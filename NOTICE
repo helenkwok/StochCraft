@@ -1,0 +1,15 @@
+StochCraft
+Copyright (c) 2026 StochCraft contributors.
+Licensed under the MIT License or the Apache License, Version 2.0, at your option
+(LICENSE-MIT, LICENSE-APACHE).
+
+Third-party material
+
+Software dependencies are listed in Cargo.lock and keep their own licences. Code adapted from
+other projects, and every non-code asset, is listed in ATTRIBUTION.md with its source and
+licence.
+
+StochCraft is independent. It is not affiliated with, sponsored by or endorsed by The AnyLogic
+Company, Autodesk, FlexSim Software Products or any other simulation or CAD vendor. AnyLogic,
+FlexSim, Factory Design Utilities, Inventor and AutoCAD are trademarks of their respective owners,
+named only to describe the kind of software StochCraft is.
