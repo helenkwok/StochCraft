@@ -24,9 +24,12 @@ agent or seen on screen. M1 fixes the first four; M3 the last.
 
 ## Principles that hold across all three
 
-1. **The model is data.** A model is a document (blocks, parameters, connections, resources,
-   experiments) that the engine compiles into a simulation. The UI, the CLI, MCP agents and
-   tests all produce and consume the same document. Nothing about a model lives only in UI state.
+1. **The model is data, in an existing open format.** A model is a document (blocks,
+   parameters, connections, resources, experiments) that the engine compiles into a
+   simulation. The UI, the CLI, MCP agents and tests all produce and consume the same document,
+   and nothing about a model lives only in UI state. StochCraft does not invent a file format
+   for it: models are BPMN 2.0 files with BPSim 2.0 simulation parameters (see
+   [Model files](#model-files-no-new-format)), the way CADCraft keeps DXF as its native format.
 2. **One command layer.** Every change to a model and every run is an engine command
    (`engine.execute("block.add", params)`), as in FieldCraft and CADCraft. The desktop app, the
    CLI, scripts and the MCP server call the same commands, so undo, the journal and agent
@@ -42,6 +45,58 @@ agent or seen on screen. M1 fixes the first four; M3 the last.
    as prose. No AnyLogic or FlexSim names for features beyond generic terms, no copied UI layouts,
    icons, example models or help text (CONTRIBUTING.md).
 
+## Model files: no new format
+
+How other simulation tools keep models:
+
+| Tool | Model is stored as |
+|---|---|
+| SimPy, simu-des, DESMO-J | Program code (Python, C, Rust, Java); no model file |
+| JaamSim | Its own plain-text configuration file (`.cfg`) |
+| AnyLogic, FlexSim, Arena, Simio | Their own proprietary files |
+| Stella (system dynamics) | XMILE, an OASIS standard |
+
+And the sibling Craft apps: CADCraft saves DXF natively and keeps CADCraft-only data inside it as
+extension data; SolidCraft has its own `.sc` only because parametric history has no standard
+form, and still reads and writes STEP, IGES and 3MF; FieldCraft has `.fieldcraft` but writes
+Abaqus, Nastran and LS-DYNA input decks.
+
+Open standards exist for exactly what StochCraft models:
+
+| Standard | Covers | Use in StochCraft |
+|---|---|---|
+| **BPMN 2.0** (OMG; ISO/IEC 19510) with **BPSim 2.0** (WfMC, 2016, CC BY 3.0) | Process flow (start events, tasks, gateways, end events, sequence flows), diagram layout (BPMN DI), and BPSim simulation parameters on each element: arrival timers and counts, processing times as distributions, branch probabilities, resources and their quantities, calendars, and scenarios with replications, seed, duration and warm-up | **Native model file** (M1) |
+| **XMILE 1.0** (OASIS, 2015) | System dynamics: stocks, flows, auxiliaries | Native file for the `sd` crate (later) |
+| **CMSD** (SISO-STD-008-2010 and -01-2012) | Manufacturing data: resources, parts, routings, schedules | Import for factory models (later) |
+
+So:
+
+- **A model is a `.bpmn` file.** StochCraft reads and writes BPMN 2.0 XML with BPSim parameters.
+  Any BPMN tool (bpmn.io, Camunda Modeler, Enterprise Architect and others) can open and draw
+  it, and BPSim-aware tools can read the simulation parameters.
+- **What BPMN and BPSim cannot say** (finite buffers that block, breakdowns, batching, conveyors)
+  goes into BPMN's own extension mechanism (`extensionElements`) under a `stochcraft` XML
+  namespace, which other tools ignore. That is the DXF-extension-data approach CADCraft uses.
+- **The flowchart layout comes free.** BPMN DI already stores where each shape and arrow is drawn,
+  so the canvas (M3.4) needs no layout format of its own.
+- **Code stays first-class.** As in SimPy and Cimba, a model can also be written directly in
+  Rust against the `blocks` API; that is how the tests and benchmarks are written.
+- **Outputs are not model formats.** Results are exported as CSV (spreadsheets) and JSON (tools).
+
+Mapping of today's blocks, to be checked element by element against the BPSim 2.0 specification
+when M1.3 starts (the specification is at bpsim.org; this session could not reach it, so element
+names below are the concepts, not yet verified spellings):
+
+| StochCraft | BPMN element | BPSim parameters |
+|---|---|---|
+| Source | Start event | Inter-trigger timer (distribution), trigger count (limit) |
+| Server (c units) | Task | Processing time (distribution); resource requirement with quantity |
+| Delay | Task with no resource | Processing time |
+| Sink | End event | (time in system is a BPSim result) |
+| Split (M2) | Exclusive gateway | Probability on each outgoing sequence flow |
+| Resource pool (M2) | Resource | Quantity (availability), calendar |
+| Experiment | Scenario | Replications, seed, duration, warm-up, base time unit |
+
 ## Layer table after M1
 
 M1 adds `model` and `io`, an `engine` above the experiment runner, and the CLI. The table
@@ -50,9 +105,9 @@ changes from what `xtask/src/layers.rs` holds today:
 | Layer | Crates | Change |
 |---|---|---|
 | L0 | `random`, `stats` (standalone) | unchanged |
-| L1 | `des`, **`model`** | `model` moves up from L0 so it can use `random::Dist` (with a `serde` feature) instead of duplicating it |
+| L1 | `des`, **`model`** | `model` moves up from L0 so it can use `random::Dist` instead of duplicating it |
 | L2 | `blocks`, `agents`, `sd` | `blocks` compiles a `model::Model` into a simulation |
-| L3 | `experiment`, **`io`** | `io` reads and writes model and result files (bytes in, bytes out, so the browser uses the same code) |
+| L3 | `experiment`, **`io`** | `io` reads and writes BPMN + BPSim files and exports results (bytes in, bytes out, so the browser uses the same code) |
 | L4 | **`engine`** | new: commands, history, journal, runs |
 | L5 | `render`, `ui-egui`, `mcp` | moved up from L4; `UI_MIN_LAYER` becomes 5 |
 | apps | `stochcraft`, `stochcraft-cli`, `stochcraft-web` | |
@@ -61,27 +116,27 @@ changes from what `xtask/src/layers.rs` holds today:
 
 ## M1: model files, the engine and a command line
 
-**Outcome:** `stochcraft-cli run line.stochcraft --reps 100` runs a model file in parallel and
+**Outcome:** `stochcraft-cli run line.bpmn --reps 100` runs a BPMN + BPSim model in parallel and
 prints per-block results with confidence intervals; `stochcraft-cli new --template mm1` writes a
-starting model; every model change is an engine command.
+starting model that other BPMN tools can open; every model change is an engine command.
 
-### M1.1 `stochcraft-model`: the model as data
+### M1.1 `stochcraft-model`: the model in memory
 
-- Types with `serde`: `Model { format, name, time_unit, blocks, connections, resources,
+- In-memory types, not a file format: `Model { name, time_unit, blocks, connections, resources,
   experiment }`, `Block { id, name, kind }`, `BlockKind::{Source, Server, Delay, Sink}` with their
-  parameters, `Connection { from: PortRef, to: PortRef }`, `Experiment { replications, seed,
-  warmup, duration }`.
-- **Stable string ids** (`"machine-1"`), not indices, so files diff cleanly, connections survive
-  deletes and agents can name blocks.
+  parameters, `Connection { from, to }`, `Experiment { replications, seed, warmup, duration }`.
+  `io` maps them to and from BPMN + BPSim.
+- **Stable string ids**, which become the BPMN element ids (`id="machine-1"`), so files diff
+  cleanly, connections survive deletes and agents can name blocks.
 - `Model::validate()` returns *every* problem (not the first) as structured diagnostics with the
   block id and a message: unconnected outputs, connections into sources, duplicate names,
   invalid distribution parameters, unknown ids. The UI shows them in place; the CLI prints them.
-- `random::Dist` gains a `serde` feature with an explicit tagged form:
-  `{"exponential": {"mean": 1.25}}`, `{"triangular": {"min": 1, "mode": 2, "max": 4}}`.
+- Every `random::Dist` maps to a BPSim distribution; a distribution with no BPSim counterpart is
+  refused in validation rather than written in a private form.
 - **Decision (time units):** the model declares one time unit (seconds, minutes or hours) and
   stores every time in it as `f64`; the UI displays and accepts other units and converts.
-  *Recommended*: yes. It is how practitioners think and avoids a units system before one is
-  needed.
+  *Recommended*: yes. It is how practitioners think, avoids a units system before one is
+  needed, and matches BPSim's base time unit for a scenario.
 
 ### M1.2 `blocks` compiles a `Model`
 
@@ -90,16 +145,21 @@ starting model; every model change is an engine command.
 - Results become data too: `RunResult { blocks: BTreeMap<BlockId, BlockStats> }` with `serde`,
   plus `ExperimentResult` holding a `Summary` per block metric across replications.
 
-### M1.3 `stochcraft-io`: files
+### M1.3 `stochcraft-io`: BPMN + BPSim files
 
-- **Decision (file format):** a single pretty-printed JSON file with sorted keys,
-  `"format": "stochcraft/1"` and a `generator` field, extension `.stochcraft`.
-  *Recommended*: start here, the same idea as FieldCraft's `model.json`. Move to a ZIP package
-  (model + results + layout images, as `.fieldcraft` does) only when there is something
-  binary to store. An unknown newer `format` is refused with a clear message; older ones are
-  migrated, each migration a tested function.
-- Golden model files under `tests/models/` (M/M/1, a tandem line, every block kind) that must
-  load, validate, run to a pinned result digest and save byte-identically.
+- Read and write BPMN 2.0 XML with BPSim 2.0 parameters (a permissively licensed XML crate such
+  as `quick-xml`; bytes in, bytes out). Written from the published BPMN and BPSim
+  specifications (clean room: no other tool's code or example files).
+- **Round-trip without loss:** BPMN elements, attributes and extensions StochCraft does not
+  understand are kept and written back unchanged, so opening and saving a file made in another
+  BPMN tool never destroys its content. Elements StochCraft cannot simulate are reported as
+  diagnostics, not dropped.
+- StochCraft-only data goes in `extensionElements` under one versioned `stochcraft` XML
+  namespace, the only place StochCraft defines anything of its own.
+- Golden models under `tests/models/` (M/M/1, a tandem line, every block kind) written by hand
+  from the specifications, plus BPMN files saved by other open-source BPMN editors (licence
+  recorded in ATTRIBUTION.md), that must load, validate, run to a pinned result digest and
+  round-trip.
 - Results export: JSON (complete) and CSV (one row per block metric, for spreadsheets).
 - Saving through `craft-atomic` on native so a crash never truncates a model.
 
@@ -118,7 +178,7 @@ starting model; every model change is an engine command.
 ### M1.5 `apps/stochcraft-cli`
 
 - `clap` subcommands:
-  - `new --template <mm1|tandem|…> <file>`
+  - `new --template <mm1|tandem|…> <file.bpmn>`
   - `validate <file>`: diagnostics; exit code 1 if any
   - `run <file> [--reps N] [--seed S] [--threads T] [--warmup W] [--duration D] [--format table|json|csv] [--out file]`
   - `exec <file> <script.json>`: replay engine commands
@@ -254,9 +314,9 @@ block, queue length over time for a single replication) with export to CSV and P
 
 ### M3.4 The flowchart canvas
 
-Blocks drawn as nodes with ports, drag to place, drag between ports to connect, pan and zoom,
-multiple selection, copy and paste, align. A layout is stored in the model file (`layout`
-section) so the canvas is part of the document.
+Blocks drawn as BPMN shapes, drag to place, drag between them to connect, pan and zoom,
+multiple selection, copy and paste, align. Positions are BPMN DI, already part of the model file,
+so a model drawn in another BPMN editor opens with its layout.
 
 ### M3.5 Live view of a run
 
@@ -299,7 +359,7 @@ and M3 proceed in parallel: each M2 block becomes editable in M3 as soon as its 
 
 | # | Question | Recommendation |
 |---|---|---|
-| D1 | Model file format | Single JSON file, `format: "stochcraft/1"`, ZIP package later |
+| D1 | Model file format | No new format: BPMN 2.0 + BPSim 2.0 (`.bpmn`), StochCraft-only data in `extensionElements`; XMILE for system dynamics and CMSD import later |
 | D2 | Time units | One unit per model, converted for display |
 | D3 | Entity attributes | Named numbers only at first |
 | D4 | First UI milestone | Forms and results before the canvas (M3.2–M3.3 before M3.4) |
