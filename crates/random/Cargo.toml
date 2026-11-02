@@ -1,0 +1,13 @@
+[package]
+name = "stochcraft-random"
+description = "StochCraft's deterministic random numbers: xoshiro256** seeded by SplitMix64, and distributions."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true

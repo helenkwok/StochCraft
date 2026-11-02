@@ -3,7 +3,7 @@
 Discrete-event and agent-based simulation for factories, logistics and queueing systems: an
 open-source, clean-room simulation application in pure Rust, for native desktops and the browser.
 
-**Status:** just started. The first crate, `stochcraft-des`, holds the deterministic event queue.
+**Status:** just started. `stochcraft-des` runs SimPy-style async processes with resources on a deterministic event queue, checked against M/M/1 queueing theory; `stochcraft-random` provides seeded xoshiro256** streams.
 
 ## Building
 

@@ -29,8 +29,18 @@ submit work you wrote yourself or have the right to license this way.
 - Results must be identical on native, wasm32 and wasm64: use fixed-width integers (`u32`, `u64`),
   not `usize`, in anything saved, sent, hashed or used to seed random numbers.
 
-Before pushing:
+## Crate layers
+
+Crates sit on layers and may depend only on lower layers, so most changes retest only a few
+crates. See [docs/architecture.md](docs/architecture.md); `cargo xtask layers` enforces it, and a
+new crate must be added to the table in `xtask/src/layers.rs`.
+
+## Before pushing
 
 ```bash
-cargo fmt --all --check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace
+cargo xtask ci
 ```
+
+That runs fmt, the layer check, Clippy with `-D warnings` and the tests. `cargo xtask ci
+--affected origin/main` does the same for only the crates your change affects, which is what CI
+runs on a pull request. `cargo xtask wasm` checks that the layered crates build for the browser.

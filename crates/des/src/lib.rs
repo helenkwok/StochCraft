@@ -1,12 +1,20 @@
 //! StochCraft's discrete-event simulation core.
 //!
-//! For now this is the event queue: events are ordered by simulated time, then by priority
-//! (higher first), then by scheduling order, so two runs of the same model always pop events in
-//! the same order. Times are `f64`; non-finite times are refused rather than stored.
+//! - [`Sim`] runs processes written as `async` blocks on simulated time, SimPy-style: a process
+//!   holds for a delay, waits for a [`Resource`], spawns other processes. It is single-threaded
+//!   and needs no async runtime, so it runs unchanged in the browser. Parallelism belongs one
+//!   level up, as independent replications.
+//! - [`EventQueue`] is the underlying queue: events are ordered by simulated time, then by priority
+//!   (higher first), then by scheduling order, so two runs of the same model always pop events
+//!   in the same order. Times are `f64`; non-finite times are refused rather than stored.
+//!
 //! All counters are fixed-width (`u64`) so results match on native, wasm32 and wasm64.
 
 use std::cmp::Ordering;
 use std::collections::BinaryHeap;
+
+mod sim;
+pub use sim::{Ctx, Hold, Resource, ResourceGuard, Sim};
 
 /// Why an event could not be scheduled.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -123,6 +131,20 @@ impl<T> EventQueue<T> {
         payload: T,
     ) -> Result<u64, ScheduleError> {
         self.schedule_at(self.now + delay, priority, payload)
+    }
+
+    /// The time of the next event, if any.
+    pub fn peek_time(&self) -> Option<f64> {
+        self.heap.peek().map(|e| e.0.time)
+    }
+
+    /// Moves the clock forward to `time` without popping (ignored if `time` is earlier than now,
+    /// later than the next event or not finite).
+    pub fn advance_to(&mut self, time: f64) {
+        let before_next = self.peek_time().is_none_or(|t| time <= t);
+        if time.is_finite() && time >= self.now && before_next {
+            self.now = time;
+        }
     }
 
     /// Pops the next event and advances the clock to its time.
