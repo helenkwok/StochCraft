@@ -18,6 +18,7 @@ stochcraft-des = { path = "crates/des" }
 stochcraft-random = { path = "crates/random" }
 stochcraft-stats = { path = "crates/stats" }
 stochcraft-experiment = { path = "crates/experiment" }
+stochcraft-blocks = { path = "crates/blocks" }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

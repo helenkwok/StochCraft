@@ -1,0 +1,18 @@
+[package]
+name = "stochcraft-blocks"
+description = "StochCraft's flow blocks: sources, servers, delays and sinks connected into process models."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-des = { workspace = true }
+stochcraft-random = { workspace = true }
+stochcraft-stats = { workspace = true }
+
+[lints]
+workspace = true
