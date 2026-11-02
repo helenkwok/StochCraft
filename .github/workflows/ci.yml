@@ -139,6 +139,26 @@ jobs:
           key: wasm
       - run: cargo xtask wasm
 
+  bench:
+    name: Benchmarks build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: bench
+          workspaces: bench
+      # The bench project is outside the workspace; this keeps it compiling as the engine changes.
+      - run: cargo fmt --manifest-path bench/Cargo.toml --check
+      - run: cargo clippy --manifest-path bench/Cargo.toml --locked --release -- -D warnings
+      - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- all 20000 4
+
   licences:
     name: cargo deny (licences, sources, bans)
     runs-on: ubuntu-latest
