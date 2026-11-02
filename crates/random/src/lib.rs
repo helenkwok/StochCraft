@@ -68,10 +68,88 @@ impl Rng {
         -mean * self.uniform_open0().ln()
     }
 
+    /// Uniform on [min, max). Returns `min` if the range is empty or not finite.
+    pub fn uniform_range(&mut self, min: f64, max: f64) -> f64 {
+        if !(min.is_finite() && max.is_finite() && max > min) {
+            return min;
+        }
+        min + (max - min) * self.uniform()
+    }
+
+    /// Triangular on [min, max] with peak at `mode`, by inverting its distribution function.
+    /// Returns `min` unless min <= mode <= max with min < max, all finite.
+    pub fn triangular(&mut self, min: f64, mode: f64, max: f64) -> f64 {
+        let valid = [min, mode, max].iter().all(|v| v.is_finite())
+            && min <= mode
+            && mode <= max
+            && min < max;
+        if !valid {
+            return min;
+        }
+        let u = self.uniform();
+        let split = (mode - min) / (max - min);
+        if u < split {
+            min + (u * (max - min) * (mode - min)).sqrt()
+        } else {
+            max - ((1.0 - u) * (max - min) * (max - mode)).sqrt()
+        }
+    }
+
     /// An independent generator for a sub-stream (a replication or a process), derived from this
     /// one's next output.
     pub fn fork(&mut self) -> Rng {
         Rng::new(self.next_u64())
+    }
+}
+
+/// A distribution of durations or other non-negative quantities, as a model describes them.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Dist {
+    /// Always the same value.
+    Constant(f64),
+    /// Exponential with this mean.
+    Exponential { mean: f64 },
+    /// Uniform between `min` and `max`.
+    Uniform { min: f64, max: f64 },
+    /// Triangular between `min` and `max`, peaking at `mode`.
+    Triangular { min: f64, mode: f64, max: f64 },
+}
+
+impl Dist {
+    /// Exponential with the given rate (events per time unit). A non-positive rate gives mean 0.
+    pub fn exponential_rate(rate: f64) -> Self {
+        let mean = if rate.is_finite() && rate > 0.0 {
+            1.0 / rate
+        } else {
+            0.0
+        };
+        Dist::Exponential { mean }
+    }
+
+    /// Draws one value. Constants that are negative or not finite give 0.
+    pub fn sample(&self, rng: &mut Rng) -> f64 {
+        match *self {
+            Dist::Constant(v) => {
+                if v.is_finite() && v > 0.0 {
+                    v
+                } else {
+                    0.0
+                }
+            }
+            Dist::Exponential { mean } => rng.exponential(mean),
+            Dist::Uniform { min, max } => rng.uniform_range(min, max),
+            Dist::Triangular { min, mode, max } => rng.triangular(min, mode, max),
+        }
+    }
+
+    /// The theoretical mean.
+    pub fn mean(&self) -> f64 {
+        match *self {
+            Dist::Constant(v) => v.max(0.0),
+            Dist::Exponential { mean } => mean.max(0.0),
+            Dist::Uniform { min, max } => (min + max) / 2.0,
+            Dist::Triangular { min, mode, max } => (min + mode + max) / 3.0,
+        }
     }
 }
 
@@ -117,5 +195,48 @@ mod tests {
         assert!((mean - 2.5).abs() < 0.03, "mean {mean}");
         assert_eq!(r.exponential(0.0), 0.0);
         assert_eq!(r.exponential(f64::NAN), 0.0);
+    }
+
+    #[test]
+    fn distribution_means() {
+        let mut r = Rng::new(99);
+        let n = 200_000;
+        for d in [
+            Dist::Constant(1.5),
+            Dist::exponential_rate(0.5),
+            Dist::Uniform { min: 2.0, max: 6.0 },
+            Dist::Triangular {
+                min: 1.0,
+                mode: 2.0,
+                max: 6.0,
+            },
+            Dist::Triangular {
+                min: 0.0,
+                mode: 0.0,
+                max: 3.0,
+            },
+        ] {
+            let m = (0..n).map(|_| d.sample(&mut r)).sum::<f64>() / n as f64;
+            assert!(
+                (m - d.mean()).abs() < 0.02 * d.mean().max(1.0),
+                "{d:?}: {m} vs {}",
+                d.mean()
+            );
+        }
+    }
+
+    #[test]
+    fn distribution_ranges_and_bad_parameters() {
+        let mut r = Rng::new(5);
+        for _ in 0..10_000 {
+            let t = r.triangular(1.0, 2.0, 6.0);
+            assert!((1.0..=6.0).contains(&t));
+            let u = r.uniform_range(-1.0, 1.0);
+            assert!((-1.0..1.0).contains(&u));
+        }
+        assert_eq!(r.triangular(1.0, 7.0, 6.0), 1.0);
+        assert_eq!(r.uniform_range(3.0, 3.0), 3.0);
+        assert_eq!(Dist::Constant(-2.0).sample(&mut r), 0.0);
+        assert_eq!(Dist::exponential_rate(0.0), Dist::Exponential { mean: 0.0 });
     }
 }
