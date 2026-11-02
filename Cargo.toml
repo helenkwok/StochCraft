@@ -13,6 +13,7 @@ publish = false
 
 [workspace.dependencies]
 stochcraft-des = { path = "crates/des" }
+stochcraft-random = { path = "crates/random" }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
