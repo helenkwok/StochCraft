@@ -65,37 +65,84 @@ Open standards exist for exactly what StochCraft models:
 
 | Standard | Covers | Use in StochCraft |
 |---|---|---|
-| **BPMN 2.0** (OMG; ISO/IEC 19510) with **BPSim 2.0** (WfMC, 2016, CC BY 3.0) | Process flow (start events, tasks, gateways, end events, sequence flows), diagram layout (BPMN DI), and BPSim simulation parameters on each element: arrival timers and counts, processing times as distributions, branch probabilities, resources and their quantities, calendars, and scenarios with replications, seed, duration and warm-up | **Native model file** (M1) |
+| **BPSim 2.0** (WfMC, December 2016, CC BY 3.0) on **BPMN 2.0** (OMG; ISO/IEC 19510) or **XPDL 2.2** (WfMC) | The process model (start events, tasks, gateways, end events, sequence flows, resources, diagram layout) is BPMN or XPDL; BPSim adds scenarios of simulation parameters that reference its elements by id | **Native model file** (M1) |
 | **XMILE 1.0** (OASIS, 2015) | System dynamics: stocks, flows, auxiliaries | Native file for the `sd` crate (later) |
 | **CMSD** (SISO-STD-008-2010 and -01-2012) | Manufacturing data: resources, parts, routings, schedules | Import for factory models (later) |
 
-So:
+### What BPSim 2.0 defines (checked against the specification)
 
-- **A model is a `.bpmn` file.** StochCraft reads and writes BPMN 2.0 XML with BPSim parameters.
-  Any BPMN tool (bpmn.io, Camunda Modeler, Enterprise Architect and others) can open and draw
-  it, and BPSim-aware tools can read the simulation parameters.
-- **What BPMN and BPSim cannot say** (finite buffers that block, breakdowns, batching, conveyors)
-  goes into BPMN's own extension mechanism (`extensionElements`) under a `stochcraft` XML
-  namespace, which other tools ignore. That is the DXF-extension-data approach CADCraft uses.
-- **The flowchart layout comes free.** BPMN DI already stores where each shape and arrow is drawn,
-  so the canvas (M3.4) needs no layout format of its own.
-- **Code stays first-class.** As in SimPy, a model can also be written directly in
-  Rust against the `blocks` API; that is how the tests and benchmarks are written.
-- **Outputs are not model formats.** Results are exported as CSV (spreadsheets) and JSON (tools).
+From the BPSim 2.0 specification (WFMC-BPSWG-2016-1) and Implementer's Guide, both CC BY 3.0:
 
-Mapping of today's blocks, to be checked element by element against the BPSim 2.0 specification
-when M1.3 starts (the specification is at bpsim.org; this session could not reach it, so element
-names below are the concepts, not yet verified spellings):
+- **Where the data lives.** One `bpsim:BPSimData` root (namespace
+  `http://www.bpsim.org/schemas/2.0`) inside a BPMN file (in `semantic:relationship
+  type="BPSimData"` → `extensionElements`), inside an XPDL `Package`, or as a standalone XML file.
+- **Scenarios.** `Scenario` (`id`, `name`, `author`, `vendor`, `version`, `inherits` to override
+  another scenario, `result` to mark an output scenario) with `ScenarioParameters`: `start`,
+  `duration`, `warmup`, `replication`, `seed`, `baseTimeUnit` (ms, s, min (default), hour, day,
+  year), `baseCurrencyUnit`, `baseResultFrequency`, `traceOutput`/`traceFormat` (XES). The
+  specification requires that the same model, seed and replication count give the same
+  results, which is principle 3.
+- **Element parameters** reference a BPMN or XPDL element by `elementRef`, in six groups:
+  - *Time:* `transferTime`, `queueTime`, `waitTime`, `setupTime`, `processingTime`,
+    `validationTime`, `reworkTime` (and `lagTime`, `duration`, `elapsedTime` as results only).
+  - *Control:* `interTriggerTimer`, `triggerCount`, `probability`, `condition`.
+  - *Resource:* `availability`, `quantity`, `selection`, `role`.
+  - *Cost:* `fixedCost`, `unitCost`.
+  - *Property:* named properties carried by each token (`long`, `double`, `boolean`, `string`,
+    `duration`, `dateTime`), and `queueLength` as a result.
+  - *Priority:* `interruptible`, `priority`.
+- **Parameter values:** constants (`Numeric`, `Floating`, `Boolean`, `String`, `Duration` in ISO
+  8601, `DateTime`), **distributions** (Beta, Binomial, Erlang, Gamma, LogNormal,
+  NegativeExponential, Normal, Poisson, Triangular, TruncatedNormal, Uniform, Weibull, and
+  `UserDistribution` from data points, discrete or continuous), `EnumParameter` (a sequence of
+  historical values), and `ExpressionParameter` (XPath 1.0 with `bpsim:getProperty`,
+  `getResource(name, qty)`, `getResourceByRoles(...)` and `orResource(...)`).
+- **Calendars:** iCalendar (RFC 5545) `VEVENT`s at scenario level; any parameter value can be
+  `validFor` a calendar (shifts, rates by time of day).
+- **Results:** `ResultRequest` of `min`, `max`, `mean`, `count` or `sum` on any parameter, written
+  back as a result scenario.
+- **Extensions:** `VendorExtension` (name and value) on scenarios and element parameters. Tools
+  must carry every vendor extension and never drop unknown ones.
 
-| StochCraft | BPMN element | BPSim parameters |
+The reference models that accompany the Implementer's Guide (car repair, home loan, technical
+support) are XPDL 2.2 files; three use BPSim 2.0 and one BPSim 1.0
+(`http://www.bpsim.org/schemas/1.0`). Between them they use inter-trigger timers, trigger
+counts, branch probabilities and conditions, processing times (triangular and truncated
+normal), token properties with expressions, resources chosen with `getResource`, queue length
+results, daily shift calendars, a start date, duration and warm-up.
+
+### Decisions that follow
+
+- **A model is a BPMN 2.0 file with embedded BPSim 2.0** (`.bpmn`) when StochCraft creates it.
+  StochCraft also **reads XPDL 2.2** with BPSim, since the reference models and several tools use
+  it, and saves a file back in the format it came in. BPSim 1.0 files are read and upgraded.
+- **StochCraft-only data** (finite buffers that block, breakdowns, batching, conveyors) is a BPSim
+  `VendorExtension` named with a `stochcraft:` prefix, which every conformant BPSim tool must
+  keep. Nothing else is StochCraft's own.
+- **Expressions are BPSim's.** Conditions and property updates use BPSim's XPath 1.0 expressions,
+  so StochCraft implements that language (the subset the specification and reference models
+  use first) instead of inventing one. This replaces decision D6.
+- **Results are a BPSim result scenario**, with CSV export for spreadsheets.
+- **The flowchart layout comes free** from BPMN DI or XPDL graphics information.
+- **Code stays first-class.** As in SimPy, a model can also be written directly in Rust against
+  the `blocks` API; that is how the tests and benchmarks are written.
+
+### Mapping to StochCraft
+
+| StochCraft | BPMN / XPDL element | BPSim parameters |
 |---|---|---|
-| Source | Start event | Inter-trigger timer (distribution), trigger count (limit) |
-| Server (c units) | Task | Processing time (distribution); resource requirement with quantity |
-| Delay | Task with no resource | Processing time |
-| Sink | End event | (time in system is a BPSim result) |
-| Split (M2) | Exclusive gateway | Probability on each outgoing sequence flow |
-| Resource pool (M2) | Resource | Quantity (availability), calendar |
-| Experiment | Scenario | Replications, seed, duration, warm-up, base time unit |
+| Source | Start event | `interTriggerTimer`, `triggerCount`; initial token properties |
+| Server (c units) | Task with a resource | `processingTime` (and the other time parameters); `selection` = `getResource(id, c)` |
+| Delay | Task with no resource | `processingTime` |
+| Sink | End event | `triggerCount` result; time in system from token creation |
+| Split (M2) | Exclusive gateway | `probability` or `condition` on each outgoing sequence flow |
+| Parallel split and join (M2) | Parallel gateway | none (BPMN semantics) |
+| Resource pool (M2) | BPMN `resource` / XPDL `Participant` of type RESOURCE | `quantity`, `availability` with calendars, `role` |
+| Entity attributes (M2) | Token | `PropertyParameters`, `ExpressionParameter` |
+| Priorities, preemption (M2) | Task | `priority`, `interruptible` |
+| Costs (later) | Task, resource | `fixedCost`, `unitCost` |
+| Experiment | Scenario | `replication`, `seed`, `start`, `duration`, `warmup`, `baseTimeUnit` |
+| Results | Result scenario | `ResultRequest` min, max, mean, count, sum |
 
 ## Layer table after M1
 
@@ -131,12 +178,14 @@ starting model that other BPMN tools can open; every model change is an engine c
 - `Model::validate()` returns *every* problem (not the first) as structured diagnostics with the
   block id and a message: unconnected outputs, connections into sources, duplicate names,
   invalid distribution parameters, unknown ids. The UI shows them in place; the CLI prints them.
-- Every `random::Dist` maps to a BPSim distribution; a distribution with no BPSim counterpart is
-  refused in validation rather than written in a private form.
-- **Decision (time units):** the model declares one time unit (seconds, minutes or hours) and
-  stores every time in it as `f64`; the UI displays and accepts other units and converts.
-  *Recommended*: yes. It is how practitioners think, avoids a units system before one is
-  needed, and matches BPSim's base time unit for a scenario.
+- `random::Dist` grows to BPSim's full set of distributions (adding Beta, Binomial, Erlang,
+  Gamma, LogNormal, Normal, Poisson, TruncatedNormal, Weibull and `UserDistribution`; it has
+  exponential, triangular and uniform today), each with a mean test, so every BPSim model
+  StochCraft reads can be sampled.
+- **Time units follow BPSim:** each scenario has a `baseTimeUnit` (minutes by default) and any
+  value may override it with its own `timeUnit` or an ISO 8601 duration (`PT24M`). The model
+  stores times as `f64` in the scenario's base unit; this was decision D2 and is now settled
+  by the standard.
 
 ### M1.2 `blocks` compiles a `Model`
 
@@ -145,22 +194,27 @@ starting model that other BPMN tools can open; every model change is an engine c
 - Results become data too: `RunResult { blocks: BTreeMap<BlockId, BlockStats> }` with `serde`,
   plus `ExperimentResult` holding a `Summary` per block metric across replications.
 
-### M1.3 `stochcraft-io`: BPMN + BPSim files
+### M1.3 `stochcraft-io`: BPSim on BPMN and XPDL
 
-- Read and write BPMN 2.0 XML with BPSim 2.0 parameters (a permissively licensed XML crate such
-  as `quick-xml`; bytes in, bytes out). Written from the published BPMN and BPSim
-  specifications (clean room: no other tool's code or example files).
-- **Round-trip without loss:** BPMN elements, attributes and extensions StochCraft does not
-  understand are kept and written back unchanged, so opening and saving a file made in another
-  BPMN tool never destroys its content. Elements StochCraft cannot simulate are reported as
-  diagnostics, not dropped.
-- StochCraft-only data goes in `extensionElements` under one versioned `stochcraft` XML
-  namespace, the only place StochCraft defines anything of its own.
-- Golden models under `tests/models/` (M/M/1, a tandem line, every block kind) written by hand
-  from the specifications, plus BPMN files saved by other open-source BPMN editors (licence
-  recorded in ATTRIBUTION.md), that must load, validate, run to a pinned result digest and
-  round-trip.
-- Results export: JSON (complete) and CSV (one row per block metric, for spreadsheets).
+- Read BPSim 2.0 (and 1.0, upgraded on read) embedded in BPMN 2.0 or XPDL 2.2, or standalone;
+  write BPMN 2.0 with embedded BPSim 2.0 for new models and the original format for opened ones.
+  A permissively licensed XML crate (such as `quick-xml`); bytes in, bytes out. Written from the
+  BPMN, XPDL and BPSim specifications.
+- **Round-trip without loss:** elements, attributes, scenarios and vendor extensions StochCraft
+  does not understand are kept and written back unchanged, as BPSim requires for vendor
+  extensions. Elements StochCraft cannot simulate yet are reported as diagnostics, not dropped.
+- StochCraft-only data is a BPSim `VendorExtension` named `stochcraft:…`.
+- Scenarios: a file's scenarios are listed, one is chosen to run, and `inherits` is resolved.
+- M1 supports what today's blocks need (start events with `interTriggerTimer` and
+  `triggerCount`, tasks with `processingTime` and one resource selection, end events, exclusive
+  gateways with `probability`, scenario parameters) and reports the rest; M2 widens it.
+- **Test corpus:** hand-written models (M/M/1, a tandem line, each element kind) plus the
+  Implementer's Guide reference models (car repair, home loan, technical support). Each must
+  load, validate, round-trip byte-for-byte where untouched, and run to a pinned result digest.
+  The reference files' licence is to be confirmed before they are committed (the guide itself
+  is CC BY 3.0); until then they are fetched for the test, not stored.
+- Results: written as a BPSim result scenario (min, max, mean, count, sum per requested
+  parameter), and exported as CSV for spreadsheets.
 - Saving through `craft-atomic` on native so a crash never truncates a model.
 
 ### M1.4 `stochcraft-engine`: commands
@@ -220,59 +274,68 @@ Needed by the blocks below, each with its own unit tests:
 | Timeouts on waits (`acquire` or `get` with a deadline) | reneging, balking |
 | Condition / event (wait until signalled) | gates, schedules, assembly |
 
-### M2.2 Entities with types and attributes
+### M2.2 Token properties and expressions
 
-- `Entity { id, kind, created, entered, attributes }`, where `kind` is an index into the model's
-  entity types (`"part-A"`, `"part-B"`) and `attributes` is a small vector of numbers declared
-  per type.
-- **Decision (attributes):** numbers only (with names) at first, text later.
-  *Recommended*: numbers only; covers due dates, priorities, weights and process times without a
-  general value system.
-- Sources produce a mix of types (weights) and set initial attributes from distributions.
+- Entities carry BPSim **properties**: named values of BPSim's property types (`long`, `double`,
+  `boolean`, `string`, `duration`, `dateTime`), set by `PropertyParameters` on start events and
+  updated as a token enters each element (decision D3 is settled by the standard: all BPSim
+  types, stored compactly).
+- **Expressions:** an evaluator for BPSim's XPath 1.0 expressions: arithmetic, comparisons and
+  boolean logic, `getProperty`, and the resource functions (M2.5). It covers what the
+  specification and the reference models use, and reports anything outside that subset as a
+  diagnostic. Validation: the car repair model's repair loop (property decremented per repair,
+  exit when it reaches zero) against its expected count.
 
 ### M2.3 Routing
 
 | Block | Behaviour | Validation |
 |---|---|---|
-| `Split` (probabilistic) | Output chosen by weights | Jackson network: throughput and W per node against product-form results |
-| `Route` (by rule) | By entity type, attribute threshold, shortest queue or round robin | Deterministic cases; shortest-queue against a symmetric two-server simulation |
-| `Merge` | Several inputs into one | Superposition of Poisson streams |
+| Exclusive gateway, by `probability` | Output chosen by weights (BPSim default: the rest share evenly) | Jackson network: throughput and W per node against product-form results |
+| Exclusive gateway, by `condition` | First outgoing flow whose expression is true | Deterministic cases; the car repair loop |
+| Parallel gateway (split and join) | Copies a token to every branch; joins wait for all | Deterministic fork-join cases; the home loan model |
+| Merge (several flows into one element) | Tokens from several inputs | Superposition of Poisson streams |
 
 ### M2.4 Buffers and blocking
 
-- `Buffer` with finite capacity between machines; a full buffer blocks the upstream server
-  (blocking after service).
+- Finite buffers between tasks, as a `stochcraft:` vendor extension (BPSim has no capacity on
+  sequence flows); a full buffer blocks the upstream task (blocking after service).
 - Validation: M/M/1/K loss probability and L; a two-machine line with a finite buffer against the
   published closed-form throughput.
 
 ### M2.5 Shared resources
 
-- `ResourcePool` (operators, forklifts, fixtures) with capacity; a Server or Delay can require
-  units from one or more pools for its duration; `Seize` and `Release` blocks for spans across
-  several steps.
+- Resource pools from BPMN `resource` or XPDL `Participant` (type RESOURCE) elements with BPSim
+  `quantity` and `role`; tasks acquire them by `selection` (`getResource(id, qty)`,
+  `getResourceByRoles`, `orResource` for alternatives), with `priority` deciding who goes first.
+  Spans across several tasks follow BPMN's own constructs (a resource held across a
+  sub-process).
 - Validation: Erlang loss (M/M/c/c) for a pool with no queue; a machine-interference
   (repairman) model against its closed form.
 
 ### M2.6 Time-dependent behaviour
 
-- Arrival schedules: piecewise-constant rate by time of day, sampled as a non-homogeneous
-  Poisson process by thinning (Lewis and Shedler). Validation: count per interval against the
-  integrated rate.
-- Shift calendars that change a server's or pool's capacity over time.
-- Breakdowns on servers: time between failures and repair time distributions, preempting or
-  waiting for the current job. Validation: availability MTBF / (MTBF + MTTR) and the effective
+- **Calendars:** BPSim calendars are iCalendar (RFC 5545) `VEVENT`s; a parameter value can be
+  `validFor` one. StochCraft implements the iCalendar subset needed for shifts and opening
+  hours (`DTSTART`, `DTEND`, `RRULE` with daily and weekly frequency, `BYDAY`, `UNTIL`,
+  `COUNT`), reports the rest, and uses it for resource `availability` and `quantity` and for
+  `interTriggerTimer` (arrival rate by time of day, which changes immediately as BPSim
+  specifies). Validation: the technical support model's shifts; arrivals per interval against
+  the integrated rate.
+- Breakdowns on servers (a `stochcraft:` vendor extension, since BPSim has none): time between
+  failures and repair time distributions, preempting or waiting for the current job (BPSim
+  `interruptible`). Validation: availability MTBF / (MTBF + MTTR) and the effective
   service rate.
 
 ### M2.7 Assembly and batching
 
-- `Batch` (N entities into one), `Unbatch`, and `Assemble` (a bill of materials from several
-  inputs into one product). Validation: exact deterministic flows; throughput bounded by the
+- Batching and assembly: BPMN's own constructs where they fit (a parallel join for assembly,
+  multi-instance activities), otherwise `stochcraft:` vendor extensions for batch size and bill
+  of materials. Validation: exact deterministic flows; throughput bounded by the
   slowest input.
 
 **Later in M2 or M4:** conveyors with length, speed and accumulation; travel networks for
-forklifts and AGVs; agent behaviours (`agents` crate); stock-and-flow (`sd` crate); an
-expression language for conditions (**Decision**, recommended later, not in M2: fixed rule types
-cover most models and keep files analysable).
+forklifts and AGVs; agent behaviours (`agents` crate); stock-and-flow (`sd` crate, XMILE);
+costs (BPSim `fixedCost`, `unitCost`); simulation traces in XES (BPSim `traceOutput`).
 
 **M2 size:** about eight PRs, each independently mergeable after M1.
 
@@ -345,7 +408,7 @@ M1.1 model ─ M1.2 compile ─ M1.3 io ─ M1.4 engine ─ M1.5 cli ─ M1.6 de
                                           │
                      ┌────────────────────┴────────────────────┐
               M2.1 primitives                            M3.1 shell
-              M2.2 entities                              M3.2 editing
+              M2.2 properties, expressions               M3.2 editing
               M2.3 … M2.7 blocks (each one PR)           M3.3 results
                      │                                   M3.4 canvas
                      └──────────── new blocks appear ────M3.5 live view
@@ -359,9 +422,10 @@ and M3 proceed in parallel: each M2 block becomes editable in M3 as soon as its 
 
 | # | Question | Recommendation |
 |---|---|---|
-| D1 | Model file format | No new format: BPMN 2.0 + BPSim 2.0 (`.bpmn`), StochCraft-only data in `extensionElements`; XMILE for system dynamics and CMSD import later |
-| D2 | Time units | One unit per model, converted for display |
-| D3 | Entity attributes | Named numbers only at first |
+| D1 | Model file format | No new format: BPSim 2.0 embedded in BPMN 2.0 (`.bpmn`, for new models) or XPDL 2.2 (read and kept); StochCraft-only data as BPSim vendor extensions; XMILE and CMSD later |
+| D2 | Time units | Settled by BPSim: scenario `baseTimeUnit`, per-value overrides |
+| D3 | Entity attributes | Settled by BPSim: token properties of BPSim's types |
 | D4 | First UI milestone | Forms and results before the canvas (M3.2–M3.3 before M3.4) |
 | D5 | Browser build | Part of M3 (M3.6), wasm32 first, wasm64 when its toolchain is verified |
-| D6 | Conditions and logic | Fixed rule types in M2; an expression language later |
+| D6 | Conditions and logic | Settled by BPSim: its XPath 1.0 expressions, the subset models use first |
+| D7 | Reference models as test files | Confirm the licence of the Implementer's Guide models before committing them; fetch them in tests until then |
