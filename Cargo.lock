@@ -82,7 +82,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "stochcraft-experiment"
+version = "0.1.0"
+dependencies = [
+ "stochcraft-des",
+ "stochcraft-random",
+ "stochcraft-stats",
+]
+
+[[package]]
 name = "stochcraft-random"
+version = "0.1.0"
+
+[[package]]
+name = "stochcraft-stats"
 version = "0.1.0"
 
 [[package]]
