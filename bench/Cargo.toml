@@ -1,0 +1,26 @@
+# The benchmark project is deliberately outside the StochCraft workspace (see the root
+# Cargo.toml `exclude`), so the engines it compares against never enter StochCraft's lock file,
+# layer check or licence policy.
+[workspace]
+
+[package]
+name = "stochcraft-bench"
+description = "M/M/1 benchmarks: StochCraft against simu-des here, and SimPy and Cimba alongside."
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[dependencies]
+stochcraft-des = { path = "../crates/des" }
+stochcraft-random = { path = "../crates/random" }
+stochcraft-experiment = { path = "../crates/experiment" }
+# simu-des 0.1.0 (MIT OR Apache-2.0), a SimPy-style Rust engine.
+simu-des = { version = "=0.1.0", optional = true }
+
+[features]
+default = ["simu"]
+simu = ["dep:simu-des"]
+
+[profile.release]
+debug = "line-tables-only"

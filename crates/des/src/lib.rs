@@ -1,7 +1,7 @@
 //! StochCraft's discrete-event simulation core.
 //!
 //! - [`Sim`] runs processes written as `async` blocks on simulated time, SimPy-style: a process
-//!   holds for a delay, waits for a [`Resource`], spawns other processes. It is single-threaded
+//!   holds for a delay, waits for a [`Resource`] or an item from a [`Store`], spawns other processes. It is single-threaded
 //!   and needs no async runtime, so it runs unchanged in the browser. Parallelism belongs one
 //!   level up, as independent replications.
 //! - [`EventQueue`] is the underlying queue: events are ordered by simulated time, then by priority
@@ -14,7 +14,7 @@ use std::cmp::Ordering;
 use std::collections::BinaryHeap;
 
 mod sim;
-pub use sim::{Ctx, Hold, Resource, ResourceGuard, Sim};
+pub use sim::{Acquire, Ctx, Get, Hold, Resource, ResourceGuard, Sim, Store};
 
 /// Why an event could not be scheduled.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
