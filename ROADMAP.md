@@ -79,7 +79,7 @@ So:
   namespace, which other tools ignore. That is the DXF-extension-data approach CADCraft uses.
 - **The flowchart layout comes free.** BPMN DI already stores where each shape and arrow is drawn,
   so the canvas (M3.4) needs no layout format of its own.
-- **Code stays first-class.** As in SimPy and Cimba, a model can also be written directly in
+- **Code stays first-class.** As in SimPy, a model can also be written directly in
   Rust against the `blocks` API; that is how the tests and benchmarks are written.
 - **Outputs are not model formats.** Results are exported as CSV (spreadsheets) and JSON (tools).
 
