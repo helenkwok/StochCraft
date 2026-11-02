@@ -75,6 +75,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "stochcraft-blocks"
+version = "0.1.0"
+dependencies = [
+ "stochcraft-des",
+ "stochcraft-random",
+ "stochcraft-stats",
+]
+
+[[package]]
 name = "stochcraft-des"
 version = "0.1.0"
 dependencies = [
