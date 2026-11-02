@@ -1,0 +1,20 @@
+[package]
+name = "stochcraft-experiment"
+description = "StochCraft's experiment runner: independent replications in parallel with reproducible random streams."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-random = { workspace = true }
+stochcraft-stats = { workspace = true }
+
+[dev-dependencies]
+stochcraft-des = { workspace = true }
+
+[lints]
+workspace = true
