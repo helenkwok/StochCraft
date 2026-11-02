@@ -1,5 +1,11 @@
 name: CI
 
+# `plan` picks a base commit (a pull request's merge base, or on main the newest commit whose CI
+# passed) and `cargo xtask affected` maps the change since it to crates. `cargo xtask ci
+# --affected` then lints and tests only those crates and the crates that depend on them. Changes
+# to the workspace manifest, the lock file, xtask or the workflows run everything, and so do
+# manual runs. The plan logic is adapted from FieldCraft's CI (MIT OR Apache-2.0).
+
 on:
   push:
     branches: [main]
@@ -10,25 +16,128 @@ permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
-  check:
-    name: fmt, clippy, test
+  plan:
+    name: Plan (affected crates)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      # To find the last green run on main.
+      actions: read
+    outputs:
+      base: ${{ steps.base.outputs.base }}
+      everything: ${{ steps.affected.outputs.everything }}
+      heavy: ${{ steps.affected.outputs.heavy }}
+      wasm: ${{ steps.affected.outputs.wasm }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: plan
+      - name: Pick the base
+        id: base
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.base_ref }}
+        run: |
+          base=""
+          case "$EVENT" in
+            push)
+              # The newest main commit whose push run passed and that this commit contains, so
+              # changes from failed or cancelled runs are tested again here.
+              for sha in $(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?branch=main&event=push&status=success&per_page=100" --jq '.workflow_runs[].head_sha'); do
+                if [ "$sha" != "$GITHUB_SHA" ] && git merge-base --is-ancestor "$sha" HEAD; then
+                  base="$sha"
+                  break
+                fi
+              done
+              ;;
+            pull_request)
+              base="$(git merge-base "origin/$PR_BASE" HEAD || true)"
+              ;;
+          esac
+          # Manual runs, or no green run to start from: everything.
+          echo "base=$base" >>"$GITHUB_OUTPUT"
+          echo "### Base: \`${base:-none (everything)}\`" >>"$GITHUB_STEP_SUMMARY"
+      - name: cargo xtask affected
+        id: affected
+        env:
+          BASE: ${{ steps.base.outputs.base }}
+        run: |
+          if [ -n "$BASE" ]; then
+            cargo xtask affected --base "$BASE" --github-output | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            printf 'everything=true\nheavy=true\nwasm=true\n' >>"$GITHUB_OUTPUT"
+          fi
+
+  ci:
+    name: cargo xtask ci
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ci
+      - name: cargo xtask ci (the affected crates, or everything)
+        env:
+          BASE: ${{ needs.plan.outputs.base }}
+          EVERYTHING: ${{ needs.plan.outputs.everything }}
+        run: |
+          if [ -n "$BASE" ] && [ "$EVERYTHING" != "true" ]; then cargo xtask ci --affected "$BASE"; else cargo xtask ci; fi
+
+  heavy:
+    name: Heavy tests (#[ignore]d)
+    needs: plan
+    if: needs.plan.outputs.heavy == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: heavy
+      - run: cargo test --workspace --release --locked -- --ignored
+
+  wasm:
+    name: wasm32 check
+    needs: plan
+    if: needs.plan.outputs.wasm == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@stable
         with:
-          components: rustfmt, clippy
+          targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
-      - run: cargo fmt --all --check
-      - run: cargo clippy --workspace --all-targets --locked -- -D warnings
-      - run: cargo test --workspace --locked
+        with:
+          key: wasm
+      - run: cargo xtask wasm
 
   licences:
     name: cargo deny (licences, sources, bans)
