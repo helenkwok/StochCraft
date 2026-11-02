@@ -3,7 +3,7 @@
 Discrete-event and agent-based simulation for factories, logistics and queueing systems: an
 open-source, clean-room simulation application in pure Rust, for native desktops and the browser.
 
-**Status:** just started. `stochcraft-des` runs SimPy-style async processes with resources on a deterministic event queue; `stochcraft-experiment` runs replications in parallel with reproducible random streams (`stochcraft-random`) and reports 95% confidence intervals (`stochcraft-stats`). Checked against M/M/1 queueing theory.
+**Status:** just started. `stochcraft-des` runs SimPy-style async processes with resources on a deterministic event queue; `stochcraft-experiment` runs replications in parallel with reproducible random streams (`stochcraft-random`) and reports 95% confidence intervals (`stochcraft-stats`). Checked against M/M/1 queueing theory; about 54× faster than SimPy on Cimba's M/M/1 benchmark model ([bench/](bench/README.md)).
 
 ## Building
 

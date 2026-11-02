@@ -328,6 +328,115 @@ impl Drop for ResourceGuard {
     }
 }
 
+struct StoreState<T> {
+    items: VecDeque<T>,
+    /// Waiting getters in arrival order, each with the slot an item is handed into.
+    getters: VecDeque<(u64, Rc<RefCell<Option<T>>>)>,
+}
+
+/// An unbounded first-in, first-out store of items (parts on a conveyor, jobs in a buffer).
+/// `put` never waits; `get` waits until an item is available. Waiting getters are served first
+/// come, first served.
+pub struct Store<T> {
+    ctx: Ctx,
+    state: Rc<RefCell<StoreState<T>>>,
+}
+
+impl<T> Clone for Store<T> {
+    fn clone(&self) -> Self {
+        Self {
+            ctx: self.ctx.clone(),
+            state: Rc::clone(&self.state),
+        }
+    }
+}
+
+impl<T> Store<T> {
+    pub fn new(ctx: &Ctx) -> Self {
+        let state = StoreState {
+            items: VecDeque::new(),
+            getters: VecDeque::new(),
+        };
+        Self {
+            ctx: ctx.clone(),
+            state: Rc::new(RefCell::new(state)),
+        }
+    }
+
+    /// Items waiting in the store.
+    pub fn len(&self) -> usize {
+        self.state.borrow().items.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.state.borrow().items.is_empty()
+    }
+
+    /// Adds an item. If a process is waiting, the item goes straight to it.
+    pub fn put(&self, item: T) {
+        let woken = {
+            let mut st = self.state.borrow_mut();
+            match st.getters.pop_front() {
+                Some((pid, slot)) => {
+                    *slot.borrow_mut() = Some(item);
+                    Some(pid)
+                }
+                None => {
+                    st.items.push_back(item);
+                    None
+                }
+            }
+        };
+        if let Some(pid) = woken {
+            self.ctx.wake_now(pid);
+        }
+    }
+
+    /// Waits for the next item.
+    pub fn get(&self) -> Get<T> {
+        Get {
+            store: self.clone(),
+            slot: None,
+        }
+    }
+}
+
+/// The future returned by [`Store::get`].
+pub struct Get<T> {
+    store: Store<T>,
+    slot: Option<Rc<RefCell<Option<T>>>>,
+}
+
+impl<T> Unpin for Get<T> {}
+
+impl<T> Future for Get<T> {
+    type Output = T;
+    fn poll(mut self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<T> {
+        if let Some(slot) = &self.slot {
+            return match slot.borrow_mut().take() {
+                Some(item) => Poll::Ready(item),
+                None => Poll::Pending,
+            };
+        }
+        let pid = self.store.ctx.current();
+        let mut st = self.store.state.borrow_mut();
+        if st.getters.is_empty()
+            && let Some(item) = st.items.pop_front()
+        {
+            return Poll::Ready(item);
+        }
+        let Some(pid) = pid else {
+            // Polled outside the simulation: it could never be woken.
+            return Poll::Pending;
+        };
+        let slot = Rc::new(RefCell::new(None));
+        st.getters.push_back((pid, Rc::clone(&slot)));
+        drop(st);
+        self.slot = Some(slot);
+        Poll::Pending
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -451,5 +560,50 @@ mod tests {
             log.borrow().clone()
         }
         assert_eq!(trace(), trace());
+    }
+
+    #[test]
+    fn store_hands_items_to_waiting_getters_in_order() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let store: Store<u32> = Store::new(&ctx);
+        let log = Rc::new(RefCell::new(Vec::new()));
+        for name in ["g1", "g2"] {
+            let (c, s, l) = (ctx.clone(), store.clone(), Rc::clone(&log));
+            sim.spawn(async move {
+                let item = s.get().await;
+                l.borrow_mut().push((name, item, c.now()));
+            });
+        }
+        let (c, s) = (ctx.clone(), store.clone());
+        sim.spawn(async move {
+            c.hold(1.0).await;
+            s.put(10);
+            s.put(20);
+            s.put(30);
+        });
+        sim.run();
+        assert_eq!(*log.borrow(), [("g1", 10, 1.0), ("g2", 20, 1.0)]);
+        assert_eq!(store.len(), 1);
+    }
+
+    #[test]
+    fn store_get_takes_queued_items_without_waiting() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let store: Store<&str> = Store::new(&ctx);
+        store.put("a");
+        store.put("b");
+        let got = Rc::new(RefCell::new(Vec::new()));
+        let (s, g) = (store.clone(), Rc::clone(&got));
+        sim.spawn(async move {
+            for _ in 0..2 {
+                let item = s.get().await;
+                g.borrow_mut().push(item);
+            }
+        });
+        sim.run();
+        assert_eq!(*got.borrow(), ["a", "b"]);
+        assert!(store.is_empty());
     }
 }
