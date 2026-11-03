@@ -25,6 +25,12 @@ impl ElementId {
         Self::is_valid(s).then(|| Self(s.to_owned()))
     }
 
+    /// The id as given, valid or not. For tools that build models from names and let
+    /// [`Model::validate`] report the invalid ones, instead of failing at the first.
+    pub fn unchecked(s: &str) -> Self {
+        Self(s.to_owned())
+    }
+
     pub fn is_valid(s: &str) -> bool {
         let mut chars = s.chars();
         let Some(first) = chars.next() else {

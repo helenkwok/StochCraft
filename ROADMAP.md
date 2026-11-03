@@ -190,10 +190,14 @@ starting model that other BPMN tools can open; every model change is an engine c
 
 ### M1.2 `blocks` compiles a `Model`
 
-- `blocks::compile(&model::Model) -> Result<Runnable, Diagnostics>`; the current builder API
-  stays as a thin layer over the model types so existing tests keep working.
-- Results become data too: `RunResult { blocks: BTreeMap<BlockId, BlockStats> }` with `serde`,
-  plus `ExperimentResult` holding a `Summary` per block metric across replications.
+- `blocks::compile(&Model) -> Result<Compiled, Vec<Diagnostic>>` refuses a model with errors
+  (returning every diagnostic) and keeps its warnings. `Compiled` is `Send + Sync`, so one
+  compiled model is shared by every worker thread of `stochcraft-experiment`.
+- The builder API becomes `Builder`, a thin layer that writes a `Model` (names are ids), so code,
+  files and the engine all run through `compile`.
+- Results are data: `Report` (per element, one replication) and `ExperimentSummary` (a `Summary`
+  per element and `Metric` across replications, from `summarise`). Writing them to files is
+  `stochcraft-io`'s job (M1.3), so no serialisation library is added here.
 
 ### M1.3 `stochcraft-io`: BPSim on BPMN and XPDL
 
