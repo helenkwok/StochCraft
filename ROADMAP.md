@@ -211,8 +211,11 @@ starting model that other BPMN tools can open; every model change is an engine c
 - **Test corpus:** hand-written models (M/M/1, a tandem line, each element kind) plus the
   Implementer's Guide reference models (car repair, home loan, technical support). Each must
   load, validate, round-trip byte-for-byte where untouched, and run to a pinned result digest.
-  The reference files' licence is to be confirmed before they are committed (the guide itself
-  is CC BY 3.0); until then they are fetched for the test, not stored.
+  The reference files are the examples published by WfMC with the Implementer's Guide 2.0 on
+  bpsim.org, under the guide's CC BY 3.0 licence; they are committed under
+  `tests/models/bpsim-reference/` with an ATTRIBUTION.md row crediting WfMC.
+- **Schema validation:** the BPSim 2.0 XML Schema (XSD, from bpsim.org) is used in tests to check
+  that every file StochCraft writes is valid BPSim.
 - Results: written as a BPSim result scenario (min, max, mean, count, sum per requested
   parameter), and exported as CSV for spreadsheets.
 - Saving through `craft-atomic` on native so a crash never truncates a model.
@@ -428,4 +431,4 @@ and M3 proceed in parallel: each M2 block becomes editable in M3 as soon as its 
 | D4 | First UI milestone | Forms and results before the canvas (M3.2–M3.3 before M3.4) |
 | D5 | Browser build | Part of M3 (M3.6), wasm32 first, wasm64 when its toolchain is verified |
 | D6 | Conditions and logic | Settled by BPSim: its XPath 1.0 expressions, the subset models use first |
-| D7 | Reference models as test files | Confirm the licence of the Implementer's Guide models before committing them; fetch them in tests until then |
+| D7 | Reference models as test files | Settled: WfMC's examples from the Implementer's Guide 2.0 (bpsim.org, CC BY 3.0), committed with attribution |
