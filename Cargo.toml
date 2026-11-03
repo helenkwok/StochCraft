@@ -16,6 +16,7 @@ publish = false
 [workspace.dependencies]
 stochcraft-des = { path = "crates/des" }
 stochcraft-random = { path = "crates/random" }
+stochcraft-model = { path = "crates/model" }
 stochcraft-stats = { path = "crates/stats" }
 stochcraft-experiment = { path = "crates/experiment" }
 stochcraft-blocks = { path = "crates/blocks" }

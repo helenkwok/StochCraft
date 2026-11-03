@@ -169,10 +169,11 @@ starting model that other BPMN tools can open; every model change is an engine c
 
 ### M1.1 `stochcraft-model`: the model in memory
 
-- In-memory types, not a file format: `Model { name, time_unit, blocks, connections, resources,
-  experiment }`, `Block { id, name, kind }`, `BlockKind::{Source, Server, Delay, Sink}` with their
-  parameters, `Connection { from, to }`, `Experiment { replications, seed, warmup, duration }`.
-  `io` maps them to and from BPMN + BPSim.
+- In-memory types, not a file format: `Model { name, elements, connections, experiment }`,
+  `Element { id, name, kind }` with `ElementKind::{Source, Server, Delay, Sink}` (named after
+  BPMN elements), `Connection { id, from, to }` (a sequence flow, with its own id), and
+  `Experiment { time_unit, warmup, duration, replications, seed }`. `io` maps them to and from
+  BPSim on BPMN or XPDL. Resource pools and gateways join in M2.
 - **Stable string ids**, which become the BPMN element ids (`id="machine-1"`), so files diff
   cleanly, connections survive deletes and agents can name blocks.
 - `Model::validate()` returns *every* problem (not the first) as structured diagnostics with the

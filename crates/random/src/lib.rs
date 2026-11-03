@@ -4,6 +4,9 @@
 //! generators", ACM TOMS 47(4), 2021), seeded by expanding a `u64` with SplitMix64 as the paper
 //! recommends. Both are implemented here from the published description. Everything is `u64`
 //! and `f64` arithmetic, so a seed gives the same stream on native, wasm32 and wasm64.
+//!
+//! [`Dist`] holds the distributions of the BPSim 2.0 specification (WfMC, 2016), each sampled
+//! exactly (no approximations) by the published method named on its variant.
 
 /// SplitMix64: used only to expand a seed into generator state.
 #[derive(Debug, Clone)]
@@ -102,56 +105,8 @@ impl Rng {
     }
 }
 
-/// A distribution of durations or other non-negative quantities, as a model describes them.
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum Dist {
-    /// Always the same value.
-    Constant(f64),
-    /// Exponential with this mean.
-    Exponential { mean: f64 },
-    /// Uniform between `min` and `max`.
-    Uniform { min: f64, max: f64 },
-    /// Triangular between `min` and `max`, peaking at `mode`.
-    Triangular { min: f64, mode: f64, max: f64 },
-}
-
-impl Dist {
-    /// Exponential with the given rate (events per time unit). A non-positive rate gives mean 0.
-    pub fn exponential_rate(rate: f64) -> Self {
-        let mean = if rate.is_finite() && rate > 0.0 {
-            1.0 / rate
-        } else {
-            0.0
-        };
-        Dist::Exponential { mean }
-    }
-
-    /// Draws one value. Constants that are negative or not finite give 0.
-    pub fn sample(&self, rng: &mut Rng) -> f64 {
-        match *self {
-            Dist::Constant(v) => {
-                if v.is_finite() && v > 0.0 {
-                    v
-                } else {
-                    0.0
-                }
-            }
-            Dist::Exponential { mean } => rng.exponential(mean),
-            Dist::Uniform { min, max } => rng.uniform_range(min, max),
-            Dist::Triangular { min, mode, max } => rng.triangular(min, mode, max),
-        }
-    }
-
-    /// The theoretical mean.
-    pub fn mean(&self) -> f64 {
-        match *self {
-            Dist::Constant(v) => v.max(0.0),
-            Dist::Exponential { mean } => mean.max(0.0),
-            Dist::Uniform { min, max } => (min + max) / 2.0,
-            Dist::Triangular { min, mode, max } => (min + mode + max) / 3.0,
-        }
-    }
-}
+mod dist;
+pub use dist::{Dist, DistError, ln_gamma};
 
 #[cfg(test)]
 mod tests {
@@ -195,34 +150,6 @@ mod tests {
         assert!((mean - 2.5).abs() < 0.03, "mean {mean}");
         assert_eq!(r.exponential(0.0), 0.0);
         assert_eq!(r.exponential(f64::NAN), 0.0);
-    }
-
-    #[test]
-    fn distribution_means() {
-        let mut r = Rng::new(99);
-        let n = 200_000;
-        for d in [
-            Dist::Constant(1.5),
-            Dist::exponential_rate(0.5),
-            Dist::Uniform { min: 2.0, max: 6.0 },
-            Dist::Triangular {
-                min: 1.0,
-                mode: 2.0,
-                max: 6.0,
-            },
-            Dist::Triangular {
-                min: 0.0,
-                mode: 0.0,
-                max: 3.0,
-            },
-        ] {
-            let m = (0..n).map(|_| d.sample(&mut r)).sum::<f64>() / n as f64;
-            assert!(
-                (m - d.mean()).abs() < 0.02 * d.mean().max(1.0),
-                "{d:?}: {m} vs {}",
-                d.mean()
-            );
-        }
     }
 
     #[test]

@@ -100,6 +100,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "stochcraft-model"
+version = "0.1.0"
+dependencies = [
+ "stochcraft-random",
+]
+
+[[package]]
 name = "stochcraft-random"
 version = "0.1.0"
 

@@ -1,0 +1,16 @@
+[package]
+name = "stochcraft-model"
+description = "StochCraft's model in memory: elements with stable ids, connections, the experiment, and validation."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-random = { workspace = true }
+
+[lints]
+workspace = true

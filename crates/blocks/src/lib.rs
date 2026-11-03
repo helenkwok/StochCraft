@@ -42,7 +42,7 @@ pub struct Entity {
     pub entered: f64,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 enum Kind {
     Source {
         interarrival: Dist,
@@ -181,7 +181,7 @@ impl Model {
             });
         }
         for b in &self.blocks {
-            match (b.kind, b.output) {
+            match (&b.kind, b.output) {
                 (Kind::Sink, _) => {}
                 (_, None) => {
                     return Err(ModelError::Unconnected {
@@ -245,7 +245,7 @@ impl Model {
                 out,
                 rng,
             };
-            match block.kind {
+            match block.kind.clone() {
                 Kind::Source {
                     interarrival,
                     limit,
@@ -272,7 +272,7 @@ impl Model {
             .blocks
             .iter()
             .zip(stats.iter())
-            .map(|(b, s)| s.borrow().report(&b.name, b.kind, end))
+            .map(|(b, s)| s.borrow().report(&b.name, &b.kind, end))
             .collect();
         Ok(Report {
             warmup,
@@ -317,7 +317,7 @@ impl BlockStats {
         self.time_in_system = Tally::new();
     }
 
-    fn report(&self, name: &str, kind: Kind, end: f64) -> BlockReport {
+    fn report(&self, name: &str, kind: &Kind, end: f64) -> BlockReport {
         let server = matches!(kind, Kind::Server { .. });
         BlockReport {
             name: name.to_owned(),
@@ -332,7 +332,7 @@ impl BlockStats {
             mean_wait: if server { self.wait.mean() } else { None },
             utilisation: match kind {
                 Kind::Server { capacity, .. } => {
-                    self.busy.average(end).map(|b| b / f64::from(capacity))
+                    self.busy.average(end).map(|b| b / f64::from(*capacity))
                 }
                 _ => None,
             },
@@ -438,6 +438,7 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
     let env = Rc::new(RefCell::new(env));
     for _ in 0..capacity {
         let env = Rc::clone(&env);
+        let service = service.clone();
         sim.spawn(async move {
             loop {
                 let (input, ctx) = {

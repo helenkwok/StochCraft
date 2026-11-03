@@ -7,15 +7,15 @@ crates above it, so a change near the top touches little and a change near the b
 
 | Layer | Crates (`stochcraft-*`) | Contents |
 |---|---|---|
-| L0 | `model`; `random`, `stats` (standalone: no workspace dependencies) | The model graph and units, random-number generators and distributions, statistics collectors |
-| L1 | `des` | The discrete-event core: event queue, processes, resources, timeouts |
+| L0 | `random`, `stats` (standalone: no workspace dependencies) | Random-number generators and BPSim's distributions, statistics collectors |
+| L1 | `des`, `model` | The discrete-event core (event queue, processes, resources, timeouts); the model in memory (elements with stable ids, connections, experiment, validation) |
 | L2 | `blocks`, `agents`, `sd` | Modelling libraries: flow blocks (source, queue, delay, conveyor…), moving agents, stock-and-flow |
 | L3 | `experiment`, `io` | Replications, parameter sweeps and optimisation; model and result files |
 | L4 | `render`, then `ui-egui` and `mcp` | Drawing, the window, and agents over MCP. The only layer allowed UI, windowing or GPU crates |
 | — | `testkit` | Test tooling; other crates may use it only as a dev-dependency |
 | apps | `stochcraft`, `stochcraft-cli`, `stochcraft-web` | Exempt from the rules |
 
-Only `des`, `random`, `stats`, `experiment` and `blocks` exist so far; the others are placed in advance so each crate's position is decided
+Only `random`, `stats`, `des`, `model`, `blocks` and `experiment` exist so far; the others are placed in advance so each crate's position is decided
 before it is written.
 
 ## Determinism across targets
