@@ -40,12 +40,12 @@ impl Class {
 /// The layering table. Names are package names without the `stochcraft-` prefix. Planned crates
 /// are listed so their place is decided before they exist.
 pub const TABLE: &[(&str, Class)] = &[
-    // L0: data model, random numbers and statistics; no simulation logic.
-    ("model", Class::Layer(0)),
+    // L0: random numbers and statistics, with no workspace dependencies.
     ("random", Class::Standalone),
     ("stats", Class::Standalone),
-    // L1: the discrete-event core (event queue, processes, resources).
+    // L1: the discrete-event core, and the model in memory (which uses `random::Dist`).
     ("des", Class::Layer(1)),
+    ("model", Class::Layer(1)),
     // L2: modelling libraries on the core.
     ("blocks", Class::Layer(2)),
     ("agents", Class::Layer(2)),
@@ -338,12 +338,14 @@ mod tests {
     #[test]
     fn clean_downward_graph_passes() {
         let g = [
-            c("stochcraft-model", &[("serde", Normal, false)]),
-            c("stochcraft-des", &[("stochcraft-model", Normal, true)]),
+            c("stochcraft-random", &[]),
+            c("stochcraft-model", &[("stochcraft-random", Normal, true)]),
+            c("stochcraft-des", &[("stochcraft-random", Dev, true)]),
             c(
                 "stochcraft-blocks",
                 &[
                     ("stochcraft-des", Normal, true),
+                    ("stochcraft-model", Normal, true),
                     ("stochcraft-testkit", Dev, true),
                 ],
             ),
@@ -490,19 +492,19 @@ mod tests {
     fn metadata_parsing() {
         let meta: Value = serde_json::from_str(
             r#"{"packages":[
-                {"name":"stochcraft-des","dependencies":[
-                    {"name":"stochcraft-model","kind":null,"path":"/x/crates/model"},
+                {"name":"stochcraft-model","dependencies":[
+                    {"name":"stochcraft-random","kind":null,"path":"/x/crates/random"},
                     {"name":"serde","kind":null},
                     {"name":"proptest","kind":"dev"}]},
-                {"name":"stochcraft-model","dependencies":[]}
+                {"name":"stochcraft-random","dependencies":[]}
             ]}"#,
         )
         .unwrap();
         let g = from_metadata(&meta).unwrap();
         assert_eq!(g.len(), 2);
-        let des = g.iter().find(|c| c.name == "stochcraft-des").unwrap();
-        assert!(des.deps[0].workspace && !des.deps[1].workspace);
-        assert_eq!(des.deps[2].kind, Dev);
+        let model = g.iter().find(|c| c.name == "stochcraft-model").unwrap();
+        assert!(model.deps[0].workspace && !model.deps[1].workspace);
+        assert_eq!(model.deps[2].kind, Dev);
         assert!(check(&g).is_empty());
     }
 }
