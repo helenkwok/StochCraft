@@ -212,8 +212,22 @@ starting model that other BPMN tools can open; every model change is an engine c
   Implementer's Guide reference models (car repair, home loan, technical support). Each must
   load, validate, round-trip byte-for-byte where untouched, and run to a pinned result digest.
   The reference files are the examples published by WfMC with the Implementer's Guide 2.0 on
-  bpsim.org, under the guide's CC BY 3.0 licence; they are committed under
-  `tests/models/bpsim-reference/` with an ATTRIBUTION.md row crediting WfMC. The bundle has each
+  bpsim.org. **They are not committed:** the specification and guide state CC BY 3.0, but the
+  example files and the XSD carry no licence of their own, so StochCraft does not redistribute
+  them. `cargo xtask fetch-bpsim` downloads the guide's zip and the XSD from bpsim.org into a
+  git-ignored `target/bpsim/`, checks each against a pinned SHA-256 and refuses a mismatch:
+
+  | File | URL | SHA-256 |
+  |---|---|---|
+  | Implementer's Guide 2.0 zip | `https://www.bpsim.org/implementers/2.0/BPSim%20Implementer's%20Guide%20v2.0.zip` | `2d82a8763e7c3356c215ae0b237c64a672400d5e2c339e7421c5e8c790aa7b00` |
+  | BPSim 2.0 XSD | `https://www.bpsim.org/schemas/2.0/BPSim-2.0.xsd` | `35999c20096c2cba9e6012d8cbb1b37d2deaac152d8da2ea4f95eb5a990ffcd2` |
+
+  CI runs it before the tests and caches the result keyed by those checksums, so bpsim.org is
+  contacted only when the cache is cold and an outage of the site cannot fail a normal run. The
+  tests that need the corpus skip with a clear message when it is missing locally, and fail in
+  CI (where `STOCHCRAFT_REQUIRE_BPSIM=1`), so they can never silently stop running. The
+  hand-written models (M/M/1, tandem line, each element kind) are StochCraft's own and are
+  committed, so most file tests run without any download. The bundle has each
   model (car repair, home loan, technical support) as both BPMN and XPDL, in BPSim 1.0 and 2.0,
   so both host formats and the 1.0 upgrade are tested from the start. Its Visio drawings and
   images are not needed.
@@ -449,4 +463,4 @@ and M3 proceed in parallel: each M2 block becomes editable in M3 as soon as its 
 | D4 | First UI milestone | Forms and results before the canvas (M3.2–M3.3 before M3.4) |
 | D5 | Browser build | Part of M3 (M3.6), wasm32 first, wasm64 when its toolchain is verified |
 | D6 | Conditions and logic | Settled by BPSim: its XPath 1.0 expressions, the subset models use first |
-| D7 | Reference models as test files | Settled: WfMC's examples from the Implementer's Guide 2.0 (bpsim.org, CC BY 3.0), BPMN and XPDL, BPSim 1.0 and 2.0, plus L-SIM results as a cross-check; committed with attribution |
+| D7 | Reference models as test files | Settled: WfMC's examples and the XSD are downloaded from bpsim.org by `cargo xtask fetch-bpsim` (pinned SHA-256, cached in CI), never committed, because they carry no licence of their own |
