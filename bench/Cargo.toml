@@ -5,7 +5,7 @@
 
 [package]
 name = "stochcraft-bench"
-description = "M/M/1 benchmarks: StochCraft against simu-des here, and SimPy and Cimba alongside."
+description = "M/M/1 benchmarks: StochCraft against simu-des, with a SimPy twin."
 version = "0.1.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
