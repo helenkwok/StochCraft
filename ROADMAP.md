@@ -225,8 +225,15 @@ starting model that other BPMN tools can open; every model change is an engine c
   intervals, since the random number generators differ. They are also the reference for how
   StochCraft writes its own result scenarios (`result`, `instance` per replication,
   `resultTimeStamp`).
-- **Schema validation:** the BPSim 2.0 XML Schema (XSD, from bpsim.org) is used in tests to check
-  that every file StochCraft writes is valid BPSim.
+- **Lenient reading, strict writing.** The BPSim 2.0 XML Schema (XSD, bpsim.org) fixes the order
+  of child elements and the allowed property types, and two of the three reference models break
+  it: the car repair model declares a property as `int` (the schema allows `long`), and the
+  technical support model and its results put parameter groups and scenario parameters in a
+  different order. StochCraft therefore reads any element order and the common aliases (`int` →
+  `long`), reporting each deviation as a warning, and always writes elements in schema order.
+  Every file and result scenario StochCraft writes is validated against the XSD in tests. A file
+  whose BPSim data StochCraft did not change is saved back unchanged; one it changed has its
+  BPSim data written in schema order.
 - Results: written as a BPSim result scenario (min, max, mean, count, sum per requested
   parameter), and exported as CSV for spreadsheets.
 - Saving through `craft-atomic` on native so a crash never truncates a model.
