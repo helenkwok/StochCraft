@@ -13,6 +13,8 @@ pub fn number(v: f64) -> String {
     if v == 0.0 {
         return "0".into();
     }
+    // Only chooses how many digits to print; results never depend on it.
+    #[allow(clippy::disallowed_methods)]
     let magnitude = v.abs().log10().floor() as i32;
     if !(-3..6).contains(&magnitude) {
         return format!("{v:.4e}");

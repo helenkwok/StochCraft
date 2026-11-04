@@ -5,6 +5,7 @@
 //! open, the choice made here is stated on the variant.
 
 use crate::Rng;
+use crate::math::{cos, exp, ln, powf, sin};
 
 /// A probability distribution, as a model describes a duration, a count or a property.
 #[derive(Debug, Clone, PartialEq)]
@@ -143,7 +144,7 @@ pub fn ln_gamma(x: f64) -> f64 {
     ];
     if x < 0.5 {
         let pi = std::f64::consts::PI;
-        return (pi / (pi * x).sin()).ln() - ln_gamma(1.0 - x);
+        return ln(pi / sin(pi * x)) - ln_gamma(1.0 - x);
     }
     let x = x - 1.0;
     let mut a = C[0];
@@ -151,20 +152,20 @@ pub fn ln_gamma(x: f64) -> f64 {
     for (i, c) in C.iter().enumerate().skip(1) {
         a += c / (x + i as f64);
     }
-    0.5 * (2.0 * std::f64::consts::PI).ln() + (x + 0.5) * t.ln() - t + a.ln()
+    0.5 * ln(2.0 * std::f64::consts::PI) + (x + 0.5) * ln(t) - t + ln(a)
 }
 
 fn standard_normal(rng: &mut Rng) -> f64 {
     let u1 = rng.uniform_open0();
     let u2 = rng.uniform();
-    (-2.0 * u1.ln()).sqrt() * (2.0 * std::f64::consts::PI * u2).cos()
+    (-2.0 * ln(u1)).sqrt() * cos(2.0 * std::f64::consts::PI * u2)
 }
 
 fn gamma_sample(rng: &mut Rng, shape: f64, scale: f64) -> f64 {
     if shape < 1.0 {
         // Γ(k) = Γ(k + 1) · U^(1/k).
         let u = rng.uniform_open0();
-        return gamma_sample(rng, shape + 1.0, scale) * u.powf(1.0 / shape);
+        return gamma_sample(rng, shape + 1.0, scale) * powf(u, 1.0 / shape);
     }
     let d = shape - 1.0 / 3.0;
     let c = 1.0 / (9.0 * d).sqrt();
@@ -176,7 +177,7 @@ fn gamma_sample(rng: &mut Rng, shape: f64, scale: f64) -> f64 {
         }
         let v = v * v * v;
         let u = rng.uniform_open0();
-        if u.ln() < 0.5 * x * x + d - d * v + d * v.ln() {
+        if ln(u) < 0.5 * x * x + d - d * v + d * ln(v) {
             return d * v * scale;
         }
     }
@@ -199,7 +200,7 @@ fn truncated_standard_normal(rng: &mut Rng, a: f64, b: f64) -> f64 {
         }
         loop {
             let z = rng.uniform_range(a, b);
-            if rng.uniform() <= (-0.5 * z * z).exp() {
+            if rng.uniform() <= exp(-0.5 * z * z) {
                 return z;
             }
         }
@@ -209,7 +210,7 @@ fn truncated_standard_normal(rng: &mut Rng, a: f64, b: f64) -> f64 {
     if a * w + 0.5 * w * w <= 1.5 {
         loop {
             let z = rng.uniform_range(a, b);
-            if rng.uniform() <= (0.5 * (a * a - z * z)).exp() {
+            if rng.uniform() <= exp(0.5 * (a * a - z * z)) {
                 return z;
             }
         }
@@ -217,14 +218,14 @@ fn truncated_standard_normal(rng: &mut Rng, a: f64, b: f64) -> f64 {
     let alpha = 0.5 * (a + (a * a + 4.0).sqrt());
     loop {
         let z = a + rng.exponential(1.0 / alpha);
-        if z <= b && rng.uniform() <= (-0.5 * (z - alpha) * (z - alpha)).exp() {
+        if z <= b && rng.uniform() <= exp(-0.5 * (z - alpha) * (z - alpha)) {
             return z;
         }
     }
 }
 
 fn poisson_knuth(rng: &mut Rng, mean: f64) -> u64 {
-    let limit = (-mean).exp();
+    let limit = exp(-mean);
     let mut k = 0u64;
     let mut p = rng.uniform_open0();
     while p > limit {
@@ -245,11 +246,11 @@ fn binomial(rng: &mut Rng, p: f64, n: u64) -> u64 {
         return n - binomial(rng, 1.0 - p, n);
     }
     // Successes are where geometric waiting times land inside the n trials.
-    let log_q = (1.0 - p).ln();
+    let log_q = ln(1.0 - p);
     let mut successes = 0u64;
     let mut position = 0u64;
     loop {
-        let skip = (rng.uniform_open0().ln() / log_q).floor();
+        let skip = (ln(rng.uniform_open0()) / log_q).floor();
         let step = if skip.is_finite() && skip < (n as f64) {
             skip as u64
         } else {
@@ -401,9 +402,10 @@ impl Dist {
                 (mean + std_dev * truncated_standard_normal(rng, a, b)).clamp(*min, *max)
             }
             Dist::LogNormal { mean, std_dev } => {
-                let s2 = (1.0 + (std_dev / mean).powi(2)).ln();
-                let mu = mean.ln() - 0.5 * s2;
-                (mu + s2.sqrt() * standard_normal(rng)).exp()
+                let cv = std_dev / mean;
+                let s2 = ln(1.0 + cv * cv);
+                let mu = ln(*mean) - 0.5 * s2;
+                exp(mu + s2.sqrt() * standard_normal(rng))
             }
             Dist::Gamma { shape, scale } => gamma_sample(rng, *shape, *scale),
             Dist::Beta { shape, scale } => {
@@ -415,7 +417,7 @@ impl Dist {
                 let each = mean / *k as f64;
                 (0..*k).map(|_| rng.exponential(each)).sum()
             }
-            Dist::Weibull { shape, scale } => scale * (-rng.uniform_open0().ln()).powf(1.0 / shape),
+            Dist::Weibull { shape, scale } => scale * powf(-ln(rng.uniform_open0()), 1.0 / shape),
             Dist::Poisson { mean } => {
                 let pieces = (mean / 30.0).ceil().max(1.0);
                 let each = mean / pieces;
@@ -490,7 +492,7 @@ impl Dist {
             }
             Dist::Gamma { shape, scale } => shape * scale,
             Dist::Beta { shape, scale } => shape / (shape + scale),
-            Dist::Weibull { shape, scale } => scale * ln_gamma(1.0 + 1.0 / shape).exp(),
+            Dist::Weibull { shape, scale } => scale * exp(ln_gamma(1.0 + 1.0 / shape)),
             Dist::Binomial {
                 probability,
                 trials,
@@ -536,8 +538,8 @@ impl Dist {
             Dist::Beta { shape: a, scale: b } => a * b / ((a + b).powi(2) * (a + b + 1.0)),
             Dist::Erlang { mean, k } => mean * mean / *k as f64,
             Dist::Weibull { shape, scale } => {
-                let g1 = ln_gamma(1.0 + 1.0 / shape).exp();
-                let g2 = ln_gamma(1.0 + 2.0 / shape).exp();
+                let g1 = exp(ln_gamma(1.0 + 1.0 / shape));
+                let g2 = exp(ln_gamma(1.0 + 2.0 / shape));
                 scale * scale * (g2 - g1 * g1)
             }
             Dist::Poisson { mean } => *mean,
@@ -565,7 +567,7 @@ fn truncated_moments(mean: f64, std_dev: f64, min: f64, max: f64) -> (f64, f64, 
             2.0
         };
         let z = (x - mean) / std_dev;
-        let f = w * (-0.5 * z * z).exp();
+        let f = w * exp(-0.5 * z * z);
         m0 += f;
         m1 += f * x;
         m2 += f * x * x;
@@ -752,10 +754,10 @@ mod tests {
 
     #[test]
     fn ln_gamma_known_values() {
-        assert!((ln_gamma(5.0) - 24f64.ln()).abs() < 1e-12);
-        assert!((ln_gamma(0.5) - std::f64::consts::PI.sqrt().ln()).abs() < 1e-12);
+        assert!((ln_gamma(5.0) - ln(24.0)).abs() < 1e-12);
+        assert!((ln_gamma(0.5) - ln(std::f64::consts::PI.sqrt())).abs() < 1e-12);
         assert!((ln_gamma(1.0)).abs() < 1e-12);
-        assert!((ln_gamma(10.5) - 1_133_278.388_7f64.ln()).abs() < 1e-9);
+        assert!((ln_gamma(10.5) - ln(1_133_278.388_7)).abs() < 1e-9);
     }
 
     #[test]

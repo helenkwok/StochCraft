@@ -16,12 +16,25 @@ crates above it, so a change near the top touches little and a change near the b
 | — | `testkit` | Test tooling; other crates may use it only as a dev-dependency |
 | apps | `stochcraft`, `stochcraft-cli`, `stochcraft-web` | Exempt from the rules |
 
-Only `random`, `stats`, `des`, `model`, `blocks`, `experiment`, `io` and `engine` exist so far; the others are placed in advance so each crate's position is decided
+Only `random`, `stats`, `des`, `model`, `blocks`, `experiment`, `io`, `engine` and `testkit` exist so far (with the `stochcraft-cli` app); the others are placed in advance so each crate's position is decided
 before it is written.
 
 ## Determinism across targets
 
 Every layered crate builds for `wasm32-unknown-unknown` (`cargo xtask wasm`), and a later wasm64
-build will follow. A seeded model must give the same results on native, wasm32 and wasm64, so
-anything saved, sent, hashed or used to seed random numbers uses fixed-width integers, never
-`usize`.
+build will follow. A seeded model must give the same results on native, wasm32 and wasm64, and
+on every operating system:
+
+- Anything saved, sent, hashed or used to seed random numbers uses fixed-width integers, never
+  `usize`.
+- Logarithms, exponentials, powers and trigonometric functions come from
+  `stochcraft_random::math` (the pure-Rust `libm`), never from `f64`'s methods, which call each
+  platform's maths library and can differ in the last bit between glibc, musl (wasm), macOS and
+  Windows. `clippy.toml` forbids the `f64` methods. Square roots are exactly rounded everywhere.
+- Replications run in parallel but their results are combined in replication order.
+
+`stochcraft-testkit` checks it: the golden models (`tests/models/`) are run through the engine
+and their results reduced to digests pinned in `tests/golden/results.txt`. The test runs natively
+in `cargo xtask ci` and as `wasm32-wasip1` under Node's built-in WASI in `cargo xtask golden`
+(both in CI). Switching to `libm` changed the last bits of some samples, which the golden test
+caught; that is the kind of drift it exists to catch.

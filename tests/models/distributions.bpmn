@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Written with stochcraft-cli for StochCraft's golden-results tests (MIT OR Apache-2.0): one element for each BPSim distribution, so every sampler is checked for identical results on every target. -->
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Every distribution" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.1.0">
+  <bpmn:resource id="constant_resource" name="constant"/>
+  <bpmn:resource id="triangular_resource" name="triangular"/>
+  <bpmn:resource id="truncated-normal_resource" name="truncated-normal"/>
+  <bpmn:resource id="gamma_resource" name="gamma"/>
+  <bpmn:resource id="erlang_resource" name="erlang"/>
+  <bpmn:resource id="poisson_resource" name="poisson"/>
+  <bpmn:resource id="user-discrete_resource" name="user-discrete"/>
+  <bpmn:process id="process" name="Every distribution" isExecutable="false">
+    <bpmn:startEvent id="arrivals" name="arrivals">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="constant" name="constant">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>constant_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="uniform" name="uniform">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+      <bpmn:outgoing>flow-3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="triangular" name="triangular">
+      <bpmn:incoming>flow-3</bpmn:incoming>
+      <bpmn:outgoing>flow-4</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>triangular_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="normal" name="normal">
+      <bpmn:incoming>flow-4</bpmn:incoming>
+      <bpmn:outgoing>flow-5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="truncated-normal" name="truncated-normal">
+      <bpmn:incoming>flow-5</bpmn:incoming>
+      <bpmn:outgoing>flow-6</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>truncated-normal_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="lognormal" name="lognormal">
+      <bpmn:incoming>flow-6</bpmn:incoming>
+      <bpmn:outgoing>flow-7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="gamma" name="gamma">
+      <bpmn:incoming>flow-7</bpmn:incoming>
+      <bpmn:outgoing>flow-8</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>gamma_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="beta" name="beta">
+      <bpmn:incoming>flow-8</bpmn:incoming>
+      <bpmn:outgoing>flow-9</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="erlang" name="erlang">
+      <bpmn:incoming>flow-9</bpmn:incoming>
+      <bpmn:outgoing>flow-10</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>erlang_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="weibull" name="weibull">
+      <bpmn:incoming>flow-10</bpmn:incoming>
+      <bpmn:outgoing>flow-11</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="poisson" name="poisson">
+      <bpmn:incoming>flow-11</bpmn:incoming>
+      <bpmn:outgoing>flow-12</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>poisson_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="binomial" name="binomial">
+      <bpmn:incoming>flow-12</bpmn:incoming>
+      <bpmn:outgoing>flow-13</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="user-discrete" name="user-discrete">
+      <bpmn:incoming>flow-13</bpmn:incoming>
+      <bpmn:outgoing>flow-14</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>user-discrete_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="user-continuous" name="user-continuous">
+      <bpmn:incoming>flow-14</bpmn:incoming>
+      <bpmn:outgoing>flow-15</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="exit" name="exit">
+      <bpmn:incoming>flow-15</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="arrivals" targetRef="constant"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="constant" targetRef="uniform"/>
+    <bpmn:sequenceFlow id="flow-3" sourceRef="uniform" targetRef="triangular"/>
+    <bpmn:sequenceFlow id="flow-4" sourceRef="triangular" targetRef="normal"/>
+    <bpmn:sequenceFlow id="flow-5" sourceRef="normal" targetRef="truncated-normal"/>
+    <bpmn:sequenceFlow id="flow-6" sourceRef="truncated-normal" targetRef="lognormal"/>
+    <bpmn:sequenceFlow id="flow-7" sourceRef="lognormal" targetRef="gamma"/>
+    <bpmn:sequenceFlow id="flow-8" sourceRef="gamma" targetRef="beta"/>
+    <bpmn:sequenceFlow id="flow-9" sourceRef="beta" targetRef="erlang"/>
+    <bpmn:sequenceFlow id="flow-10" sourceRef="erlang" targetRef="weibull"/>
+    <bpmn:sequenceFlow id="flow-11" sourceRef="weibull" targetRef="poisson"/>
+    <bpmn:sequenceFlow id="flow-12" sourceRef="poisson" targetRef="binomial"/>
+    <bpmn:sequenceFlow id="flow-13" sourceRef="binomial" targetRef="user-discrete"/>
+    <bpmn:sequenceFlow id="flow-14" sourceRef="user-discrete" targetRef="user-continuous"/>
+    <bpmn:sequenceFlow id="flow-15" sourceRef="user-continuous" targetRef="exit"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="arrivals_di" bpmnElement="arrivals">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="constant_di" bpmnElement="constant">
+        <dc:Bounds x="230" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="uniform_di" bpmnElement="uniform">
+        <dc:Bounds x="410" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="triangular_di" bpmnElement="triangular">
+        <dc:Bounds x="590" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="normal_di" bpmnElement="normal">
+        <dc:Bounds x="770" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="truncated-normal_di" bpmnElement="truncated-normal">
+        <dc:Bounds x="950" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="lognormal_di" bpmnElement="lognormal">
+        <dc:Bounds x="1130" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gamma_di" bpmnElement="gamma">
+        <dc:Bounds x="1310" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="beta_di" bpmnElement="beta">
+        <dc:Bounds x="1490" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="erlang_di" bpmnElement="erlang">
+        <dc:Bounds x="1670" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="weibull_di" bpmnElement="weibull">
+        <dc:Bounds x="1850" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="poisson_di" bpmnElement="poisson">
+        <dc:Bounds x="2030" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="binomial_di" bpmnElement="binomial">
+        <dc:Bounds x="2210" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="user-discrete_di" bpmnElement="user-discrete">
+        <dc:Bounds x="2390" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="user-continuous_di" bpmnElement="user-continuous">
+        <dc:Bounds x="2570" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="exit_di" bpmnElement="exit">
+        <dc:Bounds x="2782" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="230" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="330" y="100"/>
+        <di:waypoint x="410" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-3_di" bpmnElement="flow-3">
+        <di:waypoint x="510" y="100"/>
+        <di:waypoint x="590" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-4_di" bpmnElement="flow-4">
+        <di:waypoint x="690" y="100"/>
+        <di:waypoint x="770" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-5_di" bpmnElement="flow-5">
+        <di:waypoint x="870" y="100"/>
+        <di:waypoint x="950" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-6_di" bpmnElement="flow-6">
+        <di:waypoint x="1050" y="100"/>
+        <di:waypoint x="1130" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-7_di" bpmnElement="flow-7">
+        <di:waypoint x="1230" y="100"/>
+        <di:waypoint x="1310" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-8_di" bpmnElement="flow-8">
+        <di:waypoint x="1410" y="100"/>
+        <di:waypoint x="1490" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-9_di" bpmnElement="flow-9">
+        <di:waypoint x="1590" y="100"/>
+        <di:waypoint x="1670" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-10_di" bpmnElement="flow-10">
+        <di:waypoint x="1770" y="100"/>
+        <di:waypoint x="1850" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-11_di" bpmnElement="flow-11">
+        <di:waypoint x="1950" y="100"/>
+        <di:waypoint x="2030" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-12_di" bpmnElement="flow-12">
+        <di:waypoint x="2130" y="100"/>
+        <di:waypoint x="2210" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-13_di" bpmnElement="flow-13">
+        <di:waypoint x="2310" y="100"/>
+        <di:waypoint x="2390" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-14_di" bpmnElement="flow-14">
+        <di:waypoint x="2490" y="100"/>
+        <di:waypoint x="2570" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-15_di" bpmnElement="flow-15">
+        <di:waypoint x="2670" y="100"/>
+        <di:waypoint x="2782" y="100"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="Every distribution" vendor="StochCraft" version="0.1.0">
+          <bpsim:ScenarioParameters replication="4" seed="2026" baseTimeUnit="min">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="550"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="50"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="arrivals">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="1"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="constant">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:FloatingParameter value="0.3"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('constant_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="uniform">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UniformDistribution min="0.1" max="0.5"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="triangular">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:TriangularDistribution mode="0.2" min="0.1" max="0.6"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('triangular_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="normal">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0.4" standardDeviation="0.1"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="truncated-normal">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:TruncatedNormalDistribution mean="0.3" standardDeviation="0.2" min="0.05" max="0.9"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('truncated-normal_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="lognormal">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:LogNormalDistribution mean="0.3" standardDeviation="0.15"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="gamma">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:GammaDistribution shape="0.7" scale="0.4"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('gamma_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="beta">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:BetaDistribution shape="2" scale="3"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="erlang">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:ErlangDistribution mean="0.35" k="3"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('erlang_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="weibull">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:WeibullDistribution shape="1.5" scale="0.3"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="poisson">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:PoissonDistribution mean="0.4"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('poisson_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="binomial">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:BinomialDistribution probability="0.1" trials="4"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="user-discrete">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UserDistribution discrete="true">
+                  <bpsim:UserDistributionDataPoint probability="0.5">
+                    <bpsim:FloatingParameter value="0.1"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="0.5">
+                    <bpsim:FloatingParameter value="0.5"/>
+                  </bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('user-discrete_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="user-continuous">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:UserDistribution discrete="false">
+                  <bpsim:UserDistributionDataPoint probability="0">
+                    <bpsim:FloatingParameter value="0.1"/>
+                  </bpsim:UserDistributionDataPoint>
+                  <bpsim:UserDistributionDataPoint probability="1">
+                    <bpsim:FloatingParameter value="0.5"/>
+                  </bpsim:UserDistributionDataPoint>
+                </bpsim:UserDistribution>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="constant_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="2"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="triangular_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="2"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="truncated-normal_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="2"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="gamma_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="2"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="erlang_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="2"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="poisson_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="2"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="user-discrete_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="2"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

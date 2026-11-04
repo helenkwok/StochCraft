@@ -146,11 +146,17 @@ jobs:
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: wasm32-unknown-unknown
+          targets: wasm32-unknown-unknown, wasm32-wasip1
       - uses: Swatinem/rust-cache@v2
         with:
           key: wasm
+      # Node runs the wasm32-wasip1 test binary through its built-in WASI (xtask/wasi-run.mjs).
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - run: cargo xtask wasm
+      # The golden models must give the results pinned natively (tests/golden/results.txt).
+      - run: cargo xtask golden
 
   bench:
     name: Benchmarks build

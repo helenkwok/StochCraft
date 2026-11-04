@@ -1,0 +1,19 @@
+[package]
+name = "stochcraft-testkit"
+description = "StochCraft's test tooling: the golden models and the digests of their pinned results, checked on every target."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-engine = { workspace = true }
+serde_json = "1"
+# Digests of results (MIT OR Apache-2.0).
+sha2 = "0.11"
+
+[lints]
+workspace = true

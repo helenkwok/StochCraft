@@ -20,6 +20,8 @@ cargo xtask <command>
                   the crates a change since REV touches, plus the crates that depend on them,
                   and the CI flags: everything, heavy (#[ignore]d tests affected), wasm
   wasm            cargo check of every layered crate for wasm32-unknown-unknown
+  golden          the golden-results test (stochcraft-testkit) built for wasm32-wasip1 and run
+                  under Node's WASI (xtask/wasi-run.mjs): the pinned results must match there too
   fetch-bpsim     download the BPSim reference models and XML Schema from bpsim.org into
                   target/bpsim (checked against pinned SHA-256; never committed)
   ci [--affected REV]
@@ -35,6 +37,7 @@ fn main() -> ExitCode {
         Some("layers") => cmd_layers(),
         Some("affected") => affected::run(&args[1..]),
         Some("wasm") => cmd_wasm(),
+        Some("golden") => cmd_golden(),
         Some("fetch-bpsim") => bpsim::fetch(),
         Some("ci") => match &args[1..] {
             [] => cmd_ci(None),
@@ -160,6 +163,26 @@ fn cmd_wasm() -> Result<(), String> {
             set.len()
         ),
     )
+}
+
+/// The golden results on wasm32-wasip1. Node (22 or later) runs the test binary through its
+/// built-in WASI, so no other runtime is needed; GitHub's runners have Node.
+fn cmd_golden() -> Result<(), String> {
+    let runner = root().join("xtask").join("wasi-run.mjs");
+    let mut c = cargo();
+    c.env(
+        "CARGO_TARGET_WASM32_WASIP1_RUNNER",
+        format!("node --no-warnings {}", runner.display()),
+    )
+    .args([
+        "test",
+        "--locked",
+        "-p",
+        "stochcraft-testkit",
+        "--target",
+        "wasm32-wasip1",
+    ]);
+    run(c, "golden results on wasm32-wasip1 (Node WASI)")
 }
 
 fn cmd_ci(affected_base: Option<&str>) -> Result<(), String> {

@@ -7,6 +7,12 @@
 //!
 //! [`Dist`] holds the distributions of the BPSim 2.0 specification (WfMC, 2016), each sampled
 //! exactly (no approximations) by the published method named on its variant.
+//!
+//! Logarithms, exponentials, powers and trigonometric functions come from [`math`] (pure Rust),
+//! never from the platform's maths library, whose results can differ in the last bit between
+//! glibc, musl (wasm), macOS and Windows. Square roots are exactly rounded everywhere.
+
+pub mod math;
 
 /// SplitMix64: used only to expand a seed into generator state.
 #[derive(Debug, Clone)]
@@ -68,7 +74,7 @@ impl Rng {
         if !(mean.is_finite() && mean > 0.0) {
             return 0.0;
         }
-        -mean * self.uniform_open0().ln()
+        -mean * math::ln(self.uniform_open0())
     }
 
     /// Uniform on [min, max). Returns `min` if the range is empty or not finite.
