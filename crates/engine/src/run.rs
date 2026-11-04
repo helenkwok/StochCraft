@@ -44,6 +44,8 @@ impl RunMode {
 pub struct Plan {
     pub compiled: Compiled,
     pub experiment: Experiment,
+    /// What the results come from (see [`crate::Engine`]'s run record), attached to them.
+    pub record: Value,
 }
 
 impl Plan {
@@ -57,12 +59,14 @@ impl Plan {
     }
 
     fn results(&self, reports: &[Report]) -> Value {
-        wire::results(
+        let mut v = wire::results(
             self.compiled.model(),
             self.experiment.replications,
             self.experiment.seed,
             &summarise(reports),
-        )
+        );
+        v["record"] = self.record.clone();
+        v
     }
 }
 

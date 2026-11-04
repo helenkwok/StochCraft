@@ -589,3 +589,43 @@ fn the_committed_test_models_open_and_run() {
         assert_eq!(r["replications"], 3, "{name}");
     }
 }
+
+#[test]
+fn results_carry_a_run_record() {
+    let mut e = help_desk();
+    let r = ok(&mut e, "run", json!({"replications": 3, "seed": 9}));
+    let rec = &r["record"];
+    assert_eq!(rec["seed"], 9);
+    assert_eq!(rec["replications"], 3);
+    assert_eq!(rec["warmup"], 60.0);
+    assert_eq!(rec["file"], Value::Null);
+    assert!(
+        rec["uncertainty"]
+            .as_str()
+            .is_some_and(|u| u.contains("95%"))
+    );
+    let digest = rec["model_digest"].as_str().unwrap_or_default().to_owned();
+    assert!(
+        digest.starts_with("sha256:") && digest.len() == 7 + 64,
+        "{digest}"
+    );
+    // The digest follows the model, not the run.
+    let again = ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(again["record"]["model_digest"], json!(digest));
+    ok(&mut e, "block.set", json!({"id": "desk", "capacity": 2}));
+    let changed = ok(&mut e, "run", json!({"replications": 2}));
+    assert_ne!(changed["record"]["model_digest"], json!(digest));
+    // From a file: its name, scenario and what was noted when reading it.
+    let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let mut f = Engine::new();
+    ok(&mut f, "file.open", json!({"path": mm1.to_string_lossy()}));
+    let r = ok(&mut f, "run", json!({"replications": 2}));
+    assert_eq!(r["record"]["scenario"], "base");
+    assert_eq!(r["record"]["format"], "bpmn");
+    assert_eq!(r["record"]["unsaved_changes"], false);
+    assert!(
+        r["record"]["file_notes"]
+            .as_array()
+            .is_some_and(|n| !n.is_empty())
+    );
+}
