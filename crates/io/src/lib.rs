@@ -1,11 +1,13 @@
 //! StochCraft's model files: BPSim 2.0 (and 1.0) on BPMN 2.0 or XPDL 2.2 (ROADMAP.md, "Model
 //! files: no new format").
 //!
-//! - [`read`] / [`read_scenario`] open a file: the model, notes on anything StochCraft ignored or
+//! - [`read()`] / [`read_scenario`] open a file: the model, notes on anything StochCraft ignored or
 //!   could not use, and an [`Opened`] document that remembers the original bytes.
 //! - [`write_new`] writes a model StochCraft created as BPMN 2.0 with BPSim 2.0, in the order the
 //!   BPSim XML Schema requires, with a diagram other BPMN editors can display.
-//! - [`Opened::save`] writes an opened file back: unchanged models byte for byte.
+//! - [`Opened::save`] writes an opened file back: unchanged models byte for byte, edited ones with
+//!   only their changes written in and everything else kept as it was, checked by reading the
+//!   result back.
 //!
 //! Reading is lenient and writing strict: element order, BPSim 1.0 namespaces and other time units
 //! are accepted on reading; everything written follows the schema.
@@ -13,6 +15,7 @@
 pub mod bpsim;
 pub mod duration;
 pub mod read;
+mod save;
 pub mod write;
 
 pub use write::write_new;
@@ -114,7 +117,7 @@ pub struct Opened {
     model_at_load: stochcraft_model::Model,
 }
 
-/// What [`read`] returns.
+/// What [`read()`] returns.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Loaded {
     pub model: stochcraft_model::Model,
@@ -155,29 +158,41 @@ pub fn read_scenario(bytes: &[u8], id: Option<&str>) -> Result<Loaded, ReadError
     })
 }
 
-/// Why an opened file could not be saved.
+/// Why an edited model could not be saved into the file it was opened from.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SaveError {
-    /// The model was changed since it was opened. Writing changes back into the original file
-    /// arrives with the engine's edit commands (M1.4); until then, use [`write_new`].
-    EditedSinceOpened,
+    /// The change cannot be written into this file (yet), with the reason. [`write_new`] can
+    /// still save the model as a new file.
+    Unsupported(String),
 }
 
 impl std::fmt::Display for SaveError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str("saving changes into an opened file is not supported yet (M1.4); save as a new BPMN file instead")
+        match self {
+            SaveError::Unsupported(reason) => {
+                write!(f, "cannot save the changes into the opened file: {reason}")
+            }
+        }
     }
 }
 
 impl std::error::Error for SaveError {}
 
 impl Opened {
-    /// The file's bytes for `model`: exactly the original bytes when the model is unchanged.
+    /// The file's bytes for `model`: exactly the original bytes when the model is unchanged;
+    /// otherwise the original file with the changes written in, and everything StochCraft does
+    /// not understand kept as it was. The result is checked by reading it back.
     pub fn save(&self, model: &stochcraft_model::Model) -> Result<Vec<u8>, SaveError> {
         if *model == self.model_at_load {
             Ok(self.bytes.clone())
         } else {
-            Err(SaveError::EditedSinceOpened)
+            save::save_edited(
+                &self.bytes,
+                self.format,
+                self.scenario.as_deref(),
+                &self.model_at_load,
+                model,
+            )
         }
     }
 }

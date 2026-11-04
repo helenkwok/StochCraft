@@ -13,8 +13,10 @@ use std::process::Command;
 
 use stochcraft_blocks::Builder;
 use stochcraft_io::bpsim::{self, NS2};
-use stochcraft_io::{read, read_scenario, write_new, xml};
-use stochcraft_model::{Dist, Experiment, Model, TimeUnit};
+use stochcraft_io::{SaveError, read, read_scenario, write_new, xml};
+use stochcraft_model::{
+    Connection, Dist, Element, ElementId, ElementKind, Experiment, Model, TimeUnit,
+};
 
 fn required() -> bool {
     std::env::var("STOCHCRAFT_REQUIRE_BPSIM").is_ok_and(|v| v == "1")
@@ -204,21 +206,24 @@ fn result_scenarios_from_another_simulator_parse() {
     assert!(arrivals.iter().all(|v| v == "151"), "{arrivals:?}");
 }
 
-/// Validates the BPSim data in a written BPMN file against the official schema.
-fn validate(written: &[u8], label: &str, xsd: &Path) {
+/// Checks the BPSim data in a written file against the official schema: the errors, if any.
+fn schema_errors(written: &[u8], label: &str, xsd: &Path) -> Option<String> {
     let doc = xml::parse(written).unwrap_or_else(|e| panic!("{label}: {e}"));
     let mut data = bpsim::find_data(&doc.root)
         .unwrap_or_else(|| panic!("{label}: no BPSimData"))
         .clone();
-    // The prefix is declared on the BPMN root; the extracted part declares it itself.
-    data.attrs.insert(0, ("xmlns:bpsim".into(), NS2.into()));
+    if data.ns.as_deref() != Some(NS2) {
+        return None;
+    }
+    // The prefixes are declared on the file's root; the extracted part declares them itself.
+    for (n, v) in doc.root.attrs.iter().rev() {
+        if n.starts_with("xmlns") && !data.attrs.iter().any(|(d, _)| d == n) {
+            data.attrs.insert(0, (n.clone(), v.clone()));
+        }
+    }
     let out =
         std::env::temp_dir().join(format!("stochcraft-xsd-{}-{label}.xml", std::process::id()));
-    let text = xml::write(&xml::Document {
-        decl: None,
-        prolog: vec![],
-        root: data,
-    });
+    let text = xml::write(&xml::Document::new(data));
     std::fs::write(&out, text).unwrap_or_else(|e| panic!("{}: {e}", out.display()));
     let result = Command::new("xmllint")
         .arg("--noout")
@@ -228,11 +233,249 @@ fn validate(written: &[u8], label: &str, xsd: &Path) {
         .output();
     let _ = std::fs::remove_file(&out);
     let result = result.unwrap_or_else(|e| panic!("xmllint: {e}"));
+    (!result.status.success()).then(|| String::from_utf8_lossy(&result.stderr).into_owned())
+}
+
+/// Validates the BPSim data in a written file against the official schema.
+fn validate(written: &[u8], label: &str, xsd: &Path) {
+    if let Some(errors) = schema_errors(written, label, xsd) {
+        panic!("{label}: BPSim data is not schema-valid:\n{errors}");
+    }
+}
+
+fn label(p: &Path, scenario: &str) -> String {
+    format!("{}-{scenario}", name(p))
+        .chars()
+        .map(|c| if c.is_alphanumeric() { c } else { '_' })
+        .collect()
+}
+
+/// The edits tried on every reference model: each must save, read back as the edited model and
+/// keep a schema-valid file valid.
+/// A named change to a model.
+type Edit = (&'static str, Box<dyn Fn(&mut Model)>);
+
+fn edits() -> Vec<Edit> {
+    let first = |m: &Model, f: fn(&ElementKind) -> bool| m.elements.iter().position(|e| f(&e.kind));
+    vec![
+        (
+            "experiment",
+            Box::new(|m: &mut Model| {
+                m.experiment.replications += 1;
+                m.experiment.seed = 99;
+                m.experiment.duration += 60.0;
+                m.experiment.warmup += 30.0;
+            }),
+        ),
+        (
+            "names",
+            Box::new(|m: &mut Model| {
+                m.name = format!("{} (edited)", m.name);
+                if let Some(e) = m.elements.first_mut() {
+                    e.name = "Renamed & checked".into();
+                }
+            }),
+        ),
+        (
+            "times",
+            Box::new(move |m: &mut Model| {
+                for e in &mut m.elements {
+                    match &mut e.kind {
+                        ElementKind::Server { service: d, .. }
+                        | ElementKind::Delay { duration: d } => {
+                            *d = Dist::Triangular {
+                                min: 1.0,
+                                mode: 2.0,
+                                max: 5.0,
+                            };
+                        }
+                        ElementKind::Source {
+                            interarrival,
+                            limit,
+                        } => {
+                            *interarrival = Dist::Exponential { mean: 3.0 };
+                            *limit = Some(25);
+                        }
+                        ElementKind::Sink => {}
+                    }
+                }
+            }),
+        ),
+        (
+            "add",
+            Box::new(move |m: &mut Model| {
+                // A new delay on the first connection (or on its own if there is none).
+                let new = ElementId::unchecked("stochcraft-added");
+                let at = first(m, |k| matches!(k, ElementKind::Source { .. })).map_or(0, |i| i + 1);
+                m.elements.insert(
+                    at,
+                    Element {
+                        id: new.clone(),
+                        name: "Added".into(),
+                        kind: ElementKind::Delay {
+                            duration: Dist::Constant(2.0),
+                        },
+                    },
+                );
+                if let Some(c) = m.connections.first().cloned() {
+                    m.connections[0].to = new.clone();
+                    m.connections.insert(
+                        1,
+                        Connection {
+                            id: ElementId::unchecked("stochcraft-added-out"),
+                            from: new,
+                            to: c.to,
+                        },
+                    );
+                }
+            }),
+        ),
+        (
+            "remove",
+            Box::new(move |m: &mut Model| {
+                if let Some(i) = first(m, |k| matches!(k, ElementKind::Sink)) {
+                    let id = m.elements.remove(i).id;
+                    m.connections.retain(|c| c.from != id && c.to != id);
+                }
+            }),
+        ),
+        (
+            "server becomes delay",
+            Box::new(move |m: &mut Model| {
+                if let Some(i) = first(m, |k| matches!(k, ElementKind::Server { .. })) {
+                    m.elements[i].kind = ElementKind::Delay {
+                        duration: Dist::Constant(1.5),
+                    };
+                }
+            }),
+        ),
+        (
+            "delay becomes server",
+            Box::new(move |m: &mut Model| {
+                if let Some(i) = first(m, |k| matches!(k, ElementKind::Delay { .. })) {
+                    m.elements[i].kind = ElementKind::Server {
+                        capacity: 2,
+                        service: Dist::Constant(1.5),
+                    };
+                }
+            }),
+        ),
+    ]
+}
+
+/// Whether scenario `child` inherits, directly or not, from `ancestor`.
+fn inherits_from(file: &[u8], child: &str, ancestor: &str) -> bool {
+    let doc = xml::parse(file).unwrap_or_else(|e| panic!("{e}"));
+    let Some(data) = bpsim::find_data(&doc.root) else {
+        return false;
+    };
+    let parent = |id: &str| {
+        data.elements()
+            .find(|s| s.attr("id").as_deref() == Some(id))
+            .and_then(|s| s.attr("inherits"))
+    };
+    let mut at = parent(child);
+    for _ in 0..32 {
+        match at {
+            Some(p) if p == ancestor => return true,
+            Some(p) => at = parent(&p),
+            None => return false,
+        }
+    }
+    false
+}
+
+#[test]
+fn edits_save_into_every_reference_model_and_scenario() {
+    let Some(paths) = models() else { return };
+    let xsd = bpsim_dir().join("BPSim-2.0.xsd");
+    let check_schema = xsd.exists() && Command::new("xmllint").arg("--version").output().is_ok();
+    if !check_schema {
+        missing("the BPSim 2.0 XML Schema or xmllint is missing");
+    }
+    let (mut saves, mut checked) = (0, 0);
+    for p in &paths {
+        let b = bytes(p);
+        let Ok(first) = read(&b) else { continue };
+        for (scenario, _) in &first.opened.scenarios {
+            let l =
+                read_scenario(&b, Some(scenario)).unwrap_or_else(|e| panic!("{}: {e}", name(p)));
+            let valid_before =
+                check_schema && schema_errors(&b, &label(p, scenario), &xsd).is_none();
+            for (what, edit) in edits() {
+                let mut m = l.model.clone();
+                edit(&mut m);
+                if m == l.model {
+                    continue;
+                }
+                let at = format!("{} [{scenario}] {what}", name(p));
+                let saved = l.opened.save(&m).unwrap_or_else(|e| panic!("{at}: {e}"));
+                let back =
+                    read_scenario(&saved, Some(scenario)).unwrap_or_else(|e| panic!("{at}: {e}"));
+                assert_eq!(back.model, m, "{at}");
+                assert_eq!(back.opened.scenarios, l.opened.scenarios, "{at}");
+                // Every other scenario reads as it did.
+                for (other, _) in l.opened.scenarios.iter().filter(|(o, _)| o != scenario) {
+                    let before = read_scenario(&b, Some(other)).map(|x| x.model);
+                    let after = read_scenario(&saved, Some(other)).map(|x| x.model);
+                    // Removed and added elements are gone from (or new in) every scenario, and a
+                    // scenario that inherits from the edited one sees its edits.
+                    if matches!(what, "experiment" | "times" | "names")
+                        && !inherits_from(&b, other, scenario)
+                    {
+                        assert_eq!(
+                            after.ok().map(|m| m.experiment),
+                            before.ok().map(|m| m.experiment),
+                            "{at}: scenario {other} changed"
+                        );
+                    }
+                }
+                if valid_before {
+                    checked += 1;
+                    if let Some(errors) = schema_errors(&saved, &label(p, scenario), &xsd) {
+                        panic!("{at}: the edit made a schema-valid file invalid:\n{errors}");
+                    }
+                }
+                saves += 1;
+            }
+        }
+    }
+    eprintln!("{saves} edited saves, {checked} of them checked against the schema");
+    assert!(saves > 50, "{saves} saves");
     assert!(
-        result.status.success(),
-        "{label}: BPSim data is not schema-valid:\n{}",
-        String::from_utf8_lossy(&result.stderr)
+        !check_schema || checked > 0,
+        "no file was schema-valid to begin with"
     );
+}
+
+#[test]
+fn capacity_of_a_shared_resource_is_refused_with_the_reason() {
+    let Some(paths) = models() else { return };
+    let mut refused = 0;
+    for p in &paths {
+        let b = bytes(p);
+        let Ok(l) = read(&b) else { continue };
+        let mut m = l.model.clone();
+        let Some(e) = m
+            .elements
+            .iter_mut()
+            .find(|e| matches!(e.kind, ElementKind::Server { .. }))
+        else {
+            continue;
+        };
+        if let ElementKind::Server { capacity, .. } = &mut e.kind {
+            *capacity += 1;
+        }
+        match l.opened.save(&m) {
+            Ok(saved) => assert_eq!(read(&saved).map(|x| x.model).ok(), Some(m), "{}", name(p)),
+            Err(SaveError::Unsupported(why)) => {
+                assert!(why.contains("share"), "{}: {why}", name(p));
+                refused += 1;
+            }
+        }
+    }
+    // The technical support models share their agents between tasks.
+    assert!(refused > 0);
 }
 
 fn showcase() -> Model {
@@ -329,11 +572,7 @@ fn everything_stochcraft_writes_is_schema_valid() {
         let Ok(first) = read(&b) else { continue };
         for (id, _) in &first.opened.scenarios {
             if let Ok(l) = read_scenario(&b, Some(id)) {
-                let label: String = format!("{}-{id}", name(p))
-                    .chars()
-                    .map(|c| if c.is_alphanumeric() { c } else { '_' })
-                    .collect();
-                validate(&write_new(&l.model), &label, &xsd);
+                validate(&write_new(&l.model), &label(p, id), &xsd);
             }
         }
     }

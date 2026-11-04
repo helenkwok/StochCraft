@@ -203,8 +203,7 @@ starting model that other BPMN tools can open; every model change is an engine c
 
 Two PRs. **Part 1** (done): reading BPMN and XPDL with BPSim 2.0 and 1.0, writing new models as
 BPMN with BPSim 2.0, saving unchanged opened files byte for byte, and StochCraft's own test
-models. Saving *edits* into an opened file waits for the engine's edit commands (M1.4), which
-know what changed; until then it is refused with a clear error rather than guessed. **Part 2**
+models. Saving *edits* into an opened file came with the engine (M1.4, part 2). **Part 2**
 (done): `cargo xtask fetch-bpsim`, the reference corpus in CI (every model and scenario reads,
 unchanged saves are byte-identical, BPMN and XPDL versions give the same model, the L-SIM result
 files parse) and XSD validation of everything StochCraft writes. The statistical cross-check
@@ -272,7 +271,7 @@ against L-SIM needs gateways, which all three reference models use, so it moves 
 ### M1.4 `stochcraft-engine`: commands
 
 In two parts. **Part 1** (done): the command layer, undo and redo, the journal and runs.
-**Part 2**: saving edits into opened files while keeping everything StochCraft does not
+**Part 2** (done): saving edits into opened files while keeping everything StochCraft does not
 understand.
 
 - `Engine { model, history, journal }` and `execute(id, params) -> Result<Value>` with a
@@ -299,9 +298,28 @@ understand.
   both give exactly the results of `run`. `run.cancel` stops new replications from starting
   (`stochcraft-experiment` gains a `Control` with progress and cancellation); one already
   running finishes first.
-- `file.save` of an opened file saved unchanged writes the original bytes. Until part 2, an
-  edited opened file is refused with a clear error, and `"as_new": true` writes a new BPMN file
-  from the model alone.
+- `file.save` writes edits into the file the model was opened from (`stochcraft-io`'s
+  `Opened::save`), changing only what the edit needs:
+  - names; parameters and experiment settings in the scenario that was opened (where it
+    inherits a value, it gets its own); resource quantities for capacities;
+  - added and removed elements and connections, as BPMN or XPDL elements in the model's order,
+    with `incoming`/`outgoing` references, a resource for each new server, diagram shapes and
+    edges next to their neighbours, and the parameters of removed ones taken out of every
+    scenario;
+  - indentation and prefixes copied from the file, compact XML kept compact, and new names as
+    character references in a file declared in an encoding other than UTF-8.
+
+  Everything else is kept byte for byte: the XML writer now reproduces a parsed file exactly
+  (each start tag's own text, `<a/>` or `<a></a>`, the whitespace around the root, and a
+  changed tag keeps the layout of its other attributes), which also fixed a doubled `xml` in
+  re-written declarations. The saved file is read back before it is returned, and an edit that
+  would not read back as the model is refused with the reason (for example changing the time
+  unit of a file whose values carry their own units, reordering elements, or changing the
+  capacity of a resource several tasks share, which waits for M2.5); `"as_new": true` then
+  writes a new BPMN file from the model alone. Tests: edits on the hand-written models with a
+  bound on the lines changed, and 180 edits across every reference model and scenario, each
+  reading back as the edited model, leaving non-inheriting scenarios as they were, and keeping
+  a schema-valid file valid (120 checked with `xmllint`).
 
 ### M1.5 `apps/stochcraft-cli`
 

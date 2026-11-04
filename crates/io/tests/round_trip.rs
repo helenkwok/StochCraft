@@ -1,7 +1,7 @@
 //! Writing a model and reading it back gives the same model; opened files save unchanged.
 
 use stochcraft_blocks::Builder;
-use stochcraft_io::{Format, SaveError, read, write_new};
+use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{Dist, Experiment, Model, TimeUnit};
 
 /// A model using every element kind and every distribution.
@@ -122,7 +122,7 @@ fn added_ids_never_collide_with_model_ids() {
 }
 
 #[test]
-fn opened_files_save_unchanged_and_refuse_edits_for_now() {
+fn opened_files_save_unchanged_and_with_edits() {
     let bytes = write_new(&showcase());
     let Ok(loaded) = read(&bytes) else {
         unreachable!()
@@ -130,8 +130,10 @@ fn opened_files_save_unchanged_and_refuse_edits_for_now() {
     assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
     let mut edited = loaded.model.clone();
     edited.experiment.replications += 1;
-    assert_eq!(
-        loaded.opened.save(&edited),
-        Err(SaveError::EditedSinceOpened)
-    );
+    edited.experiment.warmup = 0.0;
+    edited.elements.pop();
+    edited.connections.pop();
+    let saved = loaded.opened.save(&edited);
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(edited)));
 }
