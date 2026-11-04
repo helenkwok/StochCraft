@@ -201,6 +201,12 @@ starting model that other BPMN tools can open; every model change is an engine c
 
 ### M1.3 `stochcraft-io`: BPSim on BPMN and XPDL
 
+Two PRs. **Part 1** (done): reading BPMN and XPDL with BPSim 2.0 and 1.0, writing new models as
+BPMN with BPSim 2.0, saving unchanged opened files byte for byte, and StochCraft's own test
+models. Saving *edits* into an opened file waits for the engine's edit commands (M1.4), which
+know what changed; until then it is refused with a clear error rather than guessed. **Part 2**:
+`cargo xtask fetch-bpsim`, the reference corpus, XSD validation in CI and the L-SIM cross-check.
+
 - Read BPSim 2.0 (and 1.0, upgraded on read) embedded in BPMN 2.0 or XPDL 2.2, or standalone;
   write BPMN 2.0 with embedded BPSim 2.0 for new models and the original format for opened ones.
   A permissively licensed XML crate (such as `quick-xml`); bytes in, bytes out. Written from the

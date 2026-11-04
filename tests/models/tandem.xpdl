@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A two-station line in XPDL 2.2 with BPSim 1.0 data, written by hand for StochCraft's tests
+     (MIT OR Apache-2.0). Times in hours. -->
+<Package xmlns="http://www.wfmc.org/2009/XPDL2.2" xmlns:b1="http://www.bpsim.org/schemas/1.0" Id="pkg" Name="Tandem line">
+  <Participants>
+    <Participant Id="welder" Name="Welding cell"><ParticipantType Type="RESOURCE"/></Participant>
+    <Participant Id="team" Name="Assembly team"><ParticipantType Type="ORGANIZATIONAL_UNIT"/></Participant>
+  </Participants>
+  <WorkflowProcesses>
+    <WorkflowProcess Id="wp">
+      <Activities>
+        <Activity Id="in" Name="Parts arrive"><Event><StartEvent Trigger="None"/></Event></Activity>
+        <Activity Id="weld" Name="Weld">
+          <Implementation><No/></Implementation>
+          <Performers><Performer>welder</Performer></Performers>
+        </Activity>
+        <Activity Id="cool" Name="Cool"><Implementation><No/></Implementation></Activity>
+        <Activity Id="out" Name="Shipped"><Event><EndEvent Result="None"/></Event></Activity>
+      </Activities>
+      <Transitions>
+        <Transition Id="t1" From="in" To="weld"/>
+        <Transition Id="t2" From="weld" To="cool"/>
+        <Transition Id="t3" From="cool" To="out"/>
+      </Transitions>
+    </WorkflowProcess>
+  </WorkflowProcesses>
+  <b1:BPSimData>
+    <b1:Scenario id="day" name="One day">
+      <b1:ElementParameters elementRef="in">
+        <b1:ControlParameters>
+          <b1:TriggerCount><b1:NumericParameter value="40"/></b1:TriggerCount>
+          <b1:InterTriggerTimer><b1:UniformDistribution min="10" max="20" timeUnit="min"/></b1:InterTriggerTimer>
+        </b1:ControlParameters>
+      </b1:ElementParameters>
+      <b1:ElementParameters elementRef="weld">
+        <b1:TimeParameters><b1:ProcessingTime><b1:ErlangDistribution mean="0.2" k="2.0"/></b1:ProcessingTime></b1:TimeParameters>
+      </b1:ElementParameters>
+      <b1:ElementParameters elementRef="cool">
+        <b1:TimeParameters><b1:ProcessingTime><b1:DurationParameter value="PT45M"/></b1:ProcessingTime></b1:TimeParameters>
+      </b1:ElementParameters>
+      <b1:ElementParameters elementRef="welder">
+        <b1:ResourceParameters><b1:Quantity><b1:NumericParameter value="3"/></b1:Quantity></b1:ResourceParameters>
+      </b1:ElementParameters>
+      <b1:ScenarioParameters baseTimeUnit="hour" seed="7" replication="10">
+        <b1:Duration><b1:DurationParameter value="P1D"/></b1:Duration>
+      </b1:ScenarioParameters>
+    </b1:Scenario>
+  </b1:BPSimData>
+</Package>
