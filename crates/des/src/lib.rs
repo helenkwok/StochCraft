@@ -1,9 +1,20 @@
 //! StochCraft's discrete-event simulation core.
 //!
 //! - [`Sim`] runs processes written as `async` blocks on simulated time, SimPy-style: a process
-//!   holds for a delay, waits for a [`Resource`] or an item from a [`Store`], spawns other processes. It is single-threaded
-//!   and needs no async runtime, so it runs unchanged in the browser. Parallelism belongs one
-//!   level up, as independent replications.
+//!   holds for a delay, waits for a [`Resource`] or an item from a [`Store`], spawns other
+//!   processes. It is single-threaded and needs no async runtime, so it runs unchanged in the
+//!   browser. Parallelism belongs one level up, as independent replications.
+//! - The building blocks of factory and logistics models:
+//!   - [`Resource`]: units served by priority, then first come, first served; optionally
+//!     preemptive ([`Resource::preemptive`]).
+//!   - [`Store`]: unbounded or bounded ([`Store::put_wait`] blocks while full), first in first
+//!     out or by priority ([`Store::with_priority`]).
+//!   - Waits with a deadline ([`Resource::acquire_within`], [`Store::get_within`]) for
+//!     reneging, and immediate refusals ([`Store::try_put`]) for balking.
+//!   - Interrupts ([`Ctx::interrupt`], [`Ctx::hold_interruptible`]) for breakdowns and
+//!     preemption.
+//!   - [`Signal`] (wake everyone waiting now) and [`Gate`] (a condition that stays true while
+//!     open) for gates, schedules and assembly.
 //! - [`EventQueue`] is the underlying queue: events are ordered by simulated time, then by priority
 //!   (higher first), then by scheduling order, so two runs of the same model always pop events
 //!   in the same order. Times are `f64`; non-finite times are refused rather than stored.
@@ -13,8 +24,27 @@
 use std::cmp::Ordering;
 use std::collections::BinaryHeap;
 
+mod resource;
+mod signal;
 mod sim;
-pub use sim::{Acquire, Ctx, Get, Hold, Resource, ResourceGuard, Sim, Store};
+mod store;
+pub use resource::{Acquire, AcquireWithin, Resource, ResourceGuard};
+pub use signal::{Gate, Signal, Wait};
+pub use sim::{Ctx, Hold, HoldInterruptible, Interrupt, InterruptCause, Interrupted, Sim};
+pub use store::{Get, GetWithin, PutWait, Store};
+
+/// A wait with a deadline ([`Resource::acquire_within`], [`Store::get_within`]) ended at the
+/// deadline without getting what it waited for. It has left the queue.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct TimedOut;
+
+impl std::fmt::Display for TimedOut {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("the wait timed out")
+    }
+}
+
+impl std::error::Error for TimedOut {}
 
 /// Why an event could not be scheduled.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -131,6 +161,11 @@ impl<T> EventQueue<T> {
         payload: T,
     ) -> Result<u64, ScheduleError> {
         self.schedule_at(self.now + delay, priority, payload)
+    }
+
+    /// The sequence number the next scheduled event will get.
+    pub(crate) fn next_seq(&self) -> u64 {
+        self.next_seq
     }
 
     /// The time of the next event, if any.
