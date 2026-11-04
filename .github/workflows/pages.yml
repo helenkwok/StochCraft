@@ -1,0 +1,179 @@
+name: Pages
+
+# The browser app on GitHub Pages, from the `gh-pages` branch: `main` at the site's root and each
+# pull request at `pr/<number>/`, so a change to the interface can be tried before it is merged. A
+# pull request's preview is removed when it closes. Needs Settings → Pages → Source = "Deploy from
+# a branch", branch `gh-pages`, folder `/ (root)` (the first run creates the branch).
+#
+# Pull requests from forks are built but not published: their token cannot push.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md", "docs/**", "bench/**", "xtask/src/bpsim.rs"]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    paths-ignore: ["**.md", "docs/**", "bench/**", "xtask/src/bpsim.rs"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  TRUNK_VERSION: v0.21.14
+
+jobs:
+  build:
+    name: Build the web app
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: pages
+      - name: Install trunk
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -sSfL "https://github.com/trunk-rs/trunk/releases/download/${TRUNK_VERSION}/trunk-x86_64-unknown-linux-gnu.tar.gz" | tar -xz -C "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: trunk build --release
+        working-directory: apps/stochcraft-web
+        run: trunk build --release --public-url ./
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: dist/web
+          retention-days: 7
+
+  publish:
+    name: Publish to gh-pages
+    needs: build
+    # Not for forks (no push rights), and never two at once (they share the branch).
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: web
+          path: web
+      - name: Check out gh-pages (or start it)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads "$url" gh-pages >/dev/null; then
+            git clone --depth 1 --branch gh-pages "$url" site
+          else
+            git init -b gh-pages site
+            git -C site remote add origin "$url"
+          fi
+      - name: Place the build
+        env:
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          if [ -n "$PR" ]; then
+            target="site/pr/$PR"
+            rm -rf "$target"
+            mkdir -p "$target"
+            cp -r web/. "$target/"
+          else
+            # main replaces everything but the previews.
+            find site -mindepth 1 -maxdepth 1 ! -name .git ! -name pr -exec rm -rf {} +
+            cp -r web/. site/
+          fi
+          touch site/.nojekyll
+      - name: Push
+        env:
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          cd site
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git commit -q -m "Publish ${PR:+pull request #$PR }${SHA}"
+          for i in 1 2 3; do
+            git push origin gh-pages && exit 0
+            # Another publish pushed first: start again from its result.
+            git pull --rebase origin gh-pages || exit 1
+          done
+          exit 1
+      - name: Link the preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          owner="${GITHUB_REPOSITORY%%/*}"
+          repo="${GITHUB_REPOSITORY#*/}"
+          base="https://${owner,,}.github.io/${repo}/"
+          if [ -z "$PR" ]; then
+            echo "### Published: ${base}" >>"$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          url="${base}pr/${PR}/"
+          echo "### Preview: ${url}" >>"$GITHUB_STEP_SUMMARY"
+          marker="<!-- stochcraft-pages-preview -->"
+          body="${marker}
+          **Preview of the browser app:** ${url} (built from ${SHA:0:7}; it can take a minute to appear)"
+          id=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate \
+            --jq ".[] | select(.body | startswith(\"$marker\")) | .id" | head -1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" -f body="$body" >/dev/null
+          else
+            gh api -X POST "repos/$GITHUB_REPOSITORY/issues/$PR/comments" -f body="$body" >/dev/null
+          fi
+
+  remove:
+    name: Remove the preview
+    if: >-
+      github.event.action == 'closed' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: false
+    steps:
+      - name: Delete pr/<number>/ from gh-pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git ls-remote --exit-code --heads "$url" gh-pages >/dev/null || exit 0
+          git clone --depth 1 --branch gh-pages "$url" site
+          cd site
+          [ -d "pr/$PR" ] || exit 0
+          git rm -rq "pr/$PR"
+          git commit -q -m "Remove the preview of pull request #$PR"
+          for i in 1 2 3; do
+            git push origin gh-pages && exit 0
+            git pull --rebase origin gh-pages || exit 1
+          done
+          exit 1
