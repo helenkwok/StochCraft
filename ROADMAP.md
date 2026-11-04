@@ -17,7 +17,7 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 |---|---|---|
 | `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist` |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary` |
-| `des` | L1 | Event queue; async processes with `hold`, `Resource`, `Store`, `spawn` |
+| `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate` |
 | `model` | L1 | The model in memory: elements, connections, experiment, validation |
 | `blocks` | L2 | Compiles a model: source, server, delay, sink; per-element statistics; warm-up |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
@@ -386,15 +386,17 @@ schema where possible.
 
 ### M2.1 Engine primitives in `des`
 
-Needed by the blocks below, each with its own unit tests:
+Done. Needed by the blocks below, each with its own unit tests; the bounded store and the
+preemptive resource are also checked against M/M/1/K blocking and two-class preemptive-resume
+priority theory:
 
-| Primitive | For |
-|---|---|
-| Bounded `Store` (`put().await` waits when full) | finite buffers, blocking lines |
-| Priority `Resource` and `Store` (priority, then FIFO) | priority rules, urgent orders |
-| Interrupt / preempt a process | breakdowns, preemptive priority |
-| Timeouts on waits (`acquire` or `get` with a deadline) | reneging, balking |
-| Condition / event (wait until signalled) | gates, schedules, assembly |
+| Primitive | For | API |
+|---|---|---|
+| Bounded `Store` (waits when full) | finite buffers, blocking lines | `Store::bounded`, `put_wait().await`, `try_put` |
+| Priority `Resource` and `Store` (priority, then FIFO) | priority rules, urgent orders | `acquire_with_priority`, `Store::with_priority` |
+| Interrupt / preempt a process | breakdowns, preemptive priority | `Ctx::interrupt`, `hold_interruptible`, `Resource::preemptive` |
+| Timeouts on waits | reneging, balking | `acquire_within`, `get_within` → `Err(TimedOut)` |
+| Condition / event (wait until signalled) | gates, schedules, assembly | `Signal` (`notify_all`), `Gate` (`open`, `close`) |
 
 ### M2.2 Token properties and expressions
 
