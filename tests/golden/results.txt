@@ -1,0 +1,6 @@
+# Digests of the golden models' results (stochcraft-testkit), identical on every target.
+# Rewrite with STOCHCRAFT_BLESS=1 cargo test -p stochcraft-testkit when a change is meant to
+# alter results, and say why in the commit.
+distributions.bpmn 0c649558d8e34d879c4ba47a95441bc1f866e5b6548e3675c416e4181314a2fa
+mm1.bpmn b404002b08d35ec8f246649d1f8c8309aa446a1e84d6aee72a523e1503c153c1
+tandem.xpdl eb1fcf0bdf16f4bac6ddcfb4ce589726a94187c6906fe82aa3187c481f7fb486

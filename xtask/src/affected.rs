@@ -16,7 +16,8 @@
 //! - `everything`: the workspace manifest, the lock file, the toolchain, xtask or the CI
 //!   workflows changed, or a path under `crates/` or `apps/` belongs to no package: run it all.
 //! - `heavy`: the affected set holds a package with `#[ignore]`d (heavy) tests.
-//! - `wasm`: the affected set holds a crate the wasm check builds (the layered crates).
+//! - `wasm`: the affected set holds a crate the wasm jobs build (the layered crates, and the
+//!   testkit, whose golden test also runs on wasm).
 //!
 //! The rules work on a small model ([`Workspace`]) so they are unit-tested without git or cargo.
 
@@ -206,7 +207,8 @@ pub fn workspace(meta: &Value) -> Result<Workspace, String> {
             .collect();
         packages.push(Package {
             heavy: sources.contains("#[ignore"),
-            wasm: crate::wasm_crate(&name),
+            // The testkit's golden test also runs on wasm (`cargo xtask golden`).
+            wasm: crate::wasm_crate(&name) || crate::layers::short_name(&name) == "testkit",
             name,
             dir: rel.to_string_lossy().replace('\\', "/"),
             deps,

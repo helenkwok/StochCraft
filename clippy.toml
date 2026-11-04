@@ -1,0 +1,15 @@
+# Elementary functions from the platform's maths library can differ in the last bit between
+# systems (glibc, musl for wasm, macOS, Windows), which would break identical results across
+# targets. Use stochcraft_random::math instead. (sqrt is exactly rounded everywhere.)
+disallowed-methods = [
+    { path = "f64::ln", reason = "use stochcraft_random::math::ln (identical on every target)" },
+    { path = "f64::exp", reason = "use stochcraft_random::math::exp (identical on every target)" },
+    { path = "f64::powf", reason = "use stochcraft_random::math::powf (identical on every target)" },
+    { path = "f64::sin", reason = "use stochcraft_random::math::sin (identical on every target)" },
+    { path = "f64::cos", reason = "use stochcraft_random::math::cos (identical on every target)" },
+    { path = "f64::tan", reason = "not identical on every target; add it to stochcraft_random::math" },
+    { path = "f64::log10", reason = "not identical on every target; add it to stochcraft_random::math" },
+    { path = "f64::log2", reason = "not identical on every target; add it to stochcraft_random::math" },
+    { path = "f64::ln_1p", reason = "not identical on every target; add it to stochcraft_random::math" },
+    { path = "f64::exp_m1", reason = "not identical on every target; add it to stochcraft_random::math" },
+]

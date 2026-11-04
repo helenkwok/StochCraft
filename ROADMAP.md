@@ -355,12 +355,21 @@ Done. Every subcommand goes through the engine's commands, as the app and agents
 
 ### M1.6 Determinism and the browser
 
-- A `stochcraft-testkit` golden-results test: each golden model's results digest is pinned and
-  must match on native and on wasm32 (run under a wasm runtime in CI; `wasm-bindgen-test` or
-  `wasmtime`). wasm64 joins when its toolchain is checked (README of the wasm64 plan).
+Done.
+
+- A `stochcraft-testkit` golden-results test: each golden model (`mm1.bpmn`, `tandem.xpdl`, and
+  `distributions.bpmn` with an element for every BPSim distribution) is run through the engine,
+  and its results digest is pinned in `tests/golden/results.txt`. It must match natively and as
+  `wasm32-wasip1`, run by `cargo xtask golden` under Node's built-in WASI (no runtime to
+  install; CI's wasm job runs it). `STOCHCRAFT_BLESS=1` rewrites the digests when a change is
+  meant to alter results.
+- Elementary functions come from the pure-Rust `libm` through `stochcraft_random::math`, and
+  `clippy.toml` forbids `f64::ln` and the like, so results do not depend on the platform's maths
+  library (docs/architecture.md).
+- wasm64 joins when its toolchain is checked (README of the wasm64 plan).
 
 **M1 size:** about six PRs (M1.1 … M1.6). M1.1–M1.3 can land without the engine; M1.4–M1.5
-depend on them.
+depend on them. **M1 is complete.**
 
 ---
 

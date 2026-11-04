@@ -43,7 +43,11 @@ cargo xtask ci
 
 That runs fmt, the layer check, Clippy with `-D warnings` and the tests. `cargo xtask ci
 --affected origin/main` does the same for only the crates your change affects, which is what CI
-runs on a pull request. `cargo xtask wasm` checks that the layered crates build for the browser.
+runs on a pull request. `cargo xtask wasm` checks that the layered crates build for the browser,
+and `cargo xtask golden` checks that the golden models give the pinned results on wasm32 too
+(it needs the `wasm32-wasip1` target and Node 22). A change that is meant to alter results
+rewrites the pinned digests with `STOCHCRAFT_BLESS=1 cargo test -p stochcraft-testkit`; say why
+in the commit.
 
 `cargo xtask fetch-bpsim` downloads the BPSim reference models and XML Schema from bpsim.org into
 `target/bpsim/` (they are never committed). Without them, and without `xmllint`, the

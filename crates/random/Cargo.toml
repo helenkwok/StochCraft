@@ -9,5 +9,10 @@ authors.workspace = true
 repository.workspace = true
 publish.workspace = true
 
+[dependencies]
+# Elementary functions in pure Rust (MIT OR Apache-2.0), so samples are bit-identical on every
+# platform rather than depending on each system's maths library.
+libm = "0.2"
+
 [lints]
 workspace = true
