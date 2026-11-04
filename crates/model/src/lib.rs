@@ -9,6 +9,10 @@
 //! - Times are `f64` in the experiment's [`TimeUnit`] (BPSim's `baseTimeUnit`, minutes by default).
 //! - [`Model::validate`] reports every problem at once as [`Diagnostic`]s, so a person or an agent
 //!   can fix them all in one pass.
+//! - Entities carry BPSim properties: each element may assign [`Property`] values to an entity
+//!   as it enters, from a fixed value, a distribution or an [`expr`] expression.
+
+pub mod expr;
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
@@ -145,12 +149,121 @@ impl ElementKind {
     }
 }
 
+/// BPSim's property types (`PropertyType`, section 6.1.5 of the specification).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum PropertyType {
+    String,
+    Boolean,
+    /// A whole number (64 bits).
+    Long,
+    Double,
+    /// A length of time, in the experiment's time unit.
+    Duration,
+    /// A date and time, kept as written (calendars arrive in M2.6).
+    DateTime,
+}
+
+impl PropertyType {
+    pub const ALL: [PropertyType; 6] = [
+        PropertyType::String,
+        PropertyType::Boolean,
+        PropertyType::Long,
+        PropertyType::Double,
+        PropertyType::Duration,
+        PropertyType::DateTime,
+    ];
+
+    /// The type's BPSim spelling.
+    pub fn bpsim_name(self) -> &'static str {
+        match self {
+            PropertyType::String => "string",
+            PropertyType::Boolean => "boolean",
+            PropertyType::Long => "long",
+            PropertyType::Double => "double",
+            PropertyType::Duration => "duration",
+            PropertyType::DateTime => "dateTime",
+        }
+    }
+
+    pub fn from_bpsim_name(s: &str) -> Option<Self> {
+        PropertyType::ALL.into_iter().find(|t| t.bpsim_name() == s)
+    }
+
+    /// Whether values of this type are numbers.
+    pub fn is_numeric(self) -> bool {
+        matches!(
+            self,
+            PropertyType::Long | PropertyType::Double | PropertyType::Duration
+        )
+    }
+}
+
+/// What a property is set to when an entity enters the element.
+#[derive(Debug, Clone, PartialEq)]
+pub enum PropertyValue {
+    /// A fixed number (a duration in the experiment's time unit).
+    Number(f64),
+    Boolean(bool),
+    /// Fixed text (a string or a date and time).
+    Text(String),
+    /// A value drawn for each entity.
+    Random(Dist),
+    /// A BPSim expression ([`expr`]), evaluated with the entity's properties as they were when it
+    /// arrived.
+    Expression(String),
+}
+
+impl PropertyValue {
+    /// A short name for messages: "a number", "a distribution"…
+    pub fn describe(&self) -> &'static str {
+        match self {
+            PropertyValue::Number(_) => "a number",
+            PropertyValue::Boolean(_) => "true or false",
+            PropertyValue::Text(_) => "text",
+            PropertyValue::Random(_) => "a distribution",
+            PropertyValue::Expression(_) => "an expression",
+        }
+    }
+}
+
+/// A property an element assigns to every entity that enters it (BPSim `PropertyParameters`).
+///
+/// All of an element's assignments are made together: each value is computed from the entity's
+/// properties as they were when it arrived, so their order does not matter.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Property {
+    pub name: String,
+    /// The declared type; without one, the property takes the type declared elsewhere in the
+    /// model, or else the type of its first value ([`Model::property_types`]).
+    pub ty: Option<PropertyType>,
+    pub value: PropertyValue,
+}
+
 /// A model element.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Element {
     pub id: ElementId,
     pub name: String,
     pub kind: ElementKind,
+    /// Properties assigned to each entity that enters (for a source: each entity it creates).
+    pub properties: Vec<Property>,
+}
+
+impl Element {
+    /// An element with no properties.
+    pub fn new(id: ElementId, name: impl Into<String>, kind: ElementKind) -> Self {
+        Self {
+            id,
+            name: name.into(),
+            kind,
+            properties: Vec::new(),
+        }
+    }
+
+    /// The property this element assigns under `name`.
+    pub fn property(&self, name: &str) -> Option<&Property> {
+        self.properties.iter().find(|p| p.name == name)
+    }
 }
 
 /// A connection from one element to another (a BPMN sequence flow).
@@ -242,6 +355,33 @@ pub enum Problem {
         field: &'static str,
         requirement: &'static str,
     },
+    /// A property with no name, or one an element assigns twice.
+    BadProperty {
+        name: String,
+        reason: &'static str,
+    },
+    /// Two declarations of a property with different types.
+    PropertyTypeConflict {
+        name: String,
+        first: PropertyType,
+        second: PropertyType,
+    },
+    /// A fixed value or distribution that a property of this type cannot hold.
+    PropertyValueType {
+        name: String,
+        ty: PropertyType,
+        value: &'static str,
+    },
+    /// An expression that cannot be used, with where and why.
+    BadExpression {
+        name: String,
+        expression: String,
+        error: expr::ExprError,
+    },
+    /// An expression reads a property that no element sets.
+    UnknownProperty {
+        name: String,
+    },
 }
 
 impl Problem {
@@ -263,6 +403,11 @@ impl Problem {
             Problem::Unreachable => "unreachable",
             Problem::NoPathToSink => "no_path_to_sink",
             Problem::BadExperiment { .. } => "bad_experiment",
+            Problem::BadProperty { .. } => "bad_property",
+            Problem::PropertyTypeConflict { .. } => "property_type_conflict",
+            Problem::PropertyValueType { .. } => "property_value_type",
+            Problem::BadExpression { .. } => "bad_expression",
+            Problem::UnknownProperty { .. } => "unknown_property",
         }
     }
 }
@@ -333,6 +478,31 @@ impl std::fmt::Display for Diagnostic {
             Problem::BadExperiment { field, requirement } => {
                 write!(f, "experiment {field} must be {requirement}")
             }
+            Problem::BadProperty { name, reason } => write!(f, "property `{name}` {reason}"),
+            Problem::PropertyTypeConflict {
+                name,
+                first,
+                second,
+            } => write!(
+                f,
+                "property `{name}` is declared as {} here and as {} elsewhere",
+                second.bpsim_name(),
+                first.bpsim_name()
+            ),
+            Problem::PropertyValueType { name, ty, value } => write!(
+                f,
+                "property `{name}` is a {}, which cannot hold {value}",
+                ty.bpsim_name()
+            ),
+            Problem::BadExpression {
+                name,
+                expression,
+                error,
+            } => write!(f, "property `{name}`: `{expression}`: {error}"),
+            Problem::UnknownProperty { name } => write!(
+                f,
+                "reads property `{name}`, which no element sets (it would read as empty)"
+            ),
         }
     }
 }
@@ -422,6 +592,7 @@ impl Model {
             }
         }
         self.check_experiment(&mut out);
+        self.check_properties(&mut out);
         self.check_reachability(&outgoing, &mut out);
         // Stable order: errors first, then as found (model order).
         out.sort_by_key(|d| std::cmp::Reverse(d.severity));
@@ -454,6 +625,148 @@ impl Model {
                     Some(id),
                     Problem::DuplicateId { id: id.clone() },
                 ));
+            }
+        }
+    }
+
+    /// The type of every property the model sets, by name: its declared type, else the type of
+    /// its first value in model order (a number or a distribution is a double, an expression the
+    /// kind of value it gives).
+    pub fn property_types(&self) -> BTreeMap<String, PropertyType> {
+        let mut types: BTreeMap<String, PropertyType> = BTreeMap::new();
+        let all = || self.elements.iter().flat_map(|e| &e.properties);
+        for p in all() {
+            if let Some(t) = p.ty {
+                types.entry(p.name.clone()).or_insert(t);
+            }
+        }
+        for p in all() {
+            if types.contains_key(&p.name) {
+                continue;
+            }
+            let t = match &p.value {
+                PropertyValue::Number(_) | PropertyValue::Random(_) => PropertyType::Double,
+                PropertyValue::Boolean(_) => PropertyType::Boolean,
+                PropertyValue::Text(_) => PropertyType::String,
+                PropertyValue::Expression(src) => match expr::parse(src).map(|e| e.kind()) {
+                    Ok(expr::Kind::Boolean) => PropertyType::Boolean,
+                    Ok(expr::Kind::Text) => PropertyType::String,
+                    _ => PropertyType::Double,
+                },
+            };
+            types.insert(p.name.clone(), t);
+        }
+        types
+    }
+
+    fn check_properties(&self, out: &mut Vec<Diagnostic>) {
+        let types = self.property_types();
+        let mut declared: BTreeMap<&str, PropertyType> = BTreeMap::new();
+        for e in &self.elements {
+            let at = Some(&e.id);
+            let mut seen = BTreeSet::new();
+            for p in &e.properties {
+                let name = p.name.clone();
+                if p.name.trim().is_empty() {
+                    out.push(Diagnostic::error(
+                        at,
+                        Problem::BadProperty {
+                            name,
+                            reason: "needs a name",
+                        },
+                    ));
+                    continue;
+                }
+                if !seen.insert(p.name.as_str()) {
+                    out.push(Diagnostic::error(
+                        at,
+                        Problem::BadProperty {
+                            name,
+                            reason: "is set twice by this element",
+                        },
+                    ));
+                    continue;
+                }
+                if let Some(t) = p.ty {
+                    match declared.get(p.name.as_str()) {
+                        Some(&first) if first != t => out.push(Diagnostic::error(
+                            at,
+                            Problem::PropertyTypeConflict {
+                                name: name.clone(),
+                                first,
+                                second: t,
+                            },
+                        )),
+                        Some(_) => {}
+                        None => {
+                            declared.insert(p.name.as_str(), t);
+                        }
+                    }
+                }
+                if let Some(ty) = p.ty.or_else(|| types.get(&p.name).copied()) {
+                    let fits = match &p.value {
+                        PropertyValue::Number(n) => {
+                            ty.is_numeric() && (ty != PropertyType::Long || n.fract() == 0.0)
+                        }
+                        PropertyValue::Random(_) => ty.is_numeric(),
+                        PropertyValue::Boolean(_) => ty == PropertyType::Boolean,
+                        PropertyValue::Text(_) => {
+                            matches!(ty, PropertyType::String | PropertyType::DateTime)
+                        }
+                        PropertyValue::Expression(_) => true,
+                    };
+                    if !fits {
+                        let value = match (&p.value, ty) {
+                            (PropertyValue::Number(_), PropertyType::Long) => "a fractional number",
+                            (v, _) => v.describe(),
+                        };
+                        out.push(Diagnostic::error(
+                            at,
+                            Problem::PropertyValueType {
+                                name: name.clone(),
+                                ty,
+                                value,
+                            },
+                        ));
+                    }
+                }
+                match &p.value {
+                    PropertyValue::Random(d) => {
+                        if let Err(error) = d.check() {
+                            out.push(Diagnostic::error(
+                                at,
+                                Problem::BadDistribution {
+                                    parameter: "property value",
+                                    error,
+                                },
+                            ));
+                        }
+                    }
+                    PropertyValue::Expression(src) => match expr::parse(src) {
+                        Ok(e) => {
+                            let mut unknown = BTreeSet::new();
+                            for read in e.properties() {
+                                if !types.contains_key(read) && unknown.insert(read) {
+                                    out.push(Diagnostic::error(
+                                        at,
+                                        Problem::UnknownProperty {
+                                            name: read.to_owned(),
+                                        },
+                                    ));
+                                }
+                            }
+                        }
+                        Err(error) => out.push(Diagnostic::error(
+                            at,
+                            Problem::BadExpression {
+                                name,
+                                expression: src.clone(),
+                                error,
+                            },
+                        )),
+                    },
+                    _ => {}
+                }
             }
         }
     }
@@ -555,11 +868,100 @@ mod tests {
     }
 
     fn el(i: &str, kind: ElementKind) -> Element {
-        Element {
-            id: id(i),
-            name: i.to_owned(),
-            kind,
+        Element::new(id(i), i, kind)
+    }
+
+    fn prop(name: &str, ty: Option<PropertyType>, value: PropertyValue) -> Property {
+        Property {
+            name: name.into(),
+            ty,
+            value,
         }
+    }
+
+    #[test]
+    fn properties_are_typed_and_checked() {
+        let mut m = mm1();
+        m.elements[0].properties = vec![
+            prop(
+                "issues",
+                Some(PropertyType::Long),
+                PropertyValue::Random(Dist::Poisson { mean: 2.0 }),
+            ),
+            prop("tier", None, PropertyValue::Text("gold".into())),
+        ];
+        m.elements[1].properties = vec![
+            prop(
+                "issues",
+                None,
+                PropertyValue::Expression("getProperty('issues') - 1".into()),
+            ),
+            prop(
+                "done",
+                None,
+                PropertyValue::Expression("getProperty('issues') <= 0".into()),
+            ),
+        ];
+        assert_eq!(m.validate(), vec![]);
+        let types = m.property_types();
+        assert_eq!(types.get("issues"), Some(&PropertyType::Long));
+        assert_eq!(types.get("tier"), Some(&PropertyType::String));
+        assert_eq!(types.get("done"), Some(&PropertyType::Boolean));
+
+        m.elements[1].properties.push(prop(
+            "late",
+            None,
+            PropertyValue::Expression("getProperty('missing') +".into()),
+        ));
+        m.elements[1].properties.push(prop(
+            "score",
+            None,
+            PropertyValue::Expression("getProperty('missing') * 2".into()),
+        ));
+        m.elements[2].properties = vec![
+            prop(
+                "issues",
+                Some(PropertyType::Double),
+                PropertyValue::Number(1.0),
+            ),
+            prop("tier", None, PropertyValue::Number(3.0)),
+            prop("tier", None, PropertyValue::Text("x".into())),
+            prop("", None, PropertyValue::Boolean(true)),
+        ];
+        m.elements[0].properties.push(prop(
+            "count",
+            Some(PropertyType::Long),
+            PropertyValue::Number(1.5),
+        ));
+        let codes: Vec<(String, &str)> = m
+            .validate()
+            .iter()
+            .map(|d| {
+                (
+                    d.at.as_ref().map(ToString::to_string).unwrap_or_default(),
+                    d.problem.code(),
+                )
+            })
+            .collect();
+        for want in [
+            ("machine", "bad_expression"),
+            ("machine", "unknown_property"),
+            ("exit", "property_type_conflict"),
+            ("exit", "property_value_type"),
+            ("exit", "bad_property"),
+            ("arrivals", "property_value_type"),
+        ] {
+            assert!(
+                codes.contains(&(want.0.into(), want.1)),
+                "missing {want:?} in {codes:?}"
+            );
+        }
+        let text: Vec<String> = m.validate().iter().map(ToString::to_string).collect();
+        assert!(
+            text.iter().any(|t| t
+                == "error at `machine`: property `late`: `getProperty('missing') +`: the expression ends too early (at character 25)"),
+            "{text:#?}"
+        );
     }
 
     fn link(i: &str, from: &str, to: &str) -> Connection {

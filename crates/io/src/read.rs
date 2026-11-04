@@ -7,7 +7,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Connection, Dist, Element as ModelElement, ElementId, ElementKind, Experiment, Model, TimeUnit,
+    Connection, Dist, Element as ModelElement, ElementId, ElementKind, Experiment, Model, Property,
+    PropertyType, PropertyValue, TimeUnit,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -282,7 +283,9 @@ fn dist_of(v: Option<Value>, what: &str, at: &str, notes: &mut Vec<Note>) -> Opt
         Some(Value::Expression(e)) => {
             notes.push(Note::error(
                 Some(at),
-                format!("{what} is an expression (`{e}`); expressions arrive in M2.2"),
+                format!(
+                    "{what} is an expression (`{e}`); only token properties take expressions so far"
+                ),
             ));
             None
         }
@@ -295,6 +298,76 @@ fn dist_of(v: Option<Value>, what: &str, at: &str, notes: &mut Vec<Note>) -> Opt
         }
         None => None,
     }
+}
+
+/// A property's `type` attribute. The schema's types are read as they are; common spellings
+/// outside it (the guide's example models write `int`) are read as the nearest BPSim type with
+/// a warning.
+fn property_type(raw: &str, name: &str, at: &str, notes: &mut Vec<Note>) -> Option<PropertyType> {
+    if let Some(t) = PropertyType::from_bpsim_name(raw) {
+        return Some(t);
+    }
+    let near = match raw {
+        "int" | "integer" | "short" | "byte" => Some(PropertyType::Long),
+        "float" | "decimal" | "number" => Some(PropertyType::Double),
+        "date" | "time" => Some(PropertyType::DateTime),
+        "bool" => Some(PropertyType::Boolean),
+        _ => None,
+    };
+    match near {
+        Some(t) => notes.push(Note::warning(
+            Some(at),
+            format!(
+                "property `{name}` has type `{raw}`, which BPSim does not define; read as {}",
+                t.bpsim_name()
+            ),
+        )),
+        None => notes.push(Note::warning(
+            Some(at),
+            format!(
+                "property `{name}` has the unknown type `{raw}`; its type is taken from its values"
+            ),
+        )),
+    }
+    near
+}
+
+/// The properties an element sets in the scenario (`PropertyParameters`), by name.
+fn properties(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+) -> Vec<Property> {
+    let Some(params) = scenario.and_then(|s| s.params.get(id)) else {
+        return Vec::new();
+    };
+    let mut out = Vec::new();
+    for (key, p) in params {
+        let Some(name) = key.strip_prefix("PropertyParameters/Property/") else {
+            continue;
+        };
+        let ty = p
+            .attr("type")
+            .and_then(|t| property_type(t.trim(), name, id, notes));
+        let value = match bpsim::value(p, unit, notes, Some(id)) {
+            Some(Value::Number(n)) | Some(Value::Dist(Dist::Constant(n))) => {
+                PropertyValue::Number(n)
+            }
+            Some(Value::Bool(b)) => PropertyValue::Boolean(b),
+            Some(Value::Text(t)) => PropertyValue::Text(t),
+            Some(Value::Dist(d)) => PropertyValue::Random(d),
+            Some(Value::Expression(e)) => PropertyValue::Expression(e),
+            // Only result requests: nothing is assigned.
+            None => continue,
+        };
+        out.push(Property {
+            name: name.to_owned(),
+            ty,
+            value,
+        });
+    }
+    out
 }
 
 /// Which resource each task uses, and the tasks using each resource.
@@ -480,6 +553,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             id: ElementId::unchecked(&n.id),
             name: n.name.clone(),
             kind,
+            properties: properties(scenario, id, unit, notes),
         });
     }
     let mut connections = Vec::new();
@@ -599,16 +673,6 @@ pub fn read_model(
             None
         }
     };
-    if scenario.as_ref().is_some_and(|s| {
-        s.params
-            .values()
-            .any(|p| p.keys().any(|k| k.contains("/Property/")))
-    }) {
-        notes.push(Note::warning(
-            None,
-            "token properties and the expressions that use them arrive in M2.2; they are ignored",
-        ));
-    }
     let _ = NSS;
     let model = to_model(process, scenario.as_ref(), notes);
     Ok((format, scenario, model))

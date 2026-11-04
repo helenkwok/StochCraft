@@ -235,7 +235,7 @@ pub enum Value {
     Bool(bool),
     Text(String),
     Dist(Dist),
-    /// A BPSim expression (XPath), evaluated from M2.2.
+    /// A BPSim expression (XPath; see `stochcraft_model::expr`).
     Expression(String),
 }
 

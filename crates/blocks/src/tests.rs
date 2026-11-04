@@ -137,13 +137,13 @@ fn compiling_a_model_directly() {
     });
     // An orphan element is a warning, not an error: the model still compiles.
     let mut with_orphan = model.clone();
-    with_orphan.elements.push(Element {
-        id: ElementId::unchecked("spare"),
-        name: "spare".into(),
-        kind: ElementKind::Delay {
+    with_orphan.elements.push(Element::new(
+        ElementId::unchecked("spare"),
+        "spare",
+        ElementKind::Delay {
             duration: Dist::Constant(1.0),
         },
-    });
+    ));
     with_orphan.connections.push(Connection {
         id: ElementId::unchecked("flow-9"),
         from: ElementId::unchecked("spare"),
@@ -204,4 +204,235 @@ fn summarise_gives_intervals_per_element_and_metric() {
     assert_eq!(summarise(&[]).elements, vec![]);
     let names: Vec<&str> = Metric::ALL.iter().map(|m| m.name()).collect();
     assert_eq!(names.len(), 7);
+}
+
+fn mean_assigned(r: &Report, element: &str, property: &str) -> Option<f64> {
+    r.element(element)?
+        .properties
+        .iter()
+        .find(|(n, _)| n == property)?
+        .1
+}
+
+#[test]
+fn properties_count_down_through_a_repair_line() {
+    // The mechanics of the BPSim guide's car repair loop, unrolled (the loop itself needs the
+    // gateways of M2.3): each car arrives with 3 issues, each repair station removes one, and
+    // the exit records whether none are left.
+    let mut m = Builder::new();
+    let src = m.source("cars", Dist::Constant(1.0), Some(20));
+    m.property(
+        src,
+        "issues",
+        Some(PropertyType::Long),
+        PropertyValue::Number(3.0),
+    );
+    let mut prev = src;
+    for name in ["repair1", "repair2", "repair3"] {
+        let r = m.delay(name, Dist::Constant(0.5));
+        m.property(
+            r,
+            "issues",
+            None,
+            PropertyValue::Expression("getProperty('issues') - 1".into()),
+        );
+        m.connect(prev, r);
+        prev = r;
+    }
+    let out = m.sink("out");
+    m.property(
+        out,
+        "fixed",
+        None,
+        PropertyValue::Expression("getProperty('issues') = 0".into()),
+    );
+    m.connect(prev, out);
+    let r = m.run(Rng::new(1), 0.0, 100.0).ok();
+    let mean = |e: &str, p: &str| r.as_ref().and_then(|r| mean_assigned(r, e, p));
+    assert_eq!(mean("cars", "issues"), Some(3.0));
+    assert_eq!(mean("repair1", "issues"), Some(2.0));
+    assert_eq!(mean("repair2", "issues"), Some(1.0));
+    assert_eq!(mean("repair3", "issues"), Some(0.0));
+    assert_eq!(mean("out", "fixed"), Some(1.0));
+    assert_eq!(
+        r.as_ref().and_then(|r| r.element("out")).map(|e| e.left),
+        Some(20)
+    );
+}
+
+#[test]
+fn assignments_at_one_element_see_the_values_it_arrived_with() {
+    let mut m = Builder::new();
+    let src = m.source("in", Dist::Constant(1.0), Some(5));
+    m.property(src, "a", None, PropertyValue::Number(1.0));
+    m.property(src, "b", None, PropertyValue::Number(10.0));
+    let swap = m.delay("swap", Dist::Constant(0.0));
+    // Together, not one after the other: b gets the old a, a the old b.
+    m.property(
+        swap,
+        "b",
+        None,
+        PropertyValue::Expression("getProperty('a')".into()),
+    );
+    m.property(
+        swap,
+        "a",
+        None,
+        PropertyValue::Expression("getProperty('b')".into()),
+    );
+    let out = m.sink("out");
+    m.property(
+        out,
+        "check",
+        None,
+        PropertyValue::Expression("getProperty('a') * 100 + getProperty('b')".into()),
+    );
+    m.connect(src, swap);
+    m.connect(swap, out);
+    let r = m.run(Rng::new(1), 0.0, 10.0).ok();
+    assert_eq!(
+        r.as_ref().and_then(|r| mean_assigned(r, "out", "check")),
+        Some(1001.0)
+    );
+}
+
+#[test]
+fn values_take_their_property_type() {
+    let mut m = Builder::new();
+    let src = m.source("in", Dist::Constant(1.0), Some(4));
+    m.property(
+        src,
+        "n",
+        Some(PropertyType::Long),
+        PropertyValue::Expression("2.5".into()),
+    );
+    m.property(
+        src,
+        "flag",
+        Some(PropertyType::Boolean),
+        PropertyValue::Expression("'yes'".into()),
+    );
+    m.property(
+        src,
+        "label",
+        Some(PropertyType::String),
+        PropertyValue::Expression("concat('car-', 7)".into()),
+    );
+    let out = m.sink("out");
+    m.property(
+        out,
+        "ok",
+        None,
+        PropertyValue::Expression(
+            "getProperty('n') = 3 and getProperty('flag') and getProperty('label') = 'car-7'"
+                .into(),
+        ),
+    );
+    m.property(
+        out,
+        "never",
+        Some(PropertyType::Long),
+        PropertyValue::Expression("getProperty('label') + 1".into()),
+    );
+    m.connect(src, out);
+    let r = m.run(Rng::new(1), 0.0, 10.0).ok();
+    let mean = |e: &str, p: &str| r.as_ref().and_then(|r| mean_assigned(r, e, p));
+    assert_eq!(mean("in", "n"), Some(3.0), "2.5 rounds to 3");
+    assert_eq!(mean("out", "ok"), Some(1.0));
+    // Text is not a number, so the long is left unset and nothing is recorded.
+    assert_eq!(mean("out", "never"), None);
+    assert_eq!(mean("in", "label"), None, "text has no mean");
+}
+
+#[test]
+fn random_properties_have_their_mean_and_change_no_other_result() {
+    let build = |with_properties: bool| {
+        let mut m = Builder::new();
+        let src = m.source("in", Dist::exponential_rate(0.8), None);
+        let desk = m.server("desk", 1, Dist::exponential_rate(1.0));
+        let out = m.sink("out");
+        if with_properties {
+            m.property(
+                src,
+                "issues",
+                Some(PropertyType::Long),
+                PropertyValue::Random(Dist::Poisson { mean: 2.0 }),
+            );
+            m.property(
+                desk,
+                "minutes",
+                None,
+                PropertyValue::Random(Dist::Uniform { min: 0.0, max: 1.0 }),
+            );
+        }
+        m.connect(src, desk);
+        m.connect(desk, out);
+        m.run(Rng::new(7), 100.0, 20_000.0).ok()
+    };
+    let (plain, with) = (build(false), build(true));
+    assert!(plain.is_some() && with.is_some());
+    let (plain, with) = (plain.unwrap_or_else(empty), with.unwrap_or_else(empty));
+    for (a, b) in plain.elements.iter().zip(&with.elements) {
+        for metric in Metric::ALL {
+            assert_eq!(a.metric(metric), b.metric(metric), "{} {metric:?}", a.id);
+        }
+    }
+    let issues = mean_assigned(&with, "in", "issues").unwrap_or(f64::NAN);
+    assert!((issues - 2.0).abs() < 0.05, "{issues}");
+    let minutes = mean_assigned(&with, "desk", "minutes").unwrap_or(f64::NAN);
+    assert!((minutes - 0.5).abs() < 0.02, "{minutes}");
+}
+
+fn empty() -> Report {
+    Report {
+        warmup: 0.0,
+        duration: 0.0,
+        elements: vec![],
+    }
+}
+
+#[test]
+fn property_means_are_summarised_across_replications() {
+    let mut m = Builder::new();
+    let src = m.source("in", Dist::Constant(1.0), None);
+    m.property(
+        src,
+        "x",
+        None,
+        PropertyValue::Random(Dist::Uniform { min: 0.0, max: 2.0 }),
+    );
+    let out = m.sink("out");
+    m.connect(src, out);
+    let reports: Vec<Report> = (0..5)
+        .filter_map(|i| m.run(Rng::new(i), 0.0, 200.0).ok())
+        .collect();
+    let s = summarise(&reports);
+    let x = s.elements.first().and_then(|e| e.properties.first());
+    assert!(
+        x.is_some_and(|(n, s)| n == "x" && s.n == 5 && (s.mean - 1.0).abs() < 0.1),
+        "{x:?}"
+    );
+    assert!(
+        s.elements.get(1).is_some_and(|e| e.properties.is_empty()),
+        "the sink assigns nothing"
+    );
+}
+
+#[test]
+fn a_bad_expression_stops_compilation_with_its_position() {
+    let mut m = Builder::new();
+    let src = m.source("in", Dist::Constant(1.0), None);
+    m.property(
+        src,
+        "n",
+        None,
+        PropertyValue::Expression("getProperty('n') +* 2".into()),
+    );
+    let out = m.sink("out");
+    m.connect(src, out);
+    let p = problems(m.run(Rng::new(1), 0.0, 1.0));
+    assert!(
+        matches!(p.as_slice(), [Problem::BadExpression { error, .. }] if error.position == 18),
+        "{p:?}"
+    );
 }

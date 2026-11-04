@@ -18,8 +18,8 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 | `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist` |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary` |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate` |
-| `model` | L1 | The model in memory: elements, connections, experiment, validation |
-| `blocks` | L2 | Compiles a model: source, server, delay, sink; per-element statistics; warm-up |
+| `model` | L1 | The model in memory: elements, connections, experiment, entity properties, validation; BPSim's XPath expressions (`expr`) |
+| `blocks` | L2 | Compiles a model: source, server, delay, sink; entities carry typed properties; per-element statistics; warm-up |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
 | `io` | L3 | BPSim on BPMN and XPDL: read, write new, save edits into opened files |
 | `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs |
@@ -413,6 +413,33 @@ priority theory:
   specification and the reference models use, and reports anything outside that subset as a
   diagnostic. Validation: the car repair model's repair loop (property decremented per repair,
   exit when it reaches zero) against its expected count.
+
+**Done.** `stochcraft_model::expr` parses BPSim's XPath subset once and evaluates it with
+XPath 1.0's conversions:
+- numbers, strings, arithmetic, comparisons, `and`/`or` and `getProperty`;
+- `not`, `boolean`, `number`, `string`, `floor`, `ceiling`, `round`, `concat`, `contains`,
+  `starts-with` and `string-length`.
+
+Paths, variables, other functions and `getResource` outside a resource selection are
+diagnostics that give the character position.
+
+Elements carry `Property` assignments, read from and saved to `PropertyParameters`. Types come
+from the declaration, or else from the first value. `int` and other spellings outside the
+schema are read with a warning.
+- **When:** an element assigns as an entity enters it, and a source as it creates one.
+- **How:** all of an element's assignments are made together, from the values the entity
+  arrived with.
+- **Random values:** drawn from streams of their own, so adding a property changes no other
+  result.
+
+Each element reports the mean value it assigned to each property. The engine has
+`property.set`, `property.remove` and `property.list`, and `model.get` and `run` include
+properties.
+
+Every expression in the reference models' properties and branch conditions parses. The repair
+loop itself needs gateways, so the car repair count cross-check moves to M2.3 with D8; its
+mechanics (a count set on arrival, decremented per repair, tested for zero) are checked on an
+unrolled line in `stochcraft-blocks`.
 
 ### M2.3 Routing
 

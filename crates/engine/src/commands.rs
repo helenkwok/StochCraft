@@ -5,11 +5,14 @@ use schemars::JsonSchema;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Deserializer};
 use serde_json::{Value, json};
-use stochcraft_model::{Connection, Element, ElementId, ElementKind, Model};
+use stochcraft_model::{Connection, Element, ElementId, ElementKind, Model, Property};
 
 use crate::edit::Op;
 use crate::run::RunMode;
-use crate::wire::{self, DistSpec, KindSpec, ModelDoc, TimeUnitSpec};
+use crate::wire::{
+    self, DistSpec, KindSpec, ModelDoc, PropertyDoc, PropertyTypeSpec, PropertyValueSpec,
+    TimeUnitSpec,
+};
 use crate::{CommandError, Engine, ErrorCode};
 
 /// What a command does, which decides whether it is undoable and journalled.
@@ -185,6 +188,31 @@ pub struct BlockAdd {
     pub index: Option<u32>,
     #[serde(flatten)]
     pub kind: KindSpec,
+    /// Properties the element sets on entities.
+    #[serde(default)]
+    pub properties: Vec<PropertyDoc>,
+}
+
+/// Sets one property on every entity entering an element, adding it or replacing its value.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct PropertySet {
+    /// The element's id.
+    pub element: String,
+    pub name: String,
+    /// The declared type; left out, an existing property keeps its own; `null` removes it.
+    #[serde(default, rename = "type", deserialize_with = "some")]
+    #[schemars(with = "Option<PropertyTypeSpec>")]
+    pub ty: Option<Option<PropertyTypeSpec>>,
+    pub value: PropertyValueSpec,
+}
+
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct PropertyRemove {
+    /// The element's id.
+    pub element: String,
+    pub name: String,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -347,7 +375,7 @@ fn model_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .and_then(Value::as_array)
     {
         for el in elements {
-            check_keys(el, &["id", "name"])?;
+            check_keys(el, &["id", "name", "properties"])?;
         }
     }
     let p: ModelSet = parse(p)?;
@@ -362,7 +390,7 @@ fn model_rename(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 }
 
 fn block_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
-    check_keys(&p, &["id", "name", "index"])?;
+    check_keys(&p, &["id", "name", "index", "properties"])?;
     let p: BlockAdd = parse(p)?;
     let kind: ElementKind = p.kind.into();
     let id = new_id(e.model(), p.id.as_deref(), kind.name())?;
@@ -374,6 +402,7 @@ fn block_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         name: p.name.unwrap_or_else(|| id.to_string()),
         id: id.clone(),
         kind,
+        properties: wire::sorted_properties(p.properties.into_iter().map(Into::into)),
     };
     e.edit(
         "block.add",
@@ -461,6 +490,79 @@ fn block_rename(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let id = existing_element(e.model(), &p.id)?;
     e.edit("block.rename", Op::RenameElement(id, p.name))?;
     Ok(json!({}))
+}
+
+fn property_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: PropertySet = parse(p)?;
+    let id = existing_element(e.model(), &p.element)?;
+    if p.name.trim().is_empty() {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            "a property needs a name",
+        ));
+    }
+    let mut props = e
+        .model()
+        .element(&id)
+        .map_or_else(Vec::new, |el| el.properties.clone());
+    let old = props.iter().position(|q| q.name == p.name);
+    let ty = match p.ty {
+        Some(t) => t.map(Into::into),
+        None => old.and_then(|i| props.get(i)).and_then(|q| q.ty),
+    };
+    let property = Property {
+        name: p.name.clone(),
+        ty,
+        value: p.value.into(),
+    };
+    match old {
+        Some(i) => props[i] = property,
+        None => props.push(property),
+    }
+    e.edit(
+        "property.set",
+        Op::SetProperties(id, wire::sorted_properties(props)),
+    )?;
+    Ok(json!({}))
+}
+
+fn property_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: PropertyRemove = parse(p)?;
+    let id = existing_element(e.model(), &p.element)?;
+    let mut props = e
+        .model()
+        .element(&id)
+        .map_or_else(Vec::new, |el| el.properties.clone());
+    let before = props.len();
+    props.retain(|q| q.name != p.name);
+    if props.len() == before {
+        return Err(CommandError::new(
+            ErrorCode::NotFound,
+            format!("`{}` sets no property `{}`", p.element, p.name),
+        ));
+    }
+    e.edit("property.remove", Op::SetProperties(id, props))?;
+    Ok(json!({}))
+}
+
+/// Every property the model sets: its type and the elements that set it.
+fn property_list(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    parse::<NoParams>(p)?;
+    let m = e.model();
+    let list: Vec<Value> = m
+        .property_types()
+        .into_iter()
+        .map(|(name, ty)| {
+            let set_by: Vec<&str> = m
+                .elements
+                .iter()
+                .filter(|el| el.property(&name).is_some())
+                .map(|el| el.id.as_str())
+                .collect();
+            json!({ "name": name, "type": PropertyTypeSpec::from(ty), "set_by": set_by })
+        })
+        .collect();
+    Ok(json!({ "properties": list }))
 }
 
 fn connect(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -697,6 +799,30 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<Id>,
         example: || json!({ "id": "walk" }),
         run: block_remove,
+    },
+    Command {
+        name: "property.set",
+        summary: "Set a property on every entity entering an element (at a source: every entity it creates), from a number, true or false, text, a distribution or a BPSim expression.",
+        kind: CommandKind::Edit,
+        schema: schema::<PropertySet>,
+        example: || json!({ "element": "arrivals", "name": "issues", "type": "long", "value": {"random": {"type": "poisson", "mean": 2.0}} }),
+        run: property_set,
+    },
+    Command {
+        name: "property.list",
+        summary: "Every property the model sets, with its type and the elements that set it.",
+        kind: CommandKind::Query,
+        schema: schema::<NoParams>,
+        example: || json!({}),
+        run: property_list,
+    },
+    Command {
+        name: "property.remove",
+        summary: "Stop an element setting a property.",
+        kind: CommandKind::Edit,
+        schema: schema::<PropertyRemove>,
+        example: || json!({ "element": "arrivals", "name": "issues" }),
+        run: property_remove,
     },
     Command {
         name: "experiment.set",
