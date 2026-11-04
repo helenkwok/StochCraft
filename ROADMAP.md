@@ -24,10 +24,14 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 | `io` | L3 | BPSim on BPMN and XPDL: read, write new, save edits into opened files |
 | `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs |
 | `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `exec`, `schema` |
+| `ui-egui` | L5 | The app's window: menus, shortcuts, model outline, background runs, results, unsaved-change prompts |
+| `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs) and the browser shell, published on GitHub Pages |
 | `bench/` | outside | M/M/1 against simu-des and SimPy (54× SimPy) |
 
-Models are saved and opened as BPSim files, changed through engine commands and run from the
-command line. Nothing can yet be seen on screen (M3).
+Models are saved and opened as BPSim files, changed through engine commands, and run from the
+command line or in a window, natively or in the browser
+([helenkwok.github.io/StochCraft](https://helenkwok.github.io/StochCraft/)). Editing in the window
+comes with M3.2.
 
 ## Principles that hold across all three
 
@@ -501,14 +505,32 @@ look as the other Craft apps.
   `craft-dialogs` (non-blocking open and save), `craft-menu` and `craft-keymap`, `craft-i18n`,
   `craft-atomic`, `craft-update` later. Git dependencies pinned by commit, all bumped together.
 - `crates/ui-egui` (L5) holds the interface; `apps/stochcraft` is the native shell;
-  `apps/stochcraft-web` the wasm32 shell.
+  `apps/stochcraft-web` the wasm32 shell. The interface never touches files or dialogs itself: it
+  asks its shell (pick a file, write these bytes, offer a download), so it is the same code and
+  the same tests on both.
+- **The browser build from the first PR** (moved forward from M3.6): GitHub Pages publishes
+  `main` at the site's root and every pull request at `pr/<number>/`, linked from the pull
+  request, so each interface change can be tried before it is merged.
 - All UI changes go through engine commands (principle 2), so undo, redo and the journal work
   from the first window.
 
 ### M3.1 Shell and documents
 
-Window, menus, keyboard shortcuts, open, save and recent files, settings, unsaved-change prompts,
-autosave, the About box with licences. Snapshot tests with `egui_kittest`.
+**M3.1a (done):** `ui-egui` with the window (menus, keyboard shortcuts, the model outline,
+results, a status bar with run progress and cancel), open, save, save as, built-in example
+models, unsaved-change prompts (also for a file dropped on the window, and the browser tab's
+close), the About box with licences; the desktop shell on eframe with craft-dialogs; the browser
+shell (file picker, downloads, dropped files); the Pages workflow with pull-request previews.
+The look follows the Craft suite (IBM Plex) and Impeccable's guidance for application screens:
+an ink header with the primary action, a cooler side rail showing the process as its BPMN
+shapes, results in the model's words with units and aligned numbers, empty and running states
+that say what to do next, and light and dark themes composed separately.
+Interaction tests drive the window through egui_kittest's accessibility tree, natively and in
+the browser's mode (runs in slices, saving as downloads).
+
+**M3.1b:** recent files, settings (craft-settings), autosave, menus and shortcuts through
+craft-menu and craft-keymap (a native macOS menu bar, user key bindings), the window frame via
+craft-window, and image snapshot tests.
 
 ### M3.2 Model editing without a canvas
 
@@ -536,8 +558,8 @@ and jump to a time.
 
 ### M3.6 Browser and agents
 
-- `apps/stochcraft-web`: the same interface built for wasm32, runs single-threaded (web workers
-  for replications later), files through the browser's open and download.
+- `apps/stochcraft-web` (in M3.1a): replications in web workers, installable as an app, and
+  working offline.
 - `crates/mcp` and `stochcraft-cli mcp`: the engine's commands as MCP tools, headless or bridged
   to a running app, following FieldCraft's MCP design.
 
@@ -574,16 +596,19 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
 M1.1 model ─ M1.2 compile ─ M1.3 io ─ M1.4 engine ─ M1.5 cli ─ M1.6 determinism
                                           │
                      ┌────────────────────┴────────────────────┐
-              M2.1 primitives                            M3.1 shell
+              M2.1 primitives                            M3.1 shell, web, Pages
               M2.2 properties, expressions               M3.2 editing
               M2.3 … M2.8 (each one PR)                  M3.3 results
                      │                                   M3.4 canvas
                      └──────────── new blocks appear ────M3.5 live view
-                                   in M3 forms           M3.6 web + MCP
+                                   in M3 forms           M3.6 workers + MCP
 ```
 
 M1 comes first because both M2 and M3 build on the model document and the engine. After M1, M2
-and M3 proceed in parallel: each M2 block becomes editable in M3 as soon as its schema lands.
+and M3 proceed in parallel, as two series of pull requests open at the same time: M2 changes
+`des`, `model`, `blocks` and the engine's commands; M3 changes `ui-egui` and the apps, so they
+rarely touch the same files. Each M2 block becomes editable in M3 as soon as its schema lands,
+and the Pages preview of an M3 pull request shows the blocks already merged.
 
 ## Decisions to confirm
 
@@ -593,7 +618,7 @@ and M3 proceed in parallel: each M2 block becomes editable in M3 as soon as its 
 | D2 | Time units | Settled by BPSim: scenario `baseTimeUnit`, per-value overrides |
 | D3 | Entity attributes | Settled by BPSim: token properties of BPSim's types |
 | D4 | First UI milestone | Forms and results before the canvas (M3.2–M3.3 before M3.4) |
-| D5 | Browser build | Part of M3 (M3.6), wasm32 first, wasm64 when its toolchain is verified |
+| D5 | Browser build | Settled: from M3.1 on, published on GitHub Pages with a preview per pull request; wasm32 first, wasm64 when its toolchain is verified |
 | D6 | Conditions and logic | Settled by BPSim: its XPath 1.0 expressions, the subset models use first |
 | D7 | Reference models as test files | Settled: WfMC's examples and the XSD are downloaded from bpsim.org by `cargo xtask fetch-bpsim` (pinned SHA-256, cached in CI), never committed, because they carry no licence of their own |
 | D8 | First arrival of a start event | Open: at time 0 (as L-SIM does, giving 151 car repair arrivals) or after the first interval (the specification's wording, and StochCraft today, giving 150). Decide in M2.3 with the cross-check |

@@ -16,8 +16,8 @@
 //! - `everything`: the workspace manifest, the lock file, the toolchain, xtask or the CI
 //!   workflows changed, or a path under `crates/` or `apps/` belongs to no package: run it all.
 //! - `heavy`: the affected set holds a package with `#[ignore]`d (heavy) tests.
-//! - `wasm`: the affected set holds a crate the wasm jobs build (the layered crates, and the
-//!   testkit, whose golden test also runs on wasm).
+//! - `wasm`: the affected set holds a crate the wasm jobs build (the layered crates, the browser
+//!   app, and the testkit, whose golden test also runs on wasm).
 //!
 //! The rules work on a small model ([`Workspace`]) so they are unit-tested without git or cargo.
 

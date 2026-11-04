@@ -23,6 +23,15 @@ stochcraft-blocks = { path = "crates/blocks" }
 stochcraft-io = { path = "crates/io" }
 stochcraft-engine = { path = "crates/engine" }
 stochcraft-testkit = { path = "crates/testkit" }
+stochcraft-ui-egui = { path = "crates/ui-egui" }
+
+# The interface (L5 and the apps): egui on the Craft suite's reviewed fork, pinned to the same
+# revisions as CADCraft (see [patch.crates-io] below), and craft-libs by commit (craft-dialogs is
+# newer than CADCraft's craft-libs pin; this commit uses the same egui fork revision).
+egui = { version = "0.37", default-features = false, features = ["default_fonts"] }
+eframe = { version = "0.37", default-features = false }
+egui_kittest = { version = "0.37", default-features = false }
+craft-dialogs = { version = "0.1.0", git = "https://github.com/storytold/craft-libs", rev = "c39e435cc34417843793df240a0b38bac970179b" }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
@@ -31,3 +40,18 @@ unsafe_code = "forbid"
 unwrap_used = "deny"
 expect_used = "deny"
 panic = "deny"
+
+# The complete egui family on the Craft suite's fork, at the commit CADCraft uses, so every Craft
+# app draws and behaves alike. Bump all of them together.
+[patch.crates-io]
+ecolor = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+emath = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+epaint = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+epaint_default_fonts = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui-winit = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui-wgpu = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui_glow = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+egui_kittest = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+eframe = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
+winit = { git = "https://github.com/storytold/winit.git", rev = "a517b3846ee8457d84ee4975110bfda6797c44dc" }

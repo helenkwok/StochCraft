@@ -16,7 +16,7 @@ crates above it, so a change near the top touches little and a change near the b
 | — | `testkit` | Test tooling; other crates may use it only as a dev-dependency |
 | apps | `stochcraft`, `stochcraft-cli`, `stochcraft-web` | Exempt from the rules |
 
-Only `random`, `stats`, `des`, `model`, `blocks`, `experiment`, `io`, `engine` and `testkit` exist so far (with the `stochcraft-cli` app); the others are placed in advance so each crate's position is decided
+Only `random`, `stats`, `des`, `model`, `blocks`, `experiment`, `io`, `engine`, `ui-egui` and `testkit` exist so far (with the three apps); the others are placed in advance so each crate's position is decided
 before it is written.
 
 ## Determinism across targets

@@ -18,9 +18,18 @@ such file is listed below. GPL, LGPL, AGPL and similar sources are never read or
 | xtask/src/main.rs | Command layout and the `root`, `cargo`, `metadata` helpers follow FieldCraft `xtask/src/main.rs` (same commit). | MIT OR Apache-2.0 |
 | bench/src/main.rs, bench/simpy/mm1.py | The `store` workload (arrival process feeding a FIFO store, one server process, λ = 0.9, μ = 1, 1,000,000 customers) follows the model of Cimba's `benchmark/MM1_single.c` and `MM1_single.py` (https://github.com/ambonvik/cimba), so results are comparable; the code is written for StochCraft and SimPy. Copyright (c) Asbjørn M. Bonvik. | Apache-2.0 |
 | .github/workflows/ci.yml | The plan job (base selection and `cargo xtask affected`) follows FieldCraft `.github/workflows/ci.yml` (same commit). | MIT OR Apache-2.0 |
+| apps/stochcraft-web/Trunk.toml, apps/stochcraft-web/index.html | The layout of CADCraft's `apps/cadcraft-web` (https://github.com/storytold/cadcraft, commit 5caaf73e): Trunk settings, a full-page canvas and a loading message. Copyright (c) 2026 ArtCraft Team and the CADCraft contributors. | MIT OR Apache-2.0 |
+| .github/workflows/pages.yml | Installing a pinned trunk release and building with `trunk build --release --public-url ./` follow SolidCraft's `.github/workflows/pages.yml` (https://github.com/tangency-labs/solidCraft, commit 653bc00b). Copyright (c) 2026 SolidCraft contributors. Publishing to a `gh-pages` branch with pull-request previews is StochCraft's. | MIT OR Apache-2.0 |
+
+The interface's design (crates/ui-egui) follows the guidance of Impeccable's design skill for
+application screens ("Operate" mode, the craft floor, layout, typography and colour references;
+https://github.com/pbakaus/impeccable, commit 695cea5, Apache-2.0). No code or text from it is
+included.
 
 ## Assets
 
 | File | Author | Source | Licence |
 |---|---|---|---|
-| _none yet_ | | | |
+| assets/fonts/ibm-plex-sans/IBMPlexSans-Variable.ttf | IBM Corp. (IBM Plex Sans, variable wdth and wght) | https://github.com/IBM/plex (via google/fonts), unmodified, as SolidCraft ships it; licence text in assets/fonts/ibm-plex-sans/OFL.txt; the interface font | SIL OFL 1.1 |
+| assets/fonts/ibm-plex-mono/IBMPlexMono-Regular.ttf | IBM Corp. (IBM Plex Mono) | https://github.com/IBM/plex (via google/fonts), unmodified; licence text in assets/fonts/ibm-plex-mono/OFL.txt; numbers in results tables | SIL OFL 1.1 |
+| assets/fonts/ibm-plex-sans/OFL.txt, assets/fonts/ibm-plex-mono/OFL.txt | IBM Corp. | Unmodified accompanying font licences | SIL OFL 1.1 |

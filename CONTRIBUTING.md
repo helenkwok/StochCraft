@@ -49,6 +49,11 @@ and `cargo xtask golden` checks that the golden models give the pinned results o
 rewrites the pinned digests with `STOCHCRAFT_BLESS=1 cargo test -p stochcraft-testkit`; say why
 in the commit.
 
+The interface (`crates/ui-egui`) is tested through its accessibility tree with egui_kittest, in
+`cargo xtask ci` like everything else. A pull request that changes it is also built for the
+browser and published at `https://helenkwok.github.io/StochCraft/pr/<number>/` (the Pages
+workflow links it from the pull request), so reviewers can try it.
+
 `cargo xtask fetch-bpsim` downloads the BPSim reference models and XML Schema from bpsim.org into
 `target/bpsim/` (they are never committed). Without them, and without `xmllint`, the
 `stochcraft-io` reference tests skip locally with a message; CI always runs them.

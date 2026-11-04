@@ -96,13 +96,14 @@ pub fn metadata() -> Result<serde_json::Value, String> {
     serde_json::from_slice(&out.stdout).map_err(|e| format!("cargo metadata: bad JSON: {e}"))
 }
 
-/// The crates the wasm check builds: every layered crate (apps, tooling and the testkit are
-/// native-only).
+/// The crates the wasm check builds: every layered crate and the browser app (the other apps,
+/// tooling and the testkit are native-only).
 pub fn wasm_crate(pkg: &str) -> bool {
-    matches!(
-        layers::classify(pkg),
-        Some(layers::Class::Layer(_) | layers::Class::Standalone)
-    )
+    pkg == "stochcraft-web"
+        || matches!(
+            layers::classify(pkg),
+            Some(layers::Class::Layer(_) | layers::Class::Standalone)
+        )
 }
 
 fn cmd_layers() -> Result<(), String> {
