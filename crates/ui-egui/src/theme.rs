@@ -175,7 +175,7 @@ fn style(s: &mut egui::Style, p: &Palette) {
         state.fg_stroke = egui::Stroke::new(1.0, p.text);
         state.corner_radius = radius;
     }
-    w.inactive.bg_stroke = egui::Stroke::NONE;
+    // Controls at rest keep a hairline, so a choice box reads as one on the canvas.
     w.inactive.weak_bg_fill = Color32::TRANSPARENT;
 }
 
