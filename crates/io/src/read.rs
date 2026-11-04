@@ -297,15 +297,20 @@ fn dist_of(v: Option<Value>, what: &str, at: &str, notes: &mut Vec<Note>) -> Opt
     }
 }
 
-/// Maps a process and scenario onto a model.
-fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Model {
-    let unit = scenario.map_or(TimeUnit::Minutes, |s| s.settings.base_time_unit);
-    let param = |id: &str, key: &str| scenario.and_then(|s| s.param(id, key));
-    let val = |id: &str, key: &str, notes: &mut Vec<Note>| {
-        param(id, key).and_then(|p| bpsim::value(p, unit, notes, Some(id)))
-    };
+/// Which resource each task uses, and the tasks using each resource.
+#[derive(Debug, Default)]
+pub(crate) struct Resources {
+    pub of_task: BTreeMap<String, String>,
+    pub users: BTreeMap<String, Vec<String>>,
+}
 
-    // Which tasks use which resource, to find pools shared between tasks.
+fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Resources {
+    let unit = scenario.map_or(TimeUnit::Minutes, |s| s.settings.base_time_unit);
+    let val = |id: &str, key: &str, notes: &mut Vec<Note>| {
+        scenario
+            .and_then(|s| s.param(id, key))
+            .and_then(|p| bpsim::value(p, unit, notes, Some(id)))
+    };
     let mut users: BTreeMap<String, Vec<String>> = BTreeMap::new();
     let mut task_resource: BTreeMap<String, String> = BTreeMap::new();
     for n in p.nodes.iter().filter(|n| n.kind == NodeKind::Task) {
@@ -337,6 +342,37 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             task_resource.insert(n.id.clone(), r);
         }
     }
+    Resources {
+        of_task: task_resource,
+        users,
+    }
+}
+
+/// The resources of the tasks in the model in `root`, as [`read_model`] assigns them.
+pub(crate) fn resources(root: &Element, scenario_id: Option<&str>) -> Resources {
+    let mut notes = Vec::new();
+    let process = if root.is(BPMN, "definitions") {
+        read_bpmn(root, &mut notes)
+    } else {
+        read_xpdl(root, &mut notes)
+    };
+    let scenario =
+        bpsim::find_data(root).and_then(|d| bpsim::read_scenario(d, scenario_id, &mut notes));
+    assign_resources(&process, scenario.as_ref(), &mut notes)
+}
+
+/// Maps a process and scenario onto a model.
+fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Model {
+    let unit = scenario.map_or(TimeUnit::Minutes, |s| s.settings.base_time_unit);
+    let param = |id: &str, key: &str| scenario.and_then(|s| s.param(id, key));
+    let val = |id: &str, key: &str, notes: &mut Vec<Note>| {
+        param(id, key).and_then(|p| bpsim::value(p, unit, notes, Some(id)))
+    };
+
+    let Resources {
+        of_task: task_resource,
+        users,
+    } = assign_resources(&p, scenario, notes);
     for (r, tasks) in users.iter().filter(|(_, t)| t.len() > 1) {
         notes.push(Note::error(
             Some(r),

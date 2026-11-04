@@ -32,9 +32,11 @@
 //!   [`Engine::replay`] runs again as a script.
 //! - `run` runs an experiment at once; `run.start`, `run.status` and `run.cancel` run one in the
 //!   background with progress and cancellation (worker threads natively, slices in the browser).
-//! - Files are BPSim on BPMN or XPDL (`stochcraft-io`). A model opened from a file and saved
-//!   unchanged gives back the original bytes; saving edits into an opened file is the next step
-//!   (M1.4, part 2), until then `file.save` with `as_new` writes a new BPMN file.
+//! - Files are BPSim on BPMN or XPDL (`stochcraft-io`). `file.save` writes edits into the file
+//!   the model was opened from, keeping everything StochCraft does not understand and every line
+//!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
+//!   be written into that file is refused with the reason, and `as_new` then writes a new BPMN
+//!   file from the model alone.
 
 mod commands;
 mod edit;
@@ -355,14 +357,15 @@ impl Engine {
         Ok(result)
     }
 
-    /// The bytes `file.save` writes: the opened file (byte for byte when the model is
-    /// unchanged), or with `as_new` (or no opened file) a new BPMN file from the model.
+    /// The bytes `file.save` writes: the opened file with the model's changes written in (byte
+    /// for byte when there are none), or with `as_new` (or no opened file) a new BPMN file from
+    /// the model.
     pub fn save_bytes(&self, as_new: bool) -> Result<Vec<u8>, CommandError> {
         match &self.file {
             Some(f) if !as_new => f.opened.save(&self.model).map_err(|e| {
                 CommandError::new(
                     ErrorCode::Unsupported,
-                    format!("{e} (`\"as_new\": true` writes the model as a new BPMN file, without the content StochCraft does not understand)"),
+                    format!("{e}; `\"as_new\": true` writes the model as a new BPMN file instead, without the content StochCraft does not understand"),
                 )
             }),
             _ => Ok(stochcraft_io::write_new(&self.model)),

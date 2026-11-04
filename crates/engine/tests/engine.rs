@@ -520,15 +520,33 @@ fn files_open_save_and_track_changes() {
     // Saved unchanged: the same bytes.
     ok(&mut f, "file.save", json!({}));
     assert_eq!(std::fs::read(&path).unwrap_or_default(), written);
-    // Edited: saving into the opened file waits for M1.4 part 2; as a new file works now.
+    // Edited: the changes are written into the opened file.
     ok(&mut f, "block.set", json!({"id": "desk", "capacity": 3}));
+    ok(&mut f, "block.add", json!({"kind": "delay", "id": "walk"}));
+    ok(&mut f, "disconnect", json!({"from": "desk", "to": "exit"}));
+    ok(&mut f, "connect", json!({"from": "desk", "to": "walk"}));
+    ok(&mut f, "connect", json!({"from": "walk", "to": "exit"}));
     assert!(f.is_dirty());
-    assert_eq!(err(&mut f, "file.save", json!({})), ErrorCode::Unsupported);
-    ok(&mut f, "file.save", json!({"as_new": true}));
+    ok(&mut f, "file.save", json!({}));
     assert!(!f.is_dirty());
     let mut g = Engine::new();
     ok(&mut g, "file.open", json!({"path": path_s}));
     assert_eq!(g.model(), f.model());
+    // An edit that cannot go into the file is refused with the reason; `as_new` still saves.
+    let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let copy = scratch("mm1-copy.bpmn");
+    let _ = std::fs::copy(&mm1, &copy);
+    let mut h = Engine::new();
+    ok(&mut h, "file.open", json!({"path": copy.to_string_lossy()}));
+    ok(&mut h, "experiment.set", json!({"time_unit": "hour"}));
+    let refused = h.execute("file.save", json!({}));
+    assert!(
+        refused
+            .as_ref()
+            .is_err_and(|e| e.code == ErrorCode::Unsupported && e.message.contains("as_new")),
+        "{refused:?}"
+    );
+    ok(&mut h, "file.save", json!({"as_new": true}));
     // Undoing back to the saved model is clean again.
     ok(&mut f, "undo", json!({}));
     assert!(f.is_dirty());

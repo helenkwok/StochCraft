@@ -109,6 +109,11 @@ pub fn dist_element(d: &Dist) -> Element {
     }
 }
 
+/// A BPSim whole-number value.
+pub(crate) fn numeric(n: u64) -> Element {
+    s("NumericParameter").with_attr("value", &n.to_string())
+}
+
 fn param(name: &str, value: Element) -> Element {
     s(name).with_child(value)
 }
@@ -151,7 +156,7 @@ fn layout(model: &Model) -> BTreeMap<String, (f64, f64)> {
     centres
 }
 
-fn size(kind: &ElementKind) -> (f64, f64) {
+pub(crate) fn size(kind: &ElementKind) -> (f64, f64) {
     match kind {
         ElementKind::Source { .. } | ElementKind::Sink => (36.0, 36.0),
         _ => (100.0, 80.0),
@@ -322,10 +327,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 let mut cp = s("ControlParameters")
                     .with_child(param("InterTriggerTimer", dist_element(interarrival)));
                 if let Some(n) = limit {
-                    cp.push(param(
-                        "TriggerCount",
-                        s("NumericParameter").with_attr("value", &n.to_string()),
-                    ));
+                    cp.push(param("TriggerCount", numeric(*n)));
                 }
                 ep.push(cp);
             }
@@ -351,7 +353,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         if let (ElementKind::Server { capacity, .. }, Some(rid)) =
             (&e.kind, resource_of.get(e.id.as_str()))
         {
-            let quantity = s("NumericParameter").with_attr("value", &capacity.to_string());
+            let quantity = numeric(u64::from(*capacity));
             scenario.push(
                 s("ElementParameters")
                     .with_attr("elementRef", rid)
@@ -365,10 +367,5 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         .with_child(b("source").with_text(&defs_id))
         .with_child(b("target").with_text(&defs_id));
     defs.push(relationship);
-    xml::write(&Document {
-        decl: None,
-        prolog: Vec::new(),
-        root: defs,
-    })
-    .into_bytes()
+    xml::write(&Document::new(defs)).into_bytes()
 }
