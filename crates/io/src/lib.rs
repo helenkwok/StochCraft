@@ -1,7 +1,7 @@
 //! StochCraft's model files: BPSim 2.0 (and 1.0) on BPMN 2.0 or XPDL 2.2 (ROADMAP.md, "Model
 //! files: no new format").
 //!
-//! - [`read`] / [`read_scenario`] open a file: the model, notes on anything StochCraft ignored or
+//! - [`read()`] / [`read_scenario`] open a file: the model, notes on anything StochCraft ignored or
 //!   could not use, and an [`Opened`] document that remembers the original bytes.
 //! - [`write_new`] writes a model StochCraft created as BPMN 2.0 with BPSim 2.0, in the order the
 //!   BPSim XML Schema requires, with a diagram other BPMN editors can display.
@@ -117,7 +117,7 @@ pub struct Opened {
     model_at_load: stochcraft_model::Model,
 }
 
-/// What [`read`] returns.
+/// What [`read()`] returns.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Loaded {
     pub model: stochcraft_model::Model,
