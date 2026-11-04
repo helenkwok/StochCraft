@@ -20,6 +20,7 @@ such file is listed below. GPL, LGPL, AGPL and similar sources are never read or
 | .github/workflows/ci.yml | The plan job (base selection and `cargo xtask affected`) follows FieldCraft `.github/workflows/ci.yml` (same commit). | MIT OR Apache-2.0 |
 | apps/stochcraft-web/Trunk.toml, apps/stochcraft-web/index.html | The layout of CADCraft's `apps/cadcraft-web` (https://github.com/storytold/cadcraft, commit 5caaf73e): Trunk settings, a full-page canvas and a loading message. Copyright (c) 2026 ArtCraft Team and the CADCraft contributors. | MIT OR Apache-2.0 |
 | .github/workflows/pages.yml | Installing a pinned trunk release and building with `trunk build --release --public-url ./` follow SolidCraft's `.github/workflows/pages.yml` (https://github.com/tangency-labs/solidCraft, commit 653bc00b). Copyright (c) 2026 SolidCraft contributors. Publishing to a `gh-pages` branch with pull-request previews is StochCraft's. | MIT OR Apache-2.0 |
+| .github/workflows/pages-deploy.yml | The build and deploy jobs follow the usage example in actions/deploy-pages' README (https://github.com/actions/deploy-pages, v5). Copyright (c) 2021 GitHub, Inc. | MIT |
 
 The interface's design (crates/ui-egui) follows the guidance of Impeccable's design skill for
 application screens ("Operate" mode, the craft floor, layout, typography and colour references;
