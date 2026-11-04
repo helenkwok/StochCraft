@@ -21,6 +21,7 @@ stochcraft-stats = { path = "crates/stats" }
 stochcraft-experiment = { path = "crates/experiment" }
 stochcraft-blocks = { path = "crates/blocks" }
 stochcraft-io = { path = "crates/io" }
+stochcraft-engine = { path = "crates/engine" }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

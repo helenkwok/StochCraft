@@ -1,0 +1,27 @@
+[package]
+name = "stochcraft-engine"
+description = "StochCraft's engine: every change to a model and every run as a command, with JSON schemas, undo and redo, a replayable journal and runs with progress and cancellation."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-model = { workspace = true }
+stochcraft-blocks = { workspace = true }
+stochcraft-experiment = { workspace = true }
+stochcraft-io = { workspace = true }
+stochcraft-stats = { workspace = true }
+# Command parameters and results as JSON (MIT OR Apache-2.0), and their JSON schemas (MIT).
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+schemars = "1"
+
+[dev-dependencies]
+stochcraft-random = { workspace = true }
+
+[lints]
+workspace = true

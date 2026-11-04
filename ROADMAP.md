@@ -271,15 +271,37 @@ against L-SIM needs gateways, which all three reference models use, so it moves 
 
 ### M1.4 `stochcraft-engine`: commands
 
+In two parts. **Part 1** (done): the command layer, undo and redo, the journal and runs.
+**Part 2**: saving edits into opened files while keeping everything StochCraft does not
+understand.
+
 - `Engine { model, history, journal }` and `execute(id, params) -> Result<Value>` with a
-  catalogue of commands: `model.new`, `model.rename`, `block.add`, `block.remove`,
-  `block.set` (parameters), `block.rename`, `connect`, `disconnect`, `experiment.set`, `run`,
-  `run.cancel`, `file.open`, `file.save`.
-- Each command has a JSON schema (generated from the parameter types) that the CLI, MCP tool
-  list and documentation are built from.
-- Undo and redo by inverse commands; a journal of every command, replayable as a script.
-- `run` executes on worker threads natively with progress and cancellation; in the browser in
-  slices between frames. Results come back as `ExperimentResult`.
+  catalogue of commands: `model.new`, `model.set`, `model.get`, `model.validate`,
+  `model.rename`, `block.add`, `block.remove`, `block.set` (parameters), `block.rename`,
+  `connect`, `disconnect`, `experiment.set`, `undo`, `redo`, `history`, `run`, `run.start`,
+  `run.status`, `run.cancel`, `file.open`, `file.save`.
+- Each command has a JSON schema, generated from its parameter types with `schemars`, a summary
+  and an example; the CLI, the MCP tool list and the documentation are built from them. A test
+  runs every example, in catalogue order, on a new engine. Parameters are strict: a misspelt
+  one is an error, never ignored. Errors carry a stable code (`not_found`, `invalid_model`…)
+  and, for a model that cannot run, its diagnostics. The JSON forms (`stochcraft_engine::wire`)
+  belong to the engine; the crates below it stay free of serialisation, and files stay BPSim.
+- Undo and redo by exact inverses: every edit returns the edit that undoes it, kept as a typed
+  value rather than JSON, so undo restores the model exactly (a randomised test checks
+  undo-then-redo after every edit). `model.new` and `file.open` start a new document and clear
+  the history; `history` reports what can be undone and whether there are unsaved changes.
+- A journal of every command except queries, replayable as a script (`Engine::replay`, and
+  `stochcraft-cli exec` in M1.5); undo and redo are journalled as commands, so a replay ends
+  in the same state.
+- `run` returns the results at once (`ExperimentResult` as JSON: per element and metric, the
+  mean, 95% half-width, standard deviation and n). `run.start` runs in the background, on
+  worker threads natively and in slices (a few replications per `run.status`) in the browser;
+  both give exactly the results of `run`. `run.cancel` stops new replications from starting
+  (`stochcraft-experiment` gains a `Control` with progress and cancellation); one already
+  running finishes first.
+- `file.save` of an opened file saved unchanged writes the original bytes. Until part 2, an
+  edited opened file is refused with a clear error, and `"as_new": true` writes a new BPMN file
+  from the model alone.
 
 ### M1.5 `apps/stochcraft-cli`
 
