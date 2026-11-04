@@ -1,0 +1,22 @@
+[package]
+name = "stochcraft-io"
+description = "StochCraft's files: BPSim 2.0 and 1.0 on BPMN 2.0 or XPDL 2.2, read leniently and written in schema order."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-model = { workspace = true }
+# XML reading (MIT).
+quick-xml = "0.42"
+
+[dev-dependencies]
+stochcraft-blocks = { workspace = true }
+stochcraft-random = { workspace = true }
+
+[lints]
+workspace = true

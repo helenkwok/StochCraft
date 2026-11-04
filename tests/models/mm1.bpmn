@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- M/M/1, written by hand for StochCraft's tests (MIT OR Apache-2.0). Arrivals every 80 s on
+     average (λ = 0.75 per minute), service 1 minute on average (μ = 1): W = 4 minutes.
+     Deliberately written the way other tools write BPMN: a non-default prefix, BPSim parameter
+     groups out of schema order, the specification's "SetupTime" spelling, seconds for one value
+     and an ISO 8601 duration for another. -->
+<semantic:definitions xmlns:semantic="http://www.omg.org/spec/BPMN/20100524/MODEL"
+    xmlns:bpsim="http://www.bpsim.org/schemas/2.0" xmlns:other="urn:example:other-tool"
+    id="defs" name="M/M/1" targetNamespace="urn:example:mm1">
+  <semantic:resource id="clerk" name="Clerk"/>
+  <semantic:process id="p1" name="Counter" isExecutable="false">
+    <semantic:startEvent id="arrive" name="Customer arrives">
+      <semantic:outgoing>f1</semantic:outgoing>
+    </semantic:startEvent>
+    <semantic:userTask id="serve" name="Serve customer">
+      <semantic:extensionElements><other:colour value="#ffcc00"/></semantic:extensionElements>
+      <semantic:incoming>f1</semantic:incoming>
+      <semantic:outgoing>f2</semantic:outgoing>
+      <semantic:performer><semantic:resourceRef>clerk</semantic:resourceRef></semantic:performer>
+    </semantic:userTask>
+    <semantic:endEvent id="leave" name="Customer leaves">
+      <semantic:incoming>f2</semantic:incoming>
+    </semantic:endEvent>
+    <semantic:sequenceFlow id="f1" sourceRef="arrive" targetRef="serve"/>
+    <semantic:sequenceFlow id="f2" sourceRef="serve" targetRef="leave"/>
+  </semantic:process>
+  <semantic:relationship type="BPSimData">
+    <semantic:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="base" name="Base case" author="StochCraft tests">
+          <bpsim:ScenarioParameters replication="16" seed="2026" baseTimeUnit="min">
+            <bpsim:Warmup><bpsim:DurationParameter value="PT1000M"/></bpsim:Warmup>
+            <bpsim:Duration><bpsim:FloatingParameter value="21000"/></bpsim:Duration>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="serve">
+            <bpsim:ResourceParameters>
+              <bpsim:Selection><bpsim:ExpressionParameter value="bpsim:getResource('clerk', 1)"/></bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:ResultRequest>mean</bpsim:ResultRequest>
+                <bpsim:NegativeExponentialDistribution mean="1"/>
+              </bpsim:ProcessingTime>
+              <bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="arrive">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer><bpsim:NegativeExponentialDistribution mean="80" timeUnit="s"/></bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="clerk">
+            <bpsim:ResourceParameters><bpsim:Quantity><bpsim:NumericParameter value="1"/></bpsim:Quantity></bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="two-clerks" name="Two clerks" inherits="base">
+          <bpsim:ElementParameters elementRef="clerk">
+            <bpsim:ResourceParameters><bpsim:Quantity><bpsim:NumericParameter value="2"/></bpsim:Quantity></bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </semantic:extensionElements>
+    <semantic:source>defs</semantic:source>
+    <semantic:target>defs</semantic:target>
+  </semantic:relationship>
+</semantic:definitions>
