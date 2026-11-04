@@ -44,3 +44,7 @@ cargo xtask ci
 That runs fmt, the layer check, Clippy with `-D warnings` and the tests. `cargo xtask ci
 --affected origin/main` does the same for only the crates your change affects, which is what CI
 runs on a pull request. `cargo xtask wasm` checks that the layered crates build for the browser.
+
+`cargo xtask fetch-bpsim` downloads the BPSim reference models and XML Schema from bpsim.org into
+`target/bpsim/` (they are never committed). Without them, and without `xmllint`, the
+`stochcraft-io` reference tests skip locally with a message; CI always runs them.
