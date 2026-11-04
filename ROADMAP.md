@@ -6,21 +6,27 @@ desktop app (and the browser app built from it). Each milestone is a series of p
 small enough to review in one sitting; every one keeps `cargo xtask ci` green.
 
 Decisions still open are marked **Decision** with a recommendation; the rest follows the
-patterns of the sibling Craft apps (FieldCraft, CADCraft, SolidCraft).
+patterns of the sibling Craft apps (FieldCraft, CADCraft, SolidCraft). The published work behind
+the credibility, experiment and digital-twin items (NASA-STD-7009B, DES practice at NASA, NNSA
+and the Aerospace Corporation, digital-twin reviews) is summarised in
+[docs/research.md](docs/research.md).
 
 ## Where we are
 
 | Crate | Layer | State |
 |---|---|---|
-| `random` | L0 | xoshiro256** streams; exponential, uniform, triangular; `Dist` |
+| `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist` |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary` |
 | `des` | L1 | Event queue; async processes with `hold`, `Resource`, `Store`, `spawn` |
-| `blocks` | L2 | Source, Server, Delay, Sink; per-block statistics; warm-up |
-| `experiment` | L3 | Parallel replications with reproducible streams |
+| `model` | L1 | The model in memory: elements, connections, experiment, validation |
+| `blocks` | L2 | Compiles a model: source, server, delay, sink; per-element statistics; warm-up |
+| `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
+| `io` | L3 | BPSim on BPMN and XPDL: read, write new, save edits into opened files |
+| `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs |
 | `bench/` | outside | M/M/1 against simu-des and SimPy (54× SimPy) |
 
-Models today are Rust code. Nothing can be saved, opened, run from a command line, driven by an
-agent or seen on screen. M1 fixes the first four; M3 the last.
+Models are saved and opened as BPSim files and changed through engine commands. Nothing can yet
+be run from a command line (M1.5) or seen on screen (M3).
 
 ## Principles that hold across all three
 
@@ -330,6 +336,12 @@ understand.
   - `exec <file> <script.json>`: replay engine commands
   - `schema [command]`: print command schemas
 - The table output reads like a textbook result: block, metric, mean, ±half-width, n.
+- **A run record with every result** (NASA-STD-7009B [M&S 24], [M&S 25], [M&S 27], [M&S 34];
+  see docs/research.md): StochCraft's version, a digest of the model, the file and scenario, the
+  seed, replications, warm-up and duration, the diagnostics and file notes seen, and how the
+  uncertainty was estimated ("95% Student-t interval over n independent replications"). The JSON
+  output carries it in full; the table prints it as a header. Results can be reproduced from the
+  record alone, since a seeded run gives the same numbers on any machine.
 - Integration tests run the binary on the golden models.
 
 ### M1.6 Determinism and the browser
@@ -425,11 +437,36 @@ Needed by the blocks below, each with its own unit tests:
   of materials. Validation: exact deterministic flows; throughput bounded by the
   slowest input.
 
+### M2.8 Experiments for decisions
+
+From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md):
+
+- **Terminating experiments:** run each replication until an event (a target count, an element
+  emptying, a time limit) instead of for a fixed duration after a warm-up; time-to-event
+  metrics. Validation: the completion time of a deterministic activity network; the maximum of
+  exponential durations against its closed form.
+- **Distributions of results, not only means:** percentiles and the empirical cumulative
+  distribution across replications, with a confidence band (Dvoretzky–Kiefer–Wolfowitz), and the
+  **probability of meeting a target** ("at least 100 batches a week") with its interval.
+- **Three-point estimates:** a distribution fitted from minimum, most likely and maximum (or 95th
+  percentile) as elicited from experts (triangular, PERT as a scaled beta, lognormal, Weibull),
+  written as a standard BPSim distribution; the triad and its source are kept as the parameter's
+  pedigree (a `stochcraft:` vendor extension).
+- **Sweeps and sensitivity:** a parameter varied over a range, results per point, and a record of
+  which parameters drive which results (NASA-STD-7009B [M&S 30]).
+- **Capacity sizing:** add a unit at the bottleneck (the busiest resource) and run again, until
+  the probability of meeting the target reaches the confidence asked for. Reported with the
+  deterministic answer beside it, which is too small.
+- **Results as inputs:** a metric's values across replications as an empirical BPSim user
+  distribution for a coarser model.
+- Acceptance model: a small multi-product plant written for StochCraft (two products sharing
+  mixers and ovens, working hours, a weekly target at 70% confidence), sized automatically.
+
 **Later in M2 or M4:** conveyors with length, speed and accumulation; travel networks for
 forklifts and AGVs; agent behaviours (`agents` crate); stock-and-flow (`sd` crate, XMILE);
 costs (BPSim `fixedCost`, `unitCost`); simulation traces in XES (BPSim `traceOutput`).
 
-**M2 size:** about eight PRs, each independently mergeable after M1.
+**M2 size:** about nine PRs, each independently mergeable after M1.
 
 ---
 
@@ -493,6 +530,26 @@ FlexSim-style factory layouts via the shared `craft-factory` data from CADCraft.
 
 ---
 
+## After M3: credibility and digital twins
+
+Not scheduled yet; recorded so earlier work does not close these doors (docs/research.md):
+
+- **Credibility reports:** `stochcraft-cli report`, a results assessment in NASA-STD-7009B's
+  terms from the run records, sensitivity records and diagnostics. Models can declare validated
+  ranges for their parameters, and results from outside them are placarded with the limit
+  exceeded and by how much ([M&S 26]).
+- **Digital twins:** starting a run from an observed state (queue contents, busy units, elapsed
+  times) rather than empty; fitting input distributions from event logs; the engine's journal as
+  the audit trail of what-if decisions.
+- **Industry 5.0 measures:** workers as resources with skills and shifts; energy and CO₂ per
+  part and per element (BPSim cost parameters plus a vendor extension); disruption scenarios.
+- **Bulk flow:** rates, splits by fraction, tanks and batch treatment for process industries,
+  with stock-and-flow in the `sd` crate.
+- **Explanations:** agents over MCP describe results in plain language (the bottleneck, what
+  limits throughput, which inputs matter most).
+- Not planned: parallelising a single run (optimistic Time Warp). Replications in parallel
+  already use every core for the models StochCraft targets.
+
 ## Order of work
 
 ```
@@ -501,7 +558,7 @@ M1.1 model ─ M1.2 compile ─ M1.3 io ─ M1.4 engine ─ M1.5 cli ─ M1.6 de
                      ┌────────────────────┴────────────────────┐
               M2.1 primitives                            M3.1 shell
               M2.2 properties, expressions               M3.2 editing
-              M2.3 … M2.7 blocks (each one PR)           M3.3 results
+              M2.3 … M2.8 (each one PR)                  M3.3 results
                      │                                   M3.4 canvas
                      └──────────── new blocks appear ────M3.5 live view
                                    in M3 forms           M3.6 web + MCP
@@ -522,3 +579,4 @@ and M3 proceed in parallel: each M2 block becomes editable in M3 as soon as its 
 | D6 | Conditions and logic | Settled by BPSim: its XPath 1.0 expressions, the subset models use first |
 | D7 | Reference models as test files | Settled: WfMC's examples and the XSD are downloaded from bpsim.org by `cargo xtask fetch-bpsim` (pinned SHA-256, cached in CI), never committed, because they carry no licence of their own |
 | D8 | First arrival of a start event | Open: at time 0 (as L-SIM does, giving 151 car repair arrivals) or after the first interval (the specification's wording, and StochCraft today, giving 150). Decide in M2.3 with the cross-check |
+| D9 | Where credibility data live (parameter pedigree, validated ranges) | In the model file, as `stochcraft:` BPSim vendor extensions, so they travel with the model and other tools keep them |
