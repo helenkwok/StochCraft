@@ -1,54 +1,89 @@
-//! Flow blocks against exact queueing results, over independent replications with a 95%
-//! confidence interval that must cover the theoretical value.
+//! Compiled models against exact queueing results: independent replications, summarised with a
+//! 95% confidence interval that must cover the theoretical value.
 
-use stochcraft_blocks::{Model, Report};
-use stochcraft_random::{Dist, Rng};
-use stochcraft_stats::Summary;
+use stochcraft_blocks::{ExperimentSummary, Metric, compile, summarise};
+use stochcraft_model::{Connection, Dist, Element, ElementId, ElementKind, Experiment, Model};
+use stochcraft_random::Rng;
 
-fn replicate(
-    reps: u64,
-    run: impl Fn(Rng) -> Option<Report>,
-    metric: impl Fn(&Report) -> Option<f64>,
-) -> Summary {
-    let values: Vec<f64> = (0..reps)
-        .filter_map(|r| metric(&run(Rng::new(10_000 + r))?))
-        .collect();
-    assert_eq!(
-        values.len() as u64,
-        reps,
-        "every replication must run and report"
-    );
-    Summary::of(&values).unwrap_or(Summary {
-        n: 0,
-        mean: f64::NAN,
-        std_dev: f64::NAN,
-        half_width: f64::NAN,
-    })
+fn id(s: &str) -> ElementId {
+    ElementId::new(s).unwrap_or_else(|| ElementId::unchecked(s))
 }
 
-fn mmc(lambda: f64, mu: f64, c: u32, rng: Rng) -> Option<Report> {
-    let mut m = Model::new();
-    let src = m.source("arrivals", Dist::exponential_rate(lambda), None);
-    let srv = m.server("servers", c, Dist::exponential_rate(mu));
-    let out = m.sink("exit");
-    m.connect(src, srv);
-    m.connect(srv, out);
-    m.run(rng, 1_000.0, 20_000.0).ok()
+/// An M/M/c model written as data, the way a model file or the engine will produce it.
+fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
+    let element = |i: &str, kind| Element {
+        id: id(i),
+        name: i.to_owned(),
+        kind,
+    };
+    let flow = |i: &str, from: &str, to: &str| Connection {
+        id: id(i),
+        from: id(from),
+        to: id(to),
+    };
+    Model {
+        name: format!("M/M/{c}"),
+        elements: vec![
+            element(
+                "arrivals",
+                ElementKind::Source {
+                    interarrival: Dist::exponential_rate(lambda),
+                    limit: None,
+                },
+            ),
+            element(
+                "servers",
+                ElementKind::Server {
+                    capacity: c,
+                    service: Dist::exponential_rate(mu),
+                },
+            ),
+            element("exit", ElementKind::Sink),
+        ],
+        connections: vec![
+            flow("f1", "arrivals", "servers"),
+            flow("f2", "servers", "exit"),
+        ],
+        experiment: Experiment {
+            warmup: 1_000.0,
+            duration: 20_000.0,
+            replications: 16,
+            ..Experiment::default()
+        },
+    }
+}
+
+fn run(model: &Model) -> ExperimentSummary {
+    let compiled = compile(model);
+    assert!(compiled.is_ok(), "{compiled:?}");
+    let Ok(compiled) = compiled else {
+        unreachable!()
+    };
+    let reps = u64::from(model.experiment.replications);
+    let reports: Vec<_> = (0..reps)
+        .map(|r| compiled.run(Rng::new(10_000 + r)))
+        .collect();
+    summarise(&reports)
+}
+
+fn covers(s: &ExperimentSummary, element: &str, metric: Metric, theory: f64) {
+    let got = s.get(element, metric);
+    eprintln!("{element} {}: {got:?} (theory {theory})", metric.name());
+    assert!(
+        got.is_some_and(|g| g.n == 16 && g.contains(theory)),
+        "{element} {}: {got:?} vs {theory}",
+        metric.name()
+    );
 }
 
 #[test]
 fn mm1_time_in_system_queue_and_utilisation() {
     // λ = 0.75, μ = 1: W = 1/(μ−λ) = 4, Lq = ρ²/(1−ρ) = 2.25, Wq = 3, utilisation ρ = 0.75.
-    let run = |r| mmc(0.75, 1.0, 1, r);
-    let w = replicate(16, run, |r| r.block("exit")?.mean_time_in_system);
-    let lq = replicate(16, run, |r| r.block("servers")?.mean_queue_length);
-    let wq = replicate(16, run, |r| r.block("servers")?.mean_wait);
-    let u = replicate(16, run, |r| r.block("servers")?.utilisation);
-    eprintln!("W {w}\nLq {lq}\nWq {wq}\nU {u}");
-    assert!(w.contains(4.0), "W {w}");
-    assert!(lq.contains(2.25), "Lq {lq}");
-    assert!(wq.contains(3.0), "Wq {wq}");
-    assert!(u.contains(0.75), "U {u}");
+    let s = run(&mmc_model(0.75, 1.0, 1));
+    covers(&s, "exit", Metric::MeanTimeInSystem, 4.0);
+    covers(&s, "servers", Metric::MeanQueueLength, 2.25);
+    covers(&s, "servers", Metric::MeanWait, 3.0);
+    covers(&s, "servers", Metric::Utilisation, 0.75);
 }
 
 #[test]
@@ -56,12 +91,8 @@ fn mm2_matches_erlang_c() {
     // λ = 1.5, μ = 1, c = 2: offered load a = 1.5, ρ = 0.75.
     // P0 = 1 / (1 + a + a²/(2!(1−ρ))) = 1/7; Erlang C = (a²/(2!(1−ρ))) P0 = 4.5/7;
     // Wq = C / (cμ − λ) = 9/7 ≈ 1.2857; W = Wq + 1/μ = 16/7 ≈ 2.2857.
-    let run = |r| mmc(1.5, 1.0, 2, r);
-    let w = replicate(16, run, |r| r.block("exit")?.mean_time_in_system);
-    let wq = replicate(16, run, |r| r.block("servers")?.mean_wait);
-    let u = replicate(16, run, |r| r.block("servers")?.utilisation);
-    eprintln!("W {w}\nWq {wq}\nU {u}");
-    assert!(w.contains(16.0 / 7.0), "W {w}");
-    assert!(wq.contains(9.0 / 7.0), "Wq {wq}");
-    assert!(u.contains(0.75), "U {u}");
+    let s = run(&mmc_model(1.5, 1.0, 2));
+    covers(&s, "exit", Metric::MeanTimeInSystem, 16.0 / 7.0);
+    covers(&s, "servers", Metric::MeanWait, 9.0 / 7.0);
+    covers(&s, "servers", Metric::Utilisation, 0.75);
 }

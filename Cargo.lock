@@ -79,6 +79,7 @@ name = "stochcraft-blocks"
 version = "0.1.0"
 dependencies = [
  "stochcraft-des",
+ "stochcraft-model",
  "stochcraft-random",
  "stochcraft-stats",
 ]
@@ -94,7 +95,9 @@ dependencies = [
 name = "stochcraft-experiment"
 version = "0.1.0"
 dependencies = [
+ "stochcraft-blocks",
  "stochcraft-des",
+ "stochcraft-model",
  "stochcraft-random",
  "stochcraft-stats",
 ]
