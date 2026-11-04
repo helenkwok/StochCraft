@@ -166,6 +166,8 @@ struct HistoryEntry {
 struct FileState {
     path: Option<String>,
     opened: Opened,
+    /// What StochCraft noted when reading the file, for run records.
+    notes: Vec<Value>,
 }
 
 /// A model, its undo history, its journal, its file and its background run.
@@ -329,30 +331,21 @@ impl Engine {
     ) -> Result<Value, CommandError> {
         let loaded = stochcraft_io::read_scenario(bytes, scenario)
             .map_err(|e| CommandError::new(ErrorCode::BadFile, format!("{name}: {e}")))?;
-        let notes: Vec<Value> = loaded
-            .notes
-            .iter()
-            .map(|n| {
-                json!({
-                    "severity": format!("{:?}", n.severity).to_lowercase(),
-                    "at": n.at,
-                    "message": n.message,
-                })
-            })
-            .collect();
+        let notes = notes_json(&loaded.notes);
         let opened = loaded.opened;
         let result = json!({
             "path": name,
             "format": format_name(opened.format),
             "scenario": opened.scenario,
             "scenarios": opened.scenarios.iter().map(|(id, name)| json!({"id": id, "name": name})).collect::<Vec<_>>(),
-            "notes": notes,
+            "notes": notes.clone(),
             "diagnostics": wire::diagnostics(&loaded.model.validate()),
         });
         self.new_document(loaded.model);
         self.file = Some(FileState {
             path: Some(name.to_owned()),
             opened,
+            notes,
         });
         Ok(result)
     }
@@ -381,6 +374,7 @@ impl Engine {
         self.file = Some(FileState {
             path: Some(path.to_owned()),
             opened: loaded.opened,
+            notes: notes_json(&loaded.notes),
         });
         self.saved = self.model.clone();
         Ok(json!({ "path": path, "format": format, "bytes": bytes.len() as u64 }))
@@ -405,9 +399,36 @@ impl Engine {
         if let Some(t) = threads {
             experiment = experiment.threads(t as usize);
         }
+        let record = self.record(&experiment, compiled.warnings());
         Ok(Plan {
             compiled,
             experiment,
+            record,
+        })
+    }
+
+    /// The run record that goes with a run's results: enough to reproduce them and to judge
+    /// them (NASA-STD-7009B [M&S 24], [M&S 25], [M&S 27], [M&S 34]; docs/research.md).
+    /// Results do not depend on the number of threads, so it is not recorded.
+    fn record(&self, experiment: &Experiment, warnings: &[stochcraft_model::Diagnostic]) -> Value {
+        let x = &self.model.experiment;
+        let file = self.file.as_ref();
+        json!({
+            "stochcraft": env!("CARGO_PKG_VERSION"),
+            "model_digest": model_digest(&self.model),
+            "file": file.and_then(|f| f.path.as_deref()),
+            "format": file.map(|f| format_name(f.opened.format)),
+            "scenario": file.and_then(|f| f.opened.scenario.as_deref()),
+            "unsaved_changes": file.is_some() && self.is_dirty(),
+            "seed": experiment.seed,
+            "replications": experiment.replications,
+            "time_unit": wire::TimeUnitSpec::from(x.time_unit),
+            "warmup": x.warmup,
+            "duration": x.duration,
+            "random_streams": "one xoshiro256** stream per replication, seeded from the experiment seed and the replication index; each element draws from its own stream",
+            "uncertainty": "95% Student-t confidence interval of the mean across independent replications (half_width); std_dev is the sample standard deviation across replications",
+            "warnings": wire::diagnostics(warnings),
+            "file_notes": file.map_or_else(Vec::new, |f| f.notes.clone()),
         })
     }
 
@@ -440,6 +461,29 @@ impl Engine {
             .as_mut()
             .map_or_else(|| json!({ "state": "idle" }), Job::cancel)
     }
+}
+
+/// A digest of the model as the engine holds it (its JSON form), so results can be matched to
+/// the exact model they came from.
+pub fn model_digest(model: &Model) -> String {
+    use sha2::{Digest, Sha256};
+    let text = serde_json::to_string(&wire::ModelDoc::from(model)).unwrap_or_default();
+    let hash = Sha256::digest(text.as_bytes());
+    let hex: String = hash.iter().map(|b| format!("{b:02x}")).collect();
+    format!("sha256:{hex}")
+}
+
+fn notes_json(notes: &[stochcraft_io::Note]) -> Vec<Value> {
+    notes
+        .iter()
+        .map(|n| {
+            json!({
+                "severity": format!("{:?}", n.severity).to_lowercase(),
+                "at": n.at,
+                "message": n.message,
+            })
+        })
+        .collect()
 }
 
 fn format_name(f: Format) -> &'static str {

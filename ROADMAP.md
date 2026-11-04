@@ -23,10 +23,11 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
 | `io` | L3 | BPSim on BPMN and XPDL: read, write new, save edits into opened files |
 | `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs |
+| `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `exec`, `schema` |
 | `bench/` | outside | M/M/1 against simu-des and SimPy (54× SimPy) |
 
-Models are saved and opened as BPSim files and changed through engine commands. Nothing can yet
-be run from a command line (M1.5) or seen on screen (M3).
+Models are saved and opened as BPSim files, changed through engine commands and run from the
+command line. Nothing can yet be seen on screen (M3).
 
 ## Principles that hold across all three
 
@@ -329,11 +330,16 @@ understand.
 
 ### M1.5 `apps/stochcraft-cli`
 
+Done. Every subcommand goes through the engine's commands, as the app and agents will.
+
 - `clap` subcommands:
-  - `new --template <mm1|tandem|…> <file.bpmn>`
-  - `validate <file>`: diagnostics; exit code 1 if any
-  - `run <file> [--reps N] [--seed S] [--threads T] [--warmup W] [--duration D] [--format table|json|csv] [--out file]`
-  - `exec <file> <script.json>`: replay engine commands
+  - `new [--template mm1|mm2|tandem] [--list] [--force] <file.bpmn>`: built from engine
+    commands and saved as a new BPMN file
+  - `validate <file> [--scenario S] [--format table|json]`: the notes from reading the file and
+    the model's diagnostics; exit code 1 if any is an error
+  - `run <file> [--scenario S] [--reps N] [--seed S] [--threads T] [--warmup W] [--duration D] [--format table|json|csv] [--out file]`
+  - `exec <script.json> [--open file]`: replay engine commands (a journal), one line of JSON
+    per step; exit code 1 at the first step that fails
   - `schema [command]`: print command schemas
 - The table output reads like a textbook result: block, metric, mean, ±half-width, n.
 - **A run record with every result** (NASA-STD-7009B [M&S 24], [M&S 25], [M&S 27], [M&S 34];
@@ -341,8 +347,11 @@ understand.
   seed, replications, warm-up and duration, the diagnostics and file notes seen, and how the
   uncertainty was estimated ("95% Student-t interval over n independent replications"). The JSON
   output carries it in full; the table prints it as a header. Results can be reproduced from the
-  record alone, since a seeded run gives the same numbers on any machine.
-- Integration tests run the binary on the golden models.
+  record alone, since a seeded run gives the same numbers on any machine. The record is built by
+  the engine (`run` results carry it), so the app and agents get it too.
+- Integration tests run the binary: every template written, validated and run; the M/M/1
+  template against queueing theory; results independent of threads and following the seed;
+  table, CSV and `--out`; exit codes for errors; scripts replayed; schemas printed.
 
 ### M1.6 Determinism and the browser
 

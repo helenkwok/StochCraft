@@ -1,0 +1,23 @@
+[package]
+name = "stochcraft-cli"
+description = "StochCraft's command line: create, check and run BPSim models on BPMN or XPDL, replay engine scripts and print command schemas."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "stochcraft-cli"
+path = "src/main.rs"
+
+[dependencies]
+stochcraft-engine = { workspace = true }
+# Command-line parsing (MIT OR Apache-2.0).
+clap = { version = "4", features = ["derive"] }
+serde_json = "1"
+
+[lints]
+workspace = true
