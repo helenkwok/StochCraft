@@ -11,6 +11,8 @@ publish = false
 
 [dependencies]
 serde_json = "1"
+# SHA-256 for checking downloaded reference files (MIT OR Apache-2.0).
+sha2 = "0.11"
 
 [lints]
 workspace = true

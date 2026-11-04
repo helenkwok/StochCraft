@@ -6,6 +6,7 @@
 //! Repository tooling. Run `cargo xtask help`.
 
 mod affected;
+mod bpsim;
 mod layers;
 
 use std::path::{Path, PathBuf};
@@ -19,6 +20,8 @@ cargo xtask <command>
                   the crates a change since REV touches, plus the crates that depend on them,
                   and the CI flags: everything, heavy (#[ignore]d tests affected), wasm
   wasm            cargo check of every layered crate for wasm32-unknown-unknown
+  fetch-bpsim     download the BPSim reference models and XML Schema from bpsim.org into
+                  target/bpsim (checked against pinned SHA-256; never committed)
   ci [--affected REV]
                   fmt --check, layers, clippy -D warnings and tests; with --affected REV only
                   for the crates `affected --base REV` names (everything when it says so)
@@ -32,6 +35,7 @@ fn main() -> ExitCode {
         Some("layers") => cmd_layers(),
         Some("affected") => affected::run(&args[1..]),
         Some("wasm") => cmd_wasm(),
+        Some("fetch-bpsim") => bpsim::fetch(),
         Some("ci") => match &args[1..] {
             [] => cmd_ci(None),
             ["--affected", base] => cmd_ci(Some(base)),

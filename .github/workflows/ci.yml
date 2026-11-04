@@ -98,10 +98,23 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           key: ci
+      # The BPSim reference models and XML Schema are downloaded, never committed (they carry no
+      # licence of their own). The cache key changes when the pinned checksums in
+      # xtask/src/bpsim.rs do, so bpsim.org is contacted only when the cache is cold.
+      - uses: actions/cache@v4
+        with:
+          path: target/bpsim
+          key: bpsim-${{ hashFiles('xtask/src/bpsim.rs') }}
+      - name: xmllint (BPSim XML Schema validation)
+        run: sudo apt-get update -q && sudo apt-get install -y -q --no-install-recommends libxml2-utils
+      - name: cargo xtask fetch-bpsim
+        run: cargo xtask fetch-bpsim
       - name: cargo xtask ci (the affected crates, or everything)
         env:
           BASE: ${{ needs.plan.outputs.base }}
           EVERYTHING: ${{ needs.plan.outputs.everything }}
+          # The reference-model tests must run here, not skip.
+          STOCHCRAFT_REQUIRE_BPSIM: "1"
         run: |
           if [ -n "$BASE" ] && [ "$EVERYTHING" != "true" ]; then cargo xtask ci --affected "$BASE"; else cargo xtask ci; fi
 

@@ -204,8 +204,11 @@ starting model that other BPMN tools can open; every model change is an engine c
 Two PRs. **Part 1** (done): reading BPMN and XPDL with BPSim 2.0 and 1.0, writing new models as
 BPMN with BPSim 2.0, saving unchanged opened files byte for byte, and StochCraft's own test
 models. Saving *edits* into an opened file waits for the engine's edit commands (M1.4), which
-know what changed; until then it is refused with a clear error rather than guessed. **Part 2**:
-`cargo xtask fetch-bpsim`, the reference corpus, XSD validation in CI and the L-SIM cross-check.
+know what changed; until then it is refused with a clear error rather than guessed. **Part 2**
+(done): `cargo xtask fetch-bpsim`, the reference corpus in CI (every model and scenario reads,
+unchanged saves are byte-identical, BPMN and XPDL versions give the same model, the L-SIM result
+files parse) and XSD validation of everything StochCraft writes. The statistical cross-check
+against L-SIM needs gateways, which all three reference models use, so it moves to M2.3.
 
 - Read BPSim 2.0 (and 1.0, upgraded on read) embedded in BPMN 2.0 or XPDL 2.2, or standalone;
   write BPMN 2.0 with embedded BPSim 2.0 for new models and the original format for opened ones.
@@ -249,7 +252,10 @@ know what changed; until then it is refused with a clear error rather than guess
   with them statistically: deterministic quantities exactly, random ones within confidence
   intervals, since the random number generators differ. They are also the reference for how
   StochCraft writes its own result scenarios (`result`, `instance` per replication,
-  `resultTimeStamp`).
+  `resultTimeStamp`). All three models use gateways, so the comparison runs from M2.3.
+  It already raises one question (decision D8): L-SIM counts 151 arrivals for an inter-trigger
+  time of 24 minutes over 60 hours, that is 150 intervals plus an arrival at time 0, while the
+  specification describes the event as occurring "after the specified time interval".
 - **Lenient reading, strict writing.** The BPSim 2.0 XML Schema (XSD, bpsim.org) fixes the order
   of child elements and the allowed property types, and two of the three reference models break
   it: the car repair model declares a property as `int` (the schema allows `long`), and the
@@ -475,3 +481,4 @@ and M3 proceed in parallel: each M2 block becomes editable in M3 as soon as its 
 | D5 | Browser build | Part of M3 (M3.6), wasm32 first, wasm64 when its toolchain is verified |
 | D6 | Conditions and logic | Settled by BPSim: its XPath 1.0 expressions, the subset models use first |
 | D7 | Reference models as test files | Settled: WfMC's examples and the XSD are downloaded from bpsim.org by `cargo xtask fetch-bpsim` (pinned SHA-256, cached in CI), never committed, because they carry no licence of their own |
+| D8 | First arrival of a start event | Open: at time 0 (as L-SIM does, giving 151 car repair arrivals) or after the first interval (the specification's wording, and StochCraft today, giving 150). Decide in M2.3 with the cross-check |
