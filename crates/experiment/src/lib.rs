@@ -8,7 +8,7 @@
 
 use std::panic::AssertUnwindSafe;
 use std::sync::Mutex;
-use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 
 use stochcraft_random::{Rng, SplitMix64};
 pub use stochcraft_stats::Summary;
@@ -24,6 +24,40 @@ pub struct Replication {
 pub enum ExperimentError {
     /// A replication panicked; its index, if known.
     ReplicationPanicked { index: Option<u64> },
+    /// [`Control::cancel`] was called before every replication had run.
+    Cancelled,
+}
+
+/// Watches and stops an experiment from another thread: how many replications have finished,
+/// and a flag that stops workers from starting more. A replication already running finishes.
+#[derive(Debug, Default)]
+pub struct Control {
+    cancelled: AtomicBool,
+    done: AtomicU64,
+}
+
+impl Control {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Asks the experiment to stop; it returns [`ExperimentError::Cancelled`].
+    pub fn cancel(&self) {
+        self.cancelled.store(true, Ordering::Relaxed);
+    }
+
+    pub fn is_cancelled(&self) -> bool {
+        self.cancelled.load(Ordering::Relaxed)
+    }
+
+    /// Replications finished so far.
+    pub fn done(&self) -> u64 {
+        self.done.load(Ordering::Relaxed)
+    }
+
+    fn finished_one(&self) {
+        self.done.fetch_add(1, Ordering::Relaxed);
+    }
 }
 
 impl std::fmt::Display for ExperimentError {
@@ -35,6 +69,7 @@ impl std::fmt::Display for ExperimentError {
             ExperimentError::ReplicationPanicked { index: None } => {
                 write!(f, "a replication panicked")
             }
+            ExperimentError::Cancelled => write!(f, "the experiment was cancelled"),
         }
     }
 }
@@ -70,8 +105,30 @@ impl Experiment {
         Rng::new(sm.next_u64())
     }
 
+    /// Replication `index`: its index and random stream. Running replications one at a time
+    /// with this (as the browser does, between frames) gives the same results as [`Self::run`].
+    pub fn replication(&self, index: u64) -> Replication {
+        Replication {
+            index,
+            rng: self.stream(index),
+        }
+    }
+
     /// Runs `model` once per replication and returns the results in index order.
     pub fn run<R, F>(&self, model: F) -> Result<Vec<R>, ExperimentError>
+    where
+        F: Fn(Replication) -> R + Sync,
+        R: Send,
+    {
+        self.run_controlled(model, &Control::new())
+    }
+
+    /// As [`Self::run`], reporting progress to `control` and stopping when it is cancelled.
+    pub fn run_controlled<R, F>(
+        &self,
+        model: F,
+        control: &Control,
+    ) -> Result<Vec<R>, ExperimentError>
     where
         F: Fn(Replication) -> R + Sync,
         R: Send,
@@ -80,17 +137,18 @@ impl Experiment {
         if workers <= 1 {
             let mut out = Vec::new();
             for index in 0..self.replications {
-                let rep = Replication {
-                    index,
-                    rng: self.stream(index),
-                };
+                if control.is_cancelled() {
+                    return Err(ExperimentError::Cancelled);
+                }
+                let rep = self.replication(index);
                 let r = std::panic::catch_unwind(AssertUnwindSafe(|| model(rep)))
                     .map_err(|_| ExperimentError::ReplicationPanicked { index: Some(index) })?;
                 out.push(r);
+                control.finished_one();
             }
             return Ok(out);
         }
-        self.run_parallel(&model, workers)
+        self.run_parallel(&model, workers, control)
     }
 
     /// Runs `model` (which returns one number per replication) and summarises the results.
@@ -111,7 +169,12 @@ impl Experiment {
         wanted.min(reps.max(1))
     }
 
-    fn run_parallel<R, F>(&self, model: &F, workers: usize) -> Result<Vec<R>, ExperimentError>
+    fn run_parallel<R, F>(
+        &self,
+        model: &F,
+        workers: usize,
+        control: &Control,
+    ) -> Result<Vec<R>, ExperimentError>
     where
         F: Fn(Replication) -> R + Sync,
         R: Send,
@@ -123,18 +186,16 @@ impl Experiment {
             for _ in 0..workers {
                 scope.spawn(|| {
                     let mut local = Vec::new();
-                    loop {
+                    while !control.is_cancelled() {
                         let index = next.fetch_add(1, Ordering::Relaxed);
                         if index >= self.replications {
                             break;
                         }
-                        let rep = Replication {
-                            index,
-                            rng: self.stream(index),
-                        };
+                        let rep = self.replication(index);
                         let outcome = std::panic::catch_unwind(AssertUnwindSafe(|| model(rep)))
                             .map_err(|_| ());
                         local.push((index, outcome));
+                        control.finished_one();
                     }
                     results
                         .lock()
@@ -151,7 +212,11 @@ impl Experiment {
             });
         }
         if u64::try_from(out.len()).ok() != Some(self.replications) {
-            return Err(ExperimentError::ReplicationPanicked { index: None });
+            return Err(if control.is_cancelled() {
+                ExperimentError::Cancelled
+            } else {
+                ExperimentError::ReplicationPanicked { index: None }
+            });
         }
         Ok(out.into_iter().filter_map(|(_, r)| r.ok()).collect())
     }
@@ -203,6 +268,35 @@ mod tests {
             res,
             Err(ExperimentError::ReplicationPanicked { .. })
         ));
+    }
+
+    #[test]
+    fn progress_and_cancellation() {
+        for threads in [1, 3] {
+            let control = Control::new();
+            let done = Experiment::new(20, 1)
+                .threads(threads)
+                .run_controlled(|r| r.index, &control);
+            assert_eq!(done.map(|v| v.len()), Ok(20));
+            assert_eq!(control.done(), 20);
+            // Cancelling from inside a replication: the ones running finish, no more start.
+            let control = Control::new();
+            let res = Experiment::new(1_000, 1).threads(threads).run_controlled(
+                |r| {
+                    if r.index == 5 {
+                        control.cancel();
+                    }
+                    r.index
+                },
+                &control,
+            );
+            assert_eq!(res, Err(ExperimentError::Cancelled));
+            assert!(control.done() < 1_000, "{}", control.done());
+        }
+        // One at a time gives what a whole run gives.
+        let x = Experiment::new(5, 42);
+        let one_by_one: Vec<u64> = (0..5).map(|i| x.replication(i).rng.next_u64()).collect();
+        assert_eq!(x.threads(2).run(|mut r| r.rng.next_u64()), Ok(one_by_one));
     }
 
     #[test]

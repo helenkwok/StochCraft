@@ -1,0 +1,573 @@
+//! The engine through its commands, as the command line, the app and agents use it.
+
+use serde_json::{Value, json};
+use stochcraft_engine::{COMMANDS, CommandKind, Engine, ErrorCode, JournalEntry};
+use stochcraft_random::Rng;
+
+fn ok(e: &mut Engine, command: &str, params: Value) -> Value {
+    let r = e.execute(command, params.clone());
+    assert!(r.is_ok(), "{command} {params}: {r:?}");
+    r.unwrap_or_default()
+}
+
+fn err(e: &mut Engine, command: &str, params: Value) -> ErrorCode {
+    let r = e.execute(command, params.clone());
+    assert!(r.is_err(), "{command} {params} should fail: {r:?}");
+    r.err().map_or(ErrorCode::Internal, |e| e.code)
+}
+
+fn scratch(name: &str) -> std::path::PathBuf {
+    let dir = std::path::Path::new(env!("CARGO_TARGET_TMPDIR")).join("engine-tests");
+    let _ = std::fs::create_dir_all(&dir);
+    dir.join(name)
+}
+
+/// The M/M/1-like help desk most tests start from.
+fn help_desk() -> Engine {
+    let mut e = Engine::new();
+    ok(&mut e, "model.set", COMMANDS[0].example());
+    e
+}
+
+#[test]
+fn catalogue_is_complete_and_its_examples_run_in_order() {
+    let names: Vec<&str> = COMMANDS.iter().map(|c| c.name).collect();
+    for wanted in [
+        "model.new",
+        "model.rename",
+        "block.add",
+        "block.remove",
+        "block.set",
+        "block.rename",
+        "connect",
+        "disconnect",
+        "experiment.set",
+        "run",
+        "run.cancel",
+        "file.open",
+        "file.save",
+        "undo",
+        "redo",
+    ] {
+        assert!(names.contains(&wanted), "{wanted} missing");
+    }
+    let mut unique = names.clone();
+    unique.sort_unstable();
+    unique.dedup();
+    assert_eq!(unique.len(), names.len(), "duplicate command names");
+
+    let mut e = Engine::new();
+    for c in COMMANDS {
+        let schema = c.params_schema();
+        assert_eq!(schema["type"], "object", "{}: {schema}", c.name);
+        assert!(!c.summary.is_empty());
+        assert_eq!(c.to_json()["name"], c.name);
+        let mut params = c.example();
+        if let Some(p) = params.get("path").and_then(Value::as_str) {
+            params["path"] = json!(scratch(p).to_string_lossy());
+        }
+        ok(&mut e, c.name, params);
+    }
+    // Queries are not journalled; everything else is.
+    let journalled = COMMANDS
+        .iter()
+        .filter(|c| c.kind != CommandKind::Query)
+        .count();
+    assert_eq!(e.journal().len(), journalled);
+}
+
+#[test]
+fn schemas_describe_the_parameters() {
+    let schema = |name: &str| {
+        COMMANDS
+            .iter()
+            .find(|c| c.name == name)
+            .map(|c| c.params_schema())
+            .unwrap_or_default()
+    };
+    let set = schema("block.set");
+    assert_eq!(set["required"], json!(["id"]), "{set}");
+    assert_eq!(set["additionalProperties"], false);
+    assert!(set["properties"]["service"].is_object());
+    // The kinds a block can be appear in block.add's schema.
+    let add = schema("block.add").to_string();
+    for kind in ["source", "server", "delay", "sink"] {
+        assert!(add.contains(&format!("\"{kind}\"")), "{kind}: {add}");
+    }
+}
+
+#[test]
+fn every_edit_undoes_exactly_and_redoes_exactly() {
+    // Random edits: after each, undo must restore the model before it, and redo the model after.
+    let mut rng = Rng::new(2026);
+    let kinds = ["source", "server", "delay", "sink"];
+    for _ in 0..40 {
+        let mut e = help_desk();
+        for _ in 0..30 {
+            let ids: Vec<String> = e
+                .model()
+                .elements
+                .iter()
+                .map(|x| x.id.to_string())
+                .collect();
+            let flows: Vec<String> = e
+                .model()
+                .connections
+                .iter()
+                .map(|x| x.id.to_string())
+                .collect();
+            let pick = |rng: &mut Rng, v: &[String]| {
+                v.get((rng.next_u64() % v.len().max(1) as u64) as usize)
+                    .cloned()
+                    .unwrap_or_default()
+            };
+            let (command, params) = match rng.next_u64() % 9 {
+                0 => (
+                    "block.add",
+                    json!({"kind": kinds[(rng.next_u64() % 4) as usize], "index": rng.next_u64() % 5}),
+                ),
+                1 => ("block.remove", json!({"id": pick(&mut rng, &ids)})),
+                2 => (
+                    "block.rename",
+                    json!({"id": pick(&mut rng, &ids), "name": format!("n{}", rng.next_u64() % 100)}),
+                ),
+                3 => (
+                    "connect",
+                    json!({"from": pick(&mut rng, &ids), "to": pick(&mut rng, &ids)}),
+                ),
+                4 => ("disconnect", json!({"id": pick(&mut rng, &flows)})),
+                5 => (
+                    "experiment.set",
+                    json!({"replications": rng.next_u64() % 20, "warmup": (rng.next_u64() % 50) as f64}),
+                ),
+                6 => (
+                    "model.rename",
+                    json!({"name": format!("m{}", rng.next_u64() % 9)}),
+                ),
+                7 => (
+                    "block.set",
+                    json!({"id": pick(&mut rng, &ids), "capacity": rng.next_u64() % 4}),
+                ),
+                _ => (
+                    "block.set",
+                    json!({"id": pick(&mut rng, &ids), "duration": {"type": "constant", "value": 2.5}}),
+                ),
+            };
+            let before = e.model().clone();
+            if e.execute(command, params.clone()).is_err() {
+                // A refused edit changes nothing.
+                assert_eq!(e.model(), &before, "{command} {params}");
+                continue;
+            }
+            let after = e.model().clone();
+            ok(&mut e, "undo", json!({}));
+            assert_eq!(e.model(), &before, "undo of {command} {params}");
+            ok(&mut e, "redo", json!({}));
+            assert_eq!(e.model(), &after, "redo of {command} {params}");
+        }
+        // And all the way back, past the model.set that loaded the help desk.
+        while e.execute("undo", json!({})).is_ok() {}
+        assert_eq!(e.model(), Engine::new().model());
+    }
+}
+
+#[test]
+fn removing_a_block_and_undoing_restores_its_connections_in_place() {
+    let mut e = help_desk();
+    let before = e.model().clone();
+    ok(&mut e, "block.remove", json!({"id": "desk"}));
+    assert!(e.model().connections.is_empty());
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(e.model(), &before);
+}
+
+#[test]
+fn a_new_edit_clears_redo_and_history_reports_it() {
+    let mut e = help_desk();
+    ok(&mut e, "model.rename", json!({"name": "a"}));
+    ok(&mut e, "model.rename", json!({"name": "b"}));
+    ok(&mut e, "undo", json!({}));
+    let h = ok(&mut e, "history", json!({}));
+    assert_eq!(h["undo"], json!(["model.set", "model.rename"]));
+    assert_eq!(h["redo"], json!(["model.rename"]));
+    ok(
+        &mut e,
+        "block.rename",
+        json!({"id": "desk", "name": "Desk"}),
+    );
+    assert_eq!(err(&mut e, "redo", json!({})), ErrorCode::NothingToRedo);
+    let mut fresh = Engine::new();
+    assert_eq!(err(&mut fresh, "undo", json!({})), ErrorCode::NothingToUndo);
+}
+
+#[test]
+fn the_journal_replays_to_the_same_model() {
+    let mut e = help_desk();
+    ok(&mut e, "block.add", json!({"kind": "delay", "id": "walk"}));
+    ok(&mut e, "disconnect", json!({"from": "desk", "to": "exit"}));
+    ok(&mut e, "connect", json!({"from": "desk", "to": "walk"}));
+    ok(&mut e, "connect", json!({"from": "walk", "to": "exit"}));
+    ok(&mut e, "experiment.set", json!({"seed": 7}));
+    ok(&mut e, "undo", json!({}));
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "walk", "duration": {"type": "uniform", "min": 1.0, "max": 3.0}}),
+    );
+    ok(&mut e, "model.get", json!({})); // a query: not journalled
+    // The journal survives a trip through JSON, as a script file would.
+    let script: Vec<JournalEntry> =
+        serde_json::from_str(&serde_json::to_string(e.journal()).unwrap_or_default())
+            .unwrap_or_default();
+    assert_eq!(script.len(), 8);
+    let mut again = Engine::new();
+    let replayed = again.replay(&script);
+    assert!(replayed.is_ok(), "{replayed:?}");
+    assert_eq!(again.model(), e.model());
+    assert_eq!(again.journal(), e.journal());
+    // A failing step stops the replay and says which.
+    let bad = vec![
+        JournalEntry {
+            command: "model.rename".into(),
+            params: json!({"name": "x"}),
+        },
+        JournalEntry {
+            command: "block.remove".into(),
+            params: json!({"id": "nope"}),
+        },
+    ];
+    let r = Engine::new().replay(&bad);
+    assert!(
+        r.as_ref()
+            .is_err_and(|e| e.index == 1 && e.error.code == ErrorCode::NotFound),
+        "{r:?}"
+    );
+}
+
+#[test]
+fn bad_commands_are_refused_without_changing_anything() {
+    let mut e = help_desk();
+    let before = e.model().clone();
+    assert_eq!(
+        err(&mut e, "block.explode", json!({})),
+        ErrorCode::UnknownCommand
+    );
+    // A misspelt parameter is an error, not silently ignored.
+    for params in [
+        json!({"kind": "server", "capcity": 2}),
+        json!({"kind": "server", "duration": {"type": "constant", "value": 1.0}}),
+        json!({"kind": "teleporter"}),
+        json!({"kind": "sink", "id": "desk"}),
+        json!({"kind": "sink", "id": "9lives"}),
+    ] {
+        let code = err(&mut e, "block.add", params.clone());
+        assert!(
+            matches!(code, ErrorCode::InvalidParams | ErrorCode::Conflict),
+            "{params}: {code:?}"
+        );
+    }
+    assert_eq!(
+        err(&mut e, "block.set", json!({"id": "desk", "srevice": 1})),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "arrivals", "capacity": 2})
+        ),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(&mut e, "block.set", json!({"id": "desk"})),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(&mut e, "block.set", json!({"id": "ghost", "capacity": 2})),
+        ErrorCode::NotFound
+    );
+    assert_eq!(
+        err(&mut e, "connect", json!({"from": "desk", "to": "ghost"})),
+        ErrorCode::NotFound
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "connect",
+            json!({"from": "desk", "to": "exit", "id": "desk"})
+        ),
+        ErrorCode::Conflict
+    );
+    assert_eq!(
+        err(&mut e, "disconnect", json!({"from": "desk"})),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(&mut e, "experiment.set", json!({})),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "model.set",
+            json!({"model": {"elements": [{"id": "a", "kind": "sink", "colour": 1}]}})
+        ),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(e.model(), &before);
+    // Each error carries a stable code and a message.
+    let r = e.execute("block.remove", json!({"id": "ghost"}));
+    assert_eq!(
+        r.err().map(|e| e.to_json()),
+        Some(json!({"code": "not_found", "message": "no element with id `ghost`"}))
+    );
+}
+
+#[test]
+fn block_set_changes_only_what_is_given() {
+    let mut e = help_desk();
+    ok(&mut e, "block.set", json!({"id": "arrivals", "limit": 5}));
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "service": {"type": "erlang", "mean": 1.5, "k": 3}}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(m["elements"][0]["limit"], 5);
+    assert_eq!(
+        m["elements"][0]["interarrival"],
+        json!({"type": "exponential", "mean": 2.0})
+    );
+    assert_eq!(m["elements"][1]["capacity"], 1);
+    assert_eq!(
+        m["elements"][1]["service"],
+        json!({"type": "erlang", "mean": 1.5, "k": 3})
+    );
+    // `null` removes the limit.
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "arrivals", "limit": null}),
+    );
+    assert_eq!(
+        ok(&mut e, "model.get", json!({}))["elements"][0]["limit"],
+        Value::Null
+    );
+}
+
+#[test]
+fn ids_are_generated_when_not_given() {
+    let mut e = Engine::new();
+    assert_eq!(
+        ok(&mut e, "block.add", json!({"kind": "server"}))["id"],
+        "server-1"
+    );
+    assert_eq!(
+        ok(&mut e, "block.add", json!({"kind": "server"}))["id"],
+        "server-2"
+    );
+    ok(&mut e, "block.add", json!({"kind": "sink", "id": "out"}));
+    assert_eq!(
+        ok(&mut e, "connect", json!({"from": "server-1", "to": "out"}))["id"],
+        "flow-1"
+    );
+    // The name defaults to the id.
+    assert_eq!(e.model().elements[0].name, "server-1");
+}
+
+#[test]
+fn validate_reports_problems_with_codes() {
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "server", "id": "m", "capacity": 0}),
+    );
+    let v = ok(&mut e, "model.validate", json!({}));
+    let codes: Vec<&str> = v["diagnostics"]
+        .as_array()
+        .map(|a| a.iter().filter_map(|d| d["code"].as_str()).collect())
+        .unwrap_or_default();
+    for c in ["zero_capacity", "no_source", "no_output"] {
+        assert!(codes.contains(&c), "{c}: {v}");
+    }
+    // A model with errors cannot run, and says why.
+    let r = e.execute("run", json!({}));
+    let r = r.err();
+    assert_eq!(r.as_ref().map(|e| e.code), Some(ErrorCode::InvalidModel));
+    assert!(
+        r.and_then(|e| e.details)
+            .is_some_and(|d| d.as_array().is_some_and(|a| !a.is_empty()))
+    );
+}
+
+fn utilisation(results: &Value) -> Value {
+    results["elements"][1]["metrics"]["utilisation"].clone()
+}
+
+#[test]
+fn runs_give_the_same_results_at_once_on_threads_and_in_slices() {
+    let mut e = help_desk();
+    let now = ok(&mut e, "run", json!({"replications": 8, "threads": 1}));
+    assert_eq!(now["replications"], 8);
+    assert_eq!(now["elements"][1]["id"], "desk");
+    assert_eq!(utilisation(&now)["n"], 8);
+    let threaded = ok(&mut e, "run", json!({"replications": 8, "threads": 3}));
+    assert_eq!(now, threaded);
+
+    ok(
+        &mut e,
+        "run.start",
+        json!({"replications": 8, "mode": "slices"}),
+    );
+    let mut status = json!({});
+    let mut polls = 0;
+    while status["state"] != "finished" {
+        status = ok(&mut e, "run.status", json!({"step": 3}));
+        polls += 1;
+        assert!(polls < 10, "{status}");
+    }
+    assert_eq!(polls, 3, "8 replications, 3 at a time");
+    assert_eq!(status["result"], now);
+
+    ok(
+        &mut e,
+        "run.start",
+        json!({"replications": 8, "mode": "threads", "threads": 2}),
+    );
+    let mut status = json!({});
+    for _ in 0..10_000 {
+        status = ok(&mut e, "run.status", json!({}));
+        if status["state"] != "running" {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(1));
+    }
+    assert_eq!(status["state"], "finished", "{status}");
+    assert_eq!(status["result"], now);
+}
+
+#[test]
+fn background_runs_report_progress_and_can_be_cancelled() {
+    let mut e = help_desk();
+    assert_eq!(ok(&mut e, "run.status", json!({}))["state"], "idle");
+    let started = ok(
+        &mut e,
+        "run.start",
+        json!({"replications": 5, "mode": "slices"}),
+    );
+    assert_eq!(
+        (
+            started["state"].clone(),
+            started["done"].clone(),
+            started["total"].clone()
+        ),
+        (json!("running"), json!(0), json!(5))
+    );
+    assert_eq!(ok(&mut e, "run.status", json!({"step": 2}))["done"], 2);
+    // One run at a time.
+    assert_eq!(err(&mut e, "run.start", json!({})), ErrorCode::Conflict);
+    let cancelled = ok(&mut e, "run.cancel", json!({}));
+    assert_eq!(cancelled["state"], "cancelled");
+    assert_eq!(cancelled["error"]["code"], "cancelled");
+
+    // Threads: a long run, cancelled almost at once, stops well short of the end.
+    ok(&mut e, "experiment.set", json!({"duration": 20_000.0}));
+    ok(
+        &mut e,
+        "run.start",
+        json!({"replications": 100_000, "mode": "threads", "threads": 2}),
+    );
+    let cancelled = ok(&mut e, "run.cancel", json!({}));
+    assert_eq!(cancelled["state"], "cancelled", "{cancelled}");
+    // A new run can start after a cancelled one, and edits made meanwhile do not affect it.
+    ok(
+        &mut e,
+        "run.start",
+        json!({"replications": 2, "mode": "slices"}),
+    );
+    ok(&mut e, "experiment.set", json!({"duration": 1.0}));
+    assert_eq!(
+        ok(&mut e, "run.status", json!({"step": 2}))["result"]["duration"],
+        20_000.0
+    );
+}
+
+#[test]
+fn files_open_save_and_track_changes() {
+    let path = scratch("files.bpmn");
+    let path_s = path.to_string_lossy().to_string();
+    let mut e = help_desk();
+    assert!(e.is_dirty());
+    assert_eq!(
+        err(&mut e, "file.save", json!({})),
+        ErrorCode::InvalidParams
+    );
+    let saved = ok(&mut e, "file.save", json!({"path": path_s}));
+    assert_eq!(saved["format"], "bpmn");
+    assert!(!e.is_dirty());
+    let written = std::fs::read(&path).unwrap_or_default();
+
+    let mut f = Engine::new();
+    ok(&mut f, "model.rename", json!({"name": "to be replaced"}));
+    let opened = ok(&mut f, "file.open", json!({"path": path_s}));
+    assert_eq!(opened["format"], "bpmn");
+    assert_eq!(opened["diagnostics"], json!([]));
+    assert_eq!(f.model(), e.model(), "what was saved is what opens");
+    // Opening a file starts a new history.
+    assert_eq!(err(&mut f, "undo", json!({})), ErrorCode::NothingToUndo);
+    assert_eq!(f.path(), Some(path_s.as_str()));
+    // Saved unchanged: the same bytes.
+    ok(&mut f, "file.save", json!({}));
+    assert_eq!(std::fs::read(&path).unwrap_or_default(), written);
+    // Edited: saving into the opened file waits for M1.4 part 2; as a new file works now.
+    ok(&mut f, "block.set", json!({"id": "desk", "capacity": 3}));
+    assert!(f.is_dirty());
+    assert_eq!(err(&mut f, "file.save", json!({})), ErrorCode::Unsupported);
+    ok(&mut f, "file.save", json!({"as_new": true}));
+    assert!(!f.is_dirty());
+    let mut g = Engine::new();
+    ok(&mut g, "file.open", json!({"path": path_s}));
+    assert_eq!(g.model(), f.model());
+    // Undoing back to the saved model is clean again.
+    ok(&mut f, "undo", json!({}));
+    assert!(f.is_dirty());
+    ok(&mut f, "redo", json!({}));
+    assert!(!f.is_dirty());
+
+    assert_eq!(
+        err(
+            &mut g,
+            "file.open",
+            json!({"path": scratch("missing.bpmn").to_string_lossy()})
+        ),
+        ErrorCode::Io
+    );
+    let junk = scratch("junk.bpmn");
+    let _ = std::fs::write(&junk, b"not xml");
+    assert_eq!(
+        err(&mut g, "file.open", json!({"path": junk.to_string_lossy()})),
+        ErrorCode::BadFile
+    );
+}
+
+#[test]
+fn the_committed_test_models_open_and_run() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models");
+    for name in ["mm1.bpmn", "tandem.xpdl"] {
+        let mut e = Engine::new();
+        let opened = ok(
+            &mut e,
+            "file.open",
+            json!({"path": root.join(name).to_string_lossy()}),
+        );
+        assert!(
+            opened["scenarios"]
+                .as_array()
+                .is_some_and(|s| !s.is_empty()),
+            "{opened}"
+        );
+        let r = ok(&mut e, "run", json!({"replications": 3}));
+        assert_eq!(r["replications"], 3, "{name}");
+    }
+}

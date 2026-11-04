@@ -244,6 +244,29 @@ pub enum Problem {
     },
 }
 
+impl Problem {
+    /// A stable snake_case name for files, the command line and agents.
+    pub fn code(&self) -> &'static str {
+        match self {
+            Problem::InvalidId { .. } => "invalid_id",
+            Problem::DuplicateId { .. } => "duplicate_id",
+            Problem::UnknownElement { .. } => "unknown_element",
+            Problem::IntoSource { .. } => "into_source",
+            Problem::OutOfSink { .. } => "out_of_sink",
+            Problem::SelfLoop { .. } => "self_loop",
+            Problem::NoOutput => "no_output",
+            Problem::SeveralOutputs { .. } => "several_outputs",
+            Problem::BadDistribution { .. } => "bad_distribution",
+            Problem::ZeroCapacity => "zero_capacity",
+            Problem::NoSource => "no_source",
+            Problem::NoSink => "no_sink",
+            Problem::Unreachable => "unreachable",
+            Problem::NoPathToSink => "no_path_to_sink",
+            Problem::BadExperiment { .. } => "bad_experiment",
+        }
+    }
+}
+
 /// One problem found by [`Model::validate`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct Diagnostic {

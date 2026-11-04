@@ -53,10 +53,12 @@ pub const TABLE: &[(&str, Class)] = &[
     // L3: running models and moving data.
     ("experiment", Class::Layer(3)),
     ("io", Class::Layer(3)),
-    // L4: drawing, the window and agents over MCP.
-    ("render", Class::Layer(4)),
-    ("ui-egui", Class::Layer(4)),
-    ("mcp", Class::Layer(4)),
+    // L4: the engine: commands, undo and redo, the journal and runs.
+    ("engine", Class::Layer(4)),
+    // L5: drawing, the window and agents over MCP, all driving the engine.
+    ("render", Class::Layer(5)),
+    ("ui-egui", Class::Layer(5)),
+    ("mcp", Class::Layer(5)),
     ("testkit", Class::Testkit),
     // apps and tooling
     ("stochcraft", Class::Exempt),
@@ -98,7 +100,7 @@ pub const UI_CRATES: &[&str] = &[
 ];
 
 /// First layer allowed to use UI crates.
-pub const UI_MIN_LAYER: u8 = 4;
+pub const UI_MIN_LAYER: u8 = 5;
 
 /// The layer the testkit sits at for rule purposes: above every layered crate.
 pub const TESTKIT_LAYER: u8 = UI_MIN_LAYER + 1;
@@ -386,7 +388,7 @@ mod tests {
             "stochcraft-render",
             &[("stochcraft-ui-egui", Normal, true)],
         )]);
-        assert!(matches!(v[..], [Violation::Upward { from: 4, to: 4, .. }]));
+        assert!(matches!(v[..], [Violation::Upward { from: 5, to: 5, .. }]));
     }
 
     #[test]
