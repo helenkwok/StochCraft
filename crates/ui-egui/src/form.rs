@@ -13,8 +13,9 @@
 
 use std::collections::HashMap;
 
-use egui::RichText;
 use serde_json::{Map, Value, json};
+
+use craft_ui::localized::{LocaleNumbers, NumberField, Unit};
 
 use crate::theme;
 
@@ -117,10 +118,13 @@ enum Node<'a> {
     Other,
 }
 
-/// The time unit and the edits in progress, shared by the fields of one form.
+/// The time unit, the region's numbers and the edits in progress, shared by the fields of one
+/// form.
 pub struct Cx<'a> {
     /// The model's time unit, for the fields that hold times.
     pub time_unit: &'a str,
+    /// How numbers are written and read (the user's region).
+    pub numbers: &'a LocaleNumbers,
     /// Text being typed, by field key, until it commits.
     pub drafts: &'a mut HashMap<String, String>,
 }
@@ -242,7 +246,7 @@ fn edit(
         Node::Enum(options) => row(ui, label, help, |ui| {
             let now = current.as_str().unwrap_or("");
             let mut picked = None;
-            egui::ComboBox::from_id_salt(key)
+            craft_ui::ComboBox::from_id_salt(key)
                 .selected_text(choice_label(now))
                 .show_ui(ui, |ui| {
                     for o in &options {
@@ -359,8 +363,10 @@ fn row<R>(
     .inner
 }
 
-/// A number field. Commits on Enter or losing focus when the text parses and is in range; Esc
-/// restores the value.
+/// A number field: craft-ui's `NumberField`, which reads and writes numbers the way the user's
+/// region does (its decimal mark and grouping), commits on Enter or leaving the field, steps with
+/// the arrow keys, and leaves text that isn't a number in the field, outlined with the reason,
+/// until it is fixed or Esc restores the value. Returns the new value when it changed.
 #[allow(clippy::too_many_arguments)]
 fn number(
     ui: &mut egui::Ui,
@@ -372,79 +378,39 @@ fn number(
     node: &Value,
     unit: Option<&str>,
 ) -> Option<Value> {
-    let shown = match current {
-        Value::Number(n) => n
-            .as_f64()
-            .map(|v| {
-                if integer {
-                    format!("{}", n)
-                } else {
-                    crate::results::number(v)
-                }
-            })
-            .unwrap_or_default(),
-        _ => String::new(),
-    };
-    let editing = cx.drafts.contains_key(key);
-    let mut text = cx.drafts.get(key).cloned().unwrap_or_else(|| shown.clone());
-    let error = editing.then(|| parse(&text, integer, node).err()).flatten();
-    let p = theme::palette(ui.ctx());
-    let mut edit = egui::TextEdit::singleline(&mut text)
-        .desired_width(110.0)
-        .align(egui::Align2::RIGHT_CENTER)
-        .font(egui::TextStyle::Monospace);
-    if error.is_some() {
-        edit = edit.text_color(p.error);
-    }
-    let r = ui.add(edit);
-    field_outline(ui, &r);
-    // Labelled for assistive technology (and tests) by the row's label.
-    r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, label));
-    if let Some(u) = unit {
-        ui.label(theme::weak(ui, u));
-    }
-    let mut out = None;
-    if r.changed() || r.has_focus() {
-        cx.drafts.insert(key.to_owned(), text.clone());
-    }
-    let escape = r.has_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape));
-    if escape {
-        cx.drafts.remove(key);
-        r.surrender_focus();
-    } else if r.lost_focus() {
-        match parse(&text, integer, node) {
-            Ok(v) => {
-                cx.drafts.remove(key);
-                if text != shown {
-                    out = Some(v);
-                }
-            }
-            Err(_) => {
-                cx.drafts.insert(key.to_owned(), text.clone());
-            }
+    let unit = unit.map(|u| Unit::new(&format!("{{n}} {u}")));
+    let r;
+    let out = if integer {
+        let max = if node["format"] == "uint32" {
+            f64::from(u32::MAX)
+        } else {
+            u64::MAX as f64
+        };
+        let mut v = current.as_u64().unwrap_or(0);
+        let mut field = NumberField::new(&mut v, cx.numbers)
+            .id_salt(key)
+            .range(0.0..=max)
+            .desired_width(110.0);
+        if let Some(u) = unit {
+            field = field.unit(u);
         }
-    }
-    if let Some(e) = error {
-        ui.label(RichText::new(e).color(p.error).size(12.0));
-    }
-    out
-}
-
-fn parse(text: &str, integer: bool, node: &Value) -> Result<Value, String> {
-    let t = text.trim().replace(',', "");
-    if integer {
-        let v: u64 = t.parse().map_err(|_| "a whole number".to_owned())?;
-        if node["format"] == "uint32" && v > u64::from(u32::MAX) {
-            return Err("too large".into());
-        }
-        Ok(json!(v))
+        r = ui.add(field);
+        r.changed().then(|| json!(v))
     } else {
-        let v: f64 = t.parse().map_err(|_| "a number".to_owned())?;
-        if !v.is_finite() {
-            return Err("a finite number".into());
+        let mut v = current.as_f64().unwrap_or(0.0);
+        let mut field = NumberField::new(&mut v, cx.numbers)
+            .id_salt(key)
+            .decimals(0..=6)
+            .desired_width(110.0);
+        if let Some(u) = unit {
+            field = field.unit(u);
         }
-        Ok(json!(v))
-    }
+        r = ui.add(field);
+        r.changed().then(|| json!(v))
+    };
+    // Named for assistive technology (and tests) by the row's label.
+    r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, label));
+    out
 }
 
 /// A tagged union (a distribution): its kind as a choice, then the chosen kind's fields.
@@ -464,7 +430,7 @@ fn tagged(
 
     let picked = row(ui, label, node["description"].as_str(), |ui| {
         let mut picked = None;
-        egui::ComboBox::from_id_salt(key)
+        craft_ui::ComboBox::from_id_salt(key)
             .selected_text(choice_label(&now))
             .width(170.0)
             .show_ui(ui, |ui| {
@@ -712,7 +678,7 @@ fn keyed(
     let mut out = None;
     let picked = row(ui, label, node["description"].as_str(), |ui| {
         let mut picked = None;
-        egui::ComboBox::from_id_salt(key)
+        craft_ui::ComboBox::from_id_salt(key)
             .selected_text(key_label(&now))
             .width(170.0)
             .show_ui(ui, |ui| {

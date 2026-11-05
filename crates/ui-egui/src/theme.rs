@@ -6,8 +6,7 @@
 //! red and amber mark errors and warnings, always with words beside them.
 
 use egui::epaint::text::{FontTweak, VariationCoords};
-use egui::{Color32, FontData, FontDefinitions, FontFamily, FontId, TextStyle, Visuals};
-use std::sync::Arc;
+use egui::{Color32, FontData, FontFamily, FontId, TextStyle, Visuals};
 
 /// The family for headings and emphasis: Plex Sans at semibold.
 pub const STRONG: &str = "plex-semibold";
@@ -102,30 +101,39 @@ fn plex(weight: f32) -> FontData {
     })
 }
 
+/// The craft-fonts faces this build embeds (build.rs; empty without `CRAFT_FONTS_DIR`).
+static CRAFT_FONTS: &[craft_fonts_build::EmbeddedFace] =
+    include!(concat!(env!("OUT_DIR"), "/craft_fonts.rs"));
+
+/// The interface's font stack, from craft-ui: IBM Plex (regular, semibold and mono) first, then
+/// egui's Hack and emoji faces for the symbols Plex lacks (⌘ ⇧ ●), then craft-fonts' faces for
+/// other scripts where the build embeds them, then the installed system fonts (desktop builds
+/// with craft-ui's `system_fonts`), so a file name or label in any script draws.
+pub fn fonts() -> craft_ui::fonts::Stack {
+    use craft_ui::fonts::{CraftFace, Family, I18nScripts, UiFonts};
+    let craft: Vec<CraftFace> = CRAFT_FONTS.iter().cloned().map(CraftFace::from).collect();
+    let strong = FontFamily::Name(STRONG.into());
+    let mut fonts = UiFonts::new(&I18nScripts)
+        .app_face("plex", plex(420.0), &[FontFamily::Proportional])
+        .app_face(STRONG, plex(600.0), std::slice::from_ref(&strong))
+        .family(Family::named(STRONG).weight(600))
+        .app_face(
+            "plex-mono",
+            FontData::from_static(PLEX_MONO),
+            &[FontFamily::Monospace],
+        )
+        .egui_face("Hack", &[FontFamily::Proportional, strong.clone()])
+        .egui_face("NotoEmoji-Regular", &[FontFamily::Proportional, strong])
+        .craft_faces(&craft);
+    if let Some(system) = craft_ui::fonts::system_font_provider("en") {
+        fonts = fonts.system_provider(system);
+    }
+    fonts.stack()
+}
+
 /// Installs the fonts, the type scale and both themes. Call once at start.
 pub fn install(ctx: &egui::Context) {
-    let mut fonts = FontDefinitions::default();
-    fonts.font_data.insert("plex".into(), Arc::new(plex(420.0)));
-    fonts.font_data.insert(STRONG.into(), Arc::new(plex(600.0)));
-    fonts.font_data.insert(
-        "plex-mono".into(),
-        Arc::new(FontData::from_static(PLEX_MONO)),
-    );
-    // Plex first; egui's own fonts stay behind it for symbols Plex lacks (⌘, ⇧).
-    let proportional = fonts.families.entry(FontFamily::Proportional).or_default();
-    proportional.insert(0, "plex".into());
-    let fallback: Vec<String> = proportional.iter().skip(1).cloned().collect();
-    fonts.families.insert(
-        FontFamily::Name(STRONG.into()),
-        std::iter::once(STRONG.to_owned()).chain(fallback).collect(),
-    );
-    fonts
-        .families
-        .entry(FontFamily::Monospace)
-        .or_default()
-        .insert(0, "plex-mono".into());
-    ctx.set_fonts(fonts);
-
+    fonts().install(ctx);
     ctx.set_theme(egui::ThemePreference::System);
     ctx.style_mut_of(egui::Theme::Light, |s| style(s, &LIGHT));
     ctx.style_mut_of(egui::Theme::Dark, |s| style(s, &DARK));
@@ -215,4 +223,30 @@ pub fn strong(text: impl Into<String>) -> egui::RichText {
 /// Secondary text, in the palette's weak colour (contrast at least 4.5:1 on the canvas and rail).
 pub fn weak(ui: &egui::Ui, text: impl Into<String>) -> egui::RichText {
     egui::RichText::new(text).color(palette(ui.ctx()).text_weak)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn plex_leads_and_egui_faces_fill_in() {
+        let stack = fonts();
+        let chain = stack.chain(&FontFamily::Proportional);
+        assert_eq!(chain.first().map(String::as_str), Some("plex"), "{chain:?}");
+        assert!(chain.iter().any(|f| f == "Hack"), "{chain:?}");
+        let strong = stack.chain(&FontFamily::Name(STRONG.into()));
+        assert_eq!(
+            strong.first().map(String::as_str),
+            Some(STRONG),
+            "{strong:?}"
+        );
+        assert_eq!(
+            stack
+                .chain(&FontFamily::Monospace)
+                .first()
+                .map(String::as_str),
+            Some("plex-mono")
+        );
+    }
 }

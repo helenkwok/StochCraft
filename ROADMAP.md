@@ -612,9 +612,17 @@ where the app does (GNOME on Wayland), the header becomes the title bar with the
 buttons; craft-quit quits the platform's way; craft-atomic makes saves crash-safe;
 craft-platform downloads files in the browser.
 
-**M3.1c, controls on craft-ui:** craft-ui's font stack (every script, system fallback), its combo
-box, localized number fields, tabs, panes and icons, strings through craft-i18n, the shortcut
-editor (craft-keymap's `ui`), screenshot tests in craft-ui's six test languages, and autosave.
+**M3.1c, controls on craft-ui (first part done):** number fields are craft-ui's `NumberField`,
+reading and writing numbers as the user's region does (craft-i18n's `Region::system()`: decimal
+mark, grouping, digits), stepping with the arrow keys; choice boxes are craft-ui's `ComboBox`; the
+Model and Results tabs are craft-ui `Tab`s; fonts come from craft-ui's stack (IBM Plex first,
+egui's faces for symbols, craft-fonts' faces where `CRAFT_FONTS_DIR` embeds them, then the
+installed system fonts on the desktop).
+
+**M3.1d:** strings through craft-i18n with a Language menu (the shared catalog translates the
+common strings now; StochCraft's own need a `stochcraft.tsv` in the craft-i18n data repository),
+the shortcut editor (craft-keymap's `ui`), screenshot tests in craft-ui's six test languages, panes
+and icons, and autosave.
 
 ### M3.2 Model editing without a canvas
 

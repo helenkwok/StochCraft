@@ -228,6 +228,8 @@ pub struct App {
     /// The app draws the window frame (craft-window chose it): the header is the title bar and
     /// shows these window buttons.
     title_bar: Option<craft_window::Layout>,
+    /// How numbers are written and read in the fields: the user's region (craft-i18n).
+    numbers: craft_ui::localized::LocaleNumbers,
 }
 
 impl App {
@@ -263,6 +265,9 @@ impl App {
             applied_theme: None,
             native_menu: false,
             title_bar: None,
+            numbers: craft_ui::localized::LocaleNumbers::new(std::sync::Arc::new(
+                craft_i18n::Format::new(&craft_i18n::Region::system(), craft_i18n::Digits::Locale),
+            )),
         }
     }
 
@@ -345,6 +350,12 @@ impl App {
         } else {
             craft_menu::Target::Web
         }
+    }
+
+    /// Writes and reads numbers in the fields as `tag`'s region does (`de-CH`, `ar-EG`), in place
+    /// of the system's region.
+    pub fn set_number_region(&mut self, tag: &str) {
+        self.numbers = craft_ui::localized::LocaleNumbers::from_tag(tag);
     }
 
     /// A dialog is open (menu commands wait).
@@ -894,26 +905,45 @@ impl App {
 
     /// The work area's two views: the model (overview or inspector) and the results.
     fn tabs(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        // craft-ui's Tab: an accessible tab (role, keyboard focus) the app lays out and paints.
+        let font = egui::FontId::new(14.0, egui::FontFamily::Name(theme::STRONG.into()));
         ui.horizontal(|ui| {
             for (label, results) in [("Model", false), ("Results", true)] {
                 let on = self.show_results == results;
-                let text = if on {
-                    theme::strong(label).color(p.text)
-                } else {
-                    theme::weak(ui, label)
-                };
-                let r = ui.add(egui::Button::selectable(on, text).min_size(egui::vec2(0.0, 28.0)));
-                // The current view is underlined in the accent.
-                if on {
-                    let rect = r.rect;
-                    ui.painter().line_segment(
-                        [
-                            rect.left_bottom() + egui::vec2(4.0, 2.0),
-                            rect.right_bottom() + egui::vec2(-4.0, 2.0),
-                        ],
-                        egui::Stroke::new(2.0, p.accent),
+                let width = ui.fonts_mut(|f| {
+                    f.layout_no_wrap(label.into(), font.clone(), p.text)
+                        .size()
+                        .x
+                }) + 24.0;
+                let (rect, _) =
+                    ui.allocate_exact_size(egui::vec2(width, 30.0), egui::Sense::hover());
+                let tab =
+                    craft_ui::tabs::Tab::new(egui::Id::unique(("view-tab", label)), label, on)
+                        .focus_stroke(egui::Stroke::new(1.5, p.accent));
+                let r = tab.show_at(ui, rect, |ui, r| {
+                    let painter = ui.painter_at(rect);
+                    if r.hovered() && !on {
+                        painter.rect_filled(rect.shrink2(egui::vec2(2.0, 3.0)), 6.0, p.stripe);
+                    }
+                    let color = if on { p.text } else { p.text_weak };
+                    painter.text(
+                        rect.center(),
+                        egui::Align2::CENTER_CENTER,
+                        label,
+                        font.clone(),
+                        color,
                     );
-                }
+                    // The current view is underlined in the accent.
+                    if on {
+                        painter.line_segment(
+                            [
+                                rect.left_bottom() + egui::vec2(6.0, -1.0),
+                                rect.right_bottom() + egui::vec2(-6.0, -1.0),
+                            ],
+                            egui::Stroke::new(2.0, p.accent),
+                        );
+                    }
+                });
                 if r.clicked() {
                     self.show_results = results;
                 }
@@ -1007,8 +1037,6 @@ impl App {
         let layout = self.menu_layout(target);
         let mut style = craft_menu::BarStyle::from_style(ui.style());
         style.title_color = p.on_shell;
-        // A mark IBM Plex has (craft-ui's font stack, with its fallbacks, comes next).
-        style.radio_mark = "•".into();
         let gate = craft_menu::Gate {
             modal: self.modal_open(),
             ..craft_menu::Gate::default()

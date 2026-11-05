@@ -9,10 +9,16 @@ use egui_kittest::kittest::Queryable;
 use stochcraft_ui_egui::commands::{self, CommandRef};
 use stochcraft_ui_egui::{App, EXAMPLES, Platform, Prefs, Request, ThemeChoice};
 
+/// The app with English numbers (`1,234.5`), so the tests read the same in every region.
+fn english(mut app: App) -> App {
+    app.set_number_region("en");
+    app
+}
+
 fn harness(platform: Platform) -> Harness<'static, App> {
     let mut h = Harness::builder()
         .with_size(egui::vec2(1100.0, 760.0))
-        .build_ui_state(|ui, app: &mut App| app.ui(ui), App::new(platform));
+        .build_ui_state(|ui, app: &mut App| app.ui(ui), english(App::new(platform)));
     h.run();
     h
 }
