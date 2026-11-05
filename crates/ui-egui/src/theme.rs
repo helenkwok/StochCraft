@@ -40,6 +40,10 @@ pub struct Palette {
     pub accent_soft: Color32,
     pub error: Color32,
     pub warning: Color32,
+    /// Chart bars: one hue, validated against this theme's canvas (dataviz checks: lightness
+    /// band, chroma floor, contrast ≥ 3:1), and its hovered state.
+    pub chart: Color32,
+    pub chart_hover: Color32,
 }
 
 pub const LIGHT: Palette = Palette {
@@ -58,6 +62,8 @@ pub const LIGHT: Palette = Palette {
     accent_soft: Color32::from_rgb(0xd7, 0xec, 0xf1),
     error: Color32::from_rgb(0xb4, 0x23, 0x18),
     warning: Color32::from_rgb(0x8f, 0x55, 0x00),
+    chart: Color32::from_rgb(0x0a, 0x7f, 0x9e),
+    chart_hover: Color32::from_rgb(0x07, 0x67, 0x80),
 };
 
 pub const DARK: Palette = Palette {
@@ -76,6 +82,8 @@ pub const DARK: Palette = Palette {
     accent_soft: Color32::from_rgb(0x15, 0x34, 0x3c),
     error: Color32::from_rgb(0xff, 0x8a, 0x80),
     warning: Color32::from_rgb(0xf2, 0xb8, 0x4b),
+    chart: Color32::from_rgb(0x1f, 0x9d, 0xb8),
+    chart_hover: Color32::from_rgb(0x3d, 0xb5, 0xcf),
 };
 
 /// The palette for the theme egui is showing.

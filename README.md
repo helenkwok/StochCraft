@@ -23,7 +23,8 @@ cargo run --release -p stochcraft
 
 Open a BPMN or XPDL model with BPSim data (or one of the examples under File ▸ Open Example), or
 build one from blocks with **+ Add block**. Select a block to edit its parameters and flows,
-run with F5 and read the results with their confidence intervals; every edit can be undone.
+run with F5 and read the results with their confidence intervals, as charts and a table; export
+the table as CSV and the charts as PNG. Every edit can be undone.
 
 To build the browser app locally, install [trunk](https://trunkrs.dev) and run it from
 `apps/stochcraft-web`:

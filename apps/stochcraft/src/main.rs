@@ -13,6 +13,8 @@ use stochcraft_ui_egui::{App, Platform, Request};
 enum Then {
     Open,
     Save,
+    /// An export's bytes, to write where the user chose.
+    Export(Vec<u8>),
 }
 
 struct Desktop {
@@ -59,6 +61,21 @@ impl Desktop {
                         Err(e) => self.app.report_error(format!("{path}: {e}")),
                     }
                 }
+                Request::Export { name, bytes } => {
+                    let ext = name.rsplit('.').next().unwrap_or("").to_owned();
+                    let what = if ext == "png" {
+                        "PNG image"
+                    } else {
+                        "CSV table"
+                    };
+                    self.dialogs.ask(
+                        FileDialog::save()
+                            .title("Export")
+                            .file_name(name)
+                            .filter(what, &[ext.as_str()]),
+                        Then::Export(bytes),
+                    );
+                }
                 Request::Quit => {
                     self.may_close = true;
                     ctx.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -75,6 +92,15 @@ impl Desktop {
                 (Then::Save, Answer::Paths(paths)) => {
                     if let Some(path) = paths.first() {
                         self.app.save_to(&path.to_string_lossy());
+                    }
+                }
+                (Then::Export(bytes), Answer::Paths(paths)) => {
+                    if let Some(path) = paths.first() {
+                        let shown = path.to_string_lossy().into_owned();
+                        match std::fs::write(path, &bytes) {
+                            Ok(()) => self.app.exported(&shown),
+                            Err(e) => self.app.report_error(format!("{shown}: {e}")),
+                        }
                     }
                 }
                 (_, Answer::Unavailable(why)) => self.app.report_error(why),

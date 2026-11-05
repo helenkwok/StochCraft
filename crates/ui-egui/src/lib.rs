@@ -11,6 +11,7 @@
 //! answers by calling [`App::open_file`], [`App::save_to`], [`App::written`] or
 //! [`App::report_error`].
 
+mod charts;
 mod editor;
 pub mod form;
 mod results;
@@ -64,6 +65,9 @@ pub enum Request {
     /// Offer `bytes` as a download named `name` (where there is no file system); answer with
     /// [`App::written`].
     Download { name: String, bytes: Vec<u8> },
+    /// Save an exported file (results as CSV, charts as PNG) named `name`: ask where (or
+    /// download it); answer with [`App::exported`] or [`App::report_error`].
+    Export { name: String, bytes: Vec<u8> },
     /// Close the window: the user confirmed, or there was nothing unsaved.
     Quit,
 }
@@ -155,6 +159,12 @@ pub struct App {
     connect_to: Option<String>,
     /// The work area shows the results rather than the model.
     show_results: bool,
+    /// Where the charts were drawn last frame, for exporting them.
+    charts_rect: Option<egui::Rect>,
+    /// A screenshot asked for to export the charts, filled in by the renderer.
+    screenshot: std::sync::Arc<std::sync::Mutex<Option<std::sync::Arc<egui::ColorImage>>>>,
+    /// The charts' area and scale when the screenshot was asked for.
+    pending_png: Option<(egui::Rect, f32)>,
 }
 
 impl App {
@@ -180,6 +190,9 @@ impl App {
             connect_from: None,
             connect_to: None,
             show_results: false,
+            charts_rect: None,
+            screenshot: std::sync::Arc::default(),
+            pending_png: None,
         }
     }
 
@@ -314,6 +327,66 @@ impl App {
     pub fn drop_file(&mut self, name: &str, bytes: Vec<u8>) {
         self.dropped = Some((name.to_owned(), bytes));
         self.replace(Replace::Dropped);
+    }
+
+    /// The shell saved an export as `path`.
+    pub fn exported(&mut self, path: &str) {
+        self.info(format!("Exported {}", file_name(path)));
+    }
+
+    /// Exports the results table as CSV.
+    pub fn export_csv(&mut self) {
+        if let Some(r) = &self.results {
+            let name = format!("{}-results.csv", self.export_stem());
+            let bytes = charts::csv(r).into_bytes();
+            self.requests.push(Request::Export { name, bytes });
+        }
+    }
+
+    /// Exports the charts as a PNG image of the window's pixels (taken on the next frame).
+    pub fn export_png(&mut self, ctx: &egui::Context) {
+        let Some(area) = self.charts_rect else {
+            self.report_error("there are no charts to export");
+            return;
+        };
+        // One capture at a time (a frame laid out twice must not ask twice).
+        if self.pending_png.is_some() {
+            return;
+        }
+        self.pending_png = Some((area, ctx.pixels_per_point()));
+        let slot = std::sync::Arc::clone(&self.screenshot);
+        let wake = ctx.clone();
+        ctx.send_viewport_cmd(egui::ViewportCommand::Screenshot(
+            egui::ScreenshotCallback::new(move |image| {
+                if let Ok(mut s) = slot.lock() {
+                    *s = Some(image);
+                }
+                wake.request_repaint();
+            }),
+        ));
+    }
+
+    /// Turns a screenshot that has arrived into the charts' PNG export.
+    fn take_screenshot(&mut self) {
+        let Some(image) = self.screenshot.lock().ok().and_then(|mut s| s.take()) else {
+            return;
+        };
+        if let Some((area, ppp)) = self.pending_png.take() {
+            match charts::png(&image, area, ppp) {
+                Some(bytes) => {
+                    let name = format!("{}-charts.png", self.export_stem());
+                    self.requests.push(Request::Export { name, bytes });
+                }
+                None => self.report_error("the charts could not be captured"),
+            }
+        }
+    }
+
+    /// The start of an export's file name: the model's file name without its extension.
+    fn export_stem(&self) -> String {
+        let name = self.document_name();
+        name.rsplit_once('.')
+            .map_or(name.clone(), |(stem, _)| stem.to_owned())
     }
 
     /// Saves to `path`, chosen by the user for Save As.
@@ -583,6 +656,7 @@ impl App {
         if self.poll() {
             ctx.request_repaint();
         }
+        self.take_screenshot();
         self.shortcuts(&ctx);
         self.drop_stale_results();
         let p = theme::palette(&ctx);
@@ -626,9 +700,7 @@ impl App {
                     ui.add_space(14.0);
                 }
                 if self.show_results && self.results.is_some() {
-                    if let Some(results) = &self.results {
-                        results::show(ui, results);
-                    }
+                    self.results_view(ui);
                 } else if has_model && !(self.show_results && self.running.is_some()) {
                     self.editor(ui, &p);
                 } else {
@@ -653,6 +725,47 @@ impl App {
 
         self.confirm_dialog(&ctx);
         self.about_window(&ctx);
+    }
+
+    /// The results: export buttons, the charts, then the table.
+    fn results_view(&mut self, ui: &mut egui::Ui) {
+        let Some(results) = self.results.clone() else {
+            return;
+        };
+        let mut csv = false;
+        let mut png = false;
+        egui::ScrollArea::vertical()
+            .auto_shrink([false, false])
+            .show(ui, |ui| {
+                ui.horizontal(|ui| {
+                    ui.heading("Results");
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        let verb = if self.platform.file_system {
+                            "Export"
+                        } else {
+                            "Download"
+                        };
+                        png = ui
+                            .add(theme::secondary(ui, &format!("{verb} charts (PNG)")))
+                            .clicked();
+                        csv = ui
+                            .add(theme::secondary(ui, &format!("{verb} table (CSV)")))
+                            .clicked();
+                    });
+                });
+                results::record_line(ui, &results);
+                ui.add_space(12.0);
+                self.charts_rect = charts::show(ui, &results);
+                ui.add_space(6.0);
+                results::show(ui, &results);
+            });
+        if csv {
+            self.export_csv();
+        }
+        if png {
+            let ctx = ui.ctx().clone();
+            self.export_png(&ctx);
+        }
     }
 
     /// The work area's two views: the model (overview or inspector) and the results.

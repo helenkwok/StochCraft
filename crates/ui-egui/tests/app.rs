@@ -105,7 +105,7 @@ fn the_browser_runs_in_slices_and_downloads_instead_of_saving() {
     finish_run(&mut h);
     assert!(h.state().results().is_some(), "{}", h.state().status());
 
-    menu(&mut h, &["File", "Download"]);
+    menu(&mut h, &["File", "Download Ctrl+S"]);
     let requests = h.state_mut().take_requests();
     let [Request::Download { name, bytes }] = requests.as_slice() else {
         panic!("expected one download, got {requests:?}");
@@ -226,4 +226,27 @@ fn about_names_the_licence() {
     // The browser has no Quit.
     click(&mut h, "File");
     assert!(h.query_by_label("Quit").is_none());
+}
+
+#[test]
+fn results_export_as_csv_and_charts_are_drawn() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    menu(&mut h, &["Model", "Run F5"]);
+    finish_run(&mut h);
+    // One chart per measure that applies, titled with its unit.
+    h.get_by_label("Utilisation (%)");
+    h.get_by_label("Mean wait (min)");
+    h.get_by_label("Mean time in system (min)");
+    click(&mut h, "Export table (CSV)");
+    let requests = h.state_mut().take_requests();
+    let [Request::Export { name, bytes }] = requests.as_slice() else {
+        panic!("expected one export, got {requests:?}");
+    };
+    assert_eq!(name, "mm1-results.csv");
+    let text = String::from_utf8_lossy(bytes);
+    assert!(text.starts_with("element,name,kind,metric,mean,half_width,std_dev,n\n"));
+    assert!(text.contains("serve,Serve customer,server,utilisation,"));
+    h.state_mut().exported("/tmp/mm1-results.csv");
+    assert_eq!(h.state().status(), "Exported mm1-results.csv");
 }
