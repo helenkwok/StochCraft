@@ -35,7 +35,7 @@ craft-atomic = { version = "0.1.0", git = "https://github.com/storytold/craft-li
 craft-dialogs = { version = "0.1.0", git = "https://github.com/storytold/craft-libs", rev = "d836bea31b7d33d83023edc6bab9cd8059232471" }
 craft-fonts-build = { version = "0.1.0", git = "https://github.com/storytold/craft-libs", rev = "d836bea31b7d33d83023edc6bab9cd8059232471" }
 craft-i18n = { version = "0.1.0", git = "https://github.com/storytold/craft-libs", rev = "d836bea31b7d33d83023edc6bab9cd8059232471" }
-craft-keymap = { version = "0.1.0", git = "https://github.com/storytold/craft-libs", rev = "d836bea31b7d33d83023edc6bab9cd8059232471", features = ["egui"] }
+craft-keymap = { version = "0.1.0", git = "https://github.com/storytold/craft-libs", rev = "d836bea31b7d33d83023edc6bab9cd8059232471", features = ["egui", "ui"] }
 craft-ui = { version = "0.1.0", git = "https://github.com/storytold/craft-libs", rev = "d836bea31b7d33d83023edc6bab9cd8059232471" }
 craft-menu = { version = "0.1.0", git = "https://github.com/storytold/craft-libs", rev = "d836bea31b7d33d83023edc6bab9cd8059232471" }
 craft-platform = { version = "0.1.0", git = "https://github.com/storytold/craft-libs", rev = "d836bea31b7d33d83023edc6bab9cd8059232471" }

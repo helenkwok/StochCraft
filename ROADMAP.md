@@ -619,10 +619,14 @@ Model and Results tabs are craft-ui `Tab`s; fonts come from craft-ui's stack (IB
 egui's faces for symbols, craft-fonts' faces where `CRAFT_FONTS_DIR` embeds them, then the
 installed system fonts on the desktop).
 
-**M3.1d:** strings through craft-i18n with a Language menu (the shared catalog translates the
-common strings now; StochCraft's own need a `stochcraft.tsv` in the craft-i18n data repository),
-the shortcut editor (craft-keymap's `ui`), screenshot tests in craft-ui's six test languages, panes
-and icons, and autosave.
+**M3.1d (keyboard shortcuts done):** Settings ▸ Keyboard Shortcuts… (Preferences in Edit on
+Windows and Linux, the app menu on macOS) opens craft-keymap's dialog: every command grouped by
+its menu, recording, conflicts, undo and a summary; the user's shortcuts are saved with the
+preferences (`config.toml` on the desktop, the browser's storage on the web).
+
+**Still to come:** strings through craft-i18n with a Language menu (the shared catalog translates
+the common strings now; StochCraft's own need a `stochcraft.tsv` in the craft-i18n data
+repository), screenshot tests in craft-ui's six test languages, panes and icons, and autosave.
 
 ### M3.2 Model editing without a canvas
 

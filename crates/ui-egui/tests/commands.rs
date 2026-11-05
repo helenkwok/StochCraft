@@ -129,3 +129,51 @@ fn the_appearance_is_chosen_from_the_menu_and_remembered() {
     assert_eq!(h.state().prefs(), prefs);
     assert_eq!(h.ctx.theme(), egui::Theme::Light);
 }
+
+#[test]
+fn keyboard_shortcuts_open_in_a_dialog_that_holds_the_keys() {
+    let mut h = harness(Platform::DESKTOP);
+    h.state_mut().open_file(EXAMPLES[0].file, EXAMPLES[0].bytes);
+    settle(&mut h);
+    // Settings is last in Edit on Windows and Linux, as Preferences (craft-menu's layout).
+    menu_item(&mut h, "Edit");
+    menu_item(&mut h, "Preferences");
+    menu_item(&mut h, "Keyboard Shortcuts…");
+    assert!(h.state().has_open_dialog());
+    // The dialog lists the app's commands.
+    assert!(h.query_all_by_label_contains("Run").count() > 0);
+    // F5 doesn't run the model while it is open.
+    h.key_press(egui::Key::F5);
+    settle(&mut h);
+    assert!(!h.state().is_running());
+    h.get_all_by_role_and_label(Role::Button, "Cancel")
+        .last()
+        .expect("the dialog's Cancel")
+        .click();
+    settle(&mut h);
+    assert!(!h.state().has_open_dialog());
+}
+
+#[test]
+fn the_users_shortcuts_come_back_from_the_preferences() {
+    let mut h = harness(Platform::DESKTOP);
+    let mut prefs = Prefs::default();
+    prefs.keyboard.shortcuts = Some(serde_json::json!({ "model.run": "F6" }));
+    h.state_mut().set_prefs(&prefs);
+    let ctx = h.ctx.clone();
+    assert_eq!(
+        h.state().shortcut(commands::RUN, &ctx).as_deref(),
+        Some("F6")
+    );
+    assert_eq!(
+        h.state().prefs().keyboard.shortcuts,
+        prefs.keyboard.shortcuts
+    );
+    // Nothing changed: nothing stored.
+    h.state_mut().set_prefs(&Prefs::default());
+    assert!(h.state().prefs().keyboard.shortcuts.is_none());
+    assert_eq!(
+        h.state().shortcut(commands::RUN, &ctx).as_deref(),
+        Some("F5")
+    );
+}
