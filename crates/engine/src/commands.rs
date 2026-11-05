@@ -98,6 +98,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
         Some("source") => &["interarrival", "limit"],
         Some("server") => &["capacity", "service"],
         Some("delay") => &["duration"],
+        Some("exclusive_gateway") => &["default"],
         _ => &[],
     };
     for k in obj.keys() {
@@ -242,6 +243,11 @@ pub struct BlockSet {
     /// Delays: time each entity spends.
     #[serde(default)]
     pub duration: Option<DistSpec>,
+    /// Exclusive gateways: the id of the outgoing connection taken when no condition holds;
+    /// `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<String>")]
+    pub default: Option<Option<String>>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -259,6 +265,32 @@ pub struct Connect {
     /// A new id; by default `flow-N`.
     #[serde(default)]
     pub id: Option<String>,
+    /// Out of an exclusive gateway: the chance an entity takes this connection.
+    #[serde(default)]
+    pub probability: Option<f64>,
+    /// Out of an exclusive gateway: a BPSim expression that must hold to take this connection,
+    /// such as `getProperty('issues') > 0`.
+    #[serde(default)]
+    pub condition: Option<String>,
+}
+
+/// How an exclusive gateway chooses a connection: the parameters to change.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct FlowSet {
+    /// The connection's id.
+    pub id: String,
+    /// The chance an entity takes this connection, from 0 to 1. Connections out of the same
+    /// gateway without one share evenly what the others leave. `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<f64>")]
+    pub probability: Option<Option<f64>>,
+    /// A BPSim expression that must hold for an entity to take this connection, such as
+    /// `getProperty('issues') > 0`. If any connection out of a gateway has one, the gateway
+    /// routes by condition. `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<String>")]
+    pub condition: Option<Option<String>>,
 }
 
 /// The connection's id, or the elements it joins.
@@ -435,12 +467,14 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("capacity", p.capacity.is_some()),
         ("service", p.service.is_some()),
         ("duration", p.duration.is_some()),
+        ("default", p.default.is_some()),
     ];
     let applies: &[&str] = match kind {
         ElementKind::Source { .. } => &["interarrival", "limit"],
         ElementKind::Server { .. } => &["capacity", "service"],
         ElementKind::Delay { .. } => &["duration"],
-        ElementKind::Sink => &[],
+        ElementKind::ExclusiveGateway { .. } => &["default"],
+        ElementKind::Sink | ElementKind::ParallelGateway => &[],
     };
     if let Some((name, _)) = given.iter().find(|(n, g)| *g && !applies.contains(n)) {
         return Err(CommandError::new(
@@ -479,7 +513,12 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *duration = d.into();
             }
         }
-        ElementKind::Sink => {}
+        ElementKind::ExclusiveGateway { default } => {
+            if let Some(d) = p.default {
+                *default = d.as_deref().map(ElementId::unchecked);
+            }
+        }
+        ElementKind::Sink | ElementKind::ParallelGateway => {}
     }
     e.edit("block.set", Op::SetKind(id, kind))?;
     Ok(json!({}))
@@ -579,10 +618,38 @@ fn connect(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 id: id.clone(),
                 from,
                 to,
+                probability: p.probability,
+                condition: p.condition,
             },
         ),
     )?;
     Ok(json!({ "id": id.as_str() }))
+}
+
+fn flow_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: FlowSet = parse(p)?;
+    let c = e
+        .model()
+        .connections
+        .iter()
+        .find(|c| c.id.as_str() == p.id)
+        .ok_or_else(|| {
+            CommandError::new(
+                ErrorCode::NotFound,
+                format!("no connection with id `{}`", p.id),
+            )
+        })?;
+    if p.probability.is_none() && p.condition.is_none() {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            "nothing to set: give `probability`, `condition` or both",
+        ));
+    }
+    let probability = p.probability.unwrap_or(c.probability);
+    let condition = p.condition.unwrap_or_else(|| c.condition.clone());
+    let id = c.id.clone();
+    e.edit("flow.set", Op::SetRoute(id, probability, condition))?;
+    Ok(json!({}))
 }
 
 fn disconnect(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -754,7 +821,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "block.add",
-        summary: "Add a source, server, delay or sink. Returns its id.",
+        summary: "Add a source, server, delay, sink, exclusive gateway or parallel gateway. Returns its id.",
         kind: CommandKind::Edit,
         schema: schema::<BlockAdd>,
         example: || json!({ "kind": "delay", "id": "walk", "duration": {"type": "triangular", "min": 1.0, "mode": 2.0, "max": 4.0} }),
@@ -783,6 +850,14 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<Connect>,
         example: || json!({ "from": "walk", "to": "exit" }),
         run: connect,
+    },
+    Command {
+        name: "flow.set",
+        summary: "Set how an exclusive gateway chooses a connection: its probability, or a condition that must hold.",
+        kind: CommandKind::Edit,
+        schema: schema::<FlowSet>,
+        example: || json!({ "id": "flow-2", "probability": 0.8 }),
+        run: flow_set,
     },
     Command {
         name: "disconnect",

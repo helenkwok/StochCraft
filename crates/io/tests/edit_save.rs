@@ -263,19 +263,11 @@ fn add_delay_between(m: &mut Model, new: &str, from: &str, to: &str) {
     m.connections.remove(c);
     m.connections.insert(
         c,
-        Connection {
-            id: id(&format!("{new}-in")),
-            from: id(from),
-            to: id(new),
-        },
+        Connection::new(id(&format!("{new}-in")), id(from), id(new)),
     );
     m.connections.insert(
         c + 1,
-        Connection {
-            id: id(&format!("{new}-out")),
-            from: id(new),
-            to: id(to),
-        },
+        Connection::new(id(&format!("{new}-out")), id(new), id(to)),
     );
 }
 

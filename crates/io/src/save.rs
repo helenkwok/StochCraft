@@ -14,7 +14,10 @@ use stochcraft_model::{Connection, Element as ModelElement, ElementKind, Model};
 use crate::bpsim::{NS2, NSS};
 use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
-use crate::write::{dist_element, numeric, property_element, size};
+use crate::write::{
+    bpmn_local, condition_element, dist_element, numeric, probability_element, property_element,
+    size,
+};
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
 
@@ -80,8 +83,39 @@ fn difference(got: &Model, want: &Model) -> Option<String> {
             want.elements.len()
         ));
     }
-    if got.connections != want.connections {
-        return Some("its connections differ".into());
+    // Connections are compared as a set, plus the order of each element's outgoing ones (an
+    // exclusive gateway tries their conditions in that order); a file with sub-processes keeps
+    // flows in several places, so their order overall means nothing.
+    if let Some(w) = want
+        .connections
+        .iter()
+        .find(|w| !got.connections.contains(w))
+    {
+        let g = got.connections.iter().find(|g| g.id == w.id);
+        return Some(format!("connection `{}` reads as {g:?}", w.id));
+    }
+    if got.connections.len() != want.connections.len() {
+        return Some(format!(
+            "it has {} connections instead of {}",
+            got.connections.len(),
+            want.connections.len()
+        ));
+    }
+    for e in &want.elements {
+        let outs = |m: &Model| -> Vec<String> {
+            m.connections
+                .iter()
+                .filter(|c| c.from == e.id)
+                .map(|c| c.id.to_string())
+                .collect()
+        };
+        if outs(got) != outs(want) {
+            return Some(format!(
+                "the connections out of `{}` read in the order {:?}",
+                e.id,
+                outs(got)
+            ));
+        }
     }
     if got.experiment != want.experiment {
         return Some(format!("its experiment reads as {:?}", got.experiment));
@@ -343,7 +377,15 @@ fn category(k: &ElementKind) -> u8 {
         ElementKind::Source { .. } => 0,
         ElementKind::Sink => 1,
         ElementKind::Server { .. } | ElementKind::Delay { .. } => 2,
+        ElementKind::ExclusiveGateway { .. } => 3,
+        ElementKind::ParallelGateway => 4,
     }
+}
+
+/// Whether two connections join the same elements under the same id (their probability and
+/// condition are parameters, saved separately).
+fn same_link(a: &Connection, b: &Connection) -> bool {
+    a.id == b.id && a.from == b.from && a.to == b.to
 }
 
 impl Editor {
@@ -409,13 +451,23 @@ impl Editor {
         let removed_conns: BTreeSet<&str> = before
             .connections
             .iter()
-            .filter(|c| new_conns.get(c.id.as_str()).copied() != Some(*c) || touches(c))
+            .filter(|c| {
+                !new_conns
+                    .get(c.id.as_str())
+                    .is_some_and(|n| same_link(n, c))
+                    || touches(c)
+            })
             .map(|c| c.id.as_str())
             .collect();
         let added_conns: Vec<&Connection> = after
             .connections
             .iter()
-            .filter(|c| old_conns.get(c.id.as_str()).copied() != Some(*c) || touches(c))
+            .filter(|c| {
+                !old_conns
+                    .get(c.id.as_str())
+                    .is_some_and(|o| same_link(o, c))
+                    || touches(c)
+            })
             .collect();
 
         for id in &replaced {
@@ -440,8 +492,19 @@ impl Editor {
             if was.is_some_and(|w| w.name != e.name) {
                 self.set_node_name(root, e.id.as_str(), &e.name);
             }
+            // An exclusive gateway's default connection (new gateways included).
+            if let ElementKind::ExclusiveGateway { default } = &e.kind {
+                let old_default = match was.map(|w| &w.kind) {
+                    Some(ElementKind::ExclusiveGateway { default }) => default.clone(),
+                    _ => None,
+                };
+                if &old_default != default {
+                    self.set_default(root, e.id.as_str(), default.as_ref().map(|d| d.as_str()))?;
+                }
+            }
         }
         self.parameters(root, scenario, &old, &replaced, after, resources)?;
+        self.routing(root, scenario, before, after)?;
         if before.experiment != after.experiment {
             self.experiment(root, scenario, before, after)?;
         }
@@ -624,12 +687,7 @@ impl Editor {
         let node = match self.format {
             Format::Bpmn => {
                 let ns = Ns::bpmn(root);
-                let local = match e.kind {
-                    ElementKind::Source { .. } => "startEvent",
-                    ElementKind::Sink => "endEvent",
-                    ElementKind::Server { .. } | ElementKind::Delay { .. } => "task",
-                };
-                let mut n = ns.el(local);
+                let mut n = ns.el(bpmn_local(&e.kind));
                 n.set_attr("id", e.id.as_str());
                 if !e.name.is_empty() {
                     self.set_text_attr(&mut n, "name", &e.name);
@@ -652,6 +710,12 @@ impl Editor {
                         ns.el("Event")
                             .with_child(ns.el("EndEvent").with_attr("Result", "None")),
                     ),
+                    ElementKind::ExclusiveGateway { .. } => {
+                        n.push(ns.el("Route").with_attr("GatewayType", "Exclusive"))
+                    }
+                    ElementKind::ParallelGateway => {
+                        n.push(ns.el("Route").with_attr("GatewayType", "Parallel"))
+                    }
                     _ => n.push(ns.el("Implementation").with_child(ns.el("Task"))),
                 }
                 n
@@ -705,7 +769,18 @@ impl Editor {
                 .with_attr("From", c.from.as_str())
                 .with_attr("To", c.to.as_str()),
         };
-        self.place(root, prev, next, flow, true)?;
+        // With no neighbouring flow in the file, a BPMN flow goes where its source node is (a
+        // sub-process, for one inside it).
+        let home = (prev.is_none() && next.is_none() && self.format == Format::Bpmn)
+            .then(|| self.container_of(root, c.from.as_str()))
+            .flatten();
+        match home {
+            Some(h) => {
+                let at = end_of(h);
+                h.children.insert(at, Node::Element(flow));
+            }
+            None => self.place(root, prev, next, flow, true)?,
+        }
         if self.format == Format::Bpmn {
             let ns = Ns::bpmn(root);
             const HEAD: [&str; 5] = [
@@ -1057,6 +1132,69 @@ impl Editor {
         }
     }
 
+    /// Sets (or removes) a BPMN exclusive gateway's `default` flow. XPDL marks it with a
+    /// transition condition instead, which is not written yet.
+    fn set_default(
+        &self,
+        root: &mut Element,
+        gateway: &str,
+        flow: Option<&str>,
+    ) -> Result<(), SaveError> {
+        if self.format == Format::Xpdl {
+            return Err(fail(format!(
+                "setting the default connection of `{gateway}` in an XPDL file is not supported yet"
+            )));
+        }
+        if let Some(n) = find_mut(root, &|e| {
+            has_id(e, "id", gateway) && e.ns.as_deref() == Some(BPMN)
+        }) {
+            self.set_or_remove(n, "default", flow.unwrap_or(""));
+        }
+        Ok(())
+    }
+
+    /// Writes the probabilities and conditions of connections that changed (or are new).
+    fn routing(
+        &mut self,
+        root: &mut Element,
+        scenario: Option<&str>,
+        before: &Model,
+        after: &Model,
+    ) -> Result<(), SaveError> {
+        let mut writes: Vec<(String, &'static str, Option<Element>)> = Vec::new();
+        for c in &after.connections {
+            let was = before.connections.iter().find(|o| same_link(o, c));
+            let (op, oc) = was.map_or((None, None), |o| (o.probability, o.condition.clone()));
+            if op != c.probability {
+                writes.push((
+                    c.id.to_string(),
+                    "Probability",
+                    c.probability.map(probability_element),
+                ));
+            }
+            if oc != c.condition {
+                let v = c.condition.as_deref().map(|x| {
+                    let mut v = condition_element(x);
+                    self.text_attrs(&mut v);
+                    v
+                });
+                writes.push((c.id.to_string(), "Condition", v));
+            }
+        }
+        // Writing nothing where there was nothing leaves the file alone.
+        writes.retain(|(id, _, v)| {
+            v.is_some() || before.connections.iter().any(|o| o.id.as_str() == id)
+        });
+        if writes.is_empty() {
+            return Ok(());
+        }
+        let s = self.ensure_scenario(root, scenario)?;
+        for (id, name, v) in writes {
+            set_param(s, &id, "ControlParameters", name, v);
+        }
+        Ok(())
+    }
+
     // -----------------------------------------------------------------------------------------
     // Parameters
 
@@ -1166,7 +1304,9 @@ impl Editor {
                         _ => {}
                     }
                 }
-                ElementKind::Sink => {}
+                ElementKind::Sink
+                | ElementKind::ExclusiveGateway { .. }
+                | ElementKind::ParallelGateway => {}
             }
         }
         for (e, server) in new_resources {

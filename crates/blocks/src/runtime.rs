@@ -24,6 +24,12 @@ struct Assigner {
 }
 
 impl Assigner {
+    /// The value of property `name` that `e` holds.
+    fn read(&self, e: &Entity, name: &str) -> Option<stochcraft_model::expr::Value> {
+        let slot = self.slots.binary_search_by(|s| s.as_str().cmp(name)).ok()?;
+        e.properties.get(slot)?.as_ref().map(Held::value)
+    }
+
     /// Makes element `index`'s assignments to `e`, all from the values it arrived with, and
     /// records the values in the element's statistics.
     fn enter(&self, index: usize, e: &mut Entity, stats: &[RefCell<BlockStats>]) {
@@ -90,7 +96,11 @@ impl Compiled {
                 .map(|a| RefCell::new(BlockStats::new(0.0, a.len())))
                 .collect(),
         );
-        let inputs: Vec<Store<Entity>> = elements.iter().map(|_| Store::new(&ctx)).collect();
+        let inputs: Vec<Vec<Store<Entity>>> = self
+            .inputs
+            .iter()
+            .map(|&n| (0..n.max(1)).map(|_| Store::new(&ctx)).collect())
+            .collect();
         let next_id = Rc::new(RefCell::new(0u64));
         // The elements' streams first, in model order as always; then the properties'.
         let streams: Vec<Rng> = elements.iter().map(|_| rng.fork()).collect();
@@ -108,15 +118,30 @@ impl Compiled {
         });
 
         for ((i, element), rng) in elements.iter().enumerate().zip(streams) {
-            let out = self.outputs.get(i).copied().flatten().and_then(|idx| {
-                inputs.get(idx).map(|s| Port {
-                    store: s.clone(),
-                    stats: Rc::clone(&stats),
-                    assigner: Rc::clone(&assigner),
-                    index: idx,
+            let outs: Vec<Out> = self
+                .routes
+                .get(i)
+                .into_iter()
+                .flatten()
+                .filter_map(|r| {
+                    let store = inputs.get(r.to)?.get(r.input)?.clone();
+                    Some(Out {
+                        port: Port {
+                            store,
+                            stats: Rc::clone(&stats),
+                            assigner: Rc::clone(&assigner),
+                            index: r.to,
+                        },
+                        weight: r.weight,
+                        condition: r.condition.clone(),
+                        default: r.default,
+                    })
                 })
-            });
-            let Some(input) = inputs.get(i).cloned() else {
+                .collect();
+            let Some(ins) = inputs.get(i).cloned() else {
+                continue;
+            };
+            let Some(input) = ins.first().cloned() else {
                 continue;
             };
             let env = BlockEnv {
@@ -125,29 +150,43 @@ impl Compiled {
                 assigner: Rc::clone(&assigner),
                 me: i,
                 input,
-                out,
+                out: outs.first().map(|o| o.port.clone()),
                 rng,
             };
             match element.kind.clone() {
                 ElementKind::Source {
                     interarrival,
                     limit,
-                } => spawn_source(&mut sim, env, interarrival, limit, Rc::clone(&next_id)),
+                } => spawn_source(
+                    &mut sim,
+                    env,
+                    interarrival,
+                    limit,
+                    Rc::clone(&next_id),
+                    self.first_arrival_at_zero,
+                ),
                 ElementKind::Server { capacity, service } => {
                     spawn_server(&mut sim, env, capacity, service)
                 }
                 ElementKind::Delay { duration } => spawn_delay(&mut sim, env, duration),
                 ElementKind::Sink => spawn_sink(&mut sim, env),
+                ElementKind::ExclusiveGateway { .. } => spawn_exclusive(&mut sim, env, outs),
+                ElementKind::ParallelGateway => {
+                    spawn_parallel(&mut sim, env, ins, outs, Rc::clone(&next_id))
+                }
             }
         }
 
-        // Discard everything before the warm-up.
-        let (c, st) = (ctx.clone(), Rc::clone(&stats));
-        sim.spawn(async move {
-            c.hold(warmup).await;
-            let now = c.now();
-            st.iter().for_each(|s| s.borrow_mut().reset(now));
-        });
+        // Discard everything before the warm-up. With none, there is nothing to discard (and a
+        // reset at time 0 would discard an arrival at time 0).
+        if warmup > 0.0 {
+            let (c, st) = (ctx.clone(), Rc::clone(&stats));
+            sim.spawn(async move {
+                c.hold(warmup).await;
+                let now = c.now();
+                st.iter().for_each(|s| s.borrow_mut().reset(now));
+            });
+        }
 
         let end = warmup + duration;
         sim.run_until(end);
@@ -266,6 +305,14 @@ impl Port {
     }
 }
 
+/// One of a gateway's outgoing connections, ready to route.
+struct Out {
+    port: Port,
+    weight: f64,
+    condition: Option<stochcraft_model::expr::Expr>,
+    default: bool,
+}
+
 struct BlockEnv {
     ctx: Ctx,
     stats: Rc<Vec<RefCell<BlockStats>>>,
@@ -299,12 +346,15 @@ fn spawn_source(
     interarrival: Dist,
     limit: Option<u64>,
     next_id: Rc<RefCell<u64>>,
+    first_at_zero: bool,
 ) {
     sim.spawn(async move {
         let mut made = 0u64;
         while limit.is_none_or(|l| made < l) {
-            let dt = interarrival.sample(&mut env.rng);
-            env.ctx.hold(dt).await;
+            if !(first_at_zero && made == 0) {
+                let dt = interarrival.sample(&mut env.rng);
+                env.ctx.hold(dt).await;
+            }
             let now = env.ctx.now();
             let id = {
                 let mut n = next_id.borrow_mut();
@@ -406,6 +456,110 @@ fn spawn_sink(sim: &mut Sim, env: BlockEnv) {
                 s.left += 1;
                 s.time_in_system.add(now - entity.created);
             });
+        }
+    });
+}
+
+/// Which of `outs` an entity takes: the first whose condition holds, else the default, if any
+/// connection has a condition; otherwise one drawn by weight. With one connection, nothing is
+/// drawn, so a gateway with a single way out never changes the random numbers.
+fn choose(outs: &[Out], e: &Entity, assigner: &Assigner, rng: &mut Rng) -> Option<usize> {
+    if outs.iter().any(|o| o.condition.is_some()) {
+        let read = |name: &str| assigner.read(e, name);
+        return outs
+            .iter()
+            .position(|o| {
+                !o.default
+                    && o.condition
+                        .as_ref()
+                        .is_some_and(|c| c.eval(&read).boolean())
+            })
+            .or_else(|| outs.iter().position(|o| o.default));
+    }
+    if outs.len() <= 1 {
+        return if outs.is_empty() { None } else { Some(0) };
+    }
+    let total: f64 = outs.iter().map(|o| o.weight).sum();
+    let mut u = rng.uniform() * total;
+    for (i, o) in outs.iter().enumerate() {
+        if u < o.weight {
+            return Some(i);
+        }
+        u -= o.weight;
+    }
+    // Rounding: the last connection with any weight.
+    outs.iter().rposition(|o| o.weight > 0.0)
+}
+
+fn spawn_exclusive(sim: &mut Sim, mut env: BlockEnv, outs: Vec<Out>) {
+    sim.spawn(async move {
+        loop {
+            let entity = env.input.get().await;
+            let now = env.ctx.now();
+            env.adjust(|s| &mut s.waiting, -1.0);
+            env.with_stats(|s| s.left += 1);
+            let to = choose(&outs, &entity, &env.assigner, &mut env.rng);
+            // With no route (no condition holds and there is no default), the entity leaves
+            // the model here.
+            if let Some(out) = to.and_then(|i| outs.get(i)) {
+                out.port.send(now, entity);
+            }
+        }
+    });
+}
+
+/// The entity a join sends on: the one from its first input, with any property it lacks taken
+/// from the others, in input order.
+fn combine(mut parts: Vec<Entity>) -> Option<Entity> {
+    let mut first = if parts.is_empty() {
+        return None;
+    } else {
+        parts.remove(0)
+    };
+    for other in parts {
+        if first.properties.len() < other.properties.len() {
+            first.properties.resize(other.properties.len(), None);
+        }
+        for (mine, theirs) in first.properties.iter_mut().zip(other.properties) {
+            if mine.is_none() {
+                *mine = theirs;
+            }
+        }
+    }
+    Some(first)
+}
+
+fn spawn_parallel(
+    sim: &mut Sim,
+    env: BlockEnv,
+    inputs: Vec<Store<Entity>>,
+    outs: Vec<Out>,
+    next_id: Rc<RefCell<u64>>,
+) {
+    sim.spawn(async move {
+        loop {
+            // One entity from each input (a join waits for all of them), in input order.
+            let mut parts = Vec::with_capacity(inputs.len());
+            for input in &inputs {
+                parts.push(input.get().await);
+            }
+            let now = env.ctx.now();
+            env.adjust(|s| &mut s.waiting, -(parts.len() as f64));
+            let Some(entity) = combine(parts) else {
+                continue;
+            };
+            // The first connection takes the entity itself; the others take copies, each a new
+            // entity with the same creation time and properties.
+            for (k, out) in outs.iter().enumerate() {
+                let mut e = entity.clone();
+                if k > 0 {
+                    let mut n = next_id.borrow_mut();
+                    e.id = *n;
+                    *n += 1;
+                }
+                env.with_stats(|s| s.left += 1);
+                out.port.send(now, e);
+            }
         }
     });
 }

@@ -2,7 +2,9 @@
 
 use stochcraft_blocks::{BlockId, Builder};
 use stochcraft_io::{Format, read, write_new};
-use stochcraft_model::{Dist, Experiment, Model, Property, PropertyType, PropertyValue, TimeUnit};
+use stochcraft_model::{
+    Dist, ElementKind, Experiment, Model, Property, PropertyType, PropertyValue, TimeUnit,
+};
 
 /// A model using every element kind and every distribution.
 pub fn showcase() -> Model {
@@ -233,4 +235,84 @@ fn property_edits_save_into_the_opened_file() {
     let text = String::from_utf8_lossy(&saved);
     assert!(text.contains("name=\"issues\" type=\"long\""), "{text}");
     assert!(!text.contains("name=\"rush\""));
+}
+
+/// A model with every kind of routing: a probability split, a fork and join, and conditions
+/// with a default.
+fn routed() -> Model {
+    let mut m = Builder::new();
+    let src = m.source("arrivals", Dist::Exponential { mean: 2.0 }, None);
+    m.property(
+        src,
+        "issues",
+        Some(PropertyType::Long),
+        PropertyValue::Random(Dist::Poisson { mean: 2.0 }),
+    );
+    let check = m.exclusive("check");
+    let scrap = m.sink("scrap");
+    let split = m.parallel("split");
+    let left = m.delay("left", Dist::Constant(1.0));
+    let right = m.delay("right", Dist::Constant(2.0));
+    let join = m.parallel("join");
+    let triage = m.exclusive("triage");
+    let repair = m.delay("repair", Dist::Constant(1.0));
+    let out = m.sink("exit");
+    m.connect(src, check);
+    m.route(check, split, Some(0.9), None);
+    m.route(check, scrap, Some(0.1), None);
+    m.connect(split, left);
+    m.connect(split, right);
+    m.connect(left, join);
+    m.connect(right, join);
+    m.connect(join, triage);
+    m.route(triage, repair, None, Some("getProperty('issues') > 0"));
+    m.route(triage, out, None, None);
+    m.default_route(triage, out);
+    m.connect(repair, out);
+    m.build(Experiment::default())
+}
+
+#[test]
+fn gateways_and_routing_write_read_and_save() {
+    let model = routed();
+    assert!(model.validate().is_empty(), "{:#?}", model.validate());
+    let bytes = write_new(&model);
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, model);
+    assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
+
+    // Change a probability, a condition and the default; remove a probability.
+    let mut edited = loaded.model.clone();
+    let at = |m: &Model, from: &str, to: &str| {
+        m.connections
+            .iter()
+            .position(|c| c.from.as_str() == from && c.to.as_str() == to)
+    };
+    let (Some(to_split), Some(to_scrap), Some(to_repair)) = (
+        at(&edited, "check", "split"),
+        at(&edited, "check", "scrap"),
+        at(&edited, "triage", "repair"),
+    ) else {
+        unreachable!()
+    };
+    edited.connections[to_split].probability = Some(0.75);
+    edited.connections[to_scrap].probability = None;
+    edited.connections[to_repair].condition = Some("getProperty('issues') >= 2".into());
+    let repair_flow = edited.connections[to_repair].id.clone();
+    if let Some(e) = edited
+        .elements
+        .iter_mut()
+        .find(|e| e.id.as_str() == "triage")
+    {
+        e.kind = ElementKind::ExclusiveGateway {
+            default: Some(repair_flow),
+        };
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited));
 }

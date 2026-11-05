@@ -144,11 +144,11 @@ fn compiling_a_model_directly() {
             duration: Dist::Constant(1.0),
         },
     ));
-    with_orphan.connections.push(Connection {
-        id: ElementId::unchecked("flow-9"),
-        from: ElementId::unchecked("spare"),
-        to: ElementId::unchecked("exit"),
-    });
+    with_orphan.connections.push(Connection::new(
+        ElementId::unchecked("flow-9"),
+        ElementId::unchecked("spare"),
+        ElementId::unchecked("exit"),
+    ));
     let compiled = compile(&with_orphan);
     assert!(
         compiled.as_ref().is_ok_and(|c| c.warnings().len() == 1),

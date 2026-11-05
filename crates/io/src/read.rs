@@ -26,6 +26,10 @@ enum NodeKind {
     Start,
     End,
     Task,
+    /// An exclusive gateway, with its default flow. Also the start and end events of a
+    /// sub-process simulated in line, which pass entities straight through.
+    Exclusive(Option<String>),
+    Parallel,
     /// Anything StochCraft cannot simulate yet, with a description for the note.
     Unsupported(String),
 }
@@ -53,6 +57,23 @@ struct Process {
     /// Resource id → name.
     resources: BTreeMap<String, String>,
     name: String,
+    /// Sub-processes simulated in line: their id → (their start event, their end event). Flows
+    /// into a sub-process go to its start event, and flows out of it leave from its end event.
+    inline: BTreeMap<String, (String, String)>,
+}
+
+impl Process {
+    /// Points flows into and out of in-line sub-processes at their start and end events.
+    fn rewire(&mut self) {
+        for f in &mut self.flows {
+            if let Some((start, _)) = self.inline.get(&f.to) {
+                f.to = start.clone();
+            }
+            if let Some((_, end)) = self.inline.get(&f.from) {
+                f.from = end.clone();
+            }
+        }
+    }
 }
 
 const BPMN_TASKS: [&str; 8] = [
@@ -94,74 +115,126 @@ fn read_bpmn(root: &Element, notes: &mut Vec<Note>) -> Process {
         if p.name.is_empty() {
             p.name = process.attr("name").unwrap_or_default();
         }
-        for e in process.elements() {
-            let Some(id) = e.attr("id") else { continue };
-            let name = e.attr("name").unwrap_or_default();
-            if e.ns.as_deref() != Some(BPMN) {
+        read_bpmn_container(process, false, &mut p, notes);
+    }
+    p.rewire();
+    p
+}
+
+/// A start event with no trigger, or a message or timer trigger: an arrival.
+fn plain_start(e: &Element) -> bool {
+    e.elements().all(|c| {
+        !c.local().ends_with("EventDefinition")
+            || c.local() == "messageEventDefinition"
+            || c.local() == "timerEventDefinition"
+    })
+}
+
+/// Reads the nodes and flows of a BPMN process or sub-process into `p`. Inside a sub-process
+/// (`inner`), its start and end events pass entities straight through.
+fn read_bpmn_container(container: &Element, inner: bool, p: &mut Process, notes: &mut Vec<Note>) {
+    let ns = [BPMN];
+    for e in container.elements() {
+        let Some(id) = e.attr("id") else { continue };
+        let name = e.attr("name").unwrap_or_default();
+        if e.ns.as_deref() != Some(BPMN) {
+            continue;
+        }
+        let local = e.local();
+        let kind = match local {
+            "sequenceFlow" => {
+                if let (Some(from), Some(to)) = (e.attr("sourceRef"), e.attr("targetRef")) {
+                    p.flows.push(Flow { id, from, to });
+                }
                 continue;
             }
-            let local = e.local();
-            let kind = match local {
-                "sequenceFlow" => {
-                    if let (Some(from), Some(to)) = (e.attr("sourceRef"), e.attr("targetRef")) {
-                        p.flows.push(Flow { id, from, to });
-                    }
+            "startEvent" if inner && plain_start(e) => NodeKind::Exclusive(None),
+            "endEvent" if inner => NodeKind::Exclusive(None),
+            "startEvent" if plain_start(e) => NodeKind::Start,
+            "endEvent" => NodeKind::End,
+            l if BPMN_TASKS.contains(&l) => NodeKind::Task,
+            "exclusiveGateway" => NodeKind::Exclusive(e.attr("default")),
+            "parallelGateway" => NodeKind::Parallel,
+            "inclusiveGateway" | "eventBasedGateway" | "complexGateway" => {
+                NodeKind::Unsupported(format!("{local} (not supported yet)"))
+            }
+            "subProcess" if e.attr("triggeredByEvent").as_deref() != Some("true") => {
+                if let Some((start, end)) = inline_ends(e) {
+                    notes.push(Note::info(
+                        Some(&id),
+                        format!(
+                            "sub-process simulated in line: its start event `{start}` and end event `{end}` pass entities straight through"
+                        ),
+                    ));
+                    p.inline.insert(id.clone(), (start, end));
+                    read_bpmn_container(e, true, p, notes);
                     continue;
                 }
-                "startEvent"
-                    if e.elements().all(|c| {
-                        !c.local().ends_with("EventDefinition")
-                            || c.local() == "messageEventDefinition"
-                            || c.local() == "timerEventDefinition"
-                    }) =>
-                {
-                    NodeKind::Start
-                }
-                "endEvent" => NodeKind::End,
-                l if BPMN_TASKS.contains(&l) => NodeKind::Task,
-                "exclusiveGateway" | "parallelGateway" | "inclusiveGateway"
-                | "eventBasedGateway" | "complexGateway" => {
-                    NodeKind::Unsupported(format!("{local} (gateways arrive in M2.3)"))
-                }
-                "subProcess" | "callActivity" | "transaction" | "adHocSubProcess" => {
-                    NodeKind::Unsupported(format!("{local} (sub-processes are not supported yet)"))
-                }
-                "startEvent"
-                | "intermediateCatchEvent"
-                | "intermediateThrowEvent"
-                | "boundaryEvent" => NodeKind::Unsupported(format!(
-                    "{local} (event triggers other than arrivals are not supported yet)"
-                )),
-                "laneSet"
-                | "dataObject"
-                | "dataObjectReference"
-                | "dataStoreReference"
-                | "textAnnotation"
-                | "association"
-                | "documentation"
-                | "extensionElements"
-                | "property"
-                | "ioSpecification" => continue,
-                other => NodeKind::Unsupported(format!("{other} (not supported yet)")),
-            };
-            let performers = e
-                .elements()
-                .filter(|r| {
-                    r.is(BPMN, "performer")
-                        || r.is(BPMN, "humanPerformer")
-                        || r.is(BPMN, "potentialOwner")
-                })
-                .filter_map(|r| r.child(&ns, "resourceRef").map(Element::text))
-                .collect();
-            p.nodes.push(Node {
-                id,
-                name,
-                kind,
-                performers,
-            });
-        }
+                NodeKind::Unsupported(
+                    "sub-process without exactly one plain start event and one end event (not supported yet)"
+                        .into(),
+                )
+            }
+            "subProcess" => NodeKind::Unsupported("event sub-process (not supported yet)".into()),
+            "callActivity" | "transaction" | "adHocSubProcess" => {
+                NodeKind::Unsupported(format!("{local} (sub-processes are not supported yet)"))
+            }
+            "startEvent"
+            | "intermediateCatchEvent"
+            | "intermediateThrowEvent"
+            | "boundaryEvent" => NodeKind::Unsupported(format!(
+                "{local} (event triggers other than arrivals are not supported yet)"
+            )),
+            "laneSet"
+            | "dataObject"
+            | "dataObjectReference"
+            | "dataStoreReference"
+            | "textAnnotation"
+            | "association"
+            | "documentation"
+            | "extensionElements"
+            | "property"
+            | "ioSpecification"
+            | "incoming"
+            | "outgoing"
+            | "multiInstanceLoopCharacteristics"
+            | "standardLoopCharacteristics"
+            | "dataInputAssociation"
+            | "dataOutputAssociation" => continue,
+            other => NodeKind::Unsupported(format!("{other} (not supported yet)")),
+        };
+        let performers = e
+            .elements()
+            .filter(|r| {
+                r.is(BPMN, "performer")
+                    || r.is(BPMN, "humanPerformer")
+                    || r.is(BPMN, "potentialOwner")
+            })
+            .filter_map(|r| r.child(&ns, "resourceRef").map(Element::text))
+            .collect();
+        p.nodes.push(Node {
+            id,
+            name,
+            kind,
+            performers,
+        });
     }
-    p
+}
+
+/// A sub-process's start and end events, when it has exactly one plain start event and one
+/// end event of its own (event sub-processes inside it do not count).
+fn inline_ends(sub: &Element) -> Option<(String, String)> {
+    let mine = |local: &str| -> Vec<&Element> {
+        sub.elements()
+            .filter(|e| e.is(BPMN, local) && e.attr("id").is_some())
+            .collect()
+    };
+    let starts = mine("startEvent");
+    let ends = mine("endEvent");
+    match (starts.as_slice(), ends.as_slice()) {
+        ([s], [e]) if plain_start(s) => Some((s.attr("id")?, e.attr("id")?)),
+        _ => None,
+    }
 }
 
 fn read_xpdl(root: &Element, notes: &mut Vec<Note>) -> Process {
@@ -185,68 +258,146 @@ fn read_xpdl(root: &Element, notes: &mut Vec<Note>) -> Process {
                 .insert(id.clone(), part.attr("Name").unwrap_or(id));
         }
     }
-    let mut activity_sets = 0;
     for wp in root
         .descendants()
         .into_iter()
         .filter(|e| e.is_any(&ns, "WorkflowProcess"))
     {
-        activity_sets += wp
+        let sets: Vec<&Element> = wp
             .child(&ns, "ActivitySets")
-            .map_or(0, |s| s.elements().count());
-        for a in wp
-            .child(&ns, "Activities")
-            .into_iter()
-            .flat_map(|acts| acts.children_named(&ns, "Activity"))
-        {
-            let Some(id) = a.attr("Id") else { continue };
-            let name = a.attr("Name").unwrap_or_default();
-            let event = a.child(&ns, "Event");
-            let kind = if let Some(ev) = event {
-                if ev.child(&ns, "StartEvent").is_some() {
-                    NodeKind::Start
-                } else if ev.child(&ns, "EndEvent").is_some() {
-                    NodeKind::End
-                } else {
-                    NodeKind::Unsupported("intermediate event (not supported yet)".into())
-                }
-            } else if let Some(r) = a.child(&ns, "Route") {
-                let g = r.attr("GatewayType").unwrap_or_else(|| "Exclusive".into());
-                NodeKind::Unsupported(format!("{g} gateway (gateways arrive in M2.3)"))
-            } else if a.child(&ns, "BlockActivity").is_some() || a.child(&ns, "SubFlow").is_some() {
-                NodeKind::Unsupported("sub-process (not supported yet)".into())
-            } else {
-                NodeKind::Task
-            };
-            let performers = a
-                .child(&ns, "Performers")
-                .map(|ps| {
-                    ps.children_named(&ns, "Performer")
-                        .map(Element::text)
-                        .collect()
-                })
-                .unwrap_or_default();
-            p.nodes.push(Node {
-                id,
-                name,
-                kind,
-                performers,
-            });
-        }
-        for t in wp
-            .child(&ns, "Transitions")
-            .into_iter()
-            .flat_map(|ts| ts.children_named(&ns, "Transition"))
-        {
-            if let (Some(id), Some(from), Some(to)) = (t.attr("Id"), t.attr("From"), t.attr("To")) {
-                p.flows.push(Flow { id, from, to });
-            }
-        }
+            .map(|s| s.children_named(&ns, "ActivitySet").collect())
+            .unwrap_or_default();
+        read_xpdl_set(wp, &sets, false, &mut p, notes);
     }
-    if activity_sets > 0 {
-        notes.push(Note::error(None, format!("{activity_sets} sub-process activity sets are not supported yet; their contents are not simulated")));
-    }
+    p.rewire();
     p
+}
+
+/// Reads the activities and transitions of an XPDL process or activity set into `p`. Inside an
+/// activity set simulated in line (`inner`), its start and end events pass entities straight
+/// through.
+fn read_xpdl_set(
+    holder: &Element,
+    sets: &[&Element],
+    inner: bool,
+    p: &mut Process,
+    notes: &mut Vec<Note>,
+) {
+    let ns = XPDL;
+    let event_of = |a: &Element, which: &str| {
+        a.child(&ns, "Event")
+            .is_some_and(|ev| ev.child(&ns, which).is_some())
+    };
+    for a in holder
+        .child(&ns, "Activities")
+        .into_iter()
+        .flat_map(|acts| acts.children_named(&ns, "Activity"))
+    {
+        let Some(id) = a.attr("Id") else { continue };
+        let name = a.attr("Name").unwrap_or_default();
+        let kind = if a.child(&ns, "Event").is_some() {
+            if event_of(a, "StartEvent") {
+                if inner {
+                    NodeKind::Exclusive(None)
+                } else {
+                    NodeKind::Start
+                }
+            } else if event_of(a, "EndEvent") {
+                if inner {
+                    NodeKind::Exclusive(None)
+                } else {
+                    NodeKind::End
+                }
+            } else {
+                NodeKind::Unsupported("intermediate event (not supported yet)".into())
+            }
+        } else if let Some(r) = a.child(&ns, "Route") {
+            let g = r.attr("GatewayType").unwrap_or_else(|| "Exclusive".into());
+            match g.as_str() {
+                "Exclusive" | "XOR" => NodeKind::Exclusive(None),
+                "Parallel" | "AND" => NodeKind::Parallel,
+                _ => NodeKind::Unsupported(format!("{g} gateway (not supported yet)")),
+            }
+        } else if let Some(b) = a.child(&ns, "BlockActivity") {
+            let set = b
+                .attr("ActivitySetId")
+                .and_then(|sid| sets.iter().find(|s| s.attr("Id").as_deref() == Some(&sid)));
+            match set {
+                Some(s) if s.attr("TriggeredByEvent").as_deref() == Some("true") => {
+                    NodeKind::Unsupported("event sub-process (not supported yet)".into())
+                }
+                Some(s) => {
+                    let mine = |which: &str| -> Vec<String> {
+                        s.child(&ns, "Activities")
+                            .into_iter()
+                            .flat_map(|acts| acts.children_named(&ns, "Activity"))
+                            .filter(|x| event_of(x, which))
+                            .filter_map(|x| x.attr("Id"))
+                            .collect()
+                    };
+                    match (mine("StartEvent").as_slice(), mine("EndEvent").as_slice()) {
+                        ([start], [end]) => {
+                            notes.push(Note::info(
+                                Some(&id),
+                                format!(
+                                    "sub-process simulated in line: its start event `{start}` and end event `{end}` pass entities straight through"
+                                ),
+                            ));
+                            p.inline.insert(id.clone(), (start.clone(), end.clone()));
+                            read_xpdl_set(s, sets, true, p, notes);
+                            continue;
+                        }
+                        _ => NodeKind::Unsupported(
+                            "sub-process without exactly one start event and one end event (not supported yet)"
+                                .into(),
+                        ),
+                    }
+                }
+                None => NodeKind::Unsupported(
+                    "sub-process with no activity set (not supported yet)".into(),
+                ),
+            }
+        } else if a.child(&ns, "SubFlow").is_some() {
+            NodeKind::Unsupported("sub-process (not supported yet)".into())
+        } else {
+            NodeKind::Task
+        };
+        let performers = a
+            .child(&ns, "Performers")
+            .map(|ps| {
+                ps.children_named(&ns, "Performer")
+                    .map(Element::text)
+                    .collect()
+            })
+            .unwrap_or_default();
+        p.nodes.push(Node {
+            id,
+            name,
+            kind,
+            performers,
+        });
+    }
+    for t in holder
+        .child(&ns, "Transitions")
+        .into_iter()
+        .flat_map(|ts| ts.children_named(&ns, "Transition"))
+    {
+        if let (Some(id), Some(from), Some(to)) = (t.attr("Id"), t.attr("From"), t.attr("To")) {
+            // XPDL marks a gateway's default transition with an OTHERWISE condition.
+            let otherwise = t
+                .child(&ns, "Condition")
+                .and_then(|c| c.attr("Type"))
+                .as_deref()
+                == Some("OTHERWISE");
+            if otherwise
+                && let Some(n) = p.nodes.iter_mut().find(|n| n.id == from)
+                && let NodeKind::Exclusive(d) = &mut n.kind
+            {
+                *d = Some(id.clone());
+            }
+            p.flows.push(Flow { id, from, to });
+        }
+    }
 }
 
 /// `getResource('id', n)` or `bpsim:getResource("id", n)`: the resource id and quantity.
@@ -540,6 +691,13 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     None => ElementKind::Delay { duration: time },
                 }
             }
+            NodeKind::Exclusive(default) => ElementKind::ExclusiveGateway {
+                default: default
+                    .as_ref()
+                    .filter(|d| p.flows.iter().any(|f| &f.id == *d && f.from == n.id))
+                    .map(|d| ElementId::unchecked(d)),
+            },
+            NodeKind::Parallel => ElementKind::ParallelGateway,
             NodeKind::Unsupported(what) => {
                 notes.push(Note::error(
                     Some(id),
@@ -558,24 +716,40 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
     }
     let mut connections = Vec::new();
     for f in &p.flows {
-        for key in [
-            "ControlParameters/Probability",
-            "ControlParameters/Condition",
-        ] {
-            if param(&f.id, key).is_some() && kept.contains(&f.from) {
-                notes.push(Note::warning(
-                    Some(&f.id),
-                    "branch probabilities and conditions arrive with gateways in M2.3",
+        if !(kept.contains(&f.from) && kept.contains(&f.to)) {
+            continue;
+        }
+        let id = f.id.as_str();
+        let probability = match val(id, "ControlParameters/Probability", notes) {
+            Some(Value::Number(x)) => Some(x),
+            Some(other) => {
+                notes.push(Note::error(
+                    Some(id),
+                    format!("a probability must be a number, not {other:?}; it is ignored"),
                 ));
+                None
             }
-        }
-        if kept.contains(&f.from) && kept.contains(&f.to) {
-            connections.push(Connection {
-                id: ElementId::unchecked(&f.id),
-                from: ElementId::unchecked(&f.from),
-                to: ElementId::unchecked(&f.to),
-            });
-        }
+            None => None,
+        };
+        let condition = match val(id, "ControlParameters/Condition", notes) {
+            Some(Value::Expression(x)) => Some(x),
+            Some(Value::Bool(b)) => Some(if b { "true()" } else { "false()" }.to_owned()),
+            Some(other) => {
+                notes.push(Note::error(
+                    Some(id),
+                    format!("a condition must be an expression or true/false, not {other:?}; it is ignored"),
+                ));
+                None
+            }
+            None => None,
+        };
+        connections.push(Connection {
+            id: ElementId::unchecked(&f.id),
+            from: ElementId::unchecked(&f.from),
+            to: ElementId::unchecked(&f.to),
+            probability,
+            condition,
+        });
     }
     Model {
         name: p.name,
