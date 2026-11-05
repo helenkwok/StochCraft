@@ -11,8 +11,10 @@
 //! answers by calling [`App::open_file`], [`App::save_to`], [`App::written`] or
 //! [`App::report_error`].
 
+mod autosave;
 mod charts;
 pub mod commands;
+pub use autosave::Autosave;
 mod editor;
 pub mod form;
 mod results;
@@ -236,6 +238,14 @@ pub struct App {
     applied_theme: Option<ThemeChoice>,
     /// The shell shows the menus in the system's menu bar (macOS), not in the window.
     native_menu: bool,
+    /// The digest of the model last handed out as a recovery copy.
+    autosaved: Option<String>,
+    /// The recovery copy can go (a damaged one, or the user discarded it).
+    autosave_clear_pending: bool,
+    /// A recovery copy found at start, waiting for the user's answer.
+    recovery: Option<Value>,
+    /// The user chose to quit (discarding any changes): no recovery copy is kept.
+    quitting: bool,
     /// Settings ▸ Keyboard Shortcuts…, while it is open (craft-keymap's dialog).
     shortcuts_dialog: Option<craft_keymap::ui::DialogState>,
     /// The app draws the window frame (craft-window chose it): the header is the title bar and
@@ -278,6 +288,10 @@ impl App {
             applied_theme: None,
             native_menu: false,
             shortcuts_dialog: None,
+            autosaved: None,
+            autosave_clear_pending: false,
+            recovery: None,
+            quitting: false,
             title_bar: None,
             numbers: craft_ui::localized::LocaleNumbers::new(std::sync::Arc::new(
                 craft_i18n::Format::new(&craft_i18n::Region::system(), craft_i18n::Digits::Locale),
@@ -691,7 +705,10 @@ impl App {
                     self.open_file(&name, &bytes);
                 }
             }
-            Replace::Quit => self.requests.push(Request::Quit),
+            Replace::Quit => {
+                self.quitting = true;
+                self.requests.push(Request::Quit);
+            }
         }
     }
 
@@ -917,6 +934,7 @@ impl App {
         self.confirm_dialog(&ctx);
         self.about_window(&ctx);
         self.shortcuts_window(&ctx);
+        self.recovery_dialog(&ctx);
     }
 
     /// The results: export buttons, the charts, then the table.

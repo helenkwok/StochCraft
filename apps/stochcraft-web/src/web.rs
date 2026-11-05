@@ -23,12 +23,20 @@ struct Web {
 
 /// Where the browser keeps the app's preferences (eframe's storage: the page's local storage).
 const PREFS_KEY: &str = "stochcraft.prefs";
+/// Where the browser keeps the recovery copy of unsaved changes.
+const RECOVERY_KEY: &str = "stochcraft.recovery";
 
 impl eframe::App for Web {
-    /// Remembers the appearance between visits.
+    /// Remembers the appearance between visits, and keeps a recovery copy of unsaved changes
+    /// (eframe calls this every half minute and when the page closes).
     fn save(&mut self, storage: &mut dyn eframe::Storage) {
         if let Ok(json) = serde_json::to_string(&self.app.prefs()) {
             storage.set_string(PREFS_KEY, json);
+        }
+        match self.app.autosave() {
+            stochcraft_ui_egui::Autosave::Write(copy) => storage.set_string(RECOVERY_KEY, copy),
+            stochcraft_ui_egui::Autosave::Clear => storage.remove_string(RECOVERY_KEY),
+            stochcraft_ui_egui::Autosave::Keep => {}
         }
     }
 
@@ -171,6 +179,13 @@ pub fn start() {
                         .and_then(|j| serde_json::from_str(&j).ok())
                     {
                         app.set_prefs(&prefs);
+                    }
+                    if let Some(copy) = cc
+                        .storage
+                        .and_then(|s| s.get_string(RECOVERY_KEY))
+                        .filter(|c| !c.is_empty())
+                    {
+                        app.offer_recovery(&copy);
                     }
                     Ok(Box::new(Web {
                         app,

@@ -1,0 +1,2 @@
+[{"command": "block.add", "params": {"kind": "server", "id": "lonely"}},
+               {"command": "file.save", "params": {"path": "/home/user/stochcraft/target-autosave/tmp/cli-tests/broken.bpmn"}}]

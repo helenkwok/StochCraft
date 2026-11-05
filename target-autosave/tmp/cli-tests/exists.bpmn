@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="M/M/1" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.1.0">
+  <bpmn:resource id="server_resource" name="Server"/>
+  <bpmn:process id="process" name="M/M/1" isExecutable="false">
+    <bpmn:startEvent id="arrivals" name="Arrivals">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="server" name="Server">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>server_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="exit" name="Exit">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="arrivals" targetRef="server"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="server" targetRef="exit"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="arrivals_di" bpmnElement="arrivals">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="server_di" bpmnElement="server">
+        <dc:Bounds x="230" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="exit_di" bpmnElement="exit">
+        <dc:Bounds x="442" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="230" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="330" y="100"/>
+        <di:waypoint x="442" y="100"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="M/M/1" vendor="StochCraft" version="0.1.0">
+          <bpsim:ScenarioParameters replication="10" seed="1" baseTimeUnit="min">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="21000"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="1000"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="arrivals">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="1.3333333333333333"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="server">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="1"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('server_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="server_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

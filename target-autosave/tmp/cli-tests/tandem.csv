@@ -1,0 +1,15 @@
+element,name,kind,metric,mean,half_width,std_dev,n
+in,Parts arrive,source,entered,40.0,0.0,0.0,3
+in,Parts arrive,source,left,40.0,0.0,0.0,3
+weld,Weld,server,entered,40.0,0.0,0.0,3
+weld,Weld,server,left,40.0,0.0,0.0,3
+weld,Weld,server,mean_queue_length,0.0,0.0,0.0,3
+weld,Weld,server,mean_wait,0.0,0.0,0.0,3
+weld,Weld,server,utilisation,0.12043835422000272,0.037948555030145034,0.01527511628771431,3
+weld,Weld,server,mean_contents,0.3613150626600082,0.11384566509043521,0.04582534886314298,3
+cool,Cool,delay,entered,40.0,0.0,0.0,3
+cool,Cool,delay,left,40.0,0.0,0.0,3
+cool,Cool,delay,mean_contents,1.2500000000000002,1.0320125208203403e-15,4.1540741810552243e-16,3
+out,Shipped,sink,entered,40.0,0.0,0.0,3
+out,Shipped,sink,left,40.0,0.0,0.0,3
+out,Shipped,sink,mean_time_in_system,0.9667890375960048,0.06830739905426185,0.027495209317886078,3

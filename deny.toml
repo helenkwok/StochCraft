@@ -37,3 +37,14 @@ allow-git = [
     "https://github.com/storytold/winit.git",
     "https://github.com/storytold/craft-libs",
 ]
+
+[advisories]
+ignore = [
+    # zvariant, zvariant_derive and zbus_names were folded into zbus 6. They reach StochCraft
+    # only through accesskit's Linux screen-reader bridge (egui-winit → accesskit_unix → zbus 5),
+    # with no release on zbus 6 yet. Unmaintained notices, not vulnerabilities: drop these when
+    # accesskit moves to zbus 6.
+    { id = "RUSTSEC-2026-0370", reason = "zvariant, via accesskit_unix; no zbus 6 release yet" },
+    { id = "RUSTSEC-2026-0371", reason = "zbus_names, via accesskit_unix; no zbus 6 release yet" },
+    { id = "RUSTSEC-2026-0372", reason = "zvariant_derive, via accesskit_unix; no zbus 6 release yet" },
+]

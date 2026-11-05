@@ -1,0 +1,3 @@
+cargo::rerun-if-changed=build.rs
+cargo::rerun-if-env-changed=CRAFT_FONTS_DIR
+cargo::rerun-if-env-changed=CRAFT_FONTS_REQUIRED

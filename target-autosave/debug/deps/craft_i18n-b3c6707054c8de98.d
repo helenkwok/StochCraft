@@ -1,0 +1,14 @@
+/home/user/stochcraft/target-autosave/debug/deps/craft_i18n-b3c6707054c8de98.d: /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/lib.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/catalog.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/fold.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/format.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/number.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/region.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/scripts.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/size.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/../data/locales.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/../data/numbers.postcard
+
+/home/user/stochcraft/target-autosave/debug/deps/libcraft_i18n-b3c6707054c8de98.rmeta: /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/lib.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/catalog.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/fold.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/format.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/number.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/region.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/scripts.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/size.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/../data/locales.rs /root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/../data/numbers.postcard
+
+/root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/lib.rs:
+/root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/catalog.rs:
+/root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/fold.rs:
+/root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/format.rs:
+/root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/number.rs:
+/root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/region.rs:
+/root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/scripts.rs:
+/root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/size.rs:
+/root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/../data/locales.rs:
+/root/.cargo/git/checkouts/craft-libs-d830b991a08c6c3d/d836bea/crates/i18n/src/../data/numbers.postcard:

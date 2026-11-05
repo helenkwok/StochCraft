@@ -1,0 +1,1 @@
+[{"command": "block.remove", "params": {"id": "nope"}}, {"command": "model.get"}]

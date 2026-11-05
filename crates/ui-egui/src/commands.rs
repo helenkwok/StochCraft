@@ -224,7 +224,7 @@ impl App {
 
     /// A dialog is open: menu commands wait.
     pub(crate) fn modal_open(&self) -> bool {
-        self.confirm.is_some() || self.shortcuts_dialog.is_some()
+        self.confirm.is_some() || self.shortcuts_dialog.is_some() || self.recovery.is_some()
     }
 
     /// Runs a command from a menu, the macOS menu bar or a shortcut.

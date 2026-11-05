@@ -1,0 +1,10 @@
+/home/user/stochcraft/target-autosave/debug/deps/utf16_iter-773f40d1d7b51dc8.d: /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/lib.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/basic.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/handler.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/indices.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/macros.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/report.rs
+
+/home/user/stochcraft/target-autosave/debug/deps/libutf16_iter-773f40d1d7b51dc8.rmeta: /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/lib.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/basic.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/handler.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/indices.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/macros.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/report.rs
+
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/lib.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/basic.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/handler.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/indices.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/macros.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/utf16_iter-1.1.0/src/report.rs:
