@@ -1102,7 +1102,18 @@ impl App {
                     } else {
                         e.name.as_str()
                     };
-                    let mine = problems.iter().filter(|pr| pr.at.as_deref() == Some(id));
+                    // Its own problems and its outgoing flows' (a decision's conditions).
+                    let outs: Vec<&str> = model
+                        .connections
+                        .iter()
+                        .filter(|c| c.from.as_str() == id)
+                        .map(|c| c.id.as_str())
+                        .collect();
+                    let mine = problems.iter().filter(|pr| {
+                        pr.at
+                            .as_deref()
+                            .is_some_and(|at| at == id || outs.contains(&at))
+                    });
                     let flag = mine.fold(None, |acc: Option<bool>, pr| {
                         Some(acc.unwrap_or(false) || pr.error)
                     });
@@ -1409,6 +1420,8 @@ impl FlowRow<'_> {
             "server" => "task with a resource",
             "delay" => "task",
             "sink" => "departures",
+            "exclusive_gateway" => "decision: one way",
+            "parallel_gateway" => "split or join: all ways",
             other => other,
         };
         response.widget_info(|| {
@@ -1454,6 +1467,31 @@ impl FlowRow<'_> {
                     p.raised,
                     egui::Stroke::new(3.0, ink),
                 );
+            }
+            "exclusive_gateway" | "parallel_gateway" => {
+                // A BPMN gateway: a diamond, with × (exclusive) or + (parallel) inside.
+                let c = egui::pos2(cx, cy);
+                let r = 10.0;
+                let diamond = vec![
+                    c + egui::vec2(0.0, -r),
+                    c + egui::vec2(r, 0.0),
+                    c + egui::vec2(0.0, r),
+                    c + egui::vec2(-r, 0.0),
+                ];
+                painter.add(egui::Shape::convex_polygon(
+                    diamond,
+                    p.raised,
+                    egui::Stroke::new(1.5, ink),
+                ));
+                let m = 4.0;
+                let mark = egui::Stroke::new(1.5, ink);
+                if self.kind == "parallel_gateway" {
+                    painter.line_segment([c + egui::vec2(-m, 0.0), c + egui::vec2(m, 0.0)], mark);
+                    painter.line_segment([c + egui::vec2(0.0, -m), c + egui::vec2(0.0, m)], mark);
+                } else {
+                    painter.line_segment([c + egui::vec2(-m, -m), c + egui::vec2(m, m)], mark);
+                    painter.line_segment([c + egui::vec2(-m, m), c + egui::vec2(m, -m)], mark);
+                }
             }
             _ => {
                 let r = egui::Rect::from_center_size(egui::pos2(cx, cy), egui::vec2(24.0, 18.0));
@@ -1536,6 +1574,7 @@ fn change_label(command: &str) -> &str {
         "block.rename" => "Rename Block",
         "block.remove" => "Remove Block",
         "connect" => "Connect",
+        "flow.set" => "Change Flow",
         "disconnect" => "Disconnect",
         "experiment.set" => "Experiment Settings",
         "property.set" => "Set Property",

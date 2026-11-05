@@ -251,3 +251,94 @@ fn a_property_is_added_typed_given_an_expression_and_removed() {
     settle(&mut h);
     assert!(element(&h, "serve")["properties"].is_null());
 }
+
+#[test]
+fn a_decision_routes_by_probability_and_condition() {
+    let mut h = harness();
+    h.state_mut()
+        .execute("model.new", json!({"name": "Triage"}));
+    settle(&mut h);
+    for kind in [
+        "Arrivals",
+        "Decision (one way)",
+        "Task",
+        "Task",
+        "Departures",
+    ] {
+        click(&mut h, Role::Button, "+ Add block");
+        click(&mut h, Role::Button, kind);
+    }
+    let gw = "exclusive_gateway-1";
+    assert_eq!(element(&h, gw)["kind"], "exclusive_gateway");
+    for (from, to) in [
+        ("source-1", gw),
+        (gw, "delay-1"),
+        (gw, "delay-2"),
+        ("delay-1", "sink-1"),
+        ("delay-2", "sink-1"),
+    ] {
+        h.state_mut()
+            .execute("connect", json!({ "from": from, "to": to }));
+    }
+    settle(&mut h);
+    let flow_to = |h: &Harness<'static, App>, to: &str| {
+        model(h)["connections"]
+            .as_array()
+            .and_then(|cs| {
+                cs.iter()
+                    .find(|c| c["from"] == gw && c["to"] == to)
+                    .and_then(|c| c["id"].as_str().map(str::to_owned))
+            })
+            .expect("a flow out of the decision")
+    };
+    let first = flow_to(&h, "delay-1");
+
+    // The decision's inspector: a probability on one way out, blank on the other.
+    click(&mut h, Role::ListBoxOption, gw);
+    type_into(&mut h, &format!("Probability of {first}"), "0.3");
+    let conn = |h: &Harness<'static, App>, id: &str| {
+        model(h)["connections"]
+            .as_array()
+            .and_then(|cs| cs.iter().find(|c| c["id"] == id).cloned())
+            .unwrap_or_default()
+    };
+    assert_eq!(conn(&h, &first)["probability"], json!(0.3));
+    h.state_mut().undo();
+    settle(&mut h);
+    assert_eq!(h.state().status(), "Undid Change Flow");
+    h.state_mut().redo();
+    settle(&mut h);
+
+    // A default way out.
+    click(&mut h, Role::ComboBox, "Default flow");
+    click(&mut h, Role::Button, "to delay-2");
+    assert_eq!(element(&h, gw)["default"], json!(flow_to(&h, "delay-2")));
+
+    // A condition that can't be read is the decision's problem, shown on it.
+    type_into(
+        &mut h,
+        &format!("Condition of {first}"),
+        "getProperty('x' >",
+    );
+    assert_eq!(conn(&h, &first)["condition"], json!("getProperty('x' >"));
+    assert!(h.query_by_label("Error").is_some());
+    // Cleared, the condition goes.
+    let field = format!("Condition of {first}");
+    h.get_by_role_and_label(Role::TextInput, &field).click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
+    h.key_press(egui::Key::Backspace);
+    h.key_press(egui::Key::Enter);
+    settle(&mut h);
+    assert!(conn(&h, &first)["condition"].is_null());
+
+    h.state_mut().run();
+    for _ in 0..5000 {
+        if !h.state().is_running() {
+            break;
+        }
+        h.step();
+    }
+    settle(&mut h);
+    assert!(h.state().results().is_some(), "{}", h.state().status());
+}

@@ -67,6 +67,8 @@ fn kind_label(kind: &str) -> &str {
         "server" => "Task with a resource",
         "delay" => "Task",
         "sink" => "Departures",
+        "exclusive_gateway" => "Decision",
+        "parallel_gateway" => "Split or join",
         other => other,
     }
 }
