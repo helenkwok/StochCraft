@@ -82,14 +82,11 @@ pub fn unit_label(unit: &str) -> &str {
     }
 }
 
-/// Draws `results` (the engine's `run` result).
-pub fn show(ui: &mut egui::Ui, results: &Value) {
-    let p = theme::palette(ui.ctx());
+/// The run record's line under the results' heading: replications, seed, warm-up, duration.
+pub fn record_line(ui: &mut egui::Ui, results: &Value) {
     let r = &results["record"];
     let unit = unit_label(r["time_unit"].as_str().unwrap_or(""));
     let num = |v: &Value| v.as_f64().map_or_else(|| "–".to_owned(), number);
-    ui.heading("Results");
-    ui.add_space(2.0);
     ui.label(theme::weak(
         ui,
         format!(
@@ -100,110 +97,114 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
             num(&r["duration"])
         ),
     ));
-    ui.add_space(10.0);
+}
+
+/// Draws `results` (the engine's `run` result).
+pub fn show(ui: &mut egui::Ui, results: &Value) {
+    let p = theme::palette(ui.ctx());
+    let r = &results["record"];
+    let unit = unit_label(r["time_unit"].as_str().unwrap_or(""));
 
     let order: Vec<&str> = results["metrics"]
         .as_array()
         .map(|m| m.iter().filter_map(Value::as_str).collect())
         .unwrap_or_default();
-    egui::ScrollArea::vertical()
-        .auto_shrink([false, false])
-        .show(ui, |ui| {
-            ui.set_max_width(640.0);
-            let notes: Vec<&str> = r["warnings"]
-                .as_array()
+    ui.vertical(|ui| {
+        ui.set_max_width(640.0);
+        let notes: Vec<&str> = r["warnings"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .chain(r["file_notes"].as_array().into_iter().flatten())
+            .filter(|n| n["severity"] != "info")
+            .filter_map(|n| n["message"].as_str())
+            .collect();
+        for n in &notes {
+            ui.horizontal_wrapped(|ui| {
+                ui.label(theme::strong("Warning").color(p.warning));
+                ui.label(*n);
+            });
+        }
+        if !notes.is_empty() {
+            ui.add_space(10.0);
+        }
+
+        for e in results["elements"].as_array().into_iter().flatten() {
+            let id = e["id"].as_str().unwrap_or("");
+            let name = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
+            ui.horizontal(|ui| {
+                ui.label(theme::strong(name).size(15.0));
+                ui.label(theme::weak(
+                    ui,
+                    kind_label(e["kind"].as_str().unwrap_or("")),
+                ));
+            });
+            ui.add_space(4.0);
+            row(ui, &p, None, ["Metric", "Mean", "± 95% CI", "Unit"]);
+            for (i, key) in order.iter().enumerate() {
+                let m = &e["metrics"][*key];
+                if m.is_null() {
+                    continue;
+                }
+                let (label, kind) = metric(key);
+                let (mean, hw) = (m["mean"].as_f64(), m["half_width"].as_f64());
+                let (scale, unit) = match kind {
+                    Unit::Share => (100.0, "%"),
+                    Unit::Time => (1.0, unit),
+                    Unit::Count | Unit::Items => (1.0, ""),
+                };
+                let show =
+                    |v: Option<f64>| v.map_or_else(|| "–".to_owned(), |v| grouped(v * scale));
+                row(
+                    ui,
+                    &p,
+                    Some(i % 2 == 0),
+                    [label, &show(mean), &show(hw), unit],
+                );
+            }
+            // The mean value this element assigned to each property it sets.
+            let shown = order
+                .iter()
+                .filter(|k| !e["metrics"][**k].is_null())
+                .count();
+            for (j, (name, m)) in e["properties"]
+                .as_object()
                 .into_iter()
                 .flatten()
-                .chain(r["file_notes"].as_array().into_iter().flatten())
-                .filter(|n| n["severity"] != "info")
-                .filter_map(|n| n["message"].as_str())
-                .collect();
-            for n in &notes {
-                ui.horizontal_wrapped(|ui| {
-                    ui.label(theme::strong("Warning").color(p.warning));
-                    ui.label(*n);
-                });
-            }
-            if !notes.is_empty() {
-                ui.add_space(10.0);
-            }
-
-            for e in results["elements"].as_array().into_iter().flatten() {
-                let id = e["id"].as_str().unwrap_or("");
-                let name = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
-                ui.horizontal(|ui| {
-                    ui.label(theme::strong(name).size(15.0));
-                    ui.label(theme::weak(
-                        ui,
-                        kind_label(e["kind"].as_str().unwrap_or("")),
-                    ));
-                });
-                ui.add_space(4.0);
-                row(ui, &p, None, ["Metric", "Mean", "± 95% CI", "Unit"]);
-                for (i, key) in order.iter().enumerate() {
-                    let m = &e["metrics"][*key];
-                    if m.is_null() {
-                        continue;
-                    }
-                    let (label, kind) = metric(key);
-                    let (mean, hw) = (m["mean"].as_f64(), m["half_width"].as_f64());
-                    let (scale, unit) = match kind {
-                        Unit::Share => (100.0, "%"),
-                        Unit::Time => (1.0, unit),
-                        Unit::Count | Unit::Items => (1.0, ""),
-                    };
-                    let show =
-                        |v: Option<f64>| v.map_or_else(|| "–".to_owned(), |v| grouped(v * scale));
-                    row(
-                        ui,
-                        &p,
-                        Some(i % 2 == 0),
-                        [label, &show(mean), &show(hw), unit],
-                    );
-                }
-                // The mean value this element assigned to each property it sets.
-                let shown = order
-                    .iter()
-                    .filter(|k| !e["metrics"][**k].is_null())
-                    .count();
-                for (j, (name, m)) in e["properties"]
-                    .as_object()
-                    .into_iter()
-                    .flatten()
-                    .enumerate()
-                {
-                    let show = |v: Option<f64>| v.map_or_else(|| "–".to_owned(), grouped);
-                    row(
-                        ui,
-                        &p,
-                        Some((shown + j) % 2 == 0),
-                        [
-                            &format!("{name} (set to, mean)"),
-                            &show(m["mean"].as_f64()),
-                            &show(m["half_width"].as_f64()),
-                            "",
-                        ],
-                    );
-                }
-                ui.add_space(16.0);
-            }
-            ui.label(theme::weak(
-                ui,
-                "± is the half-width of a 95% Student-t confidence interval of the mean across \
-                 replications.",
-            ));
-            ui.label(
-                theme::weak(
+                .enumerate()
+            {
+                let show = |v: Option<f64>| v.map_or_else(|| "–".to_owned(), grouped);
+                row(
                     ui,
-                    format!(
-                        "StochCraft {} · model {}",
-                        r["stochcraft"].as_str().unwrap_or(""),
-                        r["model_digest"].as_str().unwrap_or("")
-                    ),
-                )
-                .size(12.0),
-            );
-        });
+                    &p,
+                    Some((shown + j) % 2 == 0),
+                    [
+                        &format!("{name} (set to, mean)"),
+                        &show(m["mean"].as_f64()),
+                        &show(m["half_width"].as_f64()),
+                        "",
+                    ],
+                );
+            }
+            ui.add_space(16.0);
+        }
+        ui.label(theme::weak(
+            ui,
+            "± is the half-width of a 95% Student-t confidence interval of the mean across \
+                 replications.",
+        ));
+        ui.label(
+            theme::weak(
+                ui,
+                format!(
+                    "StochCraft {} · model {}",
+                    r["stochcraft"].as_str().unwrap_or(""),
+                    r["model_digest"].as_str().unwrap_or("")
+                ),
+            )
+            .size(12.0),
+        );
+    });
 }
 
 /// Column edges of a results row: the metric's name from the left, the mean and the half-width

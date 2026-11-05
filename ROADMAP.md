@@ -580,9 +580,16 @@ block's problem), and runs report each property's mean assigned value.
 
 ### M3.3 Running and results
 
-Experiment settings (replications, seed, warm-up, duration), a run button with progress and
-cancel, a results table with confidence intervals, and charts (time in system, utilisation per
-block, queue length over time for a single replication) with export to CSV and PNG.
+**Done:** experiment settings (M3.2's overview), Run with progress and cancel (M3.1a), the results
+table with confidence intervals, and charts above it: utilisation, mean wait, mean queue length
+and mean time in system per block, one measure per chart, the 95% interval as a whisker and a
+tooltip with the interval on hover (`ui-egui/src/charts.rs`, following the dataviz rules: one
+hue validated per theme, thin bars, recessive grid, the table as the accessible view). The table
+exports as CSV (as `stochcraft-cli run --format csv`) and the charts as PNG, saved where the user
+chooses on the desktop and downloaded in the browser.
+
+**Moved to M3.5:** queue length over time for a single replication, which needs a trace of one
+run from the engine; the live view of a run produces exactly that.
 
 ### M3.4 The flowchart canvas
 

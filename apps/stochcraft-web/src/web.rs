@@ -53,6 +53,10 @@ impl eframe::App for Web {
                         Err(e) => self.app.report_error(format!("{name}: {e:?}")),
                     }
                 }
+                Request::Export { name, bytes } => match download(&name, &bytes) {
+                    Ok(()) => self.app.exported(&name),
+                    Err(e) => self.app.report_error(format!("{name}: {e:?}")),
+                },
                 // Not made in the browser (Platform::BROWSER has no paths and no Quit).
                 Request::PickSave { .. } | Request::Quit => {}
             }
@@ -106,7 +110,12 @@ fn download(name: &str, bytes: &[u8]) -> Result<(), JsValue> {
         .ok_or_else(|| JsValue::from_str("no document"))?;
     let parts = js_sys::Array::of1(&js_sys::Uint8Array::from(bytes));
     let options = web_sys::BlobPropertyBag::new();
-    options.set_type("application/xml");
+    let kind = match name.rsplit('.').next() {
+        Some("png") => "image/png",
+        Some("csv") => "text/csv",
+        _ => "application/xml",
+    };
+    options.set_type(kind);
     let blob = web_sys::Blob::new_with_u8_array_sequence_and_options(&parts, &options)?;
     let url = web_sys::Url::create_object_url_with_blob(&blob)?;
     let a: web_sys::HtmlAnchorElement = document.create_element("a")?.unchecked_into();
