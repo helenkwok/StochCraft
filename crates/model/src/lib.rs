@@ -11,6 +11,11 @@
 //!   can fix them all in one pass.
 //! - Entities carry BPSim properties: each element may assign [`Property`] values to an entity
 //!   as it enters, from a fixed value, a distribution or an [`expr`] expression.
+//! - Gateways route entities: an exclusive gateway sends each one down one of its outgoing
+//!   [`Connection`]s, by the connections' probabilities or by the first condition that holds; a
+//!   parallel gateway copies each one down every outgoing connection and, with several incoming
+//!   connections, waits for one entity on each before going on. Any element may have several
+//!   incoming connections (a merge).
 
 pub mod expr;
 
@@ -111,7 +116,7 @@ impl TimeUnit {
     }
 }
 
-/// What an element does. M2 adds gateways, resources and the rest (ROADMAP.md).
+/// What an element does. M2 adds resources and the rest (ROADMAP.md).
 #[derive(Debug, Clone, PartialEq)]
 pub enum ElementKind {
     /// Creates entities (a BPMN start event): time between arrivals, and an optional limit
@@ -127,6 +132,19 @@ pub enum ElementKind {
     Delay { duration: Dist },
     /// Removes entities (a BPMN end event).
     Sink,
+    /// Sends each entity down one outgoing connection, at once (a BPMN exclusive gateway). If any
+    /// outgoing connection has a condition, the first in model order whose condition holds is
+    /// taken, else `default`, else the entity leaves the model here; otherwise one is drawn by
+    /// the connections' probabilities (those without one share evenly what the others leave).
+    ExclusiveGateway {
+        /// The connection taken when no condition holds (BPMN's `default` flow).
+        default: Option<ElementId>,
+    },
+    /// Copies each entity down every outgoing connection, at once (a BPMN parallel gateway).
+    /// With several incoming connections it first waits for an entity on each of them (a join)
+    /// and sends one on: the one from the first incoming connection, in model order, with any
+    /// property it lacks taken from the others in that order.
+    ParallelGateway,
 }
 
 impl ElementKind {
@@ -136,7 +154,17 @@ impl ElementKind {
             ElementKind::Server { .. } => "server",
             ElementKind::Delay { .. } => "delay",
             ElementKind::Sink => "sink",
+            ElementKind::ExclusiveGateway { .. } => "exclusive_gateway",
+            ElementKind::ParallelGateway => "parallel_gateway",
         }
+    }
+
+    /// Whether this is a gateway: it routes entities at once and holds none.
+    pub fn is_gateway(&self) -> bool {
+        matches!(
+            self,
+            ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway
+        )
     }
 
     fn distributions(&self) -> Vec<(&'static str, &Dist)> {
@@ -144,7 +172,9 @@ impl ElementKind {
             ElementKind::Source { interarrival, .. } => vec![("interarrival", interarrival)],
             ElementKind::Server { service, .. } => vec![("service", service)],
             ElementKind::Delay { duration } => vec![("duration", duration)],
-            ElementKind::Sink => vec![],
+            ElementKind::Sink
+            | ElementKind::ExclusiveGateway { .. }
+            | ElementKind::ParallelGateway => vec![],
         }
     }
 }
@@ -272,6 +302,25 @@ pub struct Connection {
     pub id: ElementId,
     pub from: ElementId,
     pub to: ElementId,
+    /// Out of an exclusive gateway: the chance an entity takes this connection (BPSim
+    /// `Probability`).
+    pub probability: Option<f64>,
+    /// Out of an exclusive gateway: a BPSim expression ([`expr`]) that must hold for an entity
+    /// to take this connection (BPSim `Condition`).
+    pub condition: Option<String>,
+}
+
+impl Connection {
+    /// A connection with no probability or condition.
+    pub fn new(id: ElementId, from: ElementId, to: ElementId) -> Self {
+        Self {
+            id,
+            from,
+            to,
+            probability: None,
+            condition: None,
+        }
+    }
 }
 
 /// How to run the model (a BPSim scenario's parameters).
@@ -382,6 +431,34 @@ pub enum Problem {
     UnknownProperty {
         name: String,
     },
+    /// A probability outside 0 to 1.
+    BadProbability {
+        value: f64,
+    },
+    /// An exclusive gateway's probabilities do not add up to 1; they are used in proportion.
+    ProbabilitySum {
+        sum: f64,
+    },
+    /// A condition that cannot be used, with where and why.
+    BadCondition {
+        expression: String,
+        error: expr::ExprError,
+    },
+    /// A probability or condition where it has no effect, and why.
+    RoutingIgnored {
+        what: &'static str,
+        reason: &'static str,
+    },
+    /// An exclusive gateway's default connection is not one of its outgoing connections.
+    BadDefault {
+        connection: ElementId,
+    },
+    /// An exclusive gateway routes by condition and has no default connection.
+    NoDefault,
+    /// A join waits on an incoming connection that no entity can reach.
+    JoinNeverCompletes {
+        connection: ElementId,
+    },
 }
 
 impl Problem {
@@ -408,6 +485,13 @@ impl Problem {
             Problem::PropertyValueType { .. } => "property_value_type",
             Problem::BadExpression { .. } => "bad_expression",
             Problem::UnknownProperty { .. } => "unknown_property",
+            Problem::BadProbability { .. } => "bad_probability",
+            Problem::ProbabilitySum { .. } => "probability_sum",
+            Problem::BadCondition { .. } => "bad_condition",
+            Problem::RoutingIgnored { .. } => "routing_ignored",
+            Problem::BadDefault { .. } => "bad_default",
+            Problem::NoDefault => "no_default",
+            Problem::JoinNeverCompletes { .. } => "join_never_completes",
         }
     }
 }
@@ -466,7 +550,7 @@ impl std::fmt::Display for Diagnostic {
             Problem::SeveralOutputs { count } => {
                 write!(
                     f,
-                    "has {count} outgoing connections; choosing between them needs a gateway (M2)"
+                    "has {count} outgoing connections; choosing between them needs a gateway"
                 )
             }
             Problem::BadDistribution { parameter, error } => write!(f, "{parameter}: {error}"),
@@ -502,6 +586,29 @@ impl std::fmt::Display for Diagnostic {
             Problem::UnknownProperty { name } => write!(
                 f,
                 "reads property `{name}`, which no element sets (it would read as empty)"
+            ),
+            Problem::BadProbability { value } => {
+                write!(f, "probability {value} must be between 0 and 1")
+            }
+            Problem::ProbabilitySum { sum } => write!(
+                f,
+                "the outgoing probabilities add up to {sum}, not 1; they are used in proportion"
+            ),
+            Problem::BadCondition { expression, error } => {
+                write!(f, "condition `{expression}`: {error}")
+            }
+            Problem::RoutingIgnored { what, reason } => write!(f, "{what} is ignored: {reason}"),
+            Problem::BadDefault { connection } => write!(
+                f,
+                "the default connection `{connection}` is not one of this gateway's outgoing connections"
+            ),
+            Problem::NoDefault => write!(
+                f,
+                "routes by condition with no default connection: an entity for which no condition holds leaves the model here"
+            ),
+            Problem::JoinNeverCompletes { connection } => write!(
+                f,
+                "waits for an entity on `{connection}`, which none can reach, so it never sends one on"
             ),
         }
     }
@@ -573,7 +680,7 @@ impl Model {
             match e.kind {
                 ElementKind::Sink => {}
                 _ if outs == 0 => out.push(Diagnostic::error(Some(&e.id), Problem::NoOutput)),
-                _ if outs > 1 => out.push(Diagnostic::error(
+                _ if outs > 1 && !e.kind.is_gateway() => out.push(Diagnostic::error(
                     Some(&e.id),
                     Problem::SeveralOutputs { count: outs },
                 )),
@@ -593,6 +700,7 @@ impl Model {
         }
         self.check_experiment(&mut out);
         self.check_properties(&mut out);
+        self.check_routing(&mut out);
         self.check_reachability(&outgoing, &mut out);
         // Stable order: errors first, then as found (model order).
         out.sort_by_key(|d| std::cmp::Reverse(d.severity));
@@ -771,6 +879,103 @@ impl Model {
         }
     }
 
+    /// Routing: probabilities, conditions and defaults on the connections out of exclusive
+    /// gateways, and routing given where it has no effect.
+    fn check_routing(&self, out: &mut Vec<Diagnostic>) {
+        let types = self.property_types();
+        for e in &self.elements {
+            let outs: Vec<&Connection> =
+                self.connections.iter().filter(|c| c.from == e.id).collect();
+            let exclusive = matches!(e.kind, ElementKind::ExclusiveGateway { .. });
+            for c in &outs {
+                let at = Some(&c.id);
+                if let Some(p) = c.probability
+                    && !(p.is_finite() && (0.0..=1.0).contains(&p))
+                {
+                    out.push(Diagnostic::error(at, Problem::BadProbability { value: p }));
+                }
+                if let Some(src) = &c.condition {
+                    match expr::parse(src) {
+                        Ok(x) => {
+                            let mut unknown = BTreeSet::new();
+                            for read in x.properties() {
+                                if !types.contains_key(read) && unknown.insert(read) {
+                                    out.push(Diagnostic::error(
+                                        at,
+                                        Problem::UnknownProperty {
+                                            name: read.to_owned(),
+                                        },
+                                    ));
+                                }
+                            }
+                        }
+                        Err(error) => out.push(Diagnostic::error(
+                            at,
+                            Problem::BadCondition {
+                                expression: src.clone(),
+                                error,
+                            },
+                        )),
+                    }
+                }
+                if !exclusive && (c.probability.is_some() || c.condition.is_some()) {
+                    let what = if c.condition.is_some() {
+                        "this condition"
+                    } else {
+                        "this probability"
+                    };
+                    out.push(Diagnostic::warning(
+                        at,
+                        Problem::RoutingIgnored {
+                            what,
+                            reason: "only connections out of an exclusive gateway choose a route",
+                        },
+                    ));
+                }
+            }
+            let ElementKind::ExclusiveGateway { default } = &e.kind else {
+                continue;
+            };
+            if let Some(d) = default
+                && !outs.iter().any(|c| &c.id == d)
+            {
+                out.push(Diagnostic::error(
+                    Some(&e.id),
+                    Problem::BadDefault {
+                        connection: d.clone(),
+                    },
+                ));
+            }
+            if outs.iter().any(|c| c.condition.is_some()) {
+                if default.is_none() {
+                    out.push(Diagnostic::warning(Some(&e.id), Problem::NoDefault));
+                }
+                for c in outs.iter().filter(|c| c.probability.is_some()) {
+                    out.push(Diagnostic::warning(
+                        Some(&c.id),
+                        Problem::RoutingIgnored {
+                            what: "this probability",
+                            reason: "the gateway routes by condition",
+                        },
+                    ));
+                }
+            } else if outs.len() > 1 {
+                let given: Vec<f64> = outs.iter().filter_map(|c| c.probability).collect();
+                let valid = given
+                    .iter()
+                    .all(|p| p.is_finite() && (0.0..=1.0).contains(p));
+                let sum: f64 = given.iter().sum();
+                let all = given.len() == outs.len();
+                if valid && ((all && (sum - 1.0).abs() > 1e-9) || sum > 1.0 + 1e-9) {
+                    out.push(Diagnostic::warning(
+                        Some(&e.id),
+                        Problem::ProbabilitySum { sum },
+                    ));
+                }
+            }
+        }
+    }
+
     fn check_experiment(&self, out: &mut Vec<Diagnostic>) {
         let x = &self.experiment;
         if !(x.warmup.is_finite() && x.warmup >= 0.0) {
@@ -833,6 +1038,25 @@ impl Model {
             }
         }
         let backward = reach(&sinks, |id| incoming.get(id).cloned().unwrap_or_default());
+        if !sources.is_empty() {
+            for e in &self.elements {
+                if !matches!(e.kind, ElementKind::ParallelGateway) || !forward.contains(&e.id) {
+                    continue;
+                }
+                let ins: Vec<&Connection> =
+                    self.connections.iter().filter(|c| c.to == e.id).collect();
+                if ins.len() > 1 {
+                    for c in ins.iter().filter(|c| !forward.contains(&c.from)) {
+                        out.push(Diagnostic::warning(
+                            Some(&e.id),
+                            Problem::JoinNeverCompletes {
+                                connection: c.id.clone(),
+                            },
+                        ));
+                    }
+                }
+            }
+        }
         for e in &self.elements {
             if !sources.is_empty() && !forward.contains(&e.id) {
                 out.push(Diagnostic::warning(Some(&e.id), Problem::Unreachable));
@@ -966,10 +1190,106 @@ mod tests {
 
     fn link(i: &str, from: &str, to: &str) -> Connection {
         Connection {
+            probability: None,
+            condition: None,
             id: id(i),
             from: id(from),
             to: id(to),
         }
+    }
+
+    fn routed(mut link: impl FnMut(&str, &str, &str) -> Connection) -> Model {
+        let mut m = mm1();
+        m.elements.insert(
+            1,
+            el(
+                "check",
+                ElementKind::ExclusiveGateway {
+                    default: Some(id("nowhere")),
+                },
+            ),
+        );
+        m.elements.push(el("scrap", ElementKind::Sink));
+        m.elements.push(el("join", ElementKind::ParallelGateway));
+        m.elements.push(el(
+            "orphan",
+            ElementKind::Delay {
+                duration: Dist::Constant(1.0),
+            },
+        ));
+        let mut to_machine = link("c1", "check", "machine");
+        to_machine.probability = Some(0.7);
+        to_machine.condition = Some("getProperty('missing') >".into());
+        let mut to_scrap = link("c2", "check", "scrap");
+        to_scrap.probability = Some(1.5);
+        let mut wasted = link("c3", "machine", "join");
+        wasted.condition = Some("true()".into());
+        m.connections = vec![
+            link("c0", "arrivals", "check"),
+            to_machine,
+            to_scrap,
+            wasted,
+            link("c4", "orphan", "join"),
+            link("c5", "join", "exit"),
+        ];
+        m
+    }
+
+    #[test]
+    fn routing_is_checked() {
+        let m = routed(|i, f, t| Connection::new(id(i), id(f), id(t)));
+        let found: Vec<(String, &str)> = m
+            .validate()
+            .iter()
+            .map(|d| {
+                (
+                    d.at.as_ref().map(ToString::to_string).unwrap_or_default(),
+                    d.problem.code(),
+                )
+            })
+            .collect();
+        for want in [
+            ("c1", "bad_condition"),
+            ("c2", "bad_probability"),
+            ("c3", "routing_ignored"),
+            ("check", "bad_default"),
+            ("c1", "routing_ignored"),
+            ("join", "join_never_completes"),
+        ] {
+            assert!(
+                found.contains(&(want.0.into(), want.1)),
+                "missing {want:?} in {found:?}"
+            );
+        }
+        // A gateway may have several outputs; nothing else may.
+        assert!(
+            !found
+                .iter()
+                .any(|(at, c)| at == "check" && *c == "several_outputs")
+        );
+
+        // Probabilities that do not add up to 1 are used in proportion, with a warning.
+        let mut m = mm1();
+        m.elements.insert(
+            1,
+            el("pick", ElementKind::ExclusiveGateway { default: None }),
+        );
+        m.elements.push(el("scrap", ElementKind::Sink));
+        let mut a = Connection::new(id("a"), id("pick"), id("machine"));
+        a.probability = Some(0.66);
+        let mut b = Connection::new(id("b"), id("pick"), id("scrap"));
+        b.probability = Some(0.33);
+        m.connections = vec![
+            Connection::new(id("in"), id("arrivals"), id("pick")),
+            a,
+            b,
+            Connection::new(id("out"), id("machine"), id("exit")),
+        ];
+        let ds = m.validate();
+        assert_eq!(ds.len(), 1, "{ds:?}");
+        assert_eq!(ds[0].problem.code(), "probability_sum");
+        assert_eq!(ds[0].severity, Severity::Warning);
+        assert!(ds[0].to_string().contains("0.99"), "{}", ds[0]);
     }
 
     fn mm1() -> Model {

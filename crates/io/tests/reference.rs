@@ -379,7 +379,9 @@ fn edits() -> Vec<Edit> {
                             *interarrival = Dist::Exponential { mean: 3.0 };
                             *limit = Some(25);
                         }
-                        ElementKind::Sink => {}
+                        ElementKind::Sink
+                        | ElementKind::ExclusiveGateway { .. }
+                        | ElementKind::ParallelGateway => {}
                     }
                 }
             }),
@@ -404,11 +406,7 @@ fn edits() -> Vec<Edit> {
                     m.connections[0].to = new.clone();
                     m.connections.insert(
                         1,
-                        Connection {
-                            id: ElementId::unchecked("stochcraft-added-out"),
-                            from: new,
-                            to: c.to,
-                        },
+                        Connection::new(ElementId::unchecked("stochcraft-added-out"), new, c.to),
                     );
                 }
             }),
@@ -525,7 +523,14 @@ fn edits_save_into_every_reference_model_and_scenario() {
                 let saved = l.opened.save(&m).unwrap_or_else(|e| panic!("{at}: {e}"));
                 let back =
                     read_scenario(&saved, Some(scenario)).unwrap_or_else(|e| panic!("{at}: {e}"));
-                assert_eq!(back.model, m, "{at}");
+                // A file with sub-processes keeps flows in several places, so connections are
+                // compared by id (saving checks the order of each element's outgoing ones).
+                let by_id = |m: &Model| {
+                    let mut m = m.clone();
+                    m.connections.sort_by(|a, b| a.id.cmp(&b.id));
+                    m
+                };
+                assert_eq!(by_id(&back.model), by_id(&m), "{at}");
                 assert_eq!(back.opened.scenarios, l.opened.scenarios, "{at}");
                 // Every other scenario reads as it did.
                 for (other, _) in l.opened.scenarios.iter().filter(|(o, _)| o != scenario) {
@@ -657,8 +662,29 @@ fn showcase() -> Model {
         m.connect(previous, step);
         previous = step;
     }
+    // Routing: a probability split, a fork and join, and a condition with a default.
+    let check = m.exclusive("check");
+    let scrap = m.sink("scrap");
+    let split = m.parallel("split");
+    let (left, right) = (
+        m.delay("left", Dist::Constant(1.0)),
+        m.delay("right", Dist::Constant(2.0)),
+    );
+    let join = m.parallel("join");
+    let triage = m.exclusive("triage");
     let out = m.sink("exit");
-    m.connect(previous, out);
+    let other = m.sink("other-exit");
+    m.connect(previous, check);
+    m.route(check, split, Some(0.9), None);
+    m.route(check, scrap, Some(0.1), None);
+    m.connect(split, left);
+    m.connect(split, right);
+    m.connect(left, join);
+    m.connect(right, join);
+    m.connect(join, triage);
+    m.route(triage, out, None, Some("1 < 2 and not(false())"));
+    m.route(triage, other, None, None);
+    m.default_route(triage, other);
     m.build(Experiment {
         time_unit: TimeUnit::Hours,
         warmup: 2.5,

@@ -12,11 +12,7 @@ fn id(s: &str) -> ElementId {
 /// An M/M/c model written as data, the way a model file or the engine will produce it.
 fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
     let element = |i: &str, kind| Element::new(id(i), i, kind);
-    let flow = |i: &str, from: &str, to: &str| Connection {
-        id: id(i),
-        from: id(from),
-        to: id(to),
-    };
+    let flow = |i: &str, from: &str, to: &str| Connection::new(id(i), id(from), id(to));
     Model {
         name: format!("M/M/{c}"),
         elements: vec![

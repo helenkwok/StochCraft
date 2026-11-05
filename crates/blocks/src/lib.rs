@@ -7,7 +7,11 @@
 //! 95% confidence interval per element and [`Metric`].
 //!
 //! Entities are created by a source, wait for and occupy a server with one or more identical
-//! units, spend time in a delay with no capacity limit, and leave through a sink.
+//! units, spend time in a delay with no capacity limit, and leave through a sink. Gateways route
+//! them at once: an exclusive gateway down one outgoing connection (by probability, or the first
+//! condition that holds), a parallel gateway down all of them as copies, after waiting for one on
+//! each incoming connection when it has several (a join). Each copy is a new entity with the
+//! original's creation time and properties. Each exclusive gateway draws from its own stream.
 //!
 //! Entities carry BPSim properties. Each element's [`stochcraft_model::Property`] assignments
 //! are made as an entity enters it (at a source, as it is created), all together, from the
@@ -121,17 +125,37 @@ struct Assign {
     source: Source,
 }
 
+/// One of the connections an element sends entities down.
+#[derive(Debug, Clone)]
+struct Route {
+    /// The element it leads to.
+    to: usize,
+    /// Which of that element's inputs it arrives on: a join has one per incoming connection, in
+    /// model order; every other element has one.
+    input: usize,
+    /// Out of an exclusive gateway routing by probability: this connection's share.
+    weight: f64,
+    /// Out of an exclusive gateway routing by condition: what must hold to take it.
+    condition: Option<expr::Expr>,
+    /// The gateway's default connection.
+    default: bool,
+}
+
 /// A model checked and ready to run.
 #[derive(Debug, Clone)]
 pub struct Compiled {
     model: Model,
-    /// For each element, the index of the element it sends entities to.
-    outputs: Vec<Option<usize>>,
+    /// For each element, the connections it sends entities down, in model order.
+    routes: Vec<Vec<Route>>,
+    /// For each element, how many inputs it has (more than one only for a join).
+    inputs: Vec<usize>,
     warnings: Vec<Diagnostic>,
     /// Property names, sorted: an entity's slots.
     slots: Vec<String>,
     /// For each element, its property assignments.
     assigns: Vec<Vec<Assign>>,
+    /// Sources create their first entity at time 0 rather than after the first interval.
+    first_arrival_at_zero: bool,
 }
 
 fn compile_assign(p: &Property, slots: &[String], ty: PropertyType) -> Option<Assign> {
@@ -157,17 +181,72 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
     if diagnostics.iter().any(|d| d.severity == Severity::Error) {
         return Err(diagnostics);
     }
-    // Validation guarantees every non-sink element has exactly one known output.
+    // Validation guarantees every non-sink element has an output, only gateways more than one,
+    // and every connection joins known elements.
     let index = |id: &ElementId| model.elements.iter().position(|e| &e.id == id);
-    let outputs = model
+    let incoming = |e: &Element| -> Vec<&Connection> {
+        model.connections.iter().filter(|c| c.to == e.id).collect()
+    };
+    let is_join =
+        |e: &Element| matches!(e.kind, ElementKind::ParallelGateway) && incoming(e).len() > 1;
+    let inputs = model
+        .elements
+        .iter()
+        .map(|e| if is_join(e) { incoming(e).len() } else { 1 })
+        .collect();
+    let routes = model
         .elements
         .iter()
         .map(|e| {
-            model
+            let outs: Vec<&Connection> = model
                 .connections
                 .iter()
-                .find(|c| c.from == e.id)
-                .and_then(|c| index(&c.to))
+                .filter(|c| c.from == e.id)
+                .collect();
+            let default = match &e.kind {
+                ElementKind::ExclusiveGateway { default } => default.as_ref(),
+                _ => None,
+            };
+            let by_condition = outs.iter().any(|c| c.condition.is_some());
+            // Probabilities: those not given share evenly what the given ones leave; if
+            // nothing is left to share, every connection counts the same.
+            let given: f64 = outs.iter().filter_map(|c| c.probability).sum();
+            let unset = outs.iter().filter(|c| c.probability.is_none()).count();
+            let share = if unset > 0 {
+                (1.0 - given).max(0.0) / unset as f64
+            } else {
+                0.0
+            };
+            let mut weights: Vec<f64> = outs
+                .iter()
+                .map(|c| c.probability.unwrap_or(share))
+                .collect();
+            if weights.iter().sum::<f64>() <= 0.0 {
+                weights.iter_mut().for_each(|w| *w = 1.0);
+            }
+            outs.iter()
+                .zip(weights)
+                .filter_map(|(c, weight)| {
+                    let to = index(&c.to)?;
+                    let target = model.elements.get(to)?;
+                    let input = if is_join(target) {
+                        incoming(target).iter().position(|x| x.id == c.id)?
+                    } else {
+                        0
+                    };
+                    Some(Route {
+                        to,
+                        input,
+                        weight,
+                        condition: if by_condition {
+                            c.condition.as_deref().and_then(|s| expr::parse(s).ok())
+                        } else {
+                            None
+                        },
+                        default: default == Some(&c.id),
+                    })
+                })
+                .collect()
         })
         .collect();
     let types = model.property_types();
@@ -185,16 +264,27 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
         .collect();
     Ok(Compiled {
         model: model.clone(),
-        outputs,
+        routes,
+        inputs,
         warnings: diagnostics,
         slots,
         assigns,
+        first_arrival_at_zero: false,
     })
 }
 
 impl Compiled {
     pub fn model(&self) -> &Model {
         &self.model
+    }
+
+    /// Makes sources create their first entity at time 0 instead of after the first interval
+    /// (decision D8 in ROADMAP.md is open; the default is after the first interval). For
+    /// cross-checks against simulators that start at time 0.
+    #[doc(hidden)]
+    pub fn first_arrival_at_zero(mut self, yes: bool) -> Self {
+        self.first_arrival_at_zero = yes;
+        self
     }
 
     /// The names of the properties entities can carry, in slot order.
@@ -397,8 +487,9 @@ pub struct BlockId(usize);
 #[derive(Debug, Clone, Default)]
 pub struct Builder {
     elements: Vec<(String, ElementKind, Vec<Property>)>,
-    /// `from` → `to`; a later connection from the same element replaces the earlier one.
-    connections: Vec<(BlockId, BlockId)>,
+    /// `from` → `to`, with a probability and a condition; a later connection from the same
+    /// element replaces the earlier one unless `from` is a gateway.
+    connections: Vec<(BlockId, BlockId, Option<f64>, Option<String>)>,
 }
 
 impl Builder {
@@ -455,10 +546,59 @@ impl Builder {
         self.add(name, ElementKind::Sink)
     }
 
-    /// Sends `from`'s entities to `to`. A later call for the same `from` replaces the earlier one.
+    /// Sends each entity down one outgoing connection: by condition if any connection has one
+    /// ([`Builder::route`]), else by the connections' probabilities.
+    pub fn exclusive(&mut self, name: &str) -> BlockId {
+        self.add(name, ElementKind::ExclusiveGateway { default: None })
+    }
+
+    /// Makes the connection from exclusive gateway `gateway` to `to` its default.
+    pub fn default_route(&mut self, gateway: BlockId, to: BlockId) {
+        // Connection ids are only known when the model is built: keep the target's name.
+        let target = self
+            .elements
+            .get(to.0)
+            .map(|(n, _, _)| n.clone())
+            .unwrap_or_default();
+        if let Some((_, kind, _)) = self.elements.get_mut(gateway.0) {
+            *kind = ElementKind::ExclusiveGateway {
+                default: Some(ElementId::unchecked(&format!("->{target}"))),
+            };
+        }
+    }
+
+    /// Copies each entity down every outgoing connection; with several incoming connections,
+    /// waits for one entity on each first.
+    pub fn parallel(&mut self, name: &str) -> BlockId {
+        self.add(name, ElementKind::ParallelGateway)
+    }
+
+    fn is_gateway(&self, b: BlockId) -> bool {
+        self.elements
+            .get(b.0)
+            .is_some_and(|(_, k, _)| k.is_gateway())
+    }
+
+    /// Sends `from`'s entities to `to`. A later call for the same `from` replaces the earlier one,
+    /// unless `from` is a gateway.
     pub fn connect(&mut self, from: BlockId, to: BlockId) {
-        self.connections.retain(|(f, _)| *f != from);
-        self.connections.push((from, to));
+        self.route(from, to, None, None);
+    }
+
+    /// Connects exclusive gateway `from` to `to`, taken with `probability`, or when `condition`
+    /// (a BPSim expression) holds.
+    pub fn route(
+        &mut self,
+        from: BlockId,
+        to: BlockId,
+        probability: Option<f64>,
+        condition: Option<&str>,
+    ) {
+        if !self.is_gateway(from) {
+            self.connections.retain(|(f, ..)| *f != from);
+        }
+        self.connections
+            .push((from, to, probability, condition.map(str::to_owned)));
     }
 
     /// The model, with the given experiment settings. Names that are not valid ids are kept as
@@ -468,26 +608,45 @@ impl Builder {
             let name = self.elements.get(i).map_or("", |(n, _, _)| n.as_str());
             ElementId::new(name).unwrap_or_else(|| ElementId::unchecked(name))
         };
+        let mut connections: Vec<&(BlockId, BlockId, Option<f64>, Option<String>)> =
+            self.connections.iter().collect();
+        connections.sort_by_key(|(from, to, ..)| (*from, *to));
+        let connections: Vec<Connection> = connections
+            .into_iter()
+            .enumerate()
+            .map(|(n, (from, to, probability, condition))| Connection {
+                id: ElementId::unchecked(&format!("flow-{}", n + 1)),
+                from: id(from.0),
+                to: id(to.0),
+                probability: *probability,
+                condition: condition.clone(),
+            })
+            .collect();
         let elements = self
             .elements
             .iter()
             .enumerate()
-            .map(|(i, (name, kind, properties))| Element {
-                id: id(i),
-                name: name.clone(),
-                kind: kind.clone(),
-                properties: properties.clone(),
-            })
-            .collect();
-        let mut connections: Vec<&(BlockId, BlockId)> = self.connections.iter().collect();
-        connections.sort();
-        let connections = connections
-            .into_iter()
-            .enumerate()
-            .map(|(n, (from, to))| Connection {
-                id: ElementId::unchecked(&format!("flow-{}", n + 1)),
-                from: id(from.0),
-                to: id(to.0),
+            .map(|(i, (name, kind, properties))| {
+                // A default route names its target (`->name`) until connection ids exist.
+                let kind = match kind {
+                    ElementKind::ExclusiveGateway {
+                        default: Some(d), ..
+                    } => ElementKind::ExclusiveGateway {
+                        default: d.as_str().strip_prefix("->").and_then(|t| {
+                            connections
+                                .iter()
+                                .find(|c| c.from == id(i) && c.to.as_str() == t)
+                                .map(|c| c.id.clone())
+                        }),
+                    },
+                    other => other.clone(),
+                };
+                Element {
+                    id: id(i),
+                    name: name.clone(),
+                    kind,
+                    properties: properties.clone(),
+                }
             })
             .collect();
         Model {

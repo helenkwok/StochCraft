@@ -181,9 +181,30 @@ fn layout(model: &Model) -> BTreeMap<String, (f64, f64)> {
     centres
 }
 
+/// The BPMN element an element kind is written as.
+pub(crate) fn bpmn_local(kind: &ElementKind) -> &'static str {
+    match kind {
+        ElementKind::Source { .. } => "startEvent",
+        ElementKind::Sink => "endEvent",
+        ElementKind::Server { .. } | ElementKind::Delay { .. } => "task",
+        ElementKind::ExclusiveGateway { .. } => "exclusiveGateway",
+        ElementKind::ParallelGateway => "parallelGateway",
+    }
+}
+
+/// A connection's BPSim `ControlParameters` values: its probability and condition.
+pub(crate) fn probability_element(p: f64) -> Element {
+    s("FloatingParameter").with_attr("value", &num(p))
+}
+
+pub(crate) fn condition_element(c: &str) -> Element {
+    s("ExpressionParameter").with_attr("value", c)
+}
+
 pub(crate) fn size(kind: &ElementKind) -> (f64, f64) {
     match kind {
         ElementKind::Source { .. } | ElementKind::Sink => (36.0, 36.0),
+        ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => (50.0, 50.0),
         _ => (100.0, 80.0),
     }
 }
@@ -232,14 +253,12 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         .with_attr("name", &model.name)
         .with_attr("isExecutable", "false");
     for e in &model.elements {
-        let local = match e.kind {
-            ElementKind::Source { .. } => "startEvent",
-            ElementKind::Sink => "endEvent",
-            ElementKind::Server { .. } | ElementKind::Delay { .. } => "task",
-        };
-        let mut node = b(local)
+        let mut node = b(bpmn_local(&e.kind))
             .with_attr("id", e.id.as_str())
             .with_attr("name", &e.name);
+        if let ElementKind::ExclusiveGateway { default: Some(d) } = &e.kind {
+            node = node.with_attr("default", d.as_str());
+        }
         for c in model.connections.iter().filter(|c| c.to == e.id) {
             node.push(b("incoming").with_text(c.id.as_str()));
         }
@@ -370,7 +389,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                     s("TimeParameters").with_child(param("ProcessingTime", dist_element(duration))),
                 );
             }
-            ElementKind::Sink => {}
+            ElementKind::Sink
+            | ElementKind::ExclusiveGateway { .. }
+            | ElementKind::ParallelGateway => {}
         }
         if !e.properties.is_empty() {
             let mut pp = s("PropertyParameters");
@@ -383,6 +404,23 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             continue;
         }
         scenario.push(ep);
+    }
+    for c in &model.connections {
+        if c.probability.is_none() && c.condition.is_none() {
+            continue;
+        }
+        let mut cp = s("ControlParameters");
+        if let Some(p) = c.probability {
+            cp.push(param("Probability", probability_element(p)));
+        }
+        if let Some(x) = &c.condition {
+            cp.push(param("Condition", condition_element(x)));
+        }
+        scenario.push(
+            s("ElementParameters")
+                .with_attr("elementRef", c.id.as_str())
+                .with_child(cp),
+        );
     }
     for e in &model.elements {
         if let (ElementKind::Server { capacity, .. }, Some(rid)) =
