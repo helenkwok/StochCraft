@@ -1,9 +1,0 @@
-/home/user/stochcraft/target-autosave/debug/deps/epaint_default_fonts-2686728e77f2ac19.d: /root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/lib.rs /root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/special_emojis.rs /root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/../fonts/Hack-Regular.ttf /root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/../fonts/Ubuntu-Light.ttf /root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/../fonts/egui-icons.ttf
-
-/home/user/stochcraft/target-autosave/debug/deps/libepaint_default_fonts-2686728e77f2ac19.rmeta: /root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/lib.rs /root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/special_emojis.rs /root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/../fonts/Hack-Regular.ttf /root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/../fonts/Ubuntu-Light.ttf /root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/../fonts/egui-icons.ttf
-
-/root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/lib.rs:
-/root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/special_emojis.rs:
-/root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/../fonts/Hack-Regular.ttf:
-/root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/../fonts/Ubuntu-Light.ttf:
-/root/.cargo/git/checkouts/egui-057e9a0485eda407/6d518fc/crates/epaint_default_fonts/src/../fonts/egui-icons.ttf:
