@@ -198,6 +198,7 @@ impl App {
         ] {
             let mut cx = form::Cx {
                 time_unit: &unit,
+                numbers: &self.numbers,
                 drafts: &mut self.drafts,
             };
             if let Some(v) = form::field(
@@ -387,6 +388,7 @@ impl App {
             for f in fields {
                 let mut cx = form::Cx {
                     time_unit: &unit,
+                    numbers: &self.numbers,
                     drafts: &mut self.drafts,
                 };
                 let key = format!("{id}/{f}");
@@ -482,7 +484,7 @@ impl App {
                     } else {
                         "Add a flow to…"
                     };
-                    egui::ComboBox::from_id_salt((id.as_str(), heading))
+                    craft_ui::ComboBox::from_id_salt((id.as_str(), heading))
                         .selected_text(theme::weak(ui, label))
                         .width(200.0)
                         .show_ui(ui, |ui| {
@@ -542,7 +544,7 @@ impl App {
         let mut chosen: Option<Option<String>> = None;
         ui.horizontal(|ui| {
             form::label_cell(ui, "Default flow", 26.0);
-            egui::ComboBox::from_id_salt((id, "default"))
+            craft_ui::ComboBox::from_id_salt((id, "default"))
                 .selected_text(shown)
                 .width(200.0)
                 .show_ui(ui, |ui| {
@@ -678,6 +680,7 @@ impl App {
             ui.indent(("prop", &id, &name), |ui| {
                 let mut cx = form::Cx {
                     time_unit: &unit,
+                    numbers: &self.numbers,
                     drafts: &mut self.drafts,
                 };
                 let base = format!("{id}/prop/{name}");
@@ -699,6 +702,7 @@ impl App {
                 }
                 let mut cx = form::Cx {
                     time_unit: &unit,
+                    numbers: &self.numbers,
                     drafts: &mut self.drafts,
                 };
                 if let Some(v) = form::field(
@@ -722,6 +726,7 @@ impl App {
         let key = format!("{id}/prop/new");
         let mut cx = form::Cx {
             time_unit: &unit,
+            numbers: &self.numbers,
             drafts: &mut self.drafts,
         };
         let mut add = None;
@@ -862,7 +867,7 @@ fn pick(
         .as_ref()
         .and_then(|v| names.iter().find(|(i, _)| i == v))
         .map_or_else(|| hint.to_owned(), |(_, n)| n.clone());
-    egui::ComboBox::from_id_salt(salt)
+    craft_ui::ComboBox::from_id_salt(salt)
         .selected_text(shown)
         .width(170.0)
         .show_ui(ui, |ui| {

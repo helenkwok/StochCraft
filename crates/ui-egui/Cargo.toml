@@ -17,11 +17,19 @@ stochcraft-engine = { workspace = true }
 egui = { workspace = true }
 serde_json = "1"
 serde = { version = "1", features = ["derive"] }
+craft-fonts-build = { workspace = true }
+craft-i18n = { workspace = true }
 craft-keymap = { workspace = true }
 craft-menu = { workspace = true }
+craft-ui = { workspace = true }
 craft-window = { workspace = true }
 # Charts exported as images.
 png = "0.18"
+
+# craft-fonts' faces for scripts IBM Plex lacks, embedded when CRAFT_FONTS_DIR names a checkout
+# (build.rs); without it, nothing is embedded and system fonts fill in.
+[build-dependencies]
+craft-fonts-build = { workspace = true }
 
 [dev-dependencies]
 egui_kittest = { workspace = true }
