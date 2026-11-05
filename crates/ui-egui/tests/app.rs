@@ -39,8 +39,17 @@ fn settle(h: &mut Harness<'static, App>) {
 
 /// Clicks through a menu path, such as File ▸ Open Example ▸ M/M/1 queue.
 fn menu(h: &mut Harness<'static, App>, path: &[&str]) {
-    for label in path {
-        click(h, label);
+    for (i, label) in path.iter().enumerate() {
+        if i == 0 {
+            // The header's menu, which comes before the work area's tabs of the same name.
+            h.get_all_by_role_and_label(egui::accesskit::Role::Button, label)
+                .next()
+                .expect("the menu")
+                .click();
+            settle(h);
+        } else {
+            click(h, label);
+        }
     }
 }
 

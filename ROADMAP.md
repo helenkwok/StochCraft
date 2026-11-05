@@ -536,9 +536,17 @@ craft-window, and image snapshot tests.
 
 ### M3.2 Model editing without a canvas
 
-A block list with a property inspector (forms generated from the command schemas, with units and
-inline validation diagnostics), a connections table, entity types and resource pools. Usable end
-to end before any drawing exists, and accessible from the keyboard.
+**Done:** the process list selects blocks (arrow keys, Delete, Esc) and adds them; the inspector
+edits a block's name, parameters and flows; the model overview edits the name and experiment,
+lists every connection with a way to join two blocks, and shows the model's problems, which also
+mark their blocks in the list. The forms are generated from the engine's command schemas
+(`ui-egui/src/form.rs`): numbers commit on Enter or leaving the field, text that is not a number
+stays in its field marked until fixed, a distribution's kind is a choice that keeps its scale,
+and times show the model's unit. Each edit is one command and one undo step. A Model and a
+Results tab divide the work area. Tests drive every path through the accessibility tree.
+
+**Still to come here:** entity types and their properties (from M2.2's schema) and resource pools
+(M2.5) appear in the same forms as their commands land.
 
 ### M3.3 Running and results
 

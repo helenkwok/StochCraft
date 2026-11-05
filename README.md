@@ -21,9 +21,9 @@ desktop:
 cargo run --release -p stochcraft
 ```
 
-Open a BPMN or XPDL model with BPSim data (or one of the examples under File ▸ Open Example),
-run it with F5 and read the results with their confidence intervals. Editing models in the
-window comes next (ROADMAP M3.2); until then the command line edits them.
+Open a BPMN or XPDL model with BPSim data (or one of the examples under File ▸ Open Example), or
+build one from blocks with **+ Add block**. Select a block to edit its parameters and flows,
+run with F5 and read the results with their confidence intervals; every edit can be undone.
 
 To build the browser app locally, install [trunk](https://trunkrs.dev) and run it from
 `apps/stochcraft-web`:

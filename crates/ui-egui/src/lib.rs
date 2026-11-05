@@ -11,6 +11,8 @@
 //! answers by calling [`App::open_file`], [`App::save_to`], [`App::written`] or
 //! [`App::report_error`].
 
+mod editor;
+pub mod form;
 mod results;
 pub mod theme;
 
@@ -144,6 +146,15 @@ pub struct App {
     title: String,
     /// The fonts and theme are installed (on the first frame).
     styled: bool,
+    /// The block the inspector shows; none shows the model overview.
+    selected: Option<String>,
+    /// Text being typed into form fields, until it commits.
+    drafts: std::collections::HashMap<String, String>,
+    /// The connections table's choices, before Connect.
+    connect_from: Option<String>,
+    connect_to: Option<String>,
+    /// The work area shows the results rather than the model.
+    show_results: bool,
 }
 
 impl App {
@@ -164,6 +175,11 @@ impl App {
             requests: Vec::new(),
             title: String::new(),
             styled: false,
+            selected: None,
+            drafts: std::collections::HashMap::new(),
+            connect_from: None,
+            connect_to: None,
+            show_results: false,
         }
     }
 
@@ -270,6 +286,9 @@ impl App {
         match self.engine.open_bytes(name, bytes, None) {
             Ok(opened) => {
                 self.results = None;
+                self.selected = None;
+                self.drafts.clear();
+                self.show_results = false;
                 // Warnings and errors from reading the file and checking the model; information
                 // notes are left for the model view.
                 let count = |k: &str| {
@@ -372,6 +391,9 @@ impl App {
             Replace::New => {
                 if self.execute("model.new", json!({})).is_some() {
                     self.results = None;
+                    self.selected = None;
+                    self.drafts.clear();
+                    self.show_results = false;
                     self.info("New model");
                 }
             }
@@ -421,6 +443,7 @@ impl App {
             return;
         }
         if let Some(status) = self.execute("run.start", json!({})) {
+            self.show_results = true;
             self.running = Some(Running {
                 done: 0,
                 total: status["total"].as_u64().unwrap_or(0),
@@ -460,6 +483,7 @@ impl App {
                     .as_str()
                     .map(str::to_owned);
                 self.results = Some(status["result"].clone());
+                self.show_results = true;
                 let n = status["total"].as_u64().unwrap_or(0);
                 self.info(format!(
                     "Finished {n} replication{}",
@@ -485,6 +509,9 @@ impl App {
             let digest = stochcraft_engine::model_digest(self.engine.model());
             if self.results_digest.as_deref() != Some(digest.as_str()) {
                 self.results = None;
+                if self.running.is_none() {
+                    self.show_results = false;
+                }
             }
         }
     }
@@ -519,6 +546,30 @@ impl App {
         }
         if self.running.is_some() && ctx.input(|i| i.key_pressed(Key::Escape)) {
             self.cancel_run();
+        }
+        // The block list from the keyboard, when no field is being edited.
+        let typing = ctx.memory(|m| m.focused().is_some());
+        if !typing && !self.show_results {
+            if ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::ArrowDown)) {
+                self.move_selection(true);
+            }
+            if ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::ArrowUp)) {
+                self.move_selection(false);
+            }
+            if self.selected.is_some()
+                && ctx.input_mut(|i| {
+                    i.consume_key(Modifiers::NONE, Key::Delete)
+                        || i.consume_key(Modifiers::NONE, Key::Backspace)
+                })
+            {
+                self.remove_selected();
+            }
+            if self.running.is_none()
+                && self.selected.is_some()
+                && ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::Escape))
+            {
+                self.selected = None;
+            }
         }
     }
 
@@ -569,8 +620,17 @@ impl App {
                     .inner_margin(egui::Margin::symmetric(28, 22)),
             )
             .show(ui, |ui| {
-                if let Some(results) = &self.results {
-                    results::show(ui, results);
+                let has_model = !self.engine.model().elements.is_empty();
+                if has_model || self.results.is_some() || self.running.is_some() {
+                    self.tabs(ui, &p);
+                    ui.add_space(14.0);
+                }
+                if self.show_results && self.results.is_some() {
+                    if let Some(results) = &self.results {
+                        results::show(ui, results);
+                    }
+                } else if has_model && !(self.show_results && self.running.is_some()) {
+                    self.editor(ui, &p);
                 } else {
                     // A readable column, not the full width of a wide window.
                     let size = egui::vec2(ui.available_width().min(640.0), ui.available_height());
@@ -595,6 +655,42 @@ impl App {
         self.about_window(&ctx);
     }
 
+    /// The work area's two views: the model (overview or inspector) and the results.
+    fn tabs(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        ui.horizontal(|ui| {
+            for (label, results) in [("Model", false), ("Results", true)] {
+                let on = self.show_results == results;
+                let text = if on {
+                    theme::strong(label).color(p.text)
+                } else {
+                    theme::weak(ui, label)
+                };
+                let r = ui.add(egui::Button::selectable(on, text).min_size(egui::vec2(0.0, 28.0)));
+                // The current view is underlined in the accent.
+                if on {
+                    let rect = r.rect;
+                    ui.painter().line_segment(
+                        [
+                            rect.left_bottom() + egui::vec2(4.0, 2.0),
+                            rect.right_bottom() + egui::vec2(-4.0, 2.0),
+                        ],
+                        egui::Stroke::new(2.0, p.accent),
+                    );
+                }
+                if r.clicked() {
+                    self.show_results = results;
+                }
+            }
+            if self.results.is_none() && self.running.is_none() {
+                ui.label(theme::weak(ui, "· no results yet"));
+            }
+        });
+        let rect = ui.max_rect();
+        let y = ui.cursor().top() + 4.0;
+        ui.painter()
+            .hline(rect.x_range(), y, egui::Stroke::new(1.0, p.border));
+    }
+
     /// The header: menus on the shell colour, the document's name, and Run.
     fn header(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         // Text and hover on the dark shell.
@@ -602,6 +698,7 @@ impl App {
         v.override_text_color = Some(p.on_shell);
         v.widgets.hovered.weak_bg_fill = p.on_shell.gamma_multiply(0.12);
         v.widgets.hovered.bg_stroke = egui::Stroke::NONE;
+        v.widgets.inactive.bg_stroke = egui::Stroke::NONE;
         v.widgets.open.weak_bg_fill = p.on_shell.gamma_multiply(0.16);
         let running = self.running.is_some();
         let can_run = !self.engine.model().elements.is_empty();
@@ -757,16 +854,43 @@ impl App {
     /// The model as its process: each element as its BPMN shape on one line from arrival to
     /// departure, then the experiment it runs.
     fn outline(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        let problems = self.problems();
         let model = self.engine.model();
         let name = if model.name.is_empty() {
-            "Untitled model"
+            "Untitled model".to_owned()
         } else {
-            model.name.as_str()
+            model.name.clone()
         };
-        ui.label(theme::strong(name).size(17.0));
-        ui.add_space(14.0);
-        ui.label(theme::strong("Process").size(12.0).color(p.text_weak));
-        ui.add_space(6.0);
+        let overview = self.selected.is_none() && !self.show_results;
+        let r = ui
+            .add(
+                egui::Button::selectable(overview, theme::strong(&name).size(17.0))
+                    .frame_when_inactive(false),
+            )
+            .on_hover_text("The model: its experiment, connections and problems");
+        let mut select: Option<Option<String>> = None;
+        if r.clicked() {
+            select = Some(None);
+        }
+        ui.add_space(10.0);
+        ui.horizontal(|ui| {
+            ui.label(theme::strong("Process").size(12.0).color(p.text_weak));
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                ui.menu_button(
+                    theme::strong("+ Add block").size(12.0).color(p.accent),
+                    |ui| {
+                        for (kind, label) in editor::KINDS {
+                            if ui.button(*label).clicked() {
+                                self.add_block(kind);
+                                self.show_results = false;
+                            }
+                        }
+                    },
+                );
+            });
+        });
+        ui.add_space(4.0);
+        let model = self.engine.model();
         egui::ScrollArea::vertical()
             .auto_shrink([false, true])
             .max_height(ui.available_height() - 130.0)
@@ -774,7 +898,7 @@ impl App {
                 if model.elements.is_empty() {
                     ui.label(theme::weak(
                         ui,
-                        "No elements yet. Open a model or an example to see its process here.",
+                        "No blocks yet. Open a model, or add blocks to build one.",
                     ));
                 }
                 let n = model.elements.len();
@@ -785,9 +909,29 @@ impl App {
                     } else {
                         e.name.as_str()
                     };
-                    flow_row(ui, p, e.kind.name(), title, i == 0, i + 1 == n);
+                    let mine = problems.iter().filter(|pr| pr.at.as_deref() == Some(id));
+                    let flag = mine.fold(None, |acc: Option<bool>, pr| {
+                        Some(acc.unwrap_or(false) || pr.error)
+                    });
+                    let selected = self.selected.as_deref() == Some(id) && !self.show_results;
+                    let row = FlowRow {
+                        kind: e.kind.name(),
+                        title,
+                        first: i == 0,
+                        last: i + 1 == n,
+                        selected,
+                        flag,
+                    };
+                    if row.show(ui, p).clicked() {
+                        select = Some(Some(id.to_owned()));
+                    }
                 }
             });
+        if let Some(sel) = select {
+            self.selected = sel;
+            self.show_results = false;
+        }
+        let model = self.engine.model();
         ui.with_layout(egui::Layout::bottom_up(egui::Align::Min), |ui| {
             let x = &model.experiment;
             let unit = time_unit(&self.engine);
@@ -856,7 +1000,7 @@ impl App {
     /// A model is open and has no results yet.
     fn ready(&mut self, ui: &mut egui::Ui) {
         ui.add_space(24.0);
-        ui.heading("Ready to run");
+        ui.heading("No results yet");
         ui.add_space(6.0);
         let x = &self.engine.model().experiment;
         ui.label(theme::weak(
@@ -997,87 +1141,119 @@ impl App {
     }
 }
 
-/// One element in the outline's process line: its BPMN shape (a thin circle for a start event, a
-/// rounded box for a task, a thick circle for an end event), joined to its neighbours.
-fn flow_row(
-    ui: &mut egui::Ui,
-    p: &theme::Palette,
-    kind: &str,
-    title: &str,
+/// One block in the outline's process line: its BPMN shape (a thin circle for a start event, a
+/// rounded box for a task, a thick circle for an end event), joined to its neighbours. Clicking
+/// it selects the block; a dot marks a problem (red for an error, amber for a warning).
+struct FlowRow<'a> {
+    kind: &'a str,
+    title: &'a str,
     first: bool,
     last: bool,
-) {
-    let height = 40.0;
-    let (rect, _) = ui.allocate_exact_size(
-        egui::vec2(ui.available_width(), height),
-        egui::Sense::hover(),
-    );
-    let painter = ui.painter_at(rect);
-    let cx = rect.left() + 14.0;
-    let cy = rect.center().y;
-    let line = egui::Stroke::new(1.5, p.border);
-    if !first {
-        painter.line_segment([egui::pos2(cx, rect.top()), egui::pos2(cx, cy)], line);
-    }
-    if !last {
-        painter.line_segment([egui::pos2(cx, cy), egui::pos2(cx, rect.bottom())], line);
-    }
-    let ink = p.text;
-    match kind {
-        "source" => {
-            painter.circle(
-                egui::pos2(cx, cy),
-                9.0,
-                p.raised,
-                egui::Stroke::new(1.5, ink),
+    selected: bool,
+    /// Some(true): an error; Some(false): a warning.
+    flag: Option<bool>,
+}
+
+impl FlowRow<'_> {
+    fn show(&self, ui: &mut egui::Ui, p: &theme::Palette) -> egui::Response {
+        let height = 40.0;
+        let (rect, response) = ui.allocate_exact_size(
+            egui::vec2(ui.available_width(), height),
+            egui::Sense::click(),
+        );
+        let what = match self.kind {
+            "source" => "arrivals",
+            "server" => "task with a resource",
+            "delay" => "task",
+            "sink" => "departures",
+            other => other,
+        };
+        response.widget_info(|| {
+            egui::WidgetInfo::selected(egui::Role::ListBoxOption, true, self.selected, self.title)
+        });
+        let painter = ui.painter_at(rect.expand(2.0));
+        if self.selected {
+            painter.rect_filled(rect, 6.0, p.accent_soft);
+        } else if response.hovered() {
+            painter.rect_filled(rect, 6.0, p.stripe);
+        }
+        if response.has_focus() {
+            painter.rect_stroke(
+                rect,
+                6.0,
+                egui::Stroke::new(1.5, p.accent),
+                egui::StrokeKind::Inside,
             );
         }
-        "sink" => {
-            painter.circle(
-                egui::pos2(cx, cy),
-                9.0,
-                p.raised,
-                egui::Stroke::new(3.0, ink),
-            );
+        let cx = rect.left() + 14.0;
+        let cy = rect.center().y;
+        let line = egui::Stroke::new(1.5, p.border);
+        if !self.first {
+            painter.line_segment([egui::pos2(cx, rect.top()), egui::pos2(cx, cy)], line);
         }
-        _ => {
-            let r = egui::Rect::from_center_size(egui::pos2(cx, cy), egui::vec2(24.0, 18.0));
-            let fill = if kind == "server" {
-                p.accent_soft
+        if !self.last {
+            painter.line_segment([egui::pos2(cx, cy), egui::pos2(cx, rect.bottom())], line);
+        }
+        let ink = p.text;
+        match self.kind {
+            "source" => {
+                painter.circle(
+                    egui::pos2(cx, cy),
+                    9.0,
+                    p.raised,
+                    egui::Stroke::new(1.5, ink),
+                );
+            }
+            "sink" => {
+                painter.circle(
+                    egui::pos2(cx, cy),
+                    9.0,
+                    p.raised,
+                    egui::Stroke::new(3.0, ink),
+                );
+            }
+            _ => {
+                let r = egui::Rect::from_center_size(egui::pos2(cx, cy), egui::vec2(24.0, 18.0));
+                let fill = if self.kind == "server" {
+                    p.accent_soft
+                } else {
+                    p.raised
+                };
+                painter.rect(
+                    r,
+                    4.0,
+                    fill,
+                    egui::Stroke::new(1.5, ink),
+                    egui::StrokeKind::Middle,
+                );
+            }
+        }
+        let text_x = rect.left() + 38.0;
+        painter.text(
+            egui::pos2(text_x, cy - 8.0),
+            egui::Align2::LEFT_CENTER,
+            self.title,
+            egui::FontId::proportional(14.0),
+            p.text,
+        );
+        painter.text(
+            egui::pos2(text_x, cy + 9.0),
+            egui::Align2::LEFT_CENTER,
+            what,
+            egui::FontId::proportional(12.0),
+            p.text_weak,
+        );
+        if let Some(error) = self.flag {
+            let color = if error { p.error } else { p.warning };
+            painter.circle_filled(egui::pos2(rect.right() - 12.0, cy), 4.0, color);
+            return response.on_hover_text(if error {
+                "This block has an error"
             } else {
-                p.raised
-            };
-            painter.rect(
-                r,
-                4.0,
-                fill,
-                egui::Stroke::new(1.5, ink),
-                egui::StrokeKind::Middle,
-            );
+                "This block has a warning"
+            });
         }
+        response
     }
-    let text_x = rect.left() + 38.0;
-    painter.text(
-        egui::pos2(text_x, cy - 8.0),
-        egui::Align2::LEFT_CENTER,
-        title,
-        egui::FontId::proportional(14.0),
-        p.text,
-    );
-    let what = match kind {
-        "source" => "arrivals",
-        "server" => "task with a resource",
-        "delay" => "task",
-        "sink" => "departures",
-        other => other,
-    };
-    painter.text(
-        egui::pos2(text_x, cy + 9.0),
-        egui::Align2::LEFT_CENTER,
-        what,
-        egui::FontId::proportional(12.0),
-        p.text_weak,
-    );
 }
 
 /// The model's time unit as written in results ("min", "h", …).
