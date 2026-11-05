@@ -18,11 +18,11 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 | `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist` |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary` |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate` |
-| `model` | L1 | The model in memory: elements, connections with probabilities and conditions, experiment, entity properties, validation; BPSim's XPath expressions (`expr`) |
-| `blocks` | L2 | Compiles a model: source, server, delay, sink, exclusive and parallel gateways, merges; entities carry typed properties; per-element statistics; warm-up |
+| `model` | L1 | The model in memory: elements, connections with probabilities and conditions, finite buffers, experiment, entity properties, validation; BPSim's XPath expressions (`expr`) |
+| `blocks` | L2 | Compiles a model: source, server, delay, sink, exclusive and parallel gateways, merges; finite buffers with blocking after service and loss; entities carry typed properties; per-element statistics; warm-up |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
-| `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line), write new, save edits into opened files |
-| `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs; `flow.set` for routing |
+| `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, `stochcraft:` vendor extensions), write new, save edits into opened files |
+| `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs; `flow.set` for routing; `queue_capacity` on servers |
 | `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `exec`, `schema` |
 | `ui-egui` | L5 | The app's window: menus, shortcuts, model outline, background runs, results, unsaved-change prompts |
 | `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs) and the browser shell, published on GitHub Pages |
@@ -500,6 +500,76 @@ unrolled line in `stochcraft-blocks`.
   sequence flows); a full buffer blocks the upstream task (blocking after service).
 - Validation: M/M/1/K loss probability and L; a two-machine line with a finite buffer against the
   published closed-form throughput.
+
+**Done:**
+- **Where the capacity lives:** on the receiving server's queue (`queue_capacity`, the most
+  entities waiting for a unit, not counting those in service), not on a connection. A BPMN task
+  has one queue shared by all its incoming sequence flows, and a sequence flow holds nothing, so
+  a capacity per flow would describe a store BPMN does not have. Left out, the queue is unlimited
+  as before; 0 means no waiting room (an entity gets in only when a unit is free).
+- **When the buffer is full**, what the sender does depends on what it is:
+  - **a server** keeps the served entity and its unit until there is room (blocking after
+    service); the unit is blocked, not busy;
+  - **a delay** keeps the entity, past its delay;
+  - **a gateway** waits, holding up the entities behind it, which queue before the gateway
+    without limit (a warning says so);
+  - **a source** loses the arrival (M/M/1/K's loss); an arrival at the instant a place frees gets
+    in, whatever the order of the two events.
+
+  The runtime gives each finite buffer a pool of places, one per unit plus the waiting room. An
+  entity takes one before it is sent and gives it back as it leaves, after any blocking of its
+  own.
+- **Results**, reported only where a finite buffer is involved, so results and golden digests
+  of models without one are unchanged:
+  - **Blocking**, for servers and delays sending to a finite buffer:
+    - `mean_blocked_time`: per entity that left;
+    - `blocking_probability` (servers): the time-average fraction of units blocked.
+  - **Loss**, for servers with a finite buffer:
+    - `lost`;
+    - `loss_probability`: lost over lost plus entered.
+- **File:** `<bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="3"/>`
+  last in the task's `ElementParameters`, in BPMN and XPDL, BPSim 2.0 and 1.0. BPSim checks a
+  vendor extension's value strictly against a schema for its namespace, so StochCraft ships one
+  (`crates/io/schemas/stochcraft-bpsim-1.xsd`). The schema test validates against it, imported
+  next to the BPSim schema.
+  - **Saving in place:** adding one adds that line, and changing it changes only its value.
+    Removing it gives back the original bytes.
+  - **Reading:** a bad value is an error note. On a task without a resource the extension is
+    ignored, with a warning. Other `stochcraft:` names are kept, with a warning that this version
+    does not know them.
+- **Validation:** `buffer_behind_gateway` (above) and `blocking_cycle`, a loop of finite-buffer
+  servers that deadlocks when every buffer in it is full. Both are warnings.
+- **Commands:**
+  - `block.set` takes `queue_capacity`; `null` removes it, and undo is exact.
+  - `block.add` and `model.set` take it with the other server parameters.
+  - Model JSON has the key only when it is set.
+
+**Validation** (`blocks/tests/buffers.rs`, 16 replications of 20,000 after a warm-up of 1,000):
+- **M/M/1/K:**
+
+  | Case | Loss probability, theory | Loss probability, StochCraft | L, theory | L, StochCraft |
+  |---|---|---|---|---|
+  | λ = 0.9, μ = 1, K = 5 | 0.12602 | 0.12613 ± 0.00229 | 2.19478 | 2.19085 ± 0.01590 |
+  | λ = 1.5, μ = 1, K = 3 | 27/65 ≈ 0.41538 | 0.41450 ± 0.00243 | 129/65 ≈ 1.98462 | 1.98126 ± 0.00647 |
+
+  Lq, utilisation and Wq are within their intervals too.
+- **Two exponential machines with b waiting places between them**, the first never starved. The
+  line is a birth-death chain on 0..b+2, so its throughput is μ2 (1 − p0) (docs/research.md).
+  Measured from the parts leaving over 20,000:
+
+  | Case | Throughput, theory | Throughput, StochCraft | P(first machine blocked), theory | P(first machine blocked), StochCraft |
+  |---|---|---|---|---|
+  | μ1 = 1, μ2 = 1.25, b = 2 | 0.87815 | 0.87937 ± 0.00289 | 0.12185 | 0.12216 ± 0.00162 |
+  | μ1 = μ2 = 1, b = 1 | 3/4 | 0.75073 ± 0.00248 | 1/4 | 0.25011 ± 0.00229 |
+
+  Mean blocked time, both utilisations and the second machine's queue are within their
+  intervals too.
+- **Exact cases:**
+  - a constant line worked by hand, checking blocked times, waits and times in system;
+  - loss with no waiting room, including an arrival at the instant the unit frees;
+  - a delay blocked after its delay;
+  - a gateway held up by a full buffer;
+  - no buffer metrics without buffers.
 
 ### M2.5 Shared resources
 

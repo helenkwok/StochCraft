@@ -193,6 +193,14 @@ pub(crate) fn bpmn_local(kind: &ElementKind) -> &'static str {
 }
 
 /// A connection's BPSim `ControlParameters` values: its probability and condition.
+/// A server's finite buffer as a StochCraft vendor extension.
+pub(crate) fn queue_capacity_element(n: u32) -> Element {
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::QUEUE_CAPACITY)
+        .with_attr("xmlns:stochcraft", crate::bpsim::STOCHCRAFT_NS)
+        .with_attr("stochcraft:value", &n.to_string())
+}
+
 pub(crate) fn probability_element(p: f64) -> Element {
     s("FloatingParameter").with_attr("value", &num(p))
 }
@@ -399,6 +407,13 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 pp.push(property_element(p));
             }
             ep.push(pp);
+        }
+        if let ElementKind::Server {
+            queue_capacity: Some(q),
+            ..
+        } = e.kind
+        {
+            ep.push(queue_capacity_element(q));
         }
         if ep.elements().next().is_none() {
             continue;

@@ -2,9 +2,10 @@
 //! and the statistics each element keeps.
 
 use std::cell::RefCell;
+use std::collections::BTreeMap;
 use std::rc::Rc;
 
-use stochcraft_des::{Ctx, Sim, Store};
+use stochcraft_des::{Ctx, Resource, ResourceGuard, Sim, Store};
 use stochcraft_model::{Element, ElementKind};
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -101,6 +102,32 @@ impl Compiled {
             .iter()
             .map(|&n| (0..n.max(1)).map(|_| Store::new(&ctx)).collect())
             .collect();
+        // A finite buffer's places: one per unit plus the waiting room. An entity holds one from
+        // the moment it gets in (waiting, in service, or blocked on its way out) until it has
+        // left, so a sender finding none free is blocked (or, for a source, loses its arrival).
+        let places: Vec<Option<Rc<Places>>> = elements
+            .iter()
+            .map(|e| match e.kind {
+                ElementKind::Server {
+                    capacity,
+                    queue_capacity: Some(q),
+                    ..
+                } => Some(Rc::new(Places {
+                    pool: Resource::new(&ctx, u64::from(capacity) + u64::from(q)),
+                    held: RefCell::new(BTreeMap::new()),
+                })),
+                _ => None,
+            })
+            .collect();
+        let feeds_buffer: Vec<bool> = (0..elements.len())
+            .map(|i| {
+                self.routes
+                    .get(i)
+                    .into_iter()
+                    .flatten()
+                    .any(|r| places.get(r.to).is_some_and(Option::is_some))
+            })
+            .collect();
         let next_id = Rc::new(RefCell::new(0u64));
         // The elements' streams first, in model order as always; then the properties'.
         let streams: Vec<Rng> = elements.iter().map(|_| rng.fork()).collect();
@@ -131,6 +158,7 @@ impl Compiled {
                             stats: Rc::clone(&stats),
                             assigner: Rc::clone(&assigner),
                             index: r.to,
+                            places: places.get(r.to).cloned().flatten(),
                         },
                         weight: r.weight,
                         condition: r.condition.clone(),
@@ -149,6 +177,7 @@ impl Compiled {
                 stats: Rc::clone(&stats),
                 assigner: Rc::clone(&assigner),
                 me: i,
+                places: places.get(i).cloned().flatten(),
                 input,
                 out: outs.first().map(|o| o.port.clone()),
                 rng,
@@ -165,9 +194,9 @@ impl Compiled {
                     Rc::clone(&next_id),
                     self.first_arrival_at_zero,
                 ),
-                ElementKind::Server { capacity, service } => {
-                    spawn_server(&mut sim, env, capacity, service)
-                }
+                ElementKind::Server {
+                    capacity, service, ..
+                } => spawn_server(&mut sim, env, capacity, service),
                 ElementKind::Delay { duration } => spawn_delay(&mut sim, env, duration),
                 ElementKind::Sink => spawn_sink(&mut sim, env),
                 ElementKind::ExclusiveGateway { .. } => spawn_exclusive(&mut sim, env, outs),
@@ -194,7 +223,8 @@ impl Compiled {
             .iter()
             .zip(stats.iter())
             .zip(&self.assigns)
-            .map(|((e, s), a)| s.borrow().report(e, a, end))
+            .zip(&feeds_buffer)
+            .map(|(((e, s), a), &blocks)| s.borrow().report(e, a, blocks, end))
             .collect();
         Report {
             warmup,
@@ -218,6 +248,13 @@ pub(crate) struct BlockStats {
     time_in_system: Tally,
     /// The values assigned to each of the element's properties.
     properties: Vec<Tally>,
+    /// Units (servers) or entities (delays) holding a finished entity while the next buffer is
+    /// full.
+    blocked: TimeWeighted,
+    /// Time each entity that left waited for room in the next buffer (blocking after service).
+    blocked_time: Tally,
+    /// Arrivals lost because this element's buffer was full.
+    lost: u64,
 }
 
 impl BlockStats {
@@ -230,6 +267,9 @@ impl BlockStats {
             wait: Tally::new(),
             time_in_system: Tally::new(),
             properties: (0..properties).map(|_| Tally::new()).collect(),
+            blocked: TimeWeighted::new(t, 0.0),
+            blocked_time: Tally::new(),
+            lost: 0,
         }
     }
 
@@ -241,11 +281,30 @@ impl BlockStats {
         self.wait = Tally::new();
         self.time_in_system = Tally::new();
         self.properties.iter_mut().for_each(|p| *p = Tally::new());
+        self.blocked.reset(t);
+        self.blocked_time = Tally::new();
+        self.lost = 0;
     }
 
-    pub(crate) fn report(&self, element: &Element, assigns: &[Assign], end: f64) -> ElementReport {
+    /// The element's report; `blocks`: whether it sends to a finite buffer.
+    pub(crate) fn report(
+        &self,
+        element: &Element,
+        assigns: &[Assign],
+        blocks: bool,
+        end: f64,
+    ) -> ElementReport {
         let kind = &element.kind;
         let server = matches!(kind, ElementKind::Server { .. });
+        let finite = matches!(
+            kind,
+            ElementKind::Server {
+                queue_capacity: Some(_),
+                ..
+            }
+        );
+        let holds = matches!(kind, ElementKind::Server { .. } | ElementKind::Delay { .. });
+        let offered = self.lost + self.entered;
         ElementReport {
             id: element.id.clone(),
             name: element.name.clone(),
@@ -273,6 +332,23 @@ impl BlockStats {
             } else {
                 None
             },
+            mean_blocked_time: if blocks && holds {
+                self.blocked_time.mean()
+            } else {
+                None
+            },
+            blocking_probability: match kind {
+                ElementKind::Server { capacity, .. } if blocks => {
+                    self.blocked.average(end).map(|b| b / f64::from(*capacity))
+                }
+                _ => None,
+            },
+            lost: finite.then_some(self.lost),
+            loss_probability: if finite && offered > 0 {
+                Some(self.lost as f64 / offered as f64)
+            } else {
+                None
+            },
             properties: assigns
                 .iter()
                 .zip(&self.properties)
@@ -289,9 +365,61 @@ struct Port {
     stats: Rc<Vec<RefCell<BlockStats>>>,
     assigner: Rc<Assigner>,
     index: usize,
+    /// The next element's places, when its buffer is finite.
+    places: Option<Rc<Places>>,
+}
+
+/// A finite buffer's places (see [`Compiled::run_for`]), with the one each entity there holds.
+struct Places {
+    pool: Resource,
+    held: RefCell<BTreeMap<u64, ResourceGuard>>,
+}
+
+impl Places {
+    /// Takes the place `guard` for entity `id`, as it gets in.
+    fn enter(&self, id: u64, guard: ResourceGuard) {
+        self.held.borrow_mut().insert(id, guard);
+    }
+
+    /// Gives back the place entity `id` holds, as it leaves.
+    fn leave(&self, id: u64) {
+        drop(self.held.borrow_mut().remove(&id));
+    }
 }
 
 impl Port {
+    /// Waits for a place in the next element's finite buffer, if it has one, and takes it for
+    /// `e`.
+    async fn make_room(&self, e: &Entity) {
+        if let Some(p) = &self.places {
+            let guard = p.pool.acquire().await;
+            p.enter(e.id, guard);
+        }
+    }
+
+    /// Sends `e`, first waiting for room in a finite buffer.
+    async fn deliver(&self, ctx: &Ctx, e: Entity) {
+        self.make_room(&e).await;
+        self.send(ctx.now(), e);
+    }
+
+    /// Sends a new arrival if there is room (a place freed at this instant counts); otherwise
+    /// it is lost, and counted as lost by the next element.
+    async fn offer(&self, ctx: &Ctx, e: Entity) {
+        if let Some(p) = &self.places {
+            match p.pool.acquire_within(0.0).await {
+                Ok(guard) => p.enter(e.id, guard),
+                Err(_) => {
+                    if let Some(s) = self.stats.get(self.index) {
+                        s.borrow_mut().lost += 1;
+                    }
+                    return;
+                }
+            }
+        }
+        self.send(ctx.now(), e);
+    }
+
     fn send(&self, now: f64, mut e: Entity) {
         e.entered = now;
         self.assigner.enter(self.index, &mut e, &self.stats);
@@ -318,6 +446,8 @@ struct BlockEnv {
     stats: Rc<Vec<RefCell<BlockStats>>>,
     assigner: Rc<Assigner>,
     me: usize,
+    /// This element's places, when its buffer is finite.
+    places: Option<Rc<Places>>,
     input: Store<Entity>,
     out: Option<Port>,
     rng: Rng,
@@ -376,7 +506,7 @@ fn spawn_source(
             // A source sets its properties on the entities it creates.
             env.assigner.enter(env.me, &mut entity, &env.stats);
             if let Some(out) = &env.out {
-                out.send(now, entity);
+                out.offer(&env.ctx, entity).await;
             }
         }
     });
@@ -403,14 +533,36 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
                     service.sample(&mut e.rng)
                 };
                 ctx.hold(duration).await;
-                let e = env.borrow();
-                e.adjust(|s| &mut s.busy, -1.0);
-                e.with_stats(|s| s.left += 1);
-                if let Some(out) = &e.out {
-                    out.send(ctx.now(), entity);
-                }
+                env.borrow().adjust(|s| &mut s.busy, -1.0);
+                move_on(&env, &ctx, entity).await;
             }
         });
+    }
+}
+
+/// An entity whose service or delay is over leaves for the next element. Into a full finite
+/// buffer it waits here first, blocking (blocking after service): the element keeps it, and its
+/// place here, until there is room, and the time is recorded.
+async fn move_on(env: &Rc<RefCell<BlockEnv>>, ctx: &Ctx, entity: Entity) {
+    let out = env.borrow().out.clone();
+    if let Some(out) = out.as_ref().filter(|o| o.places.is_some()) {
+        let start = ctx.now();
+        env.borrow().adjust(|s| &mut s.blocked, 1.0);
+        out.make_room(&entity).await;
+        let now = ctx.now();
+        let e = env.borrow();
+        e.adjust(|s| &mut s.blocked, -1.0);
+        e.with_stats(|s| s.blocked_time.add(now - start));
+    }
+    {
+        let e = env.borrow();
+        e.with_stats(|s| s.left += 1);
+        if let Some(p) = &e.places {
+            p.leave(entity.id);
+        }
+    }
+    if let Some(out) = out {
+        out.send(ctx.now(), entity);
     }
 }
 
@@ -435,12 +587,8 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
             let (c, env2) = (ctx.clone(), Rc::clone(&env));
             ctx.spawn(async move {
                 c.hold(dt).await;
-                let e = env2.borrow();
-                e.adjust(|s| &mut s.busy, -1.0);
-                e.with_stats(|s| s.left += 1);
-                if let Some(out) = &e.out {
-                    out.send(c.now(), entity);
-                }
+                env2.borrow().adjust(|s| &mut s.busy, -1.0);
+                move_on(&env2, &c, entity).await;
             });
         }
     });
@@ -495,14 +643,14 @@ fn spawn_exclusive(sim: &mut Sim, mut env: BlockEnv, outs: Vec<Out>) {
     sim.spawn(async move {
         loop {
             let entity = env.input.get().await;
-            let now = env.ctx.now();
             env.adjust(|s| &mut s.waiting, -1.0);
             env.with_stats(|s| s.left += 1);
             let to = choose(&outs, &entity, &env.assigner, &mut env.rng);
             // With no route (no condition holds and there is no default), the entity leaves
             // the model here.
+            // A full finite buffer holds the gateway, and everything behind it, up.
             if let Some(out) = to.and_then(|i| outs.get(i)) {
-                out.port.send(now, entity);
+                out.port.deliver(&env.ctx, entity).await;
             }
         }
     });
@@ -543,7 +691,6 @@ fn spawn_parallel(
             for input in &inputs {
                 parts.push(input.get().await);
             }
-            let now = env.ctx.now();
             env.adjust(|s| &mut s.waiting, -(parts.len() as f64));
             let Some(entity) = combine(parts) else {
                 continue;
@@ -558,7 +705,7 @@ fn spawn_parallel(
                     *n += 1;
                 }
                 env.with_stats(|s| s.left += 1);
-                out.port.send(now, e);
+                out.port.deliver(&env.ctx, e).await;
             }
         }
     });

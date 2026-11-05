@@ -612,6 +612,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
     let mut kept = BTreeSet::new();
     for n in &p.nodes {
         let id = n.id.as_str();
+        let queue = queue_capacity(scenario, id, notes);
         let kind = match &n.kind {
             NodeKind::Start => {
                 let interarrival = dist_of(
@@ -686,6 +687,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                         ElementKind::Server {
                             capacity: quantity,
                             service: time,
+                            queue_capacity: queue,
                         }
                     }
                     None => ElementKind::Delay { duration: time },
@@ -706,6 +708,12 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                 continue;
             }
         };
+        if queue.is_some() && !matches!(kind, ElementKind::Server { .. }) {
+            notes.push(Note::warning(
+                Some(id),
+                "a queue capacity (stochcraft:queueCapacity) applies only to a task with a resource; it is ignored here",
+            ));
+        }
         kept.insert(n.id.clone());
         elements.push(ModelElement {
             id: ElementId::unchecked(&n.id),
@@ -757,6 +765,36 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         connections,
         experiment: experiment(scenario, notes),
     }
+}
+
+/// The finite buffer StochCraft's vendor extension gives element `id`, if any; and a note for
+/// each StochCraft extension this version does not know (kept in the file all the same).
+fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) -> Option<u32> {
+    let params = scenario.and_then(|s| s.params.get(id))?;
+    let mut queue = None;
+    for (key, e) in params {
+        let Some(name) = key.strip_prefix("VendorExtension/") else {
+            continue;
+        };
+        if name == bpsim::QUEUE_CAPACITY {
+            let raw = bpsim::vendor_value(e).unwrap_or_default();
+            match raw.trim().parse::<u32>() {
+                Ok(q) => queue = Some(q),
+                Err(_) => notes.push(Note::error(
+                    Some(id),
+                    format!(
+                        "queue capacity `{raw}` must be a whole number of at least 0; there is no limit"
+                    ),
+                )),
+            }
+        } else if name.starts_with(bpsim::STOCHCRAFT) {
+            notes.push(Note::warning(
+                Some(id),
+                format!("the StochCraft extension `{name}` is not known to this version; it is kept in the file but not used"),
+            ));
+        }
+    }
+    queue
 }
 
 fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment {

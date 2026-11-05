@@ -308,13 +308,33 @@ fn schema_errors(written: &[u8], label: &str, xsd: &Path) -> Option<String> {
         std::env::temp_dir().join(format!("stochcraft-xsd-{}-{label}.xml", std::process::id()));
     let text = xml::write(&xml::Document::new(data));
     std::fs::write(&out, text).unwrap_or_else(|e| panic!("{}: {e}", out.display()));
+    // The BPSim schema with StochCraft's vendor extension schema next to it, which declares the
+    // values of its `VendorExtension`s (the BPSim schema checks them strictly).
+    let ours = Path::new(env!("CARGO_MANIFEST_DIR")).join("schemas/stochcraft-bpsim-1.xsd");
+    let both = std::env::temp_dir().join(format!(
+        "stochcraft-xsd-{}-{label}-schemas.xsd",
+        std::process::id()
+    ));
+    let wrapper = format!(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="{NS2}" schemaLocation="{}"/>
+  <xs:import namespace="{}" schemaLocation="{}"/>
+</xs:schema>
+"#,
+        xsd.display(),
+        bpsim::STOCHCRAFT_NS,
+        ours.display()
+    );
+    std::fs::write(&both, wrapper).unwrap_or_else(|e| panic!("{}: {e}", both.display()));
     let result = Command::new("xmllint")
         .arg("--noout")
         .arg("--schema")
-        .arg(xsd)
+        .arg(&both)
         .arg(&out)
         .output();
     let _ = std::fs::remove_file(&out);
+    let _ = std::fs::remove_file(&both);
     let result = result.unwrap_or_else(|e| panic!("xmllint: {e}"));
     (!result.status.success()).then(|| String::from_utf8_lossy(&result.stderr).into_owned())
 }
@@ -467,6 +487,7 @@ fn edits() -> Vec<Edit> {
                     m.elements[i].kind = ElementKind::Server {
                         capacity: 2,
                         service: Dist::Constant(1.5),
+                        queue_capacity: None,
                     };
                 }
             }),
@@ -607,13 +628,14 @@ fn showcase() -> Model {
         },
         Some(500),
     );
-    let mut previous = m.server(
+    let mut previous = m.buffered_server(
         "cut",
         2,
         Dist::Gamma {
             shape: 2.5,
             scale: 0.4,
         },
+        6,
     );
     m.connect(src, previous);
     let delays = [

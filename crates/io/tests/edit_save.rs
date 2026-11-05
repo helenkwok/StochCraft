@@ -301,6 +301,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
         element(m, "pay").kind = ElementKind::Server {
             capacity: 2,
             service: Dist::Exponential { mean: 0.5 },
+            queue_capacity: None,
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -314,6 +315,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
         element(m, "cool").kind = ElementKind::Server {
             capacity: 2,
             service: Dist::Constant(0.75),
+            queue_capacity: None,
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -347,4 +349,139 @@ fn edits_that_cannot_be_saved_say_why() {
     let mut m = loaded.model.clone();
     m.elements.reverse();
     assert!(loaded.opened.save(&m).is_err());
+}
+
+fn set_queue(m: &mut Model, at: &str, q: Option<u32>) {
+    if let ElementKind::Server { queue_capacity, .. } = &mut element(m, at).kind {
+        *queue_capacity = q;
+    }
+}
+
+/// A finite buffer is a StochCraft vendor extension in the task's element parameters: adding
+/// one adds one line, changing it changes that line, and removing it gives back the file as it
+/// was, in BPMN with BPSim 2.0 and in XPDL with BPSim 1.0.
+#[test]
+fn finite_buffers_save_as_a_vendor_extension() {
+    for (name, task, ns) in [
+        ("mm1.bpmn", "serve", "bpsim"),
+        ("tandem.xpdl", "weld", "b1"),
+    ] {
+        let original = file(name);
+        let (three, n) = edit_and_save(name, None, |m| set_queue(m, task, Some(3)));
+        assert_eq!(n, 1, "{name}:\n{}", diff(&original, &three));
+        let t = text(&three);
+        let ext = format!(
+            r#"<{ns}:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="3"/>"#
+        );
+        assert!(t.contains(&ext), "{name}:\n{t}");
+        let loaded = read_scenario(&three, None).unwrap_or_else(|e| panic!("{name}: {e}"));
+        let mut model = loaded.model.clone();
+        set_queue(&mut model, task, Some(0));
+        let zero = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(changed_lines(&three, &zero), 2, "{}", diff(&three, &zero));
+        assert!(text(&zero).contains(r#"stochcraft:value="0""#));
+        set_queue(&mut model, task, None);
+        let none = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(text(&none), text(&original), "{name}");
+    }
+}
+
+/// A server added to a file, or a delay made a server, takes its buffer along; one made a delay
+/// leaves it behind.
+#[test]
+fn new_and_changed_servers_carry_their_buffer() {
+    let (saved, _) = edit_and_save("tandem.xpdl", None, |m| {
+        element(m, "cool").kind = ElementKind::Server {
+            capacity: 2,
+            service: Dist::Constant(1.0),
+            queue_capacity: Some(4),
+        };
+        set_queue(m, "weld", Some(1));
+    });
+    let t = text(&saved);
+    assert!(t.contains(r#"stochcraft:value="4""#), "{t}");
+    let (back, _) = edit_and_save("tandem.xpdl", None, |m| {
+        set_queue(m, "weld", Some(2));
+    });
+    let loaded = read_scenario(&back, None).unwrap_or_else(|e| panic!("{e}"));
+    let mut model = loaded.model.clone();
+    element(&mut model, "weld").kind = ElementKind::Delay {
+        duration: Dist::Constant(1.0),
+    };
+    let delay = loaded.opened.save(&model).unwrap_or_else(|e| panic!("{e}"));
+    assert!(!text(&delay).contains("queueCapacity"), "{}", text(&delay));
+}
+
+/// What the reader makes of buffers it cannot use: a bad value, a buffer on a task without a
+/// resource, and StochCraft extensions this version does not know (kept all the same).
+#[test]
+fn buffers_that_cannot_be_used_are_reported() {
+    let original = text(&file("mm1.bpmn"));
+    let ext = |name: &str, value: &str| {
+        format!(
+            r#"<bpsim:VendorExtension name="{name}" xmlns:sc="https://helenkwok.github.io/StochCraft/bpsim/1" sc:value="{value}"/>
+          </bpsim:ElementParameters>"#
+        )
+    };
+    let with = |name: &str, value: &str| {
+        original.replacen("</bpsim:ElementParameters>", &ext(name, value), 1)
+    };
+    // Any prefix is read; the value is whole and at least 0.
+    let first = original
+        .split("elementRef=\"")
+        .nth(1)
+        .and_then(|s| s.split('"').next())
+        .unwrap_or_default()
+        .to_owned();
+    for (name, value, want) in [
+        ("stochcraft:queueCapacity", "-1", "must be a whole number"),
+        ("stochcraft:queueCapacity", "two", "must be a whole number"),
+        ("stochcraft:breakdowns", "1", "not known to this version"),
+    ] {
+        let bytes = with(name, value);
+        let l = read_scenario(bytes.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+        assert!(
+            l.notes.iter().any(|n| n.message.contains(want)),
+            "{name}={value} on {first}: {:?}",
+            l.notes
+        );
+        assert!(l.model.elements.iter().all(|e| !matches!(
+            e.kind,
+            ElementKind::Server {
+                queue_capacity: Some(_),
+                ..
+            }
+        )));
+    }
+}
+
+#[test]
+fn a_buffer_on_a_task_without_a_resource_is_ignored() {
+    let original = text(&file("tandem.xpdl"));
+    let bytes = original.replacen(
+        r#"<b1:ElementParameters elementRef="cool">"#,
+        r#"<b1:ElementParameters elementRef="cool"><b1:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="2"/>"#,
+        1,
+    );
+    let l = read_scenario(bytes.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        l.notes.iter().any(|n| n.at.as_deref() == Some("cool")
+            && n.message.contains("only to a task with a resource")),
+        "{:?}",
+        l.notes
+    );
+    assert!(matches!(
+        l.model
+            .elements
+            .iter()
+            .find(|e| e.id.as_str() == "cool")
+            .map(|e| &e.kind),
+        Some(ElementKind::Delay { .. })
+    ));
 }

@@ -45,7 +45,8 @@ fn bpmn_written_by_another_tool() {
         kind(m, "serve"),
         &ElementKind::Server {
             capacity: 1,
-            service: Dist::Exponential { mean: 1.0 }
+            service: Dist::Exponential { mean: 1.0 },
+            queue_capacity: None,
         }
     );
     assert_eq!(kind(m, "leave"), &ElementKind::Sink);
@@ -66,7 +67,8 @@ fn inherited_scenario_changes_only_what_it_says() {
         kind(&l.model, "serve"),
         &ElementKind::Server {
             capacity: 2,
-            service: Dist::Exponential { mean: 1.0 }
+            service: Dist::Exponential { mean: 1.0 },
+            queue_capacity: None,
         }
     );
     assert_eq!(l.model.experiment.replications, 16);
@@ -119,7 +121,8 @@ fn xpdl_with_bpsim_1() {
         kind(m, "weld"),
         &ElementKind::Server {
             capacity: 3,
-            service: Dist::Erlang { mean: 0.2, k: 2 }
+            service: Dist::Erlang { mean: 0.2, k: 2 },
+            queue_capacity: None,
         }
     );
     assert_eq!(

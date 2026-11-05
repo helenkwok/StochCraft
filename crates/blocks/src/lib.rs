@@ -315,10 +315,21 @@ pub enum Metric {
     MeanContents,
     /// Sinks: mean time from creation to arrival.
     MeanTimeInSystem,
+    /// Servers and delays sending to a finite buffer: mean time an entity that left waited,
+    /// after its service or delay, for room in the next buffer (zero when there was room).
+    MeanBlockedTime,
+    /// Servers sending to a finite buffer: time-average fraction of units blocked (holding a
+    /// served entity while the next buffer is full).
+    BlockingProbability,
+    /// Servers with a finite buffer: arrivals from sources lost because the buffer was full.
+    Lost,
+    /// Servers with a finite buffer: the fraction of arrivals lost (lost over lost plus
+    /// entered).
+    LossProbability,
 }
 
 impl Metric {
-    pub const ALL: [Metric; 7] = [
+    pub const ALL: [Metric; 11] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -326,6 +337,10 @@ impl Metric {
         Metric::Utilisation,
         Metric::MeanContents,
         Metric::MeanTimeInSystem,
+        Metric::MeanBlockedTime,
+        Metric::BlockingProbability,
+        Metric::Lost,
+        Metric::LossProbability,
     ];
 
     /// A stable name for tables, files and agents.
@@ -338,6 +353,10 @@ impl Metric {
             Metric::Utilisation => "utilisation",
             Metric::MeanContents => "mean_contents",
             Metric::MeanTimeInSystem => "mean_time_in_system",
+            Metric::MeanBlockedTime => "mean_blocked_time",
+            Metric::BlockingProbability => "blocking_probability",
+            Metric::Lost => "lost",
+            Metric::LossProbability => "loss_probability",
         }
     }
 }
@@ -356,6 +375,12 @@ pub struct ElementReport {
     pub utilisation: Option<f64>,
     pub mean_contents: Option<f64>,
     pub mean_time_in_system: Option<f64>,
+    /// Only where a finite buffer is involved (`None` otherwise, so models without one report
+    /// as before): see [`Metric::MeanBlockedTime`] and the metrics after it.
+    pub mean_blocked_time: Option<f64>,
+    pub blocking_probability: Option<f64>,
+    pub lost: Option<u64>,
+    pub loss_probability: Option<f64>,
     /// For each property the element assigns, in the element's order: the mean of the values
     /// it assigned (`None` when it assigned none, or the property holds text).
     pub properties: Vec<(String, Option<f64>)>,
@@ -372,6 +397,10 @@ impl ElementReport {
             Metric::Utilisation => self.utilisation,
             Metric::MeanContents => self.mean_contents,
             Metric::MeanTimeInSystem => self.mean_time_in_system,
+            Metric::MeanBlockedTime => self.mean_blocked_time,
+            Metric::BlockingProbability => self.blocking_probability,
+            Metric::Lost => self.lost.map(|n| n as f64),
+            Metric::LossProbability => self.loss_probability,
         }
     }
 }
@@ -533,7 +562,34 @@ impl Builder {
     /// `capacity` identical units that each serve one entity at a time, first come first served,
     /// for a time drawn from `service`.
     pub fn server(&mut self, name: &str, capacity: u32, service: Dist) -> BlockId {
-        self.add(name, ElementKind::Server { capacity, service })
+        self.add(
+            name,
+            ElementKind::Server {
+                capacity,
+                service,
+                queue_capacity: None,
+            },
+        )
+    }
+
+    /// As [`Builder::server`], with a finite buffer: at most `queue_capacity` entities wait for
+    /// a unit. When it is full, a server or delay sending here waits holding its entity
+    /// (blocking after service) and a source loses its arrival.
+    pub fn buffered_server(
+        &mut self,
+        name: &str,
+        capacity: u32,
+        service: Dist,
+        queue_capacity: u32,
+    ) -> BlockId {
+        self.add(
+            name,
+            ElementKind::Server {
+                capacity,
+                service,
+                queue_capacity: Some(queue_capacity),
+            },
+        )
     }
 
     /// Holds every entity for a time drawn from `duration`, with no capacity limit.
