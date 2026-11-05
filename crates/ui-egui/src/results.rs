@@ -161,6 +161,30 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                         [label, &show(mean), &show(hw), unit],
                     );
                 }
+                // The mean value this element assigned to each property it sets.
+                let shown = order
+                    .iter()
+                    .filter(|k| !e["metrics"][**k].is_null())
+                    .count();
+                for (j, (name, m)) in e["properties"]
+                    .as_object()
+                    .into_iter()
+                    .flatten()
+                    .enumerate()
+                {
+                    let show = |v: Option<f64>| v.map_or_else(|| "–".to_owned(), grouped);
+                    row(
+                        ui,
+                        &p,
+                        Some((shown + j) % 2 == 0),
+                        [
+                            &format!("{name} (set to, mean)"),
+                            &show(m["mean"].as_f64()),
+                            &show(m["half_width"].as_f64()),
+                            "",
+                        ],
+                    );
+                }
                 ui.add_space(16.0);
             }
             ui.label(theme::weak(
