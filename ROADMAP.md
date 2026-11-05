@@ -572,8 +572,11 @@ stays in its field marked until fixed, a distribution's kind is a choice that ke
 and times show the model's unit. Each edit is one command and one undo step. A Model and a
 Results tab divide the work area. Tests drive every path through the accessibility tree.
 
-**Still to come here:** entity types and their properties (from M2.2's schema) and resource pools
-(M2.5) appear in the same forms as their commands land.
+Entity properties (M2.2) are edited in the inspector from `property.set`'s schema (a value is a
+number, yes or no, text, a random draw or an expression; malformed expressions show as the
+block's problem), and runs report each property's mean assigned value.
+
+**Still to come here:** resource pools (M2.5) appear in the same forms as their commands land.
 
 ### M3.3 Running and results
 

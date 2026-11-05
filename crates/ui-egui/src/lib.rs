@@ -1295,6 +1295,8 @@ fn change_label(command: &str) -> &str {
         "connect" => "Connect",
         "disconnect" => "Disconnect",
         "experiment.set" => "Experiment Settings",
+        "property.set" => "Set Property",
+        "property.remove" => "Remove Property",
         other => other,
     }
 }

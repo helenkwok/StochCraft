@@ -379,6 +379,8 @@ impl App {
             }
         }
 
+        self.properties_section(ui, p, el);
+
         section(ui, "Flows");
         let names = element_names(model);
         let name_of = |x: &str| {
@@ -471,6 +473,118 @@ impl App {
                 });
             });
             ui.add_space(4.0);
+        }
+    }
+
+    /// The properties this block sets on every entity entering it: name, type and value, each
+    /// edited in place; a row to add one.
+    fn properties_section(&mut self, ui: &mut egui::Ui, p: &theme::Palette, el: &Value) {
+        let id = el["id"].as_str().unwrap_or("").to_owned();
+        section(ui, "Properties");
+        ui.label(theme::weak(
+            ui,
+            "Set on every entity as it enters this block. Expressions read the values it arrived \
+             with, such as getProperty('issues') - 1.",
+        ));
+        ui.add_space(6.0);
+        let schema = params_schema("property.set");
+        let unit = self.time_unit_label();
+        let props: Vec<Value> = el["properties"].as_array().cloned().unwrap_or_default();
+        for prop in &props {
+            let name = prop["name"].as_str().unwrap_or("").to_owned();
+            ui.horizontal(|ui| {
+                ui.label(theme::strong(&name).monospace());
+                if ui
+                    .add(
+                        egui::Button::new(egui::RichText::new("Remove").size(12.0))
+                            .stroke(egui::Stroke::new(1.0, p.border)),
+                    )
+                    .on_hover_text(format!("Stop setting {name}"))
+                    .clicked()
+                {
+                    self.execute("property.remove", json!({ "element": id, "name": name }));
+                }
+            });
+            ui.indent(("prop", &id, &name), |ui| {
+                let mut cx = form::Cx {
+                    time_unit: &unit,
+                    drafts: &mut self.drafts,
+                };
+                let base = format!("{id}/prop/{name}");
+                let sch = Schema::new(&schema);
+                if let Some(t) = form::field(
+                    ui,
+                    &mut cx,
+                    sch,
+                    &format!("{base}/type"),
+                    "type",
+                    &prop["type"],
+                    false,
+                ) {
+                    self.execute(
+                        "property.set",
+                        json!({ "element": id, "name": name, "type": t, "value": prop["value"] }),
+                    );
+                    return;
+                }
+                let mut cx = form::Cx {
+                    time_unit: &unit,
+                    drafts: &mut self.drafts,
+                };
+                if let Some(v) = form::field(
+                    ui,
+                    &mut cx,
+                    sch,
+                    &format!("{base}/value"),
+                    "value",
+                    &prop["value"],
+                    false,
+                ) {
+                    self.execute(
+                        "property.set",
+                        json!({ "element": id, "name": name, "value": v }),
+                    );
+                }
+            });
+            ui.add_space(4.0);
+        }
+        // A new property: its name, then Add (it starts as the number 0).
+        let key = format!("{id}/prop/new");
+        let mut cx = form::Cx {
+            time_unit: &unit,
+            drafts: &mut self.drafts,
+        };
+        let mut add = None;
+        ui.horizontal(|ui| {
+            form::label_cell(ui, theme::weak(ui, "New property"), 26.0);
+            let committed = form::text(ui, &mut cx, &key, "New property name", &json!(""), 180.0);
+            let typed = cx.drafts.get(&key).cloned().unwrap_or_default();
+            let name = committed
+                .as_ref()
+                .and_then(Value::as_str)
+                .map(str::to_owned)
+                .unwrap_or(typed);
+            let enter = committed.is_some() && ui.input(|i| i.key_pressed(egui::Key::Enter));
+            if ui
+                .add_enabled(
+                    !name.trim().is_empty(),
+                    theme::secondary(ui, "Add property"),
+                )
+                .clicked()
+                || (enter && !name.trim().is_empty())
+            {
+                add = Some(name.trim().to_owned());
+            } else if let Some(n) = committed.and_then(|v| v.as_str().map(str::to_owned)) {
+                // Leaving the field keeps the name for the Add button.
+                cx.drafts.insert(key.clone(), n);
+            }
+        });
+        if let Some(name) = add {
+            self.drafts.remove(&key);
+            self.execute(
+                "property.set",
+                json!({ "element": id, "name": name, "value": {"number": 0.0} }),
+            );
         }
     }
 

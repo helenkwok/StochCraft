@@ -201,3 +201,53 @@ fn the_experiment_and_flows_are_edited_from_their_forms() {
     click(&mut h, Role::Button, "Customer leaves");
     assert_eq!(model(&h)["connections"].as_array().map(Vec::len), Some(2));
 }
+
+#[test]
+fn a_property_is_added_typed_given_an_expression_and_removed() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    h.get_by_role_and_label(Role::TextInput, "New property name")
+        .click();
+    settle(&mut h);
+    h.get_by_role_and_label(Role::TextInput, "New property name")
+        .type_text("visits");
+    settle(&mut h);
+    click(&mut h, Role::Button, "Add property");
+    assert_eq!(
+        element(&h, "serve")["properties"],
+        json!([{"name": "visits", "value": {"number": 0.0}}])
+    );
+
+    click(&mut h, Role::ComboBox, "Type");
+    click(&mut h, Role::Button, "Whole number");
+    assert_eq!(element(&h, "serve")["properties"][0]["type"], "long");
+
+    click(&mut h, Role::ComboBox, "Value");
+    click(&mut h, Role::Button, "Expression");
+    type_into(&mut h, "Expression", "getProperty('visits') + 1");
+    assert_eq!(
+        element(&h, "serve")["properties"][0]["value"],
+        json!({"expression": "getProperty('visits') + 1"})
+    );
+    assert!(
+        h.query_by_label("Error").is_none(),
+        "no error: {}",
+        h.state().status()
+    );
+
+    // A malformed expression is the model's problem, shown on the block, not a failure.
+    type_into(&mut h, "Expression", "getProperty('visits' +");
+    h.get_by_label_contains("the expression ends too early (at character 23)");
+    assert!(h.query_by_label("Error").is_some());
+
+    h.state_mut().undo();
+    settle(&mut h);
+    assert_eq!(h.state().status(), "Undid Set Property");
+    let remove = h
+        .get_all_by_role_and_label(Role::Button, "Remove")
+        .next()
+        .expect("the property's Remove");
+    remove.click();
+    settle(&mut h);
+    assert!(element(&h, "serve")["properties"].is_null());
+}

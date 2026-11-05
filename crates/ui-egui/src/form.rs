@@ -64,11 +64,39 @@ impl<'a> Schema<'a> {
         {
             return Node::Typed(node, t);
         }
-        if node["oneOf"].is_array() {
-            return Node::Tagged(node);
+        if let Some(variants) = node["oneOf"].as_array() {
+            // String constants and enums, however schemars grouped them: one choice.
+            if variants
+                .iter()
+                .all(|v| v["type"] == "string" && (v["const"].is_string() || v["enum"].is_array()))
+            {
+                let options = variants
+                    .iter()
+                    .flat_map(|v| {
+                        v["const"].as_str().into_iter().chain(
+                            v["enum"]
+                                .as_array()
+                                .into_iter()
+                                .flatten()
+                                .filter_map(Value::as_str),
+                        )
+                    })
+                    .collect();
+                return Node::Enum(options);
+            }
+            // `{"number": 3}` or `{"random": …}`: each variant one required key, no `type` tag.
+            let keyed = variants.iter().all(|v| {
+                v["properties"]["type"]["const"].is_null()
+                    && v["required"].as_array().is_some_and(|r| r.len() == 1)
+            });
+            return if keyed {
+                Node::Keyed(node)
+            } else {
+                Node::Tagged(node)
+            };
         }
-        if node["enum"].is_array() {
-            return Node::Enum(node);
+        if let Some(e) = node["enum"].as_array() {
+            return Node::Enum(e.iter().filter_map(Value::as_str).collect());
         }
         match node["type"].as_str() {
             Some(t) => Node::Typed(node, t),
@@ -82,8 +110,10 @@ enum Node<'a> {
     Typed(&'a Value, &'a str),
     /// A tagged union: `oneOf` objects, each with a constant `type`.
     Tagged(&'a Value),
-    /// A string enum.
-    Enum(&'a Value),
+    /// A union of single-key objects (`{"number": 3}`, `{"expression": "…"}`).
+    Keyed(&'a Value),
+    /// A choice of strings.
+    Enum(Vec<&'a str>),
     Other,
 }
 
@@ -120,6 +150,7 @@ pub fn label(name: &str) -> String {
         "replications" => "Replications",
         "seed" => "Seed",
         "time_unit" => "Time unit",
+        "type" => "Type",
         _ => "",
     };
     if !known.is_empty() {
@@ -136,6 +167,12 @@ pub fn label(name: &str) -> String {
 pub fn choice_label(tag: &str) -> String {
     match tag {
         "log_normal" => "Log-normal".into(),
+        "" => "from its value".into(),
+        "long" => "Whole number".into(),
+        "double" => "Decimal number".into(),
+        "boolean" => "Yes or no".into(),
+        "string" => "Text".into(),
+        "dateTime" => "Date and time".into(),
         "user" => "Data points".into(),
         "hour" => "hours".into(),
         "day" => "days".into(),
@@ -202,32 +239,22 @@ fn edit(
 ) -> Option<Value> {
     match schema.non_null(node) {
         Node::Tagged(n) => tagged(ui, cx, schema, n, key, label, current),
-        Node::Enum(n) => {
-            let options: Vec<&str> = n["enum"]
-                .as_array()
-                .into_iter()
-                .flatten()
-                .filter_map(Value::as_str)
-                .collect();
-            row(ui, label, help, |ui| {
-                let now = current.as_str().unwrap_or("");
-                let mut picked = None;
-                egui::ComboBox::from_id_salt(key)
-                    .selected_text(choice_label(now))
-                    .show_ui(ui, |ui| {
-                        for o in &options {
-                            if ui.selectable_label(*o == now, choice_label(o)).clicked()
-                                && *o != now
-                            {
-                                picked = Some(json!(o));
-                            }
+        Node::Enum(options) => row(ui, label, help, |ui| {
+            let now = current.as_str().unwrap_or("");
+            let mut picked = None;
+            egui::ComboBox::from_id_salt(key)
+                .selected_text(choice_label(now))
+                .show_ui(ui, |ui| {
+                    for o in &options {
+                        if ui.selectable_label(*o == now, choice_label(o)).clicked() && *o != now {
+                            picked = Some(json!(o));
                         }
-                    })
-                    .response
-                    .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, label));
-                picked
-            })
-        }
+                    }
+                })
+                .response
+                .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, label));
+            picked
+        }),
         Node::Typed(_, "boolean") => {
             let mut b = current.as_bool().unwrap_or(false);
             let r = ui.checkbox(&mut b, label);
@@ -272,6 +299,10 @@ fn edit(
             }
         }
         Node::Typed(n, "array") => array(ui, cx, schema, n, key, label, current, time),
+        Node::Keyed(n) => keyed(ui, cx, schema, n, key, label, current, time),
+        Node::Typed(_, "string") => row(ui, label, help, |ui| {
+            text(ui, cx, key, label, current, 260.0)
+        }),
         _ => {
             ui.label(theme::weak(ui, format!("{label}: not editable here yet")));
             None
@@ -605,4 +636,130 @@ fn array(
         out = Some(all);
     }
     out.map(Value::Array)
+}
+
+/// A text field. Commits on Enter or losing focus; Esc restores the value.
+pub fn text(
+    ui: &mut egui::Ui,
+    cx: &mut Cx<'_>,
+    key: &str,
+    label: &str,
+    current: &Value,
+    width: f32,
+) -> Option<Value> {
+    let shown = current.as_str().unwrap_or("").to_owned();
+    let mut t = cx.drafts.get(key).cloned().unwrap_or_else(|| shown.clone());
+    let r = ui.add(
+        egui::TextEdit::singleline(&mut t)
+            .desired_width(width)
+            .font(egui::TextStyle::Monospace),
+    );
+    field_outline(ui, &r);
+    r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, label));
+    if r.has_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape)) {
+        cx.drafts.remove(key);
+        r.surrender_focus();
+        None
+    } else if r.lost_focus() {
+        cx.drafts.remove(key);
+        (t != shown).then(|| json!(t))
+    } else {
+        if r.has_focus() || r.changed() {
+            cx.drafts.insert(key.to_owned(), t);
+        }
+        None
+    }
+}
+
+/// How a keyed union's choice reads.
+fn key_label(k: &str) -> String {
+    match k {
+        "number" => "Number".into(),
+        "boolean" => "Yes or no".into(),
+        "text" => "Text".into(),
+        "random" => "Random".into(),
+        "expression" => "Expression".into(),
+        other => label(other),
+    }
+}
+
+/// A union of single-key objects: the key as a choice, then its value's editor.
+#[allow(clippy::too_many_arguments)]
+fn keyed(
+    ui: &mut egui::Ui,
+    cx: &mut Cx<'_>,
+    schema: Schema<'_>,
+    node: &Value,
+    key: &str,
+    label: &str,
+    current: &Value,
+    time: bool,
+) -> Option<Value> {
+    let variants: Vec<(&str, &Value)> = node["oneOf"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(|v| {
+            let k = v["required"][0].as_str()?;
+            Some((k, &v["properties"][k]))
+        })
+        .collect();
+    let now = current
+        .as_object()
+        .and_then(|o| o.keys().next())
+        .map_or("", String::as_str)
+        .to_owned();
+    let mut out = None;
+    let picked = row(ui, label, node["description"].as_str(), |ui| {
+        let mut picked = None;
+        egui::ComboBox::from_id_salt(key)
+            .selected_text(key_label(&now))
+            .width(170.0)
+            .show_ui(ui, |ui| {
+                for (k, _) in &variants {
+                    if ui.selectable_label(*k == now, key_label(k)).clicked() && *k != now {
+                        picked = Some((*k).to_owned());
+                    }
+                }
+            })
+            .response
+            .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, label));
+        picked
+    });
+    if let Some(k) = picked {
+        // A starting value of the new kind, carrying a number over where it can.
+        let n = current["number"].as_f64().unwrap_or(1.0);
+        let v = match k.as_str() {
+            "number" => json!(n),
+            "boolean" => json!(false),
+            "text" => json!(""),
+            "random" => json!({"type": "exponential", "mean": n}),
+            "expression" => json!(format!("{n}")),
+            _ => Value::Null,
+        };
+        out = Some(json!({ k: v }));
+    }
+    if let Some((k, inner)) = variants.iter().find(|(k, _)| *k == now) {
+        let k_key = format!("{key}/{k}");
+        let changed = ui
+            .indent(&k_key, |ui| {
+                edit(
+                    ui,
+                    cx,
+                    schema,
+                    inner,
+                    &k_key,
+                    &key_label(k),
+                    None,
+                    &current[*k],
+                    time,
+                    false,
+                )
+            })
+            .inner;
+        if let Some(v) = changed {
+            out = Some(json!({ (*k): v }));
+        }
+    }
+    out
 }
