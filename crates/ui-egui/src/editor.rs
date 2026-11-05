@@ -13,6 +13,8 @@ pub const KINDS: &[(&str, &str)] = &[
     ("source", "Arrivals"),
     ("server", "Task with a resource"),
     ("delay", "Task"),
+    ("exclusive_gateway", "Decision (one way)"),
+    ("parallel_gateway", "Split or join (all ways)"),
     ("sink", "Departures"),
 ];
 
@@ -24,6 +26,8 @@ pub fn new_block(kind: &str) -> Value {
             json!({"kind": "server", "capacity": 1, "service": {"type": "exponential", "mean": 1.0}})
         }
         "delay" => json!({"kind": "delay", "duration": {"type": "constant", "value": 1.0}}),
+        "exclusive_gateway" => json!({"kind": "exclusive_gateway"}),
+        "parallel_gateway" => json!({"kind": "parallel_gateway"}),
         _ => json!({"kind": "sink"}),
     }
 }
@@ -233,7 +237,20 @@ impl App {
                 ("Warning", p.warning)
             };
             ui.label(theme::strong(word).color(color));
-            ui.label(&pr.message);
+            // The engine's message starts "error at `id`: " or "error: "; the word is the label
+            // and the place is the inspector or the Show link, so only the rest is shown.
+            let message = ["error at `", "warning at `"]
+                .iter()
+                .find_map(|head| {
+                    pr.message
+                        .strip_prefix(head)
+                        .and_then(|rest| rest.split_once("`: "))
+                        .map(|(_, m)| m)
+                })
+                .or_else(|| pr.message.strip_prefix("error: "))
+                .or_else(|| pr.message.strip_prefix("warning: "))
+                .unwrap_or(&pr.message);
+            ui.label(message);
             if link
                 && let Some(at) = &pr.at
                 && ui.link(format!("Show {at}")).clicked()
@@ -348,10 +365,13 @@ impl App {
         ui.label(theme::weak(ui, format!("id {id}")).monospace());
         ui.add_space(8.0);
 
-        for pr in problems
-            .iter()
-            .filter(|pr| pr.at.as_deref() == Some(id.as_str()))
-        {
+        // The block's own problems, and those of the flows into and out of it.
+        let flows = flows_of(model, &id);
+        for pr in problems.iter().filter(|pr| {
+            pr.at
+                .as_deref()
+                .is_some_and(|at| at == id || flows.iter().any(|f| f == at))
+        }) {
             self.problem_row(ui, p, pr, false);
         }
 
@@ -401,6 +421,15 @@ impl App {
                 )
             })
             .collect();
+        let decision = kind == "exclusive_gateway";
+        if decision {
+            ui.label(theme::weak(
+                ui,
+                "An entity takes the first flow whose condition holds; with no conditions, a flow \
+                 drawn by the probabilities (blank ones share what the others leave).",
+            ));
+            ui.add_space(4.0);
+        }
         for (heading, incoming) in [("Comes from", true), ("Goes to", false)] {
             if (incoming && kind == "source") || (!incoming && kind == "sink") {
                 continue;
@@ -420,6 +449,11 @@ impl App {
                         ui.horizontal(|ui| {
                             if ui.link(name_of(other)).clicked() {
                                 self.selected = Some(other.clone());
+                            }
+                            // A decision's way out: its probability and condition.
+                            if decision && !incoming {
+                                let c = connection(model, cid);
+                                self.flow_fields(ui, cid, &c);
                             }
                             if ui
                                 .add(
@@ -473,6 +507,142 @@ impl App {
                 });
             });
             ui.add_space(4.0);
+        }
+        if decision {
+            self.default_flow(ui, &id, el, &conns, &names);
+        }
+    }
+
+    /// A decision's default flow: taken when no condition holds. Without one, such an entity
+    /// leaves the model at the gateway (with a warning).
+    fn default_flow(
+        &mut self,
+        ui: &mut egui::Ui,
+        id: &str,
+        el: &Value,
+        conns: &[(String, String, String)],
+        names: &[(String, String)],
+    ) {
+        let outs: Vec<(String, String)> = conns
+            .iter()
+            .filter(|(_, f, _)| f == id)
+            .map(|(cid, _, t)| {
+                let to = names
+                    .iter()
+                    .find(|(i, _)| i == t)
+                    .map_or_else(|| t.clone(), |(_, n)| n.clone());
+                (cid.clone(), format!("to {to}"))
+            })
+            .collect();
+        let now = el["default"].as_str().map(str::to_owned);
+        let shown = now
+            .as_ref()
+            .and_then(|d| outs.iter().find(|(c, _)| c == d))
+            .map_or_else(|| "None".to_owned(), |(_, n)| n.clone());
+        let mut chosen: Option<Option<String>> = None;
+        ui.horizontal(|ui| {
+            form::label_cell(ui, "Default flow", 26.0);
+            egui::ComboBox::from_id_salt((id, "default"))
+                .selected_text(shown)
+                .width(200.0)
+                .show_ui(ui, |ui| {
+                    if ui.selectable_label(now.is_none(), "None").clicked() {
+                        chosen = Some(None);
+                    }
+                    for (c, n) in &outs {
+                        if ui.selectable_label(now.as_deref() == Some(c), n).clicked() {
+                            chosen = Some(Some(c.clone()));
+                        }
+                    }
+                })
+                .response
+                .widget_info(|| {
+                    egui::WidgetInfo::labeled(egui::Role::ComboBox, true, "Default flow")
+                });
+        });
+        if let Some(d) = chosen.filter(|d| *d != now) {
+            self.execute("block.set", json!({ "id": id, "default": d }));
+        }
+    }
+
+    /// A decision's way out: its probability and condition, each blank when unset. Each commits
+    /// on Enter or leaving the field, as one `flow.set`.
+    fn flow_fields(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) {
+        let p_now = c["probability"]
+            .as_f64()
+            .map(crate::results::number)
+            .unwrap_or_default();
+        if let Some(t) = self.small_field(
+            ui,
+            &format!("{cid}/p"),
+            &format!("Probability of {cid}"),
+            "p",
+            &p_now,
+            56.0,
+        ) {
+            let t = t.trim();
+            if t.is_empty() {
+                self.execute("flow.set", json!({ "id": cid, "probability": null }));
+            } else {
+                match t.parse::<f64>() {
+                    Ok(v) if (0.0..=1.0).contains(&v) => {
+                        self.execute("flow.set", json!({ "id": cid, "probability": v }));
+                    }
+                    _ => self.report_error(format!("{cid}: a probability is a number from 0 to 1")),
+                }
+            }
+        }
+        let c_now = c["condition"].as_str().unwrap_or("").to_owned();
+        if let Some(t) = self.small_field(
+            ui,
+            &format!("{cid}/c"),
+            &format!("Condition of {cid}"),
+            "if",
+            &c_now,
+            200.0,
+        ) {
+            let t = t.trim();
+            let v = if t.is_empty() { Value::Null } else { json!(t) };
+            self.execute("flow.set", json!({ "id": cid, "condition": v }));
+        }
+    }
+
+    /// A small labelled text field ("p", "if") that commits on Enter or leaving it, when changed;
+    /// Esc restores it.
+    fn small_field(
+        &mut self,
+        ui: &mut egui::Ui,
+        key: &str,
+        name: &str,
+        prefix: &str,
+        current: &str,
+        width: f32,
+    ) -> Option<String> {
+        ui.label(theme::weak(ui, prefix));
+        let mut text = self
+            .drafts
+            .get(key)
+            .cloned()
+            .unwrap_or_else(|| current.to_owned());
+        let r = ui.add(
+            egui::TextEdit::singleline(&mut text)
+                .desired_width(width)
+                .font(egui::TextStyle::Monospace),
+        );
+        form::field_outline(ui, &r);
+        r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, name));
+        if r.has_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape)) {
+            self.drafts.remove(key);
+            r.surrender_focus();
+            None
+        } else if r.lost_focus() {
+            self.drafts.remove(key);
+            (text.trim() != current.trim()).then_some(text)
+        } else {
+            if r.has_focus() || r.changed() {
+                self.drafts.insert(key.to_owned(), text);
+            }
+            None
         }
     }
 
@@ -645,6 +815,28 @@ fn element_names(model: &Value) -> Vec<(String, String)> {
             (id, name)
         })
         .collect()
+}
+
+/// The ids of the connections into and out of element `id`.
+pub(crate) fn flows_of(model: &Value, id: &str) -> Vec<String> {
+    model["connections"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter(|c| c["from"] == id || c["to"] == id)
+        .filter_map(|c| c["id"].as_str().map(str::to_owned))
+        .collect()
+}
+
+/// A connection's JSON by id.
+fn connection(model: &Value, id: &str) -> Value {
+    model["connections"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .find(|c| c["id"] == id)
+        .cloned()
+        .unwrap_or_default()
 }
 
 fn kind_of(model: &Value, id: &str) -> String {

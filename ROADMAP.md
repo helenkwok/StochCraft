@@ -631,6 +631,11 @@ Entity properties (M2.2) are edited in the inspector from `property.set`'s schem
 number, yes or no, text, a random draw or an expression; malformed expressions show as the
 block's problem), and runs report each property's mean assigned value.
 
+Routing (M2.3) is edited there too: Add block offers a decision (exclusive gateway) and a split
+or join (parallel gateway), drawn as BPMN diamonds; a decision's ways out take a probability and
+a condition (blank when unset), and a default flow; a flow's problems (a condition that can't be
+read) show on its block.
+
 **Still to come here:** resource pools (M2.5) appear in the same forms as their commands land.
 
 ### M3.3 Running and results
