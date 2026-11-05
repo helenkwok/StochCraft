@@ -121,7 +121,20 @@ fn every_edit_undoes_exactly_and_redoes_exactly() {
                     .cloned()
                     .unwrap_or_default()
             };
-            let (command, params) = match rng.next_u64() % 9 {
+            let names = ["n", "tier", "rush"];
+            let (command, params) = match rng.next_u64() % 11 {
+                9 => (
+                    "property.set",
+                    json!({
+                        "element": pick(&mut rng, &ids),
+                        "name": names[(rng.next_u64() % 3) as usize],
+                        "value": {"expression": format!("getProperty('n') + {}", rng.next_u64() % 5)},
+                    }),
+                ),
+                10 => (
+                    "property.remove",
+                    json!({"element": pick(&mut rng, &ids), "name": names[(rng.next_u64() % 3) as usize]}),
+                ),
                 0 => (
                     "block.add",
                     json!({"kind": kinds[(rng.next_u64() % 4) as usize], "index": rng.next_u64() % 5}),
@@ -627,5 +640,109 @@ fn results_carry_a_run_record() {
         r["record"]["file_notes"]
             .as_array()
             .is_some_and(|n| !n.is_empty())
+    );
+}
+
+#[test]
+fn properties_are_set_listed_run_saved_and_undone() {
+    let mut e = help_desk();
+    let plain = e.model().clone();
+    ok(
+        &mut e,
+        "property.set",
+        json!({"element": "arrivals", "name": "issues", "type": "long", "value": {"number": 3}}),
+    );
+    ok(
+        &mut e,
+        "property.set",
+        json!({"element": "desk", "name": "issues", "value": {"expression": "getProperty('issues') - 1"}}),
+    );
+    ok(
+        &mut e,
+        "property.set",
+        json!({"element": "exit", "name": "done", "value": {"expression": "getProperty('issues') = 2"}}),
+    );
+    // Replacing a value keeps the declared type unless a new one (or null) is given.
+    ok(
+        &mut e,
+        "property.set",
+        json!({"element": "arrivals", "name": "issues", "value": {"number": 3}}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(
+        m["elements"][0]["properties"],
+        json!([{"name": "issues", "type": "long", "value": {"number": 3.0}}])
+    );
+    assert_eq!(
+        ok(&mut e, "property.list", json!({})),
+        json!({"properties": [
+            {"name": "done", "type": "boolean", "set_by": ["exit"]},
+            {"name": "issues", "type": "long", "set_by": ["arrivals", "desk"]},
+        ]})
+    );
+
+    // Results carry the mean value each element assigned.
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    let element = |id: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|v| v.iter().find(|x| x["id"] == id))
+            .cloned()
+            .unwrap_or_default()
+    };
+    assert_eq!(element("arrivals")["properties"]["issues"]["mean"], 3.0);
+    assert_eq!(element("desk")["properties"]["issues"]["mean"], 2.0);
+    assert_eq!(element("exit")["properties"]["done"]["mean"], 1.0);
+
+    // Saved and opened again, the model is the same.
+    let path = scratch("properties.bpmn");
+    let path = path.to_string_lossy();
+    ok(&mut e, "file.save", json!({"path": path}));
+    let saved = e.model().clone();
+    let mut again = Engine::new();
+    ok(&mut again, "file.open", json!({"path": path}));
+    assert_eq!(again.model(), &saved);
+
+    // A bad expression stops the run with its position.
+    ok(
+        &mut e,
+        "property.set",
+        json!({"element": "desk", "name": "issues", "value": {"expression": "getProperty('issues') -"}}),
+    );
+    let failed = e.execute("run", json!({}));
+    let details = failed.err().and_then(|f| f.details).unwrap_or_default();
+    assert_eq!(details[0]["code"], "bad_expression", "{details}");
+    assert_eq!(
+        err(
+            &mut e,
+            "property.remove",
+            json!({"element": "desk", "name": "nothing"})
+        ),
+        ErrorCode::NotFound
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "property.set",
+            json!({"element": "desk", "name": "x", "value": {"number": 1}, "colour": "red"})
+        ),
+        ErrorCode::InvalidParams
+    );
+
+    // Every change undoes exactly.
+    ok(
+        &mut e,
+        "property.remove",
+        json!({"element": "exit", "name": "done"}),
+    );
+    for _ in 0..6 {
+        ok(&mut e, "undo", json!({}));
+    }
+    assert_eq!(e.model(), &plain);
+    assert!(
+        ok(&mut e, "model.get", json!({}))["elements"][0]
+            .get("properties")
+            .is_none(),
+        "no properties, no key: models without properties read as before"
     );
 }

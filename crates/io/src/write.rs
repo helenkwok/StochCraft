@@ -6,7 +6,7 @@
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-use stochcraft_model::{Dist, ElementKind, Model};
+use stochcraft_model::{Dist, ElementKind, Model, Property, PropertyType, PropertyValue};
 
 use crate::bpsim::NS2;
 use crate::duration::trim_float;
@@ -112,6 +112,31 @@ pub fn dist_element(d: &Dist) -> Element {
 /// A BPSim whole-number value.
 pub(crate) fn numeric(n: u64) -> Element {
     s("NumericParameter").with_attr("value", &n.to_string())
+}
+
+/// A property's `Property` parameter: its name, its declared type and its value (a duration
+/// as a number in the scenario's time unit).
+pub(crate) fn property_element(p: &Property) -> Element {
+    let mut e = s("Property").with_attr("name", &p.name);
+    if let Some(t) = p.ty {
+        e = e.with_attr("type", t.bpsim_name());
+    }
+    let value = match &p.value {
+        PropertyValue::Number(n) if p.ty == Some(PropertyType::Long) && n.fract() == 0.0 => {
+            s("NumericParameter").with_attr("value", &num(*n))
+        }
+        PropertyValue::Number(n) => s("FloatingParameter").with_attr("value", &num(*n)),
+        PropertyValue::Boolean(b) => {
+            s("BooleanParameter").with_attr("value", if *b { "true" } else { "false" })
+        }
+        PropertyValue::Text(t) if p.ty == Some(PropertyType::DateTime) => {
+            s("DateTimeParameter").with_attr("value", t)
+        }
+        PropertyValue::Text(t) => s("StringParameter").with_attr("value", t),
+        PropertyValue::Random(d) => dist_element(d),
+        PropertyValue::Expression(x) => s("ExpressionParameter").with_attr("value", x),
+    };
+    e.with_child(value)
 }
 
 fn param(name: &str, value: Element) -> Element {
@@ -345,7 +370,17 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                     s("TimeParameters").with_child(param("ProcessingTime", dist_element(duration))),
                 );
             }
-            ElementKind::Sink => continue,
+            ElementKind::Sink => {}
+        }
+        if !e.properties.is_empty() {
+            let mut pp = s("PropertyParameters");
+            for p in &e.properties {
+                pp.push(property_element(p));
+            }
+            ep.push(pp);
+        }
+        if ep.elements().next().is_none() {
+            continue;
         }
         scenario.push(ep);
     }

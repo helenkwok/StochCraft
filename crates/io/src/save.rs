@@ -14,7 +14,7 @@ use stochcraft_model::{Connection, Element as ModelElement, ElementKind, Model};
 use crate::bpsim::{NS2, NSS};
 use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
-use crate::write::{dist_element, numeric, size};
+use crate::write::{dist_element, numeric, property_element, size};
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
 
@@ -61,8 +61,15 @@ fn difference(got: &Model, want: &Model) -> Option<String> {
     if got.name != want.name {
         return Some(format!("its name reads as {:?}", got.name));
     }
+    // An element's properties are assigned together, so their order means nothing; a file
+    // lists them in its own order.
+    let sorted = |e: &ModelElement| {
+        let mut e = e.clone();
+        e.properties.sort_by(|a, b| a.name.cmp(&b.name));
+        e
+    };
     for (g, w) in got.elements.iter().zip(&want.elements) {
-        if g != w {
+        if sorted(g) != sorted(w) {
             return Some(format!("element `{}` reads as {g:?}", w.id));
         }
     }
@@ -1064,13 +1071,27 @@ impl Editor {
     ) -> Result<(), SaveError> {
         // Every change, worked out first, then written into the scenario.
         let mut writes: Vec<(String, &'static str, &'static str, Option<Element>)> = Vec::new();
+        let mut property_writes: Vec<(String, String, Option<Element>)> = Vec::new();
         let mut new_resources: Vec<(&ModelElement, bool)> = Vec::new();
         for e in &after.elements {
-            let was = old
+            let was_element = old
                 .get(e.id.as_str())
-                .filter(|_| !replaced.contains(e.id.as_str()))
-                .map(|w| &w.kind);
+                .filter(|_| !replaced.contains(e.id.as_str()));
+            let was = was_element.map(|w| &w.kind);
             let id = e.id.to_string();
+            let old_props = was_element.map_or(&[][..], |w| w.properties.as_slice());
+            for p in old_props {
+                if e.property(&p.name).is_none() {
+                    property_writes.push((id.clone(), p.name.clone(), None));
+                }
+            }
+            for p in &e.properties {
+                if old_props.iter().find(|o| o.name == p.name) != Some(p) {
+                    let mut v = property_element(p);
+                    self.text_attrs(&mut v);
+                    property_writes.push((id.clone(), p.name.clone(), Some(v)));
+                }
+            }
             match &e.kind {
                 ElementKind::Source {
                     interarrival,
@@ -1172,14 +1193,32 @@ impl Editor {
                 self.remove_resource(root, &task);
             }
         }
-        if writes.is_empty() {
+        if writes.is_empty() && property_writes.is_empty() {
             return Ok(());
         }
         let s = self.ensure_scenario(root, scenario)?;
         for (element, group, name, v) in writes {
             set_param(s, &element, group, name, v);
         }
+        for (element, name, v) in property_writes {
+            set_property(s, &element, &name, v);
+        }
         Ok(())
+    }
+
+    /// Writes a built element's text attributes (a property's name, a text value or an
+    /// expression) as character references where the file's encoding needs it.
+    fn text_attrs(&self, e: &mut Element) {
+        if self.ascii {
+            for a in ["name", "value"] {
+                if let Some(v) = e.attr(a).filter(|v| !v.is_ascii()) {
+                    self.set_text_attr(e, a, &v);
+                }
+            }
+            for c in e.elements_mut() {
+                self.text_attrs(c);
+            }
+        }
     }
 
     /// The scenario that was opened, created (with its `BPSimData`) if the file had none.
@@ -1373,6 +1412,28 @@ fn set_param(s: &mut Element, element: &str, group: &str, name: &str, value: Opt
     };
     let mut value = value;
     rename(&mut value, &prefix, &ns);
+    let Some(g) = group_mut(s, element, group, &has) else {
+        return;
+    };
+    let order = param_order(group);
+    let pos = order.iter().position(|p| *p == name).unwrap_or(order.len());
+    set_value(g, &prefix, &ns, name, Some(value), &order[..pos]);
+}
+
+/// Parameter group `group` of `element` in scenario `s`: in the last of its `ElementParameters`
+/// for which `has` holds, else the last one, else a new one; the group is made (in the schema's
+/// group order) if that `ElementParameters` lacks it.
+fn group_mut<'a>(
+    s: &'a mut Element,
+    element: &str,
+    group: &str,
+    has: &dyn Fn(&Element) -> bool,
+) -> Option<&'a mut Element> {
+    let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
+    let prefix = s.prefix().to_owned();
+    let is_ep = |e: &Element| {
+        e.is_any(&NSS, "ElementParameters") && e.attr("elementRef").as_deref() == Some(element)
+    };
     let target = s
         .children
         .iter()
@@ -1395,7 +1456,7 @@ fn set_param(s: &mut Element, element: &str, group: &str, name: &str, value: Opt
         }
     };
     let Some(Node::Element(ep)) = s.children.get_mut(at) else {
-        return;
+        return None;
     };
     if ep.child(&NSS, group).is_none() {
         let groups = &crate::bpsim::GROUPS;
@@ -1416,12 +1477,60 @@ fn set_param(s: &mut Element, element: &str, group: &str, name: &str, value: Opt
             Node::Element(Element::new(&qname(&prefix, group), Some(&ns))),
         );
     }
-    let Some(g) = ep.child_mut(&NSS, group) else {
+    ep.child_mut(&NSS, group)
+}
+
+/// Sets (or with `None` removes) property `name` of `element` in scenario `s`. `value` is a whole
+/// `Property` element; an existing one keeps its place and result requests and takes the new
+/// type and value.
+fn set_property(s: &mut Element, element: &str, name: &str, value: Option<Element>) {
+    let is_ep = |e: &Element| {
+        e.is_any(&NSS, "ElementParameters") && e.attr("elementRef").as_deref() == Some(element)
+    };
+    let is_prop =
+        |p: &Element| p.is_any(&NSS, "Property") && p.attr("name").as_deref() == Some(name);
+    let Some(mut value) = value else {
+        for ep in s.elements_mut().filter(|e| is_ep(e)) {
+            if let Some(g) = ep.child_mut(&NSS, "PropertyParameters") {
+                remove_all(g, &is_prop);
+            }
+        }
         return;
     };
-    let order = param_order(group);
-    let pos = order.iter().position(|p| *p == name).unwrap_or(order.len());
-    set_value(g, &prefix, &ns, name, Some(value), &order[..pos]);
+    let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
+    let prefix = s.prefix().to_owned();
+    rename(&mut value, &prefix, &ns);
+    let has = |e: &Element| {
+        e.child(&NSS, "PropertyParameters")
+            .is_some_and(|g| g.elements().any(is_prop))
+    };
+    let Some(g) = group_mut(s, element, "PropertyParameters", &has) else {
+        return;
+    };
+    match g.elements_mut().filter(|p| is_prop(p)).last() {
+        // An existing property takes the new type and value, keeping its place and its result
+        // requests (which come first).
+        Some(p) => {
+            match value.attr("type") {
+                Some(t) => p.set_attr("type", &t),
+                None => p.remove_attr("type"),
+            }
+            remove_all(p, &|v| v.local() != "ResultRequest");
+            let values: Vec<Node> = std::mem::take(&mut value.children)
+                .into_iter()
+                .filter(|n| matches!(n, Node::Element(_)))
+                .collect();
+            for v in values {
+                let at = end_of(p);
+                p.children.insert(at, v);
+            }
+        }
+        // A new property goes last.
+        None => {
+            let at = end_of(g);
+            g.children.insert(at, Node::Element(value));
+        }
+    }
 }
 
 /// Sets parameter `name` of `parent` to `value`, keeping its result requests; a new parameter

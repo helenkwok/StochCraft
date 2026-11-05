@@ -9,12 +9,68 @@ use stochcraft_model::{Element, ElementKind};
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
 
-use crate::{Compiled, ElementReport, Entity, Report};
+use crate::{Assign, Compiled, ElementReport, Entity, Held, Report, Source};
+
+/// What an element assigns to entities as they enter, and the stream it draws values from.
+struct Props {
+    assigns: Vec<Assign>,
+    rng: RefCell<Rng>,
+}
+
+/// The model's property slots and each element's assignments, shared by the ports.
+struct Assigner {
+    slots: Vec<String>,
+    elements: Vec<Props>,
+}
+
+impl Assigner {
+    /// Makes element `index`'s assignments to `e`, all from the values it arrived with, and
+    /// records the values in the element's statistics.
+    fn enter(&self, index: usize, e: &mut Entity, stats: &[RefCell<BlockStats>]) {
+        let Some(props) = self.elements.get(index) else {
+            return;
+        };
+        if props.assigns.is_empty() {
+            return;
+        }
+        if e.properties.len() < self.slots.len() {
+            e.properties.resize(self.slots.len(), None);
+        }
+        let read = |name: &str| {
+            let slot = self.slots.binary_search_by(|s| s.as_str().cmp(name)).ok()?;
+            e.properties.get(slot)?.as_ref().map(Held::value)
+        };
+        let new: Vec<Option<Held>> = props
+            .assigns
+            .iter()
+            .map(|a| match &a.source {
+                Source::Fixed(v) => v.clone(),
+                Source::Random(d) => {
+                    let x = d.sample(&mut props.rng.borrow_mut());
+                    Held::of(&stochcraft_model::expr::Value::Number(x), a.ty)
+                }
+                Source::Expr(x) => Held::of(&x.eval(&read), a.ty),
+            })
+            .collect();
+        let mut s = stats.get(index).map(RefCell::borrow_mut);
+        for (k, (a, v)) in props.assigns.iter().zip(new).enumerate() {
+            if let (Some(s), Some(x)) = (&mut s, v.as_ref().and_then(Held::statistic))
+                && let Some(t) = s.properties.get_mut(k)
+            {
+                t.add(x);
+            }
+            if let Some(slot) = e.properties.get_mut(a.slot) {
+                *slot = v;
+            }
+        }
+    }
+}
 
 impl Compiled {
     /// Runs one replication for the experiment's warm-up plus duration, with random numbers from
-    /// `rng` (each element draws from its own forked stream, in model order), and reports the
-    /// statistics collected after the warm-up.
+    /// `rng` (each element draws from its own forked stream, in model order; then each element's
+    /// property values from another, so properties never change the other draws), and reports
+    /// the statistics collected after the warm-up.
     pub fn run(&self, rng: Rng) -> Report {
         let x = &self.model.experiment;
         self.run_for(rng, x.warmup, x.duration)
@@ -29,20 +85,34 @@ impl Compiled {
         let mut sim = Sim::new();
         let ctx = sim.ctx();
         let stats: Rc<Vec<RefCell<BlockStats>>> = Rc::new(
-            elements
+            self.assigns
                 .iter()
-                .map(|_| RefCell::new(BlockStats::new(0.0)))
+                .map(|a| RefCell::new(BlockStats::new(0.0, a.len())))
                 .collect(),
         );
         let inputs: Vec<Store<Entity>> = elements.iter().map(|_| Store::new(&ctx)).collect();
         let next_id = Rc::new(RefCell::new(0u64));
+        // The elements' streams first, in model order as always; then the properties'.
+        let streams: Vec<Rng> = elements.iter().map(|_| rng.fork()).collect();
+        let mut prop_root = rng.fork();
+        let assigner = Rc::new(Assigner {
+            slots: self.slots.clone(),
+            elements: self
+                .assigns
+                .iter()
+                .map(|a| Props {
+                    assigns: a.clone(),
+                    rng: RefCell::new(prop_root.fork()),
+                })
+                .collect(),
+        });
 
-        for (i, element) in elements.iter().enumerate() {
-            let rng = rng.fork();
+        for ((i, element), rng) in elements.iter().enumerate().zip(streams) {
             let out = self.outputs.get(i).copied().flatten().and_then(|idx| {
                 inputs.get(idx).map(|s| Port {
                     store: s.clone(),
                     stats: Rc::clone(&stats),
+                    assigner: Rc::clone(&assigner),
                     index: idx,
                 })
             });
@@ -52,6 +122,7 @@ impl Compiled {
             let env = BlockEnv {
                 ctx: ctx.clone(),
                 stats: Rc::clone(&stats),
+                assigner: Rc::clone(&assigner),
                 me: i,
                 input,
                 out,
@@ -83,7 +154,8 @@ impl Compiled {
         let elements = elements
             .iter()
             .zip(stats.iter())
-            .map(|(e, s)| s.borrow().report(e, end))
+            .zip(&self.assigns)
+            .map(|((e, s), a)| s.borrow().report(e, a, end))
             .collect();
         Report {
             warmup,
@@ -105,10 +177,12 @@ pub(crate) struct BlockStats {
     wait: Tally,
     /// Time from creation to reaching a sink.
     time_in_system: Tally,
+    /// The values assigned to each of the element's properties.
+    properties: Vec<Tally>,
 }
 
 impl BlockStats {
-    fn new(t: f64) -> Self {
+    fn new(t: f64, properties: usize) -> Self {
         Self {
             entered: 0,
             left: 0,
@@ -116,6 +190,7 @@ impl BlockStats {
             busy: TimeWeighted::new(t, 0.0),
             wait: Tally::new(),
             time_in_system: Tally::new(),
+            properties: (0..properties).map(|_| Tally::new()).collect(),
         }
     }
 
@@ -126,9 +201,10 @@ impl BlockStats {
         self.busy.reset(t);
         self.wait = Tally::new();
         self.time_in_system = Tally::new();
+        self.properties.iter_mut().for_each(|p| *p = Tally::new());
     }
 
-    pub(crate) fn report(&self, element: &Element, end: f64) -> ElementReport {
+    pub(crate) fn report(&self, element: &Element, assigns: &[Assign], end: f64) -> ElementReport {
         let kind = &element.kind;
         let server = matches!(kind, ElementKind::Server { .. });
         ElementReport {
@@ -158,6 +234,11 @@ impl BlockStats {
             } else {
                 None
             },
+            properties: assigns
+                .iter()
+                .zip(&self.properties)
+                .map(|(a, t)| (a.name.clone(), t.mean()))
+                .collect(),
         }
     }
 }
@@ -167,12 +248,14 @@ impl BlockStats {
 struct Port {
     store: Store<Entity>,
     stats: Rc<Vec<RefCell<BlockStats>>>,
+    assigner: Rc<Assigner>,
     index: usize,
 }
 
 impl Port {
     fn send(&self, now: f64, mut e: Entity) {
         e.entered = now;
+        self.assigner.enter(self.index, &mut e, &self.stats);
         if let Some(s) = self.stats.get(self.index) {
             let mut s = s.borrow_mut();
             s.entered += 1;
@@ -186,6 +269,7 @@ impl Port {
 struct BlockEnv {
     ctx: Ctx,
     stats: Rc<Vec<RefCell<BlockStats>>>,
+    assigner: Rc<Assigner>,
     me: usize,
     input: Store<Entity>,
     out: Option<Port>,
@@ -233,15 +317,16 @@ fn spawn_source(
                 s.entered += 1;
                 s.left += 1;
             });
+            let mut entity = Entity {
+                id,
+                created: now,
+                entered: now,
+                properties: Vec::new(),
+            };
+            // A source sets its properties on the entities it creates.
+            env.assigner.enter(env.me, &mut entity, &env.stats);
             if let Some(out) = &env.out {
-                out.send(
-                    now,
-                    Entity {
-                        id,
-                        created: now,
-                        entered: now,
-                    },
-                );
+                out.send(now, entity);
             }
         }
     });

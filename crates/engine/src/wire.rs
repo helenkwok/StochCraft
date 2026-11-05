@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::{
-    Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Experiment, Model, Severity,
-    TimeUnit,
+    Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Experiment, Model, Property,
+    PropertyType, PropertyValue, Severity, TimeUnit,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -277,6 +277,133 @@ impl From<TimeUnitSpec> for TimeUnit {
     }
 }
 
+/// BPSim's property types.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+pub enum PropertyTypeSpec {
+    #[serde(rename = "string")]
+    String,
+    #[serde(rename = "boolean")]
+    Boolean,
+    /// A whole number.
+    #[serde(rename = "long")]
+    Long,
+    #[serde(rename = "double")]
+    Double,
+    /// A length of time in the experiment's time unit.
+    #[serde(rename = "duration")]
+    Duration,
+    /// A date and time, as text.
+    #[serde(rename = "dateTime")]
+    DateTime,
+}
+
+impl From<PropertyType> for PropertyTypeSpec {
+    fn from(t: PropertyType) -> Self {
+        match t {
+            PropertyType::String => PropertyTypeSpec::String,
+            PropertyType::Boolean => PropertyTypeSpec::Boolean,
+            PropertyType::Long => PropertyTypeSpec::Long,
+            PropertyType::Double => PropertyTypeSpec::Double,
+            PropertyType::Duration => PropertyTypeSpec::Duration,
+            PropertyType::DateTime => PropertyTypeSpec::DateTime,
+        }
+    }
+}
+
+impl From<PropertyTypeSpec> for PropertyType {
+    fn from(t: PropertyTypeSpec) -> Self {
+        match t {
+            PropertyTypeSpec::String => PropertyType::String,
+            PropertyTypeSpec::Boolean => PropertyType::Boolean,
+            PropertyTypeSpec::Long => PropertyType::Long,
+            PropertyTypeSpec::Double => PropertyType::Double,
+            PropertyTypeSpec::Duration => PropertyType::Duration,
+            PropertyTypeSpec::DateTime => PropertyType::DateTime,
+        }
+    }
+}
+
+/// What a property is set to, one of: `{"number": 3}`, `{"boolean": true}`, `{"text": "gold"}`,
+/// `{"random": <distribution>}` (drawn for each entity) or `{"expression": "getProperty('n') - 1"}`
+/// (BPSim's XPath, from the entity's properties as it arrived).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
+pub enum PropertyValueSpec {
+    Number(f64),
+    Boolean(bool),
+    Text(String),
+    Random(DistSpec),
+    Expression(String),
+}
+
+impl From<&PropertyValue> for PropertyValueSpec {
+    fn from(v: &PropertyValue) -> Self {
+        match v {
+            PropertyValue::Number(n) => PropertyValueSpec::Number(*n),
+            PropertyValue::Boolean(b) => PropertyValueSpec::Boolean(*b),
+            PropertyValue::Text(t) => PropertyValueSpec::Text(t.clone()),
+            PropertyValue::Random(d) => PropertyValueSpec::Random(d.into()),
+            PropertyValue::Expression(x) => PropertyValueSpec::Expression(x.clone()),
+        }
+    }
+}
+
+impl From<PropertyValueSpec> for PropertyValue {
+    /// A constant "distribution" is a fixed number, as model files hold it.
+    fn from(v: PropertyValueSpec) -> Self {
+        match v {
+            PropertyValueSpec::Number(n)
+            | PropertyValueSpec::Random(DistSpec::Constant { value: n }) => {
+                PropertyValue::Number(n)
+            }
+            PropertyValueSpec::Boolean(b) => PropertyValue::Boolean(b),
+            PropertyValueSpec::Text(t) => PropertyValue::Text(t),
+            PropertyValueSpec::Random(d) => PropertyValue::Random(d.into()),
+            PropertyValueSpec::Expression(x) => PropertyValue::Expression(x),
+        }
+    }
+}
+
+/// A property an element sets on every entity that enters it (for a source: that it creates).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct PropertyDoc {
+    pub name: String,
+    /// The declared type; without one, the type declared elsewhere in the model or else the type
+    /// of the property's first value.
+    #[serde(default, rename = "type", skip_serializing_if = "Option::is_none")]
+    pub ty: Option<PropertyTypeSpec>,
+    pub value: PropertyValueSpec,
+}
+
+impl From<&Property> for PropertyDoc {
+    fn from(p: &Property) -> Self {
+        Self {
+            name: p.name.clone(),
+            ty: p.ty.map(Into::into),
+            value: (&p.value).into(),
+        }
+    }
+}
+
+impl From<PropertyDoc> for Property {
+    fn from(p: PropertyDoc) -> Self {
+        Self {
+            name: p.name,
+            ty: p.ty.map(Into::into),
+            value: p.value.into(),
+        }
+    }
+}
+
+/// Properties in name order: the order model files read them in (an element's assignments are
+/// made together, so the order means nothing).
+pub fn sorted_properties(props: impl IntoIterator<Item = Property>) -> Vec<Property> {
+    let mut v: Vec<Property> = props.into_iter().collect();
+    v.sort_by(|a, b| a.name.cmp(&b.name));
+    v
+}
+
 /// An element of a model.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 pub struct ElementDoc {
@@ -285,6 +412,9 @@ pub struct ElementDoc {
     pub name: String,
     #[serde(flatten)]
     pub kind: KindSpec,
+    /// Properties the element sets on entities; left out when there are none.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub properties: Vec<PropertyDoc>,
 }
 
 /// A connection from one element to another (a BPMN sequence flow).
@@ -360,6 +490,7 @@ impl From<&Model> for ModelDoc {
                     id: e.id.to_string(),
                     name: e.name.clone(),
                     kind: (&e.kind).into(),
+                    properties: e.properties.iter().map(Into::into).collect(),
                 })
                 .collect(),
             connections: m
@@ -388,6 +519,7 @@ impl From<ModelDoc> for Model {
                     id: ElementId::unchecked(&e.id),
                     name: e.name,
                     kind: e.kind.into(),
+                    properties: sorted_properties(e.properties.into_iter().map(Into::into)),
                 })
                 .collect(),
             connections: m
@@ -449,7 +581,29 @@ pub fn results(model: &Model, replications: u64, seed: u64, summary: &Experiment
                     )
                 })
                 .collect();
-            json!({ "id": e.id.as_str(), "name": e.name, "kind": e.kind, "metrics": metrics })
+            let mut v =
+                json!({ "id": e.id.as_str(), "name": e.name, "kind": e.kind, "metrics": metrics });
+            // The mean value the element assigned to each property; left out when it assigns
+            // none, so results of models without properties are as before.
+            if !e.properties.is_empty() {
+                let props: serde_json::Map<String, Value> = e
+                    .properties
+                    .iter()
+                    .map(|(name, s)| {
+                        (
+                            name.clone(),
+                            json!({
+                                "mean": s.mean,
+                                "half_width": s.half_width,
+                                "std_dev": s.std_dev,
+                                "n": s.n,
+                            }),
+                        )
+                    })
+                    .collect();
+                v["properties"] = Value::Object(props);
+            }
+            v
         })
         .collect();
     json!({

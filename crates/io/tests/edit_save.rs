@@ -247,13 +247,13 @@ fn add_delay_between(m: &mut Model, new: &str, from: &str, to: &str) {
         + 1;
     m.elements.insert(
         i,
-        Element {
-            id: id(new),
-            name: "Walk to the exit".into(),
-            kind: ElementKind::Delay {
+        Element::new(
+            id(new),
+            "Walk to the exit",
+            ElementKind::Delay {
                 duration: Dist::Uniform { min: 0.5, max: 1.5 },
             },
-        },
+        ),
     );
     let c = m
         .connections

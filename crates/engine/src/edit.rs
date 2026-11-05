@@ -4,7 +4,7 @@
 //! Applying that inverse returns the original again, which is how redo works. Inverses are kept
 //! as typed values rather than JSON, so they restore the model exactly.
 
-use stochcraft_model::{Connection, Element, ElementId, ElementKind, Experiment, Model};
+use stochcraft_model::{Connection, Element, ElementId, ElementKind, Experiment, Model, Property};
 
 use crate::{CommandError, ErrorCode};
 
@@ -23,6 +23,8 @@ pub enum Op {
     RemoveElement(ElementId),
     SetKind(ElementId, ElementKind),
     RenameElement(ElementId, String),
+    /// Replace an element's properties.
+    SetProperties(ElementId, Vec<Property>),
     Connect(usize, Connection),
     Disconnect(ElementId),
     SetExperiment(Experiment),
@@ -96,6 +98,14 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
                 .get_mut(index)
                 .ok_or_else(|| not_found("element", &id))?;
             Op::RenameElement(id, std::mem::replace(&mut e.name, name))
+        }
+        Op::SetProperties(id, properties) => {
+            let index = element_index(model, &id)?;
+            let e = model
+                .elements
+                .get_mut(index)
+                .ok_or_else(|| not_found("element", &id))?;
+            Op::SetProperties(id, std::mem::replace(&mut e.properties, properties))
         }
         Op::Connect(index, c) => {
             let id = c.id.clone();

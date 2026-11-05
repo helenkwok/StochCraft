@@ -9,6 +9,12 @@
 //! Entities are created by a source, wait for and occupy a server with one or more identical
 //! units, spend time in a delay with no capacity limit, and leave through a sink.
 //!
+//! Entities carry BPSim properties. Each element's [`stochcraft_model::Property`] assignments
+//! are made as an entity enters it (at a source, as it is created), all together, from the
+//! values the entity arrived with. Each element reports the mean of the values it assigned to
+//! each property (numbers as they are, booleans as 0 or 1). Values drawn for properties come
+//! from streams of their own, so adding a property never changes the other random numbers.
+//!
 //! [`Builder`] writes the same models from code, as in the tests and examples:
 //!
 //! ```
@@ -27,14 +33,65 @@
 
 mod runtime;
 
+use stochcraft_model::expr;
 use stochcraft_model::{
-    Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Severity,
+    Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Property,
+    PropertyType, PropertyValue, Severity,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::Summary;
 
+/// A property value an entity holds.
+#[derive(Debug, Clone, PartialEq)]
+pub enum Held {
+    Long(i64),
+    Double(f64),
+    Boolean(bool),
+    Text(String),
+}
+
+impl Held {
+    /// As an expression value.
+    pub fn value(&self) -> expr::Value {
+        match self {
+            Held::Long(n) => expr::Value::Number(*n as f64),
+            Held::Double(n) => expr::Value::Number(*n),
+            Held::Boolean(b) => expr::Value::Boolean(*b),
+            Held::Text(s) => expr::Value::Text(s.clone()),
+        }
+    }
+
+    /// `v` as a property of type `ty`: a long is rounded to the nearest whole number (halves
+    /// away from zero), and is not set at all when `v` is not a finite number.
+    pub fn of(v: &expr::Value, ty: PropertyType) -> Option<Held> {
+        Some(match ty {
+            PropertyType::Long => {
+                let n = v.number();
+                if !n.is_finite() {
+                    return None;
+                }
+                // `as` saturates at the ends of i64's range.
+                Held::Long(n.round() as i64)
+            }
+            PropertyType::Double | PropertyType::Duration => Held::Double(v.number()),
+            PropertyType::Boolean => Held::Boolean(v.boolean()),
+            PropertyType::String | PropertyType::DateTime => Held::Text(v.text()),
+        })
+    }
+
+    /// The number recorded in an element's statistics: numbers as they are, booleans as 0 or 1.
+    fn statistic(&self) -> Option<f64> {
+        match self {
+            Held::Long(n) => Some(*n as f64),
+            Held::Double(n) if n.is_finite() => Some(*n),
+            Held::Boolean(b) => Some(f64::from(u8::from(*b))),
+            Held::Double(_) | Held::Text(_) => None,
+        }
+    }
+}
+
 /// Something that flows through the model.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Entity {
     /// Unique within a run, in creation order.
     pub id: u64,
@@ -42,6 +99,26 @@ pub struct Entity {
     pub created: f64,
     /// When it entered the element it is in now.
     pub entered: f64,
+    /// Its properties, by the slot [`Compiled::property_names`] gives each name (`None`: not
+    /// set). Empty when the model has no properties.
+    pub properties: Vec<Option<Held>>,
+}
+
+/// Where an assigned value comes from.
+#[derive(Debug, Clone)]
+enum Source {
+    Fixed(Option<Held>),
+    Random(Dist),
+    Expr(expr::Expr),
+}
+
+/// One property assignment, ready to run.
+#[derive(Debug, Clone)]
+struct Assign {
+    name: String,
+    slot: usize,
+    ty: PropertyType,
+    source: Source,
 }
 
 /// A model checked and ready to run.
@@ -51,6 +128,26 @@ pub struct Compiled {
     /// For each element, the index of the element it sends entities to.
     outputs: Vec<Option<usize>>,
     warnings: Vec<Diagnostic>,
+    /// Property names, sorted: an entity's slots.
+    slots: Vec<String>,
+    /// For each element, its property assignments.
+    assigns: Vec<Vec<Assign>>,
+}
+
+fn compile_assign(p: &Property, slots: &[String], ty: PropertyType) -> Option<Assign> {
+    let source = match &p.value {
+        PropertyValue::Number(n) => Source::Fixed(Held::of(&expr::Value::Number(*n), ty)),
+        PropertyValue::Boolean(b) => Source::Fixed(Held::of(&expr::Value::Boolean(*b), ty)),
+        PropertyValue::Text(s) => Source::Fixed(Held::of(&expr::Value::Text(s.clone()), ty)),
+        PropertyValue::Random(d) => Source::Random(d.clone()),
+        PropertyValue::Expression(src) => Source::Expr(expr::parse(src).ok()?),
+    };
+    Some(Assign {
+        name: p.name.clone(),
+        slot: slots.binary_search(&p.name).ok()?,
+        ty,
+        source,
+    })
 }
 
 /// Checks `model` and prepares it to run. On any error, returns every diagnostic (errors and
@@ -73,16 +170,36 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                 .and_then(|c| index(&c.to))
         })
         .collect();
+    let types = model.property_types();
+    let slots: Vec<String> = types.keys().cloned().collect();
+    // Validation guarantees every expression parses and every property has a type.
+    let assigns = model
+        .elements
+        .iter()
+        .map(|e| {
+            e.properties
+                .iter()
+                .filter_map(|p| compile_assign(p, &slots, *types.get(&p.name)?))
+                .collect()
+        })
+        .collect();
     Ok(Compiled {
         model: model.clone(),
         outputs,
         warnings: diagnostics,
+        slots,
+        assigns,
     })
 }
 
 impl Compiled {
     pub fn model(&self) -> &Model {
         &self.model
+    }
+
+    /// The names of the properties entities can carry, in slot order.
+    pub fn property_names(&self) -> &[String] {
+        &self.slots
     }
 
     /// Warnings found when compiling (the model runs, but perhaps not as intended).
@@ -149,6 +266,9 @@ pub struct ElementReport {
     pub utilisation: Option<f64>,
     pub mean_contents: Option<f64>,
     pub mean_time_in_system: Option<f64>,
+    /// For each property the element assigns, in the element's order: the mean of the values
+    /// it assigned (`None` when it assigned none, or the property holds text).
+    pub properties: Vec<(String, Option<f64>)>,
 }
 
 impl ElementReport {
@@ -190,6 +310,8 @@ pub struct ElementSummary {
     pub kind: &'static str,
     /// Each metric the element reports, in [`Metric::ALL`] order.
     pub metrics: Vec<(Metric, Summary)>,
+    /// The mean value assigned to each property, as in [`ElementReport::properties`].
+    pub properties: Vec<(String, Summary)>,
 }
 
 impl ElementSummary {
@@ -237,11 +359,24 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                         Summary::of(&values).map(|s| (m, s))
                     })
                     .collect();
+                let properties = e
+                    .properties
+                    .iter()
+                    .enumerate()
+                    .filter_map(|(j, (name, _))| {
+                        let values: Vec<f64> = reports
+                            .iter()
+                            .filter_map(|r| r.elements.get(i)?.properties.get(j)?.1)
+                            .collect();
+                        Summary::of(&values).map(|s| (name.clone(), s))
+                    })
+                    .collect();
                 ElementSummary {
                     id: e.id.clone(),
                     name: e.name.clone(),
                     kind: e.kind,
                     metrics,
+                    properties,
                 }
             })
             .collect()
@@ -261,7 +396,7 @@ pub struct BlockId(usize);
 /// reported when the model is built or run.
 #[derive(Debug, Clone, Default)]
 pub struct Builder {
-    elements: Vec<(String, ElementKind)>,
+    elements: Vec<(String, ElementKind, Vec<Property>)>,
     /// `from` → `to`; a later connection from the same element replaces the earlier one.
     connections: Vec<(BlockId, BlockId)>,
 }
@@ -272,8 +407,25 @@ impl Builder {
     }
 
     fn add(&mut self, name: &str, kind: ElementKind) -> BlockId {
-        self.elements.push((name.to_owned(), kind));
+        self.elements.push((name.to_owned(), kind, Vec::new()));
         BlockId(self.elements.len() - 1)
+    }
+
+    /// Makes `block` set property `name` on every entity that enters it (or that it creates).
+    pub fn property(
+        &mut self,
+        block: BlockId,
+        name: &str,
+        ty: Option<PropertyType>,
+        value: PropertyValue,
+    ) {
+        if let Some((_, _, props)) = self.elements.get_mut(block.0) {
+            props.push(Property {
+                name: name.to_owned(),
+                ty,
+                value,
+            });
+        }
     }
 
     /// Creates entities with the given time between arrivals, up to `limit` if one is given.
@@ -313,17 +465,18 @@ impl Builder {
     /// written in the model's diagnostics.
     pub fn build(&self, experiment: Experiment) -> Model {
         let id = |i: usize| {
-            let name = self.elements.get(i).map_or("", |(n, _)| n.as_str());
+            let name = self.elements.get(i).map_or("", |(n, _, _)| n.as_str());
             ElementId::new(name).unwrap_or_else(|| ElementId::unchecked(name))
         };
         let elements = self
             .elements
             .iter()
             .enumerate()
-            .map(|(i, (name, kind))| Element {
+            .map(|(i, (name, kind, properties))| Element {
                 id: id(i),
                 name: name.clone(),
                 kind: kind.clone(),
+                properties: properties.clone(),
             })
             .collect();
         let mut connections: Vec<&(BlockId, BlockId)> = self.connections.iter().collect();

@@ -1,8 +1,8 @@
 //! Writing a model and reading it back gives the same model; opened files save unchanged.
 
-use stochcraft_blocks::Builder;
+use stochcraft_blocks::{BlockId, Builder};
 use stochcraft_io::{Format, read, write_new};
-use stochcraft_model::{Dist, Experiment, Model, TimeUnit};
+use stochcraft_model::{Dist, Experiment, Model, Property, PropertyType, PropertyValue, TimeUnit};
 
 /// A model using every element kind and every distribution.
 pub fn showcase() -> Model {
@@ -74,6 +74,68 @@ pub fn showcase() -> Model {
     }
     let out = m.sink("exit");
     m.connect(previous, out);
+    // Every kind of property value and every type, in name order (as files are read).
+    let props: [(BlockId, &str, Option<PropertyType>, PropertyValue); 9] = [
+        (
+            src,
+            "arrived",
+            Some(PropertyType::DateTime),
+            PropertyValue::Text("2026-11-04T09:00:00".into()),
+        ),
+        (
+            src,
+            "issues",
+            Some(PropertyType::Long),
+            PropertyValue::Random(Dist::Poisson { mean: 2.0 }),
+        ),
+        (
+            src,
+            "label",
+            None,
+            PropertyValue::Text("Gold & <VIP> \"customer\"".into()),
+        ),
+        (
+            src,
+            "patience",
+            Some(PropertyType::Duration),
+            PropertyValue::Number(1.5),
+        ),
+        (
+            src,
+            "rush",
+            Some(PropertyType::Boolean),
+            PropertyValue::Boolean(false),
+        ),
+        (
+            src,
+            "units",
+            Some(PropertyType::Long),
+            PropertyValue::Number(4.0),
+        ),
+        (
+            cut,
+            "issues",
+            None,
+            PropertyValue::Expression("getProperty('issues') - 1".into()),
+        ),
+        (
+            cut,
+            "weight",
+            Some(PropertyType::Double),
+            PropertyValue::Random(Dist::Uniform { min: 1.0, max: 2.0 }),
+        ),
+        (
+            out,
+            "fixed",
+            None,
+            PropertyValue::Expression(
+                "getProperty('issues') <= 0 and getProperty('label') != 'x'".into(),
+            ),
+        ),
+    ];
+    for (block, name, ty, value) in props {
+        m.property(block, name, ty, value);
+    }
     let mut model = m.build(Experiment {
         time_unit: TimeUnit::Hours,
         warmup: 2.5,
@@ -136,4 +198,39 @@ fn opened_files_save_unchanged_and_with_edits() {
     let saved = loaded.opened.save(&edited);
     let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
     assert_eq!(back, Ok(Ok(edited)));
+}
+
+#[test]
+fn property_edits_save_into_the_opened_file() {
+    let bytes = write_new(&showcase());
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    let mut edited = loaded.model.clone();
+    let props = &mut edited.elements[0].properties;
+    // Change a value and a type, remove one, add one (kept in name order, as files read).
+    if let Some(p) = props.iter_mut().find(|p| p.name == "units") {
+        p.value = PropertyValue::Expression("2 * 3".into());
+        p.ty = Some(PropertyType::Double);
+    }
+    props.retain(|p| p.name != "rush");
+    props.push(Property {
+        name: "zone".into(),
+        ty: None,
+        value: PropertyValue::Text("Nord".into()),
+    });
+    // And a property on an element that had none.
+    edited.elements[2].properties.push(Property {
+        name: "checked".into(),
+        ty: Some(PropertyType::Boolean),
+        value: PropertyValue::Boolean(true),
+    });
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited));
+    // Only the changed parameters differ: the other properties' text is untouched.
+    let text = String::from_utf8_lossy(&saved);
+    assert!(text.contains("name=\"issues\" type=\"long\""), "{text}");
+    assert!(!text.contains("name=\"rush\""));
 }

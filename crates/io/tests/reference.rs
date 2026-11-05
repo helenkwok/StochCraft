@@ -15,7 +15,8 @@ use stochcraft_blocks::Builder;
 use stochcraft_io::bpsim::{self, NS2};
 use stochcraft_io::{SaveError, read, read_scenario, write_new, xml};
 use stochcraft_model::{
-    Connection, Dist, Element, ElementId, ElementKind, Experiment, Model, TimeUnit,
+    Connection, Dist, Element, ElementId, ElementKind, Experiment, Model, Property, PropertyType,
+    PropertyValue, TimeUnit,
 };
 
 fn required() -> bool {
@@ -105,6 +106,88 @@ fn every_reference_model_and_scenario_reads() {
             assert_eq!(l.opened.scenario.as_deref(), Some(id.as_str()));
         }
     }
+}
+
+#[test]
+fn reference_properties_and_expressions_read() {
+    // The guide's car repair models set a count of issues on arrival and change it as a car is
+    // repaired (in a sub-process, left out until it is supported), and branch on it. Every
+    // expression in their properties and branch conditions parses; every property that reaches
+    // the model is valid.
+    let Some(paths) = models() else { return };
+    let (mut with_properties, mut expressions) = (0, 0);
+    for p in &paths {
+        let b = bytes(p);
+        let doc = xml::parse(&b).unwrap_or_else(|e| panic!("{}: {e}", name(p)));
+        let Some(data) = bpsim::find_data(&doc.root) else {
+            continue;
+        };
+        for (id, _) in bpsim::scenario_list(data) {
+            let mut notes = Vec::new();
+            let Some(s) = bpsim::read_scenario(data, Some(&id), &mut notes) else {
+                continue;
+            };
+            for (element, params) in &s.params {
+                for (key, param) in params {
+                    if !(key.contains("/Property/") || key.ends_with("/Condition")) {
+                        continue;
+                    }
+                    for v in param
+                        .elements()
+                        .filter(|v| v.local() == "ExpressionParameter")
+                    {
+                        let src = v.attr("value").unwrap_or_default();
+                        let parsed = stochcraft_model::expr::parse(&src);
+                        assert!(
+                            parsed.is_ok(),
+                            "{} [{id}] {element} {key}: `{src}`: {parsed:?}",
+                            name(p)
+                        );
+                        expressions += 1;
+                    }
+                }
+            }
+        }
+        let Ok(first) = read(&b) else { continue };
+        for (id, _) in &first.opened.scenarios {
+            let l = read_scenario(&b, Some(id)).unwrap_or_else(|e| panic!("{} {id}: {e}", name(p)));
+            let props: Vec<&Property> = l
+                .model
+                .elements
+                .iter()
+                .flat_map(|e| &e.properties)
+                .collect();
+            if props.is_empty() {
+                continue;
+            }
+            with_properties += 1;
+            let at = format!("{} [{id}]", name(p));
+            let property_problems: Vec<String> = l
+                .model
+                .validate()
+                .iter()
+                .filter(|d| {
+                    matches!(
+                        d.problem.code(),
+                        "bad_expression"
+                            | "unknown_property"
+                            | "bad_property"
+                            | "property_type_conflict"
+                            | "property_value_type"
+                    )
+                })
+                .map(ToString::to_string)
+                .collect();
+            assert!(property_problems.is_empty(), "{at}: {property_problems:#?}");
+            let types = l.model.property_types();
+            assert!(
+                types.values().all(|t| t.is_numeric()),
+                "{at}: a count of issues is a number: {types:?}"
+            );
+        }
+    }
+    assert!(with_properties > 0, "no reference model sets properties");
+    assert!(expressions >= 20, "only {expressions} expressions found");
 }
 
 #[test]
@@ -309,13 +392,13 @@ fn edits() -> Vec<Edit> {
                 let at = first(m, |k| matches!(k, ElementKind::Source { .. })).map_or(0, |i| i + 1);
                 m.elements.insert(
                     at,
-                    Element {
-                        id: new.clone(),
-                        name: "Added".into(),
-                        kind: ElementKind::Delay {
+                    Element::new(
+                        new.clone(),
+                        "Added",
+                        ElementKind::Delay {
                             duration: Dist::Constant(2.0),
                         },
-                    },
+                    ),
                 );
                 if let Some(c) = m.connections.first().cloned() {
                     m.connections[0].to = new.clone();
@@ -346,6 +429,36 @@ fn edits() -> Vec<Edit> {
                     m.elements[i].kind = ElementKind::Delay {
                         duration: Dist::Constant(1.5),
                     };
+                }
+            }),
+        ),
+        (
+            "properties",
+            Box::new(move |m: &mut Model| {
+                // Change every property, drop the last of each element's, and give the first
+                // source a new one (properties read back in name order).
+                for e in &mut m.elements {
+                    for p in &mut e.properties {
+                        p.value = match &p.value {
+                            PropertyValue::Expression(x) => {
+                                PropertyValue::Expression(format!("({x}) * 1"))
+                            }
+                            PropertyValue::Number(n) => PropertyValue::Number(n + 1.0),
+                            _ => PropertyValue::Number(2.0),
+                        };
+                    }
+                    if e.properties.len() > 1 {
+                        e.properties.pop();
+                    }
+                }
+                if let Some(i) = first(m, |k| matches!(k, ElementKind::Source { .. })) {
+                    let props = &mut m.elements[i].properties;
+                    props.push(Property {
+                        name: "stochcraftTier".into(),
+                        ty: Some(PropertyType::String),
+                        value: PropertyValue::Text("gold".into()),
+                    });
+                    props.sort_by(|a, b| a.name.cmp(&b.name));
                 }
             }),
         ),
