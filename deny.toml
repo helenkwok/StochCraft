@@ -16,6 +16,11 @@ confidence-threshold = 0.9
 [[licenses.exceptions]]
 name = "epaint_default_fonts"
 allow = ["OFL-1.1", "Ubuntu-font-1.0"]
+# option-ext (via dirs, which craft-settings uses to find the config folder): MPL-2.0, a
+# file-level licence; used unmodified from crates.io, it puts no terms on StochCraft's own code.
+[[licenses.exceptions]]
+name = "option-ext"
+allow = ["MPL-2.0"]
 
 [bans]
 multiple-versions = "warn"
