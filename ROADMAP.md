@@ -18,11 +18,11 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 | `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist` |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary` |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate` |
-| `model` | L1 | The model in memory: elements, connections, experiment, entity properties, validation; BPSim's XPath expressions (`expr`) |
-| `blocks` | L2 | Compiles a model: source, server, delay, sink; entities carry typed properties; per-element statistics; warm-up |
+| `model` | L1 | The model in memory: elements, connections with probabilities and conditions, experiment, entity properties, validation; BPSim's XPath expressions (`expr`) |
+| `blocks` | L2 | Compiles a model: source, server, delay, sink, exclusive and parallel gateways, merges; entities carry typed properties; per-element statistics; warm-up |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
-| `io` | L3 | BPSim on BPMN and XPDL: read, write new, save edits into opened files |
-| `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs |
+| `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line), write new, save edits into opened files |
+| `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs; `flow.set` for routing |
 | `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `exec`, `schema` |
 | `ui-egui` | L5 | The app's window: menus, shortcuts, model outline, background runs, results, unsaved-change prompts |
 | `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs) and the browser shell, published on GitHub Pages |
@@ -450,6 +450,50 @@ unrolled line in `stochcraft-blocks`.
 | Parallel gateway (split and join) | Copies a token to every branch; joins wait for all | Deterministic fork-join cases; the home loan model |
 | Merge (several flows into one element) | Tokens from several inputs | Superposition of Poisson streams |
 
+**Done:**
+- **Gateways:** `exclusive_gateway` and `parallel_gateway` element kinds. Connections carry a
+  BPSim `Probability` and `Condition`, read from and written to BPMN and XPDL (an XPDL
+  `OTHERWISE` transition, or BPMN's `default` attribute, is the default flow).
+- **Exclusive gateway:**
+  - If any outgoing connection has a condition, the first in model order whose condition holds
+    is taken, else the default, else the entity leaves the model there, with a warning when the
+    model is checked.
+  - Otherwise one connection is drawn from the gateway's own stream: connections without a
+    probability share evenly what the others leave, and probabilities that do not add up to 1
+    are used in proportion, with a warning.
+  - With a single way out, nothing is drawn.
+- **Parallel gateway:** copies each entity, as new entities with the same creation time and
+  properties, down every outgoing connection. With several incoming connections it is a join: it
+  waits for one entity on each and sends on the one from the first incoming connection, with any
+  property it lacks taken from the others in that order.
+- **Merges:** any element may have several incoming connections.
+- **Validation:** probabilities outside 0 to 1, malformed conditions, conditions that read unknown
+  properties, routing given where it has no effect, a default that is not an outgoing connection,
+  and joins that wait on a connection no entity reaches.
+- **Embedded sub-processes** (BPMN `subProcess`, XPDL `BlockActivity`) with one plain start event
+  and one end event are simulated in line: their start and end events pass entities straight
+  through. Event sub-processes are left out with a note.
+- **Commands:** `flow.set` sets a connection's probability and condition; `connect` takes both;
+  `block.set` takes an exclusive gateway's `default`.
+
+**Validation** (`blocks/tests/routing.rs`, `io/tests/cross_check.rs`):
+- **Against theory:** a Jackson network (λ = 1, μA = 4, μB = 2, half fed back) matches product
+  form for the arrivals at each station, utilisation, waits and time in system (2.01 ± 0.03
+  against 2). Two merged Poisson streams give M/M/1 with λ = 0.75 (W = 4.09 ± 0.13 against 4).
+- **Exact cases:** the condition loop, a fork and join, routing with no default, and the even
+  share of unset probabilities.
+- **Car repair against L-SIM's published results for scenario S1**, from 400 replications of
+  StochCraft's against L-SIM's three:
+  - **Arrivals:** 150 by default, 151 with the first arrival at time 0, as L-SIM counts in every
+    replication.
+  - **Rejected estimates, repairs started, completed and customers leaving:** within 0.15
+    standard errors (0.01 with the first arrival at 0).
+  - **Issues repaired:** 345 against L-SIM's 306 (−1.2 standard errors), within the check. The
+    model's `noOfIssues` is `int`, a truncated normal; StochCraft rounds it to the nearest whole
+    number, and L-SIM's three replications cannot tell whether it does the same.
+- **Home loan:** its two exclusive and two parallel gateways now read, but it also needs
+  intermediate message events and a boundary timer, so its cross-check waits for event support.
+
 ### M2.4 Buffers and blocking
 
 - Finite buffers between tasks, as a `stochcraft:` vendor extension (BPSim has no capacity on
@@ -679,5 +723,5 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D5 | Browser build | Settled: from M3.1 on, published on GitHub Pages with a preview per pull request; wasm32 first, wasm64 when its toolchain is verified |
 | D6 | Conditions and logic | Settled by BPSim: its XPath 1.0 expressions, the subset models use first |
 | D7 | Reference models as test files | Settled: WfMC's examples and the XSD are downloaded from bpsim.org by `cargo xtask fetch-bpsim` (pinned SHA-256, cached in CI), never committed, because they carry no licence of their own |
-| D8 | First arrival of a start event | Open: at time 0 (as L-SIM does, giving 151 car repair arrivals) or after the first interval (the specification's wording, and StochCraft today, giving 150). Decide in M2.3 with the cross-check |
+| D8 | First arrival of a start event | Open: at time 0 (as L-SIM does, giving 151 car repair arrivals) or after the first interval (the specification's wording, and StochCraft today, giving 150). Evidence from M2.3's cross-check: with the first arrival at 0, the car repair counts match L-SIM's exactly for arrivals and within 0.01 standard errors for the others; after the first interval they are one arrival short and within 0.15. Both pass |
 | D9 | Where credibility data live (parameter pedigree, validated ranges) | In the model file, as `stochcraft:` BPSim vendor extensions, so they travel with the model and other tools keep them |

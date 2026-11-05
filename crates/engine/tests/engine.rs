@@ -746,3 +746,155 @@ fn properties_are_set_listed_run_saved_and_undone() {
         "no properties, no key: models without properties read as before"
     );
 }
+
+#[test]
+fn gateways_route_by_probability_and_condition_and_undo() {
+    let mut e = help_desk();
+    let before = ok(&mut e, "model.get", json!({}));
+    // A gateway after the desk: most leave, some go back for a second look.
+    ok(
+        &mut e,
+        "disconnect",
+        json!({ "from": "desk", "to": "exit" }),
+    );
+    let g = ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "exclusive_gateway", "id": "check" }),
+    );
+    assert_eq!(g["id"], "check");
+    ok(&mut e, "connect", json!({ "from": "desk", "to": "check" }));
+    let back = ok(
+        &mut e,
+        "connect",
+        json!({ "from": "check", "to": "desk", "id": "again", "probability": 0.2 }),
+    );
+    assert_eq!(back["id"], "again");
+    ok(
+        &mut e,
+        "connect",
+        json!({ "from": "check", "to": "exit", "id": "done" }),
+    );
+    let diagnostics = ok(&mut e, "model.validate", json!({}));
+    assert_eq!(diagnostics["diagnostics"], json!([]), "{diagnostics}");
+
+    // flow.set: one parameter at a time, `null` clears, and each is one undo step.
+    ok(
+        &mut e,
+        "flow.set",
+        json!({ "id": "done", "probability": 0.8 }),
+    );
+    ok(
+        &mut e,
+        "flow.set",
+        json!({ "id": "again", "condition": "getProperty('x') > 1", "probability": null }),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let flow = |id: &str| {
+        m["connections"]
+            .as_array()
+            .and_then(|cs| cs.iter().find(|c| c["id"] == id).cloned())
+            .unwrap_or_default()
+    };
+    assert_eq!(
+        flow("again"),
+        json!({ "id": "again", "from": "check", "to": "desk", "condition": "getProperty('x') > 1" })
+    );
+    assert_eq!(flow("done")["probability"], 0.8);
+    let codes: Vec<Value> = ok(&mut e, "model.validate", json!({}))["diagnostics"]
+        .as_array()
+        .map(|d| d.iter().map(|x| x["code"].clone()).collect())
+        .unwrap_or_default();
+    // Routing by condition now: the probability is ignored, the property is unknown, and there
+    // is no default.
+    for want in ["unknown_property", "routing_ignored", "no_default"] {
+        assert!(codes.contains(&json!(want)), "{want} in {codes:?}");
+    }
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "check", "default": "done" }),
+    );
+    assert_eq!(
+        ok(&mut e, "model.get", json!({}))["elements"][3],
+        json!({ "id": "check", "name": "check", "kind": "exclusive_gateway", "default": "done" })
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({ "id": "desk", "default": "done" })
+        ),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "flow.set",
+            json!({ "id": "nope", "probability": 0.5 })
+        ),
+        ErrorCode::NotFound
+    );
+    assert_eq!(
+        err(&mut e, "flow.set", json!({ "id": "done" })),
+        ErrorCode::InvalidParams
+    );
+
+    let label = |e: &mut Engine| ok(e, "undo", json!({}))["undone"].clone();
+    assert_eq!(label(&mut e), "block.set");
+    assert_eq!(label(&mut e), "flow.set");
+    // Undoing restored the probability and removed the condition.
+    let again = ok(&mut e, "model.get", json!({}))["connections"]
+        .as_array()
+        .and_then(|cs| cs.iter().find(|c| c["id"] == "again").cloned())
+        .unwrap_or_default();
+    assert_eq!(
+        again,
+        json!({ "id": "again", "from": "check", "to": "desk", "probability": 0.2 })
+    );
+    for _ in 0..6 {
+        ok(&mut e, "undo", json!({}));
+    }
+    assert_eq!(ok(&mut e, "model.get", json!({})), before);
+
+    // A parallel gateway runs: every entity is copied to both sinks.
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "disconnect",
+        json!({ "from": "desk", "to": "exit" }),
+    );
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "parallel_gateway", "id": "copy" }),
+    );
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "sink", "id": "archive" }),
+    );
+    ok(&mut e, "connect", json!({ "from": "desk", "to": "copy" }));
+    ok(&mut e, "connect", json!({ "from": "copy", "to": "exit" }));
+    ok(
+        &mut e,
+        "connect",
+        json!({ "from": "copy", "to": "archive" }),
+    );
+    let r = ok(&mut e, "run", json!({ "replications": 2 }));
+    let count = |id: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == id))
+            .map(|x| x["metrics"]["entered"]["mean"].clone())
+            .unwrap_or_default()
+    };
+    assert_eq!(count("exit"), count("archive"));
+    assert_eq!(
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == "copy"))
+            .map(|x| x["kind"].clone()),
+        Some(json!("parallel_gateway"))
+    );
+}

@@ -27,6 +27,8 @@ pub enum Op {
     SetProperties(ElementId, Vec<Property>),
     Connect(usize, Connection),
     Disconnect(ElementId),
+    /// Set a connection's probability and condition.
+    SetRoute(ElementId, Option<f64>, Option<String>),
     SetExperiment(Experiment),
 }
 
@@ -121,6 +123,18 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
                 .ok_or_else(|| not_found("connection", &id))?;
             let c = model.connections.remove(index);
             Op::Connect(index, c)
+        }
+        Op::SetRoute(id, probability, condition) => {
+            let c = model
+                .connections
+                .iter_mut()
+                .find(|c| c.id == id)
+                .ok_or_else(|| not_found("connection", &id))?;
+            Op::SetRoute(
+                id,
+                std::mem::replace(&mut c.probability, probability),
+                std::mem::replace(&mut c.condition, condition),
+            )
         }
         Op::SetExperiment(x) => Op::SetExperiment(std::mem::replace(&mut model.experiment, x)),
     })

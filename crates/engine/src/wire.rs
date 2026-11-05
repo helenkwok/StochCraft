@@ -188,6 +188,18 @@ pub enum KindSpec {
     },
     /// Removes entities (a BPMN end event).
     Sink,
+    /// Sends each entity down one outgoing connection at once (a BPMN exclusive gateway): the
+    /// first whose condition holds if any has one, else drawn by the connections'
+    /// probabilities (`flow.set`).
+    ExclusiveGateway {
+        /// The outgoing connection taken when no condition holds; without one, such an entity
+        /// leaves the model.
+        #[serde(default)]
+        default: Option<String>,
+    },
+    /// Copies each entity down every outgoing connection at once (a BPMN parallel gateway);
+    /// with several incoming connections, first waits for an entity on each (a join).
+    ParallelGateway,
 }
 
 impl From<&ElementKind> for KindSpec {
@@ -208,6 +220,10 @@ impl From<&ElementKind> for KindSpec {
                 duration: duration.into(),
             },
             ElementKind::Sink => KindSpec::Sink,
+            ElementKind::ExclusiveGateway { default } => KindSpec::ExclusiveGateway {
+                default: default.as_ref().map(ToString::to_string),
+            },
+            ElementKind::ParallelGateway => KindSpec::ParallelGateway,
         }
     }
 }
@@ -230,6 +246,10 @@ impl From<KindSpec> for ElementKind {
                 duration: duration.into(),
             },
             KindSpec::Sink => ElementKind::Sink,
+            KindSpec::ExclusiveGateway { default } => ElementKind::ExclusiveGateway {
+                default: default.as_deref().map(ElementId::unchecked),
+            },
+            KindSpec::ParallelGateway => ElementKind::ParallelGateway,
         }
     }
 }
@@ -424,6 +444,14 @@ pub struct ConnectionDoc {
     pub id: String,
     pub from: String,
     pub to: String,
+    /// Out of an exclusive gateway: the chance an entity takes this connection; left out when
+    /// not set.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub probability: Option<f64>,
+    /// Out of an exclusive gateway: a BPSim expression that must hold to take it; left out
+    /// when not set.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub condition: Option<String>,
 }
 
 /// How to run a model. `duration` excludes the warm-up.
@@ -500,6 +528,8 @@ impl From<&Model> for ModelDoc {
                     id: c.id.to_string(),
                     from: c.from.to_string(),
                     to: c.to.to_string(),
+                    probability: c.probability,
+                    condition: c.condition.clone(),
                 })
                 .collect(),
             experiment: (&m.experiment).into(),
@@ -529,6 +559,8 @@ impl From<ModelDoc> for Model {
                     id: ElementId::unchecked(&c.id),
                     from: ElementId::unchecked(&c.from),
                     to: ElementId::unchecked(&c.to),
+                    probability: c.probability,
+                    condition: c.condition,
                 })
                 .collect(),
             experiment: m.experiment.into(),
