@@ -12,12 +12,13 @@
 //! [`App::report_error`].
 
 mod charts;
+pub mod commands;
 mod editor;
 pub mod form;
 mod results;
 pub mod theme;
 
-use egui::{Key, KeyboardShortcut, Modifiers};
+use egui::{Key, Modifiers};
 use serde_json::{Value, json};
 use stochcraft_engine::Engine;
 
@@ -58,6 +59,9 @@ pub struct Example {
 pub enum Request {
     /// Ask for a model file; answer with [`App::open_file`] (or nothing, if the user cancels).
     PickOpen,
+    /// Read the file at `path` (File ▸ Open Recent); answer with [`App::open_file`], or
+    /// [`App::report_error`] if it can't be read.
+    OpenPath { path: String },
     /// Ask where to save, suggesting `name`; answer with [`App::save_to`].
     PickSave { name: String },
     /// Write `bytes` to `path`; answer with [`App::written`] or [`App::report_error`].
@@ -99,30 +103,76 @@ enum Replace {
     New,
     Open,
     Example(usize),
+    /// File ▸ Open Recent: the recent file at this index.
+    Recent(usize),
     /// A file dropped on the window (held in `App::dropped`).
     Dropped,
     Quit,
 }
 
+/// The appearance the user chose: the system's, or always light or dark.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ThemeChoice {
+    #[default]
+    System,
+    Light,
+    Dark,
+}
+
+impl ThemeChoice {
+    pub fn key(self) -> &'static str {
+        match self {
+            ThemeChoice::System => "system",
+            ThemeChoice::Light => "light",
+            ThemeChoice::Dark => "dark",
+        }
+    }
+
+    pub fn from_key(key: &str) -> Option<Self> {
+        [ThemeChoice::System, ThemeChoice::Light, ThemeChoice::Dark]
+            .into_iter()
+            .find(|t| t.key() == key)
+    }
+
+    fn preference(self) -> egui::ThemePreference {
+        match self {
+            ThemeChoice::System => egui::ThemePreference::System,
+            ThemeChoice::Light => egui::ThemePreference::Light,
+            ThemeChoice::Dark => egui::ThemePreference::Dark,
+        }
+    }
+}
+
+/// What the app remembers between sessions: kept by the shell (craft-settings on the desktop,
+/// the browser's storage on the web).
+#[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct Prefs {
+    pub appearance: Appearance,
+    pub files: Files,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct Appearance {
+    pub theme: ThemeChoice,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct Files {
+    /// Recently opened or saved model files, newest first.
+    pub recent: Vec<String>,
+}
+
+/// How many files File ▸ Open Recent lists.
+pub const RECENT_FILES: usize = 10;
+
 /// A run in the background: its last reported status.
 struct Running {
     done: u64,
     total: u64,
-}
-
-/// The keyboard shortcuts, shown in the menus. Cmd is Ctrl outside macOS.
-mod keys {
-    use super::{Key, KeyboardShortcut, Modifiers};
-    pub const NEW: KeyboardShortcut = KeyboardShortcut::new(Modifiers::COMMAND, Key::N);
-    pub const OPEN: KeyboardShortcut = KeyboardShortcut::new(Modifiers::COMMAND, Key::O);
-    pub const SAVE: KeyboardShortcut = KeyboardShortcut::new(Modifiers::COMMAND, Key::S);
-    pub const SAVE_AS: KeyboardShortcut =
-        KeyboardShortcut::new(Modifiers::COMMAND.plus(Modifiers::SHIFT), Key::S);
-    pub const UNDO: KeyboardShortcut = KeyboardShortcut::new(Modifiers::COMMAND, Key::Z);
-    pub const REDO: KeyboardShortcut =
-        KeyboardShortcut::new(Modifiers::COMMAND.plus(Modifiers::SHIFT), Key::Z);
-    pub const RUN: KeyboardShortcut = KeyboardShortcut::new(Modifiers::NONE, Key::F5);
-    pub const QUIT: KeyboardShortcut = KeyboardShortcut::new(Modifiers::COMMAND, Key::Q);
 }
 
 /// The application: one model document and what the window shows of it.
@@ -165,6 +215,19 @@ pub struct App {
     screenshot: std::sync::Arc<std::sync::Mutex<Option<std::sync::Arc<egui::ColorImage>>>>,
     /// The charts' area and scale when the screenshot was asked for.
     pending_png: Option<(egui::Rect, f32)>,
+    /// Commands and their shortcuts (craft-keymap), and the frame's key dispatch.
+    keymap: craft_keymap::Keymap,
+    dispatcher: craft_keymap::egui::Dispatcher,
+    /// Recently opened or saved files, newest first (desktop only).
+    recent: Vec<String>,
+    theme_choice: ThemeChoice,
+    /// The theme last applied to the context.
+    applied_theme: Option<ThemeChoice>,
+    /// The shell shows the menus in the system's menu bar (macOS), not in the window.
+    native_menu: bool,
+    /// The app draws the window frame (craft-window chose it): the header is the title bar and
+    /// shows these window buttons.
+    title_bar: Option<craft_window::Layout>,
 }
 
 impl App {
@@ -193,6 +256,13 @@ impl App {
             charts_rect: None,
             screenshot: std::sync::Arc::default(),
             pending_png: None,
+            keymap: commands::keymap(craft_keymap::Platform::current()),
+            dispatcher: craft_keymap::egui::Dispatcher::new(),
+            recent: Vec::new(),
+            theme_choice: ThemeChoice::System,
+            applied_theme: None,
+            native_menu: false,
+            title_bar: None,
         }
     }
 
@@ -235,6 +305,73 @@ impl App {
             self.title.clone_from(&title);
             title
         })
+    }
+
+    /// What to remember between sessions.
+    pub fn prefs(&self) -> Prefs {
+        Prefs {
+            appearance: Appearance {
+                theme: self.theme_choice,
+            },
+            files: Files {
+                recent: self.recent.clone(),
+            },
+        }
+    }
+
+    /// Restores what was remembered.
+    pub fn set_prefs(&mut self, prefs: &Prefs) {
+        self.theme_choice = prefs.appearance.theme;
+        self.recent = prefs.files.recent.clone();
+        self.recent.truncate(RECENT_FILES);
+    }
+
+    /// The shell shows the menus in the system's menu bar, so the window doesn't (macOS).
+    pub fn set_native_menu(&mut self, on: bool) {
+        self.native_menu = on;
+    }
+
+    /// Who draws the window frame (craft-window's decision): when it is the app, the header acts
+    /// as the title bar, with the window buttons where this desktop puts them.
+    pub fn set_window_frame(&mut self, frame: &craft_window::Frame) {
+        self.title_bar = frame.layout().cloned();
+    }
+
+    /// The platform the menus are laid out for: the browser's own layout (no Quit, the
+    /// browser's shortcuts left to it) or this desktop's.
+    pub fn menu_target(&self) -> craft_menu::Target {
+        if self.platform.can_quit {
+            craft_menu::Target::current()
+        } else {
+            craft_menu::Target::Web
+        }
+    }
+
+    /// A dialog is open (menu commands wait).
+    pub fn has_open_dialog(&self) -> bool {
+        self.modal_open()
+    }
+
+    /// A command's shortcut as this platform writes it ("F5", "⌘O", "Ctrl+O").
+    pub fn shortcut(&self, command: &str, ctx: &egui::Context) -> Option<String> {
+        commands::shortcut_text(&self.keymap, command, craft_keymap::egui::platform(ctx))
+    }
+
+    /// Opens a model file read from `path` and lists it under File ▸ Open Recent.
+    pub fn open_path(&mut self, path: &str, bytes: &[u8]) {
+        self.open_file(path, bytes);
+        if self.engine.path() == Some(path) {
+            self.remember(path);
+        }
+    }
+
+    fn remember(&mut self, path: &str) {
+        if !self.platform.file_system {
+            return;
+        }
+        self.recent.retain(|p| p != path);
+        self.recent.insert(0, path.to_owned());
+        self.recent.truncate(RECENT_FILES);
     }
 
     /// Whether closing now would lose changes.
@@ -405,6 +542,7 @@ impl App {
         match self.engine.saved_to(path, bytes) {
             Ok(_) => {
                 self.info(format!("Saved {}", file_name(path)));
+                self.remember(path);
                 if let Some(next) = self.after_save.take() {
                     self.replace_now(next);
                 }
@@ -474,6 +612,11 @@ impl App {
             Replace::Example(i) => {
                 if let Some(e) = EXAMPLES.get(i) {
                     self.open_file(e.file, e.bytes);
+                }
+            }
+            Replace::Recent(i) => {
+                if let Some(path) = self.recent.get(i).cloned() {
+                    self.requests.push(Request::OpenPath { path });
                 }
             }
             Replace::Dropped => {
@@ -593,30 +736,7 @@ impl App {
         if self.confirm.is_some() || self.about {
             return;
         }
-        let pressed = |s: KeyboardShortcut| ctx.input_mut(|i| i.consume_shortcut(&s));
-        // Longest modifiers first, so Cmd+Shift+S is not taken for Cmd+S.
-        if pressed(keys::SAVE_AS) {
-            self.save_as();
-        } else if pressed(keys::SAVE) {
-            self.save();
-        }
-        if pressed(keys::REDO) {
-            self.redo();
-        } else if pressed(keys::UNDO) {
-            self.undo();
-        }
-        if pressed(keys::NEW) {
-            self.replace(Replace::New);
-        }
-        if pressed(keys::OPEN) {
-            self.replace(Replace::Open);
-        }
-        if pressed(keys::RUN) {
-            self.run();
-        }
-        if self.platform.can_quit && pressed(keys::QUIT) {
-            self.replace(Replace::Quit);
-        }
+        self.dispatch_shortcuts(ctx);
         if self.running.is_some() && ctx.input(|i| i.key_pressed(Key::Escape)) {
             self.cancel_run();
         }
@@ -657,6 +777,10 @@ impl App {
             ctx.request_repaint();
         }
         self.take_screenshot();
+        if self.applied_theme != Some(self.theme_choice) {
+            ctx.set_theme(self.theme_choice.preference());
+            self.applied_theme = Some(self.theme_choice);
+        }
         self.shortcuts(&ctx);
         self.drop_stale_results();
         let p = theme::palette(&ctx);
@@ -806,6 +930,12 @@ impl App {
 
     /// The header: menus on the shell colour, the document's name, and Run.
     fn header(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        let run_key = self.shortcut(commands::RUN, ui.ctx()).unwrap_or_default();
+        // As the title bar: its empty part moves the window and double-clicks as the system does.
+        let window_buttons = self.title_bar.clone();
+        if window_buttons.is_some() {
+            craft_window::title_bar::empty_area(ui, ui.max_rect());
+        }
         // Text and hover on the dark shell.
         let v = ui.visuals_mut();
         v.override_text_color = Some(p.on_shell);
@@ -818,9 +948,13 @@ impl App {
         let (_, clicked) = egui::Sides::new().shrink_left().show(
             ui,
             |ui| {
+                // The window buttons this desktop puts on the left, outermost first.
+                for b in window_buttons.iter().flat_map(|l| l.left.iter().rev()) {
+                    window_button(ui, p, *b);
+                }
                 ui.label(theme::strong("StochCraft").size(15.0));
                 ui.add_space(8.0);
-                self.menu_bar(ui);
+                self.menu_bar_ui(ui, p);
                 ui.add_space(8.0);
                 let dirty = if self.engine.is_dirty() {
                     " — edited"
@@ -834,6 +968,10 @@ impl App {
             },
             |ui| {
                 ui.visuals_mut().override_text_color = None;
+                // The window buttons on the right, outermost (rightmost) first.
+                for b in window_buttons.iter().flat_map(|l| l.right.iter().rev()) {
+                    window_button(ui, p, *b);
+                }
                 if running {
                     let cancel =
                         egui::Button::new(egui::RichText::new("Cancel run").color(p.on_shell))
@@ -842,7 +980,7 @@ impl App {
                             .min_size(egui::vec2(0.0, 30.0));
                     ui.add(cancel).on_hover_text("Esc").clicked()
                 } else {
-                    let shortcut = ui.ctx().format_shortcut(&keys::RUN);
+                    let shortcut = run_key.clone();
                     ui.add_enabled(can_run, theme::primary(ui, "Run"))
                         .on_hover_text(format!("Run the experiment ({shortcut})"))
                         .on_disabled_hover_text("Open a model first")
@@ -859,91 +997,33 @@ impl App {
         }
     }
 
-    fn menu_bar(&mut self, ui: &mut egui::Ui) {
-        let ctx = ui.ctx().clone();
-        let item = |ui: &mut egui::Ui, label: &str, key: Option<KeyboardShortcut>, enabled| {
-            let mut b = egui::Button::new(label);
-            if let Some(k) = key {
-                b = b.shortcut_text(theme::weak(ui, ctx.format_shortcut(&k)));
-            }
-            ui.add_enabled(enabled, b).clicked()
+    /// The in-window menu bar (craft-menu), laid out for this platform. Not drawn when the shell
+    /// shows the menus in the system's menu bar.
+    fn menu_bar_ui(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        if self.native_menu {
+            return;
+        }
+        let target = self.menu_target();
+        let layout = self.menu_layout(target);
+        let mut style = craft_menu::BarStyle::from_style(ui.style());
+        style.title_color = p.on_shell;
+        // A mark IBM Plex has (craft-ui's font stack, with its fallbacks, comes next).
+        style.radio_mark = "•".into();
+        let gate = craft_menu::Gate {
+            modal: self.modal_open(),
+            ..craft_menu::Gate::default()
         };
-        // Menus side by side in the header (egui::MenuBar would take the rest of the row).
-        ui.horizontal(|ui| {
-            ui.menu_button("File", |ui| {
-                ui.visuals_mut().override_text_color = None;
-                if item(ui, "New", Some(keys::NEW), true) {
-                    self.replace(Replace::New);
-                }
-                if item(ui, "Open…", Some(keys::OPEN), true) {
-                    self.replace(Replace::Open);
-                }
-                ui.menu_button("Open Example", |ui| {
-                    for (i, e) in EXAMPLES.iter().enumerate() {
-                        if ui.button(e.title).clicked() {
-                            self.replace(Replace::Example(i));
-                        }
-                    }
-                });
-                ui.separator();
-                let save = if self.platform.file_system {
-                    "Save"
-                } else {
-                    "Download"
-                };
-                if item(ui, save, Some(keys::SAVE), true) {
-                    self.save();
-                }
-                if self.platform.file_system && item(ui, "Save As…", Some(keys::SAVE_AS), true) {
-                    self.save_as();
-                }
-                if self.platform.can_quit {
-                    ui.separator();
-                    if item(ui, "Quit", Some(keys::QUIT), true) {
-                        self.replace(Replace::Quit);
-                    }
-                }
-            });
-            ui.menu_button("Edit", |ui| {
-                ui.visuals_mut().override_text_color = None;
-                let history = self.engine_history();
-                let undo = history.0.map(|l| format!("Undo {l}"));
-                let redo = history.1.map(|l| format!("Redo {l}"));
-                if item(
-                    ui,
-                    undo.as_deref().unwrap_or("Undo"),
-                    Some(keys::UNDO),
-                    undo.is_some(),
-                ) {
-                    self.undo();
-                }
-                if item(
-                    ui,
-                    redo.as_deref().unwrap_or("Redo"),
-                    Some(keys::REDO),
-                    redo.is_some(),
-                ) {
-                    self.redo();
-                }
-            });
-            ui.menu_button("Model", |ui| {
-                ui.visuals_mut().override_text_color = None;
-                let running = self.running.is_some();
-                let has_model = !self.engine.model().elements.is_empty();
-                if item(ui, "Run", Some(keys::RUN), !running && has_model) {
-                    self.run();
-                }
-                if item(ui, "Cancel Run", None, running) {
-                    self.cancel_run();
-                }
-            });
-            ui.menu_button("Help", |ui| {
-                ui.visuals_mut().override_text_color = None;
-                if ui.button("About StochCraft").clicked() {
-                    self.about = true;
-                }
-            });
-        });
+        // As wide as its titles need, so the document's name fits beside it.
+        let room = (ui.available_width() - 260.0).max(120.0);
+        let chosen = craft_menu::MenuBarUi::new(&layout.bar)
+            .target(target)
+            .style(style)
+            .gate(gate)
+            .shrink_to_fit(room)
+            .show(ui);
+        for command in chosen {
+            self.run_command(&command);
+        }
     }
 
     fn status_bar(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
@@ -1080,7 +1160,8 @@ impl App {
             if ui.add(theme::primary(ui, "Open a model…")).clicked() {
                 self.replace(Replace::Open);
             }
-            ui.label(theme::weak(ui, ui.ctx().format_shortcut(&keys::OPEN)));
+            let key = self.shortcut(commands::OPEN, ui.ctx()).unwrap_or_default();
+            ui.label(theme::weak(ui, key));
         });
         ui.add_space(28.0);
         ui.label(theme::strong("Or start from an example"));
@@ -1129,7 +1210,8 @@ impl App {
             if ui.add(theme::primary(ui, "Run experiment")).clicked() {
                 self.run();
             }
-            ui.label(theme::weak(ui, ui.ctx().format_shortcut(&keys::RUN)));
+            let key = self.shortcut(commands::RUN, ui.ctx()).unwrap_or_default();
+            ui.label(theme::weak(ui, key));
         });
     }
 
@@ -1251,6 +1333,54 @@ impl App {
         if ctx.input(|i| i.key_pressed(Key::Escape)) {
             self.about = false;
         }
+    }
+}
+
+/// A window button of an app-drawn title bar, drawn as a vector mark (minimise: a bar; maximise:
+/// a square, or two when maximised; close: a cross).
+fn window_button(ui: &mut egui::Ui, p: &theme::Palette, button: craft_window::Button) {
+    use craft_window::Button;
+    let maximized = ui.ctx().input(|i| i.viewport().maximized.unwrap_or(false));
+    let (label, command) = match button {
+        Button::Minimize => ("Minimise", egui::ViewportCommand::Minimized(true)),
+        Button::Maximize if maximized => ("Restore", egui::ViewportCommand::Maximized(false)),
+        Button::Maximize => ("Maximise", egui::ViewportCommand::Maximized(true)),
+        Button::Close => ("Close", egui::ViewportCommand::Close),
+    };
+    let (rect, response) = ui.allocate_exact_size(egui::vec2(30.0, 30.0), egui::Sense::click());
+    response.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, label));
+    let painter = ui.painter_at(rect);
+    if response.hovered() {
+        let fill = if matches!(button, Button::Close) {
+            p.error
+        } else {
+            p.on_shell.gamma_multiply(0.14)
+        };
+        painter.rect_filled(rect.shrink(3.0), 6.0, fill);
+    }
+    let ink = egui::Stroke::new(1.3, p.on_shell);
+    let c = rect.center();
+    let r = 5.0;
+    match button {
+        Button::Minimize => {
+            painter.line_segment([c + egui::vec2(-r, 0.0), c + egui::vec2(r, 0.0)], ink);
+        }
+        Button::Maximize => {
+            let square = egui::Rect::from_center_size(c, egui::vec2(2.0 * r, 2.0 * r));
+            if maximized {
+                let back = square.translate(egui::vec2(2.0, -2.0));
+                painter.rect_stroke(back, 1.0, ink, egui::StrokeKind::Middle);
+                painter.rect_filled(square, 1.0, p.shell);
+            }
+            painter.rect_stroke(square, 1.0, ink, egui::StrokeKind::Middle);
+        }
+        Button::Close => {
+            painter.line_segment([c + egui::vec2(-r, -r), c + egui::vec2(r, r)], ink);
+            painter.line_segment([c + egui::vec2(-r, r), c + egui::vec2(r, -r)], ink);
+        }
+    }
+    if response.on_hover_text(label).clicked() {
+        ui.ctx().send_viewport_cmd(command);
     }
 }
 

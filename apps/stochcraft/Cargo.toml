@@ -16,4 +16,10 @@ workspace = true
 stochcraft-ui-egui = { workspace = true }
 eframe = { workspace = true, features = ["default_fonts", "glow", "accesskit", "wayland", "x11"] }
 egui = { workspace = true }
+craft-atomic = { workspace = true }
 craft-dialogs = { workspace = true }
+craft-menu = { workspace = true }
+craft-quit = { workspace = true }
+craft-settings = { workspace = true }
+craft-window = { workspace = true }
+serde = { version = "1", features = ["derive"] }

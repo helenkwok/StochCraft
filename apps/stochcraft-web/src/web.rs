@@ -21,7 +21,17 @@ struct Web {
     unsaved: Rc<RefCell<bool>>,
 }
 
+/// Where the browser keeps the app's preferences (eframe's storage: the page's local storage).
+const PREFS_KEY: &str = "stochcraft.prefs";
+
 impl eframe::App for Web {
+    /// Remembers the appearance between visits.
+    fn save(&mut self, storage: &mut dyn eframe::Storage) {
+        if let Ok(json) = serde_json::to_string(&self.app.prefs()) {
+            storage.set_string(PREFS_KEY, json);
+        }
+    }
+
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
         let ctx = ui.ctx().clone();
         let files: Vec<_> = self.inbox.borrow_mut().drain(..).collect();
@@ -58,7 +68,7 @@ impl eframe::App for Web {
                     Err(e) => self.app.report_error(format!("{name}: {e:?}")),
                 },
                 // Not made in the browser (Platform::BROWSER has no paths and no Quit).
-                Request::PickSave { .. } | Request::Quit => {}
+                Request::PickSave { .. } | Request::OpenPath { .. } | Request::Quit => {}
             }
         }
         if let Some(title) = self.app.title_if_changed()
@@ -103,27 +113,19 @@ fn pick(inbox: &Inbox, ctx: &egui::Context) {
     input.click();
 }
 
-/// Offers `bytes` as a download named `name`.
+/// Offers `bytes` as a download named `name` (craft-platform's browser download).
 fn download(name: &str, bytes: &[u8]) -> Result<(), JsValue> {
-    let document = web_sys::window()
-        .and_then(|w| w.document())
-        .ok_or_else(|| JsValue::from_str("no document"))?;
-    let parts = js_sys::Array::of1(&js_sys::Uint8Array::from(bytes));
-    let options = web_sys::BlobPropertyBag::new();
-    let kind = match name.rsplit('.').next() {
+    let mime = match name.rsplit('.').next() {
         Some("png") => "image/png",
         Some("csv") => "text/csv",
         _ => "application/xml",
     };
-    options.set_type(kind);
-    let blob = web_sys::Blob::new_with_u8_array_sequence_and_options(&parts, &options)?;
-    let url = web_sys::Url::create_object_url_with_blob(&blob)?;
-    let a: web_sys::HtmlAnchorElement = document.create_element("a")?.unchecked_into();
-    a.set_href(&url);
-    a.set_download(name);
-    a.click();
-    web_sys::Url::revoke_object_url(&url)?;
-    Ok(())
+    craft_platform::browser::download_bytes(
+        name,
+        mime,
+        bytes,
+        craft_platform::browser::DownloadOptions::default(),
+    )
 }
 
 /// Asks before the tab closes or reloads while there are unsaved changes.
@@ -161,9 +163,17 @@ pub fn start() {
             .start(
                 canvas,
                 eframe::WebOptions::default(),
-                Box::new(move |_cc| {
+                Box::new(move |cc| {
+                    let mut app = App::new(Platform::BROWSER);
+                    if let Some(prefs) = cc
+                        .storage
+                        .and_then(|s| s.get_string(PREFS_KEY))
+                        .and_then(|j| serde_json::from_str(&j).ok())
+                    {
+                        app.set_prefs(&prefs);
+                    }
                     Ok(Box::new(Web {
-                        app: App::new(Platform::BROWSER),
+                        app,
                         inbox: Inbox::default(),
                         unsaved,
                     }))

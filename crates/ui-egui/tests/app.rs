@@ -19,8 +19,11 @@ fn harness(platform: Platform) -> Harness<'static, App> {
 /// Clicks the widget labelled `label` (the last one drawn, so a menu over the window wins), or a
 /// menu item that shows a shortcut after its label.
 fn click(h: &mut Harness<'static, App>, label: &str) {
+    let menu_item = egui::accesskit::Role::MenuItem;
     let button = egui::accesskit::Role::Button;
-    if let Some(node) = h.query_all_by_role_and_label(button, label).last() {
+    if let Some(node) = h.query_all_by_role_and_label(menu_item, label).last() {
+        node.click();
+    } else if let Some(node) = h.query_all_by_role_and_label(button, label).last() {
         node.click();
     } else if let Some(node) = h.query_all_by_label(label).last() {
         node.click();
@@ -41,10 +44,8 @@ fn settle(h: &mut Harness<'static, App>) {
 fn menu(h: &mut Harness<'static, App>, path: &[&str]) {
     for (i, label) in path.iter().enumerate() {
         if i == 0 {
-            // The header's menu, which comes before the work area's tabs of the same name.
-            h.get_all_by_role_and_label(egui::accesskit::Role::Button, label)
-                .next()
-                .expect("the menu")
+            // The menu bar's title (craft-menu), not the work area's tab of the same name.
+            h.get_by_role_and_label(egui::accesskit::Role::MenuItem, label)
                 .click();
             settle(h);
         } else {
@@ -73,7 +74,7 @@ fn an_example_opens_runs_and_shows_results() {
     assert!(h.state().status().starts_with("Opened mm1.bpmn"));
     assert!(!h.state().engine().model().elements.is_empty());
 
-    menu(&mut h, &["Model", "Run F5"]);
+    menu(&mut h, &["Model", "Run"]);
     finish_run(&mut h);
     let status = h.state().status().to_owned();
     let results = h.state().results().expect(&status);
@@ -105,7 +106,7 @@ fn the_browser_runs_in_slices_and_downloads_instead_of_saving() {
     finish_run(&mut h);
     assert!(h.state().results().is_some(), "{}", h.state().status());
 
-    menu(&mut h, &["File", "Download Ctrl+S"]);
+    menu(&mut h, &["File", "Download"]);
     let requests = h.state_mut().take_requests();
     let [Request::Download { name, bytes }] = requests.as_slice() else {
         panic!("expected one download, got {requests:?}");
@@ -119,7 +120,7 @@ fn the_browser_runs_in_slices_and_downloads_instead_of_saving() {
 fn undo_and_redo_name_the_change_and_results_go_stale() {
     let mut h = harness(Platform::DESKTOP);
     menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
-    menu(&mut h, &["Model", "Run F5"]);
+    menu(&mut h, &["Model", "Run"]);
     finish_run(&mut h);
     assert!(h.state().results().is_some());
 
@@ -232,7 +233,7 @@ fn about_names_the_licence() {
 fn results_export_as_csv_and_charts_are_drawn() {
     let mut h = harness(Platform::DESKTOP);
     menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
-    menu(&mut h, &["Model", "Run F5"]);
+    menu(&mut h, &["Model", "Run"]);
     finish_run(&mut h);
     // One chart per measure that applies, titled with its unit.
     h.get_by_label("Utilisation (%)");

@@ -19,6 +19,15 @@ crates above it, so a change near the top touches little and a change near the b
 Only `random`, `stats`, `des`, `model`, `blocks`, `experiment`, `io`, `engine`, `ui-egui` and `testkit` exist so far (with the three apps); the others are placed in advance so each crate's position is decided
 before it is written.
 
+## The app on craft-libs
+
+The interface (`ui-egui`, the `stochcraft` and `stochcraft-web` apps) is built on
+[craft-libs](https://github.com/storytold/craft-libs), the Craft suite's shared app foundation,
+pinned to one commit in the workspace manifest with the egui fork it uses: craft-menu and
+craft-keymap (menus and shortcuts), craft-settings, craft-window, craft-quit, craft-atomic,
+craft-dialogs and craft-platform so far, craft-ui and craft-i18n next. The interface owns only
+what is StochCraft's: its commands, its document and its look.
+
 ## Determinism across targets
 
 Every layered crate builds for `wasm32-unknown-unknown` (`cargo xtask wasm`), and a later wasm64

@@ -557,9 +557,20 @@ that say what to do next, and light and dark themes composed separately.
 Interaction tests drive the window through egui_kittest's accessibility tree, natively and in
 the browser's mode (runs in slices, saving as downloads).
 
-**M3.1b:** recent files, settings (craft-settings), autosave, menus and shortcuts through
-craft-menu and craft-keymap (a native macOS menu bar, user key bindings), the window frame via
-craft-window, and image snapshot tests.
+**M3.1b, the shell on craft-libs (done):** every command runs from one catalogue
+(`ui-egui/src/commands.rs`): craft-keymap holds the shortcuts and dispatches keys, craft-menu
+lays the menus out per platform (About, Settings and Quit where each keeps them; on the web
+without the browser's own shortcuts, Quit or file paths) and draws the in-window bar, with the
+macOS menu bar through its native backend. craft-settings keeps the preferences (appearance,
+recent files) in the platform's config folder; the browser keeps them in its storage. File ▸
+Open Recent and View ▸ Appearance are new. craft-window decides who draws the window frame and,
+where the app does (GNOME on Wayland), the header becomes the title bar with the desktop's window
+buttons; craft-quit quits the platform's way; craft-atomic makes saves crash-safe;
+craft-platform downloads files in the browser.
+
+**M3.1c, controls on craft-ui:** craft-ui's font stack (every script, system fallback), its combo
+box, localized number fields, tabs, panes and icons, strings through craft-i18n, the shortcut
+editor (craft-keymap's `ui`), screenshot tests in craft-ui's six test languages, and autosave.
 
 ### M3.2 Model editing without a canvas
 
