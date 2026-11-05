@@ -797,6 +797,8 @@ name = "craft-keymap"
 version = "0.1.0"
 source = "git+https://github.com/storytold/craft-libs?rev=d836bea31b7d33d83023edc6bab9cd8059232471#d836bea31b7d33d83023edc6bab9cd8059232471"
 dependencies = [
+ "craft-i18n",
+ "craft-ui",
  "egui",
  "serde",
  "serde_json",
@@ -3421,6 +3423,7 @@ dependencies = [
  "eframe",
  "egui",
  "serde",
+ "serde_json",
  "stochcraft-ui-egui",
 ]
 

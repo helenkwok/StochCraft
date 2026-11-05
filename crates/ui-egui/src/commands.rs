@@ -30,27 +30,31 @@ pub const RUN: &str = "model.run";
 pub const CANCEL_RUN: &str = "model.cancel_run";
 pub const THEME: &str = "view.theme";
 pub const ABOUT: &str = "help.about";
+pub const SHORTCUTS: &str = "app.keyboard_shortcuts";
 
 /// The commands that can have shortcuts, with their defaults (`Cmd` is Ctrl outside macOS).
 fn catalog() -> Vec<Bindable> {
     let app = Scope::app();
-    let b = |id: &str, label: &str, keys: &[&str]| {
+    // Each command with its menu path, which the Keyboard Shortcuts dialog groups by.
+    let b = |id: &str, label: &str, path: &[&str], keys: &[&str]| {
+        let path = path.iter().map(|p| (*p).to_owned()).collect();
         keys.iter().filter_map(|k| Binding::parse(k).ok()).fold(
-            Bindable::new(id, label, app.clone()),
+            Bindable::new(id, label, app.clone()).with_path(path),
             Bindable::with_default,
         )
     };
     vec![
-        b(NEW, "New", &["Cmd+N"]),
-        b(OPEN, "Open…", &["Cmd+O"]),
-        b(SAVE, "Save", &["Cmd+S"]),
-        b(SAVE_AS, "Save As…", &["Cmd+Shift+S"]),
-        b(QUIT, "Quit", &["Cmd+Q"]),
-        b(UNDO, "Undo", &["Cmd+Z"]),
-        b(REDO, "Redo", &["Cmd+Shift+Z", "Cmd+Y"]),
-        b(RUN, "Run", &["F5"]),
-        b(CANCEL_RUN, "Cancel Run", &[]),
-        b(ABOUT, "About StochCraft", &[]),
+        b(NEW, "New", &["File"], &["Cmd+N"]),
+        b(OPEN, "Open…", &["File"], &["Cmd+O"]),
+        b(SAVE, "Save", &["File"], &["Cmd+S"]),
+        b(SAVE_AS, "Save As…", &["File"], &["Cmd+Shift+S"]),
+        b(QUIT, "Quit", &["File"], &["Cmd+Q"]),
+        b(UNDO, "Undo", &["Edit"], &["Cmd+Z"]),
+        b(REDO, "Redo", &["Edit"], &["Cmd+Shift+Z", "Cmd+Y"]),
+        b(SHORTCUTS, "Keyboard Shortcuts…", &["Edit", "Settings"], &[]),
+        b(RUN, "Run", &["Model"], &["F5"]),
+        b(CANCEL_RUN, "Cancel Run", &["Model"], &[]),
+        b(ABOUT, "About StochCraft", &["Help"], &[]),
     ]
 }
 
@@ -126,6 +130,10 @@ impl App {
         .role(MenuRole::File);
 
         let (undo, redo) = self.engine_history();
+        // Settings: one page so far. Each platform's layout puts it where its apps keep settings
+        // (macOS: the app menu; Windows and Linux: last in Edit, as Preferences).
+        let settings = Node::submenu("Settings", vec![item(SHORTCUTS, "Keyboard Shortcuts…")])
+            .role(ItemRole::Settings);
         let edit = Menu::new(
             "Edit",
             vec![
@@ -139,6 +147,8 @@ impl App {
                     redo.as_deref()
                         .map_or("Redo".into(), |l| format!("Redo {l}")),
                 )),
+                Node::Separator,
+                settings,
             ],
         )
         .role(MenuRole::Edit);
@@ -214,7 +224,7 @@ impl App {
 
     /// A dialog is open: menu commands wait.
     pub(crate) fn modal_open(&self) -> bool {
-        self.confirm.is_some()
+        self.confirm.is_some() || self.shortcuts_dialog.is_some()
     }
 
     /// Runs a command from a menu, the macOS menu bar or a shortcut.
@@ -255,6 +265,7 @@ impl App {
                 }
             }
             ABOUT => self.about = true,
+            SHORTCUTS => self.open_shortcuts(),
             _ => {}
         }
     }

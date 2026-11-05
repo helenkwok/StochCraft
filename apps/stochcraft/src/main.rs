@@ -269,3 +269,27 @@ fn main() -> eframe::Result {
         }),
     )
 }
+
+#[cfg(test)]
+#[allow(clippy::panic)] // A settings file that doesn't read back fails the test.
+mod tests {
+    use super::*;
+
+    /// The preferences survive `config.toml`: appearance, recent files and the user's shortcuts.
+    #[test]
+    fn preferences_round_trip_through_the_settings_file() {
+        let mut prefs = Prefs::default();
+        prefs.files.recent = vec!["/models/a.bpmn".into()];
+        prefs.keyboard.shortcuts = Some(serde_json::json!({ "model.run": "F6", "file.new": "" }));
+        let mut doc = craft_settings::document::new_document(Stored::SCHEMA_VERSION);
+        assert!(craft_settings::document::merge_into(&mut doc, &Stored(prefs.clone())).is_ok());
+        let text = craft_settings::document::render(&doc);
+        let back = craft_settings::document::parse(&text)
+            .map(|d| craft_settings::document::deserialize_sections::<Stored>(&d));
+        let Ok((Stored(read), problems)) = back else {
+            panic!("the file didn't parse: {text}");
+        };
+        assert!(problems.is_empty(), "{text}");
+        assert_eq!(read, prefs, "{text}");
+    }
+}

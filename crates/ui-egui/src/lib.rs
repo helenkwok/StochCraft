@@ -151,6 +151,17 @@ impl ThemeChoice {
 pub struct Prefs {
     pub appearance: Appearance,
     pub files: Files,
+    pub keyboard: Keyboard,
+}
+
+/// The user's own shortcuts: craft-keymap's overrides of the defaults (`{"file.save": "Ctrl+S"}`,
+/// `""` for none), as Settings ▸ Keyboard Shortcuts… saves them.
+#[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct Keyboard {
+    /// Left out when the user changed nothing (TOML has no null).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shortcuts: Option<Value>,
 }
 
 #[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
@@ -225,6 +236,8 @@ pub struct App {
     applied_theme: Option<ThemeChoice>,
     /// The shell shows the menus in the system's menu bar (macOS), not in the window.
     native_menu: bool,
+    /// Settings ▸ Keyboard Shortcuts…, while it is open (craft-keymap's dialog).
+    shortcuts_dialog: Option<craft_keymap::ui::DialogState>,
     /// The app draws the window frame (craft-window chose it): the header is the title bar and
     /// shows these window buttons.
     title_bar: Option<craft_window::Layout>,
@@ -264,6 +277,7 @@ impl App {
             theme_choice: ThemeChoice::System,
             applied_theme: None,
             native_menu: false,
+            shortcuts_dialog: None,
             title_bar: None,
             numbers: craft_ui::localized::LocaleNumbers::new(std::sync::Arc::new(
                 craft_i18n::Format::new(&craft_i18n::Region::system(), craft_i18n::Digits::Locale),
@@ -321,6 +335,15 @@ impl App {
             files: Files {
                 recent: self.recent.clone(),
             },
+            keyboard: Keyboard {
+                shortcuts: serde_json::to_value(self.keymap.overrides())
+                    .ok()
+                    .filter(|v| match v {
+                        Value::Object(m) => !m.is_empty(),
+                        Value::Array(a) => !a.is_empty(),
+                        _ => false,
+                    }),
+            },
         }
     }
 
@@ -329,6 +352,39 @@ impl App {
         self.theme_choice = prefs.appearance.theme;
         self.recent = prefs.files.recent.clone();
         self.recent.truncate(RECENT_FILES);
+        let overrides = prefs
+            .keyboard
+            .shortcuts
+            .clone()
+            .and_then(|v| serde_json::from_value(v).ok())
+            .unwrap_or_default();
+        self.keymap.set_overrides(overrides);
+    }
+
+    /// Settings ▸ Keyboard Shortcuts…: craft-keymap's dialog over the app's keymap.
+    pub(crate) fn open_shortcuts(&mut self) {
+        if self.shortcuts_dialog.is_none() {
+            self.shortcuts_dialog = Some(craft_keymap::ui::DialogState::new());
+        }
+    }
+
+    /// Draws the shortcuts dialog while it is open. OK keeps the edits (the shell saves them with
+    /// the preferences); Cancel puts the keymap back as it was.
+    fn shortcuts_window(&mut self, ctx: &egui::Context) {
+        let Some(state) = &mut self.shortcuts_dialog else {
+            return;
+        };
+        let text = craft_keymap::ui::English;
+        let outcome =
+            craft_keymap::ui::ShortcutsDialog::new(&mut self.keymap, &text).show(ctx, state);
+        if !state.is_open() {
+            self.shortcuts_dialog = None;
+        }
+        match outcome {
+            Some(craft_keymap::ui::Outcome::Ok) => self.info("Keyboard shortcuts saved"),
+            Some(craft_keymap::ui::Outcome::Cancel) => self.info("Keyboard shortcuts unchanged"),
+            _ => {}
+        }
     }
 
     /// The shell shows the menus in the system's menu bar, so the window doesn't (macOS).
@@ -860,6 +916,7 @@ impl App {
 
         self.confirm_dialog(&ctx);
         self.about_window(&ctx);
+        self.shortcuts_window(&ctx);
     }
 
     /// The results: export buttons, the charts, then the table.
