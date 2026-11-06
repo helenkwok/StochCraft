@@ -18,6 +18,7 @@ pub use autosave::Autosave;
 mod editor;
 pub mod form;
 pub mod i18n;
+mod pools;
 mod results;
 pub mod theme;
 

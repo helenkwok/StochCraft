@@ -786,7 +786,10 @@ or join (parallel gateway), drawn as BPMN diamonds; a decision's ways out take a
 a condition (blank when unset), and a default flow; a flow's problems (a condition that can't be
 read) show on its block.
 
-**Still to come here:** resource pools (M2.5) appear in the same forms as their commands land.
+**Resource pools (M2.5):** the model overview lists the shared pools, each with its name, units
+and roles, with Add pool and Remove. **+ Add block** offers a task with shared resources (needing
+one unit of the first pool, made if there is none), whose inspector lists its needs: one row per
+alternative, by pool or by role, with its units, in the order they are tried.
 
 ### M3.3 Running and results
 
