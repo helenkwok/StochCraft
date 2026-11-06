@@ -659,6 +659,12 @@ impl App {
         }
     }
 
+    /// The user closed the Save dialog without choosing a file: nothing was saved, so what was
+    /// to follow the save (quit, new, open) is dropped rather than run after a later save.
+    pub fn save_cancelled(&mut self) {
+        self.after_save = None;
+    }
+
     /// The shell wrote (or downloaded) `bytes` as `path`.
     pub fn written(&mut self, path: &str, bytes: &[u8]) {
         match self.engine.saved_to(path, bytes) {

@@ -367,8 +367,12 @@ impl Engine {
 
     /// Records that the model was saved as `bytes` at `path`.
     pub fn saved_to(&mut self, path: &str, bytes: &[u8]) -> Result<Value, CommandError> {
-        // Read back what was written, so the next unchanged save gives the same bytes again.
-        let loaded = stochcraft_io::read(bytes)
+        // Read back what was written, so the next unchanged save gives the same bytes again, in
+        // the scenario that was opened (not the file's first one, which later saves would then
+        // write into).
+        let scenario = self.file.as_ref().and_then(|f| f.opened.scenario.clone());
+        let loaded = stochcraft_io::read_scenario(bytes, scenario.as_deref())
+            .or_else(|_| stochcraft_io::read(bytes))
             .map_err(|e| CommandError::new(ErrorCode::Internal, format!("{path}: {e}")))?;
         let format = format_name(loaded.opened.format);
         self.file = Some(FileState {

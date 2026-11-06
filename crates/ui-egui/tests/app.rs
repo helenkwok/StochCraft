@@ -200,6 +200,33 @@ fn unsaved_changes_are_asked_about_before_they_are_lost() {
 }
 
 #[test]
+fn a_cancelled_save_drops_what_was_to_follow_it() {
+    let mut h = harness(Platform::DESKTOP);
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Draft" }));
+    settle(&mut h);
+    // New ▸ Save, then the user closes the Save dialog without choosing a file.
+    menu(&mut h, &["File", "New"]);
+    click(&mut h, "Save");
+    assert!(matches!(
+        h.state_mut().take_requests().as_slice(),
+        [Request::PickSave { .. }]
+    ));
+    h.state_mut().save_cancelled();
+    settle(&mut h);
+    assert_eq!(h.state().engine().model().name, "Draft");
+    // A later, ordinary save does only that: no New in its wake.
+    h.state_mut().save_to("/tmp/Draft.bpmn");
+    let Some(Request::Write { path, bytes }) = h.state_mut().take_requests().pop() else {
+        panic!("expected a write");
+    };
+    h.state_mut().written(&path, &bytes);
+    settle(&mut h);
+    assert_eq!(h.state().engine().model().name, "Draft", "nothing followed");
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+}
+
+#[test]
 fn a_dropped_file_waits_for_the_unsaved_changes_question() {
     let mut h = harness(Platform::BROWSER);
     h.state_mut()
