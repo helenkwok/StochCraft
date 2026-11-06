@@ -359,3 +359,46 @@ fn a_decision_routes_by_probability_and_condition() {
     settle(&mut h);
     assert!(h.state().results().is_some(), "{}", h.state().status());
 }
+
+#[test]
+fn a_waiting_room_is_set_on_a_task_and_its_losses_reported() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    // No limit at first: the queue may grow without bound.
+    assert!(element(&h, "serve")["queue_capacity"].is_null());
+    h.get_by_label("unlimited");
+
+    // Ticking the box gives room for ten; then type the size wanted.
+    click(&mut h, Role::CheckBox, "Waiting room");
+    assert_eq!(element(&h, "serve")["queue_capacity"], json!(10));
+    type_into(&mut h, "Waiting room", "2");
+    assert_eq!(element(&h, "serve")["queue_capacity"], json!(2));
+
+    // A run reports the arrivals turned away at the full room, in words and as a chart.
+    h.state_mut().run();
+    for _ in 0..5000 {
+        if !h.state().is_running() {
+            break;
+        }
+        h.step();
+    }
+    settle(&mut h);
+    let results = h.state().results().expect("results").clone();
+    let lost = results["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|e| e["id"] == "serve"))
+        .map(|e| e["metrics"]["loss_probability"]["mean"].clone())
+        .unwrap_or_default();
+    assert!(lost.as_f64().is_some_and(|p| p > 0.0), "{results}");
+    click(&mut h, Role::Tab, "Results");
+    h.get_by_label("Share of arrivals lost");
+
+    // Unticking removes the limit again, as one undoable step.
+    click(&mut h, Role::Tab, "Model");
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    click(&mut h, Role::CheckBox, "Waiting room");
+    assert!(element(&h, "serve")["queue_capacity"].is_null());
+    h.state_mut().undo();
+    settle(&mut h);
+    assert_eq!(element(&h, "serve")["queue_capacity"], json!(2));
+}

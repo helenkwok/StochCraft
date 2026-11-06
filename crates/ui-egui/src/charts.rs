@@ -48,6 +48,19 @@ const MEASURES: &[Measure] = &[
         share: false,
         time: true,
     },
+    // Only where a waiting room is finite (M2.4); empty charts are left out.
+    Measure {
+        title: "Share of units blocked",
+        metric: "blocking_probability",
+        share: true,
+        time: false,
+    },
+    Measure {
+        title: "Share of arrivals lost",
+        metric: "loss_probability",
+        share: true,
+        time: false,
+    },
 ];
 
 /// One bar: the block's name, mean, half-width and replications.

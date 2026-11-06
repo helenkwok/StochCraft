@@ -147,6 +147,7 @@ pub fn label(name: &str) -> String {
         "discrete" => "Discrete values",
         "capacity" => "Capacity",
         "limit" => "Arrival limit",
+        "queue_capacity" => "Waiting room",
         "interarrival" => "Time between arrivals",
         "service" => "Service time",
         "duration" => "Duration",
@@ -280,19 +281,28 @@ fn edit(
                 let mut on = !current.is_null();
                 let mut out = None;
                 row(ui, label, help, |ui| {
-                    if ui
-                        .checkbox(&mut on, "")
-                        .on_hover_text("Set a value")
-                        .changed()
-                    {
-                        out = Some(if on { json!(1000) } else { Value::Null });
+                    let r = ui.checkbox(&mut on, "").on_hover_text("Set a value");
+                    // Named after the field, for screen readers (the box has no text of its own).
+                    let ticked = on;
+                    r.widget_info(|| {
+                        egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, label)
+                    });
+                    if r.changed() {
+                        // A first value of the field's scale: room for ten waiting, or a
+                        // thousand arrivals.
+                        let first = if key.ends_with("queue_capacity") {
+                            10
+                        } else {
+                            1000
+                        };
+                        out = Some(if on { json!(first) } else { Value::Null });
                     }
                     if on {
                         out = out.or_else(|| {
                             number(ui, cx, key, label, current, integer, n, unit.as_deref())
                         });
                     } else {
-                        ui.label(theme::weak(ui, "none"));
+                        ui.label(theme::weak(ui, "unlimited"));
                     }
                     out.clone()
                 })
