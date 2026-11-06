@@ -6,7 +6,7 @@ use std::collections::BTreeMap;
 use std::rc::Rc;
 
 use stochcraft_des::{Ctx, Resource, ResourceGuard, Sim, Store};
-use stochcraft_model::{Element, ElementKind};
+use stochcraft_model::{Element, ElementKind, Model, Need, ResourcePool};
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
 
@@ -128,6 +128,7 @@ impl Compiled {
                     .any(|r| places.get(r.to).is_some_and(Option::is_some))
             })
             .collect();
+        let pools = Rc::new(Pools::new(&ctx, &self.model.resources));
         let next_id = Rc::new(RefCell::new(0u64));
         // The elements' streams first, in model order as always; then the properties'.
         let streams: Vec<Rng> = elements.iter().map(|_| rng.fork()).collect();
@@ -197,6 +198,18 @@ impl Compiled {
                 ElementKind::Server {
                     capacity, service, ..
                 } => spawn_server(&mut sim, env, capacity, service),
+                ElementKind::SharedTask {
+                    service,
+                    needs,
+                    priority,
+                } => {
+                    let alternatives = alternatives(&self.model, &needs);
+                    let request = Rc::new(Request {
+                        alternatives,
+                        priority,
+                    });
+                    spawn_shared(&mut sim, env, service, request, Rc::clone(&pools));
+                }
                 ElementKind::Delay { duration } => spawn_delay(&mut sim, env, duration),
                 ElementKind::Sink => spawn_sink(&mut sim, env),
                 ElementKind::ExclusiveGateway { .. } => spawn_exclusive(&mut sim, env, outs),
@@ -209,23 +222,26 @@ impl Compiled {
         // Discard everything before the warm-up. With none, there is nothing to discard (and a
         // reset at time 0 would discard an arrival at time 0).
         if warmup > 0.0 {
-            let (c, st) = (ctx.clone(), Rc::clone(&stats));
+            let (c, st, pl) = (ctx.clone(), Rc::clone(&stats), Rc::clone(&pools));
             sim.spawn(async move {
                 c.hold(warmup).await;
                 let now = c.now();
                 st.iter().for_each(|s| s.borrow_mut().reset(now));
+                pl.reset(now);
             });
         }
 
         let end = warmup + duration;
         sim.run_until(end);
-        let elements = elements
+        let mut elements: Vec<ElementReport> = elements
             .iter()
             .zip(stats.iter())
             .zip(&self.assigns)
             .zip(&feeds_buffer)
             .map(|(((e, s), a), &blocks)| s.borrow().report(e, a, blocks, end))
             .collect();
+        // Then each shared pool, after the elements.
+        elements.extend(pools.reports(&self.model.resources, end));
         Report {
             warmup,
             duration,
@@ -295,7 +311,10 @@ impl BlockStats {
         end: f64,
     ) -> ElementReport {
         let kind = &element.kind;
-        let server = matches!(kind, ElementKind::Server { .. });
+        let server = matches!(
+            kind,
+            ElementKind::Server { .. } | ElementKind::SharedTask { .. }
+        );
         let finite = matches!(
             kind,
             ElementKind::Server {
@@ -303,7 +322,10 @@ impl BlockStats {
                 ..
             }
         );
-        let holds = matches!(kind, ElementKind::Server { .. } | ElementKind::Delay { .. });
+        let holds = matches!(
+            kind,
+            ElementKind::Server { .. } | ElementKind::SharedTask { .. } | ElementKind::Delay { .. }
+        );
         let offered = self.lost + self.entered;
         ElementReport {
             id: element.id.clone(),
@@ -324,7 +346,9 @@ impl BlockStats {
                 _ => None,
             },
             mean_contents: match kind {
-                ElementKind::Server { .. } | ElementKind::Delay { .. } => self.busy.average(end),
+                ElementKind::Server { .. }
+                | ElementKind::SharedTask { .. }
+                | ElementKind::Delay { .. } => self.busy.average(end),
                 _ => None,
             },
             mean_time_in_system: if matches!(kind, ElementKind::Sink) {
@@ -564,6 +588,278 @@ async fn move_on(env: &Rc<RefCell<BlockEnv>>, ctx: &Ctx, entity: Entity) {
     if let Some(out) = out {
         out.send(ctx.now(), entity);
     }
+}
+
+/// One way to meet a shared task's need: `quantity` units from any of `pools` (indices into the
+/// model's resources), taken in that order.
+struct Alternative {
+    pools: Vec<usize>,
+    quantity: u32,
+}
+
+/// What a shared task asks of the pools for each entity.
+struct Request {
+    /// Tried in order; the first that can be met now is taken.
+    alternatives: Vec<Alternative>,
+    priority: f64,
+}
+
+/// The pools each of `needs` can draw on.
+fn alternatives(model: &Model, needs: &[Need]) -> Vec<Alternative> {
+    needs
+        .iter()
+        .map(|need| {
+            let pools = model
+                .resources
+                .iter()
+                .enumerate()
+                .filter(|(_, r)| match need {
+                    Need::Resource { id, .. } => &r.id == id,
+                    Need::Roles { roles, .. } => r.has_roles(roles),
+                })
+                .map(|(i, _)| i)
+                .collect();
+            Alternative {
+                pools,
+                quantity: need.quantity(),
+            }
+        })
+        .collect()
+}
+
+/// Units taken from the pools: (pool, how many).
+type Taken = Vec<(usize, u32)>;
+
+/// An entity waiting for units.
+struct Waiting {
+    request: Rc<Request>,
+    /// Arrival order, for ties of priority.
+    seq: u64,
+    /// Where the units are handed over.
+    grant: Store<Taken>,
+}
+
+/// The shared resource pools of one run: free units, the entities waiting for some, and each
+/// pool's busy units over time.
+struct Pools {
+    ctx: Ctx,
+    free: RefCell<Vec<u32>>,
+    quantity: Vec<u32>,
+    busy: RefCell<Vec<TimeWeighted>>,
+    /// How many times each pool's units were taken.
+    taken: RefCell<Vec<u64>>,
+    /// Highest priority first, then by arrival.
+    waiting: RefCell<Vec<Waiting>>,
+    seq: RefCell<u64>,
+}
+
+impl Pools {
+    fn new(ctx: &Ctx, resources: &[ResourcePool]) -> Self {
+        Self {
+            ctx: ctx.clone(),
+            free: RefCell::new(resources.iter().map(|r| r.quantity).collect()),
+            quantity: resources.iter().map(|r| r.quantity).collect(),
+            busy: RefCell::new(
+                resources
+                    .iter()
+                    .map(|_| TimeWeighted::new(0.0, 0.0))
+                    .collect(),
+            ),
+            taken: RefCell::new(vec![0; resources.len()]),
+            waiting: RefCell::new(Vec::new()),
+            seq: RefCell::new(0),
+        }
+    }
+
+    /// Takes the first of `request`'s alternatives that the free units can meet, if any.
+    fn try_take(&self, request: &Request) -> Option<Taken> {
+        let mut free = self.free.borrow_mut();
+        let alt = request.alternatives.iter().find(|a| {
+            let have: u64 = a
+                .pools
+                .iter()
+                .map(|&p| u64::from(free.get(p).copied().unwrap_or(0)))
+                .sum();
+            a.quantity > 0 && have >= u64::from(a.quantity)
+        })?;
+        let mut left = alt.quantity;
+        let mut taken = Vec::new();
+        for &p in &alt.pools {
+            if left == 0 {
+                break;
+            }
+            if let Some(f) = free.get_mut(p) {
+                let n = (*f).min(left);
+                if n > 0 {
+                    *f -= n;
+                    left -= n;
+                    taken.push((p, n));
+                }
+            }
+        }
+        drop(free);
+        self.record(&taken, true);
+        Some(taken)
+    }
+
+    /// Updates the busy units of the pools in `taken`, as they are taken or given back.
+    fn record(&self, taken: &Taken, take: bool) {
+        let now = self.ctx.now();
+        let free = self.free.borrow();
+        let mut busy = self.busy.borrow_mut();
+        let mut count = self.taken.borrow_mut();
+        for &(p, _) in taken {
+            if let (Some(b), Some(&q), Some(&f)) =
+                (busy.get_mut(p), self.quantity.get(p), free.get(p))
+            {
+                b.set(now, f64::from(q - f));
+            }
+            if take && let Some(c) = count.get_mut(p) {
+                *c += 1;
+            }
+        }
+    }
+
+    /// Waits until units for `request` are free, then takes them.
+    async fn acquire(&self, request: &Rc<Request>) -> Taken {
+        if let Some(taken) = self.try_take(request) {
+            return taken;
+        }
+        let grant = Store::new(&self.ctx);
+        let seq = {
+            let mut s = self.seq.borrow_mut();
+            *s += 1;
+            *s
+        };
+        {
+            let mut w = self.waiting.borrow_mut();
+            // After every waiter of the same or higher priority.
+            let at = w
+                .iter()
+                .position(|x| x.request.priority < request.priority)
+                .unwrap_or(w.len());
+            w.insert(
+                at,
+                Waiting {
+                    request: Rc::clone(request),
+                    seq,
+                    grant: grant.clone(),
+                },
+            );
+        }
+        grant.get().await
+    }
+
+    /// Gives back `taken`, then hands free units to waiting entities: in priority order, each
+    /// that can be served now (one that cannot does not hold back the others).
+    fn release(&self, taken: Taken) {
+        {
+            let mut free = self.free.borrow_mut();
+            for &(p, n) in &taken {
+                if let Some(f) = free.get_mut(p) {
+                    *f += n;
+                }
+            }
+        }
+        self.record(&taken, false);
+        let mut i = 0;
+        loop {
+            let next = {
+                let w = self.waiting.borrow();
+                match w.get(i) {
+                    Some(x) => Rc::clone(&x.request),
+                    None => break,
+                }
+            };
+            match self.try_take(&next) {
+                Some(t) => {
+                    let x = self.waiting.borrow_mut().remove(i);
+                    let _ = x.seq;
+                    x.grant.put(t);
+                }
+                None => i += 1,
+            }
+        }
+    }
+
+    /// Discards the statistics so far (the end of the warm-up).
+    fn reset(&self, t: f64) {
+        self.busy.borrow_mut().iter_mut().for_each(|b| b.reset(t));
+        self.taken.borrow_mut().iter_mut().for_each(|c| *c = 0);
+    }
+
+    /// Each pool's report: how often its units were taken, mean units busy and utilisation.
+    fn reports(&self, resources: &[ResourcePool], end: f64) -> Vec<ElementReport> {
+        let busy = self.busy.borrow();
+        let taken = self.taken.borrow();
+        resources
+            .iter()
+            .enumerate()
+            .map(|(i, r)| {
+                let mean = busy.get(i).and_then(|b| b.average(end));
+                let n = taken.get(i).copied().unwrap_or(0);
+                ElementReport {
+                    id: r.id.clone(),
+                    name: r.name.clone(),
+                    kind: "resource",
+                    entered: n,
+                    left: n,
+                    mean_queue_length: None,
+                    mean_wait: None,
+                    utilisation: mean.map(|b| b / f64::from(r.quantity.max(1))),
+                    mean_contents: mean,
+                    mean_time_in_system: None,
+                    mean_blocked_time: None,
+                    blocking_probability: None,
+                    lost: None,
+                    loss_probability: None,
+                    properties: Vec::new(),
+                }
+            })
+            .collect()
+    }
+}
+
+/// A task whose units come from shared pools: each entity waits in this task's queue for the
+/// units its request needs, is served, and gives them back once it has left (holding them while
+/// blocked after service).
+fn spawn_shared(
+    sim: &mut Sim,
+    env: BlockEnv,
+    service: Dist,
+    request: Rc<Request>,
+    pools: Rc<Pools>,
+) {
+    let ctx = env.ctx.clone();
+    let env = Rc::new(RefCell::new(env));
+    sim.spawn(async move {
+        loop {
+            let input = env.borrow().input.clone();
+            let entity = input.get().await;
+            let (c, env2, req, pl) = (
+                ctx.clone(),
+                Rc::clone(&env),
+                Rc::clone(&request),
+                Rc::clone(&pools),
+            );
+            let service = service.clone();
+            ctx.spawn(async move {
+                let taken = pl.acquire(&req).await;
+                let duration = {
+                    let mut e = env2.borrow_mut();
+                    let now = c.now();
+                    e.with_stats(|s| s.wait.add(now - entity.entered));
+                    e.adjust(|s| &mut s.waiting, -1.0);
+                    e.adjust(|s| &mut s.busy, 1.0);
+                    service.sample(&mut e.rng)
+                };
+                c.hold(duration).await;
+                env2.borrow().adjust(|s| &mut s.busy, -1.0);
+                move_on(&env2, &c, entity).await;
+                pl.release(taken);
+            });
+        }
+    });
 }
 
 fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {

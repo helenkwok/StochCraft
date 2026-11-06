@@ -38,6 +38,8 @@ fn parameters(kind: &str) -> &'static [&'static str] {
     match kind {
         "source" => &["interarrival", "limit"],
         "server" => &["capacity", "service", "queue_capacity"],
+        // Its needs are edited with M2.5's window work; service and priority here.
+        "shared_task" => &["service", "priority"],
         "delay" => &["duration"],
         _ => &[],
     }

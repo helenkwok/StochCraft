@@ -137,6 +137,20 @@ pub enum ElementKind {
         /// whose arrival is lost. A StochCraft vendor extension (`stochcraft:queueCapacity`).
         queue_capacity: Option<u32>,
     },
+    /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
+    /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
+    /// for its service (and while blocked after it), then gives it back. Entities wait here in
+    /// one queue per task; when units come free, waiting entities across all tasks get them in
+    /// order of their task's `priority` (higher first), then of arrival. An entity that cannot be
+    /// served now does not hold back one behind it that can. BPSim's `selection` with
+    /// `getResource`, `getResourceByRoles` and `orResource`, and `priority`.
+    SharedTask {
+        service: Dist,
+        /// The alternatives, tried in order (BPSim `orResource`); at least one.
+        needs: Vec<Need>,
+        /// Who gets freed units first, higher first (BPSim `priority`; default 0).
+        priority: f64,
+    },
     /// Holds each entity for a time with no capacity limit (a task with no resource).
     Delay { duration: Dist },
     /// Removes entities (a BPMN end event).
@@ -156,11 +170,47 @@ pub enum ElementKind {
     ParallelGateway,
 }
 
+/// What a [`ElementKind::SharedTask`] needs from the pools, for one entity.
+#[derive(Debug, Clone, PartialEq)]
+pub enum Need {
+    /// `quantity` units of this pool (BPSim `getResource(id, qty)`).
+    Resource { id: ElementId, quantity: u32 },
+    /// `quantity` units, taken from the pools that have every one of `roles`, in model order
+    /// (BPSim `getResourceByRoles([roles], qty)`).
+    Roles { roles: Vec<String>, quantity: u32 },
+}
+
+impl Need {
+    pub fn quantity(&self) -> u32 {
+        match self {
+            Need::Resource { quantity, .. } | Need::Roles { quantity, .. } => *quantity,
+        }
+    }
+}
+
+/// A pool of identical units that tasks share (a BPMN `resource`, an XPDL `Participant` of type
+/// RESOURCE): BPSim `quantity` and `role`.
+#[derive(Debug, Clone, PartialEq)]
+pub struct ResourcePool {
+    pub id: ElementId,
+    pub name: String,
+    pub quantity: u32,
+    pub roles: Vec<String>,
+}
+
+impl ResourcePool {
+    /// Whether the pool plays every one of `roles`.
+    pub fn has_roles(&self, roles: &[String]) -> bool {
+        roles.iter().all(|r| self.roles.contains(r))
+    }
+}
+
 impl ElementKind {
     pub fn name(&self) -> &'static str {
         match self {
             ElementKind::Source { .. } => "source",
             ElementKind::Server { .. } => "server",
+            ElementKind::SharedTask { .. } => "shared_task",
             ElementKind::Delay { .. } => "delay",
             ElementKind::Sink => "sink",
             ElementKind::ExclusiveGateway { .. } => "exclusive_gateway",
@@ -179,7 +229,9 @@ impl ElementKind {
     fn distributions(&self) -> Vec<(&'static str, &Dist)> {
         match self {
             ElementKind::Source { interarrival, .. } => vec![("interarrival", interarrival)],
-            ElementKind::Server { service, .. } => vec![("service", service)],
+            ElementKind::Server { service, .. } | ElementKind::SharedTask { service, .. } => {
+                vec![("service", service)]
+            }
             ElementKind::Delay { duration } => vec![("duration", duration)],
             ElementKind::Sink
             | ElementKind::ExclusiveGateway { .. }
@@ -362,6 +414,8 @@ pub struct Model {
     pub name: String,
     pub elements: Vec<Element>,
     pub connections: Vec<Connection>,
+    /// Pools of units that tasks share ([`ElementKind::SharedTask`]).
+    pub resources: Vec<ResourcePool>,
     pub experiment: Experiment,
 }
 
@@ -479,6 +533,30 @@ pub enum Problem {
     BlockingCycle {
         through: Vec<ElementId>,
     },
+    /// A resource pool with no units.
+    EmptyPool,
+    /// A task with shared resources that names nothing it needs.
+    NoNeeds,
+    /// A task needs a pool that does not exist.
+    UnknownResource {
+        id: ElementId,
+    },
+    /// A task needs units with roles that no pool plays.
+    NoPoolWithRoles {
+        roles: Vec<String>,
+    },
+    /// A task needs more units at once than the pools it can use have: that alternative can
+    /// never be met (an error when no alternative can be).
+    NeedNeverMet {
+        needed: u32,
+        available: u32,
+    },
+    /// A task's priority is not a finite number.
+    BadPriority {
+        value: f64,
+    },
+    /// A pool no task uses.
+    UnusedPool,
 }
 
 impl Problem {
@@ -514,6 +592,13 @@ impl Problem {
             Problem::JoinNeverCompletes { .. } => "join_never_completes",
             Problem::BufferBehindGateway { .. } => "buffer_behind_gateway",
             Problem::BlockingCycle { .. } => "blocking_cycle",
+            Problem::EmptyPool => "empty_pool",
+            Problem::NoNeeds => "no_needs",
+            Problem::UnknownResource { .. } => "unknown_resource",
+            Problem::NoPoolWithRoles { .. } => "no_pool_with_roles",
+            Problem::NeedNeverMet { .. } => "need_never_met",
+            Problem::BadPriority { .. } => "bad_priority",
+            Problem::UnusedPool => "unused_pool",
         }
     }
 }
@@ -644,6 +729,26 @@ impl std::fmt::Display for Diagnostic {
                     names.join(" → ")
                 )
             }
+            Problem::EmptyPool => write!(f, "a resource pool needs at least 1 unit"),
+            Problem::NoNeeds => write!(f, "names no resource it needs"),
+            Problem::UnknownResource { id } => {
+                write!(f, "needs the resource `{id}`, which does not exist")
+            }
+            Problem::NoPoolWithRoles { roles } => {
+                write!(
+                    f,
+                    "needs a resource with the roles {}, which no pool has",
+                    roles.join(", ")
+                )
+            }
+            Problem::NeedNeverMet { needed, available } => write!(
+                f,
+                "needs {needed} units at once where at most {available} exist, so this can never be met"
+            ),
+            Problem::BadPriority { value } => {
+                write!(f, "priority must be a finite number, not {value}")
+            }
+            Problem::UnusedPool => write!(f, "no task uses this resource pool"),
         }
     }
 }
@@ -737,6 +842,7 @@ impl Model {
         self.check_routing(&mut out);
         self.check_reachability(&outgoing, &mut out);
         self.check_buffers(&outgoing, &mut out);
+        self.check_resources(&mut out);
         // Stable order: errors first, then as found (model order).
         out.sort_by_key(|d| std::cmp::Reverse(d.severity));
         out
@@ -747,13 +853,105 @@ impl Model {
         self.validate().iter().all(|d| d.severity < Severity::Error)
     }
 
+    /// The units that could ever meet `need`: its pool's, or those of every pool with its roles.
+    pub fn units_for(&self, need: &Need) -> Option<u32> {
+        match need {
+            Need::Resource { id, .. } => self
+                .resources
+                .iter()
+                .find(|r| &r.id == id)
+                .map(|r| r.quantity),
+            Need::Roles { roles, .. } => {
+                let pools: Vec<&ResourcePool> = self
+                    .resources
+                    .iter()
+                    .filter(|r| r.has_roles(roles))
+                    .collect();
+                (!pools.is_empty()).then(|| pools.iter().map(|r| r.quantity).sum())
+            }
+        }
+    }
+
+    fn check_resources(&self, out: &mut Vec<Diagnostic>) {
+        for r in &self.resources {
+            if r.quantity == 0 {
+                out.push(Diagnostic::error(Some(&r.id), Problem::EmptyPool));
+            }
+        }
+        let mut used: BTreeSet<&ElementId> = BTreeSet::new();
+        for e in &self.elements {
+            let ElementKind::SharedTask {
+                needs, priority, ..
+            } = &e.kind
+            else {
+                continue;
+            };
+            if !priority.is_finite() {
+                out.push(Diagnostic::error(
+                    Some(&e.id),
+                    Problem::BadPriority { value: *priority },
+                ));
+            }
+            if needs.is_empty() {
+                out.push(Diagnostic::error(Some(&e.id), Problem::NoNeeds));
+                continue;
+            }
+            let mut found = Vec::new();
+            for need in needs {
+                match need {
+                    Need::Resource { id, .. } => {
+                        used.insert(id);
+                    }
+                    Need::Roles { roles, .. } => used.extend(
+                        self.resources
+                            .iter()
+                            .filter(|r| r.has_roles(roles))
+                            .map(|r| &r.id),
+                    ),
+                }
+                let problem = match (need, self.units_for(need)) {
+                    (Need::Resource { id, .. }, None) => {
+                        Some(Problem::UnknownResource { id: id.clone() })
+                    }
+                    (Need::Roles { roles, .. }, None) => Some(Problem::NoPoolWithRoles {
+                        roles: roles.clone(),
+                    }),
+                    (_, Some(available)) if need.quantity() == 0 || need.quantity() > available => {
+                        Some(Problem::NeedNeverMet {
+                            needed: need.quantity(),
+                            available,
+                        })
+                    }
+                    _ => None,
+                };
+                found.push(problem);
+            }
+            // An alternative that can never be met is an error when it is the only kind there
+            // is, else a warning (the others still serve).
+            let all_fail = found.iter().all(Option::is_some);
+            for problem in found.into_iter().flatten() {
+                out.push(if all_fail {
+                    Diagnostic::error(Some(&e.id), problem)
+                } else {
+                    Diagnostic::warning(Some(&e.id), problem)
+                });
+            }
+        }
+        for r in &self.resources {
+            if !used.contains(&r.id) {
+                out.push(Diagnostic::warning(Some(&r.id), Problem::UnusedPool));
+            }
+        }
+    }
+
     fn check_ids(&self, out: &mut Vec<Diagnostic>) {
         let mut seen = BTreeSet::new();
         let ids = self
             .elements
             .iter()
             .map(|e| &e.id)
-            .chain(self.connections.iter().map(|c| &c.id));
+            .chain(self.connections.iter().map(|c| &c.id))
+            .chain(self.resources.iter().map(|r| &r.id));
         for id in ids {
             if !ElementId::is_valid(id.as_str()) {
                 out.push(Diagnostic::error(
@@ -1437,6 +1635,7 @@ mod tests {
                 link("f1", "arrivals", "machine"),
                 link("f2", "machine", "exit"),
             ],
+            resources: Vec::new(),
             experiment: Experiment::default(),
         }
     }

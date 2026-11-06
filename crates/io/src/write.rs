@@ -6,7 +6,7 @@
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-use stochcraft_model::{Dist, ElementKind, Model, Property, PropertyType, PropertyValue};
+use stochcraft_model::{Dist, ElementKind, Model, Need, Property, PropertyType, PropertyValue};
 
 use crate::bpsim::NS2;
 use crate::duration::trim_float;
@@ -186,7 +186,9 @@ pub(crate) fn bpmn_local(kind: &ElementKind) -> &'static str {
     match kind {
         ElementKind::Source { .. } => "startEvent",
         ElementKind::Sink => "endEvent",
-        ElementKind::Server { .. } | ElementKind::Delay { .. } => "task",
+        ElementKind::Server { .. } | ElementKind::SharedTask { .. } | ElementKind::Delay { .. } => {
+            "task"
+        }
         ElementKind::ExclusiveGateway { .. } => "exclusiveGateway",
         ElementKind::ParallelGateway => "parallelGateway",
     }
@@ -224,6 +226,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         .iter()
         .map(|e| e.id.as_str().to_owned())
         .chain(model.connections.iter().map(|c| c.id.as_str().to_owned()))
+        .chain(model.resources.iter().map(|r| r.id.as_str().to_owned()))
         .collect());
     let defs_id = ids.fresh("definitions");
     let process_id = ids.fresh("process");
@@ -242,6 +245,14 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         .with_attr("exporter", "StochCraft")
         .with_attr("exporterVersion", env!("CARGO_PKG_VERSION"));
 
+    // The shared pools, under their own ids.
+    for r in &model.resources {
+        defs.push(
+            b("resource")
+                .with_attr("id", r.id.as_str())
+                .with_attr("name", &r.name),
+        );
+    }
     // Each server owns a resource with as many units as its capacity.
     let mut resource_of = BTreeMap::new();
     for e in &model.elements {
@@ -275,6 +286,19 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if let Some(rid) = resource_of.get(e.id.as_str()) {
             node.push(b("performer").with_child(b("resourceRef").with_text(rid)));
+        }
+        // A shared task's pools named outright, as performers, for other BPMN tools; what it
+        // needs is its selection.
+        if let ElementKind::SharedTask { needs, .. } = &e.kind {
+            let mut named: Vec<&str> = Vec::new();
+            for n in needs {
+                if let Need::Resource { id, .. } = n
+                    && !named.contains(&id.as_str())
+                {
+                    named.push(id.as_str());
+                    node.push(b("performer").with_child(b("resourceRef").with_text(id.as_str())));
+                }
+            }
         }
         process.push(node);
     }
@@ -392,6 +416,23 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                     .with_attr("value", &format!("getResource('{rid}', 1)"));
                 ep.push(s("ResourceParameters").with_child(param("Selection", selection)));
             }
+            ElementKind::SharedTask {
+                service,
+                needs,
+                priority,
+            } => {
+                ep.push(
+                    s("TimeParameters").with_child(param("ProcessingTime", dist_element(service))),
+                );
+                let selection = condition_element(&crate::selection::format(needs));
+                ep.push(s("ResourceParameters").with_child(param("Selection", selection)));
+                if *priority != 0.0 {
+                    ep.push(
+                        s("PriorityParameters")
+                            .with_child(param("Priority", probability_element(*priority))),
+                    );
+                }
+            }
             ElementKind::Delay { duration } => {
                 ep.push(
                     s("TimeParameters").with_child(param("ProcessingTime", dist_element(duration))),
@@ -448,6 +489,18 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                     .with_child(s("ResourceParameters").with_child(param("Quantity", quantity))),
             );
         }
+    }
+    for r in &model.resources {
+        let mut rp =
+            s("ResourceParameters").with_child(param("Quantity", numeric(u64::from(r.quantity))));
+        for role in &r.roles {
+            rp.push(param("Role", s("StringParameter").with_attr("value", role)));
+        }
+        scenario.push(
+            s("ElementParameters")
+                .with_attr("elementRef", r.id.as_str())
+                .with_child(rp),
+        );
     }
     let relationship = b("relationship")
         .with_attr("type", "BPSimData")

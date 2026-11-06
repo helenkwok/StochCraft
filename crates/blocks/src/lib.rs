@@ -39,8 +39,8 @@ mod runtime;
 
 use stochcraft_model::expr;
 use stochcraft_model::{
-    Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Property,
-    PropertyType, PropertyValue, Severity,
+    Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Property,
+    PropertyType, PropertyValue, ResourcePool, Severity,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::Summary;
@@ -519,6 +519,8 @@ pub struct Builder {
     /// `from` → `to`, with a probability and a condition; a later connection from the same
     /// element replaces the earlier one unless `from` is a gateway.
     connections: Vec<(BlockId, BlockId, Option<f64>, Option<String>)>,
+    /// Shared resource pools: name, quantity, roles.
+    pools: Vec<(String, u32, Vec<String>)>,
 }
 
 impl Builder {
@@ -588,6 +590,35 @@ impl Builder {
                 capacity,
                 service,
                 queue_capacity: Some(queue_capacity),
+            },
+        )
+    }
+
+    /// A pool of `quantity` identical units, playing `roles`, that shared tasks draw on. Its
+    /// name is its id.
+    pub fn pool(&mut self, name: &str, quantity: u32, roles: &[&str]) {
+        self.pools.push((
+            name.to_owned(),
+            quantity,
+            roles.iter().map(|r| (*r).to_owned()).collect(),
+        ));
+    }
+
+    /// A task whose units come from the shared pools: each entity takes what the first of
+    /// `needs` that can be met asks for, ahead of entities of tasks with a lower `priority`.
+    pub fn shared_task(
+        &mut self,
+        name: &str,
+        service: Dist,
+        needs: Vec<Need>,
+        priority: f64,
+    ) -> BlockId {
+        self.add(
+            name,
+            ElementKind::SharedTask {
+                service,
+                needs,
+                priority,
             },
         )
     }
@@ -705,10 +736,21 @@ impl Builder {
                 }
             })
             .collect();
+        let resources = self
+            .pools
+            .iter()
+            .map(|(name, quantity, roles)| ResourcePool {
+                id: ElementId::new(name).unwrap_or_else(|| ElementId::unchecked(name)),
+                name: name.clone(),
+                quantity: *quantity,
+                roles: roles.clone(),
+            })
+            .collect();
         Model {
             name: String::new(),
             elements,
             connections,
+            resources,
             experiment,
         }
     }

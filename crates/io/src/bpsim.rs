@@ -79,6 +79,23 @@ impl Scenario {
     pub fn param(&self, element: &str, key: &str) -> Option<&Element> {
         self.params.get(element)?.get(key)
     }
+
+    /// Every parameter of `element` whose key starts with `prefix` (a list such as
+    /// `ResourceParameters/Role/`), in key order.
+    pub fn params_with_prefix<'a>(
+        &'a self,
+        element: &str,
+        prefix: &'a str,
+    ) -> impl Iterator<Item = &'a Element> + 'a {
+        self.params
+            .get(element)
+            .into_iter()
+            .flat_map(move |m| {
+                m.range(prefix.to_owned()..)
+                    .take_while(move |(k, _)| k.starts_with(prefix))
+            })
+            .map(|(_, v)| v)
+    }
 }
 
 fn parse_unit(s: &str, notes: &mut Vec<Note>, at: Option<&str>) -> Option<TimeUnit> {

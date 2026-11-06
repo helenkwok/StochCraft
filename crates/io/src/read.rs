@@ -7,8 +7,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Connection, Dist, Element as ModelElement, ElementId, ElementKind, Experiment, Model, Property,
-    PropertyType, PropertyValue, TimeUnit,
+    Connection, Dist, Element as ModelElement, ElementId, ElementKind, Experiment, Model, Need,
+    Property, PropertyType, PropertyValue, ResourcePool, TimeUnit,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -400,23 +400,6 @@ fn read_xpdl_set(
     }
 }
 
-/// `getResource('id', n)` or `bpsim:getResource("id", n)`: the resource id and quantity.
-fn get_resource(expr: &str) -> Option<(String, f64)> {
-    let e = expr.trim();
-    let e = e.strip_prefix("bpsim:").unwrap_or(e);
-    let args = e
-        .strip_prefix("getResource")?
-        .trim()
-        .strip_prefix('(')?
-        .strip_suffix(')')?;
-    let (name, qty) = args.rsplit_once(',')?;
-    let name = name
-        .trim()
-        .trim_matches(|c| c == '\'' || c == '"')
-        .to_owned();
-    Some((name, qty.trim().parse().ok()?))
-}
-
 /// The other time parameters StochCraft does not simulate yet.
 const OTHER_TIMES: [&str; 6] = [
     "TransferTime",
@@ -521,11 +504,17 @@ fn properties(
     out
 }
 
-/// Which resource each task uses, and the tasks using each resource.
+/// Which resources each task uses, and the tasks using each resource.
 #[derive(Debug, Default)]
 pub(crate) struct Resources {
+    /// Tasks with a resource of their own, one unit at a time (servers): task → resource.
     pub of_task: BTreeMap<String, String>,
+    /// Tasks that share pools, or need roles, several units or alternatives: task → needs.
+    pub shared: BTreeMap<String, Vec<Need>>,
+    /// The tasks that can use each resource.
     pub users: BTreeMap<String, Vec<String>>,
+    /// Each resource's roles (BPSim `role`), in file order.
+    pub roles: BTreeMap<String, Vec<String>>,
 }
 
 fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Resources {
@@ -535,40 +524,130 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
             .and_then(|s| s.param(id, key))
             .and_then(|p| bpsim::value(p, unit, notes, Some(id)))
     };
+    let mut roles: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    for r in p.resources.keys() {
+        let mut list = Vec::new();
+        let params: Vec<&Element> = scenario
+            .map(|s| {
+                s.params_with_prefix(r, "ResourceParameters/Role/")
+                    .collect()
+            })
+            .unwrap_or_default();
+        for p in params {
+            match bpsim::value(p, unit, notes, Some(r)) {
+                Some(Value::Text(t)) if !list.contains(&t) => list.push(t),
+                Some(Value::Text(_)) | None => {}
+                Some(other) => notes.push(Note::warning(
+                    Some(r),
+                    format!("a role must be text, not {other:?}; it is ignored"),
+                )),
+            }
+        }
+        roles.insert(r.clone(), list);
+    }
     let mut users: BTreeMap<String, Vec<String>> = BTreeMap::new();
-    let mut task_resource: BTreeMap<String, String> = BTreeMap::new();
+    let mut needs_of: Vec<(String, Vec<Need>)> = Vec::new();
     for n in p.nodes.iter().filter(|n| n.kind == NodeKind::Task) {
         let selection = val(&n.id, "ResourceParameters/Selection", notes);
-        let chosen = match selection {
-            Some(Value::Expression(e)) => match get_resource(&e) {
-                Some((r, qty)) => {
-                    if qty != 1.0 {
-                        notes.push(Note::warning(
-                            Some(&n.id),
-                            format!("needs {qty} units of `{r}` per job; one is used until M2.5"),
-                        ));
-                    }
-                    Some(r)
-                }
-                None => {
+        let needs = match selection {
+            Some(Value::Expression(e)) => match crate::selection::parse(&e) {
+                Ok(needs) => needs,
+                Err(why) => {
                     notes.push(Note::error(
                         Some(&n.id),
-                        format!("resource selection `{e}` is not supported until M2.5"),
+                        format!("resource selection `{e}`: {why}"),
                     ));
-                    None
+                    continue;
                 }
             },
-            Some(Value::Text(r)) => Some(r),
-            _ => n.performers.first().cloned(),
+            Some(Value::Text(r)) => vec![Need::Resource {
+                id: ElementId::unchecked(&r),
+                quantity: 1,
+            }],
+            _ => match n.performers.first() {
+                Some(r) => vec![Need::Resource {
+                    id: ElementId::unchecked(r),
+                    quantity: 1,
+                }],
+                None => continue,
+            },
         };
-        if let Some(r) = chosen {
-            users.entry(r.clone()).or_default().push(n.id.clone());
-            task_resource.insert(n.id.clone(), r);
+        for need in &needs {
+            let pools: Vec<&String> = match need {
+                Need::Resource { id, .. } => p
+                    .resources
+                    .get_key_value(id.as_str())
+                    .map(|(k, _)| k)
+                    .into_iter()
+                    .collect(),
+                Need::Roles { roles: want, .. } => roles
+                    .iter()
+                    .filter(|(_, have)| want.iter().all(|w| have.contains(w)))
+                    .map(|(r, _)| r)
+                    .collect(),
+            };
+            for r in pools {
+                let u = users.entry(r.clone()).or_default();
+                if !u.contains(&n.id) {
+                    u.push(n.id.clone());
+                }
+            }
+        }
+        needs_of.push((n.id.clone(), needs));
+    }
+    let mut of_task = BTreeMap::new();
+    let mut shared = BTreeMap::new();
+    for (task, needs) in needs_of {
+        let own = match needs.as_slice() {
+            [Need::Resource { id, quantity: 1 }]
+                if users.get(id.as_str()).is_none_or(|u| u.len() <= 1) =>
+            {
+                Some(id.to_string())
+            }
+            _ => None,
+        };
+        match own {
+            Some(r) => {
+                of_task.insert(task, r);
+            }
+            None => {
+                shared.insert(task, needs);
+            }
         }
     }
     Resources {
-        of_task: task_resource,
+        of_task,
+        shared,
         users,
+        roles,
+    }
+}
+
+/// Looks up a parameter's default value: (element, key, notes).
+type ParamValue<'a> = dyn Fn(&str, &str, &mut Vec<Note>) -> Option<Value> + 'a;
+
+/// A resource's units (BPSim `quantity`, default 1). Calendar values are M2.6's: a resource with
+/// none outside its shifts gets 1, with an error.
+fn quantity_of(r: &str, val: &ParamValue<'_>, notes: &mut Vec<Note>) -> u32 {
+    match val(r, "ResourceParameters/Quantity", notes) {
+        Some(Value::Number(q)) if q >= 1.0 && q.fract() == 0.0 && q <= f64::from(u32::MAX) => {
+            q as u32
+        }
+        Some(Value::Number(0.0)) => {
+            notes.push(Note::error(
+                Some(r),
+                "has no units outside its calendar shifts; shifts arrive in M2.6, so 1 unit is used",
+            ));
+            1
+        }
+        Some(other) => {
+            notes.push(Note::error(
+                Some(r),
+                format!("resource quantity must be a whole number of at least 1, not {other:?}"),
+            ));
+            1
+        }
+        None => 1,
     }
 }
 
@@ -595,18 +674,26 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
 
     let Resources {
         of_task: task_resource,
+        shared,
         users,
+        roles,
     } = assign_resources(&p, scenario, notes);
-    for (r, tasks) in users.iter().filter(|(_, t)| t.len() > 1) {
-        notes.push(Note::error(
-            Some(r),
-            format!(
-                "resource shared by {} tasks ({}); shared resource pools arrive in M2.5",
-                tasks.len(),
-                tasks.join(", ")
-            ),
-        ));
-    }
+    // The pools the shared tasks draw on, in id order.
+    let resources: Vec<ResourcePool> = p
+        .resources
+        .iter()
+        .filter(|(r, _)| {
+            users
+                .get(*r)
+                .is_some_and(|u| u.iter().any(|t| shared.contains_key(t)))
+        })
+        .map(|(r, name)| ResourcePool {
+            id: ElementId::unchecked(r),
+            name: name.clone(),
+            quantity: quantity_of(r, &val, notes),
+            roles: roles.get(r).cloned().unwrap_or_default(),
+        })
+        .collect();
 
     let mut elements = Vec::new();
     let mut kept = BTreeSet::new();
@@ -663,34 +750,34 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     notes,
                 )
                 .unwrap_or(Dist::Constant(0.0));
-                match task_resource.get(id) {
-                    Some(r) => {
-                        let quantity = match val(r, "ResourceParameters/Quantity", notes) {
-                            Some(Value::Number(q))
-                                if q >= 1.0 && q.fract() == 0.0 && q <= f64::from(u32::MAX) =>
-                            {
-                                q as u32
-                            }
-                            Some(Value::Number(0.0)) => {
-                                notes.push(Note::error(
-                                    Some(r),
-                                    "has no units outside its calendar shifts; shifts arrive in M2.6, so 1 unit is used",
-                                ));
-                                1
-                            }
-                            Some(other) => {
-                                notes.push(Note::error(Some(r), format!("resource quantity must be a whole number of at least 1, not {other:?}")));
-                                1
-                            }
-                            None => 1,
-                        };
+                let priority = match val(id, "PriorityParameters/Priority", notes) {
+                    Some(Value::Number(x)) => Some(x),
+                    Some(other) => {
+                        notes.push(Note::error(
+                            Some(id),
+                            format!("priority must be a number, not {other:?}"),
+                        ));
+                        None
+                    }
+                    None => None,
+                };
+                match (shared.get(id), task_resource.get(id)) {
+                    (Some(needs), _) => ElementKind::SharedTask {
+                        service: time,
+                        needs: needs.clone(),
+                        priority: priority.unwrap_or(0.0),
+                    },
+                    (None, Some(r)) => {
+                        if priority.is_some_and(|x| x != 0.0) {
+                            notes.push(Note::info(Some(id), "a priority matters only among tasks that share a resource; this task has its own"));
+                        }
                         ElementKind::Server {
-                            capacity: quantity,
+                            capacity: quantity_of(r, &val, notes),
                             service: time,
                             queue_capacity: queue,
                         }
                     }
-                    None => ElementKind::Delay { duration: time },
+                    (None, None) => ElementKind::Delay { duration: time },
                 }
             }
             NodeKind::Exclusive(default) => ElementKind::ExclusiveGateway {
@@ -763,6 +850,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         name: p.name,
         elements,
         connections,
+        resources,
         experiment: experiment(scenario, notes),
     }
 }
@@ -888,23 +976,4 @@ pub fn read_model(
     let _ = NSS;
     let model = to_model(process, scenario.as_ref(), notes);
     Ok((format, scenario, model))
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn get_resource_expressions() {
-        assert_eq!(
-            get_resource("getResource('resource_Front_Office', 1)"),
-            Some(("resource_Front_Office".into(), 1.0))
-        );
-        assert_eq!(
-            get_resource(" bpsim:getResource(\"m\", 2) "),
-            Some(("m".into(), 2.0))
-        );
-        assert_eq!(get_resource("getResourceByRoles(['a'], 1)"), None);
-        assert_eq!(get_resource("getResource('m')"), None);
-    }
 }
