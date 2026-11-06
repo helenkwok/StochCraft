@@ -36,7 +36,7 @@ pub fn new_block(kind: &str) -> Value {
 fn parameters(kind: &str) -> &'static [&'static str] {
     match kind {
         "source" => &["interarrival", "limit"],
-        "server" => &["capacity", "service"],
+        "server" => &["capacity", "service", "queue_capacity"],
         "delay" => &["duration"],
         _ => &[],
     }

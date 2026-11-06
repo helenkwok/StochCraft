@@ -57,6 +57,10 @@ fn metric(name: &str) -> (&str, Unit) {
         "utilisation" => ("Utilisation", Unit::Share),
         "mean_contents" => ("Mean number inside", Unit::Items),
         "mean_time_in_system" => ("Mean time in system", Unit::Time),
+        "mean_blocked_time" => ("Mean time blocked", Unit::Time),
+        "blocking_probability" => ("Share of units blocked", Unit::Share),
+        "lost" => ("Lost (waiting room full)", Unit::Count),
+        "loss_probability" => ("Share of arrivals lost", Unit::Share),
         other => (other, Unit::Count),
     }
 }

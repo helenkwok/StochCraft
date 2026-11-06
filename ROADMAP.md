@@ -571,6 +571,11 @@ unrolled line in `stochcraft-blocks`.
   - a gateway held up by a full buffer;
   - no buffer metrics without buffers.
 
+**In the window:** a task with a resource has a **Waiting room** parameter: unticked it is
+unlimited, ticked it starts at room for ten. Results label the buffer metrics (mean time blocked,
+share of units blocked, lost, share of arrivals lost) and chart the two shares where a run has
+them.
+
 ### M2.5 Shared resources
 
 - Resource pools from BPMN `resource` or XPDL `Participant` (type RESOURCE) elements with BPSim
