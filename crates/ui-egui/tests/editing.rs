@@ -402,3 +402,23 @@ fn a_waiting_room_is_set_on_a_task_and_its_losses_reported() {
     settle(&mut h);
     assert_eq!(element(&h, "serve")["queue_capacity"], json!(2));
 }
+
+#[test]
+fn results_are_written_as_the_users_region_writes_numbers() {
+    let mut h = mm1();
+    h.state_mut().set_number_region("de-DE");
+    h.state_mut().run();
+    for _ in 0..5000 {
+        if !h.state().is_running() {
+            break;
+        }
+        h.step();
+    }
+    settle(&mut h);
+    // About 14,990 arrivals in 20,000 minutes, grouped with a point in German.
+    assert!(
+        !h.get_all_by_label("14.990").collect::<Vec<_>>().is_empty(),
+        "no German grouping in the results"
+    );
+    assert!(h.query_by_label("14,990").is_none());
+}

@@ -895,6 +895,7 @@ impl App {
     pub fn ui(&mut self, ui: &mut egui::Ui) {
         let ctx = ui.ctx().clone();
         i18n::set_lang(self.lang);
+        results::set_numbers(&self.numbers);
         if !self.styled {
             theme::install(&ctx);
             self.styled = true;
@@ -1286,8 +1287,8 @@ impl App {
                 tf(
                     "Warm-up {warmup} {unit}, then {duration} {unit} measured",
                     &[
-                        ("warmup", &results::number(x.warmup)),
-                        ("duration", &results::number(x.duration)),
+                        ("warmup", &results::grouped(x.warmup)),
+                        ("duration", &results::grouped(x.duration)),
                         ("unit", &unit),
                     ],
                 ),
