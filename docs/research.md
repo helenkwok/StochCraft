@@ -201,6 +201,24 @@ models.
 > Renewable and Sustainable Energy Reviews 208 (2025) 115023,
 > https://doi.org/10.1016/j.rser.2024.115023.
 
+## Finite buffers and blocking
+
+The theory checks for M2.4 (`crates/blocks/tests/buffers.rs`) use textbook results, derived again
+in the tests' comments so they can be checked without the books.
+
+- **M/M/1/K**: a single exponential server whose system holds at most K, with arrivals that find
+  it full lost. Its stationary distribution is p_n ∝ ρ^n on 0..K, which gives the loss probability
+  p_K and L. D. Gross, J. F. Shortle, J. M. Thompson and C. M. Harris, *Fundamentals of Queueing
+  Theory*, 4th ed., Wiley, 2008, the M/M/1/K queue.
+- **Two machines with a finite buffer between them**: exponential machines and blocking after
+  service, with the first machine never starved. The number of parts held at the second machine,
+  plus one while the first is blocked, is a birth-death chain on 0..b+2 with rates μ1 and μ2. The
+  line therefore has the closed-form throughput μ2 (1 − p0), with p_n ∝ (μ1/μ2)^n, and the first
+  machine is blocked with probability p_(b+2). J. A. Buzacott and J. G. Shanthikumar, *Stochastic
+  Models of Manufacturing Systems*, Prentice Hall, 1993, two-stage flow lines with a finite
+  buffer. S. B. Gershwin, *Manufacturing Systems Engineering*, Prentice Hall, 1994, also treats
+  the two-machine line.
+
 ## Read and set aside
 
 Outside what a process simulator does: Type IV hydrogen pressure vessels (Khan, IJHE 2026,

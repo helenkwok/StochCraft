@@ -96,7 +96,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
     };
     let kind_keys: &[&str] = match obj.get("kind").and_then(Value::as_str) {
         Some("source") => &["interarrival", "limit"],
-        Some("server") => &["capacity", "service"],
+        Some("server") => &["capacity", "service", "queue_capacity"],
         Some("delay") => &["duration"],
         Some("exclusive_gateway") => &["default"],
         _ => &[],
@@ -240,6 +240,13 @@ pub struct BlockSet {
     /// Servers: time to serve one entity.
     #[serde(default)]
     pub service: Option<DistSpec>,
+    /// Servers: a finite buffer, the most entities that wait for a unit (not counting those in
+    /// service); 0 means no waiting room. While it is full, a server or delay sending here
+    /// holds its finished entity (blocking after service), a gateway waits, and a source's
+    /// arrival is lost. `null` removes the limit.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<u32>")]
+    pub queue_capacity: Option<Option<u32>>,
     /// Delays: time each entity spends.
     #[serde(default)]
     pub duration: Option<DistSpec>,
@@ -466,12 +473,13 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("limit", p.limit.is_some()),
         ("capacity", p.capacity.is_some()),
         ("service", p.service.is_some()),
+        ("queue_capacity", p.queue_capacity.is_some()),
         ("duration", p.duration.is_some()),
         ("default", p.default.is_some()),
     ];
     let applies: &[&str] = match kind {
         ElementKind::Source { .. } => &["interarrival", "limit"],
-        ElementKind::Server { .. } => &["capacity", "service"],
+        ElementKind::Server { .. } => &["capacity", "service", "queue_capacity"],
         ElementKind::Delay { .. } => &["duration"],
         ElementKind::ExclusiveGateway { .. } => &["default"],
         ElementKind::Sink | ElementKind::ParallelGateway => &[],
@@ -500,12 +508,19 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *limit = l;
             }
         }
-        ElementKind::Server { capacity, service } => {
+        ElementKind::Server {
+            capacity,
+            service,
+            queue_capacity,
+        } => {
             if let Some(c) = p.capacity {
                 *capacity = c;
             }
             if let Some(d) = p.service {
                 *service = d.into();
+            }
+            if let Some(q) = p.queue_capacity {
+                *queue_capacity = q;
             }
         }
         ElementKind::Delay { duration } => {
@@ -832,7 +847,7 @@ pub static COMMANDS: &[Command] = &[
         summary: "Change an element's parameters.",
         kind: CommandKind::Edit,
         schema: schema::<BlockSet>,
-        example: || json!({ "id": "desk", "capacity": 2 }),
+        example: || json!({ "id": "desk", "capacity": 2, "queue_capacity": 8 }),
         run: block_set,
     },
     Command {

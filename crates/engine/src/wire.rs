@@ -180,6 +180,12 @@ pub enum KindSpec {
         /// Time to serve one entity.
         #[serde(default = "exponential_1")]
         service: DistSpec,
+        /// A finite buffer: at most this many entities wait for a unit (not counting those in
+        /// service); left out, there is no limit. 0 means no waiting room. While it is full, a
+        /// server or delay sending here holds its finished entity (blocking after service), a
+        /// gateway waits, and a source's arrival is lost.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        queue_capacity: Option<u32>,
     },
     /// Holds each entity for a time, with no capacity limit (a task with no resource).
     Delay {
@@ -212,9 +218,14 @@ impl From<&ElementKind> for KindSpec {
                 interarrival: interarrival.into(),
                 limit: *limit,
             },
-            ElementKind::Server { capacity, service } => KindSpec::Server {
+            ElementKind::Server {
+                capacity,
+                service,
+                queue_capacity,
+            } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
+                queue_capacity: *queue_capacity,
             },
             ElementKind::Delay { duration } => KindSpec::Delay {
                 duration: duration.into(),
@@ -238,9 +249,14 @@ impl From<KindSpec> for ElementKind {
                 interarrival: interarrival.into(),
                 limit,
             },
-            KindSpec::Server { capacity, service } => ElementKind::Server {
+            KindSpec::Server {
+                capacity,
+                service,
+                queue_capacity,
+            } => ElementKind::Server {
                 capacity,
                 service: service.into(),
+                queue_capacity,
             },
             KindSpec::Delay { duration } => ElementKind::Delay {
                 duration: duration.into(),
@@ -718,7 +734,8 @@ mod tests {
             k,
             Some(KindSpec::Server {
                 capacity: 1,
-                service: DistSpec::Exponential { mean: 1.0 }
+                service: DistSpec::Exponential { mean: 1.0 },
+                queue_capacity: None,
             })
         );
     }

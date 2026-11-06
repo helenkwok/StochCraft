@@ -18,13 +18,14 @@ pub fn showcase() -> Model {
         },
         Some(500),
     );
-    let cut = m.server(
+    let cut = m.buffered_server(
         "cut",
         2,
         Dist::Gamma {
             shape: 2.5,
             scale: 0.4,
         },
+        6,
     );
     let mut previous = cut;
     m.connect(src, cut);

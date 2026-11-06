@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  StochCraft's vendor extensions to BPSim 2.0 and 1.0 (MIT OR Apache-2.0).
+
+  BPSim's VendorExtension takes a `name` and, for its value, attributes and elements from another
+  namespace, which a validator checks strictly: this schema declares StochCraft's. Validate with
+  it imported next to the BPSim schema.
+
+    <bpsim:VendorExtension name="stochcraft:queueCapacity"
+        xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="3"/>
+
+  stochcraft:queueCapacity, on a task's ElementParameters: the most entities that wait for the
+  task's resource (not counting those in service), a whole number of at least 0.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="https://helenkwok.github.io/StochCraft/bpsim/1">
+  <xs:attribute name="value" type="xs:string"/>
+</xs:schema>

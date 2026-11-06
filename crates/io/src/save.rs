@@ -16,7 +16,7 @@ use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     bpmn_local, condition_element, dist_element, numeric, probability_element, property_element,
-    size,
+    queue_capacity_element, size,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -1210,6 +1210,7 @@ impl Editor {
         // Every change, worked out first, then written into the scenario.
         let mut writes: Vec<(String, &'static str, &'static str, Option<Element>)> = Vec::new();
         let mut property_writes: Vec<(String, String, Option<Element>)> = Vec::new();
+        let mut vendor_writes: Vec<(String, &'static str, Option<Element>)> = Vec::new();
         let mut new_resources: Vec<(&ModelElement, bool)> = Vec::new();
         for e in &after.elements {
             let was_element = old
@@ -1272,6 +1273,24 @@ impl Editor {
                         ));
                     }
                     let was_server = matches!(was, Some(ElementKind::Server { .. }));
+                    // The finite buffer: written when it changed; for a task that was not a
+                    // server, any extension left in the file goes (a delay ignores it).
+                    let old_queue = match was {
+                        Some(ElementKind::Server { queue_capacity, .. }) => *queue_capacity,
+                        _ => None,
+                    };
+                    let new_queue = match &e.kind {
+                        ElementKind::Server { queue_capacity, .. } => *queue_capacity,
+                        _ => None,
+                    };
+                    let is_server = matches!(e.kind, ElementKind::Server { .. });
+                    if new_queue != old_queue || (is_server && !was_server) {
+                        vendor_writes.push((
+                            id.clone(),
+                            crate::bpsim::QUEUE_CAPACITY,
+                            new_queue.map(queue_capacity_element),
+                        ));
+                    }
                     match (&e.kind, was) {
                         (
                             ElementKind::Server { capacity, .. },
@@ -1333,10 +1352,22 @@ impl Editor {
                 self.remove_resource(root, &task);
             }
         }
-        if writes.is_empty() && property_writes.is_empty() {
+        // Removing what is not there changes nothing, and needs no scenario.
+        if writes.is_empty()
+            && property_writes.is_empty()
+            && vendor_writes.iter().all(|(_, _, v)| v.is_none())
+        {
+            if let Some(s) = scenario_mut(root, scenario) {
+                for (element, name, _) in vendor_writes {
+                    set_vendor(s, &element, name, None);
+                }
+            }
             return Ok(());
         }
         let s = self.ensure_scenario(root, scenario)?;
+        for (element, name, v) in vendor_writes {
+            set_vendor(s, &element, name, v);
+        }
         for (element, group, name, v) in writes {
             set_param(s, &element, group, name, v);
         }
@@ -1560,13 +1591,52 @@ fn set_param(s: &mut Element, element: &str, group: &str, name: &str, value: Opt
     set_value(g, &prefix, &ns, name, Some(value), &order[..pos]);
 }
 
-/// Parameter group `group` of `element` in scenario `s`: in the last of its `ElementParameters`
-/// for which `has` holds, else the last one, else a new one; the group is made (in the schema's
-/// group order) if that `ElementParameters` lacks it.
-fn group_mut<'a>(
+/// Sets (or with `None` removes) vendor extension `name` of `element` in scenario `s`. An
+/// existing one keeps its place and takes the new value; a new one goes last in the element's
+/// `ElementParameters`, as the schema orders it.
+fn set_vendor(s: &mut Element, element: &str, name: &str, value: Option<Element>) {
+    let is_ep = |e: &Element| {
+        e.is_any(&NSS, "ElementParameters") && e.attr("elementRef").as_deref() == Some(element)
+    };
+    let is_ext =
+        |v: &Element| v.is_any(&NSS, "VendorExtension") && v.attr("name").as_deref() == Some(name);
+    let Some(mut value) = value else {
+        for ep in s.elements_mut().filter(|e| is_ep(e)) {
+            remove_all(ep, &is_ext);
+        }
+        return;
+    };
+    let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
+    let prefix = s.prefix().to_owned();
+    rename(&mut value, &prefix, &ns);
+    let has = |e: &Element| e.elements().any(is_ext);
+    let Some(ep) = params_mut(s, element, &has) else {
+        return;
+    };
+    let new_value = crate::bpsim::vendor_value(&value).unwrap_or_default();
+    if let Some(old) = ep.elements_mut().filter(|v| is_ext(v)).last() {
+        // Keep the extension as written (its prefix for StochCraft's namespace) where it can.
+        let at = old.attrs.iter().position(|(n, _)| {
+            n.split_once(':')
+                .is_some_and(|(p, l)| p != "xmlns" && l == "value")
+        });
+        if let Some(at) = at {
+            let attr = old.attrs[at].0.clone();
+            old.set_attr(&attr, &new_value);
+            return;
+        }
+        *old = value;
+        return;
+    }
+    let at = end_of(ep);
+    ep.children.insert(at, Node::Element(value));
+}
+
+/// The `ElementParameters` of `element` in scenario `s` to write into: the last for which `has`
+/// holds, else the last one, else a new one.
+fn params_mut<'a>(
     s: &'a mut Element,
     element: &str,
-    group: &str,
     has: &dyn Fn(&Element) -> bool,
 ) -> Option<&'a mut Element> {
     let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
@@ -1595,9 +1665,24 @@ fn group_mut<'a>(
             at
         }
     };
-    let Some(Node::Element(ep)) = s.children.get_mut(at) else {
-        return None;
-    };
+    match s.children.get_mut(at) {
+        Some(Node::Element(ep)) => Some(ep),
+        _ => None,
+    }
+}
+
+/// Parameter group `group` of `element` in scenario `s`: in the last of its `ElementParameters`
+/// for which `has` holds, else the last one, else a new one; the group is made (in the schema's
+/// group order) if that `ElementParameters` lacks it.
+fn group_mut<'a>(
+    s: &'a mut Element,
+    element: &str,
+    group: &str,
+    has: &dyn Fn(&Element) -> bool,
+) -> Option<&'a mut Element> {
+    let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
+    let prefix = s.prefix().to_owned();
+    let ep = params_mut(s, element, has)?;
     if ep.child(&NSS, group).is_none() {
         let groups = &crate::bpsim::GROUPS;
         let pos = groups

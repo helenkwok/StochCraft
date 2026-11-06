@@ -898,3 +898,96 @@ fn gateways_route_by_probability_and_condition_and_undo() {
         Some(json!("parallel_gateway"))
     );
 }
+
+#[test]
+fn finite_buffers_are_set_undone_and_reported() {
+    let mut e = help_desk();
+    let before = ok(&mut e, "model.get", json!({}));
+    // A model without buffers has no `queue_capacity` key: model JSON is as before.
+    assert!(
+        before["elements"][1].get("queue_capacity").is_none(),
+        "{before}"
+    );
+    let plain = ok(&mut e, "run", json!({"replications": 2, "threads": 1}));
+    assert!(
+        plain["elements"][1]["metrics"]
+            .get("loss_probability")
+            .is_none()
+    );
+
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "queue_capacity": 0}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(m["elements"][1]["queue_capacity"], 0);
+    assert_eq!(m["elements"][1]["capacity"], 1);
+    let r = ok(&mut e, "run", json!({"replications": 2, "threads": 1}));
+    let metrics = &r["elements"][1]["metrics"];
+    // With no waiting room the desk is an Erlang loss system: B(1, 0.75) = 0.75 / 1.75.
+    let loss = metrics["loss_probability"]["mean"].as_f64().unwrap_or(-1.0);
+    assert!((loss - 0.75 / 1.75).abs() < 0.03, "{metrics}");
+    assert!(
+        metrics["lost"]["mean"].as_f64().unwrap_or(0.0) > 0.0,
+        "{metrics}"
+    );
+    assert!(
+        r["metrics"]
+            .as_array()
+            .is_some_and(|m| m.contains(&json!("blocking_probability")))
+    );
+
+    // Undo restores the model exactly; redo brings the buffer back; null removes it.
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(ok(&mut e, "model.get", json!({})), before);
+    ok(&mut e, "redo", json!({}));
+    assert_eq!(ok(&mut e, "model.get", json!({})), m);
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "queue_capacity": null}),
+    );
+    assert_eq!(ok(&mut e, "model.get", json!({})), before);
+
+    // Only servers have a buffer; a negative capacity is refused.
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "exit", "queue_capacity": 2})
+        ),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "desk", "queue_capacity": -1})
+        ),
+        ErrorCode::InvalidParams
+    );
+    // block.add and model.set take it with the other server parameters.
+    ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "server", "id": "second", "queue_capacity": 3}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let second = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|el| el["id"] == "second"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(second["queue_capacity"], 3, "{m}");
+    assert_eq!(
+        err(
+            &mut e,
+            "block.add",
+            json!({"kind": "delay", "id": "walk", "queue_capacity": 3}),
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(&mut e, "model.set", json!({ "model": m }));
+    assert_eq!(ok(&mut e, "model.get", json!({})), m);
+}

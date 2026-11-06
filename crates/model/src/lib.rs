@@ -127,7 +127,16 @@ pub enum ElementKind {
     },
     /// `capacity` identical units serving one entity each, first come first served (a task with
     /// a resource): BPSim `processingTime`.
-    Server { capacity: u32, service: Dist },
+    Server {
+        capacity: u32,
+        service: Dist,
+        /// A finite buffer: at most this many entities wait for a unit (not counting those in
+        /// service); `None` is unlimited. 0 means no waiting room: an entity gets in only when a
+        /// unit is free. When the buffer is full, an element sending an entity here waits
+        /// holding it (a server keeps its unit busy: blocking after service), except a source,
+        /// whose arrival is lost. A StochCraft vendor extension (`stochcraft:queueCapacity`).
+        queue_capacity: Option<u32>,
+    },
     /// Holds each entity for a time with no capacity limit (a task with no resource).
     Delay { duration: Dist },
     /// Removes entities (a BPMN end event).
@@ -459,6 +468,17 @@ pub enum Problem {
     JoinNeverCompletes {
         connection: ElementId,
     },
+    /// A server with a finite buffer is fed through a gateway: while the buffer is full the
+    /// gateway waits, holding up every entity behind it, and those wait before the gateway with
+    /// no limit (rather than blocking the element that sent them).
+    BufferBehindGateway {
+        gateway: ElementId,
+    },
+    /// Servers with finite buffers that feed each other in a loop: when every buffer in the loop
+    /// is full, each waits for the next and the loop deadlocks.
+    BlockingCycle {
+        through: Vec<ElementId>,
+    },
 }
 
 impl Problem {
@@ -492,6 +512,8 @@ impl Problem {
             Problem::BadDefault { .. } => "bad_default",
             Problem::NoDefault => "no_default",
             Problem::JoinNeverCompletes { .. } => "join_never_completes",
+            Problem::BufferBehindGateway { .. } => "buffer_behind_gateway",
+            Problem::BlockingCycle { .. } => "blocking_cycle",
         }
     }
 }
@@ -610,6 +632,18 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "waits for an entity on `{connection}`, which none can reach, so it never sends one on"
             ),
+            Problem::BufferBehindGateway { gateway } => write!(
+                f,
+                "has a finite buffer fed through gateway `{gateway}`: while the buffer is full the gateway waits and every entity behind it queues before the gateway, without limit"
+            ),
+            Problem::BlockingCycle { through } => {
+                let names: Vec<String> = through.iter().map(|i| format!("`{i}`")).collect();
+                write!(
+                    f,
+                    "finite buffers feed each other in a loop ({}); when all of them are full the loop deadlocks",
+                    names.join(" → ")
+                )
+            }
         }
     }
 }
@@ -702,6 +736,7 @@ impl Model {
         self.check_properties(&mut out);
         self.check_routing(&mut out);
         self.check_reachability(&outgoing, &mut out);
+        self.check_buffers(&outgoing, &mut out);
         // Stable order: errors first, then as found (model order).
         out.sort_by_key(|d| std::cmp::Reverse(d.severity));
         out
@@ -1002,6 +1037,91 @@ impl Model {
                 Problem::BadExperiment {
                     field: "replications",
                     requirement: "1 or more",
+                },
+            ));
+        }
+    }
+
+    /// Finite buffers fed through gateways, and loops of finite buffers that can deadlock.
+    fn check_buffers(
+        &self,
+        outgoing: &BTreeMap<&ElementId, Vec<&ElementId>>,
+        out: &mut Vec<Diagnostic>,
+    ) {
+        let finite = |id: &ElementId| {
+            self.element(id).is_some_and(|e| {
+                matches!(
+                    e.kind,
+                    ElementKind::Server {
+                        queue_capacity: Some(_),
+                        ..
+                    }
+                )
+            })
+        };
+        for e in &self.elements {
+            if !finite(&e.id) {
+                continue;
+            }
+            for (from, tos) in outgoing {
+                if tos.contains(&&e.id) && self.element(from).is_some_and(|g| g.kind.is_gateway()) {
+                    out.push(Diagnostic::warning(
+                        Some(&e.id),
+                        Problem::BufferBehindGateway {
+                            gateway: (*from).clone(),
+                        },
+                    ));
+                }
+            }
+        }
+        // A loop among finite-buffer servers alone: anything else on the way has unlimited room.
+        let next = |id: &ElementId| -> Vec<&ElementId> {
+            outgoing
+                .get(id)
+                .map(|tos| tos.iter().copied().filter(|t| finite(t)).collect())
+                .unwrap_or_default()
+        };
+        let mut reported: BTreeSet<&ElementId> = BTreeSet::new();
+        for e in &self.elements {
+            if !finite(&e.id) || reported.contains(&e.id) {
+                continue;
+            }
+            // The shortest loop back to `e`, by breadth-first search.
+            let mut parent: BTreeMap<&ElementId, &ElementId> = BTreeMap::new();
+            let mut queue = VecDeque::from([&e.id]);
+            let mut closed = None;
+            while let Some(at) = queue.pop_front() {
+                for to in next(at) {
+                    if to == &e.id {
+                        closed = Some(at);
+                        break;
+                    }
+                    if !parent.contains_key(to) {
+                        parent.insert(to, at);
+                        queue.push_back(to);
+                    }
+                }
+                if closed.is_some() {
+                    break;
+                }
+            }
+            let Some(mut at) = closed else {
+                continue;
+            };
+            let mut through = vec![at];
+            while at != &e.id {
+                let Some(p) = parent.get(at) else {
+                    break;
+                };
+                at = p;
+                through.push(at);
+            }
+            through.reverse();
+            reported.extend(through.iter().copied());
+            out.push(Diagnostic::warning(
+                Some(&e.id),
+                Problem::BlockingCycle {
+                    through: through.into_iter().cloned().collect(),
                 },
             ));
         }
@@ -1308,6 +1428,7 @@ mod tests {
                     ElementKind::Server {
                         capacity: 1,
                         service: Dist::exponential_rate(1.0),
+                        queue_capacity: None,
                     },
                 ),
                 el("exit", ElementKind::Sink),
@@ -1337,6 +1458,77 @@ mod tests {
     fn a_valid_model_has_no_diagnostics() {
         assert_eq!(mm1().validate(), vec![]);
         assert!(mm1().is_runnable());
+    }
+
+    fn buffered(m: &mut Model, id: &str, q: u32) {
+        if let Some(ElementKind::Server { queue_capacity, .. }) = m
+            .elements
+            .iter_mut()
+            .find(|e| e.id.as_str() == id)
+            .map(|e| &mut e.kind)
+        {
+            *queue_capacity = Some(q);
+        }
+    }
+
+    #[test]
+    fn finite_buffers_are_valid_even_with_no_waiting_room() {
+        let mut m = mm1();
+        buffered(&mut m, "machine", 0);
+        assert_eq!(m.validate(), vec![]);
+    }
+
+    #[test]
+    fn a_buffer_fed_through_a_gateway_is_flagged() {
+        let mut m = mm1();
+        buffered(&mut m, "machine", 2);
+        m.elements
+            .push(el("pick", ElementKind::ExclusiveGateway { default: None }));
+        m.connections[0].to = ElementId::unchecked("pick");
+        m.connections.push(link("f3", "pick", "machine"));
+        let ds = m.validate();
+        assert_eq!(ds.len(), 1, "{ds:?}");
+        assert_eq!(ds[0].problem.code(), "buffer_behind_gateway");
+        assert_eq!(ds[0].severity, Severity::Warning);
+        assert_eq!(ds[0].at.as_ref().map(ElementId::as_str), Some("machine"));
+        assert!(ds[0].to_string().contains("`pick`"), "{}", ds[0]);
+    }
+
+    #[test]
+    fn a_loop_of_finite_buffers_may_deadlock() {
+        let server = |q| ElementKind::Server {
+            capacity: 1,
+            service: Dist::Constant(1.0),
+            queue_capacity: q,
+        };
+        let mut m = mm1();
+        m.elements.push(el("a", server(Some(1))));
+        m.elements.push(el("b", server(Some(1))));
+        m.elements
+            .push(el("split", ElementKind::ExclusiveGateway { default: None }));
+        // machine → a → b → split → (a | exit): a and b are a loop if the way back skips the
+        // gateway, so first check that a gateway on the way breaks it.
+        m.connections[1].to = ElementId::unchecked("a");
+        m.connections.push(link("f3", "a", "b"));
+        m.connections.push(link("f4", "b", "split"));
+        m.connections.push(link("f5", "split", "a"));
+        m.connections.push(link("f6", "split", "exit"));
+        let codes = |m: &Model| -> Vec<&'static str> {
+            m.validate().iter().map(|d| d.problem.code()).collect()
+        };
+        assert_eq!(codes(&m), ["buffer_behind_gateway"]);
+        // b straight back to a: a loop of finite buffers only.
+        m.connections.retain(|c| c.id.as_str() != "f4");
+        m.connections.push(link("f7", "b", "a"));
+        m.connections.retain(|c| c.from.as_str() != "split");
+        m.elements.retain(|e| e.id.as_str() != "split");
+        let ds = m.validate();
+        let cycle: Vec<&Diagnostic> = ds
+            .iter()
+            .filter(|d| d.problem.code() == "blocking_cycle")
+            .collect();
+        assert_eq!(cycle.len(), 1, "{ds:?}");
+        assert!(cycle[0].to_string().contains("`a` → `b`"), "{}", cycle[0]);
     }
 
     #[test]
@@ -1371,6 +1563,7 @@ mod tests {
             ElementKind::Server {
                 capacity: 0,
                 service: Dist::Uniform { min: 2.0, max: 1.0 },
+                queue_capacity: None,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

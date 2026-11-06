@@ -17,6 +17,30 @@ pub const NS1: &str = "http://www.bpsim.org/schemas/1.0";
 /// Both versions, for lenient reading.
 pub const NSS: [&str; 2] = [NS2, NS1];
 
+/// The namespace of StochCraft's vendor extensions' values.
+pub const STOCHCRAFT_NS: &str = "https://helenkwok.github.io/StochCraft/bpsim/1";
+/// The prefix StochCraft's vendor extension names start with.
+pub const STOCHCRAFT: &str = "stochcraft:";
+/// A server's finite buffer: `<bpsim:VendorExtension name="stochcraft:queueCapacity"
+/// xmlns:stochcraft="…" stochcraft:value="3"/>` in the task's `ElementParameters`.
+pub const QUEUE_CAPACITY: &str = "stochcraft:queueCapacity";
+
+/// A vendor extension's value: its attribute named `value` in another namespace (any prefix),
+/// else its text.
+pub fn vendor_value(e: &Element) -> Option<String> {
+    e.attrs
+        .iter()
+        .find(|(n, _)| {
+            n.split_once(':')
+                .is_some_and(|(p, l)| p != "xmlns" && l == "value")
+        })
+        .map(|(_, v)| crate::xml::unescape(v))
+        .or_else(|| {
+            let t = e.text();
+            (!t.trim().is_empty()).then_some(t)
+        })
+}
+
 /// The parameter groups of `ElementParameters`, in schema order.
 pub const GROUPS: [&str; 6] = [
     "TimeParameters",
