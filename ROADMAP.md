@@ -18,11 +18,11 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 | `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist` |
 | `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary` |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate` |
-| `model` | L1 | The model in memory: elements, connections with probabilities and conditions, finite buffers, experiment, entity properties, validation; BPSim's XPath expressions (`expr`) |
-| `blocks` | L2 | Compiles a model: source, server, delay, sink, exclusive and parallel gateways, merges; finite buffers with blocking after service and loss; entities carry typed properties; per-element statistics; warm-up |
+| `model` | L1 | The model in memory: elements, connections with probabilities and conditions, finite buffers, shared resource pools, experiment, entity properties, validation; BPSim's XPath expressions (`expr`) |
+| `blocks` | L2 | Compiles a model: source, server, shared task, delay, sink, exclusive and parallel gateways, merges; finite buffers with blocking after service and loss; shared pools with roles, alternatives and priorities; entities carry typed properties; per-element statistics; warm-up |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
 | `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, `stochcraft:` vendor extensions), write new, save edits into opened files |
-| `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs; `flow.set` for routing; `queue_capacity` on servers |
+| `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs; `flow.set` for routing; `queue_capacity` on servers; `resource.add`/`set`/`remove` and shared tasks |
 | `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `exec`, `schema` |
 | `ui-egui` | L5 | The app's window: menus, shortcuts, model outline, background runs, results, unsaved-change prompts |
 | `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs) and the browser shell, published on GitHub Pages |
@@ -578,13 +578,64 @@ them.
 
 ### M2.5 Shared resources
 
-- Resource pools from BPMN `resource` or XPDL `Participant` (type RESOURCE) elements with BPSim
-  `quantity` and `role`; tasks acquire them by `selection` (`getResource(id, qty)`,
-  `getResourceByRoles`, `orResource` for alternatives), with `priority` deciding who goes first.
-  Spans across several tasks follow BPMN's own constructs (a resource held across a
-  sub-process).
-- Validation: Erlang loss (M/M/c/c) for a pool with no queue; a machine-interference
-  (repairman) model against its closed form.
+**Done.**
+
+- **Pools:** BPMN `resource` and XPDL `Participant` (type RESOURCE) elements become pools in the
+  model (`Model::resources`) with BPSim `quantity` (default 1) and `role` (any number), when a
+  task shares them.
+- **Shared tasks:** a task takes its units from the pools by its `selection`, parsed in
+  `io/src/selection.rs`:
+  - `getResource(id, qty)`;
+  - `getResourceByRoles([role, …], qty)`, which takes units from the pools that play every role,
+    in model order (`('a', 'b')` and a flat list are read too);
+  - `orResource(…)` for alternatives, tried in order.
+- **When a task stays a server:** a task that alone uses one unit of one resource stays a server
+  with its own capacity, as before, so existing models and their golden results are unchanged.
+  Anything else (a resource used by several tasks, roles, several units, alternatives) makes it a
+  shared task (`ElementKind::SharedTask`).
+- **How units are given out:**
+  - each entity takes all its units at once, or none, and holds them for its service and while
+    blocked after it;
+  - when units come free they go to waiting entities by their task's BPSim `priority` (higher
+    first), then by arrival;
+  - an entity that cannot be served now does not hold back one behind it that can (no
+    head-of-line blocking).
+- **Results:** each pool reports its utilisation and mean units busy, as an extra entry of kind
+  `resource` after the elements, so the CLI, CSV and window show pools without a new format.
+- **Validation:**
+  - a pool with no units, a need for an unknown pool, roles no pool plays, and a need larger than
+    the pools can ever meet (an error when no alternative can be met, else a warning);
+  - a priority that is not a finite number;
+  - a pool no task uses (a warning).
+- **Files:** pools, roles, selections and priorities are written to new files and saved into
+  opened ones. In an opened file, a pool's quantity and a shared task's service, needs and
+  priority save in place. Adding or removing pools, renaming a pool, changing its roles, or
+  turning a task into a shared task or back is for a new file (Save As), with the reason given.
+- **Commands:**
+  - `resource.add`, `resource.set` and `resource.remove` (refused while a task names the pool),
+    with exact undo;
+  - `block.add` with `"kind": "shared_task"`;
+  - `block.set` with `needs` and `priority`;
+  - model JSON has `resources` only when there are some.
+- **Not here:** resources held across several tasks (BPMN sub-processes), and calendars
+  (`availability`, quantity by shift), which are M2.6's. A pool whose default quantity is 0
+  outside its shifts gets 1 unit, with an error. Erlang loss (M/M/c/c) needs a waiting-room limit
+  on a shared task, which this design does not have; a server with `queue_capacity` 0 already
+  gives M/M/c/c (M2.4).
+
+**Validation** (`blocks/tests/resources.rs`, 16 replications; docs/research.md, "Shared resources"):
+
+| Case | Theory | StochCraft |
+|---|---|---|
+| Two tasks sharing 3 units, λ = 0.9 + 1.2, μ = 1 (one M/M/3): wait of each | 0.54705 | 0.54246 ± 0.01372, 0.54082 ± 0.01297 |
+| Same: pool utilisation | 0.7 | 0.69903 ± 0.00217 |
+| Non-preemptive priority M/M/1, λ = 0.3 (urgent) + 0.45, μ = 1: urgent wait | 1.07143 | 1.06908 ± 0.02114 |
+| Same: routine wait | 4.28571 | 4.30888 ± 0.18513 |
+| Machine repair M/M/2//6, λ = 0.25, μ = 1: repairmen utilisation | 0.57642 | 0.57644 ± 0.00115 |
+| Same: machines running | 4.61138 | 4.61198 ± 0.00414 |
+
+Exact cases worked by hand check alternatives in order, roles across two pools, several units
+taken together, and a large need waiting without holding back a smaller one.
 
 ### M2.6 Time-dependent behaviour
 

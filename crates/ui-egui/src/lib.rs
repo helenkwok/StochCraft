@@ -1699,6 +1699,7 @@ pub(crate) fn kind_text(kind: &str) -> &str {
     match kind {
         "source" => t("arrivals"),
         "server" => t("task with a resource"),
+        "shared_task" => t("task with shared resources"),
         "delay" => t("task"),
         "sink" => t("departures"),
         "exclusive_gateway" => t("decision: one way"),

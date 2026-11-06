@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::{
-    Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Experiment, Model, Property,
-    PropertyType, PropertyValue, Severity, TimeUnit,
+    Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Experiment, Model, Need,
+    Property, PropertyType, PropertyValue, ResourcePool, Severity, TimeUnit,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -187,6 +187,20 @@ pub enum KindSpec {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         queue_capacity: Option<u32>,
     },
+    /// A task whose units come from the model's shared resource pools (`resources`): each
+    /// entity takes what the first of `needs` that can be met now asks for, holds it for its
+    /// service, then gives it back. When units come free, waiting entities across all tasks get
+    /// them by their task's `priority` (higher first), then by arrival.
+    SharedTask {
+        /// Time to serve one entity.
+        #[serde(default = "exponential_1")]
+        service: DistSpec,
+        /// The alternatives, tried in order (BPSim `orResource`).
+        needs: Vec<NeedSpec>,
+        /// Who gets freed units first, higher first; left out, 0.
+        #[serde(default, skip_serializing_if = "is_zero")]
+        priority: f64,
+    },
     /// Holds each entity for a time, with no capacity limit (a task with no resource).
     Delay {
         #[serde(default = "constant_1")]
@@ -208,6 +222,93 @@ pub enum KindSpec {
     ParallelGateway,
 }
 
+fn is_zero(x: &f64) -> bool {
+    *x == 0.0
+}
+
+/// What a task with shared resources needs for each entity: units of one pool (BPSim
+/// `getResource`), or units from the pools that have all of `roles`, in model order
+/// (`getResourceByRoles`).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum NeedSpec {
+    Resource {
+        /// The pool's id.
+        resource: String,
+        #[serde(default = "one")]
+        quantity: u32,
+    },
+    Roles {
+        roles: Vec<String>,
+        #[serde(default = "one")]
+        quantity: u32,
+    },
+}
+
+impl From<&Need> for NeedSpec {
+    fn from(n: &Need) -> Self {
+        match n {
+            Need::Resource { id, quantity } => NeedSpec::Resource {
+                resource: id.to_string(),
+                quantity: *quantity,
+            },
+            Need::Roles { roles, quantity } => NeedSpec::Roles {
+                roles: roles.clone(),
+                quantity: *quantity,
+            },
+        }
+    }
+}
+
+impl From<NeedSpec> for Need {
+    fn from(n: NeedSpec) -> Self {
+        match n {
+            NeedSpec::Resource { resource, quantity } => Need::Resource {
+                id: ElementId::unchecked(&resource),
+                quantity,
+            },
+            NeedSpec::Roles { roles, quantity } => Need::Roles { roles, quantity },
+        }
+    }
+}
+
+/// A pool of identical units that tasks share (a BPMN `resource`).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ResourceDoc {
+    pub id: String,
+    #[serde(default)]
+    pub name: String,
+    /// How many units; 1 by default.
+    #[serde(default = "one")]
+    pub quantity: u32,
+    /// The roles its units play, for `roles` needs; left out when none.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub roles: Vec<String>,
+}
+
+impl From<&ResourcePool> for ResourceDoc {
+    fn from(r: &ResourcePool) -> Self {
+        Self {
+            id: r.id.to_string(),
+            name: r.name.clone(),
+            quantity: r.quantity,
+            roles: r.roles.clone(),
+        }
+    }
+}
+
+impl From<ResourceDoc> for ResourcePool {
+    fn from(r: ResourceDoc) -> Self {
+        Self {
+            id: ElementId::unchecked(&r.id),
+            name: r.name,
+            quantity: r.quantity,
+            roles: r.roles,
+        }
+    }
+}
+
 impl From<&ElementKind> for KindSpec {
     fn from(k: &ElementKind) -> Self {
         match k {
@@ -226,6 +327,15 @@ impl From<&ElementKind> for KindSpec {
                 capacity: *capacity,
                 service: service.into(),
                 queue_capacity: *queue_capacity,
+            },
+            ElementKind::SharedTask {
+                service,
+                needs,
+                priority,
+            } => KindSpec::SharedTask {
+                service: service.into(),
+                needs: needs.iter().map(Into::into).collect(),
+                priority: *priority,
             },
             ElementKind::Delay { duration } => KindSpec::Delay {
                 duration: duration.into(),
@@ -257,6 +367,15 @@ impl From<KindSpec> for ElementKind {
                 capacity,
                 service: service.into(),
                 queue_capacity,
+            },
+            KindSpec::SharedTask {
+                service,
+                needs,
+                priority,
+            } => ElementKind::SharedTask {
+                service: service.into(),
+                needs: needs.into_iter().map(Into::into).collect(),
+                priority,
             },
             KindSpec::Delay { duration } => ElementKind::Delay {
                 duration: duration.into(),
@@ -519,6 +638,9 @@ pub struct ModelDoc {
     pub elements: Vec<ElementDoc>,
     #[serde(default)]
     pub connections: Vec<ConnectionDoc>,
+    /// Pools of units that tasks share; left out when there are none.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub resources: Vec<ResourceDoc>,
     #[serde(default = "default_experiment")]
     pub experiment: ExperimentDoc,
 }
@@ -548,6 +670,7 @@ impl From<&Model> for ModelDoc {
                     condition: c.condition.clone(),
                 })
                 .collect(),
+            resources: m.resources.iter().map(Into::into).collect(),
             experiment: (&m.experiment).into(),
         }
     }
@@ -579,6 +702,7 @@ impl From<ModelDoc> for Model {
                     condition: c.condition,
                 })
                 .collect(),
+            resources: m.resources.into_iter().map(Into::into).collect(),
             experiment: m.experiment.into(),
         }
     }

@@ -44,6 +44,7 @@ pub fn save_edited(
         ids: all_ids(&doc.root),
         ascii: doc.ascii_only(),
         unit: indent_unit(&doc.root),
+        pool_quantity: Vec::new(),
     };
     ed.apply(&mut doc.root, scenario, before, after, &resources)?;
     let unit = ed.unit.clone();
@@ -324,6 +325,8 @@ struct Editor {
     ids: BTreeSet<String>,
     ascii: bool,
     unit: String,
+    /// Shared pools whose quantity changed: (pool, new quantity).
+    pool_quantity: Vec<(String, u32)>,
 }
 
 /// Where new elements of a namespace go: the prefix the file already uses for it, or a new one
@@ -376,7 +379,9 @@ fn category(k: &ElementKind) -> u8 {
     match k {
         ElementKind::Source { .. } => 0,
         ElementKind::Sink => 1,
-        ElementKind::Server { .. } | ElementKind::Delay { .. } => 2,
+        ElementKind::Server { .. } | ElementKind::SharedTask { .. } | ElementKind::Delay { .. } => {
+            2
+        }
         ElementKind::ExclusiveGateway { .. } => 3,
         ElementKind::ParallelGateway => 4,
     }
@@ -503,6 +508,7 @@ impl Editor {
                 }
             }
         }
+        self.pools(before, after)?;
         self.parameters(root, scenario, &old, &replaced, after, resources)?;
         self.routing(root, scenario, before, after)?;
         if before.experiment != after.experiment {
@@ -1198,6 +1204,29 @@ impl Editor {
     // -----------------------------------------------------------------------------------------
     // Parameters
 
+    /// Shared pools: their quantity can change in place; adding, removing or re-roling one is
+    /// for a new file (Save As) until the window edits pools.
+    fn pools(&mut self, before: &Model, after: &Model) -> Result<(), SaveError> {
+        let ids = |m: &Model| m.resources.iter().map(|r| r.id.clone()).collect::<Vec<_>>();
+        if ids(before) != ids(after) {
+            return Err(fail(
+                "resource pools were added or removed; save to a new file (Save As) to keep them",
+            ));
+        }
+        for (b, a) in before.resources.iter().zip(&after.resources) {
+            if b.roles != a.roles || b.name != a.name {
+                return Err(fail(format!(
+                    "the roles or name of resource `{}` changed; save to a new file (Save As) to keep them",
+                    a.id
+                )));
+            }
+            if b.quantity != a.quantity {
+                self.pool_quantity.push((a.id.to_string(), a.quantity));
+            }
+        }
+        Ok(())
+    }
+
     fn parameters(
         &mut self,
         root: &mut Element,
@@ -1323,10 +1352,58 @@ impl Editor {
                         _ => {}
                     }
                 }
+                ElementKind::SharedTask {
+                    service,
+                    needs,
+                    priority,
+                } => {
+                    let Some(ElementKind::SharedTask {
+                        service: os,
+                        needs: on,
+                        priority: op,
+                    }) = was
+                    else {
+                        return Err(fail(format!(
+                            "`{id}` became a task with shared resources; save to a new file (Save As) to keep it"
+                        )));
+                    };
+                    if os != service {
+                        writes.push((
+                            id.clone(),
+                            "TimeParameters",
+                            "ProcessingTime",
+                            Some(dist_element(service)),
+                        ));
+                    }
+                    if on != needs {
+                        let v = crate::write::condition_element(&crate::selection::format(needs));
+                        writes.push((id.clone(), "ResourceParameters", "Selection", Some(v)));
+                    }
+                    if op != priority {
+                        let v = (*priority != 0.0)
+                            .then(|| crate::write::probability_element(*priority));
+                        writes.push((id.clone(), "PriorityParameters", "Priority", v));
+                    }
+                }
                 ElementKind::Sink
                 | ElementKind::ExclusiveGateway { .. }
                 | ElementKind::ParallelGateway => {}
             }
+            if matches!(was, Some(ElementKind::SharedTask { .. }))
+                && !matches!(e.kind, ElementKind::SharedTask { .. })
+            {
+                return Err(fail(format!(
+                    "`{id}` no longer shares resources; save to a new file (Save As) to keep that"
+                )));
+            }
+        }
+        for (r, q) in std::mem::take(&mut self.pool_quantity) {
+            writes.push((
+                r,
+                "ResourceParameters",
+                "Quantity",
+                Some(numeric(u64::from(q))),
+            ));
         }
         for (e, server) in new_resources {
             if server {
@@ -1556,6 +1633,7 @@ fn param_order(group: &str) -> &'static [&'static str] {
             "TriggerCount",
         ],
         "ResourceParameters" => &["Selection", "Availability", "Quantity", "Role"],
+        "PriorityParameters" => &["Interruptible", "Priority"],
         _ => &[],
     }
 }

@@ -5,12 +5,14 @@ use schemars::JsonSchema;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Deserializer};
 use serde_json::{Value, json};
-use stochcraft_model::{Connection, Element, ElementId, ElementKind, Model, Property};
+use stochcraft_model::{
+    Connection, Element, ElementId, ElementKind, Model, Need, Property, ResourcePool,
+};
 
 use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
-    self, DistSpec, KindSpec, ModelDoc, PropertyDoc, PropertyTypeSpec, PropertyValueSpec,
+    self, DistSpec, KindSpec, ModelDoc, NeedSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec,
     TimeUnitSpec,
 };
 use crate::{CommandError, Engine, ErrorCode};
@@ -97,6 +99,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
     let kind_keys: &[&str] = match obj.get("kind").and_then(Value::as_str) {
         Some("source") => &["interarrival", "limit"],
         Some("server") => &["capacity", "service", "queue_capacity"],
+        Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
         Some("exclusive_gateway") => &["default"],
         _ => &[],
@@ -122,7 +125,9 @@ fn id_param(s: &str) -> Result<ElementId, CommandError> {
 }
 
 fn id_taken(model: &Model, id: &ElementId) -> bool {
-    model.elements.iter().any(|e| &e.id == id) || model.connections.iter().any(|c| &c.id == id)
+    model.elements.iter().any(|e| &e.id == id)
+        || model.connections.iter().any(|c| &c.id == id)
+        || model.resources.iter().any(|r| &r.id == id)
 }
 
 /// The id given, which must be new, or a fresh `prefix-N`.
@@ -247,6 +252,12 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<u32>")]
     pub queue_capacity: Option<Option<u32>>,
+    /// Tasks with shared resources: what each entity needs, the alternatives in order.
+    #[serde(default)]
+    pub needs: Option<Vec<NeedSpec>>,
+    /// Tasks with shared resources: who gets freed units first, higher first.
+    #[serde(default)]
+    pub priority: Option<f64>,
     /// Delays: time each entity spends.
     #[serde(default)]
     pub duration: Option<DistSpec>,
@@ -255,6 +266,42 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<String>")]
     pub default: Option<Option<String>>,
+}
+
+/// A new shared resource pool.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ResourceAdd {
+    /// A new id; by default `resource-N`.
+    #[serde(default)]
+    pub id: Option<String>,
+    /// Display name; by default the id.
+    #[serde(default)]
+    pub name: Option<String>,
+    /// How many identical units; 1 by default.
+    #[serde(default = "one_unit")]
+    pub quantity: u32,
+    /// The roles its units play, for tasks that need units by role.
+    #[serde(default)]
+    pub roles: Vec<String>,
+}
+
+fn one_unit() -> u32 {
+    1
+}
+
+/// A pool's settings to change.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ResourceSet {
+    pub id: String,
+    #[serde(default)]
+    pub name: Option<String>,
+    #[serde(default)]
+    pub quantity: Option<u32>,
+    /// Replaces the pool's roles.
+    #[serde(default)]
+    pub roles: Option<Vec<String>>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -474,12 +521,15 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("capacity", p.capacity.is_some()),
         ("service", p.service.is_some()),
         ("queue_capacity", p.queue_capacity.is_some()),
+        ("needs", p.needs.is_some()),
+        ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
         ("default", p.default.is_some()),
     ];
     let applies: &[&str] = match kind {
         ElementKind::Source { .. } => &["interarrival", "limit"],
         ElementKind::Server { .. } => &["capacity", "service", "queue_capacity"],
+        ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
         ElementKind::ExclusiveGateway { .. } => &["default"],
         ElementKind::Sink | ElementKind::ParallelGateway => &[],
@@ -523,6 +573,21 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *queue_capacity = q;
             }
         }
+        ElementKind::SharedTask {
+            service,
+            needs,
+            priority,
+        } => {
+            if let Some(d) = p.service {
+                *service = d.into();
+            }
+            if let Some(n) = p.needs {
+                *needs = n.into_iter().map(Into::into).collect();
+            }
+            if let Some(x) = p.priority {
+                *priority = x;
+            }
+        }
         ElementKind::Delay { duration } => {
             if let Some(d) = p.duration {
                 *duration = d.into();
@@ -536,6 +601,89 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Sink | ElementKind::ParallelGateway => {}
     }
     e.edit("block.set", Op::SetKind(id, kind))?;
+    Ok(json!({}))
+}
+
+fn existing_pool(model: &Model, s: &str) -> Result<usize, CommandError> {
+    model
+        .resources
+        .iter()
+        .position(|r| r.id.as_str() == s)
+        .ok_or_else(|| {
+            CommandError::new(
+                ErrorCode::NotFound,
+                format!("no resource pool with id `{s}`"),
+            )
+        })
+}
+
+fn resource_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: ResourceAdd = parse(p)?;
+    let id = new_id(e.model(), p.id.as_deref(), "resource")?;
+    let mut pools = e.model().resources.clone();
+    pools.push(ResourcePool {
+        name: p.name.unwrap_or_else(|| id.to_string()),
+        id: id.clone(),
+        quantity: p.quantity,
+        roles: p.roles,
+    });
+    e.edit("resource.add", Op::SetResources(pools))?;
+    Ok(json!({ "id": id.as_str() }))
+}
+
+fn resource_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: ResourceSet = parse(p)?;
+    let i = existing_pool(e.model(), &p.id)?;
+    if p.name.is_none() && p.quantity.is_none() && p.roles.is_none() {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            "nothing to set: give at least one parameter",
+        ));
+    }
+    let mut pools = e.model().resources.clone();
+    if let Some(r) = pools.get_mut(i) {
+        if let Some(n) = p.name {
+            r.name = n;
+        }
+        if let Some(q) = p.quantity {
+            r.quantity = q;
+        }
+        if let Some(roles) = p.roles {
+            r.roles = roles;
+        }
+    }
+    e.edit("resource.set", Op::SetResources(pools))?;
+    Ok(json!({}))
+}
+
+fn resource_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: Id = parse(p)?;
+    let i = existing_pool(e.model(), &p.id)?;
+    let users: Vec<&str> = e
+        .model()
+        .elements
+        .iter()
+        .filter(|el| match &el.kind {
+            ElementKind::SharedTask { needs, .. } => needs
+                .iter()
+                .any(|n| matches!(n, Need::Resource { id, .. } if id.as_str() == p.id)),
+            _ => false,
+        })
+        .map(|el| el.id.as_str())
+        .collect();
+    if !users.is_empty() {
+        return Err(CommandError::new(
+            ErrorCode::Conflict,
+            format!(
+                "`{}` is needed by {}; change their needs first",
+                p.id,
+                users.join(", ")
+            ),
+        ));
+    }
+    let mut pools = e.model().resources.clone();
+    pools.remove(i);
+    e.edit("resource.remove", Op::SetResources(pools))?;
     Ok(json!({}))
 }
 
@@ -836,7 +984,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "block.add",
-        summary: "Add a source, server, delay, sink, exclusive gateway or parallel gateway. Returns its id.",
+        summary: "Add a source, server, shared task, delay, sink, exclusive gateway or parallel gateway. Returns its id.",
         kind: CommandKind::Edit,
         schema: schema::<BlockAdd>,
         example: || json!({ "kind": "delay", "id": "walk", "duration": {"type": "triangular", "min": 1.0, "mode": 2.0, "max": 4.0} }),
@@ -921,6 +1069,30 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<ExperimentSet>,
         example: || json!({ "replications": 5, "duration": 240.0 }),
         run: experiment_set,
+    },
+    Command {
+        name: "resource.add",
+        summary: "Add a pool of units that tasks share. Returns its id.",
+        kind: CommandKind::Edit,
+        schema: schema::<ResourceAdd>,
+        example: || json!({ "id": "agents", "name": "Support agents", "quantity": 3, "roles": ["agent"] }),
+        run: resource_add,
+    },
+    Command {
+        name: "resource.set",
+        summary: "Change a shared pool's name, quantity or roles.",
+        kind: CommandKind::Edit,
+        schema: schema::<ResourceSet>,
+        example: || json!({ "id": "agents", "quantity": 4 }),
+        run: resource_set,
+    },
+    Command {
+        name: "resource.remove",
+        summary: "Remove a shared pool that no task names.",
+        kind: CommandKind::Edit,
+        schema: schema::<Id>,
+        example: || json!({ "id": "agents" }),
+        run: resource_remove,
     },
     Command {
         name: "undo",

@@ -70,6 +70,8 @@ fn kind_label(kind: &str) -> &str {
     match kind {
         "source" => t("Arrivals"),
         "server" => t("Task with a resource"),
+        "shared_task" => t("Task with shared resources"),
+        "resource" => t("Resource pool"),
         "delay" => t("Task"),
         "sink" => t("Departures"),
         "exclusive_gateway" => t("Decision"),

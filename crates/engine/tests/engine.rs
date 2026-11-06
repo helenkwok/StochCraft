@@ -991,3 +991,93 @@ fn finite_buffers_are_set_undone_and_reported() {
     ok(&mut e, "model.set", json!({ "model": m }));
     assert_eq!(ok(&mut e, "model.get", json!({})), m);
 }
+
+/// Two desks share a pool of agents: added through commands, run, reported as a pool, and
+/// guarded against losing a pool still in use; each edit undoes exactly.
+#[test]
+fn shared_pools_are_added_used_reported_and_guarded() {
+    let mut e = help_desk();
+    let before = ok(&mut e, "model.get", json!({}));
+    let added = ok(
+        &mut e,
+        "resource.add",
+        json!({"id": "agents", "quantity": 2, "roles": ["agent"]}),
+    );
+    assert_eq!(added["id"], "agents");
+    ok(&mut e, "block.remove", json!({"id": "desk"}));
+    ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "shared_task", "id": "phone", "service": {"type": "exponential", "mean": 1.5},
+               "needs": [{"resource": "agents"}], "priority": 1.0}),
+    );
+    ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "shared_task", "id": "chat",
+               "needs": [{"roles": ["agent"], "quantity": 1}]}),
+    );
+    ok(
+        &mut e,
+        "connect",
+        json!({"from": "arrivals", "to": "phone"}),
+    );
+    ok(&mut e, "connect", json!({"from": "phone", "to": "exit"}));
+    ok(&mut e, "block.set", json!({"id": "chat", "priority": 2.5}));
+    assert_eq!(
+        err(&mut e, "block.set", json!({"id": "chat", "capacity": 2})),
+        ErrorCode::InvalidParams
+    );
+    // `chat` has no input or output yet: an error, so connect it to run.
+    let src = ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "source", "id": "chats", "interarrival": {"type": "exponential", "mean": 4.0}}),
+    );
+    ok(&mut e, "connect", json!({"from": src["id"], "to": "chat"}));
+    ok(&mut e, "connect", json!({"from": "chat", "to": "exit"}));
+
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(
+        m["resources"],
+        json!([{"id": "agents", "name": "agents", "quantity": 2, "roles": ["agent"]}])
+    );
+    let chat = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "chat"))
+        .cloned();
+    assert_eq!(chat.map(|c| c["priority"].clone()), Some(json!(2.5)));
+
+    let r = ok(&mut e, "run", json!({"replications": 3}));
+    let agents = r["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "agents"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(agents["kind"], "resource", "{r}");
+    let u = agents["metrics"]["utilisation"]["mean"]
+        .as_f64()
+        .unwrap_or(-1.0);
+    assert!(u > 0.0 && u < 1.0, "{agents}");
+
+    // A pool a task names cannot be removed; once nothing names it, it can.
+    assert_eq!(
+        err(&mut e, "resource.remove", json!({"id": "agents"})),
+        ErrorCode::Conflict
+    );
+    ok(
+        &mut e,
+        "resource.set",
+        json!({"id": "agents", "quantity": 5}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(m["resources"][0]["quantity"], 5);
+    ok(&mut e, "undo", json!({}));
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(m["resources"][0]["quantity"], 2);
+    // Undoing the other ten edits of this test gives back the model it started from.
+    for _ in 0..10 {
+        ok(&mut e, "undo", json!({}));
+    }
+    assert_eq!(ok(&mut e, "model.get", json!({})), before);
+}

@@ -16,6 +16,7 @@ pub mod bpsim;
 pub mod duration;
 pub mod read;
 mod save;
+pub mod selection;
 pub mod write;
 
 pub use write::write_new;

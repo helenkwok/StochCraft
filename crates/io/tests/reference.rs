@@ -13,7 +13,7 @@ use std::process::Command;
 
 use stochcraft_blocks::Builder;
 use stochcraft_io::bpsim::{self, NS2};
-use stochcraft_io::{SaveError, read, read_scenario, write_new, xml};
+use stochcraft_io::{read, read_scenario, write_new, xml};
 use stochcraft_model::{
     Connection, Dist, Element, ElementId, ElementKind, Experiment, Model, Property, PropertyType,
     PropertyValue, TimeUnit,
@@ -385,6 +385,7 @@ fn edits() -> Vec<Edit> {
                 for e in &mut m.elements {
                     match &mut e.kind {
                         ElementKind::Server { service: d, .. }
+                        | ElementKind::SharedTask { service: d, .. }
                         | ElementKind::Delay { duration: d } => {
                             *d = Dist::Triangular {
                                 min: 1.0,
@@ -587,34 +588,43 @@ fn edits_save_into_every_reference_model_and_scenario() {
     );
 }
 
+/// The technical support models share their agents between tasks: they read as shared pools,
+/// and a pool's quantity, a shared task's needs and its priority save back into the file.
 #[test]
-fn capacity_of_a_shared_resource_is_refused_with_the_reason() {
+fn shared_pools_read_and_save_into_the_reference_models() {
     let Some(paths) = models() else { return };
-    let mut refused = 0;
+    let mut shared = 0;
     for p in &paths {
         let b = bytes(p);
         let Ok(l) = read(&b) else { continue };
+        if l.model.resources.is_empty() {
+            continue;
+        }
+        shared += 1;
         let mut m = l.model.clone();
-        let Some(e) = m
+        if let Some(r) = m.resources.first_mut() {
+            r.quantity += 2;
+        }
+        if let Some(ElementKind::SharedTask {
+            needs, priority, ..
+        }) = m
             .elements
             .iter_mut()
-            .find(|e| matches!(e.kind, ElementKind::Server { .. }))
-        else {
-            continue;
-        };
-        if let ElementKind::Server { capacity, .. } = &mut e.kind {
-            *capacity += 1;
-        }
-        match l.opened.save(&m) {
-            Ok(saved) => assert_eq!(read(&saved).map(|x| x.model).ok(), Some(m), "{}", name(p)),
-            Err(SaveError::Unsupported(why)) => {
-                assert!(why.contains("share"), "{}: {why}", name(p));
-                refused += 1;
+            .map(|e| &mut e.kind)
+            .find(|k| matches!(k, ElementKind::SharedTask { .. }))
+        {
+            *priority = 2.0;
+            if let Some(stochcraft_model::Need::Resource { quantity, .. }) = needs.first_mut() {
+                *quantity = 2;
             }
         }
+        let saved = l.opened.save(&m);
+        let Ok(saved) = saved else {
+            panic!("{}: {saved:?}", name(p))
+        };
+        assert_eq!(read(&saved).map(|x| x.model).ok(), Some(m), "{}", name(p));
     }
-    // The technical support models share their agents between tasks.
-    assert!(refused > 0);
+    assert!(shared > 0, "no reference model shares a resource");
 }
 
 fn showcase() -> Model {
@@ -703,7 +713,26 @@ fn showcase() -> Model {
     m.connect(split, right);
     m.connect(left, join);
     m.connect(right, join);
-    m.connect(join, triage);
+    // Shared pools: by id with an alternative by roles, several units, and a priority.
+    m.pool("crew", 3, &["fitter"]);
+    m.pool("seniors", 2, &["fitter", "lead"]);
+    let fit = m.shared_task(
+        "fit",
+        Dist::Exponential { mean: 1.5 },
+        vec![
+            stochcraft_model::Need::Resource {
+                id: stochcraft_model::ElementId::unchecked("crew"),
+                quantity: 2,
+            },
+            stochcraft_model::Need::Roles {
+                roles: vec!["fitter".into(), "lead".into()],
+                quantity: 1,
+            },
+        ],
+        3.5,
+    );
+    m.connect(join, fit);
+    m.connect(fit, triage);
     m.route(triage, out, None, Some("1 < 2 and not(false())"));
     m.route(triage, other, None, None);
     m.default_route(triage, other);

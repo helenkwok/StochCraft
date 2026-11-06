@@ -219,6 +219,25 @@ in the tests' comments so they can be checked without the books.
   buffer. S. B. Gershwin, *Manufacturing Systems Engineering*, Prentice Hall, 1994, also treats
   the two-machine line.
 
+## Shared resources
+
+The theory checks for M2.5 (`crates/blocks/tests/resources.rs`) use textbook results, derived
+again in the tests' comments.
+
+- **Two tasks sharing c units**: Poisson arrivals to each, the same exponential service, and the
+  units given first come first served across both, behave as one M/M/c with the arrival rates
+  added. The mean wait is Erlang C over (cμ − λ). Gross, Shortle, Thompson and Harris,
+  *Fundamentals of Queueing Theory*, 4th ed., Wiley, 2008, the M/M/c queue.
+- **Non-preemptive priorities**: one exponential server shared by two classes, the higher always
+  served first when the server frees but never interrupting a service. Class k waits
+  W0 / ((1 − σ(k−1))(1 − σk)), with W0 = Σ λi E[Si²] / 2 and σk the load of the classes up to k.
+  A. Cobham, "Priority assignment in waiting line problems", *Operations Research* 2(1), 1954,
+  70–76; also in Gross et al., priority queues.
+- **Machine repair (M/M/R//N)**: N machines that fail at rate λ while running and R repairmen
+  who repair at rate μ. The number broken is a birth-death chain on 0..N with birth rate
+  (N − n)λ and death rate min(n, R)μ. Gross et al., finite-source queues (the machine-repair
+  problem).
+
 ## Read and set aside
 
 Outside what a process simulator does: Type IV hydrogen pressure vessels (Khan, IJHE 2026,

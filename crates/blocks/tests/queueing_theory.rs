@@ -37,6 +37,7 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
             flow("f1", "arrivals", "servers"),
             flow("f2", "servers", "exit"),
         ],
+        resources: Vec::new(),
         experiment: Experiment {
             warmup: 1_000.0,
             duration: 20_000.0,
