@@ -1,0 +1,247 @@
+# ພາສາລາວ (lo) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	ພາສາລາວ
+	+ Add block	+ ເພີ່ມບລັອກ
+	About StochCraft	ກ່ຽວກັບ StochCraft
+	Add Block	ເພີ່ມບລັອກ
+	Add a flow from…	ເພີ່ມເສັ້ນທາງຈາກ…
+	Add a flow to…	ເພີ່ມເສັ້ນທາງໄປຫາ…
+	Add point	ເພີ່ມຈຸດ
+	Add property	ເພີ່ມຄຸນສົມບັດ
+	Added {block} ({id})	ເພີ່ມ {block} ({id}) ແລ້ວ
+	Appearance	ຮູບລັກສະນະ
+	Arrival limit	ຂີດຈຳກັດການມາຮອດ
+	Arrivals	ການມາຮອດ
+	Back to the model (Esc)	ກັບໄປຫາແບບຈຳລອງ (Esc)
+	Beta	ເບຕາ
+	Binomial	ທະວີນາມ
+	Boolean	ບູລີນ
+	Built with	ສ້າງດ້ວຍ
+	Cancel	ຍົກເລີກ
+	Cancel run	ຍົກເລີກການປະມວນຜົນ
+	Capacity	ຄວາມຈຸ
+	Change Block	ປ່ຽນບລັອກ
+	Change Flow	ປ່ຽນເສັ້ນທາງ
+	Changing the time unit does not convert the times already in the model.	ການປ່ຽນໜ່ວຍເວລາຈະບໍ່ແປງຄ່າເວລາທີ່ມີຢູ່ໃນແບບຈຳລອງ.
+	Close	ປິດ
+	Comes from	ມາຈາກ
+	Condition of {id}	ເງື່ອນໄຂຂອງ {id}
+	Connect	ເຊື່ອມຕໍ່
+	Connections	ການເຊື່ອມຕໍ່
+	Constant	ຄ່າຄົງທີ່
+	Data points	ຈຸດຂໍ້ມູນ
+	Date and time	ວັນທີ ແລະ ເວລາ
+	Decimal number	ຈຳນວນທົດສະນິຍົມ
+	Decision	ການຕັດສິນໃຈ
+	Decision (one way)	ການຕັດສິນໃຈ (ທາງດຽວ)
+	Default flow	ເສັ້ນທາງເລີ່ມຕົ້ນ
+	Departures	ການອອກ
+	Discard	ຖິ້ມ
+	Discarded the recovered changes	ຖິ້ມການປ່ຽນແປງທີ່ກູ້ຄືນມາແລ້ວ
+	Disconnect	ຕັດການເຊື່ອມຕໍ່
+	Discrete values	ຄ່າບໍ່ຕໍ່ເນື່ອງ
+	Discrete-event simulation, from model files to results.	ການຈຳລອງເຫດການບໍ່ຕໍ່ເນື່ອງ ຈາກໄຟລ໌ແບບຈຳລອງໄປສູ່ຜົນໄດ້ຮັບ.
+	Don't Save	ບໍ່ບັນທຶກ
+	Download	ດາວໂຫຼດ
+	Download charts (PNG)	ດາວໂຫຼດແຜນພູມ (PNG)
+	Download table (CSV)	ດາວໂຫຼດຕາຕະລາງ (CSV)
+	Duration	ໄລຍະເວລາ
+	Edit	ແກ້ໄຂ
+	Entered	ຈຳນວນທີ່ເຂົ້າ
+	Erlang	ເອີລັງ
+	Error	ຂໍ້ຜິດພາດ
+	Every distribution	ທຸກການແຈກຢາຍ
+	Experiment	ການທົດລອງ
+	Experiment Settings	ການຕັ້ງຄ່າການທົດລອງ
+	Exponential	ເອັກຊ໌ໂພເນນຊຽວ
+	Export charts (PNG)	ສົ່ງອອກແຜນພູມ (PNG)
+	Export table (CSV)	ສົ່ງອອກຕາຕະລາງ (CSV)
+	Exported {file}	ສົ່ງອອກ {file} ແລ້ວ
+	Expression	ນິພົດ
+	File	ໄຟລ໌
+	Flows	ເສັ້ນທາງ
+	From	ຈາກ
+	Gamma	ແກມມາ
+	Goes to	ໄປຫາ
+	Help	ຊ່ວຍເຫຼືອ
+	Keyboard shortcuts saved	ບັນທຶກປຸ່ມລັດແລ້ວ
+	Keyboard shortcuts unchanged	ປຸ່ມລັດບໍ່ມີການປ່ຽນແປງ
+	Language	ພາສາ
+	Left	ຈຳນວນທີ່ອອກ
+	Licensed under the MIT License or the Apache License 2.0, at your option.	ໃຊ້ໄດ້ພາຍໃຕ້ MIT License ຫຼື Apache License 2.0 ຕາມທີ່ທ່ານເລືອກ.
+	Log-normal	ລອກ-ນໍມອນ
+	Lost (waiting room full)	ສູນເສຍ (ຫ້ອງລໍຖ້າເຕັມ)
+	M/M/1 queue	ແຖວຄອຍ M/M/1
+	Maximise	ຂະຫຍາຍເຕັມຈໍ
+	Maximum	ຄ່າສູງສຸດ
+	Mean	ຄ່າສະເລ່ຍ
+	Mean number inside	ຈຳນວນສະເລ່ຍພາຍໃນ
+	Mean queue length	ຄວາມຍາວແຖວຄອຍສະເລ່ຍ
+	Mean time blocked	ເວລາສະເລ່ຍທີ່ຖືກຂັດຂວາງ
+	Mean time in system	ເວລາສະເລ່ຍໃນລະບົບ
+	Mean wait	ເວລາລໍຖ້າສະເລ່ຍ
+	Metric	ຕົວຊີ້ວັດ
+	Minimise	ຫຍໍ້ໜ້າຕ່າງ
+	Minimum	ຄ່າຕ່ຳສຸດ
+	Model	ແບບຈຳລອງ
+	Most likely	ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ
+	Name	ຊື່
+	New model	ແບບຈຳລອງໃໝ່
+	New property	ຄຸນສົມບັດໃໝ່
+	New property name	ຊື່ຄຸນສົມບັດໃໝ່
+	No blocks yet. Open a model, or add blocks to build one.	ຍັງບໍ່ມີບລັອກ. ເປີດແບບຈຳລອງ ຫຼື ເພີ່ມບລັອກເພື່ອສ້າງໃໝ່.
+	No connections yet: join blocks below.	ຍັງບໍ່ມີການເຊື່ອມຕໍ່: ເຊື່ອມບລັອກດ້ານລຸ່ມ.
+	No results yet	ຍັງບໍ່ມີຜົນໄດ້ຮັບ
+	None	ບໍ່ມີ
+	None found. The model is ready to run.	ບໍ່ພົບບັນຫາ. ແບບຈຳລອງພ້ອມໃຊ້ງານ.
+	Normal	ນໍມອນ
+	Number	ຈຳນວນ
+	One clerk, random arrivals: the textbook queue, checked against theory.	ພະນັກງານໜຶ່ງຄົນ ແລະ ການມາຮອດແບບສຸ່ມ: ແຖວຄອຍພື້ນຖານທີ່ກວດທຽບກັບທິດສະດີ.
+	One task per BPSim distribution, to compare their spread.	ໜຶ່ງໜ້າວຽກຕໍ່ແຕ່ລະການແຈກຢາຍ BPSim ເພື່ອປຽບທຽບການກະຈາຍ.
+	Open	ເປີດ
+	Open Example	ເປີດຕົວຢ່າງ
+	Open Recent	ເປີດລາຍການລ່າສຸດ
+	Open a model first	ເປີດແບບຈຳລອງກ່ອນ
+	Open a model to simulate it	ເປີດແບບຈຳລອງເພື່ອຈຳລອງການເຮັດວຽກ
+	Open a model…	ເປີດແບບຈຳລອງ…
+	Opened {file}	ເປີດ {file} ແລ້ວ
+	Or start from an example	ຫຼື ເລີ່ມຈາກຕົວຢ່າງ
+	Parameters	ພາລາມິເຕີ
+	Points	ຈຸດ
+	Poisson	ປົວຊົງ
+	Probability	ຄວາມເປັນໄປໄດ້
+	Probability of {id}	ຄວາມເປັນໄປໄດ້ຂອງ {id}
+	Problems	ບັນຫາ
+	Process	ຂະບວນການ
+	Properties	ຄຸນສົມບັດ
+	Quit	ອອກ
+	Ready	ພ້ອມ
+	Recover	ກູ້ຄືນ
+	Recover unsaved changes?	ກູ້ຄືນການປ່ຽນແປງທີ່ຍັງບໍ່ໄດ້ບັນທຶກບໍ?
+	Recovered {name}; save it to keep it	ກູ້ຄືນ {name} ແລ້ວ; ບັນທຶກເພື່ອເກັບໄວ້
+	Redid {action}	ເຮັດ {action} ຊ້ຳແລ້ວ
+	Redo	ເຮັດຊ້ຳ
+	Redo {action}	ເຮັດ {action} ຊ້ຳ
+	Remove	ລຶບ
+	Remove Block	ລຶບບລັອກ
+	Remove Property	ລຶບຄຸນສົມບັດ
+	Remove block	ລຶບບລັອກ
+	Remove the flow {id}	ລຶບເສັ້ນທາງ {id}
+	Remove this block and its flows (Delete)	ລຶບບລັອກນີ້ ແລະ ເສັ້ນທາງຂອງມັນ (Delete)
+	Removed {id}	ລຶບ {id} ແລ້ວ
+	Rename Block	ປ່ຽນຊື່ບລັອກ
+	Rename Model	ປ່ຽນຊື່ແບບຈຳລອງ
+	Replace Model	ແທນທີ່ແບບຈຳລອງ
+	Replications	ຈຳນວນຮອບຈຳລອງຊ້ຳ
+	Restore	ຄືນຂະໜາດໜ້າຕ່າງ
+	Results	ຜົນໄດ້ຮັບ
+	Run	ປະມວນຜົນ
+	Run cancelled	ຍົກເລີກການປະມວນຜົນແລ້ວ
+	Run experiment	ປະມວນຜົນການທົດລອງ
+	Run the experiment ({shortcut})	ປະມວນຜົນການທົດລອງ ({shortcut})
+	Running	ກຳລັງປະມວນຜົນ
+	Running…	ກຳລັງປະມວນຜົນ…
+	Save	ບັນທຶກ
+	Save As…	ບັນທຶກເປັນ…
+	Save changes to {name}?	ບັນທຶກການປ່ຽນແປງໃນ {name} ບໍ?
+	Saved {file}	ບັນທຶກ {file} ແລ້ວ
+	Scale	ມາດຕາສ່ວນ
+	Seed	ເມັດສຸ່ມ
+	Service time	ເວລາໃຫ້ບໍລິການ
+	Set Property	ຕັ້ງຄຸນສົມບັດ
+	Set a value	ຕັ້ງຄ່າ
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ຕັ້ງຄ່າໃຫ້ແຕ່ລະເອນທິຕີເມື່ອເຂົ້າສູ່ບລັອກນີ້. ນິພົດຈະອ່ານຄ່າທີ່ເອນທິຕີມີໃນເວລາເຂົ້າ, ເຊັ່ນ getProperty('issues') - 1.
+	Settings	ການຕັ້ງຄ່າ
+	Shape	ຮູບຮ່າງ
+	Share of arrivals lost	ສັດສ່ວນການມາຮອດທີ່ສູນເສຍ
+	Share of units blocked	ສັດສ່ວນໜ່ວຍທີ່ຖືກຂັດຂວາງ
+	Show {id}	ສະແດງ {id}
+	Split or join	ແຍກ ຫຼື ລວມ
+	Split or join (all ways)	ແຍກ ຫຼື ລວມ (ທຸກທາງ)
+	Stages (k)	ຂັ້ນຕອນ (k)
+	Standard deviation	ຄ່າຜັນຜວນມາດຕະຖານ
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ປິດລົງໂດຍທີ່ການປ່ຽນແປງໃນ {name} ຍັງບໍ່ໄດ້ບັນທຶກ. ກູ້ຄືນເປັນແບບຈຳລອງທີ່ບໍ່ມີຊື່ ຫຼື ຍົກເລີກການປ່ຽນແປງນັ້ນ.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft ອ່ານແບບຈຳລອງຂະບວນການຈາກໄຟລ໌ BPMN ຫຼື XPDL ທີ່ມີຂໍ້ມູນການຈຳລອງ BPSim, ນຳໄປທົດລອງແບບເຮັດຊ້ຳຫຼາຍຄັ້ງ ແລະ ລາຍງານທຸກຜົນພ້ອມຊ່ວງຄວາມເຊື່ອໝັ້ນ.
+	StochCraft {version} · model {digest}	StochCraft {version} · ແບບຈຳລອງ {digest}
+	Stop setting {name}	ຢຸດການຕັ້ງຄ່າ {name}
+	Tandem line	ສາຍງານຕໍ່ເນື່ອງ
+	Task	ໜ້າວຽກ
+	Task with a resource	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນ
+	Text	ຂໍ້ຄວາມ
+	The model: its experiment, connections and problems	ແບບຈຳລອງ: ການທົດລອງ ການເຊື່ອມຕໍ່ ແລະ ບັນຫາ
+	This block has a warning	ບລັອກນີ້ມີຄຳເຕືອນ
+	This block has an error	ບລັອກນີ້ມີຂໍ້ຜິດພາດ
+	Time between arrivals	ເວລາລະຫວ່າງການມາຮອດ
+	Time unit	ໜ່ວຍເວລາ
+	To	ໄປຫາ
+	Trials	ຈຳນວນຄັ້ງທົດລອງ
+	Triangular	ສາມຫຼ່ຽມ
+	Truncated normal	ນໍມອນແບບຕັດຂອບ
+	Two stations in series, read from an XPDL file.	ສອງສະຖານີຕໍ່ເນື່ອງ ອ່ານຈາກໄຟລ໌ XPDL.
+	Type	ປະເພດ
+	Undid {action}	ຍົກເລີກ {action} ແລ້ວ
+	Undo	ຍ້ອນກັບ
+	Undo {action}	ຍ້ອນກັບ {action}
+	Uniform	ແຈກຢາຍສະໝ່ຳສະເໝີ
+	Unit	ໜ່ວຍ
+	Untitled	ບໍ່ມີຊື່
+	Untitled model	ແບບຈຳລອງບໍ່ມີຊື່
+	Use System Setting	ໃຊ້ການຕັ້ງຄ່າລະບົບ
+	Utilisation	ອັດຕາການນຳໃຊ້
+	Value	ຄ່າ
+	View	ມຸມມອງ
+	Waiting room	ຫ້ອງລໍຖ້າ
+	Warm-up	ໄລຍະອຸ່ນເຄື່ອງ
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	ອຸ່ນເຄື່ອງ {warmup} {unit} ແລ້ວວັດຜົນ {duration} {unit}
+	Warning	ຄຳເຕືອນ
+	Weibull	ໄວບູນ
+	Whole number	ຈຳນວນເຕັມ
+	Yes or no	ແມ່ນ ຫຼື ບໍ່
+	Your changes will be lost if you don't save them.	ການປ່ຽນແປງຈະສູນເສຍຖ້າທ່ານບໍ່ບັນທຶກ.
+	a model	ແບບຈຳລອງ
+	arrivals	ການມາຮອດ
+	days	ວັນ
+	decision: one way	ການຕັດສິນໃຈ: ທາງດຽວ
+	departures	ການອອກ
+	egui and eframe (Craft suite fork)	egui ແລະ eframe (ແຍກມາຈາກ Craft suite)
+	from its value	ຈາກຄ່າຂອງມັນ
+	hours	ຊົ່ວໂມງ
+	id {id}	ລະຫັດ {id}
+	milliseconds	ມິລລິວິນາທີ
+	minutes	ນາທີ
+	nothing yet	ຍັງບໍ່ມີຫຍັງ
+	seconds	ວິນາທີ
+	split or join: all ways	ແຍກ ຫຼື ລວມ: ທຸກທາງ
+	task	ໜ້າວຽກ
+	task with a resource	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນ
+	the charts could not be captured	ບໍ່ສາມາດບັນທຶກພາບແຜນພູມໄດ້
+	the run stopped	ການປະມວນຜົນຢຸດແລ້ວ
+	there are no charts to export	ບໍ່ມີແຜນພູມສຳລັບສົ່ງອອກ
+	to {block}	ໄປຫາ {block}
+	unlimited	ບໍ່ຈຳກັດ
+	years	ປີ
+	{field}: not editable here yet	{field}: ຍັງບໍ່ສາມາດແກ້ໄຂຢູ່ນີ້ໄດ້
+	{id}: a probability is a number from 0 to 1	{id}: ຄວາມເປັນໄປໄດ້ຕ້ອງເປັນຕົວເລກຈາກ 0 ຫາ 1
+	{name} — edited	{name} — ແກ້ໄຂແລ້ວ
+	{property} (set to, mean)	{property} (ກຳນົດເປັນ, ຄ່າສະເລ່ຍ)
+	± 95% CI	± 95% CI
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ.
+	· no results yet	· ຍັງບໍ່ມີຜົນໄດ້ຮັບ
+@plural	Finished {n} replication|Finished {n} replications	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	ເປີດ {file} ແລ້ວ (ຄຳເຕືອນ {n} ລາຍການ)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	ປະມວນຜົນແບບຈຳລອງຢ່າງອິດສະຫຼະ {n} ຮອບ ໂດຍໃຊ້ເມັດສຸ່ມ {seed}. ຜົນຂອງແຕ່ລະອົງປະກອບມີເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກທຸກຮອບ.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	ສຳເລັດແລ້ວ {done} ຈາກ {n} ຮອບຈຳລອງຊ້ຳ
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກ {low} ຫາ {high}{unit}\nຈາກການຈຳລອງຊ້ຳ {n} ຮອບ
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed} · ອຸ່ນເຄື່ອງ {warmup} {unit} · ວັດຜົນ {duration} {unit}

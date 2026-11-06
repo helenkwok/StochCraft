@@ -1,0 +1,247 @@
+# Lietuvių (lt) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Lietuvių
+	+ Add block	+ Pridėti bloką
+	About StochCraft	Apie StochCraft
+	Add Block	Pridėti bloką
+	Add a flow from…	Pridėti srautą iš…
+	Add a flow to…	Pridėti srautą į…
+	Add point	Pridėti tašką
+	Add property	Pridėti savybę
+	Added {block} ({id})	Pridėta {block} ({id})
+	Appearance	Išvaizda
+	Arrival limit	Atvykimų limitas
+	Arrivals	Atvykimai
+	Back to the model (Esc)	Grįžti į modelį (Esc)
+	Beta	Beta
+	Binomial	Binominis
+	Boolean	Loginė reikšmė
+	Built with	Sukurta naudojant
+	Cancel	Atšaukti
+	Cancel run	Atšaukti vykdymą
+	Capacity	Pajėgumas
+	Change Block	Keisti bloką
+	Change Flow	Keisti srautą
+	Changing the time unit does not convert the times already in the model.	Pakeitus laiko vienetą, modelyje jau esančios laiko reikšmės nebus perskaičiuotos.
+	Close	Užverti
+	Comes from	Ateina iš
+	Condition of {id}	{id} sąlyga
+	Connect	Sujungti
+	Connections	Jungtys
+	Constant	Konstanta
+	Data points	Duomenų taškai
+	Date and time	Data ir laikas
+	Decimal number	Dešimtainis skaičius
+	Decision	Sprendimas
+	Decision (one way)	Sprendimas (vienas kelias)
+	Default flow	Numatytasis srautas
+	Departures	Išvykimai
+	Discard	Atmesti
+	Discarded the recovered changes	Atkurti pakeitimai atmesti
+	Disconnect	Atjungti
+	Discrete values	Diskrečiosios reikšmės
+	Discrete-event simulation, from model files to results.	Diskrečiųjų įvykių modeliavimas – nuo modelio failų iki rezultatų.
+	Don't Save	Neįrašyti
+	Download	Atsisiųsti
+	Download charts (PNG)	Atsisiųsti diagramas (PNG)
+	Download table (CSV)	Atsisiųsti lentelę (CSV)
+	Duration	Trukmė
+	Edit	Redaguoti
+	Entered	Įėjo
+	Erlang	Erlango
+	Error	Klaida
+	Every distribution	Visi skirstiniai
+	Experiment	Eksperimentas
+	Experiment Settings	Eksperimento nustatymai
+	Exponential	Eksponentinis
+	Export charts (PNG)	Eksportuoti diagramas (PNG)
+	Export table (CSV)	Eksportuoti lentelę (CSV)
+	Exported {file}	Eksportuota {file}
+	Expression	Išraiška
+	File	Failas
+	Flows	Srautai
+	From	Iš
+	Gamma	Gama
+	Goes to	Veda į
+	Help	Žinynas
+	Keyboard shortcuts saved	Spartieji klavišai įrašyti
+	Keyboard shortcuts unchanged	Spartieji klavišai nepakeisti
+	Language	Kalba
+	Left	Išėjo
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencijuota pagal MIT License arba Apache License 2.0, jūsų pasirinkimu.
+	Log-normal	Lognormalusis
+	Lost (waiting room full)	Prarasta (laukiamasis pilnas)
+	M/M/1 queue	M/M/1 eilė
+	Maximise	Maksimizuoti
+	Maximum	Maksimumas
+	Mean	Vidurkis
+	Mean number inside	Vidutinis skaičius viduje
+	Mean queue length	Vidutinis eilės ilgis
+	Mean time blocked	Vidutinė blokavimo trukmė
+	Mean time in system	Vidutinis laikas sistemoje
+	Mean wait	Vidutinis laukimo laikas
+	Metric	Rodiklis
+	Minimise	Minimizuoti
+	Minimum	Minimumas
+	Model	Modelis
+	Most likely	Labiausiai tikėtina
+	Name	Pavadinimas
+	New model	Naujas modelis
+	New property	Nauja savybė
+	New property name	Naujos savybės pavadinimas
+	No blocks yet. Open a model, or add blocks to build one.	Blokų dar nėra. Atidarykite modelį arba pridėkite blokų ir jį sukurkite.
+	No connections yet: join blocks below.	Jungčių dar nėra: sujunkite žemiau esančius blokus.
+	No results yet	Rezultatų dar nėra
+	None	Nėra
+	None found. The model is ready to run.	Problemų nerasta. Modelis paruoštas vykdyti.
+	Normal	Normalusis
+	Number	Skaičius
+	One clerk, random arrivals: the textbook queue, checked against theory.	Vienas darbuotojas, atsitiktiniai atvykimai: klasikinė eilė, patikrinta pagal teoriją.
+	One task per BPSim distribution, to compare their spread.	Po vieną užduotį kiekvienam BPSim skirstiniui, kad būtų galima palyginti jų sklaidą.
+	Open	Atverti
+	Open Example	Atidaryti pavyzdį
+	Open Recent	Atverti paskiausiai naudotus failus
+	Open a model first	Pirmiausia atidarykite modelį
+	Open a model to simulate it	Atidarykite modelį jo modeliavimui
+	Open a model…	Atidaryti modelį…
+	Opened {file}	Atidaryta {file}
+	Or start from an example	Arba pradėkite nuo pavyzdžio
+	Parameters	Parametrai
+	Points	Taškai
+	Poisson	Puasono
+	Probability	Tikimybė
+	Probability of {id}	{id} tikimybė
+	Problems	Problemos
+	Process	Procesas
+	Properties	Savybės
+	Quit	Išeiti
+	Ready	Parengta
+	Recover	Atkurti
+	Recover unsaved changes?	Atkurti neįrašytus pakeitimus?
+	Recovered {name}; save it to keep it	Atkurta {name}; įrašykite, kad išsaugotumėte
+	Redid {action}	Pakartota {action}
+	Redo	Pakartoti
+	Redo {action}	Pakartoti {action}
+	Remove	Pašalinti
+	Remove Block	Pašalinti bloką
+	Remove Property	Pašalinti savybę
+	Remove block	Pašalinti bloką
+	Remove the flow {id}	Pašalinti srautą {id}
+	Remove this block and its flows (Delete)	Pašalinti šį bloką ir jo srautus (Delete)
+	Removed {id}	Pašalinta {id}
+	Rename Block	Pervadinti bloką
+	Rename Model	Pervadinti modelį
+	Replace Model	Pakeisti modelį
+	Replications	Replikacijos
+	Restore	Atkurti langą
+	Results	Rezultatai
+	Run	Vykdyti
+	Run cancelled	Vykdymas atšauktas
+	Run experiment	Vykdyti eksperimentą
+	Run the experiment ({shortcut})	Vykdyti eksperimentą ({shortcut})
+	Running	Vykdoma
+	Running…	Vykdoma…
+	Save	Įrašyti
+	Save As…	Įrašyti kaip…
+	Save changes to {name}?	Įrašyti {name} pakeitimus?
+	Saved {file}	Įrašyta {file}
+	Scale	Skalė
+	Seed	Atsitiktinių skaičių sėkla
+	Service time	Aptarnavimo laikas
+	Set Property	Nustatyti savybę
+	Set a value	Nustatyti reikšmę
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nustatoma kiekvienam objektui, kai jis patenka į šį bloką. Išraiškos nuskaito reikšmes, kurias objektas turėjo įeidamas, pvz., getProperty('issues') - 1.
+	Settings	Nuostatos
+	Shape	Forma
+	Share of arrivals lost	Prarastų atvykimų dalis
+	Share of units blocked	Blokuotų vienetų dalis
+	Show {id}	Rodyti {id}
+	Split or join	Skaidyti arba jungti
+	Split or join (all ways)	Skaidyti arba jungti (visi keliai)
+	Stages (k)	Etapai (k)
+	Standard deviation	Standartinis nuokrypis
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft užsidarė su neišsaugotais modelio {name} pakeitimais. Atkurkite juos kaip modelį be pavadinimo arba atmeskite.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft nuskaito procesų modelius iš BPMN arba XPDL failų su BPSim modeliavimo duomenimis, vykdo juos kaip kartotinius eksperimentus ir pateikia kiekvieną rezultatą su jo pasikliautinuoju intervalu.
+	StochCraft {version} · model {digest}	StochCraft {version} · modelis {digest}
+	Stop setting {name}	Baigti nustatyti {name}
+	Tandem line	Nuoseklioji linija
+	Task	Užduotis
+	Task with a resource	Užduotis su ištekliumi
+	Text	Tekstas
+	The model: its experiment, connections and problems	Modelis: eksperimentas, jungtys ir problemos
+	This block has a warning	Šiame bloke yra įspėjimas
+	This block has an error	Šiame bloke yra klaida
+	Time between arrivals	Laikas tarp atvykimų
+	Time unit	Laiko vienetas
+	To	Į
+	Trials	Bandymai
+	Triangular	Trikampis
+	Truncated normal	Apribotasis normalusis
+	Two stations in series, read from an XPDL file.	Dvi nuoseklios stotys, nuskaitytos iš XPDL failo.
+	Type	Tipas
+	Undid {action}	Atšaukta {action}
+	Undo	Anuliuoti
+	Undo {action}	Atšaukti {action}
+	Uniform	Tolygusis
+	Unit	Vienetas
+	Untitled	Be pavadinimo
+	Untitled model	Modelis be pavadinimo
+	Use System Setting	Naudoti sistemos nustatymą
+	Utilisation	Panaudojimo koeficientas
+	Value	Reikšmė
+	View	Rodinys
+	Waiting room	Laukiamasis
+	Warm-up	Įšilimo laikotarpis
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Įšilimas {warmup} {unit}, po to matavimas {duration} {unit}
+	Warning	Įspėjimas
+	Weibull	Veibulo
+	Whole number	Sveikasis skaičius
+	Yes or no	Taip arba ne
+	Your changes will be lost if you don't save them.	Jei pakeitimų neįrašysite, jie bus prarasti.
+	a model	modelis
+	arrivals	atvykimai
+	days	dienos
+	decision: one way	sprendimas: vienas kelias
+	departures	išvykimai
+	egui and eframe (Craft suite fork)	egui ir eframe (Craft paketo atšaka)
+	from its value	pagal jo reikšmę
+	hours	valandos
+	id {id}	ID {id}
+	milliseconds	milisekundės
+	minutes	minutės
+	nothing yet	dar nieko
+	seconds	sekundės
+	split or join: all ways	skaidyti arba jungti: visi keliai
+	task	užduotis
+	task with a resource	užduotis su ištekliumi
+	the charts could not be captured	diagramų nepavyko užfiksuoti
+	the run stopped	vykdymas sustojo
+	there are no charts to export	nėra eksportuotinų diagramų
+	to {block}	į {block}
+	unlimited	be apribojimų
+	years	metai
+	{field}: not editable here yet	{field}: čia dar negalima redaguoti
+	{id}: a probability is a number from 0 to 1	{id}: tikimybė yra skaičius nuo 0 iki 1
+	{name} — edited	{name} — redaguota
+	{property} (set to, mean)	{property} (nustatyta reikšmė, vidurkis)
+	± 95% CI	± 95% pasikliautinasis intervalas
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± yra 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp kartojimų, pusplotis.
+	· no results yet	· rezultatų dar nėra
+@plural	Finished {n} replication|Finished {n} replications	Baigta {n} replikacija|Baigtos {n} replikacijos|Baigta {n} replikacijų
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Atidaryta {file} ({n} įspėjimas)|Atidaryta {file} ({n} įspėjimai)|Atidaryta {file} ({n} įspėjimų)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Vykdo {n} nepriklausomą modelio replikaciją su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomas modelio replikacijas su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomų modelio replikacijų su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	Baigta {done} iš {n} replikacijos|Baigta {done} iš {n} replikacijų|Baigta {done} iš {n} replikacijų
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikaciją|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijas|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijų
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacija · sėkla {seed}|{n} replikacijos · sėkla {seed}|{n} replikacijų · sėkla {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacija · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijos · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijų · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}

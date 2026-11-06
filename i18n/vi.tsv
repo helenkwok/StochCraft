@@ -1,0 +1,247 @@
+# Tiếng Việt (vi) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Tiếng Việt
+	+ Add block	+ Thêm khối
+	About StochCraft	Giới thiệu StochCraft
+	Add Block	Thêm khối
+	Add a flow from…	Thêm luồng từ…
+	Add a flow to…	Thêm luồng đến…
+	Add point	Thêm điểm
+	Add property	Thêm thuộc tính
+	Added {block} ({id})	Đã thêm {block} ({id})
+	Appearance	Diện mạo
+	Arrival limit	Giới hạn lượt đến
+	Arrivals	Lượt đến
+	Back to the model (Esc)	Quay lại mô hình (Esc)
+	Beta	Beta
+	Binomial	Nhị thức
+	Boolean	Boolean
+	Built with	Được xây dựng bằng
+	Cancel	Hủy
+	Cancel run	Hủy chạy
+	Capacity	Công suất
+	Change Block	Thay đổi khối
+	Change Flow	Thay đổi luồng
+	Changing the time unit does not convert the times already in the model.	Thay đổi đơn vị thời gian không chuyển đổi các giá trị thời gian đã có trong mô hình.
+	Close	Đóng
+	Comes from	Đến từ
+	Condition of {id}	Điều kiện của {id}
+	Connect	Kết nối
+	Connections	Kết nối
+	Constant	Hằng số
+	Data points	Điểm dữ liệu
+	Date and time	Ngày và giờ
+	Decimal number	Số thập phân
+	Decision	Quyết định
+	Decision (one way)	Quyết định (một hướng)
+	Default flow	Luồng mặc định
+	Departures	Lượt rời đi
+	Discard	Loại bỏ
+	Discarded the recovered changes	Đã bỏ các thay đổi được khôi phục
+	Disconnect	Ngắt kết nối
+	Discrete values	Giá trị rời rạc
+	Discrete-event simulation, from model files to results.	Mô phỏng sự kiện rời rạc, từ tệp mô hình đến kết quả.
+	Don't Save	Không lưu
+	Download	Tải xuống
+	Download charts (PNG)	Tải biểu đồ xuống (PNG)
+	Download table (CSV)	Tải bảng xuống (CSV)
+	Duration	Thời lượng
+	Edit	Chỉnh sửa
+	Entered	Đã vào
+	Erlang	Erlang
+	Error	Lỗi
+	Every distribution	Mọi phân phối
+	Experiment	Thí nghiệm
+	Experiment Settings	Cài đặt thí nghiệm
+	Exponential	Hàm mũ
+	Export charts (PNG)	Xuất biểu đồ (PNG)
+	Export table (CSV)	Xuất bảng (CSV)
+	Exported {file}	Đã xuất {file}
+	Expression	Biểu thức
+	File	Tệp
+	Flows	Luồng
+	From	Từ
+	Gamma	Gamma
+	Goes to	Đi đến
+	Help	Trợ giúp
+	Keyboard shortcuts saved	Đã lưu phím tắt
+	Keyboard shortcuts unchanged	Phím tắt không thay đổi
+	Language	Ngôn ngữ
+	Left	Đã rời đi
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Được cấp phép theo MIT License hoặc Apache License 2.0, tùy lựa chọn.
+	Log-normal	Chuẩn logarit
+	Lost (waiting room full)	Bị mất (khu vực chờ đầy)
+	M/M/1 queue	Hàng đợi M/M/1
+	Maximise	Phóng to tối đa
+	Maximum	Giá trị lớn nhất
+	Mean	Trung bình
+	Mean number inside	Số lượng trung bình bên trong
+	Mean queue length	Độ dài hàng đợi trung bình
+	Mean time blocked	Thời gian bị chặn trung bình
+	Mean time in system	Thời gian trung bình trong hệ thống
+	Mean wait	Thời gian chờ trung bình
+	Metric	Chỉ số
+	Minimise	Thu nhỏ tối đa
+	Minimum	Giá trị nhỏ nhất
+	Model	Mô hình
+	Most likely	Có khả năng nhất
+	Name	Tên
+	New model	Mô hình mới
+	New property	Thuộc tính mới
+	New property name	Tên thuộc tính mới
+	No blocks yet. Open a model, or add blocks to build one.	Chưa có khối nào. Hãy mở một mô hình hoặc thêm các khối để tạo mô hình.
+	No connections yet: join blocks below.	Chưa có kết nối: hãy nối các khối bên dưới.
+	No results yet	Chưa có kết quả
+	None	Không có
+	None found. The model is ready to run.	Không tìm thấy vấn đề. Mô hình đã sẵn sàng chạy.
+	Normal	Chuẩn
+	Number	Số
+	One clerk, random arrivals: the textbook queue, checked against theory.	Một nhân viên phục vụ, lượt đến ngẫu nhiên: hàng đợi kinh điển được đối chiếu với lý thuyết.
+	One task per BPSim distribution, to compare their spread.	Mỗi phân phối BPSim có một tác vụ để so sánh độ phân tán.
+	Open	Mở
+	Open Example	Mở ví dụ
+	Open Recent	Mở gần đây
+	Open a model first	Hãy mở mô hình trước
+	Open a model to simulate it	Mở mô hình để mô phỏng
+	Open a model…	Mở mô hình…
+	Opened {file}	Đã mở {file}
+	Or start from an example	Hoặc bắt đầu bằng ví dụ
+	Parameters	Tham số
+	Points	Điểm
+	Poisson	Poisson
+	Probability	Xác suất
+	Probability of {id}	Xác suất của {id}
+	Problems	Vấn đề
+	Process	Quy trình
+	Properties	Thuộc tính
+	Quit	Thoát
+	Ready	Sẵn sàng
+	Recover	Khôi phục
+	Recover unsaved changes?	Khôi phục các thay đổi chưa lưu?
+	Recovered {name}; save it to keep it	Đã khôi phục {name}; hãy lưu để giữ lại
+	Redid {action}	Đã làm lại {action}
+	Redo	Làm lại
+	Redo {action}	Làm lại {action}
+	Remove	Xóa
+	Remove Block	Xóa khối
+	Remove Property	Xóa thuộc tính
+	Remove block	Xóa khối
+	Remove the flow {id}	Xóa luồng {id}
+	Remove this block and its flows (Delete)	Xóa khối này và các luồng của nó (Delete)
+	Removed {id}	Đã xóa {id}
+	Rename Block	Đổi tên khối
+	Rename Model	Đổi tên mô hình
+	Replace Model	Thay thế mô hình
+	Replications	Số lần lặp
+	Restore	Khôi phục cửa sổ
+	Results	Kết quả
+	Run	Chạy
+	Run cancelled	Đã hủy chạy
+	Run experiment	Chạy thí nghiệm
+	Run the experiment ({shortcut})	Chạy thí nghiệm ({shortcut})
+	Running	Đang chạy
+	Running…	Đang chạy…
+	Save	Lưu
+	Save As…	Lưu thành…
+	Save changes to {name}?	Lưu các thay đổi vào {name}?
+	Saved {file}	Đã lưu {file}
+	Scale	Tỷ lệ
+	Seed	Hạt giống ngẫu nhiên
+	Service time	Thời gian phục vụ
+	Set Property	Đặt thuộc tính
+	Set a value	Đặt giá trị
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Được đặt cho từng thực thể khi đi vào khối này. Biểu thức đọc các giá trị mà thực thể có tại thời điểm đi vào, chẳng hạn getProperty('issues') - 1.
+	Settings	Cài đặt
+	Shape	Hình dạng
+	Share of arrivals lost	Tỷ lệ lượt đến bị mất
+	Share of units blocked	Tỷ lệ đơn vị bị chặn
+	Show {id}	Hiển thị {id}
+	Split or join	Tách hoặc gộp
+	Split or join (all ways)	Tách hoặc gộp (mọi hướng)
+	Stages (k)	Số giai đoạn (k)
+	Standard deviation	Độ lệch chuẩn
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft đã đóng khi các thay đổi trong {name} chưa được lưu. Khôi phục chúng thành một mô hình chưa đặt tên hoặc loại bỏ chúng.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft đọc mô hình quy trình từ các tệp BPMN hoặc XPDL có dữ liệu mô phỏng BPSim, chạy chúng dưới dạng các thí nghiệm lặp độc lập và báo cáo mỗi kết quả kèm khoảng tin cậy.
+	StochCraft {version} · model {digest}	StochCraft {version} · mô hình {digest}
+	Stop setting {name}	Ngừng đặt {name}
+	Tandem line	Dây chuyền nối tiếp
+	Task	Tác vụ
+	Task with a resource	Tác vụ có tài nguyên
+	Text	Văn bản
+	The model: its experiment, connections and problems	Mô hình: thí nghiệm, kết nối và vấn đề
+	This block has a warning	Khối này có cảnh báo
+	This block has an error	Khối này có lỗi
+	Time between arrivals	Thời gian giữa các lượt đến
+	Time unit	Đơn vị thời gian
+	To	Đến
+	Trials	Số lần thử
+	Triangular	Tam giác
+	Truncated normal	Chuẩn cắt cụt
+	Two stations in series, read from an XPDL file.	Hai trạm nối tiếp, được đọc từ tệp XPDL.
+	Type	Loại
+	Undid {action}	Đã hoàn tác {action}
+	Undo	Hoàn tác
+	Undo {action}	Hoàn tác {action}
+	Uniform	Đều
+	Unit	Đơn vị
+	Untitled	Chưa đặt tên
+	Untitled model	Mô hình chưa đặt tên
+	Use System Setting	Dùng cài đặt hệ thống
+	Utilisation	Mức sử dụng
+	Value	Giá trị
+	View	Xem
+	Waiting room	Khu vực chờ
+	Warm-up	Giai đoạn khởi động
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Khởi động {warmup} {unit}, sau đó đo trong {duration} {unit}
+	Warning	Cảnh báo
+	Weibull	Weibull
+	Whole number	Số nguyên
+	Yes or no	Có hoặc không
+	Your changes will be lost if you don't save them.	Các thay đổi sẽ bị mất nếu bạn không lưu.
+	a model	một mô hình
+	arrivals	lượt đến
+	days	ngày
+	decision: one way	quyết định: một hướng
+	departures	lượt rời đi
+	egui and eframe (Craft suite fork)	egui và eframe (bản phân nhánh của bộ Craft)
+	from its value	từ giá trị của nó
+	hours	giờ
+	id {id}	ID {id}
+	milliseconds	mili giây
+	minutes	phút
+	nothing yet	chưa có gì
+	seconds	giây
+	split or join: all ways	tách hoặc gộp: mọi hướng
+	task	tác vụ
+	task with a resource	tác vụ có tài nguyên
+	the charts could not be captured	không thể ghi lại biểu đồ
+	the run stopped	lần chạy đã dừng
+	there are no charts to export	không có biểu đồ để xuất
+	to {block}	đến {block}
+	unlimited	không giới hạn
+	years	năm
+	{field}: not editable here yet	{field}: chưa thể chỉnh sửa tại đây
+	{id}: a probability is a number from 0 to 1	{id}: xác suất là số từ 0 đến 1
+	{name} — edited	{name} — đã chỉnh sửa
+	{property} (set to, mean)	{property} (giá trị đặt, trung bình)
+	± 95% CI	± KTC 95%
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± là một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần lặp.
+	· no results yet	· chưa có kết quả
+@plural	Finished {n} replication|Finished {n} replications	Đã hoàn thành {n} lần lặp
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Đã mở {file} ({n} cảnh báo)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Chạy {n} lần lặp độc lập của mô hình từ hạt giống {seed}. Kết quả của mỗi phần tử kèm nửa độ rộng khoảng tin cậy 95%.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	Đã hoàn thành {done}/{n} lần lặp
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nKhoảng 95% từ {low} đến {high}{unit}\nqua {n} lần lặp
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} lần lặp · hạt giống {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} lần lặp · hạt giống {seed} · khởi động {warmup} {unit} · đo {duration} {unit}

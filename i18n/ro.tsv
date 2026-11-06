@@ -1,0 +1,247 @@
+# Română (ro) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Română
+	+ Add block	+ Adaugă bloc
+	About StochCraft	Despre StochCraft
+	Add Block	Adaugă bloc
+	Add a flow from…	Adaugă un flux de la…
+	Add a flow to…	Adaugă un flux către…
+	Add point	Adaugă punct
+	Add property	Adaugă proprietate
+	Added {block} ({id})	S-a adăugat {block} ({id})
+	Appearance	Aspect
+	Arrival limit	Limită de sosiri
+	Arrivals	Sosiri
+	Back to the model (Esc)	Înapoi la model (Esc)
+	Beta	Beta
+	Binomial	Binomială
+	Boolean	Boolean
+	Built with	Creat cu
+	Cancel	Anulează
+	Cancel run	Anulează rularea
+	Capacity	Capacitate
+	Change Block	Modifică blocul
+	Change Flow	Modifică fluxul
+	Changing the time unit does not convert the times already in the model.	Schimbarea unității de timp nu convertește timpii existenți în model.
+	Close	Închide
+	Comes from	Provine de la
+	Condition of {id}	Condiția pentru {id}
+	Connect	Conectează
+	Connections	Conexiuni
+	Constant	Constantă
+	Data points	Puncte de date
+	Date and time	Dată și oră
+	Decimal number	Număr zecimal
+	Decision	Decizie
+	Decision (one way)	Decizie (o singură cale)
+	Default flow	Flux implicit
+	Departures	Plecări
+	Discard	Renunță
+	Discarded the recovered changes	Modificările recuperate au fost eliminate
+	Disconnect	Deconectează
+	Discrete values	Valori discrete
+	Discrete-event simulation, from model files to results.	Simulare cu evenimente discrete, de la fișiere de model la rezultate.
+	Don't Save	Nu salva
+	Download	Descarcă
+	Download charts (PNG)	Descarcă graficele (PNG)
+	Download table (CSV)	Descarcă tabelul (CSV)
+	Duration	Durată
+	Edit	Editare
+	Entered	Intrări
+	Erlang	Erlang
+	Error	Eroare
+	Every distribution	Toate distribuțiile
+	Experiment	Experiment
+	Experiment Settings	Setările experimentului
+	Exponential	Exponențială
+	Export charts (PNG)	Exportă graficele (PNG)
+	Export table (CSV)	Exportă tabelul (CSV)
+	Exported {file}	S-a exportat {file}
+	Expression	Expresie
+	File	Fișier
+	Flows	Fluxuri
+	From	De la
+	Gamma	Gamma
+	Goes to	Merge către
+	Help	Ajutor
+	Keyboard shortcuts saved	Comenzile rapide au fost salvate
+	Keyboard shortcuts unchanged	Comenzile rapide nu s-au modificat
+	Language	Limbă
+	Left	Ieșiri
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Licențiat sub MIT License sau Apache License 2.0, la alegere.
+	Log-normal	Log-normală
+	Lost (waiting room full)	Pierdute (sala de așteptare plină)
+	M/M/1 queue	Coadă M/M/1
+	Maximise	Maximizează
+	Maximum	Maxim
+	Mean	Medie
+	Mean number inside	Număr mediu în interior
+	Mean queue length	Lungimea medie a cozii
+	Mean time blocked	Timp mediu de blocare
+	Mean time in system	Timp mediu în sistem
+	Mean wait	Timp mediu de așteptare
+	Metric	Indicator
+	Minimise	Minimizează
+	Minimum	Minim
+	Model	Model
+	Most likely	Cel mai probabil
+	Name	Nume
+	New model	Model nou
+	New property	Proprietate nouă
+	New property name	Numele proprietății noi
+	No blocks yet. Open a model, or add blocks to build one.	Nu există încă blocuri. Deschideți un model sau adăugați blocuri pentru a crea unul.
+	No connections yet: join blocks below.	Nu există încă conexiuni: conectați blocurile de mai jos.
+	No results yet	Nu există încă rezultate
+	None	Niciunul
+	None found. The model is ready to run.	Nu s-au găsit probleme. Modelul este gata de rulare.
+	Normal	Normală
+	Number	Număr
+	One clerk, random arrivals: the textbook queue, checked against theory.	Un operator, sosiri aleatorii: coada clasică, verificată față de teorie.
+	One task per BPSim distribution, to compare their spread.	Câte o sarcină pentru fiecare distribuție BPSim, pentru compararea dispersiei.
+	Open	Deschide
+	Open Example	Deschide exemplu
+	Open Recent	Deschide recente
+	Open a model first	Deschideți mai întâi un model
+	Open a model to simulate it	Deschideți un model pentru a-l simula
+	Open a model…	Deschide model…
+	Opened {file}	S-a deschis {file}
+	Or start from an example	Sau începeți cu un exemplu
+	Parameters	Parametri
+	Points	Puncte
+	Poisson	Poisson
+	Probability	Probabilitate
+	Probability of {id}	Probabilitatea pentru {id}
+	Problems	Probleme
+	Process	Proces
+	Properties	Proprietăți
+	Quit	Ieșire
+	Ready	Gata
+	Recover	Recuperează
+	Recover unsaved changes?	Recuperați modificările nesalvate?
+	Recovered {name}; save it to keep it	S-a recuperat {name}; salvați-l pentru a-l păstra
+	Redid {action}	S-a refăcut {action}
+	Redo	Refă
+	Redo {action}	Refă {action}
+	Remove	Elimină
+	Remove Block	Elimină blocul
+	Remove Property	Elimină proprietatea
+	Remove block	Elimină blocul
+	Remove the flow {id}	Elimină fluxul {id}
+	Remove this block and its flows (Delete)	Elimină acest bloc și fluxurile sale (Delete)
+	Removed {id}	S-a eliminat {id}
+	Rename Block	Redenumește blocul
+	Rename Model	Redenumește modelul
+	Replace Model	Înlocuiește modelul
+	Replications	Replicări
+	Restore	Restabilește
+	Results	Rezultate
+	Run	Rulează
+	Run cancelled	Rulare anulată
+	Run experiment	Rulează experimentul
+	Run the experiment ({shortcut})	Rulează experimentul ({shortcut})
+	Running	Se rulează
+	Running…	Se rulează…
+	Save	Salvează
+	Save As…	Salvează ca…
+	Save changes to {name}?	Salvați modificările pentru {name}?
+	Saved {file}	S-a salvat {file}
+	Scale	Scară
+	Seed	Sămânță
+	Service time	Timp de servire
+	Set Property	Setează proprietatea
+	Set a value	Setează o valoare
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Se setează pentru fiecare entitate la intrarea în acest bloc. Expresiile citesc valorile pe care entitatea le avea la intrare, cum ar fi getProperty('issues') - 1.
+	Settings	Setări
+	Shape	Formă
+	Share of arrivals lost	Proporția sosirilor pierdute
+	Share of units blocked	Proporția unităților blocate
+	Show {id}	Afișează {id}
+	Split or join	Divizează sau unește
+	Split or join (all ways)	Divizează sau unește (toate căile)
+	Stages (k)	Etape (k)
+	Standard deviation	Abatere standard
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft s-a închis cu modificări nesalvate în {name}. Recuperați-le ca model fără titlu sau renunțați la ele.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft citește modele de procese din fișiere BPMN sau XPDL cu date de simulare BPSim, le rulează ca experimente cu replicări și raportează fiecare rezultat împreună cu intervalul său de încredere.
+	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop setting {name}	Oprește setarea pentru {name}
+	Tandem line	Linie în tandem
+	Task	Sarcină
+	Task with a resource	Sarcină cu resursă
+	Text	Text
+	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
+	This block has a warning	Acest bloc are un avertisment
+	This block has an error	Acest bloc are o eroare
+	Time between arrivals	Timp între sosiri
+	Time unit	Unitate de timp
+	To	Către
+	Trials	Încercări
+	Triangular	Triunghiulară
+	Truncated normal	Normală trunchiată
+	Two stations in series, read from an XPDL file.	Două stații în serie, citite dintr-un fișier XPDL.
+	Type	Tip
+	Undid {action}	S-a anulat {action}
+	Undo	Anulează
+	Undo {action}	Anulează {action}
+	Uniform	Uniformă
+	Unit	Unitate
+	Untitled	Fără titlu
+	Untitled model	Model fără titlu
+	Use System Setting	Folosește setarea sistemului
+	Utilisation	Grad de utilizare
+	Value	Valoare
+	View	Vizualizare
+	Waiting room	Sală de așteptare
+	Warm-up	Perioadă de încălzire
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Încălzire {warmup} {unit}, apoi măsurare timp de {duration} {unit}
+	Warning	Avertisment
+	Weibull	Weibull
+	Whole number	Număr întreg
+	Yes or no	Da sau nu
+	Your changes will be lost if you don't save them.	Dacă nu salvați, modificările se vor pierde.
+	a model	un model
+	arrivals	sosiri
+	days	zile
+	decision: one way	decizie: o singură cale
+	departures	plecări
+	egui and eframe (Craft suite fork)	egui și eframe (ramură a suitei Craft)
+	from its value	din valoarea sa
+	hours	ore
+	id {id}	id {id}
+	milliseconds	milisecunde
+	minutes	minute
+	nothing yet	nimic deocamdată
+	seconds	secunde
+	split or join: all ways	divizează sau unește: toate căile
+	task	sarcină
+	task with a resource	sarcină cu resursă
+	the charts could not be captured	graficele nu au putut fi capturate
+	the run stopped	rularea s-a oprit
+	there are no charts to export	nu există grafice de exportat
+	to {block}	către {block}
+	unlimited	nelimitat
+	years	ani
+	{field}: not editable here yet	{field}: nu se poate edita aici deocamdată
+	{id}: a probability is a number from 0 to 1	{id}: probabilitatea este un număr între 0 și 1
+	{name} — edited	{name} — modificat
+	{property} (set to, mean)	{property} (valoare setată, medie)
+	± 95% CI	± IC 95%
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± reprezintă jumătate din lățimea unui interval de încredere Student-t de 95% pentru media dintre replicări.
+	· no results yet	· nu există încă rezultate
+@plural	Finished {n} replication|Finished {n} replications	S-a încheiat {n} replicare|S-au încheiat {n} replicări|S-au încheiat {n} replicări
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S-a deschis {file} ({n} avertisment)|S-a deschis {file} ({n} avertismente)|S-a deschis {file} ({n} avertismente)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Rulează {n} replicare independentă a modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Rulează {n} replicări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Rulează {n} replicări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	S-a încheiat {done} din {n} replicare|S-au încheiat {done} din {n} replicări|S-au încheiat {done} din {n} replicări
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicare|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicări|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicări
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replicare · sămânță {seed}|{n} replicări · sămânță {seed}|{n} replicări · sămânță {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replicare · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate

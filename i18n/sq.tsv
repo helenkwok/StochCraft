@@ -1,0 +1,247 @@
+# Shqip (sq) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Shqip
+	+ Add block	+ Shto bllok
+	About StochCraft	Rreth StochCraft
+	Add Block	Shto bllok
+	Add a flow from…	Shto rrjedhë nga…
+	Add a flow to…	Shto rrjedhë te…
+	Add point	Shto pikë
+	Add property	Shto veti
+	Added {block} ({id})	U shtua {block} ({id})
+	Appearance	Pamja
+	Arrival limit	Kufiri i mbërritjeve
+	Arrivals	Mbërritjet
+	Back to the model (Esc)	Kthehu te modeli (Esc)
+	Beta	Beta
+	Binomial	Binomiale
+	Boolean	Vlerë logjike
+	Built with	Ndërtuar me
+	Cancel	Anulo
+	Cancel run	Anulo ekzekutimin
+	Capacity	Kapaciteti
+	Change Block	Ndrysho bllokun
+	Change Flow	Ndrysho rrjedhën
+	Changing the time unit does not convert the times already in the model.	Ndryshimi i njësisë së kohës nuk i konverton kohët që gjenden tashmë në model.
+	Close	Mbyll
+	Comes from	Vjen nga
+	Condition of {id}	Kushti i {id}
+	Connect	Lidh
+	Connections	Lidhjet
+	Constant	Konstante
+	Data points	Pikat e të dhënave
+	Date and time	Data dhe ora
+	Decimal number	Numër dhjetor
+	Decision	Vendim
+	Decision (one way)	Vendim (një rrugë)
+	Default flow	Rrjedha e parazgjedhur
+	Departures	Largimet
+	Discard	Hidh poshtë
+	Discarded the recovered changes	Ndryshimet e rikuperuara u hodhën poshtë
+	Disconnect	Shkëput
+	Discrete values	Vlera diskrete
+	Discrete-event simulation, from model files to results.	Simulim i ngjarjeve diskrete, nga skedarët e modelit te rezultatet.
+	Don't Save	Mos ruaj
+	Download	Shkarko
+	Download charts (PNG)	Shkarko grafikët (PNG)
+	Download table (CSV)	Shkarko tabelën (CSV)
+	Duration	Kohëzgjatja
+	Edit	Redakto
+	Entered	Hyrjet
+	Erlang	Erlang
+	Error	Gabim
+	Every distribution	Të gjitha shpërndarjet
+	Experiment	Eksperiment
+	Experiment Settings	Cilësimet e eksperimentit
+	Exponential	Eksponenciale
+	Export charts (PNG)	Eksporto grafikët (PNG)
+	Export table (CSV)	Eksporto tabelën (CSV)
+	Exported {file}	U eksportua {file}
+	Expression	Shprehje
+	File	Skedar
+	Flows	Rrjedhat
+	From	Nga
+	Gamma	Gama
+	Goes to	Shkon te
+	Help	Ndihmë
+	Keyboard shortcuts saved	Shkurtoret e tastierës u ruajtën
+	Keyboard shortcuts unchanged	Shkurtoret e tastierës nuk ndryshuan
+	Language	Gjuha
+	Left	Daljet
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencuar sipas MIT License ose Apache License 2.0, sipas zgjedhjes suaj.
+	Log-normal	Log-normale
+	Lost (waiting room full)	Të humbura (dhoma e pritjes plot)
+	M/M/1 queue	Radha M/M/1
+	Maximise	Maksimizo
+	Maximum	Maksimumi
+	Mean	Mesatarja
+	Mean number inside	Numri mesatar brenda
+	Mean queue length	Gjatësia mesatare e radhës
+	Mean time blocked	Koha mesatare e bllokimit
+	Mean time in system	Koha mesatare në sistem
+	Mean wait	Pritja mesatare
+	Metric	Tregues
+	Minimise	Minimizo
+	Minimum	Minimumi
+	Model	Modeli
+	Most likely	Më e mundshmja
+	Name	Emri
+	New model	Model i ri
+	New property	Veti e re
+	New property name	Emri i vetisë së re
+	No blocks yet. Open a model, or add blocks to build one.	Nuk ka ende blloqe. Hapni një model ose shtoni blloqe për ta krijuar.
+	No connections yet: join blocks below.	Nuk ka ende lidhje: lidhni blloqet më poshtë.
+	No results yet	Nuk ka ende rezultate
+	None	Asnjë
+	None found. The model is ready to run.	Nuk u gjetën probleme. Modeli është gati për ekzekutim.
+	Normal	Normale
+	Number	Numër
+	One clerk, random arrivals: the textbook queue, checked against theory.	Një punonjës, mbërritje të rastësishme: radha klasike, e verifikuar me teori.
+	One task per BPSim distribution, to compare their spread.	Një detyrë për çdo shpërndarje BPSim, për të krahasuar shpërndarjen e tyre.
+	Open	Hap
+	Open Example	Hap shembullin
+	Open Recent	Hap të fundit
+	Open a model first	Hapni fillimisht një model
+	Open a model to simulate it	Hapni një model për ta simuluar
+	Open a model…	Hap modelin…
+	Opened {file}	U hap {file}
+	Or start from an example	Ose filloni me një shembull
+	Parameters	Parametrat
+	Points	Pikat
+	Poisson	Poisson
+	Probability	Probabiliteti
+	Probability of {id}	Probabiliteti i {id}
+	Problems	Problemet
+	Process	Procesi
+	Properties	Vetitë
+	Quit	Dil
+	Ready	Gati
+	Recover	Rikupero
+	Recover unsaved changes?	Të rikuperohen ndryshimet e paruajtura?
+	Recovered {name}; save it to keep it	U rikuperua {name}; ruajeni për ta mbajtur
+	Redid {action}	U ribë {action}
+	Redo	Ribëj
+	Redo {action}	Ribëj {action}
+	Remove	Hiq
+	Remove Block	Hiq bllokun
+	Remove Property	Hiq vetinë
+	Remove block	Hiq bllokun
+	Remove the flow {id}	Hiq rrjedhën {id}
+	Remove this block and its flows (Delete)	Hiq këtë bllok dhe rrjedhat e tij (Delete)
+	Removed {id}	U hoq {id}
+	Rename Block	Riemërto bllokun
+	Rename Model	Riemërto modelin
+	Replace Model	Zëvendëso modelin
+	Replications	Përsëritjet
+	Restore	Rikthe dritaren
+	Results	Rezultatet
+	Run	Ekzekuto
+	Run cancelled	Ekzekutimi u anulua
+	Run experiment	Ekzekuto eksperimentin
+	Run the experiment ({shortcut})	Ekzekuto eksperimentin ({shortcut})
+	Running	Duke u ekzekutuar
+	Running…	Duke u ekzekutuar…
+	Save	Ruaj
+	Save As…	Ruaj si…
+	Save changes to {name}?	Të ruhen ndryshimet te {name}?
+	Saved {file}	U ruajt {file}
+	Scale	Shkalla
+	Seed	Fara e rastësisë
+	Service time	Koha e shërbimit
+	Set Property	Cakto vetinë
+	Set a value	Cakto një vlerë
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Vendoset për çdo entitet kur hyn në këtë bllok. Shprehjet lexojnë vlerat që entiteti kishte në hyrje, si getProperty('issues') - 1.
+	Settings	Cilësimet
+	Shape	Forma
+	Share of arrivals lost	Pjesa e mbërritjeve të humbura
+	Share of units blocked	Pjesa e njësive të bllokuara
+	Show {id}	Shfaq {id}
+	Split or join	Ndaj ose bashko
+	Split or join (all ways)	Ndaj ose bashko (të gjitha rrugët)
+	Stages (k)	Fazat (k)
+	Standard deviation	Devijimi standard
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft u mbyll me ndryshime të paruajtura në {name}. Rikthejini si model pa titull ose hidhini poshtë.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft lexon modele procesesh nga skedarë BPMN ose XPDL me të dhëna simulimi BPSim, i ekzekuton si eksperimente me përsëritje dhe raporton çdo rezultat bashkë me intervalin e besimit.
+	StochCraft {version} · model {digest}	StochCraft {version} · modeli {digest}
+	Stop setting {name}	Ndalo caktimin e {name}
+	Tandem line	Linja në seri
+	Task	Detyrë
+	Task with a resource	Detyrë me burim
+	Text	Tekst
+	The model: its experiment, connections and problems	Modeli: eksperimenti, lidhjet dhe problemet
+	This block has a warning	Ky bllok ka një paralajmërim
+	This block has an error	Ky bllok ka një gabim
+	Time between arrivals	Koha ndërmjet mbërritjeve
+	Time unit	Njësia e kohës
+	To	Te
+	Trials	Provat
+	Triangular	Trekëndore
+	Truncated normal	Normale e prerë
+	Two stations in series, read from an XPDL file.	Dy stacione në seri, të lexuara nga një skedar XPDL.
+	Type	Lloji
+	Undid {action}	U zhbë {action}
+	Undo	Zhbëj
+	Undo {action}	Zhbëj {action}
+	Uniform	Uniforme
+	Unit	Njësia
+	Untitled	Pa titull
+	Untitled model	Model pa titull
+	Use System Setting	Përdor cilësimin e sistemit
+	Utilisation	Shfrytëzimi
+	Value	Vlera
+	View	Shiko
+	Waiting room	Dhoma e pritjes
+	Warm-up	Ngrohja
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Ngrohje {warmup} {unit}, pastaj matje për {duration} {unit}
+	Warning	Paralajmërim
+	Weibull	Weibull
+	Whole number	Numër i plotë
+	Yes or no	Po ose jo
+	Your changes will be lost if you don't save them.	Ndryshimet do të humbasin nëse nuk i ruani.
+	a model	një model
+	arrivals	mbërritjet
+	days	ditë
+	decision: one way	vendim: një rrugë
+	departures	largimet
+	egui and eframe (Craft suite fork)	egui dhe eframe (degë e paketës Craft)
+	from its value	nga vlera e tij
+	hours	orë
+	id {id}	ID {id}
+	milliseconds	milisekonda
+	minutes	minuta
+	nothing yet	ende asgjë
+	seconds	sekonda
+	split or join: all ways	ndaj ose bashko: të gjitha rrugët
+	task	detyrë
+	task with a resource	detyrë me burim
+	the charts could not be captured	grafikët nuk mund të kapeshin
+	the run stopped	ekzekutimi u ndal
+	there are no charts to export	nuk ka grafikë për eksport
+	to {block}	te {block}
+	unlimited	pa kufi
+	years	vite
+	{field}: not editable here yet	{field}: ende nuk mund të redaktohet këtu
+	{id}: a probability is a number from 0 to 1	{id}: probabiliteti është numër nga 0 deri në 1
+	{name} — edited	{name} — redaktuar
+	{property} (set to, mean)	{property} (vlera e caktuar, mesatarja)
+	± 95% CI	± 95% interval besimi
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± është gjysma e gjerësisë së një intervali besimi Student-t prej 95% për mesataren e përsëritjeve.
+	· no results yet	· ende nuk ka rezultate
+@plural	Finished {n} replication|Finished {n} replications	Përfundoi {n} përsëritje|Përfunduan {n} përsëritje
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	U hap {file} ({n} paralajmërim)|U hap {file} ({n} paralajmërime)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Ekzekuton {n} përsëritje të pavarur të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.|Ekzekuton {n} përsëritje të pavarura të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	U përfundua {done} nga {n} përsëritje|U përfunduan {done} nga {n} përsëritje
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} përsëritje|{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} përsëritje
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} përsëritje · fara {seed}|{n} përsëritje · fara {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}|{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}

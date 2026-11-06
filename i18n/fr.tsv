@@ -1,0 +1,247 @@
+# Français (fr) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Français
+	+ Add block	+ Ajouter un bloc
+	About StochCraft	À propos de StochCraft
+	Add Block	Ajouter un bloc
+	Add a flow from…	Ajouter un flux depuis…
+	Add a flow to…	Ajouter un flux vers…
+	Add point	Ajouter un point
+	Add property	Ajouter une propriété
+	Added {block} ({id})	{block} ({id}) ajouté
+	Appearance	Apparence
+	Arrival limit	Limite des arrivées
+	Arrivals	Arrivées
+	Back to the model (Esc)	Retour au modèle (Esc)
+	Beta	Bêta
+	Binomial	Binomiale
+	Boolean	Booléen
+	Built with	Développé avec
+	Cancel	Annuler
+	Cancel run	Annuler l'exécution
+	Capacity	Capacité
+	Change Block	Modifier le bloc
+	Change Flow	Modifier le flux
+	Changing the time unit does not convert the times already in the model.	Changer l'unité de temps ne convertit pas les durées déjà définies dans le modèle.
+	Close	Fermer
+	Comes from	Provient de
+	Condition of {id}	Condition de {id}
+	Connect	Connecter
+	Connections	Connexions
+	Constant	Constante
+	Data points	Points de données
+	Date and time	Date et heure
+	Decimal number	Nombre décimal
+	Decision	Décision
+	Decision (one way)	Décision (une seule voie)
+	Default flow	Flux par défaut
+	Departures	Départs
+	Discard	Ignorer
+	Discarded the recovered changes	Modifications récupérées ignorées
+	Disconnect	Déconnecter
+	Discrete values	Valeurs discrètes
+	Discrete-event simulation, from model files to results.	Simulation à événements discrets, des fichiers de modèle aux résultats.
+	Don't Save	Ne pas enregistrer
+	Download	Télécharger
+	Download charts (PNG)	Télécharger les graphiques (PNG)
+	Download table (CSV)	Télécharger le tableau (CSV)
+	Duration	Durée
+	Edit	Édition
+	Entered	Entrées
+	Erlang	Erlang
+	Error	Erreur
+	Every distribution	Toutes les distributions
+	Experiment	Expérience
+	Experiment Settings	Paramètres de l'expérience
+	Exponential	Exponentielle
+	Export charts (PNG)	Exporter les graphiques (PNG)
+	Export table (CSV)	Exporter le tableau (CSV)
+	Exported {file}	{file} exporté
+	Expression	Expression
+	File	Fichier
+	Flows	Flux
+	From	De
+	Gamma	Gamma
+	Goes to	Va vers
+	Help	Aide
+	Keyboard shortcuts saved	Raccourcis clavier enregistrés
+	Keyboard shortcuts unchanged	Raccourcis clavier inchangés
+	Language	Langue
+	Left	Sorties
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Sous MIT License ou Apache License 2.0, au choix.
+	Log-normal	Log-normale
+	Lost (waiting room full)	Perdus (salle d'attente pleine)
+	M/M/1 queue	File M/M/1
+	Maximise	Agrandir
+	Maximum	Maximum
+	Mean	Moyenne
+	Mean number inside	Nombre moyen présent
+	Mean queue length	Longueur moyenne de la file
+	Mean time blocked	Temps moyen de blocage
+	Mean time in system	Temps moyen dans le système
+	Mean wait	Attente moyenne
+	Metric	Indicateur
+	Minimise	Réduire
+	Minimum	Minimum
+	Model	Modèle
+	Most likely	Valeur la plus probable
+	Name	Nom
+	New model	Nouveau modèle
+	New property	Nouvelle propriété
+	New property name	Nom de la nouvelle propriété
+	No blocks yet. Open a model, or add blocks to build one.	Aucun bloc pour le moment. Ouvrez un modèle ou ajoutez des blocs pour en créer un.
+	No connections yet: join blocks below.	Aucune connexion pour le moment : reliez les blocs ci-dessous.
+	No results yet	Aucun résultat pour le moment
+	None	Aucun
+	None found. The model is ready to run.	Aucun problème détecté. Le modèle est prêt à être exécuté.
+	Normal	Normale
+	Number	Nombre
+	One clerk, random arrivals: the textbook queue, checked against theory.	Un seul agent, des arrivées aléatoires : la file d'attente classique, vérifiée par la théorie.
+	One task per BPSim distribution, to compare their spread.	Une tâche par distribution BPSim pour comparer leur dispersion.
+	Open	Ouvrir
+	Open Example	Ouvrir un exemple
+	Open Recent	Ouvrir un fichier récent
+	Open a model first	Ouvrez d'abord un modèle
+	Open a model to simulate it	Ouvrez un modèle pour le simuler
+	Open a model…	Ouvrir un modèle…
+	Opened {file}	{file} ouvert
+	Or start from an example	Ou commencer avec un exemple
+	Parameters	Paramètres
+	Points	Points
+	Poisson	Poisson
+	Probability	Probabilité
+	Probability of {id}	Probabilité de {id}
+	Problems	Problèmes
+	Process	Processus
+	Properties	Propriétés
+	Quit	Quitter
+	Ready	Prêt
+	Recover	Récupérer
+	Recover unsaved changes?	Récupérer les modifications non enregistrées ?
+	Recovered {name}; save it to keep it	{name} récupéré ; enregistrez-le pour le conserver
+	Redid {action}	{action} rétabli
+	Redo	Rétablir
+	Redo {action}	Rétablir {action}
+	Remove	Supprimer
+	Remove Block	Supprimer le bloc
+	Remove Property	Supprimer la propriété
+	Remove block	Supprimer le bloc
+	Remove the flow {id}	Supprimer le flux {id}
+	Remove this block and its flows (Delete)	Supprimer ce bloc et ses flux (Delete)
+	Removed {id}	{id} supprimé
+	Rename Block	Renommer le bloc
+	Rename Model	Renommer le modèle
+	Replace Model	Remplacer le modèle
+	Replications	Réplications
+	Restore	Restaurer
+	Results	Résultats
+	Run	Exécuter
+	Run cancelled	Exécution annulée
+	Run experiment	Exécuter l'expérience
+	Run the experiment ({shortcut})	Exécuter l'expérience ({shortcut})
+	Running	En cours
+	Running…	Exécution en cours…
+	Save	Enregistrer
+	Save As…	Enregistrer sous…
+	Save changes to {name}?	Enregistrer les modifications apportées à {name} ?
+	Saved {file}	{file} enregistré
+	Scale	Échelle
+	Seed	Graine
+	Service time	Temps de service
+	Set Property	Définir la propriété
+	Set a value	Définir une valeur
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Défini pour chaque entité à son entrée dans ce bloc. Les expressions lisent les valeurs qu'elle avait à son arrivée, par exemple getProperty('issues') - 1.
+	Settings	Réglages
+	Shape	Forme
+	Share of arrivals lost	Part des arrivées perdues
+	Share of units blocked	Part des unités bloquées
+	Show {id}	Afficher {id}
+	Split or join	Diviser ou joindre
+	Split or join (all ways)	Diviser ou joindre (toutes les voies)
+	Stages (k)	Étapes (k)
+	Standard deviation	Écart type
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft s'est fermé avec des modifications non enregistrées dans {name}. Récupérez-les dans un modèle sans titre ou ignorez-les.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft lit des modèles de processus à partir de fichiers BPMN ou XPDL contenant des données de simulation BPSim, les exécute sous forme d'expériences répliquées et présente chaque résultat avec son intervalle de confiance.
+	StochCraft {version} · model {digest}	StochCraft {version} · modèle {digest}
+	Stop setting {name}	Arrêter de définir {name}
+	Tandem line	Ligne en tandem
+	Task	Tâche
+	Task with a resource	Tâche avec ressource
+	Text	Texte
+	The model: its experiment, connections and problems	Le modèle : expérience, connexions et problèmes
+	This block has a warning	Ce bloc présente un avertissement
+	This block has an error	Ce bloc présente une erreur
+	Time between arrivals	Temps entre arrivées
+	Time unit	Unité de temps
+	To	À
+	Trials	Essais
+	Triangular	Triangulaire
+	Truncated normal	Normale tronquée
+	Two stations in series, read from an XPDL file.	Deux postes en série, lus depuis un fichier XPDL.
+	Type	Type
+	Undid {action}	{action} annulé
+	Undo	Annuler
+	Undo {action}	Annuler {action}
+	Uniform	Uniforme
+	Unit	Unité
+	Untitled	Sans titre
+	Untitled model	Modèle sans titre
+	Use System Setting	Utiliser le paramètre système
+	Utilisation	Taux d'utilisation
+	Value	Valeur
+	View	Affichage
+	Waiting room	Salle d'attente
+	Warm-up	Préchauffage
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Préchauffage de {warmup} {unit}, puis {duration} {unit} mesurés
+	Warning	Avertissement
+	Weibull	Weibull
+	Whole number	Nombre entier
+	Yes or no	Oui ou non
+	Your changes will be lost if you don't save them.	Vos modifications seront perdues si vous ne les enregistrez pas.
+	a model	un modèle
+	arrivals	arrivées
+	days	jours
+	decision: one way	décision : une seule voie
+	departures	départs
+	egui and eframe (Craft suite fork)	egui et eframe (fork de la suite Craft)
+	from its value	d'après sa valeur
+	hours	heures
+	id {id}	id {id}
+	milliseconds	millisecondes
+	minutes	minutes
+	nothing yet	rien pour le moment
+	seconds	secondes
+	split or join: all ways	diviser ou joindre : toutes les voies
+	task	tâche
+	task with a resource	tâche avec ressource
+	the charts could not be captured	les graphiques n'ont pas pu être capturés
+	the run stopped	l'exécution s'est arrêtée
+	there are no charts to export	aucun graphique à exporter
+	to {block}	vers {block}
+	unlimited	sans limite
+	years	années
+	{field}: not editable here yet	{field} : non modifiable ici pour le moment
+	{id}: a probability is a number from 0 to 1	{id} : une probabilité est un nombre compris entre 0 et 1
+	{name} — edited	{name} — modifié
+	{property} (set to, mean)	{property} (valeur définie, moyenne)
+	± 95% CI	± IC à 95 %
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± correspond à la demi-largeur d'un intervalle de confiance Student-t à 95 % de la moyenne sur les réplications.
+	· no results yet	· aucun résultat pour le moment
+@plural	Finished {n} replication|Finished {n} replications	{n} réplication terminée|{n} réplications terminées
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} ouvert ({n} avertissement)|{file} ouvert ({n} avertissements)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Exécute {n} réplication indépendante du modèle à partir de la graine {seed}. Les résultats de chaque élément incluent la demi-largeur d'un intervalle de confiance à 95 %.|Exécute {n} réplications indépendantes du modèle à partir de la graine {seed}. Les résultats de chaque élément incluent la demi-largeur d'un intervalle de confiance à 95 %.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} réplication terminée sur {n}|{done} réplications terminées sur {n}
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name} : {mean}{unit}\nIntervalle à 95 % de {low} à {high}{unit}\nsur {n} réplication|{name} : {mean}{unit}\nIntervalle à 95 % de {low} à {high}{unit}\nsur {n} réplications
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} réplication · graine {seed}|{n} réplications · graine {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} réplication · graine {seed} · préchauffage {warmup} {unit} · {duration} {unit} mesurés|{n} réplications · graine {seed} · préchauffage {warmup} {unit} · {duration} {unit} mesurés

@@ -1,0 +1,247 @@
+# Polski (pl) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Polski
+	+ Add block	+ Dodaj blok
+	About StochCraft	O programie StochCraft
+	Add Block	Dodaj blok
+	Add a flow from…	Dodaj przepływ z…
+	Add a flow to…	Dodaj przepływ do…
+	Add point	Dodaj punkt
+	Add property	Dodaj właściwość
+	Added {block} ({id})	Dodano {block} ({id})
+	Appearance	Wygląd
+	Arrival limit	Limit przybyć
+	Arrivals	Przybycia
+	Back to the model (Esc)	Powrót do modelu (Esc)
+	Beta	Beta
+	Binomial	Dwumianowy
+	Boolean	Wartość logiczna
+	Built with	Zbudowano przy użyciu
+	Cancel	Anuluj
+	Cancel run	Anuluj uruchomienie
+	Capacity	Pojemność
+	Change Block	Zmień blok
+	Change Flow	Zmień przepływ
+	Changing the time unit does not convert the times already in the model.	Zmiana jednostki czasu nie przelicza czasów już zapisanych w modelu.
+	Close	Zamknij
+	Comes from	Pochodzi z
+	Condition of {id}	Warunek dla {id}
+	Connect	Połącz
+	Connections	Połączenia
+	Constant	Stały
+	Data points	Punkty danych
+	Date and time	Data i godzina
+	Decimal number	Liczba dziesiętna
+	Decision	Decyzja
+	Decision (one way)	Decyzja (jedna ścieżka)
+	Default flow	Przepływ domyślny
+	Departures	Wyjścia
+	Discard	Odrzuć
+	Discarded the recovered changes	Odrzucono odzyskane zmiany
+	Disconnect	Rozłącz
+	Discrete values	Wartości dyskretne
+	Discrete-event simulation, from model files to results.	Symulacja zdarzeń dyskretnych: od plików modeli do wyników.
+	Don't Save	Nie zapisuj
+	Download	Pobierz
+	Download charts (PNG)	Pobierz wykresy (PNG)
+	Download table (CSV)	Pobierz tabelę (CSV)
+	Duration	Czas trwania
+	Edit	Edycja
+	Entered	Weszło
+	Erlang	Rozkład Erlanga
+	Error	Błąd
+	Every distribution	Wszystkie rozkłady
+	Experiment	Eksperyment
+	Experiment Settings	Ustawienia eksperymentu
+	Exponential	Wykładniczy
+	Export charts (PNG)	Eksportuj wykresy (PNG)
+	Export table (CSV)	Eksportuj tabelę (CSV)
+	Exported {file}	Wyeksportowano {file}
+	Expression	Wyrażenie
+	File	Plik
+	Flows	Przepływy
+	From	Od
+	Gamma	Gamma
+	Goes to	Prowadzi do
+	Help	Pomoc
+	Keyboard shortcuts saved	Zapisano skróty klawiaturowe
+	Keyboard shortcuts unchanged	Skróty klawiaturowe bez zmian
+	Language	Język
+	Left	Wyszło
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Na licencji MIT License lub Apache License 2.0, do wyboru.
+	Log-normal	Logarytmiczno-normalny
+	Lost (waiting room full)	Utracone (poczekalnia pełna)
+	M/M/1 queue	Kolejka M/M/1
+	Maximise	Maksymalizuj
+	Maximum	Maksimum
+	Mean	Średnia
+	Mean number inside	Średnia liczba wewnątrz
+	Mean queue length	Średnia długość kolejki
+	Mean time blocked	Średni czas blokowania
+	Mean time in system	Średni czas w systemie
+	Mean wait	Średni czas oczekiwania
+	Metric	Miara
+	Minimise	Minimalizuj
+	Minimum	Minimum
+	Model	Model
+	Most likely	Najbardziej prawdopodobna
+	Name	Nazwa
+	New model	Nowy model
+	New property	Nowa właściwość
+	New property name	Nazwa nowej właściwości
+	No blocks yet. Open a model, or add blocks to build one.	Brak bloków. Otwórz model lub dodaj bloki, aby go utworzyć.
+	No connections yet: join blocks below.	Brak połączeń: połącz bloki poniżej.
+	No results yet	Brak wyników
+	None	Brak
+	None found. The model is ready to run.	Nie znaleziono problemów. Model jest gotowy do uruchomienia.
+	Normal	Normalny
+	Number	Liczba
+	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracownik, losowe przybycia: klasyczna kolejka zweryfikowana teorią.
+	One task per BPSim distribution, to compare their spread.	Jedno zadanie dla każdego rozkładu BPSim, aby porównać ich rozrzut.
+	Open	Otwórz
+	Open Example	Otwórz przykład
+	Open Recent	Otwórz ostatnie
+	Open a model first	Najpierw otwórz model
+	Open a model to simulate it	Otwórz model, aby go symulować
+	Open a model…	Otwórz model…
+	Opened {file}	Otwarto {file}
+	Or start from an example	Lub rozpocznij od przykładu
+	Parameters	Parametry
+	Points	Punkty
+	Poisson	Poissona
+	Probability	Prawdopodobieństwo
+	Probability of {id}	Prawdopodobieństwo dla {id}
+	Problems	Problemy
+	Process	Proces
+	Properties	Właściwości
+	Quit	Zakończ
+	Ready	Gotowe
+	Recover	Odzyskaj
+	Recover unsaved changes?	Odzyskać niezapisane zmiany?
+	Recovered {name}; save it to keep it	Odzyskano {name}; zapisz, aby zachować
+	Redid {action}	Ponowiono {action}
+	Redo	Ponów
+	Redo {action}	Ponów {action}
+	Remove	Usuń
+	Remove Block	Usuń blok
+	Remove Property	Usuń właściwość
+	Remove block	Usuń blok
+	Remove the flow {id}	Usuń przepływ {id}
+	Remove this block and its flows (Delete)	Usuń ten blok i jego przepływy (Delete)
+	Removed {id}	Usunięto {id}
+	Rename Block	Zmień nazwę bloku
+	Rename Model	Zmień nazwę modelu
+	Replace Model	Zastąp model
+	Replications	Replikacje
+	Restore	Przywróć
+	Results	Wyniki
+	Run	Uruchom
+	Run cancelled	Anulowano uruchomienie
+	Run experiment	Uruchom eksperyment
+	Run the experiment ({shortcut})	Uruchom eksperyment ({shortcut})
+	Running	Uruchomiony
+	Running…	Trwa uruchamianie…
+	Save	Zapisz
+	Save As…	Zapisz jako…
+	Save changes to {name}?	Zapisać zmiany w {name}?
+	Saved {file}	Zapisano {file}
+	Scale	Skala
+	Seed	Ziarno
+	Service time	Czas obsługi
+	Set Property	Ustaw właściwość
+	Set a value	Ustaw wartość
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ustawiane dla każdej jednostki przy wejściu do tego bloku. Wyrażenia odczytują wartości, które jednostka miała w chwili wejścia, np. getProperty('issues') - 1.
+	Settings	Ustawienia
+	Shape	Kształt
+	Share of arrivals lost	Odsetek utraconych przybyć
+	Share of units blocked	Odsetek zablokowanych jednostek
+	Show {id}	Pokaż {id}
+	Split or join	Rozdziel lub połącz
+	Split or join (all ways)	Rozdziel lub połącz (wszystkie ścieżki)
+	Stages (k)	Etapy (k)
+	Standard deviation	Odchylenie standardowe
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft został zamknięty z niezapisanymi zmianami w modelu {name}. Przywróć je jako model bez tytułu lub odrzuć.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft odczytuje modele procesów z plików BPMN lub XPDL zawierających dane symulacyjne BPSim, uruchamia je jako eksperymenty z replikacjami i podaje każdy wynik wraz z przedziałem ufności.
+	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop setting {name}	Zakończ ustawianie {name}
+	Tandem line	Linia tandemowa
+	Task	Zadanie
+	Task with a resource	Zadanie z zasobem
+	Text	Tekst
+	The model: its experiment, connections and problems	Model: eksperyment, połączenia i problemy
+	This block has a warning	Ten blok ma ostrzeżenie
+	This block has an error	Ten blok ma błąd
+	Time between arrivals	Czas między przybyciami
+	Time unit	Jednostka czasu
+	To	Do
+	Trials	Próby
+	Triangular	Trójkątny
+	Truncated normal	Normalny ucięty
+	Two stations in series, read from an XPDL file.	Dwa stanowiska szeregowe wczytane z pliku XPDL.
+	Type	Typ
+	Undid {action}	Cofnięto {action}
+	Undo	Cofnij
+	Undo {action}	Cofnij: {action}
+	Uniform	Jednostajny
+	Unit	Jednostka
+	Untitled	Bez tytułu
+	Untitled model	Model bez tytułu
+	Use System Setting	Użyj ustawienia systemowego
+	Utilisation	Wykorzystanie
+	Value	Wartość
+	View	Widok
+	Waiting room	Poczekalnia
+	Warm-up	Rozgrzewka
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Rozgrzewka {warmup} {unit}, następnie pomiar przez {duration} {unit}
+	Warning	Ostrzeżenie
+	Weibull	Weibulla
+	Whole number	Liczba całkowita
+	Yes or no	Tak lub nie
+	Your changes will be lost if you don't save them.	Jeśli nie zapiszesz zmian, zostaną utracone.
+	a model	model
+	arrivals	przybycia
+	days	dni
+	decision: one way	decyzja: jedna ścieżka
+	departures	wyjścia
+	egui and eframe (Craft suite fork)	egui i eframe (odgałęzienie pakietu Craft)
+	from its value	na podstawie wartości
+	hours	godziny
+	id {id}	id {id}
+	milliseconds	milisekundy
+	minutes	minuty
+	nothing yet	jeszcze nic
+	seconds	sekundy
+	split or join: all ways	rozdziel lub połącz: wszystkie ścieżki
+	task	zadanie
+	task with a resource	zadanie z zasobem
+	the charts could not be captured	nie udało się przechwycić wykresów
+	the run stopped	uruchomienie zatrzymano
+	there are no charts to export	brak wykresów do eksportu
+	to {block}	do {block}
+	unlimited	bez ograniczeń
+	years	lata
+	{field}: not editable here yet	{field}: tutaj nie można jeszcze edytować
+	{id}: a probability is a number from 0 to 1	{id}: prawdopodobieństwo musi być liczbą od 0 do 1
+	{name} — edited	{name} — edytowano
+	{property} (set to, mean)	{property} (ustawiono na, średnia)
+	± 95% CI	± 95% PU
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± oznacza połowę szerokości 95% przedziału ufności Student-t dla średniej z replikacji.
+	· no results yet	· brak wyników
+@plural	Finished {n} replication|Finished {n} replications	Zakończono {n} replikację|Zakończono {n} replikacje|Zakończono {n} replikacji
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otwarto {file} ({n} ostrzeżenie)|Otwarto {file} ({n} ostrzeżenia)|Otwarto {file} ({n} ostrzeżeń)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Wykonuje {n} niezależną replikację modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.|Wykonuje {n} niezależne replikacje modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.|Wykonuje {n} niezależnych replikacji modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	Ukończono {done} z {n} replikacji|Ukończono {done} z {n} replikacji|Ukończono {done} z {n} replikacji
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji|{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji|{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacja · ziarno {seed}|{n} replikacje · ziarno {seed}|{n} replikacji · ziarno {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacja · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} replikacje · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} replikacji · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}

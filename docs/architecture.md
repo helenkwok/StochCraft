@@ -31,11 +31,11 @@ StochCraft's: its commands, its document and its look.
 ### Translations
 
 Every interface string is English source text looked up through craft-i18n (`ui-egui/src/i18n.rs`:
-`t`, `tf` for `{name}` placeholders, `tn`/`tnf` for counts). The catalogs are an optional build
-input, as craft-i18n's `docs/integration.md` describes: with `CRAFT_I18N_DIR` naming a checkout of
-the data repository, `ui-egui/build.rs` embeds each locale that has StochCraft's own catalog
-(`locales/<locale>/stochcraft.tsv`) with the shared `common.tsv`; without it, or before that
-catalog exists, StochCraft is English only and View ▸ Language is hidden. Right-to-left locales
+`t`, `tf` for `{name}` placeholders, `tn`/`tnf` for counts). StochCraft keeps its catalogs in this
+repository, `i18n/<locale>.tsv` (i18n/README.md), in craft-i18n's format, and `ui-egui/build.rs`
+always embeds them, on the web too: 44 languages. With `CRAFT_I18N_DIR` naming a checkout of the
+craft-i18n data repository, each language's shared `common.tsv` is embedded beside its catalog,
+for the words craft-libs' own dialogs use; StochCraft's rows win where both have one. Right-to-left locales
 are not offered until the layout is mirrored. Numbers follow the region, not the language.
 
 `tests/i18n.rs` draws every screen in craft-i18n's pseudo locale, which marks each looked-up

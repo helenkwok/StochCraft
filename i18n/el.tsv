@@ -1,0 +1,247 @@
+# Ελληνικά (el) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Ελληνικά
+	+ Add block	+ Προσθήκη μπλοκ
+	About StochCraft	Σχετικά με το StochCraft
+	Add Block	Προσθήκη μπλοκ
+	Add a flow from…	Προσθήκη ροής από…
+	Add a flow to…	Προσθήκη ροής προς…
+	Add point	Προσθήκη σημείου
+	Add property	Προσθήκη ιδιότητας
+	Added {block} ({id})	Προστέθηκε το {block} ({id})
+	Appearance	Εμφάνιση
+	Arrival limit	Όριο αφίξεων
+	Arrivals	Αφίξεις
+	Back to the model (Esc)	Πίσω στο μοντέλο (Esc)
+	Beta	Βήτα
+	Binomial	Διωνυμική
+	Boolean	Λογική τιμή
+	Built with	Δημιουργήθηκε με
+	Cancel	Ακύρωση
+	Cancel run	Ακύρωση εκτέλεσης
+	Capacity	Χωρητικότητα
+	Change Block	Αλλαγή μπλοκ
+	Change Flow	Αλλαγή ροής
+	Changing the time unit does not convert the times already in the model.	Η αλλαγή της μονάδας χρόνου δεν μετατρέπει τους χρόνους που υπάρχουν ήδη στο μοντέλο.
+	Close	Κλείσιμο
+	Comes from	Προέρχεται από
+	Condition of {id}	Συνθήκη του {id}
+	Connect	Σύνδεση
+	Connections	Συνδέσεις
+	Constant	Σταθερή
+	Data points	Σημεία δεδομένων
+	Date and time	Ημερομηνία και ώρα
+	Decimal number	Δεκαδικός αριθμός
+	Decision	Απόφαση
+	Decision (one way)	Απόφαση (μία διαδρομή)
+	Default flow	Προεπιλεγμένη ροή
+	Departures	Αναχωρήσεις
+	Discard	Απόρριψη
+	Discarded the recovered changes	Οι ανακτημένες αλλαγές απορρίφθηκαν
+	Disconnect	Αποσύνδεση
+	Discrete values	Διακριτές τιμές
+	Discrete-event simulation, from model files to results.	Προσομοίωση διακριτών γεγονότων, από αρχεία μοντέλων έως αποτελέσματα.
+	Don't Save	Να μην αποθηκευτεί
+	Download	Λήψη
+	Download charts (PNG)	Λήψη γραφημάτων (PNG)
+	Download table (CSV)	Λήψη πίνακα (CSV)
+	Duration	Διάρκεια
+	Edit	Επεξεργασία
+	Entered	Είσοδοι
+	Erlang	Έρλανγκ
+	Error	Σφάλμα
+	Every distribution	Όλες οι κατανομές
+	Experiment	Πείραμα
+	Experiment Settings	Ρυθμίσεις πειράματος
+	Exponential	Εκθετική
+	Export charts (PNG)	Εξαγωγή γραφημάτων (PNG)
+	Export table (CSV)	Εξαγωγή πίνακα (CSV)
+	Exported {file}	Εξήχθη το {file}
+	Expression	Έκφραση
+	File	Αρχείο
+	Flows	Ροές
+	From	Από
+	Gamma	Γάμμα
+	Goes to	Οδηγεί σε
+	Help	Βοήθεια
+	Keyboard shortcuts saved	Οι συντομεύσεις πληκτρολογίου αποθηκεύτηκαν
+	Keyboard shortcuts unchanged	Οι συντομεύσεις πληκτρολογίου δεν άλλαξαν
+	Language	Γλώσσα
+	Left	Έξοδοι
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Διατίθεται με MIT License ή Apache License 2.0, κατ' επιλογή.
+	Log-normal	Λογαριθμοκανονική
+	Lost (waiting room full)	Απώλειες (γεμάτος χώρος αναμονής)
+	M/M/1 queue	Ουρά M/M/1
+	Maximise	Μεγιστοποίηση
+	Maximum	Μέγιστο
+	Mean	Μέση τιμή
+	Mean number inside	Μέσο πλήθος εντός
+	Mean queue length	Μέσο μήκος ουράς
+	Mean time blocked	Μέσος χρόνος αποκλεισμού
+	Mean time in system	Μέσος χρόνος στο σύστημα
+	Mean wait	Μέση αναμονή
+	Metric	Μετρική
+	Minimise	Ελαχιστοποίηση
+	Minimum	Ελάχιστο
+	Model	Μοντέλο
+	Most likely	Πιθανότερη τιμή
+	Name	Όνομα
+	New model	Νέο μοντέλο
+	New property	Νέα ιδιότητα
+	New property name	Όνομα νέας ιδιότητας
+	No blocks yet. Open a model, or add blocks to build one.	Δεν υπάρχουν ακόμη μπλοκ. Ανοίξτε ένα μοντέλο ή προσθέστε μπλοκ για να το δημιουργήσετε.
+	No connections yet: join blocks below.	Δεν υπάρχουν ακόμη συνδέσεις: συνδέστε τα παρακάτω μπλοκ.
+	No results yet	Δεν υπάρχουν ακόμη αποτελέσματα
+	None	Κανένα
+	None found. The model is ready to run.	Δεν βρέθηκαν προβλήματα. Το μοντέλο είναι έτοιμο για εκτέλεση.
+	Normal	Κανονική
+	Number	Αριθμός
+	One clerk, random arrivals: the textbook queue, checked against theory.	Ένας υπάλληλος, τυχαίες αφίξεις: η κλασική ουρά, ελεγμένη με τη θεωρία.
+	One task per BPSim distribution, to compare their spread.	Μία εργασία ανά κατανομή BPSim για σύγκριση της διασποράς τους.
+	Open	Άνοιγμα
+	Open Example	Άνοιγμα παραδείγματος
+	Open Recent	Πρόσφατα αρχεία
+	Open a model first	Ανοίξτε πρώτα ένα μοντέλο
+	Open a model to simulate it	Ανοίξτε μοντέλο για προσομοίωση
+	Open a model…	Άνοιγμα μοντέλου…
+	Opened {file}	Άνοιξε το {file}
+	Or start from an example	Ή ξεκινήστε από ένα παράδειγμα
+	Parameters	Παράμετροι
+	Points	Σημεία
+	Poisson	Πουασόν
+	Probability	Πιθανότητα
+	Probability of {id}	Πιθανότητα του {id}
+	Problems	Προβλήματα
+	Process	Διαδικασία
+	Properties	Ιδιότητες
+	Quit	Έξοδος
+	Ready	Έτοιμο
+	Recover	Ανάκτηση
+	Recover unsaved changes?	Ανάκτηση μη αποθηκευμένων αλλαγών;
+	Recovered {name}; save it to keep it	Ανακτήθηκε το {name}· αποθηκεύστε το για να διατηρηθεί
+	Redid {action}	Επαναλήφθηκε το {action}
+	Redo	Επανάληψη
+	Redo {action}	Επανάληψη {action}
+	Remove	Αφαίρεση
+	Remove Block	Αφαίρεση μπλοκ
+	Remove Property	Αφαίρεση ιδιότητας
+	Remove block	Αφαίρεση μπλοκ
+	Remove the flow {id}	Αφαίρεση ροής {id}
+	Remove this block and its flows (Delete)	Αφαίρεση αυτού του μπλοκ και των ροών του (Delete)
+	Removed {id}	Αφαιρέθηκε το {id}
+	Rename Block	Μετονομασία μπλοκ
+	Rename Model	Μετονομασία μοντέλου
+	Replace Model	Αντικατάσταση μοντέλου
+	Replications	Επαναλήψεις
+	Restore	Επαναφορά παραθύρου
+	Results	Αποτελέσματα
+	Run	Εκτέλεση
+	Run cancelled	Η εκτέλεση ακυρώθηκε
+	Run experiment	Εκτέλεση πειράματος
+	Run the experiment ({shortcut})	Εκτέλεση πειράματος ({shortcut})
+	Running	Εκτελείται
+	Running…	Εκτελείται…
+	Save	Αποθήκευση
+	Save As…	Αποθήκευση ως…
+	Save changes to {name}?	Αποθήκευση αλλαγών στο {name};
+	Saved {file}	Αποθηκεύτηκε το {file}
+	Scale	Κλίμακα
+	Seed	Αρχικός σπόρος
+	Service time	Χρόνος εξυπηρέτησης
+	Set Property	Ορισμός ιδιότητας
+	Set a value	Ορισμός τιμής
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ορίζεται για κάθε οντότητα όταν εισέρχεται σε αυτό το μπλοκ. Οι εκφράσεις διαβάζουν τις τιμές που είχε κατά την είσοδο, όπως getProperty('issues') - 1.
+	Settings	Ρυθμίσεις
+	Shape	Σχήμα
+	Share of arrivals lost	Ποσοστό χαμένων αφίξεων
+	Share of units blocked	Ποσοστό αποκλεισμένων μονάδων
+	Show {id}	Εμφάνιση {id}
+	Split or join	Διαχωρισμός ή ένωση
+	Split or join (all ways)	Διαχωρισμός ή ένωση (όλες οι διαδρομές)
+	Stages (k)	Στάδια (k)
+	Standard deviation	Τυπική απόκλιση
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	Το StochCraft έκλεισε με μη αποθηκευμένες αλλαγές στο {name}. Ανακτήστε τις ως μοντέλο χωρίς τίτλο ή απορρίψτε τις.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	Το StochCraft διαβάζει μοντέλα διαδικασιών από αρχεία BPMN ή XPDL με δεδομένα προσομοίωσης BPSim, τα εκτελεί ως πειράματα με επαναλήψεις και παρουσιάζει κάθε αποτέλεσμα μαζί με το διάστημα εμπιστοσύνης του.
+	StochCraft {version} · model {digest}	StochCraft {version} · μοντέλο {digest}
+	Stop setting {name}	Διακοπή ορισμού του {name}
+	Tandem line	Διαδοχική γραμμή
+	Task	Εργασία
+	Task with a resource	Εργασία με πόρο
+	Text	Κείμενο
+	The model: its experiment, connections and problems	Το μοντέλο: πείραμα, συνδέσεις και προβλήματα
+	This block has a warning	Αυτό το μπλοκ έχει προειδοποίηση
+	This block has an error	Αυτό το μπλοκ έχει σφάλμα
+	Time between arrivals	Χρόνος μεταξύ αφίξεων
+	Time unit	Μονάδα χρόνου
+	To	Προς
+	Trials	Δοκιμές
+	Triangular	Τριγωνική
+	Truncated normal	Αποκομμένη κανονική
+	Two stations in series, read from an XPDL file.	Δύο σταθμοί σε σειρά, από αρχείο XPDL.
+	Type	Τύπος
+	Undid {action}	Αναιρέθηκε το {action}
+	Undo	Αναίρεση
+	Undo {action}	Αναίρεση ενέργειας: {action}
+	Uniform	Ομοιόμορφη
+	Unit	Μονάδα
+	Untitled	Χωρίς τίτλο
+	Untitled model	Μοντέλο χωρίς τίτλο
+	Use System Setting	Χρήση ρύθμισης συστήματος
+	Utilisation	Βαθμός χρησιμοποίησης
+	Value	Τιμή
+	View	Προβολή
+	Waiting room	Χώρος αναμονής
+	Warm-up	Προθέρμανση
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Προθέρμανση {warmup} {unit}, έπειτα μέτρηση {duration} {unit}
+	Warning	Προειδοποίηση
+	Weibull	Βάιμπουλ
+	Whole number	Ακέραιος αριθμός
+	Yes or no	Ναι ή όχι
+	Your changes will be lost if you don't save them.	Οι αλλαγές σας θα χαθούν αν δεν τις αποθηκεύσετε.
+	a model	ένα μοντέλο
+	arrivals	αφίξεις
+	days	ημέρες
+	decision: one way	απόφαση: μία διαδρομή
+	departures	αναχωρήσεις
+	egui and eframe (Craft suite fork)	egui και eframe (παρακλάδι της σουίτας Craft)
+	from its value	από την τιμή του
+	hours	ώρες
+	id {id}	ID {id}
+	milliseconds	χιλιοστά του δευτερολέπτου
+	minutes	λεπτά
+	nothing yet	τίποτα ακόμη
+	seconds	δευτερόλεπτα
+	split or join: all ways	διαχωρισμός ή ένωση: όλες οι διαδρομές
+	task	εργασία
+	task with a resource	εργασία με πόρο
+	the charts could not be captured	δεν ήταν δυνατή η καταγραφή των γραφημάτων
+	the run stopped	η εκτέλεση διακόπηκε
+	there are no charts to export	δεν υπάρχουν γραφήματα για εξαγωγή
+	to {block}	προς {block}
+	unlimited	χωρίς όριο
+	years	έτη
+	{field}: not editable here yet	{field}: δεν είναι ακόμη επεξεργάσιμο εδώ
+	{id}: a probability is a number from 0 to 1	{id}: η πιθανότητα είναι αριθμός από 0 έως 1
+	{name} — edited	{name} — επεξεργασμένο
+	{property} (set to, mean)	{property} (καθορισμένη τιμή, μέση τιμή)
+	± 95% CI	± 95% ΔΕ
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	Το ± είναι το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t 95% για τη μέση τιμή μεταξύ των επαναλήψεων.
+	· no results yet	· δεν υπάρχουν ακόμη αποτελέσματα
+@plural	Finished {n} replication|Finished {n} replications	Ολοκληρώθηκε {n} επανάληψη|Ολοκληρώθηκαν {n} επαναλήψεις
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Άνοιξε το {file} ({n} προειδοποίηση)|Άνοιξε το {file} ({n} προειδοποιήσεις)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Εκτελεί {n} ανεξάρτητη επανάληψη του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.|Εκτελεί {n} ανεξάρτητες επαναλήψεις του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	Ολοκληρώθηκε {done} από {n} επανάληψη|Ολοκληρώθηκαν {done} από {n} επαναλήψεις
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επανάληψη|{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επαναλήψεις
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} επανάληψη · σπόρος {seed}|{n} επαναλήψεις · σπόρος {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} επανάληψη · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}|{n} επαναλήψεις · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}

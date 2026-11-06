@@ -1,0 +1,247 @@
+# Bahasa Indonesia (id) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Bahasa Indonesia
+	+ Add block	+ Tambah blok
+	About StochCraft	Tentang StochCraft
+	Add Block	Tambah Blok
+	Add a flow from…	Tambahkan alur dari…
+	Add a flow to…	Tambahkan alur ke…
+	Add point	Tambah titik
+	Add property	Tambah properti
+	Added {block} ({id})	{block} ({id}) ditambahkan
+	Appearance	Tampilan
+	Arrival limit	Batas kedatangan
+	Arrivals	Kedatangan
+	Back to the model (Esc)	Kembali ke model (Esc)
+	Beta	Beta
+	Binomial	Binomial
+	Boolean	Boolean
+	Built with	Dibuat dengan
+	Cancel	Batal
+	Cancel run	Batalkan proses
+	Capacity	Kapasitas
+	Change Block	Ubah Blok
+	Change Flow	Ubah Alur
+	Changing the time unit does not convert the times already in the model.	Mengubah satuan waktu tidak mengonversi waktu yang sudah ada dalam model.
+	Close	Tutup
+	Comes from	Berasal dari
+	Condition of {id}	Kondisi {id}
+	Connect	Hubungkan
+	Connections	Koneksi
+	Constant	Konstan
+	Data points	Titik data
+	Date and time	Tanggal dan waktu
+	Decimal number	Bilangan desimal
+	Decision	Keputusan
+	Decision (one way)	Keputusan (satu jalur)
+	Default flow	Alur default
+	Departures	Keberangkatan
+	Discard	Buang
+	Discarded the recovered changes	Perubahan yang dipulihkan telah dibuang
+	Disconnect	Putuskan koneksi
+	Discrete values	Nilai diskret
+	Discrete-event simulation, from model files to results.	Simulasi kejadian diskret, dari berkas model hingga hasil.
+	Don't Save	Jangan Simpan
+	Download	Unduh
+	Download charts (PNG)	Unduh grafik (PNG)
+	Download table (CSV)	Unduh tabel (CSV)
+	Duration	Durasi
+	Edit	Edit
+	Entered	Masuk
+	Erlang	Erlang
+	Error	Galat
+	Every distribution	Semua distribusi
+	Experiment	Eksperimen
+	Experiment Settings	Pengaturan Eksperimen
+	Exponential	Eksponensial
+	Export charts (PNG)	Ekspor grafik (PNG)
+	Export table (CSV)	Ekspor tabel (CSV)
+	Exported {file}	{file} diekspor
+	Expression	Ekspresi
+	File	Berkas
+	Flows	Alur
+	From	Dari
+	Gamma	Gamma
+	Goes to	Menuju ke
+	Help	Bantuan
+	Keyboard shortcuts saved	Pintasan keyboard disimpan
+	Keyboard shortcuts unchanged	Pintasan keyboard tidak berubah
+	Language	Bahasa
+	Left	Keluar
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Dilisensikan berdasarkan MIT License atau Apache License 2.0, sesuai pilihan Anda.
+	Log-normal	Log-normal
+	Lost (waiting room full)	Hilang (ruang tunggu penuh)
+	M/M/1 queue	Antrean M/M/1
+	Maximise	Maksimalkan
+	Maximum	Maksimum
+	Mean	Rata-rata
+	Mean number inside	Jumlah rata-rata di dalam
+	Mean queue length	Panjang antrean rata-rata
+	Mean time blocked	Waktu terblokir rata-rata
+	Mean time in system	Waktu rata-rata dalam sistem
+	Mean wait	Waktu tunggu rata-rata
+	Metric	Metrik
+	Minimise	Minimalkan
+	Minimum	Minimum
+	Model	Model
+	Most likely	Paling mungkin
+	Name	Nama
+	New model	Model baru
+	New property	Properti baru
+	New property name	Nama properti baru
+	No blocks yet. Open a model, or add blocks to build one.	Belum ada blok. Buka model atau tambahkan blok untuk membuatnya.
+	No connections yet: join blocks below.	Belum ada koneksi: hubungkan blok di bawah.
+	No results yet	Belum ada hasil
+	None	Tidak Ada
+	None found. The model is ready to run.	Tidak ditemukan masalah. Model siap dijalankan.
+	Normal	Normal
+	Number	Angka
+	One clerk, random arrivals: the textbook queue, checked against theory.	Satu petugas, kedatangan acak: antrean klasik, diperiksa terhadap teori.
+	One task per BPSim distribution, to compare their spread.	Satu tugas per distribusi BPSim untuk membandingkan penyebarannya.
+	Open	Buka
+	Open Example	Buka Contoh
+	Open Recent	Terakhir Dibuka
+	Open a model first	Buka model terlebih dahulu
+	Open a model to simulate it	Buka model untuk menyimulasikannya
+	Open a model…	Buka model…
+	Opened {file}	{file} dibuka
+	Or start from an example	Atau mulai dari contoh
+	Parameters	Parameter
+	Points	Titik
+	Poisson	Poisson
+	Probability	Probabilitas
+	Probability of {id}	Probabilitas {id}
+	Problems	Masalah
+	Process	Proses
+	Properties	Properti
+	Quit	Keluar
+	Ready	Siap
+	Recover	Pulihkan
+	Recover unsaved changes?	Pulihkan perubahan yang belum disimpan?
+	Recovered {name}; save it to keep it	{name} dipulihkan; simpan untuk mempertahankannya
+	Redid {action}	{action} diulangi
+	Redo	Ulangi
+	Redo {action}	Ulangi {action}
+	Remove	Hapus
+	Remove Block	Hapus Blok
+	Remove Property	Hapus Properti
+	Remove block	Hapus blok
+	Remove the flow {id}	Hapus alur {id}
+	Remove this block and its flows (Delete)	Hapus blok ini beserta alurnya (Delete)
+	Removed {id}	{id} dihapus
+	Rename Block	Ganti Nama Blok
+	Rename Model	Ganti Nama Model
+	Replace Model	Ganti Model
+	Replications	Replikasi
+	Restore	Pulihkan jendela
+	Results	Hasil
+	Run	Jalankan
+	Run cancelled	Proses dibatalkan
+	Run experiment	Jalankan eksperimen
+	Run the experiment ({shortcut})	Jalankan eksperimen ({shortcut})
+	Running	Berjalan
+	Running…	Sedang berjalan…
+	Save	Simpan
+	Save As…	Simpan Sebagai…
+	Save changes to {name}?	Simpan perubahan pada {name}?
+	Saved {file}	{file} disimpan
+	Scale	Skala
+	Seed	Benih acak
+	Service time	Waktu layanan
+	Set Property	Atur Properti
+	Set a value	Tetapkan nilai
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ditetapkan pada setiap entitas saat memasuki blok ini. Ekspresi membaca nilai yang dibawa entitas saat masuk, seperti getProperty('issues') - 1.
+	Settings	Pengaturan
+	Shape	Bentuk
+	Share of arrivals lost	Proporsi kedatangan yang hilang
+	Share of units blocked	Proporsi unit yang terblokir
+	Show {id}	Tampilkan {id}
+	Split or join	Pisahkan atau gabungkan
+	Split or join (all ways)	Pisahkan atau gabungkan (semua jalur)
+	Stages (k)	Tahapan (k)
+	Standard deviation	Simpangan baku
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ditutup saat perubahan pada {name} belum disimpan. Pulihkan perubahan itu sebagai model tanpa judul atau buang.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft membaca model proses dari file BPMN atau XPDL dengan data simulasi BPSim, menjalankannya sebagai eksperimen dengan beberapa replikasi, dan melaporkan setiap hasil beserta interval kepercayaannya.
+	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop setting {name}	Berhenti mengatur {name}
+	Tandem line	Jalur tandem
+	Task	Tugas
+	Task with a resource	Tugas dengan sumber daya
+	Text	Teks
+	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
+	This block has a warning	Blok ini memiliki peringatan
+	This block has an error	Blok ini memiliki kesalahan
+	Time between arrivals	Waktu antar kedatangan
+	Time unit	Satuan waktu
+	To	Ke
+	Trials	Percobaan
+	Triangular	Segitiga
+	Truncated normal	Normal terpotong
+	Two stations in series, read from an XPDL file.	Dua stasiun berurutan, dibaca dari berkas XPDL.
+	Type	Teks
+	Undid {action}	{action} dibatalkan
+	Undo	Urungkan
+	Undo {action}	Urungkan {action}
+	Uniform	Seragam
+	Unit	Satuan
+	Untitled	Tanpa Judul
+	Untitled model	Model tanpa judul
+	Use System Setting	Gunakan Pengaturan Sistem
+	Utilisation	Tingkat pemanfaatan
+	Value	Nilai
+	View	Tampilan
+	Waiting room	Ruang tunggu
+	Warm-up	Pemanasan
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Pemanasan {warmup} {unit}, lalu pengukuran {duration} {unit}
+	Warning	Peringatan
+	Weibull	Weibull
+	Whole number	Bilangan bulat
+	Yes or no	Ya atau tidak
+	Your changes will be lost if you don't save them.	Perubahan Anda akan hilang jika tidak disimpan.
+	a model	sebuah model
+	arrivals	kedatangan
+	days	hari
+	decision: one way	keputusan: satu jalur
+	departures	keberangkatan
+	egui and eframe (Craft suite fork)	egui dan eframe (cabang dari rangkaian Craft)
+	from its value	berdasarkan nilainya
+	hours	jam
+	id {id}	id {id}
+	milliseconds	milidetik
+	minutes	menit
+	nothing yet	belum ada
+	seconds	detik
+	split or join: all ways	pisahkan atau gabungkan: semua jalur
+	task	tugas
+	task with a resource	tugas dengan sumber daya
+	the charts could not be captured	grafik tidak dapat ditangkap
+	the run stopped	proses berhenti
+	there are no charts to export	tidak ada grafik untuk diekspor
+	to {block}	ke {block}
+	unlimited	tanpa batas
+	years	tahun
+	{field}: not editable here yet	{field}: belum dapat diedit di sini
+	{id}: a probability is a number from 0 to 1	{id}: probabilitas adalah angka dari 0 sampai 1
+	{name} — edited	{name} — diedit
+	{property} (set to, mean)	{property} (nilai ditetapkan, rata-rata)
+	± 95% CI	± IK 95%
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± adalah setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh replikasi.
+	· no results yet	· belum ada hasil
+@plural	Finished {n} replication|Finished {n} replications	Selesai {n} replikasi
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} dibuka ({n} peringatan)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Menjalankan {n} replikasi model yang independen dari benih {seed}. Hasil setiap elemen mencakup setengah lebar interval kepercayaan 95%.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} dari {n} replikasi selesai
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval 95% dari {low} hingga {high}{unit}\ndari {n} replikasi
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikasi · benih {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasi · benih {seed} · pemanasan {warmup} {unit} · {duration} {unit} diukur

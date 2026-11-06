@@ -5,18 +5,15 @@
 //!   desktop app falls back to the installed system fonts. Left out: the CJK faces (tens of
 //!   megabytes uncut; cut to the translation catalogs once StochCraft has some), and everything on
 //!   the web, whose download has a size budget.
-//! - **Translations** (`CRAFT_I18N_DIR`, a checkout of https://github.com/storytold/craft-i18n):
-//!   one entry per locale that has StochCraft's own catalog (`locales/<locale>/stochcraft.tsv`),
-//!   with the shared `common.tsv` beside it; a locale with only shared strings is left out, so the
-//!   app never offers a language it has barely been translated into. Unset, StochCraft is
-//!   English only. `CRAFT_I18N_REQUIRED=1` makes a missing checkout an error, for releases. The
-//!   recipe is craft-i18n's `docs/integration.md`.
+//! - **Translations**: StochCraft's own catalogs, `i18n/<locale>.tsv` in this repository, always
+//!   embedded (on the web too), in craft-i18n's catalog format. With `CRAFT_I18N_DIR` naming a
+//!   checkout of https://github.com/storytold/craft-i18n, each locale's shared `common.tsv` is
+//!   embedded beside it, for the words craft-libs' dialogs use (key names, say); StochCraft's own
+//!   catalog wins where both have a row. `CRAFT_I18N_REQUIRED=1` makes a missing checkout an
+//!   error.
 
 use std::fmt::Write as _;
-use std::path::{Path, PathBuf};
-
-/// The app's catalog name in craft-i18n's `locales/<locale>/`.
-const APP: &str = "stochcraft";
+use std::path::PathBuf;
 
 fn main() {
     println!("cargo::rerun-if-changed=build.rs");
@@ -35,23 +32,47 @@ fn translations() {
     println!("cargo::rerun-if-env-changed=CRAFT_I18N_DIR");
     println!("cargo::rerun-if-env-changed=CRAFT_I18N_REQUIRED");
     let required = std::env::var("CRAFT_I18N_REQUIRED").is_ok_and(|v| v == "1");
-    let mut entries = Vec::new();
-    match std::env::var_os("CRAFT_I18N_DIR").map(PathBuf::from) {
-        Some(dir) if dir.join("locales").is_dir() => {
-            let locales = dir.join("locales");
-            println!("cargo::rerun-if-changed={}", locales.display());
-            entries = catalogs(&locales);
+    // StochCraft's own catalogs, in the repository: `i18n/<locale>.tsv`.
+    let own = PathBuf::from(std::env::var_os("CARGO_MANIFEST_DIR").unwrap_or_default())
+        .join("../../i18n");
+    println!("cargo::rerun-if-changed={}", own.display());
+    let shared = match std::env::var_os("CRAFT_I18N_DIR").map(PathBuf::from) {
+        Some(dir) if dir.join("locales").is_dir() => Some(dir.join("locales")),
+        Some(dir) => {
+            complain(
+                required,
+                &format!(
+                    "CRAFT_I18N_DIR ({}) has no locales/; the shared catalogs are left out",
+                    dir.display()
+                ),
+            );
+            None
         }
-        Some(dir) => complain(
-            required,
-            &format!(
-                "CRAFT_I18N_DIR ({}) has no locales/; English only",
-                dir.display()
-            ),
-        ),
-        None if required => complain(true, "CRAFT_I18N_REQUIRED=1 but CRAFT_I18N_DIR is unset"),
-        None => {}
-    }
+        None if required => {
+            complain(true, "CRAFT_I18N_REQUIRED=1 but CRAFT_I18N_DIR is unset");
+            None
+        }
+        None => None,
+    };
+    let mut entries: Vec<(String, Option<PathBuf>, PathBuf)> = std::fs::read_dir(&own)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .filter_map(|f| {
+            let path = f.path();
+            let code = path.file_name()?.to_str()?.strip_suffix(".tsv")?.to_owned();
+            println!("cargo::rerun-if-changed={}", path.display());
+            let common = shared
+                .as_ref()
+                .map(|l| l.join(&code).join("common.tsv"))
+                .filter(|p| p.is_file());
+            if let Some(c) = &common {
+                println!("cargo::rerun-if-changed={}", c.display());
+            }
+            Some((code, common, path))
+        })
+        .collect();
+    entries.sort_by(|a, b| a.0.cmp(&b.0));
     let mut src = String::from(
         "/// (locale, shared catalog, StochCraft's catalog), one entry per locale (build.rs).\n\
          pub static CRAFT_I18N: &craft_i18n::Embedded = &[\n",
@@ -72,30 +93,6 @@ fn translations() {
     if let Err(e) = std::fs::write(&out, src) {
         println!("cargo::error=writing {}: {e}", out.display());
     }
-}
-
-/// The locales with StochCraft's catalog, sorted by code: (code, common.tsv if any, app catalog).
-fn catalogs(locales: &Path) -> Vec<(String, Option<PathBuf>, PathBuf)> {
-    let Ok(dirs) = std::fs::read_dir(locales) else {
-        return Vec::new();
-    };
-    let mut entries: Vec<_> = dirs
-        .flatten()
-        .filter_map(|d| {
-            let code = d.file_name().to_str()?.to_owned();
-            let app = d.path().join(format!("{APP}.tsv"));
-            if !app.is_file() {
-                return None;
-            }
-            let common = Some(d.path().join("common.tsv")).filter(|p| p.is_file());
-            for p in [Some(&app), common.as_ref()].into_iter().flatten() {
-                println!("cargo::rerun-if-changed={}", p.display());
-            }
-            Some((code, common, app))
-        })
-        .collect();
-    entries.sort_by(|a, b| a.0.cmp(&b.0));
-    entries
 }
 
 fn complain(required: bool, message: &str) {

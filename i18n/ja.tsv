@@ -1,0 +1,247 @@
+# 日本語 (ja) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	日本語
+	+ Add block	+ ブロックを追加
+	About StochCraft	StochCraft について
+	Add Block	ブロックを追加
+	Add a flow from…	接続元…
+	Add a flow to…	接続先…
+	Add point	点を追加
+	Add property	プロパティを追加
+	Added {block} ({id})	{block} ({id}) を追加しました
+	Appearance	外観
+	Arrival limit	到着数の上限
+	Arrivals	到着
+	Back to the model (Esc)	モデルに戻る (Esc)
+	Beta	ベータ分布
+	Binomial	二項分布
+	Boolean	真偽値
+	Built with	使用技術
+	Cancel	キャンセル
+	Cancel run	実行をキャンセル
+	Capacity	処理能力
+	Change Block	ブロックを変更
+	Change Flow	フローを変更
+	Changing the time unit does not convert the times already in the model.	時間単位を変更しても、モデル内の既存の時間は換算されません。
+	Close	閉じる
+	Comes from	接続元
+	Condition of {id}	{id} の条件
+	Connect	接続
+	Connections	接続
+	Constant	定数
+	Data points	データ点
+	Date and time	日付と時刻
+	Decimal number	小数
+	Decision	分岐
+	Decision (one way)	分岐（1 つの経路）
+	Default flow	既定のフロー
+	Departures	退出
+	Discard	破棄
+	Discarded the recovered changes	復元した変更を破棄しました
+	Disconnect	接続を解除
+	Discrete values	離散値
+	Discrete-event simulation, from model files to results.	モデルファイルから結果まで、離散事象シミュレーション。
+	Don't Save	保存しない
+	Download	ダウンロード
+	Download charts (PNG)	グラフをダウンロード (PNG)
+	Download table (CSV)	表をダウンロード (CSV)
+	Duration	継続時間
+	Edit	編集
+	Entered	流入数
+	Erlang	アーラン分布
+	Error	エラー
+	Every distribution	すべての分布
+	Experiment	実験
+	Experiment Settings	実験の設定
+	Exponential	指数分布
+	Export charts (PNG)	グラフをエクスポート (PNG)
+	Export table (CSV)	表をエクスポート (CSV)
+	Exported {file}	{file} をエクスポートしました
+	Expression	式
+	File	ファイル
+	Flows	フロー
+	From	接続元
+	Gamma	ガンマ分布
+	Goes to	接続先
+	Help	ヘルプ
+	Keyboard shortcuts saved	キーボードショートカットを保存しました
+	Keyboard shortcuts unchanged	キーボードショートカットは変更されていません
+	Language	言語
+	Left	流出数
+	Licensed under the MIT License or the Apache License 2.0, at your option.	MIT License または Apache License 2.0 のいずれかを選択して利用できます。
+	Log-normal	対数正規分布
+	Lost (waiting room full)	損失（待機場所が満員）
+	M/M/1 queue	M/M/1 待ち行列
+	Maximise	最大化
+	Maximum	最大値
+	Mean	平均
+	Mean number inside	内部の平均数
+	Mean queue length	平均待ち行列長
+	Mean time blocked	平均ブロック時間
+	Mean time in system	システム内の平均滞在時間
+	Mean wait	平均待ち時間
+	Metric	指標
+	Minimise	最小化
+	Minimum	最小値
+	Model	モデル
+	Most likely	最頻値
+	Name	名前
+	New model	新しいモデル
+	New property	新しいプロパティ
+	New property name	新しいプロパティ名
+	No blocks yet. Open a model, or add blocks to build one.	ブロックはまだありません。モデルを開くか、ブロックを追加して作成してください。
+	No connections yet: join blocks below.	接続はまだありません。下のブロック同士をつないでください。
+	No results yet	結果はまだありません
+	None	なし
+	None found. The model is ready to run.	問題は見つかりませんでした。モデルを実行できます。
+	Normal	正規分布
+	Number	数値
+	One clerk, random arrivals: the textbook queue, checked against theory.	窓口が 1 つ、到着はランダム。教科書的な待ち行列を理論値と比較します。
+	One task per BPSim distribution, to compare their spread.	各 BPSim 分布につき 1 つのタスクを使い、ばらつきを比較します。
+	Open	開く
+	Open Example	サンプルを開く
+	Open Recent	最近使ったファイルを開く
+	Open a model first	先にモデルを開いてください
+	Open a model to simulate it	シミュレーションするモデルを開いてください
+	Open a model…	モデルを開く…
+	Opened {file}	{file} を開きました
+	Or start from an example	またはサンプルから始める
+	Parameters	パラメータ
+	Points	点
+	Poisson	ポアソン分布
+	Probability	確率
+	Probability of {id}	{id} の確率
+	Problems	問題
+	Process	プロセス
+	Properties	プロパティ
+	Quit	終了
+	Ready	適用可能
+	Recover	復元
+	Recover unsaved changes?	保存されていない変更を復元しますか？
+	Recovered {name}; save it to keep it	{name} を復元しました。保持するには保存してください
+	Redid {action}	{action} をやり直しました
+	Redo	やり直し
+	Redo {action}	{action} をやり直す
+	Remove	削除
+	Remove Block	ブロックを削除
+	Remove Property	プロパティを削除
+	Remove block	ブロックを削除
+	Remove the flow {id}	フロー {id} を削除
+	Remove this block and its flows (Delete)	このブロックとフローを削除 (Delete)
+	Removed {id}	{id} を削除しました
+	Rename Block	ブロック名を変更
+	Rename Model	モデル名を変更
+	Replace Model	モデルを置換
+	Replications	反復実行回数
+	Restore	元に戻す
+	Results	結果
+	Run	実行
+	Run cancelled	実行がキャンセルされました
+	Run experiment	実験を実行
+	Run the experiment ({shortcut})	実験を実行 ({shortcut})
+	Running	実行中
+	Running…	実行中…
+	Save	保存
+	Save As…	別名で保存…
+	Save changes to {name}?	{name} への変更を保存しますか？
+	Saved {file}	{file} を保存しました
+	Scale	尺度
+	Seed	乱数シード
+	Service time	サービス時間
+	Set Property	プロパティを設定
+	Set a value	値を設定
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	各エンティティがこのブロックに入るときに設定されます。式は、入る時点で保持していた値を読み取ります（例: getProperty('issues') - 1）。
+	Settings	設定
+	Shape	形状
+	Share of arrivals lost	到着数の損失割合
+	Share of units blocked	処理単位のブロック割合
+	Show {id}	{id} を表示
+	Split or join	分岐または結合
+	Split or join (all ways)	分岐または結合（すべての経路）
+	Stages (k)	段階数 (k)
+	Standard deviation	標準偏差
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft は {name} の変更が保存されないまま終了しました。変更を無題のモデルとして復元するか、破棄してください。
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft は、BPSim シミュレーションデータを含む BPMN または XPDL ファイルからプロセスモデルを読み込み、反復実験として実行し、各結果を信頼区間とともに報告します。
+	StochCraft {version} · model {digest}	StochCraft {version} · モデル {digest}
+	Stop setting {name}	{name} の設定を中止
+	Tandem line	直列ライン
+	Task	タスク
+	Task with a resource	リソースを使うタスク
+	Text	テキスト
+	The model: its experiment, connections and problems	モデル：実験、接続、問題
+	This block has a warning	このブロックには警告があります
+	This block has an error	このブロックにはエラーがあります
+	Time between arrivals	到着間隔
+	Time unit	時間単位
+	To	接続先
+	Trials	試行回数
+	Triangular	三角分布
+	Truncated normal	切断正規分布
+	Two stations in series, read from an XPDL file.	XPDL ファイルから読み込んだ、直列の 2 つのステーション。
+	Type	種類
+	Undid {action}	{action} を元に戻しました
+	Undo	取り消し
+	Undo {action}	元に戻す: {action}
+	Uniform	一様分布
+	Unit	単位
+	Untitled	名称未設定
+	Untitled model	無題のモデル
+	Use System Setting	システム設定を使用
+	Utilisation	稼働率
+	Value	値
+	View	表示
+	Waiting room	待機場所
+	Warm-up	ウォームアップ
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	ウォームアップ {warmup} {unit}、続いて {duration} {unit} を測定
+	Warning	警告
+	Weibull	ワイブル分布
+	Whole number	整数
+	Yes or no	はい／いいえ
+	Your changes will be lost if you don't save them.	保存しないと変更は失われます。
+	a model	モデル
+	arrivals	到着
+	days	日
+	decision: one way	分岐：1 つの経路
+	departures	退出
+	egui and eframe (Craft suite fork)	egui と eframe（Craft スイートのフォーク）
+	from its value	値から判定
+	hours	時間
+	id {id}	ID {id}
+	milliseconds	ミリ秒
+	minutes	分
+	nothing yet	まだありません
+	seconds	秒
+	split or join: all ways	分岐または結合：すべての経路
+	task	タスク
+	task with a resource	リソースを使うタスク
+	the charts could not be captured	グラフを取得できませんでした
+	the run stopped	実行が停止しました
+	there are no charts to export	エクスポートするグラフがありません
+	to {block}	{block} へ
+	unlimited	無制限
+	years	年
+	{field}: not editable here yet	{field}：ここではまだ編集できません
+	{id}: a probability is a number from 0 to 1	{id}：確率は 0 から 1 までの数値です
+	{name} — edited	{name} — 編集済み
+	{property} (set to, mean)	{property}（設定値、平均）
+	± 95% CI	± 95% 信頼区間
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± は、反復実行間の平均値に対する 95% Student-t 信頼区間の半幅です。
+	· no results yet	· 結果はまだありません
+@plural	Finished {n} replication|Finished {n} replications	{n} 回の反復実行が完了しました
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} を開きました（警告 {n} 件）
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	シード {seed} からモデルを {n} 回独立に反復実行します。各要素の結果には、95% 信頼区間の半幅が示されます。
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} 回中 {done} 回の反復実行が完了
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}：{mean}{unit}\n95% 区間 {low} ～ {high}{unit}\n{n} 回の反復実行に基づく
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 回の反復実行 · シード {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 回の反復実行 · シード {seed} · ウォームアップ {warmup} {unit} · 測定 {duration} {unit}

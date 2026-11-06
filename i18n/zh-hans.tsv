@@ -1,0 +1,247 @@
+# 简体中文 (zh-hans) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	简体中文
+	+ Add block	+ 添加区块
+	About StochCraft	关于 StochCraft
+	Add Block	添加区块
+	Add a flow from…	添加顺序流，来自…
+	Add a flow to…	添加顺序流，通往…
+	Add point	添加点
+	Add property	添加属性
+	Added {block} ({id})	已添加 {block} ({id})
+	Appearance	外观
+	Arrival limit	到达上限
+	Arrivals	到达
+	Back to the model (Esc)	返回模型 (Esc)
+	Beta	贝塔分布
+	Binomial	二项分布
+	Boolean	布尔值
+	Built with	使用以下技术构建
+	Cancel	取消
+	Cancel run	取消运行
+	Capacity	容量
+	Change Block	更改区块
+	Change Flow	更改顺序流
+	Changing the time unit does not convert the times already in the model.	更改时间单位不会换算模型中已有的时间值。
+	Close	关闭
+	Comes from	来源于
+	Condition of {id}	{id} 的条件
+	Connect	连接
+	Connections	连接
+	Constant	常数
+	Data points	数据点
+	Date and time	日期和时间
+	Decimal number	小数
+	Decision	决策
+	Decision (one way)	决策（单一路径）
+	Default flow	默认顺序流
+	Departures	离开
+	Discard	放弃
+	Discarded the recovered changes	已丢弃恢复的更改
+	Disconnect	断开连接
+	Discrete values	离散值
+	Discrete-event simulation, from model files to results.	离散事件仿真：从模型文件到结果。
+	Don't Save	不保存
+	Download	下载
+	Download charts (PNG)	下载图表 (PNG)
+	Download table (CSV)	下载表格 (CSV)
+	Duration	持续时间
+	Edit	编辑
+	Entered	进入数
+	Erlang	埃尔朗分布
+	Error	错误
+	Every distribution	所有分布
+	Experiment	实验
+	Experiment Settings	实验设置
+	Exponential	指数分布
+	Export charts (PNG)	导出图表 (PNG)
+	Export table (CSV)	导出表格 (CSV)
+	Exported {file}	已导出 {file}
+	Expression	表达式
+	File	文件
+	Flows	顺序流
+	From	起点
+	Gamma	伽马分布
+	Goes to	流向
+	Help	帮助
+	Keyboard shortcuts saved	键盘快捷键已保存
+	Keyboard shortcuts unchanged	键盘快捷键未更改
+	Language	语言
+	Left	离开数
+	Licensed under the MIT License or the Apache License 2.0, at your option.	可选择采用 MIT License 或 Apache License 2.0 授权。
+	Log-normal	对数正态分布
+	Lost (waiting room full)	流失（等待区已满）
+	M/M/1 queue	M/M/1 队列
+	Maximise	最大化
+	Maximum	最大值
+	Mean	均值
+	Mean number inside	内部平均数量
+	Mean queue length	平均队列长度
+	Mean time blocked	平均阻塞时间
+	Mean time in system	系统内平均时间
+	Mean wait	平均等待时间
+	Metric	指标
+	Minimise	最小化
+	Minimum	最小值
+	Model	模型
+	Most likely	最可能值
+	Name	名称
+	New model	新建模型
+	New property	新建属性
+	New property name	新属性名称
+	No blocks yet. Open a model, or add blocks to build one.	尚无区块。请打开模型，或添加区块来构建模型。
+	No connections yet: join blocks below.	尚无连接：请在下方连接区块。
+	No results yet	尚无结果
+	None	无
+	None found. The model is ready to run.	未发现问题。模型可以运行。
+	Normal	正态分布
+	Number	数字
+	One clerk, random arrivals: the textbook queue, checked against theory.	一名服务员、随机到达：经典排队模型，并与理论结果对照。
+	One task per BPSim distribution, to compare their spread.	每种 BPSim 分布各设一个任务，用于比较其离散程度。
+	Open	打开
+	Open Example	打开示例
+	Open Recent	打开最近文件
+	Open a model first	请先打开模型
+	Open a model to simulate it	打开模型以进行仿真
+	Open a model…	打开模型…
+	Opened {file}	已打开 {file}
+	Or start from an example	或从示例开始
+	Parameters	参数
+	Points	点
+	Poisson	泊松分布
+	Probability	概率
+	Probability of {id}	{id} 的概率
+	Problems	问题
+	Process	流程
+	Properties	属性
+	Quit	退出
+	Ready	就绪
+	Recover	恢复
+	Recover unsaved changes?	恢复未保存的更改？
+	Recovered {name}; save it to keep it	已恢复 {name}；请保存以保留更改
+	Redid {action}	已重做 {action}
+	Redo	重做
+	Redo {action}	重做 {action}
+	Remove	移除
+	Remove Block	移除区块
+	Remove Property	移除属性
+	Remove block	移除区块
+	Remove the flow {id}	移除顺序流 {id}
+	Remove this block and its flows (Delete)	移除此区块及其顺序流 (Delete)
+	Removed {id}	已移除 {id}
+	Rename Block	重命名区块
+	Rename Model	重命名模型
+	Replace Model	替换模型
+	Replications	重复运行次数
+	Restore	还原
+	Results	结果
+	Run	运行
+	Run cancelled	运行已取消
+	Run experiment	运行实验
+	Run the experiment ({shortcut})	运行实验 ({shortcut})
+	Running	正在运行
+	Running…	正在运行…
+	Save	保存
+	Save As…	另存为…
+	Save changes to {name}?	是否保存对 {name} 的更改？
+	Saved {file}	已保存 {file}
+	Scale	尺度参数
+	Seed	随机种子
+	Service time	服务时间
+	Set Property	设置属性
+	Set a value	设置值
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	在每个实体进入此区块时设置。表达式读取实体到达时携带的值，例如 getProperty('issues') - 1。
+	Settings	设置
+	Shape	形状参数
+	Share of arrivals lost	到达流失比例
+	Share of units blocked	资源单元阻塞比例
+	Show {id}	显示 {id}
+	Split or join	拆分或合并
+	Split or join (all ways)	拆分或合并（所有路径）
+	Stages (k)	阶段数 (k)
+	Standard deviation	标准差
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft 关闭时 {name} 有未保存的更改。可将其恢复为未命名模型，或放弃这些更改。
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft 读取带有 BPSim 仿真数据的 BPMN 或 XPDL 流程模型文件，以重复实验的方式运行，并为每个结果给出置信区间。
+	StochCraft {version} · model {digest}	StochCraft {version} · 模型 {digest}
+	Stop setting {name}	停止设置 {name}
+	Tandem line	串联流程
+	Task	任务
+	Task with a resource	需要资源的任务
+	Text	文本
+	The model: its experiment, connections and problems	模型：实验、连接和问题
+	This block has a warning	此区块存在警告
+	This block has an error	此区块存在错误
+	Time between arrivals	到达间隔时间
+	Time unit	时间单位
+	To	终点
+	Trials	试验次数
+	Triangular	三角分布
+	Truncated normal	截断正态分布
+	Two stations in series, read from an XPDL file.	从 XPDL 文件读取的两个串联工作站。
+	Type	类型
+	Undid {action}	已撤销 {action}
+	Undo	撤销
+	Undo {action}	撤消{action}
+	Uniform	均匀分布
+	Unit	单位
+	Untitled	未命名
+	Untitled model	未命名模型
+	Use System Setting	使用系统设置
+	Utilisation	利用率
+	Value	值
+	View	视图
+	Waiting room	等待区
+	Warm-up	预热期
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	预热 {warmup} {unit}，随后测量 {duration} {unit}
+	Warning	警告
+	Weibull	威布尔分布
+	Whole number	整数
+	Yes or no	是或否
+	Your changes will be lost if you don't save them.	如果不存储，你的更改将会丢失。
+	a model	一个模型
+	arrivals	到达
+	days	天
+	decision: one way	决策：单一路径
+	departures	离开
+	egui and eframe (Craft suite fork)	egui 和 eframe（Craft 套件分支）
+	from its value	根据其值
+	hours	小时
+	id {id}	ID {id}
+	milliseconds	毫秒
+	minutes	分钟
+	nothing yet	尚无内容
+	seconds	秒
+	split or join: all ways	拆分或合并：所有路径
+	task	任务
+	task with a resource	需要资源的任务
+	the charts could not be captured	无法捕获图表
+	the run stopped	运行已停止
+	there are no charts to export	没有可导出的图表
+	to {block}	前往 {block}
+	unlimited	无限制
+	years	年
+	{field}: not editable here yet	{field}：暂时无法在此编辑
+	{id}: a probability is a number from 0 to 1	{id}：概率必须是 0 到 1 之间的数字
+	{name} — edited	{name} — 已编辑
+	{property} (set to, mean)	{property}（所设值的均值）
+	± 95% CI	± 95% 置信区间
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± 表示各次重复运行均值的 95% Student-t 置信区间的半宽。
+	· no results yet	· 尚无结果
+@plural	Finished {n} replication|Finished {n} replications	已完成 {n} 次重复运行
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	已打开 {file}（{n} 条警告）
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	从随机种子 {seed} 开始，对模型进行 {n} 次独立重复运行。每个元素的结果都包含 95% 置信区间的半宽。
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	已完成 {done}/{n} 次重复运行
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}：{mean}{unit}\n95% 区间：{low} 至 {high}{unit}\n基于 {n} 次重复运行
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 次重复运行 · 随机种子 {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 次重复运行 · 随机种子 {seed} · 预热 {warmup} {unit} · 测量 {duration} {unit}

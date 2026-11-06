@@ -11,7 +11,12 @@ use stochcraft_ui_egui::{App, Autosave, EXAMPLES, Platform, Request};
 fn harness() -> Harness<'static, App> {
     let mut h = Harness::builder()
         .with_size(egui::vec2(1100.0, 760.0))
-        .build_ui_state(|ui, app: &mut App| app.ui(ui), App::new(Platform::DESKTOP));
+        .build_ui_state(|ui, app: &mut App| app.ui(ui), {
+            // In English, whatever this machine's language.
+            let mut app = App::new(Platform::DESKTOP);
+            app.set_lang(craft_i18n::Lang::EN);
+            app
+        });
     h.run();
     h
 }

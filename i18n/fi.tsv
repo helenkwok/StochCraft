@@ -1,0 +1,247 @@
+# Suomi (fi) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Suomi
+	+ Add block	+ Lisää lohko
+	About StochCraft	Tietoja StochCraftista
+	Add Block	Lisää lohko
+	Add a flow from…	Lisää virta kohteesta…
+	Add a flow to…	Lisää virta kohteeseen…
+	Add point	Lisää piste
+	Add property	Lisää ominaisuus
+	Added {block} ({id})	Lisättiin {block} ({id})
+	Appearance	Ulkoasu
+	Arrival limit	Saapumisraja
+	Arrivals	Saapumiset
+	Back to the model (Esc)	Takaisin malliin (Esc)
+	Beta	Beeta
+	Binomial	Binomijakauma
+	Boolean	Totuusarvo
+	Built with	Toteutettu seuraavilla
+	Cancel	Peruuta
+	Cancel run	Peruuta suoritus
+	Capacity	Kapasiteetti
+	Change Block	Muuta lohkoa
+	Change Flow	Muuta virtaa
+	Changing the time unit does not convert the times already in the model.	Aikayksikön vaihtaminen ei muunna mallissa jo olevia aikoja.
+	Close	Sulje
+	Comes from	Tulee kohteesta
+	Condition of {id}	Kohteen {id} ehto
+	Connect	Yhdistä
+	Connections	Yhteydet
+	Constant	Vakio
+	Data points	Datapisteet
+	Date and time	Päivämäärä ja aika
+	Decimal number	Desimaaliluku
+	Decision	Päätös
+	Decision (one way)	Päätös (yksi reitti)
+	Default flow	Oletusvirta
+	Departures	Poistumiset
+	Discard	Hylkää
+	Discarded the recovered changes	Palautetut muutokset hylättiin
+	Disconnect	Katkaise yhteys
+	Discrete values	Diskreetit arvot
+	Discrete-event simulation, from model files to results.	Diskreettitapahtumainen simulointi mallintiedostoista tuloksiin.
+	Don't Save	Älä tallenna
+	Download	Lataa
+	Download charts (PNG)	Lataa kaaviot (PNG)
+	Download table (CSV)	Lataa taulukko (CSV)
+	Duration	Kesto
+	Edit	Muokkaa
+	Entered	Saapuneet
+	Erlang	Erlang
+	Error	Virhe
+	Every distribution	Kaikki jakaumat
+	Experiment	Koe
+	Experiment Settings	Kokeen asetukset
+	Exponential	Eksponentiaalijakauma
+	Export charts (PNG)	Vie kaaviot (PNG)
+	Export table (CSV)	Vie taulukko (CSV)
+	Exported {file}	Vietiin {file}
+	Expression	Lauseke
+	File	Tiedosto
+	Flows	Virrat
+	From	Kohteesta
+	Gamma	Gamma
+	Goes to	Menee kohteeseen
+	Help	Ohje
+	Keyboard shortcuts saved	Pikanäppäimet tallennettu
+	Keyboard shortcuts unchanged	Pikanäppäimet ennallaan
+	Language	Kieli
+	Left	Poistuneet
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Lisensoitu valintasi mukaan MIT License- tai Apache License 2.0 -lisenssillä.
+	Log-normal	Lognormaalijakauma
+	Lost (waiting room full)	Menetetyt (odotustila täynnä)
+	M/M/1 queue	M/M/1-jono
+	Maximise	Suurenna
+	Maximum	Maksimi
+	Mean	Keskiarvo
+	Mean number inside	Keskimääräinen määrä sisällä
+	Mean queue length	Jonon keskipituus
+	Mean time blocked	Keskimääräinen estoaika
+	Mean time in system	Keskimääräinen aika järjestelmässä
+	Mean wait	Keskimääräinen odotusaika
+	Metric	Mittari
+	Minimise	Pienennä
+	Minimum	Minimi
+	Model	Malli
+	Most likely	Todennäköisin
+	Name	Nimi
+	New model	Uusi malli
+	New property	Uusi ominaisuus
+	New property name	Uuden ominaisuuden nimi
+	No blocks yet. Open a model, or add blocks to build one.	Lohkoja ei vielä ole. Avaa malli tai lisää lohkoja luodaksesi mallin.
+	No connections yet: join blocks below.	Yhteyksiä ei vielä ole: yhdistä alla olevat lohkot.
+	No results yet	Ei vielä tuloksia
+	None	Ei mitään
+	None found. The model is ready to run.	Ongelmia ei löytynyt. Malli on valmis suoritettavaksi.
+	Normal	Normaalijakauma
+	Number	Luku
+	One clerk, random arrivals: the textbook queue, checked against theory.	Yksi palvelija, satunnaiset saapumiset: teorian avulla tarkistettu klassinen jono.
+	One task per BPSim distribution, to compare their spread.	Yksi tehtävä kutakin BPSim-jakaumaa kohti niiden hajonnan vertailuun.
+	Open	Avaa
+	Open Example	Avaa esimerkki
+	Open Recent	Avaa viimeisimmät
+	Open a model first	Avaa ensin malli
+	Open a model to simulate it	Avaa simuloitava malli
+	Open a model…	Avaa malli…
+	Opened {file}	Avattiin {file}
+	Or start from an example	Tai aloita esimerkistä
+	Parameters	Parametrit
+	Points	Pisteet
+	Poisson	Poisson
+	Probability	Todennäköisyys
+	Probability of {id}	Kohteen {id} todennäköisyys
+	Problems	Ongelmat
+	Process	Prosessi
+	Properties	Ominaisuudet
+	Quit	Lopeta
+	Ready	Valmis
+	Recover	Palauta
+	Recover unsaved changes?	Palautetaanko tallentamattomat muutokset?
+	Recovered {name}; save it to keep it	Palautettiin {name}; säilytä se tallentamalla
+	Redid {action}	Tehtiin {action} uudelleen
+	Redo	Tee uudelleen
+	Redo {action}	Tee uudelleen {action}
+	Remove	Poista
+	Remove Block	Poista lohko
+	Remove Property	Poista ominaisuus
+	Remove block	Poista lohko
+	Remove the flow {id}	Poista virta {id}
+	Remove this block and its flows (Delete)	Poista tämä lohko ja sen virrat (Delete)
+	Removed {id}	Poistettiin {id}
+	Rename Block	Nimeä lohko uudelleen
+	Rename Model	Nimeä malli uudelleen
+	Replace Model	Korvaa malli
+	Replications	Toistot
+	Restore	Palauta ikkuna
+	Results	Tulokset
+	Run	Suorita
+	Run cancelled	Suoritus peruutettu
+	Run experiment	Suorita koe
+	Run the experiment ({shortcut})	Suorita koe ({shortcut})
+	Running	Suoritetaan
+	Running…	Suoritetaan…
+	Save	Tallenna
+	Save As…	Tallenna nimellä…
+	Save changes to {name}?	Tallennetaanko kohteen {name} muutokset?
+	Saved {file}	Tallennettiin {file}
+	Scale	Skaala
+	Seed	Satunnaislukusiemen
+	Service time	Palveluaika
+	Set Property	Aseta ominaisuus
+	Set a value	Aseta arvo
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Asetetaan jokaiselle entiteetille sen saapuessa tähän lohkoon. Lausekkeet lukevat entiteetin saapuessa voimassa olleet arvot, kuten getProperty('issues') - 1.
+	Settings	Asetukset
+	Shape	Muoto
+	Share of arrivals lost	Menetettyjen saapumisten osuus
+	Share of units blocked	Estettyjen yksiköiden osuus
+	Show {id}	Näytä {id}
+	Split or join	Haaroita tai yhdistä
+	Split or join (all ways)	Haaroita tai yhdistä (kaikki reitit)
+	Stages (k)	Vaiheet (k)
+	Standard deviation	Keskihajonta
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft suljettiin, kun mallissa {name} oli tallentamattomia muutoksia. Palauta muutokset nimettömänä mallina tai hylkää ne.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft lukee prosessimalleja BPMN- tai XPDL-tiedostoista, joissa on BPSim-simulointitietoja, suorittaa niillä toistettuja kokeita ja raportoi jokaisen tuloksen luottamusväleineen.
+	StochCraft {version} · model {digest}	StochCraft {version} · malli {digest}
+	Stop setting {name}	Lopeta kohteen {name} asettaminen
+	Tandem line	Sarjajono
+	Task	Tehtävä
+	Task with a resource	Resurssia käyttävä tehtävä
+	Text	Teksti
+	The model: its experiment, connections and problems	Malli: koe, yhteydet ja ongelmat
+	This block has a warning	Tässä lohkossa on varoitus
+	This block has an error	Tässä lohkossa on virhe
+	Time between arrivals	Saapumisten välinen aika
+	Time unit	Aikayksikkö
+	To	Kohteeseen
+	Trials	Kokeilut
+	Triangular	Kolmiojakauma
+	Truncated normal	Katkaistu normaalijakauma
+	Two stations in series, read from an XPDL file.	Kaksi peräkkäistä asemaa, luettu XPDL-tiedostosta.
+	Type	Teksti
+	Undid {action}	Kumottiin {action}
+	Undo	Kumoa
+	Undo {action}	Kumoa {action}
+	Uniform	Tasajakauma
+	Unit	Yksikkö
+	Untitled	Nimetön
+	Untitled model	Nimetön malli
+	Use System Setting	Käytä järjestelmäasetusta
+	Utilisation	Käyttöaste
+	Value	Arvo
+	View	Näytä
+	Waiting room	Odotustila
+	Warm-up	Alkulämmittely
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Alkulämmittely {warmup} {unit}, sitten mittaus {duration} {unit}
+	Warning	Varoitus
+	Weibull	Weibull
+	Whole number	Kokonaisluku
+	Yes or no	Kyllä tai ei
+	Your changes will be lost if you don't save them.	Muutokset menetetään, jos niitä ei tallenneta.
+	a model	malli
+	arrivals	saapumiset
+	days	päivää
+	decision: one way	päätös: yksi reitti
+	departures	poistumiset
+	egui and eframe (Craft suite fork)	egui ja eframe (Craft-ohjelmistoperheen haaraversio)
+	from its value	arvon perusteella
+	hours	tuntia
+	id {id}	id {id}
+	milliseconds	millisekuntia
+	minutes	minuuttia
+	nothing yet	ei vielä mitään
+	seconds	sekuntia
+	split or join: all ways	haaroita tai yhdistä: kaikki reitit
+	task	tehtävä
+	task with a resource	resurssia käyttävä tehtävä
+	the charts could not be captured	kaavioita ei voitu tallentaa
+	the run stopped	suoritus pysähtyi
+	there are no charts to export	ei vietäviä kaavioita
+	to {block}	kohteeseen {block}
+	unlimited	rajoittamaton
+	years	vuotta
+	{field}: not editable here yet	{field}: ei vielä muokattavissa täällä
+	{id}: a probability is a number from 0 to 1	{id}: todennäköisyyden on oltava luku väliltä 0–1
+	{name} — edited	{name} — muokattu
+	{property} (set to, mean)	{property} (asetettu arvo, keskiarvo)
+	± 95% CI	± 95%:n luottamusväli
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± tarkoittaa toistojen yli lasketun keskiarvon 95 %:n Student-t-luottamusvälin puolileveyttä.
+	· no results yet	· ei vielä tuloksia
+@plural	Finished {n} replication|Finished {n} replications	{n} toisto valmistui|{n} toistoa valmistui
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avattiin {file} ({n} varoitus)|Avattiin {file} ({n} varoitusta)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Suorittaa {n} mallin riippumattoman toiston siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.|Suorittaa {n} mallin riippumatonta toistoa siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} / {n} toisto valmistui|{done} / {n} toistoa valmistui
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} toiston perusteella|{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} toiston perusteella
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} toisto · siemen {seed}|{n} toistoa · siemen {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} toisto · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}|{n} toistoa · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}

@@ -1,0 +1,247 @@
+# Русский (ru) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Русский
+	+ Add block	+ Добавить блок
+	About StochCraft	О программе StochCraft
+	Add Block	Добавить блок
+	Add a flow from…	Добавить поток от…
+	Add a flow to…	Добавить поток к…
+	Add point	Добавить точку
+	Add property	Добавить свойство
+	Added {block} ({id})	Добавлен {block} ({id})
+	Appearance	Внешний вид
+	Arrival limit	Ограничение числа прибытий
+	Arrivals	Прибытия
+	Back to the model (Esc)	Вернуться к модели (Esc)
+	Beta	Бета-распределение
+	Binomial	Биномиальное распределение
+	Boolean	Логическое значение
+	Built with	Создано с использованием
+	Cancel	Отмена
+	Cancel run	Отменить запуск
+	Capacity	Количество обслуживающих единиц
+	Change Block	Изменить блок
+	Change Flow	Изменить поток
+	Changing the time unit does not convert the times already in the model.	При изменении единицы времени уже заданные в модели времена не пересчитываются.
+	Close	Закрыть
+	Comes from	Поступает от
+	Condition of {id}	Условие для {id}
+	Connect	Соединить
+	Connections	Соединения
+	Constant	Постоянное значение
+	Data points	Точки данных
+	Date and time	Дата и время
+	Decimal number	Десятичное число
+	Decision	Решение
+	Decision (one way)	Решение (один путь)
+	Default flow	Поток по умолчанию
+	Departures	Выходы
+	Discard	Отменить
+	Discarded the recovered changes	Восстановленные изменения отброшены
+	Disconnect	Разъединить
+	Discrete values	Дискретные значения
+	Discrete-event simulation, from model files to results.	Дискретно-событийное моделирование: от файлов модели до результатов.
+	Don't Save	Не сохранять
+	Download	Скачать
+	Download charts (PNG)	Скачать диаграммы (PNG)
+	Download table (CSV)	Скачать таблицу (CSV)
+	Duration	Длительность
+	Edit	Редактирование
+	Entered	Вошло
+	Erlang	Распределение Эрланга
+	Error	Ошибка
+	Every distribution	Все распределения
+	Experiment	Эксперимент
+	Experiment Settings	Настройки эксперимента
+	Exponential	Экспоненциальное распределение
+	Export charts (PNG)	Экспортировать диаграммы (PNG)
+	Export table (CSV)	Экспортировать таблицу (CSV)
+	Exported {file}	Экспортирован {file}
+	Expression	Выражение
+	File	Файл
+	Flows	Потоки
+	From	От
+	Gamma	Гамма-распределение
+	Goes to	Ведёт к
+	Help	Справка
+	Keyboard shortcuts saved	Сочетания клавиш сохранены
+	Keyboard shortcuts unchanged	Сочетания клавиш не изменены
+	Language	Язык
+	Left	Вышло
+	Licensed under the MIT License or the Apache License 2.0, at your option.	На выбор: MIT License или Apache License 2.0.
+	Log-normal	Логнормальное распределение
+	Lost (waiting room full)	Потери (места ожидания заняты)
+	M/M/1 queue	Очередь M/M/1
+	Maximise	Развернуть
+	Maximum	Максимум
+	Mean	Среднее
+	Mean number inside	Среднее число внутри
+	Mean queue length	Средняя длина очереди
+	Mean time blocked	Среднее время блокировки
+	Mean time in system	Среднее время в системе
+	Mean wait	Среднее время ожидания
+	Metric	Показатель
+	Minimise	Свернуть
+	Minimum	Минимум
+	Model	Модель
+	Most likely	Наиболее вероятное значение
+	Name	Имя
+	New model	Новая модель
+	New property	Новое свойство
+	New property name	Имя нового свойства
+	No blocks yet. Open a model, or add blocks to build one.	Блоков пока нет. Откройте модель или добавьте блоки для создания модели.
+	No connections yet: join blocks below.	Соединений пока нет: соедините блоки ниже.
+	No results yet	Результатов пока нет
+	None	Нет
+	None found. The model is ready to run.	Проблем не обнаружено. Модель готова к запуску.
+	Normal	Нормальное распределение
+	Number	Число
+	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, случайные прибытия: классическая очередь, проверенная по теории.
+	One task per BPSim distribution, to compare their spread.	По одной задаче на каждое распределение BPSim для сравнения разброса.
+	Open	Открыть
+	Open Example	Открыть пример
+	Open Recent	Открыть недавние
+	Open a model first	Сначала откройте модель
+	Open a model to simulate it	Откройте модель, чтобы запустить моделирование
+	Open a model…	Открыть модель…
+	Opened {file}	Открыт {file}
+	Or start from an example	Или начните с примера
+	Parameters	Параметры
+	Points	Точки
+	Poisson	Распределение Пуассона
+	Probability	Вероятность
+	Probability of {id}	Вероятность для {id}
+	Problems	Проблемы
+	Process	Процесс
+	Properties	Свойства
+	Quit	Выйти
+	Ready	Готово
+	Recover	Восстановить
+	Recover unsaved changes?	Восстановить несохранённые изменения?
+	Recovered {name}; save it to keep it	Восстановлен {name}; сохраните, чтобы не потерять
+	Redid {action}	Повторено действие {action}
+	Redo	Вернуть
+	Redo {action}	Повторить {action}
+	Remove	Удалить
+	Remove Block	Удалить блок
+	Remove Property	Удалить свойство
+	Remove block	Удалить блок
+	Remove the flow {id}	Удалить поток {id}
+	Remove this block and its flows (Delete)	Удалить этот блок и его потоки (Delete)
+	Removed {id}	Удалён {id}
+	Rename Block	Переименовать блок
+	Rename Model	Переименовать модель
+	Replace Model	Заменить модель
+	Replications	Число повторных запусков
+	Restore	Восстановить размер
+	Results	Результаты
+	Run	Запустить
+	Run cancelled	Запуск отменён
+	Run experiment	Запустить эксперимент
+	Run the experiment ({shortcut})	Запустить эксперимент ({shortcut})
+	Running	Выполняется
+	Running…	Выполняется…
+	Save	Сохранить
+	Save As…	Сохранить как…
+	Save changes to {name}?	Сохранить изменения в {name}?
+	Saved {file}	Сохранён {file}
+	Scale	Масштаб
+	Seed	Начальное значение генератора
+	Service time	Время обслуживания
+	Set Property	Задать свойство
+	Set a value	Задать значение
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задаётся для каждой сущности при входе в этот блок. Выражения считывают значения, которые были у сущности при входе, например getProperty('issues') - 1.
+	Settings	Настройки
+	Shape	Форма
+	Share of arrivals lost	Доля потерянных прибытий
+	Share of units blocked	Доля заблокированных единиц
+	Show {id}	Показать {id}
+	Split or join	Разделить или объединить
+	Split or join (all ways)	Разделить или объединить (все пути)
+	Stages (k)	Стадии (k)
+	Standard deviation	Стандартное отклонение
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft закрылся с несохранёнными изменениями в {name}. Восстановите их как модель без названия или отбросьте.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft загружает модели процессов из файлов BPMN или XPDL с данными моделирования BPSim, запускает их как эксперименты с повторениями и выводит каждый результат с доверительным интервалом.
+	StochCraft {version} · model {digest}	StochCraft {version} · модель {digest}
+	Stop setting {name}	Прекратить настройку {name}
+	Tandem line	Последовательная линия
+	Task	Задача
+	Task with a resource	Задача с ресурсом
+	Text	Текст
+	The model: its experiment, connections and problems	Модель: эксперимент, соединения и проблемы
+	This block has a warning	В этом блоке есть предупреждение
+	This block has an error	В этом блоке есть ошибка
+	Time between arrivals	Время между прибытиями
+	Time unit	Единица времени
+	To	К
+	Trials	Испытания
+	Triangular	Треугольное распределение
+	Truncated normal	Усечённое нормальное распределение
+	Two stations in series, read from an XPDL file.	Два последовательно расположенных поста, загруженных из файла XPDL.
+	Type	Тип
+	Undid {action}	Отменено действие {action}
+	Undo	Отменить
+	Undo {action}	Отменить: {action}
+	Uniform	Равномерное распределение
+	Unit	Единица измерения
+	Untitled	Без названия
+	Untitled model	Модель без названия
+	Use System Setting	Использовать системную настройку
+	Utilisation	Коэффициент использования
+	Value	Значение
+	View	Вид
+	Waiting room	Места ожидания
+	Warm-up	Разогрев
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Разогрев {warmup} {unit}, затем измерение в течение {duration} {unit}
+	Warning	Предупреждение
+	Weibull	Распределение Вейбулла
+	Whole number	Целое число
+	Yes or no	Да или нет
+	Your changes will be lost if you don't save them.	Если не сохранить, изменения будут потеряны.
+	a model	модель
+	arrivals	прибытия
+	days	дни
+	decision: one way	решение: один путь
+	departures	выходы
+	egui and eframe (Craft suite fork)	egui и eframe (ответвление набора Craft)
+	from its value	по значению
+	hours	часы
+	id {id}	ID {id}
+	milliseconds	миллисекунды
+	minutes	минуты
+	nothing yet	пока ничего
+	seconds	секунды
+	split or join: all ways	разделить или объединить: все пути
+	task	задача
+	task with a resource	задача с ресурсом
+	the charts could not be captured	не удалось создать снимки диаграмм
+	the run stopped	запуск остановлен
+	there are no charts to export	нет диаграмм для экспорта
+	to {block}	к {block}
+	unlimited	без ограничений
+	years	годы
+	{field}: not editable here yet	{field}: здесь пока нельзя редактировать
+	{id}: a probability is a number from 0 to 1	{id}: вероятность должна быть числом от 0 до 1
+	{name} — edited	{name} — изменено
+	{property} (set to, mean)	{property} (заданное значение, среднее)
+	± 95% CI	± 95% ДИ
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — половина ширины 95% доверительного интервала Student-t для среднего значения по повторениям.
+	· no results yet	· результатов пока нет
+@plural	Finished {n} replication|Finished {n} replications	Завершена {n} репликация|Завершены {n} репликации|Завершено {n} репликаций
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Открыт {file} ({n} предупреждение)|Открыт {file} ({n} предупреждения)|Открыт {file} ({n} предупреждений)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Выполняет {n} независимую репликацию модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимые репликации модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимых репликаций модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	Завершена {done} из {n} репликации|Завершено {done} из {n} репликаций|Завершено {done} из {n} репликаций
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликации|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликациям|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликациям
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} репликация · начальное значение {seed}|{n} репликации · начальное значение {seed}|{n} репликаций · начальное значение {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликация · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликации · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликаций · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}
