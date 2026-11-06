@@ -583,6 +583,42 @@ fn files_open_save_and_track_changes() {
 }
 
 #[test]
+fn saving_again_writes_into_the_opened_scenario() {
+    // mm1.bpmn has "base" and "two-clerks", which inherits from it.
+    let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let copy = scratch("mm1-two-saves.bpmn");
+    let _ = std::fs::copy(&mm1, &copy);
+    let path = json!(copy.to_string_lossy());
+    let reps = |scenario: &str| {
+        let mut r = Engine::new();
+        ok(
+            &mut r,
+            "file.open",
+            json!({"path": path, "scenario": scenario}),
+        );
+        r.model().experiment.replications
+    };
+    let base = reps("base");
+
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({"path": path, "scenario": "two-clerks"}),
+    );
+    ok(&mut e, "experiment.set", json!({"replications": base + 5}));
+    ok(&mut e, "file.save", json!({}));
+    ok(&mut e, "experiment.set", json!({"replications": base + 7}));
+    ok(&mut e, "file.save", json!({}));
+    assert_eq!(reps("two-clerks"), base + 7);
+    assert_eq!(reps("base"), base, "the other scenario is untouched");
+    // Saved again unchanged: the same bytes.
+    let written = std::fs::read(&copy).unwrap_or_default();
+    ok(&mut e, "file.save", json!({}));
+    assert_eq!(std::fs::read(&copy).unwrap_or_default(), written);
+}
+
+#[test]
 fn the_committed_test_models_open_and_run() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models");
     for name in ["mm1.bpmn", "tandem.xpdl"] {
