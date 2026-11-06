@@ -137,11 +137,10 @@ impl Desktop {
                         open(&mut self.app, path);
                     }
                 }
-                (Then::Save, Answer::Paths(paths)) => {
-                    if let Some(path) = paths.first() {
-                        self.app.save_to(&path.to_string_lossy());
-                    }
-                }
+                (Then::Save, Answer::Paths(paths)) => match paths.first() {
+                    Some(path) => self.app.save_to(&path.to_string_lossy()),
+                    None => self.app.save_cancelled(),
+                },
                 (Then::Export(bytes), Answer::Paths(paths)) => {
                     if let Some(path) = paths.first() {
                         let shown = path.to_string_lossy().into_owned();
@@ -152,6 +151,7 @@ impl Desktop {
                     }
                 }
                 (_, Answer::Unavailable(why)) => self.app.report_error(why),
+                (Then::Save, _) => self.app.save_cancelled(),
                 _ => {}
             }
         }
