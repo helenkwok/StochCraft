@@ -25,8 +25,23 @@ The interface (`ui-egui`, the `stochcraft` and `stochcraft-web` apps) is built o
 [craft-libs](https://github.com/storytold/craft-libs), the Craft suite's shared app foundation,
 pinned to one commit in the workspace manifest with the egui fork it uses: craft-menu and
 craft-keymap (menus and shortcuts), craft-settings, craft-window, craft-quit, craft-atomic,
-craft-dialogs and craft-platform so far, craft-ui and craft-i18n next. The interface owns only
-what is StochCraft's: its commands, its document and its look.
+craft-dialogs, craft-platform, craft-ui and craft-i18n. The interface owns only what is
+StochCraft's: its commands, its document and its look.
+
+### Translations
+
+Every interface string is English source text looked up through craft-i18n (`ui-egui/src/i18n.rs`:
+`t`, `tf` for `{name}` placeholders, `tn`/`tnf` for counts). The catalogs are an optional build
+input, as craft-i18n's `docs/integration.md` describes: with `CRAFT_I18N_DIR` naming a checkout of
+the data repository, `ui-egui/build.rs` embeds each locale that has StochCraft's own catalog
+(`locales/<locale>/stochcraft.tsv`) with the shared `common.tsv`; without it, or before that
+catalog exists, StochCraft is English only and View ▸ Language is hidden. Right-to-left locales
+are not offered until the layout is mirrored. Numbers follow the region, not the language.
+
+`tests/i18n.rs` draws every screen in craft-i18n's pseudo locale, which marks each looked-up
+string, and fails on any label drawn without a lookup that is not data (the model's names and
+ids, numbers, file names, shortcuts). The engine's own messages (validation, file notes) are not
+translated yet.
 
 ## Determinism across targets
 

@@ -705,9 +705,15 @@ every half minute and on closing the page on the web (the browser's storage), an
 the model is saved, closed or discarded on quit. If StochCraft stops with changes unsaved, the
 next start asks whether to recover them as an untitled model or discard them.
 
-**Still to come:** strings through craft-i18n with a Language menu (the shared catalog translates
-the common strings now; StochCraft's own need a `stochcraft.tsv` in the craft-i18n data
-repository), screenshot tests in craft-ui's six test languages, and panes and icons.
+**M3.1f (translations wired):** every interface string goes through craft-i18n, with a pseudo-locale
+test that fails on any that doesn't; View ▸ Language (shown once a build embeds more than English)
+picks the language or follows the system's, and the choice is saved with the preferences. The
+catalogs are embedded from `CRAFT_I18N_DIR` (docs/architecture.md). Languages appear once the
+craft-i18n data repository has a `stochcraft.tsv` for them; until then StochCraft is English.
+
+**Still to come:** StochCraft's catalog in the craft-i18n data repository, and CI building with it;
+the engine's own messages through the catalog; screenshot tests in craft-ui's six test languages;
+panes and icons.
 
 ### M3.2 Model editing without a canvas
 

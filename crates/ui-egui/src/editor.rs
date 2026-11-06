@@ -6,6 +6,7 @@ use serde_json::{Value, json};
 use stochcraft_engine::COMMANDS;
 
 use crate::form::{self, Schema};
+use crate::i18n::{t, tf};
 use crate::{App, theme};
 
 /// The kinds of block that can be added, with their parameters when added.
@@ -88,8 +89,10 @@ impl App {
         if let Some(r) = self.execute("block.add", params)
             && let Some(id) = r["id"].as_str()
         {
-            let label = KINDS.iter().find(|k| k.0 == kind).map_or(kind, |k| k.1);
-            self.info(format!("Added {} ({id})", label.to_lowercase()));
+            self.info(tf(
+                "Added {block} ({id})",
+                &[("block", crate::kind_text(kind)), ("id", id)],
+            ));
             self.selected = Some(id.to_owned());
         }
     }
@@ -112,7 +115,7 @@ impl App {
             return;
         };
         if self.execute("block.remove", json!({ "id": id })).is_some() {
-            self.info(format!("Removed {id}"));
+            self.info(tf("Removed {id}", &[("id", &id)]));
             let els = &self.engine.model().elements;
             self.selected = els
                 .get(i.min(els.len().saturating_sub(1)))
@@ -177,15 +180,15 @@ impl App {
         model: &Value,
         problems: &[Problem],
     ) {
-        ui.heading("Model");
+        ui.heading(t("Model"));
         ui.add_space(8.0);
         // The name.
         let name = model["name"].as_str().unwrap_or("").to_owned();
-        if let Some(n) = self.text_field(ui, "model/name", "Name", &name) {
+        if let Some(n) = self.text_field(ui, "model/name", t("Name"), &name) {
             self.execute("model.rename", json!({ "name": n }));
         }
 
-        section(ui, "Experiment");
+        section(ui, t("Experiment"));
         let schema = params_schema("experiment.set");
         let unit = self.time_unit_label();
         let x = model["experiment"].clone();
@@ -215,15 +218,15 @@ impl App {
         }
         ui.label(theme::weak(
             ui,
-            "Changing the time unit does not convert the times already in the model.",
+            t("Changing the time unit does not convert the times already in the model."),
         ));
 
-        section(ui, "Connections");
+        section(ui, t("Connections"));
         self.connections_table(ui, p, model);
 
-        section(ui, "Problems");
+        section(ui, t("Problems"));
         if problems.is_empty() {
-            ui.label(theme::weak(ui, "None found. The model is ready to run."));
+            ui.label(theme::weak(ui, t("None found. The model is ready to run.")));
         }
         for pr in problems {
             self.problem_row(ui, p, pr, true);
@@ -233,9 +236,9 @@ impl App {
     fn problem_row(&mut self, ui: &mut egui::Ui, p: &theme::Palette, pr: &Problem, link: bool) {
         ui.horizontal_wrapped(|ui| {
             let (word, color) = if pr.error {
-                ("Error", p.error)
+                (t("Error"), p.error)
             } else {
-                ("Warning", p.warning)
+                (t("Warning"), p.warning)
             };
             ui.label(theme::strong(word).color(color));
             // The engine's message starts "error at `id`: " or "error: "; the word is the label
@@ -254,7 +257,7 @@ impl App {
             ui.label(message);
             if link
                 && let Some(at) = &pr.at
-                && ui.link(format!("Show {at}")).clicked()
+                && ui.link(tf("Show {id}", &[("id", at)])).clicked()
             {
                 self.selected = Some(at.clone());
             }
@@ -282,7 +285,7 @@ impl App {
             })
             .collect();
         if conns.is_empty() {
-            ui.label(theme::weak(ui, "No connections yet: join blocks below."));
+            ui.label(theme::weak(ui, t("No connections yet: join blocks below.")));
         }
         egui::Grid::new("connections")
             .num_columns(4)
@@ -294,8 +297,8 @@ impl App {
                     ui.label(theme::weak(ui, "→"));
                     ui.label(name_of(to));
                     if ui
-                        .add(theme::secondary(ui, "Remove"))
-                        .on_hover_text(format!("Remove the flow {id}"))
+                        .add(theme::secondary(ui, t("Remove")))
+                        .on_hover_text(tf("Remove the flow {id}", &[("id", id)]))
                         .clicked()
                     {
                         self.execute("disconnect", json!({ "id": id }));
@@ -305,12 +308,18 @@ impl App {
             });
         ui.add_space(6.0);
         ui.horizontal(|ui| {
-            pick(ui, "connect/from", "From", &names, &mut self.connect_from);
+            pick(
+                ui,
+                "connect/from",
+                t("From"),
+                &names,
+                &mut self.connect_from,
+            );
             ui.label(theme::weak(ui, "→"));
-            pick(ui, "connect/to", "To", &names, &mut self.connect_to);
+            pick(ui, "connect/to", t("To"), &names, &mut self.connect_to);
             let ready = self.connect_from.is_some() && self.connect_to.is_some();
             if ui
-                .add_enabled(ready, theme::secondary(ui, "Connect"))
+                .add_enabled(ready, theme::secondary(ui, t("Connect")))
                 .clicked()
                 && let (Some(f), Some(t)) = (self.connect_from.take(), self.connect_to.take())
             {
@@ -333,11 +342,11 @@ impl App {
         let kind_label = KINDS
             .iter()
             .find(|k| k.0 == kind)
-            .map_or(kind.as_str(), |k| k.1);
+            .map_or(kind.as_str(), |k| t(k.1));
         ui.horizontal(|ui| {
             if ui
-                .link("Model")
-                .on_hover_text("Back to the model (Esc)")
+                .link(t("Model"))
+                .on_hover_text(t("Back to the model (Esc)"))
                 .clicked()
             {
                 self.selected = None;
@@ -355,15 +364,15 @@ impl App {
             });
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 if ui
-                    .add(theme::secondary(ui, "Remove block"))
-                    .on_hover_text("Remove this block and its flows (Delete)")
+                    .add(theme::secondary(ui, t("Remove block")))
+                    .on_hover_text(t("Remove this block and its flows (Delete)"))
                     .clicked()
                 {
                     self.remove_selected();
                 }
             });
         });
-        ui.label(theme::weak(ui, format!("id {id}")).monospace());
+        ui.label(theme::weak(ui, tf("id {id}", &[("id", &id)])).monospace());
         ui.add_space(8.0);
 
         // The block's own problems, and those of the flows into and out of it.
@@ -376,13 +385,13 @@ impl App {
             self.problem_row(ui, p, pr, false);
         }
 
-        if let Some(n) = self.text_field(ui, &format!("{id}/name"), "Name", &name) {
+        if let Some(n) = self.text_field(ui, &format!("{id}/name"), t("Name"), &name) {
             self.execute("block.rename", json!({ "id": id, "name": n }));
         }
 
         let fields = parameters(&kind);
         if !fields.is_empty() {
-            section(ui, "Parameters");
+            section(ui, t("Parameters"));
             let schema = params_schema("block.set");
             let unit = self.time_unit_label();
             for f in fields {
@@ -403,7 +412,7 @@ impl App {
 
         self.properties_section(ui, p, el);
 
-        section(ui, "Flows");
+        section(ui, t("Flows"));
         let names = element_names(model);
         let name_of = |x: &str| {
             names
@@ -432,7 +441,7 @@ impl App {
             ));
             ui.add_space(4.0);
         }
-        for (heading, incoming) in [("Comes from", true), ("Goes to", false)] {
+        for (heading, incoming) in [(t("Comes from"), true), (t("Goes to"), false)] {
             if (incoming && kind == "source") || (!incoming && kind == "sink") {
                 continue;
             }
@@ -444,10 +453,10 @@ impl App {
                         .filter(|(_, f, t)| if incoming { t == &id } else { f == &id })
                         .collect();
                     if mine.is_empty() {
-                        ui.label(theme::weak(ui, "nothing yet"));
+                        ui.label(theme::weak(ui, t("nothing yet")));
                     }
-                    for (cid, f, t) in mine {
-                        let other = if incoming { f } else { t };
+                    for (cid, f, to) in mine {
+                        let other = if incoming { f } else { to };
                         ui.horizontal(|ui| {
                             if ui.link(name_of(other)).clicked() {
                                 self.selected = Some(other.clone());
@@ -459,10 +468,10 @@ impl App {
                             }
                             if ui
                                 .add(
-                                    egui::Button::new(egui::RichText::new("Remove").size(12.0))
+                                    egui::Button::new(egui::RichText::new(t("Remove")).size(12.0))
                                         .stroke(egui::Stroke::new(1.0, p.border)),
                                 )
-                                .on_hover_text(format!("Remove the flow {cid}"))
+                                .on_hover_text(tf("Remove the flow {id}", &[("id", cid)]))
                                 .clicked()
                             {
                                 self.execute("disconnect", json!({ "id": cid }));
@@ -480,9 +489,9 @@ impl App {
                         .collect();
                     let mut chosen: Option<String> = None;
                     let label = if incoming {
-                        "Add a flow from…"
+                        t("Add a flow from…")
                     } else {
-                        "Add a flow to…"
+                        t("Add a flow to…")
                     };
                     craft_ui::ComboBox::from_id_salt((id.as_str(), heading))
                         .selected_text(theme::weak(ui, label))
@@ -533,22 +542,22 @@ impl App {
                     .iter()
                     .find(|(i, _)| i == t)
                     .map_or_else(|| t.clone(), |(_, n)| n.clone());
-                (cid.clone(), format!("to {to}"))
+                (cid.clone(), tf("to {block}", &[("block", &to)]))
             })
             .collect();
         let now = el["default"].as_str().map(str::to_owned);
         let shown = now
             .as_ref()
             .and_then(|d| outs.iter().find(|(c, _)| c == d))
-            .map_or_else(|| "None".to_owned(), |(_, n)| n.clone());
+            .map_or_else(|| t("None").to_owned(), |(_, n)| n.clone());
         let mut chosen: Option<Option<String>> = None;
         ui.horizontal(|ui| {
-            form::label_cell(ui, "Default flow", 26.0);
+            form::label_cell(ui, t("Default flow"), 26.0);
             craft_ui::ComboBox::from_id_salt((id, "default"))
                 .selected_text(shown)
                 .width(200.0)
                 .show_ui(ui, |ui| {
-                    if ui.selectable_label(now.is_none(), "None").clicked() {
+                    if ui.selectable_label(now.is_none(), t("None")).clicked() {
                         chosen = Some(None);
                     }
                     for (c, n) in &outs {
@@ -559,7 +568,7 @@ impl App {
                 })
                 .response
                 .widget_info(|| {
-                    egui::WidgetInfo::labeled(egui::Role::ComboBox, true, "Default flow")
+                    egui::WidgetInfo::labeled(egui::Role::ComboBox, true, t("Default flow"))
                 });
         });
         if let Some(d) = chosen.filter(|d| *d != now) {
@@ -577,7 +586,7 @@ impl App {
         if let Some(t) = self.small_field(
             ui,
             &format!("{cid}/p"),
-            &format!("Probability of {cid}"),
+            &tf("Probability of {id}", &[("id", cid)]),
             "p",
             &p_now,
             56.0,
@@ -590,7 +599,10 @@ impl App {
                     Ok(v) if (0.0..=1.0).contains(&v) => {
                         self.execute("flow.set", json!({ "id": cid, "probability": v }));
                     }
-                    _ => self.report_error(format!("{cid}: a probability is a number from 0 to 1")),
+                    _ => self.report_error(tf(
+                        "{id}: a probability is a number from 0 to 1",
+                        &[("id", cid)],
+                    )),
                 }
             }
         }
@@ -598,7 +610,7 @@ impl App {
         if let Some(t) = self.small_field(
             ui,
             &format!("{cid}/c"),
-            &format!("Condition of {cid}"),
+            &tf("Condition of {id}", &[("id", cid)]),
             "if",
             &c_now,
             200.0,
@@ -652,11 +664,13 @@ impl App {
     /// edited in place; a row to add one.
     fn properties_section(&mut self, ui: &mut egui::Ui, p: &theme::Palette, el: &Value) {
         let id = el["id"].as_str().unwrap_or("").to_owned();
-        section(ui, "Properties");
+        section(ui, t("Properties"));
         ui.label(theme::weak(
             ui,
-            "Set on every entity as it enters this block. Expressions read the values it arrived \
-             with, such as getProperty('issues') - 1.",
+            t(
+                "Set on every entity as it enters this block. Expressions read the values it \
+               arrived with, such as getProperty('issues') - 1.",
+            ),
         ));
         ui.add_space(6.0);
         let schema = params_schema("property.set");
@@ -668,10 +682,10 @@ impl App {
                 ui.label(theme::strong(&name).monospace());
                 if ui
                     .add(
-                        egui::Button::new(egui::RichText::new("Remove").size(12.0))
+                        egui::Button::new(egui::RichText::new(t("Remove")).size(12.0))
                             .stroke(egui::Stroke::new(1.0, p.border)),
                     )
-                    .on_hover_text(format!("Stop setting {name}"))
+                    .on_hover_text(tf("Stop setting {name}", &[("name", &name)]))
                     .clicked()
                 {
                     self.execute("property.remove", json!({ "element": id, "name": name }));
@@ -731,8 +745,9 @@ impl App {
         };
         let mut add = None;
         ui.horizontal(|ui| {
-            form::label_cell(ui, theme::weak(ui, "New property"), 26.0);
-            let committed = form::text(ui, &mut cx, &key, "New property name", &json!(""), 180.0);
+            form::label_cell(ui, theme::weak(ui, t("New property")), 26.0);
+            let committed =
+                form::text(ui, &mut cx, &key, t("New property name"), &json!(""), 180.0);
             let typed = cx.drafts.get(&key).cloned().unwrap_or_default();
             let name = committed
                 .as_ref()
@@ -743,7 +758,7 @@ impl App {
             if ui
                 .add_enabled(
                     !name.trim().is_empty(),
-                    theme::secondary(ui, "Add property"),
+                    theme::secondary(ui, t("Add property")),
                 )
                 .clicked()
                 || (enter && !name.trim().is_empty())

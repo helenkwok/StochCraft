@@ -14,6 +14,7 @@ use serde_json::json;
 
 pub use craft_keymap::CommandRef;
 
+use crate::i18n::{t, td, tf};
 use crate::{App, EXAMPLES, Replace, ThemeChoice};
 
 pub const NEW: &str = "file.new";
@@ -29,6 +30,7 @@ pub const REDO: &str = "edit.redo";
 pub const RUN: &str = "model.run";
 pub const CANCEL_RUN: &str = "model.cancel_run";
 pub const THEME: &str = "view.theme";
+pub const LANGUAGE: &str = "view.language";
 pub const ABOUT: &str = "help.about";
 pub const SHORTCUTS: &str = "app.keyboard_shortcuts";
 
@@ -71,8 +73,9 @@ pub fn shortcut_text(keymap: &Keymap, id: &str, platform: Platform) -> Option<St
         .map(|b| b.trigger.display(platform))
 }
 
-fn item(id: &str, label: &str) -> Node {
-    Node::Item(Item::new(id, label))
+/// A menu item with its label in the interface language.
+fn item(id: &str, label: &'static str) -> Node {
+    Node::Item(Item::new(id, t(label)))
 }
 
 impl App {
@@ -80,9 +83,9 @@ impl App {
     /// enabled and checked state. Lay it out with [`App::menu_layout`].
     pub fn menu_bar(&mut self) -> MenuBar {
         let save = if self.platform.file_system {
-            "Save"
+            t("Save")
         } else {
-            "Download"
+            t("Download")
         };
         let mut recent: Vec<Node> = self
             .recent
@@ -105,26 +108,26 @@ impl App {
             .map(|(i, e)| {
                 Node::Item(Item::new(
                     CommandRef::with_params(OPEN_EXAMPLE, json!({ "index": i })),
-                    e.title,
+                    td(e.title),
                 ))
             })
             .collect();
         let file = Menu::new(
-            "File",
+            t("File"),
             vec![
                 item(NEW, "New"),
                 item(OPEN, "Open…"),
-                Node::submenu("Open Recent", recent)
+                Node::submenu(t("Open Recent"), recent)
                     .platforms(Platforms::ALL.without(Platforms::WEB)),
-                Node::submenu("Open Example", examples),
+                Node::submenu(t("Open Example"), examples),
                 Node::Separator,
-                item(SAVE, save),
+                Node::Item(Item::new(SAVE, save)),
                 Node::Item(
-                    Item::new(SAVE_AS, "Save As…")
+                    Item::new(SAVE_AS, t("Save As…"))
                         .platforms(Platforms::ALL.without(Platforms::WEB)),
                 ),
                 Node::Separator,
-                Node::Item(Item::new(QUIT, "Quit").role(ItemRole::Quit)),
+                Node::Item(Item::new(QUIT, t("Quit")).role(ItemRole::Quit)),
             ],
         )
         .role(MenuRole::File);
@@ -132,20 +135,24 @@ impl App {
         let (undo, redo) = self.engine_history();
         // Settings: one page so far. Each platform's layout puts it where its apps keep settings
         // (macOS: the app menu; Windows and Linux: last in Edit, as Preferences).
-        let settings = Node::submenu("Settings", vec![item(SHORTCUTS, "Keyboard Shortcuts…")])
+        let settings = Node::submenu(t("Settings"), vec![item(SHORTCUTS, "Keyboard Shortcuts…")])
             .role(ItemRole::Settings);
         let edit = Menu::new(
-            "Edit",
+            t("Edit"),
             vec![
                 Node::Item(Item::new(
                     UNDO,
-                    undo.as_deref()
-                        .map_or("Undo".into(), |l| format!("Undo {l}")),
+                    undo.as_deref().map_or_else(
+                        || t("Undo").to_owned(),
+                        |l| tf("Undo {action}", &[("action", &td(l))]),
+                    ),
                 )),
                 Node::Item(Item::new(
                     REDO,
-                    redo.as_deref()
-                        .map_or("Redo".into(), |l| format!("Redo {l}")),
+                    redo.as_deref().map_or_else(
+                        || t("Redo").to_owned(),
+                        |l| tf("Redo {action}", &[("action", &td(l))]),
+                    ),
                 )),
                 Node::Separator,
                 settings,
@@ -155,32 +162,54 @@ impl App {
 
         let theme = self.theme_choice;
         let appearance = Node::submenu(
-            "Appearance",
+            t("Appearance"),
             [
                 (ThemeChoice::System, "Use System Setting"),
                 (ThemeChoice::Light, "Light"),
                 (ThemeChoice::Dark, "Dark"),
             ]
             .into_iter()
-            .map(|(t, label)| {
+            .map(|(c, label)| {
                 Node::Item(
-                    Item::new(CommandRef::with_params(THEME, json!(t.key())), label)
-                        .radio(theme == t),
+                    Item::new(CommandRef::with_params(THEME, json!(c.key())), t(label))
+                        .radio(theme == c),
                 )
             })
             .collect(),
         )
         .role(ItemRole::Appearance);
-        let view = Menu::new("View", vec![appearance]).role(MenuRole::View);
+        let mut view = vec![appearance];
+        // View ▸ Language, once there is more than English to choose from.
+        let languages = crate::i18n::languages();
+        if languages.len() > 1 {
+            let chosen = self.language.as_deref();
+            let mut items = vec![Node::Item(
+                Item::new(
+                    CommandRef::with_params(LANGUAGE, json!("auto")),
+                    t("Use System Setting"),
+                )
+                .radio(chosen.is_none()),
+            )];
+            items.push(Node::Separator);
+            items.extend(languages.into_iter().map(|(lang, name)| {
+                let code = crate::i18n::code(lang);
+                Node::Item(
+                    Item::new(CommandRef::with_params(LANGUAGE, json!(code)), name)
+                        .radio(chosen == Some(code)),
+                )
+            }));
+            view.push(Node::submenu(t("Language"), items));
+        }
+        let view = Menu::new(t("View"), view).role(MenuRole::View);
 
         let model = Menu::new(
-            "Model",
+            t("Model"),
             vec![item(RUN, "Run"), item(CANCEL_RUN, "Cancel Run")],
         );
         let help = Menu::new(
-            "Help",
+            t("Help"),
             vec![Node::Item(
-                Item::new(ABOUT, "About StochCraft").role(ItemRole::About),
+                Item::new(ABOUT, t("About StochCraft")).role(ItemRole::About),
             )],
         )
         .role(MenuRole::Help);
@@ -219,7 +248,13 @@ impl App {
     /// and on the web without the shortcuts the browser keeps for itself.
     pub fn menu_layout(&mut self, target: Target) -> craft_menu::Layout {
         let bar = self.menu_bar();
-        craft_menu::layout(&bar, target, &LayoutOptions::new("StochCraft"))
+        // The labels the layout writes itself (About StochCraft, Settings…, AppKit's items).
+        let label = |s: &'static str| t(s).to_owned();
+        let options = LayoutOptions {
+            label: &label,
+            ..LayoutOptions::new("StochCraft")
+        };
+        craft_menu::layout(&bar, target, &options)
     }
 
     /// A dialog is open: menu commands wait.
@@ -263,6 +298,10 @@ impl App {
                 if let Some(t) = command.params.as_str().and_then(ThemeChoice::from_key) {
                     self.theme_choice = t;
                 }
+            }
+            LANGUAGE => {
+                let code = command.params.as_str().filter(|c| *c != "auto");
+                self.set_language(code);
             }
             ABOUT => self.about = true,
             SHORTCUTS => self.open_shortcuts(),
