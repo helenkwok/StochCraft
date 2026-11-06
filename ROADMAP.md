@@ -624,9 +624,15 @@ Windows and Linux, the app menu on macOS) opens craft-keymap's dialog: every com
 its menu, recording, conflicts, undo and a summary; the user's shortcuts are saved with the
 preferences (`config.toml` on the desktop, the browser's storage on the web).
 
+**M3.1e (autosave done):** while a model has unsaved changes, a recovery copy is written every
+ten seconds on the desktop (atomically, to `recovery.json` in the user's local data folder) and
+every half minute and on closing the page on the web (the browser's storage), and removed once
+the model is saved, closed or discarded on quit. If StochCraft stops with changes unsaved, the
+next start asks whether to recover them as an untitled model or discard them.
+
 **Still to come:** strings through craft-i18n with a Language menu (the shared catalog translates
 the common strings now; StochCraft's own need a `stochcraft.tsv` in the craft-i18n data
-repository), screenshot tests in craft-ui's six test languages, panes and icons, and autosave.
+repository), screenshot tests in craft-ui's six test languages, and panes and icons.
 
 ### M3.2 Model editing without a canvas
 

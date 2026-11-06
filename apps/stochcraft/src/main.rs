@@ -16,7 +16,7 @@ use std::time::Instant;
 
 use craft_dialogs::{Answer, Dialogs, FileDialog};
 use craft_settings::{Location, Settings, SettingsStore};
-use stochcraft_ui_egui::{App, Platform, Prefs, Request};
+use stochcraft_ui_egui::{App, Autosave, Platform, Prefs, Request};
 
 /// What a file dialog's answer is for.
 enum Then {
@@ -42,6 +42,8 @@ struct Desktop {
     settings: SettingsStore<Stored>,
     /// Closing was confirmed (nothing unsaved, or the user chose).
     may_close: bool,
+    /// When the recovery copy was last brought up to date.
+    autosaved_at: Instant,
     /// The system menu bar (macOS).
     #[cfg(target_os = "macos")]
     native_menu: Option<craft_menu::NativeMenu>,
@@ -55,6 +57,9 @@ impl Desktop {
         app.set_prefs(&settings.get().0);
         if report.has_problems() {
             app.report_error("the settings could not all be read; defaults are used where not");
+        }
+        if let Some(copy) = recovery_path().and_then(|p| std::fs::read_to_string(p).ok()) {
+            app.offer_recovery(&copy);
         }
         if let Some(path) = file {
             open(&mut app, &path);
@@ -71,6 +76,7 @@ impl Desktop {
             dialogs: Dialogs::new(std::sync::Arc::new(move || wake.request_repaint())),
             settings,
             may_close: false,
+            autosaved_at: Instant::now(),
             #[cfg(target_os = "macos")]
             native_menu,
         }
@@ -170,6 +176,49 @@ impl Desktop {
     }
 }
 
+/// Where the recovery copy of unsaved changes is kept: the platform's local data folder.
+fn recovery_path() -> Option<PathBuf> {
+    dirs::data_local_dir().map(|d| d.join("stochcraft").join("recovery.json"))
+}
+
+/// How often the recovery copy is brought up to date while there are unsaved changes.
+const AUTOSAVE_EVERY: std::time::Duration = std::time::Duration::from_secs(10);
+
+impl Desktop {
+    /// Keeps the recovery copy in step with the model (atomically written, so a crash while
+    /// writing never leaves a broken one), at most every [`AUTOSAVE_EVERY`] unless `now`.
+    fn autosave(&mut self, ctx: Option<&egui::Context>, now: bool) {
+        let due = now || self.autosaved_at.elapsed() >= AUTOSAVE_EVERY;
+        if !due {
+            if let Some(ctx) = ctx.filter(|_| self.app.has_unsaved_changes()) {
+                ctx.request_repaint_after(
+                    AUTOSAVE_EVERY.saturating_sub(self.autosaved_at.elapsed()),
+                );
+            }
+            return;
+        }
+        self.autosaved_at = Instant::now();
+        let Some(path) = recovery_path() else {
+            return;
+        };
+        match self.app.autosave() {
+            Autosave::Write(copy) => {
+                let written = path
+                    .parent()
+                    .map_or(Ok(()), std::fs::create_dir_all)
+                    .and_then(|()| craft_atomic::atomic_write(&path, copy.as_bytes()));
+                if let Err(e) = written {
+                    self.app.report_error(format!("autosave: {e}"));
+                }
+            }
+            Autosave::Clear => {
+                let _ = std::fs::remove_file(&path);
+            }
+            Autosave::Keep => {}
+        }
+    }
+}
+
 /// Opens the model file at `path`, listing it under File ▸ Open Recent.
 fn open(app: &mut App, path: &Path) {
     let name = path.to_string_lossy();
@@ -234,10 +283,12 @@ impl eframe::App for Desktop {
             ctx.send_viewport_cmd(egui::ViewportCommand::Title(title));
         }
         self.sync_settings(Some(&ctx));
+        self.autosave(Some(&ctx), false);
         self.dialogs.show_pending(Some(frame));
     }
 
     fn on_exit(&mut self, _gl: Option<&eframe::glow::Context>) {
+        self.autosave(None, true);
         self.sync_settings(None);
         if let Err(e) = self.settings.flush() {
             eprintln!("stochcraft: the settings could not be saved: {e}");

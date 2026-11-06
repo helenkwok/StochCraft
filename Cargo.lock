@@ -3420,6 +3420,7 @@ dependencies = [
  "craft-settings",
  "craft-ui",
  "craft-window",
+ "dirs",
  "eframe",
  "egui",
  "serde",

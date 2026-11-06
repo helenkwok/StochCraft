@@ -25,6 +25,8 @@ craft-settings = { workspace = true }
 craft-ui = { workspace = true, features = ["system_fonts"] }
 craft-window = { workspace = true }
 serde = { version = "1", features = ["derive"] }
+# The local data folder, for the recovery copy of unsaved changes (also used by craft-settings).
+dirs = "7"
 
 [dev-dependencies]
 serde_json = "1"
