@@ -17,12 +17,15 @@ pub mod commands;
 pub use autosave::Autosave;
 mod editor;
 pub mod form;
+pub mod i18n;
 mod results;
 pub mod theme;
 
 use egui::{Key, Modifiers};
 use serde_json::{Value, json};
 use stochcraft_engine::Engine;
+
+use crate::i18n::{t, td, tf, tn, tnf};
 
 /// The models offered under File ▸ Open Example, built in so the browser app has something to
 /// open: the golden models of `stochcraft-testkit`.
@@ -170,6 +173,9 @@ pub struct Keyboard {
 #[serde(default)]
 pub struct Appearance {
     pub theme: ThemeChoice,
+    /// The interface language's code (`de`, `pt-br`); left out to follow the system.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
@@ -234,6 +240,9 @@ pub struct App {
     /// Recently opened or saved files, newest first (desktop only).
     recent: Vec<String>,
     theme_choice: ThemeChoice,
+    /// The interface language as the user chose it (`None`: the system's), and as shown.
+    language: Option<String>,
+    lang: craft_i18n::Lang,
     /// The theme last applied to the context.
     applied_theme: Option<ThemeChoice>,
     /// The shell shows the menus in the system's menu bar (macOS), not in the window.
@@ -285,6 +294,8 @@ impl App {
             dispatcher: craft_keymap::egui::Dispatcher::new(),
             recent: Vec::new(),
             theme_choice: ThemeChoice::System,
+            language: None,
+            lang: i18n::I18N.system_lang(),
             applied_theme: None,
             native_menu: false,
             shortcuts_dialog: None,
@@ -345,6 +356,7 @@ impl App {
         Prefs {
             appearance: Appearance {
                 theme: self.theme_choice,
+                language: self.language.clone(),
             },
             files: Files {
                 recent: self.recent.clone(),
@@ -364,6 +376,7 @@ impl App {
     /// Restores what was remembered.
     pub fn set_prefs(&mut self, prefs: &Prefs) {
         self.theme_choice = prefs.appearance.theme;
+        self.set_language(prefs.appearance.language.as_deref());
         self.recent = prefs.files.recent.clone();
         self.recent.truncate(RECENT_FILES);
         let overrides = prefs
@@ -373,6 +386,21 @@ impl App {
             .and_then(|v| serde_json::from_value(v).ok())
             .unwrap_or_default();
         self.keymap.set_overrides(overrides);
+    }
+
+    /// Shows the interface in the language with this code, or the system's (`None`, or a code no
+    /// longer embedded).
+    pub fn set_language(&mut self, code: Option<&str>) {
+        i18n::apply_setting(code);
+        self.lang = i18n::lang();
+        // Kept as chosen, so a build without that language doesn't forget it.
+        self.language = code.map(str::to_owned);
+    }
+
+    /// The interface language (the pseudo locale in tests).
+    pub fn set_lang(&mut self, lang: craft_i18n::Lang) {
+        self.lang = lang;
+        i18n::set_lang(lang);
     }
 
     /// Settings ▸ Keyboard Shortcuts…: craft-keymap's dialog over the app's keymap.
@@ -388,15 +416,20 @@ impl App {
         let Some(state) = &mut self.shortcuts_dialog else {
             return;
         };
-        let text = craft_keymap::ui::English;
+        let text = craft_keymap::ui::I18nText {
+            i18n: &i18n::I18N,
+            lang: i18n::lang(),
+        };
         let outcome =
             craft_keymap::ui::ShortcutsDialog::new(&mut self.keymap, &text).show(ctx, state);
         if !state.is_open() {
             self.shortcuts_dialog = None;
         }
         match outcome {
-            Some(craft_keymap::ui::Outcome::Ok) => self.info("Keyboard shortcuts saved"),
-            Some(craft_keymap::ui::Outcome::Cancel) => self.info("Keyboard shortcuts unchanged"),
+            Some(craft_keymap::ui::Outcome::Ok) => self.info(t("Keyboard shortcuts saved")),
+            Some(craft_keymap::ui::Outcome::Cancel) => {
+                self.info(t("Keyboard shortcuts unchanged"));
+            }
             _ => {}
         }
     }
@@ -466,7 +499,7 @@ impl App {
         }
         let name = &self.engine.model().name;
         if name.is_empty() {
-            "Untitled".into()
+            t("Untitled").into()
         } else {
             name.clone()
         }
@@ -531,10 +564,17 @@ impl App {
                         .count()
                 };
                 let n = count("notes") + count("diagnostics");
-                let mut message = format!("Opened {}", file_name(name));
-                if n > 0 {
-                    message += &format!(" ({n} warning{})", if n == 1 { "" } else { "s" });
-                }
+                let file = file_name(name);
+                let message = if n > 0 {
+                    tnf(
+                        n as u64,
+                        "Opened {file} ({n} warning)",
+                        "Opened {file} ({n} warnings)",
+                        &[("file", file)],
+                    )
+                } else {
+                    tf("Opened {file}", &[("file", file)])
+                };
                 self.info(message);
             }
             Err(e) => self.report_error(e.message),
@@ -549,7 +589,7 @@ impl App {
 
     /// The shell saved an export as `path`.
     pub fn exported(&mut self, path: &str) {
-        self.info(format!("Exported {}", file_name(path)));
+        self.info(tf("Exported {file}", &[("file", file_name(path))]));
     }
 
     /// Exports the results table as CSV.
@@ -564,7 +604,7 @@ impl App {
     /// Exports the charts as a PNG image of the window's pixels (taken on the next frame).
     pub fn export_png(&mut self, ctx: &egui::Context) {
         let Some(area) = self.charts_rect else {
-            self.report_error("there are no charts to export");
+            self.report_error(t("there are no charts to export"));
             return;
         };
         // One capture at a time (a frame laid out twice must not ask twice).
@@ -595,7 +635,7 @@ impl App {
                     let name = format!("{}-charts.png", self.export_stem());
                     self.requests.push(Request::Export { name, bytes });
                 }
-                None => self.report_error("the charts could not be captured"),
+                None => self.report_error(t("the charts could not be captured")),
             }
         }
     }
@@ -622,7 +662,7 @@ impl App {
     pub fn written(&mut self, path: &str, bytes: &[u8]) {
         match self.engine.saved_to(path, bytes) {
             Ok(_) => {
-                self.info(format!("Saved {}", file_name(path)));
+                self.info(tf("Saved {file}", &[("file", file_name(path))]));
                 self.remember(path);
                 if let Some(next) = self.after_save.take() {
                     self.replace_now(next);
@@ -686,7 +726,7 @@ impl App {
                     self.selected = None;
                     self.drafts.clear();
                     self.show_results = false;
-                    self.info("New model");
+                    self.info(t("New model"));
                 }
             }
             Replace::Open => self.requests.push(Request::PickOpen),
@@ -726,14 +766,14 @@ impl App {
     pub fn undo(&mut self) {
         if let Some(r) = self.execute("undo", json!({})) {
             let label = change_label(r["undone"].as_str().unwrap_or(""));
-            self.info(format!("Undid {label}"));
+            self.info(tf("Undid {action}", &[("action", &td(label))]));
         }
     }
 
     pub fn redo(&mut self) {
         if let Some(r) = self.execute("redo", json!({})) {
             let label = change_label(r["redone"].as_str().unwrap_or(""));
-            self.info(format!("Redid {label}"));
+            self.info(tf("Redid {action}", &[("action", &td(label))]));
         }
     }
 
@@ -748,7 +788,7 @@ impl App {
                 done: 0,
                 total: status["total"].as_u64().unwrap_or(0),
             });
-            self.info("Running…");
+            self.info(t("Running…"));
         }
     }
 
@@ -758,7 +798,7 @@ impl App {
             let status = self.execute("run.cancel", json!({}));
             self.running = None;
             if status.is_some() {
-                self.info("Run cancelled");
+                self.info(t("Run cancelled"));
             }
         }
     }
@@ -785,9 +825,10 @@ impl App {
                 self.results = Some(status["result"].clone());
                 self.show_results = true;
                 let n = status["total"].as_u64().unwrap_or(0);
-                self.info(format!(
-                    "Finished {n} replication{}",
-                    if n == 1 { "" } else { "s" }
+                self.info(tn(
+                    n,
+                    "Finished {n} replication",
+                    "Finished {n} replications",
                 ));
                 false
             }
@@ -795,7 +836,7 @@ impl App {
                 self.running = None;
                 let message = status["error"]["message"]
                     .as_str()
-                    .unwrap_or("the run stopped")
+                    .unwrap_or(t("the run stopped"))
                     .to_owned();
                 self.report_error(message);
                 false
@@ -853,6 +894,7 @@ impl App {
     /// Draws the window and handles its input. Call once per frame with the root `Ui`.
     pub fn ui(&mut self, ui: &mut egui::Ui) {
         let ctx = ui.ctx().clone();
+        i18n::set_lang(self.lang);
         if !self.styled {
             theme::install(&ctx);
             self.styled = true;
@@ -948,19 +990,15 @@ impl App {
             .auto_shrink([false, false])
             .show(ui, |ui| {
                 ui.horizontal(|ui| {
-                    ui.heading("Results");
+                    ui.heading(t("Results"));
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                        let verb = if self.platform.file_system {
-                            "Export"
+                        let (charts, table) = if self.platform.file_system {
+                            (t("Export charts (PNG)"), t("Export table (CSV)"))
                         } else {
-                            "Download"
+                            (t("Download charts (PNG)"), t("Download table (CSV)"))
                         };
-                        png = ui
-                            .add(theme::secondary(ui, &format!("{verb} charts (PNG)")))
-                            .clicked();
-                        csv = ui
-                            .add(theme::secondary(ui, &format!("{verb} table (CSV)")))
-                            .clicked();
+                        png = ui.add(theme::secondary(ui, charts)).clicked();
+                        csv = ui.add(theme::secondary(ui, table)).clicked();
                     });
                 });
                 results::record_line(ui, &results);
@@ -983,7 +1021,7 @@ impl App {
         // craft-ui's Tab: an accessible tab (role, keyboard focus) the app lays out and paints.
         let font = egui::FontId::new(14.0, egui::FontFamily::Name(theme::STRONG.into()));
         ui.horizontal(|ui| {
-            for (label, results) in [("Model", false), ("Results", true)] {
+            for (label, results) in [(t("Model"), false), (t("Results"), true)] {
                 let on = self.show_results == results;
                 let width = ui.fonts_mut(|f| {
                     f.layout_no_wrap(label.into(), font.clone(), p.text)
@@ -993,7 +1031,7 @@ impl App {
                 let (rect, _) =
                     ui.allocate_exact_size(egui::vec2(width, 30.0), egui::Sense::hover());
                 let tab =
-                    craft_ui::tabs::Tab::new(egui::Id::unique(("view-tab", label)), label, on)
+                    craft_ui::tabs::Tab::new(egui::Id::unique(("view-tab", results)), label, on)
                         .focus_stroke(egui::Stroke::new(1.5, p.accent));
                 let r = tab.show_at(ui, rect, |ui, r| {
                     let painter = ui.painter_at(rect);
@@ -1024,7 +1062,7 @@ impl App {
                 }
             }
             if self.results.is_none() && self.running.is_none() {
-                ui.label(theme::weak(ui, "· no results yet"));
+                ui.label(theme::weak(ui, t("· no results yet")));
             }
         });
         let rect = ui.max_rect();
@@ -1061,15 +1099,13 @@ impl App {
                 ui.add_space(8.0);
                 self.menu_bar_ui(ui, p);
                 ui.add_space(8.0);
-                let dirty = if self.engine.is_dirty() {
-                    " — edited"
+                let name = self.document_name();
+                let shown = if self.engine.is_dirty() {
+                    tf("{name} — edited", &[("name", &name)])
                 } else {
-                    ""
+                    name
                 };
-                ui.label(
-                    egui::RichText::new(format!("{}{dirty}", self.document_name()))
-                        .color(p.on_shell_weak),
-                );
+                ui.label(egui::RichText::new(shown).color(p.on_shell_weak));
             },
             |ui| {
                 ui.visuals_mut().override_text_color = None;
@@ -1079,16 +1115,19 @@ impl App {
                 }
                 if running {
                     let cancel =
-                        egui::Button::new(egui::RichText::new("Cancel run").color(p.on_shell))
+                        egui::Button::new(egui::RichText::new(t("Cancel run")).color(p.on_shell))
                             .stroke(egui::Stroke::new(1.0, p.on_shell_weak))
                             .fill(p.shell)
                             .min_size(egui::vec2(0.0, 30.0));
                     ui.add(cancel).on_hover_text("Esc").clicked()
                 } else {
                     let shortcut = run_key.clone();
-                    ui.add_enabled(can_run, theme::primary(ui, "Run"))
-                        .on_hover_text(format!("Run the experiment ({shortcut})"))
-                        .on_disabled_hover_text("Open a model first")
+                    ui.add_enabled(can_run, theme::primary(ui, t("Run")))
+                        .on_hover_text(tf(
+                            "Run the experiment ({shortcut})",
+                            &[("shortcut", &shortcut)],
+                        ))
+                        .on_disabled_hover_text(t("Open a model first"))
                         .clicked()
                 }
             },
@@ -1132,10 +1171,10 @@ impl App {
     fn status_bar(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         ui.horizontal(|ui| {
             if self.status_error {
-                ui.label(theme::strong("Error").color(p.error));
+                ui.label(theme::strong(t("Error")).color(p.error));
                 ui.label(egui::RichText::new(&self.status).color(p.error));
             } else if self.status.is_empty() {
-                ui.label(theme::weak(ui, "Ready"));
+                ui.label(theme::weak(ui, t("Ready")));
             } else {
                 ui.label(theme::weak(ui, &self.status));
             }
@@ -1153,7 +1192,7 @@ impl App {
         let problems = self.problems();
         let model = self.engine.model();
         let name = if model.name.is_empty() {
-            "Untitled model".to_owned()
+            t("Untitled model").to_owned()
         } else {
             model.name.clone()
         };
@@ -1163,20 +1202,20 @@ impl App {
                 egui::Button::selectable(overview, theme::strong(&name).size(17.0))
                     .frame_when_inactive(false),
             )
-            .on_hover_text("The model: its experiment, connections and problems");
+            .on_hover_text(t("The model: its experiment, connections and problems"));
         let mut select: Option<Option<String>> = None;
         if r.clicked() {
             select = Some(None);
         }
         ui.add_space(10.0);
         ui.horizontal(|ui| {
-            ui.label(theme::strong("Process").size(12.0).color(p.text_weak));
+            ui.label(theme::strong(t("Process")).size(12.0).color(p.text_weak));
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 ui.menu_button(
-                    theme::strong("+ Add block").size(12.0).color(p.accent),
+                    theme::strong(t("+ Add block")).size(12.0).color(p.accent),
                     |ui| {
                         for (kind, label) in editor::KINDS {
-                            if ui.button(*label).clicked() {
+                            if ui.button(t(label)).clicked() {
                                 self.add_block(kind);
                                 self.show_results = false;
                             }
@@ -1194,7 +1233,7 @@ impl App {
                 if model.elements.is_empty() {
                     ui.label(theme::weak(
                         ui,
-                        "No blocks yet. Open a model, or add blocks to build one.",
+                        t("No blocks yet. Open a model, or add blocks to build one."),
                     ));
                 }
                 let n = model.elements.len();
@@ -1244,15 +1283,23 @@ impl App {
             let unit = time_unit(&self.engine);
             ui.label(theme::weak(
                 ui,
-                format!(
-                    "Warm-up {} {unit}, then {} {unit} measured",
-                    results::number(x.warmup),
-                    results::number(x.duration)
+                tf(
+                    "Warm-up {warmup} {unit}, then {duration} {unit} measured",
+                    &[
+                        ("warmup", &results::number(x.warmup)),
+                        ("duration", &results::number(x.duration)),
+                        ("unit", &unit),
+                    ],
                 ),
             ));
-            ui.label(format!("{} replications · seed {}", x.replications, x.seed));
+            ui.label(tnf(
+                u64::from(x.replications),
+                "{n} replication · seed {seed}",
+                "{n} replications · seed {seed}",
+                &[("seed", &x.seed.to_string())],
+            ));
             ui.add_space(2.0);
-            ui.label(theme::strong("Experiment").size(12.0).color(p.text_weak));
+            ui.label(theme::strong(t("Experiment")).size(12.0).color(p.text_weak));
             ui.add_space(4.0);
             ui.separator();
         });
@@ -1261,24 +1308,26 @@ impl App {
     /// The empty state: what StochCraft opens, and a way in.
     fn welcome(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         ui.add_space(24.0);
-        ui.heading("Open a model to simulate it");
+        ui.heading(t("Open a model to simulate it"));
         ui.add_space(6.0);
         ui.label(theme::weak(
             ui,
-            "StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, \
-             runs them as replicated experiments and reports every result with its confidence \
-             interval.",
+            t(
+                "StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, \
+               runs them as replicated experiments and reports every result with its confidence \
+               interval.",
+            ),
         ));
         ui.add_space(16.0);
         ui.horizontal(|ui| {
-            if ui.add(theme::primary(ui, "Open a model…")).clicked() {
+            if ui.add(theme::primary(ui, t("Open a model…"))).clicked() {
                 self.replace(Replace::Open);
             }
             let key = self.shortcut(commands::OPEN, ui.ctx()).unwrap_or_default();
             ui.label(theme::weak(ui, key));
         });
         ui.add_space(28.0);
-        ui.label(theme::strong("Or start from an example"));
+        ui.label(theme::strong(t("Or start from an example")));
         ui.add_space(6.0);
         for (i, e) in EXAMPLES.iter().enumerate() {
             let r = egui::Frame::new()
@@ -1289,11 +1338,11 @@ impl App {
                     ui.set_width(ui.available_width());
                     ui.horizontal(|ui| {
                         ui.vertical(|ui| {
-                            ui.label(theme::strong(e.title));
-                            ui.label(theme::weak(ui, e.about));
+                            ui.label(theme::strong(t(e.title)));
+                            ui.label(theme::weak(ui, t(e.about)));
                         });
                         ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                            if ui.add(theme::secondary(ui, "Open")).clicked() {
+                            if ui.add(theme::secondary(ui, t("Open"))).clicked() {
                                 self.replace(Replace::Example(i));
                             }
                             ui.label(theme::weak(ui, e.file).monospace());
@@ -1308,20 +1357,24 @@ impl App {
     /// A model is open and has no results yet.
     fn ready(&mut self, ui: &mut egui::Ui) {
         ui.add_space(24.0);
-        ui.heading("No results yet");
+        ui.heading(t("No results yet"));
         ui.add_space(6.0);
         let x = &self.engine.model().experiment;
         ui.label(theme::weak(
             ui,
-            format!(
-                "Runs {} independent replications of the model from seed {}. Each element's \
-                 results come with the half-width of a 95% confidence interval across them.",
-                x.replications, x.seed
+            tnf(
+                u64::from(x.replications),
+                "Runs {n} independent replication of the model from seed {seed}. Each \
+                 element's results come with the half-width of a 95% confidence interval.",
+                "Runs {n} independent replications of the model from seed {seed}. Each \
+                 element's results come with the half-width of a 95% confidence interval across \
+                 them.",
+                &[("seed", &x.seed.to_string())],
             ),
         ));
         ui.add_space(16.0);
         ui.horizontal(|ui| {
-            if ui.add(theme::primary(ui, "Run experiment")).clicked() {
+            if ui.add(theme::primary(ui, t("Run experiment"))).clicked() {
                 self.run();
             }
             let key = self.shortcut(commands::RUN, ui.ctx()).unwrap_or_default();
@@ -1331,7 +1384,7 @@ impl App {
 
     fn running_view(&mut self, ui: &mut egui::Ui, done: u64, total: u64) {
         ui.add_space(24.0);
-        ui.heading("Running");
+        ui.heading(t("Running"));
         ui.add_space(10.0);
         let fraction = if total == 0 {
             0.0
@@ -1346,11 +1399,16 @@ impl App {
         ui.add_space(6.0);
         ui.label(theme::weak(
             ui,
-            format!("{done} of {total} replications finished"),
+            tnf(
+                total,
+                "{done} of {n} replication finished",
+                "{done} of {n} replications finished",
+                &[("done", &done.to_string())],
+            ),
         ));
         ui.add_space(12.0);
         if ui
-            .add(theme::secondary(ui, "Cancel run"))
+            .add(theme::secondary(ui, t("Cancel run")))
             .on_hover_text("Esc")
             .clicked()
         {
@@ -1366,26 +1424,26 @@ impl App {
         let mut choice = None;
         egui::Modal::new(egui::Id::unique("unsaved")).show(ctx, |ui| {
             ui.set_max_width(380.0);
-            ui.heading(format!("Save changes to {name}?"));
+            ui.heading(tf("Save changes to {name}?", &[("name", &name)]));
             ui.add_space(4.0);
             ui.label(theme::weak(
                 ui,
-                "Your changes will be lost if you don't save them.",
+                t("Your changes will be lost if you don't save them."),
             ));
             ui.add_space(14.0);
             ui.horizontal(|ui| {
                 let save = if self.platform.file_system {
-                    "Save"
+                    t("Save")
                 } else {
-                    "Download"
+                    t("Download")
                 };
                 if ui.add(theme::primary(ui, save)).clicked() {
                     choice = Some(Choice::Save);
                 }
-                if ui.add(theme::secondary(ui, "Don't Save")).clicked() {
+                if ui.add(theme::secondary(ui, t("Don't Save"))).clicked() {
                     choice = Some(Choice::Discard);
                 }
-                if ui.add(theme::secondary(ui, "Cancel")).clicked()
+                if ui.add(theme::secondary(ui, t("Cancel"))).clicked()
                     || ui.input(|i| i.key_pressed(Key::Escape))
                 {
                     choice = Some(Choice::Cancel);
@@ -1412,7 +1470,8 @@ impl App {
 
     fn about_window(&mut self, ctx: &egui::Context) {
         let mut open = self.about;
-        egui::Window::new("About StochCraft")
+        egui::Window::new(t("About StochCraft"))
+            .id(egui::Id::unique("about"))
             .open(&mut open)
             .collapsible(false)
             .resizable(false)
@@ -1423,22 +1482,24 @@ impl App {
                 );
                 ui.label(theme::weak(
                     ui,
-                    "Discrete-event simulation, from model files to results.",
+                    t("Discrete-event simulation, from model files to results."),
                 ));
                 ui.hyperlink("https://github.com/helenkwok/StochCraft");
                 ui.add_space(10.0);
-                ui.label(
+                ui.label(t(
                     "Licensed under the MIT License or the Apache License 2.0, at your option.",
-                );
+                ));
                 ui.add_space(10.0);
-                ui.label(theme::strong("Built with"));
+                ui.label(theme::strong(t("Built with")));
                 egui::Grid::new("credits")
                     .num_columns(2)
                     .spacing([16.0, 4.0])
                     .show(ui, |ui| {
                         for (name, licence) in CREDITS {
-                            ui.label(*name);
-                            ui.label(theme::weak(ui, *licence));
+                            // Names and SPDX licences, through the catalog for the words
+                            // some carry ("Craft suite fork").
+                            ui.label(td(name));
+                            ui.label(theme::weak(ui, td(licence)));
                             ui.end_row();
                         }
                     });
@@ -1456,10 +1517,10 @@ fn window_button(ui: &mut egui::Ui, p: &theme::Palette, button: craft_window::Bu
     use craft_window::Button;
     let maximized = ui.ctx().input(|i| i.viewport().maximized.unwrap_or(false));
     let (label, command) = match button {
-        Button::Minimize => ("Minimise", egui::ViewportCommand::Minimized(true)),
-        Button::Maximize if maximized => ("Restore", egui::ViewportCommand::Maximized(false)),
-        Button::Maximize => ("Maximise", egui::ViewportCommand::Maximized(true)),
-        Button::Close => ("Close", egui::ViewportCommand::Close),
+        Button::Minimize => (t("Minimise"), egui::ViewportCommand::Minimized(true)),
+        Button::Maximize if maximized => (t("Restore"), egui::ViewportCommand::Maximized(false)),
+        Button::Maximize => (t("Maximise"), egui::ViewportCommand::Maximized(true)),
+        Button::Close => (t("Close"), egui::ViewportCommand::Close),
     };
     let (rect, response) = ui.allocate_exact_size(egui::vec2(30.0, 30.0), egui::Sense::click());
     response.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, label));
@@ -1518,15 +1579,7 @@ impl FlowRow<'_> {
             egui::vec2(ui.available_width(), height),
             egui::Sense::click(),
         );
-        let what = match self.kind {
-            "source" => "arrivals",
-            "server" => "task with a resource",
-            "delay" => "task",
-            "sink" => "departures",
-            "exclusive_gateway" => "decision: one way",
-            "parallel_gateway" => "split or join: all ways",
-            other => other,
-        };
+        let what = kind_text(self.kind);
         response.widget_info(|| {
             egui::WidgetInfo::selected(egui::Role::ListBoxOption, true, self.selected, self.title)
         });
@@ -1631,12 +1684,25 @@ impl FlowRow<'_> {
             let color = if error { p.error } else { p.warning };
             painter.circle_filled(egui::pos2(rect.right() - 12.0, cy), 4.0, color);
             return response.on_hover_text(if error {
-                "This block has an error"
+                t("This block has an error")
             } else {
-                "This block has a warning"
+                t("This block has a warning")
             });
         }
         response
+    }
+}
+
+/// What a block of `kind` is, in a few lowercase words ("task with a resource").
+pub(crate) fn kind_text(kind: &str) -> &str {
+    match kind {
+        "source" => t("arrivals"),
+        "server" => t("task with a resource"),
+        "delay" => t("task"),
+        "sink" => t("departures"),
+        "exclusive_gateway" => t("decision: one way"),
+        "parallel_gateway" => t("split or join: all ways"),
+        other => other,
     }
 }
 

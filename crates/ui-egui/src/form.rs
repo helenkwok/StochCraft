@@ -17,6 +17,7 @@ use serde_json::{Map, Value, json};
 
 use craft_ui::localized::{LocaleNumbers, NumberField, Unit};
 
+use crate::i18n::{t, td, tf};
 use crate::theme;
 
 /// A command's parameter schema, with `$ref`s resolved against its `$defs`.
@@ -159,32 +160,34 @@ pub fn label(name: &str) -> String {
         _ => "",
     };
     if !known.is_empty() {
-        return known.to_owned();
+        return t(known).to_owned();
     }
     let s = name.replace('_', " ");
     let mut c = s.chars();
-    c.next()
+    let english = c
+        .next()
         .map(|f| f.to_uppercase().collect::<String>() + c.as_str())
-        .unwrap_or_default()
+        .unwrap_or_default();
+    td(&english)
 }
 
 /// How a distribution or enum choice reads: "truncated_normal" → "Truncated normal".
 pub fn choice_label(tag: &str) -> String {
     match tag {
-        "log_normal" => "Log-normal".into(),
-        "" => "from its value".into(),
-        "long" => "Whole number".into(),
-        "double" => "Decimal number".into(),
-        "boolean" => "Yes or no".into(),
-        "string" => "Text".into(),
-        "dateTime" => "Date and time".into(),
-        "user" => "Data points".into(),
-        "hour" => "hours".into(),
-        "day" => "days".into(),
-        "year" => "years".into(),
-        "min" => "minutes".into(),
-        "s" => "seconds".into(),
-        "ms" => "milliseconds".into(),
+        "log_normal" => t("Log-normal").into(),
+        "" => t("from its value").into(),
+        "long" => t("Whole number").into(),
+        "double" => t("Decimal number").into(),
+        "boolean" => t("Yes or no").into(),
+        "string" => t("Text").into(),
+        "dateTime" => t("Date and time").into(),
+        "user" => t("Data points").into(),
+        "hour" => t("hours").into(),
+        "day" => t("days").into(),
+        "year" => t("years").into(),
+        "min" => t("minutes").into(),
+        "s" => t("seconds").into(),
+        "ms" => t("milliseconds").into(),
         other => label(other),
     }
 }
@@ -269,8 +272,8 @@ fn edit(
             };
             r.changed().then(|| json!(b))
         }
-        Node::Typed(n, t @ ("number" | "integer")) => {
-            let integer = t == "integer";
+        Node::Typed(n, ty @ ("number" | "integer")) => {
+            let integer = ty == "integer";
             let unit = if time {
                 Some(cx.time_unit.to_owned())
             } else {
@@ -281,7 +284,7 @@ fn edit(
                 let mut on = !current.is_null();
                 let mut out = None;
                 row(ui, label, help, |ui| {
-                    let r = ui.checkbox(&mut on, "").on_hover_text("Set a value");
+                    let r = ui.checkbox(&mut on, "").on_hover_text(t("Set a value"));
                     // Named after the field, for screen readers (the box has no text of its own).
                     let ticked = on;
                     r.widget_info(|| {
@@ -302,7 +305,7 @@ fn edit(
                             number(ui, cx, key, label, current, integer, n, unit.as_deref())
                         });
                     } else {
-                        ui.label(theme::weak(ui, "unlimited"));
+                        ui.label(theme::weak(ui, t("unlimited")));
                     }
                     out.clone()
                 })
@@ -318,7 +321,10 @@ fn edit(
             text(ui, cx, key, label, current, 260.0)
         }),
         _ => {
-            ui.label(theme::weak(ui, format!("{label}: not editable here yet")));
+            ui.label(theme::weak(
+                ui,
+                tf("{field}: not editable here yet", &[("field", label)]),
+            ));
             None
         }
     }
@@ -595,14 +601,14 @@ fn array(
                     out = Some(all);
                 }
             }
-            if items.len() > 1 && ui.small_button("Remove").clicked() {
+            if items.len() > 1 && ui.small_button(t("Remove")).clicked() {
                 let mut all = out.clone().unwrap_or_else(|| items.clone());
                 all.remove(i);
                 out = Some(all);
             }
         });
     }
-    if ui.small_button("Add point").clicked() {
+    if ui.small_button(t("Add point")).clicked() {
         let mut all = out.clone().unwrap_or_else(|| items.clone());
         let last = items
             .last()

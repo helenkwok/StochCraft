@@ -10,6 +10,7 @@
 use egui::{Align2, FontId, Rect, Stroke, pos2, vec2};
 use serde_json::Value;
 
+use crate::i18n::{t, tnf};
 use crate::results::{grouped, unit_label};
 use crate::theme;
 
@@ -161,9 +162,9 @@ fn chart(ui: &mut egui::Ui, m: &Measure, bars: &[Bar], unit: &str, width: f32) {
         String::new()
     };
     let title = if suffix.is_empty() {
-        m.title.to_owned()
+        t(m.title).to_owned()
     } else {
-        format!("{} ({})", m.title, suffix.trim())
+        format!("{} ({})", t(m.title), suffix.trim())
     };
     ui.label(theme::strong(title).size(13.0));
     ui.add_space(4.0);
@@ -267,13 +268,17 @@ fn chart(ui: &mut egui::Ui, m: &Measure, bars: &[Bar], unit: &str, width: f32) {
             p.text,
         );
         if hover {
-            let tip = format!(
-                "{}: {}{suffix}\n95% interval {} to {}{suffix}\nacross {} replications",
-                b.name,
-                grouped(b.mean),
-                grouped(b.mean - b.half_width),
-                grouped(b.mean + b.half_width),
-                b.n
+            let tip = tnf(
+                b.n,
+                "{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication",
+                "{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications",
+                &[
+                    ("name", &b.name),
+                    ("mean", &grouped(b.mean)),
+                    ("low", &grouped(b.mean - b.half_width)),
+                    ("high", &grouped(b.mean + b.half_width)),
+                    ("unit", &suffix),
+                ],
             );
             egui::Tooltip::always_open(
                 ui.ctx().clone(),

@@ -8,6 +8,7 @@
 
 use serde_json::{Value, json};
 
+use crate::i18n::{t, tf};
 use crate::{App, theme};
 
 /// What the shell does with the recovery copy.
@@ -73,7 +74,10 @@ impl App {
             self.results = None;
             self.selected = None;
             self.show_results = false;
-            self.info(format!("Recovered {name}; save it to keep it"));
+            self.info(tf(
+                "Recovered {name}; save it to keep it",
+                &[("name", &name)],
+            ));
         }
     }
 
@@ -81,25 +85,26 @@ impl App {
         let Some(copy) = self.recovery.clone() else {
             return;
         };
-        let name = copy["name"].as_str().unwrap_or("a model").to_owned();
+        let name = copy["name"].as_str().unwrap_or(t("a model")).to_owned();
         let mut choice = None;
         egui::Modal::new(egui::Id::unique("recovery")).show(ctx, |ui| {
             ui.set_max_width(400.0);
-            ui.heading("Recover unsaved changes?");
+            ui.heading(t("Recover unsaved changes?"));
             ui.add_space(4.0);
             ui.label(theme::weak(
                 ui,
-                format!(
+                tf(
                     "StochCraft closed with unsaved changes to {name}. Recover them as an \
-                     untitled model, or discard them."
+                     untitled model, or discard them.",
+                    &[("name", &name)],
                 ),
             ));
             ui.add_space(14.0);
             ui.horizontal(|ui| {
-                if ui.add(theme::primary(ui, "Recover")).clicked() {
+                if ui.add(theme::primary(ui, t("Recover"))).clicked() {
                     choice = Some(true);
                 }
-                if ui.add(theme::secondary(ui, "Discard")).clicked() {
+                if ui.add(theme::secondary(ui, t("Discard"))).clicked() {
                     choice = Some(false);
                 }
             });
@@ -112,7 +117,7 @@ impl App {
             Some(false) => {
                 self.recovery = None;
                 self.autosave_clear_pending = true;
-                self.info("Discarded the recovered changes");
+                self.info(t("Discarded the recovered changes"));
             }
             None => {}
         }

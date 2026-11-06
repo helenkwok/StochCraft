@@ -5,6 +5,7 @@
 use egui::RichText;
 use serde_json::Value;
 
+use crate::i18n::{t, tf, tnf};
 use crate::theme;
 
 /// A number for a table: about five significant digits, without a run of trailing zeros.
@@ -50,29 +51,29 @@ enum Unit {
 
 fn metric(name: &str) -> (&str, Unit) {
     match name {
-        "entered" => ("Entered", Unit::Count),
-        "left" => ("Left", Unit::Count),
-        "mean_queue_length" => ("Mean queue length", Unit::Items),
-        "mean_wait" => ("Mean wait", Unit::Time),
-        "utilisation" => ("Utilisation", Unit::Share),
-        "mean_contents" => ("Mean number inside", Unit::Items),
-        "mean_time_in_system" => ("Mean time in system", Unit::Time),
-        "mean_blocked_time" => ("Mean time blocked", Unit::Time),
-        "blocking_probability" => ("Share of units blocked", Unit::Share),
-        "lost" => ("Lost (waiting room full)", Unit::Count),
-        "loss_probability" => ("Share of arrivals lost", Unit::Share),
+        "entered" => (t("Entered"), Unit::Count),
+        "left" => (t("Left"), Unit::Count),
+        "mean_queue_length" => (t("Mean queue length"), Unit::Items),
+        "mean_wait" => (t("Mean wait"), Unit::Time),
+        "utilisation" => (t("Utilisation"), Unit::Share),
+        "mean_contents" => (t("Mean number inside"), Unit::Items),
+        "mean_time_in_system" => (t("Mean time in system"), Unit::Time),
+        "mean_blocked_time" => (t("Mean time blocked"), Unit::Time),
+        "blocking_probability" => (t("Share of units blocked"), Unit::Share),
+        "lost" => (t("Lost (waiting room full)"), Unit::Count),
+        "loss_probability" => (t("Share of arrivals lost"), Unit::Share),
         other => (other, Unit::Count),
     }
 }
 
 fn kind_label(kind: &str) -> &str {
     match kind {
-        "source" => "Arrivals",
-        "server" => "Task with a resource",
-        "delay" => "Task",
-        "sink" => "Departures",
-        "exclusive_gateway" => "Decision",
-        "parallel_gateway" => "Split or join",
+        "source" => t("Arrivals"),
+        "server" => t("Task with a resource"),
+        "delay" => t("Task"),
+        "sink" => t("Departures"),
+        "exclusive_gateway" => t("Decision"),
+        "parallel_gateway" => t("Split or join"),
         other => other,
     }
 }
@@ -95,12 +96,16 @@ pub fn record_line(ui: &mut egui::Ui, results: &Value) {
     let num = |v: &Value| v.as_f64().map_or_else(|| "–".to_owned(), number);
     ui.label(theme::weak(
         ui,
-        format!(
-            "{} replications · seed {} · warm-up {} {unit} · {} {unit} measured",
-            r["replications"],
-            r["seed"],
-            num(&r["warmup"]),
-            num(&r["duration"])
+        tnf(
+            r["replications"].as_u64().unwrap_or(0),
+            "{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured",
+            "{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured",
+            &[
+                ("seed", &r["seed"].to_string()),
+                ("warmup", &num(&r["warmup"])),
+                ("duration", &num(&r["duration"])),
+                ("unit", unit),
+            ],
         ),
     ));
 }
@@ -127,7 +132,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
             .collect();
         for n in &notes {
             ui.horizontal_wrapped(|ui| {
-                ui.label(theme::strong("Warning").color(p.warning));
+                ui.label(theme::strong(t("Warning")).color(p.warning));
                 ui.label(*n);
             });
         }
@@ -146,7 +151,12 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                 ));
             });
             ui.add_space(4.0);
-            row(ui, &p, None, ["Metric", "Mean", "± 95% CI", "Unit"]);
+            row(
+                ui,
+                &p,
+                None,
+                [t("Metric"), t("Mean"), t("± 95% CI"), t("Unit")],
+            );
             for (i, key) in order.iter().enumerate() {
                 let m = &e["metrics"][*key];
                 if m.is_null() {
@@ -185,7 +195,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                     &p,
                     Some((shown + j) % 2 == 0),
                     [
-                        &format!("{name} (set to, mean)"),
+                        &tf("{property} (set to, mean)", &[("property", name)]),
                         &show(m["mean"].as_f64()),
                         &show(m["half_width"].as_f64()),
                         "",
@@ -196,16 +206,20 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
         }
         ui.label(theme::weak(
             ui,
-            "± is the half-width of a 95% Student-t confidence interval of the mean across \
-                 replications.",
+            t(
+                "± is the half-width of a 95% Student-t confidence interval of the mean across \
+               replications.",
+            ),
         ));
         ui.label(
             theme::weak(
                 ui,
-                format!(
-                    "StochCraft {} · model {}",
-                    r["stochcraft"].as_str().unwrap_or(""),
-                    r["model_digest"].as_str().unwrap_or("")
+                tf(
+                    "StochCraft {version} · model {digest}",
+                    &[
+                        ("version", r["stochcraft"].as_str().unwrap_or("")),
+                        ("digest", r["model_digest"].as_str().unwrap_or("")),
+                    ],
                 ),
             )
             .size(12.0),
