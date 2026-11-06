@@ -150,6 +150,7 @@ pub fn label(name: &str) -> String {
         "limit" => "Arrival limit",
         "queue_capacity" => "Waiting room",
         "priority" => "Priority",
+        "quantity" => "Units",
         "interarrival" => "Time between arrivals",
         "service" => "Service time",
         "duration" => "Duration",

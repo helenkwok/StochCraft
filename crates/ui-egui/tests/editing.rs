@@ -422,3 +422,48 @@ fn results_are_written_as_the_users_region_writes_numbers() {
     );
     assert!(h.query_by_label("14,990").is_none());
 }
+
+#[test]
+fn pools_are_added_and_a_shared_task_needs_them_by_pool_or_role() {
+    let mut h = mm1();
+    // The overview: add a pool, give it 3 units and a role.
+    click(&mut h, Role::Button, "Add pool");
+    let pools = |h: &Harness<'static, App>| model(h)["resources"].clone();
+    assert_eq!(pools(&h)[0]["id"], "resource-1", "{}", pools(&h));
+    type_into(&mut h, "Units", "3");
+    type_into(&mut h, "Roles", "agent, senior");
+    assert_eq!(pools(&h)[0]["quantity"], json!(3));
+    assert_eq!(pools(&h)[0]["roles"], json!(["agent", "senior"]));
+
+    // A task with shared resources starts out needing one unit of the first pool.
+    click(&mut h, Role::Button, "+ Add block");
+    click(&mut h, Role::Button, "Task with shared resources");
+    let task = element(&h, "shared_task-1");
+    assert_eq!(
+        task["needs"],
+        json!([{"resource": "resource-1", "quantity": 1}])
+    );
+
+    // Needed by role instead, then a second alternative.
+    click(&mut h, Role::ComboBox, "Alternative 1");
+    click(&mut h, Role::Button, "By role");
+    type_into(&mut h, "Roles", "agent");
+    type_into(&mut h, "Units", "2");
+    assert_eq!(
+        element(&h, "shared_task-1")["needs"],
+        json!([{"roles": ["agent"], "quantity": 2}])
+    );
+    click(&mut h, Role::Button, "Add alternative");
+    assert_eq!(
+        element(&h, "shared_task-1")["needs"][1],
+        json!({"resource": "resource-1", "quantity": 1})
+    );
+    h.state_mut().undo();
+    settle(&mut h);
+    assert_eq!(
+        element(&h, "shared_task-1")["needs"]
+            .as_array()
+            .map(Vec::len),
+        Some(1)
+    );
+}

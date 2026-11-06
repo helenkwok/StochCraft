@@ -13,6 +13,7 @@ use crate::{App, theme};
 pub const KINDS: &[(&str, &str)] = &[
     ("source", "Arrivals"),
     ("server", "Task with a resource"),
+    ("shared_task", "Task with shared resources"),
     ("delay", "Task"),
     ("exclusive_gateway", "Decision (one way)"),
     ("parallel_gateway", "Split or join (all ways)"),
@@ -25,6 +26,9 @@ pub fn new_block(kind: &str) -> Value {
         "source" => json!({"kind": "source", "interarrival": {"type": "exponential", "mean": 1.0}}),
         "server" => {
             json!({"kind": "server", "capacity": 1, "service": {"type": "exponential", "mean": 1.0}})
+        }
+        "shared_task" => {
+            json!({"kind": "shared_task", "service": {"type": "exponential", "mean": 1.0}, "needs": []})
         }
         "delay" => json!({"kind": "delay", "duration": {"type": "constant", "value": 1.0}}),
         "exclusive_gateway" => json!({"kind": "exclusive_gateway"}),
@@ -46,7 +50,7 @@ fn parameters(kind: &str) -> &'static [&'static str] {
 }
 
 /// The parameters of a command, from the engine's catalogue.
-fn params_schema(command: &str) -> Value {
+pub(crate) fn params_schema(command: &str) -> Value {
     COMMANDS
         .iter()
         .find(|c| c.name == command)
@@ -84,6 +88,12 @@ impl App {
     /// block sends entities on, and selects it.
     pub(crate) fn add_block(&mut self, kind: &str) {
         let mut params = new_block(kind);
+        if kind == "shared_task" {
+            let Some(pool) = self.first_pool() else {
+                return;
+            };
+            params["needs"] = json!([{ "resource": pool, "quantity": 1 }]);
+        }
         let index = self.selected_index().map(|i| i + 1);
         if let Some(i) = index {
             params["index"] = json!(i);
@@ -171,7 +181,7 @@ impl App {
             });
     }
 
-    fn time_unit_label(&self) -> String {
+    pub(crate) fn time_unit_label(&self) -> String {
         crate::time_unit(&self.engine)
     }
 
@@ -225,6 +235,8 @@ impl App {
 
         section(ui, t("Connections"));
         self.connections_table(ui, p, model);
+
+        self.pools_section(ui, model);
 
         section(ui, t("Problems"));
         if problems.is_empty() {
@@ -410,6 +422,10 @@ impl App {
                     self.execute("block.set", json!({ "id": id, *f: v }));
                 }
             }
+        }
+
+        if kind == "shared_task" {
+            self.needs_section(ui, model, el);
         }
 
         self.properties_section(ui, p, el);
@@ -782,7 +798,7 @@ impl App {
     }
 
     /// A text field that commits on Enter or losing focus; Esc restores it.
-    fn text_field(
+    pub(crate) fn text_field(
         &mut self,
         ui: &mut egui::Ui,
         key: &str,
@@ -817,7 +833,7 @@ impl App {
 }
 
 /// A section heading in a form: more space above than below.
-fn section(ui: &mut egui::Ui, title: &str) {
+pub(crate) fn section(ui: &mut egui::Ui, title: &str) {
     ui.add_space(18.0);
     ui.label(theme::strong(title).size(15.0));
     ui.add_space(4.0);
