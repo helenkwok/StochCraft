@@ -581,7 +581,7 @@ impl App {
     fn flow_fields(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) {
         let p_now = c["probability"]
             .as_f64()
-            .map(crate::results::number)
+            .map(crate::results::grouped)
             .unwrap_or_default();
         if let Some(t) = self.small_field(
             ui,
@@ -595,7 +595,8 @@ impl App {
             if t.is_empty() {
                 self.execute("flow.set", json!({ "id": cid, "probability": null }));
             } else {
-                match t.parse::<f64>() {
+                // As the user's region writes it ("0,5" in German), or with a point.
+                match self.numbers.parse(t) {
                     Ok(v) if (0.0..=1.0).contains(&v) => {
                         self.execute("flow.set", json!({ "id": cid, "probability": v }));
                     }

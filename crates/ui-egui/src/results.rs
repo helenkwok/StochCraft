@@ -93,7 +93,7 @@ pub fn unit_label(unit: &str) -> &str {
 pub fn record_line(ui: &mut egui::Ui, results: &Value) {
     let r = &results["record"];
     let unit = unit_label(r["time_unit"].as_str().unwrap_or(""));
-    let num = |v: &Value| v.as_f64().map_or_else(|| "–".to_owned(), number);
+    let num = |v: &Value| v.as_f64().map_or_else(|| "–".to_owned(), grouped);
     ui.label(theme::weak(
         ui,
         tnf(
@@ -270,11 +270,31 @@ fn row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [&str
     }
 }
 
-/// [`number`] with thousands separated by commas, for reading large counts at a glance.
+thread_local! {
+    /// How the user's region writes numbers, set by the app each frame ([`set_numbers`]).
+    static NUMBERS: std::cell::RefCell<Option<craft_ui::localized::LocaleNumbers>> =
+        const { std::cell::RefCell::new(None) };
+}
+
+/// Writes the results' numbers as `numbers` (the user's region) does from now on, on this thread.
+pub fn set_numbers(numbers: &craft_ui::localized::LocaleNumbers) {
+    NUMBERS.with(|n| *n.borrow_mut() = Some(numbers.clone()));
+}
+
+/// [`number`]'s digits in the user's region: its decimal mark, grouping and digits (`14.990` in
+/// German). Without a region set, thousands are grouped with commas.
 pub fn grouped(v: f64) -> String {
     let s = number(v);
-    if s.contains('e') {
+    if s.contains('e') || !v.is_finite() {
         return s;
+    }
+    let decimals = s.split_once('.').map_or(0, |(_, f)| f.len());
+    if let Some(local) = NUMBERS.with(|n| {
+        n.borrow()
+            .as_ref()
+            .map(|n| n.format(v, decimals..=decimals))
+    }) {
+        return local;
     }
     let (sign, rest) = s.strip_prefix('-').map_or(("", s.as_str()), |r| ("-", r));
     let (int, frac) = rest
