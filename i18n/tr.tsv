@@ -1,0 +1,247 @@
+# Türkçe (tr) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Türkçe
+	+ Add block	+ Blok ekle
+	About StochCraft	StochCraft hakkında
+	Add Block	Blok ekle
+	Add a flow from…	Kaynak…
+	Add a flow to…	Hedef…
+	Add point	Nokta ekle
+	Add property	Özellik ekle
+	Added {block} ({id})	{block} ({id}) eklendi
+	Appearance	Görünüm
+	Arrival limit	Geliş sınırı
+	Arrivals	Gelişler
+	Back to the model (Esc)	Modele dön (Esc)
+	Beta	Beta
+	Binomial	Binom
+	Boolean	Mantıksal
+	Built with	Şunlarla geliştirildi
+	Cancel	İptal
+	Cancel run	Çalıştırmayı iptal et
+	Capacity	Kapasite
+	Change Block	Bloğu değiştir
+	Change Flow	Akışı değiştir
+	Changing the time unit does not convert the times already in the model.	Zaman birimini değiştirmek modeldeki mevcut süreleri dönüştürmez.
+	Close	Kapat
+	Comes from	Şuradan gelir
+	Condition of {id}	{id} koşulu
+	Connect	Bağla
+	Connections	Bağlantılar
+	Constant	Sabit
+	Data points	Veri noktaları
+	Date and time	Tarih ve saat
+	Decimal number	Ondalık sayı
+	Decision	Karar
+	Decision (one way)	Karar (tek yol)
+	Default flow	Varsayılan akış
+	Departures	Çıkışlar
+	Discard	Yoksay
+	Discarded the recovered changes	Kurtarılan değişiklikler atıldı
+	Disconnect	Bağlantıyı kes
+	Discrete values	Ayrık değerler
+	Discrete-event simulation, from model files to results.	Model dosyalarından sonuçlara ayrık olay simülasyonu.
+	Don't Save	Kaydetme
+	Download	İndir
+	Download charts (PNG)	Grafikleri indir (PNG)
+	Download table (CSV)	Tabloyu indir (CSV)
+	Duration	Süre
+	Edit	Düzen
+	Entered	Giren
+	Erlang	Erlang
+	Error	Hata
+	Every distribution	Tüm dağılımlar
+	Experiment	Deney
+	Experiment Settings	Deney ayarları
+	Exponential	Üstel
+	Export charts (PNG)	Grafikleri dışa aktar (PNG)
+	Export table (CSV)	Tabloyu dışa aktar (CSV)
+	Exported {file}	{file} dışa aktarıldı
+	Expression	İfade
+	File	Dosya
+	Flows	Akışlar
+	From	Kaynak
+	Gamma	Gama
+	Goes to	Şuraya gider
+	Help	Yardım
+	Keyboard shortcuts saved	Klavye kısayolları kaydedildi
+	Keyboard shortcuts unchanged	Klavye kısayolları değişmedi
+	Language	Dil
+	Left	Çıkan
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Tercihinize göre MIT License veya Apache License 2.0 ile lisanslanmıştır.
+	Log-normal	Log-normal
+	Lost (waiting room full)	Kaybedilen (bekleme alanı dolu)
+	M/M/1 queue	M/M/1 kuyruğu
+	Maximise	Ekranı kapla
+	Maximum	Maksimum
+	Mean	Ortalama
+	Mean number inside	İçerideki ortalama sayı
+	Mean queue length	Ortalama kuyruk uzunluğu
+	Mean time blocked	Ortalama engellenme süresi
+	Mean time in system	Sistemdeki ortalama süre
+	Mean wait	Ortalama bekleme süresi
+	Metric	Ölçüt
+	Minimise	Simge durumuna küçült
+	Minimum	Minimum
+	Model	Model
+	Most likely	En olası
+	Name	Ad
+	New model	Yeni model
+	New property	Yeni özellik
+	New property name	Yeni özellik adı
+	No blocks yet. Open a model, or add blocks to build one.	Henüz blok yok. Bir model açın veya blok ekleyerek oluşturun.
+	No connections yet: join blocks below.	Henüz bağlantı yok: aşağıdaki blokları bağlayın.
+	No results yet	Henüz sonuç yok
+	None	Yok
+	None found. The model is ready to run.	Sorun bulunamadı. Model çalıştırılmaya hazır.
+	Normal	Normal
+	Number	Sayı
+	One clerk, random arrivals: the textbook queue, checked against theory.	Bir görevli, rastgele gelişler: teoriyle doğrulanan klasik kuyruk.
+	One task per BPSim distribution, to compare their spread.	Dağılımlarını karşılaştırmak için her BPSim dağılımına bir görev.
+	Open	Aç
+	Open Example	Örnek aç
+	Open Recent	Son Kullanılanları Aç
+	Open a model first	Önce bir model açın
+	Open a model to simulate it	Simülasyon için model açın
+	Open a model…	Model aç…
+	Opened {file}	{file} açıldı
+	Or start from an example	Veya bir örnekle başlayın
+	Parameters	Parametreler
+	Points	Noktalar
+	Poisson	Poisson
+	Probability	Olasılık
+	Probability of {id}	{id} olasılığı
+	Problems	Sorunlar
+	Process	Süreç
+	Properties	Özellikler
+	Quit	Çıkış
+	Ready	Hazır
+	Recover	Kurtar
+	Recover unsaved changes?	Kaydedilmemiş değişiklikler kurtarılsın mı?
+	Recovered {name}; save it to keep it	{name} kurtarıldı; korumak için kaydedin
+	Redid {action}	{action} yeniden yapıldı
+	Redo	Yinele
+	Redo {action}	{action} işlemini yinele
+	Remove	Kaldır
+	Remove Block	Bloğu kaldır
+	Remove Property	Özelliği kaldır
+	Remove block	Bloğu kaldır
+	Remove the flow {id}	{id} akışını kaldır
+	Remove this block and its flows (Delete)	Bu bloğu ve akışlarını kaldır (Delete)
+	Removed {id}	{id} kaldırıldı
+	Rename Block	Bloğu yeniden adlandır
+	Rename Model	Modeli yeniden adlandır
+	Replace Model	Modeli değiştir
+	Replications	Tekrarlar
+	Restore	Geri yükle
+	Results	Sonuçlar
+	Run	Çalıştır
+	Run cancelled	Çalıştırma iptal edildi
+	Run experiment	Deneyi çalıştır
+	Run the experiment ({shortcut})	Deneyi çalıştır ({shortcut})
+	Running	Çalışıyor
+	Running…	Çalışıyor…
+	Save	Kaydet
+	Save As…	Farklı Kaydet…
+	Save changes to {name}?	{name} üzerindeki değişiklikler kaydedilsin mi?
+	Saved {file}	{file} kaydedildi
+	Scale	Ölçek
+	Seed	Rastgelelik tohumu
+	Service time	Hizmet süresi
+	Set Property	Özelliği ayarla
+	Set a value	Değer ayarla
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Bu bloğa girerken her varlık için ayarlanır. İfadeler, varlığın giriş anında sahip olduğu değerleri okur; örneğin getProperty('issues') - 1.
+	Settings	Ayarlar
+	Shape	Şekil
+	Share of arrivals lost	Kaybedilen gelişlerin oranı
+	Share of units blocked	Engellenen birimlerin oranı
+	Show {id}	{id} göster
+	Split or join	Ayır veya birleştir
+	Split or join (all ways)	Ayır veya birleştir (tüm yollar)
+	Stages (k)	Aşamalar (k)
+	Standard deviation	Standart sapma
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft, {name} içindeki kaydedilmemiş değişikliklerle kapandı. Bunları adsız bir model olarak kurtarın veya atın.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft, BPSim benzetim verileri içeren BPMN veya XPDL dosyalarından süreç modellerini okur, bunları tekrarlı deneyler olarak çalıştırır ve her sonucu güven aralığıyla birlikte raporlar.
+	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop setting {name}	{name} ayarlamayı durdur
+	Tandem line	Tandem hat
+	Task	Görev
+	Task with a resource	Kaynak kullanan görev
+	Text	Metin
+	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
+	This block has a warning	Bu blokta uyarı var
+	This block has an error	Bu blokta hata var
+	Time between arrivals	Gelişler arası süre
+	Time unit	Zaman birimi
+	To	Hedef
+	Trials	Denemeler
+	Triangular	Üçgen
+	Truncated normal	Kesilmiş normal
+	Two stations in series, read from an XPDL file.	XPDL dosyasından okunan seri bağlı iki istasyon.
+	Type	Tür
+	Undid {action}	{action} geri alındı
+	Undo	Geri Al
+	Undo {action}	Geri Al: {action}
+	Uniform	Tekdüze
+	Unit	Birim
+	Untitled	İsimsiz
+	Untitled model	Başlıksız model
+	Use System Setting	Sistem ayarını kullan
+	Utilisation	Kullanım oranı
+	Value	Değer
+	View	Görünüm
+	Waiting room	Bekleme alanı
+	Warm-up	Isınma
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} ısınma, ardından {duration} {unit} ölçüm
+	Warning	Uyarı
+	Weibull	Weibull
+	Whole number	Tam sayı
+	Yes or no	Evet veya hayır
+	Your changes will be lost if you don't save them.	Kaydetmezseniz değişiklikleriniz kaybolur.
+	a model	bir model
+	arrivals	gelişler
+	days	gün
+	decision: one way	karar: tek yol
+	departures	çıkışlar
+	egui and eframe (Craft suite fork)	egui ve eframe (Craft paketinin çatallanmış sürümü)
+	from its value	değerinden
+	hours	saat
+	id {id}	kimlik {id}
+	milliseconds	milisaniye
+	minutes	dakika
+	nothing yet	henüz bir şey yok
+	seconds	saniye
+	split or join: all ways	ayır veya birleştir: tüm yollar
+	task	görev
+	task with a resource	kaynak kullanan görev
+	the charts could not be captured	grafikler yakalanamadı
+	the run stopped	çalıştırma durdu
+	there are no charts to export	dışa aktarılacak grafik yok
+	to {block}	{block} bloğuna
+	unlimited	sınırsız
+	years	yıl
+	{field}: not editable here yet	{field}: burada henüz düzenlenemiyor
+	{id}: a probability is a number from 0 to 1	{id}: olasılık 0 ile 1 arasında bir sayıdır
+	{name} — edited	{name} — düzenlendi
+	{property} (set to, mean)	{property} (ayarlanan değer, ortalama)
+	± 95% CI	± 95% güven aralığı
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	±, tekrarlamalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliğidir.
+	· no results yet	· henüz sonuç yok
+@plural	Finished {n} replication|Finished {n} replications	{n} tekrar tamamlandı|{n} tekrar tamamlandı
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} açıldı ({n} uyarı)|{file} açıldı ({n} uyarı)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Modelin {n} bağımsız tekrarını {seed} tohumundan çalıştırır. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.|Modelin {n} bağımsız tekrarını {seed} tohumundan çalıştırır. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} tekrardan {done} tanesi tamamlandı|{n} tekrardan {done} tanesi tamamlandı
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} tekrar üzerinden|{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} tekrar üzerinden
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} tekrar · tohum {seed}|{n} tekrar · tohum {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü|{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü

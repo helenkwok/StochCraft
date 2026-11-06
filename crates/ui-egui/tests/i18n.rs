@@ -145,6 +145,12 @@ fn the_menus_are_translated() {
         }
         visit(&menu.children, &mut missed);
     }
+    // View ▸ Language names each language in its own language, on purpose.
+    let names: Vec<String> = stochcraft_ui_egui::i18n::languages()
+        .into_iter()
+        .map(|(_, n)| n)
+        .collect();
+    missed.retain(|l| !names.contains(l));
     assert!(
         missed.is_empty(),
         "menu labels without translation: {missed:?}"
@@ -186,4 +192,30 @@ fn a_chosen_language_is_remembered_even_when_not_built_in() {
         serde_json::json!("auto"),
     ));
     assert_eq!(again.prefs().appearance.language, None);
+}
+
+/// StochCraft's own catalogs are built in: every left-to-right language craft-i18n has, each
+/// complete, and choosing one changes the menus and the window at once.
+#[test]
+fn the_built_in_languages_translate_the_window() {
+    let names: Vec<String> = stochcraft_ui_egui::i18n::languages()
+        .into_iter()
+        .map(|(_, n)| n)
+        .collect();
+    assert_eq!(names.len(), 45, "English and 44 languages: {names:?}");
+    assert!(names.iter().any(|n| n == "Deutsch") && names.iter().any(|n| n == "日本語"));
+
+    let mut app = App::new(Platform::DESKTOP);
+    app.set_language(Some("de"));
+    let layout = app.menu_layout(craft_menu::Target::Linux);
+    let titles: Vec<&str> = layout.bar.menus.iter().map(|m| m.title.as_str()).collect();
+    assert_eq!(
+        titles,
+        ["Datei", "Bearbeiten", "Ansicht", "Modell", "Hilfe"]
+    );
+    let mut h = Harness::builder()
+        .with_size(egui::vec2(1200.0, 900.0))
+        .build_ui_state(|ui, app: &mut App| app.ui(ui), app);
+    settle(&mut h);
+    h.get_by_label("Öffnen Sie ein Modell, um es zu simulieren");
 }

@@ -1,0 +1,247 @@
+# తెలుగు (te) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	తెలుగు
+	+ Add block	+ బ్లాక్‌ను జోడించు
+	About StochCraft	StochCraft గురించి
+	Add Block	బ్లాక్‌ను జోడించు
+	Add a flow from…	ఇక్కడి నుంచి ప్రవాహాన్ని జోడించు…
+	Add a flow to…	ఇక్కడికి ప్రవాహాన్ని జోడించు…
+	Add point	బిందువును జోడించు
+	Add property	లక్షణాన్ని జోడించు
+	Added {block} ({id})	{block} ({id}) జోడించబడింది
+	Appearance	రూపం
+	Arrival limit	రాకల పరిమితి
+	Arrivals	రాకలు
+	Back to the model (Esc)	నమూనాకు తిరిగి వెళ్లు (Esc)
+	Beta	బీటా
+	Binomial	ద్విపద పంపిణీ
+	Boolean	బూలియన్
+	Built with	దీనితో రూపొందించబడింది
+	Cancel	రద్దు చేయి
+	Cancel run	అమలును రద్దు చేయి
+	Capacity	సామర్థ్యం
+	Change Block	బ్లాక్‌ను మార్చు
+	Change Flow	ప్రవాహాన్ని మార్చు
+	Changing the time unit does not convert the times already in the model.	సమయ ప్రమాణాన్ని మార్చడం వల్ల నమూనాలో ఇప్పటికే ఉన్న సమయాలు మారవు.
+	Close	మూసివేయి
+	Comes from	దీని నుంచి వస్తుంది
+	Condition of {id}	{id} యొక్క షరతు
+	Connect	అనుసంధానించు
+	Connections	అనుసంధానాలు
+	Constant	స్థిర విలువ
+	Data points	డేటా బిందువులు
+	Date and time	తేదీ మరియు సమయం
+	Decimal number	దశాంశ సంఖ్య
+	Decision	నిర్ణయం
+	Decision (one way)	నిర్ణయం (ఒక దారి)
+	Default flow	డిఫాల్ట్ ప్రవాహం
+	Departures	నిష్క్రమణలు
+	Discard	విస్మరించు
+	Discarded the recovered changes	పునరుద్ధరించిన మార్పులు విస్మరించబడ్డాయి
+	Disconnect	అనుసంధానాన్ని తొలగించు
+	Discrete values	విచ్ఛిన్న విలువలు
+	Discrete-event simulation, from model files to results.	నమూనా ఫైళ్ల నుంచి ఫలితాల వరకు విచ్ఛిన్న-సంఘటన అనుకరణ.
+	Don't Save	సేవ్ చేయవద్దు
+	Download	డౌన్‌లోడ్ చేయి
+	Download charts (PNG)	చార్ట్‌లను డౌన్‌లోడ్ చేయి (PNG)
+	Download table (CSV)	పట్టికను డౌన్‌లోడ్ చేయి (CSV)
+	Duration	వ్యవధి
+	Edit	సవరణ
+	Entered	ప్రవేశించినవి
+	Erlang	ఎర్లాంగ్
+	Error	లోపం
+	Every distribution	ప్రతి పంపిణీ
+	Experiment	ప్రయోగం
+	Experiment Settings	ప్రయోగ సెట్టింగ్‌లు
+	Exponential	ఘాతాంక పంపిణీ
+	Export charts (PNG)	చార్ట్‌లను ఎగుమతి చేయి (PNG)
+	Export table (CSV)	పట్టికను ఎగుమతి చేయి (CSV)
+	Exported {file}	{file} ఎగుమతి చేయబడింది
+	Expression	వ్యక్తీకరణ
+	File	ఫైల్
+	Flows	ప్రవాహాలు
+	From	నుంచి
+	Gamma	గామా
+	Goes to	వెళ్తుంది
+	Help	సహాయం
+	Keyboard shortcuts saved	కీబోర్డ్ షార్ట్‌కట్‌లు సేవ్ చేయబడ్డాయి
+	Keyboard shortcuts unchanged	కీబోర్డ్ షార్ట్‌కట్‌లలో మార్పులేదు
+	Language	భాష
+	Left	నిష్క్రమించినవి
+	Licensed under the MIT License or the Apache License 2.0, at your option.	మీ ఎంపిక ప్రకారం MIT License లేదా Apache License 2.0 కింద లైసెన్స్ ఇవ్వబడింది.
+	Log-normal	లాగ్-నార్మల్
+	Lost (waiting room full)	కోల్పోయినవి (వేచి ఉండే గది నిండింది)
+	M/M/1 queue	M/M/1 క్యూ
+	Maximise	గరిష్ఠీకరించు
+	Maximum	గరిష్ఠం
+	Mean	సగటు
+	Mean number inside	లోపల ఉన్నవాటి సగటు సంఖ్య
+	Mean queue length	సగటు క్యూలో పొడవు
+	Mean time blocked	నిరోధిత సగటు సమయం
+	Mean time in system	వ్యవస్థలో గడిపిన సగటు సమయం
+	Mean wait	సగటు వేచి ఉండే సమయం
+	Metric	కొలమానం
+	Minimise	కనిష్ఠీకరించు
+	Minimum	కనిష్ఠం
+	Model	మోడల్
+	Most likely	అత్యంత సంభావ్య విలువ
+	Name	పేరు
+	New model	కొత్త నమూనా
+	New property	కొత్త లక్షణం
+	New property name	కొత్త లక్షణం పేరు
+	No blocks yet. Open a model, or add blocks to build one.	ఇంకా బ్లాక్‌లు లేవు. నమూనాను తెరవండి లేదా బ్లాక్‌లు జోడించి సృష్టించండి.
+	No connections yet: join blocks below.	ఇంకా అనుసంధానాలు లేవు: దిగువన బ్లాక్‌లను కలపండి.
+	No results yet	ఇంకా ఫలితాలు లేవు
+	None	ఏదీ లేదు
+	None found. The model is ready to run.	ఏ సమస్యలూ కనబడలేదు. నమూనా అమలుకు సిద్ధంగా ఉంది.
+	Normal	సాధారణ పంపిణీ
+	Number	సంఖ్య
+	One clerk, random arrivals: the textbook queue, checked against theory.	ఒక గుమాస్తా, యాదృచ్ఛిక రాకలు: సిద్ధాంతంతో ధృవీకరించిన ప్రామాణిక క్యూ.
+	One task per BPSim distribution, to compare their spread.	వ్యాప్తిని పోల్చడానికి ప్రతి BPSim పంపిణీకి ఒక పని.
+	Open	తెరువు
+	Open Example	ఉదాహరణను తెరువు
+	Open Recent	ఇటీవలివి తెరువు
+	Open a model first	ముందుగా నమూనాను తెరవండి
+	Open a model to simulate it	అనుకరణకు నమూనాను తెరవండి
+	Open a model…	నమూనాను తెరువు…
+	Opened {file}	{file} తెరవబడింది
+	Or start from an example	లేదా ఒక ఉదాహరణతో ప్రారంభించండి
+	Parameters	పరామితులు
+	Points	బిందువులు
+	Poisson	పాయిసన్
+	Probability	సంభావ్యత
+	Probability of {id}	{id} యొక్క సంభావ్యత
+	Problems	సమస్యలు
+	Process	ప్రక్రియ
+	Properties	లక్షణాలు
+	Quit	నిష్క్రమించు
+	Ready	సిద్ధం
+	Recover	పునరుద్ధరించు
+	Recover unsaved changes?	సేవ్ చేయని మార్పులను పునరుద్ధరించాలా?
+	Recovered {name}; save it to keep it	{name} పునరుద్ధరించబడింది; దాన్ని ఉంచడానికి సేవ్ చేయండి
+	Redid {action}	{action} మళ్లీ చేయబడింది
+	Redo	మళ్లీ చేయి
+	Redo {action}	{action} మళ్లీ చేయి
+	Remove	తొలగించు
+	Remove Block	బ్లాక్‌ను తొలగించు
+	Remove Property	లక్షణాన్ని తొలగించు
+	Remove block	బ్లాక్‌ను తొలగించు
+	Remove the flow {id}	{id} ప్రవాహాన్ని తొలగించు
+	Remove this block and its flows (Delete)	ఈ బ్లాక్‌ను, దాని ప్రవాహాలను తొలగించు (Delete)
+	Removed {id}	{id} తొలగించబడింది
+	Rename Block	బ్లాక్ పేరు మార్చు
+	Rename Model	నమూనా పేరు మార్చు
+	Replace Model	నమూనాను భర్తీ చేయి
+	Replications	పునరావృత్త అమలులు
+	Restore	విండో పరిమాణాన్ని పునరుద్ధరించు
+	Results	ఫలితాలు
+	Run	అమలు చేయి
+	Run cancelled	అమలు రద్దు చేయబడింది
+	Run experiment	ప్రయోగాన్ని అమలు చేయి
+	Run the experiment ({shortcut})	ప్రయోగాన్ని అమలు చేయి ({shortcut})
+	Running	అమలవుతోంది
+	Running…	అమలవుతోంది…
+	Save	సేవ్ చేయి
+	Save As…	ఇలా సేవ్ చేయి…
+	Save changes to {name}?	{name} లో మార్పులను సేవ్ చేయాలా?
+	Saved {file}	{file} సేవ్ చేయబడింది
+	Scale	స్కేలు
+	Seed	యాదృచ్ఛిక బీజం
+	Service time	సేవా సమయం
+	Set Property	లక్షణాన్ని సెట్ చేయి
+	Set a value	విలువను సెట్ చేయి
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ఈ బ్లాక్‌లోకి ప్రవేశించినప్పుడు ప్రతి ఎంటిటీకి సెట్ చేయబడుతుంది. ఎక్స్‌ప్రెషన్‌లు ఎంటిటీ ప్రవేశించిన సమయంలో ఉన్న విలువలను చదువుతాయి, ఉదాహరణకు getProperty('issues') - 1.
+	Settings	సెట్టింగ్‌లు
+	Shape	ఆకృతి పరామితి
+	Share of arrivals lost	కోల్పోయిన రాకల వాటా
+	Share of units blocked	నిరోధిత యూనిట్ల వాటా
+	Show {id}	{id} చూపించు
+	Split or join	విభజించు లేదా కలుపు
+	Split or join (all ways)	విభజించు లేదా కలుపు (అన్ని దారులు)
+	Stages (k)	దశలు (k)
+	Standard deviation	ప్రామాణిక విచలనం
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	{name}లో చేసిన మార్పులను సేవ్ చేయకుండానే StochCraft మూసివేయబడింది. వాటిని పేరులేని మోడల్‌గా పునరుద్ధరించండి లేదా విస్మరించండి.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft, BPSim సిమ్యులేషన్ డేటాతో కూడిన BPMN లేదా XPDL ఫైళ్ల నుంచి ప్రాసెస్ మోడళ్లను చదివి, వాటిని పునరావృత ప్రయోగాలుగా అమలు చేసి, ప్రతి ఫలితాన్ని దాని విశ్వసనీయత అంతరంతో నివేదిస్తుంది.
+	StochCraft {version} · model {digest}	StochCraft {version} · నమూనా {digest}
+	Stop setting {name}	{name} సెట్ చేయడం ఆపు
+	Tandem line	వరుస ప్రక్రియ
+	Task	పని
+	Task with a resource	వనరు అవసరమైన పని
+	Text	టెక్స్ట్
+	The model: its experiment, connections and problems	నమూనా: దాని ప్రయోగం, అనుసంధానాలు మరియు సమస్యలు
+	This block has a warning	ఈ బ్లాక్‌లో హెచ్చరిక ఉంది
+	This block has an error	ఈ బ్లాక్‌లో లోపం ఉంది
+	Time between arrivals	రాకల మధ్య సమయం
+	Time unit	సమయ ప్రమాణం
+	To	కు
+	Trials	ప్రయత్నాలు
+	Triangular	త్రిభుజాకార పంపిణీ
+	Truncated normal	కత్తిరించిన సాధారణ పంపిణీ
+	Two stations in series, read from an XPDL file.	XPDL ఫైల్ నుంచి చదివిన వరుసలోని రెండు స్టేషన్‌లు.
+	Type	రకం
+	Undid {action}	{action} చర్య రద్దు చేయబడింది
+	Undo	రద్దు చేయి
+	Undo {action}	రద్దు చేయి: {action}
+	Uniform	ఏకరీతి పంపిణీ
+	Unit	ప్రమాణం
+	Untitled	శీర్షిక లేదు
+	Untitled model	పేరు లేని నమూనా
+	Use System Setting	సిస్టమ్ సెట్టింగ్‌ను ఉపయోగించు
+	Utilisation	వినియోగ శాతం
+	Value	విలువ
+	View	వీక్షణ
+	Waiting room	వేచి ఉండే గది
+	Warm-up	ప్రారంభ సర్దుబాటు సమయం
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	ప్రారంభ సర్దుబాటు {warmup} {unit}, ఆపై {duration} {unit} కొలవబడింది
+	Warning	హెచ్చరిక
+	Weibull	వైబుల్
+	Whole number	పూర్ణ సంఖ్య
+	Yes or no	అవును లేదా కాదు
+	Your changes will be lost if you don't save them.	మీరు సేవ్ చేయకపోతే మీ మార్పులు పోతాయి.
+	a model	ఒక నమూనా
+	arrivals	రాకలు
+	days	రోజులు
+	decision: one way	నిర్ణయం: ఒక దారి
+	departures	నిష్క్రమణలు
+	egui and eframe (Craft suite fork)	egui మరియు eframe (Craft suite నుంచి విడిపోయిన సంస్కరణ)
+	from its value	దాని విలువ నుంచి
+	hours	గంటలు
+	id {id}	ఐడి {id}
+	milliseconds	మిల్లీసెకన్లు
+	minutes	నిమిషాలు
+	nothing yet	ఇంకా ఏమీ లేదు
+	seconds	సెకన్లు
+	split or join: all ways	విభజించు లేదా కలుపు: అన్ని దారులు
+	task	పని
+	task with a resource	వనరు అవసరమైన పని
+	the charts could not be captured	చార్ట్‌లను చిత్రీకరించలేకపోయాము
+	the run stopped	అమలు ఆగిపోయింది
+	there are no charts to export	ఎగుమతి చేయడానికి చార్ట్‌లు లేవు
+	to {block}	{block} కు
+	unlimited	పరిమితి లేదు
+	years	సంవత్సరాలు
+	{field}: not editable here yet	{field}: ఇక్కడ ఇంకా సవరించలేరు
+	{id}: a probability is a number from 0 to 1	{id}: సంభావ్యత 0 నుంచి 1 మధ్య సంఖ్య కావాలి
+	{name} — edited	{name} — సవరించబడింది
+	{property} (set to, mean)	{property} (నిర్ణీత విలువ, సగటు)
+	± 95% CI	± 95% CI
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± అనేది పునరావృత ప్రయోగాల సగటుకు సంబంధించిన 95% Student-t విశ్వసనీయత అంతరం వెడల్పులో సగం.
+	· no results yet	· ఇంకా ఫలితాలు లేవు
+@plural	Finished {n} replication|Finished {n} replications	{n} పునరావృత్త అమలు పూర్తయింది|{n} పునరావృత్త అమలులు పూర్తయ్యాయి
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} తెరవబడింది ({n} హెచ్చరిక)|{file} తెరవబడింది ({n} హెచ్చరికలు)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	{seed} బీజంతో నమూనాను {n} స్వతంత్ర పునరావృత్తంగా అమలు చేస్తుంది. ప్రతి అంశం ఫలితానికి 95% విశ్వసనీయత అంతరం సగం వెడల్పు ఇవ్వబడుతుంది.|{seed} బీజంతో నమూనాను {n} స్వతంత్ర పునరావృత్తాలుగా అమలు చేస్తుంది. అన్ని పునరావృత్తాల నుంచి ప్రతి అంశం ఫలితానికి 95% విశ్వసనీయత అంతరం సగం వెడల్పు ఇవ్వబడుతుంది.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} లో {done} పునరావృత్తం పూర్తయింది|{n} లో {done} పునరావృత్తాలు పూర్తయ్యాయి
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% అంతరం {low} నుంచి {high}{unit} వరకు\n{n} పునరావృత్తంలో|{name}: {mean}{unit}\n95% అంతరం {low} నుంచి {high}{unit} వరకు\n{n} పునరావృత్తాల్లో
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} పునరావృత్తం · బీజం {seed}|{n} పునరావృత్తాలు · బీజం {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} పునరావృత్తం · బీజం {seed} · ప్రారంభ సర్దుబాటు {warmup} {unit} · కొలత {duration} {unit}|{n} పునరావృత్తాలు · బీజం {seed} · ప్రారంభ సర్దుబాటు {warmup} {unit} · కొలత {duration} {unit}

@@ -1,0 +1,247 @@
+# Български (bg) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Български
+	+ Add block	+ Добавяне на блок
+	About StochCraft	За StochCraft
+	Add Block	Добавяне на блок
+	Add a flow from…	Добавяне на поток от…
+	Add a flow to…	Добавяне на поток към…
+	Add point	Добавяне на точка
+	Add property	Добавяне на свойство
+	Added {block} ({id})	Добавен е {block} ({id})
+	Appearance	Външен вид
+	Arrival limit	Лимит на пристиганията
+	Arrivals	Пристигания
+	Back to the model (Esc)	Обратно към модела (Esc)
+	Beta	Бета
+	Binomial	Биномиално
+	Boolean	Булева стойност
+	Built with	Създадено с
+	Cancel	Отказ
+	Cancel run	Отмяна на изпълнението
+	Capacity	Капацитет
+	Change Block	Промяна на блок
+	Change Flow	Промяна на поток
+	Changing the time unit does not convert the times already in the model.	Промяната на единицата за време не преобразува времената, които вече са в модела.
+	Close	Затваряне
+	Comes from	Идва от
+	Condition of {id}	Условие за {id}
+	Connect	Свързване
+	Connections	Връзки
+	Constant	Константа
+	Data points	Точки с данни
+	Date and time	Дата и час
+	Decimal number	Десетично число
+	Decision	Решение
+	Decision (one way)	Решение (един път)
+	Default flow	Поток по подразбиране
+	Departures	Напускания
+	Discard	Отхвърляне
+	Discarded the recovered changes	Възстановените промени са отхвърлени
+	Disconnect	Прекъсване на връзката
+	Discrete values	Дискретни стойности
+	Discrete-event simulation, from model files to results.	Симулация на дискретни събития, от файлове на модела до резултати.
+	Don't Save	Не записвай
+	Download	Изтегляне
+	Download charts (PNG)	Изтегляне на графики (PNG)
+	Download table (CSV)	Изтегляне на таблица (CSV)
+	Duration	Продължителност
+	Edit	Редактиране
+	Entered	Влезли
+	Erlang	Ерланг
+	Error	Грешка
+	Every distribution	Всички разпределения
+	Experiment	Експеримент
+	Experiment Settings	Настройки на експеримента
+	Exponential	Експоненциално
+	Export charts (PNG)	Експортиране на графики (PNG)
+	Export table (CSV)	Експортиране на таблица (CSV)
+	Exported {file}	Експортиран е {file}
+	Expression	Израз
+	File	Файл
+	Flows	Потоци
+	From	От
+	Gamma	Гама
+	Goes to	Отива към
+	Help	Помощ
+	Keyboard shortcuts saved	Клавишните комбинации са запазени
+	Keyboard shortcuts unchanged	Клавишните комбинации не са променени
+	Language	Език
+	Left	Напуснали
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Лицензирано по MIT License или Apache License 2.0, по ваш избор.
+	Log-normal	Логнормално
+	Lost (waiting room full)	Загубени (чакалнята е пълна)
+	M/M/1 queue	Опашка M/M/1
+	Maximise	Максимизиране
+	Maximum	Максимум
+	Mean	Средна стойност
+	Mean number inside	Среден брой вътре
+	Mean queue length	Средна дължина на опашката
+	Mean time blocked	Средно време на блокиране
+	Mean time in system	Средно време в системата
+	Mean wait	Средно чакане
+	Metric	Показател
+	Minimise	Минимизиране
+	Minimum	Минимум
+	Model	Модел
+	Most likely	Най-вероятна стойност
+	Name	Име
+	New model	Нов модел
+	New property	Ново свойство
+	New property name	Име на новото свойство
+	No blocks yet. Open a model, or add blocks to build one.	Все още няма блокове. Отворете модел или добавете блокове, за да създадете такъв.
+	No connections yet: join blocks below.	Все още няма връзки: свържете блоковете по-долу.
+	No results yet	Все още няма резултати
+	None	Няма
+	None found. The model is ready to run.	Не са открити проблеми. Моделът е готов за изпълнение.
+	Normal	Нормално
+	Number	Число
+	One clerk, random arrivals: the textbook queue, checked against theory.	Един служител, случайни пристигания: класическа опашка, проверена спрямо теорията.
+	One task per BPSim distribution, to compare their spread.	По една задача за всяко разпределение BPSim за сравнение на разсейването.
+	Open	Отваряне
+	Open Example	Отваряне на пример
+	Open Recent	Последно отваряни
+	Open a model first	Първо отворете модел
+	Open a model to simulate it	Отворете модел за симулация
+	Open a model…	Отваряне на модел…
+	Opened {file}	Отворен е {file}
+	Or start from an example	Или започнете с пример
+	Parameters	Параметри
+	Points	Точки
+	Poisson	Поасон
+	Probability	Вероятност
+	Probability of {id}	Вероятност за {id}
+	Problems	Проблеми
+	Process	Процес
+	Properties	Свойства
+	Quit	Изход
+	Ready	Готово
+	Recover	Възстановяване
+	Recover unsaved changes?	Да се възстановят ли незапазените промени?
+	Recovered {name}; save it to keep it	Възстановен е {name}; запазете го, за да го съхраните
+	Redid {action}	Повторено е {action}
+	Redo	Повторение
+	Redo {action}	Повтори {action}
+	Remove	Премахване
+	Remove Block	Премахване на блок
+	Remove Property	Премахване на свойство
+	Remove block	Премахване на блок
+	Remove the flow {id}	Премахване на потока {id}
+	Remove this block and its flows (Delete)	Премахване на този блок и потоците му (Delete)
+	Removed {id}	Премахнат е {id}
+	Rename Block	Преименуване на блок
+	Rename Model	Преименуване на модел
+	Replace Model	Замяна на модел
+	Replications	Репликации
+	Restore	Възстановяване на прозореца
+	Results	Резултати
+	Run	Стартиране
+	Run cancelled	Изпълнението е отменено
+	Run experiment	Стартиране на експеримент
+	Run the experiment ({shortcut})	Стартиране на експеримента ({shortcut})
+	Running	Изпълнява се
+	Running…	Изпълнява се…
+	Save	Запазване
+	Save As…	Запази като…
+	Save changes to {name}?	Да се запазят ли промените в {name}?
+	Saved {file}	Запазен е {file}
+	Scale	Мащаб
+	Seed	Начална стойност
+	Service time	Време за обслужване
+	Set Property	Задаване на свойство
+	Set a value	Задаване на стойност
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задава се за всяка същност при влизането ѝ в този блок. Изразите четат стойностите, които е имала при влизането, например getProperty('issues') - 1.
+	Settings	Настройки
+	Shape	Форма
+	Share of arrivals lost	Дял на загубените пристигания
+	Share of units blocked	Дял на блокираните единици
+	Show {id}	Показване на {id}
+	Split or join	Разделяне или обединяване
+	Split or join (all ways)	Разделяне или обединяване (всички пътища)
+	Stages (k)	Етапи (k)
+	Standard deviation	Стандартно отклонение
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft се затвори с незапазени промени в {name}. Възстановете ги като модел без име или ги отхвърлете.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft чете модели на процеси от BPMN или XPDL файлове с данни за симулация BPSim, изпълнява ги като експерименти с повторения и отчита всеки резултат с доверителния му интервал.
+	StochCraft {version} · model {digest}	StochCraft {version} · модел {digest}
+	Stop setting {name}	Спиране на задаването на {name}
+	Tandem line	Тандемна линия
+	Task	Задача
+	Task with a resource	Задача с ресурс
+	Text	Текст
+	The model: its experiment, connections and problems	Моделът: експеримент, връзки и проблеми
+	This block has a warning	Този блок има предупреждение
+	This block has an error	Този блок има грешка
+	Time between arrivals	Време между пристиганията
+	Time unit	Единица за време
+	To	Към
+	Trials	Опити
+	Triangular	Триъгълно
+	Truncated normal	Отсечено нормално
+	Two stations in series, read from an XPDL file.	Две станции последователно, прочетени от XPDL файл.
+	Type	Тип
+	Undid {action}	Отменено е {action}
+	Undo	Отмяна
+	Undo {action}	Отмяна: {action}
+	Uniform	Равномерно
+	Unit	Единица
+	Untitled	Без заглавие
+	Untitled model	Модел без заглавие
+	Use System Setting	Използване на системната настройка
+	Utilisation	Натовареност
+	Value	Стойност
+	View	Изглед
+	Waiting room	Чакалня
+	Warm-up	Загряване
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Загряване {warmup} {unit}, след това измерване за {duration} {unit}
+	Warning	Предупреждение
+	Weibull	Вайбул
+	Whole number	Цяло число
+	Yes or no	Да или не
+	Your changes will be lost if you don't save them.	Промените ви ще бъдат загубени, ако не ги запазите.
+	a model	модел
+	arrivals	пристигания
+	days	дни
+	decision: one way	решение: един път
+	departures	напускания
+	egui and eframe (Craft suite fork)	egui и eframe (разклонение на пакета Craft)
+	from its value	според стойността му
+	hours	часове
+	id {id}	ID {id}
+	milliseconds	милисекунди
+	minutes	минути
+	nothing yet	все още нищо
+	seconds	секунди
+	split or join: all ways	разделяне или обединяване: всички пътища
+	task	задача
+	task with a resource	задача с ресурс
+	the charts could not be captured	графиките не можаха да бъдат заснети
+	the run stopped	изпълнението спря
+	there are no charts to export	няма графики за експортиране
+	to {block}	към {block}
+	unlimited	неограничено
+	years	години
+	{field}: not editable here yet	{field}: тук все още не може да се редактира
+	{id}: a probability is a number from 0 to 1	{id}: вероятността е число от 0 до 1
+	{name} — edited	{name} — редактирано
+	{property} (set to, mean)	{property} (зададена стойност, средна)
+	± 95% CI	± 95% ДИ
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± означава половината от ширината на 95% доверителен интервал по Student-t за средната стойност от повторенията.
+	· no results yet	· все още няма резултати
+@plural	Finished {n} replication|Finished {n} replications	Завършена е {n} репликация|Завършени са {n} репликации
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Отворен е {file} ({n} предупреждение)|Отворен е {file} ({n} предупреждения)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Изпълнява {n} независима репликация на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.|Изпълнява {n} независими репликации на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	Завършена е {done} от {n} репликация|Завършени са {done} от {n} репликации
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} репликация|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} репликации
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} репликация · начална стойност {seed}|{n} репликации · начална стойност {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликация · начална стойност {seed} · загряване {warmup} {unit} · измерено {duration} {unit}|{n} репликации · начална стойност {seed} · загряване {warmup} {unit} · измерено {duration} {unit}

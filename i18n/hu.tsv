@@ -1,0 +1,247 @@
+# Magyar (hu) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Magyar
+	+ Add block	+ Blokk hozzáadása
+	About StochCraft	A StochCraft névjegye
+	Add Block	Blokk hozzáadása
+	Add a flow from…	Folyamat hozzáadása innen: …
+	Add a flow to…	Folyamat hozzáadása ide: …
+	Add point	Pont hozzáadása
+	Add property	Tulajdonság hozzáadása
+	Added {block} ({id})	{block} ({id}) hozzáadva
+	Appearance	Megjelenés
+	Arrival limit	Érkezési korlát
+	Arrivals	Érkezések
+	Back to the model (Esc)	Vissza a modellhez (Esc)
+	Beta	Béta
+	Binomial	Binomiális
+	Boolean	Logikai
+	Built with	Készült ezekkel
+	Cancel	Mégse
+	Cancel run	Futtatás megszakítása
+	Capacity	Kapacitás
+	Change Block	Blokk módosítása
+	Change Flow	Folyamat módosítása
+	Changing the time unit does not convert the times already in the model.	Az időegység módosítása nem váltja át a modellben már meglévő időértékeket.
+	Close	Bezárás
+	Comes from	Innen érkezik
+	Condition of {id}	{id} feltétele
+	Connect	Csatlakoztatás
+	Connections	Kapcsolatok
+	Constant	Állandó
+	Data points	Adatpontok
+	Date and time	Dátum és idő
+	Decimal number	Tizedes szám
+	Decision	Döntés
+	Decision (one way)	Döntés (egy út)
+	Default flow	Alapértelmezett folyamat
+	Departures	Távozások
+	Discard	Elvetés
+	Discarded the recovered changes	A visszaállított módosítások elvetve
+	Disconnect	Kapcsolat bontása
+	Discrete values	Diszkrét értékek
+	Discrete-event simulation, from model files to results.	Diszkrét eseményes szimuláció, a modellfájloktól az eredményekig.
+	Don't Save	Mentés nélkül
+	Download	Letöltés
+	Download charts (PNG)	Diagramok letöltése (PNG)
+	Download table (CSV)	Táblázat letöltése (CSV)
+	Duration	Időtartam
+	Edit	Szerkesztés
+	Entered	Belépett
+	Erlang	Erlang
+	Error	Hiba
+	Every distribution	Minden eloszlás
+	Experiment	Kísérlet
+	Experiment Settings	Kísérlet beállításai
+	Exponential	Exponenciális
+	Export charts (PNG)	Diagramok exportálása (PNG)
+	Export table (CSV)	Táblázat exportálása (CSV)
+	Exported {file}	{file} exportálva
+	Expression	Kifejezés
+	File	Fájl
+	Flows	Folyamatok
+	From	Innen
+	Gamma	Gamma
+	Goes to	Ide vezet
+	Help	Súgó
+	Keyboard shortcuts saved	Billentyűparancsok mentve
+	Keyboard shortcuts unchanged	A billentyűparancsok nem változtak
+	Language	Nyelv
+	Left	Távozott
+	Licensed under the MIT License or the Apache License 2.0, at your option.	A MIT License vagy az Apache License 2.0 szerint, választás szerint.
+	Log-normal	Lognormális
+	Lost (waiting room full)	Elveszett (a várakozóhely megtelt)
+	M/M/1 queue	M/M/1 sor
+	Maximise	Maximalizálás
+	Maximum	Maximum
+	Mean	Átlag
+	Mean number inside	Átlagos belső darabszám
+	Mean queue length	Átlagos sorhossz
+	Mean time blocked	Átlagos blokkolási idő
+	Mean time in system	Átlagos rendszerben töltött idő
+	Mean wait	Átlagos várakozási idő
+	Metric	Mérőszám
+	Minimise	Minimalizálás
+	Minimum	Minimum
+	Model	Modell
+	Most likely	Legvalószínűbb
+	Name	Név
+	New model	Új modell
+	New property	Új tulajdonság
+	New property name	Új tulajdonság neve
+	No blocks yet. Open a model, or add blocks to build one.	Még nincsenek blokkok. Nyisson meg egy modellt, vagy adjon hozzá blokkokat.
+	No connections yet: join blocks below.	Még nincsenek kapcsolatok: kapcsolja össze az alábbi blokkokat.
+	No results yet	Még nincsenek eredmények
+	None	Nincs
+	None found. The model is ready to run.	Nem találhatók problémák. A modell futtatásra kész.
+	Normal	Normális
+	Number	Szám
+	One clerk, random arrivals: the textbook queue, checked against theory.	Egy kiszolgáló, véletlenszerű érkezések: a klasszikus sor, elmélettel ellenőrizve.
+	One task per BPSim distribution, to compare their spread.	Minden BPSim-eloszláshoz egy feladat, a szóródás összehasonlítására.
+	Open	Megnyitás
+	Open Example	Példa megnyitása
+	Open Recent	Legutóbbi megnyitása
+	Open a model first	Előbb nyisson meg egy modellt
+	Open a model to simulate it	Nyisson meg egy modellt a szimulációhoz
+	Open a model…	Modell megnyitása…
+	Opened {file}	{file} megnyitva
+	Or start from an example	Vagy kezdjen egy példával
+	Parameters	Paraméterek
+	Points	Pontok
+	Poisson	Poisson
+	Probability	Valószínűség
+	Probability of {id}	{id} valószínűsége
+	Problems	Problémák
+	Process	Folyamat
+	Properties	Tulajdonságok
+	Quit	Kilépés
+	Ready	Kész
+	Recover	Helyreállítás
+	Recover unsaved changes?	Helyreállítja a nem mentett módosításokat?
+	Recovered {name}; save it to keep it	{name} helyreállítva; mentse a megtartásához
+	Redid {action}	{action} ismét végrehajtva
+	Redo	Újra
+	Redo {action}	{action} újra végrehajtása
+	Remove	Eltávolítás
+	Remove Block	Blokk eltávolítása
+	Remove Property	Tulajdonság eltávolítása
+	Remove block	Blokk eltávolítása
+	Remove the flow {id}	{id} folyamat eltávolítása
+	Remove this block and its flows (Delete)	E blokk és folyamatainak eltávolítása (Delete)
+	Removed {id}	{id} eltávolítva
+	Rename Block	Blokk átnevezése
+	Rename Model	Modell átnevezése
+	Replace Model	Modell cseréje
+	Replications	Ismétlések
+	Restore	Visszaállítás
+	Results	Eredmények
+	Run	Futtatás
+	Run cancelled	Futtatás megszakítva
+	Run experiment	Kísérlet futtatása
+	Run the experiment ({shortcut})	A kísérlet futtatása ({shortcut})
+	Running	Fut
+	Running…	Futtatás…
+	Save	Mentés
+	Save As…	Mentés másként…
+	Save changes to {name}?	Menti a(z) {name} módosításait?
+	Saved {file}	{file} mentve
+	Scale	Skála
+	Seed	Véletlenszám-mag
+	Service time	Kiszolgálási idő
+	Set Property	Tulajdonság beállítása
+	Set a value	Érték megadása
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Minden entitáshoz beállításra kerül, amikor belép ebbe a blokkba. A kifejezések a belépéskor meglévő értékeket olvassák, például getProperty('issues') - 1.
+	Settings	Beállítások
+	Shape	Alak
+	Share of arrivals lost	Elveszett érkezések aránya
+	Share of units blocked	Blokkolt egységek aránya
+	Show {id}	{id} megjelenítése
+	Split or join	Szétválasztás vagy egyesítés
+	Split or join (all ways)	Szétválasztás vagy egyesítés (minden út)
+	Stages (k)	Szakaszok (k)
+	Standard deviation	Szórás
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	A StochCraft úgy zárult be, hogy a(z) {name} nem mentett módosításokat tartalmazott. Állítsa vissza őket névtelen modellként, vagy vesse el őket.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	A StochCraft BPSim-szimulációs adatokat tartalmazó BPMN- vagy XPDL-fájlokból olvassa be a folyamatmodelleket, ismételt kísérletekben futtatja őket, és minden eredményt a konfidenciaintervallumával együtt jelenít meg.
+	StochCraft {version} · model {digest}	StochCraft {version} · modell {digest}
+	Stop setting {name}	{name} beállításának leállítása
+	Tandem line	Tandemvonal
+	Task	Feladat
+	Task with a resource	Erőforrást használó feladat
+	Text	Szöveg
+	The model: its experiment, connections and problems	A modell: kísérlet, kapcsolatok és problémák
+	This block has a warning	Ez a blokk figyelmeztetést tartalmaz
+	This block has an error	Ez a blokk hibát tartalmaz
+	Time between arrivals	Érkezések közötti idő
+	Time unit	Időegység
+	To	Ide
+	Trials	Próbák
+	Triangular	Háromszög
+	Truncated normal	Csonkolt normális
+	Two stations in series, read from an XPDL file.	Két sorba kapcsolt állomás, XPDL-fájlból beolvasva.
+	Type	Típus
+	Undid {action}	{action} visszavonva
+	Undo	Visszavonás
+	Undo {action}	Visszavonás: {action}
+	Uniform	Egyenletes
+	Unit	Egység
+	Untitled	Névtelen
+	Untitled model	Névtelen modell
+	Use System Setting	Rendszerbeállítás használata
+	Utilisation	Kihasználtság
+	Value	Érték
+	View	Nézet
+	Waiting room	Várakozóhely
+	Warm-up	Bemelegítés
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Bemelegítés {warmup} {unit}, majd mérés {duration} {unit} ideig
+	Warning	Figyelmeztetés
+	Weibull	Weibull
+	Whole number	Egész szám
+	Yes or no	Igen vagy nem
+	Your changes will be lost if you don't save them.	Ha nem mented, a módosításaid elvesznek.
+	a model	egy modell
+	arrivals	érkezések
+	days	nap
+	decision: one way	döntés: egy út
+	departures	távozások
+	egui and eframe (Craft suite fork)	egui és eframe (a Craft csomag elágazása)
+	from its value	az értékéből
+	hours	óra
+	id {id}	azonosító {id}
+	milliseconds	ezredmásodperc
+	minutes	perc
+	nothing yet	még semmi
+	seconds	másodperc
+	split or join: all ways	szétválasztás vagy egyesítés: minden út
+	task	feladat
+	task with a resource	erőforrást használó feladat
+	the charts could not be captured	a diagramok rögzítése nem sikerült
+	the run stopped	a futtatás leállt
+	there are no charts to export	nincs exportálható diagram
+	to {block}	ebbe: {block}
+	unlimited	korlátlan
+	years	év
+	{field}: not editable here yet	{field}: itt még nem szerkeszthető
+	{id}: a probability is a number from 0 to 1	{id}: a valószínűség 0 és 1 közötti szám
+	{name} — edited	{name} — szerkesztve
+	{property} (set to, mean)	{property} (beállított érték, átlag)
+	± 95% CI	± 95%-os konfidenciaintervallum
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	A ± az ismétlések átlagára számított 95%-os Student-t-konfidenciaintervallum fél szélessége.
+	· no results yet	· még nincsenek eredmények
+@plural	Finished {n} replication|Finished {n} replications	{n} ismétlés befejezve|{n} ismétlés befejezve
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} megnyitva ({n} figyelmeztetés)|{file} megnyitva ({n} figyelmeztetés)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.|A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done}/{n} ismétlés befejezve|{done}/{n} ismétlés befejezve
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján|{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ismétlés · mag {seed}|{n} ismétlés · mag {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}|{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}

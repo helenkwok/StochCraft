@@ -1,0 +1,247 @@
+# Čeština (cs) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Čeština
+	+ Add block	+ Přidat blok
+	About StochCraft	O aplikaci StochCraft
+	Add Block	Přidat blok
+	Add a flow from…	Přidat tok z…
+	Add a flow to…	Přidat tok do…
+	Add point	Přidat bod
+	Add property	Přidat vlastnost
+	Added {block} ({id})	Přidán {block} ({id})
+	Appearance	Vzhled
+	Arrival limit	Limit příchodů
+	Arrivals	Příchody
+	Back to the model (Esc)	Zpět k modelu (Esc)
+	Beta	Beta
+	Binomial	Binomické
+	Boolean	Logická hodnota
+	Built with	Vytvořeno pomocí
+	Cancel	Zrušit
+	Cancel run	Zrušit běh
+	Capacity	Kapacita
+	Change Block	Změnit blok
+	Change Flow	Změnit tok
+	Changing the time unit does not convert the times already in the model.	Změna časové jednotky nepřepočítá časy, které již v modelu jsou.
+	Close	Zavřít
+	Comes from	Pochází z
+	Condition of {id}	Podmínka pro {id}
+	Connect	Propojit
+	Connections	Propojení
+	Constant	Konstantní
+	Data points	Datové body
+	Date and time	Datum a čas
+	Decimal number	Desetinné číslo
+	Decision	Rozhodnutí
+	Decision (one way)	Rozhodnutí (jedna cesta)
+	Default flow	Výchozí tok
+	Departures	Odchody
+	Discard	Zahodit
+	Discarded the recovered changes	Obnovené změny byly zahozeny
+	Disconnect	Odpojit
+	Discrete values	Diskrétní hodnoty
+	Discrete-event simulation, from model files to results.	Simulace diskrétních událostí, od souborů modelu k výsledkům.
+	Don't Save	Neukládat
+	Download	Stáhnout
+	Download charts (PNG)	Stáhnout grafy (PNG)
+	Download table (CSV)	Stáhnout tabulku (CSV)
+	Duration	Doba trvání
+	Edit	Úpravy
+	Entered	Vstoupilo
+	Erlang	Erlangovo
+	Error	Chyba
+	Every distribution	Všechna rozdělení
+	Experiment	Experiment
+	Experiment Settings	Nastavení experimentu
+	Exponential	Exponenciální
+	Export charts (PNG)	Exportovat grafy (PNG)
+	Export table (CSV)	Exportovat tabulku (CSV)
+	Exported {file}	Exportováno {file}
+	Expression	Výraz
+	File	Soubor
+	Flows	Toky
+	From	Z
+	Gamma	Gama
+	Goes to	Vede do
+	Help	Nápověda
+	Keyboard shortcuts saved	Klávesové zkratky byly uloženy
+	Keyboard shortcuts unchanged	Klávesové zkratky beze změny
+	Language	Jazyk
+	Left	Odešlo
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencováno podle MIT License nebo Apache License 2.0, dle vaší volby.
+	Log-normal	Lognormální
+	Lost (waiting room full)	Ztraceno (čekárna je plná)
+	M/M/1 queue	Fronta M/M/1
+	Maximise	Maximalizovat
+	Maximum	Maximum
+	Mean	Průměr
+	Mean number inside	Průměrný počet uvnitř
+	Mean queue length	Průměrná délka fronty
+	Mean time blocked	Průměrná doba blokování
+	Mean time in system	Průměrná doba v systému
+	Mean wait	Průměrná doba čekání
+	Metric	Metrika
+	Minimise	Minimalizovat
+	Minimum	Minimum
+	Model	Model
+	Most likely	Nejpravděpodobnější
+	Name	Jméno
+	New model	Nový model
+	New property	Nová vlastnost
+	New property name	Název nové vlastnosti
+	No blocks yet. Open a model, or add blocks to build one.	Zatím žádné bloky. Otevřete model nebo přidejte bloky a vytvořte jej.
+	No connections yet: join blocks below.	Zatím žádná propojení: propojte bloky níže.
+	No results yet	Zatím žádné výsledky
+	None	Žádné
+	None found. The model is ready to run.	Nebyly nalezeny žádné problémy. Model je připraven ke spuštění.
+	Normal	Normální
+	Number	Číslo
+	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracovník, náhodné příchody: klasická fronta ověřená teorií.
+	One task per BPSim distribution, to compare their spread.	Jedna úloha pro každé rozdělení BPSim pro porovnání jejich variability.
+	Open	Otevřít
+	Open Example	Otevřít příklad
+	Open Recent	Otevřít nedávné
+	Open a model first	Nejprve otevřete model
+	Open a model to simulate it	Otevřete model pro simulaci
+	Open a model…	Otevřít model…
+	Opened {file}	Otevřen {file}
+	Or start from an example	Nebo začněte příkladem
+	Parameters	Parametry
+	Points	Body
+	Poisson	Poissonovo
+	Probability	Pravděpodobnost
+	Probability of {id}	Pravděpodobnost pro {id}
+	Problems	Problémy
+	Process	Proces
+	Properties	Vlastnosti
+	Quit	Ukončit
+	Ready	Připraveno
+	Recover	Obnovit
+	Recover unsaved changes?	Obnovit neuložené změny?
+	Recovered {name}; save it to keep it	Obnoven {name}; uložením jej zachováte
+	Redid {action}	Znovu provedeno {action}
+	Redo	Znovu
+	Redo {action}	Znovu provést {action}
+	Remove	Odebrat
+	Remove Block	Odebrat blok
+	Remove Property	Odebrat vlastnost
+	Remove block	Odebrat blok
+	Remove the flow {id}	Odebrat tok {id}
+	Remove this block and its flows (Delete)	Odebrat tento blok a jeho toky (Delete)
+	Removed {id}	Odebráno {id}
+	Rename Block	Přejmenovat blok
+	Rename Model	Přejmenovat model
+	Replace Model	Nahradit model
+	Replications	Replikace
+	Restore	Obnovit velikost
+	Results	Výsledky
+	Run	Spustit
+	Run cancelled	Běh byl zrušen
+	Run experiment	Spustit experiment
+	Run the experiment ({shortcut})	Spustit experiment ({shortcut})
+	Running	Probíhá
+	Running…	Probíhá…
+	Save	Uložit
+	Save As…	Uložit jako…
+	Save changes to {name}?	Uložit změny v {name}?
+	Saved {file}	Uloženo {file}
+	Scale	Měřítko
+	Seed	Počáteční hodnota generátoru
+	Service time	Doba obsluhy
+	Set Property	Nastavit vlastnost
+	Set a value	Nastavit hodnotu
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nastavuje se pro každou entitu při vstupu do tohoto bloku. Výrazy čtou hodnoty, se kterými entita přišla, například getProperty('issues') - 1.
+	Settings	Nastavení
+	Shape	Tvar
+	Share of arrivals lost	Podíl ztracených příchodů
+	Share of units blocked	Podíl blokovaných jednotek
+	Show {id}	Zobrazit {id}
+	Split or join	Rozdělit nebo spojit
+	Split or join (all ways)	Rozdělit nebo spojit (všechny cesty)
+	Stages (k)	Fáze (k)
+	Standard deviation	Směrodatná odchylka
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft byl ukončen s neuloženými změnami v modelu {name}. Obnovte je jako nepojmenovaný model, nebo je zahoďte.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft načítá modely procesů ze souborů BPMN nebo XPDL se simulačními daty BPSim, spouští je jako experimenty s replikacemi a uvádí každý výsledek s jeho intervalem spolehlivosti.
+	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop setting {name}	Přestat nastavovat {name}
+	Tandem line	Tandemová linka
+	Task	Úloha
+	Task with a resource	Úloha se zdrojem
+	Text	Text
+	The model: its experiment, connections and problems	Model: experiment, propojení a problémy
+	This block has a warning	Tento blok obsahuje upozornění
+	This block has an error	Tento blok obsahuje chybu
+	Time between arrivals	Doba mezi příchody
+	Time unit	Časová jednotka
+	To	Do
+	Trials	Pokusy
+	Triangular	Trojúhelníkové
+	Truncated normal	Oříznuté normální
+	Two stations in series, read from an XPDL file.	Dvě stanice v sérii načtené ze souboru XPDL.
+	Type	Typ
+	Undid {action}	Vráceno zpět {action}
+	Undo	Zpět
+	Undo {action}	Zpět: {action}
+	Uniform	Rovnoměrné
+	Unit	Jednotka
+	Untitled	Bez názvu
+	Untitled model	Nepojmenovaný model
+	Use System Setting	Použít systémové nastavení
+	Utilisation	Využití
+	Value	Hodnota
+	View	Zobrazení
+	Waiting room	Čekárna
+	Warm-up	Zahřívání
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Zahřívání {warmup} {unit}, poté měření {duration} {unit}
+	Warning	Upozornění
+	Weibull	Weibullovo
+	Whole number	Celé číslo
+	Yes or no	Ano nebo ne
+	Your changes will be lost if you don't save them.	Pokud změny neuložíte, budou ztraceny.
+	a model	model
+	arrivals	příchody
+	days	dny
+	decision: one way	rozhodnutí: jedna cesta
+	departures	odchody
+	egui and eframe (Craft suite fork)	egui a eframe (odvozená verze sady Craft)
+	from its value	podle hodnoty
+	hours	hodiny
+	id {id}	id {id}
+	milliseconds	milisekundy
+	minutes	minuty
+	nothing yet	zatím nic
+	seconds	sekundy
+	split or join: all ways	rozdělit nebo spojit: všechny cesty
+	task	úloha
+	task with a resource	úloha se zdrojem
+	the charts could not be captured	grafy se nepodařilo zachytit
+	the run stopped	běh se zastavil
+	there are no charts to export	nejsou žádné grafy k exportu
+	to {block}	do {block}
+	unlimited	bez omezení
+	years	roky
+	{field}: not editable here yet	{field}: zde zatím nelze upravovat
+	{id}: a probability is a number from 0 to 1	{id}: pravděpodobnost je číslo od 0 do 1
+	{name} — edited	{name} — upraveno
+	{property} (set to, mean)	{property} (nastaveno na, průměr)
+	± 95% CI	± 95% interval spolehlivosti
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± představuje polovinu šířky 95% Student-t intervalu spolehlivosti průměru napříč replikacemi.
+	· no results yet	· zatím žádné výsledky
+@plural	Finished {n} replication|Finished {n} replications	Dokončena {n} replikace|Dokončeny {n} replikace|Dokončeno {n} replikací
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otevřen {file} ({n} upozornění)|Otevřen {file} ({n} upozornění)|Otevřen {file} ({n} upozornění)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislou replikaci modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislé replikace modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislých replikací modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	Dokončena {done} z {n} replikace|Dokončeno {done} z {n} replikací|Dokončeno {done} z {n} replikací
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikace|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikací|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikací
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikace · počáteční hodnota {seed}|{n} replikace · počáteční hodnota {seed}|{n} replikací · počáteční hodnota {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikace · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}|{n} replikace · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}|{n} replikací · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}

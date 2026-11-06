@@ -13,6 +13,8 @@ use stochcraft_ui_egui::{App, EXAMPLES, Platform};
 /// The app with English numbers (`1,234.5`), so the tests read the same in every region.
 fn english(mut app: App) -> App {
     app.set_number_region("en");
+    // The interface in English too, whatever this machine's language.
+    app.set_lang(craft_i18n::Lang::EN);
     app
 }
 

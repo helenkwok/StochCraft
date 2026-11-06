@@ -1,0 +1,247 @@
+# Eesti (et) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Eesti
+	+ Add block	+ Lisa plokk
+	About StochCraft	Teave StochCrafti kohta
+	Add Block	Lisa plokk
+	Add a flow from…	Lisa voog alates…
+	Add a flow to…	Lisa voog kuni…
+	Add point	Lisa punkt
+	Add property	Lisa omadus
+	Added {block} ({id})	Lisatud {block} ({id})
+	Appearance	Välimus
+	Arrival limit	Saabumiste piirang
+	Arrivals	Saabumised
+	Back to the model (Esc)	Tagasi mudeli juurde (Esc)
+	Beta	Beeta
+	Binomial	Binoomjaotus
+	Boolean	Tõeväärtus
+	Built with	Loodud järgmistega
+	Cancel	Loobu
+	Cancel run	Tühista käivitus
+	Capacity	Maht
+	Change Block	Muuda plokki
+	Change Flow	Muuda voogu
+	Changing the time unit does not convert the times already in the model.	Ajaühiku muutmine ei teisenda mudelis juba olevaid aegu.
+	Close	Sulge
+	Comes from	Pärineb kohast
+	Condition of {id}	{id} tingimus
+	Connect	Ühenda
+	Connections	Ühendused
+	Constant	Konstant
+	Data points	Andmepunktid
+	Date and time	Kuupäev ja kellaaeg
+	Decimal number	Kümnendarv
+	Decision	Otsus
+	Decision (one way)	Otsus (üks tee)
+	Default flow	Vaikevoog
+	Departures	Lahkumised
+	Discard	Loobu
+	Discarded the recovered changes	Taastatud muudatused hüljati
+	Disconnect	Katkesta ühendus
+	Discrete values	Diskreetsed väärtused
+	Discrete-event simulation, from model files to results.	Diskreetsete sündmuste simulatsioon mudelifailidest tulemusteni.
+	Don't Save	Ära salvesta
+	Download	Laadi alla
+	Download charts (PNG)	Laadi graafikud alla (PNG)
+	Download table (CSV)	Laadi tabel alla (CSV)
+	Duration	Kestus
+	Edit	Muuda
+	Entered	Sisenenud
+	Erlang	Erlang
+	Error	Viga
+	Every distribution	Kõik jaotused
+	Experiment	Eksperiment
+	Experiment Settings	Eksperimendi seaded
+	Exponential	Eksponentsiaalne
+	Export charts (PNG)	Ekspordi graafikud (PNG)
+	Export table (CSV)	Ekspordi tabel (CSV)
+	Exported {file}	Eksporditud {file}
+	Expression	Avaldis
+	File	Fail
+	Flows	Vood
+	From	Alates
+	Gamma	Gamma
+	Goes to	Viib kohta
+	Help	Abi
+	Keyboard shortcuts saved	Klaviatuuri otseteed salvestatud
+	Keyboard shortcuts unchanged	Klaviatuuri otseteed muutmata
+	Language	Keel
+	Left	Lahkunud
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Litsentsitud valikuliselt MIT License'i või Apache License 2.0 alusel.
+	Log-normal	Lognormaalne
+	Lost (waiting room full)	Kaotatud (ooteruum täis)
+	M/M/1 queue	M/M/1 järjekord
+	Maximise	Maksimeeri
+	Maximum	Maksimum
+	Mean	Keskmine
+	Mean number inside	Keskmine arv sees
+	Mean queue length	Järjekorra keskmine pikkus
+	Mean time blocked	Keskmine blokeerimisaeg
+	Mean time in system	Keskmine aeg süsteemis
+	Mean wait	Keskmine ooteaeg
+	Metric	Mõõdik
+	Minimise	Minimeeri
+	Minimum	Miinimum
+	Model	Mudel
+	Most likely	Kõige tõenäolisem
+	Name	Nimi
+	New model	Uus mudel
+	New property	Uus omadus
+	New property name	Uue omaduse nimi
+	No blocks yet. Open a model, or add blocks to build one.	Plokke veel pole. Ava mudel või lisa selle loomiseks plokke.
+	No connections yet: join blocks below.	Ühendusi veel pole: ühenda allolevad plokid.
+	No results yet	Tulemusi veel pole
+	None	Puudub
+	None found. The model is ready to run.	Probleeme ei leitud. Mudel on käivitamiseks valmis.
+	Normal	Normaalne
+	Number	Arv
+	One clerk, random arrivals: the textbook queue, checked against theory.	Üks teenindaja, juhuslikud saabumised: klassikaline järjekord, mida kontrollitakse teooriaga.
+	One task per BPSim distribution, to compare their spread.	Üks ülesanne iga BPSim-jaotuse kohta nende hajuvuse võrdlemiseks.
+	Open	Ava
+	Open Example	Ava näide
+	Open Recent	Ava hiljutised
+	Open a model first	Ava esmalt mudel
+	Open a model to simulate it	Ava mudel selle simuleerimiseks
+	Open a model…	Ava mudel…
+	Opened {file}	Avati {file}
+	Or start from an example	Või alusta näitest
+	Parameters	Parameetrid
+	Points	Punktid
+	Poisson	Poisson
+	Probability	Tõenäosus
+	Probability of {id}	{id} tõenäosus
+	Problems	Probleemid
+	Process	Protsess
+	Properties	Omadused
+	Quit	Välju
+	Ready	Valmis
+	Recover	Taasta
+	Recover unsaved changes?	Kas taastada salvestamata muudatused?
+	Recovered {name}; save it to keep it	Taastati {name}; säilitamiseks salvesta see
+	Redid {action}	Tehti {action} uuesti
+	Redo	Tee uuesti
+	Redo {action}	Tee {action} uuesti
+	Remove	Eemalda
+	Remove Block	Eemalda plokk
+	Remove Property	Eemalda omadus
+	Remove block	Eemalda plokk
+	Remove the flow {id}	Eemalda voog {id}
+	Remove this block and its flows (Delete)	Eemalda see plokk ja selle vood (Delete)
+	Removed {id}	Eemaldati {id}
+	Rename Block	Nimeta plokk ümber
+	Rename Model	Nimeta mudel ümber
+	Replace Model	Asenda mudel
+	Replications	Kordused
+	Restore	Taasta aken
+	Results	Tulemused
+	Run	Käivita
+	Run cancelled	Käivitus tühistatud
+	Run experiment	Käivita eksperiment
+	Run the experiment ({shortcut})	Käivita eksperiment ({shortcut})
+	Running	Käib
+	Running…	Käivitamine…
+	Save	Salvesta
+	Save As…	Salvesta nimega…
+	Save changes to {name}?	Kas salvestada {name} muudatused?
+	Saved {file}	Salvestati {file}
+	Scale	Skaala
+	Seed	Juhuarvuseeme
+	Service time	Teenindusaeg
+	Set Property	Määra omadus
+	Set a value	Määra väärtus
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Määratakse igale olemile sellesse plokki sisenemisel. Avaldised loevad väärtusi, mis olid olemil sisenemise hetkel, näiteks getProperty('issues') - 1.
+	Settings	Seaded
+	Shape	Kuju
+	Share of arrivals lost	Kaotatud saabumiste osakaal
+	Share of units blocked	Blokeeritud ühikute osakaal
+	Show {id}	Näita {id}
+	Split or join	Hargneda või ühineda
+	Split or join (all ways)	Hargneda või ühineda (kõik teed)
+	Stages (k)	Etapid (k)
+	Standard deviation	Standardhälve
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft sulgus, kui mudelis {name} oli salvestamata muudatusi. Taasta need nimetu mudelina või hülga need.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft loeb protsessimudeleid BPMN- või XPDL-failidest, mis sisaldavad BPSim-simulatsiooniandmeid, käivitab need korduskatsetena ning esitab iga tulemuse koos usaldusvahemikuga.
+	StochCraft {version} · model {digest}	StochCraft {version} · mudel {digest}
+	Stop setting {name}	Lõpeta {name} määramine
+	Tandem line	Tandemliin
+	Task	Ülesanne
+	Task with a resource	Ressursiga ülesanne
+	Text	Tekst
+	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
+	This block has a warning	Selles plokis on hoiatus
+	This block has an error	Selles plokis on viga
+	Time between arrivals	Saabumiste vaheline aeg
+	Time unit	Ajaühik
+	To	Kuni
+	Trials	Katsed
+	Triangular	Kolmnurkne
+	Truncated normal	Kärbitud normaalne
+	Two stations in series, read from an XPDL file.	Kaks järjestikust jaama, loetud XPDL-failist.
+	Type	Tüüp
+	Undid {action}	Võeti {action} tagasi
+	Undo	Võta tagasi
+	Undo {action}	Võta tagasi: {action}
+	Uniform	Ühtlane
+	Unit	Ühik
+	Untitled	Pealkirjata
+	Untitled model	Pealkirjata mudel
+	Use System Setting	Kasuta süsteemi seadet
+	Utilisation	Kasutusmäär
+	Value	Väärtus
+	View	Vaade
+	Waiting room	Ooteruum
+	Warm-up	Soojendus
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Soojendus {warmup} {unit}, seejärel mõõtmine {duration} {unit}
+	Warning	Hoiatus
+	Weibull	Weibull
+	Whole number	Täisarv
+	Yes or no	Jah või ei
+	Your changes will be lost if you don't save them.	Salvestamata muudatused lähevad kaotsi.
+	a model	mudel
+	arrivals	saabumised
+	days	päevad
+	decision: one way	otsus: üks tee
+	departures	lahkumised
+	egui and eframe (Craft suite fork)	egui ja eframe (Crafti tarkvarakomplekti haru)
+	from its value	selle väärtuse põhjal
+	hours	tunnid
+	id {id}	id {id}
+	milliseconds	millisekundid
+	minutes	minutid
+	nothing yet	veel mitte midagi
+	seconds	sekundid
+	split or join: all ways	hargneda või ühineda: kõik teed
+	task	ülesanne
+	task with a resource	ressursiga ülesanne
+	the charts could not be captured	graafikuid ei õnnestunud salvestada
+	the run stopped	käivitus peatus
+	there are no charts to export	pole graafikuid, mida eksportida
+	to {block}	kuni {block}
+	unlimited	piiramatu
+	years	aastad
+	{field}: not editable here yet	{field}: siin ei saa veel muuta
+	{id}: a probability is a number from 0 to 1	{id}: tõenäosus on arv vahemikus 0 kuni 1
+	{name} — edited	{name} — muudetud
+	{property} (set to, mean)	{property} (määratud väärtus, keskmine)
+	± 95% CI	± 95% usaldusvahemik
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± on korduste keskmise 95% Student-t usaldusvahemiku poollaius.
+	· no results yet	· tulemusi veel pole
+@plural	Finished {n} replication|Finished {n} replications	{n} kordus lõpetatud|{n} kordust lõpetatud
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avati {file} ({n} hoiatus)|Avati {file} ({n} hoiatust)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Käivitab {n} sõltumatu mudeli korduse seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.|Käivitab {n} sõltumatut mudeli kordust seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} kordus {n}-st lõpetatud|{done} kordust {n}-st lõpetatud
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} korduse põhjal|{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} korduse põhjal
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} kordus · seeme {seed}|{n} kordust · seeme {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} kordus · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}|{n} kordust · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}

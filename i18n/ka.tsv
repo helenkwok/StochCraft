@@ -1,0 +1,247 @@
+# ქართული (ka) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	ქართული
+	+ Add block	+ ბლოკის დამატება
+	About StochCraft	StochCraft-ის შესახებ
+	Add Block	ბლოკის დამატება
+	Add a flow from…	ნაკადის დამატება (წყარო)…
+	Add a flow to…	ნაკადის დამატება (სამიზნე)…
+	Add point	წერტილის დამატება
+	Add property	თვისების დამატება
+	Added {block} ({id})	დამატებულია {block} ({id})
+	Appearance	გარეგნობა
+	Arrival limit	შემოსვლის ლიმიტი
+	Arrivals	შემოსვლები
+	Back to the model (Esc)	მოდელზე დაბრუნება (Esc)
+	Beta	ბეტა
+	Binomial	ბინომური
+	Boolean	ლოგიკური მნიშვნელობა
+	Built with	შექმნილია შემდეგით
+	Cancel	გაუქმება
+	Cancel run	გაშვების გაუქმება
+	Capacity	ტევადობა
+	Change Block	ბლოკის შეცვლა
+	Change Flow	ნაკადის შეცვლა
+	Changing the time unit does not convert the times already in the model.	დროის ერთეულის შეცვლა მოდელში უკვე მითითებულ დროებს არ გარდაქმნის.
+	Close	დახურვა
+	Comes from	მოდის აქედან
+	Condition of {id}	{id}-ის პირობა
+	Connect	დაკავშირება
+	Connections	კავშირები
+	Constant	მუდმივი
+	Data points	მონაცემთა წერტილები
+	Date and time	თარიღი და დრო
+	Decimal number	ათწილადი რიცხვი
+	Decision	გადაწყვეტილება
+	Decision (one way)	გადაწყვეტილება (ერთი გზა)
+	Default flow	ნაგულისხმევი ნაკადი
+	Departures	გასვლები
+	Discard	გაუქმება
+	Discarded the recovered changes	აღდგენილი ცვლილებები გაუქმებულია
+	Disconnect	კავშირის გაწყვეტა
+	Discrete values	დისკრეტული მნიშვნელობები
+	Discrete-event simulation, from model files to results.	დისკრეტული მოვლენების სიმულაცია, მოდელის ფაილებიდან შედეგებამდე.
+	Don't Save	არ შეინახო
+	Download	ჩამოტვირთვა
+	Download charts (PNG)	დიაგრამების ჩამოტვირთვა (PNG)
+	Download table (CSV)	ცხრილის ჩამოტვირთვა (CSV)
+	Duration	ხანგრძლივობა
+	Edit	რედაქტირება
+	Entered	შესულა
+	Erlang	ერლანგი
+	Error	შეცდომა
+	Every distribution	ყველა განაწილება
+	Experiment	ექსპერიმენტი
+	Experiment Settings	ექსპერიმენტის პარამეტრები
+	Exponential	ექსპონენციალური
+	Export charts (PNG)	დიაგრამების ექსპორტი (PNG)
+	Export table (CSV)	ცხრილის ექსპორტი (CSV)
+	Exported {file}	ექსპორტირებულია {file}
+	Expression	გამოსახულება
+	File	ფაილი
+	Flows	ნაკადები
+	From	-დან
+	Gamma	გამა
+	Goes to	მიდის აქ
+	Help	დახმარება
+	Keyboard shortcuts saved	კლავიატურის მალსახმობები შენახულია
+	Keyboard shortcuts unchanged	კლავიატურის მალსახმობები უცვლელია
+	Language	ენა
+	Left	გასულა
+	Licensed under the MIT License or the Apache License 2.0, at your option.	ლიცენზირებულია MIT License-ით ან Apache License 2.0-ით, თქვენი არჩევანით.
+	Log-normal	ლოგნორმალური
+	Lost (waiting room full)	დაკარგული (მოსაცდელი სივრცე სავსეა)
+	M/M/1 queue	M/M/1 რიგი
+	Maximise	მაქსიმიზაცია
+	Maximum	მაქსიმუმი
+	Mean	საშუალო
+	Mean number inside	საშუალო რაოდენობა შიგნით
+	Mean queue length	რიგის საშუალო სიგრძე
+	Mean time blocked	დაბლოკვის საშუალო დრო
+	Mean time in system	სისტემაში გატარებული საშუალო დრო
+	Mean wait	ლოდინის საშუალო დრო
+	Metric	მაჩვენებელი
+	Minimise	მინიმიზაცია
+	Minimum	მინიმუმი
+	Model	მოდელი
+	Most likely	ყველაზე სავარაუდო
+	Name	სახელი
+	New model	ახალი მოდელი
+	New property	ახალი თვისება
+	New property name	ახალი თვისების სახელი
+	No blocks yet. Open a model, or add blocks to build one.	ბლოკები ჯერ არ არის. გახსენით მოდელი ან დაამატეთ ბლოკები მის შესაქმნელად.
+	No connections yet: join blocks below.	კავშირები ჯერ არ არის: დააკავშირეთ ქვემოთ მოცემული ბლოკები.
+	No results yet	შედეგები ჯერ არ არის
+	None	არცერთი
+	None found. The model is ready to run.	პრობლემა არ მოიძებნა. მოდელი მზადაა გასაშვებად.
+	Normal	ნორმალური
+	Number	რიცხვი
+	One clerk, random arrivals: the textbook queue, checked against theory.	ერთი თანამშრომელი, შემთხვევითი შემოსვლები: თეორიით შემოწმებული კლასიკური რიგი.
+	One task per BPSim distribution, to compare their spread.	თითო დავალება ყოველ BPSim განაწილებაზე, მათი გაფანტვის შესადარებლად.
+	Open	გახსნა
+	Open Example	მაგალითის გახსნა
+	Open Recent	ბოლო ფაილების გახსნა
+	Open a model first	ჯერ გახსენით მოდელი
+	Open a model to simulate it	გახსენით მოდელი სიმულაციისთვის
+	Open a model…	მოდელის გახსნა…
+	Opened {file}	გახსნილია {file}
+	Or start from an example	ან დაიწყეთ მაგალითით
+	Parameters	პარამეტრები
+	Points	წერტილები
+	Poisson	პუასონი
+	Probability	ალბათობა
+	Probability of {id}	{id}-ის ალბათობა
+	Problems	პრობლემები
+	Process	პროცესი
+	Properties	თვისებები
+	Quit	გასვლა
+	Ready	მზადაა
+	Recover	აღდგენა
+	Recover unsaved changes?	აღვადგინოთ შეუნახავი ცვლილებები?
+	Recovered {name}; save it to keep it	აღდგენილია {name}; შესანარჩუნებლად შეინახეთ
+	Redid {action}	ხელახლა შესრულდა {action}
+	Redo	გამეორება
+	Redo {action}	გაიმეორეთ {action}
+	Remove	წაშლა
+	Remove Block	ბლოკის წაშლა
+	Remove Property	თვისების წაშლა
+	Remove block	ბლოკის წაშლა
+	Remove the flow {id}	{id} ნაკადის წაშლა
+	Remove this block and its flows (Delete)	ამ ბლოკისა და მისი ნაკადების წაშლა (Delete)
+	Removed {id}	წაშლილია {id}
+	Rename Block	ბლოკის გადარქმევა
+	Rename Model	მოდელის გადარქმევა
+	Replace Model	მოდელის ჩანაცვლება
+	Replications	გამეორებები
+	Restore	ფანჯრის აღდგენა
+	Results	შედეგები
+	Run	გაშვება
+	Run cancelled	გაშვება გაუქმდა
+	Run experiment	ექსპერიმენტის გაშვება
+	Run the experiment ({shortcut})	ექსპერიმენტის გაშვება ({shortcut})
+	Running	მიმდინარეობს
+	Running…	მიმდინარეობს…
+	Save	შენახვა
+	Save As…	შენახვა როგორც…
+	Save changes to {name}?	შევინახოთ ცვლილებები {name}-ში?
+	Saved {file}	შენახულია {file}
+	Scale	მასშტაბი
+	Seed	შემთხვევითი რიცხვების საწყისი მნიშვნელობა
+	Service time	მომსახურების დრო
+	Set Property	თვისების დაყენება
+	Set a value	მნიშვნელობის დაყენება
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ამ ბლოკში შესვლისას მნიშვნელობა ენიჭება თითოეულ ერთეულს. გამოსახულებები კითხულობს შესვლის მომენტში არსებულ მნიშვნელობებს, მაგალითად getProperty('issues') - 1.
+	Settings	პარამეტრები
+	Shape	ფორმა
+	Share of arrivals lost	დაკარგული შემოსვლების წილი
+	Share of units blocked	დაბლოკილი ერთეულების წილი
+	Show {id}	{id}-ის ჩვენება
+	Split or join	გაყოფა ან გაერთიანება
+	Split or join (all ways)	გაყოფა ან გაერთიანება (ყველა გზა)
+	Stages (k)	ეტაპები (k)
+	Standard deviation	სტანდარტული გადახრა
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft დაიხურა {name}-ში შეუნახავი ცვლილებებით. აღადგინეთ ისინი უსათაურო მოდელად ან გააუქმეთ.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft კითხულობს პროცესის მოდელებს BPMN ან XPDL ფაილებიდან, რომლებიც შეიცავს BPSim სიმულაციის მონაცემებს, ატარებს მათ რეპლიკაციურ ექსპერიმენტებად და თითოეულ შედეგს შესაბამის ნდობის ინტერვალთან ერთად აჩვენებს.
+	StochCraft {version} · model {digest}	StochCraft {version} · მოდელი {digest}
+	Stop setting {name}	{name}-ის დაყენების შეწყვეტა
+	Tandem line	თანმიმდევრული ხაზი
+	Task	დავალება
+	Task with a resource	დავალება რესურსით
+	Text	ტექსტი
+	The model: its experiment, connections and problems	მოდელი: ექსპერიმენტი, კავშირები და პრობლემები
+	This block has a warning	ამ ბლოკს აქვს გაფრთხილება
+	This block has an error	ამ ბლოკს აქვს შეცდომა
+	Time between arrivals	შემოსვლებს შორის დრო
+	Time unit	დროის ერთეული
+	To	-მდე
+	Trials	ცდები
+	Triangular	სამკუთხა
+	Truncated normal	შეკვეცილი ნორმალური
+	Two stations in series, read from an XPDL file.	ორი მიმდევრობითი სადგური, წაკითხული XPDL ფაილიდან.
+	Type	ტიპი
+	Undid {action}	გაუქმდა {action}
+	Undo	გაუქმება
+	Undo {action}	გააუქმეთ {action}
+	Uniform	თანაბარი
+	Unit	ერთეული
+	Untitled	უსათაურო
+	Untitled model	უსათაურო მოდელი
+	Use System Setting	სისტემის პარამეტრის გამოყენება
+	Utilisation	გამოყენების დონე
+	Value	მნიშვნელობა
+	View	ხედი
+	Waiting room	მოსაცდელი სივრცე
+	Warm-up	გახურების პერიოდი
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	გახურება {warmup} {unit}, შემდეგ გაზომვა {duration} {unit}
+	Warning	გაფრთხილება
+	Weibull	ვეიბული
+	Whole number	მთელი რიცხვი
+	Yes or no	დიახ ან არა
+	Your changes will be lost if you don't save them.	თუ არ შეინახავთ, ცვლილებები დაიკარგება.
+	a model	მოდელი
+	arrivals	შემოსვლები
+	days	დღე
+	decision: one way	გადაწყვეტილება: ერთი გზა
+	departures	გასვლები
+	egui and eframe (Craft suite fork)	egui და eframe (Craft ნაკრების განშტოება)
+	from its value	მისი მნიშვნელობიდან
+	hours	საათი
+	id {id}	ID {id}
+	milliseconds	მილიწამი
+	minutes	წუთი
+	nothing yet	ჯერ არაფერი
+	seconds	წამი
+	split or join: all ways	გაყოფა ან გაერთიანება: ყველა გზა
+	task	დავალება
+	task with a resource	დავალება რესურსით
+	the charts could not be captured	დიაგრამების გადაღება ვერ მოხერხდა
+	the run stopped	გაშვება შეჩერდა
+	there are no charts to export	ექსპორტისთვის დიაგრამები არ არის
+	to {block}	{block}-მდე
+	unlimited	შეუზღუდავი
+	years	წელი
+	{field}: not editable here yet	{field}: აქ ჯერ არ შეიძლება რედაქტირება
+	{id}: a probability is a number from 0 to 1	{id}: ალბათობა არის რიცხვი 0-დან 1-მდე
+	{name} — edited	{name} — რედაქტირებულია
+	{property} (set to, mean)	{property} (მითითებული მნიშვნელობა, საშუალო)
+	± 95% CI	± 95% ნდობის ინტერვალი
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± არის რეპლიკაციებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე.
+	· no results yet	· შედეგები ჯერ არ არის
+@plural	Finished {n} replication|Finished {n} replications	დასრულდა {n} გამეორება|დასრულდა {n} გამეორება
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	გახსნილია {file} ({n} გაფრთხილება)|გახსნილია {file} ({n} გაფრთხილება)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.|მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}-დან {done} გამეორება დასრულდა|{n}-დან {done} გამეორება დასრულდა
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით|{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} გამეორება · საწყისი მნიშვნელობა {seed}|{n} გამეორება · საწყისი მნიშვნელობა {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}|{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}

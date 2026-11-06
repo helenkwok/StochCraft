@@ -1,0 +1,247 @@
+# Українська (uk) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Українська
+	+ Add block	+ Додати блок
+	About StochCraft	Про програму StochCraft
+	Add Block	Додати блок
+	Add a flow from…	Додати потік від…
+	Add a flow to…	Додати потік до…
+	Add point	Додати точку
+	Add property	Додати властивість
+	Added {block} ({id})	Додано {block} ({id})
+	Appearance	Вигляд
+	Arrival limit	Обмеження кількості прибуттів
+	Arrivals	Прибуття
+	Back to the model (Esc)	Повернутися до моделі (Esc)
+	Beta	Бета-розподіл
+	Binomial	Біноміальний розподіл
+	Boolean	Логічне значення
+	Built with	Створено за допомогою
+	Cancel	Скасувати
+	Cancel run	Скасувати запуск
+	Capacity	Потужність
+	Change Block	Змінити блок
+	Change Flow	Змінити потік
+	Changing the time unit does not convert the times already in the model.	Зміна одиниці часу не перераховує час, уже заданий у моделі.
+	Close	Закрити
+	Comes from	Надходить від
+	Condition of {id}	Умова для {id}
+	Connect	З'єднати
+	Connections	З'єднання
+	Constant	Стала величина
+	Data points	Точки даних
+	Date and time	Дата й час
+	Decimal number	Десяткове число
+	Decision	Рішення
+	Decision (one way)	Рішення (один шлях)
+	Default flow	Потік за замовчуванням
+	Departures	Вибуття
+	Discard	Відкинути
+	Discarded the recovered changes	Відновлені зміни відкинуто
+	Disconnect	Роз'єднати
+	Discrete values	Дискретні значення
+	Discrete-event simulation, from model files to results.	Дискретно-подієве моделювання: від файлів моделі до результатів.
+	Don't Save	Не зберігати
+	Download	Завантажити
+	Download charts (PNG)	Завантажити діаграми (PNG)
+	Download table (CSV)	Завантажити таблицю (CSV)
+	Duration	Тривалість
+	Edit	Редагування
+	Entered	Увійшло
+	Erlang	Розподіл Ерланга
+	Error	Помилка
+	Every distribution	Усі розподіли
+	Experiment	Експеримент
+	Experiment Settings	Налаштування експерименту
+	Exponential	Експоненціальний розподіл
+	Export charts (PNG)	Експортувати діаграми (PNG)
+	Export table (CSV)	Експортувати таблицю (CSV)
+	Exported {file}	Експортовано {file}
+	Expression	Вираз
+	File	Файл
+	Flows	Потоки
+	From	Від
+	Gamma	Гамма-розподіл
+	Goes to	Веде до
+	Help	Довідка
+	Keyboard shortcuts saved	Клавіатурні скорочення збережено
+	Keyboard shortcuts unchanged	Клавіатурні скорочення не змінено
+	Language	Мова
+	Left	Вийшло
+	Licensed under the MIT License or the Apache License 2.0, at your option.	На вибір: MIT License або Apache License 2.0.
+	Log-normal	Логнормальний розподіл
+	Lost (waiting room full)	Втрати (місця очікування зайняті)
+	M/M/1 queue	Черга M/M/1
+	Maximise	Розгорнути
+	Maximum	Максимум
+	Mean	Середнє
+	Mean number inside	Середня кількість усередині
+	Mean queue length	Середня довжина черги
+	Mean time blocked	Середній час блокування
+	Mean time in system	Середній час у системі
+	Mean wait	Середній час очікування
+	Metric	Показник
+	Minimise	Згорнути
+	Minimum	Мінімум
+	Model	Модель
+	Most likely	Найімовірніше значення
+	Name	Ім’я
+	New model	Нова модель
+	New property	Нова властивість
+	New property name	Назва нової властивості
+	No blocks yet. Open a model, or add blocks to build one.	Блоків поки немає. Відкрийте модель або додайте блоки, щоб створити її.
+	No connections yet: join blocks below.	З'єднань поки немає: з'єднайте блоки нижче.
+	No results yet	Результатів поки немає
+	None	Немає
+	None found. The model is ready to run.	Проблем не знайдено. Модель готова до запуску.
+	Normal	Нормальний розподіл
+	Number	Число
+	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, випадкові прибуття: класична черга, перевірена теорією.
+	One task per BPSim distribution, to compare their spread.	По одному завданню на кожний розподіл BPSim для порівняння розкиду.
+	Open	Відкрити
+	Open Example	Відкрити приклад
+	Open Recent	Нещодавні файли
+	Open a model first	Спочатку відкрийте модель
+	Open a model to simulate it	Відкрийте модель для моделювання
+	Open a model…	Відкрити модель…
+	Opened {file}	Відкрито {file}
+	Or start from an example	Або почніть із прикладу
+	Parameters	Параметри
+	Points	Точки
+	Poisson	Розподіл Пуассона
+	Probability	Імовірність
+	Probability of {id}	Імовірність для {id}
+	Problems	Проблеми
+	Process	Процес
+	Properties	Властивості
+	Quit	Вийти
+	Ready	Готово
+	Recover	Відновити
+	Recover unsaved changes?	Відновити незбережені зміни?
+	Recovered {name}; save it to keep it	Відновлено {name}; збережіть, щоб не втратити
+	Redid {action}	Повторено дію {action}
+	Redo	Повторити
+	Redo {action}	Повторити {action}
+	Remove	Видалити
+	Remove Block	Видалити блок
+	Remove Property	Видалити властивість
+	Remove block	Видалити блок
+	Remove the flow {id}	Видалити потік {id}
+	Remove this block and its flows (Delete)	Видалити цей блок та його потоки (Delete)
+	Removed {id}	Видалено {id}
+	Rename Block	Перейменувати блок
+	Rename Model	Перейменувати модель
+	Replace Model	Замінити модель
+	Replications	Кількість повторних запусків
+	Restore	Відновити розмір
+	Results	Результати
+	Run	Запустити
+	Run cancelled	Запуск скасовано
+	Run experiment	Запустити експеримент
+	Run the experiment ({shortcut})	Запустити експеримент ({shortcut})
+	Running	Виконується
+	Running…	Виконується…
+	Save	Зберегти
+	Save As…	Зберегти як…
+	Save changes to {name}?	Зберегти зміни в {name}?
+	Saved {file}	Збережено {file}
+	Scale	Масштаб
+	Seed	Початкове значення генератора
+	Service time	Час обслуговування
+	Set Property	Задати властивість
+	Set a value	Задати значення
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задається для кожної сутності під час входу до цього блока. Вирази зчитують значення, які сутність мала на момент входу, наприклад getProperty('issues') - 1.
+	Settings	Налаштування
+	Shape	Форма
+	Share of arrivals lost	Частка втрачених прибуттів
+	Share of units blocked	Частка заблокованих одиниць
+	Show {id}	Показати {id}
+	Split or join	Розділити або об'єднати
+	Split or join (all ways)	Розділити або об'єднати (усі шляхи)
+	Stages (k)	Стадії (k)
+	Standard deviation	Стандартне відхилення
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft закрився з незбереженими змінами в {name}. Відновіть їх як модель без назви або відкиньте.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft зчитує моделі процесів із файлів BPMN або XPDL із даними моделювання BPSim, запускає їх як експерименти з повтореннями та подає кожен результат із довірчим інтервалом.
+	StochCraft {version} · model {digest}	StochCraft {version} · модель {digest}
+	Stop setting {name}	Припинити налаштування {name}
+	Tandem line	Послідовна лінія
+	Task	Завдання
+	Task with a resource	Завдання з ресурсом
+	Text	Текст
+	The model: its experiment, connections and problems	Модель: експеримент, з'єднання й проблеми
+	This block has a warning	У цьому блоці є попередження
+	This block has an error	У цьому блоці є помилка
+	Time between arrivals	Час між прибуттями
+	Time unit	Одиниця часу
+	To	До
+	Trials	Випробування
+	Triangular	Трикутний розподіл
+	Truncated normal	Усічений нормальний розподіл
+	Two stations in series, read from an XPDL file.	Дві послідовні станції, завантажені з файлу XPDL.
+	Type	Тип
+	Undid {action}	Скасовано дію {action}
+	Undo	Скасувати
+	Undo {action}	Скасувати: {action}
+	Uniform	Рівномірний розподіл
+	Unit	Одиниця вимірювання
+	Untitled	Без назви
+	Untitled model	Модель без назви
+	Use System Setting	Використати системне налаштування
+	Utilisation	Коефіцієнт використання
+	Value	Значення
+	View	Перегляд
+	Waiting room	Місця очікування
+	Warm-up	Розігрів
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Розігрів {warmup} {unit}, потім вимірювання протягом {duration} {unit}
+	Warning	Попередження
+	Weibull	Розподіл Вейбулла
+	Whole number	Ціле число
+	Yes or no	Так або ні
+	Your changes will be lost if you don't save them.	Якщо не зберегти зміни, їх буде втрачено.
+	a model	модель
+	arrivals	прибуття
+	days	дні
+	decision: one way	рішення: один шлях
+	departures	вибуття
+	egui and eframe (Craft suite fork)	egui та eframe (відгалуження набору Craft)
+	from its value	за значенням
+	hours	години
+	id {id}	ID {id}
+	milliseconds	мілісекунди
+	minutes	хвилини
+	nothing yet	поки нічого
+	seconds	секунди
+	split or join: all ways	розділити або об'єднати: усі шляхи
+	task	завдання
+	task with a resource	завдання з ресурсом
+	the charts could not be captured	не вдалося отримати зображення діаграм
+	the run stopped	запуск зупинено
+	there are no charts to export	немає діаграм для експорту
+	to {block}	до {block}
+	unlimited	без обмежень
+	years	роки
+	{field}: not editable here yet	{field}: тут поки не можна редагувати
+	{id}: a probability is a number from 0 to 1	{id}: імовірність має бути числом від 0 до 1
+	{name} — edited	{name} — змінено
+	{property} (set to, mean)	{property} (задане значення, середнє)
+	± 95% CI	± 95% ДІ
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — половина ширини 95% довірчого інтервалу Student-t для середнього значення за повтореннями.
+	· no results yet	· результатів поки немає
+@plural	Finished {n} replication|Finished {n} replications	Завершено {n} реплікацію|Завершено {n} реплікації|Завершено {n} реплікацій
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Відкрито {file} ({n} попередження)|Відкрито {file} ({n} попередження)|Відкрито {file} ({n} попереджень)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Виконує {n} незалежну реплікацію моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.|Виконує {n} незалежні реплікації моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.|Виконує {n} незалежних реплікацій моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	Завершено {done} із {n} реплікації|Завершено {done} із {n} реплікацій|Завершено {done} із {n} реплікацій
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} реплікацією|{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} реплікаціями|{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} реплікаціями
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} реплікація · початкове значення {seed}|{n} реплікації · початкове значення {seed}|{n} реплікацій · початкове значення {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} реплікація · початкове значення {seed} · розігрів {warmup} {unit} · виміряно {duration} {unit}|{n} реплікації · початкове значення {seed} · розігрів {warmup} {unit} · виміряно {duration} {unit}|{n} реплікацій · початкове значення {seed} · розігрів {warmup} {unit} · виміряно {duration} {unit}

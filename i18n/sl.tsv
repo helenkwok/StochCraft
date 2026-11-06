@@ -1,0 +1,247 @@
+# Slovenščina (sl) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Slovenščina
+	+ Add block	+ Dodaj blok
+	About StochCraft	O programu StochCraft
+	Add Block	Dodaj blok
+	Add a flow from…	Dodaj tok iz…
+	Add a flow to…	Dodaj tok v…
+	Add point	Dodaj točko
+	Add property	Dodaj lastnost
+	Added {block} ({id})	Dodan {block} ({id})
+	Appearance	Videz
+	Arrival limit	Omejitev prihodov
+	Arrivals	Prihodi
+	Back to the model (Esc)	Nazaj na model (Esc)
+	Beta	Beta
+	Binomial	Binomska
+	Boolean	Logična vrednost
+	Built with	Ustvarjeno z
+	Cancel	Prekliči
+	Cancel run	Prekliči izvajanje
+	Capacity	Zmogljivost
+	Change Block	Spremeni blok
+	Change Flow	Spremeni tok
+	Changing the time unit does not convert the times already in the model.	Sprememba časovne enote ne pretvori časov, ki so že v modelu.
+	Close	Zapri
+	Comes from	Prihaja iz
+	Condition of {id}	Pogoj za {id}
+	Connect	Poveži
+	Connections	Povezave
+	Constant	Konstantna
+	Data points	Podatkovne točke
+	Date and time	Datum in čas
+	Decimal number	Decimalno število
+	Decision	Odločitev
+	Decision (one way)	Odločitev (ena pot)
+	Default flow	Privzeti tok
+	Departures	Odhodi
+	Discard	Zavrzi
+	Discarded the recovered changes	Obnovljene spremembe so bile zavržene
+	Disconnect	Prekini povezavo
+	Discrete values	Diskretne vrednosti
+	Discrete-event simulation, from model files to results.	Simulacija diskretnih dogodkov, od datotek modela do rezultatov.
+	Don't Save	Ne shrani
+	Download	Prenesi
+	Download charts (PNG)	Prenesi grafe (PNG)
+	Download table (CSV)	Prenesi tabelo (CSV)
+	Duration	Trajanje
+	Edit	Urejanje
+	Entered	Vstopilo
+	Erlang	Erlangova
+	Error	Napaka
+	Every distribution	Vse porazdelitve
+	Experiment	Poskus
+	Experiment Settings	Nastavitve poskusa
+	Exponential	Eksponentna
+	Export charts (PNG)	Izvozi grafe (PNG)
+	Export table (CSV)	Izvozi tabelo (CSV)
+	Exported {file}	Izvoženo {file}
+	Expression	Izraz
+	File	Datoteka
+	Flows	Tokovi
+	From	Iz
+	Gamma	Gama
+	Goes to	Vodi v
+	Help	Pomoč
+	Keyboard shortcuts saved	Bližnjice na tipkovnici shranjene
+	Keyboard shortcuts unchanged	Bližnjice na tipkovnici nespremenjene
+	Language	Jezik
+	Left	Odšlo
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencirano pod MIT License ali Apache License 2.0, po vaši izbiri.
+	Log-normal	Lognormalna
+	Lost (waiting room full)	Izgubljeno (čakalnica polna)
+	M/M/1 queue	Čakalna vrsta M/M/1
+	Maximise	Povečaj
+	Maximum	Največja vrednost
+	Mean	Povprečje
+	Mean number inside	Povprečno število znotraj
+	Mean queue length	Povprečna dolžina vrste
+	Mean time blocked	Povprečni čas blokiranja
+	Mean time in system	Povprečni čas v sistemu
+	Mean wait	Povprečno čakanje
+	Metric	Kazalnik
+	Minimise	Pomanjšaj
+	Minimum	Najmanjša vrednost
+	Model	Model
+	Most likely	Najverjetnejša vrednost
+	Name	Ime
+	New model	Nov model
+	New property	Nova lastnost
+	New property name	Ime nove lastnosti
+	No blocks yet. Open a model, or add blocks to build one.	Blokov še ni. Odprite model ali dodajte bloke za ustvarjanje modela.
+	No connections yet: join blocks below.	Povezav še ni: povežite spodnje bloke.
+	No results yet	Rezultatov še ni
+	None	Brez
+	None found. The model is ready to run.	Težav ni bilo najdenih. Model je pripravljen na izvajanje.
+	Normal	Normalna
+	Number	Število
+	One clerk, random arrivals: the textbook queue, checked against theory.	En uslužbenec, naključni prihodi: klasična čakalna vrsta, preverjena s teorijo.
+	One task per BPSim distribution, to compare their spread.	Ena naloga na porazdelitev BPSim za primerjavo njihove razpršenosti.
+	Open	Odpri
+	Open Example	Odpri primer
+	Open Recent	Odpri nedavne
+	Open a model first	Najprej odprite model
+	Open a model to simulate it	Odprite model za simulacijo
+	Open a model…	Odpri model…
+	Opened {file}	Odprto {file}
+	Or start from an example	Ali začnite s primerom
+	Parameters	Parametri
+	Points	Točke
+	Poisson	Poissonova
+	Probability	Verjetnost
+	Probability of {id}	Verjetnost za {id}
+	Problems	Težave
+	Process	Proces
+	Properties	Lastnosti
+	Quit	Izhod
+	Ready	Omogočeno
+	Recover	Obnovi
+	Recover unsaved changes?	Obnoviti neshranjene spremembe?
+	Recovered {name}; save it to keep it	Obnovljen {name}; shranite ga, da ostane
+	Redid {action}	Ponovljeno {action}
+	Redo	Ponovi
+	Redo {action}	Uveljavi znova {action}
+	Remove	Odstrani
+	Remove Block	Odstrani blok
+	Remove Property	Odstrani lastnost
+	Remove block	Odstrani blok
+	Remove the flow {id}	Odstrani tok {id}
+	Remove this block and its flows (Delete)	Odstrani ta blok in njegove tokove (Delete)
+	Removed {id}	Odstranjeno {id}
+	Rename Block	Preimenuj blok
+	Rename Model	Preimenuj model
+	Replace Model	Zamenjaj model
+	Replications	Ponovitve
+	Restore	Obnovi okno
+	Results	Rezultati
+	Run	Zaženi
+	Run cancelled	Izvajanje preklicano
+	Run experiment	Zaženi poskus
+	Run the experiment ({shortcut})	Zaženi poskus ({shortcut})
+	Running	Izvaja se
+	Running…	Izvaja se…
+	Save	Shrani
+	Save As…	Shrani kot…
+	Save changes to {name}?	Shranim spremembe v {name}?
+	Saved {file}	Shranjeno {file}
+	Scale	Merilo
+	Seed	Seme
+	Service time	Čas strežbe
+	Set Property	Nastavi lastnost
+	Set a value	Nastavi vrednost
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nastavi se za vsako entiteto ob vstopu v ta blok. Izrazi preberejo vrednosti, ki jih je imela entiteta ob vstopu, na primer getProperty('issues') - 1.
+	Settings	Nastavitve
+	Shape	Oblika
+	Share of arrivals lost	Delež izgubljenih prihodov
+	Share of units blocked	Delež blokiranih enot
+	Show {id}	Prikaži {id}
+	Split or join	Razdeli ali združi
+	Split or join (all ways)	Razdeli ali združi (vse poti)
+	Stages (k)	Stopnje (k)
+	Standard deviation	Standardni odklon
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft se je zaprl z neshranjenimi spremembami v modelu {name}. Obnovite jih kot neimenovan model ali jih zavrzite.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft bere procesne modele iz datotek BPMN ali XPDL s simulacijskimi podatki BPSim, jih izvaja kot poskuse s ponovitvami in vsak rezultat poda z intervalom zaupanja.
+	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop setting {name}	Nehaj nastavljati {name}
+	Tandem line	Zaporedna linija
+	Task	Naloga
+	Task with a resource	Naloga z virom
+	Text	Besedilo
+	The model: its experiment, connections and problems	Model: poskus, povezave in težave
+	This block has a warning	Ta blok ima opozorilo
+	This block has an error	Ta blok ima napako
+	Time between arrivals	Čas med prihodi
+	Time unit	Časovna enota
+	To	V
+	Trials	Poskusi
+	Triangular	Trikotna
+	Truncated normal	Odrezana normalna
+	Two stations in series, read from an XPDL file.	Dve zaporedni postaji, prebrani iz datoteke XPDL.
+	Type	Vrsta
+	Undid {action}	Razveljavljeno {action}
+	Undo	Razveljavi
+	Undo {action}	Razveljavi: {action}
+	Uniform	Enakomerna
+	Unit	Enota
+	Untitled	Brez naslova
+	Untitled model	Neimenovan model
+	Use System Setting	Uporabi sistemsko nastavitev
+	Utilisation	Izkoriščenost
+	Value	Vrednost
+	View	Pogled
+	Waiting room	Čakalnica
+	Warm-up	Ogrevanje
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Ogrevanje {warmup} {unit}, nato merjenje {duration} {unit}
+	Warning	Opozorilo
+	Weibull	Weibullova
+	Whole number	Celo število
+	Yes or no	Da ali ne
+	Your changes will be lost if you don't save them.	Vaše spremembe bodo izgubljene, če jih ne shranite.
+	a model	model
+	arrivals	prihodi
+	days	dnevi
+	decision: one way	odločitev: ena pot
+	departures	odhodi
+	egui and eframe (Craft suite fork)	egui in eframe (različica paketa Craft)
+	from its value	glede na vrednost
+	hours	ure
+	id {id}	id {id}
+	milliseconds	milisekunde
+	minutes	minute
+	nothing yet	še nič
+	seconds	sekunde
+	split or join: all ways	razdeli ali združi: vse poti
+	task	naloga
+	task with a resource	naloga z virom
+	the charts could not be captured	grafov ni bilo mogoče zajeti
+	the run stopped	izvajanje se je ustavilo
+	there are no charts to export	ni grafov za izvoz
+	to {block}	v {block}
+	unlimited	neomejeno
+	years	leta
+	{field}: not editable here yet	{field}: tukaj še ni mogoče urejati
+	{id}: a probability is a number from 0 to 1	{id}: verjetnost je število od 0 do 1
+	{name} — edited	{name} — urejeno
+	{property} (set to, mean)	{property} (nastavljena vrednost, povprečje)
+	± 95% CI	± 95% interval zaupanja
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± je polovica širine 95% Student-t intervala zaupanja za povprečje med ponovitvami.
+	· no results yet	· rezultatov še ni
+@plural	Finished {n} replication|Finished {n} replications	Končana je {n} ponovitev|Končani sta {n} ponovitvi|Končane so {n} ponovitve|Končanih je {n} ponovitev
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Odprto {file} ({n} opozorilo)|Odprto {file} ({n} opozorili)|Odprto {file} ({n} opozorila)|Odprto {file} ({n} opozoril)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Izvede {n} neodvisno ponovitev modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisni ponovitvi modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisne ponovitve modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisnih ponovitev modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	Končana {done} od {n} ponovitve|Končani {done} od {n} ponovitev|Končane {done} od {n} ponovitev|Končanih {done} od {n} ponovitev
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvi|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ponovitev · seme {seed}|{n} ponovitvi · seme {seed}|{n} ponovitve · seme {seed}|{n} ponovitev · seme {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitvi · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitve · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}

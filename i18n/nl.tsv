@@ -1,0 +1,247 @@
+# Nederlands (nl) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Nederlands
+	+ Add block	+ Blok toevoegen
+	About StochCraft	Over StochCraft
+	Add Block	Blok toevoegen
+	Add a flow from…	Stroom toevoegen vanaf…
+	Add a flow to…	Stroom toevoegen naar…
+	Add point	Punt toevoegen
+	Add property	Eigenschap toevoegen
+	Added {block} ({id})	{block} ({id}) toegevoegd
+	Appearance	Uiterlijk
+	Arrival limit	Aankomstlimiet
+	Arrivals	Aankomsten
+	Back to the model (Esc)	Terug naar het model (Esc)
+	Beta	Bèta
+	Binomial	Binomiaal
+	Boolean	Booleaans
+	Built with	Gemaakt met
+	Cancel	Annuleren
+	Cancel run	Uitvoering annuleren
+	Capacity	Capaciteit
+	Change Block	Blok wijzigen
+	Change Flow	Stroom wijzigen
+	Changing the time unit does not convert the times already in the model.	Als u de tijdseenheid wijzigt, worden bestaande tijden in het model niet omgerekend.
+	Close	Sluiten
+	Comes from	Komt van
+	Condition of {id}	Voorwaarde van {id}
+	Connect	Verbinden
+	Connections	Verbindingen
+	Constant	Constant
+	Data points	Datapunten
+	Date and time	Datum en tijd
+	Decimal number	Decimaal getal
+	Decision	Beslissing
+	Decision (one way)	Beslissing (één route)
+	Default flow	Standaardstroom
+	Departures	Vertrekken
+	Discard	Negeren
+	Discarded the recovered changes	Herstelde wijzigingen verworpen
+	Disconnect	Verbinding verbreken
+	Discrete values	Discrete waarden
+	Discrete-event simulation, from model files to results.	Discrete-evenementensimulatie, van modelbestanden tot resultaten.
+	Don't Save	Niet opslaan
+	Download	Downloaden
+	Download charts (PNG)	Grafieken downloaden (PNG)
+	Download table (CSV)	Tabel downloaden (CSV)
+	Duration	Duur
+	Edit	Bewerken
+	Entered	Binnengekomen
+	Erlang	Erlang
+	Error	Fout
+	Every distribution	Alle verdelingen
+	Experiment	Experiment
+	Experiment Settings	Experimentinstellingen
+	Exponential	Exponentieel
+	Export charts (PNG)	Grafieken exporteren (PNG)
+	Export table (CSV)	Tabel exporteren (CSV)
+	Exported {file}	{file} geëxporteerd
+	Expression	Expressie
+	File	Bestand
+	Flows	Stromen
+	From	Van
+	Gamma	Gamma
+	Goes to	Gaat naar
+	Help	Help
+	Keyboard shortcuts saved	Sneltoetsen opgeslagen
+	Keyboard shortcuts unchanged	Sneltoetsen ongewijzigd
+	Language	Taal
+	Left	Vertrokken
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Onder MIT License of Apache License 2.0, naar keuze.
+	Log-normal	Lognormaal
+	Lost (waiting room full)	Verloren (wachtruimte vol)
+	M/M/1 queue	M/M/1-wachtrij
+	Maximise	Maximaliseren
+	Maximum	Maximum
+	Mean	Gemiddelde
+	Mean number inside	Gemiddeld aantal binnen
+	Mean queue length	Gemiddelde wachtrijlengte
+	Mean time blocked	Gemiddelde blokkeringstijd
+	Mean time in system	Gemiddelde tijd in het systeem
+	Mean wait	Gemiddelde wachttijd
+	Metric	Metriek
+	Minimise	Minimaliseren
+	Minimum	Minimum
+	Model	Model
+	Most likely	Meest waarschijnlijk
+	Name	Naam
+	New model	Nieuw model
+	New property	Nieuwe eigenschap
+	New property name	Naam van nieuwe eigenschap
+	No blocks yet. Open a model, or add blocks to build one.	Nog geen blokken. Open een model of voeg blokken toe om er een te maken.
+	No connections yet: join blocks below.	Nog geen verbindingen: verbind hieronder de blokken.
+	No results yet	Nog geen resultaten
+	None	Geen
+	None found. The model is ready to run.	Geen problemen gevonden. Het model is klaar om uit te voeren.
+	Normal	Normaal
+	Number	Getal
+	One clerk, random arrivals: the textbook queue, checked against theory.	Eén medewerker, willekeurige aankomsten: de klassieke wachtrij, getoetst aan de theorie.
+	One task per BPSim distribution, to compare their spread.	Eén taak per BPSim-verdeling om de spreiding te vergelijken.
+	Open	Openen
+	Open Example	Voorbeeld openen
+	Open Recent	Recent geopend
+	Open a model first	Open eerst een model
+	Open a model to simulate it	Open een model om het te simuleren
+	Open a model…	Model openen…
+	Opened {file}	{file} geopend
+	Or start from an example	Of begin met een voorbeeld
+	Parameters	Parameters
+	Points	Punten
+	Poisson	Poisson
+	Probability	Kans
+	Probability of {id}	Kans van {id}
+	Problems	Problemen
+	Process	Proces
+	Properties	Eigenschappen
+	Quit	Afsluiten
+	Ready	Klaar
+	Recover	Herstellen
+	Recover unsaved changes?	Niet-opgeslagen wijzigingen herstellen?
+	Recovered {name}; save it to keep it	{name} hersteld; sla het op om het te bewaren
+	Redid {action}	{action} opnieuw uitgevoerd
+	Redo	Opnieuw uitvoeren
+	Redo {action}	{action} opnieuw uitvoeren
+	Remove	Verwijderen
+	Remove Block	Blok verwijderen
+	Remove Property	Eigenschap verwijderen
+	Remove block	Blok verwijderen
+	Remove the flow {id}	Stroom {id} verwijderen
+	Remove this block and its flows (Delete)	Dit blok en zijn stromen verwijderen (Delete)
+	Removed {id}	{id} verwijderd
+	Rename Block	Blok hernoemen
+	Rename Model	Model hernoemen
+	Replace Model	Model vervangen
+	Replications	Herhalingen
+	Restore	Venster herstellen
+	Results	Resultaten
+	Run	Uitvoeren
+	Run cancelled	Uitvoering geannuleerd
+	Run experiment	Experiment uitvoeren
+	Run the experiment ({shortcut})	Het experiment uitvoeren ({shortcut})
+	Running	Wordt uitgevoerd
+	Running…	Wordt uitgevoerd…
+	Save	Opslaan
+	Save As…	Opslaan als…
+	Save changes to {name}?	Wijzigingen in {name} opslaan?
+	Saved {file}	{file} opgeslagen
+	Scale	Schaal
+	Seed	Startwaarde
+	Service time	Servicetijd
+	Set Property	Eigenschap instellen
+	Set a value	Een waarde instellen
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Wordt ingesteld voor elke entiteit zodra deze dit blok binnenkomt. Expressies lezen de waarden die de entiteit bij binnenkomst had, zoals getProperty('issues') - 1.
+	Settings	Instellingen
+	Shape	Vorm
+	Share of arrivals lost	Aandeel verloren aankomsten
+	Share of units blocked	Aandeel geblokkeerde eenheden
+	Show {id}	{id} tonen
+	Split or join	Splitsen of samenvoegen
+	Split or join (all ways)	Splitsen of samenvoegen (alle routes)
+	Stages (k)	Fasen (k)
+	Standard deviation	Standaardafwijking
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft is afgesloten met niet-opgeslagen wijzigingen in {name}. Herstel deze als een naamloos model of verwerp ze.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft leest procesmodellen uit BPMN- of XPDL-bestanden met BPSim-simulatiegegevens, voert ze uit als experimenten met herhalingen en rapporteert elk resultaat met het bijbehorende betrouwbaarheidsinterval.
+	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop setting {name}	Instellen van {name} stoppen
+	Tandem line	Tandemlijn
+	Task	Taak
+	Task with a resource	Taak met een hulpbron
+	Text	Tekst
+	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
+	This block has a warning	Dit blok heeft een waarschuwing
+	This block has an error	Dit blok heeft een fout
+	Time between arrivals	Tijd tussen aankomsten
+	Time unit	Tijdseenheid
+	To	Naar
+	Trials	Proeven
+	Triangular	Driehoekig
+	Truncated normal	Afgekapt normaal
+	Two stations in series, read from an XPDL file.	Twee stations achter elkaar, gelezen uit een XPDL-bestand.
+	Type	Type
+	Undid {action}	{action} ongedaan gemaakt
+	Undo	Ongedaan maken
+	Undo {action}	{action} ongedaan maken
+	Uniform	Uniform
+	Unit	Eenheid
+	Untitled	Naamloos
+	Untitled model	Naamloos model
+	Use System Setting	Systeeminstelling gebruiken
+	Utilisation	Bezettingsgraad
+	Value	Waarde
+	View	Beeld
+	Waiting room	Wachtruimte
+	Warm-up	Opwarmperiode
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Opwarmen gedurende {warmup} {unit}, daarna {duration} {unit} meten
+	Warning	Waarschuwing
+	Weibull	Weibull
+	Whole number	Geheel getal
+	Yes or no	Ja of nee
+	Your changes will be lost if you don't save them.	Je wijzigingen gaan verloren als je ze niet opslaat.
+	a model	een model
+	arrivals	aankomsten
+	days	dagen
+	decision: one way	beslissing: één route
+	departures	vertrekken
+	egui and eframe (Craft suite fork)	egui en eframe (fork van de Craft-suite)
+	from its value	op basis van de waarde
+	hours	uren
+	id {id}	id {id}
+	milliseconds	milliseconden
+	minutes	minuten
+	nothing yet	nog niets
+	seconds	seconden
+	split or join: all ways	splitsen of samenvoegen: alle routes
+	task	taak
+	task with a resource	taak met een hulpbron
+	the charts could not be captured	de grafieken konden niet worden vastgelegd
+	the run stopped	de uitvoering is gestopt
+	there are no charts to export	er zijn geen grafieken om te exporteren
+	to {block}	naar {block}
+	unlimited	onbeperkt
+	years	jaren
+	{field}: not editable here yet	{field}: hier nog niet bewerkbaar
+	{id}: a probability is a number from 0 to 1	{id}: een kans is een getal tussen 0 en 1
+	{name} — edited	{name} — bewerkt
+	{property} (set to, mean)	{property} (ingestelde waarde, gemiddelde)
+	± 95% CI	± 95%-BI
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± is de halve breedte van een 95%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de herhalingen.
+	· no results yet	· nog geen resultaten
+@plural	Finished {n} replication|Finished {n} replications	{n} herhaling voltooid|{n} herhalingen voltooid
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} geopend ({n} waarschuwing)|{file} geopend ({n} waarschuwingen)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Voert {n} onafhankelijke herhaling van het model uit met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.|Voert {n} onafhankelijke herhalingen van het model uit met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} van {n} herhaling voltooid|{done} van {n} herhalingen voltooid
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} herhaling|{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} herhalingen
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} herhaling · startwaarde {seed}|{n} herhalingen · startwaarde {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} herhaling · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten|{n} herhalingen · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten

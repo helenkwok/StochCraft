@@ -1,0 +1,247 @@
+# Dansk (da) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	Dansk
+	+ Add block	+ Tilføj blok
+	About StochCraft	Om StochCraft
+	Add Block	Tilføj blok
+	Add a flow from…	Tilføj flow fra…
+	Add a flow to…	Tilføj flow til…
+	Add point	Tilføj punkt
+	Add property	Tilføj egenskab
+	Added {block} ({id})	Tilføjede {block} ({id})
+	Appearance	Udseende
+	Arrival limit	Grænse for ankomster
+	Arrivals	Ankomster
+	Back to the model (Esc)	Tilbage til modellen (Esc)
+	Beta	Beta
+	Binomial	Binomial
+	Boolean	Boolesk
+	Built with	Bygget med
+	Cancel	Annullér
+	Cancel run	Annuller kørsel
+	Capacity	Kapacitet
+	Change Block	Rediger blok
+	Change Flow	Rediger flow
+	Changing the time unit does not convert the times already in the model.	Ændring af tidsenheden omregner ikke tider, der allerede findes i modellen.
+	Close	Luk
+	Comes from	Kommer fra
+	Condition of {id}	Betingelse for {id}
+	Connect	Forbind
+	Connections	Forbindelser
+	Constant	Konstant
+	Data points	Datapunkter
+	Date and time	Dato og klokkeslæt
+	Decimal number	Decimaltal
+	Decision	Beslutning
+	Decision (one way)	Beslutning (én vej)
+	Default flow	Standardflow
+	Departures	Afgange
+	Discard	Kassér
+	Discarded the recovered changes	Gendannede ændringer blev kasseret
+	Disconnect	Afbryd forbindelse
+	Discrete values	Diskrete værdier
+	Discrete-event simulation, from model files to results.	Diskret hændelsessimulering, fra modelfiler til resultater.
+	Don't Save	Gem ikke
+	Download	Download
+	Download charts (PNG)	Download diagrammer (PNG)
+	Download table (CSV)	Download tabel (CSV)
+	Duration	Varighed
+	Edit	Redigér
+	Entered	Indgået
+	Erlang	Erlang
+	Error	Fejl
+	Every distribution	Alle fordelinger
+	Experiment	Eksperiment
+	Experiment Settings	Eksperimentindstillinger
+	Exponential	Eksponentiel
+	Export charts (PNG)	Eksportér diagrammer (PNG)
+	Export table (CSV)	Eksportér tabel (CSV)
+	Exported {file}	Eksporterede {file}
+	Expression	Udtryk
+	File	Filer
+	Flows	Flow
+	From	Fra
+	Gamma	Gamma
+	Goes to	Går til
+	Help	Hjælp
+	Keyboard shortcuts saved	Tastaturgenveje gemt
+	Keyboard shortcuts unchanged	Tastaturgenveje uændrede
+	Language	Sprog
+	Left	Forladt
+	Licensed under the MIT License or the Apache License 2.0, at your option.	Licenseret under MIT License eller Apache License 2.0 efter eget valg.
+	Log-normal	Lognormal
+	Lost (waiting room full)	Tabt (venteværelset er fuldt)
+	M/M/1 queue	M/M/1-kø
+	Maximise	Maksimér
+	Maximum	Maksimum
+	Mean	Gennemsnit
+	Mean number inside	Gennemsnitligt antal indeni
+	Mean queue length	Gennemsnitlig kølængde
+	Mean time blocked	Gennemsnitlig blokeringstid
+	Mean time in system	Gennemsnitlig tid i systemet
+	Mean wait	Gennemsnitlig ventetid
+	Metric	Målepunkt
+	Minimise	Minimér
+	Minimum	Minimum
+	Model	Model
+	Most likely	Mest sandsynlig
+	Name	Navn
+	New model	Ny model
+	New property	Ny egenskab
+	New property name	Navn på ny egenskab
+	No blocks yet. Open a model, or add blocks to build one.	Endnu ingen blokke. Åbn en model, eller tilføj blokke for at oprette en.
+	No connections yet: join blocks below.	Endnu ingen forbindelser: forbind blokkene nedenfor.
+	No results yet	Endnu ingen resultater
+	None	Ingen
+	None found. The model is ready to run.	Ingen problemer fundet. Modellen er klar til at køre.
+	Normal	Normal
+	Number	Tal
+	One clerk, random arrivals: the textbook queue, checked against theory.	Én medarbejder, tilfældige ankomster: den klassiske kø, kontrolleret mod teorien.
+	One task per BPSim distribution, to compare their spread.	Én opgave pr. BPSim-fordeling for at sammenligne spredningen.
+	Open	Åbn
+	Open Example	Åbn eksempel
+	Open Recent	Åbn seneste
+	Open a model first	Åbn først en model
+	Open a model to simulate it	Åbn en model for at simulere den
+	Open a model…	Åbn model…
+	Opened {file}	Åbnede {file}
+	Or start from an example	Eller begynd med et eksempel
+	Parameters	Parametre
+	Points	Punkter
+	Poisson	Poisson
+	Probability	Sandsynlighed
+	Probability of {id}	Sandsynlighed for {id}
+	Problems	Problemer
+	Process	Proces
+	Properties	Egenskaber
+	Quit	Afslut
+	Ready	Klar
+	Recover	Gendan
+	Recover unsaved changes?	Gendan ikke-gemte ændringer?
+	Recovered {name}; save it to keep it	Gendannede {name}; gem den for at beholde den
+	Redid {action}	Gentog {action}
+	Redo	Gør om
+	Redo {action}	Gentag {action}
+	Remove	Fjern
+	Remove Block	Fjern blok
+	Remove Property	Fjern egenskab
+	Remove block	Fjern blok
+	Remove the flow {id}	Fjern flowet {id}
+	Remove this block and its flows (Delete)	Fjern denne blok og dens flow (Delete)
+	Removed {id}	Fjernede {id}
+	Rename Block	Omdøb blok
+	Rename Model	Omdøb model
+	Replace Model	Erstat model
+	Replications	Replikationer
+	Restore	Gendan vindue
+	Results	Resultater
+	Run	Kør
+	Run cancelled	Kørsel annulleret
+	Run experiment	Kør eksperiment
+	Run the experiment ({shortcut})	Kør eksperimentet ({shortcut})
+	Running	Kører
+	Running…	Kører…
+	Save	Gem
+	Save As…	Gem som…
+	Save changes to {name}?	Gem ændringer i {name}?
+	Saved {file}	Gemte {file}
+	Scale	Skala
+	Seed	Tilfældighedsfrø
+	Service time	Servicetid
+	Set Property	Angiv egenskab
+	Set a value	Angiv en værdi
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Indstilles for hver enhed, når den går ind i denne blok. Udtryk læser de værdier, enheden havde ved ankomsten, f.eks. getProperty('issues') - 1.
+	Settings	Indstillinger
+	Shape	Form
+	Share of arrivals lost	Andel tabte ankomster
+	Share of units blocked	Andel blokerede enheder
+	Show {id}	Vis {id}
+	Split or join	Opdel eller sammenflet
+	Split or join (all ways)	Opdel eller sammenflet (alle veje)
+	Stages (k)	Trin (k)
+	Standard deviation	Standardafvigelse
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft blev lukket med ændringer i {name}, som ikke var gemt. Gendan dem som en model uden titel, eller kassér dem.
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft læser procesmodeller fra BPMN- eller XPDL-filer med BPSim-simuleringsdata, kører dem som eksperimenter med gentagelser og rapporterer hvert resultat med det tilhørende konfidensinterval.
+	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop setting {name}	Stop med at angive {name}
+	Tandem line	Tandemlinje
+	Task	Opgave
+	Task with a resource	Opgave med ressource
+	Text	Tekst
+	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
+	This block has a warning	Denne blok har en advarsel
+	This block has an error	Denne blok har en fejl
+	Time between arrivals	Tid mellem ankomster
+	Time unit	Tidsenhed
+	To	Til
+	Trials	Forsøg
+	Triangular	Trekantet
+	Truncated normal	Afkortet normal
+	Two stations in series, read from an XPDL file.	To stationer i serie, læst fra en XPDL-fil.
+	Type	Tekst
+	Undid {action}	Fortrød {action}
+	Undo	Fortryd
+	Undo {action}	Fortryd {action}
+	Uniform	Uniform
+	Unit	Enhed
+	Untitled	Uden navn
+	Untitled model	Model uden titel
+	Use System Setting	Brug systemindstilling
+	Utilisation	Udnyttelsesgrad
+	Value	Værdi
+	View	Vis
+	Waiting room	Venteværelse
+	Warm-up	Opvarmning
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	Opvarmning {warmup} {unit}, derefter måling i {duration} {unit}
+	Warning	Advarsel
+	Weibull	Weibull
+	Whole number	Heltal
+	Yes or no	Ja eller nej
+	Your changes will be lost if you don't save them.	Dine ændringer går tabt, hvis du ikke gemmer dem.
+	a model	en model
+	arrivals	ankomster
+	days	dage
+	decision: one way	beslutning: én vej
+	departures	afgange
+	egui and eframe (Craft suite fork)	egui og eframe (forgrening af Craft-pakken)
+	from its value	ud fra værdien
+	hours	timer
+	id {id}	id {id}
+	milliseconds	millisekunder
+	minutes	minutter
+	nothing yet	intet endnu
+	seconds	sekunder
+	split or join: all ways	opdel eller sammenflet: alle veje
+	task	opgave
+	task with a resource	opgave med ressource
+	the charts could not be captured	diagrammerne kunne ikke optages
+	the run stopped	kørslen stoppede
+	there are no charts to export	ingen diagrammer at eksportere
+	to {block}	til {block}
+	unlimited	ubegrænset
+	years	år
+	{field}: not editable here yet	{field}: kan ikke redigeres her endnu
+	{id}: a probability is a number from 0 to 1	{id}: en sandsynlighed er et tal mellem 0 og 1
+	{name} — edited	{name} — redigeret
+	{property} (set to, mean)	{property} (angivet værdi, gennemsnit)
+	± 95% CI	± 95% KI
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± er halvdelen af bredden af et 95% Student-t-konfidensinterval for gennemsnittet på tværs af gentagelser.
+	· no results yet	· endnu ingen resultater
+@plural	Finished {n} replication|Finished {n} replications	{n} replikation fuldført|{n} replikationer fuldført
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Åbnede {file} ({n} advarsel)|Åbnede {file} ({n} advarsler)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kører {n} uafhængig replikation af modellen med frø {seed}. Hvert elements resultater indeholder den halve bredde af et 95% konfidensinterval.|Kører {n} uafhængige replikationer af modellen med frø {seed}. Hvert elements resultater indeholder den halve bredde af et 95% konfidensinterval.
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} af {n} replikation fuldført|{done} af {n} replikationer fuldført
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval fra {low} til {high}{unit}\npå tværs af {n} replikation|{name}: {mean}{unit}\n95% interval fra {low} til {high}{unit}\npå tværs af {n} replikationer
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikation · frø {seed}|{n} replikationer · frø {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikation · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt|{n} replikationer · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt

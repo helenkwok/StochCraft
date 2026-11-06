@@ -1,0 +1,247 @@
+# ไทย (th) interface catalog for StochCraft.
+# Columns, separated by a TAB:  context <TAB> English source text <TAB> translation
+#   context  usually empty. `@plural`, `@id` and `@msg` mean something to the apps; any other
+#            word is a label that tells apart two meanings of the same English.
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns (in any
+#            order), and a trailing "…" in one needs one in the other.
+#   @plural  English `one|other`; the translation lists this language's plural forms, `|`-separated.
+#   Lines starting with # and blank lines are ignored. A missing entry shows in English.
+#
+# Clean room: every entry was written from the plain meaning of the English text in ordinary
+# computing vocabulary. No other product's localisation, string table or translated UI was
+# consulted or copied; add entries the same way.
+
+@id	language.name	ไทย
+	+ Add block	+ เพิ่มบล็อก
+	About StochCraft	เกี่ยวกับ StochCraft
+	Add Block	เพิ่มบล็อก
+	Add a flow from…	เพิ่มโฟลว์จาก…
+	Add a flow to…	เพิ่มโฟลว์ไปยัง…
+	Add point	เพิ่มจุด
+	Add property	เพิ่มคุณสมบัติ
+	Added {block} ({id})	เพิ่ม {block} ({id}) แล้ว
+	Appearance	ลักษณะที่ปรากฏ
+	Arrival limit	จำนวนขาเข้าสูงสุด
+	Arrivals	ขาเข้า
+	Back to the model (Esc)	กลับไปยังแบบจำลอง (Esc)
+	Beta	เบตา
+	Binomial	ทวินาม
+	Boolean	บูลีน
+	Built with	พัฒนาด้วย
+	Cancel	ยกเลิก
+	Cancel run	ยกเลิกการรัน
+	Capacity	ความจุ
+	Change Block	เปลี่ยนบล็อก
+	Change Flow	เปลี่ยนโฟลว์
+	Changing the time unit does not convert the times already in the model.	การเปลี่ยนหน่วยเวลาไม่แปลงค่าเวลาที่มีอยู่ในแบบจำลอง
+	Close	ปิด
+	Comes from	มาจาก
+	Condition of {id}	เงื่อนไขของ {id}
+	Connect	เชื่อมต่อ
+	Connections	การเชื่อมต่อ
+	Constant	ค่าคงที่
+	Data points	จุดข้อมูล
+	Date and time	วันที่และเวลา
+	Decimal number	เลขทศนิยม
+	Decision	การตัดสินใจ
+	Decision (one way)	การตัดสินใจ (เลือกทางเดียว)
+	Default flow	โฟลว์เริ่มต้น
+	Departures	ขาออก
+	Discard	ละทิ้ง
+	Discarded the recovered changes	ละทิ้งการเปลี่ยนแปลงที่กู้คืนแล้ว
+	Disconnect	ตัดการเชื่อมต่อ
+	Discrete values	ค่าที่ไม่ต่อเนื่อง
+	Discrete-event simulation, from model files to results.	การจำลองเหตุการณ์ไม่ต่อเนื่อง ตั้งแต่ไฟล์แบบจำลองถึงผลลัพธ์
+	Don't Save	ไม่บันทึก
+	Download	ดาวน์โหลด
+	Download charts (PNG)	ดาวน์โหลดแผนภูมิ (PNG)
+	Download table (CSV)	ดาวน์โหลดตาราง (CSV)
+	Duration	ระยะเวลา
+	Edit	แก้ไข
+	Entered	จำนวนที่เข้ามา
+	Erlang	เออร์แลง
+	Error	ข้อผิดพลาด
+	Every distribution	ทุกการแจกแจง
+	Experiment	การทดลอง
+	Experiment Settings	การตั้งค่าการทดลอง
+	Exponential	เอ็กซ์โพเนนเชียล
+	Export charts (PNG)	ส่งออกแผนภูมิ (PNG)
+	Export table (CSV)	ส่งออกตาราง (CSV)
+	Exported {file}	ส่งออก {file} แล้ว
+	Expression	นิพจน์
+	File	ไฟล์
+	Flows	โฟลว์
+	From	จาก
+	Gamma	แกมมา
+	Goes to	ไปยัง
+	Help	วิธีใช้
+	Keyboard shortcuts saved	บันทึกปุ่มลัดแล้ว
+	Keyboard shortcuts unchanged	ปุ่มลัดไม่มีการเปลี่ยนแปลง
+	Language	ภาษา
+	Left	จำนวนที่ออกไป
+	Licensed under the MIT License or the Apache License 2.0, at your option.	อนุญาตให้ใช้ภายใต้ MIT License หรือ Apache License 2.0 ตามที่คุณเลือก
+	Log-normal	ล็อกนอร์มอล
+	Lost (waiting room full)	สูญเสีย (พื้นที่รอเต็ม)
+	M/M/1 queue	คิว M/M/1
+	Maximise	ขยายเต็มหน้าต่าง
+	Maximum	ค่าสูงสุด
+	Mean	ค่าเฉลี่ย
+	Mean number inside	จำนวนเฉลี่ยภายใน
+	Mean queue length	ความยาวคิวเฉลี่ย
+	Mean time blocked	เวลาเฉลี่ยที่ถูกบล็อก
+	Mean time in system	เวลาเฉลี่ยในระบบ
+	Mean wait	เวลารอเฉลี่ย
+	Metric	ตัวชี้วัด
+	Minimise	ย่อหน้าต่าง
+	Minimum	ค่าต่ำสุด
+	Model	แบบจำลอง
+	Most likely	ค่าที่เป็นไปได้มากที่สุด
+	Name	ชื่อ
+	New model	แบบจำลองใหม่
+	New property	คุณสมบัติใหม่
+	New property name	ชื่อคุณสมบัติใหม่
+	No blocks yet. Open a model, or add blocks to build one.	ยังไม่มีบล็อก เปิดแบบจำลองหรือเพิ่มบล็อกเพื่อสร้างแบบจำลอง
+	No connections yet: join blocks below.	ยังไม่มีการเชื่อมต่อ: เชื่อมบล็อกด้านล่าง
+	No results yet	ยังไม่มีผลลัพธ์
+	None	ไม่มี
+	None found. The model is ready to run.	ไม่พบปัญหา แบบจำลองพร้อมรันแล้ว
+	Normal	ปกติ
+	Number	ตัวเลข
+	One clerk, random arrivals: the textbook queue, checked against theory.	พนักงานหนึ่งคนและการมาถึงแบบสุ่ม: คิวมาตรฐานที่ตรวจสอบเทียบกับทฤษฎี
+	One task per BPSim distribution, to compare their spread.	หนึ่งงานต่อการแจกแจง BPSim เพื่อเปรียบเทียบการกระจายของค่า
+	Open	เปิด
+	Open Example	เปิดตัวอย่าง
+	Open Recent	เปิดล่าสุด
+	Open a model first	เปิดแบบจำลองก่อน
+	Open a model to simulate it	เปิดแบบจำลองเพื่อจำลองการทำงาน
+	Open a model…	เปิดแบบจำลอง…
+	Opened {file}	เปิด {file} แล้ว
+	Or start from an example	หรือเริ่มจากตัวอย่าง
+	Parameters	พารามิเตอร์
+	Points	จุด
+	Poisson	ปัวซอง
+	Probability	ความน่าจะเป็น
+	Probability of {id}	ความน่าจะเป็นของ {id}
+	Problems	ปัญหา
+	Process	กระบวนการ
+	Properties	คุณสมบัติ
+	Quit	ออกจากโปรแกรม
+	Ready	พร้อม
+	Recover	กู้คืน
+	Recover unsaved changes?	กู้คืนการเปลี่ยนแปลงที่ยังไม่บันทึกหรือไม่?
+	Recovered {name}; save it to keep it	กู้คืน {name} แล้ว บันทึกเพื่อเก็บไว้
+	Redid {action}	ทำซ้ำ {action} แล้ว
+	Redo	ทำซ้ำ
+	Redo {action}	ทำซ้ำ {action}
+	Remove	นำออก
+	Remove Block	นำบล็อกออก
+	Remove Property	นำคุณสมบัติออก
+	Remove block	นำบล็อกออก
+	Remove the flow {id}	นำโฟลว์ {id} ออก
+	Remove this block and its flows (Delete)	นำบล็อกนี้และโฟลว์ที่เกี่ยวข้องออก (Delete)
+	Removed {id}	นำ {id} ออกแล้ว
+	Rename Block	เปลี่ยนชื่อบล็อก
+	Rename Model	เปลี่ยนชื่อแบบจำลอง
+	Replace Model	แทนที่แบบจำลอง
+	Replications	จำนวนรอบการจำลองซ้ำ
+	Restore	คืนค่าขนาดหน้าต่าง
+	Results	ผลลัพธ์
+	Run	รัน
+	Run cancelled	ยกเลิกการรันแล้ว
+	Run experiment	รันการทดลอง
+	Run the experiment ({shortcut})	รันการทดลอง ({shortcut})
+	Running	กำลังรัน
+	Running…	กำลังรัน…
+	Save	บันทึก
+	Save As…	บันทึกเป็น…
+	Save changes to {name}?	บันทึกการเปลี่ยนแปลงใน {name} หรือไม่?
+	Saved {file}	บันทึก {file} แล้ว
+	Scale	มาตราส่วน
+	Seed	เมล็ดสุ่ม
+	Service time	เวลาให้บริการ
+	Set Property	กำหนดคุณสมบัติ
+	Set a value	กำหนดค่า
+	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	กำหนดค่าให้แต่ละเอนทิตีเมื่อเข้าสู่บล็อกนี้ นิพจน์จะอ่านค่าที่เอนทิตีมีอยู่ขณะเข้ามา เช่น getProperty('issues') - 1
+	Settings	การตั้งค่า
+	Shape	พารามิเตอร์รูปร่าง
+	Share of arrivals lost	สัดส่วนขาเข้าที่สูญเสีย
+	Share of units blocked	สัดส่วนหน่วยที่ถูกบล็อก
+	Show {id}	แสดง {id}
+	Split or join	แยกหรือรวม
+	Split or join (all ways)	แยกหรือรวม (ทุกทาง)
+	Stages (k)	จำนวนขั้น (k)
+	Standard deviation	ส่วนเบี่ยงเบนมาตรฐาน
+	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ปิดลงโดยยังมีการเปลี่ยนแปลงใน {name} ที่ไม่ได้บันทึก กู้คืนการเปลี่ยนแปลงเป็นโมเดลที่ไม่มีชื่อ หรือทิ้งการเปลี่ยนแปลงเหล่านั้น
+	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft อ่านโมเดลกระบวนการจากไฟล์ BPMN หรือ XPDL ที่มีข้อมูลการจำลอง BPSim นำไปรันเป็นการทดลองแบบทำซ้ำหลายครั้ง และรายงานผลแต่ละรายการพร้อมช่วงความเชื่อมั่น
+	StochCraft {version} · model {digest}	StochCraft {version} · แบบจำลอง {digest}
+	Stop setting {name}	หยุดกำหนดค่า {name}
+	Tandem line	สายงานต่อเนื่อง
+	Task	งาน
+	Task with a resource	งานที่ใช้ทรัพยากร
+	Text	ข้อความ
+	The model: its experiment, connections and problems	แบบจำลอง: การทดลอง การเชื่อมต่อ และปัญหา
+	This block has a warning	บล็อกนี้มีคำเตือน
+	This block has an error	บล็อกนี้มีข้อผิดพลาด
+	Time between arrivals	เวลาระหว่างการมาถึง
+	Time unit	หน่วยเวลา
+	To	ไปยัง
+	Trials	จำนวนครั้งทดลอง
+	Triangular	สามเหลี่ยม
+	Truncated normal	ปกติแบบตัดปลาย
+	Two stations in series, read from an XPDL file.	สองสถานีต่ออนุกรม อ่านจากไฟล์ XPDL
+	Type	ชนิด
+	Undid {action}	เลิกทำ {action} แล้ว
+	Undo	เลิกทำ
+	Undo {action}	เลิกทำ {action}
+	Uniform	สม่ำเสมอ
+	Unit	หน่วย
+	Untitled	ยังไม่มีชื่อ
+	Untitled model	แบบจำลองไม่มีชื่อ
+	Use System Setting	ใช้การตั้งค่าระบบ
+	Utilisation	อัตราการใช้ประโยชน์
+	Value	ค่า
+	View	มุมมอง
+	Waiting room	พื้นที่รอ
+	Warm-up	ระยะอุ่นเครื่อง
+	Warm-up {warmup} {unit}, then {duration} {unit} measured	อุ่นเครื่อง {warmup} {unit} จากนั้นวัดผล {duration} {unit}
+	Warning	คำเตือน
+	Weibull	ไวบูลล์
+	Whole number	จำนวนเต็ม
+	Yes or no	ใช่หรือไม่
+	Your changes will be lost if you don't save them.	การเปลี่ยนแปลงจะสูญหายหากคุณไม่บันทึก
+	a model	แบบจำลอง
+	arrivals	ขาเข้า
+	days	วัน
+	decision: one way	การตัดสินใจ: เลือกทางเดียว
+	departures	ขาออก
+	egui and eframe (Craft suite fork)	egui และ eframe (แยกจาก Craft suite)
+	from its value	จากค่าของมัน
+	hours	ชั่วโมง
+	id {id}	รหัส {id}
+	milliseconds	มิลลิวินาที
+	minutes	นาที
+	nothing yet	ยังไม่มีอะไร
+	seconds	วินาที
+	split or join: all ways	แยกหรือรวม: ทุกทาง
+	task	งาน
+	task with a resource	งานที่ใช้ทรัพยากร
+	the charts could not be captured	ไม่สามารถจับภาพแผนภูมิได้
+	the run stopped	การรันหยุดแล้ว
+	there are no charts to export	ไม่มีแผนภูมิให้ส่งออก
+	to {block}	ไปยัง {block}
+	unlimited	ไม่จำกัด
+	years	ปี
+	{field}: not editable here yet	{field}: ยังแก้ไขที่นี่ไม่ได้
+	{id}: a probability is a number from 0 to 1	{id}: ความน่าจะเป็นต้องเป็นตัวเลขตั้งแต่ 0 ถึง 1
+	{name} — edited	{name} — แก้ไขแล้ว
+	{property} (set to, mean)	{property} (กำหนดเป็น, ค่าเฉลี่ย)
+	± 95% CI	± 95% CI
+	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± คือครึ่งหนึ่งของความกว้างของช่วงความเชื่อมั่น Student-t 95% สำหรับค่าเฉลี่ยจากการทดลองซ้ำ
+	· no results yet	· ยังไม่มีผลลัพธ์
+@plural	Finished {n} replication|Finished {n} replications	จำลองซ้ำเสร็จแล้ว {n} รอบ
+@plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	เปิด {file} แล้ว (คำเตือน {n} รายการ)
+@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	รันการจำลองแบบจำลองอิสระ {n} รอบโดยใช้เมล็ดสุ่ม {seed} ผลลัพธ์ของแต่ละองค์ประกอบแสดงครึ่งหนึ่งของความกว้างช่วงความเชื่อมั่น 95% จากทุกรอบ
+@plural	{done} of {n} replication finished|{done} of {n} replications finished	เสร็จแล้ว {done} จาก {n} รอบการจำลองซ้ำ
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nช่วงความเชื่อมั่น 95% จาก {low} ถึง {high}{unit}\nจากการจำลองซ้ำ {n} รอบ
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	จำลองซ้ำ {n} รอบ · เมล็ดสุ่ม {seed}
+@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	จำลองซ้ำ {n} รอบ · เมล็ดสุ่ม {seed} · อุ่นเครื่อง {warmup} {unit} · วัดผล {duration} {unit}
