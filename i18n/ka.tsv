@@ -33,6 +33,9 @@
 	Availability	ხელმისაწვდომობა
 	BPMN with BPSim	BPMN BPSim-ით
 	Back to the model (Esc)	მოდელზე დაბრუნება (Esc)
+	Batch	პარტია
+	Batch (collect, then send together)	პარტია (შეაგროვე, შემდეგ ერთად გაგზავნე)
+	Batch size	პარტიის ზომა
 	Beta	ბეტა
 	Binomial	ბინომური
 	Boolean	ლოგიკური მნიშვნელობა
@@ -243,6 +246,7 @@
 	Show All	ყველას ჩვენება
 	Show {id}	{id}-ის ჩვენება
 	Speed	სიჩქარე
+	Split batches	პარტიების დაყოფა
 	Split or join	გაყოფა ან გაერთიანება
 	Split or join (all ways)	გაყოფა ან გაერთიანება (ყველა გზა)
 	Spread out	განაწილება
@@ -306,6 +310,7 @@
 	Zoom out	დაპატარავება
 	a model	მოდელი
 	arrivals	შემოსვლები
+	batch	პარტია
 	days	დღე
 	decision: one way	გადაწყვეტილება: ერთი გზა
 	departures	გასვლები
@@ -317,6 +322,7 @@
 	minutes	წუთი
 	nothing yet	ჯერ არაფერი
 	seconds	წამი
+	split batches	პარტიების დაყოფა
 	split or join: all ways	გაყოფა ან გაერთიანება: ყველა გზა
 	task	დავალება
 	task with a resource	დავალება რესურსით

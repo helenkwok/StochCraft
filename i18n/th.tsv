@@ -33,6 +33,9 @@
 	Availability	อัตราความพร้อมใช้งาน
 	BPMN with BPSim	BPMN พร้อม BPSim
 	Back to the model (Esc)	กลับไปยังแบบจำลอง (Esc)
+	Batch	ชุด
+	Batch (collect, then send together)	ชุด (รวบรวม แล้วส่งไปพร้อมกัน)
+	Batch size	ขนาดชุด
 	Beta	เบตา
 	Binomial	ทวินาม
 	Boolean	บูลีน
@@ -243,6 +246,7 @@
 	Show All	แสดงทั้งหมด
 	Show {id}	แสดง {id}
 	Speed	ความเร็ว
+	Split batches	แยกชุด
 	Split or join	แยกหรือรวม
 	Split or join (all ways)	แยกหรือรวม (ทุกทาง)
 	Spread out	กระจาย
@@ -306,6 +310,7 @@
 	Zoom out	ซูมออก
 	a model	แบบจำลอง
 	arrivals	ขาเข้า
+	batch	ชุด
 	days	วัน
 	decision: one way	การตัดสินใจ: เลือกทางเดียว
 	departures	ขาออก
@@ -317,6 +322,7 @@
 	minutes	นาที
 	nothing yet	ยังไม่มีอะไร
 	seconds	วินาที
+	split batches	การแยกชุด
 	split or join: all ways	แยกหรือรวม: ทุกทาง
 	task	งาน
 	task with a resource	งานที่ใช้ทรัพยากร

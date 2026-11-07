@@ -33,6 +33,9 @@
 	Availability	Beschikbaarheid
 	BPMN with BPSim	BPMN met BPSim
 	Back to the model (Esc)	Terug naar het model (Esc)
+	Batch	Batch
+	Batch (collect, then send together)	Batch (verzamelen, dan samen doorsturen)
+	Batch size	Batchgrootte
 	Beta	Bèta
 	Binomial	Binomiaal
 	Boolean	Booleaans
@@ -243,6 +246,7 @@
 	Show All	Alles tonen
 	Show {id}	{id} tonen
 	Speed	Snelheid
+	Split batches	Batches splitsen
 	Split or join	Splitsen of samenvoegen
 	Split or join (all ways)	Splitsen of samenvoegen (alle routes)
 	Spread out	Verdelen
@@ -306,6 +310,7 @@
 	Zoom out	Uitzoomen
 	a model	een model
 	arrivals	aankomsten
+	batch	batch
 	days	dagen
 	decision: one way	beslissing: één route
 	departures	vertrekken
@@ -317,6 +322,7 @@
 	minutes	minuten
 	nothing yet	nog niets
 	seconds	seconden
+	split batches	batches splitsen
 	split or join: all ways	splitsen of samenvoegen: alle routes
 	task	taak
 	task with a resource	taak met een hulpbron

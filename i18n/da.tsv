@@ -33,6 +33,9 @@
 	Availability	Tilgængelighed
 	BPMN with BPSim	BPMN med BPSim
 	Back to the model (Esc)	Tilbage til modellen (Esc)
+	Batch	Parti
+	Batch (collect, then send together)	Parti (saml, og send dem samlet)
+	Batch size	Partistørrelse
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolesk
@@ -243,6 +246,7 @@
 	Show All	Vis alle
 	Show {id}	Vis {id}
 	Speed	Hastighed
+	Split batches	Opdel partier
 	Split or join	Opdel eller sammenflet
 	Split or join (all ways)	Opdel eller sammenflet (alle veje)
 	Spread out	Fordel
@@ -306,6 +310,7 @@
 	Zoom out	Zoom ud
 	a model	en model
 	arrivals	ankomster
+	batch	parti
 	days	dage
 	decision: one way	beslutning: én vej
 	departures	afgange
@@ -317,6 +322,7 @@
 	minutes	minutter
 	nothing yet	intet endnu
 	seconds	sekunder
+	split batches	opdeling af partier
 	split or join: all ways	opdel eller sammenflet: alle veje
 	task	opgave
 	task with a resource	opgave med ressource

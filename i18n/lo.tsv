@@ -33,6 +33,9 @@
 	Availability	ອັດຕາຄວາມພ້ອມໃຊ້
 	BPMN with BPSim	BPMN ພ້ອມ BPSim
 	Back to the model (Esc)	ກັບໄປຫາແບບຈຳລອງ (Esc)
+	Batch	ຊຸດ
+	Batch (collect, then send together)	ຊຸດ (ເກັບລວມ, ແລ້ວສົ່ງໄປພ້ອມກັນ)
+	Batch size	ຂະໜາດຊຸດ
 	Beta	ເບຕາ
 	Binomial	ທະວີນາມ
 	Boolean	ບູລີນ
@@ -243,6 +246,7 @@
 	Show All	ສະແດງທັງໝົດ
 	Show {id}	ສະແດງ {id}
 	Speed	ຄວາມໄວ
+	Split batches	ແຍກຊຸດ
 	Split or join	ແຍກ ຫຼື ລວມ
 	Split or join (all ways)	ແຍກ ຫຼື ລວມ (ທຸກທາງ)
 	Spread out	ກະຈາຍ
@@ -306,6 +310,7 @@
 	Zoom out	ຫຍໍ້
 	a model	ແບບຈຳລອງ
 	arrivals	ການມາຮອດ
+	batch	ຊຸດ
 	days	ວັນ
 	decision: one way	ການຕັດສິນໃຈ: ທາງດຽວ
 	departures	ການອອກ
@@ -317,6 +322,7 @@
 	minutes	ນາທີ
 	nothing yet	ຍັງບໍ່ມີຫຍັງ
 	seconds	ວິນາທີ
+	split batches	ແຍກຊຸດ
 	split or join: all ways	ແຍກ ຫຼື ລວມ: ທຸກທາງ
 	task	ໜ້າວຽກ
 	task with a resource	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນ

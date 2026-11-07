@@ -33,6 +33,9 @@
 	Availability	可用率
 	BPMN with BPSim	带 BPSim 的 BPMN
 	Back to the model (Esc)	返回模型 (Esc)
+	Batch	批次
+	Batch (collect, then send together)	批次（收集后一起发送）
+	Batch size	批量大小
 	Beta	贝塔分布
 	Binomial	二项分布
 	Boolean	布尔值
@@ -243,6 +246,7 @@
 	Show All	全部显示
 	Show {id}	显示 {id}
 	Speed	速度
+	Split batches	拆分批次
 	Split or join	拆分或合并
 	Split or join (all ways)	拆分或合并（所有路径）
 	Spread out	均匀分布
@@ -306,6 +310,7 @@
 	Zoom out	缩小
 	a model	一个模型
 	arrivals	到达
+	batch	批次
 	days	天
 	decision: one way	决策：单一路径
 	departures	离开
@@ -317,6 +322,7 @@
 	minutes	分钟
 	nothing yet	尚无内容
 	seconds	秒
+	split batches	拆分批次
 	split or join: all ways	拆分或合并：所有路径
 	task	任务
 	task with a resource	需要资源的任务

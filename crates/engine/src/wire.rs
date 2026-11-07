@@ -229,8 +229,17 @@ pub enum KindSpec {
         default: Option<String>,
     },
     /// Copies each entity down every outgoing connection at once (a BPMN parallel gateway);
-    /// with several incoming connections, first waits for an entity on each (a join).
+    /// with several incoming connections, first waits for an entity on each (a join). A
+    /// connection's `quantity` makes it an assembly: that many entities from it go into each
+    /// one sent on.
     ParallelGateway,
+    /// Collects entities until there are `size`, then sends them on together as one batch.
+    Batch {
+        #[serde(default = "one")]
+        size: u32,
+    },
+    /// Splits each batch back into its entities; anything else passes through.
+    Unbatch,
 }
 
 fn is_zero(x: &f64) -> bool {
@@ -599,6 +608,8 @@ impl From<&ElementKind> for KindSpec {
                 default: default.as_ref().map(ToString::to_string),
             },
             ElementKind::ParallelGateway => KindSpec::ParallelGateway,
+            ElementKind::Batch { size } => KindSpec::Batch { size: *size },
+            ElementKind::Unbatch => KindSpec::Unbatch,
         }
     }
 }
@@ -645,6 +656,8 @@ impl From<KindSpec> for ElementKind {
                 default: default.as_deref().map(ElementId::unchecked),
             },
             KindSpec::ParallelGateway => ElementKind::ParallelGateway,
+            KindSpec::Batch { size } => ElementKind::Batch { size },
+            KindSpec::Unbatch => ElementKind::Unbatch,
         }
     }
 }
@@ -883,6 +896,10 @@ pub struct ConnectionDoc {
     /// when not set.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub condition: Option<String>,
+    /// Into a parallel gateway: how many entities from this connection go into each one it
+    /// sends on (an assembly's bill of materials); left out, 1.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub quantity: Option<u32>,
 }
 
 /// How to run a model. `duration` excludes the warm-up.
@@ -975,6 +992,7 @@ impl From<&Model> for ModelDoc {
                     to: c.to.to_string(),
                     probability: c.probability,
                     condition: c.condition.clone(),
+                    quantity: c.quantity,
                 })
                 .collect(),
             resources: m.resources.iter().map(Into::into).collect(),
@@ -1014,6 +1032,7 @@ impl From<ModelDoc> for Model {
                     to: ElementId::unchecked(&c.to),
                     probability: c.probability,
                     condition: c.condition,
+                    quantity: c.quantity,
                 })
                 .collect(),
             resources: m.resources.into_iter().map(Into::into).collect(),

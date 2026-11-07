@@ -33,6 +33,9 @@
 	Availability	Käytettävyys
 	BPMN with BPSim	BPMN ja BPSim
 	Back to the model (Esc)	Takaisin malliin (Esc)
+	Batch	Erä
+	Batch (collect, then send together)	Erä (kerää ja lähetä yhdessä)
+	Batch size	Erän koko
 	Beta	Beeta
 	Binomial	Binomijakauma
 	Boolean	Totuusarvo
@@ -243,6 +246,7 @@
 	Show All	Näytä kaikki
 	Show {id}	Näytä {id}
 	Speed	Nopeus
+	Split batches	Erien purku
 	Split or join	Haaroita tai yhdistä
 	Split or join (all ways)	Haaroita tai yhdistä (kaikki reitit)
 	Spread out	Jaa tasaisesti
@@ -306,6 +310,7 @@
 	Zoom out	Loitonna
 	a model	malli
 	arrivals	saapumiset
+	batch	erä
 	days	päivää
 	decision: one way	päätös: yksi reitti
 	departures	poistumiset
@@ -317,6 +322,7 @@
 	minutes	minuuttia
 	nothing yet	ei vielä mitään
 	seconds	sekuntia
+	split batches	erien purku
 	split or join: all ways	haaroita tai yhdistä: kaikki reitit
 	task	tehtävä
 	task with a resource	resurssia käyttävä tehtävä

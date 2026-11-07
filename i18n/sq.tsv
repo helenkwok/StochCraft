@@ -33,6 +33,9 @@
 	Availability	Disponueshmëria
 	BPMN with BPSim	BPMN me BPSim
 	Back to the model (Esc)	Kthehu te modeli (Esc)
+	Batch	Grup
+	Batch (collect, then send together)	Grup (mblidh, pastaj dërgo së bashku)
+	Batch size	Madhësia e grupit
 	Beta	Beta
 	Binomial	Binomiale
 	Boolean	Vlerë logjike
@@ -243,6 +246,7 @@
 	Show All	Shfaqi të gjitha
 	Show {id}	Shfaq {id}
 	Speed	Shpejtësia
+	Split batches	Ndaj grupet
 	Split or join	Ndaj ose bashko
 	Split or join (all ways)	Ndaj ose bashko (të gjitha rrugët)
 	Spread out	Shpërndaj
@@ -306,6 +310,7 @@
 	Zoom out	Zvogëlo
 	a model	një model
 	arrivals	mbërritjet
+	batch	grup
 	days	ditë
 	decision: one way	vendim: një rrugë
 	departures	largimet
@@ -317,6 +322,7 @@
 	minutes	minuta
 	nothing yet	ende asgjë
 	seconds	sekonda
+	split batches	ndarje e grupeve
 	split or join: all ways	ndaj ose bashko: të gjitha rrugët
 	task	detyrë
 	task with a resource	detyrë me burim

@@ -1775,6 +1775,8 @@ pub(crate) fn kind_text(kind: &str) -> &str {
         "sink" => t("departures"),
         "exclusive_gateway" => t("decision: one way"),
         "parallel_gateway" => t("split or join: all ways"),
+        "batch" => t("batch"),
+        "unbatch" => t("split batches"),
         other => other,
     }
 }

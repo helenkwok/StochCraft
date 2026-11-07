@@ -726,6 +726,48 @@ taken together, and a large need waiting without holding back a smaller one.
   of materials. Validation: exact deterministic flows; throughput bounded by the
   slowest input.
 
+**Done:**
+- **Batches:** `ElementKind::Batch { size }` collects `size` entities and sends them on together
+  as one, the first carrying the others. `ElementKind::Unbatch` sends them on one by one again.
+  - Both are BPMN tasks with a StochCraft vendor extension: `stochcraft:batchSize`, or
+    `stochcraft:unbatch` set to `true`.
+  - BPSim has no batching, and a BPMN multi-instance activity runs one activity many times
+    rather than grouping entities, so it is not used for this.
+- **Assemblies:** a parallel join with a bill of materials. `Connection.quantity` is how many
+  entities each incoming connection gives each one sent on; the parts other than the first are
+  used up. In files this is `stochcraft:quantity` on the sequence flow's `ElementParameters`.
+- **Counts:** a batch counts each entity in and each batch out, and reports the mean number
+  waiting for their batch to fill. An assembly counts every part in.
+- **Files:** read, written and saved in place, and declared in the vendor schema's notes. The
+  reference-corpus edits turn delays into batches and splits and give joins a bill of
+  materials, and the files stay schema-valid.
+- **Engine and window:**
+  - `block.add` and `block.set` take `kind: "batch"` with `size`, and `kind: "unbatch"`.
+  - `connect` and `flow.set` take `quantity`; `null` removes it.
+  - The window can add both kinds and edit a batch's size.
+- **Checks:** a batch of 0 and a quantity of 0 are errors. A quantity on a connection that
+  does not go into a parallel gateway, and a split in a model with no batches, are warnings.
+
+**Validation** (`blocks/tests/assembly.rs`, 16 replications; docs/research.md, "Batching and
+assembly"):
+
+| Case | Theory | StochCraft |
+|---|---|---|
+| Poisson arrivals at rate 1 in batches of 4, one machine of mean 3 (E₄/M/1): wait | 4.94292 | 4.85129 ± 0.30316 |
+| Same: utilisation | 0.75 | 0.74892 ± 0.00654 |
+| Same: mean number waiting for their batch to fill | 1.5 | 1.50074 ± 0.00599 |
+| Same, split again: entities out in 20,000 | 20,000 | 20,003.8 ± 54.1 |
+| Assembly of 2 A (rate 1) + 1 B (rate 0.4): assemblies in 20,000 | 8,000 | 8,024.6 ± 62.5 |
+| Assembly of 2 A (rate 0.6) + 1 B (rate 0.4): assemblies in 20,000 | 6,000 | 6,011.8 ± 29.0 |
+
+Deterministic cases worked by hand check batches of 3 (counts, the mean waiting 1, each
+entity's own time in system after the split) and an assembly of 2 + 1 parts (15 in 30, each
+after 1).
+
+**Not yet:** a batch that leaves part-full after a timeout, batches sized by a property, a
+window form for a connection's quantity, and assemblies whose parts are matched by a property
+(such as an order number).
+
 ### M2.8 Experiments for decisions
 
 From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md):

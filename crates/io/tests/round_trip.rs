@@ -367,3 +367,57 @@ fn gateways_and_routing_write_read_and_save() {
     let Ok(saved) = saved else { return };
     assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited));
 }
+
+/// Batches, splits and an assembly's bill of materials are written as StochCraft's vendor
+/// extensions on plain BPMN tasks and flows, read back as they were, and saved in place when
+/// they change.
+#[test]
+fn batches_and_assemblies_write_read_and_save() {
+    let mut m = Builder::new();
+    let parts = m.source("parts", Dist::Constant(1.0), None);
+    let frames = m.source("frames", Dist::Constant(2.0), None);
+    let assemble = m.parallel("assemble");
+    let pack = m.batch("pack", 4);
+    let ship = m.delay("ship", Dist::Constant(3.0));
+    let unpack = m.unbatch("unpack");
+    let out = m.sink("out");
+    m.connect(parts, assemble);
+    m.connect(frames, assemble);
+    m.quantity(parts, assemble, 2);
+    m.connect(assemble, pack);
+    m.connect(pack, ship);
+    m.connect(ship, unpack);
+    m.connect(unpack, out);
+    let model = m.build(Experiment::default());
+    assert!(model.validate().is_empty(), "{:#?}", model.validate());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(text.contains("stochcraft:batchSize") && text.contains("stochcraft:quantity"));
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+    assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
+
+    // A bigger batch, the split becomes a delay, the delay a batch, and the quantity goes.
+    let mut edited = loaded.model.clone();
+    for e in &mut edited.elements {
+        match e.id.as_str() {
+            "pack" => e.kind = ElementKind::Batch { size: 6 },
+            "unpack" => {
+                e.kind = ElementKind::Delay {
+                    duration: Dist::Constant(1.0),
+                }
+            }
+            "ship" => e.kind = ElementKind::Batch { size: 2 },
+            _ => {}
+        }
+    }
+    for c in &mut edited.connections {
+        c.quantity = None;
+    }
+    let saved = loaded.opened.save(&edited);
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(edited)));
+}

@@ -34,6 +34,8 @@ pub enum Op {
     Disconnect(ElementId),
     /// Set a connection's probability and condition.
     SetRoute(ElementId, Option<f64>, Option<String>),
+    /// Set a connection's bill-of-materials quantity.
+    SetQuantity(ElementId, Option<u32>),
     SetExperiment(Experiment),
     /// Replace the shared resource pools.
     SetResources(Vec<ResourcePool>),
@@ -142,6 +144,14 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
                 .ok_or_else(|| not_found("connection", &id))?;
             let c = model.connections.remove(index);
             Op::Connect(index, c)
+        }
+        Op::SetQuantity(id, quantity) => {
+            let c = model
+                .connections
+                .iter_mut()
+                .find(|c| c.id == id)
+                .ok_or_else(|| not_found("connection", &id))?;
+            Op::SetQuantity(id, std::mem::replace(&mut c.quantity, quantity))
         }
         Op::SetRoute(id, probability, condition) => {
             let c = model

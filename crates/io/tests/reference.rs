@@ -420,7 +420,9 @@ fn edits() -> Vec<Edit> {
                         }
                         ElementKind::Sink
                         | ElementKind::ExclusiveGateway { .. }
-                        | ElementKind::ParallelGateway => {}
+                        | ElementKind::ParallelGateway
+                        | ElementKind::Batch { .. }
+                        | ElementKind::Unbatch => {}
                     }
                 }
             }),
@@ -497,6 +499,35 @@ fn edits() -> Vec<Edit> {
                         value: PropertyValue::Text("gold".into()),
                     });
                     props.sort_by(|a, b| a.name.cmp(&b.name));
+                }
+            }),
+        ),
+        (
+            "batching",
+            Box::new(move |m: &mut Model| {
+                // The first delay makes batches of 3, the second splits them; a join gets a
+                // bill of materials.
+                let delays: Vec<usize> = m
+                    .elements
+                    .iter()
+                    .enumerate()
+                    .filter(|(_, e)| matches!(e.kind, ElementKind::Delay { .. }))
+                    .map(|(i, _)| i)
+                    .collect();
+                if let Some(&i) = delays.first() {
+                    m.elements[i].kind = ElementKind::Batch { size: 3 };
+                }
+                if let Some(&i) = delays.get(1) {
+                    m.elements[i].kind = ElementKind::Unbatch;
+                }
+                let joins: Vec<ElementId> = m
+                    .elements
+                    .iter()
+                    .filter(|e| matches!(e.kind, ElementKind::ParallelGateway))
+                    .map(|e| e.id.clone())
+                    .collect();
+                if let Some(c) = m.connections.iter_mut().find(|c| joins.contains(&c.to)) {
+                    c.quantity = Some(2);
                 }
             }),
         ),
@@ -932,6 +963,25 @@ fn everything_stochcraft_writes_is_schema_valid() {
         return missing("xmllint is not installed (libxml2-utils)");
     }
     validate(&write_new(&showcase()), "showcase", &xsd);
+    // Batches, splits and a bill of materials, as vendor extensions.
+    let mut b = Builder::new();
+    let parts = b.source("parts", Dist::Constant(1.0), None);
+    let frames = b.source("frames", Dist::Constant(2.0), None);
+    let join = b.parallel("assemble");
+    let pack = b.batch("pack", 4);
+    let unpack = b.unbatch("unpack");
+    let out = b.sink("out");
+    b.connect(parts, join);
+    b.connect(frames, join);
+    b.quantity(parts, join, 2);
+    b.connect(join, pack);
+    b.connect(pack, unpack);
+    b.connect(unpack, out);
+    validate(
+        &write_new(&b.build(Experiment::default())),
+        "batching",
+        &xsd,
+    );
     // Each reference model, as StochCraft reads it, written again as a new BPMN file.
     let Some(paths) = models() else { return };
     for p in &paths {
