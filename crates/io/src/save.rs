@@ -38,13 +38,24 @@ pub fn save_edited(
     after: &Model,
 ) -> Result<Vec<u8>, SaveError> {
     let mut doc = xml::parse(bytes).map_err(|e| fail(e.to_string()))?;
+    // A new element, connection or pool may not take an id the file already uses for something
+    // it keeps (two things with one id make references ambiguous and the file invalid).
+    let others = other_ids(&doc.root, before);
+    let mine = model_ids(after);
+    if let Some(id) = mine.iter().find(|id| others.contains(*id)) {
+        return Err(fail(format!(
+            "the id `{id}` is already used in the file for something StochCraft keeps but does not show; give it another id"
+        )));
+    }
     let resources = read::resources(&doc.root, scenario);
     let mut ed = Editor {
         format,
-        ids: all_ids(&doc.root),
+        // Ids made up for the file avoid the model's new ones too.
+        ids: all_ids(&doc.root).into_iter().chain(mine.clone()).collect(),
         ascii: doc.ascii_only(),
         unit: indent_unit(&doc.root),
         pool_quantity: Vec::new(),
+        model_ids: mine,
     };
     ed.apply(&mut doc.root, scenario, before, after, &resources)?;
     let unit = ed.unit.clone();
@@ -121,7 +132,30 @@ fn difference(got: &Model, want: &Model) -> Option<String> {
     if got.experiment != want.experiment {
         return Some(format!("its experiment reads as {:?}", got.experiment));
     }
+    // Shared pools: their ids, names, quantities and roles.
+    if got.resources != want.resources {
+        return Some(format!("its resource pools read as {:?}", got.resources));
+    }
     None
+}
+
+/// The ids of a model's elements, connections and pools.
+fn model_ids(m: &Model) -> BTreeSet<String> {
+    m.elements
+        .iter()
+        .map(|e| e.id.to_string())
+        .chain(m.connections.iter().map(|c| c.id.to_string()))
+        .chain(m.resources.iter().map(|r| r.id.to_string()))
+        .collect()
+}
+
+/// The ids in a file that are not `model`'s.
+pub(crate) fn other_ids(root: &Element, model: &Model) -> BTreeSet<String> {
+    let mine = model_ids(model);
+    all_ids(root)
+        .into_iter()
+        .filter(|id| !mine.contains(id))
+        .collect()
 }
 
 fn all_ids(root: &Element) -> BTreeSet<String> {
@@ -327,6 +361,8 @@ struct Editor {
     unit: String,
     /// Shared pools whose quantity changed: (pool, new quantity).
     pool_quantity: Vec<(String, u32)>,
+    /// The ids of the saved model's elements, connections and pools.
+    model_ids: BTreeSet<String>,
 }
 
 /// Where new elements of a namespace go: the prefix the file already uses for it, or a new one
@@ -536,11 +572,33 @@ impl Editor {
         for f in &flows {
             self.remove_flow(root, f);
         }
+        // A node that is gone (not one written again as another kind) takes everything that
+        // refers to it along: events on its boundary (which cannot stay without it, since
+        // `attachedToRef` is required), lanes' references and associations.
+        let gone = !self.model_ids.contains(id);
+        let boundary: Vec<String> = if gone {
+            root.descendants()
+                .into_iter()
+                .filter(|e| {
+                    e.is(BPMN, "boundaryEvent") && e.attr("attachedToRef").as_deref() == Some(id)
+                })
+                .filter_map(|e| e.attr("id"))
+                .collect()
+        } else {
+            Vec::new()
+        };
         remove_all(root, &|e| has_id(e, attr, id) && self.is_node(e));
         remove_all(root, &|e| {
             e.is(BPMNDI, "BPMNShape") && e.attr("bpmnElement").as_deref() == Some(id)
         });
+        if gone {
+            remove_all(root, &|e| e.is(BPMN, "flowNodeRef") && e.text() == id);
+            remove_associations(root, id);
+        }
         remove_params(root, id);
+        for b in &boundary {
+            self.remove_node(root, b);
+        }
     }
 
     fn remove_flow(&mut self, root: &mut Element, id: &str) {
@@ -552,6 +610,9 @@ impl Editor {
         remove_all(root, &|e| {
             e.is(BPMNDI, "BPMNEdge") && e.attr("bpmnElement").as_deref() == Some(id)
         });
+        if !self.model_ids.contains(id) {
+            remove_associations(root, id);
+        }
         remove_params(root, id);
     }
 
@@ -1604,6 +1665,28 @@ fn scenario_mut<'a>(root: &'a mut Element, id: Option<&str>) -> Option<&'a mut E
     })
 }
 
+/// Removes the BPMN associations (a note's link, for one) to or from `id`, which is gone, with
+/// their diagram edges.
+fn remove_associations(root: &mut Element, id: &str) {
+    let is_link = |e: &Element| {
+        e.is(BPMN, "association")
+            && (e.attr("sourceRef").as_deref() == Some(id)
+                || e.attr("targetRef").as_deref() == Some(id))
+    };
+    let links: Vec<String> = root
+        .descendants()
+        .into_iter()
+        .filter(|e| is_link(e))
+        .filter_map(|e| e.attr("id"))
+        .collect();
+    remove_all(root, &is_link);
+    for l in &links {
+        remove_all(root, &|e| {
+            e.is(BPMNDI, "BPMNEdge") && e.attr("bpmnElement").as_deref() == Some(l.as_str())
+        });
+    }
+}
+
 /// Removes every scenario's parameters for `id` (an element or connection that is gone).
 fn remove_params(root: &mut Element, id: &str) {
     remove_all(root, &|e| {
@@ -1818,15 +1901,14 @@ fn set_property(s: &mut Element, element: &str, name: &str, value: Option<Elemen
                 Some(t) => p.set_attr("type", &t),
                 None => p.remove_attr("type"),
             }
-            remove_all(p, &|v| v.local() != "ResultRequest");
-            let values: Vec<Node> = std::mem::take(&mut value.children)
+            let values: Vec<Element> = std::mem::take(&mut value.children)
                 .into_iter()
-                .filter(|n| matches!(n, Node::Element(_)))
+                .filter_map(|n| match n {
+                    Node::Element(v) => Some(v),
+                    _ => None,
+                })
                 .collect();
-            for v in values {
-                let at = end_of(p);
-                p.children.insert(at, v);
-            }
+            replace_values(p, values);
         }
         // A new property goes last.
         None => {
@@ -1861,10 +1943,71 @@ fn set_value(
     let Some(p) = parent.child_mut(&NSS, name) else {
         return;
     };
-    // The value replaces the old values; result requests (which come first) stay.
-    remove_all(p, &|v| v.local() != "ResultRequest");
-    if let Some(v) = value {
-        let at = end_of(p);
-        p.children.insert(at, Node::Element(v));
+    replace_values(p, value.into_iter().collect());
+}
+
+/// Whether `v`, a child of a parameter, is one of its default input values: not a result
+/// request, not a value tied to a calendar (`validFor`) and not a result value (`result`).
+/// Reading ignores the others, so only these are StochCraft's to replace.
+fn is_default_value(v: &Element) -> bool {
+    v.local() != "ResultRequest" && v.attr("validFor").is_none() && v.attr("result").is_none()
+}
+
+/// Replaces parameter `p`'s default values with `values`, in the place of the first old one (else
+/// last). Result requests, calendar values and result values stay as they were.
+fn replace_values(p: &mut Element, values: Vec<Element>) {
+    let first = p
+        .children
+        .iter()
+        .position(|n| matches!(n, Node::Element(v) if is_default_value(v)));
+    // Only the parameter's own children: a kept value's insides (an enumeration's items) are not
+    // values of the parameter.
+    let mut i = 0;
+    let mut at = None;
+    while i < p.children.len() {
+        if matches!(&p.children[i], Node::Element(v) if is_default_value(v)) {
+            if Some(i) == first {
+                // Keep the place (and the whitespace before it) for the new values.
+                p.children.remove(i);
+                at = Some(i);
+                continue;
+            }
+            p.children.remove(i);
+            // The whitespace before it goes too, unless it is the kept place's.
+            if i > 0 && at.is_none_or(|a| i > a) && is_ws(&p.children[i - 1]) {
+                p.children.remove(i - 1);
+                i -= 1;
+            }
+            continue;
+        }
+        i += 1;
+    }
+    let at = at.unwrap_or_else(|| end_of(p));
+    p.children
+        .splice(at..at, values.into_iter().map(Node::Element));
+}
+
+#[cfg(test)]
+mod tests {
+    use stochcraft_model::{ElementId, Model, ResourcePool};
+
+    use super::difference;
+
+    #[test]
+    fn a_pool_that_reads_back_differently_is_a_difference() {
+        let pool = |quantity| ResourcePool {
+            id: ElementId::unchecked("clerks"),
+            name: "Clerks".into(),
+            quantity,
+            roles: vec!["clerk".into()],
+        };
+        let mut want = Model::default();
+        want.resources.push(pool(2));
+        let mut got = Model::default();
+        got.resources.push(pool(1));
+        assert!(difference(&got, &want).is_some());
+        got.resources.clear();
+        assert!(difference(&got, &want).is_some());
+        assert!(difference(&want, &want).is_none());
     }
 }

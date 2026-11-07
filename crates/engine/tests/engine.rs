@@ -591,6 +591,43 @@ fn cancel_stops_a_replication_while_it_runs() {
 }
 
 #[test]
+fn saving_replaces_the_file_instead_of_overwriting_it() {
+    // A second name (hard link) for the same file shows whether saving wrote into the file in
+    // place (it would see the new content) or wrote a new file and renamed it over the old name,
+    // so a crash or a full disk can never leave the user's file half written.
+    let dir = scratch("atomic");
+    let _ = std::fs::remove_dir_all(&dir);
+    let _ = std::fs::create_dir_all(&dir);
+    let path = dir.join("model.bpmn");
+    let other_name = dir.join("other-name.bpmn");
+    let mut e = help_desk();
+    ok(&mut e, "file.save", json!({"path": path.to_string_lossy()}));
+    let first = std::fs::read(&path).unwrap_or_default();
+    if std::fs::hard_link(&path, &other_name).is_err() {
+        // A file system without hard links cannot tell; nothing to check here.
+        return;
+    }
+    ok(&mut e, "model.rename", json!({"name": "Renamed"}));
+    ok(&mut e, "file.save", json!({}));
+    let second = std::fs::read(&path).unwrap_or_default();
+    assert!(second != first, "the save changed nothing");
+    assert!(
+        std::fs::read(&other_name).unwrap_or_default() == first,
+        "the file was written in place"
+    );
+    // Nothing is left beside the file.
+    let mut names: Vec<String> = std::fs::read_dir(&dir)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|d| d.file_name().to_string_lossy().into_owned())
+        .collect();
+    names.sort();
+    assert_eq!(names, ["model.bpmn", "other-name.bpmn"]);
+    let _ = std::fs::remove_dir_all(&dir);
+}
+
+#[test]
 fn files_open_save_and_track_changes() {
     let path = scratch("files.bpmn");
     let path_s = path.to_string_lossy().to_string();
@@ -700,6 +737,42 @@ fn saving_again_writes_into_the_opened_scenario() {
     let written = std::fs::read(&copy).unwrap_or_default();
     ok(&mut e, "file.save", json!({}));
     assert_eq!(std::fs::read(&copy).unwrap_or_default(), written);
+}
+
+#[test]
+fn new_ids_avoid_the_ids_an_opened_file_uses() {
+    // mm1.bpmn with an element StochCraft keeps but does not model, under the id the engine
+    // would give the next delay.
+    let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let text = std::fs::read_to_string(&mm1).unwrap_or_default().replace(
+        r#"<semantic:resource id="clerk" name="Clerk"/>"#,
+        r#"<semantic:resource id="clerk" name="Clerk"/>
+  <semantic:dataStore id="delay-1" name="Records"/>"#,
+    );
+    let copy = scratch("mm1-ids.bpmn");
+    let _ = std::fs::write(&copy, text);
+    let mut e = Engine::new();
+    ok(&mut e, "file.open", json!({"path": copy.to_string_lossy()}));
+    let delay = json!({"kind": "delay", "duration": {"type": "constant", "value": 1.0}});
+    // Ids given that the file already uses (a resource of one task, a scenario, the process)
+    // are refused.
+    for taken in ["clerk", "two-clerks", "p1", "delay-1"] {
+        let mut p = delay.clone();
+        p["id"] = json!(taken);
+        assert_eq!(err(&mut e, "block.add", p), ErrorCode::Conflict, "{taken}");
+    }
+    assert_eq!(
+        err(
+            &mut e,
+            "resource.add",
+            json!({"id": "clerk", "quantity": 1})
+        ),
+        ErrorCode::Conflict
+    );
+    // A generated id skips them, and the model saves.
+    let added = ok(&mut e, "block.add", delay);
+    assert_eq!(added["id"], json!("delay-2"), "{added}");
+    ok(&mut e, "file.save", json!({}));
 }
 
 #[test]

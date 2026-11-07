@@ -338,6 +338,174 @@ fn new_names_in_a_latin_1_file_are_character_references() {
 }
 
 #[test]
+fn values_tied_to_calendars_survive_edits() {
+    // A processing time and a property, each with a value for the "lunch" calendar besides the
+    // default one. StochCraft ignores calendar values on reading (M2.6), so the read-back check
+    // cannot see them: saving must keep them by itself.
+    let original = text(&file("mm1.bpmn"))
+        .replace(
+            r#"<bpsim:NegativeExponentialDistribution mean="1"/>"#,
+            r#"<bpsim:NegativeExponentialDistribution mean="1"/>
+                <bpsim:NegativeExponentialDistribution mean="3" validFor="lunch"/>"#,
+        )
+        .replace(
+            r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+            r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="size"><bpsim:NumericParameter value="9" validFor="lunch"/><bpsim:NumericParameter value="1"/></bpsim:Property>
+            </bpsim:PropertyParameters>"#,
+        );
+    assert!(original.contains(r#"mean="3" validFor="lunch""#) && original.contains("\"size\""));
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    let serve = element(&mut m, "serve");
+    if let ElementKind::Server { service, .. } = &mut serve.kind {
+        *service = Dist::Exponential { mean: 2.0 };
+    }
+    serve.properties[0].value = stochcraft_model::PropertyValue::Number(4.0);
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    for kept in [
+        r#"<bpsim:NegativeExponentialDistribution mean="3" validFor="lunch"/>"#,
+        r#"<bpsim:NumericParameter value="9" validFor="lunch"/>"#,
+    ] {
+        assert!(t.contains(kept), "{kept} lost:\n{t}");
+    }
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+}
+
+#[test]
+fn edited_saves_keep_the_byte_order_mark_and_doctype() {
+    let original = format!(
+        "\u{feff}{}",
+        text(&file("mm1.bpmn")).replace(
+            "<semantic:definitions ",
+            "<!DOCTYPE semantic:definitions [\n  <!ENTITY tool \"StochCraft\">\n]>\n<semantic:definitions ",
+        )
+    );
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.experiment.replications = 3;
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    assert!(t.starts_with("\u{feff}<?xml "), "{t}");
+    assert!(
+        t.contains("<!DOCTYPE semantic:definitions [\n  <!ENTITY tool \"StochCraft\">\n]>\n<semantic:definitions "),
+        "{t}"
+    );
+    assert_eq!(changed_lines(original.as_bytes(), &saved), 2, "{t}");
+}
+
+#[test]
+fn removing_a_block_leaves_no_references_to_it() {
+    // A lane listing the task, a note attached to it and a timer on its boundary.
+    let original = text(&file("mm1.bpmn"))
+        .replace(
+            r#"<semantic:process id="p1" name="Counter" isExecutable="false">"#,
+            r#"<semantic:process id="p1" name="Counter" isExecutable="false">
+    <semantic:laneSet id="ls1">
+      <semantic:lane id="desk" name="Desk">
+        <semantic:flowNodeRef>arrive</semantic:flowNodeRef>
+        <semantic:flowNodeRef>serve</semantic:flowNodeRef>
+        <semantic:flowNodeRef>leave</semantic:flowNodeRef>
+      </semantic:lane>
+    </semantic:laneSet>"#,
+        )
+        .replace(
+            r#"<semantic:sequenceFlow id="f2" sourceRef="serve" targetRef="leave"/>"#,
+            r#"<semantic:sequenceFlow id="f2" sourceRef="serve" targetRef="leave"/>
+    <semantic:boundaryEvent id="late" attachedToRef="serve">
+      <semantic:outgoing>f3</semantic:outgoing>
+      <semantic:timerEventDefinition id="late-timer"/>
+    </semantic:boundaryEvent>
+    <semantic:sequenceFlow id="f3" sourceRef="late" targetRef="leave"/>
+    <semantic:textAnnotation id="note"><semantic:text>Busy at noon</semantic:text></semantic:textAnnotation>
+    <semantic:association id="a1" sourceRef="note" targetRef="serve"/>
+    <semantic:association id="a2" sourceRef="note" targetRef="f2"/>"#,
+        )
+        .replace(
+            "<semantic:incoming>f2</semantic:incoming>",
+            "<semantic:incoming>f2</semantic:incoming>\n      <semantic:incoming>f3</semantic:incoming>",
+        );
+    assert!(original.contains("attachedToRef") && original.contains("flowNodeRef"));
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.elements.retain(|e| e.id.as_str() != "serve");
+    m.connections.clear();
+    m.connections
+        .push(Connection::new(id("f0"), id("arrive"), id("leave")));
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    for gone in [
+        "<semantic:flowNodeRef>serve</semantic:flowNodeRef>",
+        r#"attachedToRef="serve""#,
+        r#"targetRef="serve""#,
+        r#"id="f3""#,
+        "<semantic:incoming>f3</semantic:incoming>",
+        r#"targetRef="f2""#,
+    ] {
+        assert!(!t.contains(gone), "{gone} left behind:\n{t}");
+    }
+    // What does not refer to the task stays.
+    for kept in [
+        "<semantic:flowNodeRef>arrive</semantic:flowNodeRef>",
+        r#"<semantic:textAnnotation id="note">"#,
+    ] {
+        assert!(t.contains(kept), "{kept} lost:\n{t}");
+    }
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+
+    // A task written again as another kind (an end event) keeps its place in the lane and its
+    // note: it is still there.
+    let mut m = loaded.model.clone();
+    element(&mut m, "serve").kind = ElementKind::Sink;
+    m.connections.retain(|c| c.id.as_str() != "f2");
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    for kept in [
+        "<semantic:flowNodeRef>serve</semantic:flowNodeRef>",
+        r#"targetRef="serve""#,
+    ] {
+        assert!(t.contains(kept), "{kept} lost:\n{t}");
+    }
+}
+
+#[test]
+fn new_ids_never_clash_with_the_files_other_ids() {
+    let loaded = read_scenario(&file("mm1.bpmn"), None).unwrap_or_else(|e| panic!("{e}"));
+    // Ids the file uses for what StochCraft keeps but does not model: the task's own resource,
+    // the process, a scenario.
+    for taken in ["clerk", "p1", "two-clerks", "defs"] {
+        assert!(loaded.opened.id_in_use(taken), "{taken}");
+        let mut m = loaded.model.clone();
+        add_delay_between(&mut m, taken, "serve", "leave");
+        let r = loaded.opened.save(&m);
+        assert!(
+            matches!(r, Err(SaveError::Unsupported(_))),
+            "{taken}: {r:?}"
+        );
+    }
+    // The model's own ids are its to reuse.
+    assert!(!loaded.opened.id_in_use("serve") && !loaded.opened.id_in_use("f1"));
+    // Ids StochCraft makes up for the file (a new server's resource) avoid the model's new ids.
+    let (saved, _) = edit_and_save("mm1.bpmn", None, |m| {
+        add_delay_between(m, "pay", "serve", "leave");
+        add_delay_between(m, "pay_resource", "pay", "leave");
+        element(m, "pay").kind = ElementKind::Server {
+            capacity: 1,
+            service: Dist::Constant(1.0),
+            queue_capacity: None,
+        };
+    });
+    let t = text(&saved);
+    assert_eq!(t.matches(r#"id="pay_resource""#).count(), 1, "{t}");
+}
+
+#[test]
 fn edits_that_cannot_be_saved_say_why() {
     // Changing the time unit would change what the values with their own units mean.
     let loaded = read_scenario(&file("mm1.bpmn"), None).unwrap_or_else(|e| panic!("{e}"));
