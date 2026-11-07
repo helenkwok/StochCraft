@@ -532,8 +532,39 @@ fn relabel(bytes: &[u8], unit: TimeUnit) -> Vec<u8> {
     m.experiment.time_unit = unit;
     let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
     let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
-    assert_eq!(back.model, m);
+    assert_within_noise(&back.model, &m);
     saved
+}
+
+/// Asserts that two models are equal but for numbers within 1e-12 of each other, which a
+/// rescaled value may differ by.
+fn assert_within_noise(got: &Model, want: &Model) {
+    if got == want {
+        return;
+    }
+    let (g, w) = (format!("{got:?}"), format!("{want:?}"));
+    let split = |s: &str| -> Vec<String> {
+        s.split(|c: char| !(c.is_ascii_digit() || c == '.' || c == '-' || c == 'e'))
+            .map(str::to_owned)
+            .collect()
+    };
+    let same = |a: &String, b: &String| match (a.parse::<f64>(), b.parse::<f64>()) {
+        (Ok(x), Ok(y)) => (x - y).abs() <= 1e-12 * x.abs().max(y.abs()),
+        _ => a == b,
+    };
+    let (sg, sw) = (split(&g), split(&w));
+    // The text between the numbers must match exactly.
+    let words = |s: &str| -> String {
+        s.chars()
+            .filter(|c| !c.is_ascii_digit() && *c != '.')
+            .collect()
+    };
+    assert!(
+        words(&g) == words(&w)
+            && sg.len() == sw.len()
+            && sg.iter().zip(&sw).all(|(a, b)| same(a, b)),
+        "{got:?}\n!=\n{want:?}"
+    );
 }
 
 /// Changing the time unit relabels the model's times (their numbers stay). Values in the file
@@ -557,12 +588,77 @@ fn changing_the_time_unit_rescales_values_with_their_own_unit() {
     ] {
         assert!(t.contains(want), "{want} missing:\n{t}");
     }
-    assert_eq!(n, 6, "{}", diff(&file("mm1.bpmn"), &hours));
-    // And back: the original file again, byte for byte.
-    assert_eq!(
-        text(&relabel(&hours, TimeUnit::Minutes)),
-        text(&file("mm1.bpmn"))
+    // Three lines in "base"; "two-clerks", which inherits from it, gets `baseTimeUnit="min"`
+    // and the two rescaled values as they were: eight new lines, four of them the lines "base"
+    // had before (which a count of changed lines does not see).
+    assert_eq!(n, 10, "{}", diff(&file("mm1.bpmn"), &hours));
+    // And back: the original numbers again.
+    let t = text(&relabel(&hours, TimeUnit::Minutes));
+    for want in [
+        r#"<bpsim:NegativeExponentialDistribution mean="80" timeUnit="s"/>"#,
+        r#"<bpsim:Warmup><bpsim:DurationParameter value="PT1000M"/></bpsim:Warmup>"#,
+    ] {
+        assert_eq!(t.matches(want).count(), 2, "{want}:\n{t}");
+    }
+}
+
+/// A scenario that inherits from the opened one means what it meant before the opened one's
+/// time unit changed: it keeps the old unit and the values that were rescaled.
+#[test]
+fn inheriting_scenarios_keep_their_meaning_when_the_time_unit_changes() {
+    let original = file("mm1.bpmn");
+    let before = read_scenario(&original, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    for unit in [TimeUnit::Hours, TimeUnit::Seconds, TimeUnit::Days] {
+        let saved = relabel(&original, unit);
+        let after = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+        assert_eq!(after.model, before.model, "{unit:?}:\n{}", text(&saved));
+        // Saving it again changes nothing more.
+        let again = relabel(&saved, TimeUnit::Minutes);
+        let after = read_scenario(&again, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+        assert_eq!(after.model, before.model, "{unit:?}:\n{}", text(&again));
+    }
+    // A scenario that runs for the default 8 hours keeps them.
+    let no_duration = text(&original).replace(
+        r#"
+            <bpsim:Duration><bpsim:FloatingParameter value="21000"/></bpsim:Duration>"#,
+        "",
     );
+    let no_duration = no_duration.replace("PT1000M", "PT100M");
+    let before =
+        read_scenario(no_duration.as_bytes(), Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    let saved = relabel(no_duration.as_bytes(), TimeUnit::Hours);
+    let after = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(after.model, before.model, "{}", text(&saved));
+}
+
+/// A rescaled value that cannot be written as a decimal reading back as exactly the same float
+/// still saves: it reads back within 1e-12 of itself.
+#[test]
+fn rescaled_values_may_differ_by_float_noise() {
+    // 2.7 days under minutes is 3888 min; under hours 3888 h, which is 162 days, but
+    // 3888 × (86400 / 3600) does not give back 3888 exactly once read as days.
+    let original = text(&file("mm1.bpmn"))
+        .replace(r#"mean="80" timeUnit="s""#, r#"mean="2.7" timeUnit="day""#);
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.experiment.time_unit = TimeUnit::Hours;
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    let mean = |m: &Model| match &m
+        .elements
+        .iter()
+        .find(|e| e.id.as_str() == "arrive")
+        .map(|e| &e.kind)
+    {
+        Some(ElementKind::Source {
+            interarrival: Dist::Exponential { mean },
+            ..
+        }) => *mean,
+        other => panic!("{other:?}"),
+    };
+    let (got, want) = (mean(&back.model), mean(&m));
+    assert_ne!(got, want, "this case was meant to be inexact");
+    assert!((got - want).abs() <= 1e-12 * want.abs(), "{got} {want}");
 }
 
 /// Without a change of time unit, values with their own units are left exactly as written.

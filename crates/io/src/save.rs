@@ -11,7 +11,9 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use stochcraft_model::{Connection, Element as ModelElement, ElementKind, Model, TimeUnit};
+use stochcraft_model::{
+    Connection, Dist, Element as ModelElement, ElementKind, Model, PropertyValue, TimeUnit,
+};
 
 use crate::bpsim::{NS2, NSS};
 use crate::duration::trim_float;
@@ -51,6 +53,8 @@ pub fn save_edited(
     }
     let resources = read::resources(&doc.root, scenario);
     let mut ed = Editor {
+        source: bytes.to_vec(),
+        rescaled: BTreeSet::new(),
         format,
         // Ids made up for the file avoid the model's new ones too.
         ids: all_ids(&doc.root).into_iter().chain(mine.clone()).collect(),
@@ -65,7 +69,7 @@ pub fn save_edited(
     let out = xml::write(&doc).into_bytes();
     // Read it back: the file must mean exactly the model that was saved.
     let back = crate::read_scenario(&out, scenario).map_err(|e| fail(e.to_string()))?;
-    match difference(&back.model, after) {
+    match difference_within(&back.model, after, &ed.rescaled) {
         None => Ok(out),
         Some(d) => Err(fail(format!(
             "the file would not read back as the model ({d})"
@@ -74,7 +78,132 @@ pub fn save_edited(
 }
 
 /// What differs between two models, for an error message.
+#[cfg(test)]
 fn difference(got: &Model, want: &Model) -> Option<String> {
+    difference_within(got, want, &BTreeSet::new())
+}
+
+/// Whether two times are the same to within float noise: 1e-12 of the larger.
+fn near(a: f64, b: f64) -> bool {
+    a == b || (a - b).abs() <= 1e-12 * a.abs().max(b.abs())
+}
+
+/// A distribution's kind, its time parameters (those a change of time unit scales, as
+/// `crate::bpsim::scale` does) and its other parameters.
+fn dist_parts(d: &Dist) -> (u8, Vec<f64>, Vec<f64>) {
+    match d {
+        Dist::Constant(v) => (0, vec![*v], vec![]),
+        Dist::Exponential { mean } => (1, vec![*mean], vec![]),
+        Dist::Uniform { min, max } => (2, vec![*min, *max], vec![]),
+        Dist::Triangular { min, mode, max } => (3, vec![*min, *mode, *max], vec![]),
+        Dist::Normal { mean, std_dev } => (4, vec![*mean, *std_dev], vec![]),
+        Dist::TruncatedNormal {
+            mean,
+            std_dev,
+            min,
+            max,
+        } => (5, vec![*mean, *std_dev, *min, *max], vec![]),
+        Dist::LogNormal { mean, std_dev } => (6, vec![*mean, *std_dev], vec![]),
+        Dist::Gamma { shape, scale } => (7, vec![*scale], vec![*shape]),
+        Dist::Beta { shape, scale } => (8, vec![], vec![*shape, *scale]),
+        Dist::Erlang { mean, k } => (9, vec![*mean], vec![*k as f64]),
+        Dist::Weibull { shape, scale } => (10, vec![*scale], vec![*shape]),
+        Dist::Poisson { mean } => (11, vec![], vec![*mean]),
+        Dist::Binomial {
+            probability,
+            trials,
+        } => (12, vec![], vec![*probability, *trials as f64]),
+        Dist::User { points, discrete } => (
+            13,
+            points.iter().map(|(_, v)| *v).collect(),
+            points
+                .iter()
+                .map(|(p, _)| *p)
+                .chain([f64::from(u8::from(*discrete))])
+                .collect(),
+        ),
+    }
+}
+
+/// Whether `a` and `b` are the same distribution with time parameters equal to within float
+/// noise and everything else exactly equal.
+fn near_dist(a: &Dist, b: &Dist) -> bool {
+    let ((ka, ta, oa), (kb, tb, ob)) = (dist_parts(a), dist_parts(b));
+    ka == kb && oa == ob && ta.len() == tb.len() && ta.iter().zip(&tb).all(|(x, y)| near(*x, *y))
+}
+
+/// `got` with each value the save rescaled taken from `want` where the two differ only by float
+/// noise. `rescaled` holds element ids with parameter keys (`""` with `Duration` or `Warmup`
+/// for the scenario's own). Rescaling a number into a value's own unit cannot always give a
+/// decimal that reads back as exactly the same float (2.7 days under minutes, relabelled to
+/// hours), so the time parameters of those values, and only those, may differ by 1e-12 of
+/// themselves; every other value must read back exactly.
+fn within_noise(got: &Model, want: &Model, rescaled: &BTreeSet<(String, String)>) -> Model {
+    let mut g = got.clone();
+    if rescaled.is_empty() {
+        return g;
+    }
+    for ge in &mut g.elements {
+        let Some(we) = want.elements.iter().find(|w| w.id == ge.id) else {
+            continue;
+        };
+        let id = ge.id.to_string();
+        let has = |key: &str| rescaled.contains(&(id.clone(), key.to_owned()));
+        match (&mut ge.kind, &we.kind) {
+            (
+                ElementKind::Source {
+                    interarrival: a, ..
+                },
+                ElementKind::Source {
+                    interarrival: b, ..
+                },
+            ) if has("ControlParameters/InterTriggerTimer") && near_dist(a, b) => *a = b.clone(),
+            (ElementKind::Server { service: a, .. }, ElementKind::Server { service: b, .. })
+            | (ElementKind::Delay { duration: a }, ElementKind::Delay { duration: b })
+            | (
+                ElementKind::SharedTask { service: a, .. },
+                ElementKind::SharedTask { service: b, .. },
+            ) if has("TimeParameters/ProcessingTime") && near_dist(a, b) => *a = b.clone(),
+            _ => {}
+        }
+        for p in &mut ge.properties {
+            if !has(&format!("PropertyParameters/Property/{}", p.name)) {
+                continue;
+            }
+            let Some(w) = we.property(&p.name) else {
+                continue;
+            };
+            let close = match (&p.value, &w.value) {
+                (PropertyValue::Number(a), PropertyValue::Number(b)) => near(*a, *b),
+                (PropertyValue::Random(a), PropertyValue::Random(b)) => near_dist(a, b),
+                _ => false,
+            };
+            if close {
+                p.value = w.value.clone();
+            }
+        }
+    }
+    let scenario = |k: &str| rescaled.contains(&(String::new(), k.to_owned()));
+    let (ge, we) = (&mut g.experiment, &want.experiment);
+    // The model's duration is the scenario's less its warm-up.
+    if (scenario("Duration") || scenario("Warmup"))
+        && near(ge.warmup, we.warmup)
+        && near(ge.warmup + ge.duration, we.warmup + we.duration)
+    {
+        ge.warmup = we.warmup;
+        ge.duration = we.duration;
+    }
+    g
+}
+
+/// What differs between two models, for an error message, allowing float noise in the values
+/// in `rescaled` ([`within_noise`]).
+fn difference_within(
+    got: &Model,
+    want: &Model,
+    rescaled: &BTreeSet<(String, String)>,
+) -> Option<String> {
+    let got = &within_noise(got, want, rescaled);
     if got.name != want.name {
         return Some(format!("its name reads as {:?}", got.name));
     }
@@ -357,6 +486,11 @@ fn num(v: f64) -> String {
 }
 
 struct Editor {
+    /// The file as it was opened.
+    source: Vec<u8>,
+    /// The values a change of time unit rescaled: element id (`""` for the scenario's own) and
+    /// parameter key.
+    rescaled: BTreeSet<(String, String)>,
     format: Format,
     ids: BTreeSet<String>,
     ascii: bool,
@@ -1607,11 +1741,18 @@ impl Editor {
             });
         }
         let s = self.ensure_scenario(root, scenario)?;
+        let mut rescaled = Vec::new();
         if relabel {
             // The model's times keep their numbers in the new unit. Values in the base unit
             // follow the new `baseTimeUnit` by themselves; values that name their own unit are
             // rescaled in that unit so they read as the model says.
+            let original = s.clone();
             rescale_own_units(s, &[], Unit::Base, b.time_unit, a.time_unit);
+            rescaled = rescaled_params(&original, s);
+            for r in &rescaled {
+                let element = r.element.clone().unwrap_or_default();
+                self.rescaled.insert((element, r.key.clone()));
+            }
         }
         let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
         let prefix = s.prefix().to_owned();
@@ -1671,7 +1812,129 @@ impl Editor {
                 &["Start", "Duration"],
             );
         }
+        if relabel {
+            self.keep_inheriting(root, scenario, b.time_unit, &rescaled, default_duration);
+        }
         Ok(())
+    }
+
+    /// Keeps the scenarios that inherit from the opened one meaning what they meant before its
+    /// time unit changed from `old`: each one that took its base unit from it gets `old` written
+    /// in, and each value the change rescaled (`rescaled`) and that it does not set itself is
+    /// written into it as it was. If the opened scenario's duration was written only because the
+    /// unit changed (`default_duration`), each one without a duration of its own gets the one it
+    /// had (the 8 hours of the default, plus its warm-up). Scenarios further down inherit
+    /// all this from these.
+    fn keep_inheriting(
+        &self,
+        root: &mut Element,
+        scenario: Option<&str>,
+        old: TimeUnit,
+        rescaled: &[Rescaled],
+        default_duration: bool,
+    ) {
+        let Some(id) = scenario_id(root, scenario) else {
+            return;
+        };
+        let Some(data) = data_mut(root) else {
+            return;
+        };
+        let children: Vec<String> = data
+            .children_named(&NSS, "Scenario")
+            .filter(|c| c.attr("inherits").as_deref() == Some(id.as_str()))
+            .filter(|c| c.attr("result").is_none())
+            .filter_map(|c| c.attr("id"))
+            .filter(|c| *c != id)
+            .collect();
+        for child in children {
+            // What the child read as before the save, for a duration it took by default.
+            let before = default_duration
+                .then(|| crate::read_scenario(&self.source, Some(&child)).ok())
+                .flatten()
+                .map(|r| r.model.experiment);
+            let Some(c) = data.elements_mut().find(|c| {
+                c.is_any(&NSS, "Scenario") && c.attr("id").as_deref() == Some(child.as_str())
+            }) else {
+                continue;
+            };
+            let ns = c.ns.clone().unwrap_or_else(|| NS2.to_owned());
+            let prefix = c.prefix().to_owned();
+            for r in rescaled {
+                let Some(element) = r.element.as_deref().filter(|e| !e.is_empty()) else {
+                    continue;
+                };
+                if sets_param(c, element, &r.group, &r.name) {
+                    continue;
+                }
+                if r.group == "PropertyParameters" {
+                    set_property(c, element, &r.name, Some(r.original.clone()));
+                    continue;
+                }
+                let has = |e: &Element| e.child(&NSS, &r.group).is_some();
+                let Some(g) = group_mut(c, element, &r.group, &has) else {
+                    continue;
+                };
+                let order = param_order(&r.group);
+                let pos = order
+                    .iter()
+                    .position(|p| *p == r.name)
+                    .unwrap_or(order.len());
+                let at = after_last_named(g, &order[..pos])
+                    .or_else(|| {
+                        g.children
+                            .iter()
+                            .position(|n| matches!(n, Node::Element(_)))
+                    })
+                    .unwrap_or_else(|| end_of(g));
+                g.children.insert(at, Node::Element(r.original.clone()));
+            }
+            let scenario_values: Vec<&Rescaled> =
+                rescaled.iter().filter(|r| r.element.is_none()).collect();
+            let needs_params = c.child(&NSS, "ScenarioParameters").is_none();
+            if needs_params {
+                let at = c
+                    .children
+                    .iter()
+                    .position(|n| matches!(n, Node::Element(_)))
+                    .unwrap_or_else(|| end_of(c));
+                c.children.insert(
+                    at,
+                    Node::Element(Element::new(
+                        &qname(&prefix, "ScenarioParameters"),
+                        Some(&ns),
+                    )),
+                );
+            }
+            let Some(sp) = c.child_mut(&NSS, "ScenarioParameters") else {
+                continue;
+            };
+            if sp.attr("baseTimeUnit").is_none() {
+                sp.set_attr("baseTimeUnit", old.bpsim_name());
+            }
+            for r in scenario_values {
+                if sp.child(&NSS, &r.name).is_none() {
+                    let earlier: &[&str] = if r.name == "Warmup" {
+                        &["Start", "Duration"]
+                    } else {
+                        &["Start"]
+                    };
+                    let at = after_last_named(sp, earlier)
+                        .or_else(|| {
+                            sp.children
+                                .iter()
+                                .position(|n| matches!(n, Node::Element(_)))
+                        })
+                        .unwrap_or_else(|| end_of(sp));
+                    sp.children.insert(at, Node::Element(r.original.clone()));
+                }
+            }
+            if let Some(x) = before.filter(|_| sp.child(&NSS, "Duration").is_none()) {
+                let mut e = Element::new("bpsim:FloatingParameter", Some(NS2))
+                    .with_attr("value", &num(x.warmup + x.duration));
+                rename(&mut e, &prefix, &ns);
+                set_value(sp, &prefix, &ns, "Duration", Some(e), &["Start"]);
+            }
+        }
     }
 }
 
@@ -1734,6 +1997,91 @@ fn has_own_units(s: &Element) -> bool {
         v.ns.as_deref().is_some_and(|n| NSS.contains(&n))
             && (v.attr("timeUnit").is_some() || v.local() == "DurationParameter")
     })
+}
+
+/// A parameter a change of time unit rescaled, as it was before.
+struct Rescaled {
+    /// The element whose parameter it is; `None` for the scenario's own (`Duration`, `Warmup`).
+    element: Option<String>,
+    /// Its group (`ScenarioParameters` for the scenario's own).
+    group: String,
+    /// Its local name, or a property's name.
+    name: String,
+    /// The key it is read under (`TimeParameters/ProcessingTime`,
+    /// `PropertyParameters/Property/<name>`, `Duration`).
+    key: String,
+    original: Element,
+}
+
+/// The parameters whose default values differ between scenario `original` and `new`, the same
+/// scenario after `rescale_own_units` (which changes attributes only, so the two line up).
+fn rescaled_params(original: &Element, new: &Element) -> Vec<Rescaled> {
+    let defaults = |p: &Element| -> Vec<Element> {
+        p.elements()
+            .filter(|v| is_default_value(v))
+            .cloned()
+            .collect()
+    };
+    let mut out = Vec::new();
+    for (o, n) in original.elements().zip(new.elements()) {
+        if o.is_any(&NSS, "ScenarioParameters") {
+            for (po, pn) in o.elements().zip(n.elements()) {
+                let name = po.local();
+                if matches!(name, "Duration" | "Warmup") && defaults(po) != defaults(pn) {
+                    out.push(Rescaled {
+                        element: None,
+                        group: "ScenarioParameters".into(),
+                        name: name.into(),
+                        key: name.into(),
+                        original: po.detached(),
+                    });
+                }
+            }
+        } else if o.is_any(&NSS, "ElementParameters") {
+            let Some(r) = o.attr("elementRef") else {
+                continue;
+            };
+            for (go, gn) in o.elements().zip(n.elements()) {
+                for (po, pn) in go.elements().zip(gn.elements()) {
+                    if defaults(po) == defaults(pn) {
+                        continue;
+                    }
+                    let g = go.local();
+                    let (name, key) = match (po.local(), po.attr("name")) {
+                        ("Property", Some(n)) => (n.clone(), format!("{g}/Property/{n}")),
+                        // The reader's spelling of the schema's `SetUpTime`.
+                        ("SetupTime", _) => ("SetupTime".into(), format!("{g}/SetUpTime")),
+                        (l, _) => (l.to_owned(), format!("{g}/{l}")),
+                    };
+                    out.push(Rescaled {
+                        element: Some(r.clone()),
+                        group: g.into(),
+                        name,
+                        key,
+                        original: po.detached(),
+                    });
+                }
+            }
+        }
+    }
+    out
+}
+
+/// Whether scenario `s` sets parameter `name` (a property's name in `PropertyParameters`) of
+/// `element` with a value of its own, so that it does not inherit it.
+fn sets_param(s: &Element, element: &str, group: &str, name: &str) -> bool {
+    s.children_named(&NSS, "ElementParameters")
+        .filter(|ep| ep.attr("elementRef").as_deref() == Some(element))
+        .filter_map(|ep| ep.child(&NSS, group))
+        .flat_map(|g| g.elements())
+        .filter(|p| {
+            if group == "PropertyParameters" {
+                p.local() == "Property" && p.attr("name").as_deref() == Some(name)
+            } else {
+                p.local() == name
+            }
+        })
+        .any(|p| p.elements().any(|v| v.local() != "ResultRequest"))
 }
 
 /// The unit a value is written in: the scenario's base unit, or one it names.
@@ -2207,5 +2555,63 @@ mod tests {
         got.resources.clear();
         assert!(difference(&got, &want).is_some());
         assert!(difference(&want, &want).is_none());
+    }
+
+    /// Float noise is allowed only in the time parameters of the values the save rescaled.
+    #[test]
+    fn only_rescaled_values_may_differ_by_float_noise() {
+        use std::collections::BTreeSet;
+
+        use stochcraft_model::{Dist, Element, ElementKind};
+
+        use super::difference_within;
+
+        let source = |mean: f64, id: &str| {
+            Element::new(
+                ElementId::unchecked(id),
+                id,
+                ElementKind::Source {
+                    interarrival: Dist::Exponential { mean },
+                    limit: None,
+                },
+            )
+        };
+        let model = |a: f64, b: f64| {
+            let mut m = Model::default();
+            m.elements.push(source(a, "a"));
+            m.elements.push(source(b, "b"));
+            m
+        };
+        let want = model(3.0, 3.0);
+        let noisy = 3.0 * (1.0 + 1e-13);
+        let key = |id: &str| {
+            (
+                id.to_owned(),
+                "ControlParameters/InterTriggerTimer".to_owned(),
+            )
+        };
+        let a_rescaled: BTreeSet<(String, String)> = [key("a")].into();
+        // Not rescaled: exact, even 1e-13 off.
+        assert!(difference_within(&model(noisy, 3.0), &want, &BTreeSet::new()).is_some());
+        assert!(difference_within(&model(3.0, noisy), &want, &a_rescaled).is_some());
+        // Rescaled: 1e-13 off reads as the same, 1e-11 off does not.
+        assert!(difference_within(&model(noisy, 3.0), &want, &a_rescaled).is_none());
+        let far = 3.0 * (1.0 + 1e-11);
+        assert!(difference_within(&model(far, 3.0), &want, &a_rescaled).is_some());
+        // Nor may anything else about it change.
+        let mut other = model(3.0, 3.0);
+        other.elements[0].kind = ElementKind::Source {
+            interarrival: Dist::Exponential { mean: noisy },
+            limit: Some(4),
+        };
+        assert!(difference_within(&other, &want, &a_rescaled).is_some());
+        // The scenario's duration and warm-up only when they were rescaled.
+        let mut w = want.clone();
+        w.experiment.duration = 100.0;
+        let mut g = w.clone();
+        g.experiment.duration = 100.0 * (1.0 + 1e-13);
+        assert!(difference_within(&g, &w, &a_rescaled).is_some());
+        let duration: BTreeSet<(String, String)> = [(String::new(), "Duration".to_owned())].into();
+        assert!(difference_within(&g, &w, &duration).is_none());
     }
 }

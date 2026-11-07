@@ -324,7 +324,10 @@ understand.
     number rescaled, so it reads as the model says (`mean="80" timeUnit="s"` under minutes
     becomes `mean="4800" timeUnit="s"` under hours, `PT1000M` becomes `PT60000M`; a duration of
     several parts is written in its smallest one). A scenario without a duration gets one, since
-    the 8 hours it would run is another number in the new unit.
+    the 8 hours it would run is another number in the new unit. A rescaled value that no decimal
+    reads back as exactly may read back within 1e-12 of itself; every other value must read back
+    exactly. Scenarios inheriting from the opened one keep their meaning: one that took its base
+    unit from it gets the old unit written in, with the rescaled values as they were.
 
   Everything else is kept byte for byte: the XML writer now reproduces a parsed file exactly
   (each start tag's own text, `<a/>` or `<a></a>`, the whitespace around the root, and a
