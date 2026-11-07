@@ -159,8 +159,53 @@ fn with_no_condition_holding_and_no_default_an_entity_leaves_at_the_gateway() {
     );
     let r = once(&m, 100.0);
     assert_eq!(entered(&r, "check"), 10);
-    assert_eq!(r.element("check").map(|e| e.left), Some(10));
+    // They are lost there, not sent on: entered = left + lost.
+    assert_eq!(r.element("check").map(|e| e.left), Some(0));
+    assert_eq!(r.element("check").and_then(|e| e.lost), Some(10));
     assert_eq!(entered(&r, "exit"), 0);
+}
+
+#[test]
+fn a_gateway_with_a_route_for_everything_loses_none() {
+    let mut m = Builder::new();
+    let arrivals = m.source("arrivals", Dist::Constant(1.0), Some(10));
+    let check = m.exclusive("check");
+    let (yes, no) = (m.sink("yes"), m.sink("no"));
+    m.connect(arrivals, check);
+    m.route(check, yes, None, Some("false()"));
+    m.route(check, no, None, Some("true()"));
+    let r = once(&m, 100.0);
+    assert_eq!(entered(&r, "no"), 10);
+    assert_eq!(r.element("check").map(|e| e.left), Some(10));
+    assert_eq!(r.element("check").and_then(|e| e.lost), Some(0));
+    // Nothing else reports losses: the source sends to no finite buffer.
+    assert_eq!(r.element("arrivals").and_then(|e| e.lost), None);
+}
+
+#[test]
+fn a_join_counts_each_entity_once() {
+    // Ten entities, each split into two copies that the join merges back into one: the join
+    // takes in ten entities and sends on ten.
+    let mut m = Builder::new();
+    let arrivals = m.source("arrivals", Dist::Constant(1.0), Some(10));
+    let split = m.parallel("split");
+    let a = m.delay("a", Dist::Constant(0.5));
+    let b = m.delay("b", Dist::Constant(0.25));
+    let join = m.parallel("join");
+    let exit = m.sink("exit");
+    m.connect(arrivals, split);
+    m.connect(split, a);
+    m.connect(split, b);
+    m.connect(a, join);
+    m.connect(b, join);
+    m.connect(join, exit);
+    let r = once(&m, 100.0);
+    // A split takes in one entity and sends on a copy per connection.
+    assert_eq!(entered(&r, "split"), 10);
+    assert_eq!(r.element("split").map(|e| e.left), Some(20));
+    assert_eq!(entered(&r, "join"), 10);
+    assert_eq!(r.element("join").map(|e| e.left), Some(10));
+    assert_eq!(entered(&r, "exit"), 10);
 }
 
 #[test]
@@ -194,7 +239,7 @@ fn a_fork_and_join_waits_for_the_slower_branch() {
     let r = once(&m, 100.0);
     assert_eq!(entered(&r, "short"), 5);
     assert_eq!(entered(&r, "long"), 5);
-    assert_eq!(entered(&r, "join"), 10);
+    assert_eq!(entered(&r, "join"), 5);
     assert_eq!(entered(&r, "exit"), 5);
     assert_eq!(
         r.element("exit").and_then(|e| e.mean_time_in_system),

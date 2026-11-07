@@ -182,6 +182,8 @@ impl Compiled {
                             assigner: Rc::clone(&assigner),
                             index: r.to,
                             places: places.get(r.to).cloned().flatten(),
+                            // A join's second and later inputs bring copies (`spawn_parallel`).
+                            counts: r.input == 0,
                         },
                         weight: r.weight,
                         condition: r.condition.clone(),
@@ -306,15 +308,21 @@ fn tag(index: usize) -> u64 {
     u64::try_from(index).unwrap_or(u64::MAX)
 }
 
-/// Statistics a block keeps while the model runs.
+/// Statistics a block keeps while the model runs. Every element balances: what entered either
+/// left, was lost here, or is still inside.
 pub(crate) struct BlockStats {
+    /// Entities that entered (a source: created; a join: each entity once, see
+    /// `spawn_parallel`).
     entered: u64,
+    /// Entities sent on (a sink: removed; a split or join: one per copy sent out).
     left: u64,
     /// Entities waiting in the block's input (servers only).
     waiting: TimeWeighted,
     /// Units busy (servers) or entities inside (delays).
     busy: TimeWeighted,
-    /// Time from entering a server's input to the start of service.
+    /// Time from entering a server's input to the start of service. Only entities that started
+    /// service count, so when the server is overloaded, those still waiting at the end (which
+    /// have waited longest) are left out and the mean is biased low.
     wait: Tally,
     /// Time from creation to reaching a sink.
     time_in_system: Tally,
@@ -325,7 +333,11 @@ pub(crate) struct BlockStats {
     blocked: TimeWeighted,
     /// Time each entity that left waited for room in the next buffer (blocking after service).
     blocked_time: Tally,
-    /// Arrivals lost because this element's buffer was full.
+    /// Entities lost here. A server with a finite buffer: arrivals from sources turned away
+    /// because the buffer was full (they never entered). A source: its own arrivals lost that
+    /// way (they entered and never left; the same arrival counts at the full buffer too). An
+    /// exclusive gateway: entities with no connection to take (no condition held and there is
+    /// no default), which leave the model there.
     lost: u64,
 }
 
@@ -423,7 +435,16 @@ impl BlockStats {
                 }
                 _ => None,
             },
-            lost: finite.then_some(self.lost),
+            // Only where losses can happen, so models without them report as before.
+            lost: match kind {
+                ElementKind::Server {
+                    queue_capacity: Some(_),
+                    ..
+                }
+                | ElementKind::ExclusiveGateway { .. } => Some(self.lost),
+                ElementKind::Source { .. } if blocks => Some(self.lost),
+                _ => None,
+            },
             loss_probability: if finite && offered > 0 {
                 Some(self.lost as f64 / offered as f64)
             } else {
@@ -447,6 +468,10 @@ struct Port {
     index: usize,
     /// The next element's places, when its buffer is finite.
     places: Option<Rc<Places>>,
+    /// Whether an entity sent here counts as entering the next element: always, except on a
+    /// join's second and later inputs, whose entities are copies merged into the one on its
+    /// first input.
+    counts: bool,
 }
 
 /// A finite buffer's places (see [`Compiled::run_for`]), with the one each entity there holds.
@@ -483,9 +508,10 @@ impl Port {
         self.send(ctx.now(), e);
     }
 
-    /// Sends a new arrival if there is room (a place freed at this instant counts); otherwise
-    /// it is lost, and counted as lost by the next element.
-    async fn offer(&self, ctx: &Ctx, e: Entity) {
+    /// Sends a new arrival if there is room (a place freed at this instant counts) and returns
+    /// `true`; otherwise the arrival is lost, counted as lost by the next element, and this
+    /// returns `false`.
+    async fn offer(&self, ctx: &Ctx, e: Entity) -> bool {
         if let Some(p) = &self.places {
             match p.pool.acquire_within(0.0).await {
                 Ok(guard) => p.enter(e.id, guard),
@@ -493,11 +519,12 @@ impl Port {
                     if let Some(s) = self.stats.get(self.index) {
                         s.borrow_mut().lost += 1;
                     }
-                    return;
+                    return false;
                 }
             }
         }
         self.send(ctx.now(), e);
+        true
     }
 
     fn send(&self, now: f64, mut e: Entity) {
@@ -505,7 +532,9 @@ impl Port {
         self.assigner.enter(self.index, &mut e, &self.stats);
         if let Some(s) = self.stats.get(self.index) {
             let mut s = s.borrow_mut();
-            s.entered += 1;
+            if self.counts {
+                s.entered += 1;
+            }
             let w = s.waiting.value() + 1.0;
             s.waiting.set(now, w);
         }
@@ -573,10 +602,7 @@ fn spawn_source(
                 id
             };
             made += 1;
-            env.with_stats(|s| {
-                s.entered += 1;
-                s.left += 1;
-            });
+            env.with_stats(|s| s.entered += 1);
             let mut entity = Entity {
                 id,
                 created: now,
@@ -585,9 +611,18 @@ fn spawn_source(
             };
             // A source sets its properties on the entities it creates.
             env.assigner.enter(env.me, &mut entity, &env.stats);
-            if let Some(out) = &env.out {
-                out.offer(&env.ctx, entity).await;
-            }
+            // It leaves, unless the next element's finite buffer is full and it is lost.
+            let sent = match &env.out {
+                Some(out) => out.offer(&env.ctx, entity).await,
+                None => true,
+            };
+            env.with_stats(|s| {
+                if sent {
+                    s.left += 1;
+                } else {
+                    s.lost += 1;
+                }
+            });
         }
     });
 }
@@ -1000,13 +1035,16 @@ fn spawn_exclusive(sim: &mut Sim, mut env: BlockEnv, outs: Vec<Out>) {
         loop {
             let entity = env.input.get().await;
             env.adjust(|s| &mut s.waiting, -1.0);
-            env.with_stats(|s| s.left += 1);
             let to = choose(&outs, &entity, &env.assigner, &mut env.rng);
             // With no route (no condition holds and there is no default), the entity leaves
-            // the model here.
+            // the model here, and is counted as lost.
             // A full finite buffer holds the gateway, and everything behind it, up.
-            if let Some(out) = to.and_then(|i| outs.get(i)) {
-                out.port.deliver(&env.ctx, entity).await;
+            match to.and_then(|i| outs.get(i)) {
+                Some(out) => {
+                    env.with_stats(|s| s.left += 1);
+                    out.port.deliver(&env.ctx, entity).await;
+                }
+                None => env.with_stats(|s| s.lost += 1),
             }
         }
     });
@@ -1033,6 +1071,18 @@ fn combine(mut parts: Vec<Entity>) -> Option<Entity> {
     Some(first)
 }
 
+/// A parallel gateway. A split sends a copy of each entity down every outgoing connection; a
+/// join waits for one entity on each input and merges them into one ([`combine`]), then sends
+/// it on (copied, if it also splits).
+///
+/// A join pairs entities by arrival order: the next one waiting on each input, whichever split
+/// made them. With several entities' copies in flight, copies of different entities can be
+/// merged with each other, if one branch overtakes another.
+///
+/// Counting: a join's `entered` counts each entity once, as it arrives on the first input (the
+/// entities arriving on the others are its copies, merged into it); `left` counts each entity
+/// sent out, one per outgoing connection. So a 2-in/1-out join reports entered = left (less
+/// any still waiting for their copies at the end), and a 1-in/2-out split left = 2 x entered.
 fn spawn_parallel(
     sim: &mut Sim,
     env: BlockEnv,

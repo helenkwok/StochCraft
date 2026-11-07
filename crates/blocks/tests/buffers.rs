@@ -256,6 +256,10 @@ fn no_waiting_room_loses_arrivals_while_busy() {
         is(&r, "desk", Metric::LossProbability, lost / 6.0);
         is(&r, "desk", Metric::MeanQueueLength, 0.0);
         is(&r, "out", Metric::Entered, entered);
+        // The source made 6 and sent on only those that got in; the rest it lost.
+        is(&r, "in", Metric::Entered, 6.0);
+        is(&r, "in", Metric::Left, entered);
+        is(&r, "in", Metric::Lost, lost);
     }
 }
 
