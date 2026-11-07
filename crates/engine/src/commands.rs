@@ -930,7 +930,9 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             )
         })?;
     let bytes = e.save_bytes(p.as_new)?;
-    std::fs::write(&path, &bytes)
+    // Written to a temporary file beside it and renamed over it, so a crash or a full disk
+    // leaves the old file whole rather than half written.
+    craft_atomic::atomic_write(std::path::Path::new(&path), &bytes)
         .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
     e.saved_to(&path, &bytes)
 }

@@ -3458,6 +3458,7 @@ dependencies = [
 name = "stochcraft-engine"
 version = "0.1.0"
 dependencies = [
+ "craft-atomic",
  "schemars",
  "serde",
  "serde_json",

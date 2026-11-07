@@ -507,6 +507,43 @@ fn background_runs_report_progress_and_can_be_cancelled() {
 }
 
 #[test]
+fn saving_replaces_the_file_instead_of_overwriting_it() {
+    // A second name (hard link) for the same file shows whether saving wrote into the file in
+    // place (it would see the new content) or wrote a new file and renamed it over the old name,
+    // so a crash or a full disk can never leave the user's file half written.
+    let dir = scratch("atomic");
+    let _ = std::fs::remove_dir_all(&dir);
+    let _ = std::fs::create_dir_all(&dir);
+    let path = dir.join("model.bpmn");
+    let other_name = dir.join("other-name.bpmn");
+    let mut e = help_desk();
+    ok(&mut e, "file.save", json!({"path": path.to_string_lossy()}));
+    let first = std::fs::read(&path).unwrap_or_default();
+    if std::fs::hard_link(&path, &other_name).is_err() {
+        // A file system without hard links cannot tell; nothing to check here.
+        return;
+    }
+    ok(&mut e, "model.rename", json!({"name": "Renamed"}));
+    ok(&mut e, "file.save", json!({}));
+    let second = std::fs::read(&path).unwrap_or_default();
+    assert!(second != first, "the save changed nothing");
+    assert!(
+        std::fs::read(&other_name).unwrap_or_default() == first,
+        "the file was written in place"
+    );
+    // Nothing is left beside the file.
+    let mut names: Vec<String> = std::fs::read_dir(&dir)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|d| d.file_name().to_string_lossy().into_owned())
+        .collect();
+    names.sort();
+    assert_eq!(names, ["model.bpmn", "other-name.bpmn"]);
+    let _ = std::fs::remove_dir_all(&dir);
+}
+
+#[test]
 fn files_open_save_and_track_changes() {
     let path = scratch("files.bpmn");
     let path_s = path.to_string_lossy().to_string();
