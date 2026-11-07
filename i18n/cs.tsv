@@ -33,6 +33,9 @@
 	Availability	Pohotovost
 	BPMN with BPSim	BPMN s BPSim
 	Back to the model (Esc)	Zpět k modelu (Esc)
+	Batch	Dávka
+	Batch (collect, then send together)	Dávka (shromáždit a poslat společně)
+	Batch size	Velikost dávky
 	Beta	Beta
 	Binomial	Binomické
 	Boolean	Logická hodnota
@@ -231,6 +234,7 @@
 	Share of units blocked	Podíl blokovaných jednotek
 	Show All	Zobrazit vše
 	Show {id}	Zobrazit {id}
+	Split batches	Rozdělení dávek
 	Split or join	Rozdělit nebo spojit
 	Split or join (all ways)	Rozdělit nebo spojit (všechny cesty)
 	Spread out	Rozmístit
@@ -284,6 +288,7 @@
 	Zoom out	Oddálit
 	a model	model
 	arrivals	příchody
+	batch	dávka
 	days	dny
 	decision: one way	rozhodnutí: jedna cesta
 	departures	odchody
@@ -295,6 +300,7 @@
 	minutes	minuty
 	nothing yet	zatím nic
 	seconds	sekundy
+	split batches	rozdělení dávek
 	split or join: all ways	rozdělit nebo spojit: všechny cesty
 	task	úloha
 	task with a resource	úloha se zdrojem

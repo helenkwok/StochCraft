@@ -17,6 +17,8 @@ pub const KINDS: &[(&str, &str)] = &[
     ("delay", "Task"),
     ("exclusive_gateway", "Decision (one way)"),
     ("parallel_gateway", "Split or join (all ways)"),
+    ("batch", "Batch (collect, then send together)"),
+    ("unbatch", "Split batches"),
     ("sink", "Departures"),
 ];
 
@@ -33,6 +35,8 @@ pub fn new_block(kind: &str) -> Value {
         "delay" => json!({"kind": "delay", "duration": {"type": "constant", "value": 1.0}}),
         "exclusive_gateway" => json!({"kind": "exclusive_gateway"}),
         "parallel_gateway" => json!({"kind": "parallel_gateway"}),
+        "batch" => json!({"kind": "batch", "size": 2}),
+        "unbatch" => json!({"kind": "unbatch"}),
         _ => json!({"kind": "sink"}),
     }
 }
@@ -45,6 +49,7 @@ fn parameters(kind: &str) -> &'static [&'static str] {
         // Its needs are edited with M2.5's window work; service and priority here.
         "shared_task" => &["service", "priority"],
         "delay" => &["duration"],
+        "batch" => &["size"],
         _ => &[],
     }
 }

@@ -33,6 +33,9 @@
 	Availability	Käideldavus
 	BPMN with BPSim	BPMN ja BPSim
 	Back to the model (Esc)	Tagasi mudeli juurde (Esc)
+	Batch	Partii
+	Batch (collect, then send together)	Partii (kogu ja saada koos edasi)
+	Batch size	Partii suurus
 	Beta	Beeta
 	Binomial	Binoomjaotus
 	Boolean	Tõeväärtus
@@ -231,6 +234,7 @@
 	Share of units blocked	Blokeeritud ühikute osakaal
 	Show All	Näita kõiki
 	Show {id}	Näita {id}
+	Split batches	Partiide jagamine
 	Split or join	Hargneda või ühineda
 	Split or join (all ways)	Hargneda või ühineda (kõik teed)
 	Spread out	Jaota
@@ -284,6 +288,7 @@
 	Zoom out	Vähenda
 	a model	mudel
 	arrivals	saabumised
+	batch	partii
 	days	päevad
 	decision: one way	otsus: üks tee
 	departures	lahkumised
@@ -295,6 +300,7 @@
 	minutes	minutid
 	nothing yet	veel mitte midagi
 	seconds	sekundid
+	split batches	partiide jagamine
 	split or join: all ways	hargneda või ühineda: kõik teed
 	task	ülesanne
 	task with a resource	ressursiga ülesanne

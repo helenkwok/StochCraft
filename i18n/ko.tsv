@@ -33,6 +33,9 @@
 	Availability	가용률
 	BPMN with BPSim	BPSim 포함 BPMN
 	Back to the model (Esc)	모델로 돌아가기 (Esc)
+	Batch	배치
+	Batch (collect, then send together)	배치 (모은 뒤 함께 보내기)
+	Batch size	배치 크기
 	Beta	베타 분포
 	Binomial	이항 분포
 	Boolean	불리언
@@ -231,6 +234,7 @@
 	Share of units blocked	자원 단위 차단 비율
 	Show All	모두 표시
 	Show {id}	{id} 표시
+	Split batches	배치 분리
 	Split or join	분할 또는 병합
 	Split or join (all ways)	분할 또는 병합(모든 경로)
 	Spread out	균등 배치
@@ -284,6 +288,7 @@
 	Zoom out	축소
 	a model	모델
 	arrivals	도착
+	batch	배치
 	days	일
 	decision: one way	의사 결정: 한 경로
 	departures	이탈
@@ -295,6 +300,7 @@
 	minutes	분
 	nothing yet	아직 없음
 	seconds	초
+	split batches	배치 분리
 	split or join: all ways	분할 또는 병합: 모든 경로
 	task	작업
 	task with a resource	자원을 사용하는 작업

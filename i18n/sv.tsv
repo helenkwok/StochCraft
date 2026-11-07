@@ -33,6 +33,9 @@
 	Availability	Tillgänglighet
 	BPMN with BPSim	BPMN med BPSim
 	Back to the model (Esc)	Tillbaka till modellen (Esc)
+	Batch	Parti
+	Batch (collect, then send together)	Parti (samla, skicka sedan tillsammans)
+	Batch size	Partistorlek
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolesk
@@ -231,6 +234,7 @@
 	Share of units blocked	Andel blockerade enheter
 	Show All	Visa alla
 	Show {id}	Visa {id}
+	Split batches	Dela upp partier
 	Split or join	Dela eller sammanfoga
 	Split or join (all ways)	Dela eller sammanfoga (alla vägar)
 	Spread out	Fördela
@@ -284,6 +288,7 @@
 	Zoom out	Zooma ut
 	a model	en modell
 	arrivals	ankomster
+	batch	parti
 	days	dagar
 	decision: one way	beslut: en väg
 	departures	avgångar
@@ -295,6 +300,7 @@
 	minutes	minuter
 	nothing yet	inget ännu
 	seconds	sekunder
+	split batches	uppdelning av partier
 	split or join: all ways	dela eller sammanfoga: alla vägar
 	task	uppgift
 	task with a resource	uppgift med resurs

@@ -33,6 +33,9 @@
 	Availability	Ketersediaan
 	BPMN with BPSim	BPMN dengan BPSim
 	Back to the model (Esc)	Kembali ke model (Esc)
+	Batch	Batch
+	Batch (collect, then send together)	Batch (kumpulkan, lalu kirim bersama)
+	Batch size	Ukuran batch
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolean
@@ -231,6 +234,7 @@
 	Share of units blocked	Proporsi unit yang terblokir
 	Show All	Tampilkan semua
 	Show {id}	Tampilkan {id}
+	Split batches	Pisahkan batch
 	Split or join	Pisahkan atau gabungkan
 	Split or join (all ways)	Pisahkan atau gabungkan (semua jalur)
 	Spread out	Sebarkan
@@ -284,6 +288,7 @@
 	Zoom out	Perkecil
 	a model	sebuah model
 	arrivals	kedatangan
+	batch	batch
 	days	hari
 	decision: one way	keputusan: satu jalur
 	departures	keberangkatan
@@ -295,6 +300,7 @@
 	minutes	menit
 	nothing yet	belum ada
 	seconds	detik
+	split batches	pemisahan batch
 	split or join: all ways	pisahkan atau gabungkan: semua jalur
 	task	tugas
 	task with a resource	tugas dengan sumber daya

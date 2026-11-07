@@ -189,6 +189,21 @@ impl Compiled {
                 .collect(),
         });
 
+        // Joins with a bill of materials: every part counts as entering.
+        let assembly: Vec<bool> = self
+            .quantities
+            .iter()
+            .zip(elements)
+            .map(|(q, e)| {
+                matches!(e.kind, ElementKind::ParallelGateway)
+                    && self
+                        .model
+                        .connections
+                        .iter()
+                        .any(|c| c.to == e.id && c.quantity.is_some())
+                    && !q.is_empty()
+            })
+            .collect();
         for ((i, element), rng) in elements.iter().enumerate().zip(streams) {
             let outs: Vec<Out> = self
                 .routes
@@ -204,8 +219,9 @@ impl Compiled {
                             assigner: Rc::clone(&assigner),
                             index: r.to,
                             places: places.get(r.to).cloned().flatten(),
-                            // A join's second and later inputs bring copies (`spawn_parallel`).
-                            counts: r.input == 0,
+                            // A join's second and later inputs bring copies (`spawn_parallel`),
+                            // unless it is an assembly, whose inputs bring parts.
+                            counts: r.input == 0 || assembly.get(r.to).copied().unwrap_or(false),
                         },
                         weight: r.weight,
                         condition: r.condition.clone(),
@@ -271,8 +287,11 @@ impl Compiled {
                 ElementKind::Sink => spawn_sink(&mut sim, env),
                 ElementKind::ExclusiveGateway { .. } => spawn_exclusive(&mut sim, env, outs),
                 ElementKind::ParallelGateway => {
-                    spawn_parallel(&mut sim, env, ins, outs, Rc::clone(&next_id))
+                    let quantities = self.quantities.get(i).cloned().unwrap_or_default();
+                    spawn_parallel(&mut sim, env, ins, quantities, outs, Rc::clone(&next_id))
                 }
+                ElementKind::Batch { size } => spawn_batch(&mut sim, env, size),
+                ElementKind::Unbatch => spawn_unbatch(&mut sim, env),
             }
         }
 
@@ -452,7 +471,8 @@ impl BlockStats {
             mean_contents: match kind {
                 ElementKind::Server { .. }
                 | ElementKind::SharedTask { .. }
-                | ElementKind::Delay { .. } => self.busy.average(end),
+                | ElementKind::Delay { .. }
+                | ElementKind::Batch { .. } => self.busy.average(end),
                 _ => None,
             },
             mean_time_in_system: if matches!(kind, ElementKind::Sink) {
@@ -690,6 +710,7 @@ fn spawn_source(
                 created: now,
                 entered: now,
                 properties: Vec::new(),
+                members: Vec::new(),
             };
             // A source sets its properties on the entities it creates.
             env.assigner.enter(env.me, &mut entity, &env.stats);
@@ -1480,19 +1501,27 @@ fn combine(mut parts: Vec<Entity>) -> Option<Entity> {
 /// entities arriving on the others are its copies, merged into it); `left` counts each entity
 /// sent out, one per outgoing connection. So a 2-in/1-out join reports entered = left (less
 /// any still waiting for their copies at the end), and a 1-in/2-out split left = 2 x entered.
+///
+/// An assembly (a join with a bill of materials) takes `quantities[k]` entities from input `k`
+/// for each one it sends on; the parts other than the first are used up. Every part counts as
+/// entering, so an assembly reports entered = left × the parts per assembly (less those still
+/// waiting at the end).
 fn spawn_parallel(
     sim: &mut Sim,
     env: BlockEnv,
     inputs: Vec<Store<Entity>>,
+    quantities: Vec<u32>,
     outs: Vec<Out>,
     next_id: Rc<RefCell<u64>>,
 ) {
     sim.spawn_tagged(tag(env.me), async move {
         loop {
-            // One entity from each input (a join waits for all of them), in input order.
+            // The parts from each input (a join waits for all of them), in input order.
             let mut parts = Vec::with_capacity(inputs.len());
-            for input in &inputs {
-                parts.push(input.get().await);
+            for (k, input) in inputs.iter().enumerate() {
+                for _ in 0..quantities.get(k).copied().unwrap_or(1).max(1) {
+                    parts.push(input.get().await);
+                }
             }
             env.adjust(|s| &mut s.waiting, -(parts.len() as f64));
             let Some(entity) = combine(parts) else {
@@ -1509,6 +1538,51 @@ fn spawn_parallel(
                 }
                 env.with_stats(|s| s.left += 1);
                 out.port.deliver(&env.ctx, e).await;
+            }
+        }
+    });
+}
+
+/// A batch: entities wait here until there are `size` of them, then go on together as one, the
+/// first carrying the others ([`Entity::members`]). `entered` counts each entity, `left` each
+/// batch, and the mean contents is the number waiting for their batch to fill.
+fn spawn_batch(sim: &mut Sim, env: BlockEnv, size: u32) {
+    let size = usize::try_from(size.max(1)).unwrap_or(usize::MAX);
+    sim.spawn_tagged(tag(env.me), async move {
+        let mut held: Vec<Entity> = Vec::with_capacity(size);
+        loop {
+            let entity = env.input.get().await;
+            env.adjust(|s| &mut s.waiting, -1.0);
+            env.adjust(|s| &mut s.busy, 1.0);
+            held.push(entity);
+            if held.len() < size {
+                continue;
+            }
+            let mut members = std::mem::take(&mut held);
+            env.adjust(|s| &mut s.busy, -(members.len() as f64));
+            let mut batch = members.remove(0);
+            batch.members.extend(members);
+            env.with_stats(|s| s.left += 1);
+            if let Some(out) = &env.out {
+                out.deliver(&env.ctx, batch).await;
+            }
+        }
+    });
+}
+
+/// Splits each batch into its entities and sends each on, the carrier first; anything else
+/// passes through. `entered` counts batches as they arrive, `left` each entity sent on.
+fn spawn_unbatch(sim: &mut Sim, env: BlockEnv) {
+    sim.spawn_tagged(tag(env.me), async move {
+        loop {
+            let mut entity = env.input.get().await;
+            env.adjust(|s| &mut s.waiting, -1.0);
+            let members = std::mem::take(&mut entity.members);
+            for e in std::iter::once(entity).chain(members) {
+                env.with_stats(|s| s.left += 1);
+                if let Some(out) = &env.out {
+                    out.deliver(&env.ctx, e).await;
+                }
             }
         }
     });

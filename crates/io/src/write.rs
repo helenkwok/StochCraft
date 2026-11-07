@@ -224,9 +224,11 @@ pub(crate) fn bpmn_local(kind: &ElementKind) -> &'static str {
     match kind {
         ElementKind::Source { .. } => "startEvent",
         ElementKind::Sink => "endEvent",
-        ElementKind::Server { .. } | ElementKind::SharedTask { .. } | ElementKind::Delay { .. } => {
-            "task"
-        }
+        ElementKind::Server { .. }
+        | ElementKind::SharedTask { .. }
+        | ElementKind::Delay { .. }
+        | ElementKind::Batch { .. }
+        | ElementKind::Unbatch => "task",
         ElementKind::ExclusiveGateway { .. } => "exclusiveGateway",
         ElementKind::ParallelGateway => "parallelGateway",
     }
@@ -235,10 +237,32 @@ pub(crate) fn bpmn_local(kind: &ElementKind) -> &'static str {
 /// A connection's BPSim `ControlParameters` values: its probability and condition.
 /// A server's finite buffer as a StochCraft vendor extension.
 pub(crate) fn queue_capacity_element(n: u32) -> Element {
+    vendor_value_element(crate::bpsim::QUEUE_CAPACITY, &n.to_string())
+}
+
+/// A StochCraft vendor extension holding one value.
+pub(crate) fn vendor_value_element(name: &str, value: &str) -> Element {
     s("VendorExtension")
-        .with_attr("name", crate::bpsim::QUEUE_CAPACITY)
+        .with_attr("name", name)
         .with_attr("xmlns:stochcraft", crate::bpsim::STOCHCRAFT_NS)
-        .with_attr("stochcraft:value", &n.to_string())
+        .with_attr("stochcraft:value", value)
+}
+
+/// The vendor extension that makes a task a batch or a split, if `kind` is one.
+pub(crate) fn batching_element(kind: &ElementKind) -> Option<Element> {
+    match kind {
+        ElementKind::Batch { size } => Some(vendor_value_element(
+            crate::bpsim::BATCH_SIZE,
+            &size.to_string(),
+        )),
+        ElementKind::Unbatch => Some(vendor_value_element(crate::bpsim::UNBATCH, "true")),
+        _ => None,
+    }
+}
+
+/// A connection's bill-of-materials quantity as a vendor extension.
+pub(crate) fn quantity_element(q: u32) -> Element {
+    vendor_value_element(crate::bpsim::QUANTITY, &q.to_string())
 }
 
 /// A server's breakdowns as StochCraft's vendor extension ([`crate::bpsim::BREAKDOWN`]).
@@ -524,7 +548,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             }
             ElementKind::Sink
             | ElementKind::ExclusiveGateway { .. }
-            | ElementKind::ParallelGateway => {}
+            | ElementKind::ParallelGateway
+            | ElementKind::Batch { .. }
+            | ElementKind::Unbatch => {}
         }
         if !e.properties.is_empty() {
             let mut pp = s("PropertyParameters");
@@ -546,27 +572,33 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         {
             ep.push(breakdown_element(b));
         }
+        if let Some(x) = batching_element(&e.kind) {
+            ep.push(x);
+        }
         if ep.elements().next().is_none() {
             continue;
         }
         scenario.push(ep);
     }
     for c in &model.connections {
-        if c.probability.is_none() && c.condition.is_none() {
+        if c.probability.is_none() && c.condition.is_none() && c.quantity.is_none() {
             continue;
         }
-        let mut cp = s("ControlParameters");
-        if let Some(p) = c.probability {
-            cp.push(param("Probability", probability_element(p)));
+        let mut ep = s("ElementParameters").with_attr("elementRef", c.id.as_str());
+        if c.probability.is_some() || c.condition.is_some() {
+            let mut cp = s("ControlParameters");
+            if let Some(p) = c.probability {
+                cp.push(param("Probability", probability_element(p)));
+            }
+            if let Some(x) = &c.condition {
+                cp.push(param("Condition", condition_element(x)));
+            }
+            ep.push(cp);
         }
-        if let Some(x) = &c.condition {
-            cp.push(param("Condition", condition_element(x)));
+        if let Some(q) = c.quantity {
+            ep.push(quantity_element(q));
         }
-        scenario.push(
-            s("ElementParameters")
-                .with_attr("elementRef", c.id.as_str())
-                .with_child(cp),
-        );
+        scenario.push(ep);
     }
     for e in &model.elements {
         if let (ElementKind::Server { capacity, .. }, Some(rid)) =

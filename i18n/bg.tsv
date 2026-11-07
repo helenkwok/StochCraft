@@ -33,6 +33,9 @@
 	Availability	Наличност
 	BPMN with BPSim	BPMN с BPSim
 	Back to the model (Esc)	Обратно към модела (Esc)
+	Batch	Партида
+	Batch (collect, then send together)	Партида (събиране, после изпращане заедно)
+	Batch size	Размер на партидата
 	Beta	Бета
 	Binomial	Биномиално
 	Boolean	Булева стойност
@@ -231,6 +234,7 @@
 	Share of units blocked	Дял на блокираните единици
 	Show All	Показване на всичко
 	Show {id}	Показване на {id}
+	Split batches	Разделяне на партиди
 	Split or join	Разделяне или обединяване
 	Split or join (all ways)	Разделяне или обединяване (всички пътища)
 	Spread out	Разпределяне
@@ -284,6 +288,7 @@
 	Zoom out	Намаляване
 	a model	модел
 	arrivals	пристигания
+	batch	партида
 	days	дни
 	decision: one way	решение: един път
 	departures	напускания
@@ -295,6 +300,7 @@
 	minutes	минути
 	nothing yet	все още нищо
 	seconds	секунди
+	split batches	разделяне на партиди
 	split or join: all ways	разделяне или обединяване: всички пътища
 	task	задача
 	task with a resource	задача с ресурс

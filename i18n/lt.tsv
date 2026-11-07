@@ -33,6 +33,9 @@
 	Availability	Parengtis
 	BPMN with BPSim	BPMN su BPSim
 	Back to the model (Esc)	Grįžti į modelį (Esc)
+	Batch	Partija
+	Batch (collect, then send together)	Partija (surinkti, tada siųsti kartu)
+	Batch size	Partijos dydis
 	Beta	Beta
 	Binomial	Binominis
 	Boolean	Loginė reikšmė
@@ -231,6 +234,7 @@
 	Share of units blocked	Blokuotų vienetų dalis
 	Show All	Rodyti visus
 	Show {id}	Rodyti {id}
+	Split batches	Partijų skaidymas
 	Split or join	Skaidyti arba jungti
 	Split or join (all ways)	Skaidyti arba jungti (visi keliai)
 	Spread out	Paskirstyti
@@ -284,6 +288,7 @@
 	Zoom out	Mažinti
 	a model	modelis
 	arrivals	atvykimai
+	batch	partija
 	days	dienos
 	decision: one way	sprendimas: vienas kelias
 	departures	išvykimai
@@ -295,6 +300,7 @@
 	minutes	minutės
 	nothing yet	dar nieko
 	seconds	sekundės
+	split batches	partijų skaidymas
 	split or join: all ways	skaidyti arba jungti: visi keliai
 	task	užduotis
 	task with a resource	užduotis su ištekliumi

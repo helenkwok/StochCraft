@@ -33,6 +33,9 @@
 	Availability	প্রাপ্যতা
 	BPMN with BPSim	BPSim সহ BPMN
 	Back to the model (Esc)	মডেলে ফিরে যান (Esc)
+	Batch	ব্যাচ
+	Batch (collect, then send together)	ব্যাচ (জড়ো করে একসাথে পাঠান)
+	Batch size	ব্যাচের আকার
 	Beta	বিটা
 	Binomial	দ্বিপদী
 	Boolean	বুলিয়ান
@@ -231,6 +234,7 @@
 	Share of units blocked	অবরুদ্ধ এককের অনুপাত
 	Show All	সব দেখান
 	Show {id}	{id} দেখান
+	Split batches	ব্যাচ ভাগ করুন
 	Split or join	ভাগ বা একত্র করুন
 	Split or join (all ways)	ভাগ বা একত্র করুন (সব পথ)
 	Spread out	ছড়িয়ে দিন
@@ -284,6 +288,7 @@
 	Zoom out	জুম আউট
 	a model	একটি মডেল
 	arrivals	আগমন
+	batch	ব্যাচ
 	days	দিন
 	decision: one way	সিদ্ধান্ত: একটি পথ
 	departures	প্রস্থান
@@ -295,6 +300,7 @@
 	minutes	মিনিট
 	nothing yet	এখনও কিছু নেই
 	seconds	সেকেন্ড
+	split batches	ব্যাচ ভাগ করা
 	split or join: all ways	ভাগ বা একত্র করুন: সব পথ
 	task	কাজ
 	task with a resource	সম্পদসহ কাজ

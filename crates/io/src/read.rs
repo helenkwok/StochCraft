@@ -891,13 +891,33 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     }
                     None => None,
                 };
-                match (shared.get(id), task_resource.get(id)) {
-                    (Some(needs), _) => ElementKind::SharedTask {
+                let batching = batching_of(scenario, id, notes);
+                match (batching, shared.get(id), task_resource.get(id)) {
+                    (Some(kind), shared, own) => {
+                        let mut ignored = Vec::new();
+                        if val(id, "TimeParameters/ProcessingTime", notes).is_some() {
+                            ignored.push("its processing time");
+                        }
+                        if shared.is_some() || own.is_some() {
+                            ignored.push("its resource");
+                        }
+                        if !ignored.is_empty() {
+                            notes.push(Note::warning(
+                                Some(id),
+                                format!(
+                                    "a batch or a split takes no time and no resource; {} is ignored",
+                                    ignored.join(" and ")
+                                ),
+                            ));
+                        }
+                        kind
+                    }
+                    (None, Some(needs), _) => ElementKind::SharedTask {
                         service: time,
                         needs: needs.clone(),
                         priority: priority.unwrap_or(0.0),
                     },
-                    (None, Some(r)) => {
+                    (None, None, Some(r)) => {
                         if priority.is_some_and(|x| x != 0.0) {
                             notes.push(Note::info(Some(id), "a priority matters only among tasks that share a resource; this task has its own"));
                         }
@@ -908,7 +928,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             breakdown: breakdown_of(scenario, id, unit, notes),
                         }
                     }
-                    (None, None) => ElementKind::Delay { duration: time },
+                    (None, None, None) => ElementKind::Delay { duration: time },
                 }
             }
             NodeKind::Exclusive(default) => ElementKind::ExclusiveGateway {
@@ -934,6 +954,19 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "breakdowns (stochcraft:breakdown) apply only to a task with a resource of its own; they are ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Batch { .. } | ElementKind::Unbatch)
+            && !matches!(n.kind, NodeKind::Task)
+            && [bpsim::BATCH_SIZE, bpsim::UNBATCH].iter().any(|x| {
+                scenario
+                    .and_then(|s| s.param(id, &format!("VendorExtension/{x}")))
+                    .is_some()
+            })
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "only a task can make or split batches (stochcraft:batchSize, stochcraft:unbatch); this is ignored",
             ));
         }
         if queue.is_some() && !matches!(kind, ElementKind::Server { .. }) {
@@ -985,6 +1018,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             to: ElementId::unchecked(&f.to),
             probability,
             condition,
+            quantity: vendor_count(scenario, id, bpsim::QUANTITY, "a quantity", notes),
         });
     }
     Model {
@@ -1018,8 +1052,15 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
                     ),
                 )),
             }
-        } else if name == bpsim::BREAKDOWN {
-            // Read by `breakdown_of`.
+        } else if [
+            bpsim::BREAKDOWN,
+            bpsim::BATCH_SIZE,
+            bpsim::UNBATCH,
+            bpsim::QUANTITY,
+        ]
+        .contains(&name)
+        {
+            // Read by `breakdown_of`, `batching_of` and `vendor_count`.
         } else if name.starts_with(bpsim::STOCHCRAFT) {
             notes.push(Note::warning(
                 Some(id),
@@ -1028,6 +1069,68 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
         }
     }
     queue
+}
+
+/// A whole number of at least 1 that StochCraft's vendor extension `name` gives element `id`,
+/// if it has one; an error note (and none) for anything else.
+fn vendor_count(
+    scenario: Option<&Scenario>,
+    id: &str,
+    name: &str,
+    what: &str,
+    notes: &mut Vec<Note>,
+) -> Option<u32> {
+    let e = scenario.and_then(|s| s.param(id, &format!("VendorExtension/{name}")))?;
+    let raw = bpsim::vendor_value(e).unwrap_or_default();
+    match raw.trim().parse::<u32>() {
+        Ok(n) if n >= 1 => Some(n),
+        _ => {
+            notes.push(Note::error(
+                Some(id),
+                format!("{what} (`{name}`) must be a whole number of at least 1, not `{raw}`; it is ignored"),
+            ));
+            None
+        }
+    }
+}
+
+/// The batch or split StochCraft's vendor extensions make task `id`, if any.
+fn batching_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    notes: &mut Vec<Note>,
+) -> Option<ElementKind> {
+    let batch = vendor_count(scenario, id, bpsim::BATCH_SIZE, "a batch size", notes)
+        .map(|size| ElementKind::Batch { size });
+    let unbatch = scenario
+        .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::UNBATCH)))
+        .and_then(|e| {
+            let raw = bpsim::vendor_value(e).unwrap_or_default();
+            match raw.trim() {
+                "true" | "1" => Some(ElementKind::Unbatch),
+                "false" | "0" => None,
+                other => {
+                    notes.push(Note::error(
+                        Some(id),
+                        format!(
+                            "`{}` must be true or false, not `{other}`; it is ignored",
+                            bpsim::UNBATCH
+                        ),
+                    ));
+                    None
+                }
+            }
+        });
+    match (batch, unbatch) {
+        (Some(b), Some(_)) => {
+            notes.push(Note::error(
+                Some(id),
+                "a task cannot both make batches and split them; it makes them",
+            ));
+            Some(b)
+        }
+        (b, u) => b.or(u),
+    }
 }
 
 /// The breakdowns StochCraft's vendor extension gives server `id`, if any; whether a failure

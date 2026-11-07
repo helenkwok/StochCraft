@@ -264,6 +264,22 @@ The checks for M2.6's breakdowns (`crates/blocks/tests/breakdowns.rs`):
   times its availability. B. Avi-Itzhak and P. Naor, "Some queuing problems with the service
   station subject to breakdown", *Operations Research* 11(3), 1963, 303–320.
 
+## Batching and assembly
+
+The checks for M2.7's batches and assemblies (`crates/blocks/tests/assembly.rs`):
+
+- **Batches of Poisson arrivals** arrive with Erlang-k times between them, so a single server
+  after a batch of k is an E_k/M/1 queue, a GI/M/1 queue whose wait in queue is σ / (μ(1 − σ)),
+  with σ the root in (0, 1) of σ = A*(μ(1 − σ)) and A*(s) = (λ/(λ + s))^k the Laplace transform of
+  the time between batches. L. Kleinrock, *Queueing Systems*, vol. 1, section 6.4 (the G/M/m
+  queue); Gross and Harris, *Fundamentals of Queueing Theory*, GI/M/1.
+- **Entities waiting for a batch to fill**: with Poisson arrivals each of 0, 1, …, k − 1 waiting
+  lasts an exponential time of the same mean, so on average (k − 1)/2 wait.
+- **An assembly's throughput** is bounded by each input: input k with arrivals at rate λ_k and
+  q_k parts per assembly allows at most λ_k / q_k assemblies a time, so the join runs at the least
+  of those (the slowest input sets the pace, and parts pile up at the others). This is the
+  bottleneck bound of a fork-join, for example Hopp and Spearman, *Factory Physics*, chapter 7.
+
 ## Read and set aside
 
 Outside what a process simulator does: Type IV hydrogen pressure vessels (Khan, IJHE 2026,

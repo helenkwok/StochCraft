@@ -1536,3 +1536,71 @@ fn breakdowns_are_set_reported_and_removed() {
     let m = ok(&mut e, "model.get", json!({}));
     assert!(!m.to_string().contains("breakdown"), "{m}");
 }
+
+/// Batches, splits and bills of materials through commands: added, changed, undone, and
+/// refused where they do not apply.
+#[test]
+fn batches_and_bills_of_materials_through_commands() {
+    let mut e = help_desk();
+    let added = ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "batch", "id": "pack", "size": 5 }),
+    );
+    assert_eq!(added["id"], "pack");
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "unbatch", "id": "unpack" }),
+    );
+    ok(&mut e, "block.set", json!({ "id": "pack", "size": 8 }));
+    let m = ok(&mut e, "model.get", json!({}));
+    let pack = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "pack"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(pack["kind"], "batch", "{m}");
+    assert_eq!(pack["size"], 8, "{m}");
+    assert_eq!(
+        err(&mut e, "block.set", json!({ "id": "pack", "capacity": 2 })),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "block.add",
+            json!({ "kind": "batch", "size": 2, "capacity": 1 })
+        ),
+        ErrorCode::InvalidParams
+    );
+
+    // A join with a bill of materials; flow.set changes and removes the quantity.
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "parallel_gateway", "id": "join" }),
+    );
+    let c = ok(
+        &mut e,
+        "connect",
+        json!({ "from": "pack", "to": "join", "quantity": 3 }),
+    );
+    let flow = c["id"].as_str().unwrap_or("").to_owned();
+    let quantity = |e: &mut Engine| {
+        ok(e, "model.get", json!({}))["connections"]
+            .as_array()
+            .and_then(|cs| cs.iter().find(|x| x["id"] == flow.as_str()))
+            .map(|x| x["quantity"].clone())
+            .unwrap_or_default()
+    };
+    assert_eq!(quantity(&mut e), json!(3));
+    ok(&mut e, "flow.set", json!({ "id": flow, "quantity": 4 }));
+    assert_eq!(quantity(&mut e), json!(4));
+    ok(&mut e, "flow.set", json!({ "id": flow, "quantity": null }));
+    assert_eq!(quantity(&mut e), Value::Null);
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(quantity(&mut e), json!(4));
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(quantity(&mut e), json!(3));
+}

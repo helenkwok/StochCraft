@@ -33,6 +33,9 @@
 	Availability	Dostępność
 	BPMN with BPSim	BPMN z BPSim
 	Back to the model (Esc)	Powrót do modelu (Esc)
+	Batch	Partia
+	Batch (collect, then send together)	Partia (zbierz, a potem wyślij razem)
+	Batch size	Wielkość partii
 	Beta	Beta
 	Binomial	Dwumianowy
 	Boolean	Wartość logiczna
@@ -231,6 +234,7 @@
 	Share of units blocked	Odsetek zablokowanych jednostek
 	Show All	Pokaż wszystko
 	Show {id}	Pokaż {id}
+	Split batches	Rozdzielanie partii
 	Split or join	Rozdziel lub połącz
 	Split or join (all ways)	Rozdziel lub połącz (wszystkie ścieżki)
 	Spread out	Rozmieść
@@ -284,6 +288,7 @@
 	Zoom out	Pomniejsz
 	a model	model
 	arrivals	przybycia
+	batch	partia
 	days	dni
 	decision: one way	decyzja: jedna ścieżka
 	departures	wyjścia
@@ -295,6 +300,7 @@
 	minutes	minuty
 	nothing yet	jeszcze nic
 	seconds	sekundy
+	split batches	rozdzielanie partii
 	split or join: all ways	rozdziel lub połącz: wszystkie ścieżki
 	task	zadanie
 	task with a resource	zadanie z zasobem

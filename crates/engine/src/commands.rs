@@ -103,6 +103,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
         Some("exclusive_gateway") => &["default"],
+        Some("batch") => &["size"],
         _ => &[],
     };
     for k in obj.keys() {
@@ -290,6 +291,9 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<String>")]
     pub default: Option<Option<String>>,
+    /// A batch: how many entities it collects before sending them on together.
+    #[serde(default)]
+    pub size: Option<u32>,
 }
 
 /// A new shared resource pool.
@@ -387,6 +391,10 @@ pub struct Connect {
     /// such as `getProperty('issues') > 0`.
     #[serde(default)]
     pub condition: Option<String>,
+    /// Into a parallel gateway: how many entities from this connection go into each one it
+    /// sends on (an assembly's bill of materials); by default 1.
+    #[serde(default)]
+    pub quantity: Option<u32>,
 }
 
 /// How an exclusive gateway chooses a connection: the parameters to change.
@@ -406,6 +414,11 @@ pub struct FlowSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<String>")]
     pub condition: Option<Option<String>>,
+    /// Into a parallel gateway: how many entities from this connection go into each one it
+    /// sends on (an assembly's bill of materials). `null` removes it (1).
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<u32>")]
+    pub quantity: Option<Option<u32>>,
 }
 
 /// The connection's id, or the elements it joins.
@@ -789,6 +802,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
         ("default", p.default.is_some()),
+        ("size", p.size.is_some()),
     ];
     let applies: &[&str] = match kind {
         ElementKind::Source { .. } => &["interarrival", "limit", "timed", "idle_outside"],
@@ -796,7 +810,8 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
         ElementKind::ExclusiveGateway { .. } => &["default"],
-        ElementKind::Sink | ElementKind::ParallelGateway => &[],
+        ElementKind::Batch { .. } => &["size"],
+        ElementKind::Sink | ElementKind::ParallelGateway | ElementKind::Unbatch => &[],
     };
     if let Some((name, _)) = given.iter().find(|(n, g)| *g && !applies.contains(n)) {
         return Err(CommandError::new(
@@ -874,7 +889,12 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *default = d.as_deref().map(ElementId::unchecked);
             }
         }
-        ElementKind::Sink | ElementKind::ParallelGateway => {}
+        ElementKind::Batch { size } => {
+            if let Some(n) = p.size {
+                *size = n;
+            }
+        }
+        ElementKind::Sink | ElementKind::ParallelGateway | ElementKind::Unbatch => {}
     }
     e.edit("block.set", Op::SetKind(id, kind))?;
     Ok(json!({}))
@@ -1152,6 +1172,7 @@ fn connect(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 to,
                 probability: p.probability,
                 condition: p.condition,
+                quantity: p.quantity,
             },
         ),
     )?;
@@ -1171,16 +1192,28 @@ fn flow_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 format!("no connection with id `{}`", p.id),
             )
         })?;
-    if p.probability.is_none() && p.condition.is_none() {
+    if p.probability.is_none() && p.condition.is_none() && p.quantity.is_none() {
         return Err(CommandError::new(
             ErrorCode::InvalidParams,
-            "nothing to set: give `probability`, `condition` or both",
+            "nothing to set: give `probability`, `condition` or `quantity`",
         ));
     }
-    let probability = p.probability.unwrap_or(c.probability);
-    let condition = p.condition.unwrap_or_else(|| c.condition.clone());
     let id = c.id.clone();
-    e.edit("flow.set", Op::SetRoute(id, probability, condition))?;
+    let mut ops = Vec::new();
+    if p.probability.is_some() || p.condition.is_some() {
+        let probability = p.probability.unwrap_or(c.probability);
+        let condition = p.condition.unwrap_or_else(|| c.condition.clone());
+        ops.push(Op::SetRoute(id.clone(), probability, condition));
+    }
+    if let Some(q) = p.quantity {
+        ops.push(Op::SetQuantity(id, q));
+    }
+    let op = if ops.len() == 1 {
+        ops.remove(0)
+    } else {
+        Op::Batch(ops)
+    };
+    e.edit("flow.set", op)?;
     Ok(json!({}))
 }
 

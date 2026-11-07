@@ -33,6 +33,9 @@
 	Availability	లభ్యత
 	BPMN with BPSim	BPSim తో BPMN
 	Back to the model (Esc)	నమూనాకు తిరిగి వెళ్లు (Esc)
+	Batch	బ్యాచ్
+	Batch (collect, then send together)	బ్యాచ్ (సేకరించి, కలిసి పంపు)
+	Batch size	బ్యాచ్ పరిమాణం
 	Beta	బీటా
 	Binomial	ద్విపద పంపిణీ
 	Boolean	బూలియన్
@@ -231,6 +234,7 @@
 	Share of units blocked	నిరోధిత యూనిట్ల వాటా
 	Show All	అన్నీ చూపించు
 	Show {id}	{id} చూపించు
+	Split batches	బ్యాచ్‌లను విడదీయి
 	Split or join	విభజించు లేదా కలుపు
 	Split or join (all ways)	విభజించు లేదా కలుపు (అన్ని దారులు)
 	Spread out	పంచు
@@ -284,6 +288,7 @@
 	Zoom out	జూమ్ అవుట్
 	a model	ఒక నమూనా
 	arrivals	రాకలు
+	batch	బ్యాచ్
 	days	రోజులు
 	decision: one way	నిర్ణయం: ఒక దారి
 	departures	నిష్క్రమణలు
@@ -295,6 +300,7 @@
 	minutes	నిమిషాలు
 	nothing yet	ఇంకా ఏమీ లేదు
 	seconds	సెకన్లు
+	split batches	బ్యాచ్‌ల విభజన
 	split or join: all ways	విభజించు లేదా కలుపు: అన్ని దారులు
 	task	పని
 	task with a resource	వనరు అవసరమైన పని

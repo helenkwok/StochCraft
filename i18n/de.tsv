@@ -33,6 +33,9 @@
 	Availability	Verfügbarkeit
 	BPMN with BPSim	BPMN mit BPSim
 	Back to the model (Esc)	Zurück zum Modell (Esc)
+	Batch	Charge
+	Batch (collect, then send together)	Charge (sammeln, dann gemeinsam weitergeben)
+	Batch size	Chargengröße
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolesch
@@ -231,6 +234,7 @@
 	Share of units blocked	Anteil blockierter Einheiten
 	Show All	Alle einblenden
 	Show {id}	{id} anzeigen
+	Split batches	Chargen aufteilen
 	Split or join	Aufteilen oder zusammenführen
 	Split or join (all ways)	Aufteilen oder zusammenführen (alle Wege)
 	Spread out	Verteilen
@@ -284,6 +288,7 @@
 	Zoom out	Verkleinern
 	a model	ein Modell
 	arrivals	Ankünfte
+	batch	Charge
 	days	Tage
 	decision: one way	Entscheidung: ein Weg
 	departures	Abgänge
@@ -295,6 +300,7 @@
 	minutes	Minuten
 	nothing yet	noch nichts
 	seconds	Sekunden
+	split batches	Chargen aufteilen
 	split or join: all ways	aufteilen oder zusammenführen: alle Wege
 	task	Aufgabe
 	task with a resource	Aufgabe mit Ressource

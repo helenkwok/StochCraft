@@ -33,6 +33,9 @@
 	Availability	கிடைக்கும் தன்மை
 	BPMN with BPSim	BPSim உடன் BPMN
 	Back to the model (Esc)	மாதிரிக்குத் திரும்பு (Esc)
+	Batch	தொகுப்பு
+	Batch (collect, then send together)	தொகுப்பு (சேகரித்து, பின் சேர்த்து அனுப்பு)
+	Batch size	தொகுப்பு அளவு
 	Beta	பீட்டா
 	Binomial	ஈருறுப்பு
 	Boolean	பூலியன்
@@ -231,6 +234,7 @@
 	Share of units blocked	தடுக்கப்பட்ட அலகுகளின் விகிதம்
 	Show All	அனைத்தையும் காட்டு
 	Show {id}	{id} ஐக் காட்டு
+	Split batches	தொகுப்புகளைப் பிரி
 	Split or join	பிரி அல்லது இணை
 	Split or join (all ways)	பிரி அல்லது இணை (எல்லா வழிகளும்)
 	Spread out	பரப்பு
@@ -284,6 +288,7 @@
 	Zoom out	சிறிதாக்கு
 	a model	ஒரு மாதிரி
 	arrivals	வருகைகள்
+	batch	தொகுப்பு
 	days	நாட்கள்
 	decision: one way	முடிவு: ஒரு வழி
 	departures	வெளியேற்றங்கள்
@@ -295,6 +300,7 @@
 	minutes	நிமிடங்கள்
 	nothing yet	இன்னும் ஏதுமில்லை
 	seconds	வினாடிகள்
+	split batches	தொகுப்புகளைப் பிரித்தல்
 	split or join: all ways	பிரி அல்லது இணை: எல்லா வழிகளும்
 	task	பணி
 	task with a resource	வளம் தேவைப்படும் பணி

@@ -33,6 +33,9 @@
 	Availability	Disponibilidade
 	BPMN with BPSim	BPMN com BPSim
 	Back to the model (Esc)	Voltar ao modelo (Esc)
+	Batch	Lote
+	Batch (collect, then send together)	Lote (reunir e enviar juntos)
+	Batch size	Tamanho do lote
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Booleano
@@ -231,6 +234,7 @@
 	Share of units blocked	Proporção de unidades bloqueadas
 	Show All	Mostrar tudo
 	Show {id}	Mostrar {id}
+	Split batches	Separar lotes
 	Split or join	Dividir ou unir
 	Split or join (all ways)	Dividir ou unir (todos os caminhos)
 	Spread out	Distribuir
@@ -284,6 +288,7 @@
 	Zoom out	Reduzir
 	a model	um modelo
 	arrivals	chegadas
+	batch	lote
 	days	dias
 	decision: one way	decisão: um caminho
 	departures	saídas
@@ -295,6 +300,7 @@
 	minutes	minutos
 	nothing yet	nada ainda
 	seconds	segundos
+	split batches	separação de lotes
 	split or join: all ways	dividir ou unir: todos os caminhos
 	task	tarefa
 	task with a resource	tarefa com recurso
