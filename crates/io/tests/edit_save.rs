@@ -475,6 +475,37 @@ fn removing_a_block_leaves_no_references_to_it() {
 }
 
 #[test]
+fn new_ids_never_clash_with_the_files_other_ids() {
+    let loaded = read_scenario(&file("mm1.bpmn"), None).unwrap_or_else(|e| panic!("{e}"));
+    // Ids the file uses for what StochCraft keeps but does not model: the task's own resource,
+    // the process, a scenario.
+    for taken in ["clerk", "p1", "two-clerks", "defs"] {
+        assert!(loaded.opened.id_in_use(taken), "{taken}");
+        let mut m = loaded.model.clone();
+        add_delay_between(&mut m, taken, "serve", "leave");
+        let r = loaded.opened.save(&m);
+        assert!(
+            matches!(r, Err(SaveError::Unsupported(_))),
+            "{taken}: {r:?}"
+        );
+    }
+    // The model's own ids are its to reuse.
+    assert!(!loaded.opened.id_in_use("serve") && !loaded.opened.id_in_use("f1"));
+    // Ids StochCraft makes up for the file (a new server's resource) avoid the model's new ids.
+    let (saved, _) = edit_and_save("mm1.bpmn", None, |m| {
+        add_delay_between(m, "pay", "serve", "leave");
+        add_delay_between(m, "pay_resource", "pay", "leave");
+        element(m, "pay").kind = ElementKind::Server {
+            capacity: 1,
+            service: Dist::Constant(1.0),
+            queue_capacity: None,
+        };
+    });
+    let t = text(&saved);
+    assert_eq!(t.matches(r#"id="pay_resource""#).count(), 1, "{t}");
+}
+
+#[test]
 fn edits_that_cannot_be_saved_say_why() {
     // Changing the time unit would change what the values with their own units mean.
     let loaded = read_scenario(&file("mm1.bpmn"), None).unwrap_or_else(|e| panic!("{e}"));

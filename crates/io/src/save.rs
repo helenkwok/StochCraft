@@ -38,14 +38,24 @@ pub fn save_edited(
     after: &Model,
 ) -> Result<Vec<u8>, SaveError> {
     let mut doc = xml::parse(bytes).map_err(|e| fail(e.to_string()))?;
+    // A new element, connection or pool may not take an id the file already uses for something
+    // it keeps (two things with one id make references ambiguous and the file invalid).
+    let others = other_ids(&doc.root, before);
+    let mine = model_ids(after);
+    if let Some(id) = mine.iter().find(|id| others.contains(*id)) {
+        return Err(fail(format!(
+            "the id `{id}` is already used in the file for something StochCraft keeps but does not show; give it another id"
+        )));
+    }
     let resources = read::resources(&doc.root, scenario);
     let mut ed = Editor {
         format,
-        ids: all_ids(&doc.root),
+        // Ids made up for the file avoid the model's new ones too.
+        ids: all_ids(&doc.root).into_iter().chain(mine.clone()).collect(),
         ascii: doc.ascii_only(),
         unit: indent_unit(&doc.root),
         pool_quantity: Vec::new(),
-        model_ids: model_ids(after),
+        model_ids: mine,
     };
     ed.apply(&mut doc.root, scenario, before, after, &resources)?;
     let unit = ed.unit.clone();
@@ -136,6 +146,15 @@ fn model_ids(m: &Model) -> BTreeSet<String> {
         .map(|e| e.id.to_string())
         .chain(m.connections.iter().map(|c| c.id.to_string()))
         .chain(m.resources.iter().map(|r| r.id.to_string()))
+        .collect()
+}
+
+/// The ids in a file that are not `model`'s.
+pub(crate) fn other_ids(root: &Element, model: &Model) -> BTreeSet<String> {
+    let mine = model_ids(model);
+    all_ids(root)
+        .into_iter()
+        .filter(|id| !mine.contains(id))
         .collect()
 }
 

@@ -619,6 +619,42 @@ fn saving_again_writes_into_the_opened_scenario() {
 }
 
 #[test]
+fn new_ids_avoid_the_ids_an_opened_file_uses() {
+    // mm1.bpmn with an element StochCraft keeps but does not model, under the id the engine
+    // would give the next delay.
+    let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let text = std::fs::read_to_string(&mm1).unwrap_or_default().replace(
+        r#"<semantic:resource id="clerk" name="Clerk"/>"#,
+        r#"<semantic:resource id="clerk" name="Clerk"/>
+  <semantic:dataStore id="delay-1" name="Records"/>"#,
+    );
+    let copy = scratch("mm1-ids.bpmn");
+    let _ = std::fs::write(&copy, text);
+    let mut e = Engine::new();
+    ok(&mut e, "file.open", json!({"path": copy.to_string_lossy()}));
+    let delay = json!({"kind": "delay", "duration": {"type": "constant", "value": 1.0}});
+    // Ids given that the file already uses (a resource of one task, a scenario, the process)
+    // are refused.
+    for taken in ["clerk", "two-clerks", "p1", "delay-1"] {
+        let mut p = delay.clone();
+        p["id"] = json!(taken);
+        assert_eq!(err(&mut e, "block.add", p), ErrorCode::Conflict, "{taken}");
+    }
+    assert_eq!(
+        err(
+            &mut e,
+            "resource.add",
+            json!({"id": "clerk", "quantity": 1})
+        ),
+        ErrorCode::Conflict
+    );
+    // A generated id skips them, and the model saves.
+    let added = ok(&mut e, "block.add", delay);
+    assert_eq!(added["id"], json!("delay-2"), "{added}");
+    ok(&mut e, "file.save", json!({}));
+}
+
+#[test]
 fn the_committed_test_models_open_and_run() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models");
     for name in ["mm1.bpmn", "tandem.xpdl"] {

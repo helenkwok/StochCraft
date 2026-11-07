@@ -350,6 +350,12 @@ impl Engine {
         Ok(result)
     }
 
+    /// Whether the opened file uses `id` for something it keeps that the model does not have, so
+    /// a new element, connection or pool may not take it.
+    fn file_uses_id(&self, id: &str) -> bool {
+        self.file.as_ref().is_some_and(|f| f.opened.id_in_use(id))
+    }
+
     /// The bytes `file.save` writes: the opened file with the model's changes written in (byte
     /// for byte when there are none), or with `as_new` (or no opened file) a new BPMN file from
     /// the model.

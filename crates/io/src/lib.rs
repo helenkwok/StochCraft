@@ -116,6 +116,9 @@ pub struct Opened {
     pub scenarios: Vec<(String, Option<String>)>,
     bytes: Vec<u8>,
     model_at_load: stochcraft_model::Model,
+    /// The file's ids that are not the model's: elements StochCraft keeps but does not model,
+    /// lanes, resources of single tasks, diagram shapes, scenarios and so on.
+    other_ids: std::collections::BTreeSet<String>,
 }
 
 /// What [`read()`] returns.
@@ -145,12 +148,14 @@ pub fn read_scenario(bytes: &[u8], id: Option<&str>) -> Result<Loaded, ReadError
     let mut seen = std::collections::BTreeSet::new();
     notes.retain(|n| seen.insert((n.severity, n.at.clone(), n.message.clone())));
     notes.sort_by_key(|n| std::cmp::Reverse(n.severity));
+    let other_ids = save::other_ids(&doc.root, &model);
     let opened = Opened {
         format,
         scenario: scenario.map(|s| s.settings.id),
         scenarios,
         bytes: bytes.to_vec(),
         model_at_load: model.clone(),
+        other_ids,
     };
     Ok(Loaded {
         model,
@@ -180,6 +185,12 @@ impl std::fmt::Display for SaveError {
 impl std::error::Error for SaveError {}
 
 impl Opened {
+    /// Whether the file uses `id` for something other than the model's elements, connections and
+    /// pools (which saving keeps), so a new element, connection or pool may not take it.
+    pub fn id_in_use(&self, id: &str) -> bool {
+        self.other_ids.contains(id)
+    }
+
     /// The file's bytes for `model`: exactly the original bytes when the model is unchanged;
     /// otherwise the original file with the changes written in, and everything StochCraft does
     /// not understand kept as it was. The result is checked by reading it back.
