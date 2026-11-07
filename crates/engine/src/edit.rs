@@ -6,6 +6,7 @@
 
 use stochcraft_model::{
     Connection, Element, ElementId, ElementKind, Experiment, Model, Property, ResourcePool,
+    calendar::Calendar,
 };
 
 use crate::{CommandError, ErrorCode};
@@ -34,6 +35,8 @@ pub enum Op {
     SetExperiment(Experiment),
     /// Replace the shared resource pools.
     SetResources(Vec<ResourcePool>),
+    /// Replace the calendars.
+    SetCalendars(Vec<Calendar>),
 }
 
 fn not_found(what: &str, id: &ElementId) -> CommandError {
@@ -142,5 +145,6 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
         }
         Op::SetExperiment(x) => Op::SetExperiment(std::mem::replace(&mut model.experiment, x)),
         Op::SetResources(r) => Op::SetResources(std::mem::replace(&mut model.resources, r)),
+        Op::SetCalendars(c) => Op::SetCalendars(std::mem::replace(&mut model.calendars, c)),
     })
 }

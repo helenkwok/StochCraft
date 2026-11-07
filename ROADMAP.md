@@ -617,11 +617,10 @@ them.
   - `block.add` with `"kind": "shared_task"`;
   - `block.set` with `needs` and `priority`;
   - model JSON has `resources` only when there are some.
-- **Not here:** resources held across several tasks (BPMN sub-processes), and calendars
-  (`availability`, quantity by shift), which are M2.6's. A pool whose default quantity is 0
-  outside its shifts gets 1 unit, with an error. Erlang loss (M/M/c/c) needs a waiting-room limit
-  on a shared task, which this design does not have; a server with `queue_capacity` 0 already
-  gives M/M/c/c (M2.4).
+- **Not here:** resources held across several tasks (BPMN sub-processes); calendars
+  (`availability`, quantity by shift) came in M2.6. Erlang loss (M/M/c/c) needs a waiting-room
+  limit on a shared task, which this design does not have; a server with `queue_capacity` 0
+  already gives M/M/c/c (M2.4).
 
 **Validation** (`blocks/tests/resources.rs`, 16 replications; docs/research.md, "Shared resources"):
 
@@ -639,13 +638,51 @@ taken together, and a large need waiting without holding back a smaller one.
 
 ### M2.6 Time-dependent behaviour
 
-- **Calendars:** BPSim calendars are iCalendar (RFC 5545) `VEVENT`s; a parameter value can be
-  `validFor` one. StochCraft implements the iCalendar subset needed for shifts and opening
-  hours (`DTSTART`, `DTEND`, `RRULE` with daily and weekly frequency, `BYDAY`, `UNTIL`,
-  `COUNT`), reports the rest, and uses it for resource `availability` and `quantity` and for
-  `interTriggerTimer` (arrival rate by time of day, which changes immediately as BPSim
-  specifies). Validation: the technical support model's shifts; arrivals per interval against
-  the integrated rate.
+- **Calendars** (done): BPSim calendars are iCalendar (RFC 5545) `VEVENT`s; a parameter value
+  can be `validFor` one. `stochcraft_model::calendar` reads and writes the subset shifts and
+  opening hours need:
+  - `DTSTART`, `DTEND`, and `RRULE` with `FREQ=DAILY` or `WEEKLY`, `INTERVAL`, `BYDAY` (plain
+    weekdays), `WKST`, `UNTIL` and `COUNT`;
+  - indented and folded lines as XML files carry them;
+  - descriptive properties (`UID`, `DTSTAMP`, `SUMMARY`, …) are skipped; anything else that
+    would change when a calendar is active (`EXDATE`, `RDATE`, other components, `TZID`) is
+    reported and ignored, and an event with an unsupported rule is left out with an error.
+
+  Times are wall-clock times in one zone. Model time 0 is the scenario's `Start`, or midnight
+  of the day the earliest event starts. Where several calendars are active, the first value
+  listed applies; outside them, the value without `validFor`.
+  - **Arrivals:** `interTriggerTimer` values for calendars. When the value changes, the
+    pending arrival is dropped and the next is drawn from the new value at once (piecewise
+    Poisson for exponential times). With no value outside the calendars there are no arrivals
+    there.
+  - **Pools:** `quantity` by shift and `availability` (true/false, by calendar). A resource with
+    either is a shared pool even for one task. When its units go down, those in use finish their
+    job first and nobody new starts. Utilisation is busy units over the units there, both
+    averaged over time.
+  - **Files:** calendars, `Start`, and values for calendars are read, written for new files,
+    and saved into opened files (an edited calendar in place; one from an inherited scenario
+    only with Save As). Other parameters' values for calendars are ignored, with a warning.
+  - **Commands:** `calendar.add`, `calendar.set` and `calendar.remove` (refused while a value
+    is valid for it); `block.set` with `timed` and `idle_outside` on sources; `resource.set`
+    with `shifts`, `available` and `availability`; `experiment.set` with `start`. Model JSON
+    has `calendars` only when there are some.
+  - **Not here:** editing calendars in the window (the engine's commands are ready for it).
+    The technical support model still does not run, for reasons unrelated to calendars
+    (percentages as probabilities, left-out intermediate events); its shifts are checked
+    instead.
+
+  **Validation** (`blocks/tests/calendars.rs`, 16 replications; `io/tests/reference.rs`):
+
+  | Case | Theory | StochCraft |
+  |---|---|---|
+  | Poisson arrivals at 0.5/min, 2/min from 8 to noon: a whole day | 1080 | 1070 ± 18.8 |
+  | Same: 8 to noon | 480 | 473.1 ± 11.3 |
+  | Same: noon to midnight | 360 | 361.6 ± 8.1 |
+  | Technical support S3: arrivals in the first day, seven shifts each drawn afresh | 2206 | 2206 |
+  | 1 unit, 3 from 8 to 4 pm, saturated, service 1: jobs in a day | 2400 | 2400 |
+
+  Exact cases worked by hand also check a rate change taking effect at once, no arrivals
+  outside the calendars, and a unit finishing its job after its shift has ended.
 - Breakdowns on servers (a `stochcraft:` vendor extension, since BPSim has none): time between
   failures and repair time distributions, preempting or waiting for the current job (BPSim
   `interruptible`). Validation: availability MTBF / (MTBF + MTTR) and the effective

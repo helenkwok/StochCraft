@@ -238,6 +238,19 @@ again in the tests' comments.
   (N − n)λ and death rate min(n, R)μ. Gross et al., finite-source queues (the machine-repair
   problem).
 
+## Calendars
+
+The checks for M2.6's calendars (`crates/blocks/tests/calendars.rs`):
+
+- **Arrivals whose rate follows the time of day** form a non-homogeneous Poisson process: the
+  count over any interval is Poisson with the integral of the rate over it as its mean. Drawing
+  a fresh exponential time at each change of rate gives exactly this process, because the
+  exponential has no memory. Ross, *Introduction to Probability Models*, 12th ed., Academic
+  Press, 2019, the non-homogeneous Poisson process.
+- **Calendars** follow RFC 5545 (iCalendar), sections 3.3.10 (recurrence rules) and 3.6.1
+  (events), in the subset BPSim models use for shifts. Dates are counted in days with Howard
+  Hinnant's civil-date algorithms (proleptic Gregorian; ATTRIBUTION.md).
+
 ## Read and set aside
 
 Outside what a process simulator does: Type IV hydrogen pressure vessels (Khan, IJHE 2026,

@@ -6,9 +6,10 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
+use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
     Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Experiment, Model, Need,
-    Property, PropertyType, PropertyValue, ResourcePool, Severity, TimeUnit,
+    Property, PropertyType, PropertyValue, ResourcePool, Severity, TimeUnit, Timed,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -171,6 +172,13 @@ pub enum KindSpec {
         /// Stop after this many arrivals; none means no limit.
         #[serde(default)]
         limit: Option<u64>,
+        /// Time between arrivals while a calendar is active, the first active one applying;
+        /// `interarrival` applies outside them. Left out when none.
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        timed: Vec<TimedDist>,
+        /// No arrivals outside the calendars of `timed`. Left out when false.
+        #[serde(default, skip_serializing_if = "is_false")]
+        idle_outside: bool,
     },
     /// Identical units serving one entity each, first come first served (a task with a
     /// resource).
@@ -285,6 +293,60 @@ pub struct ResourceDoc {
     /// The roles its units play, for `roles` needs; left out when none.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub roles: Vec<String>,
+    /// Units while a calendar is active, the first active one applying; `quantity` applies
+    /// outside them. Left out when none.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub shifts: Vec<ShiftDoc>,
+    /// Whether the units are available outside the calendars of `availability`; left out
+    /// when true.
+    #[serde(default = "yes", skip_serializing_if = "is_true")]
+    pub available: bool,
+    /// Availability while a calendar is active. Left out when none.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub availability: Vec<AvailabilityDoc>,
+}
+
+fn is_false(b: &bool) -> bool {
+    !*b
+}
+
+fn is_true(b: &bool) -> bool {
+    *b
+}
+
+fn yes() -> bool {
+    true
+}
+
+/// A time between arrivals that applies while a calendar is active.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct TimedDist {
+    /// The calendar's id.
+    pub calendar: String,
+    pub value: DistSpec,
+}
+
+/// A pool's units while a calendar is active (a shift).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ShiftDoc {
+    /// The calendar's id.
+    pub calendar: String,
+    pub quantity: u32,
+}
+
+/// Whether a pool's units are available while a calendar is active.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct AvailabilityDoc {
+    /// The calendar's id.
+    pub calendar: String,
+    pub available: bool,
+}
+
+fn timed<T, U>(v: &[Timed<T>], f: impl Fn(&Timed<T>) -> U) -> Vec<U> {
+    v.iter().map(f).collect()
 }
 
 impl From<&ResourcePool> for ResourceDoc {
@@ -294,6 +356,15 @@ impl From<&ResourcePool> for ResourceDoc {
             name: r.name.clone(),
             quantity: r.quantity,
             roles: r.roles.clone(),
+            shifts: timed(&r.shifts, |t| ShiftDoc {
+                calendar: t.calendar.to_string(),
+                quantity: t.value,
+            }),
+            available: r.available,
+            availability: timed(&r.availability, |t| AvailabilityDoc {
+                calendar: t.calendar.to_string(),
+                available: t.value,
+            }),
         }
     }
 }
@@ -305,6 +376,144 @@ impl From<ResourceDoc> for ResourcePool {
             name: r.name,
             quantity: r.quantity,
             roles: r.roles,
+            shifts: r.shifts.into_iter().map(Into::into).collect(),
+            available: r.available,
+            availability: r.availability.into_iter().map(Into::into).collect(),
+        }
+    }
+}
+
+impl From<ShiftDoc> for Timed<u32> {
+    fn from(s: ShiftDoc) -> Self {
+        Timed {
+            calendar: ElementId::unchecked(&s.calendar),
+            value: s.quantity,
+        }
+    }
+}
+
+impl From<AvailabilityDoc> for Timed<bool> {
+    fn from(s: AvailabilityDoc) -> Self {
+        Timed {
+            calendar: ElementId::unchecked(&s.calendar),
+            value: s.available,
+        }
+    }
+}
+
+impl From<TimedDist> for Timed<Dist> {
+    fn from(t: TimedDist) -> Self {
+        Timed {
+            calendar: ElementId::unchecked(&t.calendar),
+            value: t.value.into(),
+        }
+    }
+}
+
+/// A date and time, written `2016-01-01T06:00:00` (XML Schema's form, as BPSim files have it).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Stamp(pub DateTime);
+
+impl Serialize for Stamp {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        s.serialize_str(&self.0.iso())
+    }
+}
+
+impl<'de> Deserialize<'de> for Stamp {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let text = String::deserialize(d)?;
+        DateTime::parse_iso(&text).map(Stamp).ok_or_else(|| {
+            serde::de::Error::custom(format!(
+                "`{text}` is not a date and time such as 2016-01-01T06:00:00"
+            ))
+        })
+    }
+}
+
+/// An iCalendar repeat rule, written as RFC 5545 does: `FREQ=WEEKLY;BYDAY=MO,TU;COUNT=10`.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RuleSpec(pub Rule);
+
+impl Serialize for RuleSpec {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        s.serialize_str(&self.0.text())
+    }
+}
+
+impl<'de> Deserialize<'de> for RuleSpec {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let text = String::deserialize(d)?;
+        Rule::parse(&text)
+            .map(RuleSpec)
+            .map_err(|e| serde::de::Error::custom(format!("repeat `{text}`: {e}")))
+    }
+}
+
+/// A period, which can repeat (an iCalendar `VEVENT`).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct EventDoc {
+    /// When the (first) period starts, such as `2016-01-01T09:00:00`.
+    #[schemars(with = "String")]
+    pub start: Stamp,
+    /// When it ends; each repeat lasts as long.
+    #[schemars(with = "String")]
+    pub end: Stamp,
+    /// How it repeats, as an iCalendar RRULE: FREQ=DAILY or WEEKLY, with INTERVAL, BYDAY
+    /// (MO…SU), WKST, and UNTIL or COUNT. Left out when it does not repeat.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[schemars(with = "Option<String>")]
+    pub repeat: Option<RuleSpec>,
+}
+
+/// A calendar: values valid for it apply while any of its periods is under way.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct CalendarDoc {
+    pub id: String,
+    #[serde(default)]
+    pub name: String,
+    #[serde(default)]
+    pub events: Vec<EventDoc>,
+}
+
+impl From<&Event> for EventDoc {
+    fn from(e: &Event) -> Self {
+        Self {
+            start: Stamp(e.start),
+            end: Stamp(e.end),
+            repeat: e.rule.clone().map(RuleSpec),
+        }
+    }
+}
+
+impl From<EventDoc> for Event {
+    fn from(e: EventDoc) -> Self {
+        Self {
+            start: e.start.0,
+            end: e.end.0,
+            rule: e.repeat.map(|r| r.0),
+        }
+    }
+}
+
+impl From<&Calendar> for CalendarDoc {
+    fn from(c: &Calendar) -> Self {
+        Self {
+            id: c.id.to_string(),
+            name: c.name.clone(),
+            events: c.events.iter().map(Into::into).collect(),
+        }
+    }
+}
+
+impl From<CalendarDoc> for Calendar {
+    fn from(c: CalendarDoc) -> Self {
+        Self {
+            id: ElementId::unchecked(&c.id),
+            name: c.name,
+            events: c.events.into_iter().map(Into::into).collect(),
         }
     }
 }
@@ -315,9 +524,16 @@ impl From<&ElementKind> for KindSpec {
             ElementKind::Source {
                 interarrival,
                 limit,
+                timed: t,
+                idle_outside,
             } => KindSpec::Source {
                 interarrival: interarrival.into(),
                 limit: *limit,
+                timed: timed(t, |t| TimedDist {
+                    calendar: t.calendar.to_string(),
+                    value: (&t.value).into(),
+                }),
+                idle_outside: *idle_outside,
             },
             ElementKind::Server {
                 capacity,
@@ -355,9 +571,13 @@ impl From<KindSpec> for ElementKind {
             KindSpec::Source {
                 interarrival,
                 limit,
+                timed,
+                idle_outside,
             } => ElementKind::Source {
                 interarrival: interarrival.into(),
                 limit,
+                timed: timed.into_iter().map(Into::into).collect(),
+                idle_outside,
             },
             KindSpec::Server {
                 capacity,
@@ -598,6 +818,11 @@ pub struct ExperimentDoc {
     pub duration: f64,
     pub replications: u32,
     pub seed: u64,
+    /// The date and time model time 0 stands for, which places the calendars; left out when
+    /// not set (then midnight of the day the earliest calendar event starts).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[schemars(with = "Option<String>")]
+    pub start: Option<Stamp>,
 }
 
 impl From<&Experiment> for ExperimentDoc {
@@ -608,6 +833,7 @@ impl From<&Experiment> for ExperimentDoc {
             duration: x.duration,
             replications: x.replications,
             seed: x.seed,
+            start: x.start.map(Stamp),
         }
     }
 }
@@ -620,6 +846,7 @@ impl From<ExperimentDoc> for Experiment {
             duration: x.duration,
             replications: x.replications,
             seed: x.seed,
+            start: x.start.map(|s| s.0),
         }
     }
 }
@@ -641,6 +868,9 @@ pub struct ModelDoc {
     /// Pools of units that tasks share; left out when there are none.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub resources: Vec<ResourceDoc>,
+    /// Calendars that values can be valid for; left out when there are none.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub calendars: Vec<CalendarDoc>,
     #[serde(default = "default_experiment")]
     pub experiment: ExperimentDoc,
 }
@@ -671,6 +901,7 @@ impl From<&Model> for ModelDoc {
                 })
                 .collect(),
             resources: m.resources.iter().map(Into::into).collect(),
+            calendars: m.calendars.iter().map(Into::into).collect(),
             experiment: (&m.experiment).into(),
         }
     }
@@ -703,6 +934,7 @@ impl From<ModelDoc> for Model {
                 })
                 .collect(),
             resources: m.resources.into_iter().map(Into::into).collect(),
+            calendars: m.calendars.into_iter().map(Into::into).collect(),
             experiment: m.experiment.into(),
         }
     }

@@ -21,6 +21,8 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
                 ElementKind::Source {
                     interarrival: Dist::exponential_rate(lambda),
                     limit: None,
+                    idle_outside: false,
+                    timed: Vec::new(),
                 },
             ),
             element(
@@ -44,6 +46,7 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
             replications: 16,
             ..Experiment::default()
         },
+        calendars: Vec::new(),
     }
 }
 

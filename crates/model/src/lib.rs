@@ -17,7 +17,10 @@
 //!   connections, waits for one entity on each before going on. Any element may have several
 //!   incoming connections (a merge).
 
+pub mod calendar;
 pub mod expr;
+
+pub use calendar::{Calendar, DateTime, Timed};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
@@ -124,6 +127,13 @@ pub enum ElementKind {
     Source {
         interarrival: Dist,
         limit: Option<u64>,
+        /// Times between arrivals while a calendar is active (BPSim `validFor`), the first
+        /// active one applying; `interarrival` applies outside them. When the value changes,
+        /// the next arrival is drawn afresh from the new one at that moment.
+        timed: Vec<Timed<Dist>>,
+        /// No arrivals outside the calendars of `timed` (a file with no value without
+        /// `validFor`); `interarrival` is then unused.
+        idle_outside: bool,
     },
     /// `capacity` identical units serving one entity each, first come first served (a task with
     /// a resource): BPSim `processingTime`.
@@ -194,11 +204,53 @@ impl Need {
 pub struct ResourcePool {
     pub id: ElementId,
     pub name: String,
+    /// Units outside every shift of `shifts`.
     pub quantity: u32,
     pub roles: Vec<String>,
+    /// Units while a calendar is active (BPSim `quantity` values `validFor` a calendar), the
+    /// first active one applying. When the units go down, those in use finish their job first.
+    pub shifts: Vec<Timed<u32>>,
+    /// Whether the units are available outside the calendars of `availability` (BPSim
+    /// `availability`, default true).
+    pub available: bool,
+    /// Availability while a calendar is active, the first active one applying.
+    pub availability: Vec<Timed<bool>>,
 }
 
 impl ResourcePool {
+    /// A pool of `quantity` units with roles and no shifts.
+    pub fn new(id: ElementId, name: impl Into<String>, quantity: u32, roles: Vec<String>) -> Self {
+        Self {
+            id,
+            name: name.into(),
+            quantity,
+            roles,
+            shifts: Vec::new(),
+            available: true,
+            availability: Vec::new(),
+        }
+    }
+
+    /// The most units the pool ever has.
+    pub fn most_units(&self) -> u32 {
+        let any_available = self.available || self.availability.iter().any(|a| a.value);
+        if !any_available {
+            return 0;
+        }
+        self.shifts
+            .iter()
+            .map(|s| s.value)
+            .fold(self.quantity, u32::max)
+    }
+
+    /// The calendars the pool's values refer to.
+    pub fn calendars(&self) -> impl Iterator<Item = &ElementId> {
+        self.shifts
+            .iter()
+            .map(|t| &t.calendar)
+            .chain(self.availability.iter().map(|t| &t.calendar))
+    }
+
     /// Whether the pool plays every one of `roles`.
     pub fn has_roles(&self, roles: &[String]) -> bool {
         roles.iter().all(|r| self.roles.contains(r))
@@ -394,6 +446,9 @@ pub struct Experiment {
     pub duration: f64,
     pub replications: u32,
     pub seed: u64,
+    /// The date and time model time 0 stands for (BPSim scenario `start`), which places the
+    /// calendars; without one, midnight of the day the earliest calendar event starts.
+    pub start: Option<DateTime>,
 }
 
 impl Default for Experiment {
@@ -404,6 +459,7 @@ impl Default for Experiment {
             duration: 480.0,
             replications: 10,
             seed: 1,
+            start: None,
         }
     }
 }
@@ -416,6 +472,8 @@ pub struct Model {
     pub connections: Vec<Connection>,
     /// Pools of units that tasks share ([`ElementKind::SharedTask`]).
     pub resources: Vec<ResourcePool>,
+    /// Calendars that parameter values can be valid for (shifts, opening hours).
+    pub calendars: Vec<Calendar>,
     pub experiment: Experiment,
 }
 
@@ -557,6 +615,14 @@ pub enum Problem {
     },
     /// A pool no task uses.
     UnusedPool,
+    /// A value is valid for a calendar that does not exist.
+    UnknownCalendar {
+        id: ElementId,
+    },
+    /// A calendar with no events is never active.
+    EmptyCalendar,
+    /// Values valid for calendars on a block that does not use them.
+    TimedIgnored,
 }
 
 impl Problem {
@@ -599,6 +665,9 @@ impl Problem {
             Problem::NeedNeverMet { .. } => "need_never_met",
             Problem::BadPriority { .. } => "bad_priority",
             Problem::UnusedPool => "unused_pool",
+            Problem::UnknownCalendar { .. } => "unknown_calendar",
+            Problem::EmptyCalendar => "empty_calendar",
+            Problem::TimedIgnored => "timed_ignored",
         }
     }
 }
@@ -749,6 +818,19 @@ impl std::fmt::Display for Diagnostic {
                 write!(f, "priority must be a finite number, not {value}")
             }
             Problem::UnusedPool => write!(f, "no task uses this resource pool"),
+            Problem::UnknownCalendar { id } => {
+                write!(
+                    f,
+                    "has a value for the calendar `{id}`, which does not exist"
+                )
+            }
+            Problem::EmptyCalendar => {
+                write!(f, "the calendar has no events, so it is never active")
+            }
+            Problem::TimedIgnored => write!(
+                f,
+                "there are no arrivals outside the calendars, but none is given, so this start event never fires"
+            ),
         }
     }
 }
@@ -860,24 +942,25 @@ impl Model {
                 .resources
                 .iter()
                 .find(|r| &r.id == id)
-                .map(|r| r.quantity),
+                .map(ResourcePool::most_units),
             Need::Roles { roles, .. } => {
                 let pools: Vec<&ResourcePool> = self
                     .resources
                     .iter()
                     .filter(|r| r.has_roles(roles))
                     .collect();
-                (!pools.is_empty()).then(|| pools.iter().map(|r| r.quantity).sum())
+                (!pools.is_empty()).then(|| pools.iter().map(|r| r.most_units()).sum())
             }
         }
     }
 
     fn check_resources(&self, out: &mut Vec<Diagnostic>) {
         for r in &self.resources {
-            if r.quantity == 0 {
+            if r.most_units() == 0 {
                 out.push(Diagnostic::error(Some(&r.id), Problem::EmptyPool));
             }
         }
+        self.check_calendars(out);
         let mut used: BTreeSet<&ElementId> = BTreeSet::new();
         for e in &self.elements {
             let ElementKind::SharedTask {
@@ -944,6 +1027,42 @@ impl Model {
         }
     }
 
+    /// Calendars: each referenced one exists, and each has an event.
+    fn check_calendars(&self, out: &mut Vec<Diagnostic>) {
+        let known: BTreeSet<&ElementId> = self.calendars.iter().map(|c| &c.id).collect();
+        for c in &self.calendars {
+            if c.events.is_empty() {
+                out.push(Diagnostic::warning(Some(&c.id), Problem::EmptyCalendar));
+            }
+        }
+        let mut refs: Vec<(&ElementId, &ElementId)> = Vec::new();
+        for e in &self.elements {
+            if let ElementKind::Source {
+                timed,
+                idle_outside,
+                ..
+            } = &e.kind
+            {
+                refs.extend(timed.iter().map(|t| (&e.id, &t.calendar)));
+                if *idle_outside && timed.is_empty() {
+                    out.push(Diagnostic::warning(Some(&e.id), Problem::TimedIgnored));
+                }
+            }
+        }
+        for r in &self.resources {
+            refs.extend(r.calendars().map(|c| (&r.id, c)));
+        }
+        let mut reported = BTreeSet::new();
+        for (at, c) in refs {
+            if !known.contains(c) && reported.insert((at, c)) {
+                out.push(Diagnostic::error(
+                    Some(at),
+                    Problem::UnknownCalendar { id: c.clone() },
+                ));
+            }
+        }
+    }
+
     fn check_ids(&self, out: &mut Vec<Diagnostic>) {
         let mut seen = BTreeSet::new();
         let ids = self
@@ -951,7 +1070,8 @@ impl Model {
             .iter()
             .map(|e| &e.id)
             .chain(self.connections.iter().map(|c| &c.id))
-            .chain(self.resources.iter().map(|r| &r.id));
+            .chain(self.resources.iter().map(|r| &r.id))
+            .chain(self.calendars.iter().map(|c| &c.id));
         for id in ids {
             if !ElementId::is_valid(id.as_str()) {
                 out.push(Diagnostic::error(
@@ -1619,6 +1739,8 @@ mod tests {
                     ElementKind::Source {
                         interarrival: Dist::exponential_rate(0.75),
                         limit: None,
+                        idle_outside: false,
+                        timed: Vec::new(),
                     },
                 ),
                 el(
@@ -1637,6 +1759,7 @@ mod tests {
             ],
             resources: Vec::new(),
             experiment: Experiment::default(),
+            calendars: Vec::new(),
         }
     }
 
@@ -1838,6 +1961,8 @@ mod tests {
             ElementKind::Source {
                 interarrival: Dist::Constant(1.0),
                 limit: Some(3),
+                idle_outside: false,
+                timed: Vec::new(),
             },
         ));
         m.connections.push(link("f4", "src2", "a"));

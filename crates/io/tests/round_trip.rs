@@ -1,9 +1,9 @@
 //! Writing a model and reading it back gives the same model; opened files save unchanged.
 
-use stochcraft_blocks::{BlockId, Builder};
+use stochcraft_blocks::{BlockId, Builder, Event, Rule};
 use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{
-    Dist, ElementKind, Experiment, Model, Property, PropertyType, PropertyValue, TimeUnit,
+    DateTime, Dist, ElementKind, Experiment, Model, Property, PropertyType, PropertyValue, TimeUnit,
 };
 
 /// A model using every element kind and every distribution.
@@ -139,12 +139,39 @@ pub fn showcase() -> Model {
     for (block, name, ty, value) in props {
         m.property(block, name, ty, value);
     }
+    // Calendars: a faster rate on weekday mornings, and no arrivals on Sundays' night shift.
+    let at = |d: u32, h: u32| DateTime::new(2016, 1, d, h, 0, 0).unwrap_or(DateTime(0));
+    m.calendar(
+        "mornings",
+        vec![Event {
+            start: at(4, 8),
+            end: at(4, 12),
+            rule: Rule::parse("FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,WE,FR;WKST=SU;COUNT=30").ok(),
+        }],
+    );
+    m.calendar(
+        "once",
+        vec![Event {
+            start: at(5, 22),
+            end: at(6, 3),
+            rule: None,
+        }],
+    );
+    m.timed_arrivals(
+        src,
+        vec![
+            ("mornings", Dist::Exponential { mean: 0.25 }),
+            ("once", Dist::Constant(2.0)),
+        ],
+        false,
+    );
     let mut model = m.build(Experiment {
         time_unit: TimeUnit::Hours,
         warmup: 2.5,
         duration: 40.0,
         replications: 7,
         seed: u64::MAX - 3,
+        start: Some(at(4, 6)),
     });
     model.name = "Showcase & <friends>".into();
     model

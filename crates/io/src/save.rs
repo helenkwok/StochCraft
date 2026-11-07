@@ -9,14 +9,15 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use stochcraft_model::{Connection, Element as ModelElement, ElementKind, Model};
+use stochcraft_model::{Connection, Element as ModelElement, ElementKind, Model, ResourcePool};
 
 use crate::bpsim::{NS2, NSS};
 use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
-    bpmn_local, condition_element, dist_element, numeric, probability_element, property_element,
-    queue_capacity_element, size,
+    availability_param, bpmn_local, calendar_element, condition_element, dist_element, numeric,
+    probability_element, property_element, quantity_param, queue_capacity_element, size,
+    start_param, timer_param,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -120,6 +121,12 @@ fn difference(got: &Model, want: &Model) -> Option<String> {
     }
     if got.experiment != want.experiment {
         return Some(format!("its experiment reads as {:?}", got.experiment));
+    }
+    if got.resources != want.resources {
+        return Some(format!("its resource pools read as {:?}", got.resources));
+    }
+    if got.calendars != want.calendars {
+        return Some(format!("its calendars read as {:?}", got.calendars));
     }
     None
 }
@@ -325,8 +332,8 @@ struct Editor {
     ids: BTreeSet<String>,
     ascii: bool,
     unit: String,
-    /// Shared pools whose quantity changed: (pool, new quantity).
-    pool_quantity: Vec<(String, u32)>,
+    /// Shared pools whose units (quantity, shifts or availability) changed.
+    pool_quantity: Vec<ResourcePool>,
 }
 
 /// Where new elements of a namespace go: the prefix the file already uses for it, or a new one
@@ -513,6 +520,65 @@ impl Editor {
         self.routing(root, scenario, before, after)?;
         if before.experiment != after.experiment {
             self.experiment(root, scenario, before, after)?;
+        }
+        if before.calendars != after.calendars {
+            self.calendars(root, scenario, before, after)?;
+        }
+        Ok(())
+    }
+
+    /// Calendars: an edited one is replaced where the scenario has it, a new one goes after the
+    /// scenario's last, and a removed one goes. One defined by an inherited scenario is the
+    /// other scenarios' too, so it cannot change here.
+    fn calendars(
+        &mut self,
+        root: &mut Element,
+        scenario: Option<&str>,
+        before: &Model,
+        after: &Model,
+    ) -> Result<(), SaveError> {
+        let s = self.ensure_scenario(root, scenario)?;
+        let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
+        let prefix = s.prefix().to_owned();
+        let own = |s: &Element, id: &str| {
+            s.children_named(&NSS, "Calendar")
+                .any(|c| c.attr("id").as_deref() == Some(id))
+        };
+        for b in &before.calendars {
+            let a = after.calendars.iter().find(|a| a.id == b.id);
+            if a != Some(b) && !own(s, b.id.as_str()) {
+                return Err(fail(format!(
+                    "calendar `{}` comes from an inherited scenario; save to a new file (Save As) to change it",
+                    b.id
+                )));
+            }
+            if a.is_none() {
+                remove_all(s, &|c| {
+                    c.is_any(&NSS, "Calendar") && c.attr("id").as_deref() == Some(b.id.as_str())
+                });
+            }
+        }
+        for a in &after.calendars {
+            if before.calendars.iter().any(|b| b == a) {
+                continue;
+            }
+            let mut e = calendar_element(a);
+            rename(&mut e, &prefix, &ns);
+            let id = a.id.as_str();
+            if let Some(old) = s
+                .elements_mut()
+                .find(|c| c.is_any(&NSS, "Calendar") && c.attr("id").as_deref() == Some(id))
+            {
+                *old = e;
+                continue;
+            }
+            // After the element parameters and calendars, before vendor extensions.
+            let at = s
+                .children
+                .iter()
+                .position(|n| matches!(n, Node::Element(x) if x.local() == "VendorExtension"))
+                .unwrap_or_else(|| end_of(s));
+            s.children.insert(at, Node::Element(e));
         }
         Ok(())
     }
@@ -1220,8 +1286,8 @@ impl Editor {
                     a.id
                 )));
             }
-            if b.quantity != a.quantity {
-                self.pool_quantity.push((a.id.to_string(), a.quantity));
+            if b != a {
+                self.pool_quantity.push(a.clone());
             }
         }
         Ok(())
@@ -1264,20 +1330,24 @@ impl Editor {
                 ElementKind::Source {
                     interarrival,
                     limit,
+                    timed,
+                    idle_outside,
                 } => {
                     let (oi, ol) = match was {
                         Some(ElementKind::Source {
                             interarrival,
                             limit,
-                        }) => (Some(interarrival), Some(*limit)),
+                            timed,
+                            idle_outside,
+                        }) => (Some((interarrival, timed, idle_outside)), Some(*limit)),
                         _ => (None, None),
                     };
-                    if oi != Some(interarrival) {
+                    if oi != Some((interarrival, timed, idle_outside)) {
                         writes.push((
                             id.clone(),
                             "ControlParameters",
                             "InterTriggerTimer",
-                            Some(dist_element(interarrival)),
+                            Some(timer_param(interarrival, timed, *idle_outside)),
                         ));
                     }
                     if ol != Some(*limit) {
@@ -1397,12 +1467,19 @@ impl Editor {
                 )));
             }
         }
-        for (r, q) in std::mem::take(&mut self.pool_quantity) {
+        for r in std::mem::take(&mut self.pool_quantity) {
+            let id = r.id.to_string();
             writes.push((
-                r,
+                id.clone(),
+                "ResourceParameters",
+                "Availability",
+                availability_param(&r),
+            ));
+            writes.push((
+                id,
                 "ResourceParameters",
                 "Quantity",
-                Some(numeric(u64::from(q))),
+                Some(quantity_param(&r)),
             ));
         }
         for (e, server) in new_resources {
@@ -1561,6 +1638,28 @@ impl Editor {
             rename(&mut e, &prefix, &ns);
             e
         };
+        if b.start != a.start {
+            match a.start {
+                Some(t) => {
+                    let mut v = start_param(t);
+                    rename(&mut v, &prefix, &ns);
+                    match sp.child_mut(&NSS, "Start") {
+                        Some(old) => *old = v,
+                        None => {
+                            let at = sp
+                                .children
+                                .iter()
+                                .position(|n| matches!(n, Node::Element(_)))
+                                .unwrap_or_else(|| end_of(sp));
+                            sp.children.insert(at, Node::Element(v));
+                        }
+                    }
+                }
+                None => {
+                    remove_all(sp, &|x| x.is_any(&NSS, "Start"));
+                }
+            }
+        }
         if b.warmup != a.warmup || b.duration != a.duration {
             set_value(
                 sp,
@@ -1666,6 +1765,18 @@ fn set_param(s: &mut Element, element: &str, group: &str, name: &str, value: Opt
     };
     let order = param_order(group);
     let pos = order.iter().position(|p| *p == name).unwrap_or(order.len());
+    // A whole parameter (its default and its values for calendars) replaces every value.
+    if value.local() == name {
+        set_value(g, &prefix, &ns, name, None, &order[..pos]);
+        if let Some(p) = g.child_mut(&NSS, name) {
+            remove_all(p, &|v| v.local() != "ResultRequest");
+            for v in value.elements() {
+                let at = end_of(p);
+                p.children.insert(at, Node::Element(v.clone()));
+            }
+        }
+        return;
+    }
     set_value(g, &prefix, &ns, name, Some(value), &order[..pos]);
 }
 
@@ -1861,10 +1972,17 @@ fn set_value(
     let Some(p) = parent.child_mut(&NSS, name) else {
         return;
     };
-    // The value replaces the old values; result requests (which come first) stay.
-    remove_all(p, &|v| v.local() != "ResultRequest");
+    // The value replaces the old default; result requests (which come first) and values for
+    // calendars stay, the new default going before the latter.
+    remove_all(p, &|v| {
+        v.local() != "ResultRequest" && v.attr("validFor").is_none()
+    });
     if let Some(v) = value {
-        let at = end_of(p);
+        let at = p
+            .children
+            .iter()
+            .position(|n| matches!(n, Node::Element(e) if e.attr("validFor").is_some()))
+            .unwrap_or_else(|| end_of(p));
         p.children.insert(at, Node::Element(v));
     }
 }

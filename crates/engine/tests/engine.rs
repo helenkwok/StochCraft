@@ -1081,3 +1081,77 @@ fn shared_pools_are_added_used_reported_and_guarded() {
     }
     assert_eq!(ok(&mut e, "model.get", json!({})), before);
 }
+
+/// Calendars through commands: one added, arrivals and a pool's units made to follow it, the
+/// experiment's start set, bad dates and rules refused, and a calendar in use guarded.
+#[test]
+fn calendars_are_added_followed_and_guarded() {
+    let mut e = help_desk();
+    let added = ok(
+        &mut e,
+        "calendar.add",
+        json!({"id": "peak", "events": [{"start": "2016-01-01T08:00:00", "end": "2016-01-01T12:00:00", "repeat": "FREQ=DAILY"}]}),
+    );
+    assert_eq!(added["id"], "peak");
+    assert_eq!(
+        err(
+            &mut e,
+            "calendar.add",
+            json!({"events": [{"start": "2016-02-30T08:00:00", "end": "2016-01-01T12:00:00"}]}),
+        ),
+        ErrorCode::InvalidParams
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "calendar.add",
+            json!({"events": [{"start": "2016-01-01T08:00:00", "end": "2016-01-01T12:00:00", "repeat": "FREQ=MONTHLY"}]}),
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "arrivals", "timed": [{"calendar": "peak", "value": {"type": "exponential", "mean": 0.5}}]}),
+    );
+    ok(
+        &mut e,
+        "resource.add",
+        json!({"id": "staff", "quantity": 1}),
+    );
+    ok(
+        &mut e,
+        "resource.set",
+        json!({"id": "staff", "shifts": [{"calendar": "peak", "quantity": 3}]}),
+    );
+    ok(
+        &mut e,
+        "experiment.set",
+        json!({"start": "2016-01-01T00:00:00"}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(
+        m["calendars"][0]["events"][0]["repeat"], "FREQ=DAILY",
+        "{m}"
+    );
+    assert_eq!(m["experiment"]["start"], "2016-01-01T00:00:00", "{m}");
+    assert_eq!(m["resources"][0]["shifts"][0]["quantity"], 3, "{m}");
+    let arrivals = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "arrivals"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(arrivals["timed"][0]["calendar"], "peak", "{m}");
+    assert_eq!(
+        err(&mut e, "calendar.remove", json!({"id": "peak"})),
+        ErrorCode::Conflict
+    );
+    // The model as JSON reads back the same.
+    ok(&mut e, "model.set", json!({ "model": m }));
+    assert_eq!(ok(&mut e, "model.get", json!({})), m);
+    // Each edit undoes on its own.
+    ok(&mut e, "undo", json!({}));
+    ok(&mut e, "undo", json!({}));
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(m["experiment"].get("start").is_none(), "{m}");
+}

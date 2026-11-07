@@ -37,10 +37,11 @@
 
 mod runtime;
 
+pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Property,
-    PropertyType, PropertyValue, ResourcePool, Severity,
+    PropertyType, PropertyValue, ResourcePool, Severity, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::Summary;
@@ -519,8 +520,9 @@ pub struct Builder {
     /// `from` → `to`, with a probability and a condition; a later connection from the same
     /// element replaces the earlier one unless `from` is a gateway.
     connections: Vec<(BlockId, BlockId, Option<f64>, Option<String>)>,
-    /// Shared resource pools: name, quantity, roles.
-    pools: Vec<(String, u32, Vec<String>)>,
+    /// Shared resource pools.
+    pools: Vec<ResourcePool>,
+    calendars: Vec<Calendar>,
 }
 
 impl Builder {
@@ -557,6 +559,8 @@ impl Builder {
             ElementKind::Source {
                 interarrival,
                 limit,
+                idle_outside: false,
+                timed: Vec::new(),
             },
         )
     }
@@ -597,11 +601,59 @@ impl Builder {
     /// A pool of `quantity` identical units, playing `roles`, that shared tasks draw on. Its
     /// name is its id.
     pub fn pool(&mut self, name: &str, quantity: u32, roles: &[&str]) {
-        self.pools.push((
-            name.to_owned(),
+        self.pools.push(ResourcePool::new(
+            ElementId::new(name).unwrap_or_else(|| ElementId::unchecked(name)),
+            name,
             quantity,
             roles.iter().map(|r| (*r).to_owned()).collect(),
         ));
+    }
+
+    /// A calendar of `events`; its name is its id.
+    pub fn calendar(&mut self, name: &str, events: Vec<Event>) {
+        self.calendars.push(Calendar {
+            id: ElementId::unchecked(name),
+            name: name.to_owned(),
+            events,
+        });
+    }
+
+    /// Pool `pool`'s units while each calendar is active (the first active one applying); its
+    /// quantity applies outside them.
+    pub fn shifts(&mut self, pool: &str, shifts: &[(&str, u32)]) {
+        if let Some(p) = self.pools.iter_mut().find(|p| p.name == pool) {
+            p.shifts = shifts
+                .iter()
+                .map(|(c, q)| Timed {
+                    calendar: ElementId::unchecked(c),
+                    value: *q,
+                })
+                .collect();
+        }
+    }
+
+    /// Source `block`'s time between arrivals while each calendar is active (the first active
+    /// one applying); outside them, its own interarrival time, or none with `idle_outside`.
+    pub fn timed_arrivals(&mut self, block: BlockId, timed: Vec<(&str, Dist)>, idle_outside: bool) {
+        if let Some((
+            _,
+            ElementKind::Source {
+                timed: t,
+                idle_outside: i,
+                ..
+            },
+            _,
+        )) = self.elements.get_mut(block.0)
+        {
+            *t = timed
+                .into_iter()
+                .map(|(c, d)| Timed {
+                    calendar: ElementId::unchecked(c),
+                    value: d,
+                })
+                .collect();
+            *i = idle_outside;
+        }
     }
 
     /// A task whose units come from the shared pools: each entity takes what the first of
@@ -736,21 +788,12 @@ impl Builder {
                 }
             })
             .collect();
-        let resources = self
-            .pools
-            .iter()
-            .map(|(name, quantity, roles)| ResourcePool {
-                id: ElementId::new(name).unwrap_or_else(|| ElementId::unchecked(name)),
-                name: name.clone(),
-                quantity: *quantity,
-                roles: roles.clone(),
-            })
-            .collect();
         Model {
             name: String::new(),
             elements,
             connections,
-            resources,
+            resources: self.pools.clone(),
+            calendars: self.calendars.clone(),
             experiment,
         }
     }
