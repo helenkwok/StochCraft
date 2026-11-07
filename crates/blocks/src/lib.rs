@@ -37,6 +37,8 @@
 
 mod runtime;
 
+pub use runtime::{Live, LiveState};
+
 pub use stochcraft_model::Breakdown;
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;

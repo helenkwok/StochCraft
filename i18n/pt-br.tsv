@@ -103,6 +103,7 @@
 	Exported {file}	{file} exportado
 	Expression	Expressão
 	File	Arquivo
+	Finished at {time} {unit}	Terminou em {time} {unit}
 	Fit	Ajustar
 	Fit the diagram to the view	Ajustar o diagrama à visualização
 	Flows	Fluxos
@@ -112,6 +113,9 @@
 	Help	Ajuda
 	Hide Others	Ocultar outros
 	Hide {app}	Ocultar {app}
+	Inside over time	Dentro ao longo do tempo
+	Jump	Ir
+	Jump to time	Ir para o instante
 	Keyboard Shortcuts…	Atalhos de teclado…
 	Keyboard shortcuts saved	Atalhos de teclado salvos
 	Keyboard shortcuts unchanged	Atalhos de teclado não foram alterados
@@ -168,6 +172,8 @@
 	PNG image	Imagem PNG
 	Parameters	Parâmetros
 	Paste	Colar
+	Pause	Pausar
+	Play	Reproduzir
 	Points	Pontos
 	Poisson	Poisson
 	Preferences	Preferências
@@ -199,6 +205,8 @@
 	Rename Block	Renomear bloco
 	Rename Model	Renomear modelo
 	Replace Model	Substituir modelo
+	Replication 1 · {time} of {end} {unit}	Replicação 1 · {time} de {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Replicação 1 · {time} de {end} {unit} · aquecimento
 	Replications	Replicações
 	Resource pool	Pool de recursos
 	Resource pools	Pools de recursos
@@ -209,7 +217,9 @@
 	Run	Executar
 	Run cancelled	Execução cancelada
 	Run experiment	Executar experimento
+	Run replication 1 step by step and see each block's queue on the diagram	Executar a replicação 1 passo a passo e ver a fila de cada bloco no diagrama
 	Run the experiment ({shortcut})	Executar o experimento ({shortcut})
+	Run the next event	Executar o próximo evento
 	Running	Executando
 	Running…	Executando…
 	Save	Salvar
@@ -220,6 +230,7 @@
 	Scale	Escala
 	Seed	Semente
 	Select All	Selecionar tudo
+	Select a block to see its queue over time.	Selecione um bloco para ver a fila dele ao longo do tempo.
 	Service time	Tempo de serviço
 	Services	Serviços
 	Set Property	Definir propriedade
@@ -231,23 +242,30 @@
 	Share of units blocked	Proporção de unidades bloqueadas
 	Show All	Mostrar tudo
 	Show {id}	Mostrar {id}
+	Speed	Velocidade
 	Split or join	Dividir ou unir
 	Split or join (all ways)	Dividir ou unir (todos os caminhos)
 	Spread out	Distribuir
 	Stages (k)	Etapas (k)
 	Standard deviation	Desvio padrão
+	Step	Passo
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	O StochCraft foi fechado com alterações não salvas em {name}. Recupere-as como um modelo sem título ou descarte-as.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	O StochCraft lê modelos de processo de arquivos BPMN ou XPDL com dados de simulação BPSim, executa-os como experimentos com replicações e apresenta cada resultado com seu intervalo de confiança.
 	StochCraft {version} · model {digest}	StochCraft {version} · modelo {digest}
+	Stop Watching	Parar de Acompanhar
 	Stop setting {name}	Parar de definir {name}
+	Stop watching	Parar de acompanhar
+	Stopped watching	Acompanhamento parado
 	Tandem line	Linha em tandem
 	Task	Tarefa
 	Task with a resource	Tarefa com recurso
 	Task with shared resources	Tarefa com recursos compartilhados
 	Text	Texto
+	The model changed, so watching stopped	O modelo mudou, então o acompanhamento parou
 	The model: its experiment, connections and problems	O modelo: experimento, conexões e problemas
 	This block has a warning	Este bloco tem um aviso
 	This block has an error	Este bloco tem um erro
+	This run	Esta execução
 	Time between arrivals	Tempo entre chegadas
 	Time unit	Unidade de tempo
 	To	Para
@@ -270,10 +288,14 @@
 	Utilisation	Utilização
 	Value	Valor
 	View	Exibir
+	Waiting over time	Aguardando ao longo do tempo
 	Waiting room	Sala de espera
 	Warm-up	Aquecimento
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Aquecimento de {warmup} {unit}, depois {duration} {unit} medidos
 	Warning	Aviso
+	Watch a Run	Acompanhar uma Execução
+	Watch a run	Acompanhar uma execução
+	Watching replication 1	Acompanhando a replicação 1
 	Weibull	Weibull
 	Whole number	Número inteiro
 	Window	Janela
@@ -303,14 +325,23 @@
 	the run stopped	a execução parou
 	the settings could not be saved: {error}	não foi possível salvar as configurações: {error}
 	there are no charts to export	não há gráficos para exportar
+	time	instante
 	to {block}	para {block}
 	unlimited	sem limite
 	years	anos
+	{busy} busy	{busy} ocupados
+	{entered} in, {left} out, {lost} lost	{entered} entraram, {left} saíram, {lost} perdidos
 	{field}: not editable here yet	{field}: ainda não é possível editar aqui
 	{id}: a probability is a number from 0 to 1	{id}: uma probabilidade é um número de 0 a 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — editado
+	{n} created	{n} criados
+	{n} done	{n} concluídos
+	{n} inside	{n} dentro
+	{n} waiting	{n} aguardando
+	{n} {unit} per second	{n} {unit} por segundo
 	{property} (set to, mean)	{property} (valor definido, média)
+	{title}: now {now}, at most {most}	{title}: agora {now}, no máximo {most}
 	± 95% CI	± IC de 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± é a metade da largura de um intervalo de confiança Student-t de 95% para a média entre as replicações.
 	· no results yet	· ainda não há resultados

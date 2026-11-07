@@ -103,6 +103,7 @@
 	Exported {file}	{file} রপ্তানি করা হয়েছে
 	Expression	অভিব্যক্তি
 	File	ফাইল
+	Finished at {time} {unit}	{time} {unit}-এ শেষ হয়েছে
 	Fit	ফিট করুন
 	Fit the diagram to the view	ডায়াগ্রামটি দৃশ্যে ফিট করুন
 	Flows	প্রবাহ
@@ -112,6 +113,9 @@
 	Help	সহায়তা
 	Hide Others	অন্যগুলো লুকান
 	Hide {app}	{app} লুকান
+	Inside over time	সময়ের সাথে ভিতরে
+	Jump	যান
+	Jump to time	সময়ে যান
 	Keyboard Shortcuts…	কীবোর্ড শর্টকাট…
 	Keyboard shortcuts saved	কীবোর্ড শর্টকাট সংরক্ষিত হয়েছে
 	Keyboard shortcuts unchanged	কীবোর্ড শর্টকাট অপরিবর্তিত আছে
@@ -168,6 +172,8 @@
 	PNG image	PNG ছবি
 	Parameters	পরামিতি
 	Paste	পেস্ট করুন
+	Pause	বিরতি
+	Play	চালান
 	Points	বিন্দু
 	Poisson	পোয়াসঁ
 	Preferences	পছন্দ
@@ -199,6 +205,8 @@
 	Rename Block	ব্লকের নাম পরিবর্তন
 	Rename Model	মডেলের নাম পরিবর্তন
 	Replace Model	মডেল প্রতিস্থাপন
+	Replication 1 · {time} of {end} {unit}	পুনরাবৃত্তি 1 · {end} {unit}-এর মধ্যে {time}
+	Replication 1 · {time} of {end} {unit} · warm-up	পুনরাবৃত্তি 1 · {end} {unit}-এর মধ্যে {time} · প্রাথমিক প্রস্তুতিকাল
 	Replications	পুনরাবৃত্তি
 	Resource pool	সম্পদ পুল
 	Resource pools	সম্পদ পুলসমূহ
@@ -209,7 +217,9 @@
 	Run	চালান
 	Run cancelled	চালনা বাতিল করা হয়েছে
 	Run experiment	পরীক্ষা চালান
+	Run replication 1 step by step and see each block's queue on the diagram	পুনরাবৃত্তি 1 ধাপে ধাপে চালান এবং ডায়াগ্রামে প্রতিটি ব্লকের সারি দেখুন
 	Run the experiment ({shortcut})	পরীক্ষা চালান ({shortcut})
+	Run the next event	পরের ঘটনা চালান
 	Running	চলছে
 	Running…	চলছে…
 	Save	সংরক্ষণ
@@ -220,6 +230,7 @@
 	Scale	স্কেল
 	Seed	যদৃচ্ছ বীজ
 	Select All	সব নির্বাচন করুন
+	Select a block to see its queue over time.	সময়ের সাথে কোনো ব্লকের সারি দেখতে সেটি নির্বাচন করুন।
 	Service time	সেবা সময়
 	Services	পরিষেবা
 	Set Property	বৈশিষ্ট্য নির্ধারণ
@@ -231,23 +242,30 @@
 	Share of units blocked	অবরুদ্ধ এককের অনুপাত
 	Show All	সব দেখান
 	Show {id}	{id} দেখান
+	Speed	গতি
 	Split or join	ভাগ বা একত্র করুন
 	Split or join (all ways)	ভাগ বা একত্র করুন (সব পথ)
 	Spread out	ছড়িয়ে দিন
 	Stages (k)	ধাপ (k)
 	Standard deviation	প্রমিত বিচ্যুতি
+	Step	ধাপ
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft বন্ধ হওয়ার সময় {name}-এ সংরক্ষণ না করা পরিবর্তন ছিল। সেগুলো নামবিহীন মডেল হিসেবে পুনরুদ্ধার করুন, অথবা বাতিল করুন।
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft BPSim সিমুলেশন ডেটাসহ BPMN বা XPDL ফাইল থেকে প্রক্রিয়া মডেল পড়ে, সেগুলো একাধিক স্বতন্ত্র পুনরাবৃত্তির পরীক্ষায় চালায় এবং প্রতিটি ফলাফলের সঙ্গে তার আস্থা ব্যবধান দেখায়।
 	StochCraft {version} · model {digest}	StochCraft {version} · মডেল {digest}
+	Stop Watching	দেখা বন্ধ করুন
 	Stop setting {name}	{name} নির্ধারণ বন্ধ করুন
+	Stop watching	দেখা বন্ধ করুন
+	Stopped watching	দেখা বন্ধ হয়েছে
 	Tandem line	ধারাবাহিক লাইন
 	Task	কাজ
 	Task with a resource	সম্পদসহ কাজ
 	Task with shared resources	ভাগ করা সম্পদসহ কাজ
 	Text	টেক্সট
+	The model changed, so watching stopped	মডেল বদলেছে, তাই দেখা বন্ধ হয়েছে
 	The model: its experiment, connections and problems	মডেল: পরীক্ষা, সংযোগ ও সমস্যা
 	This block has a warning	এই ব্লকে সতর্কতা আছে
 	This block has an error	এই ব্লকে ত্রুটি আছে
+	This run	এই রান
 	Time between arrivals	আগমনের মধ্যবর্তী সময়
 	Time unit	সময়ের একক
 	To	পর্যন্ত
@@ -270,10 +288,14 @@
 	Utilisation	ব্যবহারের হার
 	Value	মান
 	View	প্রদর্শন
+	Waiting over time	সময়ের সাথে অপেক্ষমাণ
 	Waiting room	অপেক্ষার ঘর
 	Warm-up	প্রাথমিক প্রস্তুতিকাল
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} প্রস্তুতিকাল, তারপর {duration} {unit} পরিমাপ
 	Warning	সতর্কতা
+	Watch a Run	একটি রান দেখুন
+	Watch a run	একটি রান দেখুন
+	Watching replication 1	পুনরাবৃত্তি 1 দেখা হচ্ছে
 	Weibull	ওয়েইবুল
 	Whole number	পূর্ণসংখ্যা
 	Window	উইন্ডো
@@ -303,14 +325,23 @@
 	the run stopped	চালনা বন্ধ হয়েছে
 	the settings could not be saved: {error}	সেটিংস সংরক্ষণ করা যায়নি: {error}
 	there are no charts to export	রপ্তানি করার মতো চার্ট নেই
+	time	সময়
 	to {block}	{block}-এ
 	unlimited	সীমাহীন
 	years	বছর
+	{busy} busy	{busy} ব্যস্ত
+	{entered} in, {left} out, {lost} lost	{entered} ঢুকেছে, {left} বেরিয়েছে, {lost} হারিয়েছে
 	{field}: not editable here yet	{field}: এখানে এখনও সম্পাদনা করা যায় না
 	{id}: a probability is a number from 0 to 1	{id}: সম্ভাবনা 0 থেকে 1-এর মধ্যে একটি সংখ্যা
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — সম্পাদিত
+	{n} created	{n} তৈরি
+	{n} done	{n} সম্পন্ন
+	{n} inside	{n} ভিতরে
+	{n} waiting	{n} অপেক্ষমাণ
+	{n} {unit} per second	প্রতি সেকেন্ডে {n} {unit}
 	{property} (set to, mean)	{property} (নির্ধারিত মান, গড়)
+	{title}: now {now}, at most {most}	{title}: এখন {now}, সর্বোচ্চ {most}
 	± 95% CI	± 95% আস্থা ব্যবধান
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± হলো পুনরাবৃত্তিগুলো জুড়ে গড়ের 95% Student-t আস্থা ব্যবধানের অর্ধ-প্রস্থ।
 	· no results yet	· এখনও কোনো ফলাফল নেই

@@ -103,6 +103,7 @@
 	Exported {file}	Экспортирован {file}
 	Expression	Выражение
 	File	Файл
+	Finished at {time} {unit}	Завершено в {time} {unit}
 	Fit	Вписать
 	Fit the diagram to the view	Вписать диаграмму в окно
 	Flows	Потоки
@@ -112,6 +113,9 @@
 	Help	Справка
 	Hide Others	Скрыть остальные
 	Hide {app}	Скрыть {app}
+	Inside over time	Внутри во времени
+	Jump	Перейти
+	Jump to time	Перейти ко времени
 	Keyboard Shortcuts…	Сочетания клавиш…
 	Keyboard shortcuts saved	Сочетания клавиш сохранены
 	Keyboard shortcuts unchanged	Сочетания клавиш не изменены
@@ -168,6 +172,8 @@
 	PNG image	Изображение PNG
 	Parameters	Параметры
 	Paste	Вставить
+	Pause	Пауза
+	Play	Воспроизвести
 	Points	Точки
 	Poisson	Распределение Пуассона
 	Preferences	Настройки
@@ -199,6 +205,8 @@
 	Rename Block	Переименовать блок
 	Rename Model	Переименовать модель
 	Replace Model	Заменить модель
+	Replication 1 · {time} of {end} {unit}	Повторный запуск 1 · {time} из {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Повторный запуск 1 · {time} из {end} {unit} · разогрев
 	Replications	Число повторных запусков
 	Resource pool	Пул ресурсов
 	Resource pools	Пулы ресурсов
@@ -209,7 +217,9 @@
 	Run	Запустить
 	Run cancelled	Запуск отменён
 	Run experiment	Запустить эксперимент
+	Run replication 1 step by step and see each block's queue on the diagram	Выполнить повторный запуск 1 по шагам и видеть очередь каждого блока на диаграмме
 	Run the experiment ({shortcut})	Запустить эксперимент ({shortcut})
+	Run the next event	Выполнить следующее событие
 	Running	Выполняется
 	Running…	Выполняется…
 	Save	Сохранить
@@ -220,6 +230,7 @@
 	Scale	Масштаб
 	Seed	Начальное значение генератора
 	Select All	Выделить всё
+	Select a block to see its queue over time.	Выберите блок, чтобы увидеть его очередь во времени.
 	Service time	Время обслуживания
 	Services	Службы
 	Set Property	Задать свойство
@@ -231,23 +242,30 @@
 	Share of units blocked	Доля заблокированных единиц
 	Show All	Показать всё
 	Show {id}	Показать {id}
+	Speed	Скорость
 	Split or join	Разделить или объединить
 	Split or join (all ways)	Разделить или объединить (все пути)
 	Spread out	Распределение
 	Stages (k)	Стадии (k)
 	Standard deviation	Стандартное отклонение
+	Step	Шаг
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft закрылся с несохранёнными изменениями в {name}. Восстановите их как модель без названия или отбросьте.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft загружает модели процессов из файлов BPMN или XPDL с данными моделирования BPSim, запускает их как эксперименты с повторениями и выводит каждый результат с доверительным интервалом.
 	StochCraft {version} · model {digest}	StochCraft {version} · модель {digest}
+	Stop Watching	Прекратить наблюдение
 	Stop setting {name}	Прекратить настройку {name}
+	Stop watching	Прекратить наблюдение
+	Stopped watching	Наблюдение прекращено
 	Tandem line	Последовательная линия
 	Task	Задача
 	Task with a resource	Задача с ресурсом
 	Task with shared resources	Задача с общими ресурсами
 	Text	Текст
+	The model changed, so watching stopped	Модель изменилась, поэтому наблюдение прекращено
 	The model: its experiment, connections and problems	Модель: эксперимент, соединения и проблемы
 	This block has a warning	В этом блоке есть предупреждение
 	This block has an error	В этом блоке есть ошибка
+	This run	Этот запуск
 	Time between arrivals	Время между прибытиями
 	Time unit	Единица времени
 	To	К
@@ -270,10 +288,14 @@
 	Utilisation	Коэффициент использования
 	Value	Значение
 	View	Вид
+	Waiting over time	Ожидающие во времени
 	Waiting room	Места ожидания
 	Warm-up	Разогрев
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Разогрев {warmup} {unit}, затем измерение в течение {duration} {unit}
 	Warning	Предупреждение
+	Watch a Run	Наблюдать за запуском
+	Watch a run	Наблюдать за запуском
+	Watching replication 1	Наблюдение за повторным запуском 1
 	Weibull	Распределение Вейбулла
 	Whole number	Целое число
 	Window	Окно
@@ -303,14 +325,23 @@
 	the run stopped	запуск остановлен
 	the settings could not be saved: {error}	не удалось сохранить настройки: {error}
 	there are no charts to export	нет диаграмм для экспорта
+	time	время
 	to {block}	к {block}
 	unlimited	без ограничений
 	years	годы
+	{busy} busy	Занято: {busy}
+	{entered} in, {left} out, {lost} lost	Вошло: {entered}, вышло: {left}, потеряно: {lost}
 	{field}: not editable here yet	{field}: здесь пока нельзя редактировать
 	{id}: a probability is a number from 0 to 1	{id}: вероятность должна быть числом от 0 до 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — изменено
+	{n} created	Создано: {n}
+	{n} done	Завершено: {n}
+	{n} inside	Внутри: {n}
+	{n} waiting	Ожидают: {n}
+	{n} {unit} per second	{n} {unit} в секунду
 	{property} (set to, mean)	{property} (заданное значение, среднее)
+	{title}: now {now}, at most {most}	{title}: сейчас {now}, не более {most}
 	± 95% CI	± 95% ДИ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — половина ширины 95% доверительного интервала Student-t для среднего значения по повторениям.
 	· no results yet	· результатов пока нет

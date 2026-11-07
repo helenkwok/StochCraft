@@ -251,6 +251,11 @@ impl Sim {
         Ok(steps)
     }
 
+    /// When the next event happens, if any is scheduled.
+    pub fn next_event_time(&self) -> Option<f64> {
+        self.kernel.borrow().queue.peek_time()
+    }
+
     /// Takes the next event off the queue if it is not later than `until`.
     fn pop_until(&mut self, until: f64) -> Option<crate::Event<u64>> {
         let mut k = self.kernel.borrow_mut();

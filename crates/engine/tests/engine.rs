@@ -1536,3 +1536,37 @@ fn breakdowns_are_set_reported_and_removed() {
     let m = ok(&mut e, "model.get", json!({}));
     assert!(!m.to_string().contains("breakdown"), "{m}");
 }
+
+/// A live run is replication 1 of the experiment, step by step: run to its end it reports what
+/// that replication of `run.start` reports.
+#[test]
+fn a_live_run_is_the_first_replication() {
+    let e = help_desk();
+    let live = e.live_run(0);
+    assert!(live.is_ok(), "{:?}", live.as_ref().err());
+    let Ok(mut live) = live else { return };
+    let end = live.end();
+    assert!(live.advance_to(end / 2.0).is_ok());
+    assert!(!live.is_done());
+    assert!(live.advance_to(end).is_ok());
+    assert!(live.is_done());
+    let x = &e.model().experiment;
+    let rng = stochcraft_experiment::Experiment::new(u64::from(x.replications), x.seed).stream(0);
+    let compiled = stochcraft_blocks::compile(e.model());
+    assert!(compiled.is_ok());
+    let Ok(compiled) = compiled else { return };
+    assert_eq!(Ok(live.report()), compiled.run(rng));
+
+    let mut broken = Engine::new();
+    ok(
+        &mut broken,
+        "block.add",
+        json!({ "kind": "source", "interarrival": { "type": "constant", "value": 1.0 } }),
+    );
+    assert!(!broken.model().is_runnable());
+    assert!(
+        broken
+            .live_run(0)
+            .is_err_and(|e| e.code == ErrorCode::InvalidModel)
+    );
+}

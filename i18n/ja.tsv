@@ -103,6 +103,7 @@
 	Exported {file}	{file} をエクスポートしました
 	Expression	式
 	File	ファイル
+	Finished at {time} {unit}	{time} {unit} で終了しました
 	Fit	全体表示
 	Fit the diagram to the view	ダイアグラム全体をビューに収める
 	Flows	フロー
@@ -112,6 +113,9 @@
 	Help	ヘルプ
 	Hide Others	その他を隠す
 	Hide {app}	{app} を隠す
+	Inside over time	内部の数の推移
+	Jump	移動
+	Jump to time	移動先の時刻
 	Keyboard Shortcuts…	キーボードショートカット…
 	Keyboard shortcuts saved	キーボードショートカットを保存しました
 	Keyboard shortcuts unchanged	キーボードショートカットは変更されていません
@@ -168,6 +172,8 @@
 	PNG image	PNG 画像
 	Parameters	パラメータ
 	Paste	貼り付け
+	Pause	一時停止
+	Play	再生
 	Points	点
 	Poisson	ポアソン分布
 	Preferences	環境設定
@@ -199,6 +205,8 @@
 	Rename Block	ブロック名を変更
 	Rename Model	モデル名を変更
 	Replace Model	モデルを置換
+	Replication 1 · {time} of {end} {unit}	反復実行 1 · {time} / {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	反復実行 1 · {time} / {end} {unit} · ウォームアップ
 	Replications	反復実行回数
 	Resource pool	リソースプール
 	Resource pools	リソースプール
@@ -209,7 +217,9 @@
 	Run	実行
 	Run cancelled	実行がキャンセルされました
 	Run experiment	実験を実行
+	Run replication 1 step by step and see each block's queue on the diagram	反復実行 1 を1ステップずつ実行し、各ブロックの待ち行列をダイアグラム上で確認します
 	Run the experiment ({shortcut})	実験を実行 ({shortcut})
+	Run the next event	次のイベントを実行
 	Running	実行中
 	Running…	実行中…
 	Save	保存
@@ -220,6 +230,7 @@
 	Scale	尺度
 	Seed	乱数シード
 	Select All	すべて選択
+	Select a block to see its queue over time.	ブロックを選択すると、その待ち行列の推移が表示されます。
 	Service time	サービス時間
 	Services	サービス
 	Set Property	プロパティを設定
@@ -231,23 +242,30 @@
 	Share of units blocked	処理単位のブロック割合
 	Show All	すべてを表示
 	Show {id}	{id} を表示
+	Speed	速度
 	Split or join	分岐または結合
 	Split or join (all ways)	分岐または結合（すべての経路）
 	Spread out	均等配置
 	Stages (k)	段階数 (k)
 	Standard deviation	標準偏差
+	Step	ステップ
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft は {name} の変更が保存されないまま終了しました。変更を無題のモデルとして復元するか、破棄してください。
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft は、BPSim シミュレーションデータを含む BPMN または XPDL ファイルからプロセスモデルを読み込み、反復実験として実行し、各結果を信頼区間とともに報告します。
 	StochCraft {version} · model {digest}	StochCraft {version} · モデル {digest}
+	Stop Watching	観察を終了
 	Stop setting {name}	{name} の設定を中止
+	Stop watching	観察を終了
+	Stopped watching	観察を終了しました
 	Tandem line	直列ライン
 	Task	タスク
 	Task with a resource	リソースを使うタスク
 	Task with shared resources	共有リソースを使うタスク
 	Text	テキスト
+	The model changed, so watching stopped	モデルが変更されたため、観察を終了しました
 	The model: its experiment, connections and problems	モデル：実験、接続、問題
 	This block has a warning	このブロックには警告があります
 	This block has an error	このブロックにはエラーがあります
+	This run	この実行
 	Time between arrivals	到着間隔
 	Time unit	時間単位
 	To	接続先
@@ -270,10 +288,14 @@
 	Utilisation	稼働率
 	Value	値
 	View	表示
+	Waiting over time	待ち数の推移
 	Waiting room	待機場所
 	Warm-up	ウォームアップ
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	ウォームアップ {warmup} {unit}、続いて {duration} {unit} を測定
 	Warning	警告
+	Watch a Run	実行を観察
+	Watch a run	実行を観察
+	Watching replication 1	反復実行 1 を観察中
 	Weibull	ワイブル分布
 	Whole number	整数
 	Window	ウィンドウ
@@ -303,14 +325,23 @@
 	the run stopped	実行が停止しました
 	the settings could not be saved: {error}	設定を保存できませんでした：{error}
 	there are no charts to export	エクスポートするグラフがありません
+	time	時刻
 	to {block}	{block} へ
 	unlimited	無制限
 	years	年
+	{busy} busy	使用中 {busy}
+	{entered} in, {left} out, {lost} lost	入 {entered}・出 {left}・損失 {lost}
 	{field}: not editable here yet	{field}：ここではまだ編集できません
 	{id}: a probability is a number from 0 to 1	{id}：確率は 0 から 1 までの数値です
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — 編集済み
+	{n} created	生成 {n}
+	{n} done	完了 {n}
+	{n} inside	内部 {n}
+	{n} waiting	待ち {n}
+	{n} {unit} per second	毎秒 {n} {unit}
 	{property} (set to, mean)	{property}（設定値、平均）
+	{title}: now {now}, at most {most}	{title}: 現在 {now}、最大 {most}
 	± 95% CI	± 95% 信頼区間
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± は、反復実行間の平均値に対する 95% Student-t 信頼区間の半幅です。
 	· no results yet	· 結果はまだありません

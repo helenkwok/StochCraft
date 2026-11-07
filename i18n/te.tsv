@@ -103,6 +103,7 @@
 	Exported {file}	{file} ఎగుమతి చేయబడింది
 	Expression	వ్యక్తీకరణ
 	File	ఫైల్
+	Finished at {time} {unit}	{time} {unit} వద్ద ముగిసింది
 	Fit	సరిపెట్టు
 	Fit the diagram to the view	రేఖాచిత్రాన్ని వీక్షణకు సరిపెట్టు
 	Flows	ప్రవాహాలు
@@ -112,6 +113,9 @@
 	Help	సహాయం
 	Hide Others	ఇతరాలను దాచు
 	Hide {app}	{app} ను దాచు
+	Inside over time	కాలక్రమంలో లోపల
+	Jump	వెళ్ళు
+	Jump to time	సమయానికి వెళ్ళు
 	Keyboard Shortcuts…	కీబోర్డ్ షార్ట్‌కట్‌లు…
 	Keyboard shortcuts saved	కీబోర్డ్ షార్ట్‌కట్‌లు సేవ్ చేయబడ్డాయి
 	Keyboard shortcuts unchanged	కీబోర్డ్ షార్ట్‌కట్‌లలో మార్పులేదు
@@ -168,6 +172,8 @@
 	PNG image	PNG చిత్రం
 	Parameters	పరామితులు
 	Paste	అతికించు
+	Pause	విరామం
+	Play	ప్లే చేయి
 	Points	బిందువులు
 	Poisson	పాయిసన్
 	Preferences	ప్రాధాన్యతలు
@@ -199,6 +205,8 @@
 	Rename Block	బ్లాక్ పేరు మార్చు
 	Rename Model	నమూనా పేరు మార్చు
 	Replace Model	నమూనాను భర్తీ చేయి
+	Replication 1 · {time} of {end} {unit}	పునరావృత్త అమలు 1 · {end} {unit} లో {time}
+	Replication 1 · {time} of {end} {unit} · warm-up	పునరావృత్త అమలు 1 · {end} {unit} లో {time} · ప్రారంభ సర్దుబాటు సమయం
 	Replications	పునరావృత్త అమలులు
 	Resource pool	వనరుల పూల్
 	Resource pools	వనరుల పూల్‌లు
@@ -209,7 +217,9 @@
 	Run	అమలు చేయి
 	Run cancelled	అమలు రద్దు చేయబడింది
 	Run experiment	ప్రయోగాన్ని అమలు చేయి
+	Run replication 1 step by step and see each block's queue on the diagram	పునరావృత్త అమలు 1 ను దశలవారీగా అమలు చేసి రేఖాచిత్రంలో ప్రతి బ్లాక్ వరుసను చూడు
 	Run the experiment ({shortcut})	ప్రయోగాన్ని అమలు చేయి ({shortcut})
+	Run the next event	తదుపరి సంఘటనను అమలు చేయి
 	Running	అమలవుతోంది
 	Running…	అమలవుతోంది…
 	Save	సేవ్ చేయి
@@ -220,6 +230,7 @@
 	Scale	స్కేలు
 	Seed	యాదృచ్ఛిక బీజం
 	Select All	అన్నీ ఎంచుకో
+	Select a block to see its queue over time.	కాలక్రమంలో ఒక బ్లాక్ వరుసను చూడటానికి దాన్ని ఎంచుకోండి.
 	Service time	సేవా సమయం
 	Services	సేవలు
 	Set Property	లక్షణాన్ని సెట్ చేయి
@@ -231,23 +242,30 @@
 	Share of units blocked	నిరోధిత యూనిట్ల వాటా
 	Show All	అన్నీ చూపించు
 	Show {id}	{id} చూపించు
+	Speed	వేగం
 	Split or join	విభజించు లేదా కలుపు
 	Split or join (all ways)	విభజించు లేదా కలుపు (అన్ని దారులు)
 	Spread out	పంచు
 	Stages (k)	దశలు (k)
 	Standard deviation	ప్రామాణిక విచలనం
+	Step	దశ
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	{name}లో చేసిన మార్పులను సేవ్ చేయకుండానే StochCraft మూసివేయబడింది. వాటిని పేరులేని మోడల్‌గా పునరుద్ధరించండి లేదా విస్మరించండి.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft, BPSim సిమ్యులేషన్ డేటాతో కూడిన BPMN లేదా XPDL ఫైళ్ల నుంచి ప్రాసెస్ మోడళ్లను చదివి, వాటిని పునరావృత ప్రయోగాలుగా అమలు చేసి, ప్రతి ఫలితాన్ని దాని విశ్వసనీయత అంతరంతో నివేదిస్తుంది.
 	StochCraft {version} · model {digest}	StochCraft {version} · నమూనా {digest}
+	Stop Watching	గమనించడం ఆపు
 	Stop setting {name}	{name} సెట్ చేయడం ఆపు
+	Stop watching	గమనించడం ఆపు
+	Stopped watching	గమనించడం ఆపబడింది
 	Tandem line	వరుస ప్రక్రియ
 	Task	పని
 	Task with a resource	వనరు అవసరమైన పని
 	Task with shared resources	భాగస్వామ్య వనరులు అవసరమైన పని
 	Text	టెక్స్ట్
+	The model changed, so watching stopped	నమూనా మారింది, కాబట్టి గమనించడం ఆగిపోయింది
 	The model: its experiment, connections and problems	నమూనా: దాని ప్రయోగం, అనుసంధానాలు మరియు సమస్యలు
 	This block has a warning	ఈ బ్లాక్‌లో హెచ్చరిక ఉంది
 	This block has an error	ఈ బ్లాక్‌లో లోపం ఉంది
+	This run	ఈ అమలు
 	Time between arrivals	రాకల మధ్య సమయం
 	Time unit	సమయ ప్రమాణం
 	To	కు
@@ -270,10 +288,14 @@
 	Utilisation	వినియోగ శాతం
 	Value	విలువ
 	View	వీక్షణ
+	Waiting over time	కాలక్రమంలో వేచి ఉన్నవి
 	Waiting room	వేచి ఉండే గది
 	Warm-up	ప్రారంభ సర్దుబాటు సమయం
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	ప్రారంభ సర్దుబాటు {warmup} {unit}, ఆపై {duration} {unit} కొలవబడింది
 	Warning	హెచ్చరిక
+	Watch a Run	ఒక అమలును గమనించు
+	Watch a run	ఒక అమలును గమనించు
+	Watching replication 1	పునరావృత్త అమలు 1 గమనించబడుతోంది
 	Weibull	వైబుల్
 	Whole number	పూర్ణ సంఖ్య
 	Window	విండో
@@ -303,14 +325,23 @@
 	the run stopped	అమలు ఆగిపోయింది
 	the settings could not be saved: {error}	సెట్టింగ్‌లను సేవ్ చేయలేకపోయాము: {error}
 	there are no charts to export	ఎగుమతి చేయడానికి చార్ట్‌లు లేవు
+	time	సమయం
 	to {block}	{block} కు
 	unlimited	పరిమితి లేదు
 	years	సంవత్సరాలు
+	{busy} busy	{busy} పనిలో
+	{entered} in, {left} out, {lost} lost	{entered} లోపలికి, {left} బయటికి, {lost} కోల్పోయినవి
 	{field}: not editable here yet	{field}: ఇక్కడ ఇంకా సవరించలేరు
 	{id}: a probability is a number from 0 to 1	{id}: సంభావ్యత 0 నుంచి 1 మధ్య సంఖ్య కావాలి
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — సవరించబడింది
+	{n} created	{n} సృష్టించబడ్డాయి
+	{n} done	{n} పూర్తయ్యాయి
+	{n} inside	{n} లోపల
+	{n} waiting	{n} వేచి ఉన్నాయి
+	{n} {unit} per second	సెకనుకు {n} {unit}
 	{property} (set to, mean)	{property} (నిర్ణీత విలువ, సగటు)
+	{title}: now {now}, at most {most}	{title}: ఇప్పుడు {now}, గరిష్ఠం {most}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± అనేది పునరావృత ప్రయోగాల సగటుకు సంబంధించిన 95% Student-t విశ్వసనీయత అంతరం వెడల్పులో సగం.
 	· no results yet	· ఇంకా ఫలితాలు లేవు

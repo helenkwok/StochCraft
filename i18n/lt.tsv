@@ -103,6 +103,7 @@
 	Exported {file}	Eksportuota {file}
 	Expression	Išraiška
 	File	Failas
+	Finished at {time} {unit}	Baigta {time} {unit}
 	Fit	Pritaikyti
 	Fit the diagram to the view	Pritaikyti diagramą rodiniui
 	Flows	Srautai
@@ -112,6 +113,9 @@
 	Help	Žinynas
 	Hide Others	Slėpti kitus
 	Hide {app}	Slėpti {app}
+	Inside over time	Viduje per laiką
+	Jump	Pereiti
+	Jump to time	Pereiti į laiką
 	Keyboard Shortcuts…	Spartieji klavišai…
 	Keyboard shortcuts saved	Spartieji klavišai įrašyti
 	Keyboard shortcuts unchanged	Spartieji klavišai nepakeisti
@@ -168,6 +172,8 @@
 	PNG image	PNG paveikslas
 	Parameters	Parametrai
 	Paste	Įklijuoti
+	Pause	Pristabdyti
+	Play	Leisti
 	Points	Taškai
 	Poisson	Puasono
 	Preferences	Nuostatos
@@ -199,6 +205,8 @@
 	Rename Block	Pervadinti bloką
 	Rename Model	Pervadinti modelį
 	Replace Model	Pakeisti modelį
+	Replication 1 · {time} of {end} {unit}	Replikacija 1 · {time} iš {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Replikacija 1 · {time} iš {end} {unit} · įšilimas
 	Replications	Replikacijos
 	Resource pool	Išteklių grupė
 	Resource pools	Išteklių grupės
@@ -209,7 +217,9 @@
 	Run	Vykdyti
 	Run cancelled	Vykdymas atšauktas
 	Run experiment	Vykdyti eksperimentą
+	Run replication 1 step by step and see each block's queue on the diagram	Vykdyti 1 replikaciją žingsnis po žingsnio ir matyti kiekvieno bloko eilę diagramoje
 	Run the experiment ({shortcut})	Vykdyti eksperimentą ({shortcut})
+	Run the next event	Vykdyti kitą įvykį
 	Running	Vykdoma
 	Running…	Vykdoma…
 	Save	Įrašyti
@@ -220,6 +230,7 @@
 	Scale	Skalė
 	Seed	Atsitiktinių skaičių sėkla
 	Select All	Žymėti viską
+	Select a block to see its queue over time.	Pasirinkite bloką, kad matytumėte jo eilę per laiką.
 	Service time	Aptarnavimo laikas
 	Services	Paslaugos
 	Set Property	Nustatyti savybę
@@ -231,23 +242,30 @@
 	Share of units blocked	Blokuotų vienetų dalis
 	Show All	Rodyti visus
 	Show {id}	Rodyti {id}
+	Speed	Greitis
 	Split or join	Skaidyti arba jungti
 	Split or join (all ways)	Skaidyti arba jungti (visi keliai)
 	Spread out	Paskirstyti
 	Stages (k)	Etapai (k)
 	Standard deviation	Standartinis nuokrypis
+	Step	Žingsnis
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft užsidarė su neišsaugotais modelio {name} pakeitimais. Atkurkite juos kaip modelį be pavadinimo arba atmeskite.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft nuskaito procesų modelius iš BPMN arba XPDL failų su BPSim modeliavimo duomenimis, vykdo juos kaip kartotinius eksperimentus ir pateikia kiekvieną rezultatą su jo pasikliautinuoju intervalu.
 	StochCraft {version} · model {digest}	StochCraft {version} · modelis {digest}
+	Stop Watching	Baigti stebėjimą
 	Stop setting {name}	Baigti nustatyti {name}
+	Stop watching	Baigti stebėjimą
+	Stopped watching	Stebėjimas baigtas
 	Tandem line	Nuoseklioji linija
 	Task	Užduotis
 	Task with a resource	Užduotis su ištekliumi
 	Task with shared resources	Užduotis su bendrais ištekliais
 	Text	Tekstas
+	The model changed, so watching stopped	Modelis pasikeitė, todėl stebėjimas baigtas
 	The model: its experiment, connections and problems	Modelis: eksperimentas, jungtys ir problemos
 	This block has a warning	Šiame bloke yra įspėjimas
 	This block has an error	Šiame bloke yra klaida
+	This run	Šis vykdymas
 	Time between arrivals	Laikas tarp atvykimų
 	Time unit	Laiko vienetas
 	To	Į
@@ -270,10 +288,14 @@
 	Utilisation	Panaudojimo koeficientas
 	Value	Reikšmė
 	View	Rodinys
+	Waiting over time	Laukiantys per laiką
 	Waiting room	Laukiamasis
 	Warm-up	Įšilimo laikotarpis
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Įšilimas {warmup} {unit}, po to matavimas {duration} {unit}
 	Warning	Įspėjimas
+	Watch a Run	Stebėti vykdymą
+	Watch a run	Stebėti vykdymą
+	Watching replication 1	Stebima 1 replikacija
 	Weibull	Veibulo
 	Whole number	Sveikasis skaičius
 	Window	Langas
@@ -303,14 +325,23 @@
 	the run stopped	vykdymas sustojo
 	the settings could not be saved: {error}	nuostatų nepavyko įrašyti: {error}
 	there are no charts to export	nėra eksportuotinų diagramų
+	time	laikas
 	to {block}	į {block}
 	unlimited	be apribojimų
 	years	metai
+	{busy} busy	Užimta: {busy}
+	{entered} in, {left} out, {lost} lost	Įėjo: {entered}, išėjo: {left}, prarasta: {lost}
 	{field}: not editable here yet	{field}: čia dar negalima redaguoti
 	{id}: a probability is a number from 0 to 1	{id}: tikimybė yra skaičius nuo 0 iki 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — redaguota
+	{n} created	Sukurta: {n}
+	{n} done	Baigta: {n}
+	{n} inside	Viduje: {n}
+	{n} waiting	Laukia: {n}
+	{n} {unit} per second	{n} {unit} per sekundę
 	{property} (set to, mean)	{property} (nustatyta reikšmė, vidurkis)
+	{title}: now {now}, at most {most}	{title}: dabar {now}, daugiausia {most}
 	± 95% CI	± 95% pasikliautinasis intervalas
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± yra 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp kartojimų, pusplotis.
 	· no results yet	· rezultatų dar nėra

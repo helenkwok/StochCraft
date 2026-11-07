@@ -176,6 +176,10 @@ impl App {
             .auto_shrink([false, false])
             .show(ui, |ui| {
                 ui.set_max_width(ui.available_width().min(640.0));
+                if self.is_watching() {
+                    self.live_section(ui, p);
+                    ui.add_space(12.0);
+                }
                 match self.selected.clone() {
                     Some(id) => {
                         let el = model["elements"]

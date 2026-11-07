@@ -103,6 +103,7 @@
 	Exported {file}	{file} ஏற்றுமதி செய்யப்பட்டது
 	Expression	கோவை
 	File	கோப்பு
+	Finished at {time} {unit}	{time} {unit} இல் முடிந்தது
 	Fit	பொருத்து
 	Fit the diagram to the view	வரைபடத்தைக் காட்சியில் பொருத்து
 	Flows	ஓட்டங்கள்
@@ -112,6 +113,9 @@
 	Help	உதவி
 	Hide Others	மற்றவற்றை மறை
 	Hide {app}	{app} ஐ மறை
+	Inside over time	நேரப்படி உள்ளே
+	Jump	செல்
+	Jump to time	நேரத்திற்குச் செல்
 	Keyboard Shortcuts…	விசைப்பலகை குறுக்குவழிகள்…
 	Keyboard shortcuts saved	விசைப்பலகை குறுக்குவழிகள் சேமிக்கப்பட்டன
 	Keyboard shortcuts unchanged	விசைப்பலகை குறுக்குவழிகள் மாறவில்லை
@@ -168,6 +172,8 @@
 	PNG image	PNG படம்
 	Parameters	அளவுருக்கள்
 	Paste	ஒட்டு
+	Pause	இடைநிறுத்து
+	Play	இயக்கு
 	Points	புள்ளிகள்
 	Poisson	பாய்சான்
 	Preferences	விருப்பங்கள்
@@ -199,6 +205,8 @@
 	Rename Block	தொகுதிக்குப் பெயர் மாற்று
 	Rename Model	மாதிரிக்குப் பெயர் மாற்று
 	Replace Model	மாதிரியை மாற்றி வை
+	Replication 1 · {time} of {end} {unit}	மீள் இயக்கம் 1 · {end} {unit} இல் {time}
+	Replication 1 · {time} of {end} {unit} · warm-up	மீள் இயக்கம் 1 · {end} {unit} இல் {time} · தொடக்கச் சீராக்க நேரம்
 	Replications	மீள் இயக்கங்கள்
 	Resource pool	வளத் தொகுப்பு
 	Resource pools	வளத் தொகுப்புகள்
@@ -209,7 +217,9 @@
 	Run	இயக்கு
 	Run cancelled	இயக்கம் ரத்துசெய்யப்பட்டது
 	Run experiment	சோதனையை இயக்கு
+	Run replication 1 step by step and see each block's queue on the diagram	மீள் இயக்கம் 1 ஐப் படிப்படியாக இயக்கி, வரைபடத்தில் ஒவ்வொரு தொகுதியின் வரிசையையும் பார்
 	Run the experiment ({shortcut})	சோதனையை இயக்கு ({shortcut})
+	Run the next event	அடுத்த நிகழ்வை இயக்கு
 	Running	இயங்குகிறது
 	Running…	இயங்குகிறது…
 	Save	சேமி
@@ -220,6 +230,7 @@
 	Scale	அளவுகோல்
 	Seed	சீரற்ற விதை
 	Select All	அனைத்தையும் தேர்ந்தெடு
+	Select a block to see its queue over time.	நேரப்படி ஒரு தொகுதியின் வரிசையைப் பார்க்க அதைத் தேர்ந்தெடுக்கவும்.
 	Service time	சேவை நேரம்
 	Services	சேவைகள்
 	Set Property	பண்பை அமை
@@ -231,23 +242,30 @@
 	Share of units blocked	தடுக்கப்பட்ட அலகுகளின் விகிதம்
 	Show All	அனைத்தையும் காட்டு
 	Show {id}	{id} ஐக் காட்டு
+	Speed	வேகம்
 	Split or join	பிரி அல்லது இணை
 	Split or join (all ways)	பிரி அல்லது இணை (எல்லா வழிகளும்)
 	Spread out	பரப்பு
 	Stages (k)	படிநிலைகள் (k)
 	Standard deviation	திட்ட விலக்கம்
+	Step	படி
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	{name} இல் சேமிக்கப்படாத மாற்றங்களுடன் StochCraft மூடப்பட்டது. அவற்றைப் பெயரிடப்படாத மாதிரியாக மீட்டெடுக்கவும் அல்லது நிராகரிக்கவும்.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft, BPSim உருவகப்படுத்தல் தரவு கொண்ட BPMN அல்லது XPDL கோப்புகளிலிருந்து செயல்முறை மாதிரிகளைப் படித்து, அவற்றைப் பலமுறை தனித்தனியாகச் சோதனை செய்து, ஒவ்வொரு முடிவையும் அதன் நம்பிக்கை இடைவெளியுடன் தெரிவிக்கிறது.
 	StochCraft {version} · model {digest}	StochCraft {version} · மாதிரி {digest}
+	Stop Watching	கவனிப்பதை நிறுத்து
 	Stop setting {name}	{name} அமைப்பதை நிறுத்து
+	Stop watching	கவனிப்பதை நிறுத்து
+	Stopped watching	கவனிப்பது நிறுத்தப்பட்டது
 	Tandem line	தொடர் பணிநிலைகள்
 	Task	பணி
 	Task with a resource	வளம் தேவைப்படும் பணி
 	Task with shared resources	பகிர்ந்த வளங்கள் தேவைப்படும் பணி
 	Text	உரை
+	The model changed, so watching stopped	மாதிரி மாறியதால் கவனிப்பது நிறுத்தப்பட்டது
 	The model: its experiment, connections and problems	மாதிரி: அதன் சோதனை, இணைப்புகள், சிக்கல்கள்
 	This block has a warning	இந்தத் தொகுதியில் ஓர் எச்சரிக்கை உள்ளது
 	This block has an error	இந்தத் தொகுதியில் ஒரு பிழை உள்ளது
+	This run	இந்த இயக்கம்
 	Time between arrivals	வருகைகளுக்கு இடையிலான நேரம்
 	Time unit	நேர அலகு
 	To	இதற்கு
@@ -270,10 +288,14 @@
 	Utilisation	பயன்பாட்டு விகிதம்
 	Value	மதிப்பு
 	View	பார்வை
+	Waiting over time	நேரப்படி காத்திருப்பவை
 	Waiting room	காத்திருப்பு அறை
 	Warm-up	தொடக்கச் சீராக்க நேரம்
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	தொடக்கச் சீராக்கம் {warmup} {unit}; அதன் பின் {duration} {unit} அளவிடப்பட்டது
 	Warning	எச்சரிக்கை
+	Watch a Run	ஓர் இயக்கத்தைக் கவனி
+	Watch a run	ஓர் இயக்கத்தைக் கவனி
+	Watching replication 1	மீள் இயக்கம் 1 கவனிக்கப்படுகிறது
 	Weibull	வைபுல்
 	Whole number	முழு எண்
 	Window	சாளரம்
@@ -303,14 +325,23 @@
 	the run stopped	இயக்கம் நிறுத்தப்பட்டது
 	the settings could not be saved: {error}	அமைப்புகளைச் சேமிக்க முடியவில்லை: {error}
 	there are no charts to export	ஏற்றுமதி செய்ய வரைபடங்கள் இல்லை
+	time	நேரம்
 	to {block}	{block} க்கு
 	unlimited	வரம்பற்றது
 	years	ஆண்டுகள்
+	{busy} busy	{busy} பணியில்
+	{entered} in, {left} out, {lost} lost	{entered} உள்ளே, {left} வெளியே, {lost} இழப்பு
 	{field}: not editable here yet	{field}: இங்கே இன்னும் திருத்த முடியாது
 	{id}: a probability is a number from 0 to 1	{id}: நிகழ்தகவு 0 முதல் 1 வரையிலான எண்ணாக இருக்க வேண்டும்
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — திருத்தப்பட்டது
+	{n} created	{n} உருவாக்கப்பட்டன
+	{n} done	{n} முடிந்தன
+	{n} inside	{n} உள்ளே
+	{n} waiting	{n} காத்திருக்கின்றன
+	{n} {unit} per second	வினாடிக்கு {n} {unit}
 	{property} (set to, mean)	{property} (அமைக்கப்பட்ட மதிப்பு, சராசரி)
+	{title}: now {now}, at most {most}	{title}: இப்போது {now}, அதிகபட்சம் {most}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± என்பது மீள்சோதனைகளின் சராசரிக்கான 95% Student-t நம்பிக்கை இடைவெளியின் அகலத்தில் பாதியாகும்.
 	· no results yet	· இன்னும் முடிவுகள் இல்லை
