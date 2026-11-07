@@ -25,8 +25,11 @@ engine's messages (validation, file notes) are English too.
   sources: Einschwingphase, Verweilzeit, Skalen- and Formparameter; Taiwan usage for `zh-hant`.
 - Rows for general interface words (File, Edit, Save As…, Undo…, New, Open…, Light, Dark,
   Keyboard Shortcuts…, the macOS application menu) take the wording of craft-i18n's shared
-  `common.tsv` for that language where it has one, so StochCraft reads like the other Craft apps
-  (see ATTRIBUTION.md). Slovak has no `common.tsv`; its rows are StochCraft's own.
+  `common.tsv` for that language where it has one in the same sense, so StochCraft reads like
+  the other Craft apps (see ATTRIBUTION.md). Where a catalog already had its own term, that term
+  wins (Keyboard Shortcuts… in German, Spanish and Traditional Chinese); "Units" (a quantity) and
+  "Zoom" (the window-size toggle) have their own wording where `common.tsv` means something else.
+  Slovak has no `common.tsv`; its rows are StochCraft's own.
 - The rows added for issue #39 (shared resource pools, the macOS and Windows menu words, the
   desktop file dialogs, time-unit abbreviations) were written with Claude Code from the plain
   meaning of the English, the existing terms of each catalog and `common.tsv`; uncertain domain
