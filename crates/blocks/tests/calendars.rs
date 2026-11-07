@@ -60,7 +60,11 @@ fn arrivals_follow_the_rate_of_each_time_of_day() {
             panic!("{compiled:?}")
         };
         let reports: Vec<_> = (0..REPS)
-            .map(|r| compiled.run(Rng::new(SEED + r)))
+            .map(|r| {
+                compiled
+                    .run(Rng::new(SEED + r))
+                    .unwrap_or_else(|e| panic!("{e}"))
+            })
             .collect();
         let s = summarise(&reports);
         let got = s.get("calls", Metric::Entered);
@@ -96,7 +100,7 @@ fn a_change_of_rate_takes_effect_at_once() {
     let Ok(c) = compile(&model) else {
         panic!("does not compile")
     };
-    let r = c.run(Rng::new(1));
+    let r = c.run(Rng::new(1)).unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(r.element("in").map(|e| e.entered), Some(28), "{r:?}");
 
     // With no value outside the calendar, there are arrivals only in it: 26 to 50.
@@ -117,7 +121,7 @@ fn a_change_of_rate_takes_effect_at_once() {
     let Ok(c) = compile(&model) else {
         panic!("does not compile")
     };
-    let r = c.run(Rng::new(1));
+    let r = c.run(Rng::new(1)).unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(r.element("in").map(|e| e.entered), Some(25), "{r:?}");
 }
 
@@ -148,7 +152,10 @@ fn a_pool_has_the_units_of_its_shift() {
         panic!("does not compile")
     };
     // The first job at 0, so the unit is busy from the start.
-    let r = c.first_arrival_at_zero(true).run(Rng::new(1));
+    let r = c
+        .first_arrival_at_zero(true)
+        .run(Rng::new(1))
+        .unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(r.element("work").map(|e| e.left), Some(2400), "{r:?}");
     let util = r.element("crew").and_then(|e| e.utilisation);
     assert!(util.is_some_and(|u| (u - 1.0).abs() < 1e-9), "{util:?}");
@@ -194,7 +201,7 @@ fn a_unit_finishes_its_job_when_its_shift_ends() {
     let Ok(c) = compile(&model) else {
         panic!("does not compile")
     };
-    let r = c.run(Rng::new(1));
+    let r = c.run(Rng::new(1)).unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(r.element("work").map(|e| e.left), Some(1), "{r:?}");
     assert_eq!(
         r.element("out").and_then(|e| e.mean_time_in_system),

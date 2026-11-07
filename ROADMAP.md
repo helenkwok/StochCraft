@@ -318,14 +318,23 @@ understand.
     edges next to their neighbours, and the parameters of removed ones taken out of every
     scenario;
   - indentation and prefixes copied from the file, compact XML kept compact, and new names as
-    character references in a file declared in an encoding other than UTF-8.
+    character references in a file declared in an encoding other than UTF-8;
+  - a new time unit, which relabels the model's times (their numbers stay): `baseTimeUnit`
+    changes, and each value in the scenario that names its own unit keeps that unit with its
+    number rescaled, so it reads as the model says (`mean="80" timeUnit="s"` under minutes
+    becomes `mean="4800" timeUnit="s"` under hours, `PT1000M` becomes `PT60000M`; a duration of
+    several parts is written in its smallest one). A scenario without a duration gets one, since
+    the 8 hours it would run is another number in the new unit. A rescaled value that no decimal
+    reads back as exactly may read back within 1e-12 of itself; every other value must read back
+    exactly. Scenarios inheriting from the opened one keep their meaning: one that took its base
+    unit from it gets the old unit written in, with the rescaled values as they were.
 
   Everything else is kept byte for byte: the XML writer now reproduces a parsed file exactly
   (each start tag's own text, `<a/>` or `<a></a>`, the whitespace around the root, and a
   changed tag keeps the layout of its other attributes), which also fixed a doubled `xml` in
   re-written declarations. The saved file is read back before it is returned, and an edit that
   would not read back as the model is refused with the reason (for example changing the time
-  unit of a file whose values carry their own units, reordering elements, or changing the
+  unit of a scenario that inherits values with their own units, reordering elements, or changing the
   capacity of a resource several tasks share, which waits for M2.5); `"as_new": true` then
   writes a new BPMN file from the model alone. Tests: edits on the hand-written models with a
   bound on the lines changed, and 180 edits across every reference model and scenario, each
@@ -795,11 +804,14 @@ next start asks whether to recover them as an untitled model or discard them.
 
 **M3.1f (translations):** every interface string goes through craft-i18n, with a pseudo-locale
 test that fails on any that doesn't. StochCraft's own catalogs (`i18n/`, 44 left-to-right
-languages, each complete) are built in; View ▸ Language picks one or follows the system's, and the
+languages) are built in, each with a row for every string the window and the desktop shell look
+up (a test checks it); View ▸ Language picks one or follows the system's, and the
 choice is saved with the preferences.
 
 **Still to come:** native-speaker review of the catalogs; the engine's own messages through the
-catalog; screenshot tests in craft-ui's six test languages; panes and icons.
+catalog; the keyboard-shortcuts dialog's own words, which come from craft-i18n's shared catalog
+(not embedded in CI or the web app, and incomplete upstream); CJK, Indic, Thai and Lao fonts on
+the web; screenshot tests in craft-ui's six test languages; panes and icons.
 
 ### M3.2 Model editing without a canvas
 

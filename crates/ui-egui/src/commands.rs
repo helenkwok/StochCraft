@@ -285,11 +285,7 @@ impl App {
             CLEAR_RECENT => self.recent.clear(),
             SAVE => self.save(),
             SAVE_AS => self.save_as(),
-            QUIT => {
-                if self.platform.can_quit {
-                    self.replace(Replace::Quit);
-                }
-            }
+            QUIT if self.platform.can_quit => self.replace(Replace::Quit),
             UNDO => self.undo(),
             REDO => self.redo(),
             RUN => self.run(),

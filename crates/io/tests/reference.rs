@@ -852,7 +852,9 @@ fn the_technical_support_shifts_read_save_and_drive_arrivals() {
     run.calendars = m.calendars.clone();
     let c = stochcraft_blocks::compile(&run);
     let Ok(c) = c else { panic!("{c:?}") };
-    let r = c.run(stochcraft_random::Rng::new(1));
+    let r = c
+        .run(stochcraft_random::Rng::new(1))
+        .unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(r.element("calls").map(|e| e.entered), Some(2206), "{r:?}");
 
     // Shifts and calendars save into the file and read back.

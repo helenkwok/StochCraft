@@ -1,5 +1,6 @@
 //! The interface's words, through craft-i18n: English source text looked up in the catalogs that
-//! build.rs embeds from `CRAFT_I18N_DIR` (none without it: English only).
+//! build.rs embeds: StochCraft's own (`i18n/`, always), and craft-i18n's shared `common.tsv`
+//! beside them when `CRAFT_I18N_DIR` is set.
 //!
 //! The language is per thread, as egui draws on one: [`t`] and [`tf`] look up in it, and
 //! [`apply_setting`] sets it from the user's choice (`None`: the system's). Numbers follow the

@@ -19,7 +19,8 @@ pub enum Dist {
     /// Triangular on [min, max] peaking at `mode`. Inversion.
     Triangular { min: f64, mode: f64, max: f64 },
     /// Normal. Box–Muller (Box and Muller, 1958). Can be negative; a duration drawn from it is
-    /// treated as 0 by whoever waits for it.
+    /// treated as 0 by whoever waits for it, so when negative draws are likely the realised
+    /// mean duration is greater than `mean` (use a truncated normal to say what is meant).
     Normal { mean: f64, std_dev: f64 },
     /// Normal restricted to [min, max]. Exact rejection after Robert (1995), choosing a normal,
     /// uniform or exponential proposal by where the interval lies.
@@ -469,6 +470,36 @@ impl Dist {
         }
     }
 
+    /// Whether a draw can be greater than 0. Durations clamp negative draws to 0, so a delay
+    /// whose distribution cannot give a positive value always takes zero time (`false` too for
+    /// parameters [`Dist::check`] rejects).
+    pub fn can_be_positive(&self) -> bool {
+        if self.check().is_err() {
+            return false;
+        }
+        match self {
+            Dist::Constant(v) => *v > 0.0,
+            Dist::Exponential { mean } | Dist::Poisson { mean } | Dist::Erlang { mean, .. } => {
+                *mean > 0.0
+            }
+            Dist::Uniform { max, .. }
+            | Dist::Triangular { max, .. }
+            | Dist::TruncatedNormal { max, .. } => *max > 0.0,
+            Dist::Normal { mean, std_dev } => *mean > 0.0 || *std_dev > 0.0,
+            Dist::LogNormal { .. }
+            | Dist::Gamma { .. }
+            | Dist::Beta { .. }
+            | Dist::Weibull { .. } => true,
+            Dist::Binomial {
+                probability,
+                trials,
+            } => *probability > 0.0 && *trials > 0,
+            // Discrete: a positive value with weight. Continuous: point i's probability spreads
+            // over the values up to v_i (the first is an atom at v_0), so the same test holds.
+            Dist::User { points, .. } => points.iter().any(|(p, v)| *p > 0.0 && *v > 0.0),
+        }
+    }
+
     /// The theoretical mean (`None` where it has no simple closed form or the parameters are
     /// invalid). For the truncated normal it is computed by numerical integration.
     pub fn mean(&self) -> Option<f64> {
@@ -818,6 +849,58 @@ mod tests {
         assert_eq!(Dist::Uniform { min: 3.0, max: 3.0 }.sample(&mut r), 3.0);
         assert_eq!(Dist::Constant(-2.0).sample(&mut r), 0.0);
         assert_eq!(Dist::exponential_rate(0.0), Dist::Exponential { mean: 0.0 });
+        for (d, positive) in [
+            (Dist::Constant(0.0), false),
+            (Dist::Constant(-1.0), false),
+            (Dist::exponential_rate(0.0), false),
+            (
+                Dist::Uniform {
+                    min: -2.0,
+                    max: 0.0,
+                },
+                false,
+            ),
+            (
+                Dist::Normal {
+                    mean: 0.0,
+                    std_dev: 0.0,
+                },
+                false,
+            ),
+            (
+                Dist::User {
+                    points: vec![(1.0, 0.0), (0.0, 5.0)],
+                    discrete: false,
+                },
+                false,
+            ),
+            (Dist::Poisson { mean: -2.0 }, false),
+            (Dist::Constant(0.5), true),
+            (Dist::Exponential { mean: 2.0 }, true),
+            (
+                Dist::Normal {
+                    mean: 0.0,
+                    std_dev: 1.0,
+                },
+                true,
+            ),
+            (
+                Dist::Uniform {
+                    min: -1.0,
+                    max: 1.0,
+                },
+                true,
+            ),
+            (
+                Dist::User {
+                    points: vec![(0.5, 0.0), (0.5, 5.0)],
+                    discrete: true,
+                },
+                true,
+            ),
+        ] {
+            assert_eq!(d.can_be_positive(), positive, "{d:?}");
+        }
     }
 
     #[test]

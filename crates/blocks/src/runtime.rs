@@ -5,13 +5,13 @@ use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::rc::Rc;
 
-use stochcraft_des::{Ctx, Resource, ResourceGuard, Sim, Store};
+use stochcraft_des::{Ctx, Resource, ResourceGuard, Sim, Stopped, Store, Watch};
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{Element, ElementId, ElementKind, Model, Need, ResourcePool, Timed};
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
 
-use crate::{Assign, Compiled, ElementReport, Entity, Held, Report, Source};
+use crate::{Assign, Compiled, ElementReport, Entity, Held, Report, RunError, Source};
 
 /// What an element assigns to entities as they enter, and the stream it draws values from.
 struct Props {
@@ -79,14 +79,36 @@ impl Compiled {
     /// `rng` (each element draws from its own forked stream, in model order; then each element's
     /// property values from another, so properties never change the other draws), and reports
     /// the statistics collected after the warm-up.
-    pub fn run(&self, rng: Rng) -> Report {
+    ///
+    /// A model whose entities can go round a loop without simulated time moving would never
+    /// end; past [`Compiled::max_events_at_one_time`] events at one time the replication stops
+    /// with [`RunError::TimeStopped`] instead.
+    pub fn run(&self, rng: Rng) -> Result<Report, RunError> {
+        self.run_watched(rng, &|| false)
+    }
+
+    /// As [`Compiled::run`], asking `cancelled` every so often (every thousand or so events)
+    /// whether to stop, so that even a replication that would take very long, or never end,
+    /// can be cancelled; it then returns [`RunError::Cancelled`]. Asking changes nothing else:
+    /// a replication that is not cancelled gives exactly what [`Compiled::run`] gives.
+    pub fn run_watched(&self, rng: Rng, cancelled: &dyn Fn() -> bool) -> Result<Report, RunError> {
         let x = &self.model.experiment;
-        self.run_for(rng, x.warmup, x.duration)
+        self.simulate(rng, x.warmup, x.duration, cancelled)
     }
 
     /// As [`Compiled::run`], with an explicit warm-up and duration (negative or non-finite values
     /// count as 0).
-    pub fn run_for(&self, mut rng: Rng, warmup: f64, duration: f64) -> Report {
+    pub fn run_for(&self, rng: Rng, warmup: f64, duration: f64) -> Result<Report, RunError> {
+        self.simulate(rng, warmup, duration, &|| false)
+    }
+
+    fn simulate(
+        &self,
+        mut rng: Rng,
+        warmup: f64,
+        duration: f64,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<Report, RunError> {
         let clean = |t: f64| if t.is_finite() && t > 0.0 { t } else { 0.0 };
         let (warmup, duration) = (clean(warmup), clean(duration));
         let elements = &self.model.elements;
@@ -180,6 +202,8 @@ impl Compiled {
                             assigner: Rc::clone(&assigner),
                             index: r.to,
                             places: places.get(r.to).cloned().flatten(),
+                            // A join's second and later inputs bring copies (`spawn_parallel`).
+                            counts: r.input == 0,
                         },
                         weight: r.weight,
                         condition: r.condition.clone(),
@@ -256,7 +280,12 @@ impl Compiled {
             });
         }
 
-        sim.run_until(end);
+        let watch = Watch {
+            max_events_at_one_time: self.max_events_at_one_time,
+            cancelled,
+        };
+        sim.run_watched(end, &watch)
+            .map_err(|stopped| self.run_error(stopped))?;
         let mut elements: Vec<ElementReport> = elements
             .iter()
             .zip(stats.iter())
@@ -266,23 +295,58 @@ impl Compiled {
             .collect();
         // Then each shared pool, after the elements.
         elements.extend(pools.reports(&self.model.resources, end));
-        Report {
+        Ok(Report {
             warmup,
             duration,
             elements,
+        })
+    }
+
+    /// The error for a replication that stopped early. Element processes are tagged with the
+    /// element's index ([`tag`]).
+    fn run_error(&self, stopped: Stopped) -> RunError {
+        match stopped {
+            Stopped::Cancelled { .. } => RunError::Cancelled,
+            Stopped::TimeStopped { time, events, tag } => RunError::TimeStopped {
+                time,
+                events,
+                element: self.tagged(tag),
+            },
+            Stopped::Unschedulable { time, tag } => RunError::TimeOutOfRange {
+                time,
+                element: self.tagged(tag),
+            },
         }
+    }
+
+    /// The id and name of the element whose processes have tag `tag`.
+    fn tagged(&self, tag: Option<u64>) -> Option<(stochcraft_model::ElementId, String)> {
+        tag.and_then(|t| usize::try_from(t).ok())
+            .and_then(|i| self.model.elements.get(i))
+            .map(|e| (e.id.clone(), e.name.clone()))
     }
 }
 
-/// Statistics a block keeps while the model runs.
+/// The tag of element `index`'s processes (see [`Sim::spawn_tagged`]).
+fn tag(index: usize) -> u64 {
+    u64::try_from(index).unwrap_or(u64::MAX)
+}
+
+/// Statistics a block keeps while the model runs. Every element balances: what entered either
+/// left, was lost here, or is still inside.
 pub(crate) struct BlockStats {
+    /// Entities that entered (a source: created; a join: each entity once, see
+    /// `spawn_parallel`).
     entered: u64,
+    /// Entities sent on (a sink: removed; a split or join: one per copy sent out).
     left: u64,
     /// Entities waiting in the block's input (servers only).
     waiting: TimeWeighted,
     /// Units busy (servers) or entities inside (delays).
     busy: TimeWeighted,
-    /// Time from entering a server's input to the start of service.
+    /// Time from entering a server's input to the start of service. Only entities that started
+    /// service count, so when the server is overloaded, those still waiting at the end (which
+    /// have waited longest) are left out and the mean is biased low.
     wait: Tally,
     /// Time from creation to reaching a sink.
     time_in_system: Tally,
@@ -293,7 +357,11 @@ pub(crate) struct BlockStats {
     blocked: TimeWeighted,
     /// Time each entity that left waited for room in the next buffer (blocking after service).
     blocked_time: Tally,
-    /// Arrivals lost because this element's buffer was full.
+    /// Entities lost here. A server with a finite buffer: arrivals from sources turned away
+    /// because the buffer was full (they never entered). A source: its own arrivals lost that
+    /// way (they entered and never left; the same arrival counts at the full buffer too). An
+    /// exclusive gateway: entities with no connection to take (no condition held and there is
+    /// no default), which leave the model there.
     lost: u64,
 }
 
@@ -391,7 +459,16 @@ impl BlockStats {
                 }
                 _ => None,
             },
-            lost: finite.then_some(self.lost),
+            // Only where losses can happen, so models without them report as before.
+            lost: match kind {
+                ElementKind::Server {
+                    queue_capacity: Some(_),
+                    ..
+                }
+                | ElementKind::ExclusiveGateway { .. } => Some(self.lost),
+                ElementKind::Source { .. } if blocks => Some(self.lost),
+                _ => None,
+            },
             loss_probability: if finite && offered > 0 {
                 Some(self.lost as f64 / offered as f64)
             } else {
@@ -415,6 +492,10 @@ struct Port {
     index: usize,
     /// The next element's places, when its buffer is finite.
     places: Option<Rc<Places>>,
+    /// Whether an entity sent here counts as entering the next element: always, except on a
+    /// join's second and later inputs, whose entities are copies merged into the one on its
+    /// first input.
+    counts: bool,
 }
 
 /// A finite buffer's places (see [`Compiled::run_for`]), with the one each entity there holds.
@@ -451,9 +532,10 @@ impl Port {
         self.send(ctx.now(), e);
     }
 
-    /// Sends a new arrival if there is room (a place freed at this instant counts); otherwise
-    /// it is lost, and counted as lost by the next element.
-    async fn offer(&self, ctx: &Ctx, e: Entity) {
+    /// Sends a new arrival if there is room (a place freed at this instant counts) and returns
+    /// `true`; otherwise the arrival is lost, counted as lost by the next element, and this
+    /// returns `false`.
+    async fn offer(&self, ctx: &Ctx, e: Entity) -> bool {
         if let Some(p) = &self.places {
             match p.pool.acquire_within(0.0).await {
                 Ok(guard) => p.enter(e.id, guard),
@@ -461,11 +543,12 @@ impl Port {
                     if let Some(s) = self.stats.get(self.index) {
                         s.borrow_mut().lost += 1;
                     }
-                    return;
+                    return false;
                 }
             }
         }
         self.send(ctx.now(), e);
+        true
     }
 
     fn send(&self, now: f64, mut e: Entity) {
@@ -473,7 +556,9 @@ impl Port {
         self.assigner.enter(self.index, &mut e, &self.stats);
         if let Some(s) = self.stats.get(self.index) {
             let mut s = s.borrow_mut();
-            s.entered += 1;
+            if self.counts {
+                s.entered += 1;
+            }
             let w = s.waiting.value() + 1.0;
             s.waiting.set(now, w);
         }
@@ -530,7 +615,7 @@ fn spawn_source(
     next_id: Rc<RefCell<u64>>,
     first_at_zero: bool,
 ) {
-    sim.spawn(async move {
+    sim.spawn_tagged(tag(env.me), async move {
         let mut made = 0u64;
         // The period of `rates` now under way.
         let mut k = 0usize;
@@ -576,10 +661,7 @@ fn spawn_source(
                 id
             };
             made += 1;
-            env.with_stats(|s| {
-                s.entered += 1;
-                s.left += 1;
-            });
+            env.with_stats(|s| s.entered += 1);
             let mut entity = Entity {
                 id,
                 created: now,
@@ -588,9 +670,18 @@ fn spawn_source(
             };
             // A source sets its properties on the entities it creates.
             env.assigner.enter(env.me, &mut entity, &env.stats);
-            if let Some(out) = &env.out {
-                out.offer(&env.ctx, entity).await;
-            }
+            // It leaves, unless the next element's finite buffer is full and it is lost.
+            let sent = match &env.out {
+                Some(out) => out.offer(&env.ctx, entity).await,
+                None => true,
+            };
+            env.with_stats(|s| {
+                if sent {
+                    s.left += 1;
+                } else {
+                    s.lost += 1;
+                }
+            });
         }
     });
 }
@@ -684,11 +775,12 @@ fn spawn_shifts(sim: &mut Sim, pools: Rc<Pools>, pool: usize, changes: Vec<(f64,
 }
 
 fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
+    let me = tag(env.me);
     let env = Rc::new(RefCell::new(env));
     for _ in 0..capacity {
         let env = Rc::clone(&env);
         let service = service.clone();
-        sim.spawn(async move {
+        sim.spawn_tagged(me, async move {
             loop {
                 let (input, ctx) = {
                     let e = env.borrow();
@@ -1037,8 +1129,10 @@ fn spawn_shared(
     pools: Rc<Pools>,
 ) {
     let ctx = env.ctx.clone();
+    let me = tag(env.me);
     let env = Rc::new(RefCell::new(env));
-    sim.spawn(async move {
+    // Each entity's service is a process of its own, started from this one, so tagged alike.
+    sim.spawn_tagged(me, async move {
         loop {
             let input = env.borrow().input.clone();
             let entity = input.get().await;
@@ -1069,6 +1163,7 @@ fn spawn_shared(
 }
 
 fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
+    let me = tag(env.me);
     let env = Rc::new(RefCell::new(env));
     let mut sim_ctx = None;
     {
@@ -1076,7 +1171,7 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
         sim_ctx.get_or_insert(e.ctx.clone());
     }
     let Some(ctx) = sim_ctx else { return };
-    sim.spawn(async move {
+    sim.spawn_tagged(me, async move {
         loop {
             let input = env.borrow().input.clone();
             let entity = input.get().await;
@@ -1097,7 +1192,7 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
 }
 
 fn spawn_sink(sim: &mut Sim, env: BlockEnv) {
-    sim.spawn(async move {
+    sim.spawn_tagged(tag(env.me), async move {
         loop {
             let entity = env.input.get().await;
             let now = env.ctx.now();
@@ -1142,17 +1237,20 @@ fn choose(outs: &[Out], e: &Entity, assigner: &Assigner, rng: &mut Rng) -> Optio
 }
 
 fn spawn_exclusive(sim: &mut Sim, mut env: BlockEnv, outs: Vec<Out>) {
-    sim.spawn(async move {
+    sim.spawn_tagged(tag(env.me), async move {
         loop {
             let entity = env.input.get().await;
             env.adjust(|s| &mut s.waiting, -1.0);
-            env.with_stats(|s| s.left += 1);
             let to = choose(&outs, &entity, &env.assigner, &mut env.rng);
             // With no route (no condition holds and there is no default), the entity leaves
-            // the model here.
+            // the model here, and is counted as lost.
             // A full finite buffer holds the gateway, and everything behind it, up.
-            if let Some(out) = to.and_then(|i| outs.get(i)) {
-                out.port.deliver(&env.ctx, entity).await;
+            match to.and_then(|i| outs.get(i)) {
+                Some(out) => {
+                    env.with_stats(|s| s.left += 1);
+                    out.port.deliver(&env.ctx, entity).await;
+                }
+                None => env.with_stats(|s| s.lost += 1),
             }
         }
     });
@@ -1179,6 +1277,18 @@ fn combine(mut parts: Vec<Entity>) -> Option<Entity> {
     Some(first)
 }
 
+/// A parallel gateway. A split sends a copy of each entity down every outgoing connection; a
+/// join waits for one entity on each input and merges them into one ([`combine`]), then sends
+/// it on (copied, if it also splits).
+///
+/// A join pairs entities by arrival order: the next one waiting on each input, whichever split
+/// made them. With several entities' copies in flight, copies of different entities can be
+/// merged with each other, if one branch overtakes another.
+///
+/// Counting: a join's `entered` counts each entity once, as it arrives on the first input (the
+/// entities arriving on the others are its copies, merged into it); `left` counts each entity
+/// sent out, one per outgoing connection. So a 2-in/1-out join reports entered = left (less
+/// any still waiting for their copies at the end), and a 1-in/2-out split left = 2 x entered.
 fn spawn_parallel(
     sim: &mut Sim,
     env: BlockEnv,
@@ -1186,7 +1296,7 @@ fn spawn_parallel(
     outs: Vec<Out>,
     next_id: Rc<RefCell<u64>>,
 ) {
-    sim.spawn(async move {
+    sim.spawn_tagged(tag(env.me), async move {
         loop {
             // One entity from each input (a join waits for all of them), in input order.
             let mut parts = Vec::with_capacity(inputs.len());

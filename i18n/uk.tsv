@@ -14,32 +14,45 @@
 @id	language.name	Українська
 	+ Add block	+ Додати блок
 	About StochCraft	Про програму StochCraft
+	About {app}	Про програму {app}
 	Add Block	Додати блок
 	Add a flow from…	Додати потік від…
 	Add a flow to…	Додати потік до…
+	Add alternative	Додати альтернативу
 	Add point	Додати точку
+	Add pool	Додати пул
 	Add property	Додати властивість
+	Added pool {id}	Додано пул {id}
 	Added {block} ({id})	Додано {block} ({id})
+	Alternative {n}	Альтернатива {n}
 	Appearance	Вигляд
 	Arrival limit	Обмеження кількості прибуттів
 	Arrivals	Прибуття
+	BPMN with BPSim	BPMN з BPSim
 	Back to the model (Esc)	Повернутися до моделі (Esc)
 	Beta	Бета-розподіл
 	Binomial	Біноміальний розподіл
 	Boolean	Логічне значення
+	Bring All to Front	Усі вікна на передній план
 	Built with	Створено за допомогою
+	By role	За роллю
+	CSV table	Таблиця CSV
 	Cancel	Скасувати
+	Cancel Run	Скасувати запуск
 	Cancel run	Скасувати запуск
 	Capacity	Потужність
 	Change Block	Змінити блок
 	Change Flow	Змінити потік
 	Changing the time unit does not convert the times already in the model.	Зміна одиниці часу не перераховує час, уже заданий у моделі.
+	Clear Menu	Очистити меню
 	Close	Закрити
+	Close Window	Закрити вікно
 	Comes from	Надходить від
 	Condition of {id}	Умова для {id}
 	Connect	З'єднати
 	Connections	З'єднання
 	Constant	Стала величина
+	Dark	Темний
 	Data points	Точки даних
 	Date and time	Дата й час
 	Decimal number	Десяткове число
@@ -56,15 +69,19 @@
 	Download	Завантажити
 	Download charts (PNG)	Завантажити діаграми (PNG)
 	Download table (CSV)	Завантажити таблицю (CSV)
+	Downloaded {file}	Завантажено {file}
 	Duration	Тривалість
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Кожна сутність займає перший із цих варіантів, який можна виконати зараз, повністю й одразу, і повертає одиниці, коли виходить.
 	Edit	Редагування
 	Entered	Увійшло
 	Erlang	Розподіл Ерланга
 	Error	Помилка
 	Every distribution	Усі розподіли
+	Exit	Вийти
 	Experiment	Експеримент
 	Experiment Settings	Налаштування експерименту
 	Exponential	Експоненціальний розподіл
+	Export	Експортувати
 	Export charts (PNG)	Експортувати діаграми (PNG)
 	Export table (CSV)	Експортувати таблицю (CSV)
 	Exported {file}	Експортовано {file}
@@ -75,12 +92,17 @@
 	Gamma	Гамма-розподіл
 	Goes to	Веде до
 	Help	Довідка
+	Hide Others	Приховати інші
+	Hide {app}	Приховати {app}
+	Keyboard Shortcuts…	Клавіатурні скорочення…
 	Keyboard shortcuts saved	Клавіатурні скорочення збережено
 	Keyboard shortcuts unchanged	Клавіатурні скорочення не змінено
 	Language	Мова
 	Left	Вийшло
 	Licensed under the MIT License or the Apache License 2.0, at your option.	На вибір: MIT License або Apache License 2.0.
+	Light	Світлий
 	Log-normal	Логнормальний розподіл
+	Lost (no way out)	Втрати (немає виходу)
 	Lost (waiting room full)	Втрати (місця очікування зайняті)
 	M/M/1 queue	Черга M/M/1
 	Maximise	Розгорнути
@@ -93,10 +115,13 @@
 	Mean wait	Середній час очікування
 	Metric	Показник
 	Minimise	Згорнути
+	Minimize	Згорнути
 	Minimum	Мінімум
 	Model	Модель
 	Most likely	Найімовірніше значення
 	Name	Ім’я
+	Needs	Потреби
+	New	Створити
 	New model	Нова модель
 	New property	Нова властивість
 	New property name	Назва нової властивості
@@ -111,21 +136,28 @@
 	One task per BPSim distribution, to compare their spread.	По одному завданню на кожний розподіл BPSim для порівняння розкиду.
 	Open	Відкрити
 	Open Example	Відкрити приклад
+	Open Model	Відкрити модель
 	Open Recent	Нещодавні файли
 	Open a model first	Спочатку відкрийте модель
 	Open a model to simulate it	Відкрийте модель для моделювання
 	Open a model…	Відкрити модель…
 	Opened {file}	Відкрито {file}
+	Open…	Відкрити…
 	Or start from an example	Або почніть із прикладу
+	PNG image	Зображення PNG
 	Parameters	Параметри
 	Points	Точки
 	Poisson	Розподіл Пуассона
+	Preferences	Налаштування
+	Priority	Пріоритет
 	Probability	Імовірність
 	Probability of {id}	Імовірність для {id}
 	Problems	Проблеми
 	Process	Процес
+	Process models with BPSim	Моделі процесів з BPSim
 	Properties	Властивості
 	Quit	Вийти
+	Quit {app}	Завершити {app}
 	Ready	Готово
 	Recover	Відновити
 	Recover unsaved changes?	Відновити незбережені зміни?
@@ -136,16 +168,21 @@
 	Remove	Видалити
 	Remove Block	Видалити блок
 	Remove Property	Видалити властивість
+	Remove alternative {n}	Видалити альтернативу {n}
 	Remove block	Видалити блок
 	Remove the flow {id}	Видалити потік {id}
+	Remove the pool {id}	Видалити пул {id}
 	Remove this block and its flows (Delete)	Видалити цей блок та його потоки (Delete)
 	Removed {id}	Видалено {id}
 	Rename Block	Перейменувати блок
 	Rename Model	Перейменувати модель
 	Replace Model	Замінити модель
 	Replications	Кількість повторних запусків
+	Resource pool	Пул ресурсів
+	Resource pools	Пули ресурсів
 	Restore	Відновити розмір
 	Results	Результати
+	Roles	Ролі
 	Run	Запустити
 	Run cancelled	Запуск скасовано
 	Run experiment	Запустити експеримент
@@ -154,11 +191,13 @@
 	Running…	Виконується…
 	Save	Зберегти
 	Save As…	Зберегти як…
+	Save Model	Зберегти модель
 	Save changes to {name}?	Зберегти зміни в {name}?
 	Saved {file}	Збережено {file}
 	Scale	Масштаб
 	Seed	Початкове значення генератора
 	Service time	Час обслуговування
+	Services	Служби
 	Set Property	Задати властивість
 	Set a value	Задати значення
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задається для кожної сутності під час входу до цього блока. Вирази зчитують значення, які сутність мала на момент входу, наприклад getProperty('issues') - 1.
@@ -166,6 +205,7 @@
 	Shape	Форма
 	Share of arrivals lost	Частка втрачених прибуттів
 	Share of units blocked	Частка заблокованих одиниць
+	Show All	Показати всі
 	Show {id}	Показати {id}
 	Split or join	Розділити або об'єднати
 	Split or join (all ways)	Розділити або об'єднати (усі шляхи)
@@ -178,6 +218,7 @@
 	Tandem line	Послідовна лінія
 	Task	Завдання
 	Task with a resource	Завдання з ресурсом
+	Task with shared resources	Завдання зі спільними ресурсами
 	Text	Текст
 	The model: its experiment, connections and problems	Модель: експеримент, з'єднання й проблеми
 	This block has a warning	У цьому блоці є попередження
@@ -195,6 +236,8 @@
 	Undo {action}	Скасувати: {action}
 	Uniform	Рівномірний розподіл
 	Unit	Одиниця вимірювання
+	Units	Одиниці
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Одиниці, які спільно використовують кілька завдань. Завдання зі спільними ресурсами бере їх із пулу або за роллю.
 	Untitled	Без назви
 	Untitled model	Модель без назви
 	Use System Setting	Використати системне налаштування
@@ -207,8 +250,10 @@
 	Warning	Попередження
 	Weibull	Розподіл Вейбулла
 	Whole number	Ціле число
+	Window	Вікно
 	Yes or no	Так або ні
 	Your changes will be lost if you don't save them.	Якщо не зберегти зміни, їх буде втрачено.
+	Zoom	Перемкнути розмір вікна
 	a model	модель
 	arrivals	прибуття
 	days	дні
@@ -225,8 +270,10 @@
 	split or join: all ways	розділити або об'єднати: усі шляхи
 	task	завдання
 	task with a resource	завдання з ресурсом
+	task with shared resources	завдання зі спільними ресурсами
 	the charts could not be captured	не вдалося отримати зображення діаграм
 	the run stopped	запуск зупинено
+	the settings could not be saved: {error}	не вдалося зберегти налаштування: {error}
 	there are no charts to export	немає діаграм для експорту
 	to {block}	до {block}
 	unlimited	без обмежень
@@ -238,10 +285,17 @@
 	± 95% CI	± 95% ДІ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — половина ширини 95% довірчого інтервалу Student-t для середнього значення за повтореннями.
 	· no results yet	· результатів поки немає
+unit	d	д
+unit	h	год
+unit	min	хв
+unit	ms	мс
+unit	s	с
+unit	yr	р.
 @plural	Finished {n} replication|Finished {n} replications	Завершено {n} реплікацію|Завершено {n} реплікації|Завершено {n} реплікацій
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Відкрито {file} ({n} попередження)|Відкрито {file} ({n} попередження)|Відкрито {file} ({n} попереджень)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Виконує {n} незалежну реплікацію моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.|Виконує {n} незалежні реплікації моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.|Виконує {n} незалежних реплікацій моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Завершено {done} із {n} реплікації|Завершено {done} із {n} реплікацій|Завершено {done} із {n} реплікацій
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} реплікацією|{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} реплікаціями|{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} реплікаціями
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} реплікація · початкове значення {seed}|{n} реплікації · початкове значення {seed}|{n} реплікацій · початкове значення {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} реплікація · початкове значення {seed} · розігрів {warmup} {unit} · виміряно {duration} {unit}|{n} реплікації · початкове значення {seed} · розігрів {warmup} {unit} · виміряно {duration} {unit}|{n} реплікацій · початкове значення {seed} · розігрів {warmup} {unit} · виміряно {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} реплікація · початкове значення {seed}|{n} реплікації · початкове значення {seed}|{n} реплікацій · початкове значення {seed}
+@plural	{n} replication|{n} replications	{n} реплікація|{n} реплікації|{n} реплікацій

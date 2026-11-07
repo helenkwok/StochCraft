@@ -31,7 +31,7 @@ fn run(compiled: &Compiled, threads: usize) -> ExperimentSummary {
     let x = &compiled.model().experiment;
     let reports = Experiment::new(u64::from(x.replications), x.seed)
         .threads(threads)
-        .run(|r| compiled.run(r.rng));
+        .run(|r| compiled.run(r.rng).unwrap_or_else(|e| panic!("{e}")));
     match reports {
         Ok(r) => summarise(&r),
         Err(e) => panic!("replications failed: {e}"),

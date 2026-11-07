@@ -14,32 +14,45 @@
 @id	language.name	Norsk bokmål
 	+ Add block	+ Legg til blokk
 	About StochCraft	Om StochCraft
+	About {app}	Om {app}
 	Add Block	Legg til blokk
 	Add a flow from…	Legg til flyt fra…
 	Add a flow to…	Legg til flyt til…
+	Add alternative	Legg til alternativ
 	Add point	Legg til punkt
+	Add pool	Legg til pulje
 	Add property	Legg til egenskap
+	Added pool {id}	La til puljen {id}
 	Added {block} ({id})	La til {block} ({id})
+	Alternative {n}	Alternativ {n}
 	Appearance	Utseende
 	Arrival limit	Grense for ankomster
 	Arrivals	Ankomster
+	BPMN with BPSim	BPMN med BPSim
 	Back to the model (Esc)	Tilbake til modellen (Esc)
 	Beta	Beta
 	Binomial	Binomisk
 	Boolean	Boolsk
+	Bring All to Front	Legg alle fremst
 	Built with	Laget med
+	By role	Etter rolle
+	CSV table	CSV-tabell
 	Cancel	Avbryt
+	Cancel Run	Avbryt kjøring
 	Cancel run	Avbryt kjøring
 	Capacity	Kapasitet
 	Change Block	Endre blokk
 	Change Flow	Endre flyt
 	Changing the time unit does not convert the times already in the model.	Endring av tidsenheten konverterer ikke tidene som allerede finnes i modellen.
+	Clear Menu	Tøm menyen
 	Close	Lukk
+	Close Window	Lukk vindu
 	Comes from	Kommer fra
 	Condition of {id}	Betingelse for {id}
 	Connect	Koble til
 	Connections	Forbindelser
 	Constant	Konstant
+	Dark	Mørk
 	Data points	Datapunkter
 	Date and time	Dato og klokkeslett
 	Decimal number	Desimaltall
@@ -56,15 +69,19 @@
 	Download	Last ned
 	Download charts (PNG)	Last ned diagrammer (PNG)
 	Download table (CSV)	Last ned tabell (CSV)
+	Downloaded {file}	Lastet ned {file}
 	Duration	Varighet
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Hver enhet tar det første av disse alternativene som kan oppfylles nå, alt på én gang, og gir ressursenhetene tilbake når den forlater oppgaven.
 	Edit	Rediger
 	Entered	Innkommet
 	Erlang	Erlang
 	Error	Feil
 	Every distribution	Alle fordelinger
+	Exit	Avslutt
 	Experiment	Eksperiment
 	Experiment Settings	Eksperimentinnstillinger
 	Exponential	Eksponentiell
+	Export	Eksporter
 	Export charts (PNG)	Eksporter diagrammer (PNG)
 	Export table (CSV)	Eksporter tabell (CSV)
 	Exported {file}	Eksporterte {file}
@@ -75,12 +92,17 @@
 	Gamma	Gamma
 	Goes to	Går til
 	Help	Hjelp
+	Hide Others	Skjul andre
+	Hide {app}	Skjul {app}
+	Keyboard Shortcuts…	Hurtigtaster…
 	Keyboard shortcuts saved	Hurtigtaster lagret
 	Keyboard shortcuts unchanged	Hurtigtaster uendret
 	Language	Språk
 	Left	Forlatt
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Lisensiert under MIT License eller Apache License 2.0, etter eget valg.
+	Light	Lys
 	Log-normal	Lognormal
+	Lost (no way out)	Tapt (ingen vei ut)
 	Lost (waiting room full)	Tapt (venterommet fullt)
 	M/M/1 queue	M/M/1-kø
 	Maximise	Maksimer
@@ -93,10 +115,13 @@
 	Mean wait	Gjennomsnittlig ventetid
 	Metric	Måltall
 	Minimise	Minimer
+	Minimize	Minimer
 	Minimum	Minimum
 	Model	Modell
 	Most likely	Mest sannsynlig
 	Name	Navn
+	Needs	Behov
+	New	Ny
 	New model	Ny modell
 	New property	Ny egenskap
 	New property name	Navn på ny egenskap
@@ -111,21 +136,28 @@
 	One task per BPSim distribution, to compare their spread.	Én oppgave per BPSim-fordeling for å sammenligne spredningen.
 	Open	Åpne
 	Open Example	Åpne eksempel
+	Open Model	Åpne modell
 	Open Recent	Åpne nylig brukt
 	Open a model first	Åpne en modell først
 	Open a model to simulate it	Åpne en modell for å simulere den
 	Open a model…	Åpne modell…
 	Opened {file}	Åpnet {file}
+	Open…	Åpne…
 	Or start from an example	Eller start med et eksempel
+	PNG image	PNG-bilde
 	Parameters	Parametere
 	Points	Punkter
 	Poisson	Poisson
+	Preferences	Innstillinger
+	Priority	Prioritet
 	Probability	Sannsynlighet
 	Probability of {id}	Sannsynlighet for {id}
 	Problems	Problemer
 	Process	Prosess
+	Process models with BPSim	Prosessmodeller med BPSim
 	Properties	Egenskaper
 	Quit	Avslutt
+	Quit {app}	Avslutt {app}
 	Ready	Klar
 	Recover	Gjenopprett
 	Recover unsaved changes?	Gjenopprette ulagrede endringer?
@@ -136,16 +168,21 @@
 	Remove	Fjern
 	Remove Block	Fjern blokk
 	Remove Property	Fjern egenskap
+	Remove alternative {n}	Fjern alternativ {n}
 	Remove block	Fjern blokk
 	Remove the flow {id}	Fjern flyten {id}
+	Remove the pool {id}	Fjern puljen {id}
 	Remove this block and its flows (Delete)	Fjern denne blokken og flytene dens (Delete)
 	Removed {id}	Fjernet {id}
 	Rename Block	Gi blokk nytt navn
 	Rename Model	Gi modell nytt navn
 	Replace Model	Erstatt modell
 	Replications	Replikasjoner
+	Resource pool	Ressurspulje
+	Resource pools	Ressurspuljer
 	Restore	Gjenopprett vindu
 	Results	Resultater
+	Roles	Roller
 	Run	Kjør
 	Run cancelled	Kjøring avbrutt
 	Run experiment	Kjør eksperiment
@@ -154,11 +191,13 @@
 	Running…	Kjører…
 	Save	Lagre
 	Save As…	Lagre som…
+	Save Model	Lagre modell
 	Save changes to {name}?	Lagre endringer i {name}?
 	Saved {file}	Lagret {file}
 	Scale	Skala
 	Seed	Tilfeldighetsfrø
 	Service time	Servicetid
+	Services	Tjenester
 	Set Property	Angi egenskap
 	Set a value	Angi en verdi
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Angis for hver enhet når den går inn i denne blokken. Uttrykk leser verdiene enheten hadde ved ankomst, for eksempel getProperty('issues') - 1.
@@ -166,6 +205,7 @@
 	Shape	Form
 	Share of arrivals lost	Andel tapte ankomster
 	Share of units blocked	Andel blokkerte enheter
+	Show All	Vis alle
 	Show {id}	Vis {id}
 	Split or join	Del eller slå sammen
 	Split or join (all ways)	Del eller slå sammen (alle veier)
@@ -178,6 +218,7 @@
 	Tandem line	Tandemlinje
 	Task	Oppgave
 	Task with a resource	Oppgave med ressurs
+	Task with shared resources	Oppgave med delte ressurser
 	Text	Tekst
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
 	This block has a warning	Denne blokken har en advarsel
@@ -195,6 +236,8 @@
 	Undo {action}	Angre {action}
 	Uniform	Uniform
 	Unit	Enhet
+	Units	Enheter
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Ressursenheter som flere oppgaver deler. En oppgave med delte ressurser tar dem fra en pulje eller etter rolle.
 	Untitled	Uten navn
 	Untitled model	Modell uten tittel
 	Use System Setting	Bruk systeminnstilling
@@ -207,8 +250,10 @@
 	Warning	Advarsel
 	Weibull	Weibull
 	Whole number	Heltall
+	Window	Vindu
 	Yes or no	Ja eller nei
 	Your changes will be lost if you don't save them.	Endringene dine går tapt hvis du ikke lagrer dem.
+	Zoom	Zoom
 	a model	en modell
 	arrivals	ankomster
 	days	dager
@@ -225,8 +270,10 @@
 	split or join: all ways	del eller slå sammen: alle veier
 	task	oppgave
 	task with a resource	oppgave med ressurs
+	task with shared resources	oppgave med delte ressurser
 	the charts could not be captured	diagrammene kunne ikke fanges opp
 	the run stopped	kjøringen ble stoppet
+	the settings could not be saved: {error}	innstillingene kunne ikke lagres: {error}
 	there are no charts to export	ingen diagrammer å eksportere
 	to {block}	til {block}
 	unlimited	ubegrenset
@@ -238,10 +285,17 @@
 	± 95% CI	± 95% KI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± er halve bredden av et 95% Student-t-konfidensintervall for gjennomsnittet på tvers av gjentakelser.
 	· no results yet	· ingen resultater ennå
+unit	d	d
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	år
 @plural	Finished {n} replication|Finished {n} replications	{n} replikasjon fullført|{n} replikasjoner fullført
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Åpnet {file} ({n} advarsel)|Åpnet {file} ({n} advarsler)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kjører {n} uavhengig replikasjon av modellen fra tilfeldig frø {seed}. Resultatene for hvert element inneholder halvbredden til et 95% konfidensintervall.|Kjører {n} uavhengige replikasjoner av modellen fra tilfeldig frø {seed}. Resultatene for hvert element inneholder halvbredden til et 95% konfidensintervall.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} av {n} replikasjon fullført|{done} av {n} replikasjoner fullført
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% intervall fra {low} til {high}{unit}\nover {n} replikasjon|{name}: {mean}{unit}\n95% intervall fra {low} til {high}{unit}\nover {n} replikasjoner
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikasjon · frø {seed}|{n} replikasjoner · frø {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasjon · frø {seed} · oppvarming {warmup} {unit} · {duration} {unit} målt|{n} replikasjoner · frø {seed} · oppvarming {warmup} {unit} · {duration} {unit} målt
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikasjon · frø {seed}|{n} replikasjoner · frø {seed}
+@plural	{n} replication|{n} replications	{n} replikasjon|{n} replikasjoner

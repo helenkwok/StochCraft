@@ -280,7 +280,13 @@ impl ElementKind {
 
     fn distributions(&self) -> Vec<(&'static str, &Dist)> {
         match self {
-            ElementKind::Source { interarrival, .. } => vec![("interarrival", interarrival)],
+            ElementKind::Source {
+                interarrival,
+                timed,
+                ..
+            } => std::iter::once(("interarrival", interarrival))
+                .chain(timed.iter().map(|t| ("interarrival", &t.value)))
+                .collect(),
             ElementKind::Server { service, .. } | ElementKind::SharedTask { service, .. } => {
                 vec![("service", service)]
             }
@@ -302,7 +308,7 @@ pub enum PropertyType {
     Double,
     /// A length of time, in the experiment's time unit.
     Duration,
-    /// A date and time, kept as written (calendars arrive in M2.6).
+    /// A date and time, kept as written.
     DateTime,
 }
 
@@ -517,6 +523,9 @@ pub enum Problem {
         error: stochcraft_random::DistError,
     },
     ZeroCapacity,
+    /// A source with no limit whose time between arrivals is always 0: the run would make
+    /// entities at one instant forever and never end.
+    NoTimeBetweenArrivals,
     NoSource,
     NoSink,
     Unreachable,
@@ -639,6 +648,7 @@ impl Problem {
             Problem::SeveralOutputs { .. } => "several_outputs",
             Problem::BadDistribution { .. } => "bad_distribution",
             Problem::ZeroCapacity => "zero_capacity",
+            Problem::NoTimeBetweenArrivals => "no_time_between_arrivals",
             Problem::NoSource => "no_source",
             Problem::NoSink => "no_sink",
             Problem::Unreachable => "unreachable",
@@ -731,6 +741,10 @@ impl std::fmt::Display for Diagnostic {
             }
             Problem::BadDistribution { parameter, error } => write!(f, "{parameter}: {error}"),
             Problem::ZeroCapacity => write!(f, "a server needs at least 1 unit"),
+            Problem::NoTimeBetweenArrivals => write!(
+                f,
+                "the time between arrivals is always 0, so the run would never end; give it a positive value or limit the arrivals"
+            ),
             Problem::NoSource => write!(f, "the model has no source, so nothing will happen"),
             Problem::NoSink => write!(f, "the model has no sink, so no time in system is measured"),
             Problem::Unreachable => write!(f, "no entity can reach this element from a source"),
@@ -909,6 +923,24 @@ impl Model {
             }
             if let ElementKind::Server { capacity: 0, .. } = e.kind {
                 out.push(Diagnostic::error(Some(&e.id), Problem::ZeroCapacity));
+            }
+            // Every time between arrivals that can apply, with no limit on arrivals.
+            if let ElementKind::Source {
+                interarrival,
+                limit: None,
+                timed,
+                idle_outside,
+            } = &e.kind
+                && (!*idle_outside)
+                    .then_some(interarrival)
+                    .into_iter()
+                    .chain(timed.iter().map(|t| &t.value))
+                    .any(|d| d.check().is_ok() && !d.can_be_positive())
+            {
+                out.push(Diagnostic::error(
+                    Some(&e.id),
+                    Problem::NoTimeBetweenArrivals,
+                ));
             }
             for (parameter, d) in e.kind.distributions() {
                 if let Err(error) = d.check() {
@@ -1984,6 +2016,40 @@ mod tests {
             );
         }
         assert!(m.is_runnable(), "warnings alone do not stop a run");
+    }
+
+    #[test]
+    fn arrivals_need_time_between_them_unless_limited() {
+        for (interarrival, limit, stuck) in [
+            (Dist::Constant(0.0), None, true),
+            (Dist::exponential_rate(0.0), None, true),
+            (Dist::Constant(0.0), Some(5), false),
+            (
+                Dist::Normal {
+                    mean: 0.0,
+                    std_dev: 1.0,
+                },
+                None,
+                false,
+            ),
+        ] {
+            let mut m = mm1();
+            for e in &mut m.elements {
+                if let ElementKind::Source { .. } = e.kind {
+                    e.kind = ElementKind::Source {
+                        interarrival: interarrival.clone(),
+                        limit,
+                        idle_outside: false,
+                        timed: Vec::new(),
+                    };
+                }
+            }
+            let found = problems(&m)
+                .iter()
+                .any(|(s, _, p)| *s == Severity::Error && p == "NoTimeBetweenArrivals");
+            assert_eq!(found, stuck, "{interarrival:?}, limit {limit:?}");
+            assert_eq!(m.is_runnable(), !stuck);
+        }
     }
 
     #[test]

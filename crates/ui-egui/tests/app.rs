@@ -6,7 +6,7 @@
 use egui_kittest::Harness;
 use egui_kittest::kittest::Queryable;
 use serde_json::json;
-use stochcraft_ui_egui::{App, Platform, Request};
+use stochcraft_ui_egui::{App, Autosave, Platform, Request};
 
 /// The app with English numbers (`1,234.5`), so the tests read the same in every region.
 fn english(mut app: App) -> App {
@@ -197,6 +197,83 @@ fn unsaved_changes_are_asked_about_before_they_are_lost() {
     settle(&mut h);
     click(&mut h, "Don't Save");
     assert_eq!(h.state_mut().take_requests(), vec![Request::Quit]);
+}
+
+#[test]
+fn a_cancelled_save_drops_what_was_to_follow_it() {
+    let mut h = harness(Platform::DESKTOP);
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Draft" }));
+    settle(&mut h);
+    // New ▸ Save, then the user closes the Save dialog without choosing a file.
+    menu(&mut h, &["File", "New"]);
+    click(&mut h, "Save");
+    assert!(matches!(
+        h.state_mut().take_requests().as_slice(),
+        [Request::PickSave { .. }]
+    ));
+    h.state_mut().save_cancelled();
+    settle(&mut h);
+    assert_eq!(h.state().engine().model().name, "Draft");
+    // A later, ordinary save does only that: no New in its wake.
+    h.state_mut().save_to("/tmp/Draft.bpmn");
+    let Some(Request::Write { path, bytes }) = h.state_mut().take_requests().pop() else {
+        panic!("expected a write");
+    };
+    h.state_mut().written(&path, &bytes);
+    settle(&mut h);
+    assert_eq!(h.state().engine().model().name, "Draft", "nothing followed");
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+}
+
+/// Takes the one download the app asked for.
+fn take_download(h: &mut Harness<'static, App>) -> String {
+    let requests = h.state_mut().take_requests();
+    let [Request::Download { name, .. }] = requests.as_slice() else {
+        panic!("expected one download, got {requests:?}");
+    };
+    name.clone()
+}
+
+#[test]
+fn a_download_does_not_count_as_saved() {
+    let mut h = harness(Platform::BROWSER);
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Draft" }));
+    settle(&mut h);
+    assert!(matches!(h.state_mut().autosave(), Autosave::Write(_)));
+
+    menu(&mut h, &["File", "Download"]);
+    let name = take_download(&mut h);
+    h.state_mut().downloaded(&name);
+    settle(&mut h);
+    // The browser can't say whether the file was kept, so nothing is marked saved: the title
+    // keeps its mark, the tab still asks before closing and the recovery copy stays.
+    assert!(h.state().has_unsaved_changes());
+    assert!(h.state().title().contains('•'), "{}", h.state().title());
+    assert_eq!(h.state_mut().autosave(), Autosave::Keep, "the copy stays");
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+    assert_eq!(h.state().status(), "Downloaded Draft.bpmn");
+}
+
+#[test]
+fn downloading_in_the_unsaved_changes_question_carries_on() {
+    let mut h = harness(Platform::BROWSER);
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Draft" }));
+    settle(&mut h);
+    assert!(matches!(h.state_mut().autosave(), Autosave::Write(_)));
+
+    // New ▸ Download: the user chose to download, so New follows once the download starts,
+    // and the recovery copy goes with the model it was for (as with Don't Save).
+    menu(&mut h, &["File", "New"]);
+    click(&mut h, "Download");
+    let name = take_download(&mut h);
+    h.state_mut().downloaded(&name);
+    settle(&mut h);
+    assert_eq!(h.state().engine().model().name, "", "New followed");
+    assert_eq!(h.state().status(), "New model");
+    assert_eq!(h.state_mut().autosave(), Autosave::Clear);
 }
 
 #[test]
