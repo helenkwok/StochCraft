@@ -15,6 +15,7 @@
 	+ Add block	+ Блок қосу
 	About StochCraft	StochCraft туралы
 	About {app}	{app} туралы
+	Actual size	Нақты өлшем
 	Add Block	Блок қосу
 	Add a flow from…	Қайдан…
 	Add a flow to…	Қайда…
@@ -24,6 +25,7 @@
 	Add property	Қасиет қосу
 	Added pool {id}	{id} қоры қосылды
 	Added {block} ({id})	{block} ({id}) қосылды
+	Align	Туралау
 	Alternative {n}	{n}-балама
 	Appearance	Сыртқы түрі
 	Arrival limit	Келу шегі
@@ -34,6 +36,7 @@
 	Beta	Бета
 	Binomial	Биномдық
 	Boolean	Логикалық мән
+	Bottoms	Төменгі жиектер
 	Bring All to Front	Барлығын алдыңғы қатарға шығару
 	Built with	Мына құралдармен жасалған
 	By role	Рөл бойынша
@@ -42,8 +45,10 @@
 	Cancel Run	Іске қосуды тоқтату
 	Cancel run	Іске қосуды тоқтату
 	Capacity	Сыйымдылық
+	Centres	Көлденең орталықтар
 	Change Block	Блокты өзгерту
 	Change Flow	Ағынды өзгерту
+	Changes	Өзгерістер
 	Changing the time unit does not convert the times already in the model.	Уақыт бірлігін өзгерту модельдегі бұрыннан бар уақыт мәндерін түрлендірмейді.
 	Clear Menu	Мәзірді тазалау
 	Close	Жабу
@@ -51,8 +56,12 @@
 	Comes from	Мынадан келеді
 	Condition of {id}	{id} шарты
 	Connect	Қосу
+	Connect from {name}	{name} блогынан қосу
+	Connected {from} to {to}	{from} мен {to} қосылды
 	Connections	Байланыстар
 	Constant	Тұрақты
+	Copy	Көшіру
+	Cut	Қиып алу
 	Dark	Күңгірт
 	Data points	Дерек нүктелері
 	Date and time	Күн мен уақыт
@@ -60,7 +69,9 @@
 	Decision	Шешім
 	Decision (one way)	Шешім (бір жол)
 	Default flow	Әдепкі ағын
+	Delete	Жою
 	Departures	Кетулер
+	Diagram	Диаграмма
 	Discard	Елемеу
 	Discarded the recovered changes	Қалпына келтірілген өзгерістер тасталды
 	Disconnect	Байланысты үзу
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Диаграммаларды жүктеп алу (PNG)
 	Download table (CSV)	Кестені жүктеп алу (CSV)
 	Downloaded {file}	{file} жүктеп алынды
+	Drag to add:	Қосу үшін сүйреңіз:
+	Duplicate	Көшірмесін жасау
 	Duration	Ұзақтығы
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Әрбір нысан осылардың ішінен дәл қазір орындауға болатын біріншісін бірден толық алады да, шыққанда бірліктерді қайтарады.
 	Edit	Түзету
 	Entered	Кіргендер
 	Erlang	Эрланг
 	Error	Қате
+	Evenly across	Көлденеңінен біркелкі
+	Evenly down	Тігінен біркелкі
 	Every distribution	Барлық үлестірімдер
 	Exit	Шығу
 	Experiment	Эксперимент
@@ -88,6 +103,8 @@
 	Exported {file}	{file} экспортталды
 	Expression	Өрнек
 	File	Файл
+	Fit	Сыйдыру
+	Fit the diagram to the view	Диаграмманы көрініске сыйдыру
 	Flows	Ағындар
 	From	Қайдан
 	Gamma	Гамма
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	Пернетақта тіркесімдері өзгермеді
 	Language	Тіл
 	Left	Шыққандар
+	Left edges	Сол жақ жиектер
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Таңдауыңыз бойынша MIT License немесе Apache License 2.0 лицензиясымен таратылады.
 	Light	Ашық
 	Log-normal	Логнормальды
@@ -115,11 +133,13 @@
 	Mean time in system	Жүйедегі орташа уақыт
 	Mean wait	Күтудің орташа уақыты
 	Metric	Көрсеткіш
+	Middles	Тік орталықтар
 	Minimise	Кішірейту
 	Minimize	Жию
 	Minimum	Минимум
 	Model	Модель
 	Most likely	Ең ықтимал
+	Move	Жылжыту
 	Name	Аты-жөні
 	Needs	Қажеттіліктер
 	New	Жаңа
@@ -147,6 +167,7 @@
 	Or start from an example	Немесе мысалдан бастаңыз
 	PNG image	PNG суреті
 	Parameters	Параметрлер
+	Paste	Қою
 	Points	Нүктелер
 	Poisson	Пуассон
 	Preferences	Параметрлер
@@ -183,6 +204,7 @@
 	Resource pools	Ресурс қорлары
 	Restore	Терезені қалпына келтіру
 	Results	Нәтижелер
+	Right edges	Оң жақ жиектер
 	Roles	Рөлдер
 	Run	Іске қосу
 	Run cancelled	Іске қосу тоқтатылды
@@ -197,6 +219,7 @@
 	Saved {file}	{file} сақталды
 	Scale	Масштаб
 	Seed	Кездейсоқ тұқым
+	Select All	Барлығын таңдау
 	Service time	Қызмет көрсету уақыты
 	Services	Қызметтер
 	Set Property	Қасиетті орнату
@@ -210,6 +233,7 @@
 	Show {id}	{id} көрсету
 	Split or join	Бөлу немесе біріктіру
 	Split or join (all ways)	Бөлу немесе біріктіру (барлық жолдар)
+	Spread out	Үлестіру
 	Stages (k)	Кезеңдер (k)
 	Standard deviation	Стандартты ауытқу
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft {name} үлгісіндегі сақталмаған өзгерістермен жабылды. Оларды атаусыз үлгі ретінде қалпына келтіріңіз немесе тастаңыз.
@@ -227,6 +251,7 @@
 	Time between arrivals	Келулер арасындағы уақыт
 	Time unit	Уақыт бірлігі
 	To	Қайда
+	Tops	Жоғарғы жиектер
 	Trials	Сынақтар
 	Triangular	Үшбұрышты
 	Truncated normal	Қиылған нормальды
@@ -255,6 +280,8 @@
 	Yes or no	Иә немесе жоқ
 	Your changes will be lost if you don't save them.	Сақтамасаңыз, өзгерістеріңіз жоғалады.
 	Zoom	Терезе өлшемін ауыстыру
+	Zoom in	Үлкейту
+	Zoom out	Кішірейту
 	a model	модель
 	arrivals	келулер
 	days	күн
@@ -281,6 +308,7 @@
 	years	жыл
 	{field}: not editable here yet	{field}: мұнда әзірше өңдеу мүмкін емес
 	{id}: a probability is a number from 0 to 1	{id}: ықтималдық 0 мен 1 арасындағы сан болуы керек
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — өңделді
 	{property} (set to, mean)	{property} (орнатылған мән, орташа)
 	± 95% CI	± 95% сенімділік аралығы
@@ -292,11 +320,15 @@ unit	min	мин
 unit	ms	мс
 unit	s	с
 unit	yr	ж.
+@plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
+@plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} replication|Finished {n} replications	{n} қайталау аяқталды|{n} қайталау аяқталды
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} ашылды ({n} ескерту)|{file} ашылды ({n} ескерту)
+@plural	Removed {n} block|Removed {n} blocks	{n} блок жойылды|{n} блок жойылды
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Модельдің {n} тәуелсіз қайталауын {seed} тұқымынан іске қосады. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.|Модельдің {n} тәуелсіз қайталауын {seed} тұқымынан іске қосады. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} қайталаудың {done} аяқталды|{n} қайталаудың {done} аяқталды
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} қайталау бойынша|{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} қайталау бойынша
+@plural	{n} block selected|{n} blocks selected	{n} блок таңдалды|{n} блок таңдалды
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} қайталау · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}|{n} қайталау · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} қайталау · тұқым {seed}|{n} қайталау · тұқым {seed}
 @plural	{n} replication|{n} replications	{n} қайталау|{n} қайталау

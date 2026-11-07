@@ -15,6 +15,7 @@
 	+ Add block	+ Lägg till block
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
+	Actual size	Verklig storlek
 	Add Block	Lägg till block
 	Add a flow from…	Lägg till flöde från…
 	Add a flow to…	Lägg till flöde till…
@@ -24,6 +25,7 @@
 	Add property	Lägg till egenskap
 	Added pool {id}	Lade till poolen {id}
 	Added {block} ({id})	Lade till {block} ({id})
+	Align	Justera
 	Alternative {n}	Alternativ {n}
 	Appearance	Utseende
 	Arrival limit	Gräns för ankomster
@@ -34,6 +36,7 @@
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolesk
+	Bottoms	Nederkanter
 	Bring All to Front	Lägg alla överst
 	Built with	Skapad med
 	By role	Efter roll
@@ -42,8 +45,10 @@
 	Cancel Run	Avbryt körning
 	Cancel run	Avbryt körning
 	Capacity	Kapacitet
+	Centres	Vågräta mittpunkter
 	Change Block	Ändra block
 	Change Flow	Ändra flöde
+	Changes	Ändringar
 	Changing the time unit does not convert the times already in the model.	Att ändra tidsenheten omvandlar inte tiderna som redan finns i modellen.
 	Clear Menu	Rensa menyn
 	Close	Stäng
@@ -51,8 +56,12 @@
 	Comes from	Kommer från
 	Condition of {id}	Villkor för {id}
 	Connect	Anslut
+	Connect from {name}	Anslut från {name}
+	Connected {from} to {to}	Anslöt {from} till {to}
 	Connections	Anslutningar
 	Constant	Konstant
+	Copy	Kopiera
+	Cut	Klipp ut
 	Dark	Mörkt
 	Data points	Datapunkter
 	Date and time	Datum och tid
@@ -60,7 +69,9 @@
 	Decision	Beslut
 	Decision (one way)	Beslut (en väg)
 	Default flow	Standardflöde
+	Delete	Ta bort
 	Departures	Avgångar
+	Diagram	Diagram
 	Discard	Släng
 	Discarded the recovered changes	Återställda ändringar har kasserats
 	Disconnect	Koppla från
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Ladda ner diagram (PNG)
 	Download table (CSV)	Ladda ner tabell (CSV)
 	Downloaded {file}	Hämtade {file}
+	Drag to add:	Dra för att lägga till:
+	Duplicate	Duplicera
 	Duration	Varaktighet
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Varje entitet tar det första av dessa alternativ som kan uppfyllas nu, allt på en gång, och återlämnar enheterna när den lämnar uppgiften.
 	Edit	Redigera
 	Entered	Inkomna
 	Erlang	Erlang
 	Error	Fel
+	Evenly across	Fördela jämnt vågrätt
+	Evenly down	Fördela jämnt lodrätt
 	Every distribution	Alla fördelningar
 	Exit	Avsluta
 	Experiment	Experiment
@@ -88,6 +103,8 @@
 	Exported {file}	Exporterade {file}
 	Expression	Uttryck
 	File	Arkiv
+	Fit	Anpassa
+	Fit the diagram to the view	Anpassa diagrammet till vyn
 	Flows	Flöden
 	From	Från
 	Gamma	Gamma
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	Tangentbordsgenvägar oförändrade
 	Language	Språk
 	Left	Lämnade
+	Left edges	Vänsterkanter
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licensierad enligt MIT License eller Apache License 2.0, enligt ditt val.
 	Light	Ljust
 	Log-normal	Lognormal
@@ -115,11 +133,13 @@
 	Mean time in system	Genomsnittlig tid i systemet
 	Mean wait	Genomsnittlig väntetid
 	Metric	Mått
+	Middles	Lodräta mittpunkter
 	Minimise	Minimera
 	Minimize	Minimera
 	Minimum	Minimum
 	Model	Modell
 	Most likely	Mest sannolikt
+	Move	Flytta
 	Name	Namn
 	Needs	Behov
 	New	Ny
@@ -147,6 +167,7 @@
 	Or start from an example	Eller börja med ett exempel
 	PNG image	PNG-bild
 	Parameters	Parametrar
+	Paste	Klistra in
 	Points	Punkter
 	Poisson	Poisson
 	Preferences	Inställningar
@@ -183,6 +204,7 @@
 	Resource pools	Resurspooler
 	Restore	Återställ fönster
 	Results	Resultat
+	Right edges	Högerkanter
 	Roles	Roller
 	Run	Kör
 	Run cancelled	Körning avbruten
@@ -197,6 +219,7 @@
 	Saved {file}	Sparade {file}
 	Scale	Skala
 	Seed	Slumpfrö
+	Select All	Markera allt
 	Service time	Servicetid
 	Services	Tjänster
 	Set Property	Ange egenskap
@@ -210,6 +233,7 @@
 	Show {id}	Visa {id}
 	Split or join	Dela eller sammanfoga
 	Split or join (all ways)	Dela eller sammanfoga (alla vägar)
+	Spread out	Fördela
 	Stages (k)	Steg (k)
 	Standard deviation	Standardavvikelse
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft stängdes med osparade ändringar i {name}. Återställ dem som en namnlös modell eller kasta dem.
@@ -227,6 +251,7 @@
 	Time between arrivals	Tid mellan ankomster
 	Time unit	Tidsenhet
 	To	Till
+	Tops	Överkanter
 	Trials	Försök
 	Triangular	Triangulär
 	Truncated normal	Trunkerad normal
@@ -255,6 +280,8 @@
 	Yes or no	Ja eller nej
 	Your changes will be lost if you don't save them.	Dina ändringar går förlorade om du inte sparar dem.
 	Zoom	Zoom
+	Zoom in	Zooma in
+	Zoom out	Zooma ut
 	a model	en modell
 	arrivals	ankomster
 	days	dagar
@@ -281,6 +308,7 @@
 	years	år
 	{field}: not editable here yet	{field}: kan ännu inte redigeras här
 	{id}: a probability is a number from 0 to 1	{id}: en sannolikhet är ett tal mellan 0 och 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — redigerad
 	{property} (set to, mean)	{property} (angivet värde, medelvärde)
 	± 95% CI	± 95% KI
@@ -292,11 +320,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	år
+@plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
+@plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} replication|Finished {n} replications	{n} replikation klar|{n} replikationer klara
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Öppnade {file} ({n} varning)|Öppnade {file} ({n} varningar)
+@plural	Removed {n} block|Removed {n} blocks	Tog bort {n} block|Tog bort {n} block
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kör {n} oberoende replikation av modellen från slumpfrö {seed}. Resultaten för varje element visar halva bredden på ett 95% konfidensintervall.|Kör {n} oberoende replikationer av modellen från slumpfrö {seed}. Resultaten för varje element visar halva bredden på ett 95% konfidensintervall.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} av {n} replikation klar|{done} av {n} replikationer klara
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% intervall från {low} till {high}{unit}\növer {n} replikation|{name}: {mean}{unit}\n95% intervall från {low} till {high}{unit}\növer {n} replikationer
+@plural	{n} block selected|{n} blocks selected	{n} block markerat|{n} block markerade
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikation · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta|{n} replikationer · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikation · slumpfrö {seed}|{n} replikationer · slumpfrö {seed}
 @plural	{n} replication|{n} replications	{n} replikation|{n} replikationer

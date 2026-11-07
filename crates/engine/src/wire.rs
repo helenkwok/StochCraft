@@ -8,8 +8,8 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
-    Breakdown, Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Experiment, Model,
-    Need, Property, PropertyType, PropertyValue, ResourcePool, Severity, TimeUnit, Timed,
+    Bounds, Breakdown, Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Experiment,
+    Model, Need, Property, PropertyType, PropertyValue, ResourcePool, Severity, TimeUnit, Timed,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -830,6 +830,42 @@ pub struct ElementDoc {
     /// Properties the element sets on entities; left out when there are none.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub properties: Vec<PropertyDoc>,
+    /// Where the element is drawn; left out when it has no shape yet (it is then placed
+    /// automatically).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bounds: Option<BoundsDoc>,
+}
+
+/// A shape's top-left corner and size, in the diagram's units (BPMN DI's, y downwards).
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct BoundsDoc {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+}
+
+impl From<Bounds> for BoundsDoc {
+    fn from(b: Bounds) -> Self {
+        Self {
+            x: b.x,
+            y: b.y,
+            width: b.width,
+            height: b.height,
+        }
+    }
+}
+
+impl From<BoundsDoc> for Bounds {
+    fn from(b: BoundsDoc) -> Self {
+        Self {
+            x: b.x,
+            y: b.y,
+            width: b.width,
+            height: b.height,
+        }
+    }
 }
 
 /// A connection from one element to another (a BPMN sequence flow).
@@ -927,6 +963,7 @@ impl From<&Model> for ModelDoc {
                     name: e.name.clone(),
                     kind: (&e.kind).into(),
                     properties: e.properties.iter().map(Into::into).collect(),
+                    bounds: m.layout.get(&e.id).copied().map(Into::into),
                 })
                 .collect(),
             connections: m
@@ -950,7 +987,13 @@ impl From<&Model> for ModelDoc {
 impl From<ModelDoc> for Model {
     /// Ids are kept as written; [`Model::validate`] reports invalid ones.
     fn from(m: ModelDoc) -> Self {
+        let layout = m
+            .elements
+            .iter()
+            .filter_map(|e| Some((ElementId::unchecked(&e.id), e.bounds?.into())))
+            .collect();
         Self {
+            layout,
             name: m.name,
             elements: m
                 .elements

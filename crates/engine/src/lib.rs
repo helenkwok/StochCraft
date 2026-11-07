@@ -390,6 +390,11 @@ impl Engine {
             opened: loaded.opened,
             notes: notes_json(&loaded.notes),
         });
+        // Elements that had no shape were given one in the file; they keep it.
+        let layout = loaded.model.layout;
+        if layout.keys().all(|id| self.model.element(id).is_some()) {
+            self.model.layout = layout;
+        }
         self.saved = self.model.clone();
         Ok(json!({ "path": path, "format": format, "bytes": bytes.len() as u64 }))
     }

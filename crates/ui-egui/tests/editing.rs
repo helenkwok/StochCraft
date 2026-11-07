@@ -55,16 +55,40 @@ fn element(h: &Harness<'static, App>, id: &str) -> Value {
         .unwrap_or_else(|| panic!("no element {id}"))
 }
 
+/// Whether a widget is outside the inspector's visible part (below the tabs, above the status
+/// bar, in the 1200 × 900 window), scrolled out of sight. (Scrolling to one in sight would close
+/// an open drop-down.)
+fn off_screen(r: egui::Rect) -> bool {
+    r.top() < 110.0 || r.bottom() > 820.0
+}
+
+/// Clicks the last widget with `role` and `label`, scrolled into view first (the inspector
+/// beside the canvas scrolls).
 fn click(h: &mut Harness<'static, App>, role: Role, label: &str) {
-    h.get_all_by_role_and_label(role, label)
-        .last()
-        .unwrap_or_else(|| panic!("no {role:?} labelled {label:?}"))
-        .click();
+    fn last<'a>(
+        h: &'a Harness<'static, App>,
+        role: Role,
+        label: &'a str,
+    ) -> egui_kittest::Node<'a> {
+        h.get_all_by_role_and_label(role, label)
+            .last()
+            .unwrap_or_else(|| panic!("no {role:?} labelled {label:?}"))
+    }
+    if off_screen(last(h, role, label).rect()) {
+        last(h, role, label).scroll_to_me();
+        settle(h);
+    }
+    last(h, role, label).click();
     settle(h);
 }
 
 /// Replaces the text of the field labelled `label` and presses Enter.
 fn type_into(h: &mut Harness<'static, App>, label: &str, text: &str) {
+    if off_screen(h.get_by_role_and_label(Role::TextInput, label).rect()) {
+        h.get_by_role_and_label(Role::TextInput, label)
+            .scroll_to_me();
+        settle(h);
+    }
     h.get_by_role_and_label(Role::TextInput, label).click();
     settle(h);
     h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
@@ -265,8 +289,19 @@ fn a_property_is_added_typed_given_an_expression_and_removed() {
     let remove = h
         .get_all_by_role_and_label(Role::Button, "Remove")
         .next()
-        .expect("the property's Remove");
-    remove.click();
+        .expect("the property's Remove")
+        .rect();
+    if off_screen(remove) {
+        h.get_all_by_role_and_label(Role::Button, "Remove")
+            .next()
+            .expect("the property's Remove")
+            .scroll_to_me();
+        settle(&mut h);
+    }
+    h.get_all_by_role_and_label(Role::Button, "Remove")
+        .next()
+        .expect("the property's Remove")
+        .click();
     settle(&mut h);
     assert!(element(&h, "serve")["properties"].is_null());
 }

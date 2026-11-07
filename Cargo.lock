@@ -3535,6 +3535,7 @@ dependencies = [
  "serde",
  "serde_json",
  "stochcraft-engine",
+ "stochcraft-model",
 ]
 
 [[package]]

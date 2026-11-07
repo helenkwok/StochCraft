@@ -27,6 +27,12 @@ pub const SAVE_AS: &str = "file.save_as";
 pub const QUIT: &str = "app.quit";
 pub const UNDO: &str = "edit.undo";
 pub const REDO: &str = "edit.redo";
+pub const CUT: &str = "edit.cut";
+pub const COPY: &str = "edit.copy";
+pub const PASTE: &str = "edit.paste";
+pub const DUPLICATE: &str = "edit.duplicate";
+pub const DELETE: &str = "edit.delete";
+pub const SELECT_ALL: &str = "edit.select_all";
 pub const RUN: &str = "model.run";
 pub const CANCEL_RUN: &str = "model.cancel_run";
 pub const THEME: &str = "view.theme";
@@ -53,6 +59,12 @@ fn catalog() -> Vec<Bindable> {
         b(QUIT, "Quit", &["File"], &["Cmd+Q"]),
         b(UNDO, "Undo", &["Edit"], &["Cmd+Z"]),
         b(REDO, "Redo", &["Edit"], &["Cmd+Shift+Z", "Cmd+Y"]),
+        b(CUT, "Cut", &["Edit"], &["Cmd+X"]),
+        b(COPY, "Copy", &["Edit"], &["Cmd+C"]),
+        b(PASTE, "Paste", &["Edit"], &["Cmd+V"]),
+        b(DUPLICATE, "Duplicate", &["Edit"], &["Cmd+D"]),
+        b(DELETE, "Delete", &["Edit"], &[]),
+        b(SELECT_ALL, "Select All", &["Edit"], &["Cmd+A"]),
         b(SHORTCUTS, "Keyboard Shortcuts…", &["Edit", "Settings"], &[]),
         b(RUN, "Run", &["Model"], &["F5"]),
         b(CANCEL_RUN, "Cancel Run", &["Model"], &[]),
@@ -155,6 +167,14 @@ impl App {
                     ),
                 )),
                 Node::Separator,
+                item(CUT, "Cut"),
+                item(COPY, "Copy"),
+                item(PASTE, "Paste"),
+                item(DUPLICATE, "Duplicate"),
+                item(DELETE, "Delete"),
+                Node::Separator,
+                item(SELECT_ALL, "Select All"),
+                Node::Separator,
                 settings,
             ],
         )
@@ -240,6 +260,10 @@ impl App {
             RUN => !running && !self.engine.model().elements.is_empty(),
             CANCEL_RUN => running,
             CLEAR_RECENT => !self.recent.is_empty(),
+            CUT | COPY | DUPLICATE => !self.selection().is_empty(),
+            DELETE => !self.selection().is_empty() || self.canvas.flow.is_some(),
+            PASTE => self.can_paste(),
+            SELECT_ALL => !self.engine.model().elements.is_empty(),
             _ => true,
         }
     }
@@ -288,6 +312,12 @@ impl App {
             QUIT if self.platform.can_quit => self.replace(Replace::Quit),
             UNDO => self.undo(),
             REDO => self.redo(),
+            CUT => self.cut(),
+            COPY => self.copy(),
+            PASTE => self.paste(),
+            DUPLICATE => self.duplicate(),
+            DELETE => self.delete_selection(),
+            SELECT_ALL => self.select_all(),
             RUN => self.run(),
             CANCEL_RUN => self.cancel_run(),
             THEME => {

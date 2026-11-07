@@ -15,6 +15,7 @@
 	+ Add block	+ Blokk hozzáadása
 	About StochCraft	A StochCraft névjegye
 	About {app}	{app} névjegye
+	Actual size	Tényleges méret
 	Add Block	Blokk hozzáadása
 	Add a flow from…	Folyamat hozzáadása innen: …
 	Add a flow to…	Folyamat hozzáadása ide: …
@@ -24,6 +25,7 @@
 	Add property	Tulajdonság hozzáadása
 	Added pool {id}	{id} készlet hozzáadva
 	Added {block} ({id})	{block} ({id}) hozzáadva
+	Align	Igazítás
 	Alternative {n}	{n}. alternatíva
 	Appearance	Megjelenés
 	Arrival limit	Érkezési korlát
@@ -34,6 +36,7 @@
 	Beta	Béta
 	Binomial	Binomiális
 	Boolean	Logikai
+	Bottoms	Alsó élek
 	Bring All to Front	Az összes előtérbe hozása
 	Built with	Készült ezekkel
 	By role	Szerepkör szerint
@@ -42,8 +45,10 @@
 	Cancel Run	Futtatás megszakítása
 	Cancel run	Futtatás megszakítása
 	Capacity	Kapacitás
+	Centres	Vízszintes középpontok
 	Change Block	Blokk módosítása
 	Change Flow	Folyamat módosítása
+	Changes	Módosítások
 	Changing the time unit does not convert the times already in the model.	Az időegység módosítása nem váltja át a modellben már meglévő időértékeket.
 	Clear Menu	Menü törlése
 	Close	Bezárás
@@ -51,8 +56,12 @@
 	Comes from	Innen érkezik
 	Condition of {id}	{id} feltétele
 	Connect	Csatlakoztatás
+	Connect from {name}	Összekötés innen: {name}
+	Connected {from} to {to}	{from} összekötve ezzel: {to}
 	Connections	Kapcsolatok
 	Constant	Állandó
+	Copy	Másolás
+	Cut	Kivágás
 	Dark	Sötét
 	Data points	Adatpontok
 	Date and time	Dátum és idő
@@ -60,7 +69,9 @@
 	Decision	Döntés
 	Decision (one way)	Döntés (egy út)
 	Default flow	Alapértelmezett folyamat
+	Delete	Törlés
 	Departures	Távozások
+	Diagram	Diagram
 	Discard	Elvetés
 	Discarded the recovered changes	A visszaállított módosítások elvetve
 	Disconnect	Kapcsolat bontása
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Diagramok letöltése (PNG)
 	Download table (CSV)	Táblázat letöltése (CSV)
 	Downloaded {file}	{file} letöltve
+	Drag to add:	Hozzáadás húzással:
+	Duplicate	Kettőzés
 	Duration	Időtartam
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Minden entitás ezek közül az elsőt veszi, amely most teljesíthető, egyszerre az egészet, és távozáskor visszaadja az egységeket.
 	Edit	Szerkesztés
 	Entered	Belépett
 	Erlang	Erlang
 	Error	Hiba
+	Evenly across	Egyenletes elosztás vízszintesen
+	Evenly down	Egyenletes elosztás függőlegesen
 	Every distribution	Minden eloszlás
 	Exit	Kilépés
 	Experiment	Kísérlet
@@ -88,6 +103,8 @@
 	Exported {file}	{file} exportálva
 	Expression	Kifejezés
 	File	Fájl
+	Fit	Igazítás a nézethez
+	Fit the diagram to the view	A diagram igazítása a nézethez
 	Flows	Folyamatok
 	From	Innen
 	Gamma	Gamma
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	A billentyűparancsok nem változtak
 	Language	Nyelv
 	Left	Távozott
+	Left edges	Bal élek
 	Licensed under the MIT License or the Apache License 2.0, at your option.	A MIT License vagy az Apache License 2.0 szerint, választás szerint.
 	Light	Világos
 	Log-normal	Lognormális
@@ -115,11 +133,13 @@
 	Mean time in system	Átlagos rendszerben töltött idő
 	Mean wait	Átlagos várakozási idő
 	Metric	Mérőszám
+	Middles	Függőleges középpontok
 	Minimise	Minimalizálás
 	Minimize	Kis méret
 	Minimum	Minimum
 	Model	Modell
 	Most likely	Legvalószínűbb
+	Move	Áthelyezés
 	Name	Név
 	Needs	Igények
 	New	Új
@@ -147,6 +167,7 @@
 	Or start from an example	Vagy kezdjen egy példával
 	PNG image	PNG-kép
 	Parameters	Paraméterek
+	Paste	Beillesztés
 	Points	Pontok
 	Poisson	Poisson
 	Preferences	Beállítások
@@ -183,6 +204,7 @@
 	Resource pools	Erőforráskészletek
 	Restore	Visszaállítás
 	Results	Eredmények
+	Right edges	Jobb élek
 	Roles	Szerepkörök
 	Run	Futtatás
 	Run cancelled	Futtatás megszakítva
@@ -197,6 +219,7 @@
 	Saved {file}	{file} mentve
 	Scale	Skála
 	Seed	Véletlenszám-mag
+	Select All	Az összes kijelölése
 	Service time	Kiszolgálási idő
 	Services	Szolgáltatások
 	Set Property	Tulajdonság beállítása
@@ -210,6 +233,7 @@
 	Show {id}	{id} megjelenítése
 	Split or join	Szétválasztás vagy egyesítés
 	Split or join (all ways)	Szétválasztás vagy egyesítés (minden út)
+	Spread out	Elosztás
 	Stages (k)	Szakaszok (k)
 	Standard deviation	Szórás
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	A StochCraft úgy zárult be, hogy a(z) {name} nem mentett módosításokat tartalmazott. Állítsa vissza őket névtelen modellként, vagy vesse el őket.
@@ -227,6 +251,7 @@
 	Time between arrivals	Érkezések közötti idő
 	Time unit	Időegység
 	To	Ide
+	Tops	Felső élek
 	Trials	Próbák
 	Triangular	Háromszög
 	Truncated normal	Csonkolt normális
@@ -255,6 +280,8 @@
 	Yes or no	Igen vagy nem
 	Your changes will be lost if you don't save them.	Ha nem mented, a módosításaid elvesznek.
 	Zoom	Méretváltás
+	Zoom in	Nagyítás
+	Zoom out	Kicsinyítés
 	a model	egy modell
 	arrivals	érkezések
 	days	nap
@@ -281,6 +308,7 @@
 	years	év
 	{field}: not editable here yet	{field}: itt még nem szerkeszthető
 	{id}: a probability is a number from 0 to 1	{id}: a valószínűség 0 és 1 közötti szám
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — szerkesztve
 	{property} (set to, mean)	{property} (beállított érték, átlag)
 	± 95% CI	± 95%-os konfidenciaintervallum
@@ -292,11 +320,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	év
+@plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
+@plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} replication|Finished {n} replications	{n} ismétlés befejezve|{n} ismétlés befejezve
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} megnyitva ({n} figyelmeztetés)|{file} megnyitva ({n} figyelmeztetés)
+@plural	Removed {n} block|Removed {n} blocks	{n} blokk eltávolítva|{n} blokk eltávolítva
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.|A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done}/{n} ismétlés befejezve|{done}/{n} ismétlés befejezve
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján|{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján
+@plural	{n} block selected|{n} blocks selected	{n} blokk kijelölve|{n} blokk kijelölve
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}|{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ismétlés · mag {seed}|{n} ismétlés · mag {seed}
 @plural	{n} replication|{n} replications	{n} ismétlés|{n} ismétlés

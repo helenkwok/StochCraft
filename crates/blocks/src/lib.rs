@@ -934,6 +934,7 @@ impl Builder {
             resources: self.pools.clone(),
             calendars: self.calendars.clone(),
             experiment,
+            ..Model::default()
         }
     }
 

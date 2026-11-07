@@ -15,6 +15,7 @@
 	+ Add block	+ 블록 추가
 	About StochCraft	StochCraft 정보
 	About {app}	{app} 정보
+	Actual size	실제 크기
 	Add Block	블록 추가
 	Add a flow from…	시작 블록…
 	Add a flow to…	끝 블록…
@@ -24,6 +25,7 @@
 	Add property	속성 추가
 	Added pool {id}	풀 {id} 추가됨
 	Added {block} ({id})	{block} ({id}) 추가됨
+	Align	정렬
 	Alternative {n}	대안 {n}
 	Appearance	모양새
 	Arrival limit	도착 수 제한
@@ -34,6 +36,7 @@
 	Beta	베타 분포
 	Binomial	이항 분포
 	Boolean	불리언
+	Bottoms	아래쪽 가장자리
 	Bring All to Front	모두 앞으로 가져오기
 	Built with	사용 기술
 	By role	역할별
@@ -42,8 +45,10 @@
 	Cancel Run	실행 취소
 	Cancel run	실행 취소
 	Capacity	처리 용량
+	Centres	가로 가운데
 	Change Block	블록 변경
 	Change Flow	흐름 변경
+	Changes	변경 사항
 	Changing the time unit does not convert the times already in the model.	시간 단위를 변경해도 모델에 이미 입력된 시간은 변환되지 않습니다.
 	Clear Menu	메뉴 지우기
 	Close	닫기
@@ -51,8 +56,12 @@
 	Comes from	출발 위치
 	Condition of {id}	{id}의 조건
 	Connect	연결
+	Connect from {name}	{name}에서 연결
+	Connected {from} to {to}	{from}을(를) {to}에 연결함
 	Connections	연결
 	Constant	상수
+	Copy	복사
+	Cut	잘라내기
 	Dark	어둡게
 	Data points	데이터 점
 	Date and time	날짜 및 시간
@@ -60,7 +69,9 @@
 	Decision	의사 결정
 	Decision (one way)	의사 결정(한 경로)
 	Default flow	기본 흐름
+	Delete	삭제
 	Departures	이탈
+	Diagram	다이어그램
 	Discard	삭제
 	Discarded the recovered changes	복구된 변경 사항을 버렸습니다
 	Disconnect	연결 해제
@@ -71,12 +82,16 @@
 	Download charts (PNG)	차트 다운로드 (PNG)
 	Download table (CSV)	표 다운로드 (CSV)
 	Downloaded {file}	{file} 다운로드됨
+	Drag to add:	끌어서 추가:
+	Duplicate	복제
 	Duration	길이
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	각 엔터티는 이 중 지금 한꺼번에 모두 충족할 수 있는 첫 번째 항목을 가져가고, 떠날 때 자원 단위를 반환합니다.
 	Edit	편집
 	Entered	진입 수
 	Erlang	얼랑 분포
 	Error	오류
+	Evenly across	가로로 균등 배치
+	Evenly down	세로로 균등 배치
 	Every distribution	모든 분포
 	Exit	나가기
 	Experiment	실험
@@ -88,6 +103,8 @@
 	Exported {file}	{file} 내보냄
 	Expression	식
 	File	파일
+	Fit	맞춤
+	Fit the diagram to the view	다이어그램을 보기에 맞춤
 	Flows	흐름
 	From	시작 블록
 	Gamma	감마 분포
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	키보드 단축키가 변경되지 않았습니다
 	Language	언어
 	Left	이탈 수
+	Left edges	왼쪽 가장자리
 	Licensed under the MIT License or the Apache License 2.0, at your option.	MIT License 또는 Apache License 2.0 중 하나를 선택하여 사용할 수 있습니다.
 	Light	밝게
 	Log-normal	로그 정규 분포
@@ -115,11 +133,13 @@
 	Mean time in system	시스템 내 평균 체류 시간
 	Mean wait	평균 대기 시간
 	Metric	지표
+	Middles	세로 가운데
 	Minimise	최소화
 	Minimize	최소화
 	Minimum	최솟값
 	Model	모델
 	Most likely	최빈값
+	Move	이동
 	Name	이름
 	Needs	필요 자원
 	New	새로 만들기
@@ -147,6 +167,7 @@
 	Or start from an example	또는 예제로 시작
 	PNG image	PNG 이미지
 	Parameters	매개변수
+	Paste	붙여넣기
 	Points	점
 	Poisson	포아송 분포
 	Preferences	환경 설정
@@ -183,6 +204,7 @@
 	Resource pools	자원 풀
 	Restore	복원
 	Results	결과
+	Right edges	오른쪽 가장자리
 	Roles	역할
 	Run	실행
 	Run cancelled	실행이 취소되었습니다
@@ -197,6 +219,7 @@
 	Saved {file}	{file} 저장됨
 	Scale	척도
 	Seed	난수 시드
+	Select All	모두 선택
 	Service time	서비스 시간
 	Services	서비스
 	Set Property	속성 설정
@@ -210,6 +233,7 @@
 	Show {id}	{id} 표시
 	Split or join	분할 또는 병합
 	Split or join (all ways)	분할 또는 병합(모든 경로)
+	Spread out	균등 배치
 	Stages (k)	단계 수 (k)
 	Standard deviation	표준 편차
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft가 {name}의 변경 사항을 저장하지 않은 채 종료되었습니다. 변경 사항을 제목 없는 모델로 복구하거나 버리세요.
@@ -227,6 +251,7 @@
 	Time between arrivals	도착 간격
 	Time unit	시간 단위
 	To	끝 블록
+	Tops	위쪽 가장자리
 	Trials	시행 횟수
 	Triangular	삼각 분포
 	Truncated normal	절단 정규 분포
@@ -255,6 +280,8 @@
 	Yes or no	예 또는 아니요
 	Your changes will be lost if you don't save them.	저장하지 않으면 변경 사항이 사라집니다.
 	Zoom	확대/축소
+	Zoom in	확대
+	Zoom out	축소
 	a model	모델
 	arrivals	도착
 	days	일
@@ -281,6 +308,7 @@
 	years	년
 	{field}: not editable here yet	{field}: 여기서는 아직 편집할 수 없습니다
 	{id}: a probability is a number from 0 to 1	{id}: 확률은 0에서 1 사이의 숫자여야 합니다
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — 편집됨
 	{property} (set to, mean)	{property}(설정값, 평균)
 	± 95% CI	± 95% 신뢰 구간
@@ -292,11 +320,15 @@ unit	min	분
 unit	ms	밀리초
 unit	s	초
 unit	yr	년
+@plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
+@plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} replication|Finished {n} replications	반복 실행 {n}회 완료
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} 열림(경고 {n}개)
+@plural	Removed {n} block|Removed {n} blocks	블록 {n}개 제거됨
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	시드 {seed}부터 모델을 독립적으로 {n}회 반복 실행합니다. 각 요소의 결과에는 95% 신뢰 구간의 반폭이 포함됩니다.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}회 중 {done}회 반복 실행 완료
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% 구간 {low}~{high}{unit}\n{n}회 반복 실행 기준
+@plural	{n} block selected|{n} blocks selected	블록 {n}개 선택됨
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	반복 실행 {n}회 · 시드 {seed} · 준비 {warmup} {unit} · 측정 {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	반복 실행 {n}회 · 시드 {seed}
 @plural	{n} replication|{n} replications	반복 실행 {n}회

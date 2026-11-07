@@ -15,6 +15,7 @@
 	+ Add block	+ Dodaj blok
 	About StochCraft	O aplikaciji StochCraft
 	About {app}	O aplikaciji {app}
+	Actual size	Stvarna veličina
 	Add Block	Dodaj blok
 	Add a flow from…	Dodaj tok od…
 	Add a flow to…	Dodaj tok prema…
@@ -24,6 +25,7 @@
 	Add property	Dodaj svojstvo
 	Added pool {id}	Dodan je fond {id}
 	Added {block} ({id})	Dodan je {block} ({id})
+	Align	Poravnaj
 	Alternative {n}	Alternativa {n}
 	Appearance	Izgled
 	Arrival limit	Ograničenje dolazaka
@@ -34,6 +36,7 @@
 	Beta	Beta
 	Binomial	Binomna
 	Boolean	Logička vrijednost
+	Bottoms	Donje ivice
 	Bring All to Front	Sve u prvi plan
 	Built with	Napravljeno pomoću
 	By role	Po ulozi
@@ -42,8 +45,10 @@
 	Cancel Run	Otkaži izvođenje
 	Cancel run	Otkaži izvođenje
 	Capacity	Kapacitet
+	Centres	Horizontalni centri
 	Change Block	Promijeni blok
 	Change Flow	Promijeni tok
+	Changes	Promjene
 	Changing the time unit does not convert the times already in the model.	Promjena vremenske jedinice ne pretvara vremena koja već postoje u modelu.
 	Clear Menu	Očisti meni
 	Close	Zatvori
@@ -51,8 +56,12 @@
 	Comes from	Dolazi iz
 	Condition of {id}	Uslov za {id}
 	Connect	Poveži
+	Connect from {name}	Poveži iz {name}
+	Connected {from} to {to}	{from} je povezan sa {to}
 	Connections	Veze
 	Constant	Konstantna
+	Copy	Kopiraj
+	Cut	Izreži
 	Dark	Tamno
 	Data points	Podatkovne tačke
 	Date and time	Datum i vrijeme
@@ -60,7 +69,9 @@
 	Decision	Odluka
 	Decision (one way)	Odluka (jedan put)
 	Default flow	Zadani tok
+	Delete	Izbriši
 	Departures	Odlasci
+	Diagram	Dijagram
 	Discard	Odbaci
 	Discarded the recovered changes	Oporavljene promjene su odbačene
 	Disconnect	Prekini vezu
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Preuzmi grafikone (PNG)
 	Download table (CSV)	Preuzmi tablicu (CSV)
 	Downloaded {file}	Preuzeto: {file}
+	Drag to add:	Prevucite za dodavanje:
+	Duplicate	Dupliciraj
 	Duration	Trajanje
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Svaki entitet uzima prvu od ovih mogućnosti koja se sada može ispuniti, sve odjednom, i vraća jedinice kad izađe.
 	Edit	Uredi
 	Entered	Ušlo
 	Erlang	Erlang
 	Error	Greška
+	Evenly across	Ravnomjerno horizontalno
+	Evenly down	Ravnomjerno vertikalno
 	Every distribution	Sve distribucije
 	Exit	Izlaz
 	Experiment	Eksperiment
@@ -88,6 +103,8 @@
 	Exported {file}	Izvezeno: {file}
 	Expression	Izraz
 	File	Datoteka
+	Fit	Prilagodi
+	Fit the diagram to the view	Prilagodi dijagram prikazu
 	Flows	Tokovi
 	From	Od
 	Gamma	Gama
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	Prečice na tastaturi nisu promijenjeni
 	Language	Jezik
 	Left	Izašlo
+	Left edges	Lijeve ivice
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencirano prema MIT License ili Apache License 2.0, po vašem izboru.
 	Light	Svijetlo
 	Log-normal	Log-normalna
@@ -115,11 +133,13 @@
 	Mean time in system	Prosječno vrijeme u sistemu
 	Mean wait	Prosječno čekanje
 	Metric	Metrika
+	Middles	Vertikalni centri
 	Minimise	Minimiziraj
 	Minimize	Minimiziraj
 	Minimum	Minimum
 	Model	Model
 	Most likely	Najvjerojatnije
+	Move	Premještanje
 	Name	Naziv
 	Needs	Zahtjevi
 	New	Novo
@@ -147,6 +167,7 @@
 	Or start from an example	Ili počnite s primjerom
 	PNG image	Slika PNG
 	Parameters	Parametri
+	Paste	Zalijepi
 	Points	Tačke
 	Poisson	Poissonova
 	Preferences	Postavke
@@ -183,6 +204,7 @@
 	Resource pools	Fondovi resursa
 	Restore	Vrati
 	Results	Rezultati
+	Right edges	Desne ivice
 	Roles	Uloge
 	Run	Pokreni
 	Run cancelled	Izvođenje otkazano
@@ -197,6 +219,7 @@
 	Saved {file}	Sačuvano: {file}
 	Scale	Skala
 	Seed	Sjeme
+	Select All	Odaberi sve
 	Service time	Vrijeme posluživanja
 	Services	Usluge
 	Set Property	Postavi svojstvo
@@ -210,6 +233,7 @@
 	Show {id}	Prikaži {id}
 	Split or join	Razdvoji ili spoji
 	Split or join (all ways)	Razdvoji ili spoji (svi putovi)
+	Spread out	Rasporedi
 	Stages (k)	Faze (k)
 	Standard deviation	Standardna devijacija
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft je zatvoren s nesačuvanim promjenama u modelu {name}. Vratite ih kao model bez naslova ili ih odbacite.
@@ -227,6 +251,7 @@
 	Time between arrivals	Vrijeme između dolazaka
 	Time unit	Vremenska jedinica
 	To	Prema
+	Tops	Gornje ivice
 	Trials	Pokušaji
 	Triangular	Trokutasta
 	Truncated normal	Odsječena normalna
@@ -255,6 +280,8 @@
 	Yes or no	Da ili ne
 	Your changes will be lost if you don't save them.	Vaše promjene će biti izgubljene ako ih ne sačuvate.
 	Zoom	Zumiranje
+	Zoom in	Uvećaj
+	Zoom out	Umanji
 	a model	model
 	arrivals	dolasci
 	days	dani
@@ -281,6 +308,7 @@
 	years	godine
 	{field}: not editable here yet	{field}: ovdje se još ne može uređivati
 	{id}: a probability is a number from 0 to 1	{id}: vjerovatnoća je broj od 0 do 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — uređeno
 	{property} (set to, mean)	{property} (postavljeno na, srednja vrijednost)
 	± 95% CI	± 95% IP
@@ -292,11 +320,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	god.
+@plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana su {n} bloka|Dodano je {n} blokova
+@plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana su {n} bloka|Kopirano je {n} blokova
 @plural	Finished {n} replication|Finished {n} replications	Završena je {n} replikacija|Završene su {n} replikacije|Završeno je {n} replikacija
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otvorena datoteka {file} ({n} upozorenje)|Otvorena datoteka {file} ({n} upozorenja)|Otvorena datoteka {file} ({n} upozorenja)
+@plural	Removed {n} block|Removed {n} blocks	Uklonjen je {n} blok|Uklonjena su {n} bloka|Uklonjeno je {n} blokova
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Pokreće {n} neovisnu replikaciju modela od sjemena {seed}. Rezultati svakog elementa uključuju poluširinu 95% intervala pouzdanosti.|Pokreće {n} neovisne replikacije modela od sjemena {seed}. Rezultati svakog elementa uključuju poluširinu 95% intervala pouzdanosti.|Pokreće {n} neovisnih replikacija modela od sjemena {seed}. Rezultati svakog elementa uključuju poluširinu 95% intervala pouzdanosti.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Završena je {done} od {n} replikacije|Završeno je {done} od {n} replikacija|Završeno je {done} od {n} replikacija
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nna temelju {n} replikacije|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nna temelju {n} replikacije|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nna temelju {n} replikacija
+@plural	{n} block selected|{n} blocks selected	Odabran je {n} blok|Odabrana su {n} bloka|Odabrano je {n} blokova
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacija · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}|{n} replikacije · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}|{n} replikacija · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacija · sjeme {seed}|{n} replikacije · sjeme {seed}|{n} replikacija · sjeme {seed}
 @plural	{n} replication|{n} replications	{n} replikacija|{n} replikacije|{n} replikacija

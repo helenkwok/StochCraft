@@ -15,6 +15,7 @@
 	+ Add block	+ Tambah blok
 	About StochCraft	Tentang StochCraft
 	About {app}	Tentang {app}
+	Actual size	Ukuran sebenarnya
 	Add Block	Tambah Blok
 	Add a flow from…	Tambahkan alur dari…
 	Add a flow to…	Tambahkan alur ke…
@@ -24,6 +25,7 @@
 	Add property	Tambah properti
 	Added pool {id}	Kumpulan {id} ditambahkan
 	Added {block} ({id})	{block} ({id}) ditambahkan
+	Align	Ratakan
 	Alternative {n}	Alternatif {n}
 	Appearance	Tampilan
 	Arrival limit	Batas kedatangan
@@ -34,6 +36,7 @@
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolean
+	Bottoms	Tepi bawah
 	Bring All to Front	Bawa Semua ke Depan
 	Built with	Dibuat dengan
 	By role	Menurut peran
@@ -42,8 +45,10 @@
 	Cancel Run	Batalkan Proses
 	Cancel run	Batalkan proses
 	Capacity	Kapasitas
+	Centres	Tengah horizontal
 	Change Block	Ubah Blok
 	Change Flow	Ubah Alur
+	Changes	Perubahan
 	Changing the time unit does not convert the times already in the model.	Mengubah satuan waktu tidak mengonversi waktu yang sudah ada dalam model.
 	Clear Menu	Bersihkan Menu
 	Close	Tutup
@@ -51,8 +56,12 @@
 	Comes from	Berasal dari
 	Condition of {id}	Kondisi {id}
 	Connect	Hubungkan
+	Connect from {name}	Hubungkan dari {name}
+	Connected {from} to {to}	{from} dihubungkan ke {to}
 	Connections	Koneksi
 	Constant	Konstan
+	Copy	Salin
+	Cut	Potong
 	Dark	Gelap
 	Data points	Titik data
 	Date and time	Tanggal dan waktu
@@ -60,7 +69,9 @@
 	Decision	Keputusan
 	Decision (one way)	Keputusan (satu jalur)
 	Default flow	Alur default
+	Delete	Hapus
 	Departures	Keberangkatan
+	Diagram	Diagram
 	Discard	Buang
 	Discarded the recovered changes	Perubahan yang dipulihkan telah dibuang
 	Disconnect	Putuskan koneksi
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Unduh grafik (PNG)
 	Download table (CSV)	Unduh tabel (CSV)
 	Downloaded {file}	{file} diunduh
+	Drag to add:	Seret untuk menambah:
+	Duplicate	Duplikat
 	Duration	Durasi
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Setiap entitas mengambil alternatif pertama di antara ini yang dapat dipenuhi sekarang, sekaligus semuanya, dan mengembalikan unitnya saat meninggalkan tugas.
 	Edit	Edit
 	Entered	Masuk
 	Erlang	Erlang
 	Error	Galat
+	Evenly across	Sebar rata mendatar
+	Evenly down	Sebar rata menurun
 	Every distribution	Semua distribusi
 	Exit	Keluar
 	Experiment	Eksperimen
@@ -88,6 +103,8 @@
 	Exported {file}	{file} diekspor
 	Expression	Ekspresi
 	File	Berkas
+	Fit	Paskan
+	Fit the diagram to the view	Paskan diagram ke tampilan
 	Flows	Alur
 	From	Dari
 	Gamma	Gamma
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	Pintasan keyboard tidak berubah
 	Language	Bahasa
 	Left	Keluar
+	Left edges	Tepi kiri
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Dilisensikan berdasarkan MIT License atau Apache License 2.0, sesuai pilihan Anda.
 	Light	Terang
 	Log-normal	Log-normal
@@ -115,11 +133,13 @@
 	Mean time in system	Waktu rata-rata dalam sistem
 	Mean wait	Waktu tunggu rata-rata
 	Metric	Metrik
+	Middles	Tengah vertikal
 	Minimise	Minimalkan
 	Minimize	Minimalkan
 	Minimum	Minimum
 	Model	Model
 	Most likely	Paling mungkin
+	Move	Pindahkan
 	Name	Nama
 	Needs	Kebutuhan
 	New	Baru
@@ -147,6 +167,7 @@
 	Or start from an example	Atau mulai dari contoh
 	PNG image	Gambar PNG
 	Parameters	Parameter
+	Paste	Tempel
 	Points	Titik
 	Poisson	Poisson
 	Preferences	Preferensi
@@ -183,6 +204,7 @@
 	Resource pools	Kumpulan sumber daya
 	Restore	Pulihkan jendela
 	Results	Hasil
+	Right edges	Tepi kanan
 	Roles	Peran
 	Run	Jalankan
 	Run cancelled	Proses dibatalkan
@@ -197,6 +219,7 @@
 	Saved {file}	{file} disimpan
 	Scale	Skala
 	Seed	Benih acak
+	Select All	Pilih Semua
 	Service time	Waktu layanan
 	Services	Layanan
 	Set Property	Atur Properti
@@ -210,6 +233,7 @@
 	Show {id}	Tampilkan {id}
 	Split or join	Pisahkan atau gabungkan
 	Split or join (all ways)	Pisahkan atau gabungkan (semua jalur)
+	Spread out	Sebarkan
 	Stages (k)	Tahapan (k)
 	Standard deviation	Simpangan baku
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ditutup saat perubahan pada {name} belum disimpan. Pulihkan perubahan itu sebagai model tanpa judul atau buang.
@@ -227,6 +251,7 @@
 	Time between arrivals	Waktu antar kedatangan
 	Time unit	Satuan waktu
 	To	Ke
+	Tops	Tepi atas
 	Trials	Percobaan
 	Triangular	Segitiga
 	Truncated normal	Normal terpotong
@@ -255,6 +280,8 @@
 	Yes or no	Ya atau tidak
 	Your changes will be lost if you don't save them.	Perubahan Anda akan hilang jika tidak disimpan.
 	Zoom	Zoom
+	Zoom in	Perbesar
+	Zoom out	Perkecil
 	a model	sebuah model
 	arrivals	kedatangan
 	days	hari
@@ -281,6 +308,7 @@
 	years	tahun
 	{field}: not editable here yet	{field}: belum dapat diedit di sini
 	{id}: a probability is a number from 0 to 1	{id}: probabilitas adalah angka dari 0 sampai 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — diedit
 	{property} (set to, mean)	{property} (nilai ditetapkan, rata-rata)
 	± 95% CI	± IK 95%
@@ -292,11 +320,15 @@ unit	min	mnt
 unit	ms	ms
 unit	s	dtk
 unit	yr	thn
+@plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
+@plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
 @plural	Finished {n} replication|Finished {n} replications	Selesai {n} replikasi
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} dibuka ({n} peringatan)
+@plural	Removed {n} block|Removed {n} blocks	{n} blok dihapus
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Menjalankan {n} replikasi model yang independen dari benih {seed}. Hasil setiap elemen mencakup setengah lebar interval kepercayaan 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} dari {n} replikasi selesai
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval 95% dari {low} hingga {high}{unit}\ndari {n} replikasi
+@plural	{n} block selected|{n} blocks selected	{n} blok dipilih
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasi · benih {seed} · pemanasan {warmup} {unit} · {duration} {unit} diukur
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikasi · benih {seed}
 @plural	{n} replication|{n} replications	{n} replikasi

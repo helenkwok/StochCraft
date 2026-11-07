@@ -15,6 +15,7 @@
 	+ Add block	+ Afegeix un bloc
 	About StochCraft	Quant a StochCraft
 	About {app}	Quant a {app}
+	Actual size	Mida real
 	Add Block	Afegeix un bloc
 	Add a flow from…	Afegeix un flux des de…
 	Add a flow to…	Afegeix un flux cap a…
@@ -24,6 +25,7 @@
 	Add property	Afegeix una propietat
 	Added pool {id}	S'ha afegit el grup {id}
 	Added {block} ({id})	S'ha afegit {block} ({id})
+	Align	Alinea
 	Alternative {n}	Alternativa {n}
 	Appearance	Aparença
 	Arrival limit	Límit d'arribades
@@ -34,6 +36,7 @@
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Booleà
+	Bottoms	Vores inferiors
 	Bring All to Front	Porta-ho tot al davant
 	Built with	Creat amb
 	By role	Per rol
@@ -42,8 +45,10 @@
 	Cancel Run	Cancel·la l'execució
 	Cancel run	Cancel·la l'execució
 	Capacity	Capacitat
+	Centres	Centres horitzontals
 	Change Block	Canvia el bloc
 	Change Flow	Canvia el flux
+	Changes	Canvis
 	Changing the time unit does not convert the times already in the model.	Canviar la unitat de temps no converteix els temps que ja hi ha al model.
 	Clear Menu	Buida el menú
 	Close	Tanca
@@ -51,8 +56,12 @@
 	Comes from	Prové de
 	Condition of {id}	Condició de {id}
 	Connect	Connecta
+	Connect from {name}	Connecta des de {name}
+	Connected {from} to {to}	S'ha connectat {from} amb {to}
 	Connections	Connexions
 	Constant	Constant
+	Copy	Copia
+	Cut	Retalla
 	Dark	Fosc
 	Data points	Punts de dades
 	Date and time	Data i hora
@@ -60,7 +69,9 @@
 	Decision	Decisió
 	Decision (one way)	Decisió (un sol camí)
 	Default flow	Flux predeterminat
+	Delete	Suprimeix
 	Departures	Sortides
+	Diagram	Diagrama
 	Discard	Descarta
 	Discarded the recovered changes	S'han descartat els canvis recuperats
 	Disconnect	Desconnecta
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Baixa els gràfics (PNG)
 	Download table (CSV)	Baixa la taula (CSV)
 	Downloaded {file}	S'ha baixat {file}
+	Drag to add:	Arrossegueu per afegir:
+	Duplicate	Duplica
 	Duration	Durada
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entitat pren, tota alhora, la primera d'aquestes alternatives que es pugui satisfer en aquell moment i torna les unitats quan surt.
 	Edit	Edita
 	Entered	Entrades
 	Erlang	Erlang
 	Error	Error
+	Evenly across	Distribueix horitzontalment
+	Evenly down	Distribueix verticalment
 	Every distribution	Totes les distribucions
 	Exit	Surt
 	Experiment	Experiment
@@ -88,6 +103,8 @@
 	Exported {file}	S'ha exportat {file}
 	Expression	Expressió
 	File	Fitxer
+	Fit	Ajusta
+	Fit the diagram to the view	Ajusta el diagrama a la vista
 	Flows	Fluxos
 	From	Des de
 	Gamma	Gamma
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	Dreceres de teclat sense canvis
 	Language	Idioma
 	Left	Sortides
+	Left edges	Vores esquerres
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Sota MIT License o Apache License 2.0, a la vostra elecció.
 	Light	Clar
 	Log-normal	Log-normal
@@ -115,11 +133,13 @@
 	Mean time in system	Temps mitjà al sistema
 	Mean wait	Espera mitjana
 	Metric	Mètrica
+	Middles	Centres verticals
 	Minimise	Minimitza
 	Minimize	Minimitza
 	Minimum	Mínim
 	Model	Model
 	Most likely	Més probable
+	Move	Mou
 	Name	Nom
 	Needs	Necessitats
 	New	Nou
@@ -147,6 +167,7 @@
 	Or start from an example	O comença amb un exemple
 	PNG image	Imatge PNG
 	Parameters	Paràmetres
+	Paste	Enganxa
 	Points	Punts
 	Poisson	Poisson
 	Preferences	Preferències
@@ -183,6 +204,7 @@
 	Resource pools	Grups de recursos
 	Restore	Restaura
 	Results	Resultats
+	Right edges	Vores dretes
 	Roles	Rols
 	Run	Executa
 	Run cancelled	Execució cancel·lada
@@ -197,6 +219,7 @@
 	Saved {file}	S'ha desat {file}
 	Scale	Escala
 	Seed	Llavor
+	Select All	Selecciona-ho tot
 	Service time	Temps de servei
 	Services	Serveis
 	Set Property	Defineix la propietat
@@ -210,6 +233,7 @@
 	Show {id}	Mostra {id}
 	Split or join	Divideix o uneix
 	Split or join (all ways)	Divideix o uneix (tots els camins)
+	Spread out	Distribueix
 	Stages (k)	Etapes (k)
 	Standard deviation	Desviació estàndard
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft s'ha tancat amb canvis sense desar a {name}. Recupereu-los com a model sense títol o descarteu-los.
@@ -227,6 +251,7 @@
 	Time between arrivals	Temps entre arribades
 	Time unit	Unitat de temps
 	To	Cap a
+	Tops	Vores superiors
 	Trials	Proves
 	Triangular	Triangular
 	Truncated normal	Normal truncada
@@ -255,6 +280,8 @@
 	Yes or no	Sí o no
 	Your changes will be lost if you don't save them.	Si no els deses, perdràs els canvis.
 	Zoom	Zoom
+	Zoom in	Apropa
+	Zoom out	Allunya
 	a model	un model
 	arrivals	arribades
 	days	dies
@@ -281,6 +308,7 @@
 	years	anys
 	{field}: not editable here yet	{field}: encara no es pot editar aquí
 	{id}: a probability is a number from 0 to 1	{id}: una probabilitat és un nombre entre 0 i 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — editat
 	{property} (set to, mean)	{property} (valor definit, mitjana)
 	± 95% CI	± IC del 95%
@@ -292,11 +320,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	a
+@plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
+@plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} replication|Finished {n} replications	Acabada {n} rèplica|Acabades {n} rèpliques
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S'ha obert {file} ({n} avís)|S'ha obert {file} ({n} avisos)
+@plural	Removed {n} block|Removed {n} blocks	S'ha eliminat {n} bloc|S'han eliminat {n} blocs
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Executa {n} rèplica independent del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.|Executa {n} rèpliques independents del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Acabada {done} de {n} rèplica|Acabades {done} de {n} rèpliques
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} rèplica|{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} rèpliques
+@plural	{n} block selected|{n} blocks selected	{n} bloc seleccionat|{n} blocs seleccionats
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} rèplica · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats|{n} rèpliques · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} rèplica · llavor {seed}|{n} rèpliques · llavor {seed}
 @plural	{n} replication|{n} replications	{n} rèplica|{n} rèpliques

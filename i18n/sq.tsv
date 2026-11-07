@@ -15,6 +15,7 @@
 	+ Add block	+ Shto bllok
 	About StochCraft	Rreth StochCraft
 	About {app}	Rreth {app}
+	Actual size	Madhësia e vërtetë
 	Add Block	Shto bllok
 	Add a flow from…	Shto rrjedhë nga…
 	Add a flow to…	Shto rrjedhë te…
@@ -24,6 +25,7 @@
 	Add property	Shto veti
 	Added pool {id}	U shtua grupi {id}
 	Added {block} ({id})	U shtua {block} ({id})
+	Align	Rreshto
 	Alternative {n}	Alternativa {n}
 	Appearance	Pamja
 	Arrival limit	Kufiri i mbërritjeve
@@ -34,6 +36,7 @@
 	Beta	Beta
 	Binomial	Binomiale
 	Boolean	Vlerë logjike
+	Bottoms	Skajet e poshtme
 	Bring All to Front	Sill të gjitha përpara
 	Built with	Ndërtuar me
 	By role	Sipas rolit
@@ -42,8 +45,10 @@
 	Cancel Run	Anulo ekzekutimin
 	Cancel run	Anulo ekzekutimin
 	Capacity	Kapaciteti
+	Centres	Qendrat horizontale
 	Change Block	Ndrysho bllokun
 	Change Flow	Ndrysho rrjedhën
+	Changes	Ndryshimet
 	Changing the time unit does not convert the times already in the model.	Ndryshimi i njësisë së kohës nuk i konverton kohët që gjenden tashmë në model.
 	Clear Menu	Pastro menynë
 	Close	Mbyll
@@ -51,8 +56,12 @@
 	Comes from	Vjen nga
 	Condition of {id}	Kushti i {id}
 	Connect	Lidh
+	Connect from {name}	Lidh nga {name}
+	Connected {from} to {to}	U lidh {from} me {to}
 	Connections	Lidhjet
 	Constant	Konstante
+	Copy	Kopjo
+	Cut	Prit
 	Dark	E errët
 	Data points	Pikat e të dhënave
 	Date and time	Data dhe ora
@@ -60,7 +69,9 @@
 	Decision	Vendim
 	Decision (one way)	Vendim (një rrugë)
 	Default flow	Rrjedha e parazgjedhur
+	Delete	Fshi
 	Departures	Largimet
+	Diagram	Diagrami
 	Discard	Hidh poshtë
 	Discarded the recovered changes	Ndryshimet e rikuperuara u hodhën poshtë
 	Disconnect	Shkëput
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Shkarko grafikët (PNG)
 	Download table (CSV)	Shkarko tabelën (CSV)
 	Downloaded {file}	U shkarkua {file}
+	Drag to add:	Tërhiq për të shtuar:
+	Duplicate	Dyfisho
 	Duration	Kohëzgjatja
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Çdo entitet merr njëherësh të plotë të parën nga këto alternativa që mund të plotësohet në atë çast dhe i kthen njësitë kur largohet.
 	Edit	Redakto
 	Entered	Hyrjet
 	Erlang	Erlang
 	Error	Gabim
+	Evenly across	Shpërndaj njëtrajtësisht horizontalisht
+	Evenly down	Shpërndaj njëtrajtësisht vertikalisht
 	Every distribution	Të gjitha shpërndarjet
 	Exit	Dil
 	Experiment	Eksperiment
@@ -88,6 +103,8 @@
 	Exported {file}	U eksportua {file}
 	Expression	Shprehje
 	File	Skedar
+	Fit	Përshtat
+	Fit the diagram to the view	Përshtat diagramin me pamjen
 	Flows	Rrjedhat
 	From	Nga
 	Gamma	Gama
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	Shkurtoret e tastierës nuk ndryshuan
 	Language	Gjuha
 	Left	Daljet
+	Left edges	Skajet e majta
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencuar sipas MIT License ose Apache License 2.0, sipas zgjedhjes suaj.
 	Light	E çelët
 	Log-normal	Log-normale
@@ -115,11 +133,13 @@
 	Mean time in system	Koha mesatare në sistem
 	Mean wait	Pritja mesatare
 	Metric	Tregues
+	Middles	Qendrat vertikale
 	Minimise	Minimizo
 	Minimize	Minimizo
 	Minimum	Minimumi
 	Model	Modeli
 	Most likely	Më e mundshmja
+	Move	Zhvendos
 	Name	Emri
 	Needs	Nevojat
 	New	I ri
@@ -147,6 +167,7 @@
 	Or start from an example	Ose filloni me një shembull
 	PNG image	Imazh PNG
 	Parameters	Parametrat
+	Paste	Ngjit
 	Points	Pikat
 	Poisson	Poisson
 	Preferences	Preferencat
@@ -183,6 +204,7 @@
 	Resource pools	Grupet e burimeve
 	Restore	Rikthe dritaren
 	Results	Rezultatet
+	Right edges	Skajet e djathta
 	Roles	Rolet
 	Run	Ekzekuto
 	Run cancelled	Ekzekutimi u anulua
@@ -197,6 +219,7 @@
 	Saved {file}	U ruajt {file}
 	Scale	Shkalla
 	Seed	Fara e rastësisë
+	Select All	Përzgjidh të gjitha
 	Service time	Koha e shërbimit
 	Services	Shërbimet
 	Set Property	Cakto vetinë
@@ -210,6 +233,7 @@
 	Show {id}	Shfaq {id}
 	Split or join	Ndaj ose bashko
 	Split or join (all ways)	Ndaj ose bashko (të gjitha rrugët)
+	Spread out	Shpërndaj
 	Stages (k)	Fazat (k)
 	Standard deviation	Devijimi standard
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft u mbyll me ndryshime të paruajtura në {name}. Rikthejini si model pa titull ose hidhini poshtë.
@@ -227,6 +251,7 @@
 	Time between arrivals	Koha ndërmjet mbërritjeve
 	Time unit	Njësia e kohës
 	To	Te
+	Tops	Skajet e sipërme
 	Trials	Provat
 	Triangular	Trekëndore
 	Truncated normal	Normale e prerë
@@ -255,6 +280,8 @@
 	Yes or no	Po ose jo
 	Your changes will be lost if you don't save them.	Ndryshimet do të humbasin nëse nuk i ruani.
 	Zoom	Zmadho
+	Zoom in	Zmadho
+	Zoom out	Zvogëlo
 	a model	një model
 	arrivals	mbërritjet
 	days	ditë
@@ -281,6 +308,7 @@
 	years	vite
 	{field}: not editable here yet	{field}: ende nuk mund të redaktohet këtu
 	{id}: a probability is a number from 0 to 1	{id}: probabiliteti është numër nga 0 deri në 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — redaktuar
 	{property} (set to, mean)	{property} (vlera e caktuar, mesatarja)
 	± 95% CI	± 95% interval besimi
@@ -292,11 +320,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	v
+@plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
+@plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} replication|Finished {n} replications	Përfundoi {n} përsëritje|Përfunduan {n} përsëritje
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	U hap {file} ({n} paralajmërim)|U hap {file} ({n} paralajmërime)
+@plural	Removed {n} block|Removed {n} blocks	U hoq {n} bllok|U hoqën {n} blloqe
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Ekzekuton {n} përsëritje të pavarur të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.|Ekzekuton {n} përsëritje të pavarura të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	U përfundua {done} nga {n} përsëritje|U përfunduan {done} nga {n} përsëritje
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} përsëritje|{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} përsëritje
+@plural	{n} block selected|{n} blocks selected	{n} bllok i përzgjedhur|{n} blloqe të përzgjedhura
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}|{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} përsëritje · fara {seed}|{n} përsëritje · fara {seed}
 @plural	{n} replication|{n} replications	{n} përsëritje|{n} përsëritje

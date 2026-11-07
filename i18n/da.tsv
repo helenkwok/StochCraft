@@ -15,6 +15,7 @@
 	+ Add block	+ Tilføj blok
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
+	Actual size	Faktisk størrelse
 	Add Block	Tilføj blok
 	Add a flow from…	Tilføj flow fra…
 	Add a flow to…	Tilføj flow til…
@@ -24,6 +25,7 @@
 	Add property	Tilføj egenskab
 	Added pool {id}	Tilføjede puljen {id}
 	Added {block} ({id})	Tilføjede {block} ({id})
+	Align	Juster
 	Alternative {n}	Alternativ {n}
 	Appearance	Udseende
 	Arrival limit	Grænse for ankomster
@@ -34,6 +36,7 @@
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolesk
+	Bottoms	Nederste kanter
 	Bring All to Front	Anbring alle forrest
 	Built with	Bygget med
 	By role	Efter rolle
@@ -42,8 +45,10 @@
 	Cancel Run	Annuller kørsel
 	Cancel run	Annuller kørsel
 	Capacity	Kapacitet
+	Centres	Vandrette midter
 	Change Block	Rediger blok
 	Change Flow	Rediger flow
+	Changes	Ændringer
 	Changing the time unit does not convert the times already in the model.	Ændring af tidsenheden omregner ikke tider, der allerede findes i modellen.
 	Clear Menu	Ryd menu
 	Close	Luk
@@ -51,8 +56,12 @@
 	Comes from	Kommer fra
 	Condition of {id}	Betingelse for {id}
 	Connect	Forbind
+	Connect from {name}	Forbind fra {name}
+	Connected {from} to {to}	Forbandt {from} med {to}
 	Connections	Forbindelser
 	Constant	Konstant
+	Copy	Kopiér
+	Cut	Klip
 	Dark	Mørk
 	Data points	Datapunkter
 	Date and time	Dato og klokkeslæt
@@ -60,7 +69,9 @@
 	Decision	Beslutning
 	Decision (one way)	Beslutning (én vej)
 	Default flow	Standardflow
+	Delete	Slet
 	Departures	Afgange
+	Diagram	Diagram
 	Discard	Kassér
 	Discarded the recovered changes	Gendannede ændringer blev kasseret
 	Disconnect	Afbryd forbindelse
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Download diagrammer (PNG)
 	Download table (CSV)	Download tabel (CSV)
 	Downloaded {file}	Downloadede {file}
+	Drag to add:	Træk for at tilføje:
+	Duplicate	Duplikér
 	Duration	Varighed
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Hver enhed tager det første af disse alternativer, der kan opfyldes nu, alt på én gang, og giver ressourceenhederne tilbage, når den forlader opgaven.
 	Edit	Redigér
 	Entered	Indgået
 	Erlang	Erlang
 	Error	Fejl
+	Evenly across	Fordel jævnt vandret
+	Evenly down	Fordel jævnt lodret
 	Every distribution	Alle fordelinger
 	Exit	Afslut
 	Experiment	Eksperiment
@@ -88,6 +103,8 @@
 	Exported {file}	Eksporterede {file}
 	Expression	Udtryk
 	File	Filer
+	Fit	Tilpas
+	Fit the diagram to the view	Tilpas diagrammet til visningen
 	Flows	Flow
 	From	Fra
 	Gamma	Gamma
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	Tastaturgenveje uændrede
 	Language	Sprog
 	Left	Forladt
+	Left edges	Venstre kanter
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licenseret under MIT License eller Apache License 2.0 efter eget valg.
 	Light	Lys
 	Log-normal	Lognormal
@@ -115,11 +133,13 @@
 	Mean time in system	Gennemsnitlig tid i systemet
 	Mean wait	Gennemsnitlig ventetid
 	Metric	Målepunkt
+	Middles	Lodrette midter
 	Minimise	Minimér
 	Minimize	Minimér
 	Minimum	Minimum
 	Model	Model
 	Most likely	Mest sandsynlig
+	Move	Flyt
 	Name	Navn
 	Needs	Behov
 	New	Ny
@@ -147,6 +167,7 @@
 	Or start from an example	Eller begynd med et eksempel
 	PNG image	PNG-billede
 	Parameters	Parametre
+	Paste	Indsæt
 	Points	Punkter
 	Poisson	Poisson
 	Preferences	Præferencer
@@ -183,6 +204,7 @@
 	Resource pools	Ressourcepuljer
 	Restore	Gendan vindue
 	Results	Resultater
+	Right edges	Højre kanter
 	Roles	Roller
 	Run	Kør
 	Run cancelled	Kørsel annulleret
@@ -197,6 +219,7 @@
 	Saved {file}	Gemte {file}
 	Scale	Skala
 	Seed	Tilfældighedsfrø
+	Select All	Vælg alt
 	Service time	Servicetid
 	Services	Tjenester
 	Set Property	Angiv egenskab
@@ -210,6 +233,7 @@
 	Show {id}	Vis {id}
 	Split or join	Opdel eller sammenflet
 	Split or join (all ways)	Opdel eller sammenflet (alle veje)
+	Spread out	Fordel
 	Stages (k)	Trin (k)
 	Standard deviation	Standardafvigelse
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft blev lukket med ændringer i {name}, som ikke var gemt. Gendan dem som en model uden titel, eller kassér dem.
@@ -227,6 +251,7 @@
 	Time between arrivals	Tid mellem ankomster
 	Time unit	Tidsenhed
 	To	Til
+	Tops	Øverste kanter
 	Trials	Forsøg
 	Triangular	Trekantet
 	Truncated normal	Afkortet normal
@@ -255,6 +280,8 @@
 	Yes or no	Ja eller nej
 	Your changes will be lost if you don't save them.	Dine ændringer går tabt, hvis du ikke gemmer dem.
 	Zoom	Zoom
+	Zoom in	Zoom ind
+	Zoom out	Zoom ud
 	a model	en model
 	arrivals	ankomster
 	days	dage
@@ -281,6 +308,7 @@
 	years	år
 	{field}: not editable here yet	{field}: kan ikke redigeres her endnu
 	{id}: a probability is a number from 0 to 1	{id}: en sandsynlighed er et tal mellem 0 og 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — redigeret
 	{property} (set to, mean)	{property} (angivet værdi, gennemsnit)
 	± 95% CI	± 95% KI
@@ -292,11 +320,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	år
+@plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
+@plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} replication|Finished {n} replications	{n} replikation fuldført|{n} replikationer fuldført
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Åbnede {file} ({n} advarsel)|Åbnede {file} ({n} advarsler)
+@plural	Removed {n} block|Removed {n} blocks	Fjernede {n} blok|Fjernede {n} blokke
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kører {n} uafhængig replikation af modellen med frø {seed}. Hvert elements resultater indeholder den halve bredde af et 95% konfidensinterval.|Kører {n} uafhængige replikationer af modellen med frø {seed}. Hvert elements resultater indeholder den halve bredde af et 95% konfidensinterval.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} af {n} replikation fuldført|{done} af {n} replikationer fuldført
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval fra {low} til {high}{unit}\npå tværs af {n} replikation|{name}: {mean}{unit}\n95% interval fra {low} til {high}{unit}\npå tværs af {n} replikationer
+@plural	{n} block selected|{n} blocks selected	{n} blok valgt|{n} blokke valgt
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikation · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt|{n} replikationer · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikation · frø {seed}|{n} replikationer · frø {seed}
 @plural	{n} replication|{n} replications	{n} replikation|{n} replikationer

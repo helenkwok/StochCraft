@@ -5,7 +5,7 @@
 //! as typed values rather than JSON, so they restore the model exactly.
 
 use stochcraft_model::{
-    Connection, Element, ElementId, ElementKind, Experiment, Model, Property, ResourcePool,
+    Bounds, Connection, Element, ElementId, ElementKind, Experiment, Model, Property, ResourcePool,
     calendar::Calendar,
 };
 
@@ -16,11 +16,13 @@ pub enum Op {
     /// Replace the whole model.
     SetModel(Box<Model>),
     RenameModel(String),
-    /// Insert an element at `index`, then each connection at its index (ascending).
+    /// Insert an element at `index` (with its shape, if placed), then each connection at its
+    /// index (ascending).
     AddElement {
         index: usize,
         element: Element,
         connections: Vec<(usize, Connection)>,
+        bounds: Option<Bounds>,
     },
     /// Remove an element and every connection to or from it.
     RemoveElement(ElementId),
@@ -35,6 +37,10 @@ pub enum Op {
     SetExperiment(Experiment),
     /// Replace the shared resource pools.
     SetResources(Vec<ResourcePool>),
+    /// Place (or, with `None`, unplace) elements' shapes.
+    SetLayout(Vec<(ElementId, Option<Bounds>)>),
+    /// Several edits as one, in order.
+    Batch(Vec<Op>),
     /// Replace the calendars.
     SetCalendars(Vec<Calendar>),
 }
@@ -60,10 +66,14 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
             index,
             element,
             connections,
+            bounds,
         } => {
             let id = element.id.clone();
             let index = index.min(model.elements.len());
             model.elements.insert(index, element);
+            if let Some(b) = bounds {
+                model.layout.insert(id.clone(), b);
+            }
             for (i, c) in connections {
                 let i = i.min(model.connections.len());
                 model.connections.insert(i, c);
@@ -86,10 +96,12 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
                 }
             }
             model.connections = kept;
+            let bounds = model.layout.remove(&id);
             Op::AddElement {
                 index,
                 element,
                 connections: removed,
+                bounds,
             }
         }
         Op::SetKind(id, kind) => {
@@ -145,6 +157,38 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
         }
         Op::SetExperiment(x) => Op::SetExperiment(std::mem::replace(&mut model.experiment, x)),
         Op::SetResources(r) => Op::SetResources(std::mem::replace(&mut model.resources, r)),
+        Op::SetLayout(shapes) => {
+            if let Some((id, _)) = shapes.iter().find(|(id, _)| model.element(id).is_none()) {
+                return Err(not_found("element", id));
+            }
+            let mut old = Vec::with_capacity(shapes.len());
+            for (id, b) in shapes {
+                let was = match b {
+                    Some(b) => model.layout.insert(id.clone(), b),
+                    None => model.layout.remove(&id),
+                };
+                old.push((id, was));
+            }
+            old.reverse();
+            Op::SetLayout(old)
+        }
+        Op::Batch(ops) => {
+            let mut done: Vec<Op> = Vec::with_capacity(ops.len());
+            for op in ops {
+                match apply(model, op) {
+                    Ok(inverse) => done.push(inverse),
+                    Err(e) => {
+                        // Undo what was done, so the model is unchanged.
+                        for inverse in done.into_iter().rev() {
+                            let _ = apply(model, inverse);
+                        }
+                        return Err(e);
+                    }
+                }
+            }
+            done.reverse();
+            Op::Batch(done)
+        }
         Op::SetCalendars(c) => Op::SetCalendars(std::mem::replace(&mut model.calendars, c)),
     })
 }

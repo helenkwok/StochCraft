@@ -4,10 +4,10 @@
 //! model's; the ids StochCraft adds (the definitions, process, resources, scenario and diagram
 //! shapes) are chosen so they never collide with them, since XML ids are unique per file.
 
-use std::collections::{BTreeMap, BTreeSet, VecDeque};
+use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Breakdown, Calendar, DateTime, Dist, ElementKind, Model, Need, Property, PropertyType,
+    Bounds, Breakdown, Calendar, DateTime, Dist, ElementKind, Model, Need, Property, PropertyType,
     PropertyValue, ResourcePool, Timed,
 };
 
@@ -219,44 +219,6 @@ pub(crate) fn start_param(t: DateTime) -> Element {
     param("Start", s("DateTimeParameter").with_attr("value", &t.iso()))
 }
 
-/// Columns by distance from the sources (breadth first), rows in model order within a column.
-fn layout(model: &Model) -> BTreeMap<String, (f64, f64)> {
-    let mut next: BTreeMap<&str, Vec<&str>> = BTreeMap::new();
-    for c in &model.connections {
-        next.entry(c.from.as_str()).or_default().push(c.to.as_str());
-    }
-    let mut depth: BTreeMap<&str, usize> = BTreeMap::new();
-    let mut queue: VecDeque<&str> = VecDeque::new();
-    for e in &model.elements {
-        if matches!(e.kind, ElementKind::Source { .. }) {
-            depth.insert(e.id.as_str(), 0);
-            queue.push_back(e.id.as_str());
-        }
-    }
-    while let Some(id) = queue.pop_front() {
-        let d = depth.get(id).copied().unwrap_or(0);
-        for n in next.get(id).into_iter().flatten() {
-            if !depth.contains_key(n) {
-                depth.insert(n, d + 1);
-                queue.push_back(n);
-            }
-        }
-    }
-    let last = depth.values().copied().max().map_or(0, |m| m + 1);
-    let mut rows: BTreeMap<usize, usize> = BTreeMap::new();
-    let mut centres = BTreeMap::new();
-    for e in &model.elements {
-        let col = depth.get(e.id.as_str()).copied().unwrap_or(last);
-        let row = rows.entry(col).or_insert(0);
-        centres.insert(
-            e.id.as_str().to_owned(),
-            (100.0 + 180.0 * col as f64, 100.0 + 140.0 * *row as f64),
-        );
-        *row += 1;
-    }
-    centres
-}
-
 /// The BPMN element an element kind is written as.
 pub(crate) fn bpmn_local(kind: &ElementKind) -> &'static str {
     match kind {
@@ -309,10 +271,34 @@ pub(crate) fn condition_element(c: &str) -> Element {
 }
 
 pub(crate) fn size(kind: &ElementKind) -> (f64, f64) {
-    match kind {
-        ElementKind::Source { .. } | ElementKind::Sink => (36.0, 36.0),
-        ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => (50.0, 50.0),
-        _ => (100.0, 80.0),
+    kind.shape_size()
+}
+
+/// A shape's `dc:Bounds`.
+pub(crate) fn bounds_element(b: &Bounds) -> Element {
+    Element::new("dc:Bounds", Some(DC))
+        .with_attr("x", &num(b.x))
+        .with_attr("y", &num(b.y))
+        .with_attr("width", &num(b.width))
+        .with_attr("height", &num(b.height))
+}
+
+/// Where an edge between two shapes starts and ends: from the middle of the first's right side
+/// to the middle of the second's left, or between top and bottom when one is wholly above the
+/// other.
+pub fn edge_ends(a: &Bounds, b: &Bounds) -> ((f64, f64), (f64, f64)) {
+    let (ax, ay) = a.centre();
+    let (bx, by) = b.centre();
+    if b.x >= a.x + a.width || b.x + b.width <= a.x {
+        if bx >= ax {
+            ((a.x + a.width, ay), (b.x, by))
+        } else {
+            ((a.x, ay), (b.x + b.width, by))
+        }
+    } else if by >= ay {
+        ((ax, a.y + a.height), (bx, b.y))
+    } else {
+        ((ax, a.y), (bx, b.y + b.height))
     }
 }
 
@@ -410,47 +396,35 @@ pub fn write_new(model: &Model) -> Vec<u8> {
     defs.push(process);
 
     // The diagram.
-    let centres = layout(model);
+    let placed = model.placed();
     let mut plane = Element::new("bpmndi:BPMNPlane", Some(BPMNDI))
         .with_attr("id", &ids.fresh("plane"))
         .with_attr("bpmnElement", &process_id);
     for e in &model.elements {
-        let (cx, cy) = centres.get(e.id.as_str()).copied().unwrap_or((0.0, 0.0));
-        let (w, h) = size(&e.kind);
+        let Some(b) = placed.get(&e.id) else { continue };
         plane.push(
             Element::new("bpmndi:BPMNShape", Some(BPMNDI))
                 .with_attr("id", &ids.fresh(&format!("{}_di", e.id)))
                 .with_attr("bpmnElement", e.id.as_str())
-                .with_child(
-                    Element::new("dc:Bounds", Some(DC))
-                        .with_attr("x", &num(cx - w / 2.0))
-                        .with_attr("y", &num(cy - h / 2.0))
-                        .with_attr("width", &num(w))
-                        .with_attr("height", &num(h)),
-                ),
+                .with_child(bounds_element(b)),
         );
     }
-    let half_width = |id: &str| {
-        model
-            .elements
-            .iter()
-            .find(|e| e.id.as_str() == id)
-            .map_or(0.0, |e| size(&e.kind).0 / 2.0)
-    };
     for c in &model.connections {
-        let (fx, fy) = centres.get(c.from.as_str()).copied().unwrap_or((0.0, 0.0));
-        let (tx, ty) = centres.get(c.to.as_str()).copied().unwrap_or((0.0, 0.0));
-        let waypoint = |x: f64, y: f64| {
+        let (Some(a), Some(b)) = (placed.get(&c.from), placed.get(&c.to)) else {
+            continue;
+        };
+        let waypoint = |(x, y): (f64, f64)| {
             Element::new("di:waypoint", Some(DI))
                 .with_attr("x", &num(x))
                 .with_attr("y", &num(y))
         };
+        let (from, to) = edge_ends(a, b);
         plane.push(
             Element::new("bpmndi:BPMNEdge", Some(BPMNDI))
                 .with_attr("id", &ids.fresh(&format!("{}_di", c.id)))
                 .with_attr("bpmnElement", c.id.as_str())
-                .with_child(waypoint(fx + half_width(c.from.as_str()), fy))
-                .with_child(waypoint(tx - half_width(c.to.as_str()), ty)),
+                .with_child(waypoint(from))
+                .with_child(waypoint(to)),
         );
     }
     defs.push(

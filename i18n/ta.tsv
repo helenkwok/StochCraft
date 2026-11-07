@@ -15,6 +15,7 @@
 	+ Add block	+ தொகுதியைச் சேர்
 	About StochCraft	StochCraft பற்றி
 	About {app}	{app} பற்றி
+	Actual size	உண்மையான அளவு
 	Add Block	தொகுதியைச் சேர்
 	Add a flow from…	இதிலிருந்து ஓட்டத்தைச் சேர்…
 	Add a flow to…	இதற்கு ஓட்டத்தைச் சேர்…
@@ -24,6 +25,7 @@
 	Add property	பண்பைச் சேர்
 	Added pool {id}	{id} தொகுப்பு சேர்க்கப்பட்டது
 	Added {block} ({id})	{block} ({id}) சேர்க்கப்பட்டது
+	Align	சீரமை
 	Alternative {n}	மாற்றுத் தேர்வு {n}
 	Appearance	தோற்றம்
 	Arrival limit	வருகை வரம்பு
@@ -34,6 +36,7 @@
 	Beta	பீட்டா
 	Binomial	ஈருறுப்பு
 	Boolean	பூலியன்
+	Bottoms	கீழ் விளிம்புகள்
 	Bring All to Front	அனைத்தையும் முன்னே கொண்டுவா
 	Built with	உருவாக்கப் பயன்படுத்தியது
 	By role	பணிப்பங்கு வாரியாக
@@ -42,8 +45,10 @@
 	Cancel Run	இயக்கத்தை ரத்துசெய்
 	Cancel run	இயக்கத்தை ரத்துசெய்
 	Capacity	கொள்திறன்
+	Centres	கிடைமட்ட மையங்கள்
 	Change Block	தொகுதியை மாற்று
 	Change Flow	ஓட்டத்தை மாற்று
+	Changes	மாற்றங்கள்
 	Changing the time unit does not convert the times already in the model.	நேர அலகை மாற்றுவது மாதிரியில் ஏற்கெனவே உள்ள நேரங்களை மாற்றிக் கணக்கிடாது.
 	Clear Menu	மெனுவை அழி
 	Close	மூடு
@@ -51,8 +56,12 @@
 	Comes from	இதிலிருந்து வருகிறது
 	Condition of {id}	{id} இன் நிபந்தனை
 	Connect	இணை
+	Connect from {name}	{name} இலிருந்து இணை
+	Connected {from} to {to}	{from} ஐ {to} உடன் இணைத்தது
 	Connections	இணைப்புகள்
 	Constant	மாறிலி
+	Copy	நகலெடு
+	Cut	வெட்டு
 	Dark	அடர்
 	Data points	தரவுப் புள்ளிகள்
 	Date and time	தேதியும் நேரமும்
@@ -60,7 +69,9 @@
 	Decision	முடிவு
 	Decision (one way)	முடிவு (ஒரு வழி)
 	Default flow	இயல்புநிலை ஓட்டம்
+	Delete	நீக்கு
 	Departures	வெளியேற்றங்கள்
+	Diagram	வரைபடம்
 	Discard	நிராகரி
 	Discarded the recovered changes	மீட்டெடுத்த மாற்றங்கள் நிராகரிக்கப்பட்டன
 	Disconnect	இணைப்பைத் துண்டி
@@ -71,12 +82,16 @@
 	Download charts (PNG)	வரைபடங்களைப் பதிவிறக்கு (PNG)
 	Download table (CSV)	அட்டவணையைப் பதிவிறக்கு (CSV)
 	Downloaded {file}	{file} பதிவிறக்கப்பட்டது
+	Drag to add:	சேர்க்க இழுக்கவும்:
+	Duplicate	நகல் உருவாக்கு
 	Duration	கால அளவு
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ஒவ்வொரு உருப்படியும் இவற்றில், இப்போதே ஒரே நேரத்தில் முழுமையாக நிறைவேற்றக்கூடிய முதலாவதை எடுத்துக்கொள்கிறது; வெளியேறும்போது அலகுகளைத் திருப்பித் தருகிறது.
 	Edit	திருத்து
 	Entered	உள்ளே நுழைந்தவை
 	Erlang	எர்லாங்
 	Error	பிழை
+	Evenly across	கிடைமட்டமாகச் சமமாகப் பரப்பு
+	Evenly down	செங்குத்தாகச் சமமாகப் பரப்பு
 	Every distribution	ஒவ்வொரு பரவலும்
 	Exit	வெளியேறு
 	Experiment	சோதனை
@@ -88,6 +103,8 @@
 	Exported {file}	{file} ஏற்றுமதி செய்யப்பட்டது
 	Expression	கோவை
 	File	கோப்பு
+	Fit	பொருத்து
+	Fit the diagram to the view	வரைபடத்தைக் காட்சியில் பொருத்து
 	Flows	ஓட்டங்கள்
 	From	இதிலிருந்து
 	Gamma	காமா
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	விசைப்பலகை குறுக்குவழிகள் மாறவில்லை
 	Language	மொழி
 	Left	வெளியேறியவை
+	Left edges	இடது விளிம்புகள்
 	Licensed under the MIT License or the Apache License 2.0, at your option.	உங்கள் விருப்பப்படி MIT License அல்லது Apache License 2.0 உரிமத்தின் கீழ் வழங்கப்படுகிறது.
 	Light	வெளிர்
 	Log-normal	மடக்கை-இயல்புப் பரவல்
@@ -115,11 +133,13 @@
 	Mean time in system	அமைப்பில் கழித்த சராசரி நேரம்
 	Mean wait	சராசரி காத்திருப்பு
 	Metric	அளவீடு
+	Middles	செங்குத்து மையங்கள்
 	Minimise	சிறிதாக்கு
 	Minimize	சிறிதாக்கு
 	Minimum	குறைந்தபட்சம்
 	Model	மாதிரி
 	Most likely	அதிக வாய்ப்புள்ள மதிப்பு
+	Move	நகர்த்தல்
 	Name	பெயர்
 	Needs	தேவைகள்
 	New	புதியது
@@ -147,6 +167,7 @@
 	Or start from an example	அல்லது ஓர் எடுத்துக்காட்டில் தொடங்கவும்
 	PNG image	PNG படம்
 	Parameters	அளவுருக்கள்
+	Paste	ஒட்டு
 	Points	புள்ளிகள்
 	Poisson	பாய்சான்
 	Preferences	விருப்பங்கள்
@@ -183,6 +204,7 @@
 	Resource pools	வளத் தொகுப்புகள்
 	Restore	சாளர அளவை மீட்டமை
 	Results	முடிவுகள்
+	Right edges	வலது விளிம்புகள்
 	Roles	பணிப்பங்குகள்
 	Run	இயக்கு
 	Run cancelled	இயக்கம் ரத்துசெய்யப்பட்டது
@@ -197,6 +219,7 @@
 	Saved {file}	{file} சேமிக்கப்பட்டது
 	Scale	அளவுகோல்
 	Seed	சீரற்ற விதை
+	Select All	அனைத்தையும் தேர்ந்தெடு
 	Service time	சேவை நேரம்
 	Services	சேவைகள்
 	Set Property	பண்பை அமை
@@ -210,6 +233,7 @@
 	Show {id}	{id} ஐக் காட்டு
 	Split or join	பிரி அல்லது இணை
 	Split or join (all ways)	பிரி அல்லது இணை (எல்லா வழிகளும்)
+	Spread out	பரப்பு
 	Stages (k)	படிநிலைகள் (k)
 	Standard deviation	திட்ட விலக்கம்
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	{name} இல் சேமிக்கப்படாத மாற்றங்களுடன் StochCraft மூடப்பட்டது. அவற்றைப் பெயரிடப்படாத மாதிரியாக மீட்டெடுக்கவும் அல்லது நிராகரிக்கவும்.
@@ -227,6 +251,7 @@
 	Time between arrivals	வருகைகளுக்கு இடையிலான நேரம்
 	Time unit	நேர அலகு
 	To	இதற்கு
+	Tops	மேல் விளிம்புகள்
 	Trials	முயற்சிகள்
 	Triangular	முக்கோணப் பரவல்
 	Truncated normal	வரம்பிட்ட இயல்புப் பரவல்
@@ -255,6 +280,8 @@
 	Yes or no	ஆம் அல்லது இல்லை
 	Your changes will be lost if you don't save them.	சேமிக்காவிட்டால் உங்கள் மாற்றங்கள் இழக்கப்படும்.
 	Zoom	அளவை மாற்று
+	Zoom in	பெரிதாக்கு
+	Zoom out	சிறிதாக்கு
 	a model	ஒரு மாதிரி
 	arrivals	வருகைகள்
 	days	நாட்கள்
@@ -281,6 +308,7 @@
 	years	ஆண்டுகள்
 	{field}: not editable here yet	{field}: இங்கே இன்னும் திருத்த முடியாது
 	{id}: a probability is a number from 0 to 1	{id}: நிகழ்தகவு 0 முதல் 1 வரையிலான எண்ணாக இருக்க வேண்டும்
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — திருத்தப்பட்டது
 	{property} (set to, mean)	{property} (அமைக்கப்பட்ட மதிப்பு, சராசரி)
 	± 95% CI	± 95% CI
@@ -292,11 +320,15 @@ unit	min	நிமி
 unit	ms	மி.வி
 unit	s	வி
 unit	yr	ஆண்டு
+@plural	Added {n} block|Added {n} blocks	{n} தொகுதி சேர்க்கப்பட்டது|{n} தொகுதிகள் சேர்க்கப்பட்டன
+@plural	Copied {n} block|Copied {n} blocks	{n} தொகுதி நகலெடுக்கப்பட்டது|{n} தொகுதிகள் நகலெடுக்கப்பட்டன
 @plural	Finished {n} replication|Finished {n} replications	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} திறக்கப்பட்டது ({n} எச்சரிக்கை)|{file} திறக்கப்பட்டது ({n} எச்சரிக்கைகள்)
+@plural	Removed {n} block|Removed {n} blocks	{n} தொகுதி அகற்றப்பட்டது|{n} தொகுதிகள் அகற்றப்பட்டன
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கத்தை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.|{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கங்களை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் அவற்றின் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} இல் {done} மீள் இயக்கம் முடிந்தது|{n} இல் {done} மீள் இயக்கங்கள் முடிந்தன
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கத்தில்|{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கங்களில்
+@plural	{n} block selected|{n} blocks selected	{n} தொகுதி தேர்ந்தெடுக்கப்பட்டது|{n} தொகுதிகள் தேர்ந்தெடுக்கப்பட்டன
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} மீள் இயக்கம் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது|{n} மீள் இயக்கங்கள் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} மீள் இயக்கம் · விதை {seed}|{n} மீள் இயக்கங்கள் · விதை {seed}
 @plural	{n} replication|{n} replications	{n} மீள் இயக்கம்|{n} மீள் இயக்கங்கள்

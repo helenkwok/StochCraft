@@ -189,6 +189,12 @@ pub fn showcase() -> Model {
     model
 }
 
+/// The model with every element drawn where a new file places it.
+fn laid_out(mut m: Model) -> Model {
+    m.layout = m.placed();
+    m
+}
+
 #[test]
 fn written_models_read_back_identically() {
     let model = showcase();
@@ -198,7 +204,7 @@ fn written_models_read_back_identically() {
     let Ok(loaded) = loaded else { return };
     assert_eq!(loaded.opened.format, Format::Bpmn);
     assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
-    assert_eq!(loaded.model, model);
+    assert_eq!(loaded.model, laid_out(model.clone()));
     assert!(model.validate().is_empty());
 }
 
@@ -222,7 +228,10 @@ fn added_ids_never_collide_with_model_ids() {
     ids.sort_unstable();
     ids.dedup();
     assert_eq!(ids.len(), n, "duplicate ids in:\n{text}");
-    assert_eq!(read(text.as_bytes()).map(|l| l.model).ok(), Some(model));
+    assert_eq!(
+        read(text.as_bytes()).map(|l| l.model).ok(),
+        Some(laid_out(model))
+    );
 }
 
 #[test]
@@ -235,7 +244,9 @@ fn opened_files_save_unchanged_and_with_edits() {
     let mut edited = loaded.model.clone();
     edited.experiment.replications += 1;
     edited.experiment.warmup = 0.0;
-    edited.elements.pop();
+    if let Some(e) = edited.elements.pop() {
+        edited.layout.remove(&e.id);
+    }
     edited.connections.pop();
     let saved = loaded.opened.save(&edited);
     let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
@@ -321,7 +332,7 @@ fn gateways_and_routing_write_read_and_save() {
         unreachable!()
     };
     assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
-    assert_eq!(loaded.model, model);
+    assert_eq!(loaded.model, laid_out(model));
     assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
 
     // Change a probability, a condition and the default; remove a probability.

@@ -916,3 +916,31 @@ fn a_buffer_on_a_task_without_a_resource_is_ignored() {
         Some(ElementKind::Delay { .. })
     ));
 }
+
+/// Moving a shape changes its bounds and the edges to and from it, nothing else; a file with no
+/// diagram gets one (BPMN DI, or XPDL graphics) once its shapes are placed.
+#[test]
+fn moved_and_placed_shapes_save_into_the_diagram() {
+    let (saved, n) = edit_and_save("distributions.bpmn", None, |m| {
+        let id = m.elements[1].id.clone();
+        if let Some(b) = m.layout.get_mut(&id) {
+            b.x += 25.0;
+            b.y -= 10.0;
+        }
+    });
+    // One Bounds line, and the waypoints of the edges in and out (two each).
+    assert!(
+        (2..=10).contains(&n),
+        "{n} lines:\n{}",
+        diff(&file("distributions.bpmn"), &saved)
+    );
+
+    for name in ["mm1.bpmn", "tandem.xpdl"] {
+        let original = file(name);
+        let loaded = read_scenario(&original, None).unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert!(loaded.model.layout.is_empty(), "{name} has no diagram");
+        let (saved, _) = edit_and_save(name, None, |m| m.layout = m.placed());
+        let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(back.model.layout.len(), back.model.elements.len(), "{name}");
+    }
+}

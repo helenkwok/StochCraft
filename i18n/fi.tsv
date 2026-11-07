@@ -15,6 +15,7 @@
 	+ Add block	+ Lisää lohko
 	About StochCraft	Tietoja StochCraftista
 	About {app}	Tietoja: {app}
+	Actual size	Todellinen koko
 	Add Block	Lisää lohko
 	Add a flow from…	Lisää virta kohteesta…
 	Add a flow to…	Lisää virta kohteeseen…
@@ -24,6 +25,7 @@
 	Add property	Lisää ominaisuus
 	Added pool {id}	Lisättiin pooli {id}
 	Added {block} ({id})	Lisättiin {block} ({id})
+	Align	Tasaa
 	Alternative {n}	Vaihtoehto {n}
 	Appearance	Ulkoasu
 	Arrival limit	Saapumisraja
@@ -34,6 +36,7 @@
 	Beta	Beeta
 	Binomial	Binomijakauma
 	Boolean	Totuusarvo
+	Bottoms	Alareunat
 	Bring All to Front	Tuo kaikki eteen
 	Built with	Toteutettu seuraavilla
 	By role	Roolin mukaan
@@ -42,8 +45,10 @@
 	Cancel Run	Peruuta suoritus
 	Cancel run	Peruuta suoritus
 	Capacity	Kapasiteetti
+	Centres	Vaakakeskikohdat
 	Change Block	Muuta lohkoa
 	Change Flow	Muuta virtaa
+	Changes	Muutokset
 	Changing the time unit does not convert the times already in the model.	Aikayksikön vaihtaminen ei muunna mallissa jo olevia aikoja.
 	Clear Menu	Tyhjennä valikko
 	Close	Sulje
@@ -51,8 +56,12 @@
 	Comes from	Tulee kohteesta
 	Condition of {id}	Kohteen {id} ehto
 	Connect	Yhdistä
+	Connect from {name}	Yhdistä kohteesta {name}
+	Connected {from} to {to}	Yhdistettiin {from} kohteeseen {to}
 	Connections	Yhteydet
 	Constant	Vakio
+	Copy	Kopioi
+	Cut	Leikkaa
 	Dark	Tumma
 	Data points	Datapisteet
 	Date and time	Päivämäärä ja aika
@@ -60,7 +69,9 @@
 	Decision	Päätös
 	Decision (one way)	Päätös (yksi reitti)
 	Default flow	Oletusvirta
+	Delete	Poista
 	Departures	Poistumiset
+	Diagram	Kaavio
 	Discard	Hylkää
 	Discarded the recovered changes	Palautetut muutokset hylättiin
 	Disconnect	Katkaise yhteys
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Lataa kaaviot (PNG)
 	Download table (CSV)	Lataa taulukko (CSV)
 	Downloaded {file}	Ladattiin {file}
+	Drag to add:	Lisää vetämällä:
+	Duplicate	Monista
 	Duration	Kesto
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jokainen entiteetti ottaa näistä vaihtoehdoista ensimmäisen, joka voidaan täyttää heti, kaiken kerralla, ja palauttaa yksiköt poistuessaan tehtävästä.
 	Edit	Muokkaa
 	Entered	Saapuneet
 	Erlang	Erlang
 	Error	Virhe
+	Evenly across	Jaa tasaisesti vaakasuunnassa
+	Evenly down	Jaa tasaisesti pystysuunnassa
 	Every distribution	Kaikki jakaumat
 	Exit	Lopeta
 	Experiment	Koe
@@ -88,6 +103,8 @@
 	Exported {file}	Vietiin {file}
 	Expression	Lauseke
 	File	Tiedosto
+	Fit	Sovita
+	Fit the diagram to the view	Sovita kaavio näkymään
 	Flows	Virrat
 	From	Kohteesta
 	Gamma	Gamma
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	Pikanäppäimet ennallaan
 	Language	Kieli
 	Left	Poistuneet
+	Left edges	Vasemmat reunat
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Lisensoitu valintasi mukaan MIT License- tai Apache License 2.0 -lisenssillä.
 	Light	Vaalea
 	Log-normal	Lognormaalijakauma
@@ -115,11 +133,13 @@
 	Mean time in system	Keskimääräinen aika järjestelmässä
 	Mean wait	Keskimääräinen odotusaika
 	Metric	Mittari
+	Middles	Pystykeskikohdat
 	Minimise	Pienennä
 	Minimize	Pienennä
 	Minimum	Minimi
 	Model	Malli
 	Most likely	Todennäköisin
+	Move	Siirto
 	Name	Nimi
 	Needs	Tarpeet
 	New	Uusi
@@ -147,6 +167,7 @@
 	Or start from an example	Tai aloita esimerkistä
 	PNG image	PNG-kuva
 	Parameters	Parametrit
+	Paste	Liitä
 	Points	Pisteet
 	Poisson	Poisson
 	Preferences	Asetukset
@@ -183,6 +204,7 @@
 	Resource pools	Resurssipoolit
 	Restore	Palauta ikkuna
 	Results	Tulokset
+	Right edges	Oikeat reunat
 	Roles	Roolit
 	Run	Suorita
 	Run cancelled	Suoritus peruutettu
@@ -197,6 +219,7 @@
 	Saved {file}	Tallennettiin {file}
 	Scale	Skaala
 	Seed	Satunnaislukusiemen
+	Select All	Valitse kaikki
 	Service time	Palveluaika
 	Services	Palvelut
 	Set Property	Aseta ominaisuus
@@ -210,6 +233,7 @@
 	Show {id}	Näytä {id}
 	Split or join	Haaroita tai yhdistä
 	Split or join (all ways)	Haaroita tai yhdistä (kaikki reitit)
+	Spread out	Jaa tasaisesti
 	Stages (k)	Vaiheet (k)
 	Standard deviation	Keskihajonta
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft suljettiin, kun mallissa {name} oli tallentamattomia muutoksia. Palauta muutokset nimettömänä mallina tai hylkää ne.
@@ -227,6 +251,7 @@
 	Time between arrivals	Saapumisten välinen aika
 	Time unit	Aikayksikkö
 	To	Kohteeseen
+	Tops	Yläreunat
 	Trials	Kokeilut
 	Triangular	Kolmiojakauma
 	Truncated normal	Katkaistu normaalijakauma
@@ -255,6 +280,8 @@
 	Yes or no	Kyllä tai ei
 	Your changes will be lost if you don't save them.	Muutokset menetetään, jos niitä ei tallenneta.
 	Zoom	Vaihda kokoa
+	Zoom in	Lähennä
+	Zoom out	Loitonna
 	a model	malli
 	arrivals	saapumiset
 	days	päivää
@@ -281,6 +308,7 @@
 	years	vuotta
 	{field}: not editable here yet	{field}: ei vielä muokattavissa täällä
 	{id}: a probability is a number from 0 to 1	{id}: todennäköisyyden on oltava luku väliltä 0–1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — muokattu
 	{property} (set to, mean)	{property} (asetettu arvo, keskiarvo)
 	± 95% CI	± 95%:n luottamusväli
@@ -292,11 +320,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	v
+@plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
+@plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
 @plural	Finished {n} replication|Finished {n} replications	{n} toisto valmistui|{n} toistoa valmistui
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avattiin {file} ({n} varoitus)|Avattiin {file} ({n} varoitusta)
+@plural	Removed {n} block|Removed {n} blocks	Poistettiin {n} lohko|Poistettiin {n} lohkoa
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Suorittaa {n} mallin riippumattoman toiston siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.|Suorittaa {n} mallin riippumatonta toistoa siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} / {n} toisto valmistui|{done} / {n} toistoa valmistui
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} toiston perusteella|{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} toiston perusteella
+@plural	{n} block selected|{n} blocks selected	{n} lohko valittu|{n} lohkoa valittu
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} toisto · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}|{n} toistoa · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} toisto · siemen {seed}|{n} toistoa · siemen {seed}
 @plural	{n} replication|{n} replications	{n} toisto|{n} toistoa

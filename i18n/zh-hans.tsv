@@ -15,6 +15,7 @@
 	+ Add block	+ 添加区块
 	About StochCraft	关于 StochCraft
 	About {app}	关于 {app}
+	Actual size	实际大小
 	Add Block	添加区块
 	Add a flow from…	添加顺序流，来自…
 	Add a flow to…	添加顺序流，通往…
@@ -24,6 +25,7 @@
 	Add property	添加属性
 	Added pool {id}	已添加资源池 {id}
 	Added {block} ({id})	已添加 {block} ({id})
+	Align	对齐
 	Alternative {n}	备选方案 {n}
 	Appearance	外观
 	Arrival limit	到达上限
@@ -34,6 +36,7 @@
 	Beta	贝塔分布
 	Binomial	二项分布
 	Boolean	布尔值
+	Bottoms	底边
 	Bring All to Front	全部移到最前
 	Built with	使用以下技术构建
 	By role	按角色
@@ -42,8 +45,10 @@
 	Cancel Run	取消运行
 	Cancel run	取消运行
 	Capacity	容量
+	Centres	水平居中
 	Change Block	更改区块
 	Change Flow	更改顺序流
+	Changes	更改
 	Changing the time unit does not convert the times already in the model.	更改时间单位不会换算模型中已有的时间值。
 	Clear Menu	清除菜单
 	Close	关闭
@@ -51,8 +56,12 @@
 	Comes from	来源于
 	Condition of {id}	{id} 的条件
 	Connect	连接
+	Connect from {name}	从 {name} 连接
+	Connected {from} to {to}	已将 {from} 连接到 {to}
 	Connections	连接
 	Constant	常数
+	Copy	复制
+	Cut	剪切
 	Dark	深色
 	Data points	数据点
 	Date and time	日期和时间
@@ -60,7 +69,9 @@
 	Decision	决策
 	Decision (one way)	决策（单一路径）
 	Default flow	默认顺序流
+	Delete	删除
 	Departures	离开
+	Diagram	图表
 	Discard	放弃
 	Discarded the recovered changes	已丢弃恢复的更改
 	Disconnect	断开连接
@@ -71,12 +82,16 @@
 	Download charts (PNG)	下载图表 (PNG)
 	Download table (CSV)	下载表格 (CSV)
 	Downloaded {file}	已下载 {file}
+	Drag to add:	拖动以添加：
+	Duplicate	创建副本
 	Duration	持续时间
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	每个实体会选取其中第一个当前能一次全部满足的方案，并在离开时归还这些资源单元。
 	Edit	编辑
 	Entered	进入数
 	Erlang	埃尔朗分布
 	Error	错误
+	Evenly across	水平均匀分布
+	Evenly down	垂直均匀分布
 	Every distribution	所有分布
 	Exit	退出
 	Experiment	实验
@@ -88,6 +103,8 @@
 	Exported {file}	已导出 {file}
 	Expression	表达式
 	File	文件
+	Fit	适应
+	Fit the diagram to the view	使图表适应视图
 	Flows	顺序流
 	From	起点
 	Gamma	伽马分布
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	键盘快捷键未更改
 	Language	语言
 	Left	离开数
+	Left edges	左边
 	Licensed under the MIT License or the Apache License 2.0, at your option.	可选择采用 MIT License 或 Apache License 2.0 授权。
 	Light	浅色
 	Log-normal	对数正态分布
@@ -115,11 +133,13 @@
 	Mean time in system	系统内平均时间
 	Mean wait	平均等待时间
 	Metric	指标
+	Middles	垂直居中
 	Minimise	最小化
 	Minimize	最小化
 	Minimum	最小值
 	Model	模型
 	Most likely	最可能值
+	Move	移动
 	Name	名称
 	Needs	所需资源
 	New	新建
@@ -147,6 +167,7 @@
 	Or start from an example	或从示例开始
 	PNG image	PNG 图像
 	Parameters	参数
+	Paste	粘贴
 	Points	点
 	Poisson	泊松分布
 	Preferences	首选项
@@ -183,6 +204,7 @@
 	Resource pools	资源池
 	Restore	还原
 	Results	结果
+	Right edges	右边
 	Roles	角色
 	Run	运行
 	Run cancelled	运行已取消
@@ -197,6 +219,7 @@
 	Saved {file}	已保存 {file}
 	Scale	尺度参数
 	Seed	随机种子
+	Select All	全选
 	Service time	服务时间
 	Services	服务
 	Set Property	设置属性
@@ -210,6 +233,7 @@
 	Show {id}	显示 {id}
 	Split or join	拆分或合并
 	Split or join (all ways)	拆分或合并（所有路径）
+	Spread out	均匀分布
 	Stages (k)	阶段数 (k)
 	Standard deviation	标准差
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft 关闭时 {name} 有未保存的更改。可将其恢复为未命名模型，或放弃这些更改。
@@ -227,6 +251,7 @@
 	Time between arrivals	到达间隔时间
 	Time unit	时间单位
 	To	终点
+	Tops	顶边
 	Trials	试验次数
 	Triangular	三角分布
 	Truncated normal	截断正态分布
@@ -255,6 +280,8 @@
 	Yes or no	是或否
 	Your changes will be lost if you don't save them.	如果不存储，你的更改将会丢失。
 	Zoom	缩放
+	Zoom in	放大
+	Zoom out	缩小
 	a model	一个模型
 	arrivals	到达
 	days	天
@@ -281,6 +308,7 @@
 	years	年
 	{field}: not editable here yet	{field}：暂时无法在此编辑
 	{id}: a probability is a number from 0 to 1	{id}：概率必须是 0 到 1 之间的数字
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — 已编辑
 	{property} (set to, mean)	{property}（所设值的均值）
 	± 95% CI	± 95% 置信区间
@@ -292,11 +320,15 @@ unit	min	分钟
 unit	ms	毫秒
 unit	s	秒
 unit	yr	年
+@plural	Added {n} block|Added {n} blocks	已添加 {n} 个区块
+@plural	Copied {n} block|Copied {n} blocks	已复制 {n} 个区块
 @plural	Finished {n} replication|Finished {n} replications	已完成 {n} 次重复运行
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	已打开 {file}（{n} 条警告）
+@plural	Removed {n} block|Removed {n} blocks	已移除 {n} 个区块
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	从随机种子 {seed} 开始，对模型进行 {n} 次独立重复运行。每个元素的结果都包含 95% 置信区间的半宽。
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	已完成 {done}/{n} 次重复运行
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}：{mean}{unit}\n95% 区间：{low} 至 {high}{unit}\n基于 {n} 次重复运行
+@plural	{n} block selected|{n} blocks selected	已选择 {n} 个区块
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 次重复运行 · 随机种子 {seed} · 预热 {warmup} {unit} · 测量 {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 次重复运行 · 随机种子 {seed}
 @plural	{n} replication|{n} replications	{n} 次重复运行

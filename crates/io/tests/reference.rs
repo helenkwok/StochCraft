@@ -363,6 +363,22 @@ fn edits() -> Vec<Edit> {
     let first = |m: &Model, f: fn(&ElementKind) -> bool| m.elements.iter().position(|e| f(&e.kind));
     vec![
         (
+            "move and place shapes",
+            Box::new(|m: &mut Model| {
+                // Move every shape the file has, and place the first element without one.
+                for b in m.layout.values_mut() {
+                    b.x += 40.0;
+                    b.y += 30.5;
+                }
+                let placed = m.placed();
+                if let Some(e) = m.elements.iter().find(|e| !m.layout.contains_key(&e.id))
+                    && let Some(b) = placed.get(&e.id)
+                {
+                    m.layout.insert(e.id.clone(), *b);
+                }
+            }),
+        ),
+        (
             "experiment",
             Box::new(|m: &mut Model| {
                 m.experiment.replications += 1;
@@ -440,6 +456,7 @@ fn edits() -> Vec<Edit> {
                 if let Some(i) = first(m, |k| matches!(k, ElementKind::Sink)) {
                     let id = m.elements.remove(i).id;
                     m.connections.retain(|c| c.from != id && c.to != id);
+                    m.layout.remove(&id);
                 }
             }),
         ),
@@ -555,7 +572,12 @@ fn edits_save_into_every_reference_model_and_scenario() {
                     m.connections.sort_by(|a, b| a.id.cmp(&b.id));
                     m
                 };
-                assert_eq!(by_id(&back.model), by_id(&m), "{at}");
+                // Elements added without a shape are given one in the file.
+                let mut want = by_id(&m);
+                for (id, b) in &back.model.layout {
+                    want.layout.entry(id.clone()).or_insert(*b);
+                }
+                assert_eq!(by_id(&back.model), want, "{at}");
                 assert_eq!(back.opened.scenarios, l.opened.scenarios, "{at}");
                 // Every other scenario reads as it did.
                 for (other, _) in l.opened.scenarios.iter().filter(|(o, _)| o != scenario) {

@@ -15,6 +15,7 @@
 	+ Add block	+ ເພີ່ມບລັອກ
 	About StochCraft	ກ່ຽວກັບ StochCraft
 	About {app}	ກ່ຽວກັບ {app}
+	Actual size	ຂະໜາດຕົວຈິງ
 	Add Block	ເພີ່ມບລັອກ
 	Add a flow from…	ເພີ່ມເສັ້ນທາງຈາກ…
 	Add a flow to…	ເພີ່ມເສັ້ນທາງໄປຫາ…
@@ -24,6 +25,7 @@
 	Add property	ເພີ່ມຄຸນສົມບັດ
 	Added pool {id}	ເພີ່ມກຸ່ມຊັບພະຍາກອນ {id} ແລ້ວ
 	Added {block} ({id})	ເພີ່ມ {block} ({id}) ແລ້ວ
+	Align	ຈັດແຖວ
 	Alternative {n}	ທາງເລືອກ {n}
 	Appearance	ຮູບລັກສະນະ
 	Arrival limit	ຂີດຈຳກັດການມາຮອດ
@@ -34,6 +36,7 @@
 	Beta	ເບຕາ
 	Binomial	ທະວີນາມ
 	Boolean	ບູລີນ
+	Bottoms	ຂອບລຸ່ມ
 	Bring All to Front	ນຳທັງໝົດມາໄວ້ດ້ານໜ້າ
 	Built with	ສ້າງດ້ວຍ
 	By role	ຕາມບົດບາດ
@@ -42,8 +45,10 @@
 	Cancel Run	ຍົກເລີກການປະມວນຜົນ
 	Cancel run	ຍົກເລີກການປະມວນຜົນ
 	Capacity	ຄວາມຈຸ
+	Centres	ກາງແນວນອນ
 	Change Block	ປ່ຽນບລັອກ
 	Change Flow	ປ່ຽນເສັ້ນທາງ
+	Changes	ການປ່ຽນແປງ
 	Changing the time unit does not convert the times already in the model.	ການປ່ຽນໜ່ວຍເວລາຈະບໍ່ແປງຄ່າເວລາທີ່ມີຢູ່ໃນແບບຈຳລອງ.
 	Clear Menu	ລ້າງເມນູ
 	Close	ປິດ
@@ -51,8 +56,12 @@
 	Comes from	ມາຈາກ
 	Condition of {id}	ເງື່ອນໄຂຂອງ {id}
 	Connect	ເຊື່ອມຕໍ່
+	Connect from {name}	ເຊື່ອມຕໍ່ຈາກ {name}
+	Connected {from} to {to}	ເຊື່ອມຕໍ່ {from} ກັບ {to} ແລ້ວ
 	Connections	ການເຊື່ອມຕໍ່
 	Constant	ຄ່າຄົງທີ່
+	Copy	ສຳເນົາ
+	Cut	ຕັດ
 	Dark	ມືດ
 	Data points	ຈຸດຂໍ້ມູນ
 	Date and time	ວັນທີ ແລະ ເວລາ
@@ -60,7 +69,9 @@
 	Decision	ການຕັດສິນໃຈ
 	Decision (one way)	ການຕັດສິນໃຈ (ທາງດຽວ)
 	Default flow	ເສັ້ນທາງເລີ່ມຕົ້ນ
+	Delete	ລຶບ
 	Departures	ການອອກ
+	Diagram	ແຜນວາດ
 	Discard	ຖິ້ມ
 	Discarded the recovered changes	ຖິ້ມການປ່ຽນແປງທີ່ກູ້ຄືນມາແລ້ວ
 	Disconnect	ຕັດການເຊື່ອມຕໍ່
@@ -71,12 +82,16 @@
 	Download charts (PNG)	ດາວໂຫຼດແຜນພູມ (PNG)
 	Download table (CSV)	ດາວໂຫຼດຕາຕະລາງ (CSV)
 	Downloaded {file}	ດາວໂຫຼດ {file} ແລ້ວ
+	Drag to add:	ລາກເພື່ອເພີ່ມ:
+	Duplicate	ເຮັດສຳເນົາ
 	Duration	ໄລຍະເວລາ
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ແຕ່ລະເອນທິຕີຈະເອົາທາງເລືອກທຳອິດທີ່ສາມາດຈັດໃຫ້ໄດ້ຄົບທັງໝົດພ້ອມກັນໃນທັນທີ ແລະ ສົ່ງໜ່ວຍເຫຼົ່ານັ້ນຄືນເມື່ອອອກໄປ.
 	Edit	ແກ້ໄຂ
 	Entered	ຈຳນວນທີ່ເຂົ້າ
 	Erlang	ເອີລັງ
 	Error	ຂໍ້ຜິດພາດ
+	Evenly across	ກະຈາຍເທົ່າກັນແນວນອນ
+	Evenly down	ກະຈາຍເທົ່າກັນແນວຕັ້ງ
 	Every distribution	ທຸກການແຈກຢາຍ
 	Exit	ອອກ
 	Experiment	ການທົດລອງ
@@ -88,6 +103,8 @@
 	Exported {file}	ສົ່ງອອກ {file} ແລ້ວ
 	Expression	ນິພົດ
 	File	ໄຟລ໌
+	Fit	ພໍດີ
+	Fit the diagram to the view	ປັບແຜນວາດໃຫ້ພໍດີກັບມຸມມອງ
 	Flows	ເສັ້ນທາງ
 	From	ຈາກ
 	Gamma	ແກມມາ
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	ປຸ່ມລັດບໍ່ມີການປ່ຽນແປງ
 	Language	ພາສາ
 	Left	ຈຳນວນທີ່ອອກ
+	Left edges	ຂອບຊ້າຍ
 	Licensed under the MIT License or the Apache License 2.0, at your option.	ໃຊ້ໄດ້ພາຍໃຕ້ MIT License ຫຼື Apache License 2.0 ຕາມທີ່ທ່ານເລືອກ.
 	Light	ແຈ້ງ
 	Log-normal	ລອກ-ນໍມອນ
@@ -115,11 +133,13 @@
 	Mean time in system	ເວລາສະເລ່ຍໃນລະບົບ
 	Mean wait	ເວລາລໍຖ້າສະເລ່ຍ
 	Metric	ຕົວຊີ້ວັດ
+	Middles	ກາງແນວຕັ້ງ
 	Minimise	ຫຍໍ້ໜ້າຕ່າງ
 	Minimize	ຫຍໍ້ໜ້າຕ່າງ
 	Minimum	ຄ່າຕ່ຳສຸດ
 	Model	ແບບຈຳລອງ
 	Most likely	ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ
+	Move	ຍ້າຍ
 	Name	ຊື່
 	Needs	ສິ່ງທີ່ຕ້ອງໃຊ້
 	New	ໃໝ່
@@ -147,6 +167,7 @@
 	Or start from an example	ຫຼື ເລີ່ມຈາກຕົວຢ່າງ
 	PNG image	ຮູບພາບ PNG
 	Parameters	ພາລາມິເຕີ
+	Paste	ວາງ
 	Points	ຈຸດ
 	Poisson	ປົວຊົງ
 	Preferences	ຄ່າກຳນົດ
@@ -183,6 +204,7 @@
 	Resource pools	ກຸ່ມຊັບພະຍາກອນ
 	Restore	ຄືນຂະໜາດໜ້າຕ່າງ
 	Results	ຜົນໄດ້ຮັບ
+	Right edges	ຂອບຂວາ
 	Roles	ບົດບາດ
 	Run	ປະມວນຜົນ
 	Run cancelled	ຍົກເລີກການປະມວນຜົນແລ້ວ
@@ -197,6 +219,7 @@
 	Saved {file}	ບັນທຶກ {file} ແລ້ວ
 	Scale	ມາດຕາສ່ວນ
 	Seed	ເມັດສຸ່ມ
+	Select All	ເລືອກທັງໝົດ
 	Service time	ເວລາໃຫ້ບໍລິການ
 	Services	ບໍລິການ
 	Set Property	ຕັ້ງຄຸນສົມບັດ
@@ -210,6 +233,7 @@
 	Show {id}	ສະແດງ {id}
 	Split or join	ແຍກ ຫຼື ລວມ
 	Split or join (all ways)	ແຍກ ຫຼື ລວມ (ທຸກທາງ)
+	Spread out	ກະຈາຍ
 	Stages (k)	ຂັ້ນຕອນ (k)
 	Standard deviation	ຄ່າຜັນຜວນມາດຕະຖານ
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ປິດລົງໂດຍທີ່ການປ່ຽນແປງໃນ {name} ຍັງບໍ່ໄດ້ບັນທຶກ. ກູ້ຄືນເປັນແບບຈຳລອງທີ່ບໍ່ມີຊື່ ຫຼື ຍົກເລີກການປ່ຽນແປງນັ້ນ.
@@ -227,6 +251,7 @@
 	Time between arrivals	ເວລາລະຫວ່າງການມາຮອດ
 	Time unit	ໜ່ວຍເວລາ
 	To	ໄປຫາ
+	Tops	ຂອບເທິງ
 	Trials	ຈຳນວນຄັ້ງທົດລອງ
 	Triangular	ສາມຫຼ່ຽມ
 	Truncated normal	ນໍມອນແບບຕັດຂອບ
@@ -255,6 +280,8 @@
 	Yes or no	ແມ່ນ ຫຼື ບໍ່
 	Your changes will be lost if you don't save them.	ການປ່ຽນແປງຈະສູນເສຍຖ້າທ່ານບໍ່ບັນທຶກ.
 	Zoom	ປັບຂະໜາດໜ້າຕ່າງ
+	Zoom in	ຂະຫຍາຍ
+	Zoom out	ຫຍໍ້
 	a model	ແບບຈຳລອງ
 	arrivals	ການມາຮອດ
 	days	ວັນ
@@ -281,6 +308,7 @@
 	years	ປີ
 	{field}: not editable here yet	{field}: ຍັງບໍ່ສາມາດແກ້ໄຂຢູ່ນີ້ໄດ້
 	{id}: a probability is a number from 0 to 1	{id}: ຄວາມເປັນໄປໄດ້ຕ້ອງເປັນຕົວເລກຈາກ 0 ຫາ 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — ແກ້ໄຂແລ້ວ
 	{property} (set to, mean)	{property} (ກຳນົດເປັນ, ຄ່າສະເລ່ຍ)
 	± 95% CI	± 95% CI
@@ -292,11 +320,15 @@ unit	min	ນາທີ
 unit	ms	ມິລລິວິນາທີ
 unit	s	ວິນາທີ
 unit	yr	ປີ
+@plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
+@plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} replication|Finished {n} replications	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	ເປີດ {file} ແລ້ວ (ຄຳເຕືອນ {n} ລາຍການ)
+@plural	Removed {n} block|Removed {n} blocks	ລຶບ {n} ບລັອກແລ້ວ
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	ປະມວນຜົນແບບຈຳລອງຢ່າງອິດສະຫຼະ {n} ຮອບ ໂດຍໃຊ້ເມັດສຸ່ມ {seed}. ຜົນຂອງແຕ່ລະອົງປະກອບມີເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກທຸກຮອບ.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	ສຳເລັດແລ້ວ {done} ຈາກ {n} ຮອບຈຳລອງຊ້ຳ
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກ {low} ຫາ {high}{unit}\nຈາກການຈຳລອງຊ້ຳ {n} ຮອບ
+@plural	{n} block selected|{n} blocks selected	ເລືອກ {n} ບລັອກແລ້ວ
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed} · ອຸ່ນເຄື່ອງ {warmup} {unit} · ວັດຜົນ {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed}
 @plural	{n} replication|{n} replications	ຈຳລອງຊ້ຳ {n} ຮອບ

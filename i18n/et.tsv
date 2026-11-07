@@ -15,6 +15,7 @@
 	+ Add block	+ Lisa plokk
 	About StochCraft	Teave StochCrafti kohta
 	About {app}	Teave: {app}
+	Actual size	Tegelik suurus
 	Add Block	Lisa plokk
 	Add a flow from…	Lisa voog alates…
 	Add a flow to…	Lisa voog kuni…
@@ -24,6 +25,7 @@
 	Add property	Lisa omadus
 	Added pool {id}	Lisati kogum {id}
 	Added {block} ({id})	Lisatud {block} ({id})
+	Align	Joonda
 	Alternative {n}	Alternatiiv {n}
 	Appearance	Välimus
 	Arrival limit	Saabumiste piirang
@@ -34,6 +36,7 @@
 	Beta	Beeta
 	Binomial	Binoomjaotus
 	Boolean	Tõeväärtus
+	Bottoms	Alaservad
 	Bring All to Front	Too kõik esiplaanile
 	Built with	Loodud järgmistega
 	By role	Rolli järgi
@@ -42,8 +45,10 @@
 	Cancel Run	Tühista käivitus
 	Cancel run	Tühista käivitus
 	Capacity	Maht
+	Centres	Horisontaalsed keskkohad
 	Change Block	Muuda plokki
 	Change Flow	Muuda voogu
+	Changes	Muudatused
 	Changing the time unit does not convert the times already in the model.	Ajaühiku muutmine ei teisenda mudelis juba olevaid aegu.
 	Clear Menu	Tühjenda menüü
 	Close	Sulge
@@ -51,8 +56,12 @@
 	Comes from	Pärineb kohast
 	Condition of {id}	{id} tingimus
 	Connect	Ühenda
+	Connect from {name}	Ühenda plokist {name}
+	Connected {from} to {to}	Ühendati {from} plokiga {to}
 	Connections	Ühendused
 	Constant	Konstant
+	Copy	Kopeeri
+	Cut	Lõika
 	Dark	Tume
 	Data points	Andmepunktid
 	Date and time	Kuupäev ja kellaaeg
@@ -60,7 +69,9 @@
 	Decision	Otsus
 	Decision (one way)	Otsus (üks tee)
 	Default flow	Vaikevoog
+	Delete	Kustuta
 	Departures	Lahkumised
+	Diagram	Diagramm
 	Discard	Loobu
 	Discarded the recovered changes	Taastatud muudatused hüljati
 	Disconnect	Katkesta ühendus
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Laadi graafikud alla (PNG)
 	Download table (CSV)	Laadi tabel alla (CSV)
 	Downloaded {file}	Alla laaditud {file}
+	Drag to add:	Lisamiseks lohista:
+	Duplicate	Dubleeri
 	Duration	Kestus
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Iga olem võtab neist esimese, mida saab kohe täita, kõik korraga, ja annab ühikud tagasi, kui ülesandest lahkub.
 	Edit	Muuda
 	Entered	Sisenenud
 	Erlang	Erlang
 	Error	Viga
+	Evenly across	Jaota ühtlaselt horisontaalselt
+	Evenly down	Jaota ühtlaselt vertikaalselt
 	Every distribution	Kõik jaotused
 	Exit	Välju
 	Experiment	Eksperiment
@@ -88,6 +103,8 @@
 	Exported {file}	Eksporditud {file}
 	Expression	Avaldis
 	File	Fail
+	Fit	Sobita
+	Fit the diagram to the view	Sobita diagramm vaatesse
 	Flows	Vood
 	From	Alates
 	Gamma	Gamma
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	Klaviatuuri otseteed muutmata
 	Language	Keel
 	Left	Lahkunud
+	Left edges	Vasakud servad
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Litsentsitud valikuliselt MIT License'i või Apache License 2.0 alusel.
 	Light	Hele
 	Log-normal	Lognormaalne
@@ -115,11 +133,13 @@
 	Mean time in system	Keskmine aeg süsteemis
 	Mean wait	Keskmine ooteaeg
 	Metric	Mõõdik
+	Middles	Vertikaalsed keskkohad
 	Minimise	Minimeeri
 	Minimize	Minimeeri
 	Minimum	Miinimum
 	Model	Mudel
 	Most likely	Kõige tõenäolisem
+	Move	Teisaldamine
 	Name	Nimi
 	Needs	Vajadused
 	New	Uus
@@ -147,6 +167,7 @@
 	Or start from an example	Või alusta näitest
 	PNG image	PNG-pilt
 	Parameters	Parameetrid
+	Paste	Kleebi
 	Points	Punktid
 	Poisson	Poisson
 	Preferences	Eelistused
@@ -183,6 +204,7 @@
 	Resource pools	Ressursikogumid
 	Restore	Taasta aken
 	Results	Tulemused
+	Right edges	Paremad servad
 	Roles	Rollid
 	Run	Käivita
 	Run cancelled	Käivitus tühistatud
@@ -197,6 +219,7 @@
 	Saved {file}	Salvestati {file}
 	Scale	Skaala
 	Seed	Juhuarvuseeme
+	Select All	Vali kõik
 	Service time	Teenindusaeg
 	Services	Teenused
 	Set Property	Määra omadus
@@ -210,6 +233,7 @@
 	Show {id}	Näita {id}
 	Split or join	Hargneda või ühineda
 	Split or join (all ways)	Hargneda või ühineda (kõik teed)
+	Spread out	Jaota
 	Stages (k)	Etapid (k)
 	Standard deviation	Standardhälve
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft sulgus, kui mudelis {name} oli salvestamata muudatusi. Taasta need nimetu mudelina või hülga need.
@@ -227,6 +251,7 @@
 	Time between arrivals	Saabumiste vaheline aeg
 	Time unit	Ajaühik
 	To	Kuni
+	Tops	Ülaservad
 	Trials	Katsed
 	Triangular	Kolmnurkne
 	Truncated normal	Kärbitud normaalne
@@ -255,6 +280,8 @@
 	Yes or no	Jah või ei
 	Your changes will be lost if you don't save them.	Salvestamata muudatused lähevad kaotsi.
 	Zoom	Muuda suurust
+	Zoom in	Suurenda
+	Zoom out	Vähenda
 	a model	mudel
 	arrivals	saabumised
 	days	päevad
@@ -281,6 +308,7 @@
 	years	aastad
 	{field}: not editable here yet	{field}: siin ei saa veel muuta
 	{id}: a probability is a number from 0 to 1	{id}: tõenäosus on arv vahemikus 0 kuni 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — muudetud
 	{property} (set to, mean)	{property} (määratud väärtus, keskmine)
 	± 95% CI	± 95% usaldusvahemik
@@ -292,11 +320,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	a
+@plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
+@plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} replication|Finished {n} replications	{n} kordus lõpetatud|{n} kordust lõpetatud
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avati {file} ({n} hoiatus)|Avati {file} ({n} hoiatust)
+@plural	Removed {n} block|Removed {n} blocks	Eemaldati {n} plokk|Eemaldati {n} plokki
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Käivitab {n} sõltumatu mudeli korduse seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.|Käivitab {n} sõltumatut mudeli kordust seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} kordus {n}-st lõpetatud|{done} kordust {n}-st lõpetatud
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} korduse põhjal|{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} korduse põhjal
+@plural	{n} block selected|{n} blocks selected	{n} plokk valitud|{n} plokki valitud
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} kordus · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}|{n} kordust · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} kordus · seeme {seed}|{n} kordust · seeme {seed}
 @plural	{n} replication|{n} replications	{n} kordus|{n} kordust

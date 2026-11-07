@@ -949,6 +949,9 @@ fn properties_are_set_listed_run_saved_and_undone() {
     for _ in 0..6 {
         ok(&mut e, "undo", json!({}));
     }
+    // Saving gave the shapes their places in the file; that is not an edit to undo.
+    let mut plain = plain.clone();
+    plain.layout = e.model().layout.clone();
     assert_eq!(e.model(), &plain);
     assert!(
         ok(&mut e, "model.get", json!({}))["elements"][0]
@@ -1291,6 +1294,131 @@ fn shared_pools_are_added_used_reported_and_guarded() {
         ok(&mut e, "undo", json!({}));
     }
     assert_eq!(ok(&mut e, "model.get", json!({})), before);
+}
+
+/// Shapes move in one undoable step; a block added to a laid-out model goes to the right of the
+/// one before it, or where it is asked to go.
+#[test]
+fn shapes_move_and_new_blocks_are_placed() {
+    let mut e = help_desk();
+    assert!(e.model().layout.is_empty());
+    // Placing every shape where it is drawn now, then moving one.
+    let placed = e.model().placed();
+    let shapes: Vec<Value> = placed
+        .keys()
+        .map(|id| json!({ "id": id.as_str() }))
+        .collect();
+    ok(&mut e, "layout.set", json!({ "shapes": shapes }));
+    assert_eq!(e.model().layout, placed);
+    ok(
+        &mut e,
+        "layout.set",
+        json!({ "shapes": [{ "id": "desk", "x": 300, "y": 20 }] }),
+    );
+    let desk = ok(&mut e, "model.get", json!({}))["elements"][1]["bounds"].clone();
+    assert_eq!(
+        desk,
+        json!({ "x": 300.0, "y": 20.0, "width": 100.0, "height": 80.0 })
+    );
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(e.model().layout, placed);
+
+    // After the last element (the exit, 36 across), centred on it.
+    let added = ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "delay", "duration": { "type": "constant", "value": 1.0 } }),
+    );
+    let id = stochcraft_model::ElementId::unchecked(added["id"].as_str().unwrap_or(""));
+    let exit = placed
+        .get(&stochcraft_model::ElementId::unchecked("exit"))
+        .copied();
+    let new = e.model().layout.get(&id).copied();
+    assert!(
+        matches!((exit, new), (Some(x), Some(n)) if n.x == x.x + x.width + 50.0
+            && n.y + n.height / 2.0 == x.y + x.height / 2.0),
+        "{exit:?} {new:?}"
+    );
+    ok(&mut e, "undo", json!({}));
+    assert!(!e.model().layout.contains_key(&id));
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "sink", "id": "out2", "x": 10, "y": 400 }),
+    );
+    let out2 = ok(&mut e, "model.get", json!({}))["elements"][3]["bounds"].clone();
+    assert_eq!(out2["x"], 10.0);
+    assert_eq!(out2["y"], 400.0);
+
+    for bad in [
+        json!({ "shapes": [{ "id": "nowhere", "x": 1 }] }),
+        json!({ "shapes": [{ "id": "desk", "width": 0 }] }),
+    ] {
+        assert_ne!(err(&mut e, "layout.set", bad), ErrorCode::Internal);
+    }
+}
+
+/// A batch is one step: undone and redone whole, and if a step fails nothing changes.
+#[test]
+fn a_batch_is_one_step_and_all_or_nothing() {
+    let mut e = help_desk();
+    let before = e.model().clone();
+    let r = ok(
+        &mut e,
+        "batch",
+        json!({
+            "label": "paste",
+            "commands": [
+                { "command": "block.add", "params": { "id": "desk2", "kind": "server", "capacity": 2,
+                    "service": { "type": "exponential", "mean": 1.0 } } },
+                { "command": "connect", "params": { "from": "desk2", "to": "exit" } },
+                { "command": "block.rename", "params": { "id": "desk2", "name": "Second desk" } },
+            ]
+        }),
+    );
+    assert_eq!(r["results"][0]["id"], "desk2");
+    let after = e.model().clone();
+    assert_eq!(after.elements.len(), 4);
+    let history = ok(&mut e, "history", json!({}));
+    assert_eq!(
+        history["undo"].as_array().map(Vec::len),
+        Some(2),
+        "{history}"
+    );
+    assert_eq!(history["undo"][1], "paste");
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(e.model(), &before);
+    ok(&mut e, "redo", json!({}));
+    assert_eq!(e.model(), &after);
+
+    // The third step fails: the first two are taken back and the redo history is kept.
+    ok(&mut e, "undo", json!({}));
+    let failed = e.execute(
+        "batch",
+        json!({ "commands": [
+            { "command": "block.remove", "params": { "id": "desk" } },
+            { "command": "block.rename", "params": { "id": "exit", "name": "Out" } },
+            { "command": "block.remove", "params": { "id": "desk" } },
+        ]}),
+    );
+    assert!(
+        failed
+            .as_ref()
+            .is_err_and(|f| f.code == ErrorCode::NotFound && f.message.starts_with("step 3")),
+        "{failed:?}"
+    );
+    assert_eq!(e.model(), &before);
+    ok(&mut e, "redo", json!({}));
+    assert_eq!(e.model(), &after);
+
+    for bad in [
+        json!({ "commands": [{ "command": "run.start", "params": {} }] }),
+        json!({ "commands": [{ "command": "no.such" }] }),
+        json!({ "commands": [], "label": "anything" }),
+    ] {
+        err(&mut e, "batch", bad);
+    }
+    assert_eq!(e.model(), &after);
 }
 
 /// Calendars through commands: one added, arrivals and a pool's units made to follow it, the

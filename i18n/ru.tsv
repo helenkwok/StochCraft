@@ -15,6 +15,7 @@
 	+ Add block	+ Добавить блок
 	About StochCraft	О программе StochCraft
 	About {app}	О программе {app}
+	Actual size	Фактический размер
 	Add Block	Добавить блок
 	Add a flow from…	Добавить поток от…
 	Add a flow to…	Добавить поток к…
@@ -24,6 +25,7 @@
 	Add property	Добавить свойство
 	Added pool {id}	Добавлен пул {id}
 	Added {block} ({id})	Добавлен {block} ({id})
+	Align	Выравнивание
 	Alternative {n}	Альтернатива {n}
 	Appearance	Внешний вид
 	Arrival limit	Ограничение числа прибытий
@@ -34,6 +36,7 @@
 	Beta	Бета-распределение
 	Binomial	Биномиальное распределение
 	Boolean	Логическое значение
+	Bottoms	Нижние края
 	Bring All to Front	Все окна на передний план
 	Built with	Создано с использованием
 	By role	По роли
@@ -42,8 +45,10 @@
 	Cancel Run	Отменить запуск
 	Cancel run	Отменить запуск
 	Capacity	Количество обслуживающих единиц
+	Centres	Центры по горизонтали
 	Change Block	Изменить блок
 	Change Flow	Изменить поток
+	Changes	Изменения
 	Changing the time unit does not convert the times already in the model.	При изменении единицы времени уже заданные в модели времена не пересчитываются.
 	Clear Menu	Очистить меню
 	Close	Закрыть
@@ -51,8 +56,12 @@
 	Comes from	Поступает от
 	Condition of {id}	Условие для {id}
 	Connect	Соединить
+	Connect from {name}	Соединить от {name}
+	Connected {from} to {to}	{from} соединён с {to}
 	Connections	Соединения
 	Constant	Постоянное значение
+	Copy	Копировать
+	Cut	Вырезать
 	Dark	Тёмная
 	Data points	Точки данных
 	Date and time	Дата и время
@@ -60,7 +69,9 @@
 	Decision	Решение
 	Decision (one way)	Решение (один путь)
 	Default flow	Поток по умолчанию
+	Delete	Удалить
 	Departures	Выходы
+	Diagram	Диаграмма
 	Discard	Отменить
 	Discarded the recovered changes	Восстановленные изменения отброшены
 	Disconnect	Разъединить
@@ -71,12 +82,16 @@
 	Download charts (PNG)	Скачать диаграммы (PNG)
 	Download table (CSV)	Скачать таблицу (CSV)
 	Downloaded {file}	Скачан {file}
+	Drag to add:	Перетащите, чтобы добавить:
+	Duplicate	Дублировать
 	Duration	Длительность
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Каждая сущность занимает первый из этих вариантов, который можно выполнить сейчас, целиком и сразу, и возвращает единицы, когда уходит.
 	Edit	Редактирование
 	Entered	Вошло
 	Erlang	Распределение Эрланга
 	Error	Ошибка
+	Evenly across	Равномерно по горизонтали
+	Evenly down	Равномерно по вертикали
 	Every distribution	Все распределения
 	Exit	Выйти
 	Experiment	Эксперимент
@@ -88,6 +103,8 @@
 	Exported {file}	Экспортирован {file}
 	Expression	Выражение
 	File	Файл
+	Fit	Вписать
+	Fit the diagram to the view	Вписать диаграмму в окно
 	Flows	Потоки
 	From	От
 	Gamma	Гамма-распределение
@@ -100,6 +117,7 @@
 	Keyboard shortcuts unchanged	Сочетания клавиш не изменены
 	Language	Язык
 	Left	Вышло
+	Left edges	Левые края
 	Licensed under the MIT License or the Apache License 2.0, at your option.	На выбор: MIT License или Apache License 2.0.
 	Light	Светлая
 	Log-normal	Логнормальное распределение
@@ -115,11 +133,13 @@
 	Mean time in system	Среднее время в системе
 	Mean wait	Среднее время ожидания
 	Metric	Показатель
+	Middles	Центры по вертикали
 	Minimise	Свернуть
 	Minimize	Свернуть
 	Minimum	Минимум
 	Model	Модель
 	Most likely	Наиболее вероятное значение
+	Move	Перемещение
 	Name	Имя
 	Needs	Потребности
 	New	Создать
@@ -147,6 +167,7 @@
 	Or start from an example	Или начните с примера
 	PNG image	Изображение PNG
 	Parameters	Параметры
+	Paste	Вставить
 	Points	Точки
 	Poisson	Распределение Пуассона
 	Preferences	Настройки
@@ -183,6 +204,7 @@
 	Resource pools	Пулы ресурсов
 	Restore	Восстановить размер
 	Results	Результаты
+	Right edges	Правые края
 	Roles	Роли
 	Run	Запустить
 	Run cancelled	Запуск отменён
@@ -197,6 +219,7 @@
 	Saved {file}	Сохранён {file}
 	Scale	Масштаб
 	Seed	Начальное значение генератора
+	Select All	Выделить всё
 	Service time	Время обслуживания
 	Services	Службы
 	Set Property	Задать свойство
@@ -210,6 +233,7 @@
 	Show {id}	Показать {id}
 	Split or join	Разделить или объединить
 	Split or join (all ways)	Разделить или объединить (все пути)
+	Spread out	Распределение
 	Stages (k)	Стадии (k)
 	Standard deviation	Стандартное отклонение
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft закрылся с несохранёнными изменениями в {name}. Восстановите их как модель без названия или отбросьте.
@@ -227,6 +251,7 @@
 	Time between arrivals	Время между прибытиями
 	Time unit	Единица времени
 	To	К
+	Tops	Верхние края
 	Trials	Испытания
 	Triangular	Треугольное распределение
 	Truncated normal	Усечённое нормальное распределение
@@ -255,6 +280,8 @@
 	Yes or no	Да или нет
 	Your changes will be lost if you don't save them.	Если не сохранить, изменения будут потеряны.
 	Zoom	Переключить размер окна
+	Zoom in	Увеличить
+	Zoom out	Уменьшить
 	a model	модель
 	arrivals	прибытия
 	days	дни
@@ -281,6 +308,7 @@
 	years	годы
 	{field}: not editable here yet	{field}: здесь пока нельзя редактировать
 	{id}: a probability is a number from 0 to 1	{id}: вероятность должна быть числом от 0 до 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — изменено
 	{property} (set to, mean)	{property} (заданное значение, среднее)
 	± 95% CI	± 95% ДИ
@@ -292,11 +320,15 @@ unit	min	мин
 unit	ms	мс
 unit	s	с
 unit	yr	г.
+@plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
+@plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
 @plural	Finished {n} replication|Finished {n} replications	Завершена {n} репликация|Завершены {n} репликации|Завершено {n} репликаций
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Открыт {file} ({n} предупреждение)|Открыт {file} ({n} предупреждения)|Открыт {file} ({n} предупреждений)
+@plural	Removed {n} block|Removed {n} blocks	Удалён {n} блок|Удалено {n} блока|Удалено {n} блоков
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Выполняет {n} независимую репликацию модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимые репликации модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимых репликаций модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Завершена {done} из {n} репликации|Завершено {done} из {n} репликаций|Завершено {done} из {n} репликаций
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликации|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликациям|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликациям
+@plural	{n} block selected|{n} blocks selected	Выбран {n} блок|Выбрано {n} блока|Выбрано {n} блоков
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликация · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликации · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликаций · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} репликация · начальное значение {seed}|{n} репликации · начальное значение {seed}|{n} репликаций · начальное значение {seed}
 @plural	{n} replication|{n} replications	{n} репликация|{n} репликации|{n} репликаций
