@@ -374,7 +374,7 @@ impl App {
                 )
             });
             if (zoom - 1.0).abs() > f32::EPSILON {
-                let at = ptr.map_or(rect.center(), |p| p) - rect.min;
+                let at = ptr.unwrap_or(rect.center()) - rect.min;
                 self.zoom_at(zoom, at);
             } else if !ctrl && scroll != Vec2::ZERO {
                 self.canvas.offset += scroll;
