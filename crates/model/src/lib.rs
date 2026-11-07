@@ -146,6 +146,9 @@ pub enum ElementKind {
         /// holding it (a server keeps its unit busy: blocking after service), except a source,
         /// whose arrival is lost. A StochCraft vendor extension (`stochcraft:queueCapacity`).
         queue_capacity: Option<u32>,
+        /// Each unit fails now and then and is repaired (a StochCraft vendor extension,
+        /// `stochcraft:breakdown`, since BPSim has none); `None`: units never fail.
+        breakdown: Option<Breakdown>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
@@ -178,6 +181,19 @@ pub enum ElementKind {
     /// and sends one on: the one from the first incoming connection, in model order, with any
     /// property it lacks taken from the others in that order.
     ParallelGateway,
+}
+
+/// How a server's units fail: each unit independently, in elapsed time (busy or idle), after a
+/// time drawn from `time_to_failure` since it was last repaired; then it is repaired for a time
+/// drawn from `repair`.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Breakdown {
+    pub time_to_failure: Dist,
+    pub repair: Dist,
+    /// A failure interrupts the job under way, which resumes on the same unit after the repair
+    /// with the service time it had left (BPSim `interruptible`); otherwise the unit fails only
+    /// once its job is done, and the repair starts then.
+    pub interruptible: bool,
 }
 
 /// What a [`ElementKind::SharedTask`] needs from the pools, for one entity.
@@ -287,9 +303,17 @@ impl ElementKind {
             } => std::iter::once(("interarrival", interarrival))
                 .chain(timed.iter().map(|t| ("interarrival", &t.value)))
                 .collect(),
-            ElementKind::Server { service, .. } | ElementKind::SharedTask { service, .. } => {
-                vec![("service", service)]
+            ElementKind::Server {
+                service, breakdown, ..
+            } => {
+                let mut d = vec![("service", service)];
+                if let Some(b) = breakdown {
+                    d.push(("time_to_failure", &b.time_to_failure));
+                    d.push(("repair", &b.repair));
+                }
+                d
             }
+            ElementKind::SharedTask { service, .. } => vec![("service", service)],
             ElementKind::Delay { duration } => vec![("duration", duration)],
             ElementKind::Sink
             | ElementKind::ExclusiveGateway { .. }
@@ -1781,6 +1805,7 @@ mod tests {
                         capacity: 1,
                         service: Dist::exponential_rate(1.0),
                         queue_capacity: None,
+                        breakdown: None,
                     },
                 ),
                 el("exit", ElementKind::Sink),
@@ -1854,6 +1879,7 @@ mod tests {
             capacity: 1,
             service: Dist::Constant(1.0),
             queue_capacity: q,
+            breakdown: None,
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -1918,6 +1944,7 @@ mod tests {
                 capacity: 0,
                 service: Dist::Uniform { min: 2.0, max: 1.0 },
                 queue_capacity: None,
+                breakdown: None,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

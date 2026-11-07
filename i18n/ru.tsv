@@ -28,6 +28,7 @@
 	Appearance	Внешний вид
 	Arrival limit	Ограничение числа прибытий
 	Arrivals	Прибытия
+	Availability	Коэффициент готовности
 	BPMN with BPSim	BPMN с BPSim
 	Back to the model (Esc)	Вернуться к модели (Esc)
 	Beta	Бета-распределение

@@ -13,8 +13,8 @@ use stochcraft_model::{
 use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
-    self, AvailabilityDoc, DistSpec, EventDoc, KindSpec, ModelDoc, NeedSpec, PropertyDoc,
-    PropertyTypeSpec, PropertyValueSpec, ShiftDoc, Stamp, TimeUnitSpec, TimedDist,
+    self, AvailabilityDoc, BreakdownSpec, DistSpec, EventDoc, KindSpec, ModelDoc, NeedSpec,
+    PropertyDoc, PropertyTypeSpec, PropertyValueSpec, ShiftDoc, Stamp, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode};
 
@@ -99,7 +99,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
     };
     let kind_keys: &[&str] = match obj.get("kind").and_then(Value::as_str) {
         Some("source") => &["interarrival", "limit", "timed", "idle_outside"],
-        Some("server") => &["capacity", "service", "queue_capacity"],
+        Some("server") => &["capacity", "service", "queue_capacity", "breakdown"],
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
         Some("exclusive_gateway") => &["default"],
@@ -265,6 +265,10 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<u32>")]
     pub queue_capacity: Option<Option<u32>>,
+    /// Servers: each unit fails after a time to failure and is repaired; `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<BreakdownSpec>")]
+    pub breakdown: Option<Option<BreakdownSpec>>,
     /// Tasks with shared resources: what each entity needs, the alternatives in order.
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
@@ -578,6 +582,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("capacity", p.capacity.is_some()),
         ("service", p.service.is_some()),
         ("queue_capacity", p.queue_capacity.is_some()),
+        ("breakdown", p.breakdown.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
@@ -585,7 +590,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     ];
     let applies: &[&str] = match kind {
         ElementKind::Source { .. } => &["interarrival", "limit", "timed", "idle_outside"],
-        ElementKind::Server { .. } => &["capacity", "service", "queue_capacity"],
+        ElementKind::Server { .. } => &["capacity", "service", "queue_capacity", "breakdown"],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
         ElementKind::ExclusiveGateway { .. } => &["default"],
@@ -627,7 +632,11 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             capacity,
             service,
             queue_capacity,
+            breakdown,
         } => {
+            if let Some(b) = p.breakdown {
+                *breakdown = b.map(Into::into);
+            }
             if let Some(c) = p.capacity {
                 *capacity = c;
             }

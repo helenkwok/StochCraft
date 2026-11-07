@@ -491,6 +491,7 @@ fn edits() -> Vec<Edit> {
                         capacity: 2,
                         service: Dist::Constant(1.5),
                         queue_capacity: None,
+                        breakdown: None,
                     };
                 }
             }),
@@ -648,6 +649,18 @@ fn showcase() -> Model {
             scale: 0.4,
         },
         6,
+    );
+    m.breakdown(
+        previous,
+        stochcraft_blocks::Breakdown {
+            time_to_failure: Dist::Exponential { mean: 120.0 },
+            repair: Dist::Triangular {
+                min: 1.0,
+                mode: 2.0,
+                max: 6.0,
+            },
+            interruptible: true,
+        },
     );
     m.connect(src, previous);
     let delays = [

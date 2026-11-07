@@ -37,6 +37,7 @@
 
 mod runtime;
 
+pub use stochcraft_model::Breakdown;
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 use stochcraft_model::{
@@ -443,10 +444,13 @@ pub enum Metric {
     /// Servers with a finite buffer: the fraction of arrivals lost (lost over lost plus
     /// entered).
     LossProbability,
+    /// Servers whose units fail: time-average fraction of units up (not failed or under
+    /// repair).
+    Availability,
 }
 
 impl Metric {
-    pub const ALL: [Metric; 11] = [
+    pub const ALL: [Metric; 12] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -458,6 +462,7 @@ impl Metric {
         Metric::BlockingProbability,
         Metric::Lost,
         Metric::LossProbability,
+        Metric::Availability,
     ];
 
     /// A stable name for tables, files and agents.
@@ -474,6 +479,7 @@ impl Metric {
             Metric::BlockingProbability => "blocking_probability",
             Metric::Lost => "lost",
             Metric::LossProbability => "loss_probability",
+            Metric::Availability => "availability",
         }
     }
 }
@@ -497,6 +503,8 @@ pub struct ElementReport {
     /// reported by every exclusive gateway, buffer or not.
     pub mean_blocked_time: Option<f64>,
     pub blocking_probability: Option<f64>,
+    /// Servers whose units fail: [`Metric::Availability`].
+    pub availability: Option<f64>,
     pub lost: Option<u64>,
     pub loss_probability: Option<f64>,
     /// For each property the element assigns, in the element's order: the mean of the values
@@ -519,6 +527,7 @@ impl ElementReport {
             Metric::BlockingProbability => self.blocking_probability,
             Metric::Lost => self.lost.map(|n| n as f64),
             Metric::LossProbability => self.loss_probability,
+            Metric::Availability => self.availability,
         }
     }
 }
@@ -693,6 +702,7 @@ impl Builder {
                 capacity,
                 service,
                 queue_capacity: None,
+                breakdown: None,
             },
         )
     }
@@ -713,6 +723,7 @@ impl Builder {
                 capacity,
                 service,
                 queue_capacity: Some(queue_capacity),
+                breakdown: None,
             },
         )
     }
@@ -726,6 +737,15 @@ impl Builder {
             quantity,
             roles.iter().map(|r| (*r).to_owned()).collect(),
         ));
+    }
+
+    /// Makes server `block`'s units fail and be repaired.
+    pub fn breakdown(&mut self, block: BlockId, breakdown: Breakdown) {
+        if let Some((_, ElementKind::Server { breakdown: b, .. }, _)) =
+            self.elements.get_mut(block.0)
+        {
+            *b = Some(breakdown);
+        }
     }
 
     /// A calendar of `events`; its name is its id.

@@ -11,8 +11,36 @@
 
   stochcraft:queueCapacity, on a task's ElementParameters: the most entities that wait for the
   task's resource (not counting those in service), a whole number of at least 0.
+
+  stochcraft:breakdown, on a task's ElementParameters: its resource's units fail after a time
+  drawn from timeToFailure (elapsed since the last repair) and are repaired for a time drawn from
+  repairTime, each holding one BPSim distribution or constant. Whether a failure interrupts the
+  job under way is BPSim's own PriorityParameters/Interruptible.
+
+    <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="…">
+      <stochcraft:breakdown>
+        <stochcraft:timeToFailure><bpsim:ExponentialDistribution mean="480"/></stochcraft:timeToFailure>
+        <stochcraft:repairTime><bpsim:TriangularDistribution min="10" mode="20" max="60"/></stochcraft:repairTime>
+      </stochcraft:breakdown>
+    </bpsim:VendorExtension>
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    targetNamespace="https://helenkwok.github.io/StochCraft/bpsim/1">
+    xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"
+    targetNamespace="https://helenkwok.github.io/StochCraft/bpsim/1"
+    elementFormDefault="qualified">
   <xs:attribute name="value" type="xs:string"/>
+  <xs:complexType name="Value">
+    <xs:sequence>
+      <xs:any namespace="http://www.bpsim.org/schemas/2.0 http://www.bpsim.org/schemas/1.0"
+          processContents="lax"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="breakdown">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="timeToFailure" type="stochcraft:Value"/>
+        <xs:element name="repairTime" type="stochcraft:Value"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

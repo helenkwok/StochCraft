@@ -20,9 +20,9 @@ use crate::bpsim::{NS2, NSS};
 use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
-    availability_param, bpmn_local, calendar_element, condition_element, dist_element, numeric,
-    probability_element, property_element, quantity_param, queue_capacity_element, size,
-    start_param, timer_param,
+    availability_param, bpmn_local, breakdown_element, calendar_element, condition_element,
+    dist_element, interruptible_param, numeric, probability_element, property_element,
+    quantity_param, queue_capacity_element, size, start_param, timer_param,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -477,9 +477,13 @@ fn qname(prefix: &str, local: &str) -> String {
 }
 
 /// Moves a built element (and its children) into namespace `ns` with `prefix`.
+/// Puts BPSim elements in the file's BPSim namespace and prefix; elements of other namespaces
+/// (StochCraft's, inside a vendor extension) keep theirs.
 fn rename(e: &mut Element, prefix: &str, ns: &str) {
-    e.name = qname(prefix, e.local());
-    e.ns = Some(ns.to_owned());
+    if e.ns.as_deref().is_none_or(|n| NSS.contains(&n)) {
+        e.name = qname(prefix, e.local());
+        e.ns = Some(ns.to_owned());
+    }
     for c in e.elements_mut() {
         rename(c, prefix, ns);
     }
@@ -1582,6 +1586,29 @@ impl Editor {
                             id.clone(),
                             crate::bpsim::QUEUE_CAPACITY,
                             new_queue.map(queue_capacity_element),
+                        ));
+                    }
+                    // Breakdowns, and BPSim's `Interruptible` with them.
+                    let old_breakdown = match was {
+                        Some(ElementKind::Server { breakdown, .. }) => breakdown.as_ref(),
+                        _ => None,
+                    };
+                    let new_breakdown = match &e.kind {
+                        ElementKind::Server { breakdown, .. } => breakdown.as_ref(),
+                        _ => None,
+                    };
+                    if new_breakdown != old_breakdown || (is_server && !was_server) {
+                        vendor_writes.push((
+                            id.clone(),
+                            crate::bpsim::BREAKDOWN,
+                            new_breakdown.map(breakdown_element),
+                        ));
+                        let yes = new_breakdown.is_some_and(|b| b.interruptible);
+                        writes.push((
+                            id.clone(),
+                            "PriorityParameters",
+                            "Interruptible",
+                            yes.then(|| interruptible_param(true)),
                         ));
                     }
                     match (&e.kind, was) {

@@ -25,6 +25,12 @@ pub const STOCHCRAFT: &str = "stochcraft:";
 /// xmlns:stochcraft="…" stochcraft:value="3"/>` in the task's `ElementParameters`.
 pub const QUEUE_CAPACITY: &str = "stochcraft:queueCapacity";
 
+/// The vendor extension for a server's breakdowns: a `stochcraft:breakdown` element holding
+/// `stochcraft:timeToFailure` and `stochcraft:repairTime`, each a BPSim distribution, in the
+/// task's `ElementParameters`. Whether a failure interrupts the job is BPSim's own
+/// `PriorityParameters/Interruptible`.
+pub const BREAKDOWN: &str = "stochcraft:breakdown";
+
 /// A vendor extension's value: its attribute named `value` in another namespace (any prefix),
 /// else its text.
 pub fn vendor_value(e: &Element) -> Option<String> {
