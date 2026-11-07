@@ -82,6 +82,15 @@ impl Resource {
     /// [`InterruptCause::Preempted`]: its [`Ctx::hold_interruptible`] ends with the time it
     /// still had to run, so it can ask again and finish the rest. A request never preempts a
     /// holder of equal or higher priority; it waits like any other.
+    ///
+    /// Only a holder in [`Ctx::hold_interruptible`] at that moment can be preempted, since only
+    /// it stops using the unit at once. A holder in a plain [`Ctx::hold`], or waiting for
+    /// something else, keeps its unit (taking it would leave more users than units, and leave
+    /// an interrupt to end some later, unrelated wait), and so does a guard taken outside a
+    /// process. The decision is made when the request arrives: if no holder can be preempted
+    /// then, the request waits like any other, ahead of lower priorities, and does not preempt
+    /// a holder that starts an interruptible hold later. So hold a preemptive unit with
+    /// [`Ctx::hold_interruptible`] for any time it may be taken away.
     pub fn preemptive(ctx: &Ctx, capacity: u64) -> Self {
         Self::build(ctx, capacity, true)
     }
@@ -162,13 +171,16 @@ impl Resource {
             });
             return Some(self.guard(preempted));
         }
-        // Preempt the holder with the lowest priority, the latest among equals.
+        // Preempt the holder with the lowest priority, the latest among equals, among those in an
+        // interruptible hold (see `Resource::preemptive`).
         let holders = st.holders.as_mut()?;
         let victim = holders
             .iter()
             .enumerate()
             .rev()
-            .filter(|(_, h)| h.priority < priority)
+            .filter(|(_, h)| {
+                h.priority < priority && h.pid.is_some_and(|p| self.ctx.is_interruptible(p))
+            })
             .min_by_key(|(_, h)| h.priority)
             .map(|(i, _)| i)?;
         let v = holders.remove(victim);
@@ -590,6 +602,50 @@ mod tests {
         assert_eq!((pool.in_use(), pool.queue_len()), (3, 0));
         sim.run();
         assert_eq!(pool.in_use(), 0);
+    }
+
+    /// #42: a holder in a plain hold keeps its unit. "low" works 10 in a plain hold and then 5
+    /// in an interruptible one; "urgent", asking at 4, waits for the unit instead of taking it
+    /// while "low" still works (which left two users on one unit), and no interrupt is left to
+    /// cut "low"'s later hold short.
+    #[test]
+    fn preemption_spares_a_holder_in_a_plain_hold() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let machine = Resource::preemptive(&ctx, 1);
+        let log = log();
+        let (c, m, l) = (ctx.clone(), machine.clone(), Rc::clone(&log));
+        sim.spawn(async move {
+            let unit = m.acquire_with_priority(0).await;
+            c.hold(10.0).await;
+            l.borrow_mut().push(("low", "plain hold over", c.now()));
+            let r = c.hold_interruptible(5.0).await;
+            l.borrow_mut().push((
+                "low",
+                if r.is_ok() { "done" } else { "interrupted" },
+                c.now(),
+            ));
+            assert!(!unit.is_preempted());
+        });
+        let (c, m, l) = (ctx.clone(), machine.clone(), Rc::clone(&log));
+        sim.spawn(async move {
+            c.hold(4.0).await;
+            let _unit = m.acquire_with_priority(1).await;
+            l.borrow_mut().push(("urgent", "start", c.now()));
+            c.hold(1.0).await;
+        });
+        sim.run_until(4.0);
+        assert_eq!((machine.in_use(), machine.queue_len()), (1, 1));
+        sim.run();
+        assert_eq!(
+            *log.borrow(),
+            [
+                ("low", "plain hold over", 10.0),
+                ("low", "done", 15.0),
+                ("urgent", "start", 15.0),
+            ]
+        );
+        assert_eq!((machine.in_use(), machine.queue_len()), (0, 0));
     }
 
     #[test]

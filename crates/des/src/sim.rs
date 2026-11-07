@@ -47,12 +47,19 @@ struct Kernel {
     current: Option<u64>,
     next_pid: u64,
     procs: BTreeMap<u64, Proc>,
+    /// The first wake that could not be scheduled: the process and the time it happened.
+    unschedulable: Option<(u64, f64)>,
 }
 
 impl Kernel {
-    /// Schedules `pid` at `time`, which callers keep finite and not in the past.
+    /// Schedules `pid` at `time`. Callers keep `time` not in the past, but a wait that ends
+    /// later than the largest time that can be represented (`now + delay` overflowing) cannot be
+    /// scheduled: the process would never wake. The first such failure is kept, and
+    /// [`Sim::run_watched`] stops with [`Stopped::Unschedulable`].
     fn schedule(&mut self, pid: u64, time: f64, priority: i64) {
-        let _ = self.queue.schedule_at(time, priority, pid);
+        if self.queue.schedule_at(time, priority, pid).is_err() && self.unschedulable.is_none() {
+            self.unschedulable = Some((pid, self.queue.now()));
+        }
     }
 
     fn current_proc(&mut self) -> Option<&mut Proc> {
@@ -90,6 +97,9 @@ pub enum Stopped {
         events: u64,
         tag: Option<u64>,
     },
+    /// At simulated time `time`, a process with tag `tag` asked to wait until later than the
+    /// largest time that can be represented, so it could never wake.
+    Unschedulable { time: f64, tag: Option<u64> },
 }
 
 impl std::fmt::Display for Stopped {
@@ -100,6 +110,11 @@ impl std::fmt::Display for Stopped {
                 f,
                 "simulated time stopped moving at {time}: more than {events} events happened \
                  at that time"
+            ),
+            Stopped::Unschedulable { time, .. } => write!(
+                f,
+                "at {time} a process asked to wait until later than the largest time that can \
+                 be represented"
             ),
         }
     }
@@ -142,6 +157,7 @@ impl Sim {
             current: None,
             next_pid: 0,
             procs: BTreeMap::new(),
+            unschedulable: None,
         };
         Self {
             kernel: Rc::new(RefCell::new(kernel)),
@@ -192,10 +208,10 @@ impl Sim {
         steps
     }
 
-    /// As [`Sim::run_until`], but stops early, with the reason, when `watch` is cancelled or when
-    /// more than [`Watch::max_events_at_one_time`] events happen at one simulated time. The
-    /// checks only read counters, so a run that is not stopped runs exactly as
-    /// [`Sim::run_until`] would.
+    /// As [`Sim::run_until`], but stops early, with the reason, when `watch` is cancelled, when
+    /// more than [`Watch::max_events_at_one_time`] events happen at one simulated time, or when a
+    /// process asks to wait beyond the largest time that can be represented. The checks only
+    /// read counters, so a run that is not stopped runs exactly as [`Sim::run_until`] would.
     pub fn run_watched(&mut self, until: f64, watch: &Watch<'_>) -> Result<u64, Stopped> {
         let mut steps: u64 = 0;
         let mut instant = self.now();
@@ -223,6 +239,13 @@ impl Sim {
             }
             self.step(ev.payload, ev.seq);
             steps += 1;
+            let k = self.kernel.borrow();
+            if let Some((pid, time)) = k.unschedulable {
+                return Err(Stopped::Unschedulable {
+                    time,
+                    tag: k.procs.get(&pid).and_then(|p| p.tag),
+                });
+            }
         }
         self.kernel.borrow_mut().queue.advance_to(until);
         Ok(steps)
@@ -351,6 +374,15 @@ impl Ctx {
             k.schedule(pid, at, WAKE_PRIORITY);
         }
         true
+    }
+
+    /// Whether process `pid` is in [`Ctx::hold_interruptible`], so an interrupt would wake it now.
+    pub(crate) fn is_interruptible(&self, pid: u64) -> bool {
+        self.kernel
+            .borrow()
+            .procs
+            .get(&pid)
+            .is_some_and(|p| p.interruptible)
     }
 
     /// The id of the process being run, if called from inside one.
@@ -618,6 +650,30 @@ mod tests {
         assert_eq!(watched.run_watched(100.5, &watch), Ok(steps));
         assert_eq!((plain_ticks.get(), plain.now()), (100, 100.5));
         assert_eq!((watched_ticks.get(), watched.now()), (100, 100.5));
+    }
+
+    /// #42: a wait that would end beyond the largest time that can be represented cannot be
+    /// scheduled; the process could never wake. The run says so instead of carrying on.
+    #[test]
+    fn run_watched_reports_a_wait_that_cannot_be_scheduled() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        sim.spawn_tagged(3, async move {
+            ctx.hold(f64::MAX).await;
+            // f64::MAX + f64::MAX overflows.
+            ctx.hold(f64::MAX).await;
+        });
+        let watch = Watch {
+            max_events_at_one_time: 100,
+            cancelled: &|| false,
+        };
+        assert_eq!(
+            sim.run_watched(f64::MAX, &watch),
+            Err(Stopped::Unschedulable {
+                time: f64::MAX,
+                tag: Some(3),
+            })
+        );
     }
 
     #[test]

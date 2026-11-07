@@ -184,6 +184,26 @@ pub enum RunError {
         events: u64,
         element: Option<(ElementId, String)>,
     },
+    /// At time `time`, `element` (by id and name) drew a time to wait so long that it would end
+    /// later than the largest time that can be represented.
+    TimeOutOfRange {
+        time: f64,
+        element: Option<(ElementId, String)>,
+    },
+}
+
+/// Writes `element` as `"name" (id)`, or just the id when the name adds nothing.
+fn write_element(
+    f: &mut std::fmt::Formatter<'_>,
+    element: Option<&(ElementId, String)>,
+) -> std::fmt::Result {
+    match element {
+        Some((id, name)) if !name.is_empty() && name != id.as_str() => {
+            write!(f, "\"{name}\" ({id})")
+        }
+        Some((id, _)) => write!(f, "{id}"),
+        None => f.write_str("an element"),
+    }
 }
 
 impl std::fmt::Display for RunError {
@@ -200,16 +220,21 @@ impl std::fmt::Display for RunError {
                     "simulated time stopped moving at {time}: more than {events} events \
                      happened at that time"
                 )?;
-                match element {
-                    Some((id, name)) if !name.is_empty() && name != id.as_str() => {
-                        write!(f, ", the last at \"{name}\" ({id})")?;
-                    }
-                    Some((id, _)) => write!(f, ", the last at {id}")?,
-                    None => {}
+                if element.is_some() {
+                    f.write_str(", the last at ")?;
+                    write_element(f, element.as_ref())?;
                 }
                 f.write_str(
                     ". Entities seem to go round a loop whose steps all take no time; give a step \
                      in it a duration, or the loop a way out",
+                )
+            }
+            RunError::TimeOutOfRange { time, element } => {
+                write!(f, "at {time}, ")?;
+                write_element(f, element.as_ref())?;
+                f.write_str(
+                    " drew a time so long that it would end later than the largest time that \
+                     can be represented; check its durations",
                 )
             }
         }

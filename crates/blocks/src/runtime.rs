@@ -284,12 +284,20 @@ impl Compiled {
             Stopped::TimeStopped { time, events, tag } => RunError::TimeStopped {
                 time,
                 events,
-                element: tag
-                    .and_then(|t| usize::try_from(t).ok())
-                    .and_then(|i| self.model.elements.get(i))
-                    .map(|e| (e.id.clone(), e.name.clone())),
+                element: self.tagged(tag),
+            },
+            Stopped::Unschedulable { time, tag } => RunError::TimeOutOfRange {
+                time,
+                element: self.tagged(tag),
             },
         }
+    }
+
+    /// The id and name of the element whose processes have tag `tag`.
+    fn tagged(&self, tag: Option<u64>) -> Option<(stochcraft_model::ElementId, String)> {
+        tag.and_then(|t| usize::try_from(t).ok())
+            .and_then(|i| self.model.elements.get(i))
+            .map(|e| (e.id.clone(), e.name.clone()))
     }
 }
 

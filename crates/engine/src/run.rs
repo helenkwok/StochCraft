@@ -127,6 +127,17 @@ fn run_failed(index: u64, e: &RunError) -> CommandError {
                 "at": element.as_ref().map(|(id, _)| id.as_str()),
             })),
         },
+        // A model problem found only by running it: reported as the model's diagnostics are.
+        RunError::TimeOutOfRange { element, .. } => CommandError {
+            code: ErrorCode::InvalidModel,
+            message: format!("replication {index}: {e}"),
+            details: Some(json!([{
+                "severity": "error",
+                "at": element.as_ref().map(|(id, _)| id.as_str()),
+                "code": "time_out_of_range",
+                "message": e.to_string(),
+            }])),
+        },
     }
 }
 
