@@ -59,6 +59,7 @@ pub(crate) fn params_schema(command: &str) -> Value {
 }
 
 /// A problem found by validation, for the place it concerns.
+#[derive(Debug, Clone)]
 pub struct Problem {
     pub error: bool,
     pub at: Option<String>,
@@ -66,8 +67,20 @@ pub struct Problem {
 }
 
 impl App {
-    /// The model's problems (validation is a query: nothing is journalled).
+    /// The model's problems (validation is a query: nothing is journalled). Validated once per
+    /// change of the model, however many views ask in a frame.
     pub(crate) fn problems(&mut self) -> Vec<Problem> {
+        if let Some((model, problems)) = &self.problems_of
+            && model == self.engine.model()
+        {
+            return problems.clone();
+        }
+        let problems = self.validate();
+        self.problems_of = Some((self.engine.model().clone(), problems.clone()));
+        problems
+    }
+
+    fn validate(&mut self) -> Vec<Problem> {
         let v = self
             .engine
             .execute("model.validate", json!({}))

@@ -226,6 +226,8 @@ pub struct App {
     selected: Option<String>,
     /// The flowchart's view, its multiple selection and its clipboard.
     canvas: canvas::Canvas,
+    /// The model last validated and its problems, so a frame validates at most once.
+    problems_of: Option<(stochcraft_model::Model, Vec<editor::Problem>)>,
     /// Text being typed into form fields, until it commits.
     drafts: std::collections::HashMap<String, String>,
     /// The connections table's choices, before Connect.
@@ -289,6 +291,7 @@ impl App {
             styled: false,
             selected: None,
             canvas: canvas::Canvas::default(),
+            problems_of: None,
             drafts: std::collections::HashMap::new(),
             connect_from: None,
             connect_to: None,
@@ -885,7 +888,9 @@ impl App {
     }
 
     fn shortcuts(&mut self, ctx: &egui::Context) {
-        if self.confirm.is_some() || self.about {
+        // No block keys while a dialog is open: Delete pressed to rebind a shortcut must not
+        // delete the selection.
+        if self.modal_open() || self.about {
             return;
         }
         self.dispatch_shortcuts(ctx);

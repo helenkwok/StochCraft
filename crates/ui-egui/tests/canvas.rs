@@ -256,3 +256,15 @@ fn the_view_zooms_and_a_click_on_the_background_selects_nothing() {
     settle(&mut h);
     assert_eq!(zoom(&h), "100%");
 }
+
+/// Delete pressed while a dialog is open (here, to rebind a shortcut) goes to the dialog, not
+/// to the selected blocks.
+#[test]
+fn delete_in_a_dialog_leaves_the_selection_alone() {
+    let mut h = mm1();
+    command(&mut h, commands::SELECT_ALL);
+    command(&mut h, commands::SHORTCUTS);
+    h.key_press(egui::Key::Delete);
+    settle(&mut h);
+    assert_eq!(ids(&h), ["arrive", "serve", "leave"]);
+}
