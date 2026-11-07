@@ -164,6 +164,19 @@ impl Element {
         }
     }
 
+    /// A copy of this element and its descendants as if StochCraft had built them, to be laid
+    /// out (indented) like new elements where it is put.
+    pub fn detached(&self) -> Element {
+        let mut e = self.clone();
+        e.raw = None;
+        for c in &mut e.children {
+            if let Node::Element(c) = c {
+                *c = c.detached();
+            }
+        }
+        e
+    }
+
     /// Whether StochCraft built this element (it was not parsed from the file).
     pub fn is_new(&self) -> bool {
         self.raw.is_none()

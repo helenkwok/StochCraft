@@ -47,6 +47,28 @@ fn fields(s: &str, units: &[(char, f64)]) -> Option<f64> {
     number.is_empty().then_some(total)
 }
 
+/// `secs` written as a duration in the unit of `like`'s last (smallest) component: `PT1000M`
+/// and `PT16H40M` both give minutes, `P1D` days. `None` if `like` is not a duration.
+pub fn in_unit_of(like: &str, secs: f64) -> Option<String> {
+    let like = like.trim();
+    seconds(like)?;
+    let d = like.chars().last()?;
+    let time = like.contains('T');
+    const DAY: f64 = 86_400.0;
+    let unit = match (time, d) {
+        (true, 'H') => 3_600.0,
+        (true, 'M') => 60.0,
+        (true, 'S') => 1.0,
+        (false, 'Y') => 365.0 * DAY,
+        (false, 'M') => 30.0 * DAY,
+        (false, 'W') => 7.0 * DAY,
+        (false, 'D') => DAY,
+        _ => return None,
+    };
+    let p = if time { "PT" } else { "P" };
+    Some(format!("{p}{}{d}", trim_float(secs.max(0.0) / unit)))
+}
+
 /// A duration in seconds written as `PT…S` (exact, no calendar units).
 pub fn format_seconds(secs: f64) -> String {
     format!("PT{}S", trim_float(secs.max(0.0)))
@@ -89,6 +111,15 @@ mod tests {
         for v in [0.0, 1.5, 3_600.0, 1e-3] {
             assert_eq!(seconds(&format_seconds(v)), Some(v));
         }
+        assert_eq!(
+            in_unit_of("PT1000M", 3_600_000.0).as_deref(),
+            Some("PT60000M")
+        );
+        assert_eq!(in_unit_of("PT16H40M", 60_000.0).as_deref(), Some("PT1000M"));
+        assert_eq!(in_unit_of(" P1D ", 43_200.0).as_deref(), Some("P0.5D"));
+        assert_eq!(in_unit_of("P1M", 60.0 * 86_400.0).as_deref(), Some("P2M"));
+        assert_eq!(in_unit_of("PT0,5S", 2.0).as_deref(), Some("PT2S"));
+        assert_eq!(in_unit_of("PT", 1.0), None);
         assert_eq!(trim_float(2.0), "2");
         assert_eq!(trim_float(0.25), "0.25");
     }
