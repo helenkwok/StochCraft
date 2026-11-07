@@ -14,32 +14,45 @@
 @id	language.name	Català
 	+ Add block	+ Afegeix un bloc
 	About StochCraft	Quant a StochCraft
+	About {app}	Quant a {app}
 	Add Block	Afegeix un bloc
 	Add a flow from…	Afegeix un flux des de…
 	Add a flow to…	Afegeix un flux cap a…
+	Add alternative	Afegeix una alternativa
 	Add point	Afegeix un punt
+	Add pool	Afegeix un grup
 	Add property	Afegeix una propietat
+	Added pool {id}	S'ha afegit el grup {id}
 	Added {block} ({id})	S'ha afegit {block} ({id})
+	Alternative {n}	Alternativa {n}
 	Appearance	Aparença
 	Arrival limit	Límit d'arribades
 	Arrivals	Arribades
+	BPMN with BPSim	BPMN amb BPSim
 	Back to the model (Esc)	Torna al model (Esc)
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Booleà
+	Bring All to Front	Porta-ho tot al davant
 	Built with	Creat amb
+	By role	Per rol
+	CSV table	Taula CSV
 	Cancel	Cancel·la
+	Cancel Run	Cancel·la l'execució
 	Cancel run	Cancel·la l'execució
 	Capacity	Capacitat
 	Change Block	Canvia el bloc
 	Change Flow	Canvia el flux
 	Changing the time unit does not convert the times already in the model.	Canviar la unitat de temps no converteix els temps que ja hi ha al model.
+	Clear Menu	Buida el menú
 	Close	Tanca
+	Close Window	Tanca la finestra
 	Comes from	Prové de
 	Condition of {id}	Condició de {id}
 	Connect	Connecta
 	Connections	Connexions
 	Constant	Constant
+	Dark	Fosc
 	Data points	Punts de dades
 	Date and time	Data i hora
 	Decimal number	Nombre decimal
@@ -56,15 +69,19 @@
 	Download	Baixa
 	Download charts (PNG)	Baixa els gràfics (PNG)
 	Download table (CSV)	Baixa la taula (CSV)
+	Downloaded {file}	S'ha baixat {file}
 	Duration	Durada
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entitat pren, tota alhora, la primera d'aquestes alternatives que es pugui satisfer en aquell moment i torna les unitats quan surt.
 	Edit	Edita
 	Entered	Entrades
 	Erlang	Erlang
 	Error	Error
 	Every distribution	Totes les distribucions
+	Exit	Surt
 	Experiment	Experiment
 	Experiment Settings	Configuració de l'experiment
 	Exponential	Exponencial
+	Export	Exporta
 	Export charts (PNG)	Exporta els gràfics (PNG)
 	Export table (CSV)	Exporta la taula (CSV)
 	Exported {file}	S'ha exportat {file}
@@ -75,12 +92,17 @@
 	Gamma	Gamma
 	Goes to	Va cap a
 	Help	Ajuda
+	Hide Others	Amaga els altres
+	Hide {app}	Amaga {app}
+	Keyboard Shortcuts…	Dreceres de teclat…
 	Keyboard shortcuts saved	Dreceres de teclat desades
 	Keyboard shortcuts unchanged	Dreceres de teclat sense canvis
 	Language	Idioma
 	Left	Sortides
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Sota MIT License o Apache License 2.0, a la vostra elecció.
+	Light	Clar
 	Log-normal	Log-normal
+	Lost (no way out)	Perdudes (sense sortida)
 	Lost (waiting room full)	Perdudes (sala d'espera plena)
 	M/M/1 queue	Cua M/M/1
 	Maximise	Maximitza
@@ -93,10 +115,13 @@
 	Mean wait	Espera mitjana
 	Metric	Mètrica
 	Minimise	Minimitza
+	Minimize	Minimitza
 	Minimum	Mínim
 	Model	Model
 	Most likely	Més probable
 	Name	Nom
+	Needs	Necessitats
+	New	Nou
 	New model	Model nou
 	New property	Propietat nova
 	New property name	Nom de la propietat nova
@@ -111,21 +136,28 @@
 	One task per BPSim distribution, to compare their spread.	Una tasca per cada distribució BPSim per comparar-ne la dispersió.
 	Open	Obre
 	Open Example	Obre un exemple
+	Open Model	Obre un model
 	Open Recent	Obre els recents
 	Open a model first	Primer obre un model
 	Open a model to simulate it	Obre un model per simular-lo
 	Open a model…	Obre un model…
 	Opened {file}	S'ha obert {file}
+	Open…	Obre…
 	Or start from an example	O comença amb un exemple
+	PNG image	Imatge PNG
 	Parameters	Paràmetres
 	Points	Punts
 	Poisson	Poisson
+	Preferences	Preferències
+	Priority	Prioritat
 	Probability	Probabilitat
 	Probability of {id}	Probabilitat de {id}
 	Problems	Problemes
 	Process	Procés
+	Process models with BPSim	Models de processos amb BPSim
 	Properties	Propietats
 	Quit	Surt
+	Quit {app}	Surt de {app}
 	Ready	A punt
 	Recover	Recupera
 	Recover unsaved changes?	Vols recuperar els canvis no desats?
@@ -136,16 +168,21 @@
 	Remove	Elimina
 	Remove Block	Elimina el bloc
 	Remove Property	Elimina la propietat
+	Remove alternative {n}	Elimina l'alternativa {n}
 	Remove block	Elimina el bloc
 	Remove the flow {id}	Elimina el flux {id}
+	Remove the pool {id}	Elimina el grup {id}
 	Remove this block and its flows (Delete)	Elimina aquest bloc i els seus fluxos (Delete)
 	Removed {id}	S'ha eliminat {id}
 	Rename Block	Canvia el nom del bloc
 	Rename Model	Canvia el nom del model
 	Replace Model	Substitueix el model
 	Replications	Rèpliques
+	Resource pool	Grup de recursos
+	Resource pools	Grups de recursos
 	Restore	Restaura
 	Results	Resultats
+	Roles	Rols
 	Run	Executa
 	Run cancelled	Execució cancel·lada
 	Run experiment	Executa l'experiment
@@ -154,11 +191,13 @@
 	Running…	Executant…
 	Save	Desa
 	Save As…	Anomena i desa…
+	Save Model	Desa el model
 	Save changes to {name}?	Vols desar els canvis a {name}?
 	Saved {file}	S'ha desat {file}
 	Scale	Escala
 	Seed	Llavor
 	Service time	Temps de servei
+	Services	Serveis
 	Set Property	Defineix la propietat
 	Set a value	Defineix un valor
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	S'estableix per a cada entitat quan entra en aquest bloc. Les expressions llegeixen els valors amb què ha arribat, com ara getProperty('issues') - 1.
@@ -166,6 +205,7 @@
 	Shape	Forma
 	Share of arrivals lost	Proporció d'arribades perdudes
 	Share of units blocked	Proporció d'unitats bloquejades
+	Show All	Mostra-ho tot
 	Show {id}	Mostra {id}
 	Split or join	Divideix o uneix
 	Split or join (all ways)	Divideix o uneix (tots els camins)
@@ -178,6 +218,7 @@
 	Tandem line	Línia en tàndem
 	Task	Tasca
 	Task with a resource	Tasca amb un recurs
+	Task with shared resources	Tasca amb recursos compartits
 	Text	Text
 	The model: its experiment, connections and problems	El model: experiment, connexions i problemes
 	This block has a warning	Aquest bloc té un avís
@@ -195,6 +236,8 @@
 	Undo {action}	Desfés {action}
 	Uniform	Uniforme
 	Unit	Unitat
+	Units	Unitats
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unitats que comparteixen diverses tasques. Una tasca amb recursos compartits les pren per grup o per rol.
 	Untitled	Sense títol
 	Untitled model	Model sense títol
 	Use System Setting	Fes servir la configuració del sistema
@@ -207,8 +250,10 @@
 	Warning	Avís
 	Weibull	Weibull
 	Whole number	Nombre enter
+	Window	Finestra
 	Yes or no	Sí o no
 	Your changes will be lost if you don't save them.	Si no els deses, perdràs els canvis.
+	Zoom	Zoom
 	a model	un model
 	arrivals	arribades
 	days	dies
@@ -225,8 +270,10 @@
 	split or join: all ways	divideix o uneix: tots els camins
 	task	tasca
 	task with a resource	tasca amb un recurs
+	task with shared resources	tasca amb recursos compartits
 	the charts could not be captured	no s'han pogut capturar els gràfics
 	the run stopped	l'execució s'ha aturat
+	the settings could not be saved: {error}	no s'ha pogut desar la configuració: {error}
 	there are no charts to export	no hi ha gràfics per exportar
 	to {block}	cap a {block}
 	unlimited	sense límit
@@ -238,10 +285,17 @@
 	± 95% CI	± IC del 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± és la semiamplada d'un interval de confiança Student-t del 95% de la mitjana entre rèpliques.
 	· no results yet	· encara no hi ha resultats
+unit	d	d
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	a
 @plural	Finished {n} replication|Finished {n} replications	Acabada {n} rèplica|Acabades {n} rèpliques
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S'ha obert {file} ({n} avís)|S'ha obert {file} ({n} avisos)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Executa {n} rèplica independent del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.|Executa {n} rèpliques independents del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Acabada {done} de {n} rèplica|Acabades {done} de {n} rèpliques
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} rèplica|{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} rèpliques
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} rèplica · llavor {seed}|{n} rèpliques · llavor {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} rèplica · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats|{n} rèpliques · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} rèplica · llavor {seed}|{n} rèpliques · llavor {seed}
+@plural	{n} replication|{n} replications	{n} rèplica|{n} rèpliques

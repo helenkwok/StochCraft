@@ -14,32 +14,45 @@
 @id	language.name	Dansk
 	+ Add block	+ Tilføj blok
 	About StochCraft	Om StochCraft
+	About {app}	Om {app}
 	Add Block	Tilføj blok
 	Add a flow from…	Tilføj flow fra…
 	Add a flow to…	Tilføj flow til…
+	Add alternative	Tilføj alternativ
 	Add point	Tilføj punkt
+	Add pool	Tilføj pulje
 	Add property	Tilføj egenskab
+	Added pool {id}	Tilføjede puljen {id}
 	Added {block} ({id})	Tilføjede {block} ({id})
+	Alternative {n}	Alternativ {n}
 	Appearance	Udseende
 	Arrival limit	Grænse for ankomster
 	Arrivals	Ankomster
+	BPMN with BPSim	BPMN med BPSim
 	Back to the model (Esc)	Tilbage til modellen (Esc)
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolesk
+	Bring All to Front	Anbring alle forrest
 	Built with	Bygget med
+	By role	Efter rolle
+	CSV table	CSV-tabel
 	Cancel	Annullér
+	Cancel Run	Annuller kørsel
 	Cancel run	Annuller kørsel
 	Capacity	Kapacitet
 	Change Block	Rediger blok
 	Change Flow	Rediger flow
 	Changing the time unit does not convert the times already in the model.	Ændring af tidsenheden omregner ikke tider, der allerede findes i modellen.
+	Clear Menu	Ryd menu
 	Close	Luk
+	Close Window	Luk vindue
 	Comes from	Kommer fra
 	Condition of {id}	Betingelse for {id}
 	Connect	Forbind
 	Connections	Forbindelser
 	Constant	Konstant
+	Dark	Mørk
 	Data points	Datapunkter
 	Date and time	Dato og klokkeslæt
 	Decimal number	Decimaltal
@@ -56,15 +69,19 @@
 	Download	Download
 	Download charts (PNG)	Download diagrammer (PNG)
 	Download table (CSV)	Download tabel (CSV)
+	Downloaded {file}	Downloadede {file}
 	Duration	Varighed
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Hver enhed tager det første af disse alternativer, der kan opfyldes nu, alt på én gang, og giver ressourceenhederne tilbage, når den forlader opgaven.
 	Edit	Redigér
 	Entered	Indgået
 	Erlang	Erlang
 	Error	Fejl
 	Every distribution	Alle fordelinger
+	Exit	Afslut
 	Experiment	Eksperiment
 	Experiment Settings	Eksperimentindstillinger
 	Exponential	Eksponentiel
+	Export	Eksportér
 	Export charts (PNG)	Eksportér diagrammer (PNG)
 	Export table (CSV)	Eksportér tabel (CSV)
 	Exported {file}	Eksporterede {file}
@@ -75,12 +92,17 @@
 	Gamma	Gamma
 	Goes to	Går til
 	Help	Hjælp
+	Hide Others	Skjul andre
+	Hide {app}	Skjul {app}
+	Keyboard Shortcuts…	Tastaturgenveje…
 	Keyboard shortcuts saved	Tastaturgenveje gemt
 	Keyboard shortcuts unchanged	Tastaturgenveje uændrede
 	Language	Sprog
 	Left	Forladt
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licenseret under MIT License eller Apache License 2.0 efter eget valg.
+	Light	Lys
 	Log-normal	Lognormal
+	Lost (no way out)	Tabt (ingen vej ud)
 	Lost (waiting room full)	Tabt (venteværelset er fuldt)
 	M/M/1 queue	M/M/1-kø
 	Maximise	Maksimér
@@ -93,10 +115,13 @@
 	Mean wait	Gennemsnitlig ventetid
 	Metric	Målepunkt
 	Minimise	Minimér
+	Minimize	Minimér
 	Minimum	Minimum
 	Model	Model
 	Most likely	Mest sandsynlig
 	Name	Navn
+	Needs	Behov
+	New	Ny
 	New model	Ny model
 	New property	Ny egenskab
 	New property name	Navn på ny egenskab
@@ -111,21 +136,28 @@
 	One task per BPSim distribution, to compare their spread.	Én opgave pr. BPSim-fordeling for at sammenligne spredningen.
 	Open	Åbn
 	Open Example	Åbn eksempel
+	Open Model	Åbn model
 	Open Recent	Åbn seneste
 	Open a model first	Åbn først en model
 	Open a model to simulate it	Åbn en model for at simulere den
 	Open a model…	Åbn model…
 	Opened {file}	Åbnede {file}
+	Open…	Åbn…
 	Or start from an example	Eller begynd med et eksempel
+	PNG image	PNG-billede
 	Parameters	Parametre
 	Points	Punkter
 	Poisson	Poisson
+	Preferences	Præferencer
+	Priority	Prioritet
 	Probability	Sandsynlighed
 	Probability of {id}	Sandsynlighed for {id}
 	Problems	Problemer
 	Process	Proces
+	Process models with BPSim	Procesmodeller med BPSim
 	Properties	Egenskaber
 	Quit	Afslut
+	Quit {app}	Afslut {app}
 	Ready	Klar
 	Recover	Gendan
 	Recover unsaved changes?	Gendan ikke-gemte ændringer?
@@ -136,16 +168,21 @@
 	Remove	Fjern
 	Remove Block	Fjern blok
 	Remove Property	Fjern egenskab
+	Remove alternative {n}	Fjern alternativ {n}
 	Remove block	Fjern blok
 	Remove the flow {id}	Fjern flowet {id}
+	Remove the pool {id}	Fjern puljen {id}
 	Remove this block and its flows (Delete)	Fjern denne blok og dens flow (Delete)
 	Removed {id}	Fjernede {id}
 	Rename Block	Omdøb blok
 	Rename Model	Omdøb model
 	Replace Model	Erstat model
 	Replications	Replikationer
+	Resource pool	Ressourcepulje
+	Resource pools	Ressourcepuljer
 	Restore	Gendan vindue
 	Results	Resultater
+	Roles	Roller
 	Run	Kør
 	Run cancelled	Kørsel annulleret
 	Run experiment	Kør eksperiment
@@ -154,11 +191,13 @@
 	Running…	Kører…
 	Save	Gem
 	Save As…	Gem som…
+	Save Model	Gem model
 	Save changes to {name}?	Gem ændringer i {name}?
 	Saved {file}	Gemte {file}
 	Scale	Skala
 	Seed	Tilfældighedsfrø
 	Service time	Servicetid
+	Services	Tjenester
 	Set Property	Angiv egenskab
 	Set a value	Angiv en værdi
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Indstilles for hver enhed, når den går ind i denne blok. Udtryk læser de værdier, enheden havde ved ankomsten, f.eks. getProperty('issues') - 1.
@@ -166,6 +205,7 @@
 	Shape	Form
 	Share of arrivals lost	Andel tabte ankomster
 	Share of units blocked	Andel blokerede enheder
+	Show All	Vis alle
 	Show {id}	Vis {id}
 	Split or join	Opdel eller sammenflet
 	Split or join (all ways)	Opdel eller sammenflet (alle veje)
@@ -178,6 +218,7 @@
 	Tandem line	Tandemlinje
 	Task	Opgave
 	Task with a resource	Opgave med ressource
+	Task with shared resources	Opgave med delte ressourcer
 	Text	Tekst
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
 	This block has a warning	Denne blok har en advarsel
@@ -195,6 +236,8 @@
 	Undo {action}	Fortryd {action}
 	Uniform	Uniform
 	Unit	Enhed
+	Units	Enheder
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Ressourceenheder, som flere opgaver deler. En opgave med delte ressourcer tager dem fra en pulje eller efter rolle.
 	Untitled	Uden navn
 	Untitled model	Model uden titel
 	Use System Setting	Brug systemindstilling
@@ -207,8 +250,10 @@
 	Warning	Advarsel
 	Weibull	Weibull
 	Whole number	Heltal
+	Window	Vindue
 	Yes or no	Ja eller nej
 	Your changes will be lost if you don't save them.	Dine ændringer går tabt, hvis du ikke gemmer dem.
+	Zoom	Zoom
 	a model	en model
 	arrivals	ankomster
 	days	dage
@@ -225,8 +270,10 @@
 	split or join: all ways	opdel eller sammenflet: alle veje
 	task	opgave
 	task with a resource	opgave med ressource
+	task with shared resources	opgave med delte ressourcer
 	the charts could not be captured	diagrammerne kunne ikke optages
 	the run stopped	kørslen stoppede
+	the settings could not be saved: {error}	indstillingerne kunne ikke gemmes: {error}
 	there are no charts to export	ingen diagrammer at eksportere
 	to {block}	til {block}
 	unlimited	ubegrænset
@@ -238,10 +285,17 @@
 	± 95% CI	± 95% KI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± er halvdelen af bredden af et 95% Student-t-konfidensinterval for gennemsnittet på tværs af gentagelser.
 	· no results yet	· endnu ingen resultater
+unit	d	d
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	år
 @plural	Finished {n} replication|Finished {n} replications	{n} replikation fuldført|{n} replikationer fuldført
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Åbnede {file} ({n} advarsel)|Åbnede {file} ({n} advarsler)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kører {n} uafhængig replikation af modellen med frø {seed}. Hvert elements resultater indeholder den halve bredde af et 95% konfidensinterval.|Kører {n} uafhængige replikationer af modellen med frø {seed}. Hvert elements resultater indeholder den halve bredde af et 95% konfidensinterval.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} af {n} replikation fuldført|{done} af {n} replikationer fuldført
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval fra {low} til {high}{unit}\npå tværs af {n} replikation|{name}: {mean}{unit}\n95% interval fra {low} til {high}{unit}\npå tværs af {n} replikationer
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikation · frø {seed}|{n} replikationer · frø {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikation · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt|{n} replikationer · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikation · frø {seed}|{n} replikationer · frø {seed}
+@plural	{n} replication|{n} replications	{n} replikation|{n} replikationer

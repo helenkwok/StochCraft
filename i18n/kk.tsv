@@ -14,32 +14,45 @@
 @id	language.name	Қазақша
 	+ Add block	+ Блок қосу
 	About StochCraft	StochCraft туралы
+	About {app}	{app} туралы
 	Add Block	Блок қосу
 	Add a flow from…	Қайдан…
 	Add a flow to…	Қайда…
+	Add alternative	Балама қосу
 	Add point	Нүкте қосу
+	Add pool	Қор қосу
 	Add property	Қасиет қосу
+	Added pool {id}	{id} қоры қосылды
 	Added {block} ({id})	{block} ({id}) қосылды
+	Alternative {n}	{n}-балама
 	Appearance	Сыртқы түрі
 	Arrival limit	Келу шегі
 	Arrivals	Келулер
+	BPMN with BPSim	BPSim бар BPMN
 	Back to the model (Esc)	Модельге оралу (Esc)
 	Beta	Бета
 	Binomial	Биномдық
 	Boolean	Логикалық мән
+	Bring All to Front	Барлығын алдыңғы қатарға шығару
 	Built with	Мына құралдармен жасалған
+	By role	Рөл бойынша
+	CSV table	CSV кестесі
 	Cancel	Бас тарту
+	Cancel Run	Іске қосуды тоқтату
 	Cancel run	Іске қосуды тоқтату
 	Capacity	Сыйымдылық
 	Change Block	Блокты өзгерту
 	Change Flow	Ағынды өзгерту
 	Changing the time unit does not convert the times already in the model.	Уақыт бірлігін өзгерту модельдегі бұрыннан бар уақыт мәндерін түрлендірмейді.
+	Clear Menu	Мәзірді тазалау
 	Close	Жабу
+	Close Window	Терезені жабу
 	Comes from	Мынадан келеді
 	Condition of {id}	{id} шарты
 	Connect	Қосу
 	Connections	Байланыстар
 	Constant	Тұрақты
+	Dark	Күңгірт
 	Data points	Дерек нүктелері
 	Date and time	Күн мен уақыт
 	Decimal number	Ондық сан
@@ -56,15 +69,19 @@
 	Download	Жүктеп алу
 	Download charts (PNG)	Диаграммаларды жүктеп алу (PNG)
 	Download table (CSV)	Кестені жүктеп алу (CSV)
+	Downloaded {file}	{file} жүктеп алынды
 	Duration	Ұзақтығы
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Әрбір нысан осылардың ішінен дәл қазір орындауға болатын біріншісін бірден толық алады да, шыққанда бірліктерді қайтарады.
 	Edit	Түзету
 	Entered	Кіргендер
 	Erlang	Эрланг
 	Error	Қате
 	Every distribution	Барлық үлестірімдер
+	Exit	Шығу
 	Experiment	Эксперимент
 	Experiment Settings	Эксперимент параметрлері
 	Exponential	Экспоненциалдық
+	Export	Экспорттау
 	Export charts (PNG)	Диаграммаларды экспорттау (PNG)
 	Export table (CSV)	Кестені экспорттау (CSV)
 	Exported {file}	{file} экспортталды
@@ -75,12 +92,17 @@
 	Gamma	Гамма
 	Goes to	Қайда барады
 	Help	Көмек
+	Hide Others	Басқаларын жасыру
+	Hide {app}	{app} қолданбасын жасыру
+	Keyboard Shortcuts…	Пернетақта тіркесімдері…
 	Keyboard shortcuts saved	Пернетақта тіркесімдері сақталды
 	Keyboard shortcuts unchanged	Пернетақта тіркесімдері өзгермеді
 	Language	Тіл
 	Left	Шыққандар
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Таңдауыңыз бойынша MIT License немесе Apache License 2.0 лицензиясымен таратылады.
+	Light	Ашық
 	Log-normal	Логнормальды
+	Lost (no way out)	Жоғалғандар (шығатын жол жоқ)
 	Lost (waiting room full)	Жоғалғандар (күту орны толы)
 	M/M/1 queue	M/M/1 кезегі
 	Maximise	Үлкейту
@@ -93,10 +115,13 @@
 	Mean wait	Күтудің орташа уақыты
 	Metric	Көрсеткіш
 	Minimise	Кішірейту
+	Minimize	Жию
 	Minimum	Минимум
 	Model	Модель
 	Most likely	Ең ықтимал
 	Name	Аты-жөні
+	Needs	Қажеттіліктер
+	New	Жаңа
 	New model	Жаңа модель
 	New property	Жаңа қасиет
 	New property name	Жаңа қасиет атауы
@@ -111,21 +136,28 @@
 	One task per BPSim distribution, to compare their spread.	Таралуын салыстыру үшін әр BPSim үлестіріміне бір тапсырма.
 	Open	Ашу
 	Open Example	Мысалды ашу
+	Open Model	Модельді ашу
 	Open Recent	Соңғы файлдарды ашу
 	Open a model first	Алдымен модельді ашыңыз
 	Open a model to simulate it	Симуляциялау үшін модельді ашыңыз
 	Open a model…	Модельді ашу…
 	Opened {file}	{file} ашылды
+	Open…	Ашу…
 	Or start from an example	Немесе мысалдан бастаңыз
+	PNG image	PNG суреті
 	Parameters	Параметрлер
 	Points	Нүктелер
 	Poisson	Пуассон
+	Preferences	Параметрлер
+	Priority	Басымдық
 	Probability	Ықтималдық
 	Probability of {id}	{id} ықтималдығы
 	Problems	Мәселелер
 	Process	Процесс
+	Process models with BPSim	BPSim бар процесс модельдері
 	Properties	Қасиеттер
 	Quit	Шығу
+	Quit {app}	{app} қолданбасынан шығу
 	Ready	Дайын
 	Recover	Қалпына келтіру
 	Recover unsaved changes?	Сақталмаған өзгерістер қалпына келтірілсін бе?
@@ -136,16 +168,21 @@
 	Remove	Жою
 	Remove Block	Блокты жою
 	Remove Property	Қасиетті жою
+	Remove alternative {n}	{n}-баламаны жою
 	Remove block	Блокты жою
 	Remove the flow {id}	{id} ағынын жою
+	Remove the pool {id}	{id} қорын жою
 	Remove this block and its flows (Delete)	Бұл блокты және оның ағындарын жою (Delete)
 	Removed {id}	{id} жойылды
 	Rename Block	Блок атауын өзгерту
 	Rename Model	Модель атауын өзгерту
 	Replace Model	Модельді ауыстыру
 	Replications	Қайталаулар
+	Resource pool	Ресурс қоры
+	Resource pools	Ресурс қорлары
 	Restore	Терезені қалпына келтіру
 	Results	Нәтижелер
+	Roles	Рөлдер
 	Run	Іске қосу
 	Run cancelled	Іске қосу тоқтатылды
 	Run experiment	Экспериментті іске қосу
@@ -154,11 +191,13 @@
 	Running…	Орындалуда…
 	Save	Сақтау
 	Save As…	Басқаша сақтау…
+	Save Model	Модельді сақтау
 	Save changes to {name}?	{name} өзгерістері сақталсын ба?
 	Saved {file}	{file} сақталды
 	Scale	Масштаб
 	Seed	Кездейсоқ тұқым
 	Service time	Қызмет көрсету уақыты
+	Services	Қызметтер
 	Set Property	Қасиетті орнату
 	Set a value	Мән орнату
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Әрбір нысан осы блокқа кірген кезде оған орнатылады. Өрнектер нысан кірген сәттегі мәндерді оқиды, мысалы getProperty('issues') - 1.
@@ -166,6 +205,7 @@
 	Shape	Пішін
 	Share of arrivals lost	Жоғалған келулер үлесі
 	Share of units blocked	Бұғатталған бірліктер үлесі
+	Show All	Барлығын көрсету
 	Show {id}	{id} көрсету
 	Split or join	Бөлу немесе біріктіру
 	Split or join (all ways)	Бөлу немесе біріктіру (барлық жолдар)
@@ -178,6 +218,7 @@
 	Tandem line	Тізбекті желі
 	Task	Тапсырма
 	Task with a resource	Ресурсы бар тапсырма
+	Task with shared resources	Ортақ ресурстары бар тапсырма
 	Text	Мәтін
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
 	This block has a warning	Бұл блокта ескерту бар
@@ -195,6 +236,8 @@
 	Undo {action}	Болдырмау: {action}
 	Uniform	Бірқалыпты
 	Unit	Бірлік
+	Units	Бірлік саны
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Бірнеше тапсырма ортақ пайдаланатын бірліктер. Ортақ ресурстары бар тапсырма оларды қордан немесе рөл бойынша алады.
 	Untitled	Атаусыз
 	Untitled model	Атаусыз модель
 	Use System Setting	Жүйе параметрін пайдалану
@@ -207,8 +250,10 @@
 	Warning	Ескерту
 	Weibull	Вейбулл
 	Whole number	Бүтін сан
+	Window	Терезе
 	Yes or no	Иә немесе жоқ
 	Your changes will be lost if you don't save them.	Сақтамасаңыз, өзгерістеріңіз жоғалады.
+	Zoom	Терезе өлшемін ауыстыру
 	a model	модель
 	arrivals	келулер
 	days	күн
@@ -225,8 +270,10 @@
 	split or join: all ways	бөлу немесе біріктіру: барлық жолдар
 	task	тапсырма
 	task with a resource	ресурсы бар тапсырма
+	task with shared resources	ортақ ресурстары бар тапсырма
 	the charts could not be captured	диаграммаларды алу мүмкін болмады
 	the run stopped	іске қосу тоқтады
+	the settings could not be saved: {error}	параметрлерді сақтау мүмкін болмады: {error}
 	there are no charts to export	экспорттайтын диаграммалар жоқ
 	to {block}	{block} блогына
 	unlimited	шектеусіз
@@ -238,10 +285,17 @@
 	± 95% CI	± 95% сенімділік аралығы
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — қайталаулар арасындағы орташа мәннің 95% Student-t сенімділік аралығының жарты ені.
 	· no results yet	· әлі нәтижелер жоқ
+unit	d	күн
+unit	h	сағ
+unit	min	мин
+unit	ms	мс
+unit	s	с
+unit	yr	ж.
 @plural	Finished {n} replication|Finished {n} replications	{n} қайталау аяқталды|{n} қайталау аяқталды
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} ашылды ({n} ескерту)|{file} ашылды ({n} ескерту)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Модельдің {n} тәуелсіз қайталауын {seed} тұқымынан іске қосады. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.|Модельдің {n} тәуелсіз қайталауын {seed} тұқымынан іске қосады. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} қайталаудың {done} аяқталды|{n} қайталаудың {done} аяқталды
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} қайталау бойынша|{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} қайталау бойынша
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} қайталау · тұқым {seed}|{n} қайталау · тұқым {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} қайталау · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}|{n} қайталау · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} қайталау · тұқым {seed}|{n} қайталау · тұқым {seed}
+@plural	{n} replication|{n} replications	{n} қайталау|{n} қайталау

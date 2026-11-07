@@ -14,32 +14,45 @@
 @id	language.name	Ελληνικά
 	+ Add block	+ Προσθήκη μπλοκ
 	About StochCraft	Σχετικά με το StochCraft
+	About {app}	Σχετικά με το {app}
 	Add Block	Προσθήκη μπλοκ
 	Add a flow from…	Προσθήκη ροής από…
 	Add a flow to…	Προσθήκη ροής προς…
+	Add alternative	Προσθήκη εναλλακτικής
 	Add point	Προσθήκη σημείου
+	Add pool	Προσθήκη δεξαμενής
 	Add property	Προσθήκη ιδιότητας
+	Added pool {id}	Προστέθηκε η δεξαμενή {id}
 	Added {block} ({id})	Προστέθηκε το {block} ({id})
+	Alternative {n}	Εναλλακτική {n}
 	Appearance	Εμφάνιση
 	Arrival limit	Όριο αφίξεων
 	Arrivals	Αφίξεις
+	BPMN with BPSim	BPMN με BPSim
 	Back to the model (Esc)	Πίσω στο μοντέλο (Esc)
 	Beta	Βήτα
 	Binomial	Διωνυμική
 	Boolean	Λογική τιμή
+	Bring All to Front	Μεταφορά όλων μπροστά
 	Built with	Δημιουργήθηκε με
+	By role	Κατά ρόλο
+	CSV table	Πίνακας CSV
 	Cancel	Ακύρωση
+	Cancel Run	Ακύρωση εκτέλεσης
 	Cancel run	Ακύρωση εκτέλεσης
 	Capacity	Χωρητικότητα
 	Change Block	Αλλαγή μπλοκ
 	Change Flow	Αλλαγή ροής
 	Changing the time unit does not convert the times already in the model.	Η αλλαγή της μονάδας χρόνου δεν μετατρέπει τους χρόνους που υπάρχουν ήδη στο μοντέλο.
+	Clear Menu	Εκκαθάριση μενού
 	Close	Κλείσιμο
+	Close Window	Κλείσιμο παραθύρου
 	Comes from	Προέρχεται από
 	Condition of {id}	Συνθήκη του {id}
 	Connect	Σύνδεση
 	Connections	Συνδέσεις
 	Constant	Σταθερή
+	Dark	Σκούρο
 	Data points	Σημεία δεδομένων
 	Date and time	Ημερομηνία και ώρα
 	Decimal number	Δεκαδικός αριθμός
@@ -56,15 +69,19 @@
 	Download	Λήψη
 	Download charts (PNG)	Λήψη γραφημάτων (PNG)
 	Download table (CSV)	Λήψη πίνακα (CSV)
+	Downloaded {file}	Λήφθηκε το {file}
 	Duration	Διάρκεια
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Κάθε οντότητα παίρνει την πρώτη από αυτές που μπορεί να ικανοποιηθεί τώρα, ολόκληρη μονομιάς, και επιστρέφει τις μονάδες όταν φεύγει από την εργασία.
 	Edit	Επεξεργασία
 	Entered	Είσοδοι
 	Erlang	Έρλανγκ
 	Error	Σφάλμα
 	Every distribution	Όλες οι κατανομές
+	Exit	Έξοδος
 	Experiment	Πείραμα
 	Experiment Settings	Ρυθμίσεις πειράματος
 	Exponential	Εκθετική
+	Export	Εξαγωγή
 	Export charts (PNG)	Εξαγωγή γραφημάτων (PNG)
 	Export table (CSV)	Εξαγωγή πίνακα (CSV)
 	Exported {file}	Εξήχθη το {file}
@@ -75,12 +92,17 @@
 	Gamma	Γάμμα
 	Goes to	Οδηγεί σε
 	Help	Βοήθεια
+	Hide Others	Απόκρυψη άλλων
+	Hide {app}	Απόκρυψη {app}
+	Keyboard Shortcuts…	Συντομεύσεις πληκτρολογίου…
 	Keyboard shortcuts saved	Οι συντομεύσεις πληκτρολογίου αποθηκεύτηκαν
 	Keyboard shortcuts unchanged	Οι συντομεύσεις πληκτρολογίου δεν άλλαξαν
 	Language	Γλώσσα
 	Left	Έξοδοι
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Διατίθεται με MIT License ή Apache License 2.0, κατ' επιλογή.
+	Light	Ανοιχτό
 	Log-normal	Λογαριθμοκανονική
+	Lost (no way out)	Απώλειες (καμία διέξοδος)
 	Lost (waiting room full)	Απώλειες (γεμάτος χώρος αναμονής)
 	M/M/1 queue	Ουρά M/M/1
 	Maximise	Μεγιστοποίηση
@@ -93,10 +115,13 @@
 	Mean wait	Μέση αναμονή
 	Metric	Μετρική
 	Minimise	Ελαχιστοποίηση
+	Minimize	Ελαχιστοποίηση
 	Minimum	Ελάχιστο
 	Model	Μοντέλο
 	Most likely	Πιθανότερη τιμή
 	Name	Όνομα
+	Needs	Ανάγκες
+	New	Νέο
 	New model	Νέο μοντέλο
 	New property	Νέα ιδιότητα
 	New property name	Όνομα νέας ιδιότητας
@@ -111,21 +136,28 @@
 	One task per BPSim distribution, to compare their spread.	Μία εργασία ανά κατανομή BPSim για σύγκριση της διασποράς τους.
 	Open	Άνοιγμα
 	Open Example	Άνοιγμα παραδείγματος
+	Open Model	Άνοιγμα μοντέλου
 	Open Recent	Πρόσφατα αρχεία
 	Open a model first	Ανοίξτε πρώτα ένα μοντέλο
 	Open a model to simulate it	Ανοίξτε μοντέλο για προσομοίωση
 	Open a model…	Άνοιγμα μοντέλου…
 	Opened {file}	Άνοιξε το {file}
+	Open…	Άνοιγμα…
 	Or start from an example	Ή ξεκινήστε από ένα παράδειγμα
+	PNG image	Εικόνα PNG
 	Parameters	Παράμετροι
 	Points	Σημεία
 	Poisson	Πουασόν
+	Preferences	Προτιμήσεις
+	Priority	Προτεραιότητα
 	Probability	Πιθανότητα
 	Probability of {id}	Πιθανότητα του {id}
 	Problems	Προβλήματα
 	Process	Διαδικασία
+	Process models with BPSim	Μοντέλα διεργασιών με BPSim
 	Properties	Ιδιότητες
 	Quit	Έξοδος
+	Quit {app}	Έξοδος από το {app}
 	Ready	Έτοιμο
 	Recover	Ανάκτηση
 	Recover unsaved changes?	Ανάκτηση μη αποθηκευμένων αλλαγών;
@@ -136,16 +168,21 @@
 	Remove	Αφαίρεση
 	Remove Block	Αφαίρεση μπλοκ
 	Remove Property	Αφαίρεση ιδιότητας
+	Remove alternative {n}	Αφαίρεση εναλλακτικής {n}
 	Remove block	Αφαίρεση μπλοκ
 	Remove the flow {id}	Αφαίρεση ροής {id}
+	Remove the pool {id}	Αφαίρεση δεξαμενής {id}
 	Remove this block and its flows (Delete)	Αφαίρεση αυτού του μπλοκ και των ροών του (Delete)
 	Removed {id}	Αφαιρέθηκε το {id}
 	Rename Block	Μετονομασία μπλοκ
 	Rename Model	Μετονομασία μοντέλου
 	Replace Model	Αντικατάσταση μοντέλου
 	Replications	Επαναλήψεις
+	Resource pool	Δεξαμενή πόρων
+	Resource pools	Δεξαμενές πόρων
 	Restore	Επαναφορά παραθύρου
 	Results	Αποτελέσματα
+	Roles	Ρόλοι
 	Run	Εκτέλεση
 	Run cancelled	Η εκτέλεση ακυρώθηκε
 	Run experiment	Εκτέλεση πειράματος
@@ -154,11 +191,13 @@
 	Running…	Εκτελείται…
 	Save	Αποθήκευση
 	Save As…	Αποθήκευση ως…
+	Save Model	Αποθήκευση μοντέλου
 	Save changes to {name}?	Αποθήκευση αλλαγών στο {name};
 	Saved {file}	Αποθηκεύτηκε το {file}
 	Scale	Κλίμακα
 	Seed	Αρχικός σπόρος
 	Service time	Χρόνος εξυπηρέτησης
+	Services	Υπηρεσίες
 	Set Property	Ορισμός ιδιότητας
 	Set a value	Ορισμός τιμής
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ορίζεται για κάθε οντότητα όταν εισέρχεται σε αυτό το μπλοκ. Οι εκφράσεις διαβάζουν τις τιμές που είχε κατά την είσοδο, όπως getProperty('issues') - 1.
@@ -166,6 +205,7 @@
 	Shape	Σχήμα
 	Share of arrivals lost	Ποσοστό χαμένων αφίξεων
 	Share of units blocked	Ποσοστό αποκλεισμένων μονάδων
+	Show All	Εμφάνιση όλων
 	Show {id}	Εμφάνιση {id}
 	Split or join	Διαχωρισμός ή ένωση
 	Split or join (all ways)	Διαχωρισμός ή ένωση (όλες οι διαδρομές)
@@ -178,6 +218,7 @@
 	Tandem line	Διαδοχική γραμμή
 	Task	Εργασία
 	Task with a resource	Εργασία με πόρο
+	Task with shared resources	Εργασία με κοινόχρηστους πόρους
 	Text	Κείμενο
 	The model: its experiment, connections and problems	Το μοντέλο: πείραμα, συνδέσεις και προβλήματα
 	This block has a warning	Αυτό το μπλοκ έχει προειδοποίηση
@@ -195,6 +236,8 @@
 	Undo {action}	Αναίρεση ενέργειας: {action}
 	Uniform	Ομοιόμορφη
 	Unit	Μονάδα
+	Units	Μονάδες
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Μονάδες που μοιράζονται πολλές εργασίες. Μια εργασία με κοινόχρηστους πόρους τις παίρνει από δεξαμενή ή κατά ρόλο.
 	Untitled	Χωρίς τίτλο
 	Untitled model	Μοντέλο χωρίς τίτλο
 	Use System Setting	Χρήση ρύθμισης συστήματος
@@ -207,8 +250,10 @@
 	Warning	Προειδοποίηση
 	Weibull	Βάιμπουλ
 	Whole number	Ακέραιος αριθμός
+	Window	Παράθυρο
 	Yes or no	Ναι ή όχι
 	Your changes will be lost if you don't save them.	Οι αλλαγές σας θα χαθούν αν δεν τις αποθηκεύσετε.
+	Zoom	Αλλαγή μεγέθους
 	a model	ένα μοντέλο
 	arrivals	αφίξεις
 	days	ημέρες
@@ -225,8 +270,10 @@
 	split or join: all ways	διαχωρισμός ή ένωση: όλες οι διαδρομές
 	task	εργασία
 	task with a resource	εργασία με πόρο
+	task with shared resources	εργασία με κοινόχρηστους πόρους
 	the charts could not be captured	δεν ήταν δυνατή η καταγραφή των γραφημάτων
 	the run stopped	η εκτέλεση διακόπηκε
+	the settings could not be saved: {error}	δεν ήταν δυνατή η αποθήκευση των ρυθμίσεων: {error}
 	there are no charts to export	δεν υπάρχουν γραφήματα για εξαγωγή
 	to {block}	προς {block}
 	unlimited	χωρίς όριο
@@ -238,10 +285,17 @@
 	± 95% CI	± 95% ΔΕ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	Το ± είναι το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t 95% για τη μέση τιμή μεταξύ των επαναλήψεων.
 	· no results yet	· δεν υπάρχουν ακόμη αποτελέσματα
+unit	d	ημ
+unit	h	ώ
+unit	min	λ
+unit	ms	ms
+unit	s	δ
+unit	yr	έτ
 @plural	Finished {n} replication|Finished {n} replications	Ολοκληρώθηκε {n} επανάληψη|Ολοκληρώθηκαν {n} επαναλήψεις
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Άνοιξε το {file} ({n} προειδοποίηση)|Άνοιξε το {file} ({n} προειδοποιήσεις)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Εκτελεί {n} ανεξάρτητη επανάληψη του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.|Εκτελεί {n} ανεξάρτητες επαναλήψεις του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Ολοκληρώθηκε {done} από {n} επανάληψη|Ολοκληρώθηκαν {done} από {n} επαναλήψεις
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επανάληψη|{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επαναλήψεις
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} επανάληψη · σπόρος {seed}|{n} επαναλήψεις · σπόρος {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} επανάληψη · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}|{n} επαναλήψεις · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} επανάληψη · σπόρος {seed}|{n} επαναλήψεις · σπόρος {seed}
+@plural	{n} replication|{n} replications	{n} επανάληψη|{n} επαναλήψεις

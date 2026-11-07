@@ -14,32 +14,45 @@
 @id	language.name	Tiếng Việt
 	+ Add block	+ Thêm khối
 	About StochCraft	Giới thiệu StochCraft
+	About {app}	Giới thiệu {app}
 	Add Block	Thêm khối
 	Add a flow from…	Thêm luồng từ…
 	Add a flow to…	Thêm luồng đến…
+	Add alternative	Thêm phương án
 	Add point	Thêm điểm
+	Add pool	Thêm nhóm
 	Add property	Thêm thuộc tính
+	Added pool {id}	Đã thêm nhóm {id}
 	Added {block} ({id})	Đã thêm {block} ({id})
+	Alternative {n}	Phương án {n}
 	Appearance	Diện mạo
 	Arrival limit	Giới hạn lượt đến
 	Arrivals	Lượt đến
+	BPMN with BPSim	BPMN có BPSim
 	Back to the model (Esc)	Quay lại mô hình (Esc)
 	Beta	Beta
 	Binomial	Nhị thức
 	Boolean	Boolean
+	Bring All to Front	Đưa tất cả ra trước
 	Built with	Được xây dựng bằng
+	By role	Theo vai trò
+	CSV table	Bảng CSV
 	Cancel	Hủy
+	Cancel Run	Hủy chạy
 	Cancel run	Hủy chạy
 	Capacity	Công suất
 	Change Block	Thay đổi khối
 	Change Flow	Thay đổi luồng
 	Changing the time unit does not convert the times already in the model.	Thay đổi đơn vị thời gian không chuyển đổi các giá trị thời gian đã có trong mô hình.
+	Clear Menu	Xóa menu
 	Close	Đóng
+	Close Window	Đóng cửa sổ
 	Comes from	Đến từ
 	Condition of {id}	Điều kiện của {id}
 	Connect	Kết nối
 	Connections	Kết nối
 	Constant	Hằng số
+	Dark	Tối
 	Data points	Điểm dữ liệu
 	Date and time	Ngày và giờ
 	Decimal number	Số thập phân
@@ -56,15 +69,19 @@
 	Download	Tải xuống
 	Download charts (PNG)	Tải biểu đồ xuống (PNG)
 	Download table (CSV)	Tải bảng xuống (CSV)
+	Downloaded {file}	Đã tải xuống {file}
 	Duration	Thời lượng
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Mỗi thực thể lấy phương án đầu tiên trong số này có thể đáp ứng ngay, lấy tất cả cùng lúc, và trả lại các đơn vị khi rời khỏi tác vụ.
 	Edit	Chỉnh sửa
 	Entered	Đã vào
 	Erlang	Erlang
 	Error	Lỗi
 	Every distribution	Mọi phân phối
+	Exit	Thoát
 	Experiment	Thí nghiệm
 	Experiment Settings	Cài đặt thí nghiệm
 	Exponential	Hàm mũ
+	Export	Xuất
 	Export charts (PNG)	Xuất biểu đồ (PNG)
 	Export table (CSV)	Xuất bảng (CSV)
 	Exported {file}	Đã xuất {file}
@@ -75,12 +92,17 @@
 	Gamma	Gamma
 	Goes to	Đi đến
 	Help	Trợ giúp
+	Hide Others	Ẩn các mục khác
+	Hide {app}	Ẩn {app}
+	Keyboard Shortcuts…	Phím tắt…
 	Keyboard shortcuts saved	Đã lưu phím tắt
 	Keyboard shortcuts unchanged	Phím tắt không thay đổi
 	Language	Ngôn ngữ
 	Left	Đã rời đi
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Được cấp phép theo MIT License hoặc Apache License 2.0, tùy lựa chọn.
+	Light	Sáng
 	Log-normal	Chuẩn logarit
+	Lost (no way out)	Bị mất (không có lối ra)
 	Lost (waiting room full)	Bị mất (khu vực chờ đầy)
 	M/M/1 queue	Hàng đợi M/M/1
 	Maximise	Phóng to tối đa
@@ -93,10 +115,13 @@
 	Mean wait	Thời gian chờ trung bình
 	Metric	Chỉ số
 	Minimise	Thu nhỏ tối đa
+	Minimize	Thu nhỏ
 	Minimum	Giá trị nhỏ nhất
 	Model	Mô hình
 	Most likely	Có khả năng nhất
 	Name	Tên
+	Needs	Nhu cầu
+	New	Mới
 	New model	Mô hình mới
 	New property	Thuộc tính mới
 	New property name	Tên thuộc tính mới
@@ -111,21 +136,28 @@
 	One task per BPSim distribution, to compare their spread.	Mỗi phân phối BPSim có một tác vụ để so sánh độ phân tán.
 	Open	Mở
 	Open Example	Mở ví dụ
+	Open Model	Mở mô hình
 	Open Recent	Mở gần đây
 	Open a model first	Hãy mở mô hình trước
 	Open a model to simulate it	Mở mô hình để mô phỏng
 	Open a model…	Mở mô hình…
 	Opened {file}	Đã mở {file}
+	Open…	Mở…
 	Or start from an example	Hoặc bắt đầu bằng ví dụ
+	PNG image	Ảnh PNG
 	Parameters	Tham số
 	Points	Điểm
 	Poisson	Poisson
+	Preferences	Tùy chọn
+	Priority	Mức ưu tiên
 	Probability	Xác suất
 	Probability of {id}	Xác suất của {id}
 	Problems	Vấn đề
 	Process	Quy trình
+	Process models with BPSim	Mô hình quy trình có BPSim
 	Properties	Thuộc tính
 	Quit	Thoát
+	Quit {app}	Thoát {app}
 	Ready	Sẵn sàng
 	Recover	Khôi phục
 	Recover unsaved changes?	Khôi phục các thay đổi chưa lưu?
@@ -136,16 +168,21 @@
 	Remove	Xóa
 	Remove Block	Xóa khối
 	Remove Property	Xóa thuộc tính
+	Remove alternative {n}	Xóa phương án {n}
 	Remove block	Xóa khối
 	Remove the flow {id}	Xóa luồng {id}
+	Remove the pool {id}	Xóa nhóm {id}
 	Remove this block and its flows (Delete)	Xóa khối này và các luồng của nó (Delete)
 	Removed {id}	Đã xóa {id}
 	Rename Block	Đổi tên khối
 	Rename Model	Đổi tên mô hình
 	Replace Model	Thay thế mô hình
 	Replications	Số lần lặp
+	Resource pool	Nhóm tài nguyên
+	Resource pools	Các nhóm tài nguyên
 	Restore	Khôi phục cửa sổ
 	Results	Kết quả
+	Roles	Vai trò
 	Run	Chạy
 	Run cancelled	Đã hủy chạy
 	Run experiment	Chạy thí nghiệm
@@ -154,11 +191,13 @@
 	Running…	Đang chạy…
 	Save	Lưu
 	Save As…	Lưu thành…
+	Save Model	Lưu mô hình
 	Save changes to {name}?	Lưu các thay đổi vào {name}?
 	Saved {file}	Đã lưu {file}
 	Scale	Tỷ lệ
 	Seed	Hạt giống ngẫu nhiên
 	Service time	Thời gian phục vụ
+	Services	Dịch vụ
 	Set Property	Đặt thuộc tính
 	Set a value	Đặt giá trị
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Được đặt cho từng thực thể khi đi vào khối này. Biểu thức đọc các giá trị mà thực thể có tại thời điểm đi vào, chẳng hạn getProperty('issues') - 1.
@@ -166,6 +205,7 @@
 	Shape	Hình dạng
 	Share of arrivals lost	Tỷ lệ lượt đến bị mất
 	Share of units blocked	Tỷ lệ đơn vị bị chặn
+	Show All	Hiện tất cả
 	Show {id}	Hiển thị {id}
 	Split or join	Tách hoặc gộp
 	Split or join (all ways)	Tách hoặc gộp (mọi hướng)
@@ -178,6 +218,7 @@
 	Tandem line	Dây chuyền nối tiếp
 	Task	Tác vụ
 	Task with a resource	Tác vụ có tài nguyên
+	Task with shared resources	Tác vụ có tài nguyên dùng chung
 	Text	Văn bản
 	The model: its experiment, connections and problems	Mô hình: thí nghiệm, kết nối và vấn đề
 	This block has a warning	Khối này có cảnh báo
@@ -195,6 +236,8 @@
 	Undo {action}	Hoàn tác {action}
 	Uniform	Đều
 	Unit	Đơn vị
+	Units	Đơn vị
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Các đơn vị mà nhiều tác vụ dùng chung. Tác vụ có tài nguyên dùng chung lấy chúng theo nhóm hoặc theo vai trò.
 	Untitled	Chưa đặt tên
 	Untitled model	Mô hình chưa đặt tên
 	Use System Setting	Dùng cài đặt hệ thống
@@ -207,8 +250,10 @@
 	Warning	Cảnh báo
 	Weibull	Weibull
 	Whole number	Số nguyên
+	Window	Cửa sổ
 	Yes or no	Có hoặc không
 	Your changes will be lost if you don't save them.	Các thay đổi sẽ bị mất nếu bạn không lưu.
+	Zoom	Thu phóng
 	a model	một mô hình
 	arrivals	lượt đến
 	days	ngày
@@ -225,8 +270,10 @@
 	split or join: all ways	tách hoặc gộp: mọi hướng
 	task	tác vụ
 	task with a resource	tác vụ có tài nguyên
+	task with shared resources	tác vụ có tài nguyên dùng chung
 	the charts could not be captured	không thể ghi lại biểu đồ
 	the run stopped	lần chạy đã dừng
+	the settings could not be saved: {error}	không thể lưu cài đặt: {error}
 	there are no charts to export	không có biểu đồ để xuất
 	to {block}	đến {block}
 	unlimited	không giới hạn
@@ -238,10 +285,17 @@
 	± 95% CI	± KTC 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± là một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần lặp.
 	· no results yet	· chưa có kết quả
+unit	d	ngày
+unit	h	giờ
+unit	min	phút
+unit	ms	ms
+unit	s	s
+unit	yr	năm
 @plural	Finished {n} replication|Finished {n} replications	Đã hoàn thành {n} lần lặp
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Đã mở {file} ({n} cảnh báo)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Chạy {n} lần lặp độc lập của mô hình từ hạt giống {seed}. Kết quả của mỗi phần tử kèm nửa độ rộng khoảng tin cậy 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Đã hoàn thành {done}/{n} lần lặp
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nKhoảng 95% từ {low} đến {high}{unit}\nqua {n} lần lặp
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} lần lặp · hạt giống {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} lần lặp · hạt giống {seed} · khởi động {warmup} {unit} · đo {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} lần lặp · hạt giống {seed}
+@plural	{n} replication|{n} replications	{n} lần lặp

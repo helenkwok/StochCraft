@@ -758,11 +758,14 @@ next start asks whether to recover them as an untitled model or discard them.
 
 **M3.1f (translations):** every interface string goes through craft-i18n, with a pseudo-locale
 test that fails on any that doesn't. StochCraft's own catalogs (`i18n/`, 44 left-to-right
-languages, each complete) are built in; View ▸ Language picks one or follows the system's, and the
+languages) are built in, each with a row for every string the window and the desktop shell look
+up (a test checks it); View ▸ Language picks one or follows the system's, and the
 choice is saved with the preferences.
 
 **Still to come:** native-speaker review of the catalogs; the engine's own messages through the
-catalog; screenshot tests in craft-ui's six test languages; panes and icons.
+catalog; the keyboard-shortcuts dialog's own words, which come from craft-i18n's shared catalog
+(not embedded in CI or the web app, and incomplete upstream); CJK, Indic, Thai and Lao fonts on
+the web; screenshot tests in craft-ui's six test languages; panes and icons.
 
 ### M3.2 Model editing without a canvas
 

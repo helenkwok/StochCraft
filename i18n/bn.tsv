@@ -14,32 +14,45 @@
 @id	language.name	বাংলা
 	+ Add block	+ ব্লক যোগ করুন
 	About StochCraft	StochCraft সম্পর্কে
+	About {app}	{app} সম্পর্কে
 	Add Block	ব্লক যোগ করুন
 	Add a flow from…	প্রবাহ যোগ করুন (উৎস)…
 	Add a flow to…	প্রবাহ যোগ করুন (গন্তব্য)…
+	Add alternative	বিকল্প যোগ করুন
 	Add point	বিন্দু যোগ করুন
+	Add pool	পুল যোগ করুন
 	Add property	বৈশিষ্ট্য যোগ করুন
+	Added pool {id}	পুল {id} যোগ করা হয়েছে
 	Added {block} ({id})	{block} ({id}) যোগ করা হয়েছে
+	Alternative {n}	বিকল্প {n}
 	Appearance	দৃশ্যরূপ
 	Arrival limit	আগমনের সীমা
 	Arrivals	আগমন
+	BPMN with BPSim	BPSim সহ BPMN
 	Back to the model (Esc)	মডেলে ফিরে যান (Esc)
 	Beta	বিটা
 	Binomial	দ্বিপদী
 	Boolean	বুলিয়ান
+	Bring All to Front	সব সামনে আনুন
 	Built with	এগুলো দিয়ে তৈরি
+	By role	ভূমিকা অনুযায়ী
+	CSV table	CSV সারণি
 	Cancel	বাতিল
+	Cancel Run	চালনা বাতিল
 	Cancel run	চালনা বাতিল
 	Capacity	ধারণক্ষমতা
 	Change Block	ব্লক পরিবর্তন
 	Change Flow	প্রবাহ পরিবর্তন
 	Changing the time unit does not convert the times already in the model.	সময়ের একক পরিবর্তন করলে মডেলে আগে থেকে থাকা সময়ের মান রূপান্তরিত হয় না।
+	Clear Menu	মেনু পরিষ্কার করুন
 	Close	বন্ধ
+	Close Window	উইন্ডো বন্ধ করুন
 	Comes from	যেখান থেকে আসে
 	Condition of {id}	{id}-এর শর্ত
 	Connect	সংযুক্ত করুন
 	Connections	সংযোগ
 	Constant	ধ্রুবক
+	Dark	গাঢ়
 	Data points	ডেটা বিন্দু
 	Date and time	তারিখ ও সময়
 	Decimal number	দশমিক সংখ্যা
@@ -56,15 +69,19 @@
 	Download	ডাউনলোড
 	Download charts (PNG)	চার্ট ডাউনলোড করুন (PNG)
 	Download table (CSV)	সারণি ডাউনলোড করুন (CSV)
+	Downloaded {file}	{file} ডাউনলোড হয়েছে
 	Duration	সময়কাল
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	প্রতিটি সত্তা এগুলোর মধ্যে প্রথম সেটি নেয় যা এখনই একসঙ্গে পুরোপুরি পূরণ করা যায়, এবং বেরিয়ে যাওয়ার সময় এককগুলো ফেরত দেয়।
 	Edit	সম্পাদনা
 	Entered	প্রবেশ করেছে
 	Erlang	এরলাং
 	Error	ত্রুটি
 	Every distribution	সব বণ্টন
+	Exit	প্রস্থান
 	Experiment	পরীক্ষা
 	Experiment Settings	পরীক্ষার সেটিংস
 	Exponential	সূচকীয়
+	Export	রপ্তানি
 	Export charts (PNG)	চার্ট রপ্তানি করুন (PNG)
 	Export table (CSV)	সারণি রপ্তানি করুন (CSV)
 	Exported {file}	{file} রপ্তানি করা হয়েছে
@@ -75,12 +92,17 @@
 	Gamma	গামা
 	Goes to	যেখানে যায়
 	Help	সহায়তা
+	Hide Others	অন্যগুলো লুকান
+	Hide {app}	{app} লুকান
+	Keyboard Shortcuts…	কীবোর্ড শর্টকাট…
 	Keyboard shortcuts saved	কীবোর্ড শর্টকাট সংরক্ষিত হয়েছে
 	Keyboard shortcuts unchanged	কীবোর্ড শর্টকাট অপরিবর্তিত আছে
 	Language	ভাষা
 	Left	বেরিয়েছে
 	Licensed under the MIT License or the Apache License 2.0, at your option.	আপনার পছন্দ অনুযায়ী MIT License বা Apache License 2.0-এর অধীনে লাইসেন্সপ্রাপ্ত।
+	Light	হালকা
 	Log-normal	লগ-স্বাভাবিক
+	Lost (no way out)	হারানো (বেরোনোর পথ নেই)
 	Lost (waiting room full)	হারানো (অপেক্ষার ঘর পূর্ণ)
 	M/M/1 queue	M/M/1 সারি
 	Maximise	সর্বাধিক করুন
@@ -93,10 +115,13 @@
 	Mean wait	গড় অপেক্ষার সময়
 	Metric	পরিমাপক
 	Minimise	সর্বনিম্ন করুন
+	Minimize	ন্যূনতম
 	Minimum	সর্বনিম্ন
 	Model	মডেল
 	Most likely	সবচেয়ে সম্ভাব্য
 	Name	নাম
+	Needs	প্রয়োজন
+	New	নতুন
 	New model	নতুন মডেল
 	New property	নতুন বৈশিষ্ট্য
 	New property name	নতুন বৈশিষ্ট্যের নাম
@@ -111,21 +136,28 @@
 	One task per BPSim distribution, to compare their spread.	প্রতিটি BPSim বণ্টনের জন্য একটি কাজ, তাদের বিস্তার তুলনা করতে।
 	Open	খুলুন
 	Open Example	উদাহরণ খুলুন
+	Open Model	মডেল খুলুন
 	Open Recent	সাম্প্রতিক খুলুন
 	Open a model first	প্রথমে মডেল খুলুন
 	Open a model to simulate it	সিমুলেশনের জন্য মডেল খুলুন
 	Open a model…	মডেল খুলুন…
 	Opened {file}	{file} খোলা হয়েছে
+	Open…	খুলুন…
 	Or start from an example	অথবা উদাহরণ দিয়ে শুরু করুন
+	PNG image	PNG ছবি
 	Parameters	পরামিতি
 	Points	বিন্দু
 	Poisson	পোয়াসঁ
+	Preferences	পছন্দ
+	Priority	অগ্রাধিকার
 	Probability	সম্ভাবনা
 	Probability of {id}	{id}-এর সম্ভাবনা
 	Problems	সমস্যা
 	Process	প্রক্রিয়া
+	Process models with BPSim	BPSim সহ প্রক্রিয়া মডেল
 	Properties	বৈশিষ্ট্য
 	Quit	প্রস্থান করুন
+	Quit {app}	{app} থেকে প্রস্থান করুন
 	Ready	প্রস্তুত
 	Recover	পুনরুদ্ধার
 	Recover unsaved changes?	সংরক্ষণ না করা পরিবর্তন উদ্ধার করবেন?
@@ -136,16 +168,21 @@
 	Remove	সরান
 	Remove Block	ব্লক সরান
 	Remove Property	বৈশিষ্ট্য সরান
+	Remove alternative {n}	বিকল্প {n} সরান
 	Remove block	ব্লক সরান
 	Remove the flow {id}	প্রবাহ {id} সরান
+	Remove the pool {id}	পুল {id} সরান
 	Remove this block and its flows (Delete)	এই ব্লক ও এর প্রবাহগুলো সরান (Delete)
 	Removed {id}	{id} সরানো হয়েছে
 	Rename Block	ব্লকের নাম পরিবর্তন
 	Rename Model	মডেলের নাম পরিবর্তন
 	Replace Model	মডেল প্রতিস্থাপন
 	Replications	পুনরাবৃত্তি
+	Resource pool	সম্পদ পুল
+	Resource pools	সম্পদ পুলসমূহ
 	Restore	পুনরুদ্ধার করুন
 	Results	ফলাফল
+	Roles	ভূমিকা
 	Run	চালান
 	Run cancelled	চালনা বাতিল করা হয়েছে
 	Run experiment	পরীক্ষা চালান
@@ -154,11 +191,13 @@
 	Running…	চলছে…
 	Save	সংরক্ষণ
 	Save As…	নতুন নামে…
+	Save Model	মডেল সংরক্ষণ
 	Save changes to {name}?	{name}-এর পরিবর্তন সংরক্ষণ করবেন?
 	Saved {file}	{file} সংরক্ষিত হয়েছে
 	Scale	স্কেল
 	Seed	যদৃচ্ছ বীজ
 	Service time	সেবা সময়
+	Services	পরিষেবা
 	Set Property	বৈশিষ্ট্য নির্ধারণ
 	Set a value	একটি মান নির্ধারণ
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	এই ব্লকে প্রবেশের সময় প্রতিটি সত্তার জন্য সেট করা হয়। এক্সপ্রেশনগুলো প্রবেশের সময় সত্তার সঙ্গে থাকা মান পড়ে, যেমন getProperty('issues') - 1।
@@ -166,6 +205,7 @@
 	Shape	আকৃতি
 	Share of arrivals lost	হারানো আগমনের অনুপাত
 	Share of units blocked	অবরুদ্ধ এককের অনুপাত
+	Show All	সব দেখান
 	Show {id}	{id} দেখান
 	Split or join	ভাগ বা একত্র করুন
 	Split or join (all ways)	ভাগ বা একত্র করুন (সব পথ)
@@ -178,6 +218,7 @@
 	Tandem line	ধারাবাহিক লাইন
 	Task	কাজ
 	Task with a resource	সম্পদসহ কাজ
+	Task with shared resources	ভাগ করা সম্পদসহ কাজ
 	Text	টেক্সট
 	The model: its experiment, connections and problems	মডেল: পরীক্ষা, সংযোগ ও সমস্যা
 	This block has a warning	এই ব্লকে সতর্কতা আছে
@@ -195,6 +236,8 @@
 	Undo {action}	আনডু {action}
 	Uniform	সুষম
 	Unit	একক
+	Units	এককের সংখ্যা
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	যে এককগুলো একাধিক কাজ ভাগাভাগি করে ব্যবহার করে। ভাগ করা সম্পদসহ কাজ সেগুলো পুল বা ভূমিকা অনুযায়ী নেয়।
 	Untitled	শিরোনামহীন
 	Untitled model	শিরোনামহীন মডেল
 	Use System Setting	সিস্টেম সেটিং ব্যবহার করুন
@@ -207,8 +250,10 @@
 	Warning	সতর্কতা
 	Weibull	ওয়েইবুল
 	Whole number	পূর্ণসংখ্যা
+	Window	উইন্ডো
 	Yes or no	হ্যাঁ বা না
 	Your changes will be lost if you don't save them.	সংরক্ষণ না করলে পরিবর্তন মুছে যাবে।
+	Zoom	জুম
 	a model	একটি মডেল
 	arrivals	আগমন
 	days	দিন
@@ -225,8 +270,10 @@
 	split or join: all ways	ভাগ বা একত্র করুন: সব পথ
 	task	কাজ
 	task with a resource	সম্পদসহ কাজ
+	task with shared resources	ভাগ করা সম্পদসহ কাজ
 	the charts could not be captured	চার্ট ধারণ করা যায়নি
 	the run stopped	চালনা বন্ধ হয়েছে
+	the settings could not be saved: {error}	সেটিংস সংরক্ষণ করা যায়নি: {error}
 	there are no charts to export	রপ্তানি করার মতো চার্ট নেই
 	to {block}	{block}-এ
 	unlimited	সীমাহীন
@@ -238,10 +285,17 @@
 	± 95% CI	± 95% আস্থা ব্যবধান
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± হলো পুনরাবৃত্তিগুলো জুড়ে গড়ের 95% Student-t আস্থা ব্যবধানের অর্ধ-প্রস্থ।
 	· no results yet	· এখনও কোনো ফলাফল নেই
+unit	d	দিন
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	বছর
 @plural	Finished {n} replication|Finished {n} replications	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} খোলা হয়েছে ({n}টি সতর্কতা)|{file} খোলা হয়েছে ({n}টি সতর্কতা)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি উপাদানের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।|বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি উপাদানের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}টির মধ্যে {done}টি পুনরাবৃত্তি সম্পন্ন|{n}টির মধ্যে {done}টি পুনরাবৃত্তি সম্পন্ন
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% ব্যবধান {low} থেকে {high}{unit}\n{n}টি পুনরাবৃত্তিতে|{name}: {mean}{unit}\n95% ব্যবধান {low} থেকে {high}{unit}\n{n}টি পুনরাবৃত্তিতে
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n}টি পুনরাবৃত্তি · বীজ {seed}|{n}টি পুনরাবৃত্তি · বীজ {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n}টি পুনরাবৃত্তি · বীজ {seed} · প্রস্তুতিকাল {warmup} {unit} · পরিমাপ {duration} {unit}|{n}টি পুনরাবৃত্তি · বীজ {seed} · প্রস্তুতিকাল {warmup} {unit} · পরিমাপ {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n}টি পুনরাবৃত্তি · বীজ {seed}|{n}টি পুনরাবৃত্তি · বীজ {seed}
+@plural	{n} replication|{n} replications	{n}টি পুনরাবৃত্তি|{n}টি পুনরাবৃত্তি
