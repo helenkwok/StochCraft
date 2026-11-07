@@ -670,8 +670,26 @@ fn files_open_save_and_track_changes() {
     let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
     let copy = scratch("mm1-copy.bpmn");
     let _ = std::fs::copy(&mm1, &copy);
+    // A new time unit saves into the file: values with their own unit are rescaled.
     let mut h = Engine::new();
     ok(&mut h, "file.open", json!({"path": copy.to_string_lossy()}));
+    ok(&mut h, "experiment.set", json!({"time_unit": "hour"}));
+    ok(&mut h, "file.save", json!({}));
+    let mut g2 = Engine::new();
+    ok(
+        &mut g2,
+        "file.open",
+        json!({"path": copy.to_string_lossy()}),
+    );
+    assert_eq!(g2.model(), h.model());
+    // But not in a scenario that takes those values from another one.
+    let _ = std::fs::copy(&mm1, &copy);
+    let mut h = Engine::new();
+    ok(
+        &mut h,
+        "file.open",
+        json!({"path": copy.to_string_lossy(), "scenario": "two-clerks"}),
+    );
     ok(&mut h, "experiment.set", json!({"time_unit": "hour"}));
     let refused = h.execute("file.save", json!({}));
     assert!(

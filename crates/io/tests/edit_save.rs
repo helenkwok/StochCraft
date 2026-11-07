@@ -507,16 +507,179 @@ fn new_ids_never_clash_with_the_files_other_ids() {
 
 #[test]
 fn edits_that_cannot_be_saved_say_why() {
-    // Changing the time unit would change what the values with their own units mean.
-    let loaded = read_scenario(&file("mm1.bpmn"), None).unwrap_or_else(|e| panic!("{e}"));
+    // "two-clerks" takes its values with their own units from "base": changing its time unit
+    // would mean rewriting them in "base", which would change that scenario too.
+    let loaded =
+        read_scenario(&file("mm1.bpmn"), Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
     let mut m = loaded.model.clone();
     m.experiment.time_unit = TimeUnit::Hours;
     let r = loaded.opened.save(&m);
-    assert!(matches!(r, Err(SaveError::Unsupported(_))), "{r:?}");
+    assert!(
+        matches!(&r, Err(SaveError::Unsupported(why)) if why.contains("`base`")),
+        "{r:?}"
+    );
     // Reordering elements would change the model's random streams.
     let mut m = loaded.model.clone();
     m.elements.reverse();
     assert!(loaded.opened.save(&m).is_err());
+}
+
+/// Opens `bytes`, changes only the time unit, saves, and checks that the file reads back as the
+/// relabelled model.
+fn relabel(bytes: &[u8], unit: TimeUnit) -> Vec<u8> {
+    let loaded = read_scenario(bytes, None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.experiment.time_unit = unit;
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+    saved
+}
+
+/// Changing the time unit relabels the model's times (their numbers stay). Values in the file
+/// that name their own unit are rescaled in that unit so they still read as the model says.
+#[test]
+fn changing_the_time_unit_rescales_values_with_their_own_unit() {
+    // mm1: base unit min, arrivals every 80 s, a warm-up of PT1000M, a duration of 21000 (min).
+    let (hours, n) = edit_and_save("mm1.bpmn", None, |m| {
+        m.experiment.time_unit = TimeUnit::Hours;
+    });
+    let t = text(&hours);
+    for want in [
+        r#"baseTimeUnit="hour""#,
+        // 80 s became 80 s × 60: 1.333… hours written in seconds.
+        r#"<bpsim:NegativeExponentialDistribution mean="4800" timeUnit="s"/>"#,
+        // 1000 min became 1000 hours, written in minutes.
+        r#"<bpsim:Warmup><bpsim:DurationParameter value="PT60000M"/></bpsim:Warmup>"#,
+        // Values in the base unit are relabelled as they are.
+        r#"<bpsim:Duration><bpsim:FloatingParameter value="21000"/></bpsim:Duration>"#,
+        r#"<bpsim:NegativeExponentialDistribution mean="1"/>"#,
+    ] {
+        assert!(t.contains(want), "{want} missing:\n{t}");
+    }
+    assert_eq!(n, 6, "{}", diff(&file("mm1.bpmn"), &hours));
+    // And back: the original file again, byte for byte.
+    assert_eq!(
+        text(&relabel(&hours, TimeUnit::Minutes)),
+        text(&file("mm1.bpmn"))
+    );
+}
+
+/// Without a change of time unit, values with their own units are left exactly as written.
+#[test]
+fn other_edits_leave_values_with_their_own_unit_alone() {
+    let (saved, _) = edit_and_save("mm1.bpmn", None, |m| {
+        m.experiment.replications = 3;
+        m.experiment.duration = 100.0;
+        if let ElementKind::Server { service, .. } = &mut element(m, "serve").kind {
+            *service = Dist::Exponential { mean: 2.0 };
+        }
+    });
+    let t = text(&saved);
+    for kept in [
+        r#"<bpsim:NegativeExponentialDistribution mean="80" timeUnit="s"/>"#,
+        r#"<bpsim:DurationParameter value="PT1000M"/>"#,
+        r#"baseTimeUnit="min""#,
+    ] {
+        assert!(t.contains(kept), "{kept} changed:\n{t}");
+    }
+}
+
+/// Every kind of value with its own unit: the distributions' time parameters (not their
+/// shapes), a user distribution's points, durations of several components, a count
+/// distribution, calendar values, and the BPSim 1.0 data of an XPDL file.
+#[test]
+fn every_value_with_its_own_unit_is_rescaled() {
+    let original = text(&file("mm1.bpmn"))
+        .replace(
+            r#"<bpsim:NegativeExponentialDistribution mean="1"/>"#,
+            r#"<bpsim:TriangularDistribution min="30" mode="45" max="90" timeUnit="s"/>
+                <bpsim:TriangularDistribution min="1" mode="2" max="3" timeUnit="s" validFor="lunch"/>"#,
+        )
+        .replace("PT1000M", "PT16H40M")
+        .replace(
+            r#"<bpsim:Quantity><bpsim:NumericParameter value="1"/></bpsim:Quantity></bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>"#,
+            r#"<bpsim:Quantity><bpsim:NumericParameter value="1"/></bpsim:Quantity></bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="leave">
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="due"><bpsim:FloatingParameter value="2" timeUnit="day"/></bpsim:Property>
+              <bpsim:Property name="wait"><bpsim:GammaDistribution shape="2" scale="6" timeUnit="hour"/></bpsim:Property>
+              <bpsim:Property name="pick"><bpsim:UserDistribution timeUnit="s"><bpsim:UserDistributionDataPoint probability="0.5"><bpsim:FloatingParameter value="30"/></bpsim:UserDistributionDataPoint><bpsim:UserDistributionDataPoint probability="0.5"><bpsim:DurationParameter value="PT1M"/></bpsim:UserDistributionDataPoint></bpsim:UserDistribution></bpsim:Property>
+              <bpsim:Property name="batch"><bpsim:PoissonDistribution mean="4" timeUnit="min"/></bpsim:Property>
+            </bpsim:PropertyParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>"#,
+        );
+    let hours = relabel(original.as_bytes(), TimeUnit::Hours);
+    let t = text(&hours);
+    for want in [
+        r#"<bpsim:TriangularDistribution min="1800" mode="2700" max="5400" timeUnit="s"/>"#,
+        r#"<bpsim:TriangularDistribution min="60" mode="120" max="180" timeUnit="s" validFor="lunch"/>"#,
+        r#"<bpsim:FloatingParameter value="1800"/>"#,
+        r#"<bpsim:DurationParameter value="PT60M"/>"#,
+        // Hours stay hours: the gamma's scale grows with the change, its shape does not.
+        r#"<bpsim:GammaDistribution shape="2" scale="360" timeUnit="hour"/>"#,
+        // Several components become one, in the smallest unit among them.
+        r#"<bpsim:DurationParameter value="PT60000M"/>"#,
+        r#"<bpsim:FloatingParameter value="120" timeUnit="day"/>"#,
+        // A count does not scale: its unit label follows the base unit.
+        r#"<bpsim:PoissonDistribution mean="4" timeUnit="hour"/>"#,
+    ] {
+        assert!(t.contains(want), "{want} missing:\n{t}");
+    }
+    // Back to minutes: the same numbers as before, the durations each in one unit.
+    let t = text(&relabel(&hours, TimeUnit::Minutes));
+    for want in [
+        r#"<bpsim:TriangularDistribution min="30" mode="45" max="90" timeUnit="s"/>"#,
+        r#"<bpsim:DurationParameter value="PT1000M"/>"#,
+        r#"<bpsim:FloatingParameter value="2" timeUnit="day"/>"#,
+        r#"<bpsim:PoissonDistribution mean="4" timeUnit="min"/>"#,
+    ] {
+        assert!(
+            t.contains(want),
+            "{want} missing:
+{t}"
+        );
+    }
+
+    // tandem.xpdl (BPSim 1.0, base unit hour): arrivals uniform 10 to 20 min, welding PT45M,
+    // a duration of P1D.
+    let minutes = relabel(&file("tandem.xpdl"), TimeUnit::Minutes);
+    let t = text(&minutes);
+    for want in [
+        r#"baseTimeUnit="min""#,
+        r#"<b1:UniformDistribution min="0.16666666666666666" max="0.3333333333333333" timeUnit="min"/>"#,
+        r#"<b1:DurationParameter value="PT0.75M"/>"#,
+        r#"<b1:DurationParameter value="P0.016666666666666666D"/>"#,
+    ] {
+        assert!(t.contains(want), "{want} missing:\n{t}");
+    }
+    assert_eq!(
+        text(&relabel(&minutes, TimeUnit::Hours)),
+        text(&file("tandem.xpdl"))
+    );
+}
+
+/// A scenario without a duration runs for 8 hours; changing its time unit writes the duration
+/// down, since 8 hours would be another number in the new unit.
+#[test]
+fn a_default_duration_is_written_when_the_time_unit_changes() {
+    let original = text(&file("mm1.bpmn")).replace(
+        r#"
+            <bpsim:Warmup><bpsim:DurationParameter value="PT1000M"/></bpsim:Warmup>
+            <bpsim:Duration><bpsim:FloatingParameter value="21000"/></bpsim:Duration>"#,
+        "",
+    );
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(loaded.model.experiment.duration, 480.0);
+    let t = text(&relabel(original.as_bytes(), TimeUnit::Seconds));
+    assert!(
+        t.contains(r#"<bpsim:FloatingParameter value="480"/>"#),
+        "{t}"
+    );
 }
 
 fn set_queue(m: &mut Model, at: &str, q: Option<u32>) {

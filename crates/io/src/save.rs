@@ -4,12 +4,14 @@
 //! opened, the experiment settings, and the elements and connections added or removed (with their
 //! diagram shapes). Everything else (other scenarios, vendor extensions, gateways and other
 //! elements StochCraft does not simulate, comments, formatting) is written back exactly as it
-//! was read. The result is read back before it is returned; if it would not give the model that
-//! was saved, saving fails with the reason instead of writing a file that means something else.
+//! was read. A new time unit also rescales the values that name their own unit, so they keep
+//! reading as the model's numbers (`rescale_own_units`). The result is read back before it is
+//! returned; if it would not give the model that was saved, saving fails with the reason
+//! instead of writing a file that means something else.
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use stochcraft_model::{Connection, Element as ModelElement, ElementKind, Model};
+use stochcraft_model::{Connection, Element as ModelElement, ElementKind, Model, TimeUnit};
 
 use crate::bpsim::{NS2, NSS};
 use crate::duration::trim_float;
@@ -1587,7 +1589,30 @@ impl Editor {
         after: &Model,
     ) -> Result<(), SaveError> {
         let (b, a) = (&before.experiment, &after.experiment);
+        let relabel = b.time_unit != a.time_unit;
+        // Whether a scenario this one inherits from gives the duration.
+        let mut inherited_duration = false;
+        if relabel {
+            let ancestors = ancestors(root, scenario);
+            if let Some(from) = ancestors.iter().find(|s| has_own_units(s)) {
+                return Err(fail(format!(
+                    "the time unit cannot change in scenario `{}`: it takes values that name their own time unit from scenario `{}`, which would have to change too; change the time unit there, or save to a new file (Save As)",
+                    scenario_id(root, scenario).unwrap_or_default(),
+                    from.attr("id").unwrap_or_default()
+                )));
+            }
+            inherited_duration = ancestors.iter().any(|s| {
+                s.child(&NSS, "ScenarioParameters")
+                    .is_some_and(|p| p.child(&NSS, "Duration").is_some())
+            });
+        }
         let s = self.ensure_scenario(root, scenario)?;
+        if relabel {
+            // The model's times keep their numbers in the new unit. Values in the base unit
+            // follow the new `baseTimeUnit` by themselves; values that name their own unit are
+            // rescaled in that unit so they read as the model says.
+            rescale_own_units(s, &[], Unit::Base, b.time_unit, a.time_unit);
+        }
         let ns = s.ns.clone().unwrap_or_else(|| NS2.to_owned());
         let prefix = s.prefix().to_owned();
         if s.child(&NSS, "ScenarioParameters").is_none() {
@@ -1622,7 +1647,11 @@ impl Editor {
             rename(&mut e, &prefix, &ns);
             e
         };
-        if b.warmup != a.warmup || b.duration != a.duration {
+        // Without a duration a scenario runs for 8 hours, which is another number in the new
+        // unit: the model's duration is written down.
+        let default_duration =
+            relabel && !inherited_duration && sp.child(&NSS, "Duration").is_none();
+        if b.warmup != a.warmup || b.duration != a.duration || default_duration {
             set_value(
                 sp,
                 &prefix,
@@ -1663,6 +1692,175 @@ fn scenario_mut<'a>(root: &'a mut Element, id: Option<&str>) -> Option<&'a mut E
                 None => s.attr("result").is_none(),
             }
     })
+}
+
+/// The id of scenario `id`, or of the first input scenario.
+fn scenario_id(root: &Element, id: Option<&str>) -> Option<String> {
+    id.map(str::to_owned).or_else(|| {
+        let data = crate::bpsim::find_data(root)?;
+        data.children_named(&NSS, "Scenario")
+            .find(|s| s.attr("result").is_none())?
+            .attr("id")
+    })
+}
+
+/// The scenarios scenario `id` (or the first input scenario) inherits from, nearest first.
+fn ancestors<'a>(root: &'a Element, id: Option<&str>) -> Vec<&'a Element> {
+    let Some(data) = crate::bpsim::find_data(root) else {
+        return Vec::new();
+    };
+    let by_id = |want: &str| {
+        data.children_named(&NSS, "Scenario")
+            .find(|s| s.attr("id").as_deref() == Some(want))
+    };
+    let Some(opened) = scenario_id(root, id).and_then(|i| by_id(&i)) else {
+        return Vec::new();
+    };
+    // As the reader does it, a loop stops at the first repeat.
+    let mut chain = vec![opened];
+    while let Some(parent) = chain.last().and_then(|s| s.attr("inherits")) {
+        match by_id(&parent) {
+            Some(p) if !chain.iter().any(|c| std::ptr::eq(*c, p)) => chain.push(p),
+            _ => break,
+        }
+    }
+    chain.remove(0);
+    chain
+}
+
+/// Whether a scenario has values that name their own time unit.
+fn has_own_units(s: &Element) -> bool {
+    s.descendants().iter().any(|v| {
+        v.ns.as_deref().is_some_and(|n| NSS.contains(&n))
+            && (v.attr("timeUnit").is_some() || v.local() == "DurationParameter")
+    })
+}
+
+/// The unit a value is written in: the scenario's base unit, or one it names.
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum Unit {
+    Base,
+    Named(TimeUnit),
+}
+
+impl Unit {
+    /// `v`'s own unit when it is read in `ctx` (an unknown name reads as `ctx`).
+    fn of(v: &Element, ctx: Unit) -> Unit {
+        v.attr("timeUnit")
+            .and_then(|u| TimeUnit::from_bpsim_name(u.trim()))
+            .map_or(ctx, Unit::Named)
+    }
+
+    fn with(self, base: TimeUnit) -> TimeUnit {
+        match self {
+            Unit::Base => base,
+            Unit::Named(u) => u,
+        }
+    }
+}
+
+/// The time attributes of the values that scale with a change of time unit, as
+/// `crate::bpsim::scale` scales them (shapes and counts do not).
+fn time_attrs(local: &str) -> Option<&'static [&'static str]> {
+    Some(match local {
+        "FloatingParameter" | "NumericParameter" => &["value"],
+        "NegativeExponentialDistribution" | "ErlangDistribution" => &["mean"],
+        "UniformDistribution" => &["min", "max"],
+        "TriangularDistribution" => &["min", "mode", "max"],
+        "NormalDistribution" | "LogNormalDistribution" => &["mean", "standardDeviation"],
+        "TruncatedNormalDistribution" => &["mean", "standardDeviation", "min", "max"],
+        "GammaDistribution" | "WeibullDistribution" => &["scale"],
+        _ => return None,
+    })
+}
+
+/// A number in the base unit `base`, as the reader makes it of `x` written in the units of
+/// `chain`: each pair is a unit a value is written in and the unit it is read in, from the
+/// outermost user distribution in to the value itself.
+fn read_as(x: f64, chain: &[(Unit, Unit)], base: TimeUnit) -> f64 {
+    chain.iter().rev().fold(x, |v, (own, ctx)| {
+        v * crate::bpsim::factor(own.with(base), ctx.with(base))
+    })
+}
+
+/// The number to write in the units of `chain` for `v` in the base unit `base`.
+fn written_as(v: f64, chain: &[(Unit, Unit)], base: TimeUnit) -> f64 {
+    chain.iter().fold(v, |x, (own, ctx)| {
+        x * crate::bpsim::factor(ctx.with(base), own.with(base))
+    })
+}
+
+/// After the base unit changed from `from` to `to`, which relabels the model's times (their
+/// numbers stay), rewrites each value under `e` that names its own unit (a `timeUnit`, or an
+/// ISO 8601 duration) so that it reads as the same number in the new unit. The value keeps its
+/// unit and its number is rescaled: `mean="80" timeUnit="s"` under minutes is 1.333 min, so under
+/// hours it becomes `mean="4800" timeUnit="s"` (1.333 h). A duration is written in the unit of
+/// its smallest component: `PT1000M` becomes `PT60000M`, and `PT16H40M` (1000 min) also
+/// `PT60000M`; days and longer stay date designators (`P1D` under hours becomes
+/// `P0.016666666666666666D` under minutes, 24 min). A count
+/// distribution (beta, Poisson, binomial) does not scale; one naming the old base unit names
+/// the new one. Values in the base unit are left as they are. `outer` and `ctx` give the units
+/// of the user distributions around `e` (see [`read_as`]); a scenario starts with none and the
+/// base unit.
+fn rescale_own_units(
+    e: &mut Element,
+    outer: &[(Unit, Unit)],
+    ctx: Unit,
+    from: TimeUnit,
+    to: TimeUnit,
+) {
+    for v in e.elements_mut() {
+        if !v.ns.as_deref().is_some_and(|n| NSS.contains(&n)) {
+            continue;
+        }
+        let local = v.local().to_owned();
+        match local.as_str() {
+            "DurationParameter" => {
+                let Some(raw) = v.attr("value") else { continue };
+                let Some(secs) = crate::duration::seconds(&raw) else {
+                    continue;
+                };
+                // As the reader does it: seconds in the unit read in, then the distributions'.
+                let n = read_as(secs / ctx.with(from).seconds(), outer, from);
+                let secs = written_as(n, outer, to) * ctx.with(to).seconds();
+                if let Some(new) = crate::duration::in_unit_of(&raw, secs) {
+                    v.set_attr("value", &new);
+                }
+            }
+            "UserDistribution" => {
+                let own = Unit::of(v, ctx);
+                let mut chain = outer.to_vec();
+                chain.push((own, ctx));
+                rescale_own_units(v, &chain, own, from, to);
+            }
+            "BetaDistribution" | "PoissonDistribution" | "BinomialDistribution" => {
+                if Unit::of(v, ctx) == Unit::Named(from) {
+                    v.set_attr("timeUnit", to.bpsim_name());
+                }
+            }
+            l => match time_attrs(l) {
+                Some(attrs) => {
+                    let mut chain = outer.to_vec();
+                    chain.push((Unit::of(v, ctx), ctx));
+                    // All in the base unit: relabelled as they are.
+                    if chain.iter().all(|(own, _)| *own == Unit::Base) {
+                        continue;
+                    }
+                    for a in attrs {
+                        let Some(x) = v.attr(a).and_then(|s| s.trim().parse::<f64>().ok()) else {
+                            continue;
+                        };
+                        let new = written_as(read_as(x, &chain, from), &chain, to);
+                        // A number that stays keeps its spelling.
+                        if new != x {
+                            v.set_attr(a, &num(new));
+                        }
+                    }
+                }
+                None => rescale_own_units(v, outer, ctx, from, to),
+            },
+        }
+    }
 }
 
 /// Removes the BPMN associations (a note's link, for one) to or from `id`, which is gone, with
