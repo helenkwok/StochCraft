@@ -132,7 +132,7 @@ sustainable and resilient production.
 **For StochCraft (After M3).** Starting a run from a factory's current state; calibrating input
 distributions from event logs; workers as resources with skills and shifts; energy and CO₂ per
 part and per element (BPSim cost parameters plus a vendor extension); disruption scenarios
-(breakdowns arrive in M2.6). Open standard files (BPMN, BPSim) are what let a twin exchange
+(breakdowns came in M2.6). Open standard files (BPMN, BPSim) are what let a twin exchange
 models with other tools.
 
 > J. Barata, I. Kayser, *Industry 5.0 – Past, Present, and Near Future*, Procedia Computer Science
@@ -250,6 +250,19 @@ The checks for M2.6's calendars (`crates/blocks/tests/calendars.rs`):
 - **Calendars** follow RFC 5545 (iCalendar), sections 3.3.10 (recurrence rules) and 3.6.1
   (events), in the subset BPSim models use for shifts. Dates are counted in days with Howard
   Hinnant's civil-date algorithms (proleptic Gregorian; ATTRIBUTION.md).
+
+## Breakdowns
+
+The checks for M2.6's breakdowns (`crates/blocks/tests/breakdowns.rs`):
+
+- **Availability** of a unit that alternates up times (mean MTBF) and repairs (mean MTTR) is
+  MTBF / (MTBF + MTTR), by the renewal-reward theorem. Ross, *Introduction to Probability
+  Models*, alternating renewal processes.
+- **Preemptive resume**: with failures Poisson at rate f in elapsed time, a job of length S
+  meets on average fS failures and holds its unit for S (1 + f E[R]); with Little's law the
+  mean number in service is λ E[S] (1 + f E[R]). A saturated unit finishes work at its rate
+  times its availability. B. Avi-Itzhak and P. Naor, "Some queuing problems with the service
+  station subject to breakdown", *Operations Research* 11(3), 1963, 303–320.
 
 ## Read and set aside
 

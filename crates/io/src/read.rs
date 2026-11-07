@@ -7,8 +7,9 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Calendar, Connection, DateTime, Dist, Element as ModelElement, ElementId, ElementKind,
-    Experiment, Model, Need, Property, PropertyType, PropertyValue, ResourcePool, TimeUnit, Timed,
+    Bounds, Breakdown, Calendar, Connection, DateTime, Dist, Element as ModelElement, ElementId,
+    ElementKind, Experiment, Model, Need, Property, PropertyType, PropertyValue, ResourcePool,
+    TimeUnit, Timed,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -904,6 +905,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             capacity: quantity_of(r, &val, notes),
                             service: time,
                             queue_capacity: queue,
+                            breakdown: breakdown_of(scenario, id, unit, notes),
                         }
                     }
                     (None, None) => ElementKind::Delay { duration: time },
@@ -924,6 +926,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                 continue;
             }
         };
+        if !matches!(kind, ElementKind::Server { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::BREAKDOWN)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "breakdowns (stochcraft:breakdown) apply only to a task with a resource of its own; they are ignored here",
+            ));
+        }
         if queue.is_some() && !matches!(kind, ElementKind::Server { .. }) {
             notes.push(Note::warning(
                 Some(id),
@@ -1006,6 +1018,8 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
                     ),
                 )),
             }
+        } else if name == bpsim::BREAKDOWN {
+            // Read by `breakdown_of`.
         } else if name.starts_with(bpsim::STOCHCRAFT) {
             notes.push(Note::warning(
                 Some(id),
@@ -1014,6 +1028,56 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
         }
     }
     queue
+}
+
+/// The breakdowns StochCraft's vendor extension gives server `id`, if any; whether a failure
+/// interrupts the job is BPSim's `Interruptible` (default false).
+fn breakdown_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+) -> Option<Breakdown> {
+    let s = scenario?;
+    let ext = s.param(id, &format!("VendorExtension/{}", bpsim::BREAKDOWN))?;
+    let body = ext.elements().find(|e| e.local() == "breakdown");
+    let part = |local: &str, notes: &mut Vec<Note>| {
+        let p = body?.elements().find(|e| e.local() == local)?;
+        dist_of(
+            bpsim::default_value(p, unit, notes, Some(id)),
+            &format!("the breakdown's {local}"),
+            id,
+            notes,
+        )
+    };
+    let (Some(time_to_failure), Some(repair)) =
+        (part("timeToFailure", notes), part("repairTime", notes))
+    else {
+        notes.push(Note::error(
+            Some(id),
+            "a breakdown needs a timeToFailure and a repairTime distribution; the units never fail",
+        ));
+        return None;
+    };
+    let interruptible = match s
+        .param(id, "PriorityParameters/Interruptible")
+        .and_then(|p| bpsim::value(p, unit, notes, Some(id)))
+    {
+        Some(Value::Bool(b)) => b,
+        None => false,
+        Some(other) => {
+            notes.push(Note::error(
+                Some(id),
+                format!("interruptible must be true or false, not {other:?}; false is used"),
+            ));
+            false
+        }
+    };
+    Some(Breakdown {
+        time_to_failure,
+        repair,
+        interruptible,
+    })
 }
 
 fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment {

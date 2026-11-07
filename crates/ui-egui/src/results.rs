@@ -64,6 +64,7 @@ fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
         "lost" if kind == "exclusive_gateway" => (t("Lost (no way out)"), Unit::Count),
         "lost" => (t("Lost (waiting room full)"), Unit::Count),
         "loss_probability" => (t("Share of arrivals lost"), Unit::Share),
+        "availability" => (t("Availability"), Unit::Share),
         other => (other, Unit::Count),
     }
 }

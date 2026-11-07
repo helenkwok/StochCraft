@@ -8,8 +8,8 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
-    Bounds, Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Experiment, Model, Need,
-    Property, PropertyType, PropertyValue, ResourcePool, Severity, TimeUnit, Timed,
+    Bounds, Breakdown, Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Experiment,
+    Model, Need, Property, PropertyType, PropertyValue, ResourcePool, Severity, TimeUnit, Timed,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -194,6 +194,9 @@ pub enum KindSpec {
         /// gateway waits, and a source's arrival is lost.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         queue_capacity: Option<u32>,
+        /// Each unit fails and is repaired; left out when units never fail.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        breakdown: Option<BreakdownSpec>,
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
     /// entity takes what the first of `needs` that can be met now asks for, holds it for its
@@ -316,6 +319,39 @@ fn is_true(b: &bool) -> bool {
 
 fn yes() -> bool {
     true
+}
+
+/// How a server's units fail: each unit, independently, after a time to failure since its last
+/// repair (busy or idle), then is repaired.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct BreakdownSpec {
+    pub time_to_failure: DistSpec,
+    pub repair: DistSpec,
+    /// A failure interrupts the job under way, which resumes on the same unit after the repair
+    /// with the time it had left; otherwise the unit fails once its job is done.
+    #[serde(default)]
+    pub interruptible: bool,
+}
+
+impl From<&Breakdown> for BreakdownSpec {
+    fn from(b: &Breakdown) -> Self {
+        Self {
+            time_to_failure: (&b.time_to_failure).into(),
+            repair: (&b.repair).into(),
+            interruptible: b.interruptible,
+        }
+    }
+}
+
+impl From<BreakdownSpec> for Breakdown {
+    fn from(b: BreakdownSpec) -> Self {
+        Self {
+            time_to_failure: b.time_to_failure.into(),
+            repair: b.repair.into(),
+            interruptible: b.interruptible,
+        }
+    }
 }
 
 /// A time between arrivals that applies while a calendar is active.
@@ -539,10 +575,12 @@ impl From<&ElementKind> for KindSpec {
                 capacity,
                 service,
                 queue_capacity,
+                breakdown,
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
                 queue_capacity: *queue_capacity,
+                breakdown: breakdown.as_ref().map(Into::into),
             },
             ElementKind::SharedTask {
                 service,
@@ -583,10 +621,12 @@ impl From<KindSpec> for ElementKind {
                 capacity,
                 service,
                 queue_capacity,
+                breakdown,
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
                 queue_capacity,
+                breakdown: breakdown.map(Into::into),
             },
             KindSpec::SharedTask {
                 service,
@@ -1135,6 +1175,7 @@ mod tests {
                 capacity: 1,
                 service: DistSpec::Exponential { mean: 1.0 },
                 queue_capacity: None,
+                breakdown: None,
             })
         );
     }
