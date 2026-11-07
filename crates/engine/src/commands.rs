@@ -7,13 +7,14 @@ use serde::{Deserialize, Deserializer};
 use serde_json::{Value, json};
 use stochcraft_model::{
     Bounds, Connection, Element, ElementId, ElementKind, Model, Need, Property, ResourcePool,
+    calendar::Calendar,
 };
 
 use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
-    self, DistSpec, KindSpec, ModelDoc, NeedSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec,
-    TimeUnitSpec,
+    self, AvailabilityDoc, DistSpec, EventDoc, KindSpec, ModelDoc, NeedSpec, PropertyDoc,
+    PropertyTypeSpec, PropertyValueSpec, ShiftDoc, Stamp, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -97,7 +98,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
         return Ok(());
     };
     let kind_keys: &[&str] = match obj.get("kind").and_then(Value::as_str) {
-        Some("source") => &["interarrival", "limit"],
+        Some("source") => &["interarrival", "limit", "timed", "idle_outside"],
         Some("server") => &["capacity", "service", "queue_capacity"],
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
@@ -131,6 +132,7 @@ fn id_taken(e: &Engine, id: &ElementId) -> bool {
     model.elements.iter().any(|x| &x.id == id)
         || model.connections.iter().any(|c| &c.id == id)
         || model.resources.iter().any(|r| &r.id == id)
+        || model.calendars.iter().any(|c| &c.id == id)
         || e.file_uses_id(id.as_str())
 }
 
@@ -250,6 +252,13 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<u64>")]
     pub limit: Option<Option<u64>>,
+    /// Sources: replaces the times between arrivals that apply while a calendar is active
+    /// (the first active one applying; `interarrival` outside them).
+    #[serde(default)]
+    pub timed: Option<Vec<TimedDist>>,
+    /// Sources: no arrivals outside the calendars of `timed`.
+    #[serde(default)]
+    pub idle_outside: Option<bool>,
     /// Servers: number of identical units.
     #[serde(default)]
     pub capacity: Option<u32>,
@@ -313,6 +322,43 @@ pub struct ResourceSet {
     /// Replaces the pool's roles.
     #[serde(default)]
     pub roles: Option<Vec<String>>,
+    /// Replaces the pool's shifts: its units while each calendar is active (the first active
+    /// one applying; `quantity` outside them).
+    #[serde(default)]
+    pub shifts: Option<Vec<ShiftDoc>>,
+    /// Whether the units are available outside the calendars of `availability`.
+    #[serde(default)]
+    pub available: Option<bool>,
+    /// Replaces the pool's availability while each calendar is active.
+    #[serde(default)]
+    pub availability: Option<Vec<AvailabilityDoc>>,
+}
+
+/// A new calendar.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct CalendarAdd {
+    /// A new id; by default `calendar-N`.
+    #[serde(default)]
+    pub id: Option<String>,
+    /// Display name; by default the id.
+    #[serde(default)]
+    pub name: Option<String>,
+    /// Its periods; a calendar is active while any is under way.
+    #[serde(default)]
+    pub events: Vec<EventDoc>,
+}
+
+/// A calendar's settings to change.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct CalendarSet {
+    pub id: String,
+    #[serde(default)]
+    pub name: Option<String>,
+    /// Replaces its periods.
+    #[serde(default)]
+    pub events: Option<Vec<EventDoc>>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -386,6 +432,11 @@ pub struct ExperimentSet {
     pub replications: Option<u32>,
     #[serde(default)]
     pub seed: Option<u64>,
+    /// The date and time model time 0 stands for, such as `2016-01-01T06:00:00`, which places
+    /// the calendars; `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<String>")]
+    pub start: Option<Option<Stamp>>,
 }
 
 /// Overrides of the model's experiment for this run only.
@@ -724,6 +775,8 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let given = [
         ("interarrival", p.interarrival.is_some()),
         ("limit", p.limit.is_some()),
+        ("timed", p.timed.is_some()),
+        ("idle_outside", p.idle_outside.is_some()),
         ("capacity", p.capacity.is_some()),
         ("service", p.service.is_some()),
         ("queue_capacity", p.queue_capacity.is_some()),
@@ -733,7 +786,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("default", p.default.is_some()),
     ];
     let applies: &[&str] = match kind {
-        ElementKind::Source { .. } => &["interarrival", "limit"],
+        ElementKind::Source { .. } => &["interarrival", "limit", "timed", "idle_outside"],
         ElementKind::Server { .. } => &["capacity", "service", "queue_capacity"],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
@@ -756,12 +809,20 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Source {
             interarrival,
             limit,
+            timed,
+            idle_outside,
         } => {
             if let Some(d) = p.interarrival {
                 *interarrival = d.into();
             }
             if let Some(l) = p.limit {
                 *limit = l;
+            }
+            if let Some(t) = p.timed {
+                *timed = t.into_iter().map(Into::into).collect();
+            }
+            if let Some(i) = p.idle_outside {
+                *idle_outside = i;
             }
         }
         ElementKind::Server {
@@ -827,12 +888,12 @@ fn resource_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: ResourceAdd = parse(p)?;
     let id = new_id(e, p.id.as_deref(), "resource")?;
     let mut pools = e.model().resources.clone();
-    pools.push(ResourcePool {
-        name: p.name.unwrap_or_else(|| id.to_string()),
-        id: id.clone(),
-        quantity: p.quantity,
-        roles: p.roles,
-    });
+    pools.push(ResourcePool::new(
+        id.clone(),
+        p.name.unwrap_or_else(|| id.to_string()),
+        p.quantity,
+        p.roles,
+    ));
     e.edit("resource.add", Op::SetResources(pools))?;
     Ok(json!({ "id": id.as_str() }))
 }
@@ -840,7 +901,13 @@ fn resource_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 fn resource_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: ResourceSet = parse(p)?;
     let i = existing_pool(e.model(), &p.id)?;
-    if p.name.is_none() && p.quantity.is_none() && p.roles.is_none() {
+    if p.name.is_none()
+        && p.quantity.is_none()
+        && p.roles.is_none()
+        && p.shifts.is_none()
+        && p.available.is_none()
+        && p.availability.is_none()
+    {
         return Err(CommandError::new(
             ErrorCode::InvalidParams,
             "nothing to set: give at least one parameter",
@@ -857,8 +924,95 @@ fn resource_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         if let Some(roles) = p.roles {
             r.roles = roles;
         }
+        if let Some(sh) = p.shifts {
+            r.shifts = sh.into_iter().map(Into::into).collect();
+        }
+        if let Some(a) = p.available {
+            r.available = a;
+        }
+        if let Some(a) = p.availability {
+            r.availability = a.into_iter().map(Into::into).collect();
+        }
     }
     e.edit("resource.set", Op::SetResources(pools))?;
+    Ok(json!({}))
+}
+
+fn existing_calendar(model: &Model, s: &str) -> Result<usize, CommandError> {
+    model
+        .calendars
+        .iter()
+        .position(|c| c.id.as_str() == s)
+        .ok_or_else(|| CommandError::new(ErrorCode::NotFound, format!("no calendar with id `{s}`")))
+}
+
+fn calendar_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: CalendarAdd = parse(p)?;
+    let id = new_id(e, p.id.as_deref(), "calendar")?;
+    let mut all = e.model().calendars.clone();
+    all.push(Calendar {
+        name: p.name.unwrap_or_else(|| id.to_string()),
+        id: id.clone(),
+        events: p.events.into_iter().map(Into::into).collect(),
+    });
+    e.edit("calendar.add", Op::SetCalendars(all))?;
+    Ok(json!({ "id": id.as_str() }))
+}
+
+fn calendar_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: CalendarSet = parse(p)?;
+    let i = existing_calendar(e.model(), &p.id)?;
+    if p.name.is_none() && p.events.is_none() {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            "nothing to set: give at least one parameter",
+        ));
+    }
+    let mut all = e.model().calendars.clone();
+    if let Some(c) = all.get_mut(i) {
+        if let Some(n) = p.name {
+            c.name = n;
+        }
+        if let Some(ev) = p.events {
+            c.events = ev.into_iter().map(Into::into).collect();
+        }
+    }
+    e.edit("calendar.set", Op::SetCalendars(all))?;
+    Ok(json!({}))
+}
+
+fn calendar_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: Id = parse(p)?;
+    let i = existing_calendar(e.model(), &p.id)?;
+    let m = e.model();
+    let mut users: Vec<&str> = m
+        .elements
+        .iter()
+        .filter(|el| {
+            matches!(&el.kind, ElementKind::Source { timed, .. }
+                if timed.iter().any(|t| t.calendar.as_str() == p.id))
+        })
+        .map(|el| el.id.as_str())
+        .collect();
+    users.extend(
+        m.resources
+            .iter()
+            .filter(|r| r.calendars().any(|c| c.as_str() == p.id))
+            .map(|r| r.id.as_str()),
+    );
+    if !users.is_empty() {
+        return Err(CommandError::new(
+            ErrorCode::Conflict,
+            format!(
+                "`{}` is used by {}; remove their values for it first",
+                p.id,
+                users.join(", ")
+            ),
+        ));
+    }
+    let mut all = m.calendars.clone();
+    all.remove(i);
+    e.edit("calendar.remove", Op::SetCalendars(all))?;
     Ok(json!({}))
 }
 
@@ -1058,7 +1212,11 @@ fn experiment_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     x.duration = p.duration.unwrap_or(x.duration);
     x.replications = p.replications.unwrap_or(x.replications);
     x.seed = p.seed.unwrap_or(x.seed);
+    if let Some(s) = p.start {
+        x.start = s.map(|s| s.0);
+    }
     let given = [
+        p.start.is_some(),
         p.time_unit.is_some(),
         p.warmup.is_some(),
         p.duration.is_some(),
@@ -1296,7 +1454,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.set",
-        summary: "Change the experiment: time unit, warm-up, duration, replications, seed.",
+        summary: "Change the experiment: time unit, warm-up, duration, replications, seed, start.",
         kind: CommandKind::Edit,
         schema: schema::<ExperimentSet>,
         example: || json!({ "replications": 5, "duration": 240.0 }),
@@ -1312,7 +1470,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "resource.set",
-        summary: "Change a shared pool's name, quantity or roles.",
+        summary: "Change a shared pool's name, quantity, roles, shifts or availability.",
         kind: CommandKind::Edit,
         schema: schema::<ResourceSet>,
         example: || json!({ "id": "agents", "quantity": 4 }),
@@ -1325,6 +1483,30 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<Id>,
         example: || json!({ "id": "agents" }),
         run: resource_remove,
+    },
+    Command {
+        name: "calendar.add",
+        summary: "Add a calendar (shifts, opening hours) that arrival rates and pool units can follow. Returns its id.",
+        kind: CommandKind::Edit,
+        schema: schema::<CalendarAdd>,
+        example: || json!({ "id": "weekdays", "events": [{ "start": "2016-01-04T09:00:00", "end": "2016-01-04T17:00:00", "repeat": "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR" }] }),
+        run: calendar_add,
+    },
+    Command {
+        name: "calendar.set",
+        summary: "Change a calendar's name or periods.",
+        kind: CommandKind::Edit,
+        schema: schema::<CalendarSet>,
+        example: || json!({ "id": "weekdays", "name": "Opening hours" }),
+        run: calendar_set,
+    },
+    Command {
+        name: "calendar.remove",
+        summary: "Remove a calendar that no value is valid for.",
+        kind: CommandKind::Edit,
+        schema: schema::<Id>,
+        example: || json!({ "id": "weekdays" }),
+        run: calendar_remove,
     },
     Command {
         name: "undo",

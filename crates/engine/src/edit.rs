@@ -6,6 +6,7 @@
 
 use stochcraft_model::{
     Bounds, Connection, Element, ElementId, ElementKind, Experiment, Model, Property, ResourcePool,
+    calendar::Calendar,
 };
 
 use crate::{CommandError, ErrorCode};
@@ -40,6 +41,8 @@ pub enum Op {
     SetLayout(Vec<(ElementId, Option<Bounds>)>),
     /// Several edits as one, in order.
     Batch(Vec<Op>),
+    /// Replace the calendars.
+    SetCalendars(Vec<Calendar>),
 }
 
 fn not_found(what: &str, id: &ElementId) -> CommandError {
@@ -186,5 +189,6 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
             done.reverse();
             Op::Batch(done)
         }
+        Op::SetCalendars(c) => Op::SetCalendars(std::mem::replace(&mut model.calendars, c)),
     })
 }

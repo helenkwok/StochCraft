@@ -7,8 +7,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Connection, Dist, Element as ModelElement, ElementId, ElementKind, Experiment, Model,
-    Need, Property, PropertyType, PropertyValue, ResourcePool, TimeUnit,
+    Bounds, Calendar, Connection, DateTime, Dist, Element as ModelElement, ElementId, ElementKind,
+    Experiment, Model, Need, Property, PropertyType, PropertyValue, ResourcePool, TimeUnit, Timed,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -597,10 +597,18 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
     }
     let mut of_task = BTreeMap::new();
     let mut shared = BTreeMap::new();
+    // A resource whose units follow a calendar is a pool, even for one task.
+    let timed = |r: &str| {
+        scenario.is_some_and(|s| {
+            s.param(r, "ResourceParameters/Availability").is_some()
+                || s.param(r, "ResourceParameters/Quantity")
+                    .is_some_and(|q| q.elements().any(|v| v.attr("validFor").is_some()))
+        })
+    };
     for (task, needs) in needs_of {
         let own = match needs.as_slice() {
             [Need::Resource { id, quantity: 1 }]
-                if users.get(id.as_str()).is_none_or(|u| u.len() <= 1) =>
+                if users.get(id.as_str()).is_none_or(|u| u.len() <= 1) && !timed(id.as_str()) =>
             {
                 Some(id.to_string())
             }
@@ -626,19 +634,11 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
 /// Looks up a parameter's default value: (element, key, notes).
 type ParamValue<'a> = dyn Fn(&str, &str, &mut Vec<Note>) -> Option<Value> + 'a;
 
-/// A resource's units (BPSim `quantity`, default 1). Calendar values are M2.6's: a resource with
-/// none outside its shifts gets 1, with an error.
+/// A resource's units (BPSim `quantity`, default 1), for a task's own resource.
 fn quantity_of(r: &str, val: &ParamValue<'_>, notes: &mut Vec<Note>) -> u32 {
     match val(r, "ResourceParameters/Quantity", notes) {
         Some(Value::Number(q)) if q >= 1.0 && q.fract() == 0.0 && q <= f64::from(u32::MAX) => {
             q as u32
-        }
-        Some(Value::Number(0.0)) => {
-            notes.push(Note::error(
-                Some(r),
-                "has no units outside its calendar shifts; shifts arrive in M2.6, so 1 unit is used",
-            ));
-            1
         }
         Some(other) => {
             notes.push(Note::error(
@@ -649,6 +649,113 @@ fn quantity_of(r: &str, val: &ParamValue<'_>, notes: &mut Vec<Note>) -> u32 {
         }
         None => 1,
     }
+}
+
+/// A whole number of units, at least 0.
+fn units(v: &Value) -> Option<u32> {
+    match v {
+        Value::Number(q) if *q >= 0.0 && q.fract() == 0.0 && *q <= f64::from(u32::MAX) => {
+            Some(*q as u32)
+        }
+        _ => None,
+    }
+}
+
+/// A shared pool: its quantity outside its shifts (BPSim `quantity`, default 1), each shift's
+/// (values `validFor` a calendar), and its availability (BPSim `availability`, default true).
+fn pool_of(
+    r: &str,
+    name: &str,
+    roles: Vec<String>,
+    scenario: Option<&Scenario>,
+    notes: &mut Vec<Note>,
+) -> ResourcePool {
+    let unit = scenario.map_or(TimeUnit::Minutes, |s| s.settings.base_time_unit);
+    let param = |key: &str| scenario.and_then(|s| s.param(r, key));
+    let mut pool = ResourcePool::new(ElementId::unchecked(r), name, 1, roles);
+    if let Some(p) = param("ResourceParameters/Quantity") {
+        let shifts = bpsim::timed_values(p, unit, notes, Some(r));
+        match bpsim::default_value(p, unit, notes, Some(r)) {
+            Some(v) => match units(&v) {
+                Some(q) => pool.quantity = q,
+                None => notes.push(Note::error(
+                    Some(r),
+                    format!("resource quantity must be a whole number, not {v:?}; 1 is used"),
+                )),
+            },
+            // Only shift values: no units outside them.
+            None if !shifts.is_empty() => pool.quantity = 0,
+            None => {}
+        }
+        for (c, v) in shifts {
+            match units(&v) {
+                Some(q) => pool.shifts.push(Timed {
+                    calendar: ElementId::unchecked(&c),
+                    value: q,
+                }),
+                None => notes.push(Note::error(
+                    Some(r),
+                    format!("resource quantity for calendar `{c}` must be a whole number, not {v:?}; it is ignored"),
+                )),
+            }
+        }
+    }
+    if let Some(p) = param("ResourceParameters/Availability") {
+        let timed = bpsim::timed_values(p, unit, notes, Some(r));
+        match bpsim::default_value(p, unit, notes, Some(r)) {
+            Some(Value::Bool(b)) => pool.available = b,
+            // Only calendar values: unavailable outside them.
+            None if !timed.is_empty() => pool.available = false,
+            None => {}
+            Some(other) => notes.push(Note::error(
+                Some(r),
+                format!("availability must be true or false, not {other:?}; it is ignored"),
+            )),
+        }
+        for (c, v) in timed {
+            match v {
+                Value::Bool(b) => pool.availability.push(Timed {
+                    calendar: ElementId::unchecked(&c),
+                    value: b,
+                }),
+                other => notes.push(Note::error(
+                    Some(r),
+                    format!("availability for calendar `{c}` must be true or false, not {other:?}; it is ignored"),
+                )),
+            }
+        }
+    }
+    pool
+}
+
+/// The scenario's calendars, read from their iCalendar text.
+fn calendars(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Vec<Calendar> {
+    let Some(s) = scenario else {
+        return Vec::new();
+    };
+    s.calendars
+        .iter()
+        .map(|c| {
+            let parsed = stochcraft_model::calendar::parse(&c.text);
+            for why in parsed.errors {
+                notes.push(Note::error(
+                    Some(&c.id),
+                    format!("{why}; this event is left out of the calendar"),
+                ));
+            }
+            for what in parsed.ignored {
+                notes.push(Note::warning(
+                    Some(&c.id),
+                    format!("{what} in the calendar is not simulated and is ignored"),
+                ));
+            }
+            Calendar {
+                id: ElementId::unchecked(&c.id),
+                name: c.name.clone().unwrap_or_default(),
+                events: parsed.events,
+            }
+        })
+        .collect()
 }
 
 /// The resources of the tasks in the model in `root`, as [`read_model`] assigns them.
@@ -687,11 +794,14 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                 .get(*r)
                 .is_some_and(|u| u.iter().any(|t| shared.contains_key(t)))
         })
-        .map(|(r, name)| ResourcePool {
-            id: ElementId::unchecked(r),
-            name: name.clone(),
-            quantity: quantity_of(r, &val, notes),
-            roles: roles.get(r).cloned().unwrap_or_default(),
+        .map(|(r, name)| {
+            pool_of(
+                r,
+                name,
+                roles.get(r).cloned().unwrap_or_default(),
+                scenario,
+                notes,
+            )
         })
         .collect();
 
@@ -702,12 +812,27 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         let queue = queue_capacity(scenario, id, notes);
         let kind = match &n.kind {
             NodeKind::Start => {
-                let interarrival = dist_of(
-                    val(id, "ControlParameters/InterTriggerTimer", notes),
-                    "the inter-trigger timer",
-                    id,
-                    notes,
-                );
+                let timer = param(id, "ControlParameters/InterTriggerTimer");
+                let default = timer.and_then(|p| bpsim::default_value(p, unit, notes, Some(id)));
+                let mut timed = Vec::new();
+                for (c, v) in
+                    timer.map_or_else(Vec::new, |p| bpsim::timed_values(p, unit, notes, Some(id)))
+                {
+                    let what = format!("the inter-trigger timer for calendar `{c}`");
+                    if let Some(d) = dist_of(Some(v), &what, id, notes) {
+                        timed.push(Timed {
+                            calendar: ElementId::unchecked(&c),
+                            value: d,
+                        });
+                    }
+                }
+                let idle_outside = default.is_none() && !timed.is_empty();
+                // With no default, the first calendar's value stands in (unused outside them).
+                let interarrival = if idle_outside {
+                    timed.first().map(|t| t.value.clone())
+                } else {
+                    dist_of(default, "the inter-trigger timer", id, notes)
+                };
                 let count = match val(id, "ControlParameters/TriggerCount", notes) {
                     Some(Value::Number(c)) if c >= 0.0 && c.fract() == 0.0 => Some(c as u64),
                     Some(other) => {
@@ -723,12 +848,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     Some(d) => ElementKind::Source {
                         interarrival: d,
                         limit: count,
+                        timed,
+                        idle_outside,
                     },
                     None => {
                         notes.push(Note::info(Some(id), "no inter-trigger timer, so this start event never fires (BPSim's default)"));
                         ElementKind::Source {
                             interarrival: Dist::Constant(0.0),
                             limit: Some(0),
+                            idle_outside: false,
+                            timed: Vec::new(),
                         }
                     }
                 }
@@ -851,6 +980,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         elements,
         connections,
         resources,
+        calendars: calendars(scenario, notes),
         experiment: experiment(scenario, notes),
         layout: BTreeMap::new(),
     }
@@ -921,12 +1051,23 @@ fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment 
         ));
         1
     });
+    let start = s.start.as_deref().and_then(|t| {
+        let d = DateTime::parse_iso(t);
+        if d.is_none() {
+            notes.push(Note::warning(
+                None,
+                format!("the scenario start `{t}` is not a date and time and is ignored"),
+            ));
+        }
+        d
+    });
     Experiment {
         time_unit: unit,
         warmup,
         duration,
         replications: s.replication.unwrap_or(1),
         seed,
+        start,
     }
 }
 

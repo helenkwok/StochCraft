@@ -7,7 +7,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Dist, ElementKind, Model, Need, Property, PropertyType, PropertyValue,
+    Bounds, Calendar, DateTime, Dist, ElementKind, Model, Need, Property, PropertyType,
+    PropertyValue, ResourcePool, Timed,
 };
 
 use crate::bpsim::NS2;
@@ -143,6 +144,79 @@ pub(crate) fn property_element(p: &Property) -> Element {
 
 fn param(name: &str, value: Element) -> Element {
     s(name).with_child(value)
+}
+
+/// Parameter `name` with a default value (if any), then one value valid for each calendar.
+fn timed_param(name: &str, default: Option<Element>, timed: Vec<(&str, Element)>) -> Element {
+    let mut p = s(name);
+    if let Some(d) = default {
+        p.push(d);
+    }
+    for (c, v) in timed {
+        p.push(v.with_attr("validFor", c));
+    }
+    p
+}
+
+/// A source's `InterTriggerTimer`: its time between arrivals, then those of its calendars.
+pub(crate) fn timer_param(
+    interarrival: &Dist,
+    timed: &[Timed<Dist>],
+    idle_outside: bool,
+) -> Element {
+    timed_param(
+        "InterTriggerTimer",
+        (!idle_outside).then(|| dist_element(interarrival)),
+        timed
+            .iter()
+            .map(|t| (t.calendar.as_str(), dist_element(&t.value)))
+            .collect(),
+    )
+}
+
+/// A pool's `Quantity`: its units outside its shifts, then each shift's.
+pub(crate) fn quantity_param(r: &ResourcePool) -> Element {
+    timed_param(
+        "Quantity",
+        Some(numeric(u64::from(r.quantity))),
+        r.shifts
+            .iter()
+            .map(|t| (t.calendar.as_str(), numeric(u64::from(t.value))))
+            .collect(),
+    )
+}
+
+fn boolean(b: bool) -> Element {
+    s("BooleanParameter").with_attr("value", if b { "true" } else { "false" })
+}
+
+/// A pool's `Availability`, when it is not always available.
+pub(crate) fn availability_param(r: &ResourcePool) -> Option<Element> {
+    if r.available && r.availability.is_empty() {
+        return None;
+    }
+    Some(timed_param(
+        "Availability",
+        Some(boolean(r.available)),
+        r.availability
+            .iter()
+            .map(|t| (t.calendar.as_str(), boolean(t.value)))
+            .collect(),
+    ))
+}
+
+/// A BPSim `Calendar` with its events as iCalendar text.
+pub(crate) fn calendar_element(c: &Calendar) -> Element {
+    let mut e = s("Calendar").with_attr("id", c.id.as_str());
+    if !c.name.is_empty() {
+        e.set_attr("name", &c.name);
+    }
+    e.with_text(&stochcraft_model::calendar::write(&c.events))
+}
+
+/// The scenario's `Start`.
+pub(crate) fn start_param(t: DateTime) -> Element {
+    param("Start", s("DateTimeParameter").with_attr("value", &t.iso()))
 }
 
 /// The BPMN element an element kind is written as.
@@ -345,6 +419,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         // `xs:long` is signed; the seed's 64 bits are kept and read back unchanged.
         .with_attr("seed", &(x.seed as i64).to_string())
         .with_attr("baseTimeUnit", x.time_unit.bpsim_name());
+    if let Some(t) = x.start {
+        sp.push(start_param(t));
+    }
     // BPSim's duration includes the warm-up.
     sp.push(param(
         "Duration",
@@ -375,9 +452,14 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             ElementKind::Source {
                 interarrival,
                 limit,
+                timed,
+                idle_outside,
             } => {
-                let mut cp = s("ControlParameters")
-                    .with_child(param("InterTriggerTimer", dist_element(interarrival)));
+                let mut cp = s("ControlParameters").with_child(timer_param(
+                    interarrival,
+                    timed,
+                    *idle_outside,
+                ));
                 if let Some(n) = limit {
                     cp.push(param("TriggerCount", numeric(*n)));
                 }
@@ -467,8 +549,11 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
     }
     for r in &model.resources {
-        let mut rp =
-            s("ResourceParameters").with_child(param("Quantity", numeric(u64::from(r.quantity))));
+        let mut rp = s("ResourceParameters");
+        if let Some(a) = availability_param(r) {
+            rp.push(a);
+        }
+        rp.push(quantity_param(r));
         for role in &r.roles {
             rp.push(param("Role", s("StringParameter").with_attr("value", role)));
         }
@@ -477,6 +562,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 .with_attr("elementRef", r.id.as_str())
                 .with_child(rp),
         );
+    }
+    for c in &model.calendars {
+        scenario.push(calendar_element(c));
     }
     let relationship = b("relationship")
         .with_attr("type", "BPSimData")

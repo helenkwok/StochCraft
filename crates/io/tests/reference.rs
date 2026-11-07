@@ -12,11 +12,12 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use stochcraft_blocks::Builder;
+use stochcraft_blocks::{Event, Rule};
 use stochcraft_io::bpsim::{self, NS2};
 use stochcraft_io::{read, read_scenario, write_new, xml};
 use stochcraft_model::{
-    Connection, Dist, Element, ElementId, ElementKind, Experiment, Model, Property, PropertyType,
-    PropertyValue, TimeUnit,
+    Connection, DateTime, Dist, Element, ElementId, ElementKind, Experiment, Model, Property,
+    PropertyType, PropertyValue, TimeUnit,
 };
 
 fn required() -> bool {
@@ -412,6 +413,7 @@ fn edits() -> Vec<Edit> {
                         ElementKind::Source {
                             interarrival,
                             limit,
+                            ..
                         } => {
                             *interarrival = Dist::Exponential { mean: 3.0 };
                             *limit = Some(25);
@@ -753,6 +755,29 @@ fn showcase() -> Model {
         ],
         3.5,
     );
+    // Calendars: arrivals faster on weekday mornings, and a crew of 5 on the day shift.
+    m.calendar(
+        "mornings",
+        vec![Event {
+            start: day(4, 8),
+            end: day(4, 12),
+            rule: Rule::parse("FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20160401T000000").ok(),
+        }],
+    );
+    m.calendar(
+        "day-shift",
+        vec![Event {
+            start: day(4, 7),
+            end: day(4, 15),
+            rule: Rule::parse("FREQ=DAILY;INTERVAL=1;COUNT=60").ok(),
+        }],
+    );
+    m.timed_arrivals(
+        src,
+        vec![("mornings", Dist::Exponential { mean: 0.5 })],
+        false,
+    );
+    m.shifts("crew", &[("day-shift", 5)]);
     m.connect(join, fit);
     m.connect(fit, triage);
     m.route(triage, out, None, Some("1 < 2 and not(false())"));
@@ -764,7 +789,124 @@ fn showcase() -> Model {
         duration: 40.0,
         replications: 7,
         seed: u64::MAX - 3,
+        start: Some(day(4, 6)),
     })
+}
+
+fn day(d: u32, h: u32) -> DateTime {
+    DateTime::new(2016, 1, d, h, 0, 0).unwrap_or(DateTime(0))
+}
+
+/// The technical support model's third scenario: seven daily shifts (C1 to C7, covering the
+/// day from 6 am) with an arrival rate and front-office staff for each, and a weekday calendar
+/// (C8).
+#[test]
+fn the_technical_support_shifts_read_save_and_drive_arrivals() {
+    let Some(paths) = models() else { return };
+    let Some(p) = paths
+        .iter()
+        .find(|p| name(p).contains("Technical Support Process v2.0.0.bpmn"))
+    else {
+        return missing("the technical support model is not in target/bpsim");
+    };
+    let b = bytes(p);
+    let l = read_scenario(&b, Some("S3"));
+    let Ok(l) = l else { panic!("{l:?}") };
+    let m = &l.model;
+    assert_eq!(m.calendars.len(), 8, "{:?}", m.calendars);
+    assert_eq!(m.experiment.start, Some(day(1, 6)));
+    assert!(
+        !l.notes.iter().any(|n| n.message.contains("calendar")),
+        "{:?}",
+        l.notes
+    );
+    // The arrivals: 1 a minute by default, then a rate for each shift.
+    let src = m
+        .elements
+        .iter()
+        .find(|e| e.id.as_str() == "_10-42")
+        .map(|e| e.kind.clone());
+    let Some(ElementKind::Source {
+        interarrival,
+        timed,
+        idle_outside: false,
+        ..
+    }) = src
+    else {
+        panic!("{src:?}")
+    };
+    assert_eq!(interarrival, Dist::Constant(1.0));
+    let rates: Vec<(&str, Dist)> = timed
+        .iter()
+        .map(|t| (t.calendar.as_str(), t.value.clone()))
+        .collect();
+    assert_eq!(rates.len(), 7, "{rates:?}");
+    assert_eq!(rates[0], ("C1", Dist::Constant(0.35)));
+    // The front office has no one outside its shifts, 200 on the first.
+    let fo = m
+        .resources
+        .iter()
+        .find(|r| r.id.as_str() == "resource_Front_Office");
+    let Some(fo) = fo else {
+        panic!("{:?}", m.resources)
+    };
+    assert_eq!(fo.quantity, 0);
+    assert_eq!(fo.shifts.len(), 7);
+    assert_eq!(fo.shifts[0].value, 200);
+
+    // Over the first day from 6 am, the shifts cover every minute, and each draws its arrivals
+    // afresh at its start: ⌊length / interval⌋ each, the last landing on the end of a shift
+    // when it divides exactly (1 and 2 minutes): 514 + 209 + 327 + 180 + 558 + 268 + 150.
+    let mut b2 = Builder::new();
+    let s = b2.source("calls", interarrival.clone(), None);
+    b2.timed_arrivals(
+        s,
+        rates.iter().map(|(c, d)| (*c, d.clone())).collect(),
+        false,
+    );
+    let out = b2.sink("out");
+    b2.connect(s, out);
+    let mut run = b2.build(Experiment {
+        duration: 1440.0,
+        start: m.experiment.start,
+        ..Experiment::default()
+    });
+    run.calendars = m.calendars.clone();
+    let c = stochcraft_blocks::compile(&run);
+    let Ok(c) = c else { panic!("{c:?}") };
+    let r = c
+        .run(stochcraft_random::Rng::new(1))
+        .unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(r.element("calls").map(|e| e.entered), Some(2206), "{r:?}");
+
+    // Shifts and calendars save into the file and read back.
+    let mut edited = m.clone();
+    if let Some(r) = edited
+        .resources
+        .iter_mut()
+        .find(|r| r.id.as_str() == "resource_Front_Office")
+    {
+        r.shifts[0].value = 210;
+        r.quantity = 1;
+    }
+    if let Some(c) = edited.calendars.first_mut() {
+        c.events[0].end = day(1, 10);
+    }
+    edited.experiment.start = Some(day(1, 5));
+    if let Some(ElementKind::Source { timed, .. }) = edited
+        .elements
+        .iter_mut()
+        .map(|e| &mut e.kind)
+        .find(|k| matches!(k, ElementKind::Source { timed, .. } if !timed.is_empty()))
+    {
+        timed.pop();
+    }
+    let saved = l.opened.save(&edited);
+    let Ok(saved) = saved else {
+        panic!("{saved:?}")
+    };
+    let back = read_scenario(&saved, Some("S3")).map(|x| x.model);
+    assert_eq!(back.ok(), Some(edited));
 }
 
 #[test]
