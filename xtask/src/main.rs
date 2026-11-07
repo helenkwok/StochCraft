@@ -24,6 +24,9 @@ cargo xtask <command>
                   under Node's WASI (xtask/wasi-run.mjs): the pinned results must match there too
   fetch-bpsim     download the BPSim reference models and XML Schema from bpsim.org into
                   target/bpsim (checked against pinned SHA-256; never committed)
+  web-fonts       trunk's post-build hook: copy web-fonts/ (the craft-fonts faces build.rs
+                  serves) into the site as fonts/, except for a pull-request preview
+                  (STOCHCRAFT_PAGES_PREVIEW=1)
   ci [--affected REV]
                   fmt --check, layers, clippy -D warnings and tests; with --affected REV only
                   for the crates `affected --base REV` names (everything when it says so)
@@ -39,6 +42,7 @@ fn main() -> ExitCode {
         Some("wasm") => cmd_wasm(),
         Some("golden") => cmd_golden(),
         Some("fetch-bpsim") => bpsim::fetch(),
+        Some("web-fonts") => cmd_web_fonts(),
         Some("ci") => match &args[1..] {
             [] => cmd_ci(None),
             ["--affected", base] => cmd_ci(Some(base)),
@@ -164,6 +168,51 @@ fn cmd_wasm() -> Result<(), String> {
             set.len()
         ),
     )
+}
+
+/// Trunk's post-build hook (apps/stochcraft-web/Trunk.toml): copies the craft-fonts faces the web
+/// build serves (`web-fonts/`, written by crates/ui-egui/build.rs) into the site as `fonts/`.
+/// A pull-request preview (`STOCHCRAFT_PAGES_PREVIEW=1`) fetches the main site's copy instead and
+/// gets none. A hook rather than Trunk's `copy-dir`, which runs alongside the Rust build and so
+/// could copy the directory before build.rs has filled it.
+fn cmd_web_fonts() -> Result<(), String> {
+    if std::env::var("STOCHCRAFT_PAGES_PREVIEW").is_ok_and(|v| v == "1") {
+        eprintln!("web-fonts: a preview fetches the main site's fonts; nothing copied");
+        return Ok(());
+    }
+    let staging = std::env::var_os("TRUNK_STAGING_DIR")
+        .ok_or("web-fonts: TRUNK_STAGING_DIR is unset (run by trunk's post_build hook)")?;
+    let from = root().join("web-fonts");
+    if !from.is_dir() {
+        eprintln!("web-fonts: no web-fonts/ (CRAFT_FONTS_DIR unset?); nothing copied");
+        return Ok(());
+    }
+    let to = PathBuf::from(staging).join("fonts");
+    let n = copy_dir(&from, &to)?;
+    eprintln!("web-fonts: copied {n} file(s) to {}", to.display());
+    Ok(())
+}
+
+/// Copies the files under `from` to `to`, keeping their relative paths; returns how many.
+/// Symbolic links are skipped, not followed.
+fn copy_dir(from: &Path, to: &Path) -> Result<usize, String> {
+    std::fs::create_dir_all(to).map_err(|e| format!("{}: {e}", to.display()))?;
+    let mut n = 0;
+    for entry in std::fs::read_dir(from).map_err(|e| format!("{}: {e}", from.display()))? {
+        let entry = entry.map_err(|e| format!("{}: {e}", from.display()))?;
+        let kind = entry
+            .file_type()
+            .map_err(|e| format!("{}: {e}", entry.path().display()))?;
+        let target = to.join(entry.file_name());
+        if kind.is_dir() {
+            n += copy_dir(&entry.path(), &target)?;
+        } else if kind.is_file() {
+            std::fs::copy(entry.path(), &target)
+                .map_err(|e| format!("{}: {e}", entry.path().display()))?;
+            n += 1;
+        }
+    }
+    Ok(n)
 }
 
 /// The golden results on wasm32-wasip1. Node (22 or later) runs the test binary through its

@@ -1,13 +1,22 @@
 //! Two optional build inputs, each named by an environment variable and empty when it is unset:
 //!
 //! - **Fonts** (`CRAFT_FONTS_DIR`, a checkout of https://github.com/storytold/craft-fonts): the
-//!   faces for the scripts IBM Plex doesn't cover (Arabic, Hebrew, Thai, Devanagari…). Unset, the
-//!   desktop app falls back to the installed system fonts. Left out: the CJK faces (tens of
-//!   megabytes uncut, even though the catalogs in `i18n/` now say which characters they need), and
-//!   everything on the web, whose download has a size budget. So the web app, which has only IBM
-//!   Plex, Hack and the emoji face and no system fonts, draws Japanese, Korean, Chinese, Hindi,
-//!   Bengali, Tamil, Telugu, Thai and Lao as missing-glyph boxes until a cut of those faces is
-//!   embedded there (a size and licence decision; issue #39).
+//!   faces for the scripts IBM Plex doesn't cover (Japanese, Korean, Chinese, Arabic, Hebrew,
+//!   Thai, Devanagari, Georgian, symbols). `CRAFT_FONTS_REQUIRED=1` makes a missing checkout an
+//!   error. Unset, the table is empty and the app still builds.
+//!   - Desktop: every face but the CJK ones is embedded. The CJK faces are 5–17 MB each, so
+//!     Japanese, Korean and Chinese come from the installed system fonts, as do the scripts
+//!     craft-fonts has no face for yet.
+//!   - Web: nothing is embedded. The Regular and Bold faces, without the document serif faces
+//!     (Shippori Mincho, BIZ UDMincho), are copied into `web-fonts/` at the workspace root
+//!     (gitignored) and listed as `ServedFace`s. Trunk copies that directory into the site as
+//!     `fonts/` (Trunk.toml), and craft-ui fetches a face when the interface language or a
+//!     character needs it. A script with no served face (Bengali, Tamil, Telugu and Lao for now)
+//!     is left to the browser's own fonts (egui's web glyph fallback): it draws only where the
+//!     visitor's system has a font for it, in that font's style, and as boxes elsewhere.
+//!     `STOCHCRAFT_PAGES_PREVIEW=1` builds a pull-request preview, published at `pr/<n>/`: it
+//!     fetches the faces from the main site's copy (`../../fonts/`), and nothing is copied into
+//!     `web-fonts/` (pages.yml).
 //! - **Translations**: StochCraft's own catalogs, `i18n/<locale>.tsv` in this repository, always
 //!   embedded (on the web too), in craft-i18n's catalog format. With `CRAFT_I18N_DIR` naming a
 //!   checkout of https://github.com/storytold/craft-i18n, each locale's shared `common.tsv` is
@@ -20,14 +29,37 @@ use std::path::PathBuf;
 
 fn main() {
     println!("cargo::rerun-if-changed=build.rs");
-    let wasm = craft_fonts_build::target_is_wasm();
-    let embedded = craft_fonts_build::Embed::new()
-        .filter(move |face| !wasm && !face.is_cjk())
-        .write("craft_fonts.rs");
-    if let Err(e) = embedded {
+    fonts();
+    translations();
+}
+
+/// Writes `craft_fonts.rs`: the craft-fonts faces, as `EmbeddedFace`s on the desktop and as
+/// `ServedFace`s on the web.
+fn fonts() {
+    let written = if craft_fonts_build::target_is_wasm() {
+        println!("cargo::rerun-if-env-changed=STOCHCRAFT_PAGES_PREVIEW");
+        let preview = std::env::var("STOCHCRAFT_PAGES_PREVIEW").is_ok_and(|v| v == "1");
+        let fonts = craft_fonts_build::Embed::new().filter(|face| {
+            !matches!(face.family.as_str(), "Shippori Mincho" | "BIZ UDMincho")
+                && matches!(face.style.as_str(), "Regular" | "Bold")
+        });
+        let fonts = if preview {
+            // The main site serves the faces; the copy `serve` makes stays in the build directory.
+            let out = PathBuf::from(std::env::var_os("OUT_DIR").unwrap_or_default());
+            fonts.serve(out.join("web-fonts"), "../../fonts/")
+        } else {
+            let package = PathBuf::from(std::env::var_os("CARGO_MANIFEST_DIR").unwrap_or_default());
+            fonts.serve(package.join("../../web-fonts"), "fonts/")
+        };
+        fonts.write("craft_fonts.rs")
+    } else {
+        craft_fonts_build::Embed::new()
+            .filter(|face| !face.is_cjk())
+            .write("craft_fonts.rs")
+    };
+    if let Err(e) = written {
         println!("cargo::error={e}");
     }
-    translations();
 }
 
 /// Writes `craft_i18n.rs`: `pub static CRAFT_I18N: &craft_i18n::Embedded`.

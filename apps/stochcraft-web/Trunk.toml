@@ -1,10 +1,23 @@
 # Build with: trunk build --release   (from apps/stochcraft-web; output in dist/web)
+# With CRAFT_FONTS_DIR naming a craft-fonts checkout, the site also gets fonts/: the faces for
+# Japanese, Korean, Chinese, Thai, Hindi and other scripts, fetched when the interface needs them
+# (crates/ui-egui/build.rs).
 [build]
 target = "index.html"
 dist = "../../dist/web"
 public_url = "./"
+# Hashes the wasm and JS names only; fonts/ keeps its names, which build.rs compiles in as URLs.
 filehash = true
 
 [serve]
 addresses = ["127.0.0.1"]
 port = 8791
+
+# Copies web-fonts/ (the faces build.rs serves) into the site as fonts/, unless
+# STOCHCRAFT_PAGES_PREVIEW=1 (a pull-request preview fetches the main site's). A hook after the
+# build, since Trunk's copy-dir runs alongside the Rust build and could copy before build.rs has
+# filled the directory. Hooked files are not renamed by filehash.
+[[hooks]]
+stage = "post_build"
+command = "cargo"
+command_arguments = ["xtask", "web-fonts"]

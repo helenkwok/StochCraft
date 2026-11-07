@@ -7,6 +7,14 @@ name: Pages
 # actions/deploy-pages.
 #
 # Pull requests from forks are built but not published: their token cannot push.
+#
+# Fonts: the build serves craft-fonts' faces (Japanese, Korean, Chinese, Thai, Hindi…) beside the
+# wasm, from a checkout pinned below (crates/ui-egui/build.rs). main's build copies them into the
+# site as `fonts/`. A pull request's build doesn't: its preview, at `pr/<number>/`, fetches the
+# main site's copy at `../../fonts/` (STOCHCRAFT_PAGES_PREVIEW=1), which keeps ~31 MB out of each
+# preview. The trade-off: a pull request that adds a face or bumps the pinned craft-fonts commit
+# can't show the new face in its preview until it merges, since the preview asks the main site,
+# which doesn't have it yet; and a face main removes stops loading in older previews.
 
 on:
   push:
@@ -23,6 +31,8 @@ permissions:
 env:
   CARGO_TERM_COLOR: always
   TRUNK_VERSION: v0.21.14
+  # storytold/craft-fonts (OFL faces), pinned; ci.yml's wasm job checks out the same commit.
+  CRAFT_FONTS_REV: aced4137c022f1f587624d48e81ec77e1914a9cc
 
 jobs:
   build:
@@ -32,6 +42,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: storytold/craft-fonts
+          ref: ${{ env.CRAFT_FONTS_REV }}
+          path: craft-fonts
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -46,6 +62,12 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
       - name: trunk build --release
         working-directory: apps/stochcraft-web
+        env:
+          CRAFT_FONTS_DIR: ${{ github.workspace }}/craft-fonts
+          # A missing or unreadable checkout fails the build instead of shipping no fonts.
+          CRAFT_FONTS_REQUIRED: "1"
+          # A pull request's preview fetches the main site's fonts and copies none (see the top).
+          STOCHCRAFT_PAGES_PREVIEW: ${{ github.event_name == 'pull_request' && '1' || '' }}
         run: trunk build --release --public-url ./
       - uses: actions/upload-artifact@v4
         with:
@@ -95,6 +117,8 @@ jobs:
             rm -rf "$target"
             mkdir -p "$target"
             cp -r web/. "$target/"
+            # Previews use the main site's fonts (../../fonts/); never keep a copy here.
+            rm -rf "$target/fonts"
           else
             # main replaces everything but the previews.
             find site -mindepth 1 -maxdepth 1 ! -name .git ! -name pr -exec rm -rf {} +

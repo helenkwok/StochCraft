@@ -243,8 +243,11 @@ pub struct App {
     requests: Vec<Request>,
     /// The title last shown, so the shell sets it only when it changes.
     title: String,
-    /// The fonts and theme are installed (on the first frame).
+    /// The theme is installed (on the first frame).
     styled: bool,
+    /// The language whose font stack is installed: the fonts are installed again when the
+    /// interface language changes, so its faces lead (and, on the web, are fetched).
+    fonts_lang: Option<craft_i18n::Lang>,
     /// The block the inspector shows; none shows the model overview (or, with several blocks
     /// selected on the canvas, what can be done to them).
     selected: Option<String>,
@@ -321,6 +324,7 @@ impl App {
             requests: Vec::new(),
             title: String::new(),
             styled: false,
+            fonts_lang: None,
             selected: None,
             canvas: canvas::Canvas::default(),
             watching: None,
@@ -1079,6 +1083,10 @@ impl App {
         let ctx = ui.ctx().clone();
         i18n::set_lang(self.lang);
         results::set_numbers(&self.numbers);
+        if self.fonts_lang != Some(self.lang) {
+            theme::install_fonts(&ctx, i18n::code(self.lang));
+            self.fonts_lang = Some(self.lang);
+        }
         if !self.styled {
             theme::install(&ctx);
             self.styled = true;
