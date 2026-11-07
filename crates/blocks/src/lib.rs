@@ -402,15 +402,24 @@ impl Compiled {
 }
 
 /// A statistic an element reports.
+///
+/// Counts balance on every element: what entered either left, was lost there ([`Metric::Lost`],
+/// where reported), or was still inside at the end.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Metric {
-    /// Entities that entered (for a source: created).
+    /// Entities that entered (for a source: created). A join counts each entity once, as it
+    /// arrives on the join's first input; what arrives on its other inputs are copies of it,
+    /// merged into it.
     Entered,
-    /// Entities that left (for a sink: removed).
+    /// Entities that left, sent on to the next element (for a sink: removed). A parallel
+    /// gateway counts one per copy it sends out, so a split into two reports twice what entered.
+    /// Entities lost do not leave.
     Left,
     /// Servers: time-average number waiting for a unit.
     MeanQueueLength,
-    /// Servers: mean time from arrival to start of service.
+    /// Servers: mean time from arrival to start of service, over the entities that started
+    /// service. Entities still waiting at the end are left out, so for an overloaded server the
+    /// mean is biased low.
     MeanWait,
     /// Servers: time-average fraction of units busy.
     Utilisation,
@@ -424,7 +433,11 @@ pub enum Metric {
     /// Servers sending to a finite buffer: time-average fraction of units blocked (holding a
     /// served entity while the next buffer is full).
     BlockingProbability,
-    /// Servers with a finite buffer: arrivals from sources lost because the buffer was full.
+    /// Entities lost. Servers with a finite buffer: arrivals from sources turned away because
+    /// the buffer was full (these never entered). Sources sending to a finite buffer: their
+    /// arrivals lost that way (these entered, but never left), so one lost arrival counts at
+    /// both. Exclusive gateways: entities for which no condition held and there was no default
+    /// connection, which leave the model there.
     Lost,
     /// Servers with a finite buffer: the fraction of arrivals lost (lost over lost plus
     /// entered).
@@ -479,7 +492,8 @@ pub struct ElementReport {
     pub mean_contents: Option<f64>,
     pub mean_time_in_system: Option<f64>,
     /// Only where a finite buffer is involved (`None` otherwise, so models without one report
-    /// as before): see [`Metric::MeanBlockedTime`] and the metrics after it.
+    /// as before): see [`Metric::MeanBlockedTime`] and the metrics after it. `lost` is also
+    /// reported by every exclusive gateway, buffer or not.
     pub mean_blocked_time: Option<f64>,
     pub blocking_probability: Option<f64>,
     pub lost: Option<u64>,
@@ -563,7 +577,9 @@ impl ExperimentSummary {
 
 /// Summarises replication reports of the same model (as [`Compiled::run`] returns them, in any
 /// order). A metric is left out of an element when no replication reported a value for it, for
-/// example the mean wait of a server that no entity reached.
+/// example the mean wait of a server that no entity reached. Replications without a value are
+/// left out of that metric's summary, so its `n` can be less than the number of replications,
+/// and differ from metric to metric.
 pub fn summarise(reports: &[Report]) -> ExperimentSummary {
     let elements = reports.first().map_or_else(Vec::new, |first| {
         first
