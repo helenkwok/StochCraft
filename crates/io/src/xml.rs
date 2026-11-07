@@ -23,6 +23,9 @@ pub enum Node {
     Comment(String),
     /// A processing instruction's content (without `<?` and `?>`).
     Pi(String),
+    /// A document type declaration exactly as written, `<!DOCTYPE` to `>` (its internal subset
+    /// included).
+    DocType(String),
 }
 
 /// An element.
@@ -65,6 +68,8 @@ impl PartialEq for Element {
 /// A parsed document.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Document {
+    /// Whether the file starts with a UTF-8 byte order mark, written back before everything else.
+    pub bom: bool,
     /// The XML declaration's content, if the file had one (`version="1.0" encoding="UTF-8"`).
     pub decl: Option<String>,
     /// Comments and processing instructions before the root element. In a parsed document the
@@ -80,6 +85,7 @@ impl Document {
     /// A document built in memory, written with a declaration and indented.
     pub fn new(root: Element) -> Self {
         Self {
+            bom: false,
             decl: None,
             prolog: Vec::new(),
             root,
@@ -395,9 +401,10 @@ fn attrs_of(e: &quick_xml::events::BytesStart<'_>) -> Result<Vec<(String, String
 }
 
 /// Parses a document. The input must be UTF-8 (as BPMN and XPDL files are in practice); a byte
-/// order mark is skipped.
+/// order mark is remembered and skipped.
 pub fn parse(bytes: &[u8]) -> Result<Document, XmlError> {
     let text = std::str::from_utf8(bytes).map_err(|e| XmlError(format!("not UTF-8: {e}")))?;
+    let bom = text.starts_with('\u{feff}');
     let text = text.strip_prefix('\u{feff}').unwrap_or(text);
     let mut reader = Reader::from_str(text);
     reader.config_mut().trim_text(false);
@@ -408,6 +415,7 @@ pub fn parse(bytes: &[u8]) -> Result<Document, XmlError> {
     let mut root: Option<Element> = None;
     let mut epilog = Vec::new();
     loop {
+        let at = reader.buffer_position();
         let event = reader
             .read_event()
             .map_err(|e| XmlError(format!("at byte {}: {e}", reader.buffer_position())))?;
@@ -442,7 +450,18 @@ pub fn parse(bytes: &[u8]) -> Result<Document, XmlError> {
             Event::CData(t) => Node::CData((*t).to_owned()),
             Event::Comment(t) => Node::Comment((*t).to_owned()),
             Event::PI(t) => Node::Pi((*t).to_owned()),
-            Event::DocType(_) => continue,
+            Event::DocType(d) => {
+                // Kept exactly as written: from where the event started to where it ended.
+                let raw = usize::try_from(at)
+                    .ok()
+                    .zip(usize::try_from(reader.buffer_position()).ok())
+                    .and_then(|(from, to)| text.get(from..to))
+                    .filter(|t| t.starts_with("<!") && t.ends_with('>'));
+                Node::DocType(match raw {
+                    Some(t) => t.to_owned(),
+                    None => format!("<!DOCTYPE {}>", (*d).trim()),
+                })
+            }
             Event::Eof => break,
         };
         match stack.last_mut() {
@@ -485,6 +504,7 @@ pub fn parse(bytes: &[u8]) -> Result<Document, XmlError> {
         prolog.insert(0, Node::Text(String::new()));
     }
     Ok(Document {
+        bom,
         decl,
         prolog,
         root,
@@ -497,6 +517,9 @@ pub fn parse(bytes: &[u8]) -> Result<Document, XmlError> {
 /// whitespace as text nodes.
 pub fn write(doc: &Document) -> String {
     let mut out = String::new();
+    if doc.bom {
+        out.push('\u{feff}');
+    }
     // A parsed document's prolog starts with the (possibly empty) text after its declaration.
     let parsed = matches!(doc.prolog.first(), Some(Node::Text(_)));
     match (&doc.decl, parsed) {
@@ -685,6 +708,7 @@ fn write_node(n: &Node, out: &mut String, indent: Option<usize>) {
             out.push_str(t);
             out.push_str("?>");
         }
+        Node::DocType(t) => out.push_str(t),
     }
 }
 
@@ -751,6 +775,9 @@ mod tests {
             "<?xml version=\"1.0\"?><r\n  b = \"2\"/>\n\n",
             "<r/>",
             "<!-- c --><r/><!-- after -->",
+            "\u{feff}<?xml version=\"1.0\"?>\n<r/>",
+            "<?xml version=\"1.0\"?>\n<!DOCTYPE r>\n<r/>",
+            "<!DOCTYPE  r SYSTEM 'r.dtd' [\n  <!ENTITY e \"x\">\n]><!-- c -->\n<r>&e;</r>",
         ] {
             let d = parse(exact.as_bytes()).unwrap_or_else(|e| unreachable!("{e}"));
             assert_eq!(write(&d), exact);

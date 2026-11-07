@@ -378,6 +378,28 @@ fn values_tied_to_calendars_survive_edits() {
 }
 
 #[test]
+fn edited_saves_keep_the_byte_order_mark_and_doctype() {
+    let original = format!(
+        "\u{feff}{}",
+        text(&file("mm1.bpmn")).replace(
+            "<semantic:definitions ",
+            "<!DOCTYPE semantic:definitions [\n  <!ENTITY tool \"StochCraft\">\n]>\n<semantic:definitions ",
+        )
+    );
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.experiment.replications = 3;
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    assert!(t.starts_with("\u{feff}<?xml "), "{t}");
+    assert!(
+        t.contains("<!DOCTYPE semantic:definitions [\n  <!ENTITY tool \"StochCraft\">\n]>\n<semantic:definitions "),
+        "{t}"
+    );
+    assert_eq!(changed_lines(original.as_bytes(), &saved), 2, "{t}");
+}
+
+#[test]
 fn edits_that_cannot_be_saved_say_why() {
     // Changing the time unit would change what the values with their own units mean.
     let loaded = read_scenario(&file("mm1.bpmn"), None).unwrap_or_else(|e| panic!("{e}"));
