@@ -14,32 +14,45 @@
 @id	language.name	Български
 	+ Add block	+ Добавяне на блок
 	About StochCraft	За StochCraft
+	About {app}	За {app}
 	Add Block	Добавяне на блок
 	Add a flow from…	Добавяне на поток от…
 	Add a flow to…	Добавяне на поток към…
+	Add alternative	Добавяне на алтернатива
 	Add point	Добавяне на точка
+	Add pool	Добавяне на пул
 	Add property	Добавяне на свойство
+	Added pool {id}	Добавен е пул {id}
 	Added {block} ({id})	Добавен е {block} ({id})
+	Alternative {n}	Алтернатива {n}
 	Appearance	Външен вид
 	Arrival limit	Лимит на пристиганията
 	Arrivals	Пристигания
+	BPMN with BPSim	BPMN с BPSim
 	Back to the model (Esc)	Обратно към модела (Esc)
 	Beta	Бета
 	Binomial	Биномиално
 	Boolean	Булева стойност
+	Bring All to Front	Всички на преден план
 	Built with	Създадено с
+	By role	По роля
+	CSV table	Таблица CSV
 	Cancel	Отказ
+	Cancel Run	Отмяна на изпълнението
 	Cancel run	Отмяна на изпълнението
 	Capacity	Капацитет
 	Change Block	Промяна на блок
 	Change Flow	Промяна на поток
 	Changing the time unit does not convert the times already in the model.	Промяната на единицата за време не преобразува времената, които вече са в модела.
+	Clear Menu	Изчистване на менюто
 	Close	Затваряне
+	Close Window	Затваряне на прозореца
 	Comes from	Идва от
 	Condition of {id}	Условие за {id}
 	Connect	Свързване
 	Connections	Връзки
 	Constant	Константа
+	Dark	Тъмна
 	Data points	Точки с данни
 	Date and time	Дата и час
 	Decimal number	Десетично число
@@ -56,15 +69,19 @@
 	Download	Изтегляне
 	Download charts (PNG)	Изтегляне на графики (PNG)
 	Download table (CSV)	Изтегляне на таблица (CSV)
+	Downloaded {file}	Изтеглен е {file}
 	Duration	Продължителност
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Всяка същност взема първата от тези възможности, която може да бъде изпълнена сега, изцяло и наведнъж, и връща единиците, когато излезе.
 	Edit	Редактиране
 	Entered	Влезли
 	Erlang	Ерланг
 	Error	Грешка
 	Every distribution	Всички разпределения
+	Exit	Изход
 	Experiment	Експеримент
 	Experiment Settings	Настройки на експеримента
 	Exponential	Експоненциално
+	Export	Експортиране
 	Export charts (PNG)	Експортиране на графики (PNG)
 	Export table (CSV)	Експортиране на таблица (CSV)
 	Exported {file}	Експортиран е {file}
@@ -75,11 +92,15 @@
 	Gamma	Гама
 	Goes to	Отива към
 	Help	Помощ
+	Hide Others	Скриване на другите
+	Hide {app}	Скриване на {app}
+	Keyboard Shortcuts…	Клавишни комбинации…
 	Keyboard shortcuts saved	Клавишните комбинации са запазени
 	Keyboard shortcuts unchanged	Клавишните комбинации не са променени
 	Language	Език
 	Left	Напуснали
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Лицензирано по MIT License или Apache License 2.0, по ваш избор.
+	Light	Светла
 	Log-normal	Логнормално
 	Lost (waiting room full)	Загубени (чакалнята е пълна)
 	M/M/1 queue	Опашка M/M/1
@@ -93,10 +114,13 @@
 	Mean wait	Средно чакане
 	Metric	Показател
 	Minimise	Минимизиране
+	Minimize	Минимизиране
 	Minimum	Минимум
 	Model	Модел
 	Most likely	Най-вероятна стойност
 	Name	Име
+	Needs	Изисквания
+	New	Нов
 	New model	Нов модел
 	New property	Ново свойство
 	New property name	Име на новото свойство
@@ -111,21 +135,28 @@
 	One task per BPSim distribution, to compare their spread.	По една задача за всяко разпределение BPSim за сравнение на разсейването.
 	Open	Отваряне
 	Open Example	Отваряне на пример
+	Open Model	Отваряне на модел
 	Open Recent	Последно отваряни
 	Open a model first	Първо отворете модел
 	Open a model to simulate it	Отворете модел за симулация
 	Open a model…	Отваряне на модел…
 	Opened {file}	Отворен е {file}
+	Open…	Отваряне…
 	Or start from an example	Или започнете с пример
+	PNG image	Изображение PNG
 	Parameters	Параметри
 	Points	Точки
 	Poisson	Поасон
+	Preferences	Настройки
+	Priority	Приоритет
 	Probability	Вероятност
 	Probability of {id}	Вероятност за {id}
 	Problems	Проблеми
 	Process	Процес
+	Process models with BPSim	Модели на процеси с BPSim
 	Properties	Свойства
 	Quit	Изход
+	Quit {app}	Изход от {app}
 	Ready	Готово
 	Recover	Възстановяване
 	Recover unsaved changes?	Да се възстановят ли незапазените промени?
@@ -136,16 +167,21 @@
 	Remove	Премахване
 	Remove Block	Премахване на блок
 	Remove Property	Премахване на свойство
+	Remove alternative {n}	Премахване на алтернатива {n}
 	Remove block	Премахване на блок
 	Remove the flow {id}	Премахване на потока {id}
+	Remove the pool {id}	Премахване на пула {id}
 	Remove this block and its flows (Delete)	Премахване на този блок и потоците му (Delete)
 	Removed {id}	Премахнат е {id}
 	Rename Block	Преименуване на блок
 	Rename Model	Преименуване на модел
 	Replace Model	Замяна на модел
 	Replications	Репликации
+	Resource pool	Пул от ресурси
+	Resource pools	Пулове от ресурси
 	Restore	Възстановяване на прозореца
 	Results	Резултати
+	Roles	Роли
 	Run	Стартиране
 	Run cancelled	Изпълнението е отменено
 	Run experiment	Стартиране на експеримент
@@ -154,11 +190,13 @@
 	Running…	Изпълнява се…
 	Save	Запазване
 	Save As…	Запази като…
+	Save Model	Запазване на модел
 	Save changes to {name}?	Да се запазят ли промените в {name}?
 	Saved {file}	Запазен е {file}
 	Scale	Мащаб
 	Seed	Начална стойност
 	Service time	Време за обслужване
+	Services	Услуги
 	Set Property	Задаване на свойство
 	Set a value	Задаване на стойност
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задава се за всяка същност при влизането ѝ в този блок. Изразите четат стойностите, които е имала при влизането, например getProperty('issues') - 1.
@@ -166,6 +204,7 @@
 	Shape	Форма
 	Share of arrivals lost	Дял на загубените пристигания
 	Share of units blocked	Дял на блокираните единици
+	Show All	Показване на всичко
 	Show {id}	Показване на {id}
 	Split or join	Разделяне или обединяване
 	Split or join (all ways)	Разделяне или обединяване (всички пътища)
@@ -178,6 +217,7 @@
 	Tandem line	Тандемна линия
 	Task	Задача
 	Task with a resource	Задача с ресурс
+	Task with shared resources	Задача със споделени ресурси
 	Text	Текст
 	The model: its experiment, connections and problems	Моделът: експеримент, връзки и проблеми
 	This block has a warning	Този блок има предупреждение
@@ -195,6 +235,8 @@
 	Undo {action}	Отмяна: {action}
 	Uniform	Равномерно
 	Unit	Единица
+	Units	Брой единици
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Единици, които няколко задачи споделят. Задача със споделени ресурси ги взема от пул или по роля.
 	Untitled	Без заглавие
 	Untitled model	Модел без заглавие
 	Use System Setting	Използване на системната настройка
@@ -207,8 +249,10 @@
 	Warning	Предупреждение
 	Weibull	Вайбул
 	Whole number	Цяло число
+	Window	Прозорец
 	Yes or no	Да или не
 	Your changes will be lost if you don't save them.	Промените ви ще бъдат загубени, ако не ги запазите.
+	Zoom	Смяна на размера на прозореца
 	a model	модел
 	arrivals	пристигания
 	days	дни
@@ -225,8 +269,10 @@
 	split or join: all ways	разделяне или обединяване: всички пътища
 	task	задача
 	task with a resource	задача с ресурс
+	task with shared resources	задача със споделени ресурси
 	the charts could not be captured	графиките не можаха да бъдат заснети
 	the run stopped	изпълнението спря
+	the settings could not be saved: {error}	настройките не можаха да бъдат запазени: {error}
 	there are no charts to export	няма графики за експортиране
 	to {block}	към {block}
 	unlimited	неограничено
@@ -238,10 +284,17 @@
 	± 95% CI	± 95% ДИ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± означава половината от ширината на 95% доверителен интервал по Student-t за средната стойност от повторенията.
 	· no results yet	· все още няма резултати
+unit	d	д
+unit	h	ч
+unit	min	мин
+unit	ms	мс
+unit	s	с
+unit	yr	г.
 @plural	Finished {n} replication|Finished {n} replications	Завършена е {n} репликация|Завършени са {n} репликации
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Отворен е {file} ({n} предупреждение)|Отворен е {file} ({n} предупреждения)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Изпълнява {n} независима репликация на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.|Изпълнява {n} независими репликации на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Завършена е {done} от {n} репликация|Завършени са {done} от {n} репликации
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} репликация|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} репликации
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} репликация · начална стойност {seed}|{n} репликации · начална стойност {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликация · начална стойност {seed} · загряване {warmup} {unit} · измерено {duration} {unit}|{n} репликации · начална стойност {seed} · загряване {warmup} {unit} · измерено {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} репликация · начална стойност {seed}|{n} репликации · начална стойност {seed}
+@plural	{n} replication|{n} replications	{n} репликация|{n} репликации

@@ -14,32 +14,45 @@
 @id	language.name	Svenska
 	+ Add block	+ Lägg till block
 	About StochCraft	Om StochCraft
+	About {app}	Om {app}
 	Add Block	Lägg till block
 	Add a flow from…	Lägg till flöde från…
 	Add a flow to…	Lägg till flöde till…
+	Add alternative	Lägg till alternativ
 	Add point	Lägg till punkt
+	Add pool	Lägg till pool
 	Add property	Lägg till egenskap
+	Added pool {id}	Lade till poolen {id}
 	Added {block} ({id})	Lade till {block} ({id})
+	Alternative {n}	Alternativ {n}
 	Appearance	Utseende
 	Arrival limit	Gräns för ankomster
 	Arrivals	Ankomster
+	BPMN with BPSim	BPMN med BPSim
 	Back to the model (Esc)	Tillbaka till modellen (Esc)
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolesk
+	Bring All to Front	Lägg alla överst
 	Built with	Skapad med
+	By role	Efter roll
+	CSV table	CSV-tabell
 	Cancel	Avbryt
+	Cancel Run	Avbryt körning
 	Cancel run	Avbryt körning
 	Capacity	Kapacitet
 	Change Block	Ändra block
 	Change Flow	Ändra flöde
 	Changing the time unit does not convert the times already in the model.	Att ändra tidsenheten omvandlar inte tiderna som redan finns i modellen.
+	Clear Menu	Rensa menyn
 	Close	Stäng
+	Close Window	Stäng fönster
 	Comes from	Kommer från
 	Condition of {id}	Villkor för {id}
 	Connect	Anslut
 	Connections	Anslutningar
 	Constant	Konstant
+	Dark	Mörkt
 	Data points	Datapunkter
 	Date and time	Datum och tid
 	Decimal number	Decimaltal
@@ -56,15 +69,19 @@
 	Download	Hämta
 	Download charts (PNG)	Ladda ner diagram (PNG)
 	Download table (CSV)	Ladda ner tabell (CSV)
+	Downloaded {file}	Hämtade {file}
 	Duration	Varaktighet
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Varje entitet tar det första av dessa alternativ som kan uppfyllas nu, allt på en gång, och återlämnar enheterna när den lämnar uppgiften.
 	Edit	Redigera
 	Entered	Inkomna
 	Erlang	Erlang
 	Error	Fel
 	Every distribution	Alla fördelningar
+	Exit	Avsluta
 	Experiment	Experiment
 	Experiment Settings	Experimentinställningar
 	Exponential	Exponential
+	Export	Exportera
 	Export charts (PNG)	Exportera diagram (PNG)
 	Export table (CSV)	Exportera tabell (CSV)
 	Exported {file}	Exporterade {file}
@@ -75,11 +92,15 @@
 	Gamma	Gamma
 	Goes to	Går till
 	Help	Hjälp
+	Hide Others	Göm övriga
+	Hide {app}	Göm {app}
+	Keyboard Shortcuts…	Kortkommandon…
 	Keyboard shortcuts saved	Tangentbordsgenvägar sparade
 	Keyboard shortcuts unchanged	Tangentbordsgenvägar oförändrade
 	Language	Språk
 	Left	Lämnade
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licensierad enligt MIT License eller Apache License 2.0, enligt ditt val.
+	Light	Ljust
 	Log-normal	Lognormal
 	Lost (waiting room full)	Förlorade (väntrummet fullt)
 	M/M/1 queue	M/M/1-kö
@@ -93,10 +114,13 @@
 	Mean wait	Genomsnittlig väntetid
 	Metric	Mått
 	Minimise	Minimera
+	Minimize	Minimera
 	Minimum	Minimum
 	Model	Modell
 	Most likely	Mest sannolikt
 	Name	Namn
+	Needs	Behov
+	New	Ny
 	New model	Ny modell
 	New property	Ny egenskap
 	New property name	Namn på ny egenskap
@@ -111,21 +135,28 @@
 	One task per BPSim distribution, to compare their spread.	En uppgift per BPSim-fördelning för att jämföra deras spridning.
 	Open	Öppna
 	Open Example	Öppna exempel
+	Open Model	Öppna modell
 	Open Recent	Öppna senaste
 	Open a model first	Öppna en modell först
 	Open a model to simulate it	Öppna en modell för att simulera den
 	Open a model…	Öppna modell…
 	Opened {file}	Öppnade {file}
+	Open…	Öppna…
 	Or start from an example	Eller börja med ett exempel
+	PNG image	PNG-bild
 	Parameters	Parametrar
 	Points	Punkter
 	Poisson	Poisson
+	Preferences	Inställningar
+	Priority	Prioritet
 	Probability	Sannolikhet
 	Probability of {id}	Sannolikhet för {id}
 	Problems	Problem
 	Process	Process
+	Process models with BPSim	Processmodeller med BPSim
 	Properties	Egenskaper
 	Quit	Avsluta
+	Quit {app}	Avsluta {app}
 	Ready	Klar
 	Recover	Återställ
 	Recover unsaved changes?	Återställa osparade ändringar?
@@ -136,16 +167,21 @@
 	Remove	Ta bort
 	Remove Block	Ta bort block
 	Remove Property	Ta bort egenskap
+	Remove alternative {n}	Ta bort alternativ {n}
 	Remove block	Ta bort block
 	Remove the flow {id}	Ta bort flödet {id}
+	Remove the pool {id}	Ta bort poolen {id}
 	Remove this block and its flows (Delete)	Ta bort detta block och dess flöden (Delete)
 	Removed {id}	Tog bort {id}
 	Rename Block	Byt namn på block
 	Rename Model	Byt namn på modell
 	Replace Model	Ersätt modell
 	Replications	Replikationer
+	Resource pool	Resurspool
+	Resource pools	Resurspooler
 	Restore	Återställ fönster
 	Results	Resultat
+	Roles	Roller
 	Run	Kör
 	Run cancelled	Körning avbruten
 	Run experiment	Kör experiment
@@ -154,11 +190,13 @@
 	Running…	Körs…
 	Save	Spara
 	Save As…	Spara som…
+	Save Model	Spara modell
 	Save changes to {name}?	Spara ändringar i {name}?
 	Saved {file}	Sparade {file}
 	Scale	Skala
 	Seed	Slumpfrö
 	Service time	Servicetid
+	Services	Tjänster
 	Set Property	Ange egenskap
 	Set a value	Ange ett värde
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Anges för varje entitet när den kommer in i det här blocket. Uttryck läser de värden som entiteten hade vid ankomsten, till exempel getProperty('issues') - 1.
@@ -166,6 +204,7 @@
 	Shape	Form
 	Share of arrivals lost	Andel förlorade ankomster
 	Share of units blocked	Andel blockerade enheter
+	Show All	Visa alla
 	Show {id}	Visa {id}
 	Split or join	Dela eller sammanfoga
 	Split or join (all ways)	Dela eller sammanfoga (alla vägar)
@@ -178,6 +217,7 @@
 	Tandem line	Tandemlinje
 	Task	Uppgift
 	Task with a resource	Uppgift med resurs
+	Task with shared resources	Uppgift med delade resurser
 	Text	Text
 	The model: its experiment, connections and problems	Modellen: experiment, anslutningar och problem
 	This block has a warning	Det här blocket har en varning
@@ -195,6 +235,8 @@
 	Undo {action}	Ångra {action}
 	Uniform	Likformig
 	Unit	Enhet
+	Units	Enheter
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Resursenheter som flera uppgifter delar. En uppgift med delade resurser tar dem från en pool eller efter roll.
 	Untitled	Namnlös
 	Untitled model	Namnlös modell
 	Use System Setting	Använd systeminställning
@@ -207,8 +249,10 @@
 	Warning	Varning
 	Weibull	Weibull
 	Whole number	Heltal
+	Window	Fönster
 	Yes or no	Ja eller nej
 	Your changes will be lost if you don't save them.	Dina ändringar går förlorade om du inte sparar dem.
+	Zoom	Zoom
 	a model	en modell
 	arrivals	ankomster
 	days	dagar
@@ -225,8 +269,10 @@
 	split or join: all ways	dela eller sammanfoga: alla vägar
 	task	uppgift
 	task with a resource	uppgift med resurs
+	task with shared resources	uppgift med delade resurser
 	the charts could not be captured	diagrammen kunde inte fångas
 	the run stopped	körningen stoppades
+	the settings could not be saved: {error}	inställningarna kunde inte sparas: {error}
 	there are no charts to export	det finns inga diagram att exportera
 	to {block}	till {block}
 	unlimited	obegränsat
@@ -238,10 +284,17 @@
 	± 95% CI	± 95% KI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± är halva bredden av ett 95% Student-t-konfidensintervall för medelvärdet över replikationerna.
 	· no results yet	· inga resultat ännu
+unit	d	d
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	år
 @plural	Finished {n} replication|Finished {n} replications	{n} replikation klar|{n} replikationer klara
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Öppnade {file} ({n} varning)|Öppnade {file} ({n} varningar)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kör {n} oberoende replikation av modellen från slumpfrö {seed}. Resultaten för varje element visar halva bredden på ett 95% konfidensintervall.|Kör {n} oberoende replikationer av modellen från slumpfrö {seed}. Resultaten för varje element visar halva bredden på ett 95% konfidensintervall.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} av {n} replikation klar|{done} av {n} replikationer klara
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% intervall från {low} till {high}{unit}\növer {n} replikation|{name}: {mean}{unit}\n95% intervall från {low} till {high}{unit}\növer {n} replikationer
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikation · slumpfrö {seed}|{n} replikationer · slumpfrö {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikation · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta|{n} replikationer · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikation · slumpfrö {seed}|{n} replikationer · slumpfrö {seed}
+@plural	{n} replication|{n} replications	{n} replikation|{n} replikationer

@@ -14,32 +14,45 @@
 @id	language.name	日本語
 	+ Add block	+ ブロックを追加
 	About StochCraft	StochCraft について
+	About {app}	{app} について
 	Add Block	ブロックを追加
 	Add a flow from…	接続元…
 	Add a flow to…	接続先…
+	Add alternative	代替案を追加
 	Add point	点を追加
+	Add pool	プールを追加
 	Add property	プロパティを追加
+	Added pool {id}	プール {id} を追加しました
 	Added {block} ({id})	{block} ({id}) を追加しました
+	Alternative {n}	代替案 {n}
 	Appearance	外観
 	Arrival limit	到着数の上限
 	Arrivals	到着
+	BPMN with BPSim	BPSim 付き BPMN
 	Back to the model (Esc)	モデルに戻る (Esc)
 	Beta	ベータ分布
 	Binomial	二項分布
 	Boolean	真偽値
+	Bring All to Front	すべてを手前に移動
 	Built with	使用技術
+	By role	役割で指定
+	CSV table	CSV 表
 	Cancel	キャンセル
+	Cancel Run	実行をキャンセル
 	Cancel run	実行をキャンセル
 	Capacity	処理能力
 	Change Block	ブロックを変更
 	Change Flow	フローを変更
 	Changing the time unit does not convert the times already in the model.	時間単位を変更しても、モデル内の既存の時間は換算されません。
+	Clear Menu	メニューを消去
 	Close	閉じる
+	Close Window	ウィンドウを閉じる
 	Comes from	接続元
 	Condition of {id}	{id} の条件
 	Connect	接続
 	Connections	接続
 	Constant	定数
+	Dark	ダーク
 	Data points	データ点
 	Date and time	日付と時刻
 	Decimal number	小数
@@ -56,15 +69,19 @@
 	Download	ダウンロード
 	Download charts (PNG)	グラフをダウンロード (PNG)
 	Download table (CSV)	表をダウンロード (CSV)
+	Downloaded {file}	{file} をダウンロードしました
 	Duration	継続時間
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	各エンティティは、これらのうち今すぐ一度にすべて満たせる最初のものを確保し、退出するときにユニットを返却します。
 	Edit	編集
 	Entered	流入数
 	Erlang	アーラン分布
 	Error	エラー
 	Every distribution	すべての分布
+	Exit	終了
 	Experiment	実験
 	Experiment Settings	実験の設定
 	Exponential	指数分布
+	Export	エクスポート
 	Export charts (PNG)	グラフをエクスポート (PNG)
 	Export table (CSV)	表をエクスポート (CSV)
 	Exported {file}	{file} をエクスポートしました
@@ -75,11 +92,15 @@
 	Gamma	ガンマ分布
 	Goes to	接続先
 	Help	ヘルプ
+	Hide Others	その他を隠す
+	Hide {app}	{app} を隠す
+	Keyboard Shortcuts…	キーボードショートカット…
 	Keyboard shortcuts saved	キーボードショートカットを保存しました
 	Keyboard shortcuts unchanged	キーボードショートカットは変更されていません
 	Language	言語
 	Left	流出数
 	Licensed under the MIT License or the Apache License 2.0, at your option.	MIT License または Apache License 2.0 のいずれかを選択して利用できます。
+	Light	ライト
 	Log-normal	対数正規分布
 	Lost (waiting room full)	損失（待機場所が満員）
 	M/M/1 queue	M/M/1 待ち行列
@@ -93,10 +114,13 @@
 	Mean wait	平均待ち時間
 	Metric	指標
 	Minimise	最小化
+	Minimize	最小化
 	Minimum	最小値
 	Model	モデル
 	Most likely	最頻値
 	Name	名前
+	Needs	必要なリソース
+	New	新規
 	New model	新しいモデル
 	New property	新しいプロパティ
 	New property name	新しいプロパティ名
@@ -111,21 +135,28 @@
 	One task per BPSim distribution, to compare their spread.	各 BPSim 分布につき 1 つのタスクを使い、ばらつきを比較します。
 	Open	開く
 	Open Example	サンプルを開く
+	Open Model	モデルを開く
 	Open Recent	最近使ったファイルを開く
 	Open a model first	先にモデルを開いてください
 	Open a model to simulate it	シミュレーションするモデルを開いてください
 	Open a model…	モデルを開く…
 	Opened {file}	{file} を開きました
+	Open…	開く…
 	Or start from an example	またはサンプルから始める
+	PNG image	PNG 画像
 	Parameters	パラメータ
 	Points	点
 	Poisson	ポアソン分布
+	Preferences	環境設定
+	Priority	優先度
 	Probability	確率
 	Probability of {id}	{id} の確率
 	Problems	問題
 	Process	プロセス
+	Process models with BPSim	BPSim 付きプロセスモデル
 	Properties	プロパティ
 	Quit	終了
+	Quit {app}	{app} を終了
 	Ready	適用可能
 	Recover	復元
 	Recover unsaved changes?	保存されていない変更を復元しますか？
@@ -136,16 +167,21 @@
 	Remove	削除
 	Remove Block	ブロックを削除
 	Remove Property	プロパティを削除
+	Remove alternative {n}	代替案 {n} を削除
 	Remove block	ブロックを削除
 	Remove the flow {id}	フロー {id} を削除
+	Remove the pool {id}	プール {id} を削除
 	Remove this block and its flows (Delete)	このブロックとフローを削除 (Delete)
 	Removed {id}	{id} を削除しました
 	Rename Block	ブロック名を変更
 	Rename Model	モデル名を変更
 	Replace Model	モデルを置換
 	Replications	反復実行回数
+	Resource pool	リソースプール
+	Resource pools	リソースプール
 	Restore	元に戻す
 	Results	結果
+	Roles	役割
 	Run	実行
 	Run cancelled	実行がキャンセルされました
 	Run experiment	実験を実行
@@ -154,11 +190,13 @@
 	Running…	実行中…
 	Save	保存
 	Save As…	別名で保存…
+	Save Model	モデルを保存
 	Save changes to {name}?	{name} への変更を保存しますか？
 	Saved {file}	{file} を保存しました
 	Scale	尺度
 	Seed	乱数シード
 	Service time	サービス時間
+	Services	サービス
 	Set Property	プロパティを設定
 	Set a value	値を設定
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	各エンティティがこのブロックに入るときに設定されます。式は、入る時点で保持していた値を読み取ります（例: getProperty('issues') - 1）。
@@ -166,6 +204,7 @@
 	Shape	形状
 	Share of arrivals lost	到着数の損失割合
 	Share of units blocked	処理単位のブロック割合
+	Show All	すべてを表示
 	Show {id}	{id} を表示
 	Split or join	分岐または結合
 	Split or join (all ways)	分岐または結合（すべての経路）
@@ -178,6 +217,7 @@
 	Tandem line	直列ライン
 	Task	タスク
 	Task with a resource	リソースを使うタスク
+	Task with shared resources	共有リソースを使うタスク
 	Text	テキスト
 	The model: its experiment, connections and problems	モデル：実験、接続、問題
 	This block has a warning	このブロックには警告があります
@@ -195,6 +235,8 @@
 	Undo {action}	元に戻す: {action}
 	Uniform	一様分布
 	Unit	単位
+	Units	数量
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	複数のタスクで共有するユニット。共有リソースを使うタスクは、プールまたは役割を指定してユニットを確保します。
 	Untitled	名称未設定
 	Untitled model	無題のモデル
 	Use System Setting	システム設定を使用
@@ -207,8 +249,10 @@
 	Warning	警告
 	Weibull	ワイブル分布
 	Whole number	整数
+	Window	ウィンドウ
 	Yes or no	はい／いいえ
 	Your changes will be lost if you don't save them.	保存しないと変更は失われます。
+	Zoom	ズーム
 	a model	モデル
 	arrivals	到着
 	days	日
@@ -225,8 +269,10 @@
 	split or join: all ways	分岐または結合：すべての経路
 	task	タスク
 	task with a resource	リソースを使うタスク
+	task with shared resources	共有リソースを使うタスク
 	the charts could not be captured	グラフを取得できませんでした
 	the run stopped	実行が停止しました
+	the settings could not be saved: {error}	設定を保存できませんでした：{error}
 	there are no charts to export	エクスポートするグラフがありません
 	to {block}	{block} へ
 	unlimited	無制限
@@ -238,10 +284,17 @@
 	± 95% CI	± 95% 信頼区間
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± は、反復実行間の平均値に対する 95% Student-t 信頼区間の半幅です。
 	· no results yet	· 結果はまだありません
+unit	d	日
+unit	h	時間
+unit	min	分
+unit	ms	ミリ秒
+unit	s	秒
+unit	yr	年
 @plural	Finished {n} replication|Finished {n} replications	{n} 回の反復実行が完了しました
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} を開きました（警告 {n} 件）
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	シード {seed} からモデルを {n} 回独立に反復実行します。各要素の結果には、95% 信頼区間の半幅が示されます。
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} 回中 {done} 回の反復実行が完了
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}：{mean}{unit}\n95% 区間 {low} ～ {high}{unit}\n{n} 回の反復実行に基づく
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 回の反復実行 · シード {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 回の反復実行 · シード {seed} · ウォームアップ {warmup} {unit} · 測定 {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 回の反復実行 · シード {seed}
+@plural	{n} replication|{n} replications	{n} 回の反復実行

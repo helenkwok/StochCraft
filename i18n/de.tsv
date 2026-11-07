@@ -14,32 +14,45 @@
 @id	language.name	Deutsch
 	+ Add block	+ Block hinzufügen
 	About StochCraft	Über StochCraft
+	About {app}	Über {app}
 	Add Block	Block hinzufügen
 	Add a flow from…	Verbindung hinzufügen von…
 	Add a flow to…	Verbindung hinzufügen zu…
+	Add alternative	Alternative hinzufügen
 	Add point	Punkt hinzufügen
+	Add pool	Pool hinzufügen
 	Add property	Eigenschaft hinzufügen
+	Added pool {id}	Pool {id} hinzugefügt
 	Added {block} ({id})	{block} ({id}) hinzugefügt
+	Alternative {n}	Alternative {n}
 	Appearance	Erscheinungsbild
 	Arrival limit	Ankunftsgrenze
 	Arrivals	Ankünfte
+	BPMN with BPSim	BPMN mit BPSim
 	Back to the model (Esc)	Zurück zum Modell (Esc)
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolesch
+	Bring All to Front	Alle nach vorne bringen
 	Built with	Erstellt mit
+	By role	Nach Rolle
+	CSV table	CSV-Tabelle
 	Cancel	Abbrechen
+	Cancel Run	Simulation abbrechen
 	Cancel run	Simulation abbrechen
 	Capacity	Kapazität
 	Change Block	Block ändern
 	Change Flow	Verbindung ändern
 	Changing the time unit does not convert the times already in the model.	Beim Ändern der Zeiteinheit werden bereits vorhandene Zeiten im Modell nicht umgerechnet.
+	Clear Menu	Menü leeren
 	Close	Schließen
+	Close Window	Fenster schließen
 	Comes from	Kommt von
 	Condition of {id}	Bedingung von {id}
 	Connect	Verbinden
 	Connections	Verbindungen
 	Constant	Konstant
+	Dark	Dunkel
 	Data points	Datenpunkte
 	Date and time	Datum und Uhrzeit
 	Decimal number	Dezimalzahl
@@ -56,15 +69,19 @@
 	Download	Herunterladen
 	Download charts (PNG)	Diagramme herunterladen (PNG)
 	Download table (CSV)	Tabelle herunterladen (CSV)
+	Downloaded {file}	{file} heruntergeladen
 	Duration	Dauer
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jede Entität belegt die erste dieser Alternativen, die sich jetzt erfüllen lässt, vollständig auf einmal und gibt die Einheiten zurück, wenn sie den Block verlässt.
 	Edit	Bearbeiten
 	Entered	Eingetreten
 	Erlang	Erlang
 	Error	Fehler
 	Every distribution	Jede Verteilung
+	Exit	Beenden
 	Experiment	Experiment
 	Experiment Settings	Experimenteinstellungen
 	Exponential	Exponential
+	Export	Exportieren
 	Export charts (PNG)	Diagramme exportieren (PNG)
 	Export table (CSV)	Tabelle exportieren (CSV)
 	Exported {file}	{file} exportiert
@@ -75,11 +92,15 @@
 	Gamma	Gamma
 	Goes to	Geht zu
 	Help	Hilfe
+	Hide Others	Andere ausblenden
+	Hide {app}	{app} ausblenden
+	Keyboard Shortcuts…	Tastenkombinationen…
 	Keyboard shortcuts saved	Tastenkombinationen gespeichert
 	Keyboard shortcuts unchanged	Tastenkombinationen unverändert
 	Language	Sprache
 	Left	Ausgetreten
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Lizenziert unter der MIT License oder der Apache License 2.0, nach Ihrer Wahl.
+	Light	Hell
 	Log-normal	Lognormal
 	Lost (waiting room full)	Verloren (Warteraum voll)
 	M/M/1 queue	M/M/1-Warteschlange
@@ -93,10 +114,13 @@
 	Mean wait	Mittlere Wartezeit
 	Metric	Kennzahl
 	Minimise	Minimieren
+	Minimize	Minimieren
 	Minimum	Minimum
 	Model	Modell
 	Most likely	Wahrscheinlichster Wert
 	Name	Name
+	Needs	Bedarf
+	New	Neu
 	New model	Neues Modell
 	New property	Neue Eigenschaft
 	New property name	Name der neuen Eigenschaft
@@ -111,21 +135,28 @@
 	One task per BPSim distribution, to compare their spread.	Eine Aufgabe je BPSim-Verteilung, um ihre Streuung zu vergleichen.
 	Open	Öffnen
 	Open Example	Beispiel öffnen
+	Open Model	Modell öffnen
 	Open Recent	Zuletzt geöffnete Dateien
 	Open a model first	Öffnen Sie zuerst ein Modell
 	Open a model to simulate it	Öffnen Sie ein Modell, um es zu simulieren
 	Open a model…	Modell öffnen…
 	Opened {file}	{file} geöffnet
+	Open…	Öffnen…
 	Or start from an example	Oder mit einem Beispiel beginnen
+	PNG image	PNG-Bild
 	Parameters	Parameter
 	Points	Punkte
 	Poisson	Poisson
+	Preferences	Voreinstellungen
+	Priority	Priorität
 	Probability	Wahrscheinlichkeit
 	Probability of {id}	Wahrscheinlichkeit von {id}
 	Problems	Probleme
 	Process	Prozess
+	Process models with BPSim	Prozessmodelle mit BPSim
 	Properties	Eigenschaften
 	Quit	Beenden
+	Quit {app}	{app} beenden
 	Ready	Bereit
 	Recover	Wiederherstellen
 	Recover unsaved changes?	Ungespeicherte Änderungen wiederherstellen?
@@ -136,16 +167,21 @@
 	Remove	Entfernen
 	Remove Block	Block entfernen
 	Remove Property	Eigenschaft entfernen
+	Remove alternative {n}	Alternative {n} entfernen
 	Remove block	Block entfernen
 	Remove the flow {id}	Verbindung {id} entfernen
+	Remove the pool {id}	Pool {id} entfernen
 	Remove this block and its flows (Delete)	Diesen Block und seine Verbindungen entfernen (Entf)
 	Removed {id}	{id} entfernt
 	Rename Block	Block umbenennen
 	Rename Model	Modell umbenennen
 	Replace Model	Modell ersetzen
 	Replications	Replikationen
+	Resource pool	Ressourcenpool
+	Resource pools	Ressourcenpools
 	Restore	Wiederherstellen
 	Results	Ergebnisse
+	Roles	Rollen
 	Run	Ausführen
 	Run cancelled	Ausführung abgebrochen
 	Run experiment	Experiment ausführen
@@ -154,11 +190,13 @@
 	Running…	Wird ausgeführt…
 	Save	Speichern
 	Save As…	Speichern unter…
+	Save Model	Modell speichern
 	Save changes to {name}?	Änderungen an {name} speichern?
 	Saved {file}	{file} gespeichert
 	Scale	Skalenparameter
 	Seed	Startwert
 	Service time	Bearbeitungszeit
+	Services	Dienste
 	Set Property	Eigenschaft festlegen
 	Set a value	Wert festlegen
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Wird bei jeder Entität beim Eintritt in diesen Block gesetzt. Ausdrücke lesen die Werte, mit denen sie angekommen ist, etwa getProperty('issues') - 1.
@@ -166,6 +204,7 @@
 	Shape	Formparameter
 	Share of arrivals lost	Anteil verlorener Ankünfte
 	Share of units blocked	Anteil blockierter Einheiten
+	Show All	Alle einblenden
 	Show {id}	{id} anzeigen
 	Split or join	Aufteilen oder zusammenführen
 	Split or join (all ways)	Aufteilen oder zusammenführen (alle Wege)
@@ -178,6 +217,7 @@
 	Tandem line	Tandemlinie
 	Task	Aufgabe
 	Task with a resource	Aufgabe mit Ressource
+	Task with shared resources	Aufgabe mit gemeinsamen Ressourcen
 	Text	Text
 	The model: its experiment, connections and problems	Das Modell: Experiment, Verbindungen und Probleme
 	This block has a warning	Dieser Block hat eine Warnung
@@ -195,6 +235,8 @@
 	Undo {action}	{action} rückgängig machen
 	Uniform	Gleichverteilung
 	Unit	Einheit
+	Units	Einheiten
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Einheiten, die sich mehrere Aufgaben teilen. Eine Aufgabe mit gemeinsamen Ressourcen belegt sie nach Pool oder nach Rolle.
 	Untitled	Unbenannt
 	Untitled model	Unbenanntes Modell
 	Use System Setting	Systemeinstellung verwenden
@@ -207,8 +249,10 @@
 	Warning	Warnung
 	Weibull	Weibull
 	Whole number	Ganze Zahl
+	Window	Fenster
 	Yes or no	Ja oder Nein
 	Your changes will be lost if you don't save them.	Ihre Änderungen gehen verloren, wenn Sie sie nicht speichern.
+	Zoom	Zoom
 	a model	ein Modell
 	arrivals	Ankünfte
 	days	Tage
@@ -225,8 +269,10 @@
 	split or join: all ways	aufteilen oder zusammenführen: alle Wege
 	task	Aufgabe
 	task with a resource	Aufgabe mit Ressource
+	task with shared resources	Aufgabe mit gemeinsamen Ressourcen
 	the charts could not be captured	die Diagramme konnten nicht erfasst werden
 	the run stopped	die Ausführung wurde angehalten
+	the settings could not be saved: {error}	die Einstellungen konnten nicht gespeichert werden: {error}
 	there are no charts to export	es gibt keine Diagramme zum Exportieren
 	to {block}	zu {block}
 	unlimited	unbegrenzt
@@ -238,10 +284,17 @@
 	± 95% CI	± 95% KI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± ist die halbe Breite eines 95-%-Konfidenzintervalls (Student-t) für den Mittelwert über die Replikationen.
 	· no results yet	· noch keine Ergebnisse
+unit	d	d
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	J.
 @plural	Finished {n} replication|Finished {n} replications	{n} Replikation abgeschlossen|{n} Replikationen abgeschlossen
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} geöffnet ({n} Warnung)|{file} geöffnet ({n} Warnungen)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Führt {n} unabhängige Replikation des Modells mit dem Startwert {seed} aus. Die Ergebnisse jedes Elements enthalten die halbe Breite eines 95%-Konfidenzintervalls.|Führt {n} unabhängige Replikationen des Modells mit dem Startwert {seed} aus. Die Ergebnisse jedes Elements enthalten die halbe Breite eines 95%-Konfidenzintervalls.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} von {n} Replikation abgeschlossen|{done} von {n} Replikationen abgeschlossen
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-Intervall {low} bis {high}{unit}\nüber {n} Replikation|{name}: {mean}{unit}\n95%-Intervall {low} bis {high}{unit}\nüber {n} Replikationen
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} Replikation · Startwert {seed}|{n} Replikationen · Startwert {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} Replikation · Startwert {seed} · Einschwingphase {warmup} {unit} · {duration} {unit} gemessen|{n} Replikationen · Startwert {seed} · Einschwingphase {warmup} {unit} · {duration} {unit} gemessen
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} Replikation · Startwert {seed}|{n} Replikationen · Startwert {seed}
+@plural	{n} replication|{n} replications	{n} Replikation|{n} Replikationen

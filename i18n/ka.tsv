@@ -14,32 +14,45 @@
 @id	language.name	ქართული
 	+ Add block	+ ბლოკის დამატება
 	About StochCraft	StochCraft-ის შესახებ
+	About {app}	{app}-ის შესახებ
 	Add Block	ბლოკის დამატება
 	Add a flow from…	ნაკადის დამატება (წყარო)…
 	Add a flow to…	ნაკადის დამატება (სამიზნე)…
+	Add alternative	ალტერნატივის დამატება
 	Add point	წერტილის დამატება
+	Add pool	პულის დამატება
 	Add property	თვისების დამატება
+	Added pool {id}	დამატებულია პული {id}
 	Added {block} ({id})	დამატებულია {block} ({id})
+	Alternative {n}	ალტერნატივა {n}
 	Appearance	გარეგნობა
 	Arrival limit	შემოსვლის ლიმიტი
 	Arrivals	შემოსვლები
+	BPMN with BPSim	BPMN BPSim-ით
 	Back to the model (Esc)	მოდელზე დაბრუნება (Esc)
 	Beta	ბეტა
 	Binomial	ბინომური
 	Boolean	ლოგიკური მნიშვნელობა
+	Bring All to Front	ყველაფრის წინ წამოწევა
 	Built with	შექმნილია შემდეგით
+	By role	როლის მიხედვით
+	CSV table	CSV ცხრილი
 	Cancel	გაუქმება
+	Cancel Run	გაშვების გაუქმება
 	Cancel run	გაშვების გაუქმება
 	Capacity	ტევადობა
 	Change Block	ბლოკის შეცვლა
 	Change Flow	ნაკადის შეცვლა
 	Changing the time unit does not convert the times already in the model.	დროის ერთეულის შეცვლა მოდელში უკვე მითითებულ დროებს არ გარდაქმნის.
+	Clear Menu	მენიუს გასუფთავება
 	Close	დახურვა
+	Close Window	ფანჯრის დახურვა
 	Comes from	მოდის აქედან
 	Condition of {id}	{id}-ის პირობა
 	Connect	დაკავშირება
 	Connections	კავშირები
 	Constant	მუდმივი
+	Dark	მუქი
 	Data points	მონაცემთა წერტილები
 	Date and time	თარიღი და დრო
 	Decimal number	ათწილადი რიცხვი
@@ -56,15 +69,19 @@
 	Download	ჩამოტვირთვა
 	Download charts (PNG)	დიაგრამების ჩამოტვირთვა (PNG)
 	Download table (CSV)	ცხრილის ჩამოტვირთვა (CSV)
+	Downloaded {file}	ჩამოტვირთულია {file}
 	Duration	ხანგრძლივობა
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	თითოეული ერთეული იღებს ამათგან პირველს, რომლის სრულად დაკმაყოფილებაც ახლავე, ერთდროულად არის შესაძლებელი, და გასვლისას რესურსის ერთეულებს აბრუნებს.
 	Edit	რედაქტირება
 	Entered	შესულა
 	Erlang	ერლანგი
 	Error	შეცდომა
 	Every distribution	ყველა განაწილება
+	Exit	გასვლა
 	Experiment	ექსპერიმენტი
 	Experiment Settings	ექსპერიმენტის პარამეტრები
 	Exponential	ექსპონენციალური
+	Export	ექსპორტი
 	Export charts (PNG)	დიაგრამების ექსპორტი (PNG)
 	Export table (CSV)	ცხრილის ექსპორტი (CSV)
 	Exported {file}	ექსპორტირებულია {file}
@@ -75,11 +92,15 @@
 	Gamma	გამა
 	Goes to	მიდის აქ
 	Help	დახმარება
+	Hide Others	სხვების დამალვა
+	Hide {app}	{app}-ის დამალვა
+	Keyboard Shortcuts…	კლავიატურის მალსახმობები…
 	Keyboard shortcuts saved	კლავიატურის მალსახმობები შენახულია
 	Keyboard shortcuts unchanged	კლავიატურის მალსახმობები უცვლელია
 	Language	ენა
 	Left	გასულა
 	Licensed under the MIT License or the Apache License 2.0, at your option.	ლიცენზირებულია MIT License-ით ან Apache License 2.0-ით, თქვენი არჩევანით.
+	Light	ღია
 	Log-normal	ლოგნორმალური
 	Lost (waiting room full)	დაკარგული (მოსაცდელი სივრცე სავსეა)
 	M/M/1 queue	M/M/1 რიგი
@@ -93,10 +114,13 @@
 	Mean wait	ლოდინის საშუალო დრო
 	Metric	მაჩვენებელი
 	Minimise	მინიმიზაცია
+	Minimize	მინიმიზაცია
 	Minimum	მინიმუმი
 	Model	მოდელი
 	Most likely	ყველაზე სავარაუდო
 	Name	სახელი
+	Needs	საჭიროებები
+	New	ახალი
 	New model	ახალი მოდელი
 	New property	ახალი თვისება
 	New property name	ახალი თვისების სახელი
@@ -111,21 +135,28 @@
 	One task per BPSim distribution, to compare their spread.	თითო დავალება ყოველ BPSim განაწილებაზე, მათი გაფანტვის შესადარებლად.
 	Open	გახსნა
 	Open Example	მაგალითის გახსნა
+	Open Model	მოდელის გახსნა
 	Open Recent	ბოლო ფაილების გახსნა
 	Open a model first	ჯერ გახსენით მოდელი
 	Open a model to simulate it	გახსენით მოდელი სიმულაციისთვის
 	Open a model…	მოდელის გახსნა…
 	Opened {file}	გახსნილია {file}
+	Open…	გახსნა…
 	Or start from an example	ან დაიწყეთ მაგალითით
+	PNG image	PNG გამოსახულება
 	Parameters	პარამეტრები
 	Points	წერტილები
 	Poisson	პუასონი
+	Preferences	პარამეტრები
+	Priority	პრიორიტეტი
 	Probability	ალბათობა
 	Probability of {id}	{id}-ის ალბათობა
 	Problems	პრობლემები
 	Process	პროცესი
+	Process models with BPSim	პროცესის მოდელები BPSim-ით
 	Properties	თვისებები
 	Quit	გასვლა
+	Quit {app}	{app}-დან გასვლა
 	Ready	მზადაა
 	Recover	აღდგენა
 	Recover unsaved changes?	აღვადგინოთ შეუნახავი ცვლილებები?
@@ -136,16 +167,21 @@
 	Remove	წაშლა
 	Remove Block	ბლოკის წაშლა
 	Remove Property	თვისების წაშლა
+	Remove alternative {n}	ალტერნატივა {n}-ის წაშლა
 	Remove block	ბლოკის წაშლა
 	Remove the flow {id}	{id} ნაკადის წაშლა
+	Remove the pool {id}	{id} პულის წაშლა
 	Remove this block and its flows (Delete)	ამ ბლოკისა და მისი ნაკადების წაშლა (Delete)
 	Removed {id}	წაშლილია {id}
 	Rename Block	ბლოკის გადარქმევა
 	Rename Model	მოდელის გადარქმევა
 	Replace Model	მოდელის ჩანაცვლება
 	Replications	გამეორებები
+	Resource pool	რესურსების პული
+	Resource pools	რესურსების პულები
 	Restore	ფანჯრის აღდგენა
 	Results	შედეგები
+	Roles	როლები
 	Run	გაშვება
 	Run cancelled	გაშვება გაუქმდა
 	Run experiment	ექსპერიმენტის გაშვება
@@ -154,11 +190,13 @@
 	Running…	მიმდინარეობს…
 	Save	შენახვა
 	Save As…	შენახვა როგორც…
+	Save Model	მოდელის შენახვა
 	Save changes to {name}?	შევინახოთ ცვლილებები {name}-ში?
 	Saved {file}	შენახულია {file}
 	Scale	მასშტაბი
 	Seed	შემთხვევითი რიცხვების საწყისი მნიშვნელობა
 	Service time	მომსახურების დრო
+	Services	სერვისები
 	Set Property	თვისების დაყენება
 	Set a value	მნიშვნელობის დაყენება
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ამ ბლოკში შესვლისას მნიშვნელობა ენიჭება თითოეულ ერთეულს. გამოსახულებები კითხულობს შესვლის მომენტში არსებულ მნიშვნელობებს, მაგალითად getProperty('issues') - 1.
@@ -166,6 +204,7 @@
 	Shape	ფორმა
 	Share of arrivals lost	დაკარგული შემოსვლების წილი
 	Share of units blocked	დაბლოკილი ერთეულების წილი
+	Show All	ყველას ჩვენება
 	Show {id}	{id}-ის ჩვენება
 	Split or join	გაყოფა ან გაერთიანება
 	Split or join (all ways)	გაყოფა ან გაერთიანება (ყველა გზა)
@@ -178,6 +217,7 @@
 	Tandem line	თანმიმდევრული ხაზი
 	Task	დავალება
 	Task with a resource	დავალება რესურსით
+	Task with shared resources	დავალება საზიარო რესურსებით
 	Text	ტექსტი
 	The model: its experiment, connections and problems	მოდელი: ექსპერიმენტი, კავშირები და პრობლემები
 	This block has a warning	ამ ბლოკს აქვს გაფრთხილება
@@ -195,6 +235,8 @@
 	Undo {action}	გააუქმეთ {action}
 	Uniform	თანაბარი
 	Unit	ერთეული
+	Units	რაოდენობა
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	რესურსის ერთეულები, რომლებსაც რამდენიმე დავალება იზიარებს. დავალება საზიარო რესურსებით მათ იღებს პულის ან როლის მიხედვით.
 	Untitled	უსათაურო
 	Untitled model	უსათაურო მოდელი
 	Use System Setting	სისტემის პარამეტრის გამოყენება
@@ -207,8 +249,10 @@
 	Warning	გაფრთხილება
 	Weibull	ვეიბული
 	Whole number	მთელი რიცხვი
+	Window	ფანჯარა
 	Yes or no	დიახ ან არა
 	Your changes will be lost if you don't save them.	თუ არ შეინახავთ, ცვლილებები დაიკარგება.
+	Zoom	ზომის შეცვლა
 	a model	მოდელი
 	arrivals	შემოსვლები
 	days	დღე
@@ -225,8 +269,10 @@
 	split or join: all ways	გაყოფა ან გაერთიანება: ყველა გზა
 	task	დავალება
 	task with a resource	დავალება რესურსით
+	task with shared resources	დავალება საზიარო რესურსებით
 	the charts could not be captured	დიაგრამების გადაღება ვერ მოხერხდა
 	the run stopped	გაშვება შეჩერდა
+	the settings could not be saved: {error}	პარამეტრების შენახვა ვერ მოხერხდა: {error}
 	there are no charts to export	ექსპორტისთვის დიაგრამები არ არის
 	to {block}	{block}-მდე
 	unlimited	შეუზღუდავი
@@ -238,10 +284,17 @@
 	± 95% CI	± 95% ნდობის ინტერვალი
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± არის რეპლიკაციებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე.
 	· no results yet	· შედეგები ჯერ არ არის
+unit	d	დღე
+unit	h	სთ
+unit	min	წთ
+unit	ms	მწმ
+unit	s	წმ
+unit	yr	წელი
 @plural	Finished {n} replication|Finished {n} replications	დასრულდა {n} გამეორება|დასრულდა {n} გამეორება
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	გახსნილია {file} ({n} გაფრთხილება)|გახსნილია {file} ({n} გაფრთხილება)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.|მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}-დან {done} გამეორება დასრულდა|{n}-დან {done} გამეორება დასრულდა
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით|{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} გამეორება · საწყისი მნიშვნელობა {seed}|{n} გამეორება · საწყისი მნიშვნელობა {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}|{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} გამეორება · საწყისი მნიშვნელობა {seed}|{n} გამეორება · საწყისი მნიშვნელობა {seed}
+@plural	{n} replication|{n} replications	{n} გამეორება|{n} გამეორება

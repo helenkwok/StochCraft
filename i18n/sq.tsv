@@ -14,32 +14,45 @@
 @id	language.name	Shqip
 	+ Add block	+ Shto bllok
 	About StochCraft	Rreth StochCraft
+	About {app}	Rreth {app}
 	Add Block	Shto bllok
 	Add a flow from…	Shto rrjedhë nga…
 	Add a flow to…	Shto rrjedhë te…
+	Add alternative	Shto alternativë
 	Add point	Shto pikë
+	Add pool	Shto grup
 	Add property	Shto veti
+	Added pool {id}	U shtua grupi {id}
 	Added {block} ({id})	U shtua {block} ({id})
+	Alternative {n}	Alternativa {n}
 	Appearance	Pamja
 	Arrival limit	Kufiri i mbërritjeve
 	Arrivals	Mbërritjet
+	BPMN with BPSim	BPMN me BPSim
 	Back to the model (Esc)	Kthehu te modeli (Esc)
 	Beta	Beta
 	Binomial	Binomiale
 	Boolean	Vlerë logjike
+	Bring All to Front	Sill të gjitha përpara
 	Built with	Ndërtuar me
+	By role	Sipas rolit
+	CSV table	Tabelë CSV
 	Cancel	Anulo
+	Cancel Run	Anulo ekzekutimin
 	Cancel run	Anulo ekzekutimin
 	Capacity	Kapaciteti
 	Change Block	Ndrysho bllokun
 	Change Flow	Ndrysho rrjedhën
 	Changing the time unit does not convert the times already in the model.	Ndryshimi i njësisë së kohës nuk i konverton kohët që gjenden tashmë në model.
+	Clear Menu	Pastro menynë
 	Close	Mbyll
+	Close Window	Mbyll dritaren
 	Comes from	Vjen nga
 	Condition of {id}	Kushti i {id}
 	Connect	Lidh
 	Connections	Lidhjet
 	Constant	Konstante
+	Dark	E errët
 	Data points	Pikat e të dhënave
 	Date and time	Data dhe ora
 	Decimal number	Numër dhjetor
@@ -56,15 +69,19 @@
 	Download	Shkarko
 	Download charts (PNG)	Shkarko grafikët (PNG)
 	Download table (CSV)	Shkarko tabelën (CSV)
+	Downloaded {file}	U shkarkua {file}
 	Duration	Kohëzgjatja
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Çdo entitet merr njëherësh të plotë të parën nga këto alternativa që mund të plotësohet në atë çast dhe i kthen njësitë kur largohet.
 	Edit	Redakto
 	Entered	Hyrjet
 	Erlang	Erlang
 	Error	Gabim
 	Every distribution	Të gjitha shpërndarjet
+	Exit	Dil
 	Experiment	Eksperiment
 	Experiment Settings	Cilësimet e eksperimentit
 	Exponential	Eksponenciale
+	Export	Eksporto
 	Export charts (PNG)	Eksporto grafikët (PNG)
 	Export table (CSV)	Eksporto tabelën (CSV)
 	Exported {file}	U eksportua {file}
@@ -75,11 +92,15 @@
 	Gamma	Gama
 	Goes to	Shkon te
 	Help	Ndihmë
+	Hide Others	Fshih të tjerat
+	Hide {app}	Fshih {app}
+	Keyboard Shortcuts…	Shkurtoret e tastierës…
 	Keyboard shortcuts saved	Shkurtoret e tastierës u ruajtën
 	Keyboard shortcuts unchanged	Shkurtoret e tastierës nuk ndryshuan
 	Language	Gjuha
 	Left	Daljet
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencuar sipas MIT License ose Apache License 2.0, sipas zgjedhjes suaj.
+	Light	E çelët
 	Log-normal	Log-normale
 	Lost (waiting room full)	Të humbura (dhoma e pritjes plot)
 	M/M/1 queue	Radha M/M/1
@@ -93,10 +114,13 @@
 	Mean wait	Pritja mesatare
 	Metric	Tregues
 	Minimise	Minimizo
+	Minimize	Minimizo
 	Minimum	Minimumi
 	Model	Modeli
 	Most likely	Më e mundshmja
 	Name	Emri
+	Needs	Nevojat
+	New	I ri
 	New model	Model i ri
 	New property	Veti e re
 	New property name	Emri i vetisë së re
@@ -111,21 +135,28 @@
 	One task per BPSim distribution, to compare their spread.	Një detyrë për çdo shpërndarje BPSim, për të krahasuar shpërndarjen e tyre.
 	Open	Hap
 	Open Example	Hap shembullin
+	Open Model	Hap modelin
 	Open Recent	Hap të fundit
 	Open a model first	Hapni fillimisht një model
 	Open a model to simulate it	Hapni një model për ta simuluar
 	Open a model…	Hap modelin…
 	Opened {file}	U hap {file}
+	Open…	Hap…
 	Or start from an example	Ose filloni me një shembull
+	PNG image	Imazh PNG
 	Parameters	Parametrat
 	Points	Pikat
 	Poisson	Poisson
+	Preferences	Preferencat
+	Priority	Përparësia
 	Probability	Probabiliteti
 	Probability of {id}	Probabiliteti i {id}
 	Problems	Problemet
 	Process	Procesi
+	Process models with BPSim	Modele procesesh me BPSim
 	Properties	Vetitë
 	Quit	Dil
+	Quit {app}	Dil nga {app}
 	Ready	Gati
 	Recover	Rikupero
 	Recover unsaved changes?	Të rikuperohen ndryshimet e paruajtura?
@@ -136,16 +167,21 @@
 	Remove	Hiq
 	Remove Block	Hiq bllokun
 	Remove Property	Hiq vetinë
+	Remove alternative {n}	Hiq alternativën {n}
 	Remove block	Hiq bllokun
 	Remove the flow {id}	Hiq rrjedhën {id}
+	Remove the pool {id}	Hiq grupin {id}
 	Remove this block and its flows (Delete)	Hiq këtë bllok dhe rrjedhat e tij (Delete)
 	Removed {id}	U hoq {id}
 	Rename Block	Riemërto bllokun
 	Rename Model	Riemërto modelin
 	Replace Model	Zëvendëso modelin
 	Replications	Përsëritjet
+	Resource pool	Grup burimesh
+	Resource pools	Grupet e burimeve
 	Restore	Rikthe dritaren
 	Results	Rezultatet
+	Roles	Rolet
 	Run	Ekzekuto
 	Run cancelled	Ekzekutimi u anulua
 	Run experiment	Ekzekuto eksperimentin
@@ -154,11 +190,13 @@
 	Running…	Duke u ekzekutuar…
 	Save	Ruaj
 	Save As…	Ruaj si…
+	Save Model	Ruaj modelin
 	Save changes to {name}?	Të ruhen ndryshimet te {name}?
 	Saved {file}	U ruajt {file}
 	Scale	Shkalla
 	Seed	Fara e rastësisë
 	Service time	Koha e shërbimit
+	Services	Shërbimet
 	Set Property	Cakto vetinë
 	Set a value	Cakto një vlerë
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Vendoset për çdo entitet kur hyn në këtë bllok. Shprehjet lexojnë vlerat që entiteti kishte në hyrje, si getProperty('issues') - 1.
@@ -166,6 +204,7 @@
 	Shape	Forma
 	Share of arrivals lost	Pjesa e mbërritjeve të humbura
 	Share of units blocked	Pjesa e njësive të bllokuara
+	Show All	Shfaqi të gjitha
 	Show {id}	Shfaq {id}
 	Split or join	Ndaj ose bashko
 	Split or join (all ways)	Ndaj ose bashko (të gjitha rrugët)
@@ -178,6 +217,7 @@
 	Tandem line	Linja në seri
 	Task	Detyrë
 	Task with a resource	Detyrë me burim
+	Task with shared resources	Detyrë me burime të përbashkëta
 	Text	Tekst
 	The model: its experiment, connections and problems	Modeli: eksperimenti, lidhjet dhe problemet
 	This block has a warning	Ky bllok ka një paralajmërim
@@ -195,6 +235,8 @@
 	Undo {action}	Zhbëj {action}
 	Uniform	Uniforme
 	Unit	Njësia
+	Units	Njësitë
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Njësi që përdoren të përbashkëta nga disa detyra. Një detyrë me burime të përbashkëta i merr sipas grupit ose sipas rolit.
 	Untitled	Pa titull
 	Untitled model	Model pa titull
 	Use System Setting	Përdor cilësimin e sistemit
@@ -207,8 +249,10 @@
 	Warning	Paralajmërim
 	Weibull	Weibull
 	Whole number	Numër i plotë
+	Window	Dritarja
 	Yes or no	Po ose jo
 	Your changes will be lost if you don't save them.	Ndryshimet do të humbasin nëse nuk i ruani.
+	Zoom	Zmadho
 	a model	një model
 	arrivals	mbërritjet
 	days	ditë
@@ -225,8 +269,10 @@
 	split or join: all ways	ndaj ose bashko: të gjitha rrugët
 	task	detyrë
 	task with a resource	detyrë me burim
+	task with shared resources	detyrë me burime të përbashkëta
 	the charts could not be captured	grafikët nuk mund të kapeshin
 	the run stopped	ekzekutimi u ndal
+	the settings could not be saved: {error}	cilësimet nuk mund të ruheshin: {error}
 	there are no charts to export	nuk ka grafikë për eksport
 	to {block}	te {block}
 	unlimited	pa kufi
@@ -238,10 +284,17 @@
 	± 95% CI	± 95% interval besimi
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± është gjysma e gjerësisë së një intervali besimi Student-t prej 95% për mesataren e përsëritjeve.
 	· no results yet	· ende nuk ka rezultate
+unit	d	d
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	v
 @plural	Finished {n} replication|Finished {n} replications	Përfundoi {n} përsëritje|Përfunduan {n} përsëritje
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	U hap {file} ({n} paralajmërim)|U hap {file} ({n} paralajmërime)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Ekzekuton {n} përsëritje të pavarur të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.|Ekzekuton {n} përsëritje të pavarura të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	U përfundua {done} nga {n} përsëritje|U përfunduan {done} nga {n} përsëritje
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} përsëritje|{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} përsëritje
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} përsëritje · fara {seed}|{n} përsëritje · fara {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}|{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} përsëritje · fara {seed}|{n} përsëritje · fara {seed}
+@plural	{n} replication|{n} replications	{n} përsëritje|{n} përsëritje

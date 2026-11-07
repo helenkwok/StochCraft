@@ -35,12 +35,16 @@ Every interface string is English source text looked up through craft-i18n (`ui-
 repository, `i18n/<locale>.tsv` (i18n/README.md), in craft-i18n's format, and `ui-egui/build.rs`
 always embeds them, on the web too: 44 languages. With `CRAFT_I18N_DIR` naming a checkout of the
 craft-i18n data repository, each language's shared `common.tsv` is embedded beside its catalog,
-for the words craft-libs' own dialogs use; StochCraft's rows win where both have one. Right-to-left locales
+for the words craft-libs' own dialogs use (the keyboard-shortcuts dialog); StochCraft's rows
+win where both have one. CI and the web app are built without it, so every word StochCraft's own
+window and menus show has a row in StochCraft's catalogs. Right-to-left locales
 are not offered until the layout is mirrored. Numbers follow the region, not the language.
 
 `tests/i18n.rs` draws every screen in craft-i18n's pseudo locale, which marks each looked-up
 string, and fails on any label drawn without a lookup that is not data (the model's names and
-ids, numbers, file names, shortcuts). The engine's own messages (validation, file notes) are not
+ids, numbers, file names, shortcuts), and checks that every string passed to `t`, `tf`, `tc`,
+`tn` and `tnf` in the interface and the shells, and every string looked up while the screens are
+drawn, has a row in each catalog. The engine's own messages (validation, file notes) are not
 translated yet.
 
 ## Determinism across targets

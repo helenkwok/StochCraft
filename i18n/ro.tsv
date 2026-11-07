@@ -14,32 +14,45 @@
 @id	language.name	Română
 	+ Add block	+ Adaugă bloc
 	About StochCraft	Despre StochCraft
+	About {app}	Despre {app}
 	Add Block	Adaugă bloc
 	Add a flow from…	Adaugă un flux de la…
 	Add a flow to…	Adaugă un flux către…
+	Add alternative	Adaugă alternativă
 	Add point	Adaugă punct
+	Add pool	Adaugă grup
 	Add property	Adaugă proprietate
+	Added pool {id}	S-a adăugat grupul {id}
 	Added {block} ({id})	S-a adăugat {block} ({id})
+	Alternative {n}	Alternativa {n}
 	Appearance	Aspect
 	Arrival limit	Limită de sosiri
 	Arrivals	Sosiri
+	BPMN with BPSim	BPMN cu BPSim
 	Back to the model (Esc)	Înapoi la model (Esc)
 	Beta	Beta
 	Binomial	Binomială
 	Boolean	Boolean
+	Bring All to Front	Adu totul în față
 	Built with	Creat cu
+	By role	După rol
+	CSV table	Tabel CSV
 	Cancel	Anulează
+	Cancel Run	Anulează rularea
 	Cancel run	Anulează rularea
 	Capacity	Capacitate
 	Change Block	Modifică blocul
 	Change Flow	Modifică fluxul
 	Changing the time unit does not convert the times already in the model.	Schimbarea unității de timp nu convertește timpii existenți în model.
+	Clear Menu	Golește meniul
 	Close	Închide
+	Close Window	Închide fereastra
 	Comes from	Provine de la
 	Condition of {id}	Condiția pentru {id}
 	Connect	Conectează
 	Connections	Conexiuni
 	Constant	Constantă
+	Dark	Întunecat
 	Data points	Puncte de date
 	Date and time	Dată și oră
 	Decimal number	Număr zecimal
@@ -56,15 +69,19 @@
 	Download	Descarcă
 	Download charts (PNG)	Descarcă graficele (PNG)
 	Download table (CSV)	Descarcă tabelul (CSV)
+	Downloaded {file}	S-a descărcat {file}
 	Duration	Durată
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Fiecare entitate ia, integral și dintr-odată, prima dintre aceste alternative care poate fi satisfăcută în acel moment și returnează unitățile când pleacă.
 	Edit	Editare
 	Entered	Intrări
 	Erlang	Erlang
 	Error	Eroare
 	Every distribution	Toate distribuțiile
+	Exit	Ieșire
 	Experiment	Experiment
 	Experiment Settings	Setările experimentului
 	Exponential	Exponențială
+	Export	Exportă
 	Export charts (PNG)	Exportă graficele (PNG)
 	Export table (CSV)	Exportă tabelul (CSV)
 	Exported {file}	S-a exportat {file}
@@ -75,11 +92,15 @@
 	Gamma	Gamma
 	Goes to	Merge către
 	Help	Ajutor
+	Hide Others	Ascunde celelalte
+	Hide {app}	Ascunde {app}
+	Keyboard Shortcuts…	Comenzi rapide de la tastatură…
 	Keyboard shortcuts saved	Comenzile rapide au fost salvate
 	Keyboard shortcuts unchanged	Comenzile rapide nu s-au modificat
 	Language	Limbă
 	Left	Ieșiri
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licențiat sub MIT License sau Apache License 2.0, la alegere.
+	Light	Luminos
 	Log-normal	Log-normală
 	Lost (waiting room full)	Pierdute (sala de așteptare plină)
 	M/M/1 queue	Coadă M/M/1
@@ -93,10 +114,13 @@
 	Mean wait	Timp mediu de așteptare
 	Metric	Indicator
 	Minimise	Minimizează
+	Minimize	Minimizează
 	Minimum	Minim
 	Model	Model
 	Most likely	Cel mai probabil
 	Name	Nume
+	Needs	Necesar
+	New	Nou
 	New model	Model nou
 	New property	Proprietate nouă
 	New property name	Numele proprietății noi
@@ -111,21 +135,28 @@
 	One task per BPSim distribution, to compare their spread.	Câte o sarcină pentru fiecare distribuție BPSim, pentru compararea dispersiei.
 	Open	Deschide
 	Open Example	Deschide exemplu
+	Open Model	Deschide modelul
 	Open Recent	Deschide recente
 	Open a model first	Deschideți mai întâi un model
 	Open a model to simulate it	Deschideți un model pentru a-l simula
 	Open a model…	Deschide model…
 	Opened {file}	S-a deschis {file}
+	Open…	Deschide…
 	Or start from an example	Sau începeți cu un exemplu
+	PNG image	Imagine PNG
 	Parameters	Parametri
 	Points	Puncte
 	Poisson	Poisson
+	Preferences	Preferințe
+	Priority	Prioritate
 	Probability	Probabilitate
 	Probability of {id}	Probabilitatea pentru {id}
 	Problems	Probleme
 	Process	Proces
+	Process models with BPSim	Modele de procese cu BPSim
 	Properties	Proprietăți
 	Quit	Ieșire
+	Quit {app}	Ieșire din {app}
 	Ready	Gata
 	Recover	Recuperează
 	Recover unsaved changes?	Recuperați modificările nesalvate?
@@ -136,16 +167,21 @@
 	Remove	Elimină
 	Remove Block	Elimină blocul
 	Remove Property	Elimină proprietatea
+	Remove alternative {n}	Elimină alternativa {n}
 	Remove block	Elimină blocul
 	Remove the flow {id}	Elimină fluxul {id}
+	Remove the pool {id}	Elimină grupul {id}
 	Remove this block and its flows (Delete)	Elimină acest bloc și fluxurile sale (Delete)
 	Removed {id}	S-a eliminat {id}
 	Rename Block	Redenumește blocul
 	Rename Model	Redenumește modelul
 	Replace Model	Înlocuiește modelul
 	Replications	Replicări
+	Resource pool	Grup de resurse
+	Resource pools	Grupuri de resurse
 	Restore	Restabilește
 	Results	Rezultate
+	Roles	Roluri
 	Run	Rulează
 	Run cancelled	Rulare anulată
 	Run experiment	Rulează experimentul
@@ -154,11 +190,13 @@
 	Running…	Se rulează…
 	Save	Salvează
 	Save As…	Salvează ca…
+	Save Model	Salvează modelul
 	Save changes to {name}?	Salvați modificările pentru {name}?
 	Saved {file}	S-a salvat {file}
 	Scale	Scară
 	Seed	Sămânță
 	Service time	Timp de servire
+	Services	Servicii
 	Set Property	Setează proprietatea
 	Set a value	Setează o valoare
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Se setează pentru fiecare entitate la intrarea în acest bloc. Expresiile citesc valorile pe care entitatea le avea la intrare, cum ar fi getProperty('issues') - 1.
@@ -166,6 +204,7 @@
 	Shape	Formă
 	Share of arrivals lost	Proporția sosirilor pierdute
 	Share of units blocked	Proporția unităților blocate
+	Show All	Afișează tot
 	Show {id}	Afișează {id}
 	Split or join	Divizează sau unește
 	Split or join (all ways)	Divizează sau unește (toate căile)
@@ -178,6 +217,7 @@
 	Tandem line	Linie în tandem
 	Task	Sarcină
 	Task with a resource	Sarcină cu resursă
+	Task with shared resources	Sarcină cu resurse partajate
 	Text	Text
 	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
 	This block has a warning	Acest bloc are un avertisment
@@ -195,6 +235,8 @@
 	Undo {action}	Anulează {action}
 	Uniform	Uniformă
 	Unit	Unitate
+	Units	Unități
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unități folosite în comun de mai multe sarcini. O sarcină cu resurse partajate le ia după grup sau după rol.
 	Untitled	Fără titlu
 	Untitled model	Model fără titlu
 	Use System Setting	Folosește setarea sistemului
@@ -207,8 +249,10 @@
 	Warning	Avertisment
 	Weibull	Weibull
 	Whole number	Număr întreg
+	Window	Fereastră
 	Yes or no	Da sau nu
 	Your changes will be lost if you don't save them.	Dacă nu salvați, modificările se vor pierde.
+	Zoom	Zoom
 	a model	un model
 	arrivals	sosiri
 	days	zile
@@ -225,8 +269,10 @@
 	split or join: all ways	divizează sau unește: toate căile
 	task	sarcină
 	task with a resource	sarcină cu resursă
+	task with shared resources	sarcină cu resurse partajate
 	the charts could not be captured	graficele nu au putut fi capturate
 	the run stopped	rularea s-a oprit
+	the settings could not be saved: {error}	setările nu au putut fi salvate: {error}
 	there are no charts to export	nu există grafice de exportat
 	to {block}	către {block}
 	unlimited	nelimitat
@@ -238,10 +284,17 @@
 	± 95% CI	± IC 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± reprezintă jumătate din lățimea unui interval de încredere Student-t de 95% pentru media dintre replicări.
 	· no results yet	· nu există încă rezultate
+unit	d	z
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	a
 @plural	Finished {n} replication|Finished {n} replications	S-a încheiat {n} replicare|S-au încheiat {n} replicări|S-au încheiat {n} replicări
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S-a deschis {file} ({n} avertisment)|S-a deschis {file} ({n} avertismente)|S-a deschis {file} ({n} avertismente)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Rulează {n} replicare independentă a modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Rulează {n} replicări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Rulează {n} replicări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	S-a încheiat {done} din {n} replicare|S-au încheiat {done} din {n} replicări|S-au încheiat {done} din {n} replicări
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicare|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicări|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicări
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replicare · sămânță {seed}|{n} replicări · sămânță {seed}|{n} replicări · sămânță {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replicare · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replicare · sămânță {seed}|{n} replicări · sămânță {seed}|{n} replicări · sămânță {seed}
+@plural	{n} replication|{n} replications	{n} replicare|{n} replicări|{n} replicări

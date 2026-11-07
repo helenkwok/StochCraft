@@ -14,32 +14,45 @@
 @id	language.name	Slovenščina
 	+ Add block	+ Dodaj blok
 	About StochCraft	O programu StochCraft
+	About {app}	O programu {app}
 	Add Block	Dodaj blok
 	Add a flow from…	Dodaj tok iz…
 	Add a flow to…	Dodaj tok v…
+	Add alternative	Dodaj alternativo
 	Add point	Dodaj točko
+	Add pool	Dodaj skupino
 	Add property	Dodaj lastnost
+	Added pool {id}	Dodana skupina {id}
 	Added {block} ({id})	Dodan {block} ({id})
+	Alternative {n}	Alternativa {n}
 	Appearance	Videz
 	Arrival limit	Omejitev prihodov
 	Arrivals	Prihodi
+	BPMN with BPSim	BPMN z BPSim
 	Back to the model (Esc)	Nazaj na model (Esc)
 	Beta	Beta
 	Binomial	Binomska
 	Boolean	Logična vrednost
+	Bring All to Front	Vse v ospredje
 	Built with	Ustvarjeno z
+	By role	Po vlogi
+	CSV table	Tabela CSV
 	Cancel	Prekliči
+	Cancel Run	Prekliči izvajanje
 	Cancel run	Prekliči izvajanje
 	Capacity	Zmogljivost
 	Change Block	Spremeni blok
 	Change Flow	Spremeni tok
 	Changing the time unit does not convert the times already in the model.	Sprememba časovne enote ne pretvori časov, ki so že v modelu.
+	Clear Menu	Počisti meni
 	Close	Zapri
+	Close Window	Zapri okno
 	Comes from	Prihaja iz
 	Condition of {id}	Pogoj za {id}
 	Connect	Poveži
 	Connections	Povezave
 	Constant	Konstantna
+	Dark	Temno
 	Data points	Podatkovne točke
 	Date and time	Datum in čas
 	Decimal number	Decimalno število
@@ -56,15 +69,19 @@
 	Download	Prenesi
 	Download charts (PNG)	Prenesi grafe (PNG)
 	Download table (CSV)	Prenesi tabelo (CSV)
+	Downloaded {file}	Preneseno {file}
 	Duration	Trajanje
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Vsaka entiteta vzame prvo od teh možnosti, ki jo je mogoče izpolniti zdaj, vse naenkrat, in enote vrne, ko odide.
 	Edit	Urejanje
 	Entered	Vstopilo
 	Erlang	Erlangova
 	Error	Napaka
 	Every distribution	Vse porazdelitve
+	Exit	Izhod
 	Experiment	Poskus
 	Experiment Settings	Nastavitve poskusa
 	Exponential	Eksponentna
+	Export	Izvozi
 	Export charts (PNG)	Izvozi grafe (PNG)
 	Export table (CSV)	Izvozi tabelo (CSV)
 	Exported {file}	Izvoženo {file}
@@ -75,11 +92,15 @@
 	Gamma	Gama
 	Goes to	Vodi v
 	Help	Pomoč
+	Hide Others	Skrij druge
+	Hide {app}	Skrij {app}
+	Keyboard Shortcuts…	Bližnjice na tipkovnici…
 	Keyboard shortcuts saved	Bližnjice na tipkovnici shranjene
 	Keyboard shortcuts unchanged	Bližnjice na tipkovnici nespremenjene
 	Language	Jezik
 	Left	Odšlo
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencirano pod MIT License ali Apache License 2.0, po vaši izbiri.
+	Light	Svetlo
 	Log-normal	Lognormalna
 	Lost (waiting room full)	Izgubljeno (čakalnica polna)
 	M/M/1 queue	Čakalna vrsta M/M/1
@@ -93,10 +114,13 @@
 	Mean wait	Povprečno čakanje
 	Metric	Kazalnik
 	Minimise	Pomanjšaj
+	Minimize	Pomanjšaj
 	Minimum	Najmanjša vrednost
 	Model	Model
 	Most likely	Najverjetnejša vrednost
 	Name	Ime
+	Needs	Zahteve
+	New	Nov
 	New model	Nov model
 	New property	Nova lastnost
 	New property name	Ime nove lastnosti
@@ -111,21 +135,28 @@
 	One task per BPSim distribution, to compare their spread.	Ena naloga na porazdelitev BPSim za primerjavo njihove razpršenosti.
 	Open	Odpri
 	Open Example	Odpri primer
+	Open Model	Odpri model
 	Open Recent	Odpri nedavne
 	Open a model first	Najprej odprite model
 	Open a model to simulate it	Odprite model za simulacijo
 	Open a model…	Odpri model…
 	Opened {file}	Odprto {file}
+	Open…	Odpri…
 	Or start from an example	Ali začnite s primerom
+	PNG image	Slika PNG
 	Parameters	Parametri
 	Points	Točke
 	Poisson	Poissonova
+	Preferences	Nastavitve
+	Priority	Prednost
 	Probability	Verjetnost
 	Probability of {id}	Verjetnost za {id}
 	Problems	Težave
 	Process	Proces
+	Process models with BPSim	Modeli procesov z BPSim
 	Properties	Lastnosti
 	Quit	Izhod
+	Quit {app}	Končaj {app}
 	Ready	Omogočeno
 	Recover	Obnovi
 	Recover unsaved changes?	Obnoviti neshranjene spremembe?
@@ -136,16 +167,21 @@
 	Remove	Odstrani
 	Remove Block	Odstrani blok
 	Remove Property	Odstrani lastnost
+	Remove alternative {n}	Odstrani alternativo {n}
 	Remove block	Odstrani blok
 	Remove the flow {id}	Odstrani tok {id}
+	Remove the pool {id}	Odstrani skupino {id}
 	Remove this block and its flows (Delete)	Odstrani ta blok in njegove tokove (Delete)
 	Removed {id}	Odstranjeno {id}
 	Rename Block	Preimenuj blok
 	Rename Model	Preimenuj model
 	Replace Model	Zamenjaj model
 	Replications	Ponovitve
+	Resource pool	Skupina virov
+	Resource pools	Skupine virov
 	Restore	Obnovi okno
 	Results	Rezultati
+	Roles	Vloge
 	Run	Zaženi
 	Run cancelled	Izvajanje preklicano
 	Run experiment	Zaženi poskus
@@ -154,11 +190,13 @@
 	Running…	Izvaja se…
 	Save	Shrani
 	Save As…	Shrani kot…
+	Save Model	Shrani model
 	Save changes to {name}?	Shranim spremembe v {name}?
 	Saved {file}	Shranjeno {file}
 	Scale	Merilo
 	Seed	Seme
 	Service time	Čas strežbe
+	Services	Storitve
 	Set Property	Nastavi lastnost
 	Set a value	Nastavi vrednost
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nastavi se za vsako entiteto ob vstopu v ta blok. Izrazi preberejo vrednosti, ki jih je imela entiteta ob vstopu, na primer getProperty('issues') - 1.
@@ -166,6 +204,7 @@
 	Shape	Oblika
 	Share of arrivals lost	Delež izgubljenih prihodov
 	Share of units blocked	Delež blokiranih enot
+	Show All	Pokaži vse
 	Show {id}	Prikaži {id}
 	Split or join	Razdeli ali združi
 	Split or join (all ways)	Razdeli ali združi (vse poti)
@@ -178,6 +217,7 @@
 	Tandem line	Zaporedna linija
 	Task	Naloga
 	Task with a resource	Naloga z virom
+	Task with shared resources	Naloga s skupnimi viri
 	Text	Besedilo
 	The model: its experiment, connections and problems	Model: poskus, povezave in težave
 	This block has a warning	Ta blok ima opozorilo
@@ -195,6 +235,8 @@
 	Undo {action}	Razveljavi: {action}
 	Uniform	Enakomerna
 	Unit	Enota
+	Units	Enote
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Enote, ki si jih deli več nalog. Naloga s skupnimi viri jih vzame iz skupine ali po vlogi.
 	Untitled	Brez naslova
 	Untitled model	Neimenovan model
 	Use System Setting	Uporabi sistemsko nastavitev
@@ -207,8 +249,10 @@
 	Warning	Opozorilo
 	Weibull	Weibullova
 	Whole number	Celo število
+	Window	Okno
 	Yes or no	Da ali ne
 	Your changes will be lost if you don't save them.	Vaše spremembe bodo izgubljene, če jih ne shranite.
+	Zoom	Povečava
 	a model	model
 	arrivals	prihodi
 	days	dnevi
@@ -225,8 +269,10 @@
 	split or join: all ways	razdeli ali združi: vse poti
 	task	naloga
 	task with a resource	naloga z virom
+	task with shared resources	naloga s skupnimi viri
 	the charts could not be captured	grafov ni bilo mogoče zajeti
 	the run stopped	izvajanje se je ustavilo
+	the settings could not be saved: {error}	nastavitev ni bilo mogoče shraniti: {error}
 	there are no charts to export	ni grafov za izvoz
 	to {block}	v {block}
 	unlimited	neomejeno
@@ -238,10 +284,17 @@
 	± 95% CI	± 95% interval zaupanja
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± je polovica širine 95% Student-t intervala zaupanja za povprečje med ponovitvami.
 	· no results yet	· rezultatov še ni
+unit	d	d
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	l.
 @plural	Finished {n} replication|Finished {n} replications	Končana je {n} ponovitev|Končani sta {n} ponovitvi|Končane so {n} ponovitve|Končanih je {n} ponovitev
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Odprto {file} ({n} opozorilo)|Odprto {file} ({n} opozorili)|Odprto {file} ({n} opozorila)|Odprto {file} ({n} opozoril)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Izvede {n} neodvisno ponovitev modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisni ponovitvi modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisne ponovitve modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisnih ponovitev modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Končana {done} od {n} ponovitve|Končani {done} od {n} ponovitev|Končane {done} od {n} ponovitev|Končanih {done} od {n} ponovitev
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvi|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ponovitev · seme {seed}|{n} ponovitvi · seme {seed}|{n} ponovitve · seme {seed}|{n} ponovitev · seme {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitvi · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitve · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ponovitev · seme {seed}|{n} ponovitvi · seme {seed}|{n} ponovitve · seme {seed}|{n} ponovitev · seme {seed}
+@plural	{n} replication|{n} replications	{n} ponovitev|{n} ponovitvi|{n} ponovitve|{n} ponovitev

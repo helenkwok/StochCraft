@@ -14,32 +14,45 @@
 @id	language.name	Magyar
 	+ Add block	+ Blokk hozzáadása
 	About StochCraft	A StochCraft névjegye
+	About {app}	{app} névjegye
 	Add Block	Blokk hozzáadása
 	Add a flow from…	Folyamat hozzáadása innen: …
 	Add a flow to…	Folyamat hozzáadása ide: …
+	Add alternative	Alternatíva hozzáadása
 	Add point	Pont hozzáadása
+	Add pool	Készlet hozzáadása
 	Add property	Tulajdonság hozzáadása
+	Added pool {id}	{id} készlet hozzáadva
 	Added {block} ({id})	{block} ({id}) hozzáadva
+	Alternative {n}	{n}. alternatíva
 	Appearance	Megjelenés
 	Arrival limit	Érkezési korlát
 	Arrivals	Érkezések
+	BPMN with BPSim	BPMN BPSim-mel
 	Back to the model (Esc)	Vissza a modellhez (Esc)
 	Beta	Béta
 	Binomial	Binomiális
 	Boolean	Logikai
+	Bring All to Front	Az összes előtérbe hozása
 	Built with	Készült ezekkel
+	By role	Szerepkör szerint
+	CSV table	CSV-táblázat
 	Cancel	Mégse
+	Cancel Run	Futtatás megszakítása
 	Cancel run	Futtatás megszakítása
 	Capacity	Kapacitás
 	Change Block	Blokk módosítása
 	Change Flow	Folyamat módosítása
 	Changing the time unit does not convert the times already in the model.	Az időegység módosítása nem váltja át a modellben már meglévő időértékeket.
+	Clear Menu	Menü törlése
 	Close	Bezárás
+	Close Window	Ablak bezárása
 	Comes from	Innen érkezik
 	Condition of {id}	{id} feltétele
 	Connect	Csatlakoztatás
 	Connections	Kapcsolatok
 	Constant	Állandó
+	Dark	Sötét
 	Data points	Adatpontok
 	Date and time	Dátum és idő
 	Decimal number	Tizedes szám
@@ -56,15 +69,19 @@
 	Download	Letöltés
 	Download charts (PNG)	Diagramok letöltése (PNG)
 	Download table (CSV)	Táblázat letöltése (CSV)
+	Downloaded {file}	{file} letöltve
 	Duration	Időtartam
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Minden entitás ezek közül az elsőt veszi, amely most teljesíthető, egyszerre az egészet, és távozáskor visszaadja az egységeket.
 	Edit	Szerkesztés
 	Entered	Belépett
 	Erlang	Erlang
 	Error	Hiba
 	Every distribution	Minden eloszlás
+	Exit	Kilépés
 	Experiment	Kísérlet
 	Experiment Settings	Kísérlet beállításai
 	Exponential	Exponenciális
+	Export	Exportálás
 	Export charts (PNG)	Diagramok exportálása (PNG)
 	Export table (CSV)	Táblázat exportálása (CSV)
 	Exported {file}	{file} exportálva
@@ -75,11 +92,15 @@
 	Gamma	Gamma
 	Goes to	Ide vezet
 	Help	Súgó
+	Hide Others	Többi elrejtése
+	Hide {app}	{app} elrejtése
+	Keyboard Shortcuts…	Billentyűparancsok…
 	Keyboard shortcuts saved	Billentyűparancsok mentve
 	Keyboard shortcuts unchanged	A billentyűparancsok nem változtak
 	Language	Nyelv
 	Left	Távozott
 	Licensed under the MIT License or the Apache License 2.0, at your option.	A MIT License vagy az Apache License 2.0 szerint, választás szerint.
+	Light	Világos
 	Log-normal	Lognormális
 	Lost (waiting room full)	Elveszett (a várakozóhely megtelt)
 	M/M/1 queue	M/M/1 sor
@@ -93,10 +114,13 @@
 	Mean wait	Átlagos várakozási idő
 	Metric	Mérőszám
 	Minimise	Minimalizálás
+	Minimize	Kis méret
 	Minimum	Minimum
 	Model	Modell
 	Most likely	Legvalószínűbb
 	Name	Név
+	Needs	Igények
+	New	Új
 	New model	Új modell
 	New property	Új tulajdonság
 	New property name	Új tulajdonság neve
@@ -111,21 +135,28 @@
 	One task per BPSim distribution, to compare their spread.	Minden BPSim-eloszláshoz egy feladat, a szóródás összehasonlítására.
 	Open	Megnyitás
 	Open Example	Példa megnyitása
+	Open Model	Modell megnyitása
 	Open Recent	Legutóbbi megnyitása
 	Open a model first	Előbb nyisson meg egy modellt
 	Open a model to simulate it	Nyisson meg egy modellt a szimulációhoz
 	Open a model…	Modell megnyitása…
 	Opened {file}	{file} megnyitva
+	Open…	Megnyitás…
 	Or start from an example	Vagy kezdjen egy példával
+	PNG image	PNG-kép
 	Parameters	Paraméterek
 	Points	Pontok
 	Poisson	Poisson
+	Preferences	Beállítások
+	Priority	Prioritás
 	Probability	Valószínűség
 	Probability of {id}	{id} valószínűsége
 	Problems	Problémák
 	Process	Folyamat
+	Process models with BPSim	Folyamatmodellek BPSim-mel
 	Properties	Tulajdonságok
 	Quit	Kilépés
+	Quit {app}	Kilépés: {app}
 	Ready	Kész
 	Recover	Helyreállítás
 	Recover unsaved changes?	Helyreállítja a nem mentett módosításokat?
@@ -136,16 +167,21 @@
 	Remove	Eltávolítás
 	Remove Block	Blokk eltávolítása
 	Remove Property	Tulajdonság eltávolítása
+	Remove alternative {n}	{n}. alternatíva eltávolítása
 	Remove block	Blokk eltávolítása
 	Remove the flow {id}	{id} folyamat eltávolítása
+	Remove the pool {id}	{id} készlet eltávolítása
 	Remove this block and its flows (Delete)	E blokk és folyamatainak eltávolítása (Delete)
 	Removed {id}	{id} eltávolítva
 	Rename Block	Blokk átnevezése
 	Rename Model	Modell átnevezése
 	Replace Model	Modell cseréje
 	Replications	Ismétlések
+	Resource pool	Erőforráskészlet
+	Resource pools	Erőforráskészletek
 	Restore	Visszaállítás
 	Results	Eredmények
+	Roles	Szerepkörök
 	Run	Futtatás
 	Run cancelled	Futtatás megszakítva
 	Run experiment	Kísérlet futtatása
@@ -154,11 +190,13 @@
 	Running…	Futtatás…
 	Save	Mentés
 	Save As…	Mentés másként…
+	Save Model	Modell mentése
 	Save changes to {name}?	Menti a(z) {name} módosításait?
 	Saved {file}	{file} mentve
 	Scale	Skála
 	Seed	Véletlenszám-mag
 	Service time	Kiszolgálási idő
+	Services	Szolgáltatások
 	Set Property	Tulajdonság beállítása
 	Set a value	Érték megadása
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Minden entitáshoz beállításra kerül, amikor belép ebbe a blokkba. A kifejezések a belépéskor meglévő értékeket olvassák, például getProperty('issues') - 1.
@@ -166,6 +204,7 @@
 	Shape	Alak
 	Share of arrivals lost	Elveszett érkezések aránya
 	Share of units blocked	Blokkolt egységek aránya
+	Show All	Összes megjelenítése
 	Show {id}	{id} megjelenítése
 	Split or join	Szétválasztás vagy egyesítés
 	Split or join (all ways)	Szétválasztás vagy egyesítés (minden út)
@@ -178,6 +217,7 @@
 	Tandem line	Tandemvonal
 	Task	Feladat
 	Task with a resource	Erőforrást használó feladat
+	Task with shared resources	Megosztott erőforrásokat használó feladat
 	Text	Szöveg
 	The model: its experiment, connections and problems	A modell: kísérlet, kapcsolatok és problémák
 	This block has a warning	Ez a blokk figyelmeztetést tartalmaz
@@ -195,6 +235,8 @@
 	Undo {action}	Visszavonás: {action}
 	Uniform	Egyenletes
 	Unit	Egység
+	Units	Egységek
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Egységek, amelyeken több feladat osztozik. A megosztott erőforrásokat használó feladat készletből vagy szerepkör szerint veszi őket.
 	Untitled	Névtelen
 	Untitled model	Névtelen modell
 	Use System Setting	Rendszerbeállítás használata
@@ -207,8 +249,10 @@
 	Warning	Figyelmeztetés
 	Weibull	Weibull
 	Whole number	Egész szám
+	Window	Ablak
 	Yes or no	Igen vagy nem
 	Your changes will be lost if you don't save them.	Ha nem mented, a módosításaid elvesznek.
+	Zoom	Méretváltás
 	a model	egy modell
 	arrivals	érkezések
 	days	nap
@@ -225,8 +269,10 @@
 	split or join: all ways	szétválasztás vagy egyesítés: minden út
 	task	feladat
 	task with a resource	erőforrást használó feladat
+	task with shared resources	megosztott erőforrásokat használó feladat
 	the charts could not be captured	a diagramok rögzítése nem sikerült
 	the run stopped	a futtatás leállt
+	the settings could not be saved: {error}	a beállítások mentése nem sikerült: {error}
 	there are no charts to export	nincs exportálható diagram
 	to {block}	ebbe: {block}
 	unlimited	korlátlan
@@ -238,10 +284,17 @@
 	± 95% CI	± 95%-os konfidenciaintervallum
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	A ± az ismétlések átlagára számított 95%-os Student-t-konfidenciaintervallum fél szélessége.
 	· no results yet	· még nincsenek eredmények
+unit	d	nap
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	év
 @plural	Finished {n} replication|Finished {n} replications	{n} ismétlés befejezve|{n} ismétlés befejezve
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} megnyitva ({n} figyelmeztetés)|{file} megnyitva ({n} figyelmeztetés)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.|A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done}/{n} ismétlés befejezve|{done}/{n} ismétlés befejezve
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján|{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ismétlés · mag {seed}|{n} ismétlés · mag {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}|{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ismétlés · mag {seed}|{n} ismétlés · mag {seed}
+@plural	{n} replication|{n} replications	{n} ismétlés|{n} ismétlés
