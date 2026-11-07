@@ -156,6 +156,75 @@ pub struct Compiled {
     assigns: Vec<Vec<Assign>>,
     /// Sources create their first entity at time 0 rather than after the first interval.
     first_arrival_at_zero: bool,
+    /// See [`Compiled::max_events_at_one_time`].
+    max_events_at_one_time: u64,
+}
+
+/// The most events a replication may process at one simulated time before it stops with
+/// [`RunError::TimeStopped`] (see [`Compiled::max_events_at_one_time`]).
+///
+/// Many events can legitimately happen at one time: a source whose time between arrivals is 0
+/// may create up to its limit of entities at once (allowed since #36), and each entity costs a
+/// few events at each element it passes. Ten million leaves room for a batch of about a million
+/// entities through several elements at one instant, far beyond what a model needs, while a
+/// model looping without time moving reaches it within seconds (the error path is the only one
+/// that pays) instead of never ending.
+pub const MAX_EVENTS_AT_ONE_TIME: u64 = 10_000_000;
+
+/// Why a replication stopped without a [`Report`].
+#[derive(Debug, Clone, PartialEq)]
+pub enum RunError {
+    /// It was cancelled ([`Compiled::run_watched`]).
+    Cancelled,
+    /// Simulated time stopped moving: more than `events` events happened at time `time`, the
+    /// last of them in `element` (by id and name), which is part of a loop whose steps all take
+    /// no time.
+    TimeStopped {
+        time: f64,
+        events: u64,
+        element: Option<(ElementId, String)>,
+    },
+}
+
+impl std::fmt::Display for RunError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            RunError::Cancelled => f.write_str("the run was cancelled"),
+            RunError::TimeStopped {
+                time,
+                events,
+                element,
+            } => {
+                write!(
+                    f,
+                    "simulated time stopped moving at {time}: more than {events} events \
+                     happened at that time"
+                )?;
+                match element {
+                    Some((id, name)) if !name.is_empty() && name != id.as_str() => {
+                        write!(f, ", the last at \"{name}\" ({id})")?;
+                    }
+                    Some((id, _)) => write!(f, ", the last at {id}")?,
+                    None => {}
+                }
+                f.write_str(
+                    ". Entities seem to go round a loop whose steps all take no time; give a step \
+                     in it a duration, or the loop a way out",
+                )
+            }
+        }
+    }
+}
+
+impl std::error::Error for RunError {}
+
+/// Why [`Builder::run`] gave no report.
+#[derive(Debug, Clone, PartialEq)]
+pub enum Failed {
+    /// The model has errors: every diagnostic, as [`compile`] returns them.
+    Invalid(Vec<Diagnostic>),
+    /// The replication stopped.
+    Run(RunError),
 }
 
 fn compile_assign(p: &Property, slots: &[String], ty: PropertyType) -> Option<Assign> {
@@ -270,6 +339,7 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
         slots,
         assigns,
         first_arrival_at_zero: false,
+        max_events_at_one_time: MAX_EVENTS_AT_ONE_TIME,
     })
 }
 
@@ -284,6 +354,14 @@ impl Compiled {
     #[doc(hidden)]
     pub fn first_arrival_at_zero(mut self, yes: bool) -> Self {
         self.first_arrival_at_zero = yes;
+        self
+    }
+
+    /// Sets the most events a replication may process at one simulated time before it stops
+    /// with [`RunError::TimeStopped`] ([`MAX_EVENTS_AT_ONE_TIME`] unless set; at least 1). For
+    /// tests that need the guard to act quickly.
+    pub fn max_events_at_one_time(mut self, events: u64) -> Self {
+        self.max_events_at_one_time = events.max(1);
         self
     }
 
@@ -756,14 +834,17 @@ impl Builder {
     }
 
     /// Builds, compiles and runs one replication for `warmup + duration` time units.
-    pub fn run(&self, rng: Rng, warmup: f64, duration: f64) -> Result<Report, Vec<Diagnostic>> {
+    pub fn run(&self, rng: Rng, warmup: f64, duration: f64) -> Result<Report, Failed> {
         let experiment = Experiment {
             warmup,
             duration,
             replications: 1,
             ..Experiment::default()
         };
-        Ok(compile(&self.build(experiment))?.run(rng))
+        compile(&self.build(experiment))
+            .map_err(Failed::Invalid)?
+            .run(rng)
+            .map_err(Failed::Run)
     }
 }
 

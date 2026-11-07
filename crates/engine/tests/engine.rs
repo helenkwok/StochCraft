@@ -2,7 +2,7 @@
 
 use serde_json::{Value, json};
 use stochcraft_engine::{COMMANDS, CommandKind, Engine, ErrorCode, JournalEntry};
-use stochcraft_random::Rng;
+use stochcraft_random::{Dist, Rng};
 
 fn ok(e: &mut Engine, command: &str, params: Value) -> Value {
     let r = e.execute(command, params.clone());
@@ -504,6 +504,90 @@ fn background_runs_report_progress_and_can_be_cancelled() {
         ok(&mut e, "run.status", json!({"step": 2}))["result"]["duration"],
         20_000.0
     );
+}
+
+/// Runs `f` on a thread of its own and returns what it gives, or `None` after `secs` seconds, so
+/// that a run that never ends fails its test instead of hanging the suite.
+fn within<T: Send + 'static>(secs: u64, f: impl FnOnce() -> T + Send + 'static) -> Option<T> {
+    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::spawn(move || {
+        let _ = tx.send(f());
+    });
+    rx.recv_timeout(std::time::Duration::from_secs(secs)).ok()
+}
+
+/// One entity, arriving at 1, is worked in no time and always sent back by the gateway after
+/// it: it goes round for ever while simulated time stays at 1 (#49).
+fn zero_time_loop() -> Engine {
+    let mut m = stochcraft_blocks::Builder::new();
+    let arrivals = m.source("arrivals", Dist::Constant(1.0), Some(1));
+    let work = m.server("work", 1, Dist::Constant(0.0));
+    let check = m.exclusive("check");
+    let done = m.sink("done");
+    m.connect(arrivals, work);
+    m.connect(work, check);
+    m.route(check, work, Some(1.0), None);
+    m.route(check, done, Some(0.0), None);
+    Engine::with_model(m.build(stochcraft_model::Experiment::default()))
+}
+
+/// The error a run of the zero-time loop must stop with: `time_stopped`, at time 1, naming an
+/// element of the loop.
+fn assert_time_stopped(error: &Value) {
+    assert_eq!(error["code"], "time_stopped", "{error}");
+    assert_eq!(error["details"]["time"], 1.0, "{error}");
+    let at = error["details"]["at"].as_str();
+    assert!(matches!(at, Some("work" | "check")), "{error}");
+    let message = error["message"].as_str().unwrap_or_default();
+    assert!(message.contains("stopped moving at 1"), "{error}");
+}
+
+#[test]
+fn a_run_where_time_stops_moving_ends_with_an_error_at_once() {
+    let r = within(300, || {
+        let mut e = zero_time_loop();
+        e.execute("run", json!({"replications": 4, "threads": 2}))
+    });
+    assert!(r.is_some(), "the run did not end");
+    let error = r.and_then(Result::err).map(|e| e.to_json());
+    assert_time_stopped(&error.unwrap_or_default());
+}
+
+#[test]
+fn a_run_where_time_stops_moving_ends_with_an_error_in_slices() {
+    let status = within(300, || {
+        let mut e = zero_time_loop();
+        ok(
+            &mut e,
+            "run.start",
+            json!({"replications": 3, "mode": "slices"}),
+        );
+        ok(&mut e, "run.status", json!({"step": 1}))
+    });
+    assert!(status.is_some(), "the run did not end");
+    let status = status.unwrap_or_default();
+    assert_eq!(status["state"], "failed", "{status}");
+    assert_time_stopped(&status["error"]);
+}
+
+/// Cancelling reaches into a replication that is running: one that would take far too long
+/// stops soon after.
+#[test]
+fn cancel_stops_a_replication_while_it_runs() {
+    let status = within(60, || {
+        let mut e = help_desk();
+        ok(&mut e, "experiment.set", json!({"duration": 1e11}));
+        ok(
+            &mut e,
+            "run.start",
+            json!({"replications": 2, "mode": "threads", "threads": 2}),
+        );
+        std::thread::sleep(std::time::Duration::from_millis(100));
+        ok(&mut e, "run.cancel", json!({}))
+    });
+    assert!(status.is_some(), "cancel did not return");
+    let status = status.unwrap_or_default();
+    assert_eq!(status["state"], "cancelled", "{status}");
 }
 
 #[test]

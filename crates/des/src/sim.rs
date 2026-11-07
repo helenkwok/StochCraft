@@ -37,6 +37,8 @@ struct Proc {
     interruptible: bool,
     /// Interrupts not yet seen by an interruptible wait, oldest first.
     interrupts: VecDeque<Interrupt>,
+    /// What it belongs to, for reports ([`Sim::spawn_tagged`]); processes it starts inherit it.
+    tag: Option<u64>,
 }
 
 struct Kernel {
@@ -58,6 +60,52 @@ impl Kernel {
         self.procs.get_mut(&pid)
     }
 }
+
+/// How often (in events) [`Sim::run_watched`] asks whether it has been cancelled: often enough
+/// to stop within a fraction of a millisecond, rarely enough to cost nothing measurable.
+const CANCEL_CHECK_EVERY: u64 = 1024;
+
+/// What [`Sim::run_watched`] watches for.
+#[derive(Clone, Copy)]
+pub struct Watch<'a> {
+    /// The most events that may happen at one simulated time. A model in which processes can
+    /// loop without time moving (say, steps that all take zero time, joined in a cycle) would
+    /// otherwise never end; past this many events at one time the run stops as
+    /// [`Stopped::TimeStopped`].
+    pub max_events_at_one_time: u64,
+    /// Asked every so often; once it returns true the run stops as [`Stopped::Cancelled`].
+    pub cancelled: &'a dyn Fn() -> bool,
+}
+
+/// Why [`Sim::run_watched`] stopped before its end time.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Stopped {
+    /// The watch was cancelled, at this simulated time.
+    Cancelled { time: f64 },
+    /// More than `events` events happened at simulated time `time`: the model seems to loop
+    /// without time moving. `tag` is the tag of the process whose event passed the limit (see
+    /// [`Sim::spawn_tagged`]), which is part of the loop.
+    TimeStopped {
+        time: f64,
+        events: u64,
+        tag: Option<u64>,
+    },
+}
+
+impl std::fmt::Display for Stopped {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Stopped::Cancelled { .. } => f.write_str("the run was cancelled"),
+            Stopped::TimeStopped { time, events, .. } => write!(
+                f,
+                "simulated time stopped moving at {time}: more than {events} events happened \
+                 at that time"
+            ),
+        }
+    }
+}
+
+impl std::error::Error for Stopped {}
 
 /// A simulation: processes plus the event queue that drives them.
 pub struct Sim {
@@ -116,6 +164,13 @@ impl Sim {
         self.ctx().spawn(process)
     }
 
+    /// Starts a process at the current time, tagged with `tag` (for example the model element it
+    /// runs), as are the processes it starts. [`Stopped`] names the tag of the process involved.
+    /// Returns its id.
+    pub fn spawn_tagged(&mut self, tag: u64, process: impl Future<Output = ()> + 'static) -> u64 {
+        self.ctx().spawn_with(Some(tag), process)
+    }
+
     /// Number of processes that have not finished.
     pub fn live_processes(&self) -> usize {
         self.kernel.borrow().procs.len()
@@ -123,22 +178,63 @@ impl Sim {
 
     /// Runs events until the next one would be later than `until`, then sets the clock to
     /// `until`. Returns the number of process activations.
+    ///
+    /// It runs for as long as the model has events before `until`, which for a model whose
+    /// processes loop without simulated time moving is forever; [`Sim::run_watched`] guards
+    /// against that, and can be cancelled.
     pub fn run_until(&mut self, until: f64) -> u64 {
         let mut steps = 0;
-        loop {
-            let next = self.kernel.borrow().queue.peek_time();
-            match next {
-                Some(t) if t <= until => {}
-                _ => break,
-            }
-            let Some(ev) = self.kernel.borrow_mut().queue.pop() else {
-                break;
-            };
+        while let Some(ev) = self.pop_until(until) {
             self.step(ev.payload, ev.seq);
             steps += 1;
         }
         self.kernel.borrow_mut().queue.advance_to(until);
         steps
+    }
+
+    /// As [`Sim::run_until`], but stops early, with the reason, when `watch` is cancelled or when
+    /// more than [`Watch::max_events_at_one_time`] events happen at one simulated time. The
+    /// checks only read counters, so a run that is not stopped runs exactly as
+    /// [`Sim::run_until`] would.
+    pub fn run_watched(&mut self, until: f64, watch: &Watch<'_>) -> Result<u64, Stopped> {
+        let mut steps: u64 = 0;
+        let mut instant = self.now();
+        let mut at_instant: u64 = 0;
+        loop {
+            if steps.is_multiple_of(CANCEL_CHECK_EVERY) && (watch.cancelled)() {
+                return Err(Stopped::Cancelled { time: self.now() });
+            }
+            let Some(ev) = self.pop_until(until) else {
+                break;
+            };
+            if ev.time == instant {
+                at_instant += 1;
+            } else {
+                instant = ev.time;
+                at_instant = 1;
+            }
+            if at_instant > watch.max_events_at_one_time {
+                let k = self.kernel.borrow();
+                return Err(Stopped::TimeStopped {
+                    time: instant,
+                    events: watch.max_events_at_one_time,
+                    tag: k.procs.get(&ev.payload).and_then(|p| p.tag),
+                });
+            }
+            self.step(ev.payload, ev.seq);
+            steps += 1;
+        }
+        self.kernel.borrow_mut().queue.advance_to(until);
+        Ok(steps)
+    }
+
+    /// Takes the next event off the queue if it is not later than `until`.
+    fn pop_until(&mut self, until: f64) -> Option<crate::Event<u64>> {
+        let mut k = self.kernel.borrow_mut();
+        match k.queue.peek_time() {
+            Some(t) if t <= until => k.queue.pop(),
+            _ => None,
+        }
     }
 
     /// Runs until no events are left. Returns the number of process activations.
@@ -188,8 +284,14 @@ impl Ctx {
         self.kernel.borrow().queue.now()
     }
 
-    /// Starts a process at the current time. Returns its id.
+    /// Starts a process at the current time, with the tag of the process starting it (see
+    /// [`Sim::spawn_tagged`]). Returns its id.
     pub fn spawn(&self, process: impl Future<Output = ()> + 'static) -> u64 {
+        let tag = self.kernel.borrow_mut().current_proc().and_then(|p| p.tag);
+        self.spawn_with(tag, process)
+    }
+
+    fn spawn_with(&self, tag: Option<u64>, process: impl Future<Output = ()> + 'static) -> u64 {
         let mut k = self.kernel.borrow_mut();
         let pid = k.next_pid;
         k.next_pid += 1;
@@ -200,6 +302,7 @@ impl Ctx {
                 activated: 0,
                 interruptible: false,
                 interrupts: VecDeque::new(),
+                tag,
             },
         );
         let now = k.queue.now();
@@ -438,6 +541,83 @@ mod tests {
         assert_eq!(sim.now(), 10.5);
         sim.run_until(12.0);
         assert_eq!(ticks.get(), 12);
+    }
+
+    /// A process that loops without time moving stops the run at the limit, naming the tag of
+    /// the process looping, which it got from the process that started it. The run is on a
+    /// thread of its own, so that if the guard breaks the test fails instead of hanging.
+    #[test]
+    fn run_watched_stops_when_time_stops_moving() {
+        let (tx, rx) = std::sync::mpsc::channel();
+        std::thread::spawn(move || {
+            let mut sim = Sim::new();
+            let ctx = sim.ctx();
+            sim.spawn_tagged(7, async move {
+                ctx.hold(2.0).await;
+                let c = ctx.clone();
+                ctx.spawn(async move {
+                    loop {
+                        c.hold(0.0).await;
+                    }
+                });
+            });
+            let watch = Watch {
+                max_events_at_one_time: 100,
+                cancelled: &|| false,
+            };
+            let _ = tx.send(sim.run_watched(10.0, &watch));
+        });
+        let r = rx.recv_timeout(std::time::Duration::from_secs(30));
+        assert_eq!(
+            r,
+            Ok(Err(Stopped::TimeStopped {
+                time: 2.0,
+                events: 100,
+                tag: Some(7),
+            }))
+        );
+    }
+
+    /// Cancelling stops a run that would go on for ever; watching changes nothing else.
+    #[test]
+    fn run_watched_can_be_cancelled_and_otherwise_runs_as_run_until() {
+        let ticker = |sim: &mut Sim, ticks: &Rc<Cell<u32>>| {
+            let (ctx, t) = (sim.ctx(), Rc::clone(ticks));
+            sim.spawn(async move {
+                loop {
+                    ctx.hold(1.0).await;
+                    t.set(t.get() + 1);
+                }
+            });
+        };
+        let (mut sim, ticks) = (Sim::new(), Rc::new(Cell::new(0u32)));
+        ticker(&mut sim, &ticks);
+        let asked = Cell::new(0u32);
+        let cancelled = || {
+            asked.set(asked.get() + 1);
+            asked.get() > 3
+        };
+        let watch = Watch {
+            max_events_at_one_time: 1,
+            cancelled: &cancelled,
+        };
+        // Ends at 1e7 even if cancelling ever stops working, so the test cannot hang.
+        let r = sim.run_watched(1e7, &watch);
+        assert!(matches!(r, Err(Stopped::Cancelled { .. })), "{r:?}");
+        assert_eq!(ticks.get(), 3 * CANCEL_CHECK_EVERY as u32 - 1);
+
+        let (mut plain, plain_ticks) = (Sim::new(), Rc::new(Cell::new(0u32)));
+        ticker(&mut plain, &plain_ticks);
+        let (mut watched, watched_ticks) = (Sim::new(), Rc::new(Cell::new(0u32)));
+        ticker(&mut watched, &watched_ticks);
+        let steps = plain.run_until(100.5);
+        let watch = Watch {
+            max_events_at_one_time: 1,
+            cancelled: &|| false,
+        };
+        assert_eq!(watched.run_watched(100.5, &watch), Ok(steps));
+        assert_eq!((plain_ticks.get(), plain.now()), (100, 100.5));
+        assert_eq!((watched_ticks.get(), watched.now()), (100, 100.5));
     }
 
     #[test]

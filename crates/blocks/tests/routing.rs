@@ -24,7 +24,11 @@ fn run(b: &Builder, x: Experiment) -> ExperimentSummary {
         unreachable!()
     };
     let reports: Vec<_> = (0..u64::from(x.replications))
-        .map(|r| compiled.run(Rng::new(20_000 + r)))
+        .map(|r| {
+            compiled
+                .run(Rng::new(20_000 + r))
+                .unwrap_or_else(|e| unreachable!("{e}"))
+        })
         .collect();
     summarise(&reports)
 }
@@ -237,8 +241,14 @@ fn the_first_arrival_can_be_at_time_zero() {
     let Ok(c) = compile(&model) else {
         unreachable!()
     };
-    let after = c.clone().run(Rng::new(1));
-    let at_zero = c.first_arrival_at_zero(true).run(Rng::new(1));
+    let after = c
+        .clone()
+        .run(Rng::new(1))
+        .unwrap_or_else(|e| unreachable!("{e}"));
+    let at_zero = c
+        .first_arrival_at_zero(true)
+        .run(Rng::new(1))
+        .unwrap_or_else(|e| unreachable!("{e}"));
     assert_eq!(entered(&after, "exit"), 150);
     assert_eq!(entered(&at_zero, "exit"), 151);
 }

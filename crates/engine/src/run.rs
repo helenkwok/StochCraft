@@ -3,19 +3,21 @@
 //! Natively a run goes to worker threads and the caller polls it. In the browser, where a page
 //! cannot block, it runs in slices: each poll runs a few replications between frames. Both give
 //! exactly the results of a run in one go, since each replication's random stream depends only on
-//! the seed and its index. Cancelling stops new replications from starting; one already running
-//! finishes first.
+//! the seed and its index. Cancelling a threaded run stops the replications running within a
+//! thousand or so events, and no more start; a sliced run stops before its next replication.
+//!
+//! A replication in which simulated time stops moving ends with [`ErrorCode::TimeStopped`]
+//! (see [`stochcraft_blocks::MAX_EVENTS_AT_ONE_TIME`]), and stops the whole run.
 
 #[cfg(not(target_arch = "wasm32"))]
 use std::sync::Arc;
+use std::sync::Mutex;
 
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use stochcraft_blocks::{Compiled, Report, summarise};
-#[cfg(not(target_arch = "wasm32"))]
-use stochcraft_experiment::Control;
-use stochcraft_experiment::{Experiment, ExperimentError};
+use stochcraft_blocks::{Compiled, Report, RunError, summarise};
+use stochcraft_experiment::{Control, Experiment, ExperimentError};
 
 use crate::{CommandError, ErrorCode, wire};
 
@@ -51,10 +53,7 @@ pub struct Plan {
 impl Plan {
     /// Runs every replication now, on this thread and any workers.
     pub fn run_now(&self) -> Result<Value, CommandError> {
-        let reports = self
-            .experiment
-            .run(|r| self.compiled.run(r.rng))
-            .map_err(failed)?;
+        let reports = replicate(&self.compiled, &self.experiment, &Control::new())?;
         Ok(self.results(&reports))
     }
 
@@ -70,6 +69,42 @@ impl Plan {
     }
 }
 
+/// Runs every replication of `experiment`, reporting to `control`, which cancels them. The first
+/// replication in which time stops moving cancels the others: they would most likely stop the
+/// same way, each only after its own [`stochcraft_blocks::MAX_EVENTS_AT_ONE_TIME`] events.
+fn replicate(
+    compiled: &Compiled,
+    experiment: &Experiment,
+    control: &Control,
+) -> Result<Vec<Report>, CommandError> {
+    // The replication with the lowest index among those that stopped, and why.
+    let stopped: Mutex<Option<(u64, RunError)>> = Mutex::new(None);
+    let outcome = experiment.run_controlled(
+        |r| {
+            let index = r.index;
+            let report = compiled.run_watched(r.rng, &|| control.is_cancelled());
+            if let Err(e @ RunError::TimeStopped { .. }) = &report {
+                let mut s = stopped.lock().unwrap_or_else(|e| e.into_inner());
+                if s.as_ref().is_none_or(|(i, _)| index < *i) {
+                    *s = Some((index, e.clone()));
+                }
+                control.cancel();
+            }
+            report
+        },
+        control,
+    );
+    if let Some((index, e)) = stopped.into_inner().unwrap_or_else(|e| e.into_inner()) {
+        return Err(run_failed(index, &e));
+    }
+    outcome
+        .map_err(failed)?
+        .into_iter()
+        .zip(0u64..)
+        .map(|(r, index)| r.map_err(|e| run_failed(index, &e)))
+        .collect()
+}
+
 fn failed(e: ExperimentError) -> CommandError {
     match e {
         ExperimentError::Cancelled => CommandError::new(ErrorCode::Cancelled, e.to_string()),
@@ -79,11 +114,27 @@ fn failed(e: ExperimentError) -> CommandError {
     }
 }
 
+/// The error for replication `index`, which stopped with `e`.
+fn run_failed(index: u64, e: &RunError) -> CommandError {
+    match e {
+        RunError::Cancelled => failed(ExperimentError::Cancelled),
+        RunError::TimeStopped { time, element, .. } => CommandError {
+            code: ErrorCode::TimeStopped,
+            message: format!("replication {index}: {e}"),
+            details: Some(json!({
+                "replication": index,
+                "time": time,
+                "at": element.as_ref().map(|(id, _)| id.as_str()),
+            })),
+        },
+    }
+}
+
 enum State {
     #[cfg(not(target_arch = "wasm32"))]
     Threads {
         control: Arc<Control>,
-        handle: std::thread::JoinHandle<Result<Vec<Report>, ExperimentError>>,
+        handle: std::thread::JoinHandle<Result<Vec<Report>, CommandError>>,
     },
     Slices {
         reports: Vec<Report>,
@@ -111,7 +162,7 @@ impl Job {
                 let (c, p) = (Arc::clone(&control), plan.clone());
                 let handle = std::thread::Builder::new()
                     .name("stochcraft-run".into())
-                    .spawn(move || p.experiment.run_controlled(|r| p.compiled.run(r.rng), &c))
+                    .spawn(move || replicate(&p.compiled, &p.experiment, &c))
                     .map_err(|e| CommandError::new(ErrorCode::Internal, e.to_string()))?;
                 State::Threads { control, handle }
             }
@@ -142,7 +193,14 @@ impl Job {
                     let x = &self.plan.experiment;
                     let start = reports.len() as u64;
                     for index in start..(start.saturating_add(step.max(1))).min(total) {
-                        reports.push(self.plan.compiled.run(x.replication(index).rng));
+                        // One thread: nothing can cancel a replication while it runs.
+                        match self.plan.compiled.run(x.replication(index).rng) {
+                            Ok(r) => reports.push(r),
+                            Err(e) => {
+                                self.state = State::Finished(Err(run_failed(index, &e)));
+                                return self.status();
+                            }
+                        }
                     }
                     if reports.len() as u64 >= total {
                         let r = std::mem::take(reports);
@@ -167,14 +225,15 @@ impl Job {
         self.state = match state {
             State::Threads { handle, .. } => State::Finished(match handle.join() {
                 Ok(Ok(reports)) => Ok(self.plan.results(&reports)),
-                Ok(Err(e)) => Err(failed(e)),
+                Ok(Err(e)) => Err(e),
                 Err(_) => Err(CommandError::new(ErrorCode::Internal, "the run panicked")),
             }),
             other => other,
         };
     }
 
-    /// Stops the run: no more replications start. Returns once it has stopped.
+    /// Stops the run: the replications running stop soon after, and no more start. Returns once
+    /// it has stopped.
     pub fn cancel(&mut self) -> Value {
         match &mut self.state {
             State::Slices { cancelled, .. } => *cancelled = true,

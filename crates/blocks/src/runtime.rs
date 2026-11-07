@@ -5,12 +5,12 @@ use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::rc::Rc;
 
-use stochcraft_des::{Ctx, Resource, ResourceGuard, Sim, Store};
+use stochcraft_des::{Ctx, Resource, ResourceGuard, Sim, Stopped, Store, Watch};
 use stochcraft_model::{Element, ElementKind, Model, Need, ResourcePool};
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
 
-use crate::{Assign, Compiled, ElementReport, Entity, Held, Report, Source};
+use crate::{Assign, Compiled, ElementReport, Entity, Held, Report, RunError, Source};
 
 /// What an element assigns to entities as they enter, and the stream it draws values from.
 struct Props {
@@ -78,14 +78,36 @@ impl Compiled {
     /// `rng` (each element draws from its own forked stream, in model order; then each element's
     /// property values from another, so properties never change the other draws), and reports
     /// the statistics collected after the warm-up.
-    pub fn run(&self, rng: Rng) -> Report {
+    ///
+    /// A model whose entities can go round a loop without simulated time moving would never
+    /// end; past [`Compiled::max_events_at_one_time`] events at one time the replication stops
+    /// with [`RunError::TimeStopped`] instead.
+    pub fn run(&self, rng: Rng) -> Result<Report, RunError> {
+        self.run_watched(rng, &|| false)
+    }
+
+    /// As [`Compiled::run`], asking `cancelled` every so often (every thousand or so events)
+    /// whether to stop, so that even a replication that would take very long, or never end,
+    /// can be cancelled; it then returns [`RunError::Cancelled`]. Asking changes nothing else:
+    /// a replication that is not cancelled gives exactly what [`Compiled::run`] gives.
+    pub fn run_watched(&self, rng: Rng, cancelled: &dyn Fn() -> bool) -> Result<Report, RunError> {
         let x = &self.model.experiment;
-        self.run_for(rng, x.warmup, x.duration)
+        self.simulate(rng, x.warmup, x.duration, cancelled)
     }
 
     /// As [`Compiled::run`], with an explicit warm-up and duration (negative or non-finite values
     /// count as 0).
-    pub fn run_for(&self, mut rng: Rng, warmup: f64, duration: f64) -> Report {
+    pub fn run_for(&self, rng: Rng, warmup: f64, duration: f64) -> Result<Report, RunError> {
+        self.simulate(rng, warmup, duration, &|| false)
+    }
+
+    fn simulate(
+        &self,
+        mut rng: Rng,
+        warmup: f64,
+        duration: f64,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<Report, RunError> {
         let clean = |t: f64| if t.is_finite() && t > 0.0 { t } else { 0.0 };
         let (warmup, duration) = (clean(warmup), clean(duration));
         let elements = &self.model.elements;
@@ -232,7 +254,12 @@ impl Compiled {
         }
 
         let end = warmup + duration;
-        sim.run_until(end);
+        let watch = Watch {
+            max_events_at_one_time: self.max_events_at_one_time,
+            cancelled,
+        };
+        sim.run_watched(end, &watch)
+            .map_err(|stopped| self.run_error(stopped))?;
         let mut elements: Vec<ElementReport> = elements
             .iter()
             .zip(stats.iter())
@@ -242,12 +269,33 @@ impl Compiled {
             .collect();
         // Then each shared pool, after the elements.
         elements.extend(pools.reports(&self.model.resources, end));
-        Report {
+        Ok(Report {
             warmup,
             duration,
             elements,
+        })
+    }
+
+    /// The error for a replication that stopped early. Element processes are tagged with the
+    /// element's index ([`tag`]).
+    fn run_error(&self, stopped: Stopped) -> RunError {
+        match stopped {
+            Stopped::Cancelled { .. } => RunError::Cancelled,
+            Stopped::TimeStopped { time, events, tag } => RunError::TimeStopped {
+                time,
+                events,
+                element: tag
+                    .and_then(|t| usize::try_from(t).ok())
+                    .and_then(|i| self.model.elements.get(i))
+                    .map(|e| (e.id.clone(), e.name.clone())),
+            },
         }
     }
+}
+
+/// The tag of element `index`'s processes (see [`Sim::spawn_tagged`]).
+fn tag(index: usize) -> u64 {
+    u64::try_from(index).unwrap_or(u64::MAX)
 }
 
 /// Statistics a block keeps while the model runs.
@@ -502,7 +550,7 @@ fn spawn_source(
     next_id: Rc<RefCell<u64>>,
     first_at_zero: bool,
 ) {
-    sim.spawn(async move {
+    sim.spawn_tagged(tag(env.me), async move {
         let mut made = 0u64;
         while limit.is_none_or(|l| made < l) {
             if !(first_at_zero && made == 0) {
@@ -537,11 +585,12 @@ fn spawn_source(
 }
 
 fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
+    let me = tag(env.me);
     let env = Rc::new(RefCell::new(env));
     for _ in 0..capacity {
         let env = Rc::clone(&env);
         let service = service.clone();
-        sim.spawn(async move {
+        sim.spawn_tagged(me, async move {
             loop {
                 let (input, ctx) = {
                     let e = env.borrow();
@@ -831,8 +880,10 @@ fn spawn_shared(
     pools: Rc<Pools>,
 ) {
     let ctx = env.ctx.clone();
+    let me = tag(env.me);
     let env = Rc::new(RefCell::new(env));
-    sim.spawn(async move {
+    // Each entity's service is a process of its own, started from this one, so tagged alike.
+    sim.spawn_tagged(me, async move {
         loop {
             let input = env.borrow().input.clone();
             let entity = input.get().await;
@@ -863,6 +914,7 @@ fn spawn_shared(
 }
 
 fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
+    let me = tag(env.me);
     let env = Rc::new(RefCell::new(env));
     let mut sim_ctx = None;
     {
@@ -870,7 +922,7 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
         sim_ctx.get_or_insert(e.ctx.clone());
     }
     let Some(ctx) = sim_ctx else { return };
-    sim.spawn(async move {
+    sim.spawn_tagged(me, async move {
         loop {
             let input = env.borrow().input.clone();
             let entity = input.get().await;
@@ -891,7 +943,7 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
 }
 
 fn spawn_sink(sim: &mut Sim, env: BlockEnv) {
-    sim.spawn(async move {
+    sim.spawn_tagged(tag(env.me), async move {
         loop {
             let entity = env.input.get().await;
             let now = env.ctx.now();
@@ -936,7 +988,7 @@ fn choose(outs: &[Out], e: &Entity, assigner: &Assigner, rng: &mut Rng) -> Optio
 }
 
 fn spawn_exclusive(sim: &mut Sim, mut env: BlockEnv, outs: Vec<Out>) {
-    sim.spawn(async move {
+    sim.spawn_tagged(tag(env.me), async move {
         loop {
             let entity = env.input.get().await;
             env.adjust(|s| &mut s.waiting, -1.0);
@@ -980,7 +1032,7 @@ fn spawn_parallel(
     outs: Vec<Out>,
     next_id: Rc<RefCell<u64>>,
 ) {
-    sim.spawn(async move {
+    sim.spawn_tagged(tag(env.me), async move {
         loop {
             // One entity from each input (a join waits for all of them), in input order.
             let mut parts = Vec::with_capacity(inputs.len());
