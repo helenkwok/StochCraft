@@ -103,6 +103,7 @@
 	Exported {file}	{file} экспортталды
 	Expression	Өрнек
 	File	Файл
+	Finished at {time} {unit}	{time} {unit} кезінде аяқталды
 	Fit	Сыйдыру
 	Fit the diagram to the view	Диаграмманы көрініске сыйдыру
 	Flows	Ағындар
@@ -112,6 +113,9 @@
 	Help	Көмек
 	Hide Others	Басқаларын жасыру
 	Hide {app}	{app} қолданбасын жасыру
+	Inside over time	Уақыт бойынша ішіндегілер
+	Jump	Өту
+	Jump to time	Уақытқа өту
 	Keyboard Shortcuts…	Пернетақта тіркесімдері…
 	Keyboard shortcuts saved	Пернетақта тіркесімдері сақталды
 	Keyboard shortcuts unchanged	Пернетақта тіркесімдері өзгермеді
@@ -168,6 +172,8 @@
 	PNG image	PNG суреті
 	Parameters	Параметрлер
 	Paste	Қою
+	Pause	Кідірту
+	Play	Ойнату
 	Points	Нүктелер
 	Poisson	Пуассон
 	Preferences	Параметрлер
@@ -199,6 +205,8 @@
 	Rename Block	Блок атауын өзгерту
 	Rename Model	Модель атауын өзгерту
 	Replace Model	Модельді ауыстыру
+	Replication 1 · {time} of {end} {unit}	1-қайталау · {time} / {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	1-қайталау · {time} / {end} {unit} · қыздыру кезеңі
 	Replications	Қайталаулар
 	Resource pool	Ресурс қоры
 	Resource pools	Ресурс қорлары
@@ -209,7 +217,9 @@
 	Run	Іске қосу
 	Run cancelled	Іске қосу тоқтатылды
 	Run experiment	Экспериментті іске қосу
+	Run replication 1 step by step and see each block's queue on the diagram	1-қайталауды қадаммен орындап, диаграммада әр блоктың кезегін көру
 	Run the experiment ({shortcut})	Экспериментті іске қосу ({shortcut})
+	Run the next event	Келесі оқиғаны орындау
 	Running	Орындалуда
 	Running…	Орындалуда…
 	Save	Сақтау
@@ -220,6 +230,7 @@
 	Scale	Масштаб
 	Seed	Кездейсоқ тұқым
 	Select All	Барлығын таңдау
+	Select a block to see its queue over time.	Кезегін уақыт бойынша көру үшін блокты таңдаңыз.
 	Service time	Қызмет көрсету уақыты
 	Services	Қызметтер
 	Set Property	Қасиетті орнату
@@ -231,23 +242,30 @@
 	Share of units blocked	Бұғатталған бірліктер үлесі
 	Show All	Барлығын көрсету
 	Show {id}	{id} көрсету
+	Speed	Жылдамдық
 	Split or join	Бөлу немесе біріктіру
 	Split or join (all ways)	Бөлу немесе біріктіру (барлық жолдар)
 	Spread out	Үлестіру
 	Stages (k)	Кезеңдер (k)
 	Standard deviation	Стандартты ауытқу
+	Step	Қадам
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft {name} үлгісіндегі сақталмаған өзгерістермен жабылды. Оларды атаусыз үлгі ретінде қалпына келтіріңіз немесе тастаңыз.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft BPSim симуляция деректері бар BPMN немесе XPDL файлдарынан процесс үлгілерін оқиды, оларды қайталанатын эксперименттер ретінде орындайды және әр нәтижені сенімділік аралығымен бірге көрсетеді.
 	StochCraft {version} · model {digest}	StochCraft {version} · модель {digest}
+	Stop Watching	Бақылауды тоқтату
 	Stop setting {name}	{name} орнатуды тоқтату
+	Stop watching	Бақылауды тоқтату
+	Stopped watching	Бақылау тоқтатылды
 	Tandem line	Тізбекті желі
 	Task	Тапсырма
 	Task with a resource	Ресурсы бар тапсырма
 	Task with shared resources	Ортақ ресурстары бар тапсырма
 	Text	Мәтін
+	The model changed, so watching stopped	Модель өзгерді, сондықтан бақылау тоқтатылды
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
 	This block has a warning	Бұл блокта ескерту бар
 	This block has an error	Бұл блокта қате бар
+	This run	Осы іске қосу
 	Time between arrivals	Келулер арасындағы уақыт
 	Time unit	Уақыт бірлігі
 	To	Қайда
@@ -270,10 +288,14 @@
 	Utilisation	Пайдалану деңгейі
 	Value	Мән
 	View	Көрініс
+	Waiting over time	Уақыт бойынша күтушілер
 	Waiting room	Күту орны
 	Warm-up	Қыздыру кезеңі
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} қыздыру, содан кейін {duration} {unit} өлшеу
 	Warning	Ескерту
+	Watch a Run	Іске қосуды бақылау
+	Watch a run	Іске қосуды бақылау
+	Watching replication 1	1-қайталау бақылануда
 	Weibull	Вейбулл
 	Whole number	Бүтін сан
 	Window	Терезе
@@ -303,14 +325,23 @@
 	the run stopped	іске қосу тоқтады
 	the settings could not be saved: {error}	параметрлерді сақтау мүмкін болмады: {error}
 	there are no charts to export	экспорттайтын диаграммалар жоқ
+	time	уақыт
 	to {block}	{block} блогына
 	unlimited	шектеусіз
 	years	жыл
+	{busy} busy	Бос емес: {busy}
+	{entered} in, {left} out, {lost} lost	Кірді: {entered}, шықты: {left}, жоғалды: {lost}
 	{field}: not editable here yet	{field}: мұнда әзірше өңдеу мүмкін емес
 	{id}: a probability is a number from 0 to 1	{id}: ықтималдық 0 мен 1 арасындағы сан болуы керек
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — өңделді
+	{n} created	Жасалды: {n}
+	{n} done	Аяқталды: {n}
+	{n} inside	Ішінде: {n}
+	{n} waiting	Күтуде: {n}
+	{n} {unit} per second	секундына {n} {unit}
 	{property} (set to, mean)	{property} (орнатылған мән, орташа)
+	{title}: now {now}, at most {most}	{title}: қазір {now}, ең көбі {most}
 	± 95% CI	± 95% сенімділік аралығы
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — қайталаулар арасындағы орташа мәннің 95% Student-t сенімділік аралығының жарты ені.
 	· no results yet	· әлі нәтижелер жоқ

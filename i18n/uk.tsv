@@ -103,6 +103,7 @@
 	Exported {file}	Експортовано {file}
 	Expression	Вираз
 	File	Файл
+	Finished at {time} {unit}	Завершено о {time} {unit}
 	Fit	Умістити
 	Fit the diagram to the view	Умістити діаграму у вікно
 	Flows	Потоки
@@ -112,6 +113,9 @@
 	Help	Довідка
 	Hide Others	Приховати інші
 	Hide {app}	Приховати {app}
+	Inside over time	Усередині в часі
+	Jump	Перейти
+	Jump to time	Перейти до часу
 	Keyboard Shortcuts…	Клавіатурні скорочення…
 	Keyboard shortcuts saved	Клавіатурні скорочення збережено
 	Keyboard shortcuts unchanged	Клавіатурні скорочення не змінено
@@ -168,6 +172,8 @@
 	PNG image	Зображення PNG
 	Parameters	Параметри
 	Paste	Вставити
+	Pause	Пауза
+	Play	Відтворити
 	Points	Точки
 	Poisson	Розподіл Пуассона
 	Preferences	Налаштування
@@ -199,6 +205,8 @@
 	Rename Block	Перейменувати блок
 	Rename Model	Перейменувати модель
 	Replace Model	Замінити модель
+	Replication 1 · {time} of {end} {unit}	Повторний запуск 1 · {time} з {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Повторний запуск 1 · {time} з {end} {unit} · розігрів
 	Replications	Кількість повторних запусків
 	Resource pool	Пул ресурсів
 	Resource pools	Пули ресурсів
@@ -209,7 +217,9 @@
 	Run	Запустити
 	Run cancelled	Запуск скасовано
 	Run experiment	Запустити експеримент
+	Run replication 1 step by step and see each block's queue on the diagram	Виконати повторний запуск 1 покроково й бачити чергу кожного блока на діаграмі
 	Run the experiment ({shortcut})	Запустити експеримент ({shortcut})
+	Run the next event	Виконати наступну подію
 	Running	Виконується
 	Running…	Виконується…
 	Save	Зберегти
@@ -220,6 +230,7 @@
 	Scale	Масштаб
 	Seed	Початкове значення генератора
 	Select All	Виділити все
+	Select a block to see its queue over time.	Виберіть блок, щоб побачити його чергу в часі.
 	Service time	Час обслуговування
 	Services	Служби
 	Set Property	Задати властивість
@@ -231,23 +242,30 @@
 	Share of units blocked	Частка заблокованих одиниць
 	Show All	Показати всі
 	Show {id}	Показати {id}
+	Speed	Швидкість
 	Split or join	Розділити або об'єднати
 	Split or join (all ways)	Розділити або об'єднати (усі шляхи)
 	Spread out	Розподіл
 	Stages (k)	Стадії (k)
 	Standard deviation	Стандартне відхилення
+	Step	Крок
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft закрився з незбереженими змінами в {name}. Відновіть їх як модель без назви або відкиньте.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft зчитує моделі процесів із файлів BPMN або XPDL із даними моделювання BPSim, запускає їх як експерименти з повтореннями та подає кожен результат із довірчим інтервалом.
 	StochCraft {version} · model {digest}	StochCraft {version} · модель {digest}
+	Stop Watching	Припинити спостереження
 	Stop setting {name}	Припинити налаштування {name}
+	Stop watching	Припинити спостереження
+	Stopped watching	Спостереження припинено
 	Tandem line	Послідовна лінія
 	Task	Завдання
 	Task with a resource	Завдання з ресурсом
 	Task with shared resources	Завдання зі спільними ресурсами
 	Text	Текст
+	The model changed, so watching stopped	Модель змінилася, тому спостереження припинено
 	The model: its experiment, connections and problems	Модель: експеримент, з'єднання й проблеми
 	This block has a warning	У цьому блоці є попередження
 	This block has an error	У цьому блоці є помилка
+	This run	Цей запуск
 	Time between arrivals	Час між прибуттями
 	Time unit	Одиниця часу
 	To	До
@@ -270,10 +288,14 @@
 	Utilisation	Коефіцієнт використання
 	Value	Значення
 	View	Перегляд
+	Waiting over time	Очікують у часі
 	Waiting room	Місця очікування
 	Warm-up	Розігрів
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Розігрів {warmup} {unit}, потім вимірювання протягом {duration} {unit}
 	Warning	Попередження
+	Watch a Run	Спостерігати за запуском
+	Watch a run	Спостерігати за запуском
+	Watching replication 1	Спостереження за повторним запуском 1
 	Weibull	Розподіл Вейбулла
 	Whole number	Ціле число
 	Window	Вікно
@@ -303,14 +325,23 @@
 	the run stopped	запуск зупинено
 	the settings could not be saved: {error}	не вдалося зберегти налаштування: {error}
 	there are no charts to export	немає діаграм для експорту
+	time	час
 	to {block}	до {block}
 	unlimited	без обмежень
 	years	роки
+	{busy} busy	Зайнято: {busy}
+	{entered} in, {left} out, {lost} lost	Увійшло: {entered}, вийшло: {left}, втрачено: {lost}
 	{field}: not editable here yet	{field}: тут поки не можна редагувати
 	{id}: a probability is a number from 0 to 1	{id}: імовірність має бути числом від 0 до 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — змінено
+	{n} created	Створено: {n}
+	{n} done	Завершено: {n}
+	{n} inside	Усередині: {n}
+	{n} waiting	Очікують: {n}
+	{n} {unit} per second	{n} {unit} за секунду
 	{property} (set to, mean)	{property} (задане значення, середнє)
+	{title}: now {now}, at most {most}	{title}: зараз {now}, щонайбільше {most}
 	± 95% CI	± 95% ДІ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — половина ширини 95% довірчого інтервалу Student-t для середнього значення за повтореннями.
 	· no results yet	· результатів поки немає

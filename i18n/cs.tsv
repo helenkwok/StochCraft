@@ -103,6 +103,7 @@
 	Exported {file}	Exportováno {file}
 	Expression	Výraz
 	File	Soubor
+	Finished at {time} {unit}	Dokončeno v čase {time} {unit}
 	Fit	Přizpůsobit
 	Fit the diagram to the view	Přizpůsobit diagram zobrazení
 	Flows	Toky
@@ -112,6 +113,9 @@
 	Help	Nápověda
 	Hide Others	Skrýt ostatní
 	Hide {app}	Skrýt {app}
+	Inside over time	Uvnitř v čase
+	Jump	Přejít
+	Jump to time	Přejít na čas
 	Keyboard Shortcuts…	Klávesové zkratky…
 	Keyboard shortcuts saved	Klávesové zkratky byly uloženy
 	Keyboard shortcuts unchanged	Klávesové zkratky beze změny
@@ -168,6 +172,8 @@
 	PNG image	Obrázek PNG
 	Parameters	Parametry
 	Paste	Vložit
+	Pause	Pozastavit
+	Play	Přehrát
 	Points	Body
 	Poisson	Poissonovo
 	Preferences	Předvolby
@@ -199,6 +205,8 @@
 	Rename Block	Přejmenovat blok
 	Rename Model	Přejmenovat model
 	Replace Model	Nahradit model
+	Replication 1 · {time} of {end} {unit}	Replikace 1 · {time} z {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Replikace 1 · {time} z {end} {unit} · zahřívání
 	Replications	Replikace
 	Resource pool	Fond zdrojů
 	Resource pools	Fondy zdrojů
@@ -209,7 +217,9 @@
 	Run	Spustit
 	Run cancelled	Běh byl zrušen
 	Run experiment	Spustit experiment
+	Run replication 1 step by step and see each block's queue on the diagram	Spustit replikaci 1 krok za krokem a sledovat frontu každého bloku v diagramu
 	Run the experiment ({shortcut})	Spustit experiment ({shortcut})
+	Run the next event	Provést další událost
 	Running	Probíhá
 	Running…	Probíhá…
 	Save	Uložit
@@ -220,6 +230,7 @@
 	Scale	Měřítko
 	Seed	Počáteční hodnota generátoru
 	Select All	Vybrat vše
+	Select a block to see its queue over time.	Vyberte blok, abyste viděli jeho frontu v čase.
 	Service time	Doba obsluhy
 	Services	Služby
 	Set Property	Nastavit vlastnost
@@ -231,23 +242,30 @@
 	Share of units blocked	Podíl blokovaných jednotek
 	Show All	Zobrazit vše
 	Show {id}	Zobrazit {id}
+	Speed	Rychlost
 	Split or join	Rozdělit nebo spojit
 	Split or join (all ways)	Rozdělit nebo spojit (všechny cesty)
 	Spread out	Rozmístit
 	Stages (k)	Fáze (k)
 	Standard deviation	Směrodatná odchylka
+	Step	Krok
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft byl ukončen s neuloženými změnami v modelu {name}. Obnovte je jako nepojmenovaný model, nebo je zahoďte.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft načítá modely procesů ze souborů BPMN nebo XPDL se simulačními daty BPSim, spouští je jako experimenty s replikacemi a uvádí každý výsledek s jeho intervalem spolehlivosti.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop Watching	Ukončit sledování
 	Stop setting {name}	Přestat nastavovat {name}
+	Stop watching	Ukončit sledování
+	Stopped watching	Sledování ukončeno
 	Tandem line	Tandemová linka
 	Task	Úloha
 	Task with a resource	Úloha se zdrojem
 	Task with shared resources	Úloha se sdílenými zdroji
 	Text	Text
+	The model changed, so watching stopped	Model se změnil, proto bylo sledování ukončeno
 	The model: its experiment, connections and problems	Model: experiment, propojení a problémy
 	This block has a warning	Tento blok obsahuje upozornění
 	This block has an error	Tento blok obsahuje chybu
+	This run	Tento běh
 	Time between arrivals	Doba mezi příchody
 	Time unit	Časová jednotka
 	To	Do
@@ -270,10 +288,14 @@
 	Utilisation	Využití
 	Value	Hodnota
 	View	Zobrazení
+	Waiting over time	Čekající v čase
 	Waiting room	Čekárna
 	Warm-up	Zahřívání
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Zahřívání {warmup} {unit}, poté měření {duration} {unit}
 	Warning	Upozornění
+	Watch a Run	Sledovat běh
+	Watch a run	Sledovat běh
+	Watching replication 1	Sleduje se replikace 1
 	Weibull	Weibullovo
 	Whole number	Celé číslo
 	Window	Okno
@@ -303,14 +325,23 @@
 	the run stopped	běh se zastavil
 	the settings could not be saved: {error}	nastavení se nepodařilo uložit: {error}
 	there are no charts to export	nejsou žádné grafy k exportu
+	time	čas
 	to {block}	do {block}
 	unlimited	bez omezení
 	years	roky
+	{busy} busy	Obsazeno: {busy}
+	{entered} in, {left} out, {lost} lost	Vstoupilo: {entered}, odešlo: {left}, ztraceno: {lost}
 	{field}: not editable here yet	{field}: zde zatím nelze upravovat
 	{id}: a probability is a number from 0 to 1	{id}: pravděpodobnost je číslo od 0 do 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — upraveno
+	{n} created	Vytvořeno: {n}
+	{n} done	Hotovo: {n}
+	{n} inside	Uvnitř: {n}
+	{n} waiting	Čeká: {n}
+	{n} {unit} per second	{n} {unit} za sekundu
 	{property} (set to, mean)	{property} (nastaveno na, průměr)
+	{title}: now {now}, at most {most}	{title}: nyní {now}, nejvýše {most}
 	± 95% CI	± 95% interval spolehlivosti
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± představuje polovinu šířky 95% Student-t intervalu spolehlivosti průměru napříč replikacemi.
 	· no results yet	· zatím žádné výsledky

@@ -52,6 +52,7 @@ use stochcraft_model::Model;
 
 pub use commands::{COMMANDS, Command, CommandKind};
 pub use run::RunMode;
+pub use stochcraft_blocks::{Live, LiveState, RunError};
 
 use edit::Op;
 use run::{Job, Plan};
@@ -397,6 +398,20 @@ impl Engine {
         }
         self.saved = self.model.clone();
         Ok(json!({ "path": path, "format": format, "bytes": bytes.len() as u64 }))
+    }
+
+    /// Replication `replication` (counted from 0) of the model's experiment, set up to run step
+    /// by step for watching: the same random stream, so the same events, as that replication of
+    /// `run.start` with the experiment's seed.
+    pub fn live_run(&self, replication: u64) -> Result<Live<'static>, CommandError> {
+        let compiled = compile(&self.model).map_err(|ds| CommandError {
+            code: ErrorCode::InvalidModel,
+            message: "the model has errors and cannot run".into(),
+            details: Some(wire::diagnostics(&ds)),
+        })?;
+        let x = &self.model.experiment;
+        let rng = Experiment::new(u64::from(x.replications).max(1), x.seed).stream(replication);
+        Ok(compiled.live(rng))
     }
 
     fn plan(

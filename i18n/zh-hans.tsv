@@ -103,6 +103,7 @@
 	Exported {file}	已导出 {file}
 	Expression	表达式
 	File	文件
+	Finished at {time} {unit}	已于 {time} {unit} 结束
 	Fit	适应
 	Fit the diagram to the view	使图表适应视图
 	Flows	顺序流
@@ -112,6 +113,9 @@
 	Help	帮助
 	Hide Others	隐藏其他
 	Hide {app}	隐藏 {app}
+	Inside over time	内部数量随时间变化
+	Jump	跳转
+	Jump to time	跳转到时间
 	Keyboard Shortcuts…	键盘快捷键…
 	Keyboard shortcuts saved	键盘快捷键已保存
 	Keyboard shortcuts unchanged	键盘快捷键未更改
@@ -168,6 +172,8 @@
 	PNG image	PNG 图像
 	Parameters	参数
 	Paste	粘贴
+	Pause	暂停
+	Play	播放
 	Points	点
 	Poisson	泊松分布
 	Preferences	首选项
@@ -199,6 +205,8 @@
 	Rename Block	重命名区块
 	Rename Model	重命名模型
 	Replace Model	替换模型
+	Replication 1 · {time} of {end} {unit}	第 1 次重复运行 · {time} / {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	第 1 次重复运行 · {time} / {end} {unit} · 预热期
 	Replications	重复运行次数
 	Resource pool	资源池
 	Resource pools	资源池
@@ -209,7 +217,9 @@
 	Run	运行
 	Run cancelled	运行已取消
 	Run experiment	运行实验
+	Run replication 1 step by step and see each block's queue on the diagram	逐步执行第 1 次重复运行，并在图表上查看每个区块的队列
 	Run the experiment ({shortcut})	运行实验 ({shortcut})
+	Run the next event	执行下一个事件
 	Running	正在运行
 	Running…	正在运行…
 	Save	保存
@@ -220,6 +230,7 @@
 	Scale	尺度参数
 	Seed	随机种子
 	Select All	全选
+	Select a block to see its queue over time.	选择一个区块以查看其队列随时间的变化。
 	Service time	服务时间
 	Services	服务
 	Set Property	设置属性
@@ -231,23 +242,30 @@
 	Share of units blocked	资源单元阻塞比例
 	Show All	全部显示
 	Show {id}	显示 {id}
+	Speed	速度
 	Split or join	拆分或合并
 	Split or join (all ways)	拆分或合并（所有路径）
 	Spread out	均匀分布
 	Stages (k)	阶段数 (k)
 	Standard deviation	标准差
+	Step	单步
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft 关闭时 {name} 有未保存的更改。可将其恢复为未命名模型，或放弃这些更改。
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft 读取带有 BPSim 仿真数据的 BPMN 或 XPDL 流程模型文件，以重复实验的方式运行，并为每个结果给出置信区间。
 	StochCraft {version} · model {digest}	StochCraft {version} · 模型 {digest}
+	Stop Watching	停止观察
 	Stop setting {name}	停止设置 {name}
+	Stop watching	停止观察
+	Stopped watching	已停止观察
 	Tandem line	串联流程
 	Task	任务
 	Task with a resource	需要资源的任务
 	Task with shared resources	需要共享资源的任务
 	Text	文本
+	The model changed, so watching stopped	模型已更改，因此已停止观察
 	The model: its experiment, connections and problems	模型：实验、连接和问题
 	This block has a warning	此区块存在警告
 	This block has an error	此区块存在错误
+	This run	本次运行
 	Time between arrivals	到达间隔时间
 	Time unit	时间单位
 	To	终点
@@ -270,10 +288,14 @@
 	Utilisation	利用率
 	Value	值
 	View	视图
+	Waiting over time	等待数量随时间变化
 	Waiting room	等待区
 	Warm-up	预热期
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	预热 {warmup} {unit}，随后测量 {duration} {unit}
 	Warning	警告
+	Watch a Run	观察运行
+	Watch a run	观察运行
+	Watching replication 1	正在观察第 1 次重复运行
 	Weibull	威布尔分布
 	Whole number	整数
 	Window	窗口
@@ -303,14 +325,23 @@
 	the run stopped	运行已停止
 	the settings could not be saved: {error}	无法保存设置：{error}
 	there are no charts to export	没有可导出的图表
+	time	时间
 	to {block}	前往 {block}
 	unlimited	无限制
 	years	年
+	{busy} busy	忙碌 {busy}
+	{entered} in, {left} out, {lost} lost	进入 {entered}，离开 {left}，丢失 {lost}
 	{field}: not editable here yet	{field}：暂时无法在此编辑
 	{id}: a probability is a number from 0 to 1	{id}：概率必须是 0 到 1 之间的数字
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — 已编辑
+	{n} created	已创建 {n}
+	{n} done	已完成 {n}
+	{n} inside	内部 {n}
+	{n} waiting	等待 {n}
+	{n} {unit} per second	每秒 {n} {unit}
 	{property} (set to, mean)	{property}（所设值的均值）
+	{title}: now {now}, at most {most}	{title}：当前 {now}，最多 {most}
 	± 95% CI	± 95% 置信区间
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± 表示各次重复运行均值的 95% Student-t 置信区间的半宽。
 	· no results yet	· 尚无结果

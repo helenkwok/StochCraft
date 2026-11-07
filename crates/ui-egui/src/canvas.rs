@@ -612,6 +612,9 @@ impl App {
             shape_rects.push((id, r));
         }
 
+        // A run being watched: each block's state on its shape.
+        self.live_badges(&painter, &shape_rects, p, view.zoom);
+
         // The connect handle: on the right of the block under the pointer (or the selected one),
         // except where nothing can leave (departures).
         let near = pointer.and_then(|pt| {

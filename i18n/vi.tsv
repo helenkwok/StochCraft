@@ -103,6 +103,7 @@
 	Exported {file}	Đã xuất {file}
 	Expression	Biểu thức
 	File	Tệp
+	Finished at {time} {unit}	Kết thúc tại {time} {unit}
 	Fit	Vừa khung
 	Fit the diagram to the view	Thu phóng sơ đồ cho vừa khung nhìn
 	Flows	Luồng
@@ -112,6 +113,9 @@
 	Help	Trợ giúp
 	Hide Others	Ẩn các mục khác
 	Hide {app}	Ẩn {app}
+	Inside over time	Bên trong theo thời gian
+	Jump	Đi
+	Jump to time	Đi tới thời điểm
 	Keyboard Shortcuts…	Phím tắt…
 	Keyboard shortcuts saved	Đã lưu phím tắt
 	Keyboard shortcuts unchanged	Phím tắt không thay đổi
@@ -168,6 +172,8 @@
 	PNG image	Ảnh PNG
 	Parameters	Tham số
 	Paste	Dán
+	Pause	Tạm dừng
+	Play	Phát
 	Points	Điểm
 	Poisson	Poisson
 	Preferences	Tùy chọn
@@ -199,6 +205,8 @@
 	Rename Block	Đổi tên khối
 	Rename Model	Đổi tên mô hình
 	Replace Model	Thay thế mô hình
+	Replication 1 · {time} of {end} {unit}	Lần lặp 1 · {time} / {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Lần lặp 1 · {time} / {end} {unit} · khởi động
 	Replications	Số lần lặp
 	Resource pool	Nhóm tài nguyên
 	Resource pools	Các nhóm tài nguyên
@@ -209,7 +217,9 @@
 	Run	Chạy
 	Run cancelled	Đã hủy chạy
 	Run experiment	Chạy thí nghiệm
+	Run replication 1 step by step and see each block's queue on the diagram	Chạy lần lặp 1 từng bước và xem hàng đợi của mỗi khối trên sơ đồ
 	Run the experiment ({shortcut})	Chạy thí nghiệm ({shortcut})
+	Run the next event	Chạy sự kiện tiếp theo
 	Running	Đang chạy
 	Running…	Đang chạy…
 	Save	Lưu
@@ -220,6 +230,7 @@
 	Scale	Tỷ lệ
 	Seed	Hạt giống ngẫu nhiên
 	Select All	Chọn tất cả
+	Select a block to see its queue over time.	Chọn một khối để xem hàng đợi của nó theo thời gian.
 	Service time	Thời gian phục vụ
 	Services	Dịch vụ
 	Set Property	Đặt thuộc tính
@@ -231,23 +242,30 @@
 	Share of units blocked	Tỷ lệ đơn vị bị chặn
 	Show All	Hiện tất cả
 	Show {id}	Hiển thị {id}
+	Speed	Tốc độ
 	Split or join	Tách hoặc gộp
 	Split or join (all ways)	Tách hoặc gộp (mọi hướng)
 	Spread out	Dàn đều
 	Stages (k)	Số giai đoạn (k)
 	Standard deviation	Độ lệch chuẩn
+	Step	Bước
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft đã đóng khi các thay đổi trong {name} chưa được lưu. Khôi phục chúng thành một mô hình chưa đặt tên hoặc loại bỏ chúng.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft đọc mô hình quy trình từ các tệp BPMN hoặc XPDL có dữ liệu mô phỏng BPSim, chạy chúng dưới dạng các thí nghiệm lặp độc lập và báo cáo mỗi kết quả kèm khoảng tin cậy.
 	StochCraft {version} · model {digest}	StochCraft {version} · mô hình {digest}
+	Stop Watching	Ngừng theo dõi
 	Stop setting {name}	Ngừng đặt {name}
+	Stop watching	Ngừng theo dõi
+	Stopped watching	Đã ngừng theo dõi
 	Tandem line	Dây chuyền nối tiếp
 	Task	Tác vụ
 	Task with a resource	Tác vụ có tài nguyên
 	Task with shared resources	Tác vụ có tài nguyên dùng chung
 	Text	Văn bản
+	The model changed, so watching stopped	Mô hình đã thay đổi nên việc theo dõi đã dừng
 	The model: its experiment, connections and problems	Mô hình: thí nghiệm, kết nối và vấn đề
 	This block has a warning	Khối này có cảnh báo
 	This block has an error	Khối này có lỗi
+	This run	Lần chạy này
 	Time between arrivals	Thời gian giữa các lượt đến
 	Time unit	Đơn vị thời gian
 	To	Đến
@@ -270,10 +288,14 @@
 	Utilisation	Mức sử dụng
 	Value	Giá trị
 	View	Xem
+	Waiting over time	Đang chờ theo thời gian
 	Waiting room	Khu vực chờ
 	Warm-up	Giai đoạn khởi động
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Khởi động {warmup} {unit}, sau đó đo trong {duration} {unit}
 	Warning	Cảnh báo
+	Watch a Run	Theo dõi một lần chạy
+	Watch a run	Theo dõi một lần chạy
+	Watching replication 1	Đang theo dõi lần lặp 1
 	Weibull	Weibull
 	Whole number	Số nguyên
 	Window	Cửa sổ
@@ -303,14 +325,23 @@
 	the run stopped	lần chạy đã dừng
 	the settings could not be saved: {error}	không thể lưu cài đặt: {error}
 	there are no charts to export	không có biểu đồ để xuất
+	time	thời điểm
 	to {block}	đến {block}
 	unlimited	không giới hạn
 	years	năm
+	{busy} busy	{busy} đang bận
+	{entered} in, {left} out, {lost} lost	{entered} vào, {left} ra, {lost} mất
 	{field}: not editable here yet	{field}: chưa thể chỉnh sửa tại đây
 	{id}: a probability is a number from 0 to 1	{id}: xác suất là số từ 0 đến 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — đã chỉnh sửa
+	{n} created	{n} đã tạo
+	{n} done	{n} đã xong
+	{n} inside	{n} bên trong
+	{n} waiting	{n} đang chờ
+	{n} {unit} per second	{n} {unit} mỗi giây
 	{property} (set to, mean)	{property} (giá trị đặt, trung bình)
+	{title}: now {now}, at most {most}	{title}: hiện tại {now}, tối đa {most}
 	± 95% CI	± KTC 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± là một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần lặp.
 	· no results yet	· chưa có kết quả

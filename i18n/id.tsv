@@ -103,6 +103,7 @@
 	Exported {file}	{file} diekspor
 	Expression	Ekspresi
 	File	Berkas
+	Finished at {time} {unit}	Selesai pada {time} {unit}
 	Fit	Paskan
 	Fit the diagram to the view	Paskan diagram ke tampilan
 	Flows	Alur
@@ -112,6 +113,9 @@
 	Help	Bantuan
 	Hide Others	Sembunyikan yang lain
 	Hide {app}	Sembunyikan {app}
+	Inside over time	Di dalam dari waktu ke waktu
+	Jump	Lompat
+	Jump to time	Lompat ke waktu
 	Keyboard Shortcuts…	Pintasan Keyboard…
 	Keyboard shortcuts saved	Pintasan keyboard disimpan
 	Keyboard shortcuts unchanged	Pintasan keyboard tidak berubah
@@ -168,6 +172,8 @@
 	PNG image	Gambar PNG
 	Parameters	Parameter
 	Paste	Tempel
+	Pause	Jeda
+	Play	Putar
 	Points	Titik
 	Poisson	Poisson
 	Preferences	Preferensi
@@ -199,6 +205,8 @@
 	Rename Block	Ganti Nama Blok
 	Rename Model	Ganti Nama Model
 	Replace Model	Ganti Model
+	Replication 1 · {time} of {end} {unit}	Replikasi 1 · {time} dari {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Replikasi 1 · {time} dari {end} {unit} · pemanasan
 	Replications	Replikasi
 	Resource pool	Kumpulan sumber daya
 	Resource pools	Kumpulan sumber daya
@@ -209,7 +217,9 @@
 	Run	Jalankan
 	Run cancelled	Proses dibatalkan
 	Run experiment	Jalankan eksperimen
+	Run replication 1 step by step and see each block's queue on the diagram	Jalankan replikasi 1 langkah demi langkah dan lihat antrean tiap blok di diagram
 	Run the experiment ({shortcut})	Jalankan eksperimen ({shortcut})
+	Run the next event	Jalankan kejadian berikutnya
 	Running	Berjalan
 	Running…	Sedang berjalan…
 	Save	Simpan
@@ -220,6 +230,7 @@
 	Scale	Skala
 	Seed	Benih acak
 	Select All	Pilih Semua
+	Select a block to see its queue over time.	Pilih blok untuk melihat antreannya dari waktu ke waktu.
 	Service time	Waktu layanan
 	Services	Layanan
 	Set Property	Atur Properti
@@ -231,23 +242,30 @@
 	Share of units blocked	Proporsi unit yang terblokir
 	Show All	Tampilkan semua
 	Show {id}	Tampilkan {id}
+	Speed	Kecepatan
 	Split or join	Pisahkan atau gabungkan
 	Split or join (all ways)	Pisahkan atau gabungkan (semua jalur)
 	Spread out	Sebarkan
 	Stages (k)	Tahapan (k)
 	Standard deviation	Simpangan baku
+	Step	Langkah
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ditutup saat perubahan pada {name} belum disimpan. Pulihkan perubahan itu sebagai model tanpa judul atau buang.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft membaca model proses dari file BPMN atau XPDL dengan data simulasi BPSim, menjalankannya sebagai eksperimen dengan beberapa replikasi, dan melaporkan setiap hasil beserta interval kepercayaannya.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop Watching	Berhenti Mengamati
 	Stop setting {name}	Berhenti mengatur {name}
+	Stop watching	Berhenti mengamati
+	Stopped watching	Berhenti mengamati
 	Tandem line	Jalur tandem
 	Task	Tugas
 	Task with a resource	Tugas dengan sumber daya
 	Task with shared resources	Tugas dengan sumber daya bersama
 	Text	Teks
+	The model changed, so watching stopped	Model berubah, jadi pengamatan dihentikan
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
 	This block has a warning	Blok ini memiliki peringatan
 	This block has an error	Blok ini memiliki kesalahan
+	This run	Jalannya ini
 	Time between arrivals	Waktu antar kedatangan
 	Time unit	Satuan waktu
 	To	Ke
@@ -270,10 +288,14 @@
 	Utilisation	Tingkat pemanfaatan
 	Value	Nilai
 	View	Tampilan
+	Waiting over time	Menunggu dari waktu ke waktu
 	Waiting room	Ruang tunggu
 	Warm-up	Pemanasan
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Pemanasan {warmup} {unit}, lalu pengukuran {duration} {unit}
 	Warning	Peringatan
+	Watch a Run	Amati Jalannya Model
+	Watch a run	Amati jalannya model
+	Watching replication 1	Mengamati replikasi 1
 	Weibull	Weibull
 	Whole number	Bilangan bulat
 	Window	Jendela
@@ -303,14 +325,23 @@
 	the run stopped	proses berhenti
 	the settings could not be saved: {error}	pengaturan tidak dapat disimpan: {error}
 	there are no charts to export	tidak ada grafik untuk diekspor
+	time	waktu
 	to {block}	ke {block}
 	unlimited	tanpa batas
 	years	tahun
+	{busy} busy	{busy} sibuk
+	{entered} in, {left} out, {lost} lost	{entered} masuk, {left} keluar, {lost} hilang
 	{field}: not editable here yet	{field}: belum dapat diedit di sini
 	{id}: a probability is a number from 0 to 1	{id}: probabilitas adalah angka dari 0 sampai 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — diedit
+	{n} created	{n} dibuat
+	{n} done	{n} selesai
+	{n} inside	{n} di dalam
+	{n} waiting	{n} menunggu
+	{n} {unit} per second	{n} {unit} per detik
 	{property} (set to, mean)	{property} (nilai ditetapkan, rata-rata)
+	{title}: now {now}, at most {most}	{title}: sekarang {now}, paling banyak {most}
 	± 95% CI	± IK 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± adalah setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh replikasi.
 	· no results yet	· belum ada hasil

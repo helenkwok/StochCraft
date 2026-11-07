@@ -103,6 +103,7 @@
 	Exported {file}	{file} dışa aktarıldı
 	Expression	İfade
 	File	Dosya
+	Finished at {time} {unit}	{time} {unit} anında bitti
 	Fit	Sığdır
 	Fit the diagram to the view	Diyagramı görünüme sığdır
 	Flows	Akışlar
@@ -112,6 +113,9 @@
 	Help	Yardım
 	Hide Others	Diğerlerini Gizle
 	Hide {app}	{app} Uygulamasını Gizle
+	Inside over time	Zaman içinde içeridekiler
+	Jump	Git
+	Jump to time	Zamana git
 	Keyboard Shortcuts…	Klavye Kısayolları…
 	Keyboard shortcuts saved	Klavye kısayolları kaydedildi
 	Keyboard shortcuts unchanged	Klavye kısayolları değişmedi
@@ -168,6 +172,8 @@
 	PNG image	PNG görüntüsü
 	Parameters	Parametreler
 	Paste	Yapıştır
+	Pause	Duraklat
+	Play	Oynat
 	Points	Noktalar
 	Poisson	Poisson
 	Preferences	Tercihler
@@ -199,6 +205,8 @@
 	Rename Block	Bloğu yeniden adlandır
 	Rename Model	Modeli yeniden adlandır
 	Replace Model	Modeli değiştir
+	Replication 1 · {time} of {end} {unit}	Tekrar 1 · {time} / {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Tekrar 1 · {time} / {end} {unit} · ısınma
 	Replications	Tekrarlar
 	Resource pool	Kaynak havuzu
 	Resource pools	Kaynak havuzları
@@ -209,7 +217,9 @@
 	Run	Çalıştır
 	Run cancelled	Çalıştırma iptal edildi
 	Run experiment	Deneyi çalıştır
+	Run replication 1 step by step and see each block's queue on the diagram	Tekrar 1'i adım adım çalıştır ve her bloğun kuyruğunu diyagramda gör
 	Run the experiment ({shortcut})	Deneyi çalıştır ({shortcut})
+	Run the next event	Sonraki olayı çalıştır
 	Running	Çalışıyor
 	Running…	Çalışıyor…
 	Save	Kaydet
@@ -220,6 +230,7 @@
 	Scale	Ölçek
 	Seed	Rastgelelik tohumu
 	Select All	Tümünü seç
+	Select a block to see its queue over time.	Kuyruğunu zaman içinde görmek için bir blok seçin.
 	Service time	Hizmet süresi
 	Services	Hizmetler
 	Set Property	Özelliği ayarla
@@ -231,23 +242,30 @@
 	Share of units blocked	Engellenen birimlerin oranı
 	Show All	Tümünü Göster
 	Show {id}	{id} göster
+	Speed	Hız
 	Split or join	Ayır veya birleştir
 	Split or join (all ways)	Ayır veya birleştir (tüm yollar)
 	Spread out	Dağıt
 	Stages (k)	Aşamalar (k)
 	Standard deviation	Standart sapma
+	Step	Adım
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft, {name} içindeki kaydedilmemiş değişikliklerle kapandı. Bunları adsız bir model olarak kurtarın veya atın.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft, BPSim benzetim verileri içeren BPMN veya XPDL dosyalarından süreç modellerini okur, bunları tekrarlı deneyler olarak çalıştırır ve her sonucu güven aralığıyla birlikte raporlar.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop Watching	İzlemeyi Durdur
 	Stop setting {name}	{name} ayarlamayı durdur
+	Stop watching	İzlemeyi durdur
+	Stopped watching	İzleme durduruldu
 	Tandem line	Tandem hat
 	Task	Görev
 	Task with a resource	Kaynak kullanan görev
 	Task with shared resources	Paylaşılan kaynakları kullanan görev
 	Text	Metin
+	The model changed, so watching stopped	Model değişti, bu nedenle izleme durduruldu
 	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
 	This block has a warning	Bu blokta uyarı var
 	This block has an error	Bu blokta hata var
+	This run	Bu çalıştırma
 	Time between arrivals	Gelişler arası süre
 	Time unit	Zaman birimi
 	To	Hedef
@@ -270,10 +288,14 @@
 	Utilisation	Kullanım oranı
 	Value	Değer
 	View	Görünüm
+	Waiting over time	Zaman içinde bekleyenler
 	Waiting room	Bekleme alanı
 	Warm-up	Isınma
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} ısınma, ardından {duration} {unit} ölçüm
 	Warning	Uyarı
+	Watch a Run	Bir Çalıştırmayı İzle
+	Watch a run	Bir çalıştırmayı izle
+	Watching replication 1	Tekrar 1 izleniyor
 	Weibull	Weibull
 	Whole number	Tam sayı
 	Window	Pencere
@@ -303,14 +325,23 @@
 	the run stopped	çalıştırma durdu
 	the settings could not be saved: {error}	ayarlar kaydedilemedi: {error}
 	there are no charts to export	dışa aktarılacak grafik yok
+	time	zaman
 	to {block}	{block} bloğuna
 	unlimited	sınırsız
 	years	yıl
+	{busy} busy	{busy} meşgul
+	{entered} in, {left} out, {lost} lost	{entered} giriş, {left} çıkış, {lost} kayıp
 	{field}: not editable here yet	{field}: burada henüz düzenlenemiyor
 	{id}: a probability is a number from 0 to 1	{id}: olasılık 0 ile 1 arasında bir sayıdır
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — düzenlendi
+	{n} created	{n} oluşturuldu
+	{n} done	{n} tamamlandı
+	{n} inside	{n} içeride
+	{n} waiting	{n} bekliyor
+	{n} {unit} per second	saniyede {n} {unit}
 	{property} (set to, mean)	{property} (ayarlanan değer, ortalama)
+	{title}: now {now}, at most {most}	{title}: şu an {now}, en fazla {most}
 	± 95% CI	± 95% güven aralığı
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	±, tekrarlamalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliğidir.
 	· no results yet	· henüz sonuç yok

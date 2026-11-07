@@ -103,6 +103,7 @@
 	Exported {file}	Εξήχθη το {file}
 	Expression	Έκφραση
 	File	Αρχείο
+	Finished at {time} {unit}	Ολοκληρώθηκε στο {time} {unit}
 	Fit	Προσαρμογή
 	Fit the diagram to the view	Προσαρμογή του διαγράμματος στην προβολή
 	Flows	Ροές
@@ -112,6 +113,9 @@
 	Help	Βοήθεια
 	Hide Others	Απόκρυψη άλλων
 	Hide {app}	Απόκρυψη {app}
+	Inside over time	Μέσα στη διάρκεια του χρόνου
+	Jump	Μετάβαση
+	Jump to time	Μετάβαση σε χρόνο
 	Keyboard Shortcuts…	Συντομεύσεις πληκτρολογίου…
 	Keyboard shortcuts saved	Οι συντομεύσεις πληκτρολογίου αποθηκεύτηκαν
 	Keyboard shortcuts unchanged	Οι συντομεύσεις πληκτρολογίου δεν άλλαξαν
@@ -168,6 +172,8 @@
 	PNG image	Εικόνα PNG
 	Parameters	Παράμετροι
 	Paste	Επικόλληση
+	Pause	Παύση
+	Play	Αναπαραγωγή
 	Points	Σημεία
 	Poisson	Πουασόν
 	Preferences	Προτιμήσεις
@@ -199,6 +205,8 @@
 	Rename Block	Μετονομασία μπλοκ
 	Rename Model	Μετονομασία μοντέλου
 	Replace Model	Αντικατάσταση μοντέλου
+	Replication 1 · {time} of {end} {unit}	Επανάληψη 1 · {time} από {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Επανάληψη 1 · {time} από {end} {unit} · προθέρμανση
 	Replications	Επαναλήψεις
 	Resource pool	Δεξαμενή πόρων
 	Resource pools	Δεξαμενές πόρων
@@ -209,7 +217,9 @@
 	Run	Εκτέλεση
 	Run cancelled	Η εκτέλεση ακυρώθηκε
 	Run experiment	Εκτέλεση πειράματος
+	Run replication 1 step by step and see each block's queue on the diagram	Εκτέλεση της επανάληψης 1 βήμα προς βήμα με την ουρά κάθε μπλοκ στο διάγραμμα
 	Run the experiment ({shortcut})	Εκτέλεση πειράματος ({shortcut})
+	Run the next event	Εκτέλεση του επόμενου συμβάντος
 	Running	Εκτελείται
 	Running…	Εκτελείται…
 	Save	Αποθήκευση
@@ -220,6 +230,7 @@
 	Scale	Κλίμακα
 	Seed	Αρχικός σπόρος
 	Select All	Επιλογή όλων
+	Select a block to see its queue over time.	Επιλέξτε ένα μπλοκ για να δείτε την ουρά του στη διάρκεια του χρόνου.
 	Service time	Χρόνος εξυπηρέτησης
 	Services	Υπηρεσίες
 	Set Property	Ορισμός ιδιότητας
@@ -231,23 +242,30 @@
 	Share of units blocked	Ποσοστό αποκλεισμένων μονάδων
 	Show All	Εμφάνιση όλων
 	Show {id}	Εμφάνιση {id}
+	Speed	Ταχύτητα
 	Split or join	Διαχωρισμός ή ένωση
 	Split or join (all ways)	Διαχωρισμός ή ένωση (όλες οι διαδρομές)
 	Spread out	Κατανομή
 	Stages (k)	Στάδια (k)
 	Standard deviation	Τυπική απόκλιση
+	Step	Βήμα
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	Το StochCraft έκλεισε με μη αποθηκευμένες αλλαγές στο {name}. Ανακτήστε τις ως μοντέλο χωρίς τίτλο ή απορρίψτε τις.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	Το StochCraft διαβάζει μοντέλα διαδικασιών από αρχεία BPMN ή XPDL με δεδομένα προσομοίωσης BPSim, τα εκτελεί ως πειράματα με επαναλήψεις και παρουσιάζει κάθε αποτέλεσμα μαζί με το διάστημα εμπιστοσύνης του.
 	StochCraft {version} · model {digest}	StochCraft {version} · μοντέλο {digest}
+	Stop Watching	Διακοπή παρακολούθησης
 	Stop setting {name}	Διακοπή ορισμού του {name}
+	Stop watching	Διακοπή παρακολούθησης
+	Stopped watching	Η παρακολούθηση διακόπηκε
 	Tandem line	Διαδοχική γραμμή
 	Task	Εργασία
 	Task with a resource	Εργασία με πόρο
 	Task with shared resources	Εργασία με κοινόχρηστους πόρους
 	Text	Κείμενο
+	The model changed, so watching stopped	Το μοντέλο άλλαξε, οπότε η παρακολούθηση διακόπηκε
 	The model: its experiment, connections and problems	Το μοντέλο: πείραμα, συνδέσεις και προβλήματα
 	This block has a warning	Αυτό το μπλοκ έχει προειδοποίηση
 	This block has an error	Αυτό το μπλοκ έχει σφάλμα
+	This run	Αυτή η εκτέλεση
 	Time between arrivals	Χρόνος μεταξύ αφίξεων
 	Time unit	Μονάδα χρόνου
 	To	Προς
@@ -270,10 +288,14 @@
 	Utilisation	Βαθμός χρησιμοποίησης
 	Value	Τιμή
 	View	Προβολή
+	Waiting over time	Σε αναμονή στη διάρκεια του χρόνου
 	Waiting room	Χώρος αναμονής
 	Warm-up	Προθέρμανση
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Προθέρμανση {warmup} {unit}, έπειτα μέτρηση {duration} {unit}
 	Warning	Προειδοποίηση
+	Watch a Run	Παρακολούθηση εκτέλεσης
+	Watch a run	Παρακολούθηση εκτέλεσης
+	Watching replication 1	Παρακολούθηση της επανάληψης 1
 	Weibull	Βάιμπουλ
 	Whole number	Ακέραιος αριθμός
 	Window	Παράθυρο
@@ -303,14 +325,23 @@
 	the run stopped	η εκτέλεση διακόπηκε
 	the settings could not be saved: {error}	δεν ήταν δυνατή η αποθήκευση των ρυθμίσεων: {error}
 	there are no charts to export	δεν υπάρχουν γραφήματα για εξαγωγή
+	time	χρόνος
 	to {block}	προς {block}
 	unlimited	χωρίς όριο
 	years	έτη
+	{busy} busy	{busy} απασχολημένα
+	{entered} in, {left} out, {lost} lost	{entered} μέσα, {left} έξω, {lost} χαμένα
 	{field}: not editable here yet	{field}: δεν είναι ακόμη επεξεργάσιμο εδώ
 	{id}: a probability is a number from 0 to 1	{id}: η πιθανότητα είναι αριθμός από 0 έως 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — επεξεργασμένο
+	{n} created	{n} δημιουργήθηκαν
+	{n} done	{n} ολοκληρώθηκαν
+	{n} inside	{n} μέσα
+	{n} waiting	{n} σε αναμονή
+	{n} {unit} per second	{n} {unit} ανά δευτερόλεπτο
 	{property} (set to, mean)	{property} (καθορισμένη τιμή, μέση τιμή)
+	{title}: now {now}, at most {most}	{title}: τώρα {now}, το πολύ {most}
 	± 95% CI	± 95% ΔΕ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	Το ± είναι το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t 95% για τη μέση τιμή μεταξύ των επαναλήψεων.
 	· no results yet	· δεν υπάρχουν ακόμη αποτελέσματα

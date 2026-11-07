@@ -870,8 +870,8 @@ hue validated per theme, thin bars, recessive grid, the table as the accessible 
 exports as CSV (as `stochcraft-cli run --format csv`) and the charts as PNG, saved where the user
 chooses on the desktop and downloaded in the browser.
 
-**Moved to M3.5:** queue length over time for a single replication, which needs a trace of one
-run from the engine; the live view of a run produces exactly that.
+**Moved to M3.5 (done there):** queue length over time for a single replication, which needs a
+trace of one run from the engine; the live view of a run produces exactly that.
 
 ### M3.4 The flowchart canvas
 
@@ -919,6 +919,32 @@ their waypoints), resizing shapes by hand (`layout.set` can), and lanes and pool
 Step a single replication at a chosen speed (the engine already supports `run_until`
 in slices) and show counts, queue lengths and utilisation on the canvas as it runs; pause, step
 and jump to a time.
+
+**Done:**
+- **Stepping a run** (`blocks`): `Compiled::live` gives a `Live` run of one replication.
+  - Advance it to a time or by one event, read each block's and pool's state now, and get the
+    statistics so far.
+  - Tests check it is the same replication: run to its end in uneven slices, or one event at a
+    time, it gives exactly the report `Compiled::run` gives with the same random stream.
+  - `Engine::live_run(i)` is replication *i* of the experiment, so watching shows replication 1
+    of Run.
+- **Watching in the window** (`ui-egui/src/live.rs`), from the bar above the canvas or
+  Model ▸ Watch a Run:
+  - Play and Pause (also Space), Step to the next event, a speed in simulated time per second
+    (about a minute for the whole run by default), and Jump to a time.
+  - A clock bar shows where the run is, and when it is in its warm-up.
+  - On the canvas:
+    - each task shows the entities waiting and its units busy, with a bar for busy units;
+    - delays show the entities inside;
+    - sources show how many were created, and departures how many are done.
+  - The inspector shows the selected block's counts and a chart of its queue (or what is inside)
+    over time. This is the queue-length-over-time view moved here from M3.3.
+- **Model changes:** changing anything the run depends on stops watching; moving shapes does
+  not.
+- **Tests:** `blocks/tests/live.rs`, `engine/tests/engine.rs`, `ui-egui/tests/live.rs`.
+
+**Not yet:** entities drawn moving along the connections, watching in a web worker, and
+replications other than the first.
 
 ### M3.6 Browser and agents
 

@@ -103,6 +103,7 @@
 	Exported {file}	{file} निर्यात किया गया
 	Expression	व्यंजक
 	File	फ़ाइल
+	Finished at {time} {unit}	{time} {unit} पर समाप्त
 	Fit	फ़िट करें
 	Fit the diagram to the view	आरेख को दृश्य में फ़िट करें
 	Flows	प्रवाह
@@ -112,6 +113,9 @@
 	Help	सहायता
 	Hide Others	अन्य छिपाएँ
 	Hide {app}	{app} छिपाएँ
+	Inside over time	समय के साथ अंदर
+	Jump	जाएँ
+	Jump to time	समय पर जाएँ
 	Keyboard Shortcuts…	कीबोर्ड शॉर्टकट…
 	Keyboard shortcuts saved	कीबोर्ड शॉर्टकट सहेज दिए गए
 	Keyboard shortcuts unchanged	कीबोर्ड शॉर्टकट अपरिवर्तित हैं
@@ -168,6 +172,8 @@
 	PNG image	PNG छवि
 	Parameters	पैरामीटर
 	Paste	चिपकाएँ
+	Pause	रोकें
+	Play	चलाएँ
 	Points	बिंदु
 	Poisson	प्वासों
 	Preferences	वरीयताएँ
@@ -199,6 +205,8 @@
 	Rename Block	ब्लॉक का नाम बदलें
 	Rename Model	मॉडल का नाम बदलें
 	Replace Model	मॉडल बदलें
+	Replication 1 · {time} of {end} {unit}	पुनरावृत्ति 1 · {end} {unit} में से {time}
+	Replication 1 · {time} of {end} {unit} · warm-up	पुनरावृत्ति 1 · {end} {unit} में से {time} · वार्म-अप
 	Replications	पुनरावृत्तियाँ
 	Resource pool	संसाधन पूल
 	Resource pools	संसाधन पूल
@@ -209,7 +217,9 @@
 	Run	चलाएँ
 	Run cancelled	रन रद्द किया गया
 	Run experiment	प्रयोग चलाएँ
+	Run replication 1 step by step and see each block's queue on the diagram	पुनरावृत्ति 1 को चरण-दर-चरण चलाएँ और आरेख पर हर ब्लॉक की कतार देखें
 	Run the experiment ({shortcut})	प्रयोग चलाएँ ({shortcut})
+	Run the next event	अगली घटना चलाएँ
 	Running	चल रहा है
 	Running…	चल रहा है…
 	Save	सहेजें
@@ -220,6 +230,7 @@
 	Scale	पैमाना
 	Seed	यादृच्छिक बीज
 	Select All	सभी चुनें
+	Select a block to see its queue over time.	समय के साथ किसी ब्लॉक की कतार देखने के लिए उसे चुनें।
 	Service time	सेवा समय
 	Services	सेवाएँ
 	Set Property	गुण सेट करें
@@ -231,23 +242,30 @@
 	Share of units blocked	अवरुद्ध इकाइयों का अनुपात
 	Show All	सभी दिखाएँ
 	Show {id}	{id} दिखाएँ
+	Speed	गति
 	Split or join	विभाजित या संयोजित करें
 	Split or join (all ways)	विभाजित या संयोजित करें (सभी मार्ग)
 	Spread out	फैलाएँ
 	Stages (k)	चरण (k)
 	Standard deviation	मानक विचलन
+	Step	चरण
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft बंद होने पर {name} में कुछ बदलाव सहेजे नहीं गए थे। उन्हें बिना शीर्षक वाले मॉडल के रूप में पुनर्स्थापित करें या छोड़ दें।
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft, BPSim सिमुलेशन डेटा वाली BPMN या XPDL फ़ाइलों से प्रक्रिया मॉडल पढ़ता है, उनके कई पुनरावृत्ति प्रयोग चलाता है और प्रत्येक परिणाम के साथ उसका विश्वास अंतराल दिखाता है।
 	StochCraft {version} · model {digest}	StochCraft {version} · मॉडल {digest}
+	Stop Watching	देखना बंद करें
 	Stop setting {name}	{name} सेट करना बंद करें
+	Stop watching	देखना बंद करें
+	Stopped watching	देखना बंद किया गया
 	Tandem line	क्रमिक लाइन
 	Task	कार्य
 	Task with a resource	संसाधन वाला कार्य
 	Task with shared resources	साझा संसाधनों वाला कार्य
 	Text	पाठ
+	The model changed, so watching stopped	मॉडल बदल गया, इसलिए देखना बंद हो गया
 	The model: its experiment, connections and problems	मॉडल: प्रयोग, कनेक्शन और समस्याएँ
 	This block has a warning	इस ब्लॉक में चेतावनी है
 	This block has an error	इस ब्लॉक में त्रुटि है
+	This run	यह रन
 	Time between arrivals	आगमन के बीच का समय
 	Time unit	समय की इकाई
 	To	तक
@@ -270,10 +288,14 @@
 	Utilisation	उपयोग दर
 	Value	मान
 	View	दृश्य
+	Waiting over time	समय के साथ प्रतीक्षारत
 	Waiting room	प्रतीक्षा कक्ष
 	Warm-up	वार्म-अप
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} वार्म-अप, फिर {duration} {unit} का मापन
 	Warning	चेतावनी
+	Watch a Run	एक रन देखें
+	Watch a run	एक रन देखें
+	Watching replication 1	पुनरावृत्ति 1 देखी जा रही है
 	Weibull	वीबुल
 	Whole number	पूर्णांक
 	Window	विंडो
@@ -303,14 +325,23 @@
 	the run stopped	रन रुक गया
 	the settings could not be saved: {error}	सेटिंग सहेजी नहीं जा सकीं: {error}
 	there are no charts to export	निर्यात के लिए कोई चार्ट नहीं हैं
+	time	समय
 	to {block}	{block} तक
 	unlimited	असीमित
 	years	वर्ष
+	{busy} busy	{busy} व्यस्त
+	{entered} in, {left} out, {lost} lost	{entered} अंदर, {left} बाहर, {lost} खोए
 	{field}: not editable here yet	{field}: यहाँ अभी संपादन संभव नहीं है
 	{id}: a probability is a number from 0 to 1	{id}: प्रायिकता 0 से 1 तक की संख्या होनी चाहिए
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — संपादित
+	{n} created	{n} बनाए गए
+	{n} done	{n} पूरे
+	{n} inside	{n} अंदर
+	{n} waiting	{n} प्रतीक्षारत
+	{n} {unit} per second	{n} {unit} प्रति सेकंड
 	{property} (set to, mean)	{property} (सेट किया गया मान, माध्य)
+	{title}: now {now}, at most {most}	{title}: अभी {now}, अधिकतम {most}
 	± 95% CI	± 95% विश्वास अंतराल
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± पुनरावृत्तियों में प्राप्त माध्य के 95% Student-t विश्वास अंतराल की आधी चौड़ाई है।
 	· no results yet	· अभी कोई परिणाम नहीं हैं
