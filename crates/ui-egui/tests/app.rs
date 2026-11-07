@@ -6,7 +6,7 @@
 use egui_kittest::Harness;
 use egui_kittest::kittest::Queryable;
 use serde_json::json;
-use stochcraft_ui_egui::{App, Platform, Request};
+use stochcraft_ui_egui::{App, Autosave, Platform, Request};
 
 /// The app with English numbers (`1,234.5`), so the tests read the same in every region.
 fn english(mut app: App) -> App {
@@ -224,6 +224,56 @@ fn a_cancelled_save_drops_what_was_to_follow_it() {
     settle(&mut h);
     assert_eq!(h.state().engine().model().name, "Draft", "nothing followed");
     assert_eq!(h.state_mut().take_requests(), vec![]);
+}
+
+/// Takes the one download the app asked for.
+fn take_download(h: &mut Harness<'static, App>) -> String {
+    let requests = h.state_mut().take_requests();
+    let [Request::Download { name, .. }] = requests.as_slice() else {
+        panic!("expected one download, got {requests:?}");
+    };
+    name.clone()
+}
+
+#[test]
+fn a_download_does_not_count_as_saved() {
+    let mut h = harness(Platform::BROWSER);
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Draft" }));
+    settle(&mut h);
+    assert!(matches!(h.state_mut().autosave(), Autosave::Write(_)));
+
+    menu(&mut h, &["File", "Download"]);
+    let name = take_download(&mut h);
+    h.state_mut().downloaded(&name);
+    settle(&mut h);
+    // The browser can't say whether the file was kept, so nothing is marked saved: the title
+    // keeps its mark, the tab still asks before closing and the recovery copy stays.
+    assert!(h.state().has_unsaved_changes());
+    assert!(h.state().title().contains('•'), "{}", h.state().title());
+    assert_eq!(h.state_mut().autosave(), Autosave::Keep, "the copy stays");
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+    assert_eq!(h.state().status(), "Downloaded Draft.bpmn");
+}
+
+#[test]
+fn downloading_in_the_unsaved_changes_question_carries_on() {
+    let mut h = harness(Platform::BROWSER);
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Draft" }));
+    settle(&mut h);
+    assert!(matches!(h.state_mut().autosave(), Autosave::Write(_)));
+
+    // New ▸ Download: the user chose to download, so New follows once the download starts,
+    // and the recovery copy goes with the model it was for (as with Don't Save).
+    menu(&mut h, &["File", "New"]);
+    click(&mut h, "Download");
+    let name = take_download(&mut h);
+    h.state_mut().downloaded(&name);
+    settle(&mut h);
+    assert_eq!(h.state().engine().model().name, "", "New followed");
+    assert_eq!(h.state().status(), "New model");
+    assert_eq!(h.state_mut().autosave(), Autosave::Clear);
 }
 
 #[test]

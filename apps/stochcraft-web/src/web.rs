@@ -65,18 +65,21 @@ impl eframe::App for Web {
         for request in self.app.take_requests() {
             match request {
                 Request::PickOpen => pick(&self.inbox, &ctx),
-                Request::Download { name, bytes } | Request::Write { path: name, bytes } => {
-                    match download(&name, &bytes) {
-                        Ok(()) => self.app.written(&name, &bytes),
-                        Err(e) => self.app.report_error(format!("{name}: {e:?}")),
-                    }
-                }
+                // Started, not necessarily kept: the browser doesn't say whether the user saved
+                // the file or cancelled, so the model is not marked saved.
+                Request::Download { name, bytes } => match download(&name, &bytes) {
+                    Ok(()) => self.app.downloaded(&name),
+                    Err(e) => self.app.report_error(format!("{name}: {e:?}")),
+                },
                 Request::Export { name, bytes } => match download(&name, &bytes) {
                     Ok(()) => self.app.exported(&name),
                     Err(e) => self.app.report_error(format!("{name}: {e:?}")),
                 },
                 // Not made in the browser (Platform::BROWSER has no paths and no Quit).
-                Request::PickSave { .. } | Request::OpenPath { .. } | Request::Quit => {}
+                Request::PickSave { .. }
+                | Request::OpenPath { .. }
+                | Request::Write { .. }
+                | Request::Quit => {}
             }
         }
         if let Some(title) = self.app.title_if_changed()
