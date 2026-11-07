@@ -5,7 +5,7 @@
 use egui::RichText;
 use serde_json::Value;
 
-use crate::i18n::{t, tf, tnf};
+use crate::i18n::{t, tc, tf, tnf};
 use crate::theme;
 
 /// A number for a table: about five significant digits, without a run of trailing zeros.
@@ -80,13 +80,17 @@ fn kind_label(kind: &str) -> &str {
     }
 }
 
-/// A time unit as written after a number: the engine's names, with hours, days and years
-/// abbreviated so "24 h" reads right where "24 hour" would not.
+/// A time unit as written after a number, in the interface language: the engine's names, with
+/// hours, days and years abbreviated so "24 h" reads right where "24 hour" would not. The
+/// context `unit` keeps these short words apart from any other use of the same letters.
 pub fn unit_label(unit: &str) -> &str {
     match unit {
-        "hour" => "h",
-        "day" => "d",
-        "year" => "yr",
+        "ms" => tc("unit", "ms"),
+        "s" => tc("unit", "s"),
+        "min" => tc("unit", "min"),
+        "hour" => tc("unit", "h"),
+        "day" => tc("unit", "d"),
+        "year" => tc("unit", "yr"),
         other => other,
     }
 }
