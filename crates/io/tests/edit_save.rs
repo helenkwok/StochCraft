@@ -338,6 +338,46 @@ fn new_names_in_a_latin_1_file_are_character_references() {
 }
 
 #[test]
+fn values_tied_to_calendars_survive_edits() {
+    // A processing time and a property, each with a value for the "lunch" calendar besides the
+    // default one. StochCraft ignores calendar values on reading (M2.6), so the read-back check
+    // cannot see them: saving must keep them by itself.
+    let original = text(&file("mm1.bpmn"))
+        .replace(
+            r#"<bpsim:NegativeExponentialDistribution mean="1"/>"#,
+            r#"<bpsim:NegativeExponentialDistribution mean="1"/>
+                <bpsim:NegativeExponentialDistribution mean="3" validFor="lunch"/>"#,
+        )
+        .replace(
+            r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+            r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="size"><bpsim:NumericParameter value="9" validFor="lunch"/><bpsim:NumericParameter value="1"/></bpsim:Property>
+            </bpsim:PropertyParameters>"#,
+        );
+    assert!(original.contains(r#"mean="3" validFor="lunch""#) && original.contains("\"size\""));
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    let serve = element(&mut m, "serve");
+    if let ElementKind::Server { service, .. } = &mut serve.kind {
+        *service = Dist::Exponential { mean: 2.0 };
+    }
+    serve.properties[0].value = stochcraft_model::PropertyValue::Number(4.0);
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    for kept in [
+        r#"<bpsim:NegativeExponentialDistribution mean="3" validFor="lunch"/>"#,
+        r#"<bpsim:NumericParameter value="9" validFor="lunch"/>"#,
+    ] {
+        assert!(t.contains(kept), "{kept} lost:\n{t}");
+    }
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+}
+
+#[test]
 fn edits_that_cannot_be_saved_say_why() {
     // Changing the time unit would change what the values with their own units mean.
     let loaded = read_scenario(&file("mm1.bpmn"), None).unwrap_or_else(|e| panic!("{e}"));

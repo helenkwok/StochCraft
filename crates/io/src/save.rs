@@ -1822,15 +1822,14 @@ fn set_property(s: &mut Element, element: &str, name: &str, value: Option<Elemen
                 Some(t) => p.set_attr("type", &t),
                 None => p.remove_attr("type"),
             }
-            remove_all(p, &|v| v.local() != "ResultRequest");
-            let values: Vec<Node> = std::mem::take(&mut value.children)
+            let values: Vec<Element> = std::mem::take(&mut value.children)
                 .into_iter()
-                .filter(|n| matches!(n, Node::Element(_)))
+                .filter_map(|n| match n {
+                    Node::Element(v) => Some(v),
+                    _ => None,
+                })
                 .collect();
-            for v in values {
-                let at = end_of(p);
-                p.children.insert(at, v);
-            }
+            replace_values(p, values);
         }
         // A new property goes last.
         None => {
@@ -1865,12 +1864,48 @@ fn set_value(
     let Some(p) = parent.child_mut(&NSS, name) else {
         return;
     };
-    // The value replaces the old values; result requests (which come first) stay.
-    remove_all(p, &|v| v.local() != "ResultRequest");
-    if let Some(v) = value {
-        let at = end_of(p);
-        p.children.insert(at, Node::Element(v));
+    replace_values(p, value.into_iter().collect());
+}
+
+/// Whether `v`, a child of a parameter, is one of its default input values: not a result
+/// request, not a value tied to a calendar (`validFor`) and not a result value (`result`).
+/// Reading ignores the others, so only these are StochCraft's to replace.
+fn is_default_value(v: &Element) -> bool {
+    v.local() != "ResultRequest" && v.attr("validFor").is_none() && v.attr("result").is_none()
+}
+
+/// Replaces parameter `p`'s default values with `values`, in the place of the first old one (else
+/// last). Result requests, calendar values and result values stay as they were.
+fn replace_values(p: &mut Element, values: Vec<Element>) {
+    let first = p
+        .children
+        .iter()
+        .position(|n| matches!(n, Node::Element(v) if is_default_value(v)));
+    // Only the parameter's own children: a kept value's insides (an enumeration's items) are not
+    // values of the parameter.
+    let mut i = 0;
+    let mut at = None;
+    while i < p.children.len() {
+        if matches!(&p.children[i], Node::Element(v) if is_default_value(v)) {
+            if Some(i) == first {
+                // Keep the place (and the whitespace before it) for the new values.
+                p.children.remove(i);
+                at = Some(i);
+                continue;
+            }
+            p.children.remove(i);
+            // The whitespace before it goes too, unless it is the kept place's.
+            if i > 0 && at.is_none_or(|a| i > a) && is_ws(&p.children[i - 1]) {
+                p.children.remove(i - 1);
+                i -= 1;
+            }
+            continue;
+        }
+        i += 1;
     }
+    let at = at.unwrap_or_else(|| end_of(p));
+    p.children
+        .splice(at..at, values.into_iter().map(Node::Element));
 }
 
 #[cfg(test)]
