@@ -15,6 +15,7 @@
 	+ Add block	+ ब्लॉक जोड़ें
 	About StochCraft	StochCraft के बारे में
 	About {app}	{app} के बारे में
+	Actual size	वास्तविक आकार
 	Add Block	ब्लॉक जोड़ें
 	Add a flow from…	प्रवाह जोड़ें (स्रोत)…
 	Add a flow to…	प्रवाह जोड़ें (लक्ष्य)…
@@ -24,6 +25,7 @@
 	Add property	गुण जोड़ें
 	Added pool {id}	पूल {id} जोड़ा गया
 	Added {block} ({id})	{block} ({id}) जोड़ा गया
+	Align	संरेखित करें
 	Alternative {n}	विकल्प {n}
 	Appearance	दिखावट
 	Arrival limit	आगमन सीमा
@@ -33,6 +35,7 @@
 	Beta	बीटा
 	Binomial	द्विपद
 	Boolean	बूलियन
+	Bottoms	निचले किनारे
 	Bring All to Front	सभी को सामने लाएँ
 	Built with	इनसे बनाया गया
 	By role	भूमिका के अनुसार
@@ -41,8 +44,10 @@
 	Cancel Run	रन रद्द करें
 	Cancel run	रन रद्द करें
 	Capacity	क्षमता
+	Centres	क्षैतिज केंद्र
 	Change Block	ब्लॉक बदलें
 	Change Flow	प्रवाह बदलें
+	Changes	परिवर्तन
 	Changing the time unit does not convert the times already in the model.	समय की इकाई बदलने से मॉडल में पहले से मौजूद समय मान परिवर्तित नहीं होते।
 	Clear Menu	मेनू साफ़ करें
 	Close	बंद करें
@@ -50,8 +55,12 @@
 	Comes from	यहाँ से आता है
 	Condition of {id}	{id} की शर्त
 	Connect	जोड़ें
+	Connect from {name}	{name} से जोड़ें
+	Connected {from} to {to}	{from} को {to} से जोड़ा गया
 	Connections	कनेक्शन
 	Constant	स्थिर
+	Copy	कॉपी करें
+	Cut	काटें
 	Dark	गहरा
 	Data points	डेटा बिंदु
 	Date and time	दिनांक और समय
@@ -59,7 +68,9 @@
 	Decision	निर्णय
 	Decision (one way)	निर्णय (एक मार्ग)
 	Default flow	डिफ़ॉल्ट प्रवाह
+	Delete	मिटाएँ
 	Departures	प्रस्थान
+	Diagram	आरेख
 	Discard	त्यागें
 	Discarded the recovered changes	पुनर्प्राप्त परिवर्तन त्याग दिए गए
 	Disconnect	कनेक्शन हटाएँ
@@ -70,12 +81,16 @@
 	Download charts (PNG)	चार्ट डाउनलोड करें (PNG)
 	Download table (CSV)	तालिका डाउनलोड करें (CSV)
 	Downloaded {file}	{file} डाउनलोड की गई
+	Drag to add:	जोड़ने के लिए खींचें:
+	Duplicate	प्रतिलिपि बनाएँ
 	Duration	अवधि
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	प्रत्येक इकाई इनमें से पहला ऐसा विकल्प लेती है जिसे अभी एक साथ पूरा किया जा सके, और बाहर निकलते समय संसाधन इकाइयाँ लौटा देती है।
 	Edit	संपादित करें
 	Entered	प्रवेश संख्या
 	Erlang	एरलांग
 	Error	त्रुटि
+	Evenly across	क्षैतिज रूप से समान रूप से फैलाएँ
+	Evenly down	लंबवत रूप से समान रूप से फैलाएँ
 	Every distribution	सभी वितरण
 	Exit	बाहर निकलें
 	Experiment	प्रयोग
@@ -87,6 +102,8 @@
 	Exported {file}	{file} निर्यात किया गया
 	Expression	व्यंजक
 	File	फ़ाइल
+	Fit	फ़िट करें
+	Fit the diagram to the view	आरेख को दृश्य में फ़िट करें
 	Flows	प्रवाह
 	From	से
 	Gamma	गामा
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	कीबोर्ड शॉर्टकट अपरिवर्तित हैं
 	Language	भाषा
 	Left	प्रस्थान संख्या
+	Left edges	बाएँ किनारे
 	Licensed under the MIT License or the Apache License 2.0, at your option.	अपनी पसंद के अनुसार MIT License या Apache License 2.0 के तहत लाइसेंस प्राप्त।
 	Light	हल्का
 	Log-normal	लॉग-सामान्य
@@ -114,11 +132,13 @@
 	Mean time in system	सिस्टम में औसत समय
 	Mean wait	औसत प्रतीक्षा
 	Metric	मापदंड
+	Middles	लंबवत केंद्र
 	Minimise	न्यूनतम करें
 	Minimize	न्यूनतम करें
 	Minimum	न्यूनतम
 	Model	मॉडल
 	Most likely	सर्वाधिक संभावित
+	Move	स्थानांतरण
 	Name	नाम
 	Needs	आवश्यकताएँ
 	New	नया
@@ -146,6 +166,7 @@
 	Or start from an example	या किसी उदाहरण से शुरू करें
 	PNG image	PNG छवि
 	Parameters	पैरामीटर
+	Paste	चिपकाएँ
 	Points	बिंदु
 	Poisson	प्वासों
 	Preferences	वरीयताएँ
@@ -182,6 +203,7 @@
 	Resource pools	संसाधन पूल
 	Restore	पुनर्स्थापित करें
 	Results	परिणाम
+	Right edges	दाएँ किनारे
 	Roles	भूमिकाएँ
 	Run	चलाएँ
 	Run cancelled	रन रद्द किया गया
@@ -196,6 +218,7 @@
 	Saved {file}	{file} सहेजी गई
 	Scale	पैमाना
 	Seed	यादृच्छिक बीज
+	Select All	सभी चुनें
 	Service time	सेवा समय
 	Services	सेवाएँ
 	Set Property	गुण सेट करें
@@ -209,6 +232,7 @@
 	Show {id}	{id} दिखाएँ
 	Split or join	विभाजित या संयोजित करें
 	Split or join (all ways)	विभाजित या संयोजित करें (सभी मार्ग)
+	Spread out	फैलाएँ
 	Stages (k)	चरण (k)
 	Standard deviation	मानक विचलन
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft बंद होने पर {name} में कुछ बदलाव सहेजे नहीं गए थे। उन्हें बिना शीर्षक वाले मॉडल के रूप में पुनर्स्थापित करें या छोड़ दें।
@@ -226,6 +250,7 @@
 	Time between arrivals	आगमन के बीच का समय
 	Time unit	समय की इकाई
 	To	तक
+	Tops	ऊपरी किनारे
 	Trials	परीक्षण
 	Triangular	त्रिकोणीय
 	Truncated normal	छँटा हुआ सामान्य
@@ -254,6 +279,8 @@
 	Yes or no	हाँ या नहीं
 	Your changes will be lost if you don't save them.	यदि आप सहेजते नहीं हैं, तो परिवर्तन खो जाएँगे।
 	Zoom	ज़ूम
+	Zoom in	ज़ूम इन
+	Zoom out	ज़ूम आउट
 	a model	एक मॉडल
 	arrivals	आगमन
 	days	दिन
@@ -280,6 +307,7 @@
 	years	वर्ष
 	{field}: not editable here yet	{field}: यहाँ अभी संपादन संभव नहीं है
 	{id}: a probability is a number from 0 to 1	{id}: प्रायिकता 0 से 1 तक की संख्या होनी चाहिए
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — संपादित
 	{property} (set to, mean)	{property} (सेट किया गया मान, माध्य)
 	± 95% CI	± 95% विश्वास अंतराल
@@ -291,11 +319,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	वर्ष
+@plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
+@plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} replication|Finished {n} replications	{n} पुनरावृत्ति पूरी हुई|{n} पुनरावृत्तियाँ पूरी हुईं
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} खोली गई ({n} चेतावनी)|{file} खोली गई ({n} चेतावनियाँ)
+@plural	Removed {n} block|Removed {n} blocks	{n} ब्लॉक हटाया गया|{n} ब्लॉक हटाए गए
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	बीज {seed} से मॉडल की {n} स्वतंत्र पुनरावृत्ति चलाता है। प्रत्येक तत्व के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।|बीज {seed} से मॉडल की {n} स्वतंत्र पुनरावृत्तियाँ चलाता है। प्रत्येक तत्व के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} में से {done} पुनरावृत्ति पूरी हुई|{n} में से {done} पुनरावृत्तियाँ पूरी हुईं
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% अंतराल {low} से {high}{unit}\n{n} पुनरावृत्ति के आधार पर|{name}: {mean}{unit}\n95% अंतराल {low} से {high}{unit}\n{n} पुनरावृत्तियों के आधार पर
+@plural	{n} block selected|{n} blocks selected	{n} ब्लॉक चुना गया|{n} ब्लॉक चुने गए
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} पुनरावृत्ति · बीज {seed} · वार्म-अप {warmup} {unit} · {duration} {unit} मापा गया|{n} पुनरावृत्तियाँ · बीज {seed} · वार्म-अप {warmup} {unit} · {duration} {unit} मापा गया
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} पुनरावृत्ति · बीज {seed}|{n} पुनरावृत्तियाँ · बीज {seed}
 @plural	{n} replication|{n} replications	{n} पुनरावृत्ति|{n} पुनरावृत्तियाँ

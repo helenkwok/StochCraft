@@ -15,6 +15,7 @@
 	+ Add block	+ เพิ่มบล็อก
 	About StochCraft	เกี่ยวกับ StochCraft
 	About {app}	เกี่ยวกับ {app}
+	Actual size	ขนาดจริง
 	Add Block	เพิ่มบล็อก
 	Add a flow from…	เพิ่มโฟลว์จาก…
 	Add a flow to…	เพิ่มโฟลว์ไปยัง…
@@ -24,6 +25,7 @@
 	Add property	เพิ่มคุณสมบัติ
 	Added pool {id}	เพิ่มกลุ่มทรัพยากร {id} แล้ว
 	Added {block} ({id})	เพิ่ม {block} ({id}) แล้ว
+	Align	จัดแนว
 	Alternative {n}	ทางเลือก {n}
 	Appearance	ลักษณะที่ปรากฏ
 	Arrival limit	จำนวนขาเข้าสูงสุด
@@ -33,6 +35,7 @@
 	Beta	เบตา
 	Binomial	ทวินาม
 	Boolean	บูลีน
+	Bottoms	ขอบล่าง
 	Bring All to Front	นำทั้งหมดมาไว้ด้านหน้า
 	Built with	พัฒนาด้วย
 	By role	ตามบทบาท
@@ -41,8 +44,10 @@
 	Cancel Run	ยกเลิกการรัน
 	Cancel run	ยกเลิกการรัน
 	Capacity	ความจุ
+	Centres	กึ่งกลางแนวนอน
 	Change Block	เปลี่ยนบล็อก
 	Change Flow	เปลี่ยนโฟลว์
+	Changes	การเปลี่ยนแปลง
 	Changing the time unit does not convert the times already in the model.	การเปลี่ยนหน่วยเวลาไม่แปลงค่าเวลาที่มีอยู่ในแบบจำลอง
 	Clear Menu	ล้างเมนู
 	Close	ปิด
@@ -50,8 +55,12 @@
 	Comes from	มาจาก
 	Condition of {id}	เงื่อนไขของ {id}
 	Connect	เชื่อมต่อ
+	Connect from {name}	เชื่อมต่อจาก {name}
+	Connected {from} to {to}	เชื่อมต่อ {from} กับ {to} แล้ว
 	Connections	การเชื่อมต่อ
 	Constant	ค่าคงที่
+	Copy	คัดลอก
+	Cut	ตัด
 	Dark	มืด
 	Data points	จุดข้อมูล
 	Date and time	วันที่และเวลา
@@ -59,7 +68,9 @@
 	Decision	การตัดสินใจ
 	Decision (one way)	การตัดสินใจ (เลือกทางเดียว)
 	Default flow	โฟลว์เริ่มต้น
+	Delete	ลบ
 	Departures	ขาออก
+	Diagram	แผนภาพ
 	Discard	ละทิ้ง
 	Discarded the recovered changes	ละทิ้งการเปลี่ยนแปลงที่กู้คืนแล้ว
 	Disconnect	ตัดการเชื่อมต่อ
@@ -70,12 +81,16 @@
 	Download charts (PNG)	ดาวน์โหลดแผนภูมิ (PNG)
 	Download table (CSV)	ดาวน์โหลดตาราง (CSV)
 	Downloaded {file}	ดาวน์โหลด {file} แล้ว
+	Drag to add:	ลากเพื่อเพิ่ม:
+	Duplicate	ทำสำเนา
 	Duration	ระยะเวลา
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	แต่ละเอนทิตีจะใช้ทางเลือกแรกที่จัดหาให้ได้ครบทั้งหมดพร้อมกันในทันที และคืนหน่วยเหล่านั้นเมื่อออกไป
 	Edit	แก้ไข
 	Entered	จำนวนที่เข้ามา
 	Erlang	เออร์แลง
 	Error	ข้อผิดพลาด
+	Evenly across	กระจายเท่ากันแนวนอน
+	Evenly down	กระจายเท่ากันแนวตั้ง
 	Every distribution	ทุกการแจกแจง
 	Exit	ออก
 	Experiment	การทดลอง
@@ -87,6 +102,8 @@
 	Exported {file}	ส่งออก {file} แล้ว
 	Expression	นิพจน์
 	File	ไฟล์
+	Fit	พอดี
+	Fit the diagram to the view	ปรับแผนภาพให้พอดีกับมุมมอง
 	Flows	โฟลว์
 	From	จาก
 	Gamma	แกมมา
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	ปุ่มลัดไม่มีการเปลี่ยนแปลง
 	Language	ภาษา
 	Left	จำนวนที่ออกไป
+	Left edges	ขอบซ้าย
 	Licensed under the MIT License or the Apache License 2.0, at your option.	อนุญาตให้ใช้ภายใต้ MIT License หรือ Apache License 2.0 ตามที่คุณเลือก
 	Light	สว่าง
 	Log-normal	ล็อกนอร์มอล
@@ -114,11 +132,13 @@
 	Mean time in system	เวลาเฉลี่ยในระบบ
 	Mean wait	เวลารอเฉลี่ย
 	Metric	ตัวชี้วัด
+	Middles	กึ่งกลางแนวตั้ง
 	Minimise	ย่อหน้าต่าง
 	Minimize	ย่อหน้าต่าง
 	Minimum	ค่าต่ำสุด
 	Model	แบบจำลอง
 	Most likely	ค่าที่เป็นไปได้มากที่สุด
+	Move	ย้าย
 	Name	ชื่อ
 	Needs	สิ่งที่ต้องใช้
 	New	ใหม่
@@ -146,6 +166,7 @@
 	Or start from an example	หรือเริ่มจากตัวอย่าง
 	PNG image	ภาพ PNG
 	Parameters	พารามิเตอร์
+	Paste	วาง
 	Points	จุด
 	Poisson	ปัวซอง
 	Preferences	ค่ากำหนด
@@ -182,6 +203,7 @@
 	Resource pools	กลุ่มทรัพยากร
 	Restore	คืนค่าขนาดหน้าต่าง
 	Results	ผลลัพธ์
+	Right edges	ขอบขวา
 	Roles	บทบาท
 	Run	รัน
 	Run cancelled	ยกเลิกการรันแล้ว
@@ -196,6 +218,7 @@
 	Saved {file}	บันทึก {file} แล้ว
 	Scale	มาตราส่วน
 	Seed	เมล็ดสุ่ม
+	Select All	เลือกทั้งหมด
 	Service time	เวลาให้บริการ
 	Services	บริการ
 	Set Property	กำหนดคุณสมบัติ
@@ -209,6 +232,7 @@
 	Show {id}	แสดง {id}
 	Split or join	แยกหรือรวม
 	Split or join (all ways)	แยกหรือรวม (ทุกทาง)
+	Spread out	กระจาย
 	Stages (k)	จำนวนขั้น (k)
 	Standard deviation	ส่วนเบี่ยงเบนมาตรฐาน
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ปิดลงโดยยังมีการเปลี่ยนแปลงใน {name} ที่ไม่ได้บันทึก กู้คืนการเปลี่ยนแปลงเป็นโมเดลที่ไม่มีชื่อ หรือทิ้งการเปลี่ยนแปลงเหล่านั้น
@@ -226,6 +250,7 @@
 	Time between arrivals	เวลาระหว่างการมาถึง
 	Time unit	หน่วยเวลา
 	To	ไปยัง
+	Tops	ขอบบน
 	Trials	จำนวนครั้งทดลอง
 	Triangular	สามเหลี่ยม
 	Truncated normal	ปกติแบบตัดปลาย
@@ -254,6 +279,8 @@
 	Yes or no	ใช่หรือไม่
 	Your changes will be lost if you don't save them.	การเปลี่ยนแปลงจะสูญหายหากคุณไม่บันทึก
 	Zoom	ปรับขนาดหน้าต่าง
+	Zoom in	ซูมเข้า
+	Zoom out	ซูมออก
 	a model	แบบจำลอง
 	arrivals	ขาเข้า
 	days	วัน
@@ -280,6 +307,7 @@
 	years	ปี
 	{field}: not editable here yet	{field}: ยังแก้ไขที่นี่ไม่ได้
 	{id}: a probability is a number from 0 to 1	{id}: ความน่าจะเป็นต้องเป็นตัวเลขตั้งแต่ 0 ถึง 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — แก้ไขแล้ว
 	{property} (set to, mean)	{property} (กำหนดเป็น, ค่าเฉลี่ย)
 	± 95% CI	± 95% CI
@@ -291,11 +319,15 @@ unit	min	นาที
 unit	ms	มิลลิวินาที
 unit	s	วินาที
 unit	yr	ปี
+@plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
+@plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} replication|Finished {n} replications	จำลองซ้ำเสร็จแล้ว {n} รอบ
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	เปิด {file} แล้ว (คำเตือน {n} รายการ)
+@plural	Removed {n} block|Removed {n} blocks	นำ {n} บล็อกออกแล้ว
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	รันการจำลองแบบจำลองอิสระ {n} รอบโดยใช้เมล็ดสุ่ม {seed} ผลลัพธ์ของแต่ละองค์ประกอบแสดงครึ่งหนึ่งของความกว้างช่วงความเชื่อมั่น 95% จากทุกรอบ
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	เสร็จแล้ว {done} จาก {n} รอบการจำลองซ้ำ
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nช่วงความเชื่อมั่น 95% จาก {low} ถึง {high}{unit}\nจากการจำลองซ้ำ {n} รอบ
+@plural	{n} block selected|{n} blocks selected	เลือก {n} บล็อกอยู่
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	จำลองซ้ำ {n} รอบ · เมล็ดสุ่ม {seed} · อุ่นเครื่อง {warmup} {unit} · วัดผล {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	จำลองซ้ำ {n} รอบ · เมล็ดสุ่ม {seed}
 @plural	{n} replication|{n} replications	จำลองซ้ำ {n} รอบ

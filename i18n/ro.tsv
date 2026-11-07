@@ -15,6 +15,7 @@
 	+ Add block	+ Adaugă bloc
 	About StochCraft	Despre StochCraft
 	About {app}	Despre {app}
+	Actual size	Dimensiune reală
 	Add Block	Adaugă bloc
 	Add a flow from…	Adaugă un flux de la…
 	Add a flow to…	Adaugă un flux către…
@@ -24,6 +25,7 @@
 	Add property	Adaugă proprietate
 	Added pool {id}	S-a adăugat grupul {id}
 	Added {block} ({id})	S-a adăugat {block} ({id})
+	Align	Aliniere
 	Alternative {n}	Alternativa {n}
 	Appearance	Aspect
 	Arrival limit	Limită de sosiri
@@ -33,6 +35,7 @@
 	Beta	Beta
 	Binomial	Binomială
 	Boolean	Boolean
+	Bottoms	Marginile de jos
 	Bring All to Front	Adu totul în față
 	Built with	Creat cu
 	By role	După rol
@@ -41,8 +44,10 @@
 	Cancel Run	Anulează rularea
 	Cancel run	Anulează rularea
 	Capacity	Capacitate
+	Centres	Centre orizontale
 	Change Block	Modifică blocul
 	Change Flow	Modifică fluxul
+	Changes	Modificări
 	Changing the time unit does not convert the times already in the model.	Schimbarea unității de timp nu convertește timpii existenți în model.
 	Clear Menu	Golește meniul
 	Close	Închide
@@ -50,8 +55,12 @@
 	Comes from	Provine de la
 	Condition of {id}	Condiția pentru {id}
 	Connect	Conectează
+	Connect from {name}	Conectează de la {name}
+	Connected {from} to {to}	S-a conectat {from} la {to}
 	Connections	Conexiuni
 	Constant	Constantă
+	Copy	Copiază
+	Cut	Decupează
 	Dark	Întunecat
 	Data points	Puncte de date
 	Date and time	Dată și oră
@@ -59,7 +68,9 @@
 	Decision	Decizie
 	Decision (one way)	Decizie (o singură cale)
 	Default flow	Flux implicit
+	Delete	Șterge
 	Departures	Plecări
+	Diagram	Diagramă
 	Discard	Renunță
 	Discarded the recovered changes	Modificările recuperate au fost eliminate
 	Disconnect	Deconectează
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Descarcă graficele (PNG)
 	Download table (CSV)	Descarcă tabelul (CSV)
 	Downloaded {file}	S-a descărcat {file}
+	Drag to add:	Trageți pentru a adăuga:
+	Duplicate	Duplică
 	Duration	Durată
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Fiecare entitate ia, integral și dintr-odată, prima dintre aceste alternative care poate fi satisfăcută în acel moment și returnează unitățile când pleacă.
 	Edit	Editare
 	Entered	Intrări
 	Erlang	Erlang
 	Error	Eroare
+	Evenly across	Uniform pe orizontală
+	Evenly down	Uniform pe verticală
 	Every distribution	Toate distribuțiile
 	Exit	Ieșire
 	Experiment	Experiment
@@ -87,6 +102,8 @@
 	Exported {file}	S-a exportat {file}
 	Expression	Expresie
 	File	Fișier
+	Fit	Încadrează
+	Fit the diagram to the view	Încadrează diagrama în vizualizare
 	Flows	Fluxuri
 	From	De la
 	Gamma	Gamma
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Comenzile rapide nu s-au modificat
 	Language	Limbă
 	Left	Ieșiri
+	Left edges	Marginile din stânga
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licențiat sub MIT License sau Apache License 2.0, la alegere.
 	Light	Luminos
 	Log-normal	Log-normală
@@ -114,11 +132,13 @@
 	Mean time in system	Timp mediu în sistem
 	Mean wait	Timp mediu de așteptare
 	Metric	Indicator
+	Middles	Centre verticale
 	Minimise	Minimizează
 	Minimize	Minimizează
 	Minimum	Minim
 	Model	Model
 	Most likely	Cel mai probabil
+	Move	Mutare
 	Name	Nume
 	Needs	Necesar
 	New	Nou
@@ -146,6 +166,7 @@
 	Or start from an example	Sau începeți cu un exemplu
 	PNG image	Imagine PNG
 	Parameters	Parametri
+	Paste	Lipește
 	Points	Puncte
 	Poisson	Poisson
 	Preferences	Preferințe
@@ -182,6 +203,7 @@
 	Resource pools	Grupuri de resurse
 	Restore	Restabilește
 	Results	Rezultate
+	Right edges	Marginile din dreapta
 	Roles	Roluri
 	Run	Rulează
 	Run cancelled	Rulare anulată
@@ -196,6 +218,7 @@
 	Saved {file}	S-a salvat {file}
 	Scale	Scară
 	Seed	Sămânță
+	Select All	Selectează tot
 	Service time	Timp de servire
 	Services	Servicii
 	Set Property	Setează proprietatea
@@ -209,6 +232,7 @@
 	Show {id}	Afișează {id}
 	Split or join	Divizează sau unește
 	Split or join (all ways)	Divizează sau unește (toate căile)
+	Spread out	Distribuie
 	Stages (k)	Etape (k)
 	Standard deviation	Abatere standard
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft s-a închis cu modificări nesalvate în {name}. Recuperați-le ca model fără titlu sau renunțați la ele.
@@ -226,6 +250,7 @@
 	Time between arrivals	Timp între sosiri
 	Time unit	Unitate de timp
 	To	Către
+	Tops	Marginile de sus
 	Trials	Încercări
 	Triangular	Triunghiulară
 	Truncated normal	Normală trunchiată
@@ -254,6 +279,8 @@
 	Yes or no	Da sau nu
 	Your changes will be lost if you don't save them.	Dacă nu salvați, modificările se vor pierde.
 	Zoom	Zoom
+	Zoom in	Mărește
+	Zoom out	Micșorează
 	a model	un model
 	arrivals	sosiri
 	days	zile
@@ -280,6 +307,7 @@
 	years	ani
 	{field}: not editable here yet	{field}: nu se poate edita aici deocamdată
 	{id}: a probability is a number from 0 to 1	{id}: probabilitatea este un număr între 0 și 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — modificat
 	{property} (set to, mean)	{property} (valoare setată, medie)
 	± 95% CI	± IC 95%
@@ -291,11 +319,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	a
+@plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
+@plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} replication|Finished {n} replications	S-a încheiat {n} replicare|S-au încheiat {n} replicări|S-au încheiat {n} replicări
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S-a deschis {file} ({n} avertisment)|S-a deschis {file} ({n} avertismente)|S-a deschis {file} ({n} avertismente)
+@plural	Removed {n} block|Removed {n} blocks	S-a eliminat {n} bloc|S-au eliminat {n} blocuri|S-au eliminat {n} de blocuri
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Rulează {n} replicare independentă a modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Rulează {n} replicări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Rulează {n} replicări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	S-a încheiat {done} din {n} replicare|S-au încheiat {done} din {n} replicări|S-au încheiat {done} din {n} replicări
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicare|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicări|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicări
+@plural	{n} block selected|{n} blocks selected	{n} bloc selectat|{n} blocuri selectate|{n} de blocuri selectate
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replicare · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replicare · sămânță {seed}|{n} replicări · sămânță {seed}|{n} replicări · sămânță {seed}
 @plural	{n} replication|{n} replications	{n} replicare|{n} replicări|{n} replicări

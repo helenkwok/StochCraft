@@ -15,6 +15,7 @@
 	+ Add block	+ Προσθήκη μπλοκ
 	About StochCraft	Σχετικά με το StochCraft
 	About {app}	Σχετικά με το {app}
+	Actual size	Πραγματικό μέγεθος
 	Add Block	Προσθήκη μπλοκ
 	Add a flow from…	Προσθήκη ροής από…
 	Add a flow to…	Προσθήκη ροής προς…
@@ -24,6 +25,7 @@
 	Add property	Προσθήκη ιδιότητας
 	Added pool {id}	Προστέθηκε η δεξαμενή {id}
 	Added {block} ({id})	Προστέθηκε το {block} ({id})
+	Align	Στοίχιση
 	Alternative {n}	Εναλλακτική {n}
 	Appearance	Εμφάνιση
 	Arrival limit	Όριο αφίξεων
@@ -33,6 +35,7 @@
 	Beta	Βήτα
 	Binomial	Διωνυμική
 	Boolean	Λογική τιμή
+	Bottoms	Κάτω άκρα
 	Bring All to Front	Μεταφορά όλων μπροστά
 	Built with	Δημιουργήθηκε με
 	By role	Κατά ρόλο
@@ -41,8 +44,10 @@
 	Cancel Run	Ακύρωση εκτέλεσης
 	Cancel run	Ακύρωση εκτέλεσης
 	Capacity	Χωρητικότητα
+	Centres	Οριζόντια κέντρα
 	Change Block	Αλλαγή μπλοκ
 	Change Flow	Αλλαγή ροής
+	Changes	Αλλαγές
 	Changing the time unit does not convert the times already in the model.	Η αλλαγή της μονάδας χρόνου δεν μετατρέπει τους χρόνους που υπάρχουν ήδη στο μοντέλο.
 	Clear Menu	Εκκαθάριση μενού
 	Close	Κλείσιμο
@@ -50,8 +55,12 @@
 	Comes from	Προέρχεται από
 	Condition of {id}	Συνθήκη του {id}
 	Connect	Σύνδεση
+	Connect from {name}	Σύνδεση από {name}
+	Connected {from} to {to}	Συνδέθηκε το {from} με το {to}
 	Connections	Συνδέσεις
 	Constant	Σταθερή
+	Copy	Αντιγραφή
+	Cut	Αποκοπή
 	Dark	Σκούρο
 	Data points	Σημεία δεδομένων
 	Date and time	Ημερομηνία και ώρα
@@ -59,7 +68,9 @@
 	Decision	Απόφαση
 	Decision (one way)	Απόφαση (μία διαδρομή)
 	Default flow	Προεπιλεγμένη ροή
+	Delete	Διαγραφή
 	Departures	Αναχωρήσεις
+	Diagram	Διάγραμμα
 	Discard	Απόρριψη
 	Discarded the recovered changes	Οι ανακτημένες αλλαγές απορρίφθηκαν
 	Disconnect	Αποσύνδεση
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Λήψη γραφημάτων (PNG)
 	Download table (CSV)	Λήψη πίνακα (CSV)
 	Downloaded {file}	Λήφθηκε το {file}
+	Drag to add:	Σύρετε για προσθήκη:
+	Duplicate	Διπλότυπο
 	Duration	Διάρκεια
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Κάθε οντότητα παίρνει την πρώτη από αυτές που μπορεί να ικανοποιηθεί τώρα, ολόκληρη μονομιάς, και επιστρέφει τις μονάδες όταν φεύγει από την εργασία.
 	Edit	Επεξεργασία
 	Entered	Είσοδοι
 	Erlang	Έρλανγκ
 	Error	Σφάλμα
+	Evenly across	Ομοιόμορφη κατανομή οριζόντια
+	Evenly down	Ομοιόμορφη κατανομή κάθετα
 	Every distribution	Όλες οι κατανομές
 	Exit	Έξοδος
 	Experiment	Πείραμα
@@ -87,6 +102,8 @@
 	Exported {file}	Εξήχθη το {file}
 	Expression	Έκφραση
 	File	Αρχείο
+	Fit	Προσαρμογή
+	Fit the diagram to the view	Προσαρμογή του διαγράμματος στην προβολή
 	Flows	Ροές
 	From	Από
 	Gamma	Γάμμα
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Οι συντομεύσεις πληκτρολογίου δεν άλλαξαν
 	Language	Γλώσσα
 	Left	Έξοδοι
+	Left edges	Αριστερά άκρα
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Διατίθεται με MIT License ή Apache License 2.0, κατ' επιλογή.
 	Light	Ανοιχτό
 	Log-normal	Λογαριθμοκανονική
@@ -114,11 +132,13 @@
 	Mean time in system	Μέσος χρόνος στο σύστημα
 	Mean wait	Μέση αναμονή
 	Metric	Μετρική
+	Middles	Κάθετα κέντρα
 	Minimise	Ελαχιστοποίηση
 	Minimize	Ελαχιστοποίηση
 	Minimum	Ελάχιστο
 	Model	Μοντέλο
 	Most likely	Πιθανότερη τιμή
+	Move	Μετακίνηση
 	Name	Όνομα
 	Needs	Ανάγκες
 	New	Νέο
@@ -146,6 +166,7 @@
 	Or start from an example	Ή ξεκινήστε από ένα παράδειγμα
 	PNG image	Εικόνα PNG
 	Parameters	Παράμετροι
+	Paste	Επικόλληση
 	Points	Σημεία
 	Poisson	Πουασόν
 	Preferences	Προτιμήσεις
@@ -182,6 +203,7 @@
 	Resource pools	Δεξαμενές πόρων
 	Restore	Επαναφορά παραθύρου
 	Results	Αποτελέσματα
+	Right edges	Δεξιά άκρα
 	Roles	Ρόλοι
 	Run	Εκτέλεση
 	Run cancelled	Η εκτέλεση ακυρώθηκε
@@ -196,6 +218,7 @@
 	Saved {file}	Αποθηκεύτηκε το {file}
 	Scale	Κλίμακα
 	Seed	Αρχικός σπόρος
+	Select All	Επιλογή όλων
 	Service time	Χρόνος εξυπηρέτησης
 	Services	Υπηρεσίες
 	Set Property	Ορισμός ιδιότητας
@@ -209,6 +232,7 @@
 	Show {id}	Εμφάνιση {id}
 	Split or join	Διαχωρισμός ή ένωση
 	Split or join (all ways)	Διαχωρισμός ή ένωση (όλες οι διαδρομές)
+	Spread out	Κατανομή
 	Stages (k)	Στάδια (k)
 	Standard deviation	Τυπική απόκλιση
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	Το StochCraft έκλεισε με μη αποθηκευμένες αλλαγές στο {name}. Ανακτήστε τις ως μοντέλο χωρίς τίτλο ή απορρίψτε τις.
@@ -226,6 +250,7 @@
 	Time between arrivals	Χρόνος μεταξύ αφίξεων
 	Time unit	Μονάδα χρόνου
 	To	Προς
+	Tops	Πάνω άκρα
 	Trials	Δοκιμές
 	Triangular	Τριγωνική
 	Truncated normal	Αποκομμένη κανονική
@@ -254,6 +279,8 @@
 	Yes or no	Ναι ή όχι
 	Your changes will be lost if you don't save them.	Οι αλλαγές σας θα χαθούν αν δεν τις αποθηκεύσετε.
 	Zoom	Αλλαγή μεγέθους
+	Zoom in	Μεγέθυνση
+	Zoom out	Σμίκρυνση
 	a model	ένα μοντέλο
 	arrivals	αφίξεις
 	days	ημέρες
@@ -280,6 +307,7 @@
 	years	έτη
 	{field}: not editable here yet	{field}: δεν είναι ακόμη επεξεργάσιμο εδώ
 	{id}: a probability is a number from 0 to 1	{id}: η πιθανότητα είναι αριθμός από 0 έως 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — επεξεργασμένο
 	{property} (set to, mean)	{property} (καθορισμένη τιμή, μέση τιμή)
 	± 95% CI	± 95% ΔΕ
@@ -291,11 +319,15 @@ unit	min	λ
 unit	ms	ms
 unit	s	δ
 unit	yr	έτ
+@plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
+@plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} replication|Finished {n} replications	Ολοκληρώθηκε {n} επανάληψη|Ολοκληρώθηκαν {n} επαναλήψεις
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Άνοιξε το {file} ({n} προειδοποίηση)|Άνοιξε το {file} ({n} προειδοποιήσεις)
+@plural	Removed {n} block|Removed {n} blocks	Αφαιρέθηκε {n} μπλοκ|Αφαιρέθηκαν {n} μπλοκ
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Εκτελεί {n} ανεξάρτητη επανάληψη του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.|Εκτελεί {n} ανεξάρτητες επαναλήψεις του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Ολοκληρώθηκε {done} από {n} επανάληψη|Ολοκληρώθηκαν {done} από {n} επαναλήψεις
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επανάληψη|{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επαναλήψεις
+@plural	{n} block selected|{n} blocks selected	Επιλέχθηκε {n} μπλοκ|Επιλέχθηκαν {n} μπλοκ
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} επανάληψη · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}|{n} επαναλήψεις · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} επανάληψη · σπόρος {seed}|{n} επαναλήψεις · σπόρος {seed}
 @plural	{n} replication|{n} replications	{n} επανάληψη|{n} επαναλήψεις

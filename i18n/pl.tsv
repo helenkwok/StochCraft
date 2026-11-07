@@ -15,6 +15,7 @@
 	+ Add block	+ Dodaj blok
 	About StochCraft	O programie StochCraft
 	About {app}	O programie {app}
+	Actual size	Rzeczywisty rozmiar
 	Add Block	Dodaj blok
 	Add a flow from…	Dodaj przepływ z…
 	Add a flow to…	Dodaj przepływ do…
@@ -24,6 +25,7 @@
 	Add property	Dodaj właściwość
 	Added pool {id}	Dodano pulę {id}
 	Added {block} ({id})	Dodano {block} ({id})
+	Align	Wyrównaj
 	Alternative {n}	Alternatywa {n}
 	Appearance	Wygląd
 	Arrival limit	Limit przybyć
@@ -33,6 +35,7 @@
 	Beta	Beta
 	Binomial	Dwumianowy
 	Boolean	Wartość logiczna
+	Bottoms	Dolne krawędzie
 	Bring All to Front	Przenieś wszystkie na wierzch
 	Built with	Zbudowano przy użyciu
 	By role	Według roli
@@ -41,8 +44,10 @@
 	Cancel Run	Anuluj uruchomienie
 	Cancel run	Anuluj uruchomienie
 	Capacity	Pojemność
+	Centres	Środki w poziomie
 	Change Block	Zmień blok
 	Change Flow	Zmień przepływ
+	Changes	Zmiany
 	Changing the time unit does not convert the times already in the model.	Zmiana jednostki czasu nie przelicza czasów już zapisanych w modelu.
 	Clear Menu	Wyczyść menu
 	Close	Zamknij
@@ -50,8 +55,12 @@
 	Comes from	Pochodzi z
 	Condition of {id}	Warunek dla {id}
 	Connect	Połącz
+	Connect from {name}	Połącz od {name}
+	Connected {from} to {to}	Połączono {from} z {to}
 	Connections	Połączenia
 	Constant	Stały
+	Copy	Kopiuj
+	Cut	Wytnij
 	Dark	Ciemny
 	Data points	Punkty danych
 	Date and time	Data i godzina
@@ -59,7 +68,9 @@
 	Decision	Decyzja
 	Decision (one way)	Decyzja (jedna ścieżka)
 	Default flow	Przepływ domyślny
+	Delete	Usuń
 	Departures	Wyjścia
+	Diagram	Diagram
 	Discard	Odrzuć
 	Discarded the recovered changes	Odrzucono odzyskane zmiany
 	Disconnect	Rozłącz
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Pobierz wykresy (PNG)
 	Download table (CSV)	Pobierz tabelę (CSV)
 	Downloaded {file}	Pobrano {file}
+	Drag to add:	Przeciągnij, aby dodać:
+	Duplicate	Duplikuj
 	Duration	Czas trwania
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Każda jednostka bierze pierwszy z tych wariantów, który można teraz spełnić, wszystko naraz, i oddaje zajęte zasoby, gdy wychodzi.
 	Edit	Edycja
 	Entered	Weszło
 	Erlang	Rozkład Erlanga
 	Error	Błąd
+	Evenly across	Równomiernie w poziomie
+	Evenly down	Równomiernie w pionie
 	Every distribution	Wszystkie rozkłady
 	Exit	Zakończ
 	Experiment	Eksperyment
@@ -87,6 +102,8 @@
 	Exported {file}	Wyeksportowano {file}
 	Expression	Wyrażenie
 	File	Plik
+	Fit	Dopasuj
+	Fit the diagram to the view	Dopasuj diagram do widoku
 	Flows	Przepływy
 	From	Od
 	Gamma	Gamma
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Skróty klawiaturowe bez zmian
 	Language	Język
 	Left	Wyszło
+	Left edges	Lewe krawędzie
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Na licencji MIT License lub Apache License 2.0, do wyboru.
 	Light	Jasny
 	Log-normal	Logarytmiczno-normalny
@@ -114,11 +132,13 @@
 	Mean time in system	Średni czas w systemie
 	Mean wait	Średni czas oczekiwania
 	Metric	Miara
+	Middles	Środki w pionie
 	Minimise	Minimalizuj
 	Minimize	Minimalizuj
 	Minimum	Minimum
 	Model	Model
 	Most likely	Najbardziej prawdopodobna
+	Move	Przeniesienie
 	Name	Nazwa
 	Needs	Wymagania
 	New	Nowy
@@ -146,6 +166,7 @@
 	Or start from an example	Lub rozpocznij od przykładu
 	PNG image	Obraz PNG
 	Parameters	Parametry
+	Paste	Wklej
 	Points	Punkty
 	Poisson	Poissona
 	Preferences	Preferencje
@@ -182,6 +203,7 @@
 	Resource pools	Pule zasobów
 	Restore	Przywróć
 	Results	Wyniki
+	Right edges	Prawe krawędzie
 	Roles	Role
 	Run	Uruchom
 	Run cancelled	Anulowano uruchomienie
@@ -196,6 +218,7 @@
 	Saved {file}	Zapisano {file}
 	Scale	Skala
 	Seed	Ziarno
+	Select All	Zaznacz wszystko
 	Service time	Czas obsługi
 	Services	Usługi
 	Set Property	Ustaw właściwość
@@ -209,6 +232,7 @@
 	Show {id}	Pokaż {id}
 	Split or join	Rozdziel lub połącz
 	Split or join (all ways)	Rozdziel lub połącz (wszystkie ścieżki)
+	Spread out	Rozmieść
 	Stages (k)	Etapy (k)
 	Standard deviation	Odchylenie standardowe
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft został zamknięty z niezapisanymi zmianami w modelu {name}. Przywróć je jako model bez tytułu lub odrzuć.
@@ -226,6 +250,7 @@
 	Time between arrivals	Czas między przybyciami
 	Time unit	Jednostka czasu
 	To	Do
+	Tops	Górne krawędzie
 	Trials	Próby
 	Triangular	Trójkątny
 	Truncated normal	Normalny ucięty
@@ -254,6 +279,8 @@
 	Yes or no	Tak lub nie
 	Your changes will be lost if you don't save them.	Jeśli nie zapiszesz zmian, zostaną utracone.
 	Zoom	Powiększenie
+	Zoom in	Powiększ
+	Zoom out	Pomniejsz
 	a model	model
 	arrivals	przybycia
 	days	dni
@@ -280,6 +307,7 @@
 	years	lata
 	{field}: not editable here yet	{field}: tutaj nie można jeszcze edytować
 	{id}: a probability is a number from 0 to 1	{id}: prawdopodobieństwo musi być liczbą od 0 do 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — edytowano
 	{property} (set to, mean)	{property} (ustawiono na, średnia)
 	± 95% CI	± 95% PU
@@ -291,11 +319,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	r.
+@plural	Added {n} block|Added {n} blocks	Dodano {n} blok|Dodano {n} bloki|Dodano {n} bloków
+@plural	Copied {n} block|Copied {n} blocks	Skopiowano {n} blok|Skopiowano {n} bloki|Skopiowano {n} bloków
 @plural	Finished {n} replication|Finished {n} replications	Zakończono {n} replikację|Zakończono {n} replikacje|Zakończono {n} replikacji
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otwarto {file} ({n} ostrzeżenie)|Otwarto {file} ({n} ostrzeżenia)|Otwarto {file} ({n} ostrzeżeń)
+@plural	Removed {n} block|Removed {n} blocks	Usunięto {n} blok|Usunięto {n} bloki|Usunięto {n} bloków
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Wykonuje {n} niezależną replikację modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.|Wykonuje {n} niezależne replikacje modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.|Wykonuje {n} niezależnych replikacji modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Ukończono {done} z {n} replikacji|Ukończono {done} z {n} replikacji|Ukończono {done} z {n} replikacji
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji|{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji|{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji
+@plural	{n} block selected|{n} blocks selected	Zaznaczono {n} blok|Zaznaczono {n} bloki|Zaznaczono {n} bloków
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacja · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} replikacje · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} replikacji · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacja · ziarno {seed}|{n} replikacje · ziarno {seed}|{n} replikacji · ziarno {seed}
 @plural	{n} replication|{n} replications	{n} replikacja|{n} replikacje|{n} replikacji

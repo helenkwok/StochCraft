@@ -15,6 +15,7 @@
 	+ Add block	+ Ajouter un bloc
 	About StochCraft	À propos de StochCraft
 	About {app}	À propos de {app}
+	Actual size	Taille réelle
 	Add Block	Ajouter un bloc
 	Add a flow from…	Ajouter un flux depuis…
 	Add a flow to…	Ajouter un flux vers…
@@ -24,6 +25,7 @@
 	Add property	Ajouter une propriété
 	Added pool {id}	Pool {id} ajouté
 	Added {block} ({id})	{block} ({id}) ajouté
+	Align	Aligner
 	Alternative {n}	Alternative {n}
 	Appearance	Apparence
 	Arrival limit	Limite des arrivées
@@ -33,6 +35,7 @@
 	Beta	Bêta
 	Binomial	Binomiale
 	Boolean	Booléen
+	Bottoms	Bords inférieurs
 	Bring All to Front	Tout ramener au premier plan
 	Built with	Développé avec
 	By role	Par rôle
@@ -41,8 +44,10 @@
 	Cancel Run	Annuler l'exécution
 	Cancel run	Annuler l'exécution
 	Capacity	Capacité
+	Centres	Centres horizontaux
 	Change Block	Modifier le bloc
 	Change Flow	Modifier le flux
+	Changes	Modifications
 	Changing the time unit does not convert the times already in the model.	Changer l'unité de temps ne convertit pas les durées déjà définies dans le modèle.
 	Clear Menu	Effacer le menu
 	Close	Fermer
@@ -50,8 +55,12 @@
 	Comes from	Provient de
 	Condition of {id}	Condition de {id}
 	Connect	Connecter
+	Connect from {name}	Connecter depuis {name}
+	Connected {from} to {to}	{from} connecté à {to}
 	Connections	Connexions
 	Constant	Constante
+	Copy	Copier
+	Cut	Couper
 	Dark	Sombre
 	Data points	Points de données
 	Date and time	Date et heure
@@ -59,7 +68,9 @@
 	Decision	Décision
 	Decision (one way)	Décision (une seule voie)
 	Default flow	Flux par défaut
+	Delete	Supprimer
 	Departures	Départs
+	Diagram	Diagramme
 	Discard	Ignorer
 	Discarded the recovered changes	Modifications récupérées ignorées
 	Disconnect	Déconnecter
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Télécharger les graphiques (PNG)
 	Download table (CSV)	Télécharger le tableau (CSV)
 	Downloaded {file}	{file} téléchargé
+	Drag to add:	Faire glisser pour ajouter :
+	Duplicate	Dupliquer
 	Duration	Durée
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Chaque entité prend en une seule fois la première de ces alternatives qui peut être satisfaite immédiatement, et rend les unités à sa sortie.
 	Edit	Édition
 	Entered	Entrées
 	Erlang	Erlang
 	Error	Erreur
+	Evenly across	Répartir horizontalement
+	Evenly down	Répartir verticalement
 	Every distribution	Toutes les distributions
 	Exit	Quitter
 	Experiment	Expérience
@@ -87,6 +102,8 @@
 	Exported {file}	{file} exporté
 	Expression	Expression
 	File	Fichier
+	Fit	Ajuster
+	Fit the diagram to the view	Ajuster le diagramme à la vue
 	Flows	Flux
 	From	De
 	Gamma	Gamma
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Raccourcis clavier inchangés
 	Language	Langue
 	Left	Sorties
+	Left edges	Bords gauches
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Sous MIT License ou Apache License 2.0, au choix.
 	Light	Clair
 	Log-normal	Log-normale
@@ -114,11 +132,13 @@
 	Mean time in system	Temps moyen dans le système
 	Mean wait	Attente moyenne
 	Metric	Indicateur
+	Middles	Centres verticaux
 	Minimise	Réduire
 	Minimize	Réduire
 	Minimum	Minimum
 	Model	Modèle
 	Most likely	Valeur la plus probable
+	Move	Déplacer
 	Name	Nom
 	Needs	Besoins
 	New	Nouveau
@@ -146,6 +166,7 @@
 	Or start from an example	Ou commencer avec un exemple
 	PNG image	Image PNG
 	Parameters	Paramètres
+	Paste	Coller
 	Points	Points
 	Poisson	Poisson
 	Preferences	Préférences
@@ -182,6 +203,7 @@
 	Resource pools	Pools de ressources
 	Restore	Restaurer
 	Results	Résultats
+	Right edges	Bords droits
 	Roles	Rôles
 	Run	Exécuter
 	Run cancelled	Exécution annulée
@@ -196,6 +218,7 @@
 	Saved {file}	{file} enregistré
 	Scale	Échelle
 	Seed	Graine
+	Select All	Tout sélectionner
 	Service time	Temps de service
 	Services	Services
 	Set Property	Définir la propriété
@@ -209,6 +232,7 @@
 	Show {id}	Afficher {id}
 	Split or join	Diviser ou joindre
 	Split or join (all ways)	Diviser ou joindre (toutes les voies)
+	Spread out	Répartir
 	Stages (k)	Étapes (k)
 	Standard deviation	Écart type
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft s'est fermé avec des modifications non enregistrées dans {name}. Récupérez-les dans un modèle sans titre ou ignorez-les.
@@ -226,6 +250,7 @@
 	Time between arrivals	Temps entre arrivées
 	Time unit	Unité de temps
 	To	À
+	Tops	Bords supérieurs
 	Trials	Essais
 	Triangular	Triangulaire
 	Truncated normal	Normale tronquée
@@ -254,6 +279,8 @@
 	Yes or no	Oui ou non
 	Your changes will be lost if you don't save them.	Vos modifications seront perdues si vous ne les enregistrez pas.
 	Zoom	Zoom
+	Zoom in	Zoom avant
+	Zoom out	Zoom arrière
 	a model	un modèle
 	arrivals	arrivées
 	days	jours
@@ -280,6 +307,7 @@
 	years	années
 	{field}: not editable here yet	{field} : non modifiable ici pour le moment
 	{id}: a probability is a number from 0 to 1	{id} : une probabilité est un nombre compris entre 0 et 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — modifié
 	{property} (set to, mean)	{property} (valeur définie, moyenne)
 	± 95% CI	± IC à 95 %
@@ -291,11 +319,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	an
+@plural	Added {n} block|Added {n} blocks	{n} bloc ajouté|{n} blocs ajoutés
+@plural	Copied {n} block|Copied {n} blocks	{n} bloc copié|{n} blocs copiés
 @plural	Finished {n} replication|Finished {n} replications	{n} réplication terminée|{n} réplications terminées
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} ouvert ({n} avertissement)|{file} ouvert ({n} avertissements)
+@plural	Removed {n} block|Removed {n} blocks	{n} bloc supprimé|{n} blocs supprimés
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Exécute {n} réplication indépendante du modèle à partir de la graine {seed}. Les résultats de chaque élément incluent la demi-largeur d'un intervalle de confiance à 95 %.|Exécute {n} réplications indépendantes du modèle à partir de la graine {seed}. Les résultats de chaque élément incluent la demi-largeur d'un intervalle de confiance à 95 %.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} réplication terminée sur {n}|{done} réplications terminées sur {n}
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name} : {mean}{unit}\nIntervalle à 95 % de {low} à {high}{unit}\nsur {n} réplication|{name} : {mean}{unit}\nIntervalle à 95 % de {low} à {high}{unit}\nsur {n} réplications
+@plural	{n} block selected|{n} blocks selected	{n} bloc sélectionné|{n} blocs sélectionnés
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} réplication · graine {seed} · préchauffage {warmup} {unit} · {duration} {unit} mesurés|{n} réplications · graine {seed} · préchauffage {warmup} {unit} · {duration} {unit} mesurés
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} réplication · graine {seed}|{n} réplications · graine {seed}
 @plural	{n} replication|{n} replications	{n} réplication|{n} réplications

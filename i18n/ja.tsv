@@ -15,6 +15,7 @@
 	+ Add block	+ ブロックを追加
 	About StochCraft	StochCraft について
 	About {app}	{app} について
+	Actual size	実際のサイズ
 	Add Block	ブロックを追加
 	Add a flow from…	接続元…
 	Add a flow to…	接続先…
@@ -24,6 +25,7 @@
 	Add property	プロパティを追加
 	Added pool {id}	プール {id} を追加しました
 	Added {block} ({id})	{block} ({id}) を追加しました
+	Align	整列
 	Alternative {n}	代替案 {n}
 	Appearance	外観
 	Arrival limit	到着数の上限
@@ -33,6 +35,7 @@
 	Beta	ベータ分布
 	Binomial	二項分布
 	Boolean	真偽値
+	Bottoms	下端
 	Bring All to Front	すべてを手前に移動
 	Built with	使用技術
 	By role	役割で指定
@@ -41,8 +44,10 @@
 	Cancel Run	実行をキャンセル
 	Cancel run	実行をキャンセル
 	Capacity	処理能力
+	Centres	左右中央
 	Change Block	ブロックを変更
 	Change Flow	フローを変更
+	Changes	変更
 	Changing the time unit does not convert the times already in the model.	時間単位を変更しても、モデル内の既存の時間は換算されません。
 	Clear Menu	メニューを消去
 	Close	閉じる
@@ -50,8 +55,12 @@
 	Comes from	接続元
 	Condition of {id}	{id} の条件
 	Connect	接続
+	Connect from {name}	{name} から接続
+	Connected {from} to {to}	{from} を {to} に接続しました
 	Connections	接続
 	Constant	定数
+	Copy	コピー
+	Cut	切り取り
 	Dark	ダーク
 	Data points	データ点
 	Date and time	日付と時刻
@@ -59,7 +68,9 @@
 	Decision	分岐
 	Decision (one way)	分岐（1 つの経路）
 	Default flow	既定のフロー
+	Delete	削除
 	Departures	退出
+	Diagram	ダイアグラム
 	Discard	破棄
 	Discarded the recovered changes	復元した変更を破棄しました
 	Disconnect	接続を解除
@@ -70,12 +81,16 @@
 	Download charts (PNG)	グラフをダウンロード (PNG)
 	Download table (CSV)	表をダウンロード (CSV)
 	Downloaded {file}	{file} をダウンロードしました
+	Drag to add:	ドラッグして追加:
+	Duplicate	複製
 	Duration	継続時間
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	各エンティティは、これらのうち今すぐ一度にすべて満たせる最初のものを確保し、退出するときにユニットを返却します。
 	Edit	編集
 	Entered	流入数
 	Erlang	アーラン分布
 	Error	エラー
+	Evenly across	左右に均等配置
+	Evenly down	上下に均等配置
 	Every distribution	すべての分布
 	Exit	終了
 	Experiment	実験
@@ -87,6 +102,8 @@
 	Exported {file}	{file} をエクスポートしました
 	Expression	式
 	File	ファイル
+	Fit	全体表示
+	Fit the diagram to the view	ダイアグラム全体をビューに収める
 	Flows	フロー
 	From	接続元
 	Gamma	ガンマ分布
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	キーボードショートカットは変更されていません
 	Language	言語
 	Left	流出数
+	Left edges	左端
 	Licensed under the MIT License or the Apache License 2.0, at your option.	MIT License または Apache License 2.0 のいずれかを選択して利用できます。
 	Light	ライト
 	Log-normal	対数正規分布
@@ -114,11 +132,13 @@
 	Mean time in system	システム内の平均滞在時間
 	Mean wait	平均待ち時間
 	Metric	指標
+	Middles	上下中央
 	Minimise	最小化
 	Minimize	最小化
 	Minimum	最小値
 	Model	モデル
 	Most likely	最頻値
+	Move	移動
 	Name	名前
 	Needs	必要なリソース
 	New	新規
@@ -146,6 +166,7 @@
 	Or start from an example	またはサンプルから始める
 	PNG image	PNG 画像
 	Parameters	パラメータ
+	Paste	貼り付け
 	Points	点
 	Poisson	ポアソン分布
 	Preferences	環境設定
@@ -182,6 +203,7 @@
 	Resource pools	リソースプール
 	Restore	元に戻す
 	Results	結果
+	Right edges	右端
 	Roles	役割
 	Run	実行
 	Run cancelled	実行がキャンセルされました
@@ -196,6 +218,7 @@
 	Saved {file}	{file} を保存しました
 	Scale	尺度
 	Seed	乱数シード
+	Select All	すべて選択
 	Service time	サービス時間
 	Services	サービス
 	Set Property	プロパティを設定
@@ -209,6 +232,7 @@
 	Show {id}	{id} を表示
 	Split or join	分岐または結合
 	Split or join (all ways)	分岐または結合（すべての経路）
+	Spread out	均等配置
 	Stages (k)	段階数 (k)
 	Standard deviation	標準偏差
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft は {name} の変更が保存されないまま終了しました。変更を無題のモデルとして復元するか、破棄してください。
@@ -226,6 +250,7 @@
 	Time between arrivals	到着間隔
 	Time unit	時間単位
 	To	接続先
+	Tops	上端
 	Trials	試行回数
 	Triangular	三角分布
 	Truncated normal	切断正規分布
@@ -254,6 +279,8 @@
 	Yes or no	はい／いいえ
 	Your changes will be lost if you don't save them.	保存しないと変更は失われます。
 	Zoom	ズーム
+	Zoom in	拡大
+	Zoom out	縮小
 	a model	モデル
 	arrivals	到着
 	days	日
@@ -280,6 +307,7 @@
 	years	年
 	{field}: not editable here yet	{field}：ここではまだ編集できません
 	{id}: a probability is a number from 0 to 1	{id}：確率は 0 から 1 までの数値です
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — 編集済み
 	{property} (set to, mean)	{property}（設定値、平均）
 	± 95% CI	± 95% 信頼区間
@@ -291,11 +319,15 @@ unit	min	分
 unit	ms	ミリ秒
 unit	s	秒
 unit	yr	年
+@plural	Added {n} block|Added {n} blocks	{n} 個のブロックを追加しました
+@plural	Copied {n} block|Copied {n} blocks	{n} 個のブロックをコピーしました
 @plural	Finished {n} replication|Finished {n} replications	{n} 回の反復実行が完了しました
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} を開きました（警告 {n} 件）
+@plural	Removed {n} block|Removed {n} blocks	{n} 個のブロックを削除しました
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	シード {seed} からモデルを {n} 回独立に反復実行します。各要素の結果には、95% 信頼区間の半幅が示されます。
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} 回中 {done} 回の反復実行が完了
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}：{mean}{unit}\n95% 区間 {low} ～ {high}{unit}\n{n} 回の反復実行に基づく
+@plural	{n} block selected|{n} blocks selected	{n} 個のブロックを選択中
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 回の反復実行 · シード {seed} · ウォームアップ {warmup} {unit} · 測定 {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 回の反復実行 · シード {seed}
 @plural	{n} replication|{n} replications	{n} 回の反復実行

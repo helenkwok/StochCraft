@@ -15,6 +15,7 @@
 	+ Add block	+ Blok toevoegen
 	About StochCraft	Over StochCraft
 	About {app}	Over {app}
+	Actual size	Werkelijke grootte
 	Add Block	Blok toevoegen
 	Add a flow from…	Stroom toevoegen vanaf…
 	Add a flow to…	Stroom toevoegen naar…
@@ -24,6 +25,7 @@
 	Add property	Eigenschap toevoegen
 	Added pool {id}	Pool {id} toegevoegd
 	Added {block} ({id})	{block} ({id}) toegevoegd
+	Align	Uitlijnen
 	Alternative {n}	Alternatief {n}
 	Appearance	Uiterlijk
 	Arrival limit	Aankomstlimiet
@@ -33,6 +35,7 @@
 	Beta	Bèta
 	Binomial	Binomiaal
 	Boolean	Booleaans
+	Bottoms	Onderkanten
 	Bring All to Front	Alles naar voren halen
 	Built with	Gemaakt met
 	By role	Per rol
@@ -41,8 +44,10 @@
 	Cancel Run	Uitvoering annuleren
 	Cancel run	Uitvoering annuleren
 	Capacity	Capaciteit
+	Centres	Horizontale middens
 	Change Block	Blok wijzigen
 	Change Flow	Stroom wijzigen
+	Changes	Wijzigingen
 	Changing the time unit does not convert the times already in the model.	Als u de tijdseenheid wijzigt, worden bestaande tijden in het model niet omgerekend.
 	Clear Menu	Menu wissen
 	Close	Sluiten
@@ -50,8 +55,12 @@
 	Comes from	Komt van
 	Condition of {id}	Voorwaarde van {id}
 	Connect	Verbinden
+	Connect from {name}	Verbinden vanaf {name}
+	Connected {from} to {to}	{from} verbonden met {to}
 	Connections	Verbindingen
 	Constant	Constant
+	Copy	Kopiëren
+	Cut	Knippen
 	Dark	Donker
 	Data points	Datapunten
 	Date and time	Datum en tijd
@@ -59,7 +68,9 @@
 	Decision	Beslissing
 	Decision (one way)	Beslissing (één route)
 	Default flow	Standaardstroom
+	Delete	Verwijderen
 	Departures	Vertrekken
+	Diagram	Diagram
 	Discard	Negeren
 	Discarded the recovered changes	Herstelde wijzigingen verworpen
 	Disconnect	Verbinding verbreken
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Grafieken downloaden (PNG)
 	Download table (CSV)	Tabel downloaden (CSV)
 	Downloaded {file}	{file} gedownload
+	Drag to add:	Sleep om toe te voegen:
+	Duplicate	Dupliceren
 	Duration	Duur
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Elke entiteit neemt in één keer het eerste van deze alternatieven waaraan nu kan worden voldaan, en geeft de eenheden terug wanneer ze vertrekt.
 	Edit	Bewerken
 	Entered	Binnengekomen
 	Erlang	Erlang
 	Error	Fout
+	Evenly across	Gelijkmatig naast elkaar
+	Evenly down	Gelijkmatig onder elkaar
 	Every distribution	Alle verdelingen
 	Exit	Afsluiten
 	Experiment	Experiment
@@ -87,6 +102,8 @@
 	Exported {file}	{file} geëxporteerd
 	Expression	Expressie
 	File	Bestand
+	Fit	Passend maken
+	Fit the diagram to the view	Diagram passend in de weergave maken
 	Flows	Stromen
 	From	Van
 	Gamma	Gamma
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Sneltoetsen ongewijzigd
 	Language	Taal
 	Left	Vertrokken
+	Left edges	Linkerkanten
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Onder MIT License of Apache License 2.0, naar keuze.
 	Light	Licht
 	Log-normal	Lognormaal
@@ -114,11 +132,13 @@
 	Mean time in system	Gemiddelde tijd in het systeem
 	Mean wait	Gemiddelde wachttijd
 	Metric	Metriek
+	Middles	Verticale middens
 	Minimise	Minimaliseren
 	Minimize	Minimaliseren
 	Minimum	Minimum
 	Model	Model
 	Most likely	Meest waarschijnlijk
+	Move	Verplaatsen
 	Name	Naam
 	Needs	Behoeften
 	New	Nieuw
@@ -146,6 +166,7 @@
 	Or start from an example	Of begin met een voorbeeld
 	PNG image	PNG-afbeelding
 	Parameters	Parameters
+	Paste	Plakken
 	Points	Punten
 	Poisson	Poisson
 	Preferences	Voorkeuren
@@ -182,6 +203,7 @@
 	Resource pools	Hulpbronnenpools
 	Restore	Venster herstellen
 	Results	Resultaten
+	Right edges	Rechterkanten
 	Roles	Rollen
 	Run	Uitvoeren
 	Run cancelled	Uitvoering geannuleerd
@@ -196,6 +218,7 @@
 	Saved {file}	{file} opgeslagen
 	Scale	Schaal
 	Seed	Startwaarde
+	Select All	Alles selecteren
 	Service time	Servicetijd
 	Services	Diensten
 	Set Property	Eigenschap instellen
@@ -209,6 +232,7 @@
 	Show {id}	{id} tonen
 	Split or join	Splitsen of samenvoegen
 	Split or join (all ways)	Splitsen of samenvoegen (alle routes)
+	Spread out	Verdelen
 	Stages (k)	Fasen (k)
 	Standard deviation	Standaardafwijking
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft is afgesloten met niet-opgeslagen wijzigingen in {name}. Herstel deze als een naamloos model of verwerp ze.
@@ -226,6 +250,7 @@
 	Time between arrivals	Tijd tussen aankomsten
 	Time unit	Tijdseenheid
 	To	Naar
+	Tops	Bovenkanten
 	Trials	Proeven
 	Triangular	Driehoekig
 	Truncated normal	Afgekapt normaal
@@ -254,6 +279,8 @@
 	Yes or no	Ja of nee
 	Your changes will be lost if you don't save them.	Je wijzigingen gaan verloren als je ze niet opslaat.
 	Zoom	Zoom
+	Zoom in	Inzoomen
+	Zoom out	Uitzoomen
 	a model	een model
 	arrivals	aankomsten
 	days	dagen
@@ -280,6 +307,7 @@
 	years	jaren
 	{field}: not editable here yet	{field}: hier nog niet bewerkbaar
 	{id}: a probability is a number from 0 to 1	{id}: een kans is een getal tussen 0 en 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — bewerkt
 	{property} (set to, mean)	{property} (ingestelde waarde, gemiddelde)
 	± 95% CI	± 95%-BI
@@ -291,11 +319,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	j
+@plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
+@plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} replication|Finished {n} replications	{n} herhaling voltooid|{n} herhalingen voltooid
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} geopend ({n} waarschuwing)|{file} geopend ({n} waarschuwingen)
+@plural	Removed {n} block|Removed {n} blocks	{n} blok verwijderd|{n} blokken verwijderd
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Voert {n} onafhankelijke herhaling van het model uit met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.|Voert {n} onafhankelijke herhalingen van het model uit met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} van {n} herhaling voltooid|{done} van {n} herhalingen voltooid
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} herhaling|{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} herhalingen
+@plural	{n} block selected|{n} blocks selected	{n} blok geselecteerd|{n} blokken geselecteerd
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} herhaling · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten|{n} herhalingen · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} herhaling · startwaarde {seed}|{n} herhalingen · startwaarde {seed}
 @plural	{n} replication|{n} replications	{n} herhaling|{n} herhalingen

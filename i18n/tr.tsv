@@ -15,6 +15,7 @@
 	+ Add block	+ Blok ekle
 	About StochCraft	StochCraft hakkında
 	About {app}	{app} hakkında
+	Actual size	Gerçek boyut
 	Add Block	Blok ekle
 	Add a flow from…	Kaynak…
 	Add a flow to…	Hedef…
@@ -24,6 +25,7 @@
 	Add property	Özellik ekle
 	Added pool {id}	{id} havuzu eklendi
 	Added {block} ({id})	{block} ({id}) eklendi
+	Align	Hizala
 	Alternative {n}	Alternatif {n}
 	Appearance	Görünüm
 	Arrival limit	Geliş sınırı
@@ -33,6 +35,7 @@
 	Beta	Beta
 	Binomial	Binom
 	Boolean	Mantıksal
+	Bottoms	Alt kenarlar
 	Bring All to Front	Tümünü Öne Getir
 	Built with	Şunlarla geliştirildi
 	By role	Role göre
@@ -41,8 +44,10 @@
 	Cancel Run	Çalıştırmayı iptal et
 	Cancel run	Çalıştırmayı iptal et
 	Capacity	Kapasite
+	Centres	Yatay merkezler
 	Change Block	Bloğu değiştir
 	Change Flow	Akışı değiştir
+	Changes	Değişiklikler
 	Changing the time unit does not convert the times already in the model.	Zaman birimini değiştirmek modeldeki mevcut süreleri dönüştürmez.
 	Clear Menu	Menüyü Temizle
 	Close	Kapat
@@ -50,8 +55,12 @@
 	Comes from	Şuradan gelir
 	Condition of {id}	{id} koşulu
 	Connect	Bağla
+	Connect from {name}	{name} öğesinden bağla
+	Connected {from} to {to}	{from}, {to} öğesine bağlandı
 	Connections	Bağlantılar
 	Constant	Sabit
+	Copy	Kopyala
+	Cut	Kes
 	Dark	Koyu
 	Data points	Veri noktaları
 	Date and time	Tarih ve saat
@@ -59,7 +68,9 @@
 	Decision	Karar
 	Decision (one way)	Karar (tek yol)
 	Default flow	Varsayılan akış
+	Delete	Sil
 	Departures	Çıkışlar
+	Diagram	Diyagram
 	Discard	Yoksay
 	Discarded the recovered changes	Kurtarılan değişiklikler atıldı
 	Disconnect	Bağlantıyı kes
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Grafikleri indir (PNG)
 	Download table (CSV)	Tabloyu indir (CSV)
 	Downloaded {file}	{file} indirildi
+	Drag to add:	Eklemek için sürükleyin:
+	Duplicate	Çoğalt
 	Duration	Süre
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Her varlık, bunlardan şu anda karşılanabilen ilkini tek seferde tümüyle alır ve görevden ayrılırken birimleri geri verir.
 	Edit	Düzen
 	Entered	Giren
 	Erlang	Erlang
 	Error	Hata
+	Evenly across	Yatay olarak eşit dağıt
+	Evenly down	Dikey olarak eşit dağıt
 	Every distribution	Tüm dağılımlar
 	Exit	Çıkış
 	Experiment	Deney
@@ -87,6 +102,8 @@
 	Exported {file}	{file} dışa aktarıldı
 	Expression	İfade
 	File	Dosya
+	Fit	Sığdır
+	Fit the diagram to the view	Diyagramı görünüme sığdır
 	Flows	Akışlar
 	From	Kaynak
 	Gamma	Gama
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Klavye kısayolları değişmedi
 	Language	Dil
 	Left	Çıkan
+	Left edges	Sol kenarlar
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Tercihinize göre MIT License veya Apache License 2.0 ile lisanslanmıştır.
 	Light	Açık
 	Log-normal	Log-normal
@@ -114,11 +132,13 @@
 	Mean time in system	Sistemdeki ortalama süre
 	Mean wait	Ortalama bekleme süresi
 	Metric	Ölçüt
+	Middles	Dikey merkezler
 	Minimise	Simge durumuna küçült
 	Minimize	Küçült
 	Minimum	Minimum
 	Model	Model
 	Most likely	En olası
+	Move	Taşı
 	Name	Ad
 	Needs	İhtiyaçlar
 	New	Yeni
@@ -146,6 +166,7 @@
 	Or start from an example	Veya bir örnekle başlayın
 	PNG image	PNG görüntüsü
 	Parameters	Parametreler
+	Paste	Yapıştır
 	Points	Noktalar
 	Poisson	Poisson
 	Preferences	Tercihler
@@ -182,6 +203,7 @@
 	Resource pools	Kaynak havuzları
 	Restore	Geri yükle
 	Results	Sonuçlar
+	Right edges	Sağ kenarlar
 	Roles	Roller
 	Run	Çalıştır
 	Run cancelled	Çalıştırma iptal edildi
@@ -196,6 +218,7 @@
 	Saved {file}	{file} kaydedildi
 	Scale	Ölçek
 	Seed	Rastgelelik tohumu
+	Select All	Tümünü seç
 	Service time	Hizmet süresi
 	Services	Hizmetler
 	Set Property	Özelliği ayarla
@@ -209,6 +232,7 @@
 	Show {id}	{id} göster
 	Split or join	Ayır veya birleştir
 	Split or join (all ways)	Ayır veya birleştir (tüm yollar)
+	Spread out	Dağıt
 	Stages (k)	Aşamalar (k)
 	Standard deviation	Standart sapma
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft, {name} içindeki kaydedilmemiş değişikliklerle kapandı. Bunları adsız bir model olarak kurtarın veya atın.
@@ -226,6 +250,7 @@
 	Time between arrivals	Gelişler arası süre
 	Time unit	Zaman birimi
 	To	Hedef
+	Tops	Üst kenarlar
 	Trials	Denemeler
 	Triangular	Üçgen
 	Truncated normal	Kesilmiş normal
@@ -254,6 +279,8 @@
 	Yes or no	Evet veya hayır
 	Your changes will be lost if you don't save them.	Kaydetmezseniz değişiklikleriniz kaybolur.
 	Zoom	Boyutu Değiştir
+	Zoom in	Yakınlaştır
+	Zoom out	Uzaklaştır
 	a model	bir model
 	arrivals	gelişler
 	days	gün
@@ -280,6 +307,7 @@
 	years	yıl
 	{field}: not editable here yet	{field}: burada henüz düzenlenemiyor
 	{id}: a probability is a number from 0 to 1	{id}: olasılık 0 ile 1 arasında bir sayıdır
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — düzenlendi
 	{property} (set to, mean)	{property} (ayarlanan değer, ortalama)
 	± 95% CI	± 95% güven aralığı
@@ -291,11 +319,15 @@ unit	min	dk
 unit	ms	ms
 unit	s	sn
 unit	yr	yıl
+@plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
+@plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} replication|Finished {n} replications	{n} tekrar tamamlandı|{n} tekrar tamamlandı
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} açıldı ({n} uyarı)|{file} açıldı ({n} uyarı)
+@plural	Removed {n} block|Removed {n} blocks	{n} blok kaldırıldı|{n} blok kaldırıldı
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Modelin {n} bağımsız tekrarını {seed} tohumundan çalıştırır. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.|Modelin {n} bağımsız tekrarını {seed} tohumundan çalıştırır. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} tekrardan {done} tanesi tamamlandı|{n} tekrardan {done} tanesi tamamlandı
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} tekrar üzerinden|{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} tekrar üzerinden
+@plural	{n} block selected|{n} blocks selected	{n} blok seçildi|{n} blok seçildi
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü|{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} tekrar · tohum {seed}|{n} tekrar · tohum {seed}
 @plural	{n} replication|{n} replications	{n} tekrar|{n} tekrar

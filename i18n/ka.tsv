@@ -15,6 +15,7 @@
 	+ Add block	+ ბლოკის დამატება
 	About StochCraft	StochCraft-ის შესახებ
 	About {app}	{app}-ის შესახებ
+	Actual size	რეალური ზომა
 	Add Block	ბლოკის დამატება
 	Add a flow from…	ნაკადის დამატება (წყარო)…
 	Add a flow to…	ნაკადის დამატება (სამიზნე)…
@@ -24,6 +25,7 @@
 	Add property	თვისების დამატება
 	Added pool {id}	დამატებულია პული {id}
 	Added {block} ({id})	დამატებულია {block} ({id})
+	Align	სწორება
 	Alternative {n}	ალტერნატივა {n}
 	Appearance	გარეგნობა
 	Arrival limit	შემოსვლის ლიმიტი
@@ -33,6 +35,7 @@
 	Beta	ბეტა
 	Binomial	ბინომური
 	Boolean	ლოგიკური მნიშვნელობა
+	Bottoms	ქვედა კიდეები
 	Bring All to Front	ყველაფრის წინ წამოწევა
 	Built with	შექმნილია შემდეგით
 	By role	როლის მიხედვით
@@ -41,8 +44,10 @@
 	Cancel Run	გაშვების გაუქმება
 	Cancel run	გაშვების გაუქმება
 	Capacity	ტევადობა
+	Centres	ჰორიზონტალური ცენტრები
 	Change Block	ბლოკის შეცვლა
 	Change Flow	ნაკადის შეცვლა
+	Changes	ცვლილებები
 	Changing the time unit does not convert the times already in the model.	დროის ერთეულის შეცვლა მოდელში უკვე მითითებულ დროებს არ გარდაქმნის.
 	Clear Menu	მენიუს გასუფთავება
 	Close	დახურვა
@@ -50,8 +55,12 @@
 	Comes from	მოდის აქედან
 	Condition of {id}	{id}-ის პირობა
 	Connect	დაკავშირება
+	Connect from {name}	დაკავშირება {name}-დან
+	Connected {from} to {to}	{from} დაკავშირდა {to}-თან
 	Connections	კავშირები
 	Constant	მუდმივი
+	Copy	კოპირება
+	Cut	ამოჭრა
 	Dark	მუქი
 	Data points	მონაცემთა წერტილები
 	Date and time	თარიღი და დრო
@@ -59,7 +68,9 @@
 	Decision	გადაწყვეტილება
 	Decision (one way)	გადაწყვეტილება (ერთი გზა)
 	Default flow	ნაგულისხმევი ნაკადი
+	Delete	წაშლა
 	Departures	გასვლები
+	Diagram	დიაგრამა
 	Discard	გაუქმება
 	Discarded the recovered changes	აღდგენილი ცვლილებები გაუქმებულია
 	Disconnect	კავშირის გაწყვეტა
@@ -70,12 +81,16 @@
 	Download charts (PNG)	დიაგრამების ჩამოტვირთვა (PNG)
 	Download table (CSV)	ცხრილის ჩამოტვირთვა (CSV)
 	Downloaded {file}	ჩამოტვირთულია {file}
+	Drag to add:	გადაათრიეთ დასამატებლად:
+	Duplicate	დუბლირება
 	Duration	ხანგრძლივობა
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	თითოეული ერთეული იღებს ამათგან პირველს, რომლის სრულად დაკმაყოფილებაც ახლავე, ერთდროულად არის შესაძლებელი, და გასვლისას რესურსის ერთეულებს აბრუნებს.
 	Edit	რედაქტირება
 	Entered	შესულა
 	Erlang	ერლანგი
 	Error	შეცდომა
+	Evenly across	თანაბრად ჰორიზონტალურად
+	Evenly down	თანაბრად ვერტიკალურად
 	Every distribution	ყველა განაწილება
 	Exit	გასვლა
 	Experiment	ექსპერიმენტი
@@ -87,6 +102,8 @@
 	Exported {file}	ექსპორტირებულია {file}
 	Expression	გამოსახულება
 	File	ფაილი
+	Fit	მორგება
+	Fit the diagram to the view	დიაგრამის ხედზე მორგება
 	Flows	ნაკადები
 	From	-დან
 	Gamma	გამა
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	კლავიატურის მალსახმობები უცვლელია
 	Language	ენა
 	Left	გასულა
+	Left edges	მარცხენა კიდეები
 	Licensed under the MIT License or the Apache License 2.0, at your option.	ლიცენზირებულია MIT License-ით ან Apache License 2.0-ით, თქვენი არჩევანით.
 	Light	ღია
 	Log-normal	ლოგნორმალური
@@ -114,11 +132,13 @@
 	Mean time in system	სისტემაში გატარებული საშუალო დრო
 	Mean wait	ლოდინის საშუალო დრო
 	Metric	მაჩვენებელი
+	Middles	ვერტიკალური ცენტრები
 	Minimise	მინიმიზაცია
 	Minimize	მინიმიზაცია
 	Minimum	მინიმუმი
 	Model	მოდელი
 	Most likely	ყველაზე სავარაუდო
+	Move	გადატანა
 	Name	სახელი
 	Needs	საჭიროებები
 	New	ახალი
@@ -146,6 +166,7 @@
 	Or start from an example	ან დაიწყეთ მაგალითით
 	PNG image	PNG გამოსახულება
 	Parameters	პარამეტრები
+	Paste	ჩასმა
 	Points	წერტილები
 	Poisson	პუასონი
 	Preferences	პარამეტრები
@@ -182,6 +203,7 @@
 	Resource pools	რესურსების პულები
 	Restore	ფანჯრის აღდგენა
 	Results	შედეგები
+	Right edges	მარჯვენა კიდეები
 	Roles	როლები
 	Run	გაშვება
 	Run cancelled	გაშვება გაუქმდა
@@ -196,6 +218,7 @@
 	Saved {file}	შენახულია {file}
 	Scale	მასშტაბი
 	Seed	შემთხვევითი რიცხვების საწყისი მნიშვნელობა
+	Select All	ყველას მონიშვნა
 	Service time	მომსახურების დრო
 	Services	სერვისები
 	Set Property	თვისების დაყენება
@@ -209,6 +232,7 @@
 	Show {id}	{id}-ის ჩვენება
 	Split or join	გაყოფა ან გაერთიანება
 	Split or join (all ways)	გაყოფა ან გაერთიანება (ყველა გზა)
+	Spread out	განაწილება
 	Stages (k)	ეტაპები (k)
 	Standard deviation	სტანდარტული გადახრა
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft დაიხურა {name}-ში შეუნახავი ცვლილებებით. აღადგინეთ ისინი უსათაურო მოდელად ან გააუქმეთ.
@@ -226,6 +250,7 @@
 	Time between arrivals	შემოსვლებს შორის დრო
 	Time unit	დროის ერთეული
 	To	-მდე
+	Tops	ზედა კიდეები
 	Trials	ცდები
 	Triangular	სამკუთხა
 	Truncated normal	შეკვეცილი ნორმალური
@@ -254,6 +279,8 @@
 	Yes or no	დიახ ან არა
 	Your changes will be lost if you don't save them.	თუ არ შეინახავთ, ცვლილებები დაიკარგება.
 	Zoom	ზომის შეცვლა
+	Zoom in	გადიდება
+	Zoom out	დაპატარავება
 	a model	მოდელი
 	arrivals	შემოსვლები
 	days	დღე
@@ -280,6 +307,7 @@
 	years	წელი
 	{field}: not editable here yet	{field}: აქ ჯერ არ შეიძლება რედაქტირება
 	{id}: a probability is a number from 0 to 1	{id}: ალბათობა არის რიცხვი 0-დან 1-მდე
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — რედაქტირებულია
 	{property} (set to, mean)	{property} (მითითებული მნიშვნელობა, საშუალო)
 	± 95% CI	± 95% ნდობის ინტერვალი
@@ -291,11 +319,15 @@ unit	min	წთ
 unit	ms	მწმ
 unit	s	წმ
 unit	yr	წელი
+@plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
+@plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
 @plural	Finished {n} replication|Finished {n} replications	დასრულდა {n} გამეორება|დასრულდა {n} გამეორება
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	გახსნილია {file} ({n} გაფრთხილება)|გახსნილია {file} ({n} გაფრთხილება)
+@plural	Removed {n} block|Removed {n} blocks	წაშლილია {n} ბლოკი|წაშლილია {n} ბლოკი
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.|მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}-დან {done} გამეორება დასრულდა|{n}-დან {done} გამეორება დასრულდა
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით|{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით
+@plural	{n} block selected|{n} blocks selected	მონიშნულია {n} ბლოკი|მონიშნულია {n} ბლოკი
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}|{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} გამეორება · საწყისი მნიშვნელობა {seed}|{n} გამეორება · საწყისი მნიშვნელობა {seed}
 @plural	{n} replication|{n} replications	{n} გამეორება|{n} გამეორება

@@ -15,6 +15,7 @@
 	+ Add block	+ Přidat blok
 	About StochCraft	O aplikaci StochCraft
 	About {app}	O aplikaci {app}
+	Actual size	Skutečná velikost
 	Add Block	Přidat blok
 	Add a flow from…	Přidat tok z…
 	Add a flow to…	Přidat tok do…
@@ -24,6 +25,7 @@
 	Add property	Přidat vlastnost
 	Added pool {id}	Přidán fond {id}
 	Added {block} ({id})	Přidán {block} ({id})
+	Align	Zarovnat
 	Alternative {n}	Alternativa {n}
 	Appearance	Vzhled
 	Arrival limit	Limit příchodů
@@ -33,6 +35,7 @@
 	Beta	Beta
 	Binomial	Binomické
 	Boolean	Logická hodnota
+	Bottoms	Spodní okraje
 	Bring All to Front	Přenést vše do popředí
 	Built with	Vytvořeno pomocí
 	By role	Podle role
@@ -41,8 +44,10 @@
 	Cancel Run	Zrušit běh
 	Cancel run	Zrušit běh
 	Capacity	Kapacita
+	Centres	Vodorovné středy
 	Change Block	Změnit blok
 	Change Flow	Změnit tok
+	Changes	Změny
 	Changing the time unit does not convert the times already in the model.	Změna časové jednotky nepřepočítá časy, které již v modelu jsou.
 	Clear Menu	Vymazat nabídku
 	Close	Zavřít
@@ -50,8 +55,12 @@
 	Comes from	Pochází z
 	Condition of {id}	Podmínka pro {id}
 	Connect	Propojit
+	Connect from {name}	Propojit z {name}
+	Connected {from} to {to}	{from} propojeno s {to}
 	Connections	Propojení
 	Constant	Konstantní
+	Copy	Kopírovat
+	Cut	Vyjmout
 	Dark	Tmavý
 	Data points	Datové body
 	Date and time	Datum a čas
@@ -59,7 +68,9 @@
 	Decision	Rozhodnutí
 	Decision (one way)	Rozhodnutí (jedna cesta)
 	Default flow	Výchozí tok
+	Delete	Smazat
 	Departures	Odchody
+	Diagram	Diagram
 	Discard	Zahodit
 	Discarded the recovered changes	Obnovené změny byly zahozeny
 	Disconnect	Odpojit
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Stáhnout grafy (PNG)
 	Download table (CSV)	Stáhnout tabulku (CSV)
 	Downloaded {file}	Staženo {file}
+	Drag to add:	Přetažením přidáte:
+	Duplicate	Duplikovat
 	Duration	Doba trvání
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Každá entita si vezme první z těchto možností, kterou lze právě splnit, celou najednou, a při odchodu jednotky vrátí.
 	Edit	Úpravy
 	Entered	Vstoupilo
 	Erlang	Erlangovo
 	Error	Chyba
+	Evenly across	Rovnoměrně vodorovně
+	Evenly down	Rovnoměrně svisle
 	Every distribution	Všechna rozdělení
 	Exit	Ukončit
 	Experiment	Experiment
@@ -87,6 +102,8 @@
 	Exported {file}	Exportováno {file}
 	Expression	Výraz
 	File	Soubor
+	Fit	Přizpůsobit
+	Fit the diagram to the view	Přizpůsobit diagram zobrazení
 	Flows	Toky
 	From	Z
 	Gamma	Gama
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Klávesové zkratky beze změny
 	Language	Jazyk
 	Left	Odešlo
+	Left edges	Levé okraje
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencováno podle MIT License nebo Apache License 2.0, dle vaší volby.
 	Light	Světlý
 	Log-normal	Lognormální
@@ -114,11 +132,13 @@
 	Mean time in system	Průměrná doba v systému
 	Mean wait	Průměrná doba čekání
 	Metric	Metrika
+	Middles	Svislé středy
 	Minimise	Minimalizovat
 	Minimize	Minimalizovat
 	Minimum	Minimum
 	Model	Model
 	Most likely	Nejpravděpodobnější
+	Move	Přesun
 	Name	Jméno
 	Needs	Požadavky
 	New	Nový
@@ -146,6 +166,7 @@
 	Or start from an example	Nebo začněte příkladem
 	PNG image	Obrázek PNG
 	Parameters	Parametry
+	Paste	Vložit
 	Points	Body
 	Poisson	Poissonovo
 	Preferences	Předvolby
@@ -182,6 +203,7 @@
 	Resource pools	Fondy zdrojů
 	Restore	Obnovit velikost
 	Results	Výsledky
+	Right edges	Pravé okraje
 	Roles	Role
 	Run	Spustit
 	Run cancelled	Běh byl zrušen
@@ -196,6 +218,7 @@
 	Saved {file}	Uloženo {file}
 	Scale	Měřítko
 	Seed	Počáteční hodnota generátoru
+	Select All	Vybrat vše
 	Service time	Doba obsluhy
 	Services	Služby
 	Set Property	Nastavit vlastnost
@@ -209,6 +232,7 @@
 	Show {id}	Zobrazit {id}
 	Split or join	Rozdělit nebo spojit
 	Split or join (all ways)	Rozdělit nebo spojit (všechny cesty)
+	Spread out	Rozmístit
 	Stages (k)	Fáze (k)
 	Standard deviation	Směrodatná odchylka
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft byl ukončen s neuloženými změnami v modelu {name}. Obnovte je jako nepojmenovaný model, nebo je zahoďte.
@@ -226,6 +250,7 @@
 	Time between arrivals	Doba mezi příchody
 	Time unit	Časová jednotka
 	To	Do
+	Tops	Horní okraje
 	Trials	Pokusy
 	Triangular	Trojúhelníkové
 	Truncated normal	Oříznuté normální
@@ -254,6 +279,8 @@
 	Yes or no	Ano nebo ne
 	Your changes will be lost if you don't save them.	Pokud změny neuložíte, budou ztraceny.
 	Zoom	Přepnout velikost okna
+	Zoom in	Přiblížit
+	Zoom out	Oddálit
 	a model	model
 	arrivals	příchody
 	days	dny
@@ -280,6 +307,7 @@
 	years	roky
 	{field}: not editable here yet	{field}: zde zatím nelze upravovat
 	{id}: a probability is a number from 0 to 1	{id}: pravděpodobnost je číslo od 0 do 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — upraveno
 	{property} (set to, mean)	{property} (nastaveno na, průměr)
 	± 95% CI	± 95% interval spolehlivosti
@@ -291,11 +319,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	r.
+@plural	Added {n} block|Added {n} blocks	Přidán {n} blok|Přidány {n} bloky|Přidáno {n} bloků
+@plural	Copied {n} block|Copied {n} blocks	Zkopírován {n} blok|Zkopírovány {n} bloky|Zkopírováno {n} bloků
 @plural	Finished {n} replication|Finished {n} replications	Dokončena {n} replikace|Dokončeny {n} replikace|Dokončeno {n} replikací
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otevřen {file} ({n} upozornění)|Otevřen {file} ({n} upozornění)|Otevřen {file} ({n} upozornění)
+@plural	Removed {n} block|Removed {n} blocks	Odebrán {n} blok|Odebrány {n} bloky|Odebráno {n} bloků
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislou replikaci modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislé replikace modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislých replikací modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Dokončena {done} z {n} replikace|Dokončeno {done} z {n} replikací|Dokončeno {done} z {n} replikací
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikace|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikací|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikací
+@plural	{n} block selected|{n} blocks selected	Vybrán {n} blok|Vybrány {n} bloky|Vybráno {n} bloků
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikace · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}|{n} replikace · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}|{n} replikací · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikace · počáteční hodnota {seed}|{n} replikace · počáteční hodnota {seed}|{n} replikací · počáteční hodnota {seed}
 @plural	{n} replication|{n} replications	{n} replikace|{n} replikace|{n} replikací

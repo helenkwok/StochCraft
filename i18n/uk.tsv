@@ -15,6 +15,7 @@
 	+ Add block	+ Додати блок
 	About StochCraft	Про програму StochCraft
 	About {app}	Про програму {app}
+	Actual size	Фактичний розмір
 	Add Block	Додати блок
 	Add a flow from…	Додати потік від…
 	Add a flow to…	Додати потік до…
@@ -24,6 +25,7 @@
 	Add property	Додати властивість
 	Added pool {id}	Додано пул {id}
 	Added {block} ({id})	Додано {block} ({id})
+	Align	Вирівнювання
 	Alternative {n}	Альтернатива {n}
 	Appearance	Вигляд
 	Arrival limit	Обмеження кількості прибуттів
@@ -33,6 +35,7 @@
 	Beta	Бета-розподіл
 	Binomial	Біноміальний розподіл
 	Boolean	Логічне значення
+	Bottoms	Нижні краї
 	Bring All to Front	Усі вікна на передній план
 	Built with	Створено за допомогою
 	By role	За роллю
@@ -41,8 +44,10 @@
 	Cancel Run	Скасувати запуск
 	Cancel run	Скасувати запуск
 	Capacity	Потужність
+	Centres	Центри по горизонталі
 	Change Block	Змінити блок
 	Change Flow	Змінити потік
+	Changes	Зміни
 	Changing the time unit does not convert the times already in the model.	Зміна одиниці часу не перераховує час, уже заданий у моделі.
 	Clear Menu	Очистити меню
 	Close	Закрити
@@ -50,8 +55,12 @@
 	Comes from	Надходить від
 	Condition of {id}	Умова для {id}
 	Connect	З'єднати
+	Connect from {name}	З'єднати від {name}
+	Connected {from} to {to}	{from} з'єднано з {to}
 	Connections	З'єднання
 	Constant	Стала величина
+	Copy	Копіювати
+	Cut	Вирізати
 	Dark	Темний
 	Data points	Точки даних
 	Date and time	Дата й час
@@ -59,7 +68,9 @@
 	Decision	Рішення
 	Decision (one way)	Рішення (один шлях)
 	Default flow	Потік за замовчуванням
+	Delete	Видалити
 	Departures	Вибуття
+	Diagram	Діаграма
 	Discard	Відкинути
 	Discarded the recovered changes	Відновлені зміни відкинуто
 	Disconnect	Роз'єднати
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Завантажити діаграми (PNG)
 	Download table (CSV)	Завантажити таблицю (CSV)
 	Downloaded {file}	Завантажено {file}
+	Drag to add:	Перетягніть, щоб додати:
+	Duplicate	Дублювати
 	Duration	Тривалість
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Кожна сутність займає перший із цих варіантів, який можна виконати зараз, повністю й одразу, і повертає одиниці, коли виходить.
 	Edit	Редагування
 	Entered	Увійшло
 	Erlang	Розподіл Ерланга
 	Error	Помилка
+	Evenly across	Рівномірно по горизонталі
+	Evenly down	Рівномірно по вертикалі
 	Every distribution	Усі розподіли
 	Exit	Вийти
 	Experiment	Експеримент
@@ -87,6 +102,8 @@
 	Exported {file}	Експортовано {file}
 	Expression	Вираз
 	File	Файл
+	Fit	Умістити
+	Fit the diagram to the view	Умістити діаграму у вікно
 	Flows	Потоки
 	From	Від
 	Gamma	Гамма-розподіл
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Клавіатурні скорочення не змінено
 	Language	Мова
 	Left	Вийшло
+	Left edges	Ліві краї
 	Licensed under the MIT License or the Apache License 2.0, at your option.	На вибір: MIT License або Apache License 2.0.
 	Light	Світлий
 	Log-normal	Логнормальний розподіл
@@ -114,11 +132,13 @@
 	Mean time in system	Середній час у системі
 	Mean wait	Середній час очікування
 	Metric	Показник
+	Middles	Центри по вертикалі
 	Minimise	Згорнути
 	Minimize	Згорнути
 	Minimum	Мінімум
 	Model	Модель
 	Most likely	Найімовірніше значення
+	Move	Переміщення
 	Name	Ім’я
 	Needs	Потреби
 	New	Створити
@@ -146,6 +166,7 @@
 	Or start from an example	Або почніть із прикладу
 	PNG image	Зображення PNG
 	Parameters	Параметри
+	Paste	Вставити
 	Points	Точки
 	Poisson	Розподіл Пуассона
 	Preferences	Налаштування
@@ -182,6 +203,7 @@
 	Resource pools	Пули ресурсів
 	Restore	Відновити розмір
 	Results	Результати
+	Right edges	Праві краї
 	Roles	Ролі
 	Run	Запустити
 	Run cancelled	Запуск скасовано
@@ -196,6 +218,7 @@
 	Saved {file}	Збережено {file}
 	Scale	Масштаб
 	Seed	Початкове значення генератора
+	Select All	Виділити все
 	Service time	Час обслуговування
 	Services	Служби
 	Set Property	Задати властивість
@@ -209,6 +232,7 @@
 	Show {id}	Показати {id}
 	Split or join	Розділити або об'єднати
 	Split or join (all ways)	Розділити або об'єднати (усі шляхи)
+	Spread out	Розподіл
 	Stages (k)	Стадії (k)
 	Standard deviation	Стандартне відхилення
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft закрився з незбереженими змінами в {name}. Відновіть їх як модель без назви або відкиньте.
@@ -226,6 +250,7 @@
 	Time between arrivals	Час між прибуттями
 	Time unit	Одиниця часу
 	To	До
+	Tops	Верхні краї
 	Trials	Випробування
 	Triangular	Трикутний розподіл
 	Truncated normal	Усічений нормальний розподіл
@@ -254,6 +279,8 @@
 	Yes or no	Так або ні
 	Your changes will be lost if you don't save them.	Якщо не зберегти зміни, їх буде втрачено.
 	Zoom	Перемкнути розмір вікна
+	Zoom in	Збільшити
+	Zoom out	Зменшити
 	a model	модель
 	arrivals	прибуття
 	days	дні
@@ -280,6 +307,7 @@
 	years	роки
 	{field}: not editable here yet	{field}: тут поки не можна редагувати
 	{id}: a probability is a number from 0 to 1	{id}: імовірність має бути числом від 0 до 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — змінено
 	{property} (set to, mean)	{property} (задане значення, середнє)
 	± 95% CI	± 95% ДІ
@@ -291,11 +319,15 @@ unit	min	хв
 unit	ms	мс
 unit	s	с
 unit	yr	р.
+@plural	Added {n} block|Added {n} blocks	Додано {n} блок|Додано {n} блоки|Додано {n} блоків
+@plural	Copied {n} block|Copied {n} blocks	Скопійовано {n} блок|Скопійовано {n} блоки|Скопійовано {n} блоків
 @plural	Finished {n} replication|Finished {n} replications	Завершено {n} реплікацію|Завершено {n} реплікації|Завершено {n} реплікацій
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Відкрито {file} ({n} попередження)|Відкрито {file} ({n} попередження)|Відкрито {file} ({n} попереджень)
+@plural	Removed {n} block|Removed {n} blocks	Видалено {n} блок|Видалено {n} блоки|Видалено {n} блоків
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Виконує {n} незалежну реплікацію моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.|Виконує {n} незалежні реплікації моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.|Виконує {n} незалежних реплікацій моделі з початковим значенням {seed}. Результати кожного елемента містять півширину 95% довірчого інтервалу.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Завершено {done} із {n} реплікації|Завершено {done} із {n} реплікацій|Завершено {done} із {n} реплікацій
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} реплікацією|{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} реплікаціями|{name}: {mean}{unit}\n95% інтервал від {low} до {high}{unit}\nза {n} реплікаціями
+@plural	{n} block selected|{n} blocks selected	Вибрано {n} блок|Вибрано {n} блоки|Вибрано {n} блоків
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} реплікація · початкове значення {seed} · розігрів {warmup} {unit} · виміряно {duration} {unit}|{n} реплікації · початкове значення {seed} · розігрів {warmup} {unit} · виміряно {duration} {unit}|{n} реплікацій · початкове значення {seed} · розігрів {warmup} {unit} · виміряно {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} реплікація · початкове значення {seed}|{n} реплікації · початкове значення {seed}|{n} реплікацій · початкове значення {seed}
 @plural	{n} replication|{n} replications	{n} реплікація|{n} реплікації|{n} реплікацій

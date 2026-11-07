@@ -15,6 +15,7 @@
 	+ Add block	+ Добавяне на блок
 	About StochCraft	За StochCraft
 	About {app}	За {app}
+	Actual size	Действителен размер
 	Add Block	Добавяне на блок
 	Add a flow from…	Добавяне на поток от…
 	Add a flow to…	Добавяне на поток към…
@@ -24,6 +25,7 @@
 	Add property	Добавяне на свойство
 	Added pool {id}	Добавен е пул {id}
 	Added {block} ({id})	Добавен е {block} ({id})
+	Align	Подравняване
 	Alternative {n}	Алтернатива {n}
 	Appearance	Външен вид
 	Arrival limit	Лимит на пристиганията
@@ -33,6 +35,7 @@
 	Beta	Бета
 	Binomial	Биномиално
 	Boolean	Булева стойност
+	Bottoms	Долни ръбове
 	Bring All to Front	Всички на преден план
 	Built with	Създадено с
 	By role	По роля
@@ -41,8 +44,10 @@
 	Cancel Run	Отмяна на изпълнението
 	Cancel run	Отмяна на изпълнението
 	Capacity	Капацитет
+	Centres	Хоризонтални центрове
 	Change Block	Промяна на блок
 	Change Flow	Промяна на поток
+	Changes	Промени
 	Changing the time unit does not convert the times already in the model.	Промяната на единицата за време не преобразува времената, които вече са в модела.
 	Clear Menu	Изчистване на менюто
 	Close	Затваряне
@@ -50,8 +55,12 @@
 	Comes from	Идва от
 	Condition of {id}	Условие за {id}
 	Connect	Свързване
+	Connect from {name}	Свързване от {name}
+	Connected {from} to {to}	{from} е свързан с {to}
 	Connections	Връзки
 	Constant	Константа
+	Copy	Копиране
+	Cut	Изрязване
 	Dark	Тъмна
 	Data points	Точки с данни
 	Date and time	Дата и час
@@ -59,7 +68,9 @@
 	Decision	Решение
 	Decision (one way)	Решение (един път)
 	Default flow	Поток по подразбиране
+	Delete	Изтриване
 	Departures	Напускания
+	Diagram	Диаграма
 	Discard	Отхвърляне
 	Discarded the recovered changes	Възстановените промени са отхвърлени
 	Disconnect	Прекъсване на връзката
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Изтегляне на графики (PNG)
 	Download table (CSV)	Изтегляне на таблица (CSV)
 	Downloaded {file}	Изтеглен е {file}
+	Drag to add:	Плъзнете, за да добавите:
+	Duplicate	Дублиране
 	Duration	Продължителност
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Всяка същност взема първата от тези възможности, която може да бъде изпълнена сега, изцяло и наведнъж, и връща единиците, когато излезе.
 	Edit	Редактиране
 	Entered	Влезли
 	Erlang	Ерланг
 	Error	Грешка
+	Evenly across	Равномерно по хоризонтала
+	Evenly down	Равномерно по вертикала
 	Every distribution	Всички разпределения
 	Exit	Изход
 	Experiment	Експеримент
@@ -87,6 +102,8 @@
 	Exported {file}	Експортиран е {file}
 	Expression	Израз
 	File	Файл
+	Fit	Побиране
+	Fit the diagram to the view	Побиране на диаграмата в изгледа
 	Flows	Потоци
 	From	От
 	Gamma	Гама
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Клавишните комбинации не са променени
 	Language	Език
 	Left	Напуснали
+	Left edges	Леви ръбове
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Лицензирано по MIT License или Apache License 2.0, по ваш избор.
 	Light	Светла
 	Log-normal	Логнормално
@@ -114,11 +132,13 @@
 	Mean time in system	Средно време в системата
 	Mean wait	Средно чакане
 	Metric	Показател
+	Middles	Вертикални центрове
 	Minimise	Минимизиране
 	Minimize	Минимизиране
 	Minimum	Минимум
 	Model	Модел
 	Most likely	Най-вероятна стойност
+	Move	Преместване
 	Name	Име
 	Needs	Изисквания
 	New	Нов
@@ -146,6 +166,7 @@
 	Or start from an example	Или започнете с пример
 	PNG image	Изображение PNG
 	Parameters	Параметри
+	Paste	Поставяне
 	Points	Точки
 	Poisson	Поасон
 	Preferences	Настройки
@@ -182,6 +203,7 @@
 	Resource pools	Пулове от ресурси
 	Restore	Възстановяване на прозореца
 	Results	Резултати
+	Right edges	Десни ръбове
 	Roles	Роли
 	Run	Стартиране
 	Run cancelled	Изпълнението е отменено
@@ -196,6 +218,7 @@
 	Saved {file}	Запазен е {file}
 	Scale	Мащаб
 	Seed	Начална стойност
+	Select All	Избиране на всичко
 	Service time	Време за обслужване
 	Services	Услуги
 	Set Property	Задаване на свойство
@@ -209,6 +232,7 @@
 	Show {id}	Показване на {id}
 	Split or join	Разделяне или обединяване
 	Split or join (all ways)	Разделяне или обединяване (всички пътища)
+	Spread out	Разпределяне
 	Stages (k)	Етапи (k)
 	Standard deviation	Стандартно отклонение
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft се затвори с незапазени промени в {name}. Възстановете ги като модел без име или ги отхвърлете.
@@ -226,6 +250,7 @@
 	Time between arrivals	Време между пристиганията
 	Time unit	Единица за време
 	To	Към
+	Tops	Горни ръбове
 	Trials	Опити
 	Triangular	Триъгълно
 	Truncated normal	Отсечено нормално
@@ -254,6 +279,8 @@
 	Yes or no	Да или не
 	Your changes will be lost if you don't save them.	Промените ви ще бъдат загубени, ако не ги запазите.
 	Zoom	Смяна на размера на прозореца
+	Zoom in	Увеличаване
+	Zoom out	Намаляване
 	a model	модел
 	arrivals	пристигания
 	days	дни
@@ -280,6 +307,7 @@
 	years	години
 	{field}: not editable here yet	{field}: тук все още не може да се редактира
 	{id}: a probability is a number from 0 to 1	{id}: вероятността е число от 0 до 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — редактирано
 	{property} (set to, mean)	{property} (зададена стойност, средна)
 	± 95% CI	± 95% ДИ
@@ -291,11 +319,15 @@ unit	min	мин
 unit	ms	мс
 unit	s	с
 unit	yr	г.
+@plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
+@plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} replication|Finished {n} replications	Завършена е {n} репликация|Завършени са {n} репликации
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Отворен е {file} ({n} предупреждение)|Отворен е {file} ({n} предупреждения)
+@plural	Removed {n} block|Removed {n} blocks	Премахнат е {n} блок|Премахнати са {n} блока
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Изпълнява {n} независима репликация на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.|Изпълнява {n} независими репликации на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Завършена е {done} от {n} репликация|Завършени са {done} от {n} репликации
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} репликация|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} репликации
+@plural	{n} block selected|{n} blocks selected	Избран е {n} блок|Избрани са {n} блока
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликация · начална стойност {seed} · загряване {warmup} {unit} · измерено {duration} {unit}|{n} репликации · начална стойност {seed} · загряване {warmup} {unit} · измерено {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} репликация · начална стойност {seed}|{n} репликации · начална стойност {seed}
 @plural	{n} replication|{n} replications	{n} репликация|{n} репликации

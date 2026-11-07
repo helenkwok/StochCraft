@@ -15,6 +15,7 @@
 	+ Add block	+ Pridėti bloką
 	About StochCraft	Apie StochCraft
 	About {app}	Apie {app}
+	Actual size	Tikrasis dydis
 	Add Block	Pridėti bloką
 	Add a flow from…	Pridėti srautą iš…
 	Add a flow to…	Pridėti srautą į…
@@ -24,6 +25,7 @@
 	Add property	Pridėti savybę
 	Added pool {id}	Pridėta grupė {id}
 	Added {block} ({id})	Pridėta {block} ({id})
+	Align	Lygiuoti
 	Alternative {n}	Alternatyva {n}
 	Appearance	Išvaizda
 	Arrival limit	Atvykimų limitas
@@ -33,6 +35,7 @@
 	Beta	Beta
 	Binomial	Binominis
 	Boolean	Loginė reikšmė
+	Bottoms	Apatiniai kraštai
 	Bring All to Front	Perkelti visus į priekį
 	Built with	Sukurta naudojant
 	By role	Pagal vaidmenį
@@ -41,8 +44,10 @@
 	Cancel Run	Atšaukti vykdymą
 	Cancel run	Atšaukti vykdymą
 	Capacity	Pajėgumas
+	Centres	Horizontalūs centrai
 	Change Block	Keisti bloką
 	Change Flow	Keisti srautą
+	Changes	Pakeitimai
 	Changing the time unit does not convert the times already in the model.	Pakeitus laiko vienetą, modelyje jau esančios laiko reikšmės nebus perskaičiuotos.
 	Clear Menu	Išvalyti meniu
 	Close	Užverti
@@ -50,8 +55,12 @@
 	Comes from	Ateina iš
 	Condition of {id}	{id} sąlyga
 	Connect	Sujungti
+	Connect from {name}	Sujungti iš {name}
+	Connected {from} to {to}	{from} sujungta su {to}
 	Connections	Jungtys
 	Constant	Konstanta
+	Copy	Kopijuoti
+	Cut	Iškirpti
 	Dark	Tamsi
 	Data points	Duomenų taškai
 	Date and time	Data ir laikas
@@ -59,7 +68,9 @@
 	Decision	Sprendimas
 	Decision (one way)	Sprendimas (vienas kelias)
 	Default flow	Numatytasis srautas
+	Delete	Ištrinti
 	Departures	Išvykimai
+	Diagram	Diagrama
 	Discard	Atmesti
 	Discarded the recovered changes	Atkurti pakeitimai atmesti
 	Disconnect	Atjungti
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Atsisiųsti diagramas (PNG)
 	Download table (CSV)	Atsisiųsti lentelę (CSV)
 	Downloaded {file}	Atsisiųsta {file}
+	Drag to add:	Vilkite, kad pridėtumėte:
+	Duplicate	Dubliuoti
 	Duration	Trukmė
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Kiekvienas objektas paima pirmąją iš šių alternatyvų, kurią galima įvykdyti dabar, visą iš karto, ir grąžina vienetus, kai palieka užduotį.
 	Edit	Redaguoti
 	Entered	Įėjo
 	Erlang	Erlango
 	Error	Klaida
+	Evenly across	Tolygiai horizontaliai
+	Evenly down	Tolygiai vertikaliai
 	Every distribution	Visi skirstiniai
 	Exit	Išeiti
 	Experiment	Eksperimentas
@@ -87,6 +102,8 @@
 	Exported {file}	Eksportuota {file}
 	Expression	Išraiška
 	File	Failas
+	Fit	Pritaikyti
+	Fit the diagram to the view	Pritaikyti diagramą rodiniui
 	Flows	Srautai
 	From	Iš
 	Gamma	Gama
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Spartieji klavišai nepakeisti
 	Language	Kalba
 	Left	Išėjo
+	Left edges	Kairieji kraštai
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencijuota pagal MIT License arba Apache License 2.0, jūsų pasirinkimu.
 	Light	Šviesi
 	Log-normal	Lognormalusis
@@ -114,11 +132,13 @@
 	Mean time in system	Vidutinis laikas sistemoje
 	Mean wait	Vidutinis laukimo laikas
 	Metric	Rodiklis
+	Middles	Vertikalūs centrai
 	Minimise	Minimizuoti
 	Minimize	Sumažinti
 	Minimum	Minimumas
 	Model	Modelis
 	Most likely	Labiausiai tikėtina
+	Move	Perkėlimas
 	Name	Pavadinimas
 	Needs	Poreikiai
 	New	Naujas
@@ -146,6 +166,7 @@
 	Or start from an example	Arba pradėkite nuo pavyzdžio
 	PNG image	PNG paveikslas
 	Parameters	Parametrai
+	Paste	Įklijuoti
 	Points	Taškai
 	Poisson	Puasono
 	Preferences	Nuostatos
@@ -182,6 +203,7 @@
 	Resource pools	Išteklių grupės
 	Restore	Atkurti langą
 	Results	Rezultatai
+	Right edges	Dešinieji kraštai
 	Roles	Vaidmenys
 	Run	Vykdyti
 	Run cancelled	Vykdymas atšauktas
@@ -196,6 +218,7 @@
 	Saved {file}	Įrašyta {file}
 	Scale	Skalė
 	Seed	Atsitiktinių skaičių sėkla
+	Select All	Žymėti viską
 	Service time	Aptarnavimo laikas
 	Services	Paslaugos
 	Set Property	Nustatyti savybę
@@ -209,6 +232,7 @@
 	Show {id}	Rodyti {id}
 	Split or join	Skaidyti arba jungti
 	Split or join (all ways)	Skaidyti arba jungti (visi keliai)
+	Spread out	Paskirstyti
 	Stages (k)	Etapai (k)
 	Standard deviation	Standartinis nuokrypis
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft užsidarė su neišsaugotais modelio {name} pakeitimais. Atkurkite juos kaip modelį be pavadinimo arba atmeskite.
@@ -226,6 +250,7 @@
 	Time between arrivals	Laikas tarp atvykimų
 	Time unit	Laiko vienetas
 	To	Į
+	Tops	Viršutiniai kraštai
 	Trials	Bandymai
 	Triangular	Trikampis
 	Truncated normal	Apribotasis normalusis
@@ -254,6 +279,8 @@
 	Yes or no	Taip arba ne
 	Your changes will be lost if you don't save them.	Jei pakeitimų neįrašysite, jie bus prarasti.
 	Zoom	Keisti dydį
+	Zoom in	Didinti
+	Zoom out	Mažinti
 	a model	modelis
 	arrivals	atvykimai
 	days	dienos
@@ -280,6 +307,7 @@
 	years	metai
 	{field}: not editable here yet	{field}: čia dar negalima redaguoti
 	{id}: a probability is a number from 0 to 1	{id}: tikimybė yra skaičius nuo 0 iki 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — redaguota
 	{property} (set to, mean)	{property} (nustatyta reikšmė, vidurkis)
 	± 95% CI	± 95% pasikliautinasis intervalas
@@ -291,11 +319,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	m.
+@plural	Added {n} block|Added {n} blocks	Pridėtas {n} blokas|Pridėti {n} blokai|Pridėta {n} blokų
+@plural	Copied {n} block|Copied {n} blocks	Nukopijuotas {n} blokas|Nukopijuoti {n} blokai|Nukopijuota {n} blokų
 @plural	Finished {n} replication|Finished {n} replications	Baigta {n} replikacija|Baigtos {n} replikacijos|Baigta {n} replikacijų
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Atidaryta {file} ({n} įspėjimas)|Atidaryta {file} ({n} įspėjimai)|Atidaryta {file} ({n} įspėjimų)
+@plural	Removed {n} block|Removed {n} blocks	Pašalintas {n} blokas|Pašalinti {n} blokai|Pašalinta {n} blokų
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Vykdo {n} nepriklausomą modelio replikaciją su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomas modelio replikacijas su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomų modelio replikacijų su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Baigta {done} iš {n} replikacijos|Baigta {done} iš {n} replikacijų|Baigta {done} iš {n} replikacijų
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikaciją|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijas|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijų
+@plural	{n} block selected|{n} blocks selected	Pažymėtas {n} blokas|Pažymėti {n} blokai|Pažymėta {n} blokų
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacija · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijos · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijų · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacija · sėkla {seed}|{n} replikacijos · sėkla {seed}|{n} replikacijų · sėkla {seed}
 @plural	{n} replication|{n} replications	{n} replikacija|{n} replikacijos|{n} replikacijų

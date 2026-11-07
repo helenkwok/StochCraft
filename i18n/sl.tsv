@@ -15,6 +15,7 @@
 	+ Add block	+ Dodaj blok
 	About StochCraft	O programu StochCraft
 	About {app}	O programu {app}
+	Actual size	Dejanska velikost
 	Add Block	Dodaj blok
 	Add a flow from…	Dodaj tok iz…
 	Add a flow to…	Dodaj tok v…
@@ -24,6 +25,7 @@
 	Add property	Dodaj lastnost
 	Added pool {id}	Dodana skupina {id}
 	Added {block} ({id})	Dodan {block} ({id})
+	Align	Poravnaj
 	Alternative {n}	Alternativa {n}
 	Appearance	Videz
 	Arrival limit	Omejitev prihodov
@@ -33,6 +35,7 @@
 	Beta	Beta
 	Binomial	Binomska
 	Boolean	Logična vrednost
+	Bottoms	Spodnji robovi
 	Bring All to Front	Vse v ospredje
 	Built with	Ustvarjeno z
 	By role	Po vlogi
@@ -41,8 +44,10 @@
 	Cancel Run	Prekliči izvajanje
 	Cancel run	Prekliči izvajanje
 	Capacity	Zmogljivost
+	Centres	Vodoravna središča
 	Change Block	Spremeni blok
 	Change Flow	Spremeni tok
+	Changes	Spremembe
 	Changing the time unit does not convert the times already in the model.	Sprememba časovne enote ne pretvori časov, ki so že v modelu.
 	Clear Menu	Počisti meni
 	Close	Zapri
@@ -50,8 +55,12 @@
 	Comes from	Prihaja iz
 	Condition of {id}	Pogoj za {id}
 	Connect	Poveži
+	Connect from {name}	Poveži iz {name}
+	Connected {from} to {to}	{from} je povezan z {to}
 	Connections	Povezave
 	Constant	Konstantna
+	Copy	Kopiraj
+	Cut	Izreži
 	Dark	Temno
 	Data points	Podatkovne točke
 	Date and time	Datum in čas
@@ -59,7 +68,9 @@
 	Decision	Odločitev
 	Decision (one way)	Odločitev (ena pot)
 	Default flow	Privzeti tok
+	Delete	Izbriši
 	Departures	Odhodi
+	Diagram	Diagram
 	Discard	Zavrzi
 	Discarded the recovered changes	Obnovljene spremembe so bile zavržene
 	Disconnect	Prekini povezavo
@@ -70,12 +81,16 @@
 	Download charts (PNG)	Prenesi grafe (PNG)
 	Download table (CSV)	Prenesi tabelo (CSV)
 	Downloaded {file}	Preneseno {file}
+	Drag to add:	Povlecite za dodajanje:
+	Duplicate	Podvoji
 	Duration	Trajanje
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Vsaka entiteta vzame prvo od teh možnosti, ki jo je mogoče izpolniti zdaj, vse naenkrat, in enote vrne, ko odide.
 	Edit	Urejanje
 	Entered	Vstopilo
 	Erlang	Erlangova
 	Error	Napaka
+	Evenly across	Enakomerno vodoravno
+	Evenly down	Enakomerno navpično
 	Every distribution	Vse porazdelitve
 	Exit	Izhod
 	Experiment	Poskus
@@ -87,6 +102,8 @@
 	Exported {file}	Izvoženo {file}
 	Expression	Izraz
 	File	Datoteka
+	Fit	Prilagodi
+	Fit the diagram to the view	Prilagodi diagram pogledu
 	Flows	Tokovi
 	From	Iz
 	Gamma	Gama
@@ -99,6 +116,7 @@
 	Keyboard shortcuts unchanged	Bližnjice na tipkovnici nespremenjene
 	Language	Jezik
 	Left	Odšlo
+	Left edges	Levi robovi
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencirano pod MIT License ali Apache License 2.0, po vaši izbiri.
 	Light	Svetlo
 	Log-normal	Lognormalna
@@ -114,11 +132,13 @@
 	Mean time in system	Povprečni čas v sistemu
 	Mean wait	Povprečno čakanje
 	Metric	Kazalnik
+	Middles	Navpična središča
 	Minimise	Pomanjšaj
 	Minimize	Pomanjšaj
 	Minimum	Najmanjša vrednost
 	Model	Model
 	Most likely	Najverjetnejša vrednost
+	Move	Premik
 	Name	Ime
 	Needs	Zahteve
 	New	Nov
@@ -146,6 +166,7 @@
 	Or start from an example	Ali začnite s primerom
 	PNG image	Slika PNG
 	Parameters	Parametri
+	Paste	Prilepi
 	Points	Točke
 	Poisson	Poissonova
 	Preferences	Nastavitve
@@ -182,6 +203,7 @@
 	Resource pools	Skupine virov
 	Restore	Obnovi okno
 	Results	Rezultati
+	Right edges	Desni robovi
 	Roles	Vloge
 	Run	Zaženi
 	Run cancelled	Izvajanje preklicano
@@ -196,6 +218,7 @@
 	Saved {file}	Shranjeno {file}
 	Scale	Merilo
 	Seed	Seme
+	Select All	Izberi vse
 	Service time	Čas strežbe
 	Services	Storitve
 	Set Property	Nastavi lastnost
@@ -209,6 +232,7 @@
 	Show {id}	Prikaži {id}
 	Split or join	Razdeli ali združi
 	Split or join (all ways)	Razdeli ali združi (vse poti)
+	Spread out	Razporedi
 	Stages (k)	Stopnje (k)
 	Standard deviation	Standardni odklon
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft se je zaprl z neshranjenimi spremembami v modelu {name}. Obnovite jih kot neimenovan model ali jih zavrzite.
@@ -226,6 +250,7 @@
 	Time between arrivals	Čas med prihodi
 	Time unit	Časovna enota
 	To	V
+	Tops	Zgornji robovi
 	Trials	Poskusi
 	Triangular	Trikotna
 	Truncated normal	Odrezana normalna
@@ -254,6 +279,8 @@
 	Yes or no	Da ali ne
 	Your changes will be lost if you don't save them.	Vaše spremembe bodo izgubljene, če jih ne shranite.
 	Zoom	Povečava
+	Zoom in	Povečaj
+	Zoom out	Pomanjšaj
 	a model	model
 	arrivals	prihodi
 	days	dnevi
@@ -280,6 +307,7 @@
 	years	leta
 	{field}: not editable here yet	{field}: tukaj še ni mogoče urejati
 	{id}: a probability is a number from 0 to 1	{id}: verjetnost je število od 0 do 1
+	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — urejeno
 	{property} (set to, mean)	{property} (nastavljena vrednost, povprečje)
 	± 95% CI	± 95% interval zaupanja
@@ -291,11 +319,15 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	l.
+@plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
+@plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} replication|Finished {n} replications	Končana je {n} ponovitev|Končani sta {n} ponovitvi|Končane so {n} ponovitve|Končanih je {n} ponovitev
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Odprto {file} ({n} opozorilo)|Odprto {file} ({n} opozorili)|Odprto {file} ({n} opozorila)|Odprto {file} ({n} opozoril)
+@plural	Removed {n} block|Removed {n} blocks	Odstranjen je {n} blok|Odstranjena sta {n} bloka|Odstranjeni so {n} bloki|Odstranjenih je {n} blokov
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Izvede {n} neodvisno ponovitev modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisni ponovitvi modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisne ponovitve modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisnih ponovitev modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Končana {done} od {n} ponovitve|Končani {done} od {n} ponovitev|Končane {done} od {n} ponovitev|Končanih {done} od {n} ponovitev
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvi|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah
+@plural	{n} block selected|{n} blocks selected	Izbran je {n} blok|Izbrana sta {n} bloka|Izbrani so {n} bloki|Izbranih je {n} blokov
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitvi · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitve · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ponovitev · seme {seed}|{n} ponovitvi · seme {seed}|{n} ponovitve · seme {seed}|{n} ponovitev · seme {seed}
 @plural	{n} replication|{n} replications	{n} ponovitev|{n} ponovitvi|{n} ponovitve|{n} ponovitev
