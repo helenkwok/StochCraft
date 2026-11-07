@@ -82,6 +82,9 @@ pub enum ErrorCode {
     BadFile,
     Unsupported,
     Cancelled,
+    /// A replication stopped because simulated time stopped moving (entities going round a loop
+    /// whose steps all take no time); `details` names the element and the time.
+    TimeStopped,
     Internal,
 }
 
@@ -99,6 +102,7 @@ impl ErrorCode {
             ErrorCode::BadFile => "bad_file",
             ErrorCode::Unsupported => "unsupported",
             ErrorCode::Cancelled => "cancelled",
+            ErrorCode::TimeStopped => "time_stopped",
             ErrorCode::Internal => "internal",
         }
     }

@@ -28,7 +28,11 @@ fn reports(model: &Model) -> Vec<Report> {
         panic!("{compiled:?}")
     };
     (0..REPS)
-        .map(|r| compiled.run(Rng::new(SEED + r)))
+        .map(|r| {
+            compiled
+                .run(Rng::new(SEED + r))
+                .unwrap_or_else(|e| panic!("{e}"))
+        })
         .collect()
 }
 

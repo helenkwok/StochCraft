@@ -29,7 +29,9 @@ pub enum ExperimentError {
 }
 
 /// Watches and stops an experiment from another thread: how many replications have finished,
-/// and a flag that stops workers from starting more. A replication already running finishes.
+/// and a flag that stops workers from starting more. A replication already running finishes,
+/// unless the model asks [`Control::is_cancelled`] as it runs (as compiled models can, through
+/// `stochcraft_blocks::Compiled::run_watched`).
 #[derive(Debug, Default)]
 pub struct Control {
     cancelled: AtomicBool,

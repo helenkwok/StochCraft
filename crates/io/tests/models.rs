@@ -81,7 +81,11 @@ fn a_file_runs_and_matches_queueing_theory() {
     let compiled = compile(&l.model).unwrap_or_else(|d| panic!("{d:?}"));
     let x = &l.model.experiment;
     let reports: Vec<_> = (0..u64::from(x.replications))
-        .map(|r| compiled.run(Rng::new(x.seed + r)))
+        .map(|r| {
+            compiled
+                .run(Rng::new(x.seed + r))
+                .unwrap_or_else(|e| panic!("{e}"))
+        })
         .collect();
     let s = summarise(&reports);
     let w = s.get("leave", Metric::MeanTimeInSystem);
