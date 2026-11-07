@@ -7,6 +7,8 @@ use stochcraft_ui_egui::{App, Platform, Request};
 use wasm_bindgen::JsCast as _;
 use wasm_bindgen::prelude::*;
 
+use crate::storage;
+
 const CANVAS_ID: &str = "stochcraft_canvas";
 const LOADING_ID: &str = "stochcraft_loading";
 
@@ -19,6 +21,9 @@ struct Web {
     inbox: Inbox,
     /// The page's `beforeunload` guard reads this: a tab with unsaved changes asks before closing.
     unsaved: Rc<RefCell<bool>>,
+    /// The prefix of this page's storage keys: a pull request's preview keeps its own
+    /// ([`storage::scope`]).
+    scope: Option<String>,
 }
 
 /// Where the browser keeps the app's preferences (eframe's storage: the page's local storage).
@@ -29,15 +34,23 @@ const RECOVERY_KEY: &str = "stochcraft.recovery";
 impl eframe::App for Web {
     /// Remembers the appearance between visits, and keeps a recovery copy of unsaved changes
     /// (eframe calls this every half minute and when the page closes).
-    fn save(&mut self, storage: &mut dyn eframe::Storage) {
+    fn save(&mut self, store: &mut dyn eframe::Storage) {
+        let scope = self.scope.as_deref();
         if let Ok(json) = serde_json::to_string(&self.app.prefs()) {
-            storage.set_string(PREFS_KEY, json);
+            store.set_string(&storage::key(scope, PREFS_KEY), json);
         }
+        let recovery = storage::key(scope, RECOVERY_KEY);
         match self.app.autosave() {
-            stochcraft_ui_egui::Autosave::Write(copy) => storage.set_string(RECOVERY_KEY, copy),
-            stochcraft_ui_egui::Autosave::Clear => storage.remove_string(RECOVERY_KEY),
+            stochcraft_ui_egui::Autosave::Write(copy) => store.set_string(&recovery, copy),
+            stochcraft_ui_egui::Autosave::Clear => store.remove_string(&recovery),
             stochcraft_ui_egui::Autosave::Keep => {}
         }
+    }
+
+    /// eframe keeps egui's memory (panel sizes and the like) under one key it chooses, so only
+    /// the main site writes it; a preview starts from the main site's and leaves it alone.
+    fn persist_egui_memory(&self) -> bool {
+        self.scope.is_none()
     }
 
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
@@ -65,18 +78,21 @@ impl eframe::App for Web {
         for request in self.app.take_requests() {
             match request {
                 Request::PickOpen => pick(&self.inbox, &ctx),
-                Request::Download { name, bytes } | Request::Write { path: name, bytes } => {
-                    match download(&name, &bytes) {
-                        Ok(()) => self.app.written(&name, &bytes),
-                        Err(e) => self.app.report_error(format!("{name}: {e:?}")),
-                    }
-                }
+                // Started, not necessarily kept: the browser doesn't say whether the user saved
+                // the file or cancelled, so the model is not marked saved.
+                Request::Download { name, bytes } => match download(&name, &bytes) {
+                    Ok(()) => self.app.downloaded(&name),
+                    Err(e) => self.app.report_error(format!("{name}: {e:?}")),
+                },
                 Request::Export { name, bytes } => match download(&name, &bytes) {
                     Ok(()) => self.app.exported(&name),
                     Err(e) => self.app.report_error(format!("{name}: {e:?}")),
                 },
                 // Not made in the browser (Platform::BROWSER has no paths and no Quit).
-                Request::PickSave { .. } | Request::OpenPath { .. } | Request::Quit => {}
+                Request::PickSave { .. }
+                | Request::OpenPath { .. }
+                | Request::Write { .. }
+                | Request::Quit => {}
             }
         }
         if let Some(title) = self.app.title_if_changed()
@@ -157,6 +173,9 @@ fn guard_unload(unsaved: &Rc<RefCell<bool>>) {
 pub fn start() {
     let unsaved = Rc::new(RefCell::new(false));
     guard_unload(&unsaved);
+    let scope = web_sys::window()
+        .and_then(|w| w.location().pathname().ok())
+        .and_then(|path| storage::scope(&path));
     wasm_bindgen_futures::spawn_local(async move {
         let Some(document) = web_sys::window().and_then(|w| w.document()) else {
             return;
@@ -173,16 +192,17 @@ pub fn start() {
                 eframe::WebOptions::default(),
                 Box::new(move |cc| {
                     let mut app = App::new(Platform::BROWSER);
+                    let key = |k| storage::key(scope.as_deref(), k);
                     if let Some(prefs) = cc
                         .storage
-                        .and_then(|s| s.get_string(PREFS_KEY))
+                        .and_then(|s| s.get_string(&key(PREFS_KEY)))
                         .and_then(|j| serde_json::from_str(&j).ok())
                     {
                         app.set_prefs(&prefs);
                     }
                     if let Some(copy) = cc
                         .storage
-                        .and_then(|s| s.get_string(RECOVERY_KEY))
+                        .and_then(|s| s.get_string(&key(RECOVERY_KEY)))
                         .filter(|c| !c.is_empty())
                     {
                         app.offer_recovery(&copy);
@@ -191,6 +211,7 @@ pub fn start() {
                         app,
                         inbox: Inbox::default(),
                         unsaved,
+                        scope,
                     }))
                 }),
             )

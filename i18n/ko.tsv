@@ -14,32 +14,45 @@
 @id	language.name	한국어
 	+ Add block	+ 블록 추가
 	About StochCraft	StochCraft 정보
+	About {app}	{app} 정보
 	Add Block	블록 추가
 	Add a flow from…	시작 블록…
 	Add a flow to…	끝 블록…
+	Add alternative	대안 추가
 	Add point	점 추가
+	Add pool	풀 추가
 	Add property	속성 추가
+	Added pool {id}	풀 {id} 추가됨
 	Added {block} ({id})	{block} ({id}) 추가됨
+	Alternative {n}	대안 {n}
 	Appearance	모양새
 	Arrival limit	도착 수 제한
 	Arrivals	도착
+	BPMN with BPSim	BPSim 포함 BPMN
 	Back to the model (Esc)	모델로 돌아가기 (Esc)
 	Beta	베타 분포
 	Binomial	이항 분포
 	Boolean	불리언
+	Bring All to Front	모두 앞으로 가져오기
 	Built with	사용 기술
+	By role	역할별
+	CSV table	CSV 표
 	Cancel	취소
+	Cancel Run	실행 취소
 	Cancel run	실행 취소
 	Capacity	처리 용량
 	Change Block	블록 변경
 	Change Flow	흐름 변경
 	Changing the time unit does not convert the times already in the model.	시간 단위를 변경해도 모델에 이미 입력된 시간은 변환되지 않습니다.
+	Clear Menu	메뉴 지우기
 	Close	닫기
+	Close Window	창 닫기
 	Comes from	출발 위치
 	Condition of {id}	{id}의 조건
 	Connect	연결
 	Connections	연결
 	Constant	상수
+	Dark	어둡게
 	Data points	데이터 점
 	Date and time	날짜 및 시간
 	Decimal number	소수
@@ -56,15 +69,19 @@
 	Download	다운로드
 	Download charts (PNG)	차트 다운로드 (PNG)
 	Download table (CSV)	표 다운로드 (CSV)
+	Downloaded {file}	{file} 다운로드됨
 	Duration	길이
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	각 엔터티는 이 중 지금 한꺼번에 모두 충족할 수 있는 첫 번째 항목을 가져가고, 떠날 때 자원 단위를 반환합니다.
 	Edit	편집
 	Entered	진입 수
 	Erlang	얼랑 분포
 	Error	오류
 	Every distribution	모든 분포
+	Exit	나가기
 	Experiment	실험
 	Experiment Settings	실험 설정
 	Exponential	지수 분포
+	Export	내보내기
 	Export charts (PNG)	차트 내보내기 (PNG)
 	Export table (CSV)	표 내보내기 (CSV)
 	Exported {file}	{file} 내보냄
@@ -75,12 +92,17 @@
 	Gamma	감마 분포
 	Goes to	도착 블록
 	Help	도움말
+	Hide Others	다른 항목 숨기기
+	Hide {app}	{app} 숨기기
+	Keyboard Shortcuts…	키보드 단축키…
 	Keyboard shortcuts saved	키보드 단축키가 저장되었습니다
 	Keyboard shortcuts unchanged	키보드 단축키가 변경되지 않았습니다
 	Language	언어
 	Left	이탈 수
 	Licensed under the MIT License or the Apache License 2.0, at your option.	MIT License 또는 Apache License 2.0 중 하나를 선택하여 사용할 수 있습니다.
+	Light	밝게
 	Log-normal	로그 정규 분포
+	Lost (no way out)	손실(나갈 경로 없음)
 	Lost (waiting room full)	손실(대기실 가득 참)
 	M/M/1 queue	M/M/1 대기열
 	Maximise	최대화
@@ -93,10 +115,13 @@
 	Mean wait	평균 대기 시간
 	Metric	지표
 	Minimise	최소화
+	Minimize	최소화
 	Minimum	최솟값
 	Model	모델
 	Most likely	최빈값
 	Name	이름
+	Needs	필요 자원
+	New	새로 만들기
 	New model	새 모델
 	New property	새 속성
 	New property name	새 속성 이름
@@ -111,21 +136,28 @@
 	One task per BPSim distribution, to compare their spread.	각 BPSim 분포에 작업 하나를 배정하여 분산 정도를 비교합니다.
 	Open	열기
 	Open Example	예제 열기
+	Open Model	모델 열기
 	Open Recent	최근 항목 열기
 	Open a model first	먼저 모델을 여세요
 	Open a model to simulate it	시뮬레이션할 모델을 여세요
 	Open a model…	모델 열기…
 	Opened {file}	{file} 열림
+	Open…	열기…
 	Or start from an example	또는 예제로 시작
+	PNG image	PNG 이미지
 	Parameters	매개변수
 	Points	점
 	Poisson	포아송 분포
+	Preferences	환경 설정
+	Priority	우선순위
 	Probability	확률
 	Probability of {id}	{id}의 확률
 	Problems	문제
 	Process	프로세스
+	Process models with BPSim	BPSim 포함 프로세스 모델
 	Properties	속성
 	Quit	종료
+	Quit {app}	{app} 종료
 	Ready	준비됨
 	Recover	복구
 	Recover unsaved changes?	저장하지 않은 변경 사항을 복구할까요?
@@ -136,16 +168,21 @@
 	Remove	제거
 	Remove Block	블록 제거
 	Remove Property	속성 제거
+	Remove alternative {n}	대안 {n} 제거
 	Remove block	블록 제거
 	Remove the flow {id}	흐름 {id} 제거
+	Remove the pool {id}	풀 {id} 제거
 	Remove this block and its flows (Delete)	이 블록과 흐름 제거 (Delete)
 	Removed {id}	{id} 제거됨
 	Rename Block	블록 이름 변경
 	Rename Model	모델 이름 변경
 	Replace Model	모델 바꾸기
 	Replications	반복 실행 횟수
+	Resource pool	자원 풀
+	Resource pools	자원 풀
 	Restore	복원
 	Results	결과
+	Roles	역할
 	Run	실행
 	Run cancelled	실행이 취소되었습니다
 	Run experiment	실험 실행
@@ -154,11 +191,13 @@
 	Running…	실행 중…
 	Save	저장
 	Save As…	다른 이름으로 저장…
+	Save Model	모델 저장
 	Save changes to {name}?	{name}의 변경 사항을 저장할까요?
 	Saved {file}	{file} 저장됨
 	Scale	척도
 	Seed	난수 시드
 	Service time	서비스 시간
+	Services	서비스
 	Set Property	속성 설정
 	Set a value	값 설정
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	각 엔터티가 이 블록에 들어올 때 설정됩니다. 수식은 들어올 때 엔터티가 가지고 있던 값을 읽습니다. 예: getProperty('issues') - 1.
@@ -166,6 +205,7 @@
 	Shape	모양
 	Share of arrivals lost	도착 손실 비율
 	Share of units blocked	자원 단위 차단 비율
+	Show All	모두 표시
 	Show {id}	{id} 표시
 	Split or join	분할 또는 병합
 	Split or join (all ways)	분할 또는 병합(모든 경로)
@@ -178,6 +218,7 @@
 	Tandem line	직렬 라인
 	Task	작업
 	Task with a resource	자원을 사용하는 작업
+	Task with shared resources	공유 자원을 사용하는 작업
 	Text	텍스트
 	The model: its experiment, connections and problems	모델: 실험, 연결 및 문제
 	This block has a warning	이 블록에 경고가 있습니다
@@ -195,6 +236,8 @@
 	Undo {action}	{action} 실행 취소
 	Uniform	균등 분포
 	Unit	단위
+	Units	수량
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	여러 작업이 공유하는 자원 단위입니다. 공유 자원을 사용하는 작업은 풀 또는 역할을 기준으로 자원을 가져갑니다.
 	Untitled	제목 없음
 	Untitled model	제목 없는 모델
 	Use System Setting	시스템 설정 사용
@@ -207,8 +250,10 @@
 	Warning	경고
 	Weibull	와이블 분포
 	Whole number	정수
+	Window	창
 	Yes or no	예 또는 아니요
 	Your changes will be lost if you don't save them.	저장하지 않으면 변경 사항이 사라집니다.
+	Zoom	확대/축소
 	a model	모델
 	arrivals	도착
 	days	일
@@ -225,8 +270,10 @@
 	split or join: all ways	분할 또는 병합: 모든 경로
 	task	작업
 	task with a resource	자원을 사용하는 작업
+	task with shared resources	공유 자원을 사용하는 작업
 	the charts could not be captured	차트를 캡처할 수 없습니다
 	the run stopped	실행이 중지되었습니다
+	the settings could not be saved: {error}	설정을 저장할 수 없습니다: {error}
 	there are no charts to export	내보낼 차트가 없습니다
 	to {block}	{block}(으)로
 	unlimited	무제한
@@ -238,10 +285,17 @@
 	± 95% CI	± 95% 신뢰 구간
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	±는 반복 실험의 평균에 대한 95% Student-t 신뢰 구간 너비의 절반입니다.
 	· no results yet	· 아직 결과가 없습니다
+unit	d	일
+unit	h	시간
+unit	min	분
+unit	ms	밀리초
+unit	s	초
+unit	yr	년
 @plural	Finished {n} replication|Finished {n} replications	반복 실행 {n}회 완료
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} 열림(경고 {n}개)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	시드 {seed}부터 모델을 독립적으로 {n}회 반복 실행합니다. 각 요소의 결과에는 95% 신뢰 구간의 반폭이 포함됩니다.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}회 중 {done}회 반복 실행 완료
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% 구간 {low}~{high}{unit}\n{n}회 반복 실행 기준
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	반복 실행 {n}회 · 시드 {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	반복 실행 {n}회 · 시드 {seed} · 준비 {warmup} {unit} · 측정 {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	반복 실행 {n}회 · 시드 {seed}
+@plural	{n} replication|{n} replications	반복 실행 {n}회

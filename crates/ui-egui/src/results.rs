@@ -5,7 +5,7 @@
 use egui::RichText;
 use serde_json::Value;
 
-use crate::i18n::{t, tf, tnf};
+use crate::i18n::{t, tc, tf, tnf};
 use crate::theme;
 
 /// A number for a table: about five significant digits, without a run of trailing zeros.
@@ -49,7 +49,8 @@ enum Unit {
     Items,
 }
 
-fn metric(name: &str) -> (&str, Unit) {
+/// The label and unit of metric `name` on an element of kind `kind`.
+fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
     match name {
         "entered" => (t("Entered"), Unit::Count),
         "left" => (t("Left"), Unit::Count),
@@ -60,6 +61,7 @@ fn metric(name: &str) -> (&str, Unit) {
         "mean_time_in_system" => (t("Mean time in system"), Unit::Time),
         "mean_blocked_time" => (t("Mean time blocked"), Unit::Time),
         "blocking_probability" => (t("Share of units blocked"), Unit::Share),
+        "lost" if kind == "exclusive_gateway" => (t("Lost (no way out)"), Unit::Count),
         "lost" => (t("Lost (waiting room full)"), Unit::Count),
         "loss_probability" => (t("Share of arrivals lost"), Unit::Share),
         other => (other, Unit::Count),
@@ -80,13 +82,17 @@ fn kind_label(kind: &str) -> &str {
     }
 }
 
-/// A time unit as written after a number: the engine's names, with hours, days and years
-/// abbreviated so "24 h" reads right where "24 hour" would not.
+/// A time unit as written after a number, in the interface language: the engine's names, with
+/// hours, days and years abbreviated so "24 h" reads right where "24 hour" would not. The
+/// context `unit` keeps these short words apart from any other use of the same letters.
 pub fn unit_label(unit: &str) -> &str {
     match unit {
-        "hour" => "h",
-        "day" => "d",
-        "year" => "yr",
+        "ms" => tc("unit", "ms"),
+        "s" => tc("unit", "s"),
+        "min" => tc("unit", "min"),
+        "hour" => tc("unit", "h"),
+        "day" => tc("unit", "d"),
+        "year" => tc("unit", "yr"),
         other => other,
     }
 }
@@ -164,7 +170,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                 if m.is_null() {
                     continue;
                 }
-                let (label, kind) = metric(key);
+                let (label, kind) = metric(key, e["kind"].as_str().unwrap_or(""));
                 let (mean, hw) = (m["mean"].as_f64(), m["half_width"].as_f64());
                 let (scale, unit) = match kind {
                     Unit::Share => (100.0, "%"),

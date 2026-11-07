@@ -16,6 +16,7 @@ use std::time::Instant;
 
 use craft_dialogs::{Answer, Dialogs, FileDialog};
 use craft_settings::{Location, Settings, SettingsStore};
+use stochcraft_ui_egui::i18n::{t, tf};
 use stochcraft_ui_egui::{App, Autosave, Platform, Prefs, Request};
 
 /// What a file dialog's answer is for.
@@ -88,16 +89,16 @@ impl Desktop {
             match request {
                 Request::PickOpen => self.dialogs.ask(
                     FileDialog::open()
-                        .title("Open Model")
-                        .filter("Process models with BPSim", &["bpmn", "xpdl", "xml"]),
+                        .title(t("Open Model"))
+                        .filter(t("Process models with BPSim"), &["bpmn", "xpdl", "xml"]),
                     Then::Open,
                 ),
                 Request::OpenPath { path } => open(&mut self.app, Path::new(&path)),
                 Request::PickSave { name } => self.dialogs.ask(
                     FileDialog::save()
-                        .title("Save Model")
+                        .title(t("Save Model"))
                         .file_name(name)
-                        .filter("BPMN with BPSim", &["bpmn"]),
+                        .filter(t("BPMN with BPSim"), &["bpmn"]),
                     Then::Save,
                 ),
                 Request::Write { path, bytes } | Request::Download { name: path, bytes } => {
@@ -109,13 +110,13 @@ impl Desktop {
                 Request::Export { name, bytes } => {
                     let ext = name.rsplit('.').next().unwrap_or("").to_owned();
                     let what = if ext == "png" {
-                        "PNG image"
+                        t("PNG image")
                     } else {
-                        "CSV table"
+                        t("CSV table")
                     };
                     self.dialogs.ask(
                         FileDialog::save()
-                            .title("Export")
+                            .title(t("Export"))
                             .file_name(name)
                             .filter(what, &[ext.as_str()]),
                         Then::Export(bytes),
@@ -137,11 +138,10 @@ impl Desktop {
                         open(&mut self.app, path);
                     }
                 }
-                (Then::Save, Answer::Paths(paths)) => {
-                    if let Some(path) = paths.first() {
-                        self.app.save_to(&path.to_string_lossy());
-                    }
-                }
+                (Then::Save, Answer::Paths(paths)) => match paths.first() {
+                    Some(path) => self.app.save_to(&path.to_string_lossy()),
+                    None => self.app.save_cancelled(),
+                },
                 (Then::Export(bytes), Answer::Paths(paths)) => {
                     if let Some(path) = paths.first() {
                         let shown = path.to_string_lossy().into_owned();
@@ -152,6 +152,7 @@ impl Desktop {
                     }
                 }
                 (_, Answer::Unavailable(why)) => self.app.report_error(why),
+                (Then::Save, _) => self.app.save_cancelled(),
                 _ => {}
             }
         }
@@ -170,8 +171,10 @@ impl Desktop {
             ctx.request_repaint_after(due.saturating_duration_since(now));
         }
         if let craft_settings::SaveStatus::Failed(e) = tick.status {
-            self.app
-                .report_error(format!("the settings could not be saved: {e}"));
+            self.app.report_error(tf(
+                "the settings could not be saved: {error}",
+                &[("error", &e.to_string())],
+            ));
         }
     }
 }

@@ -74,7 +74,7 @@ pub enum Request {
     /// Write `bytes` to `path`; answer with [`App::written`] or [`App::report_error`].
     Write { path: String, bytes: Vec<u8> },
     /// Offer `bytes` as a download named `name` (where there is no file system); answer with
-    /// [`App::written`].
+    /// [`App::downloaded`] once the download has started, or [`App::report_error`].
     Download { name: String, bytes: Vec<u8> },
     /// Save an exported file (results as CSV, charts as PNG) named `name`: ask where (or
     /// download it); answer with [`App::exported`] or [`App::report_error`].
@@ -665,7 +665,13 @@ impl App {
         }
     }
 
-    /// The shell wrote (or downloaded) `bytes` as `path`.
+    /// The user closed the Save dialog without choosing a file: nothing was saved, so what was
+    /// to follow the save (quit, new, open) is dropped rather than run after a later save.
+    pub fn save_cancelled(&mut self) {
+        self.after_save = None;
+    }
+
+    /// The shell wrote `bytes` to `path`: the model is saved there.
     pub fn written(&mut self, path: &str, bytes: &[u8]) {
         match self.engine.saved_to(path, bytes) {
             Ok(_) => {
@@ -676,6 +682,19 @@ impl App {
                 }
             }
             Err(e) => self.report_error(e.message),
+        }
+    }
+
+    /// The shell started the download of the model as `name` ([`Request::Download`]).
+    ///
+    /// A browser can't tell whether the user kept the file or cancelled it, so the model is not
+    /// marked saved: the unsaved mark, the guard on closing the tab and the recovery copy all
+    /// stay until a model replaces this one. What was to follow the save (New, Open…) goes ahead,
+    /// as the user chose Download in the unsaved-changes question.
+    pub fn downloaded(&mut self, name: &str) {
+        self.info(tf("Downloaded {file}", &[("file", file_name(name))]));
+        if let Some(next) = self.after_save.take() {
+            self.replace_now(next);
         }
     }
 

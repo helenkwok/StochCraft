@@ -82,6 +82,9 @@ pub enum ErrorCode {
     BadFile,
     Unsupported,
     Cancelled,
+    /// A replication stopped because simulated time stopped moving (entities going round a loop
+    /// whose steps all take no time); `details` names the element and the time.
+    TimeStopped,
     Internal,
 }
 
@@ -99,6 +102,7 @@ impl ErrorCode {
             ErrorCode::BadFile => "bad_file",
             ErrorCode::Unsupported => "unsupported",
             ErrorCode::Cancelled => "cancelled",
+            ErrorCode::TimeStopped => "time_stopped",
             ErrorCode::Internal => "internal",
         }
     }
@@ -350,6 +354,12 @@ impl Engine {
         Ok(result)
     }
 
+    /// Whether the opened file uses `id` for something it keeps that the model does not have, so
+    /// a new element, connection or pool may not take it.
+    fn file_uses_id(&self, id: &str) -> bool {
+        self.file.as_ref().is_some_and(|f| f.opened.id_in_use(id))
+    }
+
     /// The bytes `file.save` writes: the opened file with the model's changes written in (byte
     /// for byte when there are none), or with `as_new` (or no opened file) a new BPMN file from
     /// the model.
@@ -367,8 +377,12 @@ impl Engine {
 
     /// Records that the model was saved as `bytes` at `path`.
     pub fn saved_to(&mut self, path: &str, bytes: &[u8]) -> Result<Value, CommandError> {
-        // Read back what was written, so the next unchanged save gives the same bytes again.
-        let loaded = stochcraft_io::read(bytes)
+        // Read back what was written, so the next unchanged save gives the same bytes again, in
+        // the scenario that was opened (not the file's first one, which later saves would then
+        // write into).
+        let scenario = self.file.as_ref().and_then(|f| f.opened.scenario.clone());
+        let loaded = stochcraft_io::read_scenario(bytes, scenario.as_deref())
+            .or_else(|_| stochcraft_io::read(bytes))
             .map_err(|e| CommandError::new(ErrorCode::Internal, format!("{path}: {e}")))?;
         let format = format_name(loaded.opened.format);
         self.file = Some(FileState {

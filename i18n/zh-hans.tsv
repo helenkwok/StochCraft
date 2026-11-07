@@ -14,32 +14,45 @@
 @id	language.name	简体中文
 	+ Add block	+ 添加区块
 	About StochCraft	关于 StochCraft
+	About {app}	关于 {app}
 	Add Block	添加区块
 	Add a flow from…	添加顺序流，来自…
 	Add a flow to…	添加顺序流，通往…
+	Add alternative	添加备选方案
 	Add point	添加点
+	Add pool	添加资源池
 	Add property	添加属性
+	Added pool {id}	已添加资源池 {id}
 	Added {block} ({id})	已添加 {block} ({id})
+	Alternative {n}	备选方案 {n}
 	Appearance	外观
 	Arrival limit	到达上限
 	Arrivals	到达
+	BPMN with BPSim	带 BPSim 的 BPMN
 	Back to the model (Esc)	返回模型 (Esc)
 	Beta	贝塔分布
 	Binomial	二项分布
 	Boolean	布尔值
+	Bring All to Front	全部移到最前
 	Built with	使用以下技术构建
+	By role	按角色
+	CSV table	CSV 表格
 	Cancel	取消
+	Cancel Run	取消运行
 	Cancel run	取消运行
 	Capacity	容量
 	Change Block	更改区块
 	Change Flow	更改顺序流
 	Changing the time unit does not convert the times already in the model.	更改时间单位不会换算模型中已有的时间值。
+	Clear Menu	清除菜单
 	Close	关闭
+	Close Window	关闭窗口
 	Comes from	来源于
 	Condition of {id}	{id} 的条件
 	Connect	连接
 	Connections	连接
 	Constant	常数
+	Dark	深色
 	Data points	数据点
 	Date and time	日期和时间
 	Decimal number	小数
@@ -56,15 +69,19 @@
 	Download	下载
 	Download charts (PNG)	下载图表 (PNG)
 	Download table (CSV)	下载表格 (CSV)
+	Downloaded {file}	已下载 {file}
 	Duration	持续时间
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	每个实体会选取其中第一个当前能一次全部满足的方案，并在离开时归还这些资源单元。
 	Edit	编辑
 	Entered	进入数
 	Erlang	埃尔朗分布
 	Error	错误
 	Every distribution	所有分布
+	Exit	退出
 	Experiment	实验
 	Experiment Settings	实验设置
 	Exponential	指数分布
+	Export	导出
 	Export charts (PNG)	导出图表 (PNG)
 	Export table (CSV)	导出表格 (CSV)
 	Exported {file}	已导出 {file}
@@ -75,12 +92,17 @@
 	Gamma	伽马分布
 	Goes to	流向
 	Help	帮助
+	Hide Others	隐藏其他
+	Hide {app}	隐藏 {app}
+	Keyboard Shortcuts…	键盘快捷键…
 	Keyboard shortcuts saved	键盘快捷键已保存
 	Keyboard shortcuts unchanged	键盘快捷键未更改
 	Language	语言
 	Left	离开数
 	Licensed under the MIT License or the Apache License 2.0, at your option.	可选择采用 MIT License 或 Apache License 2.0 授权。
+	Light	浅色
 	Log-normal	对数正态分布
+	Lost (no way out)	流失（无出路）
 	Lost (waiting room full)	流失（等待区已满）
 	M/M/1 queue	M/M/1 队列
 	Maximise	最大化
@@ -93,10 +115,13 @@
 	Mean wait	平均等待时间
 	Metric	指标
 	Minimise	最小化
+	Minimize	最小化
 	Minimum	最小值
 	Model	模型
 	Most likely	最可能值
 	Name	名称
+	Needs	所需资源
+	New	新建
 	New model	新建模型
 	New property	新建属性
 	New property name	新属性名称
@@ -111,21 +136,28 @@
 	One task per BPSim distribution, to compare their spread.	每种 BPSim 分布各设一个任务，用于比较其离散程度。
 	Open	打开
 	Open Example	打开示例
+	Open Model	打开模型
 	Open Recent	打开最近文件
 	Open a model first	请先打开模型
 	Open a model to simulate it	打开模型以进行仿真
 	Open a model…	打开模型…
 	Opened {file}	已打开 {file}
+	Open…	打开…
 	Or start from an example	或从示例开始
+	PNG image	PNG 图像
 	Parameters	参数
 	Points	点
 	Poisson	泊松分布
+	Preferences	首选项
+	Priority	优先级
 	Probability	概率
 	Probability of {id}	{id} 的概率
 	Problems	问题
 	Process	流程
+	Process models with BPSim	带 BPSim 的流程模型
 	Properties	属性
 	Quit	退出
+	Quit {app}	退出 {app}
 	Ready	就绪
 	Recover	恢复
 	Recover unsaved changes?	恢复未保存的更改？
@@ -136,16 +168,21 @@
 	Remove	移除
 	Remove Block	移除区块
 	Remove Property	移除属性
+	Remove alternative {n}	移除备选方案 {n}
 	Remove block	移除区块
 	Remove the flow {id}	移除顺序流 {id}
+	Remove the pool {id}	移除资源池 {id}
 	Remove this block and its flows (Delete)	移除此区块及其顺序流 (Delete)
 	Removed {id}	已移除 {id}
 	Rename Block	重命名区块
 	Rename Model	重命名模型
 	Replace Model	替换模型
 	Replications	重复运行次数
+	Resource pool	资源池
+	Resource pools	资源池
 	Restore	还原
 	Results	结果
+	Roles	角色
 	Run	运行
 	Run cancelled	运行已取消
 	Run experiment	运行实验
@@ -154,11 +191,13 @@
 	Running…	正在运行…
 	Save	保存
 	Save As…	另存为…
+	Save Model	保存模型
 	Save changes to {name}?	是否保存对 {name} 的更改？
 	Saved {file}	已保存 {file}
 	Scale	尺度参数
 	Seed	随机种子
 	Service time	服务时间
+	Services	服务
 	Set Property	设置属性
 	Set a value	设置值
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	在每个实体进入此区块时设置。表达式读取实体到达时携带的值，例如 getProperty('issues') - 1。
@@ -166,6 +205,7 @@
 	Shape	形状参数
 	Share of arrivals lost	到达流失比例
 	Share of units blocked	资源单元阻塞比例
+	Show All	全部显示
 	Show {id}	显示 {id}
 	Split or join	拆分或合并
 	Split or join (all ways)	拆分或合并（所有路径）
@@ -178,6 +218,7 @@
 	Tandem line	串联流程
 	Task	任务
 	Task with a resource	需要资源的任务
+	Task with shared resources	需要共享资源的任务
 	Text	文本
 	The model: its experiment, connections and problems	模型：实验、连接和问题
 	This block has a warning	此区块存在警告
@@ -195,6 +236,8 @@
 	Undo {action}	撤消{action}
 	Uniform	均匀分布
 	Unit	单位
+	Units	数量
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	由多个任务共享的资源单元。需要共享资源的任务按资源池或按角色获取这些单元。
 	Untitled	未命名
 	Untitled model	未命名模型
 	Use System Setting	使用系统设置
@@ -207,8 +250,10 @@
 	Warning	警告
 	Weibull	威布尔分布
 	Whole number	整数
+	Window	窗口
 	Yes or no	是或否
 	Your changes will be lost if you don't save them.	如果不存储，你的更改将会丢失。
+	Zoom	缩放
 	a model	一个模型
 	arrivals	到达
 	days	天
@@ -225,8 +270,10 @@
 	split or join: all ways	拆分或合并：所有路径
 	task	任务
 	task with a resource	需要资源的任务
+	task with shared resources	需要共享资源的任务
 	the charts could not be captured	无法捕获图表
 	the run stopped	运行已停止
+	the settings could not be saved: {error}	无法保存设置：{error}
 	there are no charts to export	没有可导出的图表
 	to {block}	前往 {block}
 	unlimited	无限制
@@ -238,10 +285,17 @@
 	± 95% CI	± 95% 置信区间
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± 表示各次重复运行均值的 95% Student-t 置信区间的半宽。
 	· no results yet	· 尚无结果
+unit	d	天
+unit	h	小时
+unit	min	分钟
+unit	ms	毫秒
+unit	s	秒
+unit	yr	年
 @plural	Finished {n} replication|Finished {n} replications	已完成 {n} 次重复运行
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	已打开 {file}（{n} 条警告）
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	从随机种子 {seed} 开始，对模型进行 {n} 次独立重复运行。每个元素的结果都包含 95% 置信区间的半宽。
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	已完成 {done}/{n} 次重复运行
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}：{mean}{unit}\n95% 区间：{low} 至 {high}{unit}\n基于 {n} 次重复运行
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 次重复运行 · 随机种子 {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 次重复运行 · 随机种子 {seed} · 预热 {warmup} {unit} · 测量 {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 次重复运行 · 随机种子 {seed}
+@plural	{n} replication|{n} replications	{n} 次重复运行

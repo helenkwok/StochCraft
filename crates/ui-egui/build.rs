@@ -3,8 +3,11 @@
 //! - **Fonts** (`CRAFT_FONTS_DIR`, a checkout of https://github.com/storytold/craft-fonts): the
 //!   faces for the scripts IBM Plex doesn't cover (Arabic, Hebrew, Thai, Devanagari…). Unset, the
 //!   desktop app falls back to the installed system fonts. Left out: the CJK faces (tens of
-//!   megabytes uncut; cut to the translation catalogs once StochCraft has some), and everything on
-//!   the web, whose download has a size budget.
+//!   megabytes uncut, even though the catalogs in `i18n/` now say which characters they need), and
+//!   everything on the web, whose download has a size budget. So the web app, which has only IBM
+//!   Plex, Hack and the emoji face and no system fonts, draws Japanese, Korean, Chinese, Hindi,
+//!   Bengali, Tamil, Telugu, Thai and Lao as missing-glyph boxes until a cut of those faces is
+//!   embedded there (a size and licence decision; issue #39).
 //! - **Translations**: StochCraft's own catalogs, `i18n/<locale>.tsv` in this repository, always
 //!   embedded (on the web too), in craft-i18n's catalog format. With `CRAFT_I18N_DIR` naming a
 //!   checkout of https://github.com/storytold/craft-i18n, each locale's shared `common.tsv` is

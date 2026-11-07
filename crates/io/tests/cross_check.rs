@@ -103,7 +103,9 @@ fn car_repair_matches_lsim() {
     const REPS: u64 = 400;
     for at_zero in [false, true] {
         let c = compiled.clone().first_arrival_at_zero(at_zero);
-        let reports: Vec<Report> = (0..REPS).map(|r| c.run(Rng::new(1 + r))).collect();
+        let reports: Vec<Report> = (0..REPS)
+            .map(|r| c.run(Rng::new(1 + r)).unwrap_or_else(|e| panic!("{e}")))
+            .collect();
         eprintln!(
             "first arrival {}:",
             if at_zero {

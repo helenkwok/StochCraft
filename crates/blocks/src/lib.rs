@@ -156,6 +156,100 @@ pub struct Compiled {
     assigns: Vec<Vec<Assign>>,
     /// Sources create their first entity at time 0 rather than after the first interval.
     first_arrival_at_zero: bool,
+    /// See [`Compiled::max_events_at_one_time`].
+    max_events_at_one_time: u64,
+}
+
+/// The most events a replication may process at one simulated time before it stops with
+/// [`RunError::TimeStopped`] (see [`Compiled::max_events_at_one_time`]).
+///
+/// Many events can legitimately happen at one time: a source whose time between arrivals is 0
+/// may create up to its limit of entities at once (allowed since #36), and each entity costs a
+/// few events at each element it passes. Ten million leaves room for a batch of about a million
+/// entities through several elements at one instant, far beyond what a model needs, while a
+/// model looping without time moving reaches it within seconds (the error path is the only one
+/// that pays) instead of never ending.
+pub const MAX_EVENTS_AT_ONE_TIME: u64 = 10_000_000;
+
+/// Why a replication stopped without a [`Report`].
+#[derive(Debug, Clone, PartialEq)]
+pub enum RunError {
+    /// It was cancelled ([`Compiled::run_watched`]).
+    Cancelled,
+    /// Simulated time stopped moving: more than `events` events happened at time `time`, the
+    /// last of them in `element` (by id and name), which is part of a loop whose steps all take
+    /// no time.
+    TimeStopped {
+        time: f64,
+        events: u64,
+        element: Option<(ElementId, String)>,
+    },
+    /// At time `time`, `element` (by id and name) drew a time to wait so long that it would end
+    /// later than the largest time that can be represented.
+    TimeOutOfRange {
+        time: f64,
+        element: Option<(ElementId, String)>,
+    },
+}
+
+/// Writes `element` as `"name" (id)`, or just the id when the name adds nothing.
+fn write_element(
+    f: &mut std::fmt::Formatter<'_>,
+    element: Option<&(ElementId, String)>,
+) -> std::fmt::Result {
+    match element {
+        Some((id, name)) if !name.is_empty() && name != id.as_str() => {
+            write!(f, "\"{name}\" ({id})")
+        }
+        Some((id, _)) => write!(f, "{id}"),
+        None => f.write_str("an element"),
+    }
+}
+
+impl std::fmt::Display for RunError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            RunError::Cancelled => f.write_str("the run was cancelled"),
+            RunError::TimeStopped {
+                time,
+                events,
+                element,
+            } => {
+                write!(
+                    f,
+                    "simulated time stopped moving at {time}: more than {events} events \
+                     happened at that time"
+                )?;
+                if element.is_some() {
+                    f.write_str(", the last at ")?;
+                    write_element(f, element.as_ref())?;
+                }
+                f.write_str(
+                    ". Entities seem to go round a loop whose steps all take no time; give a step \
+                     in it a duration, or the loop a way out",
+                )
+            }
+            RunError::TimeOutOfRange { time, element } => {
+                write!(f, "at {time}, ")?;
+                write_element(f, element.as_ref())?;
+                f.write_str(
+                    " drew a time so long that it would end later than the largest time that \
+                     can be represented; check its durations",
+                )
+            }
+        }
+    }
+}
+
+impl std::error::Error for RunError {}
+
+/// Why [`Builder::run`] gave no report.
+#[derive(Debug, Clone, PartialEq)]
+pub enum Failed {
+    /// The model has errors: every diagnostic, as [`compile`] returns them.
+    Invalid(Vec<Diagnostic>),
+    /// The replication stopped.
+    Run(RunError),
 }
 
 fn compile_assign(p: &Property, slots: &[String], ty: PropertyType) -> Option<Assign> {
@@ -270,6 +364,7 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
         slots,
         assigns,
         first_arrival_at_zero: false,
+        max_events_at_one_time: MAX_EVENTS_AT_ONE_TIME,
     })
 }
 
@@ -287,6 +382,14 @@ impl Compiled {
         self
     }
 
+    /// Sets the most events a replication may process at one simulated time before it stops
+    /// with [`RunError::TimeStopped`] ([`MAX_EVENTS_AT_ONE_TIME`] unless set; at least 1). For
+    /// tests that need the guard to act quickly.
+    pub fn max_events_at_one_time(mut self, events: u64) -> Self {
+        self.max_events_at_one_time = events.max(1);
+        self
+    }
+
     /// The names of the properties entities can carry, in slot order.
     pub fn property_names(&self) -> &[String] {
         &self.slots
@@ -299,15 +402,24 @@ impl Compiled {
 }
 
 /// A statistic an element reports.
+///
+/// Counts balance on every element: what entered either left, was lost there ([`Metric::Lost`],
+/// where reported), or was still inside at the end.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Metric {
-    /// Entities that entered (for a source: created).
+    /// Entities that entered (for a source: created). A join counts each entity once, as it
+    /// arrives on the join's first input; what arrives on its other inputs are copies of it,
+    /// merged into it.
     Entered,
-    /// Entities that left (for a sink: removed).
+    /// Entities that left, sent on to the next element (for a sink: removed). A parallel
+    /// gateway counts one per copy it sends out, so a split into two reports twice what entered.
+    /// Entities lost do not leave.
     Left,
     /// Servers: time-average number waiting for a unit.
     MeanQueueLength,
-    /// Servers: mean time from arrival to start of service.
+    /// Servers: mean time from arrival to start of service, over the entities that started
+    /// service. Entities still waiting at the end are left out, so for an overloaded server the
+    /// mean is biased low.
     MeanWait,
     /// Servers: time-average fraction of units busy.
     Utilisation,
@@ -321,7 +433,11 @@ pub enum Metric {
     /// Servers sending to a finite buffer: time-average fraction of units blocked (holding a
     /// served entity while the next buffer is full).
     BlockingProbability,
-    /// Servers with a finite buffer: arrivals from sources lost because the buffer was full.
+    /// Entities lost. Servers with a finite buffer: arrivals from sources turned away because
+    /// the buffer was full (these never entered). Sources sending to a finite buffer: their
+    /// arrivals lost that way (these entered, but never left), so one lost arrival counts at
+    /// both. Exclusive gateways: entities for which no condition held and there was no default
+    /// connection, which leave the model there.
     Lost,
     /// Servers with a finite buffer: the fraction of arrivals lost (lost over lost plus
     /// entered).
@@ -376,7 +492,8 @@ pub struct ElementReport {
     pub mean_contents: Option<f64>,
     pub mean_time_in_system: Option<f64>,
     /// Only where a finite buffer is involved (`None` otherwise, so models without one report
-    /// as before): see [`Metric::MeanBlockedTime`] and the metrics after it.
+    /// as before): see [`Metric::MeanBlockedTime`] and the metrics after it. `lost` is also
+    /// reported by every exclusive gateway, buffer or not.
     pub mean_blocked_time: Option<f64>,
     pub blocking_probability: Option<f64>,
     pub lost: Option<u64>,
@@ -460,7 +577,9 @@ impl ExperimentSummary {
 
 /// Summarises replication reports of the same model (as [`Compiled::run`] returns them, in any
 /// order). A metric is left out of an element when no replication reported a value for it, for
-/// example the mean wait of a server that no entity reached.
+/// example the mean wait of a server that no entity reached. Replications without a value are
+/// left out of that metric's summary, so its `n` can be less than the number of replications,
+/// and differ from metric to metric.
 pub fn summarise(reports: &[Report]) -> ExperimentSummary {
     let elements = reports.first().map_or_else(Vec::new, |first| {
         first
@@ -757,14 +876,17 @@ impl Builder {
     }
 
     /// Builds, compiles and runs one replication for `warmup + duration` time units.
-    pub fn run(&self, rng: Rng, warmup: f64, duration: f64) -> Result<Report, Vec<Diagnostic>> {
+    pub fn run(&self, rng: Rng, warmup: f64, duration: f64) -> Result<Report, Failed> {
         let experiment = Experiment {
             warmup,
             duration,
             replications: 1,
             ..Experiment::default()
         };
-        Ok(compile(&self.build(experiment))?.run(rng))
+        compile(&self.build(experiment))
+            .map_err(Failed::Invalid)?
+            .run(rng)
+            .map_err(Failed::Run)
     }
 }
 

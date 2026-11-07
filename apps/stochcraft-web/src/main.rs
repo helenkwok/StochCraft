@@ -7,6 +7,8 @@
 //!
 //! On other targets this binary only says so, which keeps `cargo build --workspace` working.
 
+#[cfg(any(target_arch = "wasm32", test))]
+mod storage;
 #[cfg(target_arch = "wasm32")]
 mod web;
 
