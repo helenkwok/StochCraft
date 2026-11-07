@@ -45,6 +45,7 @@ pub fn save_edited(
         ascii: doc.ascii_only(),
         unit: indent_unit(&doc.root),
         pool_quantity: Vec::new(),
+        model_ids: model_ids(after),
     };
     ed.apply(&mut doc.root, scenario, before, after, &resources)?;
     let unit = ed.unit.clone();
@@ -126,6 +127,16 @@ fn difference(got: &Model, want: &Model) -> Option<String> {
         return Some(format!("its resource pools read as {:?}", got.resources));
     }
     None
+}
+
+/// The ids of a model's elements, connections and pools.
+fn model_ids(m: &Model) -> BTreeSet<String> {
+    m.elements
+        .iter()
+        .map(|e| e.id.to_string())
+        .chain(m.connections.iter().map(|c| c.id.to_string()))
+        .chain(m.resources.iter().map(|r| r.id.to_string()))
+        .collect()
 }
 
 fn all_ids(root: &Element) -> BTreeSet<String> {
@@ -331,6 +342,8 @@ struct Editor {
     unit: String,
     /// Shared pools whose quantity changed: (pool, new quantity).
     pool_quantity: Vec<(String, u32)>,
+    /// The ids of the saved model's elements, connections and pools.
+    model_ids: BTreeSet<String>,
 }
 
 /// Where new elements of a namespace go: the prefix the file already uses for it, or a new one
@@ -540,11 +553,33 @@ impl Editor {
         for f in &flows {
             self.remove_flow(root, f);
         }
+        // A node that is gone (not one written again as another kind) takes everything that
+        // refers to it along: events on its boundary (which cannot stay without it, since
+        // `attachedToRef` is required), lanes' references and associations.
+        let gone = !self.model_ids.contains(id);
+        let boundary: Vec<String> = if gone {
+            root.descendants()
+                .into_iter()
+                .filter(|e| {
+                    e.is(BPMN, "boundaryEvent") && e.attr("attachedToRef").as_deref() == Some(id)
+                })
+                .filter_map(|e| e.attr("id"))
+                .collect()
+        } else {
+            Vec::new()
+        };
         remove_all(root, &|e| has_id(e, attr, id) && self.is_node(e));
         remove_all(root, &|e| {
             e.is(BPMNDI, "BPMNShape") && e.attr("bpmnElement").as_deref() == Some(id)
         });
+        if gone {
+            remove_all(root, &|e| e.is(BPMN, "flowNodeRef") && e.text() == id);
+            remove_associations(root, id);
+        }
         remove_params(root, id);
+        for b in &boundary {
+            self.remove_node(root, b);
+        }
     }
 
     fn remove_flow(&mut self, root: &mut Element, id: &str) {
@@ -556,6 +591,9 @@ impl Editor {
         remove_all(root, &|e| {
             e.is(BPMNDI, "BPMNEdge") && e.attr("bpmnElement").as_deref() == Some(id)
         });
+        if !self.model_ids.contains(id) {
+            remove_associations(root, id);
+        }
         remove_params(root, id);
     }
 
@@ -1606,6 +1644,28 @@ fn scenario_mut<'a>(root: &'a mut Element, id: Option<&str>) -> Option<&'a mut E
                 None => s.attr("result").is_none(),
             }
     })
+}
+
+/// Removes the BPMN associations (a note's link, for one) to or from `id`, which is gone, with
+/// their diagram edges.
+fn remove_associations(root: &mut Element, id: &str) {
+    let is_link = |e: &Element| {
+        e.is(BPMN, "association")
+            && (e.attr("sourceRef").as_deref() == Some(id)
+                || e.attr("targetRef").as_deref() == Some(id))
+    };
+    let links: Vec<String> = root
+        .descendants()
+        .into_iter()
+        .filter(|e| is_link(e))
+        .filter_map(|e| e.attr("id"))
+        .collect();
+    remove_all(root, &is_link);
+    for l in &links {
+        remove_all(root, &|e| {
+            e.is(BPMNDI, "BPMNEdge") && e.attr("bpmnElement").as_deref() == Some(l.as_str())
+        });
+    }
 }
 
 /// Removes every scenario's parameters for `id` (an element or connection that is gone).
