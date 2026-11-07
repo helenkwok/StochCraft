@@ -121,6 +121,10 @@ fn difference(got: &Model, want: &Model) -> Option<String> {
     if got.experiment != want.experiment {
         return Some(format!("its experiment reads as {:?}", got.experiment));
     }
+    // Shared pools: their ids, names, quantities and roles.
+    if got.resources != want.resources {
+        return Some(format!("its resource pools read as {:?}", got.resources));
+    }
     None
 }
 
@@ -1866,5 +1870,30 @@ fn set_value(
     if let Some(v) = value {
         let at = end_of(p);
         p.children.insert(at, Node::Element(v));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use stochcraft_model::{ElementId, Model, ResourcePool};
+
+    use super::difference;
+
+    #[test]
+    fn a_pool_that_reads_back_differently_is_a_difference() {
+        let pool = |quantity| ResourcePool {
+            id: ElementId::unchecked("clerks"),
+            name: "Clerks".into(),
+            quantity,
+            roles: vec!["clerk".into()],
+        };
+        let mut want = Model::default();
+        want.resources.push(pool(2));
+        let mut got = Model::default();
+        got.resources.push(pool(1));
+        assert!(difference(&got, &want).is_some());
+        got.resources.clear();
+        assert!(difference(&got, &want).is_some());
+        assert!(difference(&want, &want).is_none());
     }
 }
