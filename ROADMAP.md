@@ -683,10 +683,32 @@ taken together, and a large need waiting without holding back a smaller one.
 
   Exact cases worked by hand also check a rate change taking effect at once, no arrivals
   outside the calendars, and a unit finishing its job after its shift has ended.
-- Breakdowns on servers (a `stochcraft:` vendor extension, since BPSim has none): time between
-  failures and repair time distributions, preempting or waiting for the current job (BPSim
-  `interruptible`). Validation: availability MTBF / (MTBF + MTTR) and the effective
-  service rate.
+- **Breakdowns on servers** (done): a `stochcraft:breakdown` vendor extension, since BPSim has
+  none, with a `timeToFailure` and a `repairTime` distribution; BPSim's own `Interruptible`
+  chooses whether a failure interrupts the job under way.
+  - Each unit fails on its own, in elapsed time (busy or idle) since its last repair.
+  - Interruptible: the job stops and resumes on the same unit after the repair, with the
+    service time it had left (preemptive resume). Otherwise the failure waits for the job to
+    finish, and the unit takes no new job meanwhile.
+  - Waiting entities go first come first served to the first unit that is up and idle.
+    Servers without breakdowns run exactly as before.
+  - Results: a server's `availability` (the time-average fraction of units up). Utilisation
+    counts a unit holding an interrupted job as busy.
+  - Read, written, saved in place, and in the vendor schema
+    (`crates/io/schemas/stochcraft-bpsim-1.xsd`); `block.set` and `block.add` take
+    `breakdown` (`null` removes it).
+  - **Not here:** failures counted in busy time only, and breakdowns on shared pools. The
+    window shows `availability` under its metric name until it has a label and translations.
+
+  **Validation** (`blocks/tests/breakdowns.rs`, 16 replications):
+
+  | Case | Theory | StochCraft |
+  |---|---|---|
+  | One unit, failures exp(mean 100), repairs exp(mean 10): availability | 0.90909 | 0.90574 ± 0.00472 |
+  | Same, saturated, service rate 1, interruptible: jobs in 20,000 | 18,181.8 | 18,157.9 ± 129.0 |
+  | λ = 0.3, failures exp(mean 50), repairs exp(mean 5), interruptible: mean in service, λ E[S](1 + E[R]/MTBF) | 0.33 | 0.33126 ± 0.00217 |
+  | Constant: failure 10 after repair, repair 2, jobs of 3, waiting for the job: jobs by 70 | 20 | 20 |
+  | Same, interruptible: jobs by 69 | 19 | 19 |
 
 ### M2.7 Assembly and batching
 

@@ -302,6 +302,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             capacity: 2,
             service: Dist::Exponential { mean: 0.5 },
             queue_capacity: None,
+            breakdown: None,
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -316,6 +317,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             capacity: 2,
             service: Dist::Constant(0.75),
             queue_capacity: None,
+            breakdown: None,
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -401,6 +403,7 @@ fn new_and_changed_servers_carry_their_buffer() {
             capacity: 2,
             service: Dist::Constant(1.0),
             queue_capacity: Some(4),
+            breakdown: None,
         };
         set_queue(m, "weld", Some(1));
     });

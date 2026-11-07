@@ -7,8 +7,8 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
 use stochcraft_model::{
-    Calendar, DateTime, Dist, ElementKind, Model, Need, Property, PropertyType, PropertyValue,
-    ResourcePool, Timed,
+    Breakdown, Calendar, DateTime, Dist, ElementKind, Model, Need, Property, PropertyType,
+    PropertyValue, ResourcePool, Timed,
 };
 
 use crate::bpsim::NS2;
@@ -279,6 +279,27 @@ pub(crate) fn queue_capacity_element(n: u32) -> Element {
         .with_attr("stochcraft:value", &n.to_string())
 }
 
+/// A server's breakdowns as StochCraft's vendor extension ([`crate::bpsim::BREAKDOWN`]).
+pub(crate) fn breakdown_element(b: &Breakdown) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let part = |local: &str, d: &Dist| {
+        Element::new(&format!("stochcraft:{local}"), Some(ns)).with_child(dist_element(d))
+    };
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::BREAKDOWN)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(
+            Element::new("stochcraft:breakdown", Some(ns))
+                .with_child(part("timeToFailure", &b.time_to_failure))
+                .with_child(part("repairTime", &b.repair)),
+        )
+}
+
+/// BPSim's `Interruptible`, for a server whose failures interrupt the job under way.
+pub(crate) fn interruptible_param(yes: bool) -> Element {
+    param("Interruptible", boolean(yes))
+}
+
 pub(crate) fn probability_element(p: f64) -> Element {
     s("FloatingParameter").with_attr("value", &num(p))
 }
@@ -491,7 +512,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 }
                 ep.push(cp);
             }
-            ElementKind::Server { service, .. } => {
+            ElementKind::Server {
+                service, breakdown, ..
+            } => {
                 ep.push(
                     s("TimeParameters").with_child(param("ProcessingTime", dist_element(service))),
                 );
@@ -499,6 +522,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 let selection = s("ExpressionParameter")
                     .with_attr("value", &format!("getResource('{rid}', 1)"));
                 ep.push(s("ResourceParameters").with_child(param("Selection", selection)));
+                if breakdown.as_ref().is_some_and(|b| b.interruptible) {
+                    ep.push(s("PriorityParameters").with_child(interruptible_param(true)));
+                }
             }
             ElementKind::SharedTask {
                 service,
@@ -539,6 +565,12 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         } = e.kind
         {
             ep.push(queue_capacity_element(q));
+        }
+        if let ElementKind::Server {
+            breakdown: Some(b), ..
+        } = &e.kind
+        {
+            ep.push(breakdown_element(b));
         }
         if ep.elements().next().is_none() {
             continue;

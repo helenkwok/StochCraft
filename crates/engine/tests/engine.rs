@@ -1155,3 +1155,45 @@ fn calendars_are_added_followed_and_guarded() {
     let m = ok(&mut e, "model.get", json!({}));
     assert!(m["experiment"].get("start").is_none(), "{m}");
 }
+
+/// A server's breakdowns through `block.set`: set, shown in the model, run with an
+/// availability, and removed with `null`.
+#[test]
+fn breakdowns_are_set_reported_and_removed() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "breakdown": {"time_to_failure": {"type": "exponential", "mean": 50.0},
+               "repair": {"type": "constant", "value": 5.0}, "interruptible": true}}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let serve = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(serve["breakdown"]["interruptible"], true, "{m}");
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    let a = r["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+        .map(|x| x["metrics"]["availability"]["mean"].clone())
+        .unwrap_or_default();
+    assert!(a.as_f64().is_some_and(|a| a > 0.5 && a < 1.0), "{r}");
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "arrivals", "breakdown": null})
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "breakdown": null}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(!m.to_string().contains("breakdown"), "{m}");
+}

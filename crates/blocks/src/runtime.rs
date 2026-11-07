@@ -5,9 +5,11 @@ use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::rc::Rc;
 
-use stochcraft_des::{Ctx, Resource, ResourceGuard, Sim, Store};
+use stochcraft_des::{Ctx, Gate, Resource, ResourceGuard, Signal, Sim, Store};
 use stochcraft_model::calendar::{self, Calendar, DateTime};
-use stochcraft_model::{Element, ElementId, ElementKind, Model, Need, ResourcePool, Timed};
+use stochcraft_model::{
+    Breakdown, Element, ElementId, ElementKind, Model, Need, ResourcePool, Timed,
+};
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
 
@@ -221,6 +223,12 @@ impl Compiled {
                     );
                 }
                 ElementKind::Server {
+                    capacity,
+                    service,
+                    breakdown: Some(b),
+                    ..
+                } => spawn_failing_server(&mut sim, env, capacity, service, b),
+                ElementKind::Server {
                     capacity, service, ..
                 } => spawn_server(&mut sim, env, capacity, service),
                 ElementKind::SharedTask {
@@ -295,6 +303,8 @@ pub(crate) struct BlockStats {
     blocked_time: Tally,
     /// Arrivals lost because this element's buffer was full.
     lost: u64,
+    /// Units failed or under repair (servers with breakdowns).
+    down: TimeWeighted,
 }
 
 impl BlockStats {
@@ -310,6 +320,7 @@ impl BlockStats {
             blocked: TimeWeighted::new(t, 0.0),
             blocked_time: Tally::new(),
             lost: 0,
+            down: TimeWeighted::new(t, 0.0),
         }
     }
 
@@ -324,6 +335,7 @@ impl BlockStats {
         self.blocked.reset(t);
         self.blocked_time = Tally::new();
         self.lost = 0;
+        self.down.reset(t);
     }
 
     /// The element's report; `blocks`: whether it sends to a finite buffer.
@@ -389,6 +401,17 @@ impl BlockStats {
                 ElementKind::Server { capacity, .. } if blocks => {
                     self.blocked.average(end).map(|b| b / f64::from(*capacity))
                 }
+                _ => None,
+            },
+            availability: match kind {
+                ElementKind::Server {
+                    capacity,
+                    breakdown: Some(_),
+                    ..
+                } => self
+                    .down
+                    .average(end)
+                    .map(|d| 1.0 - d / f64::from(*capacity)),
                 _ => None,
             },
             lost: finite.then_some(self.lost),
@@ -711,6 +734,172 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
     }
 }
 
+/// One unit of a server whose units fail.
+#[derive(Default)]
+struct Unit {
+    /// Serving an entity (possibly interrupted by a failure), or blocked after service.
+    busy: bool,
+    /// Failed or under repair.
+    down: bool,
+    /// The job process while it is in service (so a failure can interrupt it).
+    serving: Option<u64>,
+    /// A failure is due and waits for the job to finish (non-interruptible).
+    due: bool,
+}
+
+/// A server whose units fail and are repaired ([`Breakdown`]). One process hands each waiting
+/// entity, first come first served, to the first unit that is up and idle; a process per unit
+/// makes it fail and repairs it.
+fn spawn_failing_server(
+    sim: &mut Sim,
+    mut env: BlockEnv,
+    capacity: u32,
+    service: Dist,
+    breakdown: Breakdown,
+) {
+    let ctx = env.ctx.clone();
+    // The failures draw from their own stream, so they do not change the service times.
+    let mut fail_rng = env.rng.fork();
+    let units: Rc<RefCell<Vec<Unit>>> = Rc::new(RefCell::new(
+        (0..capacity).map(|_| Unit::default()).collect(),
+    ));
+    // A unit came free or was repaired.
+    let changed = Signal::new(&ctx);
+    // Each unit's repair, which an interrupted job waits for; and its job ending, which a due
+    // failure waits for.
+    let up: Rc<Vec<Gate>> = Rc::new((0..capacity).map(|_| Gate::new(&ctx, true)).collect());
+    let done: Rc<Vec<Signal>> = Rc::new((0..capacity).map(|_| Signal::new(&ctx)).collect());
+    let env = Rc::new(RefCell::new(env));
+
+    for u in 0..capacity as usize {
+        let (c, units, changed, up, done, env) = (
+            ctx.clone(),
+            Rc::clone(&units),
+            changed.clone(),
+            Rc::clone(&up),
+            Rc::clone(&done),
+            Rc::clone(&env),
+        );
+        let b = breakdown.clone();
+        let mut rng = fail_rng.fork();
+        sim.spawn(async move {
+            loop {
+                c.hold(b.time_to_failure.sample(&mut rng)).await;
+                let busy = units.borrow().get(u).is_some_and(|x| x.busy);
+                if busy && !b.interruptible {
+                    if let Some(x) = units.borrow_mut().get_mut(u) {
+                        x.due = true;
+                    }
+                    if let Some(d) = done.get(u) {
+                        d.wait().await;
+                    }
+                }
+                let serving = units.borrow_mut().get_mut(u).and_then(|x| {
+                    x.down = true;
+                    x.due = false;
+                    x.serving
+                });
+                if let Some(g) = up.get(u) {
+                    g.close();
+                }
+                env.borrow().adjust(|s| &mut s.down, 1.0);
+                if let Some(pid) = serving {
+                    c.interrupt(pid, 0);
+                }
+                c.hold(b.repair.sample(&mut rng)).await;
+                if let Some(x) = units.borrow_mut().get_mut(u) {
+                    x.down = false;
+                }
+                env.borrow().adjust(|s| &mut s.down, -1.0);
+                if let Some(g) = up.get(u) {
+                    g.open();
+                }
+                changed.notify_all();
+            }
+        });
+    }
+
+    sim.spawn(async move {
+        loop {
+            let input = env.borrow().input.clone();
+            let entity = input.get().await;
+            // The first unit that is up and idle; else wait for one.
+            let unit = loop {
+                let free = units
+                    .borrow()
+                    .iter()
+                    .position(|x| !x.busy && !x.down && !x.due);
+                match free {
+                    Some(u) => break u,
+                    None => changed.wait().await,
+                }
+            };
+            let duration = {
+                let mut e = env.borrow_mut();
+                let now = e.ctx.now();
+                e.with_stats(|s| s.wait.add(now - entity.entered));
+                e.adjust(|s| &mut s.waiting, -1.0);
+                e.adjust(|s| &mut s.busy, 1.0);
+                service.sample(&mut e.rng)
+            };
+            if let Some(x) = units.borrow_mut().get_mut(unit) {
+                x.busy = true;
+            }
+            let (c, units2, changed2, up2, done2, env2) = (
+                ctx.clone(),
+                Rc::clone(&units),
+                changed.clone(),
+                Rc::clone(&up),
+                Rc::clone(&done),
+                Rc::clone(&env),
+            );
+            let interruptible = breakdown.interruptible;
+            let pid = ctx.spawn(async move {
+                let mut left = duration;
+                loop {
+                    if !interruptible {
+                        c.hold(left).await;
+                        break;
+                    }
+                    match c.hold_interruptible(left).await {
+                        Ok(()) => break,
+                        Err(i) => {
+                            // Failed mid-job: wait for the repair, then carry on.
+                            left = i.remaining;
+                            if let Some(x) = units2.borrow_mut().get_mut(unit) {
+                                x.serving = None;
+                            }
+                            if let Some(g) = up2.get(unit) {
+                                g.wait().await;
+                            }
+                            if let (Some(x), Some(pid)) =
+                                (units2.borrow_mut().get_mut(unit), c.current())
+                            {
+                                x.serving = Some(pid);
+                            }
+                        }
+                    }
+                }
+                if let Some(x) = units2.borrow_mut().get_mut(unit) {
+                    x.serving = None;
+                }
+                env2.borrow().adjust(|s| &mut s.busy, -1.0);
+                move_on(&env2, &c, entity).await;
+                if let Some(x) = units2.borrow_mut().get_mut(unit) {
+                    x.busy = false;
+                }
+                if let Some(d) = done2.get(unit) {
+                    d.notify_all();
+                }
+                changed2.notify_all();
+            });
+            if interruptible && let Some(x) = units.borrow_mut().get_mut(unit) {
+                x.serving = Some(pid);
+            }
+        }
+    });
+}
+
 /// An entity whose service or delay is over leaves for the next element. Into a full finite
 /// buffer it waits here first, blocking (blocking after service): the element keeps it, and its
 /// place here, until there is room, and the time is recorded.
@@ -1017,6 +1206,7 @@ impl Pools {
                     mean_time_in_system: None,
                     mean_blocked_time: None,
                     blocking_probability: None,
+                    availability: None,
                     lost: None,
                     loss_probability: None,
                     properties: Vec::new(),

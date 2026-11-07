@@ -251,6 +251,19 @@ The checks for M2.6's calendars (`crates/blocks/tests/calendars.rs`):
   (events), in the subset BPSim models use for shifts. Dates are counted in days with Howard
   Hinnant's civil-date algorithms (proleptic Gregorian; ATTRIBUTION.md).
 
+## Breakdowns
+
+The checks for M2.6's breakdowns (`crates/blocks/tests/breakdowns.rs`):
+
+- **Availability** of a unit that alternates up times (mean MTBF) and repairs (mean MTTR) is
+  MTBF / (MTBF + MTTR), by the renewal-reward theorem. Ross, *Introduction to Probability
+  Models*, alternating renewal processes.
+- **Preemptive resume**: with failures Poisson at rate f in elapsed time, a job of length S
+  meets on average fS failures and holds its unit for S (1 + f E[R]); with Little's law the
+  mean number in service is λ E[S] (1 + f E[R]). A saturated unit finishes work at its rate
+  times its availability. B. Avi-Itzhak and P. Naor, "Some queuing problems with the service
+  station subject to breakdown", *Operations Research* 11(3), 1963, 303–320.
+
 ## Read and set aside
 
 Outside what a process simulator does: Type IV hydrogen pressure vessels (Khan, IJHE 2026,

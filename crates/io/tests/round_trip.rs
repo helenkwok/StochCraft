@@ -27,6 +27,18 @@ pub fn showcase() -> Model {
         },
         6,
     );
+    m.breakdown(
+        cut,
+        stochcraft_blocks::Breakdown {
+            time_to_failure: Dist::Exponential { mean: 120.0 },
+            repair: Dist::Triangular {
+                min: 1.0,
+                mode: 2.0,
+                max: 6.0,
+            },
+            interruptible: true,
+        },
+    );
     let mut previous = cut;
     m.connect(src, cut);
     let delays = [

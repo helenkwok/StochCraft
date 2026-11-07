@@ -31,6 +31,7 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
                     capacity: c,
                     service: Dist::exponential_rate(mu),
                     queue_capacity: None,
+                    breakdown: None,
                 },
             ),
             element("exit", ElementKind::Sink),
