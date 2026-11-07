@@ -102,6 +102,7 @@
 	Licensed under the MIT License or the Apache License 2.0, at your option.	MIT License または Apache License 2.0 のいずれかを選択して利用できます。
 	Light	ライト
 	Log-normal	対数正規分布
+	Lost (no way out)	損失（出口なし）
 	Lost (waiting room full)	損失（待機場所が満員）
 	M/M/1 queue	M/M/1 待ち行列
 	Maximise	最大化
