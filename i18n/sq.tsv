@@ -106,6 +106,7 @@
 	Exported {file}	U eksportua {file}
 	Expression	Shprehje
 	File	Skedar
+	Finished at {time} {unit}	Përfundoi në {time} {unit}
 	Fit	Përshtat
 	Fit the diagram to the view	Përshtat diagramin me pamjen
 	Flows	Rrjedhat
@@ -115,6 +116,9 @@
 	Help	Ndihmë
 	Hide Others	Fshih të tjerat
 	Hide {app}	Fshih {app}
+	Inside over time	Brenda gjatë kohës
+	Jump	Shko
+	Jump to time	Shko te koha
 	Keyboard Shortcuts…	Shkurtoret e tastierës…
 	Keyboard shortcuts saved	Shkurtoret e tastierës u ruajtën
 	Keyboard shortcuts unchanged	Shkurtoret e tastierës nuk ndryshuan
@@ -171,6 +175,8 @@
 	PNG image	Imazh PNG
 	Parameters	Parametrat
 	Paste	Ngjit
+	Pause	Pauzë
+	Play	Luaj
 	Points	Pikat
 	Poisson	Poisson
 	Preferences	Preferencat
@@ -202,6 +208,8 @@
 	Rename Block	Riemërto bllokun
 	Rename Model	Riemërto modelin
 	Replace Model	Zëvendëso modelin
+	Replication 1 · {time} of {end} {unit}	Përsëritja 1 · {time} nga {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Përsëritja 1 · {time} nga {end} {unit} · ngrohja
 	Replications	Përsëritjet
 	Resource pool	Grup burimesh
 	Resource pools	Grupet e burimeve
@@ -212,7 +220,9 @@
 	Run	Ekzekuto
 	Run cancelled	Ekzekutimi u anulua
 	Run experiment	Ekzekuto eksperimentin
+	Run replication 1 step by step and see each block's queue on the diagram	Ekzekuto përsëritjen 1 hap pas hapi dhe shiko radhën e çdo blloku në diagram
 	Run the experiment ({shortcut})	Ekzekuto eksperimentin ({shortcut})
+	Run the next event	Ekzekuto ngjarjen e radhës
 	Running	Duke u ekzekutuar
 	Running…	Duke u ekzekutuar…
 	Save	Ruaj
@@ -223,6 +233,7 @@
 	Scale	Shkalla
 	Seed	Fara e rastësisë
 	Select All	Përzgjidh të gjitha
+	Select a block to see its queue over time.	Përzgjidhni një bllok për të parë radhën e tij gjatë kohës.
 	Service time	Koha e shërbimit
 	Services	Shërbimet
 	Set Property	Cakto vetinë
@@ -234,24 +245,31 @@
 	Share of units blocked	Pjesa e njësive të bllokuara
 	Show All	Shfaqi të gjitha
 	Show {id}	Shfaq {id}
+	Speed	Shpejtësia
 	Split batches	Ndaj grupet
 	Split or join	Ndaj ose bashko
 	Split or join (all ways)	Ndaj ose bashko (të gjitha rrugët)
 	Spread out	Shpërndaj
 	Stages (k)	Fazat (k)
 	Standard deviation	Devijimi standard
+	Step	Hap
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft u mbyll me ndryshime të paruajtura në {name}. Rikthejini si model pa titull ose hidhini poshtë.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft lexon modele procesesh nga skedarë BPMN ose XPDL me të dhëna simulimi BPSim, i ekzekuton si eksperimente me përsëritje dhe raporton çdo rezultat bashkë me intervalin e besimit.
 	StochCraft {version} · model {digest}	StochCraft {version} · modeli {digest}
+	Stop Watching	Ndalo vëzhgimin
 	Stop setting {name}	Ndalo caktimin e {name}
+	Stop watching	Ndalo vëzhgimin
+	Stopped watching	Vëzhgimi u ndal
 	Tandem line	Linja në seri
 	Task	Detyrë
 	Task with a resource	Detyrë me burim
 	Task with shared resources	Detyrë me burime të përbashkëta
 	Text	Tekst
+	The model changed, so watching stopped	Modeli ndryshoi, prandaj vëzhgimi u ndal
 	The model: its experiment, connections and problems	Modeli: eksperimenti, lidhjet dhe problemet
 	This block has a warning	Ky bllok ka një paralajmërim
 	This block has an error	Ky bllok ka një gabim
+	This run	Ky ekzekutim
 	Time between arrivals	Koha ndërmjet mbërritjeve
 	Time unit	Njësia e kohës
 	To	Te
@@ -274,10 +292,14 @@
 	Utilisation	Shfrytëzimi
 	Value	Vlera
 	View	Shiko
+	Waiting over time	Në pritje gjatë kohës
 	Waiting room	Dhoma e pritjes
 	Warm-up	Ngrohja
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Ngrohje {warmup} {unit}, pastaj matje për {duration} {unit}
 	Warning	Paralajmërim
+	Watch a Run	Vëzhgo një ekzekutim
+	Watch a run	Vëzhgo një ekzekutim
+	Watching replication 1	Po vëzhgohet përsëritja 1
 	Weibull	Weibull
 	Whole number	Numër i plotë
 	Window	Dritarja
@@ -309,14 +331,23 @@
 	the run stopped	ekzekutimi u ndal
 	the settings could not be saved: {error}	cilësimet nuk mund të ruheshin: {error}
 	there are no charts to export	nuk ka grafikë për eksport
+	time	koha
 	to {block}	te {block}
 	unlimited	pa kufi
 	years	vite
+	{busy} busy	{busy} të zëna
+	{entered} in, {left} out, {lost} lost	{entered} hyrje, {left} dalje, {lost} të humbura
 	{field}: not editable here yet	{field}: ende nuk mund të redaktohet këtu
 	{id}: a probability is a number from 0 to 1	{id}: probabiliteti është numër nga 0 deri në 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — redaktuar
+	{n} created	{n} të krijuara
+	{n} done	{n} të përfunduara
+	{n} inside	{n} brenda
+	{n} waiting	{n} në pritje
+	{n} {unit} per second	{n} {unit} në sekondë
 	{property} (set to, mean)	{property} (vlera e caktuar, mesatarja)
+	{title}: now {now}, at most {most}	{title}: tani {now}, më së shumti {most}
 	± 95% CI	± 95% interval besimi
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± është gjysma e gjerësisë së një intervali besimi Student-t prej 95% për mesataren e përsëritjeve.
 	· no results yet	· ende nuk ka rezultate

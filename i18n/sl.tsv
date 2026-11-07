@@ -106,6 +106,7 @@
 	Exported {file}	Izvoženo {file}
 	Expression	Izraz
 	File	Datoteka
+	Finished at {time} {unit}	Končano ob {time} {unit}
 	Fit	Prilagodi
 	Fit the diagram to the view	Prilagodi diagram pogledu
 	Flows	Tokovi
@@ -115,6 +116,9 @@
 	Help	Pomoč
 	Hide Others	Skrij druge
 	Hide {app}	Skrij {app}
+	Inside over time	Notri skozi čas
+	Jump	Skoči
+	Jump to time	Skoči na čas
 	Keyboard Shortcuts…	Bližnjice na tipkovnici…
 	Keyboard shortcuts saved	Bližnjice na tipkovnici shranjene
 	Keyboard shortcuts unchanged	Bližnjice na tipkovnici nespremenjene
@@ -171,6 +175,8 @@
 	PNG image	Slika PNG
 	Parameters	Parametri
 	Paste	Prilepi
+	Pause	Premor
+	Play	Predvajaj
 	Points	Točke
 	Poisson	Poissonova
 	Preferences	Nastavitve
@@ -202,6 +208,8 @@
 	Rename Block	Preimenuj blok
 	Rename Model	Preimenuj model
 	Replace Model	Zamenjaj model
+	Replication 1 · {time} of {end} {unit}	Ponovitev 1 · {time} od {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Ponovitev 1 · {time} od {end} {unit} · ogrevanje
 	Replications	Ponovitve
 	Resource pool	Skupina virov
 	Resource pools	Skupine virov
@@ -212,7 +220,9 @@
 	Run	Zaženi
 	Run cancelled	Izvajanje preklicano
 	Run experiment	Zaženi poskus
+	Run replication 1 step by step and see each block's queue on the diagram	Zaženi ponovitev 1 korak za korakom in spremljaj vrsto vsakega bloka v diagramu
 	Run the experiment ({shortcut})	Zaženi poskus ({shortcut})
+	Run the next event	Izvedi naslednji dogodek
 	Running	Izvaja se
 	Running…	Izvaja se…
 	Save	Shrani
@@ -223,6 +233,7 @@
 	Scale	Merilo
 	Seed	Seme
 	Select All	Izberi vse
+	Select a block to see its queue over time.	Izberite blok, da vidite njegovo vrsto skozi čas.
 	Service time	Čas strežbe
 	Services	Storitve
 	Set Property	Nastavi lastnost
@@ -234,24 +245,31 @@
 	Share of units blocked	Delež blokiranih enot
 	Show All	Pokaži vse
 	Show {id}	Prikaži {id}
+	Speed	Hitrost
 	Split batches	Razdelitev serij
 	Split or join	Razdeli ali združi
 	Split or join (all ways)	Razdeli ali združi (vse poti)
 	Spread out	Razporedi
 	Stages (k)	Stopnje (k)
 	Standard deviation	Standardni odklon
+	Step	Korak
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft se je zaprl z neshranjenimi spremembami v modelu {name}. Obnovite jih kot neimenovan model ali jih zavrzite.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft bere procesne modele iz datotek BPMN ali XPDL s simulacijskimi podatki BPSim, jih izvaja kot poskuse s ponovitvami in vsak rezultat poda z intervalom zaupanja.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop Watching	Ustavi spremljanje
 	Stop setting {name}	Nehaj nastavljati {name}
+	Stop watching	Ustavi spremljanje
+	Stopped watching	Spremljanje ustavljeno
 	Tandem line	Zaporedna linija
 	Task	Naloga
 	Task with a resource	Naloga z virom
 	Task with shared resources	Naloga s skupnimi viri
 	Text	Besedilo
+	The model changed, so watching stopped	Model se je spremenil, zato se je spremljanje ustavilo
 	The model: its experiment, connections and problems	Model: poskus, povezave in težave
 	This block has a warning	Ta blok ima opozorilo
 	This block has an error	Ta blok ima napako
+	This run	Ta zagon
 	Time between arrivals	Čas med prihodi
 	Time unit	Časovna enota
 	To	V
@@ -274,10 +292,14 @@
 	Utilisation	Izkoriščenost
 	Value	Vrednost
 	View	Pogled
+	Waiting over time	Čakajoči skozi čas
 	Waiting room	Čakalnica
 	Warm-up	Ogrevanje
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Ogrevanje {warmup} {unit}, nato merjenje {duration} {unit}
 	Warning	Opozorilo
+	Watch a Run	Spremljaj zagon
+	Watch a run	Spremljaj zagon
+	Watching replication 1	Spremljanje ponovitve 1
 	Weibull	Weibullova
 	Whole number	Celo število
 	Window	Okno
@@ -309,14 +331,23 @@
 	the run stopped	izvajanje se je ustavilo
 	the settings could not be saved: {error}	nastavitev ni bilo mogoče shraniti: {error}
 	there are no charts to export	ni grafov za izvoz
+	time	čas
 	to {block}	v {block}
 	unlimited	neomejeno
 	years	leta
+	{busy} busy	Zasedeno: {busy}
+	{entered} in, {left} out, {lost} lost	Vstopilo: {entered}, izstopilo: {left}, izgubljeno: {lost}
 	{field}: not editable here yet	{field}: tukaj še ni mogoče urejati
 	{id}: a probability is a number from 0 to 1	{id}: verjetnost je število od 0 do 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — urejeno
+	{n} created	Ustvarjeno: {n}
+	{n} done	Končano: {n}
+	{n} inside	Notri: {n}
+	{n} waiting	Čaka: {n}
+	{n} {unit} per second	{n} {unit} na sekundo
 	{property} (set to, mean)	{property} (nastavljena vrednost, povprečje)
+	{title}: now {now}, at most {most}	{title}: zdaj {now}, največ {most}
 	± 95% CI	± 95% interval zaupanja
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± je polovica širine 95% Student-t intervala zaupanja za povprečje med ponovitvami.
 	· no results yet	· rezultatov še ni

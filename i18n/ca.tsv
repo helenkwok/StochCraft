@@ -106,6 +106,7 @@
 	Exported {file}	S'ha exportat {file}
 	Expression	Expressió
 	File	Fitxer
+	Finished at {time} {unit}	Ha acabat a {time} {unit}
 	Fit	Ajusta
 	Fit the diagram to the view	Ajusta el diagrama a la vista
 	Flows	Fluxos
@@ -115,6 +116,9 @@
 	Help	Ajuda
 	Hide Others	Amaga els altres
 	Hide {app}	Amaga {app}
+	Inside over time	A dins al llarg del temps
+	Jump	Ves-hi
+	Jump to time	Ves a l'instant
 	Keyboard Shortcuts…	Dreceres de teclat…
 	Keyboard shortcuts saved	Dreceres de teclat desades
 	Keyboard shortcuts unchanged	Dreceres de teclat sense canvis
@@ -171,6 +175,8 @@
 	PNG image	Imatge PNG
 	Parameters	Paràmetres
 	Paste	Enganxa
+	Pause	Pausa
+	Play	Reprodueix
 	Points	Punts
 	Poisson	Poisson
 	Preferences	Preferències
@@ -202,6 +208,8 @@
 	Rename Block	Canvia el nom del bloc
 	Rename Model	Canvia el nom del model
 	Replace Model	Substitueix el model
+	Replication 1 · {time} of {end} {unit}	Rèplica 1 · {time} de {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Rèplica 1 · {time} de {end} {unit} · escalfament
 	Replications	Rèpliques
 	Resource pool	Grup de recursos
 	Resource pools	Grups de recursos
@@ -212,7 +220,9 @@
 	Run	Executa
 	Run cancelled	Execució cancel·lada
 	Run experiment	Executa l'experiment
+	Run replication 1 step by step and see each block's queue on the diagram	Executa la rèplica 1 pas a pas i mostra la cua de cada bloc al diagrama
 	Run the experiment ({shortcut})	Executa l'experiment ({shortcut})
+	Run the next event	Executa l'esdeveniment següent
 	Running	En execució
 	Running…	Executant…
 	Save	Desa
@@ -223,6 +233,7 @@
 	Scale	Escala
 	Seed	Llavor
 	Select All	Selecciona-ho tot
+	Select a block to see its queue over time.	Seleccioneu un bloc per veure'n la cua al llarg del temps.
 	Service time	Temps de servei
 	Services	Serveis
 	Set Property	Defineix la propietat
@@ -234,24 +245,31 @@
 	Share of units blocked	Proporció d'unitats bloquejades
 	Show All	Mostra-ho tot
 	Show {id}	Mostra {id}
+	Speed	Velocitat
 	Split batches	Separa els lots
 	Split or join	Divideix o uneix
 	Split or join (all ways)	Divideix o uneix (tots els camins)
 	Spread out	Distribueix
 	Stages (k)	Etapes (k)
 	Standard deviation	Desviació estàndard
+	Step	Pas
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft s'ha tancat amb canvis sense desar a {name}. Recupereu-los com a model sense títol o descarteu-los.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft llegeix models de processos de fitxers BPMN o XPDL amb dades de simulació BPSim, els executa en experiments amb rèpliques i mostra cada resultat amb el seu interval de confiança.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop Watching	Deixa d'observar
 	Stop setting {name}	Deixa de definir {name}
+	Stop watching	Deixa d'observar
+	Stopped watching	S'ha deixat d'observar
 	Tandem line	Línia en tàndem
 	Task	Tasca
 	Task with a resource	Tasca amb un recurs
 	Task with shared resources	Tasca amb recursos compartits
 	Text	Text
+	The model changed, so watching stopped	El model ha canviat, així que s'ha deixat d'observar
 	The model: its experiment, connections and problems	El model: experiment, connexions i problemes
 	This block has a warning	Aquest bloc té un avís
 	This block has an error	Aquest bloc té un error
+	This run	Aquesta execució
 	Time between arrivals	Temps entre arribades
 	Time unit	Unitat de temps
 	To	Cap a
@@ -274,10 +292,14 @@
 	Utilisation	Utilització
 	Value	Valor
 	View	Visualitza
+	Waiting over time	En espera al llarg del temps
 	Waiting room	Sala d'espera
 	Warm-up	Escalfament
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Escalfament de {warmup} {unit}, després {duration} {unit} mesurats
 	Warning	Avís
+	Watch a Run	Observa una execució
+	Watch a run	Observa una execució
+	Watching replication 1	S'està observant la rèplica 1
 	Weibull	Weibull
 	Whole number	Nombre enter
 	Window	Finestra
@@ -309,14 +331,23 @@
 	the run stopped	l'execució s'ha aturat
 	the settings could not be saved: {error}	no s'ha pogut desar la configuració: {error}
 	there are no charts to export	no hi ha gràfics per exportar
+	time	instant
 	to {block}	cap a {block}
 	unlimited	sense límit
 	years	anys
+	{busy} busy	{busy} ocupats
+	{entered} in, {left} out, {lost} lost	{entered} entrades, {left} sortides, {lost} perdudes
 	{field}: not editable here yet	{field}: encara no es pot editar aquí
 	{id}: a probability is a number from 0 to 1	{id}: una probabilitat és un nombre entre 0 i 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — editat
+	{n} created	{n} creats
+	{n} done	{n} acabats
+	{n} inside	{n} a dins
+	{n} waiting	{n} en espera
+	{n} {unit} per second	{n} {unit} per segon
 	{property} (set to, mean)	{property} (valor definit, mitjana)
+	{title}: now {now}, at most {most}	{title}: ara {now}, com a màxim {most}
 	± 95% CI	± IC del 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± és la semiamplada d'un interval de confiança Student-t del 95% de la mitjana entre rèpliques.
 	· no results yet	· encara no hi ha resultats

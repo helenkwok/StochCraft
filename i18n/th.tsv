@@ -106,6 +106,7 @@
 	Exported {file}	ส่งออก {file} แล้ว
 	Expression	นิพจน์
 	File	ไฟล์
+	Finished at {time} {unit}	สิ้นสุดที่ {time} {unit}
 	Fit	พอดี
 	Fit the diagram to the view	ปรับแผนภาพให้พอดีกับมุมมอง
 	Flows	โฟลว์
@@ -115,6 +116,9 @@
 	Help	วิธีใช้
 	Hide Others	ซ่อนรายการอื่น
 	Hide {app}	ซ่อน {app}
+	Inside over time	จำนวนภายในตามเวลา
+	Jump	ข้าม
+	Jump to time	ข้ามไปยังเวลา
 	Keyboard Shortcuts…	ปุ่มลัด…
 	Keyboard shortcuts saved	บันทึกปุ่มลัดแล้ว
 	Keyboard shortcuts unchanged	ปุ่มลัดไม่มีการเปลี่ยนแปลง
@@ -171,6 +175,8 @@
 	PNG image	ภาพ PNG
 	Parameters	พารามิเตอร์
 	Paste	วาง
+	Pause	หยุดชั่วคราว
+	Play	เล่น
 	Points	จุด
 	Poisson	ปัวซอง
 	Preferences	ค่ากำหนด
@@ -202,6 +208,8 @@
 	Rename Block	เปลี่ยนชื่อบล็อก
 	Rename Model	เปลี่ยนชื่อแบบจำลอง
 	Replace Model	แทนที่แบบจำลอง
+	Replication 1 · {time} of {end} {unit}	การจำลองซ้ำรอบที่ 1 · {time} จาก {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	การจำลองซ้ำรอบที่ 1 · {time} จาก {end} {unit} · ระยะอุ่นเครื่อง
 	Replications	จำนวนรอบการจำลองซ้ำ
 	Resource pool	กลุ่มทรัพยากร
 	Resource pools	กลุ่มทรัพยากร
@@ -212,7 +220,9 @@
 	Run	รัน
 	Run cancelled	ยกเลิกการรันแล้ว
 	Run experiment	รันการทดลอง
+	Run replication 1 step by step and see each block's queue on the diagram	รันการจำลองซ้ำรอบที่ 1 ทีละขั้นและดูคิวของแต่ละบล็อกบนแผนภาพ
 	Run the experiment ({shortcut})	รันการทดลอง ({shortcut})
+	Run the next event	รันเหตุการณ์ถัดไป
 	Running	กำลังรัน
 	Running…	กำลังรัน…
 	Save	บันทึก
@@ -223,6 +233,7 @@
 	Scale	มาตราส่วน
 	Seed	เมล็ดสุ่ม
 	Select All	เลือกทั้งหมด
+	Select a block to see its queue over time.	เลือกบล็อกเพื่อดูคิวตามเวลา
 	Service time	เวลาให้บริการ
 	Services	บริการ
 	Set Property	กำหนดคุณสมบัติ
@@ -234,24 +245,31 @@
 	Share of units blocked	สัดส่วนหน่วยที่ถูกบล็อก
 	Show All	แสดงทั้งหมด
 	Show {id}	แสดง {id}
+	Speed	ความเร็ว
 	Split batches	แยกชุด
 	Split or join	แยกหรือรวม
 	Split or join (all ways)	แยกหรือรวม (ทุกทาง)
 	Spread out	กระจาย
 	Stages (k)	จำนวนขั้น (k)
 	Standard deviation	ส่วนเบี่ยงเบนมาตรฐาน
+	Step	ทีละขั้น
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ปิดลงโดยยังมีการเปลี่ยนแปลงใน {name} ที่ไม่ได้บันทึก กู้คืนการเปลี่ยนแปลงเป็นโมเดลที่ไม่มีชื่อ หรือทิ้งการเปลี่ยนแปลงเหล่านั้น
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft อ่านโมเดลกระบวนการจากไฟล์ BPMN หรือ XPDL ที่มีข้อมูลการจำลอง BPSim นำไปรันเป็นการทดลองแบบทำซ้ำหลายครั้ง และรายงานผลแต่ละรายการพร้อมช่วงความเชื่อมั่น
 	StochCraft {version} · model {digest}	StochCraft {version} · แบบจำลอง {digest}
+	Stop Watching	หยุดเฝ้าดู
 	Stop setting {name}	หยุดกำหนดค่า {name}
+	Stop watching	หยุดเฝ้าดู
+	Stopped watching	หยุดเฝ้าดูแล้ว
 	Tandem line	สายงานต่อเนื่อง
 	Task	งาน
 	Task with a resource	งานที่ใช้ทรัพยากร
 	Task with shared resources	งานที่ใช้ทรัพยากรร่วมกัน
 	Text	ข้อความ
+	The model changed, so watching stopped	โมเดลเปลี่ยนไป จึงหยุดเฝ้าดู
 	The model: its experiment, connections and problems	แบบจำลอง: การทดลอง การเชื่อมต่อ และปัญหา
 	This block has a warning	บล็อกนี้มีคำเตือน
 	This block has an error	บล็อกนี้มีข้อผิดพลาด
+	This run	การรันนี้
 	Time between arrivals	เวลาระหว่างการมาถึง
 	Time unit	หน่วยเวลา
 	To	ไปยัง
@@ -274,10 +292,14 @@
 	Utilisation	อัตราการใช้ประโยชน์
 	Value	ค่า
 	View	มุมมอง
+	Waiting over time	จำนวนที่รอตามเวลา
 	Waiting room	พื้นที่รอ
 	Warm-up	ระยะอุ่นเครื่อง
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	อุ่นเครื่อง {warmup} {unit} จากนั้นวัดผล {duration} {unit}
 	Warning	คำเตือน
+	Watch a Run	เฝ้าดูการรัน
+	Watch a run	เฝ้าดูการรัน
+	Watching replication 1	กำลังเฝ้าดูการจำลองซ้ำรอบที่ 1
 	Weibull	ไวบูลล์
 	Whole number	จำนวนเต็ม
 	Window	หน้าต่าง
@@ -309,14 +331,23 @@
 	the run stopped	การรันหยุดแล้ว
 	the settings could not be saved: {error}	ไม่สามารถบันทึกการตั้งค่าได้: {error}
 	there are no charts to export	ไม่มีแผนภูมิให้ส่งออก
+	time	เวลา
 	to {block}	ไปยัง {block}
 	unlimited	ไม่จำกัด
 	years	ปี
+	{busy} busy	ไม่ว่าง {busy}
+	{entered} in, {left} out, {lost} lost	เข้า {entered} ออก {left} สูญหาย {lost}
 	{field}: not editable here yet	{field}: ยังแก้ไขที่นี่ไม่ได้
 	{id}: a probability is a number from 0 to 1	{id}: ความน่าจะเป็นต้องเป็นตัวเลขตั้งแต่ 0 ถึง 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — แก้ไขแล้ว
+	{n} created	สร้างแล้ว {n}
+	{n} done	เสร็จแล้ว {n}
+	{n} inside	ภายใน {n}
+	{n} waiting	รอ {n}
+	{n} {unit} per second	{n} {unit} ต่อวินาที
 	{property} (set to, mean)	{property} (กำหนดเป็น, ค่าเฉลี่ย)
+	{title}: now {now}, at most {most}	{title}: ขณะนี้ {now} สูงสุด {most}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± คือครึ่งหนึ่งของความกว้างของช่วงความเชื่อมั่น Student-t 95% สำหรับค่าเฉลี่ยจากการทดลองซ้ำ
 	· no results yet	· ยังไม่มีผลลัพธ์

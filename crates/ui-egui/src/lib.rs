@@ -19,6 +19,7 @@ pub use autosave::Autosave;
 mod editor;
 pub mod form;
 pub mod i18n;
+mod live;
 mod pools;
 mod results;
 pub mod theme;
@@ -226,6 +227,8 @@ pub struct App {
     selected: Option<String>,
     /// The flowchart's view, its multiple selection and its clipboard.
     canvas: canvas::Canvas,
+    /// A run being watched on the canvas (M3.5).
+    watching: Option<live::Watching>,
     /// The model last validated and its problems, so a frame validates at most once.
     problems_of: Option<(stochcraft_model::Model, Vec<editor::Problem>)>,
     /// Text being typed into form fields, until it commits.
@@ -291,6 +294,7 @@ impl App {
             styled: false,
             selected: None,
             canvas: canvas::Canvas::default(),
+            watching: None,
             problems_of: None,
             drafts: std::collections::HashMap::new(),
             connect_from: None,
@@ -561,6 +565,7 @@ impl App {
                 self.results = None;
                 self.selected = None;
                 self.canvas = canvas::Canvas::default();
+                self.watching = None;
                 self.drafts.clear();
                 self.show_results = false;
                 // Warnings and errors from reading the file and checking the model; information
@@ -754,6 +759,7 @@ impl App {
                     self.results = None;
                     self.selected = None;
                     self.canvas = canvas::Canvas::default();
+                    self.watching = None;
                     self.drafts.clear();
                     self.show_results = false;
                     self.info(t("New model"));
@@ -900,6 +906,9 @@ impl App {
         // The block list from the keyboard, when no field is being edited.
         let typing = ctx.memory(|m| m.focused().is_some());
         if !typing && !self.show_results {
+            if self.is_watching() && ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::Space)) {
+                self.toggle_playing();
+            }
             if ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::ArrowDown)) {
                 self.move_selection(true);
             }
@@ -942,6 +951,7 @@ impl App {
             self.applied_theme = Some(self.theme_choice);
         }
         self.shortcuts(&ctx);
+        self.tick_watching(&ctx);
         self.drop_stale_results();
         let p = theme::palette(&ctx);
 
@@ -1037,6 +1047,7 @@ impl App {
             ui.set_max_width(ui.available_width());
             self.editor(ui, p);
         });
+        self.watch_bar(ui, p);
         self.canvas(ui, p);
     }
 

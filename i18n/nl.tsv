@@ -106,6 +106,7 @@
 	Exported {file}	{file} geëxporteerd
 	Expression	Expressie
 	File	Bestand
+	Finished at {time} {unit}	Klaar op {time} {unit}
 	Fit	Passend maken
 	Fit the diagram to the view	Diagram passend in de weergave maken
 	Flows	Stromen
@@ -115,6 +116,9 @@
 	Help	Help
 	Hide Others	Anderen verbergen
 	Hide {app}	{app} verbergen
+	Inside over time	Binnen in de tijd
+	Jump	Ga
+	Jump to time	Ga naar tijdstip
 	Keyboard Shortcuts…	Sneltoetsen…
 	Keyboard shortcuts saved	Sneltoetsen opgeslagen
 	Keyboard shortcuts unchanged	Sneltoetsen ongewijzigd
@@ -171,6 +175,8 @@
 	PNG image	PNG-afbeelding
 	Parameters	Parameters
 	Paste	Plakken
+	Pause	Pauzeren
+	Play	Afspelen
 	Points	Punten
 	Poisson	Poisson
 	Preferences	Voorkeuren
@@ -202,6 +208,8 @@
 	Rename Block	Blok hernoemen
 	Rename Model	Model hernoemen
 	Replace Model	Model vervangen
+	Replication 1 · {time} of {end} {unit}	Herhaling 1 · {time} van {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Herhaling 1 · {time} van {end} {unit} · opwarmperiode
 	Replications	Herhalingen
 	Resource pool	Hulpbronnenpool
 	Resource pools	Hulpbronnenpools
@@ -212,7 +220,9 @@
 	Run	Uitvoeren
 	Run cancelled	Uitvoering geannuleerd
 	Run experiment	Experiment uitvoeren
+	Run replication 1 step by step and see each block's queue on the diagram	Herhaling 1 stap voor stap uitvoeren en de wachtrij van elk blok in het diagram zien
 	Run the experiment ({shortcut})	Het experiment uitvoeren ({shortcut})
+	Run the next event	Volgende gebeurtenis uitvoeren
 	Running	Wordt uitgevoerd
 	Running…	Wordt uitgevoerd…
 	Save	Opslaan
@@ -223,6 +233,7 @@
 	Scale	Schaal
 	Seed	Startwaarde
 	Select All	Alles selecteren
+	Select a block to see its queue over time.	Selecteer een blok om de wachtrij in de tijd te zien.
 	Service time	Servicetijd
 	Services	Diensten
 	Set Property	Eigenschap instellen
@@ -234,24 +245,31 @@
 	Share of units blocked	Aandeel geblokkeerde eenheden
 	Show All	Alles tonen
 	Show {id}	{id} tonen
+	Speed	Snelheid
 	Split batches	Batches splitsen
 	Split or join	Splitsen of samenvoegen
 	Split or join (all ways)	Splitsen of samenvoegen (alle routes)
 	Spread out	Verdelen
 	Stages (k)	Fasen (k)
 	Standard deviation	Standaardafwijking
+	Step	Stap
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft is afgesloten met niet-opgeslagen wijzigingen in {name}. Herstel deze als een naamloos model of verwerp ze.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft leest procesmodellen uit BPMN- of XPDL-bestanden met BPSim-simulatiegegevens, voert ze uit als experimenten met herhalingen en rapporteert elk resultaat met het bijbehorende betrouwbaarheidsinterval.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop Watching	Stoppen met volgen
 	Stop setting {name}	Instellen van {name} stoppen
+	Stop watching	Stoppen met volgen
+	Stopped watching	Gestopt met volgen
 	Tandem line	Tandemlijn
 	Task	Taak
 	Task with a resource	Taak met een hulpbron
 	Task with shared resources	Taak met gedeelde hulpbronnen
 	Text	Tekst
+	The model changed, so watching stopped	Het model is gewijzigd, dus het volgen is gestopt
 	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
 	This block has a warning	Dit blok heeft een waarschuwing
 	This block has an error	Dit blok heeft een fout
+	This run	Deze uitvoering
 	Time between arrivals	Tijd tussen aankomsten
 	Time unit	Tijdseenheid
 	To	Naar
@@ -274,10 +292,14 @@
 	Utilisation	Bezettingsgraad
 	Value	Waarde
 	View	Beeld
+	Waiting over time	Wachtend in de tijd
 	Waiting room	Wachtruimte
 	Warm-up	Opwarmperiode
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Opwarmen gedurende {warmup} {unit}, daarna {duration} {unit} meten
 	Warning	Waarschuwing
+	Watch a Run	Een uitvoering volgen
+	Watch a run	Een uitvoering volgen
+	Watching replication 1	Herhaling 1 wordt gevolgd
 	Weibull	Weibull
 	Whole number	Geheel getal
 	Window	Venster
@@ -309,14 +331,23 @@
 	the run stopped	de uitvoering is gestopt
 	the settings could not be saved: {error}	de instellingen konden niet worden opgeslagen: {error}
 	there are no charts to export	er zijn geen grafieken om te exporteren
+	time	tijdstip
 	to {block}	naar {block}
 	unlimited	onbeperkt
 	years	jaren
+	{busy} busy	{busy} bezet
+	{entered} in, {left} out, {lost} lost	{entered} in, {left} uit, {lost} verloren
 	{field}: not editable here yet	{field}: hier nog niet bewerkbaar
 	{id}: a probability is a number from 0 to 1	{id}: een kans is een getal tussen 0 en 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — bewerkt
+	{n} created	{n} gemaakt
+	{n} done	{n} klaar
+	{n} inside	{n} binnen
+	{n} waiting	{n} wachtend
+	{n} {unit} per second	{n} {unit} per seconde
 	{property} (set to, mean)	{property} (ingestelde waarde, gemiddelde)
+	{title}: now {now}, at most {most}	{title}: nu {now}, hoogstens {most}
 	± 95% CI	± 95%-BI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± is de halve breedte van een 95%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de herhalingen.
 	· no results yet	· nog geen resultaten

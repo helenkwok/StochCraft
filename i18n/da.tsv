@@ -106,6 +106,7 @@
 	Exported {file}	Eksporterede {file}
 	Expression	Udtryk
 	File	Filer
+	Finished at {time} {unit}	Færdig ved {time} {unit}
 	Fit	Tilpas
 	Fit the diagram to the view	Tilpas diagrammet til visningen
 	Flows	Flow
@@ -115,6 +116,9 @@
 	Help	Hjælp
 	Hide Others	Skjul andre
 	Hide {app}	Skjul {app}
+	Inside over time	Inde over tid
+	Jump	Gå
+	Jump to time	Gå til tidspunkt
 	Keyboard Shortcuts…	Tastaturgenveje…
 	Keyboard shortcuts saved	Tastaturgenveje gemt
 	Keyboard shortcuts unchanged	Tastaturgenveje uændrede
@@ -171,6 +175,8 @@
 	PNG image	PNG-billede
 	Parameters	Parametre
 	Paste	Indsæt
+	Pause	Pause
+	Play	Afspil
 	Points	Punkter
 	Poisson	Poisson
 	Preferences	Præferencer
@@ -202,6 +208,8 @@
 	Rename Block	Omdøb blok
 	Rename Model	Omdøb model
 	Replace Model	Erstat model
+	Replication 1 · {time} of {end} {unit}	Replikation 1 · {time} af {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Replikation 1 · {time} af {end} {unit} · opvarmning
 	Replications	Replikationer
 	Resource pool	Ressourcepulje
 	Resource pools	Ressourcepuljer
@@ -212,7 +220,9 @@
 	Run	Kør
 	Run cancelled	Kørsel annulleret
 	Run experiment	Kør eksperiment
+	Run replication 1 step by step and see each block's queue on the diagram	Kør replikation 1 trin for trin, og se hver bloks kø i diagrammet
 	Run the experiment ({shortcut})	Kør eksperimentet ({shortcut})
+	Run the next event	Kør den næste hændelse
 	Running	Kører
 	Running…	Kører…
 	Save	Gem
@@ -223,6 +233,7 @@
 	Scale	Skala
 	Seed	Tilfældighedsfrø
 	Select All	Vælg alt
+	Select a block to see its queue over time.	Vælg en blok for at se dens kø over tid.
 	Service time	Servicetid
 	Services	Tjenester
 	Set Property	Angiv egenskab
@@ -234,24 +245,31 @@
 	Share of units blocked	Andel blokerede enheder
 	Show All	Vis alle
 	Show {id}	Vis {id}
+	Speed	Hastighed
 	Split batches	Opdel partier
 	Split or join	Opdel eller sammenflet
 	Split or join (all ways)	Opdel eller sammenflet (alle veje)
 	Spread out	Fordel
 	Stages (k)	Trin (k)
 	Standard deviation	Standardafvigelse
+	Step	Trin
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft blev lukket med ændringer i {name}, som ikke var gemt. Gendan dem som en model uden titel, eller kassér dem.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft læser procesmodeller fra BPMN- eller XPDL-filer med BPSim-simuleringsdata, kører dem som eksperimenter med gentagelser og rapporterer hvert resultat med det tilhørende konfidensinterval.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop Watching	Stop med at følge
 	Stop setting {name}	Stop med at angive {name}
+	Stop watching	Stop med at følge
+	Stopped watching	Stoppede med at følge
 	Tandem line	Tandemlinje
 	Task	Opgave
 	Task with a resource	Opgave med ressource
 	Task with shared resources	Opgave med delte ressourcer
 	Text	Tekst
+	The model changed, so watching stopped	Modellen blev ændret, så følgningen stoppede
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
 	This block has a warning	Denne blok har en advarsel
 	This block has an error	Denne blok har en fejl
+	This run	Denne kørsel
 	Time between arrivals	Tid mellem ankomster
 	Time unit	Tidsenhed
 	To	Til
@@ -274,10 +292,14 @@
 	Utilisation	Udnyttelsesgrad
 	Value	Værdi
 	View	Vis
+	Waiting over time	Ventende over tid
 	Waiting room	Venteværelse
 	Warm-up	Opvarmning
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Opvarmning {warmup} {unit}, derefter måling i {duration} {unit}
 	Warning	Advarsel
+	Watch a Run	Følg en kørsel
+	Watch a run	Følg en kørsel
+	Watching replication 1	Følger replikation 1
 	Weibull	Weibull
 	Whole number	Heltal
 	Window	Vindue
@@ -309,14 +331,23 @@
 	the run stopped	kørslen stoppede
 	the settings could not be saved: {error}	indstillingerne kunne ikke gemmes: {error}
 	there are no charts to export	ingen diagrammer at eksportere
+	time	tidspunkt
 	to {block}	til {block}
 	unlimited	ubegrænset
 	years	år
+	{busy} busy	{busy} optaget
+	{entered} in, {left} out, {lost} lost	{entered} ind, {left} ud, {lost} tabt
 	{field}: not editable here yet	{field}: kan ikke redigeres her endnu
 	{id}: a probability is a number from 0 to 1	{id}: en sandsynlighed er et tal mellem 0 og 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — redigeret
+	{n} created	{n} oprettet
+	{n} done	{n} færdige
+	{n} inside	{n} inde
+	{n} waiting	{n} venter
+	{n} {unit} per second	{n} {unit} pr. sekund
 	{property} (set to, mean)	{property} (angivet værdi, gennemsnit)
+	{title}: now {now}, at most {most}	{title}: nu {now}, højst {most}
 	± 95% CI	± 95% KI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± er halvdelen af bredden af et 95% Student-t-konfidensinterval for gennemsnittet på tværs af gentagelser.
 	· no results yet	· endnu ingen resultater

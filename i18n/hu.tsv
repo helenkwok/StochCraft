@@ -106,6 +106,7 @@
 	Exported {file}	{file} exportálva
 	Expression	Kifejezés
 	File	Fájl
+	Finished at {time} {unit}	Befejeződött: {time} {unit}
 	Fit	Igazítás a nézethez
 	Fit the diagram to the view	A diagram igazítása a nézethez
 	Flows	Folyamatok
@@ -115,6 +116,9 @@
 	Help	Súgó
 	Hide Others	Többi elrejtése
 	Hide {app}	{app} elrejtése
+	Inside over time	Bent lévők az idő függvényében
+	Jump	Ugrás
+	Jump to time	Ugrás időpontra
 	Keyboard Shortcuts…	Billentyűparancsok…
 	Keyboard shortcuts saved	Billentyűparancsok mentve
 	Keyboard shortcuts unchanged	A billentyűparancsok nem változtak
@@ -171,6 +175,8 @@
 	PNG image	PNG-kép
 	Parameters	Paraméterek
 	Paste	Beillesztés
+	Pause	Szünet
+	Play	Lejátszás
 	Points	Pontok
 	Poisson	Poisson
 	Preferences	Beállítások
@@ -202,6 +208,8 @@
 	Rename Block	Blokk átnevezése
 	Rename Model	Modell átnevezése
 	Replace Model	Modell cseréje
+	Replication 1 · {time} of {end} {unit}	1. ismétlés · {time} / {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	1. ismétlés · {time} / {end} {unit} · bemelegítés
 	Replications	Ismétlések
 	Resource pool	Erőforráskészlet
 	Resource pools	Erőforráskészletek
@@ -212,7 +220,9 @@
 	Run	Futtatás
 	Run cancelled	Futtatás megszakítva
 	Run experiment	Kísérlet futtatása
+	Run replication 1 step by step and see each block's queue on the diagram	Az 1. ismétlés futtatása lépésenként, minden blokk sorával a diagramon
 	Run the experiment ({shortcut})	A kísérlet futtatása ({shortcut})
+	Run the next event	A következő esemény futtatása
 	Running	Fut
 	Running…	Futtatás…
 	Save	Mentés
@@ -223,6 +233,7 @@
 	Scale	Skála
 	Seed	Véletlenszám-mag
 	Select All	Az összes kijelölése
+	Select a block to see its queue over time.	Válasszon egy blokkot a sorának időbeli megtekintéséhez.
 	Service time	Kiszolgálási idő
 	Services	Szolgáltatások
 	Set Property	Tulajdonság beállítása
@@ -234,24 +245,31 @@
 	Share of units blocked	Blokkolt egységek aránya
 	Show All	Összes megjelenítése
 	Show {id}	{id} megjelenítése
+	Speed	Sebesség
 	Split batches	Kötegek szétbontása
 	Split or join	Szétválasztás vagy egyesítés
 	Split or join (all ways)	Szétválasztás vagy egyesítés (minden út)
 	Spread out	Elosztás
 	Stages (k)	Szakaszok (k)
 	Standard deviation	Szórás
+	Step	Lépés
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	A StochCraft úgy zárult be, hogy a(z) {name} nem mentett módosításokat tartalmazott. Állítsa vissza őket névtelen modellként, vagy vesse el őket.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	A StochCraft BPSim-szimulációs adatokat tartalmazó BPMN- vagy XPDL-fájlokból olvassa be a folyamatmodelleket, ismételt kísérletekben futtatja őket, és minden eredményt a konfidenciaintervallumával együtt jelenít meg.
 	StochCraft {version} · model {digest}	StochCraft {version} · modell {digest}
+	Stop Watching	Követés leállítása
 	Stop setting {name}	{name} beállításának leállítása
+	Stop watching	Követés leállítása
+	Stopped watching	A követés leállt
 	Tandem line	Tandemvonal
 	Task	Feladat
 	Task with a resource	Erőforrást használó feladat
 	Task with shared resources	Megosztott erőforrásokat használó feladat
 	Text	Szöveg
+	The model changed, so watching stopped	A modell megváltozott, ezért a követés leállt
 	The model: its experiment, connections and problems	A modell: kísérlet, kapcsolatok és problémák
 	This block has a warning	Ez a blokk figyelmeztetést tartalmaz
 	This block has an error	Ez a blokk hibát tartalmaz
+	This run	Ez a futtatás
 	Time between arrivals	Érkezések közötti idő
 	Time unit	Időegység
 	To	Ide
@@ -274,10 +292,14 @@
 	Utilisation	Kihasználtság
 	Value	Érték
 	View	Nézet
+	Waiting over time	Várakozók az idő függvényében
 	Waiting room	Várakozóhely
 	Warm-up	Bemelegítés
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Bemelegítés {warmup} {unit}, majd mérés {duration} {unit} ideig
 	Warning	Figyelmeztetés
+	Watch a Run	Futtatás követése
+	Watch a run	Futtatás követése
+	Watching replication 1	Az 1. ismétlés követése
 	Weibull	Weibull
 	Whole number	Egész szám
 	Window	Ablak
@@ -309,14 +331,23 @@
 	the run stopped	a futtatás leállt
 	the settings could not be saved: {error}	a beállítások mentése nem sikerült: {error}
 	there are no charts to export	nincs exportálható diagram
+	time	időpont
 	to {block}	ebbe: {block}
 	unlimited	korlátlan
 	years	év
+	{busy} busy	{busy} foglalt
+	{entered} in, {left} out, {lost} lost	{entered} be, {left} ki, {lost} elveszett
 	{field}: not editable here yet	{field}: itt még nem szerkeszthető
 	{id}: a probability is a number from 0 to 1	{id}: a valószínűség 0 és 1 közötti szám
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — szerkesztve
+	{n} created	{n} létrehozva
+	{n} done	{n} kész
+	{n} inside	{n} bent
+	{n} waiting	{n} várakozik
+	{n} {unit} per second	{n} {unit} másodpercenként
 	{property} (set to, mean)	{property} (beállított érték, átlag)
+	{title}: now {now}, at most {most}	{title}: most {now}, legfeljebb {most}
 	± 95% CI	± 95%-os konfidenciaintervallum
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	A ± az ismétlések átlagára számított 95%-os Student-t-konfidenciaintervallum fél szélessége.
 	· no results yet	· még nincsenek eredmények

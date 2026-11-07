@@ -106,6 +106,7 @@
 	Exported {file}	S-a exportat {file}
 	Expression	Expresie
 	File	Fișier
+	Finished at {time} {unit}	Încheiat la {time} {unit}
 	Fit	Încadrează
 	Fit the diagram to the view	Încadrează diagrama în vizualizare
 	Flows	Fluxuri
@@ -115,6 +116,9 @@
 	Help	Ajutor
 	Hide Others	Ascunde celelalte
 	Hide {app}	Ascunde {app}
+	Inside over time	În interior în timp
+	Jump	Salt
+	Jump to time	Salt la momentul
 	Keyboard Shortcuts…	Comenzi rapide de la tastatură…
 	Keyboard shortcuts saved	Comenzile rapide au fost salvate
 	Keyboard shortcuts unchanged	Comenzile rapide nu s-au modificat
@@ -171,6 +175,8 @@
 	PNG image	Imagine PNG
 	Parameters	Parametri
 	Paste	Lipește
+	Pause	Pauză
+	Play	Redare
 	Points	Puncte
 	Poisson	Poisson
 	Preferences	Preferințe
@@ -202,6 +208,8 @@
 	Rename Block	Redenumește blocul
 	Rename Model	Redenumește modelul
 	Replace Model	Înlocuiește modelul
+	Replication 1 · {time} of {end} {unit}	Replicarea 1 · {time} din {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Replicarea 1 · {time} din {end} {unit} · încălzire
 	Replications	Replicări
 	Resource pool	Grup de resurse
 	Resource pools	Grupuri de resurse
@@ -212,7 +220,9 @@
 	Run	Rulează
 	Run cancelled	Rulare anulată
 	Run experiment	Rulează experimentul
+	Run replication 1 step by step and see each block's queue on the diagram	Rulează replicarea 1 pas cu pas și vezi coada fiecărui bloc în diagramă
 	Run the experiment ({shortcut})	Rulează experimentul ({shortcut})
+	Run the next event	Rulează evenimentul următor
 	Running	Se rulează
 	Running…	Se rulează…
 	Save	Salvează
@@ -223,6 +233,7 @@
 	Scale	Scară
 	Seed	Sămânță
 	Select All	Selectează tot
+	Select a block to see its queue over time.	Selectați un bloc pentru a-i vedea coada în timp.
 	Service time	Timp de servire
 	Services	Servicii
 	Set Property	Setează proprietatea
@@ -234,24 +245,31 @@
 	Share of units blocked	Proporția unităților blocate
 	Show All	Afișează tot
 	Show {id}	Afișează {id}
+	Speed	Viteză
 	Split batches	Separarea loturilor
 	Split or join	Divizează sau unește
 	Split or join (all ways)	Divizează sau unește (toate căile)
 	Spread out	Distribuie
 	Stages (k)	Etape (k)
 	Standard deviation	Abatere standard
+	Step	Pas
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft s-a închis cu modificări nesalvate în {name}. Recuperați-le ca model fără titlu sau renunțați la ele.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft citește modele de procese din fișiere BPMN sau XPDL cu date de simulare BPSim, le rulează ca experimente cu replicări și raportează fiecare rezultat împreună cu intervalul său de încredere.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
+	Stop Watching	Oprește urmărirea
 	Stop setting {name}	Oprește setarea pentru {name}
+	Stop watching	Oprește urmărirea
+	Stopped watching	Urmărirea s-a oprit
 	Tandem line	Linie în tandem
 	Task	Sarcină
 	Task with a resource	Sarcină cu resursă
 	Task with shared resources	Sarcină cu resurse partajate
 	Text	Text
+	The model changed, so watching stopped	Modelul s-a schimbat, așa că urmărirea s-a oprit
 	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
 	This block has a warning	Acest bloc are un avertisment
 	This block has an error	Acest bloc are o eroare
+	This run	Această rulare
 	Time between arrivals	Timp între sosiri
 	Time unit	Unitate de timp
 	To	Către
@@ -274,10 +292,14 @@
 	Utilisation	Grad de utilizare
 	Value	Valoare
 	View	Vizualizare
+	Waiting over time	În așteptare în timp
 	Waiting room	Sală de așteptare
 	Warm-up	Perioadă de încălzire
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Încălzire {warmup} {unit}, apoi măsurare timp de {duration} {unit}
 	Warning	Avertisment
+	Watch a Run	Urmărește o rulare
+	Watch a run	Urmărește o rulare
+	Watching replication 1	Se urmărește replicarea 1
 	Weibull	Weibull
 	Whole number	Număr întreg
 	Window	Fereastră
@@ -309,14 +331,23 @@
 	the run stopped	rularea s-a oprit
 	the settings could not be saved: {error}	setările nu au putut fi salvate: {error}
 	there are no charts to export	nu există grafice de exportat
+	time	moment
 	to {block}	către {block}
 	unlimited	nelimitat
 	years	ani
+	{busy} busy	Ocupate: {busy}
+	{entered} in, {left} out, {lost} lost	Intrate: {entered}, ieșite: {left}, pierdute: {lost}
 	{field}: not editable here yet	{field}: nu se poate edita aici deocamdată
 	{id}: a probability is a number from 0 to 1	{id}: probabilitatea este un număr între 0 și 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — modificat
+	{n} created	Create: {n}
+	{n} done	Terminate: {n}
+	{n} inside	În interior: {n}
+	{n} waiting	În așteptare: {n}
+	{n} {unit} per second	{n} {unit} pe secundă
 	{property} (set to, mean)	{property} (valoare setată, medie)
+	{title}: now {now}, at most {most}	{title}: acum {now}, cel mult {most}
 	± 95% CI	± IC 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± reprezintă jumătate din lățimea unui interval de încredere Student-t de 95% pentru media dintre replicări.
 	· no results yet	· nu există încă rezultate

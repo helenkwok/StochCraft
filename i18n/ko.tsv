@@ -106,6 +106,7 @@
 	Exported {file}	{file} 내보냄
 	Expression	식
 	File	파일
+	Finished at {time} {unit}	{time} {unit}에 끝남
 	Fit	맞춤
 	Fit the diagram to the view	다이어그램을 보기에 맞춤
 	Flows	흐름
@@ -115,6 +116,9 @@
 	Help	도움말
 	Hide Others	다른 항목 숨기기
 	Hide {app}	{app} 숨기기
+	Inside over time	시간에 따른 내부 수
+	Jump	이동
+	Jump to time	이동할 시간
 	Keyboard Shortcuts…	키보드 단축키…
 	Keyboard shortcuts saved	키보드 단축키가 저장되었습니다
 	Keyboard shortcuts unchanged	키보드 단축키가 변경되지 않았습니다
@@ -171,6 +175,8 @@
 	PNG image	PNG 이미지
 	Parameters	매개변수
 	Paste	붙여넣기
+	Pause	일시 중지
+	Play	재생
 	Points	점
 	Poisson	포아송 분포
 	Preferences	환경 설정
@@ -202,6 +208,8 @@
 	Rename Block	블록 이름 변경
 	Rename Model	모델 이름 변경
 	Replace Model	모델 바꾸기
+	Replication 1 · {time} of {end} {unit}	반복 실행 1 · {time} / {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	반복 실행 1 · {time} / {end} {unit} · 준비 기간
 	Replications	반복 실행 횟수
 	Resource pool	자원 풀
 	Resource pools	자원 풀
@@ -212,7 +220,9 @@
 	Run	실행
 	Run cancelled	실행이 취소되었습니다
 	Run experiment	실험 실행
+	Run replication 1 step by step and see each block's queue on the diagram	반복 실행 1을 단계별로 실행하고 다이어그램에서 각 블록의 대기열 보기
 	Run the experiment ({shortcut})	실험 실행 ({shortcut})
+	Run the next event	다음 이벤트 실행
 	Running	실행 중
 	Running…	실행 중…
 	Save	저장
@@ -223,6 +233,7 @@
 	Scale	척도
 	Seed	난수 시드
 	Select All	모두 선택
+	Select a block to see its queue over time.	블록을 선택하면 시간에 따른 대기열을 볼 수 있습니다.
 	Service time	서비스 시간
 	Services	서비스
 	Set Property	속성 설정
@@ -234,24 +245,31 @@
 	Share of units blocked	자원 단위 차단 비율
 	Show All	모두 표시
 	Show {id}	{id} 표시
+	Speed	속도
 	Split batches	배치 분리
 	Split or join	분할 또는 병합
 	Split or join (all ways)	분할 또는 병합(모든 경로)
 	Spread out	균등 배치
 	Stages (k)	단계 수 (k)
 	Standard deviation	표준 편차
+	Step	단계
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft가 {name}의 변경 사항을 저장하지 않은 채 종료되었습니다. 변경 사항을 제목 없는 모델로 복구하거나 버리세요.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft는 BPSim 시뮬레이션 데이터가 포함된 BPMN 또는 XPDL 파일에서 프로세스 모델을 읽고, 반복 실험으로 실행한 뒤 각 결과를 신뢰 구간과 함께 보고합니다.
 	StochCraft {version} · model {digest}	StochCraft {version} · 모델 {digest}
+	Stop Watching	관찰 중지
 	Stop setting {name}	{name} 설정 중지
+	Stop watching	관찰 중지
+	Stopped watching	관찰을 중지함
 	Tandem line	직렬 라인
 	Task	작업
 	Task with a resource	자원을 사용하는 작업
 	Task with shared resources	공유 자원을 사용하는 작업
 	Text	텍스트
+	The model changed, so watching stopped	모델이 변경되어 관찰을 중지함
 	The model: its experiment, connections and problems	모델: 실험, 연결 및 문제
 	This block has a warning	이 블록에 경고가 있습니다
 	This block has an error	이 블록에 오류가 있습니다
+	This run	이 실행
 	Time between arrivals	도착 간격
 	Time unit	시간 단위
 	To	끝 블록
@@ -274,10 +292,14 @@
 	Utilisation	가동률
 	Value	값
 	View	보기
+	Waiting over time	시간에 따른 대기 수
 	Waiting room	대기실
 	Warm-up	준비 기간
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} 준비 후 {duration} {unit} 측정
 	Warning	경고
+	Watch a Run	실행 관찰
+	Watch a run	실행 관찰
+	Watching replication 1	반복 실행 1 관찰 중
 	Weibull	와이블 분포
 	Whole number	정수
 	Window	창
@@ -309,14 +331,23 @@
 	the run stopped	실행이 중지되었습니다
 	the settings could not be saved: {error}	설정을 저장할 수 없습니다: {error}
 	there are no charts to export	내보낼 차트가 없습니다
+	time	시간
 	to {block}	{block}(으)로
 	unlimited	무제한
 	years	년
+	{busy} busy	사용 중 {busy}
+	{entered} in, {left} out, {lost} lost	들어옴 {entered}, 나감 {left}, 손실 {lost}
 	{field}: not editable here yet	{field}: 여기서는 아직 편집할 수 없습니다
 	{id}: a probability is a number from 0 to 1	{id}: 확률은 0에서 1 사이의 숫자여야 합니다
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — 편집됨
+	{n} created	생성 {n}
+	{n} done	완료 {n}
+	{n} inside	내부 {n}
+	{n} waiting	대기 {n}
+	{n} {unit} per second	초당 {n} {unit}
 	{property} (set to, mean)	{property}(설정값, 평균)
+	{title}: now {now}, at most {most}	{title}: 현재 {now}, 최대 {most}
 	± 95% CI	± 95% 신뢰 구간
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	±는 반복 실험의 평균에 대한 95% Student-t 신뢰 구간 너비의 절반입니다.
 	· no results yet	· 아직 결과가 없습니다

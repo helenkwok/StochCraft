@@ -106,6 +106,7 @@
 	Exported {file}	ექსპორტირებულია {file}
 	Expression	გამოსახულება
 	File	ფაილი
+	Finished at {time} {unit}	დასრულდა {time} {unit}-ზე
 	Fit	მორგება
 	Fit the diagram to the view	დიაგრამის ხედზე მორგება
 	Flows	ნაკადები
@@ -115,6 +116,9 @@
 	Help	დახმარება
 	Hide Others	სხვების დამალვა
 	Hide {app}	{app}-ის დამალვა
+	Inside over time	შიგნით დროის მიხედვით
+	Jump	გადასვლა
+	Jump to time	დროზე გადასვლა
 	Keyboard Shortcuts…	კლავიატურის მალსახმობები…
 	Keyboard shortcuts saved	კლავიატურის მალსახმობები შენახულია
 	Keyboard shortcuts unchanged	კლავიატურის მალსახმობები უცვლელია
@@ -171,6 +175,8 @@
 	PNG image	PNG გამოსახულება
 	Parameters	პარამეტრები
 	Paste	ჩასმა
+	Pause	პაუზა
+	Play	დაკვრა
 	Points	წერტილები
 	Poisson	პუასონი
 	Preferences	პარამეტრები
@@ -202,6 +208,8 @@
 	Rename Block	ბლოკის გადარქმევა
 	Rename Model	მოდელის გადარქმევა
 	Replace Model	მოდელის ჩანაცვლება
+	Replication 1 · {time} of {end} {unit}	გამეორება 1 · {time} / {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	გამეორება 1 · {time} / {end} {unit} · გახურების პერიოდი
 	Replications	გამეორებები
 	Resource pool	რესურსების პული
 	Resource pools	რესურსების პულები
@@ -212,7 +220,9 @@
 	Run	გაშვება
 	Run cancelled	გაშვება გაუქმდა
 	Run experiment	ექსპერიმენტის გაშვება
+	Run replication 1 step by step and see each block's queue on the diagram	გამეორება 1-ის ნაბიჯ-ნაბიჯ გაშვება და თითოეული ბლოკის რიგის ნახვა დიაგრამაზე
 	Run the experiment ({shortcut})	ექსპერიმენტის გაშვება ({shortcut})
+	Run the next event	შემდეგი მოვლენის შესრულება
 	Running	მიმდინარეობს
 	Running…	მიმდინარეობს…
 	Save	შენახვა
@@ -223,6 +233,7 @@
 	Scale	მასშტაბი
 	Seed	შემთხვევითი რიცხვების საწყისი მნიშვნელობა
 	Select All	ყველას მონიშვნა
+	Select a block to see its queue over time.	აირჩიეთ ბლოკი, რომ ნახოთ მისი რიგი დროის მიხედვით.
 	Service time	მომსახურების დრო
 	Services	სერვისები
 	Set Property	თვისების დაყენება
@@ -234,24 +245,31 @@
 	Share of units blocked	დაბლოკილი ერთეულების წილი
 	Show All	ყველას ჩვენება
 	Show {id}	{id}-ის ჩვენება
+	Speed	სიჩქარე
 	Split batches	პარტიების დაყოფა
 	Split or join	გაყოფა ან გაერთიანება
 	Split or join (all ways)	გაყოფა ან გაერთიანება (ყველა გზა)
 	Spread out	განაწილება
 	Stages (k)	ეტაპები (k)
 	Standard deviation	სტანდარტული გადახრა
+	Step	ნაბიჯი
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft დაიხურა {name}-ში შეუნახავი ცვლილებებით. აღადგინეთ ისინი უსათაურო მოდელად ან გააუქმეთ.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft კითხულობს პროცესის მოდელებს BPMN ან XPDL ფაილებიდან, რომლებიც შეიცავს BPSim სიმულაციის მონაცემებს, ატარებს მათ რეპლიკაციურ ექსპერიმენტებად და თითოეულ შედეგს შესაბამის ნდობის ინტერვალთან ერთად აჩვენებს.
 	StochCraft {version} · model {digest}	StochCraft {version} · მოდელი {digest}
+	Stop Watching	დაკვირვების შეწყვეტა
 	Stop setting {name}	{name}-ის დაყენების შეწყვეტა
+	Stop watching	დაკვირვების შეწყვეტა
+	Stopped watching	დაკვირვება შეწყდა
 	Tandem line	თანმიმდევრული ხაზი
 	Task	დავალება
 	Task with a resource	დავალება რესურსით
 	Task with shared resources	დავალება საზიარო რესურსებით
 	Text	ტექსტი
+	The model changed, so watching stopped	მოდელი შეიცვალა, ამიტომ დაკვირვება შეწყდა
 	The model: its experiment, connections and problems	მოდელი: ექსპერიმენტი, კავშირები და პრობლემები
 	This block has a warning	ამ ბლოკს აქვს გაფრთხილება
 	This block has an error	ამ ბლოკს აქვს შეცდომა
+	This run	ეს გაშვება
 	Time between arrivals	შემოსვლებს შორის დრო
 	Time unit	დროის ერთეული
 	To	-მდე
@@ -274,10 +292,14 @@
 	Utilisation	გამოყენების დონე
 	Value	მნიშვნელობა
 	View	ხედი
+	Waiting over time	მომლოდინეები დროის მიხედვით
 	Waiting room	მოსაცდელი სივრცე
 	Warm-up	გახურების პერიოდი
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	გახურება {warmup} {unit}, შემდეგ გაზომვა {duration} {unit}
 	Warning	გაფრთხილება
+	Watch a Run	გაშვებაზე დაკვირვება
+	Watch a run	გაშვებაზე დაკვირვება
+	Watching replication 1	მიმდინარეობს დაკვირვება გამეორება 1-ზე
 	Weibull	ვეიბული
 	Whole number	მთელი რიცხვი
 	Window	ფანჯარა
@@ -309,14 +331,23 @@
 	the run stopped	გაშვება შეჩერდა
 	the settings could not be saved: {error}	პარამეტრების შენახვა ვერ მოხერხდა: {error}
 	there are no charts to export	ექსპორტისთვის დიაგრამები არ არის
+	time	დრო
 	to {block}	{block}-მდე
 	unlimited	შეუზღუდავი
 	years	წელი
+	{busy} busy	დაკავებული: {busy}
+	{entered} in, {left} out, {lost} lost	შევიდა: {entered}, გავიდა: {left}, დაიკარგა: {lost}
 	{field}: not editable here yet	{field}: აქ ჯერ არ შეიძლება რედაქტირება
 	{id}: a probability is a number from 0 to 1	{id}: ალბათობა არის რიცხვი 0-დან 1-მდე
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — რედაქტირებულია
+	{n} created	შეიქმნა: {n}
+	{n} done	დასრულდა: {n}
+	{n} inside	შიგნით: {n}
+	{n} waiting	ელოდება: {n}
+	{n} {unit} per second	{n} {unit} წამში
 	{property} (set to, mean)	{property} (მითითებული მნიშვნელობა, საშუალო)
+	{title}: now {now}, at most {most}	{title}: ახლა {now}, მაქსიმუმ {most}
 	± 95% CI	± 95% ნდობის ინტერვალი
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± არის რეპლიკაციებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე.
 	· no results yet	· შედეგები ჯერ არ არის

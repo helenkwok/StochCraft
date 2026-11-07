@@ -35,6 +35,8 @@ pub const DELETE: &str = "edit.delete";
 pub const SELECT_ALL: &str = "edit.select_all";
 pub const RUN: &str = "model.run";
 pub const CANCEL_RUN: &str = "model.cancel_run";
+pub const WATCH: &str = "model.watch";
+pub const STOP_WATCHING: &str = "model.stop_watching";
 pub const THEME: &str = "view.theme";
 pub const LANGUAGE: &str = "view.language";
 pub const ABOUT: &str = "help.about";
@@ -68,6 +70,8 @@ fn catalog() -> Vec<Bindable> {
         b(SHORTCUTS, "Keyboard Shortcuts…", &["Edit", "Settings"], &[]),
         b(RUN, "Run", &["Model"], &["F5"]),
         b(CANCEL_RUN, "Cancel Run", &["Model"], &[]),
+        b(WATCH, "Watch a Run", &["Model"], &[]),
+        b(STOP_WATCHING, "Stop Watching", &["Model"], &[]),
         b(ABOUT, "About StochCraft", &["Help"], &[]),
     ]
 }
@@ -224,7 +228,13 @@ impl App {
 
         let model = Menu::new(
             t("Model"),
-            vec![item(RUN, "Run"), item(CANCEL_RUN, "Cancel Run")],
+            vec![
+                item(RUN, "Run"),
+                item(CANCEL_RUN, "Cancel Run"),
+                Node::Separator,
+                item(WATCH, "Watch a Run"),
+                item(STOP_WATCHING, "Stop Watching"),
+            ],
         );
         let help = Menu::new(
             t("Help"),
@@ -259,6 +269,8 @@ impl App {
             REDO => can_redo,
             RUN => !running && !self.engine.model().elements.is_empty(),
             CANCEL_RUN => running,
+            WATCH => !running && !self.is_watching() && !self.engine.model().elements.is_empty(),
+            STOP_WATCHING => self.is_watching(),
             CLEAR_RECENT => !self.recent.is_empty(),
             CUT | COPY | DUPLICATE => !self.selection().is_empty(),
             DELETE => !self.selection().is_empty() || self.canvas.flow.is_some(),
@@ -320,6 +332,8 @@ impl App {
             SELECT_ALL => self.select_all(),
             RUN => self.run(),
             CANCEL_RUN => self.cancel_run(),
+            WATCH => self.start_watching(),
+            STOP_WATCHING => self.stop_watching(),
             THEME => {
                 if let Some(t) = command.params.as_str().and_then(ThemeChoice::from_key) {
                     self.theme_choice = t;

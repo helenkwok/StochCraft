@@ -37,6 +37,13 @@ selection, align) sends them as one `batch`. Shape positions are part of the mod
 (`Model.layout`), read from and saved to the file's BPMN DI or XPDL graphics. The canvas keeps
 only its view (pan, zoom), the selection and the clipboard.
 
+### Watching a run
+
+Model ▸ Watch a Run (`ui-egui/src/live.rs`) steps replication 1 on the UI thread, a slice per
+frame, through the engine's `live_run`. It uses the same `blocks` runtime as Run, split so that
+one replication can stop at any time and be read. A plain run is that split run taken straight
+to its end, so the two cannot drift apart. Watching reads the model and never edits it.
+
 ### Translations
 
 Every interface string is English source text looked up through craft-i18n (`ui-egui/src/i18n.rs`:

@@ -106,6 +106,7 @@
 	Exported {file}	Eksporditud {file}
 	Expression	Avaldis
 	File	Fail
+	Finished at {time} {unit}	Lõppes ajal {time} {unit}
 	Fit	Sobita
 	Fit the diagram to the view	Sobita diagramm vaatesse
 	Flows	Vood
@@ -115,6 +116,9 @@
 	Help	Abi
 	Hide Others	Peida teised
 	Hide {app}	Peida {app}
+	Inside over time	Sees aja jooksul
+	Jump	Mine
+	Jump to time	Mine ajahetkele
 	Keyboard Shortcuts…	Klaviatuuri otseteed…
 	Keyboard shortcuts saved	Klaviatuuri otseteed salvestatud
 	Keyboard shortcuts unchanged	Klaviatuuri otseteed muutmata
@@ -171,6 +175,8 @@
 	PNG image	PNG-pilt
 	Parameters	Parameetrid
 	Paste	Kleebi
+	Pause	Paus
+	Play	Esita
 	Points	Punktid
 	Poisson	Poisson
 	Preferences	Eelistused
@@ -202,6 +208,8 @@
 	Rename Block	Nimeta plokk ümber
 	Rename Model	Nimeta mudel ümber
 	Replace Model	Asenda mudel
+	Replication 1 · {time} of {end} {unit}	Kordus 1 · {time} / {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	Kordus 1 · {time} / {end} {unit} · soojendus
 	Replications	Kordused
 	Resource pool	Ressursikogum
 	Resource pools	Ressursikogumid
@@ -212,7 +220,9 @@
 	Run	Käivita
 	Run cancelled	Käivitus tühistatud
 	Run experiment	Käivita eksperiment
+	Run replication 1 step by step and see each block's queue on the diagram	Käivita kordus 1 samm-sammult ja vaata iga ploki järjekorda diagrammil
 	Run the experiment ({shortcut})	Käivita eksperiment ({shortcut})
+	Run the next event	Käivita järgmine sündmus
 	Running	Käib
 	Running…	Käivitamine…
 	Save	Salvesta
@@ -223,6 +233,7 @@
 	Scale	Skaala
 	Seed	Juhuarvuseeme
 	Select All	Vali kõik
+	Select a block to see its queue over time.	Vali plokk, et näha selle järjekorda aja jooksul.
 	Service time	Teenindusaeg
 	Services	Teenused
 	Set Property	Määra omadus
@@ -234,24 +245,31 @@
 	Share of units blocked	Blokeeritud ühikute osakaal
 	Show All	Näita kõiki
 	Show {id}	Näita {id}
+	Speed	Kiirus
 	Split batches	Partiide jagamine
 	Split or join	Hargneda või ühineda
 	Split or join (all ways)	Hargneda või ühineda (kõik teed)
 	Spread out	Jaota
 	Stages (k)	Etapid (k)
 	Standard deviation	Standardhälve
+	Step	Samm
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft sulgus, kui mudelis {name} oli salvestamata muudatusi. Taasta need nimetu mudelina või hülga need.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft loeb protsessimudeleid BPMN- või XPDL-failidest, mis sisaldavad BPSim-simulatsiooniandmeid, käivitab need korduskatsetena ning esitab iga tulemuse koos usaldusvahemikuga.
 	StochCraft {version} · model {digest}	StochCraft {version} · mudel {digest}
+	Stop Watching	Lõpeta jälgimine
 	Stop setting {name}	Lõpeta {name} määramine
+	Stop watching	Lõpeta jälgimine
+	Stopped watching	Jälgimine lõpetati
 	Tandem line	Tandemliin
 	Task	Ülesanne
 	Task with a resource	Ressursiga ülesanne
 	Task with shared resources	Jagatud ressurssidega ülesanne
 	Text	Tekst
+	The model changed, so watching stopped	Mudel muutus, seega jälgimine lõpetati
 	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
 	This block has a warning	Selles plokis on hoiatus
 	This block has an error	Selles plokis on viga
+	This run	See käivitus
 	Time between arrivals	Saabumiste vaheline aeg
 	Time unit	Ajaühik
 	To	Kuni
@@ -274,10 +292,14 @@
 	Utilisation	Kasutusmäär
 	Value	Väärtus
 	View	Vaade
+	Waiting over time	Ootel aja jooksul
 	Waiting room	Ooteruum
 	Warm-up	Soojendus
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Soojendus {warmup} {unit}, seejärel mõõtmine {duration} {unit}
 	Warning	Hoiatus
+	Watch a Run	Jälgi käivitust
+	Watch a run	Jälgi käivitust
+	Watching replication 1	Jälgitakse kordust 1
 	Weibull	Weibull
 	Whole number	Täisarv
 	Window	Aken
@@ -309,14 +331,23 @@
 	the run stopped	käivitus peatus
 	the settings could not be saved: {error}	seadeid ei õnnestunud salvestada: {error}
 	there are no charts to export	pole graafikuid, mida eksportida
+	time	aeg
 	to {block}	kuni {block}
 	unlimited	piiramatu
 	years	aastad
+	{busy} busy	{busy} hõivatud
+	{entered} in, {left} out, {lost} lost	{entered} sisse, {left} välja, {lost} kadunud
 	{field}: not editable here yet	{field}: siin ei saa veel muuta
 	{id}: a probability is a number from 0 to 1	{id}: tõenäosus on arv vahemikus 0 kuni 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — muudetud
+	{n} created	{n} loodud
+	{n} done	{n} valmis
+	{n} inside	{n} sees
+	{n} waiting	{n} ootel
+	{n} {unit} per second	{n} {unit} sekundis
 	{property} (set to, mean)	{property} (määratud väärtus, keskmine)
+	{title}: now {now}, at most {most}	{title}: praegu {now}, kõige rohkem {most}
 	± 95% CI	± 95% usaldusvahemik
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± on korduste keskmise 95% Student-t usaldusvahemiku poollaius.
 	· no results yet	· tulemusi veel pole

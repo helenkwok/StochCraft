@@ -106,6 +106,7 @@
 	Exported {file}	ສົ່ງອອກ {file} ແລ້ວ
 	Expression	ນິພົດ
 	File	ໄຟລ໌
+	Finished at {time} {unit}	ສິ້ນສຸດທີ່ {time} {unit}
 	Fit	ພໍດີ
 	Fit the diagram to the view	ປັບແຜນວາດໃຫ້ພໍດີກັບມຸມມອງ
 	Flows	ເສັ້ນທາງ
@@ -115,6 +116,9 @@
 	Help	ຊ່ວຍເຫຼືອ
 	Hide Others	ເຊື່ອງລາຍການອື່ນ
 	Hide {app}	ເຊື່ອງ {app}
+	Inside over time	ຈຳນວນພາຍໃນຕາມເວລາ
+	Jump	ຂ້າມ
+	Jump to time	ຂ້າມໄປຫາເວລາ
 	Keyboard Shortcuts…	ປຸ່ມລັດ…
 	Keyboard shortcuts saved	ບັນທຶກປຸ່ມລັດແລ້ວ
 	Keyboard shortcuts unchanged	ປຸ່ມລັດບໍ່ມີການປ່ຽນແປງ
@@ -171,6 +175,8 @@
 	PNG image	ຮູບພາບ PNG
 	Parameters	ພາລາມິເຕີ
 	Paste	ວາງ
+	Pause	ຢຸດຊົ່ວຄາວ
+	Play	ຫຼິ້ນ
 	Points	ຈຸດ
 	Poisson	ປົວຊົງ
 	Preferences	ຄ່າກຳນົດ
@@ -202,6 +208,8 @@
 	Rename Block	ປ່ຽນຊື່ບລັອກ
 	Rename Model	ປ່ຽນຊື່ແບບຈຳລອງ
 	Replace Model	ແທນທີ່ແບບຈຳລອງ
+	Replication 1 · {time} of {end} {unit}	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit}
+	Replication 1 · {time} of {end} {unit} · warm-up	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit} · ໄລຍະອຸ່ນເຄື່ອງ
 	Replications	ຈຳນວນຮອບຈຳລອງຊ້ຳ
 	Resource pool	ກຸ່ມຊັບພະຍາກອນ
 	Resource pools	ກຸ່ມຊັບພະຍາກອນ
@@ -212,7 +220,9 @@
 	Run	ປະມວນຜົນ
 	Run cancelled	ຍົກເລີກການປະມວນຜົນແລ້ວ
 	Run experiment	ປະມວນຜົນການທົດລອງ
+	Run replication 1 step by step and see each block's queue on the diagram	ປະມວນຜົນຮອບຈຳລອງທີ 1 ເທື່ອລະຂັ້ນ ແລະ ເບິ່ງຄິວຂອງແຕ່ລະບລັອກໃນແຜນວາດ
 	Run the experiment ({shortcut})	ປະມວນຜົນການທົດລອງ ({shortcut})
+	Run the next event	ປະມວນຜົນເຫດການຕໍ່ໄປ
 	Running	ກຳລັງປະມວນຜົນ
 	Running…	ກຳລັງປະມວນຜົນ…
 	Save	ບັນທຶກ
@@ -223,6 +233,7 @@
 	Scale	ມາດຕາສ່ວນ
 	Seed	ເມັດສຸ່ມ
 	Select All	ເລືອກທັງໝົດ
+	Select a block to see its queue over time.	ເລືອກບລັອກເພື່ອເບິ່ງຄິວຂອງມັນຕາມເວລາ.
 	Service time	ເວລາໃຫ້ບໍລິການ
 	Services	ບໍລິການ
 	Set Property	ຕັ້ງຄຸນສົມບັດ
@@ -234,24 +245,31 @@
 	Share of units blocked	ສັດສ່ວນໜ່ວຍທີ່ຖືກຂັດຂວາງ
 	Show All	ສະແດງທັງໝົດ
 	Show {id}	ສະແດງ {id}
+	Speed	ຄວາມໄວ
 	Split batches	ແຍກຊຸດ
 	Split or join	ແຍກ ຫຼື ລວມ
 	Split or join (all ways)	ແຍກ ຫຼື ລວມ (ທຸກທາງ)
 	Spread out	ກະຈາຍ
 	Stages (k)	ຂັ້ນຕອນ (k)
 	Standard deviation	ຄ່າຜັນຜວນມາດຕະຖານ
+	Step	ເທື່ອລະຂັ້ນ
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ປິດລົງໂດຍທີ່ການປ່ຽນແປງໃນ {name} ຍັງບໍ່ໄດ້ບັນທຶກ. ກູ້ຄືນເປັນແບບຈຳລອງທີ່ບໍ່ມີຊື່ ຫຼື ຍົກເລີກການປ່ຽນແປງນັ້ນ.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft ອ່ານແບບຈຳລອງຂະບວນການຈາກໄຟລ໌ BPMN ຫຼື XPDL ທີ່ມີຂໍ້ມູນການຈຳລອງ BPSim, ນຳໄປທົດລອງແບບເຮັດຊ້ຳຫຼາຍຄັ້ງ ແລະ ລາຍງານທຸກຜົນພ້ອມຊ່ວງຄວາມເຊື່ອໝັ້ນ.
 	StochCraft {version} · model {digest}	StochCraft {version} · ແບບຈຳລອງ {digest}
+	Stop Watching	ຢຸດຕິດຕາມ
 	Stop setting {name}	ຢຸດການຕັ້ງຄ່າ {name}
+	Stop watching	ຢຸດຕິດຕາມ
+	Stopped watching	ຢຸດຕິດຕາມແລ້ວ
 	Tandem line	ສາຍງານຕໍ່ເນື່ອງ
 	Task	ໜ້າວຽກ
 	Task with a resource	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນ
 	Task with shared resources	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນຮ່ວມກັນ
 	Text	ຂໍ້ຄວາມ
+	The model changed, so watching stopped	ແບບຈຳລອງປ່ຽນໄປ ຈຶ່ງຢຸດຕິດຕາມ
 	The model: its experiment, connections and problems	ແບບຈຳລອງ: ການທົດລອງ ການເຊື່ອມຕໍ່ ແລະ ບັນຫາ
 	This block has a warning	ບລັອກນີ້ມີຄຳເຕືອນ
 	This block has an error	ບລັອກນີ້ມີຂໍ້ຜິດພາດ
+	This run	ການປະມວນຜົນນີ້
 	Time between arrivals	ເວລາລະຫວ່າງການມາຮອດ
 	Time unit	ໜ່ວຍເວລາ
 	To	ໄປຫາ
@@ -274,10 +292,14 @@
 	Utilisation	ອັດຕາການນຳໃຊ້
 	Value	ຄ່າ
 	View	ມຸມມອງ
+	Waiting over time	ຈຳນວນທີ່ລໍຖ້າຕາມເວລາ
 	Waiting room	ຫ້ອງລໍຖ້າ
 	Warm-up	ໄລຍະອຸ່ນເຄື່ອງ
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	ອຸ່ນເຄື່ອງ {warmup} {unit} ແລ້ວວັດຜົນ {duration} {unit}
 	Warning	ຄຳເຕືອນ
+	Watch a Run	ຕິດຕາມການປະມວນຜົນ
+	Watch a run	ຕິດຕາມການປະມວນຜົນ
+	Watching replication 1	ກຳລັງຕິດຕາມຮອບຈຳລອງທີ 1
 	Weibull	ໄວບູນ
 	Whole number	ຈຳນວນເຕັມ
 	Window	ໜ້າຕ່າງ
@@ -309,14 +331,23 @@
 	the run stopped	ການປະມວນຜົນຢຸດແລ້ວ
 	the settings could not be saved: {error}	ບໍ່ສາມາດບັນທຶກການຕັ້ງຄ່າໄດ້: {error}
 	there are no charts to export	ບໍ່ມີແຜນພູມສຳລັບສົ່ງອອກ
+	time	ເວລາ
 	to {block}	ໄປຫາ {block}
 	unlimited	ບໍ່ຈຳກັດ
 	years	ປີ
+	{busy} busy	ບໍ່ຫວ່າງ {busy}
+	{entered} in, {left} out, {lost} lost	ເຂົ້າ {entered} ອອກ {left} ສູນເສຍ {lost}
 	{field}: not editable here yet	{field}: ຍັງບໍ່ສາມາດແກ້ໄຂຢູ່ນີ້ໄດ້
 	{id}: a probability is a number from 0 to 1	{id}: ຄວາມເປັນໄປໄດ້ຕ້ອງເປັນຕົວເລກຈາກ 0 ຫາ 1
 	{kind} {name}	{kind} {name}
 	{name} — edited	{name} — ແກ້ໄຂແລ້ວ
+	{n} created	ສ້າງແລ້ວ {n}
+	{n} done	ແລ້ວ {n}
+	{n} inside	ພາຍໃນ {n}
+	{n} waiting	ລໍຖ້າ {n}
+	{n} {unit} per second	{n} {unit} ຕໍ່ວິນາທີ
 	{property} (set to, mean)	{property} (ກຳນົດເປັນ, ຄ່າສະເລ່ຍ)
+	{title}: now {now}, at most {most}	{title}: ຕອນນີ້ {now} ສູງສຸດ {most}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ.
 	· no results yet	· ຍັງບໍ່ມີຜົນໄດ້ຮັບ

@@ -1,6 +1,7 @@
 //! The simulation behind a compiled model: one store per element input, processes per element,
 //! and the statistics each element keeps.
 
+use std::borrow::Cow;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::rc::Rc;
@@ -106,11 +107,29 @@ impl Compiled {
 
     fn simulate(
         &self,
-        mut rng: Rng,
+        rng: Rng,
         warmup: f64,
         duration: f64,
         cancelled: &dyn Fn() -> bool,
     ) -> Result<Report, RunError> {
+        let mut live = self.start(rng, warmup, duration);
+        let end = live.end;
+        live.advance_watched(end, cancelled)?;
+        Ok(live.report())
+    }
+
+    /// One replication set up to run step by step (a [`Live`] run), exactly as
+    /// [`Compiled::run`] would run it with `rng`.
+    pub fn live(&self, rng: Rng) -> Live<'static> {
+        let x = &self.model.experiment;
+        let live = self.start(rng, x.warmup, x.duration);
+        Live {
+            compiled: Cow::Owned(self.clone()),
+            ..live
+        }
+    }
+
+    fn start(&self, mut rng: Rng, warmup: f64, duration: f64) -> Live<'_> {
         let clean = |t: f64| if t.is_finite() && t > 0.0 { t } else { 0.0 };
         let (warmup, duration) = (clean(warmup), clean(duration));
         let elements = &self.model.elements;
@@ -307,26 +326,16 @@ impl Compiled {
             });
         }
 
-        let watch = Watch {
-            max_events_at_one_time: self.max_events_at_one_time,
-            cancelled,
-        };
-        sim.run_watched(end, &watch)
-            .map_err(|stopped| self.run_error(stopped))?;
-        let mut elements: Vec<ElementReport> = elements
-            .iter()
-            .zip(stats.iter())
-            .zip(&self.assigns)
-            .zip(&feeds_buffer)
-            .map(|(((e, s), a), &blocks)| s.borrow().report(e, a, blocks, end))
-            .collect();
-        // Then each shared pool, after the elements.
-        elements.extend(pools.reports(&self.model.resources, end));
-        Ok(Report {
+        Live {
+            compiled: Cow::Borrowed(self),
+            sim,
+            stats,
+            pools,
+            feeds_buffer,
             warmup,
             duration,
-            elements,
-        })
+            end,
+        }
     }
 
     /// The error for a replication that stopped early. Element processes are tagged with the
@@ -351,6 +360,154 @@ impl Compiled {
         tag.and_then(|t| usize::try_from(t).ok())
             .and_then(|i| self.model.elements.get(i))
             .map(|e| (e.id.clone(), e.name.clone()))
+    }
+}
+
+/// One replication run step by step, for watching it: advance it to a time or by one event, and
+/// read each block's state at that moment. Run to its end it gives exactly the [`Report`]
+/// [`Compiled::run`] gives with the same random stream.
+pub struct Live<'a> {
+    compiled: Cow<'a, Compiled>,
+    sim: Sim,
+    stats: Rc<Vec<RefCell<BlockStats>>>,
+    pools: Rc<Pools>,
+    feeds_buffer: Vec<bool>,
+    warmup: f64,
+    duration: f64,
+    end: f64,
+}
+
+/// A block's state at one moment of a [`Live`] run. Counts are since the warm-up ended (since
+/// the start while it lasts).
+#[derive(Debug, Clone, PartialEq)]
+pub struct LiveState {
+    pub id: stochcraft_model::ElementId,
+    pub entered: u64,
+    pub left: u64,
+    pub lost: u64,
+    /// Entities waiting in the block's input now (tasks with a resource or shared resources).
+    pub waiting: f64,
+    /// Units busy (a task with a resource), entities inside (other tasks), or a pool's units
+    /// in use, now.
+    pub busy: f64,
+    /// Units the block or pool has now: a task's capacity, a pool's units in its current
+    /// shift; none for blocks without units.
+    pub units: Option<f64>,
+    /// Units down for repair now (servers with breakdowns).
+    pub down: f64,
+}
+
+impl Live<'_> {
+    /// The simulated time now.
+    pub fn now(&self) -> f64 {
+        self.sim.now()
+    }
+
+    /// When the replication ends: its warm-up plus its duration.
+    pub fn end(&self) -> f64 {
+        self.end
+    }
+
+    /// When the warm-up ends (statistics count from then).
+    pub fn warmup(&self) -> f64 {
+        self.warmup
+    }
+
+    /// Whether it has reached its end.
+    pub fn is_done(&self) -> bool {
+        self.sim.now() >= self.end
+    }
+
+    /// Runs every event up to time `until` (at most the end).
+    pub fn advance_to(&mut self, until: f64) -> Result<(), RunError> {
+        self.advance_watched(until, &|| false)
+    }
+
+    /// Runs the next event (and every other one at the same time); returns its time, or `None`
+    /// when nothing more happens before the end (the run is then at its end).
+    pub fn step(&mut self) -> Result<Option<f64>, RunError> {
+        match self.sim.next_event_time() {
+            Some(t) if t <= self.end => {
+                self.advance_to(t)?;
+                Ok(Some(t))
+            }
+            _ => {
+                self.advance_to(self.end)?;
+                Ok(None)
+            }
+        }
+    }
+
+    fn advance_watched(
+        &mut self,
+        until: f64,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<(), RunError> {
+        let until = if until.is_nan() {
+            self.now()
+        } else {
+            until.min(self.end)
+        };
+        if until < self.now() {
+            return Ok(());
+        }
+        let watch = Watch {
+            max_events_at_one_time: self.compiled.max_events_at_one_time,
+            cancelled,
+        };
+        self.sim
+            .run_watched(until, &watch)
+            .map(|_| ())
+            .map_err(|stopped| self.compiled.run_error(stopped))
+    }
+
+    /// Each element's state now, in model order, then each shared pool's.
+    pub fn states(&self) -> Vec<LiveState> {
+        let model = &self.compiled.model;
+        let mut out: Vec<LiveState> = model
+            .elements
+            .iter()
+            .zip(self.stats.iter())
+            .map(|(e, s)| {
+                let s = s.borrow();
+                LiveState {
+                    id: e.id.clone(),
+                    entered: s.entered,
+                    left: s.left,
+                    lost: s.lost,
+                    waiting: s.waiting.value(),
+                    busy: s.busy.value(),
+                    units: match &e.kind {
+                        ElementKind::Server { capacity, .. } => Some(f64::from(*capacity)),
+                        _ => None,
+                    },
+                    down: s.down.value(),
+                }
+            })
+            .collect();
+        out.extend(self.pools.states(&model.resources));
+        out
+    }
+
+    /// The statistics so far, as a [`Report`] up to now (the full one once the run is done).
+    pub fn report(&self) -> Report {
+        let now = self.now().min(self.end);
+        let model = &self.compiled.model;
+        let mut elements: Vec<ElementReport> = model
+            .elements
+            .iter()
+            .zip(self.stats.iter())
+            .zip(&self.compiled.assigns)
+            .zip(&self.feeds_buffer)
+            .map(|(((e, s), a), &blocks)| s.borrow().report(e, a, blocks, now))
+            .collect();
+        // Then each shared pool, after the elements.
+        elements.extend(self.pools.reports(&model.resources, now));
+        Report {
+            warmup: self.warmup,
+            duration: (now - self.warmup).max(0.0).min(self.duration),
+            elements,
+        }
     }
 }
 
@@ -1286,6 +1443,30 @@ impl Pools {
     }
 
     /// Each pool's report: how often its units were taken, mean units busy and utilisation.
+    /// Each pool's state now.
+    fn states(&self, resources: &[ResourcePool]) -> Vec<LiveState> {
+        let busy = self.busy.borrow();
+        let units = self.units.borrow();
+        let taken = self.taken.borrow();
+        resources
+            .iter()
+            .enumerate()
+            .map(|(i, r)| {
+                let n = taken.get(i).copied().unwrap_or(0);
+                LiveState {
+                    id: r.id.clone(),
+                    entered: n,
+                    left: n,
+                    lost: 0,
+                    waiting: 0.0,
+                    busy: busy.get(i).map_or(0.0, TimeWeighted::value),
+                    units: units.get(i).map(|u| f64::from(*u)),
+                    down: 0.0,
+                }
+            })
+            .collect()
+    }
+
     fn reports(&self, resources: &[ResourcePool], end: f64) -> Vec<ElementReport> {
         let busy = self.busy.borrow();
         let capacity = self.capacity.borrow();
