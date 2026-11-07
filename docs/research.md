@@ -132,7 +132,7 @@ sustainable and resilient production.
 **For StochCraft (After M3).** Starting a run from a factory's current state; calibrating input
 distributions from event logs; workers as resources with skills and shifts; energy and CO₂ per
 part and per element (BPSim cost parameters plus a vendor extension); disruption scenarios
-(breakdowns arrive in M2.6). Open standard files (BPMN, BPSim) are what let a twin exchange
+(breakdowns came in M2.6). Open standard files (BPMN, BPSim) are what let a twin exchange
 models with other tools.
 
 > J. Barata, I. Kayser, *Industry 5.0 – Past, Present, and Near Future*, Procedia Computer Science

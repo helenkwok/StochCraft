@@ -14,32 +14,46 @@
 @id	language.name	Bahasa Indonesia
 	+ Add block	+ Tambah blok
 	About StochCraft	Tentang StochCraft
+	About {app}	Tentang {app}
 	Add Block	Tambah Blok
 	Add a flow from…	Tambahkan alur dari…
 	Add a flow to…	Tambahkan alur ke…
+	Add alternative	Tambah alternatif
 	Add point	Tambah titik
+	Add pool	Tambah kumpulan
 	Add property	Tambah properti
+	Added pool {id}	Kumpulan {id} ditambahkan
 	Added {block} ({id})	{block} ({id}) ditambahkan
+	Alternative {n}	Alternatif {n}
 	Appearance	Tampilan
 	Arrival limit	Batas kedatangan
 	Arrivals	Kedatangan
+	Availability	Ketersediaan
+	BPMN with BPSim	BPMN dengan BPSim
 	Back to the model (Esc)	Kembali ke model (Esc)
 	Beta	Beta
 	Binomial	Binomial
 	Boolean	Boolean
+	Bring All to Front	Bawa Semua ke Depan
 	Built with	Dibuat dengan
+	By role	Menurut peran
+	CSV table	Tabel CSV
 	Cancel	Batal
+	Cancel Run	Batalkan Proses
 	Cancel run	Batalkan proses
 	Capacity	Kapasitas
 	Change Block	Ubah Blok
 	Change Flow	Ubah Alur
 	Changing the time unit does not convert the times already in the model.	Mengubah satuan waktu tidak mengonversi waktu yang sudah ada dalam model.
+	Clear Menu	Bersihkan Menu
 	Close	Tutup
+	Close Window	Tutup Jendela
 	Comes from	Berasal dari
 	Condition of {id}	Kondisi {id}
 	Connect	Hubungkan
 	Connections	Koneksi
 	Constant	Konstan
+	Dark	Gelap
 	Data points	Titik data
 	Date and time	Tanggal dan waktu
 	Decimal number	Bilangan desimal
@@ -56,15 +70,19 @@
 	Download	Unduh
 	Download charts (PNG)	Unduh grafik (PNG)
 	Download table (CSV)	Unduh tabel (CSV)
+	Downloaded {file}	{file} diunduh
 	Duration	Durasi
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Setiap entitas mengambil alternatif pertama di antara ini yang dapat dipenuhi sekarang, sekaligus semuanya, dan mengembalikan unitnya saat meninggalkan tugas.
 	Edit	Edit
 	Entered	Masuk
 	Erlang	Erlang
 	Error	Galat
 	Every distribution	Semua distribusi
+	Exit	Keluar
 	Experiment	Eksperimen
 	Experiment Settings	Pengaturan Eksperimen
 	Exponential	Eksponensial
+	Export	Ekspor
 	Export charts (PNG)	Ekspor grafik (PNG)
 	Export table (CSV)	Ekspor tabel (CSV)
 	Exported {file}	{file} diekspor
@@ -75,12 +93,17 @@
 	Gamma	Gamma
 	Goes to	Menuju ke
 	Help	Bantuan
+	Hide Others	Sembunyikan yang lain
+	Hide {app}	Sembunyikan {app}
+	Keyboard Shortcuts…	Pintasan Keyboard…
 	Keyboard shortcuts saved	Pintasan keyboard disimpan
 	Keyboard shortcuts unchanged	Pintasan keyboard tidak berubah
 	Language	Bahasa
 	Left	Keluar
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Dilisensikan berdasarkan MIT License atau Apache License 2.0, sesuai pilihan Anda.
+	Light	Terang
 	Log-normal	Log-normal
+	Lost (no way out)	Hilang (tidak ada jalan keluar)
 	Lost (waiting room full)	Hilang (ruang tunggu penuh)
 	M/M/1 queue	Antrean M/M/1
 	Maximise	Maksimalkan
@@ -93,10 +116,13 @@
 	Mean wait	Waktu tunggu rata-rata
 	Metric	Metrik
 	Minimise	Minimalkan
+	Minimize	Minimalkan
 	Minimum	Minimum
 	Model	Model
 	Most likely	Paling mungkin
 	Name	Nama
+	Needs	Kebutuhan
+	New	Baru
 	New model	Model baru
 	New property	Properti baru
 	New property name	Nama properti baru
@@ -111,21 +137,28 @@
 	One task per BPSim distribution, to compare their spread.	Satu tugas per distribusi BPSim untuk membandingkan penyebarannya.
 	Open	Buka
 	Open Example	Buka Contoh
+	Open Model	Buka Model
 	Open Recent	Terakhir Dibuka
 	Open a model first	Buka model terlebih dahulu
 	Open a model to simulate it	Buka model untuk menyimulasikannya
 	Open a model…	Buka model…
 	Opened {file}	{file} dibuka
+	Open…	Buka…
 	Or start from an example	Atau mulai dari contoh
+	PNG image	Gambar PNG
 	Parameters	Parameter
 	Points	Titik
 	Poisson	Poisson
+	Preferences	Preferensi
+	Priority	Prioritas
 	Probability	Probabilitas
 	Probability of {id}	Probabilitas {id}
 	Problems	Masalah
 	Process	Proses
+	Process models with BPSim	Model proses dengan BPSim
 	Properties	Properti
 	Quit	Keluar
+	Quit {app}	Keluar dari {app}
 	Ready	Siap
 	Recover	Pulihkan
 	Recover unsaved changes?	Pulihkan perubahan yang belum disimpan?
@@ -136,16 +169,21 @@
 	Remove	Hapus
 	Remove Block	Hapus Blok
 	Remove Property	Hapus Properti
+	Remove alternative {n}	Hapus alternatif {n}
 	Remove block	Hapus blok
 	Remove the flow {id}	Hapus alur {id}
+	Remove the pool {id}	Hapus kumpulan {id}
 	Remove this block and its flows (Delete)	Hapus blok ini beserta alurnya (Delete)
 	Removed {id}	{id} dihapus
 	Rename Block	Ganti Nama Blok
 	Rename Model	Ganti Nama Model
 	Replace Model	Ganti Model
 	Replications	Replikasi
+	Resource pool	Kumpulan sumber daya
+	Resource pools	Kumpulan sumber daya
 	Restore	Pulihkan jendela
 	Results	Hasil
+	Roles	Peran
 	Run	Jalankan
 	Run cancelled	Proses dibatalkan
 	Run experiment	Jalankan eksperimen
@@ -154,11 +192,13 @@
 	Running…	Sedang berjalan…
 	Save	Simpan
 	Save As…	Simpan Sebagai…
+	Save Model	Simpan Model
 	Save changes to {name}?	Simpan perubahan pada {name}?
 	Saved {file}	{file} disimpan
 	Scale	Skala
 	Seed	Benih acak
 	Service time	Waktu layanan
+	Services	Layanan
 	Set Property	Atur Properti
 	Set a value	Tetapkan nilai
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ditetapkan pada setiap entitas saat memasuki blok ini. Ekspresi membaca nilai yang dibawa entitas saat masuk, seperti getProperty('issues') - 1.
@@ -166,6 +206,7 @@
 	Shape	Bentuk
 	Share of arrivals lost	Proporsi kedatangan yang hilang
 	Share of units blocked	Proporsi unit yang terblokir
+	Show All	Tampilkan semua
 	Show {id}	Tampilkan {id}
 	Split or join	Pisahkan atau gabungkan
 	Split or join (all ways)	Pisahkan atau gabungkan (semua jalur)
@@ -178,6 +219,7 @@
 	Tandem line	Jalur tandem
 	Task	Tugas
 	Task with a resource	Tugas dengan sumber daya
+	Task with shared resources	Tugas dengan sumber daya bersama
 	Text	Teks
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
 	This block has a warning	Blok ini memiliki peringatan
@@ -195,6 +237,8 @@
 	Undo {action}	Urungkan {action}
 	Uniform	Seragam
 	Unit	Satuan
+	Units	Unit
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unit yang digunakan bersama oleh beberapa tugas. Tugas dengan sumber daya bersama mengambilnya dari kumpulan atau menurut peran.
 	Untitled	Tanpa Judul
 	Untitled model	Model tanpa judul
 	Use System Setting	Gunakan Pengaturan Sistem
@@ -207,8 +251,10 @@
 	Warning	Peringatan
 	Weibull	Weibull
 	Whole number	Bilangan bulat
+	Window	Jendela
 	Yes or no	Ya atau tidak
 	Your changes will be lost if you don't save them.	Perubahan Anda akan hilang jika tidak disimpan.
+	Zoom	Zoom
 	a model	sebuah model
 	arrivals	kedatangan
 	days	hari
@@ -225,8 +271,10 @@
 	split or join: all ways	pisahkan atau gabungkan: semua jalur
 	task	tugas
 	task with a resource	tugas dengan sumber daya
+	task with shared resources	tugas dengan sumber daya bersama
 	the charts could not be captured	grafik tidak dapat ditangkap
 	the run stopped	proses berhenti
+	the settings could not be saved: {error}	pengaturan tidak dapat disimpan: {error}
 	there are no charts to export	tidak ada grafik untuk diekspor
 	to {block}	ke {block}
 	unlimited	tanpa batas
@@ -238,10 +286,17 @@
 	± 95% CI	± IK 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± adalah setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh replikasi.
 	· no results yet	· belum ada hasil
+unit	d	hr
+unit	h	jam
+unit	min	mnt
+unit	ms	ms
+unit	s	dtk
+unit	yr	thn
 @plural	Finished {n} replication|Finished {n} replications	Selesai {n} replikasi
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} dibuka ({n} peringatan)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Menjalankan {n} replikasi model yang independen dari benih {seed}. Hasil setiap elemen mencakup setengah lebar interval kepercayaan 95%.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} dari {n} replikasi selesai
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval 95% dari {low} hingga {high}{unit}\ndari {n} replikasi
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikasi · benih {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasi · benih {seed} · pemanasan {warmup} {unit} · {duration} {unit} diukur
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikasi · benih {seed}
+@plural	{n} replication|{n} replications	{n} replikasi

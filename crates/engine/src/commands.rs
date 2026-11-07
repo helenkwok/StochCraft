@@ -125,18 +125,22 @@ fn id_param(s: &str) -> Result<ElementId, CommandError> {
     })
 }
 
-fn id_taken(model: &Model, id: &ElementId) -> bool {
-    model.elements.iter().any(|e| &e.id == id)
+/// Whether `id` is used by the model, or by the opened file for something it keeps but the model
+/// does not have (an element StochCraft does not simulate, a lane, a scenario, a diagram shape).
+fn id_taken(e: &Engine, id: &ElementId) -> bool {
+    let model = e.model();
+    model.elements.iter().any(|x| &x.id == id)
         || model.connections.iter().any(|c| &c.id == id)
         || model.resources.iter().any(|r| &r.id == id)
         || model.calendars.iter().any(|c| &c.id == id)
+        || e.file_uses_id(id.as_str())
 }
 
 /// The id given, which must be new, or a fresh `prefix-N`.
-fn new_id(model: &Model, given: Option<&str>, prefix: &str) -> Result<ElementId, CommandError> {
+fn new_id(e: &Engine, given: Option<&str>, prefix: &str) -> Result<ElementId, CommandError> {
     if let Some(s) = given {
         let id = id_param(s)?;
-        if id_taken(model, &id) {
+        if id_taken(e, &id) {
             return Err(CommandError::new(
                 ErrorCode::Conflict,
                 format!("the id `{id}` is already used"),
@@ -146,7 +150,7 @@ fn new_id(model: &Model, given: Option<&str>, prefix: &str) -> Result<ElementId,
     }
     (1u64..)
         .map(|n| ElementId::unchecked(&format!("{prefix}-{n}")))
-        .find(|id| !id_taken(model, id))
+        .find(|id| !id_taken(e, id))
         .ok_or_else(|| CommandError::new(ErrorCode::Internal, "no free id"))
 }
 
@@ -534,7 +538,7 @@ fn block_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     check_keys(&p, &["id", "name", "index", "properties"])?;
     let p: BlockAdd = parse(p)?;
     let kind: ElementKind = p.kind.into();
-    let id = new_id(e.model(), p.id.as_deref(), kind.name())?;
+    let id = new_id(e, p.id.as_deref(), kind.name())?;
     let index = p
         .index
         .map_or(e.model().elements.len(), |i| i as usize)
@@ -689,7 +693,7 @@ fn existing_pool(model: &Model, s: &str) -> Result<usize, CommandError> {
 
 fn resource_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: ResourceAdd = parse(p)?;
-    let id = new_id(e.model(), p.id.as_deref(), "resource")?;
+    let id = new_id(e, p.id.as_deref(), "resource")?;
     let mut pools = e.model().resources.clone();
     pools.push(ResourcePool::new(
         id.clone(),
@@ -751,7 +755,7 @@ fn existing_calendar(model: &Model, s: &str) -> Result<usize, CommandError> {
 
 fn calendar_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: CalendarAdd = parse(p)?;
-    let id = new_id(e.model(), p.id.as_deref(), "calendar")?;
+    let id = new_id(e, p.id.as_deref(), "calendar")?;
     let mut all = e.model().calendars.clone();
     all.push(Calendar {
         name: p.name.unwrap_or_else(|| id.to_string()),
@@ -934,7 +938,7 @@ fn connect(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Connect = parse(p)?;
     let from = existing_element(e.model(), &p.from)?;
     let to = existing_element(e.model(), &p.to)?;
-    let id = new_id(e.model(), p.id.as_deref(), "flow")?;
+    let id = new_id(e, p.id.as_deref(), "flow")?;
     let index = e.model().connections.len();
     e.edit(
         "connect",
@@ -1093,7 +1097,9 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             )
         })?;
     let bytes = e.save_bytes(p.as_new)?;
-    std::fs::write(&path, &bytes)
+    // Written to a temporary file beside it and renamed over it, so a crash or a full disk
+    // leaves the old file whole rather than half written.
+    craft_atomic::atomic_write(std::path::Path::new(&path), &bytes)
         .map_err(|err| CommandError::new(ErrorCode::Io, format!("{path}: {err}")))?;
     e.saved_to(&path, &bytes)
 }

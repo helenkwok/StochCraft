@@ -2,12 +2,11 @@ use stochcraft_model::Problem;
 
 use super::*;
 
-fn problems(r: Result<Report, Vec<Diagnostic>>) -> Vec<Problem> {
-    r.err()
-        .unwrap_or_default()
-        .into_iter()
-        .map(|d| d.problem)
-        .collect()
+fn problems(r: Result<Report, Failed>) -> Vec<Problem> {
+    let Err(Failed::Invalid(ds)) = r else {
+        return Vec::new();
+    };
+    ds.into_iter().map(|d| d.problem).collect()
 }
 
 #[test]
@@ -158,7 +157,9 @@ fn compiling_a_model_directly() {
         return;
     };
     assert!(compiled.warnings().is_empty());
-    let r = compiled.run(Rng::new(3));
+    let Ok(r) = compiled.run(Rng::new(3)) else {
+        unreachable!()
+    };
     assert_eq!((r.warmup, r.duration), (10.0, 500.0));
     assert_eq!(
         r.elements.iter().map(|e| e.id.as_str()).collect::<Vec<_>>(),

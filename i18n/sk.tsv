@@ -14,32 +14,46 @@
 @id	language.name	Slovenčina
 	+ Add block	+ Pridať blok
 	About StochCraft	O aplikácii StochCraft
+	About {app}	O aplikácii {app}
 	Add Block	Pridať blok
 	Add a flow from…	Pridať tok z…
 	Add a flow to…	Pridať tok do…
+	Add alternative	Pridať alternatívu
 	Add point	Pridať bod
+	Add pool	Pridať skupinu
 	Add property	Pridať vlastnosť
+	Added pool {id}	Pridaná skupina {id}
 	Added {block} ({id})	Pridaný {block} ({id})
+	Alternative {n}	Alternatíva {n}
 	Appearance	Vzhľad
 	Arrival limit	Limit príchodov
 	Arrivals	Príchody
+	Availability	Pohotovosť
+	BPMN with BPSim	BPMN s BPSim
 	Back to the model (Esc)	Späť k modelu (Esc)
 	Beta	Beta
 	Binomial	Binomické
 	Boolean	Logická hodnota
+	Bring All to Front	Presunúť všetko dopredu
 	Built with	Vytvorené pomocou
+	By role	Podľa roly
+	CSV table	Tabuľka CSV
 	Cancel	Zrušiť
+	Cancel Run	Zrušiť beh
 	Cancel run	Zrušiť beh
 	Capacity	Kapacita
 	Change Block	Zmeniť blok
 	Change Flow	Zmeniť tok
 	Changing the time unit does not convert the times already in the model.	Zmena časovej jednotky neprepočíta časy, ktoré už sú v modeli.
+	Clear Menu	Vymazať ponuku
 	Close	Zavrieť
+	Close Window	Zavrieť okno
 	Comes from	Pochádza z
 	Condition of {id}	Podmienka pre {id}
 	Connect	Prepojiť
 	Connections	Prepojenia
 	Constant	Konštantné
+	Dark	Tmavý
 	Data points	Dátové body
 	Date and time	Dátum a čas
 	Decimal number	Desatinné číslo
@@ -56,15 +70,19 @@
 	Download	Stiahnuť
 	Download charts (PNG)	Stiahnuť grafy (PNG)
 	Download table (CSV)	Stiahnuť tabuľku (CSV)
+	Downloaded {file}	Stiahnuté {file}
 	Duration	Trvanie
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Každá entita si naraz vezme celú prvú z týchto alternatív, ktorú možno práve splniť, a jednotky vráti, keď odchádza.
 	Edit	Upraviť
 	Entered	Vstúpilo
 	Erlang	Erlangovo
 	Error	Chyba
 	Every distribution	Všetky rozdelenia
+	Exit	Ukončiť
 	Experiment	Experiment
 	Experiment Settings	Nastavenia experimentu
 	Exponential	Exponenciálne
+	Export	Exportovať
 	Export charts (PNG)	Exportovať grafy (PNG)
 	Export table (CSV)	Exportovať tabuľku (CSV)
 	Exported {file}	Exportované {file}
@@ -75,12 +93,17 @@
 	Gamma	Gama
 	Goes to	Vedie do
 	Help	Pomocník
+	Hide Others	Skryť ostatné
+	Hide {app}	Skryť {app}
+	Keyboard Shortcuts…	Klávesové skratky…
 	Keyboard shortcuts saved	Klávesové skratky uložené
 	Keyboard shortcuts unchanged	Klávesové skratky nezmenené
 	Language	Jazyk
 	Left	Odišlo
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencované podľa MIT License alebo Apache License 2.0, podľa vášho výberu.
+	Light	Svetlý
 	Log-normal	Lognormálne
+	Lost (no way out)	Stratené (žiadna cesta von)
 	Lost (waiting room full)	Stratené (čakáreň je plná)
 	M/M/1 queue	Front M/M/1
 	Maximise	Maximalizovať
@@ -93,10 +116,13 @@
 	Mean wait	Priemerný čas čakania
 	Metric	Metrika
 	Minimise	Minimalizovať
+	Minimize	Minimalizovať
 	Minimum	Minimum
 	Model	Model
 	Most likely	Najpravdepodobnejšia hodnota
 	Name	Názov
+	Needs	Potreby
+	New	Nový
 	New model	Nový model
 	New property	Nová vlastnosť
 	New property name	Názov novej vlastnosti
@@ -111,21 +137,28 @@
 	One task per BPSim distribution, to compare their spread.	Jedna úloha pre každé rozdelenie BPSim na porovnanie ich variability.
 	Open	Otvoriť
 	Open Example	Otvoriť príklad
+	Open Model	Otvoriť model
 	Open Recent	Otvoriť nedávne
 	Open a model first	Najprv otvorte model
 	Open a model to simulate it	Otvorte model na simuláciu
 	Open a model…	Otvoriť model…
 	Opened {file}	Otvorený {file}
+	Open…	Otvoriť…
 	Or start from an example	Alebo začnite príkladom
+	PNG image	Obrázok PNG
 	Parameters	Parametre
 	Points	Body
 	Poisson	Poissonovo
+	Preferences	Predvoľby
+	Priority	Priorita
 	Probability	Pravdepodobnosť
 	Probability of {id}	Pravdepodobnosť pre {id}
 	Problems	Problémy
 	Process	Proces
+	Process models with BPSim	Modely procesov s BPSim
 	Properties	Vlastnosti
 	Quit	Ukončiť
+	Quit {app}	Ukončiť {app}
 	Ready	Pripravené
 	Recover	Obnoviť
 	Recover unsaved changes?	Obnoviť neuložené zmeny?
@@ -136,16 +169,21 @@
 	Remove	Odstrániť
 	Remove Block	Odstrániť blok
 	Remove Property	Odstrániť vlastnosť
+	Remove alternative {n}	Odstrániť alternatívu {n}
 	Remove block	Odstrániť blok
 	Remove the flow {id}	Odstrániť tok {id}
+	Remove the pool {id}	Odstrániť skupinu {id}
 	Remove this block and its flows (Delete)	Odstrániť tento blok a jeho toky (Delete)
 	Removed {id}	Odstránené {id}
 	Rename Block	Premenovať blok
 	Rename Model	Premenovať model
 	Replace Model	Nahradiť model
 	Replications	Replikácie
+	Resource pool	Skupina zdrojov
+	Resource pools	Skupiny zdrojov
 	Restore	Obnoviť veľkosť
 	Results	Výsledky
+	Roles	Roly
 	Run	Spustiť
 	Run cancelled	Beh bol zrušený
 	Run experiment	Spustiť experiment
@@ -154,11 +192,13 @@
 	Running…	Prebieha…
 	Save	Uložiť
 	Save As…	Uložiť ako…
+	Save Model	Uložiť model
 	Save changes to {name}?	Uložiť zmeny v {name}?
 	Saved {file}	Uložené {file}
 	Scale	Mierka
 	Seed	Počiatočná hodnota generátora
 	Service time	Čas obsluhy
+	Services	Služby
 	Set Property	Nastaviť vlastnosť
 	Set a value	Nastaviť hodnotu
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nastavuje sa pre každú entitu pri vstupe do tohto bloku. Výrazy čítajú hodnoty, s ktorými entita vstúpila, napríklad getProperty('issues') - 1.
@@ -166,6 +206,7 @@
 	Shape	Tvar
 	Share of arrivals lost	Podiel stratených príchodov
 	Share of units blocked	Podiel blokovaných jednotiek
+	Show All	Zobraziť všetko
 	Show {id}	Zobraziť {id}
 	Split or join	Rozdeliť alebo spojiť
 	Split or join (all ways)	Rozdeliť alebo spojiť (všetky cesty)
@@ -178,6 +219,7 @@
 	Tandem line	Tandemová linka
 	Task	Úloha
 	Task with a resource	Úloha so zdrojom
+	Task with shared resources	Úloha so zdieľanými zdrojmi
 	Text	Text
 	The model: its experiment, connections and problems	Model: experiment, prepojenia a problémy
 	This block has a warning	Tento blok obsahuje upozornenie
@@ -195,6 +237,8 @@
 	Undo {action}	Vrátiť späť {action}
 	Uniform	Rovnomerné
 	Unit	Jednotka
+	Units	Jednotky
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Jednotky, ktoré zdieľa viacero úloh. Úloha so zdieľanými zdrojmi ich berie podľa skupiny alebo podľa roly.
 	Untitled	Bez názvu
 	Untitled model	Nepomenovaný model
 	Use System Setting	Použiť systémové nastavenie
@@ -207,8 +251,10 @@
 	Warning	Upozornenie
 	Weibull	Weibullovo
 	Whole number	Celé číslo
+	Window	Okno
 	Yes or no	Áno alebo nie
 	Your changes will be lost if you don't save them.	Ak zmeny neuložíte, stratia sa.
+	Zoom	Zmeniť veľkosť
 	a model	model
 	arrivals	príchody
 	days	dni
@@ -225,8 +271,10 @@
 	split or join: all ways	rozdeliť alebo spojiť: všetky cesty
 	task	úloha
 	task with a resource	úloha so zdrojom
+	task with shared resources	úloha so zdieľanými zdrojmi
 	the charts could not be captured	grafy sa nepodarilo zachytiť
 	the run stopped	beh sa zastavil
+	the settings could not be saved: {error}	nastavenia sa nepodarilo uložiť: {error}
 	there are no charts to export	nie sú žiadne grafy na export
 	to {block}	do {block}
 	unlimited	bez obmedzenia
@@ -238,10 +286,17 @@
 	± 95% CI	± 95% interval spoľahlivosti
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± predstavuje polovicu šírky 95% Student-t intervalu spoľahlivosti priemeru naprieč replikáciami.
 	· no results yet	· zatiaľ žiadne výsledky
+unit	d	d
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	r.
 @plural	Finished {n} replication|Finished {n} replications	Dokončená {n} replikácia|Dokončené {n} replikácie|Dokončených {n} replikácií
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otvorený {file} ({n} upozornenie)|Otvorený {file} ({n} upozornenia)|Otvorený {file} ({n} upozornení)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislú replikáciu modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislé replikácie modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislých replikácií modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Dokončená {done} z {n} replikácie|Dokončených {done} z {n} replikácií|Dokončených {done} z {n} replikácií
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikácie|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikácií|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikácií
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikácia · počiatočná hodnota {seed}|{n} replikácie · počiatočná hodnota {seed}|{n} replikácií · počiatočná hodnota {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikácia · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} replikácie · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} replikácií · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikácia · počiatočná hodnota {seed}|{n} replikácie · počiatočná hodnota {seed}|{n} replikácií · počiatočná hodnota {seed}
+@plural	{n} replication|{n} replications	{n} replikácia|{n} replikácie|{n} replikácií

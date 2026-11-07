@@ -381,7 +381,7 @@ fn num(e: &Element, name: &str) -> Option<f64> {
 }
 
 /// Seconds-per-unit factor from `from` to `to`.
-fn factor(from: TimeUnit, to: TimeUnit) -> f64 {
+pub(crate) fn factor(from: TimeUnit, to: TimeUnit) -> f64 {
     to.convert(1.0, from)
 }
 

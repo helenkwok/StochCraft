@@ -14,32 +14,46 @@
 @id	language.name	தமிழ்
 	+ Add block	+ தொகுதியைச் சேர்
 	About StochCraft	StochCraft பற்றி
+	About {app}	{app} பற்றி
 	Add Block	தொகுதியைச் சேர்
 	Add a flow from…	இதிலிருந்து ஓட்டத்தைச் சேர்…
 	Add a flow to…	இதற்கு ஓட்டத்தைச் சேர்…
+	Add alternative	மாற்றுத் தேர்வைச் சேர்
 	Add point	புள்ளியைச் சேர்
+	Add pool	தொகுப்பைச் சேர்
 	Add property	பண்பைச் சேர்
+	Added pool {id}	{id} தொகுப்பு சேர்க்கப்பட்டது
 	Added {block} ({id})	{block} ({id}) சேர்க்கப்பட்டது
+	Alternative {n}	மாற்றுத் தேர்வு {n}
 	Appearance	தோற்றம்
 	Arrival limit	வருகை வரம்பு
 	Arrivals	வருகைகள்
+	Availability	கிடைக்கும் தன்மை
+	BPMN with BPSim	BPSim உடன் BPMN
 	Back to the model (Esc)	மாதிரிக்குத் திரும்பு (Esc)
 	Beta	பீட்டா
 	Binomial	ஈருறுப்பு
 	Boolean	பூலியன்
+	Bring All to Front	அனைத்தையும் முன்னே கொண்டுவா
 	Built with	உருவாக்கப் பயன்படுத்தியது
+	By role	பணிப்பங்கு வாரியாக
+	CSV table	CSV அட்டவணை
 	Cancel	ரத்துசெய்
+	Cancel Run	இயக்கத்தை ரத்துசெய்
 	Cancel run	இயக்கத்தை ரத்துசெய்
 	Capacity	கொள்திறன்
 	Change Block	தொகுதியை மாற்று
 	Change Flow	ஓட்டத்தை மாற்று
 	Changing the time unit does not convert the times already in the model.	நேர அலகை மாற்றுவது மாதிரியில் ஏற்கெனவே உள்ள நேரங்களை மாற்றிக் கணக்கிடாது.
+	Clear Menu	மெனுவை அழி
 	Close	மூடு
+	Close Window	சாளரத்தை மூடு
 	Comes from	இதிலிருந்து வருகிறது
 	Condition of {id}	{id} இன் நிபந்தனை
 	Connect	இணை
 	Connections	இணைப்புகள்
 	Constant	மாறிலி
+	Dark	அடர்
 	Data points	தரவுப் புள்ளிகள்
 	Date and time	தேதியும் நேரமும்
 	Decimal number	தசம எண்
@@ -56,15 +70,19 @@
 	Download	பதிவிறக்கு
 	Download charts (PNG)	வரைபடங்களைப் பதிவிறக்கு (PNG)
 	Download table (CSV)	அட்டவணையைப் பதிவிறக்கு (CSV)
+	Downloaded {file}	{file} பதிவிறக்கப்பட்டது
 	Duration	கால அளவு
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ஒவ்வொரு உருப்படியும் இவற்றில், இப்போதே ஒரே நேரத்தில் முழுமையாக நிறைவேற்றக்கூடிய முதலாவதை எடுத்துக்கொள்கிறது; வெளியேறும்போது அலகுகளைத் திருப்பித் தருகிறது.
 	Edit	திருத்து
 	Entered	உள்ளே நுழைந்தவை
 	Erlang	எர்லாங்
 	Error	பிழை
 	Every distribution	ஒவ்வொரு பரவலும்
+	Exit	வெளியேறு
 	Experiment	சோதனை
 	Experiment Settings	சோதனை அமைப்புகள்
 	Exponential	அடுக்குக்குறி சார்ந்த பரவல்
+	Export	ஏற்றுமதி
 	Export charts (PNG)	வரைபடங்களை ஏற்றுமதி செய் (PNG)
 	Export table (CSV)	அட்டவணையை ஏற்றுமதி செய் (CSV)
 	Exported {file}	{file} ஏற்றுமதி செய்யப்பட்டது
@@ -75,12 +93,17 @@
 	Gamma	காமா
 	Goes to	இதற்குச் செல்கிறது
 	Help	உதவி
+	Hide Others	மற்றவற்றை மறை
+	Hide {app}	{app} ஐ மறை
+	Keyboard Shortcuts…	விசைப்பலகை குறுக்குவழிகள்…
 	Keyboard shortcuts saved	விசைப்பலகை குறுக்குவழிகள் சேமிக்கப்பட்டன
 	Keyboard shortcuts unchanged	விசைப்பலகை குறுக்குவழிகள் மாறவில்லை
 	Language	மொழி
 	Left	வெளியேறியவை
 	Licensed under the MIT License or the Apache License 2.0, at your option.	உங்கள் விருப்பப்படி MIT License அல்லது Apache License 2.0 உரிமத்தின் கீழ் வழங்கப்படுகிறது.
+	Light	வெளிர்
 	Log-normal	மடக்கை-இயல்புப் பரவல்
+	Lost (no way out)	இழந்தவை (வெளியேற வழி இல்லை)
 	Lost (waiting room full)	இழந்தவை (காத்திருப்பு அறை நிரம்பியது)
 	M/M/1 queue	M/M/1 வரிசை
 	Maximise	பெரிதாக்கு
@@ -93,10 +116,13 @@
 	Mean wait	சராசரி காத்திருப்பு
 	Metric	அளவீடு
 	Minimise	சிறிதாக்கு
+	Minimize	சிறிதாக்கு
 	Minimum	குறைந்தபட்சம்
 	Model	மாதிரி
 	Most likely	அதிக வாய்ப்புள்ள மதிப்பு
 	Name	பெயர்
+	Needs	தேவைகள்
+	New	புதியது
 	New model	புதிய மாதிரி
 	New property	புதிய பண்பு
 	New property name	புதிய பண்பின் பெயர்
@@ -111,21 +137,28 @@
 	One task per BPSim distribution, to compare their spread.	பரவல் வேறுபாட்டை ஒப்பிட ஒவ்வொரு BPSim பரவலுக்கும் ஒரு பணி.
 	Open	திற
 	Open Example	எடுத்துக்காட்டைத் திற
+	Open Model	மாதிரியைத் திற
 	Open Recent	சமீபத்தியவற்றைத் திற
 	Open a model first	முதலில் மாதிரியைத் திறக்கவும்
 	Open a model to simulate it	சிமுலேஷன் செய்ய ஒரு மாதிரியைத் திறக்கவும்
 	Open a model…	மாதிரியைத் திற…
 	Opened {file}	{file} திறக்கப்பட்டது
+	Open…	திற…
 	Or start from an example	அல்லது ஓர் எடுத்துக்காட்டில் தொடங்கவும்
+	PNG image	PNG படம்
 	Parameters	அளவுருக்கள்
 	Points	புள்ளிகள்
 	Poisson	பாய்சான்
+	Preferences	விருப்பங்கள்
+	Priority	முன்னுரிமை
 	Probability	நிகழ்தகவு
 	Probability of {id}	{id} இன் நிகழ்தகவு
 	Problems	சிக்கல்கள்
 	Process	செயல்முறை
+	Process models with BPSim	BPSim உடன் செயல்முறை மாதிரிகள்
 	Properties	பண்புகள்
 	Quit	வெளியேறு
+	Quit {app}	{app} இலிருந்து வெளியேறு
 	Ready	தயார்
 	Recover	மீட்டெடு
 	Recover unsaved changes?	சேமிக்கப்படாத மாற்றங்களை மீட்டெடுக்கவா?
@@ -136,16 +169,21 @@
 	Remove	அகற்று
 	Remove Block	தொகுதியை அகற்று
 	Remove Property	பண்பை அகற்று
+	Remove alternative {n}	மாற்றுத் தேர்வு {n} ஐ அகற்று
 	Remove block	தொகுதியை அகற்று
 	Remove the flow {id}	{id} ஓட்டத்தை அகற்று
+	Remove the pool {id}	{id} தொகுப்பை அகற்று
 	Remove this block and its flows (Delete)	இந்தத் தொகுதியையும் அதன் ஓட்டங்களையும் அகற்று (Delete)
 	Removed {id}	{id} அகற்றப்பட்டது
 	Rename Block	தொகுதிக்குப் பெயர் மாற்று
 	Rename Model	மாதிரிக்குப் பெயர் மாற்று
 	Replace Model	மாதிரியை மாற்றி வை
 	Replications	மீள் இயக்கங்கள்
+	Resource pool	வளத் தொகுப்பு
+	Resource pools	வளத் தொகுப்புகள்
 	Restore	சாளர அளவை மீட்டமை
 	Results	முடிவுகள்
+	Roles	பணிப்பங்குகள்
 	Run	இயக்கு
 	Run cancelled	இயக்கம் ரத்துசெய்யப்பட்டது
 	Run experiment	சோதனையை இயக்கு
@@ -154,11 +192,13 @@
 	Running…	இயங்குகிறது…
 	Save	சேமி
 	Save As…	இவ்வாறு சேமி…
+	Save Model	மாதிரியைச் சேமி
 	Save changes to {name}?	{name} இல் மாற்றங்களைச் சேமிக்கவா?
 	Saved {file}	{file} சேமிக்கப்பட்டது
 	Scale	அளவுகோல்
 	Seed	சீரற்ற விதை
 	Service time	சேவை நேரம்
+	Services	சேவைகள்
 	Set Property	பண்பை அமை
 	Set a value	மதிப்பை அமை
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	இந்தத் தொகுதிக்குள் நுழையும்போது ஒவ்வொரு உருப்படிக்கும் அமைக்கப்படுகிறது. கோவைகள், நுழைந்த நேரத்தில் அந்த உருப்படியிடம் இருந்த மதிப்புகளைப் படிக்கின்றன; எடுத்துக்காட்டாக getProperty('issues') - 1.
@@ -166,6 +206,7 @@
 	Shape	வடிவ அளவுரு
 	Share of arrivals lost	இழந்த வருகைகளின் விகிதம்
 	Share of units blocked	தடுக்கப்பட்ட அலகுகளின் விகிதம்
+	Show All	அனைத்தையும் காட்டு
 	Show {id}	{id} ஐக் காட்டு
 	Split or join	பிரி அல்லது இணை
 	Split or join (all ways)	பிரி அல்லது இணை (எல்லா வழிகளும்)
@@ -178,6 +219,7 @@
 	Tandem line	தொடர் பணிநிலைகள்
 	Task	பணி
 	Task with a resource	வளம் தேவைப்படும் பணி
+	Task with shared resources	பகிர்ந்த வளங்கள் தேவைப்படும் பணி
 	Text	உரை
 	The model: its experiment, connections and problems	மாதிரி: அதன் சோதனை, இணைப்புகள், சிக்கல்கள்
 	This block has a warning	இந்தத் தொகுதியில் ஓர் எச்சரிக்கை உள்ளது
@@ -195,6 +237,8 @@
 	Undo {action}	{action} ஐச் செயல்தவிர்
 	Uniform	சீரான பரவல்
 	Unit	அலகு
+	Units	அலகு எண்ணிக்கை
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	பல பணிகள் பகிர்ந்துகொள்ளும் அலகுகள். பகிர்ந்த வளங்கள் தேவைப்படும் பணி, அவற்றைத் தொகுப்பு வாரியாகவோ பணிப்பங்கு வாரியாகவோ எடுத்துக்கொள்கிறது.
 	Untitled	தலைப்பிடப்படாதது
 	Untitled model	பெயரிடப்படாத மாதிரி
 	Use System Setting	கணினி அமைப்பைப் பயன்படுத்து
@@ -207,8 +251,10 @@
 	Warning	எச்சரிக்கை
 	Weibull	வைபுல்
 	Whole number	முழு எண்
+	Window	சாளரம்
 	Yes or no	ஆம் அல்லது இல்லை
 	Your changes will be lost if you don't save them.	சேமிக்காவிட்டால் உங்கள் மாற்றங்கள் இழக்கப்படும்.
+	Zoom	அளவை மாற்று
 	a model	ஒரு மாதிரி
 	arrivals	வருகைகள்
 	days	நாட்கள்
@@ -225,8 +271,10 @@
 	split or join: all ways	பிரி அல்லது இணை: எல்லா வழிகளும்
 	task	பணி
 	task with a resource	வளம் தேவைப்படும் பணி
+	task with shared resources	பகிர்ந்த வளங்கள் தேவைப்படும் பணி
 	the charts could not be captured	வரைபடங்களைப் படம்பிடிக்க முடியவில்லை
 	the run stopped	இயக்கம் நிறுத்தப்பட்டது
+	the settings could not be saved: {error}	அமைப்புகளைச் சேமிக்க முடியவில்லை: {error}
 	there are no charts to export	ஏற்றுமதி செய்ய வரைபடங்கள் இல்லை
 	to {block}	{block} க்கு
 	unlimited	வரம்பற்றது
@@ -238,10 +286,17 @@
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± என்பது மீள்சோதனைகளின் சராசரிக்கான 95% Student-t நம்பிக்கை இடைவெளியின் அகலத்தில் பாதியாகும்.
 	· no results yet	· இன்னும் முடிவுகள் இல்லை
+unit	d	நாள்
+unit	h	மணி
+unit	min	நிமி
+unit	ms	மி.வி
+unit	s	வி
+unit	yr	ஆண்டு
 @plural	Finished {n} replication|Finished {n} replications	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} திறக்கப்பட்டது ({n} எச்சரிக்கை)|{file} திறக்கப்பட்டது ({n} எச்சரிக்கைகள்)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கத்தை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.|{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கங்களை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் அவற்றின் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} இல் {done} மீள் இயக்கம் முடிந்தது|{n} இல் {done} மீள் இயக்கங்கள் முடிந்தன
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கத்தில்|{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கங்களில்
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} மீள் இயக்கம் · விதை {seed}|{n} மீள் இயக்கங்கள் · விதை {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} மீள் இயக்கம் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது|{n} மீள் இயக்கங்கள் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} மீள் இயக்கம் · விதை {seed}|{n} மீள் இயக்கங்கள் · விதை {seed}
+@plural	{n} replication|{n} replications	{n} மீள் இயக்கம்|{n} மீள் இயக்கங்கள்

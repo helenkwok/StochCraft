@@ -2,7 +2,7 @@
 
 use serde_json::{Value, json};
 use stochcraft_engine::{COMMANDS, CommandKind, Engine, ErrorCode, JournalEntry};
-use stochcraft_random::Rng;
+use stochcraft_random::{Dist, Rng};
 
 fn ok(e: &mut Engine, command: &str, params: Value) -> Value {
     let r = e.execute(command, params.clone());
@@ -506,6 +506,127 @@ fn background_runs_report_progress_and_can_be_cancelled() {
     );
 }
 
+/// Runs `f` on a thread of its own and returns what it gives, or `None` after `secs` seconds, so
+/// that a run that never ends fails its test instead of hanging the suite.
+fn within<T: Send + 'static>(secs: u64, f: impl FnOnce() -> T + Send + 'static) -> Option<T> {
+    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::spawn(move || {
+        let _ = tx.send(f());
+    });
+    rx.recv_timeout(std::time::Duration::from_secs(secs)).ok()
+}
+
+/// One entity, arriving at 1, is worked in no time and always sent back by the gateway after
+/// it: it goes round for ever while simulated time stays at 1 (#49).
+fn zero_time_loop() -> Engine {
+    let mut m = stochcraft_blocks::Builder::new();
+    let arrivals = m.source("arrivals", Dist::Constant(1.0), Some(1));
+    let work = m.server("work", 1, Dist::Constant(0.0));
+    let check = m.exclusive("check");
+    let done = m.sink("done");
+    m.connect(arrivals, work);
+    m.connect(work, check);
+    m.route(check, work, Some(1.0), None);
+    m.route(check, done, Some(0.0), None);
+    Engine::with_model(m.build(stochcraft_model::Experiment::default()))
+}
+
+/// The error a run of the zero-time loop must stop with: `time_stopped`, at time 1, naming an
+/// element of the loop.
+fn assert_time_stopped(error: &Value) {
+    assert_eq!(error["code"], "time_stopped", "{error}");
+    assert_eq!(error["details"]["time"], 1.0, "{error}");
+    let at = error["details"]["at"].as_str();
+    assert!(matches!(at, Some("work" | "check")), "{error}");
+    let message = error["message"].as_str().unwrap_or_default();
+    assert!(message.contains("stopped moving at 1"), "{error}");
+}
+
+#[test]
+fn a_run_where_time_stops_moving_ends_with_an_error_at_once() {
+    let r = within(300, || {
+        let mut e = zero_time_loop();
+        e.execute("run", json!({"replications": 4, "threads": 2}))
+    });
+    assert!(r.is_some(), "the run did not end");
+    let error = r.and_then(Result::err).map(|e| e.to_json());
+    assert_time_stopped(&error.unwrap_or_default());
+}
+
+#[test]
+fn a_run_where_time_stops_moving_ends_with_an_error_in_slices() {
+    let status = within(300, || {
+        let mut e = zero_time_loop();
+        ok(
+            &mut e,
+            "run.start",
+            json!({"replications": 3, "mode": "slices"}),
+        );
+        ok(&mut e, "run.status", json!({"step": 1}))
+    });
+    assert!(status.is_some(), "the run did not end");
+    let status = status.unwrap_or_default();
+    assert_eq!(status["state"], "failed", "{status}");
+    assert_time_stopped(&status["error"]);
+}
+
+/// Cancelling reaches into a replication that is running: one that would take far too long
+/// stops soon after.
+#[test]
+fn cancel_stops_a_replication_while_it_runs() {
+    let status = within(60, || {
+        let mut e = help_desk();
+        ok(&mut e, "experiment.set", json!({"duration": 1e11}));
+        ok(
+            &mut e,
+            "run.start",
+            json!({"replications": 2, "mode": "threads", "threads": 2}),
+        );
+        std::thread::sleep(std::time::Duration::from_millis(100));
+        ok(&mut e, "run.cancel", json!({}))
+    });
+    assert!(status.is_some(), "cancel did not return");
+    let status = status.unwrap_or_default();
+    assert_eq!(status["state"], "cancelled", "{status}");
+}
+
+#[test]
+fn saving_replaces_the_file_instead_of_overwriting_it() {
+    // A second name (hard link) for the same file shows whether saving wrote into the file in
+    // place (it would see the new content) or wrote a new file and renamed it over the old name,
+    // so a crash or a full disk can never leave the user's file half written.
+    let dir = scratch("atomic");
+    let _ = std::fs::remove_dir_all(&dir);
+    let _ = std::fs::create_dir_all(&dir);
+    let path = dir.join("model.bpmn");
+    let other_name = dir.join("other-name.bpmn");
+    let mut e = help_desk();
+    ok(&mut e, "file.save", json!({"path": path.to_string_lossy()}));
+    let first = std::fs::read(&path).unwrap_or_default();
+    if std::fs::hard_link(&path, &other_name).is_err() {
+        // A file system without hard links cannot tell; nothing to check here.
+        return;
+    }
+    ok(&mut e, "model.rename", json!({"name": "Renamed"}));
+    ok(&mut e, "file.save", json!({}));
+    let second = std::fs::read(&path).unwrap_or_default();
+    assert!(second != first, "the save changed nothing");
+    assert!(
+        std::fs::read(&other_name).unwrap_or_default() == first,
+        "the file was written in place"
+    );
+    // Nothing is left beside the file.
+    let mut names: Vec<String> = std::fs::read_dir(&dir)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|d| d.file_name().to_string_lossy().into_owned())
+        .collect();
+    names.sort();
+    assert_eq!(names, ["model.bpmn", "other-name.bpmn"]);
+    let _ = std::fs::remove_dir_all(&dir);
+}
+
 #[test]
 fn files_open_save_and_track_changes() {
     let path = scratch("files.bpmn");
@@ -549,8 +670,26 @@ fn files_open_save_and_track_changes() {
     let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
     let copy = scratch("mm1-copy.bpmn");
     let _ = std::fs::copy(&mm1, &copy);
+    // A new time unit saves into the file: values with their own unit are rescaled.
     let mut h = Engine::new();
     ok(&mut h, "file.open", json!({"path": copy.to_string_lossy()}));
+    ok(&mut h, "experiment.set", json!({"time_unit": "hour"}));
+    ok(&mut h, "file.save", json!({}));
+    let mut g2 = Engine::new();
+    ok(
+        &mut g2,
+        "file.open",
+        json!({"path": copy.to_string_lossy()}),
+    );
+    assert_eq!(g2.model(), h.model());
+    // But not in a scenario that takes those values from another one.
+    let _ = std::fs::copy(&mm1, &copy);
+    let mut h = Engine::new();
+    ok(
+        &mut h,
+        "file.open",
+        json!({"path": copy.to_string_lossy(), "scenario": "two-clerks"}),
+    );
     ok(&mut h, "experiment.set", json!({"time_unit": "hour"}));
     let refused = h.execute("file.save", json!({}));
     assert!(
@@ -580,6 +719,78 @@ fn files_open_save_and_track_changes() {
         err(&mut g, "file.open", json!({"path": junk.to_string_lossy()})),
         ErrorCode::BadFile
     );
+}
+
+#[test]
+fn saving_again_writes_into_the_opened_scenario() {
+    // mm1.bpmn has "base" and "two-clerks", which inherits from it.
+    let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let copy = scratch("mm1-two-saves.bpmn");
+    let _ = std::fs::copy(&mm1, &copy);
+    let path = json!(copy.to_string_lossy());
+    let reps = |scenario: &str| {
+        let mut r = Engine::new();
+        ok(
+            &mut r,
+            "file.open",
+            json!({"path": path, "scenario": scenario}),
+        );
+        r.model().experiment.replications
+    };
+    let base = reps("base");
+
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({"path": path, "scenario": "two-clerks"}),
+    );
+    ok(&mut e, "experiment.set", json!({"replications": base + 5}));
+    ok(&mut e, "file.save", json!({}));
+    ok(&mut e, "experiment.set", json!({"replications": base + 7}));
+    ok(&mut e, "file.save", json!({}));
+    assert_eq!(reps("two-clerks"), base + 7);
+    assert_eq!(reps("base"), base, "the other scenario is untouched");
+    // Saved again unchanged: the same bytes.
+    let written = std::fs::read(&copy).unwrap_or_default();
+    ok(&mut e, "file.save", json!({}));
+    assert_eq!(std::fs::read(&copy).unwrap_or_default(), written);
+}
+
+#[test]
+fn new_ids_avoid_the_ids_an_opened_file_uses() {
+    // mm1.bpmn with an element StochCraft keeps but does not model, under the id the engine
+    // would give the next delay.
+    let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let text = std::fs::read_to_string(&mm1).unwrap_or_default().replace(
+        r#"<semantic:resource id="clerk" name="Clerk"/>"#,
+        r#"<semantic:resource id="clerk" name="Clerk"/>
+  <semantic:dataStore id="delay-1" name="Records"/>"#,
+    );
+    let copy = scratch("mm1-ids.bpmn");
+    let _ = std::fs::write(&copy, text);
+    let mut e = Engine::new();
+    ok(&mut e, "file.open", json!({"path": copy.to_string_lossy()}));
+    let delay = json!({"kind": "delay", "duration": {"type": "constant", "value": 1.0}});
+    // Ids given that the file already uses (a resource of one task, a scenario, the process)
+    // are refused.
+    for taken in ["clerk", "two-clerks", "p1", "delay-1"] {
+        let mut p = delay.clone();
+        p["id"] = json!(taken);
+        assert_eq!(err(&mut e, "block.add", p), ErrorCode::Conflict, "{taken}");
+    }
+    assert_eq!(
+        err(
+            &mut e,
+            "resource.add",
+            json!({"id": "clerk", "quantity": 1})
+        ),
+        ErrorCode::Conflict
+    );
+    // A generated id skips them, and the model saves.
+    let added = ok(&mut e, "block.add", delay);
+    assert_eq!(added["id"], json!("delay-2"), "{added}");
+    ok(&mut e, "file.save", json!({}));
 }
 
 #[test]

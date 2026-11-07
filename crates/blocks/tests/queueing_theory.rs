@@ -59,7 +59,11 @@ fn run(model: &Model) -> ExperimentSummary {
     };
     let reps = u64::from(model.experiment.replications);
     let reports: Vec<_> = (0..reps)
-        .map(|r| compiled.run(Rng::new(10_000 + r)))
+        .map(|r| {
+            compiled
+                .run(Rng::new(10_000 + r))
+                .unwrap_or_else(|e| unreachable!("{e}"))
+        })
         .collect();
     summarise(&reports)
 }

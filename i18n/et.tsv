@@ -14,32 +14,46 @@
 @id	language.name	Eesti
 	+ Add block	+ Lisa plokk
 	About StochCraft	Teave StochCrafti kohta
+	About {app}	Teave: {app}
 	Add Block	Lisa plokk
 	Add a flow from…	Lisa voog alates…
 	Add a flow to…	Lisa voog kuni…
+	Add alternative	Lisa alternatiiv
 	Add point	Lisa punkt
+	Add pool	Lisa kogum
 	Add property	Lisa omadus
+	Added pool {id}	Lisati kogum {id}
 	Added {block} ({id})	Lisatud {block} ({id})
+	Alternative {n}	Alternatiiv {n}
 	Appearance	Välimus
 	Arrival limit	Saabumiste piirang
 	Arrivals	Saabumised
+	Availability	Käideldavus
+	BPMN with BPSim	BPMN ja BPSim
 	Back to the model (Esc)	Tagasi mudeli juurde (Esc)
 	Beta	Beeta
 	Binomial	Binoomjaotus
 	Boolean	Tõeväärtus
+	Bring All to Front	Too kõik esiplaanile
 	Built with	Loodud järgmistega
+	By role	Rolli järgi
+	CSV table	CSV-tabel
 	Cancel	Loobu
+	Cancel Run	Tühista käivitus
 	Cancel run	Tühista käivitus
 	Capacity	Maht
 	Change Block	Muuda plokki
 	Change Flow	Muuda voogu
 	Changing the time unit does not convert the times already in the model.	Ajaühiku muutmine ei teisenda mudelis juba olevaid aegu.
+	Clear Menu	Tühjenda menüü
 	Close	Sulge
+	Close Window	Sulge aken
 	Comes from	Pärineb kohast
 	Condition of {id}	{id} tingimus
 	Connect	Ühenda
 	Connections	Ühendused
 	Constant	Konstant
+	Dark	Tume
 	Data points	Andmepunktid
 	Date and time	Kuupäev ja kellaaeg
 	Decimal number	Kümnendarv
@@ -56,15 +70,19 @@
 	Download	Laadi alla
 	Download charts (PNG)	Laadi graafikud alla (PNG)
 	Download table (CSV)	Laadi tabel alla (CSV)
+	Downloaded {file}	Alla laaditud {file}
 	Duration	Kestus
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Iga olem võtab neist esimese, mida saab kohe täita, kõik korraga, ja annab ühikud tagasi, kui ülesandest lahkub.
 	Edit	Muuda
 	Entered	Sisenenud
 	Erlang	Erlang
 	Error	Viga
 	Every distribution	Kõik jaotused
+	Exit	Välju
 	Experiment	Eksperiment
 	Experiment Settings	Eksperimendi seaded
 	Exponential	Eksponentsiaalne
+	Export	Ekspordi
 	Export charts (PNG)	Ekspordi graafikud (PNG)
 	Export table (CSV)	Ekspordi tabel (CSV)
 	Exported {file}	Eksporditud {file}
@@ -75,12 +93,17 @@
 	Gamma	Gamma
 	Goes to	Viib kohta
 	Help	Abi
+	Hide Others	Peida teised
+	Hide {app}	Peida {app}
+	Keyboard Shortcuts…	Klaviatuuri otseteed…
 	Keyboard shortcuts saved	Klaviatuuri otseteed salvestatud
 	Keyboard shortcuts unchanged	Klaviatuuri otseteed muutmata
 	Language	Keel
 	Left	Lahkunud
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Litsentsitud valikuliselt MIT License'i või Apache License 2.0 alusel.
+	Light	Hele
 	Log-normal	Lognormaalne
+	Lost (no way out)	Kaotatud (väljapääs puudub)
 	Lost (waiting room full)	Kaotatud (ooteruum täis)
 	M/M/1 queue	M/M/1 järjekord
 	Maximise	Maksimeeri
@@ -93,10 +116,13 @@
 	Mean wait	Keskmine ooteaeg
 	Metric	Mõõdik
 	Minimise	Minimeeri
+	Minimize	Minimeeri
 	Minimum	Miinimum
 	Model	Mudel
 	Most likely	Kõige tõenäolisem
 	Name	Nimi
+	Needs	Vajadused
+	New	Uus
 	New model	Uus mudel
 	New property	Uus omadus
 	New property name	Uue omaduse nimi
@@ -111,21 +137,28 @@
 	One task per BPSim distribution, to compare their spread.	Üks ülesanne iga BPSim-jaotuse kohta nende hajuvuse võrdlemiseks.
 	Open	Ava
 	Open Example	Ava näide
+	Open Model	Ava mudel
 	Open Recent	Ava hiljutised
 	Open a model first	Ava esmalt mudel
 	Open a model to simulate it	Ava mudel selle simuleerimiseks
 	Open a model…	Ava mudel…
 	Opened {file}	Avati {file}
+	Open…	Ava…
 	Or start from an example	Või alusta näitest
+	PNG image	PNG-pilt
 	Parameters	Parameetrid
 	Points	Punktid
 	Poisson	Poisson
+	Preferences	Eelistused
+	Priority	Prioriteet
 	Probability	Tõenäosus
 	Probability of {id}	{id} tõenäosus
 	Problems	Probleemid
 	Process	Protsess
+	Process models with BPSim	Protsessimudelid ja BPSim
 	Properties	Omadused
 	Quit	Välju
+	Quit {app}	Välju: {app}
 	Ready	Valmis
 	Recover	Taasta
 	Recover unsaved changes?	Kas taastada salvestamata muudatused?
@@ -136,16 +169,21 @@
 	Remove	Eemalda
 	Remove Block	Eemalda plokk
 	Remove Property	Eemalda omadus
+	Remove alternative {n}	Eemalda alternatiiv {n}
 	Remove block	Eemalda plokk
 	Remove the flow {id}	Eemalda voog {id}
+	Remove the pool {id}	Eemalda kogum {id}
 	Remove this block and its flows (Delete)	Eemalda see plokk ja selle vood (Delete)
 	Removed {id}	Eemaldati {id}
 	Rename Block	Nimeta plokk ümber
 	Rename Model	Nimeta mudel ümber
 	Replace Model	Asenda mudel
 	Replications	Kordused
+	Resource pool	Ressursikogum
+	Resource pools	Ressursikogumid
 	Restore	Taasta aken
 	Results	Tulemused
+	Roles	Rollid
 	Run	Käivita
 	Run cancelled	Käivitus tühistatud
 	Run experiment	Käivita eksperiment
@@ -154,11 +192,13 @@
 	Running…	Käivitamine…
 	Save	Salvesta
 	Save As…	Salvesta nimega…
+	Save Model	Salvesta mudel
 	Save changes to {name}?	Kas salvestada {name} muudatused?
 	Saved {file}	Salvestati {file}
 	Scale	Skaala
 	Seed	Juhuarvuseeme
 	Service time	Teenindusaeg
+	Services	Teenused
 	Set Property	Määra omadus
 	Set a value	Määra väärtus
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Määratakse igale olemile sellesse plokki sisenemisel. Avaldised loevad väärtusi, mis olid olemil sisenemise hetkel, näiteks getProperty('issues') - 1.
@@ -166,6 +206,7 @@
 	Shape	Kuju
 	Share of arrivals lost	Kaotatud saabumiste osakaal
 	Share of units blocked	Blokeeritud ühikute osakaal
+	Show All	Näita kõiki
 	Show {id}	Näita {id}
 	Split or join	Hargneda või ühineda
 	Split or join (all ways)	Hargneda või ühineda (kõik teed)
@@ -178,6 +219,7 @@
 	Tandem line	Tandemliin
 	Task	Ülesanne
 	Task with a resource	Ressursiga ülesanne
+	Task with shared resources	Jagatud ressurssidega ülesanne
 	Text	Tekst
 	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
 	This block has a warning	Selles plokis on hoiatus
@@ -195,6 +237,8 @@
 	Undo {action}	Võta tagasi: {action}
 	Uniform	Ühtlane
 	Unit	Ühik
+	Units	Ühikud
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Ühikud, mida mitu ülesannet jagavad. Jagatud ressurssidega ülesanne võtab need kogumist või rolli järgi.
 	Untitled	Pealkirjata
 	Untitled model	Pealkirjata mudel
 	Use System Setting	Kasuta süsteemi seadet
@@ -207,8 +251,10 @@
 	Warning	Hoiatus
 	Weibull	Weibull
 	Whole number	Täisarv
+	Window	Aken
 	Yes or no	Jah või ei
 	Your changes will be lost if you don't save them.	Salvestamata muudatused lähevad kaotsi.
+	Zoom	Muuda suurust
 	a model	mudel
 	arrivals	saabumised
 	days	päevad
@@ -225,8 +271,10 @@
 	split or join: all ways	hargneda või ühineda: kõik teed
 	task	ülesanne
 	task with a resource	ressursiga ülesanne
+	task with shared resources	jagatud ressurssidega ülesanne
 	the charts could not be captured	graafikuid ei õnnestunud salvestada
 	the run stopped	käivitus peatus
+	the settings could not be saved: {error}	seadeid ei õnnestunud salvestada: {error}
 	there are no charts to export	pole graafikuid, mida eksportida
 	to {block}	kuni {block}
 	unlimited	piiramatu
@@ -238,10 +286,17 @@
 	± 95% CI	± 95% usaldusvahemik
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± on korduste keskmise 95% Student-t usaldusvahemiku poollaius.
 	· no results yet	· tulemusi veel pole
+unit	d	p
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	a
 @plural	Finished {n} replication|Finished {n} replications	{n} kordus lõpetatud|{n} kordust lõpetatud
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avati {file} ({n} hoiatus)|Avati {file} ({n} hoiatust)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Käivitab {n} sõltumatu mudeli korduse seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.|Käivitab {n} sõltumatut mudeli kordust seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} kordus {n}-st lõpetatud|{done} kordust {n}-st lõpetatud
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} korduse põhjal|{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} korduse põhjal
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} kordus · seeme {seed}|{n} kordust · seeme {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} kordus · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}|{n} kordust · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} kordus · seeme {seed}|{n} kordust · seeme {seed}
+@plural	{n} replication|{n} replications	{n} kordus|{n} kordust

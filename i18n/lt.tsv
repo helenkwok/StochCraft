@@ -14,32 +14,46 @@
 @id	language.name	Lietuvių
 	+ Add block	+ Pridėti bloką
 	About StochCraft	Apie StochCraft
+	About {app}	Apie {app}
 	Add Block	Pridėti bloką
 	Add a flow from…	Pridėti srautą iš…
 	Add a flow to…	Pridėti srautą į…
+	Add alternative	Pridėti alternatyvą
 	Add point	Pridėti tašką
+	Add pool	Pridėti grupę
 	Add property	Pridėti savybę
+	Added pool {id}	Pridėta grupė {id}
 	Added {block} ({id})	Pridėta {block} ({id})
+	Alternative {n}	Alternatyva {n}
 	Appearance	Išvaizda
 	Arrival limit	Atvykimų limitas
 	Arrivals	Atvykimai
+	Availability	Parengtis
+	BPMN with BPSim	BPMN su BPSim
 	Back to the model (Esc)	Grįžti į modelį (Esc)
 	Beta	Beta
 	Binomial	Binominis
 	Boolean	Loginė reikšmė
+	Bring All to Front	Perkelti visus į priekį
 	Built with	Sukurta naudojant
+	By role	Pagal vaidmenį
+	CSV table	CSV lentelė
 	Cancel	Atšaukti
+	Cancel Run	Atšaukti vykdymą
 	Cancel run	Atšaukti vykdymą
 	Capacity	Pajėgumas
 	Change Block	Keisti bloką
 	Change Flow	Keisti srautą
 	Changing the time unit does not convert the times already in the model.	Pakeitus laiko vienetą, modelyje jau esančios laiko reikšmės nebus perskaičiuotos.
+	Clear Menu	Išvalyti meniu
 	Close	Užverti
+	Close Window	Užverti langą
 	Comes from	Ateina iš
 	Condition of {id}	{id} sąlyga
 	Connect	Sujungti
 	Connections	Jungtys
 	Constant	Konstanta
+	Dark	Tamsi
 	Data points	Duomenų taškai
 	Date and time	Data ir laikas
 	Decimal number	Dešimtainis skaičius
@@ -56,15 +70,19 @@
 	Download	Atsisiųsti
 	Download charts (PNG)	Atsisiųsti diagramas (PNG)
 	Download table (CSV)	Atsisiųsti lentelę (CSV)
+	Downloaded {file}	Atsisiųsta {file}
 	Duration	Trukmė
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Kiekvienas objektas paima pirmąją iš šių alternatyvų, kurią galima įvykdyti dabar, visą iš karto, ir grąžina vienetus, kai palieka užduotį.
 	Edit	Redaguoti
 	Entered	Įėjo
 	Erlang	Erlango
 	Error	Klaida
 	Every distribution	Visi skirstiniai
+	Exit	Išeiti
 	Experiment	Eksperimentas
 	Experiment Settings	Eksperimento nustatymai
 	Exponential	Eksponentinis
+	Export	Eksportuoti
 	Export charts (PNG)	Eksportuoti diagramas (PNG)
 	Export table (CSV)	Eksportuoti lentelę (CSV)
 	Exported {file}	Eksportuota {file}
@@ -75,12 +93,17 @@
 	Gamma	Gama
 	Goes to	Veda į
 	Help	Žinynas
+	Hide Others	Slėpti kitus
+	Hide {app}	Slėpti {app}
+	Keyboard Shortcuts…	Spartieji klavišai…
 	Keyboard shortcuts saved	Spartieji klavišai įrašyti
 	Keyboard shortcuts unchanged	Spartieji klavišai nepakeisti
 	Language	Kalba
 	Left	Išėjo
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencijuota pagal MIT License arba Apache License 2.0, jūsų pasirinkimu.
+	Light	Šviesi
 	Log-normal	Lognormalusis
+	Lost (no way out)	Prarasta (nėra išėjimo)
 	Lost (waiting room full)	Prarasta (laukiamasis pilnas)
 	M/M/1 queue	M/M/1 eilė
 	Maximise	Maksimizuoti
@@ -93,10 +116,13 @@
 	Mean wait	Vidutinis laukimo laikas
 	Metric	Rodiklis
 	Minimise	Minimizuoti
+	Minimize	Sumažinti
 	Minimum	Minimumas
 	Model	Modelis
 	Most likely	Labiausiai tikėtina
 	Name	Pavadinimas
+	Needs	Poreikiai
+	New	Naujas
 	New model	Naujas modelis
 	New property	Nauja savybė
 	New property name	Naujos savybės pavadinimas
@@ -111,21 +137,28 @@
 	One task per BPSim distribution, to compare their spread.	Po vieną užduotį kiekvienam BPSim skirstiniui, kad būtų galima palyginti jų sklaidą.
 	Open	Atverti
 	Open Example	Atidaryti pavyzdį
+	Open Model	Atidaryti modelį
 	Open Recent	Atverti paskiausiai naudotus failus
 	Open a model first	Pirmiausia atidarykite modelį
 	Open a model to simulate it	Atidarykite modelį jo modeliavimui
 	Open a model…	Atidaryti modelį…
 	Opened {file}	Atidaryta {file}
+	Open…	Atverti…
 	Or start from an example	Arba pradėkite nuo pavyzdžio
+	PNG image	PNG paveikslas
 	Parameters	Parametrai
 	Points	Taškai
 	Poisson	Puasono
+	Preferences	Nuostatos
+	Priority	Prioritetas
 	Probability	Tikimybė
 	Probability of {id}	{id} tikimybė
 	Problems	Problemos
 	Process	Procesas
+	Process models with BPSim	Procesų modeliai su BPSim
 	Properties	Savybės
 	Quit	Išeiti
+	Quit {app}	Išeiti iš {app}
 	Ready	Parengta
 	Recover	Atkurti
 	Recover unsaved changes?	Atkurti neįrašytus pakeitimus?
@@ -136,16 +169,21 @@
 	Remove	Pašalinti
 	Remove Block	Pašalinti bloką
 	Remove Property	Pašalinti savybę
+	Remove alternative {n}	Pašalinti alternatyvą {n}
 	Remove block	Pašalinti bloką
 	Remove the flow {id}	Pašalinti srautą {id}
+	Remove the pool {id}	Pašalinti grupę {id}
 	Remove this block and its flows (Delete)	Pašalinti šį bloką ir jo srautus (Delete)
 	Removed {id}	Pašalinta {id}
 	Rename Block	Pervadinti bloką
 	Rename Model	Pervadinti modelį
 	Replace Model	Pakeisti modelį
 	Replications	Replikacijos
+	Resource pool	Išteklių grupė
+	Resource pools	Išteklių grupės
 	Restore	Atkurti langą
 	Results	Rezultatai
+	Roles	Vaidmenys
 	Run	Vykdyti
 	Run cancelled	Vykdymas atšauktas
 	Run experiment	Vykdyti eksperimentą
@@ -154,11 +192,13 @@
 	Running…	Vykdoma…
 	Save	Įrašyti
 	Save As…	Įrašyti kaip…
+	Save Model	Įrašyti modelį
 	Save changes to {name}?	Įrašyti {name} pakeitimus?
 	Saved {file}	Įrašyta {file}
 	Scale	Skalė
 	Seed	Atsitiktinių skaičių sėkla
 	Service time	Aptarnavimo laikas
+	Services	Paslaugos
 	Set Property	Nustatyti savybę
 	Set a value	Nustatyti reikšmę
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nustatoma kiekvienam objektui, kai jis patenka į šį bloką. Išraiškos nuskaito reikšmes, kurias objektas turėjo įeidamas, pvz., getProperty('issues') - 1.
@@ -166,6 +206,7 @@
 	Shape	Forma
 	Share of arrivals lost	Prarastų atvykimų dalis
 	Share of units blocked	Blokuotų vienetų dalis
+	Show All	Rodyti visus
 	Show {id}	Rodyti {id}
 	Split or join	Skaidyti arba jungti
 	Split or join (all ways)	Skaidyti arba jungti (visi keliai)
@@ -178,6 +219,7 @@
 	Tandem line	Nuoseklioji linija
 	Task	Užduotis
 	Task with a resource	Užduotis su ištekliumi
+	Task with shared resources	Užduotis su bendrais ištekliais
 	Text	Tekstas
 	The model: its experiment, connections and problems	Modelis: eksperimentas, jungtys ir problemos
 	This block has a warning	Šiame bloke yra įspėjimas
@@ -195,6 +237,8 @@
 	Undo {action}	Atšaukti {action}
 	Uniform	Tolygusis
 	Unit	Vienetas
+	Units	Vienetai
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Vienetai, kuriuos bendrai naudoja kelios užduotys. Užduotis su bendrais ištekliais juos paima iš grupės arba pagal vaidmenį.
 	Untitled	Be pavadinimo
 	Untitled model	Modelis be pavadinimo
 	Use System Setting	Naudoti sistemos nustatymą
@@ -207,8 +251,10 @@
 	Warning	Įspėjimas
 	Weibull	Veibulo
 	Whole number	Sveikasis skaičius
+	Window	Langas
 	Yes or no	Taip arba ne
 	Your changes will be lost if you don't save them.	Jei pakeitimų neįrašysite, jie bus prarasti.
+	Zoom	Keisti dydį
 	a model	modelis
 	arrivals	atvykimai
 	days	dienos
@@ -225,8 +271,10 @@
 	split or join: all ways	skaidyti arba jungti: visi keliai
 	task	užduotis
 	task with a resource	užduotis su ištekliumi
+	task with shared resources	užduotis su bendrais ištekliais
 	the charts could not be captured	diagramų nepavyko užfiksuoti
 	the run stopped	vykdymas sustojo
+	the settings could not be saved: {error}	nuostatų nepavyko įrašyti: {error}
 	there are no charts to export	nėra eksportuotinų diagramų
 	to {block}	į {block}
 	unlimited	be apribojimų
@@ -238,10 +286,17 @@
 	± 95% CI	± 95% pasikliautinasis intervalas
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± yra 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp kartojimų, pusplotis.
 	· no results yet	· rezultatų dar nėra
+unit	d	d.
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	m.
 @plural	Finished {n} replication|Finished {n} replications	Baigta {n} replikacija|Baigtos {n} replikacijos|Baigta {n} replikacijų
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Atidaryta {file} ({n} įspėjimas)|Atidaryta {file} ({n} įspėjimai)|Atidaryta {file} ({n} įspėjimų)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Vykdo {n} nepriklausomą modelio replikaciją su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomas modelio replikacijas su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomų modelio replikacijų su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Baigta {done} iš {n} replikacijos|Baigta {done} iš {n} replikacijų|Baigta {done} iš {n} replikacijų
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikaciją|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijas|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijų
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacija · sėkla {seed}|{n} replikacijos · sėkla {seed}|{n} replikacijų · sėkla {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacija · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijos · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijų · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacija · sėkla {seed}|{n} replikacijos · sėkla {seed}|{n} replikacijų · sėkla {seed}
+@plural	{n} replication|{n} replications	{n} replikacija|{n} replikacijos|{n} replikacijų

@@ -14,32 +14,46 @@
 @id	language.name	Nederlands
 	+ Add block	+ Blok toevoegen
 	About StochCraft	Over StochCraft
+	About {app}	Over {app}
 	Add Block	Blok toevoegen
 	Add a flow from…	Stroom toevoegen vanaf…
 	Add a flow to…	Stroom toevoegen naar…
+	Add alternative	Alternatief toevoegen
 	Add point	Punt toevoegen
+	Add pool	Pool toevoegen
 	Add property	Eigenschap toevoegen
+	Added pool {id}	Pool {id} toegevoegd
 	Added {block} ({id})	{block} ({id}) toegevoegd
+	Alternative {n}	Alternatief {n}
 	Appearance	Uiterlijk
 	Arrival limit	Aankomstlimiet
 	Arrivals	Aankomsten
+	Availability	Beschikbaarheid
+	BPMN with BPSim	BPMN met BPSim
 	Back to the model (Esc)	Terug naar het model (Esc)
 	Beta	Bèta
 	Binomial	Binomiaal
 	Boolean	Booleaans
+	Bring All to Front	Alles naar voren halen
 	Built with	Gemaakt met
+	By role	Per rol
+	CSV table	CSV-tabel
 	Cancel	Annuleren
+	Cancel Run	Uitvoering annuleren
 	Cancel run	Uitvoering annuleren
 	Capacity	Capaciteit
 	Change Block	Blok wijzigen
 	Change Flow	Stroom wijzigen
 	Changing the time unit does not convert the times already in the model.	Als u de tijdseenheid wijzigt, worden bestaande tijden in het model niet omgerekend.
+	Clear Menu	Menu wissen
 	Close	Sluiten
+	Close Window	Venster sluiten
 	Comes from	Komt van
 	Condition of {id}	Voorwaarde van {id}
 	Connect	Verbinden
 	Connections	Verbindingen
 	Constant	Constant
+	Dark	Donker
 	Data points	Datapunten
 	Date and time	Datum en tijd
 	Decimal number	Decimaal getal
@@ -56,15 +70,19 @@
 	Download	Downloaden
 	Download charts (PNG)	Grafieken downloaden (PNG)
 	Download table (CSV)	Tabel downloaden (CSV)
+	Downloaded {file}	{file} gedownload
 	Duration	Duur
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Elke entiteit neemt in één keer het eerste van deze alternatieven waaraan nu kan worden voldaan, en geeft de eenheden terug wanneer ze vertrekt.
 	Edit	Bewerken
 	Entered	Binnengekomen
 	Erlang	Erlang
 	Error	Fout
 	Every distribution	Alle verdelingen
+	Exit	Afsluiten
 	Experiment	Experiment
 	Experiment Settings	Experimentinstellingen
 	Exponential	Exponentieel
+	Export	Exporteren
 	Export charts (PNG)	Grafieken exporteren (PNG)
 	Export table (CSV)	Tabel exporteren (CSV)
 	Exported {file}	{file} geëxporteerd
@@ -75,12 +93,17 @@
 	Gamma	Gamma
 	Goes to	Gaat naar
 	Help	Help
+	Hide Others	Anderen verbergen
+	Hide {app}	{app} verbergen
+	Keyboard Shortcuts…	Sneltoetsen…
 	Keyboard shortcuts saved	Sneltoetsen opgeslagen
 	Keyboard shortcuts unchanged	Sneltoetsen ongewijzigd
 	Language	Taal
 	Left	Vertrokken
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Onder MIT License of Apache License 2.0, naar keuze.
+	Light	Licht
 	Log-normal	Lognormaal
+	Lost (no way out)	Verloren (geen uitweg)
 	Lost (waiting room full)	Verloren (wachtruimte vol)
 	M/M/1 queue	M/M/1-wachtrij
 	Maximise	Maximaliseren
@@ -93,10 +116,13 @@
 	Mean wait	Gemiddelde wachttijd
 	Metric	Metriek
 	Minimise	Minimaliseren
+	Minimize	Minimaliseren
 	Minimum	Minimum
 	Model	Model
 	Most likely	Meest waarschijnlijk
 	Name	Naam
+	Needs	Behoeften
+	New	Nieuw
 	New model	Nieuw model
 	New property	Nieuwe eigenschap
 	New property name	Naam van nieuwe eigenschap
@@ -111,21 +137,28 @@
 	One task per BPSim distribution, to compare their spread.	Eén taak per BPSim-verdeling om de spreiding te vergelijken.
 	Open	Openen
 	Open Example	Voorbeeld openen
+	Open Model	Model openen
 	Open Recent	Recent geopend
 	Open a model first	Open eerst een model
 	Open a model to simulate it	Open een model om het te simuleren
 	Open a model…	Model openen…
 	Opened {file}	{file} geopend
+	Open…	Openen…
 	Or start from an example	Of begin met een voorbeeld
+	PNG image	PNG-afbeelding
 	Parameters	Parameters
 	Points	Punten
 	Poisson	Poisson
+	Preferences	Voorkeuren
+	Priority	Prioriteit
 	Probability	Kans
 	Probability of {id}	Kans van {id}
 	Problems	Problemen
 	Process	Proces
+	Process models with BPSim	Procesmodellen met BPSim
 	Properties	Eigenschappen
 	Quit	Afsluiten
+	Quit {app}	{app} afsluiten
 	Ready	Klaar
 	Recover	Herstellen
 	Recover unsaved changes?	Niet-opgeslagen wijzigingen herstellen?
@@ -136,16 +169,21 @@
 	Remove	Verwijderen
 	Remove Block	Blok verwijderen
 	Remove Property	Eigenschap verwijderen
+	Remove alternative {n}	Alternatief {n} verwijderen
 	Remove block	Blok verwijderen
 	Remove the flow {id}	Stroom {id} verwijderen
+	Remove the pool {id}	Pool {id} verwijderen
 	Remove this block and its flows (Delete)	Dit blok en zijn stromen verwijderen (Delete)
 	Removed {id}	{id} verwijderd
 	Rename Block	Blok hernoemen
 	Rename Model	Model hernoemen
 	Replace Model	Model vervangen
 	Replications	Herhalingen
+	Resource pool	Hulpbronnenpool
+	Resource pools	Hulpbronnenpools
 	Restore	Venster herstellen
 	Results	Resultaten
+	Roles	Rollen
 	Run	Uitvoeren
 	Run cancelled	Uitvoering geannuleerd
 	Run experiment	Experiment uitvoeren
@@ -154,11 +192,13 @@
 	Running…	Wordt uitgevoerd…
 	Save	Opslaan
 	Save As…	Opslaan als…
+	Save Model	Model opslaan
 	Save changes to {name}?	Wijzigingen in {name} opslaan?
 	Saved {file}	{file} opgeslagen
 	Scale	Schaal
 	Seed	Startwaarde
 	Service time	Servicetijd
+	Services	Diensten
 	Set Property	Eigenschap instellen
 	Set a value	Een waarde instellen
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Wordt ingesteld voor elke entiteit zodra deze dit blok binnenkomt. Expressies lezen de waarden die de entiteit bij binnenkomst had, zoals getProperty('issues') - 1.
@@ -166,6 +206,7 @@
 	Shape	Vorm
 	Share of arrivals lost	Aandeel verloren aankomsten
 	Share of units blocked	Aandeel geblokkeerde eenheden
+	Show All	Alles tonen
 	Show {id}	{id} tonen
 	Split or join	Splitsen of samenvoegen
 	Split or join (all ways)	Splitsen of samenvoegen (alle routes)
@@ -178,6 +219,7 @@
 	Tandem line	Tandemlijn
 	Task	Taak
 	Task with a resource	Taak met een hulpbron
+	Task with shared resources	Taak met gedeelde hulpbronnen
 	Text	Tekst
 	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
 	This block has a warning	Dit blok heeft een waarschuwing
@@ -195,6 +237,8 @@
 	Undo {action}	{action} ongedaan maken
 	Uniform	Uniform
 	Unit	Eenheid
+	Units	Eenheden
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Eenheden die door meerdere taken worden gedeeld. Een taak met gedeelde hulpbronnen neemt ze per pool of per rol.
 	Untitled	Naamloos
 	Untitled model	Naamloos model
 	Use System Setting	Systeeminstelling gebruiken
@@ -207,8 +251,10 @@
 	Warning	Waarschuwing
 	Weibull	Weibull
 	Whole number	Geheel getal
+	Window	Venster
 	Yes or no	Ja of nee
 	Your changes will be lost if you don't save them.	Je wijzigingen gaan verloren als je ze niet opslaat.
+	Zoom	Zoom
 	a model	een model
 	arrivals	aankomsten
 	days	dagen
@@ -225,8 +271,10 @@
 	split or join: all ways	splitsen of samenvoegen: alle routes
 	task	taak
 	task with a resource	taak met een hulpbron
+	task with shared resources	taak met gedeelde hulpbronnen
 	the charts could not be captured	de grafieken konden niet worden vastgelegd
 	the run stopped	de uitvoering is gestopt
+	the settings could not be saved: {error}	de instellingen konden niet worden opgeslagen: {error}
 	there are no charts to export	er zijn geen grafieken om te exporteren
 	to {block}	naar {block}
 	unlimited	onbeperkt
@@ -238,10 +286,17 @@
 	± 95% CI	± 95%-BI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± is de halve breedte van een 95%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de herhalingen.
 	· no results yet	· nog geen resultaten
+unit	d	d
+unit	h	u
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	j
 @plural	Finished {n} replication|Finished {n} replications	{n} herhaling voltooid|{n} herhalingen voltooid
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} geopend ({n} waarschuwing)|{file} geopend ({n} waarschuwingen)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Voert {n} onafhankelijke herhaling van het model uit met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.|Voert {n} onafhankelijke herhalingen van het model uit met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} van {n} herhaling voltooid|{done} van {n} herhalingen voltooid
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} herhaling|{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} herhalingen
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} herhaling · startwaarde {seed}|{n} herhalingen · startwaarde {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} herhaling · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten|{n} herhalingen · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} herhaling · startwaarde {seed}|{n} herhalingen · startwaarde {seed}
+@plural	{n} replication|{n} replications	{n} herhaling|{n} herhalingen

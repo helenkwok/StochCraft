@@ -14,32 +14,46 @@
 @id	language.name	Polski
 	+ Add block	+ Dodaj blok
 	About StochCraft	O programie StochCraft
+	About {app}	O programie {app}
 	Add Block	Dodaj blok
 	Add a flow from…	Dodaj przepływ z…
 	Add a flow to…	Dodaj przepływ do…
+	Add alternative	Dodaj alternatywę
 	Add point	Dodaj punkt
+	Add pool	Dodaj pulę
 	Add property	Dodaj właściwość
+	Added pool {id}	Dodano pulę {id}
 	Added {block} ({id})	Dodano {block} ({id})
+	Alternative {n}	Alternatywa {n}
 	Appearance	Wygląd
 	Arrival limit	Limit przybyć
 	Arrivals	Przybycia
+	Availability	Dostępność
+	BPMN with BPSim	BPMN z BPSim
 	Back to the model (Esc)	Powrót do modelu (Esc)
 	Beta	Beta
 	Binomial	Dwumianowy
 	Boolean	Wartość logiczna
+	Bring All to Front	Przenieś wszystkie na wierzch
 	Built with	Zbudowano przy użyciu
+	By role	Według roli
+	CSV table	Tabela CSV
 	Cancel	Anuluj
+	Cancel Run	Anuluj uruchomienie
 	Cancel run	Anuluj uruchomienie
 	Capacity	Pojemność
 	Change Block	Zmień blok
 	Change Flow	Zmień przepływ
 	Changing the time unit does not convert the times already in the model.	Zmiana jednostki czasu nie przelicza czasów już zapisanych w modelu.
+	Clear Menu	Wyczyść menu
 	Close	Zamknij
+	Close Window	Zamknij okno
 	Comes from	Pochodzi z
 	Condition of {id}	Warunek dla {id}
 	Connect	Połącz
 	Connections	Połączenia
 	Constant	Stały
+	Dark	Ciemny
 	Data points	Punkty danych
 	Date and time	Data i godzina
 	Decimal number	Liczba dziesiętna
@@ -56,15 +70,19 @@
 	Download	Pobierz
 	Download charts (PNG)	Pobierz wykresy (PNG)
 	Download table (CSV)	Pobierz tabelę (CSV)
+	Downloaded {file}	Pobrano {file}
 	Duration	Czas trwania
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Każda jednostka bierze pierwszy z tych wariantów, który można teraz spełnić, wszystko naraz, i oddaje zajęte zasoby, gdy wychodzi.
 	Edit	Edycja
 	Entered	Weszło
 	Erlang	Rozkład Erlanga
 	Error	Błąd
 	Every distribution	Wszystkie rozkłady
+	Exit	Zakończ
 	Experiment	Eksperyment
 	Experiment Settings	Ustawienia eksperymentu
 	Exponential	Wykładniczy
+	Export	Eksportuj
 	Export charts (PNG)	Eksportuj wykresy (PNG)
 	Export table (CSV)	Eksportuj tabelę (CSV)
 	Exported {file}	Wyeksportowano {file}
@@ -75,12 +93,17 @@
 	Gamma	Gamma
 	Goes to	Prowadzi do
 	Help	Pomoc
+	Hide Others	Ukryj pozostałe
+	Hide {app}	Ukryj {app}
+	Keyboard Shortcuts…	Skróty klawiaturowe…
 	Keyboard shortcuts saved	Zapisano skróty klawiaturowe
 	Keyboard shortcuts unchanged	Skróty klawiaturowe bez zmian
 	Language	Język
 	Left	Wyszło
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Na licencji MIT License lub Apache License 2.0, do wyboru.
+	Light	Jasny
 	Log-normal	Logarytmiczno-normalny
+	Lost (no way out)	Utracone (brak wyjścia)
 	Lost (waiting room full)	Utracone (poczekalnia pełna)
 	M/M/1 queue	Kolejka M/M/1
 	Maximise	Maksymalizuj
@@ -93,10 +116,13 @@
 	Mean wait	Średni czas oczekiwania
 	Metric	Miara
 	Minimise	Minimalizuj
+	Minimize	Minimalizuj
 	Minimum	Minimum
 	Model	Model
 	Most likely	Najbardziej prawdopodobna
 	Name	Nazwa
+	Needs	Wymagania
+	New	Nowy
 	New model	Nowy model
 	New property	Nowa właściwość
 	New property name	Nazwa nowej właściwości
@@ -111,21 +137,28 @@
 	One task per BPSim distribution, to compare their spread.	Jedno zadanie dla każdego rozkładu BPSim, aby porównać ich rozrzut.
 	Open	Otwórz
 	Open Example	Otwórz przykład
+	Open Model	Otwórz model
 	Open Recent	Otwórz ostatnie
 	Open a model first	Najpierw otwórz model
 	Open a model to simulate it	Otwórz model, aby go symulować
 	Open a model…	Otwórz model…
 	Opened {file}	Otwarto {file}
+	Open…	Otwórz…
 	Or start from an example	Lub rozpocznij od przykładu
+	PNG image	Obraz PNG
 	Parameters	Parametry
 	Points	Punkty
 	Poisson	Poissona
+	Preferences	Preferencje
+	Priority	Priorytet
 	Probability	Prawdopodobieństwo
 	Probability of {id}	Prawdopodobieństwo dla {id}
 	Problems	Problemy
 	Process	Proces
+	Process models with BPSim	Modele procesów z BPSim
 	Properties	Właściwości
 	Quit	Zakończ
+	Quit {app}	Zakończ {app}
 	Ready	Gotowe
 	Recover	Odzyskaj
 	Recover unsaved changes?	Odzyskać niezapisane zmiany?
@@ -136,16 +169,21 @@
 	Remove	Usuń
 	Remove Block	Usuń blok
 	Remove Property	Usuń właściwość
+	Remove alternative {n}	Usuń alternatywę {n}
 	Remove block	Usuń blok
 	Remove the flow {id}	Usuń przepływ {id}
+	Remove the pool {id}	Usuń pulę {id}
 	Remove this block and its flows (Delete)	Usuń ten blok i jego przepływy (Delete)
 	Removed {id}	Usunięto {id}
 	Rename Block	Zmień nazwę bloku
 	Rename Model	Zmień nazwę modelu
 	Replace Model	Zastąp model
 	Replications	Replikacje
+	Resource pool	Pula zasobów
+	Resource pools	Pule zasobów
 	Restore	Przywróć
 	Results	Wyniki
+	Roles	Role
 	Run	Uruchom
 	Run cancelled	Anulowano uruchomienie
 	Run experiment	Uruchom eksperyment
@@ -154,11 +192,13 @@
 	Running…	Trwa uruchamianie…
 	Save	Zapisz
 	Save As…	Zapisz jako…
+	Save Model	Zapisz model
 	Save changes to {name}?	Zapisać zmiany w {name}?
 	Saved {file}	Zapisano {file}
 	Scale	Skala
 	Seed	Ziarno
 	Service time	Czas obsługi
+	Services	Usługi
 	Set Property	Ustaw właściwość
 	Set a value	Ustaw wartość
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ustawiane dla każdej jednostki przy wejściu do tego bloku. Wyrażenia odczytują wartości, które jednostka miała w chwili wejścia, np. getProperty('issues') - 1.
@@ -166,6 +206,7 @@
 	Shape	Kształt
 	Share of arrivals lost	Odsetek utraconych przybyć
 	Share of units blocked	Odsetek zablokowanych jednostek
+	Show All	Pokaż wszystko
 	Show {id}	Pokaż {id}
 	Split or join	Rozdziel lub połącz
 	Split or join (all ways)	Rozdziel lub połącz (wszystkie ścieżki)
@@ -178,6 +219,7 @@
 	Tandem line	Linia tandemowa
 	Task	Zadanie
 	Task with a resource	Zadanie z zasobem
+	Task with shared resources	Zadanie ze współdzielonymi zasobami
 	Text	Tekst
 	The model: its experiment, connections and problems	Model: eksperyment, połączenia i problemy
 	This block has a warning	Ten blok ma ostrzeżenie
@@ -195,6 +237,8 @@
 	Undo {action}	Cofnij: {action}
 	Uniform	Jednostajny
 	Unit	Jednostka
+	Units	Jednostki
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Zasoby współdzielone przez kilka zadań. Zadanie ze współdzielonymi zasobami pobiera je z puli lub według roli.
 	Untitled	Bez tytułu
 	Untitled model	Model bez tytułu
 	Use System Setting	Użyj ustawienia systemowego
@@ -207,8 +251,10 @@
 	Warning	Ostrzeżenie
 	Weibull	Weibulla
 	Whole number	Liczba całkowita
+	Window	Okno
 	Yes or no	Tak lub nie
 	Your changes will be lost if you don't save them.	Jeśli nie zapiszesz zmian, zostaną utracone.
+	Zoom	Powiększenie
 	a model	model
 	arrivals	przybycia
 	days	dni
@@ -225,8 +271,10 @@
 	split or join: all ways	rozdziel lub połącz: wszystkie ścieżki
 	task	zadanie
 	task with a resource	zadanie z zasobem
+	task with shared resources	zadanie ze współdzielonymi zasobami
 	the charts could not be captured	nie udało się przechwycić wykresów
 	the run stopped	uruchomienie zatrzymano
+	the settings could not be saved: {error}	nie udało się zapisać ustawień: {error}
 	there are no charts to export	brak wykresów do eksportu
 	to {block}	do {block}
 	unlimited	bez ograniczeń
@@ -238,10 +286,17 @@
 	± 95% CI	± 95% PU
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± oznacza połowę szerokości 95% przedziału ufności Student-t dla średniej z replikacji.
 	· no results yet	· brak wyników
+unit	d	d
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	r.
 @plural	Finished {n} replication|Finished {n} replications	Zakończono {n} replikację|Zakończono {n} replikacje|Zakończono {n} replikacji
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otwarto {file} ({n} ostrzeżenie)|Otwarto {file} ({n} ostrzeżenia)|Otwarto {file} ({n} ostrzeżeń)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Wykonuje {n} niezależną replikację modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.|Wykonuje {n} niezależne replikacje modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.|Wykonuje {n} niezależnych replikacji modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Ukończono {done} z {n} replikacji|Ukończono {done} z {n} replikacji|Ukończono {done} z {n} replikacji
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji|{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji|{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacja · ziarno {seed}|{n} replikacje · ziarno {seed}|{n} replikacji · ziarno {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacja · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} replikacje · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} replikacji · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacja · ziarno {seed}|{n} replikacje · ziarno {seed}|{n} replikacji · ziarno {seed}
+@plural	{n} replication|{n} replications	{n} replikacja|{n} replikacje|{n} replikacji

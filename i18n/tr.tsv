@@ -14,32 +14,46 @@
 @id	language.name	Türkçe
 	+ Add block	+ Blok ekle
 	About StochCraft	StochCraft hakkında
+	About {app}	{app} hakkında
 	Add Block	Blok ekle
 	Add a flow from…	Kaynak…
 	Add a flow to…	Hedef…
+	Add alternative	Alternatif ekle
 	Add point	Nokta ekle
+	Add pool	Havuz ekle
 	Add property	Özellik ekle
+	Added pool {id}	{id} havuzu eklendi
 	Added {block} ({id})	{block} ({id}) eklendi
+	Alternative {n}	Alternatif {n}
 	Appearance	Görünüm
 	Arrival limit	Geliş sınırı
 	Arrivals	Gelişler
+	Availability	Kullanılabilirlik
+	BPMN with BPSim	BPSim içeren BPMN
 	Back to the model (Esc)	Modele dön (Esc)
 	Beta	Beta
 	Binomial	Binom
 	Boolean	Mantıksal
+	Bring All to Front	Tümünü Öne Getir
 	Built with	Şunlarla geliştirildi
+	By role	Role göre
+	CSV table	CSV tablosu
 	Cancel	İptal
+	Cancel Run	Çalıştırmayı iptal et
 	Cancel run	Çalıştırmayı iptal et
 	Capacity	Kapasite
 	Change Block	Bloğu değiştir
 	Change Flow	Akışı değiştir
 	Changing the time unit does not convert the times already in the model.	Zaman birimini değiştirmek modeldeki mevcut süreleri dönüştürmez.
+	Clear Menu	Menüyü Temizle
 	Close	Kapat
+	Close Window	Pencereyi Kapat
 	Comes from	Şuradan gelir
 	Condition of {id}	{id} koşulu
 	Connect	Bağla
 	Connections	Bağlantılar
 	Constant	Sabit
+	Dark	Koyu
 	Data points	Veri noktaları
 	Date and time	Tarih ve saat
 	Decimal number	Ondalık sayı
@@ -56,15 +70,19 @@
 	Download	İndir
 	Download charts (PNG)	Grafikleri indir (PNG)
 	Download table (CSV)	Tabloyu indir (CSV)
+	Downloaded {file}	{file} indirildi
 	Duration	Süre
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Her varlık, bunlardan şu anda karşılanabilen ilkini tek seferde tümüyle alır ve görevden ayrılırken birimleri geri verir.
 	Edit	Düzen
 	Entered	Giren
 	Erlang	Erlang
 	Error	Hata
 	Every distribution	Tüm dağılımlar
+	Exit	Çıkış
 	Experiment	Deney
 	Experiment Settings	Deney ayarları
 	Exponential	Üstel
+	Export	Dışa Aktar
 	Export charts (PNG)	Grafikleri dışa aktar (PNG)
 	Export table (CSV)	Tabloyu dışa aktar (CSV)
 	Exported {file}	{file} dışa aktarıldı
@@ -75,12 +93,17 @@
 	Gamma	Gama
 	Goes to	Şuraya gider
 	Help	Yardım
+	Hide Others	Diğerlerini Gizle
+	Hide {app}	{app} Uygulamasını Gizle
+	Keyboard Shortcuts…	Klavye Kısayolları…
 	Keyboard shortcuts saved	Klavye kısayolları kaydedildi
 	Keyboard shortcuts unchanged	Klavye kısayolları değişmedi
 	Language	Dil
 	Left	Çıkan
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Tercihinize göre MIT License veya Apache License 2.0 ile lisanslanmıştır.
+	Light	Açık
 	Log-normal	Log-normal
+	Lost (no way out)	Kaybedilen (çıkış yolu yok)
 	Lost (waiting room full)	Kaybedilen (bekleme alanı dolu)
 	M/M/1 queue	M/M/1 kuyruğu
 	Maximise	Ekranı kapla
@@ -93,10 +116,13 @@
 	Mean wait	Ortalama bekleme süresi
 	Metric	Ölçüt
 	Minimise	Simge durumuna küçült
+	Minimize	Küçült
 	Minimum	Minimum
 	Model	Model
 	Most likely	En olası
 	Name	Ad
+	Needs	İhtiyaçlar
+	New	Yeni
 	New model	Yeni model
 	New property	Yeni özellik
 	New property name	Yeni özellik adı
@@ -111,21 +137,28 @@
 	One task per BPSim distribution, to compare their spread.	Dağılımlarını karşılaştırmak için her BPSim dağılımına bir görev.
 	Open	Aç
 	Open Example	Örnek aç
+	Open Model	Model aç
 	Open Recent	Son Kullanılanları Aç
 	Open a model first	Önce bir model açın
 	Open a model to simulate it	Simülasyon için model açın
 	Open a model…	Model aç…
 	Opened {file}	{file} açıldı
+	Open…	Aç…
 	Or start from an example	Veya bir örnekle başlayın
+	PNG image	PNG görüntüsü
 	Parameters	Parametreler
 	Points	Noktalar
 	Poisson	Poisson
+	Preferences	Tercihler
+	Priority	Öncelik
 	Probability	Olasılık
 	Probability of {id}	{id} olasılığı
 	Problems	Sorunlar
 	Process	Süreç
+	Process models with BPSim	BPSim içeren süreç modelleri
 	Properties	Özellikler
 	Quit	Çıkış
+	Quit {app}	{app} Uygulamasından Çık
 	Ready	Hazır
 	Recover	Kurtar
 	Recover unsaved changes?	Kaydedilmemiş değişiklikler kurtarılsın mı?
@@ -136,16 +169,21 @@
 	Remove	Kaldır
 	Remove Block	Bloğu kaldır
 	Remove Property	Özelliği kaldır
+	Remove alternative {n}	{n}. alternatifi kaldır
 	Remove block	Bloğu kaldır
 	Remove the flow {id}	{id} akışını kaldır
+	Remove the pool {id}	{id} havuzunu kaldır
 	Remove this block and its flows (Delete)	Bu bloğu ve akışlarını kaldır (Delete)
 	Removed {id}	{id} kaldırıldı
 	Rename Block	Bloğu yeniden adlandır
 	Rename Model	Modeli yeniden adlandır
 	Replace Model	Modeli değiştir
 	Replications	Tekrarlar
+	Resource pool	Kaynak havuzu
+	Resource pools	Kaynak havuzları
 	Restore	Geri yükle
 	Results	Sonuçlar
+	Roles	Roller
 	Run	Çalıştır
 	Run cancelled	Çalıştırma iptal edildi
 	Run experiment	Deneyi çalıştır
@@ -154,11 +192,13 @@
 	Running…	Çalışıyor…
 	Save	Kaydet
 	Save As…	Farklı Kaydet…
+	Save Model	Modeli kaydet
 	Save changes to {name}?	{name} üzerindeki değişiklikler kaydedilsin mi?
 	Saved {file}	{file} kaydedildi
 	Scale	Ölçek
 	Seed	Rastgelelik tohumu
 	Service time	Hizmet süresi
+	Services	Hizmetler
 	Set Property	Özelliği ayarla
 	Set a value	Değer ayarla
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Bu bloğa girerken her varlık için ayarlanır. İfadeler, varlığın giriş anında sahip olduğu değerleri okur; örneğin getProperty('issues') - 1.
@@ -166,6 +206,7 @@
 	Shape	Şekil
 	Share of arrivals lost	Kaybedilen gelişlerin oranı
 	Share of units blocked	Engellenen birimlerin oranı
+	Show All	Tümünü Göster
 	Show {id}	{id} göster
 	Split or join	Ayır veya birleştir
 	Split or join (all ways)	Ayır veya birleştir (tüm yollar)
@@ -178,6 +219,7 @@
 	Tandem line	Tandem hat
 	Task	Görev
 	Task with a resource	Kaynak kullanan görev
+	Task with shared resources	Paylaşılan kaynakları kullanan görev
 	Text	Metin
 	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
 	This block has a warning	Bu blokta uyarı var
@@ -195,6 +237,8 @@
 	Undo {action}	Geri Al: {action}
 	Uniform	Tekdüze
 	Unit	Birim
+	Units	Birimler
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Birden çok görevin paylaştığı birimler. Paylaşılan kaynakları kullanan bir görev bunları havuzdan veya role göre alır.
 	Untitled	İsimsiz
 	Untitled model	Başlıksız model
 	Use System Setting	Sistem ayarını kullan
@@ -207,8 +251,10 @@
 	Warning	Uyarı
 	Weibull	Weibull
 	Whole number	Tam sayı
+	Window	Pencere
 	Yes or no	Evet veya hayır
 	Your changes will be lost if you don't save them.	Kaydetmezseniz değişiklikleriniz kaybolur.
+	Zoom	Boyutu Değiştir
 	a model	bir model
 	arrivals	gelişler
 	days	gün
@@ -225,8 +271,10 @@
 	split or join: all ways	ayır veya birleştir: tüm yollar
 	task	görev
 	task with a resource	kaynak kullanan görev
+	task with shared resources	paylaşılan kaynakları kullanan görev
 	the charts could not be captured	grafikler yakalanamadı
 	the run stopped	çalıştırma durdu
+	the settings could not be saved: {error}	ayarlar kaydedilemedi: {error}
 	there are no charts to export	dışa aktarılacak grafik yok
 	to {block}	{block} bloğuna
 	unlimited	sınırsız
@@ -238,10 +286,17 @@
 	± 95% CI	± 95% güven aralığı
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	±, tekrarlamalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliğidir.
 	· no results yet	· henüz sonuç yok
+unit	d	gün
+unit	h	sa
+unit	min	dk
+unit	ms	ms
+unit	s	sn
+unit	yr	yıl
 @plural	Finished {n} replication|Finished {n} replications	{n} tekrar tamamlandı|{n} tekrar tamamlandı
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} açıldı ({n} uyarı)|{file} açıldı ({n} uyarı)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Modelin {n} bağımsız tekrarını {seed} tohumundan çalıştırır. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.|Modelin {n} bağımsız tekrarını {seed} tohumundan çalıştırır. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} tekrardan {done} tanesi tamamlandı|{n} tekrardan {done} tanesi tamamlandı
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} tekrar üzerinden|{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} tekrar üzerinden
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} tekrar · tohum {seed}|{n} tekrar · tohum {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü|{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} tekrar · tohum {seed}|{n} tekrar · tohum {seed}
+@plural	{n} replication|{n} replications	{n} tekrar|{n} tekrar

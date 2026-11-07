@@ -340,17 +340,445 @@ fn new_names_in_a_latin_1_file_are_character_references() {
 }
 
 #[test]
-fn edits_that_cannot_be_saved_say_why() {
-    // Changing the time unit would change what the values with their own units mean.
+fn values_tied_to_calendars_survive_edits() {
+    // A processing time and a property, each with a value for the "lunch" calendar besides the
+    // default one. StochCraft uses calendar values only for arrivals and pool units, so the
+    // read-back check cannot see these: saving must keep them by itself.
+    let original = text(&file("mm1.bpmn"))
+        .replace(
+            r#"<bpsim:NegativeExponentialDistribution mean="1"/>"#,
+            r#"<bpsim:NegativeExponentialDistribution mean="1"/>
+                <bpsim:NegativeExponentialDistribution mean="3" validFor="lunch"/>"#,
+        )
+        .replace(
+            r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+            r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="size"><bpsim:NumericParameter value="9" validFor="lunch"/><bpsim:NumericParameter value="1"/></bpsim:Property>
+            </bpsim:PropertyParameters>"#,
+        );
+    assert!(original.contains(r#"mean="3" validFor="lunch""#) && original.contains("\"size\""));
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    let serve = element(&mut m, "serve");
+    if let ElementKind::Server { service, .. } = &mut serve.kind {
+        *service = Dist::Exponential { mean: 2.0 };
+    }
+    serve.properties[0].value = stochcraft_model::PropertyValue::Number(4.0);
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    for kept in [
+        r#"<bpsim:NegativeExponentialDistribution mean="3" validFor="lunch"/>"#,
+        r#"<bpsim:NumericParameter value="9" validFor="lunch"/>"#,
+    ] {
+        assert!(t.contains(kept), "{kept} lost:\n{t}");
+    }
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+}
+
+#[test]
+fn edited_saves_keep_the_byte_order_mark_and_doctype() {
+    let original = format!(
+        "\u{feff}{}",
+        text(&file("mm1.bpmn")).replace(
+            "<semantic:definitions ",
+            "<!DOCTYPE semantic:definitions [\n  <!ENTITY tool \"StochCraft\">\n]>\n<semantic:definitions ",
+        )
+    );
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.experiment.replications = 3;
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    assert!(t.starts_with("\u{feff}<?xml "), "{t}");
+    assert!(
+        t.contains("<!DOCTYPE semantic:definitions [\n  <!ENTITY tool \"StochCraft\">\n]>\n<semantic:definitions "),
+        "{t}"
+    );
+    assert_eq!(changed_lines(original.as_bytes(), &saved), 2, "{t}");
+}
+
+#[test]
+fn removing_a_block_leaves_no_references_to_it() {
+    // A lane listing the task, a note attached to it and a timer on its boundary.
+    let original = text(&file("mm1.bpmn"))
+        .replace(
+            r#"<semantic:process id="p1" name="Counter" isExecutable="false">"#,
+            r#"<semantic:process id="p1" name="Counter" isExecutable="false">
+    <semantic:laneSet id="ls1">
+      <semantic:lane id="desk" name="Desk">
+        <semantic:flowNodeRef>arrive</semantic:flowNodeRef>
+        <semantic:flowNodeRef>serve</semantic:flowNodeRef>
+        <semantic:flowNodeRef>leave</semantic:flowNodeRef>
+      </semantic:lane>
+    </semantic:laneSet>"#,
+        )
+        .replace(
+            r#"<semantic:sequenceFlow id="f2" sourceRef="serve" targetRef="leave"/>"#,
+            r#"<semantic:sequenceFlow id="f2" sourceRef="serve" targetRef="leave"/>
+    <semantic:boundaryEvent id="late" attachedToRef="serve">
+      <semantic:outgoing>f3</semantic:outgoing>
+      <semantic:timerEventDefinition id="late-timer"/>
+    </semantic:boundaryEvent>
+    <semantic:sequenceFlow id="f3" sourceRef="late" targetRef="leave"/>
+    <semantic:textAnnotation id="note"><semantic:text>Busy at noon</semantic:text></semantic:textAnnotation>
+    <semantic:association id="a1" sourceRef="note" targetRef="serve"/>
+    <semantic:association id="a2" sourceRef="note" targetRef="f2"/>"#,
+        )
+        .replace(
+            "<semantic:incoming>f2</semantic:incoming>",
+            "<semantic:incoming>f2</semantic:incoming>\n      <semantic:incoming>f3</semantic:incoming>",
+        );
+    assert!(original.contains("attachedToRef") && original.contains("flowNodeRef"));
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.elements.retain(|e| e.id.as_str() != "serve");
+    m.connections.clear();
+    m.connections
+        .push(Connection::new(id("f0"), id("arrive"), id("leave")));
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    for gone in [
+        "<semantic:flowNodeRef>serve</semantic:flowNodeRef>",
+        r#"attachedToRef="serve""#,
+        r#"targetRef="serve""#,
+        r#"id="f3""#,
+        "<semantic:incoming>f3</semantic:incoming>",
+        r#"targetRef="f2""#,
+    ] {
+        assert!(!t.contains(gone), "{gone} left behind:\n{t}");
+    }
+    // What does not refer to the task stays.
+    for kept in [
+        "<semantic:flowNodeRef>arrive</semantic:flowNodeRef>",
+        r#"<semantic:textAnnotation id="note">"#,
+    ] {
+        assert!(t.contains(kept), "{kept} lost:\n{t}");
+    }
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+
+    // A task written again as another kind (an end event) keeps its place in the lane and its
+    // note: it is still there.
+    let mut m = loaded.model.clone();
+    element(&mut m, "serve").kind = ElementKind::Sink;
+    m.connections.retain(|c| c.id.as_str() != "f2");
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    for kept in [
+        "<semantic:flowNodeRef>serve</semantic:flowNodeRef>",
+        r#"targetRef="serve""#,
+    ] {
+        assert!(t.contains(kept), "{kept} lost:\n{t}");
+    }
+}
+
+#[test]
+fn new_ids_never_clash_with_the_files_other_ids() {
     let loaded = read_scenario(&file("mm1.bpmn"), None).unwrap_or_else(|e| panic!("{e}"));
+    // Ids the file uses for what StochCraft keeps but does not model: the task's own resource,
+    // the process, a scenario.
+    for taken in ["clerk", "p1", "two-clerks", "defs"] {
+        assert!(loaded.opened.id_in_use(taken), "{taken}");
+        let mut m = loaded.model.clone();
+        add_delay_between(&mut m, taken, "serve", "leave");
+        let r = loaded.opened.save(&m);
+        assert!(
+            matches!(r, Err(SaveError::Unsupported(_))),
+            "{taken}: {r:?}"
+        );
+    }
+    // The model's own ids are its to reuse.
+    assert!(!loaded.opened.id_in_use("serve") && !loaded.opened.id_in_use("f1"));
+    // Ids StochCraft makes up for the file (a new server's resource) avoid the model's new ids.
+    let (saved, _) = edit_and_save("mm1.bpmn", None, |m| {
+        add_delay_between(m, "pay", "serve", "leave");
+        add_delay_between(m, "pay_resource", "pay", "leave");
+        element(m, "pay").kind = ElementKind::Server {
+            capacity: 1,
+            service: Dist::Constant(1.0),
+            queue_capacity: None,
+            breakdown: None,
+        };
+    });
+    let t = text(&saved);
+    assert_eq!(t.matches(r#"id="pay_resource""#).count(), 1, "{t}");
+}
+
+#[test]
+fn edits_that_cannot_be_saved_say_why() {
+    // "two-clerks" takes its values with their own units from "base": changing its time unit
+    // would mean rewriting them in "base", which would change that scenario too.
+    let loaded =
+        read_scenario(&file("mm1.bpmn"), Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
     let mut m = loaded.model.clone();
     m.experiment.time_unit = TimeUnit::Hours;
     let r = loaded.opened.save(&m);
-    assert!(matches!(r, Err(SaveError::Unsupported(_))), "{r:?}");
+    assert!(
+        matches!(&r, Err(SaveError::Unsupported(why)) if why.contains("`base`")),
+        "{r:?}"
+    );
     // Reordering elements would change the model's random streams.
     let mut m = loaded.model.clone();
     m.elements.reverse();
     assert!(loaded.opened.save(&m).is_err());
+}
+
+/// Opens `bytes`, changes only the time unit, saves, and checks that the file reads back as the
+/// relabelled model.
+fn relabel(bytes: &[u8], unit: TimeUnit) -> Vec<u8> {
+    let loaded = read_scenario(bytes, None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.experiment.time_unit = unit;
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_within_noise(&back.model, &m);
+    saved
+}
+
+/// Asserts that two models are equal but for numbers within 1e-12 of each other, which a
+/// rescaled value may differ by.
+fn assert_within_noise(got: &Model, want: &Model) {
+    if got == want {
+        return;
+    }
+    let (g, w) = (format!("{got:?}"), format!("{want:?}"));
+    let split = |s: &str| -> Vec<String> {
+        s.split(|c: char| !(c.is_ascii_digit() || c == '.' || c == '-' || c == 'e'))
+            .map(str::to_owned)
+            .collect()
+    };
+    let same = |a: &String, b: &String| match (a.parse::<f64>(), b.parse::<f64>()) {
+        (Ok(x), Ok(y)) => (x - y).abs() <= 1e-12 * x.abs().max(y.abs()),
+        _ => a == b,
+    };
+    let (sg, sw) = (split(&g), split(&w));
+    // The text between the numbers must match exactly.
+    let words = |s: &str| -> String {
+        s.chars()
+            .filter(|c| !c.is_ascii_digit() && *c != '.')
+            .collect()
+    };
+    assert!(
+        words(&g) == words(&w)
+            && sg.len() == sw.len()
+            && sg.iter().zip(&sw).all(|(a, b)| same(a, b)),
+        "{got:?}\n!=\n{want:?}"
+    );
+}
+
+/// Changing the time unit relabels the model's times (their numbers stay). Values in the file
+/// that name their own unit are rescaled in that unit so they still read as the model says.
+#[test]
+fn changing_the_time_unit_rescales_values_with_their_own_unit() {
+    // mm1: base unit min, arrivals every 80 s, a warm-up of PT1000M, a duration of 21000 (min).
+    let (hours, n) = edit_and_save("mm1.bpmn", None, |m| {
+        m.experiment.time_unit = TimeUnit::Hours;
+    });
+    let t = text(&hours);
+    for want in [
+        r#"baseTimeUnit="hour""#,
+        // 80 s became 80 s × 60: 1.333… hours written in seconds.
+        r#"<bpsim:NegativeExponentialDistribution mean="4800" timeUnit="s"/>"#,
+        // 1000 min became 1000 hours, written in minutes.
+        r#"<bpsim:Warmup><bpsim:DurationParameter value="PT60000M"/></bpsim:Warmup>"#,
+        // Values in the base unit are relabelled as they are.
+        r#"<bpsim:Duration><bpsim:FloatingParameter value="21000"/></bpsim:Duration>"#,
+        r#"<bpsim:NegativeExponentialDistribution mean="1"/>"#,
+    ] {
+        assert!(t.contains(want), "{want} missing:\n{t}");
+    }
+    // Three lines in "base"; "two-clerks", which inherits from it, gets `baseTimeUnit="min"`
+    // and the two rescaled values as they were: eight new lines, four of them the lines "base"
+    // had before (which a count of changed lines does not see).
+    assert_eq!(n, 10, "{}", diff(&file("mm1.bpmn"), &hours));
+    // And back: the original numbers again.
+    let t = text(&relabel(&hours, TimeUnit::Minutes));
+    for want in [
+        r#"<bpsim:NegativeExponentialDistribution mean="80" timeUnit="s"/>"#,
+        r#"<bpsim:Warmup><bpsim:DurationParameter value="PT1000M"/></bpsim:Warmup>"#,
+    ] {
+        assert_eq!(t.matches(want).count(), 2, "{want}:\n{t}");
+    }
+}
+
+/// A scenario that inherits from the opened one means what it meant before the opened one's
+/// time unit changed: it keeps the old unit and the values that were rescaled.
+#[test]
+fn inheriting_scenarios_keep_their_meaning_when_the_time_unit_changes() {
+    let original = file("mm1.bpmn");
+    let before = read_scenario(&original, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    for unit in [TimeUnit::Hours, TimeUnit::Seconds, TimeUnit::Days] {
+        let saved = relabel(&original, unit);
+        let after = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+        assert_eq!(after.model, before.model, "{unit:?}:\n{}", text(&saved));
+        // Saving it again changes nothing more.
+        let again = relabel(&saved, TimeUnit::Minutes);
+        let after = read_scenario(&again, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+        assert_eq!(after.model, before.model, "{unit:?}:\n{}", text(&again));
+    }
+    // A scenario that runs for the default 8 hours keeps them.
+    let no_duration = text(&original).replace(
+        r#"
+            <bpsim:Duration><bpsim:FloatingParameter value="21000"/></bpsim:Duration>"#,
+        "",
+    );
+    let no_duration = no_duration.replace("PT1000M", "PT100M");
+    let before =
+        read_scenario(no_duration.as_bytes(), Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    let saved = relabel(no_duration.as_bytes(), TimeUnit::Hours);
+    let after = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(after.model, before.model, "{}", text(&saved));
+}
+
+/// A rescaled value that cannot be written as a decimal reading back as exactly the same float
+/// still saves: it reads back within 1e-12 of itself.
+#[test]
+fn rescaled_values_may_differ_by_float_noise() {
+    // 2.7 days under minutes is 3888 min; under hours 3888 h, which is 162 days, but
+    // 3888 × (86400 / 3600) does not give back 3888 exactly once read as days.
+    let original = text(&file("mm1.bpmn"))
+        .replace(r#"mean="80" timeUnit="s""#, r#"mean="2.7" timeUnit="day""#);
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.experiment.time_unit = TimeUnit::Hours;
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    let mean = |m: &Model| match &m
+        .elements
+        .iter()
+        .find(|e| e.id.as_str() == "arrive")
+        .map(|e| &e.kind)
+    {
+        Some(ElementKind::Source {
+            interarrival: Dist::Exponential { mean },
+            ..
+        }) => *mean,
+        other => panic!("{other:?}"),
+    };
+    let (got, want) = (mean(&back.model), mean(&m));
+    assert_ne!(got, want, "this case was meant to be inexact");
+    assert!((got - want).abs() <= 1e-12 * want.abs(), "{got} {want}");
+}
+
+/// Without a change of time unit, values with their own units are left exactly as written.
+#[test]
+fn other_edits_leave_values_with_their_own_unit_alone() {
+    let (saved, _) = edit_and_save("mm1.bpmn", None, |m| {
+        m.experiment.replications = 3;
+        m.experiment.duration = 100.0;
+        if let ElementKind::Server { service, .. } = &mut element(m, "serve").kind {
+            *service = Dist::Exponential { mean: 2.0 };
+        }
+    });
+    let t = text(&saved);
+    for kept in [
+        r#"<bpsim:NegativeExponentialDistribution mean="80" timeUnit="s"/>"#,
+        r#"<bpsim:DurationParameter value="PT1000M"/>"#,
+        r#"baseTimeUnit="min""#,
+    ] {
+        assert!(t.contains(kept), "{kept} changed:\n{t}");
+    }
+}
+
+/// Every kind of value with its own unit: the distributions' time parameters (not their
+/// shapes), a user distribution's points, durations of several components, a count
+/// distribution, calendar values, and the BPSim 1.0 data of an XPDL file.
+#[test]
+fn every_value_with_its_own_unit_is_rescaled() {
+    let original = text(&file("mm1.bpmn"))
+        .replace(
+            r#"<bpsim:NegativeExponentialDistribution mean="1"/>"#,
+            r#"<bpsim:TriangularDistribution min="30" mode="45" max="90" timeUnit="s"/>
+                <bpsim:TriangularDistribution min="1" mode="2" max="3" timeUnit="s" validFor="lunch"/>"#,
+        )
+        .replace("PT1000M", "PT16H40M")
+        .replace(
+            r#"<bpsim:Quantity><bpsim:NumericParameter value="1"/></bpsim:Quantity></bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>"#,
+            r#"<bpsim:Quantity><bpsim:NumericParameter value="1"/></bpsim:Quantity></bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="leave">
+            <bpsim:PropertyParameters>
+              <bpsim:Property name="due"><bpsim:FloatingParameter value="2" timeUnit="day"/></bpsim:Property>
+              <bpsim:Property name="wait"><bpsim:GammaDistribution shape="2" scale="6" timeUnit="hour"/></bpsim:Property>
+              <bpsim:Property name="pick"><bpsim:UserDistribution timeUnit="s"><bpsim:UserDistributionDataPoint probability="0.5"><bpsim:FloatingParameter value="30"/></bpsim:UserDistributionDataPoint><bpsim:UserDistributionDataPoint probability="0.5"><bpsim:DurationParameter value="PT1M"/></bpsim:UserDistributionDataPoint></bpsim:UserDistribution></bpsim:Property>
+              <bpsim:Property name="batch"><bpsim:PoissonDistribution mean="4" timeUnit="min"/></bpsim:Property>
+            </bpsim:PropertyParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>"#,
+        );
+    let hours = relabel(original.as_bytes(), TimeUnit::Hours);
+    let t = text(&hours);
+    for want in [
+        r#"<bpsim:TriangularDistribution min="1800" mode="2700" max="5400" timeUnit="s"/>"#,
+        r#"<bpsim:TriangularDistribution min="60" mode="120" max="180" timeUnit="s" validFor="lunch"/>"#,
+        r#"<bpsim:FloatingParameter value="1800"/>"#,
+        r#"<bpsim:DurationParameter value="PT60M"/>"#,
+        // Hours stay hours: the gamma's scale grows with the change, its shape does not.
+        r#"<bpsim:GammaDistribution shape="2" scale="360" timeUnit="hour"/>"#,
+        // Several components become one, in the smallest unit among them.
+        r#"<bpsim:DurationParameter value="PT60000M"/>"#,
+        r#"<bpsim:FloatingParameter value="120" timeUnit="day"/>"#,
+        // A count does not scale: its unit label follows the base unit.
+        r#"<bpsim:PoissonDistribution mean="4" timeUnit="hour"/>"#,
+    ] {
+        assert!(t.contains(want), "{want} missing:\n{t}");
+    }
+    // Back to minutes: the same numbers as before, the durations each in one unit.
+    let t = text(&relabel(&hours, TimeUnit::Minutes));
+    for want in [
+        r#"<bpsim:TriangularDistribution min="30" mode="45" max="90" timeUnit="s"/>"#,
+        r#"<bpsim:DurationParameter value="PT1000M"/>"#,
+        r#"<bpsim:FloatingParameter value="2" timeUnit="day"/>"#,
+        r#"<bpsim:PoissonDistribution mean="4" timeUnit="min"/>"#,
+    ] {
+        assert!(
+            t.contains(want),
+            "{want} missing:
+{t}"
+        );
+    }
+
+    // tandem.xpdl (BPSim 1.0, base unit hour): arrivals uniform 10 to 20 min, welding PT45M,
+    // a duration of P1D.
+    let minutes = relabel(&file("tandem.xpdl"), TimeUnit::Minutes);
+    let t = text(&minutes);
+    for want in [
+        r#"baseTimeUnit="min""#,
+        r#"<b1:UniformDistribution min="0.16666666666666666" max="0.3333333333333333" timeUnit="min"/>"#,
+        r#"<b1:DurationParameter value="PT0.75M"/>"#,
+        r#"<b1:DurationParameter value="P0.016666666666666666D"/>"#,
+    ] {
+        assert!(t.contains(want), "{want} missing:\n{t}");
+    }
+    assert_eq!(
+        text(&relabel(&minutes, TimeUnit::Hours)),
+        text(&file("tandem.xpdl"))
+    );
+}
+
+/// A scenario without a duration runs for 8 hours; changing its time unit writes the duration
+/// down, since 8 hours would be another number in the new unit.
+#[test]
+fn a_default_duration_is_written_when_the_time_unit_changes() {
+    let original = text(&file("mm1.bpmn")).replace(
+        r#"
+            <bpsim:Warmup><bpsim:DurationParameter value="PT1000M"/></bpsim:Warmup>
+            <bpsim:Duration><bpsim:FloatingParameter value="21000"/></bpsim:Duration>"#,
+        "",
+    );
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(loaded.model.experiment.duration, 480.0);
+    let t = text(&relabel(original.as_bytes(), TimeUnit::Seconds));
+    assert!(
+        t.contains(r#"<bpsim:FloatingParameter value="480"/>"#),
+        "{t}"
+    );
 }
 
 fn set_queue(m: &mut Model, at: &str, q: Option<u32>) {

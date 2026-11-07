@@ -14,32 +14,46 @@
 @id	language.name	Suomi
 	+ Add block	+ Lisää lohko
 	About StochCraft	Tietoja StochCraftista
+	About {app}	Tietoja: {app}
 	Add Block	Lisää lohko
 	Add a flow from…	Lisää virta kohteesta…
 	Add a flow to…	Lisää virta kohteeseen…
+	Add alternative	Lisää vaihtoehto
 	Add point	Lisää piste
+	Add pool	Lisää pooli
 	Add property	Lisää ominaisuus
+	Added pool {id}	Lisättiin pooli {id}
 	Added {block} ({id})	Lisättiin {block} ({id})
+	Alternative {n}	Vaihtoehto {n}
 	Appearance	Ulkoasu
 	Arrival limit	Saapumisraja
 	Arrivals	Saapumiset
+	Availability	Käytettävyys
+	BPMN with BPSim	BPMN ja BPSim
 	Back to the model (Esc)	Takaisin malliin (Esc)
 	Beta	Beeta
 	Binomial	Binomijakauma
 	Boolean	Totuusarvo
+	Bring All to Front	Tuo kaikki eteen
 	Built with	Toteutettu seuraavilla
+	By role	Roolin mukaan
+	CSV table	CSV-taulukko
 	Cancel	Peruuta
+	Cancel Run	Peruuta suoritus
 	Cancel run	Peruuta suoritus
 	Capacity	Kapasiteetti
 	Change Block	Muuta lohkoa
 	Change Flow	Muuta virtaa
 	Changing the time unit does not convert the times already in the model.	Aikayksikön vaihtaminen ei muunna mallissa jo olevia aikoja.
+	Clear Menu	Tyhjennä valikko
 	Close	Sulje
+	Close Window	Sulje ikkuna
 	Comes from	Tulee kohteesta
 	Condition of {id}	Kohteen {id} ehto
 	Connect	Yhdistä
 	Connections	Yhteydet
 	Constant	Vakio
+	Dark	Tumma
 	Data points	Datapisteet
 	Date and time	Päivämäärä ja aika
 	Decimal number	Desimaaliluku
@@ -56,15 +70,19 @@
 	Download	Lataa
 	Download charts (PNG)	Lataa kaaviot (PNG)
 	Download table (CSV)	Lataa taulukko (CSV)
+	Downloaded {file}	Ladattiin {file}
 	Duration	Kesto
+	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jokainen entiteetti ottaa näistä vaihtoehdoista ensimmäisen, joka voidaan täyttää heti, kaiken kerralla, ja palauttaa yksiköt poistuessaan tehtävästä.
 	Edit	Muokkaa
 	Entered	Saapuneet
 	Erlang	Erlang
 	Error	Virhe
 	Every distribution	Kaikki jakaumat
+	Exit	Lopeta
 	Experiment	Koe
 	Experiment Settings	Kokeen asetukset
 	Exponential	Eksponentiaalijakauma
+	Export	Vie
 	Export charts (PNG)	Vie kaaviot (PNG)
 	Export table (CSV)	Vie taulukko (CSV)
 	Exported {file}	Vietiin {file}
@@ -75,12 +93,17 @@
 	Gamma	Gamma
 	Goes to	Menee kohteeseen
 	Help	Ohje
+	Hide Others	Piilota muut
+	Hide {app}	Piilota {app}
+	Keyboard Shortcuts…	Pikanäppäimet…
 	Keyboard shortcuts saved	Pikanäppäimet tallennettu
 	Keyboard shortcuts unchanged	Pikanäppäimet ennallaan
 	Language	Kieli
 	Left	Poistuneet
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Lisensoitu valintasi mukaan MIT License- tai Apache License 2.0 -lisenssillä.
+	Light	Vaalea
 	Log-normal	Lognormaalijakauma
+	Lost (no way out)	Menetetyt (ei reittiä ulos)
 	Lost (waiting room full)	Menetetyt (odotustila täynnä)
 	M/M/1 queue	M/M/1-jono
 	Maximise	Suurenna
@@ -93,10 +116,13 @@
 	Mean wait	Keskimääräinen odotusaika
 	Metric	Mittari
 	Minimise	Pienennä
+	Minimize	Pienennä
 	Minimum	Minimi
 	Model	Malli
 	Most likely	Todennäköisin
 	Name	Nimi
+	Needs	Tarpeet
+	New	Uusi
 	New model	Uusi malli
 	New property	Uusi ominaisuus
 	New property name	Uuden ominaisuuden nimi
@@ -111,21 +137,28 @@
 	One task per BPSim distribution, to compare their spread.	Yksi tehtävä kutakin BPSim-jakaumaa kohti niiden hajonnan vertailuun.
 	Open	Avaa
 	Open Example	Avaa esimerkki
+	Open Model	Avaa malli
 	Open Recent	Avaa viimeisimmät
 	Open a model first	Avaa ensin malli
 	Open a model to simulate it	Avaa simuloitava malli
 	Open a model…	Avaa malli…
 	Opened {file}	Avattiin {file}
+	Open…	Avaa…
 	Or start from an example	Tai aloita esimerkistä
+	PNG image	PNG-kuva
 	Parameters	Parametrit
 	Points	Pisteet
 	Poisson	Poisson
+	Preferences	Asetukset
+	Priority	Prioriteetti
 	Probability	Todennäköisyys
 	Probability of {id}	Kohteen {id} todennäköisyys
 	Problems	Ongelmat
 	Process	Prosessi
+	Process models with BPSim	Prosessimallit ja BPSim
 	Properties	Ominaisuudet
 	Quit	Lopeta
+	Quit {app}	Lopeta {app}
 	Ready	Valmis
 	Recover	Palauta
 	Recover unsaved changes?	Palautetaanko tallentamattomat muutokset?
@@ -136,16 +169,21 @@
 	Remove	Poista
 	Remove Block	Poista lohko
 	Remove Property	Poista ominaisuus
+	Remove alternative {n}	Poista vaihtoehto {n}
 	Remove block	Poista lohko
 	Remove the flow {id}	Poista virta {id}
+	Remove the pool {id}	Poista pooli {id}
 	Remove this block and its flows (Delete)	Poista tämä lohko ja sen virrat (Delete)
 	Removed {id}	Poistettiin {id}
 	Rename Block	Nimeä lohko uudelleen
 	Rename Model	Nimeä malli uudelleen
 	Replace Model	Korvaa malli
 	Replications	Toistot
+	Resource pool	Resurssipooli
+	Resource pools	Resurssipoolit
 	Restore	Palauta ikkuna
 	Results	Tulokset
+	Roles	Roolit
 	Run	Suorita
 	Run cancelled	Suoritus peruutettu
 	Run experiment	Suorita koe
@@ -154,11 +192,13 @@
 	Running…	Suoritetaan…
 	Save	Tallenna
 	Save As…	Tallenna nimellä…
+	Save Model	Tallenna malli
 	Save changes to {name}?	Tallennetaanko kohteen {name} muutokset?
 	Saved {file}	Tallennettiin {file}
 	Scale	Skaala
 	Seed	Satunnaislukusiemen
 	Service time	Palveluaika
+	Services	Palvelut
 	Set Property	Aseta ominaisuus
 	Set a value	Aseta arvo
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Asetetaan jokaiselle entiteetille sen saapuessa tähän lohkoon. Lausekkeet lukevat entiteetin saapuessa voimassa olleet arvot, kuten getProperty('issues') - 1.
@@ -166,6 +206,7 @@
 	Shape	Muoto
 	Share of arrivals lost	Menetettyjen saapumisten osuus
 	Share of units blocked	Estettyjen yksiköiden osuus
+	Show All	Näytä kaikki
 	Show {id}	Näytä {id}
 	Split or join	Haaroita tai yhdistä
 	Split or join (all ways)	Haaroita tai yhdistä (kaikki reitit)
@@ -178,6 +219,7 @@
 	Tandem line	Sarjajono
 	Task	Tehtävä
 	Task with a resource	Resurssia käyttävä tehtävä
+	Task with shared resources	Jaettuja resursseja käyttävä tehtävä
 	Text	Teksti
 	The model: its experiment, connections and problems	Malli: koe, yhteydet ja ongelmat
 	This block has a warning	Tässä lohkossa on varoitus
@@ -195,6 +237,8 @@
 	Undo {action}	Kumoa {action}
 	Uniform	Tasajakauma
 	Unit	Yksikkö
+	Units	Yksiköt
+	Units that several tasks share. A task with shared resources takes them by pool or by role.	Yksiköt, joita useampi tehtävä käyttää yhteisesti. Jaettuja resursseja käyttävä tehtävä ottaa ne poolista tai roolin mukaan.
 	Untitled	Nimetön
 	Untitled model	Nimetön malli
 	Use System Setting	Käytä järjestelmäasetusta
@@ -207,8 +251,10 @@
 	Warning	Varoitus
 	Weibull	Weibull
 	Whole number	Kokonaisluku
+	Window	Ikkuna
 	Yes or no	Kyllä tai ei
 	Your changes will be lost if you don't save them.	Muutokset menetetään, jos niitä ei tallenneta.
+	Zoom	Vaihda kokoa
 	a model	malli
 	arrivals	saapumiset
 	days	päivää
@@ -225,8 +271,10 @@
 	split or join: all ways	haaroita tai yhdistä: kaikki reitit
 	task	tehtävä
 	task with a resource	resurssia käyttävä tehtävä
+	task with shared resources	jaettuja resursseja käyttävä tehtävä
 	the charts could not be captured	kaavioita ei voitu tallentaa
 	the run stopped	suoritus pysähtyi
+	the settings could not be saved: {error}	asetuksia ei voitu tallentaa: {error}
 	there are no charts to export	ei vietäviä kaavioita
 	to {block}	kohteeseen {block}
 	unlimited	rajoittamaton
@@ -238,10 +286,17 @@
 	± 95% CI	± 95%:n luottamusväli
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± tarkoittaa toistojen yli lasketun keskiarvon 95 %:n Student-t-luottamusvälin puolileveyttä.
 	· no results yet	· ei vielä tuloksia
+unit	d	pv
+unit	h	h
+unit	min	min
+unit	ms	ms
+unit	s	s
+unit	yr	v
 @plural	Finished {n} replication|Finished {n} replications	{n} toisto valmistui|{n} toistoa valmistui
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avattiin {file} ({n} varoitus)|Avattiin {file} ({n} varoitusta)
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Suorittaa {n} mallin riippumattoman toiston siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.|Suorittaa {n} mallin riippumatonta toistoa siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} / {n} toisto valmistui|{done} / {n} toistoa valmistui
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} toiston perusteella|{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} toiston perusteella
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} toisto · siemen {seed}|{n} toistoa · siemen {seed}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} toisto · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}|{n} toistoa · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}
+@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} toisto · siemen {seed}|{n} toistoa · siemen {seed}
+@plural	{n} replication|{n} replications	{n} toisto|{n} toistoa

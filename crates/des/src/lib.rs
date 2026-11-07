@@ -30,7 +30,9 @@ mod sim;
 mod store;
 pub use resource::{Acquire, AcquireWithin, Resource, ResourceGuard};
 pub use signal::{Gate, Signal, Wait};
-pub use sim::{Ctx, Hold, HoldInterruptible, Interrupt, InterruptCause, Interrupted, Sim};
+pub use sim::{
+    Ctx, Hold, HoldInterruptible, Interrupt, InterruptCause, Interrupted, Sim, Stopped, Watch,
+};
 pub use store::{Get, GetWithin, PutWait, Store};
 
 /// A wait with a deadline ([`Resource::acquire_within`], [`Store::get_within`]) ended at the

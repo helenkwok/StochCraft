@@ -27,7 +27,11 @@ fn reports(model: &Model) -> Vec<Report> {
         panic!("{compiled:?}")
     };
     (0..REPS)
-        .map(|r| compiled.run(Rng::new(SEED + r)))
+        .map(|r| {
+            compiled
+                .run(Rng::new(SEED + r))
+                .unwrap_or_else(|e| panic!("{e}"))
+        })
         .collect()
 }
 
@@ -112,7 +116,9 @@ fn saturated(b: Breakdown, end: f64) -> Report {
     let Ok(c) = compile(&model) else {
         panic!("does not compile")
     };
-    c.first_arrival_at_zero(true).run(Rng::new(1))
+    c.first_arrival_at_zero(true)
+        .run(Rng::new(1))
+        .unwrap_or_else(|e| panic!("{e}"))
 }
 
 /// Jobs of 3, a failure 10 after each repair, repairs of 2, the job under way finished first:
