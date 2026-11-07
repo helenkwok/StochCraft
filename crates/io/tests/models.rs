@@ -38,7 +38,9 @@ fn bpmn_written_by_another_tool() {
         kind(m, "arrive"),
         &ElementKind::Source {
             interarrival: Dist::Exponential { mean: 80.0 / 60.0 },
-            limit: None
+            limit: None,
+            idle_outside: false,
+            timed: Vec::new(),
         }
     );
     assert_eq!(
@@ -118,7 +120,9 @@ fn xpdl_with_bpsim_1() {
                 min: 10.0 / 60.0,
                 max: 20.0 / 60.0
             },
-            limit: Some(40)
+            limit: Some(40),
+            idle_outside: false,
+            timed: Vec::new(),
         }
     );
     assert_eq!(

@@ -62,6 +62,16 @@ pub struct ScenarioSettings {
     /// BPSim's duration, which includes the warm-up.
     pub duration: Option<f64>,
     pub warmup: Option<f64>,
+    /// The scenario's start (BPSim `Start`), as written: an XML Schema date-time.
+    pub start: Option<String>,
+}
+
+/// A BPSim `Calendar` as the file has it: id, name and iCalendar text.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct CalendarText {
+    pub id: String,
+    pub name: Option<String>,
+    pub text: String,
 }
 
 /// One scenario with `inherits` resolved: for each referenced element, its parameters by
@@ -73,6 +83,9 @@ pub struct Scenario {
     pub params: BTreeMap<String, BTreeMap<String, Element>>,
     /// Whether the data used the BPSim 1.0 namespace.
     pub version_1: bool,
+    /// The calendars of the scenario and those it inherits, in file order (a scenario's own
+    /// replacing an inherited one with the same id).
+    pub calendars: Vec<CalendarText>,
 }
 
 impl Scenario {
@@ -206,8 +219,20 @@ pub fn read_scenario(data: &Element, id: Option<&str>, notes: &mut Vec<Note>) ->
                 }
             }
         }
-        if s.child(&NSS, "Calendar").is_some() {
-            notes.push(Note::warning(None, "calendars are not used yet (M2.6); values valid only during a calendar are ignored"));
+        for c in s.children_named(&NSS, "Calendar") {
+            let Some(id) = c.attr("id") else {
+                notes.push(Note::warning(None, "a calendar without an id is ignored"));
+                continue;
+            };
+            let cal = CalendarText {
+                id,
+                name: c.attr("name"),
+                text: c.text(),
+            };
+            match sc.calendars.iter_mut().find(|x| x.id == cal.id) {
+                Some(old) => *old = cal,
+                None => sc.calendars.push(cal),
+            }
         }
     }
     Some(sc)
@@ -260,11 +285,14 @@ fn read_settings(p: &Element, s: &mut ScenarioSettings, notes: &mut Vec<Note>) {
             }
         }
     }
-    if p.child(&NSS, "Start").is_some() {
-        notes.push(Note::info(
-            None,
-            "the scenario start date is kept in the file but not used yet (calendars, M2.6)",
-        ));
+    if let Some(param) = p.child(&NSS, "Start") {
+        match value(param, unit, notes, None) {
+            Some(Value::Text(t)) => s.start = Some(t),
+            _ => notes.push(Note::warning(
+                None,
+                "the scenario start is not a date and time (DateTimeParameter) and is ignored",
+            )),
+        }
     }
 }
 
@@ -280,32 +308,66 @@ pub enum Value {
     Expression(String),
 }
 
+fn input_values(param: &Element) -> Vec<&Element> {
+    param
+        .elements()
+        .filter(|v| {
+            v.ns.as_deref().is_some_and(|n| NSS.contains(&n)) && v.local() != "ResultRequest"
+        })
+        .filter(|v| v.attr("result").is_none())
+        .collect()
+}
+
 /// The default value of a parameter element (the first value without `validFor`), in `unit`.
-/// Result values and values tied to calendars are skipped with a note.
+/// Result values are skipped, and so are values tied to calendars, with a note: only the
+/// parameters that read them with [`timed_values`] use them.
 pub fn value(
     param: &Element,
     unit: TimeUnit,
     notes: &mut Vec<Note>,
     at: Option<&str>,
 ) -> Option<Value> {
-    let values: Vec<&Element> = param
-        .elements()
-        .filter(|v| {
-            v.ns.as_deref().is_some_and(|n| NSS.contains(&n)) && v.local() != "ResultRequest"
-        })
-        .filter(|v| v.attr("result").is_none())
-        .collect();
+    let values = input_values(param);
     if values.iter().any(|v| v.attr("validFor").is_some()) {
         notes.push(Note::warning(
             at,
             format!(
-                "{}: values tied to calendars are ignored until M2.6",
+                "{}: values valid for a calendar are used only for arrivals and resource quantity and availability; they are ignored here",
                 param.local()
             ),
         ));
     }
-    let v = values.into_iter().find(|v| v.attr("validFor").is_none())?;
+    default_value(param, unit, notes, at)
+}
+
+/// The default value of a parameter element, without a note about values tied to calendars.
+pub fn default_value(
+    param: &Element,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+    at: Option<&str>,
+) -> Option<Value> {
+    let v = input_values(param)
+        .into_iter()
+        .find(|v| v.attr("validFor").is_none())?;
     parse_value(v, unit, notes, at)
+}
+
+/// The values of a parameter element valid for a calendar (`validFor`), in file order: the
+/// calendar's id and the value, in `unit`.
+pub fn timed_values(
+    param: &Element,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+    at: Option<&str>,
+) -> Vec<(String, Value)> {
+    input_values(param)
+        .into_iter()
+        .filter_map(|v| {
+            let c = v.attr("validFor")?;
+            Some((c, parse_value(v, unit, notes, at)?))
+        })
+        .collect()
 }
 
 fn num(e: &Element, name: &str) -> Option<f64> {
@@ -735,5 +797,15 @@ mod tests {
             Some(Value::Number(1.0))
         );
         assert_eq!(notes.len(), 1, "{notes:?}");
+        let mut notes = vec![];
+        assert_eq!(
+            default_value(&p, TimeUnit::Minutes, &mut notes, None),
+            Some(Value::Number(1.0))
+        );
+        assert_eq!(
+            timed_values(&p, TimeUnit::Minutes, &mut notes, None),
+            [("C1".to_owned(), Value::Number(2.0))]
+        );
+        assert!(notes.is_empty(), "{notes:?}");
     }
 }

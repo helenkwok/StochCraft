@@ -340,8 +340,8 @@ fn new_names_in_a_latin_1_file_are_character_references() {
 #[test]
 fn values_tied_to_calendars_survive_edits() {
     // A processing time and a property, each with a value for the "lunch" calendar besides the
-    // default one. StochCraft ignores calendar values on reading (M2.6), so the read-back check
-    // cannot see them: saving must keep them by itself.
+    // default one. StochCraft uses calendar values only for arrivals and pool units, so the
+    // read-back check cannot see these: saving must keep them by itself.
     let original = text(&file("mm1.bpmn"))
         .replace(
             r#"<bpsim:NegativeExponentialDistribution mean="1"/>"#,

@@ -6,7 +6,8 @@ use std::collections::BTreeMap;
 use std::rc::Rc;
 
 use stochcraft_des::{Ctx, Resource, ResourceGuard, Sim, Stopped, Store, Watch};
-use stochcraft_model::{Element, ElementKind, Model, Need, ResourcePool};
+use stochcraft_model::calendar::{self, Calendar, DateTime};
+use stochcraft_model::{Element, ElementId, ElementKind, Model, Need, ResourcePool, Timed};
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
 
@@ -150,7 +151,26 @@ impl Compiled {
                     .any(|r| places.get(r.to).is_some_and(Option::is_some))
             })
             .collect();
-        let pools = Rc::new(Pools::new(&ctx, &self.model.resources));
+        let end = warmup + duration;
+        let calendars = Calendars::new(&self.model, end);
+        let units: Vec<Vec<(f64, u32)>> = self
+            .model
+            .resources
+            .iter()
+            .map(|r| calendars.units(r))
+            .collect();
+        let pools = Rc::new(Pools::new(
+            &ctx,
+            units
+                .iter()
+                .map(|u| u.first().map_or(0, |(_, n)| *n))
+                .collect(),
+        ));
+        for (p, changes) in units.into_iter().enumerate() {
+            if changes.len() > 1 {
+                spawn_shifts(&mut sim, Rc::clone(&pools), p, changes);
+            }
+        }
         let next_id = Rc::new(RefCell::new(0u64));
         // The elements' streams first, in model order as always; then the properties'.
         let streams: Vec<Rng> = elements.iter().map(|_| rng.fork()).collect();
@@ -211,14 +231,19 @@ impl Compiled {
                 ElementKind::Source {
                     interarrival,
                     limit,
-                } => spawn_source(
-                    &mut sim,
-                    env,
-                    interarrival,
-                    limit,
-                    Rc::clone(&next_id),
-                    self.first_arrival_at_zero,
-                ),
+                    timed,
+                    idle_outside,
+                } => {
+                    let rates = calendars.arrivals(interarrival, &timed, idle_outside);
+                    spawn_source(
+                        &mut sim,
+                        env,
+                        rates,
+                        limit,
+                        Rc::clone(&next_id),
+                        self.first_arrival_at_zero,
+                    );
+                }
                 ElementKind::Server {
                     capacity, service, ..
                 } => spawn_server(&mut sim, env, capacity, service),
@@ -255,7 +280,6 @@ impl Compiled {
             });
         }
 
-        let end = warmup + duration;
         let watch = Watch {
             max_events_at_one_time: self.max_events_at_one_time,
             cancelled,
@@ -579,20 +603,55 @@ impl BlockEnv {
     }
 }
 
+/// The time between arrivals over a run: from each time on, until the next, the distribution
+/// that applies (`None`: no arrivals).
+type Rates = Vec<(f64, Option<Dist>)>;
+
 fn spawn_source(
     sim: &mut Sim,
     mut env: BlockEnv,
-    interarrival: Dist,
+    rates: Rates,
     limit: Option<u64>,
     next_id: Rc<RefCell<u64>>,
     first_at_zero: bool,
 ) {
     sim.spawn_tagged(tag(env.me), async move {
         let mut made = 0u64;
+        // The period of `rates` now under way.
+        let mut k = 0usize;
         while limit.is_none_or(|l| made < l) {
-            if !(first_at_zero && made == 0) {
-                let dt = interarrival.sample(&mut env.rng);
-                env.ctx.hold(dt).await;
+            let arrive_now =
+                first_at_zero && made == 0 && rates.first().is_some_and(|(_, d)| d.is_some());
+            if !arrive_now {
+                // When the rate changes before the next arrival, that arrival is dropped and the
+                // next is drawn from the new rate at the change (BPSim: a calendar value takes
+                // effect at once).
+                loop {
+                    let now = env.ctx.now();
+                    let change = rates.get(k + 1).map(|(t, _)| *t);
+                    match rates.get(k).and_then(|(_, d)| d.as_ref()) {
+                        None => match change {
+                            Some(c) => {
+                                env.ctx.hold(c - now).await;
+                                k += 1;
+                            }
+                            None => return,
+                        },
+                        Some(d) => {
+                            let dt = d.sample(&mut env.rng);
+                            match change {
+                                Some(c) if now + dt > c => {
+                                    env.ctx.hold(c - now).await;
+                                    k += 1;
+                                }
+                                _ => {
+                                    env.ctx.hold(dt).await;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
             }
             let now = env.ctx.now();
             let id = {
@@ -623,6 +682,94 @@ fn spawn_source(
                     s.lost += 1;
                 }
             });
+        }
+    });
+}
+
+/// The model's calendars over one run: when each is active, in model time.
+struct Calendars {
+    periods: BTreeMap<ElementId, Vec<(f64, f64)>>,
+    end: f64,
+}
+
+impl Calendars {
+    fn new(model: &Model, end: f64) -> Self {
+        let origin = model
+            .experiment
+            .start
+            .or_else(|| Calendar::default_origin(&model.calendars))
+            .unwrap_or(DateTime(0));
+        let unit = model.experiment.time_unit;
+        Self {
+            periods: model
+                .calendars
+                .iter()
+                .map(|c| (c.id.clone(), c.periods(origin, unit, end)))
+                .collect(),
+            end,
+        }
+    }
+
+    fn timeline<T>(&self, timed: &[Timed<T>]) -> Vec<(f64, Option<usize>)> {
+        if timed.is_empty() {
+            return vec![(0.0, None)];
+        }
+        let periods = |c: &ElementId| self.periods.get(c).cloned().unwrap_or_default();
+        calendar::timeline(timed, &periods, self.end)
+    }
+
+    /// A source's time between arrivals over the run.
+    fn arrivals(&self, default: Dist, timed: &[Timed<Dist>], idle_outside: bool) -> Rates {
+        self.timeline(timed)
+            .into_iter()
+            .map(|(t, i)| {
+                let d = match i {
+                    Some(i) => timed.get(i).map(|x| x.value.clone()),
+                    None => (!idle_outside).then(|| default.clone()),
+                };
+                (t, d)
+            })
+            .collect()
+    }
+
+    /// A pool's units over the run: its shift's quantity while it is available, else none.
+    fn units(&self, r: &ResourcePool) -> Vec<(f64, u32)> {
+        let q = self.timeline(&r.shifts);
+        let a = self.timeline(&r.availability);
+        let mut cuts: Vec<f64> = q.iter().chain(&a).map(|(t, _)| *t).collect();
+        cuts.sort_by(f64::total_cmp);
+        cuts.dedup();
+        let at = |line: &[(f64, Option<usize>)], t: f64| {
+            line.iter()
+                .take_while(|(s, _)| *s <= t)
+                .last()
+                .and_then(|(_, i)| *i)
+        };
+        let mut out: Vec<(f64, u32)> = Vec::new();
+        for t in cuts {
+            let quantity = at(&q, t)
+                .and_then(|i| r.shifts.get(i))
+                .map_or(r.quantity, |s| s.value);
+            let available = at(&a, t)
+                .and_then(|i| r.availability.get(i))
+                .map_or(r.available, |s| s.value);
+            let units = if available { quantity } else { 0 };
+            if out.last().is_none_or(|(_, u)| *u != units) {
+                out.push((t, units));
+            }
+        }
+        out
+    }
+}
+
+/// Changes pool `pool`'s units at each time of `changes` (the first, at 0, is already set).
+fn spawn_shifts(sim: &mut Sim, pools: Rc<Pools>, pool: usize, changes: Vec<(f64, u32)>) {
+    let ctx = pools.ctx.clone();
+    sim.spawn(async move {
+        for (t, units) in changes.into_iter().skip(1) {
+            let now = ctx.now();
+            ctx.hold(t - now).await;
+            pools.set_units(pool, units);
         }
     });
 }
@@ -735,9 +882,15 @@ struct Waiting {
 /// pool's busy units over time.
 struct Pools {
     ctx: Ctx,
-    free: RefCell<Vec<u32>>,
-    quantity: Vec<u32>,
+    /// Units free now; below 0 while a pool's shift has ended with more units still busy
+    /// finishing their jobs than it now has.
+    free: RefCell<Vec<i64>>,
+    /// Units each pool has now (its shift's quantity while available).
+    units: RefCell<Vec<u32>>,
     busy: RefCell<Vec<TimeWeighted>>,
+    /// Units each pool has, over time, for utilisation: its shift's, or more while units whose
+    /// shift has ended are finishing their jobs.
+    capacity: RefCell<Vec<TimeWeighted>>,
     /// How many times each pool's units were taken.
     taken: RefCell<Vec<u64>>,
     /// Highest priority first, then by arrival.
@@ -746,20 +899,45 @@ struct Pools {
 }
 
 impl Pools {
-    fn new(ctx: &Ctx, resources: &[ResourcePool]) -> Self {
+    fn new(ctx: &Ctx, units: Vec<u32>) -> Self {
         Self {
             ctx: ctx.clone(),
-            free: RefCell::new(resources.iter().map(|r| r.quantity).collect()),
-            quantity: resources.iter().map(|r| r.quantity).collect(),
-            busy: RefCell::new(
-                resources
+            free: RefCell::new(units.iter().map(|&u| i64::from(u)).collect()),
+            busy: RefCell::new(units.iter().map(|_| TimeWeighted::new(0.0, 0.0)).collect()),
+            capacity: RefCell::new(
+                units
                     .iter()
-                    .map(|_| TimeWeighted::new(0.0, 0.0))
+                    .map(|&u| TimeWeighted::new(0.0, f64::from(u)))
                     .collect(),
             ),
-            taken: RefCell::new(vec![0; resources.len()]),
+            taken: RefCell::new(vec![0; units.len()]),
+            units: RefCell::new(units),
             waiting: RefCell::new(Vec::new()),
             seq: RefCell::new(0),
+        }
+    }
+
+    /// Sets pool `p`'s units (a shift change). Units taken away that are busy finish their job
+    /// first; units added go to waiting entities at once.
+    fn set_units(&self, p: usize, n: u32) {
+        let now = self.ctx.now();
+        let more = {
+            let mut units = self.units.borrow_mut();
+            let mut free = self.free.borrow_mut();
+            let (Some(u), Some(f)) = (units.get_mut(p), free.get_mut(p)) else {
+                return;
+            };
+            *f += i64::from(n) - i64::from(*u);
+            let more = n > *u;
+            *u = n;
+            let present = (i64::from(n) - (*f).min(0)) as f64;
+            if let Some(c) = self.capacity.borrow_mut().get_mut(p) {
+                c.set(now, present);
+            }
+            more
+        };
+        if more {
+            self.dispatch();
         }
     }
 
@@ -767,12 +945,12 @@ impl Pools {
     fn try_take(&self, request: &Request) -> Option<Taken> {
         let mut free = self.free.borrow_mut();
         let alt = request.alternatives.iter().find(|a| {
-            let have: u64 = a
+            let have: i64 = a
                 .pools
                 .iter()
-                .map(|&p| u64::from(free.get(p).copied().unwrap_or(0)))
+                .map(|&p| free.get(p).copied().unwrap_or(0).max(0))
                 .sum();
-            a.quantity > 0 && have >= u64::from(a.quantity)
+            a.quantity > 0 && have >= i64::from(a.quantity)
         })?;
         let mut left = alt.quantity;
         let mut taken = Vec::new();
@@ -781,9 +959,9 @@ impl Pools {
                 break;
             }
             if let Some(f) = free.get_mut(p) {
-                let n = (*f).min(left);
+                let n = (*f).clamp(0, i64::from(left)) as u32;
                 if n > 0 {
-                    *f -= n;
+                    *f -= i64::from(n);
                     left -= n;
                     taken.push((p, n));
                 }
@@ -798,13 +976,19 @@ impl Pools {
     fn record(&self, taken: &Taken, take: bool) {
         let now = self.ctx.now();
         let free = self.free.borrow();
+        let units = self.units.borrow();
         let mut busy = self.busy.borrow_mut();
         let mut count = self.taken.borrow_mut();
         for &(p, _) in taken {
-            if let (Some(b), Some(&q), Some(&f)) =
-                (busy.get_mut(p), self.quantity.get(p), free.get(p))
-            {
-                b.set(now, f64::from(q - f));
+            if let (Some(b), Some(&q), Some(&f)) = (busy.get_mut(p), units.get(p), free.get(p)) {
+                b.set(now, (i64::from(q) - f) as f64);
+                // Units still finishing a job after their shift are there until it ends.
+                let mut capacity = self.capacity.borrow_mut();
+                if let Some(c) = capacity.get_mut(p)
+                    && (f < 0 || c.value() > f64::from(q))
+                {
+                    c.set(now, (i64::from(q) - f.min(0)) as f64);
+                }
             }
             if take && let Some(c) = count.get_mut(p) {
                 *c += 1;
@@ -849,11 +1033,17 @@ impl Pools {
             let mut free = self.free.borrow_mut();
             for &(p, n) in &taken {
                 if let Some(f) = free.get_mut(p) {
-                    *f += n;
+                    *f += i64::from(n);
                 }
             }
         }
         self.record(&taken, false);
+        self.dispatch();
+    }
+
+    /// Hands free units to waiting entities: in priority order, each that can be served now
+    /// (one that cannot does not hold back the others).
+    fn dispatch(&self) {
         let mut i = 0;
         loop {
             let next = {
@@ -877,18 +1067,30 @@ impl Pools {
     /// Discards the statistics so far (the end of the warm-up).
     fn reset(&self, t: f64) {
         self.busy.borrow_mut().iter_mut().for_each(|b| b.reset(t));
+        self.capacity
+            .borrow_mut()
+            .iter_mut()
+            .for_each(|b| b.reset(t));
         self.taken.borrow_mut().iter_mut().for_each(|c| *c = 0);
     }
 
     /// Each pool's report: how often its units were taken, mean units busy and utilisation.
     fn reports(&self, resources: &[ResourcePool], end: f64) -> Vec<ElementReport> {
         let busy = self.busy.borrow();
+        let capacity = self.capacity.borrow();
         let taken = self.taken.borrow();
         resources
             .iter()
             .enumerate()
             .map(|(i, r)| {
                 let mean = busy.get(i).and_then(|b| b.average(end));
+                // Busy units over the units the pool had, both averaged over time.
+                let constant = r.shifts.is_empty() && r.availability.is_empty();
+                let units = if constant {
+                    Some(f64::from(if r.available { r.quantity } else { 0 }))
+                } else {
+                    capacity.get(i).and_then(|c| c.average(end))
+                };
                 let n = taken.get(i).copied().unwrap_or(0);
                 ElementReport {
                     id: r.id.clone(),
@@ -898,7 +1100,11 @@ impl Pools {
                     left: n,
                     mean_queue_length: None,
                     mean_wait: None,
-                    utilisation: mean.map(|b| b / f64::from(r.quantity.max(1))),
+                    utilisation: match (mean, units) {
+                        (Some(b), Some(u)) if u > 0.0 => Some(b / u),
+                        (Some(_), _) => Some(0.0),
+                        _ => None,
+                    },
                     mean_contents: mean,
                     mean_time_in_system: None,
                     mean_blocked_time: None,
