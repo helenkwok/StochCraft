@@ -12,6 +12,7 @@
 //! [`App::report_error`].
 
 mod autosave;
+mod canvas;
 mod charts;
 pub mod commands;
 pub use autosave::Autosave;
@@ -220,8 +221,11 @@ pub struct App {
     title: String,
     /// The fonts and theme are installed (on the first frame).
     styled: bool,
-    /// The block the inspector shows; none shows the model overview.
+    /// The block the inspector shows; none shows the model overview (or, with several blocks
+    /// selected on the canvas, what can be done to them).
     selected: Option<String>,
+    /// The flowchart's view, its multiple selection and its clipboard.
+    canvas: canvas::Canvas,
     /// Text being typed into form fields, until it commits.
     drafts: std::collections::HashMap<String, String>,
     /// The connections table's choices, before Connect.
@@ -284,6 +288,7 @@ impl App {
             title: String::new(),
             styled: false,
             selected: None,
+            canvas: canvas::Canvas::default(),
             drafts: std::collections::HashMap::new(),
             connect_from: None,
             connect_to: None,
@@ -552,6 +557,7 @@ impl App {
             Ok(opened) => {
                 self.results = None;
                 self.selected = None;
+                self.canvas = canvas::Canvas::default();
                 self.drafts.clear();
                 self.show_results = false;
                 // Warnings and errors from reading the file and checking the model; information
@@ -725,6 +731,7 @@ impl App {
                 if self.execute("model.new", json!({})).is_some() {
                     self.results = None;
                     self.selected = None;
+                    self.canvas = canvas::Canvas::default();
                     self.drafts.clear();
                     self.show_results = false;
                     self.info(t("New model"));
@@ -875,19 +882,20 @@ impl App {
             if ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::ArrowUp)) {
                 self.move_selection(false);
             }
-            if self.selected.is_some()
+            let something = !self.selection().is_empty() || self.canvas.flow.is_some();
+            if something
                 && ctx.input_mut(|i| {
                     i.consume_key(Modifiers::NONE, Key::Delete)
                         || i.consume_key(Modifiers::NONE, Key::Backspace)
                 })
             {
-                self.remove_selected();
+                self.delete_selection();
             }
             if self.running.is_none()
-                && self.selected.is_some()
+                && something
                 && ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::Escape))
             {
-                self.selected = None;
+                self.select(std::collections::BTreeSet::new());
             }
         }
     }
@@ -954,7 +962,7 @@ impl App {
                 if self.show_results && self.results.is_some() {
                     self.results_view(ui);
                 } else if has_model && !(self.show_results && self.running.is_some()) {
-                    self.editor(ui, &p);
+                    self.model_view(ui, &p);
                 } else {
                     // A readable column, not the full width of a wide window.
                     let size = egui::vec2(ui.available_width().min(640.0), ui.available_height());
@@ -979,6 +987,33 @@ impl App {
         self.about_window(&ctx);
         self.shortcuts_window(&ctx);
         self.recovery_dialog(&ctx);
+    }
+
+    /// The model: the flowchart, with the inspector beside it (below it, in a narrow window).
+    fn model_view(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        let wide = ui.available_width() >= 720.0;
+        let frame = egui::Frame::new().inner_margin(egui::Margin {
+            left: if wide { 18 } else { 0 },
+            top: if wide { 0 } else { 14 },
+            ..egui::Margin::ZERO
+        });
+        let panel = if wide {
+            egui::Panel::right("inspector")
+                .resizable(true)
+                .default_size(400.0)
+                .size_range(300.0..=(ui.available_width() - 320.0).clamp(300.0, 640.0))
+        } else {
+            egui::Panel::bottom("inspector")
+                .resizable(true)
+                .default_size(ui.available_height() * 0.5)
+                .size_range(160.0..=ui.available_height().max(200.0) * 0.8)
+        };
+        panel.frame(frame).show_separator_line(true).show(ui, |ui| {
+            // The panel keeps its width; wide rows wrap or scroll rather than widen it.
+            ui.set_max_width(ui.available_width());
+            self.editor(ui, p);
+        });
+        self.canvas(ui, p);
     }
 
     /// The results: export buttons, the charts, then the table.
@@ -1751,6 +1786,12 @@ fn change_label(command: &str) -> &str {
         "experiment.set" => "Experiment Settings",
         "property.set" => "Set Property",
         "property.remove" => "Remove Property",
+        "layout.set" => "Move",
+        "batch" => "Changes",
+        "paste" => "Paste",
+        "delete" => "Delete",
+        "align" => "Align",
+        "duplicate" => "Duplicate",
         other => other,
     }
 }

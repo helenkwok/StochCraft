@@ -28,6 +28,15 @@ craft-keymap (menus and shortcuts), craft-settings, craft-window, craft-quit, cr
 craft-dialogs, craft-platform, craft-ui and craft-i18n. The interface owns only what is
 StochCraft's: its commands, its document and its look.
 
+### The model view
+
+The Model tab is the flowchart canvas (`ui-egui/src/canvas.rs`) with the inspector beside it
+(`editor.rs`, `form.rs`, `pools.rs`). Both edit only through engine commands, so every change is
+one undo step and an agent can do the same. A gesture that makes several changes (paste, delete a
+selection, align) sends them as one `batch`. Shape positions are part of the model
+(`Model.layout`), read from and saved to the file's BPMN DI or XPDL graphics. The canvas keeps
+only its view (pan, zoom), the selection and the clipboard.
+
 ### Translations
 
 Every interface string is English source text looked up through craft-i18n (`ui-egui/src/i18n.rs`:

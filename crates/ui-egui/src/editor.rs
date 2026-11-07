@@ -1,4 +1,4 @@
-//! Editing the model without a canvas: the model overview (name, experiment, connections,
+//! Editing the model beside the canvas: the model overview (name, experiment, connections,
 //! problems) and the inspector of the selected block (name, parameters, flows, its problems).
 //! Every change is one engine command, so each is one undo step.
 
@@ -162,7 +162,7 @@ impl App {
         egui::ScrollArea::vertical()
             .auto_shrink([false, false])
             .show(ui, |ui| {
-                ui.set_max_width(640.0);
+                ui.set_max_width(ui.available_width().min(640.0));
                 match self.selected.clone() {
                     Some(id) => {
                         let el = model["elements"]
@@ -176,6 +176,7 @@ impl App {
                             None => self.selected = None,
                         }
                     }
+                    None if self.canvas.multi.len() > 1 => self.multi_inspector(ui),
                     None => self.overview(ui, p, &model, &problems),
                 }
             });

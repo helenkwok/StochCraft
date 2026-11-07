@@ -808,6 +808,41 @@ Blocks drawn as BPMN shapes, drag to place, drag between them to connect, pan an
 multiple selection, copy and paste, align. Positions are BPMN DI, already part of the model file,
 so a model drawn in another BPMN editor opens with its layout.
 
+**Done:**
+- **Layout in the model:** `Model.layout` holds each element's shape bounds.
+  - Read from BPMN DI (`BPMNShape`/`dc:Bounds`) or XPDL `NodeGraphicsInfo`.
+  - Saved back in place, and edges to a moved shape redrawn straight.
+  - A file without a diagram gets one once a shape is placed.
+  - Elements without a shape are placed by `Model::placed`: columns by distance from the
+    sources, as new files already were.
+  - The read-back check after saving compares the shapes too.
+- **Engine:**
+  - `layout.set` moves or resizes shapes in one step.
+  - `block.add` takes `x` and `y`; in a laid-out model it places a new block to the right of
+    the one before it.
+  - `batch` runs several editing commands as one undo step, and applies none of them if one
+    fails.
+  - Elements carry `bounds` on the wire.
+- **The canvas** (`ui-egui/src/canvas.rs`), beside the inspector (below it in a narrow window):
+  - Shapes in BPMN notation: events as circles (end events thick), tasks as rounded
+    rectangles with their kind, decisions with an ×, splits and joins with a +. Errors and
+    warnings colour the outline.
+  - Gateway branches show their probability.
+  - Drag a shape to move it (snapped to 10 units), together with the rest of the selection.
+  - Drag from a shape's handle to another shape to connect them.
+  - Drag a kind from the palette to add a block where it is dropped.
+  - Click, Shift- or Ctrl-click, or drag a rectangle to select; click a connection to select
+    it.
+  - Cut, Copy, Paste, Duplicate, Delete and Select All in the Edit menu, with the usual
+    shortcuts. Copies get new ids and keep the connections between them.
+  - Several selected blocks can be aligned by edges, centres or middles, or spread out evenly.
+  - Scroll or drag with the middle or right button to pan; Ctrl+scroll, pinch or the corner
+    buttons to zoom; Fit.
+- **Tests:** `ui-egui/tests/canvas.rs` drives these with the pointer.
+
+**Not yet:** edges with bends (a moved shape's edges are redrawn straight; other edges keep
+their waypoints), resizing shapes by hand (`layout.set` can), and lanes and pools.
+
 ### M3.5 Live view of a run
 
 Step a single replication at a chosen speed (the engine already supports `run_until`

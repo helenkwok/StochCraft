@@ -417,6 +417,39 @@ pub struct Model {
     /// Pools of units that tasks share ([`ElementKind::SharedTask`]).
     pub resources: Vec<ResourcePool>,
     pub experiment: Experiment,
+    /// Where elements are drawn: the shapes of the file's diagram (BPMN DI, XPDL graphics) and
+    /// those placed since. An element without one is placed by [`Model::placed`].
+    pub layout: BTreeMap<ElementId, Bounds>,
+}
+
+/// Where an element is drawn: its shape's top-left corner and size, in the diagram's units
+/// (BPMN DI's, with y growing downwards).
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Bounds {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+}
+
+impl Bounds {
+    pub fn centre(&self) -> (f64, f64) {
+        (self.x + self.width / 2.0, self.y + self.height / 2.0)
+    }
+}
+
+impl ElementKind {
+    /// The size BPMN editors draw this kind's shape: events 36 across, gateways 50, tasks
+    /// 100 by 80.
+    pub fn shape_size(&self) -> (f64, f64) {
+        match self {
+            ElementKind::Source { .. } | ElementKind::Sink => (36.0, 36.0),
+            ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => (50.0, 50.0),
+            ElementKind::Server { .. }
+            | ElementKind::SharedTask { .. }
+            | ElementKind::Delay { .. } => (100.0, 80.0),
+        }
+    }
 }
 
 /// How serious a diagnostic is.
@@ -845,6 +878,104 @@ impl Model {
         self.check_resources(&mut out);
         // Stable order: errors first, then as found (model order).
         out.sort_by_key(|d| std::cmp::Reverse(d.severity));
+        out
+    }
+
+    /// Where every element is drawn: its shape in [`Model::layout`], or else a place of its own.
+    /// With no layout at all, elements go in columns by their distance from the sources
+    /// (breadth first), in model order within a column; elements added to a laid-out model
+    /// without a shape go in a row below the rest.
+    pub fn placed(&self) -> BTreeMap<ElementId, Bounds> {
+        let mut out = BTreeMap::new();
+        let unplaced: Vec<&Element> = self
+            .elements
+            .iter()
+            .filter(|e| !self.layout.contains_key(&e.id))
+            .collect();
+        if unplaced.is_empty() {
+            for e in &self.elements {
+                if let Some(b) = self.layout.get(&e.id) {
+                    out.insert(e.id.clone(), *b);
+                }
+            }
+            return out;
+        }
+        let shaped: Vec<Bounds> = self
+            .elements
+            .iter()
+            .filter_map(|e| self.layout.get(&e.id).copied())
+            .collect();
+        if shaped.is_empty() {
+            return self.columns();
+        }
+        for e in &self.elements {
+            if let Some(b) = self.layout.get(&e.id) {
+                out.insert(e.id.clone(), *b);
+            }
+        }
+        let left = shaped.iter().map(|b| b.x).fold(f64::INFINITY, f64::min);
+        let bottom = shaped
+            .iter()
+            .map(|b| b.y + b.height)
+            .fold(f64::NEG_INFINITY, f64::max);
+        for (i, e) in unplaced.iter().enumerate() {
+            let (w, h) = e.kind.shape_size();
+            let (cx, cy) = (left + 50.0 + 150.0 * i as f64, bottom + 100.0);
+            out.insert(
+                e.id.clone(),
+                Bounds {
+                    x: cx - w / 2.0,
+                    y: cy - h / 2.0,
+                    width: w,
+                    height: h,
+                },
+            );
+        }
+        out
+    }
+
+    /// Columns by distance from the sources, rows in model order within a column.
+    fn columns(&self) -> BTreeMap<ElementId, Bounds> {
+        let mut next: BTreeMap<&ElementId, Vec<&ElementId>> = BTreeMap::new();
+        for c in &self.connections {
+            next.entry(&c.from).or_default().push(&c.to);
+        }
+        let mut depth: BTreeMap<&ElementId, usize> = BTreeMap::new();
+        let mut queue: VecDeque<&ElementId> = VecDeque::new();
+        for e in &self.elements {
+            if matches!(e.kind, ElementKind::Source { .. }) {
+                depth.insert(&e.id, 0);
+                queue.push_back(&e.id);
+            }
+        }
+        while let Some(id) = queue.pop_front() {
+            let d = depth.get(id).copied().unwrap_or(0);
+            for n in next.get(id).into_iter().flatten() {
+                if !depth.contains_key(n) {
+                    depth.insert(n, d + 1);
+                    queue.push_back(n);
+                }
+            }
+        }
+        let last = depth.values().copied().max().map_or(0, |m| m + 1);
+        let mut rows: BTreeMap<usize, usize> = BTreeMap::new();
+        let mut out = BTreeMap::new();
+        for e in &self.elements {
+            let col = depth.get(&e.id).copied().unwrap_or(last);
+            let row = rows.entry(col).or_insert(0);
+            let (cx, cy) = (100.0 + 180.0 * col as f64, 100.0 + 140.0 * *row as f64);
+            let (w, h) = e.kind.shape_size();
+            out.insert(
+                e.id.clone(),
+                Bounds {
+                    x: cx - w / 2.0,
+                    y: cy - h / 2.0,
+                    width: w,
+                    height: h,
+                },
+            );
+            *row += 1;
+        }
         out
     }
 
@@ -1637,6 +1768,7 @@ mod tests {
             ],
             resources: Vec::new(),
             experiment: Experiment::default(),
+            layout: BTreeMap::new(),
         }
     }
 

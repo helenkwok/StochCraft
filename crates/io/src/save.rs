@@ -1,22 +1,22 @@
 //! Saving an edited model into the file it was opened from.
 //!
 //! The file is changed only where the model changed: names, parameters in the scenario that was
-//! opened, the experiment settings, and the elements and connections added or removed (with their
-//! diagram shapes). Everything else (other scenarios, vendor extensions, gateways and other
+//! opened, the experiment settings, the elements and connections added or removed (with their
+//! diagram shapes), and the shapes moved or resized. Everything else (other scenarios, vendor extensions, gateways and other
 //! elements StochCraft does not simulate, comments, formatting) is written back exactly as it
 //! was read. The result is read back before it is returned; if it would not give the model that
 //! was saved, saving fails with the reason instead of writing a file that means something else.
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use stochcraft_model::{Connection, Element as ModelElement, ElementKind, Model};
+use stochcraft_model::{Bounds, Connection, Element as ModelElement, ElementKind, Model};
 
 use crate::bpsim::{NS2, NSS};
 use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
-    bpmn_local, condition_element, dist_element, numeric, probability_element, property_element,
-    queue_capacity_element, size,
+    bpmn_local, condition_element, dist_element, edge_ends, numeric, probability_element,
+    property_element, queue_capacity_element, size,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -120,6 +120,28 @@ fn difference(got: &Model, want: &Model) -> Option<String> {
     }
     if got.experiment != want.experiment {
         return Some(format!("its experiment reads as {:?}", got.experiment));
+    }
+    // Shapes are kept to the precision the file writes them with.
+    let near = |a: &Bounds, b: &Bounds| {
+        [
+            (a.x, b.x),
+            (a.y, b.y),
+            (a.width, b.width),
+            (a.height, b.height),
+        ]
+        .iter()
+        .all(|(p, q)| (p - q).abs() <= 1e-6 * p.abs().max(1.0))
+    };
+    for (id, w) in &want.layout {
+        if want.element(id).is_none() {
+            continue;
+        }
+        if !got.layout.get(id).is_some_and(|g| near(g, w)) {
+            return Some(format!(
+                "the shape of `{id}` reads as {:?}",
+                got.layout.get(id)
+            ));
+        }
     }
     None
 }
@@ -339,6 +361,18 @@ struct Ns {
 
 impl Ns {
     fn of(root: &Element, uri: &str, preferred: &str) -> Self {
+        // A prefix declared on the root is in scope everywhere.
+        if let Some((name, _)) = root
+            .attrs
+            .iter()
+            .find(|(n, v)| v == uri && n.starts_with("xmlns:"))
+        {
+            return Ns {
+                prefix: name.trim_start_matches("xmlns:").to_owned(),
+                uri: uri.to_owned(),
+                declare: false,
+            };
+        }
         match find(root, &|e| e.ns.as_deref() == Some(uri)) {
             Some(e) => Ns {
                 prefix: e.prefix().to_owned(),
@@ -487,6 +521,8 @@ impl Editor {
         for c in &added_conns {
             self.add_flow(root, after, c)?;
         }
+        let fresh: BTreeSet<&str> = added.iter().map(|e| e.id.as_str()).collect();
+        self.diagram(root, before, after, &fresh);
         if before.name != after.name {
             self.set_model_name(root, &after.name);
         }
@@ -728,7 +764,7 @@ impl Editor {
             }
         };
         self.place(root, prev, next, node, false)?;
-        self.add_shape(root, e, prev);
+        self.add_shape(root, e, prev, after.layout.get(&e.id).copied());
         Ok(())
     }
 
@@ -820,31 +856,7 @@ impl Editor {
 
     /// The bounds (x, y, width, height) of a node's shape.
     fn bounds(&self, root: &Element, id: &str) -> Option<(f64, f64, f64, f64)> {
-        let f = |e: &Element, a: &str| e.attr(a).and_then(|v| v.trim().parse::<f64>().ok());
-        match self.format {
-            Format::Bpmn => {
-                let shape = find(root, &|e| {
-                    e.is(BPMNDI, "BPMNShape") && e.attr("bpmnElement").as_deref() == Some(id)
-                })?;
-                let b = shape.child(&[DC], "Bounds")?;
-                Some((f(b, "x")?, f(b, "y")?, f(b, "width")?, f(b, "height")?))
-            }
-            Format::Xpdl => {
-                let act = find(root, &|e| {
-                    e.is_any(&XPDL, "Activity") && has_id(e, "Id", id)
-                })?;
-                let info = act
-                    .child(&XPDL, "NodeGraphicsInfos")?
-                    .child(&XPDL, "NodeGraphicsInfo")?;
-                let c = info.child(&XPDL, "Coordinates")?;
-                Some((
-                    f(c, "XCoordinate")?,
-                    f(c, "YCoordinate")?,
-                    f(info, "Width")?,
-                    f(info, "Height")?,
-                ))
-            }
-        }
+        read::shape_bounds(root, self.format, id).map(|b| (b.x, b.y, b.width, b.height))
     }
 
     /// Where a new node's shape goes: to the right of the previous element, or of everything.
@@ -855,9 +867,21 @@ impl Editor {
         }
     }
 
-    fn add_shape(&mut self, root: &mut Element, e: &ModelElement, prev: Option<&str>) {
-        let (w, h) = size(&e.kind);
-        let (x, y) = self.position(root, prev, h);
+    fn add_shape(
+        &mut self,
+        root: &mut Element,
+        e: &ModelElement,
+        prev: Option<&str>,
+        want: Option<Bounds>,
+    ) {
+        let (x, y, w, h) = match want {
+            Some(b) => (b.x, b.y, b.width, b.height),
+            None => {
+                let (w, h) = size(&e.kind);
+                let (x, y) = self.position(root, prev, h);
+                (x, y, w, h)
+            }
+        };
         match self.format {
             Format::Bpmn => {
                 let process = root
@@ -866,7 +890,11 @@ impl Editor {
                     .and_then(|p| p.attr("id"));
                 let has_plane = find(root, &|x| x.is(BPMNDI, "BPMNPlane")).is_some();
                 if !has_plane {
-                    return;
+                    // A file without a diagram gets one only once a shape is placed by hand.
+                    if want.is_none() {
+                        return;
+                    }
+                    self.add_plane(root, process.as_deref());
                 }
                 let di = Ns::of(root, BPMNDI, "bpmndi");
                 let dc = Ns::of(root, DC, "dc");
@@ -900,7 +928,11 @@ impl Editor {
                 let ns = self.xpdl_ns(root);
                 // Copy the drawing tool's attributes from a neighbouring node.
                 let template = find(root, &|x| x.is_any(&XPDL, "NodeGraphicsInfo")).cloned();
-                let Some(template) = template else { return };
+                let template = match template {
+                    Some(t) => t,
+                    None if want.is_some() => ns.el("NodeGraphicsInfo"),
+                    None => return,
+                };
                 let mut info = ns.el("NodeGraphicsInfo");
                 for (n, v) in &template.attrs {
                     if !matches!(n.as_str(), "Width" | "Height") {
@@ -919,6 +951,182 @@ impl Editor {
                 }) {
                     act.push(ns.el("NodeGraphicsInfos").with_child(info));
                 }
+            }
+        }
+    }
+
+    /// A BPMN diagram for a file that has none, on the process (or the first one).
+    fn add_plane(&mut self, root: &mut Element, process: Option<&str>) {
+        let process = process.map(str::to_owned).or_else(|| {
+            root.children_named(&[BPMN], "process")
+                .next()
+                .and_then(|p| p.attr("id"))
+        });
+        // The diagram's namespaces go on the root, so every shape added later is in their scope.
+        for (uri, preferred) in [(BPMNDI, "bpmndi"), (DC, "dc"), (DI, "di")] {
+            if root
+                .attrs
+                .iter()
+                .any(|(n, v)| v == uri && n.starts_with("xmlns:"))
+            {
+                continue;
+            }
+            let mut prefix = preferred.to_owned();
+            let mut n = 1;
+            while root.attr(&format!("xmlns:{prefix}")).is_some() {
+                n += 1;
+                prefix = format!("{preferred}{n}");
+            }
+            root.set_attr(&format!("xmlns:{prefix}"), uri);
+        }
+        let di = Ns::of(root, BPMNDI, "bpmndi");
+        let mut plane = di.el("BPMNPlane").with_attr("id", &self.fresh("plane"));
+        if let Some(p) = process {
+            plane.set_attr("bpmnElement", &p);
+        }
+        let diagram = di
+            .el("BPMNDiagram")
+            .with_attr("id", &self.fresh("diagram"))
+            .with_child(plane);
+        // Diagrams come after everything else in `definitions`, except extensions after them.
+        let at = end_of(root);
+        root.children.insert(at, Node::Element(diagram));
+    }
+
+    /// Shapes moved or resized since the file was read are moved in its diagram, and the edges
+    /// to and from them redrawn straight; shapes placed for the first time are added.
+    fn diagram(
+        &mut self,
+        root: &mut Element,
+        before: &Model,
+        after: &Model,
+        added: &BTreeSet<&str>,
+    ) {
+        let moved: BTreeSet<&str> = after
+            .elements
+            .iter()
+            .filter(|e| !added.contains(e.id.as_str()))
+            .filter(|e| {
+                let now = after.layout.get(&e.id);
+                now.is_some() && now != before.layout.get(&e.id)
+            })
+            .map(|e| e.id.as_str())
+            .collect();
+        for e in &after.elements {
+            if !moved.contains(e.id.as_str()) {
+                continue;
+            }
+            let Some(b) = after.layout.get(&e.id).copied() else {
+                continue;
+            };
+            if !self.set_bounds(root, e.id.as_str(), &b) {
+                self.add_shape(root, e, None, Some(b));
+            }
+        }
+        for c in &after.connections {
+            if !(moved.contains(c.from.as_str()) || moved.contains(c.to.as_str())) {
+                continue;
+            }
+            let (Some(a), Some(b)) = (
+                read::shape_bounds(root, self.format, c.from.as_str()),
+                read::shape_bounds(root, self.format, c.to.as_str()),
+            ) else {
+                continue;
+            };
+            let ends = edge_ends(&a, &b);
+            if !self.set_edge(root, c.id.as_str(), ends) {
+                self.add_edge(root, c);
+            }
+        }
+    }
+
+    /// Moves a node's existing shape; false if it has none.
+    fn set_bounds(&self, root: &mut Element, id: &str, b: &Bounds) -> bool {
+        match self.format {
+            Format::Bpmn => {
+                let Some(shape) = find_mut(root, &|e| {
+                    e.is(BPMNDI, "BPMNShape") && e.attr("bpmnElement").as_deref() == Some(id)
+                }) else {
+                    return false;
+                };
+                let Some(bounds) = shape.child_mut(&[DC], "Bounds") else {
+                    return false;
+                };
+                bounds.set_attr("x", &num(b.x));
+                bounds.set_attr("y", &num(b.y));
+                bounds.set_attr("width", &num(b.width));
+                bounds.set_attr("height", &num(b.height));
+                true
+            }
+            Format::Xpdl => {
+                let Some(act) = find_mut(root, &|e| {
+                    e.is_any(&XPDL, "Activity") && has_id(e, "Id", id)
+                }) else {
+                    return false;
+                };
+                let Some(info) = act
+                    .child_mut(&XPDL, "NodeGraphicsInfos")
+                    .and_then(|i| i.child_mut(&XPDL, "NodeGraphicsInfo"))
+                else {
+                    return false;
+                };
+                info.set_attr("Width", &num(b.width));
+                info.set_attr("Height", &num(b.height));
+                let Some(c) = info.child_mut(&XPDL, "Coordinates") else {
+                    return false;
+                };
+                c.set_attr("XCoordinate", &num(b.x));
+                c.set_attr("YCoordinate", &num(b.y));
+                true
+            }
+        }
+    }
+
+    /// Redraws a connection's existing edge as a straight line (its label, if any, stays);
+    /// false if it has none.
+    fn set_edge(&self, root: &mut Element, id: &str, (from, to): ((f64, f64), (f64, f64))) -> bool {
+        match self.format {
+            Format::Bpmn => {
+                let dip = Ns::of(root, DI, "di");
+                let Some(edge) = find_mut(root, &|e| {
+                    e.is(BPMNDI, "BPMNEdge") && e.attr("bpmnElement").as_deref() == Some(id)
+                }) else {
+                    return false;
+                };
+                edge.children
+                    .retain(|n| !matches!(n, Node::Element(e) if e.is(DI, "waypoint")));
+                for (i, p) in [from, to].into_iter().enumerate() {
+                    let wp = dip
+                        .el("waypoint")
+                        .with_attr("x", &num(p.0))
+                        .with_attr("y", &num(p.1));
+                    edge.children.insert(i, Node::Element(wp));
+                }
+                true
+            }
+            Format::Xpdl => {
+                let ns = self.xpdl_ns(root);
+                let Some(t) = find_mut(root, &|e| {
+                    e.is_any(&XPDL, "Transition") && has_id(e, "Id", id)
+                }) else {
+                    return false;
+                };
+                let Some(info) = t
+                    .child_mut(&XPDL, "ConnectorGraphicsInfos")
+                    .and_then(|i| i.child_mut(&XPDL, "ConnectorGraphicsInfo"))
+                else {
+                    return false;
+                };
+                info.children
+                    .retain(|n| !matches!(n, Node::Element(e) if e.is_any(&XPDL, "Coordinates")));
+                for (i, p) in [from, to].into_iter().enumerate() {
+                    let c = ns
+                        .el("Coordinates")
+                        .with_attr("XCoordinate", &num(p.0))
+                        .with_attr("YCoordinate", &num(p.1));
+                    info.children.insert(i, Node::Element(c));
+                }
+                true
             }
         }
     }

@@ -6,7 +6,7 @@ use serde::de::DeserializeOwned;
 use serde::{Deserialize, Deserializer};
 use serde_json::{Value, json};
 use stochcraft_model::{
-    Connection, Element, ElementId, ElementKind, Model, Need, Property, ResourcePool,
+    Bounds, Connection, Element, ElementId, ElementKind, Model, Need, Property, ResourcePool,
 };
 
 use crate::edit::Op;
@@ -15,7 +15,7 @@ use crate::wire::{
     self, DistSpec, KindSpec, ModelDoc, NeedSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec,
     TimeUnitSpec,
 };
-use crate::{CommandError, Engine, ErrorCode};
+use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
 /// What a command does, which decides whether it is undoable and journalled.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -192,6 +192,13 @@ pub struct BlockAdd {
     /// Position in the model's element list; by default the end.
     #[serde(default)]
     pub index: Option<u32>,
+    /// Where to draw it: its shape's left edge, in the diagram's units. By default, in a model
+    /// that is laid out, to the right of the element before it.
+    #[serde(default)]
+    pub x: Option<f64>,
+    /// Its shape's top edge (y grows downwards).
+    #[serde(default)]
+    pub y: Option<f64>,
     #[serde(flatten)]
     pub kind: KindSpec,
     /// Properties the element sets on entities.
@@ -476,7 +483,7 @@ fn model_rename(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 }
 
 fn block_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
-    check_keys(&p, &["id", "name", "index", "properties"])?;
+    check_keys(&p, &["id", "name", "index", "properties", "x", "y"])?;
     let p: BlockAdd = parse(p)?;
     let kind: ElementKind = p.kind.into();
     let id = new_id(e.model(), p.id.as_deref(), kind.name())?;
@@ -490,15 +497,210 @@ fn block_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         kind,
         properties: wire::sorted_properties(p.properties.into_iter().map(Into::into)),
     };
+    let bounds = new_shape(e.model(), &element.kind, index, p.x, p.y)?;
     e.edit(
         "block.add",
         Op::AddElement {
             index,
             element,
             connections: vec![],
+            bounds,
         },
     )?;
     Ok(json!({ "id": id.as_str() }))
+}
+
+fn finite(v: f64, what: &str) -> Result<f64, CommandError> {
+    if v.is_finite() {
+        Ok(v)
+    } else {
+        Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            format!("{what} must be a finite number"),
+        ))
+    }
+}
+
+/// A new element's shape: where it was asked to go, or in a laid-out model to the right of the
+/// element before it, centred on it; in a model with no layout, none.
+fn new_shape(
+    model: &Model,
+    kind: &ElementKind,
+    index: usize,
+    x: Option<f64>,
+    y: Option<f64>,
+) -> Result<Option<Bounds>, CommandError> {
+    let (width, height) = kind.shape_size();
+    let placed = model.placed();
+    let prev = index
+        .checked_sub(1)
+        .and_then(|i| model.elements.get(i))
+        .and_then(|p| placed.get(&p.id));
+    let auto = match prev {
+        Some(p) if !model.layout.is_empty() => {
+            Some((p.x + p.width + 50.0, p.y + p.height / 2.0 - height / 2.0))
+        }
+        _ => None,
+    };
+    let (x, y) = match (x, y, auto) {
+        (Some(x), Some(y), _) => (finite(x, "x")?, finite(y, "y")?),
+        (None, None, None) => return Ok(None),
+        (x, y, auto) => {
+            let (ax, ay) = auto.unwrap_or((40.0, 40.0));
+            (finite(x.unwrap_or(ax), "x")?, finite(y.unwrap_or(ay), "y")?)
+        }
+    };
+    Ok(Some(Bounds {
+        x,
+        y,
+        width,
+        height,
+    }))
+}
+
+/// Moves or resizes elements' shapes, all in one undoable step.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct LayoutSet {
+    pub shapes: Vec<ShapeSet>,
+}
+
+/// One element's shape: what is left out stays as it is (a shape not placed yet starts where
+/// it is drawn now, at its kind's size).
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ShapeSet {
+    /// The element's id.
+    pub id: String,
+    #[serde(default)]
+    pub x: Option<f64>,
+    #[serde(default)]
+    pub y: Option<f64>,
+    #[serde(default)]
+    pub width: Option<f64>,
+    #[serde(default)]
+    pub height: Option<f64>,
+}
+
+fn layout_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: LayoutSet = parse(p)?;
+    let placed = e.model().placed();
+    let mut shapes = Vec::with_capacity(p.shapes.len());
+    for s in p.shapes {
+        let id = existing_element(e.model(), &s.id)?;
+        let Some(now) = placed.get(&id).copied() else {
+            return Err(CommandError::new(
+                ErrorCode::Internal,
+                format!("`{id}` has no place"),
+            ));
+        };
+        let size = |v: Option<f64>, old: f64, what: &str| -> Result<f64, CommandError> {
+            let v = finite(v.unwrap_or(old), what)?;
+            if v <= 0.0 {
+                return Err(CommandError::new(
+                    ErrorCode::InvalidParams,
+                    format!("{what} must be more than 0"),
+                ));
+            }
+            Ok(v)
+        };
+        let b = Bounds {
+            x: finite(s.x.unwrap_or(now.x), "x")?,
+            y: finite(s.y.unwrap_or(now.y), "y")?,
+            width: size(s.width, now.width, "width")?,
+            height: size(s.height, now.height, "height")?,
+        };
+        shapes.push((id, Some(b)));
+    }
+    e.edit("layout.set", Op::SetLayout(shapes))?;
+    Ok(json!({}))
+}
+
+/// Several editing commands as one step: undone and redone together, and if one fails none of
+/// them is applied.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct Batch {
+    pub commands: Vec<BatchStep>,
+    /// What the step is called in the undo history: `paste`, `delete`, `align` or `duplicate`;
+    /// by default `batch`.
+    #[serde(default)]
+    pub label: Option<String>,
+}
+
+/// One command of a batch.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct BatchStep {
+    /// An editing command's name, such as `block.add`.
+    pub command: String,
+    #[serde(default)]
+    pub params: Value,
+}
+
+/// The names a batch can be given in the history.
+const BATCH_LABELS: [&str; 5] = ["batch", "paste", "delete", "align", "duplicate"];
+
+fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: Batch = parse(p)?;
+    let label = match p.label.as_deref() {
+        None => "batch",
+        Some(l) => BATCH_LABELS
+            .iter()
+            .copied()
+            .find(|b| *b == l)
+            .ok_or_else(|| {
+                CommandError::new(
+                    ErrorCode::InvalidParams,
+                    format!("a batch's label is one of {BATCH_LABELS:?}, not `{l}`"),
+                )
+            })?,
+    };
+    let start = e.undo.len();
+    let redo = e.redo.clone();
+    let mut results = Vec::with_capacity(p.commands.len());
+    for (i, step) in p.commands.into_iter().enumerate() {
+        let params = if step.params.is_null() {
+            json!({})
+        } else {
+            step.params
+        };
+        let result = match COMMANDS.iter().find(|c| c.name == step.command) {
+            Some(c) if c.kind == CommandKind::Edit => (c.run)(e, params),
+            Some(_) => Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                format!("`{}` is not an editing command", step.command),
+            )),
+            None => Err(CommandError::new(
+                ErrorCode::UnknownCommand,
+                format!("no command `{}`", step.command),
+            )),
+        };
+        match result {
+            Ok(v) => results.push(v),
+            Err(err) => {
+                // Take back the steps already done, so the model is as it was.
+                while e.undo.len() > start {
+                    if let Some(entry) = e.undo.pop() {
+                        let _ = crate::edit::apply(&mut e.model, entry.op);
+                    }
+                }
+                e.redo = redo;
+                return Err(CommandError {
+                    message: format!("step {} (`{}`): {}", i + 1, step.command, err.message),
+                    ..err
+                });
+            }
+        }
+    }
+    let ops: Vec<Op> = e.undo.drain(start..).rev().map(|h| h.op).collect();
+    if !ops.is_empty() {
+        e.undo.push(HistoryEntry {
+            label,
+            op: Op::Batch(ops),
+        });
+    }
+    Ok(json!({ "results": results }))
 }
 
 fn block_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -1037,6 +1239,30 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<Id>,
         example: || json!({ "id": "walk" }),
         run: block_remove,
+    },
+    Command {
+        name: "layout.set",
+        summary: "Move or resize elements' shapes in the diagram, in one step.",
+        kind: CommandKind::Edit,
+        schema: schema::<LayoutSet>,
+        example: || json!({ "shapes": [{ "id": "desk", "x": 240, "y": 80 }] }),
+        run: layout_set,
+    },
+    Command {
+        name: "batch",
+        summary: "Run several editing commands as one step, undone together; if one fails, none is applied.",
+        kind: CommandKind::Edit,
+        schema: schema::<Batch>,
+        example: || {
+            json!({
+                "label": "paste",
+                "commands": [
+                    { "command": "block.add", "params": { "id": "desk-copy", "kind": "delay", "duration": { "type": "constant", "value": 1.0 } } },
+                    { "command": "connect", "params": { "from": "desk-copy", "to": "exit" } }
+                ]
+            })
+        },
+        run: batch,
     },
     Command {
         name: "property.set",

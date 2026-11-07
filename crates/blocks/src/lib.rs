@@ -752,6 +752,7 @@ impl Builder {
             connections,
             resources,
             experiment,
+            ..Model::default()
         }
     }
 

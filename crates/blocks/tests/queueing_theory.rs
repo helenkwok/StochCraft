@@ -44,6 +44,7 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
             replications: 16,
             ..Experiment::default()
         },
+        ..Model::default()
     }
 }
 

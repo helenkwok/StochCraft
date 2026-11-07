@@ -7,8 +7,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Connection, Dist, Element as ModelElement, ElementId, ElementKind, Experiment, Model, Need,
-    Property, PropertyType, PropertyValue, ResourcePool, TimeUnit,
+    Bounds, Connection, Dist, Element as ModelElement, ElementId, ElementKind, Experiment, Model,
+    Need, Property, PropertyType, PropertyValue, ResourcePool, TimeUnit,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -852,6 +852,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         connections,
         resources,
         experiment: experiment(scenario, notes),
+        layout: BTreeMap::new(),
     }
 }
 
@@ -974,6 +975,60 @@ pub fn read_model(
         }
     };
     let _ = NSS;
-    let model = to_model(process, scenario.as_ref(), notes);
+    let mut model = to_model(process, scenario.as_ref(), notes);
+    model.layout = layout(root, format, &model);
     Ok((format, scenario, model))
+}
+
+const BPMNDI: &str = "http://www.omg.org/spec/BPMN/20100524/DI";
+const DC: &str = "http://www.omg.org/spec/DD/20100524/DC";
+
+/// The shapes the file's diagram gives the model's elements (the first, if it has several):
+/// BPMN DI's `BPMNShape` bounds, or XPDL's `NodeGraphicsInfo`.
+pub(crate) fn layout(root: &Element, format: Format, model: &Model) -> BTreeMap<ElementId, Bounds> {
+    let mut out = BTreeMap::new();
+    for e in &model.elements {
+        if let Some(b) = shape_bounds(root, format, e.id.as_str()) {
+            out.insert(e.id.clone(), b);
+        }
+    }
+    out
+}
+
+/// The bounds of the shape drawn for node `id`, if the file has one.
+pub(crate) fn shape_bounds(root: &Element, format: Format, id: &str) -> Option<Bounds> {
+    let f = |e: &Element, a: &str| e.attr(a).and_then(|v| v.trim().parse::<f64>().ok());
+    let finite = |b: Bounds| {
+        (b.x.is_finite() && b.y.is_finite() && b.width >= 0.0 && b.height >= 0.0).then_some(b)
+    };
+    match format {
+        Format::Bpmn => {
+            let shape = root.descendants().into_iter().find(|e| {
+                e.is(BPMNDI, "BPMNShape") && e.attr("bpmnElement").as_deref() == Some(id)
+            })?;
+            let b = shape.child(&[DC], "Bounds")?;
+            finite(Bounds {
+                x: f(b, "x")?,
+                y: f(b, "y")?,
+                width: f(b, "width")?,
+                height: f(b, "height")?,
+            })
+        }
+        Format::Xpdl => {
+            let act = root
+                .descendants()
+                .into_iter()
+                .find(|e| e.is_any(&XPDL, "Activity") && e.attr("Id").as_deref() == Some(id))?;
+            let info = act
+                .child(&XPDL, "NodeGraphicsInfos")?
+                .child(&XPDL, "NodeGraphicsInfo")?;
+            let c = info.child(&XPDL, "Coordinates")?;
+            finite(Bounds {
+                x: f(c, "XCoordinate")?,
+                y: f(c, "YCoordinate")?,
+                width: f(info, "Width")?,
+                height: f(info, "Height")?,
+            })
+        }
+    }
 }
