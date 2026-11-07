@@ -33,6 +33,9 @@
 	Availability	Қолжетімділік
 	BPMN with BPSim	BPSim бар BPMN
 	Back to the model (Esc)	Модельге оралу (Esc)
+	Batch	Топтама
+	Batch (collect, then send together)	Топтама (жинап, бірге жіберу)
+	Batch size	Топтама өлшемі
 	Beta	Бета
 	Binomial	Биномдық
 	Boolean	Логикалық мән
@@ -243,6 +246,7 @@
 	Show All	Барлығын көрсету
 	Show {id}	{id} көрсету
 	Speed	Жылдамдық
+	Split batches	Топтамаларды бөлу
 	Split or join	Бөлу немесе біріктіру
 	Split or join (all ways)	Бөлу немесе біріктіру (барлық жолдар)
 	Spread out	Үлестіру
@@ -306,6 +310,7 @@
 	Zoom out	Кішірейту
 	a model	модель
 	arrivals	келулер
+	batch	топтама
 	days	күн
 	decision: one way	шешім: бір жол
 	departures	кетулер
@@ -317,6 +322,7 @@
 	minutes	минут
 	nothing yet	әзірге ештеңе жоқ
 	seconds	секунд
+	split batches	топтамаларды бөлу
 	split or join: all ways	бөлу немесе біріктіру: барлық жолдар
 	task	тапсырма
 	task with a resource	ресурсы бар тапсырма

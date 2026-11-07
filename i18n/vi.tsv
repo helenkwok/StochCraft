@@ -33,6 +33,9 @@
 	Availability	Độ khả dụng
 	BPMN with BPSim	BPMN có BPSim
 	Back to the model (Esc)	Quay lại mô hình (Esc)
+	Batch	Lô
+	Batch (collect, then send together)	Lô (gom lại rồi gửi cùng nhau)
+	Batch size	Kích thước lô
 	Beta	Beta
 	Binomial	Nhị thức
 	Boolean	Boolean
@@ -243,6 +246,7 @@
 	Show All	Hiện tất cả
 	Show {id}	Hiển thị {id}
 	Speed	Tốc độ
+	Split batches	Tách lô
 	Split or join	Tách hoặc gộp
 	Split or join (all ways)	Tách hoặc gộp (mọi hướng)
 	Spread out	Dàn đều
@@ -306,6 +310,7 @@
 	Zoom out	Thu nhỏ
 	a model	một mô hình
 	arrivals	lượt đến
+	batch	lô
 	days	ngày
 	decision: one way	quyết định: một hướng
 	departures	lượt rời đi
@@ -317,6 +322,7 @@
 	minutes	phút
 	nothing yet	chưa có gì
 	seconds	giây
+	split batches	tách lô
 	split or join: all ways	tách hoặc gộp: mọi hướng
 	task	tác vụ
 	task with a resource	tác vụ có tài nguyên

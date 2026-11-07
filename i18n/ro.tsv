@@ -33,6 +33,9 @@
 	Availability	Disponibilitate
 	BPMN with BPSim	BPMN cu BPSim
 	Back to the model (Esc)	Înapoi la model (Esc)
+	Batch	Lot
+	Batch (collect, then send together)	Lot (adună, apoi trimite împreună)
+	Batch size	Mărimea lotului
 	Beta	Beta
 	Binomial	Binomială
 	Boolean	Boolean
@@ -243,6 +246,7 @@
 	Show All	Afișează tot
 	Show {id}	Afișează {id}
 	Speed	Viteză
+	Split batches	Separarea loturilor
 	Split or join	Divizează sau unește
 	Split or join (all ways)	Divizează sau unește (toate căile)
 	Spread out	Distribuie
@@ -306,6 +310,7 @@
 	Zoom out	Micșorează
 	a model	un model
 	arrivals	sosiri
+	batch	lot
 	days	zile
 	decision: one way	decizie: o singură cale
 	departures	plecări
@@ -317,6 +322,7 @@
 	minutes	minute
 	nothing yet	nimic deocamdată
 	seconds	secunde
+	split batches	separarea loturilor
 	split or join: all ways	divizează sau unește: toate căile
 	task	sarcină
 	task with a resource	sarcină cu resursă

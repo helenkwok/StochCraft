@@ -33,6 +33,9 @@
 	Availability	Коэффициент готовности
 	BPMN with BPSim	BPMN с BPSim
 	Back to the model (Esc)	Вернуться к модели (Esc)
+	Batch	Партия
+	Batch (collect, then send together)	Партия (собрать и отправить вместе)
+	Batch size	Размер партии
 	Beta	Бета-распределение
 	Binomial	Биномиальное распределение
 	Boolean	Логическое значение
@@ -243,6 +246,7 @@
 	Show All	Показать всё
 	Show {id}	Показать {id}
 	Speed	Скорость
+	Split batches	Разделение партий
 	Split or join	Разделить или объединить
 	Split or join (all ways)	Разделить или объединить (все пути)
 	Spread out	Распределение
@@ -306,6 +310,7 @@
 	Zoom out	Уменьшить
 	a model	модель
 	arrivals	прибытия
+	batch	партия
 	days	дни
 	decision: one way	решение: один путь
 	departures	выходы
@@ -317,6 +322,7 @@
 	minutes	минуты
 	nothing yet	пока ничего
 	seconds	секунды
+	split batches	разделение партий
 	split or join: all ways	разделить или объединить: все пути
 	task	задача
 	task with a resource	задача с ресурсом

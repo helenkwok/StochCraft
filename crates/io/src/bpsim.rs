@@ -31,6 +31,18 @@ pub const QUEUE_CAPACITY: &str = "stochcraft:queueCapacity";
 /// `PriorityParameters/Interruptible`.
 pub const BREAKDOWN: &str = "stochcraft:breakdown";
 
+/// A batch: `stochcraft:batchSize` on a task's `ElementParameters`, the number of entities it
+/// collects before sending them on together (a whole number of at least 1).
+pub const BATCH_SIZE: &str = "stochcraft:batchSize";
+
+/// A split: `stochcraft:unbatch` with the value `true` on a task's `ElementParameters` sends
+/// each batch's entities on one by one.
+pub const UNBATCH: &str = "stochcraft:unbatch";
+
+/// A bill of materials: `stochcraft:quantity` on the `ElementParameters` of a sequence flow
+/// into a parallel gateway, the number of entities from it in each one the join sends on.
+pub const QUANTITY: &str = "stochcraft:quantity";
+
 /// A vendor extension's value: its attribute named `value` in another namespace (any prefix),
 /// else its text.
 pub fn vendor_value(e: &Element) -> Option<String> {

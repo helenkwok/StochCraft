@@ -180,7 +180,20 @@ pub enum ElementKind {
     /// With several incoming connections it first waits for an entity on each of them (a join)
     /// and sends one on: the one from the first incoming connection, in model order, with any
     /// property it lacks taken from the others in that order.
+    ///
+    /// An assembly is a join with a bill of materials: an incoming connection with a
+    /// [`Connection::quantity`] gives that many entities to each one sent on, and the parts
+    /// other than the first are used up.
     ParallelGateway,
+    /// Collects entities until there are `size`, then sends them on together as one batch, at
+    /// once (a StochCraft vendor extension on a task, `stochcraft:batchSize`). The batch is the
+    /// first entity of the batch, carrying the others; an [`ElementKind::Unbatch`] later splits
+    /// it up again. Entities waiting for a batch to fill at the end of a run are still inside.
+    Batch { size: u32 },
+    /// Splits each batch back into the entities it was made of, sending each on, at once (a
+    /// StochCraft vendor extension on a task, `stochcraft:unbatch`). An entity that is not a
+    /// batch passes through as it is.
+    Unbatch,
 }
 
 /// How a server's units fail: each unit independently, in elapsed time (busy or idle), after a
@@ -283,6 +296,8 @@ impl ElementKind {
             ElementKind::Sink => "sink",
             ElementKind::ExclusiveGateway { .. } => "exclusive_gateway",
             ElementKind::ParallelGateway => "parallel_gateway",
+            ElementKind::Batch { .. } => "batch",
+            ElementKind::Unbatch => "unbatch",
         }
     }
 
@@ -317,7 +332,9 @@ impl ElementKind {
             ElementKind::Delay { duration } => vec![("duration", duration)],
             ElementKind::Sink
             | ElementKind::ExclusiveGateway { .. }
-            | ElementKind::ParallelGateway => vec![],
+            | ElementKind::ParallelGateway
+            | ElementKind::Batch { .. }
+            | ElementKind::Unbatch => vec![],
         }
     }
 }
@@ -451,6 +468,10 @@ pub struct Connection {
     /// Out of an exclusive gateway: a BPSim expression ([`expr`]) that must hold for an entity
     /// to take this connection (BPSim `Condition`).
     pub condition: Option<String>,
+    /// Into a parallel join (an assembly): how many entities from this connection go into each
+    /// one the join sends on (a bill of materials, the StochCraft vendor extension
+    /// `stochcraft:quantity`). `None` is 1.
+    pub quantity: Option<u32>,
 }
 
 impl Connection {
@@ -462,6 +483,7 @@ impl Connection {
             to,
             probability: None,
             condition: None,
+            quantity: None,
         }
     }
 }
@@ -535,7 +557,9 @@ impl ElementKind {
             ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => (50.0, 50.0),
             ElementKind::Server { .. }
             | ElementKind::SharedTask { .. }
-            | ElementKind::Delay { .. } => (100.0, 80.0),
+            | ElementKind::Delay { .. }
+            | ElementKind::Batch { .. }
+            | ElementKind::Unbatch => (100.0, 80.0),
         }
     }
 }
@@ -689,6 +713,15 @@ pub enum Problem {
     EmptyCalendar,
     /// Values valid for calendars on a block that does not use them.
     TimedIgnored,
+    /// A batch of no entities.
+    ZeroBatchSize,
+    /// A bill of materials asking for no entities from a connection.
+    ZeroQuantity,
+    /// A quantity on a connection that does not go into a parallel gateway, where it does
+    /// nothing.
+    QuantityIgnored,
+    /// The model splits batches but makes none.
+    NothingToUnbatch,
 }
 
 impl Problem {
@@ -735,6 +768,10 @@ impl Problem {
             Problem::UnknownCalendar { .. } => "unknown_calendar",
             Problem::EmptyCalendar => "empty_calendar",
             Problem::TimedIgnored => "timed_ignored",
+            Problem::ZeroBatchSize => "zero_batch_size",
+            Problem::ZeroQuantity => "zero_quantity",
+            Problem::QuantityIgnored => "quantity_ignored",
+            Problem::NothingToUnbatch => "nothing_to_unbatch",
         }
     }
 }
@@ -902,6 +939,21 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "there are no arrivals outside the calendars, but none is given, so this start event never fires"
             ),
+            Problem::ZeroBatchSize => write!(f, "a batch needs at least 1 entity"),
+            Problem::ZeroQuantity => {
+                write!(
+                    f,
+                    "a bill of materials needs at least 1 entity from each connection"
+                )
+            }
+            Problem::QuantityIgnored => write!(
+                f,
+                "this quantity is ignored: only a parallel gateway takes several entities from one connection"
+            ),
+            Problem::NothingToUnbatch => write!(
+                f,
+                "no element makes batches, so this one passes every entity through"
+            ),
         }
     }
 }
@@ -980,6 +1032,17 @@ impl Model {
             }
             if let ElementKind::Server { capacity: 0, .. } = e.kind {
                 out.push(Diagnostic::error(Some(&e.id), Problem::ZeroCapacity));
+            }
+            if let ElementKind::Batch { size: 0 } = e.kind {
+                out.push(Diagnostic::error(Some(&e.id), Problem::ZeroBatchSize));
+            }
+            if matches!(e.kind, ElementKind::Unbatch)
+                && !self
+                    .elements
+                    .iter()
+                    .any(|b| matches!(b.kind, ElementKind::Batch { .. }))
+            {
+                out.push(Diagnostic::warning(Some(&e.id), Problem::NothingToUnbatch));
             }
             // Every time between arrivals that can apply, with no limit on arrivals.
             if let ElementKind::Source {
@@ -1429,6 +1492,17 @@ impl Model {
             let exclusive = matches!(e.kind, ElementKind::ExclusiveGateway { .. });
             for c in &outs {
                 let at = Some(&c.id);
+                match c.quantity {
+                    Some(0) => out.push(Diagnostic::error(at, Problem::ZeroQuantity)),
+                    Some(_)
+                        if !self
+                            .element(&c.to)
+                            .is_some_and(|t| matches!(t.kind, ElementKind::ParallelGateway)) =>
+                    {
+                        out.push(Diagnostic::warning(at, Problem::QuantityIgnored));
+                    }
+                    _ => {}
+                }
                 if let Some(p) = c.probability
                     && !(p.is_finite() && (0.0..=1.0).contains(&p))
                 {
@@ -1817,6 +1891,7 @@ mod tests {
         Connection {
             probability: None,
             condition: None,
+            quantity: None,
             id: id(i),
             from: id(from),
             to: id(to),
@@ -1915,6 +1990,38 @@ mod tests {
         assert_eq!(ds[0].problem.code(), "probability_sum");
         assert_eq!(ds[0].severity, Severity::Warning);
         assert!(ds[0].to_string().contains("0.99"), "{}", ds[0]);
+    }
+
+    #[test]
+    fn batches_and_bills_of_materials_are_checked() {
+        let mut m = mm1();
+        m.elements[1].kind = ElementKind::Batch { size: 0 };
+        m.connections[0].quantity = Some(2);
+        let p = problems(&m);
+        assert!(
+            p.iter().any(|(s, at, x)| *s == Severity::Error
+                && at.as_deref() == Some("machine")
+                && x == "ZeroBatchSize"),
+            "{p:?}"
+        );
+        assert!(
+            p.iter().any(|(s, at, x)| *s == Severity::Warning
+                && at.as_deref() == Some("f1")
+                && x == "QuantityIgnored"),
+            "{p:?}"
+        );
+        m.elements[1].kind = ElementKind::Unbatch;
+        m.connections[0].quantity = None;
+        assert!(problems(&m).iter().any(|(_, _, x)| x == "NothingToUnbatch"));
+        m.elements[1].kind = ElementKind::ParallelGateway;
+        m.connections[0].quantity = Some(0);
+        assert!(
+            problems(&m)
+                .iter()
+                .any(|(s, _, x)| *s == Severity::Error && x == "ZeroQuantity")
+        );
+        m.connections[0].quantity = Some(3);
+        assert_eq!(m.validate(), vec![]);
     }
 
     fn mm1() -> Model {

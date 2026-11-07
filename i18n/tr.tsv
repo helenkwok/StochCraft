@@ -33,6 +33,9 @@
 	Availability	Kullanılabilirlik
 	BPMN with BPSim	BPSim içeren BPMN
 	Back to the model (Esc)	Modele dön (Esc)
+	Batch	Parti
+	Batch (collect, then send together)	Parti (topla, sonra birlikte gönder)
+	Batch size	Parti boyutu
 	Beta	Beta
 	Binomial	Binom
 	Boolean	Mantıksal
@@ -243,6 +246,7 @@
 	Show All	Tümünü Göster
 	Show {id}	{id} göster
 	Speed	Hız
+	Split batches	Partileri ayır
 	Split or join	Ayır veya birleştir
 	Split or join (all ways)	Ayır veya birleştir (tüm yollar)
 	Spread out	Dağıt
@@ -306,6 +310,7 @@
 	Zoom out	Uzaklaştır
 	a model	bir model
 	arrivals	gelişler
+	batch	parti
 	days	gün
 	decision: one way	karar: tek yol
 	departures	çıkışlar
@@ -317,6 +322,7 @@
 	minutes	dakika
 	nothing yet	henüz bir şey yok
 	seconds	saniye
+	split batches	partileri ayırma
 	split or join: all ways	ayır veya birleştir: tüm yollar
 	task	görev
 	task with a resource	kaynak kullanan görev

@@ -33,6 +33,9 @@
 	Availability	Διαθεσιμότητα
 	BPMN with BPSim	BPMN με BPSim
 	Back to the model (Esc)	Πίσω στο μοντέλο (Esc)
+	Batch	Παρτίδα
+	Batch (collect, then send together)	Παρτίδα (συλλογή και αποστολή μαζί)
+	Batch size	Μέγεθος παρτίδας
 	Beta	Βήτα
 	Binomial	Διωνυμική
 	Boolean	Λογική τιμή
@@ -243,6 +246,7 @@
 	Show All	Εμφάνιση όλων
 	Show {id}	Εμφάνιση {id}
 	Speed	Ταχύτητα
+	Split batches	Διαχωρισμός παρτίδων
 	Split or join	Διαχωρισμός ή ένωση
 	Split or join (all ways)	Διαχωρισμός ή ένωση (όλες οι διαδρομές)
 	Spread out	Κατανομή
@@ -306,6 +310,7 @@
 	Zoom out	Σμίκρυνση
 	a model	ένα μοντέλο
 	arrivals	αφίξεις
+	batch	παρτίδα
 	days	ημέρες
 	decision: one way	απόφαση: μία διαδρομή
 	departures	αναχωρήσεις
@@ -317,6 +322,7 @@
 	minutes	λεπτά
 	nothing yet	τίποτα ακόμη
 	seconds	δευτερόλεπτα
+	split batches	διαχωρισμός παρτίδων
 	split or join: all ways	διαχωρισμός ή ένωση: όλες οι διαδρομές
 	task	εργασία
 	task with a resource	εργασία με πόρο

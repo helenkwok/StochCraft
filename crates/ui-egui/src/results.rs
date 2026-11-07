@@ -79,6 +79,8 @@ fn kind_label(kind: &str) -> &str {
         "sink" => t("Departures"),
         "exclusive_gateway" => t("Decision"),
         "parallel_gateway" => t("Split or join"),
+        "batch" => t("Batch"),
+        "unbatch" => t("Split batches"),
         other => other,
     }
 }

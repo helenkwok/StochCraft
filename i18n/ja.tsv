@@ -33,6 +33,9 @@
 	Availability	可用率
 	BPMN with BPSim	BPSim 付き BPMN
 	Back to the model (Esc)	モデルに戻る (Esc)
+	Batch	バッチ
+	Batch (collect, then send together)	バッチ (集めてからまとめて送る)
+	Batch size	バッチサイズ
 	Beta	ベータ分布
 	Binomial	二項分布
 	Boolean	真偽値
@@ -243,6 +246,7 @@
 	Show All	すべてを表示
 	Show {id}	{id} を表示
 	Speed	速度
+	Split batches	バッチの分割
 	Split or join	分岐または結合
 	Split or join (all ways)	分岐または結合（すべての経路）
 	Spread out	均等配置
@@ -306,6 +310,7 @@
 	Zoom out	縮小
 	a model	モデル
 	arrivals	到着
+	batch	バッチ
 	days	日
 	decision: one way	分岐：1 つの経路
 	departures	退出
@@ -317,6 +322,7 @@
 	minutes	分
 	nothing yet	まだありません
 	seconds	秒
+	split batches	バッチの分割
 	split or join: all ways	分岐または結合：すべての経路
 	task	タスク
 	task with a resource	リソースを使うタスク

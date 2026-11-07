@@ -12,6 +12,16 @@
   stochcraft:queueCapacity, on a task's ElementParameters: the most entities that wait for the
   task's resource (not counting those in service), a whole number of at least 0.
 
+  stochcraft:batchSize, on a task's ElementParameters: the task collects this many entities
+  (a whole number of at least 1) and sends them on together as one batch.
+
+  stochcraft:unbatch, on a task's ElementParameters, with the value true: the task splits each
+  batch back into its entities.
+
+  stochcraft:quantity, on the ElementParameters of a sequence flow into a parallel gateway: how
+  many entities from that flow go into each one the gateway sends on (a bill of materials;
+  a whole number of at least 1).
+
   stochcraft:breakdown, on a task's ElementParameters: its resource's units fail after a time
   drawn from timeToFailure (elapsed since the last repair) and are repaired for a time drawn from
   repairTime, each holding one BPSim distribution or constant. Whether a failure interrupts the

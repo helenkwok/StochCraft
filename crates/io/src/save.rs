@@ -20,9 +20,10 @@ use crate::bpsim::{NS2, NSS};
 use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
-    availability_param, bpmn_local, breakdown_element, calendar_element, condition_element,
-    dist_element, edge_ends, interruptible_param, numeric, probability_element, property_element,
-    quantity_param, queue_capacity_element, size, start_param, timer_param,
+    availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
+    condition_element, dist_element, edge_ends, interruptible_param, numeric, probability_element,
+    property_element, quantity_element, quantity_param, queue_capacity_element, size, start_param,
+    timer_param,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -593,9 +594,11 @@ fn category(k: &ElementKind) -> u8 {
     match k {
         ElementKind::Source { .. } => 0,
         ElementKind::Sink => 1,
-        ElementKind::Server { .. } | ElementKind::SharedTask { .. } | ElementKind::Delay { .. } => {
-            2
-        }
+        ElementKind::Server { .. }
+        | ElementKind::SharedTask { .. }
+        | ElementKind::Delay { .. }
+        | ElementKind::Batch { .. }
+        | ElementKind::Unbatch => 2,
         ElementKind::ExclusiveGateway { .. } => 3,
         ElementKind::ParallelGateway => 4,
     }
@@ -1659,16 +1662,32 @@ impl Editor {
                 writes.push((c.id.to_string(), "Condition", v));
             }
         }
+        // Bills of materials.
+        let mut quantities: Vec<(String, Option<Element>)> = Vec::new();
+        for c in &after.connections {
+            let was = before.connections.iter().find(|o| same_link(o, c));
+            if was.and_then(|o| o.quantity) != c.quantity {
+                quantities.push((c.id.to_string(), c.quantity.map(quantity_element)));
+            }
+        }
         // Writing nothing where there was nothing leaves the file alone.
         writes.retain(|(id, _, v)| {
             v.is_some() || before.connections.iter().any(|o| o.id.as_str() == id)
         });
-        if writes.is_empty() {
+        if writes.is_empty() && quantities.iter().all(|(_, v)| v.is_none()) {
+            if let Some(s) = scenario_mut(root, scenario) {
+                for (id, _) in quantities {
+                    set_vendor(s, &id, crate::bpsim::QUANTITY, None);
+                }
+            }
             return Ok(());
         }
         let s = self.ensure_scenario(root, scenario)?;
         for (id, name, v) in writes {
             set_param(s, &id, "ControlParameters", name, v);
+        }
+        for (id, v) in quantities {
+            set_vendor(s, &id, crate::bpsim::QUANTITY, v);
         }
         Ok(())
     }
@@ -1884,9 +1903,46 @@ impl Editor {
                         writes.push((id.clone(), "PriorityParameters", "Priority", v));
                     }
                 }
+                ElementKind::Batch { .. } | ElementKind::Unbatch => {
+                    // A batch or a split takes no time and holds no resource.
+                    if matches!(
+                        was,
+                        Some(ElementKind::Server { .. } | ElementKind::Delay { .. })
+                    ) {
+                        writes.push((id.clone(), "TimeParameters", "ProcessingTime", None));
+                    }
+                    if matches!(was, Some(ElementKind::Server { .. })) {
+                        new_resources.push((e, false));
+                        vendor_writes.push((id.clone(), crate::bpsim::QUEUE_CAPACITY, None));
+                        vendor_writes.push((id.clone(), crate::bpsim::BREAKDOWN, None));
+                        writes.push((id.clone(), "PriorityParameters", "Interruptible", None));
+                    }
+                }
                 ElementKind::Sink
                 | ElementKind::ExclusiveGateway { .. }
                 | ElementKind::ParallelGateway => {}
+            }
+            // Making or splitting batches: the vendor extensions, where that changed.
+            let size = |k: Option<&ElementKind>| match k {
+                Some(ElementKind::Batch { size }) => Some(*size),
+                _ => None,
+            };
+            let splits = |k: Option<&ElementKind>| matches!(k, Some(ElementKind::Unbatch));
+            if size(was) != size(Some(&e.kind)) {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::BATCH_SIZE,
+                    size(Some(&e.kind)).and_then(|_| batching_element(&e.kind)),
+                ));
+            }
+            if splits(was) != splits(Some(&e.kind)) {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::UNBATCH,
+                    splits(Some(&e.kind))
+                        .then(|| batching_element(&e.kind))
+                        .flatten(),
+                ));
             }
             if matches!(was, Some(ElementKind::SharedTask { .. }))
                 && !matches!(e.kind, ElementKind::SharedTask { .. })

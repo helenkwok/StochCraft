@@ -33,6 +33,9 @@
 	Availability	Rendelkezésre állás
 	BPMN with BPSim	BPMN BPSim-mel
 	Back to the model (Esc)	Vissza a modellhez (Esc)
+	Batch	Köteg
+	Batch (collect, then send together)	Köteg (gyűjtés, majd együttes továbbítás)
+	Batch size	Kötegméret
 	Beta	Béta
 	Binomial	Binomiális
 	Boolean	Logikai
@@ -243,6 +246,7 @@
 	Show All	Összes megjelenítése
 	Show {id}	{id} megjelenítése
 	Speed	Sebesség
+	Split batches	Kötegek szétbontása
 	Split or join	Szétválasztás vagy egyesítés
 	Split or join (all ways)	Szétválasztás vagy egyesítés (minden út)
 	Spread out	Elosztás
@@ -306,6 +310,7 @@
 	Zoom out	Kicsinyítés
 	a model	egy modell
 	arrivals	érkezések
+	batch	köteg
 	days	nap
 	decision: one way	döntés: egy út
 	departures	távozások
@@ -317,6 +322,7 @@
 	minutes	perc
 	nothing yet	még semmi
 	seconds	másodperc
+	split batches	kötegek szétbontása
 	split or join: all ways	szétválasztás vagy egyesítés: minden út
 	task	feladat
 	task with a resource	erőforrást használó feladat

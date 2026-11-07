@@ -39,6 +39,8 @@ mod runtime;
 
 pub use runtime::{Live, LiveState};
 
+use std::collections::BTreeMap;
+
 pub use stochcraft_model::Breakdown;
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
@@ -110,6 +112,9 @@ pub struct Entity {
     /// Its properties, by the slot [`Compiled::property_names`] gives each name (`None`: not
     /// set). Empty when the model has no properties.
     pub properties: Vec<Option<Held>>,
+    /// A batch ([`ElementKind::Batch`]): the other entities it carries, until an
+    /// [`ElementKind::Unbatch`] sends them on again. Empty for any other entity.
+    pub members: Vec<Entity>,
 }
 
 /// Where an assigned value comes from.
@@ -153,6 +158,9 @@ pub struct Compiled {
     routes: Vec<Vec<Route>>,
     /// For each element, how many inputs it has (more than one only for a join).
     inputs: Vec<usize>,
+    /// For each element, how many entities each of its inputs gives a parallel gateway's
+    /// output (its bill of materials; 1 each unless a connection says otherwise).
+    quantities: Vec<Vec<u32>>,
     warnings: Vec<Diagnostic>,
     /// Property names, sorted: an entity's slots.
     slots: Vec<String>,
@@ -292,6 +300,22 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
         .iter()
         .map(|e| if is_join(e) { incoming(e).len() } else { 1 })
         .collect();
+    let quantities = model
+        .elements
+        .iter()
+        .map(|e| {
+            let ins = incoming(e);
+            if !matches!(e.kind, ElementKind::ParallelGateway) || ins.is_empty() {
+                return vec![1];
+            }
+            if is_join(e) {
+                ins.iter().map(|c| c.quantity.unwrap_or(1)).collect()
+            } else {
+                // One input: every connection into it shares it.
+                vec![ins.first().and_then(|c| c.quantity).unwrap_or(1)]
+            }
+        })
+        .collect();
     let routes = model
         .elements
         .iter()
@@ -364,6 +388,7 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
         model: model.clone(),
         routes,
         inputs,
+        quantities,
         warnings: diagnostics,
         slots,
         assigns,
@@ -408,7 +433,9 @@ impl Compiled {
 /// A statistic an element reports.
 ///
 /// Counts balance on every element: what entered either left, was lost there ([`Metric::Lost`],
-/// where reported), or was still inside at the end.
+/// where reported), or was still inside at the end; except where entities are combined or split:
+/// a batch of k reports k entered for each one left, an assembly counts every part it takes, and
+/// a split sends on each entity of a batch.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Metric {
     /// Entities that entered (for a source: created). A join counts each entity once, as it
@@ -650,6 +677,8 @@ pub struct Builder {
     /// `from` → `to`, with a probability and a condition; a later connection from the same
     /// element replaces the earlier one unless `from` is a gateway.
     connections: Vec<(BlockId, BlockId, Option<f64>, Option<String>)>,
+    /// Bills of materials: how many entities a connection gives a parallel gateway.
+    quantities: BTreeMap<(BlockId, BlockId), u32>,
     /// Shared resource pools.
     pools: Vec<ResourcePool>,
     calendars: Vec<Calendar>,
@@ -853,6 +882,22 @@ impl Builder {
         self.add(name, ElementKind::ParallelGateway)
     }
 
+    /// Collects `size` entities and sends them on as one batch.
+    pub fn batch(&mut self, name: &str, size: u32) -> BlockId {
+        self.add(name, ElementKind::Batch { size })
+    }
+
+    /// Splits batches back into their entities.
+    pub fn unbatch(&mut self, name: &str) -> BlockId {
+        self.add(name, ElementKind::Unbatch)
+    }
+
+    /// Makes the connection from `from` into parallel gateway `to` give it `quantity` entities
+    /// for each one it sends on (a bill of materials). Connect them first.
+    pub fn quantity(&mut self, from: BlockId, to: BlockId, quantity: u32) {
+        self.quantities.insert((from, to), quantity);
+    }
+
     fn is_gateway(&self, b: BlockId) -> bool {
         self.elements
             .get(b.0)
@@ -900,6 +945,7 @@ impl Builder {
                 to: id(to.0),
                 probability: *probability,
                 condition: condition.clone(),
+                quantity: self.quantities.get(&(*from, *to)).copied(),
             })
             .collect();
         let elements = self

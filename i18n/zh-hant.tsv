@@ -33,6 +33,9 @@
 	Availability	可用率
 	BPMN with BPSim	含 BPSim 的 BPMN
 	Back to the model (Esc)	返回模型 (Esc)
+	Batch	批次
+	Batch (collect, then send together)	批次（收集後一起傳送）
+	Batch size	批量大小
 	Beta	貝他分布
 	Binomial	二項分布
 	Boolean	布林值
@@ -243,6 +246,7 @@
 	Show All	全部顯示
 	Show {id}	顯示 {id}
 	Speed	速度
+	Split batches	拆分批次
 	Split or join	拆分或合併
 	Split or join (all ways)	拆分或合併（所有路徑）
 	Spread out	平均分佈
@@ -306,6 +310,7 @@
 	Zoom out	縮小
 	a model	一個模型
 	arrivals	到達
+	batch	批次
 	days	天
 	decision: one way	決策：單一路徑
 	departures	離開
@@ -317,6 +322,7 @@
 	minutes	分鐘
 	nothing yet	尚無內容
 	seconds	秒
+	split batches	拆分批次
 	split or join: all ways	拆分或合併：所有路徑
 	task	任務
 	task with a resource	需要資源的任務

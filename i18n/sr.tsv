@@ -33,6 +33,9 @@
 	Availability	Расположивост
 	BPMN with BPSim	BPMN с BPSim
 	Back to the model (Esc)	Повратак на модел (Esc)
+	Batch	Серија
+	Batch (collect, then send together)	Серија (прикупи, па пошаљи заједно)
+	Batch size	Величина серије
 	Beta	Бета
 	Binomial	Биномна
 	Boolean	Логичка вредност
@@ -243,6 +246,7 @@
 	Show All	Прикажи све
 	Show {id}	Прикажи {id}
 	Speed	Брзина
+	Split batches	Раздвајање серија
 	Split or join	Раздвоји или споји
 	Split or join (all ways)	Раздвоји или споји (сви путови)
 	Spread out	Распореди
@@ -306,6 +310,7 @@
 	Zoom out	Умањи
 	a model	модел
 	arrivals	доласци
+	batch	серија
 	days	дани
 	decision: one way	одлука: један пут
 	departures	одласци
@@ -317,6 +322,7 @@
 	minutes	минуте
 	nothing yet	још ништа
 	seconds	секунде
+	split batches	раздвајање серија
 	split or join: all ways	раздвоји или споји: сви путови
 	task	задатак
 	task with a resource	задатак с ресурсом
