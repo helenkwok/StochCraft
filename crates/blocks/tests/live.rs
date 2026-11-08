@@ -144,3 +144,48 @@ fn advancing_by_events_matches_a_plain_run() {
         }
     }
 }
+
+/// Advancing towards a time a bounded number of events at a time (how watching a run spreads a
+/// jump or a step over frames, #76) stops at that time, never past it, and from slice to slice
+/// runs the events of `advance_to`: the state on arriving, and the report at the end, match.
+#[test]
+fn advancing_towards_a_time_by_events_matches_advance_to() {
+    let c = compiled();
+    for budget in [1, 3, 50] {
+        let mut whole = c.live(Rng::new(9));
+        let mut sliced = c.live(Rng::new(9));
+        for target in [0.0, 13.5, 13.5, 20.0, 97.25, 1e9] {
+            assert!(whole.advance_to(target).is_ok());
+            loop {
+                let before = sliced.events();
+                let got = sliced
+                    .advance_toward(target, budget)
+                    .unwrap_or_else(|e| panic!("{e:?}"));
+                assert!(sliced.events() - before <= budget);
+                assert!(sliced.now() <= target.min(sliced.end()));
+                if got {
+                    break;
+                }
+            }
+            assert_eq!(sliced.now(), whole.now(), "slices of {budget} to {target}");
+            assert_eq!(sliced.events(), whole.events());
+            assert_eq!(sliced.states(), whole.states());
+        }
+        assert!(sliced.is_done());
+        assert_eq!(sliced.report(), whole.report());
+    }
+}
+
+/// `next_event_time` is where `step` goes, and is `None` once nothing more happens before the
+/// end.
+#[test]
+fn the_next_event_time_is_where_a_step_goes() {
+    let c = compiled();
+    let mut live = c.live(Rng::new(4));
+    for _ in 0..50 {
+        let next = live.next_event_time();
+        assert_eq!(live.step(), Ok(next));
+    }
+    assert!(live.advance_to(live.end()).is_ok());
+    assert_eq!(live.next_event_time(), None);
+}

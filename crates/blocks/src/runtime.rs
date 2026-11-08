@@ -482,6 +482,20 @@ impl Live<'_> {
         self.advance_watched(self.end, &|| false, events)
     }
 
+    /// Runs the events up to time `until` (at most the end), at most `events` of them; returns
+    /// whether it got to `until`. When it didn't, the next call carries on exactly where this
+    /// one stopped: run slice after slice, the events and their order are those of
+    /// [`Live::advance_to`], and the stuck-time limit counts across slices.
+    pub fn advance_toward(&mut self, until: f64, events: u64) -> Result<bool, RunError> {
+        self.advance_watched(until, &|| false, events)
+    }
+
+    /// When the next event happens, if it is no later than the end: the time [`Live::step`]
+    /// goes to.
+    pub fn next_event_time(&self) -> Option<f64> {
+        self.sim.next_event_time().filter(|t| *t <= self.end)
+    }
+
     /// The events run so far.
     pub fn events(&self) -> u64 {
         self.watching.events()
