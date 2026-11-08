@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	达到目标的比例的 95% 区间：{lo} 至 {hi}
 	95th percentile	第 95 百分位数
 	95th percentile {value}	第 95 百分位数 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	新文件只包含模型：{file} 中 StochCraft 无法理解的内容将被略去。
 	About StochCraft	关于 StochCraft
 	About {app}	关于 {app}
 	Across the range it changed by {change}: more than chance would explain.	在整个范围内变化了 {change}：超出偶然所能解释的程度。
@@ -165,6 +166,7 @@
 	Mean	均值
 	Mean number inside	内部平均数量
 	One replication of {n}: the results of the others differ.	{n} 次中的一次重复运行：其他重复运行的结果不同。
+	Save as a new BPMN file?	另存为新的 BPMN 文件？
 	Still inside at the end	结束时仍在内部的数量
 	Mean queue length	平均队列长度
 	Mean time blocked	平均阻塞时间
@@ -378,6 +380,7 @@
 	Whole number	整数
 	Window	窗口
 	With every time at its mean: {units}	所有时间取均值时：{units}
+	XPDL with BPSim	带 BPSim 的 XPDL
 	Yes or no	是或否
 	Your changes will be lost if you don't save them.	如果不存储，你的更改将会丢失。
 	Zoom	缩放
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	进入 {entered}，离开 {left}，丢失 {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}：最小值 {min}，最可能值 {mode}，{upper}
 	{field}: not editable here yet	{field}：暂时无法在此编辑
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}：StochCraft 只能将新文件写为 BPMN；请选择以 .bpmn 结尾的名称
 	{id}: a probability is a number from 0 to 1	{id}：概率必须是 0 到 1 之间的数字
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} 次重复运行中有 {met} 次达到目标：{p}（95% 区间 {lo} 至 {hi}）

@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	ຊ່ວງ 95% ຂອງສັດສ່ວນທີ່ບັນລຸເປົ້າໝາຍ: ຈາກ {lo} ຫາ {hi}
 	95th percentile	ເປີເຊັນໄທລ໌ທີ 95
 	95th percentile {value}	ເປີເຊັນໄທລ໌ທີ 95 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	ໄຟລ໌ໃໝ່ມີແຕ່ແບບຈຳລອງ: ສິ່ງທີ່ StochCraft ບໍ່ເຂົ້າໃຈໃນ {file} ຈະຖືກປະໄວ້.
 	About StochCraft	ກ່ຽວກັບ StochCraft
 	About {app}	ກ່ຽວກັບ {app}
 	Across the range it changed by {change}: more than chance would explain.	ຕະຫຼອດຊ່ວງປ່ຽນໄປ {change}: ຫຼາຍກວ່າທີ່ຄວາມບັງເອີນຈະອະທິບາຍໄດ້.
@@ -165,6 +166,7 @@
 	Mean	ຄ່າສະເລ່ຍ
 	Mean number inside	ຈຳນວນສະເລ່ຍພາຍໃນ
 	One replication of {n}: the results of the others differ.	ໜຶ່ງຮອບຈຳລອງຊ້ຳຈາກ {n}: ຜົນຂອງຮອບອື່ນແຕກຕ່າງກັນ.
+	Save as a new BPMN file?	ບັນທຶກເປັນໄຟລ໌ BPMN ໃໝ່ບໍ?
 	Still inside at the end	ຍັງຢູ່ພາຍໃນເມື່ອສິ້ນສຸດ
 	Mean queue length	ຄວາມຍາວແຖວຄອຍສະເລ່ຍ
 	Mean time blocked	ເວລາສະເລ່ຍທີ່ຖືກຂັດຂວາງ
@@ -378,6 +380,7 @@
 	Whole number	ຈຳນວນເຕັມ
 	Window	ໜ້າຕ່າງ
 	With every time at its mean: {units}	ເມື່ອທຸກເວລາເທົ່າກັບຄ່າສະເລ່ຍ: {units}
+	XPDL with BPSim	XPDL ພ້ອມ BPSim
 	Yes or no	ແມ່ນ ຫຼື ບໍ່
 	Your changes will be lost if you don't save them.	ການປ່ຽນແປງຈະສູນເສຍຖ້າທ່ານບໍ່ບັນທຶກ.
 	Zoom	ປັບຂະໜາດໜ້າຕ່າງ
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	ເຂົ້າ {entered} ອອກ {left} ສູນເສຍ {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: ຕ່ຳສຸດ {min}, ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ {mode}, {upper}
 	{field}: not editable here yet	{field}: ຍັງບໍ່ສາມາດແກ້ໄຂຢູ່ນີ້ໄດ້
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft ຂຽນໄຟລ໌ໃໝ່ເປັນ BPMN ເທົ່ານັ້ນ; ເລືອກຊື່ທີ່ລົງທ້າຍດ້ວຍ .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: ຄວາມເປັນໄປໄດ້ຕ້ອງເປັນຕົວເລກຈາກ 0 ຫາ 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} ຈາກ {of} ຮອບຈຳລອງຊ້ຳບັນລຸເປົ້າໝາຍ: {p} (ຊ່ວງ 95% ຈາກ {lo} ຫາ {hi})

@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	ช่วง 95% ของสัดส่วนที่บรรลุเป้าหมาย: จาก {lo} ถึง {hi}
 	95th percentile	เปอร์เซ็นไทล์ที่ 95
 	95th percentile {value}	เปอร์เซ็นไทล์ที่ 95 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	ไฟล์ใหม่มีเฉพาะแบบจำลอง: สิ่งที่ StochCraft ไม่เข้าใจใน {file} จะถูกละไว้
 	About StochCraft	เกี่ยวกับ StochCraft
 	About {app}	เกี่ยวกับ {app}
 	Across the range it changed by {change}: more than chance would explain.	ตลอดช่วงเปลี่ยนไป {change}: มากกว่าที่ความบังเอิญจะอธิบายได้
@@ -165,6 +166,7 @@
 	Mean	ค่าเฉลี่ย
 	Mean number inside	จำนวนเฉลี่ยภายใน
 	One replication of {n}: the results of the others differ.	หนึ่งรอบการจำลองซ้ำจาก {n}: ผลของรอบอื่นแตกต่างกัน
+	Save as a new BPMN file?	บันทึกเป็นไฟล์ BPMN ใหม่หรือไม่?
 	Still inside at the end	ยังอยู่ภายในเมื่อสิ้นสุด
 	Mean queue length	ความยาวคิวเฉลี่ย
 	Mean time blocked	เวลาเฉลี่ยที่ถูกบล็อก
@@ -378,6 +380,7 @@
 	Whole number	จำนวนเต็ม
 	Window	หน้าต่าง
 	With every time at its mean: {units}	เมื่อทุกเวลาเท่ากับค่าเฉลี่ย: {units}
+	XPDL with BPSim	XPDL พร้อม BPSim
 	Yes or no	ใช่หรือไม่
 	Your changes will be lost if you don't save them.	การเปลี่ยนแปลงจะสูญหายหากคุณไม่บันทึก
 	Zoom	ปรับขนาดหน้าต่าง
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	เข้า {entered} ออก {left} สูญหาย {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: ต่ำสุด {min} เป็นไปได้มากที่สุด {mode} {upper}
 	{field}: not editable here yet	{field}: ยังแก้ไขที่นี่ไม่ได้
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft เขียนไฟล์ใหม่เป็น BPMN เท่านั้น เลือกชื่อที่ลงท้ายด้วย .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: ความน่าจะเป็นต้องเป็นตัวเลขตั้งแต่ 0 ถึง 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} จาก {of} รอบการจำลองซ้ำบรรลุเป้าหมาย: {p} (ช่วง 95% จาก {lo} ถึง {hi})

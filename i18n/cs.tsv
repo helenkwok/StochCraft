@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95% interval podílu splňujícího cíl: {lo} až {hi}
 	95th percentile	95. percentil
 	95th percentile {value}	95. percentil {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Nový soubor obsahuje jen model: čemu StochCraft v {file} nerozumí, se vynechá.
 	About StochCraft	O aplikaci StochCraft
 	About {app}	O aplikaci {app}
 	Across the range it changed by {change}: more than chance would explain.	V rozsahu se změnil o {change}: víc, než by vysvětlila náhoda.
@@ -165,6 +166,7 @@
 	Mean	Průměr
 	Mean number inside	Průměrný počet uvnitř
 	One replication of {n}: the results of the others differ.	Jedna replikace z {n}: výsledky ostatních se liší.
+	Save as a new BPMN file?	Uložit jako nový soubor BPMN?
 	Still inside at the end	Na konci stále uvnitř
 	Mean queue length	Průměrná délka fronty
 	Mean time blocked	Průměrná doba blokování
@@ -378,6 +380,7 @@
 	Whole number	Celé číslo
 	Window	Okno
 	With every time at its mean: {units}	S každou dobou na průměru: {units}
+	XPDL with BPSim	XPDL s BPSim
 	Yes or no	Ano nebo ne
 	Your changes will be lost if you don't save them.	Pokud změny neuložíte, budou ztraceny.
 	Zoom	Přepnout velikost okna
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	Vstoupilo: {entered}, odešlo: {left}, ztraceno: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, nejpravděpodobnější {mode}, {upper}
 	{field}: not editable here yet	{field}: zde zatím nelze upravovat
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft zapisuje nový soubor pouze jako BPMN; zvolte název končící na .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: pravděpodobnost je číslo od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikací splnilo cíl: {p} (95% interval {lo} až {hi})

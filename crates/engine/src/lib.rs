@@ -408,17 +408,22 @@ impl Engine {
 
     /// The bytes `file.save` writes: the opened file with the model's changes written in (byte
     /// for byte when there are none), or with `as_new` (or no opened file) a new BPMN file from
-    /// the model.
+    /// the model. A change the opened file cannot take is [`ErrorCode::Unsupported`], with the
+    /// reason.
     pub fn save_bytes(&self, as_new: bool) -> Result<Vec<u8>, CommandError> {
         match &self.file {
-            Some(f) if !as_new => f.opened.save(&self.model).map_err(|e| {
-                CommandError::new(
-                    ErrorCode::Unsupported,
-                    format!("{e}; `\"as_new\": true` writes the model as a new BPMN file instead, without the content StochCraft does not understand"),
-                )
-            }),
+            Some(f) if !as_new => f
+                .opened
+                .save(&self.model)
+                .map_err(|e| CommandError::new(ErrorCode::Unsupported, e.to_string())),
             _ => Ok(stochcraft_io::write_new(&self.model)),
         }
+    }
+
+    /// The format of the file the model was opened from or saved to (`"bpmn"` or `"xpdl"`),
+    /// which saving into it keeps; a new file is always BPMN.
+    pub fn format(&self) -> Option<&'static str> {
+        self.file.as_ref().map(|f| format_name(f.opened.format))
     }
 
     /// Records that the model was saved as `bytes` at `path`.

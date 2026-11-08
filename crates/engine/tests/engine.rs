@@ -707,6 +707,17 @@ fn files_open_save_and_track_changes() {
             .is_err_and(|e| e.code == ErrorCode::Unsupported && e.message.contains("as_new")),
         "{refused:?}"
     );
+    // The command's `as_new` hint is the command line's: an app gives the reason alone.
+    let reason = h.save_bytes(false).err();
+    assert!(
+        reason
+            .as_ref()
+            .is_some_and(|e| e.code == ErrorCode::Unsupported
+                && e.message.contains("time unit cannot change")
+                && !e.message.contains("as_new")),
+        "{reason:?}"
+    );
+    assert_eq!(h.format(), Some("bpmn"));
     ok(&mut h, "file.save", json!({"as_new": true}));
     // Undoing back to the saved model is clean again.
     ok(&mut f, "undo", json!({}));

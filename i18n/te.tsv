@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	లక్ష్యాన్ని చేరిన వాటా యొక్క 95% అంతరం: {lo} నుండి {hi}
 	95th percentile	95వ శతాంశం
 	95th percentile {value}	95వ శతాంశం {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	కొత్త ఫైల్ లో నమూనా మాత్రమే ఉంటుంది: {file} లో StochCraft అర్థం చేసుకోనివి వదిలివేయబడతాయి.
 	About StochCraft	StochCraft గురించి
 	About {app}	{app} గురించి
 	Across the range it changed by {change}: more than chance would explain.	పూర్తి పరిధిలో ఇది {change} మారింది: యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ.
@@ -165,6 +166,7 @@
 	Mean	సగటు
 	Mean number inside	లోపల ఉన్నవాటి సగటు సంఖ్య
 	One replication of {n}: the results of the others differ.	{n}లో ఒక పునరావృత్త అమలు: మిగిలిన వాటి ఫలితాలు వేరుగా ఉంటాయి.
+	Save as a new BPMN file?	కొత్త BPMN ఫైల్ రూపంలో సేవ్ చేయాలా?
 	Still inside at the end	చివరికి ఇంకా లోపల ఉన్నవి
 	Mean queue length	సగటు క్యూలో పొడవు
 	Mean time blocked	నిరోధిత సగటు సమయం
@@ -378,6 +380,7 @@
 	Whole number	పూర్ణ సంఖ్య
 	Window	విండో
 	With every time at its mean: {units}	ప్రతి సమయం దాని సగటు వద్ద: {units}
+	XPDL with BPSim	BPSim తో XPDL
 	Yes or no	అవును లేదా కాదు
 	Your changes will be lost if you don't save them.	మీరు సేవ్ చేయకపోతే మీ మార్పులు పోతాయి.
 	Zoom	జూమ్
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} లోపలికి, {left} బయటికి, {lost} కోల్పోయినవి
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: కనిష్టం {min}, అత్యంత సంభావ్యం {mode}, {upper}
 	{field}: not editable here yet	{field}: ఇక్కడ ఇంకా సవరించలేరు
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft కొత్త ఫైల్ ను BPMN రూపంలో మాత్రమే రాస్తుంది; .bpmn తో ముగిసే పేరును ఎంచుకోండి
 	{id}: a probability is a number from 0 to 1	{id}: సంభావ్యత 0 నుంచి 1 మధ్య సంఖ్య కావాలి
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} పునరావృత్త అమలులలో {met} లక్ష్యాన్ని చేరాయి: {p} (95% అంతరం {lo} నుండి {hi})

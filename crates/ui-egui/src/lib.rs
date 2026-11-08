@@ -27,7 +27,7 @@ pub mod theme;
 
 use egui::{Key, Modifiers};
 use serde_json::{Value, json};
-use stochcraft_engine::{CommandError, Engine};
+use stochcraft_engine::{CommandError, Engine, ErrorCode};
 
 use crate::i18n::{t, td, tf, tn, tnf};
 
@@ -71,8 +71,9 @@ pub enum Request {
     /// Read the file at `path` (File ▸ Open Recent); answer with [`App::open_file`], or
     /// [`App::report_error`] if it can't be read.
     OpenPath { path: String },
-    /// Ask where to save, suggesting `name`; answer with [`App::save_to`].
-    PickSave { name: String },
+    /// Ask where to save, suggesting `name`; answer with [`App::save_to`]. BPMN is offered, and
+    /// with `xpdl` XPDL too: the model came from an XPDL file, which it can be saved into.
+    PickSave { name: String, xpdl: bool },
     /// Write `bytes` to `path`; answer with [`App::written`] or [`App::report_error`].
     Write { path: String, bytes: Vec<u8> },
     /// Offer `bytes` as a download named `name` (where there is no file system); answer with
@@ -117,6 +118,17 @@ enum Replace {
     /// A file dropped on the window (held in `App::dropped`).
     Dropped,
     Quit,
+}
+
+/// A save that needs a new BPMN file, written from the model alone, held while the user decides.
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct NewFile {
+    /// Why the model can't be saved into the opened file; none when the user chose BPMN for an
+    /// XPDL file.
+    reason: Option<String>,
+    /// The file chosen in Save As. Without one, the user is asked where (desktop), or the
+    /// download is named for a BPMN file (browser).
+    path: Option<String>,
 }
 
 /// The appearance the user chose: the system's, or always light or dark.
@@ -237,6 +249,10 @@ pub struct App {
     confirm: Option<Replace>,
     /// Do this once the save in progress has been written.
     after_save: Option<Replace>,
+    /// Waiting for the user to agree to saving as a new BPMN file.
+    new_file: Option<NewFile>,
+    /// The user agreed to a new BPMN file and is choosing where it goes.
+    as_new: bool,
     about: bool,
     /// A file dropped on the window, waiting on the unsaved-changes question.
     dropped: Option<(String, Vec<u8>)>,
@@ -322,6 +338,8 @@ impl App {
             status_error: false,
             confirm: None,
             after_save: None,
+            new_file: None,
+            as_new: false,
             about: false,
             dropped: None,
             requests: Vec::new(),
@@ -744,21 +762,82 @@ impl App {
             .map_or(name.clone(), |(stem, _)| stem.to_owned())
     }
 
-    /// Saves to `path`, chosen by the user for Save As.
+    /// Saves to `path`, chosen by the user for Save As, in the format its extension names
+    /// (`.bpmn`, `.xpdl`; otherwise the opened file's).
     pub fn save_to(&mut self, path: &str) {
+        let agreed = std::mem::take(&mut self.as_new);
+        self.save_file(path.to_owned(), true, agreed);
+    }
+
+    /// Saves to `path` (written on the desktop, downloaded under its name in the browser): into
+    /// the opened file when it is that file's format and can take the changes, else as a new
+    /// BPMN file once the user has agreed (`agreed`: already, in the question that asked for
+    /// `path`). `chosen`: the user chose `path` for Save As, so its extension says the format;
+    /// otherwise it is the opened file's own.
+    fn save_file(&mut self, path: String, chosen: bool, agreed: bool) {
+        let opened = self.engine.format();
+        let named = match extension(&path).as_str() {
+            "bpmn" => Some("bpmn"),
+            "xpdl" => Some("xpdl"),
+            _ => None,
+        };
+        let wanted = match (chosen, named, opened) {
+            (true, Some(f), _) => f,
+            (_, _, Some(f)) if !agreed => f,
+            _ => "bpmn",
+        };
+        if wanted == "xpdl" && (agreed || opened != Some("xpdl")) {
+            self.report_error(tf(
+                "{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn",
+                &[("file", file_name(&path))],
+            ));
+            return;
+        }
+        if agreed || opened.is_some_and(|f| f != wanted) {
+            if agreed {
+                self.write_new(path);
+            } else {
+                // BPMN chosen for an XPDL file.
+                self.new_file = Some(NewFile {
+                    reason: None,
+                    path: Some(path),
+                });
+            }
+            return;
+        }
         match self.engine.save_bytes(false) {
-            Ok(bytes) => self.requests.push(Request::Write {
-                path: path.to_owned(),
-                bytes,
-            }),
+            Ok(bytes) => self.deliver(path, bytes),
+            Err(e) if e.code == ErrorCode::Unsupported => {
+                self.new_file = Some(NewFile {
+                    reason: Some(e.message),
+                    path: (chosen && wanted == "bpmn").then_some(path),
+                });
+            }
             Err(e) => self.report_error(e.message),
         }
+    }
+
+    /// Writes (or downloads) the model to `path` as a new BPMN file.
+    fn write_new(&mut self, path: String) {
+        match self.engine.save_bytes(true) {
+            Ok(bytes) => self.deliver(path, bytes),
+            Err(e) => self.report_error(e.message),
+        }
+    }
+
+    fn deliver(&mut self, path: String, bytes: Vec<u8>) {
+        self.requests.push(if self.platform.file_system {
+            Request::Write { path, bytes }
+        } else {
+            Request::Download { name: path, bytes }
+        });
     }
 
     /// The user closed the Save dialog without choosing a file: nothing was saved, so what was
     /// to follow the save (quit, new, open) is dropped rather than run after a later save.
     pub fn save_cancelled(&mut self) {
         self.after_save = None;
+        self.as_new = false;
     }
 
     /// The shell wrote `bytes` to `path`: the model is saved there.
@@ -794,7 +873,7 @@ impl App {
             self.engine.path().map(str::to_owned),
             self.platform.file_system,
         ) {
-            (Some(path), true) => self.save_to(&path),
+            (Some(path), true) => self.save_file(path, false, false),
             (None, true) => self.save_as(),
             (path, false) => self.download(path),
         }
@@ -804,7 +883,8 @@ impl App {
     pub fn save_as(&mut self) {
         if self.platform.file_system {
             let name = self.suggested_name();
-            self.requests.push(Request::PickSave { name });
+            let xpdl = self.engine.format() == Some("xpdl");
+            self.requests.push(Request::PickSave { name, xpdl });
         } else {
             self.download(None);
         }
@@ -819,10 +899,7 @@ impl App {
 
     fn download(&mut self, name: Option<String>) {
         let name = name.unwrap_or_else(|| self.suggested_name());
-        match self.engine.save_bytes(false) {
-            Ok(bytes) => self.requests.push(Request::Download { name, bytes }),
-            Err(e) => self.report_error(e.message),
-        }
+        self.save_file(name, false, false);
     }
 
     /// Replaces or closes the model, first asking about unsaved changes.
@@ -1173,6 +1250,7 @@ impl App {
             });
 
         self.confirm_dialog(&ctx);
+        self.new_file_dialog(&ctx);
         self.about_window(&ctx);
         self.shortcuts_window(&ctx);
         self.recovery_dialog(&ctx);
@@ -1708,6 +1786,71 @@ impl App {
         }
     }
 
+    /// Asks before a save writes a new BPMN file, which leaves out what StochCraft does not
+    /// understand in the opened file, saying why the opened file can't be saved into.
+    fn new_file_dialog(&mut self, ctx: &egui::Context) {
+        let Some(pending) = self.new_file.clone() else {
+            return;
+        };
+        let name = self.document_name();
+        let mut choice = None;
+        egui::Modal::new(egui::Id::unique("new file")).show(ctx, |ui| {
+            ui.set_max_width(420.0);
+            ui.heading(t("Save as a new BPMN file?"));
+            ui.add_space(4.0);
+            if let Some(reason) = &pending.reason {
+                ui.label(reason);
+                ui.add_space(4.0);
+            }
+            ui.label(theme::weak(
+                ui,
+                tf(
+                    "A new file holds the model alone: what StochCraft does not understand in {file} is left out.",
+                    &[("file", &name)],
+                ),
+            ));
+            ui.add_space(14.0);
+            ui.horizontal(|ui| {
+                let go = match (&pending.path, self.platform.file_system) {
+                    (Some(_), _) => t("Save"),
+                    (None, true) => t("Save As…"),
+                    (None, false) => t("Download"),
+                };
+                if ui.add(theme::primary(ui, go)).clicked() {
+                    choice = Some(Choice::Save);
+                }
+                if ui.add(theme::secondary(ui, t("Cancel"))).clicked()
+                    || ui.input(|i| i.key_pressed(Key::Escape))
+                {
+                    choice = Some(Choice::Cancel);
+                }
+            });
+        });
+        match choice {
+            Some(Choice::Save) => {
+                self.new_file = None;
+                let bpmn = format!("{}.bpmn", self.export_stem());
+                match pending.path {
+                    Some(path) => self.write_new(path),
+                    None if self.platform.file_system => {
+                        self.as_new = true;
+                        self.requests.push(Request::PickSave {
+                            name: bpmn,
+                            xpdl: false,
+                        });
+                    }
+                    None => self.write_new(bpmn),
+                }
+            }
+            Some(Choice::Discard | Choice::Cancel) => {
+                // Nothing was saved, so what was to follow the save is dropped.
+                self.new_file = None;
+                self.after_save = None;
+            }
+            None => {}
+        }
+    }
+
     fn about_window(&mut self, ctx: &egui::Context) {
         let mut open = self.about;
         egui::Window::new(t("About StochCraft"))
@@ -2004,4 +2147,12 @@ fn change_label(command: &str) -> &str {
 /// The last component of a path, either separator.
 fn file_name(path: &str) -> &str {
     path.rsplit(['/', '\\']).next().unwrap_or(path)
+}
+
+/// A file's extension in lower case, without the dot (empty if it has none).
+fn extension(path: &str) -> String {
+    file_name(path)
+        .rsplit_once('.')
+        .map(|(_, e)| e.to_ascii_lowercase())
+        .unwrap_or_default()
 }

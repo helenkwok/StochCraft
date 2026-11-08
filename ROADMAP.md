@@ -629,7 +629,7 @@ them.
 - **Files:** pools, roles, selections and priorities are written to new files and saved into
   opened ones. In an opened file, a pool's quantity and a shared task's service, needs and
   priority save in place. Adding or removing pools, renaming a pool, changing its roles, or
-  turning a task into a shared task or back is for a new file (Save As), with the reason given.
+  turning a task into a shared task or back is for a new file: the app gives the reason and offers to save a new BPMN file.
 - **Commands:**
   - `resource.add`, `resource.set` and `resource.remove` (refused while a task names the pool),
     with exact undo;

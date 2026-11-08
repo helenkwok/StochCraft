@@ -177,7 +177,8 @@ fn unsaved_changes_are_asked_about_before_they_are_lost() {
     assert_eq!(
         h.state_mut().take_requests(),
         vec![Request::PickSave {
-            name: "Draft.bpmn".into()
+            name: "Draft.bpmn".into(),
+            xpdl: false
         }]
     );
     h.state_mut().save_to("/tmp/Draft.bpmn");
@@ -274,6 +275,187 @@ fn downloading_in_the_unsaved_changes_question_carries_on() {
     assert_eq!(h.state().engine().model().name, "", "New followed");
     assert_eq!(h.state().status(), "New model");
     assert_eq!(h.state_mut().autosave(), Autosave::Clear);
+}
+
+const XPDL_NS: &str = "http://www.wfmc.org/2009/XPDL2.2";
+const BPMN_NS: &str = "http://www.omg.org/spec/BPMN/20100524/MODEL";
+
+/// The one file the app asked to write (desktop) or download (browser): its name and text.
+fn take_file(h: &mut Harness<'static, App>) -> (String, String) {
+    let requests = h.state_mut().take_requests();
+    match requests.as_slice() {
+        [Request::Write { path: name, bytes }] | [Request::Download { name, bytes }] => {
+            (name.clone(), String::from_utf8_lossy(bytes).into_owned())
+        }
+        _ => panic!("expected one file, got {requests:?}"),
+    }
+}
+
+/// The model in `text`, read as a file named `name` would be.
+fn read_back(name: &str, text: &str) -> stochcraft_model::Model {
+    let mut e = stochcraft_engine::Engine::new();
+    e.open_bytes(name, text.as_bytes(), None)
+        .expect("a file that reads back");
+    e.model().clone()
+}
+
+/// `text`, the file saved as `name`, holds the app's model (shapes aside: a new file gives every
+/// element one).
+fn holds_the_model(h: &Harness<'static, App>, name: &str, text: &str) {
+    let mut saved = read_back(name, text);
+    let mut model = h.state().engine().model().clone();
+    saved.layout.clear();
+    model.layout.clear();
+    assert_eq!(saved, model);
+}
+
+/// Adds a pool and two tasks that share it: a change an opened file can't take.
+fn add_a_pool(h: &mut Harness<'static, App>) {
+    let app = h.state_mut();
+    app.execute("resource.add", json!({ "id": "agents", "quantity": 2 }));
+    for id in ["triage", "callback"] {
+        app.execute(
+            "block.add",
+            json!({ "kind": "shared_task", "id": id, "needs": [{ "resource": "agents" }] }),
+        );
+    }
+    assert_eq!(app.engine().model().resources.len(), 1, "{}", app.status());
+    settle(h);
+}
+
+/// File ▸ Open Example ▸ M/M/1 queue, then a pool added.
+fn mm1_with_a_new_pool(platform: Platform) -> Harness<'static, App> {
+    let mut h = harness(platform);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    add_a_pool(&mut h);
+    h
+}
+
+#[test]
+fn save_as_bpmn_writes_bpmn_even_from_an_xpdl_file() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "Tandem line"]);
+    menu(&mut h, &["File", "Save As…"]);
+    assert!(matches!(
+        h.state_mut().take_requests().as_slice(),
+        [Request::PickSave { name, xpdl: true }] if name == "tandem.xpdl"
+    ));
+    // Kept as XPDL, the file is written into, byte for byte while unchanged.
+    h.state_mut().save_to("/tmp/copy.xpdl");
+    let (_, text) = take_file(&mut h);
+    assert_eq!(text.as_bytes(), stochcraft_ui_egui::EXAMPLES[1].bytes);
+
+    // As .bpmn: a new BPMN file, once the user has agreed to leave out what it can't hold.
+    h.state_mut().save_to("/tmp/tandem.bpmn");
+    assert_eq!(h.state_mut().take_requests(), vec![], "nothing written yet");
+    settle(&mut h);
+    h.get_by_label("Save as a new BPMN file?");
+    click(&mut h, "Save");
+    let (path, text) = take_file(&mut h);
+    assert_eq!(path, "/tmp/tandem.bpmn");
+    assert!(text.contains(BPMN_NS) && !text.contains(XPDL_NS), "{text}");
+    holds_the_model(&h, &path, &text);
+    h.state_mut().written(&path, text.as_bytes());
+    assert!(!h.state().has_unsaved_changes());
+    assert_eq!(h.state().status(), "Saved tandem.bpmn");
+}
+
+#[test]
+fn a_change_the_file_cannot_take_offers_save_as_in_plain_words() {
+    let mut h = mm1_with_a_new_pool(Platform::DESKTOP);
+    menu(&mut h, &["File", "Save"]);
+    assert_eq!(h.state_mut().take_requests(), vec![], "nothing written");
+    h.get_by_label("Save as a new BPMN file?");
+    // The reason, without the command line's `as_new` hint.
+    assert!(
+        h.query_by_label_contains("resource pools were added")
+            .is_some()
+    );
+    assert!(h.query_by_label_contains("as_new").is_none());
+    assert!(
+        !h.state().status().contains("as_new"),
+        "{}",
+        h.state().status()
+    );
+    click(&mut h, "Save As…");
+    assert_eq!(
+        h.state_mut().take_requests(),
+        vec![Request::PickSave {
+            name: "mm1.bpmn".into(),
+            xpdl: false
+        }]
+    );
+    // The user agreed already: the chosen file gets the new BPMN file at once.
+    h.state_mut().save_to("/tmp/mm1-agents.bpmn");
+    let (path, text) = take_file(&mut h);
+    holds_the_model(&h, &path, &text);
+    h.state_mut().written(&path, text.as_bytes());
+    assert!(!h.state().has_unsaved_changes());
+}
+
+#[test]
+fn save_as_after_a_change_the_file_cannot_take_writes_a_new_file() {
+    let mut h = mm1_with_a_new_pool(Platform::DESKTOP);
+    menu(&mut h, &["File", "Save As…"]);
+    h.state_mut().take_requests();
+    h.state_mut().save_to("/tmp/mm1-agents.bpmn");
+    assert_eq!(h.state_mut().take_requests(), vec![], "asked first");
+    settle(&mut h);
+    assert!(
+        h.query_by_label_contains("resource pools were added")
+            .is_some()
+    );
+    click(&mut h, "Save");
+    let (path, text) = take_file(&mut h);
+    assert_eq!(path, "/tmp/mm1-agents.bpmn");
+    holds_the_model(&h, &path, &text);
+
+    // Cancel saves nothing and drops what was to follow the save (here: New).
+    let mut h = mm1_with_a_new_pool(Platform::DESKTOP);
+    menu(&mut h, &["File", "New"]);
+    click(&mut h, "Save");
+    h.get_by_label("Save as a new BPMN file?");
+    click(&mut h, "Cancel");
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+    assert_eq!(h.state().engine().model().resources.len(), 1, "no New");
+    assert!(h.query_by_label("Save as a new BPMN file?").is_none());
+}
+
+#[test]
+fn a_new_model_is_not_written_as_bpmn_under_an_xpdl_name() {
+    let mut h = harness(Platform::DESKTOP);
+    h.state_mut()
+        .execute("model.rename", json!({ "name": "Draft" }));
+    h.state_mut().save_to("/tmp/Draft.xpdl");
+    assert_eq!(h.state_mut().take_requests(), vec![]);
+    assert!(
+        h.state().status().contains("only as BPMN"),
+        "{}",
+        h.state().status()
+    );
+}
+
+#[test]
+fn the_browser_downloads_a_new_bpmn_file_when_the_opened_one_cannot_take_a_change() {
+    let mut h = mm1_with_a_new_pool(Platform::BROWSER);
+    menu(&mut h, &["File", "Download"]);
+    assert_eq!(h.state_mut().take_requests(), vec![], "asked first");
+    h.get_by_label("Save as a new BPMN file?");
+    click(&mut h, "Download");
+    let (name, text) = take_file(&mut h);
+    assert_eq!(name, "mm1.bpmn");
+    holds_the_model(&h, &name, &text);
+
+    // From an XPDL file, the download is named for what it holds.
+    let mut h = harness(Platform::BROWSER);
+    menu(&mut h, &["File", "Open Example", "Tandem line"]);
+    add_a_pool(&mut h);
+    menu(&mut h, &["File", "Download"]);
+    click(&mut h, "Download");
+    let (name, text) = take_file(&mut h);
+    assert_eq!(name, "tandem.bpmn");
+    assert!(text.contains(BPMN_NS) && !text.contains(XPDL_NS));
+    holds_the_model(&h, &name, &text);
 }
 
 #[test]

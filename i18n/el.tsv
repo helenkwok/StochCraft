@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Διάστημα 95% του ποσοστού που πετυχαίνει τον στόχο: από {lo} έως {hi}
 	95th percentile	95ο εκατοστημόριο
 	95th percentile {value}	95ο εκατοστημόριο {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Το νέο αρχείο περιέχει μόνο το μοντέλο: ό,τι δεν κατανοεί το StochCraft στο {file} παραλείπεται.
 	About StochCraft	Σχετικά με το StochCraft
 	About {app}	Σχετικά με το {app}
 	Across the range it changed by {change}: more than chance would explain.	Σε όλο το εύρος άλλαξε κατά {change}: περισσότερο απ' όσο θα εξηγούσε η τύχη.
@@ -165,6 +166,7 @@
 	Mean	Μέση τιμή
 	Mean number inside	Μέσο πλήθος εντός
 	One replication of {n}: the results of the others differ.	Μία επανάληψη από {n}: τα αποτελέσματα των άλλων διαφέρουν.
+	Save as a new BPMN file?	Αποθήκευση ως νέο αρχείο BPMN;
 	Still inside at the end	Ακόμη εντός στο τέλος
 	Mean queue length	Μέσο μήκος ουράς
 	Mean time blocked	Μέσος χρόνος αποκλεισμού
@@ -378,6 +380,7 @@
 	Whole number	Ακέραιος αριθμός
 	Window	Παράθυρο
 	With every time at its mean: {units}	Με κάθε χρόνο στη μέση τιμή του: {units}
+	XPDL with BPSim	XPDL με BPSim
 	Yes or no	Ναι ή όχι
 	Your changes will be lost if you don't save them.	Οι αλλαγές σας θα χαθούν αν δεν τις αποθηκεύσετε.
 	Zoom	Αλλαγή μεγέθους
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} μέσα, {left} έξω, {lost} χαμένα
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: ελάχιστο {min}, πιθανότερη {mode}, {upper}
 	{field}: not editable here yet	{field}: δεν είναι ακόμη επεξεργάσιμο εδώ
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: το StochCraft γράφει νέα αρχεία μόνο ως BPMN· επιλέξτε όνομα που τελειώνει σε .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: η πιθανότητα είναι αριθμός από 0 έως 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} από {of} επαναλήψεις πέτυχαν τον στόχο: {p} (διάστημα 95% από {lo} έως {hi})

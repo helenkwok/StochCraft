@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Интервал од 95% удела који постиже циљ: од {lo} до {hi}
 	95th percentile	95. перцентил
 	95th percentile {value}	95. перцентил {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Нови фајл садржи само модел: оно што StochCraft не разуме у {file} изоставља се.
 	About StochCraft	О апликацији StochCraft
 	About {app}	О апликацији {app}
 	Across the range it changed by {change}: more than chance would explain.	У опсегу се променио за {change}: више него што би објаснио случај.
@@ -165,6 +166,7 @@
 	Mean	Средња вредност
 	Mean number inside	Просјечан број унутра
 	One replication of {n}: the results of the others differ.	Једна репликација од {n}: резултати осталих се разликују.
+	Save as a new BPMN file?	Сачувати као нови BPMN фајл?
 	Still inside at the end	Још унутра на крају
 	Mean queue length	Просјечна дуљина реда
 	Mean time blocked	Просјечно време блокирања
@@ -378,6 +380,7 @@
 	Whole number	Цијели број
 	Window	Прозор
 	With every time at its mean: {units}	Са сваким временом на средњој вредности: {units}
+	XPDL with BPSim	XPDL с BPSim
 	Yes or no	Да или не
 	Your changes will be lost if you don't save them.	Ваше измене ће бити изгубљене ако их не сачувате.
 	Zoom	Зумирање
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	Ушло: {entered}, изашло: {left}, изгубљено: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: минимум {min}, највероватније {mode}, {upper}
 	{field}: not editable here yet	{field}: овдје се још не може уређивати
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft нови фајл записује само као BPMN; изаберите назив који се завршава на .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: вероватноћа је број од 0 до 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} од {of} репликација постигло је циљ: {p} (интервал од 95% од {lo} до {hi})

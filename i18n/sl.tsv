@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95-odstotni interval deleža, ki doseže cilj: od {lo} do {hi}
 	95th percentile	95. percentil
 	95th percentile {value}	95. percentil {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Nova datoteka vsebuje samo model: kar StochCraft v {file} ne razume, je izpuščeno.
 	About StochCraft	O programu StochCraft
 	About {app}	O programu {app}
 	Across the range it changed by {change}: more than chance would explain.	V razponu se je spremenil za {change}: več, kot bi pojasnilo naključje.
@@ -165,6 +166,7 @@
 	Mean	Povprečje
 	Mean number inside	Povprečno število znotraj
 	One replication of {n}: the results of the others differ.	Ena ponovitev od {n}: rezultati drugih se razlikujejo.
+	Save as a new BPMN file?	Shranim kot novo datoteko BPMN?
 	Still inside at the end	Ob koncu še znotraj
 	Mean queue length	Povprečna dolžina vrste
 	Mean time blocked	Povprečni čas blokiranja
@@ -378,6 +380,7 @@
 	Whole number	Celo število
 	Window	Okno
 	With every time at its mean: {units}	Z vsakim časom na povprečju: {units}
+	XPDL with BPSim	XPDL z BPSim
 	Yes or no	Da ali ne
 	Your changes will be lost if you don't save them.	Vaše spremembe bodo izgubljene, če jih ne shranite.
 	Zoom	Povečava
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	Vstopilo: {entered}, izstopilo: {left}, izgubljeno: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, najverjetnejša {mode}, {upper}
 	{field}: not editable here yet	{field}: tukaj še ni mogoče urejati
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft novo datoteko zapiše samo kot BPMN; izberite ime, ki se konča z .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: verjetnost je število od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} od {of} ponovitev je doseglo cilj: {p} (95-odstotni interval od {lo} do {hi})

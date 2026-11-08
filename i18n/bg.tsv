@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95% интервал на дела, постигнал целта: от {lo} до {hi}
 	95th percentile	95-и персентил
 	95th percentile {value}	95-и персентил {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Новият файл съдържа само модела: това, което StochCraft не разбира в {file}, се изпуска.
 	About StochCraft	За StochCraft
 	About {app}	За {app}
 	Across the range it changed by {change}: more than chance would explain.	В диапазона се промени с {change}: повече, отколкото би обяснила случайността.
@@ -165,6 +166,7 @@
 	Mean	Средна стойност
 	Mean number inside	Среден брой вътре
 	One replication of {n}: the results of the others differ.	Една репликация от {n}: резултатите на останалите се различават.
+	Save as a new BPMN file?	Да се запази ли като нов BPMN файл?
 	Still inside at the end	Още вътре в края
 	Mean queue length	Средна дължина на опашката
 	Mean time blocked	Средно време на блокиране
@@ -378,6 +380,7 @@
 	Whole number	Цяло число
 	Window	Прозорец
 	With every time at its mean: {units}	С всяко време на средната му стойност: {units}
+	XPDL with BPSim	XPDL с BPSim
 	Yes or no	Да или не
 	Your changes will be lost if you don't save them.	Промените ви ще бъдат загубени, ако не ги запазите.
 	Zoom	Смяна на размера на прозореца
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	Влезли: {entered}, излезли: {left}, загубени: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: минимум {min}, най-вероятна {mode}, {upper}
 	{field}: not editable here yet	{field}: тук все още не може да се редактира
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft записва нов файл само като BPMN; изберете име, завършващо на .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: вероятността е число от 0 до 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} от {of} репликации постигнаха целта: {p} (95% интервал от {lo} до {hi})

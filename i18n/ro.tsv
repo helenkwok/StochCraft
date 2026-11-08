@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Interval de 95% al ponderii care atinge ținta: de la {lo} la {hi}
 	95th percentile	Percentila 95
 	95th percentile {value}	percentila 95 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Fișierul nou conține doar modelul: ce nu înțelege StochCraft din {file} este omis.
 	About StochCraft	Despre StochCraft
 	About {app}	Despre {app}
 	Across the range it changed by {change}: more than chance would explain.	Pe interval s-a schimbat cu {change}: mai mult decât ar explica întâmplarea.
@@ -165,6 +166,7 @@
 	Mean	Medie
 	Mean number inside	Număr mediu în interior
 	One replication of {n}: the results of the others differ.	O replicare din {n}: rezultatele celorlalte diferă.
+	Save as a new BPMN file?	Salvați ca fișier BPMN nou?
 	Still inside at the end	Încă în interior la final
 	Mean queue length	Lungimea medie a cozii
 	Mean time blocked	Timp mediu de blocare
@@ -378,6 +380,7 @@
 	Whole number	Număr întreg
 	Window	Fereastră
 	With every time at its mean: {units}	Cu fiecare timp la media sa: {units}
+	XPDL with BPSim	XPDL cu BPSim
 	Yes or no	Da sau nu
 	Your changes will be lost if you don't save them.	Dacă nu salvați, modificările se vor pierde.
 	Zoom	Zoom
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	Intrate: {entered}, ieșite: {left}, pierdute: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minim {min}, cel mai probabil {mode}, {upper}
 	{field}: not editable here yet	{field}: nu se poate edita aici deocamdată
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft scrie fișiere noi doar ca BPMN; alegeți un nume care se termină în .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: probabilitatea este un număr între 0 și 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} din {of} replicări au atins ținta: {p} (interval de 95% de la {lo} la {hi})

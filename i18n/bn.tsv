@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	লক্ষ্য পূরণকারী অংশের ৯৫% ব্যবধান: {lo} থেকে {hi}
 	95th percentile	৯৫তম শতাংশক
 	95th percentile {value}	৯৫তম শতাংশক {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	নতুন ফাইলে শুধু মডেলটি থাকে: {file}-এর যা StochCraft বোঝে না তা বাদ পড়ে।
 	About StochCraft	StochCraft সম্পর্কে
 	About {app}	{app} সম্পর্কে
 	Across the range it changed by {change}: more than chance would explain.	পুরো পরিসরে এটি {change} বদলেছে: দৈবক্রম যা ব্যাখ্যা করতে পারে তার চেয়ে বেশি।
@@ -165,6 +166,7 @@
 	Mean	গড়
 	Mean number inside	ভেতরে গড় সংখ্যা
 	One replication of {n}: the results of the others differ.	{n}টির মধ্যে একটি পুনরাবৃত্তি: বাকিগুলোর ফলাফল ভিন্ন।
+	Save as a new BPMN file?	নতুন BPMN ফাইল হিসেবে সংরক্ষণ করবেন?
 	Still inside at the end	শেষে এখনও ভেতরে
 	Mean queue length	সারির গড় দৈর্ঘ্য
 	Mean time blocked	গড় অবরুদ্ধ সময়
@@ -378,6 +380,7 @@
 	Whole number	পূর্ণসংখ্যা
 	Window	উইন্ডো
 	With every time at its mean: {units}	প্রতিটি সময় তার গড়ে: {units}
+	XPDL with BPSim	BPSim সহ XPDL
 	Yes or no	হ্যাঁ বা না
 	Your changes will be lost if you don't save them.	সংরক্ষণ না করলে পরিবর্তন মুছে যাবে।
 	Zoom	জুম
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} ঢুকেছে, {left} বেরিয়েছে, {lost} হারিয়েছে
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: সর্বনিম্ন {min}, সবচেয়ে সম্ভাব্য {mode}, {upper}
 	{field}: not editable here yet	{field}: এখানে এখনও সম্পাদনা করা যায় না
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft নতুন ফাইল শুধু BPMN হিসেবে লেখে; .bpmn দিয়ে শেষ হওয়া একটি নাম বেছে নিন
 	{id}: a probability is a number from 0 to 1	{id}: সম্ভাবনা 0 থেকে 1-এর মধ্যে একটি সংখ্যা
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of}টির মধ্যে {met}টি পুনরাবৃত্তি লক্ষ্য পূরণ করেছে: {p} (৯৫% ব্যবধান {lo} থেকে {hi})

@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	目標を達成した割合の 95% 区間: {lo}〜{hi}
 	95th percentile	95 パーセンタイル
 	95th percentile {value}	95 パーセンタイル {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	新しいファイルにはモデルだけが入ります。{file} のうち StochCraft が理解できない内容は含まれません。
 	About StochCraft	StochCraft について
 	About {app}	{app} について
 	Across the range it changed by {change}: more than chance would explain.	範囲全体で {change} 変化しました。偶然では説明できない大きさです。
@@ -165,6 +166,7 @@
 	Mean	平均
 	Mean number inside	内部の平均数
 	One replication of {n}: the results of the others differ.	{n} 回中の 1 回の反復実行です。ほかの反復実行の結果は異なります。
+	Save as a new BPMN file?	新しい BPMN ファイルとして保存しますか？
 	Still inside at the end	終了時に内部に残っている数
 	Mean queue length	平均待ち行列長
 	Mean time blocked	平均ブロック時間
@@ -378,6 +380,7 @@
 	Whole number	整数
 	Window	ウィンドウ
 	With every time at its mean: {units}	すべての時間を平均値にした場合: {units}
+	XPDL with BPSim	BPSim 付き XPDL
 	Yes or no	はい／いいえ
 	Your changes will be lost if you don't save them.	保存しないと変更は失われます。
 	Zoom	ズーム
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	入 {entered}・出 {left}・損失 {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: 最小値 {min}、最頻値 {mode}、{upper}
 	{field}: not editable here yet	{field}：ここではまだ編集できません
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft は新しいファイルを BPMN でのみ書き出します。.bpmn で終わる名前を選んでください
 	{id}: a probability is a number from 0 to 1	{id}：確率は 0 から 1 までの数値です
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} 回中 {met} 回が目標を達成: {p}（95% 区間 {lo}〜{hi}）

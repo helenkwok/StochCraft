@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95%-interval van het aandeel dat het doel haalt: {lo} tot {hi}
 	95th percentile	95e percentiel
 	95th percentile {value}	95e percentiel {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Het nieuwe bestand bevat alleen het model: wat StochCraft in {file} niet begrijpt, valt weg.
 	About StochCraft	Over StochCraft
 	About {app}	Over {app}
 	Across the range it changed by {change}: more than chance would explain.	Over het bereik veranderde het met {change}: meer dan toeval zou verklaren.
@@ -165,6 +166,7 @@
 	Mean	Gemiddelde
 	Mean number inside	Gemiddeld aantal binnen
 	One replication of {n}: the results of the others differ.	Eén herhaling van {n}: de resultaten van de andere verschillen.
+	Save as a new BPMN file?	Opslaan als nieuw BPMN-bestand?
 	Still inside at the end	Aan het eind nog binnen
 	Mean queue length	Gemiddelde wachtrijlengte
 	Mean time blocked	Gemiddelde blokkeringstijd
@@ -378,6 +380,7 @@
 	Whole number	Geheel getal
 	Window	Venster
 	With every time at its mean: {units}	Met elke tijd op zijn gemiddelde: {units}
+	XPDL with BPSim	XPDL met BPSim
 	Yes or no	Ja of nee
 	Your changes will be lost if you don't save them.	Je wijzigingen gaan verloren als je ze niet opslaat.
 	Zoom	Zoom
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} in, {left} uit, {lost} verloren
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, meest waarschijnlijk {mode}, {upper}
 	{field}: not editable here yet	{field}: hier nog niet bewerkbaar
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft schrijft een nieuw bestand alleen als BPMN; kies een naam die op .bpmn eindigt
 	{id}: a probability is a number from 0 to 1	{id}: een kans is een getal tussen 0 en 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} van {of} herhalingen haalden het doel: {p} (95%-interval {lo} tot {hi})

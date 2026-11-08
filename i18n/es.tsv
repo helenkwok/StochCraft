@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Intervalo del 95 % de la proporción que cumple el objetivo: de {lo} a {hi}
 	95th percentile	Percentil 95
 	95th percentile {value}	percentil 95 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	El archivo nuevo solo contiene el modelo: lo que StochCraft no entiende de {file} se omite.
 	About StochCraft	Acerca de StochCraft
 	About {app}	Acerca de {app}
 	Across the range it changed by {change}: more than chance would explain.	En el intervalo cambió en {change}: más de lo que explicaría el azar.
@@ -165,6 +166,7 @@
 	Mean	Media
 	Mean number inside	Número medio dentro
 	One replication of {n}: the results of the others differ.	Una réplica de {n}: los resultados de las demás son distintos.
+	Save as a new BPMN file?	¿Guardar como un archivo BPMN nuevo?
 	Still inside at the end	Aún dentro al final
 	Mean queue length	Longitud media de la cola
 	Mean time blocked	Tiempo medio bloqueado
@@ -378,6 +380,7 @@
 	Whole number	Número entero
 	Window	Ventana
 	With every time at its mean: {units}	Con cada tiempo en su media: {units}
+	XPDL with BPSim	XPDL con BPSim
 	Yes or no	Sí o no
 	Your changes will be lost if you don't save them.	Si no los guardas, se perderán los cambios.
 	Zoom	Zoom
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} entraron, {left} salieron, {lost} perdidos
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: mínimo {min}, más probable {mode}, {upper}
 	{field}: not editable here yet	{field}: todavía no se puede editar aquí
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft solo escribe archivos nuevos en BPMN; elige un nombre que termine en .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: una probabilidad es un número entre 0 y 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} de {of} réplicas cumplieron el objetivo: {p} (intervalo del 95 % de {lo} a {hi})

@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Intervalle à 95 % de la part atteignant l'objectif : de {lo} à {hi}
 	95th percentile	95e centile
 	95th percentile {value}	95e centile {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Le nouveau fichier ne contient que le modèle : ce que StochCraft ne comprend pas dans {file} est omis.
 	About StochCraft	À propos de StochCraft
 	About {app}	À propos de {app}
 	Across the range it changed by {change}: more than chance would explain.	Sur la plage, il a varié de {change} : plus que le hasard ne l'expliquerait.
@@ -165,6 +166,7 @@
 	Mean	Moyenne
 	Mean number inside	Nombre moyen présent
 	One replication of {n}: the results of the others differ.	Une réplication sur {n} : les résultats des autres diffèrent.
+	Save as a new BPMN file?	Enregistrer comme nouveau fichier BPMN ?
 	Still inside at the end	Encore présents à la fin
 	Mean queue length	Longueur moyenne de la file
 	Mean time blocked	Temps moyen de blocage
@@ -378,6 +380,7 @@
 	Whole number	Nombre entier
 	Window	Fenêtre
 	With every time at its mean: {units}	Avec chaque temps à sa moyenne : {units}
+	XPDL with BPSim	XPDL avec BPSim
 	Yes or no	Oui ou non
 	Your changes will be lost if you don't save them.	Vos modifications seront perdues si vous ne les enregistrez pas.
 	Zoom	Zoom
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} entrés, {left} sortis, {lost} perdus
 	{family}: minimum {min}, most likely {mode}, {upper}	{family} : minimum {min}, valeur la plus probable {mode}, {upper}
 	{field}: not editable here yet	{field} : non modifiable ici pour le moment
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file} : StochCraft n'écrit un nouveau fichier qu'en BPMN ; choisissez un nom se terminant par .bpmn
 	{id}: a probability is a number from 0 to 1	{id} : une probabilité est un nombre compris entre 0 et 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} réplications sur {of} ont atteint l'objectif : {p} (intervalle à 95 % de {lo} à {hi})

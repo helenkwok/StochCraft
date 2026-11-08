@@ -124,13 +124,15 @@ impl Desktop {
                     Then::Open,
                 ),
                 Request::OpenPath { path } => open(&mut self.app, Path::new(&path)),
-                Request::PickSave { name } => self.dialogs.ask(
-                    FileDialog::save()
-                        .title(t("Save Model"))
-                        .file_name(name)
-                        .filter(t("BPMN with BPSim"), &["bpmn"]),
-                    Then::Save,
-                ),
+                Request::PickSave { name, xpdl } => {
+                    let mut dialog = FileDialog::save().title(t("Save Model")).file_name(name);
+                    // The opened file's format first.
+                    if xpdl {
+                        dialog = dialog.filter(t("XPDL with BPSim"), &["xpdl"]);
+                    }
+                    let dialog = dialog.filter(t("BPMN with BPSim"), &["bpmn"]);
+                    self.dialogs.ask(dialog, Then::Save);
+                }
                 Request::Write { path, bytes } | Request::Download { name: path, bytes } => {
                     match craft_atomic::atomic_write(Path::new(&path), &bytes) {
                         Ok(()) => self.app.written(&path, &bytes),

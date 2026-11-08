@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Interval del 95% de la proporció que compleix l'objectiu: de {lo} a {hi}
 	95th percentile	Percentil 95
 	95th percentile {value}	percentil 95 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	El fitxer nou només conté el model: el que StochCraft no entén de {file} queda fora.
 	About StochCraft	Quant a StochCraft
 	About {app}	Quant a {app}
 	Across the range it changed by {change}: more than chance would explain.	En l'interval ha canviat {change}: més del que explicaria l'atzar.
@@ -165,6 +166,7 @@
 	Mean	Mitjana
 	Mean number inside	Nombre mitjà a dins
 	One replication of {n}: the results of the others differ.	Una rèplica de {n}: els resultats de les altres són diferents.
+	Save as a new BPMN file?	Vols desar-ho com a fitxer BPMN nou?
 	Still inside at the end	Encara a dins al final
 	Mean queue length	Longitud mitjana de la cua
 	Mean time blocked	Temps mitjà bloquejat
@@ -378,6 +380,7 @@
 	Whole number	Nombre enter
 	Window	Finestra
 	With every time at its mean: {units}	Amb cada temps a la seva mitjana: {units}
+	XPDL with BPSim	XPDL amb BPSim
 	Yes or no	Sí o no
 	Your changes will be lost if you don't save them.	Si no els deses, perdràs els canvis.
 	Zoom	Zoom
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} entrades, {left} sortides, {lost} perdudes
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: mínim {min}, més probable {mode}, {upper}
 	{field}: not editable here yet	{field}: encara no es pot editar aquí
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft només escriu fitxers nous en BPMN; tria un nom acabat en .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: una probabilitat és un nombre entre 0 i 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} de {of} rèpliques han complert l'objectiu: {p} (interval del 95% de {lo} a {hi})

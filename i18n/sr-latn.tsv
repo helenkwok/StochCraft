@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Interval od 95% udela koji postiže cilj: od {lo} do {hi}
 	95th percentile	95. percentil
 	95th percentile {value}	95. percentil {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Novi fajl sadrži samo model: ono što StochCraft ne razume u {file} izostavlja se.
 	About StochCraft	O aplikaciji StochCraft
 	About {app}	O aplikaciji {app}
 	Across the range it changed by {change}: more than chance would explain.	U opsegu se promenio za {change}: više nego što bi objasnio slučaj.
@@ -165,6 +166,7 @@
 	Mean	Srednja vrednost
 	Mean number inside	Prosječan broj unutra
 	One replication of {n}: the results of the others differ.	Jedna replikacija od {n}: rezultati ostalih se razlikuju.
+	Save as a new BPMN file?	Sačuvati kao novi BPMN fajl?
 	Still inside at the end	Još unutra na kraju
 	Mean queue length	Prosječna duljina reda
 	Mean time blocked	Prosječno vreme blokiranja
@@ -378,6 +380,7 @@
 	Whole number	Cijeli broj
 	Window	Prozor
 	With every time at its mean: {units}	Sa svakim vremenom na srednjoj vrednosti: {units}
+	XPDL with BPSim	XPDL s BPSim
 	Yes or no	Da ili ne
 	Your changes will be lost if you don't save them.	Vaše izmene će biti izgubljene ako ih ne sačuvate.
 	Zoom	Zumiranje
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	Ušlo: {entered}, izašlo: {left}, izgubljeno: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, najverovatnije {mode}, {upper}
 	{field}: not editable here yet	{field}: ovdje se još ne može uređivati
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft novi fajl zapisuje samo kao BPMN; izaberite naziv koji se završava na .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: verovatnoća je broj od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} od {of} replikacija postiglo je cilj: {p} (interval od 95% od {lo} do {hi})
