@@ -36,6 +36,9 @@ engine's messages (validation, file notes) are English too.
   terms (resource pool, needs, by role, priority…) were checked against dictionaries, Wikipedia,
   the EU's IATE term base and simulation literature, never against another product's
   translations.
+- The row for "Still inside at the end" (issue #68, entities still inside an element when a
+  replication ends) was written with Claude Code from the plain meaning of the English and each
+  catalog's own word for "inside" in "Mean number inside"; not checked against any other source.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

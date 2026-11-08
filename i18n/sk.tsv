@@ -135,6 +135,7 @@
 	Maximum	Maximum
 	Mean	Priemer
 	Mean number inside	Priemerný počet vnútri
+	Still inside at the end	Na konci stále vnútri
 	Mean queue length	Priemerná dĺžka radu
 	Mean time blocked	Priemerný čas blokovania
 	Mean time in system	Priemerný čas v systéme

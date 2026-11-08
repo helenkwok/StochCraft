@@ -149,3 +149,171 @@ fn a_run_without_a_stop_measures_its_whole_duration() {
     }
     assert_eq!(r["measured"]["mean_duration"], 300.0);
 }
+// #68: an overloaded system, and work left inside.
+
+#[test]
+fn work_in_progress_at_the_end_is_reported() {
+    let mut e = queue(1.0, 0.8, 100.0, 1000.0);
+    let r = ok(&mut e, "run", json!({}));
+    let desk = &r["elements"][1];
+    let wip = &desk["metrics"]["work_in_progress"];
+    assert_eq!(wip["n"], 10, "{desk}");
+    assert!(wip["mean"].as_f64().is_some_and(|m| m >= 0.0), "{wip}");
+    // One value per replication, for its distribution.
+    assert_eq!(
+        r["values"]["desk"]["work_in_progress"]
+            .as_array()
+            .map(Vec::len),
+        Some(10)
+    );
+    // Sources and sinks hold nothing.
+    assert!(r["elements"][0]["metrics"]["work_in_progress"].is_null());
+    assert!(r["elements"][2]["metrics"]["work_in_progress"].is_null());
+}
+
+#[test]
+fn an_overloaded_queue_is_warned_about_before_and_after_the_run() {
+    // M/M/1 with mean service 1.5 and mean time between arrivals 1: 50% more work than capacity.
+    let mut e = queue(1.0, 1.5, 100.0, 3000.0);
+    let v = ok(&mut e, "model.validate", json!({}));
+    let pre: Vec<&Value> = v["diagnostics"].as_array().into_iter().flatten().collect();
+    assert_eq!(pre.len(), 1, "{v}");
+    assert_eq!(pre[0]["code"], "overloaded");
+    assert_eq!(pre[0]["at"], "desk");
+    assert_eq!(pre[0]["severity"], "warning");
+    let r = ok(&mut e, "run", json!({}));
+    let found = codes(&r);
+    assert!(found.contains(&"overloaded".to_owned()), "{found:?}");
+    assert!(found.contains(&"no_steady_state".to_owned()), "{found:?}");
+    let after = r["warnings"]
+        .as_array()
+        .and_then(|w| w.iter().find(|w| w["code"] == "no_steady_state"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(after["at"], "desk", "{after}");
+    // Work piles up: far more still inside at the end than a stable queue would hold.
+    let wip = r["elements"][1]["metrics"]["work_in_progress"]["mean"]
+        .as_f64()
+        .unwrap_or(0.0);
+    assert!(wip > 500.0, "{wip}");
+}
+
+#[test]
+fn an_overload_the_model_cannot_show_is_found_from_the_results() {
+    // The issue's case: the help desk mm1.bpmn with service mean 1.5 (12.5% more work than
+    // capacity), reached through a delay, so the offered load is not worked out before the run.
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "model.set",
+        json!({ "model": {
+            "name": "Hidden overload",
+            "elements": [
+                {"id": "arrivals", "kind": "source", "interarrival": {"type": "exponential", "mean": 1.3333333}},
+                {"id": "walk", "kind": "delay", "duration": {"type": "constant", "value": 1.0}},
+                {"id": "desk", "kind": "server", "capacity": 1, "service": {"type": "exponential", "mean": 1.5}},
+                {"id": "exit", "kind": "sink"}
+            ],
+            "connections": [
+                {"id": "flow-1", "from": "arrivals", "to": "walk"},
+                {"id": "flow-2", "from": "walk", "to": "desk"},
+                {"id": "flow-3", "from": "desk", "to": "exit"}
+            ],
+            "experiment": {"time_unit": "min", "warmup": 1000.0, "duration": 3000.0, "replications": 10, "seed": 3}
+        } }),
+    );
+    let v = ok(&mut e, "model.validate", json!({}));
+    assert_eq!(v["diagnostics"], json!([]), "{v}");
+    let r = ok(&mut e, "run", json!({}));
+    assert_eq!(codes(&r), vec!["no_steady_state".to_owned()]);
+}
+
+#[test]
+fn a_busy_but_stable_queue_is_not_warned_about() {
+    for (interarrival, service) in [(1.0, 0.75), (1.0, 0.9)] {
+        let mut e = queue(interarrival, service, 1000.0, 20000.0);
+        let r = ok(&mut e, "run", json!({}));
+        assert_eq!(codes(&r), Vec::<String>::new(), "service {service}");
+    }
+}
+
+#[test]
+fn the_help_desk_example_is_not_warned_about() {
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "model.set",
+        stochcraft_engine::COMMANDS[0].example(),
+    );
+    let r = ok(&mut e, "run", json!({}));
+    assert_eq!(codes(&r), Vec::<String>::new());
+}
+
+/// Every model committed under tests/models, and every BPSim reference model when they have been
+/// downloaded (`cargo xtask fetch-bpsim`), runs without a warning about its results.
+#[test]
+fn no_committed_or_reference_model_is_warned_about() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let mut files: Vec<std::path::PathBuf> = std::fs::read_dir(root.join("tests/models"))
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|d| d.path())
+        .collect();
+    let guide = root.join("target/bpsim/guide");
+    if guide.is_dir() {
+        let mut stack = vec![guide];
+        while let Some(dir) = stack.pop() {
+            for entry in std::fs::read_dir(&dir).into_iter().flatten().flatten() {
+                let p = entry.path();
+                if p.is_dir() {
+                    stack.push(p);
+                } else if p.extension().is_some_and(|x| {
+                    x.eq_ignore_ascii_case("bpmn") || x.eq_ignore_ascii_case("xpdl")
+                }) {
+                    files.push(p);
+                }
+            }
+        }
+    } else {
+        eprintln!("BPSim reference models skipped: run `cargo xtask fetch-bpsim` to include them");
+    }
+    files.sort();
+    let mut checked = 0;
+    for path in &files {
+        let name = path.display().to_string();
+        let mut e = Engine::new();
+        if name.ends_with(".json") {
+            let text = std::fs::read_to_string(path).unwrap_or_default();
+            let script: Vec<stochcraft_engine::JournalEntry> =
+                serde_json::from_str(&text).unwrap_or_default();
+            if e.replay(&script).is_err() {
+                continue;
+            }
+        } else {
+            let bytes = std::fs::read(path).unwrap_or_default();
+            if e.open_bytes(&name, &bytes, None).is_err() {
+                // Not every reference file is a runnable model (some are fragments).
+                continue;
+            }
+        }
+        let Ok(r) = e.execute("run", json!({ "replications": 4 })) else {
+            continue;
+        };
+        let ours: Vec<String> = codes(&r)
+            .into_iter()
+            .filter(|c| {
+                [
+                    "stop_with_warmup",
+                    "ended_in_warmup",
+                    "overloaded",
+                    "no_steady_state",
+                ]
+                .contains(&c.as_str())
+            })
+            .collect();
+        assert_eq!(ours, Vec::<String>::new(), "{name}");
+        checked += 1;
+    }
+    assert!(checked >= 4, "only {checked} models ran");
+}

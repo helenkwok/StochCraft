@@ -135,6 +135,7 @@
 	Maximum	Maximum
 	Mean	Mittelwert
 	Mean number inside	Mittlere Anzahl im System
+	Still inside at the end	Am Ende noch im System
 	Mean queue length	Mittlere Warteschlangenlänge
 	Mean time blocked	Mittlere Blockierungszeit
 	Mean time in system	Mittlere Verweilzeit im System

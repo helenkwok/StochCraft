@@ -135,6 +135,7 @@
 	Maximum	ค่าสูงสุด
 	Mean	ค่าเฉลี่ย
 	Mean number inside	จำนวนเฉลี่ยภายใน
+	Still inside at the end	ยังอยู่ภายในเมื่อสิ้นสุด
 	Mean queue length	ความยาวคิวเฉลี่ย
 	Mean time blocked	เวลาเฉลี่ยที่ถูกบล็อก
 	Mean time in system	เวลาเฉลี่ยในระบบ

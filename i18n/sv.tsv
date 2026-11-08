@@ -135,6 +135,7 @@
 	Maximum	Maximum
 	Mean	Medelvärde
 	Mean number inside	Genomsnittligt antal inuti
+	Still inside at the end	Fortfarande inuti vid slutet
 	Mean queue length	Genomsnittlig kölängd
 	Mean time blocked	Genomsnittlig blockeringstid
 	Mean time in system	Genomsnittlig tid i systemet

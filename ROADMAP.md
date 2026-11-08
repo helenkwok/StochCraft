@@ -814,6 +814,13 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
     gain `measured`: what each replication's statistics actually cover (`from` the warm-up's
     end, or 0, `to` its end, and whether they are `used`) and the mean time measured, which the
     app and the command line show in place of the configured duration.
+- **Overload and work left inside (#68):** a new metric, `work_in_progress`, counts the
+  entities still inside each server, shared task, delay, batch and join at the end of a
+  replication. Validation warns `overloaded` when a server fed straight from steady sources is
+  offered at least its capacity (arrival rate × mean service ÷ units ≥ 1). After the run,
+  `no_steady_state` flags a server busy at least 98% of its time up with at least 10, and at
+  least 5% of its departures, still waiting at the end (`SATURATED_UTILISATION`,
+  `BACKLOG_MIN`, `BACKLOG_SHARE` in `blocks`). Tasks with shared resources are not judged.
 - **Distributions of results:** results now carry every replication's value of every metric
   (`values`, outside `elements`, so the golden digests are unchanged). `results.distribution`
   asks about one of them, or `stop_time`, from the last run:

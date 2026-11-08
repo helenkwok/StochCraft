@@ -135,6 +135,7 @@
 	Maximum	Maximum
 	Mean	Átlag
 	Mean number inside	Átlagos belső darabszám
+	Still inside at the end	A végén még bent
 	Mean queue length	Átlagos sorhossz
 	Mean time blocked	Átlagos blokkolási idő
 	Mean time in system	Átlagos rendszerben töltött idő

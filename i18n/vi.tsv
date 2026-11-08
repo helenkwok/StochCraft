@@ -135,6 +135,7 @@
 	Maximum	Giá trị lớn nhất
 	Mean	Trung bình
 	Mean number inside	Số lượng trung bình bên trong
+	Still inside at the end	Vẫn còn bên trong lúc kết thúc
 	Mean queue length	Độ dài hàng đợi trung bình
 	Mean time blocked	Thời gian bị chặn trung bình
 	Mean time in system	Thời gian trung bình trong hệ thống

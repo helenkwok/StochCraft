@@ -135,6 +135,7 @@
 	Maximum	최댓값
 	Mean	평균
 	Mean number inside	내부 평균 개수
+	Still inside at the end	종료 시 내부에 남은 개수
 	Mean queue length	평균 대기열 길이
 	Mean time blocked	평균 차단 시간
 	Mean time in system	시스템 내 평균 체류 시간

@@ -566,7 +566,10 @@ impl Live<'_> {
             .zip(self.stats.iter())
             .zip(&self.compiled.assigns)
             .zip(&self.feeds_buffer)
-            .map(|(((e, s), a), &blocks)| s.borrow().report(e, a, blocks, now))
+            .zip(&self.compiled.inputs)
+            .map(|((((e, s), a), &blocks), &inputs)| {
+                s.borrow().report(e, a, blocks, inputs > 1, now)
+            })
             .collect();
         // Then each shared pool, after the elements.
         elements.extend(self.pools.reports(&model.resources, now));
@@ -661,12 +664,23 @@ impl BlockStats {
         self.down.reset(t);
     }
 
-    /// The element's report; `blocks`: whether it sends to a finite buffer.
+    /// Entities inside the element now: waiting in its input, being served or delayed (or
+    /// collected into a batch), and held while blocked after service.
+    fn inside(&self) -> u64 {
+        let n = self.waiting.value() + self.busy.value() + self.blocked.value();
+        // Sums of whole counts; `as` saturates (and a negative value cannot occur).
+        n.round().max(0.0) as u64
+    }
+
+    /// The element's report; `blocks`: whether it sends to a finite buffer; `join`: whether it
+    /// is a parallel gateway with several inputs (which holds entities until each input has
+    /// one).
     pub(crate) fn report(
         &self,
         element: &Element,
         assigns: &[Assign],
         blocks: bool,
+        join: bool,
         end: f64,
     ) -> ElementReport {
         let kind = &element.kind;
@@ -709,6 +723,14 @@ impl BlockStats {
                 | ElementKind::SharedTask { .. }
                 | ElementKind::Delay { .. }
                 | ElementKind::Batch { .. } => self.busy.average(end),
+                _ => None,
+            },
+            work_in_progress: match kind {
+                ElementKind::Server { .. }
+                | ElementKind::SharedTask { .. }
+                | ElementKind::Delay { .. }
+                | ElementKind::Batch { .. } => Some(self.inside()),
+                ElementKind::ParallelGateway if join => Some(self.inside()),
                 _ => None,
             },
             mean_time_in_system: if matches!(kind, ElementKind::Sink) {
@@ -1577,6 +1599,7 @@ impl Pools {
                         _ => None,
                     },
                     mean_contents: mean,
+                    work_in_progress: None,
                     mean_time_in_system: None,
                     mean_blocked_time: None,
                     blocking_probability: None,
