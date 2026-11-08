@@ -14,6 +14,8 @@ workspace = true
 
 [dependencies]
 stochcraft-ui-egui = { workspace = true }
+# The control channel the MCP server connects to (`--control`).
+stochcraft-mcp = { workspace = true }
 eframe = { workspace = true, features = ["default_fonts", "glow", "accesskit", "wayland", "x11"] }
 egui = { workspace = true }
 craft-atomic = { workspace = true }

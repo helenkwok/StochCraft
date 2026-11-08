@@ -26,7 +26,7 @@ pub mod theme;
 
 use egui::{Key, Modifiers};
 use serde_json::{Value, json};
-use stochcraft_engine::Engine;
+use stochcraft_engine::{CommandError, Engine};
 
 use crate::i18n::{t, td, tf, tn, tnf};
 
@@ -562,12 +562,7 @@ impl App {
     pub fn open_file(&mut self, name: &str, bytes: &[u8]) {
         match self.engine.open_bytes(name, bytes, None) {
             Ok(opened) => {
-                self.results = None;
-                self.selected = None;
-                self.canvas = canvas::Canvas::default();
-                self.watching = None;
-                self.drafts.clear();
-                self.show_results = false;
+                self.forget_view();
                 // Warnings and errors from reading the file and checking the model; information
                 // notes are left for the model view.
                 let count = |k: &str| {
@@ -594,6 +589,53 @@ impl App {
             }
             Err(e) => self.report_error(e.message),
         }
+    }
+
+    /// What the window shows of a model that has been replaced: results, selection, the
+    /// canvas's view, a watched run and half-typed fields.
+    fn forget_view(&mut self) {
+        self.results = None;
+        self.selected = None;
+        self.canvas = canvas::Canvas::default();
+        self.watching = None;
+        self.drafts.clear();
+        self.show_results = false;
+    }
+
+    /// Runs an engine command for an agent (the MCP server, through the desktop app's control
+    /// channel), so the person at the window sees what it does: a model it opens or starts
+    /// replaces the one shown, and the results of its runs are shown. Background runs are the
+    /// window's own (Model ▸ Run), so `run.start`, `run.status` and `run.cancel` are refused:
+    /// `run` runs at once.
+    pub fn control(&mut self, command: &str, params: Value) -> Result<Value, CommandError> {
+        if matches!(command, "run.start" | "run.status" | "run.cancel") {
+            return Err(CommandError::new(
+                stochcraft_engine::ErrorCode::Unsupported,
+                format!("`{command}` is not available in the app: use `run`, which runs at once"),
+            ));
+        }
+        let result = self.engine.execute(command, params)?;
+        match command {
+            "file.open" | "model.new" | "model.set" => {
+                self.forget_view();
+                if let Some(path) = result["path"].as_str() {
+                    self.info(tf("Opened {file}", &[("file", file_name(path))]));
+                }
+            }
+            "run" => {
+                self.results_digest = result["record"]["model_digest"].as_str().map(str::to_owned);
+                self.results = Some(result.clone());
+                self.show_results = true;
+                let n = result["replications"].as_u64().unwrap_or(0);
+                self.info(tn(
+                    n,
+                    "Finished {n} replication",
+                    "Finished {n} replications",
+                ));
+            }
+            _ => {}
+        }
+        Ok(result)
     }
 
     /// Opens a file dropped on the window, first asking about unsaved changes.

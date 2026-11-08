@@ -91,6 +91,25 @@ enum Command {
         /// One command (default: all).
         command: Option<String>,
     },
+    /// Serve the engine's commands to an AI agent over MCP (JSON-RPC on stdin and stdout;
+    /// docs/mcp.md). Headless by default; `--connect` drives the running app instead.
+    Mcp {
+        /// The control channel of an app started with `stochcraft --control PORT`, such as
+        /// `127.0.0.1:7070`. If it cannot be reached, the server runs headless.
+        #[arg(long, conflicts_with_all = ["read_root", "write_root"])]
+        connect: Option<String>,
+        /// Run an engine in this process, with no window (the default).
+        #[arg(long, conflicts_with = "connect")]
+        headless: bool,
+        /// Confine the files the agent opens to this folder (nothing can be opened without it
+        /// once either root is given).
+        #[arg(long)]
+        read_root: Option<PathBuf>,
+        /// Confine the files the agent saves to this folder (nothing can be saved without it
+        /// once either root is given).
+        #[arg(long)]
+        write_root: Option<PathBuf>,
+    },
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, ValueEnum)]
@@ -309,6 +328,25 @@ fn schema(command: Option<&str>) -> Result<u8, Failure> {
     Ok(0)
 }
 
+/// `stochcraft-cli mcp`: serves until stdin closes. Only protocol messages go to stdout.
+fn mcp(connect: Option<String>, read: Option<&Path>, write: Option<&Path>) -> Result<u8, Failure> {
+    let roots = if read.is_some() || write.is_some() {
+        stochcraft_mcp::Roots::new(read, write).map_err(Failure)?
+    } else {
+        stochcraft_mcp::Roots::default()
+    };
+    let (backend, note) =
+        stochcraft_mcp::backend(stochcraft_mcp::Options { connect, roots }).map_err(Failure)?;
+    if let Some(note) = note {
+        eprintln!("stochcraft-cli mcp: {note}");
+    }
+    let mut server = stochcraft_mcp::Server::new(backend);
+    server
+        .serve(std::io::stdin().lock(), std::io::stdout().lock())
+        .map_err(|e| Failure(format!("mcp: {e}")))?;
+    Ok(0)
+}
+
 fn main() -> ExitCode {
     let cli = Cli::parse();
     let outcome = match cli.command {
@@ -346,6 +384,12 @@ fn main() -> ExitCode {
         ),
         Command::Exec { script, open } => exec(&script, open.as_deref()),
         Command::Schema { command } => schema(command.as_deref()),
+        Command::Mcp {
+            connect,
+            headless: _,
+            read_root,
+            write_root,
+        } => mcp(connect, read_root.as_deref(), write_root.as_deref()),
     };
     match outcome {
         Ok(code) => ExitCode::from(code),

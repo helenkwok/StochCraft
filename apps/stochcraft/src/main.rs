@@ -9,13 +9,16 @@
 //! - craft-menu: the system menu bar on macOS (elsewhere the menus are in the window);
 //! - craft-atomic: crash-safe saves (a model file is never left half-written).
 //!
-//! `stochcraft [FILE]` opens FILE at start.
+//! `stochcraft [FILE]` opens FILE at start. `stochcraft --control PORT` also listens on
+//! `127.0.0.1:PORT` for engine commands from the MCP server (`stochcraft-cli mcp --connect`,
+//! docs/mcp.md), so a person can watch an agent work in the window.
 
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 use craft_dialogs::{Answer, Dialogs, FileDialog};
 use craft_settings::{Location, Settings, SettingsStore};
+use stochcraft_mcp::control;
 use stochcraft_ui_egui::i18n::{t, tf};
 use stochcraft_ui_egui::{App, Autosave, Platform, Prefs, Request};
 
@@ -48,10 +51,12 @@ struct Desktop {
     /// The system menu bar (macOS).
     #[cfg(target_os = "macos")]
     native_menu: Option<craft_menu::NativeMenu>,
+    /// Commands from the control channel (`--control`), waiting for the next frame.
+    control: Option<std::sync::mpsc::Receiver<control::Call>>,
 }
 
 impl Desktop {
-    fn new(ctx: &egui::Context, file: Option<PathBuf>) -> Self {
+    fn new(ctx: &egui::Context, file: Option<PathBuf>, control_port: Option<u16>) -> Self {
         let wake = ctx.clone();
         let mut app = App::new(Platform::DESKTOP);
         let (settings, report) = SettingsStore::<Stored>::open(Location::Auto);
@@ -65,6 +70,19 @@ impl Desktop {
         if let Some(path) = file {
             open(&mut app, &path);
         }
+        let control = control_port.and_then(|port| {
+            let wake = ctx.clone();
+            match control::listen(port, move || wake.request_repaint()) {
+                Ok((addr, calls)) => {
+                    eprintln!("stochcraft: listening for engine commands on {addr}");
+                    Some(calls)
+                }
+                Err(e) => {
+                    app.report_error(format!("--control {port}: {e}"));
+                    None
+                }
+            }
+        });
         #[cfg(target_os = "macos")]
         let native_menu = {
             let bar = app.menu_bar();
@@ -80,6 +98,18 @@ impl Desktop {
             autosaved_at: Instant::now(),
             #[cfg(target_os = "macos")]
             native_menu,
+            control,
+        }
+    }
+
+    /// Runs the commands that came in on the control channel, and answers them.
+    fn take_control_calls(&mut self) {
+        let Some(calls) = &self.control else {
+            return;
+        };
+        for call in calls.try_iter().collect::<Vec<_>>() {
+            let result = self.app.control(&call.command, call.params.clone());
+            call.answer(result);
         }
     }
 
@@ -235,6 +265,8 @@ impl eframe::App for Desktop {
     /// The close decision, before `ui` (and while the window is hidden): unsaved changes keep the
     /// window open and ask; then craft-quit routes the close the platform's way.
     fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        // Here rather than in `ui`, which a hidden window does not run.
+        self.take_control_calls();
         if ctx.input(|i| i.viewport().close_requested())
             && !self.may_close
             && !self.app.close_requested()
@@ -299,8 +331,39 @@ impl eframe::App for Desktop {
     }
 }
 
+/// `[FILE] [--control PORT]`, in any order.
+fn arguments(
+    args: impl IntoIterator<Item = std::ffi::OsString>,
+) -> Result<(Option<PathBuf>, Option<u16>), String> {
+    let mut args = args.into_iter();
+    let (mut file, mut port) = (None, None);
+    let parse = |v: Option<std::ffi::OsString>| -> Result<u16, String> {
+        v.and_then(|v| v.into_string().ok())
+            .and_then(|v| v.parse().ok())
+            .ok_or_else(|| "--control takes a port number".to_owned())
+    };
+    while let Some(arg) = args.next() {
+        match arg.to_str() {
+            Some("--control") => port = Some(parse(args.next())?),
+            Some(a) if a.starts_with("--control=") => {
+                port = Some(parse(Some(a.trim_start_matches("--control=").into()))?);
+            }
+            Some(a) if a.starts_with("--") => return Err(format!("unknown option {a}")),
+            _ if file.is_none() => file = Some(PathBuf::from(arg)),
+            _ => return Err("only one file can be opened at start".to_owned()),
+        }
+    }
+    Ok((file, port))
+}
+
 fn main() -> eframe::Result {
-    let file = std::env::args_os().nth(1).map(PathBuf::from);
+    let (file, control_port) = match arguments(std::env::args_os().skip(1)) {
+        Ok(a) => a,
+        Err(e) => {
+            eprintln!("stochcraft: {e}\nusage: stochcraft [FILE] [--control PORT]");
+            std::process::exit(2);
+        }
+    };
     // Who draws the frame on this desktop (STOCHCRAFT_TITLEBAR=app|system overrides it).
     let frame = craft_window::Choice::probe(craft_window::Prefix::new("STOCHCRAFT")).into_frame();
     let viewport = egui::ViewportBuilder::default()
@@ -317,7 +380,7 @@ fn main() -> eframe::Result {
         "StochCraft",
         options,
         Box::new(move |cc| {
-            let mut desktop = Desktop::new(&cc.egui_ctx, file);
+            let mut desktop = Desktop::new(&cc.egui_ctx, file, control_port);
             desktop.app.set_window_frame(&app_frame);
             Ok(Box::new(desktop))
         }),
@@ -328,6 +391,22 @@ fn main() -> eframe::Result {
 #[allow(clippy::panic)] // A settings file that doesn't read back fails the test.
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_file_and_a_control_port_in_any_order() {
+        let a = |v: &[&str]| arguments(v.iter().map(std::ffi::OsString::from));
+        assert_eq!(a(&[]), Ok((None, None)));
+        assert_eq!(a(&["m.bpmn"]), Ok((Some("m.bpmn".into()), None)));
+        assert_eq!(
+            a(&["--control", "7070", "m.bpmn"]),
+            Ok((Some("m.bpmn".into()), Some(7070)))
+        );
+        assert_eq!(a(&["--control=7071"]), Ok((None, Some(7071))));
+        assert!(a(&["--control"]).is_err());
+        assert!(a(&["--control", "x"]).is_err());
+        assert!(a(&["--nope"]).is_err());
+        assert!(a(&["a.bpmn", "b.bpmn"]).is_err());
+    }
 
     /// The preferences survive `config.toml`: appearance, recent files and the user's shortcuts.
     #[test]
