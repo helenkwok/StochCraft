@@ -32,6 +32,7 @@ pub use resource::{Acquire, AcquireWithin, Resource, ResourceGuard};
 pub use signal::{Gate, Signal, Wait};
 pub use sim::{
     Ctx, Hold, HoldInterruptible, Interrupt, InterruptCause, Interrupted, Sim, Stopped, Watch,
+    Watching,
 };
 pub use store::{Get, GetWithin, PutWait, Store};
 

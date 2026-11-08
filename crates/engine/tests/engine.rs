@@ -501,7 +501,7 @@ fn background_runs_report_progress_and_can_be_cancelled() {
     );
     ok(&mut e, "experiment.set", json!({"duration": 1.0}));
     assert_eq!(
-        ok(&mut e, "run.status", json!({"step": 2}))["result"]["duration"],
+        ok(&mut e, "run.status", json!({"step": 2, "events": u64::MAX}))["result"]["duration"],
         20_000.0
     );
 }
@@ -562,7 +562,16 @@ fn a_run_where_time_stops_moving_ends_with_an_error_in_slices() {
             "run.start",
             json!({"replications": 3, "mode": "slices"}),
         );
-        ok(&mut e, "run.status", json!({"step": 1}))
+        // The stuck-time limit counts across slices, so the run ends after enough of them.
+        let mut status = json!({"state": "running"});
+        while status["state"] == "running" {
+            status = ok(
+                &mut e,
+                "run.status",
+                json!({"step": 1, "events": 1_000_000}),
+            );
+        }
+        status
     });
     assert!(status.is_some(), "the run did not end");
     let status = status.unwrap_or_default();

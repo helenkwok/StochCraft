@@ -31,8 +31,8 @@
 //! - Every command that is not a query is recorded in the [`Engine::journal`], which
 //!   [`Engine::replay`] runs again as a script.
 //! - `run` runs an experiment at once; `run.start`, `run.status` and `run.cancel` run one in the
-//!   background with progress and cancellation (worker threads natively; in the browser, slices
-//!   or the page's web workers, see [`Worker`]).
+//!   background with progress and cancellation (worker threads natively; in the browser, the
+//!   page's web workers, see [`Worker`], or slices of [`SLICE_EVENTS`] events between frames).
 //! - Files are BPSim on BPMN or XPDL (`stochcraft-io`). `file.save` writes edits into the file
 //!   the model was opened from, keeping everything StochCraft does not understand and every line
 //!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
@@ -56,7 +56,7 @@ use stochcraft_io::{Format, Opened};
 use stochcraft_model::Model;
 
 pub use commands::{COMMANDS, Command, CommandKind};
-pub use run::RunMode;
+pub use run::{RunMode, SLICE_EVENTS};
 pub use stochcraft_blocks::{Live, LiveState, RunError};
 pub use workers::Worker;
 
@@ -530,14 +530,15 @@ impl Engine {
         Ok(status)
     }
 
-    /// Progress of the background run (advancing a run in slices by up to `step` replications).
-    /// A finished run's results are kept for `results.distribution`, however it was followed
-    /// (`run.status`, or a window polling here).
-    pub fn poll_run(&mut self, step: u64) -> Value {
+    /// Progress of the background run. A run in slices first runs until `step` replications
+    /// have finished or `events` events have run, whichever comes first (see [`SLICE_EVENTS`]).
+    /// A finished run's results are kept for `results.distribution` and `results.compare`,
+    /// however it was followed (`run.status`, or a window polling here).
+    pub fn poll_run(&mut self, step: u64, events: u64) -> Value {
         let status = self
             .job
             .as_mut()
-            .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step));
+            .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step, events));
         if status["state"] == "finished" && !self.job_kept {
             self.job_kept = true;
             self.keep_results(status["result"].clone());

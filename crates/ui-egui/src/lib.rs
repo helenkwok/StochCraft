@@ -195,6 +195,8 @@ pub const RECENT_FILES: usize = 10;
 /// A run in the background: its last reported status.
 struct Running {
     done: u64,
+    /// How far the replication under way has got (0 to 1), for a run in slices.
+    partial: f64,
     total: u64,
     /// The shell's [`Workers`] run it, rather than the page between frames.
     on_workers: bool,
@@ -202,7 +204,8 @@ struct Running {
 
 /// Workers the shell offers for runs: in the browser, web workers, one per core. The app hands a
 /// run's replications to them (`"mode": "workers"`, see [`stochcraft_engine::Worker`]) instead of
-/// running one replication per frame on the page. The results are the same either way.
+/// running them on the page in slices of events between frames. The results are the same either
+/// way.
 pub trait Workers {
     /// Starts running `task` (from [`Engine::worker_task`]), whose replications are numbered
     /// from 0 to `replications - 1`: each worker makes a [`stochcraft_engine::Worker`] from it
@@ -897,7 +900,7 @@ impl App {
         }
         let on_workers = self.workers.is_some() && self.start_on_workers();
         let status = if on_workers {
-            Some(self.engine.poll_run(0))
+            Some(self.engine.poll_run(0, 0))
         } else {
             self.execute("run.start", json!({}))
         };
@@ -905,6 +908,7 @@ impl App {
             self.show_results = true;
             self.running = Some(Running {
                 done: 0,
+                partial: 0.0,
                 total: status["total"].as_u64().unwrap_or(0),
                 on_workers,
             });
@@ -949,8 +953,9 @@ impl App {
         if self.running.is_none() {
             return false;
         }
-        // Answers from the shell's workers; otherwise, in the browser, a run advances one
-        // replication per frame, so the page stays responsive.
+        // Answers from the shell's workers; otherwise, in the browser, a run advances a slice of
+        // events per frame (a long replication over several frames), so the page stays
+        // responsive and Cancel acts within a frame.
         if self.running.as_ref().is_some_and(|r| r.on_workers)
             && let Some(workers) = self.workers.as_mut()
         {
@@ -968,7 +973,7 @@ impl App {
                 return false;
             }
         }
-        let status = self.engine.poll_run(1);
+        let status = self.engine.poll_run(1, stochcraft_engine::SLICE_EVENTS);
         if status["state"] != "running" {
             self.stop_workers();
         }
@@ -976,6 +981,7 @@ impl App {
             Some("running") => {
                 if let Some(r) = &mut self.running {
                     r.done = status["done"].as_u64().unwrap_or(r.done);
+                    r.partial = status["partial"].as_f64().unwrap_or(0.0);
                 }
                 true
             }
@@ -1142,8 +1148,8 @@ impl App {
                         egui::Layout::top_down(egui::Align::Min),
                         |ui| {
                             if let Some(r) = &self.running {
-                                let (done, total) = (r.done, r.total);
-                                self.running_view(ui, done, total);
+                                let (done, partial, total) = (r.done, r.partial, r.total);
+                                self.running_view(ui, done, partial, total);
                             } else if self.engine.model().elements.is_empty() {
                                 self.welcome(ui, &p);
                             } else {
@@ -1603,14 +1609,14 @@ impl App {
         });
     }
 
-    fn running_view(&mut self, ui: &mut egui::Ui, done: u64, total: u64) {
+    fn running_view(&mut self, ui: &mut egui::Ui, done: u64, partial: f64, total: u64) {
         ui.add_space(24.0);
         ui.heading(t("Running"));
         ui.add_space(10.0);
         let fraction = if total == 0 {
             0.0
         } else {
-            done as f32 / total as f32
+            ((done as f64 + partial) / total as f64).min(1.0) as f32
         };
         ui.add(
             egui::ProgressBar::new(fraction)
