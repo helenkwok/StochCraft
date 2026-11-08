@@ -6,7 +6,8 @@
 //! and `f64` arithmetic, so a seed gives the same stream on native, wasm32 and wasm64.
 //!
 //! [`Dist`] holds the distributions of the BPSim 2.0 specification (WfMC, 2016), each sampled
-//! exactly (no approximations) by the published method named on its variant.
+//! exactly (no approximations) by the published method named on its variant. [`estimate`]
+//! fits them to experts' three-point estimates.
 //!
 //! Logarithms, exponentials, powers and trigonometric functions come from [`math`] (pure Rust),
 //! never from the platform's maths library, whose results can differ in the last bit between
@@ -113,6 +114,8 @@ impl Rng {
 
 mod dist;
 pub use dist::{Dist, DistError, ln_gamma};
+pub mod estimate;
+pub use estimate::{Family, FitError, ThreePoint, Upper};
 
 #[cfg(test)]
 mod tests {

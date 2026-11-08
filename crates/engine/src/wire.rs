@@ -8,8 +8,9 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
-    Bounds, Breakdown, Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Experiment,
-    Model, Need, Property, PropertyType, PropertyValue, ResourcePool, Severity, TimeUnit, Timed,
+    Bounds, Breakdown, Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate,
+    Experiment, Family, Model, Need, Property, PropertyType, PropertyValue, ResourcePool, Severity,
+    Stop, ThreePoint, TimeUnit, Timed, Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -662,6 +663,151 @@ impl From<KindSpec> for ElementKind {
     }
 }
 
+/// What ends each replication before its time limit (a terminating experiment). Checked after
+/// everything that happens at one instant, so the run ends at that instant.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(tag = "when", rename_all = "snake_case", deny_unknown_fields)]
+pub enum StopSpec {
+    /// Once `count` entities have left `element` since time 0, warm-up included (for a sink:
+    /// arrived there).
+    Count { element: String, count: u64 },
+    /// The first time task `element` holds no entity (none waiting, none in service) after it
+    /// has taken one in.
+    Empty { element: String },
+}
+
+impl StopSpec {
+    pub fn element(&self) -> &str {
+        match self {
+            StopSpec::Count { element, .. } | StopSpec::Empty { element } => element,
+        }
+    }
+}
+
+impl From<&Stop> for StopSpec {
+    fn from(s: &Stop) -> Self {
+        match s {
+            Stop::Count { element, count } => StopSpec::Count {
+                element: element.to_string(),
+                count: *count,
+            },
+            Stop::Empty { element } => StopSpec::Empty {
+                element: element.to_string(),
+            },
+        }
+    }
+}
+
+impl From<StopSpec> for Stop {
+    fn from(s: StopSpec) -> Self {
+        match s {
+            StopSpec::Count { element, count } => Stop::Count {
+                element: ElementId::unchecked(&element),
+                count,
+            },
+            StopSpec::Empty { element } => Stop::Empty {
+                element: ElementId::unchecked(&element),
+            },
+        }
+    }
+}
+
+/// The distribution a three-point estimate is fitted to.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum FamilySpec {
+    /// Triangular on [min, max] peaking at the mode (BPSim's own).
+    Triangular,
+    /// The beta distribution on [min, max] with mean (min + 4 mode + max) / 6, written as a BPSim
+    /// user distribution of its percentiles.
+    Pert,
+    /// Log-normal from the minimum, with the mode and 95th percentile given.
+    Lognormal,
+    /// Weibull from the minimum, with the mode and 95th percentile given.
+    Weibull,
+}
+
+impl From<Family> for FamilySpec {
+    fn from(f: Family) -> Self {
+        match f {
+            Family::Triangular => FamilySpec::Triangular,
+            Family::Pert => FamilySpec::Pert,
+            Family::LogNormal => FamilySpec::Lognormal,
+            Family::Weibull => FamilySpec::Weibull,
+        }
+    }
+}
+
+impl From<FamilySpec> for Family {
+    fn from(f: FamilySpec) -> Self {
+        match f {
+            FamilySpec::Triangular => Family::Triangular,
+            FamilySpec::Pert => Family::Pert,
+            FamilySpec::Lognormal => Family::LogNormal,
+            FamilySpec::Weibull => Family::Weibull,
+        }
+    }
+}
+
+/// An expert's three-point estimate that the element's time distribution was fitted from (its
+/// pedigree). Give `max` or `p95`, not both; log-normal and Weibull estimates take `p95`.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct EstimateDoc {
+    pub family: FamilySpec,
+    pub min: f64,
+    /// The most likely value.
+    pub mode: f64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub max: Option<f64>,
+    /// The value exceeded one time in twenty.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub p95: Option<f64>,
+    /// Who gave it or where it comes from.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub source: String,
+}
+
+impl EstimateDoc {
+    /// The estimate, or why not: exactly one of `max` and `p95` must be given.
+    pub fn to_estimate(&self) -> Result<Estimate, &'static str> {
+        let (upper, upper_is) = match (self.max, self.p95) {
+            (Some(x), None) => (x, Upper::Max),
+            (None, Some(x)) => (x, Upper::P95),
+            (Some(_), Some(_)) => return Err("give `max` or `p95`, not both"),
+            (None, None) => return Err("give `max` or `p95`"),
+        };
+        Ok(Estimate {
+            three_point: ThreePoint {
+                family: self.family.into(),
+                min: self.min,
+                mode: self.mode,
+                upper,
+                upper_is,
+            },
+            source: self.source.clone(),
+        })
+    }
+}
+
+impl From<&Estimate> for EstimateDoc {
+    fn from(e: &Estimate) -> Self {
+        let t = &e.three_point;
+        let (max, p95) = match t.upper_is {
+            Upper::Max => (Some(t.upper), None),
+            Upper::P95 => (None, Some(t.upper)),
+        };
+        Self {
+            family: t.family.into(),
+            min: t.min,
+            mode: t.mode,
+            max,
+            p95,
+            source: e.source.clone(),
+        }
+    }
+}
+
 /// BPSim's time units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 pub enum TimeUnitSpec {
@@ -847,6 +993,10 @@ pub struct ElementDoc {
     /// automatically).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub bounds: Option<BoundsDoc>,
+    /// The three-point estimate the element's time distribution was fitted from; left out when
+    /// there is none.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub estimate: Option<EstimateDoc>,
 }
 
 /// A shape's top-left corner and size, in the diagram's units (BPMN DI's, y downwards).
@@ -916,6 +1066,10 @@ pub struct ExperimentDoc {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[schemars(with = "Option<String>")]
     pub start: Option<Stamp>,
+    /// What ends each replication early; left out when it runs for its duration. The warm-up
+    /// plus the duration is then its time limit.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stop: Option<StopSpec>,
 }
 
 impl From<&Experiment> for ExperimentDoc {
@@ -927,6 +1081,7 @@ impl From<&Experiment> for ExperimentDoc {
             replications: x.replications,
             seed: x.seed,
             start: x.start.map(Stamp),
+            stop: x.stop.as_ref().map(Into::into),
         }
     }
 }
@@ -940,6 +1095,7 @@ impl From<ExperimentDoc> for Experiment {
             replications: x.replications,
             seed: x.seed,
             start: x.start.map(|s| s.0),
+            stop: x.stop.map(Into::into),
         }
     }
 }
@@ -981,6 +1137,7 @@ impl From<&Model> for ModelDoc {
                     kind: (&e.kind).into(),
                     properties: e.properties.iter().map(Into::into).collect(),
                     bounds: m.layout.get(&e.id).copied().map(Into::into),
+                    estimate: m.estimates.get(&e.id).map(Into::into),
                 })
                 .collect(),
             connections: m
@@ -1010,8 +1167,19 @@ impl From<ModelDoc> for Model {
             .iter()
             .filter_map(|e| Some((ElementId::unchecked(&e.id), e.bounds?.into())))
             .collect();
+        // An estimate without exactly one of max and p95 cannot be kept (estimate.set refuses
+        // one).
+        let estimates = m
+            .elements
+            .iter()
+            .filter_map(|e| {
+                let x = e.estimate.as_ref()?.to_estimate().ok()?;
+                Some((ElementId::unchecked(&e.id), x))
+            })
+            .collect();
         Self {
             layout,
+            estimates,
             name: m.name,
             elements: m
                 .elements
@@ -1112,7 +1280,21 @@ pub fn results(model: &Model, replications: u64, seed: u64, summary: &Experiment
             v
         })
         .collect();
-    json!({
+    // Each metric's value in every replication, in replication order (null where one had
+    // none): the distributions behind the means, for percentiles and `results.distribution`.
+    let values: serde_json::Map<String, Value> = summary
+        .elements
+        .iter()
+        .map(|e| {
+            let per: serde_json::Map<String, Value> = e
+                .samples
+                .iter()
+                .map(|(m, v)| (m.name().to_owned(), json!(v)))
+                .collect();
+            (e.id.to_string(), Value::Object(per))
+        })
+        .collect();
+    let mut v = json!({
         "replications": replications,
         "seed": seed,
         "time_unit": TimeUnitSpec::from(x.time_unit),
@@ -1120,7 +1302,20 @@ pub fn results(model: &Model, replications: u64, seed: u64, summary: &Experiment
         "duration": x.duration,
         "metrics": Metric::ALL.iter().map(|m| m.name()).collect::<Vec<_>>(),
         "elements": elements,
-    })
+        "values": values,
+    });
+    if let Some(stop) = &x.stop {
+        let met = summary.stop_times.iter().flatten().count();
+        let mut s = serde_json::to_value(StopSpec::from(stop)).unwrap_or(Value::Null);
+        s["met"] = json!(met);
+        // The time to the event, over the replications that met it before the time limit.
+        s["time"] = summary.stopped.as_ref().map_or(Value::Null, |(_, t)| {
+            json!({ "mean": t.mean, "half_width": t.half_width, "std_dev": t.std_dev, "n": t.n })
+        });
+        s["times"] = json!(summary.stop_times);
+        v["stop"] = s;
+    }
+    v
 }
 
 #[cfg(test)]

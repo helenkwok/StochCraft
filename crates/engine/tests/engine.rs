@@ -1638,3 +1638,240 @@ fn a_live_run_is_the_first_replication() {
             .is_err_and(|e| e.code == ErrorCode::InvalidModel)
     );
 }
+
+/// A project of three parallel activities (exponential, mean 10) from one start: the run ends
+/// when it completes, at the maximum of the three.
+fn project() -> Engine {
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "model.set",
+        json!({ "model": {
+            "name": "Project",
+            "elements": [
+                {"id": "start", "kind": "source", "interarrival": {"type": "constant", "value": 0.0}, "limit": 1},
+                {"id": "fork", "kind": "parallel_gateway"},
+                {"id": "a", "kind": "delay", "duration": {"type": "exponential", "mean": 10.0}},
+                {"id": "b", "kind": "delay", "duration": {"type": "exponential", "mean": 10.0}},
+                {"id": "c", "kind": "delay", "duration": {"type": "exponential", "mean": 10.0}},
+                {"id": "join", "kind": "parallel_gateway"},
+                {"id": "done", "kind": "sink"}
+            ],
+            "connections": [
+                {"id": "f1", "from": "start", "to": "fork"},
+                {"id": "f2", "from": "fork", "to": "a"},
+                {"id": "f3", "from": "fork", "to": "b"},
+                {"id": "f4", "from": "fork", "to": "c"},
+                {"id": "f5", "from": "a", "to": "join"},
+                {"id": "f6", "from": "b", "to": "join"},
+                {"id": "f7", "from": "c", "to": "join"},
+                {"id": "f8", "from": "join", "to": "done"}
+            ],
+            "experiment": {"time_unit": "min", "warmup": 0.0, "duration": 1000.0, "replications": 4000, "seed": 5}
+        } }),
+    );
+    ok(
+        &mut e,
+        "experiment.set",
+        json!({ "stop": { "when": "count", "element": "done", "count": 1 } }),
+    );
+    e
+}
+
+#[test]
+fn a_terminating_run_reports_its_time_to_the_event() {
+    let mut e = project();
+    assert_eq!(
+        err(
+            &mut e,
+            "experiment.set",
+            json!({ "stop": { "when": "empty", "element": "nowhere" } })
+        ),
+        ErrorCode::NotFound
+    );
+    let r = ok(&mut e, "run", json!({}));
+    let stop = &r["stop"];
+    assert_eq!(stop["when"], "count");
+    assert_eq!(stop["met"], 4000);
+    // E[max of three exponentials of mean 10] = 10 (1 + 1/2 + 1/3).
+    let (mean, hw) = (
+        stop["time"]["mean"].as_f64().unwrap_or(0.0),
+        stop["time"]["half_width"].as_f64().unwrap_or(0.0),
+    );
+    assert!((mean - 18.333_333).abs() <= hw, "{mean} ± {hw}");
+    assert_eq!(stop["times"].as_array().map(Vec::len), Some(4000));
+    // Its distribution: the median of the maximum solves (1 − e^(−t/10))³ = 1/2.
+    let d = ok(
+        &mut e,
+        "results.distribution",
+        json!({ "metric": "stop_time", "at_most": 30.0 }),
+    );
+    let median = d["percentiles"]["50"].as_f64().unwrap_or(0.0);
+    let exact =
+        -10.0 * stochcraft_random::math::ln(1.0 - stochcraft_random::math::powf(0.5, 1.0 / 3.0));
+    let band = d["band"].as_f64().unwrap_or(0.0);
+    assert!((median - exact).abs() < 1.0, "{median} vs {exact}");
+    // √(ln 40 / 8000).
+    assert!((band - 0.02147).abs() < 1e-4, "{band}");
+    // P(T ≤ 30) = (1 − e^−3)³ = 0.8579, within Wilson's interval.
+    let (lo, hi) = (
+        d["target"]["interval"][0].as_f64().unwrap_or(1.0),
+        d["target"]["interval"][1].as_f64().unwrap_or(0.0),
+    );
+    let p = (1.0 - stochcraft_random::math::exp(-3.0)).powi(3);
+    assert!(lo <= p && p <= hi, "{p} not in [{lo}, {hi}]");
+    // The times as a distribution for a coarser model: a user distribution through them.
+    assert_eq!(d["as_distribution"]["type"], "user");
+    let dist = &d["as_distribution"];
+    ok(&mut e, "model.new", json!({ "name": "Coarse" }));
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "delay", "id": "project", "duration": dist }),
+    );
+    // Removing the element a stop watches removes the stop, and undo brings both back.
+    let mut e = project();
+    ok(&mut e, "block.remove", json!({ "id": "done" }));
+    assert!(e.model().experiment.stop.is_none());
+    ok(&mut e, "undo", json!({}));
+    assert!(e.model().experiment.stop.is_some());
+    ok(&mut e, "experiment.set", json!({ "stop": null }));
+    let r = ok(&mut e, "run", json!({ "replications": 2 }));
+    assert!(r.get("stop").is_none());
+}
+
+#[test]
+fn distributions_of_results_need_a_run_and_a_metric() {
+    let mut e = help_desk();
+    assert_eq!(
+        err(
+            &mut e,
+            "results.distribution",
+            json!({ "element": "desk", "metric": "utilisation" })
+        ),
+        ErrorCode::NotFound
+    );
+    ok(&mut e, "run", json!({ "replications": 20 }));
+    let d = ok(
+        &mut e,
+        "results.distribution",
+        json!({ "element": "desk", "metric": "utilisation", "at_least": 0.7, "percentiles": [50] }),
+    );
+    assert_eq!(d["n"], 20);
+    assert!(
+        d["percentiles"]["50"]
+            .as_f64()
+            .is_some_and(|m| m > 0.6 && m < 0.9),
+        "{d}"
+    );
+    assert_eq!(d["target"]["of"], 20);
+    assert_eq!(
+        err(
+            &mut e,
+            "results.distribution",
+            json!({ "element": "desk", "metric": "mean_time_in_system" })
+        ),
+        ErrorCode::NotFound
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "results.distribution",
+            json!({ "metric": "stop_time" })
+        ),
+        ErrorCode::InvalidParams
+    );
+    // The results carry each replication's values; the means are what they were.
+    let r = ok(&mut e, "run", json!({ "replications": 3 }));
+    assert_eq!(
+        r["values"]["desk"]["utilisation"].as_array().map(Vec::len),
+        Some(3)
+    );
+}
+
+#[test]
+fn three_point_estimates_fit_distributions_and_are_kept() {
+    let mut e = help_desk();
+    let r = ok(
+        &mut e,
+        "estimate.set",
+        json!({ "id": "desk", "family": "triangular", "min": 0.5, "mode": 1.0, "max": 3.0, "source": "staff" }),
+    );
+    assert_eq!(
+        r["distribution"],
+        json!({ "type": "triangular", "min": 0.5, "mode": 1.0, "max": 3.0 })
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let desk = m["elements"]
+        .as_array()
+        .and_then(|v| v.iter().find(|x| x["id"] == "desk"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(desk["service"]["type"], "triangular");
+    assert_eq!(
+        desk["estimate"],
+        json!({ "family": "triangular", "min": 0.5, "mode": 1.0, "max": 3.0, "source": "staff" })
+    );
+    // One step to undo: the distribution and the estimate together.
+    ok(&mut e, "undo", json!({}));
+    assert!(e.model().estimates.is_empty());
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(m["elements"].as_array().is_some_and(|v| {
+        v.iter()
+            .any(|x| x["id"] == "desk" && x["service"]["type"] == "exponential")
+    }));
+    // PERT from a 95th percentile; then a changed distribution no longer matches it.
+    let r = ok(
+        &mut e,
+        "estimate.set",
+        json!({ "id": "arrivals", "family": "pert", "min": 1.0, "mode": 1.5, "p95": 4.0 }),
+    );
+    assert_eq!(r["distribution"]["type"], "user");
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "arrivals", "interarrival": { "type": "exponential", "mean": 2.0 } }),
+    );
+    let v = ok(&mut e, "model.validate", json!({}));
+    assert!(
+        v["diagnostics"]
+            .as_array()
+            .is_some_and(|d| d.iter().any(|x| x["code"] == "estimate_mismatch")),
+        "{v}"
+    );
+    ok(&mut e, "estimate.remove", json!({ "id": "arrivals" }));
+    assert_eq!(
+        err(&mut e, "estimate.remove", json!({ "id": "arrivals" })),
+        ErrorCode::NotFound
+    );
+    // What cannot be fitted or has nothing to fit.
+    for bad in [
+        json!({ "id": "desk", "family": "lognormal", "min": 0.0, "mode": 1.0, "max": 3.0 }),
+        json!({ "id": "desk", "family": "pert", "min": 2.0, "mode": 1.0, "max": 3.0 }),
+        json!({ "id": "desk", "family": "pert", "min": 0.0, "mode": 1.0, "max": 3.0, "p95": 2.5 }),
+        json!({ "id": "exit", "family": "pert", "min": 0.0, "mode": 1.0, "max": 3.0 }),
+    ] {
+        assert_eq!(err(&mut e, "estimate.set", bad), ErrorCode::InvalidParams);
+    }
+    // Saved into a new file and opened again, the estimate is kept.
+    ok(
+        &mut e,
+        "estimate.set",
+        json!({ "id": "desk", "family": "weibull", "min": 0.2, "mode": 1.0, "p95": 2.5 }),
+    );
+    let path = scratch("estimated.bpmn");
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    let mut f = Engine::new();
+    ok(
+        &mut f,
+        "file.open",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    assert_eq!(f.model().estimates, e.model().estimates);
+    let v = ok(&mut f, "model.validate", json!({}));
+    assert_eq!(v["diagnostics"], json!([]), "{v}");
+}

@@ -386,6 +386,7 @@ fn random_properties_have_their_mean_and_change_no_other_result() {
 
 fn empty() -> Report {
     Report {
+        stopped_at: None,
         warmup: 0.0,
         duration: 0.0,
         elements: vec![],

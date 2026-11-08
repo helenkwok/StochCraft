@@ -33,6 +33,23 @@
         <stochcraft:repairTime><bpsim:TriangularDistribution min="10" mode="20" max="60"/></stochcraft:repairTime>
       </stochcraft:breakdown>
     </bpsim:VendorExtension>
+
+  stochcraft:stopCount, on an element's ElementParameters: each replication ends once this many
+  entities (a whole number of at least 1) have left the element since time 0 (for an end event:
+  arrived there), or at the scenario's duration if that comes first.
+
+  stochcraft:stopWhenEmpty, on a task's ElementParameters, with the value true: each replication
+  ends the first time the task holds no entity, none waiting and none in service, after it has
+  taken one in.
+
+  stochcraft:estimate, on the ElementParameters of an element with a time distribution (a start
+  event's interTriggerTimer, a task's processingTime): the three-point estimate the distribution
+  was fitted from, kept as its pedigree. The distribution itself is the standard BPSim one in the
+  parameters; this records where it came from. Exactly one of max and p95.
+
+    <bpsim:VendorExtension name="stochcraft:estimate" xmlns:stochcraft="…">
+      <stochcraft:estimate family="pert" min="10" mode="20" max="60" source="Delphi, round 2"/>
+    </bpsim:VendorExtension>
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"
@@ -51,6 +68,25 @@
         <xs:element name="timeToFailure" type="stochcraft:Value"/>
         <xs:element name="repairTime" type="stochcraft:Value"/>
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="estimate">
+    <xs:complexType>
+      <xs:attribute name="family" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="triangular"/>
+            <xs:enumeration value="pert"/>
+            <xs:enumeration value="lognormal"/>
+            <xs:enumeration value="weibull"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="min" type="xs:double" use="required"/>
+      <xs:attribute name="mode" type="xs:double" use="required"/>
+      <xs:attribute name="max" type="xs:double"/>
+      <xs:attribute name="p95" type="xs:double"/>
+      <xs:attribute name="source" type="xs:string"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

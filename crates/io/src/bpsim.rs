@@ -43,6 +43,19 @@ pub const UNBATCH: &str = "stochcraft:unbatch";
 /// into a parallel gateway, the number of entities from it in each one the join sends on.
 pub const QUANTITY: &str = "stochcraft:quantity";
 
+/// A terminating experiment's stop on a target count: `stochcraft:stopCount` on an element's
+/// `ElementParameters`, the run ending once that many entities have left the element.
+pub const STOP_COUNT: &str = "stochcraft:stopCount";
+
+/// A terminating experiment's stop when a task empties: `stochcraft:stopWhenEmpty` with the
+/// value `true` on the task's `ElementParameters`.
+pub const STOP_WHEN_EMPTY: &str = "stochcraft:stopWhenEmpty";
+
+/// A three-point estimate that an element's time distribution was fitted from: a
+/// `stochcraft:estimate` element with attributes `family`, `min`, `mode`, `max` or `p95`, and
+/// `source`, in the element's `ElementParameters`.
+pub const ESTIMATE: &str = "stochcraft:estimate";
+
 /// A vendor extension's value: its attribute named `value` in another namespace (any prefix),
 /// else its text.
 pub fn vendor_value(e: &Element) -> Option<String> {

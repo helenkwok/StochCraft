@@ -1,6 +1,6 @@
 [package]
 name = "stochcraft-stats"
-description = "StochCraft's statistics: running moments, time-weighted averages and confidence intervals."
+description = "StochCraft's statistics: running moments, time-weighted averages, confidence intervals and distributions of results."
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -8,6 +8,11 @@ rust-version.workspace = true
 authors.workspace = true
 repository.workspace = true
 publish.workspace = true
+
+[dependencies]
+# Elementary functions in pure Rust (MIT OR Apache-2.0), identical on every target, as in
+# stochcraft-random (which this crate may not depend on: both sit at the bottom layer).
+libm = "0.2"
 
 [lints]
 workspace = true
