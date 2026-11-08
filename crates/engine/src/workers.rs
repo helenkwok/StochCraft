@@ -103,6 +103,9 @@ pub(crate) struct Encoded {
     warmup: u64,
     duration: u64,
     stopped_at: Option<u64>,
+    measured_from: u64,
+    measured_to: u64,
+    after_warmup: bool,
     elements: Vec<EncodedElement>,
 }
 
@@ -113,6 +116,7 @@ struct EncodedElement {
     /// The optional metrics, in [`ElementReport`]'s order.
     metrics: [Option<u64>; 9],
     lost: Option<u64>,
+    work_in_progress: Option<u64>,
     properties: Vec<Option<u64>>,
 }
 
@@ -130,6 +134,9 @@ impl Encoded {
             warmup: r.warmup.to_bits(),
             duration: r.duration.to_bits(),
             stopped_at: bits(r.stopped_at),
+            measured_from: r.measured_from.to_bits(),
+            measured_to: r.measured_to.to_bits(),
+            after_warmup: r.after_warmup,
             elements: r
                 .elements
                 .iter()
@@ -148,6 +155,7 @@ impl Encoded {
                         bits(e.loss_probability),
                     ],
                     lost: e.lost,
+                    work_in_progress: e.work_in_progress,
                     properties: e.properties.iter().map(|(_, v)| bits(*v)).collect(),
                 })
                 .collect(),
@@ -178,6 +186,7 @@ impl Encoded {
                     mean_wait: float(w),
                     utilisation: float(u),
                     mean_contents: float(c),
+                    work_in_progress: e.work_in_progress,
                     mean_time_in_system: float(s),
                     mean_blocked_time: float(b),
                     blocking_probability: float(bp),
@@ -197,6 +206,9 @@ impl Encoded {
             warmup: f64::from_bits(self.warmup),
             duration: f64::from_bits(self.duration),
             stopped_at: float(self.stopped_at),
+            measured_from: f64::from_bits(self.measured_from),
+            measured_to: f64::from_bits(self.measured_to),
+            after_warmup: self.after_warmup,
             elements,
         })
     }

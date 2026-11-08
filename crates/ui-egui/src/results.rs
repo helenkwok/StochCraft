@@ -58,6 +58,7 @@ fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
         "mean_wait" => (t("Mean wait"), Unit::Time),
         "utilisation" => (t("Utilisation"), Unit::Share),
         "mean_contents" => (t("Mean number inside"), Unit::Items),
+        "work_in_progress" => (t("Still inside at the end"), Unit::Items),
         "mean_time_in_system" => (t("Mean time in system"), Unit::Time),
         "mean_blocked_time" => (t("Mean time blocked"), Unit::Time),
         "blocking_probability" => (t("Share of units blocked"), Unit::Share),
@@ -105,11 +106,17 @@ pub fn unit_label(unit: &str) -> &str {
     }
 }
 
-/// The run record's line under the results' heading: replications, seed, warm-up, duration.
+/// The run record's line under the results' heading: replications, seed, warm-up, and the time
+/// actually measured (the mean over the replications whose statistics are used, which a stop
+/// condition can make shorter than the duration; "–" when none is used).
 pub fn record_line(ui: &mut egui::Ui, results: &Value) {
     let r = &results["record"];
     let unit = unit_label(r["time_unit"].as_str().unwrap_or(""));
     let num = |v: &Value| v.as_f64().map_or_else(|| "–".to_owned(), grouped);
+    let measured = match &results["measured"] {
+        m if m.is_object() => &m["mean_duration"],
+        _ => &r["duration"],
+    };
     ui.label(theme::weak(
         ui,
         tnf(
@@ -119,7 +126,7 @@ pub fn record_line(ui: &mut egui::Ui, results: &Value) {
             &[
                 ("seed", &r["seed"].to_string()),
                 ("warmup", &num(&r["warmup"])),
-                ("duration", &num(&r["duration"])),
+                ("duration", &num(measured)),
                 ("unit", unit),
             ],
         ),
@@ -138,10 +145,12 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
         .unwrap_or_default();
     ui.vertical(|ui| {
         ui.set_max_width(640.0);
+        // Warnings from before the run (the record's), from its results, and the file's notes.
         let notes: Vec<&str> = r["warnings"]
             .as_array()
             .into_iter()
             .flatten()
+            .chain(results["warnings"].as_array().into_iter().flatten())
             .chain(r["file_notes"].as_array().into_iter().flatten())
             .filter(|n| n["severity"] != "info")
             .filter_map(|n| n["message"].as_str())

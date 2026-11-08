@@ -45,8 +45,8 @@ pub use stochcraft_model::Breakdown;
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 use stochcraft_model::{
-    Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Property,
-    PropertyType, PropertyValue, ResourcePool, Severity, Timed,
+    Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
+    Property, PropertyType, PropertyValue, ResourcePool, Severity, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::Summary;
@@ -456,6 +456,12 @@ pub enum Metric {
     Utilisation,
     /// Servers and delays: time-average number of entities being served or delayed.
     MeanContents,
+    /// Servers, shared tasks, delays, batches and joins: entities still inside at the end of
+    /// the replication (waiting, being served or delayed, held while blocked, collected into a
+    /// batch, or waiting at a join for their partners). Work that arrived and was never
+    /// finished: large, or growing with the run length, when more work arrives than the
+    /// element can do (see [`run_warnings`]).
+    WorkInProgress,
     /// Sinks: mean time from creation to arrival.
     MeanTimeInSystem,
     /// Servers and delays sending to a finite buffer: mean time an entity that left waited,
@@ -479,13 +485,14 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 12] = [
+    pub const ALL: [Metric; 13] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
         Metric::MeanWait,
         Metric::Utilisation,
         Metric::MeanContents,
+        Metric::WorkInProgress,
         Metric::MeanTimeInSystem,
         Metric::MeanBlockedTime,
         Metric::BlockingProbability,
@@ -508,6 +515,7 @@ impl Metric {
             Metric::MeanWait => "mean_wait",
             Metric::Utilisation => "utilisation",
             Metric::MeanContents => "mean_contents",
+            Metric::WorkInProgress => "work_in_progress",
             Metric::MeanTimeInSystem => "mean_time_in_system",
             Metric::MeanBlockedTime => "mean_blocked_time",
             Metric::BlockingProbability => "blocking_probability",
@@ -531,6 +539,8 @@ pub struct ElementReport {
     pub mean_wait: Option<f64>,
     pub utilisation: Option<f64>,
     pub mean_contents: Option<f64>,
+    /// [`Metric::WorkInProgress`]: entities inside at the end.
+    pub work_in_progress: Option<u64>,
     pub mean_time_in_system: Option<f64>,
     /// Only where a finite buffer is involved (`None` otherwise, so models without one report
     /// as before): see [`Metric::MeanBlockedTime`] and the metrics after it. `lost` is also
@@ -556,6 +566,7 @@ impl ElementReport {
             Metric::MeanWait => self.mean_wait,
             Metric::Utilisation => self.utilisation,
             Metric::MeanContents => self.mean_contents,
+            Metric::WorkInProgress => self.work_in_progress.map(|n| n as f64),
             Metric::MeanTimeInSystem => self.mean_time_in_system,
             Metric::MeanBlockedTime => self.mean_blocked_time,
             Metric::BlockingProbability => self.blocking_probability,
@@ -578,6 +589,14 @@ pub struct Report {
     /// When the model's stop condition was met, ending the run; `None` if it ran to its time
     /// limit (or has none). A time to an event, from time 0.
     pub stopped_at: Option<f64>,
+    /// The span the element statistics actually cover: from the warm-up's end (0 with no
+    /// warm-up, or when the run stopped before the warm-up ended) to the run's end.
+    pub measured_from: f64,
+    pub measured_to: f64,
+    /// Whether the statistics come from after the warm-up: true unless the run stopped before
+    /// the warm-up ended, when they come from the warm-up alone and [`summarise`] leaves them
+    /// out.
+    pub after_warmup: bool,
 }
 
 impl Report {
@@ -632,6 +651,32 @@ pub struct ExperimentSummary {
     /// When each replication met the stop condition, in replication order (`None`: it did
     /// not, or there is none).
     pub stop_times: Vec<Option<f64>>,
+    /// What each replication measured, in replication order.
+    pub measured: Vec<Measured>,
+}
+
+/// The span one replication's statistics cover, and whether they are used.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Measured {
+    pub from: f64,
+    pub to: f64,
+    /// False when the replication stopped before its warm-up ended: its statistics are all
+    /// from the warm-up, so [`summarise`] leaves them out (its stop time still counts).
+    pub used: bool,
+}
+
+impl ExperimentSummary {
+    /// The mean time measured over the replications whose statistics are used; `None` when
+    /// none is.
+    pub fn mean_measured(&self) -> Option<f64> {
+        let used: Vec<f64> = self
+            .measured
+            .iter()
+            .filter(|m| m.used)
+            .map(|m| m.to - m.from)
+            .collect();
+        (!used.is_empty()).then(|| used.iter().sum::<f64>() / used.len() as f64)
+    }
 }
 
 impl ExperimentSummary {
@@ -648,6 +693,11 @@ impl ExperimentSummary {
 /// example the mean wait of a server that no entity reached. Replications without a value are
 /// left out of that metric's summary, so its `n` can be less than the number of replications,
 /// and differ from metric to metric.
+///
+/// A replication that stopped before its warm-up ended ([`Report::after_warmup`] false) has
+/// statistics from the warm-up alone, which describe the start-up rather than the system: they
+/// are left out of every metric and property (as `None` in the samples), and only its stop time
+/// counts. [`run_warnings`] says so.
 pub fn summarise(reports: &[Report]) -> ExperimentSummary {
     let elements = reports.first().map_or_else(Vec::new, |first| {
         first
@@ -661,7 +711,7 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                     .filter_map(|&m| {
                         let each: Vec<Option<f64>> = reports
                             .iter()
-                            .map(|r| r.elements.get(i)?.metric(m))
+                            .map(|r| r.elements.get(i).filter(|_| r.after_warmup)?.metric(m))
                             .collect();
                         let values: Vec<f64> = each.iter().flatten().copied().collect();
                         let s = Summary::of(&values)?;
@@ -676,6 +726,7 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                     .filter_map(|(j, (name, _))| {
                         let values: Vec<f64> = reports
                             .iter()
+                            .filter(|r| r.after_warmup)
                             .filter_map(|r| r.elements.get(i)?.properties.get(j)?.1)
                             .collect();
                         Summary::of(&values).map(|s| (name.clone(), s))
@@ -698,7 +749,107 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
         elements,
         stopped: Summary::of(&times).map(|s| (times.len() as u64, s)),
         stop_times: reports.iter().map(|r| r.stopped_at).collect(),
+        measured: reports
+            .iter()
+            .map(|r| Measured {
+                from: r.measured_from,
+                to: r.measured_to,
+                used: r.after_warmup,
+            })
+            .collect(),
     }
+}
+
+/// A server busy at least this share of the time its units were up is saturated: with a queue
+/// that does not empty, it is working flat out ([`run_warnings`]).
+///
+/// Chosen with the backlog thresholds below so that stable queues stay quiet. Measured
+/// (4 to 10 replications each): the committed models' servers are busy at most 0.75 (mm1.bpmn;
+/// the others 0.11 to 0.21; the BPSim reference models have no servers), and stable M/M/1
+/// queues at 0.75 and 0.9 over 20,000 time units stay below it (one at 0.98 reaches it, and the
+/// backlog test keeps it quiet); an M/M/1 with 12.5% or 50% more work than capacity is busy
+/// more than 0.999.
+pub const SATURATED_UTILISATION: f64 = 0.98;
+
+/// The fewest entities that must still be waiting at a saturated server at the end, on
+/// average, for [`run_warnings`] to call its queue growing: a handful waiting says nothing.
+pub const BACKLOG_MIN: f64 = 10.0;
+
+/// The backlog, as a share of the entities that left the server during the run, from which
+/// [`run_warnings`] calls its queue growing. A stable queue holds what arrives in about one
+/// mean time through it (Little's law), a small share of a run many times longer: a share of
+/// 0.05 means entities wait a twentieth of the whole run, which a stable queue in a run long
+/// enough to measure it does not do. Measured: the committed models end with at most 0.03% of
+/// their departures still waiting (mm1.bpmn: 3.7 of 14,970); an M/M/1 with 12.5% more work
+/// than capacity, over 3,000 time units after a warm-up of 1,000, ends with about 19%. A queue
+/// at exactly its capacity (load 1, about 3% here) is not called growing: it has no steady
+/// state either, but its backlog grows only as the square root of the run length.
+pub const BACKLOG_SHARE: f64 = 0.05;
+
+/// Warnings about a run's results (`model`'s, summarised in `summary`) that only the run can
+/// show, in the same form as [`Model::validate`]'s:
+///
+/// - Replications that stopped before the warm-up ended
+///   ([`stochcraft_model::Problem::EndedInWarmup`]).
+/// - A server with no steady state ([`stochcraft_model::Problem::NoSteadyState`]): busy at least
+///   [`SATURATED_UTILISATION`] of the time its units were up, with at least [`BACKLOG_MIN`]
+///   entities, and at least [`BACKLOG_SHARE`] of those that left, still waiting at the end
+///   (means across replications). The backlog is what was inside beyond the server's units,
+///   so it never counts entities in service. Only servers with an unlimited queue are judged: a
+///   finite buffer loses arrivals instead of growing, and tasks with shared resources report no
+///   utilisation of their own.
+pub fn run_warnings(model: &Model, summary: &ExperimentSummary) -> Vec<Diagnostic> {
+    let mut out = Vec::new();
+    let unused = summary.measured.iter().filter(|m| !m.used).count() as u64;
+    if unused > 0 {
+        out.push(Diagnostic {
+            severity: Severity::Warning,
+            at: None,
+            problem: Problem::EndedInWarmup {
+                replications: unused,
+                of: summary.measured.len() as u64,
+            },
+        });
+    }
+    for e in &summary.elements {
+        let Some(ElementKind::Server {
+            capacity,
+            queue_capacity: None,
+            ..
+        }) = model.element(&e.id).map(|x| &x.kind)
+        else {
+            continue;
+        };
+        let mean = |m: Metric| e.metric(m).map(|s| s.mean);
+        let (Some(busy), Some(inside), Some(left)) = (
+            mean(Metric::Utilisation),
+            mean(Metric::WorkInProgress),
+            mean(Metric::Left),
+        ) else {
+            continue;
+        };
+        // Busy as a share of the time up, for servers whose units fail.
+        let utilisation = match mean(Metric::Availability) {
+            Some(up) if up > 0.0 => busy / up,
+            _ => busy,
+        };
+        let backlog = inside - f64::from(*capacity);
+        if utilisation >= SATURATED_UTILISATION
+            && backlog >= BACKLOG_MIN
+            && backlog >= BACKLOG_SHARE * left
+        {
+            out.push(Diagnostic {
+                severity: Severity::Warning,
+                at: Some(e.id.clone()),
+                problem: Problem::NoSteadyState {
+                    backlog,
+                    left,
+                    utilisation,
+                },
+            });
+        }
+    }
+    out
 }
 
 /// An element added to a [`Builder`].

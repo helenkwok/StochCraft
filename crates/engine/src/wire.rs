@@ -1303,6 +1303,18 @@ pub fn results(model: &Model, replications: u64, seed: u64, summary: &Experiment
         "metrics": Metric::ALL.iter().map(|m| m.name()).collect::<Vec<_>>(),
         "elements": elements,
         "values": values,
+        // What each replication's statistics cover; with no stop condition, every one covers
+        // the duration after the warm-up.
+        "measured": {
+            "spans": summary
+                .measured
+                .iter()
+                .map(|m| json!({ "from": m.from, "to": m.to, "used": m.used }))
+                .collect::<Vec<_>>(),
+            "mean_duration": summary.mean_measured(),
+        },
+        // What the results show that the model could not: as the run record's warnings.
+        "warnings": diagnostics(&stochcraft_blocks::run_warnings(model, summary)),
     });
     if let Some(stop) = &x.stop {
         let met = summary.stop_times.iter().flatten().count();

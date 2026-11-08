@@ -22,12 +22,15 @@ pub const KINDS: &[(&str, &str)] = &[
     ("sink", "Departures"),
 ];
 
-/// A new block's parameters: one arrival a time unit, service and delay of one time unit.
+/// A new block's parameters: one arrival a time unit; a mean service of 0.8 time units, so arrivals
+/// into a new task with a resource keep it busy 80% of the time (at 1, as many as it can serve,
+/// its queue would grow without limit and the model would be warned about, #68); delay of one
+/// time unit.
 pub fn new_block(kind: &str) -> Value {
     match kind {
         "source" => json!({"kind": "source", "interarrival": {"type": "exponential", "mean": 1.0}}),
         "server" => {
-            json!({"kind": "server", "capacity": 1, "service": {"type": "exponential", "mean": 1.0}})
+            json!({"kind": "server", "capacity": 1, "service": {"type": "exponential", "mean": 0.8}})
         }
         "shared_task" => {
             json!({"kind": "shared_task", "service": {"type": "exponential", "mean": 1.0}, "needs": []})

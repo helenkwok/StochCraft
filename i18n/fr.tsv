@@ -162,6 +162,7 @@
 	Maximum	Maximum
 	Mean	Moyenne
 	Mean number inside	Nombre moyen présent
+	Still inside at the end	Encore présents à la fin
 	Mean queue length	Longueur moyenne de la file
 	Mean time blocked	Temps moyen de blocage
 	Mean time in system	Temps moyen dans le système

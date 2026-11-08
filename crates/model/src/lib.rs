@@ -766,6 +766,32 @@ pub enum Problem {
     BadStop {
         reason: &'static str,
     },
+    /// The experiment has both a stop condition and a warm-up: a replication whose stop comes
+    /// before the warm-up ends has no statistics after the warm-up, and is left out of the
+    /// results ([`Problem::EndedInWarmup`]).
+    StopWithWarmup,
+    /// Found from a run's results, not by [`Model::validate`]: `replications` of the `of` run
+    /// stopped before the warm-up ended, so their statistics (all from the warm-up) are left out
+    /// of every metric; their stop times still count.
+    EndedInWarmup {
+        replications: u64,
+        of: u64,
+    },
+    /// A server fed straight from sources with steady arrivals is offered at least `load` times
+    /// the work its units can do (arrival rate × mean service time ÷ units, at least 1): its
+    /// queue grows without limit, so the run has no steady state.
+    Overloaded {
+        load: f64,
+    },
+    /// Found from a run's results, not by [`Model::validate`]: a server was busy nearly all the
+    /// time it was up (`utilisation`, of the time up) and, on average, at least `backlog`
+    /// entities were still waiting at the end against `left` that left during the run. The
+    /// queue grows with the run, so its means describe no steady state.
+    NoSteadyState {
+        backlog: f64,
+        left: f64,
+        utilisation: f64,
+    },
     /// A three-point estimate for an element with no time distribution to fit (or no such
     /// element).
     EstimateIgnored,
@@ -827,6 +853,10 @@ impl Problem {
             Problem::QuantityIgnored => "quantity_ignored",
             Problem::NothingToUnbatch => "nothing_to_unbatch",
             Problem::BadStop { .. } => "bad_stop",
+            Problem::StopWithWarmup => "stop_with_warmup",
+            Problem::EndedInWarmup { .. } => "ended_in_warmup",
+            Problem::Overloaded { .. } => "overloaded",
+            Problem::NoSteadyState { .. } => "no_steady_state",
             Problem::EstimateIgnored => "estimate_ignored",
             Problem::BadEstimate { .. } => "bad_estimate",
             Problem::EstimateMismatch => "estimate_mismatch",
@@ -1013,6 +1043,32 @@ impl std::fmt::Display for Diagnostic {
                 "no element makes batches, so this one passes every entity through"
             ),
             Problem::BadStop { reason } => write!(f, "the run cannot stop here: {reason}"),
+            Problem::StopWithWarmup => write!(
+                f,
+                "the run stops here, which can happen before the warm-up ends: a replication that stops during the warm-up has no statistics after it and is left out of the results (its stop time still counts)"
+            ),
+            Problem::EndedInWarmup { replications, of } if replications == of => write!(
+                f,
+                "every replication stopped before the warm-up ended, so none has statistics after it and no metric is reported (the stop times still are); shorten the warm-up or stop later"
+            ),
+            Problem::Overloaded { load } => write!(
+                f,
+                "its arrivals bring {:.0}% of the work its units can do (arrival rate × mean service time ÷ units), so its queue grows without limit and the results describe no steady state; add units or shorten the service",
+                load * 100.0
+            ),
+            Problem::NoSteadyState {
+                backlog,
+                left,
+                utilisation,
+            } => write!(
+                f,
+                "busy {:.1}% of the time and, on average, at least {backlog:.0} entities still waiting at the end against {left:.0} that left: work arrives faster than it is done, so the queue grows with the run length and its means describe no steady state (or the run ends with a backlog it could not clear)",
+                utilisation * 100.0
+            ),
+            Problem::EndedInWarmup { replications, of } => write!(
+                f,
+                "{replications} of {of} replications stopped before the warm-up ended; their statistics, all from the warm-up, are left out of every metric (their stop times still count)"
+            ),
             Problem::EstimateIgnored => write!(
                 f,
                 "has a three-point estimate but no time distribution to fit it to; it is ignored"
@@ -1023,6 +1079,27 @@ impl std::fmt::Display for Diagnostic {
                 "the time distribution is no longer the one fitted from its three-point estimate"
             ),
         }
+    }
+}
+
+/// Whether no draw from `d` is negative, so its mean is the mean time it gives (durations
+/// count a negative draw as 0, which would make the true mean larger).
+fn never_negative(d: &Dist) -> bool {
+    match d {
+        Dist::Constant(v) => *v >= 0.0,
+        Dist::Uniform { min, .. }
+        | Dist::Triangular { min, .. }
+        | Dist::TruncatedNormal { min, .. } => *min >= 0.0,
+        Dist::Normal { .. } => false,
+        Dist::User { points, .. } => points.iter().all(|(_, v)| *v >= 0.0),
+        Dist::Exponential { .. }
+        | Dist::Poisson { .. }
+        | Dist::Erlang { .. }
+        | Dist::LogNormal { .. }
+        | Dist::Gamma { .. }
+        | Dist::Beta { .. }
+        | Dist::Weibull { .. }
+        | Dist::Binomial { .. } => true,
     }
 }
 
@@ -1192,6 +1269,7 @@ impl Model {
         self.check_reachability(&outgoing, &mut out);
         self.check_buffers(&outgoing, &mut out);
         self.check_resources(&mut out);
+        self.check_load(&mut out);
         // Stable order: errors first, then as found (model order).
         out.sort_by_key(|d| std::cmp::Reverse(d.severity));
         out
@@ -1736,6 +1814,52 @@ impl Model {
         }
     }
 
+    /// Servers offered more work than they can do, where that is plain from the model: arrivals
+    /// straight from sources whose time between arrivals never changes (no limit, no
+    /// calendars) and is never negative, into a server with an unlimited queue. Arrivals by any
+    /// other way are left out, so the load found is a lower bound and the warning conservative.
+    /// (Negative service draws count as 0, which only makes the true load higher.)
+    fn check_load(&self, out: &mut Vec<Diagnostic>) {
+        for e in &self.elements {
+            let ElementKind::Server {
+                capacity,
+                service,
+                queue_capacity: None,
+                ..
+            } = &e.kind
+            else {
+                continue;
+            };
+            let Some(mean_service) = service.mean().filter(|m| m.is_finite() && *m > 0.0) else {
+                continue;
+            };
+            let rate: f64 = self
+                .connections
+                .iter()
+                .filter(|c| c.to == e.id)
+                .filter_map(|c| match &self.element(&c.from)?.kind {
+                    ElementKind::Source {
+                        interarrival,
+                        limit: None,
+                        timed,
+                        idle_outside: false,
+                    } if timed.is_empty() && never_negative(interarrival) => interarrival
+                        .mean()
+                        .filter(|m| m.is_finite() && *m > 0.0)
+                        .map(|m| 1.0 / m),
+                    _ => None,
+                })
+                .sum();
+            let load = rate * mean_service / f64::from((*capacity).max(1));
+            if load >= 1.0 {
+                out.push(Diagnostic::warning(
+                    Some(&e.id),
+                    Problem::Overloaded { load },
+                ));
+            }
+        }
+    }
+
     /// The stop condition names an element that can meet it.
     fn check_stop(&self, out: &mut Vec<Diagnostic>) {
         let Some(stop) = &self.experiment.stop else {
@@ -1758,6 +1882,8 @@ impl Model {
         };
         if let Some(reason) = reason {
             out.push(Diagnostic::error(Some(id), Problem::BadStop { reason }));
+        } else if self.experiment.warmup > 0.0 {
+            out.push(Diagnostic::warning(Some(id), Problem::StopWithWarmup));
         }
     }
 

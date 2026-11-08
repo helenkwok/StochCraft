@@ -162,6 +162,7 @@
 	Maximum	ຄ່າສູງສຸດ
 	Mean	ຄ່າສະເລ່ຍ
 	Mean number inside	ຈຳນວນສະເລ່ຍພາຍໃນ
+	Still inside at the end	ຍັງຢູ່ພາຍໃນເມື່ອສິ້ນສຸດ
 	Mean queue length	ຄວາມຍາວແຖວຄອຍສະເລ່ຍ
 	Mean time blocked	ເວລາສະເລ່ຍທີ່ຖືກຂັດຂວາງ
 	Mean time in system	ເວລາສະເລ່ຍໃນລະບົບ

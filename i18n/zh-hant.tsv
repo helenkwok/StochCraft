@@ -162,6 +162,7 @@
 	Maximum	最大值
 	Mean	平均值
 	Mean number inside	內部平均數量
+	Still inside at the end	結束時仍在內部的數量
 	Mean queue length	平均佇列長度
 	Mean time blocked	平均阻塞時間
 	Mean time in system	系統內平均時間

@@ -2,7 +2,7 @@
 //! and the statistics each element keeps.
 
 use std::borrow::Cow;
-use std::cell::RefCell;
+use std::cell::{Cell, RefCell};
 use std::collections::BTreeMap;
 use std::rc::Rc;
 
@@ -317,14 +317,22 @@ impl Compiled {
         }
 
         // Discard everything before the warm-up. With none, there is nothing to discard (and a
-        // reset at time 0 would discard an arrival at time 0).
+        // reset at time 0 would discard an arrival at time 0). A run that ends first (its stop
+        // condition met) never resets: `reset_at` says whether, and when, it did.
+        let reset_at = Rc::new(Cell::new((warmup <= 0.0).then_some(0.0)));
         if warmup > 0.0 {
-            let (c, st, pl) = (ctx.clone(), Rc::clone(&stats), Rc::clone(&pools));
+            let (c, st, pl, at) = (
+                ctx.clone(),
+                Rc::clone(&stats),
+                Rc::clone(&pools),
+                Rc::clone(&reset_at),
+            );
             sim.spawn(async move {
                 c.hold(warmup).await;
                 let now = c.now();
                 st.iter().for_each(|s| s.borrow_mut().reset(now));
                 pl.reset(now);
+                at.set(Some(now));
             });
         }
 
@@ -343,6 +351,7 @@ impl Compiled {
             end,
             stop,
             stopped_at: None,
+            reset_at,
             watching: Watching::new(0.0),
         }
     }
@@ -388,6 +397,9 @@ pub struct Live<'a> {
     stop: Option<(usize, stochcraft_model::Stop)>,
     /// When the stop condition was met, if it has been (the run then ends there).
     stopped_at: Option<f64>,
+    /// When the statistics were last reset: 0 with no warm-up, the warm-up's end once it has
+    /// ended, `None` while it lasts (and for good, when the run stopped during it).
+    reset_at: Rc<Cell<Option<f64>>>,
     /// How far the simulation has got, kept between advances so that a run in slices
     /// ([`Live::advance_by`]) counts the events at one time across them.
     watching: Watching,
@@ -585,15 +597,22 @@ impl Live<'_> {
             .zip(self.stats.iter())
             .zip(&self.compiled.assigns)
             .zip(&self.feeds_buffer)
-            .map(|(((e, s), a), &blocks)| s.borrow().report(e, a, blocks, now))
+            .zip(&self.compiled.inputs)
+            .map(|((((e, s), a), &blocks), &inputs)| {
+                s.borrow().report(e, a, blocks, inputs > 1, now)
+            })
             .collect();
         // Then each shared pool, after the elements.
         elements.extend(self.pools.reports(&model.resources, now));
+        let after_warmup = self.reset_at.get();
         Report {
             warmup: self.warmup,
             duration: (now - self.warmup).max(0.0).min(self.duration),
             elements,
             stopped_at: self.stopped_at,
+            measured_from: after_warmup.unwrap_or(0.0),
+            measured_to: now,
+            after_warmup: after_warmup.is_some(),
         }
     }
 }
@@ -676,12 +695,23 @@ impl BlockStats {
         self.down.reset(t);
     }
 
-    /// The element's report; `blocks`: whether it sends to a finite buffer.
+    /// Entities inside the element now: waiting in its input, being served or delayed (or
+    /// collected into a batch), and held while blocked after service.
+    fn inside(&self) -> u64 {
+        let n = self.waiting.value() + self.busy.value() + self.blocked.value();
+        // Sums of whole counts; `as` saturates (and a negative value cannot occur).
+        n.round().max(0.0) as u64
+    }
+
+    /// The element's report; `blocks`: whether it sends to a finite buffer; `join`: whether it
+    /// is a parallel gateway with several inputs (which holds entities until each input has
+    /// one).
     pub(crate) fn report(
         &self,
         element: &Element,
         assigns: &[Assign],
         blocks: bool,
+        join: bool,
         end: f64,
     ) -> ElementReport {
         let kind = &element.kind;
@@ -724,6 +754,14 @@ impl BlockStats {
                 | ElementKind::SharedTask { .. }
                 | ElementKind::Delay { .. }
                 | ElementKind::Batch { .. } => self.busy.average(end),
+                _ => None,
+            },
+            work_in_progress: match kind {
+                ElementKind::Server { .. }
+                | ElementKind::SharedTask { .. }
+                | ElementKind::Delay { .. }
+                | ElementKind::Batch { .. } => Some(self.inside()),
+                ElementKind::ParallelGateway if join => Some(self.inside()),
                 _ => None,
             },
             mean_time_in_system: if matches!(kind, ElementKind::Sink) {
@@ -1592,6 +1630,7 @@ impl Pools {
                         _ => None,
                     },
                     mean_contents: mean,
+                    work_in_progress: None,
                     mean_time_in_system: None,
                     mean_blocked_time: None,
                     blocking_probability: None,

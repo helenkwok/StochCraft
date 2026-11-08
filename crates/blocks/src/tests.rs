@@ -204,7 +204,7 @@ fn summarise_gives_intervals_per_element_and_metric() {
     assert_eq!(s.get("exit", Metric::MeanWait), None);
     assert_eq!(summarise(&[]).elements, vec![]);
     let names: Vec<&str> = Metric::ALL.iter().map(|m| m.name()).collect();
-    assert_eq!(names.len(), 12);
+    assert_eq!(names.len(), 13);
 }
 
 fn mean_assigned(r: &Report, element: &str, property: &str) -> Option<f64> {
@@ -390,6 +390,9 @@ fn empty() -> Report {
         warmup: 0.0,
         duration: 0.0,
         elements: vec![],
+        measured_from: 0.0,
+        measured_to: 0.0,
+        after_warmup: true,
     }
 }
 

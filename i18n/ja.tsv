@@ -162,6 +162,7 @@
 	Maximum	最大値
 	Mean	平均
 	Mean number inside	内部の平均数
+	Still inside at the end	終了時に内部に残っている数
 	Mean queue length	平均待ち行列長
 	Mean time blocked	平均ブロック時間
 	Mean time in system	システム内の平均滞在時間
