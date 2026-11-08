@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95% інтервал частки, що досягає мети: від {lo} до {hi}
 	95th percentile	95-й процентиль
 	95th percentile {value}	95-й процентиль {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Новий файл містить лише модель: те, чого StochCraft не розуміє в {file}, пропускається.
 	About StochCraft	Про програму StochCraft
 	About {app}	Про програму {app}
 	Across the range it changed by {change}: more than chance would explain.	На всьому діапазоні змінився на {change}: більше, ніж пояснила б випадковість.
@@ -165,6 +166,7 @@
 	Mean	Середнє
 	Mean number inside	Середня кількість усередині
 	One replication of {n}: the results of the others differ.	Одна реплікація з {n}: результати інших відрізняються.
+	Save as a new BPMN file?	Зберегти як новий файл BPMN?
 	Still inside at the end	Ще всередині наприкінці
 	Mean queue length	Середня довжина черги
 	Mean time blocked	Середній час блокування
@@ -378,6 +380,7 @@
 	Whole number	Ціле число
 	Window	Вікно
 	With every time at its mean: {units}	Якщо кожен час дорівнює своєму середньому: {units}
+	XPDL with BPSim	XPDL з BPSim
 	Yes or no	Так або ні
 	Your changes will be lost if you don't save them.	Якщо не зберегти зміни, їх буде втрачено.
 	Zoom	Перемкнути розмір вікна
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	Увійшло: {entered}, вийшло: {left}, втрачено: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: мінімум {min}, найімовірніше {mode}, {upper}
 	{field}: not editable here yet	{field}: тут поки не можна редагувати
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft записує новий файл лише як BPMN; виберіть назву, що закінчується на .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: імовірність має бути числом від 0 до 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} з {of} реплікацій досягли мети: {p} (95% інтервал від {lo} до {hi})

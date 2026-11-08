@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Intervali 95% i pjesës që arrin objektivin: nga {lo} në {hi}
 	95th percentile	Përqindëshi i 95-të
 	95th percentile {value}	përqindëshi i 95-të {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Skedari i ri mban vetëm modelin: ajo që StochCraft nuk e kupton në {file} lihet jashtë.
 	About StochCraft	Rreth StochCraft
 	About {app}	Rreth {app}
 	Across the range it changed by {change}: more than chance would explain.	Në interval ndryshoi me {change}: më shumë se sa do ta shpjegonte rastësia.
@@ -165,6 +166,7 @@
 	Mean	Mesatarja
 	Mean number inside	Numri mesatar brenda
 	One replication of {n}: the results of the others differ.	Një përsëritje nga {n}: rezultatet e të tjerave ndryshojnë.
+	Save as a new BPMN file?	Të ruhet si skedar i ri BPMN?
 	Still inside at the end	Ende brenda në fund
 	Mean queue length	Gjatësia mesatare e radhës
 	Mean time blocked	Koha mesatare e bllokimit
@@ -378,6 +380,7 @@
 	Whole number	Numër i plotë
 	Window	Dritarja
 	With every time at its mean: {units}	Me çdo kohë në mesataren e saj: {units}
+	XPDL with BPSim	XPDL me BPSim
 	Yes or no	Po ose jo
 	Your changes will be lost if you don't save them.	Ndryshimet do të humbasin nëse nuk i ruani.
 	Zoom	Zmadho
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} hyrje, {left} dalje, {lost} të humbura
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimumi {min}, më e mundshmja {mode}, {upper}
 	{field}: not editable here yet	{field}: ende nuk mund të redaktohet këtu
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft shkruan skedarë të rinj vetëm si BPMN; zgjidhni një emër që mbaron me .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: probabiliteti është numër nga 0 deri në 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} nga {of} përsëritje arritën objektivin: {p} (interval 95% nga {lo} në {hi})

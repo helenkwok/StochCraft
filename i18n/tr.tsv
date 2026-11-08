@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Hedefi karşılayan oranın %95 aralığı: {lo} ile {hi} arası
 	95th percentile	95. yüzdelik
 	95th percentile {value}	95. yüzdelik {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Yeni dosya yalnızca modeli içerir: {file} içinde StochCraft'ın anlamadığı şeyler dışarıda kalır.
 	About StochCraft	StochCraft hakkında
 	About {app}	{app} hakkında
 	Across the range it changed by {change}: more than chance would explain.	Aralık boyunca {change} değişti: şansın açıklayacağından fazla.
@@ -165,6 +166,7 @@
 	Mean	Ortalama
 	Mean number inside	İçerideki ortalama sayı
 	One replication of {n}: the results of the others differ.	{n} tekrardan biri: diğerlerinin sonuçları farklıdır.
+	Save as a new BPMN file?	Yeni bir BPMN dosyası olarak kaydedilsin mi?
 	Still inside at the end	Sonda hâlâ içeride
 	Mean queue length	Ortalama kuyruk uzunluğu
 	Mean time blocked	Ortalama engellenme süresi
@@ -378,6 +380,7 @@
 	Whole number	Tam sayı
 	Window	Pencere
 	With every time at its mean: {units}	Her süre ortalamasındayken: {units}
+	XPDL with BPSim	BPSim içeren XPDL
 	Yes or no	Evet veya hayır
 	Your changes will be lost if you don't save them.	Kaydetmezseniz değişiklikleriniz kaybolur.
 	Zoom	Boyutu Değiştir
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} giriş, {left} çıkış, {lost} kayıp
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: en küçük {min}, en olası {mode}, {upper}
 	{field}: not editable here yet	{field}: burada henüz düzenlenemiyor
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft yeni dosyayı yalnızca BPMN olarak yazar; .bpmn ile biten bir ad seçin
 	{id}: a probability is a number from 0 to 1	{id}: olasılık 0 ile 1 arasında bir sayıdır
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} tekrardan {met} tanesi hedefi karşıladı: {p} (%95 aralık {lo} ile {hi} arası)

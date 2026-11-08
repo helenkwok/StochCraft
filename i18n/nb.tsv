@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95 %-intervall for andelen som når målet: {lo} til {hi}
 	95th percentile	95. persentil
 	95th percentile {value}	95. persentil {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Den nye filen inneholder bare modellen: det StochCraft ikke forstår i {file}, utelates.
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
 	Across the range it changed by {change}: more than chance would explain.	Over området endret det seg med {change}: mer enn tilfeldigheter ville forklare.
@@ -165,6 +166,7 @@
 	Mean	Gjennomsnitt
 	Mean number inside	Gjennomsnittlig antall inne
 	One replication of {n}: the results of the others differ.	Én replikasjon av {n}: de andre har andre resultater.
+	Save as a new BPMN file?	Lagre som ny BPMN-fil?
 	Still inside at the end	Fortsatt inne ved slutten
 	Mean queue length	Gjennomsnittlig kølengde
 	Mean time blocked	Gjennomsnittlig blokkeringstid
@@ -378,6 +380,7 @@
 	Whole number	Heltall
 	Window	Vindu
 	With every time at its mean: {units}	Med hver tid på sitt gjennomsnitt: {units}
+	XPDL with BPSim	XPDL med BPSim
 	Yes or no	Ja eller nei
 	Your changes will be lost if you don't save them.	Endringene dine går tapt hvis du ikke lagrer dem.
 	Zoom	Zoom
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} inn, {left} ut, {lost} tapt
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, mest sannsynlig {mode}, {upper}
 	{field}: not editable here yet	{field}: kan ikke redigeres her ennå
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft skriver bare nye filer som BPMN; velg et navn som slutter på .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: en sannsynlighet er et tall fra 0 til 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} av {of} replikasjoner nådde målet: {p} (95 %-intervall {lo} til {hi})

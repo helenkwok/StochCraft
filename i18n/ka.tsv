@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	მიზნის მიღწევის წილის 95%-იანი ინტერვალი: {lo}-დან {hi}-მდე
 	95th percentile	95-ე პროცენტილი
 	95th percentile {value}	95-ე პროცენტილი {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	ახალი ფაილი მხოლოდ მოდელს შეიცავს: რაც {file}-ში StochCraft-ისთვის გაუგებარია, გამოტოვებულია.
 	About StochCraft	StochCraft-ის შესახებ
 	About {app}	{app}-ის შესახებ
 	Across the range it changed by {change}: more than chance would explain.	დიაპაზონში შეიცვალა {change}-ით: იმაზე მეტად, ვიდრე შემთხვევითობა ახსნიდა.
@@ -165,6 +166,7 @@
 	Mean	საშუალო
 	Mean number inside	საშუალო რაოდენობა შიგნით
 	One replication of {n}: the results of the others differ.	ერთი გამეორება {n}-დან: დანარჩენების შედეგები განსხვავდება.
+	Save as a new BPMN file?	შევინახოთ ახალ BPMN ფაილად?
 	Still inside at the end	ბოლოს ჯერ კიდევ შიგნით
 	Mean queue length	რიგის საშუალო სიგრძე
 	Mean time blocked	დაბლოკვის საშუალო დრო
@@ -378,6 +380,7 @@
 	Whole number	მთელი რიცხვი
 	Window	ფანჯარა
 	With every time at its mean: {units}	ყოველი დრო თავის საშუალოზე: {units}
+	XPDL with BPSim	XPDL BPSim-ით
 	Yes or no	დიახ ან არა
 	Your changes will be lost if you don't save them.	თუ არ შეინახავთ, ცვლილებები დაიკარგება.
 	Zoom	ზომის შეცვლა
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	შევიდა: {entered}, გავიდა: {left}, დაიკარგა: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: მინიმუმი {min}, ყველაზე სავარაუდო {mode}, {upper}
 	{field}: not editable here yet	{field}: აქ ჯერ არ შეიძლება რედაქტირება
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft ახალ ფაილს მხოლოდ BPMN-ად წერს; აირჩიეთ სახელი, რომელიც .bpmn-ით მთავრდება
 	{id}: a probability is a number from 0 to 1	{id}: ალბათობა არის რიცხვი 0-დან 1-მდე
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} გამეორებიდან {met}-მა მიაღწია მიზანს: {p} (95%-იანი ინტერვალი {lo}-დან {hi}-მდე)

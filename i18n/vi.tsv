@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Khoảng 95% của tỷ lệ đạt mục tiêu: từ {lo} đến {hi}
 	95th percentile	Phân vị thứ 95
 	95th percentile {value}	phân vị thứ 95 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Tệp mới chỉ chứa mô hình: những gì StochCraft không hiểu trong {file} sẽ bị bỏ qua.
 	About StochCraft	Giới thiệu StochCraft
 	About {app}	Giới thiệu {app}
 	Across the range it changed by {change}: more than chance would explain.	Trên cả khoảng, nó thay đổi {change}: nhiều hơn mức ngẫu nhiên có thể giải thích.
@@ -165,6 +166,7 @@
 	Mean	Trung bình
 	Mean number inside	Số lượng trung bình bên trong
 	One replication of {n}: the results of the others differ.	Một lần lặp trong {n}: kết quả của các lần khác sẽ khác.
+	Save as a new BPMN file?	Lưu thành tệp BPMN mới?
 	Still inside at the end	Vẫn còn bên trong lúc kết thúc
 	Mean queue length	Độ dài hàng đợi trung bình
 	Mean time blocked	Thời gian bị chặn trung bình
@@ -378,6 +380,7 @@
 	Whole number	Số nguyên
 	Window	Cửa sổ
 	With every time at its mean: {units}	Khi mọi thời gian bằng trung bình: {units}
+	XPDL with BPSim	XPDL có BPSim
 	Yes or no	Có hoặc không
 	Your changes will be lost if you don't save them.	Các thay đổi sẽ bị mất nếu bạn không lưu.
 	Zoom	Thu phóng
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} vào, {left} ra, {lost} mất
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: nhỏ nhất {min}, có khả năng nhất {mode}, {upper}
 	{field}: not editable here yet	{field}: chưa thể chỉnh sửa tại đây
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft chỉ ghi tệp mới dưới dạng BPMN; hãy chọn tên kết thúc bằng .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: xác suất là số từ 0 đến 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} trên {of} lần lặp đạt mục tiêu: {p} (khoảng 95% từ {lo} đến {hi})

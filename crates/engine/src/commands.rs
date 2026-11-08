@@ -1513,7 +1513,12 @@ fn file_save(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 "the model has no file yet: give a `path`",
             )
         })?;
-    let bytes = e.save_bytes(p.as_new)?;
+    let bytes = e.save_bytes(p.as_new).map_err(|mut err| {
+        if err.code == ErrorCode::Unsupported {
+            err.message += "; `\"as_new\": true` writes the model as a new BPMN file instead, without the content StochCraft does not understand";
+        }
+        err
+    })?;
     // Written to a temporary file beside it and renamed over it, so a crash or a full disk
     // leaves the old file whole rather than half written.
     craft_atomic::atomic_write(std::path::Path::new(&path), &bytes)

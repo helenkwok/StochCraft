@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Tavoitteen saavuttavan osuuden 95 %:n väli: {lo}–{hi}
 	95th percentile	95. persentiili
 	95th percentile {value}	95. persentiili {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Uusi tiedosto sisältää vain mallin: se, mitä StochCraft ei ymmärrä tiedostossa {file}, jätetään pois.
 	About StochCraft	Tietoja StochCraftista
 	About {app}	Tietoja: {app}
 	Across the range it changed by {change}: more than chance would explain.	Alueella se muuttui {change}: enemmän kuin sattuma selittäisi.
@@ -165,6 +166,7 @@
 	Mean	Keskiarvo
 	Mean number inside	Keskimääräinen määrä sisällä
 	One replication of {n}: the results of the others differ.	Yksi toisto {n}:stä: muiden tulokset poikkeavat.
+	Save as a new BPMN file?	Tallennetaanko uutena BPMN-tiedostona?
 	Still inside at the end	Lopussa yhä sisällä
 	Mean queue length	Jonon keskipituus
 	Mean time blocked	Keskimääräinen estoaika
@@ -378,6 +380,7 @@
 	Whole number	Kokonaisluku
 	Window	Ikkuna
 	With every time at its mean: {units}	Kun jokainen aika on keskiarvossaan: {units}
+	XPDL with BPSim	XPDL ja BPSim
 	Yes or no	Kyllä tai ei
 	Your changes will be lost if you don't save them.	Muutokset menetetään, jos niitä ei tallenneta.
 	Zoom	Vaihda kokoa
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} sisään, {left} ulos, {lost} menetetty
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimi {min}, todennäköisin {mode}, {upper}
 	{field}: not editable here yet	{field}: ei vielä muokattavissa täällä
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft kirjoittaa uuden tiedoston vain BPMN-muodossa; valitse nimi, joka päättyy .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: todennäköisyyden on oltava luku väliltä 0–1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met}/{of} toistoa saavutti tavoitteen: {p} (95 %:n väli {lo}–{hi})

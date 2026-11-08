@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Intervalo do 95 % da proporción que cumpre o obxectivo: de {lo} a {hi}
 	95th percentile	Percentil 95
 	95th percentile {value}	percentil 95 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	O ficheiro novo só contén o modelo: o que StochCraft non entende de {file} omítese.
 	About StochCraft	Sobre StochCraft
 	About {app}	Sobre {app}
 	Across the range it changed by {change}: more than chance would explain.	No intervalo cambiou {change}: máis do que explicaría o azar.
@@ -165,6 +166,7 @@
 	Mean	Media
 	Mean number inside	Número medio dentro
 	One replication of {n}: the results of the others differ.	Unha réplica de {n}: os resultados das demais son distintos.
+	Save as a new BPMN file?	Gardar como un ficheiro BPMN novo?
 	Still inside at the end	Aínda dentro ao final
 	Mean queue length	Lonxitude media da cola
 	Mean time blocked	Tempo medio bloqueado
@@ -378,6 +380,7 @@
 	Whole number	Número enteiro
 	Window	Xanela
 	With every time at its mean: {units}	Con cada tempo na súa media: {units}
+	XPDL with BPSim	XPDL con BPSim
 	Yes or no	Si ou non
 	Your changes will be lost if you don't save them.	Os seus cambios perderanse se non os garda.
 	Zoom	Zoom
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} entraron, {left} saíron, {lost} perdidos
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: mínimo {min}, máis probable {mode}, {upper}
 	{field}: not editable here yet	{field}: aínda non se pode editar aquí
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft só escribe ficheiros novos en BPMN; escolla un nome que remate en .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: unha probabilidade é un número de 0 a 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} de {of} réplicas cumpriron o obxectivo: {p} (intervalo do 95 % de {lo} a {hi})

@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Intervalo de 95% da parcela que atinge a meta: de {lo} a {hi}
 	95th percentile	Percentil 95
 	95th percentile {value}	percentil 95 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	O novo arquivo contém só o modelo: o que o StochCraft não entende em {file} fica de fora.
 	About StochCraft	Sobre o StochCraft
 	About {app}	Sobre o {app}
 	Across the range it changed by {change}: more than chance would explain.	No intervalo, mudou {change}: mais do que o acaso explicaria.
@@ -165,6 +166,7 @@
 	Mean	Média
 	Mean number inside	Número médio no sistema
 	One replication of {n}: the results of the others differ.	Uma replicação de {n}: os resultados das outras são diferentes.
+	Save as a new BPMN file?	Salvar como novo arquivo BPMN?
 	Still inside at the end	Ainda no sistema ao final
 	Mean queue length	Comprimento médio da fila
 	Mean time blocked	Tempo médio bloqueado
@@ -378,6 +380,7 @@
 	Whole number	Número inteiro
 	Window	Janela
 	With every time at its mean: {units}	Com cada tempo na sua média: {units}
+	XPDL with BPSim	XPDL com BPSim
 	Yes or no	Sim ou não
 	Your changes will be lost if you don't save them.	Suas alterações serão perdidas se você não as salvar.
 	Zoom	Zoom
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} entraram, {left} saíram, {lost} perdidos
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: mínimo {min}, mais provável {mode}, {upper}
 	{field}: not editable here yet	{field}: ainda não é possível editar aqui
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: o StochCraft só grava arquivos novos em BPMN; escolha um nome terminado em .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: uma probabilidade é um número de 0 a 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} de {of} replicações atingiram a meta: {p} (intervalo de 95% de {lo} a {hi})

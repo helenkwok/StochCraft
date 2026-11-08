@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Tikslą pasiekiančios dalies 95 % intervalas: nuo {lo} iki {hi}
 	95th percentile	95-asis procentilis
 	95th percentile {value}	95-asis procentilis {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Naujame faile yra tik modelis: tai, ko StochCraft nesupranta faile {file}, praleidžiama.
 	About StochCraft	Apie StochCraft
 	About {app}	Apie {app}
 	Across the range it changed by {change}: more than chance would explain.	Per visą intervalą pasikeitė {change}: daugiau, nei paaiškintų atsitiktinumas.
@@ -165,6 +166,7 @@
 	Mean	Vidurkis
 	Mean number inside	Vidutinis skaičius viduje
 	One replication of {n}: the results of the others differ.	Viena replikacija iš {n}: kitų rezultatai skiriasi.
+	Save as a new BPMN file?	Įrašyti kaip naują BPMN failą?
 	Still inside at the end	Pabaigoje dar viduje
 	Mean queue length	Vidutinis eilės ilgis
 	Mean time blocked	Vidutinė blokavimo trukmė
@@ -378,6 +380,7 @@
 	Whole number	Sveikasis skaičius
 	Window	Langas
 	With every time at its mean: {units}	Kai kiekvienas laikas lygus vidurkiui: {units}
+	XPDL with BPSim	XPDL su BPSim
 	Yes or no	Taip arba ne
 	Your changes will be lost if you don't save them.	Jei pakeitimų neįrašysite, jie bus prarasti.
 	Zoom	Keisti dydį
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	Įėjo: {entered}, išėjo: {left}, prarasta: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimumas {min}, labiausiai tikėtina {mode}, {upper}
 	{field}: not editable here yet	{field}: čia dar negalima redaguoti
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft naują failą įrašo tik BPMN formatu; pasirinkite pavadinimą, kuris baigiasi .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: tikimybė yra skaičius nuo 0 iki 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	Tikslą pasiekė {met} iš {of} replikacijų: {p} (95 % intervalas nuo {lo} iki {hi})

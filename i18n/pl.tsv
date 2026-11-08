@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Przedział 95% udziału osiągającego cel: od {lo} do {hi}
 	95th percentile	95. percentyl
 	95th percentile {value}	95. percentyl {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Nowy plik zawiera tylko model: to, czego StochCraft nie rozumie w {file}, zostaje pominięte.
 	About StochCraft	O programie StochCraft
 	About {app}	O programie {app}
 	Across the range it changed by {change}: more than chance would explain.	W całym zakresie zmienił się o {change}: bardziej, niż wyjaśniałby przypadek.
@@ -165,6 +166,7 @@
 	Mean	Średnia
 	Mean number inside	Średnia liczba wewnątrz
 	One replication of {n}: the results of the others differ.	Jedna replikacja z {n}: wyniki pozostałych są inne.
+	Save as a new BPMN file?	Zapisać jako nowy plik BPMN?
 	Still inside at the end	Wciąż wewnątrz na końcu
 	Mean queue length	Średnia długość kolejki
 	Mean time blocked	Średni czas blokowania
@@ -378,6 +380,7 @@
 	Whole number	Liczba całkowita
 	Window	Okno
 	With every time at its mean: {units}	Przy każdym czasie równym średniej: {units}
+	XPDL with BPSim	XPDL z BPSim
 	Yes or no	Tak lub nie
 	Your changes will be lost if you don't save them.	Jeśli nie zapiszesz zmian, zostaną utracone.
 	Zoom	Powiększenie
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	Weszło: {entered}, wyszło: {left}, utracono: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, najbardziej prawdopodobna {mode}, {upper}
 	{field}: not editable here yet	{field}: tutaj nie można jeszcze edytować
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft zapisuje nowy plik tylko jako BPMN; wybierz nazwę kończącą się na .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: prawdopodobieństwo musi być liczbą od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikacji osiągnęło cel: {p} (przedział 95% od {lo} do {hi})

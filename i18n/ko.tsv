@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	목표를 충족한 비율의 95% 구간: {lo}~{hi}
 	95th percentile	95번째 백분위수
 	95th percentile {value}	95번째 백분위수 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	새 파일에는 모델만 들어갑니다. {file}에서 StochCraft가 이해하지 못하는 내용은 빠집니다.
 	About StochCraft	StochCraft 정보
 	About {app}	{app} 정보
 	Across the range it changed by {change}: more than chance would explain.	범위 전체에서 {change}만큼 바뀌었습니다. 우연으로는 설명되지 않는 크기입니다.
@@ -165,6 +166,7 @@
 	Mean	평균
 	Mean number inside	내부 평균 개수
 	One replication of {n}: the results of the others differ.	{n}회 중 1회의 반복 실행입니다. 다른 반복 실행의 결과는 다릅니다.
+	Save as a new BPMN file?	새 BPMN 파일로 저장할까요?
 	Still inside at the end	종료 시 내부에 남은 개수
 	Mean queue length	평균 대기열 길이
 	Mean time blocked	평균 차단 시간
@@ -378,6 +380,7 @@
 	Whole number	정수
 	Window	창
 	With every time at its mean: {units}	모든 시간을 평균으로 둘 때: {units}
+	XPDL with BPSim	BPSim 포함 XPDL
 	Yes or no	예 또는 아니요
 	Your changes will be lost if you don't save them.	저장하지 않으면 변경 사항이 사라집니다.
 	Zoom	확대/축소
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	들어옴 {entered}, 나감 {left}, 손실 {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: 최솟값 {min}, 최빈값 {mode}, {upper}
 	{field}: not editable here yet	{field}: 여기서는 아직 편집할 수 없습니다
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft는 새 파일을 BPMN으로만 씁니다. .bpmn으로 끝나는 이름을 고르세요
 	{id}: a probability is a number from 0 to 1	{id}: 확률은 0에서 1 사이의 숫자여야 합니다
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of}회 중 {met}회가 목표를 충족: {p}(95% 구간 {lo}~{hi})

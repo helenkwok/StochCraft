@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Intervallo al 95% della quota che raggiunge l'obiettivo: da {lo} a {hi}
 	95th percentile	95° percentile
 	95th percentile {value}	95° percentile {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Il nuovo file contiene solo il modello: ciò che StochCraft non comprende in {file} viene tralasciato.
 	About StochCraft	Informazioni su StochCraft
 	About {app}	Informazioni su {app}
 	Across the range it changed by {change}: more than chance would explain.	Nell'intervallo è cambiato di {change}: più di quanto spiegherebbe il caso.
@@ -165,6 +166,7 @@
 	Mean	Media
 	Mean number inside	Numero medio all'interno
 	One replication of {n}: the results of the others differ.	Una replica su {n}: i risultati delle altre sono diversi.
+	Save as a new BPMN file?	Salvare come nuovo file BPMN?
 	Still inside at the end	Ancora all'interno alla fine
 	Mean queue length	Lunghezza media della coda
 	Mean time blocked	Tempo medio di blocco
@@ -378,6 +380,7 @@
 	Whole number	Numero intero
 	Window	Finestra
 	With every time at its mean: {units}	Con ogni tempo alla sua media: {units}
+	XPDL with BPSim	XPDL con BPSim
 	Yes or no	Sì o no
 	Your changes will be lost if you don't save them.	Se non le salvi, le modifiche andranno perse.
 	Zoom	Ingrandimento
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} entrati, {left} usciti, {lost} persi
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimo {min}, più probabile {mode}, {upper}
 	{field}: not editable here yet	{field}: non ancora modificabile qui
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft scrive i nuovi file solo in BPMN; scegli un nome che termini con .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: una probabilità è un numero da 0 a 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} repliche su {of} hanno raggiunto l'obiettivo: {p} (intervallo al 95% da {lo} a {hi})

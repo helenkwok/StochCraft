@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Eesmärgi saavutanud osakaalu 95% vahemik: {lo} kuni {hi}
 	95th percentile	95. protsentiil
 	95th percentile {value}	95. protsentiil {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Uues failis on ainult mudel: see, millest StochCraft failis {file} aru ei saa, jäetakse välja.
 	About StochCraft	Teave StochCrafti kohta
 	About {app}	Teave: {app}
 	Across the range it changed by {change}: more than chance would explain.	Vahemikus muutus see {change} võrra: rohkem, kui juhus seletaks.
@@ -165,6 +166,7 @@
 	Mean	Keskmine
 	Mean number inside	Keskmine arv sees
 	One replication of {n}: the results of the others differ.	Üks kordus {n}-st: teiste tulemused erinevad.
+	Save as a new BPMN file?	Kas salvestada uue BPMN-failina?
 	Still inside at the end	Lõpus veel sees
 	Mean queue length	Järjekorra keskmine pikkus
 	Mean time blocked	Keskmine blokeerimisaeg
@@ -378,6 +380,7 @@
 	Whole number	Täisarv
 	Window	Aken
 	With every time at its mean: {units}	Kui iga aeg on oma keskmisel: {units}
+	XPDL with BPSim	XPDL ja BPSim
 	Yes or no	Jah või ei
 	Your changes will be lost if you don't save them.	Salvestamata muudatused lähevad kaotsi.
 	Zoom	Muuda suurust
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} sisse, {left} välja, {lost} kadunud
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: miinimum {min}, kõige tõenäolisem {mode}, {upper}
 	{field}: not editable here yet	{field}: siin ei saa veel muuta
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft kirjutab uue faili ainult BPMN-vormingus; valige nimi, mis lõpeb laiendiga .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: tõenäosus on arv vahemikus 0 kuni 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} kordust {of}-st saavutas eesmärgi: {p} (95% vahemik {lo} kuni {hi})

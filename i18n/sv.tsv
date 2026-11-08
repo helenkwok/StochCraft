@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95 %-intervall för andelen som når målet: {lo} till {hi}
 	95th percentile	95:e percentilen
 	95th percentile {value}	95:e percentilen {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Den nya filen innehåller bara modellen: det StochCraft inte förstår i {file} utelämnas.
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
 	Across the range it changed by {change}: more than chance would explain.	Över intervallet ändrades det med {change}: mer än slumpen skulle förklara.
@@ -165,6 +166,7 @@
 	Mean	Medelvärde
 	Mean number inside	Genomsnittligt antal inuti
 	One replication of {n}: the results of the others differ.	En replikation av {n}: de övrigas resultat skiljer sig.
+	Save as a new BPMN file?	Spara som ny BPMN-fil?
 	Still inside at the end	Fortfarande inuti vid slutet
 	Mean queue length	Genomsnittlig kölängd
 	Mean time blocked	Genomsnittlig blockeringstid
@@ -378,6 +380,7 @@
 	Whole number	Heltal
 	Window	Fönster
 	With every time at its mean: {units}	Med varje tid på sitt medelvärde: {units}
+	XPDL with BPSim	XPDL med BPSim
 	Yes or no	Ja eller nej
 	Your changes will be lost if you don't save them.	Dina ändringar går förlorade om du inte sparar dem.
 	Zoom	Zoom
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} in, {left} ut, {lost} förlorade
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, mest sannolikt {mode}, {upper}
 	{field}: not editable here yet	{field}: kan ännu inte redigeras här
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft skriver bara nya filer som BPMN; välj ett namn som slutar på .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: en sannolikhet är ett tal mellan 0 och 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} av {of} replikationer nådde målet: {p} (95 %-intervall {lo} till {hi})

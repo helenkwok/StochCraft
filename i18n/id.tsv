@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Interval 95% dari bagian yang memenuhi target: {lo} sampai {hi}
 	95th percentile	Persentil ke-95
 	95th percentile {value}	persentil ke-95 {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Berkas baru hanya berisi model: apa yang tidak dipahami StochCraft di {file} tidak disertakan.
 	About StochCraft	Tentang StochCraft
 	About {app}	Tentang {app}
 	Across the range it changed by {change}: more than chance would explain.	Di seluruh rentang berubah sebesar {change}: lebih dari yang bisa dijelaskan oleh kebetulan.
@@ -165,6 +166,7 @@
 	Mean	Rata-rata
 	Mean number inside	Jumlah rata-rata di dalam
 	One replication of {n}: the results of the others differ.	Satu replikasi dari {n}: hasil replikasi lain berbeda.
+	Save as a new BPMN file?	Simpan sebagai berkas BPMN baru?
 	Still inside at the end	Masih di dalam pada akhir
 	Mean queue length	Panjang antrean rata-rata
 	Mean time blocked	Waktu terblokir rata-rata
@@ -378,6 +380,7 @@
 	Whole number	Bilangan bulat
 	Window	Jendela
 	With every time at its mean: {units}	Dengan setiap waktu pada rata-ratanya: {units}
+	XPDL with BPSim	XPDL dengan BPSim
 	Yes or no	Ya atau tidak
 	Your changes will be lost if you don't save them.	Perubahan Anda akan hilang jika tidak disimpan.
 	Zoom	Zoom
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} masuk, {left} keluar, {lost} hilang
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, paling mungkin {mode}, {upper}
 	{field}: not editable here yet	{field}: belum dapat diedit di sini
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft menulis berkas baru hanya sebagai BPMN; pilih nama yang berakhiran .bpmn
 	{id}: a probability is a number from 0 to 1	{id}: probabilitas adalah angka dari 0 sampai 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} dari {of} replikasi memenuhi target: {p} (interval 95% dari {lo} sampai {hi})

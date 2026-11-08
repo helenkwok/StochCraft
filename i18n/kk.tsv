@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Мақсатқа жеткен үлестің 95% аралығы: {lo} мен {hi} арасы
 	95th percentile	95-ші процентиль
 	95th percentile {value}	95-ші процентиль {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Жаңа файлда тек модель болады: {file} ішіндегі StochCraft түсінбейтін нәрселер қалдырылады.
 	About StochCraft	StochCraft туралы
 	About {app}	{app} туралы
 	Across the range it changed by {change}: more than chance would explain.	Ауқымда {change} өзгерді: кездейсоқтық түсіндіретіннен көп.
@@ -165,6 +166,7 @@
 	Mean	Орташа
 	Mean number inside	Ішіндегі орташа саны
 	One replication of {n}: the results of the others differ.	{n} ішінен бір қайталау: қалғандарының нәтижелері басқаша.
+	Save as a new BPMN file?	Жаңа BPMN файлы ретінде сақталсын ба?
 	Still inside at the end	Соңында әлі ішінде
 	Mean queue length	Кезектің орташа ұзындығы
 	Mean time blocked	Бұғатталудың орташа уақыты
@@ -378,6 +380,7 @@
 	Whole number	Бүтін сан
 	Window	Терезе
 	With every time at its mean: {units}	Әр уақыт өз орташасында: {units}
+	XPDL with BPSim	BPSim бар XPDL
 	Yes or no	Иә немесе жоқ
 	Your changes will be lost if you don't save them.	Сақтамасаңыз, өзгерістеріңіз жоғалады.
 	Zoom	Терезе өлшемін ауыстыру
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	Кірді: {entered}, шықты: {left}, жоғалды: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: минимум {min}, ең ықтимал {mode}, {upper}
 	{field}: not editable here yet	{field}: мұнда әзірше өңдеу мүмкін емес
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft жаңа файлды тек BPMN түрінде жазады; .bpmn деп аяқталатын атау таңдаңыз
 	{id}: a probability is a number from 0 to 1	{id}: ықтималдық 0 мен 1 арасындағы сан болуы керек
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} қайталаудың {met} мақсатқа жетті: {p} (95% аралық {lo} мен {hi} арасы)

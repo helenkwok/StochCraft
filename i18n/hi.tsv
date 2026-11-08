@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	लक्ष्य पूरा करने वाले हिस्से का 95% अंतराल: {lo} से {hi}
 	95th percentile	95वाँ प्रतिशतक
 	95th percentile {value}	95वाँ प्रतिशतक {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	नई फ़ाइल में केवल मॉडल रहता है: {file} में जो StochCraft नहीं समझता, वह छोड़ दिया जाता है।
 	About StochCraft	StochCraft के बारे में
 	About {app}	{app} के बारे में
 	Across the range it changed by {change}: more than chance would explain.	पूरी सीमा में यह {change} बदला: संयोग जितना समझा सकता है उससे अधिक।
@@ -165,6 +166,7 @@
 	Mean	माध्य
 	Mean number inside	अंदर की औसत संख्या
 	One replication of {n}: the results of the others differ.	{n} में से एक पुनरावृत्ति: बाकी के परिणाम अलग होते हैं।
+	Save as a new BPMN file?	नई BPMN फ़ाइल के रूप में सहेजें?
 	Still inside at the end	अंत में अब भी अंदर
 	Mean queue length	औसत कतार लंबाई
 	Mean time blocked	औसत अवरोध समय
@@ -378,6 +380,7 @@
 	Whole number	पूर्णांक
 	Window	विंडो
 	With every time at its mean: {units}	हर समय उसके माध्य पर: {units}
+	XPDL with BPSim	BPSim सहित XPDL
 	Yes or no	हाँ या नहीं
 	Your changes will be lost if you don't save them.	यदि आप सहेजते नहीं हैं, तो परिवर्तन खो जाएँगे।
 	Zoom	ज़ूम
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} अंदर, {left} बाहर, {lost} खोए
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: न्यूनतम {min}, सर्वाधिक संभावित {mode}, {upper}
 	{field}: not editable here yet	{field}: यहाँ अभी संपादन संभव नहीं है
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft नई फ़ाइल केवल BPMN के रूप में लिखता है; .bpmn पर समाप्त होने वाला नाम चुनें
 	{id}: a probability is a number from 0 to 1	{id}: प्रायिकता 0 से 1 तक की संख्या होनी चाहिए
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} में से {met} पुनरावृत्तियों ने लक्ष्य पूरा किया: {p} (95% अंतराल {lo} से {hi})

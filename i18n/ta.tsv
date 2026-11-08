@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	இலக்கை அடையும் பங்கின் 95% இடைவெளி: {lo} முதல் {hi}
 	95th percentile	95-ஆம் சதமானம்
 	95th percentile {value}	95-ஆம் சதமானம் {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	புதிய கோப்பில் மாதிரி மட்டுமே இருக்கும்: {file} இல் StochCraft புரிந்துகொள்ளாதவை விடப்படும்.
 	About StochCraft	StochCraft பற்றி
 	About {app}	{app} பற்றி
 	Across the range it changed by {change}: more than chance would explain.	முழு வரம்பிலும் இது {change} மாறியது: தற்செயல் விளக்குவதை விட அதிகம்.
@@ -165,6 +166,7 @@
 	Mean	சராசரி
 	Mean number inside	உள்ளே உள்ள சராசரி எண்ணிக்கை
 	One replication of {n}: the results of the others differ.	{n} இல் ஒரு மீள் இயக்கம்: மற்றவற்றின் முடிவுகள் வேறுபடும்.
+	Save as a new BPMN file?	புதிய BPMN கோப்பாகச் சேமிக்கவா?
 	Still inside at the end	முடிவில் இன்னும் உள்ளே உள்ளவை
 	Mean queue length	சராசரி வரிசை நீளம்
 	Mean time blocked	தடுக்கப்பட்ட சராசரி நேரம்
@@ -378,6 +380,7 @@
 	Whole number	முழு எண்
 	Window	சாளரம்
 	With every time at its mean: {units}	ஒவ்வொரு நேரமும் அதன் சராசரியில்: {units}
+	XPDL with BPSim	BPSim உடன் XPDL
 	Yes or no	ஆம் அல்லது இல்லை
 	Your changes will be lost if you don't save them.	சேமிக்காவிட்டால் உங்கள் மாற்றங்கள் இழக்கப்படும்.
 	Zoom	அளவை மாற்று
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} உள்ளே, {left} வெளியே, {lost} இழப்பு
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: குறைந்தபட்சம் {min}, அதிக வாய்ப்புள்ளது {mode}, {upper}
 	{field}: not editable here yet	{field}: இங்கே இன்னும் திருத்த முடியாது
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft புதிய கோப்பை BPMN ஆக மட்டுமே எழுதும்; .bpmn இல் முடியும் பெயரைத் தேர்ந்தெடுக்கவும்
 	{id}: a probability is a number from 0 to 1	{id}: நிகழ்தகவு 0 முதல் 1 வரையிலான எண்ணாக இருக்க வேண்டும்
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} மீள் இயக்கங்களில் {met} இலக்கை அடைந்தன: {p} (95% இடைவெளி {lo} முதல் {hi})

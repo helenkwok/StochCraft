@@ -18,6 +18,7 @@
 	95% interval of the share meeting the target: {lo} to {hi}	A célt elérő arány 95%-os intervalluma: {lo}–{hi}
 	95th percentile	95. percentilis
 	95th percentile {value}	95. percentilis {value}
+	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Az új fájl csak a modellt tartalmazza: ami a(z) {file} fájlban a StochCraft számára érthetetlen, kimarad.
 	About StochCraft	A StochCraft névjegye
 	About {app}	{app} névjegye
 	Across the range it changed by {change}: more than chance would explain.	A tartományban {change} értékkel változott: többel, mint amit a véletlen megmagyarázna.
@@ -165,6 +166,7 @@
 	Mean	Átlag
 	Mean number inside	Átlagos belső darabszám
 	One replication of {n}: the results of the others differ.	Egy ismétlés a(z) {n}-ból/-ből: a többi eredménye eltér.
+	Save as a new BPMN file?	Mentés új BPMN-fájlként?
 	Still inside at the end	A végén még bent
 	Mean queue length	Átlagos sorhossz
 	Mean time blocked	Átlagos blokkolási idő
@@ -378,6 +380,7 @@
 	Whole number	Egész szám
 	Window	Ablak
 	With every time at its mean: {units}	Minden idő az átlagán: {units}
+	XPDL with BPSim	XPDL BPSim-mel
 	Yes or no	Igen vagy nem
 	Your changes will be lost if you don't save them.	Ha nem mented, a módosításaid elvesznek.
 	Zoom	Méretváltás
@@ -422,6 +425,7 @@
 	{entered} in, {left} out, {lost} lost	{entered} be, {left} ki, {lost} elveszett
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, legvalószínűbb {mode}, {upper}
 	{field}: not editable here yet	{field}: itt még nem szerkeszthető
+	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: a StochCraft új fájlt csak BPMN formátumban ír; válassz .bpmn végű nevet
 	{id}: a probability is a number from 0 to 1	{id}: a valószínűség 0 és 1 közötti szám
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} ismétlésből {met} érte el a célt: {p} (95%-os intervallum {lo}–{hi})
