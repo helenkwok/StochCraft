@@ -2,7 +2,7 @@
 //! and the statistics each element keeps.
 
 use std::borrow::Cow;
-use std::cell::RefCell;
+use std::cell::{Cell, RefCell};
 use std::collections::BTreeMap;
 use std::rc::Rc;
 
@@ -315,14 +315,22 @@ impl Compiled {
         }
 
         // Discard everything before the warm-up. With none, there is nothing to discard (and a
-        // reset at time 0 would discard an arrival at time 0).
+        // reset at time 0 would discard an arrival at time 0). A run that ends first (its stop
+        // condition met) never resets: `reset_at` says whether, and when, it did.
+        let reset_at = Rc::new(Cell::new((warmup <= 0.0).then_some(0.0)));
         if warmup > 0.0 {
-            let (c, st, pl) = (ctx.clone(), Rc::clone(&stats), Rc::clone(&pools));
+            let (c, st, pl, at) = (
+                ctx.clone(),
+                Rc::clone(&stats),
+                Rc::clone(&pools),
+                Rc::clone(&reset_at),
+            );
             sim.spawn(async move {
                 c.hold(warmup).await;
                 let now = c.now();
                 st.iter().for_each(|s| s.borrow_mut().reset(now));
                 pl.reset(now);
+                at.set(Some(now));
             });
         }
 
@@ -341,6 +349,7 @@ impl Compiled {
             end,
             stop,
             stopped_at: None,
+            reset_at,
         }
     }
 
@@ -385,6 +394,9 @@ pub struct Live<'a> {
     stop: Option<(usize, stochcraft_model::Stop)>,
     /// When the stop condition was met, if it has been (the run then ends there).
     stopped_at: Option<f64>,
+    /// When the statistics were last reset: 0 with no warm-up, the warm-up's end once it has
+    /// ended, `None` while it lasts (and for good, when the run stopped during it).
+    reset_at: Rc<Cell<Option<f64>>>,
 }
 
 /// A block's state at one moment of a [`Live`] run. Counts are since the warm-up ended (since
@@ -558,11 +570,15 @@ impl Live<'_> {
             .collect();
         // Then each shared pool, after the elements.
         elements.extend(self.pools.reports(&model.resources, now));
+        let after_warmup = self.reset_at.get();
         Report {
             warmup: self.warmup,
             duration: (now - self.warmup).max(0.0).min(self.duration),
             elements,
             stopped_at: self.stopped_at,
+            measured_from: after_warmup.unwrap_or(0.0),
+            measured_to: now,
+            after_warmup: after_warmup.is_some(),
         }
     }
 }

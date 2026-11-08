@@ -390,6 +390,9 @@ fn empty() -> Report {
         warmup: 0.0,
         duration: 0.0,
         elements: vec![],
+        measured_from: 0.0,
+        measured_to: 0.0,
+        after_warmup: true,
     }
 }
 

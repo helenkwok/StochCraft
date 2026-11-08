@@ -4,8 +4,8 @@
 //! which the empirical distribution and its Dvoretzky–Kiefer–Wolfowitz band must contain.
 #![allow(clippy::panic)]
 
-use stochcraft_blocks::{Builder, Compiled, Report, compile, summarise};
-use stochcraft_model::{Dist, ElementId, Experiment, Model, Stop};
+use stochcraft_blocks::{Builder, Compiled, Report, compile, run_warnings, summarise};
+use stochcraft_model::{Dist, ElementId, Experiment, Model, Problem, Stop};
 use stochcraft_random::Rng;
 use stochcraft_stats::Ecdf;
 use stochcraft_stats::spread::dkw_half_width;
@@ -235,4 +235,63 @@ fn a_live_run_ends_at_its_stop() {
     );
     assert!(steps > 3);
     assert_eq!(live.report(), run(&c, 1));
+}
+
+/// A stop met before the warm-up ends (#67): warm-up 100, stop once 5 entities have left.
+#[test]
+fn a_stop_inside_the_warm_up_leaves_the_replication_out() {
+    let model = |count_out: u64| {
+        let mut b = Builder::new();
+        let src = b.source("arrivals", Dist::Exponential { mean: 1.0 }, None);
+        let desk = b.server("desk", 1, Dist::Exponential { mean: 0.8 });
+        let out = b.sink("out");
+        b.connect(src, desk);
+        b.connect(desk, out);
+        b.build(Experiment {
+            warmup: 100.0,
+            duration: 3000.0,
+            replications: 1,
+            stop: Some(count("out", count_out)),
+            ..Experiment::default()
+        })
+    };
+    let c = compiled(&model(5));
+    assert!(
+        c.warnings()
+            .iter()
+            .any(|d| d.problem == Problem::StopWithWarmup),
+        "{:?}",
+        c.warnings()
+    );
+    let reports: Vec<Report> = (0..8).map(|i| run(&c, 500 + i)).collect();
+    for r in &reports {
+        let at = r.stopped_at.unwrap_or_else(|| panic!("did not stop"));
+        assert!(at < 100.0, "{at}");
+        // Never reset: what it measured runs from 0 to the stop, and is not used.
+        assert_eq!((r.measured_from, r.measured_to), (0.0, at));
+        assert!(!r.after_warmup);
+    }
+    let s = summarise(&reports);
+    assert!(s.elements.iter().all(|e| e.metrics.is_empty()), "{s:?}");
+    assert_eq!(s.stopped.as_ref().map(|(n, _)| *n), Some(8));
+    assert_eq!(s.mean_measured(), None);
+    let problems: Vec<Problem> = run_warnings(c.model(), &s)
+        .into_iter()
+        .map(|d| d.problem)
+        .collect();
+    assert_eq!(
+        problems,
+        vec![Problem::EndedInWarmup {
+            replications: 8,
+            of: 8
+        }]
+    );
+    // Stopping after the warm-up: measured from its end to the stop, and used.
+    let c = compiled(&model(300));
+    let r = run(&c, 1);
+    let at = r.stopped_at.unwrap_or_else(|| panic!("did not stop"));
+    assert_eq!((r.measured_from, r.measured_to), (100.0, at));
+    assert!(r.after_warmup);
+    let s = summarise(&[r]);
+    assert!(run_warnings(c.model(), &s).is_empty());
 }

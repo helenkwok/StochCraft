@@ -56,13 +56,19 @@ fn record_lines(name: &str, results: &Value, out: &mut String) {
         }
     }
     out.push('\n');
+    // The time actually measured: a stop condition can end replications early (the mean over
+    // those whose statistics are used).
+    let measured = match &results["measured"] {
+        m if m.is_object() => &m["mean_duration"],
+        _ => &r["duration"],
+    };
     let _ = writeln!(
         out,
         "{} replications, seed {}, warm-up {} {unit}, then {} {unit} measured",
         r["replications"],
         r["seed"],
         f(&r["warmup"]),
-        f(&r["duration"])
+        f(measured)
     );
     let _ = writeln!(
         out,
@@ -138,6 +144,7 @@ pub fn table(name: &str, results: &Value) -> String {
         .as_array()
         .into_iter()
         .flatten()
+        .chain(results["warnings"].as_array().into_iter().flatten())
         .chain(
             results["record"]["file_notes"]
                 .as_array()

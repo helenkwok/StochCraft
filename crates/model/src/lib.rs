@@ -766,6 +766,17 @@ pub enum Problem {
     BadStop {
         reason: &'static str,
     },
+    /// The experiment has both a stop condition and a warm-up: a replication whose stop comes
+    /// before the warm-up ends has no statistics after the warm-up, and is left out of the
+    /// results ([`Problem::EndedInWarmup`]).
+    StopWithWarmup,
+    /// Found from a run's results, not by [`Model::validate`]: `replications` of the `of` run
+    /// stopped before the warm-up ended, so their statistics (all from the warm-up) are left out
+    /// of every metric; their stop times still count.
+    EndedInWarmup {
+        replications: u64,
+        of: u64,
+    },
     /// A three-point estimate for an element with no time distribution to fit (or no such
     /// element).
     EstimateIgnored,
@@ -827,6 +838,8 @@ impl Problem {
             Problem::QuantityIgnored => "quantity_ignored",
             Problem::NothingToUnbatch => "nothing_to_unbatch",
             Problem::BadStop { .. } => "bad_stop",
+            Problem::StopWithWarmup => "stop_with_warmup",
+            Problem::EndedInWarmup { .. } => "ended_in_warmup",
             Problem::EstimateIgnored => "estimate_ignored",
             Problem::BadEstimate { .. } => "bad_estimate",
             Problem::EstimateMismatch => "estimate_mismatch",
@@ -1013,6 +1026,18 @@ impl std::fmt::Display for Diagnostic {
                 "no element makes batches, so this one passes every entity through"
             ),
             Problem::BadStop { reason } => write!(f, "the run cannot stop here: {reason}"),
+            Problem::StopWithWarmup => write!(
+                f,
+                "the run stops here, which can happen before the warm-up ends: a replication that stops during the warm-up has no statistics after it and is left out of the results (its stop time still counts)"
+            ),
+            Problem::EndedInWarmup { replications, of } if replications == of => write!(
+                f,
+                "every replication stopped before the warm-up ended, so none has statistics after it and no metric is reported (the stop times still are); shorten the warm-up or stop later"
+            ),
+            Problem::EndedInWarmup { replications, of } => write!(
+                f,
+                "{replications} of {of} replications stopped before the warm-up ended; their statistics, all from the warm-up, are left out of every metric (their stop times still count)"
+            ),
             Problem::EstimateIgnored => write!(
                 f,
                 "has a three-point estimate but no time distribution to fit it to; it is ignored"
@@ -1758,6 +1783,8 @@ impl Model {
         };
         if let Some(reason) = reason {
             out.push(Diagnostic::error(Some(id), Problem::BadStop { reason }));
+        } else if self.experiment.warmup > 0.0 {
+            out.push(Diagnostic::warning(Some(id), Problem::StopWithWarmup));
         }
     }
 

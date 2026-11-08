@@ -45,8 +45,8 @@ pub use stochcraft_model::Breakdown;
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 use stochcraft_model::{
-    Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Property,
-    PropertyType, PropertyValue, ResourcePool, Severity, Timed,
+    Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
+    Property, PropertyType, PropertyValue, ResourcePool, Severity, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::Summary;
@@ -578,6 +578,14 @@ pub struct Report {
     /// When the model's stop condition was met, ending the run; `None` if it ran to its time
     /// limit (or has none). A time to an event, from time 0.
     pub stopped_at: Option<f64>,
+    /// The span the element statistics actually cover: from the warm-up's end (0 with no
+    /// warm-up, or when the run stopped before the warm-up ended) to the run's end.
+    pub measured_from: f64,
+    pub measured_to: f64,
+    /// Whether the statistics come from after the warm-up: true unless the run stopped before
+    /// the warm-up ended, when they come from the warm-up alone and [`summarise`] leaves them
+    /// out.
+    pub after_warmup: bool,
 }
 
 impl Report {
@@ -632,6 +640,32 @@ pub struct ExperimentSummary {
     /// When each replication met the stop condition, in replication order (`None`: it did
     /// not, or there is none).
     pub stop_times: Vec<Option<f64>>,
+    /// What each replication measured, in replication order.
+    pub measured: Vec<Measured>,
+}
+
+/// The span one replication's statistics cover, and whether they are used.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Measured {
+    pub from: f64,
+    pub to: f64,
+    /// False when the replication stopped before its warm-up ended: its statistics are all
+    /// from the warm-up, so [`summarise`] leaves them out (its stop time still counts).
+    pub used: bool,
+}
+
+impl ExperimentSummary {
+    /// The mean time measured over the replications whose statistics are used; `None` when
+    /// none is.
+    pub fn mean_measured(&self) -> Option<f64> {
+        let used: Vec<f64> = self
+            .measured
+            .iter()
+            .filter(|m| m.used)
+            .map(|m| m.to - m.from)
+            .collect();
+        (!used.is_empty()).then(|| used.iter().sum::<f64>() / used.len() as f64)
+    }
 }
 
 impl ExperimentSummary {
@@ -648,6 +682,11 @@ impl ExperimentSummary {
 /// example the mean wait of a server that no entity reached. Replications without a value are
 /// left out of that metric's summary, so its `n` can be less than the number of replications,
 /// and differ from metric to metric.
+///
+/// A replication that stopped before its warm-up ended ([`Report::after_warmup`] false) has
+/// statistics from the warm-up alone, which describe the start-up rather than the system: they
+/// are left out of every metric and property (as `None` in the samples), and only its stop time
+/// counts. [`run_warnings`] says so.
 pub fn summarise(reports: &[Report]) -> ExperimentSummary {
     let elements = reports.first().map_or_else(Vec::new, |first| {
         first
@@ -661,7 +700,7 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                     .filter_map(|&m| {
                         let each: Vec<Option<f64>> = reports
                             .iter()
-                            .map(|r| r.elements.get(i)?.metric(m))
+                            .map(|r| r.elements.get(i).filter(|_| r.after_warmup)?.metric(m))
                             .collect();
                         let values: Vec<f64> = each.iter().flatten().copied().collect();
                         let s = Summary::of(&values)?;
@@ -676,6 +715,7 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                     .filter_map(|(j, (name, _))| {
                         let values: Vec<f64> = reports
                             .iter()
+                            .filter(|r| r.after_warmup)
                             .filter_map(|r| r.elements.get(i)?.properties.get(j)?.1)
                             .collect();
                         Summary::of(&values).map(|s| (name.clone(), s))
@@ -698,7 +738,34 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
         elements,
         stopped: Summary::of(&times).map(|s| (times.len() as u64, s)),
         stop_times: reports.iter().map(|r| r.stopped_at).collect(),
+        measured: reports
+            .iter()
+            .map(|r| Measured {
+                from: r.measured_from,
+                to: r.measured_to,
+                used: r.after_warmup,
+            })
+            .collect(),
     }
+}
+
+/// Warnings about a run's results (`model`'s, summarised in `summary`) that only the run can
+/// show, in the same form as [`Model::validate`]'s: replications that stopped before the
+/// warm-up ended ([`stochcraft_model::Problem::EndedInWarmup`]).
+pub fn run_warnings(_model: &Model, summary: &ExperimentSummary) -> Vec<Diagnostic> {
+    let mut out = Vec::new();
+    let unused = summary.measured.iter().filter(|m| !m.used).count() as u64;
+    if unused > 0 {
+        out.push(Diagnostic {
+            severity: Severity::Warning,
+            at: None,
+            problem: Problem::EndedInWarmup {
+                replications: unused,
+                of: summary.measured.len() as u64,
+            },
+        });
+    }
+    out
 }
 
 /// An element added to a [`Builder`].

@@ -103,6 +103,9 @@ pub(crate) struct Encoded {
     warmup: u64,
     duration: u64,
     stopped_at: Option<u64>,
+    measured_from: u64,
+    measured_to: u64,
+    after_warmup: bool,
     elements: Vec<EncodedElement>,
 }
 
@@ -130,6 +133,9 @@ impl Encoded {
             warmup: r.warmup.to_bits(),
             duration: r.duration.to_bits(),
             stopped_at: bits(r.stopped_at),
+            measured_from: r.measured_from.to_bits(),
+            measured_to: r.measured_to.to_bits(),
+            after_warmup: r.after_warmup,
             elements: r
                 .elements
                 .iter()
@@ -197,6 +203,9 @@ impl Encoded {
             warmup: f64::from_bits(self.warmup),
             duration: f64::from_bits(self.duration),
             stopped_at: float(self.stopped_at),
+            measured_from: f64::from_bits(self.measured_from),
+            measured_to: f64::from_bits(self.measured_to),
+            after_warmup: self.after_warmup,
             elements,
         })
     }
