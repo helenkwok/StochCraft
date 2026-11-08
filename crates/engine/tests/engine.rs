@@ -2355,3 +2355,26 @@ fn compare_copes_with_missing_values_and_too_few_replications() {
         );
     }
 }
+
+/// A task's units cannot go below one: at one, sensitivity compares from its own value up.
+#[test]
+fn sensitivity_to_a_single_unit_looks_only_upwards() {
+    let mut e = help_desk();
+    let r = ok(
+        &mut e,
+        "experiment.sensitivity",
+        json!({
+            "parameters": [{ "id": "desk", "field": "capacity" }],
+            "results": [{ "element": "desk", "metric": "mean_wait" }],
+            "replications": 3,
+        }),
+    );
+    let effect = &r["effects"][0];
+    assert_eq!(effect["down"], json!(1.0), "{effect}");
+    assert_eq!(effect["up"], json!(2.0));
+    assert_eq!(effect["at_down"], effect["result"]);
+    assert!(
+        effect["elasticity"].as_f64().is_some_and(|x| x < 0.0),
+        "{effect}"
+    );
+}

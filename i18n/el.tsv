@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Ελληνικά
+	% down and up	% προς τα κάτω και πάνω
+	% of replications	% των επαναλήψεων
 	+ Add block	+ Προσθήκη μπλοκ
+	95th percentile	95ο εκατοστημόριο
+	95th percentile {value}	95ο εκατοστημόριο {value}
 	About StochCraft	Σχετικά με το StochCraft
 	About {app}	Σχετικά με το {app}
+	Across the range it changed by {change}: more than chance would explain.	Σε όλο το εύρος άλλαξε κατά {change}: περισσότερο απ' όσο θα εξηγούσε η τύχη.
+	Across the range it changed by {change}: within what chance alone could do.	Σε όλο το εύρος άλλαξε κατά {change}: εντός όσων μπορεί να κάνει μόνη της η τύχη.
 	Actual size	Πραγματικό μέγεθος
 	Add Block	Προσθήκη μπλοκ
 	Add a flow from…	Προσθήκη ροής από…
 	Add a flow to…	Προσθήκη ροής προς…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Προσθήκη μιας μονάδας στην πιο φορτωμένη εργασία ή ομάδα έως ότου αρκετές επαναλήψεις πετύχουν έναν στόχο. Εμφανίζεται και η απάντηση με κάθε χρόνο στη μέση τιμή του· συνήθως είναι πολύ μικρή.
 	Add alternative	Προσθήκη εναλλακτικής
 	Add point	Προσθήκη σημείου
 	Add pool	Προσθήκη δεξαμενής
@@ -27,9 +34,12 @@
 	Added {block} ({id})	Προστέθηκε το {block} ({id})
 	Align	Στοίχιση
 	Alternative {n}	Εναλλακτική {n}
+	Analysis	Ανάλυση
 	Appearance	Εμφάνιση
 	Arrival limit	Όριο αφίξεων
 	Arrivals	Αφίξεις
+	At least	Τουλάχιστον
+	At most	Το πολύ
 	Availability	Διαθεσιμότητα
 	BPMN with BPSim	BPMN με BPSim
 	Back to the model (Esc)	Πίσω στο μοντέλο (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Μέγεθος παρτίδας
 	Beta	Βήτα
 	Binomial	Διωνυμική
+	Block	Μπλοκ
 	Boolean	Λογική τιμή
 	Bottoms	Κάτω άκρα
 	Bring All to Front	Μεταφορά όλων μπροστά
 	Built with	Δημιουργήθηκε με
+	Busiest	Πιο φορτωμένο
 	By role	Κατά ρόλο
 	CSV table	Πίνακας CSV
 	Cancel	Ακύρωση
@@ -49,10 +61,13 @@
 	Cancel run	Ακύρωση εκτέλεσης
 	Capacity	Χωρητικότητα
 	Centres	Οριζόντια κέντρα
+	Change	Μεταβολή
 	Change Block	Αλλαγή μπλοκ
 	Change Flow	Αλλαγή ροής
+	Change the estimate	Αλλαγή εκτίμησης
 	Changes	Αλλαγές
 	Changing the time unit does not convert the times already in the model.	Η αλλαγή της μονάδας χρόνου δεν μετατρέπει τους χρόνους που υπάρχουν ήδη στο μοντέλο.
+	Choose…	Επιλογή…
 	Clear Menu	Εκκαθάριση μενού
 	Close	Κλείσιμο
 	Close Window	Κλείσιμο παραθύρου
@@ -88,11 +103,16 @@
 	Drag to add:	Σύρετε για προσθήκη:
 	Duplicate	Διπλότυπο
 	Duration	Διάρκεια
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Κάθε ανάλυση εκτελεί το πείραμα πολλές φορές με τον ίδιο σπόρο, ώστε οι διαφορές να οφείλονται στην αλλαγή και όχι στην τύχη. Μπορεί να διαρκέσει λίγο.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Κάθε οντότητα παίρνει την πρώτη από αυτές που μπορεί να ικανοποιηθεί τώρα, ολόκληρη μονομιάς, και επιστρέφει τις μονάδες όταν φεύγει από την εργασία.
 	Edit	Επεξεργασία
+	Elasticity	Ελαστικότητα
+	Ends early	Τελειώνει νωρίτερα
+	Enough: {units}, meeting the target in {p} of replications	Αρκετό: {units}, ο στόχος επιτυγχάνεται στο {p} των επαναλήψεων
 	Entered	Είσοδοι
 	Erlang	Έρλανγκ
 	Error	Σφάλμα
+	Estimate from three values…	Εκτίμηση από τρεις τιμές…
 	Evenly across	Ομοιόμορφη κατανομή οριζόντια
 	Evenly down	Ομοιόμορφη κατανομή κάθετα
 	Every distribution	Όλες οι κατανομές
@@ -105,20 +125,27 @@
 	Export table (CSV)	Εξαγωγή πίνακα (CSV)
 	Exported {file}	Εξήχθη το {file}
 	Expression	Έκφραση
+	Family	Οικογένεια
 	File	Αρχείο
 	Finished at {time} {unit}	Ολοκληρώθηκε στο {time} {unit}
 	Fit	Προσαρμογή
 	Fit the diagram to the view	Προσαρμογή του διαγράμματος στην προβολή
+	Fit the time	Προσαρμογή χρόνου
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Προσαρμογή του χρόνου αυτού του μπλοκ σε ελάχιστο, πιθανότερη τιμή και μέγιστο ή 95ο εκατοστημόριο.
+	Fitted the time of {id}	Ο χρόνος του {id} προσαρμόστηκε
 	Flows	Ροές
+	Forget the estimate	Απόρριψη εκτίμησης
 	From	Από
 	Gamma	Γάμμα
 	Goes to	Οδηγεί σε
 	Help	Βοήθεια
 	Hide Others	Απόκρυψη άλλων
 	Hide {app}	Απόκρυψη {app}
+	How many	Πόσα
 	Inside over time	Μέσα στη διάρκεια του χρόνου
 	Jump	Μετάβαση
 	Jump to time	Μετάβαση σε χρόνο
+	Keep the time, without the estimate it came from	Διατήρηση του χρόνου χωρίς την εκτίμηση από την οποία προήλθε
 	Keyboard Shortcuts…	Συντομεύσεις πληκτρολογίου…
 	Keyboard shortcuts saved	Οι συντομεύσεις πληκτρολογίου αποθηκεύτηκαν
 	Keyboard shortcuts unchanged	Οι συντομεύσεις πληκτρολογίου δεν άλλαξαν
@@ -139,6 +166,7 @@
 	Mean time blocked	Μέσος χρόνος αποκλεισμού
 	Mean time in system	Μέσος χρόνος στο σύστημα
 	Mean wait	Μέση αναμονή
+	Met in at least	Επιτυγχάνεται τουλάχιστον στο
 	Metric	Μετρική
 	Middles	Κάθετα κέντρα
 	Minimise	Ελαχιστοποίηση
@@ -147,19 +175,25 @@
 	Model	Μοντέλο
 	Most likely	Πιθανότερη τιμή
 	Move	Μετακίνηση
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Μετακίνηση κάθε παραμέτρου διαδοχικά προς τα κάτω και πάνω, και κατάταξή τους κατά το πόσο μετακινείται το αποτέλεσμα.
 	Name	Όνομα
 	Needs	Ανάγκες
+	Never: it runs for its duration	Ποτέ: διαρκεί όλη τη διάρκειά του
 	New	Νέο
 	New model	Νέο μοντέλο
 	New property	Νέα ιδιότητα
 	New property name	Όνομα νέας ιδιότητας
 	No blocks yet. Open a model, or add blocks to build one.	Δεν υπάρχουν ακόμη μπλοκ. Ανοίξτε ένα μοντέλο ή προσθέστε μπλοκ για να το δημιουργήσετε.
 	No connections yet: join blocks below.	Δεν υπάρχουν ακόμη συνδέσεις: συνδέστε τα παρακάτω μπλοκ.
+	No replication met the stop condition: each ran to its time limit.	Καμία επανάληψη δεν έφτασε τη συνθήκη διακοπής: κάθε μία διήρκεσε ως το χρονικό της όριο.
 	No results yet	Δεν υπάρχουν ακόμη αποτελέσματα
+	No target	Χωρίς στόχο
 	None	Κανένα
 	None found. The model is ready to run.	Δεν βρέθηκαν προβλήματα. Το μοντέλο είναι έτοιμο για εκτέλεση.
 	Normal	Κανονική
+	Not reached, even with {units}	Δεν επιτεύχθηκε ούτε με {units}
 	Number	Αριθμός
+	One change, which Undo takes back	Μία αλλαγή, που την αναιρεί η Αναίρεση
 	One clerk, random arrivals: the textbook queue, checked against theory.	Ένας υπάλληλος, τυχαίες αφίξεις: η κλασική ουρά, ελεγμένη με τη θεωρία.
 	One task per BPSim distribution, to compare their spread.	Μία εργασία ανά κατανομή BPSim για σύγκριση της διασποράς τους.
 	Open	Άνοιγμα
@@ -172,10 +206,13 @@
 	Opened {file}	Άνοιξε το {file}
 	Open…	Άνοιγμα…
 	Or start from an example	Ή ξεκινήστε από ένα παράδειγμα
+	PERT	PERT
 	PNG image	Εικόνα PNG
+	Parameter	Παράμετρος
 	Parameters	Παράμετροι
 	Paste	Επικόλληση
 	Pause	Παύση
+	Percentile	Εκατοστημόριο
 	Play	Αναπαραγωγή
 	Points	Σημεία
 	Poisson	Πουασόν
@@ -189,6 +226,7 @@
 	Properties	Ιδιότητες
 	Quit	Έξοδος
 	Quit {app}	Έξοδος από το {app}
+	Rank the parameters	Κατάταξη παραμέτρων
 	Ready	Έτοιμο
 	Recover	Ανάκτηση
 	Recover unsaved changes?	Ανάκτηση μη αποθηκευμένων αλλαγών;
@@ -211,9 +249,16 @@
 	Replication 1 · {time} of {end} {unit}	Επανάληψη 1 · {time} από {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Επανάληψη 1 · {time} από {end} {unit} · προθέρμανση
 	Replications	Επαναλήψεις
+	Replications meeting the target	Επαναλήψεις που πετυχαίνουν τον στόχο
+	Replications that never met the stop condition count as later than their time limit.	Οι επαναλήψεις που δεν έφτασαν ποτέ τη συνθήκη διακοπής μετρούν ως μεταγενέστερες του χρονικού τους ορίου.
 	Resource pool	Δεξαμενή πόρων
 	Resource pools	Δεξαμενές πόρων
 	Restore	Επαναφορά παραθύρου
+	Result	Αποτέλεσμα
+	Result to compare	Αποτέλεσμα προς σύγκριση
+	Result to explain	Αποτέλεσμα προς εξήγηση
+	Result with a target	Αποτέλεσμα με στόχο
+	Result, down and up	Αποτέλεσμα, κάτω και πάνω
 	Results	Αποτελέσματα
 	Right edges	Δεξιά άκρα
 	Roles	Ρόλοι
@@ -222,7 +267,10 @@
 	Run experiment	Εκτέλεση πειράματος
 	Run replication 1 step by step and see each block's queue on the diagram	Εκτέλεση της επανάληψης 1 βήμα προς βήμα με την ουρά κάθε μπλοκ στο διάγραμμα
 	Run the experiment ({shortcut})	Εκτέλεση πειράματος ({shortcut})
+	Run the experiment again to see this result's spread.	Εκτελέστε ξανά το πείραμα για να δείτε τη διασπορά αυτού του αποτελέσματος.
+	Run the experiment at each value of one parameter, and compare a result.	Εκτέλεση του πειράματος σε κάθε τιμή μιας παραμέτρου και σύγκριση ενός αποτελέσματος.
 	Run the next event	Εκτέλεση του επόμενου συμβάντος
+	Run the sweep	Εκτέλεση σάρωσης
 	Running	Εκτελείται
 	Running…	Εκτελείται…
 	Save	Αποθήκευση
@@ -234,6 +282,7 @@
 	Seed	Αρχικός σπόρος
 	Select All	Επιλογή όλων
 	Select a block to see its queue over time.	Επιλέξτε ένα μπλοκ για να δείτε την ουρά του στη διάρκεια του χρόνου.
+	Separate the values with semicolons or spaces.	Διαχωρίστε τις τιμές με ερωτηματικά (;) ή κενά.
 	Service time	Χρόνος εξυπηρέτησης
 	Services	Υπηρεσίες
 	Set Property	Ορισμός ιδιότητας
@@ -242,13 +291,19 @@
 	Settings	Ρυθμίσεις
 	Shape	Σχήμα
 	Share of arrivals lost	Ποσοστό χαμένων αφίξεων
+	Share of replications	Ποσοστό επαναλήψεων
 	Share of units blocked	Ποσοστό αποκλεισμένων μονάδων
 	Show All	Εμφάνιση όλων
 	Show {id}	Εμφάνιση {id}
+	Size	Διαστασιολόγηση
+	Size the resources	Διαστασιολόγηση πόρων
+	Source	Πηγή
+	Source: {source}	Πηγή: {source}
 	Speed	Ταχύτητα
 	Split batches	Διαχωρισμός παρτίδων
 	Split or join	Διαχωρισμός ή ένωση
 	Split or join (all ways)	Διαχωρισμός ή ένωση (όλες οι διαδρομές)
+	Spread across replications	Διασπορά μεταξύ επαναλήψεων
 	Spread out	Κατανομή
 	Stages (k)	Στάδια (k)
 	Standard deviation	Τυπική απόκλιση
@@ -260,17 +315,25 @@
 	Stop setting {name}	Διακοπή ορισμού του {name}
 	Stop watching	Διακοπή παρακολούθησης
 	Stopped watching	Η παρακολούθηση διακόπηκε
+	Sweep a parameter	Σάρωση παραμέτρου
 	Tandem line	Διαδοχική γραμμή
+	Target	Στόχος
+	Target value	Τιμή-στόχος
 	Task	Εργασία
 	Task with a resource	Εργασία με πόρο
 	Task with shared resources	Εργασία με κοινόχρηστους πόρους
 	Text	Κείμενο
 	The model changed, so watching stopped	Το μοντέλο άλλαξε, οπότε η παρακολούθηση διακόπηκε
+	The model now has the units sizing found	Το μοντέλο έχει πλέον τις μονάδες που βρήκε η διαστασιολόγηση
 	The model: its experiment, connections and problems	Το μοντέλο: πείραμα, συνδέσεις και προβλήματα
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Το ποσοστό των επαναλήψεων έως και κάθε τιμή. Η ζώνη περιέχει την πραγματική κατανομή με εμπιστοσύνη {confidence}.
+	The values are numbers, separated by semicolons or spaces	Οι τιμές είναι αριθμοί που χωρίζονται με ερωτηματικά ή κενά
 	This block has a warning	Αυτό το μπλοκ έχει προειδοποίηση
 	This block has an error	Αυτό το μπλοκ έχει σφάλμα
 	This run	Αυτή η εκτέλεση
+	Three-point estimate	Εκτίμηση τριών σημείων
 	Time between arrivals	Χρόνος μεταξύ αφίξεων
+	Time to the stop condition	Χρόνος ως τη συνθήκη διακοπής
 	Time unit	Μονάδα χρόνου
 	To	Προς
 	Tops	Πάνω άκρα
@@ -288,9 +351,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Μονάδες που μοιράζονται πολλές εργασίες. Μια εργασία με κοινόχρηστους πόρους τις παίρνει από δεξαμενή ή κατά ρόλο.
 	Untitled	Χωρίς τίτλο
 	Untitled model	Μοντέλο χωρίς τίτλο
+	Upper value	Άνω τιμή
 	Use System Setting	Χρήση ρύθμισης συστήματος
+	Use these units in the model	Χρήση αυτών των μονάδων στο μοντέλο
 	Utilisation	Βαθμός χρησιμοποίησης
 	Value	Τιμή
+	Values	Τιμές
 	View	Προβολή
 	Waiting over time	Σε αναμονή στη διάρκεια του χρόνου
 	Waiting room	Χώρος αναμονής
@@ -301,8 +367,12 @@
 	Watch a run	Παρακολούθηση εκτέλεσης
 	Watching replication 1	Παρακολούθηση της επανάληψης 1
 	Weibull	Βάιμπουλ
+	When a task empties	Όταν μια εργασία αδειάσει
+	When enough have left a block	Όταν αρκετές οντότητες έχουν φύγει από ένα μπλοκ
+	Which parameters matter	Ποιες παράμετροι μετρούν
 	Whole number	Ακέραιος αριθμός
 	Window	Παράθυρο
+	With every time at its mean: {units}	Με κάθε χρόνο στη μέση τιμή του: {units}
 	Yes or no	Ναι ή όχι
 	Your changes will be lost if you don't save them.	Οι αλλαγές σας θα χαθούν αν δεν τις αποθηκεύσετε.
 	Zoom	Αλλαγή μεγέθους
@@ -316,8 +386,11 @@
 	departures	αναχωρήσεις
 	egui and eframe (Craft suite fork)	egui και eframe (παρακλάδι της σουίτας Craft)
 	from its value	από την τιμή του
+	have left	έχουν φύγει
 	hours	ώρες
 	id {id}	ID {id}
+	matters	μετράει
+	maximum {value}	μέγιστο {value}
 	milliseconds	χιλιοστά του δευτερολέπτου
 	minutes	λεπτά
 	nothing yet	τίποτα ακόμη
@@ -334,12 +407,17 @@
 	time	χρόνος
 	to {block}	προς {block}
 	unlimited	χωρίς όριο
+	who gave it, or where it comes from	ποιος την έδωσε ή από πού προέρχεται
+	within chance	εντός της τύχης
 	years	έτη
+	{block}: units	{block}: μονάδες
 	{busy} busy	{busy} απασχολημένα
 	{entered} in, {left} out, {lost} lost	{entered} μέσα, {left} έξω, {lost} χαμένα
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: ελάχιστο {min}, πιθανότερη {mode}, {upper}
 	{field}: not editable here yet	{field}: δεν είναι ακόμη επεξεργάσιμο εδώ
 	{id}: a probability is a number from 0 to 1	{id}: η πιθανότητα είναι αριθμός από 0 έως 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} από {of} επαναλήψεις πέτυχαν τον στόχο: {p} (διάστημα 95% από {lo} έως {hi})
 	{name} — edited	{name} — επεξεργασμένο
 	{n} created	{n} δημιουργήθηκαν
 	{n} done	{n} ολοκληρώθηκαν
@@ -363,9 +441,12 @@ unit	yr	έτ
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Άνοιξε το {file} ({n} προειδοποίηση)|Άνοιξε το {file} ({n} προειδοποιήσεις)
 @plural	Removed {n} block|Removed {n} blocks	Αφαιρέθηκε {n} μπλοκ|Αφαιρέθηκαν {n} μπλοκ
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Εκτελεί {n} ανεξάρτητη επανάληψη του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.|Εκτελεί {n} ανεξάρτητες επαναλήψεις του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Η συνθήκη διακοπής επιτεύχθηκε σε {met} από {n} επανάληψη, κατά μέσο όρο μετά από {time} {unit}.|Η συνθήκη διακοπής επιτεύχθηκε σε {met} από {n} επαναλήψεις, κατά μέσο όρο μετά από {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Ολοκληρώθηκε {done} από {n} επανάληψη|Ολοκληρώθηκαν {done} από {n} επαναλήψεις
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επανάληψη|{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επαναλήψεις
 @plural	{n} block selected|{n} blocks selected	Επιλέχθηκε {n} μπλοκ|Επιλέχθηκαν {n} μπλοκ
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} επανάληψη ανά βήμα · σπόρος {seed}|{n} επαναλήψεις ανά βήμα · σπόρος {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} επανάληψη · μέση τιμή {mean} · από {min} έως {max}|{n} επαναλήψεις · μέση τιμή {mean} · από {min} έως {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} επανάληψη · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}|{n} επαναλήψεις · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} επανάληψη · σπόρος {seed}|{n} επαναλήψεις · σπόρος {seed}
 @plural	{n} replication|{n} replications	{n} επανάληψη|{n} επαναλήψεις

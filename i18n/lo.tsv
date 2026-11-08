@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	ພາສາລາວ
+	% down and up	% ລົງ ແລະ ຂຶ້ນ
+	% of replications	% ຂອງຮອບຈຳລອງຊ້ຳ
 	+ Add block	+ ເພີ່ມບລັອກ
+	95th percentile	ເປີເຊັນໄທລ໌ທີ 95
+	95th percentile {value}	ເປີເຊັນໄທລ໌ທີ 95 {value}
 	About StochCraft	ກ່ຽວກັບ StochCraft
 	About {app}	ກ່ຽວກັບ {app}
+	Across the range it changed by {change}: more than chance would explain.	ຕະຫຼອດຊ່ວງປ່ຽນໄປ {change}: ຫຼາຍກວ່າທີ່ຄວາມບັງເອີນຈະອະທິບາຍໄດ້.
+	Across the range it changed by {change}: within what chance alone could do.	ຕະຫຼອດຊ່ວງປ່ຽນໄປ {change}: ຢູ່ໃນຂອບເຂດທີ່ຄວາມບັງເອີນຢ່າງດຽວກໍເຮັດໄດ້.
 	Actual size	ຂະໜາດຕົວຈິງ
 	Add Block	ເພີ່ມບລັອກ
 	Add a flow from…	ເພີ່ມເສັ້ນທາງຈາກ…
 	Add a flow to…	ເພີ່ມເສັ້ນທາງໄປຫາ…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	ເພີ່ມໜຶ່ງໜ່ວຍໃຫ້ວຽກ ຫຼື ກຸ່ມທີ່ຫຍຸ້ງທີ່ສຸດ ຈົນກວ່າຮອບຈຳລອງຊ້ຳຈະບັນລຸເປົ້າໝາຍພຽງພໍ. ສະແດງຄຳຕອບທີ່ທຸກເວລາເທົ່າກັບຄ່າສະເລ່ຍນຳ, ເຊິ່ງມັກນ້ອຍເກີນໄປ.
 	Add alternative	ເພີ່ມທາງເລືອກ
 	Add point	ເພີ່ມຈຸດ
 	Add pool	ເພີ່ມກຸ່ມຊັບພະຍາກອນ
@@ -27,9 +34,12 @@
 	Added {block} ({id})	ເພີ່ມ {block} ({id}) ແລ້ວ
 	Align	ຈັດແຖວ
 	Alternative {n}	ທາງເລືອກ {n}
+	Analysis	ການວິເຄາະ
 	Appearance	ຮູບລັກສະນະ
 	Arrival limit	ຂີດຈຳກັດການມາຮອດ
 	Arrivals	ການມາຮອດ
+	At least	ຢ່າງໜ້ອຍ
+	At most	ຢ່າງຫຼາຍ
 	Availability	ອັດຕາຄວາມພ້ອມໃຊ້
 	BPMN with BPSim	BPMN ພ້ອມ BPSim
 	Back to the model (Esc)	ກັບໄປຫາແບບຈຳລອງ (Esc)
@@ -38,10 +48,12 @@
 	Batch size	ຂະໜາດຊຸດ
 	Beta	ເບຕາ
 	Binomial	ທະວີນາມ
+	Block	ບລັອກ
 	Boolean	ບູລີນ
 	Bottoms	ຂອບລຸ່ມ
 	Bring All to Front	ນຳທັງໝົດມາໄວ້ດ້ານໜ້າ
 	Built with	ສ້າງດ້ວຍ
+	Busiest	ຫຍຸ້ງທີ່ສຸດ
 	By role	ຕາມບົດບາດ
 	CSV table	ຕາຕະລາງ CSV
 	Cancel	ຍົກເລີກ
@@ -49,10 +61,13 @@
 	Cancel run	ຍົກເລີກການປະມວນຜົນ
 	Capacity	ຄວາມຈຸ
 	Centres	ກາງແນວນອນ
+	Change	ການປ່ຽນແປງ
 	Change Block	ປ່ຽນບລັອກ
 	Change Flow	ປ່ຽນເສັ້ນທາງ
+	Change the estimate	ປ່ຽນການປະມານ
 	Changes	ການປ່ຽນແປງ
 	Changing the time unit does not convert the times already in the model.	ການປ່ຽນໜ່ວຍເວລາຈະບໍ່ແປງຄ່າເວລາທີ່ມີຢູ່ໃນແບບຈຳລອງ.
+	Choose…	ເລືອກ…
 	Clear Menu	ລ້າງເມນູ
 	Close	ປິດ
 	Close Window	ປິດໜ້າຕ່າງ
@@ -88,11 +103,16 @@
 	Drag to add:	ລາກເພື່ອເພີ່ມ:
 	Duplicate	ເຮັດສຳເນົາ
 	Duration	ໄລຍະເວລາ
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ການວິເຄາະແຕ່ລະອັນແລ່ນການທົດລອງຫຼາຍເທື່ອດ້ວຍເມັດສຸ່ມດຽວກັນ, ຄວາມແຕກຕ່າງຈຶ່ງມາຈາກການປ່ຽນແປງ ບໍ່ແມ່ນຄວາມບັງເອີນ. ອາດໃຊ້ເວລາຈັກໜ້ອຍ.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ແຕ່ລະເອນທິຕີຈະເອົາທາງເລືອກທຳອິດທີ່ສາມາດຈັດໃຫ້ໄດ້ຄົບທັງໝົດພ້ອມກັນໃນທັນທີ ແລະ ສົ່ງໜ່ວຍເຫຼົ່ານັ້ນຄືນເມື່ອອອກໄປ.
 	Edit	ແກ້ໄຂ
+	Elasticity	ຄວາມຢືດຢຸ່ນ
+	Ends early	ຈົບກ່ອນກຳນົດ
+	Enough: {units}, meeting the target in {p} of replications	ພຽງພໍ: {units}, ບັນລຸເປົ້າໝາຍໃນ {p} ຂອງຮອບຈຳລອງຊ້ຳ
 	Entered	ຈຳນວນທີ່ເຂົ້າ
 	Erlang	ເອີລັງ
 	Error	ຂໍ້ຜິດພາດ
+	Estimate from three values…	ປະມານຈາກສາມຄ່າ…
 	Evenly across	ກະຈາຍເທົ່າກັນແນວນອນ
 	Evenly down	ກະຈາຍເທົ່າກັນແນວຕັ້ງ
 	Every distribution	ທຸກການແຈກຢາຍ
@@ -105,20 +125,27 @@
 	Export table (CSV)	ສົ່ງອອກຕາຕະລາງ (CSV)
 	Exported {file}	ສົ່ງອອກ {file} ແລ້ວ
 	Expression	ນິພົດ
+	Family	ຕະກູນ
 	File	ໄຟລ໌
 	Finished at {time} {unit}	ສິ້ນສຸດທີ່ {time} {unit}
 	Fit	ພໍດີ
 	Fit the diagram to the view	ປັບແຜນວາດໃຫ້ພໍດີກັບມຸມມອງ
+	Fit the time	ປັບເວລາໃຫ້ເຂົ້າ
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	ປັບເວລາຂອງບລັອກນີ້ໃຫ້ເຂົ້າກັບຄ່າຕ່ຳສຸດ, ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ ແລະ ຄ່າສູງສຸດ ຫຼື ເປີເຊັນໄທລ໌ທີ 95.
+	Fitted the time of {id}	ປັບເວລາຂອງ {id} ແລ້ວ
 	Flows	ເສັ້ນທາງ
+	Forget the estimate	ລືມການປະມານ
 	From	ຈາກ
 	Gamma	ແກມມາ
 	Goes to	ໄປຫາ
 	Help	ຊ່ວຍເຫຼືອ
 	Hide Others	ເຊື່ອງລາຍການອື່ນ
 	Hide {app}	ເຊື່ອງ {app}
+	How many	ຈຳນວນ
 	Inside over time	ຈຳນວນພາຍໃນຕາມເວລາ
 	Jump	ຂ້າມ
 	Jump to time	ຂ້າມໄປຫາເວລາ
+	Keep the time, without the estimate it came from	ເກັບເວລາໄວ້ ໂດຍບໍ່ເກັບການປະມານທີ່ມາ
 	Keyboard Shortcuts…	ປຸ່ມລັດ…
 	Keyboard shortcuts saved	ບັນທຶກປຸ່ມລັດແລ້ວ
 	Keyboard shortcuts unchanged	ປຸ່ມລັດບໍ່ມີການປ່ຽນແປງ
@@ -139,6 +166,7 @@
 	Mean time blocked	ເວລາສະເລ່ຍທີ່ຖືກຂັດຂວາງ
 	Mean time in system	ເວລາສະເລ່ຍໃນລະບົບ
 	Mean wait	ເວລາລໍຖ້າສະເລ່ຍ
+	Met in at least	ບັນລຸຢ່າງໜ້ອຍ
 	Metric	ຕົວຊີ້ວັດ
 	Middles	ກາງແນວຕັ້ງ
 	Minimise	ຫຍໍ້ໜ້າຕ່າງ
@@ -147,19 +175,25 @@
 	Model	ແບບຈຳລອງ
 	Most likely	ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ
 	Move	ຍ້າຍ
+	Move each parameter down and up in turn, and rank them by how much the result moves.	ປັບແຕ່ລະພາຣາມິເຕີລົງ ແລະ ຂຶ້ນເທື່ອລະອັນ ແລ້ວຈັດອັນດັບຕາມວ່າຜົນໄດ້ຮັບຂະຫຍັບຫຼາຍເທົ່າໃດ.
 	Name	ຊື່
 	Needs	ສິ່ງທີ່ຕ້ອງໃຊ້
+	Never: it runs for its duration	ບໍ່ເຄີຍ: ແລ່ນຈົນຄົບໄລຍະເວລາ
 	New	ໃໝ່
 	New model	ແບບຈຳລອງໃໝ່
 	New property	ຄຸນສົມບັດໃໝ່
 	New property name	ຊື່ຄຸນສົມບັດໃໝ່
 	No blocks yet. Open a model, or add blocks to build one.	ຍັງບໍ່ມີບລັອກ. ເປີດແບບຈຳລອງ ຫຼື ເພີ່ມບລັອກເພື່ອສ້າງໃໝ່.
 	No connections yet: join blocks below.	ຍັງບໍ່ມີການເຊື່ອມຕໍ່: ເຊື່ອມບລັອກດ້ານລຸ່ມ.
+	No replication met the stop condition: each ran to its time limit.	ບໍ່ມີຮອບຈຳລອງຊ້ຳໃດຮອດເງື່ອນໄຂຢຸດ: ທຸກຮອບແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
 	No results yet	ຍັງບໍ່ມີຜົນໄດ້ຮັບ
+	No target	ບໍ່ມີເປົ້າໝາຍ
 	None	ບໍ່ມີ
 	None found. The model is ready to run.	ບໍ່ພົບບັນຫາ. ແບບຈຳລອງພ້ອມໃຊ້ງານ.
 	Normal	ນໍມອນ
+	Not reached, even with {units}	ບໍ່ບັນລຸ ເຖິງມີ {units}
 	Number	ຈຳນວນ
+	One change, which Undo takes back	ການປ່ຽນແປງໜຶ່ງເທື່ອ ເຊິ່ງຍົກເລີກໄດ້
 	One clerk, random arrivals: the textbook queue, checked against theory.	ພະນັກງານໜຶ່ງຄົນ ແລະ ການມາຮອດແບບສຸ່ມ: ແຖວຄອຍພື້ນຖານທີ່ກວດທຽບກັບທິດສະດີ.
 	One task per BPSim distribution, to compare their spread.	ໜຶ່ງໜ້າວຽກຕໍ່ແຕ່ລະການແຈກຢາຍ BPSim ເພື່ອປຽບທຽບການກະຈາຍ.
 	Open	ເປີດ
@@ -172,10 +206,13 @@
 	Opened {file}	ເປີດ {file} ແລ້ວ
 	Open…	ເປີດ…
 	Or start from an example	ຫຼື ເລີ່ມຈາກຕົວຢ່າງ
+	PERT	PERT
 	PNG image	ຮູບພາບ PNG
+	Parameter	ພາຣາມິເຕີ
 	Parameters	ພາລາມິເຕີ
 	Paste	ວາງ
 	Pause	ຢຸດຊົ່ວຄາວ
+	Percentile	ເປີເຊັນໄທລ໌
 	Play	ຫຼິ້ນ
 	Points	ຈຸດ
 	Poisson	ປົວຊົງ
@@ -189,6 +226,7 @@
 	Properties	ຄຸນສົມບັດ
 	Quit	ອອກ
 	Quit {app}	ອອກຈາກ {app}
+	Rank the parameters	ຈັດອັນດັບພາຣາມິເຕີ
 	Ready	ພ້ອມ
 	Recover	ກູ້ຄືນ
 	Recover unsaved changes?	ກູ້ຄືນການປ່ຽນແປງທີ່ຍັງບໍ່ໄດ້ບັນທຶກບໍ?
@@ -211,9 +249,16 @@
 	Replication 1 · {time} of {end} {unit}	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit} · ໄລຍະອຸ່ນເຄື່ອງ
 	Replications	ຈຳນວນຮອບຈຳລອງຊ້ຳ
+	Replications meeting the target	ຮອບຈຳລອງຊ້ຳທີ່ບັນລຸເປົ້າໝາຍ
+	Replications that never met the stop condition count as later than their time limit.	ຮອບຈຳລອງຊ້ຳທີ່ບໍ່ເຄີຍຮອດເງື່ອນໄຂຢຸດ ນັບວ່າຊ້າກວ່າຂີດຈຳກັດເວລາຂອງມັນ.
 	Resource pool	ກຸ່ມຊັບພະຍາກອນ
 	Resource pools	ກຸ່ມຊັບພະຍາກອນ
 	Restore	ຄືນຂະໜາດໜ້າຕ່າງ
+	Result	ຜົນໄດ້ຮັບ
+	Result to compare	ຜົນໄດ້ຮັບທີ່ຈະປຽບທຽບ
+	Result to explain	ຜົນໄດ້ຮັບທີ່ຈະອະທິບາຍ
+	Result with a target	ຜົນໄດ້ຮັບທີ່ມີເປົ້າໝາຍ
+	Result, down and up	ຜົນໄດ້ຮັບ ເມື່ອລົງ ແລະ ຂຶ້ນ
 	Results	ຜົນໄດ້ຮັບ
 	Right edges	ຂອບຂວາ
 	Roles	ບົດບາດ
@@ -222,7 +267,10 @@
 	Run experiment	ປະມວນຜົນການທົດລອງ
 	Run replication 1 step by step and see each block's queue on the diagram	ປະມວນຜົນຮອບຈຳລອງທີ 1 ເທື່ອລະຂັ້ນ ແລະ ເບິ່ງຄິວຂອງແຕ່ລະບລັອກໃນແຜນວາດ
 	Run the experiment ({shortcut})	ປະມວນຜົນການທົດລອງ ({shortcut})
+	Run the experiment again to see this result's spread.	ແລ່ນການທົດລອງອີກຄັ້ງເພື່ອເບິ່ງການກະຈາຍຂອງຜົນໄດ້ຮັບນີ້.
+	Run the experiment at each value of one parameter, and compare a result.	ແລ່ນການທົດລອງທີ່ແຕ່ລະຄ່າຂອງພາຣາມິເຕີໜຶ່ງ ແລ້ວປຽບທຽບຜົນໄດ້ຮັບ.
 	Run the next event	ປະມວນຜົນເຫດການຕໍ່ໄປ
+	Run the sweep	ແລ່ນການກວາດ
 	Running	ກຳລັງປະມວນຜົນ
 	Running…	ກຳລັງປະມວນຜົນ…
 	Save	ບັນທຶກ
@@ -234,6 +282,7 @@
 	Seed	ເມັດສຸ່ມ
 	Select All	ເລືອກທັງໝົດ
 	Select a block to see its queue over time.	ເລືອກບລັອກເພື່ອເບິ່ງຄິວຂອງມັນຕາມເວລາ.
+	Separate the values with semicolons or spaces.	ຂັ້ນຄ່າດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ.
 	Service time	ເວລາໃຫ້ບໍລິການ
 	Services	ບໍລິການ
 	Set Property	ຕັ້ງຄຸນສົມບັດ
@@ -242,13 +291,19 @@
 	Settings	ການຕັ້ງຄ່າ
 	Shape	ຮູບຮ່າງ
 	Share of arrivals lost	ສັດສ່ວນການມາຮອດທີ່ສູນເສຍ
+	Share of replications	ສັດສ່ວນຂອງຮອບຈຳລອງຊ້ຳ
 	Share of units blocked	ສັດສ່ວນໜ່ວຍທີ່ຖືກຂັດຂວາງ
 	Show All	ສະແດງທັງໝົດ
 	Show {id}	ສະແດງ {id}
+	Size	ກຳນົດຂະໜາດ
+	Size the resources	ກຳນົດຂະໜາດຊັບພະຍາກອນ
+	Source	ແຫຼ່ງທີ່ມາ
+	Source: {source}	ແຫຼ່ງທີ່ມາ: {source}
 	Speed	ຄວາມໄວ
 	Split batches	ແຍກຊຸດ
 	Split or join	ແຍກ ຫຼື ລວມ
 	Split or join (all ways)	ແຍກ ຫຼື ລວມ (ທຸກທາງ)
+	Spread across replications	ການກະຈາຍລະຫວ່າງຮອບຈຳລອງຊ້ຳ
 	Spread out	ກະຈາຍ
 	Stages (k)	ຂັ້ນຕອນ (k)
 	Standard deviation	ຄ່າຜັນຜວນມາດຕະຖານ
@@ -260,17 +315,25 @@
 	Stop setting {name}	ຢຸດການຕັ້ງຄ່າ {name}
 	Stop watching	ຢຸດຕິດຕາມ
 	Stopped watching	ຢຸດຕິດຕາມແລ້ວ
+	Sweep a parameter	ກວາດພາຣາມິເຕີ
 	Tandem line	ສາຍງານຕໍ່ເນື່ອງ
+	Target	ເປົ້າໝາຍ
+	Target value	ຄ່າເປົ້າໝາຍ
 	Task	ໜ້າວຽກ
 	Task with a resource	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນ
 	Task with shared resources	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນຮ່ວມກັນ
 	Text	ຂໍ້ຄວາມ
 	The model changed, so watching stopped	ແບບຈຳລອງປ່ຽນໄປ ຈຶ່ງຢຸດຕິດຕາມ
+	The model now has the units sizing found	ຕອນນີ້ແບບຈຳລອງມີຈຳນວນໜ່ວຍທີ່ການກຳນົດຂະໜາດພົບແລ້ວ
 	The model: its experiment, connections and problems	ແບບຈຳລອງ: ການທົດລອງ ການເຊື່ອມຕໍ່ ແລະ ບັນຫາ
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ສັດສ່ວນຮອບຈຳລອງຊ້ຳທີ່ເທົ່າກັບ ຫຼື ຕ່ຳກວ່າແຕ່ລະຄ່າ. ແຖບຄອບຄຸມການແຈກຢາຍແທ້ດ້ວຍຄວາມເຊື່ອໝັ້ນ {confidence}.
+	The values are numbers, separated by semicolons or spaces	ຄ່າຕ້ອງເປັນຕົວເລກທີ່ຂັ້ນດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ
 	This block has a warning	ບລັອກນີ້ມີຄຳເຕືອນ
 	This block has an error	ບລັອກນີ້ມີຂໍ້ຜິດພາດ
 	This run	ການປະມວນຜົນນີ້
+	Three-point estimate	ການປະມານສາມຈຸດ
 	Time between arrivals	ເວລາລະຫວ່າງການມາຮອດ
+	Time to the stop condition	ເວລາຈົນຮອດເງື່ອນໄຂຢຸດ
 	Time unit	ໜ່ວຍເວລາ
 	To	ໄປຫາ
 	Tops	ຂອບເທິງ
@@ -288,9 +351,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	ໜ່ວຍທີ່ຫຼາຍໜ້າວຽກໃຊ້ຮ່ວມກັນ. ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນຮ່ວມກັນຈະເອົາໜ່ວຍເຫຼົ່ານີ້ຕາມກຸ່ມ ຫຼື ຕາມບົດບາດ.
 	Untitled	ບໍ່ມີຊື່
 	Untitled model	ແບບຈຳລອງບໍ່ມີຊື່
+	Upper value	ຄ່າເທິງ
 	Use System Setting	ໃຊ້ການຕັ້ງຄ່າລະບົບ
+	Use these units in the model	ໃຊ້ຈຳນວນໜ່ວຍເຫຼົ່ານີ້ໃນແບບຈຳລອງ
 	Utilisation	ອັດຕາການນຳໃຊ້
 	Value	ຄ່າ
+	Values	ຄ່າ
 	View	ມຸມມອງ
 	Waiting over time	ຈຳນວນທີ່ລໍຖ້າຕາມເວລາ
 	Waiting room	ຫ້ອງລໍຖ້າ
@@ -301,8 +367,12 @@
 	Watch a run	ຕິດຕາມການປະມວນຜົນ
 	Watching replication 1	ກຳລັງຕິດຕາມຮອບຈຳລອງທີ 1
 	Weibull	ໄວບູນ
+	When a task empties	ເມື່ອວຽກຫວ່າງ
+	When enough have left a block	ເມື່ອອອກຈາກບລັອກພຽງພໍ
+	Which parameters matter	ພາຣາມິເຕີໃດມີຜົນ
 	Whole number	ຈຳນວນເຕັມ
 	Window	ໜ້າຕ່າງ
+	With every time at its mean: {units}	ເມື່ອທຸກເວລາເທົ່າກັບຄ່າສະເລ່ຍ: {units}
 	Yes or no	ແມ່ນ ຫຼື ບໍ່
 	Your changes will be lost if you don't save them.	ການປ່ຽນແປງຈະສູນເສຍຖ້າທ່ານບໍ່ບັນທຶກ.
 	Zoom	ປັບຂະໜາດໜ້າຕ່າງ
@@ -316,8 +386,11 @@
 	departures	ການອອກ
 	egui and eframe (Craft suite fork)	egui ແລະ eframe (ແຍກມາຈາກ Craft suite)
 	from its value	ຈາກຄ່າຂອງມັນ
+	have left	ອອກໄປແລ້ວ
 	hours	ຊົ່ວໂມງ
 	id {id}	ລະຫັດ {id}
+	matters	ມີຜົນ
+	maximum {value}	ຄ່າສູງສຸດ {value}
 	milliseconds	ມິລລິວິນາທີ
 	minutes	ນາທີ
 	nothing yet	ຍັງບໍ່ມີຫຍັງ
@@ -334,12 +407,17 @@
 	time	ເວລາ
 	to {block}	ໄປຫາ {block}
 	unlimited	ບໍ່ຈຳກັດ
+	who gave it, or where it comes from	ໃຜໃຫ້ມາ ຫຼື ມາຈາກໃສ
+	within chance	ຢູ່ໃນຂອບເຂດຄວາມບັງເອີນ
 	years	ປີ
+	{block}: units	{block}: ຈຳນວນໜ່ວຍ
 	{busy} busy	ບໍ່ຫວ່າງ {busy}
 	{entered} in, {left} out, {lost} lost	ເຂົ້າ {entered} ອອກ {left} ສູນເສຍ {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: ຕ່ຳສຸດ {min}, ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ {mode}, {upper}
 	{field}: not editable here yet	{field}: ຍັງບໍ່ສາມາດແກ້ໄຂຢູ່ນີ້ໄດ້
 	{id}: a probability is a number from 0 to 1	{id}: ຄວາມເປັນໄປໄດ້ຕ້ອງເປັນຕົວເລກຈາກ 0 ຫາ 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} ຈາກ {of} ຮອບຈຳລອງຊ້ຳບັນລຸເປົ້າໝາຍ: {p} (ຊ່ວງ 95% ຈາກ {lo} ຫາ {hi})
 	{name} — edited	{name} — ແກ້ໄຂແລ້ວ
 	{n} created	ສ້າງແລ້ວ {n}
 	{n} done	ແລ້ວ {n}
@@ -363,9 +441,12 @@ unit	yr	ປີ
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	ເປີດ {file} ແລ້ວ (ຄຳເຕືອນ {n} ລາຍການ)
 @plural	Removed {n} block|Removed {n} blocks	ລຶບ {n} ບລັອກແລ້ວ
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	ປະມວນຜົນແບບຈຳລອງຢ່າງອິດສະຫຼະ {n} ຮອບ ໂດຍໃຊ້ເມັດສຸ່ມ {seed}. ຜົນຂອງແຕ່ລະອົງປະກອບມີເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກທຸກຮອບ.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	ຮອດເງື່ອນໄຂຢຸດໃນ {met} ຈາກ {n} ຮອບຈຳລອງຊ້ຳ ຫຼັງຈາກສະເລ່ຍ {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	ສຳເລັດແລ້ວ {done} ຈາກ {n} ຮອບຈຳລອງຊ້ຳ
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກ {low} ຫາ {high}{unit}\nຈາກການຈຳລອງຊ້ຳ {n} ຮອບ
 @plural	{n} block selected|{n} blocks selected	ເລືອກ {n} ບລັອກແລ້ວ
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} ຮອບຈຳລອງຊ້ຳຕໍ່ຂັ້ນ · ເມັດສຸ່ມ {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} ຮອບຈຳລອງຊ້ຳ · ຄ່າສະເລ່ຍ {mean} · ຈາກ {min} ຫາ {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed} · ອຸ່ນເຄື່ອງ {warmup} {unit} · ວັດຜົນ {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed}
 @plural	{n} replication|{n} replications	ຈຳລອງຊ້ຳ {n} ຮອບ

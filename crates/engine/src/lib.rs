@@ -212,6 +212,8 @@ pub struct Engine {
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
     job: Option<Job>,
+    /// The background run's results have been kept (`poll_run` reports them at every poll).
+    job_kept: bool,
     /// The results of the last run that finished, for `results.distribution`.
     last_results: Option<Value>,
     /// The results of the run that finished before it, for `results.compare`.
@@ -243,6 +245,7 @@ impl Engine {
             journal: Vec::new(),
             file: None,
             job: None,
+            job_kept: false,
             last_results: None,
             previous_results: None,
             sensitivity: Vec::new(),
@@ -262,16 +265,9 @@ impl Engine {
         })?;
         let result = (c.run)(self, params.clone())?;
         // Keep the last two results, for questions about their distributions and to compare
-        // them. A finished background run reports its results at every poll: keep them once.
-        let finished = match command {
-            "run" => Some(result.clone()),
-            "run.status" if result["state"] == "finished" => {
-                Some(result["result"].clone()).filter(|r| self.last_results.as_ref() != Some(r))
-            }
-            _ => None,
-        };
-        if let Some(r) = finished {
-            self.previous_results = self.last_results.replace(r);
+        // them (a background run's are kept as it finishes, in `poll_run`).
+        if command == "run" {
+            self.keep_results(result.clone());
         }
         if c.kind != CommandKind::Query {
             self.journal.push(JournalEntry {
@@ -530,14 +526,28 @@ impl Engine {
         let job = Job::start(plan, mode)?;
         let status = job.status();
         self.job = Some(job);
+        self.job_kept = false;
         Ok(status)
     }
 
     /// Progress of the background run (advancing a run in slices by up to `step` replications).
+    /// A finished run's results are kept for `results.distribution`, however it was followed
+    /// (`run.status`, or a window polling here).
     pub fn poll_run(&mut self, step: u64) -> Value {
-        self.job
+        let status = self
+            .job
             .as_mut()
-            .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step))
+            .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step));
+        if status["state"] == "finished" && !self.job_kept {
+            self.job_kept = true;
+            self.keep_results(status["result"].clone());
+        }
+        status
+    }
+
+    /// A finished run's results become the last, and the last the previous.
+    fn keep_results(&mut self, results: Value) {
+        self.previous_results = self.last_results.replace(results);
     }
 
     /// The background run as its workers get it, for a run started with `"mode": "workers"`

@@ -419,13 +419,20 @@ pub fn sensitivity(model: &Model, p: &SensitivityParams) -> Result<Value, Comman
         } else {
             x0 * change
         };
-        let (down, up) = ((x0 - step).max(0.0), x0 + step);
+        // Units cannot go below one, nor anything below zero: a parameter at its floor is
+        // compared one-sided, from its own value up.
+        let floor: f64 = match param.field {
+            Field::Capacity | Field::Quantity => 1.0,
+            Field::QueueCapacity | Field::Mean => 0.0,
+        };
+        let (down, up) = ((x0 - step).max(floor.min(x0)), x0 + step);
         let at = |v: f64| -> Result<ExperimentSummary, CommandError> {
             let mut m = model.clone();
             param.set(&mut m, v)?;
             run(&m, reps, seed)
         };
-        let (s_down, s_up) = (at(down)?, at(up)?);
+        let s_down = if down == x0 { base.clone() } else { at(down)? };
+        let s_up = at(up)?;
         for o in &p.results {
             let (y0, y_down, y_up) = (value(&base, o)?, value(&s_down, o)?, value(&s_up, o)?);
             let elasticity = match (y0, y_down, y_up) {

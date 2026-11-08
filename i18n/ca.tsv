@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Català
+	% down and up	% avall i amunt
+	% of replications	% de les rèpliques
 	+ Add block	+ Afegeix un bloc
+	95th percentile	Percentil 95
+	95th percentile {value}	percentil 95 {value}
 	About StochCraft	Quant a StochCraft
 	About {app}	Quant a {app}
+	Across the range it changed by {change}: more than chance would explain.	En l'interval ha canviat {change}: més del que explicaria l'atzar.
+	Across the range it changed by {change}: within what chance alone could do.	En l'interval ha canviat {change}: dins del que podria fer l'atzar tot sol.
 	Actual size	Mida real
 	Add Block	Afegeix un bloc
 	Add a flow from…	Afegeix un flux des de…
 	Add a flow to…	Afegeix un flux cap a…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Afegir una unitat a la tasca o al grup més ocupat fins que prou rèpliques compleixin un objectiu. També es mostra la resposta amb cada temps a la seva mitjana; sol ser massa petita.
 	Add alternative	Afegeix una alternativa
 	Add point	Afegeix un punt
 	Add pool	Afegeix un grup
@@ -27,9 +34,12 @@
 	Added {block} ({id})	S'ha afegit {block} ({id})
 	Align	Alinea
 	Alternative {n}	Alternativa {n}
+	Analysis	Anàlisi
 	Appearance	Aparença
 	Arrival limit	Límit d'arribades
 	Arrivals	Arribades
+	At least	Com a mínim
+	At most	Com a màxim
 	Availability	Disponibilitat
 	BPMN with BPSim	BPMN amb BPSim
 	Back to the model (Esc)	Torna al model (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Mida del lot
 	Beta	Beta
 	Binomial	Binomial
+	Block	Bloc
 	Boolean	Booleà
 	Bottoms	Vores inferiors
 	Bring All to Front	Porta-ho tot al davant
 	Built with	Creat amb
+	Busiest	El més ocupat
 	By role	Per rol
 	CSV table	Taula CSV
 	Cancel	Cancel·la
@@ -49,10 +61,13 @@
 	Cancel run	Cancel·la l'execució
 	Capacity	Capacitat
 	Centres	Centres horitzontals
+	Change	Canvi
 	Change Block	Canvia el bloc
 	Change Flow	Canvia el flux
+	Change the estimate	Canvia l'estimació
 	Changes	Canvis
 	Changing the time unit does not convert the times already in the model.	Canviar la unitat de temps no converteix els temps que ja hi ha al model.
+	Choose…	Tria…
 	Clear Menu	Buida el menú
 	Close	Tanca
 	Close Window	Tanca la finestra
@@ -88,11 +103,16 @@
 	Drag to add:	Arrossegueu per afegir:
 	Duplicate	Duplica
 	Duration	Durada
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Cada anàlisi executa l'experiment diverses vegades amb la mateixa llavor, de manera que les diferències vénen del canvi, no de l'atzar. Pot trigar una estona.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entitat pren, tota alhora, la primera d'aquestes alternatives que es pugui satisfer en aquell moment i torna les unitats quan surt.
 	Edit	Edita
+	Elasticity	Elasticitat
+	Ends early	Acaba abans
+	Enough: {units}, meeting the target in {p} of replications	Prou: {units}, compleix l'objectiu en el {p} de les rèpliques
 	Entered	Entrades
 	Erlang	Erlang
 	Error	Error
+	Estimate from three values…	Estima a partir de tres valors…
 	Evenly across	Distribueix horitzontalment
 	Evenly down	Distribueix verticalment
 	Every distribution	Totes les distribucions
@@ -105,20 +125,27 @@
 	Export table (CSV)	Exporta la taula (CSV)
 	Exported {file}	S'ha exportat {file}
 	Expression	Expressió
+	Family	Família
 	File	Fitxer
 	Finished at {time} {unit}	Ha acabat a {time} {unit}
 	Fit	Ajusta
 	Fit the diagram to the view	Ajusta el diagrama a la vista
+	Fit the time	Ajusta el temps
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Ajustar el temps d'aquest bloc a un mínim, un valor més probable i un màxim o percentil 95.
+	Fitted the time of {id}	S'ha ajustat el temps de {id}
 	Flows	Fluxos
+	Forget the estimate	Oblida l'estimació
 	From	Des de
 	Gamma	Gamma
 	Goes to	Va cap a
 	Help	Ajuda
 	Hide Others	Amaga els altres
 	Hide {app}	Amaga {app}
+	How many	Quantes
 	Inside over time	A dins al llarg del temps
 	Jump	Ves-hi
 	Jump to time	Ves a l'instant
+	Keep the time, without the estimate it came from	Conservar el temps, sense l'estimació d'on prové
 	Keyboard Shortcuts…	Dreceres de teclat…
 	Keyboard shortcuts saved	Dreceres de teclat desades
 	Keyboard shortcuts unchanged	Dreceres de teclat sense canvis
@@ -139,6 +166,7 @@
 	Mean time blocked	Temps mitjà bloquejat
 	Mean time in system	Temps mitjà al sistema
 	Mean wait	Espera mitjana
+	Met in at least	Complert en almenys
 	Metric	Mètrica
 	Middles	Centres verticals
 	Minimise	Minimitza
@@ -147,19 +175,25 @@
 	Model	Model
 	Most likely	Més probable
 	Move	Mou
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Moure cada paràmetre avall i amunt per torns, i ordenar-los segons quant es mou el resultat.
 	Name	Nom
 	Needs	Necessitats
+	Never: it runs for its duration	Mai: dura tota la seva durada
 	New	Nou
 	New model	Model nou
 	New property	Propietat nova
 	New property name	Nom de la propietat nova
 	No blocks yet. Open a model, or add blocks to build one.	Encara no hi ha blocs. Obre un model o afegeix blocs per crear-ne un.
 	No connections yet: join blocks below.	Encara no hi ha connexions: connecta els blocs de sota.
+	No replication met the stop condition: each ran to its time limit.	Cap rèplica ha complert la condició d'aturada: cadascuna ha arribat al seu límit de temps.
 	No results yet	Encara no hi ha resultats
+	No target	Sense objectiu
 	None	Cap
 	None found. The model is ready to run.	No s'han trobat problemes. El model està a punt per executar-se.
 	Normal	Normal
+	Not reached, even with {units}	No assolit, ni tan sols amb {units}
 	Number	Nombre
+	One change, which Undo takes back	Un sol canvi, que Desfés reverteix
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un treballador, arribades aleatòries: la cua clàssica, contrastada amb la teoria.
 	One task per BPSim distribution, to compare their spread.	Una tasca per cada distribució BPSim per comparar-ne la dispersió.
 	Open	Obre
@@ -172,10 +206,13 @@
 	Opened {file}	S'ha obert {file}
 	Open…	Obre…
 	Or start from an example	O comença amb un exemple
+	PERT	PERT
 	PNG image	Imatge PNG
+	Parameter	Paràmetre
 	Parameters	Paràmetres
 	Paste	Enganxa
 	Pause	Pausa
+	Percentile	Percentil
 	Play	Reprodueix
 	Points	Punts
 	Poisson	Poisson
@@ -189,6 +226,7 @@
 	Properties	Propietats
 	Quit	Surt
 	Quit {app}	Surt de {app}
+	Rank the parameters	Ordena els paràmetres
 	Ready	A punt
 	Recover	Recupera
 	Recover unsaved changes?	Vols recuperar els canvis no desats?
@@ -211,9 +249,16 @@
 	Replication 1 · {time} of {end} {unit}	Rèplica 1 · {time} de {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Rèplica 1 · {time} de {end} {unit} · escalfament
 	Replications	Rèpliques
+	Replications meeting the target	Rèpliques que compleixen l'objectiu
+	Replications that never met the stop condition count as later than their time limit.	Les rèpliques que mai no han complert la condició d'aturada compten com a posteriors al seu límit de temps.
 	Resource pool	Grup de recursos
 	Resource pools	Grups de recursos
 	Restore	Restaura
+	Result	Resultat
+	Result to compare	Resultat per comparar
+	Result to explain	Resultat per explicar
+	Result with a target	Resultat amb objectiu
+	Result, down and up	Resultat, avall i amunt
 	Results	Resultats
 	Right edges	Vores dretes
 	Roles	Rols
@@ -222,7 +267,10 @@
 	Run experiment	Executa l'experiment
 	Run replication 1 step by step and see each block's queue on the diagram	Executa la rèplica 1 pas a pas i mostra la cua de cada bloc al diagrama
 	Run the experiment ({shortcut})	Executa l'experiment ({shortcut})
+	Run the experiment again to see this result's spread.	Torneu a executar l'experiment per veure la dispersió d'aquest resultat.
+	Run the experiment at each value of one parameter, and compare a result.	Executar l'experiment amb cada valor d'un paràmetre i comparar un resultat.
 	Run the next event	Executa l'esdeveniment següent
+	Run the sweep	Executa l'escombratge
 	Running	En execució
 	Running…	Executant…
 	Save	Desa
@@ -234,6 +282,7 @@
 	Seed	Llavor
 	Select All	Selecciona-ho tot
 	Select a block to see its queue over time.	Seleccioneu un bloc per veure'n la cua al llarg del temps.
+	Separate the values with semicolons or spaces.	Separeu els valors amb punts i comes o espais.
 	Service time	Temps de servei
 	Services	Serveis
 	Set Property	Defineix la propietat
@@ -242,13 +291,19 @@
 	Settings	Configuració
 	Shape	Forma
 	Share of arrivals lost	Proporció d'arribades perdudes
+	Share of replications	Proporció de rèpliques
 	Share of units blocked	Proporció d'unitats bloquejades
 	Show All	Mostra-ho tot
 	Show {id}	Mostra {id}
+	Size	Dimensiona
+	Size the resources	Dimensiona els recursos
+	Source	Font
+	Source: {source}	Font: {source}
 	Speed	Velocitat
 	Split batches	Separa els lots
 	Split or join	Divideix o uneix
 	Split or join (all ways)	Divideix o uneix (tots els camins)
+	Spread across replications	Dispersió entre rèpliques
 	Spread out	Distribueix
 	Stages (k)	Etapes (k)
 	Standard deviation	Desviació estàndard
@@ -260,17 +315,25 @@
 	Stop setting {name}	Deixa de definir {name}
 	Stop watching	Deixa d'observar
 	Stopped watching	S'ha deixat d'observar
+	Sweep a parameter	Escombrar un paràmetre
 	Tandem line	Línia en tàndem
+	Target	Objectiu
+	Target value	Valor objectiu
 	Task	Tasca
 	Task with a resource	Tasca amb un recurs
 	Task with shared resources	Tasca amb recursos compartits
 	Text	Text
 	The model changed, so watching stopped	El model ha canviat, així que s'ha deixat d'observar
+	The model now has the units sizing found	El model té ara les unitats trobades en dimensionar
 	The model: its experiment, connections and problems	El model: experiment, connexions i problemes
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La proporció de rèpliques iguals o inferiors a cada valor. La banda conté la distribució real amb una confiança del {confidence}.
+	The values are numbers, separated by semicolons or spaces	Els valors són nombres separats per punts i comes o espais
 	This block has a warning	Aquest bloc té un avís
 	This block has an error	Aquest bloc té un error
 	This run	Aquesta execució
+	Three-point estimate	Estimació de tres punts
 	Time between arrivals	Temps entre arribades
+	Time to the stop condition	Temps fins a la condició d'aturada
 	Time unit	Unitat de temps
 	To	Cap a
 	Tops	Vores superiors
@@ -288,9 +351,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unitats que comparteixen diverses tasques. Una tasca amb recursos compartits les pren per grup o per rol.
 	Untitled	Sense títol
 	Untitled model	Model sense títol
+	Upper value	Valor superior
 	Use System Setting	Fes servir la configuració del sistema
+	Use these units in the model	Fes servir aquestes unitats al model
 	Utilisation	Utilització
 	Value	Valor
+	Values	Valors
 	View	Visualitza
 	Waiting over time	En espera al llarg del temps
 	Waiting room	Sala d'espera
@@ -301,8 +367,12 @@
 	Watch a run	Observa una execució
 	Watching replication 1	S'està observant la rèplica 1
 	Weibull	Weibull
+	When a task empties	Quan una tasca es buida
+	When enough have left a block	Quan n'han sortit prou d'un bloc
+	Which parameters matter	Quins paràmetres importen
 	Whole number	Nombre enter
 	Window	Finestra
+	With every time at its mean: {units}	Amb cada temps a la seva mitjana: {units}
 	Yes or no	Sí o no
 	Your changes will be lost if you don't save them.	Si no els deses, perdràs els canvis.
 	Zoom	Zoom
@@ -316,8 +386,11 @@
 	departures	sortides
 	egui and eframe (Craft suite fork)	egui i eframe (bifurcació del conjunt Craft)
 	from its value	a partir del seu valor
+	have left	n'han sortit
 	hours	hores
 	id {id}	id {id}
+	matters	importa
+	maximum {value}	màxim {value}
 	milliseconds	mil·lisegons
 	minutes	minuts
 	nothing yet	encara res
@@ -334,12 +407,17 @@
 	time	instant
 	to {block}	cap a {block}
 	unlimited	sense límit
+	who gave it, or where it comes from	qui la va donar o d'on prové
+	within chance	dins de l'atzar
 	years	anys
+	{block}: units	{block}: unitats
 	{busy} busy	{busy} ocupats
 	{entered} in, {left} out, {lost} lost	{entered} entrades, {left} sortides, {lost} perdudes
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: mínim {min}, més probable {mode}, {upper}
 	{field}: not editable here yet	{field}: encara no es pot editar aquí
 	{id}: a probability is a number from 0 to 1	{id}: una probabilitat és un nombre entre 0 i 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} de {of} rèpliques han complert l'objectiu: {p} (interval del 95% de {lo} a {hi})
 	{name} — edited	{name} — editat
 	{n} created	{n} creats
 	{n} done	{n} acabats
@@ -363,9 +441,12 @@ unit	yr	a
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S'ha obert {file} ({n} avís)|S'ha obert {file} ({n} avisos)
 @plural	Removed {n} block|Removed {n} blocks	S'ha eliminat {n} bloc|S'han eliminat {n} blocs
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Executa {n} rèplica independent del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.|Executa {n} rèpliques independents del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	La condició d'aturada s'ha complert en {met} de {n} rèplica, després de {time} {unit} de mitjana.|La condició d'aturada s'ha complert en {met} de {n} rèpliques, després de {time} {unit} de mitjana.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Acabada {done} de {n} rèplica|Acabades {done} de {n} rèpliques
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} rèplica|{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} rèpliques
 @plural	{n} block selected|{n} blocks selected	{n} bloc seleccionat|{n} blocs seleccionats
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} rèplica per pas · llavor {seed}|{n} rèpliques per pas · llavor {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} rèplica · mitjana {mean} · de {min} a {max}|{n} rèpliques · mitjana {mean} · de {min} a {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} rèplica · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats|{n} rèpliques · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} rèplica · llavor {seed}|{n} rèpliques · llavor {seed}
 @plural	{n} replication|{n} replications	{n} rèplica|{n} rèpliques
