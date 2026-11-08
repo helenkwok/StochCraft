@@ -95,6 +95,34 @@ fn workers_give_the_results_of_threads() {
     assert!(ran >= 3, "only {ran} models ran");
 }
 
+/// A run that ends each replication at an event (M2.8) reports when, through workers too.
+#[test]
+fn terminating_runs_on_workers_keep_their_stop_times() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "file.open",
+        json!({ "path": root.to_string_lossy() }),
+    );
+    let exit = e
+        .model()
+        .elements
+        .iter()
+        .find(|x| x.kind.name() == "sink")
+        .map(|x| x.id.to_string())
+        .expect("a sink");
+    ok(
+        &mut e,
+        "experiment.set",
+        json!({ "stop": { "when": "count", "element": exit, "count": 50 } }),
+    );
+    let threads = ok(&mut e, "run", json!({"replications": 6, "threads": 2}));
+    assert!(threads.get("stop").is_some(), "{threads}");
+    let status = on_workers(&mut e, 6, 3);
+    assert_eq!(status["result"], threads);
+}
+
 #[test]
 fn a_cancelled_or_failing_run_on_workers_says_so() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");

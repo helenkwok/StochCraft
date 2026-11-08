@@ -102,6 +102,7 @@ impl Answer {
 pub(crate) struct Encoded {
     warmup: u64,
     duration: u64,
+    stopped_at: Option<u64>,
     elements: Vec<EncodedElement>,
 }
 
@@ -128,6 +129,7 @@ impl Encoded {
         Self {
             warmup: r.warmup.to_bits(),
             duration: r.duration.to_bits(),
+            stopped_at: bits(r.stopped_at),
             elements: r
                 .elements
                 .iter()
@@ -194,6 +196,7 @@ impl Encoded {
         Some(Report {
             warmup: f64::from_bits(self.warmup),
             duration: f64::from_bits(self.duration),
+            stopped_at: float(self.stopped_at),
             elements,
         })
     }
