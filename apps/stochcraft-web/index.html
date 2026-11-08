@@ -6,6 +6,22 @@
   <title>StochCraft</title>
   <meta name="description" content="Discrete-event simulation in the browser: open a BPMN or XPDL model with BPSim data, run it and read the results.">
   <link data-trunk rel="rust" data-bin="stochcraft-web" data-wasm-opt="z" />
+  <link data-trunk rel="rust" data-bin="stochcraft-worker" data-type="worker" data-loader-shim data-wasm-opt="z" />
+  <link data-trunk rel="copy-file" href="sw.js" />
+  <link data-trunk rel="copy-file" href="manifest.webmanifest" />
+  <link data-trunk rel="copy-file" href="icon.svg" />
+  <link data-trunk rel="copy-file" href="icon-192.png" />
+  <link data-trunk rel="copy-file" href="icon-512.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#0b6e86" />
+  <script>
+    // Keeps the app for offline use (sw.js). Not where service workers are unavailable, such as
+    // a page opened from a file.
+    if ("serviceWorker" in navigator && location.protocol !== "file:") {
+      addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+    }
+  </script>
   <style>
     html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #1b1b1b; }
     @media (prefers-color-scheme: light) { html, body { background: #f8f8f8; } }

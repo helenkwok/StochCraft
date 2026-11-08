@@ -3550,6 +3550,7 @@ dependencies = [
  "egui",
  "js-sys",
  "serde_json",
+ "stochcraft-engine",
  "stochcraft-ui-egui",
  "wasm-bindgen",
  "wasm-bindgen-futures",

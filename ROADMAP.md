@@ -1093,6 +1093,34 @@ replications other than the first.
 - `crates/mcp` and `stochcraft-cli mcp`: the engine's commands as MCP tools, headless or bridged
   to a running app, following FieldCraft's MCP design.
 
+**Done (workers and offline):**
+- **Replications on every core in the browser.** A run started with `"mode": "workers"` hands
+  its replications to the caller's workers (`engine/src/workers.rs`).
+  - `Engine::worker_task` gives the run as text: the model as JSON, the seed and the number of
+    replications.
+  - Each worker makes a `Worker` from it and runs the replications it is given. It sends back
+    each report with every number as its bits.
+  - `Engine::deliver` takes the answers in any order.
+  - The results are exactly those of a run on threads.
+- **The page's workers.** The shell gives the app a `Workers` (`ui-egui`); in the browser that is
+  a pool of web workers (`stochcraft-web/src/pool.rs`).
+  - There is one worker per core but one, up to 16.
+  - Each worker loads `stochcraft-worker` (`src/worker.rs`, 0.75 MB of WebAssembly), and is
+    given the next replication as soon as it answers.
+  - Where workers cannot start, the page runs the replications itself between frames, as before.
+- **Installable and offline.**
+  - A web app manifest and an icon make the page installable.
+  - A service worker (`sw.js`) keeps the page and every file it names when it installs, so the
+    app opens and runs models offline from the first visit on.
+  - The service worker is network first, so a new build is used as soon as it is published.
+  - Each pull request's preview keeps its own cache.
+- **Tests:** `engine/tests/workers.rs` runs every committed and BPSim reference model that
+  StochCraft can run (11 with the reference models) on two workers, answering out of order. The
+  results must equal those of threads, and each model must come back from its JSON unchanged.
+  Also covered: cancelling, failing, and refusing bad answers. `ui-egui/tests/app.rs` checks a
+  run on the shell's workers, falling back when there are none, and cancelling. Checked by hand
+  in Chromium: three workers ran the M/M/1 example, and offline the page reloaded from the cache
+  and ran the tandem line.
 **Later:** 2D layout with entities moving between stations; 3D (the `render` crate, wgpu);
 FlexSim-style factory layouts via the shared `craft-factory` data from CADCraft.
 

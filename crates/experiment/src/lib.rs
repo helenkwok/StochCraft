@@ -4,7 +4,8 @@
 //! derived from the experiment seed and the replication index only. Results come back in index
 //! order, so they are identical whether the replications ran on one thread or sixteen. On native
 //! targets replications run on scoped threads (one simulation per thread, nothing shared); on
-//! `wasm32` they run one after another (browser parallelism via web workers comes later).
+//! `wasm32` they run one after another. In the browser, the engine hands replications to the
+//! page's web workers instead (`stochcraft_engine::Worker`).
 
 use std::panic::AssertUnwindSafe;
 use std::sync::Mutex;

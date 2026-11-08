@@ -1,4 +1,5 @@
-//! The browser shell: the page's canvas, the file picker, downloads and dropped files.
+//! The browser shell: the page's canvas, the file picker, downloads and dropped files, web
+//! workers for runs and the service worker for offline use.
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -192,6 +193,7 @@ pub fn start() {
                 eframe::WebOptions::default(),
                 Box::new(move |cc| {
                     let mut app = App::new(Platform::BROWSER);
+                    app.set_workers(Box::new(crate::pool::Pool::new(cc.egui_ctx.clone())));
                     let key = |k| storage::key(scope.as_deref(), k);
                     if let Some(prefs) = cc
                         .storage

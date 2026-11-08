@@ -505,7 +505,8 @@ pub struct RunStart {
     pub seed: Option<u64>,
     #[serde(default)]
     pub threads: Option<u32>,
-    /// `threads` natively, `slices` in the browser by default.
+    /// `threads` natively, `slices` in the browser by default; `workers` hands the replications
+    /// to the caller's own workers (see `Engine::worker_task`).
     #[serde(default)]
     pub mode: Option<RunMode>,
 }

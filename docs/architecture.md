@@ -44,6 +44,24 @@ frame, through the engine's `live_run`. It uses the same `blocks` runtime as Run
 one replication can stop at any time and be read. A plain run is that split run taken straight
 to its end, so the two cannot drift apart. Watching reads the model and never edits it.
 
+### Runs in the browser
+
+A page cannot start threads, so the browser shell gives the app a pool of web workers
+(`stochcraft-web/src/pool.rs`), and runs use `"mode": "workers"` (`engine/src/workers.rs`):
+
+1. The engine gives the run as text: the model's JSON, the seed and the number of replications.
+2. Each worker (`stochcraft-web/src/worker.rs`, a second WebAssembly binary) compiles the model
+   once. It is then given one replication index at a time and answers with that replication's
+   report. A worker sees only the run's text, never the engine.
+3. The page passes each answer to `Engine::deliver`, and the run finishes when every replication
+   has answered.
+
+A replication's random stream depends only on the seed and its index, and every number in an
+answer travels as its bits. The results are therefore the same as on threads, which a test
+checks for every model StochCraft can run. If no worker starts, the page runs the replications
+itself, one per frame. The service worker (`stochcraft-web/sw.js`) keeps the page and the files
+it names, so the app also works offline.
+
 ### Translations
 
 Every interface string is English source text looked up through craft-i18n (`ui-egui/src/i18n.rs`:
