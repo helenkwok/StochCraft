@@ -217,6 +217,11 @@ impl App {
             items.push(Node::Separator);
             items.extend(languages.into_iter().map(|(lang, name)| {
                 let code = crate::i18n::code(lang);
+                let name = if self.names_in_english.contains(&lang) {
+                    crate::i18n::english_name(lang).to_owned()
+                } else {
+                    name
+                };
                 Node::Item(
                     Item::new(CommandRef::with_params(LANGUAGE, json!(code)), name)
                         .radio(chosen == Some(code)),

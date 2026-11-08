@@ -999,7 +999,9 @@ Model and Results tabs are craft-ui `Tab`s; fonts come from craft-ui's stack (IB
 egui's faces for symbols, craft-fonts' faces where `CRAFT_FONTS_DIR` names a checkout, then the
 installed system fonts on the desktop). The desktop embeds the craft-fonts faces except the CJK
 ones; the web app serves them beside the wasm (CJK included) and fetches a face when the
-interface language or a character needs it.
+interface language or a character needs it. On the web, View ▸ Language names a language in
+English (Japanese, Korean, Hindi…) until the face for its own script has been fetched, so opening
+the menu fetches nothing.
 
 **M3.1d (keyboard shortcuts done):** Settings ▸ Keyboard Shortcuts… (Preferences in Edit on
 Windows and Linux, the app menu on macOS) opens craft-keymap's dialog: every command grouped by
@@ -1027,8 +1029,7 @@ Sans CJK SC maps the characters, but egui doesn't apply the OpenType `locl` feat
 shows Simplified-style shapes where regional forms differ); smaller CJK downloads on the web (the
 first use downloads the whole face: about 16 MB for Chinese, 9 MB for Japanese, regular and
 bold, and 2 MB for Korean; a cut to the catalogs' characters waits for craft-fonts' interface
-faces; opening View ▸ Language on the web, which names each language in its own script, fetches
-about 24 MB of faces, the Chinese one included); screenshot tests in craft-ui's six test
+faces); screenshot tests in craft-ui's six test
 languages; panes and icons.
 
 ### M3.2 Model editing without a canvas

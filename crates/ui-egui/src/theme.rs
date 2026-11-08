@@ -164,6 +164,57 @@ pub fn install_fonts(ctx: &egui::Context, ui_language: &str) {
     fonts(ui_language).install(ctx);
 }
 
+/// The offered languages whose names, in their own script, would fetch a font if drawn now: on
+/// the web, those with a character that only a served face draws (日本語, 한국어, हिन्दी, ไทย…)
+/// while none of the faces that draw it has been fetched. View ▸ Language shows these by their
+/// English names, so opening it fetches nothing; once the face arrives (the language was chosen,
+/// or text needed it) the name shows in its own script. Always empty on the desktop, whose faces
+/// are embedded or the system's.
+pub fn names_waiting_for_fonts(ctx: &egui::Context) -> Vec<craft_i18n::Lang> {
+    #[cfg(target_arch = "wasm32")]
+    {
+        use std::sync::LazyLock;
+        /// For each language, per character that would fetch: the served faces, any of which
+        /// draws it. Which faces draw a character doesn't depend on the UI language.
+        static NEEDS: LazyLock<Vec<(craft_i18n::Lang, Vec<Vec<String>>)>> = LazyLock::new(|| {
+            let stack = fonts("en");
+            crate::i18n::languages()
+                .into_iter()
+                .map(|(lang, name)| {
+                    let needs = name
+                        .chars()
+                        .map(|c| {
+                            stack
+                                .downloads_for(&FontFamily::Proportional, c)
+                                .into_iter()
+                                .map(ServedFace::name)
+                                .collect::<Vec<_>>()
+                        })
+                        .filter(|faces| !faces.is_empty())
+                        .collect();
+                    (lang, needs)
+                })
+                .filter(|(_, needs): &(_, Vec<Vec<String>>)| !needs.is_empty())
+                .collect()
+        });
+        // A served face's data is in the installed definitions once fetched (craft-ui adds it
+        // under the face's name); asking egui for the glyph instead would start the fetch.
+        ctx.fonts(|f| {
+            let loaded = |face: &String| f.definitions().font_data.contains_key(face);
+            NEEDS
+                .iter()
+                .filter(|(_, needs)| needs.iter().any(|faces| !faces.iter().any(loaded)))
+                .map(|(lang, _)| *lang)
+                .collect()
+        })
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        let _ = ctx;
+        Vec::new()
+    }
+}
+
 /// Installs the type scale and both themes. Call once at start, after [`install_fonts`].
 pub fn install(ctx: &egui::Context) {
     ctx.set_theme(egui::ThemePreference::System);
