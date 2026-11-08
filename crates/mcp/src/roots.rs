@@ -213,8 +213,17 @@ mod tests {
         std::fs::create_dir_all(&sibling).unwrap();
         assert!(r.check(&sibling.join("x"), Access::Read).is_err());
         assert!(r.check(Path::new(""), Access::Read).is_err());
-        // `..` below a folder that does not exist.
-        assert!(r.check(&write.join("nope/../x"), Access::Write).is_err());
+        // `..` below a folder that does not exist: refused on Unix, where the system would look
+        // for the folder. Windows removes `..` from the path's text before opening it (as
+        // `std::path::absolute` does), so there it is the file `x` in the root, which is what
+        // opening it would reach, even through a link (#77).
+        let up = r.check(&write.join("nope/../x"), Access::Write);
+        if cfg!(windows) {
+            assert_eq!(up, r.check(&write.join("x"), Access::Write));
+            assert!(up.is_ok(), "{up:?}");
+        } else {
+            assert!(up.is_err(), "{up:?}");
+        }
         // Only a read root: nothing can be written.
         let only_read = Roots::new(Some(&read), None).unwrap();
         let e = only_read

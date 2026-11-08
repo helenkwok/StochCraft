@@ -9,8 +9,10 @@
 
 use std::collections::BTreeMap;
 
+use std::time::Duration;
+
 use egui::{Align2, FontId, Pos2, Rect, Stroke, Vec2};
-use stochcraft_engine::{Live, LiveState};
+use stochcraft_engine::{Live, LiveState, RunError};
 use stochcraft_model::{ElementKind, Model};
 
 use crate::i18n::{t, tf};
@@ -24,6 +26,28 @@ const SPEEDS: [f64; 16] = [
 ];
 /// The most samples the queue-over-time charts keep; past it every other one is dropped.
 const MAX_SAMPLES: usize = 4_000;
+/// The real time a frame may spend running events (#76). Watching runs on the page's own thread,
+/// so a frame that ran every event up to its target could freeze the page: a jump far ahead on a
+/// busy model, a high speed, or a loop at one time (up to the stuck-time limit's 10 million
+/// events). Half of a 60-per-second frame is left for drawing; what doesn't fit carries on in
+/// the next frame, with the same events in the same order.
+const FRAME_BUDGET: Duration = Duration::from_millis(8);
+/// Events run between looks at the clock: about 0.2 to 0.5 ms on the desktop.
+const CHUNK_EVENTS: u64 = 1_000;
+
+/// Runs `run` towards `until` for at most about `budget` of real time (at least one chunk of
+/// events); returns whether it got there.
+fn advance_for(run: &mut Live<'static>, until: f64, budget: Duration) -> Result<bool, RunError> {
+    let start = web_time::Instant::now();
+    loop {
+        if run.advance_toward(until, CHUNK_EVENTS)? {
+            return Ok(true);
+        }
+        if start.elapsed() >= budget {
+            return Ok(false);
+        }
+    }
+}
 
 /// A run being watched.
 pub(crate) struct Watching {
@@ -39,6 +63,9 @@ pub(crate) struct Watching {
     states: BTreeMap<String, LiveState>,
     /// Text typed into the jump field.
     jump: String,
+    /// A time a step or a jump is going to, over as many frames as it takes, and whether to
+    /// say so when it gets to the end.
+    heading: Option<(f64, bool)>,
 }
 
 /// Whether `b` would run exactly as `a`: everything but the names and the diagram.
@@ -75,6 +102,7 @@ impl Watching {
             trace: Vec::new(),
             states: BTreeMap::new(),
             jump: String::new(),
+            heading: None,
         };
         w.sample();
         w
@@ -140,12 +168,37 @@ impl App {
             self.info(t("The model changed, so watching stopped"));
             return;
         }
+        if let Some((to, announce)) = w.heading {
+            let r = advance_for(&mut w.run, to, FRAME_BUDGET);
+            w.sample();
+            ctx.request_repaint();
+            match r {
+                Ok(false) => {}
+                Ok(true) => {
+                    w.heading = None;
+                    // A jump's arrival at the end is said as playing's is; a step's is not.
+                    let playing = w.playing;
+                    w.playing = announce;
+                    self.after_advance(Ok(()));
+                    if let Some(w) = &mut self.watching {
+                        w.playing = w.playing && playing;
+                    }
+                }
+                Err(e) => {
+                    w.heading = None;
+                    self.after_advance(Err(e));
+                }
+            }
+            return;
+        }
         if !w.playing || w.run.is_done() {
             return;
         }
         let dt = f64::from(ctx.input(|i| i.stable_dt).clamp(0.0, 0.25));
         let target = w.run.now() + w.speed * dt;
-        let r = w.run.advance_to(target);
+        // What doesn't fit in the frame's budget is dropped: the run plays slower than asked
+        // rather than freezing the page.
+        let r = advance_for(&mut w.run, target, FRAME_BUDGET).map(|_| ());
         w.sample();
         ctx.request_repaint();
         self.after_advance(r);
@@ -183,29 +236,20 @@ impl App {
         }
     }
 
-    /// Runs the next event.
+    /// Runs the next event (and every other one at the same time), from the next frame on.
     pub(crate) fn step_watching(&mut self) {
         let Some(w) = &mut self.watching else {
             return;
         };
         w.playing = false;
-        let r = w.run.step().map(|_| ());
-        w.sample();
-        self.after_advance(r);
+        let to = w.run.next_event_time().unwrap_or(w.run.end());
+        w.heading = Some((to, false));
     }
 
-    /// Runs to time `to` (a time already passed is not gone back to).
+    /// Runs to time `to` (a time already passed is not gone back to), from the next frame on.
     pub(crate) fn jump_to(&mut self, to: f64) {
-        let Some(w) = &mut self.watching else {
-            return;
-        };
-        let r = w.run.advance_to(to);
-        w.sample();
-        let playing = w.playing;
-        w.playing = true;
-        self.after_advance(r);
         if let Some(w) = &mut self.watching {
-            w.playing = w.playing && playing;
+            w.heading = Some((to, true));
         }
     }
 
@@ -319,6 +363,9 @@ impl App {
         }
         if let Some(v) = jump {
             self.jump_to(v);
+        }
+        if step || jump.is_some() {
+            ui.ctx().request_repaint();
         }
         if stop {
             self.stop_watching();

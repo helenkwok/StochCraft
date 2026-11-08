@@ -140,3 +140,56 @@ fn changing_the_model_stops_watching_but_moving_shapes_does_not() {
             .is_none()
     );
 }
+
+/// One entity, arriving at 1, is worked in no time and always sent back by the gateway after
+/// it: it goes round for ever while simulated time stays at 1 (#49). Watching it, a jump past 1
+/// runs those events a frame's budget at a time, so no frame freezes the window (#76): before,
+/// the first frame ran all ten million events up to the stuck-time limit at once.
+#[test]
+fn a_loop_at_one_time_never_freezes_a_frame() {
+    let mut h = watching();
+    h.state_mut().execute(
+        "model.set",
+        json!({"model": {
+            "name": "Round and round",
+            "elements": [
+                {"id": "arrivals", "kind": "source", "interarrival": {"type": "constant", "value": 1.0}, "limit": 1},
+                {"id": "work", "kind": "server", "capacity": 1, "service": {"type": "constant", "value": 0.0}},
+                {"id": "check", "kind": "exclusive_gateway"},
+                {"id": "done", "kind": "sink"}
+            ],
+            "connections": [
+                {"id": "f1", "from": "arrivals", "to": "work"},
+                {"id": "f2", "from": "work", "to": "check"},
+                {"id": "f3", "from": "check", "to": "work", "probability": 1.0},
+                {"id": "f4", "from": "check", "to": "done", "probability": 0.0}
+            ],
+            "experiment": {"time_unit": "min", "warmup": 0.0, "duration": 100.0, "replications": 1, "seed": 1}
+        }}),
+    );
+    settle(&mut h);
+    // Every frame from here on is timed.
+    let mut slowest = std::time::Duration::ZERO;
+    let mut frames = |h: &mut Harness<'static, App>, n: usize| {
+        for _ in 0..n {
+            let start = std::time::Instant::now();
+            h.step();
+            slowest = slowest.max(start.elapsed());
+        }
+    };
+    h.get_by_role_and_label(Role::Button, "Watch a run").click();
+    frames(&mut h, 2);
+    h.get_by_role_and_label(Role::Button, "Pause").click();
+    frames(&mut h, 2);
+    h.get_by_role_and_label(Role::TextInput, "Jump to time")
+        .click();
+    frames(&mut h, 1);
+    h.get_by_role_and_label(Role::TextInput, "Jump to time")
+        .type_text("50");
+    frames(&mut h, 1);
+    h.key_press(egui::Key::Enter);
+    frames(&mut h, 30);
+    assert!(slowest.as_millis() < 500, "a frame took {slowest:?}");
+    assert_eq!(time(&h), 1.0, "{}", clock(&h));
+    assert_eq!(h.state().status(), "Watching replication 1");
+}
