@@ -1727,7 +1727,8 @@ fn a_terminating_run_reports_its_time_to_the_event() {
         d["target"]["interval"][0].as_f64().unwrap_or(1.0),
         d["target"]["interval"][1].as_f64().unwrap_or(0.0),
     );
-    let p = (1.0 - stochcraft_random::math::exp(-3.0)).powi(3);
+    let q = 1.0 - stochcraft_random::math::exp(-3.0);
+    let p = q * q * q;
     assert!(lo <= p && p <= hi, "{p} not in [{lo}, {hi}]");
     // The times as a distribution for a coarser model: a user distribution through them.
     assert_eq!(d["as_distribution"]["type"], "user");

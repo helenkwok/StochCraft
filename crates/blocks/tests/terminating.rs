@@ -114,7 +114,8 @@ fn parallel_exponentials(k: usize, mean: f64) -> Model {
 /// The completion time of three exponential activities of mean 10 is their maximum:
 /// P(T ≤ t) = (1 − e^(−t/10))³, mean 10 (1 + 1/2 + 1/3).
 fn max_of_three(t: f64) -> f64 {
-    (1.0 - stochcraft_random::math::exp(-t / 10.0)).powi(3)
+    let p = 1.0 - stochcraft_random::math::exp(-t / 10.0);
+    p * p * p
 }
 
 #[test]

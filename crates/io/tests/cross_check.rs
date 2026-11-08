@@ -127,7 +127,8 @@ fn car_repair_matches_lsim() {
             assert_eq!(theirs.len(), 3, "{label}: {theirs:?}");
             // L-SIM's mean of three against the spread of a mean of three of ours: within
             // three standard errors of both (a two-sample check that rarely fails by chance).
-            let se = (sd(&ours).powi(2) / 3.0 + sd(&theirs).powi(2) / 3.0).sqrt();
+            let (s1, s2) = (sd(&ours), sd(&theirs));
+            let se = (s1 * s1 / 3.0 + s2 * s2 / 3.0).sqrt();
             let gap = mean(&theirs) - mean(&ours);
             eprintln!(
                 "  {label:>22}: StochCraft {:8.2} (sd {:6.2}), L-SIM {:8.2} {theirs:?}, gap {:6.2} = {:5.2} se",

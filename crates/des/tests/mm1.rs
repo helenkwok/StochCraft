@@ -67,7 +67,7 @@ fn mm1_matches_theory() {
         .map(|r| mm1_mean_time_in_system(1000 + r, lambda, mu, 1_000.0, 50_000.0).0)
         .collect();
     let mean = reps.iter().sum::<f64>() / reps.len() as f64;
-    let var = reps.iter().map(|x| (x - mean).powi(2)).sum::<f64>() / (reps.len() - 1) as f64;
+    let var = reps.iter().map(|x| (x - mean) * (x - mean)).sum::<f64>() / (reps.len() - 1) as f64;
     let half_width = 2.365 * (var / reps.len() as f64).sqrt(); // t(0.975, 7)
     eprintln!("W = {mean:.4} ± {half_width:.4} (theory {expected})");
     assert!(

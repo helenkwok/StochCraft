@@ -423,10 +423,14 @@ mod tests {
         for x in [0.05, 0.3, 0.5, 0.77, 0.99] {
             assert!(close(beta_cdf(x, 1.0, 1.0), x, 1e-13));
             assert!(close(beta_cdf(x, 2.0, 1.0), x * x, 1e-13));
-            assert!(close(beta_cdf(x, 1.0, 3.0), 1.0 - (1.0 - x).powi(3), 1e-13));
+            assert!(close(
+                beta_cdf(x, 1.0, 3.0),
+                1.0 - (1.0 - x) * (1.0 - x) * (1.0 - x),
+                1e-13
+            ));
             assert!(close(
                 beta_cdf(x, 2.0, 2.0),
-                3.0 * x * x - 2.0 * x.powi(3),
+                3.0 * x * x - 2.0 * x * x * x,
                 1e-13
             ));
         }
@@ -488,7 +492,8 @@ mod tests {
             unreachable!("{d:?}")
         };
         // Back to μ and σ: σ² = ln(1 + s²/m²), μ = ln m − σ²/2.
-        let s2 = ln(1.0 + (std_dev / mean).powi(2));
+        let cv = std_dev / mean;
+        let s2 = ln(1.0 + cv * cv);
         let mu = ln(mean) - s2 / 2.0;
         assert!(close(exp(mu - s2), 30.0, 1e-12));
         assert!(close(exp(mu + Z95 * s2.sqrt()), 90.0, 1e-12));

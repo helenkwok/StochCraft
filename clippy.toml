@@ -12,4 +12,6 @@ disallowed-methods = [
     { path = "f64::log2", reason = "not identical on every target; add it to stochcraft_random::math" },
     { path = "f64::ln_1p", reason = "not identical on every target; add it to stochcraft_random::math" },
     { path = "f64::exp_m1", reason = "not identical on every target; add it to stochcraft_random::math" },
+    { path = "f64::powi", reason = "precision unspecified, may differ between targets; write x * x (or a loop of multiplications)" },
+    { path = "f64::mul_add", reason = "fused or not depending on the target; write a * b + c" },
 ]

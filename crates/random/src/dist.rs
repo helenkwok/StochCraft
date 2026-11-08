@@ -609,7 +609,7 @@ impl Dist {
         Some(match self {
             Dist::Constant(_) => 0.0,
             Dist::Exponential { mean } => mean * mean,
-            Dist::Uniform { min, max } => (max - min).powi(2) / 12.0,
+            Dist::Uniform { min, max } => (max - min) * (max - min) / 12.0,
             Dist::Triangular {
                 min: a,
                 mode: c,
@@ -623,10 +623,11 @@ impl Dist {
                 max,
             } => {
                 let (m0, m1, m2) = truncated_moments(*mean, *std_dev, *min, *max);
-                m2 / m0 - (m1 / m0).powi(2)
+                let m = m1 / m0;
+                m2 / m0 - m * m
             }
             Dist::Gamma { shape, scale } => shape * scale * scale,
-            Dist::Beta { shape: a, scale: b } => a * b / ((a + b).powi(2) * (a + b + 1.0)),
+            Dist::Beta { shape: a, scale: b } => a * b / ((a + b) * (a + b) * (a + b + 1.0)),
             Dist::Erlang { mean, k } => mean * mean / *k as f64,
             Dist::Weibull { shape, scale } => {
                 let g1 = exp(ln_gamma(1.0 + 1.0 / shape));
@@ -713,7 +714,7 @@ mod tests {
         let mut rng = Rng::new(seed);
         let xs: Vec<f64> = (0..n).map(|_| d.sample(&mut rng)).collect();
         let mean = xs.iter().sum::<f64>() / n as f64;
-        let var = xs.iter().map(|x| (x - mean).powi(2)).sum::<f64>() / (n - 1) as f64;
+        let var = xs.iter().map(|x| (x - mean) * (x - mean)).sum::<f64>() / (n - 1) as f64;
         (mean, var)
     }
 
@@ -835,7 +836,7 @@ mod tests {
         };
         let (_, v) = moments(&d, 200_000, 7);
         let e2 = 0.5 * (4.0 / 3.0) + 0.5 * (1000.0 - 8.0) / 24.0;
-        let tv = e2 - 3.5f64.powi(2);
+        let tv = e2 - 3.5 * 3.5;
         assert!((v - tv).abs() < 0.03 * tv, "{v} vs {tv}");
     }
 
