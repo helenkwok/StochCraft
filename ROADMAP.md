@@ -843,8 +843,53 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
 | Log-normal and Weibull fits: mode and 95th percentile | as given | to 10⁻⁹ |
 | Wilson's interval for 8 of 10 at 95% | [0.4902, 0.9433] | same |
 
-**Still to do in M2.8:** sweeps and sensitivity records, capacity sizing at the bottleneck with
-the deterministic answer beside it, and the acceptance model.
+**Done (second part):**
+- **Sweeps:** `experiment.sweep` runs the experiment at each value of one parameter, using the
+  same seed so the random streams are shared (common random numbers). The parameter is a
+  task's `capacity`, a pool's `quantity`, a `queue_capacity`, or the `mean` of a time
+  distribution (`Dist::scaled` keeps its shape). It reports the results asked for at each
+  value, and how much each moved across the range, with whether that is more than the noise.
+- **Sensitivity:** `experiment.sensitivity` moves each parameter down and up by a fraction,
+  one at a time, and ranks the results' elasticities. Every sweep and sensitivity analysis is
+  recorded, with the model's digest, in the `sensitivity` list of later runs' records
+  (NASA-STD-7009B [M&S 30]).
+- **Capacity sizing:** `experiment.size` takes a target (a metric `at_least` or `at_most` a
+  value) and a confidence. It runs the experiment and adds a unit to the busiest task or pool,
+  then runs again, until the share of replications meeting the target reaches the confidence.
+  Beside it is the answer with every time at its mean, from one replication. `apply` makes the
+  answer the model's, as one step to undo.
+- **Acceptance model** (`tests/models/plant.json`, an engine script for `stochcraft-cli exec`):
+  - A bakery with bread and cake orders that arrive on weekdays from 8 to 4 (70 and 50 a week).
+  - Shared mixers and ovens that work those hours.
+  - Mixing and baking times from three-point estimates, PERT and triangular, kept as their
+    pedigree.
+  - The target: at least 110 orders packed a week, in 70% of weeks. Sized from one mixer and
+    one oven:
+
+
+| Mixers, ovens | Weeks meeting the target (20) | Wilson 95% interval |
+|---|---|---|
+| 2, 5 | 20% | 0.08–0.42 |
+| 3, 5 (the answer from mean times) | 55% | 0.34–0.74 |
+| 3, 6 (StochCraft's answer) | 80% | 0.58–0.92 |
+
+With every time at its mean, 3 mixers and 5 ovens look enough. With the variability they meet
+the target in only 55% of weeks, and 6 ovens are needed: the deterministic answer is too small,
+as the NNSA study found.
+
+**Validation** (`engine/tests/engine.rs`):
+
+| Case | Theory | StochCraft |
+|---|---|---|
+| Sweep of the help desk's servers (λ = 0.5, mean service 1.5): wait, 1 server | 4.5 | 4.406 ± 0.180 |
+| Same, 2 servers (Erlang C) | 0.2455 | 0.2410 ± 0.0064 |
+| Same, 3 servers | 0.0294 | 0.0288 ± 0.0013 |
+| Elasticity of M/M/1 time in system to the service time (±10%) | 4.40 | 4.32 |
+| Same, to the time between arrivals | −3.57 | −3.42 |
+
+**Not yet:** sizing several resources a step at a time, or by cost; designed experiments with
+several factors at once (factorial, Latin hypercube); saving targets in the model file; and a
+window for these commands.
 
 **Later in M2 or M4:** conveyors with length, speed and accumulation; travel networks for
 forklifts and AGVs; agent behaviours (`agents` crate); stock-and-flow (`sd` crate, XMILE);

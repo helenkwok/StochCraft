@@ -879,6 +879,41 @@ fn estimate_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     Ok(json!({}))
 }
 
+fn experiment_sweep(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: crate::decide::SweepParams = parse(p)?;
+    let v = crate::decide::sweep(e.model(), &p)?;
+    e.sensitivity.push(json!({
+        "kind": "sweep",
+        "model_digest": crate::model_digest(e.model()),
+        "parameter": v["parameter"],
+        "values": p.values,
+        "effects": v["effects"],
+    }));
+    Ok(v)
+}
+
+fn experiment_sensitivity(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: crate::decide::SensitivityParams = parse(p)?;
+    let v = crate::decide::sensitivity(e.model(), &p)?;
+    e.sensitivity.push(json!({
+        "kind": "one at a time",
+        "model_digest": crate::model_digest(e.model()),
+        "change": v["change"],
+        "effects": v["effects"],
+    }));
+    Ok(v)
+}
+
+fn experiment_size(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: crate::decide::SizeParams = parse(p)?;
+    let (mut v, sized) = crate::decide::size(e.model(), &p)?;
+    if p.apply && &sized != e.model() {
+        e.edit("experiment.size", Op::SetModel(Box::new(sized)))?;
+        v["applied"] = json!(true);
+    }
+    Ok(v)
+}
+
 fn results_distribution(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: crate::distribution::Params = parse(p)?;
     let results = e.last_results.as_ref().ok_or_else(|| {
@@ -1712,6 +1747,30 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<Run>,
         example: || json!({ "replications": 4 }),
         run,
+    },
+    Command {
+        name: "experiment.sweep",
+        summary: "Run the experiment at each value of one parameter (a task's or pool's units, a buffer, a time's mean) with the same seed, and report the results asked for at each and how much they moved.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::decide::SweepParams>,
+        example: || json!({ "parameter": { "id": "desk", "field": "capacity" }, "values": [1, 2, 3], "results": [{ "element": "desk", "metric": "mean_wait" }], "replications": 4 }),
+        run: experiment_sweep,
+    },
+    Command {
+        name: "experiment.sensitivity",
+        summary: "Move each parameter down and up in turn and rank which results it drives (their elasticities); recorded in later runs' records.",
+        kind: CommandKind::Action,
+        schema: schema::<crate::decide::SensitivityParams>,
+        example: || json!({ "parameters": [{ "id": "desk", "field": "mean" }, { "id": "arrivals", "field": "mean" }], "results": [{ "element": "exit", "metric": "mean_time_in_system" }], "replications": 4 }),
+        run: experiment_sensitivity,
+    },
+    Command {
+        name: "experiment.size",
+        summary: "Add units at the bottleneck until the share of replications meeting a target reaches the confidence asked for, with the answer from mean times beside it; `apply` makes it the model's.",
+        kind: CommandKind::Edit,
+        schema: schema::<crate::decide::SizeParams>,
+        example: || json!({ "target": { "element": "desk", "metric": "mean_wait", "at_most": 1.0 }, "confidence": 0.7, "replications": 4, "apply": true }),
+        run: experiment_size,
     },
     Command {
         name: "results.distribution",
