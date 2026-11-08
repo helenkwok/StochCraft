@@ -1,9 +1,10 @@
 # StochCraft roadmap
 
-Where StochCraft is going next and in what order. Four milestones: **M1** model files, the
+Where StochCraft is going next and in what order. Five milestones: **M1** model files, the
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
-desktop app (and the browser app built from it); **M4** system dynamics and hybrid models. M1
-and M3 are done, M2 has two parts left (M2.9, M2.10), and M4 is being planned. Each milestone is a series of pull requests small enough to review in one sitting;
+desktop app (and the browser app built from it); **M4** system dynamics and hybrid models; **M5**
+transport and layout. M1 and M3 are done, M2 has three parts left (M2.9, M2.10, M2.11), and M4
+and M5 are being planned. Each milestone is a series of pull requests small enough to review in one sitting;
 every one keeps `cargo xtask ci` green.
 
 Decisions still open are marked **Decision** with a recommendation; the rest follows the
@@ -992,6 +993,13 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   the reason in the commit).
 - **Validation against observed data.** Compare a run's results with held-out real data (black-box
   validation, ch. 6 §6.5.5 and ch. 10 §10.4.1).
+- **A capacity table.** Before a run, each station's offered load and utilisation worked out
+  from the model's own numbers (arrival rates, mean service times, units), shown beside the
+  simulated values after the run. The gap between the two is what variability and blocking
+  cost, which is what the simulation adds. It extends the `overloaded` check, which today is
+  part of the model's validation (`Model::check_load` in `model/src/lib.rs`) and covers only
+  servers with an unlimited queue fed straight from sources with steady arrivals; the table
+  needs the load passed on through routing, joins and shared pools too.
 
 Starting a run with entities already inside, the other answer to a warm-up, stays with
 "starting a run from an observed state" under digital twins (After M3).
@@ -1029,13 +1037,40 @@ model has no patience, reneging or balking.
   - M/M/1 with balking at a fixed length is M/M/1/K, already checked against theory
     (`des/tests/theory.rs`, `blocks/tests/buffers.rs`).
 
-**Later in M2:** conveyors with length, speed and accumulation; travel networks for forklifts
-and AGVs; costs (BPSim `fixedCost`, `unitCost`); simulation traces in XES (BPSim
-`traceOutput`). Agent behaviours and stock-and-flow are M4.
+### M2.11 Changeovers and lean measures
 
-**M2 size:** about nine PRs for M2.1–M2.8 and one or two each for M2.9 and M2.10, each independently mergeable after M1. **M2.1–M2.8 are complete.**
-What each leaves for later is under its own "Not yet" or "Not here". M2.9 (output analysis) and
-M2.10 (abandonment) are next.
+A line that makes several products, and results in the terms lean practice uses.
+
+- **Product mix and routing by type:** already possible. A source sets a property (a product
+  type) on each entity it creates, and an exclusive gateway's conditions read it with
+  `getProperty` (M2.2, M2.3). What is missing is a product mix as one setting (shares of each
+  type from one source) instead of a property drawn per entity.
+- **Changeovers:** a setup time when a station switches from one product type to another,
+  including setups that depend on the sequence (a time for each pair of types). BPSim has a
+  `SetUpTime` parameter, which StochCraft reads today and ignores with a warning ("not
+  simulated yet", `io/src/read.rs`); whether its meaning fits a changeover between types is to
+  verify from the specification. A table of times by pair of types would be a `stochcraft:`
+  vendor extension.
+- **Lean results:**
+  - cycle time per station and for the line;
+  - throughput against takt, from a demand and a shift time the user enters (takt as available
+    time divided by demand; the definition to cite from a primary source, to verify);
+  - each station's time split into busy, idle, blocked, starved, down and in setup. Today the
+    results have busy (`utilisation`), blocked (`blocking_probability`) and up
+    (`availability`, so down is the rest); idle is not reported on its own, and starved and in
+    setup do not exist yet;
+  - OEE only once it is defined from a cited primary source (to verify, from a primary source).
+- **Current and future state:** a current-state and a future-state value stream map as two
+  scenarios of one model, compared with `results.compare` (paired when they share their seed
+  and replications, #73).
+
+**Later in M2:** costs (BPSim `fixedCost`, `unitCost`); simulation traces in XES (BPSim
+`traceOutput`). Conveyors and travel networks are M5; agent behaviours and stock-and-flow are
+M4.
+
+**M2 size:** about nine PRs for M2.1–M2.8 and one or two each for M2.9, M2.10 and M2.11, each independently mergeable after M1. **M2.1–M2.8 are complete.**
+What each leaves for later is under its own "Not yet" or "Not here". M2.9 (output analysis),
+M2.10 (abandonment) and M2.11 (changeovers and lean measures) are next.
 
 ---
 
@@ -1391,6 +1426,69 @@ starting state (#44).
 
 ---
 
+## M5: transport and layout
+
+**Outcome:** operators, forklifts and AGVs or AMRs that carry items between places on the
+layout, with travel times from distances and speeds, and results that show where the time goes.
+
+A milestone of its own rather than an M2 part. Today's resources stay where they are: a unit is
+taken, held and given back, with no place and no travel (M2.5). Moving resources need a place
+for every station, a network to travel on, and new `des` and `blocks` behaviour, and they lean on
+the canvas (M3.4) for the layout. Conveyors join here too, since they need the same lengths,
+speeds and positions.
+
+- **Moving resources:** a pool whose units are at a place, travel to pick an item up, carry it
+  and put it down.
+  - **Task sequences:** load, travel loaded, unload, then return or wait for the next job;
+    travel empty and loaded kept apart.
+  - **Dispatching rules:** nearest idle unit, first come first served, and balanced (the unit
+    with the least work so far).
+- **Travel network:** paths between nodes, with a length each and a speed per resource; travel
+  time is the shortest path's length over the speed. Free-space pathfinding comes later.
+- **Layout:** stations at their canvas positions. Today `Model.layout` keeps each element's shape
+  bounds from BPMN DI or XPDL graphics (`model::Bounds`: x, y, width, height); travel needs a
+  scale from those drawing units to lengths, and the network's paths. An optional floor plan as
+  the canvas's background image (there is none today).
+- **Conveyors:** length, speed and accumulation (moved here from "Later in M2").
+- **Files:** `stochcraft:` vendor extensions for the network, the scale and each resource's
+  speeds and rules, as for the other StochCraft-only data (decision D1); BPSim's own
+  `TransferTime` is read today and ignored with a warning ("not simulated yet",
+  `io/src/read.rs`), and whether it fits a travel time is to verify from the specification.
+- **Results:** each moving resource's time loaded, empty and idle; distance travelled; and each
+  station's wait for transport.
+- **Checks with known answers:**
+  - one vehicle serving fixed stations with constant times: the cycle is the sum of its travel,
+    load and unload times, worked by hand;
+  - machine repair with travel (the M/M/R//N case of M2.5 with a repairman who travels): a
+    known result to find (to verify).
+
+**Later:** the 2D view of entities moving between stations and 3D (M3's "Later").
+
+---
+
+## Examples for teaching
+
+A goal rather than a milestone: course-ready example models that a teacher can hand out as they
+are.
+
+- **Each example comes with:**
+  - its source;
+  - a checked answer: an exact formula, or the published result, checked against the source
+    with its page;
+  - a write-up following STRESS-DES, one of the three 20-item reporting checklists of Monks,
+    Currie, Onggo, Robinson, Kunc and Taylor, *Strengthening the reporting of empirical
+    simulation studies: Introducing the STRESS guidelines*, Journal of Simulation 13(1):55–67,
+    2019, doi 10.1080/17477778.2018.1442155.
+- **Candidates from the common textbooks** (Banks et al., Law, Robinson) join only once their
+  parameters are taken from the books themselves.
+- **Cross-checks against open-source simulators:** SimPy (already compared on M/M/1 in `bench/`)
+  and Salabim. Salabim
+  is MIT, but its licence text is `salabim/LICENSE.txt`, not at the repository's root, and the
+  package also ships font files (`calibri.ttf` among them) whose own licences are to verify.
+  Its models are described and reimplemented, and none of its assets are ever copied.
+
+---
+
 ## After M3: credibility and digital twins
 
 Not scheduled yet; recorded so earlier work does not close these doors (docs/research.md):
@@ -1423,12 +1521,16 @@ M1.1 model ─ M1.2 compile ─ M1.3 io ─ M1.4 engine ─ M1.5 cli ─ M1.6 de
               M2.3 … M2.8 (each one PR)                  M3.3 results
               M2.9 output analysis                       M3.4 canvas
               M2.10 abandonment                          M3.5 live view
-                     │
-                     └──────────── new blocks appear ────M3.6 workers + MCP
+              M2.11 changeovers, lean measures           M3.6 workers + MCP
+                     │                                         │
+                     └──────────── new blocks appear ──────────┘
                                    in M3 forms
                                          │
-                                   M4 system dynamics, hybrid models
+                     ┌───────────────────┴───────────────────┐
+              M4 system dynamics, hybrid models       M5 transport and layout
 ```
+
+Examples for teaching are added alongside, as each feature they need lands.
 
 M1 comes first because both M2 and M3 build on the model document and the engine. After M1, M2
 and M3 proceed in parallel, as two series of pull requests open at the same time: M2 changes
