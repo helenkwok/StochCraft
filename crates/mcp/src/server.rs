@@ -32,7 +32,10 @@ model is BPMN or XPDL with BPSim data. A typical session: `open` a .bpmn or .xpd
 model with `execute`/`batch` (block.add {kind, id, ...}, connect {from, to}, flow.set, resource.add, \
 calendar.add, experiment.set {time_unit, warmup, duration, replications, seed}; list_commands shows \
 each command's parameters and an example); `check_model`; `run` for the results, each a mean across \
-replications with its 95% confidence interval; change a parameter and run again to compare; `save`. \
+replications with its 95% confidence interval; to compare, change a parameter, `run` again and \
+`execute` results.compare (the last run against the one before: each difference with its 95% \
+interval, paired when both runs keep the seed and replications, so keep them; experiment.sweep and \
+experiment.sensitivity do this over many values); `save`. \
 Every failure leaves the model unchanged and says why; `undo` takes back an edit.";
 
 pub struct Server {

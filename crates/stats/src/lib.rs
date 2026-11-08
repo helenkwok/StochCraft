@@ -9,8 +9,12 @@
 //! - [`spread`]: the distribution of a result across replications: percentiles, the empirical
 //!   cumulative distribution with its Dvoretzky–Kiefer–Wolfowitz band, and the probability of
 //!   meeting a target with Wilson's interval.
+//! - [`difference`]: the difference between two systems' results with a 95% confidence interval:
+//!   paired-t for runs with common random numbers, Welch's two-sample t otherwise.
 
+pub mod difference;
 pub mod spread;
+pub use difference::Difference;
 pub use spread::{Ecdf, Proportion};
 
 /// Running statistics over observations.

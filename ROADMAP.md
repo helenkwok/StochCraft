@@ -849,7 +849,11 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   same seed so the random streams are shared (common random numbers). The parameter is a
   task's `capacity`, a pool's `quantity`, a `queue_capacity`, or the `mean` of a time
   distribution (`Dist::scaled` keeps its shape). It reports the results asked for at each
-  value, and how much each moved across the range, with whether that is more than the noise.
+  value, and how much each moved across the range, with whether that is more than the noise
+  (a paired-t interval on the replications' differences, issue #66).
+- **Comparing two runs:** `results.compare` gives, per element and metric, both runs' means
+  and the difference with its 95% interval: paired-t when the runs share their seed and
+  replications, Welch's two-sample t otherwise (issue #66).
 - **Sensitivity:** `experiment.sensitivity` moves each parameter down and up by a fraction,
   one at a time, and ranks the results' elasticities. Every sweep and sensitivity analysis is
   recorded, with the model's digest, in the `sensitivity` list of later runs' records
