@@ -9,15 +9,16 @@ crates above it, so a change near the top touches little and a change near the b
 |---|---|---|
 | L0 | `random`, `stats` (standalone: no workspace dependencies) | Random-number generators and BPSim's distributions, statistics collectors |
 | L1 | `des`, `model` | The discrete-event core (event queue, processes, resources, timeouts); the model in memory (elements with stable ids, connections, experiment, validation) |
-| L2 | `blocks`, `agents`, `sd` | Modelling libraries: flow blocks (source, queue, delay, conveyor…), moving agents, stock-and-flow |
+| L2 | `blocks`, `agents`, `sd` | Modelling libraries: flow blocks (source, server, delay, gateways, batches…; conveyors planned), moving agents, stock-and-flow |
 | L3 | `experiment`, `io` | Replications, parameter sweeps and optimisation; model and result files |
 | L4 | `engine` | Commands, undo and redo, the journal and runs: the one way the CLI, the app and agents change or run a model |
 | L5 | `render`, then `ui-egui` and `mcp` | Drawing, the window, and agents over MCP. The only layer allowed UI, windowing or GPU crates |
 | — | `testkit` | Test tooling; other crates may use it only as a dev-dependency |
 | apps | `stochcraft`, `stochcraft-cli`, `stochcraft-web` | Exempt from the rules |
 
-Only `random`, `stats`, `des`, `model`, `blocks`, `experiment`, `io`, `engine`, `ui-egui` and `testkit` exist so far (with the three apps); the others are placed in advance so each crate's position is decided
-before it is written.
+Only `random`, `stats`, `des`, `model`, `blocks`, `experiment`, `io`, `engine`, `ui-egui`, `mcp`
+and `testkit` exist so far (with the three apps); the others (`agents`, `sd`, `render`) are
+placed in advance so each crate's position is decided before it is written.
 
 ## The app on craft-libs
 
@@ -39,8 +40,9 @@ only its view (pan, zoom), the selection and the clipboard.
 
 ### Watching a run
 
-Model ▸ Watch a Run (`ui-egui/src/live.rs`) steps replication 1 on the UI thread, a slice per
-frame, through the engine's `live_run`. It uses the same `blocks` runtime as Run, split so that
+Model ▸ Watch a Run (`ui-egui/src/live.rs`) steps replication 1 on the UI thread through the
+engine's `live_run`, for at most about 8 ms of each frame (`FRAME_BUDGET`, in chunks of 1,000
+events); what doesn't fit carries on in the next frame. It uses the same `blocks` runtime as Run, split so that
 one replication can stop at any time and be read. A plain run is that split run taken straight
 to its end, so the two cannot drift apart. Watching reads the model and never edits it.
 
@@ -59,7 +61,8 @@ A page cannot start threads, so the browser shell gives the app a pool of web wo
 A replication's random stream depends only on the seed and its index, and every number in an
 answer travels as its bits. The results are therefore the same as on threads, which a test
 checks for every model StochCraft can run. If no worker starts, the page runs the replications
-itself, one per frame. The service worker (`stochcraft-web/sw.js`) keeps the page and the files
+itself between frames, in slices of at most `SLICE_EVENTS` (5,000) events a frame; a
+replication that does not finish in one slice carries on in the next frame. The service worker (`stochcraft-web/sw.js`) keeps the page and the files
 it names, so the app also works offline.
 
 ### Translations
