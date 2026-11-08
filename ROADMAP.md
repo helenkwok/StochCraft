@@ -15,8 +15,8 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 
 | Crate | Layer | State |
 |---|---|---|
-| `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist` |
-| `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary` |
+| `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist`; fits to three-point estimates (`estimate`) |
+| `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary`; percentiles, empirical distributions with DKW bands, Wilson intervals (`spread`) |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate` |
 | `model` | L1 | The model in memory: elements, connections with probabilities and conditions, finite buffers, shared resource pools, experiment, entity properties, validation; BPSim's XPath expressions (`expr`) |
 | `blocks` | L2 | Compiles a model: source, server, shared task, delay, sink, exclusive and parallel gateways, merges; finite buffers with blocking after service and loss; shared pools with roles, alternatives and priorities; entities carry typed properties; per-element statistics; warm-up |
@@ -792,6 +792,59 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   distribution for a coarser model.
 - Acceptance model: a small multi-product plant written for StochCraft (two products sharing
   mixers and ovens, working hours, a weekly target at 70% confidence), sized automatically.
+
+**Done (first part):**
+- **Terminating runs:** `Experiment.stop` ends each replication on an event, with the warm-up
+  plus the duration as its time limit:
+  - `Stop::Count`: once N entities have left an element since time 0 (for a sink: arrived).
+  - `Stop::Empty`: the first time a task holds nothing after it has taken an entity in.
+  - The condition is checked after each instant, so the events and their order are exactly
+    those of a run without it; a condition never met changes nothing.
+  - Each report gives `stopped_at`, the time to the event. A live run (M3.5) ends there too.
+  - In files: `stochcraft:stopCount` or `stochcraft:stopWhenEmpty` on the watched element.
+    Engine: `experiment.set` with `stop`, `null` to remove it. Removing the element removes the
+    stop, in the same undo step.
+  - Results gain `stop`: how many replications met it, the mean time with its interval, and
+    each replication's time.
+- **Distributions of results:** results now carry every replication's value of every metric
+  (`values`, outside `elements`, so the golden digests are unchanged). `results.distribution`
+  asks about one of them, or `stop_time`, from the last run:
+  - percentiles (Hyndman and Fan's definition 7);
+  - the empirical cumulative distribution with its Dvoretzky–Kiefer–Wolfowitz band (Massart's
+    constant), replications that never met the stop counting as censored at the time limit;
+  - the probability of meeting a target (`at_least` or `at_most`) with Wilson's interval;
+  - `as_distribution`: the values as a continuous BPSim user distribution, ready for
+    `block.set` in a coarser model (results as inputs).
+- **Three-point estimates:** `random::ThreePoint` fits a minimum, a most likely value and a
+  maximum or 95th percentile:
+  - triangular: BPSim's own, the maximum solved for when a 95th percentile is given;
+  - PERT, the scaled beta: a BPSim user distribution of its percentiles;
+  - log-normal and Weibull from the minimum, mode and 95th percentile: BPSim's own when the
+    minimum is 0, otherwise a user distribution of percentiles.
+
+  `estimate.set` fits an element's time distribution (a source's arrivals, a task's service, a
+  delay) and keeps the triad and its source as the parameter's pedigree,
+  `stochcraft:estimate` in files (declared in the vendor schema). A distribution changed
+  afterwards no longer matches its estimate, which is a warning. `estimate.remove` forgets it.
+- The CLI's results table states the stop and when it was met.
+
+**Validation** (`blocks/tests/terminating.rs`, `random/src/estimate.rs`,
+`stats/src/spread.rs`, `engine/tests/engine.rs`):
+
+| Case | Theory | StochCraft |
+|---|---|---|
+| Activity network A(3)→B(4), A→E(5), C(6), D(2) after B and C: completion | 9 (critical path A–B–D) | 9 exactly |
+| Completion of 3 parallel exponential activities of mean 10 (2,000 replications) | 10 (1 + 1/2 + 1/3) = 18.333 | 18.142 ± 0.492 |
+| Same: largest gap between the empirical and the true distribution (1 − e^(−t/10))³ | within the 95% DKW band, 0.0304 | 0.0130 |
+| Same, 200 experiments of 50 replications: the 95% band contains the true distribution | at least 95% | 190 of 200 |
+| Same through the engine (4,000 replications): P(T ≤ 30) = (1 − e^−3)³ = 0.858 | inside Wilson's interval | yes |
+| 20 orders a minute apart, 2 minutes each: the server empties | 41 | 41 exactly |
+| PERT(10, 20, 60): mean (min + 4 mode + max) / 6 | 25 | 25.04 (the 1% table) |
+| Log-normal and Weibull fits: mode and 95th percentile | as given | to 10⁻⁹ |
+| Wilson's interval for 8 of 10 at 95% | [0.4902, 0.9433] | same |
+
+**Still to do in M2.8:** sweeps and sensitivity records, capacity sizing at the bottleneck with
+the deterministic answer beside it, and the acceptance model.
 
 **Later in M2 or M4:** conveyors with length, speed and accumulation; travel networks for
 forklifts and AGVs; agent behaviours (`agents` crate); stock-and-flow (`sd` crate, XMILE);

@@ -13,8 +13,9 @@ use stochcraft_model::{
 use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
-    self, AvailabilityDoc, BreakdownSpec, DistSpec, EventDoc, KindSpec, ModelDoc, NeedSpec,
-    PropertyDoc, PropertyTypeSpec, PropertyValueSpec, ShiftDoc, Stamp, TimeUnitSpec, TimedDist,
+    self, AvailabilityDoc, BreakdownSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec, KindSpec,
+    ModelDoc, NeedSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, ShiftDoc, Stamp,
+    StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -454,6 +455,32 @@ pub struct ExperimentSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<String>")]
     pub start: Option<Option<Stamp>>,
+    /// What ends each replication early (a terminating experiment), the warm-up plus the
+    /// duration then being its time limit; `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    pub stop: Option<Option<StopSpec>>,
+}
+
+/// A three-point estimate to fit an element's time distribution to: a source's time between
+/// arrivals, a task's service time or a delay's duration. The element then uses the fitted
+/// distribution (a standard BPSim one), and keeps the estimate as its pedigree.
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct EstimateSet {
+    pub id: String,
+    pub family: FamilySpec,
+    pub min: f64,
+    /// The most likely value.
+    pub mode: f64,
+    /// The largest value possible (triangular and PERT); give this or `p95`.
+    #[serde(default)]
+    pub max: Option<f64>,
+    /// The value exceeded one time in twenty.
+    #[serde(default)]
+    pub p95: Option<f64>,
+    /// Who gave the estimate or where it comes from.
+    #[serde(default)]
+    pub source: String,
 }
 
 /// Overrides of the model's experiment for this run only.
@@ -779,8 +806,89 @@ fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 fn block_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Id = parse(p)?;
     let id = existing_element(e.model(), &p.id)?;
-    e.edit("block.remove", Op::RemoveElement(id))?;
+    // Its estimate goes with it, and a stop condition watching it.
+    let mut ops = Vec::new();
+    if e.model().estimates.contains_key(&id) {
+        ops.push(Op::SetEstimate(id.clone(), None));
+    }
+    let x = &e.model().experiment;
+    if x.stop.as_ref().is_some_and(|s| s.element() == &id) {
+        let mut x = x.clone();
+        x.stop = None;
+        ops.push(Op::SetExperiment(x));
+    }
+    ops.push(Op::RemoveElement(id));
+    e.edit("block.remove", Op::Batch(ops))?;
     Ok(json!({}))
+}
+
+fn estimate_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: EstimateSet = parse(p)?;
+    let id = existing_element(e.model(), &p.id)?;
+    let estimate = EstimateDoc {
+        family: p.family,
+        min: p.min,
+        mode: p.mode,
+        max: p.max,
+        p95: p.p95,
+        source: p.source,
+    }
+    .to_estimate()
+    .map_err(|m| CommandError::new(ErrorCode::InvalidParams, m))?;
+    let fitted = estimate
+        .three_point
+        .fit()
+        .map_err(|err| CommandError::new(ErrorCode::InvalidParams, err.to_string()))?;
+    let mut kind = e
+        .model()
+        .element(&id)
+        .map_or(ElementKind::Sink, |el| el.kind.clone());
+    match &mut kind {
+        ElementKind::Source {
+            interarrival: d, ..
+        }
+        | ElementKind::Server { service: d, .. }
+        | ElementKind::SharedTask { service: d, .. }
+        | ElementKind::Delay { duration: d } => *d = fitted.clone(),
+        _ => {
+            return Err(CommandError::new(
+                ErrorCode::InvalidParams,
+                format!("`{id}` has no time distribution to fit an estimate to"),
+            ));
+        }
+    }
+    e.edit(
+        "estimate.set",
+        Op::Batch(vec![
+            Op::SetKind(id.clone(), kind),
+            Op::SetEstimate(id, Some(estimate)),
+        ]),
+    )?;
+    Ok(json!({ "distribution": DistSpec::from(&fitted), "mean": fitted.mean() }))
+}
+
+fn estimate_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: Id = parse(p)?;
+    let id = existing_element(e.model(), &p.id)?;
+    if !e.model().estimates.contains_key(&id) {
+        return Err(CommandError::new(
+            ErrorCode::NotFound,
+            format!("`{id}` has no three-point estimate"),
+        ));
+    }
+    e.edit("estimate.remove", Op::SetEstimate(id, None))?;
+    Ok(json!({}))
+}
+
+fn results_distribution(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: crate::distribution::Params = parse(p)?;
+    let results = e.last_results.as_ref().ok_or_else(|| {
+        CommandError::new(
+            ErrorCode::NotFound,
+            "no run has finished yet: run the experiment first",
+        )
+    })?;
+    crate::distribution::describe(results, &p)
 }
 
 fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
@@ -1258,7 +1366,14 @@ fn experiment_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     if let Some(s) = p.start {
         x.start = s.map(|s| s.0);
     }
+    if let Some(stop) = &p.stop {
+        if let Some(s) = stop {
+            existing_element(e.model(), s.element())?;
+        }
+        x.stop = stop.clone().map(Into::into);
+    }
     let given = [
+        p.stop.is_some(),
         p.start.is_some(),
         p.time_unit.is_some(),
         p.warmup.is_some(),
@@ -1408,6 +1523,22 @@ pub static COMMANDS: &[Command] = &[
         run: block_set,
     },
     Command {
+        name: "estimate.set",
+        summary: "Fit an element's time distribution to a three-point estimate (minimum, most likely, maximum or 95th percentile) and keep the estimate as its pedigree. Returns the distribution.",
+        kind: CommandKind::Edit,
+        schema: schema::<EstimateSet>,
+        example: || json!({ "id": "desk", "family": "pert", "min": 0.5, "mode": 1.2, "max": 4.0, "source": "front-desk staff, March" }),
+        run: estimate_set,
+    },
+    Command {
+        name: "estimate.remove",
+        summary: "Forget an element's three-point estimate; its distribution stays.",
+        kind: CommandKind::Edit,
+        schema: schema::<Id>,
+        example: || json!({ "id": "desk" }),
+        run: estimate_remove,
+    },
+    Command {
         name: "block.rename",
         summary: "Change an element's display name (its id stays).",
         kind: CommandKind::Edit,
@@ -1497,7 +1628,7 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.set",
-        summary: "Change the experiment: time unit, warm-up, duration, replications, seed, start.",
+        summary: "Change the experiment: time unit, warm-up, duration, replications, seed, start, and an event that ends each replication early.",
         kind: CommandKind::Edit,
         schema: schema::<ExperimentSet>,
         example: || json!({ "replications": 5, "duration": 240.0 }),
@@ -1582,6 +1713,14 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<Run>,
         example: || json!({ "replications": 4 }),
         run,
+    },
+    Command {
+        name: "results.distribution",
+        summary: "The distribution of one result across the last run's replications: percentiles, the empirical distribution with a confidence band, the probability of meeting a target, and the values as a distribution for another model.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::distribution::Params>,
+        example: || json!({ "element": "exit", "metric": "mean_time_in_system", "at_most": 6.0 }),
+        run: results_distribution,
     },
     Command {
         name: "run.start",

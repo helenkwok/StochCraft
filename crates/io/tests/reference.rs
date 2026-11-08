@@ -16,8 +16,8 @@ use stochcraft_blocks::{Event, Rule};
 use stochcraft_io::bpsim::{self, NS2};
 use stochcraft_io::{read, read_scenario, write_new, xml};
 use stochcraft_model::{
-    Connection, DateTime, Dist, Element, ElementId, ElementKind, Experiment, Model, Property,
-    PropertyType, PropertyValue, TimeUnit,
+    Connection, DateTime, Dist, Element, ElementId, ElementKind, Estimate, Experiment, Family,
+    Model, Property, PropertyType, PropertyValue, Stop, ThreePoint, TimeUnit, Upper,
 };
 
 fn required() -> bool {
@@ -544,6 +544,49 @@ fn edits() -> Vec<Edit> {
                 }
             }),
         ),
+        (
+            "terminating, with an estimate",
+            Box::new(move |m: &mut Model| {
+                // The run stops at the 5th entity out of the first end event; the first task's
+                // time is a PERT fitted from a three-point estimate, kept as its pedigree.
+                if let Some(i) = first(m, |k| matches!(k, ElementKind::Sink)) {
+                    m.experiment.stop = Some(Stop::Count {
+                        element: m.elements[i].id.clone(),
+                        count: 5,
+                    });
+                }
+                let three_point = ThreePoint {
+                    family: Family::Pert,
+                    min: 1.0,
+                    mode: 2.5,
+                    upper: 6.0,
+                    upper_is: Upper::Max,
+                };
+                let fitted = three_point.fit().unwrap_or(Dist::Constant(0.0));
+                if let Some(i) = first(m, |k| {
+                    matches!(
+                        k,
+                        ElementKind::Server { .. }
+                            | ElementKind::SharedTask { .. }
+                            | ElementKind::Delay { .. }
+                    )
+                }) {
+                    match &mut m.elements[i].kind {
+                        ElementKind::Server { service: d, .. }
+                        | ElementKind::SharedTask { service: d, .. }
+                        | ElementKind::Delay { duration: d } => *d = fitted,
+                        _ => {}
+                    }
+                    m.estimates.insert(
+                        m.elements[i].id.clone(),
+                        Estimate {
+                            three_point,
+                            source: "Delphi, round 2 (3 experts)".into(),
+                        },
+                    );
+                }
+            }),
+        ),
     ]
 }
 
@@ -833,6 +876,7 @@ fn showcase() -> Model {
         duration: 40.0,
         replications: 7,
         seed: u64::MAX - 3,
+        stop: None,
         start: Some(day(4, 6)),
     })
 }

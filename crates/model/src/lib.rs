@@ -24,7 +24,7 @@ pub use calendar::{Calendar, DateTime, Timed};
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-pub use stochcraft_random::Dist;
+pub use stochcraft_random::{Dist, Family, FitError, ThreePoint, Upper};
 
 /// The id of a model element or connection. Ids follow the XML `NCName` rule that BPMN and XPDL
 /// ids obey: a letter or `_` first, then letters, digits, `.`, `-` or `_`.
@@ -501,6 +501,42 @@ pub struct Experiment {
     /// The date and time model time 0 stands for (BPSim scenario `start`), which places the
     /// calendars; without one, midnight of the day the earliest calendar event starts.
     pub start: Option<DateTime>,
+    /// An event that ends each replication early (a terminating experiment); the warm-up plus
+    /// the duration is then its time limit. A StochCraft vendor extension on the scenario
+    /// (`stochcraft:stop`), since BPSim runs for a fixed duration.
+    pub stop: Option<Stop>,
+}
+
+/// What ends a replication before its time limit. Checked after everything that happens at one
+/// instant has happened, so the replication ends at that instant.
+#[derive(Debug, Clone, PartialEq)]
+pub enum Stop {
+    /// Once `count` entities have left `element` since time 0, warm-up included (for a sink:
+    /// arrived there): a target count.
+    Count { element: ElementId, count: u64 },
+    /// The first time `element`, a task, holds no entity (none waiting, none being served or
+    /// delayed) after it has taken one in: a backlog cleared.
+    Empty { element: ElementId },
+}
+
+impl Stop {
+    /// The element whose state it watches.
+    pub fn element(&self) -> &ElementId {
+        match self {
+            Stop::Count { element, .. } | Stop::Empty { element } => element,
+        }
+    }
+}
+
+/// An expert's three-point estimate that an element's time distribution was fitted from: the
+/// parameter's pedigree (NASA-STD-7009B [M&S 24], docs/research.md), kept with the model as a
+/// StochCraft vendor extension (`stochcraft:estimate`). The distribution is the one used; the
+/// estimate records where it came from.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Estimate {
+    pub three_point: ThreePoint,
+    /// Who gave it or where it comes from (free text; may be empty).
+    pub source: String,
 }
 
 impl Default for Experiment {
@@ -512,6 +548,7 @@ impl Default for Experiment {
             replications: 10,
             seed: 1,
             start: None,
+            stop: None,
         }
     }
 }
@@ -530,6 +567,9 @@ pub struct Model {
     /// Where elements are drawn: the shapes of the file's diagram (BPMN DI, XPDL graphics) and
     /// those placed since. An element without one is placed by [`Model::placed`].
     pub layout: BTreeMap<ElementId, Bounds>,
+    /// The three-point estimates elements' time distributions were fitted from (see
+    /// [`Model::estimated`] for which distribution).
+    pub estimates: BTreeMap<ElementId, Estimate>,
 }
 
 /// Where an element is drawn: its shape's top-left corner and size, in the diagram's units
@@ -722,6 +762,20 @@ pub enum Problem {
     QuantityIgnored,
     /// The model splits batches but makes none.
     NothingToUnbatch,
+    /// The experiment's stop condition cannot be used, and why.
+    BadStop {
+        reason: &'static str,
+    },
+    /// A three-point estimate for an element with no time distribution to fit (or no such
+    /// element).
+    EstimateIgnored,
+    /// A three-point estimate that cannot be fitted.
+    BadEstimate {
+        error: FitError,
+    },
+    /// The element's distribution is no longer the one fitted from its estimate (it was changed
+    /// since): the estimate no longer says where the distribution came from.
+    EstimateMismatch,
 }
 
 impl Problem {
@@ -772,6 +826,10 @@ impl Problem {
             Problem::ZeroQuantity => "zero_quantity",
             Problem::QuantityIgnored => "quantity_ignored",
             Problem::NothingToUnbatch => "nothing_to_unbatch",
+            Problem::BadStop { .. } => "bad_stop",
+            Problem::EstimateIgnored => "estimate_ignored",
+            Problem::BadEstimate { .. } => "bad_estimate",
+            Problem::EstimateMismatch => "estimate_mismatch",
         }
     }
 }
@@ -954,7 +1012,62 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "no element makes batches, so this one passes every entity through"
             ),
+            Problem::BadStop { reason } => write!(f, "the run cannot stop here: {reason}"),
+            Problem::EstimateIgnored => write!(
+                f,
+                "has a three-point estimate but no time distribution to fit it to; it is ignored"
+            ),
+            Problem::BadEstimate { error } => write!(f, "three-point estimate: {error}"),
+            Problem::EstimateMismatch => write!(
+                f,
+                "the time distribution is no longer the one fitted from its three-point estimate"
+            ),
         }
+    }
+}
+
+/// Whether `a` and `b` are the same distribution up to the rounding of a file's numbers (a
+/// fitted distribution read back from a file, say).
+fn same_fit(a: &Dist, b: &Dist) -> bool {
+    let near = |x: f64, y: f64| (x - y).abs() <= 1e-9 * x.abs().max(y.abs()).max(1.0);
+    match (a, b) {
+        (
+            Dist::Triangular { min, mode, max },
+            Dist::Triangular {
+                min: m2,
+                mode: o2,
+                max: x2,
+            },
+        ) => near(*min, *m2) && near(*mode, *o2) && near(*max, *x2),
+        (
+            Dist::LogNormal { mean, std_dev },
+            Dist::LogNormal {
+                mean: m2,
+                std_dev: s2,
+            },
+        ) => near(*mean, *m2) && near(*std_dev, *s2),
+        (
+            Dist::Weibull { shape, scale },
+            Dist::Weibull {
+                shape: k2,
+                scale: l2,
+            },
+        ) => near(*shape, *k2) && near(*scale, *l2),
+        (
+            Dist::User { points, discrete },
+            Dist::User {
+                points: p2,
+                discrete: d2,
+            },
+        ) => {
+            discrete == d2
+                && points.len() == p2.len()
+                && points
+                    .iter()
+                    .zip(p2)
+                    .all(|((p, v), (q, w))| near(*p, *q) && near(*v, *w))
+        }
+        _ => false,
     }
 }
 
@@ -1072,6 +1185,8 @@ impl Model {
             }
         }
         self.check_experiment(&mut out);
+        self.check_stop(&mut out);
+        self.check_estimates(&mut out);
         self.check_properties(&mut out);
         self.check_routing(&mut out);
         self.check_reachability(&outgoing, &mut out);
@@ -1621,6 +1736,65 @@ impl Model {
         }
     }
 
+    /// The stop condition names an element that can meet it.
+    fn check_stop(&self, out: &mut Vec<Diagnostic>) {
+        let Some(stop) = &self.experiment.stop else {
+            return;
+        };
+        let id = stop.element();
+        let reason = match (stop, self.element(id).map(|e| &e.kind)) {
+            (_, None) => Some("no element has this id"),
+            (Stop::Count { count: 0, .. }, _) => Some("the count must be 1 or more"),
+            (Stop::Count { .. }, Some(_)) => None,
+            (
+                Stop::Empty { .. },
+                Some(
+                    ElementKind::Server { .. }
+                    | ElementKind::SharedTask { .. }
+                    | ElementKind::Delay { .. },
+                ),
+            ) => None,
+            (Stop::Empty { .. }, Some(_)) => Some("only a task can empty"),
+        };
+        if let Some(reason) = reason {
+            out.push(Diagnostic::error(Some(id), Problem::BadStop { reason }));
+        }
+    }
+
+    /// Each estimate is for an element with a time distribution, can be fitted, and is what the
+    /// element uses.
+    fn check_estimates(&self, out: &mut Vec<Diagnostic>) {
+        for (id, estimate) in &self.estimates {
+            let Some(dist) = self.estimated(id) else {
+                out.push(Diagnostic::warning(Some(id), Problem::EstimateIgnored));
+                continue;
+            };
+            match estimate.three_point.fit() {
+                Err(error) => out.push(Diagnostic::warning(
+                    Some(id),
+                    Problem::BadEstimate { error },
+                )),
+                Ok(fitted) if !same_fit(&fitted, dist) => {
+                    out.push(Diagnostic::warning(Some(id), Problem::EstimateMismatch));
+                }
+                Ok(_) => {}
+            }
+        }
+    }
+
+    /// The time distribution of element `id` that a three-point estimate is for: a source's time
+    /// between arrivals, a task's service time, a delay's duration.
+    pub fn estimated(&self, id: &ElementId) -> Option<&Dist> {
+        match &self.element(id)?.kind {
+            ElementKind::Source { interarrival, .. } => Some(interarrival),
+            ElementKind::Server { service, .. } | ElementKind::SharedTask { service, .. } => {
+                Some(service)
+            }
+            ElementKind::Delay { duration } => Some(duration),
+            _ => None,
+        }
+    }
+
     /// Finite buffers fed through gateways, and loops of finite buffers that can deadlock.
     fn check_buffers(
         &self,
@@ -2055,6 +2229,7 @@ mod tests {
             resources: Vec::new(),
             experiment: Experiment::default(),
             layout: BTreeMap::new(),
+            estimates: BTreeMap::new(),
             calendars: Vec::new(),
         }
     }
@@ -2366,6 +2541,105 @@ mod tests {
         assert!(
             text.contains(&"error at `machine`: has nowhere to send entities".to_string()),
             "{text:#?}"
+        );
+    }
+
+    #[test]
+    fn stops_need_an_element_that_can_meet_them() {
+        let codes = |stop: Stop| {
+            let mut m = mm1();
+            m.experiment.stop = Some(stop);
+            m.validate()
+                .into_iter()
+                .filter(|d| d.problem.code() == "bad_stop")
+                .map(|d| (d.severity, d.at.map(|a| a.to_string())))
+                .collect::<Vec<_>>()
+        };
+        let id = ElementId::unchecked;
+        assert!(
+            codes(Stop::Count {
+                element: id("exit"),
+                count: 10
+            })
+            .is_empty()
+        );
+        assert!(
+            codes(Stop::Empty {
+                element: id("machine")
+            })
+            .is_empty()
+        );
+        let bad = vec![(Severity::Error, Some("exit".to_owned()))];
+        assert_eq!(
+            codes(Stop::Empty {
+                element: id("exit")
+            }),
+            bad
+        );
+        assert_eq!(
+            codes(Stop::Count {
+                element: id("exit"),
+                count: 0
+            }),
+            bad
+        );
+        assert_eq!(
+            codes(Stop::Count {
+                element: id("gone"),
+                count: 1
+            }),
+            vec![(Severity::Error, Some("gone".to_owned()))]
+        );
+    }
+
+    #[test]
+    fn estimates_must_fit_what_the_element_uses() {
+        let three_point = ThreePoint {
+            family: Family::Triangular,
+            min: 0.5,
+            mode: 1.0,
+            upper: 2.0,
+            upper_is: Upper::Max,
+        };
+        let mut m = mm1();
+        let estimate = Estimate {
+            three_point,
+            source: String::new(),
+        };
+        m.estimates
+            .insert(ElementId::unchecked("machine"), estimate.clone());
+        m.estimates
+            .insert(ElementId::unchecked("exit"), estimate.clone());
+        let codes = |m: &Model| -> Vec<(Option<String>, String)> {
+            m.validate()
+                .into_iter()
+                .map(|d| (d.at.map(|a| a.to_string()), d.problem.code().to_owned()))
+                .collect()
+        };
+        assert_eq!(
+            codes(&m),
+            vec![
+                (Some("exit".into()), "estimate_ignored".into()),
+                (Some("machine".into()), "estimate_mismatch".into()),
+            ]
+        );
+        if let Some(e) = m.elements.iter_mut().find(|e| e.id.as_str() == "machine")
+            && let ElementKind::Server { service, .. } = &mut e.kind
+        {
+            *service = Dist::Triangular {
+                min: 0.5,
+                mode: 1.0,
+                max: 2.0,
+            };
+        }
+        m.estimates.remove(&ElementId::unchecked("exit"));
+        assert_eq!(codes(&m), vec![]);
+        let mut bad = estimate;
+        bad.three_point.mode = 5.0;
+        m.estimates.insert(ElementId::unchecked("machine"), bad);
+        assert_eq!(
+            codes(&m),
+            vec![(Some("machine".into()), "bad_estimate".into())]
         );
     }
 }

@@ -7,8 +7,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Breakdown, Calendar, DateTime, Dist, ElementKind, Model, Need, Property, PropertyType,
-    PropertyValue, ResourcePool, Timed,
+    Bounds, Breakdown, Calendar, DateTime, Dist, ElementKind, Estimate, Model, Need, Property,
+    PropertyType, PropertyValue, ResourcePool, Stop, Timed,
 };
 
 use crate::bpsim::NS2;
@@ -279,6 +279,34 @@ pub(crate) fn breakdown_element(b: &Breakdown) -> Element {
                 .with_child(part("timeToFailure", &b.time_to_failure))
                 .with_child(part("repairTime", &b.repair)),
         )
+}
+
+/// A terminating experiment's stop condition, as a vendor extension on the element it watches.
+pub(crate) fn stop_element(stop: &Stop) -> Element {
+    match stop {
+        Stop::Count { count, .. } => {
+            vendor_value_element(crate::bpsim::STOP_COUNT, &count.to_string())
+        }
+        Stop::Empty { .. } => vendor_value_element(crate::bpsim::STOP_WHEN_EMPTY, "true"),
+    }
+}
+
+/// A three-point estimate as StochCraft's vendor extension ([`crate::bpsim::ESTIMATE`]).
+pub(crate) fn estimate_element(e: &Estimate) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let t = &e.three_point;
+    let mut body = Element::new("stochcraft:estimate", Some(ns))
+        .with_attr("family", t.family.name())
+        .with_attr("min", &num(t.min))
+        .with_attr("mode", &num(t.mode))
+        .with_attr(t.upper_is.name(), &num(t.upper));
+    if !e.source.is_empty() {
+        body = body.with_attr("source", &e.source);
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::ESTIMATE)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
 }
 
 /// BPSim's `Interruptible`, for a server whose failures interrupt the job under way.
@@ -574,6 +602,17 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if let Some(x) = batching_element(&e.kind) {
             ep.push(x);
+        }
+        if let Some(stop) = model
+            .experiment
+            .stop
+            .as_ref()
+            .filter(|s| s.element() == &e.id)
+        {
+            ep.push(stop_element(stop));
+        }
+        if let Some(x) = model.estimates.get(&e.id) {
+            ep.push(estimate_element(x));
         }
         if ep.elements().next().is_none() {
             continue;

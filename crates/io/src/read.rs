@@ -8,8 +8,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, Connection, DateTime, Dist, Element as ModelElement, ElementId,
-    ElementKind, Experiment, Model, Need, Property, PropertyType, PropertyValue, ResourcePool,
-    TimeUnit, Timed,
+    ElementKind, Estimate, Experiment, Family, Model, Need, Property, PropertyType, PropertyValue,
+    ResourcePool, Stop, ThreePoint, TimeUnit, Timed, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -1021,15 +1021,113 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             quantity: vendor_count(scenario, id, bpsim::QUANTITY, "a quantity", notes),
         });
     }
+    let mut experiment = experiment(scenario, notes);
+    experiment.stop = stop_of(scenario, &elements, notes);
+    let estimates = estimates_of(scenario, &elements, notes);
     Model {
         name: p.name,
         elements,
         connections,
         resources,
         calendars: calendars(scenario, notes),
-        experiment: experiment(scenario, notes),
+        experiment,
         layout: BTreeMap::new(),
+        estimates,
     }
+}
+
+/// The stop condition StochCraft's vendor extensions give the experiment, on the element they
+/// watch; the first, in model order, if there are several.
+fn stop_of(
+    scenario: Option<&Scenario>,
+    elements: &[ModelElement],
+    notes: &mut Vec<Note>,
+) -> Option<Stop> {
+    let s = scenario?;
+    let mut found: Vec<Stop> = Vec::new();
+    for e in elements {
+        let id = e.id.as_str();
+        let element = e.id.clone();
+        if let Some(n) = vendor_count(scenario, id, bpsim::STOP_COUNT, "a stop count", notes) {
+            found.push(Stop::Count {
+                element: element.clone(),
+                count: u64::from(n),
+            });
+        }
+        if let Some(x) = s.param(id, &format!("VendorExtension/{}", bpsim::STOP_WHEN_EMPTY)) {
+            match bpsim::vendor_value(x).unwrap_or_default().trim() {
+                "true" | "1" => found.push(Stop::Empty { element }),
+                "false" | "0" => {}
+                other => notes.push(Note::error(
+                    Some(id),
+                    format!(
+                        "`{}` must be true or false, not `{other}`; it is ignored",
+                        bpsim::STOP_WHEN_EMPTY
+                    ),
+                )),
+            }
+        }
+    }
+    if found.len() > 1 {
+        notes.push(Note::error(
+            Some(found[0].element().as_str()),
+            "the scenario has several stop conditions; the run stops on this one only",
+        ));
+    }
+    found.into_iter().next()
+}
+
+/// The three-point estimates StochCraft's vendor extensions record for elements.
+fn estimates_of(
+    scenario: Option<&Scenario>,
+    elements: &[ModelElement],
+    notes: &mut Vec<Note>,
+) -> BTreeMap<ElementId, Estimate> {
+    let mut out = BTreeMap::new();
+    let Some(s) = scenario else {
+        return out;
+    };
+    for e in elements {
+        let id = e.id.as_str();
+        let Some(ext) = s.param(id, &format!("VendorExtension/{}", bpsim::ESTIMATE)) else {
+            continue;
+        };
+        let body = ext.elements().find(|x| x.local() == "estimate");
+        let number = |name: &str| body.and_then(|b| b.attr(name)?.trim().parse::<f64>().ok());
+        let family = body
+            .and_then(|b| b.attr("family"))
+            .and_then(|f| Family::from_name(f.trim()));
+        let upper = match (number("max"), number("p95")) {
+            (Some(x), None) => Some((x, Upper::Max)),
+            (None, Some(x)) => Some((x, Upper::P95)),
+            _ => None,
+        };
+        match (family, number("min"), number("mode"), upper) {
+            (Some(family), Some(min), Some(mode), Some((upper, upper_is))) => {
+                out.insert(
+                    e.id.clone(),
+                    Estimate {
+                        three_point: ThreePoint {
+                            family,
+                            min,
+                            mode,
+                            upper,
+                            upper_is,
+                        },
+                        source: body.and_then(|b| b.attr("source")).unwrap_or_default(),
+                    },
+                );
+            }
+            _ => notes.push(Note::error(
+                Some(id),
+                format!(
+                    "a three-point estimate (`{}`) needs a family (triangular, pert, lognormal or weibull), a min, a mode and one of max or p95; it is ignored",
+                    bpsim::ESTIMATE
+                ),
+            )),
+        }
+    }
+    out
 }
 
 /// The finite buffer StochCraft's vendor extension gives element `id`, if any; and a note for
@@ -1057,10 +1155,14 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::BATCH_SIZE,
             bpsim::UNBATCH,
             bpsim::QUANTITY,
+            bpsim::STOP_COUNT,
+            bpsim::STOP_WHEN_EMPTY,
+            bpsim::ESTIMATE,
         ]
         .contains(&name)
         {
-            // Read by `breakdown_of`, `batching_of` and `vendor_count`.
+            // Read by `breakdown_of`, `batching_of`, `vendor_count`, `stop_of` and
+            // `estimates_of`.
         } else if name.starts_with(bpsim::STOCHCRAFT) {
             notes.push(Note::warning(
                 Some(id),
@@ -1235,6 +1337,7 @@ fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment 
         replications: s.replication.unwrap_or(1),
         seed,
         start,
+        stop: None,
     }
 }
 

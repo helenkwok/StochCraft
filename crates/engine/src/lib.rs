@@ -40,6 +40,7 @@
 //!   file from the model alone.
 
 mod commands;
+mod distribution;
 mod edit;
 mod run;
 pub mod wire;
@@ -209,6 +210,8 @@ pub struct Engine {
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
     job: Option<Job>,
+    /// The results of the last run that finished, for `results.distribution`.
+    last_results: Option<Value>,
 }
 
 impl Default for Engine {
@@ -233,6 +236,7 @@ impl Engine {
             journal: Vec::new(),
             file: None,
             job: None,
+            last_results: None,
         }
     }
 
@@ -248,6 +252,14 @@ impl Engine {
             CommandError::new(ErrorCode::UnknownCommand, format!("no command `{command}`"))
         })?;
         let result = (c.run)(self, params.clone())?;
+        // Keep the last results, for questions about their distributions.
+        match command {
+            "run" => self.last_results = Some(result.clone()),
+            "run.status" if result["state"] == "finished" => {
+                self.last_results = Some(result["result"].clone());
+            }
+            _ => {}
+        }
         if c.kind != CommandKind::Query {
             self.journal.push(JournalEntry {
                 command: command.to_owned(),
