@@ -1,0 +1,17 @@
+[package]
+name = "stochcraft-mcp"
+description = "StochCraft's MCP server: the engine's commands as tools for AI agents, over JSON-RPC 2.0 on stdio, headless or driving the running app."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+stochcraft-engine = { workspace = true }
+serde_json = "1"
+
+[lints]
+workspace = true

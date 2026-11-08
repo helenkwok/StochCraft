@@ -23,9 +23,10 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
 | `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, `stochcraft:` vendor extensions), write new, save edits into opened files |
 | `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs; `flow.set` for routing; `queue_capacity` on servers; `resource.add`/`set`/`remove` and shared tasks |
-| `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `exec`, `schema` |
+| `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `exec`, `schema`, `mcp` |
 | `ui-egui` | L5 | The app's window: menus, shortcuts, model outline, background runs, results, unsaved-change prompts |
-| `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs) and the browser shell, published on GitHub Pages |
+| `mcp` | L5 | The MCP server: the engine's commands as tools for agents, headless (with optional read and write roots) or driving the app through its control channel |
+| `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs, `--control` for agents) and the browser shell, published on GitHub Pages |
 | `bench/` | outside | M/M/1 against simu-des and SimPy (54× SimPy) |
 
 Models are saved and opened as BPSim files, changed through engine commands, and run from the
@@ -1121,6 +1122,31 @@ replications other than the first.
   run on the shell's workers, falling back when there are none, and cancelling. Checked by hand
   in Chromium: three workers ran the M/M/1 example, and offline the page reloaded from the cache
   and ran the tandem line.
+
+**Done (agents):** docs/mcp.md.
+- **`crates/mcp`** (`stochcraft-mcp`): MCP over stdio (JSON-RPC 2.0, protocol revisions
+  2025-06-18, 2025-03-26 and 2024-11-05), following FieldCraft's server.
+  - Tools: `list_commands`, `execute`, `batch`, `inspect_model`, `check_model`, `open`, `save`,
+    `run`, `undo` and `redo`.
+  - Resources: the model and the command catalogue.
+  - Input is treated as hostile: lines are capped at 16 MiB, JSON-RPC batches at 100 messages
+    and `batch` calls at 10 000 steps, and arguments are checked against each tool's schema.
+- **`stochcraft-cli mcp`** runs it headless. `--read-root` and `--write-root` confine the files
+  the agent opens and saves (links followed, whole-folder comparison, as in FieldCraft).
+- **Watching an agent:** `stochcraft --control PORT` listens on the loopback interface, and
+  `stochcraft-cli mcp --connect 127.0.0.1:PORT` drives the window through it. A model the agent
+  opens replaces the one shown, its runs' results are shown, and its edits can be undone.
+- **Tests:** `mcp/tests/session.rs` covers four areas:
+  - an agent's session (open, batch build, check, run against M/M/1 theory, undo, save,
+    resources);
+  - hostile input;
+  - the roots;
+  - the same tools through a control channel.
+
+  `ui-egui/tests/control.rs` checks that an agent's commands show in the window. Checked by hand:
+  the desktop app on a virtual display, driven by `stochcraft-cli mcp --connect`, opened the
+  tandem line and showed its results.
+
 **Later:** 2D layout with entities moving between stations; 3D (the `render` crate, wgpu);
 FlexSim-style factory layouts via the shared `craft-factory` data from CADCraft.
 

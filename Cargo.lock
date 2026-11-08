@@ -3425,6 +3425,7 @@ dependencies = [
  "egui",
  "serde",
  "serde_json",
+ "stochcraft-mcp",
  "stochcraft-ui-egui",
 ]
 
@@ -3445,6 +3446,7 @@ dependencies = [
  "clap",
  "serde_json",
  "stochcraft-engine",
+ "stochcraft-mcp",
 ]
 
 [[package]]
@@ -3490,6 +3492,14 @@ dependencies = [
  "stochcraft-blocks",
  "stochcraft-model",
  "stochcraft-random",
+]
+
+[[package]]
+name = "stochcraft-mcp"
+version = "0.1.0"
+dependencies = [
+ "serde_json",
+ "stochcraft-engine",
 ]
 
 [[package]]

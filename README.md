@@ -68,6 +68,18 @@ parameters) and replayed:
 stochcraft-cli exec changes.json --open queue.bpmn
 ```
 
+## Using it from an AI agent
+
+`stochcraft-cli mcp` serves the engine's commands over the Model Context Protocol, so an agent
+such as Claude Code can open, build, run and compare models:
+
+```bash
+claude mcp add stochcraft -- /path/to/stochcraft-cli mcp
+```
+
+Start the app with `stochcraft --control 7070` and add `--connect 127.0.0.1:7070` to watch the
+agent work in the window. [docs/mcp.md](docs/mcp.md) has the tools and options.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the clean-room and licence rules.
