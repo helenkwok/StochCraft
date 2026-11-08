@@ -311,6 +311,17 @@ The methods of M2.8, each implemented from its published description:
 - **Results as inputs**: the continuous empirical distribution, linear between the sorted
   values, of A. M. Law, *Simulation Modeling and Analysis*, 5th ed., McGraw-Hill, 2015,
   section 6.2.4.
+- **Comparing variants with common random numbers**: every variant of a sweep, a sensitivity
+  analysis or a sizing step is run with the same seed, so each replication meets the same
+  random numbers (Law, above, section 11.2), and differences between variants come from the
+  change rather than from noise.
+- **Elasticities** are central differences, one parameter at a time: the relative change in a
+  result over the relative change in the parameter. For the M/M/1 time in system
+  W = s / (1 − s/a), with service time s and time between arrivals a, they are 1 / (1 − ρ) and
+  −ρ / (1 − ρ) at the point; over ±10% at ρ = 0.75 the central differences are 4.40 and −3.57.
+- **Sizing at the bottleneck** follows the NNSA practice above: add a unit at the busiest
+  resource and run again until the share of simulated weeks meeting the target reaches the
+  confidence.
 - **Checks** (`crates/blocks/tests/terminating.rs`): the completion time of an activity network
   of constant durations is its critical path (the longest path); that of k parallel activities
   with exponential durations of mean m is their maximum, with distribution (1 − e^(−t/m))^k and

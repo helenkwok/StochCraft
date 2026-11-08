@@ -1875,3 +1875,164 @@ fn three_point_estimates_fit_distributions_and_are_kept() {
     let v = ok(&mut f, "model.validate", json!({}));
     assert_eq!(v["diagnostics"], json!([]), "{v}");
 }
+
+/// The acceptance model (tests/models/plant.json): two products sharing mixers and ovens that
+/// work weekdays 8 to 4, with times from three-point estimates, and 120 orders to make in a week.
+fn plant() -> Engine {
+    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../tests/models/plant.json");
+    let text = std::fs::read_to_string(path).unwrap_or_default();
+    let script: Vec<JournalEntry> = serde_json::from_str(&text).unwrap_or_default();
+    assert!(!script.is_empty(), "{path}");
+    let mut e = Engine::new();
+    let replayed = e.replay(&script);
+    assert!(replayed.is_ok(), "{replayed:?}");
+    e
+}
+
+#[test]
+fn the_plant_is_sized_to_its_weekly_target() {
+    let mut e = plant();
+    let v = ok(&mut e, "model.validate", json!({}));
+    assert_eq!(v["diagnostics"], json!([]), "{v}");
+    // At least 110 orders packed in the week, in 70% of weeks.
+    let target = json!({ "element": "packed", "metric": "entered", "at_least": 110 });
+    let r = ok(
+        &mut e,
+        "experiment.size",
+        json!({ "target": target, "confidence": 0.7, "apply": true }),
+    );
+    let units = |x: &Value| (x["units"]["mixers"].as_f64(), x["units"]["ovens"].as_f64());
+    let (sto, det) = (&r["stochastic"], &r["deterministic"]);
+    assert_eq!(sto["reached"], true, "{r}");
+    assert!(sto["probability"].as_f64().is_some_and(|p| p >= 0.7));
+    assert_eq!(units(sto), (Some(3.0), Some(6.0)), "{r}");
+    // With every time at its mean, one oven fewer looks enough; it is not.
+    assert_eq!(units(det), (Some(3.0), Some(5.0)), "{r}");
+    let at_det = sto["steps"]
+        .as_array()
+        .and_then(|s| s.iter().find(|s| units(s) == (Some(3.0), Some(5.0))))
+        .and_then(|s| s["probability"].as_f64());
+    assert!(at_det.is_some_and(|p| p < 0.7), "{at_det:?}");
+    // Each step added a unit at the busiest resource.
+    assert!(
+        sto["steps"]
+            .as_array()
+            .is_some_and(|s| s
+                .iter()
+                .rev()
+                .skip(1)
+                .all(|s| s["bottleneck"]["utilisation"]
+                    .as_f64()
+                    .is_some_and(|u| u > 0.9)))
+    );
+    // Applied: the model has the units, in one step to undo.
+    let pool = |e: &Engine, id: &str| {
+        e.model()
+            .resources
+            .iter()
+            .find(|p| p.id.as_str() == id)
+            .map(|p| p.most_units())
+    };
+    assert_eq!((pool(&e, "mixers"), pool(&e, "ovens")), (Some(3), Some(6)));
+    ok(&mut e, "undo", json!({}));
+    assert_eq!((pool(&e, "mixers"), pool(&e, "ovens")), (Some(1), Some(1)));
+    assert_eq!(
+        err(
+            &mut e,
+            "experiment.size",
+            json!({ "target": { "element": "packed", "metric": "entered" }, "confidence": 0.7 })
+        ),
+        ErrorCode::InvalidParams
+    );
+}
+
+/// The help desk (M/M/1, λ = 0.5, mean service 1.5) run long enough to compare with theory.
+fn long_help_desk() -> Engine {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "experiment.set",
+        json!({ "warmup": 1000.0, "duration": 40000.0, "replications": 10 }),
+    );
+    e
+}
+
+#[test]
+fn a_sweep_of_servers_follows_erlang_c() {
+    let mut e = long_help_desk();
+    let r = ok(
+        &mut e,
+        "experiment.sweep",
+        json!({
+            "parameter": { "id": "desk", "field": "capacity" },
+            "values": [1, 2, 3],
+            "results": [{ "element": "desk", "metric": "mean_wait" }]
+        }),
+    );
+    // M/M/c waits in queue from the Erlang C formula: 4.5, 0.2455, 0.0294.
+    for (point, theory) in r["points"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .zip([4.5, 0.245_45, 0.029_41])
+    {
+        let (m, hw) = (
+            point["results"][0]["mean"].as_f64().unwrap_or(0.0),
+            point["results"][0]["half_width"].as_f64().unwrap_or(0.0),
+        );
+        assert!(
+            (m - theory).abs() <= 2.0 * hw,
+            "{} servers: {m} ± {hw} vs {theory}",
+            point["value"]
+        );
+    }
+    assert_eq!(r["effects"][0]["significant"], true);
+    assert_eq!(
+        err(
+            &mut e,
+            "experiment.sweep",
+            json!({
+                "parameter": { "id": "desk", "field": "capacity" }, "values": [1.5],
+                "results": [{ "element": "desk", "metric": "mean_wait" }]
+            })
+        ),
+        ErrorCode::InvalidParams
+    );
+    // The model itself is unchanged, and the sweep is in the next run's record.
+    assert_eq!(
+        e.model()
+            .elements
+            .iter()
+            .find(|x| x.id.as_str() == "desk")
+            .map(|x| x.kind.clone()),
+        help_desk()
+            .model()
+            .elements
+            .iter()
+            .find(|x| x.id.as_str() == "desk")
+            .map(|x| x.kind.clone())
+    );
+    let run = ok(&mut e, "run", json!({ "replications": 2 }));
+    assert_eq!(run["record"]["sensitivity"][0]["kind"], "sweep");
+}
+
+#[test]
+fn sensitivity_ranks_what_drives_the_time_in_system() {
+    let mut e = long_help_desk();
+    let r = ok(
+        &mut e,
+        "experiment.sensitivity",
+        json!({
+            "parameters": [{ "id": "arrivals", "field": "mean" }, { "id": "desk", "field": "mean" }],
+            "results": [{ "element": "exit", "metric": "mean_time_in_system" }]
+        }),
+    );
+    // W = s / (1 − s/a): ±10% on the service time s gives an elasticity of 4.40, on the time
+    // between arrivals a of −3.57 (central differences).
+    let effects = r["effects"].as_array().cloned().unwrap_or_default();
+    assert_eq!(effects[0]["parameter"]["id"], "desk");
+    let el = |i: usize| effects[i]["elasticity"].as_f64().unwrap_or(0.0);
+    assert!((el(0) - 4.40).abs() < 0.6, "{}", el(0));
+    assert!((el(1) + 3.57).abs() < 0.6, "{}", el(1));
+    assert!(effects.iter().all(|x| x["significant"] == true));
+}

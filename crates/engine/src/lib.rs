@@ -39,6 +39,7 @@
 //!   file from the model alone.
 
 mod commands;
+mod decide;
 mod distribution;
 mod edit;
 mod run;
@@ -188,6 +189,9 @@ pub struct Engine {
     job: Option<Job>,
     /// The results of the last run that finished, for `results.distribution`.
     last_results: Option<Value>,
+    /// The sweeps and sensitivity analyses done on the model, carried in the run record
+    /// (NASA-STD-7009B [M&S 30]).
+    sensitivity: Vec<Value>,
 }
 
 impl Default for Engine {
@@ -213,6 +217,7 @@ impl Engine {
             file: None,
             job: None,
             last_results: None,
+            sensitivity: Vec::new(),
         }
     }
 
@@ -475,6 +480,7 @@ impl Engine {
             "uncertainty": "95% Student-t confidence interval of the mean across independent replications (half_width); std_dev is the sample standard deviation across replications",
             "warnings": wire::diagnostics(warnings),
             "file_notes": file.map_or_else(Vec::new, |f| f.notes.clone()),
+            "sensitivity": self.sensitivity,
         })
     }
 
