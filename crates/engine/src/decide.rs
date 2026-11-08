@@ -1,6 +1,6 @@
 //! Experiments for decisions over many runs of the model (M2.8): sweeping a parameter over a
 //! range, recording which parameters drive which results, and sizing capacity at the
-//! bottleneck until a target is met with the confidence asked for.
+//! bottleneck until a target share of replications meets a target.
 //!
 //! Every run of a model variant uses the same seed and so the same random streams (common
 //! random numbers), so differences between variants come from the change, not from noise
@@ -482,8 +482,11 @@ pub fn sensitivity(model: &Model, p: &SensitivityParams) -> Result<Value, Comman
 #[serde(deny_unknown_fields)]
 pub struct SizeParams {
     pub target: Target,
-    /// The share of replications that must meet the target, such as 0.7.
-    pub confidence: f64,
+    /// The share of replications that must meet the target, such as 0.7: a share of the
+    /// replications run, not a statistical confidence (the answer's Wilson interval says how
+    /// sure that share is). `confidence`, its old name, is still read.
+    #[serde(alias = "confidence")]
+    pub target_share: f64,
     /// The tasks (with a resource of their own) and pools that may grow; by default every one.
     #[serde(default)]
     pub resources: Option<Vec<String>>,
@@ -603,7 +606,7 @@ fn grow(
             "probability": probability,
             "interval": met.wilson(0.95),
         });
-        if probability >= p.confidence {
+        if probability >= p.target_share {
             steps.push(step);
             return Ok(Sized {
                 model: m,
@@ -635,11 +638,15 @@ fn grow(
 }
 
 /// Adds a unit at the bottleneck until the share of replications meeting the target reaches the
-/// confidence asked for; the same with every time at its mean beside it. Returns the answer and
-/// the model sized stochastically.
+/// target share; the same with every time at its mean beside it. Returns the answer and the
+/// model sized stochastically.
+///
+/// The share is the one observed in the replications run. Its Wilson interval at 95% is in the
+/// answer: when the interval's lower end is below the target share, the share is not shown to
+/// be met with 95% confidence (more replications would narrow the interval).
 pub fn size(model: &Model, p: &SizeParams) -> Result<(Value, Model), CommandError> {
-    if !(p.confidence > 0.0 && p.confidence <= 1.0) {
-        return Err(invalid("`confidence` must be above 0 and at most 1"));
+    if !(p.target_share > 0.0 && p.target_share <= 1.0) {
+        return Err(invalid("`target_share` must be above 0 and at most 1"));
     }
     drop(p.target.meets()?);
     metric(&p.target.metric)?;
@@ -661,7 +668,9 @@ pub fn size(model: &Model, p: &SizeParams) -> Result<(Value, Model), CommandErro
     };
     let answer = json!({
         "target": p.target,
-        "confidence": p.confidence,
+        "target_share": p.target_share,
+        // The old name of `target_share`, kept for readers of earlier answers.
+        "confidence": p.target_share,
         "replications": reps,
         "seed": seed,
         "stochastic": {
@@ -676,7 +685,7 @@ pub fn size(model: &Model, p: &SizeParams) -> Result<(Value, Model), CommandErro
             "reached": fixed.reached,
             "steps": fixed.steps,
         },
-        "method": "run, add a unit to the busiest resource that may grow (highest utilisation), run again, until the share of replications meeting the target reaches the confidence; deterministic: the same with every time distribution replaced by its mean and one replication; the interval is Wilson's at 95%",
+        "method": "run, add a unit to the busiest resource that may grow (highest utilisation), run again, until the share of replications meeting the target reaches the target share (`confidence` in earlier answers: a share of the replications run, not a statistical confidence); deterministic: the same with every time distribution replaced by its mean and one replication; the interval is Wilson's at 95% for the share meeting the target, and when its lower end is below the target share, the share is not shown to be met with 95% confidence",
     });
     Ok((answer, stochastic.model))
 }

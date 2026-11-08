@@ -1909,7 +1909,7 @@ fn the_plant_is_sized_to_its_weekly_target() {
     let r = ok(
         &mut e,
         "experiment.size",
-        json!({ "target": target, "confidence": 0.7, "apply": true }),
+        json!({ "target": target, "target_share": 0.7, "apply": true }),
     );
     let units = |x: &Value| (x["units"]["mixers"].as_f64(), x["units"]["ovens"].as_f64());
     let (sto, det) = (&r["stochastic"], &r["deterministic"]);
@@ -1950,7 +1950,42 @@ fn the_plant_is_sized_to_its_weekly_target() {
         err(
             &mut e,
             "experiment.size",
-            json!({ "target": { "element": "packed", "metric": "entered" }, "confidence": 0.7 })
+            json!({ "target": { "element": "packed", "metric": "entered" }, "target_share": 0.7 })
+        ),
+        ErrorCode::InvalidParams
+    );
+}
+
+/// Sizing stops at a target share of replications (not a statistical confidence); scripts that
+/// still say `confidence` get the same answer, and the answer carries both names.
+#[test]
+fn sizing_takes_a_target_share_and_still_reads_confidence() {
+    let target = json!({ "element": "desk", "metric": "mean_wait", "at_most": 1.0 });
+    let size = |key: &str| {
+        let mut e = help_desk();
+        ok(
+            &mut e,
+            "experiment.size",
+            json!({ "target": target, key: 0.7, "replications": 4 }),
+        )
+    };
+    let new = size("target_share");
+    let old = size("confidence");
+    assert_eq!(new["stochastic"], old["stochastic"]);
+    assert_eq!(new["target_share"], json!(0.7), "{new}");
+    assert_eq!(new["confidence"], json!(0.7), "{new}");
+    assert!(
+        new["method"]
+            .as_str()
+            .is_some_and(|m| m.contains("target share") && !m.contains("reaches the confidence")),
+        "{new}"
+    );
+    let mut e = help_desk();
+    assert_eq!(
+        err(
+            &mut e,
+            "experiment.size",
+            json!({ "target": target, "target_share": 1.5 })
         ),
         ErrorCode::InvalidParams
     );
