@@ -289,6 +289,66 @@ impl Dist {
         Dist::Exponential { mean }
     }
 
+    /// The distribution of `factor` times a draw from this one (a time measured on another
+    /// scale, such as a service taking 10% longer), or `None` for a count (Poisson, binomial),
+    /// which cannot be scaled, or a factor that is not a finite number above 0.
+    pub fn scaled(&self, factor: f64) -> Option<Dist> {
+        if !(factor.is_finite() && factor > 0.0) {
+            return None;
+        }
+        let f = factor;
+        Some(match self {
+            Dist::Constant(v) => Dist::Constant(v * f),
+            Dist::Exponential { mean } => Dist::Exponential { mean: mean * f },
+            Dist::Uniform { min, max } => Dist::Uniform {
+                min: min * f,
+                max: max * f,
+            },
+            Dist::Triangular { min, mode, max } => Dist::Triangular {
+                min: min * f,
+                mode: mode * f,
+                max: max * f,
+            },
+            Dist::Normal { mean, std_dev } => Dist::Normal {
+                mean: mean * f,
+                std_dev: std_dev * f,
+            },
+            Dist::TruncatedNormal {
+                mean,
+                std_dev,
+                min,
+                max,
+            } => Dist::TruncatedNormal {
+                mean: mean * f,
+                std_dev: std_dev * f,
+                min: min * f,
+                max: max * f,
+            },
+            Dist::LogNormal { mean, std_dev } => Dist::LogNormal {
+                mean: mean * f,
+                std_dev: std_dev * f,
+            },
+            Dist::Gamma { shape, scale } => Dist::Gamma {
+                shape: *shape,
+                scale: scale * f,
+            },
+            Dist::Erlang { mean, k } => Dist::Erlang {
+                mean: mean * f,
+                k: *k,
+            },
+            Dist::Weibull { shape, scale } => Dist::Weibull {
+                shape: *shape,
+                scale: scale * f,
+            },
+            Dist::User { points, discrete } => Dist::User {
+                points: points.iter().map(|(p, v)| (*p, v * f)).collect(),
+                discrete: *discrete,
+            },
+            // A beta lives on [0, 1]; BPSim's has no scale to change.
+            Dist::Beta { .. } | Dist::Poisson { .. } | Dist::Binomial { .. } => return None,
+        })
+    }
+
     /// Whether the parameters can be sampled.
     pub fn check(&self) -> Result<(), DistError> {
         match self {
@@ -608,6 +668,45 @@ fn truncated_moments(mean: f64, std_dev: f64, min: f64, max: f64) -> (f64, f64, 
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn scaled_distributions_scale_their_mean() {
+        for d in [
+            Dist::Constant(2.0),
+            Dist::Exponential { mean: 1.5 },
+            Dist::Uniform { min: 1.0, max: 3.0 },
+            Dist::Triangular {
+                min: 1.0,
+                mode: 2.0,
+                max: 6.0,
+            },
+            Dist::LogNormal {
+                mean: 3.0,
+                std_dev: 1.0,
+            },
+            Dist::Gamma {
+                shape: 2.0,
+                scale: 1.5,
+            },
+            Dist::Erlang { mean: 4.0, k: 3 },
+            Dist::Weibull {
+                shape: 1.5,
+                scale: 2.0,
+            },
+            Dist::User {
+                points: vec![(0.0, 1.0), (0.5, 2.0), (0.5, 4.0)],
+                discrete: false,
+            },
+        ] {
+            let (m, s) = (d.mean(), d.scaled(1.1).and_then(|s| s.mean()));
+            assert!(
+                matches!((m, s), (Some(m), Some(s)) if (s - 1.1 * m).abs() < 1e-9 * m.max(1.0)),
+                "{d:?}: {m:?} {s:?}"
+            );
+        }
+        assert_eq!(Dist::Poisson { mean: 2.0 }.scaled(2.0), None);
+        assert_eq!(Dist::Constant(1.0).scaled(0.0), None);
+    }
+
     use super::*;
 
     fn moments(d: &Dist, n: usize, seed: u64) -> (f64, f64) {

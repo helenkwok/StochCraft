@@ -336,3 +336,106 @@ fn results_export_as_csv_and_charts_are_drawn() {
     h.state_mut().exported("/tmp/mm1-results.csv");
     assert_eq!(h.state().status(), "Exported mm1-results.csv");
 }
+
+/// Workers that run the replications they are given on this thread, the last first, two per
+/// frame, as web workers would (in any order, a few at a time).
+#[derive(Default)]
+struct Pool {
+    worker: Option<stochcraft_engine::Worker>,
+    pending: Vec<u64>,
+    started: usize,
+    stopped: usize,
+    /// Refuses to start, as a browser without web workers would.
+    unavailable: bool,
+}
+
+struct Shared(std::rc::Rc<std::cell::RefCell<Pool>>);
+
+impl stochcraft_ui_egui::Workers for Shared {
+    fn start(&mut self, task: &str, replications: u64) -> bool {
+        let mut p = self.0.borrow_mut();
+        if p.unavailable {
+            return false;
+        }
+        p.worker = stochcraft_engine::Worker::new(task).ok();
+        p.pending = (0..replications).collect();
+        p.started += 1;
+        p.worker.is_some()
+    }
+
+    fn answers(&mut self) -> Vec<String> {
+        let mut p = self.0.borrow_mut();
+        let mut out = Vec::new();
+        for _ in 0..2 {
+            if let (Some(i), Some(w)) = (p.pending.pop(), p.worker.as_ref()) {
+                out.push(w.run(i));
+            }
+        }
+        out
+    }
+
+    fn stop(&mut self) {
+        let mut p = self.0.borrow_mut();
+        p.pending.clear();
+        p.stopped += 1;
+    }
+}
+
+fn run_example(h: &mut Harness<'static, App>) -> serde_json::Value {
+    h.state_mut()
+        .open_file("mm1.bpmn", stochcraft_ui_egui::EXAMPLES[0].bytes);
+    settle(h);
+    h.key_press(egui::Key::F5);
+    finish_run(h);
+    let status = h.state().status().to_owned();
+    let mut results = h.state().results().expect(&status).clone();
+    // Where the model came from is the only difference allowed.
+    results["record"]["file"] = serde_json::Value::Null;
+    results
+}
+
+#[test]
+fn runs_go_to_the_shells_workers_with_the_same_results() {
+    let pool = std::rc::Rc::new(std::cell::RefCell::new(Pool::default()));
+    let mut h = harness(Platform::BROWSER);
+    h.state_mut()
+        .set_workers(Box::new(Shared(std::rc::Rc::clone(&pool))));
+    let on_workers = run_example(&mut h);
+    assert_eq!(pool.borrow().started, 1);
+    assert_eq!(
+        pool.borrow().stopped,
+        1,
+        "the workers stop once it has finished"
+    );
+    assert!(
+        h.state().status().starts_with("Finished"),
+        "{}",
+        h.state().status()
+    );
+
+    let mut alone = harness(Platform::BROWSER);
+    assert_eq!(run_example(&mut alone), on_workers);
+
+    // Without workers to be had, the app runs the replications itself.
+    pool.borrow_mut().unavailable = true;
+    h.state_mut().run();
+    assert!(h.state().is_running());
+    finish_run(&mut h);
+    assert!(
+        h.state().status().starts_with("Finished"),
+        "{}",
+        h.state().status()
+    );
+    assert_eq!(pool.borrow().started, 1);
+    assert_eq!(pool.borrow().stopped, 1);
+
+    // Cancelling stops the workers.
+    pool.borrow_mut().unavailable = false;
+    h.state_mut()
+        .execute("experiment.set", json!({ "seed": 7 }));
+    h.state_mut().run();
+    assert!(h.state().is_running());
+    h.state_mut().cancel_run();
+    assert_eq!(pool.borrow().stopped, 2);
+    assert_eq!(h.state().status(), "Run cancelled");
+}

@@ -280,6 +280,53 @@ The checks for M2.7's batches and assemblies (`crates/blocks/tests/assembly.rs`)
   of those (the slowest input sets the pace, and parts pile up at the others). This is the
   bottleneck bound of a fork-join, for example Hopp and Spearman, *Factory Physics*, chapter 7.
 
+## Experiments for decisions
+
+The methods of M2.8, each implemented from its published description:
+
+- **Percentiles**: definition 7 of R. J. Hyndman and Y. Fan, "Sample quantiles in statistical
+  packages", *The American Statistician* 50(4), 1996, 361–365: linear interpolation between
+  order statistics at h = (n − 1)p.
+- **Confidence band for a distribution**: A. Dvoretzky, J. Kiefer and J. Wolfowitz, *Annals of
+  Mathematical Statistics* 27(3), 1956, with the tight constant of P. Massart, "The tight constant
+  in the Dvoretzky–Kiefer–Wolfowitz inequality", *Annals of Probability* 18(3), 1990: the true
+  distribution lies within ε = √(ln(2/α) / 2n) of the empirical one everywhere with probability
+  at least 1 − α. A time to an event not met before the time limit is right-censored there; the
+  empirical distribution is exact below the limit, which is all a band claims.
+- **Probability of meeting a target**: E. B. Wilson, "Probable inference, the law of succession,
+  and statistical inference", *JASA* 22(158), 1927, the score interval, which keeps near its
+  nominal coverage for few replications and probabilities near 0 or 1 (R. G. Newcombe,
+  *Statistics in Medicine* 17, 1998, compares the alternatives).
+- **The normal quantile** is found by Newton's method on Φ, from the complementary error
+  function, rather than from a published rational approximation's coefficients.
+- **PERT**: D. G. Malcolm, J. H. Roseboom, C. E. Clark and W. Fazar, "Application of a technique
+  for research and development program evaluation", *Operations Research* 7(5), 1959; the
+  beta's shapes 1 + 4(mode − min)/(max − min) and 1 + 4(max − mode)/(max − min) as in D. Vose,
+  *Risk Analysis: A Quantitative Guide*, 3rd ed., Wiley, 2008. Its incomplete beta function is
+  the continued fraction of the NIST *Digital Library of Mathematical Functions* 8.17.22,
+  evaluated by the modified Lentz method (W. J. Lentz, *Applied Optics* 15, 1976).
+- **Log-normal and Weibull from a mode and a 95th percentile**: solved from their closed forms
+  (mode e^(μ − σ²) and percentile e^(μ + z σ); mode λ((k − 1)/k)^(1/k) and percentile
+  λ(−ln 0.05)^(1/k)), as KSC's elicitation practice uses them (Trocine et al., above).
+- **Results as inputs**: the continuous empirical distribution, linear between the sorted
+  values, of A. M. Law, *Simulation Modeling and Analysis*, 5th ed., McGraw-Hill, 2015,
+  section 6.2.4.
+- **Comparing variants with common random numbers**: every variant of a sweep, a sensitivity
+  analysis or a sizing step is run with the same seed, so each replication meets the same
+  random numbers (Law, above, section 11.2), and differences between variants come from the
+  change rather than from noise.
+- **Elasticities** are central differences, one parameter at a time: the relative change in a
+  result over the relative change in the parameter. For the M/M/1 time in system
+  W = s / (1 − s/a), with service time s and time between arrivals a, they are 1 / (1 − ρ) and
+  −ρ / (1 − ρ) at the point; over ±10% at ρ = 0.75 the central differences are 4.40 and −3.57.
+- **Sizing at the bottleneck** follows the NNSA practice above: add a unit at the busiest
+  resource and run again until the share of simulated weeks meeting the target reaches the
+  confidence.
+- **Checks** (`crates/blocks/tests/terminating.rs`): the completion time of an activity network
+  of constant durations is its critical path (the longest path); that of k parallel activities
+  with exponential durations of mean m is their maximum, with distribution (1 − e^(−t/m))^k and
+  mean m (1 + 1/2 + … + 1/k).
+
 ## Read and set aside
 
 Outside what a process simulator does: Type IV hydrogen pressure vessels (Khan, IJHE 2026,

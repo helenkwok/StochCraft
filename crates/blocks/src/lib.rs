@@ -494,6 +494,11 @@ impl Metric {
         Metric::Availability,
     ];
 
+    /// The metric with this [`Metric::name`].
+    pub fn from_name(s: &str) -> Option<Self> {
+        Self::ALL.into_iter().find(|m| m.name() == s)
+    }
+
     /// A stable name for tables, files and agents.
     pub fn name(self) -> &'static str {
         match self {
@@ -565,9 +570,14 @@ impl ElementReport {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Report {
     pub warmup: f64,
+    /// The time statistics were collected over: from the warm-up to the time limit, or to the
+    /// stop (0 if the run stopped during the warm-up, when the statistics are from time 0).
     pub duration: f64,
     /// In model order.
     pub elements: Vec<ElementReport>,
+    /// When the model's stop condition was met, ending the run; `None` if it ran to its time
+    /// limit (or has none). A time to an event, from time 0.
+    pub stopped_at: Option<f64>,
 }
 
 impl Report {
@@ -587,9 +597,20 @@ pub struct ElementSummary {
     pub metrics: Vec<(Metric, Summary)>,
     /// The mean value assigned to each property, as in [`ElementReport::properties`].
     pub properties: Vec<(String, Summary)>,
+    /// Each metric's value in every replication, in replication order (`None` where a
+    /// replication had none), in the order of `metrics`: the distribution behind the summary.
+    pub samples: Vec<(Metric, Vec<Option<f64>>)>,
 }
 
 impl ElementSummary {
+    /// `metric`'s value in each replication, in replication order.
+    pub fn samples(&self, metric: Metric) -> Option<&[Option<f64>]> {
+        self.samples
+            .iter()
+            .find(|(m, _)| *m == metric)
+            .map(|(_, v)| v.as_slice())
+    }
+
     pub fn metric(&self, metric: Metric) -> Option<&Summary> {
         self.metrics
             .iter()
@@ -603,6 +624,14 @@ impl ElementSummary {
 pub struct ExperimentSummary {
     pub replications: u64,
     pub elements: Vec<ElementSummary>,
+    /// How many replications met the model's stop condition before their time limit, and the
+    /// time they met it (over those only, so biased low when some did not: the distribution of
+    /// [`Report::stopped_at`], with those censored at the limit, is the full picture). `None`
+    /// when none met it, or there is none.
+    pub stopped: Option<(u64, Summary)>,
+    /// When each replication met the stop condition, in replication order (`None`: it did
+    /// not, or there is none).
+    pub stop_times: Vec<Option<f64>>,
 }
 
 impl ExperimentSummary {
@@ -626,14 +655,18 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
             .iter()
             .enumerate()
             .map(|(i, e)| {
+                let mut samples = Vec::new();
                 let metrics = Metric::ALL
                     .iter()
                     .filter_map(|&m| {
-                        let values: Vec<f64> = reports
+                        let each: Vec<Option<f64>> = reports
                             .iter()
-                            .filter_map(|r| r.elements.get(i)?.metric(m))
+                            .map(|r| r.elements.get(i)?.metric(m))
                             .collect();
-                        Summary::of(&values).map(|s| (m, s))
+                        let values: Vec<f64> = each.iter().flatten().copied().collect();
+                        let s = Summary::of(&values)?;
+                        samples.push((m, each));
+                        Some((m, s))
                     })
                     .collect();
                 let properties = e
@@ -654,13 +687,17 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                     kind: e.kind,
                     metrics,
                     properties,
+                    samples,
                 }
             })
             .collect()
     });
+    let times: Vec<f64> = reports.iter().filter_map(|r| r.stopped_at).collect();
     ExperimentSummary {
         replications: reports.len() as u64,
         elements,
+        stopped: Summary::of(&times).map(|s| (times.len() as u64, s)),
+        stop_times: reports.iter().map(|r| r.stopped_at).collect(),
     }
 }
 

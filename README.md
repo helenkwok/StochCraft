@@ -33,6 +33,8 @@ To build the browser app locally, install [trunk](https://trunkrs.dev) and run i
 trunk serve --release
 ```
 
+In the browser, runs use a web worker per core, and the app can be installed and used offline.
+
 ## Using the command line
 
 ```bash

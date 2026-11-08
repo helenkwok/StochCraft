@@ -31,7 +31,8 @@
 //! - Every command that is not a query is recorded in the [`Engine::journal`], which
 //!   [`Engine::replay`] runs again as a script.
 //! - `run` runs an experiment at once; `run.start`, `run.status` and `run.cancel` run one in the
-//!   background with progress and cancellation (worker threads natively, slices in the browser).
+//!   background with progress and cancellation (worker threads natively; in the browser, slices
+//!   or the page's web workers, see [`Worker`]).
 //! - Files are BPSim on BPMN or XPDL (`stochcraft-io`). `file.save` writes edits into the file
 //!   the model was opened from, keeping everything StochCraft does not understand and every line
 //!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
@@ -39,9 +40,12 @@
 //!   file from the model alone.
 
 mod commands;
+mod decide;
+mod distribution;
 mod edit;
 mod run;
 pub mod wire;
+mod workers;
 
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -53,6 +57,7 @@ use stochcraft_model::Model;
 pub use commands::{COMMANDS, Command, CommandKind};
 pub use run::RunMode;
 pub use stochcraft_blocks::{Live, LiveState, RunError};
+pub use workers::Worker;
 
 use edit::Op;
 use run::{Job, Plan};
@@ -106,6 +111,27 @@ impl ErrorCode {
             ErrorCode::TimeStopped => "time_stopped",
             ErrorCode::Internal => "internal",
         }
+    }
+
+    const ALL: [ErrorCode; 13] = [
+        ErrorCode::UnknownCommand,
+        ErrorCode::InvalidParams,
+        ErrorCode::NotFound,
+        ErrorCode::Conflict,
+        ErrorCode::NothingToUndo,
+        ErrorCode::NothingToRedo,
+        ErrorCode::InvalidModel,
+        ErrorCode::Io,
+        ErrorCode::BadFile,
+        ErrorCode::Unsupported,
+        ErrorCode::Cancelled,
+        ErrorCode::TimeStopped,
+        ErrorCode::Internal,
+    ];
+
+    /// The code with this [`ErrorCode::name`].
+    pub fn named(name: &str) -> Option<Self> {
+        Self::ALL.into_iter().find(|c| c.name() == name)
     }
 }
 
@@ -185,6 +211,11 @@ pub struct Engine {
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
     job: Option<Job>,
+    /// The results of the last run that finished, for `results.distribution`.
+    last_results: Option<Value>,
+    /// The sweeps and sensitivity analyses done on the model, carried in the run record
+    /// (NASA-STD-7009B [M&S 30]).
+    sensitivity: Vec<Value>,
 }
 
 impl Default for Engine {
@@ -209,6 +240,8 @@ impl Engine {
             journal: Vec::new(),
             file: None,
             job: None,
+            last_results: None,
+            sensitivity: Vec::new(),
         }
     }
 
@@ -224,6 +257,14 @@ impl Engine {
             CommandError::new(ErrorCode::UnknownCommand, format!("no command `{command}`"))
         })?;
         let result = (c.run)(self, params.clone())?;
+        // Keep the last results, for questions about their distributions.
+        match command {
+            "run" => self.last_results = Some(result.clone()),
+            "run.status" if result["state"] == "finished" => {
+                self.last_results = Some(result["result"].clone());
+            }
+            _ => {}
+        }
         if c.kind != CommandKind::Query {
             self.journal.push(JournalEntry {
                 command: command.to_owned(),
@@ -463,6 +504,7 @@ impl Engine {
             "uncertainty": "95% Student-t confidence interval of the mean across independent replications (half_width); std_dev is the sample standard deviation across replications",
             "warnings": wire::diagnostics(warnings),
             "file_notes": file.map_or_else(Vec::new, |f| f.notes.clone()),
+            "sensitivity": self.sensitivity,
         })
     }
 
@@ -488,6 +530,18 @@ impl Engine {
         self.job
             .as_mut()
             .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step))
+    }
+
+    /// The background run as its workers get it, for a run started with `"mode": "workers"`
+    /// that is still waiting for answers: the text to send each worker, to make a [`Worker`].
+    pub fn worker_task(&self) -> Option<&str> {
+        self.job.as_ref().and_then(Job::task)
+    }
+
+    /// Takes a worker's answer ([`Worker::run`]) for the background run. Once every replication
+    /// has answered, `run.status` reports the results.
+    pub fn deliver(&mut self, answer: &str) -> Result<(), CommandError> {
+        self.job.as_mut().map_or(Ok(()), |j| j.deliver(answer))
     }
 
     fn cancel_run(&mut self) -> Value {

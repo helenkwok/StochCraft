@@ -15,8 +15,8 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 
 | Crate | Layer | State |
 |---|---|---|
-| `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist` |
-| `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary` |
+| `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist`; fits to three-point estimates (`estimate`) |
+| `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary`; percentiles, empirical distributions with DKW bands, Wilson intervals (`spread`) |
 | `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate` |
 | `model` | L1 | The model in memory: elements, connections with probabilities and conditions, finite buffers, shared resource pools, experiment, entity properties, validation; BPSim's XPath expressions (`expr`) |
 | `blocks` | L2 | Compiles a model: source, server, shared task, delay, sink, exclusive and parallel gateways, merges; finite buffers with blocking after service and loss; shared pools with roles, alternatives and priorities; entities carry typed properties; per-element statistics; warm-up |
@@ -794,6 +794,104 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
 - Acceptance model: a small multi-product plant written for StochCraft (two products sharing
   mixers and ovens, working hours, a weekly target at 70% confidence), sized automatically.
 
+**Done (first part):**
+- **Terminating runs:** `Experiment.stop` ends each replication on an event, with the warm-up
+  plus the duration as its time limit:
+  - `Stop::Count`: once N entities have left an element since time 0 (for a sink: arrived).
+  - `Stop::Empty`: the first time a task holds nothing after it has taken an entity in.
+  - The condition is checked after each instant, so the events and their order are exactly
+    those of a run without it; a condition never met changes nothing.
+  - Each report gives `stopped_at`, the time to the event. A live run (M3.5) ends there too.
+  - In files: `stochcraft:stopCount` or `stochcraft:stopWhenEmpty` on the watched element.
+    Engine: `experiment.set` with `stop`, `null` to remove it. Removing the element removes the
+    stop, in the same undo step.
+  - Results gain `stop`: how many replications met it, the mean time with its interval, and
+    each replication's time.
+- **Distributions of results:** results now carry every replication's value of every metric
+  (`values`, outside `elements`, so the golden digests are unchanged). `results.distribution`
+  asks about one of them, or `stop_time`, from the last run:
+  - percentiles (Hyndman and Fan's definition 7);
+  - the empirical cumulative distribution with its Dvoretzky–Kiefer–Wolfowitz band (Massart's
+    constant), replications that never met the stop counting as censored at the time limit;
+  - the probability of meeting a target (`at_least` or `at_most`) with Wilson's interval;
+  - `as_distribution`: the values as a continuous BPSim user distribution, ready for
+    `block.set` in a coarser model (results as inputs).
+- **Three-point estimates:** `random::ThreePoint` fits a minimum, a most likely value and a
+  maximum or 95th percentile:
+  - triangular: BPSim's own, the maximum solved for when a 95th percentile is given;
+  - PERT, the scaled beta: a BPSim user distribution of its percentiles;
+  - log-normal and Weibull from the minimum, mode and 95th percentile: BPSim's own when the
+    minimum is 0, otherwise a user distribution of percentiles.
+
+  `estimate.set` fits an element's time distribution (a source's arrivals, a task's service, a
+  delay) and keeps the triad and its source as the parameter's pedigree,
+  `stochcraft:estimate` in files (declared in the vendor schema). A distribution changed
+  afterwards no longer matches its estimate, which is a warning. `estimate.remove` forgets it.
+- The CLI's results table states the stop and when it was met.
+
+**Validation** (`blocks/tests/terminating.rs`, `random/src/estimate.rs`,
+`stats/src/spread.rs`, `engine/tests/engine.rs`):
+
+| Case | Theory | StochCraft |
+|---|---|---|
+| Activity network A(3)→B(4), A→E(5), C(6), D(2) after B and C: completion | 9 (critical path A–B–D) | 9 exactly |
+| Completion of 3 parallel exponential activities of mean 10 (2,000 replications) | 10 (1 + 1/2 + 1/3) = 18.333 | 18.142 ± 0.492 |
+| Same: largest gap between the empirical and the true distribution (1 − e^(−t/10))³ | within the 95% DKW band, 0.0304 | 0.0130 |
+| Same, 200 experiments of 50 replications: the 95% band contains the true distribution | at least 95% | 190 of 200 |
+| Same through the engine (4,000 replications): P(T ≤ 30) = (1 − e^−3)³ = 0.858 | inside Wilson's interval | yes |
+| 20 orders a minute apart, 2 minutes each: the server empties | 41 | 41 exactly |
+| PERT(10, 20, 60): mean (min + 4 mode + max) / 6 | 25 | 25.04 (the 1% table) |
+| Log-normal and Weibull fits: mode and 95th percentile | as given | to 10⁻⁹ |
+| Wilson's interval for 8 of 10 at 95% | [0.4902, 0.9433] | same |
+
+**Done (second part):**
+- **Sweeps:** `experiment.sweep` runs the experiment at each value of one parameter, using the
+  same seed so the random streams are shared (common random numbers). The parameter is a
+  task's `capacity`, a pool's `quantity`, a `queue_capacity`, or the `mean` of a time
+  distribution (`Dist::scaled` keeps its shape). It reports the results asked for at each
+  value, and how much each moved across the range, with whether that is more than the noise.
+- **Sensitivity:** `experiment.sensitivity` moves each parameter down and up by a fraction,
+  one at a time, and ranks the results' elasticities. Every sweep and sensitivity analysis is
+  recorded, with the model's digest, in the `sensitivity` list of later runs' records
+  (NASA-STD-7009B [M&S 30]).
+- **Capacity sizing:** `experiment.size` takes a target (a metric `at_least` or `at_most` a
+  value) and a confidence. It runs the experiment and adds a unit to the busiest task or pool,
+  then runs again, until the share of replications meeting the target reaches the confidence.
+  Beside it is the answer with every time at its mean, from one replication. `apply` makes the
+  answer the model's, as one step to undo.
+- **Acceptance model** (`tests/models/plant.json`, an engine script for `stochcraft-cli exec`):
+  - A bakery with bread and cake orders that arrive on weekdays from 8 to 4 (70 and 50 a week).
+  - Shared mixers and ovens that work those hours.
+  - Mixing and baking times from three-point estimates, PERT and triangular, kept as their
+    pedigree.
+  - The target: at least 110 orders packed a week, in 70% of weeks. Sized from one mixer and
+    one oven:
+
+
+| Mixers, ovens | Weeks meeting the target (20) | Wilson 95% interval |
+|---|---|---|
+| 2, 5 | 20% | 0.08–0.42 |
+| 3, 5 (the answer from mean times) | 55% | 0.34–0.74 |
+| 3, 6 (StochCraft's answer) | 80% | 0.58–0.92 |
+
+With every time at its mean, 3 mixers and 5 ovens look enough. With the variability they meet
+the target in only 55% of weeks, and 6 ovens are needed: the deterministic answer is too small,
+as the NNSA study found.
+
+**Validation** (`engine/tests/engine.rs`):
+
+| Case | Theory | StochCraft |
+|---|---|---|
+| Sweep of the help desk's servers (λ = 0.5, mean service 1.5): wait, 1 server | 4.5 | 4.406 ± 0.180 |
+| Same, 2 servers (Erlang C) | 0.2455 | 0.2410 ± 0.0064 |
+| Same, 3 servers | 0.0294 | 0.0288 ± 0.0013 |
+| Elasticity of M/M/1 time in system to the service time (±10%) | 4.40 | 4.32 |
+| Same, to the time between arrivals | −3.57 | −3.42 |
+
+**Not yet:** sizing several resources a step at a time, or by cost; designed experiments with
+several factors at once (factorial, Latin hypercube); saving targets in the model file; and a
+window for these commands.
+
 **Later in M2 or M4:** conveyors with length, speed and accumulation; travel networks for
 forklifts and AGVs; agent behaviours (`agents` crate); stock-and-flow (`sd` crate, XMILE);
 costs (BPSim `fixedCost`, `unitCost`); simulation traces in XES (BPSim `traceOutput`).
@@ -995,6 +1093,35 @@ replications other than the first.
   working offline.
 - `crates/mcp` and `stochcraft-cli mcp`: the engine's commands as MCP tools, headless or bridged
   to a running app, following FieldCraft's MCP design.
+
+**Done (workers and offline):**
+- **Replications on every core in the browser.** A run started with `"mode": "workers"` hands
+  its replications to the caller's workers (`engine/src/workers.rs`).
+  - `Engine::worker_task` gives the run as text: the model as JSON, the seed and the number of
+    replications.
+  - Each worker makes a `Worker` from it and runs the replications it is given. It sends back
+    each report with every number as its bits.
+  - `Engine::deliver` takes the answers in any order.
+  - The results are exactly those of a run on threads.
+- **The page's workers.** The shell gives the app a `Workers` (`ui-egui`); in the browser that is
+  a pool of web workers (`stochcraft-web/src/pool.rs`).
+  - There is one worker per core but one, up to 16.
+  - Each worker loads `stochcraft-worker` (`src/worker.rs`, 0.75 MB of WebAssembly), and is
+    given the next replication as soon as it answers.
+  - Where workers cannot start, the page runs the replications itself between frames, as before.
+- **Installable and offline.**
+  - A web app manifest and an icon make the page installable.
+  - A service worker (`sw.js`) keeps the page and every file it names when it installs, so the
+    app opens and runs models offline from the first visit on.
+  - The service worker is network first, so a new build is used as soon as it is published.
+  - Each pull request's preview keeps its own cache.
+- **Tests:** `engine/tests/workers.rs` runs every committed and BPSim reference model that
+  StochCraft can run (11 with the reference models) on two workers, answering out of order. The
+  results must equal those of threads, and each model must come back from its JSON unchanged.
+  Also covered: cancelling, failing, and refusing bad answers. `ui-egui/tests/app.rs` checks a
+  run on the shell's workers, falling back when there are none, and cancelling. Checked by hand
+  in Chromium: three workers ran the M/M/1 example, and offline the page reloaded from the cache
+  and ran the tandem line.
 
 **Done (agents):** docs/mcp.md.
 - **`crates/mcp`** (`stochcraft-mcp`): MCP over stdio (JSON-RPC 2.0, protocol revisions

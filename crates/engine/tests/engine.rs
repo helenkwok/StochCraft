@@ -1638,3 +1638,401 @@ fn a_live_run_is_the_first_replication() {
             .is_err_and(|e| e.code == ErrorCode::InvalidModel)
     );
 }
+
+/// A project of three parallel activities (exponential, mean 10) from one start: the run ends
+/// when it completes, at the maximum of the three.
+fn project() -> Engine {
+    let mut e = Engine::new();
+    ok(
+        &mut e,
+        "model.set",
+        json!({ "model": {
+            "name": "Project",
+            "elements": [
+                {"id": "start", "kind": "source", "interarrival": {"type": "constant", "value": 0.0}, "limit": 1},
+                {"id": "fork", "kind": "parallel_gateway"},
+                {"id": "a", "kind": "delay", "duration": {"type": "exponential", "mean": 10.0}},
+                {"id": "b", "kind": "delay", "duration": {"type": "exponential", "mean": 10.0}},
+                {"id": "c", "kind": "delay", "duration": {"type": "exponential", "mean": 10.0}},
+                {"id": "join", "kind": "parallel_gateway"},
+                {"id": "done", "kind": "sink"}
+            ],
+            "connections": [
+                {"id": "f1", "from": "start", "to": "fork"},
+                {"id": "f2", "from": "fork", "to": "a"},
+                {"id": "f3", "from": "fork", "to": "b"},
+                {"id": "f4", "from": "fork", "to": "c"},
+                {"id": "f5", "from": "a", "to": "join"},
+                {"id": "f6", "from": "b", "to": "join"},
+                {"id": "f7", "from": "c", "to": "join"},
+                {"id": "f8", "from": "join", "to": "done"}
+            ],
+            "experiment": {"time_unit": "min", "warmup": 0.0, "duration": 1000.0, "replications": 4000, "seed": 5}
+        } }),
+    );
+    ok(
+        &mut e,
+        "experiment.set",
+        json!({ "stop": { "when": "count", "element": "done", "count": 1 } }),
+    );
+    e
+}
+
+#[test]
+fn a_terminating_run_reports_its_time_to_the_event() {
+    let mut e = project();
+    assert_eq!(
+        err(
+            &mut e,
+            "experiment.set",
+            json!({ "stop": { "when": "empty", "element": "nowhere" } })
+        ),
+        ErrorCode::NotFound
+    );
+    let r = ok(&mut e, "run", json!({}));
+    let stop = &r["stop"];
+    assert_eq!(stop["when"], "count");
+    assert_eq!(stop["met"], 4000);
+    // E[max of three exponentials of mean 10] = 10 (1 + 1/2 + 1/3).
+    let (mean, hw) = (
+        stop["time"]["mean"].as_f64().unwrap_or(0.0),
+        stop["time"]["half_width"].as_f64().unwrap_or(0.0),
+    );
+    assert!((mean - 18.333_333).abs() <= hw, "{mean} ± {hw}");
+    assert_eq!(stop["times"].as_array().map(Vec::len), Some(4000));
+    // Its distribution: the median of the maximum solves (1 − e^(−t/10))³ = 1/2.
+    let d = ok(
+        &mut e,
+        "results.distribution",
+        json!({ "metric": "stop_time", "at_most": 30.0 }),
+    );
+    let median = d["percentiles"]["50"].as_f64().unwrap_or(0.0);
+    let exact =
+        -10.0 * stochcraft_random::math::ln(1.0 - stochcraft_random::math::powf(0.5, 1.0 / 3.0));
+    let band = d["band"].as_f64().unwrap_or(0.0);
+    assert!((median - exact).abs() < 1.0, "{median} vs {exact}");
+    // √(ln 40 / 8000).
+    assert!((band - 0.02147).abs() < 1e-4, "{band}");
+    // P(T ≤ 30) = (1 − e^−3)³ = 0.8579, within Wilson's interval.
+    let (lo, hi) = (
+        d["target"]["interval"][0].as_f64().unwrap_or(1.0),
+        d["target"]["interval"][1].as_f64().unwrap_or(0.0),
+    );
+    let p = (1.0 - stochcraft_random::math::exp(-3.0)).powi(3);
+    assert!(lo <= p && p <= hi, "{p} not in [{lo}, {hi}]");
+    // The times as a distribution for a coarser model: a user distribution through them.
+    assert_eq!(d["as_distribution"]["type"], "user");
+    let dist = &d["as_distribution"];
+    ok(&mut e, "model.new", json!({ "name": "Coarse" }));
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "delay", "id": "project", "duration": dist }),
+    );
+    // Removing the element a stop watches removes the stop, and undo brings both back.
+    let mut e = project();
+    ok(&mut e, "block.remove", json!({ "id": "done" }));
+    assert!(e.model().experiment.stop.is_none());
+    ok(&mut e, "undo", json!({}));
+    assert!(e.model().experiment.stop.is_some());
+    ok(&mut e, "experiment.set", json!({ "stop": null }));
+    let r = ok(&mut e, "run", json!({ "replications": 2 }));
+    assert!(r.get("stop").is_none());
+}
+
+#[test]
+fn distributions_of_results_need_a_run_and_a_metric() {
+    let mut e = help_desk();
+    assert_eq!(
+        err(
+            &mut e,
+            "results.distribution",
+            json!({ "element": "desk", "metric": "utilisation" })
+        ),
+        ErrorCode::NotFound
+    );
+    ok(&mut e, "run", json!({ "replications": 20 }));
+    let d = ok(
+        &mut e,
+        "results.distribution",
+        json!({ "element": "desk", "metric": "utilisation", "at_least": 0.7, "percentiles": [50] }),
+    );
+    assert_eq!(d["n"], 20);
+    assert!(
+        d["percentiles"]["50"]
+            .as_f64()
+            .is_some_and(|m| m > 0.6 && m < 0.9),
+        "{d}"
+    );
+    assert_eq!(d["target"]["of"], 20);
+    assert_eq!(
+        err(
+            &mut e,
+            "results.distribution",
+            json!({ "element": "desk", "metric": "mean_time_in_system" })
+        ),
+        ErrorCode::NotFound
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "results.distribution",
+            json!({ "metric": "stop_time" })
+        ),
+        ErrorCode::InvalidParams
+    );
+    // The results carry each replication's values; the means are what they were.
+    let r = ok(&mut e, "run", json!({ "replications": 3 }));
+    assert_eq!(
+        r["values"]["desk"]["utilisation"].as_array().map(Vec::len),
+        Some(3)
+    );
+}
+
+#[test]
+fn three_point_estimates_fit_distributions_and_are_kept() {
+    let mut e = help_desk();
+    let r = ok(
+        &mut e,
+        "estimate.set",
+        json!({ "id": "desk", "family": "triangular", "min": 0.5, "mode": 1.0, "max": 3.0, "source": "staff" }),
+    );
+    assert_eq!(
+        r["distribution"],
+        json!({ "type": "triangular", "min": 0.5, "mode": 1.0, "max": 3.0 })
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let desk = m["elements"]
+        .as_array()
+        .and_then(|v| v.iter().find(|x| x["id"] == "desk"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(desk["service"]["type"], "triangular");
+    assert_eq!(
+        desk["estimate"],
+        json!({ "family": "triangular", "min": 0.5, "mode": 1.0, "max": 3.0, "source": "staff" })
+    );
+    // One step to undo: the distribution and the estimate together.
+    ok(&mut e, "undo", json!({}));
+    assert!(e.model().estimates.is_empty());
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(m["elements"].as_array().is_some_and(|v| {
+        v.iter()
+            .any(|x| x["id"] == "desk" && x["service"]["type"] == "exponential")
+    }));
+    // PERT from a 95th percentile; then a changed distribution no longer matches it.
+    let r = ok(
+        &mut e,
+        "estimate.set",
+        json!({ "id": "arrivals", "family": "pert", "min": 1.0, "mode": 1.5, "p95": 4.0 }),
+    );
+    assert_eq!(r["distribution"]["type"], "user");
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "arrivals", "interarrival": { "type": "exponential", "mean": 2.0 } }),
+    );
+    let v = ok(&mut e, "model.validate", json!({}));
+    assert!(
+        v["diagnostics"]
+            .as_array()
+            .is_some_and(|d| d.iter().any(|x| x["code"] == "estimate_mismatch")),
+        "{v}"
+    );
+    ok(&mut e, "estimate.remove", json!({ "id": "arrivals" }));
+    assert_eq!(
+        err(&mut e, "estimate.remove", json!({ "id": "arrivals" })),
+        ErrorCode::NotFound
+    );
+    // What cannot be fitted or has nothing to fit.
+    for bad in [
+        json!({ "id": "desk", "family": "lognormal", "min": 0.0, "mode": 1.0, "max": 3.0 }),
+        json!({ "id": "desk", "family": "pert", "min": 2.0, "mode": 1.0, "max": 3.0 }),
+        json!({ "id": "desk", "family": "pert", "min": 0.0, "mode": 1.0, "max": 3.0, "p95": 2.5 }),
+        json!({ "id": "exit", "family": "pert", "min": 0.0, "mode": 1.0, "max": 3.0 }),
+    ] {
+        assert_eq!(err(&mut e, "estimate.set", bad), ErrorCode::InvalidParams);
+    }
+    // Saved into a new file and opened again, the estimate is kept.
+    ok(
+        &mut e,
+        "estimate.set",
+        json!({ "id": "desk", "family": "weibull", "min": 0.2, "mode": 1.0, "p95": 2.5 }),
+    );
+    let path = scratch("estimated.bpmn");
+    ok(
+        &mut e,
+        "file.save",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    let mut f = Engine::new();
+    ok(
+        &mut f,
+        "file.open",
+        json!({ "path": path.to_string_lossy() }),
+    );
+    assert_eq!(f.model().estimates, e.model().estimates);
+    let v = ok(&mut f, "model.validate", json!({}));
+    assert_eq!(v["diagnostics"], json!([]), "{v}");
+}
+
+/// The acceptance model (tests/models/plant.json): two products sharing mixers and ovens that
+/// work weekdays 8 to 4, with times from three-point estimates, and 120 orders to make in a week.
+fn plant() -> Engine {
+    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../tests/models/plant.json");
+    let text = std::fs::read_to_string(path).unwrap_or_default();
+    let script: Vec<JournalEntry> = serde_json::from_str(&text).unwrap_or_default();
+    assert!(!script.is_empty(), "{path}");
+    let mut e = Engine::new();
+    let replayed = e.replay(&script);
+    assert!(replayed.is_ok(), "{replayed:?}");
+    e
+}
+
+#[test]
+fn the_plant_is_sized_to_its_weekly_target() {
+    let mut e = plant();
+    let v = ok(&mut e, "model.validate", json!({}));
+    assert_eq!(v["diagnostics"], json!([]), "{v}");
+    // At least 110 orders packed in the week, in 70% of weeks.
+    let target = json!({ "element": "packed", "metric": "entered", "at_least": 110 });
+    let r = ok(
+        &mut e,
+        "experiment.size",
+        json!({ "target": target, "confidence": 0.7, "apply": true }),
+    );
+    let units = |x: &Value| (x["units"]["mixers"].as_f64(), x["units"]["ovens"].as_f64());
+    let (sto, det) = (&r["stochastic"], &r["deterministic"]);
+    assert_eq!(sto["reached"], true, "{r}");
+    assert!(sto["probability"].as_f64().is_some_and(|p| p >= 0.7));
+    assert_eq!(units(sto), (Some(3.0), Some(6.0)), "{r}");
+    // With every time at its mean, one oven fewer looks enough; it is not.
+    assert_eq!(units(det), (Some(3.0), Some(5.0)), "{r}");
+    let at_det = sto["steps"]
+        .as_array()
+        .and_then(|s| s.iter().find(|s| units(s) == (Some(3.0), Some(5.0))))
+        .and_then(|s| s["probability"].as_f64());
+    assert!(at_det.is_some_and(|p| p < 0.7), "{at_det:?}");
+    // Each step added a unit at the busiest resource.
+    assert!(
+        sto["steps"]
+            .as_array()
+            .is_some_and(|s| s
+                .iter()
+                .rev()
+                .skip(1)
+                .all(|s| s["bottleneck"]["utilisation"]
+                    .as_f64()
+                    .is_some_and(|u| u > 0.9)))
+    );
+    // Applied: the model has the units, in one step to undo.
+    let pool = |e: &Engine, id: &str| {
+        e.model()
+            .resources
+            .iter()
+            .find(|p| p.id.as_str() == id)
+            .map(|p| p.most_units())
+    };
+    assert_eq!((pool(&e, "mixers"), pool(&e, "ovens")), (Some(3), Some(6)));
+    ok(&mut e, "undo", json!({}));
+    assert_eq!((pool(&e, "mixers"), pool(&e, "ovens")), (Some(1), Some(1)));
+    assert_eq!(
+        err(
+            &mut e,
+            "experiment.size",
+            json!({ "target": { "element": "packed", "metric": "entered" }, "confidence": 0.7 })
+        ),
+        ErrorCode::InvalidParams
+    );
+}
+
+/// The help desk (M/M/1, λ = 0.5, mean service 1.5) run long enough to compare with theory.
+fn long_help_desk() -> Engine {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "experiment.set",
+        json!({ "warmup": 1000.0, "duration": 40000.0, "replications": 10 }),
+    );
+    e
+}
+
+#[test]
+fn a_sweep_of_servers_follows_erlang_c() {
+    let mut e = long_help_desk();
+    let r = ok(
+        &mut e,
+        "experiment.sweep",
+        json!({
+            "parameter": { "id": "desk", "field": "capacity" },
+            "values": [1, 2, 3],
+            "results": [{ "element": "desk", "metric": "mean_wait" }]
+        }),
+    );
+    // M/M/c waits in queue from the Erlang C formula: 4.5, 0.2455, 0.0294.
+    for (point, theory) in r["points"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .zip([4.5, 0.245_45, 0.029_41])
+    {
+        let (m, hw) = (
+            point["results"][0]["mean"].as_f64().unwrap_or(0.0),
+            point["results"][0]["half_width"].as_f64().unwrap_or(0.0),
+        );
+        assert!(
+            (m - theory).abs() <= 2.0 * hw,
+            "{} servers: {m} ± {hw} vs {theory}",
+            point["value"]
+        );
+    }
+    assert_eq!(r["effects"][0]["significant"], true);
+    assert_eq!(
+        err(
+            &mut e,
+            "experiment.sweep",
+            json!({
+                "parameter": { "id": "desk", "field": "capacity" }, "values": [1.5],
+                "results": [{ "element": "desk", "metric": "mean_wait" }]
+            })
+        ),
+        ErrorCode::InvalidParams
+    );
+    // The model itself is unchanged, and the sweep is in the next run's record.
+    assert_eq!(
+        e.model()
+            .elements
+            .iter()
+            .find(|x| x.id.as_str() == "desk")
+            .map(|x| x.kind.clone()),
+        help_desk()
+            .model()
+            .elements
+            .iter()
+            .find(|x| x.id.as_str() == "desk")
+            .map(|x| x.kind.clone())
+    );
+    let run = ok(&mut e, "run", json!({ "replications": 2 }));
+    assert_eq!(run["record"]["sensitivity"][0]["kind"], "sweep");
+}
+
+#[test]
+fn sensitivity_ranks_what_drives_the_time_in_system() {
+    let mut e = long_help_desk();
+    let r = ok(
+        &mut e,
+        "experiment.sensitivity",
+        json!({
+            "parameters": [{ "id": "arrivals", "field": "mean" }, { "id": "desk", "field": "mean" }],
+            "results": [{ "element": "exit", "metric": "mean_time_in_system" }]
+        }),
+    );
+    // W = s / (1 − s/a): ±10% on the service time s gives an elasticity of 4.40, on the time
+    // between arrivals a of −3.57 (central differences).
+    let effects = r["effects"].as_array().cloned().unwrap_or_default();
+    assert_eq!(effects[0]["parameter"]["id"], "desk");
+    let el = |i: usize| effects[i]["elasticity"].as_f64().unwrap_or(0.0);
+    assert!((el(0) - 4.40).abs() < 0.6, "{}", el(0));
+    assert!((el(1) + 3.57).abs() < 0.6, "{}", el(1));
+    assert!(effects.iter().all(|x| x["significant"] == true));
+}

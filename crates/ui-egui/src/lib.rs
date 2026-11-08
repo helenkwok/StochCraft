@@ -195,6 +195,23 @@ pub const RECENT_FILES: usize = 10;
 struct Running {
     done: u64,
     total: u64,
+    /// The shell's [`Workers`] run it, rather than the page between frames.
+    on_workers: bool,
+}
+
+/// Workers the shell offers for runs: in the browser, web workers, one per core. The app hands a
+/// run's replications to them (`"mode": "workers"`, see [`stochcraft_engine::Worker`]) instead of
+/// running one replication per frame on the page. The results are the same either way.
+pub trait Workers {
+    /// Starts running `task` (from [`Engine::worker_task`]), whose replications are numbered
+    /// from 0 to `replications - 1`: each worker makes a [`stochcraft_engine::Worker`] from it
+    /// and runs the replications it is given. False if no worker could start; the app then runs
+    /// the replications itself.
+    fn start(&mut self, task: &str, replications: u64) -> bool;
+    /// The workers' answers that have arrived since the last call, for [`Engine::deliver`].
+    fn answers(&mut self) -> Vec<String>;
+    /// Stops every worker: the run finished, failed or was cancelled.
+    fn stop(&mut self);
 }
 
 /// The application: one model document and what the window shows of it.
@@ -206,6 +223,8 @@ pub struct App {
     /// The model digest the results belong to.
     results_digest: Option<String>,
     running: Option<Running>,
+    /// The shell's workers for runs, if it has any.
+    workers: Option<Box<dyn Workers>>,
     /// The last message for the status bar: what happened, or what went wrong.
     status: String,
     /// The status is an error.
@@ -283,6 +302,7 @@ impl App {
             results: None,
             results_digest: None,
             running: None,
+            workers: None,
             status: String::new(),
             status_error: false,
             confirm: None,
@@ -855,24 +875,57 @@ impl App {
         }
     }
 
+    /// Runs go to these workers from now on (the browser's web workers).
+    pub fn set_workers(&mut self, workers: Box<dyn Workers>) {
+        self.workers = Some(workers);
+    }
+
     /// Model ▸ Run: starts the experiment in the background.
     pub fn run(&mut self) {
         if self.running.is_some() {
             return;
         }
-        if let Some(status) = self.execute("run.start", json!({})) {
+        let on_workers = self.workers.is_some() && self.start_on_workers();
+        let status = if on_workers {
+            Some(self.engine.poll_run(0))
+        } else {
+            self.execute("run.start", json!({}))
+        };
+        if let Some(status) = status {
             self.show_results = true;
             self.running = Some(Running {
                 done: 0,
                 total: status["total"].as_u64().unwrap_or(0),
+                on_workers,
             });
             self.info(t("Running…"));
         }
     }
 
+    /// Starts the run on the shell's workers; false (with nothing left running) if it could not
+    /// start there, so the app runs it itself.
+    fn start_on_workers(&mut self) -> bool {
+        let Ok(status) = self
+            .engine
+            .execute("run.start", json!({ "mode": "workers" }))
+        else {
+            return false;
+        };
+        let total = status["total"].as_u64().unwrap_or(0);
+        let started = match (self.engine.worker_task(), self.workers.as_mut()) {
+            (Some(task), Some(workers)) => workers.start(task, total),
+            _ => false,
+        };
+        if !started {
+            let _ = self.engine.execute("run.cancel", json!({}));
+        }
+        started
+    }
+
     /// Stops the run in progress.
     pub fn cancel_run(&mut self) {
         if self.running.is_some() {
+            self.stop_workers();
             let status = self.execute("run.cancel", json!({}));
             self.running = None;
             if status.is_some() {
@@ -886,8 +939,29 @@ impl App {
         if self.running.is_none() {
             return false;
         }
-        // In the browser a run advances one replication per frame, so the page stays responsive.
+        // Answers from the shell's workers; otherwise, in the browser, a run advances one
+        // replication per frame, so the page stays responsive.
+        if self.running.as_ref().is_some_and(|r| r.on_workers)
+            && let Some(workers) = self.workers.as_mut()
+        {
+            let refused = workers
+                .answers()
+                .iter()
+                .find_map(|answer| self.engine.deliver(answer).err());
+            // Not expected: the workers run this same engine. The run stops rather than wait for
+            // an answer that will not come.
+            if let Some(e) = refused {
+                self.stop_workers();
+                let _ = self.engine.execute("run.cancel", json!({}));
+                self.running = None;
+                self.report_error(e.message);
+                return false;
+            }
+        }
         let status = self.engine.poll_run(1);
+        if status["state"] != "running" {
+            self.stop_workers();
+        }
         match status["state"].as_str() {
             Some("running") => {
                 if let Some(r) = &mut self.running {
@@ -919,6 +993,14 @@ impl App {
                 self.report_error(message);
                 false
             }
+        }
+    }
+
+    fn stop_workers(&mut self) {
+        if self.running.as_ref().is_some_and(|r| r.on_workers)
+            && let Some(workers) = self.workers.as_mut()
+        {
+            workers.stop();
         }
     }
 

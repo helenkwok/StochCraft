@@ -3519,6 +3519,9 @@ dependencies = [
 [[package]]
 name = "stochcraft-stats"
 version = "0.1.0"
+dependencies = [
+ "libm",
+]
 
 [[package]]
 name = "stochcraft-testkit"
@@ -3557,6 +3560,7 @@ dependencies = [
  "egui",
  "js-sys",
  "serde_json",
+ "stochcraft-engine",
  "stochcraft-ui-egui",
  "wasm-bindgen",
  "wasm-bindgen-futures",

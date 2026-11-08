@@ -19,6 +19,7 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{Compiled, Report, RunError, summarise};
 use stochcraft_experiment::{Control, Experiment, ExperimentError};
 
+use crate::workers::{self, Answer};
 use crate::{CommandError, ErrorCode, wire};
 
 /// How a background run is carried out.
@@ -27,8 +28,12 @@ use crate::{CommandError, ErrorCode, wire};
 pub enum RunMode {
     /// On worker threads, while the caller carries on (not available in the browser).
     Threads,
-    /// A few replications each time `run.status` is called (how the browser runs).
+    /// A few replications each time `run.status` is called (how the browser runs on one core).
     Slices,
+    /// By the caller's own workers (how the browser runs on every core): the engine hands out
+    /// the run with [`crate::Engine::worker_task`] and collects each replication's answer with
+    /// [`crate::Engine::deliver`] (see the `workers` module).
+    Workers,
 }
 
 impl RunMode {
@@ -115,7 +120,7 @@ fn failed(e: ExperimentError) -> CommandError {
 }
 
 /// The error for replication `index`, which stopped with `e`.
-fn run_failed(index: u64, e: &RunError) -> CommandError {
+pub(crate) fn run_failed(index: u64, e: &RunError) -> CommandError {
     match e {
         RunError::Cancelled => failed(ExperimentError::Cancelled),
         RunError::TimeStopped { time, element, .. } => CommandError {
@@ -151,6 +156,14 @@ enum State {
         reports: Vec<Report>,
         cancelled: bool,
     },
+    Workers {
+        /// By replication index; `None` until its answer arrives.
+        reports: Vec<Option<Report>>,
+        received: u64,
+        /// A report of the model with no time run, for the names and kinds answers leave out.
+        template: Report,
+        task: String,
+    },
     Finished(Result<Value, CommandError>),
 }
 
@@ -167,6 +180,15 @@ impl Job {
                 reports: Vec::new(),
                 cancelled: false,
             },
+            RunMode::Workers => {
+                let rng = plan.experiment.stream(0);
+                State::Workers {
+                    reports: vec![None; usize::try_from(plan.experiment.replications).unwrap_or(0)],
+                    received: 0,
+                    template: plan.compiled.live(rng).report(),
+                    task: workers::task(&plan.compiled, &plan.experiment),
+                }
+            }
             #[cfg(not(target_arch = "wasm32"))]
             RunMode::Threads => {
                 let control = Arc::new(Control::new());
@@ -225,9 +247,53 @@ impl Job {
                     self.join();
                 }
             }
-            State::Finished(_) => {}
+            State::Workers { .. } | State::Finished(_) => {}
         }
         self.status()
+    }
+
+    /// The run as its workers get it, while it waits for their answers.
+    pub fn task(&self) -> Option<&str> {
+        match &self.state {
+            State::Workers { task, .. } => Some(task),
+            _ => None,
+        }
+    }
+
+    /// Takes a worker's answer for one replication. The first failure ends the run with it; an
+    /// answer arriving after the run has finished is ignored.
+    pub fn deliver(&mut self, answer: &str) -> Result<(), CommandError> {
+        let State::Workers {
+            reports,
+            received,
+            template,
+            ..
+        } = &mut self.state
+        else {
+            return Ok(());
+        };
+        let bad = |why: &str| CommandError::new(ErrorCode::InvalidParams, format!("answer: {why}"));
+        let answer: Answer = serde_json::from_str(answer).map_err(|e| bad(&e.to_string()))?;
+        if let Some(e) = answer.error() {
+            self.state = State::Finished(Err(e));
+            return Ok(());
+        }
+        let slot = usize::try_from(answer.index)
+            .ok()
+            .and_then(|i| reports.get_mut(i))
+            .ok_or_else(|| bad("no such replication"))?;
+        let report = answer
+            .report
+            .and_then(|r| r.decode(template))
+            .ok_or_else(|| bad("not a report of this model"))?;
+        if slot.replace(report).is_none() {
+            *received += 1;
+        }
+        if *received == self.plan.experiment.replications {
+            let r: Vec<Report> = std::mem::take(reports).into_iter().flatten().collect();
+            self.state = State::Finished(Ok(self.plan.results(&r)));
+        }
+        Ok(())
     }
 
     #[cfg(not(target_arch = "wasm32"))]
@@ -248,6 +314,9 @@ impl Job {
     pub fn cancel(&mut self) -> Value {
         match &mut self.state {
             State::Slices { cancelled, .. } => *cancelled = true,
+            State::Workers { .. } => {
+                self.state = State::Finished(Err(failed(ExperimentError::Cancelled)));
+            }
             #[cfg(not(target_arch = "wasm32"))]
             State::Threads { control, .. } => {
                 control.cancel();
@@ -262,6 +331,7 @@ impl Job {
         let total = self.total();
         let (state, done, outcome) = match &self.state {
             State::Slices { reports, .. } => ("running", reports.len() as u64, None),
+            State::Workers { received, .. } => ("running", *received, None),
             #[cfg(not(target_arch = "wasm32"))]
             State::Threads { control, .. } => ("running", control.done(), None),
             State::Finished(Ok(_)) => ("finished", total, Some(&self.state)),
