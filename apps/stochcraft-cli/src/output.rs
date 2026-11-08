@@ -133,6 +133,7 @@ pub fn table(name: &str, results: &Value) -> String {
             .collect();
         let _ = writeln!(out, "{}", line.join("  ").trim_end());
     }
+    stop_lines(results, &mut out);
     let notes: Vec<&Value> = results["record"]["warnings"]
         .as_array()
         .into_iter()
@@ -152,6 +153,34 @@ pub fn table(name: &str, results: &Value) -> String {
         }
     }
     out
+}
+
+/// A terminating run's stop: how many replications met it and when.
+fn stop_lines(results: &Value, out: &mut String) {
+    let stop = &results["stop"];
+    if stop.is_null() {
+        return;
+    }
+    let unit = s(&results["time_unit"]);
+    let what = match s(&stop["when"]) {
+        "count" => format!("{} entities left {}", stop["count"], s(&stop["element"])),
+        _ => format!("{} emptied", s(&stop["element"])),
+    };
+    let _ = write!(
+        out,
+        "\nstopped when {what}: in {} of {} replications",
+        stop["met"], results["replications"]
+    );
+    let t = &stop["time"];
+    if !t.is_null() {
+        let _ = write!(
+            out,
+            ", at {} ± {} {unit}",
+            f(&t["mean"]),
+            f(&t["half_width"])
+        );
+    }
+    out.push('\n');
 }
 
 fn csv_field(v: &str) -> String {

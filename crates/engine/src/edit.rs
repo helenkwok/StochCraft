@@ -5,8 +5,8 @@
 //! as typed values rather than JSON, so they restore the model exactly.
 
 use stochcraft_model::{
-    Bounds, Connection, Element, ElementId, ElementKind, Experiment, Model, Property, ResourcePool,
-    calendar::Calendar,
+    Bounds, Connection, Element, ElementId, ElementKind, Estimate, Experiment, Model, Property,
+    ResourcePool, calendar::Calendar,
 };
 
 use crate::{CommandError, ErrorCode};
@@ -45,6 +45,9 @@ pub enum Op {
     Batch(Vec<Op>),
     /// Replace the calendars.
     SetCalendars(Vec<Calendar>),
+    /// Record (or, with `None`, forget) the three-point estimate of an element's time
+    /// distribution.
+    SetEstimate(ElementId, Option<Estimate>),
 }
 
 fn not_found(what: &str, id: &ElementId) -> CommandError {
@@ -200,5 +203,17 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
             Op::Batch(done)
         }
         Op::SetCalendars(c) => Op::SetCalendars(std::mem::replace(&mut model.calendars, c)),
+        Op::SetEstimate(id, estimate) => {
+            let was = match estimate {
+                Some(x) => {
+                    if model.element(&id).is_none() {
+                        return Err(not_found("element", &id));
+                    }
+                    model.estimates.insert(id.clone(), x)
+                }
+                None => model.estimates.remove(&id),
+            };
+            Op::SetEstimate(id, was)
+        }
     })
 }

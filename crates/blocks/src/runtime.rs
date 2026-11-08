@@ -326,6 +326,10 @@ impl Compiled {
             });
         }
 
+        let stop = self.model.experiment.stop.as_ref().and_then(|s| {
+            let i = elements.iter().position(|e| &e.id == s.element())?;
+            Some((i, s.clone()))
+        });
         Live {
             compiled: Cow::Borrowed(self),
             sim,
@@ -335,6 +339,8 @@ impl Compiled {
             warmup,
             duration,
             end,
+            stop,
+            stopped_at: None,
         }
     }
 
@@ -375,6 +381,10 @@ pub struct Live<'a> {
     warmup: f64,
     duration: f64,
     end: f64,
+    /// The model's stop condition: the index of the element it watches, and the condition.
+    stop: Option<(usize, stochcraft_model::Stop)>,
+    /// When the stop condition was met, if it has been (the run then ends there).
+    stopped_at: Option<f64>,
 }
 
 /// A block's state at one moment of a [`Live`] run. Counts are since the warm-up ended (since
@@ -403,9 +413,32 @@ impl Live<'_> {
         self.sim.now()
     }
 
-    /// When the replication ends: its warm-up plus its duration.
+    /// When the replication ends: its warm-up plus its duration, or the time its stop
+    /// condition was met (see [`Live::stopped_at`]).
     pub fn end(&self) -> f64 {
         self.end
+    }
+
+    /// When the model's stop condition ([`stochcraft_model::Experiment::stop`]) was met, ending
+    /// the run, if it has been.
+    pub fn stopped_at(&self) -> Option<f64> {
+        self.stopped_at
+    }
+
+    /// Whether the stop condition holds now.
+    fn stop_met(&self) -> bool {
+        let Some((i, stop)) = &self.stop else {
+            return false;
+        };
+        let Some(s) = self.stats.get(*i) else {
+            return false;
+        };
+        let s = s.borrow();
+        let (entered, left) = (s.entered_before + s.entered, s.left_before + s.left);
+        match stop {
+            stochcraft_model::Stop::Count { count, .. } => left >= *count,
+            stochcraft_model::Stop::Empty { .. } => entered > 0 && left >= entered,
+        }
     }
 
     /// When the warm-up ends (statistics count from then).
@@ -455,10 +488,32 @@ impl Live<'_> {
             max_events_at_one_time: self.compiled.max_events_at_one_time,
             cancelled,
         };
-        self.sim
-            .run_watched(until, &watch)
-            .map(|_| ())
-            .map_err(|stopped| self.compiled.run_error(stopped))
+        if self.stop.is_none() || self.stopped_at.is_some() {
+            return self
+                .sim
+                .run_watched(until, &watch)
+                .map(|_| ())
+                .map_err(|stopped| self.compiled.run_error(stopped));
+        }
+        // With a stop condition: one instant at a time, checking it after each. The events are
+        // the same, in the same order, as in one go.
+        loop {
+            let to = match self.sim.next_event_time() {
+                Some(t) if t <= until => t,
+                _ => until,
+            };
+            self.sim
+                .run_watched(to, &watch)
+                .map_err(|stopped| self.compiled.run_error(stopped))?;
+            if self.stop_met() {
+                self.stopped_at = Some(self.sim.now());
+                self.end = self.sim.now();
+                return Ok(());
+            }
+            if to >= until {
+                return Ok(());
+            }
+        }
     }
 
     /// Each element's state now, in model order, then each shared pool's.
@@ -507,6 +562,7 @@ impl Live<'_> {
             warmup: self.warmup,
             duration: (now - self.warmup).max(0.0).min(self.duration),
             elements,
+            stopped_at: self.stopped_at,
         }
     }
 }
@@ -522,6 +578,9 @@ pub(crate) struct BlockStats {
     /// Entities that entered (a source: created; a join: each entity once, see
     /// `spawn_parallel`).
     entered: u64,
+    /// `entered` and `left` before the warm-up ended (for stop conditions, which count from 0).
+    entered_before: u64,
+    left_before: u64,
     /// Entities sent on (a sink: removed; a split or join: one per copy sent out).
     left: u64,
     /// Entities waiting in the block's input (servers only).
@@ -555,6 +614,8 @@ impl BlockStats {
     fn new(t: f64, properties: usize) -> Self {
         Self {
             entered: 0,
+            entered_before: 0,
+            left_before: 0,
             left: 0,
             waiting: TimeWeighted::new(t, 0.0),
             busy: TimeWeighted::new(t, 0.0),
@@ -569,6 +630,8 @@ impl BlockStats {
     }
 
     fn reset(&mut self, t: f64) {
+        self.entered_before += self.entered;
+        self.left_before += self.left;
         self.entered = 0;
         self.left = 0;
         self.waiting.reset(t);

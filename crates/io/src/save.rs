@@ -12,8 +12,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Connection, Dist, Element as ModelElement, ElementKind, Model, PropertyValue,
-    ResourcePool, TimeUnit,
+    Bounds, Connection, Dist, Element as ModelElement, ElementId, ElementKind, Model,
+    PropertyValue, ResourcePool, Stop, TimeUnit,
 };
 
 use crate::bpsim::{NS2, NSS};
@@ -21,9 +21,9 @@ use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
-    condition_element, dist_element, edge_ends, interruptible_param, numeric, probability_element,
-    property_element, quantity_element, quantity_param, queue_capacity_element, size, start_param,
-    timer_param,
+    condition_element, dist_element, edge_ends, estimate_element, interruptible_param, numeric,
+    probability_element, property_element, quantity_element, quantity_param,
+    queue_capacity_element, size, start_param, stop_element, timer_param,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -263,7 +263,10 @@ fn difference_within(
             ));
         }
     }
-    if got.experiment != want.experiment {
+    // A stop is written on the element it watches, so one on no element is not.
+    let mut want_x = want.experiment.clone();
+    want_x.stop = want_x.stop.filter(|s| want.element(s.element()).is_some());
+    if got.experiment != want_x {
         return Some(format!("its experiment reads as {:?}", got.experiment));
     }
     if got.resources != want.resources {
@@ -271,6 +274,20 @@ fn difference_within(
     }
     if got.calendars != want.calendars {
         return Some(format!("its calendars read as {:?}", got.calendars));
+    }
+    // Estimates are written with the elements they are for.
+    let kept = |m: &Model| -> BTreeMap<ElementId, stochcraft_model::Estimate> {
+        m.estimates
+            .iter()
+            .filter(|(id, _)| want.element(id).is_some())
+            .map(|(id, e)| (id.clone(), e.clone()))
+            .collect()
+    };
+    if kept(got) != kept(want) {
+        return Some(format!(
+            "its three-point estimates read as {:?}",
+            got.estimates
+        ));
     }
     // Shapes are kept to the precision the file writes them with.
     let near = |a: &Bounds, b: &Bounds| {
@@ -729,6 +746,7 @@ impl Editor {
         }
         self.pools(before, after)?;
         self.parameters(root, scenario, &old, &replaced, after, resources)?;
+        self.extensions(root, scenario, before, after, &replaced)?;
         self.routing(root, scenario, before, after)?;
         if before.experiment != after.experiment {
             self.experiment(root, scenario, before, after)?;
@@ -2012,6 +2030,76 @@ impl Editor {
         }
         for (element, name, v) in property_writes {
             set_property(s, &element, &name, v);
+        }
+        Ok(())
+    }
+
+    /// The experiment's stop condition and the three-point estimates: StochCraft's vendor
+    /// extensions on the elements they concern, where they changed (or where the element was
+    /// replaced, taking its parameters with it).
+    fn extensions(
+        &mut self,
+        root: &mut Element,
+        scenario: Option<&str>,
+        before: &Model,
+        after: &Model,
+        replaced: &BTreeSet<&str>,
+    ) -> Result<(), SaveError> {
+        use crate::bpsim::{ESTIMATE, STOP_COUNT, STOP_WHEN_EMPTY};
+        let mut writes: Vec<(String, &'static str, Option<Element>)> = Vec::new();
+        let exists = |id: &ElementId| after.element(id).is_some();
+        let (old_stop, new_stop) = (&before.experiment.stop, &after.experiment.stop);
+        let stop_moved = new_stop
+            .as_ref()
+            .is_some_and(|s| replaced.contains(s.element().as_str()));
+        if old_stop != new_stop || stop_moved {
+            if let Some(s) = old_stop {
+                for name in [STOP_COUNT, STOP_WHEN_EMPTY] {
+                    writes.push((s.element().to_string(), name, None));
+                }
+            }
+            if let Some(s) = new_stop.as_ref().filter(|s| exists(s.element())) {
+                let name = match s {
+                    Stop::Count { .. } => STOP_COUNT,
+                    Stop::Empty { .. } => STOP_WHEN_EMPTY,
+                };
+                writes.push((s.element().to_string(), name, Some(stop_element(s))));
+            }
+        }
+        let ids: BTreeSet<&ElementId> = before
+            .estimates
+            .keys()
+            .chain(after.estimates.keys())
+            .collect();
+        for id in ids {
+            let (was, now) = (before.estimates.get(id), after.estimates.get(id));
+            if was == now && !replaced.contains(id.as_str()) {
+                continue;
+            }
+            let v = now.filter(|_| exists(id)).map(|x| {
+                let mut v = estimate_element(x);
+                if self.ascii {
+                    for body in v.elements_mut() {
+                        if let Some(src) = body.attr("source").filter(|t| !t.is_ascii()) {
+                            self.set_text_attr(body, "source", &src);
+                        }
+                    }
+                }
+                v
+            });
+            writes.push((id.to_string(), ESTIMATE, v));
+        }
+        if writes.iter().all(|(_, _, v)| v.is_none()) {
+            if let Some(s) = scenario_mut(root, scenario) {
+                for (element, name, _) in writes {
+                    set_vendor(s, &element, name, None);
+                }
+            }
+            return Ok(());
+        }
+        let s = self.ensure_scenario(root, scenario)?;
+        for (element, name, v) in writes {
+            set_vendor(s, &element, name, v);
         }
         Ok(())
     }

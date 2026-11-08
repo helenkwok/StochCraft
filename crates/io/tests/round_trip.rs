@@ -183,6 +183,7 @@ pub fn showcase() -> Model {
         duration: 40.0,
         replications: 7,
         seed: u64::MAX - 3,
+        stop: None,
         start: Some(at(4, 6)),
     });
     model.name = "Showcase & <friends>".into();
