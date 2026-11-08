@@ -128,6 +128,30 @@ fn edge_ends(a: &Rect, b: &Rect) -> (Pos2, Pos2) {
     }
 }
 
+/// `text` laid out to fit in `max_width` on at most `max_rows` lines, ending in "…" where it is
+/// cut short, so a label never spills out of its shape however far the view is zoomed out.
+fn fitted(
+    painter: &egui::Painter,
+    text: &str,
+    font: FontId,
+    color: egui::Color32,
+    max_width: f32,
+    max_rows: usize,
+) -> std::sync::Arc<egui::Galley> {
+    let mut job = egui::text::LayoutJob::single_section(
+        text.to_owned(),
+        egui::TextFormat::simple(font, color),
+    );
+    job.halign = egui::Align::Center;
+    job.wrap = egui::text::TextWrapping {
+        max_width: max_width.max(1.0),
+        max_rows: max_rows.max(1),
+        break_anywhere: false,
+        overflow_character: Some('…'),
+    };
+    painter.layout_job(job)
+}
+
 fn arrow(painter: &egui::Painter, from: Pos2, to: Pos2, stroke: Stroke, zoom: f32) {
     painter.line_segment([from, to], stroke);
     let dir = (to - from).normalized();
@@ -272,7 +296,7 @@ impl App {
         let percent = format!("{:.0}%", self.canvas.zoom * 100.0);
         let buttons: [(String, &str, f32); 4] = [
             ("−".to_owned(), t("Zoom out"), 28.0),
-            (percent, t("Actual size"), 52.0),
+            (percent, t("Actual size"), 60.0),
             ("+".to_owned(), t("Zoom in"), 28.0),
             (t("Fit").to_owned(), t("Fit the diagram to the view"), 44.0),
         ];
@@ -283,7 +307,11 @@ impl App {
             let r = Rect::from_min_size(Pos2::new(x, y), Vec2::new(w, 24.0));
             x += w + 4.0;
             if ui
-                .put(r, egui::Button::new(egui::RichText::new(label).size(12.0)))
+                .put(
+                    r,
+                    egui::Button::new(egui::RichText::new(label).size(12.0))
+                        .wrap_mode(egui::TextWrapMode::Extend),
+                )
                 .on_hover_text(hint)
                 .clicked()
             {
@@ -550,31 +578,44 @@ impl App {
                     let corner = 10.0 * view.zoom;
                     painter.rect_filled(r, corner, fill);
                     painter.rect_stroke(r, corner, stroke, StrokeKind::Inside);
-                    let g = painter.layout(
-                        name.clone(),
-                        font.clone(),
-                        p.text,
-                        (r.width() - 10.0 * view.zoom).max(10.0),
-                    );
-                    let at = Pos2::new(
-                        r.center().x - g.size().x / 2.0,
-                        r.center().y - g.size().y / 2.0 - 4.0 * view.zoom,
-                    );
-                    painter.galley(at, g, p.text);
-                    // The kind, small, along the bottom.
+                    // Both texts stay inside the box: the kind, small, along the bottom (left out
+                    // when there is no room for it), and the name in the space above it.
+                    let pad = (5.0 * view.zoom).max(2.0);
+                    let inner = (r.width() - 2.0 * pad).max(1.0);
                     let kind = match &e.kind {
                         ElementKind::Server { capacity, .. } if *capacity > 1 => {
                             format!("{} ×{capacity}", crate::kind_text(kind_key(&e.kind)))
                         }
                         k => crate::kind_text(kind_key(k)).to_owned(),
                     };
-                    painter.text(
-                        Pos2::new(r.center().x, r.bottom() - 5.0 * view.zoom),
-                        Align2::CENTER_BOTTOM,
-                        kind,
-                        small.clone(),
-                        p.text_weak,
+                    // Shrunk a little to fit before it is cut short.
+                    let full = painter
+                        .layout_no_wrap(kind.clone(), small.clone(), p.text_weak)
+                        .size()
+                        .x;
+                    let shrink = (inner / full.max(1.0)).clamp(0.8, 1.0);
+                    let caption_font = FontId::proportional(small.size * shrink);
+                    let caption = fitted(&painter, &kind, caption_font, p.text_weak, inner, 1);
+                    let name_row = painter.ctx().fonts_mut(|f| f.row_height(&font));
+                    let room = r.height() - 2.0 * pad;
+                    let caption = (room >= caption.size().y + name_row).then_some(caption);
+                    let name_room = room - caption.as_ref().map_or(0.0, |c| c.size().y);
+                    let rows = ((name_room / name_row).floor() as usize).max(1);
+                    let g = fitted(&painter, name, font.clone(), p.text, inner, rows);
+                    let middle = r.top() + pad + name_room / 2.0;
+                    painter.galley(
+                        // Centred lines are laid out about x = 0: drawn at the middle.
+                        Pos2::new(r.center().x, middle - g.size().y / 2.0),
+                        g,
+                        p.text,
                     );
+                    if let Some(c) = caption {
+                        painter.galley(
+                            Pos2::new(r.center().x, r.bottom() - pad - c.size().y),
+                            c,
+                            p.text_weak,
+                        );
+                    }
                 }
             }
             // Only the part inside the canvas takes the pointer, not one under the inspector.
