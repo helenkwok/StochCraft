@@ -15,6 +15,7 @@
 	% down and up	% ned og opp
 	% of replications	% av replikasjonene
 	+ Add block	+ Legg til blokk
+	95% interval of the share meeting the target: {lo} to {hi}	95 %-intervall for andelen som når målet: {lo} til {hi}
 	95th percentile	95. persentil
 	95th percentile {value}	95. persentil {value}
 	About StochCraft	Om StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Slutter tidlig
 	Enough: {units}, meeting the target in {p} of replications	Nok: {units}, når målet i {p} av replikasjonene
 	Entered	Innkommet
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Enheter som fortsatt er inne ved slutten av en replikasjon, er utelatt fra gjennomsnittlig ventetid og gjennomsnittlig tid i systemet.
 	Erlang	Erlang
 	Error	Feil
 	Estimate from three values…	Anslå ut fra tre verdier …
@@ -162,12 +164,12 @@
 	Maximum	Maksimum
 	Mean	Gjennomsnitt
 	Mean number inside	Gjennomsnittlig antall inne
+	One replication of {n}: the results of the others differ.	Én replikasjon av {n}: de andre har andre resultater.
 	Still inside at the end	Fortsatt inne ved slutten
 	Mean queue length	Gjennomsnittlig kølengde
 	Mean time blocked	Gjennomsnittlig blokkeringstid
 	Mean time in system	Gjennomsnittlig tid i systemet
 	Mean wait	Gjennomsnittlig ventetid
-	Met in at least	Nådd i minst
 	Metric	Måltall
 	Middles	Loddrette midtpunkter
 	Minimise	Minimer
@@ -292,7 +294,6 @@
 	Settings	Innstillinger
 	Shape	Form
 	Share of arrivals lost	Andel tapte ankomster
-	Share of replications	Andel replikasjoner
 	Share of units blocked	Andel blokkerte enheter
 	Show All	Vis alle
 	Show {id}	Vis {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Gjennomløp en parameter
 	Tandem line	Tandemlinje
 	Target	Mål
+	Target share	Målandel
 	Target value	Målverdi
 	Task	Oppgave
 	Task with a resource	Oppgave med ressurs
 	Task with shared resources	Oppgave med delte ressurser
 	Text	Tekst
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhet at andelen nås; flere replikasjoner ville gjort det smalere.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Gjennomsnittlig tid til stoppbetingelsen er bare over replikasjonene som nådde den; de øvrige kjørte til sin tidsgrense.
 	The model changed, so watching stopped	Modellen ble endret, så følgingen stoppet
 	The model now has the units sizing found	Modellen har nå enhetene dimensjoneringen fant
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
@@ -394,6 +398,8 @@
 	maximum {value}	maksimum {value}
 	milliseconds	millisekunder
 	minutes	minutter
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k av N: bare k av de N replikasjonene hadde en verdi for dette resultatet, og gjennomsnittet og intervallet er over disse k.
+	n = {k} of {n}	n = {k} av {n}
 	nothing yet	ingenting ennå
 	seconds	sekunder
 	split batches	oppdeling av partier

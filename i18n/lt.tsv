@@ -15,6 +15,7 @@
 	% down and up	% žemyn ir aukštyn
 	% of replications	% replikacijų
 	+ Add block	+ Pridėti bloką
+	95% interval of the share meeting the target: {lo} to {hi}	Tikslą pasiekiančios dalies 95 % intervalas: nuo {lo} iki {hi}
 	95th percentile	95-asis procentilis
 	95th percentile {value}	95-asis procentilis {value}
 	About StochCraft	Apie StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Baigiasi anksčiau
 	Enough: {units}, meeting the target in {p} of replications	Pakanka: {units}, tikslas pasiekiamas {p} replikacijų
 	Entered	Įėjo
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Objektai, kurie replikacijos pabaigoje dar viduje, neįskaičiuojami į vidutinį laukimo laiką ir vidutinį laiką sistemoje.
 	Erlang	Erlango
 	Error	Klaida
 	Estimate from three values…	Įvertinti pagal tris reikšmes…
@@ -162,12 +164,12 @@
 	Maximum	Maksimumas
 	Mean	Vidurkis
 	Mean number inside	Vidutinis skaičius viduje
+	One replication of {n}: the results of the others differ.	Viena replikacija iš {n}: kitų rezultatai skiriasi.
 	Still inside at the end	Pabaigoje dar viduje
 	Mean queue length	Vidutinis eilės ilgis
 	Mean time blocked	Vidutinė blokavimo trukmė
 	Mean time in system	Vidutinis laikas sistemoje
 	Mean wait	Vidutinis laukimo laikas
-	Met in at least	Pasiekta ne mažiau kaip
 	Metric	Rodiklis
 	Middles	Vertikalūs centrai
 	Minimise	Minimizuoti
@@ -292,7 +294,6 @@
 	Settings	Nuostatos
 	Shape	Forma
 	Share of arrivals lost	Prarastų atvykimų dalis
-	Share of replications	Replikacijų dalis
 	Share of units blocked	Blokuotų vienetų dalis
 	Show All	Rodyti visus
 	Show {id}	Rodyti {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Parametro perėjimas
 	Tandem line	Nuoseklioji linija
 	Target	Tikslas
+	Target share	Tikslinė dalis
 	Target value	Tikslo reikšmė
 	Task	Užduotis
 	Task with a resource	Užduotis su ištekliumi
 	Task with shared resources	Užduotis su bendrais ištekliais
 	Text	Tekstas
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalas siekia žemiau tikslinės dalies {share}, todėl 95 % patikimumu neparodyta, kad dalis pasiekta; daugiau replikacijų jį susiaurintų.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Vidutinis laikas iki stabdymo sąlygos skaičiuojamas tik iš replikacijų, kurios ją pasiekė; kitos truko iki savo laiko ribos.
 	The model changed, so watching stopped	Modelis pasikeitė, todėl stebėjimas baigtas
 	The model now has the units sizing found	Modelyje dabar yra parinkimo rasti vienetai
 	The model: its experiment, connections and problems	Modelis: eksperimentas, jungtys ir problemos
@@ -394,6 +398,8 @@
 	maximum {value}	maksimumas {value}
 	milliseconds	milisekundės
 	minutes	minutės
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k iš N: tik k iš N replikacijų turėjo šio rezultato reikšmę, o jo vidurkis ir intervalas skaičiuojami iš tų k.
+	n = {k} of {n}	n = {k} iš {n}
 	nothing yet	dar nieko
 	seconds	sekundės
 	split batches	partijų skaidymas

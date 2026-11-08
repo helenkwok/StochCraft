@@ -15,6 +15,7 @@
 	% down and up	% nach unten und oben
 	% of replications	% der Replikationen
 	+ Add block	+ Block hinzufügen
+	95% interval of the share meeting the target: {lo} to {hi}	95-%-Intervall des Anteils, der das Ziel erreicht: {lo} bis {hi}
 	95th percentile	95. Perzentil
 	95th percentile {value}	95. Perzentil {value}
 	About StochCraft	Über StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Endet früher
 	Enough: {units}, meeting the target in {p} of replications	Genug: {units}, das Ziel wird in {p} der Replikationen erreicht
 	Entered	Eingetreten
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Einheiten, die am Ende einer Replikation noch im System sind, gehen nicht in die mittlere Wartezeit und die mittlere Verweilzeit im System ein.
 	Erlang	Erlang
 	Error	Fehler
 	Estimate from three values…	Aus drei Werten schätzen…
@@ -162,12 +164,12 @@
 	Maximum	Maximum
 	Mean	Mittelwert
 	Mean number inside	Mittlere Anzahl im System
+	One replication of {n}: the results of the others differ.	Eine Replikation von {n}: Die Ergebnisse der anderen weichen ab.
 	Still inside at the end	Am Ende noch im System
 	Mean queue length	Mittlere Warteschlangenlänge
 	Mean time blocked	Mittlere Blockierungszeit
 	Mean time in system	Mittlere Verweilzeit im System
 	Mean wait	Mittlere Wartezeit
-	Met in at least	Erreicht in mindestens
 	Metric	Kennzahl
 	Middles	Vertikal zentriert
 	Minimise	Minimieren
@@ -292,7 +294,6 @@
 	Settings	Einstellungen
 	Shape	Formparameter
 	Share of arrivals lost	Anteil verlorener Ankünfte
-	Share of replications	Anteil der Replikationen
 	Share of units blocked	Anteil blockierter Einheiten
 	Show All	Alle einblenden
 	Show {id}	{id} anzeigen
@@ -319,11 +320,14 @@
 	Sweep a parameter	Einen Parameter variieren
 	Tandem line	Tandemlinie
 	Target	Ziel
+	Target share	Zielanteil
 	Target value	Zielwert
 	Task	Aufgabe
 	Task with a resource	Aufgabe mit Ressource
 	Task with shared resources	Aufgabe mit gemeinsamen Ressourcen
 	Text	Text
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Das Intervall reicht unter den Zielanteil von {share}, daher ist nicht mit 95 % Konfidenz gezeigt, dass der Anteil erreicht wird; mehr Replikationen würden es verengen.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Die mittlere Zeit bis zur Abbruchbedingung bezieht sich nur auf die Replikationen, die sie erreicht haben; die übrigen liefen bis zu ihrem Zeitlimit.
 	The model changed, so watching stopped	Das Modell wurde geändert, daher wurde das Beobachten beendet
 	The model now has the units sizing found	Das Modell hat jetzt die bei der Bemessung gefundenen Einheiten
 	The model: its experiment, connections and problems	Das Modell: Experiment, Verbindungen und Probleme
@@ -394,6 +398,8 @@
 	maximum {value}	Maximum {value}
 	milliseconds	Millisekunden
 	minutes	Minuten
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k von N: nur k der N Replikationen hatten einen Wert für dieses Ergebnis; Mittelwert und Intervall beziehen sich auf diese k.
+	n = {k} of {n}	n = {k} von {n}
 	nothing yet	noch nichts
 	seconds	Sekunden
 	split batches	Chargen aufteilen

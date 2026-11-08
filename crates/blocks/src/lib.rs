@@ -462,7 +462,9 @@ pub enum Metric {
     /// finished: large, or growing with the run length, when more work arrives than the
     /// element can do (see [`run_warnings`]).
     WorkInProgress,
-    /// Sinks: mean time from creation to arrival.
+    /// Sinks: mean time from creation to arrival, over the entities that arrived. Entities still
+    /// inside the model at the end (see [`Metric::WorkInProgress`]) are left out, so when work
+    /// piles up the mean is biased low.
     MeanTimeInSystem,
     /// Servers and delays sending to a finite buffer: mean time an entity that left waited,
     /// after its service or delay, for room in the next buffer (zero when there was room).

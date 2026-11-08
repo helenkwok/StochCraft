@@ -15,6 +15,7 @@
 	% down and up	% ずつ上下
 	% of replications	% の反復実行
 	+ Add block	+ ブロックを追加
+	95% interval of the share meeting the target: {lo} to {hi}	目標を達成した割合の 95% 区間: {lo}〜{hi}
 	95th percentile	95 パーセンタイル
 	95th percentile {value}	95 パーセンタイル {value}
 	About StochCraft	StochCraft について
@@ -110,6 +111,7 @@
 	Ends early	早期終了
 	Enough: {units}, meeting the target in {p} of replications	十分: {units}、反復実行の {p} で目標を達成
 	Entered	流入数
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	反復実行の終了時に内部に残っているエンティティは、平均待ち時間とシステム内の平均滞在時間に含まれません。
 	Erlang	アーラン分布
 	Error	エラー
 	Estimate from three values…	3 つの値から見積もる…
@@ -162,12 +164,12 @@
 	Maximum	最大値
 	Mean	平均
 	Mean number inside	内部の平均数
+	One replication of {n}: the results of the others differ.	{n} 回中の 1 回の反復実行です。ほかの反復実行の結果は異なります。
 	Still inside at the end	終了時に内部に残っている数
 	Mean queue length	平均待ち行列長
 	Mean time blocked	平均ブロック時間
 	Mean time in system	システム内の平均滞在時間
 	Mean wait	平均待ち時間
-	Met in at least	達成率
 	Metric	指標
 	Middles	上下中央
 	Minimise	最小化
@@ -292,7 +294,6 @@
 	Settings	設定
 	Shape	形状
 	Share of arrivals lost	到着数の損失割合
-	Share of replications	反復実行の割合
 	Share of units blocked	処理単位のブロック割合
 	Show All	すべてを表示
 	Show {id}	{id} を表示
@@ -319,11 +320,14 @@
 	Sweep a parameter	パラメーターのスイープ
 	Tandem line	直列ライン
 	Target	目標
+	Target share	目標割合
 	Target value	目標値
 	Task	タスク
 	Task with a resource	リソースを使うタスク
 	Task with shared resources	共有リソースを使うタスク
 	Text	テキスト
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	区間が目標割合 {share} を下回るため、割合が達成されたことは 95% の信頼度では示されていません。反復実行を増やすと区間は狭まります。
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	停止条件までの平均時間は、停止条件に達した反復実行だけによるものです。それ以外は時間制限まで実行されました。
 	The model changed, so watching stopped	モデルが変更されたため、観察を終了しました
 	The model now has the units sizing found	サイズ決定で求めた数量をモデルに反映しました
 	The model: its experiment, connections and problems	モデル：実験、接続、問題
@@ -394,6 +398,8 @@
 	maximum {value}	最大値 {value}
 	milliseconds	ミリ秒
 	minutes	分
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N 回中 k 回: この結果に値があったのは N 回の反復実行のうち k 回だけで、その平均と区間はこの k 回によるものです。
+	n = {k} of {n}	n = {n} 回中 {k} 回
 	nothing yet	まだありません
 	seconds	秒
 	split batches	バッチの分割

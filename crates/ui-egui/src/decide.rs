@@ -85,7 +85,8 @@ pub(crate) struct Decide {
     size_out: Option<String>,
     size_bound: Bound,
     size_target: f64,
-    size_confidence: f64,
+    /// The share of replications that must meet the target, in percent.
+    size_target_share: f64,
     size_answer: Option<Answer>,
 
     estimate: Option<EstimateForm>,
@@ -661,6 +662,12 @@ impl App {
             )
         };
         ui.label(text);
+        if met > 0 && met < n {
+            ui.label(theme::weak(
+                ui,
+                t("The mean time to the stop condition is over the replications that met it only; the others ran to their time limit."),
+            ));
+        }
     }
 
     /// One result's distribution across the replications, with a target's probability.
@@ -1128,7 +1135,7 @@ impl App {
         ));
         if self.decide.size_bound == Bound::None {
             self.decide.size_bound = Bound::AtMost;
-            self.decide.size_confidence = 70.0;
+            self.decide.size_target_share = 70.0;
             self.decide.size_target = 1.0;
         }
         let mut go = false;
@@ -1162,13 +1169,13 @@ impl App {
             );
         });
         ui.horizontal(|ui| {
-            row_label(ui, t("Met in at least"));
+            row_label(ui, t("Target share"));
             number(
                 ui,
                 &self.numbers,
-                "size/confidence",
-                t("Share of replications"),
-                &mut self.decide.size_confidence,
+                "size/target_share",
+                t("Target share"),
+                &mut self.decide.size_target_share,
                 50.0,
             );
             ui.label(t("% of replications"));
@@ -1185,7 +1192,7 @@ impl App {
             }
             json!({
                 "target": target,
-                "confidence": (self.decide.size_confidence / 100.0).clamp(0.01, 0.999),
+                "target_share": (self.decide.size_target_share / 100.0).clamp(0.01, 0.999),
             })
         };
         if go {
@@ -1223,6 +1230,25 @@ impl App {
                 "Not reached, even with {units}",
                 &[("units", &units_text(model, &st["units"]))],
             )));
+        }
+        // How sure the share is: its Wilson interval, and whether that clears the target share.
+        if let (Some(lo), Some(hi)) = (st["interval"][0].as_f64(), st["interval"][1].as_f64()) {
+            ui.label(tf(
+                "95% interval of the share meeting the target: {lo} to {hi}",
+                &[("lo", &percent(lo)), ("hi", &percent(hi))],
+            ));
+        }
+        let share = r["target_share"]
+            .as_f64()
+            .or_else(|| r["confidence"].as_f64());
+        if let Some(share) = share.filter(|s| share_not_shown(st, *s)) {
+            ui.label(theme::weak(
+                ui,
+                tf(
+                    "The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.",
+                    &[("share", &percent(share))],
+                ),
+            ));
         }
         let det = &r["deterministic"];
         ui.label(tf(
@@ -1291,6 +1317,15 @@ fn current_value(model: &Value, id: &str, field: &str) -> Option<f64> {
             .map(|d| d.get("mean").and_then(Value::as_f64).unwrap_or(1.0)),
         _ => None,
     }
+}
+
+/// Whether sizing reached the target share in the replications run (`stochastic`, the answer's)
+/// without showing it at 95%: the Wilson interval of the share reaches below `share`.
+fn share_not_shown(stochastic: &Value, share: f64) -> bool {
+    stochastic["reached"] == true
+        && stochastic["interval"][0]
+            .as_f64()
+            .is_some_and(|lo| lo < share)
 }
 
 fn replications_line(r: &Value) -> String {
@@ -1386,4 +1421,21 @@ fn ecdf_chart(ui: &mut egui::Ui, d: &Value, unit: &str) {
             &[("confidence", &percent(d["confidence"].as_f64().unwrap_or(0.95)))],
         ),
     ));
+}
+
+#[cfg(test)]
+mod tests {
+    use super::share_not_shown;
+    use serde_json::json;
+
+    #[test]
+    fn a_share_reached_is_shown_only_when_its_interval_clears_the_target_share() {
+        let st =
+            |reached: bool, lo: f64, hi: f64| json!({ "reached": reached, "interval": [lo, hi] });
+        // 16 of 20 weeks: 80%, Wilson's 95% interval about 58% to 92%.
+        assert!(share_not_shown(&st(true, 0.584, 0.919), 0.7));
+        assert!(!share_not_shown(&st(true, 0.72, 0.95), 0.7));
+        // Not reached: the answer says so already.
+        assert!(!share_not_shown(&st(false, 0.3, 0.6), 0.7));
+    }
 }

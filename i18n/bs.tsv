@@ -15,6 +15,7 @@
 	% down and up	% dolje i gore
 	% of replications	% replikacija
 	+ Add block	+ Dodaj blok
+	95% interval of the share meeting the target: {lo} to {hi}	Interval od 95% udjela koji postiže cilj: od {lo} do {hi}
 	95th percentile	95. percentil
 	95th percentile {value}	95. percentil {value}
 	About StochCraft	O aplikaciji StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Završava ranije
 	Enough: {units}, meeting the target in {p} of replications	Dovoljno: {units}, cilj postignut u {p} replikacija
 	Entered	Ušlo
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entiteti koji su još unutra na kraju replikacije nisu uključeni u prosječno čekanje i prosječno vrijeme u sistemu.
 	Erlang	Erlang
 	Error	Greška
 	Estimate from three values…	Procijeni iz tri vrijednosti…
@@ -162,12 +164,12 @@
 	Maximum	Maksimum
 	Mean	Srednja vrijednost
 	Mean number inside	Prosječan broj unutra
+	One replication of {n}: the results of the others differ.	Jedna replikacija od {n}: rezultati ostalih se razlikuju.
 	Still inside at the end	Još unutra na kraju
 	Mean queue length	Prosječna duljina reda
 	Mean time blocked	Prosječno vrijeme blokiranja
 	Mean time in system	Prosječno vrijeme u sistemu
 	Mean wait	Prosječno čekanje
-	Met in at least	Postignuto u najmanje
 	Metric	Metrika
 	Middles	Vertikalni centri
 	Minimise	Minimiziraj
@@ -292,7 +294,6 @@
 	Settings	Postavke
 	Shape	Oblik
 	Share of arrivals lost	Udio izgubljenih dolazaka
-	Share of replications	Udio replikacija
 	Share of units blocked	Udio blokiranih jedinica
 	Show All	Prikaži sve
 	Show {id}	Prikaži {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Prolaz kroz parametar
 	Tandem line	Tandemska linija
 	Target	Cilj
+	Target share	Ciljni udio
 	Target value	Ciljna vrijednost
 	Task	Zadatak
 	Task with a resource	Zadatak s resursom
 	Task with shared resources	Zadatak sa zajedničkim resursima
 	Text	Tekst
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval seže ispod ciljnog udjela od {share}, pa nije pokazano s pouzdanošću od 95% da je udio postignut; više replikacija bi ga suzilo.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Prosječno vrijeme do uslova zaustavljanja odnosi se samo na replikacije koje su ga postigle; ostale su trajale do svog vremenskog ograničenja.
 	The model changed, so watching stopped	Model se promijenio, pa je praćenje zaustavljeno
 	The model now has the units sizing found	Model sada ima jedinice koje je pronašlo dimenzioniranje
 	The model: its experiment, connections and problems	Model: eksperiment, veze i problemi
@@ -394,6 +398,8 @@
 	maximum {value}	maksimum {value}
 	milliseconds	milisekunde
 	minutes	minute
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k od N: samo k od N replikacija ima vrijednost za taj rezultat, a njegov prosjek i interval su preko tih k.
+	n = {k} of {n}	n = {k} od {n}
 	nothing yet	još ništa
 	seconds	sekunde
 	split batches	razdvajanje serija

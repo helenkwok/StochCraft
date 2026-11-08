@@ -15,6 +15,7 @@
 	% down and up	% w dół i w górę
 	% of replications	% replikacji
 	+ Add block	+ Dodaj blok
+	95% interval of the share meeting the target: {lo} to {hi}	Przedział 95% udziału osiągającego cel: od {lo} do {hi}
 	95th percentile	95. percentyl
 	95th percentile {value}	95. percentyl {value}
 	About StochCraft	O programie StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Kończy się wcześniej
 	Enough: {units}, meeting the target in {p} of replications	Wystarczy: {units}, cel osiągnięty w {p} replikacji
 	Entered	Weszło
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Obiekty, które na końcu replikacji są wciąż wewnątrz, nie są wliczane do średniego czasu oczekiwania ani średniego czasu w systemie.
 	Erlang	Rozkład Erlanga
 	Error	Błąd
 	Estimate from three values…	Oszacuj z trzech wartości…
@@ -162,12 +164,12 @@
 	Maximum	Maksimum
 	Mean	Średnia
 	Mean number inside	Średnia liczba wewnątrz
+	One replication of {n}: the results of the others differ.	Jedna replikacja z {n}: wyniki pozostałych są inne.
 	Still inside at the end	Wciąż wewnątrz na końcu
 	Mean queue length	Średnia długość kolejki
 	Mean time blocked	Średni czas blokowania
 	Mean time in system	Średni czas w systemie
 	Mean wait	Średni czas oczekiwania
-	Met in at least	Osiągnięty w co najmniej
 	Metric	Miara
 	Middles	Środki w pionie
 	Minimise	Minimalizuj
@@ -292,7 +294,6 @@
 	Settings	Ustawienia
 	Shape	Kształt
 	Share of arrivals lost	Odsetek utraconych przybyć
-	Share of replications	Udział replikacji
 	Share of units blocked	Odsetek zablokowanych jednostek
 	Show All	Pokaż wszystko
 	Show {id}	Pokaż {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Przegląd parametru
 	Tandem line	Linia tandemowa
 	Target	Cel
+	Target share	Udział docelowy
 	Target value	Wartość docelowa
 	Task	Zadanie
 	Task with a resource	Zadanie z zasobem
 	Task with shared resources	Zadanie ze współdzielonymi zasobami
 	Text	Tekst
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Przedział sięga poniżej udziału docelowego {share}, więc nie wykazano z 95% ufnością, że udział jest osiągnięty; więcej replikacji by go zawęziło.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Średni czas do warunku zatrzymania dotyczy tylko replikacji, które go spełniły; pozostałe trwały do swojego limitu czasu.
 	The model changed, so watching stopped	Model się zmienił, więc obserwacja została zakończona
 	The model now has the units sizing found	Model ma teraz jednostki znalezione przy doborze
 	The model: its experiment, connections and problems	Model: eksperyment, połączenia i problemy
@@ -394,6 +398,8 @@
 	maximum {value}	maksimum {value}
 	milliseconds	milisekundy
 	minutes	minuty
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k z N: tylko k z N replikacji miało wartość dla tego wyniku, a jego średnia i przedział dotyczą tych k.
+	n = {k} of {n}	n = {k} z {n}
 	nothing yet	jeszcze nic
 	seconds	sekundy
 	split batches	rozdzielanie partii

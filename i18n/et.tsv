@@ -15,6 +15,7 @@
 	% down and up	% alla ja üles
 	% of replications	% kordustest
 	+ Add block	+ Lisa plokk
+	95% interval of the share meeting the target: {lo} to {hi}	Eesmärgi saavutanud osakaalu 95% vahemik: {lo} kuni {hi}
 	95th percentile	95. protsentiil
 	95th percentile {value}	95. protsentiil {value}
 	About StochCraft	Teave StochCrafti kohta
@@ -110,6 +111,7 @@
 	Ends early	Lõpeb varem
 	Enough: {units}, meeting the target in {p} of replications	Piisab: {units}, eesmärk saavutatakse {p} kordustest
 	Entered	Sisenenud
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Olemid, mis on korduse lõpus veel sees, jäetakse keskmisest ooteajast ja keskmisest ajast süsteemis välja.
 	Erlang	Erlang
 	Error	Viga
 	Estimate from three values…	Hinda kolme väärtuse põhjal…
@@ -162,12 +164,12 @@
 	Maximum	Maksimum
 	Mean	Keskmine
 	Mean number inside	Keskmine arv sees
+	One replication of {n}: the results of the others differ.	Üks kordus {n}-st: teiste tulemused erinevad.
 	Still inside at the end	Lõpus veel sees
 	Mean queue length	Järjekorra keskmine pikkus
 	Mean time blocked	Keskmine blokeerimisaeg
 	Mean time in system	Keskmine aeg süsteemis
 	Mean wait	Keskmine ooteaeg
-	Met in at least	Saavutatud vähemalt
 	Metric	Mõõdik
 	Middles	Vertikaalsed keskkohad
 	Minimise	Minimeeri
@@ -292,7 +294,6 @@
 	Settings	Seaded
 	Shape	Kuju
 	Share of arrivals lost	Kaotatud saabumiste osakaal
-	Share of replications	Korduste osakaal
 	Share of units blocked	Blokeeritud ühikute osakaal
 	Show All	Näita kõiki
 	Show {id}	Näita {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Parameetri läbimine
 	Tandem line	Tandemliin
 	Target	Eesmärk
+	Target share	Sihtosakaal
 	Target value	Eesmärgi väärtus
 	Task	Ülesanne
 	Task with a resource	Ressursiga ülesanne
 	Task with shared resources	Jagatud ressurssidega ülesanne
 	Text	Tekst
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Vahemik ulatub alla sihtosakaalu {share}, seega pole 95% usaldusega näidatud, et osakaal on saavutatud; rohkem kordusi kitsendaks seda.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskmine aeg peatamistingimuseni on ainult nende korduste põhjal, mis selle saavutasid; ülejäänud kestsid oma ajapiirini.
 	The model changed, so watching stopped	Mudel muutus, seega jälgimine lõpetati
 	The model now has the units sizing found	Mudelil on nüüd dimensioneerimisel leitud ühikud
 	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
@@ -394,6 +398,8 @@
 	maximum {value}	maksimum {value}
 	milliseconds	millisekundid
 	minutes	minutid
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k / N: ainult k kordusel N-st oli selle tulemuse väärtus ning selle keskmine ja vahemik on nende k põhjal.
+	n = {k} of {n}	n = {k} / {n}
 	nothing yet	veel mitte midagi
 	seconds	sekundid
 	split batches	partiide jagamine

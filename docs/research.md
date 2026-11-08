@@ -46,7 +46,8 @@ A `report` command can then assemble a results assessment in the standard's term
 The National Nuclear Security Administration sizes facilities for cost estimates with DES:
 process times from three-point (minimum, mode, maximum) estimates, shared equipment, working hours
 (weekdays 8 to 5), a production target per week, and a confidence level, the share of simulated
-weeks that meet the target (70% in the worked example). The equipment list is found by running,
+weeks that meet the target (70% in the worked example). StochCraft calls this the target share,
+since it is a share of the replications run rather than a statistical confidence. The equipment list is found by running,
 finding the bottleneck, adding a unit there and repeating. Using only mean process times sizes the
 facility too small: the stochastic model needs more equipment than the deterministic one for the
 same target.
@@ -332,7 +333,8 @@ The methods of M2.8, each implemented from its published description:
   −ρ / (1 − ρ) at the point; over ±10% at ρ = 0.75 the central differences are 4.40 and −3.57.
 - **Sizing at the bottleneck** follows the NNSA practice above: add a unit at the busiest
   resource and run again until the share of simulated weeks meeting the target reaches the
-  confidence.
+  target share. The share's Wilson interval says how sure it is: 16 of 20 weeks (80%) gives
+  0.58 to 0.92 at 95%, which does not show a 70% share met.
 - **Checks** (`crates/blocks/tests/terminating.rs`): the completion time of an activity network
   of constant durations is its critical path (the longest path); that of k parallel activities
   with exponential durations of mean m is their maximum, with distribution (1 − e^(−t/m))^k and

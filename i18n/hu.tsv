@@ -15,6 +15,7 @@
 	% down and up	% le és fel
 	% of replications	% az ismétlésekből
 	+ Add block	+ Blokk hozzáadása
+	95% interval of the share meeting the target: {lo} to {hi}	A célt elérő arány 95%-os intervalluma: {lo}–{hi}
 	95th percentile	95. percentilis
 	95th percentile {value}	95. percentilis {value}
 	About StochCraft	A StochCraft névjegye
@@ -110,6 +111,7 @@
 	Ends early	Korábban ér véget
 	Enough: {units}, meeting the target in {p} of replications	Elég: {units}, a cél az ismétlések {p} részében teljesül
 	Entered	Belépett
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Az ismétlés végén még bent lévő egyedek nem számítanak bele az átlagos várakozási időbe és az átlagos rendszerben töltött időbe.
 	Erlang	Erlang
 	Error	Hiba
 	Estimate from three values…	Becslés három értékből…
@@ -162,12 +164,12 @@
 	Maximum	Maximum
 	Mean	Átlag
 	Mean number inside	Átlagos belső darabszám
+	One replication of {n}: the results of the others differ.	Egy ismétlés a(z) {n}-ból/-ből: a többi eredménye eltér.
 	Still inside at the end	A végén még bent
 	Mean queue length	Átlagos sorhossz
 	Mean time blocked	Átlagos blokkolási idő
 	Mean time in system	Átlagos rendszerben töltött idő
 	Mean wait	Átlagos várakozási idő
-	Met in at least	Teljesül legalább
 	Metric	Mérőszám
 	Middles	Függőleges középpontok
 	Minimise	Minimalizálás
@@ -292,7 +294,6 @@
 	Settings	Beállítások
 	Shape	Alak
 	Share of arrivals lost	Elveszett érkezések aránya
-	Share of replications	Az ismétlések aránya
 	Share of units blocked	Blokkolt egységek aránya
 	Show All	Összes megjelenítése
 	Show {id}	{id} megjelenítése
@@ -319,11 +320,14 @@
 	Sweep a parameter	Paraméter végigfuttatása
 	Tandem line	Tandemvonal
 	Target	Cél
+	Target share	Célarány
 	Target value	Célérték
 	Task	Feladat
 	Task with a resource	Erőforrást használó feladat
 	Task with shared resources	Megosztott erőforrásokat használó feladat
 	Text	Szöveg
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Az intervallum a(z) {share} célarány alá nyúlik, így 95%-os megbízhatósággal nem igazolt, hogy az arány teljesül; több ismétlés szűkítené.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	A leállási feltételig eltelt átlagos idő csak azokra az ismétlésekre vonatkozik, amelyek elérték; a többi az időkorlátjáig futott.
 	The model changed, so watching stopped	A modell megváltozott, ezért a követés leállt
 	The model now has the units sizing found	A modellben most a méretezés által talált egységek vannak
 	The model: its experiment, connections and problems	A modell: kísérlet, kapcsolatok és problémák
@@ -394,6 +398,8 @@
 	maximum {value}	maximum {value}
 	milliseconds	ezredmásodperc
 	minutes	perc
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k / N: az N ismétlésből csak k-nak volt értéke erre az eredményre, és átlaga és intervalluma erre a k-ra vonatkozik.
+	n = {k} of {n}	n = {k} / {n}
 	nothing yet	még semmi
 	seconds	másodperc
 	split batches	kötegek szétbontása

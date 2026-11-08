@@ -788,12 +788,12 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
 - **Sweeps and sensitivity:** a parameter varied over a range, results per point, and a record of
   which parameters drive which results (NASA-STD-7009B [M&S 30]).
 - **Capacity sizing:** add a unit at the bottleneck (the busiest resource) and run again, until
-  the probability of meeting the target reaches the confidence asked for. Reported with the
+  the share of replications meeting the target reaches a target share. Reported with the
   deterministic answer beside it, which is too small.
 - **Results as inputs:** a metric's values across replications as an empirical BPSim user
   distribution for a coarser model.
 - Acceptance model: a small multi-product plant written for StochCraft (two products sharing
-  mixers and ovens, working hours, a weekly target at 70% confidence), sized automatically.
+  mixers and ovens, working hours, a weekly target met in 70% of weeks), sized automatically.
 
 **Done (first part):**
 - **Terminating runs:** `Experiment.stop` ends each replication on an event, with the warm-up
@@ -843,6 +843,19 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   `stochcraft:estimate` in files (declared in the vendor schema). A distribution changed
   afterwards no longer matches its estimate, which is a warning. `estimate.remove` forgets it.
 - The CLI's results table states the stop and when it was met.
+- **Results that are easy to misread (#69):**
+  - A metric only some replications have a value for shows "n = k of N" in the window (its
+    `n` was already in the results); the CLI's `n` column reads "k of N" then.
+  - Notes under the results say that the mean wait and the mean time in system leave out
+    entities still inside at the end (when any were), and that the mean time to the stop is
+    over the replications that met it (when not all did).
+  - Validation warns `normal_often_negative` when a time is drawn from a normal distribution
+    whose mean is less than Φ⁻¹(0.99) = 2.326 standard deviations: more than 1% of its draws
+    are below 0 and count as 0, which lengthens the mean. It suggests a truncated normal with
+    min 0 or a log-normal.
+  - Watch a run says that it shows one replication of N, and that the others differ.
+  - `clippy.toml` forbids `f64::powi` and `f64::mul_add`, whose results can differ between
+    targets; squares are written as products.
 
 **Validation** (`blocks/tests/terminating.rs`, `random/src/estimate.rs`,
 `stats/src/spread.rs`, `engine/tests/engine.rs`):
@@ -874,10 +887,14 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   recorded, with the model's digest, in the `sensitivity` list of later runs' records
   (NASA-STD-7009B [M&S 30]).
 - **Capacity sizing:** `experiment.size` takes a target (a metric `at_least` or `at_most` a
-  value) and a confidence. It runs the experiment and adds a unit to the busiest task or pool,
-  then runs again, until the share of replications meeting the target reaches the confidence.
-  Beside it is the answer with every time at its mean, from one replication. `apply` makes the
-  answer the model's, as one step to undo.
+  value) and a `target_share`. It runs the experiment and adds a unit to the busiest task or
+  pool, then runs again, until the share of replications meeting the target reaches the target
+  share. Beside it is the answer with every time at its mean, from one replication. `apply`
+  makes the answer the model's, as one step to undo.
+  - The target share was called `confidence` until #69, which it is not: 16 of 20 weeks (80%)
+    has a Wilson 95% interval of 0.58 to 0.92, so a 70% share is not shown to be met. The old
+    name is still read, and answers carry both keys. The window shows the interval of the share
+    found and says when it reaches below the target share.
 - **Acceptance model** (`tests/models/plant.json`, an engine script for `stochcraft-cli exec`):
   - A bakery with bread and cake orders that arrive on weekdays from 8 to 4 (70 and 50 a week).
   - Shared mixers and ovens that work those hours.

@@ -15,6 +15,7 @@
 	% down and up	% xuống và lên
 	% of replications	% số lần lặp
 	+ Add block	+ Thêm khối
+	95% interval of the share meeting the target: {lo} to {hi}	Khoảng 95% của tỷ lệ đạt mục tiêu: từ {lo} đến {hi}
 	95th percentile	Phân vị thứ 95
 	95th percentile {value}	phân vị thứ 95 {value}
 	About StochCraft	Giới thiệu StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Kết thúc sớm
 	Enough: {units}, meeting the target in {p} of replications	Đủ: {units}, đạt mục tiêu trong {p} số lần lặp
 	Entered	Đã vào
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Các thực thể vẫn còn bên trong lúc một lần lặp kết thúc không được tính vào thời gian chờ trung bình và thời gian trung bình trong hệ thống.
 	Erlang	Erlang
 	Error	Lỗi
 	Estimate from three values…	Ước lượng từ ba giá trị…
@@ -162,12 +164,12 @@
 	Maximum	Giá trị lớn nhất
 	Mean	Trung bình
 	Mean number inside	Số lượng trung bình bên trong
+	One replication of {n}: the results of the others differ.	Một lần lặp trong {n}: kết quả của các lần khác sẽ khác.
 	Still inside at the end	Vẫn còn bên trong lúc kết thúc
 	Mean queue length	Độ dài hàng đợi trung bình
 	Mean time blocked	Thời gian bị chặn trung bình
 	Mean time in system	Thời gian trung bình trong hệ thống
 	Mean wait	Thời gian chờ trung bình
-	Met in at least	Đạt trong ít nhất
 	Metric	Chỉ số
 	Middles	Tâm dọc
 	Minimise	Thu nhỏ tối đa
@@ -292,7 +294,6 @@
 	Settings	Cài đặt
 	Shape	Hình dạng
 	Share of arrivals lost	Tỷ lệ lượt đến bị mất
-	Share of replications	Tỷ lệ số lần lặp
 	Share of units blocked	Tỷ lệ đơn vị bị chặn
 	Show All	Hiện tất cả
 	Show {id}	Hiển thị {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Quét một tham số
 	Tandem line	Dây chuyền nối tiếp
 	Target	Mục tiêu
+	Target share	Tỷ lệ mục tiêu
 	Target value	Giá trị mục tiêu
 	Task	Tác vụ
 	Task with a resource	Tác vụ có tài nguyên
 	Task with shared resources	Tác vụ có tài nguyên dùng chung
 	Text	Văn bản
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Khoảng này xuống dưới tỷ lệ mục tiêu {share}, nên chưa cho thấy với độ tin cậy 95% rằng tỷ lệ đạt được; thêm lần lặp sẽ thu hẹp nó.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Thời gian trung bình đến điều kiện dừng chỉ tính trên các lần lặp đạt điều kiện đó; các lần khác chạy đến giới hạn thời gian.
 	The model changed, so watching stopped	Mô hình đã thay đổi nên việc theo dõi đã dừng
 	The model now has the units sizing found	Mô hình giờ có số đơn vị mà việc định cỡ tìm được
 	The model: its experiment, connections and problems	Mô hình: thí nghiệm, kết nối và vấn đề
@@ -394,6 +398,8 @@
 	maximum {value}	lớn nhất {value}
 	milliseconds	mili giây
 	minutes	phút
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k trên N: chỉ k trong N lần lặp có giá trị cho kết quả đó, và giá trị trung bình cùng khoảng của nó tính trên k lần đó.
+	n = {k} of {n}	n = {k} trên {n}
 	nothing yet	chưa có gì
 	seconds	giây
 	split batches	tách lô

@@ -1,6 +1,8 @@
 //! The results of a run, in the words of the model: one section per element with its metrics,
 //! their units and the half-width of each 95% confidence interval, under the run record that
-//! makes them reproducible (the same content as `stochcraft-cli run`).
+//! makes them reproducible (the same content as `stochcraft-cli run`). A metric that only some
+//! replications have a value for says how many ("n = 4 of 10"), and notes under the tables say
+//! what the means leave out.
 
 use egui::RichText;
 use serde_json::Value;
@@ -143,8 +145,39 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
         .as_array()
         .map(|m| m.iter().filter_map(Value::as_str).collect())
         .unwrap_or_default();
+    let replications = results["replications"]
+        .as_u64()
+        .or_else(|| r["replications"].as_u64());
+    // "n = k of N" where only k of the N replications had a value (empty otherwise).
+    let n_of = |m: &Value| match (m["n"].as_u64(), replications) {
+        (Some(k), Some(n)) if k < n => tf(
+            "n = {k} of {n}",
+            &[("k", &k.to_string()), ("n", &n.to_string())],
+        ),
+        _ => String::new(),
+    };
+    let partial = results["elements"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .flat_map(|e| {
+            let metrics = e["metrics"].as_object().into_iter().flatten();
+            let properties = e["properties"].as_object().into_iter().flatten();
+            metrics.chain(properties).map(|(_, m)| m)
+        })
+        .any(|m| !n_of(m).is_empty());
+    // Whether entities were still inside at the end of a replication somewhere.
+    let left_inside = results["elements"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .any(|e| {
+            e["metrics"]["work_in_progress"]["mean"]
+                .as_f64()
+                .is_some_and(|w| w > 0.0)
+        });
     ui.vertical(|ui| {
-        ui.set_max_width(640.0);
+        ui.set_max_width(COLUMNS[4].1);
         // Warnings from before the run (the record's), from its results, and the file's notes.
         let notes: Vec<&str> = r["warnings"]
             .as_array()
@@ -180,7 +213,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                 ui,
                 &p,
                 None,
-                [t("Metric"), t("Mean"), t("± 95% CI"), t("Unit")],
+                [t("Metric"), t("Mean"), t("± 95% CI"), t("Unit"), ""],
             );
             for (i, key) in order.iter().enumerate() {
                 let m = &e["metrics"][*key];
@@ -200,7 +233,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                     ui,
                     &p,
                     Some(i % 2 == 0),
-                    [label, &show(mean), &show(hw), unit],
+                    [label, &show(mean), &show(hw), unit, &n_of(m)],
                 );
             }
             // The mean value this element assigned to each property it sets.
@@ -224,10 +257,23 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                         &show(m["mean"].as_f64()),
                         &show(m["half_width"].as_f64()),
                         "",
+                        &n_of(m),
                     ],
                 );
             }
             ui.add_space(16.0);
+        }
+        if partial {
+            ui.label(theme::weak(
+                ui,
+                t("n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k."),
+            ));
+        }
+        if left_inside {
+            ui.label(theme::weak(
+                ui,
+                t("Entities still inside at the end of a replication are left out of the mean wait and the mean time in system."),
+            ));
         }
         ui.label(theme::weak(
             ui,
@@ -253,23 +299,28 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
 }
 
 /// Column edges of a results row: the metric's name from the left, the mean and the half-width
-/// right-aligned on fixed edges (so every element's table lines up), then the unit.
-const COLUMNS: [(f32, f32); 4] = [
+/// right-aligned on fixed edges (so every element's table lines up), the unit, then how many
+/// replications had a value where not all did.
+const COLUMNS: [(f32, f32); 5] = [
     (10.0, 230.0),
     (230.0, 360.0),
     (370.0, 500.0),
     (512.0, 580.0),
+    (588.0, 690.0),
 ];
 
 /// One row of an element's results. `stripe` is `None` for the header row.
-fn row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [&str; 4]) {
+fn row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [&str; 5]) {
     let height = if stripe.is_some() { 28.0 } else { 22.0 };
-    let width = COLUMNS[3].1;
+    let width = COLUMNS[4].1;
     let (rect, _) = ui.allocate_exact_size(egui::vec2(width, height), egui::Sense::hover());
     if stripe == Some(true) {
         ui.painter().rect_filled(rect, 4.0, p.stripe);
     }
     for (c, text) in cells.into_iter().enumerate() {
+        if text.is_empty() {
+            continue;
+        }
         let (l, r) = COLUMNS[c];
         let cell = egui::Rect::from_x_y_ranges(rect.left() + l..=rect.left() + r, rect.y_range());
         let numeric = c == 1 || c == 2;
@@ -286,7 +337,7 @@ fn row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [&str
             if c == 2 {
                 t = t.color(p.text_weak);
             }
-        } else if c == 3 {
+        } else if c >= 3 {
             t = t.color(p.text_weak);
         }
         ui.scope_builder(egui::UiBuilder::new().max_rect(cell).layout(layout), |ui| {
@@ -357,5 +408,62 @@ mod tests {
         assert_eq!(super::grouped(14990.0), "14,990");
         assert_eq!(super::grouped(1234.5678), "1234.6");
         assert_eq!(super::grouped(-123456.0), "-123,456");
+    }
+
+    /// Results of 10 replications in which only 4 had a mean wait, and work was left inside.
+    fn partial() -> serde_json::Value {
+        let m = |mean: f64, n: u64| serde_json::json!({ "mean": mean, "half_width": 0.5, "std_dev": 1.0, "n": n });
+        serde_json::json!({
+            "replications": 10,
+            "record": { "replications": 10, "time_unit": "min" },
+            "metrics": ["entered", "mean_wait", "work_in_progress"],
+            "elements": [{
+                "id": "desk", "name": "Desk", "kind": "server",
+                "metrics": {
+                    "entered": m(12.0, 10),
+                    "mean_wait": m(3.0, 4),
+                    "work_in_progress": m(0.4, 10),
+                },
+            }],
+        })
+    }
+
+    /// `results` drawn with the app's fonts (installed in the first frame).
+    fn draw(results: serde_json::Value) -> egui_kittest::Harness<'static> {
+        let mut fonts = false;
+        let mut h = egui_kittest::Harness::new_ui(move |ui| {
+            if !fonts {
+                crate::theme::install_fonts(ui.ctx(), "en");
+                crate::theme::install(ui.ctx());
+                fonts = true;
+                ui.ctx().request_repaint();
+                return;
+            }
+            super::show(ui, &results);
+        });
+        h.run();
+        h
+    }
+
+    #[test]
+    fn a_result_from_fewer_than_all_replications_says_how_many() {
+        use egui_kittest::kittest::Queryable;
+        let h = draw(partial());
+        // Only the mean wait is from fewer than all: one "n = k of N", and the note explaining it.
+        assert_eq!(h.query_all_by_label("n = 4 of 10").count(), 1);
+        assert!(h.query_by_label("n = 10 of 10").is_none());
+        h.get_by_label_contains("n = k of N: only k of the N replications");
+        h.get_by_label_contains("Entities still inside at the end of a replication are left out");
+
+        // Every replication had every value and nothing was left inside: no n and no notes.
+        let mut all = partial();
+        all["elements"][0]["metrics"]["mean_wait"]["n"] = 10.into();
+        all["elements"][0]["metrics"]["work_in_progress"]["mean"] = 0.0.into();
+        let h = draw(all);
+        assert!(h.query_by_label_contains("n = ").is_none());
+        assert!(
+            h.query_by_label_contains("still inside at the end")
+                .is_none()
+        );
     }
 }

@@ -15,6 +15,7 @@
 	% down and up	% în jos și în sus
 	% of replications	% din replicări
 	+ Add block	+ Adaugă bloc
+	95% interval of the share meeting the target: {lo} to {hi}	Interval de 95% al ponderii care atinge ținta: de la {lo} la {hi}
 	95th percentile	Percentila 95
 	95th percentile {value}	percentila 95 {value}
 	About StochCraft	Despre StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Se oprește mai devreme
 	Enough: {units}, meeting the target in {p} of replications	Suficient: {units}, atinge ținta în {p} din replicări
 	Entered	Intrări
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitățile încă în interior la finalul unei replicări sunt lăsate în afara timpului mediu de așteptare și a timpului mediu în sistem.
 	Erlang	Erlang
 	Error	Eroare
 	Estimate from three values…	Estimează din trei valori…
@@ -162,12 +164,12 @@
 	Maximum	Maxim
 	Mean	Medie
 	Mean number inside	Număr mediu în interior
+	One replication of {n}: the results of the others differ.	O replicare din {n}: rezultatele celorlalte diferă.
 	Still inside at the end	Încă în interior la final
 	Mean queue length	Lungimea medie a cozii
 	Mean time blocked	Timp mediu de blocare
 	Mean time in system	Timp mediu în sistem
 	Mean wait	Timp mediu de așteptare
-	Met in at least	Atinsă în cel puțin
 	Metric	Indicator
 	Middles	Centre verticale
 	Minimise	Minimizează
@@ -292,7 +294,6 @@
 	Settings	Setări
 	Shape	Formă
 	Share of arrivals lost	Proporția sosirilor pierdute
-	Share of replications	Ponderea replicărilor
 	Share of units blocked	Proporția unităților blocate
 	Show All	Afișează tot
 	Show {id}	Afișează {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Baleierea unui parametru
 	Tandem line	Linie în tandem
 	Target	Țintă
+	Target share	Pondere țintă
 	Target value	Valoare țintă
 	Task	Sarcină
 	Task with a resource	Sarcină cu resursă
 	Task with shared resources	Sarcină cu resurse partajate
 	Text	Text
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalul coboară sub ponderea țintă de {share}, deci nu este arătat cu 95% încredere că ponderea este atinsă; mai multe replicări l-ar îngusta.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Timpul mediu până la condiția de oprire este doar pe replicările care au atins-o; celelalte au rulat până la limita de timp.
 	The model changed, so watching stopped	Modelul s-a schimbat, așa că urmărirea s-a oprit
 	The model now has the units sizing found	Modelul are acum unitățile găsite la dimensionare
 	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
@@ -394,6 +398,8 @@
 	maximum {value}	maxim {value}
 	milliseconds	milisecunde
 	minutes	minute
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k din N: doar k din cele N replicări au avut o valoare pentru acel rezultat, iar media și intervalul său sunt pe acele k.
+	n = {k} of {n}	n = {k} din {n}
 	nothing yet	nimic deocamdată
 	seconds	secunde
 	split batches	separarea loturilor

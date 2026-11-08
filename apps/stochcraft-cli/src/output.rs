@@ -114,7 +114,11 @@ pub fn table(name: &str, results: &Value) -> String {
                 (*metric).to_owned(),
                 f(&m["mean"]),
                 f(&m["half_width"]),
-                m["n"].to_string(),
+                // How many replications had a value: "4 of 10" where not all did.
+                match (m["n"].as_u64(), results["replications"].as_u64()) {
+                    (Some(k), Some(n)) if k < n => format!("{k} of {n}"),
+                    _ => m["n"].to_string(),
+                },
             ]);
             first = false;
         }
@@ -138,6 +142,21 @@ pub fn table(name: &str, results: &Value) -> String {
             })
             .collect();
         let _ = writeln!(out, "{}", line.join("  ").trim_end());
+    }
+    let left_inside = results["elements"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .any(|e| {
+            e["metrics"]["work_in_progress"]["mean"]
+                .as_f64()
+                .is_some_and(|w| w > 0.0)
+        });
+    if left_inside {
+        let _ = writeln!(
+            out,
+            "mean_wait and mean_time_in_system leave out entities still inside at the end"
+        );
     }
     stop_lines(results, &mut out);
     let notes: Vec<&Value> = results["record"]["warnings"]
@@ -186,6 +205,9 @@ fn stop_lines(results: &Value, out: &mut String) {
             f(&t["mean"]),
             f(&t["half_width"])
         );
+        if stop["met"].as_u64() < results["replications"].as_u64() {
+            let _ = write!(out, " (over those that met it only)");
+        }
     }
     out.push('\n');
 }
@@ -287,5 +309,36 @@ mod tests {
         assert_eq!(number(0.0001234), "1.2340e-4");
         assert_eq!(number(-2.5), "-2.5");
         assert_eq!(csv_field("a, b"), "\"a, b\"");
+    }
+
+    #[test]
+    fn the_table_says_how_many_replications_a_result_is_over() {
+        let m = |mean: f64, n: u64| serde_json::json!({ "mean": mean, "half_width": 0.5, "n": n });
+        let mut results = serde_json::json!({
+            "replications": 10,
+            "time_unit": "min",
+            "record": { "replications": 10, "time_unit": "min" },
+            "metrics": ["entered", "mean_wait", "work_in_progress"],
+            "elements": [{ "id": "desk", "metrics": {
+                "entered": m(12.0, 10), "mean_wait": m(3.0, 4), "work_in_progress": m(0.4, 10),
+            } }],
+            "stop": { "when": "empty", "element": "desk", "met": 7, "time": m(50.0, 7) },
+        });
+        let out = table("q", &results);
+        assert!(out.contains("4 of 10"), "{out}");
+        assert!(!out.contains("10 of 10"), "{out}");
+        assert!(
+            out.contains("leave out entities still inside at the end"),
+            "{out}"
+        );
+        assert!(
+            out.contains("in 7 of 10 replications, at 50 ± 0.5 min (over those that met it only)"),
+            "{out}"
+        );
+        results["elements"][0]["metrics"]["work_in_progress"]["mean"] = 0.0.into();
+        results["stop"]["met"] = 10.into();
+        let out = table("q", &results);
+        assert!(!out.contains("still inside"), "{out}");
+        assert!(!out.contains("over those that met it"), "{out}");
     }
 }

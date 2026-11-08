@@ -15,6 +15,7 @@
 	% down and up	% নিচে ও উপরে
 	% of replications	% পুনরাবৃত্তিতে
 	+ Add block	+ ব্লক যোগ করুন
+	95% interval of the share meeting the target: {lo} to {hi}	লক্ষ্য পূরণকারী অংশের ৯৫% ব্যবধান: {lo} থেকে {hi}
 	95th percentile	৯৫তম শতাংশক
 	95th percentile {value}	৯৫তম শতাংশক {value}
 	About StochCraft	StochCraft সম্পর্কে
@@ -110,6 +111,7 @@
 	Ends early	আগে শেষ হয়
 	Enough: {units}, meeting the target in {p} of replications	যথেষ্ট: {units}, {p} পুনরাবৃত্তিতে লক্ষ্য পূরণ
 	Entered	প্রবেশ করেছে
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	কোনো পুনরাবৃত্তির শেষে যেগুলো এখনও ভেতরে, সেগুলো গড় অপেক্ষার সময় ও সিস্টেমে গড় সময় থেকে বাদ থাকে।
 	Erlang	এরলাং
 	Error	ত্রুটি
 	Estimate from three values…	তিনটি মান থেকে অনুমান…
@@ -162,12 +164,12 @@
 	Maximum	সর্বাধিক
 	Mean	গড়
 	Mean number inside	ভেতরে গড় সংখ্যা
+	One replication of {n}: the results of the others differ.	{n}টির মধ্যে একটি পুনরাবৃত্তি: বাকিগুলোর ফলাফল ভিন্ন।
 	Still inside at the end	শেষে এখনও ভেতরে
 	Mean queue length	সারির গড় দৈর্ঘ্য
 	Mean time blocked	গড় অবরুদ্ধ সময়
 	Mean time in system	সিস্টেমে গড় সময়
 	Mean wait	গড় অপেক্ষার সময়
-	Met in at least	অন্তত এতে পূরণ
 	Metric	পরিমাপক
 	Middles	উল্লম্ব কেন্দ্র
 	Minimise	সর্বনিম্ন করুন
@@ -292,7 +294,6 @@
 	Settings	সেটিংস
 	Shape	আকৃতি
 	Share of arrivals lost	হারানো আগমনের অনুপাত
-	Share of replications	পুনরাবৃত্তির অংশ
 	Share of units blocked	অবরুদ্ধ এককের অনুপাত
 	Show All	সব দেখান
 	Show {id}	{id} দেখান
@@ -319,11 +320,14 @@
 	Sweep a parameter	একটি প্যারামিটার সুইপ
 	Tandem line	ধারাবাহিক লাইন
 	Target	লক্ষ্য
+	Target share	লক্ষ্য অংশ
 	Target value	লক্ষ্য মান
 	Task	কাজ
 	Task with a resource	সম্পদসহ কাজ
 	Task with shared resources	ভাগ করা সম্পদসহ কাজ
 	Text	টেক্সট
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ব্যবধানটি {share} লক্ষ্য অংশের নিচে নেমে যায়, তাই অংশটি ৯৫% আস্থায় পূরণ হয়েছে বলে দেখানো যায় না; আরও পুনরাবৃত্তি এটিকে সরু করবে।
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	থামার শর্ত পর্যন্ত গড় সময় কেবল সেই পুনরাবৃত্তিগুলোর উপর যেগুলো শর্তে পৌঁছেছে; বাকিগুলো তাদের সময়সীমা পর্যন্ত চলেছে।
 	The model changed, so watching stopped	মডেল বদলেছে, তাই দেখা বন্ধ হয়েছে
 	The model now has the units sizing found	মডেলে এখন আকার নির্ধারণে পাওয়া এককগুলি আছে
 	The model: its experiment, connections and problems	মডেল: পরীক্ষা, সংযোগ ও সমস্যা
@@ -394,6 +398,8 @@
 	maximum {value}	সর্বোচ্চ {value}
 	milliseconds	মিলিসেকেন্ড
 	minutes	মিনিট
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N-টির মধ্যে k-টি: N-টি পুনরাবৃত্তির মধ্যে কেবল k-টিতে সেই ফলাফলের মান ছিল, এবং এর গড় ও ব্যবধান সেই k-টির উপর।
+	n = {k} of {n}	n = {n}টির মধ্যে {k}টি
 	nothing yet	এখনও কিছু নেই
 	seconds	সেকেন্ড
 	split batches	ব্যাচ ভাগ করা

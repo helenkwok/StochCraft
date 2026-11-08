@@ -15,6 +15,7 @@
 	% down and up	% 上下
 	% of replications	% 的重复运行
 	+ Add block	+ 添加区块
+	95% interval of the share meeting the target: {lo} to {hi}	达到目标的比例的 95% 区间：{lo} 至 {hi}
 	95th percentile	第 95 百分位数
 	95th percentile {value}	第 95 百分位数 {value}
 	About StochCraft	关于 StochCraft
@@ -110,6 +111,7 @@
 	Ends early	提前结束
 	Enough: {units}, meeting the target in {p} of replications	足够：{units}，{p} 的重复运行达到目标
 	Entered	进入数
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	重复运行结束时仍在内部的实体不计入平均等待时间和系统内平均时间。
 	Erlang	埃尔朗分布
 	Error	错误
 	Estimate from three values…	根据三个值估计…
@@ -162,12 +164,12 @@
 	Maximum	最大值
 	Mean	均值
 	Mean number inside	内部平均数量
+	One replication of {n}: the results of the others differ.	{n} 次中的一次重复运行：其他重复运行的结果不同。
 	Still inside at the end	结束时仍在内部的数量
 	Mean queue length	平均队列长度
 	Mean time blocked	平均阻塞时间
 	Mean time in system	系统内平均时间
 	Mean wait	平均等待时间
-	Met in at least	达到比例至少
 	Metric	指标
 	Middles	垂直居中
 	Minimise	最小化
@@ -292,7 +294,6 @@
 	Settings	设置
 	Shape	形状参数
 	Share of arrivals lost	到达流失比例
-	Share of replications	重复运行的比例
 	Share of units blocked	资源单元阻塞比例
 	Show All	全部显示
 	Show {id}	显示 {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	扫描一个参数
 	Tandem line	串联流程
 	Target	目标
+	Target share	目标比例
 	Target value	目标值
 	Task	任务
 	Task with a resource	需要资源的任务
 	Task with shared resources	需要共享资源的任务
 	Text	文本
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	该区间低于目标比例 {share}，因此未能以 95% 的置信度表明达到了该比例；更多的重复运行会使区间变窄。
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	到停止条件的平均时间只基于达到停止条件的重复运行；其余的运行到了时间上限。
 	The model changed, so watching stopped	模型已更改，因此已停止观察
 	The model now has the units sizing found	模型现在使用规模确定得出的数量
 	The model: its experiment, connections and problems	模型：实验、连接和问题
@@ -394,6 +398,8 @@
 	maximum {value}	最大值 {value}
 	milliseconds	毫秒
 	minutes	分钟
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N 次中的 k 次：N 次重复运行中只有 k 次有该结果的值，其平均值和区间基于这 k 次。
+	n = {k} of {n}	n = {n} 次中的 {k} 次
 	nothing yet	尚无内容
 	seconds	秒
 	split batches	拆分批次

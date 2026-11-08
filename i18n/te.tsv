@@ -15,6 +15,7 @@
 	% down and up	% కిందకు, పైకి
 	% of replications	% పునరావృత్త అమలులలో
 	+ Add block	+ బ్లాక్‌ను జోడించు
+	95% interval of the share meeting the target: {lo} to {hi}	లక్ష్యాన్ని చేరిన వాటా యొక్క 95% అంతరం: {lo} నుండి {hi}
 	95th percentile	95వ శతాంశం
 	95th percentile {value}	95వ శతాంశం {value}
 	About StochCraft	StochCraft గురించి
@@ -110,6 +111,7 @@
 	Ends early	ముందుగా ముగుస్తుంది
 	Enough: {units}, meeting the target in {p} of replications	సరిపోతుంది: {units}, {p} పునరావృత్త అమలులలో లక్ష్యం చేరుతుంది
 	Entered	ప్రవేశించినవి
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	పునరావృత్త అమలు చివరికి ఇంకా లోపల ఉన్నవి సగటు వేచి ఉండే సమయంలోనూ వ్యవస్థలో గడిపిన సగటు సమయంలోనూ లెక్కించబడవు.
 	Erlang	ఎర్లాంగ్
 	Error	లోపం
 	Estimate from three values…	మూడు విలువల నుండి అంచనా వేయి…
@@ -162,12 +164,12 @@
 	Maximum	గరిష్ఠం
 	Mean	సగటు
 	Mean number inside	లోపల ఉన్నవాటి సగటు సంఖ్య
+	One replication of {n}: the results of the others differ.	{n}లో ఒక పునరావృత్త అమలు: మిగిలిన వాటి ఫలితాలు వేరుగా ఉంటాయి.
 	Still inside at the end	చివరికి ఇంకా లోపల ఉన్నవి
 	Mean queue length	సగటు క్యూలో పొడవు
 	Mean time blocked	నిరోధిత సగటు సమయం
 	Mean time in system	వ్యవస్థలో గడిపిన సగటు సమయం
 	Mean wait	సగటు వేచి ఉండే సమయం
-	Met in at least	కనీసం ఇందులో చేరుతుంది
 	Metric	కొలమానం
 	Middles	నిలువు కేంద్రాలు
 	Minimise	కనిష్ఠీకరించు
@@ -292,7 +294,6 @@
 	Settings	సెట్టింగ్‌లు
 	Shape	ఆకృతి పరామితి
 	Share of arrivals lost	కోల్పోయిన రాకల వాటా
-	Share of replications	పునరావృత్త అమలుల వాటా
 	Share of units blocked	నిరోధిత యూనిట్ల వాటా
 	Show All	అన్నీ చూపించు
 	Show {id}	{id} చూపించు
@@ -319,11 +320,14 @@
 	Sweep a parameter	ఒక పరామితిని స్వీప్ చేయి
 	Tandem line	వరుస ప్రక్రియ
 	Target	లక్ష్యం
+	Target share	లక్ష్య వాటా
 	Target value	లక్ష్య విలువ
 	Task	పని
 	Task with a resource	వనరు అవసరమైన పని
 	Task with shared resources	భాగస్వామ్య వనరులు అవసరమైన పని
 	Text	టెక్స్ట్
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	అంతరం {share} లక్ష్య వాటా కంటే కిందకు వెళ్తుంది, కాబట్టి వాటా చేరినట్లు 95% విశ్వాసంతో చూపబడలేదు; మరిన్ని పునరావృత్త అమలులు దానిని సన్నగా చేస్తాయి.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ఆపే షరతు వరకు సగటు సమయం దానిని చేరిన పునరావృత్త అమలులపై మాత్రమే; మిగిలినవి వాటి సమయ పరిమితి వరకు నడిచాయి.
 	The model changed, so watching stopped	నమూనా మారింది, కాబట్టి గమనించడం ఆగిపోయింది
 	The model now has the units sizing found	పరిమాణ నిర్ణయం కనుగొన్న యూనిట్‌లు ఇప్పుడు మోడల్‌లో ఉన్నాయి
 	The model: its experiment, connections and problems	నమూనా: దాని ప్రయోగం, అనుసంధానాలు మరియు సమస్యలు
@@ -394,6 +398,8 @@
 	maximum {value}	గరిష్టం {value}
 	milliseconds	మిల్లీసెకన్లు
 	minutes	నిమిషాలు
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = Nలో k: N పునరావృత్త అమలులలో k మాత్రమే ఆ ఫలితానికి విలువను కలిగి ఉన్నాయి; దాని సగటు మరియు అంతరం ఆ k పై ఉన్నాయి.
+	n = {k} of {n}	n = {n}లో {k}
 	nothing yet	ఇంకా ఏమీ లేదు
 	seconds	సెకన్లు
 	split batches	బ్యాచ్‌ల విభజన

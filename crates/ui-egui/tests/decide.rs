@@ -212,8 +212,13 @@ fn the_analysis_view_sweeps_ranks_and_sizes() {
 
     // Sizing the clerks: a wait of at most a minute in 70% of replications.
     choose(&mut h, "Result with a target", "Serve customer · Mean wait");
+    h.get_by_role_and_label(Role::TextInput, "Target share");
     click(&mut h, Role::Button, "Size");
     h.get_by_label_contains("With every time at its mean:");
+    // How sure the share is: with 6 replications, Wilson's interval reaches well below 70%
+    // whatever share met it, so the note says the target share is not shown to be met.
+    h.get_by_label_contains("95% interval of the share meeting the target:");
+    h.get_by_label_contains("so the share is not shown to be met with 95% confidence");
     let before = model(&h);
     click(&mut h, Role::Button, "Use these units in the model");
     let capacity = |m: &Value| m["elements"][1]["capacity"].as_u64().unwrap_or(1);

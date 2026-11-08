@@ -15,6 +15,7 @@
 	% down and up	% poshtë dhe lart
 	% of replications	% e përsëritjeve
 	+ Add block	+ Shto bllok
+	95% interval of the share meeting the target: {lo} to {hi}	Intervali 95% i pjesës që arrin objektivin: nga {lo} në {hi}
 	95th percentile	Përqindëshi i 95-të
 	95th percentile {value}	përqindëshi i 95-të {value}
 	About StochCraft	Rreth StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Mbaron më herët
 	Enough: {units}, meeting the target in {p} of replications	Mjafton: {units}, arrin objektivin në {p} të përsëritjeve
 	Entered	Hyrjet
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitetet që janë ende brenda në fund të një përsëritjeje lihen jashtë pritjes mesatare dhe kohës mesatare në sistem.
 	Erlang	Erlang
 	Error	Gabim
 	Estimate from three values…	Vlerëso nga tri vlera…
@@ -162,12 +164,12 @@
 	Maximum	Maksimumi
 	Mean	Mesatarja
 	Mean number inside	Numri mesatar brenda
+	One replication of {n}: the results of the others differ.	Një përsëritje nga {n}: rezultatet e të tjerave ndryshojnë.
 	Still inside at the end	Ende brenda në fund
 	Mean queue length	Gjatësia mesatare e radhës
 	Mean time blocked	Koha mesatare e bllokimit
 	Mean time in system	Koha mesatare në sistem
 	Mean wait	Pritja mesatare
-	Met in at least	Arritur në të paktën
 	Metric	Tregues
 	Middles	Qendrat vertikale
 	Minimise	Minimizo
@@ -292,7 +294,6 @@
 	Settings	Cilësimet
 	Shape	Forma
 	Share of arrivals lost	Pjesa e mbërritjeve të humbura
-	Share of replications	Pjesa e përsëritjeve
 	Share of units blocked	Pjesa e njësive të bllokuara
 	Show All	Shfaqi të gjitha
 	Show {id}	Shfaq {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Skano një parametër
 	Tandem line	Linja në seri
 	Target	Objektivi
+	Target share	Pjesa objektiv
 	Target value	Vlera e objektivit
 	Task	Detyrë
 	Task with a resource	Detyrë me burim
 	Task with shared resources	Detyrë me burime të përbashkëta
 	Text	Tekst
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervali zbret nën pjesën objektiv prej {share}, ndaj nuk tregohet me besueshmëri 95% se pjesa arrihet; më shumë përsëritje do ta ngushtonin.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Koha mesatare deri te kushti i ndalimit është vetëm mbi përsëritjet që e arritën; të tjerat shkuan deri në kufirin e kohës.
 	The model changed, so watching stopped	Modeli ndryshoi, prandaj vëzhgimi u ndal
 	The model now has the units sizing found	Modeli tani ka njësitë që gjeti përmasimi
 	The model: its experiment, connections and problems	Modeli: eksperimenti, lidhjet dhe problemet
@@ -394,6 +398,8 @@
 	maximum {value}	maksimumi {value}
 	milliseconds	milisekonda
 	minutes	minuta
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k nga N: vetëm k nga N përsëritjet kishin një vlerë për atë rezultat, dhe mesatarja dhe intervali i tij janë mbi ato k.
+	n = {k} of {n}	n = {k} nga {n}
 	nothing yet	ende asgjë
 	seconds	sekonda
 	split batches	ndarje e grupeve

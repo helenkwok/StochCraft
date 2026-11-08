@@ -15,6 +15,7 @@
 	% down and up	% aşağı ve yukarı
 	% of replications	% tekrarın
 	+ Add block	+ Blok ekle
+	95% interval of the share meeting the target: {lo} to {hi}	Hedefi karşılayan oranın %95 aralığı: {lo} ile {hi} arası
 	95th percentile	95. yüzdelik
 	95th percentile {value}	95. yüzdelik {value}
 	About StochCraft	StochCraft hakkında
@@ -110,6 +111,7 @@
 	Ends early	Erken biter
 	Enough: {units}, meeting the target in {p} of replications	Yeterli: {units}, hedef tekrarların {p} kadarında karşılanır
 	Entered	Giren
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Bir tekrarın sonunda hâlâ içeride olan varlıklar ortalama bekleme süresine ve sistemdeki ortalama süreye katılmaz.
 	Erlang	Erlang
 	Error	Hata
 	Estimate from three values…	Üç değerden tahmin et…
@@ -162,12 +164,12 @@
 	Maximum	Maksimum
 	Mean	Ortalama
 	Mean number inside	İçerideki ortalama sayı
+	One replication of {n}: the results of the others differ.	{n} tekrardan biri: diğerlerinin sonuçları farklıdır.
 	Still inside at the end	Sonda hâlâ içeride
 	Mean queue length	Ortalama kuyruk uzunluğu
 	Mean time blocked	Ortalama engellenme süresi
 	Mean time in system	Sistemdeki ortalama süre
 	Mean wait	Ortalama bekleme süresi
-	Met in at least	En az şu oranda karşılanır
 	Metric	Ölçüt
 	Middles	Dikey merkezler
 	Minimise	Simge durumuna küçült
@@ -292,7 +294,6 @@
 	Settings	Ayarlar
 	Shape	Şekil
 	Share of arrivals lost	Kaybedilen gelişlerin oranı
-	Share of replications	Tekrar oranı
 	Share of units blocked	Engellenen birimlerin oranı
 	Show All	Tümünü Göster
 	Show {id}	{id} göster
@@ -319,11 +320,14 @@
 	Sweep a parameter	Bir parametreyi tara
 	Tandem line	Tandem hat
 	Target	Hedef
+	Target share	Hedef oran
 	Target value	Hedef değer
 	Task	Görev
 	Task with a resource	Kaynak kullanan görev
 	Task with shared resources	Paylaşılan kaynakları kullanan görev
 	Text	Metin
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Aralık {share} hedef oranının altına iniyor, bu yüzden oranın karşılandığı %95 güvenle gösterilmiş değil; daha fazla tekrar aralığı daraltır.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Durdurma koşuluna kadarki ortalama süre yalnızca bu koşula ulaşan tekrarlara göredir; diğerleri süre sınırlarına kadar çalıştı.
 	The model changed, so watching stopped	Model değişti, bu nedenle izleme durduruldu
 	The model now has the units sizing found	Modelde artık boyutlandırmanın bulduğu birimler var
 	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
@@ -394,6 +398,8 @@
 	maximum {value}	en büyük {value}
 	milliseconds	milisaniye
 	minutes	dakika
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N tekrardan k: N tekrarın yalnızca k tanesinde bu sonucun bir değeri vardı; ortalaması ve aralığı bu k tekrara göredir.
+	n = {k} of {n}	n = {n} tekrardan {k}
 	nothing yet	henüz bir şey yok
 	seconds	saniye
 	split batches	partileri ayırma

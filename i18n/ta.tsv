@@ -15,6 +15,7 @@
 	% down and up	% கீழும் மேலும்
 	% of replications	% மீள் இயக்கங்களில்
 	+ Add block	+ தொகுதியைச் சேர்
+	95% interval of the share meeting the target: {lo} to {hi}	இலக்கை அடையும் பங்கின் 95% இடைவெளி: {lo} முதல் {hi}
 	95th percentile	95-ஆம் சதமானம்
 	95th percentile {value}	95-ஆம் சதமானம் {value}
 	About StochCraft	StochCraft பற்றி
@@ -110,6 +111,7 @@
 	Ends early	முன்னதாக முடிகிறது
 	Enough: {units}, meeting the target in {p} of replications	போதும்: {units}, {p} மீள் இயக்கங்களில் இலக்கு அடையப்படுகிறது
 	Entered	உள்ளே நுழைந்தவை
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ஒரு மீள் இயக்கத்தின் முடிவில் இன்னும் உள்ளே உள்ளவை சராசரி காத்திருப்பிலும் அமைப்பில் கழித்த சராசரி நேரத்திலும் சேர்க்கப்படவில்லை.
 	Erlang	எர்லாங்
 	Error	பிழை
 	Estimate from three values…	மூன்று மதிப்புகளிலிருந்து மதிப்பிடு…
@@ -162,12 +164,12 @@
 	Maximum	அதிகபட்சம்
 	Mean	சராசரி
 	Mean number inside	உள்ளே உள்ள சராசரி எண்ணிக்கை
+	One replication of {n}: the results of the others differ.	{n} இல் ஒரு மீள் இயக்கம்: மற்றவற்றின் முடிவுகள் வேறுபடும்.
 	Still inside at the end	முடிவில் இன்னும் உள்ளே உள்ளவை
 	Mean queue length	சராசரி வரிசை நீளம்
 	Mean time blocked	தடுக்கப்பட்ட சராசரி நேரம்
 	Mean time in system	அமைப்பில் கழித்த சராசரி நேரம்
 	Mean wait	சராசரி காத்திருப்பு
-	Met in at least	குறைந்தது இதில் அடையப்படும்
 	Metric	அளவீடு
 	Middles	செங்குத்து மையங்கள்
 	Minimise	சிறிதாக்கு
@@ -292,7 +294,6 @@
 	Settings	அமைப்புகள்
 	Shape	வடிவ அளவுரு
 	Share of arrivals lost	இழந்த வருகைகளின் விகிதம்
-	Share of replications	மீள் இயக்கங்களின் பங்கு
 	Share of units blocked	தடுக்கப்பட்ட அலகுகளின் விகிதம்
 	Show All	அனைத்தையும் காட்டு
 	Show {id}	{id} ஐக் காட்டு
@@ -319,11 +320,14 @@
 	Sweep a parameter	ஒரு அளவுருவை வருடு
 	Tandem line	தொடர் பணிநிலைகள்
 	Target	இலக்கு
+	Target share	இலக்கு பங்கு
 	Target value	இலக்கு மதிப்பு
 	Task	பணி
 	Task with a resource	வளம் தேவைப்படும் பணி
 	Task with shared resources	பகிர்ந்த வளங்கள் தேவைப்படும் பணி
 	Text	உரை
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	இடைவெளி {share} இலக்கு பங்குக்குக் கீழே செல்கிறது, எனவே பங்கு அடையப்பட்டது 95% நம்பிக்கையுடன் காட்டப்படவில்லை; கூடுதல் மீள் இயக்கங்கள் அதைக் குறுக்கும்.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	நிறுத்த நிபந்தனை வரையிலான சராசரி நேரம் அதை அடைந்த மீள் இயக்கங்கள் மீது மட்டுமே; மற்றவை அவற்றின் நேர வரம்பு வரை இயங்கின.
 	The model changed, so watching stopped	மாதிரி மாறியதால் கவனிப்பது நிறுத்தப்பட்டது
 	The model now has the units sizing found	அளவிடுதல் கண்டறிந்த அலகுகள் இப்போது மாதிரியில் உள்ளன
 	The model: its experiment, connections and problems	மாதிரி: அதன் சோதனை, இணைப்புகள், சிக்கல்கள்
@@ -394,6 +398,8 @@
 	maximum {value}	அதிகபட்சம் {value}
 	milliseconds	மில்லிவினாடிகள்
 	minutes	நிமிடங்கள்
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N இல் k: N மீள் இயக்கங்களில் k மட்டுமே அந்த முடிவுக்கு மதிப்பைக் கொண்டிருந்தன; அதன் சராசரியும் இடைவெளியும் அந்த k மீதானவை.
+	n = {k} of {n}	n = {n} இல் {k}
 	nothing yet	இன்னும் ஏதுமில்லை
 	seconds	வினாடிகள்
 	split batches	தொகுப்புகளைப் பிரித்தல்

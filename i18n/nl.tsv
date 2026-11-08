@@ -15,6 +15,7 @@
 	% down and up	% omlaag en omhoog
 	% of replications	% van de herhalingen
 	+ Add block	+ Blok toevoegen
+	95% interval of the share meeting the target: {lo} to {hi}	95%-interval van het aandeel dat het doel haalt: {lo} tot {hi}
 	95th percentile	95e percentiel
 	95th percentile {value}	95e percentiel {value}
 	About StochCraft	Over StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Stopt eerder
 	Enough: {units}, meeting the target in {p} of replications	Genoeg: {units}, haalt het doel in {p} van de herhalingen
 	Entered	Binnengekomen
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entiteiten die aan het eind van een herhaling nog binnen zijn, tellen niet mee in de gemiddelde wachttijd en de gemiddelde tijd in het systeem.
 	Erlang	Erlang
 	Error	Fout
 	Estimate from three values…	Schatten uit drie waarden…
@@ -162,12 +164,12 @@
 	Maximum	Maximum
 	Mean	Gemiddelde
 	Mean number inside	Gemiddeld aantal binnen
+	One replication of {n}: the results of the others differ.	Eén herhaling van {n}: de resultaten van de andere verschillen.
 	Still inside at the end	Aan het eind nog binnen
 	Mean queue length	Gemiddelde wachtrijlengte
 	Mean time blocked	Gemiddelde blokkeringstijd
 	Mean time in system	Gemiddelde tijd in het systeem
 	Mean wait	Gemiddelde wachttijd
-	Met in at least	Gehaald in minstens
 	Metric	Metriek
 	Middles	Verticale middens
 	Minimise	Minimaliseren
@@ -292,7 +294,6 @@
 	Settings	Instellingen
 	Shape	Vorm
 	Share of arrivals lost	Aandeel verloren aankomsten
-	Share of replications	Aandeel herhalingen
 	Share of units blocked	Aandeel geblokkeerde eenheden
 	Show All	Alles tonen
 	Show {id}	{id} tonen
@@ -319,11 +320,14 @@
 	Sweep a parameter	Eén parameter variëren
 	Tandem line	Tandemlijn
 	Target	Doel
+	Target share	Doelaandeel
 	Target value	Doelwaarde
 	Task	Taak
 	Task with a resource	Taak met een hulpbron
 	Task with shared resources	Taak met gedeelde hulpbronnen
 	Text	Tekst
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Het interval reikt tot onder het doelaandeel van {share}, dus het is niet met 95% betrouwbaarheid aangetoond dat het aandeel wordt gehaald; meer herhalingen zouden het smaller maken.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	De gemiddelde tijd tot de stopvoorwaarde is alleen over de herhalingen die haar haalden; de andere liepen tot hun tijdslimiet.
 	The model changed, so watching stopped	Het model is gewijzigd, dus het volgen is gestopt
 	The model now has the units sizing found	Het model heeft nu de eenheden die het dimensioneren vond
 	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
@@ -394,6 +398,8 @@
 	maximum {value}	maximum {value}
 	milliseconds	milliseconden
 	minutes	minuten
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k van N: slechts k van de N herhalingen hadden een waarde voor dat resultaat, en het gemiddelde en interval zijn over die k.
+	n = {k} of {n}	n = {k} van {n}
 	nothing yet	nog niets
 	seconds	seconden
 	split batches	batches splitsen

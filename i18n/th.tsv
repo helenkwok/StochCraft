@@ -15,6 +15,7 @@
 	% down and up	% ลงและขึ้น
 	% of replications	% ของรอบการจำลองซ้ำ
 	+ Add block	+ เพิ่มบล็อก
+	95% interval of the share meeting the target: {lo} to {hi}	ช่วง 95% ของสัดส่วนที่บรรลุเป้าหมาย: จาก {lo} ถึง {hi}
 	95th percentile	เปอร์เซ็นไทล์ที่ 95
 	95th percentile {value}	เปอร์เซ็นไทล์ที่ 95 {value}
 	About StochCraft	เกี่ยวกับ StochCraft
@@ -110,6 +111,7 @@
 	Ends early	จบก่อนกำหนด
 	Enough: {units}, meeting the target in {p} of replications	เพียงพอ: {units} บรรลุเป้าหมายใน {p} ของรอบการจำลองซ้ำ
 	Entered	จำนวนที่เข้ามา
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	สิ่งที่ยังอยู่ภายในเมื่อรอบการจำลองซ้ำสิ้นสุด ไม่ถูกนับในเวลารอเฉลี่ยและเวลาเฉลี่ยในระบบ
 	Erlang	เออร์แลง
 	Error	ข้อผิดพลาด
 	Estimate from three values…	ประมาณจากสามค่า…
@@ -162,12 +164,12 @@
 	Maximum	ค่าสูงสุด
 	Mean	ค่าเฉลี่ย
 	Mean number inside	จำนวนเฉลี่ยภายใน
+	One replication of {n}: the results of the others differ.	หนึ่งรอบการจำลองซ้ำจาก {n}: ผลของรอบอื่นแตกต่างกัน
 	Still inside at the end	ยังอยู่ภายในเมื่อสิ้นสุด
 	Mean queue length	ความยาวคิวเฉลี่ย
 	Mean time blocked	เวลาเฉลี่ยที่ถูกบล็อก
 	Mean time in system	เวลาเฉลี่ยในระบบ
 	Mean wait	เวลารอเฉลี่ย
-	Met in at least	บรรลุอย่างน้อย
 	Metric	ตัวชี้วัด
 	Middles	กึ่งกลางแนวตั้ง
 	Minimise	ย่อหน้าต่าง
@@ -292,7 +294,6 @@
 	Settings	การตั้งค่า
 	Shape	พารามิเตอร์รูปร่าง
 	Share of arrivals lost	สัดส่วนขาเข้าที่สูญเสีย
-	Share of replications	สัดส่วนของรอบการจำลองซ้ำ
 	Share of units blocked	สัดส่วนหน่วยที่ถูกบล็อก
 	Show All	แสดงทั้งหมด
 	Show {id}	แสดง {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	กวาดพารามิเตอร์
 	Tandem line	สายงานต่อเนื่อง
 	Target	เป้าหมาย
+	Target share	สัดส่วนเป้าหมาย
 	Target value	ค่าเป้าหมาย
 	Task	งาน
 	Task with a resource	งานที่ใช้ทรัพยากร
 	Task with shared resources	งานที่ใช้ทรัพยากรร่วมกัน
 	Text	ข้อความ
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ช่วงนี้ลงต่ำกว่าสัดส่วนเป้าหมาย {share} จึงยังไม่แสดงด้วยความเชื่อมั่น 95% ว่าบรรลุสัดส่วนนั้น รอบการจำลองซ้ำที่มากขึ้นจะทำให้ช่วงแคบลง
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	เวลาเฉลี่ยจนถึงเงื่อนไขหยุดคิดเฉพาะรอบการจำลองซ้ำที่ถึงเงื่อนไข รอบอื่นรันจนถึงขีดจำกัดเวลา
 	The model changed, so watching stopped	โมเดลเปลี่ยนไป จึงหยุดเฝ้าดู
 	The model now has the units sizing found	ตอนนี้แบบจำลองมีจำนวนหน่วยที่การกำหนดขนาดพบแล้ว
 	The model: its experiment, connections and problems	แบบจำลอง: การทดลอง การเชื่อมต่อ และปัญหา
@@ -394,6 +398,8 @@
 	maximum {value}	ค่าสูงสุด {value}
 	milliseconds	มิลลิวินาที
 	minutes	นาที
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k จาก N: มีเพียง k จาก N รอบการจำลองซ้ำที่มีค่าของผลนั้น และค่าเฉลี่ยกับช่วงของผลนั้นคิดจาก k รอบนั้น
+	n = {k} of {n}	n = {k} จาก {n}
 	nothing yet	ยังไม่มีอะไร
 	seconds	วินาที
 	split batches	การแยกชุด

@@ -15,6 +15,7 @@
 	% down and up	% προς τα κάτω και πάνω
 	% of replications	% των επαναλήψεων
 	+ Add block	+ Προσθήκη μπλοκ
+	95% interval of the share meeting the target: {lo} to {hi}	Διάστημα 95% του ποσοστού που πετυχαίνει τον στόχο: από {lo} έως {hi}
 	95th percentile	95ο εκατοστημόριο
 	95th percentile {value}	95ο εκατοστημόριο {value}
 	About StochCraft	Σχετικά με το StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Τελειώνει νωρίτερα
 	Enough: {units}, meeting the target in {p} of replications	Αρκετό: {units}, ο στόχος επιτυγχάνεται στο {p} των επαναλήψεων
 	Entered	Είσοδοι
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Οι οντότητες που είναι ακόμη εντός στο τέλος μιας επανάληψης δεν περιλαμβάνονται στη μέση αναμονή και στον μέσο χρόνο στο σύστημα.
 	Erlang	Έρλανγκ
 	Error	Σφάλμα
 	Estimate from three values…	Εκτίμηση από τρεις τιμές…
@@ -162,12 +164,12 @@
 	Maximum	Μέγιστο
 	Mean	Μέση τιμή
 	Mean number inside	Μέσο πλήθος εντός
+	One replication of {n}: the results of the others differ.	Μία επανάληψη από {n}: τα αποτελέσματα των άλλων διαφέρουν.
 	Still inside at the end	Ακόμη εντός στο τέλος
 	Mean queue length	Μέσο μήκος ουράς
 	Mean time blocked	Μέσος χρόνος αποκλεισμού
 	Mean time in system	Μέσος χρόνος στο σύστημα
 	Mean wait	Μέση αναμονή
-	Met in at least	Επιτυγχάνεται τουλάχιστον στο
 	Metric	Μετρική
 	Middles	Κάθετα κέντρα
 	Minimise	Ελαχιστοποίηση
@@ -292,7 +294,6 @@
 	Settings	Ρυθμίσεις
 	Shape	Σχήμα
 	Share of arrivals lost	Ποσοστό χαμένων αφίξεων
-	Share of replications	Ποσοστό επαναλήψεων
 	Share of units blocked	Ποσοστό αποκλεισμένων μονάδων
 	Show All	Εμφάνιση όλων
 	Show {id}	Εμφάνιση {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Σάρωση παραμέτρου
 	Tandem line	Διαδοχική γραμμή
 	Target	Στόχος
+	Target share	Ποσοστό-στόχος
 	Target value	Τιμή-στόχος
 	Task	Εργασία
 	Task with a resource	Εργασία με πόρο
 	Task with shared resources	Εργασία με κοινόχρηστους πόρους
 	Text	Κείμενο
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Το διάστημα φτάνει κάτω από το ποσοστό-στόχο {share}, άρα δεν φαίνεται με εμπιστοσύνη 95% ότι το ποσοστό επιτυγχάνεται· περισσότερες επαναλήψεις θα το στένευαν.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Ο μέσος χρόνος ως τη συνθήκη διακοπής αφορά μόνο τις επαναλήψεις που την έφτασαν· οι υπόλοιπες διήρκεσαν ως το χρονικό τους όριο.
 	The model changed, so watching stopped	Το μοντέλο άλλαξε, οπότε η παρακολούθηση διακόπηκε
 	The model now has the units sizing found	Το μοντέλο έχει πλέον τις μονάδες που βρήκε η διαστασιολόγηση
 	The model: its experiment, connections and problems	Το μοντέλο: πείραμα, συνδέσεις και προβλήματα
@@ -394,6 +398,8 @@
 	maximum {value}	μέγιστο {value}
 	milliseconds	χιλιοστά του δευτερολέπτου
 	minutes	λεπτά
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k από N: μόνο k από τις N επαναλήψεις είχαν τιμή για αυτό το αποτέλεσμα, και ο μέσος όρος και το διάστημά του αφορούν αυτές τις k.
+	n = {k} of {n}	n = {k} από {n}
 	nothing yet	τίποτα ακόμη
 	seconds	δευτερόλεπτα
 	split batches	διαχωρισμός παρτίδων
