@@ -35,6 +35,14 @@ trunk serve --release
 
 In the browser, runs use a web worker per core, and the app can be installed and used offline.
 
+Without more, the browser app has only IBM Plex and egui's faces, so Japanese, Korean, Chinese,
+Hindi, Thai and other scripts draw only with fonts the visitor's system has, or as boxes. Set `CRAFT_FONTS_DIR` to a checkout of
+[craft-fonts](https://github.com/storytold/craft-fonts) (the commit `.github/workflows/pages.yml`
+pins) and the build serves its faces beside the app as `fonts/`, fetched when the interface
+language or a character needs them, as on the published site (`crates/ui-egui/build.rs`). Bengali,
+Tamil, Telugu and Lao have no face there yet: they draw only with fonts the visitor's own system
+has.
+
 ## Using the command line
 
 ```bash

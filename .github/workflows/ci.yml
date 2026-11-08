@@ -144,6 +144,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      # The craft-fonts commit pages.yml builds with (CRAFT_FONTS_REV there), so the table of
+      # served faces the web build compiles in is checked here too.
+      - uses: actions/checkout@v4
+        with:
+          repository: storytold/craft-fonts
+          ref: aced4137c022f1f587624d48e81ec77e1914a9cc
+          path: craft-fonts
+          persist-credentials: false
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown, wasm32-wasip1
@@ -155,6 +163,9 @@ jobs:
         with:
           node-version: 22
       - run: cargo xtask wasm
+        env:
+          CRAFT_FONTS_DIR: ${{ github.workspace }}/craft-fonts
+          CRAFT_FONTS_REQUIRED: "1"
       # The golden models must give the results pinned natively (tests/golden/results.txt).
       - run: cargo xtask golden
 

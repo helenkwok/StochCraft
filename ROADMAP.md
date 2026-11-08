@@ -996,8 +996,12 @@ craft-platform downloads files in the browser.
 reading and writing numbers as the user's region does (craft-i18n's `Region::system()`: decimal
 mark, grouping, digits), stepping with the arrow keys; choice boxes are craft-ui's `ComboBox`; the
 Model and Results tabs are craft-ui `Tab`s; fonts come from craft-ui's stack (IBM Plex first,
-egui's faces for symbols, craft-fonts' faces where `CRAFT_FONTS_DIR` embeds them, then the
-installed system fonts on the desktop).
+egui's faces for symbols, craft-fonts' faces where `CRAFT_FONTS_DIR` names a checkout, then the
+installed system fonts on the desktop). The desktop embeds the craft-fonts faces except the CJK
+ones; the web app serves them beside the wasm (CJK included) and fetches a face when the
+interface language or a character needs it. On the web, View ▸ Language names a language in
+English (Japanese, Korean, Hindi…) until the face for its own script has been fetched, so opening
+the menu fetches nothing.
 
 **M3.1d (keyboard shortcuts done):** Settings ▸ Keyboard Shortcuts… (Preferences in Edit on
 Windows and Linux, the app menu on macOS) opens craft-keymap's dialog: every command grouped by
@@ -1018,8 +1022,15 @@ choice is saved with the preferences.
 
 **Still to come:** native-speaker review of the catalogs; the engine's own messages through the
 catalog; the keyboard-shortcuts dialog's own words, which come from craft-i18n's shared catalog
-(not embedded in CI or the web app, and incomplete upstream); CJK, Indic, Thai and Lao fonts on
-the web; screenshot tests in craft-ui's six test languages; panes and icons.
+(not embedded in CI or the web app, and incomplete upstream); faces on the web for Bengali, Tamil,
+Telugu and Lao, which craft-fonts doesn't have yet (they draw with the browser's fonts where the
+visitor's system has them, and as boxes elsewhere); Traditional Chinese forms on the web (Noto
+Sans CJK SC maps the characters, but egui doesn't apply the OpenType `locl` feature, so zh-Hant
+shows Simplified-style shapes where regional forms differ); smaller CJK downloads on the web (the
+first use downloads the whole face: about 16 MB for Chinese, 9 MB for Japanese, regular and
+bold, and 2 MB for Korean; a cut to the catalogs' characters waits for craft-fonts' interface
+faces); screenshot tests in craft-ui's six test
+languages; panes and icons.
 
 ### M3.2 Model editing without a canvas
 

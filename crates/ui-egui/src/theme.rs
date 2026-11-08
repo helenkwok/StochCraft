@@ -101,19 +101,35 @@ fn plex(weight: f32) -> FontData {
     })
 }
 
-/// The craft-fonts faces this build embeds (build.rs; empty without `CRAFT_FONTS_DIR`).
-static CRAFT_FONTS: &[craft_fonts_build::EmbeddedFace] =
-    include!(concat!(env!("OUT_DIR"), "/craft_fonts.rs"));
+// The generated tables are bare `EmbeddedFace { … }` or `ServedFace { … }` literals.
+#[cfg(not(target_arch = "wasm32"))]
+use craft_fonts_build::EmbeddedFace;
+#[cfg(target_arch = "wasm32")]
+use craft_ui::fonts::ServedFace;
 
-/// The interface's font stack, from craft-ui: IBM Plex (regular, semibold and mono) first, then
-/// egui's Hack and emoji faces for the symbols Plex lacks (⌘ ⇧ ●), then craft-fonts' faces for
-/// other scripts where the build embeds them, then the installed system fonts (desktop builds
-/// with craft-ui's `system_fonts`), so a file name or label in any script draws.
-pub fn fonts() -> craft_ui::fonts::Stack {
-    use craft_ui::fonts::{CraftFace, Family, I18nScripts, UiFonts};
-    let craft: Vec<CraftFace> = CRAFT_FONTS.iter().cloned().map(CraftFace::from).collect();
+/// The craft-fonts faces this build embeds (build.rs; empty without `CRAFT_FONTS_DIR`).
+#[cfg(not(target_arch = "wasm32"))]
+static CRAFT_FONTS: &[EmbeddedFace] = include!(concat!(env!("OUT_DIR"), "/craft_fonts.rs"));
+
+/// The craft-fonts faces the web build serves beside the wasm, fetched when needed (build.rs;
+/// empty without `CRAFT_FONTS_DIR`).
+#[cfg(target_arch = "wasm32")]
+static CRAFT_FONTS: &[ServedFace] = include!(concat!(env!("OUT_DIR"), "/craft_fonts.rs"));
+
+/// The interface's font stack for `ui_language` (a locale code), from craft-ui: IBM Plex
+/// (regular, semibold and mono) first, then egui's Hack and emoji faces for the symbols Plex
+/// lacks (⌘ ⇧ ●), then craft-fonts' faces for other scripts, the UI language's first, then the
+/// installed system fonts (desktop builds with craft-ui's `system_fonts`; none on the web), so a
+/// file name or label in any script draws. On the web the craft-fonts faces are fetched: the UI
+/// language's at once, any other the first time a character needs it.
+pub fn fonts(ui_language: &str) -> craft_ui::fonts::Stack {
+    use craft_ui::fonts::{Family, I18nScripts, UiFonts};
+    let offered: Vec<&str> = crate::i18n::languages()
+        .into_iter()
+        .map(|(lang, _)| crate::i18n::code(lang))
+        .collect();
     let strong = FontFamily::Name(STRONG.into());
-    let mut fonts = UiFonts::new(&I18nScripts)
+    let fonts = UiFonts::new(&I18nScripts)
         .app_face("plex", plex(420.0), &[FontFamily::Proportional])
         .app_face(STRONG, plex(600.0), std::slice::from_ref(&strong))
         .family(Family::named(STRONG).weight(600))
@@ -123,17 +139,84 @@ pub fn fonts() -> craft_ui::fonts::Stack {
             &[FontFamily::Monospace],
         )
         .egui_face("Hack", &[FontFamily::Proportional, strong.clone()])
-        .egui_face("NotoEmoji-Regular", &[FontFamily::Proportional, strong])
-        .craft_faces(&craft);
-    if let Some(system) = craft_ui::fonts::system_font_provider("en") {
+        .egui_face("NotoEmoji-Regular", &[FontFamily::Proportional, strong]);
+    #[cfg(not(target_arch = "wasm32"))]
+    let fonts = {
+        let craft: Vec<craft_ui::fonts::CraftFace> = CRAFT_FONTS
+            .iter()
+            .copied()
+            .map(craft_ui::fonts::CraftFace::from)
+            .collect();
+        fonts.craft_faces(&craft)
+    };
+    #[cfg(target_arch = "wasm32")]
+    let fonts = fonts.served_faces(CRAFT_FONTS);
+    let mut fonts = fonts.languages(&offered).ui_language(ui_language);
+    // `None` on the web and without craft-ui's `system_fonts` feature.
+    if let Some(system) = craft_ui::fonts::system_font_provider(ui_language) {
         fonts = fonts.system_provider(system);
     }
     fonts.stack()
 }
 
-/// Installs the fonts, the type scale and both themes. Call once at start.
+/// Installs the font stack for `ui_language`. Call again when the interface language changes.
+pub fn install_fonts(ctx: &egui::Context, ui_language: &str) {
+    fonts(ui_language).install(ctx);
+}
+
+/// The offered languages whose names, in their own script, would fetch a font if drawn now: on
+/// the web, those with a character that only a served face draws (日本語, 한국어, हिन्दी, ไทย…)
+/// while none of the faces that draw it has been fetched. View ▸ Language shows these by their
+/// English names, so opening it fetches nothing; once the face arrives (the language was chosen,
+/// or text needed it) the name shows in its own script. Always empty on the desktop, whose faces
+/// are embedded or the system's.
+pub fn names_waiting_for_fonts(ctx: &egui::Context) -> Vec<craft_i18n::Lang> {
+    #[cfg(target_arch = "wasm32")]
+    {
+        use std::sync::LazyLock;
+        /// For each language, per character that would fetch: the served faces, any of which
+        /// draws it. Which faces draw a character doesn't depend on the UI language.
+        static NEEDS: LazyLock<Vec<(craft_i18n::Lang, Vec<Vec<String>>)>> = LazyLock::new(|| {
+            let stack = fonts("en");
+            crate::i18n::languages()
+                .into_iter()
+                .map(|(lang, name)| {
+                    let needs = name
+                        .chars()
+                        .map(|c| {
+                            stack
+                                .downloads_for(&FontFamily::Proportional, c)
+                                .into_iter()
+                                .map(ServedFace::name)
+                                .collect::<Vec<_>>()
+                        })
+                        .filter(|faces| !faces.is_empty())
+                        .collect();
+                    (lang, needs)
+                })
+                .filter(|(_, needs): &(_, Vec<Vec<String>>)| !needs.is_empty())
+                .collect()
+        });
+        // A served face's data is in the installed definitions once fetched (craft-ui adds it
+        // under the face's name); asking egui for the glyph instead would start the fetch.
+        ctx.fonts(|f| {
+            let loaded = |face: &String| f.definitions().font_data.contains_key(face);
+            NEEDS
+                .iter()
+                .filter(|(_, needs)| needs.iter().any(|faces| !faces.iter().any(loaded)))
+                .map(|(lang, _)| *lang)
+                .collect()
+        })
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        let _ = ctx;
+        Vec::new()
+    }
+}
+
+/// Installs the type scale and both themes. Call once at start, after [`install_fonts`].
 pub fn install(ctx: &egui::Context) {
-    fonts().install(ctx);
     ctx.set_theme(egui::ThemePreference::System);
     ctx.style_mut_of(egui::Theme::Light, |s| style(s, &LIGHT));
     ctx.style_mut_of(egui::Theme::Dark, |s| style(s, &DARK));
@@ -231,7 +314,7 @@ mod tests {
 
     #[test]
     fn plex_leads_and_egui_faces_fill_in() {
-        let stack = fonts();
+        let stack = fonts("en");
         let chain = stack.chain(&FontFamily::Proportional);
         assert_eq!(chain.first().map(String::as_str), Some("plex"), "{chain:?}");
         assert!(chain.iter().any(|f| f == "Hack"), "{chain:?}");

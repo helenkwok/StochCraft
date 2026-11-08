@@ -94,6 +94,60 @@ pub fn code(lang: Lang) -> &'static str {
     I18N.code(lang)
 }
 
+/// A language's name in English, which View ▸ Language shows on the web until the font that
+/// draws the name in its own script has been fetched (so opening the menu fetches no fonts). The
+/// code itself for a locale this table doesn't know (a test keeps it complete).
+pub fn english_name(lang: Lang) -> &'static str {
+    match code(lang) {
+        "en" => "English",
+        "bg" => "Bulgarian",
+        "bn" => "Bengali",
+        "bs" => "Bosnian",
+        "ca" => "Catalan",
+        "cs" => "Czech",
+        "da" => "Danish",
+        "de" => "German",
+        "el" => "Greek",
+        "es" => "Spanish",
+        "et" => "Estonian",
+        "fi" => "Finnish",
+        "fr" => "French",
+        "gl" => "Galician",
+        "hi" => "Hindi",
+        "hr" => "Croatian",
+        "hu" => "Hungarian",
+        "id" => "Indonesian",
+        "it" => "Italian",
+        "ja" => "Japanese",
+        "ka" => "Georgian",
+        "kk" => "Kazakh",
+        "ko" => "Korean",
+        "lo" => "Lao",
+        "lt" => "Lithuanian",
+        "nb" => "Norwegian Bokmål",
+        "nl" => "Dutch",
+        "pl" => "Polish",
+        "pt-br" => "Portuguese (Brazil)",
+        "ro" => "Romanian",
+        "ru" => "Russian",
+        "sk" => "Slovak",
+        "sl" => "Slovenian",
+        "sq" => "Albanian",
+        "sr-latn" => "Serbian (Latin)",
+        "sr" => "Serbian (Cyrillic)",
+        "sv" => "Swedish",
+        "ta" => "Tamil",
+        "te" => "Telugu",
+        "th" => "Thai",
+        "tr" => "Turkish",
+        "uk" => "Ukrainian",
+        "vi" => "Vietnamese",
+        "zh-hans" => "Chinese (Simplified)",
+        "zh-hant" => "Chinese (Traditional)",
+        other => other,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -116,6 +170,14 @@ mod tests {
             "1 replication"
         );
         assert_eq!(languages().first().map(|l| l.0), Some(Lang::EN));
+    }
+
+    #[test]
+    fn every_language_has_an_english_name() {
+        for (lang, _) in languages() {
+            assert_ne!(english_name(lang), code(lang), "no English name");
+        }
+        assert_eq!(english_name(Lang::EN), "English");
     }
 
     #[test]

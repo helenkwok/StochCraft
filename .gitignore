@@ -2,5 +2,7 @@ target/
 **/*.rs.bk
 .DS_Store
 /dist/
+# The craft-fonts faces the web build serves (crates/ui-egui/build.rs, Trunk.toml).
+/web-fonts/
 # Agent worktrees.
 /.claude/worktrees/
