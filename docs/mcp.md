@@ -149,6 +149,13 @@ as `a` and `b`). Runs with the same seed and replications share their random num
 compares them replication by replication (a paired-t interval); otherwise it uses Welch's
 two-sample t interval and says so.
 
+Each metric in `run`'s results carries `n`, the replications that had a value for it, which can
+be fewer than `replications` (a server no entity reached, or replications that stopped inside
+the warm-up). `experiment.size` takes `target_share`, the share of replications that must meet
+the target; `confidence`, its name before #69, is still accepted, and the answer carries both.
+The share is not a statistical confidence: the answer's `stochastic.interval` is its Wilson 95%
+interval, and when its lower end is below `target_share` the share is not shown to be met.
+
 `crates/mcp/tests/session.rs` covers four areas:
 - a session like this one, checked only through MCP;
 - malformed messages, oversized lines and batches, and arguments that do not match the schema;

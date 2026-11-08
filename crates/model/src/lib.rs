@@ -802,7 +802,17 @@ pub enum Problem {
     /// The element's distribution is no longer the one fitted from its estimate (it was changed
     /// since): the estimate no longer says where the distribution came from.
     EstimateMismatch,
+    /// A time (`parameter`) drawn from a normal distribution whose mean is less than
+    /// [`NORMAL_1_PERCENT`] standard deviations: more than 1% of its draws are below 0, and each
+    /// counts as 0, so the times are longer on average than the mean given.
+    NormalOftenNegative {
+        parameter: &'static str,
+    },
 }
+
+/// Φ⁻¹(0.99): a normal distribution draws below 0 more than 1% of the time when its mean is less
+/// than this many standard deviations ([`Problem::NormalOftenNegative`]).
+pub const NORMAL_1_PERCENT: f64 = 2.326_347_874_040_840_8;
 
 impl Problem {
     /// A stable snake_case name for files, the command line and agents.
@@ -860,6 +870,7 @@ impl Problem {
             Problem::EstimateIgnored => "estimate_ignored",
             Problem::BadEstimate { .. } => "bad_estimate",
             Problem::EstimateMismatch => "estimate_mismatch",
+            Problem::NormalOftenNegative { .. } => "normal_often_negative",
         }
     }
 }
@@ -1078,6 +1089,10 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "the time distribution is no longer the one fitted from its three-point estimate"
             ),
+            Problem::NormalOftenNegative { parameter } => write!(
+                f,
+                "{parameter}: this normal distribution draws below 0 more than 1 time in 100 (its mean is less than 2.33 standard deviations), and each such time counts as 0, so the times are longer on average than its mean; use a truncated normal with min 0, or a log-normal"
+            ),
         }
     }
 }
@@ -1257,6 +1272,13 @@ impl Model {
                     out.push(Diagnostic::error(
                         Some(&e.id),
                         Problem::BadDistribution { parameter, error },
+                    ));
+                } else if let Dist::Normal { mean, std_dev } = d
+                    && *mean < NORMAL_1_PERCENT * std_dev
+                {
+                    out.push(Diagnostic::warning(
+                        Some(&e.id),
+                        Problem::NormalOftenNegative { parameter },
                     ));
                 }
             }
@@ -2617,6 +2639,49 @@ mod tests {
             assert_eq!(found, stuck, "{interarrival:?}, limit {limit:?}");
             assert_eq!(m.is_runnable(), !stuck);
         }
+    }
+
+    #[test]
+    fn a_normal_time_that_is_often_negative_is_warned_about() {
+        let warned = |service: Dist| {
+            let mut m = mm1();
+            if let ElementKind::Server { service: s, .. } = &mut m.elements[1].kind {
+                *s = service;
+            }
+            let p = problems(&m);
+            assert!(m.is_runnable(), "a warning only: {p:#?}");
+            p.iter().any(|(s, at, p)| {
+                *s == Severity::Warning
+                    && at.as_deref() == Some("machine")
+                    && p.starts_with("NormalOftenNegative")
+            })
+        };
+        let normal = |mean, std_dev| Dist::Normal { mean, std_dev };
+        // P(X < 0) is 16% at mean 1, sd 1, and about 0 at mean 10, sd 1.
+        assert!(warned(normal(1.0, 1.0)));
+        assert!(!warned(normal(10.0, 1.0)));
+        // The edge: 1% below 0 at 2.326 standard deviations.
+        assert!(warned(normal(2.32, 1.0)));
+        assert!(!warned(normal(2.33, 1.0)));
+        // A truncated normal or a log-normal never draws below 0.
+        assert!(!warned(Dist::TruncatedNormal {
+            mean: 1.0,
+            std_dev: 1.0,
+            min: 0.0,
+            max: 10.0
+        }));
+        assert!(!warned(Dist::LogNormal {
+            mean: 1.0,
+            std_dev: 1.0
+        }));
+        let mut m = mm1();
+        if let ElementKind::Server { service, .. } = &mut m.elements[1].kind {
+            *service = normal(1.0, 1.0);
+        }
+        let message = m.validate()[0].to_string();
+        assert!(message.contains("service"), "{message}");
+        assert!(message.contains("truncated normal"), "{message}");
+        assert!(message.contains("log-normal"), "{message}");
     }
 
     #[test]

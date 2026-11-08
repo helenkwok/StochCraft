@@ -15,6 +15,7 @@
 	% down and up	% 낮추고 높이기
 	% of replications	% 반복 실행에서
 	+ Add block	+ 블록 추가
+	95% interval of the share meeting the target: {lo} to {hi}	목표를 충족한 비율의 95% 구간: {lo}~{hi}
 	95th percentile	95번째 백분위수
 	95th percentile {value}	95번째 백분위수 {value}
 	About StochCraft	StochCraft 정보
@@ -110,6 +111,7 @@
 	Ends early	일찍 끝남
 	Enough: {units}, meeting the target in {p} of replications	충분: {units}, 반복 실행의 {p}에서 목표 충족
 	Entered	진입 수
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	반복 실행이 끝날 때 아직 내부에 있는 개체는 평균 대기 시간과 시스템 내 평균 체류 시간에서 빠집니다.
 	Erlang	얼랑 분포
 	Error	오류
 	Estimate from three values…	세 값으로 추정…
@@ -162,12 +164,12 @@
 	Maximum	최댓값
 	Mean	평균
 	Mean number inside	내부 평균 개수
+	One replication of {n}: the results of the others differ.	{n}회 중 1회의 반복 실행입니다. 다른 반복 실행의 결과는 다릅니다.
 	Still inside at the end	종료 시 내부에 남은 개수
 	Mean queue length	평균 대기열 길이
 	Mean time blocked	평균 차단 시간
 	Mean time in system	시스템 내 평균 체류 시간
 	Mean wait	평균 대기 시간
-	Met in at least	충족 비율
 	Metric	지표
 	Middles	세로 가운데
 	Minimise	최소화
@@ -292,7 +294,6 @@
 	Settings	설정
 	Shape	모양
 	Share of arrivals lost	도착 손실 비율
-	Share of replications	반복 실행 비율
 	Share of units blocked	자원 단위 차단 비율
 	Show All	모두 표시
 	Show {id}	{id} 표시
@@ -319,11 +320,14 @@
 	Sweep a parameter	매개변수 스윕
 	Tandem line	직렬 라인
 	Target	목표
+	Target share	목표 비율
 	Target value	목표값
 	Task	작업
 	Task with a resource	자원을 사용하는 작업
 	Task with shared resources	공유 자원을 사용하는 작업
 	Text	텍스트
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	구간이 목표 비율 {share}보다 아래까지 내려가므로, 비율 충족이 95% 신뢰도로 확인되지 않았습니다. 반복 실행을 늘리면 구간이 좁아집니다.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	중지 조건까지의 평균 시간은 중지 조건에 도달한 반복 실행만으로 계산됩니다. 나머지는 시간 제한까지 실행되었습니다.
 	The model changed, so watching stopped	모델이 변경되어 관찰을 중지함
 	The model now has the units sizing found	이제 모델에 크기 정하기로 찾은 수량이 들어 있습니다
 	The model: its experiment, connections and problems	모델: 실험, 연결 및 문제
@@ -394,6 +398,8 @@
 	maximum {value}	최댓값 {value}
 	milliseconds	밀리초
 	minutes	분
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N회 중 k회: 이 결과의 값이 있는 반복 실행은 N회 중 k회뿐이며, 평균과 구간은 그 k회에 대한 것입니다.
+	n = {k} of {n}	n = {n}회 중 {k}회
 	nothing yet	아직 없음
 	seconds	초
 	split batches	배치 분리

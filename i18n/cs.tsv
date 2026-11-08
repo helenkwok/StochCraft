@@ -15,6 +15,7 @@
 	% down and up	% dolů a nahoru
 	% of replications	% replikací
 	+ Add block	+ Přidat blok
+	95% interval of the share meeting the target: {lo} to {hi}	95% interval podílu splňujícího cíl: {lo} až {hi}
 	95th percentile	95. percentil
 	95th percentile {value}	95. percentil {value}
 	About StochCraft	O aplikaci StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Končí dříve
 	Enough: {units}, meeting the target in {p} of replications	Stačí: {units}, cíl splněn v {p} replikací
 	Entered	Vstoupilo
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entity, které jsou na konci replikace stále uvnitř, nejsou zahrnuty do průměrné doby čekání ani průměrné doby v systému.
 	Erlang	Erlangovo
 	Error	Chyba
 	Estimate from three values…	Odhadnout ze tří hodnot…
@@ -162,12 +164,12 @@
 	Maximum	Maximum
 	Mean	Průměr
 	Mean number inside	Průměrný počet uvnitř
+	One replication of {n}: the results of the others differ.	Jedna replikace z {n}: výsledky ostatních se liší.
 	Still inside at the end	Na konci stále uvnitř
 	Mean queue length	Průměrná délka fronty
 	Mean time blocked	Průměrná doba blokování
 	Mean time in system	Průměrná doba v systému
 	Mean wait	Průměrná doba čekání
-	Met in at least	Splněno alespoň v
 	Metric	Metrika
 	Middles	Svislé středy
 	Minimise	Minimalizovat
@@ -292,7 +294,6 @@
 	Settings	Nastavení
 	Shape	Tvar
 	Share of arrivals lost	Podíl ztracených příchodů
-	Share of replications	Podíl replikací
 	Share of units blocked	Podíl blokovaných jednotek
 	Show All	Zobrazit vše
 	Show {id}	Zobrazit {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Průchod parametrem
 	Tandem line	Tandemová linka
 	Target	Cíl
+	Target share	Cílový podíl
 	Target value	Cílová hodnota
 	Task	Úloha
 	Task with a resource	Úloha se zdrojem
 	Task with shared resources	Úloha se sdílenými zdroji
 	Text	Text
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval sahá pod cílový podíl {share}, takže splnění podílu není prokázáno s 95% spolehlivostí; více replikací by ho zúžilo.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Průměrná doba do podmínky zastavení je jen z replikací, které ji splnily; ostatní běžely do svého časového limitu.
 	The model changed, so watching stopped	Model se změnil, proto bylo sledování ukončeno
 	The model now has the units sizing found	Model má nyní jednotky nalezené dimenzováním
 	The model: its experiment, connections and problems	Model: experiment, propojení a problémy
@@ -394,6 +398,8 @@
 	maximum {value}	maximum {value}
 	milliseconds	milisekundy
 	minutes	minuty
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k z N: jen k z N replikací mělo pro tento výsledek hodnotu a jeho průměr a interval jsou z těchto k.
+	n = {k} of {n}	n = {k} z {n}
 	nothing yet	zatím nic
 	seconds	sekundy
 	split batches	rozdělení dávek

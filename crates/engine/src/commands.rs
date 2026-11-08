@@ -1798,10 +1798,10 @@ pub static COMMANDS: &[Command] = &[
     },
     Command {
         name: "experiment.size",
-        summary: "Add units at the bottleneck until the share of replications meeting a target reaches the confidence asked for, with the answer from mean times beside it; `apply` makes it the model's.",
+        summary: "Add units at the bottleneck until the share of replications meeting a target reaches `target_share` (`confidence` is its old name), with the answer from mean times beside it; `apply` makes it the model's.",
         kind: CommandKind::Edit,
         schema: schema::<crate::decide::SizeParams>,
-        example: || json!({ "target": { "element": "desk", "metric": "mean_wait", "at_most": 1.0 }, "confidence": 0.7, "replications": 4, "apply": true }),
+        example: || json!({ "target": { "element": "desk", "metric": "mean_wait", "at_most": 1.0 }, "target_share": 0.7, "replications": 4, "apply": true }),
         run: experiment_size,
     },
     Command {

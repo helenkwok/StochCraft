@@ -55,6 +55,12 @@ fn time(h: &Harness<'static, App>) -> f64 {
 #[test]
 fn a_run_plays_pauses_steps_and_jumps() {
     let mut h = watching();
+    // The bar says this is one replication of several, whose results differ.
+    let reps = h.state().engine().model().experiment.replications;
+    assert!(reps > 1, "{reps}");
+    h.get_by_label(&format!(
+        "One replication of {reps}: the results of the others differ."
+    ));
     // Playing: frames move simulated time on.
     let t0 = time(&h);
     h.run_steps(20);

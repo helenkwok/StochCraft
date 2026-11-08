@@ -15,6 +15,7 @@
 	% down and up	% turun dan naik
 	% of replications	% replikasi
 	+ Add block	+ Tambah blok
+	95% interval of the share meeting the target: {lo} to {hi}	Interval 95% dari bagian yang memenuhi target: {lo} sampai {hi}
 	95th percentile	Persentil ke-95
 	95th percentile {value}	persentil ke-95 {value}
 	About StochCraft	Tentang StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Berakhir lebih awal
 	Enough: {units}, meeting the target in {p} of replications	Cukup: {units}, target terpenuhi pada {p} replikasi
 	Entered	Masuk
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitas yang masih di dalam pada akhir replikasi tidak dihitung dalam waktu tunggu rata-rata dan waktu rata-rata dalam sistem.
 	Erlang	Erlang
 	Error	Galat
 	Estimate from three values…	Perkirakan dari tiga nilai…
@@ -162,12 +164,12 @@
 	Maximum	Maksimum
 	Mean	Rata-rata
 	Mean number inside	Jumlah rata-rata di dalam
+	One replication of {n}: the results of the others differ.	Satu replikasi dari {n}: hasil replikasi lain berbeda.
 	Still inside at the end	Masih di dalam pada akhir
 	Mean queue length	Panjang antrean rata-rata
 	Mean time blocked	Waktu terblokir rata-rata
 	Mean time in system	Waktu rata-rata dalam sistem
 	Mean wait	Waktu tunggu rata-rata
-	Met in at least	Terpenuhi pada setidaknya
 	Metric	Metrik
 	Middles	Tengah vertikal
 	Minimise	Minimalkan
@@ -292,7 +294,6 @@
 	Settings	Pengaturan
 	Shape	Bentuk
 	Share of arrivals lost	Proporsi kedatangan yang hilang
-	Share of replications	Bagian replikasi
 	Share of units blocked	Proporsi unit yang terblokir
 	Show All	Tampilkan semua
 	Show {id}	Tampilkan {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Sapu satu parameter
 	Tandem line	Jalur tandem
 	Target	Target
+	Target share	Bagian target
 	Target value	Nilai target
 	Task	Tugas
 	Task with a resource	Tugas dengan sumber daya
 	Task with shared resources	Tugas dengan sumber daya bersama
 	Text	Teks
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak replikasi akan mempersempitnya.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas replikasi yang mencapainya; sisanya berjalan hingga batas waktunya.
 	The model changed, so watching stopped	Model berubah, jadi pengamatan dihentikan
 	The model now has the units sizing found	Model kini memakai unit yang ditemukan penentuan ukuran
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
@@ -394,6 +398,8 @@
 	maximum {value}	maksimum {value}
 	milliseconds	milidetik
 	minutes	menit
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k dari N: hanya k dari N replikasi yang memiliki nilai untuk hasil itu, dan rata-rata serta intervalnya dihitung atas k tersebut.
+	n = {k} of {n}	n = {k} dari {n}
 	nothing yet	belum ada
 	seconds	detik
 	split batches	pemisahan batch

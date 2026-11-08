@@ -15,6 +15,7 @@
 	% down and up	% вниз і вгору
 	% of replications	% реплікацій
 	+ Add block	+ Додати блок
+	95% interval of the share meeting the target: {lo} to {hi}	95% інтервал частки, що досягає мети: від {lo} до {hi}
 	95th percentile	95-й процентиль
 	95th percentile {value}	95-й процентиль {value}
 	About StochCraft	Про програму StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Завершується раніше
 	Enough: {units}, meeting the target in {p} of replications	Досить: {units}, мету досягнуто в {p} реплікацій
 	Entered	Увійшло
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Об'єкти, що ще всередині наприкінці реплікації, не враховуються в середньому часі очікування та середньому часі в системі.
 	Erlang	Розподіл Ерланга
 	Error	Помилка
 	Estimate from three values…	Оцінити за трьома значеннями…
@@ -162,12 +164,12 @@
 	Maximum	Максимум
 	Mean	Середнє
 	Mean number inside	Середня кількість усередині
+	One replication of {n}: the results of the others differ.	Одна реплікація з {n}: результати інших відрізняються.
 	Still inside at the end	Ще всередині наприкінці
 	Mean queue length	Середня довжина черги
 	Mean time blocked	Середній час блокування
 	Mean time in system	Середній час у системі
 	Mean wait	Середній час очікування
-	Met in at least	Досягнуто щонайменше в
 	Metric	Показник
 	Middles	Центри по вертикалі
 	Minimise	Згорнути
@@ -292,7 +294,6 @@
 	Settings	Налаштування
 	Shape	Форма
 	Share of arrivals lost	Частка втрачених прибуттів
-	Share of replications	Частка реплікацій
 	Share of units blocked	Частка заблокованих одиниць
 	Show All	Показати всі
 	Show {id}	Показати {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Перебір параметра
 	Tandem line	Послідовна лінія
 	Target	Мета
+	Target share	Цільова частка
 	Target value	Цільове значення
 	Task	Завдання
 	Task with a resource	Завдання з ресурсом
 	Task with shared resources	Завдання зі спільними ресурсами
 	Text	Текст
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Інтервал сягає нижче цільової частки {share}, тож з довірою 95% не показано, що частку досягнуто; більше реплікацій звузили б його.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Середній час до умови зупинки обчислено лише за реплікаціями, що її досягли; решта тривали до своєї межі часу.
 	The model changed, so watching stopped	Модель змінилася, тому спостереження припинено
 	The model now has the units sizing found	У моделі тепер одиниці, знайдені під час підбору
 	The model: its experiment, connections and problems	Модель: експеримент, з'єднання й проблеми
@@ -394,6 +398,8 @@
 	maximum {value}	максимум {value}
 	milliseconds	мілісекунди
 	minutes	хвилини
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k з N: лише k з N реплікацій мали значення для цього результату, і його середнє та інтервал обчислено за цими k.
+	n = {k} of {n}	n = {k} з {n}
 	nothing yet	поки нічого
 	seconds	секунди
 	split batches	розділення партій

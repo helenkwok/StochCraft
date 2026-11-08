@@ -46,7 +46,8 @@ fn mm1k_blocking(seed: u64, lambda: f64, mu: f64, k: usize, duration: f64) -> f6
 fn bounded_store_with_balking_matches_mm1k() {
     let (lambda, mu, k) = (0.9, 1.0, 5);
     let rho: f64 = lambda / mu;
-    let expected = (1.0 - rho) * rho.powi(k as i32) / (1.0 - rho.powi(k as i32 + 1));
+    let rho_k = (0..k).fold(1.0, |p, _| p * rho);
+    let expected = (1.0 - rho) * rho_k / (1.0 - rho_k * rho);
     let reps: Vec<f64> = (0..8)
         .map(|r| mm1k_blocking(200 + r, lambda, mu, k, 50_000.0))
         .collect();

@@ -169,7 +169,13 @@ fn batches_queue_as_erlang_arrivals() {
     b.connect(machine, unpack);
     b.connect(unpack, out);
     let s = summarise(&reports(&b.build(experiment())));
-    let wait = gi_m_1_wait(|x| (1.0 / (1.0 + x)).powi(4), mu);
+    let wait = gi_m_1_wait(
+        |x| {
+            let r = 1.0 / (1.0 + x);
+            r * r * r * r
+        },
+        mu,
+    );
     covers(&s, "machine", Metric::MeanWait, wait);
     covers(&s, "machine", Metric::Utilisation, 0.75);
     // On average 1.5 entities wait for their batch to fill (0, 1, 2 or 3 alike).

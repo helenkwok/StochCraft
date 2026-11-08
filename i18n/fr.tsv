@@ -15,6 +15,7 @@
 	% down and up	% vers le bas et vers le haut
 	% of replications	% des réplications
 	+ Add block	+ Ajouter un bloc
+	95% interval of the share meeting the target: {lo} to {hi}	Intervalle à 95 % de la part atteignant l'objectif : de {lo} à {hi}
 	95th percentile	95e centile
 	95th percentile {value}	95e centile {value}
 	About StochCraft	À propos de StochCraft
@@ -110,6 +111,7 @@
 	Ends early	S'arrête plus tôt
 	Enough: {units}, meeting the target in {p} of replications	Suffisant : {units}, l'objectif est atteint dans {p} des réplications
 	Entered	Entrées
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Les entités encore présentes à la fin d'une réplication sont exclues de l'attente moyenne et du temps moyen dans le système.
 	Erlang	Erlang
 	Error	Erreur
 	Estimate from three values…	Estimer à partir de trois valeurs…
@@ -162,12 +164,12 @@
 	Maximum	Maximum
 	Mean	Moyenne
 	Mean number inside	Nombre moyen présent
+	One replication of {n}: the results of the others differ.	Une réplication sur {n} : les résultats des autres diffèrent.
 	Still inside at the end	Encore présents à la fin
 	Mean queue length	Longueur moyenne de la file
 	Mean time blocked	Temps moyen de blocage
 	Mean time in system	Temps moyen dans le système
 	Mean wait	Attente moyenne
-	Met in at least	Atteint dans au moins
 	Metric	Indicateur
 	Middles	Centres verticaux
 	Minimise	Réduire
@@ -292,7 +294,6 @@
 	Settings	Réglages
 	Shape	Forme
 	Share of arrivals lost	Part des arrivées perdues
-	Share of replications	Part des réplications
 	Share of units blocked	Part des unités bloquées
 	Show All	Tout afficher
 	Show {id}	Afficher {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Balayer un paramètre
 	Tandem line	Ligne en tandem
 	Target	Objectif
+	Target share	Part cible
 	Target value	Valeur cible
 	Task	Tâche
 	Task with a resource	Tâche avec ressource
 	Task with shared resources	Tâche avec ressources partagées
 	Text	Texte
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'intervalle descend sous la part cible de {share} : il n'est donc pas établi avec 95 % de confiance que la part est atteinte ; davantage de réplications le resserreraient.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Le temps moyen jusqu'à la condition d'arrêt ne porte que sur les réplications qui l'ont atteinte ; les autres ont duré jusqu'à leur limite de temps.
 	The model changed, so watching stopped	Le modèle a changé, l'observation s'est donc arrêtée
 	The model now has the units sizing found	Le modèle a maintenant les unités trouvées par le dimensionnement
 	The model: its experiment, connections and problems	Le modèle : expérience, connexions et problèmes
@@ -394,6 +398,8 @@
 	maximum {value}	maximum {value}
 	milliseconds	millisecondes
 	minutes	minutes
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k sur N : seules k des N réplications avaient une valeur pour ce résultat, et sa moyenne et son intervalle portent sur ces k.
+	n = {k} of {n}	n = {k} sur {n}
 	nothing yet	rien pour le moment
 	seconds	secondes
 	split batches	séparation des lots

@@ -354,6 +354,17 @@ impl App {
                 .text(clock)
                 .fill(p.accent_soft),
         );
+        // One animated run hides the variation between runs: say what this one is.
+        let replications = self.engine.model().experiment.replications;
+        if replications > 1 {
+            ui.label(theme::weak(
+                ui,
+                tf(
+                    "One replication of {n}: the results of the others differ.",
+                    &[("n", &replications.to_string())],
+                ),
+            ));
+        }
         ui.add_space(4.0);
         if toggle {
             self.toggle_playing();

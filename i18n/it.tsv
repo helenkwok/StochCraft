@@ -15,6 +15,7 @@
 	% down and up	% in giù e in su
 	% of replications	% delle repliche
 	+ Add block	+ Aggiungi blocco
+	95% interval of the share meeting the target: {lo} to {hi}	Intervallo al 95% della quota che raggiunge l'obiettivo: da {lo} a {hi}
 	95th percentile	95° percentile
 	95th percentile {value}	95° percentile {value}
 	About StochCraft	Informazioni su StochCraft
@@ -110,6 +111,7 @@
 	Ends early	Termina prima
 	Enough: {units}, meeting the target in {p} of replications	Sufficiente: {units}, raggiunge l'obiettivo nel {p} delle repliche
 	Entered	Ingressi
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Le entità ancora all'interno alla fine di una replica sono escluse dall'attesa media e dal tempo medio nel sistema.
 	Erlang	Erlang
 	Error	Errore
 	Estimate from three values…	Stima da tre valori…
@@ -162,12 +164,12 @@
 	Maximum	Massimo
 	Mean	Media
 	Mean number inside	Numero medio all'interno
+	One replication of {n}: the results of the others differ.	Una replica su {n}: i risultati delle altre sono diversi.
 	Still inside at the end	Ancora all'interno alla fine
 	Mean queue length	Lunghezza media della coda
 	Mean time blocked	Tempo medio di blocco
 	Mean time in system	Tempo medio nel sistema
 	Mean wait	Attesa media
-	Met in at least	Raggiunto in almeno
 	Metric	Metrica
 	Middles	Centri verticali
 	Minimise	Riduci a icona
@@ -292,7 +294,6 @@
 	Settings	Impostazioni
 	Shape	Forma
 	Share of arrivals lost	Quota di arrivi persi
-	Share of replications	Quota di repliche
 	Share of units blocked	Quota di unità bloccate
 	Show All	Mostra tutto
 	Show {id}	Mostra {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Scansione di un parametro
 	Tandem line	Linea in tandem
 	Target	Obiettivo
+	Target share	Quota obiettivo
 	Target value	Valore obiettivo
 	Task	Attività
 	Task with a resource	Attività con risorsa
 	Task with shared resources	Attività con risorse condivise
 	Text	Testo
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'intervallo scende sotto la quota obiettivo del {share}, quindi non è dimostrato con una confidenza del 95% che la quota sia raggiunta; più repliche lo restringerebbero.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Il tempo medio fino alla condizione di arresto riguarda solo le repliche che l'hanno raggiunta; le altre sono arrivate al loro limite di tempo.
 	The model changed, so watching stopped	Il modello è cambiato, quindi l'osservazione si è interrotta
 	The model now has the units sizing found	Il modello ora ha le unità trovate dal dimensionamento
 	The model: its experiment, connections and problems	Il modello: esperimento, connessioni e problemi
@@ -394,6 +398,8 @@
 	maximum {value}	massimo {value}
 	milliseconds	millisecondi
 	minutes	minuti
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k su N: solo k delle N repliche avevano un valore per quel risultato, e la sua media e il suo intervallo riguardano quelle k.
+	n = {k} of {n}	n = {k} su {n}
 	nothing yet	ancora niente
 	seconds	secondi
 	split batches	separazione dei lotti

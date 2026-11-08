@@ -15,6 +15,7 @@
 	% down and up	% ქვემოთ და ზემოთ
 	% of replications	% გამეორებებიდან
 	+ Add block	+ ბლოკის დამატება
+	95% interval of the share meeting the target: {lo} to {hi}	მიზნის მიღწევის წილის 95%-იანი ინტერვალი: {lo}-დან {hi}-მდე
 	95th percentile	95-ე პროცენტილი
 	95th percentile {value}	95-ე პროცენტილი {value}
 	About StochCraft	StochCraft-ის შესახებ
@@ -110,6 +111,7 @@
 	Ends early	ადრე მთავრდება
 	Enough: {units}, meeting the target in {p} of replications	საკმარისია: {units}, მიზანი მიიღწევა გამეორებების {p}-ში
 	Entered	შესულა
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ობიექტები, რომლებიც გამეორების ბოლოს ჯერ კიდევ შიგნით არიან, არ შედის ლოდინის საშუალო დროსა და სისტემაში გატარებულ საშუალო დროში.
 	Erlang	ერლანგი
 	Error	შეცდომა
 	Estimate from three values…	შეფასება სამი მნიშვნელობით…
@@ -162,12 +164,12 @@
 	Maximum	მაქსიმუმი
 	Mean	საშუალო
 	Mean number inside	საშუალო რაოდენობა შიგნით
+	One replication of {n}: the results of the others differ.	ერთი გამეორება {n}-დან: დანარჩენების შედეგები განსხვავდება.
 	Still inside at the end	ბოლოს ჯერ კიდევ შიგნით
 	Mean queue length	რიგის საშუალო სიგრძე
 	Mean time blocked	დაბლოკვის საშუალო დრო
 	Mean time in system	სისტემაში გატარებული საშუალო დრო
 	Mean wait	ლოდინის საშუალო დრო
-	Met in at least	მიიღწევა სულ მცირე
 	Metric	მაჩვენებელი
 	Middles	ვერტიკალური ცენტრები
 	Minimise	მინიმიზაცია
@@ -292,7 +294,6 @@
 	Settings	პარამეტრები
 	Shape	ფორმა
 	Share of arrivals lost	დაკარგული შემოსვლების წილი
-	Share of replications	გამეორებების წილი
 	Share of units blocked	დაბლოკილი ერთეულების წილი
 	Show All	ყველას ჩვენება
 	Show {id}	{id}-ის ჩვენება
@@ -319,11 +320,14 @@
 	Sweep a parameter	პარამეტრის გადარბენა
 	Tandem line	თანმიმდევრული ხაზი
 	Target	მიზანი
+	Target share	სამიზნე წილი
 	Target value	მიზნობრივი მნიშვნელობა
 	Task	დავალება
 	Task with a resource	დავალება რესურსით
 	Task with shared resources	დავალება საზიარო რესურსებით
 	Text	ტექსტი
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ინტერვალი {share} სამიზნე წილზე დაბლა ჩადის, ამიტომ 95%-იანი სანდოობით არ არის ნაჩვენები, რომ წილი მიღწეულია; მეტი გამეორება მას შეავიწროებს.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	გაჩერების პირობამდე საშუალო დრო მხოლოდ იმ გამეორებებზეა გამოთვლილი, რომლებმაც მას მიაღწიეს; დანარჩენები დროის ლიმიტამდე გაგრძელდა.
 	The model changed, so watching stopped	მოდელი შეიცვალა, ამიტომ დაკვირვება შეწყდა
 	The model now has the units sizing found	მოდელს ახლა აქვს ზომის შერჩევით ნაპოვნი ერთეულები
 	The model: its experiment, connections and problems	მოდელი: ექსპერიმენტი, კავშირები და პრობლემები
@@ -394,6 +398,8 @@
 	maximum {value}	მაქსიმუმი {value}
 	milliseconds	მილიწამი
 	minutes	წუთი
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k N-დან: N გამეორებიდან მხოლოდ k-ს ჰქონდა ამ შედეგის მნიშვნელობა, და მისი საშუალო და ინტერვალი ამ k-ზეა გამოთვლილი.
+	n = {k} of {n}	n = {k} {n}-დან
 	nothing yet	ჯერ არაფერი
 	seconds	წამი
 	split batches	პარტიების დაყოფა

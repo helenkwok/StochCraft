@@ -15,6 +15,7 @@
 	% down and up	% төмен және жоғары
 	% of replications	% қайталаулардың
 	+ Add block	+ Блок қосу
+	95% interval of the share meeting the target: {lo} to {hi}	Мақсатқа жеткен үлестің 95% аралығы: {lo} мен {hi} арасы
 	95th percentile	95-ші процентиль
 	95th percentile {value}	95-ші процентиль {value}
 	About StochCraft	StochCraft туралы
@@ -110,6 +111,7 @@
 	Ends early	Ертерек аяқталады
 	Enough: {units}, meeting the target in {p} of replications	Жеткілікті: {units}, мақсат қайталаулардың {p} бөлігінде орындалады
 	Entered	Кіргендер
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Қайталаудың соңында әлі ішінде қалған нысандар күтудің орташа уақытына және жүйедегі орташа уақытқа кірмейді.
 	Erlang	Эрланг
 	Error	Қате
 	Estimate from three values…	Үш мәннен бағалау…
@@ -162,12 +164,12 @@
 	Maximum	Максимум
 	Mean	Орташа
 	Mean number inside	Ішіндегі орташа саны
+	One replication of {n}: the results of the others differ.	{n} ішінен бір қайталау: қалғандарының нәтижелері басқаша.
 	Still inside at the end	Соңында әлі ішінде
 	Mean queue length	Кезектің орташа ұзындығы
 	Mean time blocked	Бұғатталудың орташа уақыты
 	Mean time in system	Жүйедегі орташа уақыт
 	Mean wait	Күтудің орташа уақыты
-	Met in at least	Кемінде орындалады
 	Metric	Көрсеткіш
 	Middles	Тік орталықтар
 	Minimise	Кішірейту
@@ -292,7 +294,6 @@
 	Settings	Параметрлер
 	Shape	Пішін
 	Share of arrivals lost	Жоғалған келулер үлесі
-	Share of replications	Қайталаулар үлесі
 	Share of units blocked	Бұғатталған бірліктер үлесі
 	Show All	Барлығын көрсету
 	Show {id}	{id} көрсету
@@ -319,11 +320,14 @@
 	Sweep a parameter	Параметрді сұрыптау
 	Tandem line	Тізбекті желі
 	Target	Мақсат
+	Target share	Мақсатты үлес
 	Target value	Мақсатты мән
 	Task	Тапсырма
 	Task with a resource	Ресурсы бар тапсырма
 	Task with shared resources	Ортақ ресурстары бар тапсырма
 	Text	Мәтін
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Аралық {share} мақсатты үлесінен төмен түседі, сондықтан үлестің орындалғаны 95% сенімділікпен көрсетілмеген; көбірек қайталау оны тарылтады.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Тоқтату шартына дейінгі орташа уақыт тек оған жеткен қайталаулар бойынша; қалғандары уақыт шегіне дейін жүрді.
 	The model changed, so watching stopped	Модель өзгерді, сондықтан бақылау тоқтатылды
 	The model now has the units sizing found	Модельде енді өлшемдеу тапқан бірліктер бар
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
@@ -394,6 +398,8 @@
 	maximum {value}	максимум {value}
 	milliseconds	миллисекунд
 	minutes	минут
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N ішінен k: N қайталаудың тек k-сында осы нәтиженің мәні болды, оның орташасы мен аралығы сол k бойынша.
+	n = {k} of {n}	n = {n} ішінен {k}
 	nothing yet	әзірге ештеңе жоқ
 	seconds	секунд
 	split batches	топтамаларды бөлу

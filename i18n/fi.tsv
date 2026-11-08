@@ -15,6 +15,7 @@
 	% down and up	% alas ja ylös
 	% of replications	% toistoista
 	+ Add block	+ Lisää lohko
+	95% interval of the share meeting the target: {lo} to {hi}	Tavoitteen saavuttavan osuuden 95 %:n väli: {lo}–{hi}
 	95th percentile	95. persentiili
 	95th percentile {value}	95. persentiili {value}
 	About StochCraft	Tietoja StochCraftista
@@ -110,6 +111,7 @@
 	Ends early	Päättyy aiemmin
 	Enough: {units}, meeting the target in {p} of replications	Riittää: {units}, tavoite saavutetaan {p} toistoista
 	Entered	Saapuneet
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Toiston lopussa yhä sisällä olevat yksiköt jäävät pois keskimääräisestä odotusajasta ja keskimääräisestä ajasta järjestelmässä.
 	Erlang	Erlang
 	Error	Virhe
 	Estimate from three values…	Arvioi kolmesta arvosta…
@@ -162,12 +164,12 @@
 	Maximum	Maksimi
 	Mean	Keskiarvo
 	Mean number inside	Keskimääräinen määrä sisällä
+	One replication of {n}: the results of the others differ.	Yksi toisto {n}:stä: muiden tulokset poikkeavat.
 	Still inside at the end	Lopussa yhä sisällä
 	Mean queue length	Jonon keskipituus
 	Mean time blocked	Keskimääräinen estoaika
 	Mean time in system	Keskimääräinen aika järjestelmässä
 	Mean wait	Keskimääräinen odotusaika
-	Met in at least	Saavutettu vähintään
 	Metric	Mittari
 	Middles	Pystykeskikohdat
 	Minimise	Pienennä
@@ -292,7 +294,6 @@
 	Settings	Asetukset
 	Shape	Muoto
 	Share of arrivals lost	Menetettyjen saapumisten osuus
-	Share of replications	Osuus toistoista
 	Share of units blocked	Estettyjen yksiköiden osuus
 	Show All	Näytä kaikki
 	Show {id}	Näytä {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	Käy parametri läpi
 	Tandem line	Sarjajono
 	Target	Tavoite
+	Target share	Tavoiteosuus
 	Target value	Tavoitearvo
 	Task	Tehtävä
 	Task with a resource	Resurssia käyttävä tehtävä
 	Task with shared resources	Jaettuja resursseja käyttävä tehtävä
 	Text	Teksti
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Väli ulottuu alle tavoiteosuuden {share}, joten osuuden saavuttamista ei ole osoitettu 95 %:n luottamuksella; useampi toisto kaventaisi sitä.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskimääräinen aika pysäytysehtoon lasketaan vain toistoista, jotka saavuttivat sen; muut ajettiin aikarajaansa asti.
 	The model changed, so watching stopped	Malli muuttui, joten seuraaminen lopetettiin
 	The model now has the units sizing found	Mallissa on nyt mitoituksen löytämät yksiköt
 	The model: its experiment, connections and problems	Malli: koe, yhteydet ja ongelmat
@@ -394,6 +398,8 @@
 	maximum {value}	maksimi {value}
 	milliseconds	millisekuntia
 	minutes	minuuttia
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k/N: vain k toistolla N:stä oli arvo tälle tulokselle, ja sen keskiarvo ja väli lasketaan näistä k:sta.
+	n = {k} of {n}	n = {k}/{n}
 	nothing yet	ei vielä mitään
 	seconds	sekuntia
 	split batches	erien purku

@@ -39,6 +39,13 @@ engine's messages (validation, file notes) are English too.
 - The row for "Still inside at the end" (issue #68, entities still inside an element when a
   replication ends) was written with Claude Code from the plain meaning of the English and each
   catalog's own word for "inside" in "Mean number inside"; not checked against any other source.
+- The rows added for issue #69 (how many replications a result is over, what the means leave
+  out, sizing's target share and its 95% interval, the one-replication note in Watch a run) were
+  machine-drafted with Claude Code from the plain meaning of the English, reusing each catalog's
+  own words for replication, target, share, mean wait, mean time in system, stop condition, time
+  limit and 95% interval; not checked against any other source, and not reviewed by native
+  speakers. "Met in at least" and "Share of replications" were removed with the sizing field they
+  labelled (now "Target share").
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

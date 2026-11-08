@@ -15,6 +15,7 @@
 	% down and up	% ລົງ ແລະ ຂຶ້ນ
 	% of replications	% ຂອງຮອບຈຳລອງຊ້ຳ
 	+ Add block	+ ເພີ່ມບລັອກ
+	95% interval of the share meeting the target: {lo} to {hi}	ຊ່ວງ 95% ຂອງສັດສ່ວນທີ່ບັນລຸເປົ້າໝາຍ: ຈາກ {lo} ຫາ {hi}
 	95th percentile	ເປີເຊັນໄທລ໌ທີ 95
 	95th percentile {value}	ເປີເຊັນໄທລ໌ທີ 95 {value}
 	About StochCraft	ກ່ຽວກັບ StochCraft
@@ -110,6 +111,7 @@
 	Ends early	ຈົບກ່ອນກຳນົດ
 	Enough: {units}, meeting the target in {p} of replications	ພຽງພໍ: {units}, ບັນລຸເປົ້າໝາຍໃນ {p} ຂອງຮອບຈຳລອງຊ້ຳ
 	Entered	ຈຳນວນທີ່ເຂົ້າ
+	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ສິ່ງທີ່ຍັງຢູ່ພາຍໃນເມື່ອຮອບຈຳລອງຊ້ຳສິ້ນສຸດ ບໍ່ຖືກນັບໃນເວລາລໍຖ້າສະເລ່ຍ ແລະ ເວລາສະເລ່ຍໃນລະບົບ.
 	Erlang	ເອີລັງ
 	Error	ຂໍ້ຜິດພາດ
 	Estimate from three values…	ປະມານຈາກສາມຄ່າ…
@@ -162,12 +164,12 @@
 	Maximum	ຄ່າສູງສຸດ
 	Mean	ຄ່າສະເລ່ຍ
 	Mean number inside	ຈຳນວນສະເລ່ຍພາຍໃນ
+	One replication of {n}: the results of the others differ.	ໜຶ່ງຮອບຈຳລອງຊ້ຳຈາກ {n}: ຜົນຂອງຮອບອື່ນແຕກຕ່າງກັນ.
 	Still inside at the end	ຍັງຢູ່ພາຍໃນເມື່ອສິ້ນສຸດ
 	Mean queue length	ຄວາມຍາວແຖວຄອຍສະເລ່ຍ
 	Mean time blocked	ເວລາສະເລ່ຍທີ່ຖືກຂັດຂວາງ
 	Mean time in system	ເວລາສະເລ່ຍໃນລະບົບ
 	Mean wait	ເວລາລໍຖ້າສະເລ່ຍ
-	Met in at least	ບັນລຸຢ່າງໜ້ອຍ
 	Metric	ຕົວຊີ້ວັດ
 	Middles	ກາງແນວຕັ້ງ
 	Minimise	ຫຍໍ້ໜ້າຕ່າງ
@@ -292,7 +294,6 @@
 	Settings	ການຕັ້ງຄ່າ
 	Shape	ຮູບຮ່າງ
 	Share of arrivals lost	ສັດສ່ວນການມາຮອດທີ່ສູນເສຍ
-	Share of replications	ສັດສ່ວນຂອງຮອບຈຳລອງຊ້ຳ
 	Share of units blocked	ສັດສ່ວນໜ່ວຍທີ່ຖືກຂັດຂວາງ
 	Show All	ສະແດງທັງໝົດ
 	Show {id}	ສະແດງ {id}
@@ -319,11 +320,14 @@
 	Sweep a parameter	ກວາດພາຣາມິເຕີ
 	Tandem line	ສາຍງານຕໍ່ເນື່ອງ
 	Target	ເປົ້າໝາຍ
+	Target share	ສັດສ່ວນເປົ້າໝາຍ
 	Target value	ຄ່າເປົ້າໝາຍ
 	Task	ໜ້າວຽກ
 	Task with a resource	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນ
 	Task with shared resources	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນຮ່ວມກັນ
 	Text	ຂໍ້ຄວາມ
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ຊ່ວງນີ້ລົງຕ່ຳກວ່າສັດສ່ວນເປົ້າໝາຍ {share}, ຈຶ່ງບໍ່ໄດ້ສະແດງດ້ວຍຄວາມເຊື່ອໝັ້ນ 95% ວ່າບັນລຸສັດສ່ວນນັ້ນ; ຮອບຈຳລອງຊ້ຳຫຼາຍຂຶ້ນຈະເຮັດໃຫ້ຊ່ວງແຄບລົງ.
+	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ເວລາສະເລ່ຍຈົນຮອດເງື່ອນໄຂຢຸດ ຄິດສະເພາະຮອບຈຳລອງຊ້ຳທີ່ຮອດເງື່ອນໄຂ; ຮອບອື່ນແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
 	The model changed, so watching stopped	ແບບຈຳລອງປ່ຽນໄປ ຈຶ່ງຢຸດຕິດຕາມ
 	The model now has the units sizing found	ຕອນນີ້ແບບຈຳລອງມີຈຳນວນໜ່ວຍທີ່ການກຳນົດຂະໜາດພົບແລ້ວ
 	The model: its experiment, connections and problems	ແບບຈຳລອງ: ການທົດລອງ ການເຊື່ອມຕໍ່ ແລະ ບັນຫາ
@@ -394,6 +398,8 @@
 	maximum {value}	ຄ່າສູງສຸດ {value}
 	milliseconds	ມິລລິວິນາທີ
 	minutes	ນາທີ
+	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k ຈາກ N: ມີພຽງ k ຈາກ N ຮອບຈຳລອງຊ້ຳທີ່ມີຄ່າສຳລັບຜົນນັ້ນ, ແລະ ຄ່າສະເລ່ຍ ແລະ ຊ່ວງຂອງມັນຄິດຈາກ k ຮອບນັ້ນ.
+	n = {k} of {n}	n = {k} ຈາກ {n}
 	nothing yet	ຍັງບໍ່ມີຫຍັງ
 	seconds	ວິນາທີ
 	split batches	ແຍກຊຸດ
