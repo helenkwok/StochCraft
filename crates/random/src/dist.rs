@@ -20,7 +20,9 @@ pub enum Dist {
     Triangular { min: f64, mode: f64, max: f64 },
     /// Normal. Box–Muller (Box and Muller, 1958). Can be negative; a duration drawn from it is
     /// treated as 0 by whoever waits for it, so when negative draws are likely the realised
-    /// mean duration is greater than `mean` (use a truncated normal to say what is meant).
+    /// mean duration is greater than `mean` (use a truncated normal to say what is meant). A
+    /// model's validation warns about a time drawn from one that is below 0 more than 1% of the
+    /// time (`normal_often_negative`).
     Normal { mean: f64, std_dev: f64 },
     /// Normal restricted to [min, max]. Exact rejection after Robert (1995), choosing a normal,
     /// uniform or exponential proposal by where the interval lies.
