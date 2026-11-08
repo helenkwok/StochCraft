@@ -1,9 +1,9 @@
 # StochCraft roadmap
 
-Where StochCraft is going next and in what order. Three milestones: **M1** model files, the
+Where StochCraft is going next and in what order. Four milestones: **M1** model files, the
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
-desktop app (and the browser app built from it). **M4**, system dynamics and hybrid models,
-follows them. Each milestone is a series of pull requests small enough to review in one sitting;
+desktop app (and the browser app built from it); **M4** system dynamics and hybrid models. M1
+and M3 are done, M2 has two parts left (M2.9, M2.10), and M4 is being planned. Each milestone is a series of pull requests small enough to review in one sitting;
 every one keeps `cargo xtask ci` green.
 
 Decisions still open are marked **Decision** with a recommendation; the rest follows the
@@ -35,7 +35,7 @@ command line or in a window, natively or in the browser
 ([helenkwok.github.io/StochCraft](https://helenkwok.github.io/StochCraft/)), and edited in the
 window on the flowchart canvas (M3.4).
 
-## Principles that hold across all three
+## Principles that hold across all milestones
 
 1. **The model is data, in an existing open format.** A model is a document (blocks,
    parameters, connections, resources, experiments) that the engine compiles into a
@@ -79,7 +79,7 @@ Open standards exist for exactly what StochCraft models:
 | Standard | Covers | Use in StochCraft |
 |---|---|---|
 | **BPSim 2.0** (WfMC, December 2016, CC BY 3.0) on **BPMN 2.0** (OMG; ISO/IEC 19510) or **XPDL 2.2** (WfMC) | The process model (start events, tasks, gateways, end events, sequence flows, resources, diagram layout) is BPMN or XPDL; BPSim adds scenarios of simulation parameters that reference its elements by id | **Native model file** (M1) |
-| **XMILE 1.0** (OASIS, 2015) | System dynamics: stocks, flows, auxiliaries | Native file for the `sd` crate (later) |
+| **XMILE 1.0** (OASIS, 2015) | System dynamics: stocks, flows, auxiliaries | Read and written by the `sd` crate (M4); a hybrid model's BPMN+BPSim file names its XMILE variables (D13) |
 | **CMSD** (SISO-STD-008-2010 and -01-2012) | Manufacturing data: resources, parts, routings, schedules | Import for factory models (later) |
 
 ### What BPSim 2.0 defines (checked against the specification)
@@ -998,9 +998,8 @@ Starting a run with entities already inside, the other answer to a warm-up, stay
 
 ### M2.10 Abandonment
 
-Entities that give up waiting. A literature search for example models and benchmarks
-(2026-11-08) found abandonment the most common feature StochCraft can't model; Garnett,
-Mandelbaum and Reiman (2002) call impatient customers leaving before their service begins a
+Entities that give up waiting: a common feature of service models that StochCraft can't model
+yet. Garnett, Mandelbaum and Reiman (2002) call impatient customers leaving before their service begins a
 central feature that Erlang B and C lack. `des` already has the primitives (M2.1:
 `acquire_within` for reneging, `try_put` for balking), but no element uses them for this: the
 model has no patience, reneging or balking.
@@ -1034,7 +1033,7 @@ model has no patience, reneging or balking.
 and AGVs; costs (BPSim `fixedCost`, `unitCost`); simulation traces in XES (BPSim
 `traceOutput`). Agent behaviours and stock-and-flow are M4.
 
-**M2 size:** about nine PRs, each independently mergeable after M1. **M2.1–M2.8 are complete.**
+**M2 size:** about nine PRs for M2.1–M2.8 and one or two each for M2.9 and M2.10, each independently mergeable after M1. **M2.1–M2.8 are complete.**
 What each leaves for later is under its own "Not yet" or "Not here". M2.9 (output analysis) and
 M2.10 (abandonment) are next.
 
@@ -1317,8 +1316,8 @@ replications other than the first.
 FlexSim-style factory layouts via the shared `craft-factory` data from CADCraft.
 
 **M3 size:** about six PRs; M3.1–M3.3 make a usable app, M3.4–M3.5 make it a modelling tool.
-**M3 is complete.** The desktop app has been checked by hand on Linux and Windows; CI builds and
-tests on Linux only (#45), and macOS is unchecked.
+**M3 is complete.** CI builds and tests on Linux only (#45); the full test suite also passes on
+Windows (checked by hand); macOS is unchecked.
 
 ---
 
