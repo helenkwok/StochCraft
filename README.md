@@ -3,7 +3,7 @@
 Discrete-event and agent-based simulation for factories, logistics and queueing systems: an
 open-source, clean-room simulation application in pure Rust, for native desktops and the browser.
 
-**Status:** just started. `stochcraft-des` runs SimPy-style async processes with resources on a deterministic event queue; `stochcraft-experiment` runs replications in parallel with reproducible random streams (`stochcraft-random`) and reports 95% confidence intervals (`stochcraft-stats`). `stochcraft-blocks` compiles models of sources, servers, delays and sinks and reports per-element statistics; `stochcraft-io` reads and writes them as BPSim on BPMN or XPDL, the open standards other process tools use; `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo, and a replayable journal; `stochcraft-cli` runs models from the command line, and the app runs them in a window on the desktop or [in the browser](https://helenkwok.github.io/StochCraft/). Checked against M/M/1 and M/M/2 (Erlang C) queueing theory; about 54× faster than SimPy on an M/M/1 benchmark ([bench/](bench/README.md)).
+**Status:** the first three milestones are done (model files, the engine and a command line; flow logic for factories and logistics; the desktop and browser app); see [ROADMAP.md](ROADMAP.md) for what comes next. `stochcraft-des` runs SimPy-style async processes with resources on a deterministic event queue; `stochcraft-experiment` runs replications in parallel with reproducible random streams (`stochcraft-random`) and reports 95% confidence intervals (`stochcraft-stats`). `stochcraft-blocks` compiles models of sources, servers, tasks sharing resource pools, delays, sinks, decisions, splits and joins, batches and assemblies, with finite buffers, shifts, breakdowns and stop conditions, and reports per-element statistics; `stochcraft-io` reads and writes them as BPSim on BPMN or XPDL, the open standards other process tools use; `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo, and a replayable journal, and adds sweeps, sensitivity analysis and capacity sizing; `stochcraft-cli` runs models from the command line, and the app runs them in a window on the desktop or [in the browser](https://helenkwok.github.io/StochCraft/). Checked against queueing theory and exact results: M/M/1, M/M/c (Erlang C), M/M/1/K, priority queues, machine repair, a Jackson network, a two-machine line with a finite buffer, E₄/M/1 batches, assembly, arrivals by time of day, breakdowns and activity networks, and against L-SIM's published results for the BPSim car repair model; about 54× faster than SimPy on an M/M/1 benchmark ([bench/](bench/README.md)).
 
 ## Building
 
@@ -22,9 +22,12 @@ cargo run --release -p stochcraft
 ```
 
 Open a BPMN or XPDL model with BPSim data (or one of the examples under File ▸ Open Example), or
-build one from blocks with **+ Add block**. Select a block to edit its parameters and flows,
-run with F5 and read the results with their confidence intervals, as charts and a table; export
-the table as CSV and the charts as PNG. Every edit can be undone.
+build one on the flowchart canvas: add blocks with **+ Add block** or drag them from the palette,
+and drag between them to connect them. Select a block
+to edit its parameters and flows, run with F5 and read the results with their confidence
+intervals, as charts and a table; export the table as CSV and the charts as PNG. Model ▸ Watch a
+Run steps one replication on the canvas, and the Analysis view sweeps a parameter, ranks
+parameters by sensitivity and sizes capacity to a target. Every edit can be undone.
 
 To build the browser app locally, install [trunk](https://trunkrs.dev) and run it from
 `apps/stochcraft-web`:
@@ -33,7 +36,8 @@ To build the browser app locally, install [trunk](https://trunkrs.dev) and run i
 trunk serve --release
 ```
 
-In the browser, runs use a web worker per core, and the app can be installed and used offline.
+In the browser, runs use a web worker for each core but one (up to 16), and the app can be
+installed and used offline.
 
 Without more, the browser app has only IBM Plex and egui's faces, so Japanese, Korean, Chinese,
 Hindi, Thai and other scripts draw only with fonts the visitor's system has, or as boxes. Set `CRAFT_FONTS_DIR` to a checkout of

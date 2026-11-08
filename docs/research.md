@@ -105,7 +105,8 @@ as the interface to the shop floor, and game and physics engines. Digital twins 
 three levels (supervisory, interactive, predictive); DES provides the predictive "what-if" level.
 An audit trail should justify automated decisions.
 
-**For StochCraft.** The engine's journal is an audit trail; agents over MCP (M3.6) can explain
+**For StochCraft.** The engine's journal becomes an audit trail once it records its version and
+the state it started from (#44); agents over MCP (M3.6) can explain
 results ("the oven is the bottleneck at 94% utilisation"); the renderer can use a game engine
 (Bevy). For digital twins, a run must be able to start from an observed state (After M3).
 
@@ -165,9 +166,11 @@ energy-intensive industries. What a simulator would model in them is mostly *bul
 separators that split a stream by fractions, sorters with a throughput limit, storage tanks,
 batch treatment, long furnace campaigns.
 
-**For StochCraft.** A bulk-flow library (rates, splits, tanks) belongs with stock-and-flow in the
-`sd` crate (After M3) rather than in M2's discrete blocks. These studies are sources of example
-models.
+**For StochCraft.** A bulk-flow library (rates, splits, tanks) comes after M3, rather than in M2's
+discrete blocks. Since rates are usually constant between changes, the time a tank reaches a
+level can be worked out and scheduled as an exact event, so bulk flow builds on M4's
+level-crossing events rather than on the fixed steps of the `sd` crate (ROADMAP.md, D12). These
+studies are sources of example models.
 
 > M. Zier, N. Pflugradt, P. Stenzel, L. Kotzur, D. Stolten, *Industrial decarbonization pathways:
 > The example of the German glass industry*, Energy Conversion and Management: X 17 (2023) 100336,

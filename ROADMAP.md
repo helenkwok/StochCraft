@@ -2,8 +2,9 @@
 
 Where StochCraft is going next and in what order. Three milestones: **M1** model files, the
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
-desktop app (and the browser app built from it). Each milestone is a series of pull requests
-small enough to review in one sitting; every one keeps `cargo xtask ci` green.
+desktop app (and the browser app built from it). **M4**, system dynamics and hybrid models,
+follows them. Each milestone is a series of pull requests small enough to review in one sitting;
+every one keeps `cargo xtask ci` green.
 
 Decisions still open are marked **Decision** with a recommendation; the rest follows the
 patterns of the sibling Craft apps (FieldCraft, CADCraft, SolidCraft). The published work behind
@@ -16,23 +17,23 @@ and the Aerospace Corporation, digital-twin reviews) is summarised in
 | Crate | Layer | State |
 |---|---|---|
 | `random` | L0 | xoshiro256** streams; BPSim's distributions; `Dist`; fits to three-point estimates (`estimate`) |
-| `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary`; percentiles, empirical distributions with DKW bands, Wilson intervals (`spread`) |
-| `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate` |
-| `model` | L1 | The model in memory: elements, connections with probabilities and conditions, finite buffers, shared resource pools, experiment, entity properties, validation; BPSim's XPath expressions (`expr`) |
-| `blocks` | L2 | Compiles a model: source, server, shared task, delay, sink, exclusive and parallel gateways, merges; finite buffers with blocking after service and loss; shared pools with roles, alternatives and priorities; entities carry typed properties; per-element statistics; warm-up |
+| `stats` | L0 | `Tally`, `TimeWeighted`, Student-t 95% intervals, `Summary`; percentiles, empirical distributions with DKW bands, Wilson intervals (`spread`); paired and Welch differences between two runs (`difference`) |
+| `des` | L1 | Event queue; async processes with `hold`, `spawn`, interrupts; priority and preemptive `Resource`; bounded and priority `Store`; waits with deadlines; `Signal`, `Gate`; runs that can be cancelled within a replication and stop when time stops moving (`run_watched`) |
+| `model` | L1 | The model in memory: elements, connections with probabilities, conditions and quantities, finite buffers, shared resource pools, calendars, breakdowns, batches, stop conditions, three-point estimates, layout, entity properties, experiment, validation; BPSim's XPath expressions (`expr`) |
+| `blocks` | L2 | Compiles a model: source, server, shared task, delay, sink, exclusive and parallel gateways, merges, batch and unbatch, assembly; finite buffers with blocking after service and loss; shared pools with roles, alternatives, priorities and shifts; breakdowns; calendars; stop conditions; work left inside at the end; entities carry typed properties; per-element statistics; warm-up; one replication stepped and read as it runs (`Live`) |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
-| `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, `stochcraft:` vendor extensions), write new, save edits into opened files |
-| `engine` | L4 | Commands with JSON schemas, undo and redo, journal, background runs; `flow.set` for routing; `queue_capacity` on servers; `resource.add`/`set`/`remove` and shared tasks |
+| `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, calendars, diagram layout, `stochcraft:` vendor extensions), write new, save edits into opened files |
+| `engine` | L4 | Commands with JSON schemas, undo and redo, journal; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity and sizing; `results.distribution` and `results.compare`; live runs |
 | `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `exec`, `schema`, `mcp` |
-| `ui-egui` | L5 | The app's window: menus, shortcuts, model outline, background runs, results, unsaved-change prompts |
+| `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis view; watching a run; autosave; 44 languages |
 | `mcp` | L5 | The MCP server: the engine's commands as tools for agents, headless (with optional read and write roots) or driving the app through its control channel |
 | `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs, `--control` for agents) and the browser shell, published on GitHub Pages |
 | `bench/` | outside | M/M/1 against simu-des and SimPy (54× SimPy) |
 
 Models are saved and opened as BPSim files, changed through engine commands, and run from the
 command line or in a window, natively or in the browser
-([helenkwok.github.io/StochCraft](https://helenkwok.github.io/StochCraft/)). Editing in the window
-comes with M3.2.
+([helenkwok.github.io/StochCraft](https://helenkwok.github.io/StochCraft/)), and edited in the
+window on the flowchart canvas (M3.4).
 
 ## Principles that hold across all three
 
@@ -255,7 +256,9 @@ against L-SIM needs gateways, which all three reference models use, so it moves 
   committed, so most file tests run without any download. The bundle has each
   model (car repair, home loan, technical support) as both BPMN and XPDL, in BPSim 1.0 and 2.0,
   so both host formats and the 1.0 upgrade are tested from the start. Its Visio drawings and
-  images are not needed.
+  images are not needed. The BPMN MIWG test suite's `Reference/` models (BPMN interchange tests,
+  with no simulation data) are to join the reading, round-trip and diagnostics tests the same
+  way: fetched at a pinned commit, never committed (D14).
 - **Cross-check against another simulator:** the bundle includes result scenarios
   (`*_results.bpsim`) produced by Lanner's L-SIM for the three BPSim 2.0 models, with
   per-replication values (for example 151 car repair arrivals in each of three replications,
@@ -309,8 +312,11 @@ understand.
   worker threads natively and in slices (a bounded number of events per `run.status`, see
   M3.6) in the browser;
   both give exactly the results of `run`. `run.cancel` stops new replications from starting
-  (`stochcraft-experiment` gains a `Control` with progress and cancellation); one already
-  running finishes first.
+  (`stochcraft-experiment` gains a `Control` with progress and cancellation), and stops those
+  already running too: a replication asks whether it has been cancelled every 1,024 events
+  (`des::Sim::run_watched`). A replication whose clock stops moving (more than
+  `blocks::MAX_EVENTS_AT_ONE_TIME`, 10,000,000, events at one time) ends with an error naming
+  the time and the element of the loop (#49, #52).
 - `file.save` writes edits into the file the model was opened from (`stochcraft-io`'s
   `Opened::save`), changing only what the edit needs:
   - names; parameters and experiment settings in the scenario that was opened (where it
@@ -441,7 +447,8 @@ schema are read with a warning.
 - **How:** all of an element's assignments are made together, from the values the entity
   arrived with.
 - **Random values:** drawn from streams of their own, so adding a property changes no other
-  result.
+  result. (The elements' own streams are forked in model order, so adding, removing or
+  reordering an element does change the streams of the elements after it; see M2.9.)
 
 Each element reports the mean value it assigned to each property. The engine has
 `property.set`, `property.remove` and `property.list`, and `model.get` and `run` include
@@ -709,7 +716,8 @@ taken together, and a large need waiting without holding back a smaller one.
   - Read, written, saved in place, and in the vendor schema
     (`crates/io/schemas/stochcraft-bpsim-1.xsd`); `block.set` and `block.add` take
     `breakdown` (`null` removes it).
-  - **Not here:** failures counted in busy time only, and breakdowns on shared pools.
+  - **Not here:** failures counted in busy time only, breakdowns on shared pools, and editing
+    breakdowns in the window (the engine's commands are ready for it).
 
   **Validation** (`blocks/tests/breakdowns.rs`, 16 replications):
 
@@ -882,6 +890,10 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
 - **Comparing two runs:** `results.compare` gives, per element and metric, both runs' means
   and the difference with its 95% interval: paired-t when the runs share their seed and
   replications, Welch's two-sample t otherwise (issue #66).
+- **Common random numbers and the model's shape:** each element's stream is forked in model
+  order (`blocks/src/runtime.rs`). A sweep changes no element, so its points share their
+  streams; but a variant that adds, removes or reorders an element changes the streams of every
+  element after it, and so loses common random numbers (#70, M2.9).
 - **Sensitivity:** `experiment.sensitivity` moves each parameter down and up by a fraction,
   one at a time, and ranks the results' elasticities. Every sweep and sensitivity analysis is
   recorded, with the model's digest, in the `sensitivity` list of later runs' records
@@ -954,11 +966,77 @@ as the NNSA study found.
 several factors at once (factorial, Latin hypercube); saving targets in the model file; and
 running analyses in the background or on the browser's web workers.
 
-**Later in M2 or M4:** conveyors with length, speed and accumulation; travel networks for
-forklifts and AGVs; agent behaviours (`agents` crate); stock-and-flow (`sd` crate, XMILE);
-costs (BPSim `fixedCost`, `unitCost`); simulation traces in XES (BPSim `traceOutput`).
+### M2.9 Output analysis
 
-**M2 size:** about nine PRs, each independently mergeable after M1.
+Help with the choices that decide whether results mean anything: how long a warm-up, how many
+replications, and whether variants are compared on the same random numbers (#70). The book
+treats these as standard practice (Robinson, ch. 2; Morecroft and Robinson, ch. 9 §9.5; Elder,
+ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and already done:
+`overloaded` and `no_steady_state` (M2.8, #68, #75) and `ended_in_warmup` (#67).
+
+- **Choosing a warm-up.** The default warm-up is 0, and nothing helps choose one.
+  - Record key metrics at fixed times in every replication, and plot their mean across
+    replications over time (Welch's plot).
+  - Suggest a warm-up from that series with MSER-5.
+  - Warn when a run without a stop condition has a warm-up of 0.
+- **Choosing the number of replications.** The default is 10, and a single replication is
+  accepted without a word (its half-width shows as "–").
+  - Warn when a run has one replication.
+  - A sequential mode that adds replications until the 95% half-width is within a target share
+    of the mean, using the t-table already in `stats` (automated methods: Hoad, Robinson and
+    Davies, 2011).
+- **Streams by element id.** Derive each element's stream from the seed, the replication and the
+  element's id, not its place in the model, so that a variant that adds, removes or reorders an
+  element keeps common random numbers for the others, and an unrelated edit no longer changes
+  results with the same seed. This changes the golden digests once (`STOCHCRAFT_BLESS=1`, with
+  the reason in the commit).
+- **Validation against observed data.** Compare a run's results with held-out real data (black-box
+  validation, ch. 6 §6.5.5 and ch. 10 §10.4.1).
+
+Starting a run with entities already inside, the other answer to a warm-up, stays with
+"starting a run from an observed state" under digital twins (After M3).
+
+### M2.10 Abandonment
+
+Entities that give up waiting. A literature search for example models and benchmarks
+(2026-11-08) found abandonment the most common feature StochCraft can't model; Garnett,
+Mandelbaum and Reiman (2002) call impatient customers leaving before their service begins a
+central feature that Erlang B and C lack. `des` already has the primitives (M2.1:
+`acquire_within` for reneging, `try_put` for balking), but no element uses them for this: the
+model has no patience, reneging or balking.
+
+- **Reneging:** an entity waiting in a task's queue leaves when its patience runs out. Patience
+  is a distribution, set per element. Abandoned entities are counted on their own (`abandoned`,
+  and the share of arrivals abandoned), with the time they waited recorded. The typical use is a
+  caller who hangs up.
+- **Balking:** an arriving entity does not join when the queue is at or above a length, or joins
+  with a probability that depends on the queue's length; counted on its own too. The fixed-length
+  case is already there for sources: a source sending to a full finite buffer loses the arrival
+  (M2.4), which is M/M/1/K. Balking widens that to any sender and to a probability by length.
+- **Where abandoned entities go:** they leave the model, or follow an outgoing connection marked
+  for them (a call back later, say).
+- **Files:** the BPSim 2.0 schema has no parameter for patience, reneging or balking (checked in
+  `BPSim-2.0.xsd`: its time parameters are `TransferTime`, `QueueTime`, `WaitTime`,
+  `SetUpTime`, `ProcessingTime`, `ValidationTime`, `ReworkTime`, `LagTime`, `Duration` and
+  `ElapsedTime`). So patience and balking are `stochcraft:` vendor extensions on the task's
+  `ElementParameters`, declared in the vendor schema as `stochcraft:breakdown` is. Whether
+  BPSim's `QueueTime` or `WaitTime`, or a BPMN boundary timer, was meant to carry this is for the
+  specification's prose to settle (to verify).
+- **Checks with known answers:**
+  - M/M/N+M, Poisson arrivals, exponential service and exponential patience with an unlimited
+    waiting room, for which Garnett, Mandelbaum and Reiman outline an exact analysis (M&SOM
+    4(3):208–227, 2002, doi 10.1287/msom.4.3.208.7753). The steady-state formulas to test
+    against are to verify from the paper itself.
+  - M/M/1 with balking at a fixed length is M/M/1/K, already checked against theory
+    (`des/tests/theory.rs`, `blocks/tests/buffers.rs`).
+
+**Later in M2:** conveyors with length, speed and accumulation; travel networks for forklifts
+and AGVs; costs (BPSim `fixedCost`, `unitCost`); simulation traces in XES (BPSim
+`traceOutput`). Agent behaviours and stock-and-flow are M4.
+
+**M2 size:** about nine PRs, each independently mergeable after M1. **M2.1–M2.8 are complete.**
+What each leaves for later is under its own "Not yet" or "Not here". M2.9 (output analysis) and
+M2.10 (abandonment) are next.
 
 ---
 
@@ -1153,6 +1231,10 @@ and jump to a time.
     - sources show how many were created, and departures how many are done.
   - The inspector shows the selected block's counts and a chart of its queue (or what is inside)
     over time. This is the queue-length-over-time view moved here from M3.3.
+- **A frame's budget** (#76, #80): watching runs on the window's own thread, so each frame runs
+  events for at most about 8 ms (`FRAME_BUDGET`), in chunks of 1,000 between looks at the clock.
+  A step or a jump that doesn't fit carries on over the next frames, with the same events in the
+  same order; playing falls behind its speed rather than freezing the window.
 - **Model changes:** changing anything the run depends on stops watching; moving shapes does
   not.
 - **Tests:** `blocks/tests/live.rs`, `engine/tests/engine.rs`, `ui-egui/tests/live.rs`.
@@ -1163,9 +1245,9 @@ replications other than the first.
 ### M3.6 Browser and agents
 
 - `apps/stochcraft-web` (in M3.1a): replications in web workers, installable as an app, and
-  working offline.
+  working offline (done).
 - `crates/mcp` and `stochcraft-cli mcp`: the engine's commands as MCP tools, headless or bridged
-  to a running app, following FieldCraft's MCP design.
+  to a running app, following FieldCraft's MCP design (done).
 
 **Done (workers and offline):**
 - **Replications on every core in the browser.** A run started with `"mode": "workers"` hands
@@ -1235,6 +1317,78 @@ replications other than the first.
 FlexSim-style factory layouts via the shared `craft-factory` data from CADCraft.
 
 **M3 size:** about six PRs; M3.1–M3.3 make a usable app, M3.4–M3.5 make it a modelling tool.
+**M3 is complete.** The desktop app has been checked by hand on Linux and Windows; CI builds and
+tests on Linux only (#45), and macOS is unchecked.
+
+---
+
+## M4: system dynamics and hybrid models
+
+**Outcome:** a model can hold stocks and flows (the `sd` crate) and agents with behaviours (the
+`agents` crate) beside its discrete blocks, all on one clock, saved in the same file and run
+with the same replications, results and determinism as M2's models.
+
+Not started. These are the decisions to settle before the crates are written (#71); none is a
+bug in today's code. Chapter references are to Brailsford, Churilov and Dangerfield (eds.),
+*Discrete-Event Simulation and System Dynamics for Management Decision Making* (Wiley, 2014).
+
+- **One clock** (D11). `blocks`, `agents` and `sd` all sit on L2, and `INTRA_LAYER_ORDER` in
+  `xtask/src/layers.rs` allows no dependency between them, so nothing owns a shared clock yet.
+  - Each SD step is a recurring event on the `des` event list.
+  - A fixed rule says which goes first when an SD step and a DES event fall at the same time
+    (to confirm).
+  - Coupling lives either in an L3 crate or in an `sd` → `blocks` order in `layers.rs`.
+  - Pidd, ch. 15 §15.5.1; Borshchev, ch. 12 §12.2.
+- **Replications** (D10). Pure SD runs once; a hybrid model has its own SD state per
+  replication. Uncertainty about parameters is an outer sample around the inner replications,
+  not mixed into them, or the results multiply past interpreting (ch. 9 Table 9.3; ch. 15
+  §15.5.2).
+- **Results over time.** Results are one number per element per replication today; SD output is
+  behaviour over time, and the hybrid case studies report monthly measures.
+  - Values recorded at a save interval (BPSim's `baseResultFrequency`), with percentile bands per
+    time point from M2.8's band code.
+  - One recorder, shared with M2.9's Welch plot, which needs the same values at fixed times.
+  - Ch. 3 §3.2.1; ch. 14 §14.2 and §14.4.5.
+- **Units.** Both sides of every SD equation balance their units, and the SD time unit is
+  reconciled with `baseTimeUnit` (the class of bug #40 fixed for time units; ch. 3 §3.3.4,
+  ch. 11 §11.5.1).
+- **Bulk flow as exact events** (D12). Rates between changes are usually constant, so the time a
+  tank reaches a level can be worked out and scheduled as a `des` event; a fixed-step `sd` finds
+  "tank full" up to one step late. So tanks and pipes are best built as exact level-crossing
+  events in `des` and `blocks`, not as stocks in a fixed-step `sd` (ch. 12 §12.1).
+- **Numerics** (ch. 3 §3.3–3.4):
+  - Euler, with a time step that is a power-of-two fraction and time computed as start + n·DT
+    from a counter, so it is exact; RK4 optional for pure SD.
+  - Initial values; material and information delays (their order, and whether they conserve
+    material); lookup tables, clamped at their ends with a warning; IF, PULSE and STEP; arrays.
+  - A mass-balance check, and stocks that cannot go below 0.
+  - A fixed evaluation order: topological, ties broken by id.
+  - A command that halves the step, to check that results do not depend on it.
+  - Tests: a delay's pulse response against the Erlang density, logistic growth against its
+    closed form, Euler's error halving when the step halves; golden SD and hybrid models.
+- **Coupling primitives**, declared in the file rather than written as code (ch. 12 §12.2):
+  - an SD threshold triggers a DES event;
+  - DES writes only stocks;
+  - SD reads queue sizes;
+  - statistics over agents;
+  - discrete entities to continuous amounts and back without losing any.
+- **File format** (D13): a BPMN and BPSim file names XMILE variables through a `stochcraft:`
+  vendor extension.
+- **What `agents` needs from `blocks`** (ch. 12 §12.1 and §12.4; ch. 14 §14.2.2):
+  - entities injected without a source, and a given entity removed;
+  - statecharts with timeouts and triggers;
+  - populations with statistics;
+  - model instances.
+- **Linking runs** (ch. 3 §3.4.5, ch. 11 §11.5.2.1, ch. 13 §13.4, ch. 15 §15.6 and the ch. 14
+  cases):
+  - starting a run from a given state;
+  - monthly input series;
+  - scalars passed into SD constants;
+  - calibration to historical series.
+
+Already in place: arrival rates are redrawn at each rate change (M2.6), and an agent over MCP
+can open, edit and run models and drive the window (M3.6). The journal becomes an audit trail once it records its version and
+starting state (#44).
 
 ---
 
@@ -1248,11 +1402,12 @@ Not scheduled yet; recorded so earlier work does not close these doors (docs/res
   exceeded and by how much ([M&S 26]).
 - **Digital twins:** starting a run from an observed state (queue contents, busy units, elapsed
   times) rather than empty; fitting input distributions from event logs; the engine's journal as
-  the audit trail of what-if decisions.
+  the audit trail of what-if decisions, once it records its version and the state it started
+  from (#44).
 - **Industry 5.0 measures:** workers as resources with skills and shifts; energy and CO₂ per
   part and per element (BPSim cost parameters plus a vendor extension); disruption scenarios.
 - **Bulk flow:** rates, splits by fraction, tanks and batch treatment for process industries,
-  with stock-and-flow in the `sd` crate.
+  built on M4's exact level-crossing events (D12) rather than on `sd`'s fixed steps.
 - **Explanations:** agents over MCP describe results in plain language (the bottleneck, what
   limits throughput, which inputs matter most).
 - Not planned: parallelising a single run (optimistic Time Warp). Replications in parallel
@@ -1267,9 +1422,13 @@ M1.1 model ─ M1.2 compile ─ M1.3 io ─ M1.4 engine ─ M1.5 cli ─ M1.6 de
               M2.1 primitives                            M3.1 shell, web, Pages
               M2.2 properties, expressions               M3.2 editing
               M2.3 … M2.8 (each one PR)                  M3.3 results
-                     │                                   M3.4 canvas
-                     └──────────── new blocks appear ────M3.5 live view
-                                   in M3 forms           M3.6 workers + MCP
+              M2.9 output analysis                       M3.4 canvas
+              M2.10 abandonment                          M3.5 live view
+                     │
+                     └──────────── new blocks appear ────M3.6 workers + MCP
+                                   in M3 forms
+                                         │
+                                   M4 system dynamics, hybrid models
 ```
 
 M1 comes first because both M2 and M3 build on the model document and the engine. After M1, M2
@@ -1291,3 +1450,8 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D7 | Reference models as test files | Settled: WfMC's examples and the XSD are downloaded from bpsim.org by `cargo xtask fetch-bpsim` (pinned SHA-256, cached in CI), never committed, because they carry no licence of their own |
 | D8 | First arrival of a start event | Open: at time 0 (as L-SIM does, giving 151 car repair arrivals) or after the first interval (the specification's wording, and StochCraft today, giving 150). Evidence from M2.3's cross-check: with the first arrival at 0, the car repair counts match L-SIM's exactly for arrivals and within 0.01 standard errors for the others; after the first interval they are one arrival short and within 0.15. Both pass |
 | D9 | Where credibility data live (parameter pedigree, validated ranges) | In the model file, as `stochcraft:` BPSim vendor extensions, so they travel with the model and other tools keep them |
+| D10 | Replications in hybrid models (M4) | Each replication has its own SD state; uncertainty about parameters is an outer sample around the inner replications, never mixed into them |
+| D11 | The shared clock, and where coupling lives (M4) | SD steps are recurring events on the `des` event list; coupling lives in an L3 crate or an `sd` → `blocks` order in `xtask/src/layers.rs`; which goes first when an SD step and a DES event fall at the same time is a fixed rule, to confirm |
+| D12 | Bulk flow (tanks, pipes) (M4) | Exact events: with rates constant between changes, the time a level is reached is worked out and scheduled in `des`, rather than found up to one step late by a fixed-step `sd` |
+| D13 | Hybrid model files (M4) | One BPMN and BPSim file, naming XMILE variables through a `stochcraft:` vendor extension, with the couplings declared in it |
+| D14 | The BPMN MIWG test suite (github.com/bpmn-miwg/bpmn-miwg-test-suite, CC BY 3.0 by its `LICENSE.txt`) as test files | Settled: fetched in CI at a pinned commit and never committed, as for D7, so the repository stays under one licence; bpmn.io's bpmn-js-integration (MIT) does the same, cloning its own copy of the suite into `tmp/` in its CI. Only its `Reference/` folder is used, for reading, round-trip and diagnostics tests; the other folders are exports from commercial modelling tools and are not used. If a few files are ever needed offline, only those reference models are committed, each with a row in ATTRIBUTION.md and the CC BY 3.0 notice |

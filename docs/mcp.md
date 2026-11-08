@@ -63,6 +63,10 @@ The two flags keep a headless agent to the folders you give it:
     and the rest must be plain names.
   - The result is compared with the root by whole folder names: `/work2/x` is not inside
     `/work`.
+  - On Windows, `..` is removed from a path's text first (as `std::path::absolute` and Windows
+    itself do), so `<root>\nope\..\x` is accepted as `<root>\x`, the file opening it would reach,
+    even when `nope` does not exist. On Unix the system would look for `nope`, so the same path
+    is refused there (#77).
 - A refused path is an ordinary tool error the agent can read, such as
   `path refused: outside the write root /work/plant/out: /etc/x.bpmn`.
 - The roots must be existing folders; a missing one stops the server with an error.
