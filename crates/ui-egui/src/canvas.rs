@@ -817,11 +817,10 @@ impl App {
             self.select(sel);
         }
         // A drag that ended outside any widget.
-        if !ui.input(|i| i.pointer.any_down())
-            && !matches!(self.canvas.drag, Drag::None)
-            && !(drag_end || bg.drag_stopped())
-            && connect_end.is_none()
-        {
+        let released = !ui.input(|i| i.pointer.any_down());
+        let dragging = !matches!(self.canvas.drag, Drag::None);
+        let handled = drag_end || bg.drag_stopped() || connect_end.is_some();
+        if released && dragging && !handled {
             self.canvas.drag = Drag::None;
         }
 
@@ -836,7 +835,7 @@ impl App {
 
         // Clipboard events (the system's copy, cut and paste shortcuts arrive as these).
         let typing = ui.ctx().egui_wants_keyboard_input();
-        if !typing && ui.rect_contains_pointer(rect) || !typing && !self.selection().is_empty() {
+        if !typing && (ui.rect_contains_pointer(rect) || !self.selection().is_empty()) {
             let events = ui.input(|i| i.events.clone());
             for ev in events {
                 match ev {
