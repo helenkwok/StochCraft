@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	ไทย
+	% down and up	% ลงและขึ้น
+	% of replications	% ของรอบการจำลองซ้ำ
 	+ Add block	+ เพิ่มบล็อก
+	95th percentile	เปอร์เซ็นไทล์ที่ 95
+	95th percentile {value}	เปอร์เซ็นไทล์ที่ 95 {value}
 	About StochCraft	เกี่ยวกับ StochCraft
 	About {app}	เกี่ยวกับ {app}
+	Across the range it changed by {change}: more than chance would explain.	ตลอดช่วงเปลี่ยนไป {change}: มากกว่าที่ความบังเอิญจะอธิบายได้
+	Across the range it changed by {change}: within what chance alone could do.	ตลอดช่วงเปลี่ยนไป {change}: อยู่ในขอบเขตที่ความบังเอิญอย่างเดียวก็ทำได้
 	Actual size	ขนาดจริง
 	Add Block	เพิ่มบล็อก
 	Add a flow from…	เพิ่มโฟลว์จาก…
 	Add a flow to…	เพิ่มโฟลว์ไปยัง…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	เพิ่มหนึ่งหน่วยให้งานหรือกลุ่มที่ยุ่งที่สุดจนกว่ารอบการจำลองซ้ำจะบรรลุเป้าหมายมากพอ แสดงคำตอบที่ทุกเวลาเท่ากับค่าเฉลี่ยด้วย ซึ่งมักน้อยเกินไป
 	Add alternative	เพิ่มทางเลือก
 	Add point	เพิ่มจุด
 	Add pool	เพิ่มกลุ่มทรัพยากร
@@ -27,9 +34,12 @@
 	Added {block} ({id})	เพิ่ม {block} ({id}) แล้ว
 	Align	จัดแนว
 	Alternative {n}	ทางเลือก {n}
+	Analysis	การวิเคราะห์
 	Appearance	ลักษณะที่ปรากฏ
 	Arrival limit	จำนวนขาเข้าสูงสุด
 	Arrivals	ขาเข้า
+	At least	อย่างน้อย
+	At most	อย่างมาก
 	Availability	อัตราความพร้อมใช้งาน
 	BPMN with BPSim	BPMN พร้อม BPSim
 	Back to the model (Esc)	กลับไปยังแบบจำลอง (Esc)
@@ -38,10 +48,12 @@
 	Batch size	ขนาดชุด
 	Beta	เบตา
 	Binomial	ทวินาม
+	Block	บล็อก
 	Boolean	บูลีน
 	Bottoms	ขอบล่าง
 	Bring All to Front	นำทั้งหมดมาไว้ด้านหน้า
 	Built with	พัฒนาด้วย
+	Busiest	ยุ่งที่สุด
 	By role	ตามบทบาท
 	CSV table	ตาราง CSV
 	Cancel	ยกเลิก
@@ -49,10 +61,13 @@
 	Cancel run	ยกเลิกการรัน
 	Capacity	ความจุ
 	Centres	กึ่งกลางแนวนอน
+	Change	การเปลี่ยนแปลง
 	Change Block	เปลี่ยนบล็อก
 	Change Flow	เปลี่ยนโฟลว์
+	Change the estimate	เปลี่ยนการประมาณ
 	Changes	การเปลี่ยนแปลง
 	Changing the time unit does not convert the times already in the model.	การเปลี่ยนหน่วยเวลาไม่แปลงค่าเวลาที่มีอยู่ในแบบจำลอง
+	Choose…	เลือก…
 	Clear Menu	ล้างเมนู
 	Close	ปิด
 	Close Window	ปิดหน้าต่าง
@@ -88,11 +103,16 @@
 	Drag to add:	ลากเพื่อเพิ่ม:
 	Duplicate	ทำสำเนา
 	Duration	ระยะเวลา
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	การวิเคราะห์แต่ละแบบรันการทดลองหลายครั้งด้วยเมล็ดสุ่มเดียวกัน ความแตกต่างจึงมาจากการเปลี่ยนแปลง ไม่ใช่ความบังเอิญ อาจใช้เวลาสักครู่
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	แต่ละเอนทิตีจะใช้ทางเลือกแรกที่จัดหาให้ได้ครบทั้งหมดพร้อมกันในทันที และคืนหน่วยเหล่านั้นเมื่อออกไป
 	Edit	แก้ไข
+	Elasticity	ความยืดหยุ่น
+	Ends early	จบก่อนกำหนด
+	Enough: {units}, meeting the target in {p} of replications	เพียงพอ: {units} บรรลุเป้าหมายใน {p} ของรอบการจำลองซ้ำ
 	Entered	จำนวนที่เข้ามา
 	Erlang	เออร์แลง
 	Error	ข้อผิดพลาด
+	Estimate from three values…	ประมาณจากสามค่า…
 	Evenly across	กระจายเท่ากันแนวนอน
 	Evenly down	กระจายเท่ากันแนวตั้ง
 	Every distribution	ทุกการแจกแจง
@@ -105,20 +125,27 @@
 	Export table (CSV)	ส่งออกตาราง (CSV)
 	Exported {file}	ส่งออก {file} แล้ว
 	Expression	นิพจน์
+	Family	ตระกูล
 	File	ไฟล์
 	Finished at {time} {unit}	สิ้นสุดที่ {time} {unit}
 	Fit	พอดี
 	Fit the diagram to the view	ปรับแผนภาพให้พอดีกับมุมมอง
+	Fit the time	ปรับเวลาให้เข้า
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	ปรับเวลาของบล็อกนี้ให้เข้ากับค่าต่ำสุด ค่าที่เป็นไปได้มากที่สุด และค่าสูงสุดหรือเปอร์เซ็นไทล์ที่ 95
+	Fitted the time of {id}	ปรับเวลาของ {id} แล้ว
 	Flows	โฟลว์
+	Forget the estimate	ลืมการประมาณ
 	From	จาก
 	Gamma	แกมมา
 	Goes to	ไปยัง
 	Help	วิธีใช้
 	Hide Others	ซ่อนรายการอื่น
 	Hide {app}	ซ่อน {app}
+	How many	จำนวน
 	Inside over time	จำนวนภายในตามเวลา
 	Jump	ข้าม
 	Jump to time	ข้ามไปยังเวลา
+	Keep the time, without the estimate it came from	เก็บเวลาไว้ โดยไม่เก็บการประมาณที่มา
 	Keyboard Shortcuts…	ปุ่มลัด…
 	Keyboard shortcuts saved	บันทึกปุ่มลัดแล้ว
 	Keyboard shortcuts unchanged	ปุ่มลัดไม่มีการเปลี่ยนแปลง
@@ -140,6 +167,7 @@
 	Mean time blocked	เวลาเฉลี่ยที่ถูกบล็อก
 	Mean time in system	เวลาเฉลี่ยในระบบ
 	Mean wait	เวลารอเฉลี่ย
+	Met in at least	บรรลุอย่างน้อย
 	Metric	ตัวชี้วัด
 	Middles	กึ่งกลางแนวตั้ง
 	Minimise	ย่อหน้าต่าง
@@ -148,19 +176,25 @@
 	Model	แบบจำลอง
 	Most likely	ค่าที่เป็นไปได้มากที่สุด
 	Move	ย้าย
+	Move each parameter down and up in turn, and rank them by how much the result moves.	ปรับแต่ละพารามิเตอร์ลงและขึ้นทีละตัว แล้วจัดอันดับตามว่าผลลัพธ์ขยับมากเท่าใด
 	Name	ชื่อ
 	Needs	สิ่งที่ต้องใช้
+	Never: it runs for its duration	ไม่เลย: รันจนครบระยะเวลา
 	New	ใหม่
 	New model	แบบจำลองใหม่
 	New property	คุณสมบัติใหม่
 	New property name	ชื่อคุณสมบัติใหม่
 	No blocks yet. Open a model, or add blocks to build one.	ยังไม่มีบล็อก เปิดแบบจำลองหรือเพิ่มบล็อกเพื่อสร้างแบบจำลอง
 	No connections yet: join blocks below.	ยังไม่มีการเชื่อมต่อ: เชื่อมบล็อกด้านล่าง
+	No replication met the stop condition: each ran to its time limit.	ไม่มีรอบการจำลองซ้ำใดถึงเงื่อนไขหยุด: ทุกรอบรันจนถึงขีดจำกัดเวลา
 	No results yet	ยังไม่มีผลลัพธ์
+	No target	ไม่มีเป้าหมาย
 	None	ไม่มี
 	None found. The model is ready to run.	ไม่พบปัญหา แบบจำลองพร้อมรันแล้ว
 	Normal	ปกติ
+	Not reached, even with {units}	ไม่บรรลุ แม้มี {units}
 	Number	ตัวเลข
+	One change, which Undo takes back	การเปลี่ยนแปลงหนึ่งครั้ง ซึ่งเลิกทำได้
 	One clerk, random arrivals: the textbook queue, checked against theory.	พนักงานหนึ่งคนและการมาถึงแบบสุ่ม: คิวมาตรฐานที่ตรวจสอบเทียบกับทฤษฎี
 	One task per BPSim distribution, to compare their spread.	หนึ่งงานต่อการแจกแจง BPSim เพื่อเปรียบเทียบการกระจายของค่า
 	Open	เปิด
@@ -173,10 +207,13 @@
 	Opened {file}	เปิด {file} แล้ว
 	Open…	เปิด…
 	Or start from an example	หรือเริ่มจากตัวอย่าง
+	PERT	PERT
 	PNG image	ภาพ PNG
+	Parameter	พารามิเตอร์
 	Parameters	พารามิเตอร์
 	Paste	วาง
 	Pause	หยุดชั่วคราว
+	Percentile	เปอร์เซ็นไทล์
 	Play	เล่น
 	Points	จุด
 	Poisson	ปัวซอง
@@ -190,6 +227,7 @@
 	Properties	คุณสมบัติ
 	Quit	ออกจากโปรแกรม
 	Quit {app}	ออกจาก {app}
+	Rank the parameters	จัดอันดับพารามิเตอร์
 	Ready	พร้อม
 	Recover	กู้คืน
 	Recover unsaved changes?	กู้คืนการเปลี่ยนแปลงที่ยังไม่บันทึกหรือไม่?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	การจำลองซ้ำรอบที่ 1 · {time} จาก {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	การจำลองซ้ำรอบที่ 1 · {time} จาก {end} {unit} · ระยะอุ่นเครื่อง
 	Replications	จำนวนรอบการจำลองซ้ำ
+	Replications meeting the target	รอบการจำลองซ้ำที่บรรลุเป้าหมาย
+	Replications that never met the stop condition count as later than their time limit.	รอบการจำลองซ้ำที่ไม่เคยถึงเงื่อนไขหยุดนับว่าช้ากว่าขีดจำกัดเวลาของตน
 	Resource pool	กลุ่มทรัพยากร
 	Resource pools	กลุ่มทรัพยากร
 	Restore	คืนค่าขนาดหน้าต่าง
+	Result	ผลลัพธ์
+	Result to compare	ผลลัพธ์ที่จะเปรียบเทียบ
+	Result to explain	ผลลัพธ์ที่จะอธิบาย
+	Result with a target	ผลลัพธ์ที่มีเป้าหมาย
+	Result, down and up	ผลลัพธ์ เมื่อลงและขึ้น
 	Results	ผลลัพธ์
 	Right edges	ขอบขวา
 	Roles	บทบาท
@@ -223,7 +268,10 @@
 	Run experiment	รันการทดลอง
 	Run replication 1 step by step and see each block's queue on the diagram	รันการจำลองซ้ำรอบที่ 1 ทีละขั้นและดูคิวของแต่ละบล็อกบนแผนภาพ
 	Run the experiment ({shortcut})	รันการทดลอง ({shortcut})
+	Run the experiment again to see this result's spread.	รันการทดลองอีกครั้งเพื่อดูการกระจายของผลลัพธ์นี้
+	Run the experiment at each value of one parameter, and compare a result.	รันการทดลองที่แต่ละค่าของพารามิเตอร์หนึ่งตัว แล้วเปรียบเทียบผลลัพธ์
 	Run the next event	รันเหตุการณ์ถัดไป
+	Run the sweep	รันการกวาด
 	Running	กำลังรัน
 	Running…	กำลังรัน…
 	Save	บันทึก
@@ -235,6 +283,7 @@
 	Seed	เมล็ดสุ่ม
 	Select All	เลือกทั้งหมด
 	Select a block to see its queue over time.	เลือกบล็อกเพื่อดูคิวตามเวลา
+	Separate the values with semicolons or spaces.	คั่นค่าด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
 	Service time	เวลาให้บริการ
 	Services	บริการ
 	Set Property	กำหนดคุณสมบัติ
@@ -243,13 +292,19 @@
 	Settings	การตั้งค่า
 	Shape	พารามิเตอร์รูปร่าง
 	Share of arrivals lost	สัดส่วนขาเข้าที่สูญเสีย
+	Share of replications	สัดส่วนของรอบการจำลองซ้ำ
 	Share of units blocked	สัดส่วนหน่วยที่ถูกบล็อก
 	Show All	แสดงทั้งหมด
 	Show {id}	แสดง {id}
+	Size	กำหนดขนาด
+	Size the resources	กำหนดขนาดทรัพยากร
+	Source	แหล่งที่มา
+	Source: {source}	แหล่งที่มา: {source}
 	Speed	ความเร็ว
 	Split batches	แยกชุด
 	Split or join	แยกหรือรวม
 	Split or join (all ways)	แยกหรือรวม (ทุกทาง)
+	Spread across replications	การกระจายระหว่างรอบการจำลองซ้ำ
 	Spread out	กระจาย
 	Stages (k)	จำนวนขั้น (k)
 	Standard deviation	ส่วนเบี่ยงเบนมาตรฐาน
@@ -261,17 +316,25 @@
 	Stop setting {name}	หยุดกำหนดค่า {name}
 	Stop watching	หยุดเฝ้าดู
 	Stopped watching	หยุดเฝ้าดูแล้ว
+	Sweep a parameter	กวาดพารามิเตอร์
 	Tandem line	สายงานต่อเนื่อง
+	Target	เป้าหมาย
+	Target value	ค่าเป้าหมาย
 	Task	งาน
 	Task with a resource	งานที่ใช้ทรัพยากร
 	Task with shared resources	งานที่ใช้ทรัพยากรร่วมกัน
 	Text	ข้อความ
 	The model changed, so watching stopped	โมเดลเปลี่ยนไป จึงหยุดเฝ้าดู
+	The model now has the units sizing found	ตอนนี้แบบจำลองมีจำนวนหน่วยที่การกำหนดขนาดพบแล้ว
 	The model: its experiment, connections and problems	แบบจำลอง: การทดลอง การเชื่อมต่อ และปัญหา
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	สัดส่วนรอบการจำลองซ้ำที่เท่ากับหรือต่ำกว่าแต่ละค่า แถบครอบคลุมการแจกแจงจริงด้วยความเชื่อมั่น {confidence}
+	The values are numbers, separated by semicolons or spaces	ค่าต้องเป็นตัวเลขที่คั่นด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
 	This block has a warning	บล็อกนี้มีคำเตือน
 	This block has an error	บล็อกนี้มีข้อผิดพลาด
 	This run	การรันนี้
+	Three-point estimate	การประมาณสามจุด
 	Time between arrivals	เวลาระหว่างการมาถึง
+	Time to the stop condition	เวลาจนถึงเงื่อนไขหยุด
 	Time unit	หน่วยเวลา
 	To	ไปยัง
 	Tops	ขอบบน
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	หน่วยที่หลายงานใช้ร่วมกัน งานที่ใช้ทรัพยากรร่วมกันจะรับหน่วยเหล่านี้ตามกลุ่มหรือตามบทบาท
 	Untitled	ยังไม่มีชื่อ
 	Untitled model	แบบจำลองไม่มีชื่อ
+	Upper value	ค่าบน
 	Use System Setting	ใช้การตั้งค่าระบบ
+	Use these units in the model	ใช้จำนวนหน่วยเหล่านี้ในแบบจำลอง
 	Utilisation	อัตราการใช้ประโยชน์
 	Value	ค่า
+	Values	ค่า
 	View	มุมมอง
 	Waiting over time	จำนวนที่รอตามเวลา
 	Waiting room	พื้นที่รอ
@@ -302,8 +368,12 @@
 	Watch a run	เฝ้าดูการรัน
 	Watching replication 1	กำลังเฝ้าดูการจำลองซ้ำรอบที่ 1
 	Weibull	ไวบูลล์
+	When a task empties	เมื่องานว่าง
+	When enough have left a block	เมื่อออกจากบล็อกมากพอ
+	Which parameters matter	พารามิเตอร์ใดมีผล
 	Whole number	จำนวนเต็ม
 	Window	หน้าต่าง
+	With every time at its mean: {units}	เมื่อทุกเวลาเท่ากับค่าเฉลี่ย: {units}
 	Yes or no	ใช่หรือไม่
 	Your changes will be lost if you don't save them.	การเปลี่ยนแปลงจะสูญหายหากคุณไม่บันทึก
 	Zoom	ปรับขนาดหน้าต่าง
@@ -317,8 +387,11 @@
 	departures	ขาออก
 	egui and eframe (Craft suite fork)	egui และ eframe (แยกจาก Craft suite)
 	from its value	จากค่าของมัน
+	have left	ออกไปแล้ว
 	hours	ชั่วโมง
 	id {id}	รหัส {id}
+	matters	มีผล
+	maximum {value}	ค่าสูงสุด {value}
 	milliseconds	มิลลิวินาที
 	minutes	นาที
 	nothing yet	ยังไม่มีอะไร
@@ -335,12 +408,17 @@
 	time	เวลา
 	to {block}	ไปยัง {block}
 	unlimited	ไม่จำกัด
+	who gave it, or where it comes from	ใครให้มา หรือมาจากที่ใด
+	within chance	อยู่ในขอบเขตความบังเอิญ
 	years	ปี
+	{block}: units	{block}: จำนวนหน่วย
 	{busy} busy	ไม่ว่าง {busy}
 	{entered} in, {left} out, {lost} lost	เข้า {entered} ออก {left} สูญหาย {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: ต่ำสุด {min} เป็นไปได้มากที่สุด {mode} {upper}
 	{field}: not editable here yet	{field}: ยังแก้ไขที่นี่ไม่ได้
 	{id}: a probability is a number from 0 to 1	{id}: ความน่าจะเป็นต้องเป็นตัวเลขตั้งแต่ 0 ถึง 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} จาก {of} รอบการจำลองซ้ำบรรลุเป้าหมาย: {p} (ช่วง 95% จาก {lo} ถึง {hi})
 	{name} — edited	{name} — แก้ไขแล้ว
 	{n} created	สร้างแล้ว {n}
 	{n} done	เสร็จแล้ว {n}
@@ -364,9 +442,12 @@ unit	yr	ปี
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	เปิด {file} แล้ว (คำเตือน {n} รายการ)
 @plural	Removed {n} block|Removed {n} blocks	นำ {n} บล็อกออกแล้ว
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	รันการจำลองแบบจำลองอิสระ {n} รอบโดยใช้เมล็ดสุ่ม {seed} ผลลัพธ์ของแต่ละองค์ประกอบแสดงครึ่งหนึ่งของความกว้างช่วงความเชื่อมั่น 95% จากทุกรอบ
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	ถึงเงื่อนไขหยุดใน {met} จาก {n} รอบการจำลองซ้ำ หลังจากเฉลี่ย {time} {unit}
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	เสร็จแล้ว {done} จาก {n} รอบการจำลองซ้ำ
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nช่วงความเชื่อมั่น 95% จาก {low} ถึง {high}{unit}\nจากการจำลองซ้ำ {n} รอบ
 @plural	{n} block selected|{n} blocks selected	เลือก {n} บล็อกอยู่
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} รอบการจำลองซ้ำต่อขั้น · เมล็ดสุ่ม {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} รอบการจำลองซ้ำ · ค่าเฉลี่ย {mean} · จาก {min} ถึง {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	จำลองซ้ำ {n} รอบ · เมล็ดสุ่ม {seed} · อุ่นเครื่อง {warmup} {unit} · วัดผล {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	จำลองซ้ำ {n} รอบ · เมล็ดสุ่ม {seed}
 @plural	{n} replication|{n} replications	จำลองซ้ำ {n} รอบ

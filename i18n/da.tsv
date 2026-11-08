@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Dansk
+	% down and up	% ned og op
+	% of replications	% af replikationerne
 	+ Add block	+ Tilføj blok
+	95th percentile	95. percentil
+	95th percentile {value}	95. percentil {value}
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
+	Across the range it changed by {change}: more than chance would explain.	Over intervallet ændrede det sig med {change}: mere end tilfældighed ville forklare.
+	Across the range it changed by {change}: within what chance alone could do.	Over intervallet ændrede det sig med {change}: inden for hvad tilfældighed alene kan gøre.
 	Actual size	Faktisk størrelse
 	Add Block	Tilføj blok
 	Add a flow from…	Tilføj flow fra…
 	Add a flow to…	Tilføj flow til…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Tilføj en enhed ved den travleste opgave eller pulje, indtil nok replikationer når et mål. Svaret med hver tid på sit gennemsnit vises også; det er som regel for lille.
 	Add alternative	Tilføj alternativ
 	Add point	Tilføj punkt
 	Add pool	Tilføj pulje
@@ -27,9 +34,12 @@
 	Added {block} ({id})	Tilføjede {block} ({id})
 	Align	Juster
 	Alternative {n}	Alternativ {n}
+	Analysis	Analyse
 	Appearance	Udseende
 	Arrival limit	Grænse for ankomster
 	Arrivals	Ankomster
+	At least	Mindst
+	At most	Højst
 	Availability	Tilgængelighed
 	BPMN with BPSim	BPMN med BPSim
 	Back to the model (Esc)	Tilbage til modellen (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Partistørrelse
 	Beta	Beta
 	Binomial	Binomial
+	Block	Blok
 	Boolean	Boolesk
 	Bottoms	Nederste kanter
 	Bring All to Front	Anbring alle forrest
 	Built with	Bygget med
+	Busiest	Travlest
 	By role	Efter rolle
 	CSV table	CSV-tabel
 	Cancel	Annullér
@@ -49,10 +61,13 @@
 	Cancel run	Annuller kørsel
 	Capacity	Kapacitet
 	Centres	Vandrette midter
+	Change	Ændring
 	Change Block	Rediger blok
 	Change Flow	Rediger flow
+	Change the estimate	Ret skønnet
 	Changes	Ændringer
 	Changing the time unit does not convert the times already in the model.	Ændring af tidsenheden omregner ikke tider, der allerede findes i modellen.
+	Choose…	Vælg…
 	Clear Menu	Ryd menu
 	Close	Luk
 	Close Window	Luk vindue
@@ -88,11 +103,16 @@
 	Drag to add:	Træk for at tilføje:
 	Duplicate	Duplikér
 	Duration	Varighed
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Hver analyse kører eksperimentet flere gange med samme tilfældighedsfrø, så forskellene kommer fra ændringen, ikke fra tilfældighed. Det kan tage et stykke tid.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Hver enhed tager det første af disse alternativer, der kan opfyldes nu, alt på én gang, og giver ressourceenhederne tilbage, når den forlader opgaven.
 	Edit	Redigér
+	Elasticity	Elasticitet
+	Ends early	Slutter tidligt
+	Enough: {units}, meeting the target in {p} of replications	Nok: {units}, når målet i {p} af replikationerne
 	Entered	Indgået
 	Erlang	Erlang
 	Error	Fejl
+	Estimate from three values…	Skøn ud fra tre værdier…
 	Evenly across	Fordel jævnt vandret
 	Evenly down	Fordel jævnt lodret
 	Every distribution	Alle fordelinger
@@ -105,20 +125,27 @@
 	Export table (CSV)	Eksportér tabel (CSV)
 	Exported {file}	Eksporterede {file}
 	Expression	Udtryk
+	Family	Familie
 	File	Filer
 	Finished at {time} {unit}	Færdig ved {time} {unit}
 	Fit	Tilpas
 	Fit the diagram to the view	Tilpas diagrammet til visningen
+	Fit the time	Tilpas tiden
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Tilpas blokkens tid til et minimum, en mest sandsynlig værdi og et maksimum eller en 95. percentil.
+	Fitted the time of {id}	Tiden for {id} tilpasset
 	Flows	Flow
+	Forget the estimate	Glem skønnet
 	From	Fra
 	Gamma	Gamma
 	Goes to	Går til
 	Help	Hjælp
 	Hide Others	Skjul andre
 	Hide {app}	Skjul {app}
+	How many	Hvor mange
 	Inside over time	Inde over tid
 	Jump	Gå
 	Jump to time	Gå til tidspunkt
+	Keep the time, without the estimate it came from	Behold tiden, uden det skøn, den kom fra
 	Keyboard Shortcuts…	Tastaturgenveje…
 	Keyboard shortcuts saved	Tastaturgenveje gemt
 	Keyboard shortcuts unchanged	Tastaturgenveje uændrede
@@ -140,6 +167,7 @@
 	Mean time blocked	Gennemsnitlig blokeringstid
 	Mean time in system	Gennemsnitlig tid i systemet
 	Mean wait	Gennemsnitlig ventetid
+	Met in at least	Nået i mindst
 	Metric	Målepunkt
 	Middles	Lodrette midter
 	Minimise	Minimér
@@ -148,19 +176,25 @@
 	Model	Model
 	Most likely	Mest sandsynlig
 	Move	Flyt
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Flyt hver parameter ned og op efter tur, og ranger dem efter, hvor meget resultatet flytter sig.
 	Name	Navn
 	Needs	Behov
+	Never: it runs for its duration	Aldrig: kører hele sin varighed
 	New	Ny
 	New model	Ny model
 	New property	Ny egenskab
 	New property name	Navn på ny egenskab
 	No blocks yet. Open a model, or add blocks to build one.	Endnu ingen blokke. Åbn en model, eller tilføj blokke for at oprette en.
 	No connections yet: join blocks below.	Endnu ingen forbindelser: forbind blokkene nedenfor.
+	No replication met the stop condition: each ran to its time limit.	Ingen replikation nåede stopbetingelsen: hver kørte til sin tidsgrænse.
 	No results yet	Endnu ingen resultater
+	No target	Intet mål
 	None	Ingen
 	None found. The model is ready to run.	Ingen problemer fundet. Modellen er klar til at køre.
 	Normal	Normal
+	Not reached, even with {units}	Ikke nået, heller ikke med {units}
 	Number	Tal
+	One change, which Undo takes back	Én ændring, som Fortryd tager tilbage
 	One clerk, random arrivals: the textbook queue, checked against theory.	Én medarbejder, tilfældige ankomster: den klassiske kø, kontrolleret mod teorien.
 	One task per BPSim distribution, to compare their spread.	Én opgave pr. BPSim-fordeling for at sammenligne spredningen.
 	Open	Åbn
@@ -173,10 +207,13 @@
 	Opened {file}	Åbnede {file}
 	Open…	Åbn…
 	Or start from an example	Eller begynd med et eksempel
+	PERT	PERT
 	PNG image	PNG-billede
+	Parameter	Parameter
 	Parameters	Parametre
 	Paste	Indsæt
 	Pause	Pause
+	Percentile	Percentil
 	Play	Afspil
 	Points	Punkter
 	Poisson	Poisson
@@ -190,6 +227,7 @@
 	Properties	Egenskaber
 	Quit	Afslut
 	Quit {app}	Afslut {app}
+	Rank the parameters	Ranger parametrene
 	Ready	Klar
 	Recover	Gendan
 	Recover unsaved changes?	Gendan ikke-gemte ændringer?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	Replikation 1 · {time} af {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikation 1 · {time} af {end} {unit} · opvarmning
 	Replications	Replikationer
+	Replications meeting the target	Replikationer, der når målet
+	Replications that never met the stop condition count as later than their time limit.	Replikationer, der aldrig nåede stopbetingelsen, tæller som senere end deres tidsgrænse.
 	Resource pool	Ressourcepulje
 	Resource pools	Ressourcepuljer
 	Restore	Gendan vindue
+	Result	Resultat
+	Result to compare	Resultat at sammenligne
+	Result to explain	Resultat at forklare
+	Result with a target	Resultat med mål
+	Result, down and up	Resultat, ned og op
 	Results	Resultater
 	Right edges	Højre kanter
 	Roles	Roller
@@ -223,7 +268,10 @@
 	Run experiment	Kør eksperiment
 	Run replication 1 step by step and see each block's queue on the diagram	Kør replikation 1 trin for trin, og se hver bloks kø i diagrammet
 	Run the experiment ({shortcut})	Kør eksperimentet ({shortcut})
+	Run the experiment again to see this result's spread.	Kør eksperimentet igen for at se spredningen i dette resultat.
+	Run the experiment at each value of one parameter, and compare a result.	Kør eksperimentet ved hver værdi af én parameter, og sammenlign et resultat.
 	Run the next event	Kør den næste hændelse
+	Run the sweep	Kør gennemløbet
 	Running	Kører
 	Running…	Kører…
 	Save	Gem
@@ -235,6 +283,7 @@
 	Seed	Tilfældighedsfrø
 	Select All	Vælg alt
 	Select a block to see its queue over time.	Vælg en blok for at se dens kø over tid.
+	Separate the values with semicolons or spaces.	Adskil værdierne med semikolon eller mellemrum.
 	Service time	Servicetid
 	Services	Tjenester
 	Set Property	Angiv egenskab
@@ -243,13 +292,19 @@
 	Settings	Indstillinger
 	Shape	Form
 	Share of arrivals lost	Andel tabte ankomster
+	Share of replications	Andel af replikationer
 	Share of units blocked	Andel blokerede enheder
 	Show All	Vis alle
 	Show {id}	Vis {id}
+	Size	Dimensionér
+	Size the resources	Dimensionér ressourcerne
+	Source	Kilde
+	Source: {source}	Kilde: {source}
 	Speed	Hastighed
 	Split batches	Opdel partier
 	Split or join	Opdel eller sammenflet
 	Split or join (all ways)	Opdel eller sammenflet (alle veje)
+	Spread across replications	Spredning på tværs af replikationer
 	Spread out	Fordel
 	Stages (k)	Trin (k)
 	Standard deviation	Standardafvigelse
@@ -261,17 +316,25 @@
 	Stop setting {name}	Stop med at angive {name}
 	Stop watching	Stop med at følge
 	Stopped watching	Stoppede med at følge
+	Sweep a parameter	Gennemløb en parameter
 	Tandem line	Tandemlinje
+	Target	Mål
+	Target value	Målværdi
 	Task	Opgave
 	Task with a resource	Opgave med ressource
 	Task with shared resources	Opgave med delte ressourcer
 	Text	Tekst
 	The model changed, so watching stopped	Modellen blev ændret, så følgningen stoppede
+	The model now has the units sizing found	Modellen har nu de enheder, dimensioneringen fandt
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen af replikationer ved eller under hver værdi. Båndet indeholder den sande fordeling med {confidence} konfidens.
+	The values are numbers, separated by semicolons or spaces	Værdierne er tal adskilt med semikolon eller mellemrum
 	This block has a warning	Denne blok har en advarsel
 	This block has an error	Denne blok har en fejl
 	This run	Denne kørsel
+	Three-point estimate	Trepunktsskøn
 	Time between arrivals	Tid mellem ankomster
+	Time to the stop condition	Tid til stopbetingelsen
 	Time unit	Tidsenhed
 	To	Til
 	Tops	Øverste kanter
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Ressourceenheder, som flere opgaver deler. En opgave med delte ressourcer tager dem fra en pulje eller efter rolle.
 	Untitled	Uden navn
 	Untitled model	Model uden titel
+	Upper value	Øvre værdi
 	Use System Setting	Brug systemindstilling
+	Use these units in the model	Brug disse enheder i modellen
 	Utilisation	Udnyttelsesgrad
 	Value	Værdi
+	Values	Værdier
 	View	Vis
 	Waiting over time	Ventende over tid
 	Waiting room	Venteværelse
@@ -302,8 +368,12 @@
 	Watch a run	Følg en kørsel
 	Watching replication 1	Følger replikation 1
 	Weibull	Weibull
+	When a task empties	Når en opgave bliver tom
+	When enough have left a block	Når nok har forladt en blok
+	Which parameters matter	Hvilke parametre betyder noget
 	Whole number	Heltal
 	Window	Vindue
+	With every time at its mean: {units}	Med hver tid på sit gennemsnit: {units}
 	Yes or no	Ja eller nej
 	Your changes will be lost if you don't save them.	Dine ændringer går tabt, hvis du ikke gemmer dem.
 	Zoom	Zoom
@@ -317,8 +387,11 @@
 	departures	afgange
 	egui and eframe (Craft suite fork)	egui og eframe (forgrening af Craft-pakken)
 	from its value	ud fra værdien
+	have left	har forladt
 	hours	timer
 	id {id}	id {id}
+	matters	betyder noget
+	maximum {value}	maksimum {value}
 	milliseconds	millisekunder
 	minutes	minutter
 	nothing yet	intet endnu
@@ -335,12 +408,17 @@
 	time	tidspunkt
 	to {block}	til {block}
 	unlimited	ubegrænset
+	who gave it, or where it comes from	hvem der gav det, eller hvor det kommer fra
+	within chance	inden for tilfældighed
 	years	år
+	{block}: units	{block}: enheder
 	{busy} busy	{busy} optaget
 	{entered} in, {left} out, {lost} lost	{entered} ind, {left} ud, {lost} tabt
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, mest sandsynlig {mode}, {upper}
 	{field}: not editable here yet	{field}: kan ikke redigeres her endnu
 	{id}: a probability is a number from 0 to 1	{id}: en sandsynlighed er et tal mellem 0 og 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} af {of} replikationer nåede målet: {p} (95 %-interval {lo} til {hi})
 	{name} — edited	{name} — redigeret
 	{n} created	{n} oprettet
 	{n} done	{n} færdige
@@ -364,9 +442,12 @@ unit	yr	år
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Åbnede {file} ({n} advarsel)|Åbnede {file} ({n} advarsler)
 @plural	Removed {n} block|Removed {n} blocks	Fjernede {n} blok|Fjernede {n} blokke
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kører {n} uafhængig replikation af modellen med frø {seed}. Hvert elements resultater indeholder den halve bredde af et 95% konfidensinterval.|Kører {n} uafhængige replikationer af modellen med frø {seed}. Hvert elements resultater indeholder den halve bredde af et 95% konfidensinterval.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Stopbetingelsen blev nået i {met} af {n} replikation, efter gennemsnitligt {time} {unit}.|Stopbetingelsen blev nået i {met} af {n} replikationer, efter gennemsnitligt {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} af {n} replikation fuldført|{done} af {n} replikationer fuldført
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval fra {low} til {high}{unit}\npå tværs af {n} replikation|{name}: {mean}{unit}\n95% interval fra {low} til {high}{unit}\npå tværs af {n} replikationer
 @plural	{n} block selected|{n} blocks selected	{n} blok valgt|{n} blokke valgt
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikation pr. trin · tilfældighedsfrø {seed}|{n} replikationer pr. trin · tilfældighedsfrø {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikation · gennemsnit {mean} · fra {min} til {max}|{n} replikationer · gennemsnit {mean} · fra {min} til {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikation · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt|{n} replikationer · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikation · frø {seed}|{n} replikationer · frø {seed}
 @plural	{n} replication|{n} replications	{n} replikation|{n} replikationer

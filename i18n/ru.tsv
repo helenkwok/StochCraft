@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Русский
+	% down and up	% вниз и вверх
+	% of replications	% репликаций
 	+ Add block	+ Добавить блок
+	95th percentile	95-й процентиль
+	95th percentile {value}	95-й процентиль {value}
 	About StochCraft	О программе StochCraft
 	About {app}	О программе {app}
+	Across the range it changed by {change}: more than chance would explain.	На всём диапазоне изменился на {change}: больше, чем объяснила бы случайность.
+	Across the range it changed by {change}: within what chance alone could do.	На всём диапазоне изменился на {change}: в пределах того, на что способна одна случайность.
 	Actual size	Фактический размер
 	Add Block	Добавить блок
 	Add a flow from…	Добавить поток от…
 	Add a flow to…	Добавить поток к…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Добавлять единицу к самой загруженной задаче или пулу, пока достаточно репликаций не достигнут цели. Показан и ответ, где каждое время равно своему среднему; обычно он слишком мал.
 	Add alternative	Добавить альтернативу
 	Add point	Добавить точку
 	Add pool	Добавить пул
@@ -27,9 +34,12 @@
 	Added {block} ({id})	Добавлен {block} ({id})
 	Align	Выравнивание
 	Alternative {n}	Альтернатива {n}
+	Analysis	Анализ
 	Appearance	Внешний вид
 	Arrival limit	Ограничение числа прибытий
 	Arrivals	Прибытия
+	At least	Не меньше
+	At most	Не больше
 	Availability	Коэффициент готовности
 	BPMN with BPSim	BPMN с BPSim
 	Back to the model (Esc)	Вернуться к модели (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Размер партии
 	Beta	Бета-распределение
 	Binomial	Биномиальное распределение
+	Block	Блок
 	Boolean	Логическое значение
 	Bottoms	Нижние края
 	Bring All to Front	Все окна на передний план
 	Built with	Создано с использованием
+	Busiest	Самый загруженный
 	By role	По роли
 	CSV table	Таблица CSV
 	Cancel	Отмена
@@ -49,10 +61,13 @@
 	Cancel run	Отменить запуск
 	Capacity	Количество обслуживающих единиц
 	Centres	Центры по горизонтали
+	Change	Изменение
 	Change Block	Изменить блок
 	Change Flow	Изменить поток
+	Change the estimate	Изменить оценку
 	Changes	Изменения
 	Changing the time unit does not convert the times already in the model.	При изменении единицы времени уже заданные в модели времена не пересчитываются.
+	Choose…	Выберите…
 	Clear Menu	Очистить меню
 	Close	Закрыть
 	Close Window	Закрыть окно
@@ -88,11 +103,16 @@
 	Drag to add:	Перетащите, чтобы добавить:
 	Duplicate	Дублировать
 	Duration	Длительность
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Каждый анализ запускает эксперимент несколько раз с одним и тем же начальным значением генератора, поэтому различия вызваны изменением, а не случайностью. Это может занять некоторое время.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Каждая сущность занимает первый из этих вариантов, который можно выполнить сейчас, целиком и сразу, и возвращает единицы, когда уходит.
 	Edit	Редактирование
+	Elasticity	Эластичность
+	Ends early	Завершается раньше
+	Enough: {units}, meeting the target in {p} of replications	Достаточно: {units}, цель достигнута в {p} репликаций
 	Entered	Вошло
 	Erlang	Распределение Эрланга
 	Error	Ошибка
+	Estimate from three values…	Оценить по трём значениям…
 	Evenly across	Равномерно по горизонтали
 	Evenly down	Равномерно по вертикали
 	Every distribution	Все распределения
@@ -105,20 +125,27 @@
 	Export table (CSV)	Экспортировать таблицу (CSV)
 	Exported {file}	Экспортирован {file}
 	Expression	Выражение
+	Family	Семейство
 	File	Файл
 	Finished at {time} {unit}	Завершено в {time} {unit}
 	Fit	Вписать
 	Fit the diagram to the view	Вписать диаграмму в окно
+	Fit the time	Подобрать время
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Подобрать время этого блока по минимуму, наиболее вероятному значению и максимуму или 95-му процентилю.
+	Fitted the time of {id}	Время {id} подобрано
 	Flows	Потоки
+	Forget the estimate	Забыть оценку
 	From	От
 	Gamma	Гамма-распределение
 	Goes to	Ведёт к
 	Help	Справка
 	Hide Others	Скрыть остальные
 	Hide {app}	Скрыть {app}
+	How many	Сколько
 	Inside over time	Внутри во времени
 	Jump	Перейти
 	Jump to time	Перейти ко времени
+	Keep the time, without the estimate it came from	Оставить время без оценки, из которой оно получено
 	Keyboard Shortcuts…	Сочетания клавиш…
 	Keyboard shortcuts saved	Сочетания клавиш сохранены
 	Keyboard shortcuts unchanged	Сочетания клавиш не изменены
@@ -140,6 +167,7 @@
 	Mean time blocked	Среднее время блокировки
 	Mean time in system	Среднее время в системе
 	Mean wait	Среднее время ожидания
+	Met in at least	Достигнута не менее чем в
 	Metric	Показатель
 	Middles	Центры по вертикали
 	Minimise	Свернуть
@@ -148,19 +176,25 @@
 	Model	Модель
 	Most likely	Наиболее вероятное значение
 	Move	Перемещение
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Сдвигать каждый параметр по очереди вниз и вверх и упорядочить их по тому, насколько меняется результат.
 	Name	Имя
 	Needs	Потребности
+	Never: it runs for its duration	Никогда: идёт всю длительность
 	New	Создать
 	New model	Новая модель
 	New property	Новое свойство
 	New property name	Имя нового свойства
 	No blocks yet. Open a model, or add blocks to build one.	Блоков пока нет. Откройте модель или добавьте блоки для создания модели.
 	No connections yet: join blocks below.	Соединений пока нет: соедините блоки ниже.
+	No replication met the stop condition: each ran to its time limit.	Ни одна репликация не достигла условия остановки: каждая шла до своего предела времени.
 	No results yet	Результатов пока нет
+	No target	Без цели
 	None	Нет
 	None found. The model is ready to run.	Проблем не обнаружено. Модель готова к запуску.
 	Normal	Нормальное распределение
+	Not reached, even with {units}	Не достигнута даже при {units}
 	Number	Число
+	One change, which Undo takes back	Одно изменение, которое отменяет Отменить
 	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, случайные прибытия: классическая очередь, проверенная по теории.
 	One task per BPSim distribution, to compare their spread.	По одной задаче на каждое распределение BPSim для сравнения разброса.
 	Open	Открыть
@@ -173,10 +207,13 @@
 	Opened {file}	Открыт {file}
 	Open…	Открыть…
 	Or start from an example	Или начните с примера
+	PERT	PERT
 	PNG image	Изображение PNG
+	Parameter	Параметр
 	Parameters	Параметры
 	Paste	Вставить
 	Pause	Пауза
+	Percentile	Процентиль
 	Play	Воспроизвести
 	Points	Точки
 	Poisson	Распределение Пуассона
@@ -190,6 +227,7 @@
 	Properties	Свойства
 	Quit	Выйти
 	Quit {app}	Завершить {app}
+	Rank the parameters	Упорядочить параметры
 	Ready	Готово
 	Recover	Восстановить
 	Recover unsaved changes?	Восстановить несохранённые изменения?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	Повторный запуск 1 · {time} из {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Повторный запуск 1 · {time} из {end} {unit} · разогрев
 	Replications	Число повторных запусков
+	Replications meeting the target	Репликации, достигшие цели
+	Replications that never met the stop condition count as later than their time limit.	Репликации, так и не достигшие условия остановки, считаются более поздними, чем их предел времени.
 	Resource pool	Пул ресурсов
 	Resource pools	Пулы ресурсов
 	Restore	Восстановить размер
+	Result	Результат
+	Result to compare	Результат для сравнения
+	Result to explain	Результат для объяснения
+	Result with a target	Результат с целью
+	Result, down and up	Результат, вниз и вверх
 	Results	Результаты
 	Right edges	Правые края
 	Roles	Роли
@@ -223,7 +268,10 @@
 	Run experiment	Запустить эксперимент
 	Run replication 1 step by step and see each block's queue on the diagram	Выполнить повторный запуск 1 по шагам и видеть очередь каждого блока на диаграмме
 	Run the experiment ({shortcut})	Запустить эксперимент ({shortcut})
+	Run the experiment again to see this result's spread.	Запустите эксперимент снова, чтобы увидеть разброс этого результата.
+	Run the experiment at each value of one parameter, and compare a result.	Запустить эксперимент при каждом значении одного параметра и сравнить результат.
 	Run the next event	Выполнить следующее событие
+	Run the sweep	Запустить перебор
 	Running	Выполняется
 	Running…	Выполняется…
 	Save	Сохранить
@@ -235,6 +283,7 @@
 	Seed	Начальное значение генератора
 	Select All	Выделить всё
 	Select a block to see its queue over time.	Выберите блок, чтобы увидеть его очередь во времени.
+	Separate the values with semicolons or spaces.	Разделяйте значения точкой с запятой или пробелами.
 	Service time	Время обслуживания
 	Services	Службы
 	Set Property	Задать свойство
@@ -243,13 +292,19 @@
 	Settings	Настройки
 	Shape	Форма
 	Share of arrivals lost	Доля потерянных прибытий
+	Share of replications	Доля репликаций
 	Share of units blocked	Доля заблокированных единиц
 	Show All	Показать всё
 	Show {id}	Показать {id}
+	Size	Подобрать
+	Size the resources	Подбор ресурсов
+	Source	Источник
+	Source: {source}	Источник: {source}
 	Speed	Скорость
 	Split batches	Разделение партий
 	Split or join	Разделить или объединить
 	Split or join (all ways)	Разделить или объединить (все пути)
+	Spread across replications	Разброс по репликациям
 	Spread out	Распределение
 	Stages (k)	Стадии (k)
 	Standard deviation	Стандартное отклонение
@@ -261,17 +316,25 @@
 	Stop setting {name}	Прекратить настройку {name}
 	Stop watching	Прекратить наблюдение
 	Stopped watching	Наблюдение прекращено
+	Sweep a parameter	Перебор параметра
 	Tandem line	Последовательная линия
+	Target	Цель
+	Target value	Целевое значение
 	Task	Задача
 	Task with a resource	Задача с ресурсом
 	Task with shared resources	Задача с общими ресурсами
 	Text	Текст
 	The model changed, so watching stopped	Модель изменилась, поэтому наблюдение прекращено
+	The model now has the units sizing found	В модели теперь единицы, найденные при подборе
 	The model: its experiment, connections and problems	Модель: эксперимент, соединения и проблемы
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Доля репликаций, не превышающих каждое значение. Полоса содержит истинное распределение с доверием {confidence}.
+	The values are numbers, separated by semicolons or spaces	Значения — это числа, разделённые точкой с запятой или пробелами
 	This block has a warning	В этом блоке есть предупреждение
 	This block has an error	В этом блоке есть ошибка
 	This run	Этот запуск
+	Three-point estimate	Трёхточечная оценка
 	Time between arrivals	Время между прибытиями
+	Time to the stop condition	Время до условия остановки
 	Time unit	Единица времени
 	To	К
 	Tops	Верхние края
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Единицы, которые используют несколько задач. Задача с общими ресурсами берёт их из пула или по роли.
 	Untitled	Без названия
 	Untitled model	Модель без названия
+	Upper value	Верхнее значение
 	Use System Setting	Использовать системную настройку
+	Use these units in the model	Использовать эти единицы в модели
 	Utilisation	Коэффициент использования
 	Value	Значение
+	Values	Значения
 	View	Вид
 	Waiting over time	Ожидающие во времени
 	Waiting room	Места ожидания
@@ -302,8 +368,12 @@
 	Watch a run	Наблюдать за запуском
 	Watching replication 1	Наблюдение за повторным запуском 1
 	Weibull	Распределение Вейбулла
+	When a task empties	Когда задача опустеет
+	When enough have left a block	Когда блок покинет достаточно сущностей
+	Which parameters matter	Какие параметры важны
 	Whole number	Целое число
 	Window	Окно
+	With every time at its mean: {units}	Если каждое время равно своему среднему: {units}
 	Yes or no	Да или нет
 	Your changes will be lost if you don't save them.	Если не сохранить, изменения будут потеряны.
 	Zoom	Переключить размер окна
@@ -317,8 +387,11 @@
 	departures	выходы
 	egui and eframe (Craft suite fork)	egui и eframe (ответвление набора Craft)
 	from its value	по значению
+	have left	покинули
 	hours	часы
 	id {id}	ID {id}
+	matters	важен
+	maximum {value}	максимум {value}
 	milliseconds	миллисекунды
 	minutes	минуты
 	nothing yet	пока ничего
@@ -335,12 +408,17 @@
 	time	время
 	to {block}	к {block}
 	unlimited	без ограничений
+	who gave it, or where it comes from	кто её дал или откуда она
+	within chance	в пределах случайности
 	years	годы
+	{block}: units	{block}: единицы
 	{busy} busy	Занято: {busy}
 	{entered} in, {left} out, {lost} lost	Вошло: {entered}, вышло: {left}, потеряно: {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: минимум {min}, наиболее вероятное {mode}, {upper}
 	{field}: not editable here yet	{field}: здесь пока нельзя редактировать
 	{id}: a probability is a number from 0 to 1	{id}: вероятность должна быть числом от 0 до 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} из {of} репликаций достигли цели: {p} (95% интервал от {lo} до {hi})
 	{name} — edited	{name} — изменено
 	{n} created	Создано: {n}
 	{n} done	Завершено: {n}
@@ -364,9 +442,12 @@ unit	yr	г.
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Открыт {file} ({n} предупреждение)|Открыт {file} ({n} предупреждения)|Открыт {file} ({n} предупреждений)
 @plural	Removed {n} block|Removed {n} blocks	Удалён {n} блок|Удалено {n} блока|Удалено {n} блоков
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Выполняет {n} независимую репликацию модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимые репликации модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимых репликаций модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Условие остановки достигнуто в {met} из {n} репликации, в среднем через {time} {unit}.|Условие остановки достигнуто в {met} из {n} репликаций, в среднем через {time} {unit}.|Условие остановки достигнуто в {met} из {n} репликаций, в среднем через {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Завершена {done} из {n} репликации|Завершено {done} из {n} репликаций|Завершено {done} из {n} репликаций
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликации|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликациям|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликациям
 @plural	{n} block selected|{n} blocks selected	Выбран {n} блок|Выбрано {n} блока|Выбрано {n} блоков
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} репликация на шаг · начальное значение {seed}|{n} репликации на шаг · начальное значение {seed}|{n} репликаций на шаг · начальное значение {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} репликация · среднее {mean} · от {min} до {max}|{n} репликации · среднее {mean} · от {min} до {max}|{n} репликаций · среднее {mean} · от {min} до {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликация · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликации · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликаций · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} репликация · начальное значение {seed}|{n} репликации · начальное значение {seed}|{n} репликаций · начальное значение {seed}
 @plural	{n} replication|{n} replications	{n} репликация|{n} репликации|{n} репликаций

@@ -114,6 +114,19 @@ fn nice_step(max: f64, ticks: f64) -> f64 {
         .unwrap_or(10.0 * p)
 }
 
+/// The axis for bars reaching up to `max`: the gridline step and the value at the right end.
+/// With nothing above zero (every bar 0, as a queue that never forms) the axis runs from 0 to 1,
+/// so the zero bars sit at its start under round labels.
+fn axis(max: f64) -> (f64, f64) {
+    let max = if max.is_finite() && max > 0.0 {
+        max
+    } else {
+        1.0
+    };
+    let step = nice_step(max, 4.0);
+    (step, (max / step).ceil() * step)
+}
+
 /// Draws the charts that have data, side by side where they fit. Returns the area they cover
 /// (for exporting them as an image), or `None` when no chart applies.
 pub fn show(ui: &mut egui::Ui, results: &Value) -> Option<Rect> {
@@ -180,19 +193,14 @@ fn chart(ui: &mut egui::Ui, m: &Measure, bars: &[Bar], unit: &str, width: f32) {
         pos2(rect.left() + label_w, rect.top()),
         pos2(rect.right() - value_w, rect.bottom() - axis_h),
     );
-    let max = if m.share {
-        100.0
+    let (step, top_value) = if m.share {
+        (25.0, 100.0)
     } else {
-        bars.iter()
-            .map(|b| b.mean + b.half_width)
-            .fold(0.0_f64, f64::max)
-            .max(f64::MIN_POSITIVE)
-    };
-    let step = if m.share { 25.0 } else { nice_step(max, 4.0) };
-    let top_value = if m.share {
-        100.0
-    } else {
-        (max / step).ceil() * step
+        axis(
+            bars.iter()
+                .map(|b| b.mean + b.half_width)
+                .fold(0.0_f64, f64::max),
+        )
     };
     let x = |v: f64| plot.left() + (v / top_value).clamp(0.0, 1.0) as f32 * plot.width();
     let painter = ui.painter_at(rect.expand(2.0));
@@ -394,6 +402,22 @@ mod tests {
         assert_eq!(nice_step(100.0, 4.0), 50.0);
         assert_eq!(nice_step(0.07, 4.0), 0.02);
         assert_eq!(nice_step(15000.0, 4.0), 5000.0);
+    }
+
+    #[test]
+    fn an_axis_of_zeros_runs_from_0_to_1() {
+        assert_eq!(axis(0.0), (0.5, 1.0));
+        assert_eq!(axis(f64::NAN), (0.5, 1.0));
+        assert_eq!(axis(-3.0), (0.5, 1.0));
+        assert_eq!(grouped(axis(0.0).1), "1");
+        // Values above zero keep their own scale, however small.
+        assert_eq!(axis(4.1), (2.0, 6.0));
+        assert_eq!(axis(0.95052), (0.5, 1.0));
+        let (step, top) = axis(3e-6);
+        assert!(
+            top >= 3e-6 && step > 0.0 && top / step <= 5.0,
+            "{step} {top}"
+        );
     }
 
     #[test]

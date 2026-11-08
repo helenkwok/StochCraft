@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	ქართული
+	% down and up	% ქვემოთ და ზემოთ
+	% of replications	% გამეორებებიდან
 	+ Add block	+ ბლოკის დამატება
+	95th percentile	95-ე პროცენტილი
+	95th percentile {value}	95-ე პროცენტილი {value}
 	About StochCraft	StochCraft-ის შესახებ
 	About {app}	{app}-ის შესახებ
+	Across the range it changed by {change}: more than chance would explain.	დიაპაზონში შეიცვალა {change}-ით: იმაზე მეტად, ვიდრე შემთხვევითობა ახსნიდა.
+	Across the range it changed by {change}: within what chance alone could do.	დიაპაზონში შეიცვალა {change}-ით: იმის ფარგლებში, რისი გაკეთებაც მხოლოდ შემთხვევითობას შეუძლია.
 	Actual size	რეალური ზომა
 	Add Block	ბლოკის დამატება
 	Add a flow from…	ნაკადის დამატება (წყარო)…
 	Add a flow to…	ნაკადის დამატება (სამიზნე)…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	ყველაზე დატვირთულ ამოცანას ან პულს ერთეულის დამატება, სანამ საკმარისი გამეორება მიზანს არ მიაღწევს. ნაჩვენებია პასუხიც, სადაც ყოველი დრო თავის საშუალოზეა; ის ჩვეულებრივ ძალიან მცირეა.
 	Add alternative	ალტერნატივის დამატება
 	Add point	წერტილის დამატება
 	Add pool	პულის დამატება
@@ -27,9 +34,12 @@
 	Added {block} ({id})	დამატებულია {block} ({id})
 	Align	სწორება
 	Alternative {n}	ალტერნატივა {n}
+	Analysis	ანალიზი
 	Appearance	გარეგნობა
 	Arrival limit	შემოსვლის ლიმიტი
 	Arrivals	შემოსვლები
+	At least	სულ მცირე
+	At most	მაქსიმუმ
 	Availability	ხელმისაწვდომობა
 	BPMN with BPSim	BPMN BPSim-ით
 	Back to the model (Esc)	მოდელზე დაბრუნება (Esc)
@@ -38,10 +48,12 @@
 	Batch size	პარტიის ზომა
 	Beta	ბეტა
 	Binomial	ბინომური
+	Block	ბლოკი
 	Boolean	ლოგიკური მნიშვნელობა
 	Bottoms	ქვედა კიდეები
 	Bring All to Front	ყველაფრის წინ წამოწევა
 	Built with	შექმნილია შემდეგით
+	Busiest	ყველაზე დატვირთული
 	By role	როლის მიხედვით
 	CSV table	CSV ცხრილი
 	Cancel	გაუქმება
@@ -49,10 +61,13 @@
 	Cancel run	გაშვების გაუქმება
 	Capacity	ტევადობა
 	Centres	ჰორიზონტალური ცენტრები
+	Change	ცვლილება
 	Change Block	ბლოკის შეცვლა
 	Change Flow	ნაკადის შეცვლა
+	Change the estimate	შეფასების შეცვლა
 	Changes	ცვლილებები
 	Changing the time unit does not convert the times already in the model.	დროის ერთეულის შეცვლა მოდელში უკვე მითითებულ დროებს არ გარდაქმნის.
+	Choose…	აირჩიეთ…
 	Clear Menu	მენიუს გასუფთავება
 	Close	დახურვა
 	Close Window	ფანჯრის დახურვა
@@ -88,11 +103,16 @@
 	Drag to add:	გადაათრიეთ დასამატებლად:
 	Duplicate	დუბლირება
 	Duration	ხანგრძლივობა
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ყოველი ანალიზი ექსპერიმენტს რამდენჯერმე უშვებს ერთი და იმავე საწყისი მნიშვნელობით, ამიტომ განსხვავებები ცვლილებიდან მოდის და არა შემთხვევითობიდან. ამას შეიძლება დრო დასჭირდეს.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	თითოეული ერთეული იღებს ამათგან პირველს, რომლის სრულად დაკმაყოფილებაც ახლავე, ერთდროულად არის შესაძლებელი, და გასვლისას რესურსის ერთეულებს აბრუნებს.
 	Edit	რედაქტირება
+	Elasticity	ელასტიკურობა
+	Ends early	ადრე მთავრდება
+	Enough: {units}, meeting the target in {p} of replications	საკმარისია: {units}, მიზანი მიიღწევა გამეორებების {p}-ში
 	Entered	შესულა
 	Erlang	ერლანგი
 	Error	შეცდომა
+	Estimate from three values…	შეფასება სამი მნიშვნელობით…
 	Evenly across	თანაბრად ჰორიზონტალურად
 	Evenly down	თანაბრად ვერტიკალურად
 	Every distribution	ყველა განაწილება
@@ -105,20 +125,27 @@
 	Export table (CSV)	ცხრილის ექსპორტი (CSV)
 	Exported {file}	ექსპორტირებულია {file}
 	Expression	გამოსახულება
+	Family	ოჯახი
 	File	ფაილი
 	Finished at {time} {unit}	დასრულდა {time} {unit}-ზე
 	Fit	მორგება
 	Fit the diagram to the view	დიაგრამის ხედზე მორგება
+	Fit the time	დროის მორგება
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	ამ ბლოკის დროის მორგება მინიმუმზე, ყველაზე სავარაუდო მნიშვნელობაზე და მაქსიმუმზე ან 95-ე პროცენტილზე.
+	Fitted the time of {id}	{id}-ის დრო მორგებულია
 	Flows	ნაკადები
+	Forget the estimate	შეფასების დავიწყება
 	From	-დან
 	Gamma	გამა
 	Goes to	მიდის აქ
 	Help	დახმარება
 	Hide Others	სხვების დამალვა
 	Hide {app}	{app}-ის დამალვა
+	How many	რამდენი
 	Inside over time	შიგნით დროის მიხედვით
 	Jump	გადასვლა
 	Jump to time	დროზე გადასვლა
+	Keep the time, without the estimate it came from	დროის შენარჩუნება იმ შეფასების გარეშე, საიდანაც ის მოდის
 	Keyboard Shortcuts…	კლავიატურის მალსახმობები…
 	Keyboard shortcuts saved	კლავიატურის მალსახმობები შენახულია
 	Keyboard shortcuts unchanged	კლავიატურის მალსახმობები უცვლელია
@@ -140,6 +167,7 @@
 	Mean time blocked	დაბლოკვის საშუალო დრო
 	Mean time in system	სისტემაში გატარებული საშუალო დრო
 	Mean wait	ლოდინის საშუალო დრო
+	Met in at least	მიიღწევა სულ მცირე
 	Metric	მაჩვენებელი
 	Middles	ვერტიკალური ცენტრები
 	Minimise	მინიმიზაცია
@@ -148,19 +176,25 @@
 	Model	მოდელი
 	Most likely	ყველაზე სავარაუდო
 	Move	გადატანა
+	Move each parameter down and up in turn, and rank them by how much the result moves.	თითოეული პარამეტრის რიგრიგობით ქვემოთ და ზემოთ გადაწევა და დალაგება იმის მიხედვით, რამდენად იცვლება შედეგი.
 	Name	სახელი
 	Needs	საჭიროებები
+	Never: it runs for its duration	არასოდეს: გრძელდება მთელი ხანგრძლივობა
 	New	ახალი
 	New model	ახალი მოდელი
 	New property	ახალი თვისება
 	New property name	ახალი თვისების სახელი
 	No blocks yet. Open a model, or add blocks to build one.	ბლოკები ჯერ არ არის. გახსენით მოდელი ან დაამატეთ ბლოკები მის შესაქმნელად.
 	No connections yet: join blocks below.	კავშირები ჯერ არ არის: დააკავშირეთ ქვემოთ მოცემული ბლოკები.
+	No replication met the stop condition: each ran to its time limit.	არცერთმა გამეორებამ არ მიაღწია გაჩერების პირობას: თითოეული თავის დროის ლიმიტამდე გაგრძელდა.
 	No results yet	შედეგები ჯერ არ არის
+	No target	მიზნის გარეშე
 	None	არცერთი
 	None found. The model is ready to run.	პრობლემა არ მოიძებნა. მოდელი მზადაა გასაშვებად.
 	Normal	ნორმალური
+	Not reached, even with {units}	ვერ მიიღწა, თუნდაც {units}-ით
 	Number	რიცხვი
+	One change, which Undo takes back	ერთი ცვლილება, რომელსაც დაბრუნება აუქმებს
 	One clerk, random arrivals: the textbook queue, checked against theory.	ერთი თანამშრომელი, შემთხვევითი შემოსვლები: თეორიით შემოწმებული კლასიკური რიგი.
 	One task per BPSim distribution, to compare their spread.	თითო დავალება ყოველ BPSim განაწილებაზე, მათი გაფანტვის შესადარებლად.
 	Open	გახსნა
@@ -173,10 +207,13 @@
 	Opened {file}	გახსნილია {file}
 	Open…	გახსნა…
 	Or start from an example	ან დაიწყეთ მაგალითით
+	PERT	PERT
 	PNG image	PNG გამოსახულება
+	Parameter	პარამეტრი
 	Parameters	პარამეტრები
 	Paste	ჩასმა
 	Pause	პაუზა
+	Percentile	პროცენტილი
 	Play	დაკვრა
 	Points	წერტილები
 	Poisson	პუასონი
@@ -190,6 +227,7 @@
 	Properties	თვისებები
 	Quit	გასვლა
 	Quit {app}	{app}-დან გასვლა
+	Rank the parameters	პარამეტრების დალაგება
 	Ready	მზადაა
 	Recover	აღდგენა
 	Recover unsaved changes?	აღვადგინოთ შეუნახავი ცვლილებები?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	გამეორება 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	გამეორება 1 · {time} / {end} {unit} · გახურების პერიოდი
 	Replications	გამეორებები
+	Replications meeting the target	მიზნის მიმღწევი გამეორებები
+	Replications that never met the stop condition count as later than their time limit.	გამეორებები, რომლებმაც გაჩერების პირობას ვერასოდეს მიაღწიეს, ითვლება დროის ლიმიტზე გვიანად.
 	Resource pool	რესურსების პული
 	Resource pools	რესურსების პულები
 	Restore	ფანჯრის აღდგენა
+	Result	შედეგი
+	Result to compare	შესადარებელი შედეგი
+	Result to explain	ასახსნელი შედეგი
+	Result with a target	შედეგი მიზნით
+	Result, down and up	შედეგი, ქვემოთ და ზემოთ
 	Results	შედეგები
 	Right edges	მარჯვენა კიდეები
 	Roles	როლები
@@ -223,7 +268,10 @@
 	Run experiment	ექსპერიმენტის გაშვება
 	Run replication 1 step by step and see each block's queue on the diagram	გამეორება 1-ის ნაბიჯ-ნაბიჯ გაშვება და თითოეული ბლოკის რიგის ნახვა დიაგრამაზე
 	Run the experiment ({shortcut})	ექსპერიმენტის გაშვება ({shortcut})
+	Run the experiment again to see this result's spread.	ხელახლა გაუშვით ექსპერიმენტი ამ შედეგის გაბნევის სანახავად.
+	Run the experiment at each value of one parameter, and compare a result.	ექსპერიმენტის გაშვება ერთი პარამეტრის ყოველ მნიშვნელობაზე და შედეგის შედარება.
 	Run the next event	შემდეგი მოვლენის შესრულება
+	Run the sweep	გადარბენის გაშვება
 	Running	მიმდინარეობს
 	Running…	მიმდინარეობს…
 	Save	შენახვა
@@ -235,6 +283,7 @@
 	Seed	შემთხვევითი რიცხვების საწყისი მნიშვნელობა
 	Select All	ყველას მონიშვნა
 	Select a block to see its queue over time.	აირჩიეთ ბლოკი, რომ ნახოთ მისი რიგი დროის მიხედვით.
+	Separate the values with semicolons or spaces.	გამოყავით მნიშვნელობები წერტილმძიმით ან ჰარით.
 	Service time	მომსახურების დრო
 	Services	სერვისები
 	Set Property	თვისების დაყენება
@@ -243,13 +292,19 @@
 	Settings	პარამეტრები
 	Shape	ფორმა
 	Share of arrivals lost	დაკარგული შემოსვლების წილი
+	Share of replications	გამეორებების წილი
 	Share of units blocked	დაბლოკილი ერთეულების წილი
 	Show All	ყველას ჩვენება
 	Show {id}	{id}-ის ჩვენება
+	Size	ზომის შერჩევა
+	Size the resources	რესურსების ზომის შერჩევა
+	Source	წყარო
+	Source: {source}	წყარო: {source}
 	Speed	სიჩქარე
 	Split batches	პარტიების დაყოფა
 	Split or join	გაყოფა ან გაერთიანება
 	Split or join (all ways)	გაყოფა ან გაერთიანება (ყველა გზა)
+	Spread across replications	გაბნევა გამეორებებს შორის
 	Spread out	განაწილება
 	Stages (k)	ეტაპები (k)
 	Standard deviation	სტანდარტული გადახრა
@@ -261,17 +316,25 @@
 	Stop setting {name}	{name}-ის დაყენების შეწყვეტა
 	Stop watching	დაკვირვების შეწყვეტა
 	Stopped watching	დაკვირვება შეწყდა
+	Sweep a parameter	პარამეტრის გადარბენა
 	Tandem line	თანმიმდევრული ხაზი
+	Target	მიზანი
+	Target value	მიზნობრივი მნიშვნელობა
 	Task	დავალება
 	Task with a resource	დავალება რესურსით
 	Task with shared resources	დავალება საზიარო რესურსებით
 	Text	ტექსტი
 	The model changed, so watching stopped	მოდელი შეიცვალა, ამიტომ დაკვირვება შეწყდა
+	The model now has the units sizing found	მოდელს ახლა აქვს ზომის შერჩევით ნაპოვნი ერთეულები
 	The model: its experiment, connections and problems	მოდელი: ექსპერიმენტი, კავშირები და პრობლემები
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	გამეორებების წილი, რომლებიც თითოეულ მნიშვნელობაზე ნაკლები ან ტოლია. ზოლი შეიცავს ნამდვილ განაწილებას {confidence} სანდოობით.
+	The values are numbers, separated by semicolons or spaces	მნიშვნელობები რიცხვებია, გამოყოფილი წერტილმძიმით ან ჰარით
 	This block has a warning	ამ ბლოკს აქვს გაფრთხილება
 	This block has an error	ამ ბლოკს აქვს შეცდომა
 	This run	ეს გაშვება
+	Three-point estimate	სამწერტილიანი შეფასება
 	Time between arrivals	შემოსვლებს შორის დრო
+	Time to the stop condition	დრო გაჩერების პირობამდე
 	Time unit	დროის ერთეული
 	To	-მდე
 	Tops	ზედა კიდეები
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	რესურსის ერთეულები, რომლებსაც რამდენიმე დავალება იზიარებს. დავალება საზიარო რესურსებით მათ იღებს პულის ან როლის მიხედვით.
 	Untitled	უსათაურო
 	Untitled model	უსათაურო მოდელი
+	Upper value	ზედა მნიშვნელობა
 	Use System Setting	სისტემის პარამეტრის გამოყენება
+	Use these units in the model	ამ ერთეულების გამოყენება მოდელში
 	Utilisation	გამოყენების დონე
 	Value	მნიშვნელობა
+	Values	მნიშვნელობები
 	View	ხედი
 	Waiting over time	მომლოდინეები დროის მიხედვით
 	Waiting room	მოსაცდელი სივრცე
@@ -302,8 +368,12 @@
 	Watch a run	გაშვებაზე დაკვირვება
 	Watching replication 1	მიმდინარეობს დაკვირვება გამეორება 1-ზე
 	Weibull	ვეიბული
+	When a task empties	როცა ამოცანა დაცარიელდება
+	When enough have left a block	როცა ბლოკს საკმარისი დატოვებს
+	Which parameters matter	რომელი პარამეტრებია მნიშვნელოვანი
 	Whole number	მთელი რიცხვი
 	Window	ფანჯარა
+	With every time at its mean: {units}	ყოველი დრო თავის საშუალოზე: {units}
 	Yes or no	დიახ ან არა
 	Your changes will be lost if you don't save them.	თუ არ შეინახავთ, ცვლილებები დაიკარგება.
 	Zoom	ზომის შეცვლა
@@ -317,8 +387,11 @@
 	departures	გასვლები
 	egui and eframe (Craft suite fork)	egui და eframe (Craft ნაკრების განშტოება)
 	from its value	მისი მნიშვნელობიდან
+	have left	დატოვეს
 	hours	საათი
 	id {id}	ID {id}
+	matters	მნიშვნელოვანია
+	maximum {value}	მაქსიმუმი {value}
 	milliseconds	მილიწამი
 	minutes	წუთი
 	nothing yet	ჯერ არაფერი
@@ -335,12 +408,17 @@
 	time	დრო
 	to {block}	{block}-მდე
 	unlimited	შეუზღუდავი
+	who gave it, or where it comes from	ვინ მისცა ან საიდან მოდის
+	within chance	შემთხვევითობის ფარგლებში
 	years	წელი
+	{block}: units	{block}: ერთეულები
 	{busy} busy	დაკავებული: {busy}
 	{entered} in, {left} out, {lost} lost	შევიდა: {entered}, გავიდა: {left}, დაიკარგა: {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: მინიმუმი {min}, ყველაზე სავარაუდო {mode}, {upper}
 	{field}: not editable here yet	{field}: აქ ჯერ არ შეიძლება რედაქტირება
 	{id}: a probability is a number from 0 to 1	{id}: ალბათობა არის რიცხვი 0-დან 1-მდე
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} გამეორებიდან {met}-მა მიაღწია მიზანს: {p} (95%-იანი ინტერვალი {lo}-დან {hi}-მდე)
 	{name} — edited	{name} — რედაქტირებულია
 	{n} created	შეიქმნა: {n}
 	{n} done	დასრულდა: {n}
@@ -364,9 +442,12 @@ unit	yr	წელი
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	გახსნილია {file} ({n} გაფრთხილება)|გახსნილია {file} ({n} გაფრთხილება)
 @plural	Removed {n} block|Removed {n} blocks	წაშლილია {n} ბლოკი|წაშლილია {n} ბლოკი
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.|მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	გაჩერების პირობა მიღწეულ იქნა {n} გამეორებიდან {met}-ში, საშუალოდ {time} {unit}-ის შემდეგ.|გაჩერების პირობა მიღწეულ იქნა {n} გამეორებიდან {met}-ში, საშუალოდ {time} {unit}-ის შემდეგ.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}-დან {done} გამეორება დასრულდა|{n}-დან {done} გამეორება დასრულდა
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით|{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით
 @plural	{n} block selected|{n} blocks selected	მონიშნულია {n} ბლოკი|მონიშნულია {n} ბლოკი
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} გამეორება თითო ნაბიჯზე · საწყისი მნიშვნელობა {seed}|{n} გამეორება თითო ნაბიჯზე · საწყისი მნიშვნელობა {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} გამეორება · საშუალო {mean} · {min}-დან {max}-მდე|{n} გამეორება · საშუალო {mean} · {min}-დან {max}-მდე
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}|{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} გამეორება · საწყისი მნიშვნელობა {seed}|{n} გამეორება · საწყისი მნიშვნელობა {seed}
 @plural	{n} replication|{n} replications	{n} გამეორება|{n} გამეორება

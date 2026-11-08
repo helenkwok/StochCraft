@@ -4,7 +4,9 @@
 //!
 //! Every run of a model variant uses the same seed and so the same random streams (common
 //! random numbers), so differences between variants come from the change, not from noise
-//! (Law, *Simulation Modeling and Analysis*, 5th ed., section 11.2).
+//! (Law, *Simulation Modeling and Analysis*, 5th ed., section 11.2). Replication i of one
+//! variant is paired with replication i of the other, and a difference is judged by the
+//! paired-t interval on those differences (Law, section 10.2.1).
 
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -12,7 +14,7 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric, compile, summarise};
 use stochcraft_experiment::Experiment;
 use stochcraft_model::{Dist, ElementId, ElementKind, Model, ResourcePool};
-use stochcraft_stats::Proportion;
+use stochcraft_stats::{Proportion, difference};
 
 use crate::{CommandError, ErrorCode, wire};
 
@@ -240,6 +242,35 @@ fn value(s: &ExperimentSummary, o: &Output) -> Result<Option<(f64, f64)>, Comman
     Ok(s.get(&o.element, m).map(|x| (x.mean, x.half_width)))
 }
 
+/// `o`'s value in each replication of `s`, in replication order (empty if the element did not
+/// report it).
+fn samples<'a>(s: &'a ExperimentSummary, o: &Output) -> Result<&'a [Option<f64>], CommandError> {
+    let m = metric(&o.metric)?;
+    Ok(s.elements
+        .iter()
+        .find(|e| e.id.as_str() == o.element)
+        .and_then(|e| e.samples(m))
+        .unwrap_or(&[]))
+}
+
+/// The paired difference `b` − `a` of `o`, replication by replication, as fields of an effect:
+/// `difference` (the mean of the differences), `half_width` (its 95% t half-width, n − 1
+/// degrees of freedom), `n` (the replications where both have a value) and `significant` (the
+/// interval excludes 0; `null` with fewer than two pairs).
+fn paired(
+    a: &ExperimentSummary,
+    b: &ExperimentSummary,
+    o: &Output,
+) -> Result<serde_json::Map<String, Value>, CommandError> {
+    let d = difference::paired(samples(a, o)?, samples(b, o)?);
+    let mut m = serde_json::Map::new();
+    m.insert("difference".into(), json!(d.map(|d| d.mean)));
+    m.insert("half_width".into(), json!(d.map(|d| d.half_width)));
+    m.insert("n".into(), json!(d.map_or(0, |d| d.n_a)));
+    m.insert("significant".into(), json!(d.and_then(|d| d.significant())));
+    Ok(m)
+}
+
 impl Target {
     fn meets(&self) -> Result<Box<dyn Fn(f64) -> bool>, CommandError> {
         match (self.at_least, self.at_most) {
@@ -316,15 +347,14 @@ pub fn sweep(model: &Model, p: &SweepParams) -> Result<Value, CommandError> {
     let (reps, seed) = reps_seed(model, p.replications, p.seed);
     let base = p.parameter.get(model)?;
     let mut points = Vec::new();
-    let mut series: Vec<Vec<Option<(f64, f64)>>> = vec![Vec::new(); p.results.len()];
+    let mut summaries = Vec::new();
     for &v in &p.values {
         let mut m = model.clone();
         p.parameter.set(&mut m, v)?;
         let s = run(&m, reps, seed)?;
         let mut results = Vec::new();
-        for (o, line) in p.results.iter().zip(&mut series) {
+        for o in &p.results {
             let x = value(&s, o)?;
-            line.push(x);
             results.push(json!({
                 "element": o.element,
                 "metric": o.metric,
@@ -333,25 +363,32 @@ pub fn sweep(model: &Model, p: &SweepParams) -> Result<Value, CommandError> {
             }));
         }
         points.push(json!({ "value": v, "results": results }));
+        summaries.push(s);
     }
-    // Across the range: how much each result moved, and whether more than the noise.
+    // Across the range: how much each result moved, and whether more than the noise, from the
+    // differences between the first and last values' replications.
+    let (Some(first), Some(last)) = (summaries.first(), summaries.last()) else {
+        return Err(invalid("give at least one value and one result"));
+    };
+    let (lo, hi) = (p.values.first(), p.values.last());
     let effects: Vec<Value> = p
         .results
         .iter()
-        .zip(&series)
-        .map(|(o, line)| {
-            let (first, last) = (line.first().copied().flatten(), line.last().copied().flatten());
-            let (lo, hi) = (p.values.first(), p.values.last());
-            let change = first.zip(last).map(|(a, b)| b.0 - a.0);
-            json!({
-                "element": o.element,
-                "metric": o.metric,
-                "change": change,
-                "per_unit": change.zip(lo.zip(hi)).and_then(|(c, (a, b))| (b != a).then(|| c / (b - a))),
-                "significant": first.zip(last).map(|(a, b)| (b.0 - a.0).abs() > a.1 + b.1),
-            })
+        .map(|o| {
+            let mut e = paired(first, last, o)?;
+            // How much the result moved: the paired difference.
+            let change = e.remove("difference").unwrap_or(Value::Null);
+            let per_unit = change
+                .as_f64()
+                .zip(lo.zip(hi))
+                .and_then(|(c, (a, b))| (b != a).then(|| c / (b - a)));
+            e.insert("element".into(), json!(o.element));
+            e.insert("metric".into(), json!(o.metric));
+            e.insert("change".into(), change);
+            e.insert("per_unit".into(), json!(per_unit));
+            Ok(Value::Object(e))
         })
-        .collect();
+        .collect::<Result<_, CommandError>>()?;
     Ok(json!({
         "parameter": p.parameter,
         "current": base,
@@ -359,7 +396,7 @@ pub fn sweep(model: &Model, p: &SweepParams) -> Result<Value, CommandError> {
         "seed": seed,
         "points": points,
         "effects": effects,
-        "method": "one run per value with the same seed (common random numbers); significant: the 95% intervals at the two ends do not overlap",
+        "method": "one run per value with the same seed (common random numbers), so replication i of every value meets the same random numbers; change: the mean over the replications of the result at the last value minus at the first, with half_width its 95% paired-t half-width (n − 1 degrees of freedom, n the replications where both have a value); significant: that interval excludes 0 (null with fewer than two pairs)",
     }))
 }
 
@@ -382,13 +419,20 @@ pub fn sensitivity(model: &Model, p: &SensitivityParams) -> Result<Value, Comman
         } else {
             x0 * change
         };
-        let (down, up) = ((x0 - step).max(0.0), x0 + step);
+        // Units cannot go below one, nor anything below zero: a parameter at its floor is
+        // compared one-sided, from its own value up.
+        let floor: f64 = match param.field {
+            Field::Capacity | Field::Quantity => 1.0,
+            Field::QueueCapacity | Field::Mean => 0.0,
+        };
+        let (down, up) = ((x0 - step).max(floor.min(x0)), x0 + step);
         let at = |v: f64| -> Result<ExperimentSummary, CommandError> {
             let mut m = model.clone();
             param.set(&mut m, v)?;
             run(&m, reps, seed)
         };
-        let (s_down, s_up) = (at(down)?, at(up)?);
+        let s_down = if down == x0 { base.clone() } else { at(down)? };
+        let s_up = at(up)?;
         for o in &p.results {
             let (y0, y_down, y_up) = (value(&base, o)?, value(&s_down, o)?, value(&s_up, o)?);
             let elasticity = match (y0, y_down, y_up) {
@@ -397,7 +441,7 @@ pub fn sensitivity(model: &Model, p: &SensitivityParams) -> Result<Value, Comman
                 }
                 _ => None,
             };
-            rows.push(json!({
+            let mut row = json!({
                 "parameter": param,
                 "value": x0,
                 "down": down,
@@ -408,10 +452,16 @@ pub fn sensitivity(model: &Model, p: &SensitivityParams) -> Result<Value, Comman
                 "at_down": y_down.map(|y| y.0),
                 "at_up": y_up.map(|y| y.0),
                 "elasticity": elasticity,
-                "significant": y_down.zip(y_up).map(|(a, b)| (b.0 - a.0).abs() > a.1 + b.1),
-            }));
+            });
+            // The effect, up − down replication by replication, and whether it is more than
+            // the noise.
+            if let Some(r) = row.as_object_mut() {
+                r.extend(paired(&s_down, &s_up, o)?);
+            }
+            rows.push(row);
         }
     }
+    let tests = rows.len() as u64;
     // Largest effect first.
     let size = |r: &Value| r["elasticity"].as_f64().map_or(-1.0, f64::abs);
     rows.sort_by(|a, b| size(b).total_cmp(&size(a)));
@@ -420,7 +470,8 @@ pub fn sensitivity(model: &Model, p: &SensitivityParams) -> Result<Value, Comman
         "replications": reps,
         "seed": seed,
         "effects": rows,
-        "method": "one parameter at a time, down and up by `change`, the same seed throughout (common random numbers); elasticity: the relative change in the result over the relative change in the parameter; significant: the 95% intervals at the two ends do not overlap",
+        "tests": tests,
+        "method": "one parameter at a time, down and up by `change`, the same seed throughout (common random numbers), so replication i of every run meets the same random numbers; elasticity: the relative change in the result over the relative change in the parameter; difference: the mean over the replications of the result at up minus at down, with half_width its 95% paired-t half-width (n − 1 degrees of freedom, n the replications where both have a value); significant: that interval excludes 0 (null with fewer than two pairs). Each of the `tests` effects is tested on its own at 95%, so about one in twenty of those with no real effect still shows as significant by chance; for 95% confidence in all of them at once (Bonferroni), each would need its own interval at 1 − 0.05/tests, which is wider",
     }))
 }
 

@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Slovenščina
+	% down and up	% navzdol in navzgor
+	% of replications	% ponovitev
 	+ Add block	+ Dodaj blok
+	95th percentile	95. percentil
+	95th percentile {value}	95. percentil {value}
 	About StochCraft	O programu StochCraft
 	About {app}	O programu {app}
+	Across the range it changed by {change}: more than chance would explain.	V razponu se je spremenil za {change}: več, kot bi pojasnilo naključje.
+	Across the range it changed by {change}: within what chance alone could do.	V razponu se je spremenil za {change}: v mejah tega, kar zmore samo naključje.
 	Actual size	Dejanska velikost
 	Add Block	Dodaj blok
 	Add a flow from…	Dodaj tok iz…
 	Add a flow to…	Dodaj tok v…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Dodajajte enoto pri najbolj obremenjenem opravilu ali skupini, dokler dovolj ponovitev ne doseže cilja. Prikazan je tudi odgovor, pri katerem je vsak čas na svojem povprečju; običajno je premajhen.
 	Add alternative	Dodaj alternativo
 	Add point	Dodaj točko
 	Add pool	Dodaj skupino
@@ -27,9 +34,12 @@
 	Added {block} ({id})	Dodan {block} ({id})
 	Align	Poravnaj
 	Alternative {n}	Alternativa {n}
+	Analysis	Analiza
 	Appearance	Videz
 	Arrival limit	Omejitev prihodov
 	Arrivals	Prihodi
+	At least	Vsaj
+	At most	Največ
 	Availability	Razpoložljivost
 	BPMN with BPSim	BPMN z BPSim
 	Back to the model (Esc)	Nazaj na model (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Velikost serije
 	Beta	Beta
 	Binomial	Binomska
+	Block	Blok
 	Boolean	Logična vrednost
 	Bottoms	Spodnji robovi
 	Bring All to Front	Vse v ospredje
 	Built with	Ustvarjeno z
+	Busiest	Najbolj obremenjen
 	By role	Po vlogi
 	CSV table	Tabela CSV
 	Cancel	Prekliči
@@ -49,10 +61,13 @@
 	Cancel run	Prekliči izvajanje
 	Capacity	Zmogljivost
 	Centres	Vodoravna središča
+	Change	Sprememba
 	Change Block	Spremeni blok
 	Change Flow	Spremeni tok
+	Change the estimate	Spremeni oceno
 	Changes	Spremembe
 	Changing the time unit does not convert the times already in the model.	Sprememba časovne enote ne pretvori časov, ki so že v modelu.
+	Choose…	Izberite …
 	Clear Menu	Počisti meni
 	Close	Zapri
 	Close Window	Zapri okno
@@ -88,11 +103,16 @@
 	Drag to add:	Povlecite za dodajanje:
 	Duplicate	Podvoji
 	Duration	Trajanje
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Vsaka analiza večkrat zažene poskus z istim semenom, zato razlike izhajajo iz spremembe, ne iz naključja. To lahko traja nekaj časa.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Vsaka entiteta vzame prvo od teh možnosti, ki jo je mogoče izpolniti zdaj, vse naenkrat, in enote vrne, ko odide.
 	Edit	Urejanje
+	Elasticity	Elastičnost
+	Ends early	Konča se prej
+	Enough: {units}, meeting the target in {p} of replications	Dovolj: {units}, cilj dosežen v {p} ponovitev
 	Entered	Vstopilo
 	Erlang	Erlangova
 	Error	Napaka
+	Estimate from three values…	Oceni iz treh vrednosti …
 	Evenly across	Enakomerno vodoravno
 	Evenly down	Enakomerno navpično
 	Every distribution	Vse porazdelitve
@@ -105,20 +125,27 @@
 	Export table (CSV)	Izvozi tabelo (CSV)
 	Exported {file}	Izvoženo {file}
 	Expression	Izraz
+	Family	Družina
 	File	Datoteka
 	Finished at {time} {unit}	Končano ob {time} {unit}
 	Fit	Prilagodi
 	Fit the diagram to the view	Prilagodi diagram pogledu
+	Fit the time	Prilagodi čas
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Prilagodite čas tega bloka minimumu, najverjetnejši vrednosti in maksimumu ali 95. percentilu.
+	Fitted the time of {id}	Čas za {id} prilagojen
 	Flows	Tokovi
+	Forget the estimate	Pozabi oceno
 	From	Iz
 	Gamma	Gama
 	Goes to	Vodi v
 	Help	Pomoč
 	Hide Others	Skrij druge
 	Hide {app}	Skrij {app}
+	How many	Koliko
 	Inside over time	Notri skozi čas
 	Jump	Skoči
 	Jump to time	Skoči na čas
+	Keep the time, without the estimate it came from	Ohrani čas brez ocene, iz katere izhaja
 	Keyboard Shortcuts…	Bližnjice na tipkovnici…
 	Keyboard shortcuts saved	Bližnjice na tipkovnici shranjene
 	Keyboard shortcuts unchanged	Bližnjice na tipkovnici nespremenjene
@@ -140,6 +167,7 @@
 	Mean time blocked	Povprečni čas blokiranja
 	Mean time in system	Povprečni čas v sistemu
 	Mean wait	Povprečno čakanje
+	Met in at least	Doseženo v vsaj
 	Metric	Kazalnik
 	Middles	Navpična središča
 	Minimise	Pomanjšaj
@@ -148,19 +176,25 @@
 	Model	Model
 	Most likely	Najverjetnejša vrednost
 	Move	Premik
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Vsak parameter po vrsti premaknite navzdol in navzgor ter jih razvrstite po tem, koliko se rezultat premakne.
 	Name	Ime
 	Needs	Zahteve
+	Never: it runs for its duration	Nikoli: teče ves čas trajanja
 	New	Nov
 	New model	Nov model
 	New property	Nova lastnost
 	New property name	Ime nove lastnosti
 	No blocks yet. Open a model, or add blocks to build one.	Blokov še ni. Odprite model ali dodajte bloke za ustvarjanje modela.
 	No connections yet: join blocks below.	Povezav še ni: povežite spodnje bloke.
+	No replication met the stop condition: each ran to its time limit.	Nobena ponovitev ni dosegla pogoja za ustavitev: vsaka je tekla do svoje časovne omejitve.
 	No results yet	Rezultatov še ni
+	No target	Brez cilja
 	None	Brez
 	None found. The model is ready to run.	Težav ni bilo najdenih. Model je pripravljen na izvajanje.
 	Normal	Normalna
+	Not reached, even with {units}	Ni doseženo, niti z {units}
 	Number	Število
+	One change, which Undo takes back	Ena sprememba, ki jo Razveljavi prekliče
 	One clerk, random arrivals: the textbook queue, checked against theory.	En uslužbenec, naključni prihodi: klasična čakalna vrsta, preverjena s teorijo.
 	One task per BPSim distribution, to compare their spread.	Ena naloga na porazdelitev BPSim za primerjavo njihove razpršenosti.
 	Open	Odpri
@@ -173,10 +207,13 @@
 	Opened {file}	Odprto {file}
 	Open…	Odpri…
 	Or start from an example	Ali začnite s primerom
+	PERT	PERT
 	PNG image	Slika PNG
+	Parameter	Parameter
 	Parameters	Parametri
 	Paste	Prilepi
 	Pause	Premor
+	Percentile	Percentil
 	Play	Predvajaj
 	Points	Točke
 	Poisson	Poissonova
@@ -190,6 +227,7 @@
 	Properties	Lastnosti
 	Quit	Izhod
 	Quit {app}	Končaj {app}
+	Rank the parameters	Razvrsti parametre
 	Ready	Omogočeno
 	Recover	Obnovi
 	Recover unsaved changes?	Obnoviti neshranjene spremembe?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	Ponovitev 1 · {time} od {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Ponovitev 1 · {time} od {end} {unit} · ogrevanje
 	Replications	Ponovitve
+	Replications meeting the target	Ponovitve, ki dosežejo cilj
+	Replications that never met the stop condition count as later than their time limit.	Ponovitve, ki nikoli niso dosegle pogoja za ustavitev, štejejo kot poznejše od svoje časovne omejitve.
 	Resource pool	Skupina virov
 	Resource pools	Skupine virov
 	Restore	Obnovi okno
+	Result	Rezultat
+	Result to compare	Rezultat za primerjavo
+	Result to explain	Rezultat za razlago
+	Result with a target	Rezultat s ciljem
+	Result, down and up	Rezultat, navzdol in navzgor
 	Results	Rezultati
 	Right edges	Desni robovi
 	Roles	Vloge
@@ -223,7 +268,10 @@
 	Run experiment	Zaženi poskus
 	Run replication 1 step by step and see each block's queue on the diagram	Zaženi ponovitev 1 korak za korakom in spremljaj vrsto vsakega bloka v diagramu
 	Run the experiment ({shortcut})	Zaženi poskus ({shortcut})
+	Run the experiment again to see this result's spread.	Znova zaženite poskus, da vidite razpršenost tega rezultata.
+	Run the experiment at each value of one parameter, and compare a result.	Zaženite poskus pri vsaki vrednosti enega parametra in primerjajte rezultat.
 	Run the next event	Izvedi naslednji dogodek
+	Run the sweep	Zaženi preletanje
 	Running	Izvaja se
 	Running…	Izvaja se…
 	Save	Shrani
@@ -235,6 +283,7 @@
 	Seed	Seme
 	Select All	Izberi vse
 	Select a block to see its queue over time.	Izberite blok, da vidite njegovo vrsto skozi čas.
+	Separate the values with semicolons or spaces.	Vrednosti ločite s podpičji ali presledki.
 	Service time	Čas strežbe
 	Services	Storitve
 	Set Property	Nastavi lastnost
@@ -243,13 +292,19 @@
 	Settings	Nastavitve
 	Shape	Oblika
 	Share of arrivals lost	Delež izgubljenih prihodov
+	Share of replications	Delež ponovitev
 	Share of units blocked	Delež blokiranih enot
 	Show All	Pokaži vse
 	Show {id}	Prikaži {id}
+	Size	Dimenzioniraj
+	Size the resources	Dimenzioniraj vire
+	Source	Vir
+	Source: {source}	Vir: {source}
 	Speed	Hitrost
 	Split batches	Razdelitev serij
 	Split or join	Razdeli ali združi
 	Split or join (all ways)	Razdeli ali združi (vse poti)
+	Spread across replications	Razpršenost med ponovitvami
 	Spread out	Razporedi
 	Stages (k)	Stopnje (k)
 	Standard deviation	Standardni odklon
@@ -261,17 +316,25 @@
 	Stop setting {name}	Nehaj nastavljati {name}
 	Stop watching	Ustavi spremljanje
 	Stopped watching	Spremljanje ustavljeno
+	Sweep a parameter	Preletanje parametra
 	Tandem line	Zaporedna linija
+	Target	Cilj
+	Target value	Ciljna vrednost
 	Task	Naloga
 	Task with a resource	Naloga z virom
 	Task with shared resources	Naloga s skupnimi viri
 	Text	Besedilo
 	The model changed, so watching stopped	Model se je spremenil, zato se je spremljanje ustavilo
+	The model now has the units sizing found	Model ima zdaj enote, ki jih je našlo dimenzioniranje
 	The model: its experiment, connections and problems	Model: poskus, povezave in težave
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Delež ponovitev, enakih ali manjših od vsake vrednosti. Pas vsebuje pravo porazdelitev z zaupanjem {confidence}.
+	The values are numbers, separated by semicolons or spaces	Vrednosti so števila, ločena s podpičji ali presledki
 	This block has a warning	Ta blok ima opozorilo
 	This block has an error	Ta blok ima napako
 	This run	Ta zagon
+	Three-point estimate	Tritočkovna ocena
 	Time between arrivals	Čas med prihodi
+	Time to the stop condition	Čas do pogoja za ustavitev
 	Time unit	Časovna enota
 	To	V
 	Tops	Zgornji robovi
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Enote, ki si jih deli več nalog. Naloga s skupnimi viri jih vzame iz skupine ali po vlogi.
 	Untitled	Brez naslova
 	Untitled model	Neimenovan model
+	Upper value	Zgornja vrednost
 	Use System Setting	Uporabi sistemsko nastavitev
+	Use these units in the model	Uporabi te enote v modelu
 	Utilisation	Izkoriščenost
 	Value	Vrednost
+	Values	Vrednosti
 	View	Pogled
 	Waiting over time	Čakajoči skozi čas
 	Waiting room	Čakalnica
@@ -302,8 +368,12 @@
 	Watch a run	Spremljaj zagon
 	Watching replication 1	Spremljanje ponovitve 1
 	Weibull	Weibullova
+	When a task empties	Ko se opravilo izprazni
+	When enough have left a block	Ko blok zapusti dovolj entitet
+	Which parameters matter	Kateri parametri so pomembni
 	Whole number	Celo število
 	Window	Okno
+	With every time at its mean: {units}	Z vsakim časom na povprečju: {units}
 	Yes or no	Da ali ne
 	Your changes will be lost if you don't save them.	Vaše spremembe bodo izgubljene, če jih ne shranite.
 	Zoom	Povečava
@@ -317,8 +387,11 @@
 	departures	odhodi
 	egui and eframe (Craft suite fork)	egui in eframe (različica paketa Craft)
 	from its value	glede na vrednost
+	have left	zapustilo
 	hours	ure
 	id {id}	id {id}
+	matters	je pomemben
+	maximum {value}	maksimum {value}
 	milliseconds	milisekunde
 	minutes	minute
 	nothing yet	še nič
@@ -335,12 +408,17 @@
 	time	čas
 	to {block}	v {block}
 	unlimited	neomejeno
+	who gave it, or where it comes from	kdo jo je dal ali od kod izhaja
+	within chance	v mejah naključja
 	years	leta
+	{block}: units	{block}: enote
 	{busy} busy	Zasedeno: {busy}
 	{entered} in, {left} out, {lost} lost	Vstopilo: {entered}, izstopilo: {left}, izgubljeno: {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, najverjetnejša {mode}, {upper}
 	{field}: not editable here yet	{field}: tukaj še ni mogoče urejati
 	{id}: a probability is a number from 0 to 1	{id}: verjetnost je število od 0 do 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} od {of} ponovitev je doseglo cilj: {p} (95-odstotni interval od {lo} do {hi})
 	{name} — edited	{name} — urejeno
 	{n} created	Ustvarjeno: {n}
 	{n} done	Končano: {n}
@@ -364,9 +442,12 @@ unit	yr	l.
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Odprto {file} ({n} opozorilo)|Odprto {file} ({n} opozorili)|Odprto {file} ({n} opozorila)|Odprto {file} ({n} opozoril)
 @plural	Removed {n} block|Removed {n} blocks	Odstranjen je {n} blok|Odstranjena sta {n} bloka|Odstranjeni so {n} bloki|Odstranjenih je {n} blokov
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Izvede {n} neodvisno ponovitev modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisni ponovitvi modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisne ponovitve modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisnih ponovitev modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Pogoj za ustavitev je bil dosežen v {met} od {n} ponovitve, v povprečju po {time} {unit}.|Pogoj za ustavitev je bil dosežen v {met} od {n} ponovitev, v povprečju po {time} {unit}.|Pogoj za ustavitev je bil dosežen v {met} od {n} ponovitev, v povprečju po {time} {unit}.|Pogoj za ustavitev je bil dosežen v {met} od {n} ponovitev, v povprečju po {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Končana {done} od {n} ponovitve|Končani {done} od {n} ponovitev|Končane {done} od {n} ponovitev|Končanih {done} od {n} ponovitev
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvi|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah
 @plural	{n} block selected|{n} blocks selected	Izbran je {n} blok|Izbrana sta {n} bloka|Izbrani so {n} bloki|Izbranih je {n} blokov
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} ponovitev na korak · seme {seed}|{n} ponovitvi na korak · seme {seed}|{n} ponovitve na korak · seme {seed}|{n} ponovitev na korak · seme {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} ponovitev · povprečje {mean} · od {min} do {max}|{n} ponovitvi · povprečje {mean} · od {min} do {max}|{n} ponovitve · povprečje {mean} · od {min} do {max}|{n} ponovitev · povprečje {mean} · od {min} do {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitvi · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitve · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ponovitev · seme {seed}|{n} ponovitvi · seme {seed}|{n} ponovitve · seme {seed}|{n} ponovitev · seme {seed}
 @plural	{n} replication|{n} replications	{n} ponovitev|{n} ponovitvi|{n} ponovitve|{n} ponovitev

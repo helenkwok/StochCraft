@@ -306,7 +306,8 @@ understand.
   in the same state.
 - `run` returns the results at once (`ExperimentResult` as JSON: per element and metric, the
   mean, 95% half-width, standard deviation and n). `run.start` runs in the background, on
-  worker threads natively and in slices (a few replications per `run.status`) in the browser;
+  worker threads natively and in slices (a bounded number of events per `run.status`, see
+  M3.6) in the browser;
   both give exactly the results of `run`. `run.cancel` stops new replications from starting
   (`stochcraft-experiment` gains a `Control` with progress and cancellation); one already
   running finishes first.
@@ -863,7 +864,11 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   same seed so the random streams are shared (common random numbers). The parameter is a
   task's `capacity`, a pool's `quantity`, a `queue_capacity`, or the `mean` of a time
   distribution (`Dist::scaled` keeps its shape). It reports the results asked for at each
-  value, and how much each moved across the range, with whether that is more than the noise.
+  value, and how much each moved across the range, with whether that is more than the noise
+  (a paired-t interval on the replications' differences, issue #66).
+- **Comparing two runs:** `results.compare` gives, per element and metric, both runs' means
+  and the difference with its 95% interval: paired-t when the runs share their seed and
+  replications, Welch's two-sample t otherwise (issue #66).
 - **Sensitivity:** `experiment.sensitivity` moves each parameter down and up by a fraction,
   one at a time, and ranks the results' elasticities. Every sweep and sensitivity analysis is
   recorded, with the model's digest, in the `sensitivity` list of later runs' records
@@ -902,9 +907,35 @@ as the NNSA study found.
 | Elasticity of M/M/1 time in system to the service time (±10%) | 4.40 | 4.32 |
 | Same, to the time between arrivals | −3.57 | −3.42 |
 
+**In the window** (`ui-egui/src/decide.rs`):
+- **Experiment:** the model overview's "Ends early" sets the stop condition: when enough
+  entities have left a block, or when a task empties.
+- **Three-point estimate:** a timed block's inspector fits its time to a three-point estimate,
+  with the family, the upper value (a maximum or a 95th percentile) and the source. Once
+  fitted, the inspector shows the estimate, which can be changed or forgotten.
+- **Results:**
+  - A line says when the stop condition was met.
+  - "Spread across replications" shows any one result's percentiles and its empirical
+    distribution, drawn with its confidence band, and the time to the stop.
+  - With a target, it gives how many replications met it, as a share with its interval.
+- **Analysis**, a third view beside Model and Results:
+  - a sweep of one parameter, with the result at each value and whether it moved more than
+    chance;
+  - every parameter ranked by elasticity, with which ones matter;
+  - sizing to a target met in a chosen share of replications, beside the answer from mean
+    times, with a button that applies it as one undo step.
+
+  An answer is shown only while the model is the one it was found for. Analyses run at once on
+  the window's thread.
+- **Engine:**
+  - A window's background run now keeps its results for `results.distribution`.
+  - Sensitivity no longer takes a unit count below one: a parameter already at its floor is
+    compared from its own value up.
+- **Tests:** `ui-egui/tests/decide.rs`; the strings in all 44 catalogs.
+
 **Not yet:** sizing several resources a step at a time, or by cost; designed experiments with
-several factors at once (factorial, Latin hypercube); saving targets in the model file; and a
-window for these commands.
+several factors at once (factorial, Latin hypercube); saving targets in the model file; and
+running analyses in the background or on the browser's web workers.
 
 **Later in M2 or M4:** conveyors with length, speed and accumulation; travel networks for
 forklifts and AGVs; agent behaviours (`agents` crate); stock-and-flow (`sd` crate, XMILE);
@@ -1122,7 +1153,18 @@ replications other than the first.
   - There is one worker per core but one, up to 16.
   - Each worker loads `stochcraft-worker` (`src/worker.rs`, 0.75 MB of WebAssembly), and is
     given the next replication as soon as it answers.
-  - Where workers cannot start, the page runs the replications itself between frames, as before.
+  - Where workers cannot start, the page runs the replications itself between frames, in
+    slices of events (#43): each frame runs at most `SLICE_EVENTS` (5,000) events, and a
+    replication that does not finish carries on in the next frame (the `Live` run is kept in the
+    engine between polls). So one long replication no longer freezes the tab, Cancel acts within
+    a frame, and the progress bar moves within a replication. The stuck-time limit counts events
+    at one time across slices (`des::Sim::run_watched_slice`), so it fires as before. Results
+    are exactly those of threads whatever the slice size: `engine/tests/slices.rs` checks slices
+    of 1, 7, 1,000 and unlimited events on every committed model, plus models with a warm-up, a
+    shared pool and stop conditions. The slice size is an estimate: natively (release, one core
+    of an i7-12700K) the test models run at 1,900 to 7,200 events per millisecond; assuming
+    WebAssembly on a laptop at about a third of that, 5,000 events take at most about 8 ms, half
+    a 60 fps frame.
 - **Installable and offline.**
   - A web app manifest and an icon make the page installable.
   - A service worker (`sw.js`) keeps the page and every file it names when it installs, so the

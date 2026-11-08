@@ -315,6 +315,17 @@ The methods of M2.8, each implemented from its published description:
   analysis or a sizing step is run with the same seed, so each replication meets the same
   random numbers (Law, above, section 11.2), and differences between variants come from the
   change rather than from noise.
+- **Judging a difference**: sweeps, sensitivity analyses and `results.compare` pair replication
+  i of one variant with replication i of the other and give the mean difference with its 95%
+  paired-t interval, n − 1 degrees of freedom for n pairs (Law, above, section 10.2.1). A
+  difference is significant when that interval excludes 0.
+  Checking whether the two variants' own intervals overlap instead is far too strict: in the
+  M/M/1 of issue #66 they overlap, while the paired interval, +0.641 ± 0.149, is well clear of 0.
+  Runs with different seeds or replication counts are independent, and `results.compare` uses
+  Welch's two-sample t interval for them (Law, section 10.2.2), its Welch–Satterthwaite degrees
+  of freedom rounded down. A sensitivity analysis tests each of its effects at 95% on its own
+  and reports how many it tested; it does not adjust for the number of tests (Bonferroni's
+  inequality, Law, section 10.3, would ask each to be at 1 − 0.05/tests).
 - **Elasticities** are central differences, one parameter at a time: the relative change in a
   result over the relative change in the parameter. For the M/M/1 time in system
   W = s / (1 − s/a), with service time s and time between arrivals a, they are 1 / (1 − ρ) and

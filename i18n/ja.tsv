@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	日本語
+	% down and up	% ずつ上下
+	% of replications	% の反復実行
 	+ Add block	+ ブロックを追加
+	95th percentile	95 パーセンタイル
+	95th percentile {value}	95 パーセンタイル {value}
 	About StochCraft	StochCraft について
 	About {app}	{app} について
+	Across the range it changed by {change}: more than chance would explain.	範囲全体で {change} 変化しました。偶然では説明できない大きさです。
+	Across the range it changed by {change}: within what chance alone could do.	範囲全体で {change} 変化しました。偶然だけでも起こりうる範囲です。
 	Actual size	実際のサイズ
 	Add Block	ブロックを追加
 	Add a flow from…	接続元…
 	Add a flow to…	接続先…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	十分な反復実行が目標を満たすまで、最も稼働率の高いタスクまたはプールに 1 単位ずつ追加します。すべての時間を平均値にした場合の答えも表示しますが、通常は小さすぎます。
 	Add alternative	代替案を追加
 	Add point	点を追加
 	Add pool	プールを追加
@@ -27,9 +34,12 @@
 	Added {block} ({id})	{block} ({id}) を追加しました
 	Align	整列
 	Alternative {n}	代替案 {n}
+	Analysis	分析
 	Appearance	外観
 	Arrival limit	到着数の上限
 	Arrivals	到着
+	At least	以上
+	At most	以下
 	Availability	可用率
 	BPMN with BPSim	BPSim 付き BPMN
 	Back to the model (Esc)	モデルに戻る (Esc)
@@ -38,10 +48,12 @@
 	Batch size	バッチサイズ
 	Beta	ベータ分布
 	Binomial	二項分布
+	Block	ブロック
 	Boolean	真偽値
 	Bottoms	下端
 	Bring All to Front	すべてを手前に移動
 	Built with	使用技術
+	Busiest	最も稼働率が高い
 	By role	役割で指定
 	CSV table	CSV 表
 	Cancel	キャンセル
@@ -49,10 +61,13 @@
 	Cancel run	実行をキャンセル
 	Capacity	処理能力
 	Centres	左右中央
+	Change	変化幅
 	Change Block	ブロックを変更
 	Change Flow	フローを変更
+	Change the estimate	見積もりを変更
 	Changes	変更
 	Changing the time unit does not convert the times already in the model.	時間単位を変更しても、モデル内の既存の時間は換算されません。
+	Choose…	選択…
 	Clear Menu	メニューを消去
 	Close	閉じる
 	Close Window	ウィンドウを閉じる
@@ -88,11 +103,16 @@
 	Drag to add:	ドラッグして追加:
 	Duplicate	複製
 	Duration	継続時間
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	各分析は同じ乱数シードで実験を何度か実行するため、差は偶然ではなく変更によるものです。時間がかかることがあります。
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	各エンティティは、これらのうち今すぐ一度にすべて満たせる最初のものを確保し、退出するときにユニットを返却します。
 	Edit	編集
+	Elasticity	弾力性
+	Ends early	早期終了
+	Enough: {units}, meeting the target in {p} of replications	十分: {units}、反復実行の {p} で目標を達成
 	Entered	流入数
 	Erlang	アーラン分布
 	Error	エラー
+	Estimate from three values…	3 つの値から見積もる…
 	Evenly across	左右に均等配置
 	Evenly down	上下に均等配置
 	Every distribution	すべての分布
@@ -105,20 +125,27 @@
 	Export table (CSV)	表をエクスポート (CSV)
 	Exported {file}	{file} をエクスポートしました
 	Expression	式
+	Family	分布族
 	File	ファイル
 	Finished at {time} {unit}	{time} {unit} で終了しました
 	Fit	全体表示
 	Fit the diagram to the view	ダイアグラム全体をビューに収める
+	Fit the time	時間を当てはめる
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	このブロックの時間を、最小値・最頻値・最大値または 95 パーセンタイルに当てはめます。
+	Fitted the time of {id}	{id} の時間を当てはめました
 	Flows	フロー
+	Forget the estimate	見積もりを破棄
 	From	接続元
 	Gamma	ガンマ分布
 	Goes to	接続先
 	Help	ヘルプ
 	Hide Others	その他を隠す
 	Hide {app}	{app} を隠す
+	How many	数
 	Inside over time	内部の数の推移
 	Jump	移動
 	Jump to time	移動先の時刻
+	Keep the time, without the estimate it came from	時間は残し、元の見積もりは破棄します
 	Keyboard Shortcuts…	キーボードショートカット…
 	Keyboard shortcuts saved	キーボードショートカットを保存しました
 	Keyboard shortcuts unchanged	キーボードショートカットは変更されていません
@@ -140,6 +167,7 @@
 	Mean time blocked	平均ブロック時間
 	Mean time in system	システム内の平均滞在時間
 	Mean wait	平均待ち時間
+	Met in at least	達成率
 	Metric	指標
 	Middles	上下中央
 	Minimise	最小化
@@ -148,19 +176,25 @@
 	Model	モデル
 	Most likely	最頻値
 	Move	移動
+	Move each parameter down and up in turn, and rank them by how much the result moves.	各パラメーターを順に上下させ、結果がどれだけ動くかで順位を付けます。
 	Name	名前
 	Needs	必要なリソース
+	Never: it runs for its duration	なし: 継続時間いっぱい実行
 	New	新規
 	New model	新しいモデル
 	New property	新しいプロパティ
 	New property name	新しいプロパティ名
 	No blocks yet. Open a model, or add blocks to build one.	ブロックはまだありません。モデルを開くか、ブロックを追加して作成してください。
 	No connections yet: join blocks below.	接続はまだありません。下のブロック同士をつないでください。
+	No replication met the stop condition: each ran to its time limit.	停止条件に達した反復実行はありません。すべて時間制限まで実行されました。
 	No results yet	結果はまだありません
+	No target	目標なし
 	None	なし
 	None found. The model is ready to run.	問題は見つかりませんでした。モデルを実行できます。
 	Normal	正規分布
+	Not reached, even with {units}	{units} でも未達成
 	Number	数値
+	One change, which Undo takes back	元に戻すで取り消せる 1 回の変更
 	One clerk, random arrivals: the textbook queue, checked against theory.	窓口が 1 つ、到着はランダム。教科書的な待ち行列を理論値と比較します。
 	One task per BPSim distribution, to compare their spread.	各 BPSim 分布につき 1 つのタスクを使い、ばらつきを比較します。
 	Open	開く
@@ -173,10 +207,13 @@
 	Opened {file}	{file} を開きました
 	Open…	開く…
 	Or start from an example	またはサンプルから始める
+	PERT	PERT
 	PNG image	PNG 画像
+	Parameter	パラメーター
 	Parameters	パラメータ
 	Paste	貼り付け
 	Pause	一時停止
+	Percentile	パーセンタイル
 	Play	再生
 	Points	点
 	Poisson	ポアソン分布
@@ -190,6 +227,7 @@
 	Properties	プロパティ
 	Quit	終了
 	Quit {app}	{app} を終了
+	Rank the parameters	パラメーターを順位付け
 	Ready	適用可能
 	Recover	復元
 	Recover unsaved changes?	保存されていない変更を復元しますか？
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	反復実行 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	反復実行 1 · {time} / {end} {unit} · ウォームアップ
 	Replications	反復実行回数
+	Replications meeting the target	目標を満たした反復実行
+	Replications that never met the stop condition count as later than their time limit.	停止条件に達しなかった反復実行は、時間制限より後として数えます。
 	Resource pool	リソースプール
 	Resource pools	リソースプール
 	Restore	元に戻す
+	Result	結果
+	Result to compare	比較する結果
+	Result to explain	説明する結果
+	Result with a target	目標のある結果
+	Result, down and up	結果（下げた場合と上げた場合）
 	Results	結果
 	Right edges	右端
 	Roles	役割
@@ -223,7 +268,10 @@
 	Run experiment	実験を実行
 	Run replication 1 step by step and see each block's queue on the diagram	反復実行 1 を1ステップずつ実行し、各ブロックの待ち行列をダイアグラム上で確認します
 	Run the experiment ({shortcut})	実験を実行 ({shortcut})
+	Run the experiment again to see this result's spread.	この結果のばらつきを見るには、実験をもう一度実行してください。
+	Run the experiment at each value of one parameter, and compare a result.	1 つのパラメーターの各値で実験を実行し、結果を比較します。
 	Run the next event	次のイベントを実行
+	Run the sweep	スイープを実行
 	Running	実行中
 	Running…	実行中…
 	Save	保存
@@ -235,6 +283,7 @@
 	Seed	乱数シード
 	Select All	すべて選択
 	Select a block to see its queue over time.	ブロックを選択すると、その待ち行列の推移が表示されます。
+	Separate the values with semicolons or spaces.	値はセミコロンまたはスペースで区切ってください。
 	Service time	サービス時間
 	Services	サービス
 	Set Property	プロパティを設定
@@ -243,13 +292,19 @@
 	Settings	設定
 	Shape	形状
 	Share of arrivals lost	到着数の損失割合
+	Share of replications	反復実行の割合
 	Share of units blocked	処理単位のブロック割合
 	Show All	すべてを表示
 	Show {id}	{id} を表示
+	Size	サイズを決める
+	Size the resources	リソースのサイズ決定
+	Source	出典
+	Source: {source}	出典: {source}
 	Speed	速度
 	Split batches	バッチの分割
 	Split or join	分岐または結合
 	Split or join (all ways)	分岐または結合（すべての経路）
+	Spread across replications	反復実行間のばらつき
 	Spread out	均等配置
 	Stages (k)	段階数 (k)
 	Standard deviation	標準偏差
@@ -261,17 +316,25 @@
 	Stop setting {name}	{name} の設定を中止
 	Stop watching	観察を終了
 	Stopped watching	観察を終了しました
+	Sweep a parameter	パラメーターのスイープ
 	Tandem line	直列ライン
+	Target	目標
+	Target value	目標値
 	Task	タスク
 	Task with a resource	リソースを使うタスク
 	Task with shared resources	共有リソースを使うタスク
 	Text	テキスト
 	The model changed, so watching stopped	モデルが変更されたため、観察を終了しました
+	The model now has the units sizing found	サイズ決定で求めた数量をモデルに反映しました
 	The model: its experiment, connections and problems	モデル：実験、接続、問題
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	各値以下となった反復実行の割合。帯は {confidence} の信頼度で真の分布を含みます。
+	The values are numbers, separated by semicolons or spaces	値はセミコロンまたはスペースで区切った数値です
 	This block has a warning	このブロックには警告があります
 	This block has an error	このブロックにはエラーがあります
 	This run	この実行
+	Three-point estimate	三点見積もり
 	Time between arrivals	到着間隔
+	Time to the stop condition	停止条件までの時間
 	Time unit	時間単位
 	To	接続先
 	Tops	上端
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	複数のタスクで共有するユニット。共有リソースを使うタスクは、プールまたは役割を指定してユニットを確保します。
 	Untitled	名称未設定
 	Untitled model	無題のモデル
+	Upper value	上限値
 	Use System Setting	システム設定を使用
+	Use these units in the model	この数量をモデルで使う
 	Utilisation	稼働率
 	Value	値
+	Values	値
 	View	表示
 	Waiting over time	待ち数の推移
 	Waiting room	待機場所
@@ -302,8 +368,12 @@
 	Watch a run	実行を観察
 	Watching replication 1	反復実行 1 を観察中
 	Weibull	ワイブル分布
+	When a task empties	タスクが空になったとき
+	When enough have left a block	ブロックから十分な数が出たとき
+	Which parameters matter	効いているパラメーター
 	Whole number	整数
 	Window	ウィンドウ
+	With every time at its mean: {units}	すべての時間を平均値にした場合: {units}
 	Yes or no	はい／いいえ
 	Your changes will be lost if you don't save them.	保存しないと変更は失われます。
 	Zoom	ズーム
@@ -317,8 +387,11 @@
 	departures	退出
 	egui and eframe (Craft suite fork)	egui と eframe（Craft スイートのフォーク）
 	from its value	値から判定
+	have left	出たとき
 	hours	時間
 	id {id}	ID {id}
+	matters	影響あり
+	maximum {value}	最大値 {value}
 	milliseconds	ミリ秒
 	minutes	分
 	nothing yet	まだありません
@@ -335,12 +408,17 @@
 	time	時刻
 	to {block}	{block} へ
 	unlimited	無制限
+	who gave it, or where it comes from	誰が出したか、またはどこからの値か
+	within chance	偶然の範囲内
 	years	年
+	{block}: units	{block}: 数量
 	{busy} busy	使用中 {busy}
 	{entered} in, {left} out, {lost} lost	入 {entered}・出 {left}・損失 {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: 最小値 {min}、最頻値 {mode}、{upper}
 	{field}: not editable here yet	{field}：ここではまだ編集できません
 	{id}: a probability is a number from 0 to 1	{id}：確率は 0 から 1 までの数値です
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} 回中 {met} 回が目標を達成: {p}（95% 区間 {lo}〜{hi}）
 	{name} — edited	{name} — 編集済み
 	{n} created	生成 {n}
 	{n} done	完了 {n}
@@ -364,9 +442,12 @@ unit	yr	年
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} を開きました（警告 {n} 件）
 @plural	Removed {n} block|Removed {n} blocks	{n} 個のブロックを削除しました
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	シード {seed} からモデルを {n} 回独立に反復実行します。各要素の結果には、95% 信頼区間の半幅が示されます。
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	停止条件は {n} 回中 {met} 回の反復実行で、平均 {time} {unit} 後に達しました。
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} 回中 {done} 回の反復実行が完了
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}：{mean}{unit}\n95% 区間 {low} ～ {high}{unit}\n{n} 回の反復実行に基づく
 @plural	{n} block selected|{n} blocks selected	{n} 個のブロックを選択中
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	各ステップ {n} 回の反復実行 · シード {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} 回の反復実行 · 平均 {mean} · {min}〜{max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 回の反復実行 · シード {seed} · ウォームアップ {warmup} {unit} · 測定 {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 回の反復実行 · シード {seed}
 @plural	{n} replication|{n} replications	{n} 回の反復実行

@@ -31,8 +31,8 @@
 //! - Every command that is not a query is recorded in the [`Engine::journal`], which
 //!   [`Engine::replay`] runs again as a script.
 //! - `run` runs an experiment at once; `run.start`, `run.status` and `run.cancel` run one in the
-//!   background with progress and cancellation (worker threads natively; in the browser, slices
-//!   or the page's web workers, see [`Worker`]).
+//!   background with progress and cancellation (worker threads natively; in the browser, the
+//!   page's web workers, see [`Worker`], or slices of [`SLICE_EVENTS`] events between frames).
 //! - Files are BPSim on BPMN or XPDL (`stochcraft-io`). `file.save` writes edits into the file
 //!   the model was opened from, keeping everything StochCraft does not understand and every line
 //!   it did not change; saved unchanged, the file comes back byte for byte. An edit that cannot
@@ -40,6 +40,7 @@
 //!   file from the model alone.
 
 mod commands;
+mod compare;
 mod decide;
 mod distribution;
 mod edit;
@@ -55,7 +56,7 @@ use stochcraft_io::{Format, Opened};
 use stochcraft_model::Model;
 
 pub use commands::{COMMANDS, Command, CommandKind};
-pub use run::RunMode;
+pub use run::{RunMode, SLICE_EVENTS};
 pub use stochcraft_blocks::{Live, LiveState, RunError};
 pub use workers::Worker;
 
@@ -211,8 +212,12 @@ pub struct Engine {
     /// The model as last opened or saved, to tell whether there are unsaved changes.
     saved: Model,
     job: Option<Job>,
+    /// The background run's results have been kept (`poll_run` reports them at every poll).
+    job_kept: bool,
     /// The results of the last run that finished, for `results.distribution`.
     last_results: Option<Value>,
+    /// The results of the run that finished before it, for `results.compare`.
+    previous_results: Option<Value>,
     /// The sweeps and sensitivity analyses done on the model, carried in the run record
     /// (NASA-STD-7009B [M&S 30]).
     sensitivity: Vec<Value>,
@@ -240,7 +245,9 @@ impl Engine {
             journal: Vec::new(),
             file: None,
             job: None,
+            job_kept: false,
             last_results: None,
+            previous_results: None,
             sensitivity: Vec::new(),
         }
     }
@@ -257,13 +264,10 @@ impl Engine {
             CommandError::new(ErrorCode::UnknownCommand, format!("no command `{command}`"))
         })?;
         let result = (c.run)(self, params.clone())?;
-        // Keep the last results, for questions about their distributions.
-        match command {
-            "run" => self.last_results = Some(result.clone()),
-            "run.status" if result["state"] == "finished" => {
-                self.last_results = Some(result["result"].clone());
-            }
-            _ => {}
+        // Keep the last two results, for questions about their distributions and to compare
+        // them (a background run's are kept as it finishes, in `poll_run`).
+        if command == "run" {
+            self.keep_results(result.clone());
         }
         if c.kind != CommandKind::Query {
             self.journal.push(JournalEntry {
@@ -522,14 +526,29 @@ impl Engine {
         let job = Job::start(plan, mode)?;
         let status = job.status();
         self.job = Some(job);
+        self.job_kept = false;
         Ok(status)
     }
 
-    /// Progress of the background run (advancing a run in slices by up to `step` replications).
-    pub fn poll_run(&mut self, step: u64) -> Value {
-        self.job
+    /// Progress of the background run. A run in slices first runs until `step` replications
+    /// have finished or `events` events have run, whichever comes first (see [`SLICE_EVENTS`]).
+    /// A finished run's results are kept for `results.distribution` and `results.compare`,
+    /// however it was followed (`run.status`, or a window polling here).
+    pub fn poll_run(&mut self, step: u64, events: u64) -> Value {
+        let status = self
+            .job
             .as_mut()
-            .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step))
+            .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step, events));
+        if status["state"] == "finished" && !self.job_kept {
+            self.job_kept = true;
+            self.keep_results(status["result"].clone());
+        }
+        status
+    }
+
+    /// A finished run's results become the last, and the last the previous.
+    fn keep_results(&mut self, results: Value) {
+        self.previous_results = self.last_results.replace(results);
     }
 
     /// The background run as its workers get it, for a run started with `"mode": "workers"`

@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Slovenčina
+	% down and up	% nadol a nahor
+	% of replications	% replikácií
 	+ Add block	+ Pridať blok
+	95th percentile	95. percentil
+	95th percentile {value}	95. percentil {value}
 	About StochCraft	O aplikácii StochCraft
 	About {app}	O aplikácii {app}
+	Across the range it changed by {change}: more than chance would explain.	V rozsahu sa zmenil o {change}: viac, než by vysvetlila náhoda.
+	Across the range it changed by {change}: within what chance alone could do.	V rozsahu sa zmenil o {change}: v medziach toho, čo dokáže samotná náhoda.
 	Actual size	Skutočná veľkosť
 	Add Block	Pridať blok
 	Add a flow from…	Pridať tok z…
 	Add a flow to…	Pridať tok do…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Pridávať jednotku pri najvyťaženejšej úlohe alebo fonde, kým dosť replikácií nesplní cieľ. Zobrazí sa aj odpoveď s každým časom na priemere; býva príliš malá.
 	Add alternative	Pridať alternatívu
 	Add point	Pridať bod
 	Add pool	Pridať skupinu
@@ -27,9 +34,12 @@
 	Added {block} ({id})	Pridaný {block} ({id})
 	Align	Zarovnať
 	Alternative {n}	Alternatíva {n}
+	Analysis	Analýza
 	Appearance	Vzhľad
 	Arrival limit	Limit príchodov
 	Arrivals	Príchody
+	At least	Aspoň
+	At most	Najviac
 	Availability	Pohotovosť
 	BPMN with BPSim	BPMN s BPSim
 	Back to the model (Esc)	Späť k modelu (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Veľkosť dávky
 	Beta	Beta
 	Binomial	Binomické
+	Block	Blok
 	Boolean	Logická hodnota
 	Bottoms	Spodné okraje
 	Bring All to Front	Presunúť všetko dopredu
 	Built with	Vytvorené pomocou
+	Busiest	Najvyťaženejší
 	By role	Podľa roly
 	CSV table	Tabuľka CSV
 	Cancel	Zrušiť
@@ -49,10 +61,13 @@
 	Cancel run	Zrušiť beh
 	Capacity	Kapacita
 	Centres	Vodorovné stredy
+	Change	Zmena
 	Change Block	Zmeniť blok
 	Change Flow	Zmeniť tok
+	Change the estimate	Zmeniť odhad
 	Changes	Zmeny
 	Changing the time unit does not convert the times already in the model.	Zmena časovej jednotky neprepočíta časy, ktoré už sú v modeli.
+	Choose…	Vyberte…
 	Clear Menu	Vymazať ponuku
 	Close	Zavrieť
 	Close Window	Zavrieť okno
@@ -88,11 +103,16 @@
 	Drag to add:	Pridajte potiahnutím:
 	Duplicate	Duplikovať
 	Duration	Trvanie
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Každá analýza spúšťa experiment niekoľkokrát s rovnakou počiatočnou hodnotou generátora, takže rozdiely pochádzajú zo zmeny, nie z náhody. Môže to chvíľu trvať.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Každá entita si naraz vezme celú prvú z týchto alternatív, ktorú možno práve splniť, a jednotky vráti, keď odchádza.
 	Edit	Upraviť
+	Elasticity	Pružnosť
+	Ends early	Končí skôr
+	Enough: {units}, meeting the target in {p} of replications	Stačí: {units}, cieľ splnený v {p} replikácií
 	Entered	Vstúpilo
 	Erlang	Erlangovo
 	Error	Chyba
+	Estimate from three values…	Odhadnúť z troch hodnôt…
 	Evenly across	Rovnomerne vodorovne
 	Evenly down	Rovnomerne zvisle
 	Every distribution	Všetky rozdelenia
@@ -105,20 +125,27 @@
 	Export table (CSV)	Exportovať tabuľku (CSV)
 	Exported {file}	Exportované {file}
 	Expression	Výraz
+	Family	Rodina
 	File	Súbor
 	Finished at {time} {unit}	Dokončené v čase {time} {unit}
 	Fit	Prispôsobiť
 	Fit the diagram to the view	Prispôsobiť diagram zobrazeniu
+	Fit the time	Prispôsobiť čas
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Prispôsobiť čas tohto bloku minimu, najpravdepodobnejšej hodnote a maximu alebo 95. percentilu.
+	Fitted the time of {id}	Čas {id} prispôsobený
 	Flows	Toky
+	Forget the estimate	Zabudnúť odhad
 	From	Z
 	Gamma	Gama
 	Goes to	Vedie do
 	Help	Pomocník
 	Hide Others	Skryť ostatné
 	Hide {app}	Skryť {app}
+	How many	Koľko
 	Inside over time	Vnútri v čase
 	Jump	Prejsť
 	Jump to time	Prejsť na čas
+	Keep the time, without the estimate it came from	Ponechať čas bez odhadu, z ktorého vznikol
 	Keyboard Shortcuts…	Klávesové skratky…
 	Keyboard shortcuts saved	Klávesové skratky uložené
 	Keyboard shortcuts unchanged	Klávesové skratky nezmenené
@@ -140,6 +167,7 @@
 	Mean time blocked	Priemerný čas blokovania
 	Mean time in system	Priemerný čas v systéme
 	Mean wait	Priemerný čas čakania
+	Met in at least	Splnené aspoň v
 	Metric	Metrika
 	Middles	Zvislé stredy
 	Minimise	Minimalizovať
@@ -148,19 +176,25 @@
 	Model	Model
 	Most likely	Najpravdepodobnejšia hodnota
 	Move	Presun
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Postupne posunúť každý parameter nadol a nahor a zoradiť ich podľa toho, ako veľmi sa výsledok pohne.
 	Name	Názov
 	Needs	Potreby
+	Never: it runs for its duration	Nikdy: beží celé trvanie
 	New	Nový
 	New model	Nový model
 	New property	Nová vlastnosť
 	New property name	Názov novej vlastnosti
 	No blocks yet. Open a model, or add blocks to build one.	Zatiaľ žiadne bloky. Otvorte model alebo pridajte bloky na jeho vytvorenie.
 	No connections yet: join blocks below.	Zatiaľ žiadne prepojenia: prepojte bloky nižšie.
+	No replication met the stop condition: each ran to its time limit.	Žiadna replikácia nesplnila podmienku zastavenia: každá bežala do svojho časového limitu.
 	No results yet	Zatiaľ žiadne výsledky
+	No target	Bez cieľa
 	None	Žiadne
 	None found. The model is ready to run.	Nenašli sa žiadne problémy. Model je pripravený na spustenie.
 	Normal	Normálne
+	Not reached, even with {units}	Nesplnené ani s {units}
 	Number	Číslo
+	One change, which Undo takes back	Jedna zmena, ktorú Späť vráti
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracovník, náhodné príchody: klasický rad overený teóriou.
 	One task per BPSim distribution, to compare their spread.	Jedna úloha pre každé rozdelenie BPSim na porovnanie ich variability.
 	Open	Otvoriť
@@ -173,10 +207,13 @@
 	Opened {file}	Otvorený {file}
 	Open…	Otvoriť…
 	Or start from an example	Alebo začnite príkladom
+	PERT	PERT
 	PNG image	Obrázok PNG
+	Parameter	Parameter
 	Parameters	Parametre
 	Paste	Prilepiť
 	Pause	Pozastaviť
+	Percentile	Percentil
 	Play	Prehrať
 	Points	Body
 	Poisson	Poissonovo
@@ -190,6 +227,7 @@
 	Properties	Vlastnosti
 	Quit	Ukončiť
 	Quit {app}	Ukončiť {app}
+	Rank the parameters	Zoradiť parametre
 	Ready	Pripravené
 	Recover	Obnoviť
 	Recover unsaved changes?	Obnoviť neuložené zmeny?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	Replikácia 1 · {time} z {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikácia 1 · {time} z {end} {unit} · zahrievanie
 	Replications	Replikácie
+	Replications meeting the target	Replikácie spĺňajúce cieľ
+	Replications that never met the stop condition count as later than their time limit.	Replikácie, ktoré podmienku zastavenia nikdy nesplnili, sa počítajú ako neskoršie než ich časový limit.
 	Resource pool	Skupina zdrojov
 	Resource pools	Skupiny zdrojov
 	Restore	Obnoviť veľkosť
+	Result	Výsledok
+	Result to compare	Výsledok na porovnanie
+	Result to explain	Výsledok na vysvetlenie
+	Result with a target	Výsledok s cieľom
+	Result, down and up	Výsledok, nadol a nahor
 	Results	Výsledky
 	Right edges	Pravé okraje
 	Roles	Roly
@@ -223,7 +268,10 @@
 	Run experiment	Spustiť experiment
 	Run replication 1 step by step and see each block's queue on the diagram	Spustiť replikáciu 1 krok za krokom a sledovať front každého bloku v diagrame
 	Run the experiment ({shortcut})	Spustiť experiment ({shortcut})
+	Run the experiment again to see this result's spread.	Spustite experiment znova, aby ste videli rozptyl tohto výsledku.
+	Run the experiment at each value of one parameter, and compare a result.	Spustiť experiment pre každú hodnotu jedného parametra a porovnať výsledok.
 	Run the next event	Vykonať ďalšiu udalosť
+	Run the sweep	Spustiť prechod
 	Running	Prebieha
 	Running…	Prebieha…
 	Save	Uložiť
@@ -235,6 +283,7 @@
 	Seed	Počiatočná hodnota generátora
 	Select All	Vybrať všetko
 	Select a block to see its queue over time.	Vyberte blok, aby ste videli jeho front v čase.
+	Separate the values with semicolons or spaces.	Oddeľte hodnoty bodkočiarkami alebo medzerami.
 	Service time	Čas obsluhy
 	Services	Služby
 	Set Property	Nastaviť vlastnosť
@@ -243,13 +292,19 @@
 	Settings	Nastavenia
 	Shape	Tvar
 	Share of arrivals lost	Podiel stratených príchodov
+	Share of replications	Podiel replikácií
 	Share of units blocked	Podiel blokovaných jednotiek
 	Show All	Zobraziť všetko
 	Show {id}	Zobraziť {id}
+	Size	Dimenzovať
+	Size the resources	Dimenzovať zdroje
+	Source	Zdroj
+	Source: {source}	Zdroj: {source}
 	Speed	Rýchlosť
 	Split batches	Rozdelenie dávok
 	Split or join	Rozdeliť alebo spojiť
 	Split or join (all ways)	Rozdeliť alebo spojiť (všetky cesty)
+	Spread across replications	Rozptyl medzi replikáciami
 	Spread out	Rozmiestniť
 	Stages (k)	Fázy (k)
 	Standard deviation	Štandardná odchýlka
@@ -261,17 +316,25 @@
 	Stop setting {name}	Prestať nastavovať {name}
 	Stop watching	Ukončiť sledovanie
 	Stopped watching	Sledovanie ukončené
+	Sweep a parameter	Prechod parametrom
 	Tandem line	Tandemová linka
+	Target	Cieľ
+	Target value	Cieľová hodnota
 	Task	Úloha
 	Task with a resource	Úloha so zdrojom
 	Task with shared resources	Úloha so zdieľanými zdrojmi
 	Text	Text
 	The model changed, so watching stopped	Model sa zmenil, preto sa sledovanie ukončilo
+	The model now has the units sizing found	Model má teraz jednotky nájdené dimenzovaním
 	The model: its experiment, connections and problems	Model: experiment, prepojenia a problémy
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Podiel replikácií rovných alebo menších než každá hodnota. Pás obsahuje skutočné rozdelenie so spoľahlivosťou {confidence}.
+	The values are numbers, separated by semicolons or spaces	Hodnoty sú čísla oddelené bodkočiarkami alebo medzerami
 	This block has a warning	Tento blok obsahuje upozornenie
 	This block has an error	Tento blok obsahuje chybu
 	This run	Tento beh
+	Three-point estimate	Trojbodový odhad
 	Time between arrivals	Čas medzi príchodmi
+	Time to the stop condition	Čas do podmienky zastavenia
 	Time unit	Časová jednotka
 	To	Do
 	Tops	Horné okraje
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Jednotky, ktoré zdieľa viacero úloh. Úloha so zdieľanými zdrojmi ich berie podľa skupiny alebo podľa roly.
 	Untitled	Bez názvu
 	Untitled model	Nepomenovaný model
+	Upper value	Horná hodnota
 	Use System Setting	Použiť systémové nastavenie
+	Use these units in the model	Použiť tieto jednotky v modeli
 	Utilisation	Využitie
 	Value	Hodnota
+	Values	Hodnoty
 	View	Zobrazenie
 	Waiting over time	Čakajúce v čase
 	Waiting room	Čakáreň
@@ -302,8 +368,12 @@
 	Watch a run	Sledovať beh
 	Watching replication 1	Sleduje sa replikácia 1
 	Weibull	Weibullovo
+	When a task empties	Keď sa úloha vyprázdni
+	When enough have left a block	Keď blok opustí dosť entít
+	Which parameters matter	Na ktorých parametroch záleží
 	Whole number	Celé číslo
 	Window	Okno
+	With every time at its mean: {units}	S každým časom na priemere: {units}
 	Yes or no	Áno alebo nie
 	Your changes will be lost if you don't save them.	Ak zmeny neuložíte, stratia sa.
 	Zoom	Zmeniť veľkosť
@@ -317,8 +387,11 @@
 	departures	odchody
 	egui and eframe (Craft suite fork)	egui a eframe (odvodená verzia balíka Craft)
 	from its value	podľa hodnoty
+	have left	opustilo
 	hours	hodiny
 	id {id}	id {id}
+	matters	záleží
+	maximum {value}	maximum {value}
 	milliseconds	milisekundy
 	minutes	minúty
 	nothing yet	zatiaľ nič
@@ -335,12 +408,17 @@
 	time	čas
 	to {block}	do {block}
 	unlimited	bez obmedzenia
+	who gave it, or where it comes from	kto ho dal alebo odkiaľ pochádza
+	within chance	v medziach náhody
 	years	roky
+	{block}: units	{block}: jednotky
 	{busy} busy	Obsadené: {busy}
 	{entered} in, {left} out, {lost} lost	Vstúpilo: {entered}, odišlo: {left}, stratené: {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, najpravdepodobnejšia {mode}, {upper}
 	{field}: not editable here yet	{field}: tu zatiaľ nemožno upravovať
 	{id}: a probability is a number from 0 to 1	{id}: pravdepodobnosť je číslo od 0 do 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikácií splnilo cieľ: {p} (95 % interval {lo} až {hi})
 	{name} — edited	{name} — upravené
 	{n} created	Vytvorené: {n}
 	{n} done	Hotové: {n}
@@ -364,9 +442,12 @@ unit	yr	r.
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otvorený {file} ({n} upozornenie)|Otvorený {file} ({n} upozornenia)|Otvorený {file} ({n} upozornení)
 @plural	Removed {n} block|Removed {n} blocks	Odstránený {n} blok|Odstránené {n} bloky|Odstránených {n} blokov
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislú replikáciu modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislé replikácie modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislých replikácií modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Podmienka zastavenia bola splnená v {met} z {n} replikácie, v priemere po {time} {unit}.|Podmienka zastavenia bola splnená v {met} z {n} replikácií, v priemere po {time} {unit}.|Podmienka zastavenia bola splnená v {met} z {n} replikácií, v priemere po {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Dokončená {done} z {n} replikácie|Dokončených {done} z {n} replikácií|Dokončených {done} z {n} replikácií
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikácie|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikácií|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikácií
 @plural	{n} block selected|{n} blocks selected	Vybraný {n} blok|Vybrané {n} bloky|Vybraných {n} blokov
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikácia na krok · počiatočná hodnota {seed}|{n} replikácie na krok · počiatočná hodnota {seed}|{n} replikácií na krok · počiatočná hodnota {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikácia · priemer {mean} · od {min} do {max}|{n} replikácie · priemer {mean} · od {min} do {max}|{n} replikácií · priemer {mean} · od {min} do {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikácia · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} replikácie · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} replikácií · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikácia · počiatočná hodnota {seed}|{n} replikácie · počiatočná hodnota {seed}|{n} replikácií · počiatočná hodnota {seed}
 @plural	{n} replication|{n} replications	{n} replikácia|{n} replikácie|{n} replikácií

@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Română
+	% down and up	% în jos și în sus
+	% of replications	% din replicări
 	+ Add block	+ Adaugă bloc
+	95th percentile	Percentila 95
+	95th percentile {value}	percentila 95 {value}
 	About StochCraft	Despre StochCraft
 	About {app}	Despre {app}
+	Across the range it changed by {change}: more than chance would explain.	Pe interval s-a schimbat cu {change}: mai mult decât ar explica întâmplarea.
+	Across the range it changed by {change}: within what chance alone could do.	Pe interval s-a schimbat cu {change}: în limitele a ce poate face doar întâmplarea.
 	Actual size	Dimensiune reală
 	Add Block	Adaugă bloc
 	Add a flow from…	Adaugă un flux de la…
 	Add a flow to…	Adaugă un flux către…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Adaugă o unitate la sarcina sau grupul cel mai ocupat până când suficiente replicări ating o țintă. Este afișat și răspunsul cu fiecare timp la media sa; de obicei e prea mic.
 	Add alternative	Adaugă alternativă
 	Add point	Adaugă punct
 	Add pool	Adaugă grup
@@ -27,9 +34,12 @@
 	Added {block} ({id})	S-a adăugat {block} ({id})
 	Align	Aliniere
 	Alternative {n}	Alternativa {n}
+	Analysis	Analiză
 	Appearance	Aspect
 	Arrival limit	Limită de sosiri
 	Arrivals	Sosiri
+	At least	Cel puțin
+	At most	Cel mult
 	Availability	Disponibilitate
 	BPMN with BPSim	BPMN cu BPSim
 	Back to the model (Esc)	Înapoi la model (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Mărimea lotului
 	Beta	Beta
 	Binomial	Binomială
+	Block	Bloc
 	Boolean	Boolean
 	Bottoms	Marginile de jos
 	Bring All to Front	Adu totul în față
 	Built with	Creat cu
+	Busiest	Cel mai ocupat
 	By role	După rol
 	CSV table	Tabel CSV
 	Cancel	Anulează
@@ -49,10 +61,13 @@
 	Cancel run	Anulează rularea
 	Capacity	Capacitate
 	Centres	Centre orizontale
+	Change	Modificare
 	Change Block	Modifică blocul
 	Change Flow	Modifică fluxul
+	Change the estimate	Modifică estimarea
 	Changes	Modificări
 	Changing the time unit does not convert the times already in the model.	Schimbarea unității de timp nu convertește timpii existenți în model.
+	Choose…	Alege…
 	Clear Menu	Golește meniul
 	Close	Închide
 	Close Window	Închide fereastra
@@ -88,11 +103,16 @@
 	Drag to add:	Trageți pentru a adăuga:
 	Duplicate	Duplică
 	Duration	Durată
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Fiecare analiză rulează experimentul de mai multe ori cu aceeași sămânță, așa că diferențele vin din modificare, nu din întâmplare. Poate dura puțin.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Fiecare entitate ia, integral și dintr-odată, prima dintre aceste alternative care poate fi satisfăcută în acel moment și returnează unitățile când pleacă.
 	Edit	Editare
+	Elasticity	Elasticitate
+	Ends early	Se oprește mai devreme
+	Enough: {units}, meeting the target in {p} of replications	Suficient: {units}, atinge ținta în {p} din replicări
 	Entered	Intrări
 	Erlang	Erlang
 	Error	Eroare
+	Estimate from three values…	Estimează din trei valori…
 	Evenly across	Uniform pe orizontală
 	Evenly down	Uniform pe verticală
 	Every distribution	Toate distribuțiile
@@ -105,20 +125,27 @@
 	Export table (CSV)	Exportă tabelul (CSV)
 	Exported {file}	S-a exportat {file}
 	Expression	Expresie
+	Family	Familie
 	File	Fișier
 	Finished at {time} {unit}	Încheiat la {time} {unit}
 	Fit	Încadrează
 	Fit the diagram to the view	Încadrează diagrama în vizualizare
+	Fit the time	Ajustează timpul
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Ajustează timpul acestui bloc la un minim, o valoare cea mai probabilă și un maxim sau percentila 95.
+	Fitted the time of {id}	Timpul lui {id} a fost ajustat
 	Flows	Fluxuri
+	Forget the estimate	Uită estimarea
 	From	De la
 	Gamma	Gamma
 	Goes to	Merge către
 	Help	Ajutor
 	Hide Others	Ascunde celelalte
 	Hide {app}	Ascunde {app}
+	How many	Câte
 	Inside over time	În interior în timp
 	Jump	Salt
 	Jump to time	Salt la momentul
+	Keep the time, without the estimate it came from	Păstrează timpul, fără estimarea din care provine
 	Keyboard Shortcuts…	Comenzi rapide de la tastatură…
 	Keyboard shortcuts saved	Comenzile rapide au fost salvate
 	Keyboard shortcuts unchanged	Comenzile rapide nu s-au modificat
@@ -140,6 +167,7 @@
 	Mean time blocked	Timp mediu de blocare
 	Mean time in system	Timp mediu în sistem
 	Mean wait	Timp mediu de așteptare
+	Met in at least	Atinsă în cel puțin
 	Metric	Indicator
 	Middles	Centre verticale
 	Minimise	Minimizează
@@ -148,19 +176,25 @@
 	Model	Model
 	Most likely	Cel mai probabil
 	Move	Mutare
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Mută pe rând fiecare parametru în jos și în sus și ordonează-i după cât de mult se mișcă rezultatul.
 	Name	Nume
 	Needs	Necesar
+	Never: it runs for its duration	Niciodată: rulează toată durata
 	New	Nou
 	New model	Model nou
 	New property	Proprietate nouă
 	New property name	Numele proprietății noi
 	No blocks yet. Open a model, or add blocks to build one.	Nu există încă blocuri. Deschideți un model sau adăugați blocuri pentru a crea unul.
 	No connections yet: join blocks below.	Nu există încă conexiuni: conectați blocurile de mai jos.
+	No replication met the stop condition: each ran to its time limit.	Nicio replicare nu a atins condiția de oprire: fiecare a rulat până la limita de timp.
 	No results yet	Nu există încă rezultate
+	No target	Fără țintă
 	None	Niciunul
 	None found. The model is ready to run.	Nu s-au găsit probleme. Modelul este gata de rulare.
 	Normal	Normală
+	Not reached, even with {units}	Neatinsă, nici cu {units}
 	Number	Număr
+	One change, which Undo takes back	O singură modificare, pe care Anulează o desface
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un operator, sosiri aleatorii: coada clasică, verificată față de teorie.
 	One task per BPSim distribution, to compare their spread.	Câte o sarcină pentru fiecare distribuție BPSim, pentru compararea dispersiei.
 	Open	Deschide
@@ -173,10 +207,13 @@
 	Opened {file}	S-a deschis {file}
 	Open…	Deschide…
 	Or start from an example	Sau începeți cu un exemplu
+	PERT	PERT
 	PNG image	Imagine PNG
+	Parameter	Parametru
 	Parameters	Parametri
 	Paste	Lipește
 	Pause	Pauză
+	Percentile	Percentilă
 	Play	Redare
 	Points	Puncte
 	Poisson	Poisson
@@ -190,6 +227,7 @@
 	Properties	Proprietăți
 	Quit	Ieșire
 	Quit {app}	Ieșire din {app}
+	Rank the parameters	Ordonează parametrii
 	Ready	Gata
 	Recover	Recuperează
 	Recover unsaved changes?	Recuperați modificările nesalvate?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	Replicarea 1 · {time} din {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replicarea 1 · {time} din {end} {unit} · încălzire
 	Replications	Replicări
+	Replications meeting the target	Replicări care ating ținta
+	Replications that never met the stop condition count as later than their time limit.	Replicările care nu au atins niciodată condiția de oprire contează ca mai târzii decât limita lor de timp.
 	Resource pool	Grup de resurse
 	Resource pools	Grupuri de resurse
 	Restore	Restabilește
+	Result	Rezultat
+	Result to compare	Rezultat de comparat
+	Result to explain	Rezultat de explicat
+	Result with a target	Rezultat cu țintă
+	Result, down and up	Rezultat, în jos și în sus
 	Results	Rezultate
 	Right edges	Marginile din dreapta
 	Roles	Roluri
@@ -223,7 +268,10 @@
 	Run experiment	Rulează experimentul
 	Run replication 1 step by step and see each block's queue on the diagram	Rulează replicarea 1 pas cu pas și vezi coada fiecărui bloc în diagramă
 	Run the experiment ({shortcut})	Rulează experimentul ({shortcut})
+	Run the experiment again to see this result's spread.	Rulează din nou experimentul ca să vezi împrăștierea acestui rezultat.
+	Run the experiment at each value of one parameter, and compare a result.	Rulează experimentul la fiecare valoare a unui parametru și compară un rezultat.
 	Run the next event	Rulează evenimentul următor
+	Run the sweep	Rulează baleierea
 	Running	Se rulează
 	Running…	Se rulează…
 	Save	Salvează
@@ -235,6 +283,7 @@
 	Seed	Sămânță
 	Select All	Selectează tot
 	Select a block to see its queue over time.	Selectați un bloc pentru a-i vedea coada în timp.
+	Separate the values with semicolons or spaces.	Separă valorile cu punct și virgulă sau spații.
 	Service time	Timp de servire
 	Services	Servicii
 	Set Property	Setează proprietatea
@@ -243,13 +292,19 @@
 	Settings	Setări
 	Shape	Formă
 	Share of arrivals lost	Proporția sosirilor pierdute
+	Share of replications	Ponderea replicărilor
 	Share of units blocked	Proporția unităților blocate
 	Show All	Afișează tot
 	Show {id}	Afișează {id}
+	Size	Dimensionează
+	Size the resources	Dimensionează resursele
+	Source	Sursă
+	Source: {source}	Sursă: {source}
 	Speed	Viteză
 	Split batches	Separarea loturilor
 	Split or join	Divizează sau unește
 	Split or join (all ways)	Divizează sau unește (toate căile)
+	Spread across replications	Împrăștierea între replicări
 	Spread out	Distribuie
 	Stages (k)	Etape (k)
 	Standard deviation	Abatere standard
@@ -261,17 +316,25 @@
 	Stop setting {name}	Oprește setarea pentru {name}
 	Stop watching	Oprește urmărirea
 	Stopped watching	Urmărirea s-a oprit
+	Sweep a parameter	Baleierea unui parametru
 	Tandem line	Linie în tandem
+	Target	Țintă
+	Target value	Valoare țintă
 	Task	Sarcină
 	Task with a resource	Sarcină cu resursă
 	Task with shared resources	Sarcină cu resurse partajate
 	Text	Text
 	The model changed, so watching stopped	Modelul s-a schimbat, așa că urmărirea s-a oprit
+	The model now has the units sizing found	Modelul are acum unitățile găsite la dimensionare
 	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Ponderea replicărilor egale cu sau sub fiecare valoare. Banda conține distribuția reală cu o încredere de {confidence}.
+	The values are numbers, separated by semicolons or spaces	Valorile sunt numere separate prin punct și virgulă sau spații
 	This block has a warning	Acest bloc are un avertisment
 	This block has an error	Acest bloc are o eroare
 	This run	Această rulare
+	Three-point estimate	Estimare în trei puncte
 	Time between arrivals	Timp între sosiri
+	Time to the stop condition	Timp până la condiția de oprire
 	Time unit	Unitate de timp
 	To	Către
 	Tops	Marginile de sus
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unități folosite în comun de mai multe sarcini. O sarcină cu resurse partajate le ia după grup sau după rol.
 	Untitled	Fără titlu
 	Untitled model	Model fără titlu
+	Upper value	Valoare superioară
 	Use System Setting	Folosește setarea sistemului
+	Use these units in the model	Folosește aceste unități în model
 	Utilisation	Grad de utilizare
 	Value	Valoare
+	Values	Valori
 	View	Vizualizare
 	Waiting over time	În așteptare în timp
 	Waiting room	Sală de așteptare
@@ -302,8 +368,12 @@
 	Watch a run	Urmărește o rulare
 	Watching replication 1	Se urmărește replicarea 1
 	Weibull	Weibull
+	When a task empties	Când o sarcină se golește
+	When enough have left a block	Când au ieșit destule dintr-un bloc
+	Which parameters matter	Ce parametri contează
 	Whole number	Număr întreg
 	Window	Fereastră
+	With every time at its mean: {units}	Cu fiecare timp la media sa: {units}
 	Yes or no	Da sau nu
 	Your changes will be lost if you don't save them.	Dacă nu salvați, modificările se vor pierde.
 	Zoom	Zoom
@@ -317,8 +387,11 @@
 	departures	plecări
 	egui and eframe (Craft suite fork)	egui și eframe (ramură a suitei Craft)
 	from its value	din valoarea sa
+	have left	au ieșit
 	hours	ore
 	id {id}	id {id}
+	matters	contează
+	maximum {value}	maxim {value}
 	milliseconds	milisecunde
 	minutes	minute
 	nothing yet	nimic deocamdată
@@ -335,12 +408,17 @@
 	time	moment
 	to {block}	către {block}
 	unlimited	nelimitat
+	who gave it, or where it comes from	cine a dat-o sau de unde provine
+	within chance	în limita întâmplării
 	years	ani
+	{block}: units	{block}: unități
 	{busy} busy	Ocupate: {busy}
 	{entered} in, {left} out, {lost} lost	Intrate: {entered}, ieșite: {left}, pierdute: {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minim {min}, cel mai probabil {mode}, {upper}
 	{field}: not editable here yet	{field}: nu se poate edita aici deocamdată
 	{id}: a probability is a number from 0 to 1	{id}: probabilitatea este un număr între 0 și 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} din {of} replicări au atins ținta: {p} (interval de 95% de la {lo} la {hi})
 	{name} — edited	{name} — modificat
 	{n} created	Create: {n}
 	{n} done	Terminate: {n}
@@ -364,9 +442,12 @@ unit	yr	a
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S-a deschis {file} ({n} avertisment)|S-a deschis {file} ({n} avertismente)|S-a deschis {file} ({n} avertismente)
 @plural	Removed {n} block|Removed {n} blocks	S-a eliminat {n} bloc|S-au eliminat {n} blocuri|S-au eliminat {n} de blocuri
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Rulează {n} replicare independentă a modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Rulează {n} replicări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Rulează {n} replicări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Condiția de oprire a fost atinsă în {met} din {n} replicare, după {time} {unit} în medie.|Condiția de oprire a fost atinsă în {met} din {n} replicări, după {time} {unit} în medie.|Condiția de oprire a fost atinsă în {met} din {n} de replicări, după {time} {unit} în medie.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	S-a încheiat {done} din {n} replicare|S-au încheiat {done} din {n} replicări|S-au încheiat {done} din {n} replicări
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicare|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicări|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicări
 @plural	{n} block selected|{n} blocks selected	{n} bloc selectat|{n} blocuri selectate|{n} de blocuri selectate
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replicare la fiecare pas · sămânță {seed}|{n} replicări la fiecare pas · sămânță {seed}|{n} de replicări la fiecare pas · sămânță {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replicare · medie {mean} · de la {min} la {max}|{n} replicări · medie {mean} · de la {min} la {max}|{n} de replicări · medie {mean} · de la {min} la {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replicare · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replicare · sămânță {seed}|{n} replicări · sămânță {seed}|{n} replicări · sămânță {seed}
 @plural	{n} replication|{n} replications	{n} replicare|{n} replicări|{n} replicări

@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Suomi
+	% down and up	% alas ja ylös
+	% of replications	% toistoista
 	+ Add block	+ Lisää lohko
+	95th percentile	95. persentiili
+	95th percentile {value}	95. persentiili {value}
 	About StochCraft	Tietoja StochCraftista
 	About {app}	Tietoja: {app}
+	Across the range it changed by {change}: more than chance would explain.	Alueella se muuttui {change}: enemmän kuin sattuma selittäisi.
+	Across the range it changed by {change}: within what chance alone could do.	Alueella se muuttui {change}: sen rajoissa, mihin pelkkä sattuma pystyy.
 	Actual size	Todellinen koko
 	Add Block	Lisää lohko
 	Add a flow from…	Lisää virta kohteesta…
 	Add a flow to…	Lisää virta kohteeseen…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lisää yksikkö kuormitetuimpaan tehtävään tai pooliin, kunnes tarpeeksi monta toistoa saavuttaa tavoitteen. Myös vastaus, jossa jokainen aika on keskiarvossaan, näytetään; se on yleensä liian pieni.
 	Add alternative	Lisää vaihtoehto
 	Add point	Lisää piste
 	Add pool	Lisää pooli
@@ -27,9 +34,12 @@
 	Added {block} ({id})	Lisättiin {block} ({id})
 	Align	Tasaa
 	Alternative {n}	Vaihtoehto {n}
+	Analysis	Analyysi
 	Appearance	Ulkoasu
 	Arrival limit	Saapumisraja
 	Arrivals	Saapumiset
+	At least	Vähintään
+	At most	Enintään
 	Availability	Käytettävyys
 	BPMN with BPSim	BPMN ja BPSim
 	Back to the model (Esc)	Takaisin malliin (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Erän koko
 	Beta	Beeta
 	Binomial	Binomijakauma
+	Block	Lohko
 	Boolean	Totuusarvo
 	Bottoms	Alareunat
 	Bring All to Front	Tuo kaikki eteen
 	Built with	Toteutettu seuraavilla
+	Busiest	Kuormitetuin
 	By role	Roolin mukaan
 	CSV table	CSV-taulukko
 	Cancel	Peruuta
@@ -49,10 +61,13 @@
 	Cancel run	Peruuta suoritus
 	Capacity	Kapasiteetti
 	Centres	Vaakakeskikohdat
+	Change	Muutos
 	Change Block	Muuta lohkoa
 	Change Flow	Muuta virtaa
+	Change the estimate	Muuta arviota
 	Changes	Muutokset
 	Changing the time unit does not convert the times already in the model.	Aikayksikön vaihtaminen ei muunna mallissa jo olevia aikoja.
+	Choose…	Valitse…
 	Clear Menu	Tyhjennä valikko
 	Close	Sulje
 	Close Window	Sulje ikkuna
@@ -88,11 +103,16 @@
 	Drag to add:	Lisää vetämällä:
 	Duplicate	Monista
 	Duration	Kesto
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Jokainen analyysi ajaa kokeen useita kertoja samalla siemenellä, joten erot johtuvat muutoksesta eivätkä sattumasta. Tämä voi kestää hetken.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jokainen entiteetti ottaa näistä vaihtoehdoista ensimmäisen, joka voidaan täyttää heti, kaiken kerralla, ja palauttaa yksiköt poistuessaan tehtävästä.
 	Edit	Muokkaa
+	Elasticity	Jousto
+	Ends early	Päättyy aiemmin
+	Enough: {units}, meeting the target in {p} of replications	Riittää: {units}, tavoite saavutetaan {p} toistoista
 	Entered	Saapuneet
 	Erlang	Erlang
 	Error	Virhe
+	Estimate from three values…	Arvioi kolmesta arvosta…
 	Evenly across	Jaa tasaisesti vaakasuunnassa
 	Evenly down	Jaa tasaisesti pystysuunnassa
 	Every distribution	Kaikki jakaumat
@@ -105,20 +125,27 @@
 	Export table (CSV)	Vie taulukko (CSV)
 	Exported {file}	Vietiin {file}
 	Expression	Lauseke
+	Family	Jakaumaperhe
 	File	Tiedosto
 	Finished at {time} {unit}	Valmis hetkellä {time} {unit}
 	Fit	Sovita
 	Fit the diagram to the view	Sovita kaavio näkymään
+	Fit the time	Sovita aika
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Sovita tämän lohkon aika minimiin, todennäköisimpään arvoon ja maksimiin tai 95. persentiiliin.
+	Fitted the time of {id}	Lohkon {id} aika sovitettu
 	Flows	Virrat
+	Forget the estimate	Unohda arvio
 	From	Kohteesta
 	Gamma	Gamma
 	Goes to	Menee kohteeseen
 	Help	Ohje
 	Hide Others	Piilota muut
 	Hide {app}	Piilota {app}
+	How many	Kuinka monta
 	Inside over time	Sisällä ajan mittaan
 	Jump	Siirry
 	Jump to time	Siirry hetkeen
+	Keep the time, without the estimate it came from	Säilytä aika ilman arviota, josta se on peräisin
 	Keyboard Shortcuts…	Pikanäppäimet…
 	Keyboard shortcuts saved	Pikanäppäimet tallennettu
 	Keyboard shortcuts unchanged	Pikanäppäimet ennallaan
@@ -140,6 +167,7 @@
 	Mean time blocked	Keskimääräinen estoaika
 	Mean time in system	Keskimääräinen aika järjestelmässä
 	Mean wait	Keskimääräinen odotusaika
+	Met in at least	Saavutettu vähintään
 	Metric	Mittari
 	Middles	Pystykeskikohdat
 	Minimise	Pienennä
@@ -148,19 +176,25 @@
 	Model	Malli
 	Most likely	Todennäköisin
 	Move	Siirto
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Siirrä kutakin parametria vuorollaan alas ja ylös ja järjestä ne sen mukaan, kuinka paljon tulos muuttuu.
 	Name	Nimi
 	Needs	Tarpeet
+	Never: it runs for its duration	Ei koskaan: ajetaan koko kesto
 	New	Uusi
 	New model	Uusi malli
 	New property	Uusi ominaisuus
 	New property name	Uuden ominaisuuden nimi
 	No blocks yet. Open a model, or add blocks to build one.	Lohkoja ei vielä ole. Avaa malli tai lisää lohkoja luodaksesi mallin.
 	No connections yet: join blocks below.	Yhteyksiä ei vielä ole: yhdistä alla olevat lohkot.
+	No replication met the stop condition: each ran to its time limit.	Mikään toisto ei saavuttanut pysäytysehtoa: jokainen ajettiin aikarajaansa asti.
 	No results yet	Ei vielä tuloksia
+	No target	Ei tavoitetta
 	None	Ei mitään
 	None found. The model is ready to run.	Ongelmia ei löytynyt. Malli on valmis suoritettavaksi.
 	Normal	Normaalijakauma
+	Not reached, even with {units}	Ei saavutettu, ei edes yksiköillä {units}
 	Number	Luku
+	One change, which Undo takes back	Yksi muutos, jonka Kumoa peruu
 	One clerk, random arrivals: the textbook queue, checked against theory.	Yksi palvelija, satunnaiset saapumiset: teorian avulla tarkistettu klassinen jono.
 	One task per BPSim distribution, to compare their spread.	Yksi tehtävä kutakin BPSim-jakaumaa kohti niiden hajonnan vertailuun.
 	Open	Avaa
@@ -173,10 +207,13 @@
 	Opened {file}	Avattiin {file}
 	Open…	Avaa…
 	Or start from an example	Tai aloita esimerkistä
+	PERT	PERT
 	PNG image	PNG-kuva
+	Parameter	Parametri
 	Parameters	Parametrit
 	Paste	Liitä
 	Pause	Tauko
+	Percentile	Persentiili
 	Play	Toista
 	Points	Pisteet
 	Poisson	Poisson
@@ -190,6 +227,7 @@
 	Properties	Ominaisuudet
 	Quit	Lopeta
 	Quit {app}	Lopeta {app}
+	Rank the parameters	Järjestä parametrit
 	Ready	Valmis
 	Recover	Palauta
 	Recover unsaved changes?	Palautetaanko tallentamattomat muutokset?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	Toisto 1 · {time}/{end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Toisto 1 · {time}/{end} {unit} · alkulämmittely
 	Replications	Toistot
+	Replications meeting the target	Tavoitteen saavuttavat toistot
+	Replications that never met the stop condition count as later than their time limit.	Toistot, jotka eivät koskaan saavuttaneet pysäytysehtoa, lasketaan aikarajaansa myöhäisemmiksi.
 	Resource pool	Resurssipooli
 	Resource pools	Resurssipoolit
 	Restore	Palauta ikkuna
+	Result	Tulos
+	Result to compare	Verrattava tulos
+	Result to explain	Selitettävä tulos
+	Result with a target	Tulos ja tavoite
+	Result, down and up	Tulos, alas ja ylös
 	Results	Tulokset
 	Right edges	Oikeat reunat
 	Roles	Roolit
@@ -223,7 +268,10 @@
 	Run experiment	Suorita koe
 	Run replication 1 step by step and see each block's queue on the diagram	Suorita toisto 1 vaihe vaiheelta ja näe kunkin lohkon jono kaaviossa
 	Run the experiment ({shortcut})	Suorita koe ({shortcut})
+	Run the experiment again to see this result's spread.	Aja koe uudelleen nähdäksesi tämän tuloksen hajonnan.
+	Run the experiment at each value of one parameter, and compare a result.	Aja koe parametrin jokaisella arvolla ja vertaa tulosta.
 	Run the next event	Suorita seuraava tapahtuma
+	Run the sweep	Aja läpikäynti
 	Running	Suoritetaan
 	Running…	Suoritetaan…
 	Save	Tallenna
@@ -235,6 +283,7 @@
 	Seed	Satunnaislukusiemen
 	Select All	Valitse kaikki
 	Select a block to see its queue over time.	Valitse lohko nähdäksesi sen jonon ajan mittaan.
+	Separate the values with semicolons or spaces.	Erota arvot puolipisteillä tai välilyönneillä.
 	Service time	Palveluaika
 	Services	Palvelut
 	Set Property	Aseta ominaisuus
@@ -243,13 +292,19 @@
 	Settings	Asetukset
 	Shape	Muoto
 	Share of arrivals lost	Menetettyjen saapumisten osuus
+	Share of replications	Osuus toistoista
 	Share of units blocked	Estettyjen yksiköiden osuus
 	Show All	Näytä kaikki
 	Show {id}	Näytä {id}
+	Size	Mitoita
+	Size the resources	Mitoita resurssit
+	Source	Lähde
+	Source: {source}	Lähde: {source}
 	Speed	Nopeus
 	Split batches	Erien purku
 	Split or join	Haaroita tai yhdistä
 	Split or join (all ways)	Haaroita tai yhdistä (kaikki reitit)
+	Spread across replications	Hajonta toistojen välillä
 	Spread out	Jaa tasaisesti
 	Stages (k)	Vaiheet (k)
 	Standard deviation	Keskihajonta
@@ -261,17 +316,25 @@
 	Stop setting {name}	Lopeta kohteen {name} asettaminen
 	Stop watching	Lopeta seuraaminen
 	Stopped watching	Seuraaminen lopetettiin
+	Sweep a parameter	Käy parametri läpi
 	Tandem line	Sarjajono
+	Target	Tavoite
+	Target value	Tavoitearvo
 	Task	Tehtävä
 	Task with a resource	Resurssia käyttävä tehtävä
 	Task with shared resources	Jaettuja resursseja käyttävä tehtävä
 	Text	Teksti
 	The model changed, so watching stopped	Malli muuttui, joten seuraaminen lopetettiin
+	The model now has the units sizing found	Mallissa on nyt mitoituksen löytämät yksiköt
 	The model: its experiment, connections and problems	Malli: koe, yhteydet ja ongelmat
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Niiden toistojen osuus, jotka ovat kunkin arvon suuruisia tai pienempiä. Vyöhyke sisältää todellisen jakauman {confidence} luottamuksella.
+	The values are numbers, separated by semicolons or spaces	Arvot ovat lukuja, jotka erotetaan puolipisteillä tai välilyönneillä
 	This block has a warning	Tässä lohkossa on varoitus
 	This block has an error	Tässä lohkossa on virhe
 	This run	Tämä ajo
+	Three-point estimate	Kolmen pisteen arvio
 	Time between arrivals	Saapumisten välinen aika
+	Time to the stop condition	Aika pysäytysehtoon
 	Time unit	Aikayksikkö
 	To	Kohteeseen
 	Tops	Yläreunat
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Yksiköt, joita useampi tehtävä käyttää yhteisesti. Jaettuja resursseja käyttävä tehtävä ottaa ne poolista tai roolin mukaan.
 	Untitled	Nimetön
 	Untitled model	Nimetön malli
+	Upper value	Yläarvo
 	Use System Setting	Käytä järjestelmäasetusta
+	Use these units in the model	Käytä näitä yksiköitä mallissa
 	Utilisation	Käyttöaste
 	Value	Arvo
+	Values	Arvot
 	View	Näytä
 	Waiting over time	Odottavat ajan mittaan
 	Waiting room	Odotustila
@@ -302,8 +368,12 @@
 	Watch a run	Seuraa ajoa
 	Watching replication 1	Seurataan toistoa 1
 	Weibull	Weibull
+	When a task empties	Kun tehtävä tyhjenee
+	When enough have left a block	Kun tarpeeksi monta on poistunut lohkosta
+	Which parameters matter	Mitkä parametrit merkitsevät
 	Whole number	Kokonaisluku
 	Window	Ikkuna
+	With every time at its mean: {units}	Kun jokainen aika on keskiarvossaan: {units}
 	Yes or no	Kyllä tai ei
 	Your changes will be lost if you don't save them.	Muutokset menetetään, jos niitä ei tallenneta.
 	Zoom	Vaihda kokoa
@@ -317,8 +387,11 @@
 	departures	poistumiset
 	egui and eframe (Craft suite fork)	egui ja eframe (Craft-ohjelmistoperheen haaraversio)
 	from its value	arvon perusteella
+	have left	on poistunut
 	hours	tuntia
 	id {id}	id {id}
+	matters	merkitsee
+	maximum {value}	maksimi {value}
 	milliseconds	millisekuntia
 	minutes	minuuttia
 	nothing yet	ei vielä mitään
@@ -335,12 +408,17 @@
 	time	hetki
 	to {block}	kohteeseen {block}
 	unlimited	rajoittamaton
+	who gave it, or where it comes from	kuka sen antoi tai mistä se on peräisin
+	within chance	sattuman rajoissa
 	years	vuotta
+	{block}: units	{block}: yksiköt
 	{busy} busy	{busy} varattuna
 	{entered} in, {left} out, {lost} lost	{entered} sisään, {left} ulos, {lost} menetetty
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimi {min}, todennäköisin {mode}, {upper}
 	{field}: not editable here yet	{field}: ei vielä muokattavissa täällä
 	{id}: a probability is a number from 0 to 1	{id}: todennäköisyyden on oltava luku väliltä 0–1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met}/{of} toistoa saavutti tavoitteen: {p} (95 %:n väli {lo}–{hi})
 	{name} — edited	{name} — muokattu
 	{n} created	{n} luotu
 	{n} done	{n} valmis
@@ -364,9 +442,12 @@ unit	yr	v
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avattiin {file} ({n} varoitus)|Avattiin {file} ({n} varoitusta)
 @plural	Removed {n} block|Removed {n} blocks	Poistettiin {n} lohko|Poistettiin {n} lohkoa
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Suorittaa {n} mallin riippumattoman toiston siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.|Suorittaa {n} mallin riippumatonta toistoa siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Pysäytysehto saavutettiin {met}/{n} toistossa, keskimäärin {time} {unit} jälkeen.|Pysäytysehto saavutettiin {met}/{n} toistossa, keskimäärin {time} {unit} jälkeen.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} / {n} toisto valmistui|{done} / {n} toistoa valmistui
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} toiston perusteella|{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} toiston perusteella
 @plural	{n} block selected|{n} blocks selected	{n} lohko valittu|{n} lohkoa valittu
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} toisto kussakin vaiheessa · siemen {seed}|{n} toistoa kussakin vaiheessa · siemen {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} toisto · keskiarvo {mean} · {min}–{max}|{n} toistoa · keskiarvo {mean} · {min}–{max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} toisto · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}|{n} toistoa · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} toisto · siemen {seed}|{n} toistoa · siemen {seed}
 @plural	{n} replication|{n} replications	{n} toisto|{n} toistoa

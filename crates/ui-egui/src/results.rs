@@ -70,6 +70,11 @@ fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
     }
 }
 
+/// How metric `name` of an element of kind `kind` reads.
+pub(crate) fn metric_label<'a>(name: &'a str, kind: &str) -> &'a str {
+    metric(name, kind).0
+}
+
 fn kind_label(kind: &str) -> &str {
     match kind {
         "source" => t("Arrivals"),

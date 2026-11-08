@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	हिन्दी
+	% down and up	% नीचे और ऊपर
+	% of replications	% पुनरावृत्तियों में
 	+ Add block	+ ब्लॉक जोड़ें
+	95th percentile	95वाँ प्रतिशतक
+	95th percentile {value}	95वाँ प्रतिशतक {value}
 	About StochCraft	StochCraft के बारे में
 	About {app}	{app} के बारे में
+	Across the range it changed by {change}: more than chance would explain.	पूरी सीमा में यह {change} बदला: संयोग जितना समझा सकता है उससे अधिक।
+	Across the range it changed by {change}: within what chance alone could do.	पूरी सीमा में यह {change} बदला: उतने में, जितना अकेला संयोग कर सकता है।
 	Actual size	वास्तविक आकार
 	Add Block	ब्लॉक जोड़ें
 	Add a flow from…	प्रवाह जोड़ें (स्रोत)…
 	Add a flow to…	प्रवाह जोड़ें (लक्ष्य)…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	सबसे व्यस्त कार्य या पूल में एक इकाई जोड़ें, जब तक पर्याप्त पुनरावृत्तियाँ लक्ष्य पूरा न कर लें। हर समय को उसके माध्य पर रखकर मिला उत्तर भी दिखता है; वह प्रायः बहुत छोटा होता है।
 	Add alternative	विकल्प जोड़ें
 	Add point	बिंदु जोड़ें
 	Add pool	पूल जोड़ें
@@ -27,9 +34,12 @@
 	Added {block} ({id})	{block} ({id}) जोड़ा गया
 	Align	संरेखित करें
 	Alternative {n}	विकल्प {n}
+	Analysis	विश्लेषण
 	Appearance	दिखावट
 	Arrival limit	आगमन सीमा
 	Arrivals	आगमन
+	At least	कम से कम
+	At most	अधिक से अधिक
 	Availability	उपलब्धता
 	BPMN with BPSim	BPSim सहित BPMN
 	Back to the model (Esc)	मॉडल पर वापस जाएँ (Esc)
@@ -38,10 +48,12 @@
 	Batch size	बैच का आकार
 	Beta	बीटा
 	Binomial	द्विपद
+	Block	ब्लॉक
 	Boolean	बूलियन
 	Bottoms	निचले किनारे
 	Bring All to Front	सभी को सामने लाएँ
 	Built with	इनसे बनाया गया
+	Busiest	सबसे व्यस्त
 	By role	भूमिका के अनुसार
 	CSV table	CSV तालिका
 	Cancel	रद्द करें
@@ -49,10 +61,13 @@
 	Cancel run	रन रद्द करें
 	Capacity	क्षमता
 	Centres	क्षैतिज केंद्र
+	Change	परिवर्तन
 	Change Block	ब्लॉक बदलें
 	Change Flow	प्रवाह बदलें
+	Change the estimate	अनुमान बदलें
 	Changes	परिवर्तन
 	Changing the time unit does not convert the times already in the model.	समय की इकाई बदलने से मॉडल में पहले से मौजूद समय मान परिवर्तित नहीं होते।
+	Choose…	चुनें…
 	Clear Menu	मेनू साफ़ करें
 	Close	बंद करें
 	Close Window	विंडो बंद करें
@@ -88,11 +103,16 @@
 	Drag to add:	जोड़ने के लिए खींचें:
 	Duplicate	प्रतिलिपि बनाएँ
 	Duration	अवधि
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	हर विश्लेषण एक ही यादृच्छिक बीज से प्रयोग को कई बार चलाता है, ताकि अंतर बदलाव से आए, संयोग से नहीं। इसमें कुछ समय लग सकता है।
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	प्रत्येक इकाई इनमें से पहला ऐसा विकल्प लेती है जिसे अभी एक साथ पूरा किया जा सके, और बाहर निकलते समय संसाधन इकाइयाँ लौटा देती है।
 	Edit	संपादित करें
+	Elasticity	लोच
+	Ends early	पहले समाप्त होता है
+	Enough: {units}, meeting the target in {p} of replications	पर्याप्त: {units}, {p} पुनरावृत्तियों में लक्ष्य पूरा
 	Entered	प्रवेश संख्या
 	Erlang	एरलांग
 	Error	त्रुटि
+	Estimate from three values…	तीन मानों से अनुमान लगाएँ…
 	Evenly across	क्षैतिज रूप से समान रूप से फैलाएँ
 	Evenly down	लंबवत रूप से समान रूप से फैलाएँ
 	Every distribution	सभी वितरण
@@ -105,20 +125,27 @@
 	Export table (CSV)	तालिका निर्यात करें (CSV)
 	Exported {file}	{file} निर्यात किया गया
 	Expression	व्यंजक
+	Family	परिवार
 	File	फ़ाइल
 	Finished at {time} {unit}	{time} {unit} पर समाप्त
 	Fit	फ़िट करें
 	Fit the diagram to the view	आरेख को दृश्य में फ़िट करें
+	Fit the time	समय मिलाएँ
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	इस ब्लॉक के समय को न्यूनतम, सर्वाधिक संभावित मान और अधिकतम या 95वें प्रतिशतक से मिलाएँ।
+	Fitted the time of {id}	{id} का समय मिलाया गया
 	Flows	प्रवाह
+	Forget the estimate	अनुमान भूल जाएँ
 	From	से
 	Gamma	गामा
 	Goes to	यहाँ जाता है
 	Help	सहायता
 	Hide Others	अन्य छिपाएँ
 	Hide {app}	{app} छिपाएँ
+	How many	कितने
 	Inside over time	समय के साथ अंदर
 	Jump	जाएँ
 	Jump to time	समय पर जाएँ
+	Keep the time, without the estimate it came from	समय रखें, जिस अनुमान से आया उसके बिना
 	Keyboard Shortcuts…	कीबोर्ड शॉर्टकट…
 	Keyboard shortcuts saved	कीबोर्ड शॉर्टकट सहेज दिए गए
 	Keyboard shortcuts unchanged	कीबोर्ड शॉर्टकट अपरिवर्तित हैं
@@ -140,6 +167,7 @@
 	Mean time blocked	औसत अवरोध समय
 	Mean time in system	सिस्टम में औसत समय
 	Mean wait	औसत प्रतीक्षा
+	Met in at least	कम से कम इतने में पूरा
 	Metric	मापदंड
 	Middles	लंबवत केंद्र
 	Minimise	न्यूनतम करें
@@ -148,19 +176,25 @@
 	Model	मॉडल
 	Most likely	सर्वाधिक संभावित
 	Move	स्थानांतरण
+	Move each parameter down and up in turn, and rank them by how much the result moves.	हर पैरामीटर को बारी-बारी से नीचे और ऊपर करें, और परिणाम कितना हिलता है उसके अनुसार क्रम दें।
 	Name	नाम
 	Needs	आवश्यकताएँ
+	Never: it runs for its duration	कभी नहीं: पूरी अवधि चलता है
 	New	नया
 	New model	नया मॉडल
 	New property	नया गुण
 	New property name	नए गुण का नाम
 	No blocks yet. Open a model, or add blocks to build one.	अभी कोई ब्लॉक नहीं हैं। मॉडल खोलें या ब्लॉक जोड़कर मॉडल बनाएँ।
 	No connections yet: join blocks below.	अभी कोई कनेक्शन नहीं हैं: नीचे दिए ब्लॉक जोड़ें।
+	No replication met the stop condition: each ran to its time limit.	किसी पुनरावृत्ति ने रुकने की शर्त पूरी नहीं की: हर एक अपनी समय सीमा तक चली।
 	No results yet	अभी कोई परिणाम नहीं हैं
+	No target	कोई लक्ष्य नहीं
 	None	कोई नहीं
 	None found. The model is ready to run.	कोई समस्या नहीं मिली। मॉडल चलाने के लिए तैयार है।
 	Normal	सामान्य
+	Not reached, even with {units}	पूरा नहीं हुआ, {units} के साथ भी नहीं
 	Number	संख्या
+	One change, which Undo takes back	एक बदलाव, जिसे पूर्ववत करें वापस लेता है
 	One clerk, random arrivals: the textbook queue, checked against theory.	एक कर्मचारी, यादृच्छिक आगमन: सिद्धांत से सत्यापित पारंपरिक कतार।
 	One task per BPSim distribution, to compare their spread.	प्रसार की तुलना के लिए प्रत्येक BPSim वितरण पर एक कार्य।
 	Open	खोलें
@@ -173,10 +207,13 @@
 	Opened {file}	{file} खोली गई
 	Open…	खोलें…
 	Or start from an example	या किसी उदाहरण से शुरू करें
+	PERT	PERT
 	PNG image	PNG छवि
+	Parameter	पैरामीटर
 	Parameters	पैरामीटर
 	Paste	चिपकाएँ
 	Pause	रोकें
+	Percentile	प्रतिशतक
 	Play	चलाएँ
 	Points	बिंदु
 	Poisson	प्वासों
@@ -190,6 +227,7 @@
 	Properties	गुण
 	Quit	बाहर निकलें
 	Quit {app}	{app} से बाहर निकलें
+	Rank the parameters	पैरामीटर क्रमित करें
 	Ready	तैयार
 	Recover	पुनर्प्राप्त करें
 	Recover unsaved changes?	सहेजे बिना किए परिवर्तन पुनर्प्राप्त करें?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	पुनरावृत्ति 1 · {end} {unit} में से {time}
 	Replication 1 · {time} of {end} {unit} · warm-up	पुनरावृत्ति 1 · {end} {unit} में से {time} · वार्म-अप
 	Replications	पुनरावृत्तियाँ
+	Replications meeting the target	लक्ष्य पूरा करने वाली पुनरावृत्तियाँ
+	Replications that never met the stop condition count as later than their time limit.	जिन पुनरावृत्तियों ने रुकने की शर्त कभी पूरी नहीं की, वे अपनी समय सीमा से बाद की गिनी जाती हैं।
 	Resource pool	संसाधन पूल
 	Resource pools	संसाधन पूल
 	Restore	पुनर्स्थापित करें
+	Result	परिणाम
+	Result to compare	तुलना हेतु परिणाम
+	Result to explain	समझाने हेतु परिणाम
+	Result with a target	लक्ष्य वाला परिणाम
+	Result, down and up	परिणाम, नीचे और ऊपर
 	Results	परिणाम
 	Right edges	दाएँ किनारे
 	Roles	भूमिकाएँ
@@ -223,7 +268,10 @@
 	Run experiment	प्रयोग चलाएँ
 	Run replication 1 step by step and see each block's queue on the diagram	पुनरावृत्ति 1 को चरण-दर-चरण चलाएँ और आरेख पर हर ब्लॉक की कतार देखें
 	Run the experiment ({shortcut})	प्रयोग चलाएँ ({shortcut})
+	Run the experiment again to see this result's spread.	इस परिणाम का फैलाव देखने के लिए प्रयोग फिर से चलाएँ।
+	Run the experiment at each value of one parameter, and compare a result.	एक पैरामीटर के हर मान पर प्रयोग चलाएँ और एक परिणाम की तुलना करें।
 	Run the next event	अगली घटना चलाएँ
+	Run the sweep	स्वीप चलाएँ
 	Running	चल रहा है
 	Running…	चल रहा है…
 	Save	सहेजें
@@ -235,6 +283,7 @@
 	Seed	यादृच्छिक बीज
 	Select All	सभी चुनें
 	Select a block to see its queue over time.	समय के साथ किसी ब्लॉक की कतार देखने के लिए उसे चुनें।
+	Separate the values with semicolons or spaces.	मानों को अर्धविराम या रिक्त स्थान से अलग करें।
 	Service time	सेवा समय
 	Services	सेवाएँ
 	Set Property	गुण सेट करें
@@ -243,13 +292,19 @@
 	Settings	सेटिंग
 	Shape	आकार
 	Share of arrivals lost	हानि हुए आगमन का अनुपात
+	Share of replications	पुनरावृत्तियों का हिस्सा
 	Share of units blocked	अवरुद्ध इकाइयों का अनुपात
 	Show All	सभी दिखाएँ
 	Show {id}	{id} दिखाएँ
+	Size	आकार तय करें
+	Size the resources	संसाधनों का आकार तय करें
+	Source	स्रोत
+	Source: {source}	स्रोत: {source}
 	Speed	गति
 	Split batches	बैच अलग करें
 	Split or join	विभाजित या संयोजित करें
 	Split or join (all ways)	विभाजित या संयोजित करें (सभी मार्ग)
+	Spread across replications	पुनरावृत्तियों में फैलाव
 	Spread out	फैलाएँ
 	Stages (k)	चरण (k)
 	Standard deviation	मानक विचलन
@@ -261,17 +316,25 @@
 	Stop setting {name}	{name} सेट करना बंद करें
 	Stop watching	देखना बंद करें
 	Stopped watching	देखना बंद किया गया
+	Sweep a parameter	पैरामीटर स्वीप करें
 	Tandem line	क्रमिक लाइन
+	Target	लक्ष्य
+	Target value	लक्ष्य मान
 	Task	कार्य
 	Task with a resource	संसाधन वाला कार्य
 	Task with shared resources	साझा संसाधनों वाला कार्य
 	Text	पाठ
 	The model changed, so watching stopped	मॉडल बदल गया, इसलिए देखना बंद हो गया
+	The model now has the units sizing found	मॉडल में अब आकार निर्धारण से मिली इकाइयाँ हैं
 	The model: its experiment, connections and problems	मॉडल: प्रयोग, कनेक्शन और समस्याएँ
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	हर मान के बराबर या उससे कम पुनरावृत्तियों का हिस्सा। पट्टी में वास्तविक वितरण {confidence} विश्वास के साथ है।
+	The values are numbers, separated by semicolons or spaces	मान अर्धविराम या रिक्त स्थान से अलग की गई संख्याएँ हैं
 	This block has a warning	इस ब्लॉक में चेतावनी है
 	This block has an error	इस ब्लॉक में त्रुटि है
 	This run	यह रन
+	Three-point estimate	त्रि-बिंदु अनुमान
 	Time between arrivals	आगमन के बीच का समय
+	Time to the stop condition	रुकने की शर्त तक का समय
 	Time unit	समय की इकाई
 	To	तक
 	Tops	ऊपरी किनारे
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	संसाधन इकाइयाँ, जिन्हें कई कार्य साझा करते हैं। साझा संसाधनों वाला कार्य उन्हें पूल या भूमिका के अनुसार लेता है।
 	Untitled	बिना शीर्षक
 	Untitled model	बिना शीर्षक वाला मॉडल
+	Upper value	ऊपरी मान
 	Use System Setting	सिस्टम सेटिंग का उपयोग करें
+	Use these units in the model	इन इकाइयों को मॉडल में उपयोग करें
 	Utilisation	उपयोग दर
 	Value	मान
+	Values	मान
 	View	दृश्य
 	Waiting over time	समय के साथ प्रतीक्षारत
 	Waiting room	प्रतीक्षा कक्ष
@@ -302,8 +368,12 @@
 	Watch a run	एक रन देखें
 	Watching replication 1	पुनरावृत्ति 1 देखी जा रही है
 	Weibull	वीबुल
+	When a task empties	जब कोई कार्य खाली हो जाए
+	When enough have left a block	जब किसी ब्लॉक से पर्याप्त निकल जाएँ
+	Which parameters matter	कौन-से पैरामीटर मायने रखते हैं
 	Whole number	पूर्णांक
 	Window	विंडो
+	With every time at its mean: {units}	हर समय उसके माध्य पर: {units}
 	Yes or no	हाँ या नहीं
 	Your changes will be lost if you don't save them.	यदि आप सहेजते नहीं हैं, तो परिवर्तन खो जाएँगे।
 	Zoom	ज़ूम
@@ -317,8 +387,11 @@
 	departures	प्रस्थान
 	egui and eframe (Craft suite fork)	egui और eframe (Craft सुइट का फ़ोर्क)
 	from its value	इसके मान से
+	have left	निकल गए
 	hours	घंटे
 	id {id}	ID {id}
+	matters	मायने रखता है
+	maximum {value}	अधिकतम {value}
 	milliseconds	मिलीसेकंड
 	minutes	मिनट
 	nothing yet	अभी कुछ नहीं
@@ -335,12 +408,17 @@
 	time	समय
 	to {block}	{block} तक
 	unlimited	असीमित
+	who gave it, or where it comes from	किसने दिया या कहाँ से आया
+	within chance	संयोग के भीतर
 	years	वर्ष
+	{block}: units	{block}: इकाइयाँ
 	{busy} busy	{busy} व्यस्त
 	{entered} in, {left} out, {lost} lost	{entered} अंदर, {left} बाहर, {lost} खोए
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: न्यूनतम {min}, सर्वाधिक संभावित {mode}, {upper}
 	{field}: not editable here yet	{field}: यहाँ अभी संपादन संभव नहीं है
 	{id}: a probability is a number from 0 to 1	{id}: प्रायिकता 0 से 1 तक की संख्या होनी चाहिए
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} में से {met} पुनरावृत्तियों ने लक्ष्य पूरा किया: {p} (95% अंतराल {lo} से {hi})
 	{name} — edited	{name} — संपादित
 	{n} created	{n} बनाए गए
 	{n} done	{n} पूरे
@@ -364,9 +442,12 @@ unit	yr	वर्ष
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} खोली गई ({n} चेतावनी)|{file} खोली गई ({n} चेतावनियाँ)
 @plural	Removed {n} block|Removed {n} blocks	{n} ब्लॉक हटाया गया|{n} ब्लॉक हटाए गए
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	बीज {seed} से मॉडल की {n} स्वतंत्र पुनरावृत्ति चलाता है। प्रत्येक तत्व के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।|बीज {seed} से मॉडल की {n} स्वतंत्र पुनरावृत्तियाँ चलाता है। प्रत्येक तत्व के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	रुकने की शर्त {n} में से {met} पुनरावृत्ति में, औसतन {time} {unit} बाद पूरी हुई।|रुकने की शर्त {n} में से {met} पुनरावृत्तियों में, औसतन {time} {unit} बाद पूरी हुई।
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} में से {done} पुनरावृत्ति पूरी हुई|{n} में से {done} पुनरावृत्तियाँ पूरी हुईं
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% अंतराल {low} से {high}{unit}\n{n} पुनरावृत्ति के आधार पर|{name}: {mean}{unit}\n95% अंतराल {low} से {high}{unit}\n{n} पुनरावृत्तियों के आधार पर
 @plural	{n} block selected|{n} blocks selected	{n} ब्लॉक चुना गया|{n} ब्लॉक चुने गए
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	हर चरण में {n} पुनरावृत्ति · बीज {seed}|हर चरण में {n} पुनरावृत्तियाँ · बीज {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} पुनरावृत्ति · माध्य {mean} · {min} से {max}|{n} पुनरावृत्तियाँ · माध्य {mean} · {min} से {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} पुनरावृत्ति · बीज {seed} · वार्म-अप {warmup} {unit} · {duration} {unit} मापा गया|{n} पुनरावृत्तियाँ · बीज {seed} · वार्म-अप {warmup} {unit} · {duration} {unit} मापा गया
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} पुनरावृत्ति · बीज {seed}|{n} पुनरावृत्तियाँ · बीज {seed}
 @plural	{n} replication|{n} replications	{n} पुनरावृत्ति|{n} पुनरावृत्तियाँ

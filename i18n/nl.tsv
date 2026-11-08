@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Nederlands
+	% down and up	% omlaag en omhoog
+	% of replications	% van de herhalingen
 	+ Add block	+ Blok toevoegen
+	95th percentile	95e percentiel
+	95th percentile {value}	95e percentiel {value}
 	About StochCraft	Over StochCraft
 	About {app}	Over {app}
+	Across the range it changed by {change}: more than chance would explain.	Over het bereik veranderde het met {change}: meer dan toeval zou verklaren.
+	Across the range it changed by {change}: within what chance alone could do.	Over het bereik veranderde het met {change}: binnen wat toeval alleen kan doen.
 	Actual size	Werkelijke grootte
 	Add Block	Blok toevoegen
 	Add a flow from…	Stroom toevoegen vanaf…
 	Add a flow to…	Stroom toevoegen naar…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Een eenheid toevoegen bij de drukste taak of pool tot genoeg herhalingen een doel halen. Het antwoord met elke tijd op zijn gemiddelde staat er ook bij; dat is meestal te klein.
 	Add alternative	Alternatief toevoegen
 	Add point	Punt toevoegen
 	Add pool	Pool toevoegen
@@ -27,9 +34,12 @@
 	Added {block} ({id})	{block} ({id}) toegevoegd
 	Align	Uitlijnen
 	Alternative {n}	Alternatief {n}
+	Analysis	Analyse
 	Appearance	Uiterlijk
 	Arrival limit	Aankomstlimiet
 	Arrivals	Aankomsten
+	At least	Minstens
+	At most	Hoogstens
 	Availability	Beschikbaarheid
 	BPMN with BPSim	BPMN met BPSim
 	Back to the model (Esc)	Terug naar het model (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Batchgrootte
 	Beta	Bèta
 	Binomial	Binomiaal
+	Block	Blok
 	Boolean	Booleaans
 	Bottoms	Onderkanten
 	Bring All to Front	Alles naar voren halen
 	Built with	Gemaakt met
+	Busiest	Drukst
 	By role	Per rol
 	CSV table	CSV-tabel
 	Cancel	Annuleren
@@ -49,10 +61,13 @@
 	Cancel run	Uitvoering annuleren
 	Capacity	Capaciteit
 	Centres	Horizontale middens
+	Change	Verandering
 	Change Block	Blok wijzigen
 	Change Flow	Stroom wijzigen
+	Change the estimate	Schatting wijzigen
 	Changes	Wijzigingen
 	Changing the time unit does not convert the times already in the model.	Als u de tijdseenheid wijzigt, worden bestaande tijden in het model niet omgerekend.
+	Choose…	Kies…
 	Clear Menu	Menu wissen
 	Close	Sluiten
 	Close Window	Venster sluiten
@@ -88,11 +103,16 @@
 	Drag to add:	Sleep om toe te voegen:
 	Duplicate	Dupliceren
 	Duration	Duur
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Elke analyse voert het experiment meerdere keren uit met dezelfde startwaarde, zodat de verschillen van de wijziging komen, niet van toeval. Dit kan even duren.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Elke entiteit neemt in één keer het eerste van deze alternatieven waaraan nu kan worden voldaan, en geeft de eenheden terug wanneer ze vertrekt.
 	Edit	Bewerken
+	Elasticity	Elasticiteit
+	Ends early	Stopt eerder
+	Enough: {units}, meeting the target in {p} of replications	Genoeg: {units}, haalt het doel in {p} van de herhalingen
 	Entered	Binnengekomen
 	Erlang	Erlang
 	Error	Fout
+	Estimate from three values…	Schatten uit drie waarden…
 	Evenly across	Gelijkmatig naast elkaar
 	Evenly down	Gelijkmatig onder elkaar
 	Every distribution	Alle verdelingen
@@ -105,20 +125,27 @@
 	Export table (CSV)	Tabel exporteren (CSV)
 	Exported {file}	{file} geëxporteerd
 	Expression	Expressie
+	Family	Familie
 	File	Bestand
 	Finished at {time} {unit}	Klaar op {time} {unit}
 	Fit	Passend maken
 	Fit the diagram to the view	Diagram passend in de weergave maken
+	Fit the time	Tijd passen
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	De tijd van dit blok passen op een minimum, een meest waarschijnlijke waarde en een maximum of 95e percentiel.
+	Fitted the time of {id}	Tijd van {id} gepast
 	Flows	Stromen
+	Forget the estimate	Schatting vergeten
 	From	Van
 	Gamma	Gamma
 	Goes to	Gaat naar
 	Help	Help
 	Hide Others	Anderen verbergen
 	Hide {app}	{app} verbergen
+	How many	Hoeveel
 	Inside over time	Binnen in de tijd
 	Jump	Ga
 	Jump to time	Ga naar tijdstip
+	Keep the time, without the estimate it came from	De tijd houden, zonder de schatting waar hij vandaan komt
 	Keyboard Shortcuts…	Sneltoetsen…
 	Keyboard shortcuts saved	Sneltoetsen opgeslagen
 	Keyboard shortcuts unchanged	Sneltoetsen ongewijzigd
@@ -140,6 +167,7 @@
 	Mean time blocked	Gemiddelde blokkeringstijd
 	Mean time in system	Gemiddelde tijd in het systeem
 	Mean wait	Gemiddelde wachttijd
+	Met in at least	Gehaald in minstens
 	Metric	Metriek
 	Middles	Verticale middens
 	Minimise	Minimaliseren
@@ -148,19 +176,25 @@
 	Model	Model
 	Most likely	Meest waarschijnlijk
 	Move	Verplaatsen
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Elke parameter om de beurt omlaag en omhoog zetten, en ze rangschikken naar hoeveel het resultaat verschuift.
 	Name	Naam
 	Needs	Behoeften
+	Never: it runs for its duration	Nooit: loopt zijn hele duur
 	New	Nieuw
 	New model	Nieuw model
 	New property	Nieuwe eigenschap
 	New property name	Naam van nieuwe eigenschap
 	No blocks yet. Open a model, or add blocks to build one.	Nog geen blokken. Open een model of voeg blokken toe om er een te maken.
 	No connections yet: join blocks below.	Nog geen verbindingen: verbind hieronder de blokken.
+	No replication met the stop condition: each ran to its time limit.	Geen herhaling haalde de stopvoorwaarde: elke liep tot haar tijdslimiet.
 	No results yet	Nog geen resultaten
+	No target	Geen doel
 	None	Geen
 	None found. The model is ready to run.	Geen problemen gevonden. Het model is klaar om uit te voeren.
 	Normal	Normaal
+	Not reached, even with {units}	Niet gehaald, zelfs niet met {units}
 	Number	Getal
+	One change, which Undo takes back	Eén wijziging, die Ongedaan maken terugdraait
 	One clerk, random arrivals: the textbook queue, checked against theory.	Eén medewerker, willekeurige aankomsten: de klassieke wachtrij, getoetst aan de theorie.
 	One task per BPSim distribution, to compare their spread.	Eén taak per BPSim-verdeling om de spreiding te vergelijken.
 	Open	Openen
@@ -173,10 +207,13 @@
 	Opened {file}	{file} geopend
 	Open…	Openen…
 	Or start from an example	Of begin met een voorbeeld
+	PERT	PERT
 	PNG image	PNG-afbeelding
+	Parameter	Parameter
 	Parameters	Parameters
 	Paste	Plakken
 	Pause	Pauzeren
+	Percentile	Percentiel
 	Play	Afspelen
 	Points	Punten
 	Poisson	Poisson
@@ -190,6 +227,7 @@
 	Properties	Eigenschappen
 	Quit	Afsluiten
 	Quit {app}	{app} afsluiten
+	Rank the parameters	Parameters rangschikken
 	Ready	Klaar
 	Recover	Herstellen
 	Recover unsaved changes?	Niet-opgeslagen wijzigingen herstellen?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	Herhaling 1 · {time} van {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Herhaling 1 · {time} van {end} {unit} · opwarmperiode
 	Replications	Herhalingen
+	Replications meeting the target	Herhalingen die het doel halen
+	Replications that never met the stop condition count as later than their time limit.	Herhalingen die de stopvoorwaarde nooit haalden, tellen als later dan hun tijdslimiet.
 	Resource pool	Hulpbronnenpool
 	Resource pools	Hulpbronnenpools
 	Restore	Venster herstellen
+	Result	Resultaat
+	Result to compare	Resultaat om te vergelijken
+	Result to explain	Resultaat om te verklaren
+	Result with a target	Resultaat met doel
+	Result, down and up	Resultaat, omlaag en omhoog
 	Results	Resultaten
 	Right edges	Rechterkanten
 	Roles	Rollen
@@ -223,7 +268,10 @@
 	Run experiment	Experiment uitvoeren
 	Run replication 1 step by step and see each block's queue on the diagram	Herhaling 1 stap voor stap uitvoeren en de wachtrij van elk blok in het diagram zien
 	Run the experiment ({shortcut})	Het experiment uitvoeren ({shortcut})
+	Run the experiment again to see this result's spread.	Voer het experiment opnieuw uit om de spreiding van dit resultaat te zien.
+	Run the experiment at each value of one parameter, and compare a result.	Het experiment uitvoeren bij elke waarde van één parameter en een resultaat vergelijken.
 	Run the next event	Volgende gebeurtenis uitvoeren
+	Run the sweep	Reeks uitvoeren
 	Running	Wordt uitgevoerd
 	Running…	Wordt uitgevoerd…
 	Save	Opslaan
@@ -235,6 +283,7 @@
 	Seed	Startwaarde
 	Select All	Alles selecteren
 	Select a block to see its queue over time.	Selecteer een blok om de wachtrij in de tijd te zien.
+	Separate the values with semicolons or spaces.	Scheid de waarden met puntkomma's of spaties.
 	Service time	Servicetijd
 	Services	Diensten
 	Set Property	Eigenschap instellen
@@ -243,13 +292,19 @@
 	Settings	Instellingen
 	Shape	Vorm
 	Share of arrivals lost	Aandeel verloren aankomsten
+	Share of replications	Aandeel herhalingen
 	Share of units blocked	Aandeel geblokkeerde eenheden
 	Show All	Alles tonen
 	Show {id}	{id} tonen
+	Size	Dimensioneren
+	Size the resources	De middelen dimensioneren
+	Source	Bron
+	Source: {source}	Bron: {source}
 	Speed	Snelheid
 	Split batches	Batches splitsen
 	Split or join	Splitsen of samenvoegen
 	Split or join (all ways)	Splitsen of samenvoegen (alle routes)
+	Spread across replications	Spreiding over herhalingen
 	Spread out	Verdelen
 	Stages (k)	Fasen (k)
 	Standard deviation	Standaardafwijking
@@ -261,17 +316,25 @@
 	Stop setting {name}	Instellen van {name} stoppen
 	Stop watching	Stoppen met volgen
 	Stopped watching	Gestopt met volgen
+	Sweep a parameter	Eén parameter variëren
 	Tandem line	Tandemlijn
+	Target	Doel
+	Target value	Doelwaarde
 	Task	Taak
 	Task with a resource	Taak met een hulpbron
 	Task with shared resources	Taak met gedeelde hulpbronnen
 	Text	Tekst
 	The model changed, so watching stopped	Het model is gewijzigd, dus het volgen is gestopt
+	The model now has the units sizing found	Het model heeft nu de eenheden die het dimensioneren vond
 	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Het aandeel herhalingen op of onder elke waarde. De band bevat de ware verdeling met {confidence} betrouwbaarheid.
+	The values are numbers, separated by semicolons or spaces	De waarden zijn getallen, gescheiden door puntkomma's of spaties
 	This block has a warning	Dit blok heeft een waarschuwing
 	This block has an error	Dit blok heeft een fout
 	This run	Deze uitvoering
+	Three-point estimate	Driepuntsschatting
 	Time between arrivals	Tijd tussen aankomsten
+	Time to the stop condition	Tijd tot de stopvoorwaarde
 	Time unit	Tijdseenheid
 	To	Naar
 	Tops	Bovenkanten
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Eenheden die door meerdere taken worden gedeeld. Een taak met gedeelde hulpbronnen neemt ze per pool of per rol.
 	Untitled	Naamloos
 	Untitled model	Naamloos model
+	Upper value	Bovenwaarde
 	Use System Setting	Systeeminstelling gebruiken
+	Use these units in the model	Deze eenheden in het model gebruiken
 	Utilisation	Bezettingsgraad
 	Value	Waarde
+	Values	Waarden
 	View	Beeld
 	Waiting over time	Wachtend in de tijd
 	Waiting room	Wachtruimte
@@ -302,8 +368,12 @@
 	Watch a run	Een uitvoering volgen
 	Watching replication 1	Herhaling 1 wordt gevolgd
 	Weibull	Weibull
+	When a task empties	Als een taak leeg raakt
+	When enough have left a block	Als er genoeg een blok hebben verlaten
+	Which parameters matter	Welke parameters ertoe doen
 	Whole number	Geheel getal
 	Window	Venster
+	With every time at its mean: {units}	Met elke tijd op zijn gemiddelde: {units}
 	Yes or no	Ja of nee
 	Your changes will be lost if you don't save them.	Je wijzigingen gaan verloren als je ze niet opslaat.
 	Zoom	Zoom
@@ -317,8 +387,11 @@
 	departures	vertrekken
 	egui and eframe (Craft suite fork)	egui en eframe (fork van de Craft-suite)
 	from its value	op basis van de waarde
+	have left	hebben verlaten
 	hours	uren
 	id {id}	id {id}
+	matters	doet ertoe
+	maximum {value}	maximum {value}
 	milliseconds	milliseconden
 	minutes	minuten
 	nothing yet	nog niets
@@ -335,12 +408,17 @@
 	time	tijdstip
 	to {block}	naar {block}
 	unlimited	onbeperkt
+	who gave it, or where it comes from	wie hem gaf of waar hij vandaan komt
+	within chance	binnen toeval
 	years	jaren
+	{block}: units	{block}: eenheden
 	{busy} busy	{busy} bezet
 	{entered} in, {left} out, {lost} lost	{entered} in, {left} uit, {lost} verloren
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, meest waarschijnlijk {mode}, {upper}
 	{field}: not editable here yet	{field}: hier nog niet bewerkbaar
 	{id}: a probability is a number from 0 to 1	{id}: een kans is een getal tussen 0 en 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} van {of} herhalingen haalden het doel: {p} (95%-interval {lo} tot {hi})
 	{name} — edited	{name} — bewerkt
 	{n} created	{n} gemaakt
 	{n} done	{n} klaar
@@ -364,9 +442,12 @@ unit	yr	j
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} geopend ({n} waarschuwing)|{file} geopend ({n} waarschuwingen)
 @plural	Removed {n} block|Removed {n} blocks	{n} blok verwijderd|{n} blokken verwijderd
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Voert {n} onafhankelijke herhaling van het model uit met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.|Voert {n} onafhankelijke herhalingen van het model uit met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	De stopvoorwaarde werd gehaald in {met} van {n} herhaling, na gemiddeld {time} {unit}.|De stopvoorwaarde werd gehaald in {met} van {n} herhalingen, na gemiddeld {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} van {n} herhaling voltooid|{done} van {n} herhalingen voltooid
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} herhaling|{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} herhalingen
 @plural	{n} block selected|{n} blocks selected	{n} blok geselecteerd|{n} blokken geselecteerd
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} herhaling per stap · startwaarde {seed}|{n} herhalingen per stap · startwaarde {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} herhaling · gemiddelde {mean} · van {min} tot {max}|{n} herhalingen · gemiddelde {mean} · van {min} tot {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} herhaling · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten|{n} herhalingen · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} herhaling · startwaarde {seed}|{n} herhalingen · startwaarde {seed}
 @plural	{n} replication|{n} replications	{n} herhaling|{n} herhalingen

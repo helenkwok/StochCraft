@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Eesti
+	% down and up	% alla ja üles
+	% of replications	% kordustest
 	+ Add block	+ Lisa plokk
+	95th percentile	95. protsentiil
+	95th percentile {value}	95. protsentiil {value}
 	About StochCraft	Teave StochCrafti kohta
 	About {app}	Teave: {app}
+	Across the range it changed by {change}: more than chance would explain.	Vahemikus muutus see {change} võrra: rohkem, kui juhus seletaks.
+	Across the range it changed by {change}: within what chance alone could do.	Vahemikus muutus see {change} võrra: piires, mida juhus üksi teha võib.
 	Actual size	Tegelik suurus
 	Add Block	Lisa plokk
 	Add a flow from…	Lisa voog alates…
 	Add a flow to…	Lisa voog kuni…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lisa kõige koormatumale tööle või kogumile üks ühik, kuni piisavalt kordusi saavutab eesmärgi. Näidatakse ka vastust, kus iga aeg on oma keskmisel; see on tavaliselt liiga väike.
 	Add alternative	Lisa alternatiiv
 	Add point	Lisa punkt
 	Add pool	Lisa kogum
@@ -27,9 +34,12 @@
 	Added {block} ({id})	Lisatud {block} ({id})
 	Align	Joonda
 	Alternative {n}	Alternatiiv {n}
+	Analysis	Analüüs
 	Appearance	Välimus
 	Arrival limit	Saabumiste piirang
 	Arrivals	Saabumised
+	At least	Vähemalt
+	At most	Kõige rohkem
 	Availability	Käideldavus
 	BPMN with BPSim	BPMN ja BPSim
 	Back to the model (Esc)	Tagasi mudeli juurde (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Partii suurus
 	Beta	Beeta
 	Binomial	Binoomjaotus
+	Block	Plokk
 	Boolean	Tõeväärtus
 	Bottoms	Alaservad
 	Bring All to Front	Too kõik esiplaanile
 	Built with	Loodud järgmistega
+	Busiest	Kõige koormatum
 	By role	Rolli järgi
 	CSV table	CSV-tabel
 	Cancel	Loobu
@@ -49,10 +61,13 @@
 	Cancel run	Tühista käivitus
 	Capacity	Maht
 	Centres	Horisontaalsed keskkohad
+	Change	Muutus
 	Change Block	Muuda plokki
 	Change Flow	Muuda voogu
+	Change the estimate	Muuda hinnangut
 	Changes	Muudatused
 	Changing the time unit does not convert the times already in the model.	Ajaühiku muutmine ei teisenda mudelis juba olevaid aegu.
+	Choose…	Vali…
 	Clear Menu	Tühjenda menüü
 	Close	Sulge
 	Close Window	Sulge aken
@@ -88,11 +103,16 @@
 	Drag to add:	Lisamiseks lohista:
 	Duplicate	Dubleeri
 	Duration	Kestus
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Iga analüüs käitab eksperimenti mitu korda sama juhuarvuseemnega, nii et erinevused tulevad muudatusest, mitte juhusest. See võib võtta aega.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Iga olem võtab neist esimese, mida saab kohe täita, kõik korraga, ja annab ühikud tagasi, kui ülesandest lahkub.
 	Edit	Muuda
+	Elasticity	Elastsus
+	Ends early	Lõpeb varem
+	Enough: {units}, meeting the target in {p} of replications	Piisab: {units}, eesmärk saavutatakse {p} kordustest
 	Entered	Sisenenud
 	Erlang	Erlang
 	Error	Viga
+	Estimate from three values…	Hinda kolme väärtuse põhjal…
 	Evenly across	Jaota ühtlaselt horisontaalselt
 	Evenly down	Jaota ühtlaselt vertikaalselt
 	Every distribution	Kõik jaotused
@@ -105,20 +125,27 @@
 	Export table (CSV)	Ekspordi tabel (CSV)
 	Exported {file}	Eksporditud {file}
 	Expression	Avaldis
+	Family	Jaotuspere
 	File	Fail
 	Finished at {time} {unit}	Lõppes ajal {time} {unit}
 	Fit	Sobita
 	Fit the diagram to the view	Sobita diagramm vaatesse
+	Fit the time	Sobita aeg
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Sobita selle ploki aeg miinimumi, kõige tõenäolisema väärtuse ja maksimumi või 95. protsentiiliga.
+	Fitted the time of {id}	Ploki {id} aeg sobitatud
 	Flows	Vood
+	Forget the estimate	Unusta hinnang
 	From	Alates
 	Gamma	Gamma
 	Goes to	Viib kohta
 	Help	Abi
 	Hide Others	Peida teised
 	Hide {app}	Peida {app}
+	How many	Mitu
 	Inside over time	Sees aja jooksul
 	Jump	Mine
 	Jump to time	Mine ajahetkele
+	Keep the time, without the estimate it came from	Säilita aeg ilma hinnanguta, millest see tuli
 	Keyboard Shortcuts…	Klaviatuuri otseteed…
 	Keyboard shortcuts saved	Klaviatuuri otseteed salvestatud
 	Keyboard shortcuts unchanged	Klaviatuuri otseteed muutmata
@@ -140,6 +167,7 @@
 	Mean time blocked	Keskmine blokeerimisaeg
 	Mean time in system	Keskmine aeg süsteemis
 	Mean wait	Keskmine ooteaeg
+	Met in at least	Saavutatud vähemalt
 	Metric	Mõõdik
 	Middles	Vertikaalsed keskkohad
 	Minimise	Minimeeri
@@ -148,19 +176,25 @@
 	Model	Mudel
 	Most likely	Kõige tõenäolisem
 	Move	Teisaldamine
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Liiguta iga parameetrit kordamööda alla ja üles ning järjesta need selle järgi, kui palju tulemus liigub.
 	Name	Nimi
 	Needs	Vajadused
+	Never: it runs for its duration	Mitte kunagi: kestab kogu oma kestuse
 	New	Uus
 	New model	Uus mudel
 	New property	Uus omadus
 	New property name	Uue omaduse nimi
 	No blocks yet. Open a model, or add blocks to build one.	Plokke veel pole. Ava mudel või lisa selle loomiseks plokke.
 	No connections yet: join blocks below.	Ühendusi veel pole: ühenda allolevad plokid.
+	No replication met the stop condition: each ran to its time limit.	Ükski kordus ei jõudnud peatamistingimuseni: iga kordus kestis oma ajapiirini.
 	No results yet	Tulemusi veel pole
+	No target	Eesmärk puudub
 	None	Puudub
 	None found. The model is ready to run.	Probleeme ei leitud. Mudel on käivitamiseks valmis.
 	Normal	Normaalne
+	Not reached, even with {units}	Ei saavutatud, isegi mitte {units} korral
 	Number	Arv
+	One change, which Undo takes back	Üks muudatus, mille Võta tagasi tühistab
 	One clerk, random arrivals: the textbook queue, checked against theory.	Üks teenindaja, juhuslikud saabumised: klassikaline järjekord, mida kontrollitakse teooriaga.
 	One task per BPSim distribution, to compare their spread.	Üks ülesanne iga BPSim-jaotuse kohta nende hajuvuse võrdlemiseks.
 	Open	Ava
@@ -173,10 +207,13 @@
 	Opened {file}	Avati {file}
 	Open…	Ava…
 	Or start from an example	Või alusta näitest
+	PERT	PERT
 	PNG image	PNG-pilt
+	Parameter	Parameeter
 	Parameters	Parameetrid
 	Paste	Kleebi
 	Pause	Paus
+	Percentile	Protsentiil
 	Play	Esita
 	Points	Punktid
 	Poisson	Poisson
@@ -190,6 +227,7 @@
 	Properties	Omadused
 	Quit	Välju
 	Quit {app}	Välju: {app}
+	Rank the parameters	Järjesta parameetrid
 	Ready	Valmis
 	Recover	Taasta
 	Recover unsaved changes?	Kas taastada salvestamata muudatused?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	Kordus 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Kordus 1 · {time} / {end} {unit} · soojendus
 	Replications	Kordused
+	Replications meeting the target	Eesmärgi saavutanud kordused
+	Replications that never met the stop condition count as later than their time limit.	Kordused, mis peatamistingimuseni ei jõudnud, loetakse ajapiirist hilisemaks.
 	Resource pool	Ressursikogum
 	Resource pools	Ressursikogumid
 	Restore	Taasta aken
+	Result	Tulemus
+	Result to compare	Võrreldav tulemus
+	Result to explain	Selgitatav tulemus
+	Result with a target	Tulemus koos eesmärgiga
+	Result, down and up	Tulemus, alla ja üles
 	Results	Tulemused
 	Right edges	Paremad servad
 	Roles	Rollid
@@ -223,7 +268,10 @@
 	Run experiment	Käivita eksperiment
 	Run replication 1 step by step and see each block's queue on the diagram	Käivita kordus 1 samm-sammult ja vaata iga ploki järjekorda diagrammil
 	Run the experiment ({shortcut})	Käivita eksperiment ({shortcut})
+	Run the experiment again to see this result's spread.	Käivita eksperiment uuesti, et näha selle tulemuse hajuvust.
+	Run the experiment at each value of one parameter, and compare a result.	Käivita eksperiment ühe parameetri iga väärtusega ja võrdle tulemust.
 	Run the next event	Käivita järgmine sündmus
+	Run the sweep	Käivita läbimine
 	Running	Käib
 	Running…	Käivitamine…
 	Save	Salvesta
@@ -235,6 +283,7 @@
 	Seed	Juhuarvuseeme
 	Select All	Vali kõik
 	Select a block to see its queue over time.	Vali plokk, et näha selle järjekorda aja jooksul.
+	Separate the values with semicolons or spaces.	Eralda väärtused semikoolonite või tühikutega.
 	Service time	Teenindusaeg
 	Services	Teenused
 	Set Property	Määra omadus
@@ -243,13 +292,19 @@
 	Settings	Seaded
 	Shape	Kuju
 	Share of arrivals lost	Kaotatud saabumiste osakaal
+	Share of replications	Korduste osakaal
 	Share of units blocked	Blokeeritud ühikute osakaal
 	Show All	Näita kõiki
 	Show {id}	Näita {id}
+	Size	Dimensioneeri
+	Size the resources	Dimensioneeri ressursid
+	Source	Allikas
+	Source: {source}	Allikas: {source}
 	Speed	Kiirus
 	Split batches	Partiide jagamine
 	Split or join	Hargneda või ühineda
 	Split or join (all ways)	Hargneda või ühineda (kõik teed)
+	Spread across replications	Hajuvus korduste vahel
 	Spread out	Jaota
 	Stages (k)	Etapid (k)
 	Standard deviation	Standardhälve
@@ -261,17 +316,25 @@
 	Stop setting {name}	Lõpeta {name} määramine
 	Stop watching	Lõpeta jälgimine
 	Stopped watching	Jälgimine lõpetati
+	Sweep a parameter	Parameetri läbimine
 	Tandem line	Tandemliin
+	Target	Eesmärk
+	Target value	Eesmärgi väärtus
 	Task	Ülesanne
 	Task with a resource	Ressursiga ülesanne
 	Task with shared resources	Jagatud ressurssidega ülesanne
 	Text	Tekst
 	The model changed, so watching stopped	Mudel muutus, seega jälgimine lõpetati
+	The model now has the units sizing found	Mudelil on nüüd dimensioneerimisel leitud ühikud
 	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Korduste osakaal, mis on iga väärtusega võrdsed või sellest väiksemad. Vöönd sisaldab tegelikku jaotust {confidence} usaldusega.
+	The values are numbers, separated by semicolons or spaces	Väärtused on arvud, eraldatud semikoolonite või tühikutega
 	This block has a warning	Selles plokis on hoiatus
 	This block has an error	Selles plokis on viga
 	This run	See käivitus
+	Three-point estimate	Kolmepunktihinnang
 	Time between arrivals	Saabumiste vaheline aeg
+	Time to the stop condition	Aeg peatamistingimuseni
 	Time unit	Ajaühik
 	To	Kuni
 	Tops	Ülaservad
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Ühikud, mida mitu ülesannet jagavad. Jagatud ressurssidega ülesanne võtab need kogumist või rolli järgi.
 	Untitled	Pealkirjata
 	Untitled model	Pealkirjata mudel
+	Upper value	Ülemine väärtus
 	Use System Setting	Kasuta süsteemi seadet
+	Use these units in the model	Kasuta neid ühikuid mudelis
 	Utilisation	Kasutusmäär
 	Value	Väärtus
+	Values	Väärtused
 	View	Vaade
 	Waiting over time	Ootel aja jooksul
 	Waiting room	Ooteruum
@@ -302,8 +368,12 @@
 	Watch a run	Jälgi käivitust
 	Watching replication 1	Jälgitakse kordust 1
 	Weibull	Weibull
+	When a task empties	Kui töö tühjeneb
+	When enough have left a block	Kui piisavalt on plokist lahkunud
+	Which parameters matter	Millised parameetrid loevad
 	Whole number	Täisarv
 	Window	Aken
+	With every time at its mean: {units}	Kui iga aeg on oma keskmisel: {units}
 	Yes or no	Jah või ei
 	Your changes will be lost if you don't save them.	Salvestamata muudatused lähevad kaotsi.
 	Zoom	Muuda suurust
@@ -317,8 +387,11 @@
 	departures	lahkumised
 	egui and eframe (Craft suite fork)	egui ja eframe (Crafti tarkvarakomplekti haru)
 	from its value	selle väärtuse põhjal
+	have left	on lahkunud
 	hours	tunnid
 	id {id}	id {id}
+	matters	loeb
+	maximum {value}	maksimum {value}
 	milliseconds	millisekundid
 	minutes	minutid
 	nothing yet	veel mitte midagi
@@ -335,12 +408,17 @@
 	time	aeg
 	to {block}	kuni {block}
 	unlimited	piiramatu
+	who gave it, or where it comes from	kes selle andis või kust see pärineb
+	within chance	juhuse piires
 	years	aastad
+	{block}: units	{block}: ühikud
 	{busy} busy	{busy} hõivatud
 	{entered} in, {left} out, {lost} lost	{entered} sisse, {left} välja, {lost} kadunud
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: miinimum {min}, kõige tõenäolisem {mode}, {upper}
 	{field}: not editable here yet	{field}: siin ei saa veel muuta
 	{id}: a probability is a number from 0 to 1	{id}: tõenäosus on arv vahemikus 0 kuni 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} kordust {of}-st saavutas eesmärgi: {p} (95% vahemik {lo} kuni {hi})
 	{name} — edited	{name} — muudetud
 	{n} created	{n} loodud
 	{n} done	{n} valmis
@@ -364,9 +442,12 @@ unit	yr	a
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avati {file} ({n} hoiatus)|Avati {file} ({n} hoiatust)
 @plural	Removed {n} block|Removed {n} blocks	Eemaldati {n} plokk|Eemaldati {n} plokki
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Käivitab {n} sõltumatu mudeli korduse seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.|Käivitab {n} sõltumatut mudeli kordust seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Peatamistingimus saavutati {met} korral {n} kordusest, keskmiselt {time} {unit} järel.|Peatamistingimus saavutati {met} korral {n} kordusest, keskmiselt {time} {unit} järel.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} kordus {n}-st lõpetatud|{done} kordust {n}-st lõpetatud
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} korduse põhjal|{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} korduse põhjal
 @plural	{n} block selected|{n} blocks selected	{n} plokk valitud|{n} plokki valitud
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} kordus igal sammul · juhuarvuseeme {seed}|{n} kordust igal sammul · juhuarvuseeme {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} kordus · keskmine {mean} · {min} kuni {max}|{n} kordust · keskmine {mean} · {min} kuni {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} kordus · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}|{n} kordust · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} kordus · seeme {seed}|{n} kordust · seeme {seed}
 @plural	{n} replication|{n} replications	{n} kordus|{n} kordust

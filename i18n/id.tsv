@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Bahasa Indonesia
+	% down and up	% turun dan naik
+	% of replications	% replikasi
 	+ Add block	+ Tambah blok
+	95th percentile	Persentil ke-95
+	95th percentile {value}	persentil ke-95 {value}
 	About StochCraft	Tentang StochCraft
 	About {app}	Tentang {app}
+	Across the range it changed by {change}: more than chance would explain.	Di seluruh rentang berubah sebesar {change}: lebih dari yang bisa dijelaskan oleh kebetulan.
+	Across the range it changed by {change}: within what chance alone could do.	Di seluruh rentang berubah sebesar {change}: masih dalam batas yang bisa ditimbulkan kebetulan saja.
 	Actual size	Ukuran sebenarnya
 	Add Block	Tambah Blok
 	Add a flow from…	Tambahkan alur dari…
 	Add a flow to…	Tambahkan alur ke…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Tambahkan satu unit pada tugas atau kumpulan tersibuk sampai cukup banyak replikasi memenuhi target. Jawaban dengan setiap waktu pada rata-ratanya juga ditampilkan; biasanya terlalu kecil.
 	Add alternative	Tambah alternatif
 	Add point	Tambah titik
 	Add pool	Tambah kumpulan
@@ -27,9 +34,12 @@
 	Added {block} ({id})	{block} ({id}) ditambahkan
 	Align	Ratakan
 	Alternative {n}	Alternatif {n}
+	Analysis	Analisis
 	Appearance	Tampilan
 	Arrival limit	Batas kedatangan
 	Arrivals	Kedatangan
+	At least	Setidaknya
+	At most	Paling banyak
 	Availability	Ketersediaan
 	BPMN with BPSim	BPMN dengan BPSim
 	Back to the model (Esc)	Kembali ke model (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Ukuran batch
 	Beta	Beta
 	Binomial	Binomial
+	Block	Blok
 	Boolean	Boolean
 	Bottoms	Tepi bawah
 	Bring All to Front	Bawa Semua ke Depan
 	Built with	Dibuat dengan
+	Busiest	Tersibuk
 	By role	Menurut peran
 	CSV table	Tabel CSV
 	Cancel	Batal
@@ -49,10 +61,13 @@
 	Cancel run	Batalkan proses
 	Capacity	Kapasitas
 	Centres	Tengah horizontal
+	Change	Perubahan
 	Change Block	Ubah Blok
 	Change Flow	Ubah Alur
+	Change the estimate	Ubah perkiraan
 	Changes	Perubahan
 	Changing the time unit does not convert the times already in the model.	Mengubah satuan waktu tidak mengonversi waktu yang sudah ada dalam model.
+	Choose…	Pilih…
 	Clear Menu	Bersihkan Menu
 	Close	Tutup
 	Close Window	Tutup Jendela
@@ -88,11 +103,16 @@
 	Drag to add:	Seret untuk menambah:
 	Duplicate	Duplikat
 	Duration	Durasi
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Setiap analisis menjalankan eksperimen beberapa kali dengan benih acak yang sama, sehingga perbedaan berasal dari perubahan, bukan kebetulan. Ini bisa memakan waktu.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Setiap entitas mengambil alternatif pertama di antara ini yang dapat dipenuhi sekarang, sekaligus semuanya, dan mengembalikan unitnya saat meninggalkan tugas.
 	Edit	Edit
+	Elasticity	Elastisitas
+	Ends early	Berakhir lebih awal
+	Enough: {units}, meeting the target in {p} of replications	Cukup: {units}, target terpenuhi pada {p} replikasi
 	Entered	Masuk
 	Erlang	Erlang
 	Error	Galat
+	Estimate from three values…	Perkirakan dari tiga nilai…
 	Evenly across	Sebar rata mendatar
 	Evenly down	Sebar rata menurun
 	Every distribution	Semua distribusi
@@ -105,20 +125,27 @@
 	Export table (CSV)	Ekspor tabel (CSV)
 	Exported {file}	{file} diekspor
 	Expression	Ekspresi
+	Family	Keluarga
 	File	Berkas
 	Finished at {time} {unit}	Selesai pada {time} {unit}
 	Fit	Paskan
 	Fit the diagram to the view	Paskan diagram ke tampilan
+	Fit the time	Cocokkan waktu
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Cocokkan waktu blok ini dengan minimum, nilai paling mungkin, dan maksimum atau persentil ke-95.
+	Fitted the time of {id}	Waktu {id} dicocokkan
 	Flows	Alur
+	Forget the estimate	Lupakan perkiraan
 	From	Dari
 	Gamma	Gamma
 	Goes to	Menuju ke
 	Help	Bantuan
 	Hide Others	Sembunyikan yang lain
 	Hide {app}	Sembunyikan {app}
+	How many	Berapa
 	Inside over time	Di dalam dari waktu ke waktu
 	Jump	Lompat
 	Jump to time	Lompat ke waktu
+	Keep the time, without the estimate it came from	Pertahankan waktu tanpa perkiraan asalnya
 	Keyboard Shortcuts…	Pintasan Keyboard…
 	Keyboard shortcuts saved	Pintasan keyboard disimpan
 	Keyboard shortcuts unchanged	Pintasan keyboard tidak berubah
@@ -140,6 +167,7 @@
 	Mean time blocked	Waktu terblokir rata-rata
 	Mean time in system	Waktu rata-rata dalam sistem
 	Mean wait	Waktu tunggu rata-rata
+	Met in at least	Terpenuhi pada setidaknya
 	Metric	Metrik
 	Middles	Tengah vertikal
 	Minimise	Minimalkan
@@ -148,19 +176,25 @@
 	Model	Model
 	Most likely	Paling mungkin
 	Move	Pindahkan
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Turunkan dan naikkan setiap parameter bergantian, lalu urutkan menurut seberapa besar hasil bergerak.
 	Name	Nama
 	Needs	Kebutuhan
+	Never: it runs for its duration	Tidak pernah: berjalan sepanjang durasinya
 	New	Baru
 	New model	Model baru
 	New property	Properti baru
 	New property name	Nama properti baru
 	No blocks yet. Open a model, or add blocks to build one.	Belum ada blok. Buka model atau tambahkan blok untuk membuatnya.
 	No connections yet: join blocks below.	Belum ada koneksi: hubungkan blok di bawah.
+	No replication met the stop condition: each ran to its time limit.	Tidak ada replikasi yang mencapai kondisi berhenti: masing-masing berjalan hingga batas waktunya.
 	No results yet	Belum ada hasil
+	No target	Tanpa target
 	None	Tidak Ada
 	None found. The model is ready to run.	Tidak ditemukan masalah. Model siap dijalankan.
 	Normal	Normal
+	Not reached, even with {units}	Tidak tercapai, bahkan dengan {units}
 	Number	Angka
+	One change, which Undo takes back	Satu perubahan, yang dibatalkan oleh Urungkan
 	One clerk, random arrivals: the textbook queue, checked against theory.	Satu petugas, kedatangan acak: antrean klasik, diperiksa terhadap teori.
 	One task per BPSim distribution, to compare their spread.	Satu tugas per distribusi BPSim untuk membandingkan penyebarannya.
 	Open	Buka
@@ -173,10 +207,13 @@
 	Opened {file}	{file} dibuka
 	Open…	Buka…
 	Or start from an example	Atau mulai dari contoh
+	PERT	PERT
 	PNG image	Gambar PNG
+	Parameter	Parameter
 	Parameters	Parameter
 	Paste	Tempel
 	Pause	Jeda
+	Percentile	Persentil
 	Play	Putar
 	Points	Titik
 	Poisson	Poisson
@@ -190,6 +227,7 @@
 	Properties	Properti
 	Quit	Keluar
 	Quit {app}	Keluar dari {app}
+	Rank the parameters	Urutkan parameter
 	Ready	Siap
 	Recover	Pulihkan
 	Recover unsaved changes?	Pulihkan perubahan yang belum disimpan?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	Replikasi 1 · {time} dari {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikasi 1 · {time} dari {end} {unit} · pemanasan
 	Replications	Replikasi
+	Replications meeting the target	Replikasi yang memenuhi target
+	Replications that never met the stop condition count as later than their time limit.	Replikasi yang tidak pernah mencapai kondisi berhenti dihitung lebih lambat dari batas waktunya.
 	Resource pool	Kumpulan sumber daya
 	Resource pools	Kumpulan sumber daya
 	Restore	Pulihkan jendela
+	Result	Hasil
+	Result to compare	Hasil untuk dibandingkan
+	Result to explain	Hasil untuk dijelaskan
+	Result with a target	Hasil dengan target
+	Result, down and up	Hasil, turun dan naik
 	Results	Hasil
 	Right edges	Tepi kanan
 	Roles	Peran
@@ -223,7 +268,10 @@
 	Run experiment	Jalankan eksperimen
 	Run replication 1 step by step and see each block's queue on the diagram	Jalankan replikasi 1 langkah demi langkah dan lihat antrean tiap blok di diagram
 	Run the experiment ({shortcut})	Jalankan eksperimen ({shortcut})
+	Run the experiment again to see this result's spread.	Jalankan eksperimen lagi untuk melihat sebaran hasil ini.
+	Run the experiment at each value of one parameter, and compare a result.	Jalankan eksperimen pada setiap nilai satu parameter dan bandingkan suatu hasil.
 	Run the next event	Jalankan kejadian berikutnya
+	Run the sweep	Jalankan sapuan
 	Running	Berjalan
 	Running…	Sedang berjalan…
 	Save	Simpan
@@ -235,6 +283,7 @@
 	Seed	Benih acak
 	Select All	Pilih Semua
 	Select a block to see its queue over time.	Pilih blok untuk melihat antreannya dari waktu ke waktu.
+	Separate the values with semicolons or spaces.	Pisahkan nilai dengan titik koma atau spasi.
 	Service time	Waktu layanan
 	Services	Layanan
 	Set Property	Atur Properti
@@ -243,13 +292,19 @@
 	Settings	Pengaturan
 	Shape	Bentuk
 	Share of arrivals lost	Proporsi kedatangan yang hilang
+	Share of replications	Bagian replikasi
 	Share of units blocked	Proporsi unit yang terblokir
 	Show All	Tampilkan semua
 	Show {id}	Tampilkan {id}
+	Size	Tentukan ukuran
+	Size the resources	Tentukan ukuran sumber daya
+	Source	Sumber
+	Source: {source}	Sumber: {source}
 	Speed	Kecepatan
 	Split batches	Pisahkan batch
 	Split or join	Pisahkan atau gabungkan
 	Split or join (all ways)	Pisahkan atau gabungkan (semua jalur)
+	Spread across replications	Sebaran antar-replikasi
 	Spread out	Sebarkan
 	Stages (k)	Tahapan (k)
 	Standard deviation	Simpangan baku
@@ -261,17 +316,25 @@
 	Stop setting {name}	Berhenti mengatur {name}
 	Stop watching	Berhenti mengamati
 	Stopped watching	Berhenti mengamati
+	Sweep a parameter	Sapu satu parameter
 	Tandem line	Jalur tandem
+	Target	Target
+	Target value	Nilai target
 	Task	Tugas
 	Task with a resource	Tugas dengan sumber daya
 	Task with shared resources	Tugas dengan sumber daya bersama
 	Text	Teks
 	The model changed, so watching stopped	Model berubah, jadi pengamatan dihentikan
+	The model now has the units sizing found	Model kini memakai unit yang ditemukan penentuan ukuran
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian replikasi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
+	The values are numbers, separated by semicolons or spaces	Nilai berupa angka yang dipisahkan titik koma atau spasi
 	This block has a warning	Blok ini memiliki peringatan
 	This block has an error	Blok ini memiliki kesalahan
 	This run	Jalannya ini
+	Three-point estimate	Perkiraan tiga titik
 	Time between arrivals	Waktu antar kedatangan
+	Time to the stop condition	Waktu hingga kondisi berhenti
 	Time unit	Satuan waktu
 	To	Ke
 	Tops	Tepi atas
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unit yang digunakan bersama oleh beberapa tugas. Tugas dengan sumber daya bersama mengambilnya dari kumpulan atau menurut peran.
 	Untitled	Tanpa Judul
 	Untitled model	Model tanpa judul
+	Upper value	Nilai atas
 	Use System Setting	Gunakan Pengaturan Sistem
+	Use these units in the model	Gunakan unit ini dalam model
 	Utilisation	Tingkat pemanfaatan
 	Value	Nilai
+	Values	Nilai
 	View	Tampilan
 	Waiting over time	Menunggu dari waktu ke waktu
 	Waiting room	Ruang tunggu
@@ -302,8 +368,12 @@
 	Watch a run	Amati jalannya model
 	Watching replication 1	Mengamati replikasi 1
 	Weibull	Weibull
+	When a task empties	Saat sebuah tugas kosong
+	When enough have left a block	Saat cukup banyak telah meninggalkan blok
+	Which parameters matter	Parameter mana yang berpengaruh
 	Whole number	Bilangan bulat
 	Window	Jendela
+	With every time at its mean: {units}	Dengan setiap waktu pada rata-ratanya: {units}
 	Yes or no	Ya atau tidak
 	Your changes will be lost if you don't save them.	Perubahan Anda akan hilang jika tidak disimpan.
 	Zoom	Zoom
@@ -317,8 +387,11 @@
 	departures	keberangkatan
 	egui and eframe (Craft suite fork)	egui dan eframe (cabang dari rangkaian Craft)
 	from its value	berdasarkan nilainya
+	have left	telah keluar
 	hours	jam
 	id {id}	id {id}
+	matters	berpengaruh
+	maximum {value}	maksimum {value}
 	milliseconds	milidetik
 	minutes	menit
 	nothing yet	belum ada
@@ -335,12 +408,17 @@
 	time	waktu
 	to {block}	ke {block}
 	unlimited	tanpa batas
+	who gave it, or where it comes from	siapa yang memberikannya atau dari mana asalnya
+	within chance	dalam batas kebetulan
 	years	tahun
+	{block}: units	{block}: unit
 	{busy} busy	{busy} sibuk
 	{entered} in, {left} out, {lost} lost	{entered} masuk, {left} keluar, {lost} hilang
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, paling mungkin {mode}, {upper}
 	{field}: not editable here yet	{field}: belum dapat diedit di sini
 	{id}: a probability is a number from 0 to 1	{id}: probabilitas adalah angka dari 0 sampai 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} dari {of} replikasi memenuhi target: {p} (interval 95% dari {lo} sampai {hi})
 	{name} — edited	{name} — diedit
 	{n} created	{n} dibuat
 	{n} done	{n} selesai
@@ -364,9 +442,12 @@ unit	yr	thn
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} dibuka ({n} peringatan)
 @plural	Removed {n} block|Removed {n} blocks	{n} blok dihapus
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Menjalankan {n} replikasi model yang independen dari benih {seed}. Hasil setiap elemen mencakup setengah lebar interval kepercayaan 95%.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Kondisi berhenti tercapai pada {met} dari {n} replikasi, rata-rata setelah {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} dari {n} replikasi selesai
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval 95% dari {low} hingga {high}{unit}\ndari {n} replikasi
 @plural	{n} block selected|{n} blocks selected	{n} blok dipilih
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikasi per langkah · benih {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikasi · rata-rata {mean} · dari {min} sampai {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasi · benih {seed} · pemanasan {warmup} {unit} · {duration} {unit} diukur
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikasi · benih {seed}
 @plural	{n} replication|{n} replications	{n} replikasi

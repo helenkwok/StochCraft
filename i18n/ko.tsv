@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	한국어
+	% down and up	% 낮추고 높이기
+	% of replications	% 반복 실행에서
 	+ Add block	+ 블록 추가
+	95th percentile	95번째 백분위수
+	95th percentile {value}	95번째 백분위수 {value}
 	About StochCraft	StochCraft 정보
 	About {app}	{app} 정보
+	Across the range it changed by {change}: more than chance would explain.	범위 전체에서 {change}만큼 바뀌었습니다. 우연으로는 설명되지 않는 크기입니다.
+	Across the range it changed by {change}: within what chance alone could do.	범위 전체에서 {change}만큼 바뀌었습니다. 우연만으로도 생길 수 있는 범위입니다.
 	Actual size	실제 크기
 	Add Block	블록 추가
 	Add a flow from…	시작 블록…
 	Add a flow to…	끝 블록…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	충분한 반복 실행이 목표를 충족할 때까지 가장 바쁜 작업이나 풀에 단위를 하나씩 추가합니다. 모든 시간을 평균으로 둔 답도 함께 표시하지만 보통 너무 작습니다.
 	Add alternative	대안 추가
 	Add point	점 추가
 	Add pool	풀 추가
@@ -27,9 +34,12 @@
 	Added {block} ({id})	{block} ({id}) 추가됨
 	Align	정렬
 	Alternative {n}	대안 {n}
+	Analysis	분석
 	Appearance	모양새
 	Arrival limit	도착 수 제한
 	Arrivals	도착
+	At least	이상
+	At most	이하
 	Availability	가용률
 	BPMN with BPSim	BPSim 포함 BPMN
 	Back to the model (Esc)	모델로 돌아가기 (Esc)
@@ -38,10 +48,12 @@
 	Batch size	배치 크기
 	Beta	베타 분포
 	Binomial	이항 분포
+	Block	블록
 	Boolean	불리언
 	Bottoms	아래쪽 가장자리
 	Bring All to Front	모두 앞으로 가져오기
 	Built with	사용 기술
+	Busiest	가장 바쁨
 	By role	역할별
 	CSV table	CSV 표
 	Cancel	취소
@@ -49,10 +61,13 @@
 	Cancel run	실행 취소
 	Capacity	처리 용량
 	Centres	가로 가운데
+	Change	변화
 	Change Block	블록 변경
 	Change Flow	흐름 변경
+	Change the estimate	추정 변경
 	Changes	변경 사항
 	Changing the time unit does not convert the times already in the model.	시간 단위를 변경해도 모델에 이미 입력된 시간은 변환되지 않습니다.
+	Choose…	선택…
 	Clear Menu	메뉴 지우기
 	Close	닫기
 	Close Window	창 닫기
@@ -88,11 +103,16 @@
 	Drag to add:	끌어서 추가:
 	Duplicate	복제
 	Duration	길이
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	각 분석은 같은 난수 시드로 실험을 여러 번 실행하므로 차이는 우연이 아니라 변경에서 나옵니다. 시간이 걸릴 수 있습니다.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	각 엔터티는 이 중 지금 한꺼번에 모두 충족할 수 있는 첫 번째 항목을 가져가고, 떠날 때 자원 단위를 반환합니다.
 	Edit	편집
+	Elasticity	탄력성
+	Ends early	일찍 끝남
+	Enough: {units}, meeting the target in {p} of replications	충분: {units}, 반복 실행의 {p}에서 목표 충족
 	Entered	진입 수
 	Erlang	얼랑 분포
 	Error	오류
+	Estimate from three values…	세 값으로 추정…
 	Evenly across	가로로 균등 배치
 	Evenly down	세로로 균등 배치
 	Every distribution	모든 분포
@@ -105,20 +125,27 @@
 	Export table (CSV)	표 내보내기 (CSV)
 	Exported {file}	{file} 내보냄
 	Expression	식
+	Family	분포 계열
 	File	파일
 	Finished at {time} {unit}	{time} {unit}에 끝남
 	Fit	맞춤
 	Fit the diagram to the view	다이어그램을 보기에 맞춤
+	Fit the time	시간 맞추기
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	이 블록의 시간을 최솟값, 최빈값, 최댓값 또는 95번째 백분위수에 맞춥니다.
+	Fitted the time of {id}	{id}의 시간을 맞췄습니다
 	Flows	흐름
+	Forget the estimate	추정 잊기
 	From	시작 블록
 	Gamma	감마 분포
 	Goes to	도착 블록
 	Help	도움말
 	Hide Others	다른 항목 숨기기
 	Hide {app}	{app} 숨기기
+	How many	개수
 	Inside over time	시간에 따른 내부 수
 	Jump	이동
 	Jump to time	이동할 시간
+	Keep the time, without the estimate it came from	시간은 그대로 두고 근거가 된 추정만 지웁니다
 	Keyboard Shortcuts…	키보드 단축키…
 	Keyboard shortcuts saved	키보드 단축키가 저장되었습니다
 	Keyboard shortcuts unchanged	키보드 단축키가 변경되지 않았습니다
@@ -140,6 +167,7 @@
 	Mean time blocked	평균 차단 시간
 	Mean time in system	시스템 내 평균 체류 시간
 	Mean wait	평균 대기 시간
+	Met in at least	충족 비율
 	Metric	지표
 	Middles	세로 가운데
 	Minimise	최소화
@@ -148,19 +176,25 @@
 	Model	모델
 	Most likely	최빈값
 	Move	이동
+	Move each parameter down and up in turn, and rank them by how much the result moves.	각 매개변수를 차례로 낮추고 높여서 결과가 얼마나 움직이는지에 따라 순위를 매깁니다.
 	Name	이름
 	Needs	필요 자원
+	Never: it runs for its duration	안 함: 길이만큼 실행
 	New	새로 만들기
 	New model	새 모델
 	New property	새 속성
 	New property name	새 속성 이름
 	No blocks yet. Open a model, or add blocks to build one.	아직 블록이 없습니다. 모델을 열거나 블록을 추가하여 만드세요.
 	No connections yet: join blocks below.	아직 연결이 없습니다. 아래에서 블록을 연결하세요.
+	No replication met the stop condition: each ran to its time limit.	중지 조건에 도달한 반복 실행이 없습니다. 모두 시간 제한까지 실행되었습니다.
 	No results yet	아직 결과가 없습니다
+	No target	목표 없음
 	None	없음
 	None found. The model is ready to run.	문제가 없습니다. 모델을 실행할 준비가 되었습니다.
 	Normal	정규 분포
+	Not reached, even with {units}	{units}로도 도달하지 못함
 	Number	숫자
+	One change, which Undo takes back	실행 취소로 되돌릴 수 있는 한 번의 변경
 	One clerk, random arrivals: the textbook queue, checked against theory.	창구 하나, 무작위 도착: 교과서의 대기열을 이론과 비교합니다.
 	One task per BPSim distribution, to compare their spread.	각 BPSim 분포에 작업 하나를 배정하여 분산 정도를 비교합니다.
 	Open	열기
@@ -173,10 +207,13 @@
 	Opened {file}	{file} 열림
 	Open…	열기…
 	Or start from an example	또는 예제로 시작
+	PERT	PERT
 	PNG image	PNG 이미지
+	Parameter	매개변수
 	Parameters	매개변수
 	Paste	붙여넣기
 	Pause	일시 중지
+	Percentile	백분위수
 	Play	재생
 	Points	점
 	Poisson	포아송 분포
@@ -190,6 +227,7 @@
 	Properties	속성
 	Quit	종료
 	Quit {app}	{app} 종료
+	Rank the parameters	매개변수 순위 매기기
 	Ready	준비됨
 	Recover	복구
 	Recover unsaved changes?	저장하지 않은 변경 사항을 복구할까요?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	반복 실행 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	반복 실행 1 · {time} / {end} {unit} · 준비 기간
 	Replications	반복 실행 횟수
+	Replications meeting the target	목표를 충족한 반복 실행
+	Replications that never met the stop condition count as later than their time limit.	중지 조건에 도달하지 못한 반복 실행은 시간 제한보다 늦은 것으로 셉니다.
 	Resource pool	자원 풀
 	Resource pools	자원 풀
 	Restore	복원
+	Result	결과
+	Result to compare	비교할 결과
+	Result to explain	설명할 결과
+	Result with a target	목표가 있는 결과
+	Result, down and up	결과(낮췄을 때와 높였을 때)
 	Results	결과
 	Right edges	오른쪽 가장자리
 	Roles	역할
@@ -223,7 +268,10 @@
 	Run experiment	실험 실행
 	Run replication 1 step by step and see each block's queue on the diagram	반복 실행 1을 단계별로 실행하고 다이어그램에서 각 블록의 대기열 보기
 	Run the experiment ({shortcut})	실험 실행 ({shortcut})
+	Run the experiment again to see this result's spread.	이 결과의 분포를 보려면 실험을 다시 실행하세요.
+	Run the experiment at each value of one parameter, and compare a result.	한 매개변수의 각 값에서 실험을 실행하고 결과를 비교합니다.
 	Run the next event	다음 이벤트 실행
+	Run the sweep	스윕 실행
 	Running	실행 중
 	Running…	실행 중…
 	Save	저장
@@ -235,6 +283,7 @@
 	Seed	난수 시드
 	Select All	모두 선택
 	Select a block to see its queue over time.	블록을 선택하면 시간에 따른 대기열을 볼 수 있습니다.
+	Separate the values with semicolons or spaces.	값은 세미콜론이나 공백으로 구분하세요.
 	Service time	서비스 시간
 	Services	서비스
 	Set Property	속성 설정
@@ -243,13 +292,19 @@
 	Settings	설정
 	Shape	모양
 	Share of arrivals lost	도착 손실 비율
+	Share of replications	반복 실행 비율
 	Share of units blocked	자원 단위 차단 비율
 	Show All	모두 표시
 	Show {id}	{id} 표시
+	Size	크기 정하기
+	Size the resources	자원 크기 정하기
+	Source	출처
+	Source: {source}	출처: {source}
 	Speed	속도
 	Split batches	배치 분리
 	Split or join	분할 또는 병합
 	Split or join (all ways)	분할 또는 병합(모든 경로)
+	Spread across replications	반복 실행 간 분포
 	Spread out	균등 배치
 	Stages (k)	단계 수 (k)
 	Standard deviation	표준 편차
@@ -261,17 +316,25 @@
 	Stop setting {name}	{name} 설정 중지
 	Stop watching	관찰 중지
 	Stopped watching	관찰을 중지함
+	Sweep a parameter	매개변수 스윕
 	Tandem line	직렬 라인
+	Target	목표
+	Target value	목표값
 	Task	작업
 	Task with a resource	자원을 사용하는 작업
 	Task with shared resources	공유 자원을 사용하는 작업
 	Text	텍스트
 	The model changed, so watching stopped	모델이 변경되어 관찰을 중지함
+	The model now has the units sizing found	이제 모델에 크기 정하기로 찾은 수량이 들어 있습니다
 	The model: its experiment, connections and problems	모델: 실험, 연결 및 문제
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	각 값 이하인 반복 실행의 비율입니다. 띠는 {confidence} 신뢰도로 실제 분포를 포함합니다.
+	The values are numbers, separated by semicolons or spaces	값은 세미콜론이나 공백으로 구분한 숫자입니다
 	This block has a warning	이 블록에 경고가 있습니다
 	This block has an error	이 블록에 오류가 있습니다
 	This run	이 실행
+	Three-point estimate	3점 추정
 	Time between arrivals	도착 간격
+	Time to the stop condition	중지 조건까지의 시간
 	Time unit	시간 단위
 	To	끝 블록
 	Tops	위쪽 가장자리
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	여러 작업이 공유하는 자원 단위입니다. 공유 자원을 사용하는 작업은 풀 또는 역할을 기준으로 자원을 가져갑니다.
 	Untitled	제목 없음
 	Untitled model	제목 없는 모델
+	Upper value	상한값
 	Use System Setting	시스템 설정 사용
+	Use these units in the model	이 수량을 모델에 사용
 	Utilisation	가동률
 	Value	값
+	Values	값
 	View	보기
 	Waiting over time	시간에 따른 대기 수
 	Waiting room	대기실
@@ -302,8 +368,12 @@
 	Watch a run	실행 관찰
 	Watching replication 1	반복 실행 1 관찰 중
 	Weibull	와이블 분포
+	When a task empties	작업이 비었을 때
+	When enough have left a block	블록에서 충분히 나갔을 때
+	Which parameters matter	중요한 매개변수
 	Whole number	정수
 	Window	창
+	With every time at its mean: {units}	모든 시간을 평균으로 둘 때: {units}
 	Yes or no	예 또는 아니요
 	Your changes will be lost if you don't save them.	저장하지 않으면 변경 사항이 사라집니다.
 	Zoom	확대/축소
@@ -317,8 +387,11 @@
 	departures	이탈
 	egui and eframe (Craft suite fork)	egui 및 eframe(Craft 제품군 포크)
 	from its value	값에서 결정
+	have left	나갔을 때
 	hours	시간
 	id {id}	ID {id}
+	matters	중요함
+	maximum {value}	최댓값 {value}
 	milliseconds	밀리초
 	minutes	분
 	nothing yet	아직 없음
@@ -335,12 +408,17 @@
 	time	시간
 	to {block}	{block}(으)로
 	unlimited	무제한
+	who gave it, or where it comes from	누가 제시했는지 또는 출처
+	within chance	우연 범위 안
 	years	년
+	{block}: units	{block}: 수량
 	{busy} busy	사용 중 {busy}
 	{entered} in, {left} out, {lost} lost	들어옴 {entered}, 나감 {left}, 손실 {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: 최솟값 {min}, 최빈값 {mode}, {upper}
 	{field}: not editable here yet	{field}: 여기서는 아직 편집할 수 없습니다
 	{id}: a probability is a number from 0 to 1	{id}: 확률은 0에서 1 사이의 숫자여야 합니다
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of}회 중 {met}회가 목표를 충족: {p}(95% 구간 {lo}~{hi})
 	{name} — edited	{name} — 편집됨
 	{n} created	생성 {n}
 	{n} done	완료 {n}
@@ -364,9 +442,12 @@ unit	yr	년
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} 열림(경고 {n}개)
 @plural	Removed {n} block|Removed {n} blocks	블록 {n}개 제거됨
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	시드 {seed}부터 모델을 독립적으로 {n}회 반복 실행합니다. 각 요소의 결과에는 95% 신뢰 구간의 반폭이 포함됩니다.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	중지 조건은 {n}회 중 {met}회의 반복 실행에서 평균 {time} {unit} 후에 도달했습니다.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}회 중 {done}회 반복 실행 완료
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% 구간 {low}~{high}{unit}\n{n}회 반복 실행 기준
 @plural	{n} block selected|{n} blocks selected	블록 {n}개 선택됨
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	단계마다 반복 실행 {n}회 · 시드 {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	반복 실행 {n}회 · 평균 {mean} · {min}~{max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	반복 실행 {n}회 · 시드 {seed} · 준비 {warmup} {unit} · 측정 {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	반복 실행 {n}회 · 시드 {seed}
 @plural	{n} replication|{n} replications	반복 실행 {n}회

@@ -139,8 +139,15 @@ The server treats its input as hostile:
 ← … "utilisation": {"mean": 0.74…, "half_width": 0.01…} …
 → {"jsonrpc":"2.0","id":5,"method":"tools/call","params":{"name":"execute","arguments":{"command":"block.set","params":{"id":"desk","capacity":2}}}}
 → {"jsonrpc":"2.0","id":6,"method":"tools/call","params":{"name":"run","arguments":{}}}
-→ {"jsonrpc":"2.0","id":7,"method":"tools/call","params":{"name":"save","arguments":{"path":"/work/desk.bpmn"}}}
+→ {"jsonrpc":"2.0","id":7,"method":"tools/call","params":{"name":"execute","arguments":{"command":"results.compare"}}}
+← … "paired": true, … {"element": "desk", "metric": "mean_wait", "a": {"mean": …}, "b": {"mean": …}, "difference": -…, "half_width": …, "significant": true, …} …
+→ {"jsonrpc":"2.0","id":8,"method":"tools/call","params":{"name":"save","arguments":{"path":"/work/desk.bpmn"}}}
 ```
+
+`results.compare` compares the last run with the one before it (or any two runs' results given
+as `a` and `b`). Runs with the same seed and replications share their random numbers, so it
+compares them replication by replication (a paired-t interval); otherwise it uses Welch's
+two-sample t interval and says so.
 
 `crates/mcp/tests/session.rs` covers four areas:
 - a session like this one, checked only through MCP;

@@ -501,7 +501,7 @@ fn background_runs_report_progress_and_can_be_cancelled() {
     );
     ok(&mut e, "experiment.set", json!({"duration": 1.0}));
     assert_eq!(
-        ok(&mut e, "run.status", json!({"step": 2}))["result"]["duration"],
+        ok(&mut e, "run.status", json!({"step": 2, "events": u64::MAX}))["result"]["duration"],
         20_000.0
     );
 }
@@ -562,7 +562,16 @@ fn a_run_where_time_stops_moving_ends_with_an_error_in_slices() {
             "run.start",
             json!({"replications": 3, "mode": "slices"}),
         );
-        ok(&mut e, "run.status", json!({"step": 1}))
+        // The stuck-time limit counts across slices, so the run ends after enough of them.
+        let mut status = json!({"state": "running"});
+        while status["state"] == "running" {
+            status = ok(
+                &mut e,
+                "run.status",
+                json!({"step": 1, "events": 1_000_000}),
+            );
+        }
+        status
     });
     assert!(status.is_some(), "the run did not end");
     let status = status.unwrap_or_default();
@@ -2035,4 +2044,346 @@ fn sensitivity_ranks_what_drives_the_time_in_system() {
     assert!((el(0) - 4.40).abs() < 0.6, "{}", el(0));
     assert!((el(1) + 3.57).abs() < 0.6, "{}", el(1));
     assert!(effects.iter().all(|x| x["significant"] == true));
+}
+
+/// The `mm1` template of the command line (arrivals 0.75 a minute, one server with mean service
+/// 1 minute), run short as in issue #66: warm-up 200, duration 3000, 10 replications, seed 2026.
+fn short_mm1() -> Engine {
+    let mut e = Engine::new();
+    let exp = |mean: f64| json!({ "type": "exponential", "mean": mean });
+    for (command, params) in [
+        ("model.rename", json!({ "name": "M/M/1" })),
+        (
+            "block.add",
+            json!({ "kind": "source", "id": "arrivals", "interarrival": exp(1.0 / 0.75) }),
+        ),
+        (
+            "block.add",
+            json!({ "kind": "server", "id": "server", "capacity": 1, "service": exp(1.0) }),
+        ),
+        ("block.add", json!({ "kind": "sink", "id": "exit" })),
+        ("connect", json!({ "from": "arrivals", "to": "server" })),
+        ("connect", json!({ "from": "server", "to": "exit" })),
+        (
+            "experiment.set",
+            json!({ "warmup": 200.0, "duration": 3000.0, "replications": 10, "seed": 2026 }),
+        ),
+    ] {
+        ok(&mut e, command, params);
+    }
+    e
+}
+
+#[test]
+fn a_sweep_judges_a_small_change_by_its_paired_differences() {
+    // Issue #66: the 95% intervals at the two ends overlap (2.90 ± 0.36 against 3.54 ± 0.50),
+    // but the replications share their random numbers, and the paired differences are tight.
+    let mut e = short_mm1();
+    let r = ok(
+        &mut e,
+        "experiment.sweep",
+        json!({
+            "parameter": { "id": "server", "field": "mean" },
+            "values": [1.0, 1.04],
+            "results": [
+                { "element": "server", "metric": "mean_wait" },
+                { "element": "exit", "metric": "mean_time_in_system" }
+            ]
+        }),
+    );
+    // The ends' intervals overlap...
+    let at = |i: usize, j: usize, k: &str| r["points"][i]["results"][j][k].as_f64().unwrap_or(0.0);
+    assert!((at(0, 0, "mean") - 2.903).abs() < 0.001 && (at(1, 0, "mean") - 3.544).abs() < 0.001);
+    assert!(at(1, 0, "mean") - at(0, 0, "mean") < at(0, 0, "half_width") + at(1, 0, "half_width"));
+    // ...but the paired differences give +0.641 ± 0.149 and +0.681 ± 0.149.
+    let effects = r["effects"].as_array().cloned().unwrap_or_default();
+    assert_eq!(effects.len(), 2);
+    for (effect, want) in effects.iter().zip([0.641, 0.681]) {
+        let (d, hw) = (
+            effect["change"].as_f64().unwrap_or(0.0),
+            effect["half_width"].as_f64().unwrap_or(0.0),
+        );
+        assert!((d - want).abs() < 0.001, "{effect}");
+        assert!((hw - 0.149).abs() < 0.001, "{effect}");
+        assert_eq!(effect["n"], 10, "{effect}");
+        assert_eq!(effect["significant"], true, "{effect}");
+    }
+    assert!(r["method"].as_str().is_some_and(|m| m.contains("paired-t")));
+}
+
+#[test]
+fn a_sweep_of_a_parameter_that_changes_nothing_finds_no_difference() {
+    // A second server after the first: its service time cannot change the first one's waits,
+    // which draw on their own random streams.
+    let mut e = short_mm1();
+    ok(
+        &mut e,
+        "disconnect",
+        json!({ "from": "server", "to": "exit" }),
+    );
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "server", "id": "pack", "capacity": 1,
+                "service": { "type": "exponential", "mean": 0.5 } }),
+    );
+    ok(&mut e, "connect", json!({ "from": "server", "to": "pack" }));
+    ok(&mut e, "connect", json!({ "from": "pack", "to": "exit" }));
+    let sweep = |e: &mut Engine, reps: u32| {
+        ok(
+            e,
+            "experiment.sweep",
+            json!({
+                "parameter": { "id": "pack", "field": "mean" },
+                "values": [0.5, 0.6],
+                "results": [{ "element": "server", "metric": "mean_wait" }],
+                "replications": reps
+            }),
+        )
+    };
+    let r = sweep(&mut e, 10);
+    let effect = &r["effects"][0];
+    assert_eq!(effect["change"].as_f64(), Some(0.0), "{effect}");
+    assert_eq!(effect["half_width"].as_f64(), Some(0.0), "{effect}");
+    assert_eq!(effect["significant"], false, "{effect}");
+    // One replication gives a difference but no interval.
+    let r = sweep(&mut e, 1);
+    let effect = &r["effects"][0];
+    assert_eq!(effect["n"], 1, "{effect}");
+    assert_eq!(effect["change"].as_f64(), Some(0.0), "{effect}");
+    assert!(
+        effect["half_width"].is_null() && effect["significant"].is_null(),
+        "{effect}"
+    );
+    // A result nothing reported: no pairs, no difference.
+    let r = ok(
+        &mut e,
+        "experiment.sensitivity",
+        json!({
+            "parameters": [{ "id": "pack", "field": "mean" }],
+            "results": [{ "element": "nowhere", "metric": "mean_wait" }],
+            "replications": 3
+        }),
+    );
+    let effect = &r["effects"][0];
+    assert_eq!(effect["n"], 0, "{effect}");
+    assert!(
+        effect["difference"].is_null() && effect["significant"].is_null(),
+        "{effect}"
+    );
+    assert_eq!(r["tests"], 1);
+}
+
+/// The comparison of `element`'s `metric` in a `results.compare` answer.
+fn comparison<'a>(r: &'a Value, element: &str, metric: &str) -> &'a Value {
+    r["comparisons"]
+        .as_array()
+        .and_then(|c| {
+            c.iter()
+                .find(|c| c["element"] == element && c["metric"] == metric)
+        })
+        .unwrap_or(&Value::Null)
+}
+
+#[test]
+fn compare_pairs_runs_with_the_same_seed_and_not_others() {
+    let mut e = short_mm1();
+    assert_eq!(
+        err(&mut e, "results.compare", json!({})),
+        ErrorCode::NotFound
+    );
+    ok(&mut e, "run", json!({}));
+    assert_eq!(
+        err(&mut e, "results.compare", json!({})),
+        ErrorCode::NotFound
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "server", "service": { "type": "exponential", "mean": 1.04 } }),
+    );
+    ok(&mut e, "run", json!({}));
+    // Same seed and replications: paired, as in the sweep of issue #66.
+    let r = ok(&mut e, "results.compare", json!({}));
+    assert_eq!(r["paired"], true, "{r}");
+    let c = comparison(&r, "server", "mean_wait");
+    assert!(
+        (c["a"]["mean"].as_f64().unwrap_or(0.0) - 2.903).abs() < 0.001,
+        "{c}"
+    );
+    assert!(
+        (c["b"]["mean"].as_f64().unwrap_or(0.0) - 3.544).abs() < 0.001,
+        "{c}"
+    );
+    assert!(
+        (c["difference"].as_f64().unwrap_or(0.0) - 0.641).abs() < 0.001,
+        "{c}"
+    );
+    assert!(
+        (c["half_width"].as_f64().unwrap_or(0.0) - 0.149).abs() < 0.001,
+        "{c}"
+    );
+    assert_eq!((&c["pairs"], &c["df"]), (&json!(10), &json!(9)), "{c}");
+    assert_eq!(
+        (&c["interval"], &c["significant"]),
+        (&json!("paired_t"), &json!(true))
+    );
+    // Every element and metric both runs report is compared by default.
+    let tis = comparison(&r, "exit", "mean_time_in_system");
+    assert!(
+        (tis["difference"].as_f64().unwrap_or(0.0) - 0.681).abs() < 0.001,
+        "{tis}"
+    );
+    assert_eq!(r["notes"], json!([]));
+    // Comparing a run with itself: exactly no difference.
+    let last = ok(&mut e, "run", json!({}));
+    let same = ok(
+        &mut e,
+        "results.compare",
+        json!({ "a": last, "results": [{ "element": "server", "metric": "mean_wait" }] }),
+    );
+    let c = comparison(&same, "server", "mean_wait");
+    assert_eq!(
+        (c["difference"].as_f64(), &c["significant"]),
+        (Some(0.0), &json!(false))
+    );
+    assert_eq!(same["comparisons"].as_array().map(Vec::len), Some(1));
+
+    // Another seed: independent runs, compared by Welch's interval.
+    ok(&mut e, "run", json!({ "seed": 7 }));
+    let r = ok(&mut e, "results.compare", json!({}));
+    assert_eq!(r["paired"], false, "{r}");
+    let c = comparison(&r, "server", "mean_wait");
+    assert_eq!(c["interval"], "welch_t", "{c}");
+    assert!(c.get("pairs").is_none(), "{c}");
+    let (d, hw) = (
+        c["difference"].as_f64().unwrap_or(f64::NAN),
+        c["half_width"].as_f64().unwrap_or(f64::NAN),
+    );
+    let (ma, mb) = (
+        c["a"]["mean"].as_f64().unwrap_or(0.0),
+        c["b"]["mean"].as_f64().unwrap_or(0.0),
+    );
+    assert!((d - (mb - ma)).abs() < 1e-12 && hw > 0.0, "{c}");
+    assert!(
+        c["df"].as_u64().is_some_and(|df| (1..=18).contains(&df)),
+        "{c}"
+    );
+    assert!(r["method"].as_str().is_some_and(|m| m.contains("Welch")));
+}
+
+#[test]
+fn compare_copes_with_missing_values_and_too_few_replications() {
+    let mut e = Engine::new();
+    let run = |seed: u64, waits: Value, lost: Value| {
+        json!({ "seed": seed, "replications": 4, "time_unit": "minute",
+                "values": { "desk": { "mean_wait": waits, "lost": lost } } })
+    };
+    // Paired: only replications where both have a value count; one pair gives no interval.
+    let a = run(
+        1,
+        json!([1.0, null, 2.0, null]),
+        json!([1.0, 2.0, 3.0, 4.0]),
+    );
+    let b = run(
+        1,
+        json!([null, 3.0, 2.5, null]),
+        json!([2.0, 3.0, 5.0, 6.0]),
+    );
+    let r = ok(&mut e, "results.compare", json!({ "a": a, "b": b }));
+    let w = comparison(&r, "desk", "mean_wait");
+    assert_eq!(
+        (&w["pairs"], &w["a"]["n"], &w["b"]["n"]),
+        (&json!(1), &json!(2), &json!(2))
+    );
+    assert_eq!(w["difference"].as_f64(), Some(0.5), "{w}");
+    assert!(w["half_width"].is_null() && w["significant"].is_null() && w["df"].is_null());
+    // Differences 1, 1, 2, 2 on the other metric: an interval with 3 degrees of freedom.
+    let l = comparison(&r, "desk", "lost");
+    assert_eq!(
+        (&l["pairs"], &l["df"], &l["significant"]),
+        (&json!(4), &json!(3), &json!(true))
+    );
+    // No pair at all.
+    let none = ok(
+        &mut e,
+        "results.compare",
+        json!({ "a": run(1, json!([1.0, null, null, null]), json!([])),
+                "b": run(1, json!([null, 2.0, null, null]), json!([])),
+                "results": [{ "element": "desk", "metric": "mean_wait" },
+                            { "element": "nowhere", "metric": "mean_wait" }] }),
+    );
+    for c in none["comparisons"].as_array().into_iter().flatten() {
+        assert_eq!(c["pairs"], 0, "{c}");
+        assert!(
+            c["difference"].is_null() && c["significant"].is_null(),
+            "{c}"
+        );
+    }
+    // Unpaired with one value on a side: a difference but no interval.
+    let r = ok(
+        &mut e,
+        "results.compare",
+        json!({ "a": run(1, json!([1.0, null, null, null]), json!([])),
+                "b": run(2, json!([2.0, 3.0, null, null]), json!([])),
+                "results": [{ "element": "desk", "metric": "mean_wait" }] }),
+    );
+    let w = comparison(&r, "desk", "mean_wait");
+    assert_eq!(
+        (&r["paired"], w["difference"].as_f64()),
+        (&json!(false), Some(1.5))
+    );
+    assert!(
+        w["half_width"].is_null() && w["significant"].is_null(),
+        "{w}"
+    );
+    // Runs in different time units are noted.
+    let mut hours = run(1, json!([1.0]), json!([1.0]));
+    hours["time_unit"] = json!("hour");
+    let r = ok(
+        &mut e,
+        "results.compare",
+        json!({ "a": run(1, json!([1.0]), json!([1.0])), "b": hours }),
+    );
+    assert!(
+        r["notes"][0]
+            .as_str()
+            .is_some_and(|n| n.contains("time_unit")),
+        "{r}"
+    );
+    // Not results, or an unknown metric: refused.
+    for bad in [
+        json!({ "a": { "seed": 1 }, "b": run(1, json!([]), json!([])) }),
+        json!({ "a": run(1, json!([]), json!([])), "b": run(1, json!([]), json!([])),
+                "results": [{ "element": "desk", "metric": "speed" }] }),
+        json!({ "a": run(1, json!([]), json!([])), "b": run(1, json!([]), json!([])), "c": 1 }),
+    ] {
+        assert_eq!(
+            err(&mut e, "results.compare", bad),
+            ErrorCode::InvalidParams
+        );
+    }
+}
+
+/// A task's units cannot go below one: at one, sensitivity compares from its own value up.
+#[test]
+fn sensitivity_to_a_single_unit_looks_only_upwards() {
+    let mut e = help_desk();
+    let r = ok(
+        &mut e,
+        "experiment.sensitivity",
+        json!({
+            "parameters": [{ "id": "desk", "field": "capacity" }],
+            "results": [{ "element": "desk", "metric": "mean_wait" }],
+            "replications": 3,
+        }),
+    );
+    let effect = &r["effects"][0];
+    assert_eq!(effect["down"], json!(1.0), "{effect}");
+    assert_eq!(effect["up"], json!(2.0));
+    assert_eq!(effect["at_down"], effect["result"]);
+    assert!(
+        effect["elasticity"].as_f64().is_some_and(|x| x < 0.0),
+        "{effect}"
+    );
 }

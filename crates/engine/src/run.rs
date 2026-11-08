@@ -1,10 +1,13 @@
 //! Runs of an experiment in the background, with progress and cancellation.
 //!
 //! Natively a run goes to worker threads and the caller polls it. In the browser, where a page
-//! cannot block, it runs in slices: each poll runs a few replications between frames. Both give
+//! cannot block, it runs on the page's web workers, or, where it cannot start them, in slices:
+//! each poll runs a bounded number of events ([`SLICE_EVENTS`] unless asked otherwise) between
+//! frames, and a replication that does not finish in one slice carries on in the next. All give
 //! exactly the results of a run in one go, since each replication's random stream depends only on
-//! the seed and its index. Cancelling a threaded run stops the replications running within a
-//! thousand or so events, and no more start; a sliced run stops before its next replication.
+//! the seed and its index, and slicing a replication changes neither its events nor their order.
+//! Cancelling a threaded run stops the replications running within a thousand or so events, and
+//! no more start; a sliced run stops between slices.
 //!
 //! A replication in which simulated time stops moving ends with [`ErrorCode::TimeStopped`]
 //! (see [`stochcraft_blocks::MAX_EVENTS_AT_ONE_TIME`]), and stops the whole run.
@@ -16,7 +19,7 @@ use std::sync::Mutex;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use stochcraft_blocks::{Compiled, Report, RunError, summarise};
+use stochcraft_blocks::{Compiled, Live, Report, RunError, summarise};
 use stochcraft_experiment::{Control, Experiment, ExperimentError};
 
 use crate::workers::{self, Answer};
@@ -28,13 +31,27 @@ use crate::{CommandError, ErrorCode, wire};
 pub enum RunMode {
     /// On worker threads, while the caller carries on (not available in the browser).
     Threads,
-    /// A few replications each time `run.status` is called (how the browser runs on one core).
+    /// A slice of events each time `run.status` is called (how the browser runs on one core,
+    /// when it cannot start web workers).
     Slices,
     /// By the caller's own workers (how the browser runs on every core): the engine hands out
     /// the run with [`crate::Engine::worker_task`] and collects each replication's answer with
     /// [`crate::Engine::deliver`] (see the `workers` module).
     Workers,
 }
+
+/// The most events a sliced run runs per `run.status` call unless asked for another number: what
+/// the page can run between two frames and still draw about 60 of them a second.
+///
+/// An estimate, not a measurement in the browser. Measured: a native release build on one core of
+/// a desktop CPU (i7-12700K, November 2026) ran the test models at about 1,900 (the bakery plant,
+/// with shifts and shared pools) to 7,200 (M/M/1 with a stop) events per millisecond
+/// (`cargo test --release -p stochcraft-engine --test slices -- --ignored --nocapture`).
+/// Assumed: WebAssembly in the browser runs at about half native speed and a typical laptop at
+/// about two thirds of that desktop, so about 650 to 2,400 events per millisecond. A frame at 60
+/// a second has 16.7 ms; keeping at least half of it for drawing leaves about 8 ms, which 5,000
+/// events take on the slowest model (about 2 ms on most).
+pub const SLICE_EVENTS: u64 = 5_000;
 
 impl RunMode {
     pub fn default_for_target() -> Self {
@@ -154,6 +171,8 @@ enum State {
     },
     Slices {
         reports: Vec<Report>,
+        /// The replication under way (index `reports.len()`), between slices.
+        current: Option<Box<Live<'static>>>,
         cancelled: bool,
     },
     Workers {
@@ -178,6 +197,7 @@ impl Job {
         let state = match mode {
             RunMode::Slices => State::Slices {
                 reports: Vec::new(),
+                current: None,
                 cancelled: false,
             },
             RunMode::Workers => {
@@ -214,21 +234,39 @@ impl Job {
         self.plan.experiment.replications
     }
 
-    /// Advances a sliced run by up to `step` replications, collects a finished threaded run,
-    /// and reports where the run is.
-    pub fn poll(&mut self, step: u64) -> Value {
+    /// Advances a sliced run until `step` replications have finished or `events` events have
+    /// run, whichever comes first (a replication cut short carries on at the next poll; at
+    /// least one event runs), collects a finished threaded run, and reports where the run is.
+    pub fn poll(&mut self, step: u64, events: u64) -> Value {
         let total = self.total();
         match &mut self.state {
-            State::Slices { reports, cancelled } => {
+            State::Slices {
+                reports,
+                current,
+                cancelled,
+            } => {
                 if *cancelled {
                     self.state = State::Finished(Err(failed(ExperimentError::Cancelled)));
                 } else {
                     let x = &self.plan.experiment;
-                    let start = reports.len() as u64;
-                    for index in start..(start.saturating_add(step.max(1))).min(total) {
-                        // One thread: nothing can cancel a replication while it runs.
-                        match self.plan.compiled.run(x.replication(index).rng) {
-                            Ok(r) => reports.push(r),
+                    let (mut finished, mut left) = (0, events.max(1));
+                    while finished < step.max(1) && (reports.len() as u64) < total && left > 0 {
+                        let index = reports.len() as u64;
+                        // The same replication as on threads: its stream, run to its end.
+                        let live = current.get_or_insert_with(|| {
+                            Box::new(self.plan.compiled.live(x.replication(index).rng))
+                        });
+                        let before = live.events();
+                        match live.advance_by(left) {
+                            Ok(done) => {
+                                left = left.saturating_sub(live.events().saturating_sub(before));
+                                if !done {
+                                    break;
+                                }
+                                reports.push(live.report());
+                                *current = None;
+                                finished += 1;
+                            }
                             Err(e) => {
                                 self.state = State::Finished(Err(run_failed(index, &e)));
                                 return self.status();
@@ -324,7 +362,7 @@ impl Job {
             }
             State::Finished(_) => {}
         }
-        self.poll(0)
+        self.poll(0, 0)
     }
 
     pub fn status(&self) -> Value {
@@ -348,6 +386,16 @@ impl Job {
             }
             Some(State::Finished(Err(e))) => v["error"] = e.to_json(),
             _ => v["done"] = json!(done),
+        }
+        // A sliced run: how far the replication under way has got, in simulated time (0 to 1).
+        if let State::Slices { current, .. } = &self.state {
+            v["partial"] = json!(current.as_ref().map_or(0.0, |l| {
+                if l.end() > 0.0 {
+                    (l.now() / l.end()).clamp(0.0, 1.0)
+                } else {
+                    0.0
+                }
+            }));
         }
         v
     }

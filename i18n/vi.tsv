@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Tiếng Việt
+	% down and up	% xuống và lên
+	% of replications	% số lần lặp
 	+ Add block	+ Thêm khối
+	95th percentile	Phân vị thứ 95
+	95th percentile {value}	phân vị thứ 95 {value}
 	About StochCraft	Giới thiệu StochCraft
 	About {app}	Giới thiệu {app}
+	Across the range it changed by {change}: more than chance would explain.	Trên cả khoảng, nó thay đổi {change}: nhiều hơn mức ngẫu nhiên có thể giải thích.
+	Across the range it changed by {change}: within what chance alone could do.	Trên cả khoảng, nó thay đổi {change}: trong phạm vi mà chỉ ngẫu nhiên cũng có thể gây ra.
 	Actual size	Kích thước thực
 	Add Block	Thêm khối
 	Add a flow from…	Thêm luồng từ…
 	Add a flow to…	Thêm luồng đến…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Thêm một đơn vị vào tác vụ hoặc nhóm bận nhất cho đến khi đủ số lần lặp đạt mục tiêu. Câu trả lời khi mọi thời gian bằng giá trị trung bình cũng được hiển thị; nó thường quá nhỏ.
 	Add alternative	Thêm phương án
 	Add point	Thêm điểm
 	Add pool	Thêm nhóm
@@ -27,9 +34,12 @@
 	Added {block} ({id})	Đã thêm {block} ({id})
 	Align	Căn chỉnh
 	Alternative {n}	Phương án {n}
+	Analysis	Phân tích
 	Appearance	Diện mạo
 	Arrival limit	Giới hạn lượt đến
 	Arrivals	Lượt đến
+	At least	Ít nhất
+	At most	Nhiều nhất
 	Availability	Độ khả dụng
 	BPMN with BPSim	BPMN có BPSim
 	Back to the model (Esc)	Quay lại mô hình (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Kích thước lô
 	Beta	Beta
 	Binomial	Nhị thức
+	Block	Khối
 	Boolean	Boolean
 	Bottoms	Cạnh dưới
 	Bring All to Front	Đưa tất cả ra trước
 	Built with	Được xây dựng bằng
+	Busiest	Bận nhất
 	By role	Theo vai trò
 	CSV table	Bảng CSV
 	Cancel	Hủy
@@ -49,10 +61,13 @@
 	Cancel run	Hủy chạy
 	Capacity	Công suất
 	Centres	Tâm ngang
+	Change	Thay đổi
 	Change Block	Thay đổi khối
 	Change Flow	Thay đổi luồng
+	Change the estimate	Đổi ước lượng
 	Changes	Các thay đổi
 	Changing the time unit does not convert the times already in the model.	Thay đổi đơn vị thời gian không chuyển đổi các giá trị thời gian đã có trong mô hình.
+	Choose…	Chọn…
 	Clear Menu	Xóa menu
 	Close	Đóng
 	Close Window	Đóng cửa sổ
@@ -88,11 +103,16 @@
 	Drag to add:	Kéo để thêm:
 	Duplicate	Nhân bản
 	Duration	Thời lượng
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Mỗi phân tích chạy thí nghiệm nhiều lần với cùng hạt giống ngẫu nhiên, nên khác biệt đến từ thay đổi chứ không phải ngẫu nhiên. Việc này có thể mất một lúc.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Mỗi thực thể lấy phương án đầu tiên trong số này có thể đáp ứng ngay, lấy tất cả cùng lúc, và trả lại các đơn vị khi rời khỏi tác vụ.
 	Edit	Chỉnh sửa
+	Elasticity	Độ co giãn
+	Ends early	Kết thúc sớm
+	Enough: {units}, meeting the target in {p} of replications	Đủ: {units}, đạt mục tiêu trong {p} số lần lặp
 	Entered	Đã vào
 	Erlang	Erlang
 	Error	Lỗi
+	Estimate from three values…	Ước lượng từ ba giá trị…
 	Evenly across	Dàn đều theo chiều ngang
 	Evenly down	Dàn đều theo chiều dọc
 	Every distribution	Mọi phân phối
@@ -105,20 +125,27 @@
 	Export table (CSV)	Xuất bảng (CSV)
 	Exported {file}	Đã xuất {file}
 	Expression	Biểu thức
+	Family	Họ phân phối
 	File	Tệp
 	Finished at {time} {unit}	Kết thúc tại {time} {unit}
 	Fit	Vừa khung
 	Fit the diagram to the view	Thu phóng sơ đồ cho vừa khung nhìn
+	Fit the time	Khớp thời gian
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Khớp thời gian của khối này với giá trị nhỏ nhất, giá trị có khả năng nhất và giá trị lớn nhất hoặc phân vị thứ 95.
+	Fitted the time of {id}	Đã khớp thời gian của {id}
 	Flows	Luồng
+	Forget the estimate	Bỏ ước lượng
 	From	Từ
 	Gamma	Gamma
 	Goes to	Đi đến
 	Help	Trợ giúp
 	Hide Others	Ẩn các mục khác
 	Hide {app}	Ẩn {app}
+	How many	Bao nhiêu
 	Inside over time	Bên trong theo thời gian
 	Jump	Đi
 	Jump to time	Đi tới thời điểm
+	Keep the time, without the estimate it came from	Giữ thời gian, bỏ ước lượng mà nó dựa vào
 	Keyboard Shortcuts…	Phím tắt…
 	Keyboard shortcuts saved	Đã lưu phím tắt
 	Keyboard shortcuts unchanged	Phím tắt không thay đổi
@@ -140,6 +167,7 @@
 	Mean time blocked	Thời gian bị chặn trung bình
 	Mean time in system	Thời gian trung bình trong hệ thống
 	Mean wait	Thời gian chờ trung bình
+	Met in at least	Đạt trong ít nhất
 	Metric	Chỉ số
 	Middles	Tâm dọc
 	Minimise	Thu nhỏ tối đa
@@ -148,19 +176,25 @@
 	Model	Mô hình
 	Most likely	Có khả năng nhất
 	Move	Di chuyển
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Lần lượt giảm và tăng từng tham số, rồi xếp hạng theo mức kết quả thay đổi.
 	Name	Tên
 	Needs	Nhu cầu
+	Never: it runs for its duration	Không bao giờ: chạy hết thời lượng
 	New	Mới
 	New model	Mô hình mới
 	New property	Thuộc tính mới
 	New property name	Tên thuộc tính mới
 	No blocks yet. Open a model, or add blocks to build one.	Chưa có khối nào. Hãy mở một mô hình hoặc thêm các khối để tạo mô hình.
 	No connections yet: join blocks below.	Chưa có kết nối: hãy nối các khối bên dưới.
+	No replication met the stop condition: each ran to its time limit.	Không lần lặp nào đạt điều kiện dừng: mỗi lần đều chạy đến giới hạn thời gian.
 	No results yet	Chưa có kết quả
+	No target	Không có mục tiêu
 	None	Không có
 	None found. The model is ready to run.	Không tìm thấy vấn đề. Mô hình đã sẵn sàng chạy.
 	Normal	Chuẩn
+	Not reached, even with {units}	Chưa đạt, kể cả với {units}
 	Number	Số
+	One change, which Undo takes back	Một thay đổi, có thể hoàn tác
 	One clerk, random arrivals: the textbook queue, checked against theory.	Một nhân viên phục vụ, lượt đến ngẫu nhiên: hàng đợi kinh điển được đối chiếu với lý thuyết.
 	One task per BPSim distribution, to compare their spread.	Mỗi phân phối BPSim có một tác vụ để so sánh độ phân tán.
 	Open	Mở
@@ -173,10 +207,13 @@
 	Opened {file}	Đã mở {file}
 	Open…	Mở…
 	Or start from an example	Hoặc bắt đầu bằng ví dụ
+	PERT	PERT
 	PNG image	Ảnh PNG
+	Parameter	Tham số
 	Parameters	Tham số
 	Paste	Dán
 	Pause	Tạm dừng
+	Percentile	Phân vị
 	Play	Phát
 	Points	Điểm
 	Poisson	Poisson
@@ -190,6 +227,7 @@
 	Properties	Thuộc tính
 	Quit	Thoát
 	Quit {app}	Thoát {app}
+	Rank the parameters	Xếp hạng tham số
 	Ready	Sẵn sàng
 	Recover	Khôi phục
 	Recover unsaved changes?	Khôi phục các thay đổi chưa lưu?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	Lần lặp 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Lần lặp 1 · {time} / {end} {unit} · khởi động
 	Replications	Số lần lặp
+	Replications meeting the target	Số lần lặp đạt mục tiêu
+	Replications that never met the stop condition count as later than their time limit.	Các lần lặp chưa bao giờ đạt điều kiện dừng được tính là muộn hơn giới hạn thời gian của chúng.
 	Resource pool	Nhóm tài nguyên
 	Resource pools	Các nhóm tài nguyên
 	Restore	Khôi phục cửa sổ
+	Result	Kết quả
+	Result to compare	Kết quả cần so sánh
+	Result to explain	Kết quả cần giải thích
+	Result with a target	Kết quả có mục tiêu
+	Result, down and up	Kết quả, khi giảm và tăng
 	Results	Kết quả
 	Right edges	Cạnh phải
 	Roles	Vai trò
@@ -223,7 +268,10 @@
 	Run experiment	Chạy thí nghiệm
 	Run replication 1 step by step and see each block's queue on the diagram	Chạy lần lặp 1 từng bước và xem hàng đợi của mỗi khối trên sơ đồ
 	Run the experiment ({shortcut})	Chạy thí nghiệm ({shortcut})
+	Run the experiment again to see this result's spread.	Hãy chạy lại thí nghiệm để xem độ phân tán của kết quả này.
+	Run the experiment at each value of one parameter, and compare a result.	Chạy thí nghiệm với từng giá trị của một tham số và so sánh một kết quả.
 	Run the next event	Chạy sự kiện tiếp theo
+	Run the sweep	Chạy quét
 	Running	Đang chạy
 	Running…	Đang chạy…
 	Save	Lưu
@@ -235,6 +283,7 @@
 	Seed	Hạt giống ngẫu nhiên
 	Select All	Chọn tất cả
 	Select a block to see its queue over time.	Chọn một khối để xem hàng đợi của nó theo thời gian.
+	Separate the values with semicolons or spaces.	Phân tách các giá trị bằng dấu chấm phẩy hoặc dấu cách.
 	Service time	Thời gian phục vụ
 	Services	Dịch vụ
 	Set Property	Đặt thuộc tính
@@ -243,13 +292,19 @@
 	Settings	Cài đặt
 	Shape	Hình dạng
 	Share of arrivals lost	Tỷ lệ lượt đến bị mất
+	Share of replications	Tỷ lệ số lần lặp
 	Share of units blocked	Tỷ lệ đơn vị bị chặn
 	Show All	Hiện tất cả
 	Show {id}	Hiển thị {id}
+	Size	Định cỡ
+	Size the resources	Định cỡ tài nguyên
+	Source	Nguồn
+	Source: {source}	Nguồn: {source}
 	Speed	Tốc độ
 	Split batches	Tách lô
 	Split or join	Tách hoặc gộp
 	Split or join (all ways)	Tách hoặc gộp (mọi hướng)
+	Spread across replications	Độ phân tán giữa các lần lặp
 	Spread out	Dàn đều
 	Stages (k)	Số giai đoạn (k)
 	Standard deviation	Độ lệch chuẩn
@@ -261,17 +316,25 @@
 	Stop setting {name}	Ngừng đặt {name}
 	Stop watching	Ngừng theo dõi
 	Stopped watching	Đã ngừng theo dõi
+	Sweep a parameter	Quét một tham số
 	Tandem line	Dây chuyền nối tiếp
+	Target	Mục tiêu
+	Target value	Giá trị mục tiêu
 	Task	Tác vụ
 	Task with a resource	Tác vụ có tài nguyên
 	Task with shared resources	Tác vụ có tài nguyên dùng chung
 	Text	Văn bản
 	The model changed, so watching stopped	Mô hình đã thay đổi nên việc theo dõi đã dừng
+	The model now has the units sizing found	Mô hình giờ có số đơn vị mà việc định cỡ tìm được
 	The model: its experiment, connections and problems	Mô hình: thí nghiệm, kết nối và vấn đề
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Tỷ lệ lần lặp bằng hoặc dưới mỗi giá trị. Dải chứa phân phối thật với độ tin cậy {confidence}.
+	The values are numbers, separated by semicolons or spaces	Các giá trị là số, phân tách bằng dấu chấm phẩy hoặc dấu cách
 	This block has a warning	Khối này có cảnh báo
 	This block has an error	Khối này có lỗi
 	This run	Lần chạy này
+	Three-point estimate	Ước lượng ba điểm
 	Time between arrivals	Thời gian giữa các lượt đến
+	Time to the stop condition	Thời gian đến điều kiện dừng
 	Time unit	Đơn vị thời gian
 	To	Đến
 	Tops	Cạnh trên
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Các đơn vị mà nhiều tác vụ dùng chung. Tác vụ có tài nguyên dùng chung lấy chúng theo nhóm hoặc theo vai trò.
 	Untitled	Chưa đặt tên
 	Untitled model	Mô hình chưa đặt tên
+	Upper value	Giá trị trên
 	Use System Setting	Dùng cài đặt hệ thống
+	Use these units in the model	Dùng các đơn vị này trong mô hình
 	Utilisation	Mức sử dụng
 	Value	Giá trị
+	Values	Giá trị
 	View	Xem
 	Waiting over time	Đang chờ theo thời gian
 	Waiting room	Khu vực chờ
@@ -302,8 +368,12 @@
 	Watch a run	Theo dõi một lần chạy
 	Watching replication 1	Đang theo dõi lần lặp 1
 	Weibull	Weibull
+	When a task empties	Khi một tác vụ trống
+	When enough have left a block	Khi đủ số đã rời một khối
+	Which parameters matter	Tham số nào quan trọng
 	Whole number	Số nguyên
 	Window	Cửa sổ
+	With every time at its mean: {units}	Khi mọi thời gian bằng trung bình: {units}
 	Yes or no	Có hoặc không
 	Your changes will be lost if you don't save them.	Các thay đổi sẽ bị mất nếu bạn không lưu.
 	Zoom	Thu phóng
@@ -317,8 +387,11 @@
 	departures	lượt rời đi
 	egui and eframe (Craft suite fork)	egui và eframe (bản phân nhánh của bộ Craft)
 	from its value	từ giá trị của nó
+	have left	đã rời
 	hours	giờ
 	id {id}	ID {id}
+	matters	quan trọng
+	maximum {value}	lớn nhất {value}
 	milliseconds	mili giây
 	minutes	phút
 	nothing yet	chưa có gì
@@ -335,12 +408,17 @@
 	time	thời điểm
 	to {block}	đến {block}
 	unlimited	không giới hạn
+	who gave it, or where it comes from	ai đưa ra hoặc lấy từ đâu
+	within chance	trong phạm vi ngẫu nhiên
 	years	năm
+	{block}: units	{block}: đơn vị
 	{busy} busy	{busy} đang bận
 	{entered} in, {left} out, {lost} lost	{entered} vào, {left} ra, {lost} mất
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: nhỏ nhất {min}, có khả năng nhất {mode}, {upper}
 	{field}: not editable here yet	{field}: chưa thể chỉnh sửa tại đây
 	{id}: a probability is a number from 0 to 1	{id}: xác suất là số từ 0 đến 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} trên {of} lần lặp đạt mục tiêu: {p} (khoảng 95% từ {lo} đến {hi})
 	{name} — edited	{name} — đã chỉnh sửa
 	{n} created	{n} đã tạo
 	{n} done	{n} đã xong
@@ -364,9 +442,12 @@ unit	yr	năm
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Đã mở {file} ({n} cảnh báo)
 @plural	Removed {n} block|Removed {n} blocks	Đã xóa {n} khối
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Chạy {n} lần lặp độc lập của mô hình từ hạt giống {seed}. Kết quả của mỗi phần tử kèm nửa độ rộng khoảng tin cậy 95%.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Điều kiện dừng đạt được trong {met} trên {n} lần lặp, trung bình sau {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Đã hoàn thành {done}/{n} lần lặp
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nKhoảng 95% từ {low} đến {high}{unit}\nqua {n} lần lặp
 @plural	{n} block selected|{n} blocks selected	Đã chọn {n} khối
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} lần lặp mỗi bước · hạt giống {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} lần lặp · trung bình {mean} · từ {min} đến {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} lần lặp · hạt giống {seed} · khởi động {warmup} {unit} · đo {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} lần lặp · hạt giống {seed}
 @plural	{n} replication|{n} replications	{n} lần lặp

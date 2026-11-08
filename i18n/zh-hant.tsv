@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	繁體中文
+	% down and up	% 上下
+	% of replications	% 的重複執行
 	+ Add block	+ 新增區塊
+	95th percentile	第 95 百分位數
+	95th percentile {value}	第 95 百分位數 {value}
 	About StochCraft	關於 StochCraft
 	About {app}	關於 {app}
+	Across the range it changed by {change}: more than chance would explain.	在整個範圍內變化了 {change}：超出偶然所能解釋的程度。
+	Across the range it changed by {change}: within what chance alone could do.	在整個範圍內變化了 {change}：在偶然本身就可能造成的範圍內。
 	Actual size	實際大小
 	Add Block	新增區塊
 	Add a flow from…	新增順序流，來自…
 	Add a flow to…	新增順序流，通往…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	在最忙碌的任務或資源池上逐一增加單位，直到足夠多的重複執行達到目標。同時顯示所有時間取平均值時的答案；它通常偏小。
 	Add alternative	新增替代方案
 	Add point	新增點
 	Add pool	新增資源池
@@ -27,9 +34,12 @@
 	Added {block} ({id})	已新增 {block} ({id})
 	Align	對齊
 	Alternative {n}	替代方案 {n}
+	Analysis	分析
 	Appearance	外觀
 	Arrival limit	到達上限
 	Arrivals	到達
+	At least	至少
+	At most	至多
 	Availability	可用率
 	BPMN with BPSim	含 BPSim 的 BPMN
 	Back to the model (Esc)	返回模型 (Esc)
@@ -38,10 +48,12 @@
 	Batch size	批量大小
 	Beta	貝他分布
 	Binomial	二項分布
+	Block	區塊
 	Boolean	布林值
 	Bottoms	底邊
 	Bring All to Front	全部移到最前
 	Built with	使用以下技術建立
+	Busiest	最忙碌
 	By role	依角色
 	CSV table	CSV 表格
 	Cancel	取消
@@ -49,10 +61,13 @@
 	Cancel run	取消執行
 	Capacity	容量
 	Centres	水平置中
+	Change	變化
 	Change Block	變更區塊
 	Change Flow	變更順序流
+	Change the estimate	變更估計
 	Changes	變更
 	Changing the time unit does not convert the times already in the model.	變更時間單位不會換算模型中已有的時間值。
+	Choose…	選擇…
 	Clear Menu	清除選單
 	Close	關閉
 	Close Window	關閉視窗
@@ -88,11 +103,16 @@
 	Drag to add:	拖曳以新增：
 	Duplicate	建立副本
 	Duration	持續時間
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	每項分析以同一隨機種子多次執行實驗，因此差異來自變更而非偶然。可能需要一些時間。
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	每個實體會取得其中第一個目前能一次全部滿足的方案，並在離開時歸還這些資源單元。
 	Edit	編輯
+	Elasticity	彈性
+	Ends early	提前結束
+	Enough: {units}, meeting the target in {p} of replications	足夠：{units}，{p} 的重複執行達到目標
 	Entered	進入數
 	Erlang	爾朗分布
 	Error	錯誤
+	Estimate from three values…	根據三個值估計…
 	Evenly across	水平平均分佈
 	Evenly down	垂直平均分佈
 	Every distribution	所有分布
@@ -105,20 +125,27 @@
 	Export table (CSV)	匯出表格 (CSV)
 	Exported {file}	已匯出 {file}
 	Expression	運算式
+	Family	分配族
 	File	檔案
 	Finished at {time} {unit}	已於 {time} {unit} 結束
 	Fit	符合
 	Fit the diagram to the view	使圖表符合檢視
+	Fit the time	擬合時間
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	將此區塊的時間擬合為最小值、最可能值以及最大值或第 95 百分位數。
+	Fitted the time of {id}	已擬合 {id} 的時間
 	Flows	順序流
+	Forget the estimate	捨棄估計
 	From	起點
 	Gamma	伽瑪分布
 	Goes to	流向
 	Help	說明
 	Hide Others	隱藏其他
 	Hide {app}	隱藏 {app}
+	How many	數量
 	Inside over time	內部數量隨時間變化
 	Jump	跳至
 	Jump to time	跳至時間
+	Keep the time, without the estimate it came from	保留時間，去除其來源估計
 	Keyboard Shortcuts…	鍵盤快捷鍵…
 	Keyboard shortcuts saved	鍵盤快捷鍵已儲存
 	Keyboard shortcuts unchanged	鍵盤快捷鍵未變更
@@ -140,6 +167,7 @@
 	Mean time blocked	平均阻塞時間
 	Mean time in system	系統內平均時間
 	Mean wait	平均等待時間
+	Met in at least	達成比例至少
 	Metric	指標
 	Middles	垂直置中
 	Minimise	最小化
@@ -148,19 +176,25 @@
 	Model	模型
 	Most likely	最可能值
 	Move	移動
+	Move each parameter down and up in turn, and rank them by how much the result moves.	依序將每個參數調低和調高，並依結果的變動幅度排序。
 	Name	名稱
 	Needs	所需資源
+	Never: it runs for its duration	從不：執行完整個持續時間
 	New	新增
 	New model	新增模型
 	New property	新增屬性
 	New property name	新屬性名稱
 	No blocks yet. Open a model, or add blocks to build one.	尚無區塊。請開啟模型，或新增區塊來建立模型。
 	No connections yet: join blocks below.	尚無連接：請在下方連接區塊。
+	No replication met the stop condition: each ran to its time limit.	沒有重複執行達到停止條件：每次都執行到時間上限。
 	No results yet	尚無結果
+	No target	無目標
 	None	無
 	None found. The model is ready to run.	未發現問題。模型可以執行。
 	Normal	常態分布
+	Not reached, even with {units}	即使有 {units} 也未達成
 	Number	數值
+	One change, which Undo takes back	一次變更，可用復原還原
 	One clerk, random arrivals: the textbook queue, checked against theory.	一名服務員、隨機到達：經典排隊模型，並與理論結果對照。
 	One task per BPSim distribution, to compare their spread.	每種 BPSim 分布各設一個任務，用於比較其離散程度。
 	Open	開啟
@@ -173,10 +207,13 @@
 	Opened {file}	已開啟 {file}
 	Open…	開啟…
 	Or start from an example	或從範例開始
+	PERT	PERT
 	PNG image	PNG 影像
+	Parameter	參數
 	Parameters	參數
 	Paste	貼上
 	Pause	暫停
+	Percentile	百分位數
 	Play	播放
 	Points	點
 	Poisson	卜瓦松分布
@@ -190,6 +227,7 @@
 	Properties	屬性
 	Quit	退出
 	Quit {app}	退出 {app}
+	Rank the parameters	為參數排序
 	Ready	就緒
 	Recover	恢復
 	Recover unsaved changes?	恢復未儲存的變更？
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	第 1 次重複執行 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	第 1 次重複執行 · {time} / {end} {unit} · 暖機期
 	Replications	重複執行次數
+	Replications meeting the target	達到目標的重複執行
+	Replications that never met the stop condition count as later than their time limit.	從未達到停止條件的重複執行視為晚於其時間上限。
 	Resource pool	資源池
 	Resource pools	資源池
 	Restore	還原
+	Result	結果
+	Result to compare	要比較的結果
+	Result to explain	要解釋的結果
+	Result with a target	有目標的結果
+	Result, down and up	結果（調低與調高）
 	Results	結果
 	Right edges	右邊
 	Roles	角色
@@ -223,7 +268,10 @@
 	Run experiment	執行實驗
 	Run replication 1 step by step and see each block's queue on the diagram	逐步執行第 1 次重複執行，並在圖表上查看每個區塊的佇列
 	Run the experiment ({shortcut})	執行實驗 ({shortcut})
+	Run the experiment again to see this result's spread.	請再次執行實驗以查看此結果的分散情形。
+	Run the experiment at each value of one parameter, and compare a result.	在一個參數的每個值下執行實驗，並比較一個結果。
 	Run the next event	執行下一個事件
+	Run the sweep	執行掃描
 	Running	正在執行
 	Running…	正在執行…
 	Save	儲存
@@ -235,6 +283,7 @@
 	Seed	隨機種子
 	Select All	全選
 	Select a block to see its queue over time.	選取一個區塊以查看其佇列隨時間的變化。
+	Separate the values with semicolons or spaces.	請以分號或空格分隔各個值。
 	Service time	服務時間
 	Services	服務
 	Set Property	設定屬性
@@ -243,13 +292,19 @@
 	Settings	設定
 	Shape	形狀參數
 	Share of arrivals lost	到達流失比例
+	Share of replications	重複執行的比例
 	Share of units blocked	資源單元阻塞比例
 	Show All	全部顯示
 	Show {id}	顯示 {id}
+	Size	決定規模
+	Size the resources	決定資源規模
+	Source	來源
+	Source: {source}	來源：{source}
 	Speed	速度
 	Split batches	拆分批次
 	Split or join	拆分或合併
 	Split or join (all ways)	拆分或合併（所有路徑）
+	Spread across replications	各次重複執行間的分散
 	Spread out	平均分佈
 	Stages (k)	階段數 (k)
 	Standard deviation	標準差
@@ -261,17 +316,25 @@
 	Stop setting {name}	停止設定 {name}
 	Stop watching	停止觀察
 	Stopped watching	已停止觀察
+	Sweep a parameter	掃描一個參數
 	Tandem line	串聯流程
+	Target	目標
+	Target value	目標值
 	Task	任務
 	Task with a resource	需要資源的任務
 	Task with shared resources	需要共享資源的任務
 	Text	文字
 	The model changed, so watching stopped	模型已變更，因此已停止觀察
+	The model now has the units sizing found	模型現在使用規模決定得出的數量
 	The model: its experiment, connections and problems	模型：實驗、連接和問題
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超過各值的重複執行比例。色帶以 {confidence} 的信賴度包含真實分配。
+	The values are numbers, separated by semicolons or spaces	值應為以分號或空格分隔的數字
 	This block has a warning	此區塊存在警告
 	This block has an error	此區塊存在錯誤
 	This run	本次執行
+	Three-point estimate	三點估計
 	Time between arrivals	到達間隔時間
+	Time to the stop condition	到達停止條件的時間
 	Time unit	時間單位
 	To	終點
 	Tops	頂邊
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	由多個任務共享的資源單元。需要共享資源的任務會依資源池或依角色取得這些單元。
 	Untitled	未命名
 	Untitled model	未命名模型
+	Upper value	上限值
 	Use System Setting	使用系統設定
+	Use these units in the model	在模型中使用這些數量
 	Utilisation	利用率
 	Value	值
+	Values	值
 	View	檢視
 	Waiting over time	等待數量隨時間變化
 	Waiting room	等待區
@@ -302,8 +368,12 @@
 	Watch a run	觀察執行
 	Watching replication 1	正在觀察第 1 次重複執行
 	Weibull	威布林分布
+	When a task empties	當某個任務清空時
+	When enough have left a block	當足夠多實體離開某個區塊時
+	Which parameters matter	哪些參數重要
 	Whole number	整數
 	Window	視窗
+	With every time at its mean: {units}	所有時間取平均值時：{units}
 	Yes or no	是或否
 	Your changes will be lost if you don't save them.	若不儲存，您的變更將會遺失。
 	Zoom	縮放
@@ -317,8 +387,11 @@
 	departures	離開
 	egui and eframe (Craft suite fork)	egui 和 eframe（Craft 套件分支）
 	from its value	依其值
+	have left	離開
 	hours	小時
 	id {id}	ID {id}
+	matters	重要
+	maximum {value}	最大值 {value}
 	milliseconds	毫秒
 	minutes	分鐘
 	nothing yet	尚無內容
@@ -335,12 +408,17 @@
 	time	時間
 	to {block}	前往 {block}
 	unlimited	無限制
+	who gave it, or where it comes from	由誰提供或來自何處
+	within chance	在偶然範圍內
 	years	年
+	{block}: units	{block}：數量
 	{busy} busy	忙碌 {busy}
 	{entered} in, {left} out, {lost} lost	進入 {entered}，離開 {left}，遺失 {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}：最小值 {min}，最可能值 {mode}，{upper}
 	{field}: not editable here yet	{field}：暫時無法在此編輯
 	{id}: a probability is a number from 0 to 1	{id}：機率必須是 0 到 1 之間的數值
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} 次重複執行中有 {met} 次達到目標：{p}（95% 區間 {lo} 至 {hi}）
 	{name} — edited	{name} — 已編輯
 	{n} created	已建立 {n}
 	{n} done	已完成 {n}
@@ -364,9 +442,12 @@ unit	yr	年
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	已開啟 {file}（{n} 條警告）
 @plural	Removed {n} block|Removed {n} blocks	已移除 {n} 個區塊
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	從隨機種子 {seed} 開始，對模型進行 {n} 次獨立重複執行。每個元素的結果都包含 95% 信賴區間的半寬。
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	{n} 次重複執行中有 {met} 次達到停止條件，平均歷時 {time} {unit}。
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	已完成 {done}/{n} 次重複執行
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}：{mean}{unit}\n95% 區間：{low} 至 {high}{unit}\n基於 {n} 次重複執行
 @plural	{n} block selected|{n} blocks selected	已選取 {n} 個區塊
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	每步 {n} 次重複執行 · 種子 {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} 次重複執行 · 平均值 {mean} · {min} 至 {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 次重複執行 · 隨機種子 {seed} · 暖機 {warmup} {unit} · 測量 {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 次重複執行 · 隨機種子 {seed}
 @plural	{n} replication|{n} replications	{n} 次重複執行

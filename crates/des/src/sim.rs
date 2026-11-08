@@ -122,6 +122,32 @@ impl std::fmt::Display for Stopped {
 
 impl std::error::Error for Stopped {}
 
+/// Where a watched run has got to, for running it in slices ([`Sim::run_watched_slice`]): the
+/// events run so far, and those at the latest simulated time, which the stuck-time limit counts
+/// across slices.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Watching {
+    instant: f64,
+    at_instant: u64,
+    events: u64,
+}
+
+impl Watching {
+    /// A run starting with the clock at `now` ([`Sim::now`]).
+    pub fn new(now: f64) -> Self {
+        Self {
+            instant: now,
+            at_instant: 0,
+            events: 0,
+        }
+    }
+
+    /// The events run so far (stale ones skipped included).
+    pub fn events(&self) -> u64 {
+        self.events
+    }
+}
+
 /// A simulation: processes plus the event queue that drives them.
 pub struct Sim {
     kernel: Rc<RefCell<Kernel>>,
@@ -213,32 +239,55 @@ impl Sim {
     /// process asks to wait beyond the largest time that can be represented. The checks only
     /// read counters, so a run that is not stopped runs exactly as [`Sim::run_until`] would.
     pub fn run_watched(&mut self, until: f64, watch: &Watch<'_>) -> Result<u64, Stopped> {
-        let mut steps: u64 = 0;
-        let mut instant = self.now();
-        let mut at_instant: u64 = 0;
+        let mut watching = Watching::new(self.now());
+        self.run_watched_slice(until, watch, u64::MAX, &mut watching)?;
+        Ok(watching.events)
+    }
+
+    /// As [`Sim::run_watched`], but runs at most `budget` events, carrying on from `watching`
+    /// (the same one for every slice of a run, made with [`Watching::new`] at its start). Returns
+    /// `true` once no event before `until` is left (the clock is then at `until`), `false` if
+    /// the budget ran out first (the clock stays at the last event run, and the next slice takes
+    /// up exactly where this one stopped).
+    ///
+    /// Slices change nothing about the run: run slice after slice, they run exactly the events
+    /// of one [`Sim::run_watched`] call in the same order, and the events at one simulated time
+    /// are counted across slices, so the stuck-time limit stops the run at the same event.
+    pub fn run_watched_slice(
+        &mut self,
+        until: f64,
+        watch: &Watch<'_>,
+        budget: u64,
+        watching: &mut Watching,
+    ) -> Result<bool, Stopped> {
+        let mut spent: u64 = 0;
         loop {
-            if steps.is_multiple_of(CANCEL_CHECK_EVERY) && (watch.cancelled)() {
+            if watching.events.is_multiple_of(CANCEL_CHECK_EVERY) && (watch.cancelled)() {
                 return Err(Stopped::Cancelled { time: self.now() });
+            }
+            if spent >= budget && self.next_event_time().is_some_and(|t| t <= until) {
+                return Ok(false);
             }
             let Some(ev) = self.pop_until(until) else {
                 break;
             };
-            if ev.time == instant {
-                at_instant += 1;
+            if ev.time == watching.instant {
+                watching.at_instant += 1;
             } else {
-                instant = ev.time;
-                at_instant = 1;
+                watching.instant = ev.time;
+                watching.at_instant = 1;
             }
-            if at_instant > watch.max_events_at_one_time {
+            if watching.at_instant > watch.max_events_at_one_time {
                 let k = self.kernel.borrow();
                 return Err(Stopped::TimeStopped {
-                    time: instant,
+                    time: watching.instant,
                     events: watch.max_events_at_one_time,
                     tag: k.procs.get(&ev.payload).and_then(|p| p.tag),
                 });
             }
             self.step(ev.payload, ev.seq);
-            steps += 1;
+            watching.events += 1;
+            spent += 1;
             let k = self.kernel.borrow();
             if let Some((pid, time)) = k.unschedulable {
                 return Err(Stopped::Unschedulable {
@@ -248,7 +297,7 @@ impl Sim {
             }
         }
         self.kernel.borrow_mut().queue.advance_to(until);
-        Ok(steps)
+        Ok(true)
     }
 
     /// When the next event happens, if any is scheduled.
@@ -655,6 +704,90 @@ mod tests {
         assert_eq!(watched.run_watched(100.5, &watch), Ok(steps));
         assert_eq!((plain_ticks.get(), plain.now()), (100, 100.5));
         assert_eq!((watched_ticks.get(), watched.now()), (100, 100.5));
+    }
+
+    /// Run in slices of any size, a run gives the same events in the same order as in one go,
+    /// and ends with the clock at the same time.
+    #[test]
+    fn a_run_in_slices_runs_exactly_as_in_one_go() {
+        // Two tickers, one of them with a zero-time step, so several events share each time.
+        let build = |log: &Rc<RefCell<Vec<(u32, f64)>>>| {
+            let mut sim = Sim::new();
+            for (id, period) in [(1u32, 1.0), (2, 0.75)] {
+                let (ctx, l) = (sim.ctx(), Rc::clone(log));
+                sim.spawn(async move {
+                    loop {
+                        ctx.hold(period).await;
+                        l.borrow_mut().push((id, ctx.now()));
+                        ctx.hold(0.0).await;
+                        l.borrow_mut().push((id + 10, ctx.now()));
+                    }
+                });
+            }
+            sim
+        };
+        let watch = Watch {
+            max_events_at_one_time: 100,
+            cancelled: &|| false,
+        };
+        let log = Rc::new(RefCell::new(Vec::new()));
+        let mut whole = build(&log);
+        let steps = whole.run_watched(30.5, &watch);
+        for budget in [1, 2, 3, 1000] {
+            let sliced_log = Rc::new(RefCell::new(Vec::new()));
+            let mut sim = build(&sliced_log);
+            let mut w = Watching::new(sim.now());
+            let mut slices = 0;
+            while !sim
+                .run_watched_slice(30.5, &watch, budget, &mut w)
+                .unwrap_or(true)
+            {
+                slices += 1;
+                assert!(sim.now() <= 30.5);
+            }
+            assert_eq!(Ok(w.events()), steps, "slices of {budget}");
+            assert_eq!(*sliced_log.borrow(), *log.borrow(), "slices of {budget}");
+            assert_eq!(sim.now(), 30.5);
+            if budget == 1 {
+                assert_eq!(Ok(slices + 1), steps, "the last slice ends the run");
+            }
+        }
+    }
+
+    /// The stuck-time limit counts the events at one time across slices: slices smaller than
+    /// the limit still stop the loop, at the same time and naming the same process.
+    #[test]
+    fn the_stuck_time_limit_counts_across_slices() {
+        let looping = || {
+            let mut sim = Sim::new();
+            let ctx = sim.ctx();
+            sim.spawn_tagged(5, async move {
+                ctx.hold(2.0).await;
+                loop {
+                    ctx.hold(0.0).await;
+                }
+            });
+            sim
+        };
+        let watch = Watch {
+            max_events_at_one_time: 100,
+            cancelled: &|| false,
+        };
+        let whole = looping().run_watched(10.0, &watch);
+        let mut sim = looping();
+        let mut w = Watching::new(sim.now());
+        let mut r = Ok(false);
+        for _ in 0..1000 {
+            r = sim.run_watched_slice(10.0, &watch, 7, &mut w);
+            if r != Ok(false) {
+                break;
+            }
+        }
+        assert_eq!(r.map(|_| 0), whole.map(|_| 0));
+        assert!(
+            matches!(r, Err(Stopped::TimeStopped { time: 2.0, .. })),
+            "{r:?}"
+        );
     }
 
     /// #42: a wait that would end beyond the largest time that can be represented cannot be

@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	தமிழ்
+	% down and up	% கீழும் மேலும்
+	% of replications	% மீள் இயக்கங்களில்
 	+ Add block	+ தொகுதியைச் சேர்
+	95th percentile	95-ஆம் சதமானம்
+	95th percentile {value}	95-ஆம் சதமானம் {value}
 	About StochCraft	StochCraft பற்றி
 	About {app}	{app} பற்றி
+	Across the range it changed by {change}: more than chance would explain.	முழு வரம்பிலும் இது {change} மாறியது: தற்செயல் விளக்குவதை விட அதிகம்.
+	Across the range it changed by {change}: within what chance alone could do.	முழு வரம்பிலும் இது {change} மாறியது: தற்செயல் மட்டுமே செய்யக்கூடிய அளவுக்குள்.
 	Actual size	உண்மையான அளவு
 	Add Block	தொகுதியைச் சேர்
 	Add a flow from…	இதிலிருந்து ஓட்டத்தைச் சேர்…
 	Add a flow to…	இதற்கு ஓட்டத்தைச் சேர்…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	போதுமான மீள் இயக்கங்கள் இலக்கை அடையும் வரை மிகவும் பணிச்சுமையுள்ள பணிக்கோ குழுவுக்கோ ஒரு அலகைச் சேர்க்கவும். ஒவ்வொரு நேரத்தையும் அதன் சராசரியில் வைத்த பதிலும் காட்டப்படும்; அது பொதுவாக மிகச் சிறியது.
 	Add alternative	மாற்றுத் தேர்வைச் சேர்
 	Add point	புள்ளியைச் சேர்
 	Add pool	தொகுப்பைச் சேர்
@@ -27,9 +34,12 @@
 	Added {block} ({id})	{block} ({id}) சேர்க்கப்பட்டது
 	Align	சீரமை
 	Alternative {n}	மாற்றுத் தேர்வு {n}
+	Analysis	பகுப்பாய்வு
 	Appearance	தோற்றம்
 	Arrival limit	வருகை வரம்பு
 	Arrivals	வருகைகள்
+	At least	குறைந்தது
+	At most	அதிகபட்சம்
 	Availability	கிடைக்கும் தன்மை
 	BPMN with BPSim	BPSim உடன் BPMN
 	Back to the model (Esc)	மாதிரிக்குத் திரும்பு (Esc)
@@ -38,10 +48,12 @@
 	Batch size	தொகுப்பு அளவு
 	Beta	பீட்டா
 	Binomial	ஈருறுப்பு
+	Block	தொகுதி
 	Boolean	பூலியன்
 	Bottoms	கீழ் விளிம்புகள்
 	Bring All to Front	அனைத்தையும் முன்னே கொண்டுவா
 	Built with	உருவாக்கப் பயன்படுத்தியது
+	Busiest	மிகவும் பணிச்சுமையுள்ளது
 	By role	பணிப்பங்கு வாரியாக
 	CSV table	CSV அட்டவணை
 	Cancel	ரத்துசெய்
@@ -49,10 +61,13 @@
 	Cancel run	இயக்கத்தை ரத்துசெய்
 	Capacity	கொள்திறன்
 	Centres	கிடைமட்ட மையங்கள்
+	Change	மாற்றம்
 	Change Block	தொகுதியை மாற்று
 	Change Flow	ஓட்டத்தை மாற்று
+	Change the estimate	மதிப்பீட்டை மாற்று
 	Changes	மாற்றங்கள்
 	Changing the time unit does not convert the times already in the model.	நேர அலகை மாற்றுவது மாதிரியில் ஏற்கெனவே உள்ள நேரங்களை மாற்றிக் கணக்கிடாது.
+	Choose…	தேர்வுசெய்க…
 	Clear Menu	மெனுவை அழி
 	Close	மூடு
 	Close Window	சாளரத்தை மூடு
@@ -88,11 +103,16 @@
 	Drag to add:	சேர்க்க இழுக்கவும்:
 	Duplicate	நகல் உருவாக்கு
 	Duration	கால அளவு
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ஒவ்வொரு பகுப்பாய்வும் ஒரே சீரற்ற விதையுடன் சோதனையைப் பலமுறை இயக்குகிறது, எனவே வேறுபாடுகள் தற்செயலால் அல்ல, மாற்றத்தால் வருகின்றன. சிறிது நேரம் ஆகலாம்.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ஒவ்வொரு உருப்படியும் இவற்றில், இப்போதே ஒரே நேரத்தில் முழுமையாக நிறைவேற்றக்கூடிய முதலாவதை எடுத்துக்கொள்கிறது; வெளியேறும்போது அலகுகளைத் திருப்பித் தருகிறது.
 	Edit	திருத்து
+	Elasticity	நெகிழ்ச்சி
+	Ends early	முன்னதாக முடிகிறது
+	Enough: {units}, meeting the target in {p} of replications	போதும்: {units}, {p} மீள் இயக்கங்களில் இலக்கு அடையப்படுகிறது
 	Entered	உள்ளே நுழைந்தவை
 	Erlang	எர்லாங்
 	Error	பிழை
+	Estimate from three values…	மூன்று மதிப்புகளிலிருந்து மதிப்பிடு…
 	Evenly across	கிடைமட்டமாகச் சமமாகப் பரப்பு
 	Evenly down	செங்குத்தாகச் சமமாகப் பரப்பு
 	Every distribution	ஒவ்வொரு பரவலும்
@@ -105,20 +125,27 @@
 	Export table (CSV)	அட்டவணையை ஏற்றுமதி செய் (CSV)
 	Exported {file}	{file} ஏற்றுமதி செய்யப்பட்டது
 	Expression	கோவை
+	Family	குடும்பம்
 	File	கோப்பு
 	Finished at {time} {unit}	{time} {unit} இல் முடிந்தது
 	Fit	பொருத்து
 	Fit the diagram to the view	வரைபடத்தைக் காட்சியில் பொருத்து
+	Fit the time	நேரத்தைப் பொருத்து
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	இந்தத் தொகுதியின் நேரத்தை குறைந்தபட்சம், அதிக வாய்ப்புள்ள மதிப்பு, அதிகபட்சம் அல்லது 95-ஆம் சதமானத்துடன் பொருத்தவும்.
+	Fitted the time of {id}	{id} இன் நேரம் பொருத்தப்பட்டது
 	Flows	ஓட்டங்கள்
+	Forget the estimate	மதிப்பீட்டை மறந்துவிடு
 	From	இதிலிருந்து
 	Gamma	காமா
 	Goes to	இதற்குச் செல்கிறது
 	Help	உதவி
 	Hide Others	மற்றவற்றை மறை
 	Hide {app}	{app} ஐ மறை
+	How many	எத்தனை
 	Inside over time	நேரப்படி உள்ளே
 	Jump	செல்
 	Jump to time	நேரத்திற்குச் செல்
+	Keep the time, without the estimate it came from	நேரத்தை வைத்துக்கொள், அது வந்த மதிப்பீடு இல்லாமல்
 	Keyboard Shortcuts…	விசைப்பலகை குறுக்குவழிகள்…
 	Keyboard shortcuts saved	விசைப்பலகை குறுக்குவழிகள் சேமிக்கப்பட்டன
 	Keyboard shortcuts unchanged	விசைப்பலகை குறுக்குவழிகள் மாறவில்லை
@@ -140,6 +167,7 @@
 	Mean time blocked	தடுக்கப்பட்ட சராசரி நேரம்
 	Mean time in system	அமைப்பில் கழித்த சராசரி நேரம்
 	Mean wait	சராசரி காத்திருப்பு
+	Met in at least	குறைந்தது இதில் அடையப்படும்
 	Metric	அளவீடு
 	Middles	செங்குத்து மையங்கள்
 	Minimise	சிறிதாக்கு
@@ -148,19 +176,25 @@
 	Model	மாதிரி
 	Most likely	அதிக வாய்ப்புள்ள மதிப்பு
 	Move	நகர்த்தல்
+	Move each parameter down and up in turn, and rank them by how much the result moves.	ஒவ்வொரு அளவுருவையும் வரிசையாகக் கீழும் மேலும் நகர்த்தி, முடிவு எவ்வளவு நகர்கிறது என்பதன்படி தரவரிசைப்படுத்தவும்.
 	Name	பெயர்
 	Needs	தேவைகள்
+	Never: it runs for its duration	ஒருபோதும் இல்லை: முழுக் கால அளவும் இயங்கும்
 	New	புதியது
 	New model	புதிய மாதிரி
 	New property	புதிய பண்பு
 	New property name	புதிய பண்பின் பெயர்
 	No blocks yet. Open a model, or add blocks to build one.	இன்னும் தொகுதிகள் இல்லை. மாதிரியைத் திறக்கவும் அல்லது தொகுதிகளைச் சேர்த்து உருவாக்கவும்.
 	No connections yet: join blocks below.	இன்னும் இணைப்புகள் இல்லை: கீழே தொகுதிகளை இணைக்கவும்.
+	No replication met the stop condition: each ran to its time limit.	எந்த மீள் இயக்கமும் நிறுத்த நிபந்தனையை அடையவில்லை: ஒவ்வொன்றும் அதன் நேர வரம்பு வரை இயங்கியது.
 	No results yet	இன்னும் முடிவுகள் இல்லை
+	No target	இலக்கு இல்லை
 	None	ஏதுமில்லை
 	None found. The model is ready to run.	சிக்கல்கள் எதுவும் இல்லை. மாதிரி இயக்கத் தயாராக உள்ளது.
 	Normal	இயல்புப் பரவல்
+	Not reached, even with {units}	{units} இருந்தும் அடையவில்லை
 	Number	எண்
+	One change, which Undo takes back	செயல்தவிர் திரும்பப் பெறும் ஒரு மாற்றம்
 	One clerk, random arrivals: the textbook queue, checked against theory.	ஒரு பணியாளர், சீரற்ற வருகைகள்: கோட்பாட்டுடன் சரிபார்க்கப்பட்ட வழக்கமான காத்திருப்பு வரிசை.
 	One task per BPSim distribution, to compare their spread.	பரவல் வேறுபாட்டை ஒப்பிட ஒவ்வொரு BPSim பரவலுக்கும் ஒரு பணி.
 	Open	திற
@@ -173,10 +207,13 @@
 	Opened {file}	{file} திறக்கப்பட்டது
 	Open…	திற…
 	Or start from an example	அல்லது ஓர் எடுத்துக்காட்டில் தொடங்கவும்
+	PERT	PERT
 	PNG image	PNG படம்
+	Parameter	அளவுரு
 	Parameters	அளவுருக்கள்
 	Paste	ஒட்டு
 	Pause	இடைநிறுத்து
+	Percentile	சதமானம்
 	Play	இயக்கு
 	Points	புள்ளிகள்
 	Poisson	பாய்சான்
@@ -190,6 +227,7 @@
 	Properties	பண்புகள்
 	Quit	வெளியேறு
 	Quit {app}	{app} இலிருந்து வெளியேறு
+	Rank the parameters	அளவுருக்களைத் தரவரிசைப்படுத்து
 	Ready	தயார்
 	Recover	மீட்டெடு
 	Recover unsaved changes?	சேமிக்கப்படாத மாற்றங்களை மீட்டெடுக்கவா?
@@ -212,9 +250,16 @@
 	Replication 1 · {time} of {end} {unit}	மீள் இயக்கம் 1 · {end} {unit} இல் {time}
 	Replication 1 · {time} of {end} {unit} · warm-up	மீள் இயக்கம் 1 · {end} {unit} இல் {time} · தொடக்கச் சீராக்க நேரம்
 	Replications	மீள் இயக்கங்கள்
+	Replications meeting the target	இலக்கை அடைந்த மீள் இயக்கங்கள்
+	Replications that never met the stop condition count as later than their time limit.	நிறுத்த நிபந்தனையை ஒருபோதும் அடையாத மீள் இயக்கங்கள் அவற்றின் நேர வரம்பை விடப் பிந்தையவையாகக் கணக்கிடப்படும்.
 	Resource pool	வளத் தொகுப்பு
 	Resource pools	வளத் தொகுப்புகள்
 	Restore	சாளர அளவை மீட்டமை
+	Result	முடிவு
+	Result to compare	ஒப்பிட வேண்டிய முடிவு
+	Result to explain	விளக்க வேண்டிய முடிவு
+	Result with a target	இலக்குள்ள முடிவு
+	Result, down and up	முடிவு, கீழும் மேலும்
 	Results	முடிவுகள்
 	Right edges	வலது விளிம்புகள்
 	Roles	பணிப்பங்குகள்
@@ -223,7 +268,10 @@
 	Run experiment	சோதனையை இயக்கு
 	Run replication 1 step by step and see each block's queue on the diagram	மீள் இயக்கம் 1 ஐப் படிப்படியாக இயக்கி, வரைபடத்தில் ஒவ்வொரு தொகுதியின் வரிசையையும் பார்
 	Run the experiment ({shortcut})	சோதனையை இயக்கு ({shortcut})
+	Run the experiment again to see this result's spread.	இந்த முடிவின் பரவலைக் காண சோதனையை மீண்டும் இயக்கவும்.
+	Run the experiment at each value of one parameter, and compare a result.	ஒரு அளவுருவின் ஒவ்வொரு மதிப்பிலும் சோதனையை இயக்கி ஒரு முடிவை ஒப்பிடவும்.
 	Run the next event	அடுத்த நிகழ்வை இயக்கு
+	Run the sweep	வருடலை இயக்கு
 	Running	இயங்குகிறது
 	Running…	இயங்குகிறது…
 	Save	சேமி
@@ -235,6 +283,7 @@
 	Seed	சீரற்ற விதை
 	Select All	அனைத்தையும் தேர்ந்தெடு
 	Select a block to see its queue over time.	நேரப்படி ஒரு தொகுதியின் வரிசையைப் பார்க்க அதைத் தேர்ந்தெடுக்கவும்.
+	Separate the values with semicolons or spaces.	மதிப்புகளை அரைப்புள்ளி அல்லது இடைவெளியால் பிரிக்கவும்.
 	Service time	சேவை நேரம்
 	Services	சேவைகள்
 	Set Property	பண்பை அமை
@@ -243,13 +292,19 @@
 	Settings	அமைப்புகள்
 	Shape	வடிவ அளவுரு
 	Share of arrivals lost	இழந்த வருகைகளின் விகிதம்
+	Share of replications	மீள் இயக்கங்களின் பங்கு
 	Share of units blocked	தடுக்கப்பட்ட அலகுகளின் விகிதம்
 	Show All	அனைத்தையும் காட்டு
 	Show {id}	{id} ஐக் காட்டு
+	Size	அளவிடு
+	Size the resources	வளங்களை அளவிடு
+	Source	மூலம்
+	Source: {source}	மூலம்: {source}
 	Speed	வேகம்
 	Split batches	தொகுப்புகளைப் பிரி
 	Split or join	பிரி அல்லது இணை
 	Split or join (all ways)	பிரி அல்லது இணை (எல்லா வழிகளும்)
+	Spread across replications	மீள் இயக்கங்களிடையே பரவல்
 	Spread out	பரப்பு
 	Stages (k)	படிநிலைகள் (k)
 	Standard deviation	திட்ட விலக்கம்
@@ -261,17 +316,25 @@
 	Stop setting {name}	{name} அமைப்பதை நிறுத்து
 	Stop watching	கவனிப்பதை நிறுத்து
 	Stopped watching	கவனிப்பது நிறுத்தப்பட்டது
+	Sweep a parameter	ஒரு அளவுருவை வருடு
 	Tandem line	தொடர் பணிநிலைகள்
+	Target	இலக்கு
+	Target value	இலக்கு மதிப்பு
 	Task	பணி
 	Task with a resource	வளம் தேவைப்படும் பணி
 	Task with shared resources	பகிர்ந்த வளங்கள் தேவைப்படும் பணி
 	Text	உரை
 	The model changed, so watching stopped	மாதிரி மாறியதால் கவனிப்பது நிறுத்தப்பட்டது
+	The model now has the units sizing found	அளவிடுதல் கண்டறிந்த அலகுகள் இப்போது மாதிரியில் உள்ளன
 	The model: its experiment, connections and problems	மாதிரி: அதன் சோதனை, இணைப்புகள், சிக்கல்கள்
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ஒவ்வொரு மதிப்புக்கும் சமமான அல்லது குறைவான மீள் இயக்கங்களின் பங்கு. பட்டை உண்மையான பரவலை {confidence} நம்பகத்தன்மையுடன் கொண்டுள்ளது.
+	The values are numbers, separated by semicolons or spaces	மதிப்புகள் அரைப்புள்ளி அல்லது இடைவெளியால் பிரிக்கப்பட்ட எண்கள்
 	This block has a warning	இந்தத் தொகுதியில் ஓர் எச்சரிக்கை உள்ளது
 	This block has an error	இந்தத் தொகுதியில் ஒரு பிழை உள்ளது
 	This run	இந்த இயக்கம்
+	Three-point estimate	மூன்று-புள்ளி மதிப்பீடு
 	Time between arrivals	வருகைகளுக்கு இடையிலான நேரம்
+	Time to the stop condition	நிறுத்த நிபந்தனை வரையிலான நேரம்
 	Time unit	நேர அலகு
 	To	இதற்கு
 	Tops	மேல் விளிம்புகள்
@@ -289,9 +352,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	பல பணிகள் பகிர்ந்துகொள்ளும் அலகுகள். பகிர்ந்த வளங்கள் தேவைப்படும் பணி, அவற்றைத் தொகுப்பு வாரியாகவோ பணிப்பங்கு வாரியாகவோ எடுத்துக்கொள்கிறது.
 	Untitled	தலைப்பிடப்படாதது
 	Untitled model	பெயரிடப்படாத மாதிரி
+	Upper value	மேல் மதிப்பு
 	Use System Setting	கணினி அமைப்பைப் பயன்படுத்து
+	Use these units in the model	இந்த அலகுகளை மாதிரியில் பயன்படுத்து
 	Utilisation	பயன்பாட்டு விகிதம்
 	Value	மதிப்பு
+	Values	மதிப்புகள்
 	View	பார்வை
 	Waiting over time	நேரப்படி காத்திருப்பவை
 	Waiting room	காத்திருப்பு அறை
@@ -302,8 +368,12 @@
 	Watch a run	ஓர் இயக்கத்தைக் கவனி
 	Watching replication 1	மீள் இயக்கம் 1 கவனிக்கப்படுகிறது
 	Weibull	வைபுல்
+	When a task empties	ஒரு பணி காலியாகும்போது
+	When enough have left a block	ஒரு தொகுதியிலிருந்து போதுமானவை வெளியேறியதும்
+	Which parameters matter	எந்த அளவுருக்கள் முக்கியம்
 	Whole number	முழு எண்
 	Window	சாளரம்
+	With every time at its mean: {units}	ஒவ்வொரு நேரமும் அதன் சராசரியில்: {units}
 	Yes or no	ஆம் அல்லது இல்லை
 	Your changes will be lost if you don't save them.	சேமிக்காவிட்டால் உங்கள் மாற்றங்கள் இழக்கப்படும்.
 	Zoom	அளவை மாற்று
@@ -317,8 +387,11 @@
 	departures	வெளியேற்றங்கள்
 	egui and eframe (Craft suite fork)	egui மற்றும் eframe (Craft suite பிரிவு)
 	from its value	அதன் மதிப்பிலிருந்து
+	have left	வெளியேறின
 	hours	மணிநேரங்கள்
 	id {id}	அடையாளம் {id}
+	matters	முக்கியம்
+	maximum {value}	அதிகபட்சம் {value}
 	milliseconds	மில்லிவினாடிகள்
 	minutes	நிமிடங்கள்
 	nothing yet	இன்னும் ஏதுமில்லை
@@ -335,12 +408,17 @@
 	time	நேரம்
 	to {block}	{block} க்கு
 	unlimited	வரம்பற்றது
+	who gave it, or where it comes from	யார் கொடுத்தது அல்லது எங்கிருந்து வந்தது
+	within chance	தற்செயலுக்குள்
 	years	ஆண்டுகள்
+	{block}: units	{block}: அலகுகள்
 	{busy} busy	{busy} பணியில்
 	{entered} in, {left} out, {lost} lost	{entered} உள்ளே, {left} வெளியே, {lost} இழப்பு
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: குறைந்தபட்சம் {min}, அதிக வாய்ப்புள்ளது {mode}, {upper}
 	{field}: not editable here yet	{field}: இங்கே இன்னும் திருத்த முடியாது
 	{id}: a probability is a number from 0 to 1	{id}: நிகழ்தகவு 0 முதல் 1 வரையிலான எண்ணாக இருக்க வேண்டும்
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} மீள் இயக்கங்களில் {met} இலக்கை அடைந்தன: {p} (95% இடைவெளி {lo} முதல் {hi})
 	{name} — edited	{name} — திருத்தப்பட்டது
 	{n} created	{n} உருவாக்கப்பட்டன
 	{n} done	{n} முடிந்தன
@@ -364,9 +442,12 @@ unit	yr	ஆண்டு
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} திறக்கப்பட்டது ({n} எச்சரிக்கை)|{file} திறக்கப்பட்டது ({n} எச்சரிக்கைகள்)
 @plural	Removed {n} block|Removed {n} blocks	{n} தொகுதி அகற்றப்பட்டது|{n} தொகுதிகள் அகற்றப்பட்டன
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கத்தை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.|{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கங்களை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் அவற்றின் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	நிறுத்த நிபந்தனை {n} மீள் இயக்கத்தில் {met} இல், சராசரியாக {time} {unit} பிறகு அடையப்பட்டது.|நிறுத்த நிபந்தனை {n} மீள் இயக்கங்களில் {met} இல், சராசரியாக {time} {unit} பிறகு அடையப்பட்டது.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} இல் {done} மீள் இயக்கம் முடிந்தது|{n} இல் {done} மீள் இயக்கங்கள் முடிந்தன
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கத்தில்|{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கங்களில்
 @plural	{n} block selected|{n} blocks selected	{n} தொகுதி தேர்ந்தெடுக்கப்பட்டது|{n} தொகுதிகள் தேர்ந்தெடுக்கப்பட்டன
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	ஒவ்வொரு படியிலும் {n} மீள் இயக்கம் · விதை {seed}|ஒவ்வொரு படியிலும் {n} மீள் இயக்கங்கள் · விதை {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} மீள் இயக்கம் · சராசரி {mean} · {min} முதல் {max}|{n} மீள் இயக்கங்கள் · சராசரி {mean} · {min} முதல் {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} மீள் இயக்கம் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது|{n} மீள் இயக்கங்கள் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} மீள் இயக்கம் · விதை {seed}|{n} மீள் இயக்கங்கள் · விதை {seed}
 @plural	{n} replication|{n} replications	{n} மீள் இயக்கம்|{n} மீள் இயக்கங்கள்
