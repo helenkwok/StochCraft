@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Polski
+	% down and up	% w dół i w górę
+	% of replications	% replikacji
 	+ Add block	+ Dodaj blok
+	95th percentile	95. percentyl
+	95th percentile {value}	95. percentyl {value}
 	About StochCraft	O programie StochCraft
 	About {app}	O programie {app}
+	Across the range it changed by {change}: more than chance would explain.	W całym zakresie zmienił się o {change}: bardziej, niż wyjaśniałby przypadek.
+	Across the range it changed by {change}: within what chance alone could do.	W całym zakresie zmienił się o {change}: w granicach tego, co może sam przypadek.
 	Actual size	Rzeczywisty rozmiar
 	Add Block	Dodaj blok
 	Add a flow from…	Dodaj przepływ z…
 	Add a flow to…	Dodaj przepływ do…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Dodawaj jednostkę przy najbardziej obciążonym zadaniu lub puli, aż wystarczająco wiele replikacji osiągnie cel. Pokazana jest też odpowiedź z każdym czasem równym średniej; zwykle jest za mała.
 	Add alternative	Dodaj alternatywę
 	Add point	Dodaj punkt
 	Add pool	Dodaj pulę
@@ -27,9 +34,12 @@
 	Added {block} ({id})	Dodano {block} ({id})
 	Align	Wyrównaj
 	Alternative {n}	Alternatywa {n}
+	Analysis	Analiza
 	Appearance	Wygląd
 	Arrival limit	Limit przybyć
 	Arrivals	Przybycia
+	At least	Co najmniej
+	At most	Co najwyżej
 	Availability	Dostępność
 	BPMN with BPSim	BPMN z BPSim
 	Back to the model (Esc)	Powrót do modelu (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Wielkość partii
 	Beta	Beta
 	Binomial	Dwumianowy
+	Block	Blok
 	Boolean	Wartość logiczna
 	Bottoms	Dolne krawędzie
 	Bring All to Front	Przenieś wszystkie na wierzch
 	Built with	Zbudowano przy użyciu
+	Busiest	Najbardziej obciążone
 	By role	Według roli
 	CSV table	Tabela CSV
 	Cancel	Anuluj
@@ -49,10 +61,13 @@
 	Cancel run	Anuluj uruchomienie
 	Capacity	Pojemność
 	Centres	Środki w poziomie
+	Change	Zmiana
 	Change Block	Zmień blok
 	Change Flow	Zmień przepływ
+	Change the estimate	Zmień szacunek
 	Changes	Zmiany
 	Changing the time unit does not convert the times already in the model.	Zmiana jednostki czasu nie przelicza czasów już zapisanych w modelu.
+	Choose…	Wybierz…
 	Clear Menu	Wyczyść menu
 	Close	Zamknij
 	Close Window	Zamknij okno
@@ -88,11 +103,16 @@
 	Drag to add:	Przeciągnij, aby dodać:
 	Duplicate	Duplikuj
 	Duration	Czas trwania
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Każda analiza uruchamia eksperyment kilka razy z tym samym ziarnem, więc różnice wynikają ze zmiany, a nie z przypadku. Może to chwilę potrwać.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Każda jednostka bierze pierwszy z tych wariantów, który można teraz spełnić, wszystko naraz, i oddaje zajęte zasoby, gdy wychodzi.
 	Edit	Edycja
+	Elasticity	Elastyczność
+	Ends early	Kończy się wcześniej
+	Enough: {units}, meeting the target in {p} of replications	Wystarczy: {units}, cel osiągnięty w {p} replikacji
 	Entered	Weszło
 	Erlang	Rozkład Erlanga
 	Error	Błąd
+	Estimate from three values…	Oszacuj z trzech wartości…
 	Evenly across	Równomiernie w poziomie
 	Evenly down	Równomiernie w pionie
 	Every distribution	Wszystkie rozkłady
@@ -105,20 +125,27 @@
 	Export table (CSV)	Eksportuj tabelę (CSV)
 	Exported {file}	Wyeksportowano {file}
 	Expression	Wyrażenie
+	Family	Rodzina
 	File	Plik
 	Finished at {time} {unit}	Zakończono w chwili {time} {unit}
 	Fit	Dopasuj
 	Fit the diagram to the view	Dopasuj diagram do widoku
+	Fit the time	Dopasuj czas
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Dopasuj czas tego bloku do minimum, wartości najbardziej prawdopodobnej i maksimum lub 95. percentyla.
+	Fitted the time of {id}	Dopasowano czas {id}
 	Flows	Przepływy
+	Forget the estimate	Zapomnij szacunek
 	From	Od
 	Gamma	Gamma
 	Goes to	Prowadzi do
 	Help	Pomoc
 	Hide Others	Ukryj pozostałe
 	Hide {app}	Ukryj {app}
+	How many	Ile
 	Inside over time	Wewnątrz w czasie
 	Jump	Przejdź
 	Jump to time	Przejdź do chwili
+	Keep the time, without the estimate it came from	Zachowaj czas, bez szacunku, z którego pochodzi
 	Keyboard Shortcuts…	Skróty klawiaturowe…
 	Keyboard shortcuts saved	Zapisano skróty klawiaturowe
 	Keyboard shortcuts unchanged	Skróty klawiaturowe bez zmian
@@ -139,6 +166,7 @@
 	Mean time blocked	Średni czas blokowania
 	Mean time in system	Średni czas w systemie
 	Mean wait	Średni czas oczekiwania
+	Met in at least	Osiągnięty w co najmniej
 	Metric	Miara
 	Middles	Środki w pionie
 	Minimise	Minimalizuj
@@ -147,19 +175,25 @@
 	Model	Model
 	Most likely	Najbardziej prawdopodobna
 	Move	Przeniesienie
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Przesuwaj kolejno każdy parametr w dół i w górę i uszereguj je według tego, jak bardzo zmienia się wynik.
 	Name	Nazwa
 	Needs	Wymagania
+	Never: it runs for its duration	Nigdy: trwa przez cały czas trwania
 	New	Nowy
 	New model	Nowy model
 	New property	Nowa właściwość
 	New property name	Nazwa nowej właściwości
 	No blocks yet. Open a model, or add blocks to build one.	Brak bloków. Otwórz model lub dodaj bloki, aby go utworzyć.
 	No connections yet: join blocks below.	Brak połączeń: połącz bloki poniżej.
+	No replication met the stop condition: each ran to its time limit.	Żadna replikacja nie spełniła warunku zatrzymania: każda trwała do swojego limitu czasu.
 	No results yet	Brak wyników
+	No target	Bez celu
 	None	Brak
 	None found. The model is ready to run.	Nie znaleziono problemów. Model jest gotowy do uruchomienia.
 	Normal	Normalny
+	Not reached, even with {units}	Nieosiągnięty, nawet przy {units}
 	Number	Liczba
+	One change, which Undo takes back	Jedna zmiana, którą cofa Cofnij
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracownik, losowe przybycia: klasyczna kolejka zweryfikowana teorią.
 	One task per BPSim distribution, to compare their spread.	Jedno zadanie dla każdego rozkładu BPSim, aby porównać ich rozrzut.
 	Open	Otwórz
@@ -172,10 +206,13 @@
 	Opened {file}	Otwarto {file}
 	Open…	Otwórz…
 	Or start from an example	Lub rozpocznij od przykładu
+	PERT	PERT
 	PNG image	Obraz PNG
+	Parameter	Parametr
 	Parameters	Parametry
 	Paste	Wklej
 	Pause	Wstrzymaj
+	Percentile	Percentyl
 	Play	Odtwórz
 	Points	Punkty
 	Poisson	Poissona
@@ -189,6 +226,7 @@
 	Properties	Właściwości
 	Quit	Zakończ
 	Quit {app}	Zakończ {app}
+	Rank the parameters	Uszereguj parametry
 	Ready	Gotowe
 	Recover	Odzyskaj
 	Recover unsaved changes?	Odzyskać niezapisane zmiany?
@@ -211,9 +249,16 @@
 	Replication 1 · {time} of {end} {unit}	Replikacja 1 · {time} z {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikacja 1 · {time} z {end} {unit} · rozgrzewka
 	Replications	Replikacje
+	Replications meeting the target	Replikacje osiągające cel
+	Replications that never met the stop condition count as later than their time limit.	Replikacje, które nigdy nie spełniły warunku zatrzymania, liczą się jako późniejsze niż ich limit czasu.
 	Resource pool	Pula zasobów
 	Resource pools	Pule zasobów
 	Restore	Przywróć
+	Result	Wynik
+	Result to compare	Wynik do porównania
+	Result to explain	Wynik do wyjaśnienia
+	Result with a target	Wynik z celem
+	Result, down and up	Wynik, w dół i w górę
 	Results	Wyniki
 	Right edges	Prawe krawędzie
 	Roles	Role
@@ -222,7 +267,10 @@
 	Run experiment	Uruchom eksperyment
 	Run replication 1 step by step and see each block's queue on the diagram	Uruchom replikację 1 krok po kroku i zobacz kolejkę każdego bloku na diagramie
 	Run the experiment ({shortcut})	Uruchom eksperyment ({shortcut})
+	Run the experiment again to see this result's spread.	Uruchom eksperyment ponownie, aby zobaczyć rozrzut tego wyniku.
+	Run the experiment at each value of one parameter, and compare a result.	Uruchom eksperyment dla każdej wartości jednego parametru i porównaj wynik.
 	Run the next event	Wykonaj następne zdarzenie
+	Run the sweep	Uruchom przegląd
 	Running	Uruchomiony
 	Running…	Trwa uruchamianie…
 	Save	Zapisz
@@ -234,6 +282,7 @@
 	Seed	Ziarno
 	Select All	Zaznacz wszystko
 	Select a block to see its queue over time.	Zaznacz blok, aby zobaczyć jego kolejkę w czasie.
+	Separate the values with semicolons or spaces.	Oddziel wartości średnikami lub spacjami.
 	Service time	Czas obsługi
 	Services	Usługi
 	Set Property	Ustaw właściwość
@@ -242,13 +291,19 @@
 	Settings	Ustawienia
 	Shape	Kształt
 	Share of arrivals lost	Odsetek utraconych przybyć
+	Share of replications	Udział replikacji
 	Share of units blocked	Odsetek zablokowanych jednostek
 	Show All	Pokaż wszystko
 	Show {id}	Pokaż {id}
+	Size	Dobierz
+	Size the resources	Dobierz zasoby
+	Source	Źródło
+	Source: {source}	Źródło: {source}
 	Speed	Szybkość
 	Split batches	Rozdzielanie partii
 	Split or join	Rozdziel lub połącz
 	Split or join (all ways)	Rozdziel lub połącz (wszystkie ścieżki)
+	Spread across replications	Rozrzut między replikacjami
 	Spread out	Rozmieść
 	Stages (k)	Etapy (k)
 	Standard deviation	Odchylenie standardowe
@@ -260,17 +315,25 @@
 	Stop setting {name}	Zakończ ustawianie {name}
 	Stop watching	Zakończ obserwację
 	Stopped watching	Zakończono obserwację
+	Sweep a parameter	Przegląd parametru
 	Tandem line	Linia tandemowa
+	Target	Cel
+	Target value	Wartość docelowa
 	Task	Zadanie
 	Task with a resource	Zadanie z zasobem
 	Task with shared resources	Zadanie ze współdzielonymi zasobami
 	Text	Tekst
 	The model changed, so watching stopped	Model się zmienił, więc obserwacja została zakończona
+	The model now has the units sizing found	Model ma teraz jednostki znalezione przy doborze
 	The model: its experiment, connections and problems	Model: eksperyment, połączenia i problemy
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Udział replikacji równych lub mniejszych od każdej wartości. Pasmo zawiera prawdziwy rozkład z ufnością {confidence}.
+	The values are numbers, separated by semicolons or spaces	Wartości to liczby oddzielone średnikami lub spacjami
 	This block has a warning	Ten blok ma ostrzeżenie
 	This block has an error	Ten blok ma błąd
 	This run	To uruchomienie
+	Three-point estimate	Szacunek trzypunktowy
 	Time between arrivals	Czas między przybyciami
+	Time to the stop condition	Czas do warunku zatrzymania
 	Time unit	Jednostka czasu
 	To	Do
 	Tops	Górne krawędzie
@@ -288,9 +351,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Zasoby współdzielone przez kilka zadań. Zadanie ze współdzielonymi zasobami pobiera je z puli lub według roli.
 	Untitled	Bez tytułu
 	Untitled model	Model bez tytułu
+	Upper value	Wartość górna
 	Use System Setting	Użyj ustawienia systemowego
+	Use these units in the model	Użyj tych jednostek w modelu
 	Utilisation	Wykorzystanie
 	Value	Wartość
+	Values	Wartości
 	View	Widok
 	Waiting over time	Oczekujące w czasie
 	Waiting room	Poczekalnia
@@ -301,8 +367,12 @@
 	Watch a run	Obserwuj uruchomienie
 	Watching replication 1	Obserwacja replikacji 1
 	Weibull	Weibulla
+	When a task empties	Gdy zadanie się opróżni
+	When enough have left a block	Gdy wystarczająco wiele opuści blok
+	Which parameters matter	Które parametry mają znaczenie
 	Whole number	Liczba całkowita
 	Window	Okno
+	With every time at its mean: {units}	Przy każdym czasie równym średniej: {units}
 	Yes or no	Tak lub nie
 	Your changes will be lost if you don't save them.	Jeśli nie zapiszesz zmian, zostaną utracone.
 	Zoom	Powiększenie
@@ -316,8 +386,11 @@
 	departures	wyjścia
 	egui and eframe (Craft suite fork)	egui i eframe (odgałęzienie pakietu Craft)
 	from its value	na podstawie wartości
+	have left	opuściło
 	hours	godziny
 	id {id}	id {id}
+	matters	ma znaczenie
+	maximum {value}	maksimum {value}
 	milliseconds	milisekundy
 	minutes	minuty
 	nothing yet	jeszcze nic
@@ -334,12 +407,17 @@
 	time	chwila
 	to {block}	do {block}
 	unlimited	bez ograniczeń
+	who gave it, or where it comes from	kto go podał lub skąd pochodzi
+	within chance	w granicach przypadku
 	years	lata
+	{block}: units	{block}: jednostki
 	{busy} busy	Zajęte: {busy}
 	{entered} in, {left} out, {lost} lost	Weszło: {entered}, wyszło: {left}, utracono: {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, najbardziej prawdopodobna {mode}, {upper}
 	{field}: not editable here yet	{field}: tutaj nie można jeszcze edytować
 	{id}: a probability is a number from 0 to 1	{id}: prawdopodobieństwo musi być liczbą od 0 do 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikacji osiągnęło cel: {p} (przedział 95% od {lo} do {hi})
 	{name} — edited	{name} — edytowano
 	{n} created	Utworzono: {n}
 	{n} done	Ukończono: {n}
@@ -363,9 +441,12 @@ unit	yr	r.
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otwarto {file} ({n} ostrzeżenie)|Otwarto {file} ({n} ostrzeżenia)|Otwarto {file} ({n} ostrzeżeń)
 @plural	Removed {n} block|Removed {n} blocks	Usunięto {n} blok|Usunięto {n} bloki|Usunięto {n} bloków
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Wykonuje {n} niezależną replikację modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.|Wykonuje {n} niezależne replikacje modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.|Wykonuje {n} niezależnych replikacji modelu od ziarna {seed}. Wyniki każdego elementu zawierają połowę szerokości 95% przedziału ufności.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Warunek zatrzymania spełniono w {met} z {n} replikacji, średnio po {time} {unit}.|Warunek zatrzymania spełniono w {met} z {n} replikacji, średnio po {time} {unit}.|Warunek zatrzymania spełniono w {met} z {n} replikacji, średnio po {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Ukończono {done} z {n} replikacji|Ukończono {done} z {n} replikacji|Ukończono {done} z {n} replikacji
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji|{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji|{name}: {mean}{unit}\n95% przedział od {low} do {high}{unit}\nna podstawie {n} replikacji
 @plural	{n} block selected|{n} blocks selected	Zaznaczono {n} blok|Zaznaczono {n} bloki|Zaznaczono {n} bloków
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikacja na krok · ziarno {seed}|{n} replikacje na krok · ziarno {seed}|{n} replikacji na krok · ziarno {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikacja · średnia {mean} · od {min} do {max}|{n} replikacje · średnia {mean} · od {min} do {max}|{n} replikacji · średnia {mean} · od {min} do {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacja · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} replikacje · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} replikacji · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacja · ziarno {seed}|{n} replikacje · ziarno {seed}|{n} replikacji · ziarno {seed}
 @plural	{n} replication|{n} replications	{n} replikacja|{n} replikacje|{n} replikacji

@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Қазақша
+	% down and up	% төмен және жоғары
+	% of replications	% қайталаулардың
 	+ Add block	+ Блок қосу
+	95th percentile	95-ші процентиль
+	95th percentile {value}	95-ші процентиль {value}
 	About StochCraft	StochCraft туралы
 	About {app}	{app} туралы
+	Across the range it changed by {change}: more than chance would explain.	Ауқымда {change} өзгерді: кездейсоқтық түсіндіретіннен көп.
+	Across the range it changed by {change}: within what chance alone could do.	Ауқымда {change} өзгерді: тек кездейсоқтық жасай алатын шекте.
 	Actual size	Нақты өлшем
 	Add Block	Блок қосу
 	Add a flow from…	Қайдан…
 	Add a flow to…	Қайда…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Жеткілікті қайталаулар мақсатқа жеткенше ең жүктелген тапсырмаға немесе пулға бір бірлік қосу. Әр уақыт өз орташасында болатын жауап та көрсетіледі; ол әдетте тым аз.
 	Add alternative	Балама қосу
 	Add point	Нүкте қосу
 	Add pool	Қор қосу
@@ -27,9 +34,12 @@
 	Added {block} ({id})	{block} ({id}) қосылды
 	Align	Туралау
 	Alternative {n}	{n}-балама
+	Analysis	Талдау
 	Appearance	Сыртқы түрі
 	Arrival limit	Келу шегі
 	Arrivals	Келулер
+	At least	Кемінде
+	At most	Көп дегенде
 	Availability	Қолжетімділік
 	BPMN with BPSim	BPSim бар BPMN
 	Back to the model (Esc)	Модельге оралу (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Топтама өлшемі
 	Beta	Бета
 	Binomial	Биномдық
+	Block	Блок
 	Boolean	Логикалық мән
 	Bottoms	Төменгі жиектер
 	Bring All to Front	Барлығын алдыңғы қатарға шығару
 	Built with	Мына құралдармен жасалған
+	Busiest	Ең жүктелген
 	By role	Рөл бойынша
 	CSV table	CSV кестесі
 	Cancel	Бас тарту
@@ -49,10 +61,13 @@
 	Cancel run	Іске қосуды тоқтату
 	Capacity	Сыйымдылық
 	Centres	Көлденең орталықтар
+	Change	Өзгеріс
 	Change Block	Блокты өзгерту
 	Change Flow	Ағынды өзгерту
+	Change the estimate	Бағалауды өзгерту
 	Changes	Өзгерістер
 	Changing the time unit does not convert the times already in the model.	Уақыт бірлігін өзгерту модельдегі бұрыннан бар уақыт мәндерін түрлендірмейді.
+	Choose…	Таңдаңыз…
 	Clear Menu	Мәзірді тазалау
 	Close	Жабу
 	Close Window	Терезені жабу
@@ -88,11 +103,16 @@
 	Drag to add:	Қосу үшін сүйреңіз:
 	Duplicate	Көшірмесін жасау
 	Duration	Ұзақтығы
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Әр талдау экспериментті бір кездейсоқ тұқыммен бірнеше рет орындайды, сондықтан айырмашылықтар кездейсоқтықтан емес, өзгерістен шығады. Біраз уақыт алуы мүмкін.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Әрбір нысан осылардың ішінен дәл қазір орындауға болатын біріншісін бірден толық алады да, шыққанда бірліктерді қайтарады.
 	Edit	Түзету
+	Elasticity	Икемділік
+	Ends early	Ертерек аяқталады
+	Enough: {units}, meeting the target in {p} of replications	Жеткілікті: {units}, мақсат қайталаулардың {p} бөлігінде орындалады
 	Entered	Кіргендер
 	Erlang	Эрланг
 	Error	Қате
+	Estimate from three values…	Үш мәннен бағалау…
 	Evenly across	Көлденеңінен біркелкі
 	Evenly down	Тігінен біркелкі
 	Every distribution	Барлық үлестірімдер
@@ -105,20 +125,27 @@
 	Export table (CSV)	Кестені экспорттау (CSV)
 	Exported {file}	{file} экспортталды
 	Expression	Өрнек
+	Family	Отбасы
 	File	Файл
 	Finished at {time} {unit}	{time} {unit} кезінде аяқталды
 	Fit	Сыйдыру
 	Fit the diagram to the view	Диаграмманы көрініске сыйдыру
+	Fit the time	Уақытты сәйкестендіру
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Бұл блоктың уақытын минимумға, ең ықтимал мәнге және максимумға немесе 95-ші процентильге сәйкестендіру.
+	Fitted the time of {id}	{id} уақыты сәйкестендірілді
 	Flows	Ағындар
+	Forget the estimate	Бағалауды ұмыту
 	From	Қайдан
 	Gamma	Гамма
 	Goes to	Қайда барады
 	Help	Көмек
 	Hide Others	Басқаларын жасыру
 	Hide {app}	{app} қолданбасын жасыру
+	How many	Қанша
 	Inside over time	Уақыт бойынша ішіндегілер
 	Jump	Өту
 	Jump to time	Уақытқа өту
+	Keep the time, without the estimate it came from	Уақытты ол шыққан бағалаусыз сақтау
 	Keyboard Shortcuts…	Пернетақта тіркесімдері…
 	Keyboard shortcuts saved	Пернетақта тіркесімдері сақталды
 	Keyboard shortcuts unchanged	Пернетақта тіркесімдері өзгермеді
@@ -139,6 +166,7 @@
 	Mean time blocked	Бұғатталудың орташа уақыты
 	Mean time in system	Жүйедегі орташа уақыт
 	Mean wait	Күтудің орташа уақыты
+	Met in at least	Кемінде орындалады
 	Metric	Көрсеткіш
 	Middles	Тік орталықтар
 	Minimise	Кішірейту
@@ -147,19 +175,25 @@
 	Model	Модель
 	Most likely	Ең ықтимал
 	Move	Жылжыту
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Әр параметрді кезекпен төмен және жоғары жылжытып, нәтиже қаншалықты өзгеретініне қарай реттеу.
 	Name	Аты-жөні
 	Needs	Қажеттіліктер
+	Never: it runs for its duration	Ешқашан: бүкіл ұзақтығы бойы жүреді
 	New	Жаңа
 	New model	Жаңа модель
 	New property	Жаңа қасиет
 	New property name	Жаңа қасиет атауы
 	No blocks yet. Open a model, or add blocks to build one.	Әлі блоктар жоқ. Модельді ашыңыз немесе блоктар қосып жасаңыз.
 	No connections yet: join blocks below.	Әлі байланыстар жоқ: төмендегі блоктарды қосыңыз.
+	No replication met the stop condition: each ran to its time limit.	Ешбір қайталау тоқтату шартына жетпеді: әрқайсысы уақыт шегіне дейін жүрді.
 	No results yet	Әлі нәтижелер жоқ
+	No target	Мақсат жоқ
 	None	Жоқ
 	None found. The model is ready to run.	Мәселе табылған жоқ. Модель іске қосуға дайын.
 	Normal	Нормальды
+	Not reached, even with {units}	Жетпеді, тіпті {units} болғанда да
 	Number	Сан
+	One change, which Undo takes back	Болдырмау қайтаратын бір өзгеріс
 	One clerk, random arrivals: the textbook queue, checked against theory.	Бір қызметкер, кездейсоқ келулер: теориямен тексерілген классикалық кезек.
 	One task per BPSim distribution, to compare their spread.	Таралуын салыстыру үшін әр BPSim үлестіріміне бір тапсырма.
 	Open	Ашу
@@ -172,10 +206,13 @@
 	Opened {file}	{file} ашылды
 	Open…	Ашу…
 	Or start from an example	Немесе мысалдан бастаңыз
+	PERT	PERT
 	PNG image	PNG суреті
+	Parameter	Параметр
 	Parameters	Параметрлер
 	Paste	Қою
 	Pause	Кідірту
+	Percentile	Процентиль
 	Play	Ойнату
 	Points	Нүктелер
 	Poisson	Пуассон
@@ -189,6 +226,7 @@
 	Properties	Қасиеттер
 	Quit	Шығу
 	Quit {app}	{app} қолданбасынан шығу
+	Rank the parameters	Параметрлерді реттеу
 	Ready	Дайын
 	Recover	Қалпына келтіру
 	Recover unsaved changes?	Сақталмаған өзгерістер қалпына келтірілсін бе?
@@ -211,9 +249,16 @@
 	Replication 1 · {time} of {end} {unit}	1-қайталау · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	1-қайталау · {time} / {end} {unit} · қыздыру кезеңі
 	Replications	Қайталаулар
+	Replications meeting the target	Мақсатқа жеткен қайталаулар
+	Replications that never met the stop condition count as later than their time limit.	Тоқтату шартына ешқашан жетпеген қайталаулар уақыт шегінен кеш деп есептеледі.
 	Resource pool	Ресурс қоры
 	Resource pools	Ресурс қорлары
 	Restore	Терезені қалпына келтіру
+	Result	Нәтиже
+	Result to compare	Салыстырылатын нәтиже
+	Result to explain	Түсіндірілетін нәтиже
+	Result with a target	Мақсаты бар нәтиже
+	Result, down and up	Нәтиже, төмен және жоғары
 	Results	Нәтижелер
 	Right edges	Оң жақ жиектер
 	Roles	Рөлдер
@@ -222,7 +267,10 @@
 	Run experiment	Экспериментті іске қосу
 	Run replication 1 step by step and see each block's queue on the diagram	1-қайталауды қадаммен орындап, диаграммада әр блоктың кезегін көру
 	Run the experiment ({shortcut})	Экспериментті іске қосу ({shortcut})
+	Run the experiment again to see this result's spread.	Бұл нәтиженің шашырауын көру үшін экспериментті қайта орындаңыз.
+	Run the experiment at each value of one parameter, and compare a result.	Экспериментті бір параметрдің әр мәнінде орындап, нәтижені салыстыру.
 	Run the next event	Келесі оқиғаны орындау
+	Run the sweep	Сұрыптауды орындау
 	Running	Орындалуда
 	Running…	Орындалуда…
 	Save	Сақтау
@@ -234,6 +282,7 @@
 	Seed	Кездейсоқ тұқым
 	Select All	Барлығын таңдау
 	Select a block to see its queue over time.	Кезегін уақыт бойынша көру үшін блокты таңдаңыз.
+	Separate the values with semicolons or spaces.	Мәндерді нүктелі үтірмен немесе бос орынмен бөліңіз.
 	Service time	Қызмет көрсету уақыты
 	Services	Қызметтер
 	Set Property	Қасиетті орнату
@@ -242,13 +291,19 @@
 	Settings	Параметрлер
 	Shape	Пішін
 	Share of arrivals lost	Жоғалған келулер үлесі
+	Share of replications	Қайталаулар үлесі
 	Share of units blocked	Бұғатталған бірліктер үлесі
 	Show All	Барлығын көрсету
 	Show {id}	{id} көрсету
+	Size	Өлшемдеу
+	Size the resources	Ресурстарды өлшемдеу
+	Source	Дереккөз
+	Source: {source}	Дереккөз: {source}
 	Speed	Жылдамдық
 	Split batches	Топтамаларды бөлу
 	Split or join	Бөлу немесе біріктіру
 	Split or join (all ways)	Бөлу немесе біріктіру (барлық жолдар)
+	Spread across replications	Қайталаулар арасындағы шашырау
 	Spread out	Үлестіру
 	Stages (k)	Кезеңдер (k)
 	Standard deviation	Стандартты ауытқу
@@ -260,17 +315,25 @@
 	Stop setting {name}	{name} орнатуды тоқтату
 	Stop watching	Бақылауды тоқтату
 	Stopped watching	Бақылау тоқтатылды
+	Sweep a parameter	Параметрді сұрыптау
 	Tandem line	Тізбекті желі
+	Target	Мақсат
+	Target value	Мақсатты мән
 	Task	Тапсырма
 	Task with a resource	Ресурсы бар тапсырма
 	Task with shared resources	Ортақ ресурстары бар тапсырма
 	Text	Мәтін
 	The model changed, so watching stopped	Модель өзгерді, сондықтан бақылау тоқтатылды
+	The model now has the units sizing found	Модельде енді өлшемдеу тапқан бірліктер бар
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Әр мәнге тең немесе одан төмен қайталаулар үлесі. Жолақ шынайы үлестірімді {confidence} сенімділікпен қамтиды.
+	The values are numbers, separated by semicolons or spaces	Мәндер нүктелі үтірмен немесе бос орынмен бөлінген сандар
 	This block has a warning	Бұл блокта ескерту бар
 	This block has an error	Бұл блокта қате бар
 	This run	Осы іске қосу
+	Three-point estimate	Үш нүктелі бағалау
 	Time between arrivals	Келулер арасындағы уақыт
+	Time to the stop condition	Тоқтату шартына дейінгі уақыт
 	Time unit	Уақыт бірлігі
 	To	Қайда
 	Tops	Жоғарғы жиектер
@@ -288,9 +351,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Бірнеше тапсырма ортақ пайдаланатын бірліктер. Ортақ ресурстары бар тапсырма оларды қордан немесе рөл бойынша алады.
 	Untitled	Атаусыз
 	Untitled model	Атаусыз модель
+	Upper value	Жоғарғы мән
 	Use System Setting	Жүйе параметрін пайдалану
+	Use these units in the model	Осы бірліктерді модельде қолдану
 	Utilisation	Пайдалану деңгейі
 	Value	Мән
+	Values	Мәндер
 	View	Көрініс
 	Waiting over time	Уақыт бойынша күтушілер
 	Waiting room	Күту орны
@@ -301,8 +367,12 @@
 	Watch a run	Іске қосуды бақылау
 	Watching replication 1	1-қайталау бақылануда
 	Weibull	Вейбулл
+	When a task empties	Тапсырма босағанда
+	When enough have left a block	Блоктан жеткілікті шыққанда
+	Which parameters matter	Қай параметрлер маңызды
 	Whole number	Бүтін сан
 	Window	Терезе
+	With every time at its mean: {units}	Әр уақыт өз орташасында: {units}
 	Yes or no	Иә немесе жоқ
 	Your changes will be lost if you don't save them.	Сақтамасаңыз, өзгерістеріңіз жоғалады.
 	Zoom	Терезе өлшемін ауыстыру
@@ -316,8 +386,11 @@
 	departures	кетулер
 	egui and eframe (Craft suite fork)	egui және eframe (Craft жиынтығының тармағы)
 	from its value	мәні бойынша
+	have left	шықты
 	hours	сағат
 	id {id}	ID {id}
+	matters	маңызды
+	maximum {value}	максимум {value}
 	milliseconds	миллисекунд
 	minutes	минут
 	nothing yet	әзірге ештеңе жоқ
@@ -334,12 +407,17 @@
 	time	уақыт
 	to {block}	{block} блогына
 	unlimited	шектеусіз
+	who gave it, or where it comes from	кім берді немесе қайдан алынды
+	within chance	кездейсоқтық шегінде
 	years	жыл
+	{block}: units	{block}: бірліктер
 	{busy} busy	Бос емес: {busy}
 	{entered} in, {left} out, {lost} lost	Кірді: {entered}, шықты: {left}, жоғалды: {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: минимум {min}, ең ықтимал {mode}, {upper}
 	{field}: not editable here yet	{field}: мұнда әзірше өңдеу мүмкін емес
 	{id}: a probability is a number from 0 to 1	{id}: ықтималдық 0 мен 1 арасындағы сан болуы керек
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} қайталаудың {met} мақсатқа жетті: {p} (95% аралық {lo} мен {hi} арасы)
 	{name} — edited	{name} — өңделді
 	{n} created	Жасалды: {n}
 	{n} done	Аяқталды: {n}
@@ -363,9 +441,12 @@ unit	yr	ж.
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} ашылды ({n} ескерту)|{file} ашылды ({n} ескерту)
 @plural	Removed {n} block|Removed {n} blocks	{n} блок жойылды|{n} блок жойылды
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Модельдің {n} тәуелсіз қайталауын {seed} тұқымынан іске қосады. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.|Модельдің {n} тәуелсіз қайталауын {seed} тұқымынан іске қосады. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Тоқтату шарты {n} қайталаудың {met} ішінде, орта есеппен {time} {unit} кейін орындалды.|Тоқтату шарты {n} қайталаудың {met} ішінде, орта есеппен {time} {unit} кейін орындалды.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} қайталаудың {done} аяқталды|{n} қайталаудың {done} аяқталды
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} қайталау бойынша|{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} қайталау бойынша
 @plural	{n} block selected|{n} blocks selected	{n} блок таңдалды|{n} блок таңдалды
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	Әр қадамда {n} қайталау · тұқым {seed}|Әр қадамда {n} қайталау · тұқым {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} қайталау · орташа {mean} · {min} мен {max} арасы|{n} қайталау · орташа {mean} · {min} мен {max} арасы
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} қайталау · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}|{n} қайталау · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} қайталау · тұқым {seed}|{n} қайталау · тұқым {seed}
 @plural	{n} replication|{n} replications	{n} қайталау|{n} қайталау

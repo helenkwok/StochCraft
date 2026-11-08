@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	తెలుగు
+	% down and up	% కిందకు, పైకి
+	% of replications	% పునరావృత్త అమలులలో
 	+ Add block	+ బ్లాక్‌ను జోడించు
+	95th percentile	95వ శతాంశం
+	95th percentile {value}	95వ శతాంశం {value}
 	About StochCraft	StochCraft గురించి
 	About {app}	{app} గురించి
+	Across the range it changed by {change}: more than chance would explain.	పూర్తి పరిధిలో ఇది {change} మారింది: యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ.
+	Across the range it changed by {change}: within what chance alone could do.	పూర్తి పరిధిలో ఇది {change} మారింది: యాదృచ్ఛికత ఒక్కటే చేయగలిగినంత లోపే.
 	Actual size	వాస్తవ పరిమాణం
 	Add Block	బ్లాక్‌ను జోడించు
 	Add a flow from…	ఇక్కడి నుంచి ప్రవాహాన్ని జోడించు…
 	Add a flow to…	ఇక్కడికి ప్రవాహాన్ని జోడించు…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	తగినన్ని పునరావృత్త అమలులు లక్ష్యాన్ని చేరేవరకు అత్యంత రద్దీ ఉన్న పనికి లేదా పూల్‌కు ఒక యూనిట్ జోడించండి. ప్రతి సమయాన్ని దాని సగటు వద్ద ఉంచిన సమాధానం కూడా చూపబడుతుంది; అది సాధారణంగా చాలా చిన్నది.
 	Add alternative	ప్రత్యామ్నాయాన్ని జోడించు
 	Add point	బిందువును జోడించు
 	Add pool	పూల్‌ను జోడించు
@@ -27,9 +34,12 @@
 	Added {block} ({id})	{block} ({id}) జోడించబడింది
 	Align	అమర్చు
 	Alternative {n}	ప్రత్యామ్నాయం {n}
+	Analysis	విశ్లేషణ
 	Appearance	రూపం
 	Arrival limit	రాకల పరిమితి
 	Arrivals	రాకలు
+	At least	కనీసం
+	At most	గరిష్టంగా
 	Availability	లభ్యత
 	BPMN with BPSim	BPSim తో BPMN
 	Back to the model (Esc)	నమూనాకు తిరిగి వెళ్లు (Esc)
@@ -38,10 +48,12 @@
 	Batch size	బ్యాచ్ పరిమాణం
 	Beta	బీటా
 	Binomial	ద్విపద పంపిణీ
+	Block	బ్లాక్
 	Boolean	బూలియన్
 	Bottoms	కింది అంచులు
 	Bring All to Front	అన్నింటినీ ముందుకు తీసుకురా
 	Built with	దీనితో రూపొందించబడింది
+	Busiest	అత్యంత రద్దీ
 	By role	పాత్ర ప్రకారం
 	CSV table	CSV పట్టిక
 	Cancel	రద్దు చేయి
@@ -49,10 +61,13 @@
 	Cancel run	అమలును రద్దు చేయి
 	Capacity	సామర్థ్యం
 	Centres	అడ్డ కేంద్రాలు
+	Change	మార్పు
 	Change Block	బ్లాక్‌ను మార్చు
 	Change Flow	ప్రవాహాన్ని మార్చు
+	Change the estimate	అంచనాను మార్చు
 	Changes	మార్పులు
 	Changing the time unit does not convert the times already in the model.	సమయ ప్రమాణాన్ని మార్చడం వల్ల నమూనాలో ఇప్పటికే ఉన్న సమయాలు మారవు.
+	Choose…	ఎంచుకోండి…
 	Clear Menu	మెనూను క్లియర్ చేయి
 	Close	మూసివేయి
 	Close Window	విండోను మూసివేయి
@@ -88,11 +103,16 @@
 	Drag to add:	జోడించడానికి లాగండి:
 	Duplicate	నకలు చేయి
 	Duration	వ్యవధి
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ప్రతి విశ్లేషణ ఒకే యాదృచ్ఛిక బీజంతో ప్రయోగాన్ని చాలాసార్లు అమలు చేస్తుంది, కాబట్టి తేడాలు యాదృచ్ఛికత నుండి కాక మార్పు నుండి వస్తాయి. కొంత సమయం పట్టవచ్చు.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ప్రతి ఎంటిటీ వీటిలో ఇప్పుడే ఒకేసారి పూర్తిగా తీర్చగలిగే మొదటిదాన్ని తీసుకుంటుంది, బయటకు వెళ్లేటప్పుడు యూనిట్‌లను తిరిగి ఇస్తుంది.
 	Edit	సవరణ
+	Elasticity	స్థితిస్థాపకత
+	Ends early	ముందుగా ముగుస్తుంది
+	Enough: {units}, meeting the target in {p} of replications	సరిపోతుంది: {units}, {p} పునరావృత్త అమలులలో లక్ష్యం చేరుతుంది
 	Entered	ప్రవేశించినవి
 	Erlang	ఎర్లాంగ్
 	Error	లోపం
+	Estimate from three values…	మూడు విలువల నుండి అంచనా వేయి…
 	Evenly across	అడ్డంగా సమానంగా పంచు
 	Evenly down	నిలువుగా సమానంగా పంచు
 	Every distribution	ప్రతి పంపిణీ
@@ -105,20 +125,27 @@
 	Export table (CSV)	పట్టికను ఎగుమతి చేయి (CSV)
 	Exported {file}	{file} ఎగుమతి చేయబడింది
 	Expression	వ్యక్తీకరణ
+	Family	కుటుంబం
 	File	ఫైల్
 	Finished at {time} {unit}	{time} {unit} వద్ద ముగిసింది
 	Fit	సరిపెట్టు
 	Fit the diagram to the view	రేఖాచిత్రాన్ని వీక్షణకు సరిపెట్టు
+	Fit the time	సమయాన్ని అమర్చు
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	ఈ బ్లాక్ సమయాన్ని కనిష్టం, అత్యంత సంభావ్య విలువ, గరిష్టం లేదా 95వ శతాంశానికి అమర్చండి.
+	Fitted the time of {id}	{id} సమయం అమర్చబడింది
 	Flows	ప్రవాహాలు
+	Forget the estimate	అంచనాను మర్చిపో
 	From	నుంచి
 	Gamma	గామా
 	Goes to	వెళ్తుంది
 	Help	సహాయం
 	Hide Others	ఇతరాలను దాచు
 	Hide {app}	{app} ను దాచు
+	How many	ఎన్ని
 	Inside over time	కాలక్రమంలో లోపల
 	Jump	వెళ్ళు
 	Jump to time	సమయానికి వెళ్ళు
+	Keep the time, without the estimate it came from	సమయాన్ని ఉంచు, అది వచ్చిన అంచనా లేకుండా
 	Keyboard Shortcuts…	కీబోర్డ్ షార్ట్‌కట్‌లు…
 	Keyboard shortcuts saved	కీబోర్డ్ షార్ట్‌కట్‌లు సేవ్ చేయబడ్డాయి
 	Keyboard shortcuts unchanged	కీబోర్డ్ షార్ట్‌కట్‌లలో మార్పులేదు
@@ -139,6 +166,7 @@
 	Mean time blocked	నిరోధిత సగటు సమయం
 	Mean time in system	వ్యవస్థలో గడిపిన సగటు సమయం
 	Mean wait	సగటు వేచి ఉండే సమయం
+	Met in at least	కనీసం ఇందులో చేరుతుంది
 	Metric	కొలమానం
 	Middles	నిలువు కేంద్రాలు
 	Minimise	కనిష్ఠీకరించు
@@ -147,19 +175,25 @@
 	Model	మోడల్
 	Most likely	అత్యంత సంభావ్య విలువ
 	Move	తరలింపు
+	Move each parameter down and up in turn, and rank them by how much the result moves.	ప్రతి పరామితిని వరుసగా కిందకు, పైకి కదిలించి, ఫలితం ఎంత కదులుతుందో దాని ప్రకారం క్రమపరచండి.
 	Name	పేరు
 	Needs	అవసరాలు
+	Never: it runs for its duration	ఎప్పుడూ కాదు: పూర్తి వ్యవధి నడుస్తుంది
 	New	కొత్తది
 	New model	కొత్త నమూనా
 	New property	కొత్త లక్షణం
 	New property name	కొత్త లక్షణం పేరు
 	No blocks yet. Open a model, or add blocks to build one.	ఇంకా బ్లాక్‌లు లేవు. నమూనాను తెరవండి లేదా బ్లాక్‌లు జోడించి సృష్టించండి.
 	No connections yet: join blocks below.	ఇంకా అనుసంధానాలు లేవు: దిగువన బ్లాక్‌లను కలపండి.
+	No replication met the stop condition: each ran to its time limit.	ఏ పునరావృత్త అమలూ ఆపే షరతును చేరలేదు: ప్రతిదీ దాని సమయ పరిమితి వరకు నడిచింది.
 	No results yet	ఇంకా ఫలితాలు లేవు
+	No target	లక్ష్యం లేదు
 	None	ఏదీ లేదు
 	None found. The model is ready to run.	ఏ సమస్యలూ కనబడలేదు. నమూనా అమలుకు సిద్ధంగా ఉంది.
 	Normal	సాధారణ పంపిణీ
+	Not reached, even with {units}	{units}తో కూడా చేరలేదు
 	Number	సంఖ్య
+	One change, which Undo takes back	రద్దు చేయి వెనక్కి తీసుకునే ఒక మార్పు
 	One clerk, random arrivals: the textbook queue, checked against theory.	ఒక గుమాస్తా, యాదృచ్ఛిక రాకలు: సిద్ధాంతంతో ధృవీకరించిన ప్రామాణిక క్యూ.
 	One task per BPSim distribution, to compare their spread.	వ్యాప్తిని పోల్చడానికి ప్రతి BPSim పంపిణీకి ఒక పని.
 	Open	తెరువు
@@ -172,10 +206,13 @@
 	Opened {file}	{file} తెరవబడింది
 	Open…	తెరువు…
 	Or start from an example	లేదా ఒక ఉదాహరణతో ప్రారంభించండి
+	PERT	PERT
 	PNG image	PNG చిత్రం
+	Parameter	పరామితి
 	Parameters	పరామితులు
 	Paste	అతికించు
 	Pause	విరామం
+	Percentile	శతాంశం
 	Play	ప్లే చేయి
 	Points	బిందువులు
 	Poisson	పాయిసన్
@@ -189,6 +226,7 @@
 	Properties	లక్షణాలు
 	Quit	నిష్క్రమించు
 	Quit {app}	{app} నుంచి నిష్క్రమించు
+	Rank the parameters	పరామితులను క్రమపరచు
 	Ready	సిద్ధం
 	Recover	పునరుద్ధరించు
 	Recover unsaved changes?	సేవ్ చేయని మార్పులను పునరుద్ధరించాలా?
@@ -211,9 +249,16 @@
 	Replication 1 · {time} of {end} {unit}	పునరావృత్త అమలు 1 · {end} {unit} లో {time}
 	Replication 1 · {time} of {end} {unit} · warm-up	పునరావృత్త అమలు 1 · {end} {unit} లో {time} · ప్రారంభ సర్దుబాటు సమయం
 	Replications	పునరావృత్త అమలులు
+	Replications meeting the target	లక్ష్యాన్ని చేరిన పునరావృత్త అమలులు
+	Replications that never met the stop condition count as later than their time limit.	ఆపే షరతును ఎప్పుడూ చేరని పునరావృత్త అమలులు వాటి సమయ పరిమితి తర్వాతవిగా లెక్కించబడతాయి.
 	Resource pool	వనరుల పూల్
 	Resource pools	వనరుల పూల్‌లు
 	Restore	విండో పరిమాణాన్ని పునరుద్ధరించు
+	Result	ఫలితం
+	Result to compare	పోల్చాల్సిన ఫలితం
+	Result to explain	వివరించాల్సిన ఫలితం
+	Result with a target	లక్ష్యం ఉన్న ఫలితం
+	Result, down and up	ఫలితం, కిందకు, పైకి
 	Results	ఫలితాలు
 	Right edges	కుడి అంచులు
 	Roles	పాత్రలు
@@ -222,7 +267,10 @@
 	Run experiment	ప్రయోగాన్ని అమలు చేయి
 	Run replication 1 step by step and see each block's queue on the diagram	పునరావృత్త అమలు 1 ను దశలవారీగా అమలు చేసి రేఖాచిత్రంలో ప్రతి బ్లాక్ వరుసను చూడు
 	Run the experiment ({shortcut})	ప్రయోగాన్ని అమలు చేయి ({shortcut})
+	Run the experiment again to see this result's spread.	ఈ ఫలితం యొక్క విస్తరణను చూడటానికి ప్రయోగాన్ని మళ్లీ అమలు చేయండి.
+	Run the experiment at each value of one parameter, and compare a result.	ఒక పరామితి యొక్క ప్రతి విలువ వద్ద ప్రయోగాన్ని అమలు చేసి ఒక ఫలితాన్ని పోల్చండి.
 	Run the next event	తదుపరి సంఘటనను అమలు చేయి
+	Run the sweep	స్వీప్ అమలు చేయి
 	Running	అమలవుతోంది
 	Running…	అమలవుతోంది…
 	Save	సేవ్ చేయి
@@ -234,6 +282,7 @@
 	Seed	యాదృచ్ఛిక బీజం
 	Select All	అన్నీ ఎంచుకో
 	Select a block to see its queue over time.	కాలక్రమంలో ఒక బ్లాక్ వరుసను చూడటానికి దాన్ని ఎంచుకోండి.
+	Separate the values with semicolons or spaces.	విలువలను సెమీకోలన్ లేదా ఖాళీతో వేరు చేయండి.
 	Service time	సేవా సమయం
 	Services	సేవలు
 	Set Property	లక్షణాన్ని సెట్ చేయి
@@ -242,13 +291,19 @@
 	Settings	సెట్టింగ్‌లు
 	Shape	ఆకృతి పరామితి
 	Share of arrivals lost	కోల్పోయిన రాకల వాటా
+	Share of replications	పునరావృత్త అమలుల వాటా
 	Share of units blocked	నిరోధిత యూనిట్ల వాటా
 	Show All	అన్నీ చూపించు
 	Show {id}	{id} చూపించు
+	Size	పరిమాణం నిర్ణయించు
+	Size the resources	వనరుల పరిమాణం నిర్ణయించు
+	Source	మూలం
+	Source: {source}	మూలం: {source}
 	Speed	వేగం
 	Split batches	బ్యాచ్‌లను విడదీయి
 	Split or join	విభజించు లేదా కలుపు
 	Split or join (all ways)	విభజించు లేదా కలుపు (అన్ని దారులు)
+	Spread across replications	పునరావృత్త అమలుల మధ్య విస్తరణ
 	Spread out	పంచు
 	Stages (k)	దశలు (k)
 	Standard deviation	ప్రామాణిక విచలనం
@@ -260,17 +315,25 @@
 	Stop setting {name}	{name} సెట్ చేయడం ఆపు
 	Stop watching	గమనించడం ఆపు
 	Stopped watching	గమనించడం ఆపబడింది
+	Sweep a parameter	ఒక పరామితిని స్వీప్ చేయి
 	Tandem line	వరుస ప్రక్రియ
+	Target	లక్ష్యం
+	Target value	లక్ష్య విలువ
 	Task	పని
 	Task with a resource	వనరు అవసరమైన పని
 	Task with shared resources	భాగస్వామ్య వనరులు అవసరమైన పని
 	Text	టెక్స్ట్
 	The model changed, so watching stopped	నమూనా మారింది, కాబట్టి గమనించడం ఆగిపోయింది
+	The model now has the units sizing found	పరిమాణ నిర్ణయం కనుగొన్న యూనిట్‌లు ఇప్పుడు మోడల్‌లో ఉన్నాయి
 	The model: its experiment, connections and problems	నమూనా: దాని ప్రయోగం, అనుసంధానాలు మరియు సమస్యలు
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ప్రతి విలువకు సమానమైన లేదా తక్కువైన పునరావృత్త అమలుల వాటా. పట్టీ నిజమైన పంపిణీని {confidence} విశ్వాసంతో కలిగి ఉంటుంది.
+	The values are numbers, separated by semicolons or spaces	విలువలు సెమీకోలన్ లేదా ఖాళీతో వేరు చేసిన సంఖ్యలు
 	This block has a warning	ఈ బ్లాక్‌లో హెచ్చరిక ఉంది
 	This block has an error	ఈ బ్లాక్‌లో లోపం ఉంది
 	This run	ఈ అమలు
+	Three-point estimate	మూడు-బిందువుల అంచనా
 	Time between arrivals	రాకల మధ్య సమయం
+	Time to the stop condition	ఆపే షరతు వరకు సమయం
 	Time unit	సమయ ప్రమాణం
 	To	కు
 	Tops	పై అంచులు
@@ -288,9 +351,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	అనేక పనులు పంచుకునే యూనిట్‌లు. భాగస్వామ్య వనరులు అవసరమైన పని వాటిని పూల్ ప్రకారం లేదా పాత్ర ప్రకారం తీసుకుంటుంది.
 	Untitled	శీర్షిక లేదు
 	Untitled model	పేరు లేని నమూనా
+	Upper value	ఎగువ విలువ
 	Use System Setting	సిస్టమ్ సెట్టింగ్‌ను ఉపయోగించు
+	Use these units in the model	ఈ యూనిట్‌లను మోడల్‌లో ఉపయోగించు
 	Utilisation	వినియోగ శాతం
 	Value	విలువ
+	Values	విలువలు
 	View	వీక్షణ
 	Waiting over time	కాలక్రమంలో వేచి ఉన్నవి
 	Waiting room	వేచి ఉండే గది
@@ -301,8 +367,12 @@
 	Watch a run	ఒక అమలును గమనించు
 	Watching replication 1	పునరావృత్త అమలు 1 గమనించబడుతోంది
 	Weibull	వైబుల్
+	When a task empties	ఒక పని ఖాళీ అయినప్పుడు
+	When enough have left a block	ఒక బ్లాక్ నుండి తగినన్ని వెళ్లిపోయినప్పుడు
+	Which parameters matter	ఏ పరామితులు ముఖ్యం
 	Whole number	పూర్ణ సంఖ్య
 	Window	విండో
+	With every time at its mean: {units}	ప్రతి సమయం దాని సగటు వద్ద: {units}
 	Yes or no	అవును లేదా కాదు
 	Your changes will be lost if you don't save them.	మీరు సేవ్ చేయకపోతే మీ మార్పులు పోతాయి.
 	Zoom	జూమ్
@@ -316,8 +386,11 @@
 	departures	నిష్క్రమణలు
 	egui and eframe (Craft suite fork)	egui మరియు eframe (Craft suite నుంచి విడిపోయిన సంస్కరణ)
 	from its value	దాని విలువ నుంచి
+	have left	వెళ్లిపోయాయి
 	hours	గంటలు
 	id {id}	ఐడి {id}
+	matters	ముఖ్యం
+	maximum {value}	గరిష్టం {value}
 	milliseconds	మిల్లీసెకన్లు
 	minutes	నిమిషాలు
 	nothing yet	ఇంకా ఏమీ లేదు
@@ -334,12 +407,17 @@
 	time	సమయం
 	to {block}	{block} కు
 	unlimited	పరిమితి లేదు
+	who gave it, or where it comes from	ఎవరు ఇచ్చారు లేదా ఎక్కడ నుండి వచ్చింది
+	within chance	యాదృచ్ఛికత లోపే
 	years	సంవత్సరాలు
+	{block}: units	{block}: యూనిట్‌లు
 	{busy} busy	{busy} పనిలో
 	{entered} in, {left} out, {lost} lost	{entered} లోపలికి, {left} బయటికి, {lost} కోల్పోయినవి
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: కనిష్టం {min}, అత్యంత సంభావ్యం {mode}, {upper}
 	{field}: not editable here yet	{field}: ఇక్కడ ఇంకా సవరించలేరు
 	{id}: a probability is a number from 0 to 1	{id}: సంభావ్యత 0 నుంచి 1 మధ్య సంఖ్య కావాలి
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} పునరావృత్త అమలులలో {met} లక్ష్యాన్ని చేరాయి: {p} (95% అంతరం {lo} నుండి {hi})
 	{name} — edited	{name} — సవరించబడింది
 	{n} created	{n} సృష్టించబడ్డాయి
 	{n} done	{n} పూర్తయ్యాయి
@@ -363,9 +441,12 @@ unit	yr	సం.
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} తెరవబడింది ({n} హెచ్చరిక)|{file} తెరవబడింది ({n} హెచ్చరికలు)
 @plural	Removed {n} block|Removed {n} blocks	{n} బ్లాక్ తొలగించబడింది|{n} బ్లాక్‌లు తొలగించబడ్డాయి
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	{seed} బీజంతో నమూనాను {n} స్వతంత్ర పునరావృత్తంగా అమలు చేస్తుంది. ప్రతి అంశం ఫలితానికి 95% విశ్వసనీయత అంతరం సగం వెడల్పు ఇవ్వబడుతుంది.|{seed} బీజంతో నమూనాను {n} స్వతంత్ర పునరావృత్తాలుగా అమలు చేస్తుంది. అన్ని పునరావృత్తాల నుంచి ప్రతి అంశం ఫలితానికి 95% విశ్వసనీయత అంతరం సగం వెడల్పు ఇవ్వబడుతుంది.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	ఆపే షరతు {n} పునరావృత్త అమలులో {met}లో, సగటున {time} {unit} తర్వాత చేరింది.|ఆపే షరతు {n} పునరావృత్త అమలులలో {met}లో, సగటున {time} {unit} తర్వాత చేరింది.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} లో {done} పునరావృత్తం పూర్తయింది|{n} లో {done} పునరావృత్తాలు పూర్తయ్యాయి
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% అంతరం {low} నుంచి {high}{unit} వరకు\n{n} పునరావృత్తంలో|{name}: {mean}{unit}\n95% అంతరం {low} నుంచి {high}{unit} వరకు\n{n} పునరావృత్తాల్లో
 @plural	{n} block selected|{n} blocks selected	{n} బ్లాక్ ఎంచుకోబడింది|{n} బ్లాక్‌లు ఎంచుకోబడ్డాయి
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	ప్రతి దశకు {n} పునరావృత్త అమలు · బీజం {seed}|ప్రతి దశకు {n} పునరావృత్త అమలులు · బీజం {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} పునరావృత్త అమలు · సగటు {mean} · {min} నుండి {max}|{n} పునరావృత్త అమలులు · సగటు {mean} · {min} నుండి {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} పునరావృత్తం · బీజం {seed} · ప్రారంభ సర్దుబాటు {warmup} {unit} · కొలత {duration} {unit}|{n} పునరావృత్తాలు · బీజం {seed} · ప్రారంభ సర్దుబాటు {warmup} {unit} · కొలత {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} పునరావృత్తం · బీజం {seed}|{n} పునరావృత్తాలు · బీజం {seed}
 @plural	{n} replication|{n} replications	{n} పునరావృత్త అమలు|{n} పునరావృత్త అమలులు
