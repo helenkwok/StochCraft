@@ -514,9 +514,14 @@ pub struct RunStart {
 #[derive(Debug, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct RunStatus {
-    /// For a run in slices: replications to run before reporting (default 1).
+    /// For a run in slices: the most replications to finish before reporting (default 1).
     #[serde(default)]
     pub step: Option<u64>,
+    /// For a run in slices: the most events to run before reporting (default 5,000, a slice
+    /// the browser runs between frames); a replication not finished then carries on at the next
+    /// call, with exactly the same results.
+    #[serde(default)]
+    pub events: Option<u64>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -1456,7 +1461,10 @@ fn run_start(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn run_status(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: RunStatus = parse(p)?;
-    Ok(e.poll_run(p.step.unwrap_or(1)))
+    Ok(e.poll_run(
+        p.step.unwrap_or(1),
+        p.events.unwrap_or(crate::run::SLICE_EVENTS),
+    ))
 }
 
 fn run_cancel(e: &mut Engine, p: Value) -> Result<Value, CommandError> {

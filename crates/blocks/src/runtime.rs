@@ -6,7 +6,9 @@ use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::rc::Rc;
 
-use stochcraft_des::{Ctx, Gate, Resource, ResourceGuard, Signal, Sim, Stopped, Store, Watch};
+use stochcraft_des::{
+    Ctx, Gate, Resource, ResourceGuard, Signal, Sim, Stopped, Store, Watch, Watching,
+};
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
     Breakdown, Element, ElementId, ElementKind, Model, Need, ResourcePool, Timed,
@@ -114,7 +116,7 @@ impl Compiled {
     ) -> Result<Report, RunError> {
         let mut live = self.start(rng, warmup, duration);
         let end = live.end;
-        live.advance_watched(end, cancelled)?;
+        live.advance_watched(end, cancelled, u64::MAX)?;
         Ok(live.report())
     }
 
@@ -341,6 +343,7 @@ impl Compiled {
             end,
             stop,
             stopped_at: None,
+            watching: Watching::new(0.0),
         }
     }
 
@@ -385,6 +388,9 @@ pub struct Live<'a> {
     stop: Option<(usize, stochcraft_model::Stop)>,
     /// When the stop condition was met, if it has been (the run then ends there).
     stopped_at: Option<f64>,
+    /// How far the simulation has got, kept between advances so that a run in slices
+    /// ([`Live::advance_by`]) counts the events at one time across them.
+    watching: Watching,
 }
 
 /// A block's state at one moment of a [`Live`] run. Counts are since the warm-up ended (since
@@ -453,7 +459,20 @@ impl Live<'_> {
 
     /// Runs every event up to time `until` (at most the end).
     pub fn advance_to(&mut self, until: f64) -> Result<(), RunError> {
-        self.advance_watched(until, &|| false)
+        self.advance_watched(until, &|| false, u64::MAX).map(|_| ())
+    }
+
+    /// Runs at most `events` events towards the end; returns whether it has reached the end.
+    /// A replication run this way, slice after slice, runs exactly the events of
+    /// [`Compiled::run`] in the same order, whatever the slice size, and its stuck-time limit
+    /// counts across slices.
+    pub fn advance_by(&mut self, events: u64) -> Result<bool, RunError> {
+        self.advance_watched(self.end, &|| false, events)
+    }
+
+    /// The events run so far.
+    pub fn events(&self) -> u64 {
+        self.watching.events()
     }
 
     /// Runs the next event (and every other one at the same time); returns its time, or `None`
@@ -471,18 +490,22 @@ impl Live<'_> {
         }
     }
 
+    /// Runs the events up to `until` (at most the end), at most `budget` of them; returns
+    /// whether it got to `until` (false: the budget ran out first, and the next call carries on
+    /// exactly where this one stopped).
     fn advance_watched(
         &mut self,
         until: f64,
         cancelled: &dyn Fn() -> bool,
-    ) -> Result<(), RunError> {
+        budget: u64,
+    ) -> Result<bool, RunError> {
         let until = if until.is_nan() {
             self.now()
         } else {
             until.min(self.end)
         };
         if until < self.now() {
-            return Ok(());
+            return Ok(true);
         }
         let watch = Watch {
             max_events_at_one_time: self.compiled.max_events_at_one_time,
@@ -491,27 +514,35 @@ impl Live<'_> {
         if self.stop.is_none() || self.stopped_at.is_some() {
             return self
                 .sim
-                .run_watched(until, &watch)
-                .map(|_| ())
+                .run_watched_slice(until, &watch, budget, &mut self.watching)
                 .map_err(|stopped| self.compiled.run_error(stopped));
         }
         // With a stop condition: one instant at a time, checking it after each. The events are
-        // the same, in the same order, as in one go.
+        // the same, in the same order, as in one go. An instant the budget cuts short is
+        // finished by the next call (its next event is still at that instant) before the
+        // condition is checked.
+        let mut left = budget;
         loop {
             let to = match self.sim.next_event_time() {
                 Some(t) if t <= until => t,
                 _ => until,
             };
-            self.sim
-                .run_watched(to, &watch)
+            let before = self.watching.events();
+            let finished = self
+                .sim
+                .run_watched_slice(to, &watch, left, &mut self.watching)
                 .map_err(|stopped| self.compiled.run_error(stopped))?;
+            if !finished {
+                return Ok(false);
+            }
+            left = left.saturating_sub(self.watching.events().saturating_sub(before));
             if self.stop_met() {
                 self.stopped_at = Some(self.sim.now());
                 self.end = self.sim.now();
-                return Ok(());
+                return Ok(true);
             }
             if to >= until {
-                return Ok(());
+                return Ok(true);
             }
         }
     }

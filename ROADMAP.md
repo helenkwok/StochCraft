@@ -306,7 +306,8 @@ understand.
   in the same state.
 - `run` returns the results at once (`ExperimentResult` as JSON: per element and metric, the
   mean, 95% half-width, standard deviation and n). `run.start` runs in the background, on
-  worker threads natively and in slices (a few replications per `run.status`) in the browser;
+  worker threads natively and in slices (a bounded number of events per `run.status`, see
+  M3.6) in the browser;
   both give exactly the results of `run`. `run.cancel` stops new replications from starting
   (`stochcraft-experiment` gains a `Control` with progress and cancellation); one already
   running finishes first.
@@ -1108,7 +1109,18 @@ replications other than the first.
   - There is one worker per core but one, up to 16.
   - Each worker loads `stochcraft-worker` (`src/worker.rs`, 0.75 MB of WebAssembly), and is
     given the next replication as soon as it answers.
-  - Where workers cannot start, the page runs the replications itself between frames, as before.
+  - Where workers cannot start, the page runs the replications itself between frames, in
+    slices of events (#43): each frame runs at most `SLICE_EVENTS` (5,000) events, and a
+    replication that does not finish carries on in the next frame (the `Live` run is kept in the
+    engine between polls). So one long replication no longer freezes the tab, Cancel acts within
+    a frame, and the progress bar moves within a replication. The stuck-time limit counts events
+    at one time across slices (`des::Sim::run_watched_slice`), so it fires as before. Results
+    are exactly those of threads whatever the slice size: `engine/tests/slices.rs` checks slices
+    of 1, 7, 1,000 and unlimited events on every committed model, plus models with a warm-up, a
+    shared pool and stop conditions. The slice size is an estimate: natively (release, one core
+    of an i7-12700K) the test models run at 1,900 to 7,200 events per millisecond; assuming
+    WebAssembly on a laptop at about a third of that, 5,000 events take at most about 8 ms, half
+    a 60 fps frame.
 - **Installable and offline.**
   - A web app manifest and an icon make the page installable.
   - A service worker (`sw.js`) keeps the page and every file it names when it installs, so the

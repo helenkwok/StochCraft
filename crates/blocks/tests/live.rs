@@ -105,3 +105,42 @@ fn the_report_so_far_covers_the_time_run() {
     let desk = r.element("desk").and_then(|e| e.utilisation);
     assert!(desk.is_some_and(|u| (0.0..=1.0).contains(&u)), "{desk:?}");
 }
+
+/// A replication run a bounded number of events at a time (how the browser runs without
+/// workers, #43) ends with exactly the plain run's report, whatever the slice size, with or
+/// without a stop condition. Slices of one event put the warm-up's end on a slice boundary.
+#[test]
+fn advancing_by_events_matches_a_plain_run() {
+    let mut stopping = model();
+    stopping.experiment.stop = Some(stochcraft_model::Stop::Count {
+        element: ElementId::unchecked("exit"),
+        count: 40,
+    });
+    let stopping = compile(&stopping).unwrap_or_else(|e| panic!("{e:?}"));
+    for (c, stops) in [(compiled(), false), (stopping, true)] {
+        let plain = c.run(Rng::new(5));
+        assert_eq!(
+            plain.as_ref().map(|r| r.stopped_at.is_some()),
+            Ok(stops),
+            "the stop is met"
+        );
+        for budget in [1, 2, 7, 500, u64::MAX] {
+            let mut live = c.live(Rng::new(5));
+            let mut slices = 0u64;
+            loop {
+                let before = live.events();
+                let done = live.advance_by(budget).unwrap_or_else(|e| panic!("{e:?}"));
+                assert!(live.events() - before <= budget, "at most {budget} events");
+                slices += 1;
+                if done {
+                    break;
+                }
+            }
+            assert!(live.is_done());
+            assert_eq!(Ok(live.report()), plain, "slices of {budget}");
+            if budget == 1 {
+                assert!(slices > 100, "{slices}");
+            }
+        }
+    }
+}
