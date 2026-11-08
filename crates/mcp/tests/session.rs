@@ -157,6 +157,22 @@ fn an_agent_opens_builds_checks_runs_and_saves() {
         .unwrap();
     let rho = desk["metrics"]["utilisation"]["mean"].as_f64().unwrap();
     assert!((0.6..0.9).contains(&rho), "utilisation {rho}, theory 0.75");
+    // A second desk, run again with the same seed, and the two runs compared in pairs.
+    s.ok(
+        "execute",
+        json!({"command": "block.set", "params": {"id": "desk", "capacity": 2}}),
+    );
+    s.ok("run", json!({}));
+    let compared = s.ok(
+        "execute",
+        json!({"command": "results.compare", "params": {
+            "results": [{"element": "desk", "metric": "mean_wait"}]}}),
+    );
+    assert_eq!(compared["paired"], true, "{compared}");
+    let wait = &compared["comparisons"][0];
+    assert!(wait["difference"].as_f64().unwrap() < 0.0, "{wait}");
+    assert_eq!(wait["significant"], true, "{wait}");
+    s.ok("undo", json!({}));
     s.ok("undo", json!({}));
     assert_eq!(
         s.ok("inspect_model", json!({}))["model"]["experiment"]["replications"],

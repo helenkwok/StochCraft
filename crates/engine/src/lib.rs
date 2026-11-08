@@ -40,6 +40,7 @@
 //!   file from the model alone.
 
 mod commands;
+mod compare;
 mod decide;
 mod distribution;
 mod edit;
@@ -213,6 +214,8 @@ pub struct Engine {
     job: Option<Job>,
     /// The results of the last run that finished, for `results.distribution`.
     last_results: Option<Value>,
+    /// The results of the run that finished before it, for `results.compare`.
+    previous_results: Option<Value>,
     /// The sweeps and sensitivity analyses done on the model, carried in the run record
     /// (NASA-STD-7009B [M&S 30]).
     sensitivity: Vec<Value>,
@@ -241,6 +244,7 @@ impl Engine {
             file: None,
             job: None,
             last_results: None,
+            previous_results: None,
             sensitivity: Vec::new(),
         }
     }
@@ -257,13 +261,17 @@ impl Engine {
             CommandError::new(ErrorCode::UnknownCommand, format!("no command `{command}`"))
         })?;
         let result = (c.run)(self, params.clone())?;
-        // Keep the last results, for questions about their distributions.
-        match command {
-            "run" => self.last_results = Some(result.clone()),
+        // Keep the last two results, for questions about their distributions and to compare
+        // them. A finished background run reports its results at every poll: keep them once.
+        let finished = match command {
+            "run" => Some(result.clone()),
             "run.status" if result["state"] == "finished" => {
-                self.last_results = Some(result["result"].clone());
+                Some(result["result"].clone()).filter(|r| self.last_results.as_ref() != Some(r))
             }
-            _ => {}
+            _ => None,
+        };
+        if let Some(r) = finished {
+            self.previous_results = self.last_results.replace(r);
         }
         if c.kind != CommandKind::Query {
             self.journal.push(JournalEntry {
