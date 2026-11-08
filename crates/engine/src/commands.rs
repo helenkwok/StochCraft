@@ -931,6 +931,29 @@ fn results_distribution(e: &mut Engine, p: Value) -> Result<Value, CommandError>
     crate::distribution::describe(results, &p)
 }
 
+fn results_compare(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: crate::compare::Params = parse(p)?;
+    let need = |r: Option<&Value>, which: &str| {
+        r.cloned().ok_or_else(|| {
+            CommandError::new(
+                ErrorCode::NotFound,
+                format!(
+                    "no {which} run to compare: run the experiment, change the model, run it again, then compare (or give `a` and `b`)"
+                ),
+            )
+        })
+    };
+    let b = match p.b {
+        Some(b) => b,
+        None => need(e.last_results.as_ref(), "last")?,
+    };
+    let a = match p.a {
+        Some(a) => a,
+        None => need(e.previous_results.as_ref(), "earlier")?,
+    };
+    crate::compare::compare(&a, &b, p.results.as_deref())
+}
+
 fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: BlockSet = parse(p)?;
     let id = existing_element(e.model(), &p.id)?;
@@ -1788,6 +1811,17 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<crate::distribution::Params>,
         example: || json!({ "element": "exit", "metric": "mean_time_in_system", "at_most": 6.0 }),
         run: results_distribution,
+    },
+    Command {
+        name: "results.compare",
+        summary: "Compare two runs' results, by default the last run with the one before it: per element and metric both means and the difference with its 95% interval, paired-t when the runs share their seed and replications (common random numbers), Welch's two-sample t otherwise.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::compare::Params>,
+        example: || {
+            let run = |wait: [f64; 3]| json!({ "seed": 1, "replications": 3, "values": { "desk": { "mean_wait": wait } } });
+            json!({ "a": run([1.2, 0.8, 1.5]), "b": run([0.9, 0.7, 1.1]), "results": [{ "element": "desk", "metric": "mean_wait" }] })
+        },
+        run: results_compare,
     },
     Command {
         name: "run.start",

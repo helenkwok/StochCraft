@@ -15,6 +15,7 @@ mod autosave;
 mod canvas;
 mod charts;
 pub mod commands;
+mod decide;
 pub use autosave::Autosave;
 mod editor;
 pub mod form;
@@ -260,6 +261,11 @@ pub struct App {
     connect_to: Option<String>,
     /// The work area shows the results rather than the model.
     show_results: bool,
+    /// The work area shows the Analysis view (sweeps, sensitivity, sizing), unless the results
+    /// are shown.
+    show_analysis: bool,
+    /// The M2.8 screens' choices and last answers.
+    decide: decide::Decide,
     /// Where the charts were drawn last frame, for exporting them.
     charts_rect: Option<egui::Rect>,
     /// A screenshot asked for to export the charts, filled in by the renderer.
@@ -323,6 +329,8 @@ impl App {
             connect_from: None,
             connect_to: None,
             show_results: false,
+            show_analysis: false,
+            decide: decide::Decide::default(),
             charts_rect: None,
             screenshot: std::sync::Arc::default(),
             pending_png: None,
@@ -623,6 +631,7 @@ impl App {
         self.watching = None;
         self.drafts.clear();
         self.show_results = false;
+        self.show_analysis = false;
     }
 
     /// Runs an engine command for an agent (the MCP server, through the desktop app's control
@@ -827,6 +836,7 @@ impl App {
                     self.watching = None;
                     self.drafts.clear();
                     self.show_results = false;
+                    self.show_analysis = false;
                     self.info(t("New model"));
                 }
             }
@@ -1018,6 +1028,7 @@ impl App {
                 self.results = None;
                 if self.running.is_none() {
                     self.show_results = false;
+                    self.show_analysis = false;
                 }
             }
         }
@@ -1125,6 +1136,8 @@ impl App {
                 }
                 if self.show_results && self.results.is_some() {
                     self.results_view(ui);
+                } else if self.show_analysis && has_model && !self.show_results {
+                    self.analysis_view(ui);
                 } else if has_model && !(self.show_results && self.running.is_some()) {
                     self.model_view(ui, &p);
                 } else {
@@ -1204,10 +1217,12 @@ impl App {
                     });
                 });
                 results::record_line(ui, &results);
+                self.stop_line(ui, &results);
                 ui.add_space(12.0);
                 self.charts_rect = charts::show(ui, &results);
                 ui.add_space(6.0);
                 results::show(ui, &results);
+                self.distribution_section(ui, &results);
             });
         if csv {
             self.export_csv();
@@ -1223,8 +1238,16 @@ impl App {
         // craft-ui's Tab: an accessible tab (role, keyboard focus) the app lays out and paints.
         let font = egui::FontId::new(14.0, egui::FontFamily::Name(theme::STRONG.into()));
         ui.horizontal(|ui| {
-            for (label, results) in [(t("Model"), false), (t("Results"), true)] {
-                let on = self.show_results == results;
+            // 0: the model, 1: the results, 2: the Analysis view.
+            let current = if self.show_results {
+                1
+            } else if self.show_analysis {
+                2
+            } else {
+                0
+            };
+            for (label, view) in [(t("Model"), 0), (t("Results"), 1), (t("Analysis"), 2)] {
+                let on = current == view;
                 let width = ui.fonts_mut(|f| {
                     f.layout_no_wrap(label.into(), font.clone(), p.text)
                         .size()
@@ -1232,9 +1255,8 @@ impl App {
                 }) + 24.0;
                 let (rect, _) =
                     ui.allocate_exact_size(egui::vec2(width, 30.0), egui::Sense::hover());
-                let tab =
-                    craft_ui::tabs::Tab::new(egui::Id::unique(("view-tab", results)), label, on)
-                        .focus_stroke(egui::Stroke::new(1.5, p.accent));
+                let tab = craft_ui::tabs::Tab::new(egui::Id::unique(("view-tab", view)), label, on)
+                    .focus_stroke(egui::Stroke::new(1.5, p.accent));
                 let r = tab.show_at(ui, rect, |ui, r| {
                     let painter = ui.painter_at(rect);
                     if r.hovered() && !on {
@@ -1260,7 +1282,8 @@ impl App {
                     }
                 });
                 if r.clicked() {
-                    self.show_results = results;
+                    self.show_results = view == 1;
+                    self.show_analysis = view == 2;
                 }
             }
             if self.results.is_none() && self.running.is_none() {
@@ -1420,6 +1443,7 @@ impl App {
                             if ui.button(t(label)).clicked() {
                                 self.add_block(kind);
                                 self.show_results = false;
+                                self.show_analysis = false;
                             }
                         }
                     },
@@ -1478,6 +1502,7 @@ impl App {
         if let Some(sel) = select {
             self.selected = sel;
             self.show_results = false;
+            self.show_analysis = false;
         }
         let model = self.engine.model();
         ui.with_layout(egui::Layout::bottom_up(egui::Align::Min), |ui| {

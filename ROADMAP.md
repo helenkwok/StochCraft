@@ -850,7 +850,11 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   same seed so the random streams are shared (common random numbers). The parameter is a
   task's `capacity`, a pool's `quantity`, a `queue_capacity`, or the `mean` of a time
   distribution (`Dist::scaled` keeps its shape). It reports the results asked for at each
-  value, and how much each moved across the range, with whether that is more than the noise.
+  value, and how much each moved across the range, with whether that is more than the noise
+  (a paired-t interval on the replications' differences, issue #66).
+- **Comparing two runs:** `results.compare` gives, per element and metric, both runs' means
+  and the difference with its 95% interval: paired-t when the runs share their seed and
+  replications, Welch's two-sample t otherwise (issue #66).
 - **Sensitivity:** `experiment.sensitivity` moves each parameter down and up by a fraction,
   one at a time, and ranks the results' elasticities. Every sweep and sensitivity analysis is
   recorded, with the model's digest, in the `sensitivity` list of later runs' records
@@ -889,9 +893,35 @@ as the NNSA study found.
 | Elasticity of M/M/1 time in system to the service time (±10%) | 4.40 | 4.32 |
 | Same, to the time between arrivals | −3.57 | −3.42 |
 
+**In the window** (`ui-egui/src/decide.rs`):
+- **Experiment:** the model overview's "Ends early" sets the stop condition: when enough
+  entities have left a block, or when a task empties.
+- **Three-point estimate:** a timed block's inspector fits its time to a three-point estimate,
+  with the family, the upper value (a maximum or a 95th percentile) and the source. Once
+  fitted, the inspector shows the estimate, which can be changed or forgotten.
+- **Results:**
+  - A line says when the stop condition was met.
+  - "Spread across replications" shows any one result's percentiles and its empirical
+    distribution, drawn with its confidence band, and the time to the stop.
+  - With a target, it gives how many replications met it, as a share with its interval.
+- **Analysis**, a third view beside Model and Results:
+  - a sweep of one parameter, with the result at each value and whether it moved more than
+    chance;
+  - every parameter ranked by elasticity, with which ones matter;
+  - sizing to a target met in a chosen share of replications, beside the answer from mean
+    times, with a button that applies it as one undo step.
+
+  An answer is shown only while the model is the one it was found for. Analyses run at once on
+  the window's thread.
+- **Engine:**
+  - A window's background run now keeps its results for `results.distribution`.
+  - Sensitivity no longer takes a unit count below one: a parameter already at its floor is
+    compared from its own value up.
+- **Tests:** `ui-egui/tests/decide.rs`; the strings in all 44 catalogs.
+
 **Not yet:** sizing several resources a step at a time, or by cost; designed experiments with
-several factors at once (factorial, Latin hypercube); saving targets in the model file; and a
-window for these commands.
+several factors at once (factorial, Latin hypercube); saving targets in the model file; and
+running analyses in the background or on the browser's web workers.
 
 **Later in M2 or M4:** conveyors with length, speed and accumulation; travel networks for
 forklifts and AGVs; agent behaviours (`agents` crate); stock-and-flow (`sd` crate, XMILE);

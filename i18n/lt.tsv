@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Lietuvių
+	% down and up	% žemyn ir aukštyn
+	% of replications	% replikacijų
 	+ Add block	+ Pridėti bloką
+	95th percentile	95-asis procentilis
+	95th percentile {value}	95-asis procentilis {value}
 	About StochCraft	Apie StochCraft
 	About {app}	Apie {app}
+	Across the range it changed by {change}: more than chance would explain.	Per visą intervalą pasikeitė {change}: daugiau, nei paaiškintų atsitiktinumas.
+	Across the range it changed by {change}: within what chance alone could do.	Per visą intervalą pasikeitė {change}: tiek, kiek gali vien atsitiktinumas.
 	Actual size	Tikrasis dydis
 	Add Block	Pridėti bloką
 	Add a flow from…	Pridėti srautą iš…
 	Add a flow to…	Pridėti srautą į…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Pridėti vienetą prie labiausiai apkrautos užduoties ar telkinio, kol pakankamai replikacijų pasieks tikslą. Rodomas ir atsakymas, kai kiekvienas laikas lygus savo vidurkiui; jis paprastai per mažas.
 	Add alternative	Pridėti alternatyvą
 	Add point	Pridėti tašką
 	Add pool	Pridėti grupę
@@ -27,9 +34,12 @@
 	Added {block} ({id})	Pridėta {block} ({id})
 	Align	Lygiuoti
 	Alternative {n}	Alternatyva {n}
+	Analysis	Analizė
 	Appearance	Išvaizda
 	Arrival limit	Atvykimų limitas
 	Arrivals	Atvykimai
+	At least	Ne mažiau
+	At most	Ne daugiau
 	Availability	Parengtis
 	BPMN with BPSim	BPMN su BPSim
 	Back to the model (Esc)	Grįžti į modelį (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Partijos dydis
 	Beta	Beta
 	Binomial	Binominis
+	Block	Blokas
 	Boolean	Loginė reikšmė
 	Bottoms	Apatiniai kraštai
 	Bring All to Front	Perkelti visus į priekį
 	Built with	Sukurta naudojant
+	Busiest	Labiausiai apkrautas
 	By role	Pagal vaidmenį
 	CSV table	CSV lentelė
 	Cancel	Atšaukti
@@ -49,10 +61,13 @@
 	Cancel run	Atšaukti vykdymą
 	Capacity	Pajėgumas
 	Centres	Horizontalūs centrai
+	Change	Pokytis
 	Change Block	Keisti bloką
 	Change Flow	Keisti srautą
+	Change the estimate	Keisti įvertį
 	Changes	Pakeitimai
 	Changing the time unit does not convert the times already in the model.	Pakeitus laiko vienetą, modelyje jau esančios laiko reikšmės nebus perskaičiuotos.
+	Choose…	Pasirinkite…
 	Clear Menu	Išvalyti meniu
 	Close	Užverti
 	Close Window	Užverti langą
@@ -88,11 +103,16 @@
 	Drag to add:	Vilkite, kad pridėtumėte:
 	Duplicate	Dubliuoti
 	Duration	Trukmė
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Kiekviena analizė kelis kartus paleidžia eksperimentą su ta pačia sėkla, todėl skirtumai kyla iš pakeitimo, o ne iš atsitiktinumo. Tai gali užtrukti.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Kiekvienas objektas paima pirmąją iš šių alternatyvų, kurią galima įvykdyti dabar, visą iš karto, ir grąžina vienetus, kai palieka užduotį.
 	Edit	Redaguoti
+	Elasticity	Elastingumas
+	Ends early	Baigiasi anksčiau
+	Enough: {units}, meeting the target in {p} of replications	Pakanka: {units}, tikslas pasiekiamas {p} replikacijų
 	Entered	Įėjo
 	Erlang	Erlango
 	Error	Klaida
+	Estimate from three values…	Įvertinti pagal tris reikšmes…
 	Evenly across	Tolygiai horizontaliai
 	Evenly down	Tolygiai vertikaliai
 	Every distribution	Visi skirstiniai
@@ -105,20 +125,27 @@
 	Export table (CSV)	Eksportuoti lentelę (CSV)
 	Exported {file}	Eksportuota {file}
 	Expression	Išraiška
+	Family	Šeima
 	File	Failas
 	Finished at {time} {unit}	Baigta {time} {unit}
 	Fit	Pritaikyti
 	Fit the diagram to the view	Pritaikyti diagramą rodiniui
+	Fit the time	Pritaikyti laiką
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Pritaikyti šio bloko laiką minimumui, labiausiai tikėtinai reikšmei ir maksimumui arba 95-ajam procentiliui.
+	Fitted the time of {id}	{id} laikas pritaikytas
 	Flows	Srautai
+	Forget the estimate	Pamiršti įvertį
 	From	Iš
 	Gamma	Gama
 	Goes to	Veda į
 	Help	Žinynas
 	Hide Others	Slėpti kitus
 	Hide {app}	Slėpti {app}
+	How many	Kiek
 	Inside over time	Viduje per laiką
 	Jump	Pereiti
 	Jump to time	Pereiti į laiką
+	Keep the time, without the estimate it came from	Palikti laiką be įverčio, iš kurio jis gautas
 	Keyboard Shortcuts…	Spartieji klavišai…
 	Keyboard shortcuts saved	Spartieji klavišai įrašyti
 	Keyboard shortcuts unchanged	Spartieji klavišai nepakeisti
@@ -139,6 +166,7 @@
 	Mean time blocked	Vidutinė blokavimo trukmė
 	Mean time in system	Vidutinis laikas sistemoje
 	Mean wait	Vidutinis laukimo laikas
+	Met in at least	Pasiekta ne mažiau kaip
 	Metric	Rodiklis
 	Middles	Vertikalūs centrai
 	Minimise	Minimizuoti
@@ -147,19 +175,25 @@
 	Model	Modelis
 	Most likely	Labiausiai tikėtina
 	Move	Perkėlimas
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Paeiliui keisti kiekvieną parametrą žemyn ir aukštyn ir surikiuoti juos pagal tai, kiek pasikeičia rezultatas.
 	Name	Pavadinimas
 	Needs	Poreikiai
+	Never: it runs for its duration	Niekada: trunka visą trukmę
 	New	Naujas
 	New model	Naujas modelis
 	New property	Nauja savybė
 	New property name	Naujos savybės pavadinimas
 	No blocks yet. Open a model, or add blocks to build one.	Blokų dar nėra. Atidarykite modelį arba pridėkite blokų ir jį sukurkite.
 	No connections yet: join blocks below.	Jungčių dar nėra: sujunkite žemiau esančius blokus.
+	No replication met the stop condition: each ran to its time limit.	Nė viena replikacija nepasiekė stabdymo sąlygos: kiekviena truko iki savo laiko ribos.
 	No results yet	Rezultatų dar nėra
+	No target	Be tikslo
 	None	Nėra
 	None found. The model is ready to run.	Problemų nerasta. Modelis paruoštas vykdyti.
 	Normal	Normalusis
+	Not reached, even with {units}	Nepasiekta net su {units}
 	Number	Skaičius
+	One change, which Undo takes back	Vienas pakeitimas, kurį atšaukia Anuliuoti
 	One clerk, random arrivals: the textbook queue, checked against theory.	Vienas darbuotojas, atsitiktiniai atvykimai: klasikinė eilė, patikrinta pagal teoriją.
 	One task per BPSim distribution, to compare their spread.	Po vieną užduotį kiekvienam BPSim skirstiniui, kad būtų galima palyginti jų sklaidą.
 	Open	Atverti
@@ -172,10 +206,13 @@
 	Opened {file}	Atidaryta {file}
 	Open…	Atverti…
 	Or start from an example	Arba pradėkite nuo pavyzdžio
+	PERT	PERT
 	PNG image	PNG paveikslas
+	Parameter	Parametras
 	Parameters	Parametrai
 	Paste	Įklijuoti
 	Pause	Pristabdyti
+	Percentile	Procentilis
 	Play	Leisti
 	Points	Taškai
 	Poisson	Puasono
@@ -189,6 +226,7 @@
 	Properties	Savybės
 	Quit	Išeiti
 	Quit {app}	Išeiti iš {app}
+	Rank the parameters	Surikiuoti parametrus
 	Ready	Parengta
 	Recover	Atkurti
 	Recover unsaved changes?	Atkurti neįrašytus pakeitimus?
@@ -211,9 +249,16 @@
 	Replication 1 · {time} of {end} {unit}	Replikacija 1 · {time} iš {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikacija 1 · {time} iš {end} {unit} · įšilimas
 	Replications	Replikacijos
+	Replications meeting the target	Replikacijos, pasiekiančios tikslą
+	Replications that never met the stop condition count as later than their time limit.	Replikacijos, niekada nepasiekusios stabdymo sąlygos, laikomos vėlesnėmis už savo laiko ribą.
 	Resource pool	Išteklių grupė
 	Resource pools	Išteklių grupės
 	Restore	Atkurti langą
+	Result	Rezultatas
+	Result to compare	Lyginamas rezultatas
+	Result to explain	Aiškinamas rezultatas
+	Result with a target	Rezultatas su tikslu
+	Result, down and up	Rezultatas, žemyn ir aukštyn
 	Results	Rezultatai
 	Right edges	Dešinieji kraštai
 	Roles	Vaidmenys
@@ -222,7 +267,10 @@
 	Run experiment	Vykdyti eksperimentą
 	Run replication 1 step by step and see each block's queue on the diagram	Vykdyti 1 replikaciją žingsnis po žingsnio ir matyti kiekvieno bloko eilę diagramoje
 	Run the experiment ({shortcut})	Vykdyti eksperimentą ({shortcut})
+	Run the experiment again to see this result's spread.	Paleiskite eksperimentą dar kartą, kad pamatytumėte šio rezultato sklaidą.
+	Run the experiment at each value of one parameter, and compare a result.	Paleisti eksperimentą su kiekviena vieno parametro reikšme ir palyginti rezultatą.
 	Run the next event	Vykdyti kitą įvykį
+	Run the sweep	Paleisti perėjimą
 	Running	Vykdoma
 	Running…	Vykdoma…
 	Save	Įrašyti
@@ -234,6 +282,7 @@
 	Seed	Atsitiktinių skaičių sėkla
 	Select All	Žymėti viską
 	Select a block to see its queue over time.	Pasirinkite bloką, kad matytumėte jo eilę per laiką.
+	Separate the values with semicolons or spaces.	Atskirkite reikšmes kabliataškiais arba tarpais.
 	Service time	Aptarnavimo laikas
 	Services	Paslaugos
 	Set Property	Nustatyti savybę
@@ -242,13 +291,19 @@
 	Settings	Nuostatos
 	Shape	Forma
 	Share of arrivals lost	Prarastų atvykimų dalis
+	Share of replications	Replikacijų dalis
 	Share of units blocked	Blokuotų vienetų dalis
 	Show All	Rodyti visus
 	Show {id}	Rodyti {id}
+	Size	Parinkti
+	Size the resources	Parinkti išteklius
+	Source	Šaltinis
+	Source: {source}	Šaltinis: {source}
 	Speed	Greitis
 	Split batches	Partijų skaidymas
 	Split or join	Skaidyti arba jungti
 	Split or join (all ways)	Skaidyti arba jungti (visi keliai)
+	Spread across replications	Sklaida tarp replikacijų
 	Spread out	Paskirstyti
 	Stages (k)	Etapai (k)
 	Standard deviation	Standartinis nuokrypis
@@ -260,17 +315,25 @@
 	Stop setting {name}	Baigti nustatyti {name}
 	Stop watching	Baigti stebėjimą
 	Stopped watching	Stebėjimas baigtas
+	Sweep a parameter	Parametro perėjimas
 	Tandem line	Nuoseklioji linija
+	Target	Tikslas
+	Target value	Tikslo reikšmė
 	Task	Užduotis
 	Task with a resource	Užduotis su ištekliumi
 	Task with shared resources	Užduotis su bendrais ištekliais
 	Text	Tekstas
 	The model changed, so watching stopped	Modelis pasikeitė, todėl stebėjimas baigtas
+	The model now has the units sizing found	Modelyje dabar yra parinkimo rasti vienetai
 	The model: its experiment, connections and problems	Modelis: eksperimentas, jungtys ir problemos
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Replikacijų, ne didesnių už kiekvieną reikšmę, dalis. Juosta su {confidence} pasikliovimu apima tikrąjį skirstinį.
+	The values are numbers, separated by semicolons or spaces	Reikšmės yra skaičiai, atskirti kabliataškiais arba tarpais
 	This block has a warning	Šiame bloke yra įspėjimas
 	This block has an error	Šiame bloke yra klaida
 	This run	Šis vykdymas
+	Three-point estimate	Trijų taškų įvertis
 	Time between arrivals	Laikas tarp atvykimų
+	Time to the stop condition	Laikas iki stabdymo sąlygos
 	Time unit	Laiko vienetas
 	To	Į
 	Tops	Viršutiniai kraštai
@@ -288,9 +351,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Vienetai, kuriuos bendrai naudoja kelios užduotys. Užduotis su bendrais ištekliais juos paima iš grupės arba pagal vaidmenį.
 	Untitled	Be pavadinimo
 	Untitled model	Modelis be pavadinimo
+	Upper value	Viršutinė reikšmė
 	Use System Setting	Naudoti sistemos nustatymą
+	Use these units in the model	Naudoti šiuos vienetus modelyje
 	Utilisation	Panaudojimo koeficientas
 	Value	Reikšmė
+	Values	Reikšmės
 	View	Rodinys
 	Waiting over time	Laukiantys per laiką
 	Waiting room	Laukiamasis
@@ -301,8 +367,12 @@
 	Watch a run	Stebėti vykdymą
 	Watching replication 1	Stebima 1 replikacija
 	Weibull	Veibulo
+	When a task empties	Kai užduotis ištuštėja
+	When enough have left a block	Kai pakankamai paliko bloką
+	Which parameters matter	Kurie parametrai svarbūs
 	Whole number	Sveikasis skaičius
 	Window	Langas
+	With every time at its mean: {units}	Kai kiekvienas laikas lygus vidurkiui: {units}
 	Yes or no	Taip arba ne
 	Your changes will be lost if you don't save them.	Jei pakeitimų neįrašysite, jie bus prarasti.
 	Zoom	Keisti dydį
@@ -316,8 +386,11 @@
 	departures	išvykimai
 	egui and eframe (Craft suite fork)	egui ir eframe (Craft paketo atšaka)
 	from its value	pagal jo reikšmę
+	have left	paliko
 	hours	valandos
 	id {id}	ID {id}
+	matters	svarbus
+	maximum {value}	maksimumas {value}
 	milliseconds	milisekundės
 	minutes	minutės
 	nothing yet	dar nieko
@@ -334,12 +407,17 @@
 	time	laikas
 	to {block}	į {block}
 	unlimited	be apribojimų
+	who gave it, or where it comes from	kas jį pateikė arba iš kur jis
+	within chance	atsitiktinumo ribose
 	years	metai
+	{block}: units	{block}: vienetai
 	{busy} busy	Užimta: {busy}
 	{entered} in, {left} out, {lost} lost	Įėjo: {entered}, išėjo: {left}, prarasta: {lost}
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimumas {min}, labiausiai tikėtina {mode}, {upper}
 	{field}: not editable here yet	{field}: čia dar negalima redaguoti
 	{id}: a probability is a number from 0 to 1	{id}: tikimybė yra skaičius nuo 0 iki 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	Tikslą pasiekė {met} iš {of} replikacijų: {p} (95 % intervalas nuo {lo} iki {hi})
 	{name} — edited	{name} — redaguota
 	{n} created	Sukurta: {n}
 	{n} done	Baigta: {n}
@@ -363,9 +441,12 @@ unit	yr	m.
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Atidaryta {file} ({n} įspėjimas)|Atidaryta {file} ({n} įspėjimai)|Atidaryta {file} ({n} įspėjimų)
 @plural	Removed {n} block|Removed {n} blocks	Pašalintas {n} blokas|Pašalinti {n} blokai|Pašalinta {n} blokų
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Vykdo {n} nepriklausomą modelio replikaciją su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomas modelio replikacijas su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomų modelio replikacijų su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Stabdymo sąlyga pasiekta {met} iš {n} replikacijos, vidutiniškai po {time} {unit}.|Stabdymo sąlyga pasiekta {met} iš {n} replikacijų, vidutiniškai po {time} {unit}.|Stabdymo sąlyga pasiekta {met} iš {n} replikacijų, vidutiniškai po {time} {unit}.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	Baigta {done} iš {n} replikacijos|Baigta {done} iš {n} replikacijų|Baigta {done} iš {n} replikacijų
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikaciją|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijas|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijų
 @plural	{n} block selected|{n} blocks selected	Pažymėtas {n} blokas|Pažymėti {n} blokai|Pažymėta {n} blokų
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikacija kiekviename žingsnyje · sėkla {seed}|{n} replikacijos kiekviename žingsnyje · sėkla {seed}|{n} replikacijų kiekviename žingsnyje · sėkla {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikacija · vidurkis {mean} · nuo {min} iki {max}|{n} replikacijos · vidurkis {mean} · nuo {min} iki {max}|{n} replikacijų · vidurkis {mean} · nuo {min} iki {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacija · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijos · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijų · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacija · sėkla {seed}|{n} replikacijos · sėkla {seed}|{n} replikacijų · sėkla {seed}
 @plural	{n} replication|{n} replications	{n} replikacija|{n} replikacijos|{n} replikacijų

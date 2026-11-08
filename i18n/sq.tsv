@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Shqip
+	% down and up	% poshtë dhe lart
+	% of replications	% e përsëritjeve
 	+ Add block	+ Shto bllok
+	95th percentile	Përqindëshi i 95-të
+	95th percentile {value}	përqindëshi i 95-të {value}
 	About StochCraft	Rreth StochCraft
 	About {app}	Rreth {app}
+	Across the range it changed by {change}: more than chance would explain.	Në interval ndryshoi me {change}: më shumë se sa do ta shpjegonte rastësia.
+	Across the range it changed by {change}: within what chance alone could do.	Në interval ndryshoi me {change}: brenda asaj që mund të bëjë vetëm rastësia.
 	Actual size	Madhësia e vërtetë
 	Add Block	Shto bllok
 	Add a flow from…	Shto rrjedhë nga…
 	Add a flow to…	Shto rrjedhë te…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Shto një njësi te detyra ose grupi më i ngarkuar derisa mjaft përsëritje të arrijnë një objektiv. Tregohet edhe përgjigjja me çdo kohë në mesataren e saj; zakonisht është shumë e vogël.
 	Add alternative	Shto alternativë
 	Add point	Shto pikë
 	Add pool	Shto grup
@@ -27,9 +34,12 @@
 	Added {block} ({id})	U shtua {block} ({id})
 	Align	Rreshto
 	Alternative {n}	Alternativa {n}
+	Analysis	Analiza
 	Appearance	Pamja
 	Arrival limit	Kufiri i mbërritjeve
 	Arrivals	Mbërritjet
+	At least	Të paktën
+	At most	Më së shumti
 	Availability	Disponueshmëria
 	BPMN with BPSim	BPMN me BPSim
 	Back to the model (Esc)	Kthehu te modeli (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Madhësia e grupit
 	Beta	Beta
 	Binomial	Binomiale
+	Block	Blloku
 	Boolean	Vlerë logjike
 	Bottoms	Skajet e poshtme
 	Bring All to Front	Sill të gjitha përpara
 	Built with	Ndërtuar me
+	Busiest	Më i ngarkuari
 	By role	Sipas rolit
 	CSV table	Tabelë CSV
 	Cancel	Anulo
@@ -49,10 +61,13 @@
 	Cancel run	Anulo ekzekutimin
 	Capacity	Kapaciteti
 	Centres	Qendrat horizontale
+	Change	Ndryshimi
 	Change Block	Ndrysho bllokun
 	Change Flow	Ndrysho rrjedhën
+	Change the estimate	Ndrysho vlerësimin
 	Changes	Ndryshimet
 	Changing the time unit does not convert the times already in the model.	Ndryshimi i njësisë së kohës nuk i konverton kohët që gjenden tashmë në model.
+	Choose…	Zgjidh…
 	Clear Menu	Pastro menynë
 	Close	Mbyll
 	Close Window	Mbyll dritaren
@@ -88,11 +103,16 @@
 	Drag to add:	Tërhiq për të shtuar:
 	Duplicate	Dyfisho
 	Duration	Kohëzgjatja
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Çdo analizë e ekzekuton eksperimentin disa herë me të njëjtën farë, kështu që ndryshimet vijnë nga ndryshimi, jo nga rastësia. Mund të zgjasë pak.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Çdo entitet merr njëherësh të plotë të parën nga këto alternativa që mund të plotësohet në atë çast dhe i kthen njësitë kur largohet.
 	Edit	Redakto
+	Elasticity	Elasticiteti
+	Ends early	Mbaron më herët
+	Enough: {units}, meeting the target in {p} of replications	Mjafton: {units}, arrin objektivin në {p} të përsëritjeve
 	Entered	Hyrjet
 	Erlang	Erlang
 	Error	Gabim
+	Estimate from three values…	Vlerëso nga tri vlera…
 	Evenly across	Shpërndaj njëtrajtësisht horizontalisht
 	Evenly down	Shpërndaj njëtrajtësisht vertikalisht
 	Every distribution	Të gjitha shpërndarjet
@@ -105,20 +125,27 @@
 	Export table (CSV)	Eksporto tabelën (CSV)
 	Exported {file}	U eksportua {file}
 	Expression	Shprehje
+	Family	Familja
 	File	Skedar
 	Finished at {time} {unit}	Përfundoi në {time} {unit}
 	Fit	Përshtat
 	Fit the diagram to the view	Përshtat diagramin me pamjen
+	Fit the time	Përshtat kohën
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Përshtat kohën e këtij blloku me një minimum, një vlerë më të mundshme dhe një maksimum ose përqindëshin e 95-të.
+	Fitted the time of {id}	Koha e {id} u përshtat
 	Flows	Rrjedhat
+	Forget the estimate	Harro vlerësimin
 	From	Nga
 	Gamma	Gama
 	Goes to	Shkon te
 	Help	Ndihmë
 	Hide Others	Fshih të tjerat
 	Hide {app}	Fshih {app}
+	How many	Sa
 	Inside over time	Brenda gjatë kohës
 	Jump	Shko
 	Jump to time	Shko te koha
+	Keep the time, without the estimate it came from	Mbaj kohën, pa vlerësimin nga erdhi
 	Keyboard Shortcuts…	Shkurtoret e tastierës…
 	Keyboard shortcuts saved	Shkurtoret e tastierës u ruajtën
 	Keyboard shortcuts unchanged	Shkurtoret e tastierës nuk ndryshuan
@@ -139,6 +166,7 @@
 	Mean time blocked	Koha mesatare e bllokimit
 	Mean time in system	Koha mesatare në sistem
 	Mean wait	Pritja mesatare
+	Met in at least	Arritur në të paktën
 	Metric	Tregues
 	Middles	Qendrat vertikale
 	Minimise	Minimizo
@@ -147,19 +175,25 @@
 	Model	Modeli
 	Most likely	Më e mundshmja
 	Move	Zhvendos
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Lëviz çdo parametër poshtë dhe lart me radhë dhe rendit sipas sa lëviz rezultati.
 	Name	Emri
 	Needs	Nevojat
+	Never: it runs for its duration	Kurrë: zgjat gjatë gjithë kohëzgjatjes
 	New	I ri
 	New model	Model i ri
 	New property	Veti e re
 	New property name	Emri i vetisë së re
 	No blocks yet. Open a model, or add blocks to build one.	Nuk ka ende blloqe. Hapni një model ose shtoni blloqe për ta krijuar.
 	No connections yet: join blocks below.	Nuk ka ende lidhje: lidhni blloqet më poshtë.
+	No replication met the stop condition: each ran to its time limit.	Asnjë përsëritje nuk arriti kushtin e ndalimit: secila shkoi deri në kufirin e kohës.
 	No results yet	Nuk ka ende rezultate
+	No target	Pa objektiv
 	None	Asnjë
 	None found. The model is ready to run.	Nuk u gjetën probleme. Modeli është gati për ekzekutim.
 	Normal	Normale
+	Not reached, even with {units}	Nuk u arrit, as me {units}
 	Number	Numër
+	One change, which Undo takes back	Një ndryshim, që Zhbëj e kthen
 	One clerk, random arrivals: the textbook queue, checked against theory.	Një punonjës, mbërritje të rastësishme: radha klasike, e verifikuar me teori.
 	One task per BPSim distribution, to compare their spread.	Një detyrë për çdo shpërndarje BPSim, për të krahasuar shpërndarjen e tyre.
 	Open	Hap
@@ -172,10 +206,13 @@
 	Opened {file}	U hap {file}
 	Open…	Hap…
 	Or start from an example	Ose filloni me një shembull
+	PERT	PERT
 	PNG image	Imazh PNG
+	Parameter	Parametri
 	Parameters	Parametrat
 	Paste	Ngjit
 	Pause	Pauzë
+	Percentile	Përqindëshi
 	Play	Luaj
 	Points	Pikat
 	Poisson	Poisson
@@ -189,6 +226,7 @@
 	Properties	Vetitë
 	Quit	Dil
 	Quit {app}	Dil nga {app}
+	Rank the parameters	Rendit parametrat
 	Ready	Gati
 	Recover	Rikupero
 	Recover unsaved changes?	Të rikuperohen ndryshimet e paruajtura?
@@ -211,9 +249,16 @@
 	Replication 1 · {time} of {end} {unit}	Përsëritja 1 · {time} nga {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Përsëritja 1 · {time} nga {end} {unit} · ngrohja
 	Replications	Përsëritjet
+	Replications meeting the target	Përsëritjet që arrijnë objektivin
+	Replications that never met the stop condition count as later than their time limit.	Përsëritjet që nuk e arritën kurrë kushtin e ndalimit numërohen si më vonë se kufiri i tyre i kohës.
 	Resource pool	Grup burimesh
 	Resource pools	Grupet e burimeve
 	Restore	Rikthe dritaren
+	Result	Rezultati
+	Result to compare	Rezultati për krahasim
+	Result to explain	Rezultati për shpjegim
+	Result with a target	Rezultati me objektiv
+	Result, down and up	Rezultati, poshtë dhe lart
 	Results	Rezultatet
 	Right edges	Skajet e djathta
 	Roles	Rolet
@@ -222,7 +267,10 @@
 	Run experiment	Ekzekuto eksperimentin
 	Run replication 1 step by step and see each block's queue on the diagram	Ekzekuto përsëritjen 1 hap pas hapi dhe shiko radhën e çdo blloku në diagram
 	Run the experiment ({shortcut})	Ekzekuto eksperimentin ({shortcut})
+	Run the experiment again to see this result's spread.	Ekzekuto sërish eksperimentin për të parë shpërndarjen e këtij rezultati.
+	Run the experiment at each value of one parameter, and compare a result.	Ekzekuto eksperimentin në çdo vlerë të një parametri dhe krahaso një rezultat.
 	Run the next event	Ekzekuto ngjarjen e radhës
+	Run the sweep	Ekzekuto skanimin
 	Running	Duke u ekzekutuar
 	Running…	Duke u ekzekutuar…
 	Save	Ruaj
@@ -234,6 +282,7 @@
 	Seed	Fara e rastësisë
 	Select All	Përzgjidh të gjitha
 	Select a block to see its queue over time.	Përzgjidhni një bllok për të parë radhën e tij gjatë kohës.
+	Separate the values with semicolons or spaces.	Ndaji vlerat me pikëpresje ose hapësira.
 	Service time	Koha e shërbimit
 	Services	Shërbimet
 	Set Property	Cakto vetinë
@@ -242,13 +291,19 @@
 	Settings	Cilësimet
 	Shape	Forma
 	Share of arrivals lost	Pjesa e mbërritjeve të humbura
+	Share of replications	Pjesa e përsëritjeve
 	Share of units blocked	Pjesa e njësive të bllokuara
 	Show All	Shfaqi të gjitha
 	Show {id}	Shfaq {id}
+	Size	Përmaso
+	Size the resources	Përmaso burimet
+	Source	Burimi
+	Source: {source}	Burimi: {source}
 	Speed	Shpejtësia
 	Split batches	Ndaj grupet
 	Split or join	Ndaj ose bashko
 	Split or join (all ways)	Ndaj ose bashko (të gjitha rrugët)
+	Spread across replications	Shpërndarja ndërmjet përsëritjeve
 	Spread out	Shpërndaj
 	Stages (k)	Fazat (k)
 	Standard deviation	Devijimi standard
@@ -260,17 +315,25 @@
 	Stop setting {name}	Ndalo caktimin e {name}
 	Stop watching	Ndalo vëzhgimin
 	Stopped watching	Vëzhgimi u ndal
+	Sweep a parameter	Skano një parametër
 	Tandem line	Linja në seri
+	Target	Objektivi
+	Target value	Vlera e objektivit
 	Task	Detyrë
 	Task with a resource	Detyrë me burim
 	Task with shared resources	Detyrë me burime të përbashkëta
 	Text	Tekst
 	The model changed, so watching stopped	Modeli ndryshoi, prandaj vëzhgimi u ndal
+	The model now has the units sizing found	Modeli tani ka njësitë që gjeti përmasimi
 	The model: its experiment, connections and problems	Modeli: eksperimenti, lidhjet dhe problemet
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Pjesa e përsëritjeve në ose nën çdo vlerë. Brezi përmban shpërndarjen e vërtetë me besueshmëri {confidence}.
+	The values are numbers, separated by semicolons or spaces	Vlerat janë numra të ndarë me pikëpresje ose hapësira
 	This block has a warning	Ky bllok ka një paralajmërim
 	This block has an error	Ky bllok ka një gabim
 	This run	Ky ekzekutim
+	Three-point estimate	Vlerësim me tri pika
 	Time between arrivals	Koha ndërmjet mbërritjeve
+	Time to the stop condition	Koha deri te kushti i ndalimit
 	Time unit	Njësia e kohës
 	To	Te
 	Tops	Skajet e sipërme
@@ -288,9 +351,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Njësi që përdoren të përbashkëta nga disa detyra. Një detyrë me burime të përbashkëta i merr sipas grupit ose sipas rolit.
 	Untitled	Pa titull
 	Untitled model	Model pa titull
+	Upper value	Vlera e sipërme
 	Use System Setting	Përdor cilësimin e sistemit
+	Use these units in the model	Përdor këto njësi në model
 	Utilisation	Shfrytëzimi
 	Value	Vlera
+	Values	Vlerat
 	View	Shiko
 	Waiting over time	Në pritje gjatë kohës
 	Waiting room	Dhoma e pritjes
@@ -301,8 +367,12 @@
 	Watch a run	Vëzhgo një ekzekutim
 	Watching replication 1	Po vëzhgohet përsëritja 1
 	Weibull	Weibull
+	When a task empties	Kur një detyrë zbrazet
+	When enough have left a block	Kur kanë dalë mjaft nga një bllok
+	Which parameters matter	Cilët parametra kanë rëndësi
 	Whole number	Numër i plotë
 	Window	Dritarja
+	With every time at its mean: {units}	Me çdo kohë në mesataren e saj: {units}
 	Yes or no	Po ose jo
 	Your changes will be lost if you don't save them.	Ndryshimet do të humbasin nëse nuk i ruani.
 	Zoom	Zmadho
@@ -316,8 +386,11 @@
 	departures	largimet
 	egui and eframe (Craft suite fork)	egui dhe eframe (degë e paketës Craft)
 	from its value	nga vlera e tij
+	have left	kanë dalë
 	hours	orë
 	id {id}	ID {id}
+	matters	ka rëndësi
+	maximum {value}	maksimumi {value}
 	milliseconds	milisekonda
 	minutes	minuta
 	nothing yet	ende asgjë
@@ -334,12 +407,17 @@
 	time	koha
 	to {block}	te {block}
 	unlimited	pa kufi
+	who gave it, or where it comes from	kush e dha ose nga vjen
+	within chance	brenda rastësisë
 	years	vite
+	{block}: units	{block}: njësi
 	{busy} busy	{busy} të zëna
 	{entered} in, {left} out, {lost} lost	{entered} hyrje, {left} dalje, {lost} të humbura
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimumi {min}, më e mundshmja {mode}, {upper}
 	{field}: not editable here yet	{field}: ende nuk mund të redaktohet këtu
 	{id}: a probability is a number from 0 to 1	{id}: probabiliteti është numër nga 0 deri në 1
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} nga {of} përsëritje arritën objektivin: {p} (interval 95% nga {lo} në {hi})
 	{name} — edited	{name} — redaktuar
 	{n} created	{n} të krijuara
 	{n} done	{n} të përfunduara
@@ -363,9 +441,12 @@ unit	yr	v
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	U hap {file} ({n} paralajmërim)|U hap {file} ({n} paralajmërime)
 @plural	Removed {n} block|Removed {n} blocks	U hoq {n} bllok|U hoqën {n} blloqe
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Ekzekuton {n} përsëritje të pavarur të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.|Ekzekuton {n} përsëritje të pavarura të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Kushti i ndalimit u arrit në {met} nga {n} përsëritje, pas {time} {unit} mesatarisht.|Kushti i ndalimit u arrit në {met} nga {n} përsëritje, pas {time} {unit} mesatarisht.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	U përfundua {done} nga {n} përsëritje|U përfunduan {done} nga {n} përsëritje
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} përsëritje|{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} përsëritje
 @plural	{n} block selected|{n} blocks selected	{n} bllok i përzgjedhur|{n} blloqe të përzgjedhura
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} përsëritje për çdo hap · fara {seed}|{n} përsëritje për çdo hap · fara {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} përsëritje · mesatarja {mean} · nga {min} në {max}|{n} përsëritje · mesatarja {mean} · nga {min} në {max}
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}|{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} përsëritje · fara {seed}|{n} përsëritje · fara {seed}
 @plural	{n} replication|{n} replications	{n} përsëritje|{n} përsëritje
