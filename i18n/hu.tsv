@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Magyar
+	% down and up	% le és fel
+	% of replications	% az ismétlésekből
 	+ Add block	+ Blokk hozzáadása
+	95th percentile	95. percentilis
+	95th percentile {value}	95. percentilis {value}
 	About StochCraft	A StochCraft névjegye
 	About {app}	{app} névjegye
+	Across the range it changed by {change}: more than chance would explain.	A tartományban {change} értékkel változott: többel, mint amit a véletlen megmagyarázna.
+	Across the range it changed by {change}: within what chance alone could do.	A tartományban {change} értékkel változott: azon belül, amit a véletlen egymaga okozhat.
 	Actual size	Tényleges méret
 	Add Block	Blokk hozzáadása
 	Add a flow from…	Folyamat hozzáadása innen: …
 	Add a flow to…	Folyamat hozzáadása ide: …
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Egy egység hozzáadása a legterheltebb feladathoz vagy készlethez, amíg elég ismétlés el nem éri a célt. Megjelenik az a válasz is, amelyben minden idő az átlagán van; ez rendszerint túl kicsi.
 	Add alternative	Alternatíva hozzáadása
 	Add point	Pont hozzáadása
 	Add pool	Készlet hozzáadása
@@ -27,9 +34,12 @@
 	Added {block} ({id})	{block} ({id}) hozzáadva
 	Align	Igazítás
 	Alternative {n}	{n}. alternatíva
+	Analysis	Elemzés
 	Appearance	Megjelenés
 	Arrival limit	Érkezési korlát
 	Arrivals	Érkezések
+	At least	Legalább
+	At most	Legfeljebb
 	Availability	Rendelkezésre állás
 	BPMN with BPSim	BPMN BPSim-mel
 	Back to the model (Esc)	Vissza a modellhez (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Kötegméret
 	Beta	Béta
 	Binomial	Binomiális
+	Block	Blokk
 	Boolean	Logikai
 	Bottoms	Alsó élek
 	Bring All to Front	Az összes előtérbe hozása
 	Built with	Készült ezekkel
+	Busiest	Legterheltebb
 	By role	Szerepkör szerint
 	CSV table	CSV-táblázat
 	Cancel	Mégse
@@ -49,10 +61,13 @@
 	Cancel run	Futtatás megszakítása
 	Capacity	Kapacitás
 	Centres	Vízszintes középpontok
+	Change	Változtatás
 	Change Block	Blokk módosítása
 	Change Flow	Folyamat módosítása
+	Change the estimate	Becslés módosítása
 	Changes	Módosítások
 	Changing the time unit does not convert the times already in the model.	Az időegység módosítása nem váltja át a modellben már meglévő időértékeket.
+	Choose…	Válasszon…
 	Clear Menu	Menü törlése
 	Close	Bezárás
 	Close Window	Ablak bezárása
@@ -88,11 +103,16 @@
 	Drag to add:	Hozzáadás húzással:
 	Duplicate	Kettőzés
 	Duration	Időtartam
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Minden elemzés többször futtatja a kísérletet ugyanazzal a véletlenszám-maggal, így a különbségek a változtatásból erednek, nem a véletlenből. Ez eltarthat egy ideig.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Minden entitás ezek közül az elsőt veszi, amely most teljesíthető, egyszerre az egészet, és távozáskor visszaadja az egységeket.
 	Edit	Szerkesztés
+	Elasticity	Rugalmasság
+	Ends early	Korábban ér véget
+	Enough: {units}, meeting the target in {p} of replications	Elég: {units}, a cél az ismétlések {p} részében teljesül
 	Entered	Belépett
 	Erlang	Erlang
 	Error	Hiba
+	Estimate from three values…	Becslés három értékből…
 	Evenly across	Egyenletes elosztás vízszintesen
 	Evenly down	Egyenletes elosztás függőlegesen
 	Every distribution	Minden eloszlás
@@ -105,20 +125,27 @@
 	Export table (CSV)	Táblázat exportálása (CSV)
 	Exported {file}	{file} exportálva
 	Expression	Kifejezés
+	Family	Család
 	File	Fájl
 	Finished at {time} {unit}	Befejeződött: {time} {unit}
 	Fit	Igazítás a nézethez
 	Fit the diagram to the view	A diagram igazítása a nézethez
+	Fit the time	Idő illesztése
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	A blokk idejének illesztése egy minimumra, egy legvalószínűbb értékre és egy maximumra vagy 95. percentilisre.
+	Fitted the time of {id}	{id} ideje illesztve
 	Flows	Folyamatok
+	Forget the estimate	Becslés elvetése
 	From	Innen
 	Gamma	Gamma
 	Goes to	Ide vezet
 	Help	Súgó
 	Hide Others	Többi elrejtése
 	Hide {app}	{app} elrejtése
+	How many	Hány
 	Inside over time	Bent lévők az idő függvényében
 	Jump	Ugrás
 	Jump to time	Ugrás időpontra
+	Keep the time, without the estimate it came from	Az idő megtartása a becslés nélkül, amelyből származik
 	Keyboard Shortcuts…	Billentyűparancsok…
 	Keyboard shortcuts saved	Billentyűparancsok mentve
 	Keyboard shortcuts unchanged	A billentyűparancsok nem változtak
@@ -139,6 +166,7 @@
 	Mean time blocked	Átlagos blokkolási idő
 	Mean time in system	Átlagos rendszerben töltött idő
 	Mean wait	Átlagos várakozási idő
+	Met in at least	Teljesül legalább
 	Metric	Mérőszám
 	Middles	Függőleges középpontok
 	Minimise	Minimalizálás
@@ -147,19 +175,25 @@
 	Model	Modell
 	Most likely	Legvalószínűbb
 	Move	Áthelyezés
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Minden paraméter sorban lejjebb és feljebb állítása, és rangsorolásuk aszerint, mennyit mozdul az eredmény.
 	Name	Név
 	Needs	Igények
+	Never: it runs for its duration	Soha: a teljes időtartamig fut
 	New	Új
 	New model	Új modell
 	New property	Új tulajdonság
 	New property name	Új tulajdonság neve
 	No blocks yet. Open a model, or add blocks to build one.	Még nincsenek blokkok. Nyisson meg egy modellt, vagy adjon hozzá blokkokat.
 	No connections yet: join blocks below.	Még nincsenek kapcsolatok: kapcsolja össze az alábbi blokkokat.
+	No replication met the stop condition: each ran to its time limit.	Egy ismétlés sem érte el a leállási feltételt: mind az időkorlátjáig futott.
 	No results yet	Még nincsenek eredmények
+	No target	Nincs cél
 	None	Nincs
 	None found. The model is ready to run.	Nem találhatók problémák. A modell futtatásra kész.
 	Normal	Normális
+	Not reached, even with {units}	Nem teljesül, még ezzel sem: {units}
 	Number	Szám
+	One change, which Undo takes back	Egy módosítás, amelyet a Visszavonás visszavesz
 	One clerk, random arrivals: the textbook queue, checked against theory.	Egy kiszolgáló, véletlenszerű érkezések: a klasszikus sor, elmélettel ellenőrizve.
 	One task per BPSim distribution, to compare their spread.	Minden BPSim-eloszláshoz egy feladat, a szóródás összehasonlítására.
 	Open	Megnyitás
@@ -172,10 +206,13 @@
 	Opened {file}	{file} megnyitva
 	Open…	Megnyitás…
 	Or start from an example	Vagy kezdjen egy példával
+	PERT	PERT
 	PNG image	PNG-kép
+	Parameter	Paraméter
 	Parameters	Paraméterek
 	Paste	Beillesztés
 	Pause	Szünet
+	Percentile	Percentilis
 	Play	Lejátszás
 	Points	Pontok
 	Poisson	Poisson
@@ -189,6 +226,7 @@
 	Properties	Tulajdonságok
 	Quit	Kilépés
 	Quit {app}	Kilépés: {app}
+	Rank the parameters	Paraméterek rangsorolása
 	Ready	Kész
 	Recover	Helyreállítás
 	Recover unsaved changes?	Helyreállítja a nem mentett módosításokat?
@@ -211,9 +249,16 @@
 	Replication 1 · {time} of {end} {unit}	1. ismétlés · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	1. ismétlés · {time} / {end} {unit} · bemelegítés
 	Replications	Ismétlések
+	Replications meeting the target	A célt elérő ismétlések
+	Replications that never met the stop condition count as later than their time limit.	A leállási feltételt soha el nem érő ismétlések az időkorlátjuknál későbbinek számítanak.
 	Resource pool	Erőforráskészlet
 	Resource pools	Erőforráskészletek
 	Restore	Visszaállítás
+	Result	Eredmény
+	Result to compare	Összehasonlítandó eredmény
+	Result to explain	Magyarázandó eredmény
+	Result with a target	Eredmény céllal
+	Result, down and up	Eredmény, lent és fent
 	Results	Eredmények
 	Right edges	Jobb élek
 	Roles	Szerepkörök
@@ -222,7 +267,10 @@
 	Run experiment	Kísérlet futtatása
 	Run replication 1 step by step and see each block's queue on the diagram	Az 1. ismétlés futtatása lépésenként, minden blokk sorával a diagramon
 	Run the experiment ({shortcut})	A kísérlet futtatása ({shortcut})
+	Run the experiment again to see this result's spread.	Futtassa újra a kísérletet az eredmény szóródásának megtekintéséhez.
+	Run the experiment at each value of one parameter, and compare a result.	A kísérlet futtatása egy paraméter minden értékénél, és egy eredmény összehasonlítása.
 	Run the next event	A következő esemény futtatása
+	Run the sweep	Végigfuttatás
 	Running	Fut
 	Running…	Futtatás…
 	Save	Mentés
@@ -234,6 +282,7 @@
 	Seed	Véletlenszám-mag
 	Select All	Az összes kijelölése
 	Select a block to see its queue over time.	Válasszon egy blokkot a sorának időbeli megtekintéséhez.
+	Separate the values with semicolons or spaces.	Pontosvesszővel vagy szóközzel válassza el az értékeket.
 	Service time	Kiszolgálási idő
 	Services	Szolgáltatások
 	Set Property	Tulajdonság beállítása
@@ -242,13 +291,19 @@
 	Settings	Beállítások
 	Shape	Alak
 	Share of arrivals lost	Elveszett érkezések aránya
+	Share of replications	Az ismétlések aránya
 	Share of units blocked	Blokkolt egységek aránya
 	Show All	Összes megjelenítése
 	Show {id}	{id} megjelenítése
+	Size	Méretezés
+	Size the resources	Erőforrások méretezése
+	Source	Forrás
+	Source: {source}	Forrás: {source}
 	Speed	Sebesség
 	Split batches	Kötegek szétbontása
 	Split or join	Szétválasztás vagy egyesítés
 	Split or join (all ways)	Szétválasztás vagy egyesítés (minden út)
+	Spread across replications	Szóródás az ismétlések között
 	Spread out	Elosztás
 	Stages (k)	Szakaszok (k)
 	Standard deviation	Szórás
@@ -260,17 +315,25 @@
 	Stop setting {name}	{name} beállításának leállítása
 	Stop watching	Követés leállítása
 	Stopped watching	A követés leállt
+	Sweep a parameter	Paraméter végigfuttatása
 	Tandem line	Tandemvonal
+	Target	Cél
+	Target value	Célérték
 	Task	Feladat
 	Task with a resource	Erőforrást használó feladat
 	Task with shared resources	Megosztott erőforrásokat használó feladat
 	Text	Szöveg
 	The model changed, so watching stopped	A modell megváltozott, ezért a követés leállt
+	The model now has the units sizing found	A modellben most a méretezés által talált egységek vannak
 	The model: its experiment, connections and problems	A modell: kísérlet, kapcsolatok és problémák
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Az egyes értékeknél nem nagyobb ismétlések aránya. A sáv {confidence} megbízhatósággal tartalmazza a valódi eloszlást.
+	The values are numbers, separated by semicolons or spaces	Az értékek pontosvesszővel vagy szóközzel elválasztott számok
 	This block has a warning	Ez a blokk figyelmeztetést tartalmaz
 	This block has an error	Ez a blokk hibát tartalmaz
 	This run	Ez a futtatás
+	Three-point estimate	Hárompontos becslés
 	Time between arrivals	Érkezések közötti idő
+	Time to the stop condition	Idő a leállási feltételig
 	Time unit	Időegység
 	To	Ide
 	Tops	Felső élek
@@ -288,9 +351,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Egységek, amelyeken több feladat osztozik. A megosztott erőforrásokat használó feladat készletből vagy szerepkör szerint veszi őket.
 	Untitled	Névtelen
 	Untitled model	Névtelen modell
+	Upper value	Felső érték
 	Use System Setting	Rendszerbeállítás használata
+	Use these units in the model	Ezek az egységek kerüljenek a modellbe
 	Utilisation	Kihasználtság
 	Value	Érték
+	Values	Értékek
 	View	Nézet
 	Waiting over time	Várakozók az idő függvényében
 	Waiting room	Várakozóhely
@@ -301,8 +367,12 @@
 	Watch a run	Futtatás követése
 	Watching replication 1	Az 1. ismétlés követése
 	Weibull	Weibull
+	When a task empties	Amikor egy feladat kiürül
+	When enough have left a block	Amikor elég elhagyott egy blokkot
+	Which parameters matter	Mely paraméterek számítanak
 	Whole number	Egész szám
 	Window	Ablak
+	With every time at its mean: {units}	Minden idő az átlagán: {units}
 	Yes or no	Igen vagy nem
 	Your changes will be lost if you don't save them.	Ha nem mented, a módosításaid elvesznek.
 	Zoom	Méretváltás
@@ -316,8 +386,11 @@
 	departures	távozások
 	egui and eframe (Craft suite fork)	egui és eframe (a Craft csomag elágazása)
 	from its value	az értékéből
+	have left	elhagyta
 	hours	óra
 	id {id}	azonosító {id}
+	matters	számít
+	maximum {value}	maximum {value}
 	milliseconds	ezredmásodperc
 	minutes	perc
 	nothing yet	még semmi
@@ -334,12 +407,17 @@
 	time	időpont
 	to {block}	ebbe: {block}
 	unlimited	korlátlan
+	who gave it, or where it comes from	ki adta, vagy honnan származik
+	within chance	a véletlen határán belül
 	years	év
+	{block}: units	{block}: egységek
 	{busy} busy	{busy} foglalt
 	{entered} in, {left} out, {lost} lost	{entered} be, {left} ki, {lost} elveszett
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, legvalószínűbb {mode}, {upper}
 	{field}: not editable here yet	{field}: itt még nem szerkeszthető
 	{id}: a probability is a number from 0 to 1	{id}: a valószínűség 0 és 1 közötti szám
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} ismétlésből {met} érte el a célt: {p} (95%-os intervallum {lo}–{hi})
 	{name} — edited	{name} — szerkesztve
 	{n} created	{n} létrehozva
 	{n} done	{n} kész
@@ -363,9 +441,12 @@ unit	yr	év
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} megnyitva ({n} figyelmeztetés)|{file} megnyitva ({n} figyelmeztetés)
 @plural	Removed {n} block|Removed {n} blocks	{n} blokk eltávolítva|{n} blokk eltávolítva
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.|A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	A leállási feltétel {n} ismétlésből {met} esetben teljesült, átlagosan {time} {unit} után.|A leállási feltétel {n} ismétlésből {met} esetben teljesült, átlagosan {time} {unit} után.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{done}/{n} ismétlés befejezve|{done}/{n} ismétlés befejezve
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján|{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján
 @plural	{n} block selected|{n} blocks selected	{n} blokk kijelölve|{n} blokk kijelölve
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} ismétlés lépésenként · mag {seed}|{n} ismétlés lépésenként · mag {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} ismétlés · átlag {mean} · {min} és {max} között|{n} ismétlés · átlag {mean} · {min} és {max} között
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}|{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ismétlés · mag {seed}|{n} ismétlés · mag {seed}
 @plural	{n} replication|{n} replications	{n} ismétlés|{n} ismétlés

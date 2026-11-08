@@ -12,13 +12,20 @@
 # consulted or copied; add entries the same way.
 
 @id	language.name	Türkçe
+	% down and up	% aşağı ve yukarı
+	% of replications	% tekrarın
 	+ Add block	+ Blok ekle
+	95th percentile	95. yüzdelik
+	95th percentile {value}	95. yüzdelik {value}
 	About StochCraft	StochCraft hakkında
 	About {app}	{app} hakkında
+	Across the range it changed by {change}: more than chance would explain.	Aralık boyunca {change} değişti: şansın açıklayacağından fazla.
+	Across the range it changed by {change}: within what chance alone could do.	Aralık boyunca {change} değişti: tek başına şansın yapabileceği ölçüde.
 	Actual size	Gerçek boyut
 	Add Block	Blok ekle
 	Add a flow from…	Kaynak…
 	Add a flow to…	Hedef…
+	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Yeterince tekrar bir hedefe ulaşana dek en yoğun göreve ya da havuza bir birim ekle. Her sürenin ortalamasında olduğu yanıt da gösterilir; genellikle fazla küçüktür.
 	Add alternative	Alternatif ekle
 	Add point	Nokta ekle
 	Add pool	Havuz ekle
@@ -27,9 +34,12 @@
 	Added {block} ({id})	{block} ({id}) eklendi
 	Align	Hizala
 	Alternative {n}	Alternatif {n}
+	Analysis	Analiz
 	Appearance	Görünüm
 	Arrival limit	Geliş sınırı
 	Arrivals	Gelişler
+	At least	En az
+	At most	En çok
 	Availability	Kullanılabilirlik
 	BPMN with BPSim	BPSim içeren BPMN
 	Back to the model (Esc)	Modele dön (Esc)
@@ -38,10 +48,12 @@
 	Batch size	Parti boyutu
 	Beta	Beta
 	Binomial	Binom
+	Block	Blok
 	Boolean	Mantıksal
 	Bottoms	Alt kenarlar
 	Bring All to Front	Tümünü Öne Getir
 	Built with	Şunlarla geliştirildi
+	Busiest	En yoğun
 	By role	Role göre
 	CSV table	CSV tablosu
 	Cancel	İptal
@@ -49,10 +61,13 @@
 	Cancel run	Çalıştırmayı iptal et
 	Capacity	Kapasite
 	Centres	Yatay merkezler
+	Change	Değişim
 	Change Block	Bloğu değiştir
 	Change Flow	Akışı değiştir
+	Change the estimate	Tahmini değiştir
 	Changes	Değişiklikler
 	Changing the time unit does not convert the times already in the model.	Zaman birimini değiştirmek modeldeki mevcut süreleri dönüştürmez.
+	Choose…	Seçin…
 	Clear Menu	Menüyü Temizle
 	Close	Kapat
 	Close Window	Pencereyi Kapat
@@ -88,11 +103,16 @@
 	Drag to add:	Eklemek için sürükleyin:
 	Duplicate	Çoğalt
 	Duration	Süre
+	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Her analiz deneyi aynı rastgelelik tohumuyla birkaç kez çalıştırır; böylece farklar şanstan değil değişiklikten gelir. Biraz sürebilir.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Her varlık, bunlardan şu anda karşılanabilen ilkini tek seferde tümüyle alır ve görevden ayrılırken birimleri geri verir.
 	Edit	Düzen
+	Elasticity	Esneklik
+	Ends early	Erken biter
+	Enough: {units}, meeting the target in {p} of replications	Yeterli: {units}, hedef tekrarların {p} kadarında karşılanır
 	Entered	Giren
 	Erlang	Erlang
 	Error	Hata
+	Estimate from three values…	Üç değerden tahmin et…
 	Evenly across	Yatay olarak eşit dağıt
 	Evenly down	Dikey olarak eşit dağıt
 	Every distribution	Tüm dağılımlar
@@ -105,20 +125,27 @@
 	Export table (CSV)	Tabloyu dışa aktar (CSV)
 	Exported {file}	{file} dışa aktarıldı
 	Expression	İfade
+	Family	Aile
 	File	Dosya
 	Finished at {time} {unit}	{time} {unit} anında bitti
 	Fit	Sığdır
 	Fit the diagram to the view	Diyagramı görünüme sığdır
+	Fit the time	Süreyi uydur
+	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Bu bloğun süresini bir en küçük, bir en olası değer ve bir en büyük ya da 95. yüzdeliğe uydur.
+	Fitted the time of {id}	{id} süresi uyduruldu
 	Flows	Akışlar
+	Forget the estimate	Tahmini unut
 	From	Kaynak
 	Gamma	Gama
 	Goes to	Şuraya gider
 	Help	Yardım
 	Hide Others	Diğerlerini Gizle
 	Hide {app}	{app} Uygulamasını Gizle
+	How many	Kaç
 	Inside over time	Zaman içinde içeridekiler
 	Jump	Git
 	Jump to time	Zamana git
+	Keep the time, without the estimate it came from	Süreyi, geldiği tahmin olmadan koru
 	Keyboard Shortcuts…	Klavye Kısayolları…
 	Keyboard shortcuts saved	Klavye kısayolları kaydedildi
 	Keyboard shortcuts unchanged	Klavye kısayolları değişmedi
@@ -139,6 +166,7 @@
 	Mean time blocked	Ortalama engellenme süresi
 	Mean time in system	Sistemdeki ortalama süre
 	Mean wait	Ortalama bekleme süresi
+	Met in at least	En az şu oranda karşılanır
 	Metric	Ölçüt
 	Middles	Dikey merkezler
 	Minimise	Simge durumuna küçült
@@ -147,19 +175,25 @@
 	Model	Model
 	Most likely	En olası
 	Move	Taşı
+	Move each parameter down and up in turn, and rank them by how much the result moves.	Her parametreyi sırayla aşağı ve yukarı oynat, sonucun ne kadar değiştiğine göre sırala.
 	Name	Ad
 	Needs	İhtiyaçlar
+	Never: it runs for its duration	Hiçbir zaman: süresince çalışır
 	New	Yeni
 	New model	Yeni model
 	New property	Yeni özellik
 	New property name	Yeni özellik adı
 	No blocks yet. Open a model, or add blocks to build one.	Henüz blok yok. Bir model açın veya blok ekleyerek oluşturun.
 	No connections yet: join blocks below.	Henüz bağlantı yok: aşağıdaki blokları bağlayın.
+	No replication met the stop condition: each ran to its time limit.	Hiçbir tekrar durdurma koşuluna ulaşmadı: her biri süre sınırına kadar çalıştı.
 	No results yet	Henüz sonuç yok
+	No target	Hedef yok
 	None	Yok
 	None found. The model is ready to run.	Sorun bulunamadı. Model çalıştırılmaya hazır.
 	Normal	Normal
+	Not reached, even with {units}	Ulaşılamadı, {units} ile bile
 	Number	Sayı
+	One change, which Undo takes back	Geri Al ile geri alınan tek bir değişiklik
 	One clerk, random arrivals: the textbook queue, checked against theory.	Bir görevli, rastgele gelişler: teoriyle doğrulanan klasik kuyruk.
 	One task per BPSim distribution, to compare their spread.	Dağılımlarını karşılaştırmak için her BPSim dağılımına bir görev.
 	Open	Aç
@@ -172,10 +206,13 @@
 	Opened {file}	{file} açıldı
 	Open…	Aç…
 	Or start from an example	Veya bir örnekle başlayın
+	PERT	PERT
 	PNG image	PNG görüntüsü
+	Parameter	Parametre
 	Parameters	Parametreler
 	Paste	Yapıştır
 	Pause	Duraklat
+	Percentile	Yüzdelik
 	Play	Oynat
 	Points	Noktalar
 	Poisson	Poisson
@@ -189,6 +226,7 @@
 	Properties	Özellikler
 	Quit	Çıkış
 	Quit {app}	{app} Uygulamasından Çık
+	Rank the parameters	Parametreleri sırala
 	Ready	Hazır
 	Recover	Kurtar
 	Recover unsaved changes?	Kaydedilmemiş değişiklikler kurtarılsın mı?
@@ -211,9 +249,16 @@
 	Replication 1 · {time} of {end} {unit}	Tekrar 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Tekrar 1 · {time} / {end} {unit} · ısınma
 	Replications	Tekrarlar
+	Replications meeting the target	Hedefi karşılayan tekrarlar
+	Replications that never met the stop condition count as later than their time limit.	Durdurma koşuluna hiç ulaşmayan tekrarlar süre sınırından sonra sayılır.
 	Resource pool	Kaynak havuzu
 	Resource pools	Kaynak havuzları
 	Restore	Geri yükle
+	Result	Sonuç
+	Result to compare	Karşılaştırılacak sonuç
+	Result to explain	Açıklanacak sonuç
+	Result with a target	Hedefli sonuç
+	Result, down and up	Sonuç, aşağı ve yukarı
 	Results	Sonuçlar
 	Right edges	Sağ kenarlar
 	Roles	Roller
@@ -222,7 +267,10 @@
 	Run experiment	Deneyi çalıştır
 	Run replication 1 step by step and see each block's queue on the diagram	Tekrar 1'i adım adım çalıştır ve her bloğun kuyruğunu diyagramda gör
 	Run the experiment ({shortcut})	Deneyi çalıştır ({shortcut})
+	Run the experiment again to see this result's spread.	Bu sonucun yayılımını görmek için deneyi yeniden çalıştırın.
+	Run the experiment at each value of one parameter, and compare a result.	Deneyi bir parametrenin her değerinde çalıştır ve bir sonucu karşılaştır.
 	Run the next event	Sonraki olayı çalıştır
+	Run the sweep	Taramayı çalıştır
 	Running	Çalışıyor
 	Running…	Çalışıyor…
 	Save	Kaydet
@@ -234,6 +282,7 @@
 	Seed	Rastgelelik tohumu
 	Select All	Tümünü seç
 	Select a block to see its queue over time.	Kuyruğunu zaman içinde görmek için bir blok seçin.
+	Separate the values with semicolons or spaces.	Değerleri noktalı virgül veya boşlukla ayırın.
 	Service time	Hizmet süresi
 	Services	Hizmetler
 	Set Property	Özelliği ayarla
@@ -242,13 +291,19 @@
 	Settings	Ayarlar
 	Shape	Şekil
 	Share of arrivals lost	Kaybedilen gelişlerin oranı
+	Share of replications	Tekrar oranı
 	Share of units blocked	Engellenen birimlerin oranı
 	Show All	Tümünü Göster
 	Show {id}	{id} göster
+	Size	Boyutlandır
+	Size the resources	Kaynakları boyutlandır
+	Source	Kaynak
+	Source: {source}	Kaynak: {source}
 	Speed	Hız
 	Split batches	Partileri ayır
 	Split or join	Ayır veya birleştir
 	Split or join (all ways)	Ayır veya birleştir (tüm yollar)
+	Spread across replications	Tekrarlar arası yayılım
 	Spread out	Dağıt
 	Stages (k)	Aşamalar (k)
 	Standard deviation	Standart sapma
@@ -260,17 +315,25 @@
 	Stop setting {name}	{name} ayarlamayı durdur
 	Stop watching	İzlemeyi durdur
 	Stopped watching	İzleme durduruldu
+	Sweep a parameter	Bir parametreyi tara
 	Tandem line	Tandem hat
+	Target	Hedef
+	Target value	Hedef değer
 	Task	Görev
 	Task with a resource	Kaynak kullanan görev
 	Task with shared resources	Paylaşılan kaynakları kullanan görev
 	Text	Metin
 	The model changed, so watching stopped	Model değişti, bu nedenle izleme durduruldu
+	The model now has the units sizing found	Modelde artık boyutlandırmanın bulduğu birimler var
 	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
+	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Her değere eşit veya altındaki tekrarların oranı. Bant, gerçek dağılımı {confidence} güvenle içerir.
+	The values are numbers, separated by semicolons or spaces	Değerler noktalı virgül veya boşlukla ayrılmış sayılardır
 	This block has a warning	Bu blokta uyarı var
 	This block has an error	Bu blokta hata var
 	This run	Bu çalıştırma
+	Three-point estimate	Üç noktalı tahmin
 	Time between arrivals	Gelişler arası süre
+	Time to the stop condition	Durdurma koşuluna kadar geçen süre
 	Time unit	Zaman birimi
 	To	Hedef
 	Tops	Üst kenarlar
@@ -288,9 +351,12 @@
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Birden çok görevin paylaştığı birimler. Paylaşılan kaynakları kullanan bir görev bunları havuzdan veya role göre alır.
 	Untitled	İsimsiz
 	Untitled model	Başlıksız model
+	Upper value	Üst değer
 	Use System Setting	Sistem ayarını kullan
+	Use these units in the model	Bu birimleri modelde kullan
 	Utilisation	Kullanım oranı
 	Value	Değer
+	Values	Değerler
 	View	Görünüm
 	Waiting over time	Zaman içinde bekleyenler
 	Waiting room	Bekleme alanı
@@ -301,8 +367,12 @@
 	Watch a run	Bir çalıştırmayı izle
 	Watching replication 1	Tekrar 1 izleniyor
 	Weibull	Weibull
+	When a task empties	Bir görev boşaldığında
+	When enough have left a block	Bir bloktan yeterince ayrıldığında
+	Which parameters matter	Hangi parametreler önemli
 	Whole number	Tam sayı
 	Window	Pencere
+	With every time at its mean: {units}	Her süre ortalamasındayken: {units}
 	Yes or no	Evet veya hayır
 	Your changes will be lost if you don't save them.	Kaydetmezseniz değişiklikleriniz kaybolur.
 	Zoom	Boyutu Değiştir
@@ -316,8 +386,11 @@
 	departures	çıkışlar
 	egui and eframe (Craft suite fork)	egui ve eframe (Craft paketinin çatallanmış sürümü)
 	from its value	değerinden
+	have left	ayrıldı
 	hours	saat
 	id {id}	kimlik {id}
+	matters	önemli
+	maximum {value}	en büyük {value}
 	milliseconds	milisaniye
 	minutes	dakika
 	nothing yet	henüz bir şey yok
@@ -334,12 +407,17 @@
 	time	zaman
 	to {block}	{block} bloğuna
 	unlimited	sınırsız
+	who gave it, or where it comes from	kim verdi ya da nereden geliyor
+	within chance	şans içinde
 	years	yıl
+	{block}: units	{block}: birimler
 	{busy} busy	{busy} meşgul
 	{entered} in, {left} out, {lost} lost	{entered} giriş, {left} çıkış, {lost} kayıp
+	{family}: minimum {min}, most likely {mode}, {upper}	{family}: en küçük {min}, en olası {mode}, {upper}
 	{field}: not editable here yet	{field}: burada henüz düzenlenemiyor
 	{id}: a probability is a number from 0 to 1	{id}: olasılık 0 ile 1 arasında bir sayıdır
 	{kind} {name}	{kind} {name}
+	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} tekrardan {met} tanesi hedefi karşıladı: {p} (%95 aralık {lo} ile {hi} arası)
 	{name} — edited	{name} — düzenlendi
 	{n} created	{n} oluşturuldu
 	{n} done	{n} tamamlandı
@@ -363,9 +441,12 @@ unit	yr	yıl
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} açıldı ({n} uyarı)|{file} açıldı ({n} uyarı)
 @plural	Removed {n} block|Removed {n} blocks	{n} blok kaldırıldı|{n} blok kaldırıldı
 @plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Modelin {n} bağımsız tekrarını {seed} tohumundan çalıştırır. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.|Modelin {n} bağımsız tekrarını {seed} tohumundan çalıştırır. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.
+@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Durdurma koşuluna {n} tekrardan {met} tanesinde, ortalama {time} {unit} sonra ulaşıldı.|Durdurma koşuluna {n} tekrardan {met} tanesinde, ortalama {time} {unit} sonra ulaşıldı.
 @plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} tekrardan {done} tanesi tamamlandı|{n} tekrardan {done} tanesi tamamlandı
 @plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} tekrar üzerinden|{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} tekrar üzerinden
 @plural	{n} block selected|{n} blocks selected	{n} blok seçildi|{n} blok seçildi
+@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	Her adımda {n} tekrar · tohum {seed}|Her adımda {n} tekrar · tohum {seed}
+@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} tekrar · ortalama {mean} · {min} ile {max} arası|{n} tekrar · ortalama {mean} · {min} ile {max} arası
 @plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü|{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü
 @plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} tekrar · tohum {seed}|{n} tekrar · tohum {seed}
 @plural	{n} replication|{n} replications	{n} tekrar|{n} tekrar

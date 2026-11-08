@@ -74,6 +74,7 @@ impl App {
             self.results = None;
             self.selected = None;
             self.show_results = false;
+            self.show_analysis = false;
             self.info(tf(
                 "Recovered {name}; save it to keep it",
                 &[("name", &name)],

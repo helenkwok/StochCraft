@@ -255,6 +255,7 @@ impl App {
             ui,
             t("Changing the time unit does not convert the times already in the model."),
         ));
+        self.stop_row(ui, model);
 
         section(ui, t("Connections"));
         self.connections_table(ui, p, model);
@@ -449,6 +450,10 @@ impl App {
 
         if kind == "shared_task" {
             self.needs_section(ui, model, el);
+        }
+
+        if matches!(kind.as_str(), "source" | "server" | "shared_task" | "delay") {
+            self.estimate_section(ui, el);
         }
 
         self.properties_section(ui, p, el);

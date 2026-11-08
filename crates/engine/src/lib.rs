@@ -258,12 +258,8 @@ impl Engine {
         })?;
         let result = (c.run)(self, params.clone())?;
         // Keep the last results, for questions about their distributions.
-        match command {
-            "run" => self.last_results = Some(result.clone()),
-            "run.status" if result["state"] == "finished" => {
-                self.last_results = Some(result["result"].clone());
-            }
-            _ => {}
+        if command == "run" {
+            self.last_results = Some(result.clone());
         }
         if c.kind != CommandKind::Query {
             self.journal.push(JournalEntry {
@@ -526,10 +522,17 @@ impl Engine {
     }
 
     /// Progress of the background run (advancing a run in slices by up to `step` replications).
+    /// A finished run's results are kept for `results.distribution`, however it was followed
+    /// (`run.status`, or a window polling here).
     pub fn poll_run(&mut self, step: u64) -> Value {
-        self.job
+        let status = self
+            .job
             .as_mut()
-            .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step))
+            .map_or_else(|| json!({ "state": "idle" }), |j| j.poll(step));
+        if status["state"] == "finished" {
+            self.last_results = Some(status["result"].clone());
+        }
+        status
     }
 
     /// The background run as its workers get it, for a run started with `"mode": "workers"`
