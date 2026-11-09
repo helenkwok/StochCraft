@@ -16,6 +16,18 @@ fn settle(h: &mut Harness<'static, App>) {
     }
 }
 
+/// Runs frames, one at a time, until `done` holds, for at most `frames` of them. A jump far
+/// ahead runs only a frame's budget of events per frame (#80), so how many frames it needs
+/// depends on the machine; a slow runner needs more than [`settle`] gives.
+fn until(h: &mut Harness<'static, App>, frames: usize, done: impl Fn(&App) -> bool) {
+    for _ in 0..frames {
+        if done(h.state()) {
+            return;
+        }
+        h.run_steps(1);
+    }
+}
+
 /// The M/M/1 example, open, with the run being watched (and paused, so frames don't move it).
 fn watching() -> Harness<'static, App> {
     let mut app = App::new(Platform::DESKTOP);
@@ -114,6 +126,9 @@ fn the_end_is_reported_and_the_selected_block_charted() {
     settle(&mut h);
     h.key_press(egui::Key::Enter);
     settle(&mut h);
+    until(&mut h, 100_000, |app| {
+        app.status().starts_with("Finished at ")
+    });
     assert!(
         h.state().status().starts_with("Finished at "),
         "{}",
