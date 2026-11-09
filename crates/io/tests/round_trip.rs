@@ -39,6 +39,7 @@ pub fn showcase() -> Model {
             interruptible: true,
         },
     );
+    m.transfer(cut, Dist::Uniform { min: 0.5, max: 1.5 });
     let mut previous = cut;
     m.connect(src, cut);
     let delays = [

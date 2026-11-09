@@ -540,6 +540,7 @@ fn edits() -> Vec<Edit> {
                         service: Dist::Constant(1.5),
                         queue_capacity: None,
                         breakdown: None,
+                        transfer: None,
                     };
                 }
             }),
@@ -758,6 +759,7 @@ fn showcase() -> Model {
             interruptible: true,
         },
     );
+    m.transfer(previous, Dist::Uniform { min: 0.5, max: 1.5 });
     m.connect(src, previous);
     let delays = [
         Dist::Constant(1.25),

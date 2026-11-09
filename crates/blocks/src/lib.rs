@@ -924,6 +924,7 @@ impl Builder {
                 service,
                 queue_capacity: None,
                 breakdown: None,
+                transfer: None,
             },
         )
     }
@@ -945,6 +946,7 @@ impl Builder {
                 service,
                 queue_capacity: Some(queue_capacity),
                 breakdown: None,
+                transfer: None,
             },
         )
     }
@@ -966,6 +968,16 @@ impl Builder {
             self.elements.get_mut(block.0)
         {
             *b = Some(breakdown);
+        }
+    }
+
+    /// Gives server `block` a transfer time: each part takes a time drawn from `transfer` to
+    /// get there, holding a sending server's unit meanwhile.
+    pub fn transfer(&mut self, block: BlockId, transfer: Dist) {
+        if let Some((_, ElementKind::Server { transfer: t, .. }, _)) =
+            self.elements.get_mut(block.0)
+        {
+            *t = Some(transfer);
         }
     }
 

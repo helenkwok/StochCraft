@@ -23,7 +23,7 @@ use crate::write::{
     availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
     condition_element, dist_element, edge_ends, estimate_element, interruptible_param, numeric,
     probability_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, size, start_param, stop_element, timer_param,
+    queue_capacity_element, size, start_param, stop_element, timer_param, transfer_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -1856,6 +1856,22 @@ impl Editor {
                             yes.then(|| interruptible_param(true)),
                         ));
                     }
+                    // The transfer time into the server.
+                    let old_transfer = match was {
+                        Some(ElementKind::Server { transfer, .. }) => transfer.as_ref(),
+                        _ => None,
+                    };
+                    let new_transfer = match &e.kind {
+                        ElementKind::Server { transfer, .. } => transfer.as_ref(),
+                        _ => None,
+                    };
+                    if new_transfer != old_transfer || (is_server && !was_server) {
+                        vendor_writes.push((
+                            id.clone(),
+                            crate::bpsim::TRANSFER_TIME,
+                            new_transfer.map(transfer_element),
+                        ));
+                    }
                     match (&e.kind, was) {
                         (
                             ElementKind::Server { capacity, .. },
@@ -1933,6 +1949,7 @@ impl Editor {
                         new_resources.push((e, false));
                         vendor_writes.push((id.clone(), crate::bpsim::QUEUE_CAPACITY, None));
                         vendor_writes.push((id.clone(), crate::bpsim::BREAKDOWN, None));
+                        vendor_writes.push((id.clone(), crate::bpsim::TRANSFER_TIME, None));
                         writes.push((id.clone(), "PriorityParameters", "Interruptible", None));
                     }
                 }
