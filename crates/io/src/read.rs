@@ -944,6 +944,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             breakdown: breakdown_of(scenario, id, unit, notes),
                             available,
                             availability,
+                            transfer: transfer_of(scenario, id, unit, notes),
                         }
                     }
                     (None, None, None) => ElementKind::Delay { duration: time },
@@ -972,6 +973,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "breakdowns (stochcraft:breakdown) apply only to a task with a resource of its own; they are ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Server { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::TRANSFER_TIME)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "a transfer time (stochcraft:transferTime) applies only to a task with a resource of its own; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::Batch { .. } | ElementKind::Unbatch)
@@ -1170,6 +1181,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             }
         } else if [
             bpsim::BREAKDOWN,
+            bpsim::TRANSFER_TIME,
             bpsim::BATCH_SIZE,
             bpsim::UNBATCH,
             bpsim::QUANTITY,
@@ -1179,8 +1191,8 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
         ]
         .contains(&name)
         {
-            // Read by `breakdown_of`, `batching_of`, `vendor_count`, `stop_of` and
-            // `estimates_of`.
+            // Read by `breakdown_of`, `transfer_of`, `batching_of`, `vendor_count`, `stop_of`
+            // and `estimates_of`.
         } else if name.starts_with(bpsim::STOCHCRAFT) {
             notes.push(Note::warning(
                 Some(id),
@@ -1301,6 +1313,28 @@ fn breakdown_of(
         repair,
         interruptible,
     })
+}
+
+/// The transfer time StochCraft's vendor extension gives server `id`, if any.
+fn transfer_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+) -> Option<Dist> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::TRANSFER_TIME))?;
+    let body = ext
+        .elements()
+        .find(|e| e.local() == "transferTime")
+        .and_then(|b| bpsim::default_value(b, unit, notes, Some(id)));
+    if body.is_none() {
+        notes.push(Note::error(
+            Some(id),
+            "a transfer time needs a distribution or a constant; parts arrive at once",
+        ));
+        return None;
+    }
+    dist_of(body, "the transfer time", id, notes)
 }
 
 fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment {

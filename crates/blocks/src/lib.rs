@@ -941,6 +941,7 @@ impl Builder {
                 breakdown: None,
                 available: true,
                 availability: Vec::new(),
+                transfer: None,
             },
         )
     }
@@ -964,6 +965,7 @@ impl Builder {
                 breakdown: None,
                 available: true,
                 availability: Vec::new(),
+                transfer: None,
             },
         )
     }
@@ -1010,6 +1012,16 @@ impl Builder {
                     value: *v,
                 })
                 .collect();
+        }
+    }
+
+    /// Gives server `block` a transfer time: each part takes a time drawn from `transfer` to
+    /// get there, holding a sending server's unit meanwhile.
+    pub fn transfer(&mut self, block: BlockId, transfer: Dist) {
+        if let Some((_, ElementKind::Server { transfer: t, .. }, _)) =
+            self.elements.get_mut(block.0)
+        {
+            *t = Some(transfer);
         }
     }
 

@@ -174,6 +174,22 @@ impl Compiled {
                     .any(|r| places.get(r.to).is_some_and(Option::is_some))
             })
             .collect();
+        // Whether each element sends across a transfer, which holds a server's unit.
+        let feeds_transfer: Vec<bool> = (0..elements.len())
+            .map(|i| {
+                self.routes.get(i).into_iter().flatten().any(|r| {
+                    elements.get(r.to).is_some_and(|e| {
+                        matches!(
+                            e.kind,
+                            ElementKind::Server {
+                                transfer: Some(_),
+                                ..
+                            }
+                        )
+                    })
+                })
+            })
+            .collect();
         let end = warmup + duration;
         let calendars = Calendars::new(&self.model, end);
         let units: Vec<Vec<(f64, u32)>> = self
@@ -198,6 +214,20 @@ impl Compiled {
         // The elements' streams first, in model order as always; then the properties'.
         let streams: Vec<Rng> = elements.iter().map(|_| rng.fork()).collect();
         let mut prop_root = rng.fork();
+        // Then a stream for each server's transfer times, in model order (only for servers that
+        // have one, so models without transfers draw exactly as before).
+        let transfers: Vec<Option<Rc<Transfer>>> = elements
+            .iter()
+            .map(|e| match &e.kind {
+                ElementKind::Server {
+                    transfer: Some(d), ..
+                } => Some(Rc::new(Transfer {
+                    time: d.clone(),
+                    rng: RefCell::new(rng.fork()),
+                })),
+                _ => None,
+            })
+            .collect();
         let assigner = Rc::new(Assigner {
             slots: self.slots.clone(),
             elements: self
@@ -240,6 +270,7 @@ impl Compiled {
                             assigner: Rc::clone(&assigner),
                             index: r.to,
                             places: places.get(r.to).cloned().flatten(),
+                            transfer: transfers.get(r.to).cloned().flatten(),
                             // A join's second and later inputs bring copies (`spawn_parallel`),
                             // unless it is an assembly, whose inputs bring parts.
                             counts: r.input == 0 || assembly.get(r.to).copied().unwrap_or(false),
@@ -265,6 +296,10 @@ impl Compiled {
                 input,
                 out: outs.first().map(|o| o.port.clone()),
                 rng,
+                holds: matches!(
+                    element.kind,
+                    ElementKind::Server { .. } | ElementKind::SharedTask { .. }
+                ),
             };
             match element.kind.clone() {
                 ElementKind::Source {
@@ -353,6 +388,7 @@ impl Compiled {
             stats,
             pools,
             feeds_buffer,
+            feeds_transfer,
             warmup,
             duration,
             end,
@@ -397,6 +433,7 @@ pub struct Live<'a> {
     stats: Rc<Vec<RefCell<BlockStats>>>,
     pools: Rc<Pools>,
     feeds_buffer: Vec<bool>,
+    feeds_transfer: Vec<bool>,
     warmup: f64,
     duration: f64,
     end: f64,
@@ -617,10 +654,11 @@ impl Live<'_> {
             .iter()
             .zip(self.stats.iter())
             .zip(&self.compiled.assigns)
-            .zip(&self.feeds_buffer)
+            .zip(self.feeds_buffer.iter().zip(&self.feeds_transfer))
             .zip(&self.compiled.inputs)
-            .map(|((((e, s), a), &blocks), &inputs)| {
-                s.borrow().report(e, a, blocks, inputs > 1, now)
+            .map(|((((e, s), a), (&blocks, &transfers)), &inputs)| {
+                s.borrow()
+                    .report(e, a, Sends { blocks, transfers }, inputs > 1, now)
             })
             .collect();
         // Then each shared pool, after the elements.
@@ -681,6 +719,22 @@ pub(crate) struct BlockStats {
     down: TimeWeighted,
     /// A server's units in each state but starved, each unit in exactly one ([`UnitBook`]).
     states: UnitStates,
+    /// Entities on their way here, in transfer (servers with a transfer time). They have
+    /// entered and hold a place in the buffer, but have not joined the queue yet.
+    transit: TimeWeighted,
+    /// Units holding on through a transfer to the next element (servers and tasks with shared
+    /// resources sending to a server with a transfer time). The entity is counted at the next
+    /// element, in its `transit`; the unit is blocked.
+    transferring: TimeWeighted,
+}
+
+/// What an element sends to, for its report.
+#[derive(Clone, Copy)]
+pub(crate) struct Sends {
+    /// A finite buffer.
+    pub(crate) blocks: bool,
+    /// A server with a transfer time.
+    pub(crate) transfers: bool,
 }
 
 /// The state a server's unit is in: exactly one at every instant, the first that applies of
@@ -833,6 +887,8 @@ impl BlockStats {
             lost: 0,
             down: TimeWeighted::new(t, 0.0),
             states: UnitStates::new(t),
+            transit: TimeWeighted::new(t, 0.0),
+            transferring: TimeWeighted::new(t, 0.0),
         }
     }
 
@@ -851,27 +907,32 @@ impl BlockStats {
         self.lost = 0;
         self.down.reset(t);
         self.states.reset(t);
+        self.transit.reset(t);
+        self.transferring.reset(t);
     }
 
-    /// Entities inside the element now: waiting in its input, being served or delayed (or
-    /// collected into a batch), and held while blocked after service.
+    /// Entities inside the element now: on their way in (in transfer), waiting in its input,
+    /// being served or delayed (or collected into a batch), and held while blocked after
+    /// service. An entity in transfer to the next element is that element's, not this one's.
     fn inside(&self) -> u64 {
-        let n = self.waiting.value() + self.busy.value() + self.blocked.value();
+        let n =
+            self.transit.value() + self.waiting.value() + self.busy.value() + self.blocked.value();
         // Sums of whole counts; `as` saturates (and a negative value cannot occur).
         n.round().max(0.0) as u64
     }
 
-    /// The element's report; `blocks`: whether it sends to a finite buffer; `join`: whether it
-    /// is a parallel gateway with several inputs (which holds entities until each input has
-    /// one).
+    /// The element's report; `sends`: whether it sends to a finite buffer or across a
+    /// transfer; `join`: whether it is a parallel gateway with several inputs (which holds
+    /// entities until each input has one).
     pub(crate) fn report(
         &self,
         element: &Element,
         assigns: &[Assign],
-        blocks: bool,
+        sends: Sends,
         join: bool,
         end: f64,
     ) -> ElementReport {
+        let Sends { blocks, transfers } = sends;
         let kind = &element.kind;
         let server = matches!(
             kind,
@@ -932,7 +993,14 @@ impl BlockStats {
             } else {
                 None
             },
+            // Units held after their job: waiting for room in the next buffer, or through a
+            // transfer to the next element.
             blocking_probability: match kind {
+                ElementKind::Server { capacity, .. } if transfers => self
+                    .blocked
+                    .average(end)
+                    .zip(self.transferring.average(end))
+                    .map(|(b, t)| (b + t) / f64::from(*capacity)),
                 ElementKind::Server { capacity, .. } if blocks => {
                     self.blocked.average(end).map(|b| b / f64::from(*capacity))
                 }
@@ -996,6 +1064,8 @@ struct Port {
     index: usize,
     /// The next element's places, when its buffer is finite.
     places: Option<Rc<Places>>,
+    /// The next element's transfer time, when it has one.
+    transfer: Option<Rc<Transfer>>,
     /// Whether an entity sent here counts as entering the next element: always, except on a
     /// join's second and later inputs, whose entities are copies merged into the one on its
     /// first input.
@@ -1020,6 +1090,12 @@ impl Places {
     }
 }
 
+/// A server's transfer time, and the stream it is drawn from.
+struct Transfer {
+    time: Dist,
+    rng: RefCell<Rng>,
+}
+
 impl Port {
     /// Waits for a place in the next element's finite buffer, if it has one, and takes it for
     /// `e`.
@@ -1030,10 +1106,68 @@ impl Port {
         }
     }
 
-    /// Sends `e`, first waiting for room in a finite buffer.
+    /// Sends `e`, first waiting for room in a finite buffer; any transfer goes on by itself.
     async fn deliver(&self, ctx: &Ctx, e: Entity) {
         self.make_room(&e).await;
-        self.send(ctx.now(), e);
+        self.dispatch(ctx, e);
+    }
+
+    /// Sends `e`, which already has its place: at once, or into a transfer that goes on by
+    /// itself (the sender holds nothing while it lasts).
+    fn dispatch(&self, ctx: &Ctx, e: Entity) {
+        self.travel(ctx, e, self.transfer_time());
+    }
+
+    /// Sends `e`: at once, or with `transfer`, into a transfer of that time that goes on by
+    /// itself.
+    fn travel(&self, ctx: &Ctx, e: Entity, transfer: Option<f64>) {
+        match transfer {
+            None => self.send(ctx.now(), e),
+            Some(dt) => {
+                let e = self.depart(ctx.now(), e);
+                let (c, port) = (ctx.clone(), self.clone());
+                ctx.spawn(async move {
+                    c.hold(dt).await;
+                    port.arrive(c.now(), e);
+                });
+            }
+        }
+    }
+
+    /// A transfer time drawn for the next entity, if the next element has one (negative draws
+    /// count as 0).
+    fn transfer_time(&self) -> Option<f64> {
+        let t = self.transfer.as_ref()?;
+        let dt = t.time.sample(&mut t.rng.borrow_mut());
+        Some(if dt.is_finite() && dt > 0.0 { dt } else { 0.0 })
+    }
+
+    /// `e` sets off for the next element, into a transfer: it enters it (and is counted
+    /// there, in transit) now, and joins its queue when the transfer ends ([`Port::arrive`]).
+    fn depart(&self, now: f64, mut e: Entity) -> Entity {
+        self.assigner.enter(self.index, &mut e, &self.stats);
+        if let Some(s) = self.stats.get(self.index) {
+            let mut s = s.borrow_mut();
+            if self.counts {
+                s.entered += 1;
+            }
+            let n = s.transit.value() + 1.0;
+            s.transit.set(now, n);
+        }
+        e
+    }
+
+    /// `e`'s transfer is over: it joins the next element's queue.
+    fn arrive(&self, now: f64, mut e: Entity) {
+        e.entered = now;
+        if let Some(s) = self.stats.get(self.index) {
+            let mut s = s.borrow_mut();
+            let n = s.transit.value() - 1.0;
+            s.transit.set(now, n);
+            let w = s.waiting.value() + 1.0;
+            s.waiting.set(now, w);
+        }
+        self.store.put(e);
     }
 
     /// Sends a new arrival if there is room (a place freed at this instant counts) and returns
@@ -1051,7 +1185,7 @@ impl Port {
                 }
             }
         }
-        self.send(ctx.now(), e);
+        self.dispatch(ctx, e);
         true
     }
 
@@ -1088,6 +1222,9 @@ struct BlockEnv {
     input: Store<Entity>,
     out: Option<Port>,
     rng: Rng,
+    /// Whether the element's units stay with an entity through a transfer to the next element
+    /// (a server, a task with shared resources); otherwise the entity travels on its own.
+    holds: bool,
 }
 
 impl BlockEnv {
@@ -1569,15 +1706,38 @@ async fn move_on(env: &Rc<RefCell<BlockEnv>>, ctx: &Ctx, entity: Entity) {
         e.adjust(|s| &mut s.blocked, -1.0);
         e.with_stats(|s| s.blocked_time.add(now - start));
     }
-    {
-        let e = env.borrow();
-        e.with_stats(|s| s.left += 1);
-        if let Some(p) = &e.places {
-            p.leave(entity.id);
+    let transfer = out.as_ref().and_then(Port::transfer_time);
+    let holds = env.borrow().holds;
+    match (out, transfer) {
+        // Across a transfer, a unit stays with the entity, blocked, until it gets there; the
+        // entity is the next element's from the start, and keeps its place here (which is the
+        // unit's) until the unit is free.
+        (Some(out), Some(dt)) if holds => {
+            env.borrow().with_stats(|s| s.left += 1);
+            let id = entity.id;
+            let entity = out.depart(ctx.now(), entity);
+            env.borrow().adjust(|s| &mut s.transferring, 1.0);
+            ctx.hold(dt).await;
+            let e = env.borrow();
+            e.adjust(|s| &mut s.transferring, -1.0);
+            if let Some(p) = &e.places {
+                p.leave(id);
+            }
+            drop(e);
+            out.arrive(ctx.now(), entity);
         }
-    }
-    if let Some(out) = out {
-        out.send(ctx.now(), entity);
+        (out, transfer) => {
+            {
+                let e = env.borrow();
+                e.with_stats(|s| s.left += 1);
+                if let Some(p) = &e.places {
+                    p.leave(entity.id);
+                }
+            }
+            if let Some(out) = out {
+                out.travel(ctx, entity, transfer);
+            }
+        }
     }
 }
 

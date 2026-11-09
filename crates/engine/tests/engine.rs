@@ -1602,6 +1602,43 @@ fn a_server_follows_its_calendar() {
     );
 }
 
+/// A server's transfer time through `block.set` and `block.add`: set, shown in the model, run,
+/// refused where it does not apply, and removed with `null`.
+#[test]
+fn transfer_times_are_set_and_removed() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "transfer": {"type": "constant", "value": 0.5}}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let desk = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(desk["transfer"]["value"], 0.5, "{m}");
+    ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "arrivals", "transfer": {"type": "constant", "value": 1.0}})
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(&mut e, "block.set", json!({"id": "desk", "transfer": null}));
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(!m.to_string().contains("transfer"), "{m}");
+    let added = ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "server", "id": "second", "transfer": {"type": "exponential", "mean": 2.0}}),
+    );
+    assert_eq!(added["id"], "second");
+}
+
 /// Batches, splits and bills of materials through commands: added, changed, undone, and
 /// refused where they do not apply.
 #[test]

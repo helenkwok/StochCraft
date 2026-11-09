@@ -31,6 +31,11 @@ pub const QUEUE_CAPACITY: &str = "stochcraft:queueCapacity";
 /// `PriorityParameters/Interruptible`.
 pub const BREAKDOWN: &str = "stochcraft:breakdown";
 
+/// The vendor extension for the time a part takes to reach a server: a
+/// `stochcraft:transferTime` element holding one BPSim distribution or constant, in the
+/// receiving task's `ElementParameters`.
+pub const TRANSFER_TIME: &str = "stochcraft:transferTime";
+
 /// A batch: `stochcraft:batchSize` on a task's `ElementParameters`, the number of entities it
 /// collects before sending them on together (a whole number of at least 1).
 pub const BATCH_SIZE: &str = "stochcraft:batchSize";

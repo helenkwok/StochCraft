@@ -207,6 +207,12 @@ pub enum KindSpec {
         /// finishes first; failures and repairs go on through the breaks. Left out when none.
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
         availability: Vec<AvailabilityDoc>,
+        /// The time each part takes to get here from the element that sends it (a short
+        /// conveyor, a hand transfer); left out, parts arrive at once. The part takes its place
+        /// in the buffer as the transfer starts and joins the queue as it ends; a sending server
+        /// or task with shared resources keeps its unit, blocked, through the transfer.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        transfer: Option<DistSpec>,
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
     /// entity takes what the first of `needs` that can be met now asks for, holds it for its
@@ -597,6 +603,7 @@ impl From<&ElementKind> for KindSpec {
                 breakdown,
                 available,
                 availability,
+                transfer,
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
@@ -607,6 +614,7 @@ impl From<&ElementKind> for KindSpec {
                     calendar: t.calendar.to_string(),
                     available: t.value,
                 }),
+                transfer: transfer.as_ref().map(Into::into),
             },
             ElementKind::SharedTask {
                 service,
@@ -652,6 +660,7 @@ impl From<KindSpec> for ElementKind {
                 breakdown,
                 available,
                 availability,
+                transfer,
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
@@ -659,6 +668,7 @@ impl From<KindSpec> for ElementKind {
                 breakdown: breakdown.map(Into::into),
                 available,
                 availability: availability.into_iter().map(Into::into).collect(),
+                transfer: transfer.map(Into::into),
             },
             KindSpec::SharedTask {
                 service,
@@ -1424,6 +1434,7 @@ mod tests {
                 breakdown: None,
                 available: true,
                 availability: Vec::new(),
+                transfer: None,
             })
         );
     }

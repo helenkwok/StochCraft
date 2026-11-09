@@ -542,6 +542,7 @@ fn edits() -> Vec<Edit> {
                         breakdown: None,
                         available: true,
                         availability: Vec::new(),
+                        transfer: None,
                     };
                 }
             }),
@@ -760,6 +761,7 @@ fn showcase() -> Model {
             interruptible: true,
         },
     );
+    m.transfer(previous, Dist::Uniform { min: 0.5, max: 1.5 });
     m.connect(src, previous);
     let cut = previous;
     let delays = [

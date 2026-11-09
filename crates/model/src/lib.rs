@@ -160,6 +160,19 @@ pub enum ElementKind {
         /// repair even if the shift has ended meanwhile. Failures ([`Breakdown`]) keep coming
         /// in elapsed time through the breaks, and a repair goes on through them.
         availability: Vec<Timed<bool>>,
+        /// The time a part takes to get here from the element that sends it (a short conveyor,
+        /// a hand transfer), drawn for each part; `None`: parts arrive at once. A StochCraft
+        /// vendor extension (`stochcraft:transferTime`).
+        ///
+        /// A part takes its place in the buffer (`queue_capacity`) when its transfer starts, so
+        /// the capacity counts parts in transit as well as those waiting, and it joins the
+        /// queue when the transfer ends. A server or a task with shared resources sending it
+        /// waits after its job until there is room (blocking after service), then its unit
+        /// stays occupied, and counts as blocked, for the whole transfer. Any other sender (a
+        /// source, a delay, a gateway, a batch or a split) holds nothing while the part
+        /// travels. A part in transit is inside this element (its work in progress), not the
+        /// sender's.
+        transfer: Option<Dist>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
@@ -330,12 +343,18 @@ impl ElementKind {
                 .chain(timed.iter().map(|t| ("interarrival", &t.value)))
                 .collect(),
             ElementKind::Server {
-                service, breakdown, ..
+                service,
+                breakdown,
+                transfer,
+                ..
             } => {
                 let mut d = vec![("service", service)];
                 if let Some(b) = breakdown {
                     d.push(("time_to_failure", &b.time_to_failure));
                     d.push(("repair", &b.repair));
+                }
+                if let Some(t) = transfer {
+                    d.push(("transfer", t));
                 }
                 d
             }
@@ -2382,6 +2401,7 @@ mod tests {
                         breakdown: None,
                         available: true,
                         availability: Vec::new(),
+                        transfer: None,
                     },
                 ),
                 el("exit", ElementKind::Sink),
@@ -2460,6 +2480,7 @@ mod tests {
             breakdown: None,
             available: true,
             availability: Vec::new(),
+            transfer: None,
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -2527,6 +2548,7 @@ mod tests {
                 breakdown: None,
                 available: true,
                 availability: Vec::new(),
+                transfer: None,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

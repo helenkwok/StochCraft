@@ -107,6 +107,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "breakdown",
             "available",
             "availability",
+            "transfer",
         ],
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
@@ -294,6 +295,12 @@ pub struct BlockSet {
     /// through the breaks.
     #[serde(default)]
     pub availability: Option<Vec<AvailabilityDoc>>,
+    /// Servers: the time each part takes to get here from the element that sends it (it takes
+    /// its place in the buffer as the transfer starts and joins the queue as it ends; a sending
+    /// server keeps its unit, blocked, through the transfer); `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<DistSpec>")]
+    pub transfer: Option<Option<DistSpec>>,
     /// Tasks with shared resources: what each entity needs, the alternatives in order.
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
@@ -988,6 +995,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("breakdown", p.breakdown.is_some()),
         ("available", p.available.is_some()),
         ("availability", p.availability.is_some()),
+        ("transfer", p.transfer.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
@@ -1003,6 +1011,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "breakdown",
             "available",
             "availability",
+            "transfer",
         ],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
@@ -1049,6 +1058,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             breakdown,
             available,
             availability,
+            transfer,
         } => {
             if let Some(b) = p.breakdown {
                 *breakdown = b.map(Into::into);
@@ -1058,6 +1068,9 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             }
             if let Some(a) = p.availability {
                 *availability = a.into_iter().map(Into::into).collect();
+            }
+            if let Some(t) = p.transfer {
+                *transfer = t.map(Into::into);
             }
             if let Some(c) = p.capacity {
                 *capacity = c;

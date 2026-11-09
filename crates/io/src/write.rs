@@ -282,6 +282,15 @@ pub(crate) fn breakdown_element(b: &Breakdown) -> Element {
         )
 }
 
+/// A server's transfer time as StochCraft's vendor extension ([`crate::bpsim::TRANSFER_TIME`]).
+pub(crate) fn transfer_element(d: &Dist) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::TRANSFER_TIME)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(Element::new("stochcraft:transferTime", Some(ns)).with_child(dist_element(d)))
+}
+
 /// A terminating experiment's stop condition, as a vendor extension on the element it watches.
 pub(crate) fn stop_element(stop: &Stop) -> Element {
     match stop {
@@ -600,6 +609,12 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         } = &e.kind
         {
             ep.push(breakdown_element(b));
+        }
+        if let ElementKind::Server {
+            transfer: Some(d), ..
+        } = &e.kind
+        {
+            ep.push(transfer_element(d));
         }
         if let Some(x) = batching_element(&e.kind) {
             ep.push(x);
