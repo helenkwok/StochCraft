@@ -684,14 +684,15 @@ pub(crate) struct BlockStats {
 }
 
 /// The state a server's unit is in: exactly one at every instant, the first that applies of
-/// failed (or under repair), off shift, blocked (holding a finished entity), processing (an
-/// entity), and starved (idle, on shift and up).
+/// failed (or under repair), processing (an entity, including a job that runs on into a break
+/// or resumes off shift after a repair), blocked (holding a finished entity), off shift (idle
+/// because the calendar has the units unavailable) and starved (idle, on shift and up).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum UnitState {
     Failed,
-    OffShift,
-    Blocked,
     Processing,
+    Blocked,
+    OffShift,
     Starved,
 }
 
@@ -763,12 +764,12 @@ impl UnitBook {
     fn state(&self, d: Doing) -> UnitState {
         if d.down {
             UnitState::Failed
-        } else if !self.open.get() {
-            UnitState::OffShift
-        } else if d.holding {
-            UnitState::Blocked
         } else if d.processing {
             UnitState::Processing
+        } else if d.holding {
+            UnitState::Blocked
+        } else if !self.open.get() {
+            UnitState::OffShift
         } else {
             UnitState::Starved
         }

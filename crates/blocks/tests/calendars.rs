@@ -263,14 +263,14 @@ fn server_with_a_break(
 
 /// Jobs of 1.5 and a break from 10 to 20: jobs end at 1.5, 3, …, 9; the one started at 9 is
 /// under way at 10 and finishes at 10.5; none starts until 20; then they end at 21.5, …, 29 by
-/// 29.5. 13 jobs. The unit is off shift for the whole break (finishing its job counts as off
-/// shift: off shift comes before processing), 10 of 29.5, and busy 10.5 + 9.5.
+/// 29.5. 13 jobs. The job finishing at 10.5 is processing; the unit is off shift from then to the
+/// end of the break, 9.5 of 29.5, and busy 10.5 + 9.5.
 #[test]
 fn a_server_stops_taking_jobs_for_its_break() {
     let r = server_with_a_break(1.5, None, 29.5);
     let m = r.element("machine");
     assert_eq!(m.map(|e| e.left), Some(13), "{r:?}");
-    close(m.and_then(|e| e.time_off_shift), 10.0 / 29.5);
+    close(m.and_then(|e| e.time_off_shift), 9.5 / 29.5);
     close(m.and_then(|e| e.utilisation), 20.0 / 29.5);
     // Units that never fail report no availability.
     assert_eq!(m.and_then(|e| e.availability), None);
@@ -284,8 +284,8 @@ fn a_server_stops_taking_jobs_for_its_break() {
 /// - the next failure comes at 19, during the break, and its repair runs to 24, past its end;
 /// - the third job runs 24 to 28: three jobs by 30.
 ///
-/// Failed 10 of 30 ([7, 12) and [19, 24)); off shift the rest of the break, 7 (including the
-/// resumed job's last minute: off shift comes before processing).
+/// Failed 10 of 30 ([7, 12) and [19, 24)); the resumed job [12, 13) is processing; off shift
+/// the rest of the break, [13, 19): 6.
 #[test]
 fn an_interrupted_job_resumes_after_its_repair_even_off_shift() {
     let r = server_with_a_break(
@@ -300,14 +300,15 @@ fn an_interrupted_job_resumes_after_its_repair_even_off_shift() {
     let m = r.element("machine");
     assert_eq!(m.map(|e| e.left), Some(3), "{r:?}");
     close(m.and_then(|e| e.availability), 1.0 - 10.0 / 30.0);
-    close(m.and_then(|e| e.time_off_shift), 7.0 / 30.0);
+    close(m.and_then(|e| e.time_off_shift), 6.0 / 30.0);
     // An out at 4, 13 and 28.
     assert_eq!(r.element("out").map(|e| e.entered), Some(3));
 }
 
 /// A failing server off shift from midnight to 8 every day, saturated: failures (exponential,
 /// mean 100) and repairs (exponential, mean 10) come and go in elapsed time, whatever the
-/// calendar, so the unit is up A = 100 / 110 of the time, and up while off shift A / 3 of it;
+/// calendar, so the unit is up A = 100 / 110 of the time, and up in a break A / 3 of it (off
+/// shift, less the minute or so a day it spends finishing a job, inside the interval);
 /// on shift and up, A × 2/3 of the time, it does a job a minute (exponential service, mean 1),
 /// failures interrupting them. Over 20 days after a day's warm-up: about 28,800 × 2/3 × A =
 /// 17,454.5 jobs, plus the jobs under way at each 8 hours' close that finish after it (about

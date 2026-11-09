@@ -486,9 +486,9 @@ pub enum Metric {
     Availability,
     /// Servers whose units follow a calendar: time-average fraction of units off shift. A unit
     /// is in exactly one state at a time, the first that applies of failed (or under repair),
-    /// off shift, blocked, processing and starved: off shift means the calendar has the units
-    /// unavailable and the unit has not failed, even while it finishes a job it started on
-    /// shift.
+    /// processing, blocked, off shift and starved: off shift means only idle because the
+    /// calendar has the units unavailable. A job that runs on into a break, or resumes off
+    /// shift after a repair, is processing; a finished entity held during a break is blocked.
     TimeOffShift,
 }
 

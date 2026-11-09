@@ -744,9 +744,10 @@ taken together, and a large need waiting without holding back a smaller one.
     - Servers with neither a calendar nor breakdowns run exactly as before; servers with
       breakdowns and no calendar too.
   - **States:** at every instant each unit is in exactly one state, the first that applies of
-    failed (or under repair), off shift, blocked, processing and starved (idle, on shift and
-    up). Off shift is the calendar's: a unit finishing a job it started before the break, or a
-    resumed job, counts as off shift. Results add `time_off_shift`, the time-average fraction
+    failed (or under repair), processing, blocked, off shift and starved (idle, on shift and
+    up). Off shift means only idle because the calendar has the units unavailable: a job that
+    runs on into a break, or resumes off shift after a repair, is processing, and a finished
+    entity held during a break is blocked. Results add `time_off_shift`, the time-average fraction
     of units off shift, for servers with a calendar ("Time off shift" in the window,
     in every catalog).
     - `availability` stays the fraction of units not failed, whatever the calendar.
@@ -765,11 +766,11 @@ taken together, and a large need waiting without holding back a smaller one.
   | Case | Theory | StochCraft |
   |---|---|---|
   | Jobs of 1.5 waiting from 0, off shift 10 to 20: jobs by 29.5 (the one under way at 10 finishes at 10.5) | 13 | 13 |
-  | Same: off-shift share, utilisation | 10/29.5, 20/29.5 | exact |
+  | Same: off-shift share (from 10.5), utilisation | 9.5/29.5, 20/29.5 | exact |
   | Jobs of 4, failure 7 after each repair, repairs of 5, interruptible, off shift 10 to 20: jobs by 30 (the job interrupted at 7 resumes at 12, off shift) | 3 | 3 |
-  | Same: availability, off-shift share | 20/30, 7/30 | exact |
+  | Same: availability, off-shift share (the resumed job [12, 13) is processing) | 20/30, 6/30 | exact |
   | Saturated, failures exp(mean 100), repairs exp(mean 10), off shift midnight to 8: availability A | 0.90909 | 0.90942 ± 0.00437 |
-  | Same: off-shift share A/3 | 0.30303 | 0.30310 ± 0.00286 |
+  | Same: off-shift share, A/3 less the time finishing jobs in breaks | 0.30303 | 0.30249 ± 0.00290 |
   | Same: jobs in 20 days, 28,800 × 2/3 × A (plus jobs finishing after a close) | 17,454.5 | 17,497.1 ± 112.8 |
 
 ### M2.7 Assembly and batching
