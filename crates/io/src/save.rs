@@ -1874,26 +1874,52 @@ impl Editor {
                     }
                     match (&e.kind, was) {
                         (
-                            ElementKind::Server { capacity, .. },
-                            Some(ElementKind::Server { capacity: oc, .. }),
-                        ) if capacity != oc => {
+                            ElementKind::Server {
+                                capacity,
+                                available,
+                                availability,
+                                ..
+                            },
+                            Some(ElementKind::Server {
+                                capacity: oc,
+                                available: oa,
+                                availability: ov,
+                                ..
+                            }),
+                        ) if capacity != oc || available != oa || availability != ov => {
+                            // The capacity and the availability are the task's own resource's.
+                            let what = if capacity != oc {
+                                "capacity"
+                            } else {
+                                "availability"
+                            };
                             let r = resources.of_task.get(&id).ok_or_else(|| {
                                 fail(format!(
-                                    "`{id}` has no resource of its own to set the capacity of"
+                                    "`{id}` has no resource of its own to set the {what} of"
                                 ))
                             })?;
                             let users = resources.users.get(r).map_or(0, Vec::len);
                             if users > 1 {
                                 return Err(fail(format!(
-                                    "the capacity of `{id}` is resource `{r}`'s quantity, which {users} tasks share; shared resources can be edited from M2.5"
+                                    "the {what} of `{id}` is resource `{r}`'s, which {users} tasks share; shared resources can be edited from M2.5"
                                 )));
                             }
-                            writes.push((
-                                r.clone(),
-                                "ResourceParameters",
-                                "Quantity",
-                                Some(numeric(u64::from(*capacity))),
-                            ));
+                            if capacity != oc {
+                                writes.push((
+                                    r.clone(),
+                                    "ResourceParameters",
+                                    "Quantity",
+                                    Some(numeric(u64::from(*capacity))),
+                                ));
+                            }
+                            if available != oa || availability != ov {
+                                writes.push((
+                                    r.clone(),
+                                    "ResourceParameters",
+                                    "Availability",
+                                    availability_param(*available, availability),
+                                ));
+                            }
                         }
                         (ElementKind::Server { .. }, _) if !was_server => {
                             new_resources.push((e, true))
@@ -1993,7 +2019,7 @@ impl Editor {
                 id.clone(),
                 "ResourceParameters",
                 "Availability",
-                availability_param(&r),
+                availability_param(r.available, &r.availability),
             ));
             writes.push((
                 id,
@@ -2005,12 +2031,21 @@ impl Editor {
         for (e, server) in new_resources {
             if server {
                 let rid = self.add_resource(root, e);
-                if let ElementKind::Server { capacity, .. } = e.kind {
+                if let ElementKind::Server {
+                    capacity,
+                    available,
+                    availability,
+                    ..
+                } = &e.kind
+                {
+                    if let Some(a) = availability_param(*available, availability) {
+                        writes.push((rid.clone(), "ResourceParameters", "Availability", Some(a)));
+                    }
                     writes.push((
                         rid,
                         "ResourceParameters",
                         "Quantity",
-                        Some(numeric(u64::from(capacity))),
+                        Some(numeric(u64::from(*capacity))),
                     ));
                 }
             } else {

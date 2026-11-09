@@ -540,6 +540,8 @@ fn edits() -> Vec<Edit> {
                         service: Dist::Constant(1.5),
                         queue_capacity: None,
                         breakdown: None,
+                        available: true,
+                        availability: Vec::new(),
                         transfer: None,
                     };
                 }
@@ -761,6 +763,7 @@ fn showcase() -> Model {
     );
     m.transfer(previous, Dist::Uniform { min: 0.5, max: 1.5 });
     m.connect(src, previous);
+    let cut = previous;
     let delays = [
         Dist::Constant(1.25),
         Dist::Exponential { mean: 0.75 },
@@ -867,6 +870,7 @@ fn showcase() -> Model {
         false,
     );
     m.shifts("crew", &[("day-shift", 5)]);
+    m.availability(cut, false, &[("day-shift", true)]);
     m.connect(join, fit);
     m.connect(fit, triage);
     m.route(triage, out, None, Some("1 < 2 and not(false())"));

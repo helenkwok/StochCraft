@@ -303,6 +303,8 @@ fn blocks_and_connections_can_be_added_and_removed() {
             service: Dist::Exponential { mean: 0.5 },
             queue_capacity: None,
             breakdown: None,
+            available: true,
+            availability: Vec::new(),
             transfer: None,
         };
     });
@@ -319,6 +321,8 @@ fn blocks_and_connections_can_be_added_and_removed() {
             service: Dist::Constant(0.75),
             queue_capacity: None,
             breakdown: None,
+            available: true,
+            availability: Vec::new(),
             transfer: None,
         };
     });
@@ -504,6 +508,8 @@ fn new_ids_never_clash_with_the_files_other_ids() {
             service: Dist::Constant(1.0),
             queue_capacity: None,
             breakdown: None,
+            available: true,
+            availability: Vec::new(),
             transfer: None,
         };
     });
@@ -825,6 +831,74 @@ fn finite_buffers_save_as_a_vendor_extension() {
     }
 }
 
+fn set_availability(m: &mut Model, at: &str, open: bool, timed: &[(&str, bool)]) {
+    if let ElementKind::Server {
+        available,
+        availability,
+        ..
+    } = &mut element(m, at).kind
+    {
+        *available = open;
+        *availability = timed
+            .iter()
+            .map(|(c, v)| stochcraft_model::Timed {
+                calendar: id(c),
+                value: *v,
+            })
+            .collect();
+    }
+}
+
+/// A server's calendar is BPSim's own `Availability` on the task's resource: set, it is written
+/// there (with a calendar added to the file for it), read back as the server's, and removed
+/// again it gives back the file as it was, in BPMN and in XPDL.
+#[test]
+fn a_servers_availability_saves_on_its_resource() {
+    for (name, task) in [("mm1.bpmn", "serve"), ("tandem.xpdl", "weld")] {
+        let original = file(name);
+        let (off, _) = edit_and_save(name, None, |m| set_availability(m, task, false, &[]));
+        assert!(
+            text(&off).contains("Availability"),
+            "{name}:\n{}",
+            text(&off)
+        );
+        let loaded = read_scenario(&off, None).unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert!(
+            matches!(
+                loaded.model.element(&id(task)).map(|e| &e.kind),
+                Some(ElementKind::Server {
+                    available: false,
+                    ..
+                })
+            ),
+            "{name}: {:?}",
+            loaded.model.element(&id(task))
+        );
+        let mut model = loaded.model.clone();
+        set_availability(&mut model, task, true, &[]);
+        let back = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(text(&back), text(&original), "{name}");
+        // With a calendar: the units are off for its events.
+        edit_and_save(name, None, |m| {
+            m.calendars.push(stochcraft_model::calendar::Calendar {
+                id: id("lunch"),
+                name: "Lunch".into(),
+                events: vec![stochcraft_model::calendar::Event {
+                    start: stochcraft_model::DateTime::new(2016, 1, 4, 12, 0, 0)
+                        .unwrap_or(stochcraft_model::DateTime(0)),
+                    end: stochcraft_model::DateTime::new(2016, 1, 4, 13, 0, 0)
+                        .unwrap_or(stochcraft_model::DateTime(0)),
+                    rule: None,
+                }],
+            });
+            set_availability(m, task, true, &[("lunch", false)]);
+        });
+    }
+}
+
 fn set_transfer(m: &mut Model, at: &str, d: Option<Dist>) {
     if let ElementKind::Server { transfer, .. } = &mut element(m, at).kind {
         *transfer = d;
@@ -934,6 +1008,8 @@ fn new_and_changed_servers_carry_their_buffer() {
             service: Dist::Constant(1.0),
             queue_capacity: Some(4),
             breakdown: None,
+            available: true,
+            availability: Vec::new(),
             transfer: None,
         };
         set_queue(m, "weld", Some(1));

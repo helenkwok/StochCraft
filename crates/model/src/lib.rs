@@ -149,6 +149,17 @@ pub enum ElementKind {
         /// Each unit fails now and then and is repaired (a StochCraft vendor extension,
         /// `stochcraft:breakdown`, since BPSim has none); `None`: units never fail.
         breakdown: Option<Breakdown>,
+        /// Whether the units are available (on shift) outside the calendars of
+        /// `availability`: BPSim `availability` on the task's own resource, default true.
+        available: bool,
+        /// Availability while a calendar is active, the first active one applying (BPSim
+        /// `availability` values `validFor` a calendar), as for a pool. All the units follow it.
+        ///
+        /// A unit checks it only when it takes its next entity: a job under way when the units
+        /// go off shift finishes first, and a job interrupted by a failure resumes after its
+        /// repair even if the shift has ended meanwhile. Failures ([`Breakdown`]) keep coming
+        /// in elapsed time through the breaks, and a repair goes on through them.
+        availability: Vec<Timed<bool>>,
         /// The time a part takes to get here from the element that sends it (a short conveyor,
         /// a hand transfer), drawn for each part; `None`: parts arrive at once. A StochCraft
         /// vendor extension (`stochcraft:transferTime`).
@@ -1532,6 +1543,9 @@ impl Model {
                     out.push(Diagnostic::warning(Some(&e.id), Problem::TimedIgnored));
                 }
             }
+            if let ElementKind::Server { availability, .. } = &e.kind {
+                refs.extend(availability.iter().map(|t| (&e.id, &t.calendar)));
+            }
         }
         for r in &self.resources {
             refs.extend(r.calendars().map(|c| (&r.id, c)));
@@ -2385,6 +2399,8 @@ mod tests {
                         service: Dist::exponential_rate(1.0),
                         queue_capacity: None,
                         breakdown: None,
+                        available: true,
+                        availability: Vec::new(),
                         transfer: None,
                     },
                 ),
@@ -2462,6 +2478,8 @@ mod tests {
             service: Dist::Constant(1.0),
             queue_capacity: q,
             breakdown: None,
+            available: true,
+            availability: Vec::new(),
             transfer: None,
         };
         let mut m = mm1();
@@ -2528,6 +2546,8 @@ mod tests {
                 service: Dist::Uniform { min: 2.0, max: 1.0 },
                 queue_capacity: None,
                 breakdown: None,
+                available: true,
+                availability: Vec::new(),
                 transfer: None,
             },
         ));

@@ -68,6 +68,7 @@ fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
         "lost" => (t("Lost (waiting room full)"), Unit::Count),
         "loss_probability" => (t("Share of arrivals lost"), Unit::Share),
         "availability" => (t("Availability"), Unit::Share),
+        "time_off_shift" => (t("Time off shift"), Unit::Share),
         other => (other, Unit::Count),
     }
 }

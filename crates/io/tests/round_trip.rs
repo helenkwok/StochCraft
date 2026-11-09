@@ -178,6 +178,7 @@ pub fn showcase() -> Model {
         ],
         false,
     );
+    m.availability(cut, true, &[("once", false)]);
     let mut model = m.build(Experiment {
         time_unit: TimeUnit::Hours,
         warmup: 2.5,

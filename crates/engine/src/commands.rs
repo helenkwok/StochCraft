@@ -105,6 +105,8 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "service",
             "queue_capacity",
             "breakdown",
+            "available",
+            "availability",
             "transfer",
         ],
         Some("shared_task") => &["service", "needs", "priority"],
@@ -284,6 +286,15 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<BreakdownSpec>")]
     pub breakdown: Option<Option<BreakdownSpec>>,
+    /// Servers: whether the units are available (on shift) outside the calendars of
+    /// `availability`.
+    #[serde(default)]
+    pub available: Option<bool>,
+    /// Servers: replaces the availability while each calendar is active (the first active one
+    /// applying). A unit checks it as it takes its next entity; failures and repairs go on
+    /// through the breaks.
+    #[serde(default)]
+    pub availability: Option<Vec<AvailabilityDoc>>,
     /// Servers: the time each part takes to get here from the element that sends it (it takes
     /// its place in the buffer as the transfer starts and joins the queue as it ends; a sending
     /// server keeps its unit, blocked, through the transfer); `null` removes it.
@@ -982,6 +993,8 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("service", p.service.is_some()),
         ("queue_capacity", p.queue_capacity.is_some()),
         ("breakdown", p.breakdown.is_some()),
+        ("available", p.available.is_some()),
+        ("availability", p.availability.is_some()),
         ("transfer", p.transfer.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
@@ -996,6 +1009,8 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "service",
             "queue_capacity",
             "breakdown",
+            "available",
+            "availability",
             "transfer",
         ],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
@@ -1041,10 +1056,18 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             service,
             queue_capacity,
             breakdown,
+            available,
+            availability,
             transfer,
         } => {
             if let Some(b) = p.breakdown {
                 *breakdown = b.map(Into::into);
+            }
+            if let Some(a) = p.available {
+                *available = a;
+            }
+            if let Some(a) = p.availability {
+                *availability = a.into_iter().map(Into::into).collect();
             }
             if let Some(t) = p.transfer {
                 *transfer = t.map(Into::into);
@@ -1212,9 +1235,12 @@ fn calendar_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let mut users: Vec<&str> = m
         .elements
         .iter()
-        .filter(|el| {
-            matches!(&el.kind, ElementKind::Source { timed, .. }
-                if timed.iter().any(|t| t.calendar.as_str() == p.id))
+        .filter(|el| match &el.kind {
+            ElementKind::Source { timed, .. } => timed.iter().any(|t| t.calendar.as_str() == p.id),
+            ElementKind::Server { availability, .. } => {
+                availability.iter().any(|t| t.calendar.as_str() == p.id)
+            }
+            _ => false,
         })
         .map(|el| el.id.as_str())
         .collect();
