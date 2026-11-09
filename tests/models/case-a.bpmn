@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Case A (Schmitt et al. 2026)" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.1.0">
+  <bpmn:resource id="raw_resource" name="Raw material"/>
+  <bpmn:resource id="m1_resource" name="SV36262"/>
+  <bpmn:resource id="m2_resource" name="SV32173"/>
+  <bpmn:resource id="m3_resource" name="SV91991"/>
+  <bpmn:resource id="m4_resource" name="SV91989"/>
+  <bpmn:process id="process" name="Case A (Schmitt et al. 2026)" isExecutable="false">
+    <bpmn:startEvent id="supply" name="Supply">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="raw" name="Raw material">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>raw_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="m1" name="SV36262">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+      <bpmn:outgoing>flow-3</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>m1_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="m2" name="SV32173">
+      <bpmn:incoming>flow-3</bpmn:incoming>
+      <bpmn:outgoing>flow-4</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>m2_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="m3" name="SV91991">
+      <bpmn:incoming>flow-4</bpmn:incoming>
+      <bpmn:outgoing>flow-5</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>m3_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:task id="m4" name="SV91989">
+      <bpmn:incoming>flow-5</bpmn:incoming>
+      <bpmn:outgoing>flow-6</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>m4_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="done" name="Finished parts">
+      <bpmn:incoming>flow-6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="supply" targetRef="raw"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="raw" targetRef="m1"/>
+    <bpmn:sequenceFlow id="flow-3" sourceRef="m1" targetRef="m2"/>
+    <bpmn:sequenceFlow id="flow-4" sourceRef="m2" targetRef="m3"/>
+    <bpmn:sequenceFlow id="flow-5" sourceRef="m3" targetRef="m4"/>
+    <bpmn:sequenceFlow id="flow-6" sourceRef="m4" targetRef="done"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="supply_di" bpmnElement="supply">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="raw_di" bpmnElement="raw">
+        <dc:Bounds x="230" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="m1_di" bpmnElement="m1">
+        <dc:Bounds x="410" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="m2_di" bpmnElement="m2">
+        <dc:Bounds x="590" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="m3_di" bpmnElement="m3">
+        <dc:Bounds x="770" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="m4_di" bpmnElement="m4">
+        <dc:Bounds x="950" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="done_di" bpmnElement="done">
+        <dc:Bounds x="1162" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="230" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="330" y="100"/>
+        <di:waypoint x="410" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-3_di" bpmnElement="flow-3">
+        <di:waypoint x="510" y="100"/>
+        <di:waypoint x="590" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-4_di" bpmnElement="flow-4">
+        <di:waypoint x="690" y="100"/>
+        <di:waypoint x="770" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-5_di" bpmnElement="flow-5">
+        <di:waypoint x="870" y="100"/>
+        <di:waypoint x="950" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-6_di" bpmnElement="flow-6">
+        <di:waypoint x="1050" y="100"/>
+        <di:waypoint x="1162" y="100"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="Case A (Schmitt et al. 2026)" vendor="StochCraft" version="0.1.0">
+          <bpsim:ScenarioParameters replication="25" seed="1" baseTimeUnit="s">
+            <bpsim:Start>
+              <bpsim:DateTimeParameter value="2024-01-01T00:00:00"/>
+            </bpsim:Start>
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="2592000"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="86400"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="supply">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:FloatingParameter value="60"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="raw">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('raw_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="5"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="m1">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:FloatingParameter value="320"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('m1_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:PriorityParameters>
+              <bpsim:Interruptible>
+                <bpsim:BooleanParameter value="true"/>
+              </bpsim:Interruptible>
+            </bpsim:PriorityParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="0"/>
+            <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:breakdown>
+                <stochcraft:timeToFailure>
+                  <bpsim:NegativeExponentialDistribution mean="7984.333333333331"/>
+                </stochcraft:timeToFailure>
+                <stochcraft:repairTime>
+                  <bpsim:NegativeExponentialDistribution mean="1409"/>
+                </stochcraft:repairTime>
+              </stochcraft:breakdown>
+            </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:power" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:power processing="50" idle="10"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="m2">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:FloatingParameter value="290"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('m2_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:PriorityParameters>
+              <bpsim:Interruptible>
+                <bpsim:BooleanParameter value="true"/>
+              </bpsim:Interruptible>
+            </bpsim:PriorityParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="5"/>
+            <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:breakdown>
+                <stochcraft:timeToFailure>
+                  <bpsim:NegativeExponentialDistribution mean="4068.6666666666656"/>
+                </stochcraft:timeToFailure>
+                <stochcraft:repairTime>
+                  <bpsim:NegativeExponentialDistribution mean="718"/>
+                </stochcraft:repairTime>
+              </stochcraft:breakdown>
+            </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:transferTime>
+                <bpsim:FloatingParameter value="10"/>
+              </stochcraft:transferTime>
+            </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:power" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:power processing="50" idle="10"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="m3">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:FloatingParameter value="134"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('m3_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:PriorityParameters>
+              <bpsim:Interruptible>
+                <bpsim:BooleanParameter value="true"/>
+              </bpsim:Interruptible>
+            </bpsim:PriorityParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="5"/>
+            <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:breakdown>
+                <stochcraft:timeToFailure>
+                  <bpsim:NegativeExponentialDistribution mean="329132.9999999997"/>
+                </stochcraft:timeToFailure>
+                <stochcraft:repairTime>
+                  <bpsim:NegativeExponentialDistribution mean="6717"/>
+                </stochcraft:repairTime>
+              </stochcraft:breakdown>
+            </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:transferTime>
+                <bpsim:FloatingParameter value="10"/>
+              </stochcraft:transferTime>
+            </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:power" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:power processing="50" idle="10"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="m4">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:FloatingParameter value="41"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('m4_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:PriorityParameters>
+              <bpsim:Interruptible>
+                <bpsim:BooleanParameter value="true"/>
+              </bpsim:Interruptible>
+            </bpsim:PriorityParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="5"/>
+            <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:breakdown>
+                <stochcraft:timeToFailure>
+                  <bpsim:NegativeExponentialDistribution mean="66428.99999999994"/>
+                </stochcraft:timeToFailure>
+                <stochcraft:repairTime>
+                  <bpsim:NegativeExponentialDistribution mean="671"/>
+                </stochcraft:repairTime>
+              </stochcraft:breakdown>
+            </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:transferTime>
+                <bpsim:FloatingParameter value="10"/>
+              </stochcraft:transferTime>
+            </bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:power" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:power processing="50" idle="10"/>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="raw_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="m1_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:BooleanParameter value="true"/>
+                <bpsim:BooleanParameter value="false" validFor="weekend"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="m2_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:BooleanParameter value="true"/>
+                <bpsim:BooleanParameter value="false" validFor="weekend"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="m3_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:BooleanParameter value="true"/>
+                <bpsim:BooleanParameter value="false" validFor="weekend"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="m4_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:BooleanParameter value="true"/>
+                <bpsim:BooleanParameter value="false" validFor="weekend"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="1"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+          <bpsim:Calendar id="weekend" name="Weekend breaks">BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//StochCraft//EN
+BEGIN:VEVENT
+DTSTART:20240105T170000
+DTEND:20240106T070000
+RRULE:FREQ=WEEKLY
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20240106T170000
+DTEND:20240107T070000
+RRULE:FREQ=WEEKLY
+END:VEVENT
+END:VCALENDAR</bpsim:Calendar>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

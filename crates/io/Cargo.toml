@@ -16,6 +16,7 @@ quick-xml = "0.42"
 
 [dev-dependencies]
 stochcraft-blocks = { workspace = true }
+stochcraft-experiment = { workspace = true }
 stochcraft-random = { workspace = true }
 
 [lints]

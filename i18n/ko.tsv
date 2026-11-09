@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	{n}회 중 1회의 반복 실행입니다. 다른 반복 실행의 결과는 다릅니다.
 	Save as a new BPMN file?	새 BPMN 파일로 저장할까요?
 	Still inside at the end	종료 시 내부에 남은 개수
+	Mean work in progress	평균 재공품 수
 	Mean queue length	평균 대기열 길이
 	Mean time blocked	평균 차단 시간
 	Mean time in system	시스템 내 평균 체류 시간

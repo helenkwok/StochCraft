@@ -941,6 +941,14 @@ impl BlockStats {
         n.round().max(0.0) as u64
     }
 
+    /// The time-average of [`Self::inside`] from the last reset to `end`.
+    fn mean_inside(&self, end: f64) -> Option<f64> {
+        [&self.transit, &self.waiting, &self.busy, &self.blocked]
+            .iter()
+            .map(|tw| tw.average(end))
+            .sum()
+    }
+
     /// The energy a server with power `p` used from the last reset to `end`, in kilowatt-hours
     /// (`hours`: hours in one model time unit): each state's power times the time its units
     /// spent in it.
@@ -1028,6 +1036,14 @@ impl BlockStats {
                 | ElementKind::Delay { .. }
                 | ElementKind::Batch { .. } => Some(self.inside()),
                 ElementKind::ParallelGateway if join => Some(self.inside()),
+                _ => None,
+            },
+            mean_work_in_progress: match kind {
+                ElementKind::Server { .. }
+                | ElementKind::SharedTask { .. }
+                | ElementKind::Delay { .. }
+                | ElementKind::Batch { .. } => self.mean_inside(end),
+                ElementKind::ParallelGateway if join => self.mean_inside(end),
                 _ => None,
             },
             mean_time_in_system: if matches!(kind, ElementKind::Sink) {
@@ -2104,6 +2120,7 @@ impl Pools {
                     },
                     mean_contents: mean,
                     work_in_progress: None,
+                    mean_work_in_progress: None,
                     mean_time_in_system: None,
                     mean_blocked_time: None,
                     blocking_probability: None,

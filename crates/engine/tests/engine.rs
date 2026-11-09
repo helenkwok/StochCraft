@@ -816,7 +816,7 @@ fn new_ids_avoid_the_ids_an_opened_file_uses() {
 #[test]
 fn the_committed_test_models_open_and_run() {
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models");
-    for name in ["mm1.bpmn", "tandem.xpdl"] {
+    for name in ["mm1.bpmn", "tandem.xpdl", "case-a.bpmn"] {
         let mut e = Engine::new();
         let opened = ok(
             &mut e,

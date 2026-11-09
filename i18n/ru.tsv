@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Одна репликация из {n}: результаты остальных отличаются.
 	Save as a new BPMN file?	Сохранить как новый файл BPMN?
 	Still inside at the end	Осталось внутри в конце
+	Mean work in progress	Средний объём незавершённого производства
 	Mean queue length	Средняя длина очереди
 	Mean time blocked	Среднее время блокировки
 	Mean time in system	Среднее время в системе

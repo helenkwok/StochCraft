@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Unha réplica de {n}: os resultados das demais son distintos.
 	Save as a new BPMN file?	Gardar como un ficheiro BPMN novo?
 	Still inside at the end	Aínda dentro ao final
+	Mean work in progress	Inventario en proceso medio
 	Mean queue length	Lonxitude media da cola
 	Mean time blocked	Tempo medio bloqueado
 	Mean time in system	Tempo medio no sistema

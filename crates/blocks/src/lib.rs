@@ -462,6 +462,13 @@ pub enum Metric {
     /// finished: large, or growing with the run length, when more work arrives than the
     /// element can do (see [`run_warnings`]).
     WorkInProgress,
+    /// Servers, shared tasks, delays, batches and joins: time-average number of entities inside
+    /// over the measured window, each counted once wherever it is in the element: on its way in
+    /// (in transfer), waiting, being served or delayed (or collected into a batch, or waiting at
+    /// a join), or held while blocked after service. An entity in transfer to the next element
+    /// is that element's. Summed over the elements of a line, the line's time-average work in
+    /// progress.
+    MeanWorkInProgress,
     /// Sinks: mean time from creation to arrival, over the entities that arrived. Entities still
     /// inside the model at the end (see [`Metric::WorkInProgress`]) are left out, so when work
     /// piles up the mean is biased low.
@@ -516,7 +523,7 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 20] = [
+    pub const ALL: [Metric; 21] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -524,6 +531,7 @@ impl Metric {
         Metric::Utilisation,
         Metric::MeanContents,
         Metric::WorkInProgress,
+        Metric::MeanWorkInProgress,
         Metric::MeanTimeInSystem,
         Metric::MeanBlockedTime,
         Metric::BlockingProbability,
@@ -554,6 +562,7 @@ impl Metric {
             Metric::Utilisation => "utilisation",
             Metric::MeanContents => "mean_contents",
             Metric::WorkInProgress => "work_in_progress",
+            Metric::MeanWorkInProgress => "mean_work_in_progress",
             Metric::MeanTimeInSystem => "mean_time_in_system",
             Metric::MeanBlockedTime => "mean_blocked_time",
             Metric::BlockingProbability => "blocking_probability",
@@ -586,6 +595,8 @@ pub struct ElementReport {
     pub mean_contents: Option<f64>,
     /// [`Metric::WorkInProgress`]: entities inside at the end.
     pub work_in_progress: Option<u64>,
+    /// [`Metric::MeanWorkInProgress`]: the time-average number inside.
+    pub mean_work_in_progress: Option<f64>,
     pub mean_time_in_system: Option<f64>,
     /// Only where a finite buffer is involved (`None` otherwise, so models without one report
     /// as before): see [`Metric::MeanBlockedTime`] and the metrics after it. `lost` is also
@@ -623,6 +634,7 @@ impl ElementReport {
             Metric::Utilisation => self.utilisation,
             Metric::MeanContents => self.mean_contents,
             Metric::WorkInProgress => self.work_in_progress.map(|n| n as f64),
+            Metric::MeanWorkInProgress => self.mean_work_in_progress,
             Metric::MeanTimeInSystem => self.mean_time_in_system,
             Metric::MeanBlockedTime => self.mean_blocked_time,
             Metric::BlockingProbability => self.blocking_probability,

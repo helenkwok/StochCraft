@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	ໜຶ່ງຮອບຈຳລອງຊ້ຳຈາກ {n}: ຜົນຂອງຮອບອື່ນແຕກຕ່າງກັນ.
 	Save as a new BPMN file?	ບັນທຶກເປັນໄຟລ໌ BPMN ໃໝ່ບໍ?
 	Still inside at the end	ຍັງຢູ່ພາຍໃນເມື່ອສິ້ນສຸດ
+	Mean work in progress	ສິນຄ້າລະຫວ່າງຜະລິດສະເລ່ຍ
 	Mean queue length	ຄວາມຍາວແຖວຄອຍສະເລ່ຍ
 	Mean time blocked	ເວລາສະເລ່ຍທີ່ຖືກຂັດຂວາງ
 	Mean time in system	ເວລາສະເລ່ຍໃນລະບົບ

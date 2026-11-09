@@ -99,6 +99,15 @@ fn a_part_in_transfer_counts_once_at_the_receiving_machine() {
     close(m2.and_then(|e| e.mean_contents), 19.0 * 2.0 / 99.0);
     // The first machine: 19 whole transfers and one under way, 39 of 99.
     close(m1.and_then(|e| e.blocking_probability), 39.0 / 99.0);
+    // Time-average work in progress, each part counted once: part k (from 0) is the first
+    // machine's from 0 until its transfer starts at 5k + 3, then the second's until it leaves
+    // at 5k + 7 (the 20th, from 98, until the end at 99).
+    let first: f64 = (0..20).map(|k| 5.0 * f64::from(k) + 3.0).sum();
+    close(m1.and_then(|e| e.mean_work_in_progress), first / 99.0);
+    close(
+        m2.and_then(|e| e.mean_work_in_progress),
+        (19.0 * 4.0 + 1.0) / 99.0,
+    );
 }
 
 /// The buffer's capacity (one unit and two waiting places) counts parts in transfer: stepping

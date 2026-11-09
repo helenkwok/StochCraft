@@ -63,6 +63,7 @@ fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
         "utilisation" => (t("Utilisation"), Unit::Share),
         "mean_contents" => (t("Mean number inside"), Unit::Items),
         "work_in_progress" => (t("Still inside at the end"), Unit::Items),
+        "mean_work_in_progress" => (t("Mean work in progress"), Unit::Items),
         "mean_time_in_system" => (t("Mean time in system"), Unit::Time),
         "mean_blocked_time" => (t("Mean time blocked"), Unit::Time),
         "blocking_probability" => (t("Share of units blocked"), Unit::Share),

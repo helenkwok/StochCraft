@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Một lần lặp trong {n}: kết quả của các lần khác sẽ khác.
 	Save as a new BPMN file?	Lưu thành tệp BPMN mới?
 	Still inside at the end	Vẫn còn bên trong lúc kết thúc
+	Mean work in progress	Sản phẩm dở dang trung bình
 	Mean queue length	Độ dài hàng đợi trung bình
 	Mean time blocked	Thời gian bị chặn trung bình
 	Mean time in system	Thời gian trung bình trong hệ thống
