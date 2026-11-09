@@ -303,6 +303,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             service: Dist::Exponential { mean: 0.5 },
             queue_capacity: None,
             breakdown: None,
+            transfer: None,
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -318,6 +319,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             service: Dist::Constant(0.75),
             queue_capacity: None,
             breakdown: None,
+            transfer: None,
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -502,6 +504,7 @@ fn new_ids_never_clash_with_the_files_other_ids() {
             service: Dist::Constant(1.0),
             queue_capacity: None,
             breakdown: None,
+            transfer: None,
         };
     });
     let t = text(&saved);
@@ -822,6 +825,105 @@ fn finite_buffers_save_as_a_vendor_extension() {
     }
 }
 
+fn set_transfer(m: &mut Model, at: &str, d: Option<Dist>) {
+    if let ElementKind::Server { transfer, .. } = &mut element(m, at).kind {
+        *transfer = d;
+    }
+}
+
+/// A transfer time is a StochCraft vendor extension in the receiving task's element
+/// parameters: adding one adds it, changing it changes only its value, and removing it gives
+/// back the file as it was, in BPMN with BPSim 2.0 and in XPDL with BPSim 1.0. A server made a
+/// delay leaves it behind.
+#[test]
+fn transfer_times_save_as_a_vendor_extension() {
+    for (name, task, ns) in [
+        ("mm1.bpmn", "serve", "bpsim"),
+        ("tandem.xpdl", "weld", "b1"),
+    ] {
+        let original = file(name);
+        let (ten, _) = edit_and_save(name, None, |m| {
+            set_transfer(m, task, Some(Dist::Constant(10.0)));
+        });
+        let t = text(&ten);
+        assert!(
+            t.contains(&format!(
+                r#"<{ns}:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">"#
+            )),
+            "{name}:\n{t}"
+        );
+        let loaded = read_scenario(&ten, None).unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert!(
+            loaded.notes.is_empty() || !loaded.notes.iter().any(|n| n.message.contains("transfer")),
+            "{:?}",
+            loaded.notes
+        );
+        let mut model = loaded.model.clone();
+        set_transfer(&mut model, task, Some(Dist::Exponential { mean: 4.0 }));
+        let changed = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(changed_lines(&ten, &changed), 2, "{}", diff(&ten, &changed));
+        let back = read_scenario(&changed, None).unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(back.model, model, "{name}");
+        set_transfer(&mut model, task, None);
+        let none = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(text(&none), text(&original), "{name}");
+        // Made a delay, the task leaves its transfer behind.
+        let mut model = loaded.model.clone();
+        element(&mut model, task).kind = ElementKind::Delay {
+            duration: Dist::Constant(1.0),
+        };
+        let delay = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert!(!text(&delay).contains("transferTime"), "{}", text(&delay));
+    }
+}
+
+/// What the reader makes of transfers it cannot use: one with no time, and one on a task
+/// without a resource.
+#[test]
+fn transfers_that_cannot_be_used_are_reported() {
+    let original = text(&file("mm1.bpmn"));
+    let empty = r#"<bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"><stochcraft:transferTime/></bpsim:VendorExtension>
+          </bpsim:ElementParameters>"#;
+    let bytes = original.replacen("</bpsim:ElementParameters>", empty, 1);
+    let l = read_scenario(bytes.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        l.notes
+            .iter()
+            .any(|n| n.message.contains("a transfer time needs")),
+        "{:?}",
+        l.notes
+    );
+    assert!(l.model.elements.iter().all(|e| !matches!(
+        e.kind,
+        ElementKind::Server {
+            transfer: Some(_),
+            ..
+        }
+    )));
+    // On a start event: ignored, with a warning.
+    let on_source = original.replacen(
+        r#"elementRef="arrive">"#,
+        r#"elementRef="arrive"><bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"><stochcraft:transferTime><bpsim:FloatingParameter value="2"/></stochcraft:transferTime></bpsim:VendorExtension>"#,
+        1,
+    );
+    let l = read_scenario(on_source.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        l.notes.iter().any(|n| n.at.as_deref() == Some("arrive")
+            && n.message.contains("applies only to a task with a resource")),
+        "{:?}",
+        l.notes
+    );
+}
+
 /// A server added to a file, or a delay made a server, takes its buffer along; one made a delay
 /// leaves it behind.
 #[test]
@@ -832,6 +934,7 @@ fn new_and_changed_servers_carry_their_buffer() {
             service: Dist::Constant(1.0),
             queue_capacity: Some(4),
             breakdown: None,
+            transfer: None,
         };
         set_queue(m, "weld", Some(1));
     });

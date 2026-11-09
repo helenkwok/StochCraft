@@ -34,6 +34,15 @@
       </stochcraft:breakdown>
     </bpsim:VendorExtension>
 
+  stochcraft:transferTime, on a task's ElementParameters: the time a part takes to reach the
+  task from the element that sends it, holding one BPSim distribution or constant. The part
+  takes its place in the task's buffer (queueCapacity) when the transfer starts and joins the
+  queue when it ends; a sending task's resource stays occupied through the transfer.
+
+    <bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="…">
+      <stochcraft:transferTime><bpsim:FloatingParameter value="10"/></stochcraft:transferTime>
+    </bpsim:VendorExtension>
+
   stochcraft:stopCount, on an element's ElementParameters: each replication ends once this many
   entities (a whole number of at least 1) have left the element since time 0 (for an end event:
   arrived there), or at the scenario's duration if that comes first.
@@ -70,6 +79,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="transferTime" type="stochcraft:Value"/>
   <xs:element name="estimate">
     <xs:complexType>
       <xs:attribute name="family" use="required">

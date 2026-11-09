@@ -558,6 +558,32 @@ unrolled line in `stochcraft-blocks`.
     does not know them.
 - **Validation:** `buffer_behind_gateway` (above) and `blocking_cycle`, a loop of finite-buffer
   servers that deadlocks when every buffer in it is full. Both are warnings.
+- **Transfer time** (issue #89): a part needs a fixed or random time to reach a server (a short
+  conveyor, a hand transfer), set on the receiving server (`transfer`, a distribution).
+  - The part takes its place in the receiving buffer when its transfer starts, so the capacity
+    counts parts in transit as well as those waiting, and joins the queue when the transfer
+    ends. Its wait (`mean_wait`) counts from then.
+  - A server or a task with shared resources sending it waits after its job until there is
+    room (blocking after service, as before), then its unit stays occupied through the whole
+    transfer. Sources, delays, gateways, batches and splits hold nothing: the part travels on
+    its own (a source still loses its arrival when there is no room).
+  - **Results:** a part in transit counts once, in the receiving server's work in progress
+    (`entered` there counts it as the transfer starts), not in its queue length or the number
+    in service, and not at the sender. The sender's `blocking_probability` counts its units
+    held through a transfer as blocked; `mean_blocked_time` stays the wait for room alone.
+  - Transfer times come from a stream of their own per receiving server, forked after all the
+    others, so models without transfers draw exactly as before. A transfer that does not hold
+    the sender (a conveyor with its own capacity) is not an option yet.
+  - **File:** `<bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="…"><stochcraft:transferTime><bpsim:FloatingParameter value="10"/></stochcraft:transferTime></bpsim:VendorExtension>`
+    in the receiving task's `ElementParameters` (any BPSim distribution in place of the
+    constant), read, written, saved in place and in the vendor schema; `block.set` and
+    `block.add` take `transfer` (`null` removes it). Not editable in the window yet.
+  - **Checks** (`blocks/tests/transfers.rs`, worked by hand): two machines with fixed cycles
+    and a buffer of two, the second's buffer never empty, give exactly 1 / max(cycle₁ +
+    transfer, cycle₂) parts per time unit with either machine the bottleneck; the first
+    machine is blocked exactly its transfers' share of the time; a part in transit is counted
+    once, at the receiving machine; and, stepping through a run, the receiving machine never
+    holds more than its unit plus its waiting room, transit included.
 - **Commands:**
   - `block.set` takes `queue_capacity`; `null` removes it, and undo is exact.
   - `block.add` and `model.set` take it with the other server parameters.
