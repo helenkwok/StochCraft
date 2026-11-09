@@ -110,6 +110,8 @@
 	Edit	Редагування
 	Elasticity	Еластичність
 	Ends early	Завершується раніше
+	Energy	Енергія
+	Energy per part	Енергія на деталь
 	Enough: {units}, meeting the target in {p} of replications	Досить: {units}, мету досягнуто в {p} реплікацій
 	Entered	Увійшло
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Об'єкти, що ще всередині наприкінці реплікації, не враховуються в середньому часі очікування та середньому часі в системі.
@@ -340,7 +342,11 @@
 	This run	Цей запуск
 	Three-point estimate	Триточкова оцінка
 	Time between arrivals	Час між прибуттями
+	Time blocked	Час блокування
+	Time failed	Час відмови
 	Time off shift	Час поза зміною
+	Time processing	Час обробки
+	Time starved	Час без роботи
 	Time to the stop condition	Час до умови зупинки
 	Time unit	Одиниця часу
 	To	До

@@ -110,6 +110,8 @@
 	Edit	Edit
 	Elasticity	Elastisitas
 	Ends early	Berakhir lebih awal
+	Energy	Energi
+	Energy per part	Energi per komponen
 	Enough: {units}, meeting the target in {p} of replications	Cukup: {units}, target terpenuhi pada {p} replikasi
 	Entered	Masuk
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitas yang masih di dalam pada akhir replikasi tidak dihitung dalam waktu tunggu rata-rata dan waktu rata-rata dalam sistem.
@@ -340,7 +342,11 @@
 	This run	Jalannya ini
 	Three-point estimate	Perkiraan tiga titik
 	Time between arrivals	Waktu antar kedatangan
+	Time blocked	Waktu terblokir
+	Time failed	Waktu rusak
 	Time off shift	Waktu di luar sif
+	Time processing	Waktu memproses
+	Time starved	Waktu tanpa pekerjaan
 	Time to the stop condition	Waktu hingga kondisi berhenti
 	Time unit	Satuan waktu
 	To	Ke

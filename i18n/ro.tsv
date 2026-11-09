@@ -110,6 +110,8 @@
 	Edit	Editare
 	Elasticity	Elasticitate
 	Ends early	Se oprește mai devreme
+	Energy	Energie
+	Energy per part	Energie pe piesă
 	Enough: {units}, meeting the target in {p} of replications	Suficient: {units}, atinge ținta în {p} din replicări
 	Entered	Intrări
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitățile încă în interior la finalul unei replicări sunt lăsate în afara timpului mediu de așteptare și a timpului mediu în sistem.
@@ -340,7 +342,11 @@
 	This run	Această rulare
 	Three-point estimate	Estimare în trei puncte
 	Time between arrivals	Timp între sosiri
+	Time blocked	Timp blocat
+	Time failed	Timp în avarie
 	Time off shift	Timp în afara turei
+	Time processing	Timp de procesare
+	Time starved	Timp fără lucru
 	Time to the stop condition	Timp până la condiția de oprire
 	Time unit	Unitate de timp
 	To	Către

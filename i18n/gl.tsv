@@ -110,6 +110,8 @@
 	Edit	Editar
 	Elasticity	Elasticidade
 	Ends early	Remata antes
+	Energy	Enerxía
+	Energy per part	Enerxía por peza
 	Enough: {units}, meeting the target in {p} of replications	Abonda: {units}, cumpre o obxectivo no {p} das réplicas
 	Entered	Entradas
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	As entidades aínda dentro ao final dunha réplica non se inclúen na espera media nin no tempo medio no sistema.
@@ -340,7 +342,11 @@
 	This run	Esta execución
 	Three-point estimate	Estimación de tres puntos
 	Time between arrivals	Tempo entre chegadas
+	Time blocked	Tempo bloqueado
+	Time failed	Tempo avariado
 	Time off shift	Tempo fóra de quenda
+	Time processing	Tempo procesando
+	Time starved	Tempo sen traballo
 	Time to the stop condition	Tempo ata a condición de parada
 	Time unit	Unidade de tempo
 	To	A

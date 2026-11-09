@@ -540,9 +540,10 @@ fn edits() -> Vec<Edit> {
                         service: Dist::Constant(1.5),
                         queue_capacity: None,
                         breakdown: None,
+                        transfer: None,
                         available: true,
                         availability: Vec::new(),
-                        transfer: None,
+                        power: None,
                     };
                 }
             }),
@@ -762,6 +763,16 @@ fn showcase() -> Model {
         },
     );
     m.transfer(previous, Dist::Uniform { min: 0.5, max: 1.5 });
+    m.power(
+        previous,
+        stochcraft_blocks::Power {
+            processing: 12.5,
+            idle: 1.25,
+            blocked: Some(2.0),
+            failed: None,
+            off_shift: Some(0.0),
+        },
+    );
     m.connect(src, previous);
     let cut = previous;
     let delays = [

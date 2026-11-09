@@ -40,6 +40,16 @@ pub fn showcase() -> Model {
         },
     );
     m.transfer(cut, Dist::Uniform { min: 0.5, max: 1.5 });
+    m.power(
+        cut,
+        stochcraft_blocks::Power {
+            processing: 12.5,
+            idle: 1.25,
+            blocked: None,
+            failed: Some(0.0),
+            off_shift: Some(0.5),
+        },
+    );
     let mut previous = cut;
     m.connect(src, cut);
     let delays = [

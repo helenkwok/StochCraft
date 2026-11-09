@@ -110,6 +110,8 @@
 	Edit	Muuda
 	Elasticity	Elastsus
 	Ends early	Lõpeb varem
+	Energy	Energia
+	Energy per part	Energia detaili kohta
 	Enough: {units}, meeting the target in {p} of replications	Piisab: {units}, eesmärk saavutatakse {p} kordustest
 	Entered	Sisenenud
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Olemid, mis on korduse lõpus veel sees, jäetakse keskmisest ooteajast ja keskmisest ajast süsteemis välja.
@@ -340,7 +342,11 @@
 	This run	See käivitus
 	Three-point estimate	Kolmepunktihinnang
 	Time between arrivals	Saabumiste vaheline aeg
+	Time blocked	Blokeeritud aeg
+	Time failed	Rikkis oleku aeg
 	Time off shift	Aeg vahetusest väljas
+	Time processing	Töötlemise aeg
+	Time starved	Tööta aeg
 	Time to the stop condition	Aeg peatamistingimuseni
 	Time unit	Ajaühik
 	To	Kuni

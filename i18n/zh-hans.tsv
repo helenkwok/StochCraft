@@ -110,6 +110,8 @@
 	Edit	编辑
 	Elasticity	弹性
 	Ends early	提前结束
+	Energy	能耗
+	Energy per part	单件能耗
 	Enough: {units}, meeting the target in {p} of replications	足够：{units}，{p} 的重复运行达到目标
 	Entered	进入数
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	重复运行结束时仍在内部的实体不计入平均等待时间和系统内平均时间。
@@ -340,7 +342,11 @@
 	This run	本次运行
 	Three-point estimate	三点估计
 	Time between arrivals	到达间隔时间
+	Time blocked	阻塞时间
+	Time failed	故障时间
 	Time off shift	非当班时间
+	Time processing	加工时间
+	Time starved	待料时间
 	Time to the stop condition	到达停止条件的时间
 	Time unit	时间单位
 	To	终点

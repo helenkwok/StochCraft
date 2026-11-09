@@ -110,6 +110,8 @@
 	Edit	Úpravy
 	Elasticity	Pružnost
 	Ends early	Končí dříve
+	Energy	Energie
+	Energy per part	Energie na díl
 	Enough: {units}, meeting the target in {p} of replications	Stačí: {units}, cíl splněn v {p} replikací
 	Entered	Vstoupilo
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entity, které jsou na konci replikace stále uvnitř, nejsou zahrnuty do průměrné doby čekání ani průměrné doby v systému.
@@ -340,7 +342,11 @@
 	This run	Tento běh
 	Three-point estimate	Tříbodový odhad
 	Time between arrivals	Doba mezi příchody
+	Time blocked	Čas blokování
+	Time failed	Čas v poruše
 	Time off shift	Čas mimo směnu
+	Time processing	Čas zpracování
+	Time starved	Čas bez práce
 	Time to the stop condition	Doba do podmínky zastavení
 	Time unit	Časová jednotka
 	To	Do

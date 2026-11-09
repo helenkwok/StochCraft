@@ -9,8 +9,8 @@ use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
     Bounds, Breakdown, Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate,
-    Experiment, Family, Model, Need, Property, PropertyType, PropertyValue, ResourcePool, Severity,
-    Stop, ThreePoint, TimeUnit, Timed, Upper,
+    Experiment, Family, Model, Need, Power, Property, PropertyType, PropertyValue, ResourcePool,
+    Severity, Stop, ThreePoint, TimeUnit, Timed, Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -198,6 +198,12 @@ pub enum KindSpec {
         /// Each unit fails and is repaired; left out when units never fail.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         breakdown: Option<BreakdownSpec>,
+        /// The time each part takes to get here from the element that sends it (a short
+        /// conveyor, a hand transfer); left out, parts arrive at once. The part takes its place
+        /// in the buffer as the transfer starts and joins the queue as it ends; a sending server
+        /// or task with shared resources keeps its unit, blocked, through the transfer.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        transfer: Option<DistSpec>,
         /// Whether the units are available (on shift) outside the calendars of
         /// `availability`; left out when true.
         #[serde(default = "yes", skip_serializing_if = "is_true")]
@@ -207,12 +213,10 @@ pub enum KindSpec {
         /// finishes first; failures and repairs go on through the breaks. Left out when none.
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
         availability: Vec<AvailabilityDoc>,
-        /// The time each part takes to get here from the element that sends it (a short
-        /// conveyor, a hand transfer); left out, parts arrive at once. The part takes its place
-        /// in the buffer as the transfer starts and joins the queue as it ends; a sending server
-        /// or task with shared resources keeps its unit, blocked, through the transfer.
+        /// The power each unit draws in each state, in kilowatts, for energy results; left out
+        /// when none.
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        transfer: Option<DistSpec>,
+        power: Option<PowerSpec>,
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
     /// entity takes what the first of `needs` that can be met now asks for, holds it for its
@@ -375,6 +379,46 @@ impl From<BreakdownSpec> for Breakdown {
             time_to_failure: b.time_to_failure.into(),
             repair: b.repair.into(),
             interruptible: b.interruptible,
+        }
+    }
+}
+
+/// The power a server's unit draws in each state, in kilowatts. A unit is in exactly one state
+/// at a time, the first that applies of failed (or under repair), processing, blocked, off
+/// shift (idle because the calendar is closed) and starved (idle); blocked, failed and off shift draw `idle` when left out.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct PowerSpec {
+    pub processing: f64,
+    pub idle: f64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub blocked: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub failed: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub off_shift: Option<f64>,
+}
+
+impl From<&Power> for PowerSpec {
+    fn from(p: &Power) -> Self {
+        Self {
+            processing: p.processing,
+            idle: p.idle,
+            blocked: p.blocked,
+            failed: p.failed,
+            off_shift: p.off_shift,
+        }
+    }
+}
+
+impl From<PowerSpec> for Power {
+    fn from(p: PowerSpec) -> Self {
+        Self {
+            processing: p.processing,
+            idle: p.idle,
+            blocked: p.blocked,
+            failed: p.failed,
+            off_shift: p.off_shift,
         }
     }
 }
@@ -601,20 +645,22 @@ impl From<&ElementKind> for KindSpec {
                 service,
                 queue_capacity,
                 breakdown,
+                transfer,
                 available,
                 availability,
-                transfer,
+                power,
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
                 queue_capacity: *queue_capacity,
                 breakdown: breakdown.as_ref().map(Into::into),
+                transfer: transfer.as_ref().map(Into::into),
                 available: *available,
                 availability: timed(availability, |t| AvailabilityDoc {
                     calendar: t.calendar.to_string(),
                     available: t.value,
                 }),
-                transfer: transfer.as_ref().map(Into::into),
+                power: power.as_ref().map(Into::into),
             },
             ElementKind::SharedTask {
                 service,
@@ -658,17 +704,19 @@ impl From<KindSpec> for ElementKind {
                 service,
                 queue_capacity,
                 breakdown,
+                transfer,
                 available,
                 availability,
-                transfer,
+                power,
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
                 queue_capacity,
                 breakdown: breakdown.map(Into::into),
+                transfer: transfer.map(Into::into),
                 available,
                 availability: availability.into_iter().map(Into::into).collect(),
-                transfer: transfer.map(Into::into),
+                power: power.map(Into::into),
             },
             KindSpec::SharedTask {
                 service,
@@ -1432,9 +1480,10 @@ mod tests {
                 service: DistSpec::Exponential { mean: 1.0 },
                 queue_capacity: None,
                 breakdown: None,
+                transfer: None,
                 available: true,
                 availability: Vec::new(),
-                transfer: None,
+                power: None,
             })
         );
     }

@@ -303,9 +303,10 @@ fn blocks_and_connections_can_be_added_and_removed() {
             service: Dist::Exponential { mean: 0.5 },
             queue_capacity: None,
             breakdown: None,
+            transfer: None,
             available: true,
             availability: Vec::new(),
-            transfer: None,
+            power: None,
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -321,9 +322,10 @@ fn blocks_and_connections_can_be_added_and_removed() {
             service: Dist::Constant(0.75),
             queue_capacity: None,
             breakdown: None,
+            transfer: None,
             available: true,
             availability: Vec::new(),
-            transfer: None,
+            power: None,
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -508,9 +510,10 @@ fn new_ids_never_clash_with_the_files_other_ids() {
             service: Dist::Constant(1.0),
             queue_capacity: None,
             breakdown: None,
+            transfer: None,
             available: true,
             availability: Vec::new(),
-            transfer: None,
+            power: None,
         };
     });
     let t = text(&saved);
@@ -831,74 +834,6 @@ fn finite_buffers_save_as_a_vendor_extension() {
     }
 }
 
-fn set_availability(m: &mut Model, at: &str, open: bool, timed: &[(&str, bool)]) {
-    if let ElementKind::Server {
-        available,
-        availability,
-        ..
-    } = &mut element(m, at).kind
-    {
-        *available = open;
-        *availability = timed
-            .iter()
-            .map(|(c, v)| stochcraft_model::Timed {
-                calendar: id(c),
-                value: *v,
-            })
-            .collect();
-    }
-}
-
-/// A server's calendar is BPSim's own `Availability` on the task's resource: set, it is written
-/// there (with a calendar added to the file for it), read back as the server's, and removed
-/// again it gives back the file as it was, in BPMN and in XPDL.
-#[test]
-fn a_servers_availability_saves_on_its_resource() {
-    for (name, task) in [("mm1.bpmn", "serve"), ("tandem.xpdl", "weld")] {
-        let original = file(name);
-        let (off, _) = edit_and_save(name, None, |m| set_availability(m, task, false, &[]));
-        assert!(
-            text(&off).contains("Availability"),
-            "{name}:\n{}",
-            text(&off)
-        );
-        let loaded = read_scenario(&off, None).unwrap_or_else(|e| panic!("{name}: {e}"));
-        assert!(
-            matches!(
-                loaded.model.element(&id(task)).map(|e| &e.kind),
-                Some(ElementKind::Server {
-                    available: false,
-                    ..
-                })
-            ),
-            "{name}: {:?}",
-            loaded.model.element(&id(task))
-        );
-        let mut model = loaded.model.clone();
-        set_availability(&mut model, task, true, &[]);
-        let back = loaded
-            .opened
-            .save(&model)
-            .unwrap_or_else(|e| panic!("{name}: {e}"));
-        assert_eq!(text(&back), text(&original), "{name}");
-        // With a calendar: the units are off for its events.
-        edit_and_save(name, None, |m| {
-            m.calendars.push(stochcraft_model::calendar::Calendar {
-                id: id("lunch"),
-                name: "Lunch".into(),
-                events: vec![stochcraft_model::calendar::Event {
-                    start: stochcraft_model::DateTime::new(2016, 1, 4, 12, 0, 0)
-                        .unwrap_or(stochcraft_model::DateTime(0)),
-                    end: stochcraft_model::DateTime::new(2016, 1, 4, 13, 0, 0)
-                        .unwrap_or(stochcraft_model::DateTime(0)),
-                    rule: None,
-                }],
-            });
-            set_availability(m, task, true, &[("lunch", false)]);
-        });
-    }
-}
-
 fn set_transfer(m: &mut Model, at: &str, d: Option<Dist>) {
     if let ElementKind::Server { transfer, .. } = &mut element(m, at).kind {
         *transfer = d;
@@ -998,6 +933,167 @@ fn transfers_that_cannot_be_used_are_reported() {
     );
 }
 
+fn set_power(m: &mut Model, at: &str, p: Option<stochcraft_model::Power>) {
+    if let ElementKind::Server { power, .. } = &mut element(m, at).kind {
+        *power = p;
+    }
+}
+
+/// A server's power per state is a StochCraft vendor extension in the task's element
+/// parameters: added, changed in place, read back, and removed to give back the file as it
+/// was, in BPMN and XPDL; a server made a delay leaves it behind; a bad value is reported.
+#[test]
+fn powers_save_as_a_vendor_extension() {
+    let p = |idle: f64| stochcraft_model::Power {
+        processing: 12.5,
+        idle,
+        blocked: None,
+        failed: Some(0.5),
+        off_shift: None,
+    };
+    for (name, task, ns) in [
+        ("mm1.bpmn", "serve", "bpsim"),
+        ("tandem.xpdl", "weld", "b1"),
+    ] {
+        let original = file(name);
+        let (with, _) = edit_and_save(name, None, |m| set_power(m, task, Some(p(2.0))));
+        let t = text(&with);
+        assert!(
+            t.contains(&format!(r#"<{ns}:VendorExtension name="stochcraft:power""#))
+                && t.contains(r#"processing="12.5" idle="2" failed="0.5""#),
+            "{name}:\n{t}"
+        );
+        let loaded = read_scenario(&with, None).unwrap_or_else(|e| panic!("{name}: {e}"));
+        let mut model = loaded.model.clone();
+        set_power(&mut model, task, Some(p(1.5)));
+        let changed = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(
+            changed_lines(&with, &changed),
+            2,
+            "{}",
+            diff(&with, &changed)
+        );
+        let back = read_scenario(&changed, None).unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(back.model, model, "{name}");
+        set_power(&mut model, task, None);
+        let none = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(text(&none), text(&original), "{name}");
+        let mut model = loaded.model.clone();
+        element(&mut model, task).kind = ElementKind::Delay {
+            duration: Dist::Constant(1.0),
+        };
+        let delay = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert!(
+            !text(&delay).contains("stochcraft:power"),
+            "{}",
+            text(&delay)
+        );
+    }
+    // Without idle, or with a value that is not a number: an error, and no power.
+    let original = text(&file("mm1.bpmn"));
+    for body in [
+        r#"<stochcraft:power processing="3"/>"#,
+        r#"<stochcraft:power processing="3" idle="1" failed="lots"/>"#,
+    ] {
+        let ext = format!(
+            r#"<bpsim:VendorExtension name="stochcraft:power" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">{body}</bpsim:VendorExtension>
+          </bpsim:ElementParameters>"#
+        );
+        let bytes = original.replacen("</bpsim:ElementParameters>", &ext, 1);
+        let l = read_scenario(bytes.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+        assert!(
+            l.notes
+                .iter()
+                .any(|n| n.at.as_deref() == Some("serve") && n.message.contains("power")),
+            "{body}: {:?}",
+            l.notes
+        );
+        assert!(
+            l.model
+                .elements
+                .iter()
+                .all(|e| !matches!(e.kind, ElementKind::Server { power: Some(_), .. }))
+        );
+    }
+}
+
+fn set_availability(m: &mut Model, at: &str, open: bool, timed: &[(&str, bool)]) {
+    if let ElementKind::Server {
+        available,
+        availability,
+        ..
+    } = &mut element(m, at).kind
+    {
+        *available = open;
+        *availability = timed
+            .iter()
+            .map(|(c, v)| stochcraft_model::Timed {
+                calendar: id(c),
+                value: *v,
+            })
+            .collect();
+    }
+}
+
+/// A server's calendar is BPSim's own `Availability` on the task's resource: set, it is written
+/// there (with a calendar added to the file for it), read back as the server's, and removed
+/// again it gives back the file as it was, in BPMN and in XPDL.
+#[test]
+fn a_servers_availability_saves_on_its_resource() {
+    for (name, task) in [("mm1.bpmn", "serve"), ("tandem.xpdl", "weld")] {
+        let original = file(name);
+        let (off, _) = edit_and_save(name, None, |m| set_availability(m, task, false, &[]));
+        assert!(
+            text(&off).contains("Availability"),
+            "{name}:\n{}",
+            text(&off)
+        );
+        let loaded = read_scenario(&off, None).unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert!(
+            matches!(
+                loaded.model.element(&id(task)).map(|e| &e.kind),
+                Some(ElementKind::Server {
+                    available: false,
+                    ..
+                })
+            ),
+            "{name}: {:?}",
+            loaded.model.element(&id(task))
+        );
+        let mut model = loaded.model.clone();
+        set_availability(&mut model, task, true, &[]);
+        let back = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(text(&back), text(&original), "{name}");
+        // With a calendar: the units are off for its events.
+        edit_and_save(name, None, |m| {
+            m.calendars.push(stochcraft_model::calendar::Calendar {
+                id: id("lunch"),
+                name: "Lunch".into(),
+                events: vec![stochcraft_model::calendar::Event {
+                    start: stochcraft_model::DateTime::new(2016, 1, 4, 12, 0, 0)
+                        .unwrap_or(stochcraft_model::DateTime(0)),
+                    end: stochcraft_model::DateTime::new(2016, 1, 4, 13, 0, 0)
+                        .unwrap_or(stochcraft_model::DateTime(0)),
+                    rule: None,
+                }],
+            });
+            set_availability(m, task, true, &[("lunch", false)]);
+        });
+    }
+}
+
 /// A server added to a file, or a delay made a server, takes its buffer along; one made a delay
 /// leaves it behind.
 #[test]
@@ -1008,9 +1104,10 @@ fn new_and_changed_servers_carry_their_buffer() {
             service: Dist::Constant(1.0),
             queue_capacity: Some(4),
             breakdown: None,
+            transfer: None,
             available: true,
             availability: Vec::new(),
-            transfer: None,
+            power: None,
         };
         set_queue(m, "weld", Some(1));
     });

@@ -110,6 +110,8 @@
 	Edit	編輯
 	Elasticity	彈性
 	Ends early	提前結束
+	Energy	能耗
+	Energy per part	單件能耗
 	Enough: {units}, meeting the target in {p} of replications	足夠：{units}，{p} 的重複執行達到目標
 	Entered	進入數
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	重複執行結束時仍在內部的實體不計入平均等待時間與系統內平均時間。
@@ -340,7 +342,11 @@
 	This run	本次執行
 	Three-point estimate	三點估計
 	Time between arrivals	到達間隔時間
+	Time blocked	阻塞時間
+	Time failed	故障時間
 	Time off shift	非當班時間
+	Time processing	加工時間
+	Time starved	待料時間
 	Time to the stop condition	到達停止條件的時間
 	Time unit	時間單位
 	To	終點

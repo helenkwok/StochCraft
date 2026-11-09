@@ -110,6 +110,8 @@
 	Edit	Urejanje
 	Elasticity	Elastičnost
 	Ends early	Konča se prej
+	Energy	Energija
+	Energy per part	Energija na kos
 	Enough: {units}, meeting the target in {p} of replications	Dovolj: {units}, cilj dosežen v {p} ponovitev
 	Entered	Vstopilo
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitete, ki so ob koncu ponovitve še znotraj, niso upoštevane v povprečnem čakanju in povprečnem času v sistemu.
@@ -340,7 +342,11 @@
 	This run	Ta zagon
 	Three-point estimate	Tritočkovna ocena
 	Time between arrivals	Čas med prihodi
+	Time blocked	Čas blokade
+	Time failed	Čas okvare
 	Time off shift	Čas zunaj izmene
+	Time processing	Čas obdelave
+	Time starved	Čas brez dela
 	Time to the stop condition	Čas do pogoja za ustavitev
 	Time unit	Časovna enota
 	To	V

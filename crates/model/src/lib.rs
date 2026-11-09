@@ -149,17 +149,6 @@ pub enum ElementKind {
         /// Each unit fails now and then and is repaired (a StochCraft vendor extension,
         /// `stochcraft:breakdown`, since BPSim has none); `None`: units never fail.
         breakdown: Option<Breakdown>,
-        /// Whether the units are available (on shift) outside the calendars of
-        /// `availability`: BPSim `availability` on the task's own resource, default true.
-        available: bool,
-        /// Availability while a calendar is active, the first active one applying (BPSim
-        /// `availability` values `validFor` a calendar), as for a pool. All the units follow it.
-        ///
-        /// A unit checks it only when it takes its next entity: a job under way when the units
-        /// go off shift finishes first, and a job interrupted by a failure resumes after its
-        /// repair even if the shift has ended meanwhile. Failures ([`Breakdown`]) keep coming
-        /// in elapsed time through the breaks, and a repair goes on through them.
-        availability: Vec<Timed<bool>>,
         /// The time a part takes to get here from the element that sends it (a short conveyor,
         /// a hand transfer), drawn for each part; `None`: parts arrive at once. A StochCraft
         /// vendor extension (`stochcraft:transferTime`).
@@ -173,6 +162,20 @@ pub enum ElementKind {
         /// travels. A part in transit is inside this element (its work in progress), not the
         /// sender's.
         transfer: Option<Dist>,
+        /// Whether the units are available (on shift) outside the calendars of
+        /// `availability`: BPSim `availability` on the task's own resource, default true.
+        available: bool,
+        /// Availability while a calendar is active, the first active one applying (BPSim
+        /// `availability` values `validFor` a calendar), as for a pool. All the units follow it.
+        ///
+        /// A unit checks it only when it takes its next entity: a job under way when the units
+        /// go off shift finishes first, and a job interrupted by a failure resumes after its
+        /// repair even if the shift has ended meanwhile. Failures ([`Breakdown`]) keep coming
+        /// in elapsed time through the breaks, and a repair goes on through them.
+        availability: Vec<Timed<bool>>,
+        /// The power each unit draws in each of its states, for energy results; `None`: no
+        /// energy is reported. A StochCraft vendor extension (`stochcraft:power`).
+        power: Option<Power>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
@@ -218,6 +221,52 @@ pub enum ElementKind {
     /// StochCraft vendor extension on a task, `stochcraft:unbatch`). An entity that is not a
     /// batch passes through as it is.
     Unbatch,
+}
+
+/// The electrical power a server's unit draws in each state, in kilowatts. At every instant a
+/// unit is in exactly one state, the first that applies of failed (or under repair), processing
+/// (including a job running on into a break), blocked (holding a finished entity, waiting for
+/// room or through a transfer), off shift (idle because the calendar has the units
+/// unavailable) and starved (idle, on shift and up). Blocked, failed and off shift draw `idle` unless given.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Power {
+    pub processing: f64,
+    pub idle: f64,
+    pub blocked: Option<f64>,
+    pub failed: Option<f64>,
+    pub off_shift: Option<f64>,
+}
+
+impl Power {
+    /// A unit's power while blocked: `blocked`, else `idle`.
+    pub fn while_blocked(&self) -> f64 {
+        self.blocked.unwrap_or(self.idle)
+    }
+
+    /// A unit's power while failed or under repair: `failed`, else `idle`.
+    pub fn while_failed(&self) -> f64 {
+        self.failed.unwrap_or(self.idle)
+    }
+
+    /// A unit's power while off shift: `off_shift`, else `idle`.
+    pub fn while_off_shift(&self) -> f64 {
+        self.off_shift.unwrap_or(self.idle)
+    }
+
+    /// Each value given, by state name, for checking.
+    pub fn values(&self) -> Vec<(&'static str, f64)> {
+        let mut v = vec![("processing", self.processing), ("idle", self.idle)];
+        for (name, x) in [
+            ("blocked", self.blocked),
+            ("failed", self.failed),
+            ("off_shift", self.off_shift),
+        ] {
+            if let Some(x) = x {
+                v.push((name, x));
+            }
+        }
+        v
+    }
 }
 
 /// How a server's units fail: each unit independently, in elapsed time (busy or idle), after a
@@ -685,6 +734,10 @@ pub enum Problem {
         field: &'static str,
         requirement: &'static str,
     },
+    /// A server's power in a state that is negative or not a number.
+    BadPower {
+        state: &'static str,
+    },
     /// A property with no name, or one an element assigns twice.
     BadProperty {
         name: String,
@@ -864,6 +917,7 @@ impl Problem {
             Problem::Unreachable => "unreachable",
             Problem::NoPathToSink => "no_path_to_sink",
             Problem::BadExperiment { .. } => "bad_experiment",
+            Problem::BadPower { .. } => "bad_power",
             Problem::BadProperty { .. } => "bad_property",
             Problem::PropertyTypeConflict { .. } => "property_type_conflict",
             Problem::PropertyValueType { .. } => "property_value_type",
@@ -972,6 +1026,10 @@ impl std::fmt::Display for Diagnostic {
             Problem::NoSink => write!(f, "the model has no sink, so no time in system is measured"),
             Problem::Unreachable => write!(f, "no entity can reach this element from a source"),
             Problem::NoPathToSink => write!(f, "entities here can never reach a sink"),
+            Problem::BadPower { state } => write!(
+                f,
+                "the power while {state} must be a number of kilowatts of at least 0"
+            ),
             Problem::BadExperiment { field, requirement } => {
                 write!(f, "experiment {field} must be {requirement}")
             }
@@ -1296,6 +1354,13 @@ impl Model {
                     Some(&e.id),
                     Problem::NoTimeBetweenArrivals,
                 ));
+            }
+            if let ElementKind::Server { power: Some(p), .. } = &e.kind {
+                for (state, x) in p.values() {
+                    if !(x.is_finite() && x >= 0.0) {
+                        out.push(Diagnostic::error(Some(&e.id), Problem::BadPower { state }));
+                    }
+                }
             }
             for (parameter, d) in e.kind.distributions() {
                 if let Err(error) = d.check() {
@@ -2399,9 +2464,10 @@ mod tests {
                         service: Dist::exponential_rate(1.0),
                         queue_capacity: None,
                         breakdown: None,
+                        transfer: None,
                         available: true,
                         availability: Vec::new(),
-                        transfer: None,
+                        power: None,
                     },
                 ),
                 el("exit", ElementKind::Sink),
@@ -2478,9 +2544,10 @@ mod tests {
             service: Dist::Constant(1.0),
             queue_capacity: q,
             breakdown: None,
+            transfer: None,
             available: true,
             availability: Vec::new(),
-            transfer: None,
+            power: None,
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -2546,9 +2613,10 @@ mod tests {
                 service: Dist::Uniform { min: 2.0, max: 1.0 },
                 queue_capacity: None,
                 breakdown: None,
+                transfer: None,
                 available: true,
                 availability: Vec::new(),
-                transfer: None,
+                power: None,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

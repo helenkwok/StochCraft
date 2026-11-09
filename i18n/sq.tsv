@@ -110,6 +110,8 @@
 	Edit	Redakto
 	Elasticity	Elasticiteti
 	Ends early	Mbaron më herët
+	Energy	Energjia
+	Energy per part	Energjia për pjesë
 	Enough: {units}, meeting the target in {p} of replications	Mjafton: {units}, arrin objektivin në {p} të përsëritjeve
 	Entered	Hyrjet
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitetet që janë ende brenda në fund të një përsëritjeje lihen jashtë pritjes mesatare dhe kohës mesatare në sistem.
@@ -340,7 +342,11 @@
 	This run	Ky ekzekutim
 	Three-point estimate	Vlerësim me tri pika
 	Time between arrivals	Koha ndërmjet mbërritjeve
+	Time blocked	Koha e bllokuar
+	Time failed	Koha në defekt
 	Time off shift	Koha jashtë turnit
+	Time processing	Koha e përpunimit
+	Time starved	Koha pa punë
 	Time to the stop condition	Koha deri te kushti i ndalimit
 	Time unit	Njësia e kohës
 	To	Te

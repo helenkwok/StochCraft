@@ -110,6 +110,8 @@
 	Edit	Redaguoti
 	Elasticity	Elastingumas
 	Ends early	Baigiasi anksčiau
+	Energy	Energija
+	Energy per part	Energija vienai detalei
 	Enough: {units}, meeting the target in {p} of replications	Pakanka: {units}, tikslas pasiekiamas {p} replikacijų
 	Entered	Įėjo
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Objektai, kurie replikacijos pabaigoje dar viduje, neįskaičiuojami į vidutinį laukimo laiką ir vidutinį laiką sistemoje.
@@ -340,7 +342,11 @@
 	This run	Šis vykdymas
 	Three-point estimate	Trijų taškų įvertis
 	Time between arrivals	Laikas tarp atvykimų
+	Time blocked	Blokavimo laikas
+	Time failed	Gedimo laikas
 	Time off shift	Laikas ne pamainoje
+	Time processing	Apdorojimo laikas
+	Time starved	Laikas be darbo
 	Time to the stop condition	Laikas iki stabdymo sąlygos
 	Time unit	Laiko vienetas
 	To	Į

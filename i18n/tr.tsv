@@ -110,6 +110,8 @@
 	Edit	Düzen
 	Elasticity	Esneklik
 	Ends early	Erken biter
+	Energy	Enerji
+	Energy per part	Parça başına enerji
 	Enough: {units}, meeting the target in {p} of replications	Yeterli: {units}, hedef tekrarların {p} kadarında karşılanır
 	Entered	Giren
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Bir tekrarın sonunda hâlâ içeride olan varlıklar ortalama bekleme süresine ve sistemdeki ortalama süreye katılmaz.
@@ -340,7 +342,11 @@
 	This run	Bu çalıştırma
 	Three-point estimate	Üç noktalı tahmin
 	Time between arrivals	Gelişler arası süre
+	Time blocked	Engellenme süresi
+	Time failed	Arıza süresi
 	Time off shift	Vardiya dışı süre
+	Time processing	İşleme süresi
+	Time starved	İş bekleme süresi
 	Time to the stop condition	Durdurma koşuluna kadar geçen süre
 	Time unit	Zaman birimi
 	To	Hedef

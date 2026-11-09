@@ -110,6 +110,8 @@
 	Edit	திருத்து
 	Elasticity	நெகிழ்ச்சி
 	Ends early	முன்னதாக முடிகிறது
+	Energy	ஆற்றல்
+	Energy per part	ஒரு பாகத்திற்கான ஆற்றல்
 	Enough: {units}, meeting the target in {p} of replications	போதும்: {units}, {p} மீள் இயக்கங்களில் இலக்கு அடையப்படுகிறது
 	Entered	உள்ளே நுழைந்தவை
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ஒரு மீள் இயக்கத்தின் முடிவில் இன்னும் உள்ளே உள்ளவை சராசரி காத்திருப்பிலும் அமைப்பில் கழித்த சராசரி நேரத்திலும் சேர்க்கப்படவில்லை.
@@ -340,7 +342,11 @@
 	This run	இந்த இயக்கம்
 	Three-point estimate	மூன்று-புள்ளி மதிப்பீடு
 	Time between arrivals	வருகைகளுக்கு இடையிலான நேரம்
+	Time blocked	தடுக்கப்பட்ட நேரம்
+	Time failed	பழுதடைந்த நேரம்
 	Time off shift	பணிமுறைக்கு வெளியே நேரம்
+	Time processing	செயலாக்க நேரம்
+	Time starved	வேலையில்லா நேரம்
 	Time to the stop condition	நிறுத்த நிபந்தனை வரையிலான நேரம்
 	Time unit	நேர அலகு
 	To	இதற்கு

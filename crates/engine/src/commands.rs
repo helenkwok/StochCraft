@@ -14,8 +14,8 @@ use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BreakdownSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec, KindSpec,
-    ModelDoc, NeedSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, ShiftDoc, Stamp,
-    StopSpec, TimeUnitSpec, TimedDist,
+    ModelDoc, NeedSpec, PowerSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, ShiftDoc,
+    Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -105,9 +105,10 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "service",
             "queue_capacity",
             "breakdown",
+            "transfer",
             "available",
             "availability",
-            "transfer",
+            "power",
         ],
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
@@ -286,6 +287,12 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<BreakdownSpec>")]
     pub breakdown: Option<Option<BreakdownSpec>>,
+    /// Servers: the time each part takes to get here from the element that sends it (it takes
+    /// its place in the buffer as the transfer starts and joins the queue as it ends; a sending
+    /// server keeps its unit, blocked, through the transfer); `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<DistSpec>")]
+    pub transfer: Option<Option<DistSpec>>,
     /// Servers: whether the units are available (on shift) outside the calendars of
     /// `availability`.
     #[serde(default)]
@@ -295,12 +302,11 @@ pub struct BlockSet {
     /// through the breaks.
     #[serde(default)]
     pub availability: Option<Vec<AvailabilityDoc>>,
-    /// Servers: the time each part takes to get here from the element that sends it (it takes
-    /// its place in the buffer as the transfer starts and joins the queue as it ends; a sending
-    /// server keeps its unit, blocked, through the transfer); `null` removes it.
+    /// Servers: the power each unit draws in each state, in kilowatts (processing and idle;
+    /// blocked, failed and off_shift default to idle); `null` removes it.
     #[serde(default, deserialize_with = "some")]
-    #[schemars(with = "Option<DistSpec>")]
-    pub transfer: Option<Option<DistSpec>>,
+    #[schemars(with = "Option<PowerSpec>")]
+    pub power: Option<Option<PowerSpec>>,
     /// Tasks with shared resources: what each entity needs, the alternatives in order.
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
@@ -993,9 +999,10 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("service", p.service.is_some()),
         ("queue_capacity", p.queue_capacity.is_some()),
         ("breakdown", p.breakdown.is_some()),
+        ("transfer", p.transfer.is_some()),
         ("available", p.available.is_some()),
         ("availability", p.availability.is_some()),
-        ("transfer", p.transfer.is_some()),
+        ("power", p.power.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
@@ -1009,9 +1016,10 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "service",
             "queue_capacity",
             "breakdown",
+            "transfer",
             "available",
             "availability",
-            "transfer",
+            "power",
         ],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
@@ -1056,12 +1064,16 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             service,
             queue_capacity,
             breakdown,
+            transfer,
             available,
             availability,
-            transfer,
+            power,
         } => {
             if let Some(b) = p.breakdown {
                 *breakdown = b.map(Into::into);
+            }
+            if let Some(t) = p.transfer {
+                *transfer = t.map(Into::into);
             }
             if let Some(a) = p.available {
                 *available = a;
@@ -1069,8 +1081,8 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             if let Some(a) = p.availability {
                 *availability = a.into_iter().map(Into::into).collect();
             }
-            if let Some(t) = p.transfer {
-                *transfer = t.map(Into::into);
+            if let Some(x) = p.power {
+                *power = x.map(Into::into);
             }
             if let Some(c) = p.capacity {
                 *capacity = c;

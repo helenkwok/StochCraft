@@ -128,6 +128,17 @@ impl TimeWeighted {
         (span > 0.0).then(|| (self.area + self.value * (t - self.last_time)) / span)
     }
 
+    /// The integral of the quantity over time from the start to `time` (the average times the
+    /// time passed; 0 when no time has passed).
+    pub fn integral(&self, time: f64) -> f64 {
+        let t = if time.is_finite() {
+            time.max(self.last_time)
+        } else {
+            self.last_time
+        };
+        self.area + self.value * (t - self.last_time)
+    }
+
     /// Restarts the average at `time`, keeping the current value (to discard a warm-up period).
     pub fn reset(&mut self, time: f64) {
         let t = if time.is_finite() {

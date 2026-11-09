@@ -8,8 +8,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, Connection, DateTime, Dist, Element as ModelElement, ElementId,
-    ElementKind, Estimate, Experiment, Family, Model, Need, Property, PropertyType, PropertyValue,
-    ResourcePool, Stop, ThreePoint, TimeUnit, Timed, Upper,
+    ElementKind, Estimate, Experiment, Family, Model, Need, Power, Property, PropertyType,
+    PropertyValue, ResourcePool, Stop, ThreePoint, TimeUnit, Timed, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -942,9 +942,10 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             service: time,
                             queue_capacity: queue,
                             breakdown: breakdown_of(scenario, id, unit, notes),
+                            transfer: transfer_of(scenario, id, unit, notes),
                             available,
                             availability,
-                            transfer: transfer_of(scenario, id, unit, notes),
+                            power: power_of(scenario, id, notes),
                         }
                     }
                     (None, None, None) => ElementKind::Delay { duration: time },
@@ -983,6 +984,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "a transfer time (stochcraft:transferTime) applies only to a task with a resource of its own; it is ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Server { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::POWER)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "a power (stochcraft:power) applies only to a task with a resource of its own; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::Batch { .. } | ElementKind::Unbatch)
@@ -1182,6 +1193,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
         } else if [
             bpsim::BREAKDOWN,
             bpsim::TRANSFER_TIME,
+            bpsim::POWER,
             bpsim::BATCH_SIZE,
             bpsim::UNBATCH,
             bpsim::QUANTITY,
@@ -1335,6 +1347,53 @@ fn transfer_of(
         return None;
     }
     dist_of(body, "the transfer time", id, notes)
+}
+
+/// The power per state StochCraft's vendor extension gives server `id`, if any: kilowatts in
+/// attributes `processing` and `idle` (both needed), and `blocked`, `failed` and `offShift`.
+fn power_of(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) -> Option<Power> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::POWER))?;
+    let body = ext.elements().find(|e| e.local() == "power");
+    let mut bad = Vec::new();
+    let mut number = |name: &'static str| {
+        let raw = body.and_then(|b| b.attr(name))?;
+        let x = raw.trim().parse::<f64>().ok().filter(|x| x.is_finite());
+        if x.is_none() {
+            bad.push(name);
+        }
+        x
+    };
+    let power = match (number("processing"), number("idle")) {
+        (Some(processing), Some(idle)) => Some(Power {
+            processing,
+            idle,
+            blocked: number("blocked"),
+            failed: number("failed"),
+            off_shift: number("offShift"),
+        }),
+        _ => None,
+    };
+    if !bad.is_empty() {
+        notes.push(Note::error(
+            Some(id),
+            format!(
+                "the power (`{}`) while {} must be a number of kilowatts; it is ignored",
+                bpsim::POWER,
+                bad.join(", ")
+            ),
+        ));
+        return None;
+    }
+    if power.is_none() {
+        notes.push(Note::error(
+            Some(id),
+            format!(
+                "the power (`{}`) needs `processing` and `idle` in kilowatts; it is ignored",
+                bpsim::POWER
+            ),
+        ));
+    }
+    power
 }
 
 fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment {

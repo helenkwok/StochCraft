@@ -110,6 +110,8 @@
 	Edit	რედაქტირება
 	Elasticity	ელასტიკურობა
 	Ends early	ადრე მთავრდება
+	Energy	ენერგია
+	Energy per part	ენერგია ერთ დეტალზე
 	Enough: {units}, meeting the target in {p} of replications	საკმარისია: {units}, მიზანი მიიღწევა გამეორებების {p}-ში
 	Entered	შესულა
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ობიექტები, რომლებიც გამეორების ბოლოს ჯერ კიდევ შიგნით არიან, არ შედის ლოდინის საშუალო დროსა და სისტემაში გატარებულ საშუალო დროში.
@@ -340,7 +342,11 @@
 	This run	ეს გაშვება
 	Three-point estimate	სამწერტილიანი შეფასება
 	Time between arrivals	შემოსვლებს შორის დრო
+	Time blocked	დაბლოკვის დრო
+	Time failed	გაუმართაობის დრო
 	Time off shift	ცვლის გარეთ დრო
+	Time processing	დამუშავების დრო
+	Time starved	სამუშაოს გარეშე დრო
 	Time to the stop condition	დრო გაჩერების პირობამდე
 	Time unit	დროის ერთეული
 	To	-მდე

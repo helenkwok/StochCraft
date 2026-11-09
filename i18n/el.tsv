@@ -110,6 +110,8 @@
 	Edit	Επεξεργασία
 	Elasticity	Ελαστικότητα
 	Ends early	Τελειώνει νωρίτερα
+	Energy	Ενέργεια
+	Energy per part	Ενέργεια ανά τεμάχιο
 	Enough: {units}, meeting the target in {p} of replications	Αρκετό: {units}, ο στόχος επιτυγχάνεται στο {p} των επαναλήψεων
 	Entered	Είσοδοι
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Οι οντότητες που είναι ακόμη εντός στο τέλος μιας επανάληψης δεν περιλαμβάνονται στη μέση αναμονή και στον μέσο χρόνο στο σύστημα.
@@ -340,7 +342,11 @@
 	This run	Αυτή η εκτέλεση
 	Three-point estimate	Εκτίμηση τριών σημείων
 	Time between arrivals	Χρόνος μεταξύ αφίξεων
+	Time blocked	Χρόνος αποκλεισμού
+	Time failed	Χρόνος βλάβης
 	Time off shift	Χρόνος εκτός βάρδιας
+	Time processing	Χρόνος επεξεργασίας
+	Time starved	Χρόνος χωρίς εργασία
 	Time to the stop condition	Χρόνος ως τη συνθήκη διακοπής
 	Time unit	Μονάδα χρόνου
 	To	Προς
