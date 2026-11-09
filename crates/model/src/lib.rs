@@ -224,9 +224,10 @@ pub enum ElementKind {
 }
 
 /// The electrical power a server's unit draws in each state, in kilowatts. At every instant a
-/// unit is in exactly one state, the first that applies of failed (or under repair), off shift,
-/// blocked (holding a finished entity, waiting for room or through a transfer), processing,
-/// and starved (idle, on shift and up). Blocked, failed and off shift draw `idle` unless given.
+/// unit is in exactly one state, the first that applies of failed (or under repair), processing
+/// (including a job running on into a break), blocked (holding a finished entity, waiting for
+/// room or through a transfer), off shift (idle because the calendar has the units
+/// unavailable) and starved (idle, on shift and up). Blocked, failed and off shift draw `idle` unless given.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Power {
     pub processing: f64,

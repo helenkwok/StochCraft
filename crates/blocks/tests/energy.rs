@@ -110,8 +110,8 @@ fn at(h: u32, m: u32) -> DateTime {
 
 /// The machine of `calendars.rs`'s interrupted job: jobs of 4 waiting from 0, a failure 7 after
 /// each repair, repairs of 5, failures interrupting the job, off shift from 10 to 20, over 30
-/// minutes. Processing [0, 7) and [24, 30): 13; failed [7, 12) and [19, 24): 10; off shift
-/// [12, 19) (including the resumed job's last minute: off shift comes before processing): 7.
+/// minutes. Processing [0, 7), the resumed job [12, 13) in the break, and [24, 30): 14; failed
+/// [7, 12) and [19, 24): 10; off shift (idle in the break) [13, 19): 6.
 fn failing_on_a_calendar(p: Power) -> Report {
     let mut b = Builder::new();
     b.calendar(
@@ -148,7 +148,7 @@ fn failing_on_a_calendar(p: Power) -> Report {
     c.run(Rng::new(1)).unwrap_or_else(|e| panic!("{e}"))
 }
 
-/// Each state at its own power: (10 × 13 + 0.5 × 10 + 0.2 × 7) / 60 kWh. The states share the
+/// Each state at its own power: (10 × 14 + 0.5 × 10 + 0.2 × 6) / 60 kWh. The states share the
 /// time out exactly; failed is the complement of availability.
 #[test]
 fn failed_and_off_shift_have_their_own_power() {
@@ -160,27 +160,27 @@ fn failed_and_off_shift_have_their_own_power() {
         off_shift: Some(0.2),
     });
     let m = r.element("machine");
-    close(m.and_then(|e| e.energy), (130.0 + 5.0 + 1.4) / 60.0);
-    close(m.and_then(|e| e.time_processing), 13.0 / 30.0);
+    close(m.and_then(|e| e.energy), (140.0 + 5.0 + 1.2) / 60.0);
+    close(m.and_then(|e| e.time_processing), 14.0 / 30.0);
     close(m.and_then(|e| e.time_failed), 10.0 / 30.0);
-    close(m.and_then(|e| e.time_off_shift), 7.0 / 30.0);
+    close(m.and_then(|e| e.time_off_shift), 6.0 / 30.0);
     close(m.and_then(|e| e.time_starved), 0.0);
     close(m.and_then(|e| e.time_blocked), 0.0);
     close(m.and_then(|e| e.availability), 20.0 / 30.0);
     // Three parts out (at 4, 13 and 28).
     close(
         r.element("out").and_then(|e| e.specific_energy),
-        136.4 / 60.0 / 3.0,
+        146.2 / 60.0 / 3.0,
     );
 }
 
-/// Left out, blocked, failed and off shift draw the idle power: (10 × 13 + 2 × 17) / 60 kWh.
+/// Left out, blocked, failed and off shift draw the idle power: (10 × 14 + 2 × 16) / 60 kWh.
 #[test]
 fn states_without_a_power_draw_idle_power() {
     let r = failing_on_a_calendar(power(10.0, 2.0));
     close(
         r.element("machine").and_then(|e| e.energy),
-        (130.0 + 34.0) / 60.0,
+        (140.0 + 32.0) / 60.0,
     );
 }
 

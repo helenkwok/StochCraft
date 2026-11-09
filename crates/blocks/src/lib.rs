@@ -486,18 +486,19 @@ pub enum Metric {
     Availability,
     /// Servers whose units follow a calendar, or that have a power: time-average fraction of
     /// units off shift. A unit is in exactly one state at a time, the first that applies of
-    /// failed (or under repair), off shift, blocked, processing and starved: off shift means
-    /// the calendar has the units unavailable and the unit has not failed, even while it
-    /// finishes a job it started on shift.
+    /// failed (or under repair), processing, blocked, off shift and starved: off shift means
+    /// only idle because the calendar has the units unavailable. A job that runs on into a
+    /// break, or resumes off shift after a repair, is processing; a finished entity held
+    /// during a break is blocked.
     TimeOffShift,
-    /// Servers with a power: time-average fraction of units processing (serving an entity, and
-    /// neither failed nor off shift).
+    /// Servers with a power: time-average fraction of units processing (serving an entity, in a
+    /// break too, and not failed).
     TimeProcessing,
     /// Servers with a power: time-average fraction of units starved (idle, on shift and up).
     TimeStarved,
     /// Servers with a power: time-average fraction of units blocked (holding a finished entity
-    /// while the next buffer is full, or through a transfer to the next element; neither failed
-    /// nor off shift). Unlike [`Metric::BlockingProbability`], failed and off-shift time is
+    /// while the next buffer is full, or through a transfer to the next element, in a break too;
+    /// not failed). Unlike [`Metric::BlockingProbability`], a failed unit holding an entity is
     /// not counted as blocked.
     TimeBlocked,
     /// Servers with a power: time-average fraction of units failed or under repair; the

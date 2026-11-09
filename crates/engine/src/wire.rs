@@ -384,8 +384,8 @@ impl From<BreakdownSpec> for Breakdown {
 }
 
 /// The power a server's unit draws in each state, in kilowatts. A unit is in exactly one state
-/// at a time, the first that applies of failed (or under repair), off shift, blocked,
-/// processing and starved (idle); blocked, failed and off shift draw `idle` when left out.
+/// at a time, the first that applies of failed (or under repair), processing, blocked, off
+/// shift (idle because the calendar is closed) and starved (idle); blocked, failed and off shift draw `idle` when left out.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct PowerSpec {

@@ -770,9 +770,10 @@ taken together, and a large need waiting without holding back a smaller one.
     - Servers with neither a calendar nor breakdowns run exactly as before; servers with
       breakdowns and no calendar too.
   - **States:** at every instant each unit is in exactly one state, the first that applies of
-    failed (or under repair), off shift, blocked, processing and starved (idle, on shift and
-    up). Off shift is the calendar's: a unit finishing a job it started before the break, or a
-    resumed job, counts as off shift. Results add `time_off_shift`, the time-average fraction
+    failed (or under repair), processing, blocked, off shift and starved (idle, on shift and
+    up). Off shift means only idle because the calendar has the units unavailable: a job that
+    runs on into a break, or resumes off shift after a repair, is processing, and a finished
+    entity held during a break is blocked. Results add `time_off_shift`, the time-average fraction
     of units off shift, for servers with a calendar ("Time off shift" in the window,
     in every catalog).
     - `availability` stays the fraction of units not failed, whatever the calendar.
@@ -791,11 +792,11 @@ taken together, and a large need waiting without holding back a smaller one.
   | Case | Theory | StochCraft |
   |---|---|---|
   | Jobs of 1.5 waiting from 0, off shift 10 to 20: jobs by 29.5 (the one under way at 10 finishes at 10.5) | 13 | 13 |
-  | Same: off-shift share, utilisation | 10/29.5, 20/29.5 | exact |
+  | Same: off-shift share (from 10.5), utilisation | 9.5/29.5, 20/29.5 | exact |
   | Jobs of 4, failure 7 after each repair, repairs of 5, interruptible, off shift 10 to 20: jobs by 30 (the job interrupted at 7 resumes at 12, off shift) | 3 | 3 |
-  | Same: availability, off-shift share | 20/30, 7/30 | exact |
+  | Same: availability, off-shift share (the resumed job [12, 13) is processing) | 20/30, 6/30 | exact |
   | Saturated, failures exp(mean 100), repairs exp(mean 10), off shift midnight to 8: availability A | 0.90909 | 0.90942 ± 0.00437 |
-  | Same: off-shift share A/3 | 0.30303 | 0.30310 ± 0.00286 |
+  | Same: off-shift share, A/3 less the time finishing jobs in breaks | 0.30303 | 0.30249 ± 0.00290 |
   | Same: jobs in 20 days, 28,800 × 2/3 × A (plus jobs finishing after a close) | 17,454.5 | 17,497.1 ± 112.8 |
 - **Energy per server state** (issue #90, a first step towards the energy and CO₂ measures
   under Later):
@@ -803,8 +804,10 @@ taken together, and a large need waiting without holding back a smaller one.
     and `idle` (needed), and `blocked`, `failed` and `off_shift`, each `idle` when left out.
     Tasks with shared resources, delays and pools have no power yet.
   - **States:** at every instant each unit is in exactly one state, the first that applies of
-    failed (or under repair), off shift, blocked (holding a finished entity while the next
-    buffer is full, or through a transfer), processing and starved (idle, on shift and up).
+    failed (or under repair), processing (a job running on into a break, or resumed off shift
+    after a repair, included), blocked (holding a finished entity while the next buffer is
+    full, or through a transfer, in a break too), off shift (idle because the calendar has the
+    units unavailable) and starved (idle, on shift and up).
     These are the unit-state counts of the calendars above, which every server keeps and the
     warm-up resets with the other statistics: there is one accounting.
   - **Energy:** each state's power times the exact time the units spent in it, cut at the end
@@ -814,8 +817,8 @@ taken together, and a large need waiting without holding back a smaller one.
     - `energy` (kWh, "Energy");
     - `time_processing`, `time_starved`, `time_blocked`, `time_failed` and `time_off_shift`,
       the time-average fraction of units in each state. They add up to 1.
-      - `time_blocked` leaves out failed and off-shift time, which `blocking_probability`
-        counts.
+      - `time_blocked` leaves out a failed unit holding an entity, which
+        `blocking_probability` counts.
       - `time_failed` is 1 − `availability`.
       - `time_processing` leaves out an interrupted job's repairs, which `utilisation`
         counts.
@@ -837,8 +840,8 @@ taken together, and a large need waiting without holding back a smaller one.
   |---|---|---|
   | Jobs of 1 min every 4, 10 kW processing, 2 kW idle, window [32.5, 92.5) cutting a job at each end: energy, energy per part | 4 kWh, 4/15 | exact |
   | Same, times in seconds, hours and days | 4 kWh | exact |
-  | The failing server on a calendar above (processing 13, failed 10, off shift 7 of 30), 10/2/0.5/0.2 kW | 136.4/60 kWh | exact |
-  | Same, failed and off shift left out (idle power) | 164/60 kWh | exact |
+  | The failing server on a calendar above (processing 14, failed 10, off shift 6 of 30), 10/2/0.5/0.2 kW | 146.2/60 kWh | exact |
+  | Same, failed and off shift left out (idle power) | 172/60 kWh | exact |
   | The transfer line above: the first machine processing 48 and blocked 32 of 80 at 5 and 3 kW; the second processing 32 at 4 kW and idle 48 at 0.5 kW; 16 parts | 336/60, 152/60 kWh; 488/60/16 per part | exact |
   | Rare arrivals, 20 replications, some with nothing out: the summary's mean and `n` are those of the replications with a ratio | | exact |
 
