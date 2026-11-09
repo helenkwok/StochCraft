@@ -110,6 +110,8 @@
 	Edit	編集
 	Elasticity	弾力性
 	Ends early	早期終了
+	Energy	エネルギー
+	Energy per part	部品あたりのエネルギー
 	Enough: {units}, meeting the target in {p} of replications	十分: {units}、反復実行の {p} で目標を達成
 	Entered	流入数
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	反復実行の終了時に内部に残っているエンティティは、平均待ち時間とシステム内の平均滞在時間に含まれません。
@@ -340,7 +342,11 @@
 	This run	この実行
 	Three-point estimate	三点見積もり
 	Time between arrivals	到着間隔
+	Time blocked	ブロック時間
+	Time failed	故障時間
 	Time off shift	シフト外の時間
+	Time processing	処理中の時間
+	Time starved	仕事待ちの時間
 	Time to the stop condition	停止条件までの時間
 	Time unit	時間単位
 	To	接続先

@@ -49,6 +49,8 @@ enum Unit {
     Time,
     Share,
     Items,
+    /// Kilowatt-hours.
+    Energy,
 }
 
 /// The label and unit of metric `name` on an element of kind `kind`.
@@ -69,6 +71,12 @@ fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
         "loss_probability" => (t("Share of arrivals lost"), Unit::Share),
         "availability" => (t("Availability"), Unit::Share),
         "time_off_shift" => (t("Time off shift"), Unit::Share),
+        "time_processing" => (t("Time processing"), Unit::Share),
+        "time_starved" => (t("Time starved"), Unit::Share),
+        "time_blocked" => (t("Time blocked"), Unit::Share),
+        "time_failed" => (t("Time failed"), Unit::Share),
+        "energy" => (t("Energy"), Unit::Energy),
+        "specific_energy" => (t("Energy per part"), Unit::Energy),
         other => (other, Unit::Count),
     }
 }
@@ -226,6 +234,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                 let (scale, unit) = match kind {
                     Unit::Share => (100.0, "%"),
                     Unit::Time => (1.0, unit),
+                    Unit::Energy => (1.0, "kWh"),
                     Unit::Count | Unit::Items => (1.0, ""),
                 };
                 let show =

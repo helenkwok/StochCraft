@@ -114,7 +114,7 @@ struct EncodedElement {
     entered: u64,
     left: u64,
     /// The optional metrics, in [`ElementReport`]'s order.
-    metrics: [Option<u64>; 10],
+    metrics: [Option<u64>; 16],
     lost: Option<u64>,
     work_in_progress: Option<u64>,
     properties: Vec<Option<u64>>,
@@ -154,6 +154,12 @@ impl Encoded {
                         bits(e.availability),
                         bits(e.loss_probability),
                         bits(e.time_off_shift),
+                        bits(e.time_processing),
+                        bits(e.time_starved),
+                        bits(e.time_blocked),
+                        bits(e.time_failed),
+                        bits(e.energy),
+                        bits(e.specific_energy),
                     ],
                     lost: e.lost,
                     work_in_progress: e.work_in_progress,
@@ -176,7 +182,7 @@ impl Encoded {
                 if e.properties.len() != t.properties.len() {
                     return None;
                 }
-                let [q, w, u, c, s, b, bp, a, lp, off] = e.metrics;
+                let [q, w, u, c, s, b, bp, a, lp, off, pr, st, bl, fa, en, se] = e.metrics;
                 Some(ElementReport {
                     id: t.id.clone(),
                     name: t.name.clone(),
@@ -195,6 +201,12 @@ impl Encoded {
                     lost: e.lost,
                     loss_probability: float(lp),
                     time_off_shift: float(off),
+                    time_processing: float(pr),
+                    time_starved: float(st),
+                    time_blocked: float(bl),
+                    time_failed: float(fa),
+                    energy: float(en),
+                    specific_energy: float(se),
                     properties: t
                         .properties
                         .iter()

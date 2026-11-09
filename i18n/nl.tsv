@@ -110,6 +110,8 @@
 	Edit	Bewerken
 	Elasticity	Elasticiteit
 	Ends early	Stopt eerder
+	Energy	Energie
+	Energy per part	Energie per onderdeel
 	Enough: {units}, meeting the target in {p} of replications	Genoeg: {units}, haalt het doel in {p} van de herhalingen
 	Entered	Binnengekomen
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entiteiten die aan het eind van een herhaling nog binnen zijn, tellen niet mee in de gemiddelde wachttijd en de gemiddelde tijd in het systeem.
@@ -340,7 +342,11 @@
 	This run	Deze uitvoering
 	Three-point estimate	Driepuntsschatting
 	Time between arrivals	Tijd tussen aankomsten
+	Time blocked	Tijd geblokkeerd
+	Time failed	Tijd in storing
 	Time off shift	Tijd buiten werktijd
+	Time processing	Tijd in bewerking
+	Time starved	Tijd zonder werk
 	Time to the stop condition	Tijd tot de stopvoorwaarde
 	Time unit	Tijdseenheid
 	To	Naar

@@ -110,6 +110,8 @@
 	Edit	Түзету
 	Elasticity	Икемділік
 	Ends early	Ертерек аяқталады
+	Energy	Энергия
+	Energy per part	Бір бөлшекке энергия
 	Enough: {units}, meeting the target in {p} of replications	Жеткілікті: {units}, мақсат қайталаулардың {p} бөлігінде орындалады
 	Entered	Кіргендер
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Қайталаудың соңында әлі ішінде қалған нысандар күтудің орташа уақытына және жүйедегі орташа уақытқа кірмейді.
@@ -340,7 +342,11 @@
 	This run	Осы іске қосу
 	Three-point estimate	Үш нүктелі бағалау
 	Time between arrivals	Келулер арасындағы уақыт
+	Time blocked	Бұғатталған уақыт
+	Time failed	Ақаулы уақыт
 	Time off shift	Ауысымнан тыс уақыт
+	Time processing	Өңдеу уақыты
+	Time starved	Жұмыссыз уақыт
 	Time to the stop condition	Тоқтату шартына дейінгі уақыт
 	Time unit	Уақыт бірлігі
 	To	Қайда

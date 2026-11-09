@@ -110,6 +110,8 @@
 	Edit	ແກ້ໄຂ
 	Elasticity	ຄວາມຢືດຢຸ່ນ
 	Ends early	ຈົບກ່ອນກຳນົດ
+	Energy	ພະລັງງານ
+	Energy per part	ພະລັງງານຕໍ່ຊິ້ນ
 	Enough: {units}, meeting the target in {p} of replications	ພຽງພໍ: {units}, ບັນລຸເປົ້າໝາຍໃນ {p} ຂອງຮອບຈຳລອງຊ້ຳ
 	Entered	ຈຳນວນທີ່ເຂົ້າ
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ສິ່ງທີ່ຍັງຢູ່ພາຍໃນເມື່ອຮອບຈຳລອງຊ້ຳສິ້ນສຸດ ບໍ່ຖືກນັບໃນເວລາລໍຖ້າສະເລ່ຍ ແລະ ເວລາສະເລ່ຍໃນລະບົບ.
@@ -340,7 +342,11 @@
 	This run	ການປະມວນຜົນນີ້
 	Three-point estimate	ການປະມານສາມຈຸດ
 	Time between arrivals	ເວລາລະຫວ່າງການມາຮອດ
+	Time blocked	ເວລາທີ່ຖືກຂັດຂວາງ
+	Time failed	ເວລາທີ່ເສຍ
 	Time off shift	ເວລານອກກະ
+	Time processing	ເວລາປະມວນຜົນ
+	Time starved	ເວລາບໍ່ມີວຽກ
 	Time to the stop condition	ເວລາຈົນຮອດເງື່ອນໄຂຢຸດ
 	Time unit	ໜ່ວຍເວລາ
 	To	ໄປຫາ

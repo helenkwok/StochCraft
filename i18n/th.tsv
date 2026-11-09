@@ -110,6 +110,8 @@
 	Edit	แก้ไข
 	Elasticity	ความยืดหยุ่น
 	Ends early	จบก่อนกำหนด
+	Energy	พลังงาน
+	Energy per part	พลังงานต่อชิ้น
 	Enough: {units}, meeting the target in {p} of replications	เพียงพอ: {units} บรรลุเป้าหมายใน {p} ของรอบการจำลองซ้ำ
 	Entered	จำนวนที่เข้ามา
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	สิ่งที่ยังอยู่ภายในเมื่อรอบการจำลองซ้ำสิ้นสุด ไม่ถูกนับในเวลารอเฉลี่ยและเวลาเฉลี่ยในระบบ
@@ -340,7 +342,11 @@
 	This run	การรันนี้
 	Three-point estimate	การประมาณสามจุด
 	Time between arrivals	เวลาระหว่างการมาถึง
+	Time blocked	เวลาที่ถูกบล็อก
+	Time failed	เวลาที่ขัดข้อง
 	Time off shift	เวลานอกกะ
+	Time processing	เวลาประมวลผล
+	Time starved	เวลาที่ไม่มีงาน
 	Time to the stop condition	เวลาจนถึงเงื่อนไขหยุด
 	Time unit	หน่วยเวลา
 	To	ไปยัง

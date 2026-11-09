@@ -110,6 +110,8 @@
 	Edit	সম্পাদনা
 	Elasticity	স্থিতিস্থাপকতা
 	Ends early	আগে শেষ হয়
+	Energy	শক্তি
+	Energy per part	প্রতি অংশে শক্তি
 	Enough: {units}, meeting the target in {p} of replications	যথেষ্ট: {units}, {p} পুনরাবৃত্তিতে লক্ষ্য পূরণ
 	Entered	প্রবেশ করেছে
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	কোনো পুনরাবৃত্তির শেষে যেগুলো এখনও ভেতরে, সেগুলো গড় অপেক্ষার সময় ও সিস্টেমে গড় সময় থেকে বাদ থাকে।
@@ -340,7 +342,11 @@
 	This run	এই রান
 	Three-point estimate	তিন-বিন্দু অনুমান
 	Time between arrivals	আগমনের মধ্যবর্তী সময়
+	Time blocked	অবরুদ্ধ সময়
+	Time failed	বিকল থাকার সময়
 	Time off shift	শিফটের বাইরে সময়
+	Time processing	প্রক্রিয়াকরণে সময়
+	Time starved	কাজহীন সময়
 	Time to the stop condition	থামার শর্ত পর্যন্ত সময়
 	Time unit	সময়ের একক
 	To	পর্যন্ত

@@ -41,9 +41,9 @@ pub use runtime::{Live, LiveState};
 
 use std::collections::BTreeMap;
 
-pub use stochcraft_model::Breakdown;
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
+pub use stochcraft_model::{Breakdown, Power};
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
     Property, PropertyType, PropertyValue, ResourcePool, Severity, Timed,
@@ -484,16 +484,38 @@ pub enum Metric {
     /// Servers whose units fail: time-average fraction of units up (not failed or under
     /// repair).
     Availability,
-    /// Servers whose units follow a calendar: time-average fraction of units off shift. A unit
-    /// is in exactly one state at a time, the first that applies of failed (or under repair),
-    /// off shift, blocked, processing and starved: off shift means the calendar has the units
-    /// unavailable and the unit has not failed, even while it finishes a job it started on
-    /// shift.
+    /// Servers whose units follow a calendar, or that have a power: time-average fraction of
+    /// units off shift. A unit is in exactly one state at a time, the first that applies of
+    /// failed (or under repair), off shift, blocked, processing and starved: off shift means
+    /// the calendar has the units unavailable and the unit has not failed, even while it
+    /// finishes a job it started on shift.
     TimeOffShift,
+    /// Servers with a power: time-average fraction of units processing (serving an entity, and
+    /// neither failed nor off shift).
+    TimeProcessing,
+    /// Servers with a power: time-average fraction of units starved (idle, on shift and up).
+    TimeStarved,
+    /// Servers with a power: time-average fraction of units blocked (holding a finished entity
+    /// while the next buffer is full, or through a transfer to the next element; neither failed
+    /// nor off shift). Unlike [`Metric::BlockingProbability`], failed and off-shift time is
+    /// not counted as blocked.
+    TimeBlocked,
+    /// Servers with a power: time-average fraction of units failed or under repair; the
+    /// complement of [`Metric::Availability`].
+    TimeFailed,
+    /// Servers with a power: energy used in the measured window, in kilowatt-hours: each
+    /// state's power times the exact time the units spent in it, cut at the end of the warm-up
+    /// and at the end of the run.
+    Energy,
+    /// Sinks, when any server has a power: the energy of every server with a power over the
+    /// measured window, divided by the entities that reached this sink in it, in kilowatt-hours
+    /// each. A replication in which none reached it has no value (never 0), so the summary is
+    /// the mean of the ratios of the replications that have one, and its `n` says how many.
+    SpecificEnergy,
 }
 
 impl Metric {
-    pub const ALL: [Metric; 14] = [
+    pub const ALL: [Metric; 20] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -508,6 +530,12 @@ impl Metric {
         Metric::LossProbability,
         Metric::Availability,
         Metric::TimeOffShift,
+        Metric::TimeProcessing,
+        Metric::TimeStarved,
+        Metric::TimeBlocked,
+        Metric::TimeFailed,
+        Metric::Energy,
+        Metric::SpecificEnergy,
     ];
 
     /// The metric with this [`Metric::name`].
@@ -532,6 +560,12 @@ impl Metric {
             Metric::LossProbability => "loss_probability",
             Metric::Availability => "availability",
             Metric::TimeOffShift => "time_off_shift",
+            Metric::TimeProcessing => "time_processing",
+            Metric::TimeStarved => "time_starved",
+            Metric::TimeBlocked => "time_blocked",
+            Metric::TimeFailed => "time_failed",
+            Metric::Energy => "energy",
+            Metric::SpecificEnergy => "specific_energy",
         }
     }
 }
@@ -561,6 +595,15 @@ pub struct ElementReport {
     pub availability: Option<f64>,
     /// Servers whose units follow a calendar: [`Metric::TimeOffShift`].
     pub time_off_shift: Option<f64>,
+    /// Servers with a power: [`Metric::TimeProcessing`] and the other states, and
+    /// [`Metric::Energy`].
+    pub time_processing: Option<f64>,
+    pub time_starved: Option<f64>,
+    pub time_blocked: Option<f64>,
+    pub time_failed: Option<f64>,
+    pub energy: Option<f64>,
+    /// Sinks, when any server has a power: [`Metric::SpecificEnergy`].
+    pub specific_energy: Option<f64>,
     pub lost: Option<u64>,
     pub loss_probability: Option<f64>,
     /// For each property the element assigns, in the element's order: the mean of the values
@@ -586,6 +629,12 @@ impl ElementReport {
             Metric::LossProbability => self.loss_probability,
             Metric::Availability => self.availability,
             Metric::TimeOffShift => self.time_off_shift,
+            Metric::TimeProcessing => self.time_processing,
+            Metric::TimeStarved => self.time_starved,
+            Metric::TimeBlocked => self.time_blocked,
+            Metric::TimeFailed => self.time_failed,
+            Metric::Energy => self.energy,
+            Metric::SpecificEnergy => self.specific_energy,
         }
     }
 }
@@ -942,6 +991,7 @@ impl Builder {
                 transfer: None,
                 available: true,
                 availability: Vec::new(),
+                power: None,
             },
         )
     }
@@ -966,6 +1016,7 @@ impl Builder {
                 transfer: None,
                 available: true,
                 availability: Vec::new(),
+                power: None,
             },
         )
     }
@@ -1022,6 +1073,13 @@ impl Builder {
                     value: *v,
                 })
                 .collect();
+        }
+    }
+
+    /// Gives server `block` the power its units draw in each state, for energy results.
+    pub fn power(&mut self, block: BlockId, power: Power) {
+        if let Some((_, ElementKind::Server { power: p, .. }, _)) = self.elements.get_mut(block.0) {
+            *p = Some(power);
         }
     }
 

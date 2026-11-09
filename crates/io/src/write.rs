@@ -7,8 +7,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Breakdown, Calendar, DateTime, Dist, ElementKind, Estimate, Model, Need, Property,
-    PropertyType, PropertyValue, ResourcePool, Stop, Timed,
+    Bounds, Breakdown, Calendar, DateTime, Dist, ElementKind, Estimate, Model, Need, Power,
+    Property, PropertyType, PropertyValue, ResourcePool, Stop, Timed,
 };
 
 use crate::bpsim::NS2;
@@ -280,6 +280,27 @@ pub(crate) fn breakdown_element(b: &Breakdown) -> Element {
                 .with_child(part("timeToFailure", &b.time_to_failure))
                 .with_child(part("repairTime", &b.repair)),
         )
+}
+
+/// A server's power per state as StochCraft's vendor extension ([`crate::bpsim::POWER`]).
+pub(crate) fn power_element(p: &Power) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:power", Some(ns))
+        .with_attr("processing", &num(p.processing))
+        .with_attr("idle", &num(p.idle));
+    for (name, x) in [
+        ("blocked", p.blocked),
+        ("failed", p.failed),
+        ("offShift", p.off_shift),
+    ] {
+        if let Some(x) = x {
+            body = body.with_attr(name, &num(x));
+        }
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::POWER)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
 }
 
 /// A server's transfer time as StochCraft's vendor extension ([`crate::bpsim::TRANSFER_TIME`]).
@@ -615,6 +636,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         } = &e.kind
         {
             ep.push(transfer_element(d));
+        }
+        if let ElementKind::Server { power: Some(p), .. } = &e.kind {
+            ep.push(power_element(p));
         }
         if let Some(x) = batching_element(&e.kind) {
             ep.push(x);

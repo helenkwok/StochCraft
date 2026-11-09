@@ -110,6 +110,8 @@
 	Edit	Chỉnh sửa
 	Elasticity	Độ co giãn
 	Ends early	Kết thúc sớm
+	Energy	Năng lượng
+	Energy per part	Năng lượng trên mỗi chi tiết
 	Enough: {units}, meeting the target in {p} of replications	Đủ: {units}, đạt mục tiêu trong {p} số lần lặp
 	Entered	Đã vào
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Các thực thể vẫn còn bên trong lúc một lần lặp kết thúc không được tính vào thời gian chờ trung bình và thời gian trung bình trong hệ thống.
@@ -340,7 +342,11 @@
 	This run	Lần chạy này
 	Three-point estimate	Ước lượng ba điểm
 	Time between arrivals	Thời gian giữa các lượt đến
+	Time blocked	Thời gian bị chặn
+	Time failed	Thời gian hỏng hóc
 	Time off shift	Thời gian ngoài ca
+	Time processing	Thời gian xử lý
+	Time starved	Thời gian không có việc
 	Time to the stop condition	Thời gian đến điều kiện dừng
 	Time unit	Đơn vị thời gian
 	To	Đến

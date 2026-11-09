@@ -36,6 +36,11 @@ pub const BREAKDOWN: &str = "stochcraft:breakdown";
 /// receiving task's `ElementParameters`.
 pub const TRANSFER_TIME: &str = "stochcraft:transferTime";
 
+/// The vendor extension for the power a server's units draw in each state: a
+/// `stochcraft:power` element with attributes `processing` and `idle` (needed) and `blocked`,
+/// `failed` and `offShift`, each in kilowatts, in the task's `ElementParameters`.
+pub const POWER: &str = "stochcraft:power";
+
 /// A batch: `stochcraft:batchSize` on a task's `ElementParameters`, the number of entities it
 /// collects before sending them on together (a whole number of at least 1).
 pub const BATCH_SIZE: &str = "stochcraft:batchSize";

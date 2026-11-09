@@ -110,6 +110,8 @@
 	Edit	संपादित करें
 	Elasticity	लोच
 	Ends early	पहले समाप्त होता है
+	Energy	ऊर्जा
+	Energy per part	प्रति पुर्जा ऊर्जा
 	Enough: {units}, meeting the target in {p} of replications	पर्याप्त: {units}, {p} पुनरावृत्तियों में लक्ष्य पूरा
 	Entered	प्रवेश संख्या
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	किसी पुनरावृत्ति के अंत में जो अब भी अंदर हैं, वे औसत प्रतीक्षा और सिस्टम में औसत समय में शामिल नहीं होते।
@@ -340,7 +342,11 @@
 	This run	यह रन
 	Three-point estimate	त्रि-बिंदु अनुमान
 	Time between arrivals	आगमन के बीच का समय
+	Time blocked	अवरुद्ध समय
+	Time failed	खराबी में समय
 	Time off shift	पाली से बाहर समय
+	Time processing	प्रसंस्करण में समय
+	Time starved	बिना काम का समय
 	Time to the stop condition	रुकने की शर्त तक का समय
 	Time unit	समय की इकाई
 	To	तक

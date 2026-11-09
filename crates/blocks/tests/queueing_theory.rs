@@ -35,6 +35,7 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
                     transfer: None,
                     available: true,
                     availability: Vec::new(),
+                    power: None,
                 },
             ),
             element("exit", ElementKind::Sink),

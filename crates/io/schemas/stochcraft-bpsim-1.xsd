@@ -43,6 +43,14 @@
       <stochcraft:transferTime><bpsim:FloatingParameter value="10"/></stochcraft:transferTime>
     </bpsim:VendorExtension>
 
+  stochcraft:power, on a task's ElementParameters: the power each unit of the task's resource
+  draws in each state, in kilowatts (numbers of at least 0): processing and idle (both needed),
+  and blocked, failed and offShift, each idle when left out.
+
+    <bpsim:VendorExtension name="stochcraft:power" xmlns:stochcraft="…">
+      <stochcraft:power processing="12.5" idle="2" failed="0.5" offShift="0"/>
+    </bpsim:VendorExtension>
+
   stochcraft:stopCount, on an element's ElementParameters: each replication ends once this many
   entities (a whole number of at least 1) have left the element since time 0 (for an end event:
   arrived there), or at the scenario's duration if that comes first.
@@ -80,6 +88,15 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="transferTime" type="stochcraft:Value"/>
+  <xs:element name="power">
+    <xs:complexType>
+      <xs:attribute name="processing" type="xs:double" use="required"/>
+      <xs:attribute name="idle" type="xs:double" use="required"/>
+      <xs:attribute name="blocked" type="xs:double"/>
+      <xs:attribute name="failed" type="xs:double"/>
+      <xs:attribute name="offShift" type="xs:double"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="estimate">
     <xs:complexType>
       <xs:attribute name="family" use="required">

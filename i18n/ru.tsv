@@ -110,6 +110,8 @@
 	Edit	Редактирование
 	Elasticity	Эластичность
 	Ends early	Завершается раньше
+	Energy	Энергия
+	Energy per part	Энергия на деталь
 	Enough: {units}, meeting the target in {p} of replications	Достаточно: {units}, цель достигнута в {p} репликаций
 	Entered	Вошло
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Объекты, оставшиеся внутри в конце репликации, не учитываются в среднем времени ожидания и среднем времени в системе.
@@ -340,7 +342,11 @@
 	This run	Этот запуск
 	Three-point estimate	Трёхточечная оценка
 	Time between arrivals	Время между прибытиями
+	Time blocked	Время блокировки
+	Time failed	Время отказа
 	Time off shift	Время вне смены
+	Time processing	Время обработки
+	Time starved	Время без работы
 	Time to the stop condition	Время до условия остановки
 	Time unit	Единица времени
 	To	К

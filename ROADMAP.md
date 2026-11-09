@@ -797,6 +797,50 @@ taken together, and a large need waiting without holding back a smaller one.
   | Saturated, failures exp(mean 100), repairs exp(mean 10), off shift midnight to 8: availability A | 0.90909 | 0.90942 ± 0.00437 |
   | Same: off-shift share A/3 | 0.30303 | 0.30310 ± 0.00286 |
   | Same: jobs in 20 days, 28,800 × 2/3 × A (plus jobs finishing after a close) | 17,454.5 | 17,497.1 ± 112.8 |
+- **Energy per server state** (issue #90, a first step towards the energy and CO₂ measures
+  under Later):
+  - **Model:** `power` on a server, the kilowatts each unit draws in each state: `processing`
+    and `idle` (needed), and `blocked`, `failed` and `off_shift`, each `idle` when left out.
+    Tasks with shared resources, delays and pools have no power yet.
+  - **States:** at every instant each unit is in exactly one state, the first that applies of
+    failed (or under repair), off shift, blocked (holding a finished entity while the next
+    buffer is full, or through a transfer), processing and starved (idle, on shift and up).
+    These are the unit-state counts of the calendars above, which every server keeps and the
+    warm-up resets with the other statistics: there is one accounting.
+  - **Energy:** each state's power times the exact time the units spent in it, cut at the end
+    of the warm-up and at the end of the run (not booked when a state ends), converted from the
+    model's time unit to hours: kilowatt-hours.
+  - **Results**, only for servers with a power, so other models report as before:
+    - `energy` (kWh, "Energy");
+    - `time_processing`, `time_starved`, `time_blocked`, `time_failed` and `time_off_shift`,
+      the time-average fraction of units in each state. They add up to 1.
+      - `time_blocked` leaves out failed and off-shift time, which `blocking_probability`
+        counts.
+      - `time_failed` is 1 − `availability`.
+      - `time_processing` leaves out an interrupted job's repairs, which `utilisation`
+        counts.
+    - **Energy per part** (`specific_energy`, "Energy per part"): at every sink of a model with
+      a power, the energy of all servers with a power over the window, divided by the entities
+      that reached that sink in it.
+      - Choosing a sink means reading that sink's value; with several sinks, each reports its
+        own ratio.
+      - A replication with nothing out has no ratio (never 0). The summary is the mean of the
+        others' ratios, and its `n` says how many there were.
+  - **File:** `<bpsim:VendorExtension name="stochcraft:power" xmlns:stochcraft="…"><stochcraft:power processing="12.5" idle="2" failed="0.5"/></bpsim:VendorExtension>`
+    in the task's `ElementParameters`, read, written, saved in place and in the vendor schema.
+    A negative or non-numeric power is an error (`bad_power`). `block.set` and `block.add`
+    take `power`, and `null` removes it. Not editable in the window yet.
+
+  **Validation** (`blocks/tests/energy.rs`, worked by hand):
+
+  | Case | Theory | StochCraft |
+  |---|---|---|
+  | Jobs of 1 min every 4, 10 kW processing, 2 kW idle, window [32.5, 92.5) cutting a job at each end: energy, energy per part | 4 kWh, 4/15 | exact |
+  | Same, times in seconds, hours and days | 4 kWh | exact |
+  | The failing server on a calendar above (processing 13, failed 10, off shift 7 of 30), 10/2/0.5/0.2 kW | 136.4/60 kWh | exact |
+  | Same, failed and off shift left out (idle power) | 164/60 kWh | exact |
+  | The transfer line above: the first machine processing 48 and blocked 32 of 80 at 5 and 3 kW; the second processing 32 at 4 kW and idle 48 at 0.5 kW; 16 parts | 336/60, 152/60 kWh; 488/60/16 per part | exact |
+  | Rare arrivals, 20 replications, some with nothing out: the summary's mean and `n` are those of the replications with a ratio | | exact |
 
 ### M2.7 Assembly and batching
 

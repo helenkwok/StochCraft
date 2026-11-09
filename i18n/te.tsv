@@ -110,6 +110,8 @@
 	Edit	సవరణ
 	Elasticity	స్థితిస్థాపకత
 	Ends early	ముందుగా ముగుస్తుంది
+	Energy	శక్తి
+	Energy per part	ఒక్కో భాగానికి శక్తి
 	Enough: {units}, meeting the target in {p} of replications	సరిపోతుంది: {units}, {p} పునరావృత్త అమలులలో లక్ష్యం చేరుతుంది
 	Entered	ప్రవేశించినవి
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	పునరావృత్త అమలు చివరికి ఇంకా లోపల ఉన్నవి సగటు వేచి ఉండే సమయంలోనూ వ్యవస్థలో గడిపిన సగటు సమయంలోనూ లెక్కించబడవు.
@@ -340,7 +342,11 @@
 	This run	ఈ అమలు
 	Three-point estimate	మూడు-బిందువుల అంచనా
 	Time between arrivals	రాకల మధ్య సమయం
+	Time blocked	నిరోధిత సమయం
+	Time failed	లోపం ఉన్న సమయం
 	Time off shift	షిఫ్ట్ వెలుపల సమయం
+	Time processing	ప్రాసెసింగ్ సమయం
+	Time starved	పని లేని సమయం
 	Time to the stop condition	ఆపే షరతు వరకు సమయం
 	Time unit	సమయ ప్రమాణం
 	To	కు

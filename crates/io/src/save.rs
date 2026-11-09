@@ -22,7 +22,7 @@ use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
     condition_element, dist_element, edge_ends, estimate_element, interruptible_param, numeric,
-    probability_element, property_element, quantity_element, quantity_param,
+    power_element, probability_element, property_element, quantity_element, quantity_param,
     queue_capacity_element, size, start_param, stop_element, timer_param, transfer_element,
 };
 use crate::xml::{self, Element, Node};
@@ -1872,6 +1872,22 @@ impl Editor {
                             new_transfer.map(transfer_element),
                         ));
                     }
+                    // The power per state.
+                    let old_power = match was {
+                        Some(ElementKind::Server { power, .. }) => power.as_ref(),
+                        _ => None,
+                    };
+                    let new_power = match &e.kind {
+                        ElementKind::Server { power, .. } => power.as_ref(),
+                        _ => None,
+                    };
+                    if new_power != old_power || (is_server && !was_server) {
+                        vendor_writes.push((
+                            id.clone(),
+                            crate::bpsim::POWER,
+                            new_power.map(power_element),
+                        ));
+                    }
                     match (&e.kind, was) {
                         (
                             ElementKind::Server {
@@ -1976,6 +1992,7 @@ impl Editor {
                         vendor_writes.push((id.clone(), crate::bpsim::QUEUE_CAPACITY, None));
                         vendor_writes.push((id.clone(), crate::bpsim::BREAKDOWN, None));
                         vendor_writes.push((id.clone(), crate::bpsim::TRANSFER_TIME, None));
+                        vendor_writes.push((id.clone(), crate::bpsim::POWER, None));
                         writes.push((id.clone(), "PriorityParameters", "Interruptible", None));
                     }
                 }

@@ -1557,6 +1557,75 @@ fn breakdowns_are_set_reported_and_removed() {
     assert!(!m.to_string().contains("breakdown"), "{m}");
 }
 
+/// A server's power through `block.set`: set, shown in the model, run with energy, state
+/// shares and energy per part at the sink, refused on a source, a negative value an error, and
+/// removed with `null`.
+#[test]
+fn powers_give_energy_results() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "power": {"processing": 10.0, "idle": 2.0, "failed": 0.5}}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let desk = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(desk["power"]["processing"], 10.0, "{m}");
+    assert!(desk["power"].get("blocked").is_none(), "{m}");
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    let metric = |id: &str, name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == id))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    assert!(metric("desk", "energy").is_some_and(|x| x > 0.0), "{r}");
+    let shares: f64 = [
+        "time_processing",
+        "time_starved",
+        "time_blocked",
+        "time_failed",
+        "time_off_shift",
+    ]
+    .iter()
+    .filter_map(|n| metric("desk", n))
+    .sum();
+    assert!((shares - 1.0).abs() < 1e-9, "{shares}: {r}");
+    assert!(
+        metric("exit", "specific_energy").is_some_and(|x| x > 0.0),
+        "{r}"
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "arrivals", "power": {"processing": 1.0, "idle": 1.0}})
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "power": {"processing": -1.0, "idle": 2.0}}),
+    );
+    let v = ok(&mut e, "model.validate", json!({}));
+    assert!(v.to_string().contains("bad_power"), "{v}");
+    ok(&mut e, "block.set", json!({"id": "desk", "power": null}));
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(!m.to_string().contains("power"), "{m}");
+    ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "server", "id": "oven", "power": {"processing": 30.0, "idle": 5.0}}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(m.to_string().contains("\"processing\":30.0"), "{m}");
+}
+
 /// A server's transfer time through `block.set` and `block.add`: set, shown in the model, run,
 /// refused where it does not apply, and removed with `null`.
 #[test]

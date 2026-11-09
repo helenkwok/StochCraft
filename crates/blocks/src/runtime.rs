@@ -11,7 +11,7 @@ use stochcraft_des::{
 };
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
-    Breakdown, Element, ElementId, ElementKind, Model, Need, ResourcePool, Timed,
+    Breakdown, Element, ElementId, ElementKind, Model, Need, Power, ResourcePool, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -649,6 +649,7 @@ impl Live<'_> {
     pub fn report(&self) -> Report {
         let now = self.now().min(self.end);
         let model = &self.compiled.model;
+        let hours = model.experiment.time_unit.seconds() / 3_600.0;
         let mut elements: Vec<ElementReport> = model
             .elements
             .iter()
@@ -658,9 +659,23 @@ impl Live<'_> {
             .zip(&self.compiled.inputs)
             .map(|((((e, s), a), (&blocks, &transfers)), &inputs)| {
                 s.borrow()
-                    .report(e, a, Sends { blocks, transfers }, inputs > 1, now)
+                    .report(e, a, Sends { blocks, transfers }, inputs > 1, now, hours)
             })
             .collect();
+        // Energy per entity at each sink: the energy of every server with a power over the
+        // window, over the entities that reached the sink in it (none reached it: no value).
+        let powered = model
+            .elements
+            .iter()
+            .any(|e| matches!(e.kind, ElementKind::Server { power: Some(_), .. }));
+        if powered {
+            let total: f64 = elements.iter().filter_map(|e| e.energy).sum();
+            for (r, e) in elements.iter_mut().zip(&model.elements) {
+                if matches!(e.kind, ElementKind::Sink) && r.left > 0 {
+                    r.specific_energy = Some(total / r.left as f64);
+                }
+            }
+        }
         // Then each shared pool, after the elements.
         elements.extend(self.pools.reports(&model.resources, now));
         let after_warmup = self.reset_at.get();
@@ -724,7 +739,7 @@ pub(crate) struct BlockStats {
     /// resources sending to a server with a transfer time). The entity is counted at the next
     /// element, in its `transit`; the unit is blocked.
     transferring: TimeWeighted,
-    /// A server's units in each state but starved, each unit in exactly one ([`UnitBook`]).
+    /// A server's units in each state, each unit in exactly one ([`UnitBook`]).
     states: UnitStates,
 }
 
@@ -749,13 +764,13 @@ enum UnitState {
     Starved,
 }
 
-/// How many of a server's units are in each state, over time. Starved is what is left of the
-/// server's capacity.
+/// How many of a server's units are in each state, over time; they add up to its capacity.
 pub(crate) struct UnitStates {
     failed: TimeWeighted,
     off_shift: TimeWeighted,
     blocked: TimeWeighted,
     processing: TimeWeighted,
+    starved: TimeWeighted,
 }
 
 impl UnitStates {
@@ -765,6 +780,7 @@ impl UnitStates {
             off_shift: TimeWeighted::new(t, 0.0),
             blocked: TimeWeighted::new(t, 0.0),
             processing: TimeWeighted::new(t, 0.0),
+            starved: TimeWeighted::new(t, 0.0),
         }
     }
 
@@ -773,6 +789,7 @@ impl UnitStates {
         self.off_shift.reset(t);
         self.blocked.reset(t);
         self.processing.reset(t);
+        self.starved.reset(t);
     }
 
     fn get(&mut self, s: UnitState) -> Option<&mut TimeWeighted> {
@@ -781,7 +798,7 @@ impl UnitStates {
             UnitState::OffShift => Some(&mut self.off_shift),
             UnitState::Blocked => Some(&mut self.blocked),
             UnitState::Processing => Some(&mut self.processing),
-            UnitState::Starved => None,
+            UnitState::Starved => Some(&mut self.starved),
         }
     }
 }
@@ -807,10 +824,13 @@ struct UnitBook {
 }
 
 impl UnitBook {
-    fn new(capacity: u32, open: bool) -> Rc<Self> {
+    /// A book of `capacity` units, all starved (idle, on shift and up) to start with.
+    fn new(env: &BlockEnv, capacity: u32) -> Rc<Self> {
+        let now = env.ctx.now();
+        env.with_stats(|s| s.states.starved.set(now, f64::from(capacity)));
         Rc::new(Self {
             doing: RefCell::new(vec![Doing::default(); capacity as usize]),
-            open: Cell::new(open),
+            open: Cell::new(true),
         })
     }
 
@@ -920,9 +940,22 @@ impl BlockStats {
         n.round().max(0.0) as u64
     }
 
+    /// The energy a server with power `p` used from the last reset to `end`, in kilowatt-hours
+    /// (`hours`: hours in one model time unit): each state's power times the time its units
+    /// spent in it.
+    fn energy(&self, p: &Power, end: f64, hours: f64) -> f64 {
+        let s = &self.states;
+        let kw_units = p.processing * s.processing.integral(end)
+            + p.idle * s.starved.integral(end)
+            + p.while_blocked() * s.blocked.integral(end)
+            + p.while_failed() * s.failed.integral(end)
+            + p.while_off_shift() * s.off_shift.integral(end);
+        kw_units * hours
+    }
+
     /// The element's report; `sends`: whether it sends to a finite buffer or across a
     /// transfer; `join`: whether it is a parallel gateway with several inputs (which holds
-    /// entities until each input has one).
+    /// entities until each input has one); `hours`: hours in one model time unit, for energy.
     pub(crate) fn report(
         &self,
         element: &Element,
@@ -930,9 +963,23 @@ impl BlockStats {
         sends: Sends,
         join: bool,
         end: f64,
+        hours: f64,
     ) -> ElementReport {
         let Sends { blocks, transfers } = sends;
         let kind = &element.kind;
+        // Servers with a power report the share of time in each state, and their energy.
+        let powered = match kind {
+            ElementKind::Server {
+                capacity,
+                power: Some(p),
+                ..
+            } => Some((f64::from(*capacity), p)),
+            _ => None,
+        };
+        let share = |tw: &TimeWeighted| {
+            let (capacity, _) = powered?;
+            tw.average(end).map(|x| x / capacity)
+        };
         let server = matches!(
             kind,
             ElementKind::Server { .. } | ElementKind::SharedTask { .. }
@@ -1016,20 +1063,34 @@ impl BlockStats {
                     .map(|d| 1.0 - d / f64::from(*capacity)),
                 _ => None,
             },
-            // Only for servers that follow a calendar, so others report as before.
+            // Only for servers that follow a calendar or have a power, so others report as before.
             time_off_shift: match kind {
                 ElementKind::Server {
                     capacity,
                     available,
                     availability,
+                    power,
                     ..
-                } if !*available || !availability.is_empty() => self
+                } if !*available || !availability.is_empty() || power.is_some() => self
                     .states
                     .off_shift
                     .average(end)
                     .map(|o| o / f64::from(*capacity)),
                 _ => None,
             },
+            time_processing: share(&self.states.processing),
+            time_starved: share(&self.states.starved),
+            time_blocked: share(&self.states.blocked),
+            time_failed: share(&self.states.failed),
+            // Only once time has passed, as for the time-averages.
+            energy: powered.and_then(|(_, p)| {
+                self.states
+                    .processing
+                    .average(end)
+                    .map(|_| self.energy(p, end, hours))
+            }),
+            // Filled in by [`Live::report`], which sees every element.
+            specific_energy: None,
             // Only where losses can happen, so models without them report as before.
             lost: match kind {
                 ElementKind::Server {
@@ -1430,7 +1491,7 @@ fn spawn_shifts(sim: &mut Sim, pools: Rc<Pools>, pool: usize, changes: Vec<(f64,
 fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
     let me = tag(env.me);
     let env = Rc::new(RefCell::new(env));
-    let book = UnitBook::new(capacity, true);
+    let book = UnitBook::new(&env.borrow(), capacity);
     for u in 0..capacity as usize {
         let env = Rc::clone(&env);
         let book = Rc::clone(&book);
@@ -1503,7 +1564,7 @@ fn spawn_unit_server(
     let units: Rc<RefCell<Vec<Unit>>> = Rc::new(RefCell::new(
         (0..capacity).map(|_| Unit::default()).collect(),
     ));
-    let book = UnitBook::new(capacity, true);
+    let book = UnitBook::new(&env, capacity);
     // A unit came free, was repaired, or came on shift.
     let changed = Signal::new(&ctx);
     // Each unit's repair, which an interrupted job waits for; and its job ending, which a due
@@ -2047,6 +2108,12 @@ impl Pools {
                     blocking_probability: None,
                     availability: None,
                     time_off_shift: None,
+                    time_processing: None,
+                    time_starved: None,
+                    time_blocked: None,
+                    time_failed: None,
+                    energy: None,
+                    specific_energy: None,
                     lost: None,
                     loss_probability: None,
                     properties: Vec::new(),

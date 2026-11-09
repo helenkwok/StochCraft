@@ -110,6 +110,8 @@
 	Edit	편집
 	Elasticity	탄력성
 	Ends early	일찍 끝남
+	Energy	에너지
+	Energy per part	부품당 에너지
 	Enough: {units}, meeting the target in {p} of replications	충분: {units}, 반복 실행의 {p}에서 목표 충족
 	Entered	진입 수
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	반복 실행이 끝날 때 아직 내부에 있는 개체는 평균 대기 시간과 시스템 내 평균 체류 시간에서 빠집니다.
@@ -340,7 +342,11 @@
 	This run	이 실행
 	Three-point estimate	3점 추정
 	Time between arrivals	도착 간격
+	Time blocked	차단 시간
+	Time failed	고장 시간
 	Time off shift	근무 외 시간
+	Time processing	처리 시간
+	Time starved	작업 대기 시간
 	Time to the stop condition	중지 조건까지의 시간
 	Time unit	시간 단위
 	To	끝 블록

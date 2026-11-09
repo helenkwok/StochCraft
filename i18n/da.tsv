@@ -110,6 +110,8 @@
 	Edit	Redigér
 	Elasticity	Elasticitet
 	Ends early	Slutter tidligt
+	Energy	Energi
+	Energy per part	Energi pr. emne
 	Enough: {units}, meeting the target in {p} of replications	Nok: {units}, når målet i {p} af replikationerne
 	Entered	Indgået
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Enheder, der stadig er indeni ved slutningen af en replikation, er udeladt af den gennemsnitlige ventetid og den gennemsnitlige tid i systemet.
@@ -340,7 +342,11 @@
 	This run	Denne kørsel
 	Three-point estimate	Trepunktsskøn
 	Time between arrivals	Tid mellem ankomster
+	Time blocked	Tid blokeret
+	Time failed	Tid i nedbrud
 	Time off shift	Tid uden for skift
+	Time processing	Tid i bearbejdning
+	Time starved	Tid uden arbejde
 	Time to the stop condition	Tid til stopbetingelsen
 	Time unit	Tidsenhed
 	To	Til
