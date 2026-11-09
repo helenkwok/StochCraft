@@ -162,6 +162,16 @@ pub enum ElementKind {
         /// travels. A part in transit is inside this element (its work in progress), not the
         /// sender's.
         transfer: Option<Dist>,
+        /// Whether the units are available (on shift) outside the calendars of
+        /// `availability`: BPSim `availability` on the task's own resource, default true.
+        available: bool,
+        /// Availability while a calendar is active, the first active one applying (BPSim
+        /// `availability` values `validFor` a calendar), as for a pool. All the units follow it.
+        /// A unit checks it only when it takes its next entity: a job under way when the units
+        /// go off shift finishes first, and a job interrupted by a failure resumes after its
+        /// repair even if the shift has ended meanwhile. Failures ([`Breakdown`]) keep coming
+        /// in elapsed time through the breaks, and a repair goes on through them.
+        availability: Vec<Timed<bool>>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
@@ -1532,6 +1542,9 @@ impl Model {
                     out.push(Diagnostic::warning(Some(&e.id), Problem::TimedIgnored));
                 }
             }
+            if let ElementKind::Server { availability, .. } = &e.kind {
+                refs.extend(availability.iter().map(|t| (&e.id, &t.calendar)));
+            }
         }
         for r in &self.resources {
             refs.extend(r.calendars().map(|c| (&r.id, c)));
@@ -2386,6 +2399,8 @@ mod tests {
                         queue_capacity: None,
                         breakdown: None,
                         transfer: None,
+                        available: true,
+                        availability: Vec::new(),
                     },
                 ),
                 el("exit", ElementKind::Sink),
@@ -2463,6 +2478,8 @@ mod tests {
             queue_capacity: q,
             breakdown: None,
             transfer: None,
+            available: true,
+            availability: Vec::new(),
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -2529,6 +2546,8 @@ mod tests {
                 queue_capacity: None,
                 breakdown: None,
                 transfer: None,
+                available: true,
+                availability: Vec::new(),
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

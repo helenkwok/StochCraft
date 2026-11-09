@@ -2471,3 +2471,48 @@ fn sensitivity_to_a_single_unit_looks_only_upwards() {
         "{effect}"
     );
 }
+
+/// A server's calendar through `block.set`: units off shift outside a calendar, shown in the
+/// model and run with an off-shift share; the calendar cannot be removed while the server uses
+/// it.
+#[test]
+fn a_server_follows_its_calendar() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "calendar.add",
+        json!({"id": "day", "events": [{"start": "2016-01-01T00:00:00", "end": "2016-01-01T04:00:00", "repeat": "FREQ=DAILY"}]}),
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "available": false, "availability": [{"calendar": "day", "available": true}]}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let desk = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(desk["available"], false, "{m}");
+    assert_eq!(desk["availability"][0]["calendar"], "day", "{m}");
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    let off = r["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+        .map(|x| x["metrics"]["time_off_shift"]["mean"].clone())
+        .unwrap_or_default();
+    assert!(off.as_f64().is_some_and(|o| o > 0.0 && o < 1.0), "{r}");
+    assert_eq!(
+        err(&mut e, "calendar.remove", json!({"id": "day"})),
+        ErrorCode::Conflict
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "arrivals", "available": false})
+        ),
+        ErrorCode::InvalidParams
+    );
+}

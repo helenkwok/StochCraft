@@ -51,6 +51,8 @@ fn bpmn_written_by_another_tool() {
             queue_capacity: None,
             breakdown: None,
             transfer: None,
+            available: true,
+            availability: Vec::new(),
         }
     );
     assert_eq!(kind(m, "leave"), &ElementKind::Sink);
@@ -75,6 +77,8 @@ fn inherited_scenario_changes_only_what_it_says() {
             queue_capacity: None,
             breakdown: None,
             transfer: None,
+            available: true,
+            availability: Vec::new(),
         }
     );
     assert_eq!(l.model.experiment.replications, 16);
@@ -137,6 +141,8 @@ fn xpdl_with_bpsim_1() {
             queue_capacity: None,
             breakdown: None,
             transfer: None,
+            available: true,
+            availability: Vec::new(),
         }
     );
     assert_eq!(

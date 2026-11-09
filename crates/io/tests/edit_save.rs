@@ -304,6 +304,8 @@ fn blocks_and_connections_can_be_added_and_removed() {
             queue_capacity: None,
             breakdown: None,
             transfer: None,
+            available: true,
+            availability: Vec::new(),
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -320,6 +322,8 @@ fn blocks_and_connections_can_be_added_and_removed() {
             queue_capacity: None,
             breakdown: None,
             transfer: None,
+            available: true,
+            availability: Vec::new(),
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -505,6 +509,8 @@ fn new_ids_never_clash_with_the_files_other_ids() {
             queue_capacity: None,
             breakdown: None,
             transfer: None,
+            available: true,
+            availability: Vec::new(),
         };
     });
     let t = text(&saved);
@@ -924,6 +930,74 @@ fn transfers_that_cannot_be_used_are_reported() {
     );
 }
 
+fn set_availability(m: &mut Model, at: &str, open: bool, timed: &[(&str, bool)]) {
+    if let ElementKind::Server {
+        available,
+        availability,
+        ..
+    } = &mut element(m, at).kind
+    {
+        *available = open;
+        *availability = timed
+            .iter()
+            .map(|(c, v)| stochcraft_model::Timed {
+                calendar: id(c),
+                value: *v,
+            })
+            .collect();
+    }
+}
+
+/// A server's calendar is BPSim's own `Availability` on the task's resource: set, it is written
+/// there (with a calendar added to the file for it), read back as the server's, and removed
+/// again it gives back the file as it was, in BPMN and in XPDL.
+#[test]
+fn a_servers_availability_saves_on_its_resource() {
+    for (name, task) in [("mm1.bpmn", "serve"), ("tandem.xpdl", "weld")] {
+        let original = file(name);
+        let (off, _) = edit_and_save(name, None, |m| set_availability(m, task, false, &[]));
+        assert!(
+            text(&off).contains("Availability"),
+            "{name}:\n{}",
+            text(&off)
+        );
+        let loaded = read_scenario(&off, None).unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert!(
+            matches!(
+                loaded.model.element(&id(task)).map(|e| &e.kind),
+                Some(ElementKind::Server {
+                    available: false,
+                    ..
+                })
+            ),
+            "{name}: {:?}",
+            loaded.model.element(&id(task))
+        );
+        let mut model = loaded.model.clone();
+        set_availability(&mut model, task, true, &[]);
+        let back = loaded
+            .opened
+            .save(&model)
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+        assert_eq!(text(&back), text(&original), "{name}");
+        // With a calendar: the units are off for its events.
+        edit_and_save(name, None, |m| {
+            m.calendars.push(stochcraft_model::calendar::Calendar {
+                id: id("lunch"),
+                name: "Lunch".into(),
+                events: vec![stochcraft_model::calendar::Event {
+                    start: stochcraft_model::DateTime::new(2016, 1, 4, 12, 0, 0)
+                        .unwrap_or(stochcraft_model::DateTime(0)),
+                    end: stochcraft_model::DateTime::new(2016, 1, 4, 13, 0, 0)
+                        .unwrap_or(stochcraft_model::DateTime(0)),
+                    rule: None,
+                }],
+            });
+            set_availability(m, task, true, &[("lunch", false)]);
+        });
+    }
+}
+
 /// A server added to a file, or a delay made a server, takes its buffer along; one made a delay
 /// leaves it behind.
 #[test]
@@ -935,6 +1009,8 @@ fn new_and_changed_servers_carry_their_buffer() {
             queue_capacity: Some(4),
             breakdown: None,
             transfer: None,
+            available: true,
+            availability: Vec::new(),
         };
         set_queue(m, "weld", Some(1));
     });

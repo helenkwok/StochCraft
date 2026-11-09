@@ -190,15 +190,16 @@ fn boolean(b: bool) -> Element {
     s("BooleanParameter").with_attr("value", if b { "true" } else { "false" })
 }
 
-/// A pool's `Availability`, when it is not always available.
-pub(crate) fn availability_param(r: &ResourcePool) -> Option<Element> {
-    if r.available && r.availability.is_empty() {
+/// A pool's or a server's resource's `Availability` (`available` outside the calendars of
+/// `availability`), when it is not always available.
+pub(crate) fn availability_param(available: bool, availability: &[Timed<bool>]) -> Option<Element> {
+    if available && availability.is_empty() {
         return None;
     }
     Some(timed_param(
         "Availability",
-        Some(boolean(r.available)),
-        r.availability
+        Some(boolean(available)),
+        availability
             .iter()
             .map(|t| (t.calendar.as_str(), boolean(t.value)))
             .collect(),
@@ -655,20 +656,32 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         scenario.push(ep);
     }
     for e in &model.elements {
-        if let (ElementKind::Server { capacity, .. }, Some(rid)) =
-            (&e.kind, resource_of.get(e.id.as_str()))
+        if let (
+            ElementKind::Server {
+                capacity,
+                available,
+                availability,
+                ..
+            },
+            Some(rid),
+        ) = (&e.kind, resource_of.get(e.id.as_str()))
         {
             let quantity = numeric(u64::from(*capacity));
+            let mut rp = s("ResourceParameters");
+            if let Some(a) = availability_param(*available, availability) {
+                rp.push(a);
+            }
+            rp.push(param("Quantity", quantity));
             scenario.push(
                 s("ElementParameters")
                     .with_attr("elementRef", rid)
-                    .with_child(s("ResourceParameters").with_child(param("Quantity", quantity))),
+                    .with_child(rp),
             );
         }
     }
     for r in &model.resources {
         let mut rp = s("ResourceParameters");
-        if let Some(a) = availability_param(r) {
+        if let Some(a) = availability_param(r.available, &r.availability) {
             rp.push(a);
         }
         rp.push(quantity_param(r));

@@ -204,6 +204,15 @@ pub enum KindSpec {
         /// or task with shared resources keeps its unit, blocked, through the transfer.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         transfer: Option<DistSpec>,
+        /// Whether the units are available (on shift) outside the calendars of
+        /// `availability`; left out when true.
+        #[serde(default = "yes", skip_serializing_if = "is_true")]
+        available: bool,
+        /// Availability while a calendar is active, the first active one applying; all the
+        /// units follow it. A unit checks it as it takes its next entity, so a job under way
+        /// finishes first; failures and repairs go on through the breaks. Left out when none.
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        availability: Vec<AvailabilityDoc>,
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
     /// entity takes what the first of `needs` that can be met now asks for, holds it for its
@@ -388,7 +397,7 @@ pub struct ShiftDoc {
     pub quantity: u32,
 }
 
-/// Whether a pool's units are available while a calendar is active.
+/// Whether a pool's or a server's units are available while a calendar is active.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct AvailabilityDoc {
@@ -593,12 +602,19 @@ impl From<&ElementKind> for KindSpec {
                 queue_capacity,
                 breakdown,
                 transfer,
+                available,
+                availability,
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
                 queue_capacity: *queue_capacity,
                 breakdown: breakdown.as_ref().map(Into::into),
                 transfer: transfer.as_ref().map(Into::into),
+                available: *available,
+                availability: timed(availability, |t| AvailabilityDoc {
+                    calendar: t.calendar.to_string(),
+                    available: t.value,
+                }),
             },
             ElementKind::SharedTask {
                 service,
@@ -643,12 +659,16 @@ impl From<KindSpec> for ElementKind {
                 queue_capacity,
                 breakdown,
                 transfer,
+                available,
+                availability,
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
                 queue_capacity,
                 breakdown: breakdown.map(Into::into),
                 transfer: transfer.map(Into::into),
+                available,
+                availability: availability.into_iter().map(Into::into).collect(),
             },
             KindSpec::SharedTask {
                 service,
@@ -1413,6 +1433,8 @@ mod tests {
                 queue_capacity: None,
                 breakdown: None,
                 transfer: None,
+                available: true,
+                availability: Vec::new(),
             })
         );
     }

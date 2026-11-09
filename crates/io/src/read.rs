@@ -598,12 +598,13 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
     }
     let mut of_task = BTreeMap::new();
     let mut shared = BTreeMap::new();
-    // A resource whose units follow a calendar is a pool, even for one task.
+    // A resource whose number of units follows a calendar is a pool, even for one task. One
+    // that is only available or not by calendar can be a task's own (a server's units follow
+    // its availability).
     let timed = |r: &str| {
         scenario.is_some_and(|s| {
-            s.param(r, "ResourceParameters/Availability").is_some()
-                || s.param(r, "ResourceParameters/Quantity")
-                    .is_some_and(|q| q.elements().any(|v| v.attr("validFor").is_some()))
+            s.param(r, "ResourceParameters/Quantity")
+                .is_some_and(|q| q.elements().any(|v| v.attr("validFor").is_some()))
         })
     };
     for (task, needs) in needs_of {
@@ -701,12 +702,26 @@ fn pool_of(
             }
         }
     }
-    if let Some(p) = param("ResourceParameters/Availability") {
+    (pool.available, pool.availability) = availability_of(r, scenario, notes);
+    pool
+}
+
+/// Resource `r`'s availability (BPSim `availability`, default true) and its values while
+/// calendars are active.
+fn availability_of(
+    r: &str,
+    scenario: Option<&Scenario>,
+    notes: &mut Vec<Note>,
+) -> (bool, Vec<Timed<bool>>) {
+    let unit = scenario.map_or(TimeUnit::Minutes, |s| s.settings.base_time_unit);
+    let mut available = true;
+    let mut availability = Vec::new();
+    if let Some(p) = scenario.and_then(|s| s.param(r, "ResourceParameters/Availability")) {
         let timed = bpsim::timed_values(p, unit, notes, Some(r));
         match bpsim::default_value(p, unit, notes, Some(r)) {
-            Some(Value::Bool(b)) => pool.available = b,
+            Some(Value::Bool(b)) => available = b,
             // Only calendar values: unavailable outside them.
-            None if !timed.is_empty() => pool.available = false,
+            None if !timed.is_empty() => available = false,
             None => {}
             Some(other) => notes.push(Note::error(
                 Some(r),
@@ -715,7 +730,7 @@ fn pool_of(
         }
         for (c, v) in timed {
             match v {
-                Value::Bool(b) => pool.availability.push(Timed {
+                Value::Bool(b) => availability.push(Timed {
                     calendar: ElementId::unchecked(&c),
                     value: b,
                 }),
@@ -726,7 +741,7 @@ fn pool_of(
             }
         }
     }
-    pool
+    (available, availability)
 }
 
 /// The scenario's calendars, read from their iCalendar text.
@@ -921,12 +936,15 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                         if priority.is_some_and(|x| x != 0.0) {
                             notes.push(Note::info(Some(id), "a priority matters only among tasks that share a resource; this task has its own"));
                         }
+                        let (available, availability) = availability_of(r, scenario, notes);
                         ElementKind::Server {
                             capacity: quantity_of(r, &val, notes),
                             service: time,
                             queue_capacity: queue,
                             breakdown: breakdown_of(scenario, id, unit, notes),
                             transfer: transfer_of(scenario, id, unit, notes),
+                            available,
+                            availability,
                         }
                     }
                     (None, None, None) => ElementKind::Delay { duration: time },
