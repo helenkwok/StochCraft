@@ -844,6 +844,48 @@ taken together, and a large need waiting without holding back a smaller one.
   | Same, failed and off shift left out (idle power) | 172/60 kWh | exact |
   | The transfer line above: the first machine processing 48 and blocked 32 of 80 at 5 and 3 kW; the second processing 32 at 4 kW and idle 48 at 0.5 kW; 16 parts | 336/60, 152/60 kWh; 488/60/16 per part | exact |
   | Rare arrivals, 20 replications, some with nothing out: the summary's mean and `n` are those of the replications with a ratio | | exact |
+- **Time-average work in progress** (issue #87): `mean_work_in_progress` ("Mean work in
+  progress") on servers, shared tasks, delays, batches and joins. It is the time-average number
+  of entities inside over the window, each counted once wherever it is in the element: in
+  transfer to it, waiting, being served or delayed, or held while blocked. Summed over a line's
+  elements, it gives the line's work in progress. `work_in_progress` is still the count left
+  inside at the end. Worked by hand in `blocks/tests/transfers.rs`: a part counts at the first
+  machine until its transfer starts, then at the second.
+- **Industrial benchmark: Case A of Schmitt et al. (2026)** (issue #87). Paper: "LLM-driven
+  discrete-event simulation: A generative AI framework for automated model generation,
+  adaptation, and evaluation in manufacturing", *Journal of Manufacturing Systems* 85, 642–661,
+  https://doi.org/10.1016/j.jmsy.2026.02.015 (CC BY 4.0), Table 4. It is a truck maker's line of
+  four machines with exponential failures and repairs, buffers of 5 with a 10 s transfer,
+  weekend breaks and power per machine.
+  - **In StochCraft:** `stochcraft-cli new -t case-a`, committed as `tests/models/case-a.bpmn`
+    and run by `io/tests/benchmarks.rs` (25 replications of 30 days, 1 day of warm-up, 0.2 s in
+    a release build).
+    - Material is always there: a supply buffer kept full feeds the first machine as soon as it
+      has room. Its arrivals turned away show as `lost` at the supply, and it is left out of
+      the line's work in progress.
+    - The behaviour the paper leaves open is set as its published model does it. The failure
+      clock runs through breaks, and an interrupted job resumes with the time it had left. A
+      buffer's capacity counts parts in transit, and the sending machine is held through the
+      transfer. A machine checks the calendar as it takes its next part.
+  - **Compared with:** the authors' published model (GPL-3.0), run on its own inputs outside
+    the repository; none of its source was used in StochCraft. Its throughput matches the
+    paper's. Its WIP samples once a minute and counts a part in transit twice, and its energy
+    books each state when the state ends. So the WIP and energy-per-part references are that
+    model measured exactly: the same 25 seeds, distinct parts, and power integrated over exact
+    state times.
+
+  | Measure | Paper | Published model, exact | StochCraft |
+  |---|---|---|---|
+  | Throughput (parts/h) | 7.38 | 7.384 [7.335, 7.433] | 7.373 ± 0.056 |
+  | Work in progress (parts) | 4.47 | 4.402 [4.322, 4.482] | 4.405 ± 0.093 |
+  | Energy per part (kWh) | 14.22 | 14.141 [14.105, 14.177] | 14.148 ± 0.041 |
+
+  Each machine's share of time processing, blocked (transfers included) and failed agrees
+  within the half-width of the difference of two means of 25 replications. The test checks
+  these shares too. Starved and off shift are compared as one: the published model counts a
+  machine idle in a break as starved until it takes a part, while StochCraft counts it off shift.
+  For the last machine that is 74.7% starved and 15.9% off shift, against 86.0% and 4.6%. The
+  sum is 90.59% against 90.62%, and energy is the same either way.
 
 ### M2.7 Assembly and batching
 

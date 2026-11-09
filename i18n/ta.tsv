@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	{n} இல் ஒரு மீள் இயக்கம்: மற்றவற்றின் முடிவுகள் வேறுபடும்.
 	Save as a new BPMN file?	புதிய BPMN கோப்பாகச் சேமிக்கவா?
 	Still inside at the end	முடிவில் இன்னும் உள்ளே உள்ளவை
+	Mean work in progress	சராசரி நடைபெறும் பணி
 	Mean queue length	சராசரி வரிசை நீளம்
 	Mean time blocked	தடுக்கப்பட்ட சராசரி நேரம்
 	Mean time in system	அமைப்பில் கழித்த சராசரி நேரம்

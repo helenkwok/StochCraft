@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Ena ponovitev od {n}: rezultati drugih se razlikujejo.
 	Save as a new BPMN file?	Shranim kot novo datoteko BPMN?
 	Still inside at the end	Ob koncu še znotraj
+	Mean work in progress	Povprečna nedokončana proizvodnja
 	Mean queue length	Povprečna dolžina vrste
 	Mean time blocked	Povprečni čas blokiranja
 	Mean time in system	Povprečni čas v sistemu

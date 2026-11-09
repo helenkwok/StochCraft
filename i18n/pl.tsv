@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Jedna replikacja z {n}: wyniki pozostałych są inne.
 	Save as a new BPMN file?	Zapisać jako nowy plik BPMN?
 	Still inside at the end	Wciąż wewnątrz na końcu
+	Mean work in progress	Średnia produkcja w toku
 	Mean queue length	Średnia długość kolejki
 	Mean time blocked	Średni czas blokowania
 	Mean time in system	Średni czas w systemie

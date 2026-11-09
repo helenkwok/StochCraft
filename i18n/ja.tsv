@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	{n} 回中の 1 回の反復実行です。ほかの反復実行の結果は異なります。
 	Save as a new BPMN file?	新しい BPMN ファイルとして保存しますか？
 	Still inside at the end	終了時に内部に残っている数
+	Mean work in progress	平均仕掛品数
 	Mean queue length	平均待ち行列長
 	Mean time blocked	平均ブロック時間
 	Mean time in system	システム内の平均滞在時間

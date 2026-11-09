@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	หนึ่งรอบการจำลองซ้ำจาก {n}: ผลของรอบอื่นแตกต่างกัน
 	Save as a new BPMN file?	บันทึกเป็นไฟล์ BPMN ใหม่หรือไม่?
 	Still inside at the end	ยังอยู่ภายในเมื่อสิ้นสุด
+	Mean work in progress	งานระหว่างทำเฉลี่ย
 	Mean queue length	ความยาวคิวเฉลี่ย
 	Mean time blocked	เวลาเฉลี่ยที่ถูกบล็อก
 	Mean time in system	เวลาเฉลี่ยในระบบ

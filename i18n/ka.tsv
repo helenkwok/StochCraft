@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	ერთი გამეორება {n}-დან: დანარჩენების შედეგები განსხვავდება.
 	Save as a new BPMN file?	შევინახოთ ახალ BPMN ფაილად?
 	Still inside at the end	ბოლოს ჯერ კიდევ შიგნით
+	Mean work in progress	დაუმთავრებელი წარმოების საშუალო რაოდენობა
 	Mean queue length	რიგის საშუალო სიგრძე
 	Mean time blocked	დაბლოკვის საშუალო დრო
 	Mean time in system	სისტემაში გატარებული საშუალო დრო

@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	{n} ішінен бір қайталау: қалғандарының нәтижелері басқаша.
 	Save as a new BPMN file?	Жаңа BPMN файлы ретінде сақталсын ба?
 	Still inside at the end	Соңында әлі ішінде
+	Mean work in progress	Аяқталмаған өндірістің орташа мөлшері
 	Mean queue length	Кезектің орташа ұзындығы
 	Mean time blocked	Бұғатталудың орташа уақыты
 	Mean time in system	Жүйедегі орташа уақыт

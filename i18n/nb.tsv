@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Én replikasjon av {n}: de andre har andre resultater.
 	Save as a new BPMN file?	Lagre som ny BPMN-fil?
 	Still inside at the end	Fortsatt inne ved slutten
+	Mean work in progress	Gjennomsnittlig varer i arbeid
 	Mean queue length	Gjennomsnittlig kølengde
 	Mean time blocked	Gjennomsnittlig blokkeringstid
 	Mean time in system	Gjennomsnittlig tid i systemet

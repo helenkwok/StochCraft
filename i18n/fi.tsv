@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Yksi toisto {n}:stä: muiden tulokset poikkeavat.
 	Save as a new BPMN file?	Tallennetaanko uutena BPMN-tiedostona?
 	Still inside at the end	Lopussa yhä sisällä
+	Mean work in progress	Keskimääräinen keskeneräinen tuotanto
 	Mean queue length	Jonon keskipituus
 	Mean time blocked	Keskimääräinen estoaika
 	Mean time in system	Keskimääräinen aika järjestelmässä

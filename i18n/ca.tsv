@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Una rèplica de {n}: els resultats de les altres són diferents.
 	Save as a new BPMN file?	Vols desar-ho com a fitxer BPMN nou?
 	Still inside at the end	Encara a dins al final
+	Mean work in progress	Treball en curs mitjà
 	Mean queue length	Longitud mitjana de la cua
 	Mean time blocked	Temps mitjà bloquejat
 	Mean time in system	Temps mitjà al sistema

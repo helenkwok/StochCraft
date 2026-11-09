@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Μία επανάληψη από {n}: τα αποτελέσματα των άλλων διαφέρουν.
 	Save as a new BPMN file?	Αποθήκευση ως νέο αρχείο BPMN;
 	Still inside at the end	Ακόμη εντός στο τέλος
+	Mean work in progress	Μέση παραγωγή σε εξέλιξη
 	Mean queue length	Μέσο μήκος ουράς
 	Mean time blocked	Μέσος χρόνος αποκλεισμού
 	Mean time in system	Μέσος χρόνος στο σύστημα

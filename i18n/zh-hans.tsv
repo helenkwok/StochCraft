@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	{n} 次中的一次重复运行：其他重复运行的结果不同。
 	Save as a new BPMN file?	另存为新的 BPMN 文件？
 	Still inside at the end	结束时仍在内部的数量
+	Mean work in progress	平均在制品数
 	Mean queue length	平均队列长度
 	Mean time blocked	平均阻塞时间
 	Mean time in system	系统内平均时间

@@ -65,7 +65,7 @@ fn covers(m: &Value, theory: f64) -> bool {
 #[test]
 fn every_template_is_written_validated_and_run() {
     let list = ok(&["new", "--list"]);
-    for name in ["mm1", "mm2", "tandem"] {
+    for name in ["mm1", "mm2", "tandem", "case-a"] {
         assert!(list.contains(name), "{list}");
         let path = scratch(&format!("{name}.bpmn"));
         let p = path.to_string_lossy();

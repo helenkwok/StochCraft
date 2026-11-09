@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Eén herhaling van {n}: de resultaten van de andere verschillen.
 	Save as a new BPMN file?	Opslaan als nieuw BPMN-bestand?
 	Still inside at the end	Aan het eind nog binnen
+	Mean work in progress	Gemiddeld onderhanden werk
 	Mean queue length	Gemiddelde wachtrijlengte
 	Mean time blocked	Gemiddelde blokkeringstijd
 	Mean time in system	Gemiddelde tijd in het systeem

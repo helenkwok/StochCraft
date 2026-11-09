@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Egy ismétlés a(z) {n}-ból/-ből: a többi eredménye eltér.
 	Save as a new BPMN file?	Mentés új BPMN-fájlként?
 	Still inside at the end	A végén még bent
+	Mean work in progress	Átlagos befejezetlen termelés
 	Mean queue length	Átlagos sorhossz
 	Mean time blocked	Átlagos blokkolási idő
 	Mean time in system	Átlagos rendszerben töltött idő

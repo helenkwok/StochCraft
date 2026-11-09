@@ -89,6 +89,78 @@ fn tandem() -> Vec<(&'static str, Value)> {
     ]
 }
 
+/// Schmitt et al. (2026), Case A (Table 4): four machines in series with failures, buffers of 5
+/// with a 10-second transfer, weekend breaks and power per machine, in seconds from Monday
+/// 00:00. Material is always there for the first machine: a supply buffer kept full feeds it
+/// as soon as it has room.
+fn case_a() -> Vec<(&'static str, Value)> {
+    // (id, name, cycle time, availability, mean time to repair), Table 4.
+    let machines = [
+        ("m1", "SV36262", 320.0, 0.85, 1409.0),
+        ("m2", "SV32173", 290.0, 0.85, 718.0),
+        ("m3", "SV91991", 134.0, 0.98, 6717.0),
+        ("m4", "SV91989", 41.0, 0.99, 671.0),
+    ];
+    let weekly =
+        |start: &str, end: &str| json!({"start": start, "end": end, "repeat": "FREQ=WEEKLY"});
+    let mut steps = vec![
+        (
+            "model.rename",
+            json!({"name": "Case A (Schmitt et al. 2026)"}),
+        ),
+        (
+            "calendar.add",
+            json!({"id": "weekend", "name": "Weekend breaks", "events": [
+                weekly("2024-01-05T17:00:00", "2024-01-06T07:00:00"),
+                weekly("2024-01-06T17:00:00", "2024-01-07T07:00:00"),
+            ]}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "source", "id": "supply", "name": "Supply",
+                   "interarrival": {"type": "constant", "value": 60.0}}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "server", "id": "raw", "name": "Raw material", "capacity": 1,
+                   "service": {"type": "constant", "value": 0.0}, "queue_capacity": 5}),
+        ),
+        ("connect", json!({"from": "supply", "to": "raw"})),
+    ];
+    let mut from = "raw";
+    for (i, (id, name, cycle, a, mttr)) in machines.into_iter().enumerate() {
+        let mut block = json!({
+            "kind": "server", "id": id, "name": name, "capacity": 1,
+            "service": {"type": "constant", "value": cycle},
+            "queue_capacity": if i == 0 { 0 } else { 5 },
+            "breakdown": {
+                "time_to_failure": exp(mttr * a / (1.0 - a)),
+                "repair": exp(mttr),
+                "interruptible": true,
+            },
+            "availability": [{"calendar": "weekend", "available": false}],
+            "power": {"processing": 50.0, "idle": 10.0},
+        });
+        if i > 0 {
+            block["transfer"] = json!({"type": "constant", "value": 10.0});
+        }
+        steps.push(("block.add", block));
+        steps.push(("connect", json!({"from": from, "to": id})));
+        from = id;
+    }
+    steps.push((
+        "block.add",
+        json!({"kind": "sink", "id": "done", "name": "Finished parts"}),
+    ));
+    steps.push(("connect", json!({"from": from, "to": "done"})));
+    steps.push((
+        "experiment.set",
+        json!({"time_unit": "s", "warmup": 86400.0, "duration": 2505600.0,
+               "replications": 25, "seed": 1, "start": "2024-01-01T00:00:00"}),
+    ));
+    steps
+}
+
 pub static TEMPLATES: &[Template] = &[
     Template {
         name: "mm1",
@@ -104,5 +176,10 @@ pub static TEMPLATES: &[Template] = &[
         name: "tandem",
         summary: "Tandem line: cut, a 2-minute conveyor and weld, in minutes",
         steps: tandem,
+    },
+    Template {
+        name: "case-a",
+        summary: "Case A of Schmitt et al. (2026): four machines with failures, buffers of 5 with a 10 s transfer, weekend breaks and energy, in seconds",
+        steps: case_a,
     },
 ];

@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	{n}లో ఒక పునరావృత్త అమలు: మిగిలిన వాటి ఫలితాలు వేరుగా ఉంటాయి.
 	Save as a new BPMN file?	కొత్త BPMN ఫైల్ రూపంలో సేవ్ చేయాలా?
 	Still inside at the end	చివరికి ఇంకా లోపల ఉన్నవి
+	Mean work in progress	సగటు పురోగతిలో ఉన్న పని
 	Mean queue length	సగటు క్యూలో పొడవు
 	Mean time blocked	నిరోధిత సగటు సమయం
 	Mean time in system	వ్యవస్థలో గడిపిన సగటు సమయం

@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	{n}টির মধ্যে একটি পুনরাবৃত্তি: বাকিগুলোর ফলাফল ভিন্ন।
 	Save as a new BPMN file?	নতুন BPMN ফাইল হিসেবে সংরক্ষণ করবেন?
 	Still inside at the end	শেষে এখনও ভেতরে
+	Mean work in progress	গড় প্রক্রিয়াধীন কাজ
 	Mean queue length	সারির গড় দৈর্ঘ্য
 	Mean time blocked	গড় অবরুদ্ধ সময়
 	Mean time in system	সিস্টেমে গড় সময়

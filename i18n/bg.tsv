@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Една репликация от {n}: резултатите на останалите се различават.
 	Save as a new BPMN file?	Да се запази ли като нов BPMN файл?
 	Still inside at the end	Още вътре в края
+	Mean work in progress	Средно незавършено производство
 	Mean queue length	Средна дължина на опашката
 	Mean time blocked	Средно време на блокиране
 	Mean time in system	Средно време в системата

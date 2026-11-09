@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Eine Replikation von {n}: Die Ergebnisse der anderen weichen ab.
 	Save as a new BPMN file?	Als neue BPMN-Datei speichern?
 	Still inside at the end	Am Ende noch im System
+	Mean work in progress	Mittlerer Umlaufbestand
 	Mean queue length	Mittlere Warteschlangenlänge
 	Mean time blocked	Mittlere Blockierungszeit
 	Mean time in system	Mittlere Verweilzeit im System

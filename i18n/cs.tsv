@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Jedna replikace z {n}: výsledky ostatních se liší.
 	Save as a new BPMN file?	Uložit jako nový soubor BPMN?
 	Still inside at the end	Na konci stále uvnitř
+	Mean work in progress	Průměrná nedokončená výroba
 	Mean queue length	Průměrná délka fronty
 	Mean time blocked	Průměrná doba blokování
 	Mean time in system	Průměrná doba v systému

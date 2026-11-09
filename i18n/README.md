@@ -53,6 +53,12 @@ engine's messages (validation, file notes) are English too.
   processing, starved, blocked and failed) were machine-drafted the same way, with the "Time …"
   rows phrased alike in each language; "starved" is rendered as time without work (waiting for
   parts). Not checked against any other source, and not reviewed by native speakers.
+- The row for "Mean work in progress" (issue #87, the time-average number of parts inside an
+  element) was machine-drafted with Claude Code using each language's term for work in process.
+  The term comes from Wikipedia's interlanguage links where there was one (bn, ca, de, ja, nl,
+  pl), and otherwise from general accounting and operations-management usage. It was not checked
+  against IATE, and not reviewed by native speakers. The least certain are lo, ta, te, hi, ka,
+  kk, sq and it.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

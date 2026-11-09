@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	{n} tekrardan biri: diğerlerinin sonuçları farklıdır.
 	Save as a new BPMN file?	Yeni bir BPMN dosyası olarak kaydedilsin mi?
 	Still inside at the end	Sonda hâlâ içeride
+	Mean work in progress	Ortalama süreç içi stok
 	Mean queue length	Ortalama kuyruk uzunluğu
 	Mean time blocked	Ortalama engellenme süresi
 	Mean time in system	Sistemdeki ortalama süre

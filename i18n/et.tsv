@@ -170,6 +170,7 @@
 	One replication of {n}: the results of the others differ.	Üks kordus {n}-st: teiste tulemused erinevad.
 	Save as a new BPMN file?	Kas salvestada uue BPMN-failina?
 	Still inside at the end	Lõpus veel sees
+	Mean work in progress	Keskmine lõpetamata toodang
 	Mean queue length	Järjekorra keskmine pikkus
 	Mean time blocked	Keskmine blokeerimisaeg
 	Mean time in system	Keskmine aeg süsteemis
