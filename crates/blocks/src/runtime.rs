@@ -286,12 +286,19 @@ impl Compiled {
                 ElementKind::Server {
                     capacity,
                     service,
-                    breakdown: Some(b),
+                    breakdown,
+                    available,
+                    availability,
                     ..
-                } => spawn_failing_server(&mut sim, env, capacity, service, b),
-                ElementKind::Server {
-                    capacity, service, ..
-                } => spawn_server(&mut sim, env, capacity, service),
+                } => {
+                    let shifts = calendars.availability(available, &availability);
+                    let always = matches!(shifts.as_slice(), [(_, true)]);
+                    if breakdown.is_some() || !always {
+                        spawn_unit_server(&mut sim, env, capacity, service, breakdown, shifts);
+                    } else {
+                        spawn_server(&mut sim, env, capacity, service);
+                    }
+                }
                 ElementKind::SharedTask {
                     service,
                     needs,
@@ -672,6 +679,140 @@ pub(crate) struct BlockStats {
     lost: u64,
     /// Units failed or under repair (servers with breakdowns).
     down: TimeWeighted,
+    /// A server's units in each state but starved, each unit in exactly one ([`UnitBook`]).
+    states: UnitStates,
+}
+
+/// The state a server's unit is in: exactly one at every instant, the first that applies of
+/// failed (or under repair), off shift, blocked (holding a finished entity), processing (an
+/// entity), and starved (idle, on shift and up).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum UnitState {
+    Failed,
+    OffShift,
+    Blocked,
+    Processing,
+    Starved,
+}
+
+/// How many of a server's units are in each state, over time. Starved is what is left of the
+/// server's capacity.
+pub(crate) struct UnitStates {
+    failed: TimeWeighted,
+    off_shift: TimeWeighted,
+    blocked: TimeWeighted,
+    processing: TimeWeighted,
+}
+
+impl UnitStates {
+    fn new(t: f64) -> Self {
+        Self {
+            failed: TimeWeighted::new(t, 0.0),
+            off_shift: TimeWeighted::new(t, 0.0),
+            blocked: TimeWeighted::new(t, 0.0),
+            processing: TimeWeighted::new(t, 0.0),
+        }
+    }
+
+    fn reset(&mut self, t: f64) {
+        self.failed.reset(t);
+        self.off_shift.reset(t);
+        self.blocked.reset(t);
+        self.processing.reset(t);
+    }
+
+    fn get(&mut self, s: UnitState) -> Option<&mut TimeWeighted> {
+        match s {
+            UnitState::Failed => Some(&mut self.failed),
+            UnitState::OffShift => Some(&mut self.off_shift),
+            UnitState::Blocked => Some(&mut self.blocked),
+            UnitState::Processing => Some(&mut self.processing),
+            UnitState::Starved => None,
+        }
+    }
+}
+
+/// What a server's unit is doing, from which its [`UnitState`] follows.
+#[derive(Debug, Clone, Copy, Default)]
+struct Doing {
+    /// Serving an entity, including one whose service a failure interrupted.
+    processing: bool,
+    /// Holding a finished entity, blocked.
+    holding: bool,
+    /// Failed or under repair.
+    down: bool,
+}
+
+/// What each of a server's units is doing and whether they are on shift, kept in step with
+/// the counts of units in each state ([`BlockStats`]'s `states`), which give the shares of time
+/// in each state.
+struct UnitBook {
+    doing: RefCell<Vec<Doing>>,
+    /// The units are on shift (their calendar's availability).
+    open: Cell<bool>,
+}
+
+impl UnitBook {
+    fn new(capacity: u32, open: bool) -> Rc<Self> {
+        Rc::new(Self {
+            doing: RefCell::new(vec![Doing::default(); capacity as usize]),
+            open: Cell::new(open),
+        })
+    }
+
+    fn state(&self, d: Doing) -> UnitState {
+        if d.down {
+            UnitState::Failed
+        } else if !self.open.get() {
+            UnitState::OffShift
+        } else if d.holding {
+            UnitState::Blocked
+        } else if d.processing {
+            UnitState::Processing
+        } else {
+            UnitState::Starved
+        }
+    }
+
+    /// Moves a unit from state `from` to `to` in the counts.
+    fn count(env: &BlockEnv, from: UnitState, to: UnitState) {
+        if from == to {
+            return;
+        }
+        let now = env.ctx.now();
+        env.with_stats(|s| {
+            for (st, delta) in [(from, -1.0), (to, 1.0)] {
+                if let Some(tw) = s.states.get(st) {
+                    let v = tw.value() + delta;
+                    tw.set(now, v);
+                }
+            }
+        });
+    }
+
+    /// Changes what unit `u` is doing (now), keeping the counts.
+    fn change(&self, env: &BlockEnv, u: usize, f: impl FnOnce(&mut Doing)) {
+        let (from, to) = {
+            let mut doing = self.doing.borrow_mut();
+            let Some(d) = doing.get_mut(u) else {
+                return;
+            };
+            let from = self.state(*d);
+            f(d);
+            (from, self.state(*d))
+        };
+        Self::count(env, from, to);
+    }
+
+    /// The units go on or off shift (now).
+    fn set_open(&self, env: &BlockEnv, open: bool) {
+        let doing = self.doing.borrow().clone();
+        let from: Vec<UnitState> = doing.iter().map(|d| self.state(*d)).collect();
+        self.open.set(open);
+        for (d, f) in doing.iter().zip(from) {
+            Self::count(env, f, self.state(*d));
+        }
+    }
 }
 
 impl BlockStats {
@@ -690,6 +831,7 @@ impl BlockStats {
             blocked_time: Tally::new(),
             lost: 0,
             down: TimeWeighted::new(t, 0.0),
+            states: UnitStates::new(t),
         }
     }
 
@@ -707,6 +849,7 @@ impl BlockStats {
         self.blocked_time = Tally::new();
         self.lost = 0;
         self.down.reset(t);
+        self.states.reset(t);
     }
 
     /// Entities inside the element now: waiting in its input, being served or delayed (or
@@ -803,6 +946,20 @@ impl BlockStats {
                     .down
                     .average(end)
                     .map(|d| 1.0 - d / f64::from(*capacity)),
+                _ => None,
+            },
+            // Only for servers that follow a calendar, so others report as before.
+            time_off_shift: match kind {
+                ElementKind::Server {
+                    capacity,
+                    available,
+                    availability,
+                    ..
+                } if !*available || !availability.is_empty() => self
+                    .states
+                    .off_shift
+                    .average(end)
+                    .map(|o| o / f64::from(*capacity)),
                 _ => None,
             },
             // Only where losses can happen, so models without them report as before.
@@ -1079,6 +1236,18 @@ impl Calendars {
             .collect()
     }
 
+    /// Whether a server's units are on shift over the run: from each time on, until the next.
+    fn availability(&self, available: bool, timed: &[Timed<bool>]) -> Vec<(f64, bool)> {
+        let mut out: Vec<(f64, bool)> = Vec::new();
+        for (t, i) in self.timeline(timed) {
+            let open = i.and_then(|i| timed.get(i)).map_or(available, |x| x.value);
+            if out.last().is_none_or(|(_, o)| *o != open) {
+                out.push((t, open));
+            }
+        }
+        out
+    }
+
     /// A pool's units over the run: its shift's quantity while it is available, else none.
     fn units(&self, r: &ResourcePool) -> Vec<(f64, u32)> {
         let q = self.timeline(&r.shifts);
@@ -1124,8 +1293,10 @@ fn spawn_shifts(sim: &mut Sim, pools: Rc<Pools>, pool: usize, changes: Vec<(f64,
 fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
     let me = tag(env.me);
     let env = Rc::new(RefCell::new(env));
-    for _ in 0..capacity {
+    let book = UnitBook::new(capacity, true);
+    for u in 0..capacity as usize {
         let env = Rc::clone(&env);
+        let book = Rc::clone(&book);
         let service = service.clone();
         sim.spawn_tagged(me, async move {
             loop {
@@ -1140,17 +1311,26 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
                     e.with_stats(|s| s.wait.add(now - entity.entered));
                     e.adjust(|s| &mut s.waiting, -1.0);
                     e.adjust(|s| &mut s.busy, 1.0);
+                    book.change(&e, u, |d| d.processing = true);
                     service.sample(&mut e.rng)
                 };
                 ctx.hold(duration).await;
-                env.borrow().adjust(|s| &mut s.busy, -1.0);
+                {
+                    let e = env.borrow();
+                    e.adjust(|s| &mut s.busy, -1.0);
+                    book.change(&e, u, |d| {
+                        d.processing = false;
+                        d.holding = true;
+                    });
+                }
                 move_on(&env, &ctx, entity).await;
+                book.change(&env.borrow(), u, |d| d.holding = false);
             }
         });
     }
 }
 
-/// One unit of a server whose units fail.
+/// One unit of a server whose units fail or follow a calendar.
 #[derive(Default)]
 struct Unit {
     /// Serving an entity (possibly interrupted by a failure), or blocked after service.
@@ -1163,41 +1343,74 @@ struct Unit {
     due: bool,
 }
 
-/// A server whose units fail and are repaired ([`Breakdown`]). One process hands each waiting
-/// entity, first come first served, to the first unit that is up and idle; a process per unit
-/// makes it fail and repairs it.
-fn spawn_failing_server(
+/// A server whose units fail and are repaired ([`Breakdown`]), or follow a calendar (`shifts`:
+/// from each time on, whether they are on shift), or both. One process hands each waiting
+/// entity, first come first served, to the first unit that is up, idle and on shift; a process
+/// per unit makes it fail and repairs it; and one process takes the units on and off shift.
+///
+/// A unit checks the calendar only as it takes an entity: a job under way when the shift ends
+/// finishes, and one a failure interrupted resumes after the repair, shift or not. Failures
+/// come in elapsed time, and repairs go on, through the breaks.
+fn spawn_unit_server(
     sim: &mut Sim,
     mut env: BlockEnv,
     capacity: u32,
     service: Dist,
-    breakdown: Breakdown,
+    breakdown: Option<Breakdown>,
+    shifts: Vec<(f64, bool)>,
 ) {
     let ctx = env.ctx.clone();
     let me = tag(env.me);
     // The failures draw from their own stream, so they do not change the service times.
-    let mut fail_rng = env.rng.fork();
+    let mut fail_rng = breakdown.as_ref().map(|_| env.rng.fork());
     let units: Rc<RefCell<Vec<Unit>>> = Rc::new(RefCell::new(
         (0..capacity).map(|_| Unit::default()).collect(),
     ));
-    // A unit came free or was repaired.
+    let book = UnitBook::new(capacity, true);
+    // A unit came free, was repaired, or came on shift.
     let changed = Signal::new(&ctx);
     // Each unit's repair, which an interrupted job waits for; and its job ending, which a due
     // failure waits for.
     let up: Rc<Vec<Gate>> = Rc::new((0..capacity).map(|_| Gate::new(&ctx, true)).collect());
     let done: Rc<Vec<Signal>> = Rc::new((0..capacity).map(|_| Signal::new(&ctx)).collect());
     let env = Rc::new(RefCell::new(env));
+    // Off shift from the start: every unit is (counted from time 0).
+    if shifts.first().is_some_and(|(_, open)| !*open) {
+        book.set_open(&env.borrow(), false);
+    }
+
+    if shifts.len() > 1 {
+        let (c, book, changed, env) = (
+            ctx.clone(),
+            Rc::clone(&book),
+            changed.clone(),
+            Rc::clone(&env),
+        );
+        sim.spawn_tagged(me, async move {
+            for (t, open) in shifts.into_iter().skip(1) {
+                let now = c.now();
+                c.hold(t - now).await;
+                book.set_open(&env.borrow(), open);
+                if open {
+                    changed.notify_all();
+                }
+            }
+        });
+    }
 
     for u in 0..capacity as usize {
-        let (c, units, changed, up, done, env) = (
+        let (Some(b), Some(fail_rng)) = (breakdown.clone(), fail_rng.as_mut()) else {
+            break;
+        };
+        let (c, units, changed, up, done, env, book) = (
             ctx.clone(),
             Rc::clone(&units),
             changed.clone(),
             Rc::clone(&up),
             Rc::clone(&done),
             Rc::clone(&env),
+            Rc::clone(&book),
         );
-        let b = breakdown.clone();
         let mut rng = fail_rng.fork();
         sim.spawn_tagged(me, async move {
             loop {
@@ -1219,7 +1432,11 @@ fn spawn_failing_server(
                 if let Some(g) = up.get(u) {
                     g.close();
                 }
-                env.borrow().adjust(|s| &mut s.down, 1.0);
+                {
+                    let e = env.borrow();
+                    e.adjust(|s| &mut s.down, 1.0);
+                    book.change(&e, u, |d| d.down = true);
+                }
                 if let Some(pid) = serving {
                     c.interrupt(pid, 0);
                 }
@@ -1227,7 +1444,11 @@ fn spawn_failing_server(
                 if let Some(x) = units.borrow_mut().get_mut(u) {
                     x.down = false;
                 }
-                env.borrow().adjust(|s| &mut s.down, -1.0);
+                {
+                    let e = env.borrow();
+                    e.adjust(|s| &mut s.down, -1.0);
+                    book.change(&e, u, |d| d.down = false);
+                }
                 if let Some(g) = up.get(u) {
                     g.open();
                 }
@@ -1240,12 +1461,18 @@ fn spawn_failing_server(
         loop {
             let input = env.borrow().input.clone();
             let entity = input.get().await;
-            // The first unit that is up and idle; else wait for one.
+            // The first unit that is up, idle and on shift; else wait for one.
             let unit = loop {
-                let free = units
-                    .borrow()
-                    .iter()
-                    .position(|x| !x.busy && !x.down && !x.due);
+                let free = book
+                    .open
+                    .get()
+                    .then(|| {
+                        units
+                            .borrow()
+                            .iter()
+                            .position(|x| !x.busy && !x.down && !x.due)
+                    })
+                    .flatten();
                 match free {
                     Some(u) => break u,
                     None => changed.wait().await,
@@ -1257,20 +1484,22 @@ fn spawn_failing_server(
                 e.with_stats(|s| s.wait.add(now - entity.entered));
                 e.adjust(|s| &mut s.waiting, -1.0);
                 e.adjust(|s| &mut s.busy, 1.0);
+                book.change(&e, unit, |d| d.processing = true);
                 service.sample(&mut e.rng)
             };
             if let Some(x) = units.borrow_mut().get_mut(unit) {
                 x.busy = true;
             }
-            let (c, units2, changed2, up2, done2, env2) = (
+            let (c, units2, changed2, up2, done2, env2, book2) = (
                 ctx.clone(),
                 Rc::clone(&units),
                 changed.clone(),
                 Rc::clone(&up),
                 Rc::clone(&done),
                 Rc::clone(&env),
+                Rc::clone(&book),
             );
-            let interruptible = breakdown.interruptible;
+            let interruptible = breakdown.as_ref().is_some_and(|b| b.interruptible);
             let pid = ctx.spawn(async move {
                 let mut left = duration;
                 loop {
@@ -1300,8 +1529,16 @@ fn spawn_failing_server(
                 if let Some(x) = units2.borrow_mut().get_mut(unit) {
                     x.serving = None;
                 }
-                env2.borrow().adjust(|s| &mut s.busy, -1.0);
+                {
+                    let e = env2.borrow();
+                    e.adjust(|s| &mut s.busy, -1.0);
+                    book2.change(&e, unit, |d| {
+                        d.processing = false;
+                        d.holding = true;
+                    });
+                }
                 move_on(&env2, &c, entity).await;
+                book2.change(&env2.borrow(), unit, |d| d.holding = false);
                 if let Some(x) = units2.borrow_mut().get_mut(unit) {
                     x.busy = false;
                 }
@@ -1649,6 +1886,7 @@ impl Pools {
                     mean_blocked_time: None,
                     blocking_probability: None,
                     availability: None,
+                    time_off_shift: None,
                     lost: None,
                     loss_probability: None,
                     properties: Vec::new(),

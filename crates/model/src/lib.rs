@@ -149,6 +149,17 @@ pub enum ElementKind {
         /// Each unit fails now and then and is repaired (a StochCraft vendor extension,
         /// `stochcraft:breakdown`, since BPSim has none); `None`: units never fail.
         breakdown: Option<Breakdown>,
+        /// Whether the units are available (on shift) outside the calendars of
+        /// `availability`: BPSim `availability` on the task's own resource, default true.
+        available: bool,
+        /// Availability while a calendar is active, the first active one applying (BPSim
+        /// `availability` values `validFor` a calendar), as for a pool. All the units follow it.
+        ///
+        /// A unit checks it only when it takes its next entity: a job under way when the units
+        /// go off shift finishes first, and a job interrupted by a failure resumes after its
+        /// repair even if the shift has ended meanwhile. Failures ([`Breakdown`]) keep coming
+        /// in elapsed time through the breaks, and a repair goes on through them.
+        availability: Vec<Timed<bool>>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
@@ -1513,6 +1524,9 @@ impl Model {
                     out.push(Diagnostic::warning(Some(&e.id), Problem::TimedIgnored));
                 }
             }
+            if let ElementKind::Server { availability, .. } = &e.kind {
+                refs.extend(availability.iter().map(|t| (&e.id, &t.calendar)));
+            }
         }
         for r in &self.resources {
             refs.extend(r.calendars().map(|c| (&r.id, c)));
@@ -2366,6 +2380,8 @@ mod tests {
                         service: Dist::exponential_rate(1.0),
                         queue_capacity: None,
                         breakdown: None,
+                        available: true,
+                        availability: Vec::new(),
                     },
                 ),
                 el("exit", ElementKind::Sink),
@@ -2442,6 +2458,8 @@ mod tests {
             service: Dist::Constant(1.0),
             queue_capacity: q,
             breakdown: None,
+            available: true,
+            availability: Vec::new(),
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -2507,6 +2525,8 @@ mod tests {
                 service: Dist::Uniform { min: 2.0, max: 1.0 },
                 queue_capacity: None,
                 breakdown: None,
+                available: true,
+                availability: Vec::new(),
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

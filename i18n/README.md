@@ -46,6 +46,9 @@ engine's messages (validation, file notes) are English too.
   limit and 95% interval; not checked against any other source, and not reviewed by native
   speakers. "Met in at least" and "Share of replications" were removed with the sizing field they
   labelled (now "Target share").
+- The row for "Time off shift" (issue #88, the share of time a server's units are off shift)
+  was machine-drafted from the plain meaning of the English, with the language's everyday word
+  for a work shift; not checked against any other source, and not reviewed by native speakers.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

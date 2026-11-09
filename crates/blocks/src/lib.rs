@@ -484,10 +484,16 @@ pub enum Metric {
     /// Servers whose units fail: time-average fraction of units up (not failed or under
     /// repair).
     Availability,
+    /// Servers whose units follow a calendar: time-average fraction of units off shift. A unit
+    /// is in exactly one state at a time, the first that applies of failed (or under repair),
+    /// off shift, blocked, processing and starved: off shift means the calendar has the units
+    /// unavailable and the unit has not failed, even while it finishes a job it started on
+    /// shift.
+    TimeOffShift,
 }
 
 impl Metric {
-    pub const ALL: [Metric; 13] = [
+    pub const ALL: [Metric; 14] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -501,6 +507,7 @@ impl Metric {
         Metric::Lost,
         Metric::LossProbability,
         Metric::Availability,
+        Metric::TimeOffShift,
     ];
 
     /// The metric with this [`Metric::name`].
@@ -524,6 +531,7 @@ impl Metric {
             Metric::Lost => "lost",
             Metric::LossProbability => "loss_probability",
             Metric::Availability => "availability",
+            Metric::TimeOffShift => "time_off_shift",
         }
     }
 }
@@ -551,6 +559,8 @@ pub struct ElementReport {
     pub blocking_probability: Option<f64>,
     /// Servers whose units fail: [`Metric::Availability`].
     pub availability: Option<f64>,
+    /// Servers whose units follow a calendar: [`Metric::TimeOffShift`].
+    pub time_off_shift: Option<f64>,
     pub lost: Option<u64>,
     pub loss_probability: Option<f64>,
     /// For each property the element assigns, in the element's order: the mean of the values
@@ -575,6 +585,7 @@ impl ElementReport {
             Metric::Lost => self.lost.map(|n| n as f64),
             Metric::LossProbability => self.loss_probability,
             Metric::Availability => self.availability,
+            Metric::TimeOffShift => self.time_off_shift,
         }
     }
 }
@@ -830,10 +841,14 @@ pub fn run_warnings(model: &Model, summary: &ExperimentSummary) -> Vec<Diagnosti
         ) else {
             continue;
         };
-        // Busy as a share of the time up, for servers whose units fail.
-        let utilisation = match mean(Metric::Availability) {
-            Some(up) if up > 0.0 => busy / up,
-            _ => busy,
+        // Busy as a share of the time up and on shift, for servers whose units fail or follow
+        // a calendar.
+        let up =
+            mean(Metric::Availability).unwrap_or(1.0) - mean(Metric::TimeOffShift).unwrap_or(0.0);
+        let utilisation = if up > 0.0 && up < 1.0 {
+            busy / up
+        } else {
+            busy
         };
         let backlog = inside - f64::from(*capacity);
         if utilisation >= SATURATED_UTILISATION
@@ -924,6 +939,8 @@ impl Builder {
                 service,
                 queue_capacity: None,
                 breakdown: None,
+                available: true,
+                availability: Vec::new(),
             },
         )
     }
@@ -945,6 +962,8 @@ impl Builder {
                 service,
                 queue_capacity: Some(queue_capacity),
                 breakdown: None,
+                available: true,
+                availability: Vec::new(),
             },
         )
     }
@@ -966,6 +985,31 @@ impl Builder {
             self.elements.get_mut(block.0)
         {
             *b = Some(breakdown);
+        }
+    }
+
+    /// Makes server `block`'s units follow calendars: on shift while each calendar is active
+    /// as `availability` says (the first active one applying), and as `available` says outside
+    /// them.
+    pub fn availability(&mut self, block: BlockId, available: bool, availability: &[(&str, bool)]) {
+        if let Some((
+            _,
+            ElementKind::Server {
+                available: a,
+                availability: t,
+                ..
+            },
+            _,
+        )) = self.elements.get_mut(block.0)
+        {
+            *a = available;
+            *t = availability
+                .iter()
+                .map(|(c, v)| Timed {
+                    calendar: ElementId::unchecked(c),
+                    value: *v,
+                })
+                .collect();
         }
     }
 

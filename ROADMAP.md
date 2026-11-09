@@ -729,6 +729,48 @@ taken together, and a large need waiting without holding back a smaller one.
   | λ = 0.3, failures exp(mean 50), repairs exp(mean 5), interruptible: mean in service, λ E[S](1 + E[R]/MTBF) | 0.33 | 0.33126 ± 0.00217 |
   | Constant: failure 10 after repair, repair 2, jobs of 3, waiting for the job: jobs by 70 | 20 | 20 |
   | Same, interruptible: jobs by 69 | 19 | 19 |
+- **Calendars on servers** (issue #88): a server's units follow an availability calendar, as a
+  pool's do, alongside any breakdowns.
+  - **Model:** `available` (outside the calendars, default true) and `availability` (on or off
+    while each calendar is active, the first active one applying) on the server; all its units
+    follow them. Varying the number of units by calendar (`quantity` shifts) stays a pool's.
+  - **Semantics:**
+    - A unit checks the calendar only when it takes its next entity, so a job under way when a
+      break starts finishes first (as a pool's unit does).
+    - A job a failure interrupted resumes on its unit after the repair, even if the break has
+      begun meanwhile.
+    - Failures keep coming in elapsed time through the breaks, and a repair goes on through
+      them. Counting failures in busy time only could be an option later.
+    - Servers with neither a calendar nor breakdowns run exactly as before; servers with
+      breakdowns and no calendar too.
+  - **States:** at every instant each unit is in exactly one state, the first that applies of
+    failed (or under repair), off shift, blocked, processing and starved (idle, on shift and
+    up). Off shift is the calendar's: a unit finishing a job it started before the break, or a
+    resumed job, counts as off shift. Results add `time_off_shift`, the time-average fraction
+    of units off shift, for servers with a calendar ("Time off shift" in the window,
+    in every catalog).
+    - `availability` stays the fraction of units not failed, whatever the calendar.
+    - `utilisation` stays the fraction holding a job, through breaks and repairs alike.
+    - The saturation warning judges a server busy over the time its units were up and on
+      shift.
+  - **File:** BPSim's own `Availability` on the task's resource (`ResourceParameters`, values
+    `validFor` a calendar), read, written and saved in place. A resource of one task that is
+    only available or not by calendar is now read as that task's own, a server with a
+    calendar. Before, it became a one-task pool. A resource whose quantity varies by calendar
+    is still a pool. `block.set` and `block.add` take `available` and `availability`. Not
+    editable in the window yet.
+
+  **Validation** (`blocks/tests/calendars.rs`):
+
+  | Case | Theory | StochCraft |
+  |---|---|---|
+  | Jobs of 1.5 waiting from 0, off shift 10 to 20: jobs by 29.5 (the one under way at 10 finishes at 10.5) | 13 | 13 |
+  | Same: off-shift share, utilisation | 10/29.5, 20/29.5 | exact |
+  | Jobs of 4, failure 7 after each repair, repairs of 5, interruptible, off shift 10 to 20: jobs by 30 (the job interrupted at 7 resumes at 12, off shift) | 3 | 3 |
+  | Same: availability, off-shift share | 20/30, 7/30 | exact |
+  | Saturated, failures exp(mean 100), repairs exp(mean 10), off shift midnight to 8: availability A | 0.90909 | 0.90942 ± 0.00437 |
+  | Same: off-shift share A/3 | 0.30303 | 0.30310 ± 0.00286 |
+  | Same: jobs in 20 days, 28,800 × 2/3 × A (plus jobs finishing after a close) | 17,454.5 | 17,497.1 ± 112.8 |
 
 ### M2.7 Assembly and batching
 
