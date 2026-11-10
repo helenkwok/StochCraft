@@ -606,6 +606,25 @@ fn model_new(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     Ok(json!({}))
 }
 
+/// Refuses `transfer_holds_sender` set to false on a server with no transfer, which would
+/// otherwise be dropped without a word (as `block.set` refuses it).
+fn check_transfer(kind: &KindSpec) -> Result<(), CommandError> {
+    if matches!(
+        kind,
+        KindSpec::Server {
+            transfer: None,
+            transfer_holds_sender: false,
+            ..
+        }
+    ) {
+        return Err(CommandError::new(
+            ErrorCode::InvalidParams,
+            "`transfer_holds_sender` needs a transfer: give `transfer` too",
+        ));
+    }
+    Ok(())
+}
+
 fn model_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     if let Some(elements) = p
         .get("model")
@@ -617,6 +636,9 @@ fn model_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         }
     }
     let p: ModelSet = parse(p)?;
+    for el in &p.model.elements {
+        check_transfer(&el.kind)?;
+    }
     e.edit("model.set", Op::SetModel(Box::new(p.model.into())))?;
     Ok(json!({}))
 }
@@ -630,6 +652,7 @@ fn model_rename(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 fn block_add(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     check_keys(&p, &["id", "name", "index", "properties", "x", "y"])?;
     let p: BlockAdd = parse(p)?;
+    check_transfer(&p.kind)?;
     let kind: ElementKind = p.kind.into();
     let id = new_id(e, p.id.as_deref(), kind.name())?;
     let index = p

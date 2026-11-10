@@ -1713,6 +1713,15 @@ fn minimum_stays_and_shortest_queue_routing_through_commands() {
     let m = ok(&mut e, "model.get", json!({}));
     assert_eq!(desk(&m)["breakdown"]["hands_on_while_down"], false, "{m}");
     ok(&mut e, "run", json!({"replications": 2}));
+    // Without a transfer, the setting would be lost: refused when adding too.
+    assert_eq!(
+        err(
+            &mut e,
+            "block.add",
+            json!({"kind": "server", "id": "oven", "transfer_holds_sender": false})
+        ),
+        ErrorCode::InvalidParams
+    );
 
     ok(
         &mut e,
