@@ -607,10 +607,20 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
                 .is_some_and(|q| q.elements().any(|v| v.attr("validFor").is_some()))
         })
     };
+    // A resource StochCraft marked as a pool is one. In a file without the marker, a resource
+    // with a role, or used by a task with a priority, is a pool too: StochCraft never writes
+    // either for a task's own resource.
+    let pool = |r: &str, task: &str| {
+        is_marked_pool(scenario, r)
+            || roles.get(r).is_some_and(|l| !l.is_empty())
+            || scenario.is_some_and(|s| s.param(task, "PriorityParameters/Priority").is_some())
+    };
     for (task, needs) in needs_of {
         let own = match needs.as_slice() {
             [Need::Resource { id, quantity: 1 }]
-                if users.get(id.as_str()).is_none_or(|u| u.len() <= 1) && !timed(id.as_str()) =>
+                if users.get(id.as_str()).is_none_or(|u| u.len() <= 1)
+                    && !timed(id.as_str())
+                    && !pool(id.as_str(), &task) =>
             {
                 Some(id.to_string())
             }
@@ -631,6 +641,14 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
         users,
         roles,
     }
+}
+
+/// Whether `r` carries StochCraft's pool marker ([`bpsim::POOL`]).
+fn is_marked_pool(scenario: Option<&Scenario>, r: &str) -> bool {
+    scenario
+        .and_then(|s| s.param(r, &format!("VendorExtension/{}", bpsim::POOL)))
+        .and_then(bpsim::vendor_value)
+        .is_some_and(|v| v.trim() == "true")
 }
 
 /// Looks up a parameter's default value: (element, key, notes).
@@ -801,14 +819,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         users,
         roles,
     } = assign_resources(&p, scenario, notes);
-    // The pools the shared tasks draw on, in id order.
+    // The pools the shared tasks draw on, and those no task uses that are marked as pools or
+    // have a role, in id order. Other unused resources are left out: a bare BPMN resource, or
+    // a server's own one that an in-place save left behind when the server became a delay (its
+    // quantity is still there).
     let resources: Vec<ResourcePool> = p
         .resources
         .iter()
-        .filter(|(r, _)| {
-            users
-                .get(*r)
-                .is_some_and(|u| u.iter().any(|t| shared.contains_key(t)))
+        .filter(|(r, _)| match users.get(*r) {
+            Some(u) if !u.is_empty() => u.iter().any(|t| shared.contains_key(t)),
+            _ => is_marked_pool(scenario, r) || roles.get(*r).is_some_and(|l| !l.is_empty()),
         })
         .map(|(r, name)| {
             pool_of(

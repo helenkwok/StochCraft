@@ -741,7 +741,8 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         scenario.push(
             s("ElementParameters")
                 .with_attr("elementRef", r.id.as_str())
-                .with_child(rp),
+                .with_child(rp)
+                .with_child(vendor_value_element(crate::bpsim::POOL, "true")),
         );
     }
     for c in &model.calendars {

@@ -3,8 +3,8 @@
 use stochcraft_blocks::{BlockId, Builder, Event, Rule};
 use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{
-    DateTime, Dist, ElementKind, Experiment, Model, Property, PropertyType, PropertyValue, Routing,
-    TimeUnit,
+    DateTime, Dist, ElementKind, Experiment, Model, Need, Property, PropertyType, PropertyValue,
+    Routing, TimeUnit,
 };
 
 /// A model using every element kind and every distribution.
@@ -509,4 +509,91 @@ fn shortest_queue_routing_and_minimum_stays_write_read_and_save() {
     let again = back.opened.save(&loaded.model);
     let back = again.as_deref().map(|b| read(b).map(|l| l.model));
     assert_eq!(back, Ok(Ok(loaded.model)));
+}
+
+/// A model whose pools BPMN with BPSim alone could not tell apart from tasks' own resources:
+/// one pool no task uses, and one that a single task with priority 0 needs one unit of.
+fn lone_pools() -> Model {
+    let mut m = Builder::new();
+    let src = m.source("arrivals", Dist::Exponential { mean: 2.0 }, None);
+    m.pool("agents", 2, &[]);
+    m.pool("spare", 3, &[]);
+    let phone = m.shared_task(
+        "phone",
+        Dist::Exponential { mean: 1.5 },
+        vec![Need::Resource {
+            id: stochcraft_model::ElementId::unchecked("agents"),
+            quantity: 1,
+        }],
+        0.0,
+    );
+    let out = m.sink("exit");
+    m.connect(src, phone);
+    m.connect(phone, out);
+    m.build(Experiment::default())
+}
+
+#[test]
+fn pools_one_task_or_none_uses_read_back_as_pools() {
+    let model = lone_pools();
+    let bytes = write_new(&model);
+    let loaded = read(&bytes);
+    assert!(loaded.is_ok(), "{loaded:?}");
+    let Ok(loaded) = loaded else { return };
+    assert_eq!(loaded.model, laid_out(model));
+}
+
+#[test]
+fn files_without_the_pool_marker_keep_pools_with_a_role_or_a_priority() {
+    let mut m = Builder::new();
+    let src = m.source("arrivals", Dist::Exponential { mean: 2.0 }, None);
+    m.pool("agents", 2, &["agent"]);
+    m.pool("clerks", 1, &[]);
+    m.pool("spare", 3, &["spare"]);
+    let phone = m.shared_task(
+        "phone",
+        Dist::Exponential { mean: 1.5 },
+        vec![Need::Resource {
+            id: stochcraft_model::ElementId::unchecked("agents"),
+            quantity: 1,
+        }],
+        0.0,
+    );
+    let desk = m.shared_task(
+        "desk",
+        Dist::Exponential { mean: 1.0 },
+        vec![Need::Resource {
+            id: stochcraft_model::ElementId::unchecked("clerks"),
+            quantity: 1,
+        }],
+        2.0,
+    );
+    let out = m.sink("exit");
+    m.connect(src, phone);
+    m.connect(phone, desk);
+    m.connect(desk, out);
+    let model = m.build(Experiment::default());
+    let written = String::from_utf8(write_new(&model)).unwrap_or_default();
+    // The file as an older StochCraft wrote it: no pool markers.
+    let old = without_extension(&written, "stochcraft:pool");
+    assert!(!old.contains("stochcraft:pool"));
+    let loaded = read(old.as_bytes());
+    assert!(loaded.is_ok(), "{loaded:?}");
+    let Ok(loaded) = loaded else { return };
+    assert_eq!(loaded.model, laid_out(model));
+}
+
+/// `xml` without the `<bpsim:VendorExtension …/>` elements whose name is `name`.
+fn without_extension(xml: &str, name: &str) -> String {
+    let needle = format!("name=\"{name}\"");
+    let mut out = String::new();
+    let mut rest = xml;
+    while let Some(at) = rest.find(&needle) {
+        let start = rest[..at].rfind('<').unwrap_or(at);
+        let end = rest[at..].find("/>").map_or(rest.len(), |e| at + e + 2);
+        out.push_str(&rest[..start]);
+        rest = &rest[end..];
+    }
+    out.push_str(rest);
+    out
 }
