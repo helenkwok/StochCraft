@@ -858,7 +858,7 @@ taken together, and a large need waiting without holding back a smaller one.
   four machines with exponential failures and repairs, buffers of 5 with a 10 s transfer,
   weekend breaks and power per machine.
   - **In StochCraft:** `stochcraft-cli new -t case-a`, committed as `tests/models/case-a.bpmn`
-    and run by `io/tests/benchmarks.rs` (25 replications of 30 days, 1 day of warm-up, 0.2 s in
+    and run by `engine/tests/benchmarks.rs` (25 replications of 30 days, 1 day of warm-up, 0.2 s in
     a release build).
     - Material is always there: a supply buffer kept full feeds the first machine as soon as it
       has room. Its arrivals turned away show as `lost` at the supply, and it is left out of
