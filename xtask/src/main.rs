@@ -222,7 +222,10 @@ fn cmd_golden() -> Result<(), String> {
     let mut c = cargo();
     c.env(
         "CARGO_TARGET_WASM32_WASIP1_RUNNER",
-        format!("node --no-warnings {}", runner.display()),
+        format!(
+            "node --no-warnings --disable-wasm-trap-handler {}",
+            runner.display()
+        ),
     )
     .args([
         "test",
