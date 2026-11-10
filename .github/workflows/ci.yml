@@ -37,7 +37,7 @@ jobs:
       heavy: ${{ steps.affected.outputs.heavy }}
       wasm: ${{ steps.affected.outputs.wasm }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -88,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -101,7 +101,7 @@ jobs:
       # The BPSim reference models and XML Schema are downloaded, never committed (they carry no
       # licence of their own). The cache key changes when the pinned checksums in
       # xtask/src/bpsim.rs do, so bpsim.org is contacted only when the cache is cold.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: target/bpsim
           key: bpsim-${{ hashFiles('xtask/src/bpsim.rs') }}
@@ -125,7 +125,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@stable
@@ -141,12 +141,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       # The craft-fonts commit pages.yml builds with (CRAFT_FONTS_REV there), so the table of
       # served faces the web build compiles in is checked here too.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: storytold/craft-fonts
           ref: aced4137c022f1f587624d48e81ec77e1914a9cc
@@ -161,7 +161,7 @@ jobs:
       # Node runs the wasm32-wasip1 test binary through its built-in WASI (xtask/wasi-run.mjs). Node 22
       # crashed natively (SIGSEGV, also without its wasm trap handler) on the golden tests on GitHub's
       # runner only; Node 24 is the version keepatch.yml already uses.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
       - run: cargo xtask wasm
@@ -176,7 +176,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@stable
@@ -196,7 +196,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: EmbarkStudios/cargo-deny-action@v2
