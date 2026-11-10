@@ -1,0 +1,30 @@
+# Dependabot proposes updates on its own branches; CI checks them; a person merges.
+# Patch and minor updates arrive as one grouped pull request per ecosystem each week, so the
+# review load stays small. Major updates come one at a time.
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directories: ["/", "/bench"]
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      cargo-patch-and-minor:
+        update-types: [patch, minor]
+    ignore:
+      # The egui family is patched to the Craft suite's fork at one commit ([patch.crates-io] in
+      # Cargo.toml) and is bumped together by hand, with CADCraft. A version bump here would
+      # leave that patch unused.
+      - dependency-name: "egui*"
+      - dependency-name: "eframe"
+      - dependency-name: "ecolor"
+      - dependency-name: "emath"
+      - dependency-name: "epaint*"
+      - dependency-name: "winit"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
