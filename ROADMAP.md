@@ -932,7 +932,7 @@ taken together, and a large need waiting without holding back a smaller one.
   32 s; the same weekend breaks; 1 day of warm-up then 7 measured (the paper's "7-day horizon":
   with 7 in total its published model falls 3% short of its throughput).
   - **In StochCraft:** `stochcraft-cli new -t case-b`, committed as `tests/models/case-b.bpmn`
-    and run by `io/tests/benchmarks.rs` (25 replications; ignored in debug builds, run in
+    and run by `engine/tests/benchmarks.rs` (25 replications; ignored in debug builds, run in
     release by CI). Parts go to the press whose buffer has the shorter queue, and each delay is
     a minimum time in the buffer. The test also runs it with transfers that hold the sender.
   - **Compared with:** an independent model of the written specification, outside the
