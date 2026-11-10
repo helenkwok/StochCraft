@@ -326,6 +326,12 @@ pub struct Breakdown {
     /// with the service time it had left (BPSim `interruptible`); otherwise the unit fails only
     /// once its job is done, and the repair starts then.
     pub interruptible: bool,
+    /// A unit that fails while holding a finished entity, waiting for room in the next buffer
+    /// (or carrying it there), still hands it on as soon as there is room, under repair
+    /// (`true`, the default); otherwise it keeps it until repaired
+    /// (`stochcraft:breakdown handsOnWhileDown="false"`). Either way a unit under repair takes no
+    /// new entity, and one left empty keeps its place in the buffer free until repaired.
+    pub hands_on_while_down: bool,
 }
 
 /// What a [`ElementKind::SharedTask`] needs from the pools, for one entity.

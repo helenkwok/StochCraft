@@ -25,7 +25,9 @@
   stochcraft:breakdown, on a task's ElementParameters: its resource's units fail after a time
   drawn from timeToFailure (elapsed since the last repair) and are repaired for a time drawn from
   repairTime, each holding one BPSim distribution or constant. Whether a failure interrupts the
-  job under way is BPSim's own PriorityParameters/Interruptible.
+  job under way is BPSim's own PriorityParameters/Interruptible. With handsOnWhileDown="false", a
+  unit that fails while holding a finished part keeps it until repaired (by default it hands it
+  on as soon as there is room).
 
     <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="…">
       <stochcraft:breakdown>
@@ -93,6 +95,7 @@
         <xs:element name="timeToFailure" type="stochcraft:Value"/>
         <xs:element name="repairTime" type="stochcraft:Value"/>
       </xs:sequence>
+      <xs:attribute name="handsOnWhileDown" type="xs:boolean" default="true"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="transferTime">

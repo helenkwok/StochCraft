@@ -272,12 +272,15 @@ pub(crate) fn breakdown_element(b: &Breakdown) -> Element {
     let part = |local: &str, d: &Dist| {
         Element::new(&format!("stochcraft:{local}"), Some(ns)).with_child(dist_element(d))
     };
+    let mut body = Element::new("stochcraft:breakdown", Some(ns));
+    if !b.hands_on_while_down {
+        body = body.with_attr("handsOnWhileDown", "false");
+    }
     s("VendorExtension")
         .with_attr("name", crate::bpsim::BREAKDOWN)
         .with_attr("xmlns:stochcraft", ns)
         .with_child(
-            Element::new("stochcraft:breakdown", Some(ns))
-                .with_child(part("timeToFailure", &b.time_to_failure))
+            body.with_child(part("timeToFailure", &b.time_to_failure))
                 .with_child(part("repairTime", &b.repair)),
         )
 }

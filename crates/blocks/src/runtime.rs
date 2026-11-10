@@ -1224,6 +1224,17 @@ impl Places {
         self.held.borrow_mut().insert(id, guard);
     }
 
+    /// The place entity `id` holds, as it leaves: kept for the element (returned) if `keep`,
+    /// else given back.
+    fn leave_or_keep(&self, id: u64, keep: bool) -> Option<ResourceGuard> {
+        if keep {
+            self.held.borrow_mut().remove(&id)
+        } else {
+            self.leave(id);
+            None
+        }
+    }
+
     /// Gives back the place entity `id` holds, as it leaves.
     fn leave(&self, id: u64) {
         let guard = self.held.borrow_mut().remove(&id);
@@ -1238,6 +1249,14 @@ impl Places {
     /// Whether a place is free now.
     fn has_room(&self) -> bool {
         self.pool.in_use() < self.pool.capacity()
+    }
+
+    /// Gives back a place held for no entity (a broken unit's, [`reserve_place`]).
+    fn give_back(&self, guard: ResourceGuard) {
+        drop(guard);
+        for w in self.watchers.borrow().iter() {
+            w.notify_all();
+        }
     }
 }
 
@@ -1764,7 +1783,7 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
                         d.holding = true;
                     });
                 }
-                move_on(&env, &ctx, entity).await;
+                move_on(&env, &ctx, entity, &|| false, None).await;
                 book.change(&env.borrow(), u, |d| d.holding = false);
             }
         });
@@ -1782,6 +1801,26 @@ struct Unit {
     serving: Option<u64>,
     /// A failure is due and waits for the job to finish (non-interruptible).
     due: bool,
+    /// While down with no entity: the server's place it keeps, so that no entity gets in for
+    /// it ([`reserve_place`]).
+    reserved: Option<ResourceGuard>,
+}
+
+/// A unit that is down and holds no entity cannot take one, so the place in the server's finite
+/// buffer that would be its own is kept free of entities until its repair: the buffer then holds
+/// no more than its waiting room (and the other units' places) meanwhile. Taken only if a place
+/// is free at that moment (none is when every place already holds an entity, such as one taken
+/// for the unit before a break).
+fn reserve_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places>>) {
+    let Some(p) = places else { return };
+    let mut units = units.borrow_mut();
+    if let Some(x) = units.get_mut(u)
+        && x.down
+        && !x.busy
+        && x.reserved.is_none()
+    {
+        x.reserved = p.pool.try_acquire();
+    }
 }
 
 /// A server whose units fail and are repaired ([`Breakdown`]), or follow a calendar (`shifts`:
@@ -1878,12 +1917,18 @@ fn spawn_unit_server(
                     e.adjust(|s| &mut s.down, 1.0);
                     book.change(&e, u, |d| d.down = true);
                 }
+                let places = env.borrow().places.clone();
+                reserve_place(&units, u, places.as_ref());
                 if let Some(pid) = serving {
                     c.interrupt(pid, 0);
                 }
                 c.hold(b.repair.sample(&mut rng)).await;
-                if let Some(x) = units.borrow_mut().get_mut(u) {
+                let kept = units.borrow_mut().get_mut(u).and_then(|x| {
                     x.down = false;
+                    x.reserved.take()
+                });
+                if let (Some(g), Some(p)) = (kept, &places) {
+                    p.give_back(g);
                 }
                 {
                     let e = env.borrow();
@@ -1941,6 +1986,7 @@ fn spawn_unit_server(
                 Rc::clone(&book),
             );
             let interruptible = breakdown.as_ref().is_some_and(|b| b.interruptible);
+            let waits_for_repair = breakdown.as_ref().is_some_and(|b| !b.hands_on_while_down);
             let pid = ctx.spawn(async move {
                 let mut left = duration;
                 loop {
@@ -1978,10 +2024,17 @@ fn spawn_unit_server(
                         d.holding = true;
                     });
                 }
-                move_on(&env2, &c, entity).await;
+                // Handed on while down: now empty, the unit keeps the entity's place until
+                // its repair ([`reserve_place`]).
+                let down = || units2.borrow().get(unit).is_some_and(|x| x.down);
+                let repaired = waits_for_repair.then(|| up2.get(unit)).flatten();
+                let kept = move_on(&env2, &c, entity, &down, repaired).await;
                 book2.change(&env2.borrow(), unit, |d| d.holding = false);
                 if let Some(x) = units2.borrow_mut().get_mut(unit) {
                     x.busy = false;
+                    if kept.is_some() {
+                        x.reserved = kept;
+                    }
                 }
                 if let Some(d) = done2.get(unit) {
                     d.notify_all();
@@ -1997,8 +2050,22 @@ fn spawn_unit_server(
 
 /// An entity whose service or delay is over leaves for the next element. Into a full finite
 /// buffer it waits here first, blocking (blocking after service): the element keeps it, and its
-/// place here, until there is room, and the time is recorded.
-async fn move_on(env: &Rc<RefCell<BlockEnv>>, ctx: &Ctx, mut entity: Entity) {
+/// place here, until there is room, and the time is recorded. As the entity's place here comes
+/// free, `keep` says whether the element keeps it (a broken unit, [`reserve_place`]); then it is
+/// returned instead of given back. With `repaired`, the unit holding the entity hands it on
+/// only while that gate is open (it is up): a unit that is down first waits for its repair, and
+/// one that breaks down while waiting for room waits for its repair once there is room,
+/// keeping the place it has.
+async fn move_on(
+    env: &Rc<RefCell<BlockEnv>>,
+    ctx: &Ctx,
+    mut entity: Entity,
+    keep: &dyn Fn() -> bool,
+    repaired: Option<&Gate>,
+) -> Option<ResourceGuard> {
+    if let Some(g) = repaired {
+        g.wait().await;
+    }
     let out = env.borrow().out.clone();
     // Where the entity goes: the next element, or the way a shortest-queue gateway there gives.
     let out = match out {
@@ -2006,6 +2073,9 @@ async fn move_on(env: &Rc<RefCell<BlockEnv>>, ctx: &Ctx, mut entity: Entity) {
             let start = ctx.now();
             env.borrow().adjust(|s| &mut s.blocked, 1.0);
             let to = out.make_room(&mut entity).await;
+            if let Some(g) = repaired {
+                g.wait().await;
+            }
             let now = ctx.now();
             let e = env.borrow();
             e.adjust(|s| &mut s.blocked, -1.0);
@@ -2029,23 +2099,23 @@ async fn move_on(env: &Rc<RefCell<BlockEnv>>, ctx: &Ctx, mut entity: Entity) {
             ctx.hold(dt).await;
             let e = env.borrow();
             e.adjust(|s| &mut s.transferring, -1.0);
-            if let Some(p) = &e.places {
-                p.leave(id);
-            }
+            let kept = e.places.as_ref().and_then(|p| p.leave_or_keep(id, keep()));
             drop(e);
             out.arrive(ctx.now(), entity);
+            kept
         }
         (out, transfer) => {
-            {
+            let kept = {
                 let e = env.borrow();
                 e.with_stats(|s| s.left += 1);
-                if let Some(p) = &e.places {
-                    p.leave(entity.id);
-                }
-            }
+                e.places
+                    .as_ref()
+                    .and_then(|p| p.leave_or_keep(entity.id, keep()))
+            };
             if let Some(out) = out {
                 out.travel(ctx, entity, transfer);
             }
+            kept
         }
     }
 }
@@ -2410,7 +2480,7 @@ fn spawn_shared(
                 };
                 c.hold(duration).await;
                 env2.borrow().adjust(|s| &mut s.busy, -1.0);
-                move_on(&env2, &c, entity).await;
+                move_on(&env2, &c, entity, &|| false, None).await;
                 pl.release(taken);
             });
         }
@@ -2440,7 +2510,7 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
             ctx.spawn(async move {
                 c.hold(dt).await;
                 env2.borrow().adjust(|s| &mut s.busy, -1.0);
-                move_on(&env2, &c, entity).await;
+                move_on(&env2, &c, entity, &|| false, None).await;
             });
         }
     });

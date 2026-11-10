@@ -407,6 +407,10 @@ pub struct BreakdownSpec {
     /// with the time it had left; otherwise the unit fails once its job is done.
     #[serde(default)]
     pub interruptible: bool,
+    /// A unit that fails while holding a finished entity still hands it on when there is room
+    /// (true), or keeps it until repaired (false); left out when true.
+    #[serde(default = "yes", skip_serializing_if = "is_true")]
+    pub hands_on_while_down: bool,
 }
 
 impl From<&Breakdown> for BreakdownSpec {
@@ -415,6 +419,7 @@ impl From<&Breakdown> for BreakdownSpec {
             time_to_failure: (&b.time_to_failure).into(),
             repair: (&b.repair).into(),
             interruptible: b.interruptible,
+            hands_on_while_down: b.hands_on_while_down,
         }
     }
 }
@@ -425,6 +430,7 @@ impl From<BreakdownSpec> for Breakdown {
             time_to_failure: b.time_to_failure.into(),
             repair: b.repair.into(),
             interruptible: b.interruptible,
+            hands_on_while_down: b.hands_on_while_down,
         }
     }
 }

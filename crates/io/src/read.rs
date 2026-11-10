@@ -1332,10 +1332,28 @@ fn breakdown_of(
             false
         }
     };
+    let hands_on_while_down = match body
+        .and_then(|b| b.attr("handsOnWhileDown"))
+        .as_deref()
+        .map(str::trim)
+    {
+        None | Some("true" | "1") => true,
+        Some("false" | "0") => false,
+        Some(other) => {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "handsOnWhileDown on a breakdown must be true or false, not `{other}`; a unit under repair hands on its finished part"
+                ),
+            ));
+            true
+        }
+    };
     Some(Breakdown {
         time_to_failure,
         repair,
         interruptible,
+        hands_on_while_down,
     })
 }
 

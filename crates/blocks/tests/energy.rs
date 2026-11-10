@@ -131,6 +131,7 @@ fn failing_on_a_calendar(p: Power) -> Report {
             time_to_failure: Dist::Constant(7.0),
             repair: Dist::Constant(5.0),
             interruptible: true,
+            hands_on_while_down: true,
         },
     );
     b.power(m, p);

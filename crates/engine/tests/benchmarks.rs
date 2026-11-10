@@ -23,6 +23,7 @@ use std::path::Path;
 use stochcraft_blocks::{Report, compile};
 use stochcraft_experiment::Experiment;
 use stochcraft_io::read_scenario;
+use stochcraft_model::ElementKind;
 
 /// The 95% Student-t quantile for 24 degrees of freedom (25 replications).
 const T_24: f64 = 2.063_898_561_628_021;
@@ -131,5 +132,91 @@ fn case_a_matches_the_published_line() {
                 "{m} share {i}: StochCraft {mean} ± {hw}%, published {want}%"
             );
         }
+    }
+}
+
+/// Case B of the same paper (Table 6, `tests/models/case-b.bpmn`, written by
+/// `stochcraft-cli new -t case-b`): seven machines with two presses in parallel, fed by the
+/// shorter queue, 8.9% rejected at quality, weekend breaks and energy, 25 replications of 7
+/// days after 1 day of warm-up. The paper gives no confidence intervals and its published model
+/// adds storage that Table 6 does not list, so the targets are those of an independent model of
+/// the specification (100 replications, a unit under repair handing on its finished part), and
+/// StochCraft's mean must lie within the half-width of a difference of the two means. Each
+/// buffer's delay is checked both as a minimum time in the buffer (the file, which matches the
+/// paper's 27.26 parts an hour) and as a transfer that holds the sending machine.
+fn case_b(holds_sender: bool) -> Vec<Report> {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/case-b.bpmn");
+    let bytes = std::fs::read(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+    let loaded = read_scenario(&bytes, None).unwrap_or_else(|e| panic!("{e}"));
+    assert!(loaded.notes.is_empty(), "{:?}", loaded.notes);
+    let mut model = loaded.model;
+    for e in &mut model.elements {
+        if let ElementKind::Server {
+            transfer: Some(t), ..
+        } = &mut e.kind
+        {
+            t.holds_sender = holds_sender;
+        }
+    }
+    let x = model.experiment.clone();
+    assert_eq!(
+        (x.replications, x.warmup, x.duration),
+        (25, 86_400.0, 604_800.0)
+    );
+    let c = compile(&model).unwrap_or_else(|e| panic!("{e:?}"));
+    let streams = Experiment::new(u64::from(x.replications), x.seed);
+    (0..u64::from(x.replications))
+        .map(|i| c.run(streams.stream(i)).unwrap_or_else(|e| panic!("{e}")))
+        .collect()
+}
+
+/// StochCraft's mean agrees with a target mean (with its half-width) within the half-width of
+/// their difference.
+fn agrees(what: &str, (mean, hw): (f64, f64), (target, target_hw): (f64, f64)) {
+    let allowed = (hw * hw + target_hw * target_hw).sqrt();
+    assert!(
+        (mean - target).abs() <= allowed,
+        "{what}: StochCraft {mean} ± {hw}, target {target} ± {target_hw}"
+    );
+}
+
+#[test]
+#[ignore = "slow in debug builds (about a minute); CI runs it in release with the ignored tests"]
+fn case_b_matches_an_independent_model_of_the_line() {
+    const STATIONS: [&str; 7] = [
+        "loading", "conveyor", "washing", "handling", "press1", "press2", "quality",
+    ];
+    let hours = 604_800.0 / 3600.0;
+    // (holds the sender, throughput, WIP, energy per accepted part), targets as mean and
+    // 95% half-width.
+    let targets = [
+        (
+            false,
+            (27.091_49, 0.035_21),
+            (18.346_31, 0.042_98),
+            (0.439_741, 0.000_479),
+        ),
+        (
+            true,
+            (23.072_86, 0.030_17),
+            (17.340_41, 0.040_02),
+            (0.491_921, 0.000_564),
+        ),
+    ];
+    for (holds, th_t, wip_t, sec_t) in targets {
+        let reports = case_b(holds);
+        let th = each(&reports, |r| {
+            value(r, "done", |e| Some(e.entered as f64)) / hours
+        });
+        agrees(&format!("throughput, holds {holds}"), th, th_t);
+        let wip = each(&reports, |r| {
+            STATIONS
+                .iter()
+                .map(|m| value(r, m, |e| e.mean_work_in_progress))
+                .sum()
+        });
+        agrees(&format!("work in progress, holds {holds}"), wip, wip_t);
+        let sec = each(&reports, |r| value(r, "done", |e| e.specific_energy));
+        agrees(&format!("energy per part, holds {holds}"), sec, sec_t);
     }
 }

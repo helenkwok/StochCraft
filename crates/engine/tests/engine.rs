@@ -1705,6 +1705,14 @@ fn minimum_stays_and_shortest_queue_routing_through_commands() {
     );
     let m = ok(&mut e, "model.get", json!({}));
     assert!(!m.to_string().contains("transfer_holds_sender"), "{m}");
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "breakdown": {"time_to_failure": {"type": "exponential", "mean": 100.0}, "repair": {"type": "constant", "value": 5.0}, "hands_on_while_down": false}}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(desk(&m)["breakdown"]["hands_on_while_down"], false, "{m}");
+    ok(&mut e, "run", json!({"replications": 2}));
 
     ok(
         &mut e,

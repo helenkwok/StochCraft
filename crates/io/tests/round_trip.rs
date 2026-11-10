@@ -38,6 +38,7 @@ pub fn showcase() -> Model {
                 max: 6.0,
             },
             interruptible: true,
+            hands_on_while_down: true,
         },
     );
     m.transfer(cut, Dist::Uniform { min: 0.5, max: 1.5 });
@@ -452,6 +453,15 @@ fn shortest_queue_routing_and_minimum_stays_write_read_and_save() {
     let out = m.sink("done");
     m.min_stay(p1, Dist::Constant(32.0));
     m.min_stay(p2, Dist::Constant(32.0));
+    m.breakdown(
+        p1,
+        stochcraft_blocks::Breakdown {
+            time_to_failure: Dist::Exponential { mean: 525.0 },
+            repair: Dist::Exponential { mean: 73.0 },
+            interruptible: true,
+            hands_on_while_down: false,
+        },
+    );
     m.connect(src, handle);
     m.connect(handle, pick);
     m.connect(pick, p1);
@@ -467,6 +477,7 @@ fn shortest_queue_routing_and_minimum_stays_write_read_and_save() {
         "{text}"
     );
     assert_eq!(text.matches(r#"holdsSender="false""#).count(), 2, "{text}");
+    assert!(text.contains(r#"handsOnWhileDown="false""#), "{text}");
     let Ok(loaded) = read(&bytes) else {
         unreachable!()
     };

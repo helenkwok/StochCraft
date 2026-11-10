@@ -760,6 +760,7 @@ fn showcase() -> Model {
                 max: 6.0,
             },
             interruptible: true,
+            hands_on_while_down: true,
         },
     );
     m.transfer(previous, Dist::Uniform { min: 0.5, max: 1.5 });
@@ -1043,7 +1044,8 @@ fn everything_stochcraft_writes_is_schema_valid() {
         "batching",
         &xsd,
     );
-    // Routing to the shortest queue, and a transfer that does not hold the sender.
+    // Routing to the shortest queue, a transfer that does not hold the sender, and a
+    // breakdown that keeps a finished part until repaired.
     let mut r = Builder::new();
     let src = r.source("arrive", Dist::Constant(1.0), None);
     let pick = r.shortest_queue("pick");
@@ -1051,6 +1053,15 @@ fn everything_stochcraft_writes_is_schema_valid() {
     let c = r.buffered_server("b", 1, Dist::Constant(2.0), 3);
     r.min_stay(a, Dist::Constant(0.5));
     r.transfer(c, Dist::Constant(0.5));
+    r.breakdown(
+        a,
+        stochcraft_blocks::Breakdown {
+            time_to_failure: Dist::Constant(50.0),
+            repair: Dist::Constant(5.0),
+            interruptible: true,
+            hands_on_while_down: false,
+        },
+    );
     let out = r.sink("out");
     r.connect(src, pick);
     r.connect(pick, a);
