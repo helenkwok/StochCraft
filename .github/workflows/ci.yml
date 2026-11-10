@@ -158,10 +158,12 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           key: wasm
-      # Node runs the wasm32-wasip1 test binary through its built-in WASI (xtask/wasi-run.mjs).
+      # Node runs the wasm32-wasip1 test binary through its built-in WASI (xtask/wasi-run.mjs). Node 22
+      # crashed natively (SIGSEGV, also without its wasm trap handler) on the golden tests on GitHub's
+      # runner only; Node 24 is the version keepatch.yml already uses.
       - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
       - run: cargo xtask wasm
         env:
           CRAFT_FONTS_DIR: ${{ github.workspace }}/craft-fonts

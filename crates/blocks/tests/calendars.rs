@@ -294,6 +294,7 @@ fn an_interrupted_job_resumes_after_its_repair_even_off_shift() {
             time_to_failure: Dist::Constant(7.0),
             repair: Dist::Constant(5.0),
             interruptible: true,
+            hands_on_while_down: true,
         }),
         30.0,
     );
@@ -326,6 +327,7 @@ fn a_failing_server_on_a_calendar_matches_its_long_run_availability() {
             time_to_failure: Dist::Exponential { mean: 100.0 },
             repair: Dist::Exponential { mean: 10.0 },
             interruptible: true,
+            hands_on_while_down: true,
         },
     );
     let out = b.sink("out");

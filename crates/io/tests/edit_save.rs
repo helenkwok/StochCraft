@@ -6,7 +6,9 @@
 use std::collections::BTreeMap;
 
 use stochcraft_io::{SaveError, read_scenario};
-use stochcraft_model::{Connection, Dist, Element, ElementId, ElementKind, Model, TimeUnit};
+use stochcraft_model::{
+    Connection, Dist, Element, ElementId, ElementKind, Model, TimeUnit, Transfer,
+};
 
 fn file(name: &str) -> Vec<u8> {
     let path = format!("{}/../../tests/models/{name}", env!("CARGO_MANIFEST_DIR"));
@@ -836,7 +838,7 @@ fn finite_buffers_save_as_a_vendor_extension() {
 
 fn set_transfer(m: &mut Model, at: &str, d: Option<Dist>) {
     if let ElementKind::Server { transfer, .. } = &mut element(m, at).kind {
-        *transfer = d;
+        *transfer = d.map(Transfer::holding);
     }
 }
 
@@ -928,6 +930,57 @@ fn transfers_that_cannot_be_used_are_reported() {
     assert!(
         l.notes.iter().any(|n| n.at.as_deref() == Some("arrive")
             && n.message.contains("applies only to a task with a resource")),
+        "{:?}",
+        l.notes
+    );
+}
+
+/// Whether a transfer holds the sender is an attribute of the transfer time, changed in place
+/// on one line and read back; a value that is not true or false is reported and the transfer
+/// holds the sender. A routing rule on a task is ignored with a warning.
+#[test]
+fn minimum_stays_save_and_bad_values_are_reported() {
+    let (ten, _) = edit_and_save("mm1.bpmn", None, |m| {
+        set_transfer(m, "serve", Some(Dist::Constant(10.0)));
+    });
+    let loaded = read_scenario(&ten, None).unwrap_or_else(|e| panic!("{e}"));
+    let mut model = loaded.model.clone();
+    if let ElementKind::Server {
+        transfer: Some(t), ..
+    } = &mut element(&mut model, "serve").kind
+    {
+        t.holds_sender = false;
+    }
+    let free = loaded.opened.save(&model).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        text(&free).contains(r#"holdsSender="false""#),
+        "{}",
+        text(&free)
+    );
+    let back = read_scenario(&free, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, model);
+
+    let maybe = text(&free).replace(r#"holdsSender="false""#, r#"holdsSender="maybe""#);
+    let l = read_scenario(maybe.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        l.notes.iter().any(|n| n.message.contains("holdsSender")),
+        "{:?}",
+        l.notes
+    );
+    assert!(l.model.elements.iter().any(|e| matches!(
+        &e.kind,
+        ElementKind::Server { transfer: Some(t), .. } if t.holds_sender
+    )));
+
+    let original = text(&file("mm1.bpmn"));
+    let routing = r#"<bpsim:VendorExtension name="stochcraft:routing" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="shortestQueue"/>
+          </bpsim:ElementParameters>"#;
+    let on_task = original.replacen("</bpsim:ElementParameters>", routing, 1);
+    let l = read_scenario(on_task.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        l.notes
+            .iter()
+            .any(|n| n.message.contains("applies only to an exclusive gateway")),
         "{:?}",
         l.notes
     );

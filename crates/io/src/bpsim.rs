@@ -33,8 +33,14 @@ pub const BREAKDOWN: &str = "stochcraft:breakdown";
 
 /// The vendor extension for the time a part takes to reach a server: a
 /// `stochcraft:transferTime` element holding one BPSim distribution or constant, in the
-/// receiving task's `ElementParameters`.
+/// receiving task's `ElementParameters`; with the attribute `holdsSender="false"`, a sending
+/// task's resource is free at once (a minimum time in the buffer).
 pub const TRANSFER_TIME: &str = "stochcraft:transferTime";
+
+/// An exclusive gateway's routing rule: `stochcraft:routing` with the value `shortestQueue` on
+/// the gateway's `ElementParameters` sends each entity to the way with the shortest queue that
+/// has room.
+pub const ROUTING: &str = "stochcraft:routing";
 
 /// The vendor extension for the power a server's units draw in each state: a
 /// `stochcraft:power` element with attributes `processing` and `idle` (needed) and `blocked`,

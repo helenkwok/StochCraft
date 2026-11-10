@@ -25,7 +25,9 @@
   stochcraft:breakdown, on a task's ElementParameters: its resource's units fail after a time
   drawn from timeToFailure (elapsed since the last repair) and are repaired for a time drawn from
   repairTime, each holding one BPSim distribution or constant. Whether a failure interrupts the
-  job under way is BPSim's own PriorityParameters/Interruptible.
+  job under way is BPSim's own PriorityParameters/Interruptible. With handsOnWhileDown="false", a
+  unit that fails while holding a finished part keeps it until repaired (by default it hands it
+  on as soon as there is room).
 
     <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="…">
       <stochcraft:breakdown>
@@ -37,11 +39,19 @@
   stochcraft:transferTime, on a task's ElementParameters: the time a part takes to reach the
   task from the element that sends it, holding one BPSim distribution or constant. The part
   takes its place in the task's buffer (queueCapacity) when the transfer starts and joins the
-  queue when it ends; a sending task's resource stays occupied through the transfer.
+  queue when it ends; a sending task's resource stays occupied through the transfer, unless the
+  attribute holdsSender is false: then it is free at once, and the time is a minimum time in the
+  buffer.
 
     <bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="…">
-      <stochcraft:transferTime><bpsim:FloatingParameter value="10"/></stochcraft:transferTime>
+      <stochcraft:transferTime holdsSender="false"><bpsim:FloatingParameter value="32"/></stochcraft:transferTime>
     </bpsim:VendorExtension>
+
+  stochcraft:routing, on an exclusive gateway's ElementParameters, with the value shortestQueue
+  (or standard, BPMN's own routing): each entity goes to the way with the fewest entities waiting
+  or in transit among those with room, a tie to the way taken longest ago; while no way has
+  room, the element sending into the gateway waits (a task's resource stays blocked) and a
+  start event's arrival is lost.
 
   stochcraft:power, on a task's ElementParameters: the power each unit of the task's resource
   draws in each state, in kilowatts (numbers of at least 0): processing and idle (both needed),
@@ -85,9 +95,18 @@
         <xs:element name="timeToFailure" type="stochcraft:Value"/>
         <xs:element name="repairTime" type="stochcraft:Value"/>
       </xs:sequence>
+      <xs:attribute name="handsOnWhileDown" type="xs:boolean" default="true"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="transferTime" type="stochcraft:Value"/>
+  <xs:element name="transferTime">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="stochcraft:Value">
+          <xs:attribute name="holdsSender" type="xs:boolean" default="true"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="power">
     <xs:complexType>
       <xs:attribute name="processing" type="xs:double" use="required"/>

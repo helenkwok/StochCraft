@@ -122,6 +122,17 @@ impl Resource {
         self.state.borrow().waiters.len()
     }
 
+    /// Takes a unit now if one is free and nobody is waiting for one, without waiting (and
+    /// without preempting); `None` otherwise.
+    pub fn try_acquire(&self) -> Option<ResourceGuard> {
+        let st = self.state.borrow();
+        if st.in_use >= st.capacity || !st.waiters.is_empty() {
+            return None;
+        }
+        drop(st);
+        self.try_take(0, None)
+    }
+
     /// Waits for a unit, with priority 0. Hold the returned guard while using it.
     pub fn acquire(&self) -> Acquire {
         self.acquire_with_priority(0)

@@ -13,7 +13,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     Bounds, Connection, Dist, Element as ModelElement, ElementId, ElementKind, Model,
-    PropertyValue, ResourcePool, Stop, TimeUnit,
+    PropertyValue, ResourcePool, Routing, Stop, TimeUnit,
 };
 
 use crate::bpsim::{NS2, NSS};
@@ -23,7 +23,8 @@ use crate::write::{
     availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
     condition_element, dist_element, edge_ends, estimate_element, interruptible_param, numeric,
     power_element, probability_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, size, start_param, stop_element, timer_param, transfer_element,
+    queue_capacity_element, routing_element, size, start_param, stop_element, timer_param,
+    transfer_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -734,9 +735,9 @@ impl Editor {
                 self.set_node_name(root, e.id.as_str(), &e.name);
             }
             // An exclusive gateway's default connection (new gateways included).
-            if let ElementKind::ExclusiveGateway { default } = &e.kind {
+            if let ElementKind::ExclusiveGateway { default, .. } = &e.kind {
                 let old_default = match was.map(|w| &w.kind) {
-                    Some(ElementKind::ExclusiveGateway { default }) => default.clone(),
+                    Some(ElementKind::ExclusiveGateway { default, .. }) => default.clone(),
                     _ => None,
                 };
                 if &old_default != default {
@@ -2020,6 +2021,18 @@ impl Editor {
                     splits(Some(&e.kind))
                         .then(|| batching_element(&e.kind))
                         .flatten(),
+                ));
+            }
+            // An exclusive gateway's routing rule, where that changed.
+            let routing = |k: Option<&ElementKind>| match k {
+                Some(ElementKind::ExclusiveGateway { routing, .. }) => *routing,
+                _ => Routing::Standard,
+            };
+            if routing(was) != routing(Some(&e.kind)) {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::ROUTING,
+                    routing_element(routing(Some(&e.kind))),
                 ));
             }
             if matches!(was, Some(ElementKind::SharedTask { .. }))

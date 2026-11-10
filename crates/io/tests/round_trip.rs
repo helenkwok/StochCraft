@@ -3,7 +3,8 @@
 use stochcraft_blocks::{BlockId, Builder, Event, Rule};
 use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{
-    DateTime, Dist, ElementKind, Experiment, Model, Property, PropertyType, PropertyValue, TimeUnit,
+    DateTime, Dist, ElementKind, Experiment, Model, Property, PropertyType, PropertyValue, Routing,
+    TimeUnit,
 };
 
 /// A model using every element kind and every distribution.
@@ -37,6 +38,7 @@ pub fn showcase() -> Model {
                 max: 6.0,
             },
             interruptible: true,
+            hands_on_while_down: true,
         },
     );
     m.transfer(cut, Dist::Uniform { min: 0.5, max: 1.5 });
@@ -373,6 +375,7 @@ fn gateways_and_routing_write_read_and_save() {
     {
         e.kind = ElementKind::ExclusiveGateway {
             default: Some(repair_flow),
+            routing: Routing::Standard,
         };
     }
     let saved = loaded.opened.save(&edited);
@@ -433,4 +436,77 @@ fn batches_and_assemblies_write_read_and_save() {
     let saved = loaded.opened.save(&edited);
     let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
     assert_eq!(back, Ok(Ok(edited)));
+}
+
+/// Two presses behind a shortest-queue gateway, each with a minimum time in its buffer:
+/// written, read and saved back unchanged; switching the gateway to standard routing and the
+/// transfers to ones that hold the sender, in place, drops their extensions and reads back;
+/// switching back reads back as the first model.
+#[test]
+fn shortest_queue_routing_and_minimum_stays_write_read_and_save() {
+    let mut m = Builder::new();
+    let src = m.source("arrive", Dist::Exponential { mean: 60.0 }, None);
+    let handle = m.server("handle", 1, Dist::Constant(25.0));
+    let pick = m.shortest_queue("pick");
+    let p1 = m.buffered_server("press1", 1, Dist::Constant(175.0), 3);
+    let p2 = m.buffered_server("press2", 1, Dist::Constant(176.0), 3);
+    let out = m.sink("done");
+    m.min_stay(p1, Dist::Constant(32.0));
+    m.min_stay(p2, Dist::Constant(32.0));
+    m.breakdown(
+        p1,
+        stochcraft_blocks::Breakdown {
+            time_to_failure: Dist::Exponential { mean: 525.0 },
+            repair: Dist::Exponential { mean: 73.0 },
+            interruptible: true,
+            hands_on_while_down: false,
+        },
+    );
+    m.connect(src, handle);
+    m.connect(handle, pick);
+    m.connect(pick, p1);
+    m.connect(pick, p2);
+    m.connect(p1, out);
+    m.connect(p2, out);
+    let model = m.build(Experiment::default());
+    assert!(model.validate().is_empty(), "{:#?}", model.validate());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes).into_owned();
+    assert!(
+        text.contains(r#"stochcraft:value="shortestQueue""#),
+        "{text}"
+    );
+    assert_eq!(text.matches(r#"holdsSender="false""#).count(), 2, "{text}");
+    assert!(text.contains(r#"handsOnWhileDown="false""#), "{text}");
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+    assert_eq!(loaded.opened.save(&loaded.model), Ok(bytes.clone()));
+
+    let mut edited = loaded.model.clone();
+    for e in &mut edited.elements {
+        match &mut e.kind {
+            ElementKind::ExclusiveGateway { routing, .. } => *routing = Routing::Standard,
+            ElementKind::Server {
+                transfer: Some(t), ..
+            } => t.holds_sender = true,
+            _ => {}
+        }
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    let after = String::from_utf8_lossy(&saved).into_owned();
+    assert!(!after.contains("shortestQueue"), "{after}");
+    assert!(!after.contains("holdsSender"), "{after}");
+    let Ok(back) = read(&saved) else {
+        unreachable!()
+    };
+    assert_eq!(back.model, edited);
+    // Back again: the same model (an extension rewritten in place is written on one line).
+    let again = back.opened.save(&loaded.model);
+    let back = again.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(loaded.model)));
 }

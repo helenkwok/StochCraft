@@ -8,7 +8,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, DateTime, Dist, ElementKind, Estimate, Model, Need, Power,
-    Property, PropertyType, PropertyValue, ResourcePool, Stop, Timed,
+    Property, PropertyType, PropertyValue, ResourcePool, Routing, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -272,12 +272,15 @@ pub(crate) fn breakdown_element(b: &Breakdown) -> Element {
     let part = |local: &str, d: &Dist| {
         Element::new(&format!("stochcraft:{local}"), Some(ns)).with_child(dist_element(d))
     };
+    let mut body = Element::new("stochcraft:breakdown", Some(ns));
+    if !b.hands_on_while_down {
+        body = body.with_attr("handsOnWhileDown", "false");
+    }
     s("VendorExtension")
         .with_attr("name", crate::bpsim::BREAKDOWN)
         .with_attr("xmlns:stochcraft", ns)
         .with_child(
-            Element::new("stochcraft:breakdown", Some(ns))
-                .with_child(part("timeToFailure", &b.time_to_failure))
+            body.with_child(part("timeToFailure", &b.time_to_failure))
                 .with_child(part("repairTime", &b.repair)),
         )
 }
@@ -304,12 +307,27 @@ pub(crate) fn power_element(p: &Power) -> Element {
 }
 
 /// A server's transfer time as StochCraft's vendor extension ([`crate::bpsim::TRANSFER_TIME`]).
-pub(crate) fn transfer_element(d: &Dist) -> Element {
+pub(crate) fn transfer_element(t: &Transfer) -> Element {
     let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:transferTime", Some(ns));
+    if !t.holds_sender {
+        body = body.with_attr("holdsSender", "false");
+    }
     s("VendorExtension")
         .with_attr("name", crate::bpsim::TRANSFER_TIME)
         .with_attr("xmlns:stochcraft", ns)
-        .with_child(Element::new("stochcraft:transferTime", Some(ns)).with_child(dist_element(d)))
+        .with_child(body.with_child(dist_element(&t.time)))
+}
+
+/// An exclusive gateway's routing rule as StochCraft's vendor extension
+/// ([`crate::bpsim::ROUTING`]), if it is not BPMN's own.
+pub(crate) fn routing_element(routing: Routing) -> Option<Element> {
+    match routing {
+        Routing::Standard => None,
+        Routing::ShortestQueue => {
+            Some(vendor_value_element(crate::bpsim::ROUTING, "shortestQueue"))
+        }
+    }
 }
 
 /// A terminating experiment's stop condition, as a vendor extension on the element it watches.
@@ -441,7 +459,10 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         let mut node = b(bpmn_local(&e.kind))
             .with_attr("id", e.id.as_str())
             .with_attr("name", &e.name);
-        if let ElementKind::ExclusiveGateway { default: Some(d) } = &e.kind {
+        if let ElementKind::ExclusiveGateway {
+            default: Some(d), ..
+        } = &e.kind
+        {
             node = node.with_attr("default", d.as_str());
         }
         for c in model.connections.iter().filter(|c| c.to == e.id) {
@@ -632,10 +653,15 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             ep.push(breakdown_element(b));
         }
         if let ElementKind::Server {
-            transfer: Some(d), ..
+            transfer: Some(t), ..
         } = &e.kind
         {
-            ep.push(transfer_element(d));
+            ep.push(transfer_element(t));
+        }
+        if let ElementKind::ExclusiveGateway { routing, .. } = &e.kind
+            && let Some(x) = routing_element(*routing)
+        {
+            ep.push(x);
         }
         if let ElementKind::Server { power: Some(p), .. } = &e.kind {
             ep.push(power_element(p));

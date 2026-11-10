@@ -11,12 +11,12 @@ use stochcraft_des::{
 };
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
-    Breakdown, Element, ElementId, ElementKind, Model, Need, Power, ResourcePool, Timed,
+    Breakdown, Element, ElementId, ElementKind, Model, Need, Power, ResourcePool, Routing, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
 
-use crate::{Assign, Compiled, ElementReport, Entity, Held, Report, RunError, Source};
+use crate::{Assign, Compiled, ElementReport, Entity, Held, Report, Route, RunError, Source};
 
 /// What an element assigns to entities as they enter, and the stream it draws values from.
 struct Props {
@@ -161,30 +161,61 @@ impl Compiled {
                 } => Some(Rc::new(Places {
                     pool: Resource::new(&ctx, u64::from(capacity) + u64::from(q)),
                     held: RefCell::new(BTreeMap::new()),
+                    watchers: RefCell::new(Vec::new()),
                 })),
                 _ => None,
             })
             .collect();
+        // Shortest-queue gateways: an element sending into one routes through it itself, so
+        // what it sends to is the gateway's ways.
+        let routes_itself = |i: usize| {
+            elements.get(i).is_some_and(|e| {
+                matches!(
+                    e.kind,
+                    ElementKind::ExclusiveGateway {
+                        routing: Routing::ShortestQueue,
+                        ..
+                    }
+                )
+            })
+        };
+        let sends_to = |i: usize| -> Vec<usize> {
+            self.routes
+                .get(i)
+                .into_iter()
+                .flatten()
+                .flat_map(|r| {
+                    if routes_itself(r.to) {
+                        self.routes
+                            .get(r.to)
+                            .into_iter()
+                            .flatten()
+                            .map(|w| w.to)
+                            .collect()
+                    } else {
+                        vec![r.to]
+                    }
+                })
+                .collect()
+        };
         let feeds_buffer: Vec<bool> = (0..elements.len())
             .map(|i| {
-                self.routes
-                    .get(i)
+                sends_to(i)
                     .into_iter()
-                    .flatten()
-                    .any(|r| places.get(r.to).is_some_and(Option::is_some))
+                    .any(|t| places.get(t).is_some_and(Option::is_some))
             })
             .collect();
-        // Whether each element sends across a transfer, which holds a server's unit.
+        // Whether each element sends across a transfer that holds a server's unit.
         let feeds_transfer: Vec<bool> = (0..elements.len())
             .map(|i| {
-                self.routes.get(i).into_iter().flatten().any(|r| {
-                    elements.get(r.to).is_some_and(|e| {
+                sends_to(i).into_iter().any(|t| {
+                    elements.get(t).is_some_and(|e| {
                         matches!(
-                            e.kind,
+                            &e.kind,
                             ElementKind::Server {
-                                transfer: Some(_),
+                                transfer: Some(t),
                                 ..
-                            }
+                            } if t.holds_sender
                         )
                     })
                 })
@@ -220,9 +251,10 @@ impl Compiled {
             .iter()
             .map(|e| match &e.kind {
                 ElementKind::Server {
-                    transfer: Some(d), ..
+                    transfer: Some(t), ..
                 } => Some(Rc::new(Transfer {
-                    time: d.clone(),
+                    time: t.time.clone(),
+                    holds_sender: t.holds_sender,
                     rng: RefCell::new(rng.fork()),
                 })),
                 _ => None,
@@ -255,6 +287,37 @@ impl Compiled {
                     && !q.is_empty()
             })
             .collect();
+        // The way into element `r.to`, as itself (not routed through, even if it is a
+        // shortest-queue gateway).
+        let plain_port = |r: &Route| -> Option<Port> {
+            let store = inputs.get(r.to)?.get(r.input)?.clone();
+            Some(Port {
+                store,
+                stats: Rc::clone(&stats),
+                assigner: Rc::clone(&assigner),
+                index: r.to,
+                places: places.get(r.to).cloned().flatten(),
+                transfer: transfers.get(r.to).cloned().flatten(),
+                // A join's second and later inputs bring copies (`spawn_parallel`), unless it
+                // is an assembly, whose inputs bring parts.
+                counts: r.input == 0 || assembly.get(r.to).copied().unwrap_or(false),
+                router: None,
+            })
+        };
+        let routers: Vec<Option<Rc<Router>>> = (0..elements.len())
+            .map(|g| {
+                routes_itself(g).then(|| {
+                    let ways: Vec<Port> = self
+                        .routes
+                        .get(g)
+                        .into_iter()
+                        .flatten()
+                        .filter_map(&plain_port)
+                        .collect();
+                    Rc::new(Router::new(&ctx, g, ways))
+                })
+            })
+            .collect();
         for ((i, element), rng) in elements.iter().enumerate().zip(streams) {
             let outs: Vec<Out> = self
                 .routes
@@ -262,19 +325,10 @@ impl Compiled {
                 .into_iter()
                 .flatten()
                 .filter_map(|r| {
-                    let store = inputs.get(r.to)?.get(r.input)?.clone();
+                    let mut port = plain_port(r)?;
+                    port.router = routers.get(r.to).cloned().flatten();
                     Some(Out {
-                        port: Port {
-                            store,
-                            stats: Rc::clone(&stats),
-                            assigner: Rc::clone(&assigner),
-                            index: r.to,
-                            places: places.get(r.to).cloned().flatten(),
-                            transfer: transfers.get(r.to).cloned().flatten(),
-                            // A join's second and later inputs bring copies (`spawn_parallel`),
-                            // unless it is an assembly, whose inputs bring parts.
-                            counts: r.input == 0 || assembly.get(r.to).copied().unwrap_or(false),
-                        },
+                        port,
                         weight: r.weight,
                         condition: r.condition.clone(),
                         default: r.default,
@@ -348,7 +402,10 @@ impl Compiled {
                 }
                 ElementKind::Delay { duration } => spawn_delay(&mut sim, env, duration),
                 ElementKind::Sink => spawn_sink(&mut sim, env),
-                ElementKind::ExclusiveGateway { .. } => spawn_exclusive(&mut sim, env, outs),
+                ElementKind::ExclusiveGateway { .. } => {
+                    let router = routers.get(i).cloned().flatten();
+                    spawn_exclusive(&mut sim, env, outs, router)
+                }
                 ElementKind::ParallelGateway => {
                     let quantities = self.quantities.get(i).cloned().unwrap_or_default();
                     spawn_parallel(&mut sim, env, ins, quantities, outs, Rc::clone(&next_id))
@@ -728,7 +785,8 @@ pub(crate) struct BlockStats {
     /// because the buffer was full (they never entered). A source: its own arrivals lost that
     /// way (they entered and never left; the same arrival counts at the full buffer too). An
     /// exclusive gateway: entities with no connection to take (no condition held and there is
-    /// no default), which leave the model there.
+    /// no default), which leave the model there; or, routing to the shortest queue, arrivals
+    /// from a source finding no way with room.
     lost: u64,
     /// Units failed or under repair (servers with breakdowns).
     down: TimeWeighted,
@@ -1147,12 +1205,17 @@ struct Port {
     /// join's second and later inputs, whose entities are copies merged into the one on its
     /// first input.
     counts: bool,
+    /// When the next element is a shortest-queue gateway: its ways, which the sender routes
+    /// to itself, so that it is the one waiting for room.
+    router: Option<Rc<Router>>,
 }
 
 /// A finite buffer's places (see [`Compiled::run_for`]), with the one each entity there holds.
 struct Places {
     pool: Resource,
     held: RefCell<BTreeMap<u64, ResourceGuard>>,
+    /// Woken whenever a place here is given back (routers waiting for room on any way).
+    watchers: RefCell<Vec<Signal>>,
 }
 
 impl Places {
@@ -1161,32 +1224,201 @@ impl Places {
         self.held.borrow_mut().insert(id, guard);
     }
 
+    /// The place entity `id` holds, as it leaves: kept for the element (returned) if `keep`,
+    /// else given back.
+    fn leave_or_keep(&self, id: u64, keep: bool) -> Option<ResourceGuard> {
+        if keep {
+            self.held.borrow_mut().remove(&id)
+        } else {
+            self.leave(id);
+            None
+        }
+    }
+
     /// Gives back the place entity `id` holds, as it leaves.
     fn leave(&self, id: u64) {
-        drop(self.held.borrow_mut().remove(&id));
+        let guard = self.held.borrow_mut().remove(&id);
+        if guard.is_some() {
+            drop(guard);
+            for w in self.watchers.borrow().iter() {
+                w.notify_all();
+            }
+        }
+    }
+
+    /// Whether a place is free now.
+    fn has_room(&self) -> bool {
+        self.pool.in_use() < self.pool.capacity()
+    }
+
+    /// Gives back a place held for no entity (a broken unit's, [`reserve_place`]).
+    fn give_back(&self, guard: ResourceGuard) {
+        drop(guard);
+        for w in self.watchers.borrow().iter() {
+            w.notify_all();
+        }
     }
 }
 
 /// A server's transfer time, and the stream it is drawn from.
 struct Transfer {
     time: Dist,
+    /// Whether a sending server's unit stays with the part through the transfer.
+    holds_sender: bool,
     rng: RefCell<Rng>,
 }
 
+/// A shortest-queue gateway's ways ([`stochcraft_model::Routing::ShortestQueue`]).
+///
+/// A freed place goes first to a plain waiter for that buffer (a [`Resource`] hands it straight
+/// to whoever waits in [`Port::make_room`]), so a router woken then finds no room and waits on.
+struct Router {
+    /// The gateway (its statistics).
+    index: usize,
+    /// Its ways, as plain ports.
+    ways: Vec<Port>,
+    /// When each way was last taken, as a count of the choices made (0: never).
+    taken: RefCell<Vec<u64>>,
+    choices: Cell<u64>,
+    /// Woken whenever a place is given back on any way.
+    freed: Signal,
+}
+
+impl Router {
+    fn new(ctx: &Ctx, index: usize, ways: Vec<Port>) -> Self {
+        let freed = Signal::new(ctx);
+        for w in &ways {
+            if let Some(p) = &w.places {
+                p.watchers.borrow_mut().push(freed.clone());
+            }
+        }
+        Self {
+            index,
+            taken: RefCell::new(vec![0; ways.len()]),
+            ways,
+            choices: Cell::new(0),
+            freed,
+        }
+    }
+
+    /// Whether some way has a finite buffer (so that a sender can be held up).
+    fn may_block(&self) -> bool {
+        self.ways.iter().any(|w| w.places.is_some())
+    }
+
+    /// The way to take now: of those with room, the one with the fewest entities waiting or in
+    /// transit, then the one taken longest ago, then the first; `None` if none has room. Taking
+    /// it is recorded.
+    fn choose(&self) -> Option<&Port> {
+        let taken = self.taken.borrow();
+        let best = self
+            .ways
+            .iter()
+            .enumerate()
+            .filter(|(_, w)| w.places.as_ref().is_none_or(|p| p.has_room()))
+            .min_by(|(a, wa), (b, wb)| {
+                wa.queue()
+                    .total_cmp(&wb.queue())
+                    .then(taken.get(*a).cmp(&taken.get(*b)))
+                    .then(a.cmp(b))
+            })
+            .map(|(i, _)| i);
+        drop(taken);
+        let i = best?;
+        let n = self.choices.get() + 1;
+        self.choices.set(n);
+        if let Some(t) = self.taken.borrow_mut().get_mut(i) {
+            *t = n;
+        }
+        self.ways.get(i)
+    }
+
+    /// Waits until some way has room, takes a place there for `e`, and returns that way.
+    async fn route(&self, e: &Entity) -> Port {
+        loop {
+            // Nothing waits between looking for room and taking it, nor before starting to wait.
+            if let Some(way) = self.route_now(e).await {
+                return way;
+            }
+            self.freed.wait().await;
+        }
+    }
+
+    /// Takes a place for `e` on the way to take now and returns it; `None` if no way has room.
+    async fn route_now(&self, e: &Entity) -> Option<Port> {
+        let way = self.choose()?.clone();
+        if let Some(p) = &way.places {
+            // `choose` found a free place, which a request takes at once.
+            let guard = p.pool.acquire().await;
+            p.enter(e.id, guard);
+        }
+        Some(way)
+    }
+}
+
 impl Port {
+    /// Entities waiting at the next element, or in transit to it.
+    fn queue(&self) -> f64 {
+        self.stats.get(self.index).map_or(0.0, |s| {
+            let s = s.borrow();
+            s.waiting.value() + s.transit.value()
+        })
+    }
+
+    /// Whether sending here can be held up by a full buffer.
+    fn may_block(&self) -> bool {
+        match &self.router {
+            Some(r) => r.may_block(),
+            None => self.places.is_some(),
+        }
+    }
+
+    /// Whether a sending server's unit stays with the part through the transfer here.
+    fn holds_sender(&self) -> bool {
+        self.transfer.as_ref().is_some_and(|t| t.holds_sender)
+    }
+
+    /// `e` enters the shortest-queue gateway of `router`, on its way to one of its ways.
+    fn enter_gateway(&self, router: &Router, e: &mut Entity) {
+        self.assigner.enter(router.index, e, &self.stats);
+        if let Some(s) = self.stats.get(router.index) {
+            s.borrow_mut().entered += 1;
+        }
+    }
+
+    /// An entity leaves the shortest-queue gateway of `router`, at the moment it gets a way, or
+    /// is lost there.
+    fn leave_gateway(&self, router: &Router, lost: bool) {
+        if let Some(s) = self.stats.get(router.index) {
+            let mut s = s.borrow_mut();
+            if lost {
+                s.lost += 1;
+            } else {
+                s.left += 1;
+            }
+        }
+    }
+
     /// Waits for a place in the next element's finite buffer, if it has one, and takes it for
-    /// `e`.
-    async fn make_room(&self, e: &Entity) {
+    /// `e`; returns where `e` goes: here, or, through a shortest-queue gateway, the way chosen.
+    async fn make_room(&self, e: &mut Entity) -> Port {
+        if let Some(r) = &self.router {
+            self.enter_gateway(r, e);
+            let way = r.route(e).await;
+            self.leave_gateway(r, false);
+            return way;
+        }
         if let Some(p) = &self.places {
             let guard = p.pool.acquire().await;
             p.enter(e.id, guard);
         }
+        self.clone()
     }
 
     /// Sends `e`, first waiting for room in a finite buffer; any transfer goes on by itself.
-    async fn deliver(&self, ctx: &Ctx, e: Entity) {
-        self.make_room(&e).await;
-        self.dispatch(ctx, e);
+    async fn deliver(&self, ctx: &Ctx, mut e: Entity) {
+        let to = self.make_room(&mut e).await;
+        to.dispatch(ctx, e);
     }
 
     /// Sends `e`, which already has its place: at once, or into a transfer that goes on by
@@ -1249,8 +1481,21 @@ impl Port {
 
     /// Sends a new arrival if there is room (a place freed at this instant counts) and returns
     /// `true`; otherwise the arrival is lost, counted as lost by the next element, and this
-    /// returns `false`.
-    async fn offer(&self, ctx: &Ctx, e: Entity) -> bool {
+    /// returns `false`. Through a shortest-queue gateway, the arrival is lost (counted by the
+    /// gateway) if no way has room now.
+    async fn offer(&self, ctx: &Ctx, mut e: Entity) -> bool {
+        if let Some(r) = &self.router {
+            self.enter_gateway(r, &mut e);
+            let way = r.route_now(&e).await;
+            self.leave_gateway(r, way.is_none());
+            return match way {
+                Some(way) => {
+                    way.dispatch(ctx, e);
+                    true
+                }
+                None => false,
+            };
+        }
         if let Some(p) = &self.places {
             match p.pool.acquire_within(0.0).await {
                 Ok(guard) => p.enter(e.id, guard),
@@ -1538,7 +1783,7 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
                         d.holding = true;
                     });
                 }
-                move_on(&env, &ctx, entity).await;
+                move_on(&env, &ctx, entity, &|| false, None).await;
                 book.change(&env.borrow(), u, |d| d.holding = false);
             }
         });
@@ -1556,6 +1801,26 @@ struct Unit {
     serving: Option<u64>,
     /// A failure is due and waits for the job to finish (non-interruptible).
     due: bool,
+    /// While down with no entity: the server's place it keeps, so that no entity gets in for
+    /// it ([`reserve_place`]).
+    reserved: Option<ResourceGuard>,
+}
+
+/// A unit that is down and holds no entity cannot take one, so the place in the server's finite
+/// buffer that would be its own is kept free of entities until its repair: the buffer then holds
+/// no more than its waiting room (and the other units' places) meanwhile. Taken only if a place
+/// is free at that moment (none is when every place already holds an entity, such as one taken
+/// for the unit before a break).
+fn reserve_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places>>) {
+    let Some(p) = places else { return };
+    let mut units = units.borrow_mut();
+    if let Some(x) = units.get_mut(u)
+        && x.down
+        && !x.busy
+        && x.reserved.is_none()
+    {
+        x.reserved = p.pool.try_acquire();
+    }
 }
 
 /// A server whose units fail and are repaired ([`Breakdown`]), or follow a calendar (`shifts`:
@@ -1652,12 +1917,18 @@ fn spawn_unit_server(
                     e.adjust(|s| &mut s.down, 1.0);
                     book.change(&e, u, |d| d.down = true);
                 }
+                let places = env.borrow().places.clone();
+                reserve_place(&units, u, places.as_ref());
                 if let Some(pid) = serving {
                     c.interrupt(pid, 0);
                 }
                 c.hold(b.repair.sample(&mut rng)).await;
-                if let Some(x) = units.borrow_mut().get_mut(u) {
+                let kept = units.borrow_mut().get_mut(u).and_then(|x| {
                     x.down = false;
+                    x.reserved.take()
+                });
+                if let (Some(g), Some(p)) = (kept, &places) {
+                    p.give_back(g);
                 }
                 {
                     let e = env.borrow();
@@ -1715,6 +1986,7 @@ fn spawn_unit_server(
                 Rc::clone(&book),
             );
             let interruptible = breakdown.as_ref().is_some_and(|b| b.interruptible);
+            let waits_for_repair = breakdown.as_ref().is_some_and(|b| !b.hands_on_while_down);
             let pid = ctx.spawn(async move {
                 let mut left = duration;
                 loop {
@@ -1752,10 +2024,17 @@ fn spawn_unit_server(
                         d.holding = true;
                     });
                 }
-                move_on(&env2, &c, entity).await;
+                // Handed on while down: now empty, the unit keeps the entity's place until
+                // its repair ([`reserve_place`]).
+                let down = || units2.borrow().get(unit).is_some_and(|x| x.down);
+                let repaired = waits_for_repair.then(|| up2.get(unit)).flatten();
+                let kept = move_on(&env2, &c, entity, &down, repaired).await;
                 book2.change(&env2.borrow(), unit, |d| d.holding = false);
                 if let Some(x) = units2.borrow_mut().get_mut(unit) {
                     x.busy = false;
+                    if kept.is_some() {
+                        x.reserved = kept;
+                    }
                 }
                 if let Some(d) = done2.get(unit) {
                     d.notify_all();
@@ -1771,24 +2050,47 @@ fn spawn_unit_server(
 
 /// An entity whose service or delay is over leaves for the next element. Into a full finite
 /// buffer it waits here first, blocking (blocking after service): the element keeps it, and its
-/// place here, until there is room, and the time is recorded.
-async fn move_on(env: &Rc<RefCell<BlockEnv>>, ctx: &Ctx, entity: Entity) {
-    let out = env.borrow().out.clone();
-    if let Some(out) = out.as_ref().filter(|o| o.places.is_some()) {
-        let start = ctx.now();
-        env.borrow().adjust(|s| &mut s.blocked, 1.0);
-        out.make_room(&entity).await;
-        let now = ctx.now();
-        let e = env.borrow();
-        e.adjust(|s| &mut s.blocked, -1.0);
-        e.with_stats(|s| s.blocked_time.add(now - start));
+/// place here, until there is room, and the time is recorded. As the entity's place here comes
+/// free, `keep` says whether the element keeps it (a broken unit, [`reserve_place`]); then it is
+/// returned instead of given back. With `repaired`, the unit holding the entity hands it on
+/// only while that gate is open (it is up): a unit that is down first waits for its repair, and
+/// one that breaks down while waiting for room waits for its repair once there is room,
+/// keeping the place it has.
+async fn move_on(
+    env: &Rc<RefCell<BlockEnv>>,
+    ctx: &Ctx,
+    mut entity: Entity,
+    keep: &dyn Fn() -> bool,
+    repaired: Option<&Gate>,
+) -> Option<ResourceGuard> {
+    if let Some(g) = repaired {
+        g.wait().await;
     }
+    let out = env.borrow().out.clone();
+    // Where the entity goes: the next element, or the way a shortest-queue gateway there gives.
+    let out = match out {
+        Some(out) if out.may_block() => {
+            let start = ctx.now();
+            env.borrow().adjust(|s| &mut s.blocked, 1.0);
+            let to = out.make_room(&mut entity).await;
+            if let Some(g) = repaired {
+                g.wait().await;
+            }
+            let now = ctx.now();
+            let e = env.borrow();
+            e.adjust(|s| &mut s.blocked, -1.0);
+            e.with_stats(|s| s.blocked_time.add(now - start));
+            Some(to)
+        }
+        Some(out) => Some(out.make_room(&mut entity).await),
+        None => None,
+    };
     let transfer = out.as_ref().and_then(Port::transfer_time);
-    let holds = env.borrow().holds;
+    let holds = env.borrow().holds && out.as_ref().is_some_and(Port::holds_sender);
     match (out, transfer) {
-        // Across a transfer, a unit stays with the entity, blocked, until it gets there; the
-        // entity is the next element's from the start, and keeps its place here (which is the
-        // unit's) until the unit is free.
+        // Across a transfer that holds the sender, a unit stays with the entity, blocked, until
+        // it gets there; the entity is the next element's from the start, and keeps its place
+        // here (which is the unit's) until the unit is free.
         (Some(out), Some(dt)) if holds => {
             env.borrow().with_stats(|s| s.left += 1);
             let id = entity.id;
@@ -1797,23 +2099,23 @@ async fn move_on(env: &Rc<RefCell<BlockEnv>>, ctx: &Ctx, entity: Entity) {
             ctx.hold(dt).await;
             let e = env.borrow();
             e.adjust(|s| &mut s.transferring, -1.0);
-            if let Some(p) = &e.places {
-                p.leave(id);
-            }
+            let kept = e.places.as_ref().and_then(|p| p.leave_or_keep(id, keep()));
             drop(e);
             out.arrive(ctx.now(), entity);
+            kept
         }
         (out, transfer) => {
-            {
+            let kept = {
                 let e = env.borrow();
                 e.with_stats(|s| s.left += 1);
-                if let Some(p) = &e.places {
-                    p.leave(entity.id);
-                }
-            }
+                e.places
+                    .as_ref()
+                    .and_then(|p| p.leave_or_keep(entity.id, keep()))
+            };
             if let Some(out) = out {
                 out.travel(ctx, entity, transfer);
             }
+            kept
         }
     }
 }
@@ -2178,7 +2480,7 @@ fn spawn_shared(
                 };
                 c.hold(duration).await;
                 env2.borrow().adjust(|s| &mut s.busy, -1.0);
-                move_on(&env2, &c, entity).await;
+                move_on(&env2, &c, entity, &|| false, None).await;
                 pl.release(taken);
             });
         }
@@ -2208,7 +2510,7 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
             ctx.spawn(async move {
                 c.hold(dt).await;
                 env2.borrow().adjust(|s| &mut s.busy, -1.0);
-                move_on(&env2, &c, entity).await;
+                move_on(&env2, &c, entity, &|| false, None).await;
             });
         }
     });
@@ -2259,11 +2561,20 @@ fn choose(outs: &[Out], e: &Entity, assigner: &Assigner, rng: &mut Rng) -> Optio
     outs.iter().rposition(|o| o.weight > 0.0)
 }
 
-fn spawn_exclusive(sim: &mut Sim, mut env: BlockEnv, outs: Vec<Out>) {
+/// An exclusive gateway. A shortest-queue one (`router`) is routed through by the elements
+/// sending into it; only an entity that still arrives here (from another shortest-queue gateway)
+/// is routed by its own process, which then waits for room.
+fn spawn_exclusive(sim: &mut Sim, mut env: BlockEnv, outs: Vec<Out>, router: Option<Rc<Router>>) {
     sim.spawn_tagged(tag(env.me), async move {
         loop {
             let entity = env.input.get().await;
             env.adjust(|s| &mut s.waiting, -1.0);
+            if let Some(r) = &router {
+                let way = r.route(&entity).await;
+                env.with_stats(|s| s.left += 1);
+                way.dispatch(&env.ctx, entity);
+                continue;
+            }
             let to = choose(&outs, &entity, &env.assigner, &mut env.rng);
             // With no route (no condition holds and there is no default), the entity leaves
             // the model here, and is counted as lost.

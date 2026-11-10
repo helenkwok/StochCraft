@@ -572,18 +572,50 @@ unrolled line in `stochcraft-blocks`.
     in service, and not at the sender. The sender's `blocking_probability` counts its units
     held through a transfer as blocked; `mean_blocked_time` stays the wait for room alone.
   - Transfer times come from a stream of their own per receiving server, forked after all the
-    others, so models without transfers draw exactly as before. A transfer that does not hold
-    the sender (a conveyor with its own capacity) is not an option yet.
+    others, so models without transfers draw exactly as before.
+  - **A minimum time in the buffer** (issue #96): a transfer that does not hold the sender
+    (`holds_sender` false). The sending unit is free as soon as the part is in; the part counts
+    against the capacity from then and can be taken only after the time. It matters: on the
+    assembly line of Case B (Schmitt et al. 2026, two presses of 175 s behind 32 s buffers), an
+    independent model gives about 23 accepted parts/h when the presses are held through the
+    transfer and 27.0 when they are not, against 27.26 published.
+  - A unit that fails while holding a part through a transfer lets the transfer finish on
+    time (it is already on its way); the unit is failed from then on and takes no new part
+    until repaired.
   - **File:** `<bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="…"><stochcraft:transferTime><bpsim:FloatingParameter value="10"/></stochcraft:transferTime></bpsim:VendorExtension>`
     in the receiving task's `ElementParameters` (any BPSim distribution in place of the
-    constant), read, written, saved in place and in the vendor schema; `block.set` and
-    `block.add` take `transfer` (`null` removes it). Not editable in the window yet.
+    constant), with `holdsSender="false"` on `stochcraft:transferTime` for a minimum time in
+    the buffer; read, written, saved in place and in the vendor schema; `block.set` and
+    `block.add` take `transfer` (`null` removes it) and `transfer_holds_sender` (needs a
+    transfer; a new `transfer` keeps it). Not editable in the window yet.
   - **Checks** (`blocks/tests/transfers.rs`, worked by hand): two machines with fixed cycles
     and a buffer of two, the second's buffer never empty, give exactly 1 / max(cycle₁ +
-    transfer, cycle₂) parts per time unit with either machine the bottleneck; the first
-    machine is blocked exactly its transfers' share of the time; a part in transit is counted
-    once, at the receiving machine; and, stepping through a run, the receiving machine never
-    holds more than its unit plus its waiting room, transit included.
+    transfer, cycle₂) parts per time unit with either machine the bottleneck, and
+    1 / max(cycle₁, cycle₂) with a minimum time in the buffer instead; the first machine is
+    blocked exactly its transfers' share of the time (none with a minimum stay); a part in
+    transit is counted once, at the receiving machine; and, stepping through a run, the
+    receiving machine never holds more than its unit plus its waiting room, transit included.
+- **Routing to the shortest queue** (issue #96): an exclusive gateway with `routing`
+  `shortest_queue` (`stochcraft:routing="shortestQueue"`) sends each entity to the way with
+  room whose next element has the fewest entities waiting or in transit (those in service not
+  counted); a tie goes to the way taken longest ago, so equal ways take turns.
+  - The element sending into the gateway does the routing itself, so it is the one that waits
+    while no way has room: a server stays blocked after its job (and a transfer into the way
+    chosen then holds its unit, if the transfer holds senders), and a source loses its arrival
+    (counted lost at the gateway and the source). Nothing waits before the gateway, so
+    `buffer_behind_gateway` does not apply to it.
+  - A freed place goes first to a plain waiter for that buffer (an element with that single
+    way), then to entities routed through the gateway.
+  - Probabilities, conditions and a default on its ways have no effect (`routing_ignored`).
+    Standard gateways keep their behaviour: they pick a way first, then wait for room there.
+  - **File:** `<bpsim:VendorExtension name="stochcraft:routing" xmlns:stochcraft="…" stochcraft:value="shortestQueue"/>`
+    in the gateway's `ElementParameters`; on any other element it is ignored with a warning.
+    `block.set` and `block.add` take `routing` (`standard` or `shortest_queue`). Not editable in
+    the window yet.
+  - **Checks** (`blocks/tests/shortest_queue.rs`, worked by hand): ties take turns and the
+    shorter queue wins; a full way is passed over and the sender is blocked until either way
+    frees, for exactly the times worked out; a source loses its arrival when every way is
+    full; and a transfer into the way taken holds the sender or not.
 - **Commands:**
   - `block.set` takes `queue_capacity`; `null` removes it, and undo is exact.
   - `block.add` and `model.set` take it with the other server parameters.
@@ -737,6 +769,14 @@ taken together, and a large need waiting without holding back a smaller one.
     finish, and the unit takes no new job meanwhile.
   - Waiting entities go first come first served to the first unit that is up and idle.
     Servers without breakdowns run exactly as before.
+  - **With a finite buffer** (issue #96): a unit that is down and holds no entity keeps its own
+    place in the buffer free until its repair, so the buffer holds only its waiting room
+    meanwhile (a broken machine takes no part). A unit that fails while holding a finished
+    entity, waiting for room in the next buffer, hands it on as soon as there is room, under
+    repair (`hands_on_while_down`, the default), or keeps it until repaired
+    (`stochcraft:breakdown handsOnWhileDown="false"`). No source states which (the papers
+    behind Case B below are silent), so it is the model's choice; on Case B the difference is
+    0.2% of throughput.
   - Results: a server's `availability` (the time-average fraction of units up; "Availability"
     in the window, in every catalog). Utilisation counts a unit holding an interrupted job as
     busy.
@@ -876,9 +916,9 @@ taken together, and a large need waiting without holding back a smaller one.
 
   | Measure | Paper | Published model, exact | StochCraft |
   |---|---|---|---|
-  | Throughput (parts/h) | 7.38 | 7.384 [7.335, 7.433] | 7.373 ± 0.056 |
-  | Work in progress (parts) | 4.47 | 4.402 [4.322, 4.482] | 4.405 ± 0.093 |
-  | Energy per part (kWh) | 14.22 | 14.141 [14.105, 14.177] | 14.148 ± 0.041 |
+  | Throughput (parts/h) | 7.38 | 7.384 [7.335, 7.433] | 7.370 ± 0.056 |
+  | Work in progress (parts) | 4.47 | 4.402 [4.322, 4.482] | 4.386 ± 0.093 |
+  | Energy per part (kWh) | 14.22 | 14.141 [14.105, 14.177] | 14.150 ± 0.042 |
 
   Each machine's share of time processing, blocked (transfers included) and failed agrees
   within the half-width of the difference of two means of 25 replications. The test checks
@@ -886,6 +926,34 @@ taken together, and a large need waiting without holding back a smaller one.
   machine idle in a break as starved until it takes a part, while StochCraft counts it off shift.
   For the last machine that is 74.7% starved and 15.9% off shift, against 86.0% and 4.6%. The
   sum is 90.59% against 90.62%, and energy is the same either way.
+- **Industrial benchmark: Case B of the same paper** (issue #96), Table 6: an automated
+  assembly line of seven machines, Loading, Conveyor, Washing and Handling in series, two
+  presses in parallel, then Quality, which rejects 8.9%. Buffers of 2 with 10 s and of 3 with
+  32 s; the same weekend breaks; 1 day of warm-up then 7 measured (the paper's "7-day horizon":
+  with 7 in total its published model falls 3% short of its throughput).
+  - **In StochCraft:** `stochcraft-cli new -t case-b`, committed as `tests/models/case-b.bpmn`
+    and run by `engine/tests/benchmarks.rs` (25 replications; ignored in debug builds, run in
+    release by CI). Parts go to the press whose buffer has the shorter queue, and each delay is
+    a minimum time in the buffer. The test also runs it with transfers that hold the sender.
+  - **Compared with:** an independent model of the written specification, outside the
+    repository (100 replications), since the paper gives no intervals and its published model
+    adds storage Table 6 does not list. With the same rules, StochCraft agrees on every
+    measure and on each station's work in progress. The two rules no source fixes were
+    settled this way: a broken empty machine takes no part, and a machine under repair hands
+    on its finished part (keeping it instead lowers throughput by 0.045 parts/h, in both).
+
+  | Measure | Paper | Independent model | StochCraft |
+  |---|---|---|---|
+  | Throughput, minimum time in buffer (accepted parts/h) | 27.26 | 27.091 [27.056, 27.127] | 27.150 ± 0.056 |
+  | Work in progress (parts) | 18.22 | 18.346 [18.303, 18.389] | 18.362 ± 0.105 |
+  | Energy per accepted part (kWh) | 0.4510 | 0.43974 [0.43926, 0.44022] | 0.43904 ± 0.00070 |
+  | Throughput, transfer holding the sender | – | 23.073 [23.043, 23.103] | 23.115 ± 0.049 |
+  | Work in progress (parts) | – | 17.340 [17.300, 17.380] | 17.364 ± 0.085 |
+  | Energy per accepted part (kWh) | – | 0.49192 [0.49136, 0.49249] | 0.49128 ± 0.00087 |
+
+  The paper's own two tools differed by 0.8% in throughput on this line. A delay that holds the
+  sending machine costs the presses 32 s of every 175 s job: 15% of throughput, far from the
+  paper's figure, so the paper's delays are read as minimum times in the buffer.
 
 ### M2.7 Assembly and batching
 

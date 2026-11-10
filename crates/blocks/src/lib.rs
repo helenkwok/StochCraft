@@ -43,7 +43,7 @@ use std::collections::BTreeMap;
 
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
-pub use stochcraft_model::{Breakdown, Power};
+pub use stochcraft_model::{Breakdown, Power, Routing, Transfer};
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
     Property, PropertyType, PropertyValue, ResourcePool, Severity, Timed,
@@ -326,7 +326,7 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                 .filter(|c| c.from == e.id)
                 .collect();
             let default = match &e.kind {
-                ElementKind::ExclusiveGateway { default } => default.as_ref(),
+                ElementKind::ExclusiveGateway { default, .. } => default.as_ref(),
                 _ => None,
             };
             let by_condition = outs.iter().any(|c| c.condition.is_some());
@@ -1057,6 +1057,22 @@ impl Builder {
     /// Gives server `block` a transfer time: each part takes a time drawn from `transfer` to
     /// get there, holding a sending server's unit meanwhile.
     pub fn transfer(&mut self, block: BlockId, transfer: Dist) {
+        self.set_transfer(block, Transfer::holding(transfer));
+    }
+
+    /// Gives server `block` a minimum time in its buffer: each part takes a time drawn from
+    /// `time` to get there, and a sending server's unit is free as soon as the part is in.
+    pub fn min_stay(&mut self, block: BlockId, time: Dist) {
+        self.set_transfer(
+            block,
+            Transfer {
+                time,
+                holds_sender: false,
+            },
+        );
+    }
+
+    fn set_transfer(&mut self, block: BlockId, transfer: Transfer) {
         if let Some((_, ElementKind::Server { transfer: t, .. }, _)) =
             self.elements.get_mut(block.0)
         {
@@ -1175,7 +1191,13 @@ impl Builder {
     /// Sends each entity down one outgoing connection: by condition if any connection has one
     /// ([`Builder::route`]), else by the connections' probabilities.
     pub fn exclusive(&mut self, name: &str) -> BlockId {
-        self.add(name, ElementKind::ExclusiveGateway { default: None })
+        self.add(
+            name,
+            ElementKind::ExclusiveGateway {
+                default: None,
+                routing: Routing::Standard,
+            },
+        )
     }
 
     /// Makes the connection from exclusive gateway `gateway` to `to` its default.
@@ -1186,11 +1208,23 @@ impl Builder {
             .get(to.0)
             .map(|(n, _, _)| n.clone())
             .unwrap_or_default();
-        if let Some((_, kind, _)) = self.elements.get_mut(gateway.0) {
-            *kind = ElementKind::ExclusiveGateway {
-                default: Some(ElementId::unchecked(&format!("->{target}"))),
-            };
+        if let Some((_, ElementKind::ExclusiveGateway { default, .. }, _)) =
+            self.elements.get_mut(gateway.0)
+        {
+            *default = Some(ElementId::unchecked(&format!("->{target}")));
         }
+    }
+
+    /// Sends each entity to the way with the shortest queue that has room
+    /// ([`Routing::ShortestQueue`]), the sender waiting while no way has any.
+    pub fn shortest_queue(&mut self, name: &str) -> BlockId {
+        self.add(
+            name,
+            ElementKind::ExclusiveGateway {
+                default: None,
+                routing: Routing::ShortestQueue,
+            },
+        )
     }
 
     /// Copies each entity down every outgoing connection; with several incoming connections,
@@ -1273,7 +1307,8 @@ impl Builder {
                 // A default route names its target (`->name`) until connection ids exist.
                 let kind = match kind {
                     ElementKind::ExclusiveGateway {
-                        default: Some(d), ..
+                        default: Some(d),
+                        routing,
                     } => ElementKind::ExclusiveGateway {
                         default: d.as_str().strip_prefix("->").and_then(|t| {
                             connections
@@ -1281,6 +1316,7 @@ impl Builder {
                                 .find(|c| c.from == id(i) && c.to.as_str() == t)
                                 .map(|c| c.id.clone())
                         }),
+                        routing: *routing,
                     },
                     other => other.clone(),
                 };

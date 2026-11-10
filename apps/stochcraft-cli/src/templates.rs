@@ -161,6 +161,128 @@ fn case_a() -> Vec<(&'static str, Value)> {
     steps
 }
 
+/// Schmitt et al. (2026), Case B (Table 6): an automated assembly line of seven machines,
+/// two presses in parallel, 8.9% rejected at quality, in seconds from Monday 00:00. Buffers of
+/// 2 with 10 s and of 3 with 32 s, each a minimum time in the buffer (the sending machine is
+/// free once the part is in); parts go to the press whose buffer has the shorter queue. The
+/// availabilities are those of the authors' data file, which Table 6 rounds. Material is always
+/// there for loading, and every machine follows the weekend breaks of Case A.
+fn case_b() -> Vec<(&'static str, Value)> {
+    // (id, name, cycle time, availability, mean time to repair, idle kW, processing kW,
+    // buffer, transfer s); the conveyor never fails.
+    let machines = [
+        ("loading", "Loading", 12.0, 0.9049, 68.0, 0.25, 0.72, 0, 0.0),
+        ("conveyor", "Conveyor", 6.0, 1.0, 0.0, 0.0, 0.0, 2, 10.0),
+        (
+            "washing", "Washing", 14.0, 0.8089, 269.0, 4.28, 35.24, 2, 10.0,
+        ),
+        (
+            "handling", "Handling", 25.0, 0.9779, 74.0, 0.5, 0.74, 2, 10.0,
+        ),
+        (
+            "press1", "Press 1", 175.0, 0.8779, 73.0, 1.25, 1.28, 3, 32.0,
+        ),
+        (
+            "press2", "Press 2", 176.0, 0.8769, 74.0, 1.25, 1.27, 3, 32.0,
+        ),
+        (
+            "quality", "Quality", 41.0, 0.8587, 66.0, 0.58, 0.84, 3, 32.0,
+        ),
+    ];
+    let weekly =
+        |start: &str, end: &str| json!({"start": start, "end": end, "repeat": "FREQ=WEEKLY"});
+    let mut steps = vec![
+        (
+            "model.rename",
+            json!({"name": "Case B (Schmitt et al. 2026)"}),
+        ),
+        (
+            "calendar.add",
+            json!({"id": "weekend", "name": "Weekend breaks", "events": [
+                weekly("2024-01-05T17:00:00", "2024-01-06T07:00:00"),
+                weekly("2024-01-06T17:00:00", "2024-01-07T07:00:00"),
+            ]}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "source", "id": "supply", "name": "Supply",
+                   "interarrival": {"type": "constant", "value": 2.0}}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "server", "id": "raw", "name": "Raw material", "capacity": 1,
+                   "service": {"type": "constant", "value": 0.0}, "queue_capacity": 5}),
+        ),
+        ("connect", json!({"from": "supply", "to": "raw"})),
+        (
+            "block.add",
+            json!({"kind": "exclusive_gateway", "id": "route", "name": "To a press",
+                   "routing": "shortest_queue"}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "exclusive_gateway", "id": "inspect", "name": "Accepted?"}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "sink", "id": "done", "name": "Accepted parts"}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "sink", "id": "scrap", "name": "Rejected parts"}),
+        ),
+    ];
+    for (id, name, cycle, a, mttr, idle, processing, buffer, transfer) in machines {
+        let mut block = json!({
+            "kind": "server", "id": id, "name": name, "capacity": 1,
+            "service": {"type": "constant", "value": cycle},
+            "queue_capacity": buffer,
+            "availability": [{"calendar": "weekend", "available": false}],
+            "power": {"processing": processing, "idle": idle},
+        });
+        if a < 1.0 {
+            block["breakdown"] = json!({
+                "time_to_failure": exp(mttr * a / (1.0 - a)),
+                "repair": exp(mttr),
+                "interruptible": true,
+            });
+        }
+        if transfer > 0.0 {
+            block["transfer"] = json!({"type": "constant", "value": transfer});
+            block["transfer_holds_sender"] = json!(false);
+        }
+        steps.push(("block.add", block));
+    }
+    for (from, to) in [
+        ("raw", "loading"),
+        ("loading", "conveyor"),
+        ("conveyor", "washing"),
+        ("washing", "handling"),
+        ("handling", "route"),
+        ("route", "press1"),
+        ("route", "press2"),
+        ("press1", "quality"),
+        ("press2", "quality"),
+        ("quality", "inspect"),
+    ] {
+        steps.push(("connect", json!({"from": from, "to": to})));
+    }
+    steps.push((
+        "connect",
+        json!({"from": "inspect", "to": "done", "probability": 0.911}),
+    ));
+    steps.push((
+        "connect",
+        json!({"from": "inspect", "to": "scrap", "probability": 0.089}),
+    ));
+    steps.push((
+        "experiment.set",
+        json!({"time_unit": "s", "warmup": 86400.0, "duration": 604800.0,
+               "replications": 25, "seed": 1, "start": "2024-01-01T00:00:00"}),
+    ));
+    steps
+}
+
 pub static TEMPLATES: &[Template] = &[
     Template {
         name: "mm1",
@@ -181,5 +303,10 @@ pub static TEMPLATES: &[Template] = &[
         name: "case-a",
         summary: "Case A of Schmitt et al. (2026): four machines with failures, buffers of 5 with a 10 s transfer, weekend breaks and energy, in seconds",
         steps: case_a,
+    },
+    Template {
+        name: "case-b",
+        summary: "Case B of Schmitt et al. (2026): seven machines, two presses in parallel fed by the shorter queue, 8.9% rejects, minimum times in the buffers, weekend breaks and energy, in seconds",
+        steps: case_b,
     },
 ];

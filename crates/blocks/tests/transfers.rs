@@ -167,3 +167,38 @@ fn a_source_sends_parts_on_their_way() {
     assert_eq!(r.element("in").map(|e| (e.entered, e.left)), Some((26, 26)));
     close(r.element("m").and_then(|e| e.mean_wait), 0.0);
 }
+
+/// A minimum time in the buffer instead (the transfer does not hold the sender): with the
+/// first machine and its transfer the bottleneck held (3 + 2 against 2), the first machine now
+/// works without a break, [3k, 3k + 3), each part reaching the queue 2 later and served
+/// [3k + 5, 3k + 7). After a warm-up of 21, the parts out at 22, 25, …, 100: 27 in 80,
+/// throughput 1/3 where holding gave 1/5. The first machine is never blocked, and the part
+/// still counts at the second machine from the moment it leaves the first.
+#[test]
+fn a_minimum_stay_frees_the_sending_machine_at_once() {
+    let mut m = Builder::new();
+    let src = m.source("in", Dist::Constant(0.0), Some(40));
+    let m1 = m.server("m1", 1, Dist::Constant(3.0));
+    let m2 = m.buffered_server("m2", 1, Dist::Constant(2.0), 2);
+    m.min_stay(m2, Dist::Constant(2.0));
+    let out = m.sink("out");
+    m.connect(src, m1);
+    m.connect(m1, m2);
+    m.connect(m2, out);
+    let model = m.build(window(21.0, 80.0));
+    assert_eq!(model.validate(), vec![]);
+    let c = compile(&model).unwrap_or_else(|e| panic!("{e:?}"));
+    let r = run(&c);
+    assert_eq!(left(&r, "m2"), 27, "{r:?}");
+    let m1 = r.element("m1");
+    close(m1.and_then(|e| e.utilisation), 1.0);
+    close(m1.and_then(|e| e.blocking_probability), 0.0);
+    // Busy [3k + 5, 3k + 7): half of k = 5, all of k = 6 to 31, 53 of 80.
+    close(r.element("m2").and_then(|e| e.utilisation), 53.0 / 80.0);
+    // Part k is the second machine's [3k + 3, 3k + 7): 1 of k = 5, 4 each of k = 6 to 31, 2 of
+    // k = 32: 107 over 80.
+    close(
+        r.element("m2").and_then(|e| e.mean_work_in_progress),
+        107.0 / 80.0,
+    );
+}

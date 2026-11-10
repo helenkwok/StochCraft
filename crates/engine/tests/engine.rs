@@ -1663,6 +1663,93 @@ fn transfer_times_are_set_and_removed() {
     assert_eq!(added["id"], "second");
 }
 
+/// A transfer that does not hold the sender, and a gateway routing to the shortest queue,
+/// through `block.set` and `block.add`: set, shown in the model (and left out when the
+/// default), kept when the transfer time changes, refused without a transfer, and run.
+#[test]
+fn minimum_stays_and_shortest_queue_routing_through_commands() {
+    let mut e = help_desk();
+    let desk = |m: &serde_json::Value| {
+        m["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+            .cloned()
+            .unwrap_or_default()
+    };
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "desk", "transfer_holds_sender": false})
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "transfer": {"type": "constant", "value": 0.5}, "transfer_holds_sender": false}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(desk(&m)["transfer_holds_sender"], false, "{m}");
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "transfer": {"type": "constant", "value": 0.75}}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(desk(&m)["transfer_holds_sender"], false, "{m}");
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "transfer_holds_sender": true}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(!m.to_string().contains("transfer_holds_sender"), "{m}");
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "breakdown": {"time_to_failure": {"type": "exponential", "mean": 100.0}, "repair": {"type": "constant", "value": 5.0}, "hands_on_while_down": false}}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert_eq!(desk(&m)["breakdown"]["hands_on_while_down"], false, "{m}");
+    ok(&mut e, "run", json!({"replications": 2}));
+    // Without a transfer, the setting would be lost: refused when adding too.
+    assert_eq!(
+        err(
+            &mut e,
+            "block.add",
+            json!({"kind": "server", "id": "oven", "transfer_holds_sender": false})
+        ),
+        ErrorCode::InvalidParams
+    );
+
+    ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "exclusive_gateway", "id": "pick", "routing": "shortest_queue"}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(
+        m.to_string().contains("\"routing\":\"shortest_queue\""),
+        "{m}"
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "pick", "routing": "standard"}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(!m.to_string().contains("routing"), "{m}");
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "desk", "routing": "shortest_queue"})
+        ),
+        ErrorCode::InvalidParams
+    );
+}
+
 /// Batches, splits and bills of materials through commands: added, changed, undone, and
 /// refused where they do not apply.
 #[test]

@@ -60,6 +60,7 @@ fn availability_and_the_effective_service_rate_match() {
         time_to_failure: Dist::Exponential { mean: mtbf },
         repair: Dist::Exponential { mean: mttr },
         interruptible: true,
+        hands_on_while_down: true,
     };
     let model = failing(
         2.0,
@@ -87,6 +88,7 @@ fn an_interrupted_job_holds_its_unit_through_the_repairs() {
         time_to_failure: Dist::Exponential { mean: mtbf },
         repair: Dist::Exponential { mean: mttr },
         interruptible: true,
+        hands_on_while_down: true,
     };
     let model = failing(
         lambda,
@@ -131,6 +133,7 @@ fn a_failure_waits_for_the_job_when_not_interruptible() {
             time_to_failure: Dist::Constant(10.0),
             repair: Dist::Constant(2.0),
             interruptible: false,
+            hands_on_while_down: true,
         },
         70.0,
     );
@@ -150,6 +153,7 @@ fn an_interrupted_job_resumes_where_it_stopped() {
             time_to_failure: Dist::Constant(10.0),
             repair: Dist::Constant(2.0),
             interruptible: true,
+            hands_on_while_down: true,
         },
         69.0,
     );

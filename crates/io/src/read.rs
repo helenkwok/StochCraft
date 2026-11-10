@@ -9,7 +9,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, Connection, DateTime, Dist, Element as ModelElement, ElementId,
     ElementKind, Estimate, Experiment, Family, Model, Need, Power, Property, PropertyType,
-    PropertyValue, ResourcePool, Stop, ThreePoint, TimeUnit, Timed, Upper,
+    PropertyValue, ResourcePool, Routing, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -956,6 +956,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     .as_ref()
                     .filter(|d| p.flows.iter().any(|f| &f.id == *d && f.from == n.id))
                     .map(|d| ElementId::unchecked(d)),
+                routing: routing_of(scenario, id, notes),
             },
             NodeKind::Parallel => ElementKind::ParallelGateway,
             NodeKind::Unsupported(what) => {
@@ -984,6 +985,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "a transfer time (stochcraft:transferTime) applies only to a task with a resource of its own; it is ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::ExclusiveGateway { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::ROUTING)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "a routing rule (stochcraft:routing) applies only to an exclusive gateway; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::Server { .. })
@@ -1193,6 +1204,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
         } else if [
             bpsim::BREAKDOWN,
             bpsim::TRANSFER_TIME,
+            bpsim::ROUTING,
             bpsim::POWER,
             bpsim::BATCH_SIZE,
             bpsim::UNBATCH,
@@ -1203,8 +1215,8 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
         ]
         .contains(&name)
         {
-            // Read by `breakdown_of`, `transfer_of`, `batching_of`, `vendor_count`, `stop_of`
-            // and `estimates_of`.
+            // Read by `breakdown_of`, `transfer_of`, `routing_of`, `batching_of`,
+            // `vendor_count`, `stop_of` and `estimates_of`.
         } else if name.starts_with(bpsim::STOCHCRAFT) {
             notes.push(Note::warning(
                 Some(id),
@@ -1320,25 +1332,42 @@ fn breakdown_of(
             false
         }
     };
+    let hands_on_while_down = match body
+        .and_then(|b| b.attr("handsOnWhileDown"))
+        .as_deref()
+        .map(str::trim)
+    {
+        None | Some("true" | "1") => true,
+        Some("false" | "0") => false,
+        Some(other) => {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "handsOnWhileDown on a breakdown must be true or false, not `{other}`; a unit under repair hands on its finished part"
+                ),
+            ));
+            true
+        }
+    };
     Some(Breakdown {
         time_to_failure,
         repair,
         interruptible,
+        hands_on_while_down,
     })
 }
 
-/// The transfer time StochCraft's vendor extension gives server `id`, if any.
+/// The transfer time StochCraft's vendor extension gives server `id`, if any, and whether it
+/// holds the sender (attribute `holdsSender`, default true).
 fn transfer_of(
     scenario: Option<&Scenario>,
     id: &str,
     unit: TimeUnit,
     notes: &mut Vec<Note>,
-) -> Option<Dist> {
+) -> Option<Transfer> {
     let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::TRANSFER_TIME))?;
-    let body = ext
-        .elements()
-        .find(|e| e.local() == "transferTime")
-        .and_then(|b| bpsim::default_value(b, unit, notes, Some(id)));
+    let element = ext.elements().find(|e| e.local() == "transferTime");
+    let body = element.and_then(|b| bpsim::default_value(b, unit, notes, Some(id)));
     if body.is_none() {
         notes.push(Note::error(
             Some(id),
@@ -1346,7 +1375,49 @@ fn transfer_of(
         ));
         return None;
     }
-    dist_of(body, "the transfer time", id, notes)
+    let holds = element.and_then(|e| e.attr("holdsSender"));
+    let holds_sender = match holds.as_deref().map(str::trim) {
+        None | Some("true" | "1") => true,
+        Some("false" | "0") => false,
+        Some(other) => {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "holdsSender on a transfer time must be true or false, not `{other}`; the transfer holds the sender"
+                ),
+            ));
+            true
+        }
+    };
+    Some(Transfer {
+        time: dist_of(body, "the transfer time", id, notes)?,
+        holds_sender,
+    })
+}
+
+/// The routing rule StochCraft's vendor extension gives exclusive gateway `id` (BPMN's own
+/// when none).
+fn routing_of(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) -> Routing {
+    let Some(ext) =
+        scenario.and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::ROUTING)))
+    else {
+        return Routing::Standard;
+    };
+    let raw = bpsim::vendor_value(ext).unwrap_or_default();
+    match raw.trim() {
+        "shortestQueue" => Routing::ShortestQueue,
+        "standard" => Routing::Standard,
+        other => {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "the routing rule (`{}`) must be shortestQueue or standard, not `{other}`; the gateway routes by its conditions or probabilities",
+                    bpsim::ROUTING
+                ),
+            ));
+            Routing::Standard
+        }
+    }
 }
 
 /// The power per state StochCraft's vendor extension gives server `id`, if any: kilowatts in
