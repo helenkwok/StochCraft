@@ -150,18 +150,9 @@ pub enum ElementKind {
         /// `stochcraft:breakdown`, since BPSim has none); `None`: units never fail.
         breakdown: Option<Breakdown>,
         /// The time a part takes to get here from the element that sends it (a short conveyor,
-        /// a hand transfer), drawn for each part; `None`: parts arrive at once. A StochCraft
-        /// vendor extension (`stochcraft:transferTime`).
-        ///
-        /// A part takes its place in the buffer (`queue_capacity`) when its transfer starts, so
-        /// the capacity counts parts in transit as well as those waiting, and it joins the
-        /// queue when the transfer ends. A server or a task with shared resources sending it
-        /// waits after its job until there is room (blocking after service), then its unit
-        /// stays occupied, and counts as blocked, for the whole transfer. Any other sender (a
-        /// source, a delay, a gateway, a batch or a split) holds nothing while the part
-        /// travels. A part in transit is inside this element (its work in progress), not the
-        /// sender's.
-        transfer: Option<Dist>,
+        /// a hand transfer, a minimum time in the buffer); `None`: parts arrive at once.
+        /// See [`Transfer`].
+        transfer: Option<Transfer>,
         /// Whether the units are available (on shift) outside the calendars of
         /// `availability`: BPSim `availability` on the task's own resource, default true.
         available: bool,
@@ -195,13 +186,16 @@ pub enum ElementKind {
     Delay { duration: Dist },
     /// Removes entities (a BPMN end event).
     Sink,
-    /// Sends each entity down one outgoing connection, at once (a BPMN exclusive gateway). If any
-    /// outgoing connection has a condition, the first in model order whose condition holds is
-    /// taken, else `default`, else the entity leaves the model here; otherwise one is drawn by
-    /// the connections' probabilities (those without one share evenly what the others leave).
+    /// Sends each entity down one outgoing connection, at once (a BPMN exclusive gateway). With
+    /// [`Routing::Standard`]: if any outgoing connection has a condition, the first in model
+    /// order whose condition holds is taken, else `default`, else the entity leaves the model
+    /// here; otherwise one is drawn by the connections' probabilities (those without one share
+    /// evenly what the others leave). With [`Routing::ShortestQueue`], see there.
     ExclusiveGateway {
         /// The connection taken when no condition holds (BPMN's `default` flow).
         default: Option<ElementId>,
+        /// How the way is chosen.
+        routing: Routing,
     },
     /// Copies each entity down every outgoing connection, at once (a BPMN parallel gateway).
     /// With several incoming connections it first waits for an entity on each of them (a join)
@@ -267,6 +261,58 @@ impl Power {
         }
         v
     }
+}
+
+/// The time a part takes to get into a server from the element that sends it, drawn for each
+/// part (a StochCraft vendor extension, `stochcraft:transferTime`).
+///
+/// A part takes its place in the buffer (`queue_capacity`) when its transfer starts, so the
+/// capacity counts parts in transit as well as those waiting, and it joins the queue when the
+/// transfer ends. A part in transit is inside this server (its work in progress), not the
+/// sender's. A server or a task with shared resources sending it waits after its job until there
+/// is room (blocking after service); then, if `holds_sender`, its unit stays occupied, and counts
+/// as blocked, for the whole transfer (a robot or a person carrying the part), and goes on with
+/// it if the unit fails meanwhile; otherwise the unit is free at once and the time is a minimum
+/// time in the buffer (`stochcraft:transferHoldsSender="false"`). Any other sender (a source, a
+/// delay, a gateway, a batch or a split) holds nothing while the part travels.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Transfer {
+    pub time: Dist,
+    pub holds_sender: bool,
+}
+
+impl Transfer {
+    /// A transfer of `time` that holds the sending unit.
+    pub fn holding(time: Dist) -> Self {
+        Self {
+            time,
+            holds_sender: true,
+        }
+    }
+}
+
+/// How an exclusive gateway chooses the way each entity takes.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Routing {
+    /// By the first condition that holds, else the default; with no conditions, drawn by the
+    /// connections' probabilities (BPMN and BPSim).
+    #[default]
+    Standard,
+    /// To the way with the shortest queue that has room (a StochCraft vendor extension,
+    /// `stochcraft:routing="shortestQueue"`): only ways whose next element has room in its
+    /// buffer are candidates, and the entity takes the one with the fewest entities waiting or
+    /// in transit there (not counting those in service); a tie goes to the way taken longest ago
+    /// (the first in model order if none has been taken yet), so equal ways take turns. With no
+    /// room on any way, the entity waits until a place frees on one, and the rule is applied
+    /// then.
+    ///
+    /// The element sending into the gateway does the waiting, as if the ways were its own: a
+    /// server stays blocked after its job until some way has room (and a transfer into the way
+    /// chosen then holds its unit, if the transfer holds senders), and a source loses its
+    /// arrival when no way has room. Probabilities, conditions and a default have no effect.
+    /// A plain waiter for the same buffer (another sender with only that way) gets a freed
+    /// place before an entity routed here.
+    ShortestQueue,
 }
 
 /// How a server's units fail: each unit independently, in elapsed time (busy or idle), after a
@@ -403,7 +449,7 @@ impl ElementKind {
                     d.push(("repair", &b.repair));
                 }
                 if let Some(t) = transfer {
-                    d.push(("transfer", t));
+                    d.push(("transfer", &t.time));
                 }
                 d
             }
@@ -778,7 +824,7 @@ pub enum Problem {
         expression: String,
         error: expr::ExprError,
     },
-    /// A probability or condition where it has no effect, and why.
+    /// A probability, condition or default where it has no effect, and why.
     RoutingIgnored {
         what: &'static str,
         reason: &'static str,
@@ -1860,7 +1906,7 @@ impl Model {
                     ));
                 }
             }
-            let ElementKind::ExclusiveGateway { default } = &e.kind else {
+            let ElementKind::ExclusiveGateway { default, routing } = &e.kind else {
                 continue;
             };
             if let Some(d) = default
@@ -1873,7 +1919,24 @@ impl Model {
                     },
                 ));
             }
-            if outs.iter().any(|c| c.condition.is_some()) {
+            if *routing == Routing::ShortestQueue {
+                let reason = "the gateway routes to the shortest queue";
+                for c in &outs {
+                    let what = if c.condition.is_some() {
+                        "this condition"
+                    } else if c.probability.is_some() {
+                        "this probability"
+                    } else if default.as_ref() == Some(&c.id) {
+                        "this default"
+                    } else {
+                        continue;
+                    };
+                    out.push(Diagnostic::warning(
+                        Some(&c.id),
+                        Problem::RoutingIgnored { what, reason },
+                    ));
+                }
+            } else if outs.iter().any(|c| c.condition.is_some()) {
                 if default.is_none() {
                     out.push(Diagnostic::warning(Some(&e.id), Problem::NoDefault));
                 }
@@ -2063,7 +2126,18 @@ impl Model {
                 continue;
             }
             for (from, tos) in outgoing {
-                if tos.contains(&&e.id) && self.element(from).is_some_and(|g| g.kind.is_gateway()) {
+                // A shortest-queue gateway leaves the waiting to its sender.
+                let holds_up = self.element(from).is_some_and(|g| {
+                    g.kind.is_gateway()
+                        && !matches!(
+                            g.kind,
+                            ElementKind::ExclusiveGateway {
+                                routing: Routing::ShortestQueue,
+                                ..
+                            }
+                        )
+                });
+                if tos.contains(&&e.id) && holds_up {
                     out.push(Diagnostic::warning(
                         Some(&e.id),
                         Problem::BufferBehindGateway {
@@ -2326,6 +2400,7 @@ mod tests {
                 "check",
                 ElementKind::ExclusiveGateway {
                     default: Some(id("nowhere")),
+                    routing: Routing::Standard,
                 },
             ),
         );
@@ -2392,7 +2467,13 @@ mod tests {
         let mut m = mm1();
         m.elements.insert(
             1,
-            el("pick", ElementKind::ExclusiveGateway { default: None }),
+            el(
+                "pick",
+                ElementKind::ExclusiveGateway {
+                    default: None,
+                    routing: Routing::Standard,
+                },
+            ),
         );
         m.elements.push(el("scrap", ElementKind::Sink));
         let mut a = Connection::new(id("a"), id("pick"), id("machine"));
@@ -2525,8 +2606,13 @@ mod tests {
     fn a_buffer_fed_through_a_gateway_is_flagged() {
         let mut m = mm1();
         buffered(&mut m, "machine", 2);
-        m.elements
-            .push(el("pick", ElementKind::ExclusiveGateway { default: None }));
+        m.elements.push(el(
+            "pick",
+            ElementKind::ExclusiveGateway {
+                default: None,
+                routing: Routing::Standard,
+            },
+        ));
         m.connections[0].to = ElementId::unchecked("pick");
         m.connections.push(link("f3", "pick", "machine"));
         let ds = m.validate();
@@ -2552,8 +2638,13 @@ mod tests {
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
         m.elements.push(el("b", server(Some(1))));
-        m.elements
-            .push(el("split", ElementKind::ExclusiveGateway { default: None }));
+        m.elements.push(el(
+            "split",
+            ElementKind::ExclusiveGateway {
+                default: None,
+                routing: Routing::Standard,
+            },
+        ));
         // machine → a → b → split → (a | exit): a and b are a loop if the way back skips the
         // gateway, so first check that a gateway on the way breaks it.
         m.connections[1].to = ElementId::unchecked("a");

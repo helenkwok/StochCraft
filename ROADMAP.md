@@ -572,18 +572,50 @@ unrolled line in `stochcraft-blocks`.
     in service, and not at the sender. The sender's `blocking_probability` counts its units
     held through a transfer as blocked; `mean_blocked_time` stays the wait for room alone.
   - Transfer times come from a stream of their own per receiving server, forked after all the
-    others, so models without transfers draw exactly as before. A transfer that does not hold
-    the sender (a conveyor with its own capacity) is not an option yet.
+    others, so models without transfers draw exactly as before.
+  - **A minimum time in the buffer** (issue #96): a transfer that does not hold the sender
+    (`holds_sender` false). The sending unit is free as soon as the part is in; the part counts
+    against the capacity from then and can be taken only after the time. It matters: on the
+    assembly line of Case B (Schmitt et al. 2026, two presses of 175 s behind 32 s buffers), an
+    independent model gives about 23 accepted parts/h when the presses are held through the
+    transfer and 27.0 when they are not, against 27.26 published.
+  - A unit that fails while holding a part through a transfer lets the transfer finish on
+    time (it is already on its way); the unit is failed from then on and takes no new part
+    until repaired.
   - **File:** `<bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="…"><stochcraft:transferTime><bpsim:FloatingParameter value="10"/></stochcraft:transferTime></bpsim:VendorExtension>`
     in the receiving task's `ElementParameters` (any BPSim distribution in place of the
-    constant), read, written, saved in place and in the vendor schema; `block.set` and
-    `block.add` take `transfer` (`null` removes it). Not editable in the window yet.
+    constant), with `holdsSender="false"` on `stochcraft:transferTime` for a minimum time in
+    the buffer; read, written, saved in place and in the vendor schema; `block.set` and
+    `block.add` take `transfer` (`null` removes it) and `transfer_holds_sender` (needs a
+    transfer; a new `transfer` keeps it). Not editable in the window yet.
   - **Checks** (`blocks/tests/transfers.rs`, worked by hand): two machines with fixed cycles
     and a buffer of two, the second's buffer never empty, give exactly 1 / max(cycle₁ +
-    transfer, cycle₂) parts per time unit with either machine the bottleneck; the first
-    machine is blocked exactly its transfers' share of the time; a part in transit is counted
-    once, at the receiving machine; and, stepping through a run, the receiving machine never
-    holds more than its unit plus its waiting room, transit included.
+    transfer, cycle₂) parts per time unit with either machine the bottleneck, and
+    1 / max(cycle₁, cycle₂) with a minimum time in the buffer instead; the first machine is
+    blocked exactly its transfers' share of the time (none with a minimum stay); a part in
+    transit is counted once, at the receiving machine; and, stepping through a run, the
+    receiving machine never holds more than its unit plus its waiting room, transit included.
+- **Routing to the shortest queue** (issue #96): an exclusive gateway with `routing`
+  `shortest_queue` (`stochcraft:routing="shortestQueue"`) sends each entity to the way with
+  room whose next element has the fewest entities waiting or in transit (those in service not
+  counted); a tie goes to the way taken longest ago, so equal ways take turns.
+  - The element sending into the gateway does the routing itself, so it is the one that waits
+    while no way has room: a server stays blocked after its job (and a transfer into the way
+    chosen then holds its unit, if the transfer holds senders), and a source loses its arrival
+    (counted lost at the gateway and the source). Nothing waits before the gateway, so
+    `buffer_behind_gateway` does not apply to it.
+  - A freed place goes first to a plain waiter for that buffer (an element with that single
+    way), then to entities routed through the gateway.
+  - Probabilities, conditions and a default on its ways have no effect (`routing_ignored`).
+    Standard gateways keep their behaviour: they pick a way first, then wait for room there.
+  - **File:** `<bpsim:VendorExtension name="stochcraft:routing" xmlns:stochcraft="…" stochcraft:value="shortestQueue"/>`
+    in the gateway's `ElementParameters`; on any other element it is ignored with a warning.
+    `block.set` and `block.add` take `routing` (`standard` or `shortest_queue`). Not editable in
+    the window yet.
+  - **Checks** (`blocks/tests/shortest_queue.rs`, worked by hand): ties take turns and the
+    shorter queue wins; a full way is passed over and the sender is blocked until either way
+    frees, for exactly the times worked out; a source loses its arrival when every way is
+    full; and a transfer into the way taken holds the sender or not.
 - **Commands:**
   - `block.set` takes `queue_capacity`; `null` removes it, and undo is exact.
   - `block.add` and `model.set` take it with the other server parameters.

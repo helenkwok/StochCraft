@@ -1043,6 +1043,21 @@ fn everything_stochcraft_writes_is_schema_valid() {
         "batching",
         &xsd,
     );
+    // Routing to the shortest queue, and a transfer that does not hold the sender.
+    let mut r = Builder::new();
+    let src = r.source("arrive", Dist::Constant(1.0), None);
+    let pick = r.shortest_queue("pick");
+    let a = r.buffered_server("a", 1, Dist::Constant(2.0), 3);
+    let c = r.buffered_server("b", 1, Dist::Constant(2.0), 3);
+    r.min_stay(a, Dist::Constant(0.5));
+    r.transfer(c, Dist::Constant(0.5));
+    let out = r.sink("out");
+    r.connect(src, pick);
+    r.connect(pick, a);
+    r.connect(pick, c);
+    r.connect(a, out);
+    r.connect(c, out);
+    validate(&write_new(&r.build(Experiment::default())), "routing", &xsd);
     // Each reference model, as StochCraft reads it, written again as a new BPMN file.
     let Some(paths) = models() else { return };
     for p in &paths {

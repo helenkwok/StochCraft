@@ -7,15 +7,15 @@ use serde::{Deserialize, Deserializer};
 use serde_json::{Value, json};
 use stochcraft_model::{
     Bounds, Connection, Element, ElementId, ElementKind, Model, Need, Property, ResourcePool,
-    calendar::Calendar,
+    Transfer, calendar::Calendar,
 };
 
 use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BreakdownSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec, KindSpec,
-    ModelDoc, NeedSpec, PowerSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, ShiftDoc,
-    Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    ModelDoc, NeedSpec, PowerSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, RoutingSpec,
+    ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -106,13 +106,14 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "queue_capacity",
             "breakdown",
             "transfer",
+            "transfer_holds_sender",
             "available",
             "availability",
             "power",
         ],
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
-        Some("exclusive_gateway") => &["default"],
+        Some("exclusive_gateway") => &["default", "routing"],
         Some("batch") => &["size"],
         _ => &[],
     };
@@ -293,6 +294,11 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<DistSpec>")]
     pub transfer: Option<Option<DistSpec>>,
+    /// Servers: whether a sending server keeps its unit, blocked, through the transfer (true),
+    /// or is free at once, the transfer being a minimum time in the buffer (false). Needs a
+    /// transfer.
+    #[serde(default)]
+    pub transfer_holds_sender: Option<bool>,
     /// Servers: whether the units are available (on shift) outside the calendars of
     /// `availability`.
     #[serde(default)]
@@ -321,6 +327,11 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<String>")]
     pub default: Option<Option<String>>,
+    /// Exclusive gateways: how the way is chosen, `standard` (conditions, else probabilities)
+    /// or `shortest_queue` (the way with the shortest queue that has room, the sender waiting
+    /// while none has).
+    #[serde(default)]
+    pub routing: Option<RoutingSpec>,
     /// A batch: how many entities it collects before sending them on together.
     #[serde(default)]
     pub size: Option<u32>,
@@ -1000,6 +1011,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("queue_capacity", p.queue_capacity.is_some()),
         ("breakdown", p.breakdown.is_some()),
         ("transfer", p.transfer.is_some()),
+        ("transfer_holds_sender", p.transfer_holds_sender.is_some()),
         ("available", p.available.is_some()),
         ("availability", p.availability.is_some()),
         ("power", p.power.is_some()),
@@ -1007,6 +1019,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
         ("default", p.default.is_some()),
+        ("routing", p.routing.is_some()),
         ("size", p.size.is_some()),
     ];
     let applies: &[&str] = match kind {
@@ -1017,13 +1030,14 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "queue_capacity",
             "breakdown",
             "transfer",
+            "transfer_holds_sender",
             "available",
             "availability",
             "power",
         ],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
-        ElementKind::ExclusiveGateway { .. } => &["default"],
+        ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
         ElementKind::Batch { .. } => &["size"],
         ElementKind::Sink | ElementKind::ParallelGateway | ElementKind::Unbatch => &[],
     };
@@ -1073,7 +1087,23 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *breakdown = b.map(Into::into);
             }
             if let Some(t) = p.transfer {
-                *transfer = t.map(Into::into);
+                // A new time keeps whether the transfer held the sender.
+                let holds = transfer.as_ref().is_none_or(|x| x.holds_sender);
+                *transfer = t.map(|d| Transfer {
+                    time: d.into(),
+                    holds_sender: holds,
+                });
+            }
+            if let Some(h) = p.transfer_holds_sender {
+                match transfer {
+                    Some(t) => t.holds_sender = h,
+                    None => {
+                        return Err(CommandError::new(
+                            ErrorCode::InvalidParams,
+                            "`transfer_holds_sender` needs a transfer: give `transfer` too",
+                        ));
+                    }
+                }
             }
             if let Some(a) = p.available {
                 *available = a;
@@ -1114,9 +1144,12 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *duration = d.into();
             }
         }
-        ElementKind::ExclusiveGateway { default } => {
+        ElementKind::ExclusiveGateway { default, routing } => {
             if let Some(d) = p.default {
                 *default = d.as_deref().map(ElementId::unchecked);
+            }
+            if let Some(r) = p.routing {
+                *routing = r.into();
             }
         }
         ElementKind::Batch { size } => {

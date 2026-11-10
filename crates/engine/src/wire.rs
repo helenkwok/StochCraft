@@ -10,7 +10,7 @@ use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
     Bounds, Breakdown, Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate,
     Experiment, Family, Model, Need, Power, Property, PropertyType, PropertyValue, ResourcePool,
-    Severity, Stop, ThreePoint, TimeUnit, Timed, Upper,
+    Routing, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -199,11 +199,15 @@ pub enum KindSpec {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         breakdown: Option<BreakdownSpec>,
         /// The time each part takes to get here from the element that sends it (a short
-        /// conveyor, a hand transfer); left out, parts arrive at once. The part takes its place
-        /// in the buffer as the transfer starts and joins the queue as it ends; a sending server
-        /// or task with shared resources keeps its unit, blocked, through the transfer.
+        /// conveyor, a hand transfer, a minimum time in the buffer); left out, parts arrive at
+        /// once. The part takes its place in the buffer as the transfer starts and joins the
+        /// queue as it ends.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         transfer: Option<DistSpec>,
+        /// Whether a sending server or task with shared resources keeps its unit, blocked,
+        /// through the transfer (else it is free at once); left out when true.
+        #[serde(default = "yes", skip_serializing_if = "is_true")]
+        transfer_holds_sender: bool,
         /// Whether the units are available (on shift) outside the calendars of
         /// `availability`; left out when true.
         #[serde(default = "yes", skip_serializing_if = "is_true")]
@@ -241,12 +245,16 @@ pub enum KindSpec {
     Sink,
     /// Sends each entity down one outgoing connection at once (a BPMN exclusive gateway): the
     /// first whose condition holds if any has one, else drawn by the connections'
-    /// probabilities (`flow.set`).
+    /// probabilities (`flow.set`); or, with `routing` `shortest_queue`, to the way with the
+    /// shortest queue that has room.
     ExclusiveGateway {
         /// The outgoing connection taken when no condition holds; without one, such an entity
         /// leaves the model.
         #[serde(default)]
         default: Option<String>,
+        /// How the way is chosen; left out when standard.
+        #[serde(default, skip_serializing_if = "RoutingSpec::is_standard")]
+        routing: RoutingSpec,
     },
     /// Copies each entity down every outgoing connection at once (a BPMN parallel gateway);
     /// with several incoming connections, first waits for an entity on each (a join). A
@@ -348,6 +356,44 @@ fn is_true(b: &bool) -> bool {
 
 fn yes() -> bool {
     true
+}
+
+/// How an exclusive gateway chooses the way each entity takes.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum RoutingSpec {
+    /// By the first condition that holds, else the default; with no conditions, drawn by the
+    /// connections' probabilities.
+    #[default]
+    Standard,
+    /// To the way with the shortest queue (entities waiting or in transit) that has room; a
+    /// tie goes to the way taken longest ago. With no room on any way, the element sending
+    /// into the gateway waits (a server blocked after its job), or a source loses its arrival.
+    ShortestQueue,
+}
+
+impl RoutingSpec {
+    fn is_standard(&self) -> bool {
+        *self == RoutingSpec::Standard
+    }
+}
+
+impl From<Routing> for RoutingSpec {
+    fn from(r: Routing) -> Self {
+        match r {
+            Routing::Standard => RoutingSpec::Standard,
+            Routing::ShortestQueue => RoutingSpec::ShortestQueue,
+        }
+    }
+}
+
+impl From<RoutingSpec> for Routing {
+    fn from(r: RoutingSpec) -> Self {
+        match r {
+            RoutingSpec::Standard => Routing::Standard,
+            RoutingSpec::ShortestQueue => Routing::ShortestQueue,
+        }
+    }
 }
 
 /// How a server's units fail: each unit, independently, after a time to failure since its last
@@ -654,7 +700,8 @@ impl From<&ElementKind> for KindSpec {
                 service: service.into(),
                 queue_capacity: *queue_capacity,
                 breakdown: breakdown.as_ref().map(Into::into),
-                transfer: transfer.as_ref().map(Into::into),
+                transfer: transfer.as_ref().map(|t| (&t.time).into()),
+                transfer_holds_sender: transfer.as_ref().is_none_or(|t| t.holds_sender),
                 available: *available,
                 availability: timed(availability, |t| AvailabilityDoc {
                     calendar: t.calendar.to_string(),
@@ -675,8 +722,9 @@ impl From<&ElementKind> for KindSpec {
                 duration: duration.into(),
             },
             ElementKind::Sink => KindSpec::Sink,
-            ElementKind::ExclusiveGateway { default } => KindSpec::ExclusiveGateway {
+            ElementKind::ExclusiveGateway { default, routing } => KindSpec::ExclusiveGateway {
                 default: default.as_ref().map(ToString::to_string),
+                routing: (*routing).into(),
             },
             ElementKind::ParallelGateway => KindSpec::ParallelGateway,
             ElementKind::Batch { size } => KindSpec::Batch { size: *size },
@@ -705,6 +753,7 @@ impl From<KindSpec> for ElementKind {
                 queue_capacity,
                 breakdown,
                 transfer,
+                transfer_holds_sender,
                 available,
                 availability,
                 power,
@@ -713,7 +762,10 @@ impl From<KindSpec> for ElementKind {
                 service: service.into(),
                 queue_capacity,
                 breakdown: breakdown.map(Into::into),
-                transfer: transfer.map(Into::into),
+                transfer: transfer.map(|t| Transfer {
+                    time: t.into(),
+                    holds_sender: transfer_holds_sender,
+                }),
                 available,
                 availability: availability.into_iter().map(Into::into).collect(),
                 power: power.map(Into::into),
@@ -731,8 +783,9 @@ impl From<KindSpec> for ElementKind {
                 duration: duration.into(),
             },
             KindSpec::Sink => ElementKind::Sink,
-            KindSpec::ExclusiveGateway { default } => ElementKind::ExclusiveGateway {
+            KindSpec::ExclusiveGateway { default, routing } => ElementKind::ExclusiveGateway {
                 default: default.as_deref().map(ElementId::unchecked),
+                routing: routing.into(),
             },
             KindSpec::ParallelGateway => ElementKind::ParallelGateway,
             KindSpec::Batch { size } => ElementKind::Batch { size },
@@ -1481,6 +1534,7 @@ mod tests {
                 queue_capacity: None,
                 breakdown: None,
                 transfer: None,
+                transfer_holds_sender: true,
                 available: true,
                 availability: Vec::new(),
                 power: None,
