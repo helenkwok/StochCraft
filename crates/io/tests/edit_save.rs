@@ -487,6 +487,59 @@ fn removing_a_block_leaves_no_references_to_it() {
 }
 
 #[test]
+fn removing_a_block_from_an_xpdl_file_removes_its_associations() {
+    // Notes linked to the cooling step, to the flow into it and to the welding step.
+    let original = text(&file("tandem.xpdl")).replace(
+        "  <WorkflowProcesses>",
+        r#"  <Artifacts>
+    <Artifact Id="note" ArtifactType="Annotation" TextAnnotation="Cools overnight"/>
+    <Artifact Id="memo" ArtifactType="Annotation" TextAnnotation="Two welders"/>
+  </Artifacts>
+  <Associations>
+    <Association Id="a1" Source="note" Target="cool" AssociationDirection="None"/>
+    <Association Id="a2" Source="note" Target="t2" AssociationDirection="None"/>
+  </Associations>
+  <WorkflowProcesses>"#,
+    );
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.elements.retain(|e| e.id.as_str() != "cool");
+    m.connections
+        .retain(|c| c.id.as_str() != "t2" && c.id.as_str() != "t3");
+    m.connections
+        .push(Connection::new(id("t4"), id("weld"), id("out")));
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    for gone in [r#"Target="cool""#, r#"Target="t2""#, "<Associations>"] {
+        assert!(
+            !t.contains(gone),
+            "{gone} left behind:
+{t}"
+        );
+    }
+    assert!(
+        t.contains(r#"<Artifact Id="note""#),
+        "the note was lost:
+{t}"
+    );
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+
+    // An association to what stays is kept, and so is its list.
+    let kept = original.replace(
+        "  </Associations>",
+        r#"    <Association Id="a3" Source="memo" Target="weld" AssociationDirection="None"/>
+  </Associations>"#,
+    );
+    let loaded = read_scenario(kept.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    assert!(!t.contains(r#"Target="cool""#), "{t}");
+    assert!(t.contains(r#"<Association Id="a3""#), "{t}");
+    assert!(t.contains("<Associations>"), "{t}");
+}
+
+#[test]
 fn new_ids_never_clash_with_the_files_other_ids() {
     let loaded = read_scenario(&file("mm1.bpmn"), None).unwrap_or_else(|e| panic!("{e}"));
     // Ids the file uses for what StochCraft keeps but does not model: the task's own resource,
@@ -646,6 +699,38 @@ fn inheriting_scenarios_keep_their_meaning_when_the_time_unit_changes() {
     let saved = relabel(no_duration.as_bytes(), TimeUnit::Hours);
     let after = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(after.model, before.model, "{}", text(&saved));
+}
+
+/// A scenario two levels down, with a base time unit of its own and no duration of its own,
+/// means what it meant before the opened scenario's time unit changed (#82).
+#[test]
+fn a_nested_scenario_with_its_own_unit_keeps_its_meaning_when_the_time_unit_changes() {
+    let original = text(&file("mm1.bpmn")).replace(
+        r#"<bpsim:NumericParameter value="2"/></bpsim:Quantity></bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>"#,
+        r#"<bpsim:NumericParameter value="2"/></bpsim:Quantity></bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+        <bpsim:Scenario id="rush" name="Rush hour" inherits="two-clerks">
+          <bpsim:ScenarioParameters baseTimeUnit="s"/>
+          <bpsim:ElementParameters elementRef="arrive">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer><bpsim:NegativeExponentialDistribution mean="40"/></bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>"#,
+    );
+    assert!(original.contains(r#"id="rush""#));
+    let before = read_scenario(original.as_bytes(), Some("rush")).unwrap_or_else(|e| panic!("{e}"));
+    for unit in [TimeUnit::Hours, TimeUnit::Seconds, TimeUnit::Days] {
+        let saved = relabel(original.as_bytes(), unit);
+        let after = read_scenario(&saved, Some("rush")).unwrap_or_else(|e| panic!("{e}"));
+        assert_within_noise(&after.model, &before.model);
+        let again = relabel(&saved, TimeUnit::Minutes);
+        let after = read_scenario(&again, Some("rush")).unwrap_or_else(|e| panic!("{e}"));
+        assert_within_noise(&after.model, &before.model);
+    }
 }
 
 /// A rescaled value that cannot be written as a decimal reading back as exactly the same float
