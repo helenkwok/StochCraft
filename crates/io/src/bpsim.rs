@@ -25,6 +25,11 @@ pub const STOCHCRAFT: &str = "stochcraft:";
 /// xmlns:stochcraft="…" stochcraft:value="3"/>` in the task's `ElementParameters`.
 pub const QUEUE_CAPACITY: &str = "stochcraft:queueCapacity";
 
+/// A shared pool: `stochcraft:pool` with the value `true` on a resource's `ElementParameters`.
+/// BPMN with BPSim cannot otherwise tell a pool that one task uses, or none, from a task's own
+/// resource; a resource with this marker is always read as a pool.
+pub const POOL: &str = "stochcraft:pool";
+
 /// The vendor extension for a server's breakdowns: a `stochcraft:breakdown` element holding
 /// `stochcraft:timeToFailure` and `stochcraft:repairTime`, each a BPSim distribution, in the
 /// task's `ElementParameters`. Whether a failure interrupts the job is BPSim's own

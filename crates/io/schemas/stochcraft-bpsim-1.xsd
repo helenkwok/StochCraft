@@ -12,6 +12,10 @@
   stochcraft:queueCapacity, on a task's ElementParameters: the most entities that wait for the
   task's resource (not counting those in service), a whole number of at least 0.
 
+  stochcraft:pool, on a resource's ElementParameters, with the value true: the resource is a
+  shared pool, even when one task uses it or none. Without it, a resource that one task needs a
+  single unit of may be read as that task's own resource.
+
   stochcraft:batchSize, on a task's ElementParameters: the task collects this many entities
   (a whole number of at least 1) and sends them on together as one batch.
 
