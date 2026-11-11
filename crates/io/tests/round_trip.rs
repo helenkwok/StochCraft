@@ -631,3 +631,45 @@ fn pools_read_back_in_model_order() {
     assert_eq!(ids(&loaded.model), ["zeta", "alpha"]);
     assert_eq!(loaded.model, laid_out(model));
 }
+
+/// An XPDL file's resource participants read as pools in the order it declares them.
+#[test]
+fn xpdl_pools_read_in_declaration_order() {
+    let xpdl = r#"<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://www.wfmc.org/2009/XPDL2.2" xmlns:b1="http://www.bpsim.org/schemas/1.0" Id="pkg" Name="Pools">
+  <Participants>
+    <Participant Id="zeta" Name="Zeta"><ParticipantType Type="RESOURCE"/></Participant>
+    <Participant Id="alpha" Name="Alpha"><ParticipantType Type="RESOURCE"/></Participant>
+  </Participants>
+  <WorkflowProcesses>
+    <WorkflowProcess Id="wp">
+      <Activities>
+        <Activity Id="in"><Event><StartEvent Trigger="None"/></Event></Activity>
+        <Activity Id="out"><Event><EndEvent Result="None"/></Event></Activity>
+      </Activities>
+      <Transitions><Transition Id="t1" From="in" To="out"/></Transitions>
+    </WorkflowProcess>
+  </WorkflowProcesses>
+  <b1:BPSimData>
+    <b1:Scenario id="s">
+      <b1:ElementParameters elementRef="zeta">
+        <b1:ResourceParameters><b1:Role><b1:StringParameter value="agent"/></b1:Role></b1:ResourceParameters>
+      </b1:ElementParameters>
+      <b1:ElementParameters elementRef="alpha">
+        <b1:ResourceParameters><b1:Role><b1:StringParameter value="agent"/></b1:Role></b1:ResourceParameters>
+      </b1:ElementParameters>
+    </b1:Scenario>
+  </b1:BPSimData>
+</Package>"#;
+    let loaded = read(xpdl.as_bytes());
+    assert!(loaded.is_ok(), "{loaded:?}");
+    let Ok(loaded) = loaded else { return };
+    assert_eq!(loaded.opened.format, Format::Xpdl);
+    let ids: Vec<String> = loaded
+        .model
+        .resources
+        .iter()
+        .map(|r| r.id.to_string())
+        .collect();
+    assert_eq!(ids, ["zeta", "alpha"]);
+}
