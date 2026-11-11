@@ -166,7 +166,7 @@ jobs:
           key: wasm
       # Node runs the wasm32-wasip1 test binary through its built-in WASI (xtask/wasi-run.mjs). Node 22
       # crashed natively (SIGSEGV, also without its wasm trap handler) on the golden tests on GitHub's
-      # runner only; Node 24 is the version keepatch.yml already uses.
+      # runner only, so this job uses Node 24.
       - uses: actions/setup-node@v7
         with:
           node-version: 24
