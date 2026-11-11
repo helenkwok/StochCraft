@@ -51,12 +51,24 @@ struct Flow {
     to: String,
 }
 
+impl Process {
+    /// Declares a resource; a repeated id keeps its first place and takes the later name.
+    fn add_resource(&mut self, id: String, name: String) {
+        if self.resources.insert(id.clone(), name).is_none() {
+            self.resource_order.push(id);
+        }
+    }
+}
+
 #[derive(Debug, Default)]
 struct Process {
     nodes: Vec<Node>,
     flows: Vec<Flow>,
     /// Resource id → name.
     resources: BTreeMap<String, String>,
+    /// The resources' ids in the order the file declares them (the model's pool order, which
+    /// a need by roles tries pools in).
+    resource_order: Vec<String>,
     name: String,
     /// Sub-processes simulated in line: their id → (their start event, their end event). Flows
     /// into a sub-process go to its start event, and flows out of it leave from its end event.
@@ -96,7 +108,7 @@ fn read_bpmn(root: &Element, notes: &mut Vec<Note>) -> Process {
     };
     for r in root.children_named(&ns, "resource") {
         if let Some(id) = r.attr("id") {
-            p.resources.insert(id.clone(), r.attr("name").unwrap_or(id));
+            p.add_resource(id.clone(), r.attr("name").unwrap_or(id));
         }
     }
     let message_flows = root
@@ -255,8 +267,7 @@ fn read_xpdl(root: &Element, notes: &mut Vec<Note>) -> Process {
             .as_deref()
             == Some("RESOURCE");
         if let (true, Some(id)) = (is_resource, part.attr("Id")) {
-            p.resources
-                .insert(id.clone(), part.attr("Name").unwrap_or(id));
+            p.add_resource(id.clone(), part.attr("Name").unwrap_or(id));
         }
     }
     for wp in root
@@ -820,12 +831,13 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
         roles,
     } = assign_resources(&p, scenario, notes);
     // The pools the shared tasks draw on, and those no task uses that are marked as pools or
-    // have a role, in id order. Other unused resources are left out: a bare BPMN resource, or
-    // a server's own one that an in-place save left behind when the server became a delay (its
-    // quantity is still there).
+    // have a role, in the order the file declares them. Other unused resources are left out: a
+    // bare BPMN resource, or a server's own one that an in-place save left behind when the
+    // server became a delay (its quantity is still there).
     let resources: Vec<ResourcePool> = p
-        .resources
+        .resource_order
         .iter()
+        .filter_map(|r| p.resources.get_key_value(r))
         .filter(|(r, _)| match users.get(*r) {
             Some(u) if !u.is_empty() => u.iter().any(|t| shared.contains_key(t)),
             _ => is_marked_pool(scenario, r) || roles.get(*r).is_some_and(|l| !l.is_empty()),
