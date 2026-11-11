@@ -597,3 +597,37 @@ fn without_extension(xml: &str, name: &str) -> String {
     out.push_str(rest);
     out
 }
+
+/// A need by roles tries pools in model order, so the pools must read back in the order they
+/// were written, not in id order.
+#[test]
+fn pools_read_back_in_model_order() {
+    let mut m = Builder::new();
+    let src = m.source("arrivals", Dist::Exponential { mean: 2.0 }, None);
+    m.pool("zeta", 1, &["agent"]);
+    m.pool("alpha", 2, &["agent"]);
+    let phone = m.shared_task(
+        "phone",
+        Dist::Exponential { mean: 1.5 },
+        vec![Need::Roles {
+            roles: vec!["agent".into()],
+            quantity: 1,
+        }],
+        0.0,
+    );
+    let out = m.sink("exit");
+    m.connect(src, phone);
+    m.connect(phone, out);
+    let model = m.build(Experiment::default());
+    let loaded = read(&write_new(&model));
+    assert!(loaded.is_ok(), "{loaded:?}");
+    let Ok(loaded) = loaded else { return };
+    let ids = |m: &Model| {
+        m.resources
+            .iter()
+            .map(|r| r.id.to_string())
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(ids(&loaded.model), ["zeta", "alpha"]);
+    assert_eq!(loaded.model, laid_out(model));
+}
