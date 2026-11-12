@@ -37,6 +37,7 @@
 	Add point	Додај тачку
 	Add pool	Додај фонд
 	Add property	Додај својство
+	Add row	Додај ред
 	Add value	Додај вредност
 	Added calendar {id}	Додат је календар {id}
 	Added pool {id}	Додат је фонд {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Једна промена, коју Опозови враћа
 	One clerk, random arrivals: the textbook queue, checked against theory.	Један службеник, насумични доласци: класичан ред чекања, провјерен теоријом.
 	One task per BPSim distribution, to compare their spread.	По један задатак за сваку BPSim дистрибуцију ради успоредбе њихове распршености.
+	Only when this property changes	Само када се ово својство промени
 	Open	Отвори
 	Open Example	Отвори примјер
 	Open Model	Отвори модел
@@ -341,6 +343,8 @@
 	Set a value	Постави вредност
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Поставља се за сваки ентитет при уласку у овај блок. Изрази читају вредности које је ентитет имао при уласку, као што је getProperty('issues') - 1.
 	Settings	Поставке
+	Setup	Припрема
+	Setup time	Време припреме
 	Shape	Облик
 	Share	Удео
 	Share of arrivals lost	Удио изгубљених долазака
@@ -395,10 +399,12 @@
 	Time failed	Вријеме у квару
 	Time off shift	Вријеме ван смјене
 	Time processing	Вријеме обраде
+	Time setting up	Време у припреми
 	Time starved	Вријеме без посла
 	Time to failure	Време до квара
 	Time to the stop condition	Време до услова заустављања
 	Time unit	Временска јединица
+	Times for particular changes	Времена за одређене промене
 	To	Према
 	Tops	Горње ивице
 	Transfer time	Време преноса

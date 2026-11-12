@@ -37,6 +37,7 @@
 	Add point	Lisää piste
 	Add pool	Lisää pooli
 	Add property	Lisää ominaisuus
+	Add row	Lisää rivi
 	Add value	Lisää arvo
 	Added calendar {id}	Lisättiin kalenteri {id}
 	Added pool {id}	Lisättiin pooli {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Yksi muutos, jonka Kumoa peruu
 	One clerk, random arrivals: the textbook queue, checked against theory.	Yksi palvelija, satunnaiset saapumiset: teorian avulla tarkistettu klassinen jono.
 	One task per BPSim distribution, to compare their spread.	Yksi tehtävä kutakin BPSim-jakaumaa kohti niiden hajonnan vertailuun.
+	Only when this property changes	Vain kun tämä ominaisuus muuttuu
 	Open	Avaa
 	Open Example	Avaa esimerkki
 	Open Model	Avaa malli
@@ -341,6 +343,8 @@
 	Set a value	Aseta arvo
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Asetetaan jokaiselle entiteetille sen saapuessa tähän lohkoon. Lausekkeet lukevat entiteetin saapuessa voimassa olleet arvot, kuten getProperty('issues') - 1.
 	Settings	Asetukset
+	Setup	Asetus
+	Setup time	Asetusaika
 	Shape	Muoto
 	Share	Osuus
 	Share of arrivals lost	Menetettyjen saapumisten osuus
@@ -395,10 +399,12 @@
 	Time failed	Aika vikaantuneena
 	Time off shift	Aika vuoron ulkopuolella
 	Time processing	Käsittelyaika
+	Time setting up	Aika asetuksessa
 	Time starved	Aika ilman työtä
 	Time to failure	Aika vikaantumiseen
 	Time to the stop condition	Aika pysäytysehtoon
 	Time unit	Aikayksikkö
+	Times for particular changes	Ajat tietyille muutoksille
 	To	Kohteeseen
 	Tops	Yläreunat
 	Transfer time	Siirtoaika

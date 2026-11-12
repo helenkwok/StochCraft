@@ -37,6 +37,7 @@
 	Add point	添加点
 	Add pool	添加资源池
 	Add property	添加属性
+	Add row	添加行
 	Add value	添加值
 	Added calendar {id}	已添加日历 {id}
 	Added pool {id}	已添加资源池 {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	一次更改，可用撤销还原
 	One clerk, random arrivals: the textbook queue, checked against theory.	一名服务员、随机到达：经典排队模型，并与理论结果对照。
 	One task per BPSim distribution, to compare their spread.	每种 BPSim 分布各设一个任务，用于比较其离散程度。
+	Only when this property changes	仅当此属性变化时
 	Open	打开
 	Open Example	打开示例
 	Open Model	打开模型
@@ -341,6 +343,8 @@
 	Set a value	设置值
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	在每个实体进入此区块时设置。表达式读取实体到达时携带的值，例如 getProperty('issues') - 1。
 	Settings	设置
+	Setup	换型
+	Setup time	换型时间
 	Shape	形状参数
 	Share	比例
 	Share of arrivals lost	到达流失比例
@@ -395,10 +399,12 @@
 	Time failed	故障时间
 	Time off shift	非当班时间
 	Time processing	加工时间
+	Time setting up	换型占用时间
 	Time starved	待料时间
 	Time to failure	故障前时间
 	Time to the stop condition	到达停止条件的时间
 	Time unit	时间单位
+	Times for particular changes	特定切换的时间
 	To	终点
 	Tops	顶边
 	Transfer time	传送时间

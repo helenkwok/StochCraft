@@ -1271,12 +1271,15 @@ A line that makes several products, and results in the terms lean practice uses.
   `getProperty` (M2.2, M2.3). A product mix is one setting: a property whose value is a mix,
   text values each drawn by its share (`{"mix": [...]}`), written as BPSim's own discrete
   `UserDistribution` of `StringParameter`s (BPSim 2.0, 6.2.8 and 6.3.5.13). Done.
-- **Changeovers:** a setup time when a station switches from one product type to another,
-  including setups that depend on the sequence (a time for each pair of types). BPSim has a
-  `SetUpTime` parameter, which StochCraft reads today and ignores with a warning ("not
-  simulated yet", `io/src/read.rs`); whether its meaning fits a changeover between types is to
-  verify from the specification. A table of times by pair of types would be a `stochcraft:`
-  vendor extension.
+- **Changeovers:** done. A server's `setup` is either a setup before every job, BPSim's own
+  `SetUpTime` ("The time expended prior to performing the actual work", part of each job's
+  duration, BPSim 2.0, 6.2.4; a setup of 0, BPSim's default, is none), or a changeover, the
+  vendor extension `stochcraft:changeover`: a unit sets up only when a property's value differs
+  from the last part's (its first part needs none), with times for particular changes from one
+  value to another (sequence-dependent setups). Setting up is a unit state of its own,
+  reported as `time_setup`; it counts in utilisation, draws processing power, and a failure
+  interrupts it like a job. Setups draw from their own random stream, so service times stay
+  those of the same model without setups.
 - **Lean results:**
   - cycle time per station and for the line;
   - throughput against takt, from a demand and a shift time the user enters (takt as available

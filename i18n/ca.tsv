@@ -37,6 +37,7 @@
 	Add point	Afegeix un punt
 	Add pool	Afegeix un grup
 	Add property	Afegeix una propietat
+	Add row	Afegeix una fila
 	Add value	Afegeix un valor
 	Added calendar {id}	S'ha afegit el calendari {id}
 	Added pool {id}	S'ha afegit el grup {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Un sol canvi, que Desfés reverteix
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un treballador, arribades aleatòries: la cua clàssica, contrastada amb la teoria.
 	One task per BPSim distribution, to compare their spread.	Una tasca per cada distribució BPSim per comparar-ne la dispersió.
+	Only when this property changes	Només quan canvia aquesta propietat
 	Open	Obre
 	Open Example	Obre un exemple
 	Open Model	Obre un model
@@ -341,6 +343,8 @@
 	Set a value	Defineix un valor
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	S'estableix per a cada entitat quan entra en aquest bloc. Les expressions llegeixen els valors amb què ha arribat, com ara getProperty('issues') - 1.
 	Settings	Configuració
+	Setup	Preparació
+	Setup time	Temps de preparació
 	Shape	Forma
 	Share	Proporció
 	Share of arrivals lost	Proporció d'arribades perdudes
@@ -395,10 +399,12 @@
 	Time failed	Temps avariat
 	Time off shift	Temps fora de torn
 	Time processing	Temps processant
+	Time setting up	Temps preparant
 	Time starved	Temps sense feina
 	Time to failure	Temps fins a l'avaria
 	Time to the stop condition	Temps fins a la condició d'aturada
 	Time unit	Unitat de temps
+	Times for particular changes	Temps per a canvis concrets
 	To	Cap a
 	Tops	Vores superiors
 	Transfer time	Temps de transferència

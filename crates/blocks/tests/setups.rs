@@ -33,9 +33,7 @@ fn a_setup_before_every_job_takes_its_share_of_the_time() {
     b.connect(src, m);
     b.connect(m, out);
     let r = b.run(Rng::new(1), 0.0, 100_000.0);
-    let Ok(r) = r else {
-        panic!("{r:?}")
-    };
+    let Ok(r) = r else { panic!("{r:?}") };
     let e = element(&r, "machine");
     close(e.time_setup, 0.2, 1e-3);
     close(e.utilisation, 0.5, 1e-3);
@@ -131,7 +129,9 @@ fn a_failure_interrupts_a_setup_and_it_resumes() {
     // Setting up 20% of the time still: a repair stops the clock on the setup.
     close(e.time_setup, 0.2, 0.005);
     assert!(
-        element(&r, "out").mean_time_in_system.is_some_and(|t| t > 5.0),
+        element(&r, "out")
+            .mean_time_in_system
+            .is_some_and(|t| t > 5.0),
         "repairs add to the time in the machine"
     );
 }

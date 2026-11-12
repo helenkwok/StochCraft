@@ -37,6 +37,7 @@
 	Add point	Pridėti tašką
 	Add pool	Pridėti grupę
 	Add property	Pridėti savybę
+	Add row	Pridėti eilutę
 	Add value	Pridėti reikšmę
 	Added calendar {id}	Pridėtas kalendorius {id}
 	Added pool {id}	Pridėta grupė {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Vienas pakeitimas, kurį atšaukia Anuliuoti
 	One clerk, random arrivals: the textbook queue, checked against theory.	Vienas darbuotojas, atsitiktiniai atvykimai: klasikinė eilė, patikrinta pagal teoriją.
 	One task per BPSim distribution, to compare their spread.	Po vieną užduotį kiekvienam BPSim skirstiniui, kad būtų galima palyginti jų sklaidą.
+	Only when this property changes	Tik pasikeitus šiai savybei
 	Open	Atverti
 	Open Example	Atidaryti pavyzdį
 	Open Model	Atidaryti modelį
@@ -341,6 +343,8 @@
 	Set a value	Nustatyti reikšmę
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nustatoma kiekvienam objektui, kai jis patenka į šį bloką. Išraiškos nuskaito reikšmes, kurias objektas turėjo įeidamas, pvz., getProperty('issues') - 1.
 	Settings	Nuostatos
+	Setup	Derinimas
+	Setup time	Derinimo laikas
 	Shape	Forma
 	Share	Dalis
 	Share of arrivals lost	Prarastų atvykimų dalis
@@ -395,10 +399,12 @@
 	Time failed	Gedimo laikas
 	Time off shift	Laikas ne pamainoje
 	Time processing	Apdorojimo laikas
+	Time setting up	Laikas derinant
 	Time starved	Laikas be darbo
 	Time to failure	Laikas iki gedimo
 	Time to the stop condition	Laikas iki stabdymo sąlygos
 	Time unit	Laiko vienetas
+	Times for particular changes	Laikai konkretiems pakeitimams
 	To	Į
 	Tops	Viršutiniai kraštai
 	Transfer time	Perdavimo laikas

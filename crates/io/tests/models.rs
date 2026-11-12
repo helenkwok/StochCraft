@@ -26,7 +26,7 @@ fn bpmn_written_by_another_tool() {
     assert_eq!(l.opened.format, Format::Bpmn);
     assert_eq!(l.opened.scenario.as_deref(), Some("base"));
     assert_eq!(l.opened.scenarios.len(), 2);
-    // Warnings at most (the set-up time is noted as not simulated yet).
+    // Warnings at most (its set-up time of 0 is no setup).
     assert!(
         l.notes.iter().all(|n| n.severity < Severity::Error),
         "{:#?}",

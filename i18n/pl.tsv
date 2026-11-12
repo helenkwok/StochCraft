@@ -37,6 +37,7 @@
 	Add point	Dodaj punkt
 	Add pool	Dodaj pulę
 	Add property	Dodaj właściwość
+	Add row	Dodaj wiersz
 	Add value	Dodaj wartość
 	Added calendar {id}	Dodano kalendarz {id}
 	Added pool {id}	Dodano pulę {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Jedna zmiana, którą cofa Cofnij
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracownik, losowe przybycia: klasyczna kolejka zweryfikowana teorią.
 	One task per BPSim distribution, to compare their spread.	Jedno zadanie dla każdego rozkładu BPSim, aby porównać ich rozrzut.
+	Only when this property changes	Tylko gdy zmienia się ta właściwość
 	Open	Otwórz
 	Open Example	Otwórz przykład
 	Open Model	Otwórz model
@@ -341,6 +343,8 @@
 	Set a value	Ustaw wartość
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ustawiane dla każdej jednostki przy wejściu do tego bloku. Wyrażenia odczytują wartości, które jednostka miała w chwili wejścia, np. getProperty('issues') - 1.
 	Settings	Ustawienia
+	Setup	Przezbrojenie
+	Setup time	Czas przezbrojenia
 	Shape	Kształt
 	Share	Udział
 	Share of arrivals lost	Odsetek utraconych przybyć
@@ -395,10 +399,12 @@
 	Time failed	Czas awarii
 	Time off shift	Czas poza zmianą
 	Time processing	Czas przetwarzania
+	Time setting up	Czas przezbrajania
 	Time starved	Czas bez pracy
 	Time to failure	Czas do awarii
 	Time to the stop condition	Czas do warunku zatrzymania
 	Time unit	Jednostka czasu
+	Times for particular changes	Czasy dla określonych zmian
 	To	Do
 	Tops	Górne krawędzie
 	Transfer time	Czas transferu

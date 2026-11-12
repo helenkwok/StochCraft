@@ -37,6 +37,7 @@
 	Add point	Tilføj punkt
 	Add pool	Tilføj pulje
 	Add property	Tilføj egenskab
+	Add row	Tilføj række
 	Add value	Tilføj værdi
 	Added calendar {id}	Tilføjede kalenderen {id}
 	Added pool {id}	Tilføjede puljen {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Én ændring, som Fortryd tager tilbage
 	One clerk, random arrivals: the textbook queue, checked against theory.	Én medarbejder, tilfældige ankomster: den klassiske kø, kontrolleret mod teorien.
 	One task per BPSim distribution, to compare their spread.	Én opgave pr. BPSim-fordeling for at sammenligne spredningen.
+	Only when this property changes	Kun når denne egenskab ændres
 	Open	Åbn
 	Open Example	Åbn eksempel
 	Open Model	Åbn model
@@ -341,6 +343,8 @@
 	Set a value	Angiv en værdi
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Indstilles for hver enhed, når den går ind i denne blok. Udtryk læser de værdier, enheden havde ved ankomsten, f.eks. getProperty('issues') - 1.
 	Settings	Indstillinger
+	Setup	Omstilling
+	Setup time	Omstillingstid
 	Shape	Form
 	Share	Andel
 	Share of arrivals lost	Andel tabte ankomster
@@ -395,10 +399,12 @@
 	Time failed	Tid i nedbrud
 	Time off shift	Tid uden for skift
 	Time processing	Tid i bearbejdning
+	Time setting up	Tid i omstilling
 	Time starved	Tid uden arbejde
 	Time to failure	Tid til nedbrud
 	Time to the stop condition	Tid til stopbetingelsen
 	Time unit	Tidsenhed
+	Times for particular changes	Tider for bestemte ændringer
 	To	Til
 	Tops	Øverste kanter
 	Transfer time	Overførselstid

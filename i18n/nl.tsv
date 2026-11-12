@@ -37,6 +37,7 @@
 	Add point	Punt toevoegen
 	Add pool	Pool toevoegen
 	Add property	Eigenschap toevoegen
+	Add row	Rij toevoegen
 	Add value	Waarde toevoegen
 	Added calendar {id}	Kalender {id} toegevoegd
 	Added pool {id}	Pool {id} toegevoegd
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Eén wijziging, die Ongedaan maken terugdraait
 	One clerk, random arrivals: the textbook queue, checked against theory.	Eén medewerker, willekeurige aankomsten: de klassieke wachtrij, getoetst aan de theorie.
 	One task per BPSim distribution, to compare their spread.	Eén taak per BPSim-verdeling om de spreiding te vergelijken.
+	Only when this property changes	Alleen als deze eigenschap verandert
 	Open	Openen
 	Open Example	Voorbeeld openen
 	Open Model	Model openen
@@ -341,6 +343,8 @@
 	Set a value	Een waarde instellen
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Wordt ingesteld voor elke entiteit zodra deze dit blok binnenkomt. Expressies lezen de waarden die de entiteit bij binnenkomst had, zoals getProperty('issues') - 1.
 	Settings	Instellingen
+	Setup	Omstellen
+	Setup time	Omsteltijd
 	Shape	Vorm
 	Share	Aandeel
 	Share of arrivals lost	Aandeel verloren aankomsten
@@ -395,10 +399,12 @@
 	Time failed	Tijd in storing
 	Time off shift	Tijd buiten werktijd
 	Time processing	Tijd in bewerking
+	Time setting up	Tijd met omstellen
 	Time starved	Tijd zonder werk
 	Time to failure	Tijd tot storing
 	Time to the stop condition	Tijd tot de stopvoorwaarde
 	Time unit	Tijdseenheid
+	Times for particular changes	Tijden voor bepaalde wissels
 	To	Naar
 	Tops	Bovenkanten
 	Transfer time	Transfertijd

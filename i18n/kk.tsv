@@ -37,6 +37,7 @@
 	Add point	Нүкте қосу
 	Add pool	Қор қосу
 	Add property	Қасиет қосу
+	Add row	Жол қосу
 	Add value	Мән қосу
 	Added calendar {id}	{id} күнтізбесі қосылды
 	Added pool {id}	{id} қоры қосылды
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Болдырмау қайтаратын бір өзгеріс
 	One clerk, random arrivals: the textbook queue, checked against theory.	Бір қызметкер, кездейсоқ келулер: теориямен тексерілген классикалық кезек.
 	One task per BPSim distribution, to compare their spread.	Таралуын салыстыру үшін әр BPSim үлестіріміне бір тапсырма.
+	Only when this property changes	Тек осы қасиет өзгергенде
 	Open	Ашу
 	Open Example	Мысалды ашу
 	Open Model	Модельді ашу
@@ -341,6 +343,8 @@
 	Set a value	Мән орнату
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Әрбір нысан осы блокқа кірген кезде оған орнатылады. Өрнектер нысан кірген сәттегі мәндерді оқиды, мысалы getProperty('issues') - 1.
 	Settings	Параметрлер
+	Setup	Дайындық
+	Setup time	Дайындық уақыты
 	Shape	Пішін
 	Share	Үлес
 	Share of arrivals lost	Жоғалған келулер үлесі
@@ -395,10 +399,12 @@
 	Time failed	Ақаулы уақыт
 	Time off shift	Ауысымнан тыс уақыт
 	Time processing	Өңдеу уақыты
+	Time setting up	Дайындықтағы уақыт
 	Time starved	Жұмыссыз уақыт
 	Time to failure	Ақауға дейінгі уақыт
 	Time to the stop condition	Тоқтату шартына дейінгі уақыт
 	Time unit	Уақыт бірлігі
+	Times for particular changes	Нақты өзгерістерге арналған уақыт
 	To	Қайда
 	Tops	Жоғарғы жиектер
 	Transfer time	Тасымалдау уақыты

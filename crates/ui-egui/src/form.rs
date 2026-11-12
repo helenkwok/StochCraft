@@ -190,6 +190,12 @@ pub fn label(name: &str) -> String {
         "availability" => "Availability by calendar",
         "shifts" => "Units by calendar",
         "calendar" => "Calendar",
+        "setup" => "Setup",
+        "time" => "Setup time",
+        "on_change_of" => "Only when this property changes",
+        "by_change" => "Times for particular changes",
+        "from" => "From",
+        "to" => "To",
         _ => "",
     };
     if !known.is_empty() {
@@ -796,10 +802,23 @@ fn records(
         )
     };
     let used = |id: &str| items.iter().any(|it| it["calendar"] == id);
+    // Entries by calendar, or plain rows (a changeover's times for particular changes).
+    let by_calendar = item["properties"]["calendar"].is_object();
     ui.indent(key, |ui| {
         for (i, it) in items.iter().enumerate() {
             let k = format!("{key}/{i}");
+            if !by_calendar {
+                ui.horizontal(|ui| {
+                    ui.label(theme::weak(ui, format!("{} {}", label, i + 1)));
+                    if ui.small_button(t("Remove")).clicked() {
+                        removed = Some(i);
+                    }
+                });
+            }
             ui.horizontal(|ui| {
+                if !by_calendar {
+                    return;
+                }
                 let cal_label = label_for("calendar");
                 label_cell(ui, cal_label.as_str(), 26.0);
                 let now = it["calendar"].as_str().unwrap_or("");
@@ -863,6 +882,14 @@ fn records(
                     }
                 }
             });
+        }
+        if !by_calendar {
+            if ui.small_button(t("Add row")).clicked() {
+                let mut all = out.clone().unwrap_or_else(|| items.clone());
+                all.push(first_value(schema, item));
+                out = Some(all);
+            }
+            return;
         }
         match calendars.iter().find(|(id, _)| !used(id)) {
             Some((first, _)) => {

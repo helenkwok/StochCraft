@@ -8,9 +8,9 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
-    Bounds, Breakdown, Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate,
-    Experiment, Family, Model, Need, Power, Property, PropertyType, PropertyValue, ResourcePool,
-    Routing, Setup, Change, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    Bounds, Breakdown, Change, Connection, Diagnostic, Dist, Element, ElementId, ElementKind,
+    Estimate, Experiment, Family, Model, Need, Power, Property, PropertyType, PropertyValue,
+    ResourcePool, Routing, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -164,6 +164,9 @@ fn one() -> u32 {
 /// times with mean 1, one server unit, a delay of 1, no arrival limit.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(tag = "kind", rename_all = "snake_case")]
+// The wire form of a block, one per element in a document, never in the event loop: a
+// server's settings stay inline (see `ElementKind`).
+#[allow(clippy::large_enum_variant)]
 pub enum KindSpec {
     /// Creates entities (a BPMN start event).
     Source {

@@ -121,6 +121,9 @@ impl TimeUnit {
 
 /// What an element does. M2 adds resources and the rest (ROADMAP.md).
 #[derive(Debug, Clone, PartialEq)]
+// The document form of a block: one per element, cloned with the model, never in the event
+// loop, so a server's many settings stay inline rather than boxed.
+#[allow(clippy::large_enum_variant)]
 pub enum ElementKind {
     /// Creates entities (a BPMN start event): time between arrivals, and an optional limit
     /// (BPSim `interTriggerTimer` and `triggerCount`).

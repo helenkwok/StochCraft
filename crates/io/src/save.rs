@@ -21,10 +21,10 @@ use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
-    condition_element, dist_element, edge_ends, estimate_element, interruptible_param, numeric,
-    power_element, probability_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, routing_element, size, start_param, stop_element, timer_param,
-    transfer_element, changeover_element,
+    changeover_element, condition_element, dist_element, edge_ends, estimate_element,
+    interruptible_param, numeric, power_element, probability_element, property_element,
+    quantity_element, quantity_param, queue_capacity_element, routing_element, size, start_param,
+    stop_element, timer_param, transfer_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};

@@ -184,8 +184,26 @@ impl Encoded {
                 if e.properties.len() != t.properties.len() {
                     return None;
                 }
-                let [q, w, u, c, s, b, bp, a, lp, off, pr, st, bl, fa, en, se, mw, su] =
-                    e.metrics;
+                let [
+                    q,
+                    w,
+                    u,
+                    c,
+                    s,
+                    b,
+                    bp,
+                    a,
+                    lp,
+                    off,
+                    pr,
+                    st,
+                    bl,
+                    fa,
+                    en,
+                    se,
+                    mw,
+                    su,
+                ] = e.metrics;
                 Some(ElementReport {
                     id: t.id.clone(),
                     name: t.name.clone(),

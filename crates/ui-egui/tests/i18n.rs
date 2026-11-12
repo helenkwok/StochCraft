@@ -36,7 +36,7 @@ fn pseudo_sized(size: egui::Vec2) -> Harness<'static, App> {
 
 /// Messages the engine writes (file notes, validation), which are English until the engine's own
 /// strings have a catalog.
-const ENGINE: &[&str] = &["SetUpTime is not simulated yet and is ignored"];
+const ENGINE: &[&str] = &[];
 
 /// Text that is the model's or the user's, not the interface's: names and ids from the model,
 /// numbers and units, file names, shortcuts; and egui's own ("Resize panel").
@@ -496,6 +496,11 @@ fn looked_up_on_screen() -> BTreeSet<String> {
                     "repair": {"type": "exponential", "mean": 5.0},
                 },
                 "availability": [{"calendar": "lunch", "available": false}],
+                "setup": {
+                    "time": {"type": "constant", "value": 1.0},
+                    "on_change_of": "tier",
+                    "by_change": [{"from": "a", "to": "b", "time": {"type": "constant", "value": 2.0}}],
+                },
             }),
         )
         .expect("a server with breakdowns");

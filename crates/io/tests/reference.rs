@@ -789,6 +789,18 @@ fn showcase() -> Model {
         },
     );
     m.transfer(previous, Dist::Uniform { min: 0.5, max: 1.5 });
+    m.setup(
+        previous,
+        stochcraft_blocks::Setup {
+            time: Dist::Constant(5.0),
+            on_change_of: Some("issues".into()),
+            by_change: vec![stochcraft_blocks::Change {
+                from: "0".into(),
+                to: "2".into(),
+                time: Dist::Uniform { min: 6.0, max: 9.0 },
+            }],
+        },
+    );
     m.power(
         previous,
         stochcraft_blocks::Power {

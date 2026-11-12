@@ -37,6 +37,7 @@
 	Add point	Добавить точку
 	Add pool	Добавить пул
 	Add property	Добавить свойство
+	Add row	Добавить строку
 	Add value	Добавить значение
 	Added calendar {id}	Добавлен календарь {id}
 	Added pool {id}	Добавлен пул {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Одно изменение, которое отменяет Отменить
 	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, случайные прибытия: классическая очередь, проверенная по теории.
 	One task per BPSim distribution, to compare their spread.	По одной задаче на каждое распределение BPSim для сравнения разброса.
+	Only when this property changes	Только при изменении этого свойства
 	Open	Открыть
 	Open Example	Открыть пример
 	Open Model	Открыть модель
@@ -341,6 +343,8 @@
 	Set a value	Задать значение
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задаётся для каждой сущности при входе в этот блок. Выражения считывают значения, которые были у сущности при входе, например getProperty('issues') - 1.
 	Settings	Настройки
+	Setup	Переналадка
+	Setup time	Время переналадки
 	Shape	Форма
 	Share	Доля
 	Share of arrivals lost	Доля потерянных прибытий
@@ -395,10 +399,12 @@
 	Time failed	Время отказа
 	Time off shift	Время вне смены
 	Time processing	Время обработки
+	Time setting up	Время в переналадке
 	Time starved	Время без работы
 	Time to failure	Время до отказа
 	Time to the stop condition	Время до условия остановки
 	Time unit	Единица времени
+	Times for particular changes	Время для отдельных переходов
 	To	К
 	Tops	Верхние края
 	Transfer time	Время передачи

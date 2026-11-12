@@ -37,6 +37,7 @@
 	Add point	ເພີ່ມຈຸດ
 	Add pool	ເພີ່ມກຸ່ມຊັບພະຍາກອນ
 	Add property	ເພີ່ມຄຸນສົມບັດ
+	Add row	ເພີ່ມແຖວ
 	Add value	ເພີ່ມຄ່າ
 	Added calendar {id}	ເພີ່ມປະຕິທິນ {id} ແລ້ວ
 	Added pool {id}	ເພີ່ມກຸ່ມຊັບພະຍາກອນ {id} ແລ້ວ
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	ການປ່ຽນແປງໜຶ່ງເທື່ອ ເຊິ່ງຍົກເລີກໄດ້
 	One clerk, random arrivals: the textbook queue, checked against theory.	ພະນັກງານໜຶ່ງຄົນ ແລະ ການມາຮອດແບບສຸ່ມ: ແຖວຄອຍພື້ນຖານທີ່ກວດທຽບກັບທິດສະດີ.
 	One task per BPSim distribution, to compare their spread.	ໜຶ່ງໜ້າວຽກຕໍ່ແຕ່ລະການແຈກຢາຍ BPSim ເພື່ອປຽບທຽບການກະຈາຍ.
+	Only when this property changes	ສະເພາະເມື່ອຄຸນສົມບັດນີ້ປ່ຽນ
 	Open	ເປີດ
 	Open Example	ເປີດຕົວຢ່າງ
 	Open Model	ເປີດແບບຈຳລອງ
@@ -341,6 +343,8 @@
 	Set a value	ຕັ້ງຄ່າ
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ຕັ້ງຄ່າໃຫ້ແຕ່ລະເອນທິຕີເມື່ອເຂົ້າສູ່ບລັອກນີ້. ນິພົດຈະອ່ານຄ່າທີ່ເອນທິຕີມີໃນເວລາເຂົ້າ, ເຊັ່ນ getProperty('issues') - 1.
 	Settings	ການຕັ້ງຄ່າ
+	Setup	ການຕັ້ງເຄື່ອງ
+	Setup time	ເວລາຕັ້ງເຄື່ອງ
 	Shape	ຮູບຮ່າງ
 	Share	ສັດສ່ວນ
 	Share of arrivals lost	ສັດສ່ວນການມາຮອດທີ່ສູນເສຍ
@@ -395,10 +399,12 @@
 	Time failed	ເວລາທີ່ເສຍ
 	Time off shift	ເວລານອກກະ
 	Time processing	ເວລາປະມວນຜົນ
+	Time setting up	ເວລາທີ່ກຳລັງຕັ້ງເຄື່ອງ
 	Time starved	ເວລາບໍ່ມີວຽກ
 	Time to failure	ເວລາຈົນກວ່າຈະເສຍ
 	Time to the stop condition	ເວລາຈົນຮອດເງື່ອນໄຂຢຸດ
 	Time unit	ໜ່ວຍເວລາ
+	Times for particular changes	ເວລາສຳລັບການປ່ຽນສະເພາະ
 	To	ໄປຫາ
 	Tops	ຂອບເທິງ
 	Transfer time	ເວລາຂົນຍ້າຍ

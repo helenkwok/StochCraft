@@ -37,6 +37,7 @@
 	Add point	Dodaj točko
 	Add pool	Dodaj skupino
 	Add property	Dodaj lastnost
+	Add row	Dodaj vrstico
 	Add value	Dodaj vrednost
 	Added calendar {id}	Dodan koledar {id}
 	Added pool {id}	Dodana skupina {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Ena sprememba, ki jo Razveljavi prekliče
 	One clerk, random arrivals: the textbook queue, checked against theory.	En uslužbenec, naključni prihodi: klasična čakalna vrsta, preverjena s teorijo.
 	One task per BPSim distribution, to compare their spread.	Ena naloga na porazdelitev BPSim za primerjavo njihove razpršenosti.
+	Only when this property changes	Samo ko se ta lastnost spremeni
 	Open	Odpri
 	Open Example	Odpri primer
 	Open Model	Odpri model
@@ -341,6 +343,8 @@
 	Set a value	Nastavi vrednost
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nastavi se za vsako entiteto ob vstopu v ta blok. Izrazi preberejo vrednosti, ki jih je imela entiteta ob vstopu, na primer getProperty('issues') - 1.
 	Settings	Nastavitve
+	Setup	Priprava
+	Setup time	Čas priprave
 	Shape	Oblika
 	Share	Delež
 	Share of arrivals lost	Delež izgubljenih prihodov
@@ -395,10 +399,12 @@
 	Time failed	Čas okvare
 	Time off shift	Čas zunaj izmene
 	Time processing	Čas obdelave
+	Time setting up	Čas v pripravi
 	Time starved	Čas brez dela
 	Time to failure	Čas do okvare
 	Time to the stop condition	Čas do pogoja za ustavitev
 	Time unit	Časovna enota
+	Times for particular changes	Časi za določene spremembe
 	To	V
 	Tops	Zgornji robovi
 	Transfer time	Čas prenosa

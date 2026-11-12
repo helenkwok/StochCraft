@@ -721,3 +721,29 @@ fn a_product_mix_is_set_on_the_arrivals() {
         h.state().status()
     );
 }
+
+#[test]
+fn a_setup_and_a_changeover_are_set_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    click(&mut h, Role::CheckBox, "Setup");
+    assert_eq!(
+        element(&h, "serve")["setup"],
+        json!({"time": {"type": "exponential", "mean": 1.0}})
+    );
+    // A changeover: only when the type changes, 3 time units from A to B.
+    type_into(&mut h, "Only when this property changes", "type");
+    assert_eq!(element(&h, "serve")["setup"]["on_change_of"], json!("type"));
+    click(&mut h, Role::Button, "Add row");
+    type_into(&mut h, "From", "A");
+    type_into(&mut h, "To", "B");
+    assert_eq!(
+        element(&h, "serve")["setup"]["by_change"],
+        json!([{"from": "A", "to": "B", "time": {"type": "exponential", "mean": 1.0}}])
+    );
+    // No element sets `type` yet: the model says so.
+    h.get_by_label_contains("reads property `type`, which no element sets");
+    // Removing the setup is one step.
+    click(&mut h, Role::CheckBox, "Setup");
+    assert!(element(&h, "serve").get("setup").is_none());
+}

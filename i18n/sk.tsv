@@ -37,6 +37,7 @@
 	Add point	Pridať bod
 	Add pool	Pridať skupinu
 	Add property	Pridať vlastnosť
+	Add row	Pridať riadok
 	Add value	Pridať hodnotu
 	Added calendar {id}	Pridaný kalendár {id}
 	Added pool {id}	Pridaná skupina {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Jedna zmena, ktorú Späť vráti
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracovník, náhodné príchody: klasický rad overený teóriou.
 	One task per BPSim distribution, to compare their spread.	Jedna úloha pre každé rozdelenie BPSim na porovnanie ich variability.
+	Only when this property changes	Len pri zmene tejto vlastnosti
 	Open	Otvoriť
 	Open Example	Otvoriť príklad
 	Open Model	Otvoriť model
@@ -341,6 +343,8 @@
 	Set a value	Nastaviť hodnotu
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nastavuje sa pre každú entitu pri vstupe do tohto bloku. Výrazy čítajú hodnoty, s ktorými entita vstúpila, napríklad getProperty('issues') - 1.
 	Settings	Nastavenia
+	Setup	Nastavenie
+	Setup time	Čas nastavenia
 	Shape	Tvar
 	Share	Podiel
 	Share of arrivals lost	Podiel stratených príchodov
@@ -395,10 +399,12 @@
 	Time failed	Čas poruchy
 	Time off shift	Čas mimo zmeny
 	Time processing	Čas spracovania
+	Time setting up	Čas nastavovania
 	Time starved	Čas bez práce
 	Time to failure	Čas do poruchy
 	Time to the stop condition	Čas do podmienky zastavenia
 	Time unit	Časová jednotka
+	Times for particular changes	Časy pre konkrétne zmeny
 	To	Do
 	Tops	Horné okraje
 	Transfer time	Čas presunu

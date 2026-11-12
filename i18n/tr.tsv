@@ -37,6 +37,7 @@
 	Add point	Nokta ekle
 	Add pool	Havuz ekle
 	Add property	Özellik ekle
+	Add row	Satır ekle
 	Add value	Değer ekle
 	Added calendar {id}	{id} takvimi eklendi
 	Added pool {id}	{id} havuzu eklendi
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Geri Al ile geri alınan tek bir değişiklik
 	One clerk, random arrivals: the textbook queue, checked against theory.	Bir görevli, rastgele gelişler: teoriyle doğrulanan klasik kuyruk.
 	One task per BPSim distribution, to compare their spread.	Dağılımlarını karşılaştırmak için her BPSim dağılımına bir görev.
+	Only when this property changes	Yalnızca bu özellik değiştiğinde
 	Open	Aç
 	Open Example	Örnek aç
 	Open Model	Model aç
@@ -341,6 +343,8 @@
 	Set a value	Değer ayarla
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Bu bloğa girerken her varlık için ayarlanır. İfadeler, varlığın giriş anında sahip olduğu değerleri okur; örneğin getProperty('issues') - 1.
 	Settings	Ayarlar
+	Setup	Hazırlık
+	Setup time	Hazırlık süresi
 	Shape	Şekil
 	Share	Oran
 	Share of arrivals lost	Kaybedilen gelişlerin oranı
@@ -395,10 +399,12 @@
 	Time failed	Arıza süresi
 	Time off shift	Vardiya dışı süre
 	Time processing	İşleme süresi
+	Time setting up	Hazırlıkta geçen süre
 	Time starved	İş bekleme süresi
 	Time to failure	Arızaya kadar süre
 	Time to the stop condition	Durdurma koşuluna kadar geçen süre
 	Time unit	Zaman birimi
+	Times for particular changes	Belirli değişimler için süreler
 	To	Hedef
 	Tops	Üst kenarlar
 	Transfer time	Aktarma süresi

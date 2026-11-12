@@ -7,9 +7,10 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Breakdown, Calendar, Connection, DateTime, Dist, Element as ModelElement, ElementId,
-    ElementKind, Estimate, Experiment, Family, Model, Need, Power, Property, PropertyType,
-    PropertyValue, ResourcePool, Routing, Setup, Change, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    Bounds, Breakdown, Calendar, Change, Connection, DateTime, Dist, Element as ModelElement,
+    ElementId, ElementKind, Estimate, Experiment, Family, Model, Need, Power, Property,
+    PropertyType, PropertyValue, ResourcePool, Routing, Setup, Stop, ThreePoint, TimeUnit, Timed,
+    Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -978,7 +979,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             available,
                             availability,
                             power: power_of(scenario, id, notes),
-                            setup: setup_of(scenario, id, unit, &val, notes),
+                            setup: setup_of(scenario, id, unit, notes),
                         }
                     }
                     (None, None, None) => ElementKind::Delay { duration: time },
@@ -1411,11 +1412,14 @@ fn setup_of(
     scenario: Option<&Scenario>,
     id: &str,
     unit: TimeUnit,
-    val: &dyn Fn(&str, &str, &mut Vec<Note>) -> Option<Value>,
     notes: &mut Vec<Note>,
 ) -> Option<Setup> {
-    let every_job = val(id, "TimeParameters/SetUpTime", notes)
-        .and_then(|v| dist_of(Some(v), "the setup time", id, notes));
+    // A setup of 0 is none: BPSim's default for an unspecified time.
+    let every_job = scenario
+        .and_then(|s| s.param(id, "TimeParameters/SetUpTime"))
+        .and_then(|p| bpsim::value(p, unit, notes, Some(id)))
+        .and_then(|v| dist_of(Some(v), "the setup time", id, notes))
+        .filter(|d| *d != Dist::Constant(0.0));
     let Some(ext) =
         scenario.and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::CHANGEOVER)))
     else {
