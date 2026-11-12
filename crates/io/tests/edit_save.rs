@@ -1384,3 +1384,70 @@ fn moved_and_placed_shapes_save_into_the_diagram() {
         assert_eq!(back.model.layout.len(), back.model.elements.len(), "{name}");
     }
 }
+
+/// A parameter the opened scenario inherits comes back on reading whatever the opened scenario
+/// does without it, so removing it there is refused, as for calendars (#117); in the scenario
+/// that sets it, it goes.
+#[test]
+fn removing_what_an_inherited_scenario_sets_is_refused() {
+    let original = text(&file("mm1.bpmn")).replace(
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:breakdown>
+                <stochcraft:timeToFailure><bpsim:FloatingParameter value="100"/></stochcraft:timeToFailure>
+                <stochcraft:repairTime><bpsim:FloatingParameter value="5"/></stochcraft:repairTime>
+              </stochcraft:breakdown>
+            </bpsim:VendorExtension>"#,
+    );
+    let remove = |m: &mut Model| {
+        if let ElementKind::Server { breakdown, .. } = &mut element(m, "serve").kind {
+            assert!(breakdown.is_some(), "the breakdown is read");
+            *breakdown = None;
+        }
+    };
+    // In the scenario that inherits it: refused, with the reason.
+    let child =
+        read_scenario(original.as_bytes(), Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = child.model.clone();
+    remove(&mut m);
+    let refused = child.opened.save(&m);
+    assert!(
+        refused
+            .as_ref()
+            .is_err_and(|e| e.to_string().contains("comes from an inherited scenario")),
+        "{refused:?}"
+    );
+    // In the scenario that sets it: removed.
+    let base = read_scenario(original.as_bytes(), Some("base")).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = base.model.clone();
+    remove(&mut m);
+    let saved = base.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    assert!(!text(&saved).contains("stochcraft:breakdown"));
+    let back = read_scenario(&saved, Some("base")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+
+    // Made not interruptible where an inherited scenario says it is: an explicit `false`.
+    let interrupting = original.replace(
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:PriorityParameters><bpsim:Interruptible><bpsim:BooleanParameter value="true"/></bpsim:Interruptible></bpsim:PriorityParameters>"#,
+    );
+    let child = read_scenario(interrupting.as_bytes(), Some("two-clerks"))
+        .unwrap_or_else(|e| panic!("{e}"));
+    let mut m = child.model.clone();
+    if let ElementKind::Server {
+        breakdown: Some(b), ..
+    } = &mut element(&mut m, "serve").kind
+    {
+        assert!(b.interruptible, "inherited");
+        b.interruptible = false;
+    }
+    let saved = child.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let back = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+}
