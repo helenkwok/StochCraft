@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	முழு வரம்பிலும் இது {change} மாறியது: தற்செயல் மட்டுமே செய்யக்கூடிய அளவுக்குள்.
 	Actual size	உண்மையான அளவு
 	Add Block	தொகுதியைச் சேர்
+	Add Calendar	நாட்காட்டியைச் சேர்
+	Add Pool	தொகுப்பைச் சேர்
 	Add a flow from…	இதிலிருந்து ஓட்டத்தைச் சேர்…
 	Add a flow to…	இதற்கு ஓட்டத்தைச் சேர்…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	போதுமான மீள் இயக்கங்கள் இலக்கை அடையும் வரை மிகவும் பணிச்சுமையுள்ள பணிக்கோ குழுவுக்கோ ஒரு அலகைச் சேர்க்கவும். ஒவ்வொரு நேரத்தையும் அதன் சராசரியில் வைத்த பதிலும் காட்டப்படும்; அது பொதுவாக மிகச் சிறியது.
 	Add alternative	மாற்றுத் தேர்வைச் சேர்
+	Add calendar entry	நாட்காட்டிப் பதிவைச் சேர்
 	Add point	புள்ளியைச் சேர்
 	Add pool	தொகுப்பைச் சேர்
 	Add property	பண்பைச் சேர்
@@ -40,9 +43,13 @@
 	Appearance	தோற்றம்
 	Arrival limit	வருகை வரம்பு
 	Arrivals	வருகைகள்
+	Arrivals by calendar	நாட்காட்டியின்படி வருகைகள்
 	At least	குறைந்தது
 	At most	அதிகபட்சம்
 	Availability	கிடைக்கும் தன்மை
+	Availability by calendar	நாட்காட்டியின்படி கிடைக்கும் தன்மை
+	Available	கிடைக்கும்
+	Available outside calendars	நாட்காட்டிகளுக்கு வெளியேயும் கிடைக்கும்
 	BPMN with BPSim	BPSim உடன் BPMN
 	Back to the model (Esc)	மாதிரிக்குத் திரும்பு (Esc)
 	Batch	தொகுப்பு
@@ -53,11 +60,14 @@
 	Block	தொகுதி
 	Boolean	பூலியன்
 	Bottoms	கீழ் விளிம்புகள்
+	Breakdowns	பழுதுகள்
+	Breakdowns and availability	பழுதுகளும் கிடைக்கும் தன்மையும்
 	Bring All to Front	அனைத்தையும் முன்னே கொண்டுவா
 	Built with	உருவாக்கப் பயன்படுத்தியது
 	Busiest	மிகவும் பணிச்சுமையுள்ளது
 	By role	பணிப்பங்கு வாரியாக
 	CSV table	CSV அட்டவணை
+	Calendar	நாட்காட்டி
 	Cancel	ரத்துசெய்
 	Cancel Run	இயக்கத்தை ரத்துசெய்
 	Cancel run	இயக்கத்தை ரத்துசெய்
@@ -65,7 +75,9 @@
 	Centres	கிடைமட்ட மையங்கள்
 	Change	மாற்றம்
 	Change Block	தொகுதியை மாற்று
+	Change Calendar	நாட்காட்டியை மாற்று
 	Change Flow	ஓட்டத்தை மாற்று
+	Change Pool	தொகுப்பை மாற்று
 	Change the estimate	மதிப்பீட்டை மாற்று
 	Changes	மாற்றங்கள்
 	Changing the time unit does not convert the times already in the model.	நேர அலகை மாற்றுவது மாதிரியில் ஏற்கெனவே உள்ள நேரங்களை மாற்றிக் கணக்கிடாது.
@@ -130,6 +142,7 @@
 	Export table (CSV)	அட்டவணையை ஏற்றுமதி செய் (CSV)
 	Exported {file}	{file} ஏற்றுமதி செய்யப்பட்டது
 	Expression	கோவை
+	Failure interrupts the job	பழுது வேலையை இடைநிறுத்தும்
 	Family	குடும்பம்
 	File	கோப்பு
 	Finished at {time} {unit}	{time} {unit} இல் முடிந்தது
@@ -143,6 +156,7 @@
 	From	இதிலிருந்து
 	Gamma	காமா
 	Goes to	இதற்குச் செல்கிறது
+	Hands on finished parts while down	பழுதடைந்திருக்கும்போதும் முடிந்த பாகங்களை அனுப்பும்
 	Help	உதவி
 	Hide Others	மற்றவற்றை மறை
 	Hide {app}	{app} ஐ மறை
@@ -191,6 +205,7 @@
 	New model	புதிய மாதிரி
 	New property	புதிய பண்பு
 	New property name	புதிய பண்பின் பெயர்
+	No arrivals outside calendars	நாட்காட்டிகளுக்கு வெளியே வருகைகள் இல்லை
 	No blocks yet. Open a model, or add blocks to build one.	இன்னும் தொகுதிகள் இல்லை. மாதிரியைத் திறக்கவும் அல்லது தொகுதிகளைச் சேர்த்து உருவாக்கவும்.
 	No connections yet: join blocks below.	இன்னும் இணைப்புகள் இல்லை: கீழே தொகுதிகளை இணைக்கவும்.
 	No replication met the stop condition: each ran to its time limit.	எந்த மீள் இயக்கமும் நிறுத்த நிபந்தனையை அடையவில்லை: ஒவ்வொன்றும் அதன் நேர வரம்பு வரை இயங்கியது.
@@ -244,6 +259,8 @@
 	Redo {action}	{action} மீண்டும் செய்
 	Remove	அகற்று
 	Remove Block	தொகுதியை அகற்று
+	Remove Calendar	நாட்காட்டியை அகற்று
+	Remove Pool	தொகுப்பை அகற்று
 	Remove Property	பண்பை அகற்று
 	Remove alternative {n}	மாற்றுத் தேர்வு {n} ஐ அகற்று
 	Remove block	தொகுதியை அகற்று
@@ -253,6 +270,7 @@
 	Removed {id}	{id} அகற்றப்பட்டது
 	Rename Block	தொகுதிக்குப் பெயர் மாற்று
 	Rename Model	மாதிரிக்குப் பெயர் மாற்று
+	Repair time	பழுதுபார்ப்பு நேரம்
 	Replace Model	மாதிரியை மாற்றி வை
 	Replication 1 · {time} of {end} {unit}	மீள் இயக்கம் 1 · {end} {unit} இல் {time}
 	Replication 1 · {time} of {end} {unit} · warm-up	மீள் இயக்கம் 1 · {end} {unit} இல் {time} · தொடக்கச் சீராக்க நேரம்
@@ -290,6 +308,7 @@
 	Seed	சீரற்ற விதை
 	Select All	அனைத்தையும் தேர்ந்தெடு
 	Select a block to see its queue over time.	நேரப்படி ஒரு தொகுதியின் வரிசையைப் பார்க்க அதைத் தேர்ந்தெடுக்கவும்.
+	Sender waits during transfer	இடமாற்றத்தின்போது அனுப்புநர் காத்திருக்கும்
 	Separate the values with semicolons or spaces.	மதிப்புகளை அரைப்புள்ளி அல்லது இடைவெளியால் பிரிக்கவும்.
 	Service time	சேவை நேரம்
 	Services	சேவைகள்
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	இடைவெளி {share} இலக்கு பங்குக்குக் கீழே செல்கிறது, எனவே பங்கு அடையப்பட்டது 95% நம்பிக்கையுடன் காட்டப்படவில்லை; கூடுதல் மீள் இயக்கங்கள் அதைக் குறுக்கும்.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	நிறுத்த நிபந்தனை வரையிலான சராசரி நேரம் அதை அடைந்த மீள் இயக்கங்கள் மீது மட்டுமே; மற்றவை அவற்றின் நேர வரம்பு வரை இயங்கின.
 	The model changed, so watching stopped	மாதிரி மாறியதால் கவனிப்பது நிறுத்தப்பட்டது
+	The model has no calendars yet.	மாதிரியில் இன்னும் நாட்காட்டிகள் இல்லை.
 	The model now has the units sizing found	அளவிடுதல் கண்டறிந்த அலகுகள் இப்போது மாதிரியில் உள்ளன
 	The model: its experiment, connections and problems	மாதிரி: அதன் சோதனை, இணைப்புகள், சிக்கல்கள்
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ஒவ்வொரு மதிப்புக்கும் சமமான அல்லது குறைவான மீள் இயக்கங்களின் பங்கு. பட்டை உண்மையான பரவலை {confidence} நம்பகத்தன்மையுடன் கொண்டுள்ளது.
@@ -348,10 +368,12 @@
 	Time off shift	பணிமுறைக்கு வெளியே நேரம்
 	Time processing	செயலாக்க நேரம்
 	Time starved	வேலையில்லா நேரம்
+	Time to failure	பழுது வரையிலான நேரம்
 	Time to the stop condition	நிறுத்த நிபந்தனை வரையிலான நேரம்
 	Time unit	நேர அலகு
 	To	இதற்கு
 	Tops	மேல் விளிம்புகள்
+	Transfer time	இடமாற்ற நேரம்
 	Trials	முயற்சிகள்
 	Triangular	முக்கோணப் பரவல்
 	Truncated normal	வரம்பிட்ட இயல்புப் பரவல்
@@ -363,6 +385,7 @@
 	Uniform	சீரான பரவல்
 	Unit	அலகு
 	Units	அலகு எண்ணிக்கை
+	Units by calendar	நாட்காட்டியின்படி அலகு எண்ணிக்கை
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	பல பணிகள் பகிர்ந்துகொள்ளும் அலகுகள். பகிர்ந்த வளங்கள் தேவைப்படும் பணி, அவற்றைத் தொகுப்பு வாரியாகவோ பணிப்பங்கு வாரியாகவோ எடுத்துக்கொள்கிறது.
 	Untitled	தலைப்பிடப்படாதது
 	Untitled model	பெயரிடப்படாத மாதிரி

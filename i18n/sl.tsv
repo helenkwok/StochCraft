@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	V razponu se je spremenil za {change}: v mejah tega, kar zmore samo naključje.
 	Actual size	Dejanska velikost
 	Add Block	Dodaj blok
+	Add Calendar	Dodaj koledar
+	Add Pool	Dodaj skupino
 	Add a flow from…	Dodaj tok iz…
 	Add a flow to…	Dodaj tok v…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Dodajajte enoto pri najbolj obremenjenem opravilu ali skupini, dokler dovolj ponovitev ne doseže cilja. Prikazan je tudi odgovor, pri katerem je vsak čas na svojem povprečju; običajno je premajhen.
 	Add alternative	Dodaj alternativo
+	Add calendar entry	Dodaj vnos koledarja
 	Add point	Dodaj točko
 	Add pool	Dodaj skupino
 	Add property	Dodaj lastnost
@@ -40,9 +43,13 @@
 	Appearance	Videz
 	Arrival limit	Omejitev prihodov
 	Arrivals	Prihodi
+	Arrivals by calendar	Prihodi po koledarju
 	At least	Vsaj
 	At most	Največ
 	Availability	Razpoložljivost
+	Availability by calendar	Razpoložljivost po koledarju
+	Available	Na voljo
+	Available outside calendars	Na voljo zunaj koledarjev
 	BPMN with BPSim	BPMN z BPSim
 	Back to the model (Esc)	Nazaj na model (Esc)
 	Batch	Serija
@@ -53,11 +60,14 @@
 	Block	Blok
 	Boolean	Logična vrednost
 	Bottoms	Spodnji robovi
+	Breakdowns	Okvare
+	Breakdowns and availability	Okvare in razpoložljivost
 	Bring All to Front	Vse v ospredje
 	Built with	Ustvarjeno z
 	Busiest	Najbolj obremenjen
 	By role	Po vlogi
 	CSV table	Tabela CSV
+	Calendar	Koledar
 	Cancel	Prekliči
 	Cancel Run	Prekliči izvajanje
 	Cancel run	Prekliči izvajanje
@@ -65,7 +75,9 @@
 	Centres	Vodoravna središča
 	Change	Sprememba
 	Change Block	Spremeni blok
+	Change Calendar	Spremeni koledar
 	Change Flow	Spremeni tok
+	Change Pool	Spremeni skupino
 	Change the estimate	Spremeni oceno
 	Changes	Spremembe
 	Changing the time unit does not convert the times already in the model.	Sprememba časovne enote ne pretvori časov, ki so že v modelu.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Izvozi tabelo (CSV)
 	Exported {file}	Izvoženo {file}
 	Expression	Izraz
+	Failure interrupts the job	Okvara prekine delo
 	Family	Družina
 	File	Datoteka
 	Finished at {time} {unit}	Končano ob {time} {unit}
@@ -143,6 +156,7 @@
 	From	Iz
 	Gamma	Gama
 	Goes to	Vodi v
+	Hands on finished parts while down	Dokončane kose preda tudi med okvaro
 	Help	Pomoč
 	Hide Others	Skrij druge
 	Hide {app}	Skrij {app}
@@ -191,6 +205,7 @@
 	New model	Nov model
 	New property	Nova lastnost
 	New property name	Ime nove lastnosti
+	No arrivals outside calendars	Brez prihodov zunaj koledarjev
 	No blocks yet. Open a model, or add blocks to build one.	Blokov še ni. Odprite model ali dodajte bloke za ustvarjanje modela.
 	No connections yet: join blocks below.	Povezav še ni: povežite spodnje bloke.
 	No replication met the stop condition: each ran to its time limit.	Nobena ponovitev ni dosegla pogoja za ustavitev: vsaka je tekla do svoje časovne omejitve.
@@ -244,6 +259,8 @@
 	Redo {action}	Uveljavi znova {action}
 	Remove	Odstrani
 	Remove Block	Odstrani blok
+	Remove Calendar	Odstrani koledar
+	Remove Pool	Odstrani skupino
 	Remove Property	Odstrani lastnost
 	Remove alternative {n}	Odstrani alternativo {n}
 	Remove block	Odstrani blok
@@ -253,6 +270,7 @@
 	Removed {id}	Odstranjeno {id}
 	Rename Block	Preimenuj blok
 	Rename Model	Preimenuj model
+	Repair time	Čas popravila
 	Replace Model	Zamenjaj model
 	Replication 1 · {time} of {end} {unit}	Ponovitev 1 · {time} od {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Ponovitev 1 · {time} od {end} {unit} · ogrevanje
@@ -290,6 +308,7 @@
 	Seed	Seme
 	Select All	Izberi vse
 	Select a block to see its queue over time.	Izberite blok, da vidite njegovo vrsto skozi čas.
+	Sender waits during transfer	Pošiljatelj čaka med prenosom
 	Separate the values with semicolons or spaces.	Vrednosti ločite s podpičji ali presledki.
 	Service time	Čas strežbe
 	Services	Storitve
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval sega pod ciljni delež {share}, zato ni pokazano s 95-odstotno zanesljivostjo, da je delež dosežen; več ponovitev bi ga zožilo.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Povprečni čas do pogoja za ustavitev je le iz ponovitev, ki so ga dosegle; ostale so tekle do svoje časovne omejitve.
 	The model changed, so watching stopped	Model se je spremenil, zato se je spremljanje ustavilo
+	The model has no calendars yet.	Model še nima koledarjev.
 	The model now has the units sizing found	Model ima zdaj enote, ki jih je našlo dimenzioniranje
 	The model: its experiment, connections and problems	Model: poskus, povezave in težave
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Delež ponovitev, enakih ali manjših od vsake vrednosti. Pas vsebuje pravo porazdelitev z zaupanjem {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Čas zunaj izmene
 	Time processing	Čas obdelave
 	Time starved	Čas brez dela
+	Time to failure	Čas do okvare
 	Time to the stop condition	Čas do pogoja za ustavitev
 	Time unit	Časovna enota
 	To	V
 	Tops	Zgornji robovi
+	Transfer time	Čas prenosa
 	Trials	Poskusi
 	Triangular	Trikotna
 	Truncated normal	Odrezana normalna
@@ -363,6 +385,7 @@
 	Uniform	Enakomerna
 	Unit	Enota
 	Units	Enote
+	Units by calendar	Enote po koledarju
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Enote, ki si jih deli več nalog. Naloga s skupnimi viri jih vzame iz skupine ali po vlogi.
 	Untitled	Brez naslova
 	Untitled model	Neimenovan model

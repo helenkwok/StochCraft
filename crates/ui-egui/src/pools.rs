@@ -37,6 +37,7 @@ impl App {
         ));
         let schema = params_schema("resource.set");
         let unit = self.time_unit_label();
+        let calendars = form::calendars(model);
         for r in model["resources"].as_array().cloned().unwrap_or_default() {
             let id = r["id"].as_str().unwrap_or("").to_owned();
             ui.add_space(6.0);
@@ -65,6 +66,7 @@ impl App {
                 time_unit: &unit,
                 numbers: &self.numbers,
                 drafts: &mut self.drafts,
+                calendars: &[],
             };
             if let Some(q) = form::field(
                 ui,
@@ -87,6 +89,31 @@ impl App {
                     "resource.set",
                     json!({ "id": id, "roles": roles_of(&text) }),
                 );
+            }
+            // Shifts and availability: the units, and whether they are on shift, while each
+            // calendar is active. Left out of the file, `available` is true.
+            for f in ["shifts", "available", "availability"] {
+                let current = match (f, &r[f]) {
+                    ("available", Value::Null) => json!(true),
+                    (_, v) => v.clone(),
+                };
+                let mut cx = form::Cx {
+                    time_unit: &unit,
+                    numbers: &self.numbers,
+                    drafts: &mut self.drafts,
+                    calendars: &calendars,
+                };
+                if let Some(v) = form::field(
+                    ui,
+                    &mut cx,
+                    Schema::new(&schema),
+                    &format!("pool/{id}/{f}"),
+                    f,
+                    &current,
+                    false,
+                ) {
+                    self.execute("resource.set", json!({ "id": id, f: v }));
+                }
             }
         }
         ui.add_space(6.0);
@@ -193,6 +220,7 @@ impl App {
                 time_unit: &unit,
                 numbers: &self.numbers,
                 drafts: &mut self.drafts,
+                calendars: &[],
             };
             let quantity = need.get("quantity").cloned().unwrap_or(json!(1));
             if let Some(q) = form::field(

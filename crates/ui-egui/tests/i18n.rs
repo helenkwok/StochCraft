@@ -474,6 +474,50 @@ fn looked_up_on_screen() -> BTreeSet<String> {
             }),
         )
         .expect("a shared task");
+    // No example has a calendar, breakdowns or a transfer either: a calendar, a server and a
+    // source that use it, and the pool's shifts, so their fields are drawn too.
+    h.state_mut()
+        .execute(
+            "calendar.add",
+            serde_json::json!({
+                "id": "lunch",
+                "events": [{"start": "2026-01-01T12:00:00", "end": "2026-01-01T13:00:00", "repeat": "FREQ=DAILY"}],
+            }),
+        )
+        .expect("a calendar");
+    h.state_mut()
+        .execute(
+            "block.add",
+            serde_json::json!({
+                "kind": "server",
+                "transfer": {"type": "constant", "value": 0.5},
+                "breakdown": {
+                    "time_to_failure": {"type": "exponential", "mean": 100.0},
+                    "repair": {"type": "exponential", "mean": 5.0},
+                },
+                "availability": [{"calendar": "lunch", "available": false}],
+            }),
+        )
+        .expect("a server with breakdowns");
+    h.state_mut()
+        .execute(
+            "block.add",
+            serde_json::json!({
+                "kind": "source",
+                "timed": [{"calendar": "lunch", "value": {"type": "exponential", "mean": 2.0}}],
+            }),
+        )
+        .expect("a source with arrivals by calendar");
+    h.state_mut()
+        .execute(
+            "resource.set",
+            serde_json::json!({
+                "id": pool,
+                "shifts": [{"calendar": "lunch", "quantity": 0}],
+                "availability": [{"calendar": "lunch", "available": false}],
+            }),
+        )
+        .expect("shifts set");
     settle(&mut h);
     let name = h.state().engine().model().name.clone();
     h.get_by_label(&name).click();

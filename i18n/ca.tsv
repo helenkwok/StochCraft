@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	En l'interval ha canviat {change}: dins del que podria fer l'atzar tot sol.
 	Actual size	Mida real
 	Add Block	Afegeix un bloc
+	Add Calendar	Afegeix un calendari
+	Add Pool	Afegeix un grup
 	Add a flow from…	Afegeix un flux des de…
 	Add a flow to…	Afegeix un flux cap a…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Afegir una unitat a la tasca o al grup més ocupat fins que prou rèpliques compleixin un objectiu. També es mostra la resposta amb cada temps a la seva mitjana; sol ser massa petita.
 	Add alternative	Afegeix una alternativa
+	Add calendar entry	Afegeix una entrada de calendari
 	Add point	Afegeix un punt
 	Add pool	Afegeix un grup
 	Add property	Afegeix una propietat
@@ -40,9 +43,13 @@
 	Appearance	Aparença
 	Arrival limit	Límit d'arribades
 	Arrivals	Arribades
+	Arrivals by calendar	Arribades per calendari
 	At least	Com a mínim
 	At most	Com a màxim
 	Availability	Disponibilitat
+	Availability by calendar	Disponibilitat per calendari
+	Available	Disponible
+	Available outside calendars	Disponible fora dels calendaris
 	BPMN with BPSim	BPMN amb BPSim
 	Back to the model (Esc)	Torna al model (Esc)
 	Batch	Lot
@@ -53,11 +60,14 @@
 	Block	Bloc
 	Boolean	Booleà
 	Bottoms	Vores inferiors
+	Breakdowns	Avaries
+	Breakdowns and availability	Avaries i disponibilitat
 	Bring All to Front	Porta-ho tot al davant
 	Built with	Creat amb
 	Busiest	El més ocupat
 	By role	Per rol
 	CSV table	Taula CSV
+	Calendar	Calendari
 	Cancel	Cancel·la
 	Cancel Run	Cancel·la l'execució
 	Cancel run	Cancel·la l'execució
@@ -65,7 +75,9 @@
 	Centres	Centres horitzontals
 	Change	Canvi
 	Change Block	Canvia el bloc
+	Change Calendar	Canvia el calendari
 	Change Flow	Canvia el flux
+	Change Pool	Canvia el grup
 	Change the estimate	Canvia l'estimació
 	Changes	Canvis
 	Changing the time unit does not convert the times already in the model.	Canviar la unitat de temps no converteix els temps que ja hi ha al model.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Exporta la taula (CSV)
 	Exported {file}	S'ha exportat {file}
 	Expression	Expressió
+	Failure interrupts the job	L'avaria interromp la feina
 	Family	Família
 	File	Fitxer
 	Finished at {time} {unit}	Ha acabat a {time} {unit}
@@ -143,6 +156,7 @@
 	From	Des de
 	Gamma	Gamma
 	Goes to	Va cap a
+	Hands on finished parts while down	Passa les peces acabades durant l'avaria
 	Help	Ajuda
 	Hide Others	Amaga els altres
 	Hide {app}	Amaga {app}
@@ -191,6 +205,7 @@
 	New model	Model nou
 	New property	Propietat nova
 	New property name	Nom de la propietat nova
+	No arrivals outside calendars	Cap arribada fora dels calendaris
 	No blocks yet. Open a model, or add blocks to build one.	Encara no hi ha blocs. Obre un model o afegeix blocs per crear-ne un.
 	No connections yet: join blocks below.	Encara no hi ha connexions: connecta els blocs de sota.
 	No replication met the stop condition: each ran to its time limit.	Cap rèplica ha complert la condició d'aturada: cadascuna ha arribat al seu límit de temps.
@@ -244,6 +259,8 @@
 	Redo {action}	Refés {action}
 	Remove	Elimina
 	Remove Block	Elimina el bloc
+	Remove Calendar	Elimina el calendari
+	Remove Pool	Elimina el grup
 	Remove Property	Elimina la propietat
 	Remove alternative {n}	Elimina l'alternativa {n}
 	Remove block	Elimina el bloc
@@ -253,6 +270,7 @@
 	Removed {id}	S'ha eliminat {id}
 	Rename Block	Canvia el nom del bloc
 	Rename Model	Canvia el nom del model
+	Repair time	Temps de reparació
 	Replace Model	Substitueix el model
 	Replication 1 · {time} of {end} {unit}	Rèplica 1 · {time} de {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Rèplica 1 · {time} de {end} {unit} · escalfament
@@ -290,6 +308,7 @@
 	Seed	Llavor
 	Select All	Selecciona-ho tot
 	Select a block to see its queue over time.	Seleccioneu un bloc per veure'n la cua al llarg del temps.
+	Sender waits during transfer	L'emissor espera durant la transferència
 	Separate the values with semicolons or spaces.	Separeu els valors amb punts i comes o espais.
 	Service time	Temps de servei
 	Services	Serveis
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'interval arriba per sota de la proporció objectiu del {share}, de manera que no es demostra amb un 95% de confiança que es compleixi; més rèpliques l'estretirien.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	El temps mitjà fins a la condició d'aturada és només sobre les rèpliques que l'han complert; les altres han arribat al seu límit de temps.
 	The model changed, so watching stopped	El model ha canviat, així que s'ha deixat d'observar
+	The model has no calendars yet.	El model encara no té calendaris.
 	The model now has the units sizing found	El model té ara les unitats trobades en dimensionar
 	The model: its experiment, connections and problems	El model: experiment, connexions i problemes
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La proporció de rèpliques iguals o inferiors a cada valor. La banda conté la distribució real amb una confiança del {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Temps fora de torn
 	Time processing	Temps processant
 	Time starved	Temps sense feina
+	Time to failure	Temps fins a l'avaria
 	Time to the stop condition	Temps fins a la condició d'aturada
 	Time unit	Unitat de temps
 	To	Cap a
 	Tops	Vores superiors
+	Transfer time	Temps de transferència
 	Trials	Proves
 	Triangular	Triangular
 	Truncated normal	Normal truncada
@@ -363,6 +385,7 @@
 	Uniform	Uniforme
 	Unit	Unitat
 	Units	Unitats
+	Units by calendar	Unitats per calendari
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unitats que comparteixen diverses tasques. Una tasca amb recursos compartits les pren per grup o per rol.
 	Untitled	Sense títol
 	Untitled model	Model sense títol

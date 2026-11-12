@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	पूरी सीमा में यह {change} बदला: उतने में, जितना अकेला संयोग कर सकता है।
 	Actual size	वास्तविक आकार
 	Add Block	ब्लॉक जोड़ें
+	Add Calendar	कैलेंडर जोड़ें
+	Add Pool	पूल जोड़ें
 	Add a flow from…	प्रवाह जोड़ें (स्रोत)…
 	Add a flow to…	प्रवाह जोड़ें (लक्ष्य)…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	सबसे व्यस्त कार्य या पूल में एक इकाई जोड़ें, जब तक पर्याप्त पुनरावृत्तियाँ लक्ष्य पूरा न कर लें। हर समय को उसके माध्य पर रखकर मिला उत्तर भी दिखता है; वह प्रायः बहुत छोटा होता है।
 	Add alternative	विकल्प जोड़ें
+	Add calendar entry	कैलेंडर प्रविष्टि जोड़ें
 	Add point	बिंदु जोड़ें
 	Add pool	पूल जोड़ें
 	Add property	गुण जोड़ें
@@ -40,9 +43,13 @@
 	Appearance	दिखावट
 	Arrival limit	आगमन सीमा
 	Arrivals	आगमन
+	Arrivals by calendar	कैलेंडर के अनुसार आगमन
 	At least	कम से कम
 	At most	अधिक से अधिक
 	Availability	उपलब्धता
+	Availability by calendar	कैलेंडर के अनुसार उपलब्धता
+	Available	उपलब्ध
+	Available outside calendars	कैलेंडरों के बाहर उपलब्ध
 	BPMN with BPSim	BPSim सहित BPMN
 	Back to the model (Esc)	मॉडल पर वापस जाएँ (Esc)
 	Batch	बैच
@@ -53,11 +60,14 @@
 	Block	ब्लॉक
 	Boolean	बूलियन
 	Bottoms	निचले किनारे
+	Breakdowns	खराबियाँ
+	Breakdowns and availability	खराबियाँ और उपलब्धता
 	Bring All to Front	सभी को सामने लाएँ
 	Built with	इनसे बनाया गया
 	Busiest	सबसे व्यस्त
 	By role	भूमिका के अनुसार
 	CSV table	CSV तालिका
+	Calendar	कैलेंडर
 	Cancel	रद्द करें
 	Cancel Run	रन रद्द करें
 	Cancel run	रन रद्द करें
@@ -65,7 +75,9 @@
 	Centres	क्षैतिज केंद्र
 	Change	परिवर्तन
 	Change Block	ब्लॉक बदलें
+	Change Calendar	कैलेंडर बदलें
 	Change Flow	प्रवाह बदलें
+	Change Pool	पूल बदलें
 	Change the estimate	अनुमान बदलें
 	Changes	परिवर्तन
 	Changing the time unit does not convert the times already in the model.	समय की इकाई बदलने से मॉडल में पहले से मौजूद समय मान परिवर्तित नहीं होते।
@@ -130,6 +142,7 @@
 	Export table (CSV)	तालिका निर्यात करें (CSV)
 	Exported {file}	{file} निर्यात किया गया
 	Expression	व्यंजक
+	Failure interrupts the job	खराबी काम रोक देती है
 	Family	परिवार
 	File	फ़ाइल
 	Finished at {time} {unit}	{time} {unit} पर समाप्त
@@ -143,6 +156,7 @@
 	From	से
 	Gamma	गामा
 	Goes to	यहाँ जाता है
+	Hands on finished parts while down	खराबी में भी तैयार पुर्जे आगे भेजता है
 	Help	सहायता
 	Hide Others	अन्य छिपाएँ
 	Hide {app}	{app} छिपाएँ
@@ -191,6 +205,7 @@
 	New model	नया मॉडल
 	New property	नया गुण
 	New property name	नए गुण का नाम
+	No arrivals outside calendars	कैलेंडरों के बाहर कोई आगमन नहीं
 	No blocks yet. Open a model, or add blocks to build one.	अभी कोई ब्लॉक नहीं हैं। मॉडल खोलें या ब्लॉक जोड़कर मॉडल बनाएँ।
 	No connections yet: join blocks below.	अभी कोई कनेक्शन नहीं हैं: नीचे दिए ब्लॉक जोड़ें।
 	No replication met the stop condition: each ran to its time limit.	किसी पुनरावृत्ति ने रुकने की शर्त पूरी नहीं की: हर एक अपनी समय सीमा तक चली।
@@ -244,6 +259,8 @@
 	Redo {action}	{action} फिर से करें
 	Remove	हटाएँ
 	Remove Block	ब्लॉक हटाएँ
+	Remove Calendar	कैलेंडर हटाएँ
+	Remove Pool	पूल हटाएँ
 	Remove Property	गुण हटाएँ
 	Remove alternative {n}	विकल्प {n} हटाएँ
 	Remove block	ब्लॉक हटाएँ
@@ -253,6 +270,7 @@
 	Removed {id}	{id} हटाया गया
 	Rename Block	ब्लॉक का नाम बदलें
 	Rename Model	मॉडल का नाम बदलें
+	Repair time	मरम्मत समय
 	Replace Model	मॉडल बदलें
 	Replication 1 · {time} of {end} {unit}	पुनरावृत्ति 1 · {end} {unit} में से {time}
 	Replication 1 · {time} of {end} {unit} · warm-up	पुनरावृत्ति 1 · {end} {unit} में से {time} · वार्म-अप
@@ -290,6 +308,7 @@
 	Seed	यादृच्छिक बीज
 	Select All	सभी चुनें
 	Select a block to see its queue over time.	समय के साथ किसी ब्लॉक की कतार देखने के लिए उसे चुनें।
+	Sender waits during transfer	स्थानांतरण के दौरान भेजने वाला रुका रहता है
 	Separate the values with semicolons or spaces.	मानों को अर्धविराम या रिक्त स्थान से अलग करें।
 	Service time	सेवा समय
 	Services	सेवाएँ
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	अंतराल {share} के लक्ष्य हिस्से से नीचे तक जाता है, इसलिए 95% विश्वास के साथ यह नहीं दिखता कि हिस्सा पूरा हुआ; अधिक पुनरावृत्तियाँ इसे संकरा करेंगी।
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	रुकने की शर्त तक का औसत समय केवल उन पुनरावृत्तियों पर है जिन्होंने शर्त पूरी की; बाकी अपनी समय सीमा तक चलीं।
 	The model changed, so watching stopped	मॉडल बदल गया, इसलिए देखना बंद हो गया
+	The model has no calendars yet.	मॉडल में अभी कोई कैलेंडर नहीं है।
 	The model now has the units sizing found	मॉडल में अब आकार निर्धारण से मिली इकाइयाँ हैं
 	The model: its experiment, connections and problems	मॉडल: प्रयोग, कनेक्शन और समस्याएँ
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	हर मान के बराबर या उससे कम पुनरावृत्तियों का हिस्सा। पट्टी में वास्तविक वितरण {confidence} विश्वास के साथ है।
@@ -348,10 +368,12 @@
 	Time off shift	पाली से बाहर समय
 	Time processing	प्रसंस्करण में समय
 	Time starved	बिना काम का समय
+	Time to failure	खराबी तक का समय
 	Time to the stop condition	रुकने की शर्त तक का समय
 	Time unit	समय की इकाई
 	To	तक
 	Tops	ऊपरी किनारे
+	Transfer time	स्थानांतरण समय
 	Trials	परीक्षण
 	Triangular	त्रिकोणीय
 	Truncated normal	छँटा हुआ सामान्य
@@ -363,6 +385,7 @@
 	Uniform	समरूप
 	Unit	इकाई
 	Units	मात्रा
+	Units by calendar	कैलेंडर के अनुसार मात्रा
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	संसाधन इकाइयाँ, जिन्हें कई कार्य साझा करते हैं। साझा संसाधनों वाला कार्य उन्हें पूल या भूमिका के अनुसार लेता है।
 	Untitled	बिना शीर्षक
 	Untitled model	बिना शीर्षक वाला मॉडल

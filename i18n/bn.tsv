@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	পুরো পরিসরে এটি {change} বদলেছে: শুধু দৈবক্রম যতটা করতে পারে তার মধ্যে।
 	Actual size	প্রকৃত আকার
 	Add Block	ব্লক যোগ করুন
+	Add Calendar	ক্যালেন্ডার যোগ করুন
+	Add Pool	পুল যোগ করুন
 	Add a flow from…	প্রবাহ যোগ করুন (উৎস)…
 	Add a flow to…	প্রবাহ যোগ করুন (গন্তব্য)…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	পর্যাপ্ত পুনরাবৃত্তি লক্ষ্য পূরণ না করা পর্যন্ত সবচেয়ে ব্যস্ত কাজ বা পুলে একটি করে একক যোগ করুন। প্রতিটি সময় তার গড়ে রেখে পাওয়া উত্তরও দেখানো হয়; সেটি সাধারণত খুব ছোট।
 	Add alternative	বিকল্প যোগ করুন
+	Add calendar entry	ক্যালেন্ডার এন্ট্রি যোগ করুন
 	Add point	বিন্দু যোগ করুন
 	Add pool	পুল যোগ করুন
 	Add property	বৈশিষ্ট্য যোগ করুন
@@ -40,9 +43,13 @@
 	Appearance	দৃশ্যরূপ
 	Arrival limit	আগমনের সীমা
 	Arrivals	আগমন
+	Arrivals by calendar	ক্যালেন্ডার অনুযায়ী আগমন
 	At least	অন্তত
 	At most	সর্বোচ্চ
 	Availability	প্রাপ্যতা
+	Availability by calendar	ক্যালেন্ডার অনুযায়ী প্রাপ্যতা
+	Available	প্রাপ্য
+	Available outside calendars	ক্যালেন্ডারের বাইরে প্রাপ্য
 	BPMN with BPSim	BPSim সহ BPMN
 	Back to the model (Esc)	মডেলে ফিরে যান (Esc)
 	Batch	ব্যাচ
@@ -53,11 +60,14 @@
 	Block	ব্লক
 	Boolean	বুলিয়ান
 	Bottoms	নিচের প্রান্ত
+	Breakdowns	বিকলতা
+	Breakdowns and availability	বিকলতা ও প্রাপ্যতা
 	Bring All to Front	সব সামনে আনুন
 	Built with	এগুলো দিয়ে তৈরি
 	Busiest	সবচেয়ে ব্যস্ত
 	By role	ভূমিকা অনুযায়ী
 	CSV table	CSV সারণি
+	Calendar	ক্যালেন্ডার
 	Cancel	বাতিল
 	Cancel Run	চালনা বাতিল
 	Cancel run	চালনা বাতিল
@@ -65,7 +75,9 @@
 	Centres	অনুভূমিক কেন্দ্র
 	Change	পরিবর্তন
 	Change Block	ব্লক পরিবর্তন
+	Change Calendar	ক্যালেন্ডার পরিবর্তন
 	Change Flow	প্রবাহ পরিবর্তন
+	Change Pool	পুল পরিবর্তন
 	Change the estimate	অনুমান বদলান
 	Changes	পরিবর্তন
 	Changing the time unit does not convert the times already in the model.	সময়ের একক পরিবর্তন করলে মডেলে আগে থেকে থাকা সময়ের মান রূপান্তরিত হয় না।
@@ -130,6 +142,7 @@
 	Export table (CSV)	সারণি রপ্তানি করুন (CSV)
 	Exported {file}	{file} রপ্তানি করা হয়েছে
 	Expression	অভিব্যক্তি
+	Failure interrupts the job	বিকলতা কাজ থামিয়ে দেয়
 	Family	পরিবার
 	File	ফাইল
 	Finished at {time} {unit}	{time} {unit}-এ শেষ হয়েছে
@@ -143,6 +156,7 @@
 	From	থেকে
 	Gamma	গামা
 	Goes to	যেখানে যায়
+	Hands on finished parts while down	বিকল অবস্থাতেও তৈরি অংশ এগিয়ে দেয়
 	Help	সহায়তা
 	Hide Others	অন্যগুলো লুকান
 	Hide {app}	{app} লুকান
@@ -191,6 +205,7 @@
 	New model	নতুন মডেল
 	New property	নতুন বৈশিষ্ট্য
 	New property name	নতুন বৈশিষ্ট্যের নাম
+	No arrivals outside calendars	ক্যালেন্ডারের বাইরে কোনো আগমন নেই
 	No blocks yet. Open a model, or add blocks to build one.	এখনও কোনো ব্লক নেই। মডেল খুলুন, অথবা ব্লক যোগ করে একটি তৈরি করুন।
 	No connections yet: join blocks below.	এখনও কোনো সংযোগ নেই: নিচের ব্লকগুলো যুক্ত করুন।
 	No replication met the stop condition: each ran to its time limit.	কোনো পুনরাবৃত্তি থামার শর্তে পৌঁছায়নি: প্রতিটি তার সময়সীমা পর্যন্ত চলেছে।
@@ -244,6 +259,8 @@
 	Redo {action}	{action} পুনরায় করুন
 	Remove	সরান
 	Remove Block	ব্লক সরান
+	Remove Calendar	ক্যালেন্ডার সরান
+	Remove Pool	পুল সরান
 	Remove Property	বৈশিষ্ট্য সরান
 	Remove alternative {n}	বিকল্প {n} সরান
 	Remove block	ব্লক সরান
@@ -253,6 +270,7 @@
 	Removed {id}	{id} সরানো হয়েছে
 	Rename Block	ব্লকের নাম পরিবর্তন
 	Rename Model	মডেলের নাম পরিবর্তন
+	Repair time	মেরামতের সময়
 	Replace Model	মডেল প্রতিস্থাপন
 	Replication 1 · {time} of {end} {unit}	পুনরাবৃত্তি 1 · {end} {unit}-এর মধ্যে {time}
 	Replication 1 · {time} of {end} {unit} · warm-up	পুনরাবৃত্তি 1 · {end} {unit}-এর মধ্যে {time} · প্রাথমিক প্রস্তুতিকাল
@@ -290,6 +308,7 @@
 	Seed	যদৃচ্ছ বীজ
 	Select All	সব নির্বাচন করুন
 	Select a block to see its queue over time.	সময়ের সাথে কোনো ব্লকের সারি দেখতে সেটি নির্বাচন করুন।
+	Sender waits during transfer	স্থানান্তরের সময় প্রেরক অপেক্ষা করে
 	Separate the values with semicolons or spaces.	মানগুলি সেমিকোলন বা স্পেস দিয়ে আলাদা করুন।
 	Service time	সেবা সময়
 	Services	পরিষেবা
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ব্যবধানটি {share} লক্ষ্য অংশের নিচে নেমে যায়, তাই অংশটি ৯৫% আস্থায় পূরণ হয়েছে বলে দেখানো যায় না; আরও পুনরাবৃত্তি এটিকে সরু করবে।
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	থামার শর্ত পর্যন্ত গড় সময় কেবল সেই পুনরাবৃত্তিগুলোর উপর যেগুলো শর্তে পৌঁছেছে; বাকিগুলো তাদের সময়সীমা পর্যন্ত চলেছে।
 	The model changed, so watching stopped	মডেল বদলেছে, তাই দেখা বন্ধ হয়েছে
+	The model has no calendars yet.	মডেলে এখনও কোনো ক্যালেন্ডার নেই।
 	The model now has the units sizing found	মডেলে এখন আকার নির্ধারণে পাওয়া এককগুলি আছে
 	The model: its experiment, connections and problems	মডেল: পরীক্ষা, সংযোগ ও সমস্যা
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	প্রতিটি মানের সমান বা কম পুনরাবৃত্তির অংশ। ব্যান্ডটি {confidence} আস্থায় প্রকৃত বণ্টন ধারণ করে।
@@ -348,10 +368,12 @@
 	Time off shift	শিফটের বাইরে সময়
 	Time processing	প্রক্রিয়াকরণে সময়
 	Time starved	কাজহীন সময়
+	Time to failure	বিকল হওয়া পর্যন্ত সময়
 	Time to the stop condition	থামার শর্ত পর্যন্ত সময়
 	Time unit	সময়ের একক
 	To	পর্যন্ত
 	Tops	উপরের প্রান্ত
+	Transfer time	স্থানান্তরের সময়
 	Trials	পরীক্ষার সংখ্যা
 	Triangular	ত্রিভুজীয়
 	Truncated normal	ছাঁটা স্বাভাবিক
@@ -363,6 +385,7 @@
 	Uniform	সুষম
 	Unit	একক
 	Units	এককের সংখ্যা
+	Units by calendar	ক্যালেন্ডার অনুযায়ী এককের সংখ্যা
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	যে এককগুলো একাধিক কাজ ভাগাভাগি করে ব্যবহার করে। ভাগ করা সম্পদসহ কাজ সেগুলো পুল বা ভূমিকা অনুযায়ী নেয়।
 	Untitled	শিরোনামহীন
 	Untitled model	শিরোনামহীন মডেল

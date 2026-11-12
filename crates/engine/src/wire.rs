@@ -410,6 +410,8 @@ pub struct BreakdownSpec {
     /// A unit that fails while holding a finished entity still hands it on when there is room
     /// (true), or keeps it until repaired (false); left out when true.
     #[serde(default = "yes", skip_serializing_if = "is_true")]
+    // schemars leaves out a default that `skip_serializing_if` would; the forms need it.
+    #[schemars(extend("default" = true))]
     pub hands_on_while_down: bool,
 }
 

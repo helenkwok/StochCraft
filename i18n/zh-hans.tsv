@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	在整个范围内变化了 {change}：在偶然本身就可能造成的范围内。
 	Actual size	实际大小
 	Add Block	添加区块
+	Add Calendar	添加日历
+	Add Pool	添加资源池
 	Add a flow from…	添加顺序流，来自…
 	Add a flow to…	添加顺序流，通往…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	在最繁忙的任务或资源池上逐个增加单位，直到足够多的重复运行达到目标。同时显示所有时间取均值时的答案；它通常偏小。
 	Add alternative	添加备选方案
+	Add calendar entry	添加日历条目
 	Add point	添加点
 	Add pool	添加资源池
 	Add property	添加属性
@@ -40,9 +43,13 @@
 	Appearance	外观
 	Arrival limit	到达上限
 	Arrivals	到达
+	Arrivals by calendar	按日历的到达
 	At least	至少
 	At most	至多
 	Availability	可用率
+	Availability by calendar	按日历的可用性
+	Available	可用
+	Available outside calendars	日历外可用
 	BPMN with BPSim	带 BPSim 的 BPMN
 	Back to the model (Esc)	返回模型 (Esc)
 	Batch	批次
@@ -53,11 +60,14 @@
 	Block	区块
 	Boolean	布尔值
 	Bottoms	底边
+	Breakdowns	故障
+	Breakdowns and availability	故障与可用性
 	Bring All to Front	全部移到最前
 	Built with	使用以下技术构建
 	Busiest	最繁忙
 	By role	按角色
 	CSV table	CSV 表格
+	Calendar	日历
 	Cancel	取消
 	Cancel Run	取消运行
 	Cancel run	取消运行
@@ -65,7 +75,9 @@
 	Centres	水平居中
 	Change	变化
 	Change Block	更改区块
+	Change Calendar	更改日历
 	Change Flow	更改顺序流
+	Change Pool	更改资源池
 	Change the estimate	更改估计
 	Changes	更改
 	Changing the time unit does not convert the times already in the model.	更改时间单位不会换算模型中已有的时间值。
@@ -130,6 +142,7 @@
 	Export table (CSV)	导出表格 (CSV)
 	Exported {file}	已导出 {file}
 	Expression	表达式
+	Failure interrupts the job	故障中断作业
 	Family	分布族
 	File	文件
 	Finished at {time} {unit}	已于 {time} {unit} 结束
@@ -143,6 +156,7 @@
 	From	起点
 	Gamma	伽马分布
 	Goes to	流向
+	Hands on finished parts while down	故障时仍移交完成的工件
 	Help	帮助
 	Hide Others	隐藏其他
 	Hide {app}	隐藏 {app}
@@ -191,6 +205,7 @@
 	New model	新建模型
 	New property	新建属性
 	New property name	新属性名称
+	No arrivals outside calendars	日历外无到达
 	No blocks yet. Open a model, or add blocks to build one.	尚无区块。请打开模型，或添加区块来构建模型。
 	No connections yet: join blocks below.	尚无连接：请在下方连接区块。
 	No replication met the stop condition: each ran to its time limit.	没有重复运行达到停止条件：每次都运行到时间上限。
@@ -244,6 +259,8 @@
 	Redo {action}	重做 {action}
 	Remove	移除
 	Remove Block	移除区块
+	Remove Calendar	移除日历
+	Remove Pool	移除资源池
 	Remove Property	移除属性
 	Remove alternative {n}	移除备选方案 {n}
 	Remove block	移除区块
@@ -253,6 +270,7 @@
 	Removed {id}	已移除 {id}
 	Rename Block	重命名区块
 	Rename Model	重命名模型
+	Repair time	维修时间
 	Replace Model	替换模型
 	Replication 1 · {time} of {end} {unit}	第 1 次重复运行 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	第 1 次重复运行 · {time} / {end} {unit} · 预热期
@@ -290,6 +308,7 @@
 	Seed	随机种子
 	Select All	全选
 	Select a block to see its queue over time.	选择一个区块以查看其队列随时间的变化。
+	Sender waits during transfer	传送期间发送方等待
 	Separate the values with semicolons or spaces.	请用分号或空格分隔各个值。
 	Service time	服务时间
 	Services	服务
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	该区间低于目标比例 {share}，因此未能以 95% 的置信度表明达到了该比例；更多的重复运行会使区间变窄。
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	到停止条件的平均时间只基于达到停止条件的重复运行；其余的运行到了时间上限。
 	The model changed, so watching stopped	模型已更改，因此已停止观察
+	The model has no calendars yet.	模型还没有日历。
 	The model now has the units sizing found	模型现在使用规模确定得出的数量
 	The model: its experiment, connections and problems	模型：实验、连接和问题
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超过各值的重复运行比例。色带以 {confidence} 的置信度包含真实分布。
@@ -348,10 +368,12 @@
 	Time off shift	非当班时间
 	Time processing	加工时间
 	Time starved	待料时间
+	Time to failure	故障前时间
 	Time to the stop condition	到达停止条件的时间
 	Time unit	时间单位
 	To	终点
 	Tops	顶边
+	Transfer time	传送时间
 	Trials	试验次数
 	Triangular	三角分布
 	Truncated normal	截断正态分布
@@ -363,6 +385,7 @@
 	Uniform	均匀分布
 	Unit	单位
 	Units	数量
+	Units by calendar	按日历的数量
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	由多个任务共享的资源单元。需要共享资源的任务按资源池或按角色获取这些单元。
 	Untitled	未命名
 	Untitled model	未命名模型

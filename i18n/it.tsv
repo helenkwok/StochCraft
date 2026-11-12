@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Nell'intervallo è cambiato di {change}: entro ciò che il solo caso potrebbe produrre.
 	Actual size	Dimensioni reali
 	Add Block	Aggiungi blocco
+	Add Calendar	Aggiungi calendario
+	Add Pool	Aggiungi pool
 	Add a flow from…	Aggiungi un flusso da…
 	Add a flow to…	Aggiungi un flusso verso…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Aggiungere un'unità all'attività o al pool più occupato finché abbastanza repliche raggiungono un obiettivo. È mostrata anche la risposta con ogni tempo alla sua media; di solito è troppo piccola.
 	Add alternative	Aggiungi alternativa
+	Add calendar entry	Aggiungi voce di calendario
 	Add point	Aggiungi punto
 	Add pool	Aggiungi pool
 	Add property	Aggiungi proprietà
@@ -40,9 +43,13 @@
 	Appearance	Aspetto
 	Arrival limit	Limite degli arrivi
 	Arrivals	Arrivi
+	Arrivals by calendar	Arrivi per calendario
 	At least	Almeno
 	At most	Al massimo
 	Availability	Disponibilità
+	Availability by calendar	Disponibilità per calendario
+	Available	Disponibile
+	Available outside calendars	Disponibile fuori dai calendari
 	BPMN with BPSim	BPMN con BPSim
 	Back to the model (Esc)	Torna al modello (Esc)
 	Batch	Lotto
@@ -53,11 +60,14 @@
 	Block	Blocco
 	Boolean	Booleano
 	Bottoms	Bordi inferiori
+	Breakdowns	Guasti
+	Breakdowns and availability	Guasti e disponibilità
 	Bring All to Front	Porta tutto in primo piano
 	Built with	Realizzato con
 	Busiest	Più occupato
 	By role	Per ruolo
 	CSV table	Tabella CSV
+	Calendar	Calendario
 	Cancel	Annulla
 	Cancel Run	Annulla esecuzione
 	Cancel run	Annulla esecuzione
@@ -65,7 +75,9 @@
 	Centres	Centri orizzontali
 	Change	Variazione
 	Change Block	Modifica blocco
+	Change Calendar	Modifica calendario
 	Change Flow	Modifica flusso
+	Change Pool	Modifica pool
 	Change the estimate	Modifica la stima
 	Changes	Modifiche
 	Changing the time unit does not convert the times already in the model.	La modifica dell'unità di tempo non converte i tempi già presenti nel modello.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Esporta tabella (CSV)
 	Exported {file}	Esportato {file}
 	Expression	Espressione
+	Failure interrupts the job	Il guasto interrompe la lavorazione
 	Family	Famiglia
 	File	File
 	Finished at {time} {unit}	Terminato a {time} {unit}
@@ -143,6 +156,7 @@
 	From	Da
 	Gamma	Gamma
 	Goes to	Va a
+	Hands on finished parts while down	Passa i pezzi finiti anche in guasto
 	Help	Aiuto
 	Hide Others	Nascondi altri
 	Hide {app}	Nascondi {app}
@@ -191,6 +205,7 @@
 	New model	Nuovo modello
 	New property	Nuova proprietà
 	New property name	Nome della nuova proprietà
+	No arrivals outside calendars	Nessun arrivo fuori dai calendari
 	No blocks yet. Open a model, or add blocks to build one.	Non ci sono ancora blocchi. Apri un modello o aggiungi blocchi per crearne uno.
 	No connections yet: join blocks below.	Non ci sono ancora connessioni: collega i blocchi qui sotto.
 	No replication met the stop condition: each ran to its time limit.	Nessuna replica ha raggiunto la condizione di arresto: ognuna è arrivata al suo limite di tempo.
@@ -244,6 +259,8 @@
 	Redo {action}	Ripeti {action}
 	Remove	Rimuovi
 	Remove Block	Rimuovi blocco
+	Remove Calendar	Rimuovi calendario
+	Remove Pool	Rimuovi pool
 	Remove Property	Rimuovi proprietà
 	Remove alternative {n}	Rimuovi alternativa {n}
 	Remove block	Rimuovi blocco
@@ -253,6 +270,7 @@
 	Removed {id}	Rimosso {id}
 	Rename Block	Rinomina blocco
 	Rename Model	Rinomina modello
+	Repair time	Tempo di riparazione
 	Replace Model	Sostituisci modello
 	Replication 1 · {time} of {end} {unit}	Replica 1 · {time} di {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replica 1 · {time} di {end} {unit} · riscaldamento
@@ -290,6 +308,7 @@
 	Seed	Seme
 	Select All	Seleziona tutto
 	Select a block to see its queue over time.	Seleziona un blocco per vederne la coda nel tempo.
+	Sender waits during transfer	Il mittente attende durante il trasferimento
 	Separate the values with semicolons or spaces.	Separa i valori con punti e virgola o spazi.
 	Service time	Tempo di servizio
 	Services	Servizi
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'intervallo scende sotto la quota obiettivo del {share}, quindi non è dimostrato con una confidenza del 95% che la quota sia raggiunta; più repliche lo restringerebbero.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Il tempo medio fino alla condizione di arresto riguarda solo le repliche che l'hanno raggiunta; le altre sono arrivate al loro limite di tempo.
 	The model changed, so watching stopped	Il modello è cambiato, quindi l'osservazione si è interrotta
+	The model has no calendars yet.	Il modello non ha ancora calendari.
 	The model now has the units sizing found	Il modello ora ha le unità trovate dal dimensionamento
 	The model: its experiment, connections and problems	Il modello: esperimento, connessioni e problemi
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La quota di repliche pari o inferiori a ogni valore. La fascia contiene la vera distribuzione con una confidenza del {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Tempo fuori turno
 	Time processing	Tempo in lavorazione
 	Time starved	Tempo senza lavoro
+	Time to failure	Tempo fino al guasto
 	Time to the stop condition	Tempo fino alla condizione di arresto
 	Time unit	Unità di tempo
 	To	A
 	Tops	Bordi superiori
+	Transfer time	Tempo di trasferimento
 	Trials	Prove
 	Triangular	Triangolare
 	Truncated normal	Normale troncata
@@ -363,6 +385,7 @@
 	Uniform	Uniforme
 	Unit	Unità
 	Units	Unità
+	Units by calendar	Unità per calendario
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unità condivise da più attività. Un'attività con risorse condivise le prende per pool o per ruolo.
 	Untitled	Senza titolo
 	Untitled model	Modello senza titolo

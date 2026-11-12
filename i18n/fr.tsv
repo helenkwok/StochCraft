@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Sur la plage, il a varié de {change} : dans ce que le hasard seul pourrait produire.
 	Actual size	Taille réelle
 	Add Block	Ajouter un bloc
+	Add Calendar	Ajouter un calendrier
+	Add Pool	Ajouter un pool
 	Add a flow from…	Ajouter un flux depuis…
 	Add a flow to…	Ajouter un flux vers…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Ajouter une unité à la tâche ou au pool le plus occupé jusqu'à ce qu'assez de réplications atteignent un objectif. La réponse avec chaque temps à sa moyenne est aussi indiquée ; elle est généralement trop petite.
 	Add alternative	Ajouter une alternative
+	Add calendar entry	Ajouter une entrée de calendrier
 	Add point	Ajouter un point
 	Add pool	Ajouter un pool
 	Add property	Ajouter une propriété
@@ -40,9 +43,13 @@
 	Appearance	Apparence
 	Arrival limit	Limite des arrivées
 	Arrivals	Arrivées
+	Arrivals by calendar	Arrivées par calendrier
 	At least	Au moins
 	At most	Au plus
 	Availability	Disponibilité
+	Availability by calendar	Disponibilité par calendrier
+	Available	Disponible
+	Available outside calendars	Disponible hors des calendriers
 	BPMN with BPSim	BPMN avec BPSim
 	Back to the model (Esc)	Retour au modèle (Esc)
 	Batch	Lot
@@ -53,11 +60,14 @@
 	Block	Bloc
 	Boolean	Booléen
 	Bottoms	Bords inférieurs
+	Breakdowns	Pannes
+	Breakdowns and availability	Pannes et disponibilité
 	Bring All to Front	Tout ramener au premier plan
 	Built with	Développé avec
 	Busiest	Le plus occupé
 	By role	Par rôle
 	CSV table	Tableau CSV
+	Calendar	Calendrier
 	Cancel	Annuler
 	Cancel Run	Annuler l'exécution
 	Cancel run	Annuler l'exécution
@@ -65,7 +75,9 @@
 	Centres	Centres horizontaux
 	Change	Variation
 	Change Block	Modifier le bloc
+	Change Calendar	Modifier le calendrier
 	Change Flow	Modifier le flux
+	Change Pool	Modifier le pool
 	Change the estimate	Modifier l'estimation
 	Changes	Modifications
 	Changing the time unit does not convert the times already in the model.	Changer l'unité de temps ne convertit pas les durées déjà définies dans le modèle.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Exporter le tableau (CSV)
 	Exported {file}	{file} exporté
 	Expression	Expression
+	Failure interrupts the job	La panne interrompt le travail
 	Family	Famille
 	File	Fichier
 	Finished at {time} {unit}	Terminé à {time} {unit}
@@ -143,6 +156,7 @@
 	From	De
 	Gamma	Gamma
 	Goes to	Va vers
+	Hands on finished parts while down	Transmet les pièces finies pendant la panne
 	Help	Aide
 	Hide Others	Masquer les autres
 	Hide {app}	Masquer {app}
@@ -191,6 +205,7 @@
 	New model	Nouveau modèle
 	New property	Nouvelle propriété
 	New property name	Nom de la nouvelle propriété
+	No arrivals outside calendars	Aucune arrivée hors des calendriers
 	No blocks yet. Open a model, or add blocks to build one.	Aucun bloc pour le moment. Ouvrez un modèle ou ajoutez des blocs pour en créer un.
 	No connections yet: join blocks below.	Aucune connexion pour le moment : reliez les blocs ci-dessous.
 	No replication met the stop condition: each ran to its time limit.	Aucune réplication n'a atteint la condition d'arrêt : chacune a duré jusqu'à sa limite de temps.
@@ -244,6 +259,8 @@
 	Redo {action}	Rétablir {action}
 	Remove	Supprimer
 	Remove Block	Supprimer le bloc
+	Remove Calendar	Supprimer le calendrier
+	Remove Pool	Supprimer le pool
 	Remove Property	Supprimer la propriété
 	Remove alternative {n}	Supprimer l'alternative {n}
 	Remove block	Supprimer le bloc
@@ -253,6 +270,7 @@
 	Removed {id}	{id} supprimé
 	Rename Block	Renommer le bloc
 	Rename Model	Renommer le modèle
+	Repair time	Temps de réparation
 	Replace Model	Remplacer le modèle
 	Replication 1 · {time} of {end} {unit}	Réplication 1 · {time} sur {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Réplication 1 · {time} sur {end} {unit} · préchauffage
@@ -290,6 +308,7 @@
 	Seed	Graine
 	Select All	Tout sélectionner
 	Select a block to see its queue over time.	Sélectionnez un bloc pour voir sa file au fil du temps.
+	Sender waits during transfer	L'expéditeur attend pendant le transfert
 	Separate the values with semicolons or spaces.	Séparez les valeurs par des points-virgules ou des espaces.
 	Service time	Temps de service
 	Services	Services
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'intervalle descend sous la part cible de {share} : il n'est donc pas établi avec 95 % de confiance que la part est atteinte ; davantage de réplications le resserreraient.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Le temps moyen jusqu'à la condition d'arrêt ne porte que sur les réplications qui l'ont atteinte ; les autres ont duré jusqu'à leur limite de temps.
 	The model changed, so watching stopped	Le modèle a changé, l'observation s'est donc arrêtée
+	The model has no calendars yet.	Le modèle n'a pas encore de calendrier.
 	The model now has the units sizing found	Le modèle a maintenant les unités trouvées par le dimensionnement
 	The model: its experiment, connections and problems	Le modèle : expérience, connexions et problèmes
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La part des réplications inférieures ou égales à chaque valeur. La bande contient la vraie distribution avec une confiance de {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Temps hors poste
 	Time processing	Temps en traitement
 	Time starved	Temps sans travail
+	Time to failure	Temps avant panne
 	Time to the stop condition	Temps jusqu'à la condition d'arrêt
 	Time unit	Unité de temps
 	To	À
 	Tops	Bords supérieurs
+	Transfer time	Temps de transfert
 	Trials	Essais
 	Triangular	Triangulaire
 	Truncated normal	Normale tronquée
@@ -363,6 +385,7 @@
 	Uniform	Uniforme
 	Unit	Unité
 	Units	Unités
+	Units by calendar	Unités par calendrier
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unités partagées par plusieurs tâches. Une tâche avec ressources partagées les prend par pool ou par rôle.
 	Untitled	Sans titre
 	Untitled model	Modèle sans titre

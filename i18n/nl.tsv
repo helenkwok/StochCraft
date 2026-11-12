@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Over het bereik veranderde het met {change}: binnen wat toeval alleen kan doen.
 	Actual size	Werkelijke grootte
 	Add Block	Blok toevoegen
+	Add Calendar	Kalender toevoegen
+	Add Pool	Pool toevoegen
 	Add a flow from…	Stroom toevoegen vanaf…
 	Add a flow to…	Stroom toevoegen naar…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Een eenheid toevoegen bij de drukste taak of pool tot genoeg herhalingen een doel halen. Het antwoord met elke tijd op zijn gemiddelde staat er ook bij; dat is meestal te klein.
 	Add alternative	Alternatief toevoegen
+	Add calendar entry	Kalenderitem toevoegen
 	Add point	Punt toevoegen
 	Add pool	Pool toevoegen
 	Add property	Eigenschap toevoegen
@@ -40,9 +43,13 @@
 	Appearance	Uiterlijk
 	Arrival limit	Aankomstlimiet
 	Arrivals	Aankomsten
+	Arrivals by calendar	Aankomsten per kalender
 	At least	Minstens
 	At most	Hoogstens
 	Availability	Beschikbaarheid
+	Availability by calendar	Beschikbaarheid per kalender
+	Available	Beschikbaar
+	Available outside calendars	Beschikbaar buiten kalenders
 	BPMN with BPSim	BPMN met BPSim
 	Back to the model (Esc)	Terug naar het model (Esc)
 	Batch	Batch
@@ -53,11 +60,14 @@
 	Block	Blok
 	Boolean	Booleaans
 	Bottoms	Onderkanten
+	Breakdowns	Storingen
+	Breakdowns and availability	Storingen en beschikbaarheid
 	Bring All to Front	Alles naar voren halen
 	Built with	Gemaakt met
 	Busiest	Drukst
 	By role	Per rol
 	CSV table	CSV-tabel
+	Calendar	Kalender
 	Cancel	Annuleren
 	Cancel Run	Uitvoering annuleren
 	Cancel run	Uitvoering annuleren
@@ -65,7 +75,9 @@
 	Centres	Horizontale middens
 	Change	Verandering
 	Change Block	Blok wijzigen
+	Change Calendar	Kalender wijzigen
 	Change Flow	Stroom wijzigen
+	Change Pool	Pool wijzigen
 	Change the estimate	Schatting wijzigen
 	Changes	Wijzigingen
 	Changing the time unit does not convert the times already in the model.	Als u de tijdseenheid wijzigt, worden bestaande tijden in het model niet omgerekend.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Tabel exporteren (CSV)
 	Exported {file}	{file} geëxporteerd
 	Expression	Expressie
+	Failure interrupts the job	Storing onderbreekt de bewerking
 	Family	Familie
 	File	Bestand
 	Finished at {time} {unit}	Klaar op {time} {unit}
@@ -143,6 +156,7 @@
 	From	Van
 	Gamma	Gamma
 	Goes to	Gaat naar
+	Hands on finished parts while down	Geeft gerede onderdelen door tijdens storing
 	Help	Help
 	Hide Others	Anderen verbergen
 	Hide {app}	{app} verbergen
@@ -191,6 +205,7 @@
 	New model	Nieuw model
 	New property	Nieuwe eigenschap
 	New property name	Naam van nieuwe eigenschap
+	No arrivals outside calendars	Geen aankomsten buiten kalenders
 	No blocks yet. Open a model, or add blocks to build one.	Nog geen blokken. Open een model of voeg blokken toe om er een te maken.
 	No connections yet: join blocks below.	Nog geen verbindingen: verbind hieronder de blokken.
 	No replication met the stop condition: each ran to its time limit.	Geen herhaling haalde de stopvoorwaarde: elke liep tot haar tijdslimiet.
@@ -244,6 +259,8 @@
 	Redo {action}	{action} opnieuw uitvoeren
 	Remove	Verwijderen
 	Remove Block	Blok verwijderen
+	Remove Calendar	Kalender verwijderen
+	Remove Pool	Pool verwijderen
 	Remove Property	Eigenschap verwijderen
 	Remove alternative {n}	Alternatief {n} verwijderen
 	Remove block	Blok verwijderen
@@ -253,6 +270,7 @@
 	Removed {id}	{id} verwijderd
 	Rename Block	Blok hernoemen
 	Rename Model	Model hernoemen
+	Repair time	Reparatietijd
 	Replace Model	Model vervangen
 	Replication 1 · {time} of {end} {unit}	Herhaling 1 · {time} van {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Herhaling 1 · {time} van {end} {unit} · opwarmperiode
@@ -290,6 +308,7 @@
 	Seed	Startwaarde
 	Select All	Alles selecteren
 	Select a block to see its queue over time.	Selecteer een blok om de wachtrij in de tijd te zien.
+	Sender waits during transfer	Afzender wacht tijdens transfer
 	Separate the values with semicolons or spaces.	Scheid de waarden met puntkomma's of spaties.
 	Service time	Servicetijd
 	Services	Diensten
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Het interval reikt tot onder het doelaandeel van {share}, dus het is niet met 95% betrouwbaarheid aangetoond dat het aandeel wordt gehaald; meer herhalingen zouden het smaller maken.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	De gemiddelde tijd tot de stopvoorwaarde is alleen over de herhalingen die haar haalden; de andere liepen tot hun tijdslimiet.
 	The model changed, so watching stopped	Het model is gewijzigd, dus het volgen is gestopt
+	The model has no calendars yet.	Het model heeft nog geen kalenders.
 	The model now has the units sizing found	Het model heeft nu de eenheden die het dimensioneren vond
 	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Het aandeel herhalingen op of onder elke waarde. De band bevat de ware verdeling met {confidence} betrouwbaarheid.
@@ -348,10 +368,12 @@
 	Time off shift	Tijd buiten werktijd
 	Time processing	Tijd in bewerking
 	Time starved	Tijd zonder werk
+	Time to failure	Tijd tot storing
 	Time to the stop condition	Tijd tot de stopvoorwaarde
 	Time unit	Tijdseenheid
 	To	Naar
 	Tops	Bovenkanten
+	Transfer time	Transfertijd
 	Trials	Proeven
 	Triangular	Driehoekig
 	Truncated normal	Afgekapt normaal
@@ -363,6 +385,7 @@
 	Uniform	Uniform
 	Unit	Eenheid
 	Units	Eenheden
+	Units by calendar	Eenheden per kalender
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Eenheden die door meerdere taken worden gedeeld. Een taak met gedeelde hulpbronnen neemt ze per pool of per rol.
 	Untitled	Naamloos
 	Untitled model	Naamloos model

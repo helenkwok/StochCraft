@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	На всём диапазоне изменился на {change}: в пределах того, на что способна одна случайность.
 	Actual size	Фактический размер
 	Add Block	Добавить блок
+	Add Calendar	Добавить календарь
+	Add Pool	Добавить пул
 	Add a flow from…	Добавить поток от…
 	Add a flow to…	Добавить поток к…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Добавлять единицу к самой загруженной задаче или пулу, пока достаточно репликаций не достигнут цели. Показан и ответ, где каждое время равно своему среднему; обычно он слишком мал.
 	Add alternative	Добавить альтернативу
+	Add calendar entry	Добавить запись календаря
 	Add point	Добавить точку
 	Add pool	Добавить пул
 	Add property	Добавить свойство
@@ -40,9 +43,13 @@
 	Appearance	Внешний вид
 	Arrival limit	Ограничение числа прибытий
 	Arrivals	Прибытия
+	Arrivals by calendar	Прибытия по календарю
 	At least	Не меньше
 	At most	Не больше
 	Availability	Коэффициент готовности
+	Availability by calendar	Доступность по календарю
+	Available	Доступно
+	Available outside calendars	Доступно вне календарей
 	BPMN with BPSim	BPMN с BPSim
 	Back to the model (Esc)	Вернуться к модели (Esc)
 	Batch	Партия
@@ -53,11 +60,14 @@
 	Block	Блок
 	Boolean	Логическое значение
 	Bottoms	Нижние края
+	Breakdowns	Отказы
+	Breakdowns and availability	Отказы и доступность
 	Bring All to Front	Все окна на передний план
 	Built with	Создано с использованием
 	Busiest	Самый загруженный
 	By role	По роли
 	CSV table	Таблица CSV
+	Calendar	Календарь
 	Cancel	Отмена
 	Cancel Run	Отменить запуск
 	Cancel run	Отменить запуск
@@ -65,7 +75,9 @@
 	Centres	Центры по горизонтали
 	Change	Изменение
 	Change Block	Изменить блок
+	Change Calendar	Изменить календарь
 	Change Flow	Изменить поток
+	Change Pool	Изменить пул
 	Change the estimate	Изменить оценку
 	Changes	Изменения
 	Changing the time unit does not convert the times already in the model.	При изменении единицы времени уже заданные в модели времена не пересчитываются.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Экспортировать таблицу (CSV)
 	Exported {file}	Экспортирован {file}
 	Expression	Выражение
+	Failure interrupts the job	Отказ прерывает работу
 	Family	Семейство
 	File	Файл
 	Finished at {time} {unit}	Завершено в {time} {unit}
@@ -143,6 +156,7 @@
 	From	От
 	Gamma	Гамма-распределение
 	Goes to	Ведёт к
+	Hands on finished parts while down	Передаёт готовые детали и при отказе
 	Help	Справка
 	Hide Others	Скрыть остальные
 	Hide {app}	Скрыть {app}
@@ -191,6 +205,7 @@
 	New model	Новая модель
 	New property	Новое свойство
 	New property name	Имя нового свойства
+	No arrivals outside calendars	Нет прибытий вне календарей
 	No blocks yet. Open a model, or add blocks to build one.	Блоков пока нет. Откройте модель или добавьте блоки для создания модели.
 	No connections yet: join blocks below.	Соединений пока нет: соедините блоки ниже.
 	No replication met the stop condition: each ran to its time limit.	Ни одна репликация не достигла условия остановки: каждая шла до своего предела времени.
@@ -244,6 +259,8 @@
 	Redo {action}	Повторить {action}
 	Remove	Удалить
 	Remove Block	Удалить блок
+	Remove Calendar	Удалить календарь
+	Remove Pool	Удалить пул
 	Remove Property	Удалить свойство
 	Remove alternative {n}	Удалить альтернативу {n}
 	Remove block	Удалить блок
@@ -253,6 +270,7 @@
 	Removed {id}	Удалён {id}
 	Rename Block	Переименовать блок
 	Rename Model	Переименовать модель
+	Repair time	Время ремонта
 	Replace Model	Заменить модель
 	Replication 1 · {time} of {end} {unit}	Повторный запуск 1 · {time} из {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Повторный запуск 1 · {time} из {end} {unit} · разогрев
@@ -290,6 +308,7 @@
 	Seed	Начальное значение генератора
 	Select All	Выделить всё
 	Select a block to see its queue over time.	Выберите блок, чтобы увидеть его очередь во времени.
+	Sender waits during transfer	Отправитель ждёт во время передачи
 	Separate the values with semicolons or spaces.	Разделяйте значения точкой с запятой или пробелами.
 	Service time	Время обслуживания
 	Services	Службы
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Интервал опускается ниже целевой доли {share}, поэтому с доверием 95% не показано, что доля достигнута; больше репликаций сузили бы его.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Среднее время до условия остановки рассчитано только по репликациям, которые его достигли; остальные шли до своего предела времени.
 	The model changed, so watching stopped	Модель изменилась, поэтому наблюдение прекращено
+	The model has no calendars yet.	В модели пока нет календарей.
 	The model now has the units sizing found	В модели теперь единицы, найденные при подборе
 	The model: its experiment, connections and problems	Модель: эксперимент, соединения и проблемы
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Доля репликаций, не превышающих каждое значение. Полоса содержит истинное распределение с доверием {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Время вне смены
 	Time processing	Время обработки
 	Time starved	Время без работы
+	Time to failure	Время до отказа
 	Time to the stop condition	Время до условия остановки
 	Time unit	Единица времени
 	To	К
 	Tops	Верхние края
+	Transfer time	Время передачи
 	Trials	Испытания
 	Triangular	Треугольное распределение
 	Truncated normal	Усечённое нормальное распределение
@@ -363,6 +385,7 @@
 	Uniform	Равномерное распределение
 	Unit	Единица измерения
 	Units	Единицы
+	Units by calendar	Единицы по календарю
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Единицы, которые используют несколько задач. Задача с общими ресурсами берёт их из пула или по роли.
 	Untitled	Без названия
 	Untitled model	Модель без названия

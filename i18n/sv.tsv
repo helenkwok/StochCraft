@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Över intervallet ändrades det med {change}: inom vad slumpen ensam kan åstadkomma.
 	Actual size	Verklig storlek
 	Add Block	Lägg till block
+	Add Calendar	Lägg till kalender
+	Add Pool	Lägg till pool
 	Add a flow from…	Lägg till flöde från…
 	Add a flow to…	Lägg till flöde till…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lägg till en enhet vid den mest belastade uppgiften eller poolen tills tillräckligt många replikationer når ett mål. Svaret med varje tid på sitt medelvärde visas också; det är oftast för litet.
 	Add alternative	Lägg till alternativ
+	Add calendar entry	Lägg till kalenderpost
 	Add point	Lägg till punkt
 	Add pool	Lägg till pool
 	Add property	Lägg till egenskap
@@ -40,9 +43,13 @@
 	Appearance	Utseende
 	Arrival limit	Gräns för ankomster
 	Arrivals	Ankomster
+	Arrivals by calendar	Ankomster per kalender
 	At least	Minst
 	At most	Högst
 	Availability	Tillgänglighet
+	Availability by calendar	Tillgänglighet per kalender
+	Available	Tillgänglig
+	Available outside calendars	Tillgänglig utanför kalendrar
 	BPMN with BPSim	BPMN med BPSim
 	Back to the model (Esc)	Tillbaka till modellen (Esc)
 	Batch	Parti
@@ -53,11 +60,14 @@
 	Block	Block
 	Boolean	Boolesk
 	Bottoms	Nederkanter
+	Breakdowns	Haverier
+	Breakdowns and availability	Haverier och tillgänglighet
 	Bring All to Front	Lägg alla överst
 	Built with	Skapad med
 	Busiest	Mest belastad
 	By role	Efter roll
 	CSV table	CSV-tabell
+	Calendar	Kalender
 	Cancel	Avbryt
 	Cancel Run	Avbryt körning
 	Cancel run	Avbryt körning
@@ -65,7 +75,9 @@
 	Centres	Vågräta mittpunkter
 	Change	Ändring
 	Change Block	Ändra block
+	Change Calendar	Ändra kalender
 	Change Flow	Ändra flöde
+	Change Pool	Ändra pool
 	Change the estimate	Ändra uppskattningen
 	Changes	Ändringar
 	Changing the time unit does not convert the times already in the model.	Att ändra tidsenheten omvandlar inte tiderna som redan finns i modellen.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Exportera tabell (CSV)
 	Exported {file}	Exporterade {file}
 	Expression	Uttryck
+	Failure interrupts the job	Haveri avbryter arbetet
 	Family	Familj
 	File	Arkiv
 	Finished at {time} {unit}	Klar vid {time} {unit}
@@ -143,6 +156,7 @@
 	From	Från
 	Gamma	Gamma
 	Goes to	Går till
+	Hands on finished parts while down	Lämnar vidare färdiga detaljer även vid haveri
 	Help	Hjälp
 	Hide Others	Göm övriga
 	Hide {app}	Göm {app}
@@ -191,6 +205,7 @@
 	New model	Ny modell
 	New property	Ny egenskap
 	New property name	Namn på ny egenskap
+	No arrivals outside calendars	Inga ankomster utanför kalendrar
 	No blocks yet. Open a model, or add blocks to build one.	Inga block ännu. Öppna en modell eller lägg till block för att skapa en.
 	No connections yet: join blocks below.	Inga anslutningar ännu: koppla ihop blocken nedan.
 	No replication met the stop condition: each ran to its time limit.	Ingen replikation nådde stoppvillkoret: var och en körde till sin tidsgräns.
@@ -244,6 +259,8 @@
 	Redo {action}	Gör om {action}
 	Remove	Ta bort
 	Remove Block	Ta bort block
+	Remove Calendar	Ta bort kalender
+	Remove Pool	Ta bort pool
 	Remove Property	Ta bort egenskap
 	Remove alternative {n}	Ta bort alternativ {n}
 	Remove block	Ta bort block
@@ -253,6 +270,7 @@
 	Removed {id}	Tog bort {id}
 	Rename Block	Byt namn på block
 	Rename Model	Byt namn på modell
+	Repair time	Reparationstid
 	Replace Model	Ersätt modell
 	Replication 1 · {time} of {end} {unit}	Replikation 1 · {time} av {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikation 1 · {time} av {end} {unit} · uppvärmning
@@ -290,6 +308,7 @@
 	Seed	Slumpfrö
 	Select All	Markera allt
 	Select a block to see its queue over time.	Välj ett block för att se dess kö över tid.
+	Sender waits during transfer	Avsändaren väntar under överföringen
 	Separate the values with semicolons or spaces.	Skilj värdena åt med semikolon eller mellanslag.
 	Service time	Servicetid
 	Services	Tjänster
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet når under målandelen {share}, så det är inte visat med 95 % säkerhet att andelen nås; fler replikationer skulle göra det smalare.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Den genomsnittliga tiden till stoppvillkoret gäller bara replikationerna som nådde det; de övriga körde till sin tidsgräns.
 	The model changed, so watching stopped	Modellen ändrades, så följningen stoppades
+	The model has no calendars yet.	Modellen har inga kalendrar än.
 	The model now has the units sizing found	Modellen har nu enheterna som dimensioneringen hittade
 	The model: its experiment, connections and problems	Modellen: experiment, anslutningar och problem
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen replikationer vid eller under varje värde. Bandet innehåller den sanna fördelningen med {confidence} konfidens.
@@ -348,10 +368,12 @@
 	Time off shift	Tid utanför skift
 	Time processing	Tid i bearbetning
 	Time starved	Tid utan arbete
+	Time to failure	Tid till haveri
 	Time to the stop condition	Tid till stoppvillkoret
 	Time unit	Tidsenhet
 	To	Till
 	Tops	Överkanter
+	Transfer time	Överföringstid
 	Trials	Försök
 	Triangular	Triangulär
 	Truncated normal	Trunkerad normal
@@ -363,6 +385,7 @@
 	Uniform	Likformig
 	Unit	Enhet
 	Units	Enheter
+	Units by calendar	Enheter per kalender
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Resursenheter som flera uppgifter delar. En uppgift med delade resurser tar dem från en pool eller efter roll.
 	Untitled	Namnlös
 	Untitled model	Namnlös modell

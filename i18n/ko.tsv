@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	범위 전체에서 {change}만큼 바뀌었습니다. 우연만으로도 생길 수 있는 범위입니다.
 	Actual size	실제 크기
 	Add Block	블록 추가
+	Add Calendar	캘린더 추가
+	Add Pool	풀 추가
 	Add a flow from…	시작 블록…
 	Add a flow to…	끝 블록…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	충분한 반복 실행이 목표를 충족할 때까지 가장 바쁜 작업이나 풀에 단위를 하나씩 추가합니다. 모든 시간을 평균으로 둔 답도 함께 표시하지만 보통 너무 작습니다.
 	Add alternative	대안 추가
+	Add calendar entry	캘린더 항목 추가
 	Add point	점 추가
 	Add pool	풀 추가
 	Add property	속성 추가
@@ -40,9 +43,13 @@
 	Appearance	모양새
 	Arrival limit	도착 수 제한
 	Arrivals	도착
+	Arrivals by calendar	캘린더별 도착
 	At least	이상
 	At most	이하
 	Availability	가용률
+	Availability by calendar	캘린더별 가용 여부
+	Available	가용
+	Available outside calendars	캘린더 밖에서도 가용
 	BPMN with BPSim	BPSim 포함 BPMN
 	Back to the model (Esc)	모델로 돌아가기 (Esc)
 	Batch	배치
@@ -53,11 +60,14 @@
 	Block	블록
 	Boolean	불리언
 	Bottoms	아래쪽 가장자리
+	Breakdowns	고장
+	Breakdowns and availability	고장 및 가용 여부
 	Bring All to Front	모두 앞으로 가져오기
 	Built with	사용 기술
 	Busiest	가장 바쁨
 	By role	역할별
 	CSV table	CSV 표
+	Calendar	캘린더
 	Cancel	취소
 	Cancel Run	실행 취소
 	Cancel run	실행 취소
@@ -65,7 +75,9 @@
 	Centres	가로 가운데
 	Change	변화
 	Change Block	블록 변경
+	Change Calendar	캘린더 변경
 	Change Flow	흐름 변경
+	Change Pool	풀 변경
 	Change the estimate	추정 변경
 	Changes	변경 사항
 	Changing the time unit does not convert the times already in the model.	시간 단위를 변경해도 모델에 이미 입력된 시간은 변환되지 않습니다.
@@ -130,6 +142,7 @@
 	Export table (CSV)	표 내보내기 (CSV)
 	Exported {file}	{file} 내보냄
 	Expression	식
+	Failure interrupts the job	고장 시 작업 중단
 	Family	분포 계열
 	File	파일
 	Finished at {time} {unit}	{time} {unit}에 끝남
@@ -143,6 +156,7 @@
 	From	시작 블록
 	Gamma	감마 분포
 	Goes to	도착 블록
+	Hands on finished parts while down	고장 중에도 완료된 부품 전달
 	Help	도움말
 	Hide Others	다른 항목 숨기기
 	Hide {app}	{app} 숨기기
@@ -191,6 +205,7 @@
 	New model	새 모델
 	New property	새 속성
 	New property name	새 속성 이름
+	No arrivals outside calendars	캘린더 밖에서는 도착 없음
 	No blocks yet. Open a model, or add blocks to build one.	아직 블록이 없습니다. 모델을 열거나 블록을 추가하여 만드세요.
 	No connections yet: join blocks below.	아직 연결이 없습니다. 아래에서 블록을 연결하세요.
 	No replication met the stop condition: each ran to its time limit.	중지 조건에 도달한 반복 실행이 없습니다. 모두 시간 제한까지 실행되었습니다.
@@ -244,6 +259,8 @@
 	Redo {action}	{action} 다시 실행
 	Remove	제거
 	Remove Block	블록 제거
+	Remove Calendar	캘린더 제거
+	Remove Pool	풀 제거
 	Remove Property	속성 제거
 	Remove alternative {n}	대안 {n} 제거
 	Remove block	블록 제거
@@ -253,6 +270,7 @@
 	Removed {id}	{id} 제거됨
 	Rename Block	블록 이름 변경
 	Rename Model	모델 이름 변경
+	Repair time	수리 시간
 	Replace Model	모델 바꾸기
 	Replication 1 · {time} of {end} {unit}	반복 실행 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	반복 실행 1 · {time} / {end} {unit} · 준비 기간
@@ -290,6 +308,7 @@
 	Seed	난수 시드
 	Select All	모두 선택
 	Select a block to see its queue over time.	블록을 선택하면 시간에 따른 대기열을 볼 수 있습니다.
+	Sender waits during transfer	이송 중 보내는 쪽 대기
 	Separate the values with semicolons or spaces.	값은 세미콜론이나 공백으로 구분하세요.
 	Service time	서비스 시간
 	Services	서비스
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	구간이 목표 비율 {share}보다 아래까지 내려가므로, 비율 충족이 95% 신뢰도로 확인되지 않았습니다. 반복 실행을 늘리면 구간이 좁아집니다.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	중지 조건까지의 평균 시간은 중지 조건에 도달한 반복 실행만으로 계산됩니다. 나머지는 시간 제한까지 실행되었습니다.
 	The model changed, so watching stopped	모델이 변경되어 관찰을 중지함
+	The model has no calendars yet.	모델에 아직 캘린더가 없습니다.
 	The model now has the units sizing found	이제 모델에 크기 정하기로 찾은 수량이 들어 있습니다
 	The model: its experiment, connections and problems	모델: 실험, 연결 및 문제
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	각 값 이하인 반복 실행의 비율입니다. 띠는 {confidence} 신뢰도로 실제 분포를 포함합니다.
@@ -348,10 +368,12 @@
 	Time off shift	근무 외 시간
 	Time processing	처리 시간
 	Time starved	작업 대기 시간
+	Time to failure	고장까지의 시간
 	Time to the stop condition	중지 조건까지의 시간
 	Time unit	시간 단위
 	To	끝 블록
 	Tops	위쪽 가장자리
+	Transfer time	이송 시간
 	Trials	시행 횟수
 	Triangular	삼각 분포
 	Truncated normal	절단 정규 분포
@@ -363,6 +385,7 @@
 	Uniform	균등 분포
 	Unit	단위
 	Units	수량
+	Units by calendar	캘린더별 수량
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	여러 작업이 공유하는 자원 단위입니다. 공유 자원을 사용하는 작업은 풀 또는 역할을 기준으로 자원을 가져갑니다.
 	Untitled	제목 없음
 	Untitled model	제목 없는 모델

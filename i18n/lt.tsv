@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Per visą intervalą pasikeitė {change}: tiek, kiek gali vien atsitiktinumas.
 	Actual size	Tikrasis dydis
 	Add Block	Pridėti bloką
+	Add Calendar	Pridėti kalendorių
+	Add Pool	Pridėti grupę
 	Add a flow from…	Pridėti srautą iš…
 	Add a flow to…	Pridėti srautą į…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Pridėti vienetą prie labiausiai apkrautos užduoties ar telkinio, kol pakankamai replikacijų pasieks tikslą. Rodomas ir atsakymas, kai kiekvienas laikas lygus savo vidurkiui; jis paprastai per mažas.
 	Add alternative	Pridėti alternatyvą
+	Add calendar entry	Pridėti kalendoriaus įrašą
 	Add point	Pridėti tašką
 	Add pool	Pridėti grupę
 	Add property	Pridėti savybę
@@ -40,9 +43,13 @@
 	Appearance	Išvaizda
 	Arrival limit	Atvykimų limitas
 	Arrivals	Atvykimai
+	Arrivals by calendar	Atvykimai pagal kalendorių
 	At least	Ne mažiau
 	At most	Ne daugiau
 	Availability	Parengtis
+	Availability by calendar	Prieinamumas pagal kalendorių
+	Available	Prieinama
+	Available outside calendars	Prieinama už kalendorių ribų
 	BPMN with BPSim	BPMN su BPSim
 	Back to the model (Esc)	Grįžti į modelį (Esc)
 	Batch	Partija
@@ -53,11 +60,14 @@
 	Block	Blokas
 	Boolean	Loginė reikšmė
 	Bottoms	Apatiniai kraštai
+	Breakdowns	Gedimai
+	Breakdowns and availability	Gedimai ir prieinamumas
 	Bring All to Front	Perkelti visus į priekį
 	Built with	Sukurta naudojant
 	Busiest	Labiausiai apkrautas
 	By role	Pagal vaidmenį
 	CSV table	CSV lentelė
+	Calendar	Kalendorius
 	Cancel	Atšaukti
 	Cancel Run	Atšaukti vykdymą
 	Cancel run	Atšaukti vykdymą
@@ -65,7 +75,9 @@
 	Centres	Horizontalūs centrai
 	Change	Pokytis
 	Change Block	Keisti bloką
+	Change Calendar	Keisti kalendorių
 	Change Flow	Keisti srautą
+	Change Pool	Keisti grupę
 	Change the estimate	Keisti įvertį
 	Changes	Pakeitimai
 	Changing the time unit does not convert the times already in the model.	Pakeitus laiko vienetą, modelyje jau esančios laiko reikšmės nebus perskaičiuotos.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Eksportuoti lentelę (CSV)
 	Exported {file}	Eksportuota {file}
 	Expression	Išraiška
+	Failure interrupts the job	Gedimas pertraukia darbą
 	Family	Šeima
 	File	Failas
 	Finished at {time} {unit}	Baigta {time} {unit}
@@ -143,6 +156,7 @@
 	From	Iš
 	Gamma	Gama
 	Goes to	Veda į
+	Hands on finished parts while down	Gedimo metu perduoda baigtas detales
 	Help	Žinynas
 	Hide Others	Slėpti kitus
 	Hide {app}	Slėpti {app}
@@ -191,6 +205,7 @@
 	New model	Naujas modelis
 	New property	Nauja savybė
 	New property name	Naujos savybės pavadinimas
+	No arrivals outside calendars	Jokių atvykimų už kalendorių ribų
 	No blocks yet. Open a model, or add blocks to build one.	Blokų dar nėra. Atidarykite modelį arba pridėkite blokų ir jį sukurkite.
 	No connections yet: join blocks below.	Jungčių dar nėra: sujunkite žemiau esančius blokus.
 	No replication met the stop condition: each ran to its time limit.	Nė viena replikacija nepasiekė stabdymo sąlygos: kiekviena truko iki savo laiko ribos.
@@ -244,6 +259,8 @@
 	Redo {action}	Pakartoti {action}
 	Remove	Pašalinti
 	Remove Block	Pašalinti bloką
+	Remove Calendar	Pašalinti kalendorių
+	Remove Pool	Pašalinti grupę
 	Remove Property	Pašalinti savybę
 	Remove alternative {n}	Pašalinti alternatyvą {n}
 	Remove block	Pašalinti bloką
@@ -253,6 +270,7 @@
 	Removed {id}	Pašalinta {id}
 	Rename Block	Pervadinti bloką
 	Rename Model	Pervadinti modelį
+	Repair time	Remonto laikas
 	Replace Model	Pakeisti modelį
 	Replication 1 · {time} of {end} {unit}	Replikacija 1 · {time} iš {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikacija 1 · {time} iš {end} {unit} · įšilimas
@@ -290,6 +308,7 @@
 	Seed	Atsitiktinių skaičių sėkla
 	Select All	Žymėti viską
 	Select a block to see its queue over time.	Pasirinkite bloką, kad matytumėte jo eilę per laiką.
+	Sender waits during transfer	Siuntėjas laukia perdavimo metu
 	Separate the values with semicolons or spaces.	Atskirkite reikšmes kabliataškiais arba tarpais.
 	Service time	Aptarnavimo laikas
 	Services	Paslaugos
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalas siekia žemiau tikslinės dalies {share}, todėl 95 % patikimumu neparodyta, kad dalis pasiekta; daugiau replikacijų jį susiaurintų.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Vidutinis laikas iki stabdymo sąlygos skaičiuojamas tik iš replikacijų, kurios ją pasiekė; kitos truko iki savo laiko ribos.
 	The model changed, so watching stopped	Modelis pasikeitė, todėl stebėjimas baigtas
+	The model has no calendars yet.	Modelis dar neturi kalendorių.
 	The model now has the units sizing found	Modelyje dabar yra parinkimo rasti vienetai
 	The model: its experiment, connections and problems	Modelis: eksperimentas, jungtys ir problemos
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Replikacijų, ne didesnių už kiekvieną reikšmę, dalis. Juosta su {confidence} pasikliovimu apima tikrąjį skirstinį.
@@ -348,10 +368,12 @@
 	Time off shift	Laikas ne pamainoje
 	Time processing	Apdorojimo laikas
 	Time starved	Laikas be darbo
+	Time to failure	Laikas iki gedimo
 	Time to the stop condition	Laikas iki stabdymo sąlygos
 	Time unit	Laiko vienetas
 	To	Į
 	Tops	Viršutiniai kraštai
+	Transfer time	Perdavimo laikas
 	Trials	Bandymai
 	Triangular	Trikampis
 	Truncated normal	Apribotasis normalusis
@@ -363,6 +385,7 @@
 	Uniform	Tolygusis
 	Unit	Vienetas
 	Units	Vienetai
+	Units by calendar	Vienetai pagal kalendorių
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Vienetai, kuriuos bendrai naudoja kelios užduotys. Užduotis su bendrais ištekliais juos paima iš grupės arba pagal vaidmenį.
 	Untitled	Be pavadinimo
 	Untitled model	Modelis be pavadinimo

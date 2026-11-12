@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	在整個範圍內變化了 {change}：在偶然本身就可能造成的範圍內。
 	Actual size	實際大小
 	Add Block	新增區塊
+	Add Calendar	新增行事曆
+	Add Pool	新增資源池
 	Add a flow from…	新增順序流，來自…
 	Add a flow to…	新增順序流，通往…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	在最忙碌的任務或資源池上逐一增加單位，直到足夠多的重複執行達到目標。同時顯示所有時間取平均值時的答案；它通常偏小。
 	Add alternative	新增替代方案
+	Add calendar entry	新增行事曆項目
 	Add point	新增點
 	Add pool	新增資源池
 	Add property	新增屬性
@@ -40,9 +43,13 @@
 	Appearance	外觀
 	Arrival limit	到達上限
 	Arrivals	到達
+	Arrivals by calendar	依行事曆的到達
 	At least	至少
 	At most	至多
 	Availability	可用率
+	Availability by calendar	依行事曆的可用性
+	Available	可用
+	Available outside calendars	行事曆外可用
 	BPMN with BPSim	含 BPSim 的 BPMN
 	Back to the model (Esc)	返回模型 (Esc)
 	Batch	批次
@@ -53,11 +60,14 @@
 	Block	區塊
 	Boolean	布林值
 	Bottoms	底邊
+	Breakdowns	故障
+	Breakdowns and availability	故障與可用性
 	Bring All to Front	全部移到最前
 	Built with	使用以下技術建立
 	Busiest	最忙碌
 	By role	依角色
 	CSV table	CSV 表格
+	Calendar	行事曆
 	Cancel	取消
 	Cancel Run	取消執行
 	Cancel run	取消執行
@@ -65,7 +75,9 @@
 	Centres	水平置中
 	Change	變化
 	Change Block	變更區塊
+	Change Calendar	變更行事曆
 	Change Flow	變更順序流
+	Change Pool	變更資源池
 	Change the estimate	變更估計
 	Changes	變更
 	Changing the time unit does not convert the times already in the model.	變更時間單位不會換算模型中已有的時間值。
@@ -130,6 +142,7 @@
 	Export table (CSV)	匯出表格 (CSV)
 	Exported {file}	已匯出 {file}
 	Expression	運算式
+	Failure interrupts the job	故障中斷作業
 	Family	分配族
 	File	檔案
 	Finished at {time} {unit}	已於 {time} {unit} 結束
@@ -143,6 +156,7 @@
 	From	起點
 	Gamma	伽瑪分布
 	Goes to	流向
+	Hands on finished parts while down	故障時仍移交完成的工件
 	Help	說明
 	Hide Others	隱藏其他
 	Hide {app}	隱藏 {app}
@@ -191,6 +205,7 @@
 	New model	新增模型
 	New property	新增屬性
 	New property name	新屬性名稱
+	No arrivals outside calendars	行事曆外無到達
 	No blocks yet. Open a model, or add blocks to build one.	尚無區塊。請開啟模型，或新增區塊來建立模型。
 	No connections yet: join blocks below.	尚無連接：請在下方連接區塊。
 	No replication met the stop condition: each ran to its time limit.	沒有重複執行達到停止條件：每次都執行到時間上限。
@@ -244,6 +259,8 @@
 	Redo {action}	重做 {action}
 	Remove	移除
 	Remove Block	移除區塊
+	Remove Calendar	移除行事曆
+	Remove Pool	移除資源池
 	Remove Property	移除屬性
 	Remove alternative {n}	移除替代方案 {n}
 	Remove block	移除區塊
@@ -253,6 +270,7 @@
 	Removed {id}	已移除 {id}
 	Rename Block	重新命名區塊
 	Rename Model	重新命名模型
+	Repair time	維修時間
 	Replace Model	替換模型
 	Replication 1 · {time} of {end} {unit}	第 1 次重複執行 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	第 1 次重複執行 · {time} / {end} {unit} · 暖機期
@@ -290,6 +308,7 @@
 	Seed	隨機種子
 	Select All	全選
 	Select a block to see its queue over time.	選取一個區塊以查看其佇列隨時間的變化。
+	Sender waits during transfer	傳送期間發送端等待
 	Separate the values with semicolons or spaces.	請以分號或空格分隔各個值。
 	Service time	服務時間
 	Services	服務
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	該區間低於目標比例 {share}，因此未能以 95% 的信賴度顯示已達到該比例；更多的重複執行會使區間變窄。
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	到停止條件的平均時間只以達到停止條件的重複執行為準；其餘的執行到時間上限。
 	The model changed, so watching stopped	模型已變更，因此已停止觀察
+	The model has no calendars yet.	模型尚無行事曆。
 	The model now has the units sizing found	模型現在使用規模決定得出的數量
 	The model: its experiment, connections and problems	模型：實驗、連接和問題
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超過各值的重複執行比例。色帶以 {confidence} 的信賴度包含真實分配。
@@ -348,10 +368,12 @@
 	Time off shift	非當班時間
 	Time processing	加工時間
 	Time starved	待料時間
+	Time to failure	故障前時間
 	Time to the stop condition	到達停止條件的時間
 	Time unit	時間單位
 	To	終點
 	Tops	頂邊
+	Transfer time	傳送時間
 	Trials	試驗次數
 	Triangular	三角分布
 	Truncated normal	截斷常態分布
@@ -363,6 +385,7 @@
 	Uniform	均勻分布
 	Unit	單位
 	Units	數量
+	Units by calendar	依行事曆的數量
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	由多個任務共享的資源單元。需要共享資源的任務會依資源池或依角色取得這些單元。
 	Untitled	未命名
 	Untitled model	未命名模型

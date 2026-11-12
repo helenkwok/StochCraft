@@ -119,8 +119,8 @@ enum Node<'a> {
     Other,
 }
 
-/// The time unit, the region's numbers and the edits in progress, shared by the fields of one
-/// form.
+/// The time unit, the region's numbers, the model's calendars and the edits in progress, shared
+/// by the fields of one form.
 pub struct Cx<'a> {
     /// The model's time unit, for the fields that hold times.
     pub time_unit: &'a str,
@@ -128,6 +128,22 @@ pub struct Cx<'a> {
     pub numbers: &'a LocaleNumbers,
     /// Text being typed, by field key, until it commits.
     pub drafts: &'a mut HashMap<String, String>,
+    /// The model's calendars, id and name, for the fields that name one.
+    pub calendars: &'a [(String, String)],
+}
+
+/// The model's calendars, id and name, for [`Cx::calendars`].
+pub fn calendars(model: &Value) -> Vec<(String, String)> {
+    model["calendars"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(|c| {
+            let id = c["id"].as_str()?.to_owned();
+            let name = c["name"].as_str().unwrap_or("").to_owned();
+            Some((id, name))
+        })
+        .collect()
 }
 
 /// How a field reads: "std_dev" → "Standard deviation".
@@ -160,6 +176,19 @@ pub fn label(name: &str) -> String {
         "seed" => "Seed",
         "time_unit" => "Time unit",
         "type" => "Type",
+        "timed" => "Arrivals by calendar",
+        "idle_outside" => "No arrivals outside calendars",
+        "transfer" => "Transfer time",
+        "transfer_holds_sender" => "Sender waits during transfer",
+        "breakdown" => "Breakdowns",
+        "time_to_failure" => "Time to failure",
+        "repair" => "Repair time",
+        "interruptible" => "Failure interrupts the job",
+        "hands_on_while_down" => "Hands on finished parts while down",
+        "available" => "Available outside calendars",
+        "availability" => "Availability by calendar",
+        "shifts" => "Units by calendar",
+        "calendar" => "Calendar",
         _ => "",
     };
     if !known.is_empty() {
@@ -249,7 +278,8 @@ fn edit(
     nullable: bool,
 ) -> Option<Value> {
     match schema.non_null(node) {
-        Node::Tagged(n) => tagged(ui, cx, schema, n, key, label, current),
+        Node::Tagged(n) => tagged(ui, cx, schema, n, key, label, current, nullable),
+        Node::Typed(n, "object") => object(ui, cx, schema, n, key, label, help, current, nullable),
         Node::Enum(options) => row(ui, label, help, |ui| {
             let now = current.as_str().unwrap_or("");
             let mut picked = None;
@@ -266,8 +296,13 @@ fn edit(
                 .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, label));
             picked
         }),
-        Node::Typed(_, "boolean") => {
-            let mut b = current.as_bool().unwrap_or(false);
+        Node::Typed(n, "boolean") => {
+            // Left out, a setting has the schema's default (`hands_on_while_down` is true).
+            let mut b = current
+                .as_bool()
+                .or_else(|| node["default"].as_bool())
+                .or_else(|| n["default"].as_bool())
+                .unwrap_or(false);
             let r = ui.checkbox(&mut b, label);
             let r = match help {
                 Some(h) => r.on_hover_text(h),
@@ -318,7 +353,18 @@ fn edit(
                 })
             }
         }
-        Node::Typed(n, "array") => array(ui, cx, schema, n, key, label, current, time),
+        Node::Typed(n, "array") => {
+            let item = schema.resolve(&n["items"]);
+            let numbers = item["properties"].as_object().is_some_and(|m| {
+                m.values()
+                    .all(|p| matches!(p["type"].as_str(), Some("number" | "integer")))
+            });
+            if numbers {
+                array(ui, cx, schema, n, key, label, current, time)
+            } else {
+                records(ui, cx, schema, item, key, label, help, current)
+            }
+        }
         Node::Keyed(n) => keyed(ui, cx, schema, n, key, label, current, time),
         Node::Typed(_, "string") => row(ui, label, help, |ui| {
             text(ui, cx, key, label, current, 260.0)
@@ -432,7 +478,9 @@ fn number(
     out
 }
 
-/// A tagged union (a distribution): its kind as a choice, then the chosen kind's fields.
+/// A tagged union (a distribution): its kind as a choice, then the chosen kind's fields. When
+/// `nullable`, the first choice is None (a transfer time that can be removed).
+#[allow(clippy::too_many_arguments)]
 fn tagged(
     ui: &mut egui::Ui,
     cx: &mut Cx<'_>,
@@ -441,6 +489,7 @@ fn tagged(
     key: &str,
     label: &str,
     current: &Value,
+    nullable: bool,
 ) -> Option<Value> {
     let variants: Vec<&Value> = node["oneOf"].as_array().into_iter().flatten().collect();
     let tag_of = |v: &Value| v["properties"]["type"]["const"].as_str().map(str::to_owned);
@@ -449,10 +498,21 @@ fn tagged(
 
     let picked = row(ui, label, node["description"].as_str(), |ui| {
         let mut picked = None;
+        let shown = if nullable && current.is_null() {
+            t("None").to_owned()
+        } else {
+            choice_label(&now)
+        };
         craft_ui::ComboBox::from_id_salt(key)
-            .selected_text(choice_label(&now))
+            .selected_text(shown)
             .width(170.0)
             .show_ui(ui, |ui| {
+                if nullable
+                    && ui.selectable_label(current.is_null(), t("None")).clicked()
+                    && !current.is_null()
+                {
+                    out = Some(Value::Null);
+                }
                 for v in &variants {
                     if let Some(tag) = tag_of(v) {
                         let r = ui.selectable_label(tag == now, choice_label(&tag));
@@ -560,6 +620,267 @@ fn default_variant(variant: &Value, tag: &str, current: &Value) -> Value {
         obj.insert(f.clone(), v);
     }
     Value::Object(obj)
+}
+
+/// A first value for a field being turned on or a row being added: the schema's required fields,
+/// a distribution as an exponential with mean 1, a setting at its default.
+fn first_value(schema: Schema<'_>, node: &Value) -> Value {
+    match schema.non_null(node) {
+        Node::Tagged(n) => {
+            let variants: Vec<&Value> = n["oneOf"].as_array().into_iter().flatten().collect();
+            fn tag_of(v: &Value) -> Option<&str> {
+                v["properties"]["type"]["const"].as_str()
+            }
+            variants
+                .iter()
+                .find(|v| tag_of(v) == Some("exponential"))
+                .or_else(|| variants.first())
+                .and_then(|v| Some(default_variant(v, tag_of(v)?, &Value::Null)))
+                .unwrap_or(Value::Null)
+        }
+        Node::Typed(n, "object") => {
+            let mut obj = Map::new();
+            for f in n["required"].as_array().into_iter().flatten() {
+                if let Some(f) = f.as_str() {
+                    obj.insert(f.to_owned(), first_value(schema, &n["properties"][f]));
+                }
+            }
+            Value::Object(obj)
+        }
+        Node::Typed(n, "boolean") => json!(
+            node["default"]
+                .as_bool()
+                .or_else(|| n["default"].as_bool())
+                .unwrap_or(false)
+        ),
+        Node::Typed(_, "number" | "integer") => json!(1),
+        Node::Typed(_, "array") => json!([]),
+        Node::Typed(_, "string") => json!(""),
+        Node::Enum(options) => options.first().map_or(Value::Null, |o| json!(o)),
+        Node::Keyed(_) => json!({"number": 1.0}),
+        _ => Value::Null,
+    }
+}
+
+/// Whether property `f` of an object may be left out or `null` (an `Option` field).
+fn optional_field(schema: Schema<'_>, object: &Value, f: &str) -> bool {
+    let required = object["required"]
+        .as_array()
+        .is_some_and(|r| r.iter().any(|x| x == f));
+    let node = schema.resolve(&object["properties"][f]);
+    let null = node["anyOf"]
+        .as_array()
+        .is_some_and(|a| a.iter().any(|s| s["type"] == "null"))
+        || node["type"]
+            .as_array()
+            .is_some_and(|a| a.iter().any(|t| t == "null"));
+    !required && null
+}
+
+/// An object (a server's breakdowns): its fields, indented under its label, required ones first.
+/// When `nullable`, a checkbox beside the label turns it on (with a first value) or off.
+#[allow(clippy::too_many_arguments)]
+fn object(
+    ui: &mut egui::Ui,
+    cx: &mut Cx<'_>,
+    schema: Schema<'_>,
+    node: &Value,
+    key: &str,
+    label: &str,
+    help: Option<&str>,
+    current: &Value,
+    nullable: bool,
+) -> Option<Value> {
+    let mut out = None;
+    if nullable {
+        let mut on = !current.is_null();
+        out = row(ui, label, help, |ui| {
+            let r = ui.checkbox(&mut on, "").on_hover_text(t("Set a value"));
+            let ticked = on;
+            r.widget_info(|| egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, label));
+            if !on {
+                ui.label(theme::weak(ui, t("None")));
+            }
+            r.changed().then(|| {
+                if on {
+                    first_value(schema, node)
+                } else {
+                    Value::Null
+                }
+            })
+        });
+        if current.is_null() {
+            return out;
+        }
+    } else {
+        ui.label(theme::strong(label));
+    }
+    let fields: Vec<&str> = node["required"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+        .chain(
+            node["properties"]
+                .as_object()
+                .into_iter()
+                .flat_map(|m| m.keys().map(String::as_str)),
+        )
+        .fold(Vec::new(), |mut acc, f| {
+            if !acc.contains(&f) {
+                acc.push(f);
+            }
+            acc
+        });
+    ui.indent(key, |ui| {
+        for f in fields {
+            let fnode = &node["properties"][f];
+            let changed = edit(
+                ui,
+                cx,
+                schema,
+                fnode,
+                &format!("{key}/{f}"),
+                &label_for(f),
+                fnode["description"].as_str(),
+                &current[f],
+                false,
+                optional_field(schema, node, f),
+            );
+            if let Some(nv) = changed {
+                let mut obj = current.as_object().cloned().unwrap_or_default();
+                if nv.is_null() {
+                    obj.remove(f);
+                } else {
+                    obj.insert(f.to_owned(), nv);
+                }
+                out = Some(Value::Object(obj));
+            }
+        }
+    });
+    out
+}
+
+/// A list of settings that each apply while a calendar is active (a server's availability, a
+/// source's arrivals, a pool's shifts): one entry per calendar, its calendar chosen from the
+/// model's, with a remove button, and a button to add one.
+#[allow(clippy::too_many_arguments)]
+fn records(
+    ui: &mut egui::Ui,
+    cx: &mut Cx<'_>,
+    schema: Schema<'_>,
+    item: &Value,
+    key: &str,
+    label: &str,
+    help: Option<&str>,
+    current: &Value,
+) -> Option<Value> {
+    let items = current.as_array().cloned().unwrap_or_default();
+    let mut out: Option<Vec<Value>> = None;
+    let r = ui.label(theme::strong(label));
+    if let Some(h) = help {
+        r.on_hover_text(h);
+    }
+    let fields: Vec<String> = item["properties"]
+        .as_object()
+        .map(|m| m.keys().filter(|k| *k != "calendar").cloned().collect())
+        .unwrap_or_default();
+    let calendars = cx.calendars.to_vec();
+    let name_of = |id: &str| {
+        calendars.iter().find(|(i, _)| i == id).map_or_else(
+            || id.to_owned(),
+            |(i, n)| if n.is_empty() { i.clone() } else { n.clone() },
+        )
+    };
+    let used = |id: &str| items.iter().any(|it| it["calendar"] == id);
+    ui.indent(key, |ui| {
+        for (i, it) in items.iter().enumerate() {
+            let k = format!("{key}/{i}");
+            ui.horizontal(|ui| {
+                let cal_label = label_for("calendar");
+                label_cell(ui, cal_label.as_str(), 26.0);
+                let now = it["calendar"].as_str().unwrap_or("");
+                craft_ui::ComboBox::from_id_salt(format!("{k}/calendar"))
+                    .selected_text(name_of(now))
+                    .width(170.0)
+                    .show_ui(ui, |ui| {
+                        for (id, _) in &calendars {
+                            // The first active entry applies, so each calendar has one entry.
+                            let taken = id != now && used(id);
+                            if ui
+                                .add_enabled(
+                                    !taken,
+                                    egui::Button::selectable(id == now, name_of(id)),
+                                )
+                                .clicked()
+                                && id != now
+                            {
+                                let mut all = out.clone().unwrap_or_else(|| items.clone());
+                                all[i]["calendar"] = json!(id);
+                                out = Some(all);
+                            }
+                        }
+                    })
+                    .response
+                    .widget_info(|| {
+                        egui::WidgetInfo::labeled(
+                            egui::Role::ComboBox,
+                            true,
+                            format!("{cal_label} {}", i + 1),
+                        )
+                    });
+                if ui.small_button(t("Remove")).clicked() {
+                    let mut all = out.clone().unwrap_or_else(|| items.clone());
+                    all.remove(i);
+                    out = Some(all);
+                }
+            });
+            ui.indent(&k, |ui| {
+                for f in &fields {
+                    let fnode = &item["properties"][f.as_str()];
+                    // Within an entry, "available" is the entry's own setting.
+                    let flabel = if f == "available" {
+                        t("Available").to_owned()
+                    } else {
+                        label_for(f)
+                    };
+                    if let Some(v) = edit(
+                        ui,
+                        cx,
+                        schema,
+                        fnode,
+                        &format!("{k}/{f}"),
+                        &flabel,
+                        fnode["description"].as_str(),
+                        &it[f.as_str()],
+                        false,
+                        false,
+                    ) {
+                        let mut all = out.clone().unwrap_or_else(|| items.clone());
+                        all[i][f.as_str()] = v;
+                        out = Some(all);
+                    }
+                }
+            });
+        }
+        match calendars.iter().find(|(id, _)| !used(id)) {
+            Some((first, _)) => {
+                if ui.small_button(t("Add calendar entry")).clicked() {
+                    let mut all = out.clone().unwrap_or_else(|| items.clone());
+                    let mut new = first_value(schema, item);
+                    new["calendar"] = json!(first);
+                    all.push(new);
+                    out = Some(all);
+                }
+            }
+            None if calendars.is_empty() => {
+                ui.label(theme::weak(ui, t("The model has no calendars yet.")));
+            }
+            // Every calendar has its entry.
+            None => {}
+        }
+    });
+    out.map(Value::Array)
 }
 
 /// An array of objects (a user distribution's points): one row each, with a remove button, and

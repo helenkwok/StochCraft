@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Über den Bereich änderte es sich um {change}: im Rahmen dessen, was der Zufall allein bewirken kann.
 	Actual size	Originalgröße
 	Add Block	Block hinzufügen
+	Add Calendar	Kalender hinzufügen
+	Add Pool	Pool hinzufügen
 	Add a flow from…	Verbindung hinzufügen von…
 	Add a flow to…	Verbindung hinzufügen zu…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Am meistbelasteten Arbeitsschritt oder Pool eine Einheit hinzufügen, bis genug Replikationen ein Ziel erreichen. Die Antwort mit jeder Zeit auf ihrem Mittelwert wird ebenfalls gezeigt; sie ist meist zu klein.
 	Add alternative	Alternative hinzufügen
+	Add calendar entry	Kalendereintrag hinzufügen
 	Add point	Punkt hinzufügen
 	Add pool	Pool hinzufügen
 	Add property	Eigenschaft hinzufügen
@@ -40,9 +43,13 @@
 	Appearance	Erscheinungsbild
 	Arrival limit	Ankunftsgrenze
 	Arrivals	Ankünfte
+	Arrivals by calendar	Ankünfte nach Kalender
 	At least	Mindestens
 	At most	Höchstens
 	Availability	Verfügbarkeit
+	Availability by calendar	Verfügbarkeit nach Kalender
+	Available	Verfügbar
+	Available outside calendars	Außerhalb der Kalender verfügbar
 	BPMN with BPSim	BPMN mit BPSim
 	Back to the model (Esc)	Zurück zum Modell (Esc)
 	Batch	Charge
@@ -53,11 +60,14 @@
 	Block	Block
 	Boolean	Boolesch
 	Bottoms	Unterkanten
+	Breakdowns	Ausfälle
+	Breakdowns and availability	Ausfälle und Verfügbarkeit
 	Bring All to Front	Alle nach vorne bringen
 	Built with	Erstellt mit
 	Busiest	Am meisten belastet
 	By role	Nach Rolle
 	CSV table	CSV-Tabelle
+	Calendar	Kalender
 	Cancel	Abbrechen
 	Cancel Run	Simulation abbrechen
 	Cancel run	Simulation abbrechen
@@ -65,7 +75,9 @@
 	Centres	Horizontal zentriert
 	Change	Änderung
 	Change Block	Block ändern
+	Change Calendar	Kalender ändern
 	Change Flow	Verbindung ändern
+	Change Pool	Pool ändern
 	Change the estimate	Schätzung ändern
 	Changes	Änderungen
 	Changing the time unit does not convert the times already in the model.	Beim Ändern der Zeiteinheit werden bereits vorhandene Zeiten im Modell nicht umgerechnet.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Tabelle exportieren (CSV)
 	Exported {file}	{file} exportiert
 	Expression	Ausdruck
+	Failure interrupts the job	Ausfall unterbricht die Bearbeitung
 	Family	Familie
 	File	Datei
 	Finished at {time} {unit}	Beendet bei {time} {unit}
@@ -143,6 +156,7 @@
 	From	Von
 	Gamma	Gamma
 	Goes to	Geht zu
+	Hands on finished parts while down	Gibt fertige Teile auch im Ausfall weiter
 	Help	Hilfe
 	Hide Others	Andere ausblenden
 	Hide {app}	{app} ausblenden
@@ -191,6 +205,7 @@
 	New model	Neues Modell
 	New property	Neue Eigenschaft
 	New property name	Name der neuen Eigenschaft
+	No arrivals outside calendars	Keine Ankünfte außerhalb der Kalender
 	No blocks yet. Open a model, or add blocks to build one.	Noch keine Blöcke. Öffnen Sie ein Modell oder fügen Sie Blöcke hinzu.
 	No connections yet: join blocks below.	Noch keine Verbindungen: Verbinden Sie die Blöcke unten.
 	No replication met the stop condition: each ran to its time limit.	Keine Replikation hat die Abbruchbedingung erreicht: jede lief bis zu ihrem Zeitlimit.
@@ -244,6 +259,8 @@
 	Redo {action}	{action} wiederholen
 	Remove	Entfernen
 	Remove Block	Block entfernen
+	Remove Calendar	Kalender entfernen
+	Remove Pool	Pool entfernen
 	Remove Property	Eigenschaft entfernen
 	Remove alternative {n}	Alternative {n} entfernen
 	Remove block	Block entfernen
@@ -253,6 +270,7 @@
 	Removed {id}	{id} entfernt
 	Rename Block	Block umbenennen
 	Rename Model	Modell umbenennen
+	Repair time	Reparaturzeit
 	Replace Model	Modell ersetzen
 	Replication 1 · {time} of {end} {unit}	Replikation 1 · {time} von {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikation 1 · {time} von {end} {unit} · Einschwingphase
@@ -290,6 +308,7 @@
 	Seed	Startwert
 	Select All	Alles auswählen
 	Select a block to see its queue over time.	Wählen Sie einen Block, um seine Warteschlange über die Zeit zu sehen.
+	Sender waits during transfer	Absender wartet während des Transfers
 	Separate the values with semicolons or spaces.	Trennen Sie die Werte durch Semikolons oder Leerzeichen.
 	Service time	Bearbeitungszeit
 	Services	Dienste
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Das Intervall reicht unter den Zielanteil von {share}, daher ist nicht mit 95 % Konfidenz gezeigt, dass der Anteil erreicht wird; mehr Replikationen würden es verengen.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Die mittlere Zeit bis zur Abbruchbedingung bezieht sich nur auf die Replikationen, die sie erreicht haben; die übrigen liefen bis zu ihrem Zeitlimit.
 	The model changed, so watching stopped	Das Modell wurde geändert, daher wurde das Beobachten beendet
+	The model has no calendars yet.	Das Modell hat noch keine Kalender.
 	The model now has the units sizing found	Das Modell hat jetzt die bei der Bemessung gefundenen Einheiten
 	The model: its experiment, connections and problems	Das Modell: Experiment, Verbindungen und Probleme
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Der Anteil der Replikationen bei oder unter jedem Wert. Das Band enthält die wahre Verteilung mit {confidence} Konfidenz.
@@ -348,10 +368,12 @@
 	Time off shift	Zeit außerhalb der Schicht
 	Time processing	Zeit in Bearbeitung
 	Time starved	Zeit ohne Arbeit
+	Time to failure	Zeit bis zum Ausfall
 	Time to the stop condition	Zeit bis zur Abbruchbedingung
 	Time unit	Zeiteinheit
 	To	Nach
 	Tops	Oberkanten
+	Transfer time	Transferzeit
 	Trials	Versuche
 	Triangular	Dreiecksverteilung
 	Truncated normal	Gestutzte Normalverteilung
@@ -363,6 +385,7 @@
 	Uniform	Gleichverteilung
 	Unit	Einheit
 	Units	Einheiten
+	Units by calendar	Einheiten nach Kalender
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Einheiten, die sich mehrere Aufgaben teilen. Eine Aufgabe mit gemeinsamen Ressourcen belegt sie nach Pool oder nach Rolle.
 	Untitled	Unbenannt
 	Untitled model	Unbenanntes Modell

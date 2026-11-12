@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	ຕະຫຼອດຊ່ວງປ່ຽນໄປ {change}: ຢູ່ໃນຂອບເຂດທີ່ຄວາມບັງເອີນຢ່າງດຽວກໍເຮັດໄດ້.
 	Actual size	ຂະໜາດຕົວຈິງ
 	Add Block	ເພີ່ມບລັອກ
+	Add Calendar	ເພີ່ມປະຕິທິນ
+	Add Pool	ເພີ່ມກຸ່ມຊັບພະຍາກອນ
 	Add a flow from…	ເພີ່ມເສັ້ນທາງຈາກ…
 	Add a flow to…	ເພີ່ມເສັ້ນທາງໄປຫາ…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	ເພີ່ມໜຶ່ງໜ່ວຍໃຫ້ວຽກ ຫຼື ກຸ່ມທີ່ຫຍຸ້ງທີ່ສຸດ ຈົນກວ່າຮອບຈຳລອງຊ້ຳຈະບັນລຸເປົ້າໝາຍພຽງພໍ. ສະແດງຄຳຕອບທີ່ທຸກເວລາເທົ່າກັບຄ່າສະເລ່ຍນຳ, ເຊິ່ງມັກນ້ອຍເກີນໄປ.
 	Add alternative	ເພີ່ມທາງເລືອກ
+	Add calendar entry	ເພີ່ມລາຍການປະຕິທິນ
 	Add point	ເພີ່ມຈຸດ
 	Add pool	ເພີ່ມກຸ່ມຊັບພະຍາກອນ
 	Add property	ເພີ່ມຄຸນສົມບັດ
@@ -40,9 +43,13 @@
 	Appearance	ຮູບລັກສະນະ
 	Arrival limit	ຂີດຈຳກັດການມາຮອດ
 	Arrivals	ການມາຮອດ
+	Arrivals by calendar	ການມາຮອດຕາມປະຕິທິນ
 	At least	ຢ່າງໜ້ອຍ
 	At most	ຢ່າງຫຼາຍ
 	Availability	ອັດຕາຄວາມພ້ອມໃຊ້
+	Availability by calendar	ຄວາມພ້ອມໃຊ້ຕາມປະຕິທິນ
+	Available	ພ້ອມໃຊ້
+	Available outside calendars	ພ້ອມໃຊ້ນອກປະຕິທິນ
 	BPMN with BPSim	BPMN ພ້ອມ BPSim
 	Back to the model (Esc)	ກັບໄປຫາແບບຈຳລອງ (Esc)
 	Batch	ຊຸດ
@@ -53,11 +60,14 @@
 	Block	ບລັອກ
 	Boolean	ບູລີນ
 	Bottoms	ຂອບລຸ່ມ
+	Breakdowns	ການເສຍ
+	Breakdowns and availability	ການເສຍ ແລະ ຄວາມພ້ອມໃຊ້
 	Bring All to Front	ນຳທັງໝົດມາໄວ້ດ້ານໜ້າ
 	Built with	ສ້າງດ້ວຍ
 	Busiest	ຫຍຸ້ງທີ່ສຸດ
 	By role	ຕາມບົດບາດ
 	CSV table	ຕາຕະລາງ CSV
+	Calendar	ປະຕິທິນ
 	Cancel	ຍົກເລີກ
 	Cancel Run	ຍົກເລີກການປະມວນຜົນ
 	Cancel run	ຍົກເລີກການປະມວນຜົນ
@@ -65,7 +75,9 @@
 	Centres	ກາງແນວນອນ
 	Change	ການປ່ຽນແປງ
 	Change Block	ປ່ຽນບລັອກ
+	Change Calendar	ປ່ຽນປະຕິທິນ
 	Change Flow	ປ່ຽນເສັ້ນທາງ
+	Change Pool	ປ່ຽນກຸ່ມຊັບພະຍາກອນ
 	Change the estimate	ປ່ຽນການປະມານ
 	Changes	ການປ່ຽນແປງ
 	Changing the time unit does not convert the times already in the model.	ການປ່ຽນໜ່ວຍເວລາຈະບໍ່ແປງຄ່າເວລາທີ່ມີຢູ່ໃນແບບຈຳລອງ.
@@ -130,6 +142,7 @@
 	Export table (CSV)	ສົ່ງອອກຕາຕະລາງ (CSV)
 	Exported {file}	ສົ່ງອອກ {file} ແລ້ວ
 	Expression	ນິພົດ
+	Failure interrupts the job	ການເສຍຂັດຈັງຫວະວຽກ
 	Family	ຕະກູນ
 	File	ໄຟລ໌
 	Finished at {time} {unit}	ສິ້ນສຸດທີ່ {time} {unit}
@@ -143,6 +156,7 @@
 	From	ຈາກ
 	Gamma	ແກມມາ
 	Goes to	ໄປຫາ
+	Hands on finished parts while down	ສົ່ງຕໍ່ຊິ້ນທີ່ສຳເລັດແລ້ວແມ່ນແຕ່ໃນຂະນະເສຍ
 	Help	ຊ່ວຍເຫຼືອ
 	Hide Others	ເຊື່ອງລາຍການອື່ນ
 	Hide {app}	ເຊື່ອງ {app}
@@ -191,6 +205,7 @@
 	New model	ແບບຈຳລອງໃໝ່
 	New property	ຄຸນສົມບັດໃໝ່
 	New property name	ຊື່ຄຸນສົມບັດໃໝ່
+	No arrivals outside calendars	ບໍ່ມີການມາຮອດນອກປະຕິທິນ
 	No blocks yet. Open a model, or add blocks to build one.	ຍັງບໍ່ມີບລັອກ. ເປີດແບບຈຳລອງ ຫຼື ເພີ່ມບລັອກເພື່ອສ້າງໃໝ່.
 	No connections yet: join blocks below.	ຍັງບໍ່ມີການເຊື່ອມຕໍ່: ເຊື່ອມບລັອກດ້ານລຸ່ມ.
 	No replication met the stop condition: each ran to its time limit.	ບໍ່ມີຮອບຈຳລອງຊ້ຳໃດຮອດເງື່ອນໄຂຢຸດ: ທຸກຮອບແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
@@ -244,6 +259,8 @@
 	Redo {action}	ເຮັດ {action} ຊ້ຳ
 	Remove	ລຶບ
 	Remove Block	ລຶບບລັອກ
+	Remove Calendar	ລຶບປະຕິທິນ
+	Remove Pool	ລຶບກຸ່ມຊັບພະຍາກອນ
 	Remove Property	ລຶບຄຸນສົມບັດ
 	Remove alternative {n}	ລຶບທາງເລືອກ {n}
 	Remove block	ລຶບບລັອກ
@@ -253,6 +270,7 @@
 	Removed {id}	ລຶບ {id} ແລ້ວ
 	Rename Block	ປ່ຽນຊື່ບລັອກ
 	Rename Model	ປ່ຽນຊື່ແບບຈຳລອງ
+	Repair time	ເວລາສ້ອມແປງ
 	Replace Model	ແທນທີ່ແບບຈຳລອງ
 	Replication 1 · {time} of {end} {unit}	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit} · ໄລຍະອຸ່ນເຄື່ອງ
@@ -290,6 +308,7 @@
 	Seed	ເມັດສຸ່ມ
 	Select All	ເລືອກທັງໝົດ
 	Select a block to see its queue over time.	ເລືອກບລັອກເພື່ອເບິ່ງຄິວຂອງມັນຕາມເວລາ.
+	Sender waits during transfer	ຜູ້ສົ່ງລໍຖ້າລະຫວ່າງຂົນຍ້າຍ
 	Separate the values with semicolons or spaces.	ຂັ້ນຄ່າດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ.
 	Service time	ເວລາໃຫ້ບໍລິການ
 	Services	ບໍລິການ
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ຊ່ວງນີ້ລົງຕ່ຳກວ່າສັດສ່ວນເປົ້າໝາຍ {share}, ຈຶ່ງບໍ່ໄດ້ສະແດງດ້ວຍຄວາມເຊື່ອໝັ້ນ 95% ວ່າບັນລຸສັດສ່ວນນັ້ນ; ຮອບຈຳລອງຊ້ຳຫຼາຍຂຶ້ນຈະເຮັດໃຫ້ຊ່ວງແຄບລົງ.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ເວລາສະເລ່ຍຈົນຮອດເງື່ອນໄຂຢຸດ ຄິດສະເພາະຮອບຈຳລອງຊ້ຳທີ່ຮອດເງື່ອນໄຂ; ຮອບອື່ນແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
 	The model changed, so watching stopped	ແບບຈຳລອງປ່ຽນໄປ ຈຶ່ງຢຸດຕິດຕາມ
+	The model has no calendars yet.	ແບບຈຳລອງຍັງບໍ່ມີປະຕິທິນ.
 	The model now has the units sizing found	ຕອນນີ້ແບບຈຳລອງມີຈຳນວນໜ່ວຍທີ່ການກຳນົດຂະໜາດພົບແລ້ວ
 	The model: its experiment, connections and problems	ແບບຈຳລອງ: ການທົດລອງ ການເຊື່ອມຕໍ່ ແລະ ບັນຫາ
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ສັດສ່ວນຮອບຈຳລອງຊ້ຳທີ່ເທົ່າກັບ ຫຼື ຕ່ຳກວ່າແຕ່ລະຄ່າ. ແຖບຄອບຄຸມການແຈກຢາຍແທ້ດ້ວຍຄວາມເຊື່ອໝັ້ນ {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	ເວລານອກກະ
 	Time processing	ເວລາປະມວນຜົນ
 	Time starved	ເວລາບໍ່ມີວຽກ
+	Time to failure	ເວລາຈົນກວ່າຈະເສຍ
 	Time to the stop condition	ເວລາຈົນຮອດເງື່ອນໄຂຢຸດ
 	Time unit	ໜ່ວຍເວລາ
 	To	ໄປຫາ
 	Tops	ຂອບເທິງ
+	Transfer time	ເວລາຂົນຍ້າຍ
 	Trials	ຈຳນວນຄັ້ງທົດລອງ
 	Triangular	ສາມຫຼ່ຽມ
 	Truncated normal	ນໍມອນແບບຕັດຂອບ
@@ -363,6 +385,7 @@
 	Uniform	ແຈກຢາຍສະໝ່ຳສະເໝີ
 	Unit	ໜ່ວຍ
 	Units	ຈຳນວນໜ່ວຍ
+	Units by calendar	ຈຳນວນໜ່ວຍຕາມປະຕິທິນ
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	ໜ່ວຍທີ່ຫຼາຍໜ້າວຽກໃຊ້ຮ່ວມກັນ. ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນຮ່ວມກັນຈະເອົາໜ່ວຍເຫຼົ່ານີ້ຕາມກຸ່ມ ຫຼື ຕາມບົດບາດ.
 	Untitled	ບໍ່ມີຊື່
 	Untitled model	ແບບຈຳລອງບໍ່ມີຊື່

@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	V rozsahu sa zmenil o {change}: v medziach toho, čo dokáže samotná náhoda.
 	Actual size	Skutočná veľkosť
 	Add Block	Pridať blok
+	Add Calendar	Pridať kalendár
+	Add Pool	Pridať skupinu
 	Add a flow from…	Pridať tok z…
 	Add a flow to…	Pridať tok do…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Pridávať jednotku pri najvyťaženejšej úlohe alebo fonde, kým dosť replikácií nesplní cieľ. Zobrazí sa aj odpoveď s každým časom na priemere; býva príliš malá.
 	Add alternative	Pridať alternatívu
+	Add calendar entry	Pridať položku kalendára
 	Add point	Pridať bod
 	Add pool	Pridať skupinu
 	Add property	Pridať vlastnosť
@@ -40,9 +43,13 @@
 	Appearance	Vzhľad
 	Arrival limit	Limit príchodov
 	Arrivals	Príchody
+	Arrivals by calendar	Príchody podľa kalendára
 	At least	Aspoň
 	At most	Najviac
 	Availability	Pohotovosť
+	Availability by calendar	Dostupnosť podľa kalendára
+	Available	Dostupné
+	Available outside calendars	Dostupné mimo kalendárov
 	BPMN with BPSim	BPMN s BPSim
 	Back to the model (Esc)	Späť k modelu (Esc)
 	Batch	Dávka
@@ -53,11 +60,14 @@
 	Block	Blok
 	Boolean	Logická hodnota
 	Bottoms	Spodné okraje
+	Breakdowns	Poruchy
+	Breakdowns and availability	Poruchy a dostupnosť
 	Bring All to Front	Presunúť všetko dopredu
 	Built with	Vytvorené pomocou
 	Busiest	Najvyťaženejší
 	By role	Podľa roly
 	CSV table	Tabuľka CSV
+	Calendar	Kalendár
 	Cancel	Zrušiť
 	Cancel Run	Zrušiť beh
 	Cancel run	Zrušiť beh
@@ -65,7 +75,9 @@
 	Centres	Vodorovné stredy
 	Change	Zmena
 	Change Block	Zmeniť blok
+	Change Calendar	Zmeniť kalendár
 	Change Flow	Zmeniť tok
+	Change Pool	Zmeniť skupinu
 	Change the estimate	Zmeniť odhad
 	Changes	Zmeny
 	Changing the time unit does not convert the times already in the model.	Zmena časovej jednotky neprepočíta časy, ktoré už sú v modeli.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Exportovať tabuľku (CSV)
 	Exported {file}	Exportované {file}
 	Expression	Výraz
+	Failure interrupts the job	Porucha preruší prácu
 	Family	Rodina
 	File	Súbor
 	Finished at {time} {unit}	Dokončené v čase {time} {unit}
@@ -143,6 +156,7 @@
 	From	Z
 	Gamma	Gama
 	Goes to	Vedie do
+	Hands on finished parts while down	Odovzdáva hotové diely aj počas poruchy
 	Help	Pomocník
 	Hide Others	Skryť ostatné
 	Hide {app}	Skryť {app}
@@ -191,6 +205,7 @@
 	New model	Nový model
 	New property	Nová vlastnosť
 	New property name	Názov novej vlastnosti
+	No arrivals outside calendars	Žiadne príchody mimo kalendárov
 	No blocks yet. Open a model, or add blocks to build one.	Zatiaľ žiadne bloky. Otvorte model alebo pridajte bloky na jeho vytvorenie.
 	No connections yet: join blocks below.	Zatiaľ žiadne prepojenia: prepojte bloky nižšie.
 	No replication met the stop condition: each ran to its time limit.	Žiadna replikácia nesplnila podmienku zastavenia: každá bežala do svojho časového limitu.
@@ -244,6 +259,8 @@
 	Redo {action}	Znova vykonať {action}
 	Remove	Odstrániť
 	Remove Block	Odstrániť blok
+	Remove Calendar	Odstrániť kalendár
+	Remove Pool	Odstrániť skupinu
 	Remove Property	Odstrániť vlastnosť
 	Remove alternative {n}	Odstrániť alternatívu {n}
 	Remove block	Odstrániť blok
@@ -253,6 +270,7 @@
 	Removed {id}	Odstránené {id}
 	Rename Block	Premenovať blok
 	Rename Model	Premenovať model
+	Repair time	Čas opravy
 	Replace Model	Nahradiť model
 	Replication 1 · {time} of {end} {unit}	Replikácia 1 · {time} z {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikácia 1 · {time} z {end} {unit} · zahrievanie
@@ -290,6 +308,7 @@
 	Seed	Počiatočná hodnota generátora
 	Select All	Vybrať všetko
 	Select a block to see its queue over time.	Vyberte blok, aby ste videli jeho front v čase.
+	Sender waits during transfer	Odosielateľ čaká počas presunu
 	Separate the values with semicolons or spaces.	Oddeľte hodnoty bodkočiarkami alebo medzerami.
 	Service time	Čas obsluhy
 	Services	Služby
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval siaha pod cieľový podiel {share}, takže splnenie podielu nie je preukázané s 95 % spoľahlivosťou; viac replikácií by ho zúžilo.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Priemerný čas do podmienky zastavenia je iba z replikácií, ktoré ju splnili; ostatné bežali do svojho časového limitu.
 	The model changed, so watching stopped	Model sa zmenil, preto sa sledovanie ukončilo
+	The model has no calendars yet.	Model zatiaľ nemá žiadne kalendáre.
 	The model now has the units sizing found	Model má teraz jednotky nájdené dimenzovaním
 	The model: its experiment, connections and problems	Model: experiment, prepojenia a problémy
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Podiel replikácií rovných alebo menších než každá hodnota. Pás obsahuje skutočné rozdelenie so spoľahlivosťou {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Čas mimo zmeny
 	Time processing	Čas spracovania
 	Time starved	Čas bez práce
+	Time to failure	Čas do poruchy
 	Time to the stop condition	Čas do podmienky zastavenia
 	Time unit	Časová jednotka
 	To	Do
 	Tops	Horné okraje
+	Transfer time	Čas presunu
 	Trials	Pokusy
 	Triangular	Trojuholníkové
 	Truncated normal	Orezané normálne
@@ -363,6 +385,7 @@
 	Uniform	Rovnomerné
 	Unit	Jednotka
 	Units	Jednotky
+	Units by calendar	Jednotky podľa kalendára
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Jednotky, ktoré zdieľa viacero úloh. Úloha so zdieľanými zdrojmi ich berie podľa skupiny alebo podľa roly.
 	Untitled	Bez názvu
 	Untitled model	Nepomenovaný model

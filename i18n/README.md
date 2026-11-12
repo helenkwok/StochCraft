@@ -59,6 +59,16 @@ engine's messages (validation, file notes) are English too.
   pl), and otherwise from general accounting and operations-management usage. It was not checked
   against IATE, and not reviewed by native speakers. The least certain are lo, ta, te, hi, ka,
   kk, sq and it.
+- The rows for the breakdown, transfer and calendar fields and the pool and calendar undo names
+  (PR "forms for breakdowns, transfer and calendars") were machine-drafted with Claude Code from
+  the plain meaning of the English and each catalog's existing terms (pool, shift, failed, units,
+  block): "Breakdowns" and "Time to failure" use the word of that catalog's "Time failed", and the
+  undo names follow its "Change Block", "Add Block" and "Remove Block". Where a catalog's
+  "Availability" is a reliability ratio (ja, ko, ru, uk, zh-hans, zh-hant, th, lo, cs, sk, lt,
+  et), the calendar rows use the everyday word for being available instead. Serbian rows are
+  Ekavian. Not checked against dictionaries, Wikipedia, IATE or any other source, and not
+  reviewed by native speakers. The least certain are lo, th, ta, te, ka, kk, bn, sq and
+  zh-hant ("行事曆" for calendar).
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

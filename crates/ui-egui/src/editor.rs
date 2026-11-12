@@ -48,12 +48,39 @@ pub fn new_block(kind: &str) -> Value {
 fn parameters(kind: &str) -> &'static [&'static str] {
     match kind {
         "source" => &["interarrival", "limit"],
-        "server" => &["capacity", "service", "queue_capacity"],
+        "server" => &[
+            "capacity",
+            "service",
+            "queue_capacity",
+            "transfer",
+            "transfer_holds_sender",
+        ],
         // Its needs are edited with M2.5's window work; service and priority here.
         "shared_task" => &["service", "priority"],
         "delay" => &["duration"],
         "batch" => &["size"],
         _ => &[],
+    }
+}
+
+/// The parameters that change with the calendars or over time (breakdowns), shown in a section
+/// of their own that starts open when any is set.
+fn timed_parameters(kind: &str) -> &'static [&'static str] {
+    match kind {
+        "source" => &["timed", "idle_outside"],
+        "server" => &["breakdown", "available", "availability"],
+        _ => &[],
+    }
+}
+
+/// Whether a block's parameter differs from what a block without it has (left out of the file).
+fn is_set(el: &Value, f: &str) -> bool {
+    match (f, &el[f]) {
+        (_, Value::Null) => false,
+        ("available", v) => *v == json!(false),
+        ("idle_outside", v) => *v == json!(true),
+        (_, Value::Array(a)) => !a.is_empty(),
+        _ => true,
     }
 }
 
@@ -241,6 +268,7 @@ impl App {
                 time_unit: &unit,
                 numbers: &self.numbers,
                 drafts: &mut self.drafts,
+                calendars: &[],
             };
             if let Some(v) = form::field(
                 ui,
@@ -370,6 +398,45 @@ impl App {
         let _ = p;
     }
 
+    /// A block's parameters `fields`, each drawn from `block.set`'s schema; an edit is one
+    /// `block.set`.
+    fn block_fields(
+        &mut self,
+        ui: &mut egui::Ui,
+        model: &Value,
+        el: &Value,
+        id: &str,
+        fields: &[&str],
+    ) {
+        let schema = params_schema("block.set");
+        let unit = self.time_unit_label();
+        let calendars = form::calendars(model);
+        for f in fields {
+            // Whether the sender waits applies only to a transfer.
+            if *f == "transfer_holds_sender" && el["transfer"].is_null() {
+                continue;
+            }
+            // Settings the file leaves out when they have their default.
+            let current = match (*f, &el[*f]) {
+                ("available" | "transfer_holds_sender", Value::Null) => json!(true),
+                ("idle_outside", Value::Null) => json!(false),
+                (_, v) => v.clone(),
+            };
+            let mut cx = form::Cx {
+                time_unit: &unit,
+                numbers: &self.numbers,
+                drafts: &mut self.drafts,
+                calendars: &calendars,
+            };
+            let key = format!("{id}/{f}");
+            let time = matches!(*f, "interarrival" | "service" | "duration" | "transfer");
+            if let Some(v) = form::field(ui, &mut cx, Schema::new(&schema), &key, f, &current, time)
+            {
+                self.execute("block.set", json!({ "id": id, *f: v }));
+            }
+        }
+    }
+
     fn inspector(
         &mut self,
         ui: &mut egui::Ui,
@@ -433,22 +500,20 @@ impl App {
         let fields = parameters(&kind);
         if !fields.is_empty() {
             section(ui, t("Parameters"));
-            let schema = params_schema("block.set");
-            let unit = self.time_unit_label();
-            for f in fields {
-                let mut cx = form::Cx {
-                    time_unit: &unit,
-                    numbers: &self.numbers,
-                    drafts: &mut self.drafts,
-                };
-                let key = format!("{id}/{f}");
-                let time = matches!(*f, "interarrival" | "service" | "duration");
-                if let Some(v) =
-                    form::field(ui, &mut cx, Schema::new(&schema), &key, f, &el[*f], time)
-                {
-                    self.execute("block.set", json!({ "id": id, *f: v }));
-                }
-            }
+            self.block_fields(ui, model, el, &id, fields);
+        }
+        let more = timed_parameters(&kind);
+        if !more.is_empty() {
+            let title = if kind == "server" {
+                t("Breakdowns and availability")
+            } else {
+                t("Arrivals by calendar")
+            };
+            ui.add_space(6.0);
+            egui::CollapsingHeader::new(theme::strong(title))
+                .id_salt(format!("{id}/timed"))
+                .default_open(more.iter().any(|f| is_set(el, f)))
+                .show(ui, |ui| self.block_fields(ui, model, el, &id, more));
         }
 
         if kind == "shared_task" {
@@ -746,6 +811,7 @@ impl App {
                     time_unit: &unit,
                     numbers: &self.numbers,
                     drafts: &mut self.drafts,
+                    calendars: &[],
                 };
                 let base = format!("{id}/prop/{name}");
                 let sch = Schema::new(&schema);
@@ -768,6 +834,7 @@ impl App {
                     time_unit: &unit,
                     numbers: &self.numbers,
                     drafts: &mut self.drafts,
+                    calendars: &[],
                 };
                 if let Some(v) = form::field(
                     ui,
@@ -792,6 +859,7 @@ impl App {
             time_unit: &unit,
             numbers: &self.numbers,
             drafts: &mut self.drafts,
+            calendars: &[],
         };
         let mut add = None;
         ui.horizontal(|ui| {
