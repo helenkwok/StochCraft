@@ -37,6 +37,7 @@
 	Add point	Punt toevoegen
 	Add pool	Pool toevoegen
 	Add property	Eigenschap toevoegen
+	Add value	Waarde toevoegen
 	Added calendar {id}	Kalender {id} toegevoegd
 	Added pool {id}	Pool {id} toegevoegd
 	Added {block} ({id})	{block} ({id}) toegevoegd
@@ -204,6 +205,7 @@
 	Minimise	Minimaliseren
 	Minimize	Minimaliseren
 	Minimum	Minimum
+	Mix	Mix
 	Model	Model
 	Model time 0 is	Modeltijd 0 is
 	Mon	ma
@@ -267,6 +269,7 @@
 	Properties	Eigenschappen
 	Quit	Afsluiten
 	Quit {app}	{app} afsluiten
+	Random	Willekeurig
 	Rank the parameters	Parameters rangschikken
 	Ready	Klaar
 	Recover	Herstellen
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Wordt ingesteld voor elke entiteit zodra deze dit blok binnenkomt. Expressies lezen de waarden die de entiteit bij binnenkomst had, zoals getProperty('issues') - 1.
 	Settings	Instellingen
 	Shape	Vorm
+	Share	Aandeel
 	Share of arrivals lost	Aandeel verloren aankomsten
 	Share of units blocked	Aandeel geblokkeerde eenheden
 	Show All	Alles tonen

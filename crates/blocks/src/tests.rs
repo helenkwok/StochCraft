@@ -496,3 +496,52 @@ fn a_bad_expression_stops_compilation_with_its_position() {
         "{p:?}"
     );
 }
+
+#[test]
+fn a_mix_draws_each_value_by_its_share_and_routes_by_it() {
+    // A product mix: A three parts in five, B two. A decision sends each type its own way.
+    let mut m = Builder::new();
+    let src = m.source("parts", Dist::Constant(1.0), Some(20_000));
+    m.property(
+        src,
+        "type",
+        None,
+        PropertyValue::Choice(vec![(3.0, "A".into()), (2.0, "B".into())]),
+    );
+    let split = m.exclusive("by_type");
+    let a = m.sink("a");
+    let b = m.sink("b");
+    m.connect(src, split);
+    m.route(split, a, None, Some("getProperty('type') = 'A'"));
+    m.route(split, b, None, Some("getProperty('type') = 'B'"));
+    let r = m.run(Rng::new(7), 0.0, 30_000.0).ok();
+    let left = |e: &str| r.as_ref().and_then(|r| r.element(e)).map_or(0, |e| e.left);
+    let (na, nb) = (left("a"), left("b"));
+    assert_eq!(na + nb, 20_000);
+    // 0.6 within five standard deviations of a binomial share (sd 0.0035).
+    let share = na as f64 / 20_000.0;
+    assert!((share - 0.6).abs() < 0.0175, "share of A {share}");
+}
+
+#[test]
+fn a_mix_needs_shares_that_add_up_to_more_than_zero() {
+    let mut m = Builder::new();
+    let src = m.source("parts", Dist::Constant(1.0), Some(5));
+    m.property(
+        src,
+        "type",
+        None,
+        PropertyValue::Choice(vec![(0.0, "A".into()), (-1.0, "B".into())]),
+    );
+    let out = m.sink("out");
+    m.connect(src, out);
+    let model = m.build(Experiment::default());
+    assert!(
+        model
+            .validate()
+            .iter()
+            .any(|d| matches!(&d.problem, Problem::BadProperty { name, .. } if name == "type")),
+        "{:?}",
+        model.validate()
+    );
+}

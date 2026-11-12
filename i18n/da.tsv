@@ -37,6 +37,7 @@
 	Add point	Tilføj punkt
 	Add pool	Tilføj pulje
 	Add property	Tilføj egenskab
+	Add value	Tilføj værdi
 	Added calendar {id}	Tilføjede kalenderen {id}
 	Added pool {id}	Tilføjede puljen {id}
 	Added {block} ({id})	Tilføjede {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Minimér
 	Minimize	Minimér
 	Minimum	Minimum
+	Mix	Mix
 	Model	Model
 	Model time 0 is	Modeltid 0 er
 	Mon	man
@@ -267,6 +269,7 @@
 	Properties	Egenskaber
 	Quit	Afslut
 	Quit {app}	Afslut {app}
+	Random	Tilfældig
 	Rank the parameters	Ranger parametrene
 	Ready	Klar
 	Recover	Gendan
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Indstilles for hver enhed, når den går ind i denne blok. Udtryk læser de værdier, enheden havde ved ankomsten, f.eks. getProperty('issues') - 1.
 	Settings	Indstillinger
 	Shape	Form
+	Share	Andel
 	Share of arrivals lost	Andel tabte ankomster
 	Share of units blocked	Andel blokerede enheder
 	Show All	Vis alle

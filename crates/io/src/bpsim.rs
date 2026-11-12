@@ -356,6 +356,8 @@ pub enum Value {
     Bool(bool),
     Text(String),
     Dist(Dist),
+    /// Text drawn by shares: a `UserDistribution` whose data points are `StringParameter`s.
+    Choice(Vec<(f64, String)>),
     /// A BPSim expression (XPath; see `stochcraft_model::expr`).
     Expression(String),
 }
@@ -525,21 +527,32 @@ fn parse_value(
                 .attr("discrete")
                 .is_some_and(|d| d.trim() == "true" || d.trim() == "1");
             let mut points = Vec::new();
+            let mut texts = Vec::new();
             for p in v.children_named(&NSS, "UserDistributionDataPoint") {
                 let prob = num(p, "probability");
                 let val = p
                     .elements()
                     .find_map(|x| match parse_value(x, own_unit, notes, at) {
-                        Some(Value::Number(n)) => Some(n),
-                        Some(Value::Dist(Dist::Constant(n))) => Some(n),
+                        Some(Value::Number(n)) => Some(Value::Number(n)),
+                        Some(Value::Dist(Dist::Constant(n))) => Some(Value::Number(n)),
+                        Some(Value::Text(t)) => Some(Value::Text(t)),
                         _ => None,
                     });
-                match prob.zip(val) {
-                    Some(pv) => points.push(pv),
-                    None => {
+                match (prob, val) {
+                    (Some(pr), Some(Value::Number(n))) => points.push((pr, n)),
+                    (Some(pr), Some(Value::Text(t))) => texts.push((pr, t)),
+                    _ => {
                         return bad(notes, "a data point needs a probability and a fixed value");
                     }
                 }
+            }
+            // Text values: a mix drawn by shares (a product mix), for properties.
+            match (points.is_empty(), texts.is_empty()) {
+                (true, false) => return Some(Value::Choice(texts)),
+                (false, false) => {
+                    return bad(notes, "data points are either all numbers or all text");
+                }
+                _ => {}
             }
             Some(Dist::User { points, discrete })
         }

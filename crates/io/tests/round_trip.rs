@@ -673,3 +673,42 @@ fn xpdl_pools_read_in_declaration_order() {
         .collect();
     assert_eq!(ids, ["zeta", "alpha"]);
 }
+
+#[test]
+fn a_mix_is_written_as_text_data_points_and_read_back() {
+    let mut m = Builder::new();
+    let src = m.source("parts", Dist::Exponential { mean: 1.0 }, None);
+    m.property(
+        src,
+        "type",
+        Some(PropertyType::String),
+        PropertyValue::Choice(vec![
+            (0.5, "A".into()),
+            (0.3, "B".into()),
+            (0.2, "C".into()),
+        ]),
+    );
+    let out = m.sink("out");
+    m.connect(src, out);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    // BPSim's own form: a discrete user distribution of string parameters (BPSim 2.0, 6.3.5.13).
+    let squeezed: String = text.split_whitespace().collect::<Vec<_>>().join(" ");
+    assert!(
+        squeezed.contains(r#"<bpsim:UserDistributionDataPoint probability="0.3"> <bpsim:StringParameter value="B"/>"#),
+        "{text}"
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model, laid_out(model));
+
+    // Changed in the opened file, it saves in place and reads back.
+    let mut edited = loaded.model.clone();
+    edited.elements[0].properties[0].value =
+        PropertyValue::Choice(vec![(1.0, "A".into()), (1.0, "D".into())]);
+    let saved = loaded.opened.save(&edited);
+    let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
+    assert_eq!(back, Ok(Ok(edited)));
+}

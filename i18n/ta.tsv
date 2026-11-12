@@ -37,6 +37,7 @@
 	Add point	புள்ளியைச் சேர்
 	Add pool	தொகுப்பைச் சேர்
 	Add property	பண்பைச் சேர்
+	Add value	மதிப்பைச் சேர்
 	Added calendar {id}	{id} நாட்காட்டி சேர்க்கப்பட்டது
 	Added pool {id}	{id} தொகுப்பு சேர்க்கப்பட்டது
 	Added {block} ({id})	{block} ({id}) சேர்க்கப்பட்டது
@@ -204,6 +205,7 @@
 	Minimise	சிறிதாக்கு
 	Minimize	சிறிதாக்கு
 	Minimum	குறைந்தபட்சம்
+	Mix	கலவை
 	Model	மாதிரி
 	Model time 0 is	மாதிரி நேரம் 0 என்பது
 	Mon	திங்
@@ -267,6 +269,7 @@
 	Properties	பண்புகள்
 	Quit	வெளியேறு
 	Quit {app}	{app} இலிருந்து வெளியேறு
+	Random	சீரற்ற
 	Rank the parameters	அளவுருக்களைத் தரவரிசைப்படுத்து
 	Ready	தயார்
 	Recover	மீட்டெடு
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	இந்தத் தொகுதிக்குள் நுழையும்போது ஒவ்வொரு உருப்படிக்கும் அமைக்கப்படுகிறது. கோவைகள், நுழைந்த நேரத்தில் அந்த உருப்படியிடம் இருந்த மதிப்புகளைப் படிக்கின்றன; எடுத்துக்காட்டாக getProperty('issues') - 1.
 	Settings	அமைப்புகள்
 	Shape	வடிவ அளவுரு
+	Share	பங்கு
 	Share of arrivals lost	இழந்த வருகைகளின் விகிதம்
 	Share of units blocked	தடுக்கப்பட்ட அலகுகளின் விகிதம்
 	Show All	அனைத்தையும் காட்டு

@@ -37,6 +37,7 @@
 	Add point	წერტილის დამატება
 	Add pool	პულის დამატება
 	Add property	თვისების დამატება
+	Add value	მნიშვნელობის დამატება
 	Added calendar {id}	დამატებულია კალენდარი {id}
 	Added pool {id}	დამატებულია პული {id}
 	Added {block} ({id})	დამატებულია {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	მინიმიზაცია
 	Minimize	მინიმიზაცია
 	Minimum	მინიმუმი
+	Mix	ნარევი
 	Model	მოდელი
 	Model time 0 is	მოდელის დრო 0 არის
 	Mon	ორშ
@@ -267,6 +269,7 @@
 	Properties	თვისებები
 	Quit	გასვლა
 	Quit {app}	{app}-დან გასვლა
+	Random	შემთხვევითი
 	Rank the parameters	პარამეტრების დალაგება
 	Ready	მზადაა
 	Recover	აღდგენა
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ამ ბლოკში შესვლისას მნიშვნელობა ენიჭება თითოეულ ერთეულს. გამოსახულებები კითხულობს შესვლის მომენტში არსებულ მნიშვნელობებს, მაგალითად getProperty('issues') - 1.
 	Settings	პარამეტრები
 	Shape	ფორმა
+	Share	წილი
 	Share of arrivals lost	დაკარგული შემოსვლების წილი
 	Share of units blocked	დაბლოკილი ერთეულების წილი
 	Show All	ყველას ჩვენება

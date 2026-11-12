@@ -155,6 +155,7 @@ pub fn label(name: &str) -> String {
         "max" => "Maximum",
         "mode" => "Most likely",
         "value" => "Value",
+        "share" => "Share",
         "shape" => "Shape",
         "scale" => "Scale",
         "k" => "Stages (k)",
@@ -355,10 +356,11 @@ fn edit(
         }
         Node::Typed(n, "array") => {
             let item = schema.resolve(&n["items"]);
+            // Rows of numbers and text (a distribution's points, a mix's values and shares).
             let numbers = item["properties"].as_object().is_some_and(|m| {
                 m.values()
-                    .all(|p| matches!(p["type"].as_str(), Some("number" | "integer")))
-            });
+                    .all(|p| matches!(p["type"].as_str(), Some("number" | "integer" | "string")))
+            }) && item["properties"].get("calendar").is_none();
             if numbers {
                 array(ui, cx, schema, n, key, label, current, time)
             } else {
@@ -888,8 +890,8 @@ fn records(
     out.map(Value::Array)
 }
 
-/// An array of objects (a user distribution's points): one row each, with a remove button, and
-/// a row to add.
+/// An array of objects (a user distribution's points, a mix's values and shares): one row each,
+/// with a remove button, and a row to add.
 #[allow(clippy::too_many_arguments)]
 fn array(
     ui: &mut egui::Ui,
@@ -906,15 +908,47 @@ fn array(
     let mut out: Option<Vec<Value>> = None;
     let mut removed = None;
     ui.label(theme::strong(label));
-    let fields: Vec<String> = item["properties"]
-        .as_object()
-        .map(|m| m.keys().cloned().collect())
-        .unwrap_or_default();
+    // In the order the schema requires them (a mix: the value, then its share).
+    let fields: Vec<String> = item["required"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+        .map(str::to_owned)
+        .chain(
+            item["properties"]
+                .as_object()
+                .into_iter()
+                .flat_map(|m| m.keys().cloned()),
+        )
+        .fold(Vec::new(), |mut acc, f| {
+            if !acc.contains(&f) {
+                acc.push(f);
+            }
+            acc
+        });
+    let is_text = |f: &str| item["properties"][f]["type"] == "string";
+    let texts = fields.iter().any(|f| is_text(f));
     for (i, it) in items.iter().enumerate() {
         ui.horizontal(|ui| {
             for f in &fields {
                 let k = format!("{key}/{i}/{f}");
                 ui.label(theme::weak(ui, label_for(f)));
+                if is_text(f) {
+                    if let Some(v) = text(
+                        ui,
+                        cx,
+                        &k,
+                        &format!("{} {}", label_for(f), i + 1),
+                        &it[f],
+                        110.0,
+                    ) {
+                        let mut all = out.clone().unwrap_or_else(|| items.clone());
+                        all[i][f] = v;
+                        out = Some(all);
+                    }
+                    continue;
+                }
                 let unit = (time && f == "value").then_some(cx.time_unit.to_owned());
                 if let Some(v) = number(
                     ui,
@@ -936,12 +970,21 @@ fn array(
             }
         });
     }
-    if ui.small_button(t("Add point")).clicked() {
+    let add = if texts {
+        t("Add value")
+    } else {
+        t("Add point")
+    };
+    if ui.small_button(add).clicked() {
         let mut all = out.clone().unwrap_or_else(|| items.clone());
-        let last = items
+        let mut last = items
             .last()
             .cloned()
             .unwrap_or_else(|| json!({"probability": 1.0, "value": 1.0}));
+        // A new value of a mix starts empty, its share the last one's.
+        for f in fields.iter().filter(|f| is_text(f)) {
+            last[f.as_str()] = json!("");
+        }
         all.push(last);
         out = Some(all);
     }
@@ -990,11 +1033,12 @@ pub fn text(
 /// How a keyed union's choice reads.
 fn key_label(k: &str) -> String {
     match k {
-        "number" => "Number".into(),
-        "boolean" => "Yes or no".into(),
-        "text" => "Text".into(),
-        "random" => "Random".into(),
-        "expression" => "Expression".into(),
+        "number" => t("Number").into(),
+        "boolean" => t("Yes or no").into(),
+        "text" => t("Text").into(),
+        "random" => t("Random").into(),
+        "mix" => t("Mix").into(),
+        "expression" => t("Expression").into(),
         other => label(other),
     }
 }
@@ -1050,6 +1094,11 @@ fn keyed(
             "boolean" => json!(false),
             "text" => json!(""),
             "random" => json!({"type": "exponential", "mean": n}),
+            // Two values, half each; a text value carries over as the first.
+            "mix" => json!([
+                {"value": current["text"].as_str().unwrap_or("A"), "share": 1.0},
+                {"value": "B", "share": 1.0},
+            ]),
             "expression" => json!(format!("{n}")),
             _ => Value::Null,
         };

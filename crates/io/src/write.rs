@@ -137,6 +137,17 @@ pub(crate) fn property_element(p: &Property) -> Element {
         }
         PropertyValue::Text(t) => s("StringParameter").with_attr("value", t),
         PropertyValue::Random(d) => dist_element(d),
+        PropertyValue::Choice(values) => {
+            let mut e = s("UserDistribution").with_attr("discrete", "true");
+            for (share, v) in values {
+                e.push(
+                    s("UserDistributionDataPoint")
+                        .with_attr("probability", &num(*share))
+                        .with_child(s("StringParameter").with_attr("value", v)),
+                );
+            }
+            e
+        }
         PropertyValue::Expression(x) => s("ExpressionParameter").with_attr("value", x),
     };
     e.with_child(value)

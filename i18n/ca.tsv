@@ -37,6 +37,7 @@
 	Add point	Afegeix un punt
 	Add pool	Afegeix un grup
 	Add property	Afegeix una propietat
+	Add value	Afegeix un valor
 	Added calendar {id}	S'ha afegit el calendari {id}
 	Added pool {id}	S'ha afegit el grup {id}
 	Added {block} ({id})	S'ha afegit {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Minimitza
 	Minimize	Minimitza
 	Minimum	Mínim
+	Mix	Barreja
 	Model	Model
 	Model time 0 is	El temps 0 del model és
 	Mon	dl.
@@ -267,6 +269,7 @@
 	Properties	Propietats
 	Quit	Surt
 	Quit {app}	Surt de {app}
+	Random	Aleatori
 	Rank the parameters	Ordena els paràmetres
 	Ready	A punt
 	Recover	Recupera
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	S'estableix per a cada entitat quan entra en aquest bloc. Les expressions llegeixen els valors amb què ha arribat, com ara getProperty('issues') - 1.
 	Settings	Configuració
 	Shape	Forma
+	Share	Proporció
 	Share of arrivals lost	Proporció d'arribades perdudes
 	Share of units blocked	Proporció d'unitats bloquejades
 	Show All	Mostra-ho tot

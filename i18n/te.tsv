@@ -37,6 +37,7 @@
 	Add point	బిందువును జోడించు
 	Add pool	పూల్‌ను జోడించు
 	Add property	లక్షణాన్ని జోడించు
+	Add value	విలువను జోడించు
 	Added calendar {id}	{id} క్యాలెండర్ జోడించబడింది
 	Added pool {id}	{id} పూల్ జోడించబడింది
 	Added {block} ({id})	{block} ({id}) జోడించబడింది
@@ -204,6 +205,7 @@
 	Minimise	కనిష్ఠీకరించు
 	Minimize	కనిష్ఠీకరించు
 	Minimum	కనిష్ఠం
+	Mix	మిశ్రమం
 	Model	మోడల్
 	Model time 0 is	నమూనా సమయం 0 అంటే
 	Mon	సోమ
@@ -267,6 +269,7 @@
 	Properties	లక్షణాలు
 	Quit	నిష్క్రమించు
 	Quit {app}	{app} నుంచి నిష్క్రమించు
+	Random	యాదృచ్ఛికం
 	Rank the parameters	పరామితులను క్రమపరచు
 	Ready	సిద్ధం
 	Recover	పునరుద్ధరించు
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ఈ బ్లాక్‌లోకి ప్రవేశించినప్పుడు ప్రతి ఎంటిటీకి సెట్ చేయబడుతుంది. ఎక్స్‌ప్రెషన్‌లు ఎంటిటీ ప్రవేశించిన సమయంలో ఉన్న విలువలను చదువుతాయి, ఉదాహరణకు getProperty('issues') - 1.
 	Settings	సెట్టింగ్‌లు
 	Shape	ఆకృతి పరామితి
+	Share	వాటా
 	Share of arrivals lost	కోల్పోయిన రాకల వాటా
 	Share of units blocked	నిరోధిత యూనిట్ల వాటా
 	Show All	అన్నీ చూపించు

@@ -76,6 +76,11 @@ engine's messages (validation, file notes) are English too.
   abbreviations are each language's usual short names, and "On" (before the weekday buttons) is
   rendered as "Days". Not checked against dictionaries, Wikipedia, IATE or any other source,
   and not reviewed by native speakers. The least certain are lo, th, ta, te, ka, kk, bn and sq.
+- The rows for a property drawn as text values by shares (PR "product mix: a property drawn as
+  text values by shares": Random, Mix, Share, Add value) were machine-drafted with Claude Code
+  from the plain meaning of the English, reusing each catalog's word for random (from the
+  textbook-queue example) and for share (from "Target share"). Not checked against any other
+  source, and not reviewed by native speakers; "Mix" is the least certain.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -37,6 +37,7 @@
 	Add point	ເພີ່ມຈຸດ
 	Add pool	ເພີ່ມກຸ່ມຊັບພະຍາກອນ
 	Add property	ເພີ່ມຄຸນສົມບັດ
+	Add value	ເພີ່ມຄ່າ
 	Added calendar {id}	ເພີ່ມປະຕິທິນ {id} ແລ້ວ
 	Added pool {id}	ເພີ່ມກຸ່ມຊັບພະຍາກອນ {id} ແລ້ວ
 	Added {block} ({id})	ເພີ່ມ {block} ({id}) ແລ້ວ
@@ -204,6 +205,7 @@
 	Minimise	ຫຍໍ້ໜ້າຕ່າງ
 	Minimize	ຫຍໍ້ໜ້າຕ່າງ
 	Minimum	ຄ່າຕ່ຳສຸດ
+	Mix	ປະສົມ
 	Model	ແບບຈຳລອງ
 	Model time 0 is	ເວລາ 0 ຂອງແບບຈຳລອງແມ່ນ
 	Mon	ຈັນ
@@ -267,6 +269,7 @@
 	Properties	ຄຸນສົມບັດ
 	Quit	ອອກ
 	Quit {app}	ອອກຈາກ {app}
+	Random	ສຸ່ມ
 	Rank the parameters	ຈັດອັນດັບພາຣາມິເຕີ
 	Ready	ພ້ອມ
 	Recover	ກູ້ຄືນ
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ຕັ້ງຄ່າໃຫ້ແຕ່ລະເອນທິຕີເມື່ອເຂົ້າສູ່ບລັອກນີ້. ນິພົດຈະອ່ານຄ່າທີ່ເອນທິຕີມີໃນເວລາເຂົ້າ, ເຊັ່ນ getProperty('issues') - 1.
 	Settings	ການຕັ້ງຄ່າ
 	Shape	ຮູບຮ່າງ
+	Share	ສັດສ່ວນ
 	Share of arrivals lost	ສັດສ່ວນການມາຮອດທີ່ສູນເສຍ
 	Share of units blocked	ສັດສ່ວນໜ່ວຍທີ່ຖືກຂັດຂວາງ
 	Show All	ສະແດງທັງໝົດ

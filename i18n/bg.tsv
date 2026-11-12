@@ -37,6 +37,7 @@
 	Add point	Добавяне на точка
 	Add pool	Добавяне на пул
 	Add property	Добавяне на свойство
+	Add value	Добавяне на стойност
 	Added calendar {id}	Добавен е календар {id}
 	Added pool {id}	Добавен е пул {id}
 	Added {block} ({id})	Добавен е {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Минимизиране
 	Minimize	Минимизиране
 	Minimum	Минимум
+	Mix	Смес
 	Model	Модел
 	Model time 0 is	Моделно време 0 е
 	Mon	пн
@@ -267,6 +269,7 @@
 	Properties	Свойства
 	Quit	Изход
 	Quit {app}	Изход от {app}
+	Random	Случайна
 	Rank the parameters	Подреждане на параметрите
 	Ready	Готово
 	Recover	Възстановяване
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задава се за всяка същност при влизането ѝ в този блок. Изразите четат стойностите, които е имала при влизането, например getProperty('issues') - 1.
 	Settings	Настройки
 	Shape	Форма
+	Share	Дял
 	Share of arrivals lost	Дял на загубените пристигания
 	Share of units blocked	Дял на блокираните единици
 	Show All	Показване на всичко

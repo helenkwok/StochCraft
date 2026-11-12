@@ -503,6 +503,7 @@ fn properties(
             Some(Value::Bool(b)) => PropertyValue::Boolean(b),
             Some(Value::Text(t)) => PropertyValue::Text(t),
             Some(Value::Dist(d)) => PropertyValue::Random(d),
+            Some(Value::Choice(c)) => PropertyValue::Choice(c),
             Some(Value::Expression(e)) => PropertyValue::Expression(e),
             // Only result requests: nothing is assigned.
             None => continue,

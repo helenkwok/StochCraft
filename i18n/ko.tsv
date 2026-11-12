@@ -37,6 +37,7 @@
 	Add point	점 추가
 	Add pool	풀 추가
 	Add property	속성 추가
+	Add value	값 추가
 	Added calendar {id}	캘린더 {id} 추가됨
 	Added pool {id}	풀 {id} 추가됨
 	Added {block} ({id})	{block} ({id}) 추가됨
@@ -204,6 +205,7 @@
 	Minimise	최소화
 	Minimize	최소화
 	Minimum	최솟값
+	Mix	혼합
 	Model	모델
 	Model time 0 is	모델 시간 0
 	Mon	월
@@ -267,6 +269,7 @@
 	Properties	속성
 	Quit	종료
 	Quit {app}	{app} 종료
+	Random	무작위
 	Rank the parameters	매개변수 순위 매기기
 	Ready	준비됨
 	Recover	복구
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	각 엔터티가 이 블록에 들어올 때 설정됩니다. 수식은 들어올 때 엔터티가 가지고 있던 값을 읽습니다. 예: getProperty('issues') - 1.
 	Settings	설정
 	Shape	모양
+	Share	비율
 	Share of arrivals lost	도착 손실 비율
 	Share of units blocked	자원 단위 차단 비율
 	Show All	모두 표시

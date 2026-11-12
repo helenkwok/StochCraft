@@ -37,6 +37,7 @@
 	Add point	Dodaj točko
 	Add pool	Dodaj skupino
 	Add property	Dodaj lastnost
+	Add value	Dodaj vrednost
 	Added calendar {id}	Dodan koledar {id}
 	Added pool {id}	Dodana skupina {id}
 	Added {block} ({id})	Dodan {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Pomanjšaj
 	Minimize	Pomanjšaj
 	Minimum	Najmanjša vrednost
+	Mix	Mešanica
 	Model	Model
 	Model time 0 is	Čas modela 0 je
 	Mon	pon
@@ -267,6 +269,7 @@
 	Properties	Lastnosti
 	Quit	Izhod
 	Quit {app}	Končaj {app}
+	Random	Naključno
 	Rank the parameters	Razvrsti parametre
 	Ready	Omogočeno
 	Recover	Obnovi
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nastavi se za vsako entiteto ob vstopu v ta blok. Izrazi preberejo vrednosti, ki jih je imela entiteta ob vstopu, na primer getProperty('issues') - 1.
 	Settings	Nastavitve
 	Shape	Oblika
+	Share	Delež
 	Share of arrivals lost	Delež izgubljenih prihodov
 	Share of units blocked	Delež blokiranih enot
 	Show All	Pokaži vse

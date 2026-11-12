@@ -1037,8 +1037,10 @@ impl From<PropertyTypeSpec> for PropertyType {
 }
 
 /// What a property is set to, one of: `{"number": 3}`, `{"boolean": true}`, `{"text": "gold"}`,
-/// `{"random": <distribution>}` (drawn for each entity) or `{"expression": "getProperty('n') - 1"}`
-/// (BPSim's XPath, from the entity's properties as it arrived).
+/// `{"random": <distribution>}` (drawn for each entity), `{"mix": [{"value": "A", "share": 0.6},
+/// {"value": "B", "share": 0.4}]}` (text drawn for each entity by its share, such as a product mix)
+/// or `{"expression": "getProperty('n') - 1"}` (BPSim's XPath, from the entity's properties as it
+/// arrived).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum PropertyValueSpec {
@@ -1046,7 +1048,17 @@ pub enum PropertyValueSpec {
     Boolean(bool),
     Text(String),
     Random(DistSpec),
+    Mix(Vec<MixShare>),
     Expression(String),
+}
+
+/// One value of a mix and its share. The shares need not add up to 1: each value is drawn in
+/// proportion to its share.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct MixShare {
+    pub value: String,
+    pub share: f64,
 }
 
 impl From<&PropertyValue> for PropertyValueSpec {
@@ -1056,6 +1068,14 @@ impl From<&PropertyValue> for PropertyValueSpec {
             PropertyValue::Boolean(b) => PropertyValueSpec::Boolean(*b),
             PropertyValue::Text(t) => PropertyValueSpec::Text(t.clone()),
             PropertyValue::Random(d) => PropertyValueSpec::Random(d.into()),
+            PropertyValue::Choice(c) => PropertyValueSpec::Mix(
+                c.iter()
+                    .map(|(share, value)| MixShare {
+                        value: value.clone(),
+                        share: *share,
+                    })
+                    .collect(),
+            ),
             PropertyValue::Expression(x) => PropertyValueSpec::Expression(x.clone()),
         }
     }
@@ -1072,6 +1092,9 @@ impl From<PropertyValueSpec> for PropertyValue {
             PropertyValueSpec::Boolean(b) => PropertyValue::Boolean(b),
             PropertyValueSpec::Text(t) => PropertyValue::Text(t),
             PropertyValueSpec::Random(d) => PropertyValue::Random(d.into()),
+            PropertyValueSpec::Mix(m) => {
+                PropertyValue::Choice(m.into_iter().map(|s| (s.share, s.value)).collect())
+            }
             PropertyValueSpec::Expression(x) => PropertyValue::Expression(x),
         }
     }

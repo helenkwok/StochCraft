@@ -37,6 +37,7 @@
 	Add point	Nokta ekle
 	Add pool	Havuz ekle
 	Add property	Özellik ekle
+	Add value	Değer ekle
 	Added calendar {id}	{id} takvimi eklendi
 	Added pool {id}	{id} havuzu eklendi
 	Added {block} ({id})	{block} ({id}) eklendi
@@ -204,6 +205,7 @@
 	Minimise	Simge durumuna küçült
 	Minimize	Küçült
 	Minimum	Minimum
+	Mix	Karışım
 	Model	Model
 	Model time 0 is	Model zamanı 0
 	Mon	Pzt
@@ -267,6 +269,7 @@
 	Properties	Özellikler
 	Quit	Çıkış
 	Quit {app}	{app} Uygulamasından Çık
+	Random	Rastgele
 	Rank the parameters	Parametreleri sırala
 	Ready	Hazır
 	Recover	Kurtar
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Bu bloğa girerken her varlık için ayarlanır. İfadeler, varlığın giriş anında sahip olduğu değerleri okur; örneğin getProperty('issues') - 1.
 	Settings	Ayarlar
 	Shape	Şekil
+	Share	Oran
 	Share of arrivals lost	Kaybedilen gelişlerin oranı
 	Share of units blocked	Engellenen birimlerin oranı
 	Show All	Tümünü Göster

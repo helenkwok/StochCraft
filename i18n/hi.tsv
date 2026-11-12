@@ -37,6 +37,7 @@
 	Add point	बिंदु जोड़ें
 	Add pool	पूल जोड़ें
 	Add property	गुण जोड़ें
+	Add value	मान जोड़ें
 	Added calendar {id}	कैलेंडर {id} जोड़ा गया
 	Added pool {id}	पूल {id} जोड़ा गया
 	Added {block} ({id})	{block} ({id}) जोड़ा गया
@@ -204,6 +205,7 @@
 	Minimise	न्यूनतम करें
 	Minimize	न्यूनतम करें
 	Minimum	न्यूनतम
+	Mix	मिश्रण
 	Model	मॉडल
 	Model time 0 is	मॉडल समय 0 है
 	Mon	सोम
@@ -267,6 +269,7 @@
 	Properties	गुण
 	Quit	बाहर निकलें
 	Quit {app}	{app} से बाहर निकलें
+	Random	यादृच्छिक
 	Rank the parameters	पैरामीटर क्रमित करें
 	Ready	तैयार
 	Recover	पुनर्प्राप्त करें
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	इस ब्लॉक में प्रवेश करते समय प्रत्येक इकाई पर सेट किया जाता है। एक्सप्रेशन इकाई के प्रवेश के समय मौजूद मान पढ़ते हैं, जैसे getProperty('issues') - 1।
 	Settings	सेटिंग
 	Shape	आकार
+	Share	हिस्सा
 	Share of arrivals lost	हानि हुए आगमन का अनुपात
 	Share of units blocked	अवरुद्ध इकाइयों का अनुपात
 	Show All	सभी दिखाएँ

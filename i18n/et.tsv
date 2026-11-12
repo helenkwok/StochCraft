@@ -37,6 +37,7 @@
 	Add point	Lisa punkt
 	Add pool	Lisa kogum
 	Add property	Lisa omadus
+	Add value	Lisa väärtus
 	Added calendar {id}	Lisati kalender {id}
 	Added pool {id}	Lisati kogum {id}
 	Added {block} ({id})	Lisatud {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Minimeeri
 	Minimize	Minimeeri
 	Minimum	Miinimum
+	Mix	Segu
 	Model	Mudel
 	Model time 0 is	Mudeli aeg 0 on
 	Mon	E
@@ -267,6 +269,7 @@
 	Properties	Omadused
 	Quit	Välju
 	Quit {app}	Välju: {app}
+	Random	Juhuslik
 	Rank the parameters	Järjesta parameetrid
 	Ready	Valmis
 	Recover	Taasta
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Määratakse igale olemile sellesse plokki sisenemisel. Avaldised loevad väärtusi, mis olid olemil sisenemise hetkel, näiteks getProperty('issues') - 1.
 	Settings	Seaded
 	Shape	Kuju
+	Share	Osakaal
 	Share of arrivals lost	Kaotatud saabumiste osakaal
 	Share of units blocked	Blokeeritud ühikute osakaal
 	Show All	Näita kõiki
