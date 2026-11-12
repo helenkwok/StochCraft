@@ -2768,14 +2768,24 @@ fn rescale_own_units(
     }
 }
 
-/// Removes the BPMN associations (a note's link, for one) to or from `id`, which is gone, with
-/// their diagram edges.
+/// Removes the associations (a note's link, for one) to or from `id`, which is gone: BPMN ones
+/// with their diagram edges, and XPDL ones (their graphics are inside them), with an XPDL
+/// `Associations` list left empty.
 fn remove_associations(root: &mut Element, id: &str) {
     let is_link = |e: &Element| {
         e.is(BPMN, "association")
             && (e.attr("sourceRef").as_deref() == Some(id)
                 || e.attr("targetRef").as_deref() == Some(id))
     };
+    let is_xpdl_link = |e: &Element| {
+        e.is_any(&XPDL, "Association")
+            && (e.attr("Source").as_deref() == Some(id) || e.attr("Target").as_deref() == Some(id))
+    };
+    if remove_all(root, &is_xpdl_link) > 0 {
+        remove_all(root, &|e| {
+            e.is_any(&XPDL, "Associations") && e.elements().next().is_none()
+        });
+    }
     let links: Vec<String> = root
         .descendants()
         .into_iter()
