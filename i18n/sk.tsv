@@ -31,13 +31,17 @@
 	Add a flow to…	Pridať tok do…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Pridávať jednotku pri najvyťaženejšej úlohe alebo fonde, kým dosť replikácií nesplní cieľ. Zobrazí sa aj odpoveď s každým časom na priemere; býva príliš malá.
 	Add alternative	Pridať alternatívu
+	Add calendar	Pridať kalendár
 	Add calendar entry	Pridať položku kalendára
+	Add period	Pridať obdobie
 	Add point	Pridať bod
 	Add pool	Pridať skupinu
 	Add property	Pridať vlastnosť
+	Added calendar {id}	Pridaný kalendár {id}
 	Added pool {id}	Pridaná skupina {id}
 	Added {block} ({id})	Pridaný {block} ({id})
 	Align	Zarovnať
+	Also: {rule}	Tiež: {rule}
 	Alternative {n}	Alternatíva {n}
 	Analysis	Analýza
 	Appearance	Vzhľad
@@ -68,6 +72,8 @@
 	By role	Podľa roly
 	CSV table	Tabuľka CSV
 	Calendar	Kalendár
+	Calendar name	Názov kalendára
+	Calendars	Kalendáre
 	Cancel	Zrušiť
 	Cancel Run	Zrušiť beh
 	Cancel run	Zrušiť beh
@@ -94,6 +100,7 @@
 	Constant	Konštantné
 	Copy	Kopírovať
 	Cut	Vystrihnúť
+	Daily	Denne
 	Dark	Tmavý
 	Data points	Dátové body
 	Date and time	Dátum a čas
@@ -109,6 +116,7 @@
 	Disconnect	Odpojiť
 	Discrete values	Diskrétne hodnoty
 	Discrete-event simulation, from model files to results.	Simulácia diskrétnych udalostí, od súborov modelu k výsledkom.
+	Does not repeat	Neopakuje sa
 	Don't Save	Neukladať
 	Download	Stiahnuť
 	Download charts (PNG)	Stiahnuť grafy (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Čas {id} prispôsobený
 	Flows	Toky
 	Forget the estimate	Zabudnúť odhad
+	Fri	pi
 	From	Z
 	Gamma	Gama
 	Goes to	Vedie do
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Klávesové skratky uložené
 	Keyboard shortcuts unchanged	Klávesové skratky nezmenené
 	Language	Jazyk
+	Leave empty to start at midnight of the day the first period starts.	Nechajte prázdne, aby sa začalo o polnoci dňa, keď začína prvé obdobie.
 	Left	Odišlo
 	Left edges	Ľavé okraje
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencované podľa MIT License alebo Apache License 2.0, podľa vášho výberu.
@@ -195,6 +205,8 @@
 	Minimize	Minimalizovať
 	Minimum	Minimum
 	Model	Model
+	Model time 0 is	Čas modelu 0 je
+	Mon	po
 	Most likely	Najpravdepodobnejšia hodnota
 	Move	Presun
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Postupne posunúť každý parameter nadol a nahor a zoradiť ich podľa toho, ako veľmi sa výsledok pohne.
@@ -213,9 +225,11 @@
 	No target	Bez cieľa
 	None	Žiadne
 	None found. The model is ready to run.	Nenašli sa žiadne problémy. Model je pripravený na spustenie.
+	None picked: the day the period starts.	Nič nevybraté: deň, keď obdobie začína.
 	Normal	Normálne
 	Not reached, even with {units}	Nesplnené ani s {units}
 	Number	Číslo
+	On	Dni
 	One change, which Undo takes back	Jedna zmena, ktorú Späť vráti
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracovník, náhodné príchody: klasický rad overený teóriou.
 	One task per BPSim distribution, to compare their spread.	Jedna úloha pre každé rozdelenie BPSim na porovnanie ich variability.
@@ -236,6 +250,10 @@
 	Paste	Prilepiť
 	Pause	Pozastaviť
 	Percentile	Percentil
+	Period {n} ends	Obdobie {n} končí
+	Period {n} repeats	Obdobie {n} sa opakuje
+	Period {n} starts	Obdobie {n} začína
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Obdobia, keď sa menia dostupnosť, príchody alebo zmeny skupiny. Dátumy a časy sa píšu ako 2026-01-31T09:00:00.
 	Play	Prehrať
 	Points	Body
 	Poisson	Poissonovo
@@ -264,13 +282,16 @@
 	Remove Property	Odstrániť vlastnosť
 	Remove alternative {n}	Odstrániť alternatívu {n}
 	Remove block	Odstrániť blok
+	Remove the calendar {id}	Odstrániť kalendár {id}
 	Remove the flow {id}	Odstrániť tok {id}
 	Remove the pool {id}	Odstrániť skupinu {id}
 	Remove this block and its flows (Delete)	Odstrániť tento blok a jeho toky (Delete)
+	Remove this period	Odstrániť toto obdobie
 	Removed {id}	Odstránené {id}
 	Rename Block	Premenovať blok
 	Rename Model	Premenovať model
 	Repair time	Čas opravy
+	Repeats	Opakovanie
 	Replace Model	Nahradiť model
 	Replication 1 · {time} of {end} {unit}	Replikácia 1 · {time} z {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikácia 1 · {time} z {end} {unit} · zahrievanie
@@ -299,6 +320,7 @@
 	Run the sweep	Spustiť prechod
 	Running	Prebieha
 	Running…	Prebieha…
+	Sat	so
 	Save	Uložiť
 	Save As…	Uložiť ako…
 	Save Model	Uložiť model
@@ -341,6 +363,7 @@
 	Stop setting {name}	Prestať nastavovať {name}
 	Stop watching	Ukončiť sledovanie
 	Stopped watching	Sledovanie ukončené
+	Sun	ne
 	Sweep a parameter	Prechod parametrom
 	Tandem line	Tandemová linka
 	Target	Cieľ
@@ -362,6 +385,7 @@
 	This block has an error	Tento blok obsahuje chybu
 	This run	Tento beh
 	Three-point estimate	Trojbodový odhad
+	Thu	št
 	Time between arrivals	Čas medzi príchodmi
 	Time blocked	Čas blokovania
 	Time failed	Čas poruchy
@@ -377,6 +401,7 @@
 	Trials	Pokusy
 	Triangular	Trojuholníkové
 	Truncated normal	Orezané normálne
+	Tue	ut
 	Two stations in series, read from an XPDL file.	Dve stanice v sérii načítané zo súboru XPDL.
 	Type	Typ
 	Undid {action}	Vrátené späť {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Sledovať beh
 	Watch a run	Sledovať beh
 	Watching replication 1	Sleduje sa replikácia 1
+	Wed	st
+	Weekly	Týždenne
 	Weibull	Weibullovo
 	When a task empties	Keď sa úloha vyprázdni
 	When enough have left a block	Keď blok opustí dosť entít

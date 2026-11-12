@@ -31,13 +31,17 @@
 	Add a flow to…	添加顺序流，通往…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	在最繁忙的任务或资源池上逐个增加单位，直到足够多的重复运行达到目标。同时显示所有时间取均值时的答案；它通常偏小。
 	Add alternative	添加备选方案
+	Add calendar	添加日历
 	Add calendar entry	添加日历条目
+	Add period	添加时段
 	Add point	添加点
 	Add pool	添加资源池
 	Add property	添加属性
+	Added calendar {id}	已添加日历 {id}
 	Added pool {id}	已添加资源池 {id}
 	Added {block} ({id})	已添加 {block} ({id})
 	Align	对齐
+	Also: {rule}	另外：{rule}
 	Alternative {n}	备选方案 {n}
 	Analysis	分析
 	Appearance	外观
@@ -68,6 +72,8 @@
 	By role	按角色
 	CSV table	CSV 表格
 	Calendar	日历
+	Calendar name	日历名称
+	Calendars	日历
 	Cancel	取消
 	Cancel Run	取消运行
 	Cancel run	取消运行
@@ -94,6 +100,7 @@
 	Constant	常数
 	Copy	复制
 	Cut	剪切
+	Daily	每天
 	Dark	深色
 	Data points	数据点
 	Date and time	日期和时间
@@ -109,6 +116,7 @@
 	Disconnect	断开连接
 	Discrete values	离散值
 	Discrete-event simulation, from model files to results.	离散事件仿真：从模型文件到结果。
+	Does not repeat	不重复
 	Don't Save	不保存
 	Download	下载
 	Download charts (PNG)	下载图表 (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	已拟合 {id} 的时间
 	Flows	顺序流
 	Forget the estimate	舍弃估计
+	Fri	周五
 	From	起点
 	Gamma	伽马分布
 	Goes to	流向
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	键盘快捷键已保存
 	Keyboard shortcuts unchanged	键盘快捷键未更改
 	Language	语言
+	Leave empty to start at midnight of the day the first period starts.	留空则从第一个时段开始当天的午夜开始。
 	Left	离开数
 	Left edges	左边
 	Licensed under the MIT License or the Apache License 2.0, at your option.	可选择采用 MIT License 或 Apache License 2.0 授权。
@@ -195,6 +205,8 @@
 	Minimize	最小化
 	Minimum	最小值
 	Model	模型
+	Model time 0 is	模型时间 0 为
+	Mon	周一
 	Most likely	最可能值
 	Move	移动
 	Move each parameter down and up in turn, and rank them by how much the result moves.	依次将每个参数调低和调高，并按结果的变化幅度排序。
@@ -213,9 +225,11 @@
 	No target	无目标
 	None	无
 	None found. The model is ready to run.	未发现问题。模型可以运行。
+	None picked: the day the period starts.	未选择：时段开始的那一天。
 	Normal	正态分布
 	Not reached, even with {units}	即使有 {units} 也未达到
 	Number	数字
+	On	星期
 	One change, which Undo takes back	一次更改，可用撤销还原
 	One clerk, random arrivals: the textbook queue, checked against theory.	一名服务员、随机到达：经典排队模型，并与理论结果对照。
 	One task per BPSim distribution, to compare their spread.	每种 BPSim 分布各设一个任务，用于比较其离散程度。
@@ -236,6 +250,10 @@
 	Paste	粘贴
 	Pause	暂停
 	Percentile	百分位数
+	Period {n} ends	时段 {n} 结束
+	Period {n} repeats	时段 {n} 重复
+	Period {n} starts	时段 {n} 开始
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	可用性、到达或资源池的班次发生变化的时段。日期和时间写作 2026-01-31T09:00:00。
 	Play	播放
 	Points	点
 	Poisson	泊松分布
@@ -264,13 +282,16 @@
 	Remove Property	移除属性
 	Remove alternative {n}	移除备选方案 {n}
 	Remove block	移除区块
+	Remove the calendar {id}	移除日历 {id}
 	Remove the flow {id}	移除顺序流 {id}
 	Remove the pool {id}	移除资源池 {id}
 	Remove this block and its flows (Delete)	移除此区块及其顺序流 (Delete)
+	Remove this period	移除此时段
 	Removed {id}	已移除 {id}
 	Rename Block	重命名区块
 	Rename Model	重命名模型
 	Repair time	维修时间
+	Repeats	重复
 	Replace Model	替换模型
 	Replication 1 · {time} of {end} {unit}	第 1 次重复运行 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	第 1 次重复运行 · {time} / {end} {unit} · 预热期
@@ -299,6 +320,7 @@
 	Run the sweep	运行扫描
 	Running	正在运行
 	Running…	正在运行…
+	Sat	周六
 	Save	保存
 	Save As…	另存为…
 	Save Model	保存模型
@@ -341,6 +363,7 @@
 	Stop setting {name}	停止设置 {name}
 	Stop watching	停止观察
 	Stopped watching	已停止观察
+	Sun	周日
 	Sweep a parameter	扫描一个参数
 	Tandem line	串联流程
 	Target	目标
@@ -362,6 +385,7 @@
 	This block has an error	此区块存在错误
 	This run	本次运行
 	Three-point estimate	三点估计
+	Thu	周四
 	Time between arrivals	到达间隔时间
 	Time blocked	阻塞时间
 	Time failed	故障时间
@@ -377,6 +401,7 @@
 	Trials	试验次数
 	Triangular	三角分布
 	Truncated normal	截断正态分布
+	Tue	周二
 	Two stations in series, read from an XPDL file.	从 XPDL 文件读取的两个串联工作站。
 	Type	类型
 	Undid {action}	已撤销 {action}
@@ -404,6 +429,8 @@
 	Watch a Run	观察运行
 	Watch a run	观察运行
 	Watching replication 1	正在观察第 1 次重复运行
+	Wed	周三
+	Weekly	每周
 	Weibull	威布尔分布
 	When a task empties	当某个任务清空时
 	When enough have left a block	当足够多实体离开某个区块时

@@ -31,13 +31,17 @@
 	Add a flow to…	Folyamat hozzáadása ide: …
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Egy egység hozzáadása a legterheltebb feladathoz vagy készlethez, amíg elég ismétlés el nem éri a célt. Megjelenik az a válasz is, amelyben minden idő az átlagán van; ez rendszerint túl kicsi.
 	Add alternative	Alternatíva hozzáadása
+	Add calendar	Naptár hozzáadása
 	Add calendar entry	Naptárbejegyzés hozzáadása
+	Add period	Időszak hozzáadása
 	Add point	Pont hozzáadása
 	Add pool	Készlet hozzáadása
 	Add property	Tulajdonság hozzáadása
+	Added calendar {id}	{id} naptár hozzáadva
 	Added pool {id}	{id} készlet hozzáadva
 	Added {block} ({id})	{block} ({id}) hozzáadva
 	Align	Igazítás
+	Also: {rule}	Továbbá: {rule}
 	Alternative {n}	{n}. alternatíva
 	Analysis	Elemzés
 	Appearance	Megjelenés
@@ -68,6 +72,8 @@
 	By role	Szerepkör szerint
 	CSV table	CSV-táblázat
 	Calendar	Naptár
+	Calendar name	Naptár neve
+	Calendars	Naptárak
 	Cancel	Mégse
 	Cancel Run	Futtatás megszakítása
 	Cancel run	Futtatás megszakítása
@@ -94,6 +100,7 @@
 	Constant	Állandó
 	Copy	Másolás
 	Cut	Kivágás
+	Daily	Naponta
 	Dark	Sötét
 	Data points	Adatpontok
 	Date and time	Dátum és idő
@@ -109,6 +116,7 @@
 	Disconnect	Kapcsolat bontása
 	Discrete values	Diszkrét értékek
 	Discrete-event simulation, from model files to results.	Diszkrét eseményes szimuláció, a modellfájloktól az eredményekig.
+	Does not repeat	Nem ismétlődik
 	Don't Save	Mentés nélkül
 	Download	Letöltés
 	Download charts (PNG)	Diagramok letöltése (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	{id} ideje illesztve
 	Flows	Folyamatok
 	Forget the estimate	Becslés elvetése
+	Fri	P
 	From	Innen
 	Gamma	Gamma
 	Goes to	Ide vezet
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Billentyűparancsok mentve
 	Keyboard shortcuts unchanged	A billentyűparancsok nem változtak
 	Language	Nyelv
+	Leave empty to start at midnight of the day the first period starts.	Hagyja üresen, hogy az első időszak kezdőnapjának éjfélén induljon.
 	Left	Távozott
 	Left edges	Bal élek
 	Licensed under the MIT License or the Apache License 2.0, at your option.	A MIT License vagy az Apache License 2.0 szerint, választás szerint.
@@ -195,6 +205,8 @@
 	Minimize	Kis méret
 	Minimum	Minimum
 	Model	Modell
+	Model time 0 is	A modell 0. időpontja
+	Mon	H
 	Most likely	Legvalószínűbb
 	Move	Áthelyezés
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Minden paraméter sorban lejjebb és feljebb állítása, és rangsorolásuk aszerint, mennyit mozdul az eredmény.
@@ -213,9 +225,11 @@
 	No target	Nincs cél
 	None	Nincs
 	None found. The model is ready to run.	Nem találhatók problémák. A modell futtatásra kész.
+	None picked: the day the period starts.	Nincs kiválasztva: az időszak kezdőnapja.
 	Normal	Normális
 	Not reached, even with {units}	Nem teljesül, még ezzel sem: {units}
 	Number	Szám
+	On	Napok
 	One change, which Undo takes back	Egy módosítás, amelyet a Visszavonás visszavesz
 	One clerk, random arrivals: the textbook queue, checked against theory.	Egy kiszolgáló, véletlenszerű érkezések: a klasszikus sor, elmélettel ellenőrizve.
 	One task per BPSim distribution, to compare their spread.	Minden BPSim-eloszláshoz egy feladat, a szóródás összehasonlítására.
@@ -236,6 +250,10 @@
 	Paste	Beillesztés
 	Pause	Szünet
 	Percentile	Percentilis
+	Period {n} ends	{n}. időszak vége
+	Period {n} repeats	{n}. időszak ismétlődése
+	Period {n} starts	{n}. időszak kezdete
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Időszakok, amikor a rendelkezésre állás, az érkezések vagy egy készlet műszakjai változnak. A dátumot és az időt így kell írni: 2026-01-31T09:00:00.
 	Play	Lejátszás
 	Points	Pontok
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Tulajdonság eltávolítása
 	Remove alternative {n}	{n}. alternatíva eltávolítása
 	Remove block	Blokk eltávolítása
+	Remove the calendar {id}	{id} naptár eltávolítása
 	Remove the flow {id}	{id} folyamat eltávolítása
 	Remove the pool {id}	{id} készlet eltávolítása
 	Remove this block and its flows (Delete)	E blokk és folyamatainak eltávolítása (Delete)
+	Remove this period	Időszak eltávolítása
 	Removed {id}	{id} eltávolítva
 	Rename Block	Blokk átnevezése
 	Rename Model	Modell átnevezése
 	Repair time	Javítási idő
+	Repeats	Ismétlődés
 	Replace Model	Modell cseréje
 	Replication 1 · {time} of {end} {unit}	1. ismétlés · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	1. ismétlés · {time} / {end} {unit} · bemelegítés
@@ -299,6 +320,7 @@
 	Run the sweep	Végigfuttatás
 	Running	Fut
 	Running…	Futtatás…
+	Sat	Szo
 	Save	Mentés
 	Save As…	Mentés másként…
 	Save Model	Modell mentése
@@ -341,6 +363,7 @@
 	Stop setting {name}	{name} beállításának leállítása
 	Stop watching	Követés leállítása
 	Stopped watching	A követés leállt
+	Sun	V
 	Sweep a parameter	Paraméter végigfuttatása
 	Tandem line	Tandemvonal
 	Target	Cél
@@ -362,6 +385,7 @@
 	This block has an error	Ez a blokk hibát tartalmaz
 	This run	Ez a futtatás
 	Three-point estimate	Hárompontos becslés
+	Thu	Cs
 	Time between arrivals	Érkezések közötti idő
 	Time blocked	Blokkolt idő
 	Time failed	Meghibásodott állapotban töltött idő
@@ -377,6 +401,7 @@
 	Trials	Próbák
 	Triangular	Háromszög
 	Truncated normal	Csonkolt normális
+	Tue	K
 	Two stations in series, read from an XPDL file.	Két sorba kapcsolt állomás, XPDL-fájlból beolvasva.
 	Type	Típus
 	Undid {action}	{action} visszavonva
@@ -404,6 +429,8 @@
 	Watch a Run	Futtatás követése
 	Watch a run	Futtatás követése
 	Watching replication 1	Az 1. ismétlés követése
+	Wed	Sze
+	Weekly	Hetente
 	Weibull	Weibull
 	When a task empties	Amikor egy feladat kiürül
 	When enough have left a block	Amikor elég elhagyott egy blokkot

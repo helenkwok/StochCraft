@@ -31,13 +31,17 @@
 	Add a flow to…	Stroom toevoegen naar…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Een eenheid toevoegen bij de drukste taak of pool tot genoeg herhalingen een doel halen. Het antwoord met elke tijd op zijn gemiddelde staat er ook bij; dat is meestal te klein.
 	Add alternative	Alternatief toevoegen
+	Add calendar	Kalender toevoegen
 	Add calendar entry	Kalenderitem toevoegen
+	Add period	Periode toevoegen
 	Add point	Punt toevoegen
 	Add pool	Pool toevoegen
 	Add property	Eigenschap toevoegen
+	Added calendar {id}	Kalender {id} toegevoegd
 	Added pool {id}	Pool {id} toegevoegd
 	Added {block} ({id})	{block} ({id}) toegevoegd
 	Align	Uitlijnen
+	Also: {rule}	Ook: {rule}
 	Alternative {n}	Alternatief {n}
 	Analysis	Analyse
 	Appearance	Uiterlijk
@@ -68,6 +72,8 @@
 	By role	Per rol
 	CSV table	CSV-tabel
 	Calendar	Kalender
+	Calendar name	Kalendernaam
+	Calendars	Kalenders
 	Cancel	Annuleren
 	Cancel Run	Uitvoering annuleren
 	Cancel run	Uitvoering annuleren
@@ -94,6 +100,7 @@
 	Constant	Constant
 	Copy	Kopiëren
 	Cut	Knippen
+	Daily	Dagelijks
 	Dark	Donker
 	Data points	Datapunten
 	Date and time	Datum en tijd
@@ -109,6 +116,7 @@
 	Disconnect	Verbinding verbreken
 	Discrete values	Discrete waarden
 	Discrete-event simulation, from model files to results.	Discrete-evenementensimulatie, van modelbestanden tot resultaten.
+	Does not repeat	Herhaalt niet
 	Don't Save	Niet opslaan
 	Download	Downloaden
 	Download charts (PNG)	Grafieken downloaden (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Tijd van {id} gepast
 	Flows	Stromen
 	Forget the estimate	Schatting vergeten
+	Fri	vr
 	From	Van
 	Gamma	Gamma
 	Goes to	Gaat naar
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Sneltoetsen opgeslagen
 	Keyboard shortcuts unchanged	Sneltoetsen ongewijzigd
 	Language	Taal
+	Leave empty to start at midnight of the day the first period starts.	Laat leeg om te beginnen om middernacht van de dag waarop de eerste periode begint.
 	Left	Vertrokken
 	Left edges	Linkerkanten
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Onder MIT License of Apache License 2.0, naar keuze.
@@ -195,6 +205,8 @@
 	Minimize	Minimaliseren
 	Minimum	Minimum
 	Model	Model
+	Model time 0 is	Modeltijd 0 is
+	Mon	ma
 	Most likely	Meest waarschijnlijk
 	Move	Verplaatsen
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Elke parameter om de beurt omlaag en omhoog zetten, en ze rangschikken naar hoeveel het resultaat verschuift.
@@ -213,9 +225,11 @@
 	No target	Geen doel
 	None	Geen
 	None found. The model is ready to run.	Geen problemen gevonden. Het model is klaar om uit te voeren.
+	None picked: the day the period starts.	Niets gekozen: de dag waarop de periode begint.
 	Normal	Normaal
 	Not reached, even with {units}	Niet gehaald, zelfs niet met {units}
 	Number	Getal
+	On	Dagen
 	One change, which Undo takes back	Eén wijziging, die Ongedaan maken terugdraait
 	One clerk, random arrivals: the textbook queue, checked against theory.	Eén medewerker, willekeurige aankomsten: de klassieke wachtrij, getoetst aan de theorie.
 	One task per BPSim distribution, to compare their spread.	Eén taak per BPSim-verdeling om de spreiding te vergelijken.
@@ -236,6 +250,10 @@
 	Paste	Plakken
 	Pause	Pauzeren
 	Percentile	Percentiel
+	Period {n} ends	Periode {n} eindigt
+	Period {n} repeats	Periode {n} herhaalt
+	Period {n} starts	Periode {n} begint
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioden waarin beschikbaarheid, aankomsten of de werktijden van een pool veranderen. Datums en tijden schrijf je als 2026-01-31T09:00:00.
 	Play	Afspelen
 	Points	Punten
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Eigenschap verwijderen
 	Remove alternative {n}	Alternatief {n} verwijderen
 	Remove block	Blok verwijderen
+	Remove the calendar {id}	Kalender {id} verwijderen
 	Remove the flow {id}	Stroom {id} verwijderen
 	Remove the pool {id}	Pool {id} verwijderen
 	Remove this block and its flows (Delete)	Dit blok en zijn stromen verwijderen (Delete)
+	Remove this period	Deze periode verwijderen
 	Removed {id}	{id} verwijderd
 	Rename Block	Blok hernoemen
 	Rename Model	Model hernoemen
 	Repair time	Reparatietijd
+	Repeats	Herhaling
 	Replace Model	Model vervangen
 	Replication 1 · {time} of {end} {unit}	Herhaling 1 · {time} van {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Herhaling 1 · {time} van {end} {unit} · opwarmperiode
@@ -299,6 +320,7 @@
 	Run the sweep	Reeks uitvoeren
 	Running	Wordt uitgevoerd
 	Running…	Wordt uitgevoerd…
+	Sat	za
 	Save	Opslaan
 	Save As…	Opslaan als…
 	Save Model	Model opslaan
@@ -341,6 +363,7 @@
 	Stop setting {name}	Instellen van {name} stoppen
 	Stop watching	Stoppen met volgen
 	Stopped watching	Gestopt met volgen
+	Sun	zo
 	Sweep a parameter	Eén parameter variëren
 	Tandem line	Tandemlijn
 	Target	Doel
@@ -362,6 +385,7 @@
 	This block has an error	Dit blok heeft een fout
 	This run	Deze uitvoering
 	Three-point estimate	Driepuntsschatting
+	Thu	do
 	Time between arrivals	Tijd tussen aankomsten
 	Time blocked	Tijd geblokkeerd
 	Time failed	Tijd in storing
@@ -377,6 +401,7 @@
 	Trials	Proeven
 	Triangular	Driehoekig
 	Truncated normal	Afgekapt normaal
+	Tue	di
 	Two stations in series, read from an XPDL file.	Twee stations achter elkaar, gelezen uit een XPDL-bestand.
 	Type	Type
 	Undid {action}	{action} ongedaan gemaakt
@@ -404,6 +429,8 @@
 	Watch a Run	Een uitvoering volgen
 	Watch a run	Een uitvoering volgen
 	Watching replication 1	Herhaling 1 wordt gevolgd
+	Wed	wo
+	Weekly	Wekelijks
 	Weibull	Weibull
 	When a task empties	Als een taak leeg raakt
 	When enough have left a block	Als er genoeg een blok hebben verlaten

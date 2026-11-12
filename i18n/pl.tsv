@@ -31,13 +31,17 @@
 	Add a flow to…	Dodaj przepływ do…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Dodawaj jednostkę przy najbardziej obciążonym zadaniu lub puli, aż wystarczająco wiele replikacji osiągnie cel. Pokazana jest też odpowiedź z każdym czasem równym średniej; zwykle jest za mała.
 	Add alternative	Dodaj alternatywę
+	Add calendar	Dodaj kalendarz
 	Add calendar entry	Dodaj wpis kalendarza
+	Add period	Dodaj okres
 	Add point	Dodaj punkt
 	Add pool	Dodaj pulę
 	Add property	Dodaj właściwość
+	Added calendar {id}	Dodano kalendarz {id}
 	Added pool {id}	Dodano pulę {id}
 	Added {block} ({id})	Dodano {block} ({id})
 	Align	Wyrównaj
+	Also: {rule}	Także: {rule}
 	Alternative {n}	Alternatywa {n}
 	Analysis	Analiza
 	Appearance	Wygląd
@@ -68,6 +72,8 @@
 	By role	Według roli
 	CSV table	Tabela CSV
 	Calendar	Kalendarz
+	Calendar name	Nazwa kalendarza
+	Calendars	Kalendarze
 	Cancel	Anuluj
 	Cancel Run	Anuluj uruchomienie
 	Cancel run	Anuluj uruchomienie
@@ -94,6 +100,7 @@
 	Constant	Stały
 	Copy	Kopiuj
 	Cut	Wytnij
+	Daily	Codziennie
 	Dark	Ciemny
 	Data points	Punkty danych
 	Date and time	Data i godzina
@@ -109,6 +116,7 @@
 	Disconnect	Rozłącz
 	Discrete values	Wartości dyskretne
 	Discrete-event simulation, from model files to results.	Symulacja zdarzeń dyskretnych: od plików modeli do wyników.
+	Does not repeat	Nie powtarza się
 	Don't Save	Nie zapisuj
 	Download	Pobierz
 	Download charts (PNG)	Pobierz wykresy (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Dopasowano czas {id}
 	Flows	Przepływy
 	Forget the estimate	Zapomnij szacunek
+	Fri	pt
 	From	Od
 	Gamma	Gamma
 	Goes to	Prowadzi do
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Zapisano skróty klawiaturowe
 	Keyboard shortcuts unchanged	Skróty klawiaturowe bez zmian
 	Language	Język
+	Leave empty to start at midnight of the day the first period starts.	Pozostaw puste, aby zacząć o północy dnia, w którym zaczyna się pierwszy okres.
 	Left	Wyszło
 	Left edges	Lewe krawędzie
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Na licencji MIT License lub Apache License 2.0, do wyboru.
@@ -195,6 +205,8 @@
 	Minimize	Minimalizuj
 	Minimum	Minimum
 	Model	Model
+	Model time 0 is	Czas modelu 0 to
+	Mon	pon
 	Most likely	Najbardziej prawdopodobna
 	Move	Przeniesienie
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Przesuwaj kolejno każdy parametr w dół i w górę i uszereguj je według tego, jak bardzo zmienia się wynik.
@@ -213,9 +225,11 @@
 	No target	Bez celu
 	None	Brak
 	None found. The model is ready to run.	Nie znaleziono problemów. Model jest gotowy do uruchomienia.
+	None picked: the day the period starts.	Nic nie wybrano: dzień, w którym zaczyna się okres.
 	Normal	Normalny
 	Not reached, even with {units}	Nieosiągnięty, nawet przy {units}
 	Number	Liczba
+	On	Dni
 	One change, which Undo takes back	Jedna zmiana, którą cofa Cofnij
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracownik, losowe przybycia: klasyczna kolejka zweryfikowana teorią.
 	One task per BPSim distribution, to compare their spread.	Jedno zadanie dla każdego rozkładu BPSim, aby porównać ich rozrzut.
@@ -236,6 +250,10 @@
 	Paste	Wklej
 	Pause	Wstrzymaj
 	Percentile	Percentyl
+	Period {n} ends	Koniec okresu {n}
+	Period {n} repeats	Powtarzanie okresu {n}
+	Period {n} starts	Początek okresu {n}
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Okresy, w których zmieniają się dostępność, przybycia lub zmiany puli. Daty i godziny zapisuje się jako 2026-01-31T09:00:00.
 	Play	Odtwórz
 	Points	Punkty
 	Poisson	Poissona
@@ -264,13 +282,16 @@
 	Remove Property	Usuń właściwość
 	Remove alternative {n}	Usuń alternatywę {n}
 	Remove block	Usuń blok
+	Remove the calendar {id}	Usuń kalendarz {id}
 	Remove the flow {id}	Usuń przepływ {id}
 	Remove the pool {id}	Usuń pulę {id}
 	Remove this block and its flows (Delete)	Usuń ten blok i jego przepływy (Delete)
+	Remove this period	Usuń ten okres
 	Removed {id}	Usunięto {id}
 	Rename Block	Zmień nazwę bloku
 	Rename Model	Zmień nazwę modelu
 	Repair time	Czas naprawy
+	Repeats	Powtarzanie
 	Replace Model	Zastąp model
 	Replication 1 · {time} of {end} {unit}	Replikacja 1 · {time} z {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikacja 1 · {time} z {end} {unit} · rozgrzewka
@@ -299,6 +320,7 @@
 	Run the sweep	Uruchom przegląd
 	Running	Uruchomiony
 	Running…	Trwa uruchamianie…
+	Sat	sob
 	Save	Zapisz
 	Save As…	Zapisz jako…
 	Save Model	Zapisz model
@@ -341,6 +363,7 @@
 	Stop setting {name}	Zakończ ustawianie {name}
 	Stop watching	Zakończ obserwację
 	Stopped watching	Zakończono obserwację
+	Sun	niedz
 	Sweep a parameter	Przegląd parametru
 	Tandem line	Linia tandemowa
 	Target	Cel
@@ -362,6 +385,7 @@
 	This block has an error	Ten blok ma błąd
 	This run	To uruchomienie
 	Three-point estimate	Szacunek trzypunktowy
+	Thu	czw
 	Time between arrivals	Czas między przybyciami
 	Time blocked	Czas zablokowania
 	Time failed	Czas awarii
@@ -377,6 +401,7 @@
 	Trials	Próby
 	Triangular	Trójkątny
 	Truncated normal	Normalny ucięty
+	Tue	wt
 	Two stations in series, read from an XPDL file.	Dwa stanowiska szeregowe wczytane z pliku XPDL.
 	Type	Typ
 	Undid {action}	Cofnięto {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Obserwuj uruchomienie
 	Watch a run	Obserwuj uruchomienie
 	Watching replication 1	Obserwacja replikacji 1
+	Wed	śr
+	Weekly	Co tydzień
 	Weibull	Weibulla
 	When a task empties	Gdy zadanie się opróżni
 	When enough have left a block	Gdy wystarczająco wiele opuści blok

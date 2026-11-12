@@ -31,13 +31,17 @@
 	Add a flow to…	Dodaj tok prema…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Dodaj jedinicu najopterećenijem zadatku ili grupi dok dovoljno replikacija ne postigne cilj. Prikazan je i odgovor sa svakim vremenom na srednjoj vrijednosti; obično je premalen.
 	Add alternative	Dodaj alternativu
+	Add calendar	Dodaj kalendar
 	Add calendar entry	Dodaj stavku kalendara
+	Add period	Dodaj period
 	Add point	Dodaj tačku
 	Add pool	Dodaj fond
 	Add property	Dodaj svojstvo
+	Added calendar {id}	Dodan je kalendar {id}
 	Added pool {id}	Dodan je fond {id}
 	Added {block} ({id})	Dodan je {block} ({id})
 	Align	Poravnaj
+	Also: {rule}	Također: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Analiza
 	Appearance	Izgled
@@ -68,6 +72,8 @@
 	By role	Po ulozi
 	CSV table	Tablica CSV
 	Calendar	Kalendar
+	Calendar name	Naziv kalendara
+	Calendars	Kalendari
 	Cancel	Otkaži
 	Cancel Run	Otkaži izvođenje
 	Cancel run	Otkaži izvođenje
@@ -94,6 +100,7 @@
 	Constant	Konstantna
 	Copy	Kopiraj
 	Cut	Izreži
+	Daily	Dnevno
 	Dark	Tamno
 	Data points	Podatkovne tačke
 	Date and time	Datum i vrijeme
@@ -109,6 +116,7 @@
 	Disconnect	Prekini vezu
 	Discrete values	Diskretne vrijednosti
 	Discrete-event simulation, from model files to results.	Simulacija diskretnih događaja, od datoteka modela do rezultata.
+	Does not repeat	Ne ponavlja se
 	Don't Save	Nemoj sačuvati
 	Download	Preuzmi
 	Download charts (PNG)	Preuzmi grafikone (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Vrijeme za {id} prilagođeno
 	Flows	Tokovi
 	Forget the estimate	Zaboravi procjenu
+	Fri	pet
 	From	Od
 	Gamma	Gama
 	Goes to	Vodi prema
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Prečice na tastaturi spremljeni
 	Keyboard shortcuts unchanged	Prečice na tastaturi nisu promijenjeni
 	Language	Jezik
+	Leave empty to start at midnight of the day the first period starts.	Ostavite prazno da počne u ponoć dana u kojem počinje prvi period.
 	Left	Izašlo
 	Left edges	Lijeve ivice
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencirano prema MIT License ili Apache License 2.0, po vašem izboru.
@@ -195,6 +205,8 @@
 	Minimize	Minimiziraj
 	Minimum	Minimum
 	Model	Model
+	Model time 0 is	Vrijeme modela 0 je
+	Mon	pon
 	Most likely	Najvjerojatnije
 	Move	Premještanje
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Pomjeri redom svaki parametar dolje i gore i poredaj ih prema tome koliko se rezultat pomjeri.
@@ -213,9 +225,11 @@
 	No target	Bez cilja
 	None	Ništa
 	None found. The model is ready to run.	Nisu pronađeni problemi. Model je spreman za izvođenje.
+	None picked: the day the period starts.	Ništa nije odabrano: dan kada period počinje.
 	Normal	Normalna
 	Not reached, even with {units}	Nije postignuto, ni sa {units}
 	Number	Broj
+	On	Dani
 	One change, which Undo takes back	Jedna promjena, koju Poništi vraća
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jedan službenik, nasumični dolasci: klasičan red čekanja, provjeren teorijom.
 	One task per BPSim distribution, to compare their spread.	Po jedan zadatak za svaku BPSim distribuciju radi usporedbe njihove raspršenosti.
@@ -236,6 +250,10 @@
 	Paste	Zalijepi
 	Pause	Pauza
 	Percentile	Percentil
+	Period {n} ends	Period {n} završava
+	Period {n} repeats	Period {n} se ponavlja
+	Period {n} starts	Period {n} počinje
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periodi u kojima se mijenjaju raspoloživost, dolasci ili smjene fonda. Datumi i vremena pišu se kao 2026-01-31T09:00:00.
 	Play	Reproduciraj
 	Points	Tačke
 	Poisson	Poissonova
@@ -264,13 +282,16 @@
 	Remove Property	Ukloni svojstvo
 	Remove alternative {n}	Ukloni alternativu {n}
 	Remove block	Ukloni blok
+	Remove the calendar {id}	Ukloni kalendar {id}
 	Remove the flow {id}	Ukloni tok {id}
 	Remove the pool {id}	Ukloni fond {id}
 	Remove this block and its flows (Delete)	Ukloni ovaj blok i njegove tokove (Delete)
+	Remove this period	Ukloni ovaj period
 	Removed {id}	Uklonjeno: {id}
 	Rename Block	Preimenuj blok
 	Rename Model	Preimenuj model
 	Repair time	Vrijeme popravke
+	Repeats	Ponavljanje
 	Replace Model	Zamijeni model
 	Replication 1 · {time} of {end} {unit}	Replikacija 1 · {time} od {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikacija 1 · {time} od {end} {unit} · zagrijavanje
@@ -299,6 +320,7 @@
 	Run the sweep	Pokreni prolaz
 	Running	Izvodi se
 	Running…	Izvođenje u tijeku…
+	Sat	sub
 	Save	Sačuvaj
 	Save As…	Sačuvaj kao…
 	Save Model	Sačuvaj model
@@ -341,6 +363,7 @@
 	Stop setting {name}	Prekini postavljanje {name}
 	Stop watching	Zaustavi praćenje
 	Stopped watching	Praćenje zaustavljeno
+	Sun	ned
 	Sweep a parameter	Prolaz kroz parametar
 	Tandem line	Tandemska linija
 	Target	Cilj
@@ -362,6 +385,7 @@
 	This block has an error	Ovaj blok ima grešku
 	This run	Ovo pokretanje
 	Three-point estimate	Procjena u tri tačke
+	Thu	čet
 	Time between arrivals	Vrijeme između dolazaka
 	Time blocked	Vrijeme blokade
 	Time failed	Vrijeme u kvaru
@@ -377,6 +401,7 @@
 	Trials	Pokušaji
 	Triangular	Trokutasta
 	Truncated normal	Odsječena normalna
+	Tue	uto
 	Two stations in series, read from an XPDL file.	Dvije stanice u nizu, učitane iz XPDL datoteke.
 	Type	Vrsta
 	Undid {action}	Poništeno: {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Prati pokretanje
 	Watch a run	Prati pokretanje
 	Watching replication 1	Prati se replikacija 1
+	Wed	sri
+	Weekly	Sedmično
 	Weibull	Weibullova
 	When a task empties	Kad se zadatak isprazni
 	When enough have left a block	Kad dovoljno entiteta napusti blok

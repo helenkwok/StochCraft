@@ -31,13 +31,17 @@
 	Add a flow to…	ნაკადის დამატება (სამიზნე)…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	ყველაზე დატვირთულ ამოცანას ან პულს ერთეულის დამატება, სანამ საკმარისი გამეორება მიზანს არ მიაღწევს. ნაჩვენებია პასუხიც, სადაც ყოველი დრო თავის საშუალოზეა; ის ჩვეულებრივ ძალიან მცირეა.
 	Add alternative	ალტერნატივის დამატება
+	Add calendar	კალენდრის დამატება
 	Add calendar entry	კალენდრის ჩანაწერის დამატება
+	Add period	პერიოდის დამატება
 	Add point	წერტილის დამატება
 	Add pool	პულის დამატება
 	Add property	თვისების დამატება
+	Added calendar {id}	დამატებულია კალენდარი {id}
 	Added pool {id}	დამატებულია პული {id}
 	Added {block} ({id})	დამატებულია {block} ({id})
 	Align	სწორება
+	Also: {rule}	ასევე: {rule}
 	Alternative {n}	ალტერნატივა {n}
 	Analysis	ანალიზი
 	Appearance	გარეგნობა
@@ -68,6 +72,8 @@
 	By role	როლის მიხედვით
 	CSV table	CSV ცხრილი
 	Calendar	კალენდარი
+	Calendar name	კალენდრის სახელი
+	Calendars	კალენდრები
 	Cancel	გაუქმება
 	Cancel Run	გაშვების გაუქმება
 	Cancel run	გაშვების გაუქმება
@@ -94,6 +100,7 @@
 	Constant	მუდმივი
 	Copy	კოპირება
 	Cut	ამოჭრა
+	Daily	ყოველდღე
 	Dark	მუქი
 	Data points	მონაცემთა წერტილები
 	Date and time	თარიღი და დრო
@@ -109,6 +116,7 @@
 	Disconnect	კავშირის გაწყვეტა
 	Discrete values	დისკრეტული მნიშვნელობები
 	Discrete-event simulation, from model files to results.	დისკრეტული მოვლენების სიმულაცია, მოდელის ფაილებიდან შედეგებამდე.
+	Does not repeat	არ მეორდება
 	Don't Save	არ შეინახო
 	Download	ჩამოტვირთვა
 	Download charts (PNG)	დიაგრამების ჩამოტვირთვა (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	{id}-ის დრო მორგებულია
 	Flows	ნაკადები
 	Forget the estimate	შეფასების დავიწყება
+	Fri	პარ
 	From	-დან
 	Gamma	გამა
 	Goes to	მიდის აქ
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	კლავიატურის მალსახმობები შენახულია
 	Keyboard shortcuts unchanged	კლავიატურის მალსახმობები უცვლელია
 	Language	ენა
+	Leave empty to start at midnight of the day the first period starts.	დატოვეთ ცარიელი, რომ დაიწყოს იმ დღის შუაღამეს, როცა პირველი პერიოდი იწყება.
 	Left	გასულა
 	Left edges	მარცხენა კიდეები
 	Licensed under the MIT License or the Apache License 2.0, at your option.	ლიცენზირებულია MIT License-ით ან Apache License 2.0-ით, თქვენი არჩევანით.
@@ -195,6 +205,8 @@
 	Minimize	მინიმიზაცია
 	Minimum	მინიმუმი
 	Model	მოდელი
+	Model time 0 is	მოდელის დრო 0 არის
+	Mon	ორშ
 	Most likely	ყველაზე სავარაუდო
 	Move	გადატანა
 	Move each parameter down and up in turn, and rank them by how much the result moves.	თითოეული პარამეტრის რიგრიგობით ქვემოთ და ზემოთ გადაწევა და დალაგება იმის მიხედვით, რამდენად იცვლება შედეგი.
@@ -213,9 +225,11 @@
 	No target	მიზნის გარეშე
 	None	არცერთი
 	None found. The model is ready to run.	პრობლემა არ მოიძებნა. მოდელი მზადაა გასაშვებად.
+	None picked: the day the period starts.	არაფერია არჩეული: დღე, როცა პერიოდი იწყება.
 	Normal	ნორმალური
 	Not reached, even with {units}	ვერ მიიღწა, თუნდაც {units}-ით
 	Number	რიცხვი
+	On	დღეები
 	One change, which Undo takes back	ერთი ცვლილება, რომელსაც დაბრუნება აუქმებს
 	One clerk, random arrivals: the textbook queue, checked against theory.	ერთი თანამშრომელი, შემთხვევითი შემოსვლები: თეორიით შემოწმებული კლასიკური რიგი.
 	One task per BPSim distribution, to compare their spread.	თითო დავალება ყოველ BPSim განაწილებაზე, მათი გაფანტვის შესადარებლად.
@@ -236,6 +250,10 @@
 	Paste	ჩასმა
 	Pause	პაუზა
 	Percentile	პროცენტილი
+	Period {n} ends	პერიოდი {n} მთავრდება
+	Period {n} repeats	პერიოდი {n} მეორდება
+	Period {n} starts	პერიოდი {n} იწყება
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	პერიოდები, როცა იცვლება ხელმისაწვდომობა, შემოსვლები ან პულის ცვლები. თარიღი და დრო იწერება ასე: 2026-01-31T09:00:00.
 	Play	დაკვრა
 	Points	წერტილები
 	Poisson	პუასონი
@@ -264,13 +282,16 @@
 	Remove Property	თვისების წაშლა
 	Remove alternative {n}	ალტერნატივა {n}-ის წაშლა
 	Remove block	ბლოკის წაშლა
+	Remove the calendar {id}	{id} კალენდრის წაშლა
 	Remove the flow {id}	{id} ნაკადის წაშლა
 	Remove the pool {id}	{id} პულის წაშლა
 	Remove this block and its flows (Delete)	ამ ბლოკისა და მისი ნაკადების წაშლა (Delete)
+	Remove this period	ამ პერიოდის წაშლა
 	Removed {id}	წაშლილია {id}
 	Rename Block	ბლოკის გადარქმევა
 	Rename Model	მოდელის გადარქმევა
 	Repair time	შეკეთების დრო
+	Repeats	გამეორება
 	Replace Model	მოდელის ჩანაცვლება
 	Replication 1 · {time} of {end} {unit}	გამეორება 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	გამეორება 1 · {time} / {end} {unit} · გახურების პერიოდი
@@ -299,6 +320,7 @@
 	Run the sweep	გადარბენის გაშვება
 	Running	მიმდინარეობს
 	Running…	მიმდინარეობს…
+	Sat	შაბ
 	Save	შენახვა
 	Save As…	შენახვა როგორც…
 	Save Model	მოდელის შენახვა
@@ -341,6 +363,7 @@
 	Stop setting {name}	{name}-ის დაყენების შეწყვეტა
 	Stop watching	დაკვირვების შეწყვეტა
 	Stopped watching	დაკვირვება შეწყდა
+	Sun	კვი
 	Sweep a parameter	პარამეტრის გადარბენა
 	Tandem line	თანმიმდევრული ხაზი
 	Target	მიზანი
@@ -362,6 +385,7 @@
 	This block has an error	ამ ბლოკს აქვს შეცდომა
 	This run	ეს გაშვება
 	Three-point estimate	სამწერტილიანი შეფასება
+	Thu	ხუთ
 	Time between arrivals	შემოსვლებს შორის დრო
 	Time blocked	დაბლოკვის დრო
 	Time failed	გაუმართაობის დრო
@@ -377,6 +401,7 @@
 	Trials	ცდები
 	Triangular	სამკუთხა
 	Truncated normal	შეკვეცილი ნორმალური
+	Tue	სამ
 	Two stations in series, read from an XPDL file.	ორი მიმდევრობითი სადგური, წაკითხული XPDL ფაილიდან.
 	Type	ტიპი
 	Undid {action}	გაუქმდა {action}
@@ -404,6 +429,8 @@
 	Watch a Run	გაშვებაზე დაკვირვება
 	Watch a run	გაშვებაზე დაკვირვება
 	Watching replication 1	მიმდინარეობს დაკვირვება გამეორება 1-ზე
+	Wed	ოთხ
+	Weekly	ყოველკვირა
 	Weibull	ვეიბული
 	When a task empties	როცა ამოცანა დაცარიელდება
 	When enough have left a block	როცა ბლოკს საკმარისი დატოვებს

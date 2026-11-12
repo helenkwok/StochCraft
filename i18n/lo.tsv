@@ -31,13 +31,17 @@
 	Add a flow to…	ເພີ່ມເສັ້ນທາງໄປຫາ…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	ເພີ່ມໜຶ່ງໜ່ວຍໃຫ້ວຽກ ຫຼື ກຸ່ມທີ່ຫຍຸ້ງທີ່ສຸດ ຈົນກວ່າຮອບຈຳລອງຊ້ຳຈະບັນລຸເປົ້າໝາຍພຽງພໍ. ສະແດງຄຳຕອບທີ່ທຸກເວລາເທົ່າກັບຄ່າສະເລ່ຍນຳ, ເຊິ່ງມັກນ້ອຍເກີນໄປ.
 	Add alternative	ເພີ່ມທາງເລືອກ
+	Add calendar	ເພີ່ມປະຕິທິນ
 	Add calendar entry	ເພີ່ມລາຍການປະຕິທິນ
+	Add period	ເພີ່ມໄລຍະ
 	Add point	ເພີ່ມຈຸດ
 	Add pool	ເພີ່ມກຸ່ມຊັບພະຍາກອນ
 	Add property	ເພີ່ມຄຸນສົມບັດ
+	Added calendar {id}	ເພີ່ມປະຕິທິນ {id} ແລ້ວ
 	Added pool {id}	ເພີ່ມກຸ່ມຊັບພະຍາກອນ {id} ແລ້ວ
 	Added {block} ({id})	ເພີ່ມ {block} ({id}) ແລ້ວ
 	Align	ຈັດແຖວ
+	Also: {rule}	ນອກຈາກນີ້: {rule}
 	Alternative {n}	ທາງເລືອກ {n}
 	Analysis	ການວິເຄາະ
 	Appearance	ຮູບລັກສະນະ
@@ -68,6 +72,8 @@
 	By role	ຕາມບົດບາດ
 	CSV table	ຕາຕະລາງ CSV
 	Calendar	ປະຕິທິນ
+	Calendar name	ຊື່ປະຕິທິນ
+	Calendars	ປະຕິທິນ
 	Cancel	ຍົກເລີກ
 	Cancel Run	ຍົກເລີກການປະມວນຜົນ
 	Cancel run	ຍົກເລີກການປະມວນຜົນ
@@ -94,6 +100,7 @@
 	Constant	ຄ່າຄົງທີ່
 	Copy	ສຳເນົາ
 	Cut	ຕັດ
+	Daily	ທຸກມື້
 	Dark	ມືດ
 	Data points	ຈຸດຂໍ້ມູນ
 	Date and time	ວັນທີ ແລະ ເວລາ
@@ -109,6 +116,7 @@
 	Disconnect	ຕັດການເຊື່ອມຕໍ່
 	Discrete values	ຄ່າບໍ່ຕໍ່ເນື່ອງ
 	Discrete-event simulation, from model files to results.	ການຈຳລອງເຫດການບໍ່ຕໍ່ເນື່ອງ ຈາກໄຟລ໌ແບບຈຳລອງໄປສູ່ຜົນໄດ້ຮັບ.
+	Does not repeat	ບໍ່ເຮັດຊ້ຳ
 	Don't Save	ບໍ່ບັນທຶກ
 	Download	ດາວໂຫຼດ
 	Download charts (PNG)	ດາວໂຫຼດແຜນພູມ (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	ປັບເວລາຂອງ {id} ແລ້ວ
 	Flows	ເສັ້ນທາງ
 	Forget the estimate	ລືມການປະມານ
+	Fri	ສຸກ
 	From	ຈາກ
 	Gamma	ແກມມາ
 	Goes to	ໄປຫາ
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	ບັນທຶກປຸ່ມລັດແລ້ວ
 	Keyboard shortcuts unchanged	ປຸ່ມລັດບໍ່ມີການປ່ຽນແປງ
 	Language	ພາສາ
+	Leave empty to start at midnight of the day the first period starts.	ປະວ່າງໄວ້ເພື່ອເລີ່ມຕອນທ່ຽງຄືນຂອງມື້ທີ່ໄລຍະທຳອິດເລີ່ມ.
 	Left	ຈຳນວນທີ່ອອກ
 	Left edges	ຂອບຊ້າຍ
 	Licensed under the MIT License or the Apache License 2.0, at your option.	ໃຊ້ໄດ້ພາຍໃຕ້ MIT License ຫຼື Apache License 2.0 ຕາມທີ່ທ່ານເລືອກ.
@@ -195,6 +205,8 @@
 	Minimize	ຫຍໍ້ໜ້າຕ່າງ
 	Minimum	ຄ່າຕ່ຳສຸດ
 	Model	ແບບຈຳລອງ
+	Model time 0 is	ເວລາ 0 ຂອງແບບຈຳລອງແມ່ນ
+	Mon	ຈັນ
 	Most likely	ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ
 	Move	ຍ້າຍ
 	Move each parameter down and up in turn, and rank them by how much the result moves.	ປັບແຕ່ລະພາຣາມິເຕີລົງ ແລະ ຂຶ້ນເທື່ອລະອັນ ແລ້ວຈັດອັນດັບຕາມວ່າຜົນໄດ້ຮັບຂະຫຍັບຫຼາຍເທົ່າໃດ.
@@ -213,9 +225,11 @@
 	No target	ບໍ່ມີເປົ້າໝາຍ
 	None	ບໍ່ມີ
 	None found. The model is ready to run.	ບໍ່ພົບບັນຫາ. ແບບຈຳລອງພ້ອມໃຊ້ງານ.
+	None picked: the day the period starts.	ບໍ່ໄດ້ເລືອກ: ມື້ທີ່ໄລຍະເລີ່ມ.
 	Normal	ນໍມອນ
 	Not reached, even with {units}	ບໍ່ບັນລຸ ເຖິງມີ {units}
 	Number	ຈຳນວນ
+	On	ມື້
 	One change, which Undo takes back	ການປ່ຽນແປງໜຶ່ງເທື່ອ ເຊິ່ງຍົກເລີກໄດ້
 	One clerk, random arrivals: the textbook queue, checked against theory.	ພະນັກງານໜຶ່ງຄົນ ແລະ ການມາຮອດແບບສຸ່ມ: ແຖວຄອຍພື້ນຖານທີ່ກວດທຽບກັບທິດສະດີ.
 	One task per BPSim distribution, to compare their spread.	ໜຶ່ງໜ້າວຽກຕໍ່ແຕ່ລະການແຈກຢາຍ BPSim ເພື່ອປຽບທຽບການກະຈາຍ.
@@ -236,6 +250,10 @@
 	Paste	ວາງ
 	Pause	ຢຸດຊົ່ວຄາວ
 	Percentile	ເປີເຊັນໄທລ໌
+	Period {n} ends	ໄລຍະ {n} ສິ້ນສຸດ
+	Period {n} repeats	ໄລຍະ {n} ເຮັດຊ້ຳ
+	Period {n} starts	ໄລຍະ {n} ເລີ່ມ
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	ໄລຍະເວລາທີ່ຄວາມພ້ອມໃຊ້, ການມາຮອດ ຫຼື ກະຂອງກຸ່ມຊັບພະຍາກອນປ່ຽນແປງ. ວັນທີ ແລະ ເວລາຂຽນເປັນ 2026-01-31T09:00:00.
 	Play	ຫຼິ້ນ
 	Points	ຈຸດ
 	Poisson	ປົວຊົງ
@@ -264,13 +282,16 @@
 	Remove Property	ລຶບຄຸນສົມບັດ
 	Remove alternative {n}	ລຶບທາງເລືອກ {n}
 	Remove block	ລຶບບລັອກ
+	Remove the calendar {id}	ລຶບປະຕິທິນ {id}
 	Remove the flow {id}	ລຶບເສັ້ນທາງ {id}
 	Remove the pool {id}	ລຶບກຸ່ມຊັບພະຍາກອນ {id}
 	Remove this block and its flows (Delete)	ລຶບບລັອກນີ້ ແລະ ເສັ້ນທາງຂອງມັນ (Delete)
+	Remove this period	ລຶບໄລຍະນີ້
 	Removed {id}	ລຶບ {id} ແລ້ວ
 	Rename Block	ປ່ຽນຊື່ບລັອກ
 	Rename Model	ປ່ຽນຊື່ແບບຈຳລອງ
 	Repair time	ເວລາສ້ອມແປງ
+	Repeats	ເຮັດຊ້ຳ
 	Replace Model	ແທນທີ່ແບບຈຳລອງ
 	Replication 1 · {time} of {end} {unit}	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit} · ໄລຍະອຸ່ນເຄື່ອງ
@@ -299,6 +320,7 @@
 	Run the sweep	ແລ່ນການກວາດ
 	Running	ກຳລັງປະມວນຜົນ
 	Running…	ກຳລັງປະມວນຜົນ…
+	Sat	ເສົາ
 	Save	ບັນທຶກ
 	Save As…	ບັນທຶກເປັນ…
 	Save Model	ບັນທຶກແບບຈຳລອງ
@@ -341,6 +363,7 @@
 	Stop setting {name}	ຢຸດການຕັ້ງຄ່າ {name}
 	Stop watching	ຢຸດຕິດຕາມ
 	Stopped watching	ຢຸດຕິດຕາມແລ້ວ
+	Sun	ອາທິດ
 	Sweep a parameter	ກວາດພາຣາມິເຕີ
 	Tandem line	ສາຍງານຕໍ່ເນື່ອງ
 	Target	ເປົ້າໝາຍ
@@ -362,6 +385,7 @@
 	This block has an error	ບລັອກນີ້ມີຂໍ້ຜິດພາດ
 	This run	ການປະມວນຜົນນີ້
 	Three-point estimate	ການປະມານສາມຈຸດ
+	Thu	ພະຫັດ
 	Time between arrivals	ເວລາລະຫວ່າງການມາຮອດ
 	Time blocked	ເວລາທີ່ຖືກຂັດຂວາງ
 	Time failed	ເວລາທີ່ເສຍ
@@ -377,6 +401,7 @@
 	Trials	ຈຳນວນຄັ້ງທົດລອງ
 	Triangular	ສາມຫຼ່ຽມ
 	Truncated normal	ນໍມອນແບບຕັດຂອບ
+	Tue	ອັງຄານ
 	Two stations in series, read from an XPDL file.	ສອງສະຖານີຕໍ່ເນື່ອງ ອ່ານຈາກໄຟລ໌ XPDL.
 	Type	ປະເພດ
 	Undid {action}	ຍົກເລີກ {action} ແລ້ວ
@@ -404,6 +429,8 @@
 	Watch a Run	ຕິດຕາມການປະມວນຜົນ
 	Watch a run	ຕິດຕາມການປະມວນຜົນ
 	Watching replication 1	ກຳລັງຕິດຕາມຮອບຈຳລອງທີ 1
+	Wed	ພຸດ
+	Weekly	ທຸກອາທິດ
 	Weibull	ໄວບູນ
 	When a task empties	ເມື່ອວຽກຫວ່າງ
 	When enough have left a block	ເມື່ອອອກຈາກບລັອກພຽງພໍ

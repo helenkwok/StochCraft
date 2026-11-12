@@ -31,13 +31,17 @@
 	Add a flow to…	เพิ่มโฟลว์ไปยัง…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	เพิ่มหนึ่งหน่วยให้งานหรือกลุ่มที่ยุ่งที่สุดจนกว่ารอบการจำลองซ้ำจะบรรลุเป้าหมายมากพอ แสดงคำตอบที่ทุกเวลาเท่ากับค่าเฉลี่ยด้วย ซึ่งมักน้อยเกินไป
 	Add alternative	เพิ่มทางเลือก
+	Add calendar	เพิ่มปฏิทิน
 	Add calendar entry	เพิ่มรายการปฏิทิน
+	Add period	เพิ่มช่วง
 	Add point	เพิ่มจุด
 	Add pool	เพิ่มกลุ่มทรัพยากร
 	Add property	เพิ่มคุณสมบัติ
+	Added calendar {id}	เพิ่มปฏิทิน {id} แล้ว
 	Added pool {id}	เพิ่มกลุ่มทรัพยากร {id} แล้ว
 	Added {block} ({id})	เพิ่ม {block} ({id}) แล้ว
 	Align	จัดแนว
+	Also: {rule}	เพิ่มเติม: {rule}
 	Alternative {n}	ทางเลือก {n}
 	Analysis	การวิเคราะห์
 	Appearance	ลักษณะที่ปรากฏ
@@ -68,6 +72,8 @@
 	By role	ตามบทบาท
 	CSV table	ตาราง CSV
 	Calendar	ปฏิทิน
+	Calendar name	ชื่อปฏิทิน
+	Calendars	ปฏิทิน
 	Cancel	ยกเลิก
 	Cancel Run	ยกเลิกการรัน
 	Cancel run	ยกเลิกการรัน
@@ -94,6 +100,7 @@
 	Constant	ค่าคงที่
 	Copy	คัดลอก
 	Cut	ตัด
+	Daily	ทุกวัน
 	Dark	มืด
 	Data points	จุดข้อมูล
 	Date and time	วันที่และเวลา
@@ -109,6 +116,7 @@
 	Disconnect	ตัดการเชื่อมต่อ
 	Discrete values	ค่าที่ไม่ต่อเนื่อง
 	Discrete-event simulation, from model files to results.	การจำลองเหตุการณ์ไม่ต่อเนื่อง ตั้งแต่ไฟล์แบบจำลองถึงผลลัพธ์
+	Does not repeat	ไม่ซ้ำ
 	Don't Save	ไม่บันทึก
 	Download	ดาวน์โหลด
 	Download charts (PNG)	ดาวน์โหลดแผนภูมิ (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	ปรับเวลาของ {id} แล้ว
 	Flows	โฟลว์
 	Forget the estimate	ลืมการประมาณ
+	Fri	ศ.
 	From	จาก
 	Gamma	แกมมา
 	Goes to	ไปยัง
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	บันทึกปุ่มลัดแล้ว
 	Keyboard shortcuts unchanged	ปุ่มลัดไม่มีการเปลี่ยนแปลง
 	Language	ภาษา
+	Leave empty to start at midnight of the day the first period starts.	เว้นว่างไว้เพื่อเริ่มที่เที่ยงคืนของวันที่ช่วงแรกเริ่ม
 	Left	จำนวนที่ออกไป
 	Left edges	ขอบซ้าย
 	Licensed under the MIT License or the Apache License 2.0, at your option.	อนุญาตให้ใช้ภายใต้ MIT License หรือ Apache License 2.0 ตามที่คุณเลือก
@@ -195,6 +205,8 @@
 	Minimize	ย่อหน้าต่าง
 	Minimum	ค่าต่ำสุด
 	Model	แบบจำลอง
+	Model time 0 is	เวลา 0 ของแบบจำลองคือ
+	Mon	จ.
 	Most likely	ค่าที่เป็นไปได้มากที่สุด
 	Move	ย้าย
 	Move each parameter down and up in turn, and rank them by how much the result moves.	ปรับแต่ละพารามิเตอร์ลงและขึ้นทีละตัว แล้วจัดอันดับตามว่าผลลัพธ์ขยับมากเท่าใด
@@ -213,9 +225,11 @@
 	No target	ไม่มีเป้าหมาย
 	None	ไม่มี
 	None found. The model is ready to run.	ไม่พบปัญหา แบบจำลองพร้อมรันแล้ว
+	None picked: the day the period starts.	ไม่ได้เลือก: วันที่ช่วงเริ่ม
 	Normal	ปกติ
 	Not reached, even with {units}	ไม่บรรลุ แม้มี {units}
 	Number	ตัวเลข
+	On	วัน
 	One change, which Undo takes back	การเปลี่ยนแปลงหนึ่งครั้ง ซึ่งเลิกทำได้
 	One clerk, random arrivals: the textbook queue, checked against theory.	พนักงานหนึ่งคนและการมาถึงแบบสุ่ม: คิวมาตรฐานที่ตรวจสอบเทียบกับทฤษฎี
 	One task per BPSim distribution, to compare their spread.	หนึ่งงานต่อการแจกแจง BPSim เพื่อเปรียบเทียบการกระจายของค่า
@@ -236,6 +250,10 @@
 	Paste	วาง
 	Pause	หยุดชั่วคราว
 	Percentile	เปอร์เซ็นไทล์
+	Period {n} ends	ช่วง {n} สิ้นสุด
+	Period {n} repeats	ช่วง {n} ซ้ำ
+	Period {n} starts	ช่วง {n} เริ่ม
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	ช่วงเวลาที่ความพร้อมใช้งาน การมาถึง หรือกะของกลุ่มทรัพยากรเปลี่ยนไป วันที่และเวลาเขียนเป็น 2026-01-31T09:00:00
 	Play	เล่น
 	Points	จุด
 	Poisson	ปัวซอง
@@ -264,13 +282,16 @@
 	Remove Property	นำคุณสมบัติออก
 	Remove alternative {n}	นำทางเลือก {n} ออก
 	Remove block	นำบล็อกออก
+	Remove the calendar {id}	นำปฏิทิน {id} ออก
 	Remove the flow {id}	นำโฟลว์ {id} ออก
 	Remove the pool {id}	นำกลุ่มทรัพยากร {id} ออก
 	Remove this block and its flows (Delete)	นำบล็อกนี้และโฟลว์ที่เกี่ยวข้องออก (Delete)
+	Remove this period	นำช่วงนี้ออก
 	Removed {id}	นำ {id} ออกแล้ว
 	Rename Block	เปลี่ยนชื่อบล็อก
 	Rename Model	เปลี่ยนชื่อแบบจำลอง
 	Repair time	เวลาซ่อม
+	Repeats	ซ้ำ
 	Replace Model	แทนที่แบบจำลอง
 	Replication 1 · {time} of {end} {unit}	การจำลองซ้ำรอบที่ 1 · {time} จาก {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	การจำลองซ้ำรอบที่ 1 · {time} จาก {end} {unit} · ระยะอุ่นเครื่อง
@@ -299,6 +320,7 @@
 	Run the sweep	รันการกวาด
 	Running	กำลังรัน
 	Running…	กำลังรัน…
+	Sat	ส.
 	Save	บันทึก
 	Save As…	บันทึกเป็น…
 	Save Model	บันทึกแบบจำลอง
@@ -341,6 +363,7 @@
 	Stop setting {name}	หยุดกำหนดค่า {name}
 	Stop watching	หยุดเฝ้าดู
 	Stopped watching	หยุดเฝ้าดูแล้ว
+	Sun	อา.
 	Sweep a parameter	กวาดพารามิเตอร์
 	Tandem line	สายงานต่อเนื่อง
 	Target	เป้าหมาย
@@ -362,6 +385,7 @@
 	This block has an error	บล็อกนี้มีข้อผิดพลาด
 	This run	การรันนี้
 	Three-point estimate	การประมาณสามจุด
+	Thu	พฤ.
 	Time between arrivals	เวลาระหว่างการมาถึง
 	Time blocked	เวลาที่ถูกบล็อก
 	Time failed	เวลาที่ขัดข้อง
@@ -377,6 +401,7 @@
 	Trials	จำนวนครั้งทดลอง
 	Triangular	สามเหลี่ยม
 	Truncated normal	ปกติแบบตัดปลาย
+	Tue	อ.
 	Two stations in series, read from an XPDL file.	สองสถานีต่ออนุกรม อ่านจากไฟล์ XPDL
 	Type	ชนิด
 	Undid {action}	เลิกทำ {action} แล้ว
@@ -404,6 +429,8 @@
 	Watch a Run	เฝ้าดูการรัน
 	Watch a run	เฝ้าดูการรัน
 	Watching replication 1	กำลังเฝ้าดูการจำลองซ้ำรอบที่ 1
+	Wed	พ.
+	Weekly	ทุกสัปดาห์
 	Weibull	ไวบูลล์
 	When a task empties	เมื่องานว่าง
 	When enough have left a block	เมื่อออกจากบล็อกมากพอ

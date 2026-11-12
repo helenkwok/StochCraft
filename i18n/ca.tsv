@@ -31,13 +31,17 @@
 	Add a flow to…	Afegeix un flux cap a…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Afegir una unitat a la tasca o al grup més ocupat fins que prou rèpliques compleixin un objectiu. També es mostra la resposta amb cada temps a la seva mitjana; sol ser massa petita.
 	Add alternative	Afegeix una alternativa
+	Add calendar	Afegeix un calendari
 	Add calendar entry	Afegeix una entrada de calendari
+	Add period	Afegeix un període
 	Add point	Afegeix un punt
 	Add pool	Afegeix un grup
 	Add property	Afegeix una propietat
+	Added calendar {id}	S'ha afegit el calendari {id}
 	Added pool {id}	S'ha afegit el grup {id}
 	Added {block} ({id})	S'ha afegit {block} ({id})
 	Align	Alinea
+	Also: {rule}	També: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Anàlisi
 	Appearance	Aparença
@@ -68,6 +72,8 @@
 	By role	Per rol
 	CSV table	Taula CSV
 	Calendar	Calendari
+	Calendar name	Nom del calendari
+	Calendars	Calendaris
 	Cancel	Cancel·la
 	Cancel Run	Cancel·la l'execució
 	Cancel run	Cancel·la l'execució
@@ -94,6 +100,7 @@
 	Constant	Constant
 	Copy	Copia
 	Cut	Retalla
+	Daily	Cada dia
 	Dark	Fosc
 	Data points	Punts de dades
 	Date and time	Data i hora
@@ -109,6 +116,7 @@
 	Disconnect	Desconnecta
 	Discrete values	Valors discrets
 	Discrete-event simulation, from model files to results.	Simulació d'esdeveniments discrets: dels fitxers del model als resultats.
+	Does not repeat	No es repeteix
 	Don't Save	No desis
 	Download	Baixa
 	Download charts (PNG)	Baixa els gràfics (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	S'ha ajustat el temps de {id}
 	Flows	Fluxos
 	Forget the estimate	Oblida l'estimació
+	Fri	dv.
 	From	Des de
 	Gamma	Gamma
 	Goes to	Va cap a
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Dreceres de teclat desades
 	Keyboard shortcuts unchanged	Dreceres de teclat sense canvis
 	Language	Idioma
+	Leave empty to start at midnight of the day the first period starts.	Deixeu-ho buit per començar a la mitjanit del dia en què comença el primer període.
 	Left	Sortides
 	Left edges	Vores esquerres
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Sota MIT License o Apache License 2.0, a la vostra elecció.
@@ -195,6 +205,8 @@
 	Minimize	Minimitza
 	Minimum	Mínim
 	Model	Model
+	Model time 0 is	El temps 0 del model és
+	Mon	dl.
 	Most likely	Més probable
 	Move	Mou
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Moure cada paràmetre avall i amunt per torns, i ordenar-los segons quant es mou el resultat.
@@ -213,9 +225,11 @@
 	No target	Sense objectiu
 	None	Cap
 	None found. The model is ready to run.	No s'han trobat problemes. El model està a punt per executar-se.
+	None picked: the day the period starts.	Cap triat: el dia en què comença el període.
 	Normal	Normal
 	Not reached, even with {units}	No assolit, ni tan sols amb {units}
 	Number	Nombre
+	On	Dies
 	One change, which Undo takes back	Un sol canvi, que Desfés reverteix
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un treballador, arribades aleatòries: la cua clàssica, contrastada amb la teoria.
 	One task per BPSim distribution, to compare their spread.	Una tasca per cada distribució BPSim per comparar-ne la dispersió.
@@ -236,6 +250,10 @@
 	Paste	Enganxa
 	Pause	Pausa
 	Percentile	Percentil
+	Period {n} ends	Fi del període {n}
+	Period {n} repeats	Repetició del període {n}
+	Period {n} starts	Inici del període {n}
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Períodes en què canvien la disponibilitat, les arribades o els torns d'un grup. Les dates i hores s'escriuen 2026-01-31T09:00:00.
 	Play	Reprodueix
 	Points	Punts
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Elimina la propietat
 	Remove alternative {n}	Elimina l'alternativa {n}
 	Remove block	Elimina el bloc
+	Remove the calendar {id}	Elimina el calendari {id}
 	Remove the flow {id}	Elimina el flux {id}
 	Remove the pool {id}	Elimina el grup {id}
 	Remove this block and its flows (Delete)	Elimina aquest bloc i els seus fluxos (Delete)
+	Remove this period	Elimina aquest període
 	Removed {id}	S'ha eliminat {id}
 	Rename Block	Canvia el nom del bloc
 	Rename Model	Canvia el nom del model
 	Repair time	Temps de reparació
+	Repeats	Es repeteix
 	Replace Model	Substitueix el model
 	Replication 1 · {time} of {end} {unit}	Rèplica 1 · {time} de {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Rèplica 1 · {time} de {end} {unit} · escalfament
@@ -299,6 +320,7 @@
 	Run the sweep	Executa l'escombratge
 	Running	En execució
 	Running…	Executant…
+	Sat	ds.
 	Save	Desa
 	Save As…	Anomena i desa…
 	Save Model	Desa el model
@@ -341,6 +363,7 @@
 	Stop setting {name}	Deixa de definir {name}
 	Stop watching	Deixa d'observar
 	Stopped watching	S'ha deixat d'observar
+	Sun	dg.
 	Sweep a parameter	Escombrar un paràmetre
 	Tandem line	Línia en tàndem
 	Target	Objectiu
@@ -362,6 +385,7 @@
 	This block has an error	Aquest bloc té un error
 	This run	Aquesta execució
 	Three-point estimate	Estimació de tres punts
+	Thu	dj.
 	Time between arrivals	Temps entre arribades
 	Time blocked	Temps bloquejat
 	Time failed	Temps avariat
@@ -377,6 +401,7 @@
 	Trials	Proves
 	Triangular	Triangular
 	Truncated normal	Normal truncada
+	Tue	dt.
 	Two stations in series, read from an XPDL file.	Dues estacions en sèrie, llegides d'un fitxer XPDL.
 	Type	Tipus
 	Undid {action}	S'ha desfet {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Observa una execució
 	Watch a run	Observa una execució
 	Watching replication 1	S'està observant la rèplica 1
+	Wed	dc.
+	Weekly	Cada setmana
 	Weibull	Weibull
 	When a task empties	Quan una tasca es buida
 	When enough have left a block	Quan n'han sortit prou d'un bloc

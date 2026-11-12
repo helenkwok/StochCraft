@@ -777,6 +777,7 @@ fn records(
 ) -> Option<Value> {
     let items = current.as_array().cloned().unwrap_or_default();
     let mut out: Option<Vec<Value>> = None;
+    let mut removed = None;
     let r = ui.label(theme::strong(label));
     if let Some(h) = help {
         r.on_hover_text(h);
@@ -830,9 +831,7 @@ fn records(
                         )
                     });
                 if ui.small_button(t("Remove")).clicked() {
-                    let mut all = out.clone().unwrap_or_else(|| items.clone());
-                    all.remove(i);
-                    out = Some(all);
+                    removed = Some(i);
                 }
             });
             ui.indent(&k, |ui| {
@@ -880,6 +879,12 @@ fn records(
             None => {}
         }
     });
+    // Removed last, so the other entries' edits this frame use the indexes they were drawn with.
+    if let Some(i) = removed {
+        let mut all = out.unwrap_or(items);
+        all.remove(i);
+        out = Some(all);
+    }
     out.map(Value::Array)
 }
 
@@ -899,6 +904,7 @@ fn array(
     let item = schema.resolve(&node["items"]);
     let items = current.as_array().cloned().unwrap_or_default();
     let mut out: Option<Vec<Value>> = None;
+    let mut removed = None;
     ui.label(theme::strong(label));
     let fields: Vec<String> = item["properties"]
         .as_object()
@@ -926,9 +932,7 @@ fn array(
                 }
             }
             if items.len() > 1 && ui.small_button(t("Remove")).clicked() {
-                let mut all = out.clone().unwrap_or_else(|| items.clone());
-                all.remove(i);
-                out = Some(all);
+                removed = Some(i);
             }
         });
     }
@@ -939,6 +943,12 @@ fn array(
             .cloned()
             .unwrap_or_else(|| json!({"probability": 1.0, "value": 1.0}));
         all.push(last);
+        out = Some(all);
+    }
+    // Removed last, so the other entries' edits this frame use the indexes they were drawn with.
+    if let Some(i) = removed {
+        let mut all = out.unwrap_or(items);
+        all.remove(i);
         out = Some(all);
     }
     out.map(Value::Array)

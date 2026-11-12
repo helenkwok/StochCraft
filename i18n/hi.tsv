@@ -31,13 +31,17 @@
 	Add a flow to…	प्रवाह जोड़ें (लक्ष्य)…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	सबसे व्यस्त कार्य या पूल में एक इकाई जोड़ें, जब तक पर्याप्त पुनरावृत्तियाँ लक्ष्य पूरा न कर लें। हर समय को उसके माध्य पर रखकर मिला उत्तर भी दिखता है; वह प्रायः बहुत छोटा होता है।
 	Add alternative	विकल्प जोड़ें
+	Add calendar	कैलेंडर जोड़ें
 	Add calendar entry	कैलेंडर प्रविष्टि जोड़ें
+	Add period	अवधि जोड़ें
 	Add point	बिंदु जोड़ें
 	Add pool	पूल जोड़ें
 	Add property	गुण जोड़ें
+	Added calendar {id}	कैलेंडर {id} जोड़ा गया
 	Added pool {id}	पूल {id} जोड़ा गया
 	Added {block} ({id})	{block} ({id}) जोड़ा गया
 	Align	संरेखित करें
+	Also: {rule}	साथ ही: {rule}
 	Alternative {n}	विकल्प {n}
 	Analysis	विश्लेषण
 	Appearance	दिखावट
@@ -68,6 +72,8 @@
 	By role	भूमिका के अनुसार
 	CSV table	CSV तालिका
 	Calendar	कैलेंडर
+	Calendar name	कैलेंडर का नाम
+	Calendars	कैलेंडर
 	Cancel	रद्द करें
 	Cancel Run	रन रद्द करें
 	Cancel run	रन रद्द करें
@@ -94,6 +100,7 @@
 	Constant	स्थिर
 	Copy	कॉपी करें
 	Cut	काटें
+	Daily	प्रतिदिन
 	Dark	गहरा
 	Data points	डेटा बिंदु
 	Date and time	दिनांक और समय
@@ -109,6 +116,7 @@
 	Disconnect	कनेक्शन हटाएँ
 	Discrete values	असतत मान
 	Discrete-event simulation, from model files to results.	असतत-घटना सिमुलेशन, मॉडल फ़ाइलों से परिणामों तक।
+	Does not repeat	नहीं दोहराता
 	Don't Save	सहेजें नहीं
 	Download	डाउनलोड करें
 	Download charts (PNG)	चार्ट डाउनलोड करें (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	{id} का समय मिलाया गया
 	Flows	प्रवाह
 	Forget the estimate	अनुमान भूल जाएँ
+	Fri	शुक्र
 	From	से
 	Gamma	गामा
 	Goes to	यहाँ जाता है
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	कीबोर्ड शॉर्टकट सहेज दिए गए
 	Keyboard shortcuts unchanged	कीबोर्ड शॉर्टकट अपरिवर्तित हैं
 	Language	भाषा
+	Leave empty to start at midnight of the day the first period starts.	पहली अवधि जिस दिन शुरू होती है, उस दिन की आधी रात से शुरू करने के लिए खाली छोड़ें।
 	Left	प्रस्थान संख्या
 	Left edges	बाएँ किनारे
 	Licensed under the MIT License or the Apache License 2.0, at your option.	अपनी पसंद के अनुसार MIT License या Apache License 2.0 के तहत लाइसेंस प्राप्त।
@@ -195,6 +205,8 @@
 	Minimize	न्यूनतम करें
 	Minimum	न्यूनतम
 	Model	मॉडल
+	Model time 0 is	मॉडल समय 0 है
+	Mon	सोम
 	Most likely	सर्वाधिक संभावित
 	Move	स्थानांतरण
 	Move each parameter down and up in turn, and rank them by how much the result moves.	हर पैरामीटर को बारी-बारी से नीचे और ऊपर करें, और परिणाम कितना हिलता है उसके अनुसार क्रम दें।
@@ -213,9 +225,11 @@
 	No target	कोई लक्ष्य नहीं
 	None	कोई नहीं
 	None found. The model is ready to run.	कोई समस्या नहीं मिली। मॉडल चलाने के लिए तैयार है।
+	None picked: the day the period starts.	कोई नहीं चुना: जिस दिन अवधि शुरू होती है।
 	Normal	सामान्य
 	Not reached, even with {units}	पूरा नहीं हुआ, {units} के साथ भी नहीं
 	Number	संख्या
+	On	दिन
 	One change, which Undo takes back	एक बदलाव, जिसे पूर्ववत करें वापस लेता है
 	One clerk, random arrivals: the textbook queue, checked against theory.	एक कर्मचारी, यादृच्छिक आगमन: सिद्धांत से सत्यापित पारंपरिक कतार।
 	One task per BPSim distribution, to compare their spread.	प्रसार की तुलना के लिए प्रत्येक BPSim वितरण पर एक कार्य।
@@ -236,6 +250,10 @@
 	Paste	चिपकाएँ
 	Pause	रोकें
 	Percentile	प्रतिशतक
+	Period {n} ends	अवधि {n} समाप्त
+	Period {n} repeats	अवधि {n} दोहराव
+	Period {n} starts	अवधि {n} शुरू
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	वे अवधियाँ जब उपलब्धता, आगमन या किसी पूल की पालियाँ बदलती हैं। दिनांक और समय 2026-01-31T09:00:00 की तरह लिखे जाते हैं।
 	Play	चलाएँ
 	Points	बिंदु
 	Poisson	प्वासों
@@ -264,13 +282,16 @@
 	Remove Property	गुण हटाएँ
 	Remove alternative {n}	विकल्प {n} हटाएँ
 	Remove block	ब्लॉक हटाएँ
+	Remove the calendar {id}	कैलेंडर {id} हटाएँ
 	Remove the flow {id}	प्रवाह {id} हटाएँ
 	Remove the pool {id}	पूल {id} हटाएँ
 	Remove this block and its flows (Delete)	यह ब्लॉक और इसके प्रवाह हटाएँ (Delete)
+	Remove this period	यह अवधि हटाएँ
 	Removed {id}	{id} हटाया गया
 	Rename Block	ब्लॉक का नाम बदलें
 	Rename Model	मॉडल का नाम बदलें
 	Repair time	मरम्मत समय
+	Repeats	दोहराव
 	Replace Model	मॉडल बदलें
 	Replication 1 · {time} of {end} {unit}	पुनरावृत्ति 1 · {end} {unit} में से {time}
 	Replication 1 · {time} of {end} {unit} · warm-up	पुनरावृत्ति 1 · {end} {unit} में से {time} · वार्म-अप
@@ -299,6 +320,7 @@
 	Run the sweep	स्वीप चलाएँ
 	Running	चल रहा है
 	Running…	चल रहा है…
+	Sat	शनि
 	Save	सहेजें
 	Save As…	इस रूप में सहेजें…
 	Save Model	मॉडल सहेजें
@@ -341,6 +363,7 @@
 	Stop setting {name}	{name} सेट करना बंद करें
 	Stop watching	देखना बंद करें
 	Stopped watching	देखना बंद किया गया
+	Sun	रवि
 	Sweep a parameter	पैरामीटर स्वीप करें
 	Tandem line	क्रमिक लाइन
 	Target	लक्ष्य
@@ -362,6 +385,7 @@
 	This block has an error	इस ब्लॉक में त्रुटि है
 	This run	यह रन
 	Three-point estimate	त्रि-बिंदु अनुमान
+	Thu	गुरु
 	Time between arrivals	आगमन के बीच का समय
 	Time blocked	अवरुद्ध समय
 	Time failed	खराबी में समय
@@ -377,6 +401,7 @@
 	Trials	परीक्षण
 	Triangular	त्रिकोणीय
 	Truncated normal	छँटा हुआ सामान्य
+	Tue	मंगल
 	Two stations in series, read from an XPDL file.	XPDL फ़ाइल से पढ़े गए क्रम में दो स्टेशन।
 	Type	प्रकार
 	Undid {action}	{action} पूर्ववत किया गया
@@ -404,6 +429,8 @@
 	Watch a Run	एक रन देखें
 	Watch a run	एक रन देखें
 	Watching replication 1	पुनरावृत्ति 1 देखी जा रही है
+	Wed	बुध
+	Weekly	साप्ताहिक
 	Weibull	वीबुल
 	When a task empties	जब कोई कार्य खाली हो जाए
 	When enough have left a block	जब किसी ब्लॉक से पर्याप्त निकल जाएँ

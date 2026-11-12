@@ -31,13 +31,17 @@
 	Add a flow to…	Tambahkan alur ke…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Tambahkan satu unit pada tugas atau kumpulan tersibuk sampai cukup banyak replikasi memenuhi target. Jawaban dengan setiap waktu pada rata-ratanya juga ditampilkan; biasanya terlalu kecil.
 	Add alternative	Tambah alternatif
+	Add calendar	Tambah kalender
 	Add calendar entry	Tambah entri kalender
+	Add period	Tambah periode
 	Add point	Tambah titik
 	Add pool	Tambah kumpulan
 	Add property	Tambah properti
+	Added calendar {id}	Kalender {id} ditambahkan
 	Added pool {id}	Kumpulan {id} ditambahkan
 	Added {block} ({id})	{block} ({id}) ditambahkan
 	Align	Ratakan
+	Also: {rule}	Juga: {rule}
 	Alternative {n}	Alternatif {n}
 	Analysis	Analisis
 	Appearance	Tampilan
@@ -68,6 +72,8 @@
 	By role	Menurut peran
 	CSV table	Tabel CSV
 	Calendar	Kalender
+	Calendar name	Nama kalender
+	Calendars	Kalender
 	Cancel	Batal
 	Cancel Run	Batalkan Proses
 	Cancel run	Batalkan proses
@@ -94,6 +100,7 @@
 	Constant	Konstan
 	Copy	Salin
 	Cut	Potong
+	Daily	Harian
 	Dark	Gelap
 	Data points	Titik data
 	Date and time	Tanggal dan waktu
@@ -109,6 +116,7 @@
 	Disconnect	Putuskan koneksi
 	Discrete values	Nilai diskret
 	Discrete-event simulation, from model files to results.	Simulasi kejadian diskret, dari berkas model hingga hasil.
+	Does not repeat	Tidak berulang
 	Don't Save	Jangan Simpan
 	Download	Unduh
 	Download charts (PNG)	Unduh grafik (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Waktu {id} dicocokkan
 	Flows	Alur
 	Forget the estimate	Lupakan perkiraan
+	Fri	Jum
 	From	Dari
 	Gamma	Gamma
 	Goes to	Menuju ke
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Pintasan keyboard disimpan
 	Keyboard shortcuts unchanged	Pintasan keyboard tidak berubah
 	Language	Bahasa
+	Leave empty to start at midnight of the day the first period starts.	Biarkan kosong untuk mulai pada tengah malam hari periode pertama dimulai.
 	Left	Keluar
 	Left edges	Tepi kiri
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Dilisensikan berdasarkan MIT License atau Apache License 2.0, sesuai pilihan Anda.
@@ -195,6 +205,8 @@
 	Minimize	Minimalkan
 	Minimum	Minimum
 	Model	Model
+	Model time 0 is	Waktu model 0 adalah
+	Mon	Sen
 	Most likely	Paling mungkin
 	Move	Pindahkan
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Turunkan dan naikkan setiap parameter bergantian, lalu urutkan menurut seberapa besar hasil bergerak.
@@ -213,9 +225,11 @@
 	No target	Tanpa target
 	None	Tidak Ada
 	None found. The model is ready to run.	Tidak ditemukan masalah. Model siap dijalankan.
+	None picked: the day the period starts.	Tidak ada yang dipilih: hari periode dimulai.
 	Normal	Normal
 	Not reached, even with {units}	Tidak tercapai, bahkan dengan {units}
 	Number	Angka
+	On	Hari
 	One change, which Undo takes back	Satu perubahan, yang dibatalkan oleh Urungkan
 	One clerk, random arrivals: the textbook queue, checked against theory.	Satu petugas, kedatangan acak: antrean klasik, diperiksa terhadap teori.
 	One task per BPSim distribution, to compare their spread.	Satu tugas per distribusi BPSim untuk membandingkan penyebarannya.
@@ -236,6 +250,10 @@
 	Paste	Tempel
 	Pause	Jeda
 	Percentile	Persentil
+	Period {n} ends	Periode {n} selesai
+	Period {n} repeats	Periode {n} berulang
+	Period {n} starts	Periode {n} mulai
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periode saat ketersediaan, kedatangan, atau sif kumpulan berubah. Tanggal dan waktu ditulis 2026-01-31T09:00:00.
 	Play	Putar
 	Points	Titik
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Hapus Properti
 	Remove alternative {n}	Hapus alternatif {n}
 	Remove block	Hapus blok
+	Remove the calendar {id}	Hapus kalender {id}
 	Remove the flow {id}	Hapus alur {id}
 	Remove the pool {id}	Hapus kumpulan {id}
 	Remove this block and its flows (Delete)	Hapus blok ini beserta alurnya (Delete)
+	Remove this period	Hapus periode ini
 	Removed {id}	{id} dihapus
 	Rename Block	Ganti Nama Blok
 	Rename Model	Ganti Nama Model
 	Repair time	Waktu perbaikan
+	Repeats	Berulang
 	Replace Model	Ganti Model
 	Replication 1 · {time} of {end} {unit}	Replikasi 1 · {time} dari {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikasi 1 · {time} dari {end} {unit} · pemanasan
@@ -299,6 +320,7 @@
 	Run the sweep	Jalankan sapuan
 	Running	Berjalan
 	Running…	Sedang berjalan…
+	Sat	Sab
 	Save	Simpan
 	Save As…	Simpan Sebagai…
 	Save Model	Simpan Model
@@ -341,6 +363,7 @@
 	Stop setting {name}	Berhenti mengatur {name}
 	Stop watching	Berhenti mengamati
 	Stopped watching	Berhenti mengamati
+	Sun	Min
 	Sweep a parameter	Sapu satu parameter
 	Tandem line	Jalur tandem
 	Target	Target
@@ -362,6 +385,7 @@
 	This block has an error	Blok ini memiliki kesalahan
 	This run	Jalannya ini
 	Three-point estimate	Perkiraan tiga titik
+	Thu	Kam
 	Time between arrivals	Waktu antar kedatangan
 	Time blocked	Waktu terblokir
 	Time failed	Waktu rusak
@@ -377,6 +401,7 @@
 	Trials	Percobaan
 	Triangular	Segitiga
 	Truncated normal	Normal terpotong
+	Tue	Sel
 	Two stations in series, read from an XPDL file.	Dua stasiun berurutan, dibaca dari berkas XPDL.
 	Type	Teks
 	Undid {action}	{action} dibatalkan
@@ -404,6 +429,8 @@
 	Watch a Run	Amati Jalannya Model
 	Watch a run	Amati jalannya model
 	Watching replication 1	Mengamati replikasi 1
+	Wed	Rab
+	Weekly	Mingguan
 	Weibull	Weibull
 	When a task empties	Saat sebuah tugas kosong
 	When enough have left a block	Saat cukup banyak telah meninggalkan blok

@@ -31,13 +31,17 @@
 	Add a flow to…	Lisää virta kohteeseen…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lisää yksikkö kuormitetuimpaan tehtävään tai pooliin, kunnes tarpeeksi monta toistoa saavuttaa tavoitteen. Myös vastaus, jossa jokainen aika on keskiarvossaan, näytetään; se on yleensä liian pieni.
 	Add alternative	Lisää vaihtoehto
+	Add calendar	Lisää kalenteri
 	Add calendar entry	Lisää kalenterimerkintä
+	Add period	Lisää jakso
 	Add point	Lisää piste
 	Add pool	Lisää pooli
 	Add property	Lisää ominaisuus
+	Added calendar {id}	Lisättiin kalenteri {id}
 	Added pool {id}	Lisättiin pooli {id}
 	Added {block} ({id})	Lisättiin {block} ({id})
 	Align	Tasaa
+	Also: {rule}	Lisäksi: {rule}
 	Alternative {n}	Vaihtoehto {n}
 	Analysis	Analyysi
 	Appearance	Ulkoasu
@@ -68,6 +72,8 @@
 	By role	Roolin mukaan
 	CSV table	CSV-taulukko
 	Calendar	Kalenteri
+	Calendar name	Kalenterin nimi
+	Calendars	Kalenterit
 	Cancel	Peruuta
 	Cancel Run	Peruuta suoritus
 	Cancel run	Peruuta suoritus
@@ -94,6 +100,7 @@
 	Constant	Vakio
 	Copy	Kopioi
 	Cut	Leikkaa
+	Daily	Päivittäin
 	Dark	Tumma
 	Data points	Datapisteet
 	Date and time	Päivämäärä ja aika
@@ -109,6 +116,7 @@
 	Disconnect	Katkaise yhteys
 	Discrete values	Diskreetit arvot
 	Discrete-event simulation, from model files to results.	Diskreettitapahtumainen simulointi mallintiedostoista tuloksiin.
+	Does not repeat	Ei toistu
 	Don't Save	Älä tallenna
 	Download	Lataa
 	Download charts (PNG)	Lataa kaaviot (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Lohkon {id} aika sovitettu
 	Flows	Virrat
 	Forget the estimate	Unohda arvio
+	Fri	pe
 	From	Kohteesta
 	Gamma	Gamma
 	Goes to	Menee kohteeseen
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Pikanäppäimet tallennettu
 	Keyboard shortcuts unchanged	Pikanäppäimet ennallaan
 	Language	Kieli
+	Leave empty to start at midnight of the day the first period starts.	Jätä tyhjäksi, niin aloitetaan sen päivän keskiyöllä, jona ensimmäinen jakso alkaa.
 	Left	Poistuneet
 	Left edges	Vasemmat reunat
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Lisensoitu valintasi mukaan MIT License- tai Apache License 2.0 -lisenssillä.
@@ -195,6 +205,8 @@
 	Minimize	Pienennä
 	Minimum	Minimi
 	Model	Malli
+	Model time 0 is	Mallin aika 0 on
+	Mon	ma
 	Most likely	Todennäköisin
 	Move	Siirto
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Siirrä kutakin parametria vuorollaan alas ja ylös ja järjestä ne sen mukaan, kuinka paljon tulos muuttuu.
@@ -213,9 +225,11 @@
 	No target	Ei tavoitetta
 	None	Ei mitään
 	None found. The model is ready to run.	Ongelmia ei löytynyt. Malli on valmis suoritettavaksi.
+	None picked: the day the period starts.	Ei valintaa: päivä, jona jakso alkaa.
 	Normal	Normaalijakauma
 	Not reached, even with {units}	Ei saavutettu, ei edes yksiköillä {units}
 	Number	Luku
+	On	Päivät
 	One change, which Undo takes back	Yksi muutos, jonka Kumoa peruu
 	One clerk, random arrivals: the textbook queue, checked against theory.	Yksi palvelija, satunnaiset saapumiset: teorian avulla tarkistettu klassinen jono.
 	One task per BPSim distribution, to compare their spread.	Yksi tehtävä kutakin BPSim-jakaumaa kohti niiden hajonnan vertailuun.
@@ -236,6 +250,10 @@
 	Paste	Liitä
 	Pause	Tauko
 	Percentile	Persentiili
+	Period {n} ends	Jakso {n} päättyy
+	Period {n} repeats	Jakso {n} toistuu
+	Period {n} starts	Jakso {n} alkaa
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Jaksot, joiden aikana käytettävyys, saapumiset tai poolin vuorot muuttuvat. Päivämäärät ja ajat kirjoitetaan muodossa 2026-01-31T09:00:00.
 	Play	Toista
 	Points	Pisteet
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Poista ominaisuus
 	Remove alternative {n}	Poista vaihtoehto {n}
 	Remove block	Poista lohko
+	Remove the calendar {id}	Poista kalenteri {id}
 	Remove the flow {id}	Poista virta {id}
 	Remove the pool {id}	Poista pooli {id}
 	Remove this block and its flows (Delete)	Poista tämä lohko ja sen virrat (Delete)
+	Remove this period	Poista tämä jakso
 	Removed {id}	Poistettiin {id}
 	Rename Block	Nimeä lohko uudelleen
 	Rename Model	Nimeä malli uudelleen
 	Repair time	Korjausaika
+	Repeats	Toistuu
 	Replace Model	Korvaa malli
 	Replication 1 · {time} of {end} {unit}	Toisto 1 · {time}/{end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Toisto 1 · {time}/{end} {unit} · alkulämmittely
@@ -299,6 +320,7 @@
 	Run the sweep	Aja läpikäynti
 	Running	Suoritetaan
 	Running…	Suoritetaan…
+	Sat	la
 	Save	Tallenna
 	Save As…	Tallenna nimellä…
 	Save Model	Tallenna malli
@@ -341,6 +363,7 @@
 	Stop setting {name}	Lopeta kohteen {name} asettaminen
 	Stop watching	Lopeta seuraaminen
 	Stopped watching	Seuraaminen lopetettiin
+	Sun	su
 	Sweep a parameter	Käy parametri läpi
 	Tandem line	Sarjajono
 	Target	Tavoite
@@ -362,6 +385,7 @@
 	This block has an error	Tässä lohkossa on virhe
 	This run	Tämä ajo
 	Three-point estimate	Kolmen pisteen arvio
+	Thu	to
 	Time between arrivals	Saapumisten välinen aika
 	Time blocked	Aika estettynä
 	Time failed	Aika vikaantuneena
@@ -377,6 +401,7 @@
 	Trials	Kokeilut
 	Triangular	Kolmiojakauma
 	Truncated normal	Katkaistu normaalijakauma
+	Tue	ti
 	Two stations in series, read from an XPDL file.	Kaksi peräkkäistä asemaa, luettu XPDL-tiedostosta.
 	Type	Teksti
 	Undid {action}	Kumottiin {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Seuraa ajoa
 	Watch a run	Seuraa ajoa
 	Watching replication 1	Seurataan toistoa 1
+	Wed	ke
+	Weekly	Viikoittain
 	Weibull	Weibull
 	When a task empties	Kun tehtävä tyhjenee
 	When enough have left a block	Kun tarpeeksi monta on poistunut lohkosta

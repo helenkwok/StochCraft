@@ -292,6 +292,7 @@ impl App {
         self.connections_table(ui, p, model);
 
         self.pools_section(ui, model);
+        self.calendars_section(ui, model);
 
         section(ui, t("Problems"));
         if problems.is_empty() {

@@ -69,6 +69,13 @@ engine's messages (validation, file notes) are English too.
   Ekavian. Not checked against dictionaries, Wikipedia, IATE or any other source, and not
   reviewed by native speakers. The least certain are lo, th, ta, te, ka, kk, bn, sq and
   zh-hant ("行事曆" for calendar).
+- The rows for the Calendars section of the model page (PR "Calendars section on the model
+  page": periods, their repeats, model time 0) were machine-drafted with Claude Code the same
+  way, from the plain meaning of the English and each catalog's existing terms, including the
+  calendar, pool, shift, availability and arrivals words of the rows above. The weekday
+  abbreviations are each language's usual short names, and "On" (before the weekday buttons) is
+  rendered as "Days". Not checked against dictionaries, Wikipedia, IATE or any other source,
+  and not reviewed by native speakers. The least certain are lo, th, ta, te, ka, kk, bn and sq.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

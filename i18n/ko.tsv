@@ -31,13 +31,17 @@
 	Add a flow to…	끝 블록…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	충분한 반복 실행이 목표를 충족할 때까지 가장 바쁜 작업이나 풀에 단위를 하나씩 추가합니다. 모든 시간을 평균으로 둔 답도 함께 표시하지만 보통 너무 작습니다.
 	Add alternative	대안 추가
+	Add calendar	캘린더 추가
 	Add calendar entry	캘린더 항목 추가
+	Add period	기간 추가
 	Add point	점 추가
 	Add pool	풀 추가
 	Add property	속성 추가
+	Added calendar {id}	캘린더 {id} 추가됨
 	Added pool {id}	풀 {id} 추가됨
 	Added {block} ({id})	{block} ({id}) 추가됨
 	Align	정렬
+	Also: {rule}	기타: {rule}
 	Alternative {n}	대안 {n}
 	Analysis	분석
 	Appearance	모양새
@@ -68,6 +72,8 @@
 	By role	역할별
 	CSV table	CSV 표
 	Calendar	캘린더
+	Calendar name	캘린더 이름
+	Calendars	캘린더
 	Cancel	취소
 	Cancel Run	실행 취소
 	Cancel run	실행 취소
@@ -94,6 +100,7 @@
 	Constant	상수
 	Copy	복사
 	Cut	잘라내기
+	Daily	매일
 	Dark	어둡게
 	Data points	데이터 점
 	Date and time	날짜 및 시간
@@ -109,6 +116,7 @@
 	Disconnect	연결 해제
 	Discrete values	이산 값
 	Discrete-event simulation, from model files to results.	모델 파일에서 결과까지, 이산 사건 시뮬레이션.
+	Does not repeat	반복 안 함
 	Don't Save	저장 안 함
 	Download	다운로드
 	Download charts (PNG)	차트 다운로드 (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	{id}의 시간을 맞췄습니다
 	Flows	흐름
 	Forget the estimate	추정 잊기
+	Fri	금
 	From	시작 블록
 	Gamma	감마 분포
 	Goes to	도착 블록
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	키보드 단축키가 저장되었습니다
 	Keyboard shortcuts unchanged	키보드 단축키가 변경되지 않았습니다
 	Language	언어
+	Leave empty to start at midnight of the day the first period starts.	비워 두면 첫 기간이 시작하는 날의 자정에 시작합니다.
 	Left	이탈 수
 	Left edges	왼쪽 가장자리
 	Licensed under the MIT License or the Apache License 2.0, at your option.	MIT License 또는 Apache License 2.0 중 하나를 선택하여 사용할 수 있습니다.
@@ -195,6 +205,8 @@
 	Minimize	최소화
 	Minimum	최솟값
 	Model	모델
+	Model time 0 is	모델 시간 0
+	Mon	월
 	Most likely	최빈값
 	Move	이동
 	Move each parameter down and up in turn, and rank them by how much the result moves.	각 매개변수를 차례로 낮추고 높여서 결과가 얼마나 움직이는지에 따라 순위를 매깁니다.
@@ -213,9 +225,11 @@
 	No target	목표 없음
 	None	없음
 	None found. The model is ready to run.	문제가 없습니다. 모델을 실행할 준비가 되었습니다.
+	None picked: the day the period starts.	선택하지 않으면: 기간이 시작하는 요일.
 	Normal	정규 분포
 	Not reached, even with {units}	{units}로도 도달하지 못함
 	Number	숫자
+	On	요일
 	One change, which Undo takes back	실행 취소로 되돌릴 수 있는 한 번의 변경
 	One clerk, random arrivals: the textbook queue, checked against theory.	창구 하나, 무작위 도착: 교과서의 대기열을 이론과 비교합니다.
 	One task per BPSim distribution, to compare their spread.	각 BPSim 분포에 작업 하나를 배정하여 분산 정도를 비교합니다.
@@ -236,6 +250,10 @@
 	Paste	붙여넣기
 	Pause	일시 중지
 	Percentile	백분위수
+	Period {n} ends	기간 {n} 종료
+	Period {n} repeats	기간 {n} 반복
+	Period {n} starts	기간 {n} 시작
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	가용 여부, 도착 또는 풀의 근무조가 바뀌는 기간입니다. 날짜와 시간은 2026-01-31T09:00:00 형식으로 씁니다.
 	Play	재생
 	Points	점
 	Poisson	포아송 분포
@@ -264,13 +282,16 @@
 	Remove Property	속성 제거
 	Remove alternative {n}	대안 {n} 제거
 	Remove block	블록 제거
+	Remove the calendar {id}	캘린더 {id} 제거
 	Remove the flow {id}	흐름 {id} 제거
 	Remove the pool {id}	풀 {id} 제거
 	Remove this block and its flows (Delete)	이 블록과 흐름 제거 (Delete)
+	Remove this period	이 기간 제거
 	Removed {id}	{id} 제거됨
 	Rename Block	블록 이름 변경
 	Rename Model	모델 이름 변경
 	Repair time	수리 시간
+	Repeats	반복
 	Replace Model	모델 바꾸기
 	Replication 1 · {time} of {end} {unit}	반복 실행 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	반복 실행 1 · {time} / {end} {unit} · 준비 기간
@@ -299,6 +320,7 @@
 	Run the sweep	스윕 실행
 	Running	실행 중
 	Running…	실행 중…
+	Sat	토
 	Save	저장
 	Save As…	다른 이름으로 저장…
 	Save Model	모델 저장
@@ -341,6 +363,7 @@
 	Stop setting {name}	{name} 설정 중지
 	Stop watching	관찰 중지
 	Stopped watching	관찰을 중지함
+	Sun	일
 	Sweep a parameter	매개변수 스윕
 	Tandem line	직렬 라인
 	Target	목표
@@ -362,6 +385,7 @@
 	This block has an error	이 블록에 오류가 있습니다
 	This run	이 실행
 	Three-point estimate	3점 추정
+	Thu	목
 	Time between arrivals	도착 간격
 	Time blocked	차단 시간
 	Time failed	고장 시간
@@ -377,6 +401,7 @@
 	Trials	시행 횟수
 	Triangular	삼각 분포
 	Truncated normal	절단 정규 분포
+	Tue	화
 	Two stations in series, read from an XPDL file.	XPDL 파일에서 읽어온 직렬 배치 작업장 두 개.
 	Type	종류
 	Undid {action}	{action} 실행 취소함
@@ -404,6 +429,8 @@
 	Watch a Run	실행 관찰
 	Watch a run	실행 관찰
 	Watching replication 1	반복 실행 1 관찰 중
+	Wed	수
+	Weekly	매주
 	Weibull	와이블 분포
 	When a task empties	작업이 비었을 때
 	When enough have left a block	블록에서 충분히 나갔을 때

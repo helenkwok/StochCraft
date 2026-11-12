@@ -31,13 +31,17 @@
 	Add a flow to…	Hedef…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Yeterince tekrar bir hedefe ulaşana dek en yoğun göreve ya da havuza bir birim ekle. Her sürenin ortalamasında olduğu yanıt da gösterilir; genellikle fazla küçüktür.
 	Add alternative	Alternatif ekle
+	Add calendar	Takvim ekle
 	Add calendar entry	Takvim girdisi ekle
+	Add period	Dönem ekle
 	Add point	Nokta ekle
 	Add pool	Havuz ekle
 	Add property	Özellik ekle
+	Added calendar {id}	{id} takvimi eklendi
 	Added pool {id}	{id} havuzu eklendi
 	Added {block} ({id})	{block} ({id}) eklendi
 	Align	Hizala
+	Also: {rule}	Ayrıca: {rule}
 	Alternative {n}	Alternatif {n}
 	Analysis	Analiz
 	Appearance	Görünüm
@@ -68,6 +72,8 @@
 	By role	Role göre
 	CSV table	CSV tablosu
 	Calendar	Takvim
+	Calendar name	Takvim adı
+	Calendars	Takvimler
 	Cancel	İptal
 	Cancel Run	Çalıştırmayı iptal et
 	Cancel run	Çalıştırmayı iptal et
@@ -94,6 +100,7 @@
 	Constant	Sabit
 	Copy	Kopyala
 	Cut	Kes
+	Daily	Günlük
 	Dark	Koyu
 	Data points	Veri noktaları
 	Date and time	Tarih ve saat
@@ -109,6 +116,7 @@
 	Disconnect	Bağlantıyı kes
 	Discrete values	Ayrık değerler
 	Discrete-event simulation, from model files to results.	Model dosyalarından sonuçlara ayrık olay simülasyonu.
+	Does not repeat	Tekrarlanmaz
 	Don't Save	Kaydetme
 	Download	İndir
 	Download charts (PNG)	Grafikleri indir (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	{id} süresi uyduruldu
 	Flows	Akışlar
 	Forget the estimate	Tahmini unut
+	Fri	Cum
 	From	Kaynak
 	Gamma	Gama
 	Goes to	Şuraya gider
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Klavye kısayolları kaydedildi
 	Keyboard shortcuts unchanged	Klavye kısayolları değişmedi
 	Language	Dil
+	Leave empty to start at midnight of the day the first period starts.	İlk dönemin başladığı günün gece yarısında başlamak için boş bırakın.
 	Left	Çıkan
 	Left edges	Sol kenarlar
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Tercihinize göre MIT License veya Apache License 2.0 ile lisanslanmıştır.
@@ -195,6 +205,8 @@
 	Minimize	Küçült
 	Minimum	Minimum
 	Model	Model
+	Model time 0 is	Model zamanı 0
+	Mon	Pzt
 	Most likely	En olası
 	Move	Taşı
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Her parametreyi sırayla aşağı ve yukarı oynat, sonucun ne kadar değiştiğine göre sırala.
@@ -213,9 +225,11 @@
 	No target	Hedef yok
 	None	Yok
 	None found. The model is ready to run.	Sorun bulunamadı. Model çalıştırılmaya hazır.
+	None picked: the day the period starts.	Seçim yok: dönemin başladığı gün.
 	Normal	Normal
 	Not reached, even with {units}	Ulaşılamadı, {units} ile bile
 	Number	Sayı
+	On	Günler
 	One change, which Undo takes back	Geri Al ile geri alınan tek bir değişiklik
 	One clerk, random arrivals: the textbook queue, checked against theory.	Bir görevli, rastgele gelişler: teoriyle doğrulanan klasik kuyruk.
 	One task per BPSim distribution, to compare their spread.	Dağılımlarını karşılaştırmak için her BPSim dağılımına bir görev.
@@ -236,6 +250,10 @@
 	Paste	Yapıştır
 	Pause	Duraklat
 	Percentile	Yüzdelik
+	Period {n} ends	{n}. dönem bitişi
+	Period {n} repeats	{n}. dönem tekrarı
+	Period {n} starts	{n}. dönem başlangıcı
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Kullanılabilirliğin, gelişlerin veya bir havuzun vardiyalarının değiştiği dönemler. Tarih ve saatler 2026-01-31T09:00:00 biçiminde yazılır.
 	Play	Oynat
 	Points	Noktalar
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Özelliği kaldır
 	Remove alternative {n}	{n}. alternatifi kaldır
 	Remove block	Bloğu kaldır
+	Remove the calendar {id}	{id} takvimini kaldır
 	Remove the flow {id}	{id} akışını kaldır
 	Remove the pool {id}	{id} havuzunu kaldır
 	Remove this block and its flows (Delete)	Bu bloğu ve akışlarını kaldır (Delete)
+	Remove this period	Bu dönemi kaldır
 	Removed {id}	{id} kaldırıldı
 	Rename Block	Bloğu yeniden adlandır
 	Rename Model	Modeli yeniden adlandır
 	Repair time	Onarım süresi
+	Repeats	Tekrar
 	Replace Model	Modeli değiştir
 	Replication 1 · {time} of {end} {unit}	Tekrar 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Tekrar 1 · {time} / {end} {unit} · ısınma
@@ -299,6 +320,7 @@
 	Run the sweep	Taramayı çalıştır
 	Running	Çalışıyor
 	Running…	Çalışıyor…
+	Sat	Cmt
 	Save	Kaydet
 	Save As…	Farklı Kaydet…
 	Save Model	Modeli kaydet
@@ -341,6 +363,7 @@
 	Stop setting {name}	{name} ayarlamayı durdur
 	Stop watching	İzlemeyi durdur
 	Stopped watching	İzleme durduruldu
+	Sun	Paz
 	Sweep a parameter	Bir parametreyi tara
 	Tandem line	Tandem hat
 	Target	Hedef
@@ -362,6 +385,7 @@
 	This block has an error	Bu blokta hata var
 	This run	Bu çalıştırma
 	Three-point estimate	Üç noktalı tahmin
+	Thu	Per
 	Time between arrivals	Gelişler arası süre
 	Time blocked	Engellenme süresi
 	Time failed	Arıza süresi
@@ -377,6 +401,7 @@
 	Trials	Denemeler
 	Triangular	Üçgen
 	Truncated normal	Kesilmiş normal
+	Tue	Sal
 	Two stations in series, read from an XPDL file.	XPDL dosyasından okunan seri bağlı iki istasyon.
 	Type	Tür
 	Undid {action}	{action} geri alındı
@@ -404,6 +429,8 @@
 	Watch a Run	Bir Çalıştırmayı İzle
 	Watch a run	Bir çalıştırmayı izle
 	Watching replication 1	Tekrar 1 izleniyor
+	Wed	Çar
+	Weekly	Haftalık
 	Weibull	Weibull
 	When a task empties	Bir görev boşaldığında
 	When enough have left a block	Bir bloktan yeterince ayrıldığında

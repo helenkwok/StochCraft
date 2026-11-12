@@ -12,6 +12,7 @@
 //! [`App::report_error`].
 
 mod autosave;
+mod calendars;
 mod canvas;
 mod charts;
 pub mod commands;

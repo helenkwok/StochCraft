@@ -31,13 +31,17 @@
 	Add a flow to…	Adaugă un flux către…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Adaugă o unitate la sarcina sau grupul cel mai ocupat până când suficiente replicări ating o țintă. Este afișat și răspunsul cu fiecare timp la media sa; de obicei e prea mic.
 	Add alternative	Adaugă alternativă
+	Add calendar	Adaugă calendar
 	Add calendar entry	Adaugă o intrare de calendar
+	Add period	Adaugă perioadă
 	Add point	Adaugă punct
 	Add pool	Adaugă grup
 	Add property	Adaugă proprietate
+	Added calendar {id}	S-a adăugat calendarul {id}
 	Added pool {id}	S-a adăugat grupul {id}
 	Added {block} ({id})	S-a adăugat {block} ({id})
 	Align	Aliniere
+	Also: {rule}	De asemenea: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Analiză
 	Appearance	Aspect
@@ -68,6 +72,8 @@
 	By role	După rol
 	CSV table	Tabel CSV
 	Calendar	Calendar
+	Calendar name	Numele calendarului
+	Calendars	Calendare
 	Cancel	Anulează
 	Cancel Run	Anulează rularea
 	Cancel run	Anulează rularea
@@ -94,6 +100,7 @@
 	Constant	Constantă
 	Copy	Copiază
 	Cut	Decupează
+	Daily	Zilnic
 	Dark	Întunecat
 	Data points	Puncte de date
 	Date and time	Dată și oră
@@ -109,6 +116,7 @@
 	Disconnect	Deconectează
 	Discrete values	Valori discrete
 	Discrete-event simulation, from model files to results.	Simulare cu evenimente discrete, de la fișiere de model la rezultate.
+	Does not repeat	Nu se repetă
 	Don't Save	Nu salva
 	Download	Descarcă
 	Download charts (PNG)	Descarcă graficele (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Timpul lui {id} a fost ajustat
 	Flows	Fluxuri
 	Forget the estimate	Uită estimarea
+	Fri	vin
 	From	De la
 	Gamma	Gamma
 	Goes to	Merge către
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Comenzile rapide au fost salvate
 	Keyboard shortcuts unchanged	Comenzile rapide nu s-au modificat
 	Language	Limbă
+	Leave empty to start at midnight of the day the first period starts.	Lăsați gol pentru a începe la miezul nopții din ziua în care începe prima perioadă.
 	Left	Ieșiri
 	Left edges	Marginile din stânga
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licențiat sub MIT License sau Apache License 2.0, la alegere.
@@ -195,6 +205,8 @@
 	Minimize	Minimizează
 	Minimum	Minim
 	Model	Model
+	Model time 0 is	Timpul 0 al modelului este
+	Mon	lun
 	Most likely	Cel mai probabil
 	Move	Mutare
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Mută pe rând fiecare parametru în jos și în sus și ordonează-i după cât de mult se mișcă rezultatul.
@@ -213,9 +225,11 @@
 	No target	Fără țintă
 	None	Niciunul
 	None found. The model is ready to run.	Nu s-au găsit probleme. Modelul este gata de rulare.
+	None picked: the day the period starts.	Nimic ales: ziua în care începe perioada.
 	Normal	Normală
 	Not reached, even with {units}	Neatinsă, nici cu {units}
 	Number	Număr
+	On	Zile
 	One change, which Undo takes back	O singură modificare, pe care Anulează o desface
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un operator, sosiri aleatorii: coada clasică, verificată față de teorie.
 	One task per BPSim distribution, to compare their spread.	Câte o sarcină pentru fiecare distribuție BPSim, pentru compararea dispersiei.
@@ -236,6 +250,10 @@
 	Paste	Lipește
 	Pause	Pauză
 	Percentile	Percentilă
+	Period {n} ends	Perioada {n} se termină
+	Period {n} repeats	Perioada {n} se repetă
+	Period {n} starts	Perioada {n} începe
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioade în care se schimbă disponibilitatea, sosirile sau turele unui grup. Datele și orele se scriu 2026-01-31T09:00:00.
 	Play	Redare
 	Points	Puncte
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Elimină proprietatea
 	Remove alternative {n}	Elimină alternativa {n}
 	Remove block	Elimină blocul
+	Remove the calendar {id}	Elimină calendarul {id}
 	Remove the flow {id}	Elimină fluxul {id}
 	Remove the pool {id}	Elimină grupul {id}
 	Remove this block and its flows (Delete)	Elimină acest bloc și fluxurile sale (Delete)
+	Remove this period	Elimină această perioadă
 	Removed {id}	S-a eliminat {id}
 	Rename Block	Redenumește blocul
 	Rename Model	Redenumește modelul
 	Repair time	Timp de reparare
+	Repeats	Repetare
 	Replace Model	Înlocuiește modelul
 	Replication 1 · {time} of {end} {unit}	Replicarea 1 · {time} din {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replicarea 1 · {time} din {end} {unit} · încălzire
@@ -299,6 +320,7 @@
 	Run the sweep	Rulează baleierea
 	Running	Se rulează
 	Running…	Se rulează…
+	Sat	sâm
 	Save	Salvează
 	Save As…	Salvează ca…
 	Save Model	Salvează modelul
@@ -341,6 +363,7 @@
 	Stop setting {name}	Oprește setarea pentru {name}
 	Stop watching	Oprește urmărirea
 	Stopped watching	Urmărirea s-a oprit
+	Sun	dum
 	Sweep a parameter	Baleierea unui parametru
 	Tandem line	Linie în tandem
 	Target	Țintă
@@ -362,6 +385,7 @@
 	This block has an error	Acest bloc are o eroare
 	This run	Această rulare
 	Three-point estimate	Estimare în trei puncte
+	Thu	joi
 	Time between arrivals	Timp între sosiri
 	Time blocked	Timp blocat
 	Time failed	Timp în avarie
@@ -377,6 +401,7 @@
 	Trials	Încercări
 	Triangular	Triunghiulară
 	Truncated normal	Normală trunchiată
+	Tue	mar
 	Two stations in series, read from an XPDL file.	Două stații în serie, citite dintr-un fișier XPDL.
 	Type	Tip
 	Undid {action}	S-a anulat {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Urmărește o rulare
 	Watch a run	Urmărește o rulare
 	Watching replication 1	Se urmărește replicarea 1
+	Wed	mie
+	Weekly	Săptămânal
 	Weibull	Weibull
 	When a task empties	Când o sarcină se golește
 	When enough have left a block	Când au ieșit destule dintr-un bloc
