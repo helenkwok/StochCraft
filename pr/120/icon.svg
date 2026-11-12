@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- StochCraft's icon: arrivals, a server and an exit on a flow line. -->
-  <rect width="512" height="512" rx="96" fill="#0b6e86"/>
-  <path d="M120 256H392" stroke="#d7ecf1" stroke-width="20" stroke-linecap="round"/>
-  <circle cx="120" cy="256" r="52" fill="#ffffff"/>
-  <rect x="200" y="188" width="136" height="136" rx="24" fill="#ffffff"/>
-  <circle cx="392" cy="256" r="41" fill="#0b6e86" stroke="#ffffff" stroke-width="22"/>
-</svg>
