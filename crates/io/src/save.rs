@@ -1849,12 +1849,13 @@ impl Editor {
                             crate::bpsim::BREAKDOWN,
                             new_breakdown.map(breakdown_element),
                         ));
-                        let yes = new_breakdown.is_some_and(|b| b.interruptible);
+                        // With breakdowns, said either way: a `false` of the scenario's own
+                        // overrides an inherited `true`, where removing it could not.
                         writes.push((
                             id.clone(),
                             "PriorityParameters",
                             "Interruptible",
-                            yes.then(|| interruptible_param(true)),
+                            new_breakdown.map(|b| interruptible_param(b.interruptible)),
                         ));
                     }
                     // The transfer time into the server.
@@ -2120,6 +2121,40 @@ impl Editor {
                     }
                 }
                 self.remove_resource(root, &task);
+            }
+        }
+        // A parameter an inherited scenario sets comes back on reading, whatever this one does
+        // without it: such a removal cannot be saved here (as for calendars).
+        {
+            let parents = ancestors(root, scenario);
+            let inherited = |element: &str, group: &str, name: &str| {
+                parents.iter().any(|a| sets_param(a, element, group, name))
+            };
+            let what = writes
+                .iter()
+                .filter(|(element, group, name, v)| v.is_none() && inherited(element, group, name))
+                .map(|(element, _, name, _)| format!("{name} of `{element}`"))
+                .chain(
+                    property_writes
+                        .iter()
+                        .filter(|(element, name, v)| {
+                            v.is_none() && inherited(element, "PropertyParameters", name)
+                        })
+                        .map(|(element, name, _)| format!("property `{name}` of `{element}`")),
+                )
+                .chain(
+                    vendor_writes
+                        .iter()
+                        .filter(|(element, name, v)| {
+                            v.is_none() && parents.iter().any(|a| sets_vendor(a, element, name))
+                        })
+                        .map(|(element, name, _)| format!("{name} of `{element}`")),
+                )
+                .next();
+            if let Some(what) = what {
+                return Err(fail(format!(
+                    "{what} comes from an inherited scenario, so removing it here would not remove it; save to a new file (Save As) to change it"
+                )));
             }
         }
         // Removing what is not there changes nothing, and needs no scenario.
@@ -2671,6 +2706,14 @@ fn sets_param(s: &Element, element: &str, group: &str, name: &str) -> bool {
             }
         })
         .any(|p| p.elements().any(|v| v.local() != "ResultRequest"))
+}
+
+/// Whether scenario `s` has StochCraft's vendor extension `name` on `element`.
+fn sets_vendor(s: &Element, element: &str, name: &str) -> bool {
+    s.children_named(&NSS, "ElementParameters")
+        .filter(|ep| ep.attr("elementRef").as_deref() == Some(element))
+        .flat_map(|ep| ep.elements())
+        .any(|v| v.is_any(&NSS, "VendorExtension") && v.attr("name").as_deref() == Some(name))
 }
 
 /// The unit a value is written in: the scenario's base unit, or one it names.
