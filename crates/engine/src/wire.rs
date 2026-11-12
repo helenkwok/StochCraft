@@ -10,7 +10,7 @@ use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
     Bounds, Breakdown, Connection, Diagnostic, Dist, Element, ElementId, ElementKind, Estimate,
     Experiment, Family, Model, Need, Power, Property, PropertyType, PropertyValue, ResourcePool,
-    Routing, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    Routing, Setup, Change, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -221,6 +221,10 @@ pub enum KindSpec {
         /// when none.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         power: Option<PowerSpec>,
+        /// A setup before a job: before every job, or with `on_change_of` only when that
+        /// property's value changes from the last part's (a changeover); left out when none.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        setup: Option<SetupSpec>,
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
     /// entity takes what the first of `needs` that can be met now asks for, holds it for its
@@ -392,6 +396,67 @@ impl From<RoutingSpec> for Routing {
         match r {
             RoutingSpec::Standard => Routing::Standard,
             RoutingSpec::ShortestQueue => Routing::ShortestQueue,
+        }
+    }
+}
+
+/// A server's setup: time a unit spends preparing before a job, holding the part, in a state of
+/// its own. Without `on_change_of`, before every job (BPSim `SetUpTime`); with it, a changeover:
+/// only when the part's value of that property differs from that of the part the unit served
+/// last (its first part needs none), for the time `by_change` gives for that change, else `time`.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct SetupSpec {
+    pub time: DistSpec,
+    /// The property whose value changing makes a changeover; left out: before every job.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub on_change_of: Option<String>,
+    /// Times for particular changes, from one value to another (values as text).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub by_change: Vec<ChangeSpec>,
+}
+
+/// The time of a changeover from parts whose value is `from` to parts whose value is `to`.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ChangeSpec {
+    pub from: String,
+    pub to: String,
+    pub time: DistSpec,
+}
+
+impl From<&Setup> for SetupSpec {
+    fn from(s: &Setup) -> Self {
+        Self {
+            time: (&s.time).into(),
+            on_change_of: s.on_change_of.clone(),
+            by_change: s
+                .by_change
+                .iter()
+                .map(|c| ChangeSpec {
+                    from: c.from.clone(),
+                    to: c.to.clone(),
+                    time: (&c.time).into(),
+                })
+                .collect(),
+        }
+    }
+}
+
+impl From<SetupSpec> for Setup {
+    fn from(s: SetupSpec) -> Self {
+        Self {
+            time: s.time.into(),
+            on_change_of: s.on_change_of.filter(|p| !p.trim().is_empty()),
+            by_change: s
+                .by_change
+                .into_iter()
+                .map(|c| Change {
+                    from: c.from,
+                    to: c.to,
+                    time: c.time.into(),
+                })
+                .collect(),
         }
     }
 }
@@ -703,6 +768,7 @@ impl From<&ElementKind> for KindSpec {
                 available,
                 availability,
                 power,
+                setup,
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
@@ -716,6 +782,7 @@ impl From<&ElementKind> for KindSpec {
                     available: t.value,
                 }),
                 power: power.as_ref().map(Into::into),
+                setup: setup.as_ref().map(Into::into),
             },
             ElementKind::SharedTask {
                 service,
@@ -765,6 +832,7 @@ impl From<KindSpec> for ElementKind {
                 available,
                 availability,
                 power,
+                setup,
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
@@ -777,6 +845,7 @@ impl From<KindSpec> for ElementKind {
                 available,
                 availability: availability.into_iter().map(Into::into).collect(),
                 power: power.map(Into::into),
+                setup: setup.map(Into::into),
             },
             KindSpec::SharedTask {
                 service,
@@ -1569,6 +1638,7 @@ mod tests {
                 available: true,
                 availability: Vec::new(),
                 power: None,
+                setup: None,
             })
         );
     }

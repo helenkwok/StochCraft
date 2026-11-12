@@ -51,6 +51,20 @@
       <stochcraft:transferTime holdsSender="false"><bpsim:FloatingParameter value="32"/></stochcraft:transferTime>
     </bpsim:VendorExtension>
 
+  stochcraft:changeover, on a task's ElementParameters: its resource's unit sets up before a part
+  only when the part's value of the token property named by the attribute property differs from
+  that of the part the unit served last (its first part needs none). The setup takes the time of
+  the stochcraft:change whose from and to are the two values, else stochcraft:time, each holding
+  one BPSim distribution or constant. A setup before every job is BPSim's own
+  TimeParameters/SetUpTime.
+
+    <bpsim:VendorExtension name="stochcraft:changeover" xmlns:stochcraft="…">
+      <stochcraft:changeover property="type">
+        <stochcraft:time><bpsim:FloatingParameter value="10"/></stochcraft:time>
+        <stochcraft:change from="A" to="B"><bpsim:FloatingParameter value="25"/></stochcraft:change>
+      </stochcraft:changeover>
+    </bpsim:VendorExtension>
+
   stochcraft:routing, on an exclusive gateway's ElementParameters, with the value shortestQueue
   (or standard, BPMN's own routing): each entity goes to the way with the fewest entities waiting
   or in transit among those with room, a tie to the way taken longest ago; while no way has
@@ -109,6 +123,24 @@
           <xs:attribute name="holdsSender" type="xs:boolean" default="true"/>
         </xs:extension>
       </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="changeover">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="time" type="stochcraft:Value"/>
+        <xs:element name="change" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:complexContent>
+              <xs:extension base="stochcraft:Value">
+                <xs:attribute name="from" type="xs:string" use="required"/>
+                <xs:attribute name="to" type="xs:string" use="required"/>
+              </xs:extension>
+            </xs:complexContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="property" type="xs:string" use="required"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="power">

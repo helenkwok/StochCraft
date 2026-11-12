@@ -568,6 +568,7 @@ fn edits() -> Vec<Edit> {
                         available: true,
                         availability: Vec::new(),
                         power: None,
+                        setup: None,
                     };
                 }
             }),

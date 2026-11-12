@@ -167,6 +167,10 @@ pub enum ElementKind {
         /// The power each unit draws in each of its states, for energy results; `None`: no
         /// energy is reported. A StochCraft vendor extension (`stochcraft:power`).
         power: Option<Power>,
+        /// A setup before a job: before every job (BPSim `SetUpTime`), or only when the part's
+        /// type changes (a changeover, a StochCraft vendor extension); `None`: no setups. See
+        /// [`Setup`].
+        setup: Option<Setup>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
@@ -275,6 +279,52 @@ impl Power {
 /// it if the unit fails meanwhile; otherwise the unit is free at once and the time is a minimum
 /// time in the buffer (`stochcraft:transferHoldsSender="false"`). Any other sender (a source, a
 /// delay, a gateway, a batch or a split) holds nothing while the part travels.
+/// A server's setup: time its unit spends preparing before a job, in a state of its own (neither
+/// processing nor idle), during which it holds the part and takes no other.
+///
+/// Without `on_change_of`, every job has one: BPSim's `SetUpTime`, "the time expended prior to
+/// performing the actual work" (BPSim 2.0, 6.2.4), part of each job's duration. With it, a
+/// changeover: a unit sets up only when the part's value of that property differs from that of
+/// the part it served last (its first part needs none), taking the time `by_change` gives for
+/// that change, or else `time`. Failures come during a setup as during the job; an
+/// interruptible one stops it, and it resumes after the repair.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Setup {
+    pub time: Dist,
+    /// The property whose value changing makes a changeover.
+    pub on_change_of: Option<String>,
+    /// Times for particular changes, from one value to another (sequence-dependent setups).
+    pub by_change: Vec<Change>,
+}
+
+/// The time of a changeover from parts whose property value is `from` to parts whose value is
+/// `to` (values as text: `A`, `2`, `true`).
+#[derive(Debug, Clone, PartialEq)]
+pub struct Change {
+    pub from: String,
+    pub to: String,
+    pub time: Dist,
+}
+
+impl Setup {
+    /// A setup of `time` before every job (BPSim `SetUpTime`).
+    pub fn every_job(time: Dist) -> Self {
+        Self {
+            time,
+            on_change_of: None,
+            by_change: Vec::new(),
+        }
+    }
+
+    /// The time of a changeover from `from` to `to`.
+    pub fn time_for(&self, from: &str, to: &str) -> &Dist {
+        self.by_change
+            .iter()
+            .find(|c| c.from == from && c.to == to)
+            .map_or(&self.time, |c| &c.time)
+    }
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct Transfer {
     pub time: Dist,
@@ -447,9 +497,14 @@ impl ElementKind {
                 service,
                 breakdown,
                 transfer,
+                setup,
                 ..
             } => {
                 let mut d = vec![("service", service)];
+                if let Some(s) = setup {
+                    d.push(("setup", &s.time));
+                    d.extend(s.by_change.iter().map(|c| ("setup", &c.time)));
+                }
                 if let Some(b) = breakdown {
                     d.push(("time_to_failure", &b.time_to_failure));
                     d.push(("repair", &b.repair));
@@ -822,6 +877,8 @@ pub enum Problem {
     UnknownProperty {
         name: String,
     },
+    /// A setup has times for particular changes but no property whose changes it watches.
+    ChangesWithoutProperty,
     /// A probability outside 0 to 1.
     BadProbability {
         value: f64,
@@ -980,6 +1037,7 @@ impl Problem {
             Problem::PropertyValueType { .. } => "property_value_type",
             Problem::BadExpression { .. } => "bad_expression",
             Problem::UnknownProperty { .. } => "unknown_property",
+            Problem::ChangesWithoutProperty => "changes_without_property",
             Problem::BadProbability { .. } => "bad_probability",
             Problem::ProbabilitySum { .. } => "probability_sum",
             Problem::BadCondition { .. } => "bad_condition",
@@ -1114,6 +1172,10 @@ impl std::fmt::Display for Diagnostic {
             Problem::UnknownProperty { name } => write!(
                 f,
                 "reads property `{name}`, which no element sets (it would read as empty)"
+            ),
+            Problem::ChangesWithoutProperty => write!(
+                f,
+                "its setup has times for changes from one value to another but no property to watch"
             ),
             Problem::BadProbability { value } => {
                 write!(f, "probability {value} must be between 0 and 1")
@@ -1411,6 +1473,23 @@ impl Model {
                     Some(&e.id),
                     Problem::NoTimeBetweenArrivals,
                 ));
+            }
+            if let ElementKind::Server { setup: Some(s), .. } = &e.kind {
+                match &s.on_change_of {
+                    Some(name) if !self.property_types().contains_key(name) => {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::UnknownProperty { name: name.clone() },
+                        ));
+                    }
+                    None if !s.by_change.is_empty() => {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::ChangesWithoutProperty,
+                        ));
+                    }
+                    _ => {}
+                }
             }
             if let ElementKind::Server { power: Some(p), .. } = &e.kind {
                 for (state, x) in p.values() {
@@ -2576,6 +2655,7 @@ mod tests {
                         available: true,
                         availability: Vec::new(),
                         power: None,
+                        setup: None,
                     },
                 ),
                 el("exit", ElementKind::Sink),
@@ -2661,6 +2741,7 @@ mod tests {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -2735,6 +2816,7 @@ mod tests {
                 available: true,
                 availability: Vec::new(),
                 power: None,
+                setup: None,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

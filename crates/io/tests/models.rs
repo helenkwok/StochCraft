@@ -54,6 +54,7 @@ fn bpmn_written_by_another_tool() {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         }
     );
     assert_eq!(kind(m, "leave"), &ElementKind::Sink);
@@ -81,6 +82,7 @@ fn inherited_scenario_changes_only_what_it_says() {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         }
     );
     assert_eq!(l.model.experiment.replications, 16);
@@ -146,6 +148,7 @@ fn xpdl_with_bpsim_1() {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         }
     );
     assert_eq!(

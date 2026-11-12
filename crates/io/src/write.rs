@@ -8,7 +8,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, DateTime, Dist, ElementKind, Estimate, Model, Need, Power,
-    Property, PropertyType, PropertyValue, ResourcePool, Routing, Stop, Timed, Transfer,
+    Property, PropertyType, PropertyValue, ResourcePool, Routing, Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -317,6 +317,26 @@ pub(crate) fn power_element(p: &Power) -> Element {
         .with_child(body)
 }
 
+/// A server's changeovers as StochCraft's vendor extension ([`crate::bpsim::CHANGEOVER`]).
+pub(crate) fn changeover_element(x: &Setup) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:changeover", Some(ns))
+        .with_attr("property", x.on_change_of.as_deref().unwrap_or_default())
+        .with_child(Element::new("stochcraft:time", Some(ns)).with_child(dist_element(&x.time)));
+    for c in &x.by_change {
+        body.push(
+            Element::new("stochcraft:change", Some(ns))
+                .with_attr("from", &c.from)
+                .with_attr("to", &c.to)
+                .with_child(dist_element(&c.time)),
+        );
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::CHANGEOVER)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
+}
+
 /// A server's transfer time as StochCraft's vendor extension ([`crate::bpsim::TRANSFER_TIME`]).
 pub(crate) fn transfer_element(t: &Transfer) -> Element {
     let ns = crate::bpsim::STOCHCRAFT_NS;
@@ -602,11 +622,18 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 ep.push(cp);
             }
             ElementKind::Server {
-                service, breakdown, ..
+                service,
+                breakdown,
+                setup,
+                ..
             } => {
-                ep.push(
-                    s("TimeParameters").with_child(param("ProcessingTime", dist_element(service))),
-                );
+                // A setup before every job is BPSim's own SetUpTime (a changeover is the vendor
+                // extension below).
+                let mut tp = s("TimeParameters");
+                if let Some(x) = setup.as_ref().filter(|x| x.on_change_of.is_none()) {
+                    tp.push(param("SetUpTime", dist_element(&x.time)));
+                }
+                ep.push(tp.with_child(param("ProcessingTime", dist_element(service))));
                 let rid = resource_of.get(e.id.as_str()).cloned().unwrap_or_default();
                 let selection = s("ExpressionParameter")
                     .with_attr("value", &format!("getResource('{rid}', 1)"));
@@ -676,6 +703,11 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if let ElementKind::Server { power: Some(p), .. } = &e.kind {
             ep.push(power_element(p));
+        }
+        if let ElementKind::Server { setup: Some(x), .. } = &e.kind
+            && x.on_change_of.is_some()
+        {
+            ep.push(changeover_element(x));
         }
         if let Some(x) = batching_element(&e.kind) {
             ep.push(x);

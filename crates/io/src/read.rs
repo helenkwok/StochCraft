@@ -9,7 +9,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, Connection, DateTime, Dist, Element as ModelElement, ElementId,
     ElementKind, Estimate, Experiment, Family, Model, Need, Power, Property, PropertyType,
-    PropertyValue, ResourcePool, Routing, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    PropertyValue, ResourcePool, Routing, Setup, Change, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -413,11 +413,10 @@ fn read_xpdl_set(
 }
 
 /// The other time parameters StochCraft does not simulate yet.
-const OTHER_TIMES: [&str; 6] = [
+const OTHER_TIMES: [&str; 5] = [
     "TransferTime",
     "QueueTime",
     "WaitTime",
-    "SetUpTime",
     "ValidationTime",
     "ReworkTime",
 ];
@@ -979,6 +978,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             available,
                             availability,
                             power: power_of(scenario, id, notes),
+                            setup: setup_of(scenario, id, unit, &val, notes),
                         }
                     }
                     (None, None, None) => ElementKind::Delay { duration: time },
@@ -1008,6 +1008,18 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "breakdowns (stochcraft:breakdown) apply only to a task with a resource of its own; they are ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Server { .. })
+            && scenario.is_some_and(|s| {
+                s.param(id, "TimeParameters/SetUpTime").is_some()
+                    || s.param(id, &format!("VendorExtension/{}", bpsim::CHANGEOVER))
+                        .is_some()
+            })
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "a setup (SetUpTime or stochcraft:changeover) is simulated only for a task with a resource of its own; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::Server { .. })
@@ -1237,6 +1249,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
         } else if [
             bpsim::BREAKDOWN,
             bpsim::TRANSFER_TIME,
+            bpsim::CHANGEOVER,
             bpsim::ROUTING,
             bpsim::POWER,
             bpsim::BATCH_SIZE,
@@ -1392,6 +1405,74 @@ fn breakdown_of(
 
 /// The transfer time StochCraft's vendor extension gives server `id`, if any, and whether it
 /// holds the sender (attribute `holdsSender`, default true).
+/// Server `id`'s setup: a changeover (StochCraft's vendor extension) if the file has one, else
+/// BPSim's `SetUpTime` before every job.
+fn setup_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    val: &dyn Fn(&str, &str, &mut Vec<Note>) -> Option<Value>,
+    notes: &mut Vec<Note>,
+) -> Option<Setup> {
+    let every_job = val(id, "TimeParameters/SetUpTime", notes)
+        .and_then(|v| dist_of(Some(v), "the setup time", id, notes));
+    let Some(ext) =
+        scenario.and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::CHANGEOVER)))
+    else {
+        return every_job.map(Setup::every_job);
+    };
+    if every_job.is_some() {
+        notes.push(Note::warning(
+            Some(id),
+            "a task has both a SetUpTime and a changeover (stochcraft:changeover); only the changeover is simulated",
+        ));
+    }
+    let body = ext.elements().find(|e| e.local() == "changeover");
+    let property = body
+        .and_then(|b| b.attr("property"))
+        .map(|p| p.trim().to_owned())
+        .filter(|p| !p.is_empty());
+    let time = body
+        .and_then(|b| b.elements().find(|e| e.local() == "time"))
+        .and_then(|t| bpsim::default_value(t, unit, notes, Some(id)))
+        .and_then(|v| dist_of(Some(v), "the changeover time", id, notes));
+    let (Some(property), Some(time)) = (property, time) else {
+        notes.push(Note::error(
+            Some(id),
+            "a changeover needs a property and a time; the task has no setups",
+        ));
+        return None;
+    };
+    let mut by_change = Vec::new();
+    for c in body
+        .into_iter()
+        .flat_map(|b| b.elements())
+        .filter(|e| e.local() == "change")
+    {
+        let (Some(from), Some(to)) = (c.attr("from"), c.attr("to")) else {
+            notes.push(Note::error(
+                Some(id),
+                "a changeover's change needs `from` and `to`; it is left out",
+            ));
+            continue;
+        };
+        let d = bpsim::default_value(c, unit, notes, Some(id))
+            .and_then(|v| dist_of(Some(v), "a change's time", id, notes));
+        match d {
+            Some(time) => by_change.push(Change { from, to, time }),
+            None => notes.push(Note::error(
+                Some(id),
+                format!("the change from `{from}` to `{to}` needs a time; it is left out"),
+            )),
+        }
+    }
+    Some(Setup {
+        time,
+        on_change_of: Some(property),
+        by_change,
+    })
+}
+
 fn transfer_of(
     scenario: Option<&Scenario>,
     id: &str,

@@ -76,6 +76,7 @@ fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
         "time_starved" => (t("Time starved"), Unit::Share),
         "time_blocked" => (t("Time blocked"), Unit::Share),
         "time_failed" => (t("Time failed"), Unit::Share),
+        "time_setup" => (t("Time setting up"), Unit::Share),
         "energy" => (t("Energy"), Unit::Energy),
         "specific_energy" => (t("Energy per part"), Unit::Energy),
         other => (other, Unit::Count),
