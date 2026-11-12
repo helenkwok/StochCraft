@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Trên cả khoảng, nó thay đổi {change}: trong phạm vi mà chỉ ngẫu nhiên cũng có thể gây ra.
 	Actual size	Kích thước thực
 	Add Block	Thêm khối
+	Add Calendar	Thêm lịch
+	Add Pool	Thêm nhóm
 	Add a flow from…	Thêm luồng từ…
 	Add a flow to…	Thêm luồng đến…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Thêm một đơn vị vào tác vụ hoặc nhóm bận nhất cho đến khi đủ số lần lặp đạt mục tiêu. Câu trả lời khi mọi thời gian bằng giá trị trung bình cũng được hiển thị; nó thường quá nhỏ.
 	Add alternative	Thêm phương án
+	Add calendar entry	Thêm mục lịch
 	Add point	Thêm điểm
 	Add pool	Thêm nhóm
 	Add property	Thêm thuộc tính
@@ -40,9 +43,13 @@
 	Appearance	Diện mạo
 	Arrival limit	Giới hạn lượt đến
 	Arrivals	Lượt đến
+	Arrivals by calendar	Lượt đến theo lịch
 	At least	Ít nhất
 	At most	Nhiều nhất
 	Availability	Độ khả dụng
+	Availability by calendar	Độ khả dụng theo lịch
+	Available	Khả dụng
+	Available outside calendars	Khả dụng ngoài các lịch
 	BPMN with BPSim	BPMN có BPSim
 	Back to the model (Esc)	Quay lại mô hình (Esc)
 	Batch	Lô
@@ -53,11 +60,14 @@
 	Block	Khối
 	Boolean	Boolean
 	Bottoms	Cạnh dưới
+	Breakdowns	Hỏng hóc
+	Breakdowns and availability	Hỏng hóc và độ khả dụng
 	Bring All to Front	Đưa tất cả ra trước
 	Built with	Được xây dựng bằng
 	Busiest	Bận nhất
 	By role	Theo vai trò
 	CSV table	Bảng CSV
+	Calendar	Lịch
 	Cancel	Hủy
 	Cancel Run	Hủy chạy
 	Cancel run	Hủy chạy
@@ -65,7 +75,9 @@
 	Centres	Tâm ngang
 	Change	Thay đổi
 	Change Block	Thay đổi khối
+	Change Calendar	Thay đổi lịch
 	Change Flow	Thay đổi luồng
+	Change Pool	Thay đổi nhóm
 	Change the estimate	Đổi ước lượng
 	Changes	Các thay đổi
 	Changing the time unit does not convert the times already in the model.	Thay đổi đơn vị thời gian không chuyển đổi các giá trị thời gian đã có trong mô hình.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Xuất bảng (CSV)
 	Exported {file}	Đã xuất {file}
 	Expression	Biểu thức
+	Failure interrupts the job	Hỏng hóc làm gián đoạn công việc
 	Family	Họ phân phối
 	File	Tệp
 	Finished at {time} {unit}	Kết thúc tại {time} {unit}
@@ -143,6 +156,7 @@
 	From	Từ
 	Gamma	Gamma
 	Goes to	Đi đến
+	Hands on finished parts while down	Vẫn chuyển tiếp chi tiết đã xong khi hỏng
 	Help	Trợ giúp
 	Hide Others	Ẩn các mục khác
 	Hide {app}	Ẩn {app}
@@ -191,6 +205,7 @@
 	New model	Mô hình mới
 	New property	Thuộc tính mới
 	New property name	Tên thuộc tính mới
+	No arrivals outside calendars	Không có lượt đến ngoài các lịch
 	No blocks yet. Open a model, or add blocks to build one.	Chưa có khối nào. Hãy mở một mô hình hoặc thêm các khối để tạo mô hình.
 	No connections yet: join blocks below.	Chưa có kết nối: hãy nối các khối bên dưới.
 	No replication met the stop condition: each ran to its time limit.	Không lần lặp nào đạt điều kiện dừng: mỗi lần đều chạy đến giới hạn thời gian.
@@ -244,6 +259,8 @@
 	Redo {action}	Làm lại {action}
 	Remove	Xóa
 	Remove Block	Xóa khối
+	Remove Calendar	Xóa lịch
+	Remove Pool	Xóa nhóm
 	Remove Property	Xóa thuộc tính
 	Remove alternative {n}	Xóa phương án {n}
 	Remove block	Xóa khối
@@ -253,6 +270,7 @@
 	Removed {id}	Đã xóa {id}
 	Rename Block	Đổi tên khối
 	Rename Model	Đổi tên mô hình
+	Repair time	Thời gian sửa chữa
 	Replace Model	Thay thế mô hình
 	Replication 1 · {time} of {end} {unit}	Lần lặp 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Lần lặp 1 · {time} / {end} {unit} · khởi động
@@ -290,6 +308,7 @@
 	Seed	Hạt giống ngẫu nhiên
 	Select All	Chọn tất cả
 	Select a block to see its queue over time.	Chọn một khối để xem hàng đợi của nó theo thời gian.
+	Sender waits during transfer	Bên gửi chờ trong khi chuyển
 	Separate the values with semicolons or spaces.	Phân tách các giá trị bằng dấu chấm phẩy hoặc dấu cách.
 	Service time	Thời gian phục vụ
 	Services	Dịch vụ
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Khoảng này xuống dưới tỷ lệ mục tiêu {share}, nên chưa cho thấy với độ tin cậy 95% rằng tỷ lệ đạt được; thêm lần lặp sẽ thu hẹp nó.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Thời gian trung bình đến điều kiện dừng chỉ tính trên các lần lặp đạt điều kiện đó; các lần khác chạy đến giới hạn thời gian.
 	The model changed, so watching stopped	Mô hình đã thay đổi nên việc theo dõi đã dừng
+	The model has no calendars yet.	Mô hình chưa có lịch nào.
 	The model now has the units sizing found	Mô hình giờ có số đơn vị mà việc định cỡ tìm được
 	The model: its experiment, connections and problems	Mô hình: thí nghiệm, kết nối và vấn đề
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Tỷ lệ lần lặp bằng hoặc dưới mỗi giá trị. Dải chứa phân phối thật với độ tin cậy {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Thời gian ngoài ca
 	Time processing	Thời gian xử lý
 	Time starved	Thời gian không có việc
+	Time to failure	Thời gian đến khi hỏng
 	Time to the stop condition	Thời gian đến điều kiện dừng
 	Time unit	Đơn vị thời gian
 	To	Đến
 	Tops	Cạnh trên
+	Transfer time	Thời gian chuyển
 	Trials	Số lần thử
 	Triangular	Tam giác
 	Truncated normal	Chuẩn cắt cụt
@@ -363,6 +385,7 @@
 	Uniform	Đều
 	Unit	Đơn vị
 	Units	Đơn vị
+	Units by calendar	Đơn vị theo lịch
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Các đơn vị mà nhiều tác vụ dùng chung. Tác vụ có tài nguyên dùng chung lấy chúng theo nhóm hoặc theo vai trò.
 	Untitled	Chưa đặt tên
 	Untitled model	Mô hình chưa đặt tên

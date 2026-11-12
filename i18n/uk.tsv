@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	На всьому діапазоні змінився на {change}: у межах того, на що здатна сама випадковість.
 	Actual size	Фактичний розмір
 	Add Block	Додати блок
+	Add Calendar	Додати календар
+	Add Pool	Додати пул
 	Add a flow from…	Додати потік від…
 	Add a flow to…	Додати потік до…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Додавати одиницю до найзавантаженішого завдання чи пулу, доки достатньо реплікацій не досягне мети. Показано й відповідь, де кожен час дорівнює своєму середньому; зазвичай вона замала.
 	Add alternative	Додати альтернативу
+	Add calendar entry	Додати запис календаря
 	Add point	Додати точку
 	Add pool	Додати пул
 	Add property	Додати властивість
@@ -40,9 +43,13 @@
 	Appearance	Вигляд
 	Arrival limit	Обмеження кількості прибуттів
 	Arrivals	Прибуття
+	Arrivals by calendar	Прибуття за календарем
 	At least	Не менше
 	At most	Не більше
 	Availability	Коефіцієнт готовності
+	Availability by calendar	Доступність за календарем
+	Available	Доступно
+	Available outside calendars	Доступно поза календарями
 	BPMN with BPSim	BPMN з BPSim
 	Back to the model (Esc)	Повернутися до моделі (Esc)
 	Batch	Партія
@@ -53,11 +60,14 @@
 	Block	Блок
 	Boolean	Логічне значення
 	Bottoms	Нижні краї
+	Breakdowns	Відмови
+	Breakdowns and availability	Відмови та доступність
 	Bring All to Front	Усі вікна на передній план
 	Built with	Створено за допомогою
 	Busiest	Найзавантаженіший
 	By role	За роллю
 	CSV table	Таблиця CSV
+	Calendar	Календар
 	Cancel	Скасувати
 	Cancel Run	Скасувати запуск
 	Cancel run	Скасувати запуск
@@ -65,7 +75,9 @@
 	Centres	Центри по горизонталі
 	Change	Зміна
 	Change Block	Змінити блок
+	Change Calendar	Змінити календар
 	Change Flow	Змінити потік
+	Change Pool	Змінити пул
 	Change the estimate	Змінити оцінку
 	Changes	Зміни
 	Changing the time unit does not convert the times already in the model.	Зміна одиниці часу не перераховує час, уже заданий у моделі.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Експортувати таблицю (CSV)
 	Exported {file}	Експортовано {file}
 	Expression	Вираз
+	Failure interrupts the job	Відмова перериває роботу
 	Family	Родина
 	File	Файл
 	Finished at {time} {unit}	Завершено о {time} {unit}
@@ -143,6 +156,7 @@
 	From	Від
 	Gamma	Гамма-розподіл
 	Goes to	Веде до
+	Hands on finished parts while down	Передає готові деталі і під час відмови
 	Help	Довідка
 	Hide Others	Приховати інші
 	Hide {app}	Приховати {app}
@@ -191,6 +205,7 @@
 	New model	Нова модель
 	New property	Нова властивість
 	New property name	Назва нової властивості
+	No arrivals outside calendars	Немає прибуттів поза календарями
 	No blocks yet. Open a model, or add blocks to build one.	Блоків поки немає. Відкрийте модель або додайте блоки, щоб створити її.
 	No connections yet: join blocks below.	З'єднань поки немає: з'єднайте блоки нижче.
 	No replication met the stop condition: each ran to its time limit.	Жодна реплікація не досягла умови зупинки: кожна тривала до своєї межі часу.
@@ -244,6 +259,8 @@
 	Redo {action}	Повторити {action}
 	Remove	Видалити
 	Remove Block	Видалити блок
+	Remove Calendar	Видалити календар
+	Remove Pool	Видалити пул
 	Remove Property	Видалити властивість
 	Remove alternative {n}	Видалити альтернативу {n}
 	Remove block	Видалити блок
@@ -253,6 +270,7 @@
 	Removed {id}	Видалено {id}
 	Rename Block	Перейменувати блок
 	Rename Model	Перейменувати модель
+	Repair time	Час ремонту
 	Replace Model	Замінити модель
 	Replication 1 · {time} of {end} {unit}	Повторний запуск 1 · {time} з {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Повторний запуск 1 · {time} з {end} {unit} · розігрів
@@ -290,6 +308,7 @@
 	Seed	Початкове значення генератора
 	Select All	Виділити все
 	Select a block to see its queue over time.	Виберіть блок, щоб побачити його чергу в часі.
+	Sender waits during transfer	Відправник чекає під час передачі
 	Separate the values with semicolons or spaces.	Розділяйте значення крапкою з комою або пробілами.
 	Service time	Час обслуговування
 	Services	Служби
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Інтервал сягає нижче цільової частки {share}, тож з довірою 95% не показано, що частку досягнуто; більше реплікацій звузили б його.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Середній час до умови зупинки обчислено лише за реплікаціями, що її досягли; решта тривали до своєї межі часу.
 	The model changed, so watching stopped	Модель змінилася, тому спостереження припинено
+	The model has no calendars yet.	У моделі ще немає календарів.
 	The model now has the units sizing found	У моделі тепер одиниці, знайдені під час підбору
 	The model: its experiment, connections and problems	Модель: експеримент, з'єднання й проблеми
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Частка реплікацій, що не перевищують кожне значення. Смуга містить справжній розподіл із довірою {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Час поза зміною
 	Time processing	Час обробки
 	Time starved	Час без роботи
+	Time to failure	Час до відмови
 	Time to the stop condition	Час до умови зупинки
 	Time unit	Одиниця часу
 	To	До
 	Tops	Верхні краї
+	Transfer time	Час передачі
 	Trials	Випробування
 	Triangular	Трикутний розподіл
 	Truncated normal	Усічений нормальний розподіл
@@ -363,6 +385,7 @@
 	Uniform	Рівномірний розподіл
 	Unit	Одиниця вимірювання
 	Units	Одиниці
+	Units by calendar	Одиниці за календарем
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Одиниці, які спільно використовують кілька завдань. Завдання зі спільними ресурсами бере їх із пулу або за роллю.
 	Untitled	Без назви
 	Untitled model	Модель без назви

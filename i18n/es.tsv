@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	En el intervalo cambió en {change}: dentro de lo que podría causar el azar.
 	Actual size	Tamaño real
 	Add Block	Añadir bloque
+	Add Calendar	Añadir calendario
+	Add Pool	Añadir grupo
 	Add a flow from…	Añadir un flujo desde…
 	Add a flow to…	Añadir un flujo hacia…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Añadir una unidad en la tarea o el grupo más ocupado hasta que suficientes réplicas cumplan un objetivo. También se muestra la respuesta con cada tiempo en su media; suele quedarse corta.
 	Add alternative	Añadir alternativa
+	Add calendar entry	Añadir entrada de calendario
 	Add point	Añadir punto
 	Add pool	Añadir grupo
 	Add property	Añadir propiedad
@@ -40,9 +43,13 @@
 	Appearance	Apariencia
 	Arrival limit	Límite de llegadas
 	Arrivals	Llegadas
+	Arrivals by calendar	Llegadas por calendario
 	At least	Al menos
 	At most	Como máximo
 	Availability	Disponibilidad
+	Availability by calendar	Disponibilidad por calendario
+	Available	Disponible
+	Available outside calendars	Disponible fuera de los calendarios
 	BPMN with BPSim	BPMN con BPSim
 	Back to the model (Esc)	Volver al modelo (Esc)
 	Batch	Lote
@@ -53,11 +60,14 @@
 	Block	Bloque
 	Boolean	Booleano
 	Bottoms	Bordes inferiores
+	Breakdowns	Averías
+	Breakdowns and availability	Averías y disponibilidad
 	Bring All to Front	Traer todo al frente
 	Built with	Creado con
 	Busiest	Más ocupado
 	By role	Por rol
 	CSV table	Tabla CSV
+	Calendar	Calendario
 	Cancel	Cancelar
 	Cancel Run	Cancelar ejecución
 	Cancel run	Cancelar ejecución
@@ -65,7 +75,9 @@
 	Centres	Centros horizontales
 	Change	Cambio
 	Change Block	Cambiar bloque
+	Change Calendar	Cambiar calendario
 	Change Flow	Cambiar flujo
+	Change Pool	Cambiar grupo
 	Change the estimate	Cambiar la estimación
 	Changes	Cambios
 	Changing the time unit does not convert the times already in the model.	Cambiar la unidad de tiempo no convierte los tiempos ya definidos en el modelo.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Exportar tabla (CSV)
 	Exported {file}	Se exportó {file}
 	Expression	Expresión
+	Failure interrupts the job	La avería interrumpe el trabajo
 	Family	Familia
 	File	Archivo
 	Finished at {time} {unit}	Terminó en {time} {unit}
@@ -143,6 +156,7 @@
 	From	Desde
 	Gamma	Gamma
 	Goes to	Va a
+	Hands on finished parts while down	Entrega las piezas terminadas durante la avería
 	Help	Ayuda
 	Hide Others	Ocultar otros
 	Hide {app}	Ocultar {app}
@@ -191,6 +205,7 @@
 	New model	Nuevo modelo
 	New property	Nueva propiedad
 	New property name	Nombre de la nueva propiedad
+	No arrivals outside calendars	Sin llegadas fuera de los calendarios
 	No blocks yet. Open a model, or add blocks to build one.	Todavía no hay bloques. Abre un modelo o añade bloques para crear uno.
 	No connections yet: join blocks below.	Todavía no hay conexiones: conecta los bloques de abajo.
 	No replication met the stop condition: each ran to its time limit.	Ninguna réplica cumplió la condición de parada: cada una llegó a su límite de tiempo.
@@ -244,6 +259,8 @@
 	Redo {action}	Rehacer {action}
 	Remove	Eliminar
 	Remove Block	Eliminar bloque
+	Remove Calendar	Eliminar calendario
+	Remove Pool	Eliminar grupo
 	Remove Property	Eliminar propiedad
 	Remove alternative {n}	Eliminar alternativa {n}
 	Remove block	Eliminar bloque
@@ -253,6 +270,7 @@
 	Removed {id}	Se eliminó {id}
 	Rename Block	Cambiar nombre del bloque
 	Rename Model	Cambiar nombre del modelo
+	Repair time	Tiempo de reparación
 	Replace Model	Sustituir modelo
 	Replication 1 · {time} of {end} {unit}	Réplica 1 · {time} de {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Réplica 1 · {time} de {end} {unit} · calentamiento
@@ -290,6 +308,7 @@
 	Seed	Semilla
 	Select All	Seleccionar todo
 	Select a block to see its queue over time.	Seleccione un bloque para ver su cola a lo largo del tiempo.
+	Sender waits during transfer	El emisor espera durante la transferencia
 	Separate the values with semicolons or spaces.	Separe los valores con punto y coma o espacios.
 	Service time	Tiempo de servicio
 	Services	Servicios
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	El intervalo llega por debajo de la proporción objetivo del {share}, así que no se demuestra con un 95 % de confianza que se cumpla; más réplicas lo estrecharían.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	El tiempo medio hasta la condición de parada es solo sobre las réplicas que la cumplieron; las demás llegaron a su límite de tiempo.
 	The model changed, so watching stopped	El modelo cambió, así que se dejó de observar
+	The model has no calendars yet.	El modelo aún no tiene calendarios.
 	The model now has the units sizing found	El modelo tiene ahora las unidades halladas al dimensionar
 	The model: its experiment, connections and problems	El modelo: experimento, conexiones y problemas
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La proporción de réplicas iguales o inferiores a cada valor. La banda contiene la distribución real con una confianza del {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Tiempo fuera de turno
 	Time processing	Tiempo procesando
 	Time starved	Tiempo sin trabajo
+	Time to failure	Tiempo hasta la avería
 	Time to the stop condition	Tiempo hasta la condición de parada
 	Time unit	Unidad de tiempo
 	To	Hasta
 	Tops	Bordes superiores
+	Transfer time	Tiempo de transferencia
 	Trials	Ensayos
 	Triangular	Triangular
 	Truncated normal	Normal truncada
@@ -363,6 +385,7 @@
 	Uniform	Uniforme
 	Unit	Unidad
 	Units	Unidades
+	Units by calendar	Unidades por calendario
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unidades que comparten varias tareas. Una tarea con recursos compartidos las toma por grupo o por rol.
 	Untitled	Sin título
 	Untitled model	Modelo sin título

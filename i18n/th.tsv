@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	ตลอดช่วงเปลี่ยนไป {change}: อยู่ในขอบเขตที่ความบังเอิญอย่างเดียวก็ทำได้
 	Actual size	ขนาดจริง
 	Add Block	เพิ่มบล็อก
+	Add Calendar	เพิ่มปฏิทิน
+	Add Pool	เพิ่มกลุ่มทรัพยากร
 	Add a flow from…	เพิ่มโฟลว์จาก…
 	Add a flow to…	เพิ่มโฟลว์ไปยัง…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	เพิ่มหนึ่งหน่วยให้งานหรือกลุ่มที่ยุ่งที่สุดจนกว่ารอบการจำลองซ้ำจะบรรลุเป้าหมายมากพอ แสดงคำตอบที่ทุกเวลาเท่ากับค่าเฉลี่ยด้วย ซึ่งมักน้อยเกินไป
 	Add alternative	เพิ่มทางเลือก
+	Add calendar entry	เพิ่มรายการปฏิทิน
 	Add point	เพิ่มจุด
 	Add pool	เพิ่มกลุ่มทรัพยากร
 	Add property	เพิ่มคุณสมบัติ
@@ -40,9 +43,13 @@
 	Appearance	ลักษณะที่ปรากฏ
 	Arrival limit	จำนวนขาเข้าสูงสุด
 	Arrivals	ขาเข้า
+	Arrivals by calendar	การมาถึงตามปฏิทิน
 	At least	อย่างน้อย
 	At most	อย่างมาก
 	Availability	อัตราความพร้อมใช้งาน
+	Availability by calendar	ความพร้อมใช้งานตามปฏิทิน
+	Available	พร้อมใช้งาน
+	Available outside calendars	พร้อมใช้งานนอกปฏิทิน
 	BPMN with BPSim	BPMN พร้อม BPSim
 	Back to the model (Esc)	กลับไปยังแบบจำลอง (Esc)
 	Batch	ชุด
@@ -53,11 +60,14 @@
 	Block	บล็อก
 	Boolean	บูลีน
 	Bottoms	ขอบล่าง
+	Breakdowns	การขัดข้อง
+	Breakdowns and availability	การขัดข้องและความพร้อมใช้งาน
 	Bring All to Front	นำทั้งหมดมาไว้ด้านหน้า
 	Built with	พัฒนาด้วย
 	Busiest	ยุ่งที่สุด
 	By role	ตามบทบาท
 	CSV table	ตาราง CSV
+	Calendar	ปฏิทิน
 	Cancel	ยกเลิก
 	Cancel Run	ยกเลิกการรัน
 	Cancel run	ยกเลิกการรัน
@@ -65,7 +75,9 @@
 	Centres	กึ่งกลางแนวนอน
 	Change	การเปลี่ยนแปลง
 	Change Block	เปลี่ยนบล็อก
+	Change Calendar	เปลี่ยนปฏิทิน
 	Change Flow	เปลี่ยนโฟลว์
+	Change Pool	เปลี่ยนกลุ่มทรัพยากร
 	Change the estimate	เปลี่ยนการประมาณ
 	Changes	การเปลี่ยนแปลง
 	Changing the time unit does not convert the times already in the model.	การเปลี่ยนหน่วยเวลาไม่แปลงค่าเวลาที่มีอยู่ในแบบจำลอง
@@ -130,6 +142,7 @@
 	Export table (CSV)	ส่งออกตาราง (CSV)
 	Exported {file}	ส่งออก {file} แล้ว
 	Expression	นิพจน์
+	Failure interrupts the job	การขัดข้องขัดจังหวะงาน
 	Family	ตระกูล
 	File	ไฟล์
 	Finished at {time} {unit}	สิ้นสุดที่ {time} {unit}
@@ -143,6 +156,7 @@
 	From	จาก
 	Gamma	แกมมา
 	Goes to	ไปยัง
+	Hands on finished parts while down	ส่งต่อชิ้นงานที่เสร็จแล้วแม้ขณะขัดข้อง
 	Help	วิธีใช้
 	Hide Others	ซ่อนรายการอื่น
 	Hide {app}	ซ่อน {app}
@@ -191,6 +205,7 @@
 	New model	แบบจำลองใหม่
 	New property	คุณสมบัติใหม่
 	New property name	ชื่อคุณสมบัติใหม่
+	No arrivals outside calendars	ไม่มีการมาถึงนอกปฏิทิน
 	No blocks yet. Open a model, or add blocks to build one.	ยังไม่มีบล็อก เปิดแบบจำลองหรือเพิ่มบล็อกเพื่อสร้างแบบจำลอง
 	No connections yet: join blocks below.	ยังไม่มีการเชื่อมต่อ: เชื่อมบล็อกด้านล่าง
 	No replication met the stop condition: each ran to its time limit.	ไม่มีรอบการจำลองซ้ำใดถึงเงื่อนไขหยุด: ทุกรอบรันจนถึงขีดจำกัดเวลา
@@ -244,6 +259,8 @@
 	Redo {action}	ทำซ้ำ {action}
 	Remove	นำออก
 	Remove Block	นำบล็อกออก
+	Remove Calendar	นำปฏิทินออก
+	Remove Pool	นำกลุ่มทรัพยากรออก
 	Remove Property	นำคุณสมบัติออก
 	Remove alternative {n}	นำทางเลือก {n} ออก
 	Remove block	นำบล็อกออก
@@ -253,6 +270,7 @@
 	Removed {id}	นำ {id} ออกแล้ว
 	Rename Block	เปลี่ยนชื่อบล็อก
 	Rename Model	เปลี่ยนชื่อแบบจำลอง
+	Repair time	เวลาซ่อม
 	Replace Model	แทนที่แบบจำลอง
 	Replication 1 · {time} of {end} {unit}	การจำลองซ้ำรอบที่ 1 · {time} จาก {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	การจำลองซ้ำรอบที่ 1 · {time} จาก {end} {unit} · ระยะอุ่นเครื่อง
@@ -290,6 +308,7 @@
 	Seed	เมล็ดสุ่ม
 	Select All	เลือกทั้งหมด
 	Select a block to see its queue over time.	เลือกบล็อกเพื่อดูคิวตามเวลา
+	Sender waits during transfer	ผู้ส่งรอระหว่างขนย้าย
 	Separate the values with semicolons or spaces.	คั่นค่าด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
 	Service time	เวลาให้บริการ
 	Services	บริการ
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ช่วงนี้ลงต่ำกว่าสัดส่วนเป้าหมาย {share} จึงยังไม่แสดงด้วยความเชื่อมั่น 95% ว่าบรรลุสัดส่วนนั้น รอบการจำลองซ้ำที่มากขึ้นจะทำให้ช่วงแคบลง
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	เวลาเฉลี่ยจนถึงเงื่อนไขหยุดคิดเฉพาะรอบการจำลองซ้ำที่ถึงเงื่อนไข รอบอื่นรันจนถึงขีดจำกัดเวลา
 	The model changed, so watching stopped	โมเดลเปลี่ยนไป จึงหยุดเฝ้าดู
+	The model has no calendars yet.	แบบจำลองยังไม่มีปฏิทิน
 	The model now has the units sizing found	ตอนนี้แบบจำลองมีจำนวนหน่วยที่การกำหนดขนาดพบแล้ว
 	The model: its experiment, connections and problems	แบบจำลอง: การทดลอง การเชื่อมต่อ และปัญหา
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	สัดส่วนรอบการจำลองซ้ำที่เท่ากับหรือต่ำกว่าแต่ละค่า แถบครอบคลุมการแจกแจงจริงด้วยความเชื่อมั่น {confidence}
@@ -348,10 +368,12 @@
 	Time off shift	เวลานอกกะ
 	Time processing	เวลาประมวลผล
 	Time starved	เวลาที่ไม่มีงาน
+	Time to failure	เวลาจนถึงขัดข้อง
 	Time to the stop condition	เวลาจนถึงเงื่อนไขหยุด
 	Time unit	หน่วยเวลา
 	To	ไปยัง
 	Tops	ขอบบน
+	Transfer time	เวลาขนย้าย
 	Trials	จำนวนครั้งทดลอง
 	Triangular	สามเหลี่ยม
 	Truncated normal	ปกติแบบตัดปลาย
@@ -363,6 +385,7 @@
 	Uniform	สม่ำเสมอ
 	Unit	หน่วย
 	Units	จำนวนหน่วย
+	Units by calendar	จำนวนหน่วยตามปฏิทิน
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	หน่วยที่หลายงานใช้ร่วมกัน งานที่ใช้ทรัพยากรร่วมกันจะรับหน่วยเหล่านี้ตามกลุ่มหรือตามบทบาท
 	Untitled	ยังไม่มีชื่อ
 	Untitled model	แบบจำลองไม่มีชื่อ

@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Alueella se muuttui {change}: sen rajoissa, mihin pelkkä sattuma pystyy.
 	Actual size	Todellinen koko
 	Add Block	Lisää lohko
+	Add Calendar	Lisää kalenteri
+	Add Pool	Lisää pooli
 	Add a flow from…	Lisää virta kohteesta…
 	Add a flow to…	Lisää virta kohteeseen…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lisää yksikkö kuormitetuimpaan tehtävään tai pooliin, kunnes tarpeeksi monta toistoa saavuttaa tavoitteen. Myös vastaus, jossa jokainen aika on keskiarvossaan, näytetään; se on yleensä liian pieni.
 	Add alternative	Lisää vaihtoehto
+	Add calendar entry	Lisää kalenterimerkintä
 	Add point	Lisää piste
 	Add pool	Lisää pooli
 	Add property	Lisää ominaisuus
@@ -40,9 +43,13 @@
 	Appearance	Ulkoasu
 	Arrival limit	Saapumisraja
 	Arrivals	Saapumiset
+	Arrivals by calendar	Saapumiset kalenterin mukaan
 	At least	Vähintään
 	At most	Enintään
 	Availability	Käytettävyys
+	Availability by calendar	Käytettävyys kalenterin mukaan
+	Available	Käytettävissä
+	Available outside calendars	Käytettävissä kalenterien ulkopuolella
 	BPMN with BPSim	BPMN ja BPSim
 	Back to the model (Esc)	Takaisin malliin (Esc)
 	Batch	Erä
@@ -53,11 +60,14 @@
 	Block	Lohko
 	Boolean	Totuusarvo
 	Bottoms	Alareunat
+	Breakdowns	Vikaantumiset
+	Breakdowns and availability	Vikaantumiset ja käytettävyys
 	Bring All to Front	Tuo kaikki eteen
 	Built with	Toteutettu seuraavilla
 	Busiest	Kuormitetuin
 	By role	Roolin mukaan
 	CSV table	CSV-taulukko
+	Calendar	Kalenteri
 	Cancel	Peruuta
 	Cancel Run	Peruuta suoritus
 	Cancel run	Peruuta suoritus
@@ -65,7 +75,9 @@
 	Centres	Vaakakeskikohdat
 	Change	Muutos
 	Change Block	Muuta lohkoa
+	Change Calendar	Muuta kalenteria
 	Change Flow	Muuta virtaa
+	Change Pool	Muuta poolia
 	Change the estimate	Muuta arviota
 	Changes	Muutokset
 	Changing the time unit does not convert the times already in the model.	Aikayksikön vaihtaminen ei muunna mallissa jo olevia aikoja.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Vie taulukko (CSV)
 	Exported {file}	Vietiin {file}
 	Expression	Lauseke
+	Failure interrupts the job	Vika keskeyttää työn
 	Family	Jakaumaperhe
 	File	Tiedosto
 	Finished at {time} {unit}	Valmis hetkellä {time} {unit}
@@ -143,6 +156,7 @@
 	From	Kohteesta
 	Gamma	Gamma
 	Goes to	Menee kohteeseen
+	Hands on finished parts while down	Luovuttaa valmiit osat myös vikaantuneena
 	Help	Ohje
 	Hide Others	Piilota muut
 	Hide {app}	Piilota {app}
@@ -191,6 +205,7 @@
 	New model	Uusi malli
 	New property	Uusi ominaisuus
 	New property name	Uuden ominaisuuden nimi
+	No arrivals outside calendars	Ei saapumisia kalenterien ulkopuolella
 	No blocks yet. Open a model, or add blocks to build one.	Lohkoja ei vielä ole. Avaa malli tai lisää lohkoja luodaksesi mallin.
 	No connections yet: join blocks below.	Yhteyksiä ei vielä ole: yhdistä alla olevat lohkot.
 	No replication met the stop condition: each ran to its time limit.	Mikään toisto ei saavuttanut pysäytysehtoa: jokainen ajettiin aikarajaansa asti.
@@ -244,6 +259,8 @@
 	Redo {action}	Tee uudelleen {action}
 	Remove	Poista
 	Remove Block	Poista lohko
+	Remove Calendar	Poista kalenteri
+	Remove Pool	Poista pooli
 	Remove Property	Poista ominaisuus
 	Remove alternative {n}	Poista vaihtoehto {n}
 	Remove block	Poista lohko
@@ -253,6 +270,7 @@
 	Removed {id}	Poistettiin {id}
 	Rename Block	Nimeä lohko uudelleen
 	Rename Model	Nimeä malli uudelleen
+	Repair time	Korjausaika
 	Replace Model	Korvaa malli
 	Replication 1 · {time} of {end} {unit}	Toisto 1 · {time}/{end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Toisto 1 · {time}/{end} {unit} · alkulämmittely
@@ -290,6 +308,7 @@
 	Seed	Satunnaislukusiemen
 	Select All	Valitse kaikki
 	Select a block to see its queue over time.	Valitse lohko nähdäksesi sen jonon ajan mittaan.
+	Sender waits during transfer	Lähettäjä odottaa siirron ajan
 	Separate the values with semicolons or spaces.	Erota arvot puolipisteillä tai välilyönneillä.
 	Service time	Palveluaika
 	Services	Palvelut
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Väli ulottuu alle tavoiteosuuden {share}, joten osuuden saavuttamista ei ole osoitettu 95 %:n luottamuksella; useampi toisto kaventaisi sitä.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskimääräinen aika pysäytysehtoon lasketaan vain toistoista, jotka saavuttivat sen; muut ajettiin aikarajaansa asti.
 	The model changed, so watching stopped	Malli muuttui, joten seuraaminen lopetettiin
+	The model has no calendars yet.	Mallissa ei ole vielä kalentereita.
 	The model now has the units sizing found	Mallissa on nyt mitoituksen löytämät yksiköt
 	The model: its experiment, connections and problems	Malli: koe, yhteydet ja ongelmat
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Niiden toistojen osuus, jotka ovat kunkin arvon suuruisia tai pienempiä. Vyöhyke sisältää todellisen jakauman {confidence} luottamuksella.
@@ -348,10 +368,12 @@
 	Time off shift	Aika vuoron ulkopuolella
 	Time processing	Käsittelyaika
 	Time starved	Aika ilman työtä
+	Time to failure	Aika vikaantumiseen
 	Time to the stop condition	Aika pysäytysehtoon
 	Time unit	Aikayksikkö
 	To	Kohteeseen
 	Tops	Yläreunat
+	Transfer time	Siirtoaika
 	Trials	Kokeilut
 	Triangular	Kolmiojakauma
 	Truncated normal	Katkaistu normaalijakauma
@@ -363,6 +385,7 @@
 	Uniform	Tasajakauma
 	Unit	Yksikkö
 	Units	Yksiköt
+	Units by calendar	Yksiköt kalenterin mukaan
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Yksiköt, joita useampi tehtävä käyttää yhteisesti. Jaettuja resursseja käyttävä tehtävä ottaa ne poolista tai roolin mukaan.
 	Untitled	Nimetön
 	Untitled model	Nimetön malli

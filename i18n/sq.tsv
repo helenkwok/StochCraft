@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Në interval ndryshoi me {change}: brenda asaj që mund të bëjë vetëm rastësia.
 	Actual size	Madhësia e vërtetë
 	Add Block	Shto bllok
+	Add Calendar	Shto kalendar
+	Add Pool	Shto grup
 	Add a flow from…	Shto rrjedhë nga…
 	Add a flow to…	Shto rrjedhë te…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Shto një njësi te detyra ose grupi më i ngarkuar derisa mjaft përsëritje të arrijnë një objektiv. Tregohet edhe përgjigjja me çdo kohë në mesataren e saj; zakonisht është shumë e vogël.
 	Add alternative	Shto alternativë
+	Add calendar entry	Shto hyrje kalendari
 	Add point	Shto pikë
 	Add pool	Shto grup
 	Add property	Shto veti
@@ -40,9 +43,13 @@
 	Appearance	Pamja
 	Arrival limit	Kufiri i mbërritjeve
 	Arrivals	Mbërritjet
+	Arrivals by calendar	Mbërritjet sipas kalendarit
 	At least	Të paktën
 	At most	Më së shumti
 	Availability	Disponueshmëria
+	Availability by calendar	Disponueshmëria sipas kalendarit
+	Available	I disponueshëm
+	Available outside calendars	I disponueshëm jashtë kalendarëve
 	BPMN with BPSim	BPMN me BPSim
 	Back to the model (Esc)	Kthehu te modeli (Esc)
 	Batch	Grup
@@ -53,11 +60,14 @@
 	Block	Blloku
 	Boolean	Vlerë logjike
 	Bottoms	Skajet e poshtme
+	Breakdowns	Defektet
+	Breakdowns and availability	Defektet dhe disponueshmëria
 	Bring All to Front	Sill të gjitha përpara
 	Built with	Ndërtuar me
 	Busiest	Më i ngarkuari
 	By role	Sipas rolit
 	CSV table	Tabelë CSV
+	Calendar	Kalendari
 	Cancel	Anulo
 	Cancel Run	Anulo ekzekutimin
 	Cancel run	Anulo ekzekutimin
@@ -65,7 +75,9 @@
 	Centres	Qendrat horizontale
 	Change	Ndryshimi
 	Change Block	Ndrysho bllokun
+	Change Calendar	Ndrysho kalendarin
 	Change Flow	Ndrysho rrjedhën
+	Change Pool	Ndrysho grupin
 	Change the estimate	Ndrysho vlerësimin
 	Changes	Ndryshimet
 	Changing the time unit does not convert the times already in the model.	Ndryshimi i njësisë së kohës nuk i konverton kohët që gjenden tashmë në model.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Eksporto tabelën (CSV)
 	Exported {file}	U eksportua {file}
 	Expression	Shprehje
+	Failure interrupts the job	Defekti ndërpret punën
 	Family	Familja
 	File	Skedar
 	Finished at {time} {unit}	Përfundoi në {time} {unit}
@@ -143,6 +156,7 @@
 	From	Nga
 	Gamma	Gama
 	Goes to	Shkon te
+	Hands on finished parts while down	Kalon pjesët e përfunduara edhe në defekt
 	Help	Ndihmë
 	Hide Others	Fshih të tjerat
 	Hide {app}	Fshih {app}
@@ -191,6 +205,7 @@
 	New model	Model i ri
 	New property	Veti e re
 	New property name	Emri i vetisë së re
+	No arrivals outside calendars	Pa mbërritje jashtë kalendarëve
 	No blocks yet. Open a model, or add blocks to build one.	Nuk ka ende blloqe. Hapni një model ose shtoni blloqe për ta krijuar.
 	No connections yet: join blocks below.	Nuk ka ende lidhje: lidhni blloqet më poshtë.
 	No replication met the stop condition: each ran to its time limit.	Asnjë përsëritje nuk arriti kushtin e ndalimit: secila shkoi deri në kufirin e kohës.
@@ -244,6 +259,8 @@
 	Redo {action}	Ribëj {action}
 	Remove	Hiq
 	Remove Block	Hiq bllokun
+	Remove Calendar	Hiq kalendarin
+	Remove Pool	Hiq grupin
 	Remove Property	Hiq vetinë
 	Remove alternative {n}	Hiq alternativën {n}
 	Remove block	Hiq bllokun
@@ -253,6 +270,7 @@
 	Removed {id}	U hoq {id}
 	Rename Block	Riemërto bllokun
 	Rename Model	Riemërto modelin
+	Repair time	Koha e riparimit
 	Replace Model	Zëvendëso modelin
 	Replication 1 · {time} of {end} {unit}	Përsëritja 1 · {time} nga {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Përsëritja 1 · {time} nga {end} {unit} · ngrohja
@@ -290,6 +308,7 @@
 	Seed	Fara e rastësisë
 	Select All	Përzgjidh të gjitha
 	Select a block to see its queue over time.	Përzgjidhni një bllok për të parë radhën e tij gjatë kohës.
+	Sender waits during transfer	Dërguesi pret gjatë transferimit
 	Separate the values with semicolons or spaces.	Ndaji vlerat me pikëpresje ose hapësira.
 	Service time	Koha e shërbimit
 	Services	Shërbimet
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervali zbret nën pjesën objektiv prej {share}, ndaj nuk tregohet me besueshmëri 95% se pjesa arrihet; më shumë përsëritje do ta ngushtonin.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Koha mesatare deri te kushti i ndalimit është vetëm mbi përsëritjet që e arritën; të tjerat shkuan deri në kufirin e kohës.
 	The model changed, so watching stopped	Modeli ndryshoi, prandaj vëzhgimi u ndal
+	The model has no calendars yet.	Modeli nuk ka ende kalendarë.
 	The model now has the units sizing found	Modeli tani ka njësitë që gjeti përmasimi
 	The model: its experiment, connections and problems	Modeli: eksperimenti, lidhjet dhe problemet
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Pjesa e përsëritjeve në ose nën çdo vlerë. Brezi përmban shpërndarjen e vërtetë me besueshmëri {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Koha jashtë turnit
 	Time processing	Koha e përpunimit
 	Time starved	Koha pa punë
+	Time to failure	Koha deri në defekt
 	Time to the stop condition	Koha deri te kushti i ndalimit
 	Time unit	Njësia e kohës
 	To	Te
 	Tops	Skajet e sipërme
+	Transfer time	Koha e transferimit
 	Trials	Provat
 	Triangular	Trekëndore
 	Truncated normal	Normale e prerë
@@ -363,6 +385,7 @@
 	Uniform	Uniforme
 	Unit	Njësia
 	Units	Njësitë
+	Units by calendar	Njësitë sipas kalendarit
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Njësi që përdoren të përbashkëta nga disa detyra. Një detyrë me burime të përbashkëta i merr sipas grupit ose sipas rolit.
 	Untitled	Pa titull
 	Untitled model	Model pa titull

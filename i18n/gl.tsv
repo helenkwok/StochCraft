@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	No intervalo cambiou {change}: dentro do que podería facer o azar só.
 	Actual size	Tamaño real
 	Add Block	Engadir bloque
+	Add Calendar	Engadir calendario
+	Add Pool	Engadir grupo
 	Add a flow from…	Engadir fluxo desde…
 	Add a flow to…	Engadir fluxo cara a…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Engadir unha unidade na tarefa ou no grupo máis ocupado ata que abondas réplicas cumpran un obxectivo. Tamén se amosa a resposta con cada tempo na súa media; adoita ser demasiado pequena.
 	Add alternative	Engadir alternativa
+	Add calendar entry	Engadir entrada de calendario
 	Add point	Engadir punto
 	Add pool	Engadir grupo
 	Add property	Engadir propiedade
@@ -40,9 +43,13 @@
 	Appearance	Aparencia
 	Arrival limit	Límite de chegadas
 	Arrivals	Chegadas
+	Arrivals by calendar	Chegadas por calendario
 	At least	Polo menos
 	At most	Como máximo
 	Availability	Dispoñibilidade
+	Availability by calendar	Dispoñibilidade por calendario
+	Available	Dispoñible
+	Available outside calendars	Dispoñible fóra dos calendarios
 	BPMN with BPSim	BPMN con BPSim
 	Back to the model (Esc)	Volver ao modelo (Esc)
 	Batch	Lote
@@ -53,11 +60,14 @@
 	Block	Bloque
 	Boolean	Booleano
 	Bottoms	Bordos inferiores
+	Breakdowns	Avarías
+	Breakdowns and availability	Avarías e dispoñibilidade
 	Bring All to Front	Traer todo á fronte
 	Built with	Feito con
 	Busiest	Máis ocupado
 	By role	Por rol
 	CSV table	Táboa CSV
+	Calendar	Calendario
 	Cancel	Cancelar
 	Cancel Run	Cancelar execución
 	Cancel run	Cancelar execución
@@ -65,7 +75,9 @@
 	Centres	Centros horizontais
 	Change	Cambio
 	Change Block	Cambiar bloque
+	Change Calendar	Cambiar calendario
 	Change Flow	Cambiar fluxo
+	Change Pool	Cambiar grupo
 	Change the estimate	Cambiar a estimación
 	Changes	Cambios
 	Changing the time unit does not convert the times already in the model.	Cambiar a unidade de tempo non converte os tempos xa definidos no modelo.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Exportar táboa (CSV)
 	Exported {file}	Exportouse {file}
 	Expression	Expresión
+	Failure interrupts the job	A avaría interrompe o traballo
 	Family	Familia
 	File	Ficheiro
 	Finished at {time} {unit}	Rematou en {time} {unit}
@@ -143,6 +156,7 @@
 	From	Desde
 	Gamma	Gamma
 	Goes to	Vai a
+	Hands on finished parts while down	Pasa as pezas rematadas durante a avaría
 	Help	Axuda
 	Hide Others	Ocultar outros
 	Hide {app}	Ocultar {app}
@@ -191,6 +205,7 @@
 	New model	Novo modelo
 	New property	Nova propiedade
 	New property name	Nome da nova propiedade
+	No arrivals outside calendars	Sen chegadas fóra dos calendarios
 	No blocks yet. Open a model, or add blocks to build one.	Aínda non hai bloques. Abra un modelo ou engada bloques para crear un.
 	No connections yet: join blocks below.	Aínda non hai conexións: conecte os bloques de abaixo.
 	No replication met the stop condition: each ran to its time limit.	Ningunha réplica cumpriu a condición de parada: cada unha chegou ao seu límite de tempo.
@@ -244,6 +259,8 @@
 	Redo {action}	Refacer {action}
 	Remove	Eliminar
 	Remove Block	Eliminar bloque
+	Remove Calendar	Eliminar calendario
+	Remove Pool	Eliminar grupo
 	Remove Property	Eliminar propiedade
 	Remove alternative {n}	Eliminar alternativa {n}
 	Remove block	Eliminar bloque
@@ -253,6 +270,7 @@
 	Removed {id}	Eliminouse {id}
 	Rename Block	Renomear bloque
 	Rename Model	Renomear modelo
+	Repair time	Tempo de reparación
 	Replace Model	Substituír modelo
 	Replication 1 · {time} of {end} {unit}	Réplica 1 · {time} de {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Réplica 1 · {time} de {end} {unit} · quecemento
@@ -290,6 +308,7 @@
 	Seed	Semente
 	Select All	Seleccionar todo
 	Select a block to see its queue over time.	Seleccione un bloque para ver a súa cola ao longo do tempo.
+	Sender waits during transfer	O emisor agarda durante a transferencia
 	Separate the values with semicolons or spaces.	Separa os valores con punto e coma ou espazos.
 	Service time	Tempo de servizo
 	Services	Servizos
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	O intervalo chega por debaixo da proporción obxectivo do {share}, así que non se demostra cun 95 % de confianza que se cumpra; máis réplicas estreitaríano.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	O tempo medio ata a condición de parada é só sobre as réplicas que a cumpriron; as demais chegaron ao seu límite de tempo.
 	The model changed, so watching stopped	O modelo cambiou, así que se deixou de observar
+	The model has no calendars yet.	O modelo aínda non ten calendarios.
 	The model now has the units sizing found	O modelo ten agora as unidades atopadas ao dimensionar
 	The model: its experiment, connections and problems	O modelo: experimento, conexións e problemas
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	A proporción de réplicas iguais ou inferiores a cada valor. A banda contén a distribución real cunha confianza do {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Tempo fóra de quenda
 	Time processing	Tempo procesando
 	Time starved	Tempo sen traballo
+	Time to failure	Tempo ata a avaría
 	Time to the stop condition	Tempo ata a condición de parada
 	Time unit	Unidade de tempo
 	To	A
 	Tops	Bordos superiores
+	Transfer time	Tempo de transferencia
 	Trials	Ensaios
 	Triangular	Triangular
 	Truncated normal	Normal truncada
@@ -363,6 +385,7 @@
 	Uniform	Uniforme
 	Unit	Unidade
 	Units	Unidades
+	Units by calendar	Unidades por calendario
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unidades que comparten varias tarefas. Unha tarefa con recursos compartidos tómaas por grupo ou por rol.
 	Untitled	Sen título
 	Untitled model	Modelo sen título

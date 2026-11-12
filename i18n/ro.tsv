@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Pe interval s-a schimbat cu {change}: în limitele a ce poate face doar întâmplarea.
 	Actual size	Dimensiune reală
 	Add Block	Adaugă bloc
+	Add Calendar	Adaugă calendar
+	Add Pool	Adaugă grup
 	Add a flow from…	Adaugă un flux de la…
 	Add a flow to…	Adaugă un flux către…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Adaugă o unitate la sarcina sau grupul cel mai ocupat până când suficiente replicări ating o țintă. Este afișat și răspunsul cu fiecare timp la media sa; de obicei e prea mic.
 	Add alternative	Adaugă alternativă
+	Add calendar entry	Adaugă o intrare de calendar
 	Add point	Adaugă punct
 	Add pool	Adaugă grup
 	Add property	Adaugă proprietate
@@ -40,9 +43,13 @@
 	Appearance	Aspect
 	Arrival limit	Limită de sosiri
 	Arrivals	Sosiri
+	Arrivals by calendar	Sosiri pe calendar
 	At least	Cel puțin
 	At most	Cel mult
 	Availability	Disponibilitate
+	Availability by calendar	Disponibilitate pe calendar
+	Available	Disponibil
+	Available outside calendars	Disponibil în afara calendarelor
 	BPMN with BPSim	BPMN cu BPSim
 	Back to the model (Esc)	Înapoi la model (Esc)
 	Batch	Lot
@@ -53,11 +60,14 @@
 	Block	Bloc
 	Boolean	Boolean
 	Bottoms	Marginile de jos
+	Breakdowns	Avarii
+	Breakdowns and availability	Avarii și disponibilitate
 	Bring All to Front	Adu totul în față
 	Built with	Creat cu
 	Busiest	Cel mai ocupat
 	By role	După rol
 	CSV table	Tabel CSV
+	Calendar	Calendar
 	Cancel	Anulează
 	Cancel Run	Anulează rularea
 	Cancel run	Anulează rularea
@@ -65,7 +75,9 @@
 	Centres	Centre orizontale
 	Change	Modificare
 	Change Block	Modifică blocul
+	Change Calendar	Modifică calendarul
 	Change Flow	Modifică fluxul
+	Change Pool	Modifică grupul
 	Change the estimate	Modifică estimarea
 	Changes	Modificări
 	Changing the time unit does not convert the times already in the model.	Schimbarea unității de timp nu convertește timpii existenți în model.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Exportă tabelul (CSV)
 	Exported {file}	S-a exportat {file}
 	Expression	Expresie
+	Failure interrupts the job	Avaria întrerupe lucrul
 	Family	Familie
 	File	Fișier
 	Finished at {time} {unit}	Încheiat la {time} {unit}
@@ -143,6 +156,7 @@
 	From	De la
 	Gamma	Gamma
 	Goes to	Merge către
+	Hands on finished parts while down	Predă piesele terminate și în avarie
 	Help	Ajutor
 	Hide Others	Ascunde celelalte
 	Hide {app}	Ascunde {app}
@@ -191,6 +205,7 @@
 	New model	Model nou
 	New property	Proprietate nouă
 	New property name	Numele proprietății noi
+	No arrivals outside calendars	Fără sosiri în afara calendarelor
 	No blocks yet. Open a model, or add blocks to build one.	Nu există încă blocuri. Deschideți un model sau adăugați blocuri pentru a crea unul.
 	No connections yet: join blocks below.	Nu există încă conexiuni: conectați blocurile de mai jos.
 	No replication met the stop condition: each ran to its time limit.	Nicio replicare nu a atins condiția de oprire: fiecare a rulat până la limita de timp.
@@ -244,6 +259,8 @@
 	Redo {action}	Refă {action}
 	Remove	Elimină
 	Remove Block	Elimină blocul
+	Remove Calendar	Elimină calendarul
+	Remove Pool	Elimină grupul
 	Remove Property	Elimină proprietatea
 	Remove alternative {n}	Elimină alternativa {n}
 	Remove block	Elimină blocul
@@ -253,6 +270,7 @@
 	Removed {id}	S-a eliminat {id}
 	Rename Block	Redenumește blocul
 	Rename Model	Redenumește modelul
+	Repair time	Timp de reparare
 	Replace Model	Înlocuiește modelul
 	Replication 1 · {time} of {end} {unit}	Replicarea 1 · {time} din {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replicarea 1 · {time} din {end} {unit} · încălzire
@@ -290,6 +308,7 @@
 	Seed	Sămânță
 	Select All	Selectează tot
 	Select a block to see its queue over time.	Selectați un bloc pentru a-i vedea coada în timp.
+	Sender waits during transfer	Expeditorul așteaptă în timpul transferului
 	Separate the values with semicolons or spaces.	Separă valorile cu punct și virgulă sau spații.
 	Service time	Timp de servire
 	Services	Servicii
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalul coboară sub ponderea țintă de {share}, deci nu este arătat cu 95% încredere că ponderea este atinsă; mai multe replicări l-ar îngusta.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Timpul mediu până la condiția de oprire este doar pe replicările care au atins-o; celelalte au rulat până la limita de timp.
 	The model changed, so watching stopped	Modelul s-a schimbat, așa că urmărirea s-a oprit
+	The model has no calendars yet.	Modelul nu are încă calendare.
 	The model now has the units sizing found	Modelul are acum unitățile găsite la dimensionare
 	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Ponderea replicărilor egale cu sau sub fiecare valoare. Banda conține distribuția reală cu o încredere de {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Timp în afara turei
 	Time processing	Timp de procesare
 	Time starved	Timp fără lucru
+	Time to failure	Timp până la avarie
 	Time to the stop condition	Timp până la condiția de oprire
 	Time unit	Unitate de timp
 	To	Către
 	Tops	Marginile de sus
+	Transfer time	Timp de transfer
 	Trials	Încercări
 	Triangular	Triunghiulară
 	Truncated normal	Normală trunchiată
@@ -363,6 +385,7 @@
 	Uniform	Uniformă
 	Unit	Unitate
 	Units	Unități
+	Units by calendar	Unități pe calendar
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unități folosite în comun de mai multe sarcini. O sarcină cu resurse partajate le ia după grup sau după rol.
 	Untitled	Fără titlu
 	Untitled model	Model fără titlu

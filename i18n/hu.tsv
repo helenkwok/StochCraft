@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	A tartományban {change} értékkel változott: azon belül, amit a véletlen egymaga okozhat.
 	Actual size	Tényleges méret
 	Add Block	Blokk hozzáadása
+	Add Calendar	Naptár hozzáadása
+	Add Pool	Készlet hozzáadása
 	Add a flow from…	Folyamat hozzáadása innen: …
 	Add a flow to…	Folyamat hozzáadása ide: …
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Egy egység hozzáadása a legterheltebb feladathoz vagy készlethez, amíg elég ismétlés el nem éri a célt. Megjelenik az a válasz is, amelyben minden idő az átlagán van; ez rendszerint túl kicsi.
 	Add alternative	Alternatíva hozzáadása
+	Add calendar entry	Naptárbejegyzés hozzáadása
 	Add point	Pont hozzáadása
 	Add pool	Készlet hozzáadása
 	Add property	Tulajdonság hozzáadása
@@ -40,9 +43,13 @@
 	Appearance	Megjelenés
 	Arrival limit	Érkezési korlát
 	Arrivals	Érkezések
+	Arrivals by calendar	Érkezések naptár szerint
 	At least	Legalább
 	At most	Legfeljebb
 	Availability	Rendelkezésre állás
+	Availability by calendar	Rendelkezésre állás naptár szerint
+	Available	Elérhető
+	Available outside calendars	Elérhető a naptárakon kívül
 	BPMN with BPSim	BPMN BPSim-mel
 	Back to the model (Esc)	Vissza a modellhez (Esc)
 	Batch	Köteg
@@ -53,11 +60,14 @@
 	Block	Blokk
 	Boolean	Logikai
 	Bottoms	Alsó élek
+	Breakdowns	Meghibásodások
+	Breakdowns and availability	Meghibásodások és rendelkezésre állás
 	Bring All to Front	Az összes előtérbe hozása
 	Built with	Készült ezekkel
 	Busiest	Legterheltebb
 	By role	Szerepkör szerint
 	CSV table	CSV-táblázat
+	Calendar	Naptár
 	Cancel	Mégse
 	Cancel Run	Futtatás megszakítása
 	Cancel run	Futtatás megszakítása
@@ -65,7 +75,9 @@
 	Centres	Vízszintes középpontok
 	Change	Változtatás
 	Change Block	Blokk módosítása
+	Change Calendar	Naptár módosítása
 	Change Flow	Folyamat módosítása
+	Change Pool	Készlet módosítása
 	Change the estimate	Becslés módosítása
 	Changes	Módosítások
 	Changing the time unit does not convert the times already in the model.	Az időegység módosítása nem váltja át a modellben már meglévő időértékeket.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Táblázat exportálása (CSV)
 	Exported {file}	{file} exportálva
 	Expression	Kifejezés
+	Failure interrupts the job	A meghibásodás megszakítja a munkát
 	Family	Család
 	File	Fájl
 	Finished at {time} {unit}	Befejeződött: {time} {unit}
@@ -143,6 +156,7 @@
 	From	Innen
 	Gamma	Gamma
 	Goes to	Ide vezet
+	Hands on finished parts while down	Meghibásodott állapotban is továbbadja a kész darabokat
 	Help	Súgó
 	Hide Others	Többi elrejtése
 	Hide {app}	{app} elrejtése
@@ -191,6 +205,7 @@
 	New model	Új modell
 	New property	Új tulajdonság
 	New property name	Új tulajdonság neve
+	No arrivals outside calendars	Nincs érkezés a naptárakon kívül
 	No blocks yet. Open a model, or add blocks to build one.	Még nincsenek blokkok. Nyisson meg egy modellt, vagy adjon hozzá blokkokat.
 	No connections yet: join blocks below.	Még nincsenek kapcsolatok: kapcsolja össze az alábbi blokkokat.
 	No replication met the stop condition: each ran to its time limit.	Egy ismétlés sem érte el a leállási feltételt: mind az időkorlátjáig futott.
@@ -244,6 +259,8 @@
 	Redo {action}	{action} újra végrehajtása
 	Remove	Eltávolítás
 	Remove Block	Blokk eltávolítása
+	Remove Calendar	Naptár eltávolítása
+	Remove Pool	Készlet eltávolítása
 	Remove Property	Tulajdonság eltávolítása
 	Remove alternative {n}	{n}. alternatíva eltávolítása
 	Remove block	Blokk eltávolítása
@@ -253,6 +270,7 @@
 	Removed {id}	{id} eltávolítva
 	Rename Block	Blokk átnevezése
 	Rename Model	Modell átnevezése
+	Repair time	Javítási idő
 	Replace Model	Modell cseréje
 	Replication 1 · {time} of {end} {unit}	1. ismétlés · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	1. ismétlés · {time} / {end} {unit} · bemelegítés
@@ -290,6 +308,7 @@
 	Seed	Véletlenszám-mag
 	Select All	Az összes kijelölése
 	Select a block to see its queue over time.	Válasszon egy blokkot a sorának időbeli megtekintéséhez.
+	Sender waits during transfer	A küldő vár a továbbítás alatt
 	Separate the values with semicolons or spaces.	Pontosvesszővel vagy szóközzel válassza el az értékeket.
 	Service time	Kiszolgálási idő
 	Services	Szolgáltatások
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Az intervallum a(z) {share} célarány alá nyúlik, így 95%-os megbízhatósággal nem igazolt, hogy az arány teljesül; több ismétlés szűkítené.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	A leállási feltételig eltelt átlagos idő csak azokra az ismétlésekre vonatkozik, amelyek elérték; a többi az időkorlátjáig futott.
 	The model changed, so watching stopped	A modell megváltozott, ezért a követés leállt
+	The model has no calendars yet.	A modellnek még nincs naptára.
 	The model now has the units sizing found	A modellben most a méretezés által talált egységek vannak
 	The model: its experiment, connections and problems	A modell: kísérlet, kapcsolatok és problémák
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Az egyes értékeknél nem nagyobb ismétlések aránya. A sáv {confidence} megbízhatósággal tartalmazza a valódi eloszlást.
@@ -348,10 +368,12 @@
 	Time off shift	Műszakon kívüli idő
 	Time processing	Feldolgozási idő
 	Time starved	Munka nélküli idő
+	Time to failure	Meghibásodásig eltelt idő
 	Time to the stop condition	Idő a leállási feltételig
 	Time unit	Időegység
 	To	Ide
 	Tops	Felső élek
+	Transfer time	Továbbítási idő
 	Trials	Próbák
 	Triangular	Háromszög
 	Truncated normal	Csonkolt normális
@@ -363,6 +385,7 @@
 	Uniform	Egyenletes
 	Unit	Egység
 	Units	Egységek
+	Units by calendar	Egységek naptár szerint
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Egységek, amelyeken több feladat osztozik. A megosztott erőforrásokat használó feladat készletből vagy szerepkör szerint veszi őket.
 	Untitled	Névtelen
 	Untitled model	Névtelen modell

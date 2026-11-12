@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	範囲全体で {change} 変化しました。偶然だけでも起こりうる範囲です。
 	Actual size	実際のサイズ
 	Add Block	ブロックを追加
+	Add Calendar	カレンダーを追加
+	Add Pool	プールを追加
 	Add a flow from…	接続元…
 	Add a flow to…	接続先…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	十分な反復実行が目標を満たすまで、最も稼働率の高いタスクまたはプールに 1 単位ずつ追加します。すべての時間を平均値にした場合の答えも表示しますが、通常は小さすぎます。
 	Add alternative	代替案を追加
+	Add calendar entry	カレンダー項目を追加
 	Add point	点を追加
 	Add pool	プールを追加
 	Add property	プロパティを追加
@@ -40,9 +43,13 @@
 	Appearance	外観
 	Arrival limit	到着数の上限
 	Arrivals	到着
+	Arrivals by calendar	カレンダーごとの到着
 	At least	以上
 	At most	以下
 	Availability	可用率
+	Availability by calendar	カレンダーごとの稼働可否
+	Available	稼働可能
+	Available outside calendars	カレンダー外でも稼働可能
 	BPMN with BPSim	BPSim 付き BPMN
 	Back to the model (Esc)	モデルに戻る (Esc)
 	Batch	バッチ
@@ -53,11 +60,14 @@
 	Block	ブロック
 	Boolean	真偽値
 	Bottoms	下端
+	Breakdowns	故障
+	Breakdowns and availability	故障と稼働可否
 	Bring All to Front	すべてを手前に移動
 	Built with	使用技術
 	Busiest	最も稼働率が高い
 	By role	役割で指定
 	CSV table	CSV 表
+	Calendar	カレンダー
 	Cancel	キャンセル
 	Cancel Run	実行をキャンセル
 	Cancel run	実行をキャンセル
@@ -65,7 +75,9 @@
 	Centres	左右中央
 	Change	変化幅
 	Change Block	ブロックを変更
+	Change Calendar	カレンダーを変更
 	Change Flow	フローを変更
+	Change Pool	プールを変更
 	Change the estimate	見積もりを変更
 	Changes	変更
 	Changing the time unit does not convert the times already in the model.	時間単位を変更しても、モデル内の既存の時間は換算されません。
@@ -130,6 +142,7 @@
 	Export table (CSV)	表をエクスポート (CSV)
 	Exported {file}	{file} をエクスポートしました
 	Expression	式
+	Failure interrupts the job	故障で作業を中断
 	Family	分布族
 	File	ファイル
 	Finished at {time} {unit}	{time} {unit} で終了しました
@@ -143,6 +156,7 @@
 	From	接続元
 	Gamma	ガンマ分布
 	Goes to	接続先
+	Hands on finished parts while down	故障中も完成した部品を渡す
 	Help	ヘルプ
 	Hide Others	その他を隠す
 	Hide {app}	{app} を隠す
@@ -191,6 +205,7 @@
 	New model	新しいモデル
 	New property	新しいプロパティ
 	New property name	新しいプロパティ名
+	No arrivals outside calendars	カレンダー外は到着なし
 	No blocks yet. Open a model, or add blocks to build one.	ブロックはまだありません。モデルを開くか、ブロックを追加して作成してください。
 	No connections yet: join blocks below.	接続はまだありません。下のブロック同士をつないでください。
 	No replication met the stop condition: each ran to its time limit.	停止条件に達した反復実行はありません。すべて時間制限まで実行されました。
@@ -244,6 +259,8 @@
 	Redo {action}	{action} をやり直す
 	Remove	削除
 	Remove Block	ブロックを削除
+	Remove Calendar	カレンダーを削除
+	Remove Pool	プールを削除
 	Remove Property	プロパティを削除
 	Remove alternative {n}	代替案 {n} を削除
 	Remove block	ブロックを削除
@@ -253,6 +270,7 @@
 	Removed {id}	{id} を削除しました
 	Rename Block	ブロック名を変更
 	Rename Model	モデル名を変更
+	Repair time	修理時間
 	Replace Model	モデルを置換
 	Replication 1 · {time} of {end} {unit}	反復実行 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	反復実行 1 · {time} / {end} {unit} · ウォームアップ
@@ -290,6 +308,7 @@
 	Seed	乱数シード
 	Select All	すべて選択
 	Select a block to see its queue over time.	ブロックを選択すると、その待ち行列の推移が表示されます。
+	Sender waits during transfer	搬送中は送り元が待機
 	Separate the values with semicolons or spaces.	値はセミコロンまたはスペースで区切ってください。
 	Service time	サービス時間
 	Services	サービス
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	区間が目標割合 {share} を下回るため、割合が達成されたことは 95% の信頼度では示されていません。反復実行を増やすと区間は狭まります。
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	停止条件までの平均時間は、停止条件に達した反復実行だけによるものです。それ以外は時間制限まで実行されました。
 	The model changed, so watching stopped	モデルが変更されたため、観察を終了しました
+	The model has no calendars yet.	モデルにはまだカレンダーがありません。
 	The model now has the units sizing found	サイズ決定で求めた数量をモデルに反映しました
 	The model: its experiment, connections and problems	モデル：実験、接続、問題
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	各値以下となった反復実行の割合。帯は {confidence} の信頼度で真の分布を含みます。
@@ -348,10 +368,12 @@
 	Time off shift	シフト外の時間
 	Time processing	処理中の時間
 	Time starved	仕事待ちの時間
+	Time to failure	故障までの時間
 	Time to the stop condition	停止条件までの時間
 	Time unit	時間単位
 	To	接続先
 	Tops	上端
+	Transfer time	搬送時間
 	Trials	試行回数
 	Triangular	三角分布
 	Truncated normal	切断正規分布
@@ -363,6 +385,7 @@
 	Uniform	一様分布
 	Unit	単位
 	Units	数量
+	Units by calendar	カレンダーごとの数量
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	複数のタスクで共有するユニット。共有リソースを使うタスクは、プールまたは役割を指定してユニットを確保します。
 	Untitled	名称未設定
 	Untitled model	無題のモデル

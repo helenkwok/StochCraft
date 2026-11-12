@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	დიაპაზონში შეიცვალა {change}-ით: იმის ფარგლებში, რისი გაკეთებაც მხოლოდ შემთხვევითობას შეუძლია.
 	Actual size	რეალური ზომა
 	Add Block	ბლოკის დამატება
+	Add Calendar	კალენდრის დამატება
+	Add Pool	პულის დამატება
 	Add a flow from…	ნაკადის დამატება (წყარო)…
 	Add a flow to…	ნაკადის დამატება (სამიზნე)…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	ყველაზე დატვირთულ ამოცანას ან პულს ერთეულის დამატება, სანამ საკმარისი გამეორება მიზანს არ მიაღწევს. ნაჩვენებია პასუხიც, სადაც ყოველი დრო თავის საშუალოზეა; ის ჩვეულებრივ ძალიან მცირეა.
 	Add alternative	ალტერნატივის დამატება
+	Add calendar entry	კალენდრის ჩანაწერის დამატება
 	Add point	წერტილის დამატება
 	Add pool	პულის დამატება
 	Add property	თვისების დამატება
@@ -40,9 +43,13 @@
 	Appearance	გარეგნობა
 	Arrival limit	შემოსვლის ლიმიტი
 	Arrivals	შემოსვლები
+	Arrivals by calendar	შემოსვლები კალენდრის მიხედვით
 	At least	სულ მცირე
 	At most	მაქსიმუმ
 	Availability	ხელმისაწვდომობა
+	Availability by calendar	ხელმისაწვდომობა კალენდრის მიხედვით
+	Available	ხელმისაწვდომია
+	Available outside calendars	ხელმისაწვდომია კალენდრების გარეთ
 	BPMN with BPSim	BPMN BPSim-ით
 	Back to the model (Esc)	მოდელზე დაბრუნება (Esc)
 	Batch	პარტია
@@ -53,11 +60,14 @@
 	Block	ბლოკი
 	Boolean	ლოგიკური მნიშვნელობა
 	Bottoms	ქვედა კიდეები
+	Breakdowns	გაუმართაობები
+	Breakdowns and availability	გაუმართაობები და ხელმისაწვდომობა
 	Bring All to Front	ყველაფრის წინ წამოწევა
 	Built with	შექმნილია შემდეგით
 	Busiest	ყველაზე დატვირთული
 	By role	როლის მიხედვით
 	CSV table	CSV ცხრილი
+	Calendar	კალენდარი
 	Cancel	გაუქმება
 	Cancel Run	გაშვების გაუქმება
 	Cancel run	გაშვების გაუქმება
@@ -65,7 +75,9 @@
 	Centres	ჰორიზონტალური ცენტრები
 	Change	ცვლილება
 	Change Block	ბლოკის შეცვლა
+	Change Calendar	კალენდრის შეცვლა
 	Change Flow	ნაკადის შეცვლა
+	Change Pool	პულის შეცვლა
 	Change the estimate	შეფასების შეცვლა
 	Changes	ცვლილებები
 	Changing the time unit does not convert the times already in the model.	დროის ერთეულის შეცვლა მოდელში უკვე მითითებულ დროებს არ გარდაქმნის.
@@ -130,6 +142,7 @@
 	Export table (CSV)	ცხრილის ექსპორტი (CSV)
 	Exported {file}	ექსპორტირებულია {file}
 	Expression	გამოსახულება
+	Failure interrupts the job	გაუმართაობა წყვეტს სამუშაოს
 	Family	ოჯახი
 	File	ფაილი
 	Finished at {time} {unit}	დასრულდა {time} {unit}-ზე
@@ -143,6 +156,7 @@
 	From	-დან
 	Gamma	გამა
 	Goes to	მიდის აქ
+	Hands on finished parts while down	გაუმართაობისას გადასცემს დასრულებულ დეტალებს
 	Help	დახმარება
 	Hide Others	სხვების დამალვა
 	Hide {app}	{app}-ის დამალვა
@@ -191,6 +205,7 @@
 	New model	ახალი მოდელი
 	New property	ახალი თვისება
 	New property name	ახალი თვისების სახელი
+	No arrivals outside calendars	კალენდრების გარეთ შემოსვლები არ არის
 	No blocks yet. Open a model, or add blocks to build one.	ბლოკები ჯერ არ არის. გახსენით მოდელი ან დაამატეთ ბლოკები მის შესაქმნელად.
 	No connections yet: join blocks below.	კავშირები ჯერ არ არის: დააკავშირეთ ქვემოთ მოცემული ბლოკები.
 	No replication met the stop condition: each ran to its time limit.	არცერთმა გამეორებამ არ მიაღწია გაჩერების პირობას: თითოეული თავის დროის ლიმიტამდე გაგრძელდა.
@@ -244,6 +259,8 @@
 	Redo {action}	გაიმეორეთ {action}
 	Remove	წაშლა
 	Remove Block	ბლოკის წაშლა
+	Remove Calendar	კალენდრის წაშლა
+	Remove Pool	პულის წაშლა
 	Remove Property	თვისების წაშლა
 	Remove alternative {n}	ალტერნატივა {n}-ის წაშლა
 	Remove block	ბლოკის წაშლა
@@ -253,6 +270,7 @@
 	Removed {id}	წაშლილია {id}
 	Rename Block	ბლოკის გადარქმევა
 	Rename Model	მოდელის გადარქმევა
+	Repair time	შეკეთების დრო
 	Replace Model	მოდელის ჩანაცვლება
 	Replication 1 · {time} of {end} {unit}	გამეორება 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	გამეორება 1 · {time} / {end} {unit} · გახურების პერიოდი
@@ -290,6 +308,7 @@
 	Seed	შემთხვევითი რიცხვების საწყისი მნიშვნელობა
 	Select All	ყველას მონიშვნა
 	Select a block to see its queue over time.	აირჩიეთ ბლოკი, რომ ნახოთ მისი რიგი დროის მიხედვით.
+	Sender waits during transfer	გამგზავნი ელოდება გადატანის დასრულებას
 	Separate the values with semicolons or spaces.	გამოყავით მნიშვნელობები წერტილმძიმით ან ჰარით.
 	Service time	მომსახურების დრო
 	Services	სერვისები
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ინტერვალი {share} სამიზნე წილზე დაბლა ჩადის, ამიტომ 95%-იანი სანდოობით არ არის ნაჩვენები, რომ წილი მიღწეულია; მეტი გამეორება მას შეავიწროებს.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	გაჩერების პირობამდე საშუალო დრო მხოლოდ იმ გამეორებებზეა გამოთვლილი, რომლებმაც მას მიაღწიეს; დანარჩენები დროის ლიმიტამდე გაგრძელდა.
 	The model changed, so watching stopped	მოდელი შეიცვალა, ამიტომ დაკვირვება შეწყდა
+	The model has no calendars yet.	მოდელს ჯერ არ აქვს კალენდრები.
 	The model now has the units sizing found	მოდელს ახლა აქვს ზომის შერჩევით ნაპოვნი ერთეულები
 	The model: its experiment, connections and problems	მოდელი: ექსპერიმენტი, კავშირები და პრობლემები
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	გამეორებების წილი, რომლებიც თითოეულ მნიშვნელობაზე ნაკლები ან ტოლია. ზოლი შეიცავს ნამდვილ განაწილებას {confidence} სანდოობით.
@@ -348,10 +368,12 @@
 	Time off shift	ცვლის გარეთ დრო
 	Time processing	დამუშავების დრო
 	Time starved	სამუშაოს გარეშე დრო
+	Time to failure	დრო გაუმართაობამდე
 	Time to the stop condition	დრო გაჩერების პირობამდე
 	Time unit	დროის ერთეული
 	To	-მდე
 	Tops	ზედა კიდეები
+	Transfer time	გადატანის დრო
 	Trials	ცდები
 	Triangular	სამკუთხა
 	Truncated normal	შეკვეცილი ნორმალური
@@ -363,6 +385,7 @@
 	Uniform	თანაბარი
 	Unit	ერთეული
 	Units	რაოდენობა
+	Units by calendar	რაოდენობა კალენდრის მიხედვით
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	რესურსის ერთეულები, რომლებსაც რამდენიმე დავალება იზიარებს. დავალება საზიარო რესურსებით მათ იღებს პულის ან როლის მიხედვით.
 	Untitled	უსათაურო
 	Untitled model	უსათაურო მოდელი

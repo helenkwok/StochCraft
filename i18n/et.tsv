@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Vahemikus muutus see {change} võrra: piires, mida juhus üksi teha võib.
 	Actual size	Tegelik suurus
 	Add Block	Lisa plokk
+	Add Calendar	Lisa kalender
+	Add Pool	Lisa kogum
 	Add a flow from…	Lisa voog alates…
 	Add a flow to…	Lisa voog kuni…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lisa kõige koormatumale tööle või kogumile üks ühik, kuni piisavalt kordusi saavutab eesmärgi. Näidatakse ka vastust, kus iga aeg on oma keskmisel; see on tavaliselt liiga väike.
 	Add alternative	Lisa alternatiiv
+	Add calendar entry	Lisa kalendrikirje
 	Add point	Lisa punkt
 	Add pool	Lisa kogum
 	Add property	Lisa omadus
@@ -40,9 +43,13 @@
 	Appearance	Välimus
 	Arrival limit	Saabumiste piirang
 	Arrivals	Saabumised
+	Arrivals by calendar	Saabumised kalendri järgi
 	At least	Vähemalt
 	At most	Kõige rohkem
 	Availability	Käideldavus
+	Availability by calendar	Saadavus kalendri järgi
+	Available	Saadaval
+	Available outside calendars	Saadaval väljaspool kalendreid
 	BPMN with BPSim	BPMN ja BPSim
 	Back to the model (Esc)	Tagasi mudeli juurde (Esc)
 	Batch	Partii
@@ -53,11 +60,14 @@
 	Block	Plokk
 	Boolean	Tõeväärtus
 	Bottoms	Alaservad
+	Breakdowns	Rikked
+	Breakdowns and availability	Rikked ja saadavus
 	Bring All to Front	Too kõik esiplaanile
 	Built with	Loodud järgmistega
 	Busiest	Kõige koormatum
 	By role	Rolli järgi
 	CSV table	CSV-tabel
+	Calendar	Kalender
 	Cancel	Loobu
 	Cancel Run	Tühista käivitus
 	Cancel run	Tühista käivitus
@@ -65,7 +75,9 @@
 	Centres	Horisontaalsed keskkohad
 	Change	Muutus
 	Change Block	Muuda plokki
+	Change Calendar	Muuda kalendrit
 	Change Flow	Muuda voogu
+	Change Pool	Muuda kogumit
 	Change the estimate	Muuda hinnangut
 	Changes	Muudatused
 	Changing the time unit does not convert the times already in the model.	Ajaühiku muutmine ei teisenda mudelis juba olevaid aegu.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Ekspordi tabel (CSV)
 	Exported {file}	Eksporditud {file}
 	Expression	Avaldis
+	Failure interrupts the job	Rike katkestab töö
 	Family	Jaotuspere
 	File	Fail
 	Finished at {time} {unit}	Lõppes ajal {time} {unit}
@@ -143,6 +156,7 @@
 	From	Alates
 	Gamma	Gamma
 	Goes to	Viib kohta
+	Hands on finished parts while down	Annab rikkis olekus valmis detailid edasi
 	Help	Abi
 	Hide Others	Peida teised
 	Hide {app}	Peida {app}
@@ -191,6 +205,7 @@
 	New model	Uus mudel
 	New property	Uus omadus
 	New property name	Uue omaduse nimi
+	No arrivals outside calendars	Väljaspool kalendreid saabumisi pole
 	No blocks yet. Open a model, or add blocks to build one.	Plokke veel pole. Ava mudel või lisa selle loomiseks plokke.
 	No connections yet: join blocks below.	Ühendusi veel pole: ühenda allolevad plokid.
 	No replication met the stop condition: each ran to its time limit.	Ükski kordus ei jõudnud peatamistingimuseni: iga kordus kestis oma ajapiirini.
@@ -244,6 +259,8 @@
 	Redo {action}	Tee {action} uuesti
 	Remove	Eemalda
 	Remove Block	Eemalda plokk
+	Remove Calendar	Eemalda kalender
+	Remove Pool	Eemalda kogum
 	Remove Property	Eemalda omadus
 	Remove alternative {n}	Eemalda alternatiiv {n}
 	Remove block	Eemalda plokk
@@ -253,6 +270,7 @@
 	Removed {id}	Eemaldati {id}
 	Rename Block	Nimeta plokk ümber
 	Rename Model	Nimeta mudel ümber
+	Repair time	Remondiaeg
 	Replace Model	Asenda mudel
 	Replication 1 · {time} of {end} {unit}	Kordus 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Kordus 1 · {time} / {end} {unit} · soojendus
@@ -290,6 +308,7 @@
 	Seed	Juhuarvuseeme
 	Select All	Vali kõik
 	Select a block to see its queue over time.	Vali plokk, et näha selle järjekorda aja jooksul.
+	Sender waits during transfer	Saatja ootab ülekande ajal
 	Separate the values with semicolons or spaces.	Eralda väärtused semikoolonite või tühikutega.
 	Service time	Teenindusaeg
 	Services	Teenused
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Vahemik ulatub alla sihtosakaalu {share}, seega pole 95% usaldusega näidatud, et osakaal on saavutatud; rohkem kordusi kitsendaks seda.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskmine aeg peatamistingimuseni on ainult nende korduste põhjal, mis selle saavutasid; ülejäänud kestsid oma ajapiirini.
 	The model changed, so watching stopped	Mudel muutus, seega jälgimine lõpetati
+	The model has no calendars yet.	Mudelil pole veel kalendreid.
 	The model now has the units sizing found	Mudelil on nüüd dimensioneerimisel leitud ühikud
 	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Korduste osakaal, mis on iga väärtusega võrdsed või sellest väiksemad. Vöönd sisaldab tegelikku jaotust {confidence} usaldusega.
@@ -348,10 +368,12 @@
 	Time off shift	Aeg vahetusest väljas
 	Time processing	Töötlemise aeg
 	Time starved	Tööta aeg
+	Time to failure	Aeg rikkeni
 	Time to the stop condition	Aeg peatamistingimuseni
 	Time unit	Ajaühik
 	To	Kuni
 	Tops	Ülaservad
+	Transfer time	Ülekandeaeg
 	Trials	Katsed
 	Triangular	Kolmnurkne
 	Truncated normal	Kärbitud normaalne
@@ -363,6 +385,7 @@
 	Uniform	Ühtlane
 	Unit	Ühik
 	Units	Ühikud
+	Units by calendar	Ühikud kalendri järgi
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Ühikud, mida mitu ülesannet jagavad. Jagatud ressurssidega ülesanne võtab need kogumist või rolli järgi.
 	Untitled	Pealkirjata
 	Untitled model	Pealkirjata mudel

@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	పూర్తి పరిధిలో ఇది {change} మారింది: యాదృచ్ఛికత ఒక్కటే చేయగలిగినంత లోపే.
 	Actual size	వాస్తవ పరిమాణం
 	Add Block	బ్లాక్‌ను జోడించు
+	Add Calendar	క్యాలెండర్‌ను జోడించు
+	Add Pool	పూల్‌ను జోడించు
 	Add a flow from…	ఇక్కడి నుంచి ప్రవాహాన్ని జోడించు…
 	Add a flow to…	ఇక్కడికి ప్రవాహాన్ని జోడించు…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	తగినన్ని పునరావృత్త అమలులు లక్ష్యాన్ని చేరేవరకు అత్యంత రద్దీ ఉన్న పనికి లేదా పూల్‌కు ఒక యూనిట్ జోడించండి. ప్రతి సమయాన్ని దాని సగటు వద్ద ఉంచిన సమాధానం కూడా చూపబడుతుంది; అది సాధారణంగా చాలా చిన్నది.
 	Add alternative	ప్రత్యామ్నాయాన్ని జోడించు
+	Add calendar entry	క్యాలెండర్ ఎంట్రీని జోడించు
 	Add point	బిందువును జోడించు
 	Add pool	పూల్‌ను జోడించు
 	Add property	లక్షణాన్ని జోడించు
@@ -40,9 +43,13 @@
 	Appearance	రూపం
 	Arrival limit	రాకల పరిమితి
 	Arrivals	రాకలు
+	Arrivals by calendar	క్యాలెండర్ ప్రకారం రాకలు
 	At least	కనీసం
 	At most	గరిష్టంగా
 	Availability	లభ్యత
+	Availability by calendar	క్యాలెండర్ ప్రకారం లభ్యత
+	Available	అందుబాటులో ఉంది
+	Available outside calendars	క్యాలెండర్‌ల వెలుపల అందుబాటులో ఉంది
 	BPMN with BPSim	BPSim తో BPMN
 	Back to the model (Esc)	నమూనాకు తిరిగి వెళ్లు (Esc)
 	Batch	బ్యాచ్
@@ -53,11 +60,14 @@
 	Block	బ్లాక్
 	Boolean	బూలియన్
 	Bottoms	కింది అంచులు
+	Breakdowns	లోపాలు
+	Breakdowns and availability	లోపాలు మరియు లభ్యత
 	Bring All to Front	అన్నింటినీ ముందుకు తీసుకురా
 	Built with	దీనితో రూపొందించబడింది
 	Busiest	అత్యంత రద్దీ
 	By role	పాత్ర ప్రకారం
 	CSV table	CSV పట్టిక
+	Calendar	క్యాలెండర్
 	Cancel	రద్దు చేయి
 	Cancel Run	అమలును రద్దు చేయి
 	Cancel run	అమలును రద్దు చేయి
@@ -65,7 +75,9 @@
 	Centres	అడ్డ కేంద్రాలు
 	Change	మార్పు
 	Change Block	బ్లాక్‌ను మార్చు
+	Change Calendar	క్యాలెండర్‌ను మార్చు
 	Change Flow	ప్రవాహాన్ని మార్చు
+	Change Pool	పూల్‌ను మార్చు
 	Change the estimate	అంచనాను మార్చు
 	Changes	మార్పులు
 	Changing the time unit does not convert the times already in the model.	సమయ ప్రమాణాన్ని మార్చడం వల్ల నమూనాలో ఇప్పటికే ఉన్న సమయాలు మారవు.
@@ -130,6 +142,7 @@
 	Export table (CSV)	పట్టికను ఎగుమతి చేయి (CSV)
 	Exported {file}	{file} ఎగుమతి చేయబడింది
 	Expression	వ్యక్తీకరణ
+	Failure interrupts the job	లోపం పనికి అంతరాయం కలిగిస్తుంది
 	Family	కుటుంబం
 	File	ఫైల్
 	Finished at {time} {unit}	{time} {unit} వద్ద ముగిసింది
@@ -143,6 +156,7 @@
 	From	నుంచి
 	Gamma	గామా
 	Goes to	వెళ్తుంది
+	Hands on finished parts while down	లోపం ఉన్నప్పుడూ పూర్తయిన భాగాలను పంపుతుంది
 	Help	సహాయం
 	Hide Others	ఇతరాలను దాచు
 	Hide {app}	{app} ను దాచు
@@ -191,6 +205,7 @@
 	New model	కొత్త నమూనా
 	New property	కొత్త లక్షణం
 	New property name	కొత్త లక్షణం పేరు
+	No arrivals outside calendars	క్యాలెండర్‌ల వెలుపల రాకలు లేవు
 	No blocks yet. Open a model, or add blocks to build one.	ఇంకా బ్లాక్‌లు లేవు. నమూనాను తెరవండి లేదా బ్లాక్‌లు జోడించి సృష్టించండి.
 	No connections yet: join blocks below.	ఇంకా అనుసంధానాలు లేవు: దిగువన బ్లాక్‌లను కలపండి.
 	No replication met the stop condition: each ran to its time limit.	ఏ పునరావృత్త అమలూ ఆపే షరతును చేరలేదు: ప్రతిదీ దాని సమయ పరిమితి వరకు నడిచింది.
@@ -244,6 +259,8 @@
 	Redo {action}	{action} మళ్లీ చేయి
 	Remove	తొలగించు
 	Remove Block	బ్లాక్‌ను తొలగించు
+	Remove Calendar	క్యాలెండర్‌ను తొలగించు
+	Remove Pool	పూల్‌ను తొలగించు
 	Remove Property	లక్షణాన్ని తొలగించు
 	Remove alternative {n}	ప్రత్యామ్నాయం {n} ను తొలగించు
 	Remove block	బ్లాక్‌ను తొలగించు
@@ -253,6 +270,7 @@
 	Removed {id}	{id} తొలగించబడింది
 	Rename Block	బ్లాక్ పేరు మార్చు
 	Rename Model	నమూనా పేరు మార్చు
+	Repair time	మరమ్మతు సమయం
 	Replace Model	నమూనాను భర్తీ చేయి
 	Replication 1 · {time} of {end} {unit}	పునరావృత్త అమలు 1 · {end} {unit} లో {time}
 	Replication 1 · {time} of {end} {unit} · warm-up	పునరావృత్త అమలు 1 · {end} {unit} లో {time} · ప్రారంభ సర్దుబాటు సమయం
@@ -290,6 +308,7 @@
 	Seed	యాదృచ్ఛిక బీజం
 	Select All	అన్నీ ఎంచుకో
 	Select a block to see its queue over time.	కాలక్రమంలో ఒక బ్లాక్ వరుసను చూడటానికి దాన్ని ఎంచుకోండి.
+	Sender waits during transfer	బదిలీ సమయంలో పంపే యంత్రం వేచి ఉంటుంది
 	Separate the values with semicolons or spaces.	విలువలను సెమీకోలన్ లేదా ఖాళీతో వేరు చేయండి.
 	Service time	సేవా సమయం
 	Services	సేవలు
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	అంతరం {share} లక్ష్య వాటా కంటే కిందకు వెళ్తుంది, కాబట్టి వాటా చేరినట్లు 95% విశ్వాసంతో చూపబడలేదు; మరిన్ని పునరావృత్త అమలులు దానిని సన్నగా చేస్తాయి.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ఆపే షరతు వరకు సగటు సమయం దానిని చేరిన పునరావృత్త అమలులపై మాత్రమే; మిగిలినవి వాటి సమయ పరిమితి వరకు నడిచాయి.
 	The model changed, so watching stopped	నమూనా మారింది, కాబట్టి గమనించడం ఆగిపోయింది
+	The model has no calendars yet.	నమూనాలో ఇంకా క్యాలెండర్‌లు లేవు.
 	The model now has the units sizing found	పరిమాణ నిర్ణయం కనుగొన్న యూనిట్‌లు ఇప్పుడు మోడల్‌లో ఉన్నాయి
 	The model: its experiment, connections and problems	నమూనా: దాని ప్రయోగం, అనుసంధానాలు మరియు సమస్యలు
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ప్రతి విలువకు సమానమైన లేదా తక్కువైన పునరావృత్త అమలుల వాటా. పట్టీ నిజమైన పంపిణీని {confidence} విశ్వాసంతో కలిగి ఉంటుంది.
@@ -348,10 +368,12 @@
 	Time off shift	షిఫ్ట్ వెలుపల సమయం
 	Time processing	ప్రాసెసింగ్ సమయం
 	Time starved	పని లేని సమయం
+	Time to failure	లోపం వచ్చే వరకు సమయం
 	Time to the stop condition	ఆపే షరతు వరకు సమయం
 	Time unit	సమయ ప్రమాణం
 	To	కు
 	Tops	పై అంచులు
+	Transfer time	బదిలీ సమయం
 	Trials	ప్రయత్నాలు
 	Triangular	త్రిభుజాకార పంపిణీ
 	Truncated normal	కత్తిరించిన సాధారణ పంపిణీ
@@ -363,6 +385,7 @@
 	Uniform	ఏకరీతి పంపిణీ
 	Unit	ప్రమాణం
 	Units	యూనిట్‌లు
+	Units by calendar	క్యాలెండర్ ప్రకారం యూనిట్‌లు
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	అనేక పనులు పంచుకునే యూనిట్‌లు. భాగస్వామ్య వనరులు అవసరమైన పని వాటిని పూల్ ప్రకారం లేదా పాత్ర ప్రకారం తీసుకుంటుంది.
 	Untitled	శీర్షిక లేదు
 	Untitled model	పేరు లేని నమూనా

@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Ауқымда {change} өзгерді: тек кездейсоқтық жасай алатын шекте.
 	Actual size	Нақты өлшем
 	Add Block	Блок қосу
+	Add Calendar	Күнтізбе қосу
+	Add Pool	Қор қосу
 	Add a flow from…	Қайдан…
 	Add a flow to…	Қайда…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Жеткілікті қайталаулар мақсатқа жеткенше ең жүктелген тапсырмаға немесе пулға бір бірлік қосу. Әр уақыт өз орташасында болатын жауап та көрсетіледі; ол әдетте тым аз.
 	Add alternative	Балама қосу
+	Add calendar entry	Күнтізбе жазбасын қосу
 	Add point	Нүкте қосу
 	Add pool	Қор қосу
 	Add property	Қасиет қосу
@@ -40,9 +43,13 @@
 	Appearance	Сыртқы түрі
 	Arrival limit	Келу шегі
 	Arrivals	Келулер
+	Arrivals by calendar	Күнтізбе бойынша келулер
 	At least	Кемінде
 	At most	Көп дегенде
 	Availability	Қолжетімділік
+	Availability by calendar	Күнтізбе бойынша қолжетімділік
+	Available	Қолжетімді
+	Available outside calendars	Күнтізбелерден тыс қолжетімді
 	BPMN with BPSim	BPSim бар BPMN
 	Back to the model (Esc)	Модельге оралу (Esc)
 	Batch	Топтама
@@ -53,11 +60,14 @@
 	Block	Блок
 	Boolean	Логикалық мән
 	Bottoms	Төменгі жиектер
+	Breakdowns	Ақаулар
+	Breakdowns and availability	Ақаулар және қолжетімділік
 	Bring All to Front	Барлығын алдыңғы қатарға шығару
 	Built with	Мына құралдармен жасалған
 	Busiest	Ең жүктелген
 	By role	Рөл бойынша
 	CSV table	CSV кестесі
+	Calendar	Күнтізбе
 	Cancel	Бас тарту
 	Cancel Run	Іске қосуды тоқтату
 	Cancel run	Іске қосуды тоқтату
@@ -65,7 +75,9 @@
 	Centres	Көлденең орталықтар
 	Change	Өзгеріс
 	Change Block	Блокты өзгерту
+	Change Calendar	Күнтізбені өзгерту
 	Change Flow	Ағынды өзгерту
+	Change Pool	Қорды өзгерту
 	Change the estimate	Бағалауды өзгерту
 	Changes	Өзгерістер
 	Changing the time unit does not convert the times already in the model.	Уақыт бірлігін өзгерту модельдегі бұрыннан бар уақыт мәндерін түрлендірмейді.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Кестені экспорттау (CSV)
 	Exported {file}	{file} экспортталды
 	Expression	Өрнек
+	Failure interrupts the job	Ақау жұмысты үзеді
 	Family	Отбасы
 	File	Файл
 	Finished at {time} {unit}	{time} {unit} кезінде аяқталды
@@ -143,6 +156,7 @@
 	From	Қайдан
 	Gamma	Гамма
 	Goes to	Қайда барады
+	Hands on finished parts while down	Ақаулы кезде де дайын бөлшектерді береді
 	Help	Көмек
 	Hide Others	Басқаларын жасыру
 	Hide {app}	{app} қолданбасын жасыру
@@ -191,6 +205,7 @@
 	New model	Жаңа модель
 	New property	Жаңа қасиет
 	New property name	Жаңа қасиет атауы
+	No arrivals outside calendars	Күнтізбелерден тыс келулер жоқ
 	No blocks yet. Open a model, or add blocks to build one.	Әлі блоктар жоқ. Модельді ашыңыз немесе блоктар қосып жасаңыз.
 	No connections yet: join blocks below.	Әлі байланыстар жоқ: төмендегі блоктарды қосыңыз.
 	No replication met the stop condition: each ran to its time limit.	Ешбір қайталау тоқтату шартына жетпеді: әрқайсысы уақыт шегіне дейін жүрді.
@@ -244,6 +259,8 @@
 	Redo {action}	{action} қайталау
 	Remove	Жою
 	Remove Block	Блокты жою
+	Remove Calendar	Күнтізбені жою
+	Remove Pool	Қорды жою
 	Remove Property	Қасиетті жою
 	Remove alternative {n}	{n}-баламаны жою
 	Remove block	Блокты жою
@@ -253,6 +270,7 @@
 	Removed {id}	{id} жойылды
 	Rename Block	Блок атауын өзгерту
 	Rename Model	Модель атауын өзгерту
+	Repair time	Жөндеу уақыты
 	Replace Model	Модельді ауыстыру
 	Replication 1 · {time} of {end} {unit}	1-қайталау · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	1-қайталау · {time} / {end} {unit} · қыздыру кезеңі
@@ -290,6 +308,7 @@
 	Seed	Кездейсоқ тұқым
 	Select All	Барлығын таңдау
 	Select a block to see its queue over time.	Кезегін уақыт бойынша көру үшін блокты таңдаңыз.
+	Sender waits during transfer	Тасымалдау кезінде жіберуші күтеді
 	Separate the values with semicolons or spaces.	Мәндерді нүктелі үтірмен немесе бос орынмен бөліңіз.
 	Service time	Қызмет көрсету уақыты
 	Services	Қызметтер
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Аралық {share} мақсатты үлесінен төмен түседі, сондықтан үлестің орындалғаны 95% сенімділікпен көрсетілмеген; көбірек қайталау оны тарылтады.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Тоқтату шартына дейінгі орташа уақыт тек оған жеткен қайталаулар бойынша; қалғандары уақыт шегіне дейін жүрді.
 	The model changed, so watching stopped	Модель өзгерді, сондықтан бақылау тоқтатылды
+	The model has no calendars yet.	Модельде әлі күнтізбе жоқ.
 	The model now has the units sizing found	Модельде енді өлшемдеу тапқан бірліктер бар
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Әр мәнге тең немесе одан төмен қайталаулар үлесі. Жолақ шынайы үлестірімді {confidence} сенімділікпен қамтиды.
@@ -348,10 +368,12 @@
 	Time off shift	Ауысымнан тыс уақыт
 	Time processing	Өңдеу уақыты
 	Time starved	Жұмыссыз уақыт
+	Time to failure	Ақауға дейінгі уақыт
 	Time to the stop condition	Тоқтату шартына дейінгі уақыт
 	Time unit	Уақыт бірлігі
 	To	Қайда
 	Tops	Жоғарғы жиектер
+	Transfer time	Тасымалдау уақыты
 	Trials	Сынақтар
 	Triangular	Үшбұрышты
 	Truncated normal	Қиылған нормальды
@@ -363,6 +385,7 @@
 	Uniform	Бірқалыпты
 	Unit	Бірлік
 	Units	Бірлік саны
+	Units by calendar	Күнтізбе бойынша бірлік саны
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Бірнеше тапсырма ортақ пайдаланатын бірліктер. Ортақ ресурстары бар тапсырма оларды қордан немесе рөл бойынша алады.
 	Untitled	Атаусыз
 	Untitled model	Атаусыз модель

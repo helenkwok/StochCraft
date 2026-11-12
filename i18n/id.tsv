@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Di seluruh rentang berubah sebesar {change}: masih dalam batas yang bisa ditimbulkan kebetulan saja.
 	Actual size	Ukuran sebenarnya
 	Add Block	Tambah Blok
+	Add Calendar	Tambah Kalender
+	Add Pool	Tambah Kumpulan
 	Add a flow from…	Tambahkan alur dari…
 	Add a flow to…	Tambahkan alur ke…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Tambahkan satu unit pada tugas atau kumpulan tersibuk sampai cukup banyak replikasi memenuhi target. Jawaban dengan setiap waktu pada rata-ratanya juga ditampilkan; biasanya terlalu kecil.
 	Add alternative	Tambah alternatif
+	Add calendar entry	Tambah entri kalender
 	Add point	Tambah titik
 	Add pool	Tambah kumpulan
 	Add property	Tambah properti
@@ -40,9 +43,13 @@
 	Appearance	Tampilan
 	Arrival limit	Batas kedatangan
 	Arrivals	Kedatangan
+	Arrivals by calendar	Kedatangan per kalender
 	At least	Setidaknya
 	At most	Paling banyak
 	Availability	Ketersediaan
+	Availability by calendar	Ketersediaan per kalender
+	Available	Tersedia
+	Available outside calendars	Tersedia di luar kalender
 	BPMN with BPSim	BPMN dengan BPSim
 	Back to the model (Esc)	Kembali ke model (Esc)
 	Batch	Batch
@@ -53,11 +60,14 @@
 	Block	Blok
 	Boolean	Boolean
 	Bottoms	Tepi bawah
+	Breakdowns	Kerusakan
+	Breakdowns and availability	Kerusakan dan ketersediaan
 	Bring All to Front	Bawa Semua ke Depan
 	Built with	Dibuat dengan
 	Busiest	Tersibuk
 	By role	Menurut peran
 	CSV table	Tabel CSV
+	Calendar	Kalender
 	Cancel	Batal
 	Cancel Run	Batalkan Proses
 	Cancel run	Batalkan proses
@@ -65,7 +75,9 @@
 	Centres	Tengah horizontal
 	Change	Perubahan
 	Change Block	Ubah Blok
+	Change Calendar	Ubah Kalender
 	Change Flow	Ubah Alur
+	Change Pool	Ubah Kumpulan
 	Change the estimate	Ubah perkiraan
 	Changes	Perubahan
 	Changing the time unit does not convert the times already in the model.	Mengubah satuan waktu tidak mengonversi waktu yang sudah ada dalam model.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Ekspor tabel (CSV)
 	Exported {file}	{file} diekspor
 	Expression	Ekspresi
+	Failure interrupts the job	Kerusakan menyela pekerjaan
 	Family	Keluarga
 	File	Berkas
 	Finished at {time} {unit}	Selesai pada {time} {unit}
@@ -143,6 +156,7 @@
 	From	Dari
 	Gamma	Gamma
 	Goes to	Menuju ke
+	Hands on finished parts while down	Tetap meneruskan komponen jadi saat rusak
 	Help	Bantuan
 	Hide Others	Sembunyikan yang lain
 	Hide {app}	Sembunyikan {app}
@@ -191,6 +205,7 @@
 	New model	Model baru
 	New property	Properti baru
 	New property name	Nama properti baru
+	No arrivals outside calendars	Tanpa kedatangan di luar kalender
 	No blocks yet. Open a model, or add blocks to build one.	Belum ada blok. Buka model atau tambahkan blok untuk membuatnya.
 	No connections yet: join blocks below.	Belum ada koneksi: hubungkan blok di bawah.
 	No replication met the stop condition: each ran to its time limit.	Tidak ada replikasi yang mencapai kondisi berhenti: masing-masing berjalan hingga batas waktunya.
@@ -244,6 +259,8 @@
 	Redo {action}	Ulangi {action}
 	Remove	Hapus
 	Remove Block	Hapus Blok
+	Remove Calendar	Hapus Kalender
+	Remove Pool	Hapus Kumpulan
 	Remove Property	Hapus Properti
 	Remove alternative {n}	Hapus alternatif {n}
 	Remove block	Hapus blok
@@ -253,6 +270,7 @@
 	Removed {id}	{id} dihapus
 	Rename Block	Ganti Nama Blok
 	Rename Model	Ganti Nama Model
+	Repair time	Waktu perbaikan
 	Replace Model	Ganti Model
 	Replication 1 · {time} of {end} {unit}	Replikasi 1 · {time} dari {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikasi 1 · {time} dari {end} {unit} · pemanasan
@@ -290,6 +308,7 @@
 	Seed	Benih acak
 	Select All	Pilih Semua
 	Select a block to see its queue over time.	Pilih blok untuk melihat antreannya dari waktu ke waktu.
+	Sender waits during transfer	Pengirim menunggu selama perpindahan
 	Separate the values with semicolons or spaces.	Pisahkan nilai dengan titik koma atau spasi.
 	Service time	Waktu layanan
 	Services	Layanan
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak replikasi akan mempersempitnya.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas replikasi yang mencapainya; sisanya berjalan hingga batas waktunya.
 	The model changed, so watching stopped	Model berubah, jadi pengamatan dihentikan
+	The model has no calendars yet.	Model belum memiliki kalender.
 	The model now has the units sizing found	Model kini memakai unit yang ditemukan penentuan ukuran
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian replikasi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Waktu di luar sif
 	Time processing	Waktu memproses
 	Time starved	Waktu tanpa pekerjaan
+	Time to failure	Waktu hingga rusak
 	Time to the stop condition	Waktu hingga kondisi berhenti
 	Time unit	Satuan waktu
 	To	Ke
 	Tops	Tepi atas
+	Transfer time	Waktu perpindahan
 	Trials	Percobaan
 	Triangular	Segitiga
 	Truncated normal	Normal terpotong
@@ -363,6 +385,7 @@
 	Uniform	Seragam
 	Unit	Satuan
 	Units	Unit
+	Units by calendar	Unit per kalender
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unit yang digunakan bersama oleh beberapa tugas. Tugas dengan sumber daya bersama mengambilnya dari kumpulan atau menurut peran.
 	Untitled	Tanpa Judul
 	Untitled model	Model tanpa judul

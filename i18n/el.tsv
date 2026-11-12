@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Σε όλο το εύρος άλλαξε κατά {change}: εντός όσων μπορεί να κάνει μόνη της η τύχη.
 	Actual size	Πραγματικό μέγεθος
 	Add Block	Προσθήκη μπλοκ
+	Add Calendar	Προσθήκη ημερολογίου
+	Add Pool	Προσθήκη δεξαμενής
 	Add a flow from…	Προσθήκη ροής από…
 	Add a flow to…	Προσθήκη ροής προς…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Προσθήκη μιας μονάδας στην πιο φορτωμένη εργασία ή ομάδα έως ότου αρκετές επαναλήψεις πετύχουν έναν στόχο. Εμφανίζεται και η απάντηση με κάθε χρόνο στη μέση τιμή του· συνήθως είναι πολύ μικρή.
 	Add alternative	Προσθήκη εναλλακτικής
+	Add calendar entry	Προσθήκη καταχώρισης ημερολογίου
 	Add point	Προσθήκη σημείου
 	Add pool	Προσθήκη δεξαμενής
 	Add property	Προσθήκη ιδιότητας
@@ -40,9 +43,13 @@
 	Appearance	Εμφάνιση
 	Arrival limit	Όριο αφίξεων
 	Arrivals	Αφίξεις
+	Arrivals by calendar	Αφίξεις ανά ημερολόγιο
 	At least	Τουλάχιστον
 	At most	Το πολύ
 	Availability	Διαθεσιμότητα
+	Availability by calendar	Διαθεσιμότητα ανά ημερολόγιο
+	Available	Διαθέσιμο
+	Available outside calendars	Διαθέσιμο εκτός ημερολογίων
 	BPMN with BPSim	BPMN με BPSim
 	Back to the model (Esc)	Πίσω στο μοντέλο (Esc)
 	Batch	Παρτίδα
@@ -53,11 +60,14 @@
 	Block	Μπλοκ
 	Boolean	Λογική τιμή
 	Bottoms	Κάτω άκρα
+	Breakdowns	Βλάβες
+	Breakdowns and availability	Βλάβες και διαθεσιμότητα
 	Bring All to Front	Μεταφορά όλων μπροστά
 	Built with	Δημιουργήθηκε με
 	Busiest	Πιο φορτωμένο
 	By role	Κατά ρόλο
 	CSV table	Πίνακας CSV
+	Calendar	Ημερολόγιο
 	Cancel	Ακύρωση
 	Cancel Run	Ακύρωση εκτέλεσης
 	Cancel run	Ακύρωση εκτέλεσης
@@ -65,7 +75,9 @@
 	Centres	Οριζόντια κέντρα
 	Change	Μεταβολή
 	Change Block	Αλλαγή μπλοκ
+	Change Calendar	Αλλαγή ημερολογίου
 	Change Flow	Αλλαγή ροής
+	Change Pool	Αλλαγή δεξαμενής
 	Change the estimate	Αλλαγή εκτίμησης
 	Changes	Αλλαγές
 	Changing the time unit does not convert the times already in the model.	Η αλλαγή της μονάδας χρόνου δεν μετατρέπει τους χρόνους που υπάρχουν ήδη στο μοντέλο.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Εξαγωγή πίνακα (CSV)
 	Exported {file}	Εξήχθη το {file}
 	Expression	Έκφραση
+	Failure interrupts the job	Η βλάβη διακόπτει την εργασία
 	Family	Οικογένεια
 	File	Αρχείο
 	Finished at {time} {unit}	Ολοκληρώθηκε στο {time} {unit}
@@ -143,6 +156,7 @@
 	From	Από
 	Gamma	Γάμμα
 	Goes to	Οδηγεί σε
+	Hands on finished parts while down	Παραδίδει τα έτοιμα τεμάχια και σε βλάβη
 	Help	Βοήθεια
 	Hide Others	Απόκρυψη άλλων
 	Hide {app}	Απόκρυψη {app}
@@ -191,6 +205,7 @@
 	New model	Νέο μοντέλο
 	New property	Νέα ιδιότητα
 	New property name	Όνομα νέας ιδιότητας
+	No arrivals outside calendars	Χωρίς αφίξεις εκτός ημερολογίων
 	No blocks yet. Open a model, or add blocks to build one.	Δεν υπάρχουν ακόμη μπλοκ. Ανοίξτε ένα μοντέλο ή προσθέστε μπλοκ για να το δημιουργήσετε.
 	No connections yet: join blocks below.	Δεν υπάρχουν ακόμη συνδέσεις: συνδέστε τα παρακάτω μπλοκ.
 	No replication met the stop condition: each ran to its time limit.	Καμία επανάληψη δεν έφτασε τη συνθήκη διακοπής: κάθε μία διήρκεσε ως το χρονικό της όριο.
@@ -244,6 +259,8 @@
 	Redo {action}	Επανάληψη {action}
 	Remove	Αφαίρεση
 	Remove Block	Αφαίρεση μπλοκ
+	Remove Calendar	Αφαίρεση ημερολογίου
+	Remove Pool	Αφαίρεση δεξαμενής
 	Remove Property	Αφαίρεση ιδιότητας
 	Remove alternative {n}	Αφαίρεση εναλλακτικής {n}
 	Remove block	Αφαίρεση μπλοκ
@@ -253,6 +270,7 @@
 	Removed {id}	Αφαιρέθηκε το {id}
 	Rename Block	Μετονομασία μπλοκ
 	Rename Model	Μετονομασία μοντέλου
+	Repair time	Χρόνος επισκευής
 	Replace Model	Αντικατάσταση μοντέλου
 	Replication 1 · {time} of {end} {unit}	Επανάληψη 1 · {time} από {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Επανάληψη 1 · {time} από {end} {unit} · προθέρμανση
@@ -290,6 +308,7 @@
 	Seed	Αρχικός σπόρος
 	Select All	Επιλογή όλων
 	Select a block to see its queue over time.	Επιλέξτε ένα μπλοκ για να δείτε την ουρά του στη διάρκεια του χρόνου.
+	Sender waits during transfer	Ο αποστολέας περιμένει κατά τη μεταφορά
 	Separate the values with semicolons or spaces.	Διαχωρίστε τις τιμές με ερωτηματικά (;) ή κενά.
 	Service time	Χρόνος εξυπηρέτησης
 	Services	Υπηρεσίες
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Το διάστημα φτάνει κάτω από το ποσοστό-στόχο {share}, άρα δεν φαίνεται με εμπιστοσύνη 95% ότι το ποσοστό επιτυγχάνεται· περισσότερες επαναλήψεις θα το στένευαν.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Ο μέσος χρόνος ως τη συνθήκη διακοπής αφορά μόνο τις επαναλήψεις που την έφτασαν· οι υπόλοιπες διήρκεσαν ως το χρονικό τους όριο.
 	The model changed, so watching stopped	Το μοντέλο άλλαξε, οπότε η παρακολούθηση διακόπηκε
+	The model has no calendars yet.	Το μοντέλο δεν έχει ακόμη ημερολόγια.
 	The model now has the units sizing found	Το μοντέλο έχει πλέον τις μονάδες που βρήκε η διαστασιολόγηση
 	The model: its experiment, connections and problems	Το μοντέλο: πείραμα, συνδέσεις και προβλήματα
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Το ποσοστό των επαναλήψεων έως και κάθε τιμή. Η ζώνη περιέχει την πραγματική κατανομή με εμπιστοσύνη {confidence}.
@@ -348,10 +368,12 @@
 	Time off shift	Χρόνος εκτός βάρδιας
 	Time processing	Χρόνος επεξεργασίας
 	Time starved	Χρόνος χωρίς εργασία
+	Time to failure	Χρόνος έως τη βλάβη
 	Time to the stop condition	Χρόνος ως τη συνθήκη διακοπής
 	Time unit	Μονάδα χρόνου
 	To	Προς
 	Tops	Πάνω άκρα
+	Transfer time	Χρόνος μεταφοράς
 	Trials	Δοκιμές
 	Triangular	Τριγωνική
 	Truncated normal	Αποκομμένη κανονική
@@ -363,6 +385,7 @@
 	Uniform	Ομοιόμορφη
 	Unit	Μονάδα
 	Units	Μονάδες
+	Units by calendar	Μονάδες ανά ημερολόγιο
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Μονάδες που μοιράζονται πολλές εργασίες. Μια εργασία με κοινόχρηστους πόρους τις παίρνει από δεξαμενή ή κατά ρόλο.
 	Untitled	Χωρίς τίτλο
 	Untitled model	Μοντέλο χωρίς τίτλο

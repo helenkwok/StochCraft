@@ -6,7 +6,7 @@
 
 use egui::accesskit::Role;
 use egui_kittest::Harness;
-use egui_kittest::kittest::Queryable;
+use egui_kittest::kittest::{NodeT, Queryable};
 use serde_json::{Value, json};
 use stochcraft_ui_egui::{App, EXAMPLES, Platform};
 
@@ -234,11 +234,8 @@ fn the_experiment_and_flows_are_edited_from_their_forms() {
 
     click(&mut h, Role::ListBoxOption, "Serve customer");
     // The inspector lists the flows; removing one is an edit like any other.
-    h.get_all_by_role_and_label(Role::Button, "Remove")
-        .last()
-        .expect("a flow's Remove")
-        .click();
-    settle(&mut h);
+    // (The last Remove is a flow's, below the parameters: scrolled into view first.)
+    click(&mut h, Role::Button, "Remove");
     assert_eq!(model(&h)["connections"].as_array().map(Vec::len), Some(1));
     click(&mut h, Role::ComboBox, "Add a flow to…");
     click(&mut h, Role::Button, "Customer leaves");
@@ -502,5 +499,118 @@ fn pools_are_added_and_a_shared_task_needs_them_by_pool_or_role() {
             .as_array()
             .map(Vec::len),
         Some(1)
+    );
+}
+
+#[test]
+fn a_servers_transfer_breakdowns_and_availability_are_edited_in_its_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+
+    // A transfer time: none at first, then a constant one, whose sender is then freed at once.
+    click(&mut h, Role::ComboBox, "Transfer time");
+    click(&mut h, Role::Button, "Constant");
+    assert_eq!(
+        element(&h, "serve")["transfer"],
+        json!({"type": "constant", "value": 1.0})
+    );
+    click(&mut h, Role::CheckBox, "Sender waits during transfer");
+    assert_eq!(element(&h, "serve")["transfer_holds_sender"], json!(false));
+    click(&mut h, Role::ComboBox, "Transfer time");
+    click(&mut h, Role::Button, "None");
+    assert!(element(&h, "serve").get("transfer").is_none());
+    assert!(
+        h.query_by_label("Sender waits during transfer").is_none(),
+        "shown only with a transfer"
+    );
+
+    // Breakdowns and availability start closed on a server with neither.
+    assert!(h.query_by_label("Breakdowns").is_none());
+    click(
+        &mut h,
+        Role::DisclosureTriangle,
+        "Breakdowns and availability",
+    );
+    h.get_by_label("The model has no calendars yet.");
+    click(&mut h, Role::CheckBox, "Breakdowns");
+    assert_eq!(
+        element(&h, "serve")["breakdown"],
+        json!({
+            "time_to_failure": {"type": "exponential", "mean": 1.0},
+            "repair": {"type": "exponential", "mean": 1.0},
+            "interruptible": false,
+        })
+    );
+    // The repair time's mean: the last "Mean" (service, time to failure, repair).
+    let repair_mean = |h: &Harness<'static, App>| {
+        h.get_all_by_role_and_label(Role::TextInput, "Mean")
+            .last()
+            .expect("the repair's mean")
+            .rect()
+    };
+    if off_screen(repair_mean(&h)) {
+        h.get_all_by_role_and_label(Role::TextInput, "Mean")
+            .last()
+            .expect("the repair's mean")
+            .scroll_to_me();
+        settle(&mut h);
+    }
+    h.get_all_by_role_and_label(Role::TextInput, "Mean")
+        .last()
+        .expect("the repair's mean")
+        .click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
+    h.get_all_by_role_and_label(Role::TextInput, "Mean")
+        .last()
+        .expect("the repair's mean")
+        .type_text("5");
+    settle(&mut h);
+    h.key_press(egui::Key::Enter);
+    settle(&mut h);
+    assert_eq!(
+        element(&h, "serve")["breakdown"]["repair"],
+        json!({"type": "exponential", "mean": 5.0})
+    );
+    // Hands on finished parts while down is true when left out of the file.
+    assert_eq!(
+        h.get_by_role_and_label(Role::CheckBox, "Hands on finished parts while down")
+            .accesskit_node()
+            .toggled(),
+        Some(egui::accesskit::Toggled::True)
+    );
+    click(&mut h, Role::CheckBox, "Failure interrupts the job");
+    assert_eq!(
+        element(&h, "serve")["breakdown"]["interruptible"],
+        json!(true)
+    );
+
+    // With a calendar in the model, the server is off shift while it is active.
+    h.state_mut()
+        .execute(
+            "calendar.add",
+            json!({
+                "id": "lunch",
+                "name": "Lunch",
+                "events": [{"start": "2026-01-01T12:00:00", "end": "2026-01-01T13:00:00", "repeat": "FREQ=DAILY"}],
+            }),
+        )
+        .expect("a calendar");
+    settle(&mut h);
+    click(&mut h, Role::Button, "Add calendar entry");
+    assert_eq!(
+        element(&h, "serve")["availability"],
+        json!([{"calendar": "lunch", "available": false}])
+    );
+    h.get_by_role_and_label(Role::ComboBox, "Calendar 1");
+    click(&mut h, Role::CheckBox, "Available outside calendars");
+    assert_eq!(element(&h, "serve")["available"], json!(false));
+    // Each edit is one undo step.
+    h.state_mut().undo();
+    settle(&mut h);
+    assert!(element(&h, "serve").get("available").is_none());
+    assert_eq!(
+        element(&h, "serve")["availability"],
+        json!([{"calendar": "lunch", "available": false}])
     );
 }

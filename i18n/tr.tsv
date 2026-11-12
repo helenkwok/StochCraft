@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Aralık boyunca {change} değişti: tek başına şansın yapabileceği ölçüde.
 	Actual size	Gerçek boyut
 	Add Block	Blok ekle
+	Add Calendar	Takvim ekle
+	Add Pool	Havuz ekle
 	Add a flow from…	Kaynak…
 	Add a flow to…	Hedef…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Yeterince tekrar bir hedefe ulaşana dek en yoğun göreve ya da havuza bir birim ekle. Her sürenin ortalamasında olduğu yanıt da gösterilir; genellikle fazla küçüktür.
 	Add alternative	Alternatif ekle
+	Add calendar entry	Takvim girdisi ekle
 	Add point	Nokta ekle
 	Add pool	Havuz ekle
 	Add property	Özellik ekle
@@ -40,9 +43,13 @@
 	Appearance	Görünüm
 	Arrival limit	Geliş sınırı
 	Arrivals	Gelişler
+	Arrivals by calendar	Takvime göre gelişler
 	At least	En az
 	At most	En çok
 	Availability	Kullanılabilirlik
+	Availability by calendar	Takvime göre kullanılabilirlik
+	Available	Kullanılabilir
+	Available outside calendars	Takvimler dışında kullanılabilir
 	BPMN with BPSim	BPSim içeren BPMN
 	Back to the model (Esc)	Modele dön (Esc)
 	Batch	Parti
@@ -53,11 +60,14 @@
 	Block	Blok
 	Boolean	Mantıksal
 	Bottoms	Alt kenarlar
+	Breakdowns	Arızalar
+	Breakdowns and availability	Arızalar ve kullanılabilirlik
 	Bring All to Front	Tümünü Öne Getir
 	Built with	Şunlarla geliştirildi
 	Busiest	En yoğun
 	By role	Role göre
 	CSV table	CSV tablosu
+	Calendar	Takvim
 	Cancel	İptal
 	Cancel Run	Çalıştırmayı iptal et
 	Cancel run	Çalıştırmayı iptal et
@@ -65,7 +75,9 @@
 	Centres	Yatay merkezler
 	Change	Değişim
 	Change Block	Bloğu değiştir
+	Change Calendar	Takvimi değiştir
 	Change Flow	Akışı değiştir
+	Change Pool	Havuzu değiştir
 	Change the estimate	Tahmini değiştir
 	Changes	Değişiklikler
 	Changing the time unit does not convert the times already in the model.	Zaman birimini değiştirmek modeldeki mevcut süreleri dönüştürmez.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Tabloyu dışa aktar (CSV)
 	Exported {file}	{file} dışa aktarıldı
 	Expression	İfade
+	Failure interrupts the job	Arıza işi keser
 	Family	Aile
 	File	Dosya
 	Finished at {time} {unit}	{time} {unit} anında bitti
@@ -143,6 +156,7 @@
 	From	Kaynak
 	Gamma	Gama
 	Goes to	Şuraya gider
+	Hands on finished parts while down	Arızalıyken de bitmiş parçaları aktarır
 	Help	Yardım
 	Hide Others	Diğerlerini Gizle
 	Hide {app}	{app} Uygulamasını Gizle
@@ -191,6 +205,7 @@
 	New model	Yeni model
 	New property	Yeni özellik
 	New property name	Yeni özellik adı
+	No arrivals outside calendars	Takvimler dışında geliş yok
 	No blocks yet. Open a model, or add blocks to build one.	Henüz blok yok. Bir model açın veya blok ekleyerek oluşturun.
 	No connections yet: join blocks below.	Henüz bağlantı yok: aşağıdaki blokları bağlayın.
 	No replication met the stop condition: each ran to its time limit.	Hiçbir tekrar durdurma koşuluna ulaşmadı: her biri süre sınırına kadar çalıştı.
@@ -244,6 +259,8 @@
 	Redo {action}	{action} işlemini yinele
 	Remove	Kaldır
 	Remove Block	Bloğu kaldır
+	Remove Calendar	Takvimi kaldır
+	Remove Pool	Havuzu kaldır
 	Remove Property	Özelliği kaldır
 	Remove alternative {n}	{n}. alternatifi kaldır
 	Remove block	Bloğu kaldır
@@ -253,6 +270,7 @@
 	Removed {id}	{id} kaldırıldı
 	Rename Block	Bloğu yeniden adlandır
 	Rename Model	Modeli yeniden adlandır
+	Repair time	Onarım süresi
 	Replace Model	Modeli değiştir
 	Replication 1 · {time} of {end} {unit}	Tekrar 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Tekrar 1 · {time} / {end} {unit} · ısınma
@@ -290,6 +308,7 @@
 	Seed	Rastgelelik tohumu
 	Select All	Tümünü seç
 	Select a block to see its queue over time.	Kuyruğunu zaman içinde görmek için bir blok seçin.
+	Sender waits during transfer	Gönderen aktarma sırasında bekler
 	Separate the values with semicolons or spaces.	Değerleri noktalı virgül veya boşlukla ayırın.
 	Service time	Hizmet süresi
 	Services	Hizmetler
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Aralık {share} hedef oranının altına iniyor, bu yüzden oranın karşılandığı %95 güvenle gösterilmiş değil; daha fazla tekrar aralığı daraltır.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Durdurma koşuluna kadarki ortalama süre yalnızca bu koşula ulaşan tekrarlara göredir; diğerleri süre sınırlarına kadar çalıştı.
 	The model changed, so watching stopped	Model değişti, bu nedenle izleme durduruldu
+	The model has no calendars yet.	Modelde henüz takvim yok.
 	The model now has the units sizing found	Modelde artık boyutlandırmanın bulduğu birimler var
 	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Her değere eşit veya altındaki tekrarların oranı. Bant, gerçek dağılımı {confidence} güvenle içerir.
@@ -348,10 +368,12 @@
 	Time off shift	Vardiya dışı süre
 	Time processing	İşleme süresi
 	Time starved	İş bekleme süresi
+	Time to failure	Arızaya kadar süre
 	Time to the stop condition	Durdurma koşuluna kadar geçen süre
 	Time unit	Zaman birimi
 	To	Hedef
 	Tops	Üst kenarlar
+	Transfer time	Aktarma süresi
 	Trials	Denemeler
 	Triangular	Üçgen
 	Truncated normal	Kesilmiş normal
@@ -363,6 +385,7 @@
 	Uniform	Tekdüze
 	Unit	Birim
 	Units	Birimler
+	Units by calendar	Takvime göre birimler
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Birden çok görevin paylaştığı birimler. Paylaşılan kaynakları kullanan bir görev bunları havuzdan veya role göre alır.
 	Untitled	İsimsiz
 	Untitled model	Başlıksız model

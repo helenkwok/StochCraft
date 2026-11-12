@@ -25,10 +25,13 @@
 	Across the range it changed by {change}: within what chance alone could do.	Over intervallet ændrede det sig med {change}: inden for hvad tilfældighed alene kan gøre.
 	Actual size	Faktisk størrelse
 	Add Block	Tilføj blok
+	Add Calendar	Tilføj kalender
+	Add Pool	Tilføj pulje
 	Add a flow from…	Tilføj flow fra…
 	Add a flow to…	Tilføj flow til…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Tilføj en enhed ved den travleste opgave eller pulje, indtil nok replikationer når et mål. Svaret med hver tid på sit gennemsnit vises også; det er som regel for lille.
 	Add alternative	Tilføj alternativ
+	Add calendar entry	Tilføj kalenderpost
 	Add point	Tilføj punkt
 	Add pool	Tilføj pulje
 	Add property	Tilføj egenskab
@@ -40,9 +43,13 @@
 	Appearance	Udseende
 	Arrival limit	Grænse for ankomster
 	Arrivals	Ankomster
+	Arrivals by calendar	Ankomster pr. kalender
 	At least	Mindst
 	At most	Højst
 	Availability	Tilgængelighed
+	Availability by calendar	Tilgængelighed pr. kalender
+	Available	Tilgængelig
+	Available outside calendars	Tilgængelig uden for kalendere
 	BPMN with BPSim	BPMN med BPSim
 	Back to the model (Esc)	Tilbage til modellen (Esc)
 	Batch	Parti
@@ -53,11 +60,14 @@
 	Block	Blok
 	Boolean	Boolesk
 	Bottoms	Nederste kanter
+	Breakdowns	Nedbrud
+	Breakdowns and availability	Nedbrud og tilgængelighed
 	Bring All to Front	Anbring alle forrest
 	Built with	Bygget med
 	Busiest	Travlest
 	By role	Efter rolle
 	CSV table	CSV-tabel
+	Calendar	Kalender
 	Cancel	Annullér
 	Cancel Run	Annuller kørsel
 	Cancel run	Annuller kørsel
@@ -65,7 +75,9 @@
 	Centres	Vandrette midter
 	Change	Ændring
 	Change Block	Rediger blok
+	Change Calendar	Rediger kalender
 	Change Flow	Rediger flow
+	Change Pool	Rediger pulje
 	Change the estimate	Ret skønnet
 	Changes	Ændringer
 	Changing the time unit does not convert the times already in the model.	Ændring af tidsenheden omregner ikke tider, der allerede findes i modellen.
@@ -130,6 +142,7 @@
 	Export table (CSV)	Eksportér tabel (CSV)
 	Exported {file}	Eksporterede {file}
 	Expression	Udtryk
+	Failure interrupts the job	Nedbrud afbryder arbejdet
 	Family	Familie
 	File	Filer
 	Finished at {time} {unit}	Færdig ved {time} {unit}
@@ -143,6 +156,7 @@
 	From	Fra
 	Gamma	Gamma
 	Goes to	Går til
+	Hands on finished parts while down	Afleverer færdige emner under nedbrud
 	Help	Hjælp
 	Hide Others	Skjul andre
 	Hide {app}	Skjul {app}
@@ -191,6 +205,7 @@
 	New model	Ny model
 	New property	Ny egenskab
 	New property name	Navn på ny egenskab
+	No arrivals outside calendars	Ingen ankomster uden for kalendere
 	No blocks yet. Open a model, or add blocks to build one.	Endnu ingen blokke. Åbn en model, eller tilføj blokke for at oprette en.
 	No connections yet: join blocks below.	Endnu ingen forbindelser: forbind blokkene nedenfor.
 	No replication met the stop condition: each ran to its time limit.	Ingen replikation nåede stopbetingelsen: hver kørte til sin tidsgrænse.
@@ -244,6 +259,8 @@
 	Redo {action}	Gentag {action}
 	Remove	Fjern
 	Remove Block	Fjern blok
+	Remove Calendar	Fjern kalender
+	Remove Pool	Fjern pulje
 	Remove Property	Fjern egenskab
 	Remove alternative {n}	Fjern alternativ {n}
 	Remove block	Fjern blok
@@ -253,6 +270,7 @@
 	Removed {id}	Fjernede {id}
 	Rename Block	Omdøb blok
 	Rename Model	Omdøb model
+	Repair time	Reparationstid
 	Replace Model	Erstat model
 	Replication 1 · {time} of {end} {unit}	Replikation 1 · {time} af {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikation 1 · {time} af {end} {unit} · opvarmning
@@ -290,6 +308,7 @@
 	Seed	Tilfældighedsfrø
 	Select All	Vælg alt
 	Select a block to see its queue over time.	Vælg en blok for at se dens kø over tid.
+	Sender waits during transfer	Afsenderen venter under overførslen
 	Separate the values with semicolons or spaces.	Adskil værdierne med semikolon eller mellemrum.
 	Service time	Servicetid
 	Services	Tjenester
@@ -334,6 +353,7 @@
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhed, at andelen nås; flere replikationer ville gøre det smallere.
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Den gennemsnitlige tid til stopbetingelsen er kun over de replikationer, der nåede den; de øvrige kørte til deres tidsgrænse.
 	The model changed, so watching stopped	Modellen blev ændret, så følgningen stoppede
+	The model has no calendars yet.	Modellen har endnu ingen kalendere.
 	The model now has the units sizing found	Modellen har nu de enheder, dimensioneringen fandt
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen af replikationer ved eller under hver værdi. Båndet indeholder den sande fordeling med {confidence} konfidens.
@@ -348,10 +368,12 @@
 	Time off shift	Tid uden for skift
 	Time processing	Tid i bearbejdning
 	Time starved	Tid uden arbejde
+	Time to failure	Tid til nedbrud
 	Time to the stop condition	Tid til stopbetingelsen
 	Time unit	Tidsenhed
 	To	Til
 	Tops	Øverste kanter
+	Transfer time	Overførselstid
 	Trials	Forsøg
 	Triangular	Trekantet
 	Truncated normal	Afkortet normal
@@ -363,6 +385,7 @@
 	Uniform	Uniform
 	Unit	Enhed
 	Units	Enheder
+	Units by calendar	Enheder pr. kalender
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Ressourceenheder, som flere opgaver deler. En opgave med delte ressourcer tager dem fra en pulje eller efter rolle.
 	Untitled	Uden navn
 	Untitled model	Model uden titel
