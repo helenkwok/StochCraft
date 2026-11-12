@@ -174,6 +174,10 @@ pub enum ElementKind {
         /// type changes (a changeover, a StochCraft vendor extension); `None`: no setups. See
         /// [`Setup`].
         setup: Option<Setup>,
+        /// The planned time to make one item (ISO 22400-2's planned runtime per item), for the
+        /// OEE results: its mean is the plan. Not simulated; `None`: effectiveness and OEE are
+        /// not reported. A StochCraft vendor extension (`stochcraft:plannedRunTime`).
+        planned_run_time: Option<Dist>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
@@ -501,6 +505,7 @@ impl ElementKind {
                 breakdown,
                 transfer,
                 setup,
+                planned_run_time,
                 ..
             } => {
                 let mut d = vec![("service", service)];
@@ -514,6 +519,9 @@ impl ElementKind {
                 }
                 if let Some(t) = transfer {
                     d.push(("transfer", &t.time));
+                }
+                if let Some(p) = planned_run_time {
+                    d.push(("planned_run_time", p));
                 }
                 d
             }
@@ -2659,6 +2667,7 @@ mod tests {
                         availability: Vec::new(),
                         power: None,
                         setup: None,
+                        planned_run_time: None,
                     },
                 ),
                 el("exit", ElementKind::Sink),
@@ -2745,6 +2754,7 @@ mod tests {
             availability: Vec::new(),
             power: None,
             setup: None,
+            planned_run_time: None,
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -2820,6 +2830,7 @@ mod tests {
                 availability: Vec::new(),
                 power: None,
                 setup: None,
+                planned_run_time: None,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

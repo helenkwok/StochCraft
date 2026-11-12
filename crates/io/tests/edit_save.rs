@@ -310,6 +310,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             availability: Vec::new(),
             power: None,
             setup: None,
+            planned_run_time: None,
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -330,6 +331,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             availability: Vec::new(),
             power: None,
             setup: None,
+            planned_run_time: None,
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -594,6 +596,7 @@ fn new_ids_never_clash_with_the_files_other_ids() {
             availability: Vec::new(),
             power: None,
             setup: None,
+            planned_run_time: None,
         };
     });
     let t = text(&saved);
@@ -1272,6 +1275,7 @@ fn new_and_changed_servers_carry_their_buffer() {
             availability: Vec::new(),
             power: None,
             setup: None,
+            planned_run_time: None,
         };
         set_queue(m, "weld", Some(1));
     });

@@ -111,6 +111,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "availability",
             "power",
             "setup",
+            "planned_run_time",
         ],
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
@@ -319,6 +320,11 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<SetupSpec>")]
     pub setup: Option<Option<SetupSpec>>,
+    /// Servers: the planned time to make one item, for the OEE results (its mean is the plan;
+    /// not simulated); `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<DistSpec>")]
+    pub planned_run_time: Option<Option<DistSpec>>,
     /// Tasks with shared resources: what each entity needs, the alternatives in order.
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
@@ -1045,6 +1051,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("availability", p.availability.is_some()),
         ("power", p.power.is_some()),
         ("setup", p.setup.is_some()),
+        ("planned_run_time", p.planned_run_time.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
@@ -1065,6 +1072,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "availability",
             "power",
             "setup",
+            "planned_run_time",
         ],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
@@ -1114,9 +1122,13 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             availability,
             power,
             setup,
+            planned_run_time,
         } => {
             if let Some(s) = p.setup {
                 *setup = s.map(Into::into);
+            }
+            if let Some(x) = p.planned_run_time {
+                *planned_run_time = x.map(Into::into);
             }
             if let Some(b) = p.breakdown {
                 *breakdown = b.map(Into::into);

@@ -51,6 +51,15 @@
       <stochcraft:transferTime holdsSender="false"><bpsim:FloatingParameter value="32"/></stochcraft:transferTime>
     </bpsim:VendorExtension>
 
+  stochcraft:plannedRunTime, on a task's ElementParameters: the planned time for the task's
+  resource to make one item (ISO 22400-2's planned runtime per item), holding one BPSim
+  distribution or constant whose mean is the plan. It is not simulated; results use it for
+  effectiveness and OEE.
+
+    <bpsim:VendorExtension name="stochcraft:plannedRunTime" xmlns:stochcraft="…">
+      <stochcraft:plannedRunTime><bpsim:FloatingParameter value="30"/></stochcraft:plannedRunTime>
+    </bpsim:VendorExtension>
+
   stochcraft:changeover, on a task's ElementParameters: its resource's unit sets up before a part
   only when the part's value of the token property named by the attribute property differs from
   that of the part the unit served last (its first part needs none). The setup takes the time of
@@ -125,6 +134,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="plannedRunTime" type="stochcraft:Value"/>
   <xs:element name="changeover">
     <xs:complexType>
       <xs:sequence>

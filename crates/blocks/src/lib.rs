@@ -1031,6 +1031,7 @@ impl Builder {
                 availability: Vec::new(),
                 power: None,
                 setup: None,
+                planned_run_time: None,
             },
         )
     }
@@ -1057,6 +1058,7 @@ impl Builder {
                 availability: Vec::new(),
                 power: None,
                 setup: None,
+                planned_run_time: None,
             },
         )
     }
@@ -1136,6 +1138,22 @@ impl Builder {
     pub fn power(&mut self, block: BlockId, power: Power) {
         if let Some((_, ElementKind::Server { power: p, .. }, _)) = self.elements.get_mut(block.0) {
             *p = Some(power);
+        }
+    }
+
+    /// Gives server `block` a planned time to make one item, for the OEE results (its mean is
+    /// the plan; it does not change the simulation).
+    pub fn planned_run_time(&mut self, block: BlockId, planned: Dist) {
+        if let Some((
+            _,
+            ElementKind::Server {
+                planned_run_time: p,
+                ..
+            },
+            _,
+        )) = self.elements.get_mut(block.0)
+        {
+            *p = Some(planned);
         }
     }
 

@@ -22,9 +22,9 @@ use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
     changeover_element, condition_element, dist_element, edge_ends, estimate_element,
-    interruptible_param, numeric, power_element, probability_element, property_element,
-    quantity_element, quantity_param, queue_capacity_element, routing_element, size, start_param,
-    stop_element, timer_param, transfer_element,
+    interruptible_param, numeric, planned_element, power_element, probability_element,
+    property_element, quantity_element, quantity_param, queue_capacity_element, routing_element,
+    size, start_param, stop_element, timer_param, transfer_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -1890,6 +1890,26 @@ impl Editor {
                             new_power.map(power_element),
                         ));
                     }
+                    // The planned time to make one item, for the OEE results.
+                    let old_planned = match was {
+                        Some(ElementKind::Server {
+                            planned_run_time, ..
+                        }) => planned_run_time.as_ref(),
+                        _ => None,
+                    };
+                    let new_planned = match &e.kind {
+                        ElementKind::Server {
+                            planned_run_time, ..
+                        } => planned_run_time.as_ref(),
+                        _ => None,
+                    };
+                    if new_planned != old_planned || (is_server && !was_server) {
+                        vendor_writes.push((
+                            id.clone(),
+                            crate::bpsim::PLANNED_RUN_TIME,
+                            new_planned.map(planned_element),
+                        ));
+                    }
                     // The setup: BPSim's SetUpTime before every job, or a changeover.
                     let old_setup = match was {
                         Some(ElementKind::Server { setup, .. }) => setup.as_ref(),
@@ -2024,6 +2044,7 @@ impl Editor {
                         vendor_writes.push((id.clone(), crate::bpsim::BREAKDOWN, None));
                         vendor_writes.push((id.clone(), crate::bpsim::TRANSFER_TIME, None));
                         vendor_writes.push((id.clone(), crate::bpsim::POWER, None));
+                        vendor_writes.push((id.clone(), crate::bpsim::PLANNED_RUN_TIME, None));
                         vendor_writes.push((id.clone(), crate::bpsim::CHANGEOVER, None));
                         writes.push((id.clone(), "TimeParameters", "SetUpTime", None));
                         writes.push((id.clone(), "PriorityParameters", "Interruptible", None));

@@ -980,6 +980,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             availability,
                             power: power_of(scenario, id, notes),
                             setup: setup_of(scenario, id, unit, notes),
+                            planned_run_time: planned_of(scenario, id, unit, notes),
                         }
                     }
                     (None, None, None) => ElementKind::Delay { duration: time },
@@ -1031,6 +1032,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "a transfer time (stochcraft:transferTime) applies only to a task with a resource of its own; it is ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Server { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::PLANNED_RUN_TIME)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "a planned run time (stochcraft:plannedRunTime) applies only to a task with a resource of its own; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::ExclusiveGateway { .. })
@@ -1253,6 +1264,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::CHANGEOVER,
             bpsim::ROUTING,
             bpsim::POWER,
+            bpsim::PLANNED_RUN_TIME,
             bpsim::BATCH_SIZE,
             bpsim::UNBATCH,
             bpsim::QUANTITY,
@@ -1511,6 +1523,28 @@ fn transfer_of(
         time: dist_of(body, "the transfer time", id, notes)?,
         holds_sender,
     })
+}
+
+/// The planned time to make one item StochCraft's vendor extension gives server `id`, if any.
+fn planned_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+) -> Option<Dist> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::PLANNED_RUN_TIME))?;
+    let body = ext
+        .elements()
+        .find(|e| e.local() == "plannedRunTime")
+        .and_then(|b| bpsim::default_value(b, unit, notes, Some(id)));
+    if body.is_none() {
+        notes.push(Note::error(
+            Some(id),
+            "a planned run time needs a distribution or a constant; effectiveness and OEE are not reported",
+        ));
+        return None;
+    }
+    dist_of(body, "the planned run time", id, notes)
 }
 
 /// The routing rule StochCraft's vendor extension gives exclusive gateway `id` (BPMN's own

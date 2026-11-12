@@ -228,6 +228,10 @@ pub enum KindSpec {
         /// property's value changes from the last part's (a changeover); left out when none.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         setup: Option<SetupSpec>,
+        /// The planned time to make one item (ISO 22400-2's planned runtime per item), for the
+        /// OEE results; its mean is the plan. Not simulated. Left out when none.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        planned_run_time: Option<DistSpec>,
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
     /// entity takes what the first of `needs` that can be met now asks for, holds it for its
@@ -772,6 +776,7 @@ impl From<&ElementKind> for KindSpec {
                 availability,
                 power,
                 setup,
+                planned_run_time,
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
@@ -786,6 +791,7 @@ impl From<&ElementKind> for KindSpec {
                 }),
                 power: power.as_ref().map(Into::into),
                 setup: setup.as_ref().map(Into::into),
+                planned_run_time: planned_run_time.as_ref().map(Into::into),
             },
             ElementKind::SharedTask {
                 service,
@@ -836,6 +842,7 @@ impl From<KindSpec> for ElementKind {
                 availability,
                 power,
                 setup,
+                planned_run_time,
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
@@ -849,6 +856,7 @@ impl From<KindSpec> for ElementKind {
                 availability: availability.into_iter().map(Into::into).collect(),
                 power: power.map(Into::into),
                 setup: setup.map(Into::into),
+                planned_run_time: planned_run_time.map(Into::into),
             },
             KindSpec::SharedTask {
                 service,
@@ -1642,6 +1650,7 @@ mod tests {
                 availability: Vec::new(),
                 power: None,
                 setup: None,
+                planned_run_time: None,
             })
         );
     }
