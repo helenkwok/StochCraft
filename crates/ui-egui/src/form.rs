@@ -977,10 +977,14 @@ fn array(
     };
     if ui.small_button(add).clicked() {
         let mut all = out.clone().unwrap_or_else(|| items.clone());
-        let mut last = items
-            .last()
-            .cloned()
-            .unwrap_or_else(|| json!({"probability": 1.0, "value": 1.0}));
+        let mut last = items.last().cloned().unwrap_or_else(|| {
+            if texts {
+                // A mix's first value, as its schema has it.
+                first_value(schema, item)
+            } else {
+                json!({"probability": 1.0, "value": 1.0})
+            }
+        });
         // A new value of a mix starts empty, its share the last one's.
         for f in fields.iter().filter(|f| is_text(f)) {
             last[f.as_str()] = json!("");

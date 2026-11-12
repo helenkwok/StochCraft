@@ -1825,8 +1825,10 @@ impl Model {
                         }
                     }
                     PropertyValue::Choice(values) => {
-                        let shares_ok = values.iter().all(|(s, _)| s.is_finite() && *s >= 0.0)
-                            && values.iter().map(|(s, _)| s).sum::<f64>() > 0.0;
+                        let shares_ok = values.iter().all(|(s, _)| s.is_finite() && *s >= 0.0) && {
+                            let total = values.iter().map(|(s, _)| s).sum::<f64>();
+                            total > 0.0 && total.is_finite()
+                        };
                         if !shares_ok {
                             out.push(Diagnostic::error(
                                 at,

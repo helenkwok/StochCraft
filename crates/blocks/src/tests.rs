@@ -545,3 +545,24 @@ fn a_mix_needs_shares_that_add_up_to_more_than_zero() {
         model.validate()
     );
 }
+
+#[test]
+fn a_mix_whose_shares_overflow_is_refused() {
+    let mut m = Builder::new();
+    let src = m.source("parts", Dist::Constant(1.0), Some(5));
+    m.property(
+        src,
+        "type",
+        None,
+        PropertyValue::Choice(vec![(1e308, "A".into()), (1e308, "B".into())]),
+    );
+    let out = m.sink("out");
+    m.connect(src, out);
+    let model = m.build(Experiment::default());
+    assert!(
+        model
+            .validate()
+            .iter()
+            .any(|d| matches!(&d.problem, Problem::BadProperty { name, .. } if name == "type"))
+    );
+}
