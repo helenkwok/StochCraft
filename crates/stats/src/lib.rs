@@ -289,6 +289,27 @@ mod tests {
     }
 
     #[test]
+    fn t_table_interpolates_between_rows() {
+        // Between the table rows 30 and 40 (2.042 and 2.021): strictly inside, and falling as
+        // df grows.
+        let mid: Vec<f64> = (31..=39)
+            .map(|df| t_critical_95(df).unwrap_or(f64::NAN))
+            .collect();
+        assert!(mid.iter().all(|t| *t > 2.021 && *t < 2.042), "{mid:?}");
+        assert!(mid.windows(2).all(|w| w[1] < w[0]), "{mid:?}");
+        // Published value for df 35 (NIST/SEMATECH e-Handbook of Statistical Methods, section
+        // 1.3.6.7.2, "Critical values of the Student's t distribution"): 2.030.
+        assert!(t_critical_95(35).is_some_and(|t| (t - 2.030).abs() < 0.002));
+        // Between 120 (1.980) and the normal limit 1.960: strictly inside, and falling as df
+        // grows.
+        let tail: Vec<f64> = (121..=999)
+            .map(|df| t_critical_95(df).unwrap_or(f64::NAN))
+            .collect();
+        assert!(tail.iter().all(|t| *t > 1.960 && *t < 1.980), "{tail:?}");
+        assert!(tail.windows(2).all(|w| w[1] < w[0]));
+    }
+
+    #[test]
     fn summary_interval() {
         let s = Summary::of(&[4.0, 6.0]).unwrap_or(Summary {
             n: 0,

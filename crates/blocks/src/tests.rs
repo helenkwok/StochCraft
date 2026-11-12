@@ -207,6 +207,61 @@ fn summarise_gives_intervals_per_element_and_metric() {
     assert_eq!(names.len(), 21);
 }
 
+#[test]
+fn summarise_leaves_out_replications_missing_a_metric() {
+    // Random service, so the desk's utilisation differs from one replication to the next.
+    let mut b = Builder::new();
+    let src = b.source("arrivals", Dist::Exponential { mean: 1.0 }, None);
+    let srv = b.server("desk", 1, Dist::Exponential { mean: 0.5 });
+    let out = b.sink("exit");
+    b.connect(src, srv);
+    b.connect(srv, out);
+    let mut reports: Vec<Report> = (1..=4)
+        .filter_map(|i| b.run(Rng::new(i), 0.25, 100.0).ok())
+        .collect();
+    assert_eq!(reports.len(), 4);
+    let utilisation: Vec<Option<f64>> = reports
+        .iter()
+        .map(|r| r.element("desk").and_then(|d| d.utilisation))
+        .collect();
+    let values: Vec<f64> = utilisation.iter().flatten().copied().collect();
+    assert_eq!(values.len(), 4, "{utilisation:?}");
+    let entered: Vec<f64> = reports
+        .iter()
+        .filter_map(|r| r.element("desk").map(|d| d.entered as f64))
+        .collect();
+    // Remove the desk's utilisation from replications 2 and 4 (indices 1 and 3) after the run.
+    for k in [1, 3] {
+        let desk = reports
+            .get_mut(k)
+            .and_then(|r| r.elements.iter_mut().find(|e| e.id.as_str() == "desk"));
+        if let Some(d) = desk {
+            d.utilisation = None;
+        }
+    }
+    let s = summarise(&reports);
+    let u = s.get("desk", Metric::Utilisation);
+    // Only replications 1 and 3 count: the mean is over those two, not all four.
+    let (u0, u2) = (values[0], values[2]);
+    assert!(
+        u.is_some_and(|u| u.n == 2 && (u.mean - (u0 + u2) / 2.0).abs() < 1e-12),
+        "{u:?}"
+    );
+    let samples = s
+        .elements
+        .iter()
+        .find(|e| e.id.as_str() == "desk")
+        .and_then(|e| e.samples(Metric::Utilisation));
+    assert_eq!(samples, Some(&[Some(u0), None, Some(u2), None][..]));
+    // Other metrics of the same element still count every replication.
+    let n = entered.len() as f64;
+    let mean_entered = entered.iter().sum::<f64>() / n;
+    assert!(
+        s.get("desk", Metric::Entered)
+            .is_some_and(|e| e.n == 4 && (e.mean - mean_entered).abs() < 1e-9)
+    );
+}
+
 fn mean_assigned(r: &Report, element: &str, property: &str) -> Option<f64> {
     r.element(element)?
         .properties
