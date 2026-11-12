@@ -99,8 +99,17 @@ fn without_power_there_is_no_energy() {
     let r = c.run(Rng::new(1)).unwrap_or_else(|e| panic!("{e}"));
     let m = r.element("machine");
     assert_eq!(m.and_then(|e| e.energy), None);
-    assert_eq!(m.and_then(|e| e.time_processing), None);
+    // Where its time goes is reported all the same: the states that can happen to it.
+    assert!(
+        m.and_then(|e| e.time_processing)
+            .is_some_and(|x| (x - 0.25).abs() < 0.02),
+        "{m:?}"
+    );
+    assert!(m.and_then(|e| e.time_starved).is_some());
+    // No calendar, no breakdowns, no finite buffer after it: none of those states.
     assert_eq!(m.and_then(|e| e.time_off_shift), None);
+    assert_eq!(m.and_then(|e| e.time_failed), None);
+    assert_eq!(m.and_then(|e| e.time_blocked), None);
     assert_eq!(r.element("out").and_then(|e| e.specific_energy), None);
 }
 

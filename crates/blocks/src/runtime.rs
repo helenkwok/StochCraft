@@ -1074,10 +1074,22 @@ impl BlockStats {
             } => Some((f64::from(*capacity), p)),
             _ => None,
         };
-        let share = |tw: &TimeWeighted| {
-            let (capacity, _) = powered?;
-            tw.average(end).map(|x| x / capacity)
+        // Every server reports the share of its units' time in each state that can happen to it
+        // (all of them with a power, for its energy): processing and starved always, blocked
+        // where it sends to a finite buffer or across a transfer, failed with breakdowns.
+        let share = |tw: &TimeWeighted, applies: bool| match kind {
+            ElementKind::Server {
+                capacity, power, ..
+            } if applies || power.is_some() => tw.average(end).map(|x| x / f64::from(*capacity)),
+            _ => None,
         };
+        let fails = matches!(
+            kind,
+            ElementKind::Server {
+                breakdown: Some(_),
+                ..
+            }
+        );
         let server = matches!(
             kind,
             ElementKind::Server { .. } | ElementKind::SharedTask { .. }
@@ -1184,10 +1196,10 @@ impl BlockStats {
                     .map(|o| o / f64::from(*capacity)),
                 _ => None,
             },
-            time_processing: share(&self.states.processing),
-            time_starved: share(&self.states.starved),
-            time_blocked: share(&self.states.blocked),
-            time_failed: share(&self.states.failed),
+            time_processing: share(&self.states.processing, true),
+            time_starved: share(&self.states.starved, true),
+            time_blocked: share(&self.states.blocked, blocks || transfers),
+            time_failed: share(&self.states.failed, fails),
             // Servers that set up, whether or not they have a power.
             time_setup: match kind {
                 ElementKind::Server {
