@@ -792,6 +792,7 @@ fn records(
             |(i, n)| if n.is_empty() { i.clone() } else { n.clone() },
         )
     };
+    let used = |id: &str| items.iter().any(|it| it["calendar"] == id);
     ui.indent(key, |ui| {
         for (i, it) in items.iter().enumerate() {
             let k = format!("{key}/{i}");
@@ -804,7 +805,16 @@ fn records(
                     .width(170.0)
                     .show_ui(ui, |ui| {
                         for (id, _) in &calendars {
-                            if ui.selectable_label(id == now, name_of(id)).clicked() && id != now {
+                            // The first active entry applies, so each calendar has one entry.
+                            let taken = id != now && used(id);
+                            if ui
+                                .add_enabled(
+                                    !taken,
+                                    egui::Button::selectable(id == now, name_of(id)),
+                                )
+                                .clicked()
+                                && id != now
+                            {
                                 let mut all = out.clone().unwrap_or_else(|| items.clone());
                                 all[i]["calendar"] = json!(id);
                                 out = Some(all);
@@ -853,7 +863,7 @@ fn records(
                 }
             });
         }
-        match calendars.first() {
+        match calendars.iter().find(|(id, _)| !used(id)) {
             Some((first, _)) => {
                 if ui.small_button(t("Add calendar entry")).clicked() {
                     let mut all = out.clone().unwrap_or_else(|| items.clone());
@@ -863,9 +873,11 @@ fn records(
                     out = Some(all);
                 }
             }
-            None => {
+            None if calendars.is_empty() => {
                 ui.label(theme::weak(ui, t("The model has no calendars yet.")));
             }
+            // Every calendar has its entry.
+            None => {}
         }
     });
     out.map(Value::Array)

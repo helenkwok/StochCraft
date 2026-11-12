@@ -603,6 +603,8 @@ fn a_servers_transfer_breakdowns_and_availability_are_edited_in_its_inspector() 
         json!([{"calendar": "lunch", "available": false}])
     );
     h.get_by_role_and_label(Role::ComboBox, "Calendar 1");
+    // The first active entry applies, so a calendar has one entry: none left to add.
+    assert!(h.query_by_label("Add calendar entry").is_none());
     click(&mut h, Role::CheckBox, "Available outside calendars");
     assert_eq!(element(&h, "serve")["available"], json!(false));
     // Each edit is one undo step.
