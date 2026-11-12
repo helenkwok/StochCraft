@@ -135,3 +135,26 @@ fn a_failure_interrupts_a_setup_and_it_resumes() {
         "repairs add to the time in the machine"
     );
 }
+
+/// Adding a setup does not change the service times drawn: with a setup of no time, a run gives
+/// exactly the results of the same model without one.
+#[test]
+fn a_setup_leaves_the_service_times_as_they_were() {
+    let run = |setup: bool| {
+        let mut b = Builder::new();
+        let src = b.source("parts", Dist::Exponential { mean: 1.0 }, None);
+        let m = b.server("machine", 1, Dist::Exponential { mean: 0.8 });
+        if setup {
+            b.setup(m, Setup::every_job(Dist::Constant(0.0)));
+        }
+        let out = b.sink("out");
+        b.connect(src, m);
+        b.connect(m, out);
+        let Ok(r) = b.run(Rng::new(11), 0.0, 5_000.0) else {
+            panic!("no report")
+        };
+        let e = element(&r, "out");
+        (e.left, e.mean_time_in_system)
+    };
+    assert_eq!(run(true), run(false));
+}

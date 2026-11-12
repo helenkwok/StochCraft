@@ -1880,6 +1880,9 @@ impl Setups {
     }
 }
 
+/// Mixed into the seed of a server's setup stream, so it is not its service stream's.
+const SETUP_STREAM: u64 = 0x5e7f_a11d_c4a9_6e01;
+
 /// What a server whose units fail, follow a calendar or set up runs with.
 struct UnitServer {
     capacity: u32,
@@ -1926,8 +1929,11 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
     let me = tag(env.me);
     // The failures draw from their own stream, so they do not change the service times.
     let mut fail_rng = breakdown.as_ref().map(|_| env.rng.fork());
-    // So do the setups (forked after the failures', so those stay as they were).
-    let mut setup_rng = setup.as_ref().map(|_| env.rng.fork());
+    // So do the setups. Their stream is seeded without drawing from the element's own (forking
+    // would), so the service times and the failures stay those of the model without setups.
+    let mut setup_rng = setup
+        .as_ref()
+        .map(|_| Rng::new(env.rng.clone().next_u64() ^ SETUP_STREAM));
     let units: Rc<RefCell<Vec<Unit>>> = Rc::new(RefCell::new(
         (0..capacity).map(|_| Unit::default()).collect(),
     ));

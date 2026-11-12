@@ -1910,7 +1910,12 @@ impl Editor {
                         vendor_writes.push((
                             id.clone(),
                             crate::bpsim::CHANGEOVER,
-                            changeover.map(changeover_element),
+                            changeover.map(|x| {
+                                // Its property and values as the file's encoding needs.
+                                let mut v = changeover_element(x);
+                                self.text_attrs(&mut v);
+                                v
+                            }),
                         ));
                     }
                     match (&e.kind, was) {
@@ -2216,7 +2221,8 @@ impl Editor {
     /// expression) as character references where the file's encoding needs it.
     fn text_attrs(&self, e: &mut Element) {
         if self.ascii {
-            for a in ["name", "value"] {
+            // Names and text values; a changeover's property and the values it changes between.
+            for a in ["name", "value", "property", "from", "to"] {
                 if let Some(v) = e.attr(a).filter(|v| !v.is_ascii()) {
                     self.set_text_attr(e, a, &v);
                 }

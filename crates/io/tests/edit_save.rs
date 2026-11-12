@@ -349,6 +349,28 @@ fn new_names_in_a_latin_1_file_are_character_references() {
     assert!(text(&saved).contains("Caf&#233;") && !text(&saved).contains("Café"));
     let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(back.model, m);
+
+    // A changeover's property and values too.
+    let mut m = back.model.clone();
+    if let ElementKind::Server { setup, .. } = &mut element(&mut m, "serve").kind {
+        *setup = Some(stochcraft_model::Setup {
+            time: Dist::Constant(1.0),
+            on_change_of: Some("thé".into()),
+            by_change: vec![stochcraft_model::Change {
+                from: "vert".into(),
+                to: "青".into(),
+                time: Dist::Constant(2.0),
+            }],
+        });
+    }
+    let saved = back.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    assert!(
+        t.contains("th&#233;") && t.contains("&#38738;") && !t.contains('青'),
+        "{t}"
+    );
+    let again = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(again.model, m);
 }
 
 #[test]

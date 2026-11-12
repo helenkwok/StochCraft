@@ -463,8 +463,9 @@ pub enum Metric {
     Left,
     /// Servers: time-average number waiting for a unit.
     MeanQueueLength,
-    /// Servers: mean time from arrival to start of service, over the entities that started
-    /// service. Entities still waiting at the end are left out, so for an overloaded server the
+    /// Servers: mean time from arrival to start of service (a unit taking the entity; a setup
+    /// is part of its service, as BPSim counts it in the activity's duration), over the
+    /// entities that started service. Entities still waiting at the end are left out, so for an overloaded server the
     /// mean is biased low.
     MeanWait,
     /// Servers: time-average fraction of units busy.
