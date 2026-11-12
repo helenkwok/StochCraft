@@ -181,6 +181,7 @@ pub fn label(name: &str) -> String {
         "idle_outside" => "No arrivals outside calendars",
         "transfer" => "Transfer time",
         "transfer_holds_sender" => "Sender waits during transfer",
+        "planned_run_time" => "Planned run time per item",
         "breakdown" => "Breakdowns",
         "time_to_failure" => "Time to failure",
         "repair" => "Repair time",

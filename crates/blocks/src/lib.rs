@@ -531,6 +531,19 @@ pub enum Metric {
     /// Servers that set up (a setup before every job, or changeovers): time-average fraction of
     /// units setting up. Their utilisation includes it (a unit setting up holds its part).
     TimeSetup,
+    /// Servers: ISO 22400-2's availability, the time producing over the time planned to be
+    /// busy: [`Metric::TimeProcessing`] over one less [`Metric::TimeOffShift`] (planned
+    /// downtime). Setups, failures, starving and blocking all lower it. Unlike
+    /// [`Metric::Availability`], which only failures lower.
+    OeeAvailability,
+    /// Servers with a planned run time per item: ISO 22400-2's effectiveness, the planned run
+    /// time per item times the items produced ([`Metric::Left`]) over the time producing. Below
+    /// 1 when jobs take longer than planned. An item still held at the end, its job done but
+    /// not yet sent on (blocked), is not yet counted.
+    OeeEffectiveness,
+    /// Servers that set up: ISO 22400-2's setup ratio, the time setting up over the time
+    /// setting up and producing.
+    SetupRatio,
     /// Servers with a power: energy used in the measured window, in kilowatt-hours: each
     /// state's power times the exact time the units spent in it, cut at the end of the warm-up
     /// and at the end of the run.
@@ -543,7 +556,7 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 22] = [
+    pub const ALL: [Metric; 25] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -564,6 +577,9 @@ impl Metric {
         Metric::TimeBlocked,
         Metric::TimeFailed,
         Metric::TimeSetup,
+        Metric::OeeAvailability,
+        Metric::OeeEffectiveness,
+        Metric::SetupRatio,
         Metric::Energy,
         Metric::SpecificEnergy,
     ];
@@ -596,6 +612,9 @@ impl Metric {
             Metric::TimeBlocked => "time_blocked",
             Metric::TimeFailed => "time_failed",
             Metric::TimeSetup => "time_setup",
+            Metric::OeeAvailability => "oee_availability",
+            Metric::OeeEffectiveness => "oee_effectiveness",
+            Metric::SetupRatio => "setup_ratio",
             Metric::Energy => "energy",
             Metric::SpecificEnergy => "specific_energy",
         }
@@ -637,6 +656,12 @@ pub struct ElementReport {
     pub time_failed: Option<f64>,
     /// Servers that set up: [`Metric::TimeSetup`].
     pub time_setup: Option<f64>,
+    /// Servers: [`Metric::OeeAvailability`].
+    pub oee_availability: Option<f64>,
+    /// Servers with a planned run time per item: [`Metric::OeeEffectiveness`].
+    pub oee_effectiveness: Option<f64>,
+    /// Servers that set up: [`Metric::SetupRatio`].
+    pub setup_ratio: Option<f64>,
     pub energy: Option<f64>,
     /// Sinks, when any server has a power: [`Metric::SpecificEnergy`].
     pub specific_energy: Option<f64>,
@@ -671,6 +696,9 @@ impl ElementReport {
             Metric::TimeBlocked => self.time_blocked,
             Metric::TimeFailed => self.time_failed,
             Metric::TimeSetup => self.time_setup,
+            Metric::OeeAvailability => self.oee_availability,
+            Metric::OeeEffectiveness => self.oee_effectiveness,
+            Metric::SetupRatio => self.setup_ratio,
             Metric::Energy => self.energy,
             Metric::SpecificEnergy => self.specific_energy,
         }

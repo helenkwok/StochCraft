@@ -1213,6 +1213,39 @@ impl BlockStats {
                     .map(|x| x / f64::from(*capacity)),
                 _ => None,
             },
+            // ISO 22400-2's OEE elements. Off shift is planned downtime, so the time planned to
+            // be busy is the units' time less it.
+            oee_availability: match kind {
+                ElementKind::Server { capacity, .. } => self
+                    .states
+                    .processing
+                    .average(end)
+                    .zip(self.states.off_shift.average(end))
+                    .and_then(|(p, o)| {
+                        let planned = f64::from(*capacity) - o;
+                        (planned > 0.0).then(|| p / planned)
+                    }),
+                _ => None,
+            },
+            oee_effectiveness: match kind {
+                ElementKind::Server {
+                    planned_run_time: Some(plan),
+                    ..
+                } => plan.mean().and_then(|m| {
+                    let producing = self.states.processing.integral(end);
+                    (producing > 0.0).then(|| m * self.left as f64 / producing)
+                }),
+                _ => None,
+            },
+            setup_ratio: match kind {
+                ElementKind::Server { setup: Some(_), .. } => self
+                    .states
+                    .setup
+                    .average(end)
+                    .zip(self.states.processing.average(end))
+                    .and_then(|(s, p)| (s + p > 0.0).then(|| s / (s + p))),
+                _ => None,
+            },
             // Only once time has passed, as for the time-averages.
             energy: powered.and_then(|(_, p)| {
                 self.states
@@ -2552,6 +2585,9 @@ impl Pools {
                     time_blocked: None,
                     time_failed: None,
                     time_setup: None,
+                    oee_availability: None,
+                    oee_effectiveness: None,
+                    setup_ratio: None,
                     energy: None,
                     specific_energy: None,
                     lost: None,
