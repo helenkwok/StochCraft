@@ -2742,8 +2742,15 @@ fn a_planned_run_time_gives_effectiveness_and_is_removed() {
         json!({"id": "desk", "planned_run_time": {"type": "constant", "value": 0.1}}),
     );
     let r = ok(&mut e, "run", json!({"replications": 2}));
-    assert!(metric(&r, "oee_effectiveness").is_some_and(|x| x > 0.0), "{r}");
-    ok(&mut e, "block.set", json!({"id": "desk", "planned_run_time": null}));
+    assert!(
+        metric(&r, "oee_effectiveness").is_some_and(|x| x > 0.0),
+        "{r}"
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "planned_run_time": null}),
+    );
     let m = ok(&mut e, "model.get", json!({}));
     assert!(!m.to_string().contains("planned_run_time"), "{m}");
 }

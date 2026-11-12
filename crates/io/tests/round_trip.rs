@@ -810,9 +810,7 @@ fn a_planned_run_time_is_written_saved_and_removed() {
         unreachable!()
     };
     let removed = again.opened.save(&edited);
-    let Ok(removed) = removed else {
-        unreachable!()
-    };
+    let Ok(removed) = removed else { unreachable!() };
     let text = String::from_utf8_lossy(&removed);
     assert!(!text.contains("plannedRunTime"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
