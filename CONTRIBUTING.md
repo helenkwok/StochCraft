@@ -45,7 +45,7 @@ That runs fmt, the layer check, Clippy with `-D warnings` and the tests. `cargo 
 --affected origin/main` does the same for only the crates your change affects, which is what CI
 runs on a pull request. `cargo xtask wasm` checks that the layered crates build for the browser,
 and `cargo xtask golden` checks that the golden models give the pinned results on wasm32 too
-(it needs the `wasm32-wasip1` target and Node 22). A change that is meant to alter results
+(it needs the `wasm32-wasip1` target and Node 22 or later; CI uses the latest LTS). A change that is meant to alter results
 rewrites the pinned digests with `STOCHCRAFT_BLESS=1 cargo test -p stochcraft-testkit`; say why
 in the commit.
 

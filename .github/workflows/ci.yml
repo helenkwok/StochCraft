@@ -205,12 +205,11 @@ jobs:
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
           key: wasm
-      # Node runs the wasm32-wasip1 test binary through its built-in WASI (xtask/wasi-run.mjs). Node 22
-      # crashed natively (SIGSEGV, also without its wasm trap handler) on the golden tests on GitHub's
-      # runner only, so this job uses Node 24.
+      # Node runs the wasm32-wasip1 test binary through its built-in WASI (xtask/wasi-run.mjs). This
+      # job uses the latest LTS release of Node; wasi-run.mjs works around a Node 22 crash (#102).
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: lts/*
       - run: cargo xtask wasm
         env:
           CRAFT_FONTS_DIR: ${{ github.workspace }}/craft-fonts
