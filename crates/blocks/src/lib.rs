@@ -514,17 +514,18 @@ pub enum Metric {
     /// break, or resumes off shift after a repair, is processing; a finished entity held
     /// during a break is blocked.
     TimeOffShift,
-    /// Servers with a power: time-average fraction of units processing (serving an entity, in a
+    /// Servers: time-average fraction of units processing (serving an entity, in a
     /// break too, and not failed).
     TimeProcessing,
-    /// Servers with a power: time-average fraction of units starved (idle, on shift and up).
+    /// Servers: time-average fraction of units starved (idle, on shift and up).
     TimeStarved,
-    /// Servers with a power: time-average fraction of units blocked (holding a finished entity
+    /// Servers that send to a finite buffer or across a transfer (all with a power):
+    /// time-average fraction of units blocked (holding a finished entity
     /// while the next buffer is full, or through a transfer to the next element, in a break too;
     /// not failed). Unlike [`Metric::BlockingProbability`], a failed unit holding an entity is
     /// not counted as blocked.
     TimeBlocked,
-    /// Servers with a power: time-average fraction of units failed or under repair; the
+    /// Servers with breakdowns (all with a power): time-average fraction of units failed or under repair; the
     /// complement of [`Metric::Availability`].
     TimeFailed,
     /// Servers that set up (a setup before every job, or changeovers): time-average fraction of
@@ -628,8 +629,8 @@ pub struct ElementReport {
     pub availability: Option<f64>,
     /// Servers whose units follow a calendar: [`Metric::TimeOffShift`].
     pub time_off_shift: Option<f64>,
-    /// Servers with a power: [`Metric::TimeProcessing`] and the other states, and
-    /// [`Metric::Energy`].
+    /// Servers: [`Metric::TimeProcessing`] and the other states that can happen to them;
+    /// servers with a power: all of them, and [`Metric::Energy`].
     pub time_processing: Option<f64>,
     pub time_starved: Option<f64>,
     pub time_blocked: Option<f64>,
