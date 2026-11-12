@@ -1402,4 +1402,26 @@ fn removing_what_an_inherited_scenario_sets_is_refused() {
     assert!(!text(&saved).contains("stochcraft:breakdown"));
     let back = read_scenario(&saved, Some("base")).unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(back.model, m);
+
+    // Made not interruptible where an inherited scenario says it is: an explicit `false`.
+    let interrupting = original.replace(
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:PriorityParameters><bpsim:Interruptible><bpsim:BooleanParameter value="true"/></bpsim:Interruptible></bpsim:PriorityParameters>"#,
+    );
+    let child = read_scenario(interrupting.as_bytes(), Some("two-clerks"))
+        .unwrap_or_else(|e| panic!("{e}"));
+    let mut m = child.model.clone();
+    if let ElementKind::Server {
+        breakdown: Some(b), ..
+    } = &mut element(&mut m, "serve").kind
+    {
+        assert!(b.interruptible, "inherited");
+        b.interruptible = false;
+    }
+    let saved = child.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let back = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
 }

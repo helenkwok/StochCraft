@@ -1849,12 +1849,13 @@ impl Editor {
                             crate::bpsim::BREAKDOWN,
                             new_breakdown.map(breakdown_element),
                         ));
-                        let yes = new_breakdown.is_some_and(|b| b.interruptible);
+                        // With breakdowns, said either way: a `false` of the scenario's own
+                        // overrides an inherited `true`, where removing it could not.
                         writes.push((
                             id.clone(),
                             "PriorityParameters",
                             "Interruptible",
-                            yes.then(|| interruptible_param(true)),
+                            new_breakdown.map(|b| interruptible_param(b.interruptible)),
                         ));
                     }
                     // The transfer time into the server.
