@@ -177,6 +177,7 @@ impl App {
 
         let mut changed: Option<Vec<Value>> = None;
         let unit = self.time_unit_label();
+        let mut removed = None;
         ui.indent(format!("calendar/{id}/events"), |ui| {
             for (i, e) in events.iter().enumerate() {
                 let k = format!("calendar/{id}/{i}");
@@ -265,9 +266,7 @@ impl App {
                         .on_hover_text(t("Remove this period"))
                         .clicked()
                     {
-                        let mut all = changed.clone().unwrap_or_else(|| events.clone());
-                        all.remove(i);
-                        changed = Some(all);
+                        removed = Some(i);
                     }
                 });
                 if rule.freq == "WEEKLY" {
@@ -311,6 +310,13 @@ impl App {
                 changed = Some(all);
             }
         });
+        // Removed last, so the other periods' edits this frame use the indexes they were drawn
+        // with.
+        if let Some(i) = removed {
+            let mut all = changed.unwrap_or(events);
+            all.remove(i);
+            changed = Some(all);
+        }
         if let Some(all) = changed {
             self.execute("calendar.set", json!({ "id": id, "events": all }));
         }
