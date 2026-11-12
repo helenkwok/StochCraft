@@ -37,6 +37,7 @@
 	Add point	Engadir punto
 	Add pool	Engadir grupo
 	Add property	Engadir propiedade
+	Add row	Engadir fila
 	Add value	Engadir valor
 	Added calendar {id}	Engadiuse o calendario {id}
 	Added pool {id}	Engadiuse o grupo {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Un só cambio, que Desfacer reverte
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un empregado, chegadas aleatorias: a cola clásica, comprobada coa teoría.
 	One task per BPSim distribution, to compare their spread.	Unha tarefa por distribución BPSim para comparar a súa dispersión.
+	Only when this property changes	Só cando cambia esta propiedade
 	Open	Abrir
 	Open Example	Abrir exemplo
 	Open Model	Abrir modelo
@@ -341,6 +343,8 @@
 	Set a value	Definir un valor
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Establécese para cada entidade ao entrar neste bloque. As expresións len os valores cos que chegou, como getProperty('issues') - 1.
 	Settings	Axustes
+	Setup	Preparación
+	Setup time	Tempo de preparación
 	Shape	Forma
 	Share	Proporción
 	Share of arrivals lost	Proporción de chegadas perdidas
@@ -395,10 +399,12 @@
 	Time failed	Tempo avariado
 	Time off shift	Tempo fóra de quenda
 	Time processing	Tempo procesando
+	Time setting up	Tempo preparando
 	Time starved	Tempo sen traballo
 	Time to failure	Tempo ata a avaría
 	Time to the stop condition	Tempo ata a condición de parada
 	Time unit	Unidade de tempo
+	Times for particular changes	Tempos para cambios concretos
 	To	A
 	Tops	Bordos superiores
 	Transfer time	Tempo de transferencia

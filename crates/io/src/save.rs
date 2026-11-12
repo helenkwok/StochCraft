@@ -21,10 +21,10 @@ use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
-    condition_element, dist_element, edge_ends, estimate_element, interruptible_param, numeric,
-    power_element, probability_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, routing_element, size, start_param, stop_element, timer_param,
-    transfer_element,
+    changeover_element, condition_element, dist_element, edge_ends, estimate_element,
+    interruptible_param, numeric, power_element, probability_element, property_element,
+    quantity_element, quantity_param, queue_capacity_element, routing_element, size, start_param,
+    stop_element, timer_param, transfer_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -1889,6 +1889,35 @@ impl Editor {
                             new_power.map(power_element),
                         ));
                     }
+                    // The setup: BPSim's SetUpTime before every job, or a changeover.
+                    let old_setup = match was {
+                        Some(ElementKind::Server { setup, .. }) => setup.as_ref(),
+                        _ => None,
+                    };
+                    let new_setup = match &e.kind {
+                        ElementKind::Server { setup, .. } => setup.as_ref(),
+                        _ => None,
+                    };
+                    if new_setup != old_setup || (is_server && !was_server) {
+                        let every_job = new_setup.filter(|x| x.on_change_of.is_none());
+                        let changeover = new_setup.filter(|x| x.on_change_of.is_some());
+                        writes.push((
+                            id.clone(),
+                            "TimeParameters",
+                            "SetUpTime",
+                            every_job.map(|x| dist_element(&x.time)),
+                        ));
+                        vendor_writes.push((
+                            id.clone(),
+                            crate::bpsim::CHANGEOVER,
+                            changeover.map(|x| {
+                                // Its property and values as the file's encoding needs.
+                                let mut v = changeover_element(x);
+                                self.text_attrs(&mut v);
+                                v
+                            }),
+                        ));
+                    }
                     match (&e.kind, was) {
                         (
                             ElementKind::Server {
@@ -1994,6 +2023,8 @@ impl Editor {
                         vendor_writes.push((id.clone(), crate::bpsim::BREAKDOWN, None));
                         vendor_writes.push((id.clone(), crate::bpsim::TRANSFER_TIME, None));
                         vendor_writes.push((id.clone(), crate::bpsim::POWER, None));
+                        vendor_writes.push((id.clone(), crate::bpsim::CHANGEOVER, None));
+                        writes.push((id.clone(), "TimeParameters", "SetUpTime", None));
                         writes.push((id.clone(), "PriorityParameters", "Interruptible", None));
                     }
                 }
@@ -2190,7 +2221,8 @@ impl Editor {
     /// expression) as character references where the file's encoding needs it.
     fn text_attrs(&self, e: &mut Element) {
         if self.ascii {
-            for a in ["name", "value"] {
+            // Names and text values; a changeover's property and the values it changes between.
+            for a in ["name", "value", "property", "from", "to"] {
                 if let Some(v) = e.attr(a).filter(|v| !v.is_ascii()) {
                     self.set_text_attr(e, a, &v);
                 }

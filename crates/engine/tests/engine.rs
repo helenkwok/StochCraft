@@ -862,16 +862,13 @@ fn results_carry_a_run_record() {
     // From a file: its name, scenario and what was noted when reading it.
     let mm1 = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
     let mut f = Engine::new();
-    ok(&mut f, "file.open", json!({"path": mm1.to_string_lossy()}));
+    let opened = ok(&mut f, "file.open", json!({"path": mm1.to_string_lossy()}));
     let r = ok(&mut f, "run", json!({"replications": 2}));
     assert_eq!(r["record"]["scenario"], "base");
     assert_eq!(r["record"]["format"], "bpmn");
     assert_eq!(r["record"]["unsaved_changes"], false);
-    assert!(
-        r["record"]["file_notes"]
-            .as_array()
-            .is_some_and(|n| !n.is_empty())
-    );
+    assert!(r["record"]["file_notes"].is_array(), "{r}");
+    assert_eq!(r["record"]["file_notes"], opened["notes"]);
 }
 
 #[test]
@@ -2671,4 +2668,56 @@ fn a_server_follows_its_calendar() {
         ),
         ErrorCode::InvalidParams
     );
+}
+
+#[test]
+fn a_setup_is_set_run_and_removed() {
+    let mut e = help_desk();
+    // A changeover on a property no element sets is the model's problem, not a refusal.
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "setup": {
+            "time": {"type": "constant", "value": 0.25},
+            "on_change_of": "tier",
+            "by_change": [{"from": "a", "to": "b", "time": {"type": "constant", "value": 1.0}}],
+        }}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let desk = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(desk["setup"]["on_change_of"], "tier", "{m}");
+    // Before every job instead, with a power: the states, setup among them, cover the time.
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "setup": {"time": {"type": "constant", "value": 0.25}},
+               "power": {"processing": 10.0, "idle": 1.0}}),
+    );
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    let metric = |name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    assert!(metric("time_setup").is_some_and(|x| x > 0.0), "{r}");
+    let shares: f64 = [
+        "time_processing",
+        "time_setup",
+        "time_starved",
+        "time_blocked",
+        "time_failed",
+        "time_off_shift",
+    ]
+    .iter()
+    .filter_map(|n| metric(n))
+    .sum();
+    assert!((shares - 1.0).abs() < 1e-9, "{shares}: {r}");
+    ok(&mut e, "block.set", json!({"id": "desk", "setup": null}));
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(!m.to_string().contains("\"setup\""), "{m}");
 }

@@ -11,7 +11,8 @@ use stochcraft_des::{
 };
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
-    Breakdown, Element, ElementId, ElementKind, Model, Need, Power, ResourcePool, Routing, Timed,
+    Breakdown, Element, ElementId, ElementKind, Model, Need, Power, ResourcePool, Routing, Setup,
+    Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -383,12 +384,27 @@ impl Compiled {
                     breakdown,
                     available,
                     availability,
+                    setup,
                     ..
                 } => {
                     let shifts = calendars.availability(available, &availability);
                     let always = matches!(shifts.as_slice(), [(_, true)]);
-                    if breakdown.is_some() || !always {
-                        spawn_unit_server(&mut sim, env, capacity, service, breakdown, shifts);
+                    // A changeover reads the part's property from its slot.
+                    let setup = setup.map(|setup| Setups {
+                        slot: setup.on_change_of.as_deref().and_then(|name| {
+                            self.slots.binary_search_by(|s| s.as_str().cmp(name)).ok()
+                        }),
+                        setup,
+                    });
+                    if breakdown.is_some() || !always || setup.is_some() {
+                        let parts = UnitServer {
+                            capacity,
+                            service,
+                            breakdown,
+                            shifts,
+                            setup,
+                        };
+                        spawn_unit_server(&mut sim, env, parts);
                     } else {
                         spawn_server(&mut sim, env, capacity, service);
                     }
@@ -822,6 +838,7 @@ pub(crate) struct Sends {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum UnitState {
     Failed,
+    Setup,
     Processing,
     Blocked,
     OffShift,
@@ -831,6 +848,7 @@ enum UnitState {
 /// How many of a server's units are in each state, over time; they add up to its capacity.
 pub(crate) struct UnitStates {
     failed: TimeWeighted,
+    setup: TimeWeighted,
     off_shift: TimeWeighted,
     blocked: TimeWeighted,
     processing: TimeWeighted,
@@ -841,6 +859,7 @@ impl UnitStates {
     fn new(t: f64) -> Self {
         Self {
             failed: TimeWeighted::new(t, 0.0),
+            setup: TimeWeighted::new(t, 0.0),
             off_shift: TimeWeighted::new(t, 0.0),
             blocked: TimeWeighted::new(t, 0.0),
             processing: TimeWeighted::new(t, 0.0),
@@ -850,6 +869,7 @@ impl UnitStates {
 
     fn reset(&mut self, t: f64) {
         self.failed.reset(t);
+        self.setup.reset(t);
         self.off_shift.reset(t);
         self.blocked.reset(t);
         self.processing.reset(t);
@@ -859,6 +879,7 @@ impl UnitStates {
     fn get(&mut self, s: UnitState) -> Option<&mut TimeWeighted> {
         match s {
             UnitState::Failed => Some(&mut self.failed),
+            UnitState::Setup => Some(&mut self.setup),
             UnitState::OffShift => Some(&mut self.off_shift),
             UnitState::Blocked => Some(&mut self.blocked),
             UnitState::Processing => Some(&mut self.processing),
@@ -872,6 +893,8 @@ impl UnitStates {
 struct Doing {
     /// Serving an entity, including one whose service a failure interrupted.
     processing: bool,
+    /// Setting up for the entity it serves (within `processing`).
+    setup: bool,
     /// Holding a finished entity, blocked.
     holding: bool,
     /// Failed or under repair.
@@ -901,6 +924,8 @@ impl UnitBook {
     fn state(&self, d: Doing) -> UnitState {
         if d.down {
             UnitState::Failed
+        } else if d.processing && d.setup {
+            UnitState::Setup
         } else if d.processing {
             UnitState::Processing
         } else if d.holding {
@@ -1017,7 +1042,8 @@ impl BlockStats {
     /// spent in it.
     fn energy(&self, p: &Power, end: f64, hours: f64) -> f64 {
         let s = &self.states;
-        let kw_units = p.processing * s.processing.integral(end)
+        // A unit setting up draws its processing power (its machine runs).
+        let kw_units = p.processing * (s.processing.integral(end) + s.setup.integral(end))
             + p.idle * s.starved.integral(end)
             + p.while_blocked() * s.blocked.integral(end)
             + p.while_failed() * s.failed.integral(end)
@@ -1162,6 +1188,19 @@ impl BlockStats {
             time_starved: share(&self.states.starved),
             time_blocked: share(&self.states.blocked),
             time_failed: share(&self.states.failed),
+            // Servers that set up, whether or not they have a power.
+            time_setup: match kind {
+                ElementKind::Server {
+                    capacity,
+                    setup: Some(_),
+                    ..
+                } => self
+                    .states
+                    .setup
+                    .average(end)
+                    .map(|x| x / f64::from(*capacity)),
+                _ => None,
+            },
             // Only once time has passed, as for the time-averages.
             energy: powered.and_then(|(_, p)| {
                 self.states
@@ -1809,6 +1848,48 @@ struct Unit {
     /// While down with no entity: the server's place it keeps, so that no entity gets in for
     /// it ([`reserve_place`]).
     reserved: Option<ResourceGuard>,
+    /// For a changeover: the value of the watched property of the last entity it served
+    /// (`None` before its first; `Some(None)` when that entity had none).
+    last: Option<Option<String>>,
+}
+
+/// A server's setup, with the slot of the property a changeover watches.
+struct Setups {
+    setup: Setup,
+    slot: Option<usize>,
+}
+
+impl Setups {
+    /// The setup time before serving `entity` on unit `x`, if it needs one; for a changeover,
+    /// the unit now remembers the entity's value.
+    fn before(&self, entity: &Entity, x: &mut Unit, rng: &mut Rng) -> Option<f64> {
+        if self.setup.on_change_of.is_none() {
+            return Some(self.setup.time.sample(rng));
+        }
+        let value = self
+            .slot
+            .and_then(|k| entity.properties.get(k).cloned().flatten())
+            .map(|h| h.value().text());
+        match x.last.replace(value.clone()) {
+            Some(last) if last != value => {
+                let (from, to) = (last.unwrap_or_default(), value.unwrap_or_default());
+                Some(self.setup.time_for(&from, &to).sample(rng))
+            }
+            _ => None,
+        }
+    }
+}
+
+/// Mixed into the seed of a server's setup stream, so it is not its service stream's.
+const SETUP_STREAM: u64 = 0x5e7f_a11d_c4a9_6e01;
+
+/// What a server whose units fail, follow a calendar or set up runs with.
+struct UnitServer {
+    capacity: u32,
+    service: Dist,
+    breakdown: Option<Breakdown>,
+    shifts: Vec<(f64, bool)>,
+    setup: Option<Setups>,
 }
 
 /// A unit that is down and holds no entity cannot take one, so the place in the server's finite
@@ -1836,18 +1917,23 @@ fn reserve_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places
 /// A unit checks the calendar only as it takes an entity: a job under way when the shift ends
 /// finishes, and one a failure interrupted resumes after the repair, shift or not. Failures
 /// come in elapsed time, and repairs go on, through the breaks.
-fn spawn_unit_server(
-    sim: &mut Sim,
-    mut env: BlockEnv,
-    capacity: u32,
-    service: Dist,
-    breakdown: Option<Breakdown>,
-    shifts: Vec<(f64, bool)>,
-) {
+fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
+    let UnitServer {
+        capacity,
+        service,
+        breakdown,
+        shifts,
+        setup,
+    } = parts;
     let ctx = env.ctx.clone();
     let me = tag(env.me);
     // The failures draw from their own stream, so they do not change the service times.
     let mut fail_rng = breakdown.as_ref().map(|_| env.rng.fork());
+    // So do the setups. Their stream is seeded without drawing from the element's own (forking
+    // would), so the service times and the failures stay those of the model without setups.
+    let mut setup_rng = setup
+        .as_ref()
+        .map(|_| Rng::new(env.rng.clone().next_u64() ^ SETUP_STREAM));
     let units: Rc<RefCell<Vec<Unit>>> = Rc::new(RefCell::new(
         (0..capacity).map(|_| Unit::default()).collect(),
     ));
@@ -1969,13 +2055,23 @@ fn spawn_unit_server(
                     None => changed.wait().await,
                 }
             };
+            let set_up = match (&setup, setup_rng.as_mut()) {
+                (Some(s), Some(rng)) => units
+                    .borrow_mut()
+                    .get_mut(unit)
+                    .and_then(|x| s.before(&entity, x, rng)),
+                _ => None,
+            };
             let duration = {
                 let mut e = env.borrow_mut();
                 let now = e.ctx.now();
                 e.with_stats(|s| s.wait.add(now - entity.entered));
                 e.adjust(|s| &mut s.waiting, -1.0);
                 e.adjust(|s| &mut s.busy, 1.0);
-                book.change(&e, unit, |d| d.processing = true);
+                book.change(&e, unit, |d| {
+                    d.processing = true;
+                    d.setup = set_up.is_some();
+                });
                 service.sample(&mut e.rng)
             };
             if let Some(x) = units.borrow_mut().get_mut(unit) {
@@ -1993,27 +2089,33 @@ fn spawn_unit_server(
             let interruptible = breakdown.as_ref().is_some_and(|b| b.interruptible);
             let waits_for_repair = breakdown.as_ref().is_some_and(|b| !b.hands_on_while_down);
             let pid = ctx.spawn(async move {
-                let mut left = duration;
-                loop {
-                    if !interruptible {
-                        c.hold(left).await;
-                        break;
+                // The setup (if any), then the job; a failure interrupts either alike.
+                for (job, time) in [(false, set_up), (true, Some(duration))] {
+                    let Some(mut left) = time else { continue };
+                    if job {
+                        book2.change(&env2.borrow(), unit, |d| d.setup = false);
                     }
-                    match c.hold_interruptible(left).await {
-                        Ok(()) => break,
-                        Err(i) => {
-                            // Failed mid-job: wait for the repair, then carry on.
-                            left = i.remaining;
-                            if let Some(x) = units2.borrow_mut().get_mut(unit) {
-                                x.serving = None;
-                            }
-                            if let Some(g) = up2.get(unit) {
-                                g.wait().await;
-                            }
-                            if let (Some(x), Some(pid)) =
-                                (units2.borrow_mut().get_mut(unit), c.current())
-                            {
-                                x.serving = Some(pid);
+                    loop {
+                        if !interruptible {
+                            c.hold(left).await;
+                            break;
+                        }
+                        match c.hold_interruptible(left).await {
+                            Ok(()) => break,
+                            Err(i) => {
+                                // Failed mid-job: wait for the repair, then carry on.
+                                left = i.remaining;
+                                if let Some(x) = units2.borrow_mut().get_mut(unit) {
+                                    x.serving = None;
+                                }
+                                if let Some(g) = up2.get(unit) {
+                                    g.wait().await;
+                                }
+                                if let (Some(x), Some(pid)) =
+                                    (units2.borrow_mut().get_mut(unit), c.current())
+                                {
+                                    x.serving = Some(pid);
+                                }
                             }
                         }
                     }
@@ -2437,6 +2539,7 @@ impl Pools {
                     time_starved: None,
                     time_blocked: None,
                     time_failed: None,
+                    time_setup: None,
                     energy: None,
                     specific_energy: None,
                     lost: None,

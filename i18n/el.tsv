@@ -37,6 +37,7 @@
 	Add point	Προσθήκη σημείου
 	Add pool	Προσθήκη δεξαμενής
 	Add property	Προσθήκη ιδιότητας
+	Add row	Προσθήκη γραμμής
 	Add value	Προσθήκη τιμής
 	Added calendar {id}	Προστέθηκε το ημερολόγιο {id}
 	Added pool {id}	Προστέθηκε η δεξαμενή {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Μία αλλαγή, που την αναιρεί η Αναίρεση
 	One clerk, random arrivals: the textbook queue, checked against theory.	Ένας υπάλληλος, τυχαίες αφίξεις: η κλασική ουρά, ελεγμένη με τη θεωρία.
 	One task per BPSim distribution, to compare their spread.	Μία εργασία ανά κατανομή BPSim για σύγκριση της διασποράς τους.
+	Only when this property changes	Μόνο όταν αλλάζει αυτή η ιδιότητα
 	Open	Άνοιγμα
 	Open Example	Άνοιγμα παραδείγματος
 	Open Model	Άνοιγμα μοντέλου
@@ -341,6 +343,8 @@
 	Set a value	Ορισμός τιμής
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ορίζεται για κάθε οντότητα όταν εισέρχεται σε αυτό το μπλοκ. Οι εκφράσεις διαβάζουν τις τιμές που είχε κατά την είσοδο, όπως getProperty('issues') - 1.
 	Settings	Ρυθμίσεις
+	Setup	Προετοιμασία
+	Setup time	Χρόνος προετοιμασίας
 	Shape	Σχήμα
 	Share	Ποσοστό
 	Share of arrivals lost	Ποσοστό χαμένων αφίξεων
@@ -395,10 +399,12 @@
 	Time failed	Χρόνος βλάβης
 	Time off shift	Χρόνος εκτός βάρδιας
 	Time processing	Χρόνος επεξεργασίας
+	Time setting up	Χρόνος σε προετοιμασία
 	Time starved	Χρόνος χωρίς εργασία
 	Time to failure	Χρόνος έως τη βλάβη
 	Time to the stop condition	Χρόνος ως τη συνθήκη διακοπής
 	Time unit	Μονάδα χρόνου
+	Times for particular changes	Χρόνοι για συγκεκριμένες αλλαγές
 	To	Προς
 	Tops	Πάνω άκρα
 	Transfer time	Χρόνος μεταφοράς

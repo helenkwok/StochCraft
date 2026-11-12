@@ -37,6 +37,7 @@
 	Add point	बिंदु जोड़ें
 	Add pool	पूल जोड़ें
 	Add property	गुण जोड़ें
+	Add row	पंक्ति जोड़ें
 	Add value	मान जोड़ें
 	Added calendar {id}	कैलेंडर {id} जोड़ा गया
 	Added pool {id}	पूल {id} जोड़ा गया
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	एक बदलाव, जिसे पूर्ववत करें वापस लेता है
 	One clerk, random arrivals: the textbook queue, checked against theory.	एक कर्मचारी, यादृच्छिक आगमन: सिद्धांत से सत्यापित पारंपरिक कतार।
 	One task per BPSim distribution, to compare their spread.	प्रसार की तुलना के लिए प्रत्येक BPSim वितरण पर एक कार्य।
+	Only when this property changes	केवल इस गुण के बदलने पर
 	Open	खोलें
 	Open Example	उदाहरण खोलें
 	Open Model	मॉडल खोलें
@@ -341,6 +343,8 @@
 	Set a value	मान सेट करें
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	इस ब्लॉक में प्रवेश करते समय प्रत्येक इकाई पर सेट किया जाता है। एक्सप्रेशन इकाई के प्रवेश के समय मौजूद मान पढ़ते हैं, जैसे getProperty('issues') - 1।
 	Settings	सेटिंग
+	Setup	सेटअप
+	Setup time	सेटअप समय
 	Shape	आकार
 	Share	हिस्सा
 	Share of arrivals lost	हानि हुए आगमन का अनुपात
@@ -395,10 +399,12 @@
 	Time failed	खराबी में समय
 	Time off shift	पाली से बाहर समय
 	Time processing	प्रसंस्करण में समय
+	Time setting up	सेटअप में समय
 	Time starved	बिना काम का समय
 	Time to failure	खराबी तक का समय
 	Time to the stop condition	रुकने की शर्त तक का समय
 	Time unit	समय की इकाई
+	Times for particular changes	विशेष बदलावों के समय
 	To	तक
 	Tops	ऊपरी किनारे
 	Transfer time	स्थानांतरण समय

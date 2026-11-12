@@ -42,6 +42,13 @@ pub const BREAKDOWN: &str = "stochcraft:breakdown";
 /// task's resource is free at once (a minimum time in the buffer).
 pub const TRANSFER_TIME: &str = "stochcraft:transferTime";
 
+/// The vendor extension for a server's changeovers: a `stochcraft:changeover` element whose
+/// attribute `property` names the property whose value changing makes a unit set up, holding a
+/// `stochcraft:time` (a BPSim distribution or constant) and any number of `stochcraft:change`
+/// elements, each with attributes `from` and `to` and a distribution, for particular changes. A
+/// setup before every job is BPSim's own `TimeParameters/SetUpTime`.
+pub const CHANGEOVER: &str = "stochcraft:changeover";
+
 /// An exclusive gateway's routing rule: `stochcraft:routing` with the value `shortestQueue` on
 /// the gateway's `ElementParameters` sends each entity to the way with the shortest queue that
 /// has room.

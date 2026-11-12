@@ -37,6 +37,7 @@
 	Add point	점 추가
 	Add pool	풀 추가
 	Add property	속성 추가
+	Add row	행 추가
 	Add value	값 추가
 	Added calendar {id}	캘린더 {id} 추가됨
 	Added pool {id}	풀 {id} 추가됨
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	실행 취소로 되돌릴 수 있는 한 번의 변경
 	One clerk, random arrivals: the textbook queue, checked against theory.	창구 하나, 무작위 도착: 교과서의 대기열을 이론과 비교합니다.
 	One task per BPSim distribution, to compare their spread.	각 BPSim 분포에 작업 하나를 배정하여 분산 정도를 비교합니다.
+	Only when this property changes	이 속성이 바뀔 때만
 	Open	열기
 	Open Example	예제 열기
 	Open Model	모델 열기
@@ -341,6 +343,8 @@
 	Set a value	값 설정
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	각 엔터티가 이 블록에 들어올 때 설정됩니다. 수식은 들어올 때 엔터티가 가지고 있던 값을 읽습니다. 예: getProperty('issues') - 1.
 	Settings	설정
+	Setup	셋업
+	Setup time	셋업 시간
 	Shape	모양
 	Share	비율
 	Share of arrivals lost	도착 손실 비율
@@ -395,10 +399,12 @@
 	Time failed	고장 시간
 	Time off shift	근무 외 시간
 	Time processing	처리 시간
+	Time setting up	셋업 중 시간
 	Time starved	작업 대기 시간
 	Time to failure	고장까지의 시간
 	Time to the stop condition	중지 조건까지의 시간
 	Time unit	시간 단위
+	Times for particular changes	특정 변경별 시간
 	To	끝 블록
 	Tops	위쪽 가장자리
 	Transfer time	이송 시간

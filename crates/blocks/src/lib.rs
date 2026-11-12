@@ -43,7 +43,7 @@ use std::collections::BTreeMap;
 
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
-pub use stochcraft_model::{Breakdown, Power, Routing, Transfer};
+pub use stochcraft_model::{Breakdown, Change, Power, Routing, Setup, Transfer};
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
     Property, PropertyType, PropertyValue, ResourcePool, Severity, Timed,
@@ -463,8 +463,9 @@ pub enum Metric {
     Left,
     /// Servers: time-average number waiting for a unit.
     MeanQueueLength,
-    /// Servers: mean time from arrival to start of service, over the entities that started
-    /// service. Entities still waiting at the end are left out, so for an overloaded server the
+    /// Servers: mean time from arrival to start of service (a unit taking the entity; a setup
+    /// is part of its service, as BPSim counts it in the activity's duration), over the
+    /// entities that started service. Entities still waiting at the end are left out, so for an overloaded server the
     /// mean is biased low.
     MeanWait,
     /// Servers: time-average fraction of units busy.
@@ -526,6 +527,9 @@ pub enum Metric {
     /// Servers with a power: time-average fraction of units failed or under repair; the
     /// complement of [`Metric::Availability`].
     TimeFailed,
+    /// Servers that set up (a setup before every job, or changeovers): time-average fraction of
+    /// units setting up. Their utilisation includes it (a unit setting up holds its part).
+    TimeSetup,
     /// Servers with a power: energy used in the measured window, in kilowatt-hours: each
     /// state's power times the exact time the units spent in it, cut at the end of the warm-up
     /// and at the end of the run.
@@ -538,7 +542,7 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 21] = [
+    pub const ALL: [Metric; 22] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -558,6 +562,7 @@ impl Metric {
         Metric::TimeStarved,
         Metric::TimeBlocked,
         Metric::TimeFailed,
+        Metric::TimeSetup,
         Metric::Energy,
         Metric::SpecificEnergy,
     ];
@@ -589,6 +594,7 @@ impl Metric {
             Metric::TimeStarved => "time_starved",
             Metric::TimeBlocked => "time_blocked",
             Metric::TimeFailed => "time_failed",
+            Metric::TimeSetup => "time_setup",
             Metric::Energy => "energy",
             Metric::SpecificEnergy => "specific_energy",
         }
@@ -628,6 +634,8 @@ pub struct ElementReport {
     pub time_starved: Option<f64>,
     pub time_blocked: Option<f64>,
     pub time_failed: Option<f64>,
+    /// Servers that set up: [`Metric::TimeSetup`].
+    pub time_setup: Option<f64>,
     pub energy: Option<f64>,
     /// Sinks, when any server has a power: [`Metric::SpecificEnergy`].
     pub specific_energy: Option<f64>,
@@ -661,6 +669,7 @@ impl ElementReport {
             Metric::TimeStarved => self.time_starved,
             Metric::TimeBlocked => self.time_blocked,
             Metric::TimeFailed => self.time_failed,
+            Metric::TimeSetup => self.time_setup,
             Metric::Energy => self.energy,
             Metric::SpecificEnergy => self.specific_energy,
         }
@@ -1020,6 +1029,7 @@ impl Builder {
                 available: true,
                 availability: Vec::new(),
                 power: None,
+                setup: None,
             },
         )
     }
@@ -1045,6 +1055,7 @@ impl Builder {
                 available: true,
                 availability: Vec::new(),
                 power: None,
+                setup: None,
             },
         )
     }
@@ -1124,6 +1135,13 @@ impl Builder {
     pub fn power(&mut self, block: BlockId, power: Power) {
         if let Some((_, ElementKind::Server { power: p, .. }, _)) = self.elements.get_mut(block.0) {
             *p = Some(power);
+        }
+    }
+
+    /// Gives server `block` a setup: before every job, or a changeover ([`Setup`]).
+    pub fn setup(&mut self, block: BlockId, setup: Setup) {
+        if let Some((_, ElementKind::Server { setup: s, .. }, _)) = self.elements.get_mut(block.0) {
+            *s = Some(setup);
         }
     }
 

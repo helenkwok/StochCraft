@@ -37,6 +37,7 @@
 	Add point	புள்ளியைச் சேர்
 	Add pool	தொகுப்பைச் சேர்
 	Add property	பண்பைச் சேர்
+	Add row	வரிசையைச் சேர்
 	Add value	மதிப்பைச் சேர்
 	Added calendar {id}	{id} நாட்காட்டி சேர்க்கப்பட்டது
 	Added pool {id}	{id} தொகுப்பு சேர்க்கப்பட்டது
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	செயல்தவிர் திரும்பப் பெறும் ஒரு மாற்றம்
 	One clerk, random arrivals: the textbook queue, checked against theory.	ஒரு பணியாளர், சீரற்ற வருகைகள்: கோட்பாட்டுடன் சரிபார்க்கப்பட்ட வழக்கமான காத்திருப்பு வரிசை.
 	One task per BPSim distribution, to compare their spread.	பரவல் வேறுபாட்டை ஒப்பிட ஒவ்வொரு BPSim பரவலுக்கும் ஒரு பணி.
+	Only when this property changes	இந்தப் பண்பு மாறும்போது மட்டும்
 	Open	திற
 	Open Example	எடுத்துக்காட்டைத் திற
 	Open Model	மாதிரியைத் திற
@@ -341,6 +343,8 @@
 	Set a value	மதிப்பை அமை
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	இந்தத் தொகுதிக்குள் நுழையும்போது ஒவ்வொரு உருப்படிக்கும் அமைக்கப்படுகிறது. கோவைகள், நுழைந்த நேரத்தில் அந்த உருப்படியிடம் இருந்த மதிப்புகளைப் படிக்கின்றன; எடுத்துக்காட்டாக getProperty('issues') - 1.
 	Settings	அமைப்புகள்
+	Setup	அமைவு
+	Setup time	அமைவு நேரம்
 	Shape	வடிவ அளவுரு
 	Share	பங்கு
 	Share of arrivals lost	இழந்த வருகைகளின் விகிதம்
@@ -395,10 +399,12 @@
 	Time failed	பழுதடைந்த நேரம்
 	Time off shift	பணிமுறைக்கு வெளியே நேரம்
 	Time processing	செயலாக்க நேரம்
+	Time setting up	அமைவில் உள்ள நேரம்
 	Time starved	வேலையில்லா நேரம்
 	Time to failure	பழுது வரையிலான நேரம்
 	Time to the stop condition	நிறுத்த நிபந்தனை வரையிலான நேரம்
 	Time unit	நேர அலகு
+	Times for particular changes	குறிப்பிட்ட மாற்றங்களுக்கான நேரங்கள்
 	To	இதற்கு
 	Tops	மேல் விளிம்புகள்
 	Transfer time	இடமாற்ற நேரம்

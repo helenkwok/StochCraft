@@ -37,6 +37,7 @@
 	Add point	Thêm điểm
 	Add pool	Thêm nhóm
 	Add property	Thêm thuộc tính
+	Add row	Thêm hàng
 	Add value	Thêm giá trị
 	Added calendar {id}	Đã thêm lịch {id}
 	Added pool {id}	Đã thêm nhóm {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Một thay đổi, có thể hoàn tác
 	One clerk, random arrivals: the textbook queue, checked against theory.	Một nhân viên phục vụ, lượt đến ngẫu nhiên: hàng đợi kinh điển được đối chiếu với lý thuyết.
 	One task per BPSim distribution, to compare their spread.	Mỗi phân phối BPSim có một tác vụ để so sánh độ phân tán.
+	Only when this property changes	Chỉ khi thuộc tính này thay đổi
 	Open	Mở
 	Open Example	Mở ví dụ
 	Open Model	Mở mô hình
@@ -341,6 +343,8 @@
 	Set a value	Đặt giá trị
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Được đặt cho từng thực thể khi đi vào khối này. Biểu thức đọc các giá trị mà thực thể có tại thời điểm đi vào, chẳng hạn getProperty('issues') - 1.
 	Settings	Cài đặt
+	Setup	Chuẩn bị máy
+	Setup time	Thời gian chuẩn bị máy
 	Shape	Hình dạng
 	Share	Tỷ lệ
 	Share of arrivals lost	Tỷ lệ lượt đến bị mất
@@ -395,10 +399,12 @@
 	Time failed	Thời gian hỏng hóc
 	Time off shift	Thời gian ngoài ca
 	Time processing	Thời gian xử lý
+	Time setting up	Thời gian đang chuẩn bị máy
 	Time starved	Thời gian không có việc
 	Time to failure	Thời gian đến khi hỏng
 	Time to the stop condition	Thời gian đến điều kiện dừng
 	Time unit	Đơn vị thời gian
+	Times for particular changes	Thời gian cho các thay đổi cụ thể
 	To	Đến
 	Tops	Cạnh trên
 	Transfer time	Thời gian chuyển

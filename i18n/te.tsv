@@ -37,6 +37,7 @@
 	Add point	బిందువును జోడించు
 	Add pool	పూల్‌ను జోడించు
 	Add property	లక్షణాన్ని జోడించు
+	Add row	వరుసను జోడించు
 	Add value	విలువను జోడించు
 	Added calendar {id}	{id} క్యాలెండర్ జోడించబడింది
 	Added pool {id}	{id} పూల్ జోడించబడింది
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	రద్దు చేయి వెనక్కి తీసుకునే ఒక మార్పు
 	One clerk, random arrivals: the textbook queue, checked against theory.	ఒక గుమాస్తా, యాదృచ్ఛిక రాకలు: సిద్ధాంతంతో ధృవీకరించిన ప్రామాణిక క్యూ.
 	One task per BPSim distribution, to compare their spread.	వ్యాప్తిని పోల్చడానికి ప్రతి BPSim పంపిణీకి ఒక పని.
+	Only when this property changes	ఈ లక్షణం మారినప్పుడు మాత్రమే
 	Open	తెరువు
 	Open Example	ఉదాహరణను తెరువు
 	Open Model	నమూనాను తెరువు
@@ -341,6 +343,8 @@
 	Set a value	విలువను సెట్ చేయి
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ఈ బ్లాక్‌లోకి ప్రవేశించినప్పుడు ప్రతి ఎంటిటీకి సెట్ చేయబడుతుంది. ఎక్స్‌ప్రెషన్‌లు ఎంటిటీ ప్రవేశించిన సమయంలో ఉన్న విలువలను చదువుతాయి, ఉదాహరణకు getProperty('issues') - 1.
 	Settings	సెట్టింగ్‌లు
+	Setup	సెటప్
+	Setup time	సెటప్ సమయం
 	Shape	ఆకృతి పరామితి
 	Share	వాటా
 	Share of arrivals lost	కోల్పోయిన రాకల వాటా
@@ -395,10 +399,12 @@
 	Time failed	లోపం ఉన్న సమయం
 	Time off shift	షిఫ్ట్ వెలుపల సమయం
 	Time processing	ప్రాసెసింగ్ సమయం
+	Time setting up	సెటప్‌లో ఉన్న సమయం
 	Time starved	పని లేని సమయం
 	Time to failure	లోపం వచ్చే వరకు సమయం
 	Time to the stop condition	ఆపే షరతు వరకు సమయం
 	Time unit	సమయ ప్రమాణం
+	Times for particular changes	నిర్దిష్ట మార్పుల సమయాలు
 	To	కు
 	Tops	పై అంచులు
 	Transfer time	బదిలీ సమయం

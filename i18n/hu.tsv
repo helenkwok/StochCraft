@@ -37,6 +37,7 @@
 	Add point	Pont hozzáadása
 	Add pool	Készlet hozzáadása
 	Add property	Tulajdonság hozzáadása
+	Add row	Sor hozzáadása
 	Add value	Érték hozzáadása
 	Added calendar {id}	{id} naptár hozzáadva
 	Added pool {id}	{id} készlet hozzáadva
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Egy módosítás, amelyet a Visszavonás visszavesz
 	One clerk, random arrivals: the textbook queue, checked against theory.	Egy kiszolgáló, véletlenszerű érkezések: a klasszikus sor, elmélettel ellenőrizve.
 	One task per BPSim distribution, to compare their spread.	Minden BPSim-eloszláshoz egy feladat, a szóródás összehasonlítására.
+	Only when this property changes	Csak ha ez a tulajdonság változik
 	Open	Megnyitás
 	Open Example	Példa megnyitása
 	Open Model	Modell megnyitása
@@ -341,6 +343,8 @@
 	Set a value	Érték megadása
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Minden entitáshoz beállításra kerül, amikor belép ebbe a blokkba. A kifejezések a belépéskor meglévő értékeket olvassák, például getProperty('issues') - 1.
 	Settings	Beállítások
+	Setup	Átállás
+	Setup time	Átállási idő
 	Shape	Alak
 	Share	Arány
 	Share of arrivals lost	Elveszett érkezések aránya
@@ -395,10 +399,12 @@
 	Time failed	Meghibásodott állapotban töltött idő
 	Time off shift	Műszakon kívüli idő
 	Time processing	Feldolgozási idő
+	Time setting up	Átállással töltött idő
 	Time starved	Munka nélküli idő
 	Time to failure	Meghibásodásig eltelt idő
 	Time to the stop condition	Idő a leállási feltételig
 	Time unit	Időegység
+	Times for particular changes	Idők adott váltásokhoz
 	To	Ide
 	Tops	Felső élek
 	Transfer time	Továbbítási idő

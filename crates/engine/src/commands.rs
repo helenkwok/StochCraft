@@ -15,7 +15,7 @@ use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BreakdownSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec, KindSpec,
     ModelDoc, NeedSpec, PowerSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, RoutingSpec,
-    ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -110,6 +110,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "available",
             "availability",
             "power",
+            "setup",
         ],
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
@@ -313,6 +314,11 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<PowerSpec>")]
     pub power: Option<Option<PowerSpec>>,
+    /// Servers: a setup before every job, or with `on_change_of` a changeover when that
+    /// property's value changes; `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<SetupSpec>")]
+    pub setup: Option<Option<SetupSpec>>,
     /// Tasks with shared resources: what each entity needs, the alternatives in order.
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
@@ -1038,6 +1044,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("available", p.available.is_some()),
         ("availability", p.availability.is_some()),
         ("power", p.power.is_some()),
+        ("setup", p.setup.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
@@ -1057,6 +1064,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "available",
             "availability",
             "power",
+            "setup",
         ],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
@@ -1105,7 +1113,11 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             available,
             availability,
             power,
+            setup,
         } => {
+            if let Some(s) = p.setup {
+                *setup = s.map(Into::into);
+            }
             if let Some(b) = p.breakdown {
                 *breakdown = b.map(Into::into);
             }

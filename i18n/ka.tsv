@@ -37,6 +37,7 @@
 	Add point	წერტილის დამატება
 	Add pool	პულის დამატება
 	Add property	თვისების დამატება
+	Add row	მწკრივის დამატება
 	Add value	მნიშვნელობის დამატება
 	Added calendar {id}	დამატებულია კალენდარი {id}
 	Added pool {id}	დამატებულია პული {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	ერთი ცვლილება, რომელსაც დაბრუნება აუქმებს
 	One clerk, random arrivals: the textbook queue, checked against theory.	ერთი თანამშრომელი, შემთხვევითი შემოსვლები: თეორიით შემოწმებული კლასიკური რიგი.
 	One task per BPSim distribution, to compare their spread.	თითო დავალება ყოველ BPSim განაწილებაზე, მათი გაფანტვის შესადარებლად.
+	Only when this property changes	მხოლოდ ამ თვისების შეცვლისას
 	Open	გახსნა
 	Open Example	მაგალითის გახსნა
 	Open Model	მოდელის გახსნა
@@ -341,6 +343,8 @@
 	Set a value	მნიშვნელობის დაყენება
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ამ ბლოკში შესვლისას მნიშვნელობა ენიჭება თითოეულ ერთეულს. გამოსახულებები კითხულობს შესვლის მომენტში არსებულ მნიშვნელობებს, მაგალითად getProperty('issues') - 1.
 	Settings	პარამეტრები
+	Setup	მომზადება
+	Setup time	მომზადების დრო
 	Shape	ფორმა
 	Share	წილი
 	Share of arrivals lost	დაკარგული შემოსვლების წილი
@@ -395,10 +399,12 @@
 	Time failed	გაუმართაობის დრო
 	Time off shift	ცვლის გარეთ დრო
 	Time processing	დამუშავების დრო
+	Time setting up	მომზადებაზე დახარჯული დრო
 	Time starved	სამუშაოს გარეშე დრო
 	Time to failure	დრო გაუმართაობამდე
 	Time to the stop condition	დრო გაჩერების პირობამდე
 	Time unit	დროის ერთეული
+	Times for particular changes	დროები კონკრეტული ცვლილებებისთვის
 	To	-მდე
 	Tops	ზედა კიდეები
 	Transfer time	გადატანის დრო

@@ -309,6 +309,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -328,6 +329,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -347,6 +349,28 @@ fn new_names_in_a_latin_1_file_are_character_references() {
     assert!(text(&saved).contains("Caf&#233;") && !text(&saved).contains("Café"));
     let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(back.model, m);
+
+    // A changeover's property and values too.
+    let mut m = back.model.clone();
+    if let ElementKind::Server { setup, .. } = &mut element(&mut m, "serve").kind {
+        *setup = Some(stochcraft_model::Setup {
+            time: Dist::Constant(1.0),
+            on_change_of: Some("thé".into()),
+            by_change: vec![stochcraft_model::Change {
+                from: "vert".into(),
+                to: "青".into(),
+                time: Dist::Constant(2.0),
+            }],
+        });
+    }
+    let saved = back.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    assert!(
+        t.contains("th&#233;") && t.contains("&#38738;") && !t.contains('青'),
+        "{t}"
+    );
+    let again = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(again.model, m);
 }
 
 #[test]
@@ -569,6 +593,7 @@ fn new_ids_never_clash_with_the_files_other_ids() {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         };
     });
     let t = text(&saved);
@@ -1246,6 +1271,7 @@ fn new_and_changed_servers_carry_their_buffer() {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         };
         set_queue(m, "weld", Some(1));
     });

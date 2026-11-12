@@ -37,6 +37,7 @@
 	Add point	Tambah titik
 	Add pool	Tambah kumpulan
 	Add property	Tambah properti
+	Add row	Tambah baris
 	Add value	Tambah nilai
 	Added calendar {id}	Kalender {id} ditambahkan
 	Added pool {id}	Kumpulan {id} ditambahkan
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Satu perubahan, yang dibatalkan oleh Urungkan
 	One clerk, random arrivals: the textbook queue, checked against theory.	Satu petugas, kedatangan acak: antrean klasik, diperiksa terhadap teori.
 	One task per BPSim distribution, to compare their spread.	Satu tugas per distribusi BPSim untuk membandingkan penyebarannya.
+	Only when this property changes	Hanya saat properti ini berubah
 	Open	Buka
 	Open Example	Buka Contoh
 	Open Model	Buka Model
@@ -341,6 +343,8 @@
 	Set a value	Tetapkan nilai
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ditetapkan pada setiap entitas saat memasuki blok ini. Ekspresi membaca nilai yang dibawa entitas saat masuk, seperti getProperty('issues') - 1.
 	Settings	Pengaturan
+	Setup	Penyiapan
+	Setup time	Waktu penyiapan
 	Shape	Bentuk
 	Share	Bagian
 	Share of arrivals lost	Proporsi kedatangan yang hilang
@@ -395,10 +399,12 @@
 	Time failed	Waktu rusak
 	Time off shift	Waktu di luar sif
 	Time processing	Waktu memproses
+	Time setting up	Waktu menyiapkan
 	Time starved	Waktu tanpa pekerjaan
 	Time to failure	Waktu hingga rusak
 	Time to the stop condition	Waktu hingga kondisi berhenti
 	Time unit	Satuan waktu
+	Times for particular changes	Waktu untuk perubahan tertentu
 	To	Ke
 	Tops	Tepi atas
 	Transfer time	Waktu perpindahan

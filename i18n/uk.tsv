@@ -37,6 +37,7 @@
 	Add point	Додати точку
 	Add pool	Додати пул
 	Add property	Додати властивість
+	Add row	Додати рядок
 	Add value	Додати значення
 	Added calendar {id}	Додано календар {id}
 	Added pool {id}	Додано пул {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Одна зміна, яку скасовує Скасувати
 	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, випадкові прибуття: класична черга, перевірена теорією.
 	One task per BPSim distribution, to compare their spread.	По одному завданню на кожний розподіл BPSim для порівняння розкиду.
+	Only when this property changes	Лише коли змінюється ця властивість
 	Open	Відкрити
 	Open Example	Відкрити приклад
 	Open Model	Відкрити модель
@@ -341,6 +343,8 @@
 	Set a value	Задати значення
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задається для кожної сутності під час входу до цього блока. Вирази зчитують значення, які сутність мала на момент входу, наприклад getProperty('issues') - 1.
 	Settings	Налаштування
+	Setup	Переналагодження
+	Setup time	Час переналагодження
 	Shape	Форма
 	Share	Частка
 	Share of arrivals lost	Частка втрачених прибуттів
@@ -395,10 +399,12 @@
 	Time failed	Час відмови
 	Time off shift	Час поза зміною
 	Time processing	Час обробки
+	Time setting up	Час у переналагодженні
 	Time starved	Час без роботи
 	Time to failure	Час до відмови
 	Time to the stop condition	Час до умови зупинки
 	Time unit	Одиниця часу
+	Times for particular changes	Час для окремих переходів
 	To	До
 	Tops	Верхні краї
 	Transfer time	Час передачі

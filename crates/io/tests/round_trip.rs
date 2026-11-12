@@ -42,6 +42,18 @@ pub fn showcase() -> Model {
         },
     );
     m.transfer(cut, Dist::Uniform { min: 0.5, max: 1.5 });
+    m.setup(
+        cut,
+        stochcraft_blocks::Setup {
+            time: Dist::Constant(5.0),
+            on_change_of: Some("issues".into()),
+            by_change: vec![stochcraft_blocks::Change {
+                from: "0".into(),
+                to: "2".into(),
+                time: Dist::Uniform { min: 6.0, max: 9.0 },
+            }],
+        },
+    );
     m.power(
         cut,
         stochcraft_blocks::Power {
@@ -711,4 +723,47 @@ fn a_mix_is_written_as_text_data_points_and_read_back() {
     let saved = loaded.opened.save(&edited);
     let back = saved.as_deref().map(|b| read(b).map(|l| l.model));
     assert_eq!(back, Ok(Ok(edited)));
+}
+
+#[test]
+fn a_setup_before_every_job_is_bpsims_setuptime() {
+    let mut m = Builder::new();
+    let src = m.source("parts", Dist::Exponential { mean: 5.0 }, None);
+    let machine = m.server("machine", 1, Dist::Constant(3.0));
+    m.setup(
+        machine,
+        stochcraft_blocks::Setup::every_job(Dist::Uniform { min: 1.0, max: 2.0 }),
+    );
+    let out = m.sink("out");
+    m.connect(src, machine);
+    m.connect(machine, out);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(text.contains("<bpsim:SetUpTime>"), "{text}");
+    assert!(!text.contains("stochcraft:changeover"), "{text}");
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model, laid_out(model));
+
+    // Made a changeover in the opened file: SetUpTime goes, the extension comes.
+    let mut edited = loaded.model.clone();
+    if let ElementKind::Server { setup, .. } = &mut edited.elements[1].kind {
+        *setup = Some(stochcraft_blocks::Setup {
+            time: Dist::Constant(4.0),
+            on_change_of: Some("type".into()),
+            by_change: Vec::new(),
+        });
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(!text.contains("SetUpTime"), "{text}");
+    assert!(
+        text.contains(r#"<stochcraft:changeover property="type">"#),
+        "{text}"
+    );
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited));
 }

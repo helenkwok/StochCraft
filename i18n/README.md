@@ -81,6 +81,14 @@ engine's messages (validation, file notes) are English too.
   from the plain meaning of the English, reusing each catalog's word for random (from the
   textbook-queue example) and for share (from "Target share"). Not checked against any other
   source, and not reviewed by native speakers; "Mix" is the least certain.
+- The rows for setups and changeovers (PR "setups and changeovers on a task with a resource")
+  were machine-drafted with Claude Code from the plain meaning of the English and each
+  catalog's existing terms, with "Time setting up" phrased like the other "Time …" rows. The
+  manufacturing term for a setup follows Wikipedia's interlanguage links for "Changeover" and
+  "Single-minute exchange of die" where they name one (nb Omstilling, sv Ställtid, ja 段取り,
+  ru переналадка, zh 换模/换型); elsewhere it is the language's general word for machine set-up
+  or preparation. Not checked against IATE, and not reviewed by native speakers. The least
+  certain are lo, th, ta, te, ka, kk, bn, sq, ko and vi.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

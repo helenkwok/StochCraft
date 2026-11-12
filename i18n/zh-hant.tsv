@@ -37,6 +37,7 @@
 	Add point	新增點
 	Add pool	新增資源池
 	Add property	新增屬性
+	Add row	新增列
 	Add value	新增值
 	Added calendar {id}	已新增行事曆 {id}
 	Added pool {id}	已新增資源池 {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	一次變更，可用復原還原
 	One clerk, random arrivals: the textbook queue, checked against theory.	一名服務員、隨機到達：經典排隊模型，並與理論結果對照。
 	One task per BPSim distribution, to compare their spread.	每種 BPSim 分布各設一個任務，用於比較其離散程度。
+	Only when this property changes	僅在此屬性變更時
 	Open	開啟
 	Open Example	開啟範例
 	Open Model	開啟模型
@@ -341,6 +343,8 @@
 	Set a value	設定值
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	在每個實體進入此區塊時設定。運算式讀取實體到達時攜帶的值，例如 getProperty('issues') - 1。
 	Settings	設定
+	Setup	換線
+	Setup time	換線時間
 	Shape	形狀參數
 	Share	比例
 	Share of arrivals lost	到達流失比例
@@ -395,10 +399,12 @@
 	Time failed	故障時間
 	Time off shift	非當班時間
 	Time processing	加工時間
+	Time setting up	換線佔用時間
 	Time starved	待料時間
 	Time to failure	故障前時間
 	Time to the stop condition	到達停止條件的時間
 	Time unit	時間單位
+	Times for particular changes	特定切換的時間
 	To	終點
 	Tops	頂邊
 	Transfer time	傳送時間

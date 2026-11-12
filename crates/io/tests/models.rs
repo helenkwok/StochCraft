@@ -26,7 +26,7 @@ fn bpmn_written_by_another_tool() {
     assert_eq!(l.opened.format, Format::Bpmn);
     assert_eq!(l.opened.scenario.as_deref(), Some("base"));
     assert_eq!(l.opened.scenarios.len(), 2);
-    // Warnings at most (the set-up time is noted as not simulated yet).
+    // Warnings at most (its set-up time of 0 is no setup).
     assert!(
         l.notes.iter().all(|n| n.severity < Severity::Error),
         "{:#?}",
@@ -54,6 +54,7 @@ fn bpmn_written_by_another_tool() {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         }
     );
     assert_eq!(kind(m, "leave"), &ElementKind::Sink);
@@ -81,6 +82,7 @@ fn inherited_scenario_changes_only_what_it_says() {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         }
     );
     assert_eq!(l.model.experiment.replications, 16);
@@ -146,6 +148,7 @@ fn xpdl_with_bpsim_1() {
             available: true,
             availability: Vec::new(),
             power: None,
+            setup: None,
         }
     );
     assert_eq!(

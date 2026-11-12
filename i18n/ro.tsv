@@ -37,6 +37,7 @@
 	Add point	Adaugă punct
 	Add pool	Adaugă grup
 	Add property	Adaugă proprietate
+	Add row	Adaugă rând
 	Add value	Adaugă valoare
 	Added calendar {id}	S-a adăugat calendarul {id}
 	Added pool {id}	S-a adăugat grupul {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	O singură modificare, pe care Anulează o desface
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un operator, sosiri aleatorii: coada clasică, verificată față de teorie.
 	One task per BPSim distribution, to compare their spread.	Câte o sarcină pentru fiecare distribuție BPSim, pentru compararea dispersiei.
+	Only when this property changes	Doar când se schimbă această proprietate
 	Open	Deschide
 	Open Example	Deschide exemplu
 	Open Model	Deschide modelul
@@ -341,6 +343,8 @@
 	Set a value	Setează o valoare
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Se setează pentru fiecare entitate la intrarea în acest bloc. Expresiile citesc valorile pe care entitatea le avea la intrare, cum ar fi getProperty('issues') - 1.
 	Settings	Setări
+	Setup	Pregătire
+	Setup time	Timp de pregătire
 	Shape	Formă
 	Share	Pondere
 	Share of arrivals lost	Proporția sosirilor pierdute
@@ -395,10 +399,12 @@
 	Time failed	Timp în avarie
 	Time off shift	Timp în afara turei
 	Time processing	Timp de procesare
+	Time setting up	Timp în pregătire
 	Time starved	Timp fără lucru
 	Time to failure	Timp până la avarie
 	Time to the stop condition	Timp până la condiția de oprire
 	Time unit	Unitate de timp
+	Times for particular changes	Timpi pentru anumite schimbări
 	To	Către
 	Tops	Marginile de sus
 	Transfer time	Timp de transfer

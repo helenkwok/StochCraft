@@ -37,6 +37,7 @@
 	Add point	Lisa punkt
 	Add pool	Lisa kogum
 	Add property	Lisa omadus
+	Add row	Lisa rida
 	Add value	Lisa väärtus
 	Added calendar {id}	Lisati kalender {id}
 	Added pool {id}	Lisati kogum {id}
@@ -235,6 +236,7 @@
 	One change, which Undo takes back	Üks muudatus, mille Võta tagasi tühistab
 	One clerk, random arrivals: the textbook queue, checked against theory.	Üks teenindaja, juhuslikud saabumised: klassikaline järjekord, mida kontrollitakse teooriaga.
 	One task per BPSim distribution, to compare their spread.	Üks ülesanne iga BPSim-jaotuse kohta nende hajuvuse võrdlemiseks.
+	Only when this property changes	Ainult siis, kui see omadus muutub
 	Open	Ava
 	Open Example	Ava näide
 	Open Model	Ava mudel
@@ -341,6 +343,8 @@
 	Set a value	Määra väärtus
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Määratakse igale olemile sellesse plokki sisenemisel. Avaldised loevad väärtusi, mis olid olemil sisenemise hetkel, näiteks getProperty('issues') - 1.
 	Settings	Seaded
+	Setup	Ümberseadistus
+	Setup time	Ümberseadistusaeg
 	Shape	Kuju
 	Share	Osakaal
 	Share of arrivals lost	Kaotatud saabumiste osakaal
@@ -395,10 +399,12 @@
 	Time failed	Rikkis oleku aeg
 	Time off shift	Aeg vahetusest väljas
 	Time processing	Töötlemise aeg
+	Time setting up	Ümberseadistamise aeg
 	Time starved	Tööta aeg
 	Time to failure	Aeg rikkeni
 	Time to the stop condition	Aeg peatamistingimuseni
 	Time unit	Ajaühik
+	Times for particular changes	Ajad konkreetsete muutuste jaoks
 	To	Kuni
 	Tops	Ülaservad
 	Transfer time	Ülekandeaeg
