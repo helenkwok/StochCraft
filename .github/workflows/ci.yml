@@ -139,6 +139,47 @@ jobs:
           key: heavy
       - run: cargo test --workspace --release --locked -- --ignored
 
+  # The BPSim reference-model and schema tests on Windows, where file paths and temporary files
+  # differ from Linux. xmllint is MSYS2's native mingw64 build (MSYS2 is preinstalled on the
+  # runner); only its mingw64 folder goes on PATH, since MSYS2's usr/bin has a link.exe that
+  # would shadow MSVC's linker.
+  windows:
+    name: Reference tests on Windows
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      # The tests compare files byte for byte, so check out with the repository's LF endings.
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: windows
+      - uses: actions/cache@v6
+        with:
+          path: target/bpsim
+          key: bpsim-${{ hashFiles('xtask/src/bpsim.rs') }}
+      - name: xmllint (MSYS2 mingw64 libxml2)
+        run: |
+          C:\msys64\usr\bin\pacman.exe -Sy --noconfirm --needed mingw-w64-x86_64-libxml2
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      # Git for Windows' usr/bin has the unzip that fetch-bpsim needs; it goes last on PATH.
+      - name: cargo xtask fetch-bpsim
+        run: |
+          $env:PATH = "$env:PATH;C:\Program Files\Git\usr\bin"
+          cargo xtask fetch-bpsim
+      - name: cargo test (reference models and schema)
+        env:
+          STOCHCRAFT_REQUIRE_BPSIM: "1"
+        run: |
+          xmllint --version
+          cargo test -p stochcraft-io --locked --test reference
+
   wasm:
     name: wasm32 check
     needs: plan

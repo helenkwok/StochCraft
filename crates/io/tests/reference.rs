@@ -10,6 +10,7 @@
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 use stochcraft_blocks::Builder;
 use stochcraft_blocks::{Event, Rule};
@@ -305,17 +306,21 @@ fn schema_errors(written: &[u8], label: &str, xsd: &Path) -> Option<String> {
             data.attrs.insert(0, (n.clone(), v.clone()));
         }
     }
-    let out =
-        std::env::temp_dir().join(format!("stochcraft-xsd-{}-{label}.xml", std::process::id()));
+    // Tests run in parallel threads of one process and may check the same label at once, so
+    // each call gets its own files.
+    static CALLS: AtomicUsize = AtomicUsize::new(0);
+    let stem = format!(
+        "stochcraft-xsd-{}-{}-{label}",
+        std::process::id(),
+        CALLS.fetch_add(1, Ordering::Relaxed)
+    );
+    let out = std::env::temp_dir().join(format!("{stem}.xml"));
     let text = xml::write(&xml::Document::new(data));
     std::fs::write(&out, text).unwrap_or_else(|e| panic!("{}: {e}", out.display()));
     // The BPSim schema with StochCraft's vendor extension schema next to it, which declares the
     // values of its `VendorExtension`s (the BPSim schema checks them strictly).
     let ours = Path::new(env!("CARGO_MANIFEST_DIR")).join("schemas/stochcraft-bpsim-1.xsd");
-    let both = std::env::temp_dir().join(format!(
-        "stochcraft-xsd-{}-{label}-schemas.xsd",
-        std::process::id()
-    ));
+    let both = std::env::temp_dir().join(format!("{stem}-schemas.xsd"));
     let wrapper = format!(
         r#"<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -323,9 +328,9 @@ fn schema_errors(written: &[u8], label: &str, xsd: &Path) -> Option<String> {
   <xs:import namespace="{}" schemaLocation="{}"/>
 </xs:schema>
 "#,
-        xsd.display(),
+        file_uri(xsd),
         bpsim::STOCHCRAFT_NS,
-        ours.display()
+        file_uri(&ours)
     );
     std::fs::write(&both, wrapper).unwrap_or_else(|e| panic!("{}: {e}", both.display()));
     let result = Command::new("xmllint")
@@ -338,6 +343,25 @@ fn schema_errors(written: &[u8], label: &str, xsd: &Path) -> Option<String> {
     let _ = std::fs::remove_file(&both);
     let result = result.unwrap_or_else(|e| panic!("xmllint: {e}"));
     (!result.status.success()).then(|| String::from_utf8_lossy(&result.stderr).into_owned())
+}
+
+/// A `file:` URI for an absolute path, as `schemaLocation` needs: a Windows path such as
+/// `C:\Users\...` is not one, and neither is a path with a space in it.
+fn file_uri(path: &Path) -> String {
+    let path = path.to_string_lossy().replace('\\', "/");
+    let mut uri = String::from(if path.starts_with('/') {
+        "file://"
+    } else {
+        "file:///"
+    });
+    for b in path.bytes() {
+        if b.is_ascii_alphanumeric() || b"-._~/:".contains(&b) {
+            uri.push(char::from(b));
+        } else {
+            uri.push_str(&format!("%{b:02X}"));
+        }
+    }
+    uri
 }
 
 /// Validates the BPSim data in a written file against the official schema.
