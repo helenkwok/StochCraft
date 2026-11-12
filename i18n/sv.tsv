@@ -232,6 +232,8 @@
 	Normal	Normal
 	Not reached, even with {units}	Inte nått, inte ens med {units}
 	Number	Tal
+	OEE availability	OEE-tillgänglighet
+	OEE effectiveness	OEE-effektivitet
 	On	Dagar
 	One change, which Undo takes back	En ändring, som Ångra tar tillbaka
 	One clerk, random arrivals: the textbook queue, checked against theory.	En handläggare, slumpmässiga ankomster: den klassiska kön, kontrollerad mot teorin.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Period {n} upprepas
 	Period {n} starts	Period {n} börjar
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioder då tillgänglighet, ankomster eller en pools skift ändras. Datum och tider skrivs 2026-01-31T09:00:00.
+	Planned run time per item	Planerad körtid per detalj
 	Play	Spela upp
 	Points	Punkter
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Servicetid
 	Services	Tjänster
 	Set Property	Ange egenskap
+	Set a planned run time per item on this block to see its effectiveness.	Ange en planerad körtid per detalj för detta block för att se dess effektivitet.
 	Set a value	Ange ett värde
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Anges för varje entitet när den kommer in i det här blocket. Uttryck läser de värden som entiteten hade vid ankomsten, till exempel getProperty('issues') - 1.
 	Settings	Inställningar
 	Setup	Omställning
+	Setup ratio	Ställtidsandel
 	Setup time	Ställtid
 	Shape	Form
 	Share	Andel

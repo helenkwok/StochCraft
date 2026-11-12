@@ -232,6 +232,8 @@
 	Normal	ปกติ
 	Not reached, even with {units}	ไม่บรรลุ แม้มี {units}
 	Number	ตัวเลข
+	OEE availability	ความพร้อมใช้งาน OEE
+	OEE effectiveness	ประสิทธิผล OEE
 	On	วัน
 	One change, which Undo takes back	การเปลี่ยนแปลงหนึ่งครั้ง ซึ่งเลิกทำได้
 	One clerk, random arrivals: the textbook queue, checked against theory.	พนักงานหนึ่งคนและการมาถึงแบบสุ่ม: คิวมาตรฐานที่ตรวจสอบเทียบกับทฤษฎี
@@ -258,6 +260,7 @@
 	Period {n} repeats	ช่วง {n} ซ้ำ
 	Period {n} starts	ช่วง {n} เริ่ม
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	ช่วงเวลาที่ความพร้อมใช้งาน การมาถึง หรือกะของกลุ่มทรัพยากรเปลี่ยนไป วันที่และเวลาเขียนเป็น 2026-01-31T09:00:00
+	Planned run time per item	เวลาเดินเครื่องตามแผนต่อชิ้น
 	Play	เล่น
 	Points	จุด
 	Poisson	ปัวซอง
@@ -340,10 +343,12 @@
 	Service time	เวลาให้บริการ
 	Services	บริการ
 	Set Property	กำหนดคุณสมบัติ
+	Set a planned run time per item on this block to see its effectiveness.	กำหนดเวลาเดินเครื่องตามแผนต่อชิ้นให้บล็อกนี้เพื่อดูประสิทธิผล
 	Set a value	กำหนดค่า
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	กำหนดค่าให้แต่ละเอนทิตีเมื่อเข้าสู่บล็อกนี้ นิพจน์จะอ่านค่าที่เอนทิตีมีอยู่ขณะเข้ามา เช่น getProperty('issues') - 1
 	Settings	การตั้งค่า
 	Setup	การตั้งเครื่อง
+	Setup ratio	สัดส่วนการตั้งเครื่อง
 	Setup time	เวลาตั้งเครื่อง
 	Shape	พารามิเตอร์รูปร่าง
 	Share	สัดส่วน

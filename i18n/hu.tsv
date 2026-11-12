@@ -232,6 +232,8 @@
 	Normal	Normális
 	Not reached, even with {units}	Nem teljesül, még ezzel sem: {units}
 	Number	Szám
+	OEE availability	OEE rendelkezésre állás
+	OEE effectiveness	OEE hatékonyság
 	On	Napok
 	One change, which Undo takes back	Egy módosítás, amelyet a Visszavonás visszavesz
 	One clerk, random arrivals: the textbook queue, checked against theory.	Egy kiszolgáló, véletlenszerű érkezések: a klasszikus sor, elmélettel ellenőrizve.
@@ -258,6 +260,7 @@
 	Period {n} repeats	{n}. időszak ismétlődése
 	Period {n} starts	{n}. időszak kezdete
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Időszakok, amikor a rendelkezésre állás, az érkezések vagy egy készlet műszakjai változnak. A dátumot és az időt így kell írni: 2026-01-31T09:00:00.
+	Planned run time per item	Tervezett futási idő darabonként
 	Play	Lejátszás
 	Points	Pontok
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Kiszolgálási idő
 	Services	Szolgáltatások
 	Set Property	Tulajdonság beállítása
+	Set a planned run time per item on this block to see its effectiveness.	Adjon meg ennél a blokknál tervezett futási időt darabonként a hatékonyságának megtekintéséhez.
 	Set a value	Érték megadása
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Minden entitáshoz beállításra kerül, amikor belép ebbe a blokkba. A kifejezések a belépéskor meglévő értékeket olvassák, például getProperty('issues') - 1.
 	Settings	Beállítások
 	Setup	Átállás
+	Setup ratio	Átállási arány
 	Setup time	Átállási idő
 	Shape	Alak
 	Share	Arány

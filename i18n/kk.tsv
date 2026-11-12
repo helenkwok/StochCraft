@@ -232,6 +232,8 @@
 	Normal	Нормальды
 	Not reached, even with {units}	Жетпеді, тіпті {units} болғанда да
 	Number	Сан
+	OEE availability	OEE қолжетімділігі
+	OEE effectiveness	OEE нәтижелілігі
 	On	Күндер
 	One change, which Undo takes back	Болдырмау қайтаратын бір өзгеріс
 	One clerk, random arrivals: the textbook queue, checked against theory.	Бір қызметкер, кездейсоқ келулер: теориямен тексерілген классикалық кезек.
@@ -258,6 +260,7 @@
 	Period {n} repeats	{n}-кезең қайталануы
 	Period {n} starts	{n}-кезең басталуы
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Қолжетімділік, келулер немесе қордың ауысымдары өзгеретін кезеңдер. Күн мен уақыт 2026-01-31T09:00:00 түрінде жазылады.
+	Planned run time per item	Бір бөлшекке жоспарланған жұмыс уақыты
 	Play	Ойнату
 	Points	Нүктелер
 	Poisson	Пуассон
@@ -340,10 +343,12 @@
 	Service time	Қызмет көрсету уақыты
 	Services	Қызметтер
 	Set Property	Қасиетті орнату
+	Set a planned run time per item on this block to see its effectiveness.	Нәтижелілігін көру үшін осы блокқа бір бөлшекке жоспарланған жұмыс уақытын орнатыңыз.
 	Set a value	Мән орнату
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Әрбір нысан осы блокқа кірген кезде оған орнатылады. Өрнектер нысан кірген сәттегі мәндерді оқиды, мысалы getProperty('issues') - 1.
 	Settings	Параметрлер
 	Setup	Дайындық
+	Setup ratio	Дайындық үлесі
 	Setup time	Дайындық уақыты
 	Shape	Пішін
 	Share	Үлес

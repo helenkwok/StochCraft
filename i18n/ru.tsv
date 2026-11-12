@@ -232,6 +232,8 @@
 	Normal	Нормальное распределение
 	Not reached, even with {units}	Не достигнута даже при {units}
 	Number	Число
+	OEE availability	Доступность OEE
+	OEE effectiveness	Результативность OEE
 	On	Дни
 	One change, which Undo takes back	Одно изменение, которое отменяет Отменить
 	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, случайные прибытия: классическая очередь, проверенная по теории.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Повтор периода {n}
 	Period {n} starts	Начало периода {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Периоды, когда меняются доступность, прибытия или смены пула. Дата и время записываются как 2026-01-31T09:00:00.
+	Planned run time per item	Плановое время работы на деталь
 	Play	Воспроизвести
 	Points	Точки
 	Poisson	Распределение Пуассона
@@ -340,10 +343,12 @@
 	Service time	Время обслуживания
 	Services	Службы
 	Set Property	Задать свойство
+	Set a planned run time per item on this block to see its effectiveness.	Задайте для этого блока плановое время работы на деталь, чтобы увидеть его результативность.
 	Set a value	Задать значение
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задаётся для каждой сущности при входе в этот блок. Выражения считывают значения, которые были у сущности при входе, например getProperty('issues') - 1.
 	Settings	Настройки
 	Setup	Переналадка
+	Setup ratio	Доля переналадки
 	Setup time	Время переналадки
 	Shape	Форма
 	Share	Доля

@@ -232,6 +232,8 @@
 	Normal	Normaal
 	Not reached, even with {units}	Niet gehaald, zelfs niet met {units}
 	Number	Getal
+	OEE availability	OEE-beschikbaarheid
+	OEE effectiveness	OEE-effectiviteit
 	On	Dagen
 	One change, which Undo takes back	Eén wijziging, die Ongedaan maken terugdraait
 	One clerk, random arrivals: the textbook queue, checked against theory.	Eén medewerker, willekeurige aankomsten: de klassieke wachtrij, getoetst aan de theorie.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Periode {n} herhaalt
 	Period {n} starts	Periode {n} begint
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioden waarin beschikbaarheid, aankomsten of de werktijden van een pool veranderen. Datums en tijden schrijf je als 2026-01-31T09:00:00.
+	Planned run time per item	Geplande looptijd per onderdeel
 	Play	Afspelen
 	Points	Punten
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Servicetijd
 	Services	Diensten
 	Set Property	Eigenschap instellen
+	Set a planned run time per item on this block to see its effectiveness.	Stel voor dit blok een geplande looptijd per onderdeel in om de effectiviteit te zien.
 	Set a value	Een waarde instellen
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Wordt ingesteld voor elke entiteit zodra deze dit blok binnenkomt. Expressies lezen de waarden die de entiteit bij binnenkomst had, zoals getProperty('issues') - 1.
 	Settings	Instellingen
 	Setup	Omstellen
+	Setup ratio	Omstelaandeel
 	Setup time	Omsteltijd
 	Shape	Vorm
 	Share	Aandeel

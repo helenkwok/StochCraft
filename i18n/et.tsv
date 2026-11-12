@@ -232,6 +232,8 @@
 	Normal	Normaalne
 	Not reached, even with {units}	Ei saavutatud, isegi mitte {units} korral
 	Number	Arv
+	OEE availability	OEE kättesaadavus
+	OEE effectiveness	OEE tõhusus
 	On	Päevad
 	One change, which Undo takes back	Üks muudatus, mille Võta tagasi tühistab
 	One clerk, random arrivals: the textbook queue, checked against theory.	Üks teenindaja, juhuslikud saabumised: klassikaline järjekord, mida kontrollitakse teooriaga.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Periood {n} kordub
 	Period {n} starts	Periood {n} algab
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioodid, mil muutuvad saadavus, saabumised või kogumi vahetused. Kuupäevad ja kellaajad kirjutatakse kujul 2026-01-31T09:00:00.
+	Planned run time per item	Kavandatud tööaeg detaili kohta
 	Play	Esita
 	Points	Punktid
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Teenindusaeg
 	Services	Teenused
 	Set Property	Määra omadus
+	Set a planned run time per item on this block to see its effectiveness.	Määra selle ploki jaoks kavandatud tööaeg detaili kohta, et näha selle tõhusust.
 	Set a value	Määra väärtus
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Määratakse igale olemile sellesse plokki sisenemisel. Avaldised loevad väärtusi, mis olid olemil sisenemise hetkel, näiteks getProperty('issues') - 1.
 	Settings	Seaded
 	Setup	Ümberseadistus
+	Setup ratio	Ümberseadistuse osakaal
 	Setup time	Ümberseadistusaeg
 	Shape	Kuju
 	Share	Osakaal

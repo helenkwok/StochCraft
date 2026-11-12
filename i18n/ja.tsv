@@ -232,6 +232,8 @@
 	Normal	正規分布
 	Not reached, even with {units}	{units} でも未達成
 	Number	数値
+	OEE availability	OEE 可動率
+	OEE effectiveness	OEE 有効性
 	On	曜日
 	One change, which Undo takes back	元に戻すで取り消せる 1 回の変更
 	One clerk, random arrivals: the textbook queue, checked against theory.	窓口が 1 つ、到着はランダム。教科書的な待ち行列を理論値と比較します。
@@ -258,6 +260,7 @@
 	Period {n} repeats	期間 {n} の繰り返し
 	Period {n} starts	期間 {n} の開始
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	稼働可否、到着、プールのシフトが変わる期間です。日時は 2026-01-31T09:00:00 のように書きます。
+	Planned run time per item	部品あたりの計画実行時間
 	Play	再生
 	Points	点
 	Poisson	ポアソン分布
@@ -340,10 +343,12 @@
 	Service time	サービス時間
 	Services	サービス
 	Set Property	プロパティを設定
+	Set a planned run time per item on this block to see its effectiveness.	このブロックに部品あたりの計画実行時間を設定すると、その有効性が表示されます。
 	Set a value	値を設定
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	各エンティティがこのブロックに入るときに設定されます。式は、入る時点で保持していた値を読み取ります（例: getProperty('issues') - 1）。
 	Settings	設定
 	Setup	段取り
+	Setup ratio	段取り比率
 	Setup time	段取り時間
 	Shape	形状
 	Share	割合

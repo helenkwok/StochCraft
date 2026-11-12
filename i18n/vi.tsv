@@ -232,6 +232,8 @@
 	Normal	Chuẩn
 	Not reached, even with {units}	Chưa đạt, kể cả với {units}
 	Number	Số
+	OEE availability	Độ khả dụng OEE
+	OEE effectiveness	Hiệu quả OEE
 	On	Các ngày
 	One change, which Undo takes back	Một thay đổi, có thể hoàn tác
 	One clerk, random arrivals: the textbook queue, checked against theory.	Một nhân viên phục vụ, lượt đến ngẫu nhiên: hàng đợi kinh điển được đối chiếu với lý thuyết.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Khoảng {n} lặp lại
 	Period {n} starts	Khoảng {n} bắt đầu
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Các khoảng thời gian mà độ khả dụng, lượt đến hoặc ca của nhóm thay đổi. Ngày giờ được viết như 2026-01-31T09:00:00.
+	Planned run time per item	Thời gian chạy dự kiến trên mỗi chi tiết
 	Play	Phát
 	Points	Điểm
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Thời gian phục vụ
 	Services	Dịch vụ
 	Set Property	Đặt thuộc tính
+	Set a planned run time per item on this block to see its effectiveness.	Đặt thời gian chạy dự kiến trên mỗi chi tiết cho khối này để xem hiệu quả của nó.
 	Set a value	Đặt giá trị
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Được đặt cho từng thực thể khi đi vào khối này. Biểu thức đọc các giá trị mà thực thể có tại thời điểm đi vào, chẳng hạn getProperty('issues') - 1.
 	Settings	Cài đặt
 	Setup	Chuẩn bị máy
+	Setup ratio	Tỷ lệ chuẩn bị máy
 	Setup time	Thời gian chuẩn bị máy
 	Shape	Hình dạng
 	Share	Tỷ lệ

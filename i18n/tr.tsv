@@ -232,6 +232,8 @@
 	Normal	Normal
 	Not reached, even with {units}	Ulaşılamadı, {units} ile bile
 	Number	Sayı
+	OEE availability	OEE kullanılabilirliği
+	OEE effectiveness	OEE etkinliği
 	On	Günler
 	One change, which Undo takes back	Geri Al ile geri alınan tek bir değişiklik
 	One clerk, random arrivals: the textbook queue, checked against theory.	Bir görevli, rastgele gelişler: teoriyle doğrulanan klasik kuyruk.
@@ -258,6 +260,7 @@
 	Period {n} repeats	{n}. dönem tekrarı
 	Period {n} starts	{n}. dönem başlangıcı
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Kullanılabilirliğin, gelişlerin veya bir havuzun vardiyalarının değiştiği dönemler. Tarih ve saatler 2026-01-31T09:00:00 biçiminde yazılır.
+	Planned run time per item	Parça başına planlanan çalışma süresi
 	Play	Oynat
 	Points	Noktalar
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Hizmet süresi
 	Services	Hizmetler
 	Set Property	Özelliği ayarla
+	Set a planned run time per item on this block to see its effectiveness.	Etkinliğini görmek için bu blokta parça başına planlanan çalışma süresini ayarlayın.
 	Set a value	Değer ayarla
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Bu bloğa girerken her varlık için ayarlanır. İfadeler, varlığın giriş anında sahip olduğu değerleri okur; örneğin getProperty('issues') - 1.
 	Settings	Ayarlar
 	Setup	Hazırlık
+	Setup ratio	Hazırlık oranı
 	Setup time	Hazırlık süresi
 	Shape	Şekil
 	Share	Oran

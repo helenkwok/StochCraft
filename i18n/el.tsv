@@ -232,6 +232,8 @@
 	Normal	Κανονική
 	Not reached, even with {units}	Δεν επιτεύχθηκε ούτε με {units}
 	Number	Αριθμός
+	OEE availability	Διαθεσιμότητα OEE
+	OEE effectiveness	Αποτελεσματικότητα OEE
 	On	Ημέρες
 	One change, which Undo takes back	Μία αλλαγή, που την αναιρεί η Αναίρεση
 	One clerk, random arrivals: the textbook queue, checked against theory.	Ένας υπάλληλος, τυχαίες αφίξεις: η κλασική ουρά, ελεγμένη με τη θεωρία.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Επανάληψη περιόδου {n}
 	Period {n} starts	Έναρξη περιόδου {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Περίοδοι κατά τις οποίες αλλάζουν η διαθεσιμότητα, οι αφίξεις ή οι βάρδιες μιας δεξαμενής. Οι ημερομηνίες και οι ώρες γράφονται ως 2026-01-31T09:00:00.
+	Planned run time per item	Προγραμματισμένος χρόνος λειτουργίας ανά τεμάχιο
 	Play	Αναπαραγωγή
 	Points	Σημεία
 	Poisson	Πουασόν
@@ -340,10 +343,12 @@
 	Service time	Χρόνος εξυπηρέτησης
 	Services	Υπηρεσίες
 	Set Property	Ορισμός ιδιότητας
+	Set a planned run time per item on this block to see its effectiveness.	Ορίστε προγραμματισμένο χρόνο λειτουργίας ανά τεμάχιο σε αυτό το μπλοκ για να δείτε την αποτελεσματικότητά του.
 	Set a value	Ορισμός τιμής
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ορίζεται για κάθε οντότητα όταν εισέρχεται σε αυτό το μπλοκ. Οι εκφράσεις διαβάζουν τις τιμές που είχε κατά την είσοδο, όπως getProperty('issues') - 1.
 	Settings	Ρυθμίσεις
 	Setup	Προετοιμασία
+	Setup ratio	Ποσοστό προετοιμασίας
 	Setup time	Χρόνος προετοιμασίας
 	Shape	Σχήμα
 	Share	Ποσοστό

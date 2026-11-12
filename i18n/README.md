@@ -89,6 +89,25 @@ engine's messages (validation, file notes) are English too.
   ru переналадка, zh 换模/换型); elsewhere it is the language's general word for machine set-up
   or preparation. Not checked against IATE, and not reviewed by native speakers. The least
   certain are lo, th, ta, te, ka, kk, bn, sq, ko and vi.
+- The rows for ISO 22400-2's OEE elements (PR "OEE availability, effectiveness and setup ratio":
+  Planned run time per item, OEE availability, OEE effectiveness, Setup ratio and the hint to set
+  a planned run time) were machine-drafted with Claude Code from the plain meaning of the English
+  and each catalog's existing terms: the part word of "Energy per part" for "item", the setup word
+  of "Setup", and the share or ratio word. "OEE" is kept as the acronym in every language, although
+  some Wikipedia articles name a local one (fr TRS, sv TAK, fi KNL, hu TEH, de GAE, cs CEZ, es
+  ETE). "OEE availability" uses the availability factor named by the interlanguage links of
+  Wikipedia's "Overall equipment effectiveness" where there is one (de Verfügbarkeit, es
+  Disponibilidad, fr disponibilité, it disponibilità, nl beschikbaarheid, pl Dostępność, pt
+  Disponibilidade, sv Tillgänglighet, fi käytettävyys, hu rendelkezésre állás, cs dostupnost, ru
+  Доступность, ja 可動率, ko 가용성, zh-hant 稼動率); where a catalog's "Availability" is a
+  reliability ratio and no article exists (uk, sk, lt, et, th, lo) it is the everyday word for
+  available, and zh-hans uses 时间开动率 from general mainland TPM usage rather than the
+  article's 稼动率. "OEE effectiveness" renders ISO's "effectiveness" literally (Effektivität,
+  efficacité, 有効性, результативность…), not the "performance" factor the Wikipedia articles name
+  (Leistung, prestatie, performance/desempenho, 性能, производительность, Anläggningsutnyttjande,
+  nopeus, teljesítmény, 產能效率), so the row and the hint use the same word as the English. Not
+  checked against IATE or the standard's own translations, and not reviewed by native speakers.
+  The least certain are lo, th, ta, te, ka, kk, bn, sq, et, lt and zh-hans.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

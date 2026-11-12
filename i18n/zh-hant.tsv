@@ -232,6 +232,8 @@
 	Normal	常態分布
 	Not reached, even with {units}	即使有 {units} 也未達成
 	Number	數值
+	OEE availability	OEE 稼動率
+	OEE effectiveness	OEE 效能
 	On	星期
 	One change, which Undo takes back	一次變更，可用復原還原
 	One clerk, random arrivals: the textbook queue, checked against theory.	一名服務員、隨機到達：經典排隊模型，並與理論結果對照。
@@ -258,6 +260,7 @@
 	Period {n} repeats	時段 {n} 重複
 	Period {n} starts	時段 {n} 開始
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	可用性、到達或資源池的班次改變的時段。日期和時間寫作 2026-01-31T09:00:00。
+	Planned run time per item	單件計畫運行時間
 	Play	播放
 	Points	點
 	Poisson	卜瓦松分布
@@ -340,10 +343,12 @@
 	Service time	服務時間
 	Services	服務
 	Set Property	設定屬性
+	Set a planned run time per item on this block to see its effectiveness.	為此區塊設定單件計畫運行時間，即可查看其效能。
 	Set a value	設定值
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	在每個實體進入此區塊時設定。運算式讀取實體到達時攜帶的值，例如 getProperty('issues') - 1。
 	Settings	設定
 	Setup	換線
+	Setup ratio	換線比率
 	Setup time	換線時間
 	Shape	形狀參數
 	Share	比例

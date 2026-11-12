@@ -232,6 +232,8 @@
 	Normal	정규 분포
 	Not reached, even with {units}	{units}로도 도달하지 못함
 	Number	숫자
+	OEE availability	OEE 가용성
+	OEE effectiveness	OEE 효과성
 	On	요일
 	One change, which Undo takes back	실행 취소로 되돌릴 수 있는 한 번의 변경
 	One clerk, random arrivals: the textbook queue, checked against theory.	창구 하나, 무작위 도착: 교과서의 대기열을 이론과 비교합니다.
@@ -258,6 +260,7 @@
 	Period {n} repeats	기간 {n} 반복
 	Period {n} starts	기간 {n} 시작
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	가용 여부, 도착 또는 풀의 근무조가 바뀌는 기간입니다. 날짜와 시간은 2026-01-31T09:00:00 형식으로 씁니다.
+	Planned run time per item	부품당 계획 가동 시간
 	Play	재생
 	Points	점
 	Poisson	포아송 분포
@@ -340,10 +343,12 @@
 	Service time	서비스 시간
 	Services	서비스
 	Set Property	속성 설정
+	Set a planned run time per item on this block to see its effectiveness.	이 블록에 부품당 계획 가동 시간을 설정하면 효과성을 볼 수 있습니다.
 	Set a value	값 설정
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	각 엔터티가 이 블록에 들어올 때 설정됩니다. 수식은 들어올 때 엔터티가 가지고 있던 값을 읽습니다. 예: getProperty('issues') - 1.
 	Settings	설정
 	Setup	셋업
+	Setup ratio	셋업 비율
 	Setup time	셋업 시간
 	Shape	모양
 	Share	비율

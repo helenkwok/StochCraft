@@ -232,6 +232,8 @@
 	Normal	Normaalijakauma
 	Not reached, even with {units}	Ei saavutettu, ei edes yksiköillä {units}
 	Number	Luku
+	OEE availability	OEE-käytettävyys
+	OEE effectiveness	OEE-tehokkuus
 	On	Päivät
 	One change, which Undo takes back	Yksi muutos, jonka Kumoa peruu
 	One clerk, random arrivals: the textbook queue, checked against theory.	Yksi palvelija, satunnaiset saapumiset: teorian avulla tarkistettu klassinen jono.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Jakso {n} toistuu
 	Period {n} starts	Jakso {n} alkaa
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Jaksot, joiden aikana käytettävyys, saapumiset tai poolin vuorot muuttuvat. Päivämäärät ja ajat kirjoitetaan muodossa 2026-01-31T09:00:00.
+	Planned run time per item	Suunniteltu käyntiaika osaa kohden
 	Play	Toista
 	Points	Pisteet
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Palveluaika
 	Services	Palvelut
 	Set Property	Aseta ominaisuus
+	Set a planned run time per item on this block to see its effectiveness.	Aseta tälle lohkolle suunniteltu käyntiaika osaa kohden nähdäksesi sen tehokkuuden.
 	Set a value	Aseta arvo
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Asetetaan jokaiselle entiteetille sen saapuessa tähän lohkoon. Lausekkeet lukevat entiteetin saapuessa voimassa olleet arvot, kuten getProperty('issues') - 1.
 	Settings	Asetukset
 	Setup	Asetus
+	Setup ratio	Asetusosuus
 	Setup time	Asetusaika
 	Shape	Muoto
 	Share	Osuus

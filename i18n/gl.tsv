@@ -232,6 +232,8 @@
 	Normal	Normal
 	Not reached, even with {units}	Non acadado, nin sequera con {units}
 	Number	Número
+	OEE availability	Dispoñibilidade OEE
+	OEE effectiveness	Eficacia OEE
 	On	Días
 	One change, which Undo takes back	Un só cambio, que Desfacer reverte
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un empregado, chegadas aleatorias: a cola clásica, comprobada coa teoría.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Repetición do período {n}
 	Period {n} starts	Inicio do período {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Períodos nos que cambian a dispoñibilidade, as chegadas ou as quendas dun grupo. As datas e horas escríbense 2026-01-31T09:00:00.
+	Planned run time per item	Tempo de execución planificado por peza
 	Play	Reproducir
 	Points	Puntos
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Tempo de servizo
 	Services	Servizos
 	Set Property	Definir propiedade
+	Set a planned run time per item on this block to see its effectiveness.	Defina un tempo de execución planificado por peza neste bloque para ver a súa eficacia.
 	Set a value	Definir un valor
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Establécese para cada entidade ao entrar neste bloque. As expresións len os valores cos que chegou, como getProperty('issues') - 1.
 	Settings	Axustes
 	Setup	Preparación
+	Setup ratio	Proporción de preparación
 	Setup time	Tempo de preparación
 	Shape	Forma
 	Share	Proporción
