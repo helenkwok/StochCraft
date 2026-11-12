@@ -31,13 +31,17 @@
 	Add a flow to…	Pridėti srautą į…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Pridėti vienetą prie labiausiai apkrautos užduoties ar telkinio, kol pakankamai replikacijų pasieks tikslą. Rodomas ir atsakymas, kai kiekvienas laikas lygus savo vidurkiui; jis paprastai per mažas.
 	Add alternative	Pridėti alternatyvą
+	Add calendar	Pridėti kalendorių
 	Add calendar entry	Pridėti kalendoriaus įrašą
+	Add period	Pridėti laikotarpį
 	Add point	Pridėti tašką
 	Add pool	Pridėti grupę
 	Add property	Pridėti savybę
+	Added calendar {id}	Pridėtas kalendorius {id}
 	Added pool {id}	Pridėta grupė {id}
 	Added {block} ({id})	Pridėta {block} ({id})
 	Align	Lygiuoti
+	Also: {rule}	Taip pat: {rule}
 	Alternative {n}	Alternatyva {n}
 	Analysis	Analizė
 	Appearance	Išvaizda
@@ -68,6 +72,8 @@
 	By role	Pagal vaidmenį
 	CSV table	CSV lentelė
 	Calendar	Kalendorius
+	Calendar name	Kalendoriaus pavadinimas
+	Calendars	Kalendoriai
 	Cancel	Atšaukti
 	Cancel Run	Atšaukti vykdymą
 	Cancel run	Atšaukti vykdymą
@@ -94,6 +100,7 @@
 	Constant	Konstanta
 	Copy	Kopijuoti
 	Cut	Iškirpti
+	Daily	Kasdien
 	Dark	Tamsi
 	Data points	Duomenų taškai
 	Date and time	Data ir laikas
@@ -109,6 +116,7 @@
 	Disconnect	Atjungti
 	Discrete values	Diskrečiosios reikšmės
 	Discrete-event simulation, from model files to results.	Diskrečiųjų įvykių modeliavimas – nuo modelio failų iki rezultatų.
+	Does not repeat	Nesikartoja
 	Don't Save	Neįrašyti
 	Download	Atsisiųsti
 	Download charts (PNG)	Atsisiųsti diagramas (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	{id} laikas pritaikytas
 	Flows	Srautai
 	Forget the estimate	Pamiršti įvertį
+	Fri	pn
 	From	Iš
 	Gamma	Gama
 	Goes to	Veda į
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Spartieji klavišai įrašyti
 	Keyboard shortcuts unchanged	Spartieji klavišai nepakeisti
 	Language	Kalba
+	Leave empty to start at midnight of the day the first period starts.	Palikite tuščią, kad prasidėtų vidurnaktį tą dieną, kai prasideda pirmasis laikotarpis.
 	Left	Išėjo
 	Left edges	Kairieji kraštai
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencijuota pagal MIT License arba Apache License 2.0, jūsų pasirinkimu.
@@ -195,6 +205,8 @@
 	Minimize	Sumažinti
 	Minimum	Minimumas
 	Model	Modelis
+	Model time 0 is	Modelio laikas 0 yra
+	Mon	pr
 	Most likely	Labiausiai tikėtina
 	Move	Perkėlimas
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Paeiliui keisti kiekvieną parametrą žemyn ir aukštyn ir surikiuoti juos pagal tai, kiek pasikeičia rezultatas.
@@ -213,9 +225,11 @@
 	No target	Be tikslo
 	None	Nėra
 	None found. The model is ready to run.	Problemų nerasta. Modelis paruoštas vykdyti.
+	None picked: the day the period starts.	Nieko nepasirinkta: diena, kai prasideda laikotarpis.
 	Normal	Normalusis
 	Not reached, even with {units}	Nepasiekta net su {units}
 	Number	Skaičius
+	On	Dienos
 	One change, which Undo takes back	Vienas pakeitimas, kurį atšaukia Anuliuoti
 	One clerk, random arrivals: the textbook queue, checked against theory.	Vienas darbuotojas, atsitiktiniai atvykimai: klasikinė eilė, patikrinta pagal teoriją.
 	One task per BPSim distribution, to compare their spread.	Po vieną užduotį kiekvienam BPSim skirstiniui, kad būtų galima palyginti jų sklaidą.
@@ -236,6 +250,10 @@
 	Paste	Įklijuoti
 	Pause	Pristabdyti
 	Percentile	Procentilis
+	Period {n} ends	{n} laikotarpio pabaiga
+	Period {n} repeats	{n} laikotarpio kartojimas
+	Period {n} starts	{n} laikotarpio pradžia
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Laikotarpiai, kai keičiasi prieinamumas, atvykimai ar grupės pamainos. Datos ir laikai rašomi taip: 2026-01-31T09:00:00.
 	Play	Leisti
 	Points	Taškai
 	Poisson	Puasono
@@ -264,13 +282,16 @@
 	Remove Property	Pašalinti savybę
 	Remove alternative {n}	Pašalinti alternatyvą {n}
 	Remove block	Pašalinti bloką
+	Remove the calendar {id}	Pašalinti kalendorių {id}
 	Remove the flow {id}	Pašalinti srautą {id}
 	Remove the pool {id}	Pašalinti grupę {id}
 	Remove this block and its flows (Delete)	Pašalinti šį bloką ir jo srautus (Delete)
+	Remove this period	Pašalinti šį laikotarpį
 	Removed {id}	Pašalinta {id}
 	Rename Block	Pervadinti bloką
 	Rename Model	Pervadinti modelį
 	Repair time	Remonto laikas
+	Repeats	Kartojasi
 	Replace Model	Pakeisti modelį
 	Replication 1 · {time} of {end} {unit}	Replikacija 1 · {time} iš {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikacija 1 · {time} iš {end} {unit} · įšilimas
@@ -299,6 +320,7 @@
 	Run the sweep	Paleisti perėjimą
 	Running	Vykdoma
 	Running…	Vykdoma…
+	Sat	št
 	Save	Įrašyti
 	Save As…	Įrašyti kaip…
 	Save Model	Įrašyti modelį
@@ -341,6 +363,7 @@
 	Stop setting {name}	Baigti nustatyti {name}
 	Stop watching	Baigti stebėjimą
 	Stopped watching	Stebėjimas baigtas
+	Sun	sk
 	Sweep a parameter	Parametro perėjimas
 	Tandem line	Nuoseklioji linija
 	Target	Tikslas
@@ -362,6 +385,7 @@
 	This block has an error	Šiame bloke yra klaida
 	This run	Šis vykdymas
 	Three-point estimate	Trijų taškų įvertis
+	Thu	kt
 	Time between arrivals	Laikas tarp atvykimų
 	Time blocked	Blokavimo laikas
 	Time failed	Gedimo laikas
@@ -377,6 +401,7 @@
 	Trials	Bandymai
 	Triangular	Trikampis
 	Truncated normal	Apribotasis normalusis
+	Tue	an
 	Two stations in series, read from an XPDL file.	Dvi nuoseklios stotys, nuskaitytos iš XPDL failo.
 	Type	Tipas
 	Undid {action}	Atšaukta {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Stebėti vykdymą
 	Watch a run	Stebėti vykdymą
 	Watching replication 1	Stebima 1 replikacija
+	Wed	tr
+	Weekly	Kas savaitę
 	Weibull	Veibulo
 	When a task empties	Kai užduotis ištuštėja
 	When enough have left a block	Kai pakankamai paliko bloką

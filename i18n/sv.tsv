@@ -31,13 +31,17 @@
 	Add a flow to…	Lägg till flöde till…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lägg till en enhet vid den mest belastade uppgiften eller poolen tills tillräckligt många replikationer når ett mål. Svaret med varje tid på sitt medelvärde visas också; det är oftast för litet.
 	Add alternative	Lägg till alternativ
+	Add calendar	Lägg till kalender
 	Add calendar entry	Lägg till kalenderpost
+	Add period	Lägg till period
 	Add point	Lägg till punkt
 	Add pool	Lägg till pool
 	Add property	Lägg till egenskap
+	Added calendar {id}	Lade till kalendern {id}
 	Added pool {id}	Lade till poolen {id}
 	Added {block} ({id})	Lade till {block} ({id})
 	Align	Justera
+	Also: {rule}	Även: {rule}
 	Alternative {n}	Alternativ {n}
 	Analysis	Analys
 	Appearance	Utseende
@@ -68,6 +72,8 @@
 	By role	Efter roll
 	CSV table	CSV-tabell
 	Calendar	Kalender
+	Calendar name	Kalendernamn
+	Calendars	Kalendrar
 	Cancel	Avbryt
 	Cancel Run	Avbryt körning
 	Cancel run	Avbryt körning
@@ -94,6 +100,7 @@
 	Constant	Konstant
 	Copy	Kopiera
 	Cut	Klipp ut
+	Daily	Dagligen
 	Dark	Mörkt
 	Data points	Datapunkter
 	Date and time	Datum och tid
@@ -109,6 +116,7 @@
 	Disconnect	Koppla från
 	Discrete values	Diskreta värden
 	Discrete-event simulation, from model files to results.	Diskret händelsesimulering, från modellfiler till resultat.
+	Does not repeat	Upprepas inte
 	Don't Save	Spara inte
 	Download	Hämta
 	Download charts (PNG)	Ladda ner diagram (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Tiden för {id} anpassad
 	Flows	Flöden
 	Forget the estimate	Glöm uppskattningen
+	Fri	fre
 	From	Från
 	Gamma	Gamma
 	Goes to	Går till
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Tangentbordsgenvägar sparade
 	Keyboard shortcuts unchanged	Tangentbordsgenvägar oförändrade
 	Language	Språk
+	Leave empty to start at midnight of the day the first period starts.	Lämna tomt för att börja vid midnatt den dag då den första perioden börjar.
 	Left	Lämnade
 	Left edges	Vänsterkanter
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licensierad enligt MIT License eller Apache License 2.0, enligt ditt val.
@@ -195,6 +205,8 @@
 	Minimize	Minimera
 	Minimum	Minimum
 	Model	Modell
+	Model time 0 is	Modelltid 0 är
+	Mon	mån
 	Most likely	Mest sannolikt
 	Move	Flytta
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Flytta varje parameter nedåt och uppåt i tur och ordning, och rangordna dem efter hur mycket resultatet rör sig.
@@ -213,9 +225,11 @@
 	No target	Inget mål
 	None	Ingen
 	None found. The model is ready to run.	Inga problem hittades. Modellen är redo att köras.
+	None picked: the day the period starts.	Inget valt: den dag perioden börjar.
 	Normal	Normal
 	Not reached, even with {units}	Inte nått, inte ens med {units}
 	Number	Tal
+	On	Dagar
 	One change, which Undo takes back	En ändring, som Ångra tar tillbaka
 	One clerk, random arrivals: the textbook queue, checked against theory.	En handläggare, slumpmässiga ankomster: den klassiska kön, kontrollerad mot teorin.
 	One task per BPSim distribution, to compare their spread.	En uppgift per BPSim-fördelning för att jämföra deras spridning.
@@ -236,6 +250,10 @@
 	Paste	Klistra in
 	Pause	Pausa
 	Percentile	Percentil
+	Period {n} ends	Period {n} slutar
+	Period {n} repeats	Period {n} upprepas
+	Period {n} starts	Period {n} börjar
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioder då tillgänglighet, ankomster eller en pools skift ändras. Datum och tider skrivs 2026-01-31T09:00:00.
 	Play	Spela upp
 	Points	Punkter
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Ta bort egenskap
 	Remove alternative {n}	Ta bort alternativ {n}
 	Remove block	Ta bort block
+	Remove the calendar {id}	Ta bort kalendern {id}
 	Remove the flow {id}	Ta bort flödet {id}
 	Remove the pool {id}	Ta bort poolen {id}
 	Remove this block and its flows (Delete)	Ta bort detta block och dess flöden (Delete)
+	Remove this period	Ta bort den här perioden
 	Removed {id}	Tog bort {id}
 	Rename Block	Byt namn på block
 	Rename Model	Byt namn på modell
 	Repair time	Reparationstid
+	Repeats	Upprepas
 	Replace Model	Ersätt modell
 	Replication 1 · {time} of {end} {unit}	Replikation 1 · {time} av {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikation 1 · {time} av {end} {unit} · uppvärmning
@@ -299,6 +320,7 @@
 	Run the sweep	Kör svepet
 	Running	Körs
 	Running…	Körs…
+	Sat	lör
 	Save	Spara
 	Save As…	Spara som…
 	Save Model	Spara modell
@@ -341,6 +363,7 @@
 	Stop setting {name}	Sluta ange {name}
 	Stop watching	Sluta följa
 	Stopped watching	Slutade följa
+	Sun	sön
 	Sweep a parameter	Svep en parameter
 	Tandem line	Tandemlinje
 	Target	Mål
@@ -362,6 +385,7 @@
 	This block has an error	Det här blocket har ett fel
 	This run	Den här körningen
 	Three-point estimate	Trepunktsskattning
+	Thu	tor
 	Time between arrivals	Tid mellan ankomster
 	Time blocked	Tid blockerad
 	Time failed	Tid i haveri
@@ -377,6 +401,7 @@
 	Trials	Försök
 	Triangular	Triangulär
 	Truncated normal	Trunkerad normal
+	Tue	tis
 	Two stations in series, read from an XPDL file.	Två stationer i serie, inlästa från en XPDL-fil.
 	Type	Typ
 	Undid {action}	Ångrade {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Följ en körning
 	Watch a run	Följ en körning
 	Watching replication 1	Följer replikation 1
+	Wed	ons
+	Weekly	Varje vecka
 	Weibull	Weibull
 	When a task empties	När en uppgift blir tom
 	When enough have left a block	När tillräckligt många har lämnat ett block

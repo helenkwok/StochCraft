@@ -31,13 +31,17 @@
 	Add a flow to…	Legg til flyt til…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Legg til en enhet ved den travleste oppgaven eller poolen til nok replikasjoner når et mål. Svaret med hver tid på sitt gjennomsnitt vises også; det er som regel for lite.
 	Add alternative	Legg til alternativ
+	Add calendar	Legg til kalender
 	Add calendar entry	Legg til kalenderoppføring
+	Add period	Legg til periode
 	Add point	Legg til punkt
 	Add pool	Legg til pulje
 	Add property	Legg til egenskap
+	Added calendar {id}	La til kalenderen {id}
 	Added pool {id}	La til puljen {id}
 	Added {block} ({id})	La til {block} ({id})
 	Align	Juster
+	Also: {rule}	I tillegg: {rule}
 	Alternative {n}	Alternativ {n}
 	Analysis	Analyse
 	Appearance	Utseende
@@ -68,6 +72,8 @@
 	By role	Etter rolle
 	CSV table	CSV-tabell
 	Calendar	Kalender
+	Calendar name	Kalendernavn
+	Calendars	Kalendere
 	Cancel	Avbryt
 	Cancel Run	Avbryt kjøring
 	Cancel run	Avbryt kjøring
@@ -94,6 +100,7 @@
 	Constant	Konstant
 	Copy	Kopier
 	Cut	Klipp ut
+	Daily	Daglig
 	Dark	Mørk
 	Data points	Datapunkter
 	Date and time	Dato og klokkeslett
@@ -109,6 +116,7 @@
 	Disconnect	Koble fra
 	Discrete values	Diskrete verdier
 	Discrete-event simulation, from model files to results.	Diskret hendelsessimulering, fra modellfiler til resultater.
+	Does not repeat	Gjentas ikke
 	Don't Save	Ikke lagre
 	Download	Last ned
 	Download charts (PNG)	Last ned diagrammer (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Tiden for {id} tilpasset
 	Flows	Flyter
 	Forget the estimate	Glem anslaget
+	Fri	fre
 	From	Fra
 	Gamma	Gamma
 	Goes to	Går til
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Hurtigtaster lagret
 	Keyboard shortcuts unchanged	Hurtigtaster uendret
 	Language	Språk
+	Leave empty to start at midnight of the day the first period starts.	La stå tomt for å starte ved midnatt den dagen første periode starter.
 	Left	Forlatt
 	Left edges	Venstrekanter
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Lisensiert under MIT License eller Apache License 2.0, etter eget valg.
@@ -195,6 +205,8 @@
 	Minimize	Minimer
 	Minimum	Minimum
 	Model	Modell
+	Model time 0 is	Modelltid 0 er
+	Mon	man
 	Most likely	Mest sannsynlig
 	Move	Flytt
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Flytt hver parameter ned og opp etter tur, og ranger dem etter hvor mye resultatet flytter seg.
@@ -213,9 +225,11 @@
 	No target	Intet mål
 	None	Ingen
 	None found. The model is ready to run.	Ingen problemer funnet. Modellen er klar til å kjøres.
+	None picked: the day the period starts.	Ingen valgt: dagen perioden starter.
 	Normal	Normal
 	Not reached, even with {units}	Ikke nådd, heller ikke med {units}
 	Number	Tall
+	On	Dager
 	One change, which Undo takes back	Én endring, som Angre tar tilbake
 	One clerk, random arrivals: the textbook queue, checked against theory.	Én medarbeider, tilfeldige ankomster: den klassiske køen, kontrollert mot teorien.
 	One task per BPSim distribution, to compare their spread.	Én oppgave per BPSim-fordeling for å sammenligne spredningen.
@@ -236,6 +250,10 @@
 	Paste	Lim inn
 	Pause	Pause
 	Percentile	Persentil
+	Period {n} ends	Periode {n} slutter
+	Period {n} repeats	Periode {n} gjentas
+	Period {n} starts	Periode {n} starter
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioder der tilgjengelighet, ankomster eller en puljes skift endres. Datoer og klokkeslett skrives 2026-01-31T09:00:00.
 	Play	Spill av
 	Points	Punkter
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Fjern egenskap
 	Remove alternative {n}	Fjern alternativ {n}
 	Remove block	Fjern blokk
+	Remove the calendar {id}	Fjern kalenderen {id}
 	Remove the flow {id}	Fjern flyten {id}
 	Remove the pool {id}	Fjern puljen {id}
 	Remove this block and its flows (Delete)	Fjern denne blokken og flytene dens (Delete)
+	Remove this period	Fjern denne perioden
 	Removed {id}	Fjernet {id}
 	Rename Block	Gi blokk nytt navn
 	Rename Model	Gi modell nytt navn
 	Repair time	Reparasjonstid
+	Repeats	Gjentas
 	Replace Model	Erstatt modell
 	Replication 1 · {time} of {end} {unit}	Replikasjon 1 · {time} av {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Replikasjon 1 · {time} av {end} {unit} · oppvarming
@@ -299,6 +320,7 @@
 	Run the sweep	Kjør gjennomløpet
 	Running	Kjører
 	Running…	Kjører…
+	Sat	lør
 	Save	Lagre
 	Save As…	Lagre som…
 	Save Model	Lagre modell
@@ -341,6 +363,7 @@
 	Stop setting {name}	Slutt å angi {name}
 	Stop watching	Slutt å følge
 	Stopped watching	Sluttet å følge
+	Sun	søn
 	Sweep a parameter	Gjennomløp en parameter
 	Tandem line	Tandemlinje
 	Target	Mål
@@ -362,6 +385,7 @@
 	This block has an error	Denne blokken har en feil
 	This run	Denne kjøringen
 	Three-point estimate	Trepunktsanslag
+	Thu	tor
 	Time between arrivals	Tid mellom ankomster
 	Time blocked	Tid blokkert
 	Time failed	Tid med feil
@@ -377,6 +401,7 @@
 	Trials	Forsøk
 	Triangular	Triangulær
 	Truncated normal	Avkortet normal
+	Tue	tir
 	Two stations in series, read from an XPDL file.	To stasjoner i serie, lest fra en XPDL-fil.
 	Type	Type
 	Undid {action}	Angret {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Følg en kjøring
 	Watch a run	Følg en kjøring
 	Watching replication 1	Følger replikasjon 1
+	Wed	ons
+	Weekly	Ukentlig
 	Weibull	Weibull
 	When a task empties	Når en oppgave blir tom
 	When enough have left a block	Når nok har forlatt en blokk

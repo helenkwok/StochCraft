@@ -31,13 +31,17 @@
 	Add a flow to…	新增順序流，通往…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	在最忙碌的任務或資源池上逐一增加單位，直到足夠多的重複執行達到目標。同時顯示所有時間取平均值時的答案；它通常偏小。
 	Add alternative	新增替代方案
+	Add calendar	新增行事曆
 	Add calendar entry	新增行事曆項目
+	Add period	新增時段
 	Add point	新增點
 	Add pool	新增資源池
 	Add property	新增屬性
+	Added calendar {id}	已新增行事曆 {id}
 	Added pool {id}	已新增資源池 {id}
 	Added {block} ({id})	已新增 {block} ({id})
 	Align	對齊
+	Also: {rule}	另外：{rule}
 	Alternative {n}	替代方案 {n}
 	Analysis	分析
 	Appearance	外觀
@@ -68,6 +72,8 @@
 	By role	依角色
 	CSV table	CSV 表格
 	Calendar	行事曆
+	Calendar name	行事曆名稱
+	Calendars	行事曆
 	Cancel	取消
 	Cancel Run	取消執行
 	Cancel run	取消執行
@@ -94,6 +100,7 @@
 	Constant	常數
 	Copy	複製
 	Cut	剪下
+	Daily	每天
 	Dark	深色
 	Data points	資料點
 	Date and time	日期和時間
@@ -109,6 +116,7 @@
 	Disconnect	中斷連接
 	Discrete values	離散值
 	Discrete-event simulation, from model files to results.	離散事件模擬：從模型檔案到結果。
+	Does not repeat	不重複
 	Don't Save	不儲存
 	Download	下載
 	Download charts (PNG)	下載圖表 (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	已擬合 {id} 的時間
 	Flows	順序流
 	Forget the estimate	捨棄估計
+	Fri	週五
 	From	起點
 	Gamma	伽瑪分布
 	Goes to	流向
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	鍵盤快捷鍵已儲存
 	Keyboard shortcuts unchanged	鍵盤快捷鍵未變更
 	Language	語言
+	Leave empty to start at midnight of the day the first period starts.	留空則從第一個時段開始當天的午夜開始。
 	Left	離開數
 	Left edges	左邊
 	Licensed under the MIT License or the Apache License 2.0, at your option.	可選擇採用 MIT License 或 Apache License 2.0 授權。
@@ -195,6 +205,8 @@
 	Minimize	最小化
 	Minimum	最小值
 	Model	模型
+	Model time 0 is	模型時間 0 為
+	Mon	週一
 	Most likely	最可能值
 	Move	移動
 	Move each parameter down and up in turn, and rank them by how much the result moves.	依序將每個參數調低和調高，並依結果的變動幅度排序。
@@ -213,9 +225,11 @@
 	No target	無目標
 	None	無
 	None found. The model is ready to run.	未發現問題。模型可以執行。
+	None picked: the day the period starts.	未選取：時段開始的那一天。
 	Normal	常態分布
 	Not reached, even with {units}	即使有 {units} 也未達成
 	Number	數值
+	On	星期
 	One change, which Undo takes back	一次變更，可用復原還原
 	One clerk, random arrivals: the textbook queue, checked against theory.	一名服務員、隨機到達：經典排隊模型，並與理論結果對照。
 	One task per BPSim distribution, to compare their spread.	每種 BPSim 分布各設一個任務，用於比較其離散程度。
@@ -236,6 +250,10 @@
 	Paste	貼上
 	Pause	暫停
 	Percentile	百分位數
+	Period {n} ends	時段 {n} 結束
+	Period {n} repeats	時段 {n} 重複
+	Period {n} starts	時段 {n} 開始
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	可用性、到達或資源池的班次改變的時段。日期和時間寫作 2026-01-31T09:00:00。
 	Play	播放
 	Points	點
 	Poisson	卜瓦松分布
@@ -264,13 +282,16 @@
 	Remove Property	移除屬性
 	Remove alternative {n}	移除替代方案 {n}
 	Remove block	移除區塊
+	Remove the calendar {id}	移除行事曆 {id}
 	Remove the flow {id}	移除順序流 {id}
 	Remove the pool {id}	移除資源池 {id}
 	Remove this block and its flows (Delete)	移除此區塊及其順序流 (Delete)
+	Remove this period	移除此時段
 	Removed {id}	已移除 {id}
 	Rename Block	重新命名區塊
 	Rename Model	重新命名模型
 	Repair time	維修時間
+	Repeats	重複
 	Replace Model	替換模型
 	Replication 1 · {time} of {end} {unit}	第 1 次重複執行 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	第 1 次重複執行 · {time} / {end} {unit} · 暖機期
@@ -299,6 +320,7 @@
 	Run the sweep	執行掃描
 	Running	正在執行
 	Running…	正在執行…
+	Sat	週六
 	Save	儲存
 	Save As…	另存新檔…
 	Save Model	儲存模型
@@ -341,6 +363,7 @@
 	Stop setting {name}	停止設定 {name}
 	Stop watching	停止觀察
 	Stopped watching	已停止觀察
+	Sun	週日
 	Sweep a parameter	掃描一個參數
 	Tandem line	串聯流程
 	Target	目標
@@ -362,6 +385,7 @@
 	This block has an error	此區塊存在錯誤
 	This run	本次執行
 	Three-point estimate	三點估計
+	Thu	週四
 	Time between arrivals	到達間隔時間
 	Time blocked	阻塞時間
 	Time failed	故障時間
@@ -377,6 +401,7 @@
 	Trials	試驗次數
 	Triangular	三角分布
 	Truncated normal	截斷常態分布
+	Tue	週二
 	Two stations in series, read from an XPDL file.	從 XPDL 檔案讀取的兩個串聯工作站。
 	Type	型別
 	Undid {action}	已復原 {action}
@@ -404,6 +429,8 @@
 	Watch a Run	觀察執行
 	Watch a run	觀察執行
 	Watching replication 1	正在觀察第 1 次重複執行
+	Wed	週三
+	Weekly	每週
 	Weibull	威布林分布
 	When a task empties	當某個任務清空時
 	When enough have left a block	當足夠多實體離開某個區塊時

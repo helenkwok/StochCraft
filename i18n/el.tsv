@@ -31,13 +31,17 @@
 	Add a flow to…	Προσθήκη ροής προς…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Προσθήκη μιας μονάδας στην πιο φορτωμένη εργασία ή ομάδα έως ότου αρκετές επαναλήψεις πετύχουν έναν στόχο. Εμφανίζεται και η απάντηση με κάθε χρόνο στη μέση τιμή του· συνήθως είναι πολύ μικρή.
 	Add alternative	Προσθήκη εναλλακτικής
+	Add calendar	Προσθήκη ημερολογίου
 	Add calendar entry	Προσθήκη καταχώρισης ημερολογίου
+	Add period	Προσθήκη περιόδου
 	Add point	Προσθήκη σημείου
 	Add pool	Προσθήκη δεξαμενής
 	Add property	Προσθήκη ιδιότητας
+	Added calendar {id}	Προστέθηκε το ημερολόγιο {id}
 	Added pool {id}	Προστέθηκε η δεξαμενή {id}
 	Added {block} ({id})	Προστέθηκε το {block} ({id})
 	Align	Στοίχιση
+	Also: {rule}	Επίσης: {rule}
 	Alternative {n}	Εναλλακτική {n}
 	Analysis	Ανάλυση
 	Appearance	Εμφάνιση
@@ -68,6 +72,8 @@
 	By role	Κατά ρόλο
 	CSV table	Πίνακας CSV
 	Calendar	Ημερολόγιο
+	Calendar name	Όνομα ημερολογίου
+	Calendars	Ημερολόγια
 	Cancel	Ακύρωση
 	Cancel Run	Ακύρωση εκτέλεσης
 	Cancel run	Ακύρωση εκτέλεσης
@@ -94,6 +100,7 @@
 	Constant	Σταθερή
 	Copy	Αντιγραφή
 	Cut	Αποκοπή
+	Daily	Καθημερινά
 	Dark	Σκούρο
 	Data points	Σημεία δεδομένων
 	Date and time	Ημερομηνία και ώρα
@@ -109,6 +116,7 @@
 	Disconnect	Αποσύνδεση
 	Discrete values	Διακριτές τιμές
 	Discrete-event simulation, from model files to results.	Προσομοίωση διακριτών γεγονότων, από αρχεία μοντέλων έως αποτελέσματα.
+	Does not repeat	Χωρίς επανάληψη
 	Don't Save	Να μην αποθηκευτεί
 	Download	Λήψη
 	Download charts (PNG)	Λήψη γραφημάτων (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Ο χρόνος του {id} προσαρμόστηκε
 	Flows	Ροές
 	Forget the estimate	Απόρριψη εκτίμησης
+	Fri	Παρ
 	From	Από
 	Gamma	Γάμμα
 	Goes to	Οδηγεί σε
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Οι συντομεύσεις πληκτρολογίου αποθηκεύτηκαν
 	Keyboard shortcuts unchanged	Οι συντομεύσεις πληκτρολογίου δεν άλλαξαν
 	Language	Γλώσσα
+	Leave empty to start at midnight of the day the first period starts.	Αφήστε κενό για έναρξη τα μεσάνυχτα της ημέρας που αρχίζει η πρώτη περίοδος.
 	Left	Έξοδοι
 	Left edges	Αριστερά άκρα
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Διατίθεται με MIT License ή Apache License 2.0, κατ' επιλογή.
@@ -195,6 +205,8 @@
 	Minimize	Ελαχιστοποίηση
 	Minimum	Ελάχιστο
 	Model	Μοντέλο
+	Model time 0 is	Ο χρόνος 0 του μοντέλου είναι
+	Mon	Δευ
 	Most likely	Πιθανότερη τιμή
 	Move	Μετακίνηση
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Μετακίνηση κάθε παραμέτρου διαδοχικά προς τα κάτω και πάνω, και κατάταξή τους κατά το πόσο μετακινείται το αποτέλεσμα.
@@ -213,9 +225,11 @@
 	No target	Χωρίς στόχο
 	None	Κανένα
 	None found. The model is ready to run.	Δεν βρέθηκαν προβλήματα. Το μοντέλο είναι έτοιμο για εκτέλεση.
+	None picked: the day the period starts.	Καμία επιλογή: η ημέρα που αρχίζει η περίοδος.
 	Normal	Κανονική
 	Not reached, even with {units}	Δεν επιτεύχθηκε ούτε με {units}
 	Number	Αριθμός
+	On	Ημέρες
 	One change, which Undo takes back	Μία αλλαγή, που την αναιρεί η Αναίρεση
 	One clerk, random arrivals: the textbook queue, checked against theory.	Ένας υπάλληλος, τυχαίες αφίξεις: η κλασική ουρά, ελεγμένη με τη θεωρία.
 	One task per BPSim distribution, to compare their spread.	Μία εργασία ανά κατανομή BPSim για σύγκριση της διασποράς τους.
@@ -236,6 +250,10 @@
 	Paste	Επικόλληση
 	Pause	Παύση
 	Percentile	Εκατοστημόριο
+	Period {n} ends	Λήξη περιόδου {n}
+	Period {n} repeats	Επανάληψη περιόδου {n}
+	Period {n} starts	Έναρξη περιόδου {n}
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Περίοδοι κατά τις οποίες αλλάζουν η διαθεσιμότητα, οι αφίξεις ή οι βάρδιες μιας δεξαμενής. Οι ημερομηνίες και οι ώρες γράφονται ως 2026-01-31T09:00:00.
 	Play	Αναπαραγωγή
 	Points	Σημεία
 	Poisson	Πουασόν
@@ -264,13 +282,16 @@
 	Remove Property	Αφαίρεση ιδιότητας
 	Remove alternative {n}	Αφαίρεση εναλλακτικής {n}
 	Remove block	Αφαίρεση μπλοκ
+	Remove the calendar {id}	Αφαίρεση ημερολογίου {id}
 	Remove the flow {id}	Αφαίρεση ροής {id}
 	Remove the pool {id}	Αφαίρεση δεξαμενής {id}
 	Remove this block and its flows (Delete)	Αφαίρεση αυτού του μπλοκ και των ροών του (Delete)
+	Remove this period	Αφαίρεση αυτής της περιόδου
 	Removed {id}	Αφαιρέθηκε το {id}
 	Rename Block	Μετονομασία μπλοκ
 	Rename Model	Μετονομασία μοντέλου
 	Repair time	Χρόνος επισκευής
+	Repeats	Επανάληψη
 	Replace Model	Αντικατάσταση μοντέλου
 	Replication 1 · {time} of {end} {unit}	Επανάληψη 1 · {time} από {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Επανάληψη 1 · {time} από {end} {unit} · προθέρμανση
@@ -299,6 +320,7 @@
 	Run the sweep	Εκτέλεση σάρωσης
 	Running	Εκτελείται
 	Running…	Εκτελείται…
+	Sat	Σάβ
 	Save	Αποθήκευση
 	Save As…	Αποθήκευση ως…
 	Save Model	Αποθήκευση μοντέλου
@@ -341,6 +363,7 @@
 	Stop setting {name}	Διακοπή ορισμού του {name}
 	Stop watching	Διακοπή παρακολούθησης
 	Stopped watching	Η παρακολούθηση διακόπηκε
+	Sun	Κυρ
 	Sweep a parameter	Σάρωση παραμέτρου
 	Tandem line	Διαδοχική γραμμή
 	Target	Στόχος
@@ -362,6 +385,7 @@
 	This block has an error	Αυτό το μπλοκ έχει σφάλμα
 	This run	Αυτή η εκτέλεση
 	Three-point estimate	Εκτίμηση τριών σημείων
+	Thu	Πέμ
 	Time between arrivals	Χρόνος μεταξύ αφίξεων
 	Time blocked	Χρόνος αποκλεισμού
 	Time failed	Χρόνος βλάβης
@@ -377,6 +401,7 @@
 	Trials	Δοκιμές
 	Triangular	Τριγωνική
 	Truncated normal	Αποκομμένη κανονική
+	Tue	Τρί
 	Two stations in series, read from an XPDL file.	Δύο σταθμοί σε σειρά, από αρχείο XPDL.
 	Type	Τύπος
 	Undid {action}	Αναιρέθηκε το {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Παρακολούθηση εκτέλεσης
 	Watch a run	Παρακολούθηση εκτέλεσης
 	Watching replication 1	Παρακολούθηση της επανάληψης 1
+	Wed	Τετ
+	Weekly	Εβδομαδιαία
 	Weibull	Βάιμπουλ
 	When a task empties	Όταν μια εργασία αδειάσει
 	When enough have left a block	Όταν αρκετές οντότητες έχουν φύγει από ένα μπλοκ

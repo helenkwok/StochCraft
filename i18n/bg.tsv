@@ -31,13 +31,17 @@
 	Add a flow to…	Добавяне на поток към…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Добавяне на единица към най-натоварената задача или група, докато достатъчно репликации постигнат целта. Показва се и отговорът с всяко време на средната му стойност; обикновено е твърде малък.
 	Add alternative	Добавяне на алтернатива
+	Add calendar	Добавяне на календар
 	Add calendar entry	Добавяне на запис в календара
+	Add period	Добавяне на период
 	Add point	Добавяне на точка
 	Add pool	Добавяне на пул
 	Add property	Добавяне на свойство
+	Added calendar {id}	Добавен е календар {id}
 	Added pool {id}	Добавен е пул {id}
 	Added {block} ({id})	Добавен е {block} ({id})
 	Align	Подравняване
+	Also: {rule}	Също: {rule}
 	Alternative {n}	Алтернатива {n}
 	Analysis	Анализ
 	Appearance	Външен вид
@@ -68,6 +72,8 @@
 	By role	По роля
 	CSV table	Таблица CSV
 	Calendar	Календар
+	Calendar name	Име на календара
+	Calendars	Календари
 	Cancel	Отказ
 	Cancel Run	Отмяна на изпълнението
 	Cancel run	Отмяна на изпълнението
@@ -94,6 +100,7 @@
 	Constant	Константа
 	Copy	Копиране
 	Cut	Изрязване
+	Daily	Ежедневно
 	Dark	Тъмна
 	Data points	Точки с данни
 	Date and time	Дата и час
@@ -109,6 +116,7 @@
 	Disconnect	Прекъсване на връзката
 	Discrete values	Дискретни стойности
 	Discrete-event simulation, from model files to results.	Симулация на дискретни събития, от файлове на модела до резултати.
+	Does not repeat	Не се повтаря
 	Don't Save	Не записвай
 	Download	Изтегляне
 	Download charts (PNG)	Изтегляне на графики (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Времето на {id} е напаснато
 	Flows	Потоци
 	Forget the estimate	Забравяне на оценката
+	Fri	пт
 	From	От
 	Gamma	Гама
 	Goes to	Отива към
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Клавишните комбинации са запазени
 	Keyboard shortcuts unchanged	Клавишните комбинации не са променени
 	Language	Език
+	Leave empty to start at midnight of the day the first period starts.	Оставете празно, за да започне в полунощ на деня, в който започва първият период.
 	Left	Напуснали
 	Left edges	Леви ръбове
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Лицензирано по MIT License или Apache License 2.0, по ваш избор.
@@ -195,6 +205,8 @@
 	Minimize	Минимизиране
 	Minimum	Минимум
 	Model	Модел
+	Model time 0 is	Моделно време 0 е
+	Mon	пн
 	Most likely	Най-вероятна стойност
 	Move	Преместване
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Всеки параметър се премества поред надолу и нагоре и се подреждат според това колко се променя резултатът.
@@ -213,9 +225,11 @@
 	No target	Без цел
 	None	Няма
 	None found. The model is ready to run.	Не са открити проблеми. Моделът е готов за изпълнение.
+	None picked: the day the period starts.	Нищо не е избрано: денят, в който започва периодът.
 	Normal	Нормално
 	Not reached, even with {units}	Не е постигната дори с {units}
 	Number	Число
+	On	Дни
 	One change, which Undo takes back	Една промяна, която Отмяна връща
 	One clerk, random arrivals: the textbook queue, checked against theory.	Един служител, случайни пристигания: класическа опашка, проверена спрямо теорията.
 	One task per BPSim distribution, to compare their spread.	По една задача за всяко разпределение BPSim за сравнение на разсейването.
@@ -236,6 +250,10 @@
 	Paste	Поставяне
 	Pause	Пауза
 	Percentile	Персентил
+	Period {n} ends	Период {n} завършва
+	Period {n} repeats	Период {n} се повтаря
+	Period {n} starts	Период {n} започва
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Периоди, в които се променят наличността, пристиганията или смените на пул. Датите и часовете се записват като 2026-01-31T09:00:00.
 	Play	Пускане
 	Points	Точки
 	Poisson	Поасон
@@ -264,13 +282,16 @@
 	Remove Property	Премахване на свойство
 	Remove alternative {n}	Премахване на алтернатива {n}
 	Remove block	Премахване на блок
+	Remove the calendar {id}	Премахване на календара {id}
 	Remove the flow {id}	Премахване на потока {id}
 	Remove the pool {id}	Премахване на пула {id}
 	Remove this block and its flows (Delete)	Премахване на този блок и потоците му (Delete)
+	Remove this period	Премахване на този период
 	Removed {id}	Премахнат е {id}
 	Rename Block	Преименуване на блок
 	Rename Model	Преименуване на модел
 	Repair time	Време за ремонт
+	Repeats	Повторение
 	Replace Model	Замяна на модел
 	Replication 1 · {time} of {end} {unit}	Репликация 1 · {time} от {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Репликация 1 · {time} от {end} {unit} · загряване
@@ -299,6 +320,7 @@
 	Run the sweep	Изпълнение на обхождането
 	Running	Изпълнява се
 	Running…	Изпълнява се…
+	Sat	сб
 	Save	Запазване
 	Save As…	Запази като…
 	Save Model	Запазване на модел
@@ -341,6 +363,7 @@
 	Stop setting {name}	Спиране на задаването на {name}
 	Stop watching	Спиране на наблюдението
 	Stopped watching	Наблюдението е спряно
+	Sun	нд
 	Sweep a parameter	Обхождане на параметър
 	Tandem line	Тандемна линия
 	Target	Цел
@@ -362,6 +385,7 @@
 	This block has an error	Този блок има грешка
 	This run	Това изпълнение
 	Three-point estimate	Оценка в три точки
+	Thu	чт
 	Time between arrivals	Време между пристиганията
 	Time blocked	Време в блокиране
 	Time failed	Време в повреда
@@ -377,6 +401,7 @@
 	Trials	Опити
 	Triangular	Триъгълно
 	Truncated normal	Отсечено нормално
+	Tue	вт
 	Two stations in series, read from an XPDL file.	Две станции последователно, прочетени от XPDL файл.
 	Type	Тип
 	Undid {action}	Отменено е {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Наблюдение на изпълнение
 	Watch a run	Наблюдение на изпълнение
 	Watching replication 1	Наблюдава се репликация 1
+	Wed	ср
+	Weekly	Ежеседмично
 	Weibull	Вайбул
 	When a task empties	Когато задача се изпразни
 	When enough have left a block	Когато достатъчно са напуснали блок

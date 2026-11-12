@@ -31,13 +31,17 @@
 	Add a flow to…	接続先…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	十分な反復実行が目標を満たすまで、最も稼働率の高いタスクまたはプールに 1 単位ずつ追加します。すべての時間を平均値にした場合の答えも表示しますが、通常は小さすぎます。
 	Add alternative	代替案を追加
+	Add calendar	カレンダーを追加
 	Add calendar entry	カレンダー項目を追加
+	Add period	期間を追加
 	Add point	点を追加
 	Add pool	プールを追加
 	Add property	プロパティを追加
+	Added calendar {id}	カレンダー {id} を追加しました
 	Added pool {id}	プール {id} を追加しました
 	Added {block} ({id})	{block} ({id}) を追加しました
 	Align	整列
+	Also: {rule}	その他: {rule}
 	Alternative {n}	代替案 {n}
 	Analysis	分析
 	Appearance	外観
@@ -68,6 +72,8 @@
 	By role	役割で指定
 	CSV table	CSV 表
 	Calendar	カレンダー
+	Calendar name	カレンダー名
+	Calendars	カレンダー
 	Cancel	キャンセル
 	Cancel Run	実行をキャンセル
 	Cancel run	実行をキャンセル
@@ -94,6 +100,7 @@
 	Constant	定数
 	Copy	コピー
 	Cut	切り取り
+	Daily	毎日
 	Dark	ダーク
 	Data points	データ点
 	Date and time	日付と時刻
@@ -109,6 +116,7 @@
 	Disconnect	接続を解除
 	Discrete values	離散値
 	Discrete-event simulation, from model files to results.	モデルファイルから結果まで、離散事象シミュレーション。
+	Does not repeat	繰り返さない
 	Don't Save	保存しない
 	Download	ダウンロード
 	Download charts (PNG)	グラフをダウンロード (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	{id} の時間を当てはめました
 	Flows	フロー
 	Forget the estimate	見積もりを破棄
+	Fri	金
 	From	接続元
 	Gamma	ガンマ分布
 	Goes to	接続先
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	キーボードショートカットを保存しました
 	Keyboard shortcuts unchanged	キーボードショートカットは変更されていません
 	Language	言語
+	Leave empty to start at midnight of the day the first period starts.	空欄にすると、最初の期間が始まる日の午前 0 時から始まります。
 	Left	流出数
 	Left edges	左端
 	Licensed under the MIT License or the Apache License 2.0, at your option.	MIT License または Apache License 2.0 のいずれかを選択して利用できます。
@@ -195,6 +205,8 @@
 	Minimize	最小化
 	Minimum	最小値
 	Model	モデル
+	Model time 0 is	モデル時刻 0 は
+	Mon	月
 	Most likely	最頻値
 	Move	移動
 	Move each parameter down and up in turn, and rank them by how much the result moves.	各パラメーターを順に上下させ、結果がどれだけ動くかで順位を付けます。
@@ -213,9 +225,11 @@
 	No target	目標なし
 	None	なし
 	None found. The model is ready to run.	問題は見つかりませんでした。モデルを実行できます。
+	None picked: the day the period starts.	未選択の場合: 期間が始まる曜日。
 	Normal	正規分布
 	Not reached, even with {units}	{units} でも未達成
 	Number	数値
+	On	曜日
 	One change, which Undo takes back	元に戻すで取り消せる 1 回の変更
 	One clerk, random arrivals: the textbook queue, checked against theory.	窓口が 1 つ、到着はランダム。教科書的な待ち行列を理論値と比較します。
 	One task per BPSim distribution, to compare their spread.	各 BPSim 分布につき 1 つのタスクを使い、ばらつきを比較します。
@@ -236,6 +250,10 @@
 	Paste	貼り付け
 	Pause	一時停止
 	Percentile	パーセンタイル
+	Period {n} ends	期間 {n} の終了
+	Period {n} repeats	期間 {n} の繰り返し
+	Period {n} starts	期間 {n} の開始
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	稼働可否、到着、プールのシフトが変わる期間です。日時は 2026-01-31T09:00:00 のように書きます。
 	Play	再生
 	Points	点
 	Poisson	ポアソン分布
@@ -264,13 +282,16 @@
 	Remove Property	プロパティを削除
 	Remove alternative {n}	代替案 {n} を削除
 	Remove block	ブロックを削除
+	Remove the calendar {id}	カレンダー {id} を削除
 	Remove the flow {id}	フロー {id} を削除
 	Remove the pool {id}	プール {id} を削除
 	Remove this block and its flows (Delete)	このブロックとフローを削除 (Delete)
+	Remove this period	この期間を削除
 	Removed {id}	{id} を削除しました
 	Rename Block	ブロック名を変更
 	Rename Model	モデル名を変更
 	Repair time	修理時間
+	Repeats	繰り返し
 	Replace Model	モデルを置換
 	Replication 1 · {time} of {end} {unit}	反復実行 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	反復実行 1 · {time} / {end} {unit} · ウォームアップ
@@ -299,6 +320,7 @@
 	Run the sweep	スイープを実行
 	Running	実行中
 	Running…	実行中…
+	Sat	土
 	Save	保存
 	Save As…	別名で保存…
 	Save Model	モデルを保存
@@ -341,6 +363,7 @@
 	Stop setting {name}	{name} の設定を中止
 	Stop watching	観察を終了
 	Stopped watching	観察を終了しました
+	Sun	日
 	Sweep a parameter	パラメーターのスイープ
 	Tandem line	直列ライン
 	Target	目標
@@ -362,6 +385,7 @@
 	This block has an error	このブロックにはエラーがあります
 	This run	この実行
 	Three-point estimate	三点見積もり
+	Thu	木
 	Time between arrivals	到着間隔
 	Time blocked	ブロック時間
 	Time failed	故障時間
@@ -377,6 +401,7 @@
 	Trials	試行回数
 	Triangular	三角分布
 	Truncated normal	切断正規分布
+	Tue	火
 	Two stations in series, read from an XPDL file.	XPDL ファイルから読み込んだ、直列の 2 つのステーション。
 	Type	種類
 	Undid {action}	{action} を元に戻しました
@@ -404,6 +429,8 @@
 	Watch a Run	実行を観察
 	Watch a run	実行を観察
 	Watching replication 1	反復実行 1 を観察中
+	Wed	水
+	Weekly	毎週
 	Weibull	ワイブル分布
 	When a task empties	タスクが空になったとき
 	When enough have left a block	ブロックから十分な数が出たとき

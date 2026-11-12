@@ -31,13 +31,17 @@
 	Add a flow to…	Додати потік до…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Додавати одиницю до найзавантаженішого завдання чи пулу, доки достатньо реплікацій не досягне мети. Показано й відповідь, де кожен час дорівнює своєму середньому; зазвичай вона замала.
 	Add alternative	Додати альтернативу
+	Add calendar	Додати календар
 	Add calendar entry	Додати запис календаря
+	Add period	Додати період
 	Add point	Додати точку
 	Add pool	Додати пул
 	Add property	Додати властивість
+	Added calendar {id}	Додано календар {id}
 	Added pool {id}	Додано пул {id}
 	Added {block} ({id})	Додано {block} ({id})
 	Align	Вирівнювання
+	Also: {rule}	Також: {rule}
 	Alternative {n}	Альтернатива {n}
 	Analysis	Аналіз
 	Appearance	Вигляд
@@ -68,6 +72,8 @@
 	By role	За роллю
 	CSV table	Таблиця CSV
 	Calendar	Календар
+	Calendar name	Назва календаря
+	Calendars	Календарі
 	Cancel	Скасувати
 	Cancel Run	Скасувати запуск
 	Cancel run	Скасувати запуск
@@ -94,6 +100,7 @@
 	Constant	Стала величина
 	Copy	Копіювати
 	Cut	Вирізати
+	Daily	Щодня
 	Dark	Темний
 	Data points	Точки даних
 	Date and time	Дата й час
@@ -109,6 +116,7 @@
 	Disconnect	Роз'єднати
 	Discrete values	Дискретні значення
 	Discrete-event simulation, from model files to results.	Дискретно-подієве моделювання: від файлів моделі до результатів.
+	Does not repeat	Не повторюється
 	Don't Save	Не зберігати
 	Download	Завантажити
 	Download charts (PNG)	Завантажити діаграми (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Час {id} підібрано
 	Flows	Потоки
 	Forget the estimate	Забути оцінку
+	Fri	пт
 	From	Від
 	Gamma	Гамма-розподіл
 	Goes to	Веде до
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Клавіатурні скорочення збережено
 	Keyboard shortcuts unchanged	Клавіатурні скорочення не змінено
 	Language	Мова
+	Leave empty to start at midnight of the day the first period starts.	Залиште порожнім, щоб почати опівночі дня, коли починається перший період.
 	Left	Вийшло
 	Left edges	Ліві краї
 	Licensed under the MIT License or the Apache License 2.0, at your option.	На вибір: MIT License або Apache License 2.0.
@@ -195,6 +205,8 @@
 	Minimize	Згорнути
 	Minimum	Мінімум
 	Model	Модель
+	Model time 0 is	Час моделі 0 —
+	Mon	пн
 	Most likely	Найімовірніше значення
 	Move	Переміщення
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Зсувати кожен параметр по черзі вниз і вгору та впорядкувати їх за тим, наскільки змінюється результат.
@@ -213,9 +225,11 @@
 	No target	Без мети
 	None	Немає
 	None found. The model is ready to run.	Проблем не знайдено. Модель готова до запуску.
+	None picked: the day the period starts.	Нічого не вибрано: день початку періоду.
 	Normal	Нормальний розподіл
 	Not reached, even with {units}	Не досягнуто навіть із {units}
 	Number	Число
+	On	Дні
 	One change, which Undo takes back	Одна зміна, яку скасовує Скасувати
 	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, випадкові прибуття: класична черга, перевірена теорією.
 	One task per BPSim distribution, to compare their spread.	По одному завданню на кожний розподіл BPSim для порівняння розкиду.
@@ -236,6 +250,10 @@
 	Paste	Вставити
 	Pause	Пауза
 	Percentile	Процентиль
+	Period {n} ends	Кінець періоду {n}
+	Period {n} repeats	Повторення періоду {n}
+	Period {n} starts	Початок періоду {n}
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Періоди, коли змінюються доступність, прибуття або зміни пулу. Дату й час записують як 2026-01-31T09:00:00.
 	Play	Відтворити
 	Points	Точки
 	Poisson	Розподіл Пуассона
@@ -264,13 +282,16 @@
 	Remove Property	Видалити властивість
 	Remove alternative {n}	Видалити альтернативу {n}
 	Remove block	Видалити блок
+	Remove the calendar {id}	Видалити календар {id}
 	Remove the flow {id}	Видалити потік {id}
 	Remove the pool {id}	Видалити пул {id}
 	Remove this block and its flows (Delete)	Видалити цей блок та його потоки (Delete)
+	Remove this period	Видалити цей період
 	Removed {id}	Видалено {id}
 	Rename Block	Перейменувати блок
 	Rename Model	Перейменувати модель
 	Repair time	Час ремонту
+	Repeats	Повторення
 	Replace Model	Замінити модель
 	Replication 1 · {time} of {end} {unit}	Повторний запуск 1 · {time} з {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Повторний запуск 1 · {time} з {end} {unit} · розігрів
@@ -299,6 +320,7 @@
 	Run the sweep	Запустити перебір
 	Running	Виконується
 	Running…	Виконується…
+	Sat	сб
 	Save	Зберегти
 	Save As…	Зберегти як…
 	Save Model	Зберегти модель
@@ -341,6 +363,7 @@
 	Stop setting {name}	Припинити налаштування {name}
 	Stop watching	Припинити спостереження
 	Stopped watching	Спостереження припинено
+	Sun	нд
 	Sweep a parameter	Перебір параметра
 	Tandem line	Послідовна лінія
 	Target	Мета
@@ -362,6 +385,7 @@
 	This block has an error	У цьому блоці є помилка
 	This run	Цей запуск
 	Three-point estimate	Триточкова оцінка
+	Thu	чт
 	Time between arrivals	Час між прибуттями
 	Time blocked	Час блокування
 	Time failed	Час відмови
@@ -377,6 +401,7 @@
 	Trials	Випробування
 	Triangular	Трикутний розподіл
 	Truncated normal	Усічений нормальний розподіл
+	Tue	вт
 	Two stations in series, read from an XPDL file.	Дві послідовні станції, завантажені з файлу XPDL.
 	Type	Тип
 	Undid {action}	Скасовано дію {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Спостерігати за запуском
 	Watch a run	Спостерігати за запуском
 	Watching replication 1	Спостереження за повторним запуском 1
+	Wed	ср
+	Weekly	Щотижня
 	Weibull	Розподіл Вейбулла
 	When a task empties	Коли завдання спорожніє
 	When enough have left a block	Коли блок покине достатньо сутностей

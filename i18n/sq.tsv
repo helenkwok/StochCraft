@@ -31,13 +31,17 @@
 	Add a flow to…	Shto rrjedhë te…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Shto një njësi te detyra ose grupi më i ngarkuar derisa mjaft përsëritje të arrijnë një objektiv. Tregohet edhe përgjigjja me çdo kohë në mesataren e saj; zakonisht është shumë e vogël.
 	Add alternative	Shto alternativë
+	Add calendar	Shto kalendar
 	Add calendar entry	Shto hyrje kalendari
+	Add period	Shto periudhë
 	Add point	Shto pikë
 	Add pool	Shto grup
 	Add property	Shto veti
+	Added calendar {id}	U shtua kalendari {id}
 	Added pool {id}	U shtua grupi {id}
 	Added {block} ({id})	U shtua {block} ({id})
 	Align	Rreshto
+	Also: {rule}	Gjithashtu: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Analiza
 	Appearance	Pamja
@@ -68,6 +72,8 @@
 	By role	Sipas rolit
 	CSV table	Tabelë CSV
 	Calendar	Kalendari
+	Calendar name	Emri i kalendarit
+	Calendars	Kalendarët
 	Cancel	Anulo
 	Cancel Run	Anulo ekzekutimin
 	Cancel run	Anulo ekzekutimin
@@ -94,6 +100,7 @@
 	Constant	Konstante
 	Copy	Kopjo
 	Cut	Prit
+	Daily	Çdo ditë
 	Dark	E errët
 	Data points	Pikat e të dhënave
 	Date and time	Data dhe ora
@@ -109,6 +116,7 @@
 	Disconnect	Shkëput
 	Discrete values	Vlera diskrete
 	Discrete-event simulation, from model files to results.	Simulim i ngjarjeve diskrete, nga skedarët e modelit te rezultatet.
+	Does not repeat	Nuk përsëritet
 	Don't Save	Mos ruaj
 	Download	Shkarko
 	Download charts (PNG)	Shkarko grafikët (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Koha e {id} u përshtat
 	Flows	Rrjedhat
 	Forget the estimate	Harro vlerësimin
+	Fri	Pre
 	From	Nga
 	Gamma	Gama
 	Goes to	Shkon te
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Shkurtoret e tastierës u ruajtën
 	Keyboard shortcuts unchanged	Shkurtoret e tastierës nuk ndryshuan
 	Language	Gjuha
+	Leave empty to start at midnight of the day the first period starts.	Lëreni bosh për të nisur në mesnatë të ditës kur nis periudha e parë.
 	Left	Daljet
 	Left edges	Skajet e majta
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencuar sipas MIT License ose Apache License 2.0, sipas zgjedhjes suaj.
@@ -195,6 +205,8 @@
 	Minimize	Minimizo
 	Minimum	Minimumi
 	Model	Modeli
+	Model time 0 is	Koha 0 e modelit është
+	Mon	Hën
 	Most likely	Më e mundshmja
 	Move	Zhvendos
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Lëviz çdo parametër poshtë dhe lart me radhë dhe rendit sipas sa lëviz rezultati.
@@ -213,9 +225,11 @@
 	No target	Pa objektiv
 	None	Asnjë
 	None found. The model is ready to run.	Nuk u gjetën probleme. Modeli është gati për ekzekutim.
+	None picked: the day the period starts.	Asnjë e zgjedhur: dita kur nis periudha.
 	Normal	Normale
 	Not reached, even with {units}	Nuk u arrit, as me {units}
 	Number	Numër
+	On	Ditët
 	One change, which Undo takes back	Një ndryshim, që Zhbëj e kthen
 	One clerk, random arrivals: the textbook queue, checked against theory.	Një punonjës, mbërritje të rastësishme: radha klasike, e verifikuar me teori.
 	One task per BPSim distribution, to compare their spread.	Një detyrë për çdo shpërndarje BPSim, për të krahasuar shpërndarjen e tyre.
@@ -236,6 +250,10 @@
 	Paste	Ngjit
 	Pause	Pauzë
 	Percentile	Përqindëshi
+	Period {n} ends	Periudha {n} mbaron
+	Period {n} repeats	Periudha {n} përsëritet
+	Period {n} starts	Periudha {n} nis
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periudha kur ndryshojnë disponueshmëria, mbërritjet ose turnet e një grupi. Datat dhe orët shkruhen 2026-01-31T09:00:00.
 	Play	Luaj
 	Points	Pikat
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Hiq vetinë
 	Remove alternative {n}	Hiq alternativën {n}
 	Remove block	Hiq bllokun
+	Remove the calendar {id}	Hiq kalendarin {id}
 	Remove the flow {id}	Hiq rrjedhën {id}
 	Remove the pool {id}	Hiq grupin {id}
 	Remove this block and its flows (Delete)	Hiq këtë bllok dhe rrjedhat e tij (Delete)
+	Remove this period	Hiq këtë periudhë
 	Removed {id}	U hoq {id}
 	Rename Block	Riemërto bllokun
 	Rename Model	Riemërto modelin
 	Repair time	Koha e riparimit
+	Repeats	Përsëritet
 	Replace Model	Zëvendëso modelin
 	Replication 1 · {time} of {end} {unit}	Përsëritja 1 · {time} nga {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Përsëritja 1 · {time} nga {end} {unit} · ngrohja
@@ -299,6 +320,7 @@
 	Run the sweep	Ekzekuto skanimin
 	Running	Duke u ekzekutuar
 	Running…	Duke u ekzekutuar…
+	Sat	Sht
 	Save	Ruaj
 	Save As…	Ruaj si…
 	Save Model	Ruaj modelin
@@ -341,6 +363,7 @@
 	Stop setting {name}	Ndalo caktimin e {name}
 	Stop watching	Ndalo vëzhgimin
 	Stopped watching	Vëzhgimi u ndal
+	Sun	Die
 	Sweep a parameter	Skano një parametër
 	Tandem line	Linja në seri
 	Target	Objektivi
@@ -362,6 +385,7 @@
 	This block has an error	Ky bllok ka një gabim
 	This run	Ky ekzekutim
 	Three-point estimate	Vlerësim me tri pika
+	Thu	Enj
 	Time between arrivals	Koha ndërmjet mbërritjeve
 	Time blocked	Koha e bllokuar
 	Time failed	Koha në defekt
@@ -377,6 +401,7 @@
 	Trials	Provat
 	Triangular	Trekëndore
 	Truncated normal	Normale e prerë
+	Tue	Mar
 	Two stations in series, read from an XPDL file.	Dy stacione në seri, të lexuara nga një skedar XPDL.
 	Type	Lloji
 	Undid {action}	U zhbë {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Vëzhgo një ekzekutim
 	Watch a run	Vëzhgo një ekzekutim
 	Watching replication 1	Po vëzhgohet përsëritja 1
+	Wed	Mër
+	Weekly	Çdo javë
 	Weibull	Weibull
 	When a task empties	Kur një detyrë zbrazet
 	When enough have left a block	Kur kanë dalë mjaft nga një bllok

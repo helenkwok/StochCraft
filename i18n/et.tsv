@@ -31,13 +31,17 @@
 	Add a flow to…	Lisa voog kuni…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lisa kõige koormatumale tööle või kogumile üks ühik, kuni piisavalt kordusi saavutab eesmärgi. Näidatakse ka vastust, kus iga aeg on oma keskmisel; see on tavaliselt liiga väike.
 	Add alternative	Lisa alternatiiv
+	Add calendar	Lisa kalender
 	Add calendar entry	Lisa kalendrikirje
+	Add period	Lisa periood
 	Add point	Lisa punkt
 	Add pool	Lisa kogum
 	Add property	Lisa omadus
+	Added calendar {id}	Lisati kalender {id}
 	Added pool {id}	Lisati kogum {id}
 	Added {block} ({id})	Lisatud {block} ({id})
 	Align	Joonda
+	Also: {rule}	Lisaks: {rule}
 	Alternative {n}	Alternatiiv {n}
 	Analysis	Analüüs
 	Appearance	Välimus
@@ -68,6 +72,8 @@
 	By role	Rolli järgi
 	CSV table	CSV-tabel
 	Calendar	Kalender
+	Calendar name	Kalendri nimi
+	Calendars	Kalendrid
 	Cancel	Loobu
 	Cancel Run	Tühista käivitus
 	Cancel run	Tühista käivitus
@@ -94,6 +100,7 @@
 	Constant	Konstant
 	Copy	Kopeeri
 	Cut	Lõika
+	Daily	Iga päev
 	Dark	Tume
 	Data points	Andmepunktid
 	Date and time	Kuupäev ja kellaaeg
@@ -109,6 +116,7 @@
 	Disconnect	Katkesta ühendus
 	Discrete values	Diskreetsed väärtused
 	Discrete-event simulation, from model files to results.	Diskreetsete sündmuste simulatsioon mudelifailidest tulemusteni.
+	Does not repeat	Ei kordu
 	Don't Save	Ära salvesta
 	Download	Laadi alla
 	Download charts (PNG)	Laadi graafikud alla (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Ploki {id} aeg sobitatud
 	Flows	Vood
 	Forget the estimate	Unusta hinnang
+	Fri	R
 	From	Alates
 	Gamma	Gamma
 	Goes to	Viib kohta
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Klaviatuuri otseteed salvestatud
 	Keyboard shortcuts unchanged	Klaviatuuri otseteed muutmata
 	Language	Keel
+	Leave empty to start at midnight of the day the first period starts.	Jäta tühjaks, et alustada selle päeva keskööl, mil algab esimene periood.
 	Left	Lahkunud
 	Left edges	Vasakud servad
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Litsentsitud valikuliselt MIT License'i või Apache License 2.0 alusel.
@@ -195,6 +205,8 @@
 	Minimize	Minimeeri
 	Minimum	Miinimum
 	Model	Mudel
+	Model time 0 is	Mudeli aeg 0 on
+	Mon	E
 	Most likely	Kõige tõenäolisem
 	Move	Teisaldamine
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Liiguta iga parameetrit kordamööda alla ja üles ning järjesta need selle järgi, kui palju tulemus liigub.
@@ -213,9 +225,11 @@
 	No target	Eesmärk puudub
 	None	Puudub
 	None found. The model is ready to run.	Probleeme ei leitud. Mudel on käivitamiseks valmis.
+	None picked: the day the period starts.	Midagi pole valitud: päev, mil periood algab.
 	Normal	Normaalne
 	Not reached, even with {units}	Ei saavutatud, isegi mitte {units} korral
 	Number	Arv
+	On	Päevad
 	One change, which Undo takes back	Üks muudatus, mille Võta tagasi tühistab
 	One clerk, random arrivals: the textbook queue, checked against theory.	Üks teenindaja, juhuslikud saabumised: klassikaline järjekord, mida kontrollitakse teooriaga.
 	One task per BPSim distribution, to compare their spread.	Üks ülesanne iga BPSim-jaotuse kohta nende hajuvuse võrdlemiseks.
@@ -236,6 +250,10 @@
 	Paste	Kleebi
 	Pause	Paus
 	Percentile	Protsentiil
+	Period {n} ends	Periood {n} lõpeb
+	Period {n} repeats	Periood {n} kordub
+	Period {n} starts	Periood {n} algab
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioodid, mil muutuvad saadavus, saabumised või kogumi vahetused. Kuupäevad ja kellaajad kirjutatakse kujul 2026-01-31T09:00:00.
 	Play	Esita
 	Points	Punktid
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Eemalda omadus
 	Remove alternative {n}	Eemalda alternatiiv {n}
 	Remove block	Eemalda plokk
+	Remove the calendar {id}	Eemalda kalender {id}
 	Remove the flow {id}	Eemalda voog {id}
 	Remove the pool {id}	Eemalda kogum {id}
 	Remove this block and its flows (Delete)	Eemalda see plokk ja selle vood (Delete)
+	Remove this period	Eemalda see periood
 	Removed {id}	Eemaldati {id}
 	Rename Block	Nimeta plokk ümber
 	Rename Model	Nimeta mudel ümber
 	Repair time	Remondiaeg
+	Repeats	Kordub
 	Replace Model	Asenda mudel
 	Replication 1 · {time} of {end} {unit}	Kordus 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Kordus 1 · {time} / {end} {unit} · soojendus
@@ -299,6 +320,7 @@
 	Run the sweep	Käivita läbimine
 	Running	Käib
 	Running…	Käivitamine…
+	Sat	L
 	Save	Salvesta
 	Save As…	Salvesta nimega…
 	Save Model	Salvesta mudel
@@ -341,6 +363,7 @@
 	Stop setting {name}	Lõpeta {name} määramine
 	Stop watching	Lõpeta jälgimine
 	Stopped watching	Jälgimine lõpetati
+	Sun	P
 	Sweep a parameter	Parameetri läbimine
 	Tandem line	Tandemliin
 	Target	Eesmärk
@@ -362,6 +385,7 @@
 	This block has an error	Selles plokis on viga
 	This run	See käivitus
 	Three-point estimate	Kolmepunktihinnang
+	Thu	N
 	Time between arrivals	Saabumiste vaheline aeg
 	Time blocked	Blokeeritud aeg
 	Time failed	Rikkis oleku aeg
@@ -377,6 +401,7 @@
 	Trials	Katsed
 	Triangular	Kolmnurkne
 	Truncated normal	Kärbitud normaalne
+	Tue	T
 	Two stations in series, read from an XPDL file.	Kaks järjestikust jaama, loetud XPDL-failist.
 	Type	Tüüp
 	Undid {action}	Võeti {action} tagasi
@@ -404,6 +429,8 @@
 	Watch a Run	Jälgi käivitust
 	Watch a run	Jälgi käivitust
 	Watching replication 1	Jälgitakse kordust 1
+	Wed	K
+	Weekly	Iga nädal
 	Weibull	Weibull
 	When a task empties	Kui töö tühjeneb
 	When enough have left a block	Kui piisavalt on plokist lahkunud

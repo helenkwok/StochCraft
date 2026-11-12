@@ -31,13 +31,17 @@
 	Add a flow to…	Добавить поток к…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Добавлять единицу к самой загруженной задаче или пулу, пока достаточно репликаций не достигнут цели. Показан и ответ, где каждое время равно своему среднему; обычно он слишком мал.
 	Add alternative	Добавить альтернативу
+	Add calendar	Добавить календарь
 	Add calendar entry	Добавить запись календаря
+	Add period	Добавить период
 	Add point	Добавить точку
 	Add pool	Добавить пул
 	Add property	Добавить свойство
+	Added calendar {id}	Добавлен календарь {id}
 	Added pool {id}	Добавлен пул {id}
 	Added {block} ({id})	Добавлен {block} ({id})
 	Align	Выравнивание
+	Also: {rule}	Также: {rule}
 	Alternative {n}	Альтернатива {n}
 	Analysis	Анализ
 	Appearance	Внешний вид
@@ -68,6 +72,8 @@
 	By role	По роли
 	CSV table	Таблица CSV
 	Calendar	Календарь
+	Calendar name	Название календаря
+	Calendars	Календари
 	Cancel	Отмена
 	Cancel Run	Отменить запуск
 	Cancel run	Отменить запуск
@@ -94,6 +100,7 @@
 	Constant	Постоянное значение
 	Copy	Копировать
 	Cut	Вырезать
+	Daily	Ежедневно
 	Dark	Тёмная
 	Data points	Точки данных
 	Date and time	Дата и время
@@ -109,6 +116,7 @@
 	Disconnect	Разъединить
 	Discrete values	Дискретные значения
 	Discrete-event simulation, from model files to results.	Дискретно-событийное моделирование: от файлов модели до результатов.
+	Does not repeat	Не повторяется
 	Don't Save	Не сохранять
 	Download	Скачать
 	Download charts (PNG)	Скачать диаграммы (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Время {id} подобрано
 	Flows	Потоки
 	Forget the estimate	Забыть оценку
+	Fri	пт
 	From	От
 	Gamma	Гамма-распределение
 	Goes to	Ведёт к
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Сочетания клавиш сохранены
 	Keyboard shortcuts unchanged	Сочетания клавиш не изменены
 	Language	Язык
+	Leave empty to start at midnight of the day the first period starts.	Оставьте пустым, чтобы начать в полночь дня, когда начинается первый период.
 	Left	Вышло
 	Left edges	Левые края
 	Licensed under the MIT License or the Apache License 2.0, at your option.	На выбор: MIT License или Apache License 2.0.
@@ -195,6 +205,8 @@
 	Minimize	Свернуть
 	Minimum	Минимум
 	Model	Модель
+	Model time 0 is	Время модели 0 —
+	Mon	пн
 	Most likely	Наиболее вероятное значение
 	Move	Перемещение
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Сдвигать каждый параметр по очереди вниз и вверх и упорядочить их по тому, насколько меняется результат.
@@ -213,9 +225,11 @@
 	No target	Без цели
 	None	Нет
 	None found. The model is ready to run.	Проблем не обнаружено. Модель готова к запуску.
+	None picked: the day the period starts.	Ничего не выбрано: день начала периода.
 	Normal	Нормальное распределение
 	Not reached, even with {units}	Не достигнута даже при {units}
 	Number	Число
+	On	Дни
 	One change, which Undo takes back	Одно изменение, которое отменяет Отменить
 	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, случайные прибытия: классическая очередь, проверенная по теории.
 	One task per BPSim distribution, to compare their spread.	По одной задаче на каждое распределение BPSim для сравнения разброса.
@@ -236,6 +250,10 @@
 	Paste	Вставить
 	Pause	Пауза
 	Percentile	Процентиль
+	Period {n} ends	Конец периода {n}
+	Period {n} repeats	Повтор периода {n}
+	Period {n} starts	Начало периода {n}
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Периоды, когда меняются доступность, прибытия или смены пула. Дата и время записываются как 2026-01-31T09:00:00.
 	Play	Воспроизвести
 	Points	Точки
 	Poisson	Распределение Пуассона
@@ -264,13 +282,16 @@
 	Remove Property	Удалить свойство
 	Remove alternative {n}	Удалить альтернативу {n}
 	Remove block	Удалить блок
+	Remove the calendar {id}	Удалить календарь {id}
 	Remove the flow {id}	Удалить поток {id}
 	Remove the pool {id}	Удалить пул {id}
 	Remove this block and its flows (Delete)	Удалить этот блок и его потоки (Delete)
+	Remove this period	Удалить этот период
 	Removed {id}	Удалён {id}
 	Rename Block	Переименовать блок
 	Rename Model	Переименовать модель
 	Repair time	Время ремонта
+	Repeats	Повтор
 	Replace Model	Заменить модель
 	Replication 1 · {time} of {end} {unit}	Повторный запуск 1 · {time} из {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Повторный запуск 1 · {time} из {end} {unit} · разогрев
@@ -299,6 +320,7 @@
 	Run the sweep	Запустить перебор
 	Running	Выполняется
 	Running…	Выполняется…
+	Sat	сб
 	Save	Сохранить
 	Save As…	Сохранить как…
 	Save Model	Сохранить модель
@@ -341,6 +363,7 @@
 	Stop setting {name}	Прекратить настройку {name}
 	Stop watching	Прекратить наблюдение
 	Stopped watching	Наблюдение прекращено
+	Sun	вс
 	Sweep a parameter	Перебор параметра
 	Tandem line	Последовательная линия
 	Target	Цель
@@ -362,6 +385,7 @@
 	This block has an error	В этом блоке есть ошибка
 	This run	Этот запуск
 	Three-point estimate	Трёхточечная оценка
+	Thu	чт
 	Time between arrivals	Время между прибытиями
 	Time blocked	Время блокировки
 	Time failed	Время отказа
@@ -377,6 +401,7 @@
 	Trials	Испытания
 	Triangular	Треугольное распределение
 	Truncated normal	Усечённое нормальное распределение
+	Tue	вт
 	Two stations in series, read from an XPDL file.	Два последовательно расположенных поста, загруженных из файла XPDL.
 	Type	Тип
 	Undid {action}	Отменено действие {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Наблюдать за запуском
 	Watch a run	Наблюдать за запуском
 	Watching replication 1	Наблюдение за повторным запуском 1
+	Wed	ср
+	Weekly	Еженедельно
 	Weibull	Распределение Вейбулла
 	When a task empties	Когда задача опустеет
 	When enough have left a block	Когда блок покинет достаточно сущностей

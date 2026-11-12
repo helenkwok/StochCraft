@@ -31,13 +31,17 @@
 	Add a flow to…	Thêm luồng đến…
 	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Thêm một đơn vị vào tác vụ hoặc nhóm bận nhất cho đến khi đủ số lần lặp đạt mục tiêu. Câu trả lời khi mọi thời gian bằng giá trị trung bình cũng được hiển thị; nó thường quá nhỏ.
 	Add alternative	Thêm phương án
+	Add calendar	Thêm lịch
 	Add calendar entry	Thêm mục lịch
+	Add period	Thêm khoảng thời gian
 	Add point	Thêm điểm
 	Add pool	Thêm nhóm
 	Add property	Thêm thuộc tính
+	Added calendar {id}	Đã thêm lịch {id}
 	Added pool {id}	Đã thêm nhóm {id}
 	Added {block} ({id})	Đã thêm {block} ({id})
 	Align	Căn chỉnh
+	Also: {rule}	Ngoài ra: {rule}
 	Alternative {n}	Phương án {n}
 	Analysis	Phân tích
 	Appearance	Diện mạo
@@ -68,6 +72,8 @@
 	By role	Theo vai trò
 	CSV table	Bảng CSV
 	Calendar	Lịch
+	Calendar name	Tên lịch
+	Calendars	Lịch
 	Cancel	Hủy
 	Cancel Run	Hủy chạy
 	Cancel run	Hủy chạy
@@ -94,6 +100,7 @@
 	Constant	Hằng số
 	Copy	Sao chép
 	Cut	Cắt
+	Daily	Hằng ngày
 	Dark	Tối
 	Data points	Điểm dữ liệu
 	Date and time	Ngày và giờ
@@ -109,6 +116,7 @@
 	Disconnect	Ngắt kết nối
 	Discrete values	Giá trị rời rạc
 	Discrete-event simulation, from model files to results.	Mô phỏng sự kiện rời rạc, từ tệp mô hình đến kết quả.
+	Does not repeat	Không lặp lại
 	Don't Save	Không lưu
 	Download	Tải xuống
 	Download charts (PNG)	Tải biểu đồ xuống (PNG)
@@ -153,6 +161,7 @@
 	Fitted the time of {id}	Đã khớp thời gian của {id}
 	Flows	Luồng
 	Forget the estimate	Bỏ ước lượng
+	Fri	T6
 	From	Từ
 	Gamma	Gamma
 	Goes to	Đi đến
@@ -169,6 +178,7 @@
 	Keyboard shortcuts saved	Đã lưu phím tắt
 	Keyboard shortcuts unchanged	Phím tắt không thay đổi
 	Language	Ngôn ngữ
+	Leave empty to start at midnight of the day the first period starts.	Để trống để bắt đầu lúc nửa đêm của ngày khoảng thời gian đầu tiên bắt đầu.
 	Left	Đã rời đi
 	Left edges	Cạnh trái
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Được cấp phép theo MIT License hoặc Apache License 2.0, tùy lựa chọn.
@@ -195,6 +205,8 @@
 	Minimize	Thu nhỏ
 	Minimum	Giá trị nhỏ nhất
 	Model	Mô hình
+	Model time 0 is	Thời điểm 0 của mô hình là
+	Mon	T2
 	Most likely	Có khả năng nhất
 	Move	Di chuyển
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Lần lượt giảm và tăng từng tham số, rồi xếp hạng theo mức kết quả thay đổi.
@@ -213,9 +225,11 @@
 	No target	Không có mục tiêu
 	None	Không có
 	None found. The model is ready to run.	Không tìm thấy vấn đề. Mô hình đã sẵn sàng chạy.
+	None picked: the day the period starts.	Không chọn: ngày khoảng thời gian bắt đầu.
 	Normal	Chuẩn
 	Not reached, even with {units}	Chưa đạt, kể cả với {units}
 	Number	Số
+	On	Các ngày
 	One change, which Undo takes back	Một thay đổi, có thể hoàn tác
 	One clerk, random arrivals: the textbook queue, checked against theory.	Một nhân viên phục vụ, lượt đến ngẫu nhiên: hàng đợi kinh điển được đối chiếu với lý thuyết.
 	One task per BPSim distribution, to compare their spread.	Mỗi phân phối BPSim có một tác vụ để so sánh độ phân tán.
@@ -236,6 +250,10 @@
 	Paste	Dán
 	Pause	Tạm dừng
 	Percentile	Phân vị
+	Period {n} ends	Khoảng {n} kết thúc
+	Period {n} repeats	Khoảng {n} lặp lại
+	Period {n} starts	Khoảng {n} bắt đầu
+	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Các khoảng thời gian mà độ khả dụng, lượt đến hoặc ca của nhóm thay đổi. Ngày giờ được viết như 2026-01-31T09:00:00.
 	Play	Phát
 	Points	Điểm
 	Poisson	Poisson
@@ -264,13 +282,16 @@
 	Remove Property	Xóa thuộc tính
 	Remove alternative {n}	Xóa phương án {n}
 	Remove block	Xóa khối
+	Remove the calendar {id}	Xóa lịch {id}
 	Remove the flow {id}	Xóa luồng {id}
 	Remove the pool {id}	Xóa nhóm {id}
 	Remove this block and its flows (Delete)	Xóa khối này và các luồng của nó (Delete)
+	Remove this period	Xóa khoảng thời gian này
 	Removed {id}	Đã xóa {id}
 	Rename Block	Đổi tên khối
 	Rename Model	Đổi tên mô hình
 	Repair time	Thời gian sửa chữa
+	Repeats	Lặp lại
 	Replace Model	Thay thế mô hình
 	Replication 1 · {time} of {end} {unit}	Lần lặp 1 · {time} / {end} {unit}
 	Replication 1 · {time} of {end} {unit} · warm-up	Lần lặp 1 · {time} / {end} {unit} · khởi động
@@ -299,6 +320,7 @@
 	Run the sweep	Chạy quét
 	Running	Đang chạy
 	Running…	Đang chạy…
+	Sat	T7
 	Save	Lưu
 	Save As…	Lưu thành…
 	Save Model	Lưu mô hình
@@ -341,6 +363,7 @@
 	Stop setting {name}	Ngừng đặt {name}
 	Stop watching	Ngừng theo dõi
 	Stopped watching	Đã ngừng theo dõi
+	Sun	CN
 	Sweep a parameter	Quét một tham số
 	Tandem line	Dây chuyền nối tiếp
 	Target	Mục tiêu
@@ -362,6 +385,7 @@
 	This block has an error	Khối này có lỗi
 	This run	Lần chạy này
 	Three-point estimate	Ước lượng ba điểm
+	Thu	T5
 	Time between arrivals	Thời gian giữa các lượt đến
 	Time blocked	Thời gian bị chặn
 	Time failed	Thời gian hỏng hóc
@@ -377,6 +401,7 @@
 	Trials	Số lần thử
 	Triangular	Tam giác
 	Truncated normal	Chuẩn cắt cụt
+	Tue	T3
 	Two stations in series, read from an XPDL file.	Hai trạm nối tiếp, được đọc từ tệp XPDL.
 	Type	Loại
 	Undid {action}	Đã hoàn tác {action}
@@ -404,6 +429,8 @@
 	Watch a Run	Theo dõi một lần chạy
 	Watch a run	Theo dõi một lần chạy
 	Watching replication 1	Đang theo dõi lần lặp 1
+	Wed	T4
+	Weekly	Hằng tuần
 	Weibull	Weibull
 	When a task empties	Khi một tác vụ trống
 	When enough have left a block	Khi đủ số đã rời một khối

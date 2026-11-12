@@ -616,3 +616,69 @@ fn a_servers_transfer_breakdowns_and_availability_are_edited_in_its_inspector() 
         json!([{"calendar": "lunch", "available": false}])
     );
 }
+
+#[test]
+fn calendars_are_added_named_and_given_periods_on_the_model_page() {
+    let mut h = mm1();
+    click(&mut h, Role::Button, "Add calendar");
+    let calendars = |h: &Harness<'static, App>| model(h)["calendars"].clone();
+    assert_eq!(calendars(&h)[0]["id"], "calendar-1", "{}", calendars(&h));
+    type_into(&mut h, "Calendar name", "Day shift");
+    assert_eq!(calendars(&h)[0]["name"], json!("Day shift"));
+
+    // A new period: 9 to 5 every day, on the day of the model's first period (none yet).
+    click(&mut h, Role::Button, "Add period");
+    assert_eq!(
+        calendars(&h)[0]["events"],
+        json!([{"start": "2026-01-01T09:00:00", "end": "2026-01-01T17:00:00", "repeat": "FREQ=DAILY"}])
+    );
+    type_into(&mut h, "Period 1 ends", "2026-01-01T13:00:00");
+    assert_eq!(
+        calendars(&h)[0]["events"][0]["end"],
+        json!("2026-01-01T13:00:00")
+    );
+    // Text that is not a date is refused, and the period keeps its time.
+    type_into(&mut h, "Period 1 starts", "tomorrow");
+    assert_eq!(
+        calendars(&h)[0]["events"][0]["start"],
+        json!("2026-01-01T09:00:00")
+    );
+
+    // Weekly on Monday and Friday.
+    click(&mut h, Role::ComboBox, "Period 1 repeats");
+    click(&mut h, Role::Button, "Weekly");
+    click(&mut h, Role::Button, "Fri");
+    click(&mut h, Role::Button, "Mon");
+    assert_eq!(
+        calendars(&h)[0]["events"][0]["repeat"],
+        json!("FREQ=WEEKLY;BYDAY=MO,FR")
+    );
+
+    // Model time 0 placed on a date.
+    type_into(&mut h, "Model time 0 is", "2026-01-05T00:00:00");
+    assert_eq!(
+        model(&h)["experiment"]["start"],
+        json!("2026-01-05T00:00:00")
+    );
+
+    // The period's Remove (the last one) removes it; then the calendar's is the last.
+    click(&mut h, Role::Button, "Remove");
+    assert_eq!(calendars(&h)[0]["events"], json!([]));
+
+    // A calendar in use is not removed; once unused, it is.
+    h.state_mut()
+        .execute(
+            "block.set",
+            json!({"id": "serve", "availability": [{"calendar": "calendar-1", "available": false}]}),
+        )
+        .expect("availability set");
+    settle(&mut h);
+    click(&mut h, Role::Button, "Remove");
+    assert_eq!(calendars(&h).as_array().map(Vec::len), Some(1));
+    h.state_mut()
+        .execute("block.set", json!({"id": "serve", "availability": []}))
+        .expect("availability cleared");
+    settle(&mut h);
+    click(&mut h, Role::Button, "Remove");
+    assert_eq!(calendars(&h), Value::Null);
+}
