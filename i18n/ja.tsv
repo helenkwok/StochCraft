@@ -37,6 +37,7 @@
 	Add point	点を追加
 	Add pool	プールを追加
 	Add property	プロパティを追加
+	Add value	値を追加
 	Added calendar {id}	カレンダー {id} を追加しました
 	Added pool {id}	プール {id} を追加しました
 	Added {block} ({id})	{block} ({id}) を追加しました
@@ -204,6 +205,7 @@
 	Minimise	最小化
 	Minimize	最小化
 	Minimum	最小値
+	Mix	ミックス
 	Model	モデル
 	Model time 0 is	モデル時刻 0 は
 	Mon	月
@@ -267,6 +269,7 @@
 	Properties	プロパティ
 	Quit	終了
 	Quit {app}	{app} を終了
+	Random	ランダム
 	Rank the parameters	パラメーターを順位付け
 	Ready	適用可能
 	Recover	復元
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	各エンティティがこのブロックに入るときに設定されます。式は、入る時点で保持していた値を読み取ります（例: getProperty('issues') - 1）。
 	Settings	設定
 	Shape	形状
+	Share	割合
 	Share of arrivals lost	到着数の損失割合
 	Share of units blocked	処理単位のブロック割合
 	Show All	すべてを表示

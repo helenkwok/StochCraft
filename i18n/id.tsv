@@ -37,6 +37,7 @@
 	Add point	Tambah titik
 	Add pool	Tambah kumpulan
 	Add property	Tambah properti
+	Add value	Tambah nilai
 	Added calendar {id}	Kalender {id} ditambahkan
 	Added pool {id}	Kumpulan {id} ditambahkan
 	Added {block} ({id})	{block} ({id}) ditambahkan
@@ -204,6 +205,7 @@
 	Minimise	Minimalkan
 	Minimize	Minimalkan
 	Minimum	Minimum
+	Mix	Campuran
 	Model	Model
 	Model time 0 is	Waktu model 0 adalah
 	Mon	Sen
@@ -267,6 +269,7 @@
 	Properties	Properti
 	Quit	Keluar
 	Quit {app}	Keluar dari {app}
+	Random	Acak
 	Rank the parameters	Urutkan parameter
 	Ready	Siap
 	Recover	Pulihkan
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ditetapkan pada setiap entitas saat memasuki blok ini. Ekspresi membaca nilai yang dibawa entitas saat masuk, seperti getProperty('issues') - 1.
 	Settings	Pengaturan
 	Shape	Bentuk
+	Share	Bagian
 	Share of arrivals lost	Proporsi kedatangan yang hilang
 	Share of units blocked	Proporsi unit yang terblokir
 	Show All	Tampilkan semua

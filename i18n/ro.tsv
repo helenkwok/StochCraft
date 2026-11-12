@@ -37,6 +37,7 @@
 	Add point	Adaugă punct
 	Add pool	Adaugă grup
 	Add property	Adaugă proprietate
+	Add value	Adaugă valoare
 	Added calendar {id}	S-a adăugat calendarul {id}
 	Added pool {id}	S-a adăugat grupul {id}
 	Added {block} ({id})	S-a adăugat {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Minimizează
 	Minimize	Minimizează
 	Minimum	Minim
+	Mix	Mix
 	Model	Model
 	Model time 0 is	Timpul 0 al modelului este
 	Mon	lun
@@ -267,6 +269,7 @@
 	Properties	Proprietăți
 	Quit	Ieșire
 	Quit {app}	Ieșire din {app}
+	Random	Aleatoriu
 	Rank the parameters	Ordonează parametrii
 	Ready	Gata
 	Recover	Recuperează
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Se setează pentru fiecare entitate la intrarea în acest bloc. Expresiile citesc valorile pe care entitatea le avea la intrare, cum ar fi getProperty('issues') - 1.
 	Settings	Setări
 	Shape	Formă
+	Share	Pondere
 	Share of arrivals lost	Proporția sosirilor pierdute
 	Share of units blocked	Proporția unităților blocate
 	Show All	Afișează tot

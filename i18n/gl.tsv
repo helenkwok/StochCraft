@@ -37,6 +37,7 @@
 	Add point	Engadir punto
 	Add pool	Engadir grupo
 	Add property	Engadir propiedade
+	Add value	Engadir valor
 	Added calendar {id}	Engadiuse o calendario {id}
 	Added pool {id}	Engadiuse o grupo {id}
 	Added {block} ({id})	Engadiuse {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Minimizar
 	Minimize	Minimizar
 	Minimum	Mínimo
+	Mix	Mestura
 	Model	Modelo
 	Model time 0 is	O tempo 0 do modelo é
 	Mon	lun
@@ -267,6 +269,7 @@
 	Properties	Propiedades
 	Quit	Saír
 	Quit {app}	Saír de {app}
+	Random	Aleatorio
 	Rank the parameters	Ordenar os parámetros
 	Ready	Listo
 	Recover	Recuperar
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Establécese para cada entidade ao entrar neste bloque. As expresións len os valores cos que chegou, como getProperty('issues') - 1.
 	Settings	Axustes
 	Shape	Forma
+	Share	Proporción
 	Share of arrivals lost	Proporción de chegadas perdidas
 	Share of units blocked	Proporción de unidades bloqueadas
 	Show All	Amosar todo

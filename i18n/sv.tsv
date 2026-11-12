@@ -37,6 +37,7 @@
 	Add point	Lägg till punkt
 	Add pool	Lägg till pool
 	Add property	Lägg till egenskap
+	Add value	Lägg till värde
 	Added calendar {id}	Lade till kalendern {id}
 	Added pool {id}	Lade till poolen {id}
 	Added {block} ({id})	Lade till {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Minimera
 	Minimize	Minimera
 	Minimum	Minimum
+	Mix	Mix
 	Model	Modell
 	Model time 0 is	Modelltid 0 är
 	Mon	mån
@@ -267,6 +269,7 @@
 	Properties	Egenskaper
 	Quit	Avsluta
 	Quit {app}	Avsluta {app}
+	Random	Slumpmässig
 	Rank the parameters	Rangordna parametrarna
 	Ready	Klar
 	Recover	Återställ
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Anges för varje entitet när den kommer in i det här blocket. Uttryck läser de värden som entiteten hade vid ankomsten, till exempel getProperty('issues') - 1.
 	Settings	Inställningar
 	Shape	Form
+	Share	Andel
 	Share of arrivals lost	Andel förlorade ankomster
 	Share of units blocked	Andel blockerade enheter
 	Show All	Visa alla

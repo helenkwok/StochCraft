@@ -37,6 +37,7 @@
 	Add point	Punkt hinzufügen
 	Add pool	Pool hinzufügen
 	Add property	Eigenschaft hinzufügen
+	Add value	Wert hinzufügen
 	Added calendar {id}	Kalender {id} hinzugefügt
 	Added pool {id}	Pool {id} hinzugefügt
 	Added {block} ({id})	{block} ({id}) hinzugefügt
@@ -204,6 +205,7 @@
 	Minimise	Minimieren
 	Minimize	Minimieren
 	Minimum	Minimum
+	Mix	Mix
 	Model	Modell
 	Model time 0 is	Modellzeit 0 ist
 	Mon	Mo
@@ -267,6 +269,7 @@
 	Properties	Eigenschaften
 	Quit	Beenden
 	Quit {app}	{app} beenden
+	Random	Zufällig
 	Rank the parameters	Parameter ordnen
 	Ready	Bereit
 	Recover	Wiederherstellen
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Wird bei jeder Entität beim Eintritt in diesen Block gesetzt. Ausdrücke lesen die Werte, mit denen sie angekommen ist, etwa getProperty('issues') - 1.
 	Settings	Einstellungen
 	Shape	Formparameter
+	Share	Anteil
 	Share of arrivals lost	Anteil verlorener Ankünfte
 	Share of units blocked	Anteil blockierter Einheiten
 	Show All	Alle einblenden

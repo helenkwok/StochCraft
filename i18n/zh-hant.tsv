@@ -37,6 +37,7 @@
 	Add point	新增點
 	Add pool	新增資源池
 	Add property	新增屬性
+	Add value	新增值
 	Added calendar {id}	已新增行事曆 {id}
 	Added pool {id}	已新增資源池 {id}
 	Added {block} ({id})	已新增 {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	最小化
 	Minimize	最小化
 	Minimum	最小值
+	Mix	組合
 	Model	模型
 	Model time 0 is	模型時間 0 為
 	Mon	週一
@@ -267,6 +269,7 @@
 	Properties	屬性
 	Quit	退出
 	Quit {app}	退出 {app}
+	Random	隨機
 	Rank the parameters	為參數排序
 	Ready	就緒
 	Recover	恢復
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	在每個實體進入此區塊時設定。運算式讀取實體到達時攜帶的值，例如 getProperty('issues') - 1。
 	Settings	設定
 	Shape	形狀參數
+	Share	比例
 	Share of arrivals lost	到達流失比例
 	Share of units blocked	資源單元阻塞比例
 	Show All	全部顯示

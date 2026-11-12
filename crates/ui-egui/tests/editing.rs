@@ -682,3 +682,42 @@ fn calendars_are_added_named_and_given_periods_on_the_model_page() {
     click(&mut h, Role::Button, "Remove");
     assert_eq!(calendars(&h), Value::Null);
 }
+
+#[test]
+fn a_product_mix_is_set_on_the_arrivals() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Customer arrives");
+    h.get_by_role_and_label(Role::TextInput, "New property name")
+        .click();
+    settle(&mut h);
+    h.get_by_role_and_label(Role::TextInput, "New property name")
+        .type_text("type");
+    settle(&mut h);
+    click(&mut h, Role::Button, "Add property");
+
+    // A mix: two values, half each, then a third value and other shares.
+    click(&mut h, Role::ComboBox, "Value");
+    click(&mut h, Role::Button, "Mix");
+    let value = |h: &Harness<'static, App>| element(h, "arrive")["properties"][0]["value"].clone();
+    assert_eq!(
+        value(&h),
+        json!({"mix": [{"value": "A", "share": 1.0}, {"value": "B", "share": 1.0}]})
+    );
+    click(&mut h, Role::Button, "Add value");
+    type_into(&mut h, "Value 3", "C");
+    type_into(&mut h, "Share 1", "3");
+    assert_eq!(
+        value(&h),
+        json!({"mix": [
+            {"value": "A", "share": 3.0},
+            {"value": "B", "share": 1.0},
+            {"value": "C", "share": 1.0},
+        ]})
+    );
+    // Typed as text, so a decision can read it with getProperty('type').
+    assert!(
+        h.query_by_label("Error").is_none(),
+        "no error: {}",
+        h.state().status()
+    );
+}

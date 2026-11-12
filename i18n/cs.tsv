@@ -37,6 +37,7 @@
 	Add point	Přidat bod
 	Add pool	Přidat fond
 	Add property	Přidat vlastnost
+	Add value	Přidat hodnotu
 	Added calendar {id}	Přidán kalendář {id}
 	Added pool {id}	Přidán fond {id}
 	Added {block} ({id})	Přidán {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Minimalizovat
 	Minimize	Minimalizovat
 	Minimum	Minimum
+	Mix	Mix
 	Model	Model
 	Model time 0 is	Čas modelu 0 je
 	Mon	po
@@ -267,6 +269,7 @@
 	Properties	Vlastnosti
 	Quit	Ukončit
 	Quit {app}	Ukončit {app}
+	Random	Náhodné
 	Rank the parameters	Seřadit parametry
 	Ready	Připraveno
 	Recover	Obnovit
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nastavuje se pro každou entitu při vstupu do tohoto bloku. Výrazy čtou hodnoty, se kterými entita přišla, například getProperty('issues') - 1.
 	Settings	Nastavení
 	Shape	Tvar
+	Share	Podíl
 	Share of arrivals lost	Podíl ztracených příchodů
 	Share of units blocked	Podíl blokovaných jednotek
 	Show All	Zobrazit vše

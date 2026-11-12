@@ -37,6 +37,7 @@
 	Add point	添加点
 	Add pool	添加资源池
 	Add property	添加属性
+	Add value	添加值
 	Added calendar {id}	已添加日历 {id}
 	Added pool {id}	已添加资源池 {id}
 	Added {block} ({id})	已添加 {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	最小化
 	Minimize	最小化
 	Minimum	最小值
+	Mix	组合
 	Model	模型
 	Model time 0 is	模型时间 0 为
 	Mon	周一
@@ -267,6 +269,7 @@
 	Properties	属性
 	Quit	退出
 	Quit {app}	退出 {app}
+	Random	随机
 	Rank the parameters	对参数排序
 	Ready	就绪
 	Recover	恢复
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	在每个实体进入此区块时设置。表达式读取实体到达时携带的值，例如 getProperty('issues') - 1。
 	Settings	设置
 	Shape	形状参数
+	Share	比例
 	Share of arrivals lost	到达流失比例
 	Share of units blocked	资源单元阻塞比例
 	Show All	全部显示

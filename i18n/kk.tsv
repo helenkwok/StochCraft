@@ -37,6 +37,7 @@
 	Add point	Нүкте қосу
 	Add pool	Қор қосу
 	Add property	Қасиет қосу
+	Add value	Мән қосу
 	Added calendar {id}	{id} күнтізбесі қосылды
 	Added pool {id}	{id} қоры қосылды
 	Added {block} ({id})	{block} ({id}) қосылды
@@ -204,6 +205,7 @@
 	Minimise	Кішірейту
 	Minimize	Жию
 	Minimum	Минимум
+	Mix	Қоспа
 	Model	Модель
 	Model time 0 is	Модельдің 0 уақыты
 	Mon	дс
@@ -267,6 +269,7 @@
 	Properties	Қасиеттер
 	Quit	Шығу
 	Quit {app}	{app} қолданбасынан шығу
+	Random	Кездейсоқ
 	Rank the parameters	Параметрлерді реттеу
 	Ready	Дайын
 	Recover	Қалпына келтіру
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Әрбір нысан осы блокқа кірген кезде оған орнатылады. Өрнектер нысан кірген сәттегі мәндерді оқиды, мысалы getProperty('issues') - 1.
 	Settings	Параметрлер
 	Shape	Пішін
+	Share	Үлес
 	Share of arrivals lost	Жоғалған келулер үлесі
 	Share of units blocked	Бұғатталған бірліктер үлесі
 	Show All	Барлығын көрсету

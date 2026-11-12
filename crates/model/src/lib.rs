@@ -529,6 +529,10 @@ pub enum PropertyValue {
     Text(String),
     /// A value drawn for each entity.
     Random(Dist),
+    /// Text drawn for each entity, each value with its share (a product mix: `A` half the time,
+    /// `B` and `C` a quarter each). BPSim writes it as a discrete `UserDistribution` whose data
+    /// points are `StringParameter`s (BPSim 2.0, 6.2.8 and 6.3.5.13).
+    Choice(Vec<(f64, String)>),
     /// A BPSim expression ([`expr`]), evaluated with the entity's properties as they were when it
     /// arrived.
     Expression(String),
@@ -542,6 +546,7 @@ impl PropertyValue {
             PropertyValue::Boolean(_) => "true or false",
             PropertyValue::Text(_) => "text",
             PropertyValue::Random(_) => "a distribution",
+            PropertyValue::Choice(_) => "a mix of text values",
             PropertyValue::Expression(_) => "an expression",
         }
     }
@@ -1723,7 +1728,7 @@ impl Model {
             let t = match &p.value {
                 PropertyValue::Number(_) | PropertyValue::Random(_) => PropertyType::Double,
                 PropertyValue::Boolean(_) => PropertyType::Boolean,
-                PropertyValue::Text(_) => PropertyType::String,
+                PropertyValue::Text(_) | PropertyValue::Choice(_) => PropertyType::String,
                 PropertyValue::Expression(src) => match expr::parse(src).map(|e| e.kind()) {
                     Ok(expr::Kind::Boolean) => PropertyType::Boolean,
                     Ok(expr::Kind::Text) => PropertyType::String,
@@ -1789,6 +1794,7 @@ impl Model {
                         PropertyValue::Text(_) => {
                             matches!(ty, PropertyType::String | PropertyType::DateTime)
                         }
+                        PropertyValue::Choice(_) => ty == PropertyType::String,
                         PropertyValue::Expression(_) => true,
                     };
                     if !fits {
@@ -1814,6 +1820,21 @@ impl Model {
                                 Problem::BadDistribution {
                                     parameter: "property value",
                                     error,
+                                },
+                            ));
+                        }
+                    }
+                    PropertyValue::Choice(values) => {
+                        let shares_ok = values.iter().all(|(s, _)| s.is_finite() && *s >= 0.0) && {
+                            let total = values.iter().map(|(s, _)| s).sum::<f64>();
+                            total > 0.0 && total.is_finite()
+                        };
+                        if !shares_ok {
+                            out.push(Diagnostic::error(
+                                at,
+                                Problem::BadProperty {
+                                    name: name.clone(),
+                                    reason: "needs shares that are not negative and add up to more than 0",
                                 },
                             ));
                         }

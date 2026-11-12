@@ -37,6 +37,7 @@
 	Add point	Shto pikë
 	Add pool	Shto grup
 	Add property	Shto veti
+	Add value	Shto vlerë
 	Added calendar {id}	U shtua kalendari {id}
 	Added pool {id}	U shtua grupi {id}
 	Added {block} ({id})	U shtua {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Minimizo
 	Minimize	Minimizo
 	Minimum	Minimumi
+	Mix	Përzierje
 	Model	Modeli
 	Model time 0 is	Koha 0 e modelit është
 	Mon	Hën
@@ -267,6 +269,7 @@
 	Properties	Vetitë
 	Quit	Dil
 	Quit {app}	Dil nga {app}
+	Random	E rastësishme
 	Rank the parameters	Rendit parametrat
 	Ready	Gati
 	Recover	Rikupero
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Vendoset për çdo entitet kur hyn në këtë bllok. Shprehjet lexojnë vlerat që entiteti kishte në hyrje, si getProperty('issues') - 1.
 	Settings	Cilësimet
 	Shape	Forma
+	Share	Pjesa
 	Share of arrivals lost	Pjesa e mbërritjeve të humbura
 	Share of units blocked	Pjesa e njësive të bllokuara
 	Show All	Shfaqi të gjitha

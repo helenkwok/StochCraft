@@ -37,6 +37,7 @@
 	Add point	Pridėti tašką
 	Add pool	Pridėti grupę
 	Add property	Pridėti savybę
+	Add value	Pridėti reikšmę
 	Added calendar {id}	Pridėtas kalendorius {id}
 	Added pool {id}	Pridėta grupė {id}
 	Added {block} ({id})	Pridėta {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Minimizuoti
 	Minimize	Sumažinti
 	Minimum	Minimumas
+	Mix	Mišinys
 	Model	Modelis
 	Model time 0 is	Modelio laikas 0 yra
 	Mon	pr
@@ -267,6 +269,7 @@
 	Properties	Savybės
 	Quit	Išeiti
 	Quit {app}	Išeiti iš {app}
+	Random	Atsitiktinė
 	Rank the parameters	Surikiuoti parametrus
 	Ready	Parengta
 	Recover	Atkurti
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nustatoma kiekvienam objektui, kai jis patenka į šį bloką. Išraiškos nuskaito reikšmes, kurias objektas turėjo įeidamas, pvz., getProperty('issues') - 1.
 	Settings	Nuostatos
 	Shape	Forma
+	Share	Dalis
 	Share of arrivals lost	Prarastų atvykimų dalis
 	Share of units blocked	Blokuotų vienetų dalis
 	Show All	Rodyti visus

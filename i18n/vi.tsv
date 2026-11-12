@@ -37,6 +37,7 @@
 	Add point	Thêm điểm
 	Add pool	Thêm nhóm
 	Add property	Thêm thuộc tính
+	Add value	Thêm giá trị
 	Added calendar {id}	Đã thêm lịch {id}
 	Added pool {id}	Đã thêm nhóm {id}
 	Added {block} ({id})	Đã thêm {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Thu nhỏ tối đa
 	Minimize	Thu nhỏ
 	Minimum	Giá trị nhỏ nhất
+	Mix	Hỗn hợp
 	Model	Mô hình
 	Model time 0 is	Thời điểm 0 của mô hình là
 	Mon	T2
@@ -267,6 +269,7 @@
 	Properties	Thuộc tính
 	Quit	Thoát
 	Quit {app}	Thoát {app}
+	Random	Ngẫu nhiên
 	Rank the parameters	Xếp hạng tham số
 	Ready	Sẵn sàng
 	Recover	Khôi phục
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Được đặt cho từng thực thể khi đi vào khối này. Biểu thức đọc các giá trị mà thực thể có tại thời điểm đi vào, chẳng hạn getProperty('issues') - 1.
 	Settings	Cài đặt
 	Shape	Hình dạng
+	Share	Tỷ lệ
 	Share of arrivals lost	Tỷ lệ lượt đến bị mất
 	Share of units blocked	Tỷ lệ đơn vị bị chặn
 	Show All	Hiện tất cả

@@ -435,7 +435,8 @@ impl Dist {
                     finite("value", *v)?;
                 }
                 let total: f64 = points.iter().map(|(p, _)| *p).sum();
-                if total > 0.0 {
+                // Finite too: probabilities that overflow cannot be shared out.
+                if total > 0.0 && total.is_finite() {
                     Ok(())
                 } else {
                     Err(DistError::EmptyUserDistribution)

@@ -122,6 +122,8 @@ pub struct Entity {
 enum Source {
     Fixed(Option<Held>),
     Random(Dist),
+    /// A mix: a value's index drawn from the shares, and the values.
+    Choice(Dist, Vec<String>),
     Expr(expr::Expr),
 }
 
@@ -270,6 +272,19 @@ fn compile_assign(p: &Property, slots: &[String], ty: PropertyType) -> Option<As
         PropertyValue::Boolean(b) => Source::Fixed(Held::of(&expr::Value::Boolean(*b), ty)),
         PropertyValue::Text(s) => Source::Fixed(Held::of(&expr::Value::Text(s.clone()), ty)),
         PropertyValue::Random(d) => Source::Random(d.clone()),
+        // The value's index drawn from a discrete distribution of the shares, so a mix draws as a
+        // discrete user distribution does.
+        PropertyValue::Choice(values) => Source::Choice(
+            Dist::User {
+                points: values
+                    .iter()
+                    .enumerate()
+                    .map(|(i, (share, _))| (*share, i as f64))
+                    .collect(),
+                discrete: true,
+            },
+            values.iter().map(|(_, v)| v.clone()).collect(),
+        ),
         PropertyValue::Expression(src) => Source::Expr(expr::parse(src).ok()?),
     };
     Some(Assign {

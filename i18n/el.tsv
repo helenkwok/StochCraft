@@ -37,6 +37,7 @@
 	Add point	Προσθήκη σημείου
 	Add pool	Προσθήκη δεξαμενής
 	Add property	Προσθήκη ιδιότητας
+	Add value	Προσθήκη τιμής
 	Added calendar {id}	Προστέθηκε το ημερολόγιο {id}
 	Added pool {id}	Προστέθηκε η δεξαμενή {id}
 	Added {block} ({id})	Προστέθηκε το {block} ({id})
@@ -204,6 +205,7 @@
 	Minimise	Ελαχιστοποίηση
 	Minimize	Ελαχιστοποίηση
 	Minimum	Ελάχιστο
+	Mix	Μείγμα
 	Model	Μοντέλο
 	Model time 0 is	Ο χρόνος 0 του μοντέλου είναι
 	Mon	Δευ
@@ -267,6 +269,7 @@
 	Properties	Ιδιότητες
 	Quit	Έξοδος
 	Quit {app}	Έξοδος από το {app}
+	Random	Τυχαία
 	Rank the parameters	Κατάταξη παραμέτρων
 	Ready	Έτοιμο
 	Recover	Ανάκτηση
@@ -339,6 +342,7 @@
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ορίζεται για κάθε οντότητα όταν εισέρχεται σε αυτό το μπλοκ. Οι εκφράσεις διαβάζουν τις τιμές που είχε κατά την είσοδο, όπως getProperty('issues') - 1.
 	Settings	Ρυθμίσεις
 	Shape	Σχήμα
+	Share	Ποσοστό
 	Share of arrivals lost	Ποσοστό χαμένων αφίξεων
 	Share of units blocked	Ποσοστό αποκλεισμένων μονάδων
 	Show All	Εμφάνιση όλων

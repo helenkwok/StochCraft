@@ -1268,8 +1268,9 @@ A line that makes several products, and results in the terms lean practice uses.
 
 - **Product mix and routing by type:** already possible. A source sets a property (a product
   type) on each entity it creates, and an exclusive gateway's conditions read it with
-  `getProperty` (M2.2, M2.3). What is missing is a product mix as one setting (shares of each
-  type from one source) instead of a property drawn per entity.
+  `getProperty` (M2.2, M2.3). A product mix is one setting: a property whose value is a mix,
+  text values each drawn by its share (`{"mix": [...]}`), written as BPSim's own discrete
+  `UserDistribution` of `StringParameter`s (BPSim 2.0, 6.2.8 and 6.3.5.13). Done.
 - **Changeovers:** a setup time when a station switches from one product type to another,
   including setups that depend on the sequence (a time for each pair of types). BPSim has a
   `SetUpTime` parameter, which StochCraft reads today and ignores with a warning ("not

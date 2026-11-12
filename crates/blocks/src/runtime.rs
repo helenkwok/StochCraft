@@ -62,6 +62,11 @@ impl Assigner {
                     let x = d.sample(&mut props.rng.borrow_mut());
                     Held::of(&stochcraft_model::expr::Value::Number(x), a.ty)
                 }
+                Source::Choice(pick, values) => {
+                    let i = pick.sample(&mut props.rng.borrow_mut()) as usize;
+                    let text = values.get(i).cloned().unwrap_or_default();
+                    Held::of(&stochcraft_model::expr::Value::Text(text), a.ty)
+                }
                 Source::Expr(x) => Held::of(&x.eval(&read), a.ty),
             })
             .collect();
