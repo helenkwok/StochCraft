@@ -2721,3 +2721,29 @@ fn a_setup_is_set_run_and_removed() {
     let m = ok(&mut e, "model.get", json!({}));
     assert!(!m.to_string().contains("\"setup\""), "{m}");
 }
+
+/// A planned run time per item gives a server its OEE effectiveness; without it the results
+/// have availability only, and removing it removes it from the model.
+#[test]
+fn a_planned_run_time_gives_effectiveness_and_is_removed() {
+    let mut e = help_desk();
+    let metric = |r: &serde_json::Value, name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert!(metric(&r, "oee_availability").is_some(), "{r}");
+    assert_eq!(metric(&r, "oee_effectiveness"), None, "{r}");
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "planned_run_time": {"type": "constant", "value": 0.1}}),
+    );
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert!(metric(&r, "oee_effectiveness").is_some_and(|x| x > 0.0), "{r}");
+    ok(&mut e, "block.set", json!({"id": "desk", "planned_run_time": null}));
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(!m.to_string().contains("planned_run_time"), "{m}");
+}

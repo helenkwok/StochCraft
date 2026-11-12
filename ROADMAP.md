@@ -1288,7 +1288,14 @@ A line that makes several products, and results in the terms lean practice uses.
     results have busy (`utilisation`), blocked (`blocking_probability`) and up
     (`availability`, so down is the rest); idle is not reported on its own, and starved and in
     setup do not exist yet;
-  - OEE only once it is defined from a cited primary source (to verify, from a primary source).
+  - OEE from ISO 22400-2:2014+A1:2017 (KPIs availability, effectiveness, quality ratio, OEE
+    index, setup ratio). Done: per server, `oee_availability` (production time over planned
+    busy time, off shift being planned downtime), `oee_effectiveness` (from a planned run time
+    per item, the vendor extension `stochcraft:plannedRunTime`; not reported without one, and
+    the results say how to get it) and `setup_ratio`. To do: the quality ratio and the OEE
+    index, from scrap sinks and rework connections the user marks (as FlexSim's by-percentage
+    ports and AnyLogic's SelectOutput, a probability route; charged to the last server the part
+    finished at, or one the scrap sink names; each pass counts as produced).
 - **Current and future state:** a current-state and a future-state value stream map as two
   scenarios of one model, compared with `results.compare` (paired when they share their seed
   and replications, #73).

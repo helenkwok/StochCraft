@@ -767,3 +767,53 @@ fn a_setup_before_every_job_is_bpsims_setuptime() {
     );
     assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited));
 }
+
+/// A planned run time per item is StochCraft's vendor extension: written, read back, changed
+/// and removed in place.
+#[test]
+fn a_planned_run_time_is_written_saved_and_removed() {
+    let mut m = Builder::new();
+    let src = m.source("parts", Dist::Exponential { mean: 5.0 }, None);
+    let machine = m.server("machine", 1, Dist::Constant(3.0));
+    m.planned_run_time(machine, Dist::Constant(2.5));
+    let out = m.sink("out");
+    m.connect(src, machine);
+    m.connect(machine, out);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(text.contains("<stochcraft:plannedRunTime>"), "{text}");
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model, laid_out(model));
+
+    let mut edited = loaded.model.clone();
+    if let ElementKind::Server {
+        planned_run_time, ..
+    } = &mut edited.elements[1].kind
+    {
+        *planned_run_time = Some(Dist::Constant(2.0));
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    if let ElementKind::Server {
+        planned_run_time, ..
+    } = &mut edited.elements[1].kind
+    {
+        *planned_run_time = None;
+    }
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let removed = again.opened.save(&edited);
+    let Ok(removed) = removed else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(!text.contains("plannedRunTime"), "{text}");
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}

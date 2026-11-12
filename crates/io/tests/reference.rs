@@ -790,6 +790,7 @@ fn showcase() -> Model {
         },
     );
     m.transfer(previous, Dist::Uniform { min: 0.5, max: 1.5 });
+    m.planned_run_time(previous, Dist::Constant(4.0));
     m.setup(
         previous,
         stochcraft_blocks::Setup {
