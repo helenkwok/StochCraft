@@ -216,6 +216,12 @@ jobs:
           CRAFT_FONTS_REQUIRED: "1"
       # The golden models must give the results pinned natively (tests/golden/results.txt).
       - run: cargo xtask golden
+      # Again on Node 22, the oldest Node LTS CONTRIBUTING supports, so the wasi-run.mjs
+      # workaround for its crash stays tested (#102). The test binary is already built.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: node --version && cargo xtask golden
 
   bench:
     name: Benchmarks build
