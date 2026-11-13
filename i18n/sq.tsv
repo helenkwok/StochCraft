@@ -101,6 +101,7 @@
 	Connections	Lidhjet
 	Constant	Konstante
 	Copy	Kopjo
+	Counts against	I ngarkohet
 	Cut	Prit
 	Daily	Çdo ditë
 	Dark	E errët
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Nuk ka ende lidhje: lidhni blloqet më poshtë.
 	No replication met the stop condition: each ran to its time limit.	Asnjë përsëritje nuk arriti kushtin e ndalimit: secila shkoi deri në kufirin e kohës.
 	No results yet	Nuk ka ende rezultate
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Në këtë model nuk është shënuar asnjë skarto apo ripunim, ndaj OEE e llogarit cilësinë si 100%.
 	No target	Pa objektiv
 	None	Asnjë
 	None found. The model is ready to run.	Nuk u gjetën probleme. Modeli është gati për ekzekutim.
@@ -232,6 +234,7 @@
 	Normal	Normale
 	Not reached, even with {units}	Nuk u arrit, as me {units}
 	Number	Numër
+	OEE	OEE
 	OEE availability	Disponueshmëria OEE
 	OEE effectiveness	Efektiviteti OEE
 	On	Ditët
@@ -253,6 +256,7 @@
 	PNG image	Imazh PNG
 	Parameter	Parametri
 	Parameters	Parametrat
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Pjesët që marrin këtë rrjedhë kthehen për t'u punuar sërish; ato llogariten si ripunim për detyrën e fundit me burim nëpër të cilën kaluan.
 	Paste	Ngjit
 	Pause	Pauzë
 	Percentile	Përqindëshi
@@ -272,6 +276,8 @@
 	Process	Procesi
 	Process models with BPSim	Modele procesesh me BPSim
 	Properties	Vetitë
+	Quality	Cilësia
+	Quality ratio	Raporti i cilësisë
 	Quit	Dil
 	Quit {app}	Dil nga {app}
 	Random	E rastësishme
@@ -315,6 +321,9 @@
 	Result with a target	Rezultati me objektiv
 	Result, down and up	Rezultati, poshtë dhe lart
 	Results	Rezultatet
+	Rework	Ripunim
+	Rework on {id}	Ripunim në {id}
+	Rework ratio	Raporti i ripunimit
 	Right edges	Skajet e djathta
 	Roles	Rolet
 	Run	Ekzekuto
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Të ruhen ndryshimet te {name}?
 	Saved {file}	U ruajt {file}
 	Scale	Shkalla
+	Scrap	Skarto
+	Scrap ratio	Raporti i skartos
 	Seed	Fara e rastësisë
 	Select All	Përzgjidh të gjitha
 	Select a block to see its queue over time.	Përzgjidhni një bllok për të parë radhën e tij gjatë kohës.
@@ -387,6 +398,7 @@
 	Task with shared resources	Detyrë me burime të përbashkëta
 	Text	Tekst
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervali zbret nën pjesën objektiv prej {share}, ndaj nuk tregohet me besueshmëri 95% se pjesa arrihet; më shumë përsëritje do ta ngushtonin.
+	The last task with a resource it finished at	Detyra e fundit me burim nëpër të cilën kaloi pjesa
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Koha mesatare deri te kushti i ndalimit është vetëm mbi përsëritjet që e arritën; të tjerat shkuan deri në kufirin e kohës.
 	The model changed, so watching stopped	Modeli ndryshoi, prandaj vëzhgimi u ndal
 	The model has no calendars yet.	Modeli nuk ka ende kalendarë.
@@ -447,6 +459,7 @@
 	Wed	Mër
 	Weekly	Çdo javë
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Ajo që arrin te këto largime është skarto dhe llogaritet në raportin e cilësisë së detyrës së cilës i ngarkohet.
 	When a task empties	Kur një detyrë zbrazet
 	When enough have left a block	Kur kanë dalë mjaft nga një bllok
 	Which parameters matter	Cilët parametra kanë rëndësi

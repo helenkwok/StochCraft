@@ -101,6 +101,7 @@
 	Connections	Połączenia
 	Constant	Stały
 	Copy	Kopiuj
+	Counts against	Przypisane do
 	Cut	Wytnij
 	Daily	Codziennie
 	Dark	Ciemny
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Brak połączeń: połącz bloki poniżej.
 	No replication met the stop condition: each ran to its time limit.	Żadna replikacja nie spełniła warunku zatrzymania: każda trwała do swojego limitu czasu.
 	No results yet	Brak wyników
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	W tym modelu nie oznaczono braków ani poprawek, więc OEE liczy jakość jako 100%.
 	No target	Bez celu
 	None	Brak
 	None found. The model is ready to run.	Nie znaleziono problemów. Model jest gotowy do uruchomienia.
@@ -232,6 +234,7 @@
 	Normal	Normalny
 	Not reached, even with {units}	Nieosiągnięty, nawet przy {units}
 	Number	Liczba
+	OEE	OEE
 	OEE availability	Dostępność OEE
 	OEE effectiveness	Efektywność OEE
 	On	Dni
@@ -253,6 +256,7 @@
 	PNG image	Obraz PNG
 	Parameter	Parametr
 	Parameters	Parametry
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Części idące tym przepływem wracają do ponownej obróbki; liczą się jako poprawki ostatniego zadania z zasobem, przez które przeszły.
 	Paste	Wklej
 	Pause	Wstrzymaj
 	Percentile	Percentyl
@@ -272,6 +276,8 @@
 	Process	Proces
 	Process models with BPSim	Modele procesów z BPSim
 	Properties	Właściwości
+	Quality	Jakość
+	Quality ratio	Udział jakości
 	Quit	Zakończ
 	Quit {app}	Zakończ {app}
 	Random	Losowa
@@ -315,6 +321,9 @@
 	Result with a target	Wynik z celem
 	Result, down and up	Wynik, w dół i w górę
 	Results	Wyniki
+	Rework	Poprawki
+	Rework on {id}	Poprawki na {id}
+	Rework ratio	Udział poprawek
 	Right edges	Prawe krawędzie
 	Roles	Role
 	Run	Uruchom
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Zapisać zmiany w {name}?
 	Saved {file}	Zapisano {file}
 	Scale	Skala
+	Scrap	Braki
+	Scrap ratio	Udział braków
 	Seed	Ziarno
 	Select All	Zaznacz wszystko
 	Select a block to see its queue over time.	Zaznacz blok, aby zobaczyć jego kolejkę w czasie.
@@ -387,6 +398,7 @@
 	Task with shared resources	Zadanie ze współdzielonymi zasobami
 	Text	Tekst
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Przedział sięga poniżej udziału docelowego {share}, więc nie wykazano z 95% ufnością, że udział jest osiągnięty; więcej replikacji by go zawęziło.
+	The last task with a resource it finished at	Ostatnie zadanie z zasobem, przez które przeszła część
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Średni czas do warunku zatrzymania dotyczy tylko replikacji, które go spełniły; pozostałe trwały do swojego limitu czasu.
 	The model changed, so watching stopped	Model się zmienił, więc obserwacja została zakończona
 	The model has no calendars yet.	Model nie ma jeszcze kalendarzy.
@@ -447,6 +459,7 @@
 	Wed	śr
 	Weekly	Co tydzień
 	Weibull	Weibulla
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	To, co dociera do tych wyjść, to braki, liczone w udziale jakości zadania, któremu są przypisane.
 	When a task empties	Gdy zadanie się opróżni
 	When enough have left a block	Gdy wystarczająco wiele opuści blok
 	Which parameters matter	Które parametry mają znaczenie

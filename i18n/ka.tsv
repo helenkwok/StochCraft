@@ -101,6 +101,7 @@
 	Connections	კავშირები
 	Constant	მუდმივი
 	Copy	კოპირება
+	Counts against	ეკისრება
 	Cut	ამოჭრა
 	Daily	ყოველდღე
 	Dark	მუქი
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	კავშირები ჯერ არ არის: დააკავშირეთ ქვემოთ მოცემული ბლოკები.
 	No replication met the stop condition: each ran to its time limit.	არცერთმა გამეორებამ არ მიაღწია გაჩერების პირობას: თითოეული თავის დროის ლიმიტამდე გაგრძელდა.
 	No results yet	შედეგები ჯერ არ არის
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	ამ მოდელში წუნი ან გადამუშავება მონიშნული არ არის, ამიტომ OEE ხარისხს 100%-ად თვლის.
 	No target	მიზნის გარეშე
 	None	არცერთი
 	None found. The model is ready to run.	პრობლემა არ მოიძებნა. მოდელი მზადაა გასაშვებად.
@@ -232,6 +234,7 @@
 	Normal	ნორმალური
 	Not reached, even with {units}	ვერ მიიღწა, თუნდაც {units}-ით
 	Number	რიცხვი
+	OEE	OEE
 	OEE availability	OEE ხელმისაწვდომობა
 	OEE effectiveness	OEE ეფექტიანობა
 	On	დღეები
@@ -253,6 +256,7 @@
 	PNG image	PNG გამოსახულება
 	Parameter	პარამეტრი
 	Parameters	პარამეტრები
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ამ ნაკადით მიმავალი დეტალები ბრუნდება ხელახლა დასამუშავებლად; ისინი აღირიცხება გადამუშავებად ბოლო დავალებისთვის რესურსით, რომელიც გაიარეს.
 	Paste	ჩასმა
 	Pause	პაუზა
 	Percentile	პროცენტილი
@@ -272,6 +276,8 @@
 	Process	პროცესი
 	Process models with BPSim	პროცესის მოდელები BPSim-ით
 	Properties	თვისებები
+	Quality	ხარისხი
+	Quality ratio	ხარისხის წილი
 	Quit	გასვლა
 	Quit {app}	{app}-დან გასვლა
 	Random	შემთხვევითი
@@ -315,6 +321,9 @@
 	Result with a target	შედეგი მიზნით
 	Result, down and up	შედეგი, ქვემოთ და ზემოთ
 	Results	შედეგები
+	Rework	გადამუშავება
+	Rework on {id}	გადამუშავება ნაკადზე {id}
+	Rework ratio	გადამუშავების წილი
 	Right edges	მარჯვენა კიდეები
 	Roles	როლები
 	Run	გაშვება
@@ -335,6 +344,8 @@
 	Save changes to {name}?	შევინახოთ ცვლილებები {name}-ში?
 	Saved {file}	შენახულია {file}
 	Scale	მასშტაბი
+	Scrap	წუნი
+	Scrap ratio	წუნის წილი
 	Seed	შემთხვევითი რიცხვების საწყისი მნიშვნელობა
 	Select All	ყველას მონიშვნა
 	Select a block to see its queue over time.	აირჩიეთ ბლოკი, რომ ნახოთ მისი რიგი დროის მიხედვით.
@@ -387,6 +398,7 @@
 	Task with shared resources	დავალება საზიარო რესურსებით
 	Text	ტექსტი
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ინტერვალი {share} სამიზნე წილზე დაბლა ჩადის, ამიტომ 95%-იანი სანდოობით არ არის ნაჩვენები, რომ წილი მიღწეულია; მეტი გამეორება მას შეავიწროებს.
+	The last task with a resource it finished at	ბოლო დავალება რესურსით, რომელიც დეტალმა გაიარა
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	გაჩერების პირობამდე საშუალო დრო მხოლოდ იმ გამეორებებზეა გამოთვლილი, რომლებმაც მას მიაღწიეს; დანარჩენები დროის ლიმიტამდე გაგრძელდა.
 	The model changed, so watching stopped	მოდელი შეიცვალა, ამიტომ დაკვირვება შეწყდა
 	The model has no calendars yet.	მოდელს ჯერ არ აქვს კალენდრები.
@@ -447,6 +459,7 @@
 	Wed	ოთხ
 	Weekly	ყოველკვირა
 	Weibull	ვეიბული
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	რაც ამ გასვლებს აღწევს, წუნია და აღირიცხება იმ დავალების ხარისხის წილში, რომელსაც ეკისრება.
 	When a task empties	როცა ამოცანა დაცარიელდება
 	When enough have left a block	როცა ბლოკს საკმარისი დატოვებს
 	Which parameters matter	რომელი პარამეტრებია მნიშვნელოვანი

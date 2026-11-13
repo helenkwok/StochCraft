@@ -77,6 +77,16 @@ pub const UNBATCH: &str = "stochcraft:unbatch";
 /// into a parallel gateway, the number of entities from it in each one the join sends on.
 pub const QUANTITY: &str = "stochcraft:quantity";
 
+/// Rework: `stochcraft:rework` with the value `true` on a sequence flow's `ElementParameters`:
+/// entities taking it failed their quality requirements and go back to be worked on again,
+/// counted against the last server they finished at (ISO 22400-2's rework quantity).
+pub const REWORK: &str = "stochcraft:rework";
+
+/// Scrap: a `stochcraft:scrap` element on an end event's `ElementParameters`: what reaches it
+/// is scrap (ISO 22400-2's scrap quantity), counted against the task its attribute `chargedTo`
+/// names, or else the last task with a resource of its own each entity finished at.
+pub const SCRAP: &str = "stochcraft:scrap";
+
 /// A terminating experiment's stop on a target count: `stochcraft:stopCount` on an element's
 /// `ElementParameters`, the run ending once that many entities have left the element.
 pub const STOP_COUNT: &str = "stochcraft:stopCount";

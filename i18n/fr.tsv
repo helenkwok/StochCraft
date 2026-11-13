@@ -101,6 +101,7 @@
 	Connections	Connexions
 	Constant	Constante
 	Copy	Copier
+	Counts against	Imputé à
 	Cut	Couper
 	Daily	Chaque jour
 	Dark	Sombre
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Aucune connexion pour le moment : reliez les blocs ci-dessous.
 	No replication met the stop condition: each ran to its time limit.	Aucune réplication n'a atteint la condition d'arrêt : chacune a duré jusqu'à sa limite de temps.
 	No results yet	Aucun résultat pour le moment
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Aucun rebut ni aucune retouche n'est marqué dans ce modèle, donc l'OEE compte la qualité comme 100 %.
 	No target	Pas d'objectif
 	None	Aucun
 	None found. The model is ready to run.	Aucun problème détecté. Le modèle est prêt à être exécuté.
@@ -232,6 +234,7 @@
 	Normal	Normale
 	Not reached, even with {units}	Non atteint, même avec {units}
 	Number	Nombre
+	OEE	OEE
 	OEE availability	Disponibilité OEE
 	OEE effectiveness	Efficacité OEE
 	On	Jours
@@ -253,6 +256,7 @@
 	PNG image	Image PNG
 	Parameter	Paramètre
 	Parameters	Paramètres
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Les pièces qui prennent ce flux repartent pour être retravaillées ; elles comptent comme retouches de la dernière tâche avec ressource par laquelle elles sont passées.
 	Paste	Coller
 	Pause	Pause
 	Percentile	Centile
@@ -272,6 +276,8 @@
 	Process	Processus
 	Process models with BPSim	Modèles de processus avec BPSim
 	Properties	Propriétés
+	Quality	Qualité
+	Quality ratio	Taux de qualité
 	Quit	Quitter
 	Quit {app}	Quitter {app}
 	Random	Aléatoire
@@ -315,6 +321,9 @@
 	Result with a target	Résultat avec un objectif
 	Result, down and up	Résultat, vers le bas et vers le haut
 	Results	Résultats
+	Rework	Retouche
+	Rework on {id}	Retouche sur {id}
+	Rework ratio	Taux de retouche
 	Right edges	Bords droits
 	Roles	Rôles
 	Run	Exécuter
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Enregistrer les modifications apportées à {name} ?
 	Saved {file}	{file} enregistré
 	Scale	Échelle
+	Scrap	Rebut
+	Scrap ratio	Taux de rebut
 	Seed	Graine
 	Select All	Tout sélectionner
 	Select a block to see its queue over time.	Sélectionnez un bloc pour voir sa file au fil du temps.
@@ -387,6 +398,7 @@
 	Task with shared resources	Tâche avec ressources partagées
 	Text	Texte
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'intervalle descend sous la part cible de {share} : il n'est donc pas établi avec 95 % de confiance que la part est atteinte ; davantage de réplications le resserreraient.
+	The last task with a resource it finished at	La dernière tâche avec ressource par laquelle la pièce est passée
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Le temps moyen jusqu'à la condition d'arrêt ne porte que sur les réplications qui l'ont atteinte ; les autres ont duré jusqu'à leur limite de temps.
 	The model changed, so watching stopped	Le modèle a changé, l'observation s'est donc arrêtée
 	The model has no calendars yet.	Le modèle n'a pas encore de calendrier.
@@ -447,6 +459,7 @@
 	Wed	mer
 	Weekly	Chaque semaine
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Ce qui atteint ces départs est du rebut, compté dans le taux de qualité de la tâche à laquelle il est imputé.
 	When a task empties	Quand une tâche se vide
 	When enough have left a block	Quand assez sont sortis d'un bloc
 	Which parameters matter	Quels paramètres comptent

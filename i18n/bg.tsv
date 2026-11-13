@@ -101,6 +101,7 @@
 	Connections	Връзки
 	Constant	Константа
 	Copy	Копиране
+	Counts against	Приписва се на
 	Cut	Изрязване
 	Daily	Ежедневно
 	Dark	Тъмна
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Все още няма връзки: свържете блоковете по-долу.
 	No replication met the stop condition: each ran to its time limit.	Нито една репликация не достигна условието за спиране: всяка продължи до времевия си лимит.
 	No results yet	Все още няма резултати
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	В този модел не е отбелязан брак или преработка, затова OEE отчита качеството като 100%.
 	No target	Без цел
 	None	Няма
 	None found. The model is ready to run.	Не са открити проблеми. Моделът е готов за изпълнение.
@@ -232,6 +234,7 @@
 	Normal	Нормално
 	Not reached, even with {units}	Не е постигната дори с {units}
 	Number	Число
+	OEE	OEE
 	OEE availability	Наличност OEE
 	OEE effectiveness	Ефективност OEE
 	On	Дни
@@ -253,6 +256,7 @@
 	PNG image	Изображение PNG
 	Parameter	Параметър
 	Parameters	Параметри
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Частите, минаващи по този поток, се връщат за повторна обработка; отчитат се като преработка на последната задача с ресурс, през която са минали.
 	Paste	Поставяне
 	Pause	Пауза
 	Percentile	Персентил
@@ -272,6 +276,8 @@
 	Process	Процес
 	Process models with BPSim	Модели на процеси с BPSim
 	Properties	Свойства
+	Quality	Качество
+	Quality ratio	Дял на годните
 	Quit	Изход
 	Quit {app}	Изход от {app}
 	Random	Случайна
@@ -315,6 +321,9 @@
 	Result with a target	Резултат с цел
 	Result, down and up	Резултат, надолу и нагоре
 	Results	Резултати
+	Rework	Преработка
+	Rework on {id}	Преработка на {id}
+	Rework ratio	Дял на преработката
 	Right edges	Десни ръбове
 	Roles	Роли
 	Run	Стартиране
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Да се запазят ли промените в {name}?
 	Saved {file}	Запазен е {file}
 	Scale	Мащаб
+	Scrap	Брак
+	Scrap ratio	Дял на брака
 	Seed	Начална стойност
 	Select All	Избиране на всичко
 	Select a block to see its queue over time.	Изберете блок, за да видите опашката му във времето.
@@ -387,6 +398,7 @@
 	Task with shared resources	Задача със споделени ресурси
 	Text	Текст
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Интервалът стига под целевия дял от {share}, така че не е показано с 95% доверие, че делът е постигнат; повече репликации биха го стеснили.
+	The last task with a resource it finished at	Последната задача с ресурс, през която е минала частта
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Средното време до условието за спиране е само върху репликациите, които са го достигнали; останалите продължиха до времевия си лимит.
 	The model changed, so watching stopped	Моделът се промени, затова наблюдението спря
 	The model has no calendars yet.	Моделът все още няма календари.
@@ -447,6 +459,7 @@
 	Wed	ср
 	Weekly	Ежеседмично
 	Weibull	Вайбул
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Това, което достига тези напускания, е брак и се отчита в дела на годните на задачата, на която се приписва.
 	When a task empties	Когато задача се изпразни
 	When enough have left a block	Когато достатъчно са напуснали блок
 	Which parameters matter	Кои параметри имат значение

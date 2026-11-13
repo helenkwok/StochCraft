@@ -51,6 +51,19 @@
       <stochcraft:transferTime holdsSender="false"><bpsim:FloatingParameter value="32"/></stochcraft:transferTime>
     </bpsim:VendorExtension>
 
+  stochcraft:rework, on a sequence flow's ElementParameters, with the value true: entities
+  taking it failed their quality requirements and go back to be worked on again (ISO 22400-2's
+  rework quantity), counted against the last task with a resource of its own they finished at.
+
+  stochcraft:scrap, on an end event's ElementParameters: what reaches it is scrap (ISO
+  22400-2's scrap quantity), counted against the task the attribute chargedTo names (an
+  inspection rejecting work done upstream), or else the last task with a resource of its own
+  each entity finished at.
+
+    <bpsim:VendorExtension name="stochcraft:scrap" xmlns:stochcraft="…">
+      <stochcraft:scrap chargedTo="machine"/>
+    </bpsim:VendorExtension>
+
   stochcraft:plannedRunTime, on a task's ElementParameters: the planned time for the task's
   resource to make one item (ISO 22400-2's planned runtime per item), holding one BPSim
   distribution or constant whose mean is the plan. It is not simulated; results use it for
@@ -135,6 +148,11 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="plannedRunTime" type="stochcraft:Value"/>
+  <xs:element name="scrap">
+    <xs:complexType>
+      <xs:attribute name="chargedTo" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="changeover">
     <xs:complexType>
       <xs:sequence>

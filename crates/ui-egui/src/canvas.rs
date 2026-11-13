@@ -541,9 +541,9 @@ impl App {
                 painter.galley(at, g, p.text);
             };
             match &e.kind {
-                ElementKind::Source { .. } | ElementKind::Sink => {
+                ElementKind::Source { .. } | ElementKind::Sink { .. } => {
                     let radius = r.width().min(r.height()) / 2.0;
-                    let width = if matches!(e.kind, ElementKind::Sink) {
+                    let width = if matches!(e.kind, ElementKind::Sink { .. }) {
                         // An end event's thick ring.
                         stroke.width + 2.0
                     } else {
@@ -679,7 +679,7 @@ impl App {
             && model
                 .elements
                 .iter()
-                .any(|e| e.id.as_str() == hid && !matches!(e.kind, ElementKind::Sink))
+                .any(|e| e.id.as_str() == hid && !matches!(e.kind, ElementKind::Sink { .. }))
             && matches!(self.canvas.drag, Drag::None | Drag::Connect { .. })
         {
             let at = hr.right_center() + Vec2::new(10.0, 0.0);

@@ -23,8 +23,9 @@ use crate::write::{
     availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
     changeover_element, condition_element, dist_element, edge_ends, estimate_element,
     interruptible_param, numeric, planned_element, power_element, probability_element,
-    property_element, quantity_element, quantity_param, queue_capacity_element, routing_element,
-    size, start_param, stop_element, timer_param, transfer_element,
+    property_element, quantity_element, quantity_param, queue_capacity_element, rework_element,
+    routing_element, scrap_element, size, start_param, stop_element, timer_param, transfer_element,
+    vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -611,7 +612,7 @@ impl Ns {
 fn category(k: &ElementKind) -> u8 {
     match k {
         ElementKind::Source { .. } => 0,
-        ElementKind::Sink => 1,
+        ElementKind::Sink { .. } => 1,
         ElementKind::Server { .. }
         | ElementKind::SharedTask { .. }
         | ElementKind::Delay { .. }
@@ -748,7 +749,7 @@ impl Editor {
         self.pools(before, after)?;
         self.parameters(root, scenario, &old, &replaced, after, resources)?;
         self.extensions(root, scenario, before, after, &replaced)?;
-        self.routing(root, scenario, before, after)?;
+        self.routing(root, scenario, before, after, &replaced)?;
         if before.experiment != after.experiment {
             self.experiment(root, scenario, before, after)?;
         }
@@ -1034,7 +1035,7 @@ impl Editor {
                         ns.el("Event")
                             .with_child(ns.el("StartEvent").with_attr("Trigger", "None")),
                     ),
-                    ElementKind::Sink => n.push(
+                    ElementKind::Sink { .. } => n.push(
                         ns.el("Event")
                             .with_child(ns.el("EndEvent").with_attr("Result", "None")),
                     ),
@@ -1653,17 +1654,29 @@ impl Editor {
         Ok(())
     }
 
-    /// Writes the probabilities and conditions of connections that changed (or are new).
+    /// Writes the probabilities and conditions of connections that changed (or are new). A
+    /// connection to or from an element written again as another kind (`replaced`) was written
+    /// again with it, without its parameters, so it counts as new.
     fn routing(
         &mut self,
         root: &mut Element,
         scenario: Option<&str>,
         before: &Model,
         after: &Model,
+        replaced: &BTreeSet<&str>,
     ) -> Result<(), SaveError> {
+        let old = |c: &Connection| {
+            before
+                .connections
+                .iter()
+                .find(|o| same_link(o, c))
+                .filter(|_| {
+                    !replaced.contains(c.from.as_str()) && !replaced.contains(c.to.as_str())
+                })
+        };
         let mut writes: Vec<(String, &'static str, Option<Element>)> = Vec::new();
         for c in &after.connections {
-            let was = before.connections.iter().find(|o| same_link(o, c));
+            let was = old(c);
             let (op, oc) = was.map_or((None, None), |o| (o.probability, o.condition.clone()));
             if op != c.probability {
                 writes.push((
@@ -1683,20 +1696,42 @@ impl Editor {
         }
         // Bills of materials.
         let mut quantities: Vec<(String, Option<Element>)> = Vec::new();
+        let mut reworks: Vec<(String, Option<Element>)> = Vec::new();
+        // Rework an inherited scenario sets comes back on reading unless this one says false.
+        let parents = ancestors(root, scenario);
         for c in &after.connections {
-            let was = before.connections.iter().find(|o| same_link(o, c));
+            let was = old(c);
             if was.and_then(|o| o.quantity) != c.quantity {
                 quantities.push((c.id.to_string(), c.quantity.map(quantity_element)));
+            }
+            if was.is_some_and(|o| o.rework) != c.rework {
+                let inherited = parents
+                    .iter()
+                    .any(|a| sets_vendor(a, c.id.as_str(), crate::bpsim::REWORK));
+                let v = if c.rework {
+                    Some(rework_element())
+                } else if inherited {
+                    Some(vendor_value_element(crate::bpsim::REWORK, "false"))
+                } else {
+                    None
+                };
+                reworks.push((c.id.to_string(), v));
             }
         }
         // Writing nothing where there was nothing leaves the file alone.
         writes.retain(|(id, _, v)| {
             v.is_some() || before.connections.iter().any(|o| o.id.as_str() == id)
         });
-        if writes.is_empty() && quantities.iter().all(|(_, v)| v.is_none()) {
+        if writes.is_empty()
+            && quantities.iter().all(|(_, v)| v.is_none())
+            && reworks.iter().all(|(_, v)| v.is_none())
+        {
             if let Some(s) = scenario_mut(root, scenario) {
                 for (id, _) in quantities {
                     set_vendor(s, &id, crate::bpsim::QUANTITY, None);
+                }
+                for (id, _) in reworks {
+                    set_vendor(s, &id, crate::bpsim::REWORK, None);
                 }
             }
             return Ok(());
@@ -1707,6 +1742,9 @@ impl Editor {
         }
         for (id, v) in quantities {
             set_vendor(s, &id, crate::bpsim::QUANTITY, v);
+        }
+        for (id, v) in reworks {
+            set_vendor(s, &id, crate::bpsim::REWORK, v);
         }
         Ok(())
     }
@@ -2050,9 +2088,30 @@ impl Editor {
                         writes.push((id.clone(), "PriorityParameters", "Interruptible", None));
                     }
                 }
-                ElementKind::Sink
+                ElementKind::Sink { .. }
                 | ElementKind::ExclusiveGateway { .. }
                 | ElementKind::ParallelGateway => {}
+            }
+            // Scrap at a sink.
+            let old_scrap = match was {
+                Some(ElementKind::Sink { scrap }) => scrap.as_ref(),
+                _ => None,
+            };
+            let new_scrap = match &e.kind {
+                ElementKind::Sink { scrap } => scrap.as_ref(),
+                _ => None,
+            };
+            if old_scrap != new_scrap {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::SCRAP,
+                    new_scrap.map(|x| {
+                        // The task it names as the file's encoding needs.
+                        let mut v = scrap_element(x);
+                        self.text_attrs(&mut v);
+                        v
+                    }),
+                ));
             }
             // Making or splitting batches: the vendor extensions, where that changed.
             let size = |k: Option<&ElementKind>| match k {

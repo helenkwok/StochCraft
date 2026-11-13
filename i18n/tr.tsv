@@ -101,6 +101,7 @@
 	Connections	Bağlantılar
 	Constant	Sabit
 	Copy	Kopyala
+	Counts against	Yazıldığı görev
 	Cut	Kes
 	Daily	Günlük
 	Dark	Koyu
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Henüz bağlantı yok: aşağıdaki blokları bağlayın.
 	No replication met the stop condition: each ran to its time limit.	Hiçbir tekrar durdurma koşuluna ulaşmadı: her biri süre sınırına kadar çalıştı.
 	No results yet	Henüz sonuç yok
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Bu modelde hurda veya yeniden işleme işaretlenmemiştir, bu yüzden OEE kaliteyi %100 sayar.
 	No target	Hedef yok
 	None	Yok
 	None found. The model is ready to run.	Sorun bulunamadı. Model çalıştırılmaya hazır.
@@ -232,6 +234,7 @@
 	Normal	Normal
 	Not reached, even with {units}	Ulaşılamadı, {units} ile bile
 	Number	Sayı
+	OEE	OEE
 	OEE availability	OEE kullanılabilirliği
 	OEE effectiveness	OEE etkinliği
 	On	Günler
@@ -253,6 +256,7 @@
 	PNG image	PNG görüntüsü
 	Parameter	Parametre
 	Parameters	Parametreler
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Bu akışı izleyen parçalar yeniden işlenmek üzere geri döner; geçtikleri kaynak kullanan son görevin yeniden işlemesi olarak sayılırlar.
 	Paste	Yapıştır
 	Pause	Duraklat
 	Percentile	Yüzdelik
@@ -272,6 +276,8 @@
 	Process	Süreç
 	Process models with BPSim	BPSim içeren süreç modelleri
 	Properties	Özellikler
+	Quality	Kalite
+	Quality ratio	Kalite oranı
 	Quit	Çıkış
 	Quit {app}	{app} Uygulamasından Çık
 	Random	Rastgele
@@ -315,6 +321,9 @@
 	Result with a target	Hedefli sonuç
 	Result, down and up	Sonuç, aşağı ve yukarı
 	Results	Sonuçlar
+	Rework	Yeniden işleme
+	Rework on {id}	{id} üzerinde yeniden işleme
+	Rework ratio	Yeniden işleme oranı
 	Right edges	Sağ kenarlar
 	Roles	Roller
 	Run	Çalıştır
@@ -335,6 +344,8 @@
 	Save changes to {name}?	{name} üzerindeki değişiklikler kaydedilsin mi?
 	Saved {file}	{file} kaydedildi
 	Scale	Ölçek
+	Scrap	Hurda
+	Scrap ratio	Hurda oranı
 	Seed	Rastgelelik tohumu
 	Select All	Tümünü seç
 	Select a block to see its queue over time.	Kuyruğunu zaman içinde görmek için bir blok seçin.
@@ -387,6 +398,7 @@
 	Task with shared resources	Paylaşılan kaynakları kullanan görev
 	Text	Metin
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Aralık {share} hedef oranının altına iniyor, bu yüzden oranın karşılandığı %95 güvenle gösterilmiş değil; daha fazla tekrar aralığı daraltır.
+	The last task with a resource it finished at	Parçanın geçtiği kaynak kullanan son görev
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Durdurma koşuluna kadarki ortalama süre yalnızca bu koşula ulaşan tekrarlara göredir; diğerleri süre sınırlarına kadar çalıştı.
 	The model changed, so watching stopped	Model değişti, bu nedenle izleme durduruldu
 	The model has no calendars yet.	Modelde henüz takvim yok.
@@ -447,6 +459,7 @@
 	Wed	Çar
 	Weekly	Haftalık
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Bu çıkışlara ulaşan hurdadır ve yazıldığı görevin kalite oranında sayılır.
 	When a task empties	Bir görev boşaldığında
 	When enough have left a block	Bir bloktan yeterince ayrıldığında
 	Which parameters matter	Hangi parametreler önemli

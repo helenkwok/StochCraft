@@ -108,6 +108,27 @@ engine's messages (validation, file notes) are English too.
   nopeus, teljesítmény, 產能效率), so the row and the hint use the same word as the English. Not
   checked against IATE or the standard's own translations, and not reviewed by native speakers.
   The least certain are lo, th, ta, te, ka, kk, bn, sq, et, lt and zh-hans.
+- The rows for ISO 22400-2's quality elements (Quality, Scrap, Rework, Counts against, the
+  last-task default, Rework on {id}, their two hints, Quality ratio, Scrap ratio, Rework ratio, OEE
+  and the note that OEE counts quality as 100%) were machine-drafted with Claude Code from the
+  plain meaning of the English and each catalog's existing terms: the words for Departures, task
+  with a resource, flow, part, block and the share or ratio word, and the previous bullet's OEE
+  wording. "OEE" stays the acronym. The scrap and rework words come from the quality sections of
+  Wikipedia's "Overall equipment effectiveness" interlanguage articles where they name them (de
+  Ausschuss and Nacharbeit, nl afkeur and herbewerking, hu selejt and újramunkálás, es desechadas
+  and retrabajadas, pt retrabalho) and elsewhere from the language's general manufacturing words
+  (fr rebut and retouche, it scarto and rilavorazione, sv kassation, cs zmetky, pl braki, ru and
+  uk брак); Wikipedia's "Scrap" and "Rework" articles are about recycling and electronics, so they
+  were not used. "Quality ratio" follows the quality factor those articles name where it is a rate
+  (de Qualitätsrate, fr Taux de qualité, it Tasso di qualità), so de, fr and it use a rate word
+  for all three ratios rather than the "Setup ratio" word; ru, uk and bg say "share of good
+  parts" (Доля годных, Частка придатних, Дял на годните) and ja, ko, zh-hans and zh-hant the
+  good-part rate (良品率, 양품률, 合格率, 良率), which is the ratio's definition rather than a
+  literal "quality". Not checked against IATE or the standard's own translations, and not
+  reviewed by native speakers. The least certain are lo, th, ta, te, ka, kk, bn, sq, et and lt as
+  before, plus ja 廃棄 and ko 폐기 (which can read as the act of disposal rather than the scrapped
+  item), sq Skarto (an Italian loan), hi's "Counts against" (phrased as a question), and pl,
+  whose "Udział jakości" keeps the share word although Polish usage tends to say "wskaźnik".
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

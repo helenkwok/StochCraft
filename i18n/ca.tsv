@@ -101,6 +101,7 @@
 	Connections	Connexions
 	Constant	Constant
 	Copy	Copia
+	Counts against	S'imputa a
 	Cut	Retalla
 	Daily	Cada dia
 	Dark	Fosc
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Encara no hi ha connexions: connecta els blocs de sota.
 	No replication met the stop condition: each ran to its time limit.	Cap rèplica ha complert la condició d'aturada: cadascuna ha arribat al seu límit de temps.
 	No results yet	Encara no hi ha resultats
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	En aquest model no hi ha cap rebuig ni retreball marcat, de manera que l'OEE compta la qualitat com a 100%.
 	No target	Sense objectiu
 	None	Cap
 	None found. The model is ready to run.	No s'han trobat problemes. El model està a punt per executar-se.
@@ -232,6 +234,7 @@
 	Normal	Normal
 	Not reached, even with {units}	No assolit, ni tan sols amb {units}
 	Number	Nombre
+	OEE	OEE
 	OEE availability	Disponibilitat OEE
 	OEE effectiveness	Eficàcia OEE
 	On	Dies
@@ -253,6 +256,7 @@
 	PNG image	Imatge PNG
 	Parameter	Paràmetre
 	Parameters	Paràmetres
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Les peces que prenen aquest flux tornen a treballar-se; compten com a retreball de l'última tasca amb un recurs per on han passat.
 	Paste	Enganxa
 	Pause	Pausa
 	Percentile	Percentil
@@ -272,6 +276,8 @@
 	Process	Procés
 	Process models with BPSim	Models de processos amb BPSim
 	Properties	Propietats
+	Quality	Qualitat
+	Quality ratio	Proporció de qualitat
 	Quit	Surt
 	Quit {app}	Surt de {app}
 	Random	Aleatori
@@ -315,6 +321,9 @@
 	Result with a target	Resultat amb objectiu
 	Result, down and up	Resultat, avall i amunt
 	Results	Resultats
+	Rework	Retreball
+	Rework on {id}	Retreball a {id}
+	Rework ratio	Proporció de retreball
 	Right edges	Vores dretes
 	Roles	Rols
 	Run	Executa
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Vols desar els canvis a {name}?
 	Saved {file}	S'ha desat {file}
 	Scale	Escala
+	Scrap	Rebuig
+	Scrap ratio	Proporció de rebuig
 	Seed	Llavor
 	Select All	Selecciona-ho tot
 	Select a block to see its queue over time.	Seleccioneu un bloc per veure'n la cua al llarg del temps.
@@ -387,6 +398,7 @@
 	Task with shared resources	Tasca amb recursos compartits
 	Text	Text
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'interval arriba per sota de la proporció objectiu del {share}, de manera que no es demostra amb un 95% de confiança que es compleixi; més rèpliques l'estretirien.
+	The last task with a resource it finished at	L'última tasca amb un recurs per on ha passat la peça
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	El temps mitjà fins a la condició d'aturada és només sobre les rèpliques que l'han complert; les altres han arribat al seu límit de temps.
 	The model changed, so watching stopped	El model ha canviat, així que s'ha deixat d'observar
 	The model has no calendars yet.	El model encara no té calendaris.
@@ -447,6 +459,7 @@
 	Wed	dc.
 	Weekly	Cada setmana
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	El que arriba a aquestes sortides és rebuig i compta en la proporció de qualitat de la tasca a la qual s'imputa.
 	When a task empties	Quan una tasca es buida
 	When enough have left a block	Quan n'han sortit prou d'un bloc
 	Which parameters matter	Quins paràmetres importen

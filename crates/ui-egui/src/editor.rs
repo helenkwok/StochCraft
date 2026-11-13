@@ -525,6 +525,9 @@ impl App {
         if kind == "shared_task" {
             self.needs_section(ui, model, el);
         }
+        if kind == "sink" {
+            self.scrap_section(ui, model, el, &id);
+        }
 
         if matches!(kind.as_str(), "source" | "server" | "shared_task" | "delay") {
             self.estimate_section(ui, el);
@@ -581,11 +584,6 @@ impl App {
                             if ui.link(name_of(other)).clicked() {
                                 self.selected = Some(other.clone());
                             }
-                            // A decision's way out: its probability and condition.
-                            if decision && !incoming {
-                                let c = connection(model, cid);
-                                self.flow_fields(ui, cid, &c);
-                            }
                             if ui
                                 .add(
                                     egui::Button::new(egui::RichText::new(t("Remove")).size(12.0))
@@ -597,6 +595,21 @@ impl App {
                                 self.execute("disconnect", json!({ "id": cid }));
                             }
                         });
+                        // A way out: a decision's probability and condition, and for any whether
+                        // it is rework, on lines of their own so the row fits the inspector.
+                        if !incoming && kind != "source" {
+                            let c = connection(model, cid);
+                            if decision {
+                                ui.horizontal(|ui| {
+                                    ui.add_space(12.0);
+                                    self.flow_fields(ui, cid, &c);
+                                });
+                            }
+                            ui.horizontal(|ui| {
+                                ui.add_space(12.0);
+                                self.rework_field(ui, cid, &c);
+                            });
+                        }
                     }
                     let others: Vec<(String, String)> = names
                         .iter()
@@ -641,6 +654,82 @@ impl App {
         }
         if decision {
             self.default_flow(ui, &id, el, &conns, &names);
+        }
+    }
+
+    /// Whether what reaches a sink is scrap, for the OEE quality results, and which server it
+    /// counts against: the last one each part finished at, or one named (an inspection that
+    /// rejects work done upstream names the machine that did it).
+    fn scrap_section(&mut self, ui: &mut egui::Ui, model: &Value, el: &Value, id: &str) {
+        section(ui, t("Quality"));
+        let scrap = &el["scrap"];
+        let mut on = scrap.is_object();
+        if ui
+            .checkbox(&mut on, t("Scrap"))
+            .on_hover_text(t(
+                "What reaches these departures is scrap, counted in the quality ratio of the task it counts against.",
+            ))
+            .changed()
+        {
+            let v = if on { json!({}) } else { Value::Null };
+            self.execute("block.set", json!({ "id": id, "scrap": v }));
+        }
+        if !on {
+            return;
+        }
+        let servers: Vec<(String, String)> = model["elements"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter(|e| e["kind"] == "server")
+            .map(|e| {
+                let i = e["id"].as_str().unwrap_or("").to_owned();
+                let n = e["name"]
+                    .as_str()
+                    .filter(|n| !n.is_empty())
+                    .unwrap_or(&i)
+                    .to_owned();
+                (i, n)
+            })
+            .collect();
+        let now = scrap["charged_to"].as_str().map(str::to_owned);
+        let last = t("The last task with a resource it finished at");
+        let shown = now
+            .as_ref()
+            .map(|c| {
+                servers
+                    .iter()
+                    .find(|(i, _)| i == c)
+                    .map_or_else(|| c.clone(), |(_, n)| n.clone())
+            })
+            .unwrap_or_else(|| last.to_owned());
+        let mut chosen: Option<Option<String>> = None;
+        ui.horizontal(|ui| {
+            form::label_cell(ui, t("Counts against"), 26.0);
+            craft_ui::ComboBox::from_id_salt((id, "charged_to"))
+                .selected_text(shown)
+                .width(220.0)
+                .show_ui(ui, |ui| {
+                    if ui.selectable_label(now.is_none(), last).clicked() {
+                        chosen = Some(None);
+                    }
+                    for (i, n) in &servers {
+                        if ui.selectable_label(now.as_deref() == Some(i), n).clicked() {
+                            chosen = Some(Some(i.clone()));
+                        }
+                    }
+                })
+                .response
+                .widget_info(|| {
+                    egui::WidgetInfo::labeled(egui::Role::ComboBox, true, t("Counts against"))
+                });
+        });
+        if let Some(c) = chosen.filter(|c| *c != now) {
+            let v = match c {
+                Some(c) => json!({ "charged_to": c }),
+                None => json!({}),
+            };
+            self.execute("block.set", json!({ "id": id, "scrap": v }));
         }
     }
 
@@ -739,6 +828,20 @@ impl App {
             let t = t.trim();
             let v = if t.is_empty() { Value::Null } else { json!(t) };
             self.execute("flow.set", json!({ "id": cid, "condition": v }));
+        }
+    }
+
+    /// Whether parts sent this way go back to be worked on again: rework, for the quality
+    /// results.
+    fn rework_field(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) {
+        let mut rework = c["rework"].as_bool().unwrap_or(false);
+        let r = ui.checkbox(&mut rework, t("Rework")).on_hover_text(t(
+            "Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.",
+        ));
+        let (ticked, name) = (rework, tf("Rework on {id}", &[("id", cid)]));
+        r.widget_info(|| egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, &name));
+        if r.changed() {
+            self.execute("flow.set", json!({ "id": cid, "rework": rework }));
         }
     }
 

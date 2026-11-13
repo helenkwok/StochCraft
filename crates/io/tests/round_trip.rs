@@ -815,3 +815,86 @@ fn a_planned_run_time_is_written_saved_and_removed() {
     assert!(!text.contains("plannedRunTime"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
 }
+
+/// A scrap sink, with the server it counts against, and a rework connection are StochCraft's
+/// vendor extensions: written, read back, changed and removed in place.
+#[test]
+fn scrap_and_rework_are_written_saved_and_removed() {
+    let mut m = Builder::new();
+    let src = m.source("parts", Dist::Exponential { mean: 5.0 }, None);
+    let machine = m.server("machine", 1, Dist::Constant(3.0));
+    let check = m.exclusive("check");
+    let good = m.sink("good");
+    let scrap = m.sink("scrap");
+    m.connect(src, machine);
+    m.connect(machine, check);
+    m.route(check, good, Some(0.8), None);
+    m.route(check, scrap, Some(0.1), None);
+    m.route(check, machine, Some(0.1), None);
+    m.scrap(scrap, Some(machine));
+    m.rework(check, machine);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(
+        text.contains(r#"<stochcraft:scrap chargedTo="machine"/>"#),
+        "{text}"
+    );
+    assert!(text.contains(r#"name="stochcraft:rework""#), "{text}");
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model, laid_out(model));
+
+    // No longer charged to the machine, and the loop no longer rework.
+    let mut edited = loaded.model.clone();
+    for e in &mut edited.elements {
+        if let ElementKind::Sink { scrap: Some(s) } = &mut e.kind {
+            s.charged_to = None;
+        }
+    }
+    for c in &mut edited.connections {
+        c.rework = false;
+    }
+    let saved = loaded.opened.save(&edited);
+    let Ok(saved) = saved else { unreachable!() };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(!text.contains("chargedTo"), "{text}");
+    assert!(!text.contains("stochcraft:rework"), "{text}");
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    // Not scrap any more.
+    for e in &mut edited.elements {
+        if let ElementKind::Sink { scrap } = &mut e.kind {
+            *scrap = None;
+        }
+    }
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let Ok(removed) = again.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(!text.contains("stochcraft:scrap"), "{text}");
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// A rework way with no probability, condition or quantity is still written in a new file.
+#[test]
+fn a_plain_rework_way_is_written_in_a_new_file() {
+    let mut m = Builder::new();
+    let src = m.source("parts", Dist::Exponential { mean: 5.0 }, None);
+    let first = m.server("first", 1, Dist::Constant(3.0));
+    let again = m.server("again", 1, Dist::Constant(2.0));
+    let out = m.sink("out");
+    m.connect(src, first);
+    m.connect(first, again);
+    m.connect(again, out);
+    m.rework(first, again);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(text.contains(r#"name="stochcraft:rework""#), "{text}");
+    assert_eq!(read(&bytes).map(|l| l.model).ok(), Some(laid_out(model)));
+}

@@ -101,6 +101,7 @@
 	Connections	Conexiuni
 	Constant	Constantă
 	Copy	Copiază
+	Counts against	Imputat la
 	Cut	Decupează
 	Daily	Zilnic
 	Dark	Întunecat
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Nu există încă conexiuni: conectați blocurile de mai jos.
 	No replication met the stop condition: each ran to its time limit.	Nicio replicare nu a atins condiția de oprire: fiecare a rulat până la limita de timp.
 	No results yet	Nu există încă rezultate
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	În acest model nu este marcat niciun rebut sau reprelucrare, așa că OEE consideră calitatea 100%.
 	No target	Fără țintă
 	None	Niciunul
 	None found. The model is ready to run.	Nu s-au găsit probleme. Modelul este gata de rulare.
@@ -232,6 +234,7 @@
 	Normal	Normală
 	Not reached, even with {units}	Neatinsă, nici cu {units}
 	Number	Număr
+	OEE	OEE
 	OEE availability	Disponibilitate OEE
 	OEE effectiveness	Eficacitate OEE
 	On	Zile
@@ -253,6 +256,7 @@
 	PNG image	Imagine PNG
 	Parameter	Parametru
 	Parameters	Parametri
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Piesele care urmează acest flux se întorc pentru a fi prelucrate din nou; ele contează ca reprelucrare a ultimei sarcini cu resursă prin care au trecut.
 	Paste	Lipește
 	Pause	Pauză
 	Percentile	Percentilă
@@ -272,6 +276,8 @@
 	Process	Proces
 	Process models with BPSim	Modele de procese cu BPSim
 	Properties	Proprietăți
+	Quality	Calitate
+	Quality ratio	Ponderea calității
 	Quit	Ieșire
 	Quit {app}	Ieșire din {app}
 	Random	Aleatoriu
@@ -315,6 +321,9 @@
 	Result with a target	Rezultat cu țintă
 	Result, down and up	Rezultat, în jos și în sus
 	Results	Rezultate
+	Rework	Reprelucrare
+	Rework on {id}	Reprelucrare pe {id}
+	Rework ratio	Ponderea reprelucrării
 	Right edges	Marginile din dreapta
 	Roles	Roluri
 	Run	Rulează
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Salvați modificările pentru {name}?
 	Saved {file}	S-a salvat {file}
 	Scale	Scară
+	Scrap	Rebut
+	Scrap ratio	Ponderea rebutului
 	Seed	Sămânță
 	Select All	Selectează tot
 	Select a block to see its queue over time.	Selectați un bloc pentru a-i vedea coada în timp.
@@ -387,6 +398,7 @@
 	Task with shared resources	Sarcină cu resurse partajate
 	Text	Text
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalul coboară sub ponderea țintă de {share}, deci nu este arătat cu 95% încredere că ponderea este atinsă; mai multe replicări l-ar îngusta.
+	The last task with a resource it finished at	Ultima sarcină cu resursă prin care a trecut piesa
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Timpul mediu până la condiția de oprire este doar pe replicările care au atins-o; celelalte au rulat până la limita de timp.
 	The model changed, so watching stopped	Modelul s-a schimbat, așa că urmărirea s-a oprit
 	The model has no calendars yet.	Modelul nu are încă calendare.
@@ -447,6 +459,7 @@
 	Wed	mie
 	Weekly	Săptămânal
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Ce ajunge la aceste plecări este rebut și se contabilizează în ponderea calității sarcinii căreia îi este imputat.
 	When a task empties	Când o sarcină se golește
 	When enough have left a block	Când au ieșit destule dintr-un bloc
 	Which parameters matter	Ce parametri contează

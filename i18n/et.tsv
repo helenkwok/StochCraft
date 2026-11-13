@@ -101,6 +101,7 @@
 	Connections	Ühendused
 	Constant	Konstant
 	Copy	Kopeeri
+	Counts against	Arvele kantakse
 	Cut	Lõika
 	Daily	Iga päev
 	Dark	Tume
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Ühendusi veel pole: ühenda allolevad plokid.
 	No replication met the stop condition: each ran to its time limit.	Ükski kordus ei jõudnud peatamistingimuseni: iga kordus kestis oma ajapiirini.
 	No results yet	Tulemusi veel pole
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Selles mudelis pole praaki ega ümbertöötlust märgitud, seega arvestab OEE kvaliteediks 100%.
 	No target	Eesmärk puudub
 	None	Puudub
 	None found. The model is ready to run.	Probleeme ei leitud. Mudel on käivitamiseks valmis.
@@ -232,6 +234,7 @@
 	Normal	Normaalne
 	Not reached, even with {units}	Ei saavutatud, isegi mitte {units} korral
 	Number	Arv
+	OEE	OEE
 	OEE availability	OEE kättesaadavus
 	OEE effectiveness	OEE tõhusus
 	On	Päevad
@@ -253,6 +256,7 @@
 	PNG image	PNG-pilt
 	Parameter	Parameeter
 	Parameters	Parameetrid
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Seda voogu mööda liikuvad detailid lähevad tagasi uuesti töötlemisele; need loetakse ümbertöötluseks viimasele ressursiga ülesandele, mille nad läbisid.
 	Paste	Kleebi
 	Pause	Paus
 	Percentile	Protsentiil
@@ -272,6 +276,8 @@
 	Process	Protsess
 	Process models with BPSim	Protsessimudelid ja BPSim
 	Properties	Omadused
+	Quality	Kvaliteet
+	Quality ratio	Kvaliteedi osakaal
 	Quit	Välju
 	Quit {app}	Välju: {app}
 	Random	Juhuslik
@@ -315,6 +321,9 @@
 	Result with a target	Tulemus koos eesmärgiga
 	Result, down and up	Tulemus, alla ja üles
 	Results	Tulemused
+	Rework	Ümbertöötlus
+	Rework on {id}	Ümbertöötlus voos {id}
+	Rework ratio	Ümbertöötluse osakaal
 	Right edges	Paremad servad
 	Roles	Rollid
 	Run	Käivita
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Kas salvestada {name} muudatused?
 	Saved {file}	Salvestati {file}
 	Scale	Skaala
+	Scrap	Praak
+	Scrap ratio	Praagi osakaal
 	Seed	Juhuarvuseeme
 	Select All	Vali kõik
 	Select a block to see its queue over time.	Vali plokk, et näha selle järjekorda aja jooksul.
@@ -387,6 +398,7 @@
 	Task with shared resources	Jagatud ressurssidega ülesanne
 	Text	Tekst
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Vahemik ulatub alla sihtosakaalu {share}, seega pole 95% usaldusega näidatud, et osakaal on saavutatud; rohkem kordusi kitsendaks seda.
+	The last task with a resource it finished at	Viimane ressursiga ülesanne, mille detail läbis
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskmine aeg peatamistingimuseni on ainult nende korduste põhjal, mis selle saavutasid; ülejäänud kestsid oma ajapiirini.
 	The model changed, so watching stopped	Mudel muutus, seega jälgimine lõpetati
 	The model has no calendars yet.	Mudelil pole veel kalendreid.
@@ -447,6 +459,7 @@
 	Wed	K
 	Weekly	Iga nädal
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	See, mis jõuab nendesse lahkumistesse, on praak ja läheb arvesse selle ülesande kvaliteedi osakaalu, mille arvele see kantakse.
 	When a task empties	Kui töö tühjeneb
 	When enough have left a block	Kui piisavalt on plokist lahkunud
 	Which parameters matter	Millised parameetrid loevad

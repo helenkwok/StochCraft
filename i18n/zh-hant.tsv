@@ -101,6 +101,7 @@
 	Connections	連接
 	Constant	常數
 	Copy	複製
+	Counts against	計入任務
 	Cut	剪下
 	Daily	每天
 	Dark	深色
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	尚無連接：請在下方連接區塊。
 	No replication met the stop condition: each ran to its time limit.	沒有重複執行達到停止條件：每次都執行到時間上限。
 	No results yet	尚無結果
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	此模型中未標記報廢或重工，因此 OEE 將品質計為 100%。
 	No target	無目標
 	None	無
 	None found. The model is ready to run.	未發現問題。模型可以執行。
@@ -232,6 +234,7 @@
 	Normal	常態分布
 	Not reached, even with {units}	即使有 {units} 也未達成
 	Number	數值
+	OEE	OEE
 	OEE availability	OEE 稼動率
 	OEE effectiveness	OEE 效能
 	On	星期
@@ -253,6 +256,7 @@
 	PNG image	PNG 影像
 	Parameter	參數
 	Parameters	參數
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	沿此順序流的零件會返回重新加工；它們計為最後經過的需要資源的任務的重工。
 	Paste	貼上
 	Pause	暫停
 	Percentile	百分位數
@@ -272,6 +276,8 @@
 	Process	流程
 	Process models with BPSim	含 BPSim 的流程模型
 	Properties	屬性
+	Quality	品質
+	Quality ratio	良率
 	Quit	退出
 	Quit {app}	退出 {app}
 	Random	隨機
@@ -315,6 +321,9 @@
 	Result with a target	有目標的結果
 	Result, down and up	結果（調低與調高）
 	Results	結果
+	Rework	重工
+	Rework on {id}	{id} 上的重工
+	Rework ratio	重工率
 	Right edges	右邊
 	Roles	角色
 	Run	執行
@@ -335,6 +344,8 @@
 	Save changes to {name}?	是否儲存對 {name} 的變更？
 	Saved {file}	已儲存 {file}
 	Scale	尺度參數
+	Scrap	報廢
+	Scrap ratio	報廢率
 	Seed	隨機種子
 	Select All	全選
 	Select a block to see its queue over time.	選取一個區塊以查看其佇列隨時間的變化。
@@ -387,6 +398,7 @@
 	Task with shared resources	需要共享資源的任務
 	Text	文字
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	該區間低於目標比例 {share}，因此未能以 95% 的信賴度顯示已達到該比例；更多的重複執行會使區間變窄。
+	The last task with a resource it finished at	最後經過的需要資源的任務
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	到停止條件的平均時間只以達到停止條件的重複執行為準；其餘的執行到時間上限。
 	The model changed, so watching stopped	模型已變更，因此已停止觀察
 	The model has no calendars yet.	模型尚無行事曆。
@@ -447,6 +459,7 @@
 	Wed	週三
 	Weekly	每週
 	Weibull	威布林分布
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	到達此離開的都是報廢品，計入其歸屬任務的良率。
 	When a task empties	當某個任務清空時
 	When enough have left a block	當足夠多實體離開某個區塊時
 	Which parameters matter	哪些參數重要

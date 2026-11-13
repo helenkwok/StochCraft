@@ -101,6 +101,7 @@
 	Connections	Conexións
 	Constant	Constante
 	Copy	Copiar
+	Counts against	Impútase a
 	Cut	Cortar
 	Daily	Cada día
 	Dark	Escuro
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Aínda non hai conexións: conecte os bloques de abaixo.
 	No replication met the stop condition: each ran to its time limit.	Ningunha réplica cumpriu a condición de parada: cada unha chegou ao seu límite de tempo.
 	No results yet	Aínda non hai resultados
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Este modelo non ten refugo nin retraballo marcados, así que o OEE conta a calidade como 100 %.
 	No target	Sen obxectivo
 	None	Ningún
 	None found. The model is ready to run.	Non se atoparon problemas. O modelo está listo para executarse.
@@ -232,6 +234,7 @@
 	Normal	Normal
 	Not reached, even with {units}	Non acadado, nin sequera con {units}
 	Number	Número
+	OEE	OEE
 	OEE availability	Dispoñibilidade OEE
 	OEE effectiveness	Eficacia OEE
 	On	Días
@@ -253,6 +256,7 @@
 	PNG image	Imaxe PNG
 	Parameter	Parámetro
 	Parameters	Parámetros
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	As pezas que toman este fluxo volven traballarse; contan como retraballo da última tarefa con recurso pola que pasaron.
 	Paste	Pegar
 	Pause	Pausa
 	Percentile	Percentil
@@ -272,6 +276,8 @@
 	Process	Proceso
 	Process models with BPSim	Modelos de procesos con BPSim
 	Properties	Propiedades
+	Quality	Calidade
+	Quality ratio	Proporción de calidade
 	Quit	Saír
 	Quit {app}	Saír de {app}
 	Random	Aleatorio
@@ -315,6 +321,9 @@
 	Result with a target	Resultado con obxectivo
 	Result, down and up	Resultado, abaixo e arriba
 	Results	Resultados
+	Rework	Retraballo
+	Rework on {id}	Retraballo en {id}
+	Rework ratio	Proporción de retraballo
 	Right edges	Bordos dereitos
 	Roles	Roles
 	Run	Executar
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Gardar os cambios en {name}?
 	Saved {file}	Gardouse {file}
 	Scale	Escala
+	Scrap	Refugo
+	Scrap ratio	Proporción de refugo
 	Seed	Semente
 	Select All	Seleccionar todo
 	Select a block to see its queue over time.	Seleccione un bloque para ver a súa cola ao longo do tempo.
@@ -387,6 +398,7 @@
 	Task with shared resources	Tarefa con recursos compartidos
 	Text	Texto
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	O intervalo chega por debaixo da proporción obxectivo do {share}, así que non se demostra cun 95 % de confianza que se cumpra; máis réplicas estreitaríano.
+	The last task with a resource it finished at	A última tarefa con recurso pola que pasou a peza
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	O tempo medio ata a condición de parada é só sobre as réplicas que a cumpriron; as demais chegaron ao seu límite de tempo.
 	The model changed, so watching stopped	O modelo cambiou, así que se deixou de observar
 	The model has no calendars yet.	O modelo aínda non ten calendarios.
@@ -447,6 +459,7 @@
 	Wed	mér
 	Weekly	Cada semana
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	O que chega a estas saídas é refugo e conta na proporción de calidade da tarefa á que se imputa.
 	When a task empties	Cando unha tarefa se baleira
 	When enough have left a block	Cando saíron abondas dun bloque
 	Which parameters matter	Que parámetros importan

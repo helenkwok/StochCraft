@@ -101,6 +101,7 @@
 	Connections	Jungtys
 	Constant	Konstanta
 	Copy	Kopijuoti
+	Counts against	Priskiriama
 	Cut	Iškirpti
 	Daily	Kasdien
 	Dark	Tamsi
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Jungčių dar nėra: sujunkite žemiau esančius blokus.
 	No replication met the stop condition: each ran to its time limit.	Nė viena replikacija nepasiekė stabdymo sąlygos: kiekviena truko iki savo laiko ribos.
 	No results yet	Rezultatų dar nėra
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Šiame modelyje nepažymėtas joks brokas ar perdirbimas, todėl OEE kokybę laiko 100 %.
 	No target	Be tikslo
 	None	Nėra
 	None found. The model is ready to run.	Problemų nerasta. Modelis paruoštas vykdyti.
@@ -232,6 +234,7 @@
 	Normal	Normalusis
 	Not reached, even with {units}	Nepasiekta net su {units}
 	Number	Skaičius
+	OEE	OEE
 	OEE availability	OEE prieinamumas
 	OEE effectiveness	OEE efektyvumas
 	On	Dienos
@@ -253,6 +256,7 @@
 	PNG image	PNG paveikslas
 	Parameter	Parametras
 	Parameters	Parametrai
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Šiuo srautu einančios detalės grįžta būti apdirbtos dar kartą; jos įskaitomos kaip perdirbimas paskutinei užduočiai su ištekliumi, kurią praėjo.
 	Paste	Įklijuoti
 	Pause	Pristabdyti
 	Percentile	Procentilis
@@ -272,6 +276,8 @@
 	Process	Procesas
 	Process models with BPSim	Procesų modeliai su BPSim
 	Properties	Savybės
+	Quality	Kokybė
+	Quality ratio	Kokybės dalis
 	Quit	Išeiti
 	Quit {app}	Išeiti iš {app}
 	Random	Atsitiktinė
@@ -315,6 +321,9 @@
 	Result with a target	Rezultatas su tikslu
 	Result, down and up	Rezultatas, žemyn ir aukštyn
 	Results	Rezultatai
+	Rework	Perdirbimas
+	Rework on {id}	Perdirbimas sraute {id}
+	Rework ratio	Perdirbimo dalis
 	Right edges	Dešinieji kraštai
 	Roles	Vaidmenys
 	Run	Vykdyti
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Įrašyti {name} pakeitimus?
 	Saved {file}	Įrašyta {file}
 	Scale	Skalė
+	Scrap	Brokas
+	Scrap ratio	Broko dalis
 	Seed	Atsitiktinių skaičių sėkla
 	Select All	Žymėti viską
 	Select a block to see its queue over time.	Pasirinkite bloką, kad matytumėte jo eilę per laiką.
@@ -387,6 +398,7 @@
 	Task with shared resources	Užduotis su bendrais ištekliais
 	Text	Tekstas
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalas siekia žemiau tikslinės dalies {share}, todėl 95 % patikimumu neparodyta, kad dalis pasiekta; daugiau replikacijų jį susiaurintų.
+	The last task with a resource it finished at	Paskutinė užduotis su ištekliumi, kurią detalė praėjo
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Vidutinis laikas iki stabdymo sąlygos skaičiuojamas tik iš replikacijų, kurios ją pasiekė; kitos truko iki savo laiko ribos.
 	The model changed, so watching stopped	Modelis pasikeitė, todėl stebėjimas baigtas
 	The model has no calendars yet.	Modelis dar neturi kalendorių.
@@ -447,6 +459,7 @@
 	Wed	tr
 	Weekly	Kas savaitę
 	Weibull	Veibulo
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Tai, kas pasiekia šiuos išvykimus, yra brokas ir įskaitoma į užduoties, kuriai priskiriama, kokybės dalį.
 	When a task empties	Kai užduotis ištuštėja
 	When enough have left a block	Kai pakankamai paliko bloką
 	Which parameters matter	Kurie parametrai svarbūs

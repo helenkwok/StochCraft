@@ -114,7 +114,7 @@ struct EncodedElement {
     entered: u64,
     left: u64,
     /// The optional metrics, in [`ElementReport`]'s order.
-    metrics: [Option<u64>; 21],
+    metrics: [Option<u64>; 25],
     lost: Option<u64>,
     work_in_progress: Option<u64>,
     properties: Vec<Option<u64>>,
@@ -165,6 +165,10 @@ impl Encoded {
                         bits(e.oee_availability),
                         bits(e.oee_effectiveness),
                         bits(e.setup_ratio),
+                        bits(e.quality_ratio),
+                        bits(e.scrap_ratio),
+                        bits(e.rework_ratio),
+                        bits(e.oee),
                     ],
                     lost: e.lost,
                     work_in_progress: e.work_in_progress,
@@ -209,6 +213,10 @@ impl Encoded {
                     oa,
                     oe,
                     sr,
+                    qr,
+                    scr,
+                    rr,
+                    oe2,
                 ] = e.metrics;
                 Some(ElementReport {
                     id: t.id.clone(),
@@ -237,6 +245,10 @@ impl Encoded {
                     oee_availability: float(oa),
                     oee_effectiveness: float(oe),
                     setup_ratio: float(sr),
+                    quality_ratio: float(qr),
+                    scrap_ratio: float(scr),
+                    rework_ratio: float(rr),
+                    oee: float(oe2),
                     energy: float(en),
                     specific_energy: float(se),
                     properties: t

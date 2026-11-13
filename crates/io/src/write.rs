@@ -8,7 +8,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, DateTime, Dist, ElementKind, Estimate, Model, Need, Power,
-    Property, PropertyType, PropertyValue, ResourcePool, Routing, Setup, Stop, Timed, Transfer,
+    Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, Timed,
+    Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -235,7 +236,7 @@ pub(crate) fn start_param(t: DateTime) -> Element {
 pub(crate) fn bpmn_local(kind: &ElementKind) -> &'static str {
     match kind {
         ElementKind::Source { .. } => "startEvent",
-        ElementKind::Sink => "endEvent",
+        ElementKind::Sink { .. } => "endEvent",
         ElementKind::Server { .. }
         | ElementKind::SharedTask { .. }
         | ElementKind::Delay { .. }
@@ -335,6 +336,24 @@ pub(crate) fn changeover_element(x: &Setup) -> Element {
         .with_attr("name", crate::bpsim::CHANGEOVER)
         .with_attr("xmlns:stochcraft", ns)
         .with_child(body)
+}
+
+/// A sink's scrap as StochCraft's vendor extension ([`crate::bpsim::SCRAP`]).
+pub(crate) fn scrap_element(x: &Scrap) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:scrap", Some(ns));
+    if let Some(c) = &x.charged_to {
+        body = body.with_attr("chargedTo", c.as_str());
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::SCRAP)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
+}
+
+/// Rework on a connection as StochCraft's vendor extension ([`crate::bpsim::REWORK`]).
+pub(crate) fn rework_element() -> Element {
+    vendor_value_element(crate::bpsim::REWORK, "true")
 }
 
 /// A server's planned time to make one item as StochCraft's vendor extension
@@ -674,7 +693,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                     s("TimeParameters").with_child(param("ProcessingTime", dist_element(duration))),
                 );
             }
-            ElementKind::Sink
+            ElementKind::Sink { .. }
             | ElementKind::ExclusiveGateway { .. }
             | ElementKind::ParallelGateway
             | ElementKind::Batch { .. }
@@ -721,6 +740,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         {
             ep.push(planned_element(d));
         }
+        if let ElementKind::Sink { scrap: Some(x) } = &e.kind {
+            ep.push(scrap_element(x));
+        }
         if let ElementKind::Server { setup: Some(x), .. } = &e.kind
             && x.on_change_of.is_some()
         {
@@ -746,7 +768,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         scenario.push(ep);
     }
     for c in &model.connections {
-        if c.probability.is_none() && c.condition.is_none() && c.quantity.is_none() {
+        if c.probability.is_none() && c.condition.is_none() && c.quantity.is_none() && !c.rework {
             continue;
         }
         let mut ep = s("ElementParameters").with_attr("elementRef", c.id.as_str());
@@ -762,6 +784,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if let Some(q) = c.quantity {
             ep.push(quantity_element(q));
+        }
+        if c.rework {
+            ep.push(rework_element());
         }
         scenario.push(ep);
     }

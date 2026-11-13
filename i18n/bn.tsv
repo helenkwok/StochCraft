@@ -101,6 +101,7 @@
 	Connections	সংযোগ
 	Constant	ধ্রুবক
 	Copy	কপি করুন
+	Counts against	যে কাজের বিপরীতে গণনা হয়
 	Cut	কাটুন
 	Daily	প্রতিদিন
 	Dark	গাঢ়
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	এখনও কোনো সংযোগ নেই: নিচের ব্লকগুলো যুক্ত করুন।
 	No replication met the stop condition: each ran to its time limit.	কোনো পুনরাবৃত্তি থামার শর্তে পৌঁছায়নি: প্রতিটি তার সময়সীমা পর্যন্ত চলেছে।
 	No results yet	এখনও কোনো ফলাফল নেই
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	এই মডেলে কোনো স্ক্র্যাপ বা পুনঃকাজ চিহ্নিত নেই, তাই OEE গুণমানকে ১০০% ধরে।
 	No target	কোনো লক্ষ্য নেই
 	None	কোনটিই নয়
 	None found. The model is ready to run.	কোনো সমস্যা পাওয়া যায়নি। মডেল চালানোর জন্য প্রস্তুত।
@@ -232,6 +234,7 @@
 	Normal	স্বাভাবিক
 	Not reached, even with {units}	পূরণ হয়নি, {units} দিয়েও না
 	Number	সংখ্যা
+	OEE	OEE
 	OEE availability	OEE প্রাপ্যতা
 	OEE effectiveness	OEE কার্যকারিতা
 	On	দিন
@@ -253,6 +256,7 @@
 	PNG image	PNG ছবি
 	Parameter	প্যারামিটার
 	Parameters	পরামিতি
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	এই প্রবাহ ধরে যাওয়া অংশগুলো আবার কাজের জন্য ফিরে যায়; শেষ যে সম্পদসহ কাজ সেগুলো পার হয়েছে তার বিপরীতে পুনঃকাজ হিসেবে গণ্য হয়।
 	Paste	পেস্ট করুন
 	Pause	বিরতি
 	Percentile	শতাংশক
@@ -272,6 +276,8 @@
 	Process	প্রক্রিয়া
 	Process models with BPSim	BPSim সহ প্রক্রিয়া মডেল
 	Properties	বৈশিষ্ট্য
+	Quality	গুণমান
+	Quality ratio	গুণমান অনুপাত
 	Quit	প্রস্থান করুন
 	Quit {app}	{app} থেকে প্রস্থান করুন
 	Random	দৈব
@@ -315,6 +321,9 @@
 	Result with a target	লক্ষ্যসহ ফলাফল
 	Result, down and up	ফলাফল, নিচে ও উপরে
 	Results	ফলাফল
+	Rework	পুনঃকাজ
+	Rework on {id}	{id}-এ পুনঃকাজ
+	Rework ratio	পুনঃকাজ অনুপাত
 	Right edges	ডান প্রান্ত
 	Roles	ভূমিকা
 	Run	চালান
@@ -335,6 +344,8 @@
 	Save changes to {name}?	{name}-এর পরিবর্তন সংরক্ষণ করবেন?
 	Saved {file}	{file} সংরক্ষিত হয়েছে
 	Scale	স্কেল
+	Scrap	স্ক্র্যাপ
+	Scrap ratio	স্ক্র্যাপ অনুপাত
 	Seed	যদৃচ্ছ বীজ
 	Select All	সব নির্বাচন করুন
 	Select a block to see its queue over time.	সময়ের সাথে কোনো ব্লকের সারি দেখতে সেটি নির্বাচন করুন।
@@ -387,6 +398,7 @@
 	Task with shared resources	ভাগ করা সম্পদসহ কাজ
 	Text	টেক্সট
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ব্যবধানটি {share} লক্ষ্য অংশের নিচে নেমে যায়, তাই অংশটি ৯৫% আস্থায় পূরণ হয়েছে বলে দেখানো যায় না; আরও পুনরাবৃত্তি এটিকে সরু করবে।
+	The last task with a resource it finished at	শেষ যে সম্পদসহ কাজ অংশটি পার হয়েছে
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	থামার শর্ত পর্যন্ত গড় সময় কেবল সেই পুনরাবৃত্তিগুলোর উপর যেগুলো শর্তে পৌঁছেছে; বাকিগুলো তাদের সময়সীমা পর্যন্ত চলেছে।
 	The model changed, so watching stopped	মডেল বদলেছে, তাই দেখা বন্ধ হয়েছে
 	The model has no calendars yet.	মডেলে এখনও কোনো ক্যালেন্ডার নেই।
@@ -447,6 +459,7 @@
 	Wed	বুধ
 	Weekly	প্রতি সপ্তাহে
 	Weibull	ওয়েইবুল
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	এই প্রস্থানে যা পৌঁছায় তা স্ক্র্যাপ, এবং যে কাজের বিপরীতে গণনা হয় তার গুণমান অনুপাতে গণ্য হয়।
 	When a task empties	যখন কোনো কাজ খালি হয়
 	When enough have left a block	যখন কোনো ব্লক থেকে যথেষ্ট বেরিয়ে যায়
 	Which parameters matter	কোন প্যারামিটারগুলি গুরুত্বপূর্ণ

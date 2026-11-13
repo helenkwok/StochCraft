@@ -101,6 +101,7 @@
 	Connections	Prepojenia
 	Constant	Konštantné
 	Copy	Kopírovať
+	Counts against	Pripisuje sa
 	Cut	Vystrihnúť
 	Daily	Denne
 	Dark	Tmavý
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Zatiaľ žiadne prepojenia: prepojte bloky nižšie.
 	No replication met the stop condition: each ran to its time limit.	Žiadna replikácia nesplnila podmienku zastavenia: každá bežala do svojho časového limitu.
 	No results yet	Zatiaľ žiadne výsledky
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	V tomto modeli nie sú označené žiadne nepodarky ani prepracovanie, takže OEE počíta kvalitu ako 100 %.
 	No target	Bez cieľa
 	None	Žiadne
 	None found. The model is ready to run.	Nenašli sa žiadne problémy. Model je pripravený na spustenie.
@@ -232,6 +234,7 @@
 	Normal	Normálne
 	Not reached, even with {units}	Nesplnené ani s {units}
 	Number	Číslo
+	OEE	OEE
 	OEE availability	Dostupnosť OEE
 	OEE effectiveness	Efektívnosť OEE
 	On	Dni
@@ -253,6 +256,7 @@
 	PNG image	Obrázok PNG
 	Parameter	Parameter
 	Parameters	Parametre
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Diely, ktoré idú týmto tokom, sa vracajú na opätovné spracovanie; počítajú sa ako prepracovanie poslednej úlohy so zdrojom, ktorou prešli.
 	Paste	Prilepiť
 	Pause	Pozastaviť
 	Percentile	Percentil
@@ -272,6 +276,8 @@
 	Process	Proces
 	Process models with BPSim	Modely procesov s BPSim
 	Properties	Vlastnosti
+	Quality	Kvalita
+	Quality ratio	Podiel kvality
 	Quit	Ukončiť
 	Quit {app}	Ukončiť {app}
 	Random	Náhodné
@@ -315,6 +321,9 @@
 	Result with a target	Výsledok s cieľom
 	Result, down and up	Výsledok, nadol a nahor
 	Results	Výsledky
+	Rework	Prepracovanie
+	Rework on {id}	Prepracovanie na {id}
+	Rework ratio	Podiel prepracovania
 	Right edges	Pravé okraje
 	Roles	Roly
 	Run	Spustiť
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Uložiť zmeny v {name}?
 	Saved {file}	Uložené {file}
 	Scale	Mierka
+	Scrap	Nepodarky
+	Scrap ratio	Podiel nepodarkov
 	Seed	Počiatočná hodnota generátora
 	Select All	Vybrať všetko
 	Select a block to see its queue over time.	Vyberte blok, aby ste videli jeho front v čase.
@@ -387,6 +398,7 @@
 	Task with shared resources	Úloha so zdieľanými zdrojmi
 	Text	Text
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval siaha pod cieľový podiel {share}, takže splnenie podielu nie je preukázané s 95 % spoľahlivosťou; viac replikácií by ho zúžilo.
+	The last task with a resource it finished at	Posledná úloha so zdrojom, ktorou diel prešiel
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Priemerný čas do podmienky zastavenia je iba z replikácií, ktoré ju splnili; ostatné bežali do svojho časového limitu.
 	The model changed, so watching stopped	Model sa zmenil, preto sa sledovanie ukončilo
 	The model has no calendars yet.	Model zatiaľ nemá žiadne kalendáre.
@@ -447,6 +459,7 @@
 	Wed	st
 	Weekly	Týždenne
 	Weibull	Weibullovo
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Čo dorazí do týchto odchodov, sú nepodarky, započítané do podielu kvality úlohy, ku ktorej sa pripisujú.
 	When a task empties	Keď sa úloha vyprázdni
 	When enough have left a block	Keď blok opustí dosť entít
 	Which parameters matter	Na ktorých parametroch záleží

@@ -500,7 +500,7 @@ fn removing_a_block_leaves_no_references_to_it() {
     // A task written again as another kind (an end event) keeps its place in the lane and its
     // note: it is still there.
     let mut m = loaded.model.clone();
-    element(&mut m, "serve").kind = ElementKind::Sink;
+    element(&mut m, "serve").kind = ElementKind::Sink { scrap: None };
     m.connections.retain(|c| c.id.as_str() != "f2");
     let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
     let t = text(&saved);
@@ -1454,4 +1454,46 @@ fn removing_what_an_inherited_scenario_sets_is_refused() {
     let saved = child.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
     let back = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(back.model, m);
+}
+
+/// A way out marked rework in a scenario the opened one inherits is unmarked with an explicit
+/// `false`, since leaving it out would read the inherited `true` back; the parent keeps its own.
+#[test]
+fn unmarking_inherited_rework_writes_false() {
+    // Only in "base": "two-clerks" has its own clerk parameters too.
+    let original = text(&file("mm1.bpmn")).replacen(
+        r#"          <bpsim:ElementParameters elementRef="clerk">
+            <bpsim:ResourceParameters>"#,
+        r#"          <bpsim:ElementParameters elementRef="f2">
+            <bpsim:VendorExtension name="stochcraft:rework" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="true"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="clerk">
+            <bpsim:ResourceParameters>"#,
+        1,
+    );
+    assert_ne!(original, text(&file("mm1.bpmn")), "the rework is added");
+    let child =
+        read_scenario(original.as_bytes(), Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = child.model.clone();
+    for c in &mut m.connections {
+        if c.id.as_str() == "f2" {
+            assert!(c.rework, "the inherited rework is read");
+            c.rework = false;
+        }
+    }
+    let saved = child.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        text(&saved).contains(r#"stochcraft:value="false""#),
+        "{}",
+        text(&saved)
+    );
+    let back = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+    let base = read_scenario(&saved, Some("base")).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        base.model
+            .connections
+            .iter()
+            .any(|c| c.id.as_str() == "f2" && c.rework)
+    );
 }

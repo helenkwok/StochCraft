@@ -101,6 +101,7 @@
 	Connections	Verbindingen
 	Constant	Constant
 	Copy	Kopiëren
+	Counts against	Toegerekend aan
 	Cut	Knippen
 	Daily	Dagelijks
 	Dark	Donker
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Nog geen verbindingen: verbind hieronder de blokken.
 	No replication met the stop condition: each ran to its time limit.	Geen herhaling haalde de stopvoorwaarde: elke liep tot haar tijdslimiet.
 	No results yet	Nog geen resultaten
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	In dit model is geen afkeur of herbewerking gemarkeerd, dus telt de OEE de kwaliteit als 100%.
 	No target	Geen doel
 	None	Geen
 	None found. The model is ready to run.	Geen problemen gevonden. Het model is klaar om uit te voeren.
@@ -232,6 +234,7 @@
 	Normal	Normaal
 	Not reached, even with {units}	Niet gehaald, zelfs niet met {units}
 	Number	Getal
+	OEE	OEE
 	OEE availability	OEE-beschikbaarheid
 	OEE effectiveness	OEE-effectiviteit
 	On	Dagen
@@ -253,6 +256,7 @@
 	PNG image	PNG-afbeelding
 	Parameter	Parameter
 	Parameters	Parameters
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Onderdelen die deze stroom nemen, gaan terug om opnieuw bewerkt te worden; ze tellen als herbewerking voor de laatste taak met een hulpbron die ze doorliepen.
 	Paste	Plakken
 	Pause	Pauzeren
 	Percentile	Percentiel
@@ -272,6 +276,8 @@
 	Process	Proces
 	Process models with BPSim	Procesmodellen met BPSim
 	Properties	Eigenschappen
+	Quality	Kwaliteit
+	Quality ratio	Kwaliteitsaandeel
 	Quit	Afsluiten
 	Quit {app}	{app} afsluiten
 	Random	Willekeurig
@@ -315,6 +321,9 @@
 	Result with a target	Resultaat met doel
 	Result, down and up	Resultaat, omlaag en omhoog
 	Results	Resultaten
+	Rework	Herbewerking
+	Rework on {id}	Herbewerking op {id}
+	Rework ratio	Herbewerkingsaandeel
 	Right edges	Rechterkanten
 	Roles	Rollen
 	Run	Uitvoeren
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Wijzigingen in {name} opslaan?
 	Saved {file}	{file} opgeslagen
 	Scale	Schaal
+	Scrap	Afkeur
+	Scrap ratio	Afkeuraandeel
 	Seed	Startwaarde
 	Select All	Alles selecteren
 	Select a block to see its queue over time.	Selecteer een blok om de wachtrij in de tijd te zien.
@@ -387,6 +398,7 @@
 	Task with shared resources	Taak met gedeelde hulpbronnen
 	Text	Tekst
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Het interval reikt tot onder het doelaandeel van {share}, dus het is niet met 95% betrouwbaarheid aangetoond dat het aandeel wordt gehaald; meer herhalingen zouden het smaller maken.
+	The last task with a resource it finished at	De laatste taak met een hulpbron die het onderdeel doorliep
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	De gemiddelde tijd tot de stopvoorwaarde is alleen over de herhalingen die haar haalden; de andere liepen tot hun tijdslimiet.
 	The model changed, so watching stopped	Het model is gewijzigd, dus het volgen is gestopt
 	The model has no calendars yet.	Het model heeft nog geen kalenders.
@@ -447,6 +459,7 @@
 	Wed	wo
 	Weekly	Wekelijks
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Wat deze vertrekken bereikt, is afkeur en telt mee in het kwaliteitsaandeel van de taak waaraan het wordt toegerekend.
 	When a task empties	Als een taak leeg raakt
 	When enough have left a block	Als er genoeg een blok hebben verlaten
 	Which parameters matter	Welke parameters ertoe doen

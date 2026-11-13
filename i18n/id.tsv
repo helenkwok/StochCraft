@@ -101,6 +101,7 @@
 	Connections	Koneksi
 	Constant	Konstan
 	Copy	Salin
+	Counts against	Dibebankan ke
 	Cut	Potong
 	Daily	Harian
 	Dark	Gelap
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Belum ada koneksi: hubungkan blok di bawah.
 	No replication met the stop condition: each ran to its time limit.	Tidak ada replikasi yang mencapai kondisi berhenti: masing-masing berjalan hingga batas waktunya.
 	No results yet	Belum ada hasil
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Tidak ada skrap atau pengerjaan ulang yang ditandai dalam model ini, jadi OEE menghitung kualitas sebagai 100%.
 	No target	Tanpa target
 	None	Tidak Ada
 	None found. The model is ready to run.	Tidak ditemukan masalah. Model siap dijalankan.
@@ -232,6 +234,7 @@
 	Normal	Normal
 	Not reached, even with {units}	Tidak tercapai, bahkan dengan {units}
 	Number	Angka
+	OEE	OEE
 	OEE availability	Ketersediaan OEE
 	OEE effectiveness	Efektivitas OEE
 	On	Hari
@@ -253,6 +256,7 @@
 	PNG image	Gambar PNG
 	Parameter	Parameter
 	Parameters	Parameter
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Komponen yang melalui alur ini kembali untuk dikerjakan lagi; komponen itu dihitung sebagai pengerjaan ulang pada tugas terakhir dengan sumber daya yang dilaluinya.
 	Paste	Tempel
 	Pause	Jeda
 	Percentile	Persentil
@@ -272,6 +276,8 @@
 	Process	Proses
 	Process models with BPSim	Model proses dengan BPSim
 	Properties	Properti
+	Quality	Kualitas
+	Quality ratio	Rasio kualitas
 	Quit	Keluar
 	Quit {app}	Keluar dari {app}
 	Random	Acak
@@ -315,6 +321,9 @@
 	Result with a target	Hasil dengan target
 	Result, down and up	Hasil, turun dan naik
 	Results	Hasil
+	Rework	Pengerjaan ulang
+	Rework on {id}	Pengerjaan ulang di {id}
+	Rework ratio	Rasio pengerjaan ulang
 	Right edges	Tepi kanan
 	Roles	Peran
 	Run	Jalankan
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Simpan perubahan pada {name}?
 	Saved {file}	{file} disimpan
 	Scale	Skala
+	Scrap	Skrap
+	Scrap ratio	Rasio skrap
 	Seed	Benih acak
 	Select All	Pilih Semua
 	Select a block to see its queue over time.	Pilih blok untuk melihat antreannya dari waktu ke waktu.
@@ -387,6 +398,7 @@
 	Task with shared resources	Tugas dengan sumber daya bersama
 	Text	Teks
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak replikasi akan mempersempitnya.
+	The last task with a resource it finished at	Tugas terakhir dengan sumber daya yang dilalui komponen
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas replikasi yang mencapainya; sisanya berjalan hingga batas waktunya.
 	The model changed, so watching stopped	Model berubah, jadi pengamatan dihentikan
 	The model has no calendars yet.	Model belum memiliki kalender.
@@ -447,6 +459,7 @@
 	Wed	Rab
 	Weekly	Mingguan
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Yang mencapai keberangkatan ini adalah skrap, dihitung dalam rasio kualitas tugas yang dibebaninya.
 	When a task empties	Saat sebuah tugas kosong
 	When enough have left a block	Saat cukup banyak telah meninggalkan blok
 	Which parameters matter	Parameter mana yang berpengaruh

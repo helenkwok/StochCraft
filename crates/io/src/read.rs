@@ -9,8 +9,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, Change, Connection, DateTime, Dist, Element as ModelElement,
     ElementId, ElementKind, Estimate, Experiment, Family, Model, Need, Power, Property,
-    PropertyType, PropertyValue, ResourcePool, Routing, Setup, Stop, ThreePoint, TimeUnit, Timed,
-    Transfer, Upper,
+    PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit,
+    Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -911,7 +911,9 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     }
                 }
             }
-            NodeKind::End => ElementKind::Sink,
+            NodeKind::End => ElementKind::Sink {
+                scrap: scrap_of(scenario, id),
+            },
             NodeKind::Task => {
                 for t in OTHER_TIMES {
                     if val(id, &format!("TimeParameters/{t}"), notes).is_some() {
@@ -1044,6 +1046,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                 "a planned run time (stochcraft:plannedRunTime) applies only to a task with a resource of its own; it is ignored here",
             ));
         }
+        if !matches!(kind, ElementKind::Sink { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::SCRAP)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "scrap (stochcraft:scrap) applies only to an end event; it is ignored here",
+            ));
+        }
         if !matches!(kind, ElementKind::ExclusiveGateway { .. })
             && scenario
                 .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::ROUTING)))
@@ -1127,6 +1139,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             probability,
             condition,
             quantity: vendor_count(scenario, id, bpsim::QUANTITY, "a quantity", notes),
+            rework: vendor_flag(scenario, id, bpsim::REWORK, notes),
         });
     }
     let mut experiment = experiment(scenario, notes);
@@ -1265,6 +1278,8 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::ROUTING,
             bpsim::POWER,
             bpsim::PLANNED_RUN_TIME,
+            bpsim::SCRAP,
+            bpsim::REWORK,
             bpsim::BATCH_SIZE,
             bpsim::UNBATCH,
             bpsim::QUANTITY,
@@ -1307,6 +1322,39 @@ fn vendor_count(
             None
         }
     }
+}
+
+/// A true-or-false vendor extension `name` on `id` (false when absent).
+fn vendor_flag(scenario: Option<&Scenario>, id: &str, name: &str, notes: &mut Vec<Note>) -> bool {
+    let Some(e) = scenario.and_then(|s| s.param(id, &format!("VendorExtension/{name}"))) else {
+        return false;
+    };
+    let raw = bpsim::vendor_value(e).unwrap_or_default();
+    match raw.trim() {
+        "true" | "1" => true,
+        "false" | "0" => false,
+        other => {
+            notes.push(Note::error(
+                Some(id),
+                format!("`{name}` must be true or false, not `{other}`; it is ignored"),
+            ));
+            false
+        }
+    }
+}
+
+/// Whether StochCraft's vendor extension makes end event `id` take scrap, and against which
+/// task, if it names one.
+fn scrap_of(scenario: Option<&Scenario>, id: &str) -> Option<Scrap> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::SCRAP))?;
+    let charged_to = ext
+        .elements()
+        .find(|e| e.local() == "scrap")
+        .and_then(|b| b.attr("chargedTo"))
+        .map(|c| c.trim().to_owned())
+        .filter(|c| !c.is_empty())
+        .map(|c| ElementId::unchecked(&c));
+    Some(Scrap { charged_to })
 }
 
 /// The batch or split StochCraft's vendor extensions make task `id`, if any.
