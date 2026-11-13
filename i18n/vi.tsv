@@ -25,6 +25,7 @@
 	Abandoned on {id}	Bỏ đi tại {id}
 	About StochCraft	Giới thiệu StochCraft
 	About {app}	Giới thiệu {app}
+	Accent	Màu nhấn
 	Across the range it changed by {change}: more than chance would explain.	Trên cả khoảng, nó thay đổi {change}: nhiều hơn mức ngẫu nhiên có thể giải thích.
 	Across the range it changed by {change}: within what chance alone could do.	Trên cả khoảng, nó thay đổi {change}: trong phạm vi mà chỉ ngẫu nhiên cũng có thể gây ra.
 	Actual size	Kích thước thực
@@ -47,6 +48,7 @@
 	Added pool {id}	Đã thêm nhóm {id}
 	Added {block} ({id})	Đã thêm {block} ({id})
 	Align	Căn chỉnh
+	All text meets the contrast minimums.	Mọi văn bản đều đạt độ tương phản tối thiểu.
 	Also: {rule}	Ngoài ra: {rule}
 	Alternative {n}	Phương án {n}
 	Analysis	Phân tích
@@ -69,11 +71,13 @@
 	Binomial	Nhị thức
 	Block	Khối
 	Boolean	Boolean
+	Borders	Đường viền
 	Bottoms	Cạnh dưới
 	Breakdowns	Hỏng hóc
 	Breakdowns and availability	Hỏng hóc và độ khả dụng
 	Bring All to Front	Đưa tất cả ra trước
 	Built with	Được xây dựng bằng
+	Built-in themes are read-only. Duplicate one to change its colours.	Các chủ đề có sẵn chỉ đọc. Hãy nhân bản một chủ đề để đổi màu của nó.
 	Busiest	Bận nhất
 	By role	Theo vai trò
 	CSV table	Bảng CSV
@@ -83,6 +87,7 @@
 	Cancel	Hủy
 	Cancel Run	Hủy chạy
 	Cancel run	Hủy chạy
+	Canvas	Bề mặt chính
 	Capacity	Công suất
 	Centres	Tâm ngang
 	Change	Thay đổi
@@ -93,6 +98,8 @@
 	Change the estimate	Đổi ước lượng
 	Changes	Các thay đổi
 	Changing the time unit does not convert the times already in the model.	Thay đổi đơn vị thời gian không chuyển đổi các giá trị thời gian đã có trong mô hình.
+	Chart	Biểu đồ
+	Chart hover	Biểu đồ khi trỏ chuột
 	Choose…	Chọn…
 	Clear Menu	Xóa menu
 	Close	Đóng
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Mỗi thực thể lấy phương án đầu tiên trong số này có thể đáp ứng ngay, lấy tất cả cùng lúc, và trả lại các đơn vị khi rời khỏi tác vụ.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Mỗi thực thể chờ ở đây tối đa một khoảng thời gian được rút ngẫu nhiên cho nó khi đến, rồi bỏ đi: nó đi theo lối ra được đánh dấu "Bỏ đi", hoặc rời khỏi mô hình.
 	Edit	Chỉnh sửa
+	Edit themes…	Chỉnh sửa chủ đề…
 	Elasticity	Độ co giãn
 	Ends early	Kết thúc sớm
 	Energy	Năng lượng
@@ -183,11 +191,14 @@
 	Gives up before service starts	Bỏ đi trước khi bắt đầu phục vụ
 	Goes to	Đi đến
 	Hands on finished parts while down	Vẫn chuyển tiếp chi tiết đã xong khi hỏng
+	Header	Thanh tiêu đề
 	Help	Trợ giúp
 	Hide Others	Ẩn các mục khác
 	Hide {app}	Ẩn {app}
+	High contrast	Tương phản cao
 	How many	Bao nhiêu
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Khách hàng muốn bao nhiêu chi tiết từ các lượt rời đi này; khi đó kết quả hiển thị takt (thời gian khả dụng chia cho nhu cầu) và thời gian chu kỳ của mỗi tác vụ.
+	In use	Đang dùng
 	Inside over time	Bên trong theo thời gian
 	Jump	Đi
 	Jump to time	Đi tới thời điểm
@@ -301,6 +312,7 @@
 	Quality ratio	Tỷ lệ chất lượng
 	Quit	Thoát
 	Quit {app}	Thoát {app}
+	Raised surfaces	Bề mặt nổi
 	Random	Ngẫu nhiên
 	Rank the parameters	Xếp hạng tham số
 	Ready	Sẵn sàng
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Xóa khối này và các luồng của nó (Delete)
 	Remove this period	Xóa khoảng thời gian này
 	Removed {id}	Đã xóa {id}
+	Rename	Đổi tên
 	Rename Block	Đổi tên khối
 	Rename Model	Đổi tên mô hình
 	Repair time	Thời gian sửa chữa
@@ -363,6 +376,7 @@
 	Save As…	Lưu thành…
 	Save Model	Lưu mô hình
 	Save changes to {name}?	Lưu các thay đổi vào {name}?
+	Save name	Lưu tên
 	Saved {file}	Đã lưu {file}
 	Scale	Tỷ lệ
 	Scrap	Phế phẩm
@@ -390,8 +404,10 @@
 	Share that gave up	Tỷ lệ bỏ đi
 	Show All	Hiện tất cả
 	Show {id}	Hiển thị {id}
+	Side rail	Thanh bên
 	Size	Định cỡ
 	Size the resources	Định cỡ tài nguyên
+	Soft accent	Màu nhấn nhạt
 	Source	Nguồn
 	Source: {source}	Nguồn: {source}
 	Speed	Tốc độ
@@ -403,6 +419,7 @@
 	Stages (k)	Số giai đoạn (k)
 	Standard deviation	Độ lệch chuẩn
 	Step	Bước
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft đã đóng khi các thay đổi trong {name} chưa được lưu. Khôi phục chúng thành một mô hình chưa đặt tên hoặc loại bỏ chúng.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft đọc mô hình quy trình từ các tệp BPMN hoặc XPDL có dữ liệu mô phỏng BPSim, chạy chúng dưới dạng các thí nghiệm lặp độc lập và báo cáo mỗi kết quả kèm khoảng tin cậy.
 	StochCraft {version} · model {digest}	StochCraft {version} · mô hình {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Đã ngừng theo dõi
 	Sun	CN
 	Sweep a parameter	Quét một tham số
+	Table stripes	Sọc bảng
 	Takt	Takt
 	Takt time	Thời gian takt
 	Tandem line	Dây chuyền nối tiếp
@@ -422,6 +440,8 @@
 	Task with a resource	Tác vụ có tài nguyên
 	Task with shared resources	Tác vụ có tài nguyên dùng chung
 	Text	Văn bản
+	Text on accent	Văn bản trên màu nhấn
+	Text on header	Văn bản trên thanh tiêu đề
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Khoảng này xuống dưới tỷ lệ mục tiêu {share}, nên chưa cho thấy với độ tin cậy 95% rằng tỷ lệ đạt được; thêm lần lặp sẽ thu hẹp nó.
 	The last task with a resource it finished at	Tác vụ có tài nguyên cuối cùng mà chi tiết đã đi qua
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Thời gian trung bình đến điều kiện dừng chỉ tính trên các lần lặp đạt điều kiện đó; các lần khác chạy đến giới hạn thời gian.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Mô hình chưa có lịch nào.
 	The model now has the units sizing found	Mô hình giờ có số đơn vị mà việc định cỡ tìm được
 	The model: its experiment, connections and problems	Mô hình: thí nghiệm, kết nối và vấn đề
+	The name is empty or already used.	Tên đang trống hoặc đã được dùng.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Tỷ lệ lần lặp bằng hoặc dưới mỗi giá trị. Dải chứa phân phối thật với độ tin cậy {confidence}.
 	The values are numbers, separated by semicolons or spaces	Các giá trị là số, phân tách bằng dấu chấm phẩy hoặc dấu cách
 	The whole clock	Toàn bộ thời gian
+	Themes	Chủ đề
 	This block has a warning	Khối này có cảnh báo
 	This block has an error	Khối này có lỗi
 	This run	Lần chạy này
@@ -478,12 +500,15 @@
 	View	Xem
 	Waiting over time	Đang chờ theo thời gian
 	Waiting room	Khu vực chờ
+	Warm	Ấm
 	Warm-up	Giai đoạn khởi động
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Khởi động {warmup} {unit}, sau đó đo trong {duration} {unit}
 	Warning	Cảnh báo
 	Watch a Run	Theo dõi một lần chạy
 	Watch a run	Theo dõi một lần chạy
 	Watching replication 1	Đang theo dõi lần lặp 1
+	Weak text	Văn bản mờ
+	Weak text on header	Văn bản mờ trên thanh tiêu đề
 	Wed	T4
 	Weekly	Hằng tuần
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} đang chờ
 	{n} {unit} per second	{n} {unit} mỗi giây
 	{property} (set to, mean)	{property} (giá trị đặt, trung bình)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} trên {background}: {ratio}:1, cần {min}:1
 	{title}: now {now}, at most {most}	{title}: hiện tại {now}, tối đa {most}
 	± 95% CI	± KTC 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± là một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần lặp.

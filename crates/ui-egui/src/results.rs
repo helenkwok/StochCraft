@@ -483,7 +483,7 @@ mod tests {
         let mut h = egui_kittest::Harness::new_ui(move |ui| {
             if !fonts {
                 crate::theme::install_fonts(ui.ctx(), "en");
-                crate::theme::install(ui.ctx());
+                crate::theme::install(ui.ctx(), &crate::theme::default_theme());
                 fonts = true;
                 ui.ctx().request_repaint();
                 return;

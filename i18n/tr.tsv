@@ -25,6 +25,7 @@
 	Abandoned on {id}	{id} üzerinde vazgeçenler
 	About StochCraft	StochCraft hakkında
 	About {app}	{app} hakkında
+	Accent	Vurgu
 	Across the range it changed by {change}: more than chance would explain.	Aralık boyunca {change} değişti: şansın açıklayacağından fazla.
 	Across the range it changed by {change}: within what chance alone could do.	Aralık boyunca {change} değişti: tek başına şansın yapabileceği ölçüde.
 	Actual size	Gerçek boyut
@@ -47,6 +48,7 @@
 	Added pool {id}	{id} havuzu eklendi
 	Added {block} ({id})	{block} ({id}) eklendi
 	Align	Hizala
+	All text meets the contrast minimums.	Tüm metinler en düşük kontrast değerlerini karşılıyor.
 	Also: {rule}	Ayrıca: {rule}
 	Alternative {n}	Alternatif {n}
 	Analysis	Analiz
@@ -69,11 +71,13 @@
 	Binomial	Binom
 	Block	Blok
 	Boolean	Mantıksal
+	Borders	Kenarlıklar
 	Bottoms	Alt kenarlar
 	Breakdowns	Arızalar
 	Breakdowns and availability	Arızalar ve kullanılabilirlik
 	Bring All to Front	Tümünü Öne Getir
 	Built with	Şunlarla geliştirildi
+	Built-in themes are read-only. Duplicate one to change its colours.	Yerleşik temalar salt okunurdur. Renklerini değiştirmek için birini çoğaltın.
 	Busiest	En yoğun
 	By role	Role göre
 	CSV table	CSV tablosu
@@ -83,6 +87,7 @@
 	Cancel	İptal
 	Cancel Run	Çalıştırmayı iptal et
 	Cancel run	Çalıştırmayı iptal et
+	Canvas	Ana yüzey
 	Capacity	Kapasite
 	Centres	Yatay merkezler
 	Change	Değişim
@@ -93,6 +98,8 @@
 	Change the estimate	Tahmini değiştir
 	Changes	Değişiklikler
 	Changing the time unit does not convert the times already in the model.	Zaman birimini değiştirmek modeldeki mevcut süreleri dönüştürmez.
+	Chart	Grafik
+	Chart hover	İşaretçi altındaki grafik
 	Choose…	Seçin…
 	Clear Menu	Menüyü Temizle
 	Close	Kapat
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Her varlık, bunlardan şu anda karşılanabilen ilkini tek seferde tümüyle alır ve görevden ayrılırken birimleri geri verir.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Her varlık burada, gelişinde kendisi için rastgele çekilen süreden fazla beklemez, sonra vazgeçer: "Vazgeçenler" olarak işaretlenen çıkış yolunu izler ya da modelden ayrılır.
 	Edit	Düzen
+	Edit themes…	Temaları düzenle…
 	Elasticity	Esneklik
 	Ends early	Erken biter
 	Energy	Enerji
@@ -183,11 +191,14 @@
 	Gives up before service starts	Hizmet başlamadan vazgeçer
 	Goes to	Şuraya gider
 	Hands on finished parts while down	Arızalıyken de bitmiş parçaları aktarır
+	Header	Üst çubuk
 	Help	Yardım
 	Hide Others	Diğerlerini Gizle
 	Hide {app}	{app} Uygulamasını Gizle
+	High contrast	Yüksek kontrast
 	How many	Kaç
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Müşterilerin bu çıkışlardan kaç parça istediği; sonuçlar o zaman taktı (kullanılabilir sürenin talebe bölümü) ve her görevin döngü süresini gösterir.
+	In use	Kullanımda
 	Inside over time	Zaman içinde içeridekiler
 	Jump	Git
 	Jump to time	Zamana git
@@ -301,6 +312,7 @@
 	Quality ratio	Kalite oranı
 	Quit	Çıkış
 	Quit {app}	{app} Uygulamasından Çık
+	Raised surfaces	Yükseltilmiş yüzeyler
 	Random	Rastgele
 	Rank the parameters	Parametreleri sırala
 	Ready	Hazır
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Bu bloğu ve akışlarını kaldır (Delete)
 	Remove this period	Bu dönemi kaldır
 	Removed {id}	{id} kaldırıldı
+	Rename	Yeniden adlandır
 	Rename Block	Bloğu yeniden adlandır
 	Rename Model	Modeli yeniden adlandır
 	Repair time	Onarım süresi
@@ -363,6 +376,7 @@
 	Save As…	Farklı Kaydet…
 	Save Model	Modeli kaydet
 	Save changes to {name}?	{name} üzerindeki değişiklikler kaydedilsin mi?
+	Save name	Adı kaydet
 	Saved {file}	{file} kaydedildi
 	Scale	Ölçek
 	Scrap	Hurda
@@ -390,8 +404,10 @@
 	Share that gave up	Vazgeçenlerin oranı
 	Show All	Tümünü Göster
 	Show {id}	{id} göster
+	Side rail	Yan çubuk
 	Size	Boyutlandır
 	Size the resources	Kaynakları boyutlandır
+	Soft accent	Yumuşak vurgu
 	Source	Kaynak
 	Source: {source}	Kaynak: {source}
 	Speed	Hız
@@ -403,6 +419,7 @@
 	Stages (k)	Aşamalar (k)
 	Standard deviation	Standart sapma
 	Step	Adım
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft, {name} içindeki kaydedilmemiş değişikliklerle kapandı. Bunları adsız bir model olarak kurtarın veya atın.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft, BPSim benzetim verileri içeren BPMN veya XPDL dosyalarından süreç modellerini okur, bunları tekrarlı deneyler olarak çalıştırır ve her sonucu güven aralığıyla birlikte raporlar.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	İzleme durduruldu
 	Sun	Paz
 	Sweep a parameter	Bir parametreyi tara
+	Table stripes	Tablo şeritleri
 	Takt	Takt
 	Takt time	Takt zamanı
 	Tandem line	Tandem hat
@@ -422,6 +440,8 @@
 	Task with a resource	Kaynak kullanan görev
 	Task with shared resources	Paylaşılan kaynakları kullanan görev
 	Text	Metin
+	Text on accent	Vurgu üzerindeki metin
+	Text on header	Üst çubuktaki metin
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Aralık {share} hedef oranının altına iniyor, bu yüzden oranın karşılandığı %95 güvenle gösterilmiş değil; daha fazla tekrar aralığı daraltır.
 	The last task with a resource it finished at	Parçanın geçtiği kaynak kullanan son görev
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Durdurma koşuluna kadarki ortalama süre yalnızca bu koşula ulaşan tekrarlara göredir; diğerleri süre sınırlarına kadar çalıştı.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Modelde henüz takvim yok.
 	The model now has the units sizing found	Modelde artık boyutlandırmanın bulduğu birimler var
 	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
+	The name is empty or already used.	Ad boş veya zaten kullanılıyor.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Her değere eşit veya altındaki tekrarların oranı. Bant, gerçek dağılımı {confidence} güvenle içerir.
 	The values are numbers, separated by semicolons or spaces	Değerler noktalı virgül veya boşlukla ayrılmış sayılardır
 	The whole clock	Tüm süre
+	Themes	Temalar
 	This block has a warning	Bu blokta uyarı var
 	This block has an error	Bu blokta hata var
 	This run	Bu çalıştırma
@@ -478,12 +500,15 @@
 	View	Görünüm
 	Waiting over time	Zaman içinde bekleyenler
 	Waiting room	Bekleme alanı
+	Warm	Sıcak
 	Warm-up	Isınma
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} ısınma, ardından {duration} {unit} ölçüm
 	Warning	Uyarı
 	Watch a Run	Bir Çalıştırmayı İzle
 	Watch a run	Bir çalıştırmayı izle
 	Watching replication 1	Tekrar 1 izleniyor
+	Weak text	Soluk metin
+	Weak text on header	Üst çubuktaki soluk metin
 	Wed	Çar
 	Weekly	Haftalık
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} bekliyor
 	{n} {unit} per second	saniyede {n} {unit}
 	{property} (set to, mean)	{property} (ayarlanan değer, ortalama)
+	{text} on {background}: {ratio}:1, needs {min}:1	{background} üzerinde {text}: {ratio}:1, en az {min}:1 gerekli
 	{title}: now {now}, at most {most}	{title}: şu an {now}, en fazla {most}
 	± 95% CI	± 95% güven aralığı
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	±, tekrarlamalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliğidir.

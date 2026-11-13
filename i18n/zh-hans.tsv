@@ -25,6 +25,7 @@
 	Abandoned on {id}	{id} 上的放弃
 	About StochCraft	关于 StochCraft
 	About {app}	关于 {app}
+	Accent	强调色
 	Across the range it changed by {change}: more than chance would explain.	在整个范围内变化了 {change}：超出偶然所能解释的程度。
 	Across the range it changed by {change}: within what chance alone could do.	在整个范围内变化了 {change}：在偶然本身就可能造成的范围内。
 	Actual size	实际大小
@@ -47,6 +48,7 @@
 	Added pool {id}	已添加资源池 {id}
 	Added {block} ({id})	已添加 {block} ({id})
 	Align	对齐
+	All text meets the contrast minimums.	所有文本均达到最低对比度。
 	Also: {rule}	另外：{rule}
 	Alternative {n}	备选方案 {n}
 	Analysis	分析
@@ -69,11 +71,13 @@
 	Binomial	二项分布
 	Block	区块
 	Boolean	布尔值
+	Borders	边框
 	Bottoms	底边
 	Breakdowns	故障
 	Breakdowns and availability	故障与可用性
 	Bring All to Front	全部移到最前
 	Built with	使用以下技术构建
+	Built-in themes are read-only. Duplicate one to change its colours.	内置主题为只读。要更改颜色，请先为其中一个创建副本。
 	Busiest	最繁忙
 	By role	按角色
 	CSV table	CSV 表格
@@ -83,6 +87,7 @@
 	Cancel	取消
 	Cancel Run	取消运行
 	Cancel run	取消运行
+	Canvas	画布
 	Capacity	容量
 	Centres	水平居中
 	Change	变化
@@ -93,6 +98,8 @@
 	Change the estimate	更改估计
 	Changes	更改
 	Changing the time unit does not convert the times already in the model.	更改时间单位不会换算模型中已有的时间值。
+	Chart	图表
+	Chart hover	悬停时的图表
 	Choose…	选择…
 	Clear Menu	清除菜单
 	Close	关闭
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	每个实体会选取其中第一个当前能一次全部满足的方案，并在离开时归还这些资源单元。
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	每个实体在此最多等待到达时为其随机抽取的时间，然后放弃：它走标记为“放弃”的出口，或离开模型。
 	Edit	编辑
+	Edit themes…	编辑主题…
 	Elasticity	弹性
 	Ends early	提前结束
 	Energy	能耗
@@ -183,11 +191,14 @@
 	Gives up before service starts	在服务开始前放弃
 	Goes to	流向
 	Hands on finished parts while down	故障时仍移交完成的工件
+	Header	顶栏
 	Help	帮助
 	Hide Others	隐藏其他
 	Hide {app}	隐藏 {app}
+	High contrast	高对比度
 	How many	数量
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	客户希望从这些离开处获得多少件；结果随后会显示节拍（可用时间除以需求）和每个任务的周期时间。
+	In use	使用中
 	Inside over time	内部数量随时间变化
 	Jump	跳转
 	Jump to time	跳转到时间
@@ -301,6 +312,7 @@
 	Quality ratio	合格率
 	Quit	退出
 	Quit {app}	退出 {app}
+	Raised surfaces	浮起表面
 	Random	随机
 	Rank the parameters	对参数排序
 	Ready	就绪
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	移除此区块及其顺序流 (Delete)
 	Remove this period	移除此时段
 	Removed {id}	已移除 {id}
+	Rename	重命名
 	Rename Block	重命名区块
 	Rename Model	重命名模型
 	Repair time	维修时间
@@ -363,6 +376,7 @@
 	Save As…	另存为…
 	Save Model	保存模型
 	Save changes to {name}?	是否保存对 {name} 的更改？
+	Save name	保存名称
 	Saved {file}	已保存 {file}
 	Scale	尺度参数
 	Scrap	废品
@@ -390,8 +404,10 @@
 	Share that gave up	放弃比例
 	Show All	全部显示
 	Show {id}	显示 {id}
+	Side rail	侧边栏
 	Size	确定规模
 	Size the resources	确定资源规模
+	Soft accent	柔和强调色
 	Source	来源
 	Source: {source}	来源：{source}
 	Speed	速度
@@ -403,6 +419,7 @@
 	Stages (k)	阶段数 (k)
 	Standard deviation	标准差
 	Step	单步
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft 关闭时 {name} 有未保存的更改。可将其恢复为未命名模型，或放弃这些更改。
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft 读取带有 BPSim 仿真数据的 BPMN 或 XPDL 流程模型文件，以重复实验的方式运行，并为每个结果给出置信区间。
 	StochCraft {version} · model {digest}	StochCraft {version} · 模型 {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	已停止观察
 	Sun	周日
 	Sweep a parameter	扫描一个参数
+	Table stripes	表格条纹
 	Takt	节拍
 	Takt time	节拍时间
 	Tandem line	串联流程
@@ -422,6 +440,8 @@
 	Task with a resource	需要资源的任务
 	Task with shared resources	需要共享资源的任务
 	Text	文本
+	Text on accent	强调色上的文本
+	Text on header	顶栏文本
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	该区间低于目标比例 {share}，因此未能以 95% 的置信度表明达到了该比例；更多的重复运行会使区间变窄。
 	The last task with a resource it finished at	最后经过的需要资源的任务
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	到停止条件的平均时间只基于达到停止条件的重复运行；其余的运行到了时间上限。
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	模型还没有日历。
 	The model now has the units sizing found	模型现在使用规模确定得出的数量
 	The model: its experiment, connections and problems	模型：实验、连接和问题
+	The name is empty or already used.	名称为空或已被使用。
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超过各值的重复运行比例。色带以 {confidence} 的置信度包含真实分布。
 	The values are numbers, separated by semicolons or spaces	值应为用分号或空格分隔的数字
 	The whole clock	全部时间
+	Themes	主题
 	This block has a warning	此区块存在警告
 	This block has an error	此区块存在错误
 	This run	本次运行
@@ -478,12 +500,15 @@
 	View	视图
 	Waiting over time	等待数量随时间变化
 	Waiting room	等待区
+	Warm	暖色
 	Warm-up	预热期
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	预热 {warmup} {unit}，随后测量 {duration} {unit}
 	Warning	警告
 	Watch a Run	观察运行
 	Watch a run	观察运行
 	Watching replication 1	正在观察第 1 次重复运行
+	Weak text	弱化文本
+	Weak text on header	顶栏弱化文本
 	Wed	周三
 	Weekly	每周
 	Weibull	威布尔分布
@@ -555,6 +580,7 @@
 	{n} waiting	等待 {n}
 	{n} {unit} per second	每秒 {n} {unit}
 	{property} (set to, mean)	{property}（所设值的均值）
+	{text} on {background}: {ratio}:1, needs {min}:1	{background}上的{text}：{ratio}:1，需要 {min}:1
 	{title}: now {now}, at most {most}	{title}：当前 {now}，最多 {most}
 	± 95% CI	± 95% 置信区间
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± 表示各次重复运行均值的 95% Student-t 置信区间的半宽。

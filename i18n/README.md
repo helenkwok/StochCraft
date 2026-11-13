@@ -191,6 +191,35 @@ engine's messages (validation, file notes) are English too.
   before, plus hu lemond, id menyerah, vi bỏ đi and hi छोड़कर गईं, and the marks that are verb
   forms rather than nouns (da Gav op, nb Ga opp, sv Gav upp, cs and sk Vzdané, uk Пішли), and sr
   and sr-latn, written in ekavian but keeping the catalogs' "Prosječno čekanje" for the mean wait.
+- The rows for colour themes (PR "colour themes": Edit themes…, the Themes window and its hint,
+  In use, Rename, Save name, the name check, the contrast check and its warning "{text} on
+  {background}: {ratio}:1, needs {min}:1", the built-in themes High contrast, Warm and StochCraft,
+  and the palette roles Header, Side rail, Canvas, Raised surfaces, Weak text, Borders, Table
+  stripes, Accent, Soft accent, Chart hover and the Text on… roles) were machine-drafted with
+  Claude Code from the plain meaning of the English and each catalog's existing words, taken from
+  its rows for Text, Light, Dark, Duplicate, Name, Edit, Rename Model and Download charts (PNG):
+  the roles that name text contain that catalog's "Text" word, because the warning puts the
+  existing "Text" row next to the new ones; Chart and Chart hover use the word of "Download
+  charts"; Rename follows "Rename Model"; "Warm" agrees with the catalog's Light and Dark. The
+  sources checked were Wikipedia's articles on theme (computing), colour scheme, contrast
+  (vision), contrast ratio, sidebar (computing), header (computing) and the HTML canvas element
+  in their interlanguage versions, and the W3C's published WCAG 2 translations (ca, da, de, es,
+  et, fi, fr, it, ja, ko, nl, no, pl, pt-BR, ru, sk, sv, th, uk, zh-Hans) for success criterion
+  1.4.3 "Contrast (Minimum)". They agree with the drafted words (tema/thème/teema, barra lateral,
+  thanh bên, 侧边栏/側邊欄, th ความเปรียบต่าง, the WCAG "Kontrast (minimum)" family), except
+  that ru and uk use "контраст" in WCAG, hence Высокий/Високий контраст and "minimum requirements
+  for contrast" in the contrast check, and ko uses 명도 대비 there. de keeps Farbschemata (de
+  Wikipedia's article is "Skin", a narrower thing), and lo uses ຊຸດສີ ("colour set") because
+  ທີມ also means team; kk uses Тақырып for theme and calls the header "top bar" (Жоғарғы жолақ) so
+  the two don't meet. No article exists for accent colour, high-contrast mode or zebra striping,
+  and the header and canvas articles are about data headers and the HTML element, so Header,
+  Canvas (mostly "main surface"; ja, ko and zh say canvas), Raised surfaces, Table stripes,
+  Accent and Soft accent are the plain meaning only. In languages with cases the warning names
+  the background after a dash (in effect "{text} – background ‘{background}’") so neither role name has to
+  change form; the ratio keeps "." as the decimal point, as the code formats it, and
+  "StochCraft" stays as it is in every language. Not checked against IATE, and not reviewed by
+  native speakers. The least certain are lo, th, ta, te, kk, ka, bn and sq, and the calques for
+  Raised surfaces, Side rail, Table stripes and Soft accent everywhere.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

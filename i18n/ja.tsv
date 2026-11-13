@@ -25,6 +25,7 @@
 	Abandoned on {id}	{id} の離脱
 	About StochCraft	StochCraft について
 	About {app}	{app} について
+	Accent	アクセント
 	Across the range it changed by {change}: more than chance would explain.	範囲全体で {change} 変化しました。偶然では説明できない大きさです。
 	Across the range it changed by {change}: within what chance alone could do.	範囲全体で {change} 変化しました。偶然だけでも起こりうる範囲です。
 	Actual size	実際のサイズ
@@ -47,6 +48,7 @@
 	Added pool {id}	プール {id} を追加しました
 	Added {block} ({id})	{block} ({id}) を追加しました
 	Align	整列
+	All text meets the contrast minimums.	すべてのテキストが最低コントラストを満たしています。
 	Also: {rule}	その他: {rule}
 	Alternative {n}	代替案 {n}
 	Analysis	分析
@@ -69,11 +71,13 @@
 	Binomial	二項分布
 	Block	ブロック
 	Boolean	真偽値
+	Borders	枠線
 	Bottoms	下端
 	Breakdowns	故障
 	Breakdowns and availability	故障と稼働可否
 	Bring All to Front	すべてを手前に移動
 	Built with	使用技術
+	Built-in themes are read-only. Duplicate one to change its colours.	組み込みテーマは読み取り専用です。色を変えるには、いずれかを複製してください。
 	Busiest	最も稼働率が高い
 	By role	役割で指定
 	CSV table	CSV 表
@@ -83,6 +87,7 @@
 	Cancel	キャンセル
 	Cancel Run	実行をキャンセル
 	Cancel run	実行をキャンセル
+	Canvas	キャンバス
 	Capacity	処理能力
 	Centres	左右中央
 	Change	変化幅
@@ -93,6 +98,8 @@
 	Change the estimate	見積もりを変更
 	Changes	変更
 	Changing the time unit does not convert the times already in the model.	時間単位を変更しても、モデル内の既存の時間は換算されません。
+	Chart	グラフ
+	Chart hover	ポインター下のグラフ
 	Choose…	選択…
 	Clear Menu	メニューを消去
 	Close	閉じる
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	各エンティティは、これらのうち今すぐ一度にすべて満たせる最初のものを確保し、退出するときにユニットを返却します。
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	各エンティティは、到着時に抽選された時間を上限としてここで待ち、その後離脱します。「離脱」と表示された出口へ進むか、モデルから出ます。
 	Edit	編集
+	Edit themes…	テーマを編集…
 	Elasticity	弾力性
 	Ends early	早期終了
 	Energy	エネルギー
@@ -183,11 +191,14 @@
 	Gives up before service starts	サービス開始前に離脱
 	Goes to	接続先
 	Hands on finished parts while down	故障中も完成した部品を渡す
+	Header	ヘッダー
 	Help	ヘルプ
 	Hide Others	その他を隠す
 	Hide {app}	{app} を隠す
+	High contrast	ハイコントラスト
 	How many	数
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	顧客がこれらの退出から求める部品の数。結果にはタクト（稼働可能時間を需要で割った値）と各タスクのサイクルタイムが表示されます。
+	In use	使用中
 	Inside over time	内部の数の推移
 	Jump	移動
 	Jump to time	移動先の時刻
@@ -301,6 +312,7 @@
 	Quality ratio	良品率
 	Quit	終了
 	Quit {app}	{app} を終了
+	Raised surfaces	浮き出た面
 	Random	ランダム
 	Rank the parameters	パラメーターを順位付け
 	Ready	適用可能
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	このブロックとフローを削除 (Delete)
 	Remove this period	この期間を削除
 	Removed {id}	{id} を削除しました
+	Rename	名前を変更
 	Rename Block	ブロック名を変更
 	Rename Model	モデル名を変更
 	Repair time	修理時間
@@ -363,6 +376,7 @@
 	Save As…	別名で保存…
 	Save Model	モデルを保存
 	Save changes to {name}?	{name} への変更を保存しますか？
+	Save name	名前を保存
 	Saved {file}	{file} を保存しました
 	Scale	尺度
 	Scrap	廃棄
@@ -390,8 +404,10 @@
 	Share that gave up	離脱率
 	Show All	すべてを表示
 	Show {id}	{id} を表示
+	Side rail	サイドバー
 	Size	サイズを決める
 	Size the resources	リソースのサイズ決定
+	Soft accent	淡いアクセント
 	Source	出典
 	Source: {source}	出典: {source}
 	Speed	速度
@@ -403,6 +419,7 @@
 	Stages (k)	段階数 (k)
 	Standard deviation	標準偏差
 	Step	ステップ
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft は {name} の変更が保存されないまま終了しました。変更を無題のモデルとして復元するか、破棄してください。
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft は、BPSim シミュレーションデータを含む BPMN または XPDL ファイルからプロセスモデルを読み込み、反復実験として実行し、各結果を信頼区間とともに報告します。
 	StochCraft {version} · model {digest}	StochCraft {version} · モデル {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	観察を終了しました
 	Sun	日
 	Sweep a parameter	パラメーターのスイープ
+	Table stripes	表の縞
 	Takt	タクトタイム
 	Takt time	タクトタイム
 	Tandem line	直列ライン
@@ -422,6 +440,8 @@
 	Task with a resource	リソースを使うタスク
 	Task with shared resources	共有リソースを使うタスク
 	Text	テキスト
+	Text on accent	アクセント上のテキスト
+	Text on header	ヘッダー上のテキスト
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	区間が目標割合 {share} を下回るため、割合が達成されたことは 95% の信頼度では示されていません。反復実行を増やすと区間は狭まります。
 	The last task with a resource it finished at	部品が最後に通ったリソースを使うタスク
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	停止条件までの平均時間は、停止条件に達した反復実行だけによるものです。それ以外は時間制限まで実行されました。
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	モデルにはまだカレンダーがありません。
 	The model now has the units sizing found	サイズ決定で求めた数量をモデルに反映しました
 	The model: its experiment, connections and problems	モデル：実験、接続、問題
+	The name is empty or already used.	名前が空か、すでに使われています。
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	各値以下となった反復実行の割合。帯は {confidence} の信頼度で真の分布を含みます。
 	The values are numbers, separated by semicolons or spaces	値はセミコロンまたはスペースで区切った数値です
 	The whole clock	すべての時間
+	Themes	テーマ
 	This block has a warning	このブロックには警告があります
 	This block has an error	このブロックにはエラーがあります
 	This run	この実行
@@ -478,12 +500,15 @@
 	View	表示
 	Waiting over time	待ち数の推移
 	Waiting room	待機場所
+	Warm	ウォーム
 	Warm-up	ウォームアップ
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	ウォームアップ {warmup} {unit}、続いて {duration} {unit} を測定
 	Warning	警告
 	Watch a Run	実行を観察
 	Watch a run	実行を観察
 	Watching replication 1	反復実行 1 を観察中
+	Weak text	淡いテキスト
+	Weak text on header	ヘッダー上の淡いテキスト
 	Wed	水
 	Weekly	毎週
 	Weibull	ワイブル分布
@@ -555,6 +580,7 @@
 	{n} waiting	待ち {n}
 	{n} {unit} per second	毎秒 {n} {unit}
 	{property} (set to, mean)	{property}（設定値、平均）
+	{text} on {background}: {ratio}:1, needs {min}:1	{background} 上の {text}: {ratio}:1、{min}:1 以上が必要
 	{title}: now {now}, at most {most}	{title}: 現在 {now}、最大 {most}
 	± 95% CI	± 95% 信頼区間
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± は、反復実行間の平均値に対する 95% Student-t 信頼区間の半幅です。

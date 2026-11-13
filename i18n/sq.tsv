@@ -25,6 +25,7 @@
 	Abandoned on {id}	Hoqën dorë në {id}
 	About StochCraft	Rreth StochCraft
 	About {app}	Rreth {app}
+	Accent	Theks
 	Across the range it changed by {change}: more than chance would explain.	Në interval ndryshoi me {change}: më shumë se sa do ta shpjegonte rastësia.
 	Across the range it changed by {change}: within what chance alone could do.	Në interval ndryshoi me {change}: brenda asaj që mund të bëjë vetëm rastësia.
 	Actual size	Madhësia e vërtetë
@@ -47,6 +48,7 @@
 	Added pool {id}	U shtua grupi {id}
 	Added {block} ({id})	U shtua {block} ({id})
 	Align	Rreshto
+	All text meets the contrast minimums.	I gjithë teksti plotëson kontrastin minimal.
 	Also: {rule}	Gjithashtu: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Analiza
@@ -69,11 +71,13 @@
 	Binomial	Binomiale
 	Block	Blloku
 	Boolean	Vlerë logjike
+	Borders	Kufij
 	Bottoms	Skajet e poshtme
 	Breakdowns	Defektet
 	Breakdowns and availability	Defektet dhe disponueshmëria
 	Bring All to Front	Sill të gjitha përpara
 	Built with	Ndërtuar me
+	Built-in themes are read-only. Duplicate one to change its colours.	Temat e integruara janë vetëm për lexim. Dyfishoni njërën për t'i ndryshuar ngjyrat.
 	Busiest	Më i ngarkuari
 	By role	Sipas rolit
 	CSV table	Tabelë CSV
@@ -83,6 +87,7 @@
 	Cancel	Anulo
 	Cancel Run	Anulo ekzekutimin
 	Cancel run	Anulo ekzekutimin
+	Canvas	Sipërfaqe kryesore
 	Capacity	Kapaciteti
 	Centres	Qendrat horizontale
 	Change	Ndryshimi
@@ -93,6 +98,8 @@
 	Change the estimate	Ndrysho vlerësimin
 	Changes	Ndryshimet
 	Changing the time unit does not convert the times already in the model.	Ndryshimi i njësisë së kohës nuk i konverton kohët që gjenden tashmë në model.
+	Chart	Grafik
+	Chart hover	Grafik nën tregues
 	Choose…	Zgjidh…
 	Clear Menu	Pastro menynë
 	Close	Mbyll
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Çdo entitet merr njëherësh të plotë të parën nga këto alternativa që mund të plotësohet në atë çast dhe i kthen njësitë kur largohet.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Çdo entitet pret këtu të shumtën një kohë të hedhur në short për të kur mbërrin, pastaj heq dorë: merr daljen e shënuar „Hoqën dorë” ose largohet nga modeli.
 	Edit	Redakto
+	Edit themes…	Redakto temat…
 	Elasticity	Elasticiteti
 	Ends early	Mbaron më herët
 	Energy	Energjia
@@ -183,11 +191,14 @@
 	Gives up before service starts	Heq dorë para se të nisë shërbimi
 	Goes to	Shkon te
 	Hands on finished parts while down	Kalon pjesët e përfunduara edhe në defekt
+	Header	Shirit i kokës
 	Help	Ndihmë
 	Hide Others	Fshih të tjerat
 	Hide {app}	Fshih {app}
+	High contrast	Kontrast i lartë
 	How many	Sa
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Sa pjesë duan klientët nga këto largime; rezultatet tregojnë atëherë taktin (kohën e disponueshme pjesëtuar me kërkesën) dhe kohën e ciklit të çdo detyre.
+	In use	Në përdorim
 	Inside over time	Brenda gjatë kohës
 	Jump	Shko
 	Jump to time	Shko te koha
@@ -301,6 +312,7 @@
 	Quality ratio	Raporti i cilësisë
 	Quit	Dil
 	Quit {app}	Dil nga {app}
+	Raised surfaces	Sipërfaqe të ngritura
 	Random	E rastësishme
 	Rank the parameters	Rendit parametrat
 	Ready	Gati
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Hiq këtë bllok dhe rrjedhat e tij (Delete)
 	Remove this period	Hiq këtë periudhë
 	Removed {id}	U hoq {id}
+	Rename	Riemërto
 	Rename Block	Riemërto bllokun
 	Rename Model	Riemërto modelin
 	Repair time	Koha e riparimit
@@ -363,6 +376,7 @@
 	Save As…	Ruaj si…
 	Save Model	Ruaj modelin
 	Save changes to {name}?	Të ruhen ndryshimet te {name}?
+	Save name	Ruaj emrin
 	Saved {file}	U ruajt {file}
 	Scale	Shkalla
 	Scrap	Skarto
@@ -390,8 +404,10 @@
 	Share that gave up	Pjesa që hoqi dorë
 	Show All	Shfaqi të gjitha
 	Show {id}	Shfaq {id}
+	Side rail	Shirit anësor
 	Size	Përmaso
 	Size the resources	Përmaso burimet
+	Soft accent	Theks i butë
 	Source	Burimi
 	Source: {source}	Burimi: {source}
 	Speed	Shpejtësia
@@ -403,6 +419,7 @@
 	Stages (k)	Fazat (k)
 	Standard deviation	Devijimi standard
 	Step	Hap
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft u mbyll me ndryshime të paruajtura në {name}. Rikthejini si model pa titull ose hidhini poshtë.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft lexon modele procesesh nga skedarë BPMN ose XPDL me të dhëna simulimi BPSim, i ekzekuton si eksperimente me përsëritje dhe raporton çdo rezultat bashkë me intervalin e besimit.
 	StochCraft {version} · model {digest}	StochCraft {version} · modeli {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Vëzhgimi u ndal
 	Sun	Die
 	Sweep a parameter	Skano një parametër
+	Table stripes	Vija tabelash
 	Takt	Takt
 	Takt time	Koha e taktit
 	Tandem line	Linja në seri
@@ -422,6 +440,8 @@
 	Task with a resource	Detyrë me burim
 	Task with shared resources	Detyrë me burime të përbashkëta
 	Text	Tekst
+	Text on accent	Tekst mbi theksin
+	Text on header	Tekst në shiritin e kokës
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervali zbret nën pjesën objektiv prej {share}, ndaj nuk tregohet me besueshmëri 95% se pjesa arrihet; më shumë përsëritje do ta ngushtonin.
 	The last task with a resource it finished at	Detyra e fundit me burim nëpër të cilën kaloi pjesa
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Koha mesatare deri te kushti i ndalimit është vetëm mbi përsëritjet që e arritën; të tjerat shkuan deri në kufirin e kohës.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Modeli nuk ka ende kalendarë.
 	The model now has the units sizing found	Modeli tani ka njësitë që gjeti përmasimi
 	The model: its experiment, connections and problems	Modeli: eksperimenti, lidhjet dhe problemet
+	The name is empty or already used.	Emri është bosh ose është përdorur tashmë.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Pjesa e përsëritjeve në ose nën çdo vlerë. Brezi përmban shpërndarjen e vërtetë me besueshmëri {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vlerat janë numra të ndarë me pikëpresje ose hapësira
 	The whole clock	Gjithë koha
+	Themes	Temat
 	This block has a warning	Ky bllok ka një paralajmërim
 	This block has an error	Ky bllok ka një gabim
 	This run	Ky ekzekutim
@@ -478,12 +500,15 @@
 	View	Shiko
 	Waiting over time	Në pritje gjatë kohës
 	Waiting room	Dhoma e pritjes
+	Warm	E ngrohtë
 	Warm-up	Ngrohja
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Ngrohje {warmup} {unit}, pastaj matje për {duration} {unit}
 	Warning	Paralajmërim
 	Watch a Run	Vëzhgo një ekzekutim
 	Watch a run	Vëzhgo një ekzekutim
 	Watching replication 1	Po vëzhgohet përsëritja 1
+	Weak text	Tekst i zbehtë
+	Weak text on header	Tekst i zbehtë në shiritin e kokës
 	Wed	Mër
 	Weekly	Çdo javë
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} në pritje
 	{n} {unit} per second	{n} {unit} në sekondë
 	{property} (set to, mean)	{property} (vlera e caktuar, mesatarja)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – sfondi „{background}“: {ratio}:1, nevojitet {min}:1
 	{title}: now {now}, at most {most}	{title}: tani {now}, më së shumti {most}
 	± 95% CI	± 95% interval besimi
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± është gjysma e gjerësisë së një intervali besimi Student-t prej 95% për mesataren e përsëritjeve.

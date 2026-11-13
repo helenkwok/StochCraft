@@ -25,6 +25,7 @@
 	Abandoned on {id}	Ушедшие на {id}
 	About StochCraft	О программе StochCraft
 	About {app}	О программе {app}
+	Accent	Акцент
 	Across the range it changed by {change}: more than chance would explain.	На всём диапазоне изменился на {change}: больше, чем объяснила бы случайность.
 	Across the range it changed by {change}: within what chance alone could do.	На всём диапазоне изменился на {change}: в пределах того, на что способна одна случайность.
 	Actual size	Фактический размер
@@ -47,6 +48,7 @@
 	Added pool {id}	Добавлен пул {id}
 	Added {block} ({id})	Добавлен {block} ({id})
 	Align	Выравнивание
+	All text meets the contrast minimums.	Весь текст соответствует минимальным требованиям к контрасту.
 	Also: {rule}	Также: {rule}
 	Alternative {n}	Альтернатива {n}
 	Analysis	Анализ
@@ -69,11 +71,13 @@
 	Binomial	Биномиальное распределение
 	Block	Блок
 	Boolean	Логическое значение
+	Borders	Границы
 	Bottoms	Нижние края
 	Breakdowns	Отказы
 	Breakdowns and availability	Отказы и доступность
 	Bring All to Front	Все окна на передний план
 	Built with	Создано с использованием
+	Built-in themes are read-only. Duplicate one to change its colours.	Встроенные темы доступны только для чтения. Чтобы изменить цвета, создайте дубликат одной из них.
 	Busiest	Самый загруженный
 	By role	По роли
 	CSV table	Таблица CSV
@@ -83,6 +87,7 @@
 	Cancel	Отмена
 	Cancel Run	Отменить запуск
 	Cancel run	Отменить запуск
+	Canvas	Основная поверхность
 	Capacity	Количество обслуживающих единиц
 	Centres	Центры по горизонтали
 	Change	Изменение
@@ -93,6 +98,8 @@
 	Change the estimate	Изменить оценку
 	Changes	Изменения
 	Changing the time unit does not convert the times already in the model.	При изменении единицы времени уже заданные в модели времена не пересчитываются.
+	Chart	Диаграмма
+	Chart hover	Диаграмма под указателем
 	Choose…	Выберите…
 	Clear Menu	Очистить меню
 	Close	Закрыть
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Каждая сущность занимает первый из этих вариантов, который можно выполнить сейчас, целиком и сразу, и возвращает единицы, когда уходит.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Каждая сущность ждёт здесь не дольше случайного времени, выбранного для неё при прибытии, а затем уходит: идёт по выходу с пометкой «Ушедшие» или покидает модель.
 	Edit	Редактирование
+	Edit themes…	Изменить темы…
 	Elasticity	Эластичность
 	Ends early	Завершается раньше
 	Energy	Энергия
@@ -183,11 +191,14 @@
 	Gives up before service starts	Уходит до начала обслуживания
 	Goes to	Ведёт к
 	Hands on finished parts while down	Передаёт готовые детали и при отказе
+	Header	Верхняя панель
 	Help	Справка
 	Hide Others	Скрыть остальные
 	Hide {app}	Скрыть {app}
+	High contrast	Высокий контраст
 	How many	Сколько
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Сколько деталей клиенты хотят от этих выходов; тогда результаты показывают такт (доступное время, делённое на спрос) и время цикла каждой задачи.
+	In use	Используется
 	Inside over time	Внутри во времени
 	Jump	Перейти
 	Jump to time	Перейти ко времени
@@ -301,6 +312,7 @@
 	Quality ratio	Доля годных
 	Quit	Выйти
 	Quit {app}	Завершить {app}
+	Raised surfaces	Приподнятые поверхности
 	Random	Случайное
 	Rank the parameters	Упорядочить параметры
 	Ready	Готово
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Удалить этот блок и его потоки (Delete)
 	Remove this period	Удалить этот период
 	Removed {id}	Удалён {id}
+	Rename	Переименовать
 	Rename Block	Переименовать блок
 	Rename Model	Переименовать модель
 	Repair time	Время ремонта
@@ -363,6 +376,7 @@
 	Save As…	Сохранить как…
 	Save Model	Сохранить модель
 	Save changes to {name}?	Сохранить изменения в {name}?
+	Save name	Сохранить имя
 	Saved {file}	Сохранён {file}
 	Scale	Масштаб
 	Scrap	Брак
@@ -390,8 +404,10 @@
 	Share that gave up	Доля ушедших
 	Show All	Показать всё
 	Show {id}	Показать {id}
+	Side rail	Боковая панель
 	Size	Подобрать
 	Size the resources	Подбор ресурсов
+	Soft accent	Мягкий акцент
 	Source	Источник
 	Source: {source}	Источник: {source}
 	Speed	Скорость
@@ -403,6 +419,7 @@
 	Stages (k)	Стадии (k)
 	Standard deviation	Стандартное отклонение
 	Step	Шаг
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft закрылся с несохранёнными изменениями в {name}. Восстановите их как модель без названия или отбросьте.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft загружает модели процессов из файлов BPMN или XPDL с данными моделирования BPSim, запускает их как эксперименты с повторениями и выводит каждый результат с доверительным интервалом.
 	StochCraft {version} · model {digest}	StochCraft {version} · модель {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Наблюдение прекращено
 	Sun	вс
 	Sweep a parameter	Перебор параметра
+	Table stripes	Полосы таблиц
 	Takt	Такт
 	Takt time	Время такта
 	Tandem line	Последовательная линия
@@ -422,6 +440,8 @@
 	Task with a resource	Задача с ресурсом
 	Task with shared resources	Задача с общими ресурсами
 	Text	Текст
+	Text on accent	Текст на акценте
+	Text on header	Текст на верхней панели
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Интервал опускается ниже целевой доли {share}, поэтому с доверием 95% не показано, что доля достигнута; больше репликаций сузили бы его.
 	The last task with a resource it finished at	Последняя задача с ресурсом, которую прошла деталь
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Среднее время до условия остановки рассчитано только по репликациям, которые его достигли; остальные шли до своего предела времени.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	В модели пока нет календарей.
 	The model now has the units sizing found	В модели теперь единицы, найденные при подборе
 	The model: its experiment, connections and problems	Модель: эксперимент, соединения и проблемы
+	The name is empty or already used.	Имя пустое или уже используется.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Доля репликаций, не превышающих каждое значение. Полоса содержит истинное распределение с доверием {confidence}.
 	The values are numbers, separated by semicolons or spaces	Значения — это числа, разделённые точкой с запятой или пробелами
 	The whole clock	Всё время
+	Themes	Темы
 	This block has a warning	В этом блоке есть предупреждение
 	This block has an error	В этом блоке есть ошибка
 	This run	Этот запуск
@@ -478,12 +500,15 @@
 	View	Вид
 	Waiting over time	Ожидающие во времени
 	Waiting room	Места ожидания
+	Warm	Тёплая
 	Warm-up	Разогрев
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Разогрев {warmup} {unit}, затем измерение в течение {duration} {unit}
 	Warning	Предупреждение
 	Watch a Run	Наблюдать за запуском
 	Watch a run	Наблюдать за запуском
 	Watching replication 1	Наблюдение за повторным запуском 1
+	Weak text	Блёклый текст
+	Weak text on header	Блёклый текст на верхней панели
 	Wed	ср
 	Weekly	Еженедельно
 	Weibull	Распределение Вейбулла
@@ -555,6 +580,7 @@
 	{n} waiting	Ожидают: {n}
 	{n} {unit} per second	{n} {unit} в секунду
 	{property} (set to, mean)	{property} (заданное значение, среднее)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} — фон «{background}»: {ratio}:1, нужно {min}:1
 	{title}: now {now}, at most {most}	{title}: сейчас {now}, не более {most}
 	± 95% CI	± 95% ДИ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — половина ширины 95% доверительного интервала Student-t для среднего значения по повторениям.

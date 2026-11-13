@@ -25,6 +25,7 @@
 	Abandoned on {id}	Vzdané na {id}
 	About StochCraft	O aplikaci StochCraft
 	About {app}	O aplikaci {app}
+	Accent	Zvýraznění
 	Across the range it changed by {change}: more than chance would explain.	V rozsahu se změnil o {change}: víc, než by vysvětlila náhoda.
 	Across the range it changed by {change}: within what chance alone could do.	V rozsahu se změnil o {change}: v mezích toho, co dokáže sama náhoda.
 	Actual size	Skutečná velikost
@@ -47,6 +48,7 @@
 	Added pool {id}	Přidán fond {id}
 	Added {block} ({id})	Přidán {block} ({id})
 	Align	Zarovnat
+	All text meets the contrast minimums.	Veškerý text splňuje minimální kontrast.
 	Also: {rule}	Také: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Analýza
@@ -69,11 +71,13 @@
 	Binomial	Binomické
 	Block	Blok
 	Boolean	Logická hodnota
+	Borders	Okraje
 	Bottoms	Spodní okraje
 	Breakdowns	Poruchy
 	Breakdowns and availability	Poruchy a dostupnost
 	Bring All to Front	Přenést vše do popředí
 	Built with	Vytvořeno pomocí
+	Built-in themes are read-only. Duplicate one to change its colours.	Vestavěné motivy jsou jen pro čtení. Chcete-li změnit barvy, některý duplikujte.
 	Busiest	Nejvytíženější
 	By role	Podle role
 	CSV table	Tabulka CSV
@@ -83,6 +87,7 @@
 	Cancel	Zrušit
 	Cancel Run	Zrušit běh
 	Cancel run	Zrušit běh
+	Canvas	Hlavní plocha
 	Capacity	Kapacita
 	Centres	Vodorovné středy
 	Change	Změna
@@ -93,6 +98,8 @@
 	Change the estimate	Změnit odhad
 	Changes	Změny
 	Changing the time unit does not convert the times already in the model.	Změna časové jednotky nepřepočítá časy, které již v modelu jsou.
+	Chart	Graf
+	Chart hover	Graf pod ukazatelem
 	Choose…	Vyberte…
 	Clear Menu	Vymazat nabídku
 	Close	Zavřít
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Každá entita si vezme první z těchto možností, kterou lze právě splnit, celou najednou, a při odchodu jednotky vrátí.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Každá entita zde čeká nejvýše dobu, která se jí náhodně určí při příchodu, a pak to vzdá: odejde cestou označenou „Vzdané“, nebo opustí model.
 	Edit	Úpravy
+	Edit themes…	Upravit motivy…
 	Elasticity	Pružnost
 	Ends early	Končí dříve
 	Energy	Energie
@@ -183,11 +191,14 @@
 	Gives up before service starts	Vzdá to před začátkem obsluhy
 	Goes to	Vede do
 	Hands on finished parts while down	Předává hotové díly i v poruše
+	Header	Záhlaví
 	Help	Nápověda
 	Hide Others	Skrýt ostatní
 	Hide {app}	Skrýt {app}
+	High contrast	Vysoký kontrast
 	How many	Kolik
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kolik dílů chtějí zákazníci z těchto odchodů; výsledky pak ukážou takt (dostupný čas dělený poptávkou) a čas cyklu každé úlohy.
+	In use	Používá se
 	Inside over time	Uvnitř v čase
 	Jump	Přejít
 	Jump to time	Přejít na čas
@@ -301,6 +312,7 @@
 	Quality ratio	Podíl kvality
 	Quit	Ukončit
 	Quit {app}	Ukončit {app}
+	Raised surfaces	Vyvýšené plochy
 	Random	Náhodné
 	Rank the parameters	Seřadit parametry
 	Ready	Připraveno
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Odebrat tento blok a jeho toky (Delete)
 	Remove this period	Odebrat toto období
 	Removed {id}	Odebráno {id}
+	Rename	Přejmenovat
 	Rename Block	Přejmenovat blok
 	Rename Model	Přejmenovat model
 	Repair time	Doba opravy
@@ -363,6 +376,7 @@
 	Save As…	Uložit jako…
 	Save Model	Uložit model
 	Save changes to {name}?	Uložit změny v {name}?
+	Save name	Uložit jméno
 	Saved {file}	Uloženo {file}
 	Scale	Měřítko
 	Scrap	Zmetky
@@ -390,8 +404,10 @@
 	Share that gave up	Podíl těch, které to vzdaly
 	Show All	Zobrazit vše
 	Show {id}	Zobrazit {id}
+	Side rail	Boční lišta
 	Size	Dimenzovat
 	Size the resources	Dimenzovat zdroje
+	Soft accent	Jemné zvýraznění
 	Source	Zdroj
 	Source: {source}	Zdroj: {source}
 	Speed	Rychlost
@@ -403,6 +419,7 @@
 	Stages (k)	Fáze (k)
 	Standard deviation	Směrodatná odchylka
 	Step	Krok
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft byl ukončen s neuloženými změnami v modelu {name}. Obnovte je jako nepojmenovaný model, nebo je zahoďte.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft načítá modely procesů ze souborů BPMN nebo XPDL se simulačními daty BPSim, spouští je jako experimenty s replikacemi a uvádí každý výsledek s jeho intervalem spolehlivosti.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Sledování ukončeno
 	Sun	ne
 	Sweep a parameter	Průchod parametrem
+	Table stripes	Pruhy tabulek
 	Takt	Takt
 	Takt time	Čas taktu
 	Tandem line	Tandemová linka
@@ -422,6 +440,8 @@
 	Task with a resource	Úloha se zdrojem
 	Task with shared resources	Úloha se sdílenými zdroji
 	Text	Text
+	Text on accent	Text na zvýraznění
+	Text on header	Text v záhlaví
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval sahá pod cílový podíl {share}, takže splnění podílu není prokázáno s 95% spolehlivostí; více replikací by ho zúžilo.
 	The last task with a resource it finished at	Poslední úloha se zdrojem, kterou díl prošel
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Průměrná doba do podmínky zastavení je jen z replikací, které ji splnily; ostatní běžely do svého časového limitu.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Model zatím nemá žádné kalendáře.
 	The model now has the units sizing found	Model má nyní jednotky nalezené dimenzováním
 	The model: its experiment, connections and problems	Model: experiment, propojení a problémy
+	The name is empty or already used.	Jméno je prázdné nebo se už používá.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Podíl replikací rovných nebo menších než každá hodnota. Pás obsahuje skutečné rozdělení se spolehlivostí {confidence}.
 	The values are numbers, separated by semicolons or spaces	Hodnoty jsou čísla oddělená středníky nebo mezerami
 	The whole clock	Celý čas
+	Themes	Motivy
 	This block has a warning	Tento blok obsahuje upozornění
 	This block has an error	Tento blok obsahuje chybu
 	This run	Tento běh
@@ -478,12 +500,15 @@
 	View	Zobrazení
 	Waiting over time	Čekající v čase
 	Waiting room	Čekárna
+	Warm	Teplý
 	Warm-up	Zahřívání
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Zahřívání {warmup} {unit}, poté měření {duration} {unit}
 	Warning	Upozornění
 	Watch a Run	Sledovat běh
 	Watch a run	Sledovat běh
 	Watching replication 1	Sleduje se replikace 1
+	Weak text	Tlumený text
+	Weak text on header	Tlumený text v záhlaví
 	Wed	st
 	Weekly	Týdně
 	Weibull	Weibullovo
@@ -555,6 +580,7 @@
 	{n} waiting	Čeká: {n}
 	{n} {unit} per second	{n} {unit} za sekundu
 	{property} (set to, mean)	{property} (nastaveno na, průměr)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadí „{background}“: {ratio}:1, je třeba {min}:1
 	{title}: now {now}, at most {most}	{title}: nyní {now}, nejvýše {most}
 	± 95% CI	± 95% interval spolehlivosti
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± představuje polovinu šířky 95% Student-t intervalu spolehlivosti průměru napříč replikacemi.

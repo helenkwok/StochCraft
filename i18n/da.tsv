@@ -25,6 +25,7 @@
 	Abandoned on {id}	Gav op på {id}
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
+	Accent	Accent
 	Across the range it changed by {change}: more than chance would explain.	Over intervallet ændrede det sig med {change}: mere end tilfældighed ville forklare.
 	Across the range it changed by {change}: within what chance alone could do.	Over intervallet ændrede det sig med {change}: inden for hvad tilfældighed alene kan gøre.
 	Actual size	Faktisk størrelse
@@ -47,6 +48,7 @@
 	Added pool {id}	Tilføjede puljen {id}
 	Added {block} ({id})	Tilføjede {block} ({id})
 	Align	Juster
+	All text meets the contrast minimums.	Al tekst opfylder minimumskontrasten.
 	Also: {rule}	Desuden: {rule}
 	Alternative {n}	Alternativ {n}
 	Analysis	Analyse
@@ -69,11 +71,13 @@
 	Binomial	Binomial
 	Block	Blok
 	Boolean	Boolesk
+	Borders	Kanter
 	Bottoms	Nederste kanter
 	Breakdowns	Nedbrud
 	Breakdowns and availability	Nedbrud og tilgængelighed
 	Bring All to Front	Anbring alle forrest
 	Built with	Bygget med
+	Built-in themes are read-only. Duplicate one to change its colours.	Indbyggede temaer er skrivebeskyttede. Duplikér et for at ændre dets farver.
 	Busiest	Travlest
 	By role	Efter rolle
 	CSV table	CSV-tabel
@@ -83,6 +87,7 @@
 	Cancel	Annullér
 	Cancel Run	Annuller kørsel
 	Cancel run	Annuller kørsel
+	Canvas	Hovedflade
 	Capacity	Kapacitet
 	Centres	Vandrette midter
 	Change	Ændring
@@ -93,6 +98,8 @@
 	Change the estimate	Ret skønnet
 	Changes	Ændringer
 	Changing the time unit does not convert the times already in the model.	Ændring af tidsenheden omregner ikke tider, der allerede findes i modellen.
+	Chart	Diagram
+	Chart hover	Diagram under markøren
 	Choose…	Vælg…
 	Clear Menu	Ryd menu
 	Close	Luk
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Hver enhed tager det første af disse alternativer, der kan opfyldes nu, alt på én gang, og giver ressourceenhederne tilbage, når den forlader opgaven.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Hver enhed venter her højst en tid, der trækkes tilfældigt for den ved ankomsten, og giver så op: den tager vejen ud markeret »Gav op«, eller forlader modellen.
 	Edit	Redigér
+	Edit themes…	Redigér temaer…
 	Elasticity	Elasticitet
 	Ends early	Slutter tidligt
 	Energy	Energi
@@ -183,11 +191,14 @@
 	Gives up before service starts	Giver op før servicen begynder
 	Goes to	Går til
 	Hands on finished parts while down	Afleverer færdige emner under nedbrud
+	Header	Topbjælke
 	Help	Hjælp
 	Hide Others	Skjul andre
 	Hide {app}	Skjul {app}
+	High contrast	Høj kontrast
 	How many	Hvor mange
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hvor mange emner kunderne ønsker fra disse afgange; resultaterne viser så takten (den tilgængelige tid divideret med behovet) og hver opgaves cyklustid.
+	In use	I brug
 	Inside over time	Inde over tid
 	Jump	Gå
 	Jump to time	Gå til tidspunkt
@@ -301,6 +312,7 @@
 	Quality ratio	Kvalitetsandel
 	Quit	Afslut
 	Quit {app}	Afslut {app}
+	Raised surfaces	Hævede flader
 	Random	Tilfældig
 	Rank the parameters	Ranger parametrene
 	Ready	Klar
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Fjern denne blok og dens flow (Delete)
 	Remove this period	Fjern denne periode
 	Removed {id}	Fjernede {id}
+	Rename	Omdøb
 	Rename Block	Omdøb blok
 	Rename Model	Omdøb model
 	Repair time	Reparationstid
@@ -363,6 +376,7 @@
 	Save As…	Gem som…
 	Save Model	Gem model
 	Save changes to {name}?	Gem ændringer i {name}?
+	Save name	Gem navn
 	Saved {file}	Gemte {file}
 	Scale	Skala
 	Scrap	Kassation
@@ -390,8 +404,10 @@
 	Share that gave up	Andel, der gav op
 	Show All	Vis alle
 	Show {id}	Vis {id}
+	Side rail	Sidebjælke
 	Size	Dimensionér
 	Size the resources	Dimensionér ressourcerne
+	Soft accent	Blød accent
 	Source	Kilde
 	Source: {source}	Kilde: {source}
 	Speed	Hastighed
@@ -403,6 +419,7 @@
 	Stages (k)	Trin (k)
 	Standard deviation	Standardafvigelse
 	Step	Trin
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft blev lukket med ændringer i {name}, som ikke var gemt. Gendan dem som en model uden titel, eller kassér dem.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft læser procesmodeller fra BPMN- eller XPDL-filer med BPSim-simuleringsdata, kører dem som eksperimenter med gentagelser og rapporterer hvert resultat med det tilhørende konfidensinterval.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Stoppede med at følge
 	Sun	søn
 	Sweep a parameter	Gennemløb en parameter
+	Table stripes	Tabelstriber
 	Takt	Takt
 	Takt time	Takttid
 	Tandem line	Tandemlinje
@@ -422,6 +440,8 @@
 	Task with a resource	Opgave med ressource
 	Task with shared resources	Opgave med delte ressourcer
 	Text	Tekst
+	Text on accent	Tekst på accent
+	Text on header	Tekst på topbjælke
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhed, at andelen nås; flere replikationer ville gøre det smallere.
 	The last task with a resource it finished at	Den sidste opgave med ressource, emnet gik igennem
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Den gennemsnitlige tid til stopbetingelsen er kun over de replikationer, der nåede den; de øvrige kørte til deres tidsgrænse.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Modellen har endnu ingen kalendere.
 	The model now has the units sizing found	Modellen har nu de enheder, dimensioneringen fandt
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
+	The name is empty or already used.	Navnet er tomt eller allerede i brug.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen af replikationer ved eller under hver værdi. Båndet indeholder den sande fordeling med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Værdierne er tal adskilt med semikolon eller mellemrum
 	The whole clock	Hele tiden
+	Themes	Temaer
 	This block has a warning	Denne blok har en advarsel
 	This block has an error	Denne blok har en fejl
 	This run	Denne kørsel
@@ -478,12 +500,15 @@
 	View	Vis
 	Waiting over time	Ventende over tid
 	Waiting room	Venteværelse
+	Warm	Varm
 	Warm-up	Opvarmning
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Opvarmning {warmup} {unit}, derefter måling i {duration} {unit}
 	Warning	Advarsel
 	Watch a Run	Følg en kørsel
 	Watch a run	Følg en kørsel
 	Watching replication 1	Følger replikation 1
+	Weak text	Svag tekst
+	Weak text on header	Svag tekst på topbjælke
 	Wed	ons
 	Weekly	Ugentligt
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} venter
 	{n} {unit} per second	{n} {unit} pr. sekund
 	{property} (set to, mean)	{property} (angivet værdi, gennemsnit)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} på {background}: {ratio}:1, kræver {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, højst {most}
 	± 95% CI	± 95% KI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± er halvdelen af bredden af et 95% Student-t-konfidensinterval for gennemsnittet på tværs af gentagelser.

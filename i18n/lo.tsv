@@ -25,6 +25,7 @@
 	Abandoned on {id}	ເຊົາລໍຖ້າທີ່ {id}
 	About StochCraft	ກ່ຽວກັບ StochCraft
 	About {app}	ກ່ຽວກັບ {app}
+	Accent	ສີເນັ້ນ
 	Across the range it changed by {change}: more than chance would explain.	ຕະຫຼອດຊ່ວງປ່ຽນໄປ {change}: ຫຼາຍກວ່າທີ່ຄວາມບັງເອີນຈະອະທິບາຍໄດ້.
 	Across the range it changed by {change}: within what chance alone could do.	ຕະຫຼອດຊ່ວງປ່ຽນໄປ {change}: ຢູ່ໃນຂອບເຂດທີ່ຄວາມບັງເອີນຢ່າງດຽວກໍເຮັດໄດ້.
 	Actual size	ຂະໜາດຕົວຈິງ
@@ -47,6 +48,7 @@
 	Added pool {id}	ເພີ່ມກຸ່ມຊັບພະຍາກອນ {id} ແລ້ວ
 	Added {block} ({id})	ເພີ່ມ {block} ({id}) ແລ້ວ
 	Align	ຈັດແຖວ
+	All text meets the contrast minimums.	ຂໍ້ຄວາມທັງໝົດຜ່ານຄວາມຄົມຊັດຂັ້ນຕ່ຳ.
 	Also: {rule}	ນອກຈາກນີ້: {rule}
 	Alternative {n}	ທາງເລືອກ {n}
 	Analysis	ການວິເຄາະ
@@ -69,11 +71,13 @@
 	Binomial	ທະວີນາມ
 	Block	ບລັອກ
 	Boolean	ບູລີນ
+	Borders	ເສັ້ນຂອບ
 	Bottoms	ຂອບລຸ່ມ
 	Breakdowns	ການເສຍ
 	Breakdowns and availability	ການເສຍ ແລະ ຄວາມພ້ອມໃຊ້
 	Bring All to Front	ນຳທັງໝົດມາໄວ້ດ້ານໜ້າ
 	Built with	ສ້າງດ້ວຍ
+	Built-in themes are read-only. Duplicate one to change its colours.	ຊຸດສີທີ່ມີມາໃນຕົວແມ່ນອ່ານໄດ້ຢ່າງດຽວ. ເຮັດສຳເນົາອັນໜຶ່ງເພື່ອປ່ຽນສີຂອງມັນ.
 	Busiest	ຫຍຸ້ງທີ່ສຸດ
 	By role	ຕາມບົດບາດ
 	CSV table	ຕາຕະລາງ CSV
@@ -83,6 +87,7 @@
 	Cancel	ຍົກເລີກ
 	Cancel Run	ຍົກເລີກການປະມວນຜົນ
 	Cancel run	ຍົກເລີກການປະມວນຜົນ
+	Canvas	ພື້ນຜິວຫຼັກ
 	Capacity	ຄວາມຈຸ
 	Centres	ກາງແນວນອນ
 	Change	ການປ່ຽນແປງ
@@ -93,6 +98,8 @@
 	Change the estimate	ປ່ຽນການປະມານ
 	Changes	ການປ່ຽນແປງ
 	Changing the time unit does not convert the times already in the model.	ການປ່ຽນໜ່ວຍເວລາຈະບໍ່ແປງຄ່າເວລາທີ່ມີຢູ່ໃນແບບຈຳລອງ.
+	Chart	ແຜນພູມ
+	Chart hover	ແຜນພູມເມື່ອຊີ້
 	Choose…	ເລືອກ…
 	Clear Menu	ລ້າງເມນູ
 	Close	ປິດ
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ແຕ່ລະເອນທິຕີຈະເອົາທາງເລືອກທຳອິດທີ່ສາມາດຈັດໃຫ້ໄດ້ຄົບທັງໝົດພ້ອມກັນໃນທັນທີ ແລະ ສົ່ງໜ່ວຍເຫຼົ່ານັ້ນຄືນເມື່ອອອກໄປ.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ແຕ່ລະເອນທິຕີຈະລໍຖ້າຢູ່ນີ້ບໍ່ເກີນເວລາທີ່ສຸ່ມໃຫ້ມັນເມື່ອມາຮອດ, ແລ້ວຈຶ່ງເຊົາລໍຖ້າ: ມັນໄປທາງອອກທີ່ໝາຍວ່າ "ເຊົາລໍຖ້າ" ຫຼື ອອກຈາກແບບຈຳລອງ.
 	Edit	ແກ້ໄຂ
+	Edit themes…	ແກ້ໄຂຊຸດສີ…
 	Elasticity	ຄວາມຢືດຢຸ່ນ
 	Ends early	ຈົບກ່ອນກຳນົດ
 	Energy	ພະລັງງານ
@@ -183,11 +191,14 @@
 	Gives up before service starts	ເຊົາລໍຖ້າກ່ອນເລີ່ມການບໍລິການ
 	Goes to	ໄປຫາ
 	Hands on finished parts while down	ສົ່ງຕໍ່ຊິ້ນທີ່ສຳເລັດແລ້ວແມ່ນແຕ່ໃນຂະນະເສຍ
+	Header	ແຖບຫົວ
 	Help	ຊ່ວຍເຫຼືອ
 	Hide Others	ເຊື່ອງລາຍການອື່ນ
 	Hide {app}	ເຊື່ອງ {app}
+	High contrast	ຄວາມຄົມຊັດສູງ
 	How many	ຈຳນວນ
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ລູກຄ້າຕ້ອງການຈັກຊິ້ນຈາກການອອກເຫຼົ່ານີ້; ຈາກນັ້ນຜົນຈະສະແດງແທັກ (ເວລາທີ່ມີຫານດ້ວຍຄວາມຕ້ອງການ) ແລະ ເວລາຮອບວຽນຂອງແຕ່ລະໜ້າວຽກ.
+	In use	ກຳລັງໃຊ້
 	Inside over time	ຈຳນວນພາຍໃນຕາມເວລາ
 	Jump	ຂ້າມ
 	Jump to time	ຂ້າມໄປຫາເວລາ
@@ -301,6 +312,7 @@
 	Quality ratio	ສັດສ່ວນຄຸນນະພາບ
 	Quit	ອອກ
 	Quit {app}	ອອກຈາກ {app}
+	Raised surfaces	ພື້ນຜິວທີ່ຍົກຂຶ້ນ
 	Random	ສຸ່ມ
 	Rank the parameters	ຈັດອັນດັບພາຣາມິເຕີ
 	Ready	ພ້ອມ
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	ລຶບບລັອກນີ້ ແລະ ເສັ້ນທາງຂອງມັນ (Delete)
 	Remove this period	ລຶບໄລຍະນີ້
 	Removed {id}	ລຶບ {id} ແລ້ວ
+	Rename	ປ່ຽນຊື່
 	Rename Block	ປ່ຽນຊື່ບລັອກ
 	Rename Model	ປ່ຽນຊື່ແບບຈຳລອງ
 	Repair time	ເວລາສ້ອມແປງ
@@ -363,6 +376,7 @@
 	Save As…	ບັນທຶກເປັນ…
 	Save Model	ບັນທຶກແບບຈຳລອງ
 	Save changes to {name}?	ບັນທຶກການປ່ຽນແປງໃນ {name} ບໍ?
+	Save name	ບັນທຶກຊື່
 	Saved {file}	ບັນທຶກ {file} ແລ້ວ
 	Scale	ມາດຕາສ່ວນ
 	Scrap	ຂອງເສຍ
@@ -390,8 +404,10 @@
 	Share that gave up	ສັດສ່ວນທີ່ເຊົາລໍຖ້າ
 	Show All	ສະແດງທັງໝົດ
 	Show {id}	ສະແດງ {id}
+	Side rail	ແຖບຂ້າງ
 	Size	ກຳນົດຂະໜາດ
 	Size the resources	ກຳນົດຂະໜາດຊັບພະຍາກອນ
+	Soft accent	ສີເນັ້ນອ່ອນ
 	Source	ແຫຼ່ງທີ່ມາ
 	Source: {source}	ແຫຼ່ງທີ່ມາ: {source}
 	Speed	ຄວາມໄວ
@@ -403,6 +419,7 @@
 	Stages (k)	ຂັ້ນຕອນ (k)
 	Standard deviation	ຄ່າຜັນຜວນມາດຕະຖານ
 	Step	ເທື່ອລະຂັ້ນ
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ປິດລົງໂດຍທີ່ການປ່ຽນແປງໃນ {name} ຍັງບໍ່ໄດ້ບັນທຶກ. ກູ້ຄືນເປັນແບບຈຳລອງທີ່ບໍ່ມີຊື່ ຫຼື ຍົກເລີກການປ່ຽນແປງນັ້ນ.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft ອ່ານແບບຈຳລອງຂະບວນການຈາກໄຟລ໌ BPMN ຫຼື XPDL ທີ່ມີຂໍ້ມູນການຈຳລອງ BPSim, ນຳໄປທົດລອງແບບເຮັດຊ້ຳຫຼາຍຄັ້ງ ແລະ ລາຍງານທຸກຜົນພ້ອມຊ່ວງຄວາມເຊື່ອໝັ້ນ.
 	StochCraft {version} · model {digest}	StochCraft {version} · ແບບຈຳລອງ {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	ຢຸດຕິດຕາມແລ້ວ
 	Sun	ອາທິດ
 	Sweep a parameter	ກວາດພາຣາມິເຕີ
+	Table stripes	ແຖບລາຍຕາຕະລາງ
 	Takt	ເວລາແທັກ
 	Takt time	ເວລາແທັກ
 	Tandem line	ສາຍງານຕໍ່ເນື່ອງ
@@ -422,6 +440,8 @@
 	Task with a resource	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນ
 	Task with shared resources	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນຮ່ວມກັນ
 	Text	ຂໍ້ຄວາມ
+	Text on accent	ຂໍ້ຄວາມເທິງສີເນັ້ນ
+	Text on header	ຂໍ້ຄວາມເທິງແຖບຫົວ
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ຊ່ວງນີ້ລົງຕ່ຳກວ່າສັດສ່ວນເປົ້າໝາຍ {share}, ຈຶ່ງບໍ່ໄດ້ສະແດງດ້ວຍຄວາມເຊື່ອໝັ້ນ 95% ວ່າບັນລຸສັດສ່ວນນັ້ນ; ຮອບຈຳລອງຊ້ຳຫຼາຍຂຶ້ນຈະເຮັດໃຫ້ຊ່ວງແຄບລົງ.
 	The last task with a resource it finished at	ໜ້າວຽກສຸດທ້າຍທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ຊິ້ນງານຜ່ານມາ
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ເວລາສະເລ່ຍຈົນຮອດເງື່ອນໄຂຢຸດ ຄິດສະເພາະຮອບຈຳລອງຊ້ຳທີ່ຮອດເງື່ອນໄຂ; ຮອບອື່ນແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	ແບບຈຳລອງຍັງບໍ່ມີປະຕິທິນ.
 	The model now has the units sizing found	ຕອນນີ້ແບບຈຳລອງມີຈຳນວນໜ່ວຍທີ່ການກຳນົດຂະໜາດພົບແລ້ວ
 	The model: its experiment, connections and problems	ແບບຈຳລອງ: ການທົດລອງ ການເຊື່ອມຕໍ່ ແລະ ບັນຫາ
+	The name is empty or already used.	ຊື່ຫວ່າງເປົ່າ ຫຼື ຖືກໃຊ້ແລ້ວ.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ສັດສ່ວນຮອບຈຳລອງຊ້ຳທີ່ເທົ່າກັບ ຫຼື ຕ່ຳກວ່າແຕ່ລະຄ່າ. ແຖບຄອບຄຸມການແຈກຢາຍແທ້ດ້ວຍຄວາມເຊື່ອໝັ້ນ {confidence}.
 	The values are numbers, separated by semicolons or spaces	ຄ່າຕ້ອງເປັນຕົວເລກທີ່ຂັ້ນດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ
 	The whole clock	ເວລາທັງໝົດ
+	Themes	ຊຸດສີ
 	This block has a warning	ບລັອກນີ້ມີຄຳເຕືອນ
 	This block has an error	ບລັອກນີ້ມີຂໍ້ຜິດພາດ
 	This run	ການປະມວນຜົນນີ້
@@ -478,12 +500,15 @@
 	View	ມຸມມອງ
 	Waiting over time	ຈຳນວນທີ່ລໍຖ້າຕາມເວລາ
 	Waiting room	ຫ້ອງລໍຖ້າ
+	Warm	ອົບອຸ່ນ
 	Warm-up	ໄລຍະອຸ່ນເຄື່ອງ
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	ອຸ່ນເຄື່ອງ {warmup} {unit} ແລ້ວວັດຜົນ {duration} {unit}
 	Warning	ຄຳເຕືອນ
 	Watch a Run	ຕິດຕາມການປະມວນຜົນ
 	Watch a run	ຕິດຕາມການປະມວນຜົນ
 	Watching replication 1	ກຳລັງຕິດຕາມຮອບຈຳລອງທີ 1
+	Weak text	ຂໍ້ຄວາມຈາງ
+	Weak text on header	ຂໍ້ຄວາມຈາງເທິງແຖບຫົວ
 	Wed	ພຸດ
 	Weekly	ທຸກອາທິດ
 	Weibull	ໄວບູນ
@@ -555,6 +580,7 @@
 	{n} waiting	ລໍຖ້າ {n}
 	{n} {unit} per second	{n} {unit} ຕໍ່ວິນາທີ
 	{property} (set to, mean)	{property} (ກຳນົດເປັນ, ຄ່າສະເລ່ຍ)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} ເທິງ {background}: {ratio}:1, ຕ້ອງການ {min}:1
 	{title}: now {now}, at most {most}	{title}: ຕອນນີ້ {now} ສູງສຸດ {most}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ.

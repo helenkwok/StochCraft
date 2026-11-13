@@ -25,6 +25,7 @@
 	Abandoned on {id}	{id} இல் கைவிட்டவை
 	About StochCraft	StochCraft பற்றி
 	About {app}	{app} பற்றி
+	Accent	முனைப்பு நிறம்
 	Across the range it changed by {change}: more than chance would explain.	முழு வரம்பிலும் இது {change} மாறியது: தற்செயல் விளக்குவதை விட அதிகம்.
 	Across the range it changed by {change}: within what chance alone could do.	முழு வரம்பிலும் இது {change} மாறியது: தற்செயல் மட்டுமே செய்யக்கூடிய அளவுக்குள்.
 	Actual size	உண்மையான அளவு
@@ -47,6 +48,7 @@
 	Added pool {id}	{id} தொகுப்பு சேர்க்கப்பட்டது
 	Added {block} ({id})	{block} ({id}) சேர்க்கப்பட்டது
 	Align	சீரமை
+	All text meets the contrast minimums.	எல்லா உரையும் குறைந்தபட்ச மாறுபாட்டைப் பூர்த்தி செய்கிறது.
 	Also: {rule}	மேலும்: {rule}
 	Alternative {n}	மாற்றுத் தேர்வு {n}
 	Analysis	பகுப்பாய்வு
@@ -69,11 +71,13 @@
 	Binomial	ஈருறுப்பு
 	Block	தொகுதி
 	Boolean	பூலியன்
+	Borders	எல்லைக் கோடுகள்
 	Bottoms	கீழ் விளிம்புகள்
 	Breakdowns	பழுதுகள்
 	Breakdowns and availability	பழுதுகளும் கிடைக்கும் தன்மையும்
 	Bring All to Front	அனைத்தையும் முன்னே கொண்டுவா
 	Built with	உருவாக்கப் பயன்படுத்தியது
+	Built-in themes are read-only. Duplicate one to change its colours.	உள்ளமைந்த தீம்களைப் படிக்க மட்டுமே முடியும். நிறங்களை மாற்ற ஒன்றின் நகலை உருவாக்கவும்.
 	Busiest	மிகவும் பணிச்சுமையுள்ளது
 	By role	பணிப்பங்கு வாரியாக
 	CSV table	CSV அட்டவணை
@@ -83,6 +87,7 @@
 	Cancel	ரத்துசெய்
 	Cancel Run	இயக்கத்தை ரத்துசெய்
 	Cancel run	இயக்கத்தை ரத்துசெய்
+	Canvas	முதன்மைப் பரப்பு
 	Capacity	கொள்திறன்
 	Centres	கிடைமட்ட மையங்கள்
 	Change	மாற்றம்
@@ -93,6 +98,8 @@
 	Change the estimate	மதிப்பீட்டை மாற்று
 	Changes	மாற்றங்கள்
 	Changing the time unit does not convert the times already in the model.	நேர அலகை மாற்றுவது மாதிரியில் ஏற்கெனவே உள்ள நேரங்களை மாற்றிக் கணக்கிடாது.
+	Chart	வரைபடம்
+	Chart hover	சுட்டியின் கீழ் வரைபடம்
 	Choose…	தேர்வுசெய்க…
 	Clear Menu	மெனுவை அழி
 	Close	மூடு
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ஒவ்வொரு உருப்படியும் இவற்றில், இப்போதே ஒரே நேரத்தில் முழுமையாக நிறைவேற்றக்கூடிய முதலாவதை எடுத்துக்கொள்கிறது; வெளியேறும்போது அலகுகளைத் திருப்பித் தருகிறது.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ஒவ்வொரு உருப்படியும் வந்தடையும்போது அதற்காகச் சீரற்ற முறையில் எடுக்கப்பட்ட நேரம் வரை மட்டுமே இங்கே காத்திருந்து, பின்னர் கைவிடுகிறது: "கைவிட்டவை" எனக் குறிக்கப்பட்ட வெளியேறும் வழியில் செல்கிறது, அல்லது மாதிரியை விட்டு வெளியேறுகிறது.
 	Edit	திருத்து
+	Edit themes…	தீம்களைத் திருத்து…
 	Elasticity	நெகிழ்ச்சி
 	Ends early	முன்னதாக முடிகிறது
 	Energy	ஆற்றல்
@@ -183,11 +191,14 @@
 	Gives up before service starts	சேவை தொடங்கும் முன் கைவிடுகிறது
 	Goes to	இதற்குச் செல்கிறது
 	Hands on finished parts while down	பழுதடைந்திருக்கும்போதும் முடிந்த பாகங்களை அனுப்பும்
+	Header	தலைப்புப் பட்டை
 	Help	உதவி
 	Hide Others	மற்றவற்றை மறை
 	Hide {app}	{app} ஐ மறை
+	High contrast	உயர் மாறுபாடு
 	How many	எத்தனை
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	இந்த வெளியேற்றங்களிலிருந்து வாடிக்கையாளர்கள் எத்தனை பாகங்களை விரும்புகிறார்கள்; அப்போது முடிவுகள் டாக்ட் (கிடைக்கும் நேரத்தைத் தேவையால் வகுத்தது) மற்றும் ஒவ்வொரு பணியின் சுழற்சி நேரத்தையும் காட்டும்.
+	In use	பயன்பாட்டில்
 	Inside over time	நேரப்படி உள்ளே
 	Jump	செல்
 	Jump to time	நேரத்திற்குச் செல்
@@ -301,6 +312,7 @@
 	Quality ratio	தர விகிதம்
 	Quit	வெளியேறு
 	Quit {app}	{app} இலிருந்து வெளியேறு
+	Raised surfaces	உயர்த்தப்பட்ட பரப்புகள்
 	Random	சீரற்ற
 	Rank the parameters	அளவுருக்களைத் தரவரிசைப்படுத்து
 	Ready	தயார்
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	இந்தத் தொகுதியையும் அதன் ஓட்டங்களையும் அகற்று (Delete)
 	Remove this period	இந்தக் காலத்தை அகற்று
 	Removed {id}	{id} அகற்றப்பட்டது
+	Rename	பெயர் மாற்று
 	Rename Block	தொகுதிக்குப் பெயர் மாற்று
 	Rename Model	மாதிரிக்குப் பெயர் மாற்று
 	Repair time	பழுதுபார்ப்பு நேரம்
@@ -363,6 +376,7 @@
 	Save As…	இவ்வாறு சேமி…
 	Save Model	மாதிரியைச் சேமி
 	Save changes to {name}?	{name} இல் மாற்றங்களைச் சேமிக்கவா?
+	Save name	பெயரைச் சேமி
 	Saved {file}	{file} சேமிக்கப்பட்டது
 	Scale	அளவுகோல்
 	Scrap	கழிவு
@@ -390,8 +404,10 @@
 	Share that gave up	கைவிட்டவற்றின் விகிதம்
 	Show All	அனைத்தையும் காட்டு
 	Show {id}	{id} ஐக் காட்டு
+	Side rail	பக்கப் பட்டை
 	Size	அளவிடு
 	Size the resources	வளங்களை அளவிடு
+	Soft accent	மென் முனைப்பு நிறம்
 	Source	மூலம்
 	Source: {source}	மூலம்: {source}
 	Speed	வேகம்
@@ -403,6 +419,7 @@
 	Stages (k)	படிநிலைகள் (k)
 	Standard deviation	திட்ட விலக்கம்
 	Step	படி
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	{name} இல் சேமிக்கப்படாத மாற்றங்களுடன் StochCraft மூடப்பட்டது. அவற்றைப் பெயரிடப்படாத மாதிரியாக மீட்டெடுக்கவும் அல்லது நிராகரிக்கவும்.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft, BPSim உருவகப்படுத்தல் தரவு கொண்ட BPMN அல்லது XPDL கோப்புகளிலிருந்து செயல்முறை மாதிரிகளைப் படித்து, அவற்றைப் பலமுறை தனித்தனியாகச் சோதனை செய்து, ஒவ்வொரு முடிவையும் அதன் நம்பிக்கை இடைவெளியுடன் தெரிவிக்கிறது.
 	StochCraft {version} · model {digest}	StochCraft {version} · மாதிரி {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	கவனிப்பது நிறுத்தப்பட்டது
 	Sun	ஞாயி
 	Sweep a parameter	ஒரு அளவுருவை வருடு
+	Table stripes	அட்டவணைப் பட்டைகள்
 	Takt	டாக்ட்
 	Takt time	டாக்ட் நேரம்
 	Tandem line	தொடர் பணிநிலைகள்
@@ -422,6 +440,8 @@
 	Task with a resource	வளம் தேவைப்படும் பணி
 	Task with shared resources	பகிர்ந்த வளங்கள் தேவைப்படும் பணி
 	Text	உரை
+	Text on accent	முனைப்பு நிறத்தில் உரை
+	Text on header	தலைப்புப் பட்டையில் உரை
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	இடைவெளி {share} இலக்கு பங்குக்குக் கீழே செல்கிறது, எனவே பங்கு அடையப்பட்டது 95% நம்பிக்கையுடன் காட்டப்படவில்லை; கூடுதல் மீள் இயக்கங்கள் அதைக் குறுக்கும்.
 	The last task with a resource it finished at	பாகம் கடைசியாகக் கடந்த வளம் தேவைப்படும் பணி
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	நிறுத்த நிபந்தனை வரையிலான சராசரி நேரம் அதை அடைந்த மீள் இயக்கங்கள் மீது மட்டுமே; மற்றவை அவற்றின் நேர வரம்பு வரை இயங்கின.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	மாதிரியில் இன்னும் நாட்காட்டிகள் இல்லை.
 	The model now has the units sizing found	அளவிடுதல் கண்டறிந்த அலகுகள் இப்போது மாதிரியில் உள்ளன
 	The model: its experiment, connections and problems	மாதிரி: அதன் சோதனை, இணைப்புகள், சிக்கல்கள்
+	The name is empty or already used.	பெயர் காலியாக உள்ளது அல்லது ஏற்கெனவே பயன்பாட்டில் உள்ளது.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ஒவ்வொரு மதிப்புக்கும் சமமான அல்லது குறைவான மீள் இயக்கங்களின் பங்கு. பட்டை உண்மையான பரவலை {confidence} நம்பகத்தன்மையுடன் கொண்டுள்ளது.
 	The values are numbers, separated by semicolons or spaces	மதிப்புகள் அரைப்புள்ளி அல்லது இடைவெளியால் பிரிக்கப்பட்ட எண்கள்
 	The whole clock	முழு நேரமும்
+	Themes	தீம்கள்
 	This block has a warning	இந்தத் தொகுதியில் ஓர் எச்சரிக்கை உள்ளது
 	This block has an error	இந்தத் தொகுதியில் ஒரு பிழை உள்ளது
 	This run	இந்த இயக்கம்
@@ -478,12 +500,15 @@
 	View	பார்வை
 	Waiting over time	நேரப்படி காத்திருப்பவை
 	Waiting room	காத்திருப்பு அறை
+	Warm	வெதுவெதுப்பான
 	Warm-up	தொடக்கச் சீராக்க நேரம்
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	தொடக்கச் சீராக்கம் {warmup} {unit}; அதன் பின் {duration} {unit} அளவிடப்பட்டது
 	Warning	எச்சரிக்கை
 	Watch a Run	ஓர் இயக்கத்தைக் கவனி
 	Watch a run	ஓர் இயக்கத்தைக் கவனி
 	Watching replication 1	மீள் இயக்கம் 1 கவனிக்கப்படுகிறது
+	Weak text	மங்கிய உரை
+	Weak text on header	தலைப்புப் பட்டையில் மங்கிய உரை
 	Wed	புத
 	Weekly	வாரந்தோறும்
 	Weibull	வைபுல்
@@ -555,6 +580,7 @@
 	{n} waiting	{n} காத்திருக்கின்றன
 	{n} {unit} per second	வினாடிக்கு {n} {unit}
 	{property} (set to, mean)	{property} (அமைக்கப்பட்ட மதிப்பு, சராசரி)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – பின்னணி {background}: {ratio}:1, தேவை {min}:1
 	{title}: now {now}, at most {most}	{title}: இப்போது {now}, அதிகபட்சம் {most}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± என்பது மீள்சோதனைகளின் சராசரிக்கான 95% Student-t நம்பிக்கை இடைவெளியின் அகலத்தில் பாதியாகும்.
