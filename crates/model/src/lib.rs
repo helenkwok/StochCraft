@@ -178,6 +178,9 @@ pub enum ElementKind {
         /// OEE results: its mean is the plan. Not simulated; `None`: effectiveness and OEE are
         /// not reported. A StochCraft vendor extension (`stochcraft:plannedRunTime`).
         planned_run_time: Option<Dist>,
+        /// How long an entity waits before it gives up (reneging); `None`: entities wait for as
+        /// long as it takes. See [`Patience`].
+        patience: Option<Patience>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
@@ -352,6 +355,55 @@ impl Transfer {
     }
 }
 
+/// How long an entity waits at a server before it gives up, drawn for each entity as it enters
+/// (a StochCraft vendor extension, `stochcraft:patience`, since BPSim has no parameter for it).
+/// The clock starts as it enters the server, before any transfer into it.
+///
+/// An entity that gives up is counted as abandoned (not as left) and takes the server's way out
+/// marked [`Connection::abandoned`], or leaves the model if there is none. A unit taking it at
+/// the deadline itself serves it. A patience of 0 gives up unless a unit is free at once
+/// (Erlang's loss system); negative draws count as 0. The model is Garnett, Mandelbaum and
+/// Reiman's M/M/N+M (Manufacturing & Service Operations Management 4(3), 2002) when patience,
+/// arrivals and service are exponential.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Patience {
+    pub time: Dist,
+    pub until: PatienceUntil,
+}
+
+/// What an entity's patience must see happen in time.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum PatienceUntil {
+    /// Its service starting (a caller who hangs up while on hold): once a unit takes it, it
+    /// stays.
+    #[default]
+    Start,
+    /// Its service being done (a client that times out): if the deadline passes while a unit
+    /// serves it, or while the unit holds it blocked after service, it gives up then, and a
+    /// stand-in (a new entity with its properties, creation time and last server) takes the
+    /// abandoned way at once; the unit finishes the job anyway (wasted work) and discards it.
+    Done,
+}
+
+impl PatienceUntil {
+    /// The name in files and on the wire.
+    pub fn name(self) -> &'static str {
+        match self {
+            PatienceUntil::Start => "start",
+            PatienceUntil::Done => "done",
+        }
+    }
+
+    /// The value named `s`.
+    pub fn from_name(s: &str) -> Option<Self> {
+        match s {
+            "start" => Some(PatienceUntil::Start),
+            "done" => Some(PatienceUntil::Done),
+            _ => None,
+        }
+    }
+}
+
 /// How an exclusive gateway chooses the way each entity takes.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Routing {
@@ -510,6 +562,7 @@ impl ElementKind {
                 transfer,
                 setup,
                 planned_run_time,
+                patience,
                 ..
             } => {
                 let mut d = vec![("service", service)];
@@ -526,6 +579,9 @@ impl ElementKind {
                 }
                 if let Some(p) = planned_run_time {
                     d.push(("planned_run_time", p));
+                }
+                if let Some(p) = patience {
+                    d.push(("patience", &p.time));
                 }
                 d
             }
@@ -683,6 +739,10 @@ pub struct Connection {
     /// last server it finished at, for the OEE quality results. A StochCraft vendor extension
     /// (`stochcraft:rework`).
     pub rework: bool,
+    /// The way out of a server with a [`Patience`] that entities giving up take (a call back
+    /// later, a retry), apart from its ordinary way out. A StochCraft vendor extension
+    /// (`stochcraft:abandoned`).
+    pub abandoned: bool,
 }
 
 /// The customer demand a sink serves, for takt: `quantity` parts each `per` period. Takt is the
@@ -756,6 +816,7 @@ impl Connection {
             condition: None,
             quantity: None,
             rework: false,
+            abandoned: false,
         }
     }
 }
@@ -966,6 +1027,16 @@ pub enum Problem {
     },
     /// A planned run time per item whose mean is not above 0.
     PlannedRunTimeNotPositive,
+    /// A patience whose mean is below 0.
+    PatienceNegative,
+    /// A connection marked for entities that give up leaves an element with no patience.
+    AbandonedWithoutPatience {
+        connection: ElementId,
+    },
+    /// Several ways out of one server are marked for entities that give up.
+    SeveralAbandonedWays {
+        count: usize,
+    },
     /// A demand whose quantity is not a number above 0.
     DemandNotPositive,
     /// A demand per shift with no calendar to say what a shift is.
@@ -1135,6 +1206,9 @@ impl Problem {
             Problem::ChangesWithoutProperty => "changes_without_property",
             Problem::ScrapNotAgainstServer { .. } => "scrap_not_against_server",
             Problem::PlannedRunTimeNotPositive => "planned_run_time_not_positive",
+            Problem::PatienceNegative => "patience_negative",
+            Problem::AbandonedWithoutPatience { .. } => "abandoned_without_patience",
+            Problem::SeveralAbandonedWays { .. } => "several_abandoned_ways",
             Problem::DemandNotPositive => "demand_not_positive",
             Problem::ShiftWithoutCalendar => "shift_without_calendar",
             Problem::DemandCalendarUnknown { .. } => "demand_calendar_unknown",
@@ -1297,6 +1371,18 @@ impl std::fmt::Display for Diagnostic {
             Problem::PlannedRunTimeNotPositive => {
                 write!(f, "its planned run time per item must have a mean above 0")
             }
+            Problem::PatienceNegative => {
+                write!(f, "its patience must have a mean of 0 or more")
+            }
+            Problem::AbandonedWithoutPatience { connection } => write!(
+                f,
+                "connection `{connection}` is the way for entities that give up, but they come \
+                 only from a task with a resource of its own and a patience"
+            ),
+            Problem::SeveralAbandonedWays { count } => write!(
+                f,
+                "{count} of its ways out are for entities that give up; at most one can be"
+            ),
             Problem::BadProbability { value } => {
                 write!(f, "probability {value} must be between 0 and 1")
             }
@@ -1502,6 +1588,20 @@ impl Model {
         let elements: BTreeMap<&ElementId, &Element> =
             self.elements.iter().map(|e| (&e.id, e)).collect();
         let mut outgoing: BTreeMap<&ElementId, Vec<&ElementId>> = BTreeMap::new();
+        // The ways entities take after their service: all but a patient server's way for those
+        // who give up, which entities leave by on their own (not a unit holding them).
+        let mut served: BTreeMap<&ElementId, Vec<&ElementId>> = BTreeMap::new();
+        let patient = |id: &ElementId| {
+            elements.get(id).is_some_and(|e| {
+                matches!(
+                    e.kind,
+                    ElementKind::Server {
+                        patience: Some(_),
+                        ..
+                    }
+                )
+            })
+        };
         for c in &self.connections {
             let mut ok = true;
             for end in [&c.from, &c.to] {
@@ -1547,12 +1647,34 @@ impl Model {
                 ));
                 ok = false;
             }
+            if c.abandoned && !patient(&c.from) {
+                out.push(Diagnostic::error(
+                    Some(&c.id),
+                    Problem::AbandonedWithoutPatience {
+                        connection: c.id.clone(),
+                    },
+                ));
+            }
             if ok {
                 outgoing.entry(&c.from).or_default().push(&c.to);
+                if !(c.abandoned && patient(&c.from)) {
+                    served.entry(&c.from).or_default().push(&c.to);
+                }
             }
         }
         for e in &self.elements {
-            let outs = outgoing.get(&e.id).map_or(0, Vec::len);
+            let outs = served.get(&e.id).map_or(0, Vec::len);
+            let abandoned = self
+                .connections
+                .iter()
+                .filter(|c| c.abandoned && c.from == e.id)
+                .count();
+            if abandoned > 1 && patient(&e.id) {
+                out.push(Diagnostic::error(
+                    Some(&e.id),
+                    Problem::SeveralAbandonedWays { count: abandoned },
+                ));
+            }
             match e.kind {
                 ElementKind::Sink { .. } => {}
                 _ if outs == 0 => out.push(Diagnostic::error(Some(&e.id), Problem::NoOutput)),
@@ -1645,6 +1767,14 @@ impl Model {
                     Problem::PlannedRunTimeNotPositive,
                 ));
             }
+            if let ElementKind::Server {
+                patience: Some(p), ..
+            } = &e.kind
+                && p.time.check().is_ok()
+                && p.time.mean().is_some_and(|m| m < 0.0)
+            {
+                out.push(Diagnostic::error(Some(&e.id), Problem::PatienceNegative));
+            }
             if let ElementKind::Server { setup: Some(s), .. } = &e.kind {
                 match &s.on_change_of {
                     Some(name) if !self.property_types().contains_key(name) => {
@@ -1691,7 +1821,7 @@ impl Model {
         self.check_properties(&mut out);
         self.check_routing(&mut out);
         self.check_reachability(&outgoing, &mut out);
-        self.check_buffers(&outgoing, &mut out);
+        self.check_buffers(&served, &mut out);
         self.check_resources(&mut out);
         self.check_load(&mut out);
         // Stable order: errors first, then as found (model order).
@@ -2281,10 +2411,12 @@ impl Model {
     /// (Negative service draws count as 0, which only makes the true load higher.)
     fn check_load(&self, out: &mut Vec<Diagnostic>) {
         for e in &self.elements {
+            // Entities that give up keep a patient server's queue from growing without limit.
             let ElementKind::Server {
                 capacity,
                 service,
                 queue_capacity: None,
+                patience: None,
                 ..
             } = &e.kind
             else {
@@ -2664,6 +2796,7 @@ mod tests {
             condition: None,
             quantity: None,
             rework: false,
+            abandoned: false,
             id: id(i),
             from: id(from),
             to: id(to),
@@ -2841,6 +2974,7 @@ mod tests {
                         power: None,
                         setup: None,
                         planned_run_time: None,
+                        patience: None,
                     },
                 ),
                 el(
@@ -2934,6 +3068,7 @@ mod tests {
             power: None,
             setup: None,
             planned_run_time: None,
+            patience: None,
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -3010,6 +3145,7 @@ mod tests {
                 power: None,
                 setup: None,
                 planned_run_time: None,
+                patience: None,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

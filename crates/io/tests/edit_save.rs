@@ -311,6 +311,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             power: None,
             setup: None,
             planned_run_time: None,
+            patience: None,
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -332,6 +333,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             power: None,
             setup: None,
             planned_run_time: None,
+            patience: None,
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -600,6 +602,7 @@ fn new_ids_never_clash_with_the_files_other_ids() {
             power: None,
             setup: None,
             planned_run_time: None,
+            patience: None,
         };
     });
     let t = text(&saved);
@@ -1279,6 +1282,7 @@ fn new_and_changed_servers_carry_their_buffer() {
             power: None,
             setup: None,
             planned_run_time: None,
+            patience: None,
         };
         set_queue(m, "weld", Some(1));
     });
@@ -1498,5 +1502,48 @@ fn unmarking_inherited_rework_writes_false() {
             .connections
             .iter()
             .any(|c| c.id.as_str() == "f2" && c.rework)
+    );
+}
+
+/// A way for entities that give up, marked in a scenario the opened one inherits, is unmarked
+/// with an explicit `false`, since leaving it out would read the inherited `true` back; the
+/// parent keeps its own.
+#[test]
+fn unmarking_an_inherited_abandoned_way_writes_false() {
+    // Only in "base": "two-clerks" has its own clerk parameters too.
+    let original = text(&file("mm1.bpmn")).replacen(
+        r#"          <bpsim:ElementParameters elementRef="clerk">
+            <bpsim:ResourceParameters>"#,
+        r#"          <bpsim:ElementParameters elementRef="f2">
+            <bpsim:VendorExtension name="stochcraft:abandoned" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="true"/>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="clerk">
+            <bpsim:ResourceParameters>"#,
+        1,
+    );
+    assert_ne!(original, text(&file("mm1.bpmn")), "the way is added");
+    let child =
+        read_scenario(original.as_bytes(), Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = child.model.clone();
+    for c in &mut m.connections {
+        if c.id.as_str() == "f2" {
+            assert!(c.abandoned, "the inherited way is read");
+            c.abandoned = false;
+        }
+    }
+    let saved = child.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        text(&saved).contains(r#"stochcraft:value="false""#),
+        "{}",
+        text(&saved)
+    );
+    let back = read_scenario(&saved, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(back.model, m);
+    let base = read_scenario(&saved, Some("base")).unwrap_or_else(|e| panic!("{e}"));
+    assert!(
+        base.model
+            .connections
+            .iter()
+            .any(|c| c.id.as_str() == "f2" && c.abandoned)
     );
 }

@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Interval 95% dari bagian yang memenuhi target: {lo} sampai {hi}
 	95th percentile	Persentil ke-95
 	95th percentile {value}	persentil ke-95 {value}
+	A caller on hold: once a unit takes it, the entity stays.	Penelepon yang ditahan: begitu sebuah unit mengambilnya, entitas tetap tinggal.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Klien yang kehabisan waktu (timeout): jika waktunya habis selama layanan, ia menyerah saat itu, dan unit tetap menyelesaikan pekerjaannya (pekerjaan sia-sia).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Berkas baru hanya berisi model: apa yang tidak dipahami StochCraft di {file} tidak disertakan.
+	Abandoned	Menyerah
+	Abandoned on {id}	Menyerah di {id}
 	About StochCraft	Tentang StochCraft
 	About {app}	Tentang {app}
 	Across the range it changed by {change}: more than chance would explain.	Di seluruh rentang berubah sebesar {change}: lebih dari yang bisa dijelaskan oleh kebetulan.
@@ -134,6 +138,7 @@
 	Duration	Durasi
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Setiap analisis menjalankan eksperimen beberapa kali dengan benih acak yang sama, sehingga perbedaan berasal dari perubahan, bukan kebetulan. Ini bisa memakan waktu.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Setiap entitas mengambil alternatif pertama di antara ini yang dapat dipenuhi sekarang, sekaligus semuanya, dan mengembalikan unitnya saat meninggalkan tugas.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Setiap entitas menunggu di sini paling lama selama waktu yang diundi untuknya saat tiba, lalu menyerah: entitas mengambil jalan keluar bertanda "Menyerah", atau meninggalkan model.
 	Edit	Edit
 	Elasticity	Elastisitas
 	Ends early	Berakhir lebih awal
@@ -141,7 +146,9 @@
 	Energy per part	Energi per komponen
 	Enough: {units}, meeting the target in {p} of replications	Cukup: {units}, target terpenuhi pada {p} replikasi
 	Entered	Masuk
+	Entities give up waiting	Entitas berhenti menunggu
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitas yang masih di dalam pada akhir replikasi tidak dihitung dalam waktu tunggu rata-rata dan waktu rata-rata dalam sistem.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitas yang berhenti menunggu mengambil alur ini (misalnya untuk mencoba lagi nanti); yang lain mengambil jalan keluar lain dari tugas.
 	Erlang	Erlang
 	Error	Galat
 	Estimate from three values…	Perkirakan dari tiga nilai…
@@ -171,6 +178,9 @@
 	Fri	Jum
 	From	Dari
 	Gamma	Gamma
+	Gave up	Menyerah
+	Gives up before it is done	Menyerah sebelum selesai
+	Gives up before service starts	Menyerah sebelum layanan dimulai
 	Goes to	Menuju ke
 	Hands on finished parts while down	Tetap meneruskan komponen jadi saat rusak
 	Help	Bantuan
@@ -207,6 +217,7 @@
 	Mean time blocked	Waktu terblokir rata-rata
 	Mean time in system	Waktu rata-rata dalam sistem
 	Mean wait	Waktu tunggu rata-rata
+	Mean wait before giving up	Waktu tunggu rata-rata sebelum menyerah
 	Metric	Metrik
 	Middles	Tengah vertikal
 	Minimise	Minimalkan
@@ -265,6 +276,7 @@
 	Parts wanted	Komponen diinginkan
 	Parts wanted is a number above 0	Komponen diinginkan harus berupa angka di atas 0
 	Paste	Tempel
+	Patience	Kesabaran
 	Pause	Jeda
 	Per	Periode
 	Per shift needs a calendar: each period it is active is a shift.	"Per sif" memerlukan kalender: setiap periode saat kalender itu aktif adalah satu sif.
@@ -374,6 +386,8 @@
 	Share	Bagian
 	Share of arrivals lost	Proporsi kedatangan yang hilang
 	Share of units blocked	Proporsi unit yang terblokir
+	Share of work wasted	Proporsi pekerjaan sia-sia
+	Share that gave up	Proporsi yang menyerah
 	Show All	Tampilkan semua
 	Show {id}	Tampilkan {id}
 	Size	Tentukan ukuran
@@ -424,6 +438,7 @@
 	Three-point estimate	Perkiraan tiga titik
 	Thu	Kam
 	Time available	Waktu tersedia
+	Time before giving up	Waktu sebelum menyerah
 	Time between arrivals	Waktu antar kedatangan
 	Time blocked	Waktu terblokir
 	Time failed	Waktu rusak
@@ -479,6 +494,7 @@
 	Whole number	Bilangan bulat
 	Window	Jendela
 	With every time at its mean: {units}	Dengan setiap waktu pada rata-ratanya: {units}
+	Work wasted on those who gave up	Pekerjaan sia-sia untuk yang menyerah
 	XPDL with BPSim	XPDL dengan BPSim
 	Yes or no	Ya atau tidak
 	Your changes will be lost if you don't save them.	Perubahan Anda akan hilang jika tidak disimpan.

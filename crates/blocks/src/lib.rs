@@ -44,7 +44,8 @@ use std::collections::{BTreeMap, BTreeSet};
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 pub use stochcraft_model::{
-    Breakdown, Change, Demand, DemandPer, Power, Routing, Scrap, Setup, Transfer,
+    Breakdown, Change, Demand, DemandPer, Patience, PatienceUntil, Power, Routing, Scrap, Setup,
+    Transfer,
 };
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
@@ -157,6 +158,9 @@ struct Route {
     default: bool,
     /// Entities taking it are rework.
     rework: bool,
+    /// Out of a server with a patience: the way entities that give up take, not its ordinary
+    /// way out.
+    abandoned: bool,
 }
 
 /// A model checked and ready to run.
@@ -389,6 +393,14 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                         },
                         default: default == Some(&c.id),
                         rework: c.rework,
+                        abandoned: c.abandoned
+                            && matches!(
+                                e.kind,
+                                ElementKind::Server {
+                                    patience: Some(_),
+                                    ..
+                                }
+                            ),
                     })
                 })
                 .collect()
@@ -512,6 +524,24 @@ pub enum Metric {
     /// Servers with a finite buffer: the fraction of arrivals lost (lost over lost plus
     /// entered).
     LossProbability,
+    /// Servers with a patience: entities that gave up, counted once each as they give up
+    /// (waiting, or in transfer here when the transfer ends; with patience until done, in
+    /// service or held blocked after it, at the deadline). They do not count as left, so every
+    /// server balances: entered = left + lost + abandoned + still inside, except that an entity
+    /// that gave up in service counts as abandoned and as inside until its unit discards it.
+    Abandoned,
+    /// Servers with a patience: the share of entities that gave up, abandoned over abandoned
+    /// plus left.
+    AbandonedShare,
+    /// Servers with a patience: the mean time those that gave up had been here when they did
+    /// (their patience), from entering, transfer included.
+    AbandonedWait,
+    /// Servers with patience until done: the service time (the time drawn for the job, and
+    /// its setup) spent on jobs whose entity gave up before they were done, in time units.
+    Wasted,
+    /// Servers with patience until done: [`Metric::Wasted`] over the time the units spent
+    /// processing and setting up.
+    WastedShare,
     /// Servers whose units fail: time-average fraction of units up (not failed or under
     /// repair).
     Availability,
@@ -591,7 +621,7 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 33] = [
+    pub const ALL: [Metric; 38] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -605,6 +635,11 @@ impl Metric {
         Metric::BlockingProbability,
         Metric::Lost,
         Metric::LossProbability,
+        Metric::Abandoned,
+        Metric::AbandonedShare,
+        Metric::AbandonedWait,
+        Metric::Wasted,
+        Metric::WastedShare,
         Metric::Availability,
         Metric::TimeOffShift,
         Metric::TimeProcessing,
@@ -648,6 +683,11 @@ impl Metric {
             Metric::BlockingProbability => "blocking_probability",
             Metric::Lost => "lost",
             Metric::LossProbability => "loss_probability",
+            Metric::Abandoned => "abandoned",
+            Metric::AbandonedShare => "abandoned_share",
+            Metric::AbandonedWait => "abandoned_wait",
+            Metric::Wasted => "wasted",
+            Metric::WastedShare => "wasted_share",
             Metric::Availability => "availability",
             Metric::TimeOffShift => "time_off_shift",
             Metric::TimeProcessing => "time_processing",
@@ -732,6 +772,14 @@ pub struct ElementReport {
     pub specific_energy: Option<f64>,
     pub lost: Option<u64>,
     pub loss_probability: Option<f64>,
+    /// Servers with a patience: [`Metric::Abandoned`], [`Metric::AbandonedShare`] and
+    /// [`Metric::AbandonedWait`].
+    pub abandoned: Option<u64>,
+    pub abandoned_share: Option<f64>,
+    pub abandoned_wait: Option<f64>,
+    /// Servers with patience until done: [`Metric::Wasted`] and [`Metric::WastedShare`].
+    pub wasted: Option<f64>,
+    pub wasted_share: Option<f64>,
     /// For each property the element assigns, in the element's order: the mean of the values
     /// it assigned (`None` when it assigned none, or the property holds text).
     pub properties: Vec<(String, Option<f64>)>,
@@ -754,6 +802,11 @@ impl ElementReport {
             Metric::BlockingProbability => self.blocking_probability,
             Metric::Lost => self.lost.map(|n| n as f64),
             Metric::LossProbability => self.loss_probability,
+            Metric::Abandoned => self.abandoned.map(|n| n as f64),
+            Metric::AbandonedShare => self.abandoned_share,
+            Metric::AbandonedWait => self.abandoned_wait,
+            Metric::Wasted => self.wasted,
+            Metric::WastedShare => self.wasted_share,
             Metric::Availability => self.availability,
             Metric::TimeOffShift => self.time_off_shift,
             Metric::TimeProcessing => self.time_processing,
@@ -1074,6 +1127,8 @@ pub struct Builder {
     quantities: BTreeMap<(BlockId, BlockId), u32>,
     /// Connections whose entities are rework.
     reworks: BTreeSet<(BlockId, BlockId)>,
+    /// Ways out for entities that give up, besides each server's ordinary one.
+    abandoned: Vec<(BlockId, BlockId)>,
     /// Shared resource pools.
     pools: Vec<ResourcePool>,
     calendars: Vec<Calendar>,
@@ -1135,6 +1190,7 @@ impl Builder {
                 power: None,
                 setup: None,
                 planned_run_time: None,
+                patience: None,
             },
         )
     }
@@ -1162,6 +1218,7 @@ impl Builder {
                 power: None,
                 setup: None,
                 planned_run_time: None,
+                patience: None,
             },
         )
     }
@@ -1258,6 +1315,21 @@ impl Builder {
         {
             *p = Some(planned);
         }
+    }
+
+    /// Gives server `block` a patience: entities that wait longer give up ([`Patience`]).
+    pub fn patience(&mut self, block: BlockId, patience: Patience) {
+        if let Some((_, ElementKind::Server { patience: p, .. }, _)) =
+            self.elements.get_mut(block.0)
+        {
+            *p = Some(patience);
+        }
+    }
+
+    /// Gives server `from` a second way out, to `to`, that the entities giving up take
+    /// ([`Builder::patience`]); [`Builder::connect`] still sets its ordinary way out.
+    pub fn abandoned(&mut self, from: BlockId, to: BlockId) {
+        self.abandoned.push((from, to));
     }
 
     /// Gives server `block` a setup: before every job, or a changeover ([`Setup`]).
@@ -1469,21 +1541,34 @@ impl Builder {
             let name = self.elements.get(i).map_or("", |(n, _, _)| n.as_str());
             ElementId::new(name).unwrap_or_else(|| ElementId::unchecked(name))
         };
-        let mut connections: Vec<&(BlockId, BlockId, Option<f64>, Option<String>)> =
-            self.connections.iter().collect();
-        connections.sort_by_key(|(from, to, ..)| (*from, *to));
+        // From, to, probability, condition, and whether it is the way for those who give up.
+        type Flow = (BlockId, BlockId, Option<f64>, Option<String>, bool);
+        let mut connections: Vec<Flow> = self
+            .connections
+            .iter()
+            .map(|(f, t, p, c)| (*f, *t, *p, c.clone(), false))
+            .chain(
+                self.abandoned
+                    .iter()
+                    .map(|(f, t)| (*f, *t, None, None, true)),
+            )
+            .collect();
+        connections.sort_by_key(|(from, to, .., abandoned)| (*from, *abandoned, *to));
         let connections: Vec<Connection> = connections
             .into_iter()
             .enumerate()
-            .map(|(n, (from, to, probability, condition))| Connection {
-                id: ElementId::unchecked(&format!("flow-{}", n + 1)),
-                from: id(from.0),
-                to: id(to.0),
-                probability: *probability,
-                condition: condition.clone(),
-                quantity: self.quantities.get(&(*from, *to)).copied(),
-                rework: self.reworks.contains(&(*from, *to)),
-            })
+            .map(
+                |(n, (from, to, probability, condition, abandoned))| Connection {
+                    id: ElementId::unchecked(&format!("flow-{}", n + 1)),
+                    from: id(from.0),
+                    to: id(to.0),
+                    probability,
+                    condition,
+                    quantity: self.quantities.get(&(from, to)).copied(),
+                    rework: self.reworks.contains(&(from, to)),
+                    abandoned,
+                },
+            )
             .collect();
         let elements = self
             .elements

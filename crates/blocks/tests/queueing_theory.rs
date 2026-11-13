@@ -38,6 +38,7 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
                     power: None,
                     setup: None,
                     planned_run_time: None,
+                    patience: None,
                 },
             ),
             element(

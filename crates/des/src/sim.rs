@@ -26,6 +26,9 @@ type ProcFuture = Pin<Box<dyn Future<Output = ()>>>;
 /// the same instant, so a released unit goes to the waiter before anyone else asks.
 pub(crate) const WAKE_PRIORITY: i64 = 1;
 
+/// Priority of a [`Ctx::hold_late`] timer: behind every ordinary event at the same instant.
+pub(crate) const LATE_PRIORITY: i64 = -1;
+
 /// A live process.
 struct Proc {
     /// Its future; `None` while it is being polled.
@@ -393,7 +396,26 @@ impl Ctx {
             ctx: self.clone(),
             delay: clamp_delay(delay),
             until: None,
+            priority: 0,
         }
+    }
+
+    /// Waits `delay` time units, then wakes after every other event at that instant, including
+    /// those scheduled during it (a deadline: whatever else happens at the deadline itself
+    /// happens first, as a hand-over beats a deadline in [`crate::Store::get_within`]). Timers
+    /// of several late holds ending together wake in the order they were set. A negative or
+    /// non-finite delay waits zero time, still behind the other events now.
+    pub fn hold_late(&self, delay: f64) -> Hold {
+        Hold {
+            priority: LATE_PRIORITY,
+            ..self.hold(delay)
+        }
+    }
+
+    /// Starts a process at the current time with tag `tag` (see [`Sim::spawn_tagged`]), from
+    /// inside another process. Returns its id.
+    pub fn spawn_tagged(&self, tag: u64, process: impl Future<Output = ()> + 'static) -> u64 {
+        self.spawn_with(Some(tag), process)
     }
 
     /// Waits `delay` time units unless the process is interrupted first ([`Ctx::interrupt`],
@@ -454,12 +476,17 @@ impl Ctx {
     /// Schedules the running process to wake at `time` (at least now). Returns `false` outside
     /// a process.
     pub(crate) fn wake_current_at(&self, time: f64) -> bool {
+        self.wake_current_at_priority(time, 0)
+    }
+
+    /// As [`Ctx::wake_current_at`], at `priority` among the events at that time.
+    fn wake_current_at_priority(&self, time: f64, priority: i64) -> bool {
         let mut k = self.kernel.borrow_mut();
         let Some(pid) = k.current else {
             return false;
         };
         let time = time.max(k.queue.now());
-        k.schedule(pid, time, 0);
+        k.schedule(pid, time, priority);
         true
     }
 
@@ -497,12 +524,14 @@ pub(crate) fn deadline(now: f64, patience: f64) -> Option<f64> {
     }
 }
 
-/// The future returned by [`Ctx::hold`].
+/// The future returned by [`Ctx::hold`] and [`Ctx::hold_late`].
 pub struct Hold {
     ctx: Ctx,
     delay: f64,
     /// When the hold ends, once it has started.
     until: Option<f64>,
+    /// Its timer's priority among the events at that time.
+    priority: i64,
 }
 
 impl Future for Hold {
@@ -515,7 +544,7 @@ impl Future for Hold {
             Some(until) => until,
             None => now + self.delay,
         };
-        if !self.ctx.wake_current_at(until) {
+        if !self.ctx.wake_current_at_priority(until, self.priority) {
             // Polled outside the simulation: nothing to wait on.
             return Poll::Ready(());
         }
@@ -608,6 +637,45 @@ mod tests {
         sim.run();
         assert_eq!(*log.borrow(), [0.0, 2.0, 2.5]);
         assert_eq!(sim.live_processes(), 0);
+    }
+
+    /// A late hold ends after every other event at its time, even one scheduled at that time by
+    /// a process that woke then; a late hold of 0 still waits for the others now.
+    #[test]
+    fn hold_late_wakes_after_everything_else_at_that_time() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let log = Rc::new(RefCell::new(Vec::new()));
+        let (c, l) = (ctx.clone(), Rc::clone(&log));
+        sim.spawn(async move {
+            c.hold_late(2.0).await;
+            l.borrow_mut().push(("late", c.now()));
+            c.hold_late(0.0).await;
+            l.borrow_mut().push(("late again", c.now()));
+        });
+        let (c, l) = (ctx.clone(), Rc::clone(&log));
+        sim.spawn(async move {
+            c.hold(2.0).await;
+            l.borrow_mut().push(("on time", c.now()));
+            // Started at 2, behind the late timer in scheduling order.
+            let (c2, l2) = (c.clone(), Rc::clone(&l));
+            c.spawn(async move {
+                l2.borrow_mut().push(("started", c2.now()));
+                c2.hold(0.0).await;
+                l2.borrow_mut().push(("held 0", c2.now()));
+            });
+        });
+        sim.run();
+        assert_eq!(
+            *log.borrow(),
+            [
+                ("on time", 2.0),
+                ("started", 2.0),
+                ("held 0", 2.0),
+                ("late", 2.0),
+                ("late again", 2.0)
+            ]
+        );
     }
 
     #[test]

@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95-%-Intervall des Anteils, der das Ziel erreicht: {lo} bis {hi}
 	95th percentile	95. Perzentil
 	95th percentile {value}	95. Perzentil {value}
+	A caller on hold: once a unit takes it, the entity stays.	Ein Anrufer in der Warteschleife: Sobald eine Einheit ihn übernimmt, bleibt die Entität.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Ein Client mit Zeitüberschreitung: Läuft seine Zeit während der Bearbeitung ab, gibt er dann auf, und die Einheit erledigt den Auftrag trotzdem (verschwendete Arbeit).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Die neue Datei enthält nur das Modell: Was StochCraft in {file} nicht versteht, entfällt.
+	Abandoned	Abgebrochen
+	Abandoned on {id}	Abgebrochen bei {id}
 	About StochCraft	Über StochCraft
 	About {app}	Über {app}
 	Across the range it changed by {change}: more than chance would explain.	Über den Bereich änderte es sich um {change}: mehr, als der Zufall erklären würde.
@@ -134,6 +138,7 @@
 	Duration	Dauer
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Jede Analyse führt das Experiment mehrmals mit demselben Startwert aus, sodass die Unterschiede von der Änderung kommen, nicht vom Zufall. Das kann eine Weile dauern.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jede Entität belegt die erste dieser Alternativen, die sich jetzt erfüllen lässt, vollständig auf einmal und gibt die Einheiten zurück, wenn sie den Block verlässt.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Jede Entität wartet hier höchstens eine Zeit, die bei ihrer Ankunft zufällig für sie gezogen wird, und gibt dann auf: Sie nimmt den als „Abgebrochen“ markierten Ausgang oder verlässt das Modell.
 	Edit	Bearbeiten
 	Elasticity	Elastizität
 	Ends early	Endet früher
@@ -141,7 +146,9 @@
 	Energy per part	Energie je Teil
 	Enough: {units}, meeting the target in {p} of replications	Genug: {units}, das Ziel wird in {p} der Replikationen erreicht
 	Entered	Eingetreten
+	Entities give up waiting	Entitäten geben das Warten auf
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Einheiten, die am Ende einer Replikation noch im System sind, gehen nicht in die mittlere Wartezeit und die mittlere Verweilzeit im System ein.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitäten, die das Warten aufgeben, nehmen diese Verbindung (etwa um es später erneut zu versuchen); die anderen nehmen den anderen Ausgang der Aufgabe.
 	Erlang	Erlang
 	Error	Fehler
 	Estimate from three values…	Aus drei Werten schätzen…
@@ -171,6 +178,9 @@
 	Fri	Fr
 	From	Von
 	Gamma	Gamma
+	Gave up	Aufgegeben
+	Gives up before it is done	Gibt vor dem Ende der Bearbeitung auf
+	Gives up before service starts	Gibt vor Beginn der Bearbeitung auf
 	Goes to	Geht zu
 	Hands on finished parts while down	Gibt fertige Teile auch im Ausfall weiter
 	Help	Hilfe
@@ -207,6 +217,7 @@
 	Mean time blocked	Mittlere Blockierungszeit
 	Mean time in system	Mittlere Verweilzeit im System
 	Mean wait	Mittlere Wartezeit
+	Mean wait before giving up	Mittlere Wartezeit bis zum Aufgeben
 	Metric	Kennzahl
 	Middles	Vertikal zentriert
 	Minimise	Minimieren
@@ -265,6 +276,7 @@
 	Parts wanted	Gewünschte Teile
 	Parts wanted is a number above 0	Die Anzahl gewünschter Teile ist eine Zahl über 0
 	Paste	Einfügen
+	Patience	Geduld
 	Pause	Pause
 	Per	Zeitraum
 	Per shift needs a calendar: each period it is active is a shift.	„je Schicht“ braucht einen Kalender: Jeder Zeitraum, in dem er aktiv ist, ist eine Schicht.
@@ -374,6 +386,8 @@
 	Share	Anteil
 	Share of arrivals lost	Anteil verlorener Ankünfte
 	Share of units blocked	Anteil blockierter Einheiten
+	Share of work wasted	Anteil verschwendeter Arbeit
+	Share that gave up	Anteil, der aufgegeben hat
 	Show All	Alle einblenden
 	Show {id}	{id} anzeigen
 	Size	Bemessen
@@ -424,6 +438,7 @@
 	Three-point estimate	Dreipunktschätzung
 	Thu	Do
 	Time available	Verfügbare Zeit
+	Time before giving up	Zeit bis zum Aufgeben
 	Time between arrivals	Zeit zwischen Ankünften
 	Time blocked	Zeit blockiert
 	Time failed	Zeit im Ausfall
@@ -479,6 +494,7 @@
 	Whole number	Ganze Zahl
 	Window	Fenster
 	With every time at its mean: {units}	Mit jeder Zeit auf ihrem Mittelwert: {units}
+	Work wasted on those who gave up	Verschwendete Arbeit an Aufgebenden
 	XPDL with BPSim	XPDL mit BPSim
 	Yes or no	Ja oder Nein
 	Your changes will be lost if you don't save them.	Ihre Änderungen gehen verloren, wenn Sie sie nicht speichern.

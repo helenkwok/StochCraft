@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	A célt elérő arány 95%-os intervalluma: {lo}–{hi}
 	95th percentile	95. percentilis
 	95th percentile {value}	95. percentilis {value}
+	A caller on hold: once a unit takes it, the entity stays.	Tartásban várakozó hívó: amint egy egység átveszi, az entitás marad.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Időtúllépéses kliens: ha az ideje a kiszolgálás közben lejár, akkor lemond, és az egység mégis befejezi a munkát (elvesztegetett munka).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Az új fájl csak a modellt tartalmazza: ami a(z) {file} fájlban a StochCraft számára érthetetlen, kimarad.
+	Abandoned	Lemondtak
+	Abandoned on {id}	Lemondtak itt: {id}
 	About StochCraft	A StochCraft névjegye
 	About {app}	{app} névjegye
 	Across the range it changed by {change}: more than chance would explain.	A tartományban {change} értékkel változott: többel, mint amit a véletlen megmagyarázna.
@@ -134,6 +138,7 @@
 	Duration	Időtartam
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Minden elemzés többször futtatja a kísérletet ugyanazzal a véletlenszám-maggal, így a különbségek a változtatásból erednek, nem a véletlenből. Ez eltarthat egy ideig.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Minden entitás ezek közül az elsőt veszi, amely most teljesíthető, egyszerre az egészet, és távozáskor visszaadja az egységeket.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Minden entitás legfeljebb annyi ideig vár itt, amennyit érkezésekor véletlenszerűen sorsolnak neki, aztán lemond: a „Lemondtak” jelölésű kiutat választja, vagy elhagyja a modellt.
 	Edit	Szerkesztés
 	Elasticity	Rugalmasság
 	Ends early	Korábban ér véget
@@ -141,7 +146,9 @@
 	Energy per part	Energia darabonként
 	Enough: {units}, meeting the target in {p} of replications	Elég: {units}, a cél az ismétlések {p} részében teljesül
 	Entered	Belépett
+	Entities give up waiting	Az entitások lemondanak a várakozásról
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Az ismétlés végén még bent lévő egyedek nem számítanak bele az átlagos várakozási időbe és az átlagos rendszerben töltött időbe.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	A várakozásról lemondó entitások ezt a folyamatot követik (például hogy később újra próbálkozzanak); a többiek a feladat másik kiútját választják.
 	Erlang	Erlang
 	Error	Hiba
 	Estimate from three values…	Becslés három értékből…
@@ -171,6 +178,9 @@
 	Fri	P
 	From	Innen
 	Gamma	Gamma
+	Gave up	Lemondtak
+	Gives up before it is done	A befejezés előtt lemond
+	Gives up before service starts	A kiszolgálás kezdete előtt lemond
 	Goes to	Ide vezet
 	Hands on finished parts while down	Meghibásodott állapotban is továbbadja a kész darabokat
 	Help	Súgó
@@ -207,6 +217,7 @@
 	Mean time blocked	Átlagos blokkolási idő
 	Mean time in system	Átlagos rendszerben töltött idő
 	Mean wait	Átlagos várakozási idő
+	Mean wait before giving up	Átlagos várakozási idő a lemondásig
 	Metric	Mérőszám
 	Middles	Függőleges középpontok
 	Minimise	Minimalizálás
@@ -265,6 +276,7 @@
 	Parts wanted	Kért darabok
 	Parts wanted is a number above 0	A kért darabok száma 0-nál nagyobb szám
 	Paste	Beillesztés
+	Patience	Türelem
 	Pause	Szünet
 	Per	Időszak
 	Per shift needs a calendar: each period it is active is a shift.	A „műszakonként” naptárt igényel: minden időszak, amikor aktív, egy műszak.
@@ -374,6 +386,8 @@
 	Share	Arány
 	Share of arrivals lost	Elveszett érkezések aránya
 	Share of units blocked	Blokkolt egységek aránya
+	Share of work wasted	Elvesztegetett munka aránya
+	Share that gave up	Lemondók aránya
 	Show All	Összes megjelenítése
 	Show {id}	{id} megjelenítése
 	Size	Méretezés
@@ -424,6 +438,7 @@
 	Three-point estimate	Hárompontos becslés
 	Thu	Cs
 	Time available	Rendelkezésre álló idő
+	Time before giving up	Idő a lemondásig
 	Time between arrivals	Érkezések közötti idő
 	Time blocked	Blokkolt idő
 	Time failed	Meghibásodott állapotban töltött idő
@@ -479,6 +494,7 @@
 	Whole number	Egész szám
 	Window	Ablak
 	With every time at its mean: {units}	Minden idő az átlagán: {units}
+	Work wasted on those who gave up	A lemondókra elvesztegetett munka
 	XPDL with BPSim	XPDL BPSim-mel
 	Yes or no	Igen vagy nem
 	Your changes will be lost if you don't save them.	Ha nem mented, a módosításaid elvesznek.

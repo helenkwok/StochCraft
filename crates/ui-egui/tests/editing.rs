@@ -765,6 +765,41 @@ fn a_planned_run_time_is_set_in_the_inspector() {
     assert!(element(&h, "serve").get("planned_run_time").is_none());
 }
 
+/// A task with a resource is given a patience in the inspector, until its service is done, and
+/// a way out marked for those who give up; unticking the patience removes it.
+#[test]
+fn a_patience_and_an_abandoned_way_are_set_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Closed on a server without a patience.
+    assert!(h.query_by_label("Entities give up waiting").is_none());
+    click(&mut h, Role::DisclosureTriangle, "Patience");
+    click(&mut h, Role::CheckBox, "Entities give up waiting");
+    assert_eq!(
+        element(&h, "serve")["patience"],
+        json!({"time": {"type": "exponential", "mean": 1.0}})
+    );
+    click(&mut h, Role::RadioButton, "Gives up before it is done");
+    assert_eq!(element(&h, "serve")["patience"]["until"], json!("done"));
+    let way = model(&h)["connections"]
+        .as_array()
+        .and_then(|cs| {
+            cs.iter()
+                .find(|c| c["from"] == "serve")
+                .and_then(|c| c["id"].as_str().map(str::to_owned))
+        })
+        .expect("the way out");
+    click(&mut h, Role::CheckBox, &format!("Abandoned on {way}"));
+    let abandoned = model(&h)["connections"]
+        .as_array()
+        .and_then(|cs| cs.iter().find(|c| c["id"] == way.as_str()).cloned())
+        .unwrap_or_default()["abandoned"]
+        .clone();
+    assert_eq!(abandoned, json!(true));
+    click(&mut h, Role::CheckBox, "Entities give up waiting");
+    assert!(element(&h, "serve").get("patience").is_none());
+}
+
 /// A sink is made a scrap sink in the inspector, and its scrap counted against a server named
 /// there; unticking it makes it an ordinary end again.
 #[test]

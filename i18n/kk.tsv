@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Мақсатқа жеткен үлестің 95% аралығы: {lo} мен {hi} арасы
 	95th percentile	95-ші процентиль
 	95th percentile {value}	95-ші процентиль {value}
+	A caller on hold: once a unit takes it, the entity stays.	Күтудегі қоңырау шалушы: бірлік оны қабылдаған соң, нысан қалады.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Уақыты бітетін клиент (timeout): уақыты қызмет көрсету кезінде бітсе, сол сәтте бас тартады, ал бірлік жұмысты бәрібір аяқтайды (босқа кеткен жұмыс).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Жаңа файлда тек модель болады: {file} ішіндегі StochCraft түсінбейтін нәрселер қалдырылады.
+	Abandoned	Бас тартқандар
+	Abandoned on {id}	{id} ағынында бас тартқандар
 	About StochCraft	StochCraft туралы
 	About {app}	{app} туралы
 	Across the range it changed by {change}: more than chance would explain.	Ауқымда {change} өзгерді: кездейсоқтық түсіндіретіннен көп.
@@ -134,6 +138,7 @@
 	Duration	Ұзақтығы
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Әр талдау экспериментті бір кездейсоқ тұқыммен бірнеше рет орындайды, сондықтан айырмашылықтар кездейсоқтықтан емес, өзгерістен шығады. Біраз уақыт алуы мүмкін.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Әрбір нысан осылардың ішінен дәл қазір орындауға болатын біріншісін бірден толық алады да, шыққанда бірліктерді қайтарады.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Әрбір нысан мұнда келген кезде оған кездейсоқ таңдалған уақыттан аспайтын уақыт күтеді, содан кейін бас тартады: «Бас тартқандар» деп белгіленген шығатын жолмен кетеді немесе модельден шығады.
 	Edit	Түзету
 	Elasticity	Икемділік
 	Ends early	Ертерек аяқталады
@@ -141,7 +146,9 @@
 	Energy per part	Бір бөлшекке энергия
 	Enough: {units}, meeting the target in {p} of replications	Жеткілікті: {units}, мақсат қайталаулардың {p} бөлігінде орындалады
 	Entered	Кіргендер
+	Entities give up waiting	Нысандар күтуден бас тартады
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Қайталаудың соңында әлі ішінде қалған нысандар күтудің орташа уақытына және жүйедегі орташа уақытқа кірмейді.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Күтуден бас тартқан нысандар осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін); қалғандары тапсырманың басқа шығатын жолымен кетеді.
 	Erlang	Эрланг
 	Error	Қате
 	Estimate from three values…	Үш мәннен бағалау…
@@ -171,6 +178,9 @@
 	Fri	жм
 	From	Қайдан
 	Gamma	Гамма
+	Gave up	Бас тартқандар
+	Gives up before it is done	Аяқталғанға дейін бас тартады
+	Gives up before service starts	Қызмет көрсету басталғанға дейін бас тартады
 	Goes to	Қайда барады
 	Hands on finished parts while down	Ақаулы кезде де дайын бөлшектерді береді
 	Help	Көмек
@@ -207,6 +217,7 @@
 	Mean time blocked	Бұғатталудың орташа уақыты
 	Mean time in system	Жүйедегі орташа уақыт
 	Mean wait	Күтудің орташа уақыты
+	Mean wait before giving up	Бас тартқанға дейінгі орташа күту уақыты
 	Metric	Көрсеткіш
 	Middles	Тік орталықтар
 	Minimise	Кішірейту
@@ -265,6 +276,7 @@
 	Parts wanted	Қажетті бөлшектер
 	Parts wanted is a number above 0	Қажетті бөлшектер 0-ден үлкен сан болуы керек
 	Paste	Қою
+	Patience	Шыдамдылық
 	Pause	Кідірту
 	Per	Кезең
 	Per shift needs a calendar: each period it is active is a shift.	«Ауысымына» күнтізбені қажет етеді: ол белсенді болатын әр кезең — бір ауысым.
@@ -374,6 +386,8 @@
 	Share	Үлес
 	Share of arrivals lost	Жоғалған келулер үлесі
 	Share of units blocked	Бұғатталған бірліктер үлесі
+	Share of work wasted	Босқа кеткен жұмыс үлесі
+	Share that gave up	Бас тартқандар үлесі
 	Show All	Барлығын көрсету
 	Show {id}	{id} көрсету
 	Size	Өлшемдеу
@@ -424,6 +438,7 @@
 	Three-point estimate	Үш нүктелі бағалау
 	Thu	бс
 	Time available	Қолжетімді уақыт
+	Time before giving up	Бас тартқанға дейінгі уақыт
 	Time between arrivals	Келулер арасындағы уақыт
 	Time blocked	Бұғатталған уақыт
 	Time failed	Ақаулы уақыт
@@ -479,6 +494,7 @@
 	Whole number	Бүтін сан
 	Window	Терезе
 	With every time at its mean: {units}	Әр уақыт өз орташасында: {units}
+	Work wasted on those who gave up	Бас тартқандарға босқа кеткен жұмыс
 	XPDL with BPSim	BPSim бар XPDL
 	Yes or no	Иә немесе жоқ
 	Your changes will be lost if you don't save them.	Сақтамасаңыз, өзгерістеріңіз жоғалады.

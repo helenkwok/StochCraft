@@ -53,6 +53,11 @@ impl<T> StoreState<T> {
     /// the processes whose puts went in.
     fn take(&mut self) -> Option<(T, Vec<u64>)> {
         let (_, item) = self.items.pop_front()?;
+        Some((item, self.refill()))
+    }
+
+    /// Lets waiting puts fill the room there is. Returns the processes whose puts went in.
+    fn refill(&mut self) -> Vec<u64> {
         let mut woken = Vec::new();
         while self.items.len() < self.capacity {
             let Some(p) = self.putters.pop_front() else {
@@ -64,7 +69,7 @@ impl<T> StoreState<T> {
                 woken.push(pid);
             }
         }
-        Some((item, woken))
+        woken
     }
 }
 
@@ -186,6 +191,20 @@ impl<T> Store<T> {
             item: Some(item),
             done: None,
         }
+    }
+
+    /// Takes out the first item held (in the order gets would take them) for which `f` holds,
+    /// without waiting: someone giving up their place in the queue. Puts waiting for room fill
+    /// the room it leaves, as after a get. Items still waiting to be put in are not looked at.
+    pub fn take_where(&self, f: impl Fn(&T) -> bool) -> Option<T> {
+        let (item, woken) = {
+            let mut st = self.state.borrow_mut();
+            let at = st.items.iter().position(|(_, x)| f(x))?;
+            let (_, item) = st.items.remove(at)?;
+            (item, st.refill())
+        };
+        self.wake_all(woken);
+        Some(item)
     }
 
     /// Waits for the next item.
@@ -478,6 +497,41 @@ mod tests {
         });
         sim.run();
         assert_eq!(*got.borrow(), ["b", "d", "c", "a", "e"]);
+    }
+
+    #[test]
+    fn take_where_removes_a_held_item_and_lets_a_waiting_put_in() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let buffer: Store<u32> = Store::bounded(&ctx, 2);
+        buffer.put(1);
+        buffer.put(2);
+        let puts = log();
+        let (c, b, l) = (ctx.clone(), buffer.clone(), Rc::clone(&puts));
+        sim.spawn(async move {
+            b.put_wait(3).await;
+            l.borrow_mut().push((3, c.now()));
+        });
+        let (c, b) = (ctx.clone(), buffer.clone());
+        sim.spawn(async move {
+            c.hold(1.0).await;
+            // A waiting put is not held yet, so it cannot be taken out.
+            assert_eq!(b.take_where(|x| *x == 3), None);
+            assert_eq!(b.take_where(|x| *x == 9), None);
+            assert_eq!(b.take_where(|x| *x == 1), Some(1));
+        });
+        sim.run();
+        assert_eq!(*puts.borrow(), [(3, 1.0)]);
+        let rest = log();
+        let (b, r) = (buffer.clone(), Rc::clone(&rest));
+        sim.spawn(async move {
+            for _ in 0..2 {
+                let x = b.get().await;
+                r.borrow_mut().push(x);
+            }
+        });
+        sim.run();
+        assert_eq!(*rest.borrow(), [2, 3]);
     }
 
     #[test]

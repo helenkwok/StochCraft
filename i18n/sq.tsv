@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Intervali 95% i pjesës që arrin objektivin: nga {lo} në {hi}
 	95th percentile	Përqindëshi i 95-të
 	95th percentile {value}	përqindëshi i 95-të {value}
+	A caller on hold: once a unit takes it, the entity stays.	Një telefonues në pritje: sapo një njësi e merr, entiteti mbetet.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Një klient të cilit i skadon koha (timeout): nëse koha i mbaron gjatë shërbimit, heq dorë atëherë, dhe njësia e përfundon punën gjithsesi (punë e humbur).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Skedari i ri mban vetëm modelin: ajo që StochCraft nuk e kupton në {file} lihet jashtë.
+	Abandoned	Hoqën dorë
+	Abandoned on {id}	Hoqën dorë në {id}
 	About StochCraft	Rreth StochCraft
 	About {app}	Rreth {app}
 	Across the range it changed by {change}: more than chance would explain.	Në interval ndryshoi me {change}: më shumë se sa do ta shpjegonte rastësia.
@@ -134,6 +138,7 @@
 	Duration	Kohëzgjatja
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Çdo analizë e ekzekuton eksperimentin disa herë me të njëjtën farë, kështu që ndryshimet vijnë nga ndryshimi, jo nga rastësia. Mund të zgjasë pak.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Çdo entitet merr njëherësh të plotë të parën nga këto alternativa që mund të plotësohet në atë çast dhe i kthen njësitë kur largohet.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Çdo entitet pret këtu të shumtën një kohë të hedhur në short për të kur mbërrin, pastaj heq dorë: merr daljen e shënuar „Hoqën dorë” ose largohet nga modeli.
 	Edit	Redakto
 	Elasticity	Elasticiteti
 	Ends early	Mbaron më herët
@@ -141,7 +146,9 @@
 	Energy per part	Energjia për pjesë
 	Enough: {units}, meeting the target in {p} of replications	Mjafton: {units}, arrin objektivin në {p} të përsëritjeve
 	Entered	Hyrjet
+	Entities give up waiting	Entitetet heqin dorë nga pritja
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitetet që janë ende brenda në fund të një përsëritjeje lihen jashtë pritjes mesatare dhe kohës mesatare në sistem.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitetet që heqin dorë nga pritja marrin këtë rrjedhë (për të provuar sërish më vonë, të themi); të tjerët marrin daljen tjetër të detyrës.
 	Erlang	Erlang
 	Error	Gabim
 	Estimate from three values…	Vlerëso nga tri vlera…
@@ -171,6 +178,9 @@
 	Fri	Pre
 	From	Nga
 	Gamma	Gama
+	Gave up	Hoqën dorë
+	Gives up before it is done	Heq dorë para se të përfundojë
+	Gives up before service starts	Heq dorë para se të nisë shërbimi
 	Goes to	Shkon te
 	Hands on finished parts while down	Kalon pjesët e përfunduara edhe në defekt
 	Help	Ndihmë
@@ -207,6 +217,7 @@
 	Mean time blocked	Koha mesatare e bllokimit
 	Mean time in system	Koha mesatare në sistem
 	Mean wait	Pritja mesatare
+	Mean wait before giving up	Pritja mesatare para heqjes dorë
 	Metric	Tregues
 	Middles	Qendrat vertikale
 	Minimise	Minimizo
@@ -265,6 +276,7 @@
 	Parts wanted	Pjesë të kërkuara
 	Parts wanted is a number above 0	Numri i pjesëve të kërkuara është një numër mbi 0
 	Paste	Ngjit
+	Patience	Durim
 	Pause	Pauzë
 	Per	Periudha
 	Per shift needs a calendar: each period it is active is a shift.	„Për turn” kërkon një kalendar: çdo periudhë kur ai është aktiv është një turn.
@@ -374,6 +386,8 @@
 	Share	Pjesa
 	Share of arrivals lost	Pjesa e mbërritjeve të humbura
 	Share of units blocked	Pjesa e njësive të bllokuara
+	Share of work wasted	Pjesa e punës së humbur
+	Share that gave up	Pjesa që hoqi dorë
 	Show All	Shfaqi të gjitha
 	Show {id}	Shfaq {id}
 	Size	Përmaso
@@ -424,6 +438,7 @@
 	Three-point estimate	Vlerësim me tri pika
 	Thu	Enj
 	Time available	Koha e disponueshme
+	Time before giving up	Koha deri në heqjen dorë
 	Time between arrivals	Koha ndërmjet mbërritjeve
 	Time blocked	Koha e bllokuar
 	Time failed	Koha në defekt
@@ -479,6 +494,7 @@
 	Whole number	Numër i plotë
 	Window	Dritarja
 	With every time at its mean: {units}	Me çdo kohë në mesataren e saj: {units}
+	Work wasted on those who gave up	Punë e humbur për ata që hoqën dorë
 	XPDL with BPSim	XPDL me BPSim
 	Yes or no	Po ose jo
 	Your changes will be lost if you don't save them.	Ndryshimet do të humbasin nëse nuk i ruani.

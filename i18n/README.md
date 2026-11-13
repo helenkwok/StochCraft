@@ -158,6 +158,39 @@ engine's messages (validation, file notes) are English too.
   native speakers. The least certain are lo and th (whose takt words ເວລາແທັກ and แท็กไทม์ are
   unsourced transliterations), ta, te, bn, ka, kk and sq as before, plus et, lt and the sr and
   sr-latn rows (written in ekavian although those catalogs mix in ijekavian forms).
+- The rows for patience (PR "entities that give up waiting": the Patience section of a task, its
+  two choices and their hints, the Abandoned mark on a flow, and the Gave up, Share that gave up,
+  Mean wait before giving up, Work wasted on those who gave up and Share of work wasted results)
+  were machine-drafted with Claude Code from the plain meaning of the English and each catalog's
+  existing words for entity, unit, flow, task, service, wait, share, mean, work, way out and model,
+  taken from its rows for the Rework mark, "Each entity takes the first…", "Mean wait" and "Share of
+  arrivals lost". Where a catalog already tells a unit from an entity by a longer word (da and nb
+  ressourceenhed, hi संसाधन इकाई, ka რესურსის ერთეული, ko 자원 단위, zh 资源单元/資源單元) the
+  hint "once a unit takes it, the entity stays" uses that word, and pl, whose entity is
+  "jednostka", says "zasób" as its catalog does. "Abandoned on {id}" follows each catalog's
+  "Rework on {id}", and the hint naming "the way out marked Abandoned" quotes the same word as the
+  mark. Most catalogs use one verb for giving up throughout; id, lt, ru, uk and te say "stop
+  waiting" for the checkbox and a leave or withdraw verb for the rest. The queueing term is reneging (in call
+  centres, abandonment); the sources checked were Wikipedia's articles on queueing theory, call
+  centres, Erlang C and timeouts in their interlanguage versions, which give little: pt
+  "desistir e sair do sistema" (hence pt-br desistir, Desistências), ro "părăsesc coada" for
+  reneging, es "impaciencia del cliente", el "χαμένων κλήσεων (abandoned calls)", de Erlang C's
+  callers who "auflegen" after a while, and a ko article's 포기호 (전화 포기), hence ko 포기. The
+  timeout articles' titles give cs časová prodleva, ja タイムアウト, ko 타임아웃, ru Тайм-аут, tr
+  zaman aşımı and uk тайм-аут; elsewhere "times out" is the language's plain words for its time
+  running out, with "timeout" in brackets where that helps. Everything else is the plain meaning:
+  es, ca, gl, it and fr abandon (fr Abandons for the mark), de aufgeben with the mark Abgebrochen,
+  nl afhaken, ru and uk "leave" (Ушедшие, Пішли), cs and sk vzdát, pl rezygnować, bs, hr and sr
+  odustati, sl odnehati, hu lemond (not "felad", which is also "send" next to the catalog's
+  feladat for task), fi luopua, et loobuma, lt pasitraukti, sv, da and nb "give up", tr vazgeçmek,
+  zh 放弃/放棄, ja 離脱. The heading "Patience" is the language's word for patience, except ja
+  途中離脱, ko 대기 포기, th การเลิกรอ and lo ການເຊົາລໍຖ້າ, where the bare word reads as a virtue
+  rather than a setting. "Time before giving up" is reached through a field label in form.rs that
+  the catalog test does not scan, so the test does not check its row. Not checked against IATE,
+  and not reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka, kk and sq as
+  before, plus hu lemond, id menyerah, vi bỏ đi and hi छोड़कर गईं, and the marks that are verb
+  forms rather than nouns (da Gav op, nb Ga opp, sv Gav upp, cs and sk Vzdané, uk Пішли), and sr
+  and sr-latn, written in ekavian but keeping the catalogs' "Prosječno čekanje" for the mean wait.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

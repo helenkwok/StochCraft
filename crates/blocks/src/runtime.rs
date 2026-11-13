@@ -4,15 +4,15 @@
 use std::borrow::Cow;
 use std::cell::{Cell, RefCell};
 use std::collections::BTreeMap;
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 
 use stochcraft_des::{
     Ctx, Gate, Resource, ResourceGuard, Signal, Sim, Stopped, Store, Watch, Watching,
 };
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
-    Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, Model, Need, Power,
-    ResourcePool, Routing, Setup, Timed,
+    Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, Model, Need, PatienceUntil,
+    Power, ResourcePool, Routing, Setup, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -185,11 +185,14 @@ impl Compiled {
                 )
             })
         };
+        // Where an element's units send what they finish (not a patient server's way for those
+        // who give up, which they take by themselves).
         let sends_to = |i: usize| -> Vec<usize> {
             self.routes
                 .get(i)
                 .into_iter()
                 .flatten()
+                .filter(|r| !r.abandoned)
                 .flat_map(|r| {
                     if routes_itself(r.to) {
                         self.routes
@@ -266,6 +269,32 @@ impl Compiled {
                 _ => None,
             })
             .collect();
+        // Then a stream for each server's patience, in model order (only for servers that have
+        // one, so models without patience draw exactly as before).
+        let patients: Vec<Option<Rc<Patient>>> = elements
+            .iter()
+            .enumerate()
+            .map(|(i, e)| match &e.kind {
+                ElementKind::Server {
+                    patience: Some(p), ..
+                } => Some(Rc::new(Patient {
+                    index: i,
+                    until: p.until,
+                    time: p.time.clone(),
+                    rng: RefCell::new(rng.fork()),
+                    ctx: ctx.clone(),
+                    input: inputs.get(i)?.first()?.clone(),
+                    places: places.get(i).cloned().flatten(),
+                    stats: Rc::clone(&stats),
+                    way: RefCell::new(None),
+                    next_id: Rc::clone(&next_id),
+                    stays: RefCell::new(BTreeMap::new()),
+                    visits: Cell::new(0),
+                    held: RefCell::new(None),
+                })),
+                _ => None,
+            })
+            .collect();
         let assigner = Rc::new(Assigner {
             slots: self.slots.clone(),
             elements: self
@@ -309,6 +338,11 @@ impl Compiled {
                 counts: r.input == 0 || assembly.get(r.to).copied().unwrap_or(false),
                 router: None,
                 rework: r.rework,
+                patient: patients
+                    .get(r.to)
+                    .cloned()
+                    .flatten()
+                    .map(|p| Rc::downgrade(&p)),
             })
         };
         let routers: Vec<Option<Rc<Router>>> = (0..elements.len())
@@ -326,22 +360,28 @@ impl Compiled {
             })
             .collect();
         for ((i, element), rng) in elements.iter().enumerate().zip(streams) {
-            let outs: Vec<Out> = self
-                .routes
-                .get(i)
-                .into_iter()
-                .flatten()
+            let routed = |r: &Route| {
+                let mut port = plain_port(r)?;
+                port.router = routers.get(r.to).cloned().flatten();
+                Some(port)
+            };
+            let routes = self.routes.get(i).into_iter().flatten();
+            let outs: Vec<Out> = routes
+                .clone()
+                .filter(|r| !r.abandoned)
                 .filter_map(|r| {
-                    let mut port = plain_port(r)?;
-                    port.router = routers.get(r.to).cloned().flatten();
                     Some(Out {
-                        port,
+                        port: routed(r)?,
                         weight: r.weight,
                         condition: r.condition.clone(),
                         default: r.default,
                     })
                 })
                 .collect();
+            let patient = patients.get(i).cloned().flatten();
+            if let Some(p) = &patient {
+                *p.way.borrow_mut() = routes.clone().filter(|r| r.abandoned).find_map(routed);
+            }
             let Some(ins) = inputs.get(i).cloned() else {
                 continue;
             };
@@ -361,6 +401,7 @@ impl Compiled {
                     element.kind,
                     ElementKind::Server { .. } | ElementKind::SharedTask { .. }
                 ),
+                patient,
             };
             match element.kind.clone() {
                 ElementKind::Source {
@@ -917,6 +958,11 @@ pub(crate) struct BlockStats {
     transferring: TimeWeighted,
     /// A server's units in each state, each unit in exactly one ([`UnitBook`]).
     states: UnitStates,
+    /// Servers with a patience: entities that gave up, and how long each had been here.
+    abandoned: u64,
+    abandoned_wait: Tally,
+    /// Servers with patience until done: service time spent on jobs whose entity gave up.
+    wasted: f64,
 }
 
 /// What an element sends to, for its report.
@@ -1101,6 +1147,9 @@ impl BlockStats {
             transit: TimeWeighted::new(t, 0.0),
             transferring: TimeWeighted::new(t, 0.0),
             states: UnitStates::new(t),
+            abandoned: 0,
+            abandoned_wait: Tally::new(),
+            wasted: 0.0,
         }
     }
 
@@ -1124,6 +1173,9 @@ impl BlockStats {
         self.transit.reset(t);
         self.transferring.reset(t);
         self.states.reset(t);
+        self.abandoned = 0;
+        self.abandoned_wait = Tally::new();
+        self.wasted = 0.0;
     }
 
     /// Entities inside the element now: on their way in (in transfer), waiting in its input,
@@ -1250,6 +1302,12 @@ impl BlockStats {
             _ => None,
         };
         let quality_ratio = per_produced(self.produced.saturating_sub(self.scrap + self.rework));
+        let patient = match kind {
+            ElementKind::Server {
+                patience: Some(p), ..
+            } => Some(p.until),
+            _ => None,
+        };
         ElementReport {
             id: element.id.clone(),
             name: element.name.clone(),
@@ -1414,6 +1472,16 @@ impl BlockStats {
             } else {
                 None
             },
+            abandoned: patient.map(|_| self.abandoned),
+            abandoned_share: patient.and_then(|_| {
+                let ended = self.abandoned + self.left;
+                (ended > 0).then(|| self.abandoned as f64 / ended as f64)
+            }),
+            abandoned_wait: patient.and_then(|_| self.abandoned_wait.mean()),
+            wasted: (patient == Some(PatienceUntil::Done)).then_some(self.wasted),
+            wasted_share: (patient == Some(PatienceUntil::Done))
+                .then(|| self.states.processing.integral(end) + self.states.setup.integral(end))
+                .and_then(|working| (working > 0.0).then(|| self.wasted / working)),
             properties: assigns
                 .iter()
                 .zip(&self.properties)
@@ -1443,6 +1511,9 @@ struct Port {
     router: Option<Rc<Router>>,
     /// Entities sent this way are rework, counted against the last server they finished at.
     rework: bool,
+    /// The next element's patience, when it is a server with one. Weak, since a patience holds
+    /// its way out, which may lead to another patient server and back.
+    patient: Option<Weak<Patient>>,
 }
 
 /// A finite buffer's places (see [`Compiled::run_for`]), with the one each entity there holds.
@@ -1501,6 +1572,213 @@ struct Transfer {
     /// Whether a sending server's unit stays with the part through the transfer.
     holds_sender: bool,
     rng: RefCell<Rng>,
+}
+
+/// Where an entity that can still give up is at a patient server.
+enum Stage {
+    /// Waiting for a unit: in the server's input, or held by its dispatcher until a unit is
+    /// free (a server whose units fail, follow a calendar or set up).
+    Waiting,
+    /// In transfer here; with the time it had been here when its patience ran out, if it has.
+    Transit(Option<f64>),
+    /// Taken by a unit, patience until done: a copy for its stand-in, the job's work, and
+    /// whether it has given up.
+    Serving { copy: Entity, work: f64, gone: bool },
+}
+
+/// One entity's stay at a patient server: which stay (an entity can come back later, as rework
+/// or a retry, with a deadline of its own) and where it is.
+struct Stay {
+    visit: u64,
+    stage: Stage,
+}
+
+/// A server's patience while the model runs ([`stochcraft_model::Patience`]): the deadline of
+/// each entity that enters, and the way out for those that give up.
+///
+/// Each entity entering starts a timer that runs out after every other event at its deadline
+/// ([`Ctx::hold_late`]), so a unit taking the entity at the deadline itself serves it, as a
+/// hand-over beats a deadline in `des`. The timer finds the entity where it is then: waiting, it
+/// is taken out of the queue and gives up; in transfer, it gives up as it arrives; in service
+/// (patience until done), a stand-in gives up in its place and the unit discards the original
+/// when its job is done; gone on, or served (patience until start), nothing happens.
+struct Patient {
+    /// The server.
+    index: usize,
+    until: PatienceUntil,
+    time: Dist,
+    rng: RefCell<Rng>,
+    ctx: Ctx,
+    input: Store<Entity>,
+    places: Option<Rc<Places>>,
+    stats: Rc<Vec<RefCell<BlockStats>>>,
+    /// The way out marked for those who give up; `None`: they leave the model.
+    way: RefCell<Option<Port>>,
+    /// Ids for stand-ins.
+    next_id: Rc<RefCell<u64>>,
+    /// Each entity here that can still give up.
+    stays: RefCell<BTreeMap<u64, Stay>>,
+    visits: Cell<u64>,
+    /// The entity the dispatcher holds while it waits for a unit (still waiting).
+    held: RefCell<Option<Entity>>,
+}
+
+impl Patient {
+    /// Entity `id` enters (now), waiting or in transfer: its deadline starts.
+    fn arm(self: &Rc<Self>, id: u64, stage: Stage) {
+        let visit = self.visits.get() + 1;
+        self.visits.set(visit);
+        self.stays.borrow_mut().insert(id, Stay { visit, stage });
+        let p = self.time.sample(&mut self.rng.borrow_mut());
+        // An infinite patience never runs out; negative or undefined ones count as 0.
+        if p == f64::INFINITY {
+            return;
+        }
+        let p = if p > 0.0 { p } else { 0.0 };
+        let (me, c) = (Rc::clone(self), self.ctx.clone());
+        self.ctx.spawn_tagged(tag(self.index), async move {
+            c.hold_late(p).await;
+            me.run_out(id, visit, p);
+        });
+    }
+
+    /// Entity `id`'s patience, `waited` long, has run out on its stay `visit`.
+    fn run_out(&self, id: u64, visit: u64, waited: f64) {
+        let stage = {
+            let mut stays = self.stays.borrow_mut();
+            match stays.get_mut(&id) {
+                Some(s) if s.visit == visit => match &mut s.stage {
+                    Stage::Waiting => None,
+                    Stage::Transit(expired) => {
+                        *expired = Some(waited);
+                        return;
+                    }
+                    Stage::Serving { copy, gone, .. } if !*gone => {
+                        *gone = true;
+                        Some(copy.clone())
+                    }
+                    Stage::Serving { .. } => return,
+                },
+                _ => return,
+            }
+        };
+        match stage {
+            // In service: a stand-in gives up now; the unit discards the original later.
+            Some(mut stand_in) => {
+                stand_in.id = {
+                    let mut n = self.next_id.borrow_mut();
+                    let id = *n;
+                    *n += 1;
+                    id
+                };
+                self.give_up(stand_in, waited);
+            }
+            None => {
+                let held = {
+                    let mut h = self.held.borrow_mut();
+                    if h.as_ref().is_some_and(|e| e.id == id) {
+                        h.take()
+                    } else {
+                        None
+                    }
+                };
+                let Some(e) = held.or_else(|| self.input.take_where(|e| e.id == id)) else {
+                    return;
+                };
+                self.stays.borrow_mut().remove(&id);
+                let now = self.ctx.now();
+                if let Some(s) = self.stats.get(self.index) {
+                    let mut s = s.borrow_mut();
+                    let w = s.waiting.value() - 1.0;
+                    s.waiting.set(now, w);
+                }
+                if let Some(p) = &self.places {
+                    p.leave(id);
+                }
+                self.give_up(e, waited);
+            }
+        }
+    }
+
+    /// Counts `e`, which had been here `waited` long, as giving up, and sends it the way marked
+    /// for it (if there is one; else it leaves the model).
+    fn give_up(&self, e: Entity, waited: f64) {
+        if let Some(s) = self.stats.get(self.index) {
+            let mut s = s.borrow_mut();
+            s.abandoned += 1;
+            s.abandoned_wait.add(waited);
+        }
+        let Some(way) = self.way.borrow().clone() else {
+            return;
+        };
+        if way.may_block() {
+            // It waits for room on its own, as a process.
+            let c = self.ctx.clone();
+            self.ctx.spawn_tagged(tag(self.index), async move {
+                way.deliver(&c, e).await;
+            });
+        } else {
+            way.dispatch(&self.ctx, e);
+        }
+    }
+
+    /// Entity `e`'s transfer here is over: it joins the queue (`None`), or, if its patience ran
+    /// out on the way, it gives up now, having been here as long as its patience (returned).
+    fn arrive(&self, e: &Entity) -> Option<f64> {
+        let mut stays = self.stays.borrow_mut();
+        let stay = stays.get_mut(&e.id)?;
+        match stay.stage {
+            Stage::Transit(Some(waited)) => {
+                stays.remove(&e.id);
+                Some(waited)
+            }
+            _ => {
+                stay.stage = Stage::Waiting;
+                None
+            }
+        }
+    }
+
+    /// A unit takes `e` for a job of `work`: served, with patience until start; with patience
+    /// until done, it can still give up until the unit hands it on.
+    fn start(&self, e: &Entity, work: f64) {
+        let mut stays = self.stays.borrow_mut();
+        match self.until {
+            PatienceUntil::Start => {
+                stays.remove(&e.id);
+            }
+            PatienceUntil::Done => {
+                if let Some(s) = stays.get_mut(&e.id) {
+                    s.stage = Stage::Serving {
+                        copy: e.clone(),
+                        work: if work > 0.0 { work } else { 0.0 },
+                        gone: false,
+                    };
+                }
+            }
+        }
+    }
+
+    /// Whether entity `id`, whose job is done, gave up meanwhile: then the work it took, and
+    /// the entity is no longer here. Otherwise it is handed on, and can no longer give up here.
+    fn done(&self, id: u64) -> Option<f64> {
+        let mut stays = self.stays.borrow_mut();
+        match stays.get(&id).map(|s| &s.stage) {
+            Some(Stage::Serving {
+                work, gone: true, ..
+            }) => {
+                let work = *work;
+                stays.remove(&id);
+                Some(work)
+            }
+            _ => None,
+        }
+    }
+
+    /// Entity `id` leaves the server, handed on.
+    fn handed_on(&self, id: u64) {
+        self.stays.borrow_mut().remove(&id);
+    }
 }
 
 /// A shortest-queue gateway's ways ([`stochcraft_model::Routing::ShortestQueue`]).
@@ -1709,20 +1987,41 @@ impl Port {
             let n = s.transit.value() + 1.0;
             s.transit.set(now, n);
         }
+        if let Some(p) = self.patient() {
+            p.arm(e.id, Stage::Transit(None));
+        }
         e
     }
 
-    /// `e`'s transfer is over: it joins the next element's queue.
+    /// The next element's patience, if it has one.
+    fn patient(&self) -> Option<Rc<Patient>> {
+        self.patient.as_ref().and_then(Weak::upgrade)
+    }
+
+    /// `e`'s transfer is over: it joins the next element's queue, unless its patience there ran
+    /// out on the way, when it gives up now (counted as it does).
     fn arrive(&self, now: f64, mut e: Entity) {
+        let patient = self.patient();
+        let gave_up = patient.as_ref().and_then(|p| p.arrive(&e));
         e.entered = now;
         if let Some(s) = self.stats.get(self.index) {
             let mut s = s.borrow_mut();
             let n = s.transit.value() - 1.0;
             s.transit.set(now, n);
-            let w = s.waiting.value() + 1.0;
-            s.waiting.set(now, w);
+            if gave_up.is_none() {
+                let w = s.waiting.value() + 1.0;
+                s.waiting.set(now, w);
+            }
         }
-        self.store.put(e);
+        match (patient, gave_up) {
+            (Some(p), Some(waited)) => {
+                if let Some(places) = &self.places {
+                    places.leave(e.id);
+                }
+                p.give_up(e, waited);
+            }
+            _ => self.store.put(e),
+        }
     }
 
     /// Sends a new arrival if there is room (a place freed at this instant counts) and returns
@@ -1769,6 +2068,9 @@ impl Port {
             let w = s.waiting.value() + 1.0;
             s.waiting.set(now, w);
         }
+        if let Some(p) = self.patient() {
+            p.arm(e.id, Stage::Waiting);
+        }
         self.store.put(e);
     }
 }
@@ -1794,6 +2096,8 @@ struct BlockEnv {
     /// Whether the element's units stay with an entity through a transfer to the next element
     /// (a server, a task with shared resources); otherwise the entity travels on its own.
     holds: bool,
+    /// A server's own patience, if it has one.
+    patient: Option<Rc<Patient>>,
 }
 
 impl BlockEnv {
@@ -2022,6 +2326,9 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
                     book.change(&e, u, |d| d.processing = true);
                     service.sample(&mut e.rng)
                 };
+                if let Some(p) = &env.borrow().patient {
+                    p.start(&entity, duration);
+                }
                 ctx.hold(duration).await;
                 {
                     let e = env.borrow();
@@ -2241,10 +2548,15 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
         });
     }
 
+    let patient = env.borrow().patient.clone();
     sim.spawn_tagged(me, async move {
         loop {
             let input = env.borrow().input.clone();
-            let entity = input.get().await;
+            let mut entity = Some(input.get().await);
+            // Still waiting while it waits for a unit here, so it can still give up.
+            if let Some(p) = &patient {
+                *p.held.borrow_mut() = entity.take();
+            }
             // The first unit that is up, idle and on shift; else wait for one.
             let unit = loop {
                 let free = book
@@ -2261,6 +2573,10 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                     Some(u) => break u,
                     None => changed.wait().await,
                 }
+            };
+            let Some(entity) = entity.or_else(|| patient.as_ref()?.held.borrow_mut().take()) else {
+                // It gave up meanwhile: the unit takes the next.
+                continue;
             };
             let set_up = match (&setup, setup_rng.as_mut()) {
                 (Some(s), Some(rng)) => units
@@ -2281,6 +2597,9 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                 });
                 service.sample(&mut e.rng)
             };
+            if let Some(p) = &patient {
+                p.start(&entity, set_up.unwrap_or(0.0).max(0.0) + duration.max(0.0));
+            }
             if let Some(x) = units.borrow_mut().get_mut(unit) {
                 x.busy = true;
             }
@@ -2380,8 +2699,18 @@ async fn move_on(
     keep: &dyn Fn() -> bool,
     repaired: Option<&Gate>,
 ) -> Option<ResourceGuard> {
+    // With patience until done, an entity that gave up while its job was under way (or while it
+    // was held after it) is discarded rather than handed on.
+    let patient = env.borrow().patient.clone();
+    let gave_up = |id: u64| patient.as_ref().and_then(|p| p.done(id));
+    if let Some(work) = gave_up(entity.id) {
+        return discard(env, entity.id, work, keep);
+    }
     if let Some(g) = repaired {
         g.wait().await;
+        if let Some(work) = gave_up(entity.id) {
+            return discard(env, entity.id, work, keep);
+        }
     }
     let out = env.borrow().out.clone();
     // Where the entity goes: the next element, or the way a shortest-queue gateway there gives.
@@ -2394,14 +2723,24 @@ async fn move_on(
                 g.wait().await;
             }
             let now = ctx.now();
-            let e = env.borrow();
-            e.adjust(|s| &mut s.blocked, -1.0);
-            e.with_stats(|s| s.blocked_time.add(now - start));
+            env.borrow().adjust(|s| &mut s.blocked, -1.0);
+            // It gave up while held: the place it got next goes back unused. (Through a
+            // shortest-queue gateway, the gateway has counted it passing.)
+            if let Some(work) = gave_up(entity.id) {
+                if let Some(p) = &to.places {
+                    p.leave(entity.id);
+                }
+                return discard(env, entity.id, work, keep);
+            }
+            env.borrow().with_stats(|s| s.blocked_time.add(now - start));
             Some(to)
         }
         Some(out) => Some(out.make_room(&mut entity).await),
         None => None,
     };
+    if let Some(p) = &patient {
+        p.handed_on(entity.id);
+    }
     let transfer = out.as_ref().and_then(Port::transfer_time);
     let holds = env.borrow().holds && out.as_ref().is_some_and(Port::holds_sender);
     match (out, transfer) {
@@ -2435,6 +2774,24 @@ async fn move_on(
             kept
         }
     }
+}
+
+/// A server's job whose entity gave up before it was done (patience until done) ends: the
+/// entity is discarded, neither left nor produced, and its `work` was wasted. Its place here
+/// comes free as on leaving (or stays the unit's, as `keep` says; see [`move_on`]).
+fn discard(
+    env: &Rc<RefCell<BlockEnv>>,
+    id: u64,
+    work: f64,
+    keep: &dyn Fn() -> bool,
+) -> Option<ResourceGuard> {
+    let e = env.borrow();
+    e.with_stats(|s| {
+        s.wasted += work;
+        // Counted as produced when its job ended.
+        s.produced = s.produced.saturating_sub(1);
+    });
+    e.places.as_ref().and_then(|p| p.leave_or_keep(id, keep()))
 }
 
 /// One way to meet a shared task's need: `quantity` units from any of `pools` (indices into the
@@ -2765,6 +3122,11 @@ impl Pools {
                     specific_energy: None,
                     lost: None,
                     loss_probability: None,
+                    abandoned: None,
+                    abandoned_share: None,
+                    abandoned_wait: None,
+                    wasted: None,
+                    wasted_share: None,
                     properties: Vec::new(),
                 }
             })

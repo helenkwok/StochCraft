@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Tavoitteen saavuttavan osuuden 95 %:n väli: {lo}–{hi}
 	95th percentile	95. persentiili
 	95th percentile {value}	95. persentiili {value}
+	A caller on hold: once a unit takes it, the entity stays.	Jonossa odottava soittaja: kun yksikkö on ottanut sen, entiteetti jää.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Aikakatkaisun saava asiakas: jos sen aika loppuu palvelun aikana, se luopuu silloin, ja yksikkö tekee työn silti loppuun (hukkatyö).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Uusi tiedosto sisältää vain mallin: se, mitä StochCraft ei ymmärrä tiedostossa {file}, jätetään pois.
+	Abandoned	Luopuneet
+	Abandoned on {id}	Luopuneet virrassa {id}
 	About StochCraft	Tietoja StochCraftista
 	About {app}	Tietoja: {app}
 	Across the range it changed by {change}: more than chance would explain.	Alueella se muuttui {change}: enemmän kuin sattuma selittäisi.
@@ -134,6 +138,7 @@
 	Duration	Kesto
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Jokainen analyysi ajaa kokeen useita kertoja samalla siemenellä, joten erot johtuvat muutoksesta eivätkä sattumasta. Tämä voi kestää hetken.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jokainen entiteetti ottaa näistä vaihtoehdoista ensimmäisen, joka voidaan täyttää heti, kaiken kerralla, ja palauttaa yksiköt poistuessaan tehtävästä.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Jokainen entiteetti odottaa tässä enintään ajan, joka arvotaan sille sen saapuessa, ja luopuu sitten: se kulkee reittiä ulos, joka on merkitty ”Luopuneet”, tai poistuu mallista.
 	Edit	Muokkaa
 	Elasticity	Jousto
 	Ends early	Päättyy aiemmin
@@ -141,7 +146,9 @@
 	Energy per part	Energia osaa kohden
 	Enough: {units}, meeting the target in {p} of replications	Riittää: {units}, tavoite saavutetaan {p} toistoista
 	Entered	Saapuneet
+	Entities give up waiting	Entiteetit luopuvat odottamisesta
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Toiston lopussa yhä sisällä olevat yksiköt jäävät pois keskimääräisestä odotusajasta ja keskimääräisestä ajasta järjestelmässä.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Odottamisesta luopuvat entiteetit kulkevat tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen); muut kulkevat tehtävän toista reittiä ulos.
 	Erlang	Erlang
 	Error	Virhe
 	Estimate from three values…	Arvioi kolmesta arvosta…
@@ -171,6 +178,9 @@
 	Fri	pe
 	From	Kohteesta
 	Gamma	Gamma
+	Gave up	Luopui
+	Gives up before it is done	Luopuu ennen valmistumista
+	Gives up before service starts	Luopuu ennen palvelun alkua
 	Goes to	Menee kohteeseen
 	Hands on finished parts while down	Luovuttaa valmiit osat myös vikaantuneena
 	Help	Ohje
@@ -207,6 +217,7 @@
 	Mean time blocked	Keskimääräinen estoaika
 	Mean time in system	Keskimääräinen aika järjestelmässä
 	Mean wait	Keskimääräinen odotusaika
+	Mean wait before giving up	Keskimääräinen odotusaika ennen luopumista
 	Metric	Mittari
 	Middles	Pystykeskikohdat
 	Minimise	Pienennä
@@ -265,6 +276,7 @@
 	Parts wanted	Halutut osat
 	Parts wanted is a number above 0	Haluttujen osien määrän on oltava yli 0
 	Paste	Liitä
+	Patience	Kärsivällisyys
 	Pause	Tauko
 	Per	Jakso
 	Per shift needs a calendar: each period it is active is a shift.	”Vuorossa” vaatii kalenterin: jokainen jakso, jona se on aktiivinen, on yksi vuoro.
@@ -374,6 +386,8 @@
 	Share	Osuus
 	Share of arrivals lost	Menetettyjen saapumisten osuus
 	Share of units blocked	Estettyjen yksiköiden osuus
+	Share of work wasted	Hukatun työn osuus
+	Share that gave up	Luopuneiden osuus
 	Show All	Näytä kaikki
 	Show {id}	Näytä {id}
 	Size	Mitoita
@@ -424,6 +438,7 @@
 	Three-point estimate	Kolmen pisteen arvio
 	Thu	to
 	Time available	Käytettävissä oleva aika
+	Time before giving up	Aika ennen luopumista
 	Time between arrivals	Saapumisten välinen aika
 	Time blocked	Aika estettynä
 	Time failed	Aika vikaantuneena
@@ -479,6 +494,7 @@
 	Whole number	Kokonaisluku
 	Window	Ikkuna
 	With every time at its mean: {units}	Kun jokainen aika on keskiarvossaan: {units}
+	Work wasted on those who gave up	Luopuneisiin hukattu työ
 	XPDL with BPSim	XPDL ja BPSim
 	Yes or no	Kyllä tai ei
 	Your changes will be lost if you don't save them.	Muutokset menetetään, jos niitä ei tallenneta.

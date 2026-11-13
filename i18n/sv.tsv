@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95 %-intervall för andelen som når målet: {lo} till {hi}
 	95th percentile	95:e percentilen
 	95th percentile {value}	95:e percentilen {value}
+	A caller on hold: once a unit takes it, the entity stays.	En uppringare i kö: när en enhet har tagit den stannar entiteten.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	En klient med timeout: om dess tid tar slut under servicen ger den upp då, och enheten slutför jobbet ändå (bortkastat arbete).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Den nya filen innehåller bara modellen: det StochCraft inte förstår i {file} utelämnas.
+	Abandoned	Gav upp
+	Abandoned on {id}	Gav upp på {id}
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
 	Across the range it changed by {change}: more than chance would explain.	Över intervallet ändrades det med {change}: mer än slumpen skulle förklara.
@@ -134,6 +138,7 @@
 	Duration	Varaktighet
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Varje analys kör experimentet flera gånger med samma slumpfrö, så skillnaderna kommer från ändringen, inte från slumpen. Det kan ta en stund.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Varje entitet tar det första av dessa alternativ som kan uppfyllas nu, allt på en gång, och återlämnar enheterna när den lämnar uppgiften.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Varje entitet väntar här högst en tid som slumpas fram för den vid ankomsten och ger sedan upp: den tar vägen ut som är markerad ”Gav upp”, eller lämnar modellen.
 	Edit	Redigera
 	Elasticity	Elasticitet
 	Ends early	Slutar tidigare
@@ -141,7 +146,9 @@
 	Energy per part	Energi per detalj
 	Enough: {units}, meeting the target in {p} of replications	Tillräckligt: {units}, når målet i {p} av replikationerna
 	Entered	Inkomna
+	Entities give up waiting	Entiteter ger upp väntan
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Enheter som fortfarande är inuti vid slutet av en replikation räknas inte med i genomsnittlig väntetid och genomsnittlig tid i systemet.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteter som ger upp väntan tar detta flöde (för att försöka igen senare, till exempel); de andra tar uppgiftens andra väg ut.
 	Erlang	Erlang
 	Error	Fel
 	Estimate from three values…	Uppskatta från tre värden…
@@ -171,6 +178,9 @@
 	Fri	fre
 	From	Från
 	Gamma	Gamma
+	Gave up	Gav upp
+	Gives up before it is done	Ger upp innan den är klar
+	Gives up before service starts	Ger upp innan servicen börjar
 	Goes to	Går till
 	Hands on finished parts while down	Lämnar vidare färdiga detaljer även vid haveri
 	Help	Hjälp
@@ -207,6 +217,7 @@
 	Mean time blocked	Genomsnittlig blockeringstid
 	Mean time in system	Genomsnittlig tid i systemet
 	Mean wait	Genomsnittlig väntetid
+	Mean wait before giving up	Genomsnittlig väntetid innan de gav upp
 	Metric	Mått
 	Middles	Lodräta mittpunkter
 	Minimise	Minimera
@@ -265,6 +276,7 @@
 	Parts wanted	Önskade detaljer
 	Parts wanted is a number above 0	Antalet önskade detaljer är ett tal över 0
 	Paste	Klistra in
+	Patience	Tålamod
 	Pause	Pausa
 	Per	Period
 	Per shift needs a calendar: each period it is active is a shift.	”Per skift” kräver en kalender: varje period den är aktiv är ett skift.
@@ -374,6 +386,8 @@
 	Share	Andel
 	Share of arrivals lost	Andel förlorade ankomster
 	Share of units blocked	Andel blockerade enheter
+	Share of work wasted	Andel bortkastat arbete
+	Share that gave up	Andel som gav upp
 	Show All	Visa alla
 	Show {id}	Visa {id}
 	Size	Dimensionera
@@ -424,6 +438,7 @@
 	Three-point estimate	Trepunktsskattning
 	Thu	tor
 	Time available	Tillgänglig tid
+	Time before giving up	Tid innan den ger upp
 	Time between arrivals	Tid mellan ankomster
 	Time blocked	Tid blockerad
 	Time failed	Tid i haveri
@@ -479,6 +494,7 @@
 	Whole number	Heltal
 	Window	Fönster
 	With every time at its mean: {units}	Med varje tid på sitt medelvärde: {units}
+	Work wasted on those who gave up	Bortkastat arbete på dem som gav upp
 	XPDL with BPSim	XPDL med BPSim
 	Yes or no	Ja eller nej
 	Your changes will be lost if you don't save them.	Dina ändringar går förlorade om du inte sparar dem.

@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95 % interval podielu, ktorý splnil cieľ: {lo} až {hi}
 	95th percentile	95. percentil
 	95th percentile {value}	95. percentil {value}
+	A caller on hold: once a unit takes it, the entity stays.	Volajúci na linke: keď si ho jednotka vezme, entita zostane.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Klient s časovým limitom: ak mu čas vyprší počas obsluhy, vzdá to v tej chvíli a jednotka prácu aj tak dokončí (zbytočná práca).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Nový súbor obsahuje len model: čomu StochCraft v {file} nerozumie, sa vynechá.
+	Abandoned	Vzdané
+	Abandoned on {id}	Vzdané na {id}
 	About StochCraft	O aplikácii StochCraft
 	About {app}	O aplikácii {app}
 	Across the range it changed by {change}: more than chance would explain.	V rozsahu sa zmenil o {change}: viac, než by vysvetlila náhoda.
@@ -134,6 +138,7 @@
 	Duration	Trvanie
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Každá analýza spúšťa experiment niekoľkokrát s rovnakou počiatočnou hodnotou generátora, takže rozdiely pochádzajú zo zmeny, nie z náhody. Môže to chvíľu trvať.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Každá entita si naraz vezme celú prvú z týchto alternatív, ktorú možno práve splniť, a jednotky vráti, keď odchádza.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Každá entita tu čaká najviac čas, ktorý sa jej náhodne určí pri príchode, a potom to vzdá: odíde cestou označenou „Vzdané“ alebo opustí model.
 	Edit	Upraviť
 	Elasticity	Pružnosť
 	Ends early	Končí skôr
@@ -141,7 +146,9 @@
 	Energy per part	Energia na diel
 	Enough: {units}, meeting the target in {p} of replications	Stačí: {units}, cieľ splnený v {p} replikácií
 	Entered	Vstúpilo
+	Entities give up waiting	Entity vzdávajú čakanie
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entity, ktoré sú na konci replikácie stále vnútri, nie sú zahrnuté do priemerného času čakania ani priemerného času v systéme.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entity, ktoré vzdajú čakanie, idú týmto tokom (napríklad aby to neskôr skúsili znova); ostatné idú druhou cestou von z úlohy.
 	Erlang	Erlangovo
 	Error	Chyba
 	Estimate from three values…	Odhadnúť z troch hodnôt…
@@ -171,6 +178,9 @@
 	Fri	pi
 	From	Z
 	Gamma	Gama
+	Gave up	Vzdali to
+	Gives up before it is done	Vzdá to pred dokončením
+	Gives up before service starts	Vzdá to pred začiatkom obsluhy
 	Goes to	Vedie do
 	Hands on finished parts while down	Odovzdáva hotové diely aj počas poruchy
 	Help	Pomocník
@@ -207,6 +217,7 @@
 	Mean time blocked	Priemerný čas blokovania
 	Mean time in system	Priemerný čas v systéme
 	Mean wait	Priemerný čas čakania
+	Mean wait before giving up	Priemerný čas čakania do vzdania
 	Metric	Metrika
 	Middles	Zvislé stredy
 	Minimise	Minimalizovať
@@ -265,6 +276,7 @@
 	Parts wanted	Požadované diely
 	Parts wanted is a number above 0	Počet požadovaných dielov je číslo väčšie ako 0
 	Paste	Prilepiť
+	Patience	Trpezlivosť
 	Pause	Pozastaviť
 	Per	Obdobie
 	Per shift needs a calendar: each period it is active is a shift.	„Za zmenu“ potrebuje kalendár: každé obdobie, keď je aktívny, je jedna zmena.
@@ -374,6 +386,8 @@
 	Share	Podiel
 	Share of arrivals lost	Podiel stratených príchodov
 	Share of units blocked	Podiel blokovaných jednotiek
+	Share of work wasted	Podiel zbytočnej práce
+	Share that gave up	Podiel tých, ktoré to vzdali
 	Show All	Zobraziť všetko
 	Show {id}	Zobraziť {id}
 	Size	Dimenzovať
@@ -424,6 +438,7 @@
 	Three-point estimate	Trojbodový odhad
 	Thu	št
 	Time available	Dostupný čas
+	Time before giving up	Čas do vzdania
 	Time between arrivals	Čas medzi príchodmi
 	Time blocked	Čas blokovania
 	Time failed	Čas poruchy
@@ -479,6 +494,7 @@
 	Whole number	Celé číslo
 	Window	Okno
 	With every time at its mean: {units}	S každým časom na priemere: {units}
+	Work wasted on those who gave up	Zbytočná práca na tých, ktoré to vzdali
 	XPDL with BPSim	XPDL s BPSim
 	Yes or no	Áno alebo nie
 	Your changes will be lost if you don't save them.	Ak zmeny neuložíte, stratia sa.

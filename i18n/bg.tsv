@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95% интервал на дела, постигнал целта: от {lo} до {hi}
 	95th percentile	95-и персентил
 	95th percentile {value}	95-и персентил {value}
+	A caller on hold: once a unit takes it, the entity stays.	Обаждащ се на изчакване: щом единица го поеме, същността остава.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Клиент с изтичащо време (тайм-аут): ако времето му изтече по време на обслужването, той се отказва тогава, а единицата все пак довършва работата (пропиляна работа).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Новият файл съдържа само модела: това, което StochCraft не разбира в {file}, се изпуска.
+	Abandoned	Отказали се
+	Abandoned on {id}	Отказали се на {id}
 	About StochCraft	За StochCraft
 	About {app}	За {app}
 	Across the range it changed by {change}: more than chance would explain.	В диапазона се промени с {change}: повече, отколкото би обяснила случайността.
@@ -134,6 +138,7 @@
 	Duration	Продължителност
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Всеки анализ изпълнява експеримента няколко пъти със същата начална стойност, така че разликите идват от промяната, а не от случайността. Може да отнеме време.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Всяка същност взема първата от тези възможности, която може да бъде изпълнена сега, изцяло и наведнъж, и връща единиците, когато излезе.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Всяка същност чака тук най-много време, изтеглено случайно за нея при пристигането ѝ, след което се отказва: тръгва по изхода, отбелязан като „Отказали се“, или напуска модела.
 	Edit	Редактиране
 	Elasticity	Еластичност
 	Ends early	Завършва по-рано
@@ -141,7 +146,9 @@
 	Energy per part	Енергия на част
 	Enough: {units}, meeting the target in {p} of replications	Достатъчно: {units}, целта е постигната в {p} от репликациите
 	Entered	Влезли
+	Entities give up waiting	Същностите се отказват от чакането
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Обектите, които са още вътре в края на репликация, не се включват в средното чакане и средното време в системата.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Същностите, които се отказват от чакането, минават по този поток (например за да опитат отново по-късно); останалите минават по другия изход на задачата.
 	Erlang	Ерланг
 	Error	Грешка
 	Estimate from three values…	Оценка от три стойности…
@@ -171,6 +178,9 @@
 	Fri	пт
 	From	От
 	Gamma	Гама
+	Gave up	Отказали се
+	Gives up before it is done	Отказва се преди края на обслужването
+	Gives up before service starts	Отказва се преди началото на обслужването
 	Goes to	Отива към
 	Hands on finished parts while down	Предава готовите части и при повреда
 	Help	Помощ
@@ -207,6 +217,7 @@
 	Mean time blocked	Средно време на блокиране
 	Mean time in system	Средно време в системата
 	Mean wait	Средно чакане
+	Mean wait before giving up	Средно чакане до отказване
 	Metric	Показател
 	Middles	Вертикални центрове
 	Minimise	Минимизиране
@@ -265,6 +276,7 @@
 	Parts wanted	Желани части
 	Parts wanted is a number above 0	Желаните части са число над 0
 	Paste	Поставяне
+	Patience	Търпение
 	Pause	Пауза
 	Per	Период
 	Per shift needs a calendar: each period it is active is a shift.	„На смяна“ изисква календар: всеки период, в който той е активен, е смяна.
@@ -374,6 +386,8 @@
 	Share	Дял
 	Share of arrivals lost	Дял на загубените пристигания
 	Share of units blocked	Дял на блокираните единици
+	Share of work wasted	Дял на пропиляната работа
+	Share that gave up	Дял на отказалите се
 	Show All	Показване на всичко
 	Show {id}	Показване на {id}
 	Size	Оразмеряване
@@ -424,6 +438,7 @@
 	Three-point estimate	Оценка в три точки
 	Thu	чт
 	Time available	Налично време
+	Time before giving up	Време до отказване
 	Time between arrivals	Време между пристиганията
 	Time blocked	Време в блокиране
 	Time failed	Време в повреда
@@ -479,6 +494,7 @@
 	Whole number	Цяло число
 	Window	Прозорец
 	With every time at its mean: {units}	С всяко време на средната му стойност: {units}
+	Work wasted on those who gave up	Пропиляна работа за отказалите се
 	XPDL with BPSim	XPDL с BPSim
 	Yes or no	Да или не
 	Your changes will be lost if you don't save them.	Промените ви ще бъдат загубени, ако не ги запазите.

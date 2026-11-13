@@ -115,7 +115,11 @@ struct EncodedElement {
     left: u64,
     /// The optional metrics, in [`ElementReport`]'s order.
     metrics: [Option<u64>; 29],
+    /// Servers with a patience: the abandoned share and wait, the work wasted and its share
+    /// (apart, since serde takes arrays of at most 32).
+    patience: [Option<u64>; 4],
     lost: Option<u64>,
+    abandoned: Option<u64>,
     work_in_progress: Option<u64>,
     properties: Vec<Option<u64>>,
 }
@@ -174,7 +178,14 @@ impl Encoded {
                         bits(e.demand_met),
                         bits(e.cycle_time),
                     ],
+                    patience: [
+                        bits(e.abandoned_share),
+                        bits(e.abandoned_wait),
+                        bits(e.wasted),
+                        bits(e.wasted_share),
+                    ],
                     lost: e.lost,
+                    abandoned: e.abandoned,
                     work_in_progress: e.work_in_progress,
                     properties: e.properties.iter().map(|(_, v)| bits(*v)).collect(),
                 })
@@ -226,6 +237,7 @@ impl Encoded {
                     dmet,
                     ct,
                 ] = e.metrics;
+                let [ash, aw, wa, wsh] = e.patience;
                 Some(ElementReport {
                     id: t.id.clone(),
                     name: t.name.clone(),
@@ -244,6 +256,11 @@ impl Encoded {
                     availability: float(a),
                     lost: e.lost,
                     loss_probability: float(lp),
+                    abandoned: e.abandoned,
+                    abandoned_share: float(ash),
+                    abandoned_wait: float(aw),
+                    wasted: float(wa),
+                    wasted_share: float(wsh),
                     time_off_shift: float(off),
                     time_processing: float(pr),
                     time_starved: float(st),

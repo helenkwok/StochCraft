@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Interval de 95% al ponderii care atinge ținta: de la {lo} la {hi}
 	95th percentile	Percentila 95
 	95th percentile {value}	percentila 95 {value}
+	A caller on hold: once a unit takes it, the entity stays.	Un apelant în așteptare: odată ce o unitate îl preia, entitatea rămâne.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Un client care expiră (timeout): dacă timpul îi expiră în timpul servirii, renunță atunci, iar unitatea termină oricum lucrul (muncă irosită).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Fișierul nou conține doar modelul: ce nu înțelege StochCraft din {file} este omis.
+	Abandoned	Renunțări
+	Abandoned on {id}	Renunțări pe {id}
 	About StochCraft	Despre StochCraft
 	About {app}	Despre {app}
 	Across the range it changed by {change}: more than chance would explain.	Pe interval s-a schimbat cu {change}: mai mult decât ar explica întâmplarea.
@@ -134,6 +138,7 @@
 	Duration	Durată
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Fiecare analiză rulează experimentul de mai multe ori cu aceeași sămânță, așa că diferențele vin din modificare, nu din întâmplare. Poate dura puțin.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Fiecare entitate ia, integral și dintr-odată, prima dintre aceste alternative care poate fi satisfăcută în acel moment și returnează unitățile când pleacă.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Fiecare entitate așteaptă aici cel mult un timp extras la întâmplare pentru ea la sosire, apoi renunță: ia ieșirea marcată „Renunțări” sau părăsește modelul.
 	Edit	Editare
 	Elasticity	Elasticitate
 	Ends early	Se oprește mai devreme
@@ -141,7 +146,9 @@
 	Energy per part	Energie pe piesă
 	Enough: {units}, meeting the target in {p} of replications	Suficient: {units}, atinge ținta în {p} din replicări
 	Entered	Intrări
+	Entities give up waiting	Entitățile renunță să mai aștepte
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitățile încă în interior la finalul unei replicări sunt lăsate în afara timpului mediu de așteptare și a timpului mediu în sistem.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitățile care renunță să mai aștepte iau acest flux (pentru a încerca din nou mai târziu, de exemplu); celelalte iau cealaltă ieșire a sarcinii.
 	Erlang	Erlang
 	Error	Eroare
 	Estimate from three values…	Estimează din trei valori…
@@ -171,6 +178,9 @@
 	Fri	vin
 	From	De la
 	Gamma	Gamma
+	Gave up	Au renunțat
+	Gives up before it is done	Renunță înainte de a fi terminată
+	Gives up before service starts	Renunță înainte de începerea servirii
 	Goes to	Merge către
 	Hands on finished parts while down	Predă piesele terminate și în avarie
 	Help	Ajutor
@@ -207,6 +217,7 @@
 	Mean time blocked	Timp mediu de blocare
 	Mean time in system	Timp mediu în sistem
 	Mean wait	Timp mediu de așteptare
+	Mean wait before giving up	Timp mediu de așteptare până la renunțare
 	Metric	Indicator
 	Middles	Centre verticale
 	Minimise	Minimizează
@@ -265,6 +276,7 @@
 	Parts wanted	Piese dorite
 	Parts wanted is a number above 0	Numărul de piese dorite este un număr mai mare decât 0
 	Paste	Lipește
+	Patience	Răbdare
 	Pause	Pauză
 	Per	Perioadă
 	Per shift needs a calendar: each period it is active is a shift.	„Pe tură” are nevoie de un calendar: fiecare perioadă în care este activ este o tură.
@@ -374,6 +386,8 @@
 	Share	Pondere
 	Share of arrivals lost	Proporția sosirilor pierdute
 	Share of units blocked	Proporția unităților blocate
+	Share of work wasted	Ponderea muncii irosite
+	Share that gave up	Proporția celor care au renunțat
 	Show All	Afișează tot
 	Show {id}	Afișează {id}
 	Size	Dimensionează
@@ -424,6 +438,7 @@
 	Three-point estimate	Estimare în trei puncte
 	Thu	joi
 	Time available	Timp disponibil
+	Time before giving up	Timp până la renunțare
 	Time between arrivals	Timp între sosiri
 	Time blocked	Timp blocat
 	Time failed	Timp în avarie
@@ -479,6 +494,7 @@
 	Whole number	Număr întreg
 	Window	Fereastră
 	With every time at its mean: {units}	Cu fiecare timp la media sa: {units}
+	Work wasted on those who gave up	Muncă irosită pe cele care au renunțat
 	XPDL with BPSim	XPDL cu BPSim
 	Yes or no	Da sau nu
 	Your changes will be lost if you don't save them.	Dacă nu salvați, modificările se vor pierde.
