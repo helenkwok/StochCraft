@@ -2810,6 +2810,59 @@ fn a_patience_and_an_abandoned_way_are_set_run_and_removed() {
     );
 }
 
+/// A health check is set by command, shows in the model, gives the server its rows, and is
+/// removed again; it is a server's only.
+#[test]
+fn a_health_check_is_set_run_and_removed() {
+    let mut e = help_desk();
+    let metric = |r: &serde_json::Value, name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(metric(&r, "taken_out"), None, "{r}");
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "health_check": {
+            "interval": {"type": "exponential", "mean": 1.0},
+            "limit": 0.0,
+            "restart": {"type": "constant", "value": 0.5},
+            "keep": 1,
+            "on_takeout": "resume",
+        }}),
+    );
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(m.contains("\"on_takeout\":\"resume\""), "{m}");
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert!(metric(&r, "taken_out").is_some(), "{r}");
+    assert!(metric(&r, "mean_in_service").is_some(), "{r}");
+    assert!(metric(&r, "time_restarting").is_some(), "{r}");
+    // Resuming wastes nothing, and reports no waste.
+    assert_eq!(metric(&r, "wasted"), None, "{r}");
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "health_check": null}),
+    );
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(!m.contains("health_check"), "{m}");
+    ok(&mut e, "block.add", json!({"kind": "delay", "id": "pause"}));
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "pause", "health_check": {
+                "interval": {"type": "constant", "value": 1.0},
+                "restart": {"type": "constant", "value": 1.0},
+            }})
+        ),
+        ErrorCode::InvalidParams
+    );
+}
+
 /// A sink made a scrap sink and a connection made rework give the quality rows; unmarking them
 /// takes the rows away again.
 #[test]
