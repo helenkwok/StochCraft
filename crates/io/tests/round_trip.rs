@@ -879,3 +879,22 @@ fn scrap_and_rework_are_written_saved_and_removed() {
     assert!(!text.contains("stochcraft:scrap"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
 }
+
+/// A rework way with no probability, condition or quantity is still written in a new file.
+#[test]
+fn a_plain_rework_way_is_written_in_a_new_file() {
+    let mut m = Builder::new();
+    let src = m.source("parts", Dist::Exponential { mean: 5.0 }, None);
+    let first = m.server("first", 1, Dist::Constant(3.0));
+    let again = m.server("again", 1, Dist::Constant(2.0));
+    let out = m.sink("out");
+    m.connect(src, first);
+    m.connect(first, again);
+    m.connect(again, out);
+    m.rework(first, again);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(text.contains(r#"name="stochcraft:rework""#), "{text}");
+    assert_eq!(read(&bytes).map(|l| l.model).ok(), Some(laid_out(model)));
+}

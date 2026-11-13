@@ -876,7 +876,7 @@ fn showcase() -> Model {
     m.connect(previous, check);
     m.route(check, split, Some(0.9), None);
     m.route(check, scrap, Some(0.1), None);
-    m.scrap(scrap, Some(previous));
+    m.scrap(scrap, Some(cut));
     m.connect(split, left);
     m.connect(split, right);
     m.connect(left, join);
