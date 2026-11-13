@@ -232,6 +232,8 @@
 	Normal	Normală
 	Not reached, even with {units}	Neatinsă, nici cu {units}
 	Number	Număr
+	OEE availability	Disponibilitate OEE
+	OEE effectiveness	Eficacitate OEE
 	On	Zile
 	One change, which Undo takes back	O singură modificare, pe care Anulează o desface
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un operator, sosiri aleatorii: coada clasică, verificată față de teorie.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Perioada {n} se repetă
 	Period {n} starts	Perioada {n} începe
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioade în care se schimbă disponibilitatea, sosirile sau turele unui grup. Datele și orele se scriu 2026-01-31T09:00:00.
+	Planned run time per item	Timp de execuție planificat pe piesă
 	Play	Redare
 	Points	Puncte
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Timp de servire
 	Services	Servicii
 	Set Property	Setează proprietatea
+	Set a planned run time per item on this block to see its effectiveness.	Setați un timp de execuție planificat pe piesă pentru acest bloc pentru a-i vedea eficacitatea.
 	Set a value	Setează o valoare
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Se setează pentru fiecare entitate la intrarea în acest bloc. Expresiile citesc valorile pe care entitatea le avea la intrare, cum ar fi getProperty('issues') - 1.
 	Settings	Setări
 	Setup	Pregătire
+	Setup ratio	Ponderea pregătirii
 	Setup time	Timp de pregătire
 	Shape	Formă
 	Share	Pondere

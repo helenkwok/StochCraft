@@ -232,6 +232,8 @@
 	Normal	సాధారణ పంపిణీ
 	Not reached, even with {units}	{units}తో కూడా చేరలేదు
 	Number	సంఖ్య
+	OEE availability	OEE లభ్యత
+	OEE effectiveness	OEE ప్రభావశీలత
 	On	రోజులు
 	One change, which Undo takes back	రద్దు చేయి వెనక్కి తీసుకునే ఒక మార్పు
 	One clerk, random arrivals: the textbook queue, checked against theory.	ఒక గుమాస్తా, యాదృచ్ఛిక రాకలు: సిద్ధాంతంతో ధృవీకరించిన ప్రామాణిక క్యూ.
@@ -258,6 +260,7 @@
 	Period {n} repeats	వ్యవధి {n} పునరావృతం
 	Period {n} starts	వ్యవధి {n} ప్రారంభం
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	లభ్యత, రాకలు లేదా పూల్ షిఫ్ట్‌లు మారే వ్యవధులు. తేదీలు, సమయాలు 2026-01-31T09:00:00 లాగా రాయాలి.
+	Planned run time per item	ఒక్కో భాగానికి ప్రణాళిక చేసిన రన్ సమయం
 	Play	ప్లే చేయి
 	Points	బిందువులు
 	Poisson	పాయిసన్
@@ -340,10 +343,12 @@
 	Service time	సేవా సమయం
 	Services	సేవలు
 	Set Property	లక్షణాన్ని సెట్ చేయి
+	Set a planned run time per item on this block to see its effectiveness.	ఈ బ్లాక్ ప్రభావశీలతను చూడటానికి దానికి ఒక్కో భాగానికి ప్రణాళిక చేసిన రన్ సమయాన్ని సెట్ చేయండి.
 	Set a value	విలువను సెట్ చేయి
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ఈ బ్లాక్‌లోకి ప్రవేశించినప్పుడు ప్రతి ఎంటిటీకి సెట్ చేయబడుతుంది. ఎక్స్‌ప్రెషన్‌లు ఎంటిటీ ప్రవేశించిన సమయంలో ఉన్న విలువలను చదువుతాయి, ఉదాహరణకు getProperty('issues') - 1.
 	Settings	సెట్టింగ్‌లు
 	Setup	సెటప్
+	Setup ratio	సెటప్ నిష్పత్తి
 	Setup time	సెటప్ సమయం
 	Shape	ఆకృతి పరామితి
 	Share	వాటా

@@ -232,6 +232,8 @@
 	Normal	Нормальний розподіл
 	Not reached, even with {units}	Не досягнуто навіть із {units}
 	Number	Число
+	OEE availability	Доступність OEE
+	OEE effectiveness	Результативність OEE
 	On	Дні
 	One change, which Undo takes back	Одна зміна, яку скасовує Скасувати
 	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, випадкові прибуття: класична черга, перевірена теорією.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Повторення періоду {n}
 	Period {n} starts	Початок періоду {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Періоди, коли змінюються доступність, прибуття або зміни пулу. Дату й час записують як 2026-01-31T09:00:00.
+	Planned run time per item	Планований час роботи на деталь
 	Play	Відтворити
 	Points	Точки
 	Poisson	Розподіл Пуассона
@@ -340,10 +343,12 @@
 	Service time	Час обслуговування
 	Services	Служби
 	Set Property	Задати властивість
+	Set a planned run time per item on this block to see its effectiveness.	Задайте для цього блока планований час роботи на деталь, щоб побачити його результативність.
 	Set a value	Задати значення
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задається для кожної сутності під час входу до цього блока. Вирази зчитують значення, які сутність мала на момент входу, наприклад getProperty('issues') - 1.
 	Settings	Налаштування
 	Setup	Переналагодження
+	Setup ratio	Частка переналагодження
 	Setup time	Час переналагодження
 	Shape	Форма
 	Share	Частка

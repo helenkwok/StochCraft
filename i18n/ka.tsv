@@ -232,6 +232,8 @@
 	Normal	ნორმალური
 	Not reached, even with {units}	ვერ მიიღწა, თუნდაც {units}-ით
 	Number	რიცხვი
+	OEE availability	OEE ხელმისაწვდომობა
+	OEE effectiveness	OEE ეფექტიანობა
 	On	დღეები
 	One change, which Undo takes back	ერთი ცვლილება, რომელსაც დაბრუნება აუქმებს
 	One clerk, random arrivals: the textbook queue, checked against theory.	ერთი თანამშრომელი, შემთხვევითი შემოსვლები: თეორიით შემოწმებული კლასიკური რიგი.
@@ -258,6 +260,7 @@
 	Period {n} repeats	პერიოდი {n} მეორდება
 	Period {n} starts	პერიოდი {n} იწყება
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	პერიოდები, როცა იცვლება ხელმისაწვდომობა, შემოსვლები ან პულის ცვლები. თარიღი და დრო იწერება ასე: 2026-01-31T09:00:00.
+	Planned run time per item	დაგეგმილი მუშაობის დრო ერთ დეტალზე
 	Play	დაკვრა
 	Points	წერტილები
 	Poisson	პუასონი
@@ -340,10 +343,12 @@
 	Service time	მომსახურების დრო
 	Services	სერვისები
 	Set Property	თვისების დაყენება
+	Set a planned run time per item on this block to see its effectiveness.	დააყენეთ ამ ბლოკზე დაგეგმილი მუშაობის დრო ერთ დეტალზე, რომ ნახოთ მისი ეფექტიანობა.
 	Set a value	მნიშვნელობის დაყენება
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ამ ბლოკში შესვლისას მნიშვნელობა ენიჭება თითოეულ ერთეულს. გამოსახულებები კითხულობს შესვლის მომენტში არსებულ მნიშვნელობებს, მაგალითად getProperty('issues') - 1.
 	Settings	პარამეტრები
 	Setup	მომზადება
+	Setup ratio	მომზადების წილი
 	Setup time	მომზადების დრო
 	Shape	ფორმა
 	Share	წილი

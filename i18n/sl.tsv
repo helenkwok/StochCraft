@@ -232,6 +232,8 @@
 	Normal	Normalna
 	Not reached, even with {units}	Ni doseženo, niti z {units}
 	Number	Število
+	OEE availability	Razpoložljivost OEE
+	OEE effectiveness	Učinkovitost OEE
 	On	Dnevi
 	One change, which Undo takes back	Ena sprememba, ki jo Razveljavi prekliče
 	One clerk, random arrivals: the textbook queue, checked against theory.	En uslužbenec, naključni prihodi: klasična čakalna vrsta, preverjena s teorijo.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Ponavljanje obdobja {n}
 	Period {n} starts	Začetek obdobja {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Obdobja, ko se spremenijo razpoložljivost, prihodi ali izmene skupine. Datumi in časi se pišejo kot 2026-01-31T09:00:00.
+	Planned run time per item	Načrtovani čas delovanja na kos
 	Play	Predvajaj
 	Points	Točke
 	Poisson	Poissonova
@@ -340,10 +343,12 @@
 	Service time	Čas strežbe
 	Services	Storitve
 	Set Property	Nastavi lastnost
+	Set a planned run time per item on this block to see its effectiveness.	Za ta blok nastavite načrtovani čas delovanja na kos, da vidite njegovo učinkovitost.
 	Set a value	Nastavi vrednost
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nastavi se za vsako entiteto ob vstopu v ta blok. Izrazi preberejo vrednosti, ki jih je imela entiteta ob vstopu, na primer getProperty('issues') - 1.
 	Settings	Nastavitve
 	Setup	Priprava
+	Setup ratio	Delež priprave
 	Setup time	Čas priprave
 	Shape	Oblika
 	Share	Delež

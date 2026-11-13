@@ -232,6 +232,8 @@
 	Normal	Normale
 	Not reached, even with {units}	Nuk u arrit, as me {units}
 	Number	Numër
+	OEE availability	Disponueshmëria OEE
+	OEE effectiveness	Efektiviteti OEE
 	On	Ditët
 	One change, which Undo takes back	Një ndryshim, që Zhbëj e kthen
 	One clerk, random arrivals: the textbook queue, checked against theory.	Një punonjës, mbërritje të rastësishme: radha klasike, e verifikuar me teori.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Periudha {n} përsëritet
 	Period {n} starts	Periudha {n} nis
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periudha kur ndryshojnë disponueshmëria, mbërritjet ose turnet e një grupi. Datat dhe orët shkruhen 2026-01-31T09:00:00.
+	Planned run time per item	Koha e planifikuar e punës për pjesë
 	Play	Luaj
 	Points	Pikat
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Koha e shërbimit
 	Services	Shërbimet
 	Set Property	Cakto vetinë
+	Set a planned run time per item on this block to see its effectiveness.	Caktoni një kohë të planifikuar pune për pjesë në këtë bllok për të parë efektivitetin e tij.
 	Set a value	Cakto një vlerë
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Vendoset për çdo entitet kur hyn në këtë bllok. Shprehjet lexojnë vlerat që entiteti kishte në hyrje, si getProperty('issues') - 1.
 	Settings	Cilësimet
 	Setup	Përgatitja
+	Setup ratio	Raporti i përgatitjes
 	Setup time	Koha e përgatitjes
 	Shape	Forma
 	Share	Pjesa

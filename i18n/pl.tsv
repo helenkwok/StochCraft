@@ -232,6 +232,8 @@
 	Normal	Normalny
 	Not reached, even with {units}	Nieosiągnięty, nawet przy {units}
 	Number	Liczba
+	OEE availability	Dostępność OEE
+	OEE effectiveness	Efektywność OEE
 	On	Dni
 	One change, which Undo takes back	Jedna zmiana, którą cofa Cofnij
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracownik, losowe przybycia: klasyczna kolejka zweryfikowana teorią.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Powtarzanie okresu {n}
 	Period {n} starts	Początek okresu {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Okresy, w których zmieniają się dostępność, przybycia lub zmiany puli. Daty i godziny zapisuje się jako 2026-01-31T09:00:00.
+	Planned run time per item	Planowany czas pracy na część
 	Play	Odtwórz
 	Points	Punkty
 	Poisson	Poissona
@@ -340,10 +343,12 @@
 	Service time	Czas obsługi
 	Services	Usługi
 	Set Property	Ustaw właściwość
+	Set a planned run time per item on this block to see its effectiveness.	Ustaw planowany czas pracy na część w tym bloku, aby zobaczyć jego efektywność.
 	Set a value	Ustaw wartość
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ustawiane dla każdej jednostki przy wejściu do tego bloku. Wyrażenia odczytują wartości, które jednostka miała w chwili wejścia, np. getProperty('issues') - 1.
 	Settings	Ustawienia
 	Setup	Przezbrojenie
+	Setup ratio	Udział przezbrojeń
 	Setup time	Czas przezbrojenia
 	Shape	Kształt
 	Share	Udział

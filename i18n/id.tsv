@@ -232,6 +232,8 @@
 	Normal	Normal
 	Not reached, even with {units}	Tidak tercapai, bahkan dengan {units}
 	Number	Angka
+	OEE availability	Ketersediaan OEE
+	OEE effectiveness	Efektivitas OEE
 	On	Hari
 	One change, which Undo takes back	Satu perubahan, yang dibatalkan oleh Urungkan
 	One clerk, random arrivals: the textbook queue, checked against theory.	Satu petugas, kedatangan acak: antrean klasik, diperiksa terhadap teori.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Periode {n} berulang
 	Period {n} starts	Periode {n} mulai
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periode saat ketersediaan, kedatangan, atau sif kumpulan berubah. Tanggal dan waktu ditulis 2026-01-31T09:00:00.
+	Planned run time per item	Waktu jalan terencana per komponen
 	Play	Putar
 	Points	Titik
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Waktu layanan
 	Services	Layanan
 	Set Property	Atur Properti
+	Set a planned run time per item on this block to see its effectiveness.	Tetapkan waktu jalan terencana per komponen pada blok ini untuk melihat efektivitasnya.
 	Set a value	Tetapkan nilai
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Ditetapkan pada setiap entitas saat memasuki blok ini. Ekspresi membaca nilai yang dibawa entitas saat masuk, seperti getProperty('issues') - 1.
 	Settings	Pengaturan
 	Setup	Penyiapan
+	Setup ratio	Rasio penyiapan
 	Setup time	Waktu penyiapan
 	Shape	Bentuk
 	Share	Bagian

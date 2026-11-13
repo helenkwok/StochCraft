@@ -232,6 +232,8 @@
 	Normal	ນໍມອນ
 	Not reached, even with {units}	ບໍ່ບັນລຸ ເຖິງມີ {units}
 	Number	ຈຳນວນ
+	OEE availability	ຄວາມພ້ອມໃຊ້ OEE
+	OEE effectiveness	ປະສິດທິຜົນ OEE
 	On	ມື້
 	One change, which Undo takes back	ການປ່ຽນແປງໜຶ່ງເທື່ອ ເຊິ່ງຍົກເລີກໄດ້
 	One clerk, random arrivals: the textbook queue, checked against theory.	ພະນັກງານໜຶ່ງຄົນ ແລະ ການມາຮອດແບບສຸ່ມ: ແຖວຄອຍພື້ນຖານທີ່ກວດທຽບກັບທິດສະດີ.
@@ -258,6 +260,7 @@
 	Period {n} repeats	ໄລຍະ {n} ເຮັດຊ້ຳ
 	Period {n} starts	ໄລຍະ {n} ເລີ່ມ
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	ໄລຍະເວລາທີ່ຄວາມພ້ອມໃຊ້, ການມາຮອດ ຫຼື ກະຂອງກຸ່ມຊັບພະຍາກອນປ່ຽນແປງ. ວັນທີ ແລະ ເວລາຂຽນເປັນ 2026-01-31T09:00:00.
+	Planned run time per item	ເວລາເດີນເຄື່ອງຕາມແຜນຕໍ່ຊິ້ນ
 	Play	ຫຼິ້ນ
 	Points	ຈຸດ
 	Poisson	ປົວຊົງ
@@ -340,10 +343,12 @@
 	Service time	ເວລາໃຫ້ບໍລິການ
 	Services	ບໍລິການ
 	Set Property	ຕັ້ງຄຸນສົມບັດ
+	Set a planned run time per item on this block to see its effectiveness.	ກຳນົດເວລາເດີນເຄື່ອງຕາມແຜນຕໍ່ຊິ້ນໃຫ້ບລັອກນີ້ເພື່ອເບິ່ງປະສິດທິຜົນຂອງມັນ.
 	Set a value	ຕັ້ງຄ່າ
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	ຕັ້ງຄ່າໃຫ້ແຕ່ລະເອນທິຕີເມື່ອເຂົ້າສູ່ບລັອກນີ້. ນິພົດຈະອ່ານຄ່າທີ່ເອນທິຕີມີໃນເວລາເຂົ້າ, ເຊັ່ນ getProperty('issues') - 1.
 	Settings	ການຕັ້ງຄ່າ
 	Setup	ການຕັ້ງເຄື່ອງ
+	Setup ratio	ສັດສ່ວນການຕັ້ງເຄື່ອງ
 	Setup time	ເວລາຕັ້ງເຄື່ອງ
 	Shape	ຮູບຮ່າງ
 	Share	ສັດສ່ວນ

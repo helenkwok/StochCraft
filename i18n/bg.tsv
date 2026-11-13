@@ -232,6 +232,8 @@
 	Normal	Нормално
 	Not reached, even with {units}	Не е постигната дори с {units}
 	Number	Число
+	OEE availability	Наличност OEE
+	OEE effectiveness	Ефективност OEE
 	On	Дни
 	One change, which Undo takes back	Една промяна, която Отмяна връща
 	One clerk, random arrivals: the textbook queue, checked against theory.	Един служител, случайни пристигания: класическа опашка, проверена спрямо теорията.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Период {n} се повтаря
 	Period {n} starts	Период {n} започва
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Периоди, в които се променят наличността, пристиганията или смените на пул. Датите и часовете се записват като 2026-01-31T09:00:00.
+	Planned run time per item	Планирано време за работа на част
 	Play	Пускане
 	Points	Точки
 	Poisson	Поасон
@@ -340,10 +343,12 @@
 	Service time	Време за обслужване
 	Services	Услуги
 	Set Property	Задаване на свойство
+	Set a planned run time per item on this block to see its effectiveness.	Задайте планирано време за работа на част за този блок, за да видите ефективността му.
 	Set a value	Задаване на стойност
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Задава се за всяка същност при влизането ѝ в този блок. Изразите четат стойностите, които е имала при влизането, например getProperty('issues') - 1.
 	Settings	Настройки
 	Setup	Пренастройка
+	Setup ratio	Дял на пренастройката
 	Setup time	Време за пренастройка
 	Shape	Форма
 	Share	Дял

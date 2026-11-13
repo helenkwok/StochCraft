@@ -337,6 +337,16 @@ pub(crate) fn changeover_element(x: &Setup) -> Element {
         .with_child(body)
 }
 
+/// A server's planned time to make one item as StochCraft's vendor extension
+/// ([`crate::bpsim::PLANNED_RUN_TIME`]).
+pub(crate) fn planned_element(d: &Dist) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::PLANNED_RUN_TIME)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(Element::new("stochcraft:plannedRunTime", Some(ns)).with_child(dist_element(d)))
+}
+
 /// A server's transfer time as StochCraft's vendor extension ([`crate::bpsim::TRANSFER_TIME`]).
 pub(crate) fn transfer_element(t: &Transfer) -> Element {
     let ns = crate::bpsim::STOCHCRAFT_NS;
@@ -703,6 +713,13 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if let ElementKind::Server { power: Some(p), .. } = &e.kind {
             ep.push(power_element(p));
+        }
+        if let ElementKind::Server {
+            planned_run_time: Some(d),
+            ..
+        } = &e.kind
+        {
+            ep.push(planned_element(d));
         }
         if let ElementKind::Server { setup: Some(x), .. } = &e.kind
             && x.on_change_of.is_some()

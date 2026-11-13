@@ -232,6 +232,8 @@
 	Normal	Normalusis
 	Not reached, even with {units}	Nepasiekta net su {units}
 	Number	Skaičius
+	OEE availability	OEE prieinamumas
+	OEE effectiveness	OEE efektyvumas
 	On	Dienos
 	One change, which Undo takes back	Vienas pakeitimas, kurį atšaukia Anuliuoti
 	One clerk, random arrivals: the textbook queue, checked against theory.	Vienas darbuotojas, atsitiktiniai atvykimai: klasikinė eilė, patikrinta pagal teoriją.
@@ -258,6 +260,7 @@
 	Period {n} repeats	{n} laikotarpio kartojimas
 	Period {n} starts	{n} laikotarpio pradžia
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Laikotarpiai, kai keičiasi prieinamumas, atvykimai ar grupės pamainos. Datos ir laikai rašomi taip: 2026-01-31T09:00:00.
+	Planned run time per item	Planuojamas veikimo laikas vienai detalei
 	Play	Leisti
 	Points	Taškai
 	Poisson	Puasono
@@ -340,10 +343,12 @@
 	Service time	Aptarnavimo laikas
 	Services	Paslaugos
 	Set Property	Nustatyti savybę
+	Set a planned run time per item on this block to see its effectiveness.	Nustatykite šiam blokui planuojamą veikimo laiką vienai detalei, kad matytumėte jo efektyvumą.
 	Set a value	Nustatyti reikšmę
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nustatoma kiekvienam objektui, kai jis patenka į šį bloką. Išraiškos nuskaito reikšmes, kurias objektas turėjo įeidamas, pvz., getProperty('issues') - 1.
 	Settings	Nuostatos
 	Setup	Derinimas
+	Setup ratio	Derinimo dalis
 	Setup time	Derinimo laikas
 	Shape	Forma
 	Share	Dalis

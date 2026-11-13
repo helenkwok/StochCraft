@@ -59,6 +59,12 @@ pub const ROUTING: &str = "stochcraft:routing";
 /// `failed` and `offShift`, each in kilowatts, in the task's `ElementParameters`.
 pub const POWER: &str = "stochcraft:power";
 
+/// The vendor extension for a server's planned time to make one item (ISO 22400-2's planned
+/// runtime per item), for the OEE results: a `stochcraft:plannedRunTime` element holding one
+/// BPSim distribution or constant (its mean is the plan), in the task's `ElementParameters`.
+/// It does not change the simulation.
+pub const PLANNED_RUN_TIME: &str = "stochcraft:plannedRunTime";
+
 /// A batch: `stochcraft:batchSize` on a task's `ElementParameters`, the number of entities it
 /// collects before sending them on together (a whole number of at least 1).
 pub const BATCH_SIZE: &str = "stochcraft:batchSize";

@@ -795,6 +795,9 @@ pub(crate) struct BlockStats {
     wait: Tally,
     /// Time from creation to reaching a sink.
     time_in_system: Tally,
+    /// Servers: jobs finished, whether or not the entity has left yet (ISO 22400-2's produced
+    /// quantity); `left` lags it by those held while blocked.
+    produced: u64,
     /// The values assigned to each of the element's properties.
     properties: Vec<Tally>,
     /// Units (servers) or entities (delays) holding a finished entity while the next buffer is
@@ -989,6 +992,7 @@ impl BlockStats {
             busy: TimeWeighted::new(t, 0.0),
             wait: Tally::new(),
             time_in_system: Tally::new(),
+            produced: 0,
             properties: (0..properties).map(|_| Tally::new()).collect(),
             blocked: TimeWeighted::new(t, 0.0),
             blocked_time: Tally::new(),
@@ -1009,6 +1013,7 @@ impl BlockStats {
         self.busy.reset(t);
         self.wait = Tally::new();
         self.time_in_system = Tally::new();
+        self.produced = 0;
         self.properties.iter_mut().for_each(|p| *p = Tally::new());
         self.blocked.reset(t);
         self.blocked_time = Tally::new();
@@ -1211,6 +1216,39 @@ impl BlockStats {
                     .setup
                     .average(end)
                     .map(|x| x / f64::from(*capacity)),
+                _ => None,
+            },
+            // ISO 22400-2's OEE elements. Off shift is planned downtime, so the time planned to
+            // be busy is the units' time less it.
+            oee_availability: match kind {
+                ElementKind::Server { capacity, .. } => self
+                    .states
+                    .processing
+                    .average(end)
+                    .zip(self.states.off_shift.average(end))
+                    .and_then(|(p, o)| {
+                        let planned = f64::from(*capacity) - o;
+                        (planned > 0.0).then(|| p / planned)
+                    }),
+                _ => None,
+            },
+            oee_effectiveness: match kind {
+                ElementKind::Server {
+                    planned_run_time: Some(plan),
+                    ..
+                } => plan.mean().and_then(|m| {
+                    let producing = self.states.processing.integral(end);
+                    (producing > 0.0).then(|| m * self.produced as f64 / producing)
+                }),
+                _ => None,
+            },
+            setup_ratio: match kind {
+                ElementKind::Server { setup: Some(_), .. } => self
+                    .states
+                    .setup
+                    .average(end)
+                    .zip(self.states.processing.average(end))
+                    .and_then(|(s, p)| (s + p > 0.0).then(|| s / (s + p))),
                 _ => None,
             },
             // Only once time has passed, as for the time-averages.
@@ -1839,6 +1877,7 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
                         d.holding = true;
                     });
                 }
+                env.borrow().with_stats(|s| s.produced += 1);
                 move_on(&env, &ctx, entity, &|| false, None).await;
                 book.change(&env.borrow(), u, |d| d.holding = false);
             }
@@ -2147,6 +2186,7 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                 // its repair ([`reserve_place`]).
                 let down = || units2.borrow().get(unit).is_some_and(|x| x.down);
                 let repaired = waits_for_repair.then(|| up2.get(unit)).flatten();
+                env2.borrow().with_stats(|s| s.produced += 1);
                 let kept = move_on(&env2, &c, entity, &down, repaired).await;
                 book2.change(&env2.borrow(), unit, |d| d.holding = false);
                 if let Some(x) = units2.borrow_mut().get_mut(unit) {
@@ -2552,6 +2592,9 @@ impl Pools {
                     time_blocked: None,
                     time_failed: None,
                     time_setup: None,
+                    oee_availability: None,
+                    oee_effectiveness: None,
+                    setup_ratio: None,
                     energy: None,
                     specific_energy: None,
                     lost: None,

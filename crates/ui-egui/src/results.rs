@@ -77,6 +77,9 @@ fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
         "time_blocked" => (t("Time blocked"), Unit::Share),
         "time_failed" => (t("Time failed"), Unit::Share),
         "time_setup" => (t("Time setting up"), Unit::Share),
+        "oee_availability" => (t("OEE availability"), Unit::Share),
+        "oee_effectiveness" => (t("OEE effectiveness"), Unit::Share),
+        "setup_ratio" => (t("Setup ratio"), Unit::Share),
         "energy" => (t("Energy"), Unit::Energy),
         "specific_energy" => (t("Energy per part"), Unit::Energy),
         other => (other, Unit::Count),
@@ -272,6 +275,16 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                         &n_of(m),
                     ],
                 );
+            }
+            // OEE needs a plan to compare against; say how to get it rather than guess one.
+            if !e["metrics"]["oee_availability"].is_null()
+                && e["metrics"]["oee_effectiveness"].is_null()
+            {
+                ui.add_space(2.0);
+                ui.label(theme::weak(
+                    ui,
+                    t("Set a planned run time per item on this block to see its effectiveness."),
+                ));
             }
             ui.add_space(16.0);
         }

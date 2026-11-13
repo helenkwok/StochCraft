@@ -747,3 +747,20 @@ fn a_setup_and_a_changeover_are_set_in_the_inspector() {
     click(&mut h, Role::CheckBox, "Setup");
     assert!(element(&h, "serve").get("setup").is_none());
 }
+
+/// A planned run time per item, for OEE, is set and removed in the inspector like a transfer
+/// time.
+#[test]
+fn a_planned_run_time_is_set_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    click(&mut h, Role::ComboBox, "Planned run time per item");
+    click(&mut h, Role::Button, "Constant");
+    assert_eq!(
+        element(&h, "serve")["planned_run_time"],
+        json!({"type": "constant", "value": 1.0})
+    );
+    click(&mut h, Role::ComboBox, "Planned run time per item");
+    click(&mut h, Role::Button, "None");
+    assert!(element(&h, "serve").get("planned_run_time").is_none());
+}

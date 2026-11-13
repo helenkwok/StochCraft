@@ -232,6 +232,8 @@
 	Normal	Normal
 	Not reached, even with {units}	Ikke nådd, heller ikke med {units}
 	Number	Tall
+	OEE availability	OEE-tilgjengelighet
+	OEE effectiveness	OEE-effektivitet
 	On	Dager
 	One change, which Undo takes back	Én endring, som Angre tar tilbake
 	One clerk, random arrivals: the textbook queue, checked against theory.	Én medarbeider, tilfeldige ankomster: den klassiske køen, kontrollert mot teorien.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Periode {n} gjentas
 	Period {n} starts	Periode {n} starter
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioder der tilgjengelighet, ankomster eller en puljes skift endres. Datoer og klokkeslett skrives 2026-01-31T09:00:00.
+	Planned run time per item	Planlagt kjøretid per del
 	Play	Spill av
 	Points	Punkter
 	Poisson	Poisson
@@ -340,10 +343,12 @@
 	Service time	Servicetid
 	Services	Tjenester
 	Set Property	Angi egenskap
+	Set a planned run time per item on this block to see its effectiveness.	Angi en planlagt kjøretid per del for denne blokken for å se effektiviteten.
 	Set a value	Angi en verdi
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Angis for hver enhet når den går inn i denne blokken. Uttrykk leser verdiene enheten hadde ved ankomst, for eksempel getProperty('issues') - 1.
 	Settings	Innstillinger
 	Setup	Omstilling
+	Setup ratio	Omstillingsandel
 	Setup time	Omstillingstid
 	Shape	Form
 	Share	Andel

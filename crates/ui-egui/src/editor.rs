@@ -55,6 +55,7 @@ fn parameters(kind: &str) -> &'static [&'static str] {
             "transfer",
             "transfer_holds_sender",
             "setup",
+            "planned_run_time",
         ],
         // Its needs are edited with M2.5's window work; service and priority here.
         "shared_task" => &["service", "priority"],
@@ -431,7 +432,10 @@ impl App {
                 calendars: &calendars,
             };
             let key = format!("{id}/{f}");
-            let time = matches!(*f, "interarrival" | "service" | "duration" | "transfer");
+            let time = matches!(
+                *f,
+                "interarrival" | "service" | "duration" | "transfer" | "planned_run_time"
+            );
             if let Some(v) = form::field(ui, &mut cx, Schema::new(&schema), &key, f, &current, time)
             {
                 self.execute("block.set", json!({ "id": id, *f: v }));

@@ -232,6 +232,8 @@
 	Normal	Normální
 	Not reached, even with {units}	Nesplněno ani s {units}
 	Number	Číslo
+	OEE availability	Dostupnost OEE
+	OEE effectiveness	Efektivnost OEE
 	On	Dny
 	One change, which Undo takes back	Jedna změna, kterou Zpět vrátí
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracovník, náhodné příchody: klasická fronta ověřená teorií.
@@ -258,6 +260,7 @@
 	Period {n} repeats	Období {n} se opakuje
 	Period {n} starts	Období {n} začíná
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Období, kdy se mění dostupnost, příchody nebo směny fondu. Data a časy se píší jako 2026-01-31T09:00:00.
+	Planned run time per item	Plánovaná doba běhu na díl
 	Play	Přehrát
 	Points	Body
 	Poisson	Poissonovo
@@ -340,10 +343,12 @@
 	Service time	Doba obsluhy
 	Services	Služby
 	Set Property	Nastavit vlastnost
+	Set a planned run time per item on this block to see its effectiveness.	Nastavte u tohoto bloku plánovanou dobu běhu na díl, abyste viděli jeho efektivnost.
 	Set a value	Nastavit hodnotu
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	Nastavuje se pro každou entitu při vstupu do tohoto bloku. Výrazy čtou hodnoty, se kterými entita přišla, například getProperty('issues') - 1.
 	Settings	Nastavení
 	Setup	Seřízení
+	Setup ratio	Podíl seřízení
 	Setup time	Doba seřízení
 	Shape	Tvar
 	Share	Podíl

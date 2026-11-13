@@ -232,6 +232,8 @@
 	Normal	सामान्य
 	Not reached, even with {units}	पूरा नहीं हुआ, {units} के साथ भी नहीं
 	Number	संख्या
+	OEE availability	OEE उपलब्धता
+	OEE effectiveness	OEE प्रभावशीलता
 	On	दिन
 	One change, which Undo takes back	एक बदलाव, जिसे पूर्ववत करें वापस लेता है
 	One clerk, random arrivals: the textbook queue, checked against theory.	एक कर्मचारी, यादृच्छिक आगमन: सिद्धांत से सत्यापित पारंपरिक कतार।
@@ -258,6 +260,7 @@
 	Period {n} repeats	अवधि {n} दोहराव
 	Period {n} starts	अवधि {n} शुरू
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	वे अवधियाँ जब उपलब्धता, आगमन या किसी पूल की पालियाँ बदलती हैं। दिनांक और समय 2026-01-31T09:00:00 की तरह लिखे जाते हैं।
+	Planned run time per item	प्रति पुर्जा नियोजित चलन समय
 	Play	चलाएँ
 	Points	बिंदु
 	Poisson	प्वासों
@@ -340,10 +343,12 @@
 	Service time	सेवा समय
 	Services	सेवाएँ
 	Set Property	गुण सेट करें
+	Set a planned run time per item on this block to see its effectiveness.	इस ब्लॉक की प्रभावशीलता देखने के लिए उस पर प्रति पुर्जा नियोजित चलन समय सेट करें।
 	Set a value	मान सेट करें
 	Set on every entity as it enters this block. Expressions read the values it arrived with, such as getProperty('issues') - 1.	इस ब्लॉक में प्रवेश करते समय प्रत्येक इकाई पर सेट किया जाता है। एक्सप्रेशन इकाई के प्रवेश के समय मौजूद मान पढ़ते हैं, जैसे getProperty('issues') - 1।
 	Settings	सेटिंग
 	Setup	सेटअप
+	Setup ratio	सेटअप अनुपात
 	Setup time	सेटअप समय
 	Shape	आकार
 	Share	हिस्सा
