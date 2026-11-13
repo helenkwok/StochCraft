@@ -38,6 +38,8 @@ pub const CANCEL_RUN: &str = "model.cancel_run";
 pub const WATCH: &str = "model.watch";
 pub const STOP_WATCHING: &str = "model.stop_watching";
 pub const THEME: &str = "view.theme";
+pub const COLOR_THEME: &str = "view.color_theme";
+pub const EDIT_THEMES: &str = "view.edit_themes";
 pub const LANGUAGE: &str = "view.language";
 pub const ABOUT: &str = "help.about";
 pub const SHORTCUTS: &str = "app.keyboard_shortcuts";
@@ -185,23 +187,35 @@ impl App {
         .role(MenuRole::Edit);
 
         let theme = self.theme_choice;
-        let appearance = Node::submenu(
-            t("Appearance"),
-            [
-                (ThemeChoice::System, "Use System Setting"),
-                (ThemeChoice::Light, "Light"),
-                (ThemeChoice::Dark, "Dark"),
-            ]
+        let mut appearance: Vec<Node> = [
+            (ThemeChoice::System, "Use System Setting"),
+            (ThemeChoice::Light, "Light"),
+            (ThemeChoice::Dark, "Dark"),
+        ]
+        .into_iter()
+        .map(|(c, label)| {
+            Node::Item(
+                Item::new(CommandRef::with_params(THEME, json!(c.key())), t(label))
+                    .radio(theme == c),
+            )
+        })
+        .collect();
+        // The colour themes: the built-in ones, then the user's own.
+        appearance.push(Node::Separator);
+        let names = crate::theme::presets()
             .into_iter()
-            .map(|(c, label)| {
-                Node::Item(
-                    Item::new(CommandRef::with_params(THEME, json!(c.key())), t(label))
-                        .radio(theme == c),
-                )
-            })
-            .collect(),
-        )
-        .role(ItemRole::Appearance);
+            .map(|t| t.name)
+            .chain(self.custom_themes.iter().map(|t| t.name.clone()));
+        for name in names {
+            let chosen = self.colors == name;
+            let shown = crate::theme::shown_name(&name);
+            appearance.push(Node::Item(
+                Item::new(CommandRef::with_params(COLOR_THEME, json!(name)), shown).radio(chosen),
+            ));
+        }
+        appearance.push(Node::Separator);
+        appearance.push(item(EDIT_THEMES, "Edit themes…"));
+        let appearance = Node::submenu(t("Appearance"), appearance).role(ItemRole::Appearance);
         let mut view = vec![appearance];
         // View ▸ Language, once there is more than English to choose from.
         let languages = crate::i18n::languages();
@@ -300,7 +314,10 @@ impl App {
 
     /// A dialog is open: menu commands wait.
     pub(crate) fn modal_open(&self) -> bool {
-        self.confirm.is_some() || self.shortcuts_dialog.is_some() || self.recovery.is_some()
+        self.confirm.is_some()
+            || self.shortcuts_dialog.is_some()
+            || self.recovery.is_some()
+            || self.themes.is_some()
     }
 
     /// Runs a command from a menu, the macOS menu bar or a shortcut.
@@ -344,6 +361,12 @@ impl App {
                     self.theme_choice = t;
                 }
             }
+            COLOR_THEME => {
+                if let Some(name) = command.params.as_str() {
+                    self.colors = name.to_owned();
+                }
+            }
+            EDIT_THEMES => self.open_themes(),
             LANGUAGE => {
                 let code = command.params.as_str().filter(|c| *c != "auto");
                 self.set_language(code);
