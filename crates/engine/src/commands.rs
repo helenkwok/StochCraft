@@ -13,9 +13,9 @@ use stochcraft_model::{
 use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
-    self, AvailabilityDoc, BreakdownSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec, KindSpec,
-    ModelDoc, NeedSpec, PowerSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, RoutingSpec,
-    ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    self, AvailabilityDoc, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec,
+    KindSpec, ModelDoc, NeedSpec, PowerSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec,
+    RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -113,7 +113,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "setup",
             "planned_run_time",
         ],
-        Some("sink") => &["scrap"],
+        Some("sink") => &["scrap", "demand"],
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
         Some("exclusive_gateway") => &["default", "routing"],
@@ -331,6 +331,10 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<ScrapSpec>")]
     pub scrap: Option<Option<ScrapSpec>>,
+    /// Sinks: the customer demand it serves, for takt; `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<DemandSpec>")]
+    pub demand: Option<Option<DemandSpec>>,
     /// Tasks with shared resources: what each entity needs, the alternatives in order.
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
@@ -929,10 +933,13 @@ fn estimate_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .three_point
         .fit()
         .map_err(|err| CommandError::new(ErrorCode::InvalidParams, err.to_string()))?;
-    let mut kind = e
-        .model()
-        .element(&id)
-        .map_or(ElementKind::Sink { scrap: None }, |el| el.kind.clone());
+    let mut kind = e.model().element(&id).map_or(
+        ElementKind::Sink {
+            scrap: None,
+            demand: None,
+        },
+        |el| el.kind.clone(),
+    );
     match &mut kind {
         ElementKind::Source {
             interarrival: d, ..
@@ -1042,10 +1049,13 @@ fn results_compare(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: BlockSet = parse(p)?;
     let id = existing_element(e.model(), &p.id)?;
-    let mut kind = e
-        .model()
-        .element(&id)
-        .map_or(ElementKind::Sink { scrap: None }, |el| el.kind.clone());
+    let mut kind = e.model().element(&id).map_or(
+        ElementKind::Sink {
+            scrap: None,
+            demand: None,
+        },
+        |el| el.kind.clone(),
+    );
     let given = [
         ("interarrival", p.interarrival.is_some()),
         ("limit", p.limit.is_some()),
@@ -1063,6 +1073,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("setup", p.setup.is_some()),
         ("planned_run_time", p.planned_run_time.is_some()),
         ("scrap", p.scrap.is_some()),
+        ("demand", p.demand.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
@@ -1089,7 +1100,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Delay { .. } => &["duration"],
         ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
         ElementKind::Batch { .. } => &["size"],
-        ElementKind::Sink { .. } => &["scrap"],
+        ElementKind::Sink { .. } => &["scrap", "demand"],
         ElementKind::ParallelGateway | ElementKind::Unbatch => &[],
     };
     if let Some((name, _)) = given.iter().find(|(n, g)| *g && !applies.contains(n)) {
@@ -1216,7 +1227,10 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *size = n;
             }
         }
-        ElementKind::Sink { scrap } => {
+        ElementKind::Sink { scrap, demand } => {
+            if let Some(d) = p.demand {
+                *demand = d.map(Into::into);
+            }
             if let Some(s) = p.scrap {
                 *scrap = s.map(|s| stochcraft_model::Scrap {
                     charged_to: s.charged_to.as_deref().map(ElementId::unchecked),

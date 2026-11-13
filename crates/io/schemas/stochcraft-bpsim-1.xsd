@@ -64,6 +64,15 @@
       <stochcraft:scrap chargedTo="machine"/>
     </bpsim:VendorExtension>
 
+  stochcraft:demand, on an end event's ElementParameters: the customer demand it serves, for
+  takt (the available time divided by the demand over it): quantity parts per run (the measured
+  window), day, week or shift. With calendar, only the time that calendar is active counts as
+  available, and with per="shift" each active period of it is a shift (needed then).
+
+    <bpsim:VendorExtension name="stochcraft:demand" xmlns:stochcraft="…">
+      <stochcraft:demand quantity="480" per="shift" calendar="day-shift"/>
+    </bpsim:VendorExtension>
+
   stochcraft:plannedRunTime, on a task's ElementParameters: the planned time for the task's
   resource to make one item (ISO 22400-2's planned runtime per item), holding one BPSim
   distribution or constant whose mean is the plan. It is not simulated; results use it for
@@ -148,6 +157,22 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="plannedRunTime" type="stochcraft:Value"/>
+  <xs:element name="demand">
+    <xs:complexType>
+      <xs:attribute name="quantity" type="xs:double" use="required"/>
+      <xs:attribute name="per" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="run"/>
+            <xs:enumeration value="day"/>
+            <xs:enumeration value="week"/>
+            <xs:enumeration value="shift"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="calendar" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="scrap">
     <xs:complexType>
       <xs:attribute name="chargedTo" type="xs:string"/>

@@ -8,10 +8,10 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
-    Bounds, Breakdown, Change, Connection, Diagnostic, Dist, Element, ElementId, ElementKind,
-    Estimate, Experiment, Family, Model, Need, Power, Property, PropertyType, PropertyValue,
-    ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer,
-    Upper,
+    Bounds, Breakdown, Change, Connection, Demand, DemandPer, Diagnostic, Dist, Element, ElementId,
+    ElementKind, Estimate, Experiment, Family, Model, Need, Power, Property, PropertyType,
+    PropertyValue, ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit,
+    Timed, Transfer, Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -258,6 +258,9 @@ pub enum KindSpec {
     Sink {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         scrap: Option<ScrapSpec>,
+        /// The customer demand it serves, for takt; left out when none.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        demand: Option<DemandSpec>,
     },
     /// Sends each entity down one outgoing connection at once (a BPMN exclusive gateway): the
     /// first whose condition holds if any has one, else drawn by the connections'
@@ -810,10 +813,11 @@ impl From<&ElementKind> for KindSpec {
             ElementKind::Delay { duration } => KindSpec::Delay {
                 duration: duration.into(),
             },
-            ElementKind::Sink { scrap } => KindSpec::Sink {
+            ElementKind::Sink { scrap, demand } => KindSpec::Sink {
                 scrap: scrap.as_ref().map(|s| ScrapSpec {
                     charged_to: s.charged_to.as_ref().map(ToString::to_string),
                 }),
+                demand: demand.as_ref().map(Into::into),
             },
             ElementKind::ExclusiveGateway { default, routing } => KindSpec::ExclusiveGateway {
                 default: default.as_ref().map(ToString::to_string),
@@ -879,10 +883,11 @@ impl From<KindSpec> for ElementKind {
             KindSpec::Delay { duration } => ElementKind::Delay {
                 duration: duration.into(),
             },
-            KindSpec::Sink { scrap } => ElementKind::Sink {
+            KindSpec::Sink { scrap, demand } => ElementKind::Sink {
                 scrap: scrap.map(|s| Scrap {
                     charged_to: s.charged_to.as_deref().map(ElementId::unchecked),
                 }),
+                demand: demand.map(Into::into),
             },
             KindSpec::ExclusiveGateway { default, routing } => ElementKind::ExclusiveGateway {
                 default: default.as_deref().map(ElementId::unchecked),
@@ -1309,6 +1314,58 @@ pub struct ConnectionDoc {
     /// the OEE quality results; left out when false.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub rework: bool,
+}
+
+/// The customer demand a sink serves, for takt: `quantity` parts each `per` period, with the
+/// time available that of the measured window, or of `calendar` only (needed per shift: each
+/// active period of it is a shift).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct DemandSpec {
+    pub quantity: f64,
+    pub per: DemandPerSpec,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub calendar: Option<String>,
+}
+
+/// The period a demand is for: the whole measured window, each day, each week, or each shift.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum DemandPerSpec {
+    Run,
+    Day,
+    Week,
+    Shift,
+}
+
+impl From<&Demand> for DemandSpec {
+    fn from(d: &Demand) -> Self {
+        DemandSpec {
+            quantity: d.quantity,
+            per: match d.per {
+                DemandPer::Run => DemandPerSpec::Run,
+                DemandPer::Day => DemandPerSpec::Day,
+                DemandPer::Week => DemandPerSpec::Week,
+                DemandPer::Shift => DemandPerSpec::Shift,
+            },
+            calendar: d.calendar.as_ref().map(ToString::to_string),
+        }
+    }
+}
+
+impl From<DemandSpec> for Demand {
+    fn from(d: DemandSpec) -> Self {
+        Demand {
+            quantity: d.quantity,
+            per: match d.per {
+                DemandPerSpec::Run => DemandPer::Run,
+                DemandPerSpec::Day => DemandPer::Day,
+                DemandPerSpec::Week => DemandPer::Week,
+                DemandPerSpec::Shift => DemandPer::Shift,
+            },
+            calendar: d.calendar.as_deref().map(ElementId::unchecked),
+        }
+    }
 }
 
 /// A sink that takes scrap: each entity reaching it counts against `charged_to`, a server (an

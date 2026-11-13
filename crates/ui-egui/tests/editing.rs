@@ -826,3 +826,25 @@ fn a_way_out_of_a_decision_is_marked_rework() {
     click(&mut h, Role::CheckBox, &format!("Rework on {back}"));
     assert_eq!(rework(&h), Value::Null);
 }
+
+/// A customer demand is set on departures in the inspector: how many parts, per what, and the
+/// time available.
+#[test]
+fn a_demand_is_set_on_departures_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Customer leaves");
+    click(&mut h, Role::CheckBox, "Customer demand");
+    assert_eq!(
+        element(&h, "leave")["demand"],
+        json!({"quantity": 100.0, "per": "day"})
+    );
+    type_into(&mut h, "Parts wanted", "480");
+    click(&mut h, Role::ComboBox, "Per");
+    click(&mut h, Role::Button, "per week");
+    assert_eq!(
+        element(&h, "leave")["demand"],
+        json!({"quantity": 480.0, "per": "week"})
+    );
+    click(&mut h, Role::CheckBox, "Customer demand");
+    assert!(element(&h, "leave").get("demand").is_none());
+}

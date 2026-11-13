@@ -849,7 +849,7 @@ fn scrap_and_rework_are_written_saved_and_removed() {
     // No longer charged to the machine, and the loop no longer rework.
     let mut edited = loaded.model.clone();
     for e in &mut edited.elements {
-        if let ElementKind::Sink { scrap: Some(s) } = &mut e.kind {
+        if let ElementKind::Sink { scrap: Some(s), .. } = &mut e.kind {
             s.charged_to = None;
         }
     }
@@ -865,7 +865,7 @@ fn scrap_and_rework_are_written_saved_and_removed() {
 
     // Not scrap any more.
     for e in &mut edited.elements {
-        if let ElementKind::Sink { scrap } = &mut e.kind {
+        if let ElementKind::Sink { scrap, .. } = &mut e.kind {
             *scrap = None;
         }
     }
@@ -877,5 +877,74 @@ fn scrap_and_rework_are_written_saved_and_removed() {
     };
     let text = String::from_utf8_lossy(&removed);
     assert!(!text.contains("stochcraft:scrap"), "{text}");
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// A customer demand per shift of a calendar is StochCraft's vendor extension: written, read
+/// back, changed and removed in place.
+#[test]
+fn a_demand_is_written_saved_and_removed() {
+    let mut m = Builder::new();
+    m.calendar(
+        "day-shift",
+        vec![stochcraft_blocks::Event {
+            start: stochcraft_model::DateTime::new(2016, 1, 1, 8, 0, 0)
+                .unwrap_or(stochcraft_model::DateTime(0)),
+            end: stochcraft_model::DateTime::new(2016, 1, 1, 16, 0, 0)
+                .unwrap_or(stochcraft_model::DateTime(0)),
+            rule: stochcraft_blocks::Rule::parse("FREQ=DAILY").ok(),
+        }],
+    );
+    let src = m.source("parts", Dist::Exponential { mean: 5.0 }, None);
+    let out = m.sink("out");
+    m.demand(
+        out,
+        stochcraft_blocks::Demand {
+            quantity: 48.0,
+            per: stochcraft_blocks::DemandPer::Shift,
+            calendar: Some(stochcraft_model::ElementId::unchecked("day-shift")),
+        },
+    );
+    m.connect(src, out);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(
+        text.contains(r#"<stochcraft:demand quantity="48" per="shift" calendar="day-shift"/>"#),
+        "{text}"
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model, laid_out(model));
+
+    let mut edited = loaded.model.clone();
+    for e in &mut edited.elements {
+        if let ElementKind::Sink {
+            demand: Some(d), ..
+        } = &mut e.kind
+        {
+            d.per = stochcraft_blocks::DemandPer::Week;
+            d.calendar = None;
+        }
+    }
+    let Ok(saved) = loaded.opened.save(&edited) else {
+        unreachable!()
+    };
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    for e in &mut edited.elements {
+        if let ElementKind::Sink { demand, .. } = &mut e.kind {
+            *demand = None;
+        }
+    }
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let Ok(removed) = again.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(!text.contains("stochcraft:demand"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
 }

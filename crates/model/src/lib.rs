@@ -196,8 +196,11 @@ pub enum ElementKind {
     /// Holds each entity for a time with no capacity limit (a task with no resource).
     Delay { duration: Dist },
     /// Removes entities (a BPMN end event). With `scrap`, what reaches it is scrap, for the
-    /// OEE quality results.
-    Sink { scrap: Option<Scrap> },
+    /// OEE quality results; with `demand`, the customer demand it serves, for takt.
+    Sink {
+        scrap: Option<Scrap>,
+        demand: Option<Demand>,
+    },
     /// Sends each entity down one outgoing connection, at once (a BPMN exclusive gateway). With
     /// [`Routing::Standard`]: if any outgoing connection has a condition, the first in model
     /// order whose condition holds is taken, else `default`, else the entity leaves the model
@@ -682,6 +685,55 @@ pub struct Connection {
     pub rework: bool,
 }
 
+/// The customer demand a sink serves, for takt: `quantity` parts each `per` period. Takt is the
+/// available time divided by the demand over it (the Lean Enterprise Institute's Lean Lexicon:
+/// "the available production time divided by customer demand"). The available time is the
+/// measured window's, or with `calendar` only the time that calendar is active in it. A
+/// StochCraft vendor extension (`stochcraft:demand`).
+#[derive(Debug, Clone, PartialEq)]
+pub struct Demand {
+    pub quantity: f64,
+    pub per: DemandPer,
+    pub calendar: Option<ElementId>,
+}
+
+/// The period a [`Demand`]'s quantity is for.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum DemandPer {
+    /// The whole measured window.
+    Run,
+    /// Each day (24 hours) of the measured window.
+    Day,
+    /// Each week (7 days) of the measured window.
+    Week,
+    /// Each active period of the demand's calendar (a shift); one partly in the measured window
+    /// counts by the share of it inside.
+    Shift,
+}
+
+impl DemandPer {
+    /// The name in files and on the wire.
+    pub fn name(self) -> &'static str {
+        match self {
+            DemandPer::Run => "run",
+            DemandPer::Day => "day",
+            DemandPer::Week => "week",
+            DemandPer::Shift => "shift",
+        }
+    }
+
+    /// The period named `s`.
+    pub fn from_name(s: &str) -> Option<Self> {
+        match s {
+            "run" => Some(DemandPer::Run),
+            "day" => Some(DemandPer::Day),
+            "week" => Some(DemandPer::Week),
+            "shift" => Some(DemandPer::Shift),
+            _ => None,
+        }
+    }
+}
+
 /// A sink that takes scrap (ISO 22400-2's scrap quantity: produced, failed its quality
 /// requirements, scrapped or recycled), a StochCraft vendor extension (`stochcraft:scrap`). Each
 /// entity reaching it counts against `charged_to` if given (an inspection that rejects work done
@@ -914,6 +966,14 @@ pub enum Problem {
     },
     /// A planned run time per item whose mean is not above 0.
     PlannedRunTimeNotPositive,
+    /// A demand whose quantity is not a number above 0.
+    DemandNotPositive,
+    /// A demand per shift with no calendar to say what a shift is.
+    ShiftWithoutCalendar,
+    /// A demand's calendar does not exist.
+    DemandCalendarUnknown {
+        id: ElementId,
+    },
     /// A probability outside 0 to 1.
     BadProbability {
         value: f64,
@@ -1075,6 +1135,9 @@ impl Problem {
             Problem::ChangesWithoutProperty => "changes_without_property",
             Problem::ScrapNotAgainstServer { .. } => "scrap_not_against_server",
             Problem::PlannedRunTimeNotPositive => "planned_run_time_not_positive",
+            Problem::DemandNotPositive => "demand_not_positive",
+            Problem::ShiftWithoutCalendar => "shift_without_calendar",
+            Problem::DemandCalendarUnknown { .. } => "demand_calendar_unknown",
             Problem::BadProbability { .. } => "bad_probability",
             Problem::ProbabilitySum { .. } => "probability_sum",
             Problem::BadCondition { .. } => "bad_condition",
@@ -1218,6 +1281,19 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "its scrap counts against `{id}`, which is not a task with a resource of its own"
             ),
+            Problem::DemandNotPositive => {
+                write!(f, "its demand must be a number of parts above 0")
+            }
+            Problem::ShiftWithoutCalendar => write!(
+                f,
+                "its demand is per shift but names no calendar to say when the shifts are"
+            ),
+            Problem::DemandCalendarUnknown { id } => {
+                write!(
+                    f,
+                    "its demand names the calendar `{id}`, which does not exist"
+                )
+            }
             Problem::PlannedRunTimeNotPositive => {
                 write!(f, "its planned run time per item must have a mean above 0")
             }
@@ -1522,6 +1598,7 @@ impl Model {
                 scrap: Some(Scrap {
                     charged_to: Some(c),
                 }),
+                ..
             } = &e.kind
                 && !self
                     .elements
@@ -1532,6 +1609,29 @@ impl Model {
                     Some(&e.id),
                     Problem::ScrapNotAgainstServer { id: c.to_string() },
                 ));
+            }
+            if let ElementKind::Sink {
+                demand: Some(d), ..
+            } = &e.kind
+            {
+                if !(d.quantity.is_finite() && d.quantity > 0.0) {
+                    out.push(Diagnostic::error(Some(&e.id), Problem::DemandNotPositive));
+                }
+                match &d.calendar {
+                    None if d.per == DemandPer::Shift => {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::ShiftWithoutCalendar,
+                        ));
+                    }
+                    Some(c) if !self.calendars.iter().any(|x| x.id == *c) => {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::DemandCalendarUnknown { id: c.clone() },
+                        ));
+                    }
+                    _ => {}
+                }
             }
             if let ElementKind::Server {
                 planned_run_time: Some(d),
@@ -2582,8 +2682,13 @@ mod tests {
                 },
             ),
         );
-        m.elements
-            .push(el("scrap", ElementKind::Sink { scrap: None }));
+        m.elements.push(el(
+            "scrap",
+            ElementKind::Sink {
+                scrap: None,
+                demand: None,
+            },
+        ));
         m.elements.push(el("join", ElementKind::ParallelGateway));
         m.elements.push(el(
             "orphan",
@@ -2654,8 +2759,13 @@ mod tests {
                 },
             ),
         );
-        m.elements
-            .push(el("scrap", ElementKind::Sink { scrap: None }));
+        m.elements.push(el(
+            "scrap",
+            ElementKind::Sink {
+                scrap: None,
+                demand: None,
+            },
+        ));
         let mut a = Connection::new(id("a"), id("pick"), id("machine"));
         a.probability = Some(0.66);
         let mut b = Connection::new(id("b"), id("pick"), id("scrap"));
@@ -2733,7 +2843,13 @@ mod tests {
                         planned_run_time: None,
                     },
                 ),
-                el("exit", ElementKind::Sink { scrap: None }),
+                el(
+                    "exit",
+                    ElementKind::Sink {
+                        scrap: None,
+                        demand: None,
+                    },
+                ),
             ],
             connections: vec![
                 link("f1", "arrivals", "machine"),
@@ -2929,8 +3045,13 @@ mod tests {
     #[test]
     fn branching_needs_a_gateway() {
         let mut m = mm1();
-        m.elements
-            .push(el("scrap", ElementKind::Sink { scrap: None }));
+        m.elements.push(el(
+            "scrap",
+            ElementKind::Sink {
+                scrap: None,
+                demand: None,
+            },
+        ));
         m.connections.push(link("f3", "machine", "scrap"));
         assert_eq!(
             problems(&m),
@@ -3084,7 +3205,13 @@ mod tests {
         let empty = Model::default();
         assert_eq!(empty.validate(), vec![]);
         let lonely = Model {
-            elements: vec![el("x", ElementKind::Sink { scrap: None })],
+            elements: vec![el(
+                "x",
+                ElementKind::Sink {
+                    scrap: None,
+                    demand: None,
+                },
+            )],
             ..Model::default()
         };
         assert!(problems(&lonely).iter().any(|(_, _, s)| s == "NoSource"));

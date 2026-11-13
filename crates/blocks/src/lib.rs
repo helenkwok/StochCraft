@@ -43,7 +43,9 @@ use std::collections::{BTreeMap, BTreeSet};
 
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
-pub use stochcraft_model::{Breakdown, Change, Power, Routing, Scrap, Setup, Transfer};
+pub use stochcraft_model::{
+    Breakdown, Change, Demand, DemandPer, Power, Routing, Scrap, Setup, Transfer,
+};
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
     Property, PropertyType, PropertyValue, ResourcePool, Severity, Timed,
@@ -550,7 +552,7 @@ pub enum Metric {
     /// setting up and producing.
     SetupRatio,
     /// Servers, when the model marks scrap or rework: ISO 22400-2's quality ratio, the good
-    /// quantity over the produced quantity ([`Metric::Left`], each pass counted). The good
+    /// quantity over the produced quantity (jobs finished, each pass counted). The good
     /// quantity is taken as what was produced less what was scrapped or sent to rework, charged
     /// to this server (see [`stochcraft_model::Scrap`]).
     QualityRatio,
@@ -564,6 +566,19 @@ pub enum Metric {
     /// effectiveness times the quality ratio, which counts as 1 when the model marks no scrap
     /// or rework.
     Oee,
+    /// Sinks with a demand: takt, the time available over the measured window (or that of the
+    /// demand's calendar in it) divided by the demand over it, in time units per part.
+    Takt,
+    /// Sinks with a demand: the demand over the measured window, in parts (a share of a day,
+    /// week or shift counting by its share).
+    Demand,
+    /// Sinks with a demand: the parts that arrived over the demand, as a share (1 or more: the
+    /// demand is met).
+    DemandMet,
+    /// Servers, when any sink has a demand: the time each part takes the server, set up and
+    /// processing, over its units (so 2 units halve it), in time units: what to compare with
+    /// takt.
+    CycleTime,
     /// Servers with a power: energy used in the measured window, in kilowatt-hours: each
     /// state's power times the exact time the units spent in it, cut at the end of the warm-up
     /// and at the end of the run.
@@ -576,7 +591,7 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 29] = [
+    pub const ALL: [Metric; 33] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -604,6 +619,10 @@ impl Metric {
         Metric::ScrapRatio,
         Metric::ReworkRatio,
         Metric::Oee,
+        Metric::Takt,
+        Metric::Demand,
+        Metric::DemandMet,
+        Metric::CycleTime,
         Metric::Energy,
         Metric::SpecificEnergy,
     ];
@@ -643,6 +662,10 @@ impl Metric {
             Metric::ScrapRatio => "scrap_ratio",
             Metric::ReworkRatio => "rework_ratio",
             Metric::Oee => "oee",
+            Metric::Takt => "takt",
+            Metric::Demand => "demand",
+            Metric::DemandMet => "demand_met",
+            Metric::CycleTime => "cycle_time",
             Metric::Energy => "energy",
             Metric::SpecificEnergy => "specific_energy",
         }
@@ -698,6 +721,12 @@ pub struct ElementReport {
     pub rework_ratio: Option<f64>,
     /// Servers with a planned run time per item: [`Metric::Oee`].
     pub oee: Option<f64>,
+    /// Sinks with a demand: [`Metric::Takt`], [`Metric::Demand`] and [`Metric::DemandMet`].
+    pub takt: Option<f64>,
+    pub demand: Option<f64>,
+    pub demand_met: Option<f64>,
+    /// Servers, when any sink has a demand: [`Metric::CycleTime`].
+    pub cycle_time: Option<f64>,
     pub energy: Option<f64>,
     /// Sinks, when any server has a power: [`Metric::SpecificEnergy`].
     pub specific_energy: Option<f64>,
@@ -739,6 +768,10 @@ impl ElementReport {
             Metric::ScrapRatio => self.scrap_ratio,
             Metric::ReworkRatio => self.rework_ratio,
             Metric::Oee => self.oee,
+            Metric::Takt => self.takt,
+            Metric::Demand => self.demand,
+            Metric::DemandMet => self.demand_met,
+            Metric::CycleTime => self.cycle_time,
             Metric::Energy => self.energy,
             Metric::SpecificEnergy => self.specific_energy,
         }
@@ -1307,7 +1340,13 @@ impl Builder {
 
     /// Removes entities from the model and records their time in system.
     pub fn sink(&mut self, name: &str) -> BlockId {
-        self.add(name, ElementKind::Sink { scrap: None })
+        self.add(
+            name,
+            ElementKind::Sink {
+                scrap: None,
+                demand: None,
+            },
+        )
     }
 
     /// Sends each entity down one outgoing connection: by condition if any connection has one
@@ -1377,13 +1416,20 @@ impl Builder {
         self.reworks.insert((from, to));
     }
 
+    /// Gives sink `block` the customer demand it serves, for takt.
+    pub fn demand(&mut self, block: BlockId, demand: Demand) {
+        if let Some((_, ElementKind::Sink { demand: d, .. }, _)) = self.elements.get_mut(block.0) {
+            *d = Some(demand);
+        }
+    }
+
     /// Makes sink `block` take scrap, counted against server `charged_to`, or else the last
     /// server each entity finished at.
     pub fn scrap(&mut self, block: BlockId, charged_to: Option<BlockId>) {
         let charged_to = charged_to
             .and_then(|c| self.elements.get(c.0))
             .map(|(name, ..)| ElementId::unchecked(name));
-        if let Some((_, ElementKind::Sink { scrap }, _)) = self.elements.get_mut(block.0) {
+        if let Some((_, ElementKind::Sink { scrap, .. }, _)) = self.elements.get_mut(block.0) {
             *scrap = Some(Scrap { charged_to });
         }
     }

@@ -526,6 +526,7 @@ impl App {
             self.needs_section(ui, model, el);
         }
         if kind == "sink" {
+            self.demand_section(ui, model, el, &id);
             self.scrap_section(ui, model, el, &id);
         }
 
@@ -652,6 +653,146 @@ impl App {
         }
         if decision {
             self.default_flow(ui, &id, el, &conns, &names);
+        }
+    }
+
+    /// The customer demand a sink serves, for takt: how many parts, per run, day, week or
+    /// shift, and whether the time available is the whole clock or a calendar's active time.
+    fn demand_section(&mut self, ui: &mut egui::Ui, model: &Value, el: &Value, id: &str) {
+        section(ui, t("Takt"));
+        let demand = el["demand"].clone();
+        let mut on = demand.is_object();
+        if ui
+            .checkbox(&mut on, t("Customer demand"))
+            .on_hover_text(t(
+                "How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.",
+            ))
+            .changed()
+        {
+            let v = if on {
+                json!({"quantity": 100.0, "per": "day"})
+            } else {
+                Value::Null
+            };
+            self.execute("block.set", json!({ "id": id, "demand": v }));
+        }
+        if !on {
+            return;
+        }
+        let set = |d: &Value, key: &str, v: Value| {
+            let mut d = d.clone();
+            if v.is_null() {
+                if let Some(o) = d.as_object_mut() {
+                    o.remove(key);
+                }
+            } else {
+                d[key] = v;
+            }
+            d
+        };
+        let q_now = demand["quantity"]
+            .as_f64()
+            .map(crate::results::grouped)
+            .unwrap_or_default();
+        if let Some(text) = self.text_field(ui, &format!("{id}/demand"), t("Parts wanted"), &q_now)
+        {
+            match self.numbers.parse(&text) {
+                Ok(q) if q.is_finite() && q > 0.0 => {
+                    let d = set(&demand, "quantity", json!(q));
+                    self.execute("block.set", json!({ "id": id, "demand": d }));
+                }
+                _ => self.report_error(t("Parts wanted is a number above 0")),
+            }
+        }
+        let pers = [
+            ("run", t("for the whole run")),
+            ("day", t("per day")),
+            ("week", t("per week")),
+            ("shift", t("per shift")),
+        ];
+        let per_now = demand["per"].as_str().unwrap_or("day").to_owned();
+        let mut chosen_per: Option<&str> = None;
+        ui.horizontal(|ui| {
+            form::label_cell(ui, t("Per"), 26.0);
+            let shown = pers
+                .iter()
+                .find(|(k, _)| *k == per_now)
+                .map_or(per_now.as_str(), |(_, l)| l);
+            craft_ui::ComboBox::from_id_salt((id, "per"))
+                .selected_text(shown)
+                .width(200.0)
+                .show_ui(ui, |ui| {
+                    for (k, l) in &pers {
+                        if ui.selectable_label(per_now == *k, *l).clicked() {
+                            chosen_per = Some(k);
+                        }
+                    }
+                })
+                .response
+                .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, t("Per")));
+        });
+        if let Some(k) = chosen_per.filter(|k| *k != per_now) {
+            let d = set(&demand, "per", json!(k));
+            self.execute("block.set", json!({ "id": id, "demand": d }));
+        }
+        let calendars: Vec<(String, String)> = model["calendars"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .map(|c| {
+                let i = c["id"].as_str().unwrap_or("").to_owned();
+                let n = c["name"]
+                    .as_str()
+                    .filter(|n| !n.is_empty())
+                    .unwrap_or(&i)
+                    .to_owned();
+                (i, n)
+            })
+            .collect();
+        let cal_now = demand["calendar"].as_str().map(str::to_owned);
+        let clock = t("The whole clock");
+        let shown = cal_now
+            .as_ref()
+            .map(|c| {
+                calendars
+                    .iter()
+                    .find(|(i, _)| i == c)
+                    .map_or_else(|| c.clone(), |(_, n)| n.clone())
+            })
+            .unwrap_or_else(|| clock.to_owned());
+        let mut chosen_cal: Option<Option<String>> = None;
+        ui.horizontal(|ui| {
+            form::label_cell(ui, t("Time available"), 26.0);
+            craft_ui::ComboBox::from_id_salt((id, "available"))
+                .selected_text(shown)
+                .width(200.0)
+                .show_ui(ui, |ui| {
+                    if ui.selectable_label(cal_now.is_none(), clock).clicked() {
+                        chosen_cal = Some(None);
+                    }
+                    for (i, n) in &calendars {
+                        if ui
+                            .selectable_label(cal_now.as_deref() == Some(i), n)
+                            .clicked()
+                        {
+                            chosen_cal = Some(Some(i.clone()));
+                        }
+                    }
+                })
+                .response
+                .widget_info(|| {
+                    egui::WidgetInfo::labeled(egui::Role::ComboBox, true, t("Time available"))
+                });
+        });
+        if let Some(c) = chosen_cal.filter(|c| *c != cal_now) {
+            let d = set(&demand, "calendar", c.map_or(Value::Null, |c| json!(c)));
+            self.execute("block.set", json!({ "id": id, "demand": d }));
+        }
+        if per_now == "shift" && cal_now.is_none() {
+            ui.label(theme::weak(
+                ui,
+                t("Per shift needs a calendar: each period it is active is a shift."),
+            ));
         }
     }
 

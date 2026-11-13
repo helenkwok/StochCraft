@@ -58,7 +58,13 @@ fn bpmn_written_by_another_tool() {
             planned_run_time: None,
         }
     );
-    assert_eq!(kind(m, "leave"), &ElementKind::Sink { scrap: None });
+    assert_eq!(
+        kind(m, "leave"),
+        &ElementKind::Sink {
+            scrap: None,
+            demand: None,
+        }
+    );
     let x = &m.experiment;
     assert_eq!(
         (x.time_unit, x.replications, x.seed),

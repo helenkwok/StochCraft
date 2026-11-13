@@ -877,6 +877,14 @@ fn showcase() -> Model {
     m.route(check, split, Some(0.9), None);
     m.route(check, scrap, Some(0.1), None);
     m.scrap(scrap, Some(previous));
+    m.demand(
+        out,
+        stochcraft_blocks::Demand {
+            quantity: 480.0,
+            per: stochcraft_blocks::DemandPer::Day,
+            calendar: None,
+        },
+    );
     m.connect(split, left);
     m.connect(split, right);
     m.connect(left, join);
