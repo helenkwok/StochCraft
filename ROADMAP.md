@@ -1231,36 +1231,49 @@ Starting a run with entities already inside, the other answer to a warm-up, stay
 
 ### M2.10 Abandonment
 
-Entities that give up waiting: a common feature of service models that StochCraft can't model
-yet. Garnett, Mandelbaum and Reiman (2002) call impatient customers leaving before their service begins a
-central feature that Erlang B and C lack. `des` already has the primitives (M2.1:
-`acquire_within` for reneging, `try_put` for balking), but no element uses them for this: the
-model has no patience, reneging or balking.
+Entities that give up waiting: a common feature of service models, and of IT systems whose
+clients time out and retry. Garnett, Mandelbaum and Reiman (2002) call impatient customers
+leaving before their service begins a central feature that Erlang B and C lack.
 
-- **Reneging:** an entity waiting in a task's queue leaves when its patience runs out. Patience
-  is a distribution, set per element. Abandoned entities are counted on their own (`abandoned`,
-  and the share of arrivals abandoned), with the time they waited recorded. The typical use is a
-  caller who hangs up.
-- **Balking:** an arriving entity does not join when the queue is at or above a length, or joins
-  with a probability that depends on the queue's length; counted on its own too. The fixed-length
-  case is already there for sources: a source sending to a full finite buffer loses the arrival
-  (M2.4), which is M/M/1/K. Balking widens that to any sender and to a probability by length.
-- **Where abandoned entities go:** they leave the model, or follow an outgoing connection marked
-  for them (a call back later, say).
-- **Files:** the BPSim 2.0 schema has no parameter for patience, reneging or balking (checked in
-  `BPSim-2.0.xsd`: its time parameters are `TransferTime`, `QueueTime`, `WaitTime`,
-  `SetUpTime`, `ProcessingTime`, `ValidationTime`, `ReworkTime`, `LagTime`, `Duration` and
-  `ElapsedTime`). So patience and balking are `stochcraft:` vendor extensions on the task's
-  `ElementParameters`, declared in the vendor schema as `stochcraft:breakdown` is. Whether
-  BPSim's `QueueTime` or `WaitTime`, or a BPMN boundary timer, was meant to carry this is for the
-  specification's prose to settle (to verify).
-- **Checks with known answers:**
-  - M/M/N+M, Poisson arrivals, exponential service and exponential patience with an unlimited
-    waiting room, for which Garnett, Mandelbaum and Reiman outline an exact analysis (M&SOM
-    4(3):208–227, 2002, doi 10.1287/msom.4.3.208.7753). The steady-state formulas to test
-    against are to verify from the paper itself.
-  - M/M/1 with balking at a fixed length is M/M/1/K, already checked against theory
-    (`des/tests/theory.rs`, `blocks/tests/buffers.rs`).
+- **Reneging:** done. A task with a resource of its own can have a patience
+  (`stochcraft:patience`): a distribution, drawn for each entity as it enters, with its clock
+  starting then (before any transfer in). Until its service *starts* (a caller who hangs up
+  while on hold), or until its service is *done* (a client that times out). The deadline is
+  checked wherever the entity is: waiting, it leaves the queue (freeing its place in a finite
+  buffer); in transfer, it gives up as it arrives; in service or held blocked after it (patience
+  until done), it gives up at the deadline and a stand-in (a new entity with its properties,
+  creation time and last server) takes the abandoned way at once, while the unit finishes the
+  job anyway and discards it. A unit taking an entity at its deadline serves it (the `des` rule
+  for deadlines; `Ctx::hold_late` runs the timer after everything else at that instant). A
+  patience of 0 gives up unless a unit is free at once. Results per server: `abandoned` (counted
+  once each, not as left, so entered = left + lost + abandoned + inside), `abandoned_share`
+  (abandoned over abandoned plus left), `abandoned_wait`, and with patience until done `wasted`
+  (the service time spent on jobs given up) and `wasted_share`. A server's units serve one
+  entity at a time either way (FIFO), and failures, calendars and setups work with it.
+- **Where abandoned entities go:** done. They leave the model, or take the server's way out
+  marked `stochcraft:abandoned` (one at most; a server may then have two ways out). Retries need
+  no element of their own: the abandoned way leads to a delay (the back-off) and back to the
+  task, or to a decision that retries with a probability and otherwise gives up for good; a
+  reconnection that needs a handshake goes through a task with a setup first.
+- **Files:** done. Patience and the abandoned way are `stochcraft:` vendor extensions
+  (`stochcraft:patience until="start|done"` with a distribution inside, on the task's
+  `ElementParameters`; `stochcraft:abandoned` on a sequence flow), read, written, saved in
+  place, set by `block.set` and `flow.set`, and edited in the inspector. BPSim 2.0 has no
+  parameter for them: its `queueTime` and `waitTime` are durations the modeller sets, parts of
+  `lagTime` (6.2.4), and an `interTriggerTimer` on a boundary event is the interval between
+  repeated occurrences of that event (6.2.5), not a patience drawn for each entity.
+- **Checks with known answers:** done (`blocks/tests/abandonment.rs`). M/M/c+M (Poisson
+  arrivals, exponential service and patience, unlimited room; Garnett, Mandelbaum and Reiman,
+  M&SOM 4(3):208–227, 2002, as the model's reference) against its birth–death chain, solved in
+  the test from first principles (death rate min(n, c)·μ + max(n − c, 0)·θ; P(abandon) =
+  θ·E[Nq]/λ): mean queue, share abandoned and utilisation for three cases, one overloaded (ρ =
+  1.5, which abandonment keeps stable), and once more through the unit server; patience 0 against
+  Erlang B; the tie at the deadline; patience until done in service and while blocked; a patience
+  running out in transfer; retry loops whose counts balance on every element.
+- **Not yet:** balking (not joining a queue at or above a length, or with a probability that
+  depends on its length; the fixed-length case for sources is already there, M2.4); patience on
+  tasks with shared resources; an entity that gives up while held blocked before a
+  shortest-queue gateway still counts as passing through that gateway.
 
 ### M2.11 Changeovers and lean measures
 

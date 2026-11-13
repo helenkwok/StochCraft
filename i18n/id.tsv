@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Interval 95% dari bagian yang memenuhi target: {lo} sampai {hi}
 	95th percentile	Persentil ke-95
 	95th percentile {value}	persentil ke-95 {value}
+	A caller on hold: once a unit takes it, the entity stays.	Penelepon yang ditahan: begitu sebuah unit mengambilnya, entitas tetap tinggal.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Klien yang kehabisan waktu (timeout): jika waktunya habis selama layanan, ia menyerah saat itu, dan unit tetap menyelesaikan pekerjaannya (pekerjaan sia-sia).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Berkas baru hanya berisi model: apa yang tidak dipahami StochCraft di {file} tidak disertakan.
+	Abandoned	Menyerah
+	Abandoned on {id}	Menyerah di {id}
 	About StochCraft	Tentang StochCraft
 	About {app}	Tentang {app}
 	Across the range it changed by {change}: more than chance would explain.	Di seluruh rentang berubah sebesar {change}: lebih dari yang bisa dijelaskan oleh kebetulan.
@@ -102,7 +106,9 @@
 	Constant	Konstan
 	Copy	Salin
 	Counts against	Dibebankan ke
+	Customer demand	Permintaan pelanggan
 	Cut	Potong
+	Cycle time	Waktu siklus
 	Daily	Harian
 	Dark	Gelap
 	Data points	Titik data
@@ -112,6 +118,8 @@
 	Decision (one way)	Keputusan (satu jalur)
 	Default flow	Alur default
 	Delete	Hapus
+	Demand	Permintaan
+	Demand met	Bagian permintaan terpenuhi
 	Departures	Keberangkatan
 	Diagram	Diagram
 	Discard	Buang
@@ -130,6 +138,7 @@
 	Duration	Durasi
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Setiap analisis menjalankan eksperimen beberapa kali dengan benih acak yang sama, sehingga perbedaan berasal dari perubahan, bukan kebetulan. Ini bisa memakan waktu.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Setiap entitas mengambil alternatif pertama di antara ini yang dapat dipenuhi sekarang, sekaligus semuanya, dan mengembalikan unitnya saat meninggalkan tugas.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Setiap entitas menunggu di sini paling lama selama waktu yang diundi untuknya saat tiba, lalu menyerah: entitas mengambil jalan keluar bertanda "Menyerah", atau meninggalkan model.
 	Edit	Edit
 	Elasticity	Elastisitas
 	Ends early	Berakhir lebih awal
@@ -137,7 +146,9 @@
 	Energy per part	Energi per komponen
 	Enough: {units}, meeting the target in {p} of replications	Cukup: {units}, target terpenuhi pada {p} replikasi
 	Entered	Masuk
+	Entities give up waiting	Entitas berhenti menunggu
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitas yang masih di dalam pada akhir replikasi tidak dihitung dalam waktu tunggu rata-rata dan waktu rata-rata dalam sistem.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitas yang berhenti menunggu mengambil alur ini (misalnya untuk mencoba lagi nanti); yang lain mengambil jalan keluar lain dari tugas.
 	Erlang	Erlang
 	Error	Galat
 	Estimate from three values…	Perkirakan dari tiga nilai…
@@ -167,12 +178,16 @@
 	Fri	Jum
 	From	Dari
 	Gamma	Gamma
+	Gave up	Menyerah
+	Gives up before it is done	Menyerah sebelum selesai
+	Gives up before service starts	Menyerah sebelum layanan dimulai
 	Goes to	Menuju ke
 	Hands on finished parts while down	Tetap meneruskan komponen jadi saat rusak
 	Help	Bantuan
 	Hide Others	Sembunyikan yang lain
 	Hide {app}	Sembunyikan {app}
 	How many	Berapa
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Berapa komponen yang diinginkan pelanggan dari keberangkatan ini; hasilnya lalu menunjukkan takt (waktu tersedia dibagi permintaan) dan waktu siklus setiap tugas.
 	Inside over time	Di dalam dari waktu ke waktu
 	Jump	Lompat
 	Jump to time	Lompat ke waktu
@@ -202,6 +217,7 @@
 	Mean time blocked	Waktu terblokir rata-rata
 	Mean time in system	Waktu rata-rata dalam sistem
 	Mean wait	Waktu tunggu rata-rata
+	Mean wait before giving up	Waktu tunggu rata-rata sebelum menyerah
 	Metric	Metrik
 	Middles	Tengah vertikal
 	Minimise	Minimalkan
@@ -257,8 +273,13 @@
 	Parameter	Parameter
 	Parameters	Parameter
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Komponen yang melalui alur ini kembali untuk dikerjakan lagi; komponen itu dihitung sebagai pengerjaan ulang pada tugas terakhir dengan sumber daya yang dilaluinya.
+	Parts wanted	Komponen diinginkan
+	Parts wanted is a number above 0	Komponen diinginkan harus berupa angka di atas 0
 	Paste	Tempel
+	Patience	Kesabaran
 	Pause	Jeda
+	Per	Periode
+	Per shift needs a calendar: each period it is active is a shift.	"Per sif" memerlukan kalender: setiap periode saat kalender itu aktif adalah satu sif.
 	Percentile	Persentil
 	Period {n} ends	Periode {n} selesai
 	Period {n} repeats	Periode {n} berulang
@@ -365,6 +386,8 @@
 	Share	Bagian
 	Share of arrivals lost	Proporsi kedatangan yang hilang
 	Share of units blocked	Proporsi unit yang terblokir
+	Share of work wasted	Proporsi pekerjaan sia-sia
+	Share that gave up	Proporsi yang menyerah
 	Show All	Tampilkan semua
 	Show {id}	Tampilkan {id}
 	Size	Tentukan ukuran
@@ -389,6 +412,8 @@
 	Stopped watching	Berhenti mengamati
 	Sun	Min
 	Sweep a parameter	Sapu satu parameter
+	Takt	Takt
+	Takt time	Waktu takt
 	Tandem line	Jalur tandem
 	Target	Target
 	Target share	Bagian target
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian replikasi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
 	The values are numbers, separated by semicolons or spaces	Nilai berupa angka yang dipisahkan titik koma atau spasi
+	The whole clock	Seluruh waktu
 	This block has a warning	Blok ini memiliki peringatan
 	This block has an error	Blok ini memiliki kesalahan
 	This run	Jalannya ini
 	Three-point estimate	Perkiraan tiga titik
 	Thu	Kam
+	Time available	Waktu tersedia
+	Time before giving up	Waktu sebelum menyerah
 	Time between arrivals	Waktu antar kedatangan
 	Time blocked	Waktu terblokir
 	Time failed	Waktu rusak
@@ -466,6 +494,7 @@
 	Whole number	Bilangan bulat
 	Window	Jendela
 	With every time at its mean: {units}	Dengan setiap waktu pada rata-ratanya: {units}
+	Work wasted on those who gave up	Pekerjaan sia-sia untuk yang menyerah
 	XPDL with BPSim	XPDL dengan BPSim
 	Yes or no	Ya atau tidak
 	Your changes will be lost if you don't save them.	Perubahan Anda akan hilang jika tidak disimpan.
@@ -479,6 +508,7 @@
 	decision: one way	keputusan: satu jalur
 	departures	keberangkatan
 	egui and eframe (Craft suite fork)	egui dan eframe (cabang dari rangkaian Craft)
+	for the whole run	untuk seluruh jalannya
 	from its value	berdasarkan nilainya
 	have left	telah keluar
 	hours	jam
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k dari N: hanya k dari N replikasi yang memiliki nilai untuk hasil itu, dan rata-rata serta intervalnya dihitung atas k tersebut.
 	n = {k} of {n}	n = {k} dari {n}
 	nothing yet	belum ada
+	per day	per hari
+	per shift	per sif
+	per week	per minggu
 	seconds	detik
 	split batches	pemisahan batch
 	split or join: all ways	pisahkan atau gabungkan: semua jalur

@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95% интервал на дела, постигнал целта: от {lo} до {hi}
 	95th percentile	95-и персентил
 	95th percentile {value}	95-и персентил {value}
+	A caller on hold: once a unit takes it, the entity stays.	Обаждащ се на изчакване: щом единица го поеме, същността остава.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Клиент с изтичащо време (тайм-аут): ако времето му изтече по време на обслужването, той се отказва тогава, а единицата все пак довършва работата (пропиляна работа).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Новият файл съдържа само модела: това, което StochCraft не разбира в {file}, се изпуска.
+	Abandoned	Отказали се
+	Abandoned on {id}	Отказали се на {id}
 	About StochCraft	За StochCraft
 	About {app}	За {app}
 	Across the range it changed by {change}: more than chance would explain.	В диапазона се промени с {change}: повече, отколкото би обяснила случайността.
@@ -102,7 +106,9 @@
 	Constant	Константа
 	Copy	Копиране
 	Counts against	Приписва се на
+	Customer demand	Клиентско търсене
 	Cut	Изрязване
+	Cycle time	Време на цикъла
 	Daily	Ежедневно
 	Dark	Тъмна
 	Data points	Точки с данни
@@ -112,6 +118,8 @@
 	Decision (one way)	Решение (един път)
 	Default flow	Поток по подразбиране
 	Delete	Изтриване
+	Demand	Търсене
+	Demand met	Дял на покритото търсене
 	Departures	Напускания
 	Diagram	Диаграма
 	Discard	Отхвърляне
@@ -130,6 +138,7 @@
 	Duration	Продължителност
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Всеки анализ изпълнява експеримента няколко пъти със същата начална стойност, така че разликите идват от промяната, а не от случайността. Може да отнеме време.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Всяка същност взема първата от тези възможности, която може да бъде изпълнена сега, изцяло и наведнъж, и връща единиците, когато излезе.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Всяка същност чака тук най-много време, изтеглено случайно за нея при пристигането ѝ, след което се отказва: тръгва по изхода, отбелязан като „Отказали се“, или напуска модела.
 	Edit	Редактиране
 	Elasticity	Еластичност
 	Ends early	Завършва по-рано
@@ -137,7 +146,9 @@
 	Energy per part	Енергия на част
 	Enough: {units}, meeting the target in {p} of replications	Достатъчно: {units}, целта е постигната в {p} от репликациите
 	Entered	Влезли
+	Entities give up waiting	Същностите се отказват от чакането
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Обектите, които са още вътре в края на репликация, не се включват в средното чакане и средното време в системата.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Същностите, които се отказват от чакането, минават по този поток (например за да опитат отново по-късно); останалите минават по другия изход на задачата.
 	Erlang	Ерланг
 	Error	Грешка
 	Estimate from three values…	Оценка от три стойности…
@@ -167,12 +178,16 @@
 	Fri	пт
 	From	От
 	Gamma	Гама
+	Gave up	Отказали се
+	Gives up before it is done	Отказва се преди края на обслужването
+	Gives up before service starts	Отказва се преди началото на обслужването
 	Goes to	Отива към
 	Hands on finished parts while down	Предава готовите части и при повреда
 	Help	Помощ
 	Hide Others	Скриване на другите
 	Hide {app}	Скриване на {app}
 	How many	Колко
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Колко части искат клиентите от тези напускания; тогава резултатите показват такта (наличното време, разделено на търсенето) и времето на цикъла на всяка задача.
 	Inside over time	Вътре във времето
 	Jump	Отиване
 	Jump to time	Отиване към момент
@@ -202,6 +217,7 @@
 	Mean time blocked	Средно време на блокиране
 	Mean time in system	Средно време в системата
 	Mean wait	Средно чакане
+	Mean wait before giving up	Средно чакане до отказване
 	Metric	Показател
 	Middles	Вертикални центрове
 	Minimise	Минимизиране
@@ -257,8 +273,13 @@
 	Parameter	Параметър
 	Parameters	Параметри
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Частите, минаващи по този поток, се връщат за повторна обработка; отчитат се като преработка на последната задача с ресурс, през която са минали.
+	Parts wanted	Желани части
+	Parts wanted is a number above 0	Желаните части са число над 0
 	Paste	Поставяне
+	Patience	Търпение
 	Pause	Пауза
+	Per	Период
+	Per shift needs a calendar: each period it is active is a shift.	„На смяна“ изисква календар: всеки период, в който той е активен, е смяна.
 	Percentile	Персентил
 	Period {n} ends	Период {n} завършва
 	Period {n} repeats	Период {n} се повтаря
@@ -365,6 +386,8 @@
 	Share	Дял
 	Share of arrivals lost	Дял на загубените пристигания
 	Share of units blocked	Дял на блокираните единици
+	Share of work wasted	Дял на пропиляната работа
+	Share that gave up	Дял на отказалите се
 	Show All	Показване на всичко
 	Show {id}	Показване на {id}
 	Size	Оразмеряване
@@ -389,6 +412,8 @@
 	Stopped watching	Наблюдението е спряно
 	Sun	нд
 	Sweep a parameter	Обхождане на параметър
+	Takt	Такт
+	Takt time	Време на такта
 	Tandem line	Тандемна линия
 	Target	Цел
 	Target share	Целеви дял
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	Моделът: експеримент, връзки и проблеми
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Делът на репликациите при или под всяка стойност. Лентата съдържа истинското разпределение с доверие {confidence}.
 	The values are numbers, separated by semicolons or spaces	Стойностите са числа, разделени с точка и запетая или интервали
+	The whole clock	Цялото време
 	This block has a warning	Този блок има предупреждение
 	This block has an error	Този блок има грешка
 	This run	Това изпълнение
 	Three-point estimate	Оценка в три точки
 	Thu	чт
+	Time available	Налично време
+	Time before giving up	Време до отказване
 	Time between arrivals	Време между пристиганията
 	Time blocked	Време в блокиране
 	Time failed	Време в повреда
@@ -466,6 +494,7 @@
 	Whole number	Цяло число
 	Window	Прозорец
 	With every time at its mean: {units}	С всяко време на средната му стойност: {units}
+	Work wasted on those who gave up	Пропиляна работа за отказалите се
 	XPDL with BPSim	XPDL с BPSim
 	Yes or no	Да или не
 	Your changes will be lost if you don't save them.	Промените ви ще бъдат загубени, ако не ги запазите.
@@ -479,6 +508,7 @@
 	decision: one way	решение: един път
 	departures	напускания
 	egui and eframe (Craft suite fork)	egui и eframe (разклонение на пакета Craft)
+	for the whole run	за цялото изпълнение
 	from its value	според стойността му
 	have left	са напуснали
 	hours	часове
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k от N: само k от N репликации имат стойност за този резултат и средното и интервалът му са върху тези k.
 	n = {k} of {n}	n = {k} от {n}
 	nothing yet	все още нищо
+	per day	на ден
+	per shift	на смяна
+	per week	на седмица
 	seconds	секунди
 	split batches	разделяне на партиди
 	split or join: all ways	разделяне или обединяване: всички пътища

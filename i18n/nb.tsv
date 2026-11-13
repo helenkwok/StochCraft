@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95 %-intervall for andelen som når målet: {lo} til {hi}
 	95th percentile	95. persentil
 	95th percentile {value}	95. persentil {value}
+	A caller on hold: once a unit takes it, the entity stays.	En innringer i kø: når en ressursenhet har tatt den, blir enheten.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	En klient med tidsavbrudd: hvis tiden løper ut under servicen, gir den opp da, og ressursenheten fullfører jobben likevel (bortkastet arbeid).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Den nye filen inneholder bare modellen: det StochCraft ikke forstår i {file}, utelates.
+	Abandoned	Ga opp
+	Abandoned on {id}	Ga opp på {id}
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
 	Across the range it changed by {change}: more than chance would explain.	Over området endret det seg med {change}: mer enn tilfeldigheter ville forklare.
@@ -102,7 +106,9 @@
 	Constant	Konstant
 	Copy	Kopier
 	Counts against	Belastes
+	Customer demand	Kundebehov
 	Cut	Klipp ut
+	Cycle time	Syklustid
 	Daily	Daglig
 	Dark	Mørk
 	Data points	Datapunkter
@@ -112,6 +118,8 @@
 	Decision (one way)	Beslutning (én vei)
 	Default flow	Standardflyt
 	Delete	Slett
+	Demand	Behov
+	Demand met	Andel av behovet dekket
 	Departures	Avganger
 	Diagram	Diagram
 	Discard	Forkast
@@ -130,6 +138,7 @@
 	Duration	Varighet
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Hver analyse kjører eksperimentet flere ganger med samme tilfeldighetsfrø, så forskjellene kommer fra endringen, ikke fra tilfeldigheter. Det kan ta en stund.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Hver enhet tar det første av disse alternativene som kan oppfylles nå, alt på én gang, og gir ressursenhetene tilbake når den forlater oppgaven.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Hver enhet venter her høyst en tid som trekkes tilfeldig for den ved ankomst, og gir så opp: den tar veien ut merket «Ga opp», eller forlater modellen.
 	Edit	Rediger
 	Elasticity	Elastisitet
 	Ends early	Slutter tidlig
@@ -137,7 +146,9 @@
 	Energy per part	Energi per del
 	Enough: {units}, meeting the target in {p} of replications	Nok: {units}, når målet i {p} av replikasjonene
 	Entered	Innkommet
+	Entities give up waiting	Enheter gir opp å vente
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Enheter som fortsatt er inne ved slutten av en replikasjon, er utelatt fra gjennomsnittlig ventetid og gjennomsnittlig tid i systemet.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Enheter som gir opp å vente, tar denne flyten (for å prøve igjen senere, for eksempel); de andre tar oppgavens andre vei ut.
 	Erlang	Erlang
 	Error	Feil
 	Estimate from three values…	Anslå ut fra tre verdier …
@@ -167,12 +178,16 @@
 	Fri	fre
 	From	Fra
 	Gamma	Gamma
+	Gave up	Ga opp
+	Gives up before it is done	Gir opp før den er ferdig
+	Gives up before service starts	Gir opp før servicen starter
 	Goes to	Går til
 	Hands on finished parts while down	Leverer ferdige deler også ved feil
 	Help	Hjelp
 	Hide Others	Skjul andre
 	Hide {app}	Skjul {app}
 	How many	Hvor mange
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hvor mange deler kundene vil ha fra disse avgangene; resultatene viser da takten (tilgjengelig tid delt på behovet) og hver oppgaves syklustid.
 	Inside over time	Inne over tid
 	Jump	Gå
 	Jump to time	Gå til tidspunkt
@@ -202,6 +217,7 @@
 	Mean time blocked	Gjennomsnittlig blokkeringstid
 	Mean time in system	Gjennomsnittlig tid i systemet
 	Mean wait	Gjennomsnittlig ventetid
+	Mean wait before giving up	Gjennomsnittlig ventetid før de ga opp
 	Metric	Måltall
 	Middles	Loddrette midtpunkter
 	Minimise	Minimer
@@ -257,8 +273,13 @@
 	Parameter	Parameter
 	Parameters	Parametere
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Deler som tar denne flyten, går tilbake for å bearbeides på nytt; de telles som omarbeid for den siste oppgaven med ressurs de gikk gjennom.
+	Parts wanted	Ønskede deler
+	Parts wanted is a number above 0	Antall ønskede deler er et tall over 0
 	Paste	Lim inn
+	Patience	Tålmodighet
 	Pause	Pause
+	Per	Periode
+	Per shift needs a calendar: each period it is active is a shift.	«Per skift» trenger en kalender: hver periode den er aktiv, er et skift.
 	Percentile	Persentil
 	Period {n} ends	Periode {n} slutter
 	Period {n} repeats	Periode {n} gjentas
@@ -365,6 +386,8 @@
 	Share	Andel
 	Share of arrivals lost	Andel tapte ankomster
 	Share of units blocked	Andel blokkerte enheter
+	Share of work wasted	Andel bortkastet arbeid
+	Share that gave up	Andel som ga opp
 	Show All	Vis alle
 	Show {id}	Vis {id}
 	Size	Dimensjoner
@@ -389,6 +412,8 @@
 	Stopped watching	Sluttet å følge
 	Sun	søn
 	Sweep a parameter	Gjennomløp en parameter
+	Takt	Takt
+	Takt time	Takttid
 	Tandem line	Tandemlinje
 	Target	Mål
 	Target share	Målandel
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen replikasjoner ved eller under hver verdi. Båndet inneholder den sanne fordelingen med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Verdiene er tall skilt med semikolon eller mellomrom
+	The whole clock	Hele tiden
 	This block has a warning	Denne blokken har en advarsel
 	This block has an error	Denne blokken har en feil
 	This run	Denne kjøringen
 	Three-point estimate	Trepunktsanslag
 	Thu	tor
+	Time available	Tilgjengelig tid
+	Time before giving up	Tid før den gir opp
 	Time between arrivals	Tid mellom ankomster
 	Time blocked	Tid blokkert
 	Time failed	Tid med feil
@@ -466,6 +494,7 @@
 	Whole number	Heltall
 	Window	Vindu
 	With every time at its mean: {units}	Med hver tid på sitt gjennomsnitt: {units}
+	Work wasted on those who gave up	Bortkastet arbeid på dem som ga opp
 	XPDL with BPSim	XPDL med BPSim
 	Yes or no	Ja eller nei
 	Your changes will be lost if you don't save them.	Endringene dine går tapt hvis du ikke lagrer dem.
@@ -479,6 +508,7 @@
 	decision: one way	beslutning: én vei
 	departures	avganger
 	egui and eframe (Craft suite fork)	egui og eframe (forgrening av Craft-pakken)
+	for the whole run	for hele kjøringen
 	from its value	ut fra verdien
 	have left	har forlatt
 	hours	timer
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k av N: bare k av de N replikasjonene hadde en verdi for dette resultatet, og gjennomsnittet og intervallet er over disse k.
 	n = {k} of {n}	n = {k} av {n}
 	nothing yet	ingenting ennå
+	per day	per dag
+	per shift	per skift
+	per week	per uke
 	seconds	sekunder
 	split batches	oppdeling av partier
 	split or join: all ways	del eller slå sammen: alle veier

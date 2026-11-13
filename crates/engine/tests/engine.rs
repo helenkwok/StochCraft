@@ -2755,6 +2755,61 @@ fn a_planned_run_time_gives_effectiveness_and_is_removed() {
     assert!(!m.to_string().contains("planned_run_time"), "{m}");
 }
 
+/// A patience and a way for those who give up are set by command, show in the model, give the
+/// server its abandonment rows, and are removed again.
+#[test]
+fn a_patience_and_an_abandoned_way_are_set_run_and_removed() {
+    let mut e = help_desk();
+    let metric = |r: &serde_json::Value, name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(metric(&r, "abandoned"), None, "{r}");
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "patience": {"time": {"type": "exponential", "mean": 1.0}, "until": "done"}}),
+    );
+    ok(&mut e, "block.add", json!({"kind": "delay", "id": "retry"}));
+    let way = ok(&mut e, "connect", json!({"from": "desk", "to": "retry"}));
+    let way = way["id"].as_str().unwrap_or_default().to_owned();
+    ok(&mut e, "flow.set", json!({"id": way, "abandoned": true}));
+    ok(&mut e, "connect", json!({"from": "retry", "to": "desk"}));
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(m.contains("\"abandoned\":true"), "{m}");
+    assert!(m.contains("\"until\":\"done\""), "{m}");
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert!(metric(&r, "abandoned").is_some_and(|x| x > 0.0), "{r}");
+    assert!(metric(&r, "wasted").is_some(), "{r}");
+    // `start` is the default, left out of the model.
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "patience": {"time": {"type": "constant", "value": 2.0}}}),
+    );
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(
+        m.contains("\"patience\"") && !m.contains("\"until\""),
+        "{m}"
+    );
+    ok(&mut e, "flow.set", json!({"id": way, "abandoned": false}));
+    ok(&mut e, "block.set", json!({"id": "desk", "patience": null}));
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(!m.contains("abandoned") && !m.contains("patience"), "{m}");
+    // Patience is a server's only.
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "retry", "patience": {"time": {"type": "constant", "value": 1.0}}})
+        ),
+        ErrorCode::InvalidParams
+    );
+}
+
 /// A sink made a scrap sink and a connection made rework give the quality rows; unmarking them
 /// takes the rows away again.
 #[test]
@@ -2786,4 +2841,29 @@ fn scrap_and_rework_are_set_run_and_removed() {
         !m.to_string().contains("rework") && !m.to_string().contains("scrap"),
         "{m}"
     );
+}
+
+/// A customer demand on the exit gives it takt and the desk a cycle time; a demand per shift
+/// with no calendar is the model's problem; removing the demand removes them.
+#[test]
+fn a_demand_gives_takt_and_is_removed() {
+    let mut e = help_desk();
+    let metric = |r: &serde_json::Value, id: &str, name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == id))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "exit", "demand": {"quantity": 30.0, "per": "run"}}),
+    );
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert!(metric(&r, "exit", "takt").is_some_and(|t| t > 0.0), "{r}");
+    assert!(metric(&r, "desk", "cycle_time").is_some(), "{r}");
+    ok(&mut e, "block.set", json!({"id": "exit", "demand": null}));
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(metric(&r, "exit", "takt"), None, "{r}");
+    assert_eq!(metric(&r, "desk", "cycle_time"), None, "{r}");
 }

@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	లక్ష్యాన్ని చేరిన వాటా యొక్క 95% అంతరం: {lo} నుండి {hi}
 	95th percentile	95వ శతాంశం
 	95th percentile {value}	95వ శతాంశం {value}
+	A caller on hold: once a unit takes it, the entity stays.	హోల్డ్‌లో ఉన్న కాలర్: ఒక యూనిట్ దాన్ని తీసుకున్న తర్వాత, ఎంటిటీ ఉండిపోతుంది.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	టైమ్‌అవుట్ అయ్యే క్లయింట్: సేవ జరుగుతుండగా దాని సమయం అయిపోతే, అప్పుడే వదిలి వెళ్తుంది, అయినా యూనిట్ ఆ పనిని పూర్తి చేస్తుంది (వృథా అయిన పని).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	కొత్త ఫైల్ లో నమూనా మాత్రమే ఉంటుంది: {file} లో StochCraft అర్థం చేసుకోనివి వదిలివేయబడతాయి.
+	Abandoned	వదిలి వెళ్లినవి
+	Abandoned on {id}	{id} వద్ద వదిలి వెళ్లినవి
 	About StochCraft	StochCraft గురించి
 	About {app}	{app} గురించి
 	Across the range it changed by {change}: more than chance would explain.	పూర్తి పరిధిలో ఇది {change} మారింది: యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ.
@@ -102,7 +106,9 @@
 	Constant	స్థిర విలువ
 	Copy	కాపీ చేయి
 	Counts against	ఖాతాలో వేసే పని
+	Customer demand	కస్టమర్ డిమాండ్
 	Cut	కత్తిరించు
+	Cycle time	సైకిల్ సమయం
 	Daily	ప్రతిరోజూ
 	Dark	డార్క్
 	Data points	డేటా బిందువులు
@@ -112,6 +118,8 @@
 	Decision (one way)	నిర్ణయం (ఒక దారి)
 	Default flow	డిఫాల్ట్ ప్రవాహం
 	Delete	తొలగించు
+	Demand	డిమాండ్
+	Demand met	తీరిన డిమాండ్ వాటా
 	Departures	నిష్క్రమణలు
 	Diagram	రేఖాచిత్రం
 	Discard	విస్మరించు
@@ -130,6 +138,7 @@
 	Duration	వ్యవధి
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ప్రతి విశ్లేషణ ఒకే యాదృచ్ఛిక బీజంతో ప్రయోగాన్ని చాలాసార్లు అమలు చేస్తుంది, కాబట్టి తేడాలు యాదృచ్ఛికత నుండి కాక మార్పు నుండి వస్తాయి. కొంత సమయం పట్టవచ్చు.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ప్రతి ఎంటిటీ వీటిలో ఇప్పుడే ఒకేసారి పూర్తిగా తీర్చగలిగే మొదటిదాన్ని తీసుకుంటుంది, బయటకు వెళ్లేటప్పుడు యూనిట్‌లను తిరిగి ఇస్తుంది.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ప్రతి ఎంటిటీ వచ్చినప్పుడు దానికోసం యాదృచ్ఛికంగా తీసిన సమయం వరకు మాత్రమే ఇక్కడ వేచి ఉంటుంది, తర్వాత వదిలి వెళ్తుంది: "వదిలి వెళ్లినవి" అని గుర్తించిన బయటికి దారిలో వెళ్తుంది, లేదా నమూనా నుండి బయటకు వెళ్తుంది.
 	Edit	సవరణ
 	Elasticity	స్థితిస్థాపకత
 	Ends early	ముందుగా ముగుస్తుంది
@@ -137,7 +146,9 @@
 	Energy per part	ఒక్కో భాగానికి శక్తి
 	Enough: {units}, meeting the target in {p} of replications	సరిపోతుంది: {units}, {p} పునరావృత్త అమలులలో లక్ష్యం చేరుతుంది
 	Entered	ప్రవేశించినవి
+	Entities give up waiting	ఎంటిటీలు వేచి ఉండటం మానేస్తాయి
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	పునరావృత్త అమలు చివరికి ఇంకా లోపల ఉన్నవి సగటు వేచి ఉండే సమయంలోనూ వ్యవస్థలో గడిపిన సగటు సమయంలోనూ లెక్కించబడవు.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	వేచి ఉండటం మానేసిన ఎంటిటీలు ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి); మిగిలినవి పని యొక్క మరో బయటికి దారిలో వెళ్తాయి.
 	Erlang	ఎర్లాంగ్
 	Error	లోపం
 	Estimate from three values…	మూడు విలువల నుండి అంచనా వేయి…
@@ -167,12 +178,16 @@
 	Fri	శుక్ర
 	From	నుంచి
 	Gamma	గామా
+	Gave up	వదిలి వెళ్లినవి
+	Gives up before it is done	పూర్తయ్యే ముందు వదిలి వెళ్తుంది
+	Gives up before service starts	సేవ మొదలయ్యే ముందు వదిలి వెళ్తుంది
 	Goes to	వెళ్తుంది
 	Hands on finished parts while down	లోపం ఉన్నప్పుడూ పూర్తయిన భాగాలను పంపుతుంది
 	Help	సహాయం
 	Hide Others	ఇతరాలను దాచు
 	Hide {app}	{app} ను దాచు
 	How many	ఎన్ని
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ఈ నిష్క్రమణల నుంచి కస్టమర్లు ఎన్ని భాగాలు కోరుకుంటున్నారు; అప్పుడు ఫలితాలు టాక్ట్ (అందుబాటులో ఉన్న సమయాన్ని డిమాండ్‌తో భాగించినది) మరియు ప్రతి పని యొక్క సైకిల్ సమయాన్ని చూపుతాయి.
 	Inside over time	కాలక్రమంలో లోపల
 	Jump	వెళ్ళు
 	Jump to time	సమయానికి వెళ్ళు
@@ -202,6 +217,7 @@
 	Mean time blocked	నిరోధిత సగటు సమయం
 	Mean time in system	వ్యవస్థలో గడిపిన సగటు సమయం
 	Mean wait	సగటు వేచి ఉండే సమయం
+	Mean wait before giving up	వదిలి వెళ్లే ముందు సగటు వేచి ఉండే సమయం
 	Metric	కొలమానం
 	Middles	నిలువు కేంద్రాలు
 	Minimise	కనిష్ఠీకరించు
@@ -257,8 +273,13 @@
 	Parameter	పరామితి
 	Parameters	పరామితులు
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ఈ ప్రవాహంలో వెళ్ళే భాగాలు మళ్ళీ పని కోసం వెనక్కి వెళ్తాయి; అవి చివరిగా దాటిన వనరు అవసరమైన పని ఖాతాలో పునఃపనిగా లెక్కించబడతాయి.
+	Parts wanted	కోరిన భాగాలు
+	Parts wanted is a number above 0	కోరిన భాగాలు 0 కంటే పెద్ద సంఖ్య కావాలి
 	Paste	అతికించు
+	Patience	ఓపిక
 	Pause	విరామం
+	Per	వ్యవధి
+	Per shift needs a calendar: each period it is active is a shift.	"షిఫ్ట్‌కు" ఎంపికకు క్యాలెండర్ అవసరం: అది సక్రియంగా ఉన్న ప్రతి వ్యవధి ఒక షిఫ్ట్.
 	Percentile	శతాంశం
 	Period {n} ends	వ్యవధి {n} ముగింపు
 	Period {n} repeats	వ్యవధి {n} పునరావృతం
@@ -365,6 +386,8 @@
 	Share	వాటా
 	Share of arrivals lost	కోల్పోయిన రాకల వాటా
 	Share of units blocked	నిరోధిత యూనిట్ల వాటా
+	Share of work wasted	వృథా అయిన పని వాటా
+	Share that gave up	వదిలి వెళ్లినవాటి వాటా
 	Show All	అన్నీ చూపించు
 	Show {id}	{id} చూపించు
 	Size	పరిమాణం నిర్ణయించు
@@ -389,6 +412,8 @@
 	Stopped watching	గమనించడం ఆపబడింది
 	Sun	ఆది
 	Sweep a parameter	ఒక పరామితిని స్వీప్ చేయి
+	Takt	టాక్ట్
+	Takt time	టాక్ట్ సమయం
 	Tandem line	వరుస ప్రక్రియ
 	Target	లక్ష్యం
 	Target share	లక్ష్య వాటా
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	నమూనా: దాని ప్రయోగం, అనుసంధానాలు మరియు సమస్యలు
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ప్రతి విలువకు సమానమైన లేదా తక్కువైన పునరావృత్త అమలుల వాటా. పట్టీ నిజమైన పంపిణీని {confidence} విశ్వాసంతో కలిగి ఉంటుంది.
 	The values are numbers, separated by semicolons or spaces	విలువలు సెమీకోలన్ లేదా ఖాళీతో వేరు చేసిన సంఖ్యలు
+	The whole clock	మొత్తం సమయం
 	This block has a warning	ఈ బ్లాక్‌లో హెచ్చరిక ఉంది
 	This block has an error	ఈ బ్లాక్‌లో లోపం ఉంది
 	This run	ఈ అమలు
 	Three-point estimate	మూడు-బిందువుల అంచనా
 	Thu	గురు
+	Time available	అందుబాటులో ఉన్న సమయం
+	Time before giving up	వదిలి వెళ్లే ముందు సమయం
 	Time between arrivals	రాకల మధ్య సమయం
 	Time blocked	నిరోధిత సమయం
 	Time failed	లోపం ఉన్న సమయం
@@ -466,6 +494,7 @@
 	Whole number	పూర్ణ సంఖ్య
 	Window	విండో
 	With every time at its mean: {units}	ప్రతి సమయం దాని సగటు వద్ద: {units}
+	Work wasted on those who gave up	వదిలి వెళ్లినవాటిపై వృథా అయిన పని
 	XPDL with BPSim	BPSim తో XPDL
 	Yes or no	అవును లేదా కాదు
 	Your changes will be lost if you don't save them.	మీరు సేవ్ చేయకపోతే మీ మార్పులు పోతాయి.
@@ -479,6 +508,7 @@
 	decision: one way	నిర్ణయం: ఒక దారి
 	departures	నిష్క్రమణలు
 	egui and eframe (Craft suite fork)	egui మరియు eframe (Craft suite నుంచి విడిపోయిన సంస్కరణ)
+	for the whole run	మొత్తం అమలుకు
 	from its value	దాని విలువ నుంచి
 	have left	వెళ్లిపోయాయి
 	hours	గంటలు
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = Nలో k: N పునరావృత్త అమలులలో k మాత్రమే ఆ ఫలితానికి విలువను కలిగి ఉన్నాయి; దాని సగటు మరియు అంతరం ఆ k పై ఉన్నాయి.
 	n = {k} of {n}	n = {n}లో {k}
 	nothing yet	ఇంకా ఏమీ లేదు
+	per day	రోజుకు
+	per shift	షిఫ్ట్‌కు
+	per week	వారానికి
 	seconds	సెకన్లు
 	split batches	బ్యాచ్‌ల విభజన
 	split or join: all ways	విభజించు లేదా కలుపు: అన్ని దారులు

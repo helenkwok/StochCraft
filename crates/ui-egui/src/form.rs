@@ -182,6 +182,7 @@ pub fn label(name: &str) -> String {
         "transfer" => "Transfer time",
         "transfer_holds_sender" => "Sender waits during transfer",
         "planned_run_time" => "Planned run time per item",
+        "patience" => "Time before giving up",
         "breakdown" => "Breakdowns",
         "time_to_failure" => "Time to failure",
         "repair" => "Repair time",

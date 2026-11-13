@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	ຊ່ວງ 95% ຂອງສັດສ່ວນທີ່ບັນລຸເປົ້າໝາຍ: ຈາກ {lo} ຫາ {hi}
 	95th percentile	ເປີເຊັນໄທລ໌ທີ 95
 	95th percentile {value}	ເປີເຊັນໄທລ໌ທີ 95 {value}
+	A caller on hold: once a unit takes it, the entity stays.	ຜູ້ໂທທີ່ຖືສາຍລໍຖ້າ: ເມື່ອໜ່ວຍໃດໜຶ່ງຮັບມັນແລ້ວ, ເອນທິຕີຈະຢູ່ຕໍ່.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	ລູກຂ່າຍທີ່ໝົດເວລາ (timeout): ຖ້າເວລາຂອງມັນໝົດລະຫວ່າງການບໍລິການ, ມັນຈະເຊົາໃນຕອນນັ້ນ ແລະ ໜ່ວຍຍັງເຮັດວຽກນັ້ນຈົນສຳເລັດ (ວຽກທີ່ເສຍເປົ່າ).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	ໄຟລ໌ໃໝ່ມີແຕ່ແບບຈຳລອງ: ສິ່ງທີ່ StochCraft ບໍ່ເຂົ້າໃຈໃນ {file} ຈະຖືກປະໄວ້.
+	Abandoned	ເຊົາລໍຖ້າ
+	Abandoned on {id}	ເຊົາລໍຖ້າທີ່ {id}
 	About StochCraft	ກ່ຽວກັບ StochCraft
 	About {app}	ກ່ຽວກັບ {app}
 	Across the range it changed by {change}: more than chance would explain.	ຕະຫຼອດຊ່ວງປ່ຽນໄປ {change}: ຫຼາຍກວ່າທີ່ຄວາມບັງເອີນຈະອະທິບາຍໄດ້.
@@ -102,7 +106,9 @@
 	Constant	ຄ່າຄົງທີ່
 	Copy	ສຳເນົາ
 	Counts against	ນັບໃສ່ໜ້າວຽກ
+	Customer demand	ຄວາມຕ້ອງການຂອງລູກຄ້າ
 	Cut	ຕັດ
+	Cycle time	ເວລາຮອບວຽນ
 	Daily	ທຸກມື້
 	Dark	ມືດ
 	Data points	ຈຸດຂໍ້ມູນ
@@ -112,6 +118,8 @@
 	Decision (one way)	ການຕັດສິນໃຈ (ທາງດຽວ)
 	Default flow	ເສັ້ນທາງເລີ່ມຕົ້ນ
 	Delete	ລຶບ
+	Demand	ຄວາມຕ້ອງການ
+	Demand met	ສັດສ່ວນຄວາມຕ້ອງການທີ່ຕອບສະໜອງໄດ້
 	Departures	ການອອກ
 	Diagram	ແຜນວາດ
 	Discard	ຖິ້ມ
@@ -130,6 +138,7 @@
 	Duration	ໄລຍະເວລາ
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ການວິເຄາະແຕ່ລະອັນແລ່ນການທົດລອງຫຼາຍເທື່ອດ້ວຍເມັດສຸ່ມດຽວກັນ, ຄວາມແຕກຕ່າງຈຶ່ງມາຈາກການປ່ຽນແປງ ບໍ່ແມ່ນຄວາມບັງເອີນ. ອາດໃຊ້ເວລາຈັກໜ້ອຍ.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ແຕ່ລະເອນທິຕີຈະເອົາທາງເລືອກທຳອິດທີ່ສາມາດຈັດໃຫ້ໄດ້ຄົບທັງໝົດພ້ອມກັນໃນທັນທີ ແລະ ສົ່ງໜ່ວຍເຫຼົ່ານັ້ນຄືນເມື່ອອອກໄປ.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ແຕ່ລະເອນທິຕີຈະລໍຖ້າຢູ່ນີ້ບໍ່ເກີນເວລາທີ່ສຸ່ມໃຫ້ມັນເມື່ອມາຮອດ, ແລ້ວຈຶ່ງເຊົາລໍຖ້າ: ມັນໄປທາງອອກທີ່ໝາຍວ່າ "ເຊົາລໍຖ້າ" ຫຼື ອອກຈາກແບບຈຳລອງ.
 	Edit	ແກ້ໄຂ
 	Elasticity	ຄວາມຢືດຢຸ່ນ
 	Ends early	ຈົບກ່ອນກຳນົດ
@@ -137,7 +146,9 @@
 	Energy per part	ພະລັງງານຕໍ່ຊິ້ນ
 	Enough: {units}, meeting the target in {p} of replications	ພຽງພໍ: {units}, ບັນລຸເປົ້າໝາຍໃນ {p} ຂອງຮອບຈຳລອງຊ້ຳ
 	Entered	ຈຳນວນທີ່ເຂົ້າ
+	Entities give up waiting	ເອນທິຕີເຊົາລໍຖ້າ
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ສິ່ງທີ່ຍັງຢູ່ພາຍໃນເມື່ອຮອບຈຳລອງຊ້ຳສິ້ນສຸດ ບໍ່ຖືກນັບໃນເວລາລໍຖ້າສະເລ່ຍ ແລະ ເວລາສະເລ່ຍໃນລະບົບ.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	ເອນທິຕີທີ່ເຊົາລໍຖ້າຈະໄປຕາມເສັ້ນທາງນີ້ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ); ສ່ວນທີ່ເຫຼືອໄປທາງອອກອື່ນຂອງໜ້າວຽກ.
 	Erlang	ເອີລັງ
 	Error	ຂໍ້ຜິດພາດ
 	Estimate from three values…	ປະມານຈາກສາມຄ່າ…
@@ -167,12 +178,16 @@
 	Fri	ສຸກ
 	From	ຈາກ
 	Gamma	ແກມມາ
+	Gave up	ຈຳນວນທີ່ເຊົາລໍຖ້າ
+	Gives up before it is done	ເຊົາລໍຖ້າກ່ອນສຳເລັດ
+	Gives up before service starts	ເຊົາລໍຖ້າກ່ອນເລີ່ມການບໍລິການ
 	Goes to	ໄປຫາ
 	Hands on finished parts while down	ສົ່ງຕໍ່ຊິ້ນທີ່ສຳເລັດແລ້ວແມ່ນແຕ່ໃນຂະນະເສຍ
 	Help	ຊ່ວຍເຫຼືອ
 	Hide Others	ເຊື່ອງລາຍການອື່ນ
 	Hide {app}	ເຊື່ອງ {app}
 	How many	ຈຳນວນ
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ລູກຄ້າຕ້ອງການຈັກຊິ້ນຈາກການອອກເຫຼົ່ານີ້; ຈາກນັ້ນຜົນຈະສະແດງແທັກ (ເວລາທີ່ມີຫານດ້ວຍຄວາມຕ້ອງການ) ແລະ ເວລາຮອບວຽນຂອງແຕ່ລະໜ້າວຽກ.
 	Inside over time	ຈຳນວນພາຍໃນຕາມເວລາ
 	Jump	ຂ້າມ
 	Jump to time	ຂ້າມໄປຫາເວລາ
@@ -202,6 +217,7 @@
 	Mean time blocked	ເວລາສະເລ່ຍທີ່ຖືກຂັດຂວາງ
 	Mean time in system	ເວລາສະເລ່ຍໃນລະບົບ
 	Mean wait	ເວລາລໍຖ້າສະເລ່ຍ
+	Mean wait before giving up	ເວລາລໍຖ້າສະເລ່ຍກ່ອນເຊົາລໍຖ້າ
 	Metric	ຕົວຊີ້ວັດ
 	Middles	ກາງແນວຕັ້ງ
 	Minimise	ຫຍໍ້ໜ້າຕ່າງ
@@ -257,8 +273,13 @@
 	Parameter	ພາຣາມິເຕີ
 	Parameters	ພາລາມິເຕີ
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ຊິ້ນງານທີ່ໄປຕາມເສັ້ນທາງນີ້ຈະກັບໄປເຮັດໃໝ່; ພວກມັນຖືກນັບເປັນການແກ້ໄຂງານຂອງໜ້າວຽກສຸດທ້າຍທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ພວກມັນຜ່ານມາ.
+	Parts wanted	ຈຳນວນຊິ້ນທີ່ຕ້ອງການ
+	Parts wanted is a number above 0	ຈຳນວນຊິ້ນທີ່ຕ້ອງການຕ້ອງເປັນຕົວເລກທີ່ຫຼາຍກວ່າ 0
 	Paste	ວາງ
+	Patience	ການເຊົາລໍຖ້າ
 	Pause	ຢຸດຊົ່ວຄາວ
+	Per	ໄລຍະ
+	Per shift needs a calendar: each period it is active is a shift.	"ຕໍ່ກະ" ຕ້ອງມີປະຕິທິນ: ແຕ່ລະໄລຍະທີ່ປະຕິທິນເປີດໃຊ້ແມ່ນໜຶ່ງກະ.
 	Percentile	ເປີເຊັນໄທລ໌
 	Period {n} ends	ໄລຍະ {n} ສິ້ນສຸດ
 	Period {n} repeats	ໄລຍະ {n} ເຮັດຊ້ຳ
@@ -365,6 +386,8 @@
 	Share	ສັດສ່ວນ
 	Share of arrivals lost	ສັດສ່ວນການມາຮອດທີ່ສູນເສຍ
 	Share of units blocked	ສັດສ່ວນໜ່ວຍທີ່ຖືກຂັດຂວາງ
+	Share of work wasted	ສັດສ່ວນວຽກທີ່ເສຍເປົ່າ
+	Share that gave up	ສັດສ່ວນທີ່ເຊົາລໍຖ້າ
 	Show All	ສະແດງທັງໝົດ
 	Show {id}	ສະແດງ {id}
 	Size	ກຳນົດຂະໜາດ
@@ -389,6 +412,8 @@
 	Stopped watching	ຢຸດຕິດຕາມແລ້ວ
 	Sun	ອາທິດ
 	Sweep a parameter	ກວາດພາຣາມິເຕີ
+	Takt	ເວລາແທັກ
+	Takt time	ເວລາແທັກ
 	Tandem line	ສາຍງານຕໍ່ເນື່ອງ
 	Target	ເປົ້າໝາຍ
 	Target share	ສັດສ່ວນເປົ້າໝາຍ
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	ແບບຈຳລອງ: ການທົດລອງ ການເຊື່ອມຕໍ່ ແລະ ບັນຫາ
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ສັດສ່ວນຮອບຈຳລອງຊ້ຳທີ່ເທົ່າກັບ ຫຼື ຕ່ຳກວ່າແຕ່ລະຄ່າ. ແຖບຄອບຄຸມການແຈກຢາຍແທ້ດ້ວຍຄວາມເຊື່ອໝັ້ນ {confidence}.
 	The values are numbers, separated by semicolons or spaces	ຄ່າຕ້ອງເປັນຕົວເລກທີ່ຂັ້ນດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ
+	The whole clock	ເວລາທັງໝົດ
 	This block has a warning	ບລັອກນີ້ມີຄຳເຕືອນ
 	This block has an error	ບລັອກນີ້ມີຂໍ້ຜິດພາດ
 	This run	ການປະມວນຜົນນີ້
 	Three-point estimate	ການປະມານສາມຈຸດ
 	Thu	ພະຫັດ
+	Time available	ເວລາທີ່ມີ
+	Time before giving up	ເວລາກ່ອນເຊົາລໍຖ້າ
 	Time between arrivals	ເວລາລະຫວ່າງການມາຮອດ
 	Time blocked	ເວລາທີ່ຖືກຂັດຂວາງ
 	Time failed	ເວລາທີ່ເສຍ
@@ -466,6 +494,7 @@
 	Whole number	ຈຳນວນເຕັມ
 	Window	ໜ້າຕ່າງ
 	With every time at its mean: {units}	ເມື່ອທຸກເວລາເທົ່າກັບຄ່າສະເລ່ຍ: {units}
+	Work wasted on those who gave up	ວຽກທີ່ເສຍເປົ່າກັບຜູ້ທີ່ເຊົາລໍຖ້າ
 	XPDL with BPSim	XPDL ພ້ອມ BPSim
 	Yes or no	ແມ່ນ ຫຼື ບໍ່
 	Your changes will be lost if you don't save them.	ການປ່ຽນແປງຈະສູນເສຍຖ້າທ່ານບໍ່ບັນທຶກ.
@@ -479,6 +508,7 @@
 	decision: one way	ການຕັດສິນໃຈ: ທາງດຽວ
 	departures	ການອອກ
 	egui and eframe (Craft suite fork)	egui ແລະ eframe (ແຍກມາຈາກ Craft suite)
+	for the whole run	ສຳລັບການປະມວນຜົນທັງໝົດ
 	from its value	ຈາກຄ່າຂອງມັນ
 	have left	ອອກໄປແລ້ວ
 	hours	ຊົ່ວໂມງ
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k ຈາກ N: ມີພຽງ k ຈາກ N ຮອບຈຳລອງຊ້ຳທີ່ມີຄ່າສຳລັບຜົນນັ້ນ, ແລະ ຄ່າສະເລ່ຍ ແລະ ຊ່ວງຂອງມັນຄິດຈາກ k ຮອບນັ້ນ.
 	n = {k} of {n}	n = {k} ຈາກ {n}
 	nothing yet	ຍັງບໍ່ມີຫຍັງ
+	per day	ຕໍ່ມື້
+	per shift	ຕໍ່ກະ
+	per week	ຕໍ່ອາທິດ
 	seconds	ວິນາທີ
 	split batches	ແຍກຊຸດ
 	split or join: all ways	ແຍກ ຫຼື ລວມ: ທຸກທາງ

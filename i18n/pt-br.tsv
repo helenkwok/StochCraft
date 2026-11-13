@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Intervalo de 95% da parcela que atinge a meta: de {lo} a {hi}
 	95th percentile	Percentil 95
 	95th percentile {value}	percentil 95 {value}
+	A caller on hold: once a unit takes it, the entity stays.	Uma chamada em espera: assim que uma unidade a atende, a entidade fica.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Um cliente que expira (timeout): se o tempo dele se esgota durante o serviço, ele desiste nesse momento, e a unidade termina o trabalho mesmo assim (trabalho desperdiçado).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	O novo arquivo contém só o modelo: o que o StochCraft não entende em {file} fica de fora.
+	Abandoned	Desistências
+	Abandoned on {id}	Desistências em {id}
 	About StochCraft	Sobre o StochCraft
 	About {app}	Sobre o {app}
 	Across the range it changed by {change}: more than chance would explain.	No intervalo, mudou {change}: mais do que o acaso explicaria.
@@ -102,7 +106,9 @@
 	Constant	Constante
 	Copy	Copiar
 	Counts against	Atribuído a
+	Customer demand	Demanda do cliente
 	Cut	Recortar
+	Cycle time	Tempo de ciclo
 	Daily	Diariamente
 	Dark	Escuro
 	Data points	Pontos de dados
@@ -112,6 +118,8 @@
 	Decision (one way)	Decisão (um caminho)
 	Default flow	Fluxo padrão
 	Delete	Excluir
+	Demand	Demanda
+	Demand met	Proporção da demanda atendida
 	Departures	Saídas
 	Diagram	Diagrama
 	Discard	Descartar
@@ -130,6 +138,7 @@
 	Duration	Duração
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Cada análise executa o experimento várias vezes com a mesma semente, então as diferenças vêm da mudança, não do acaso. Pode demorar um pouco.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entidade pega, de uma só vez, a primeira destas alternativas que puder ser atendida no momento e devolve as unidades ao sair.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Cada entidade espera aqui no máximo um tempo sorteado para ela na chegada e depois desiste: segue a saída marcada como “Desistências” ou sai do modelo.
 	Edit	Editar
 	Elasticity	Elasticidade
 	Ends early	Termina antes
@@ -137,7 +146,9 @@
 	Energy per part	Energia por peça
 	Enough: {units}, meeting the target in {p} of replications	Suficiente: {units}, atinge a meta em {p} das replicações
 	Entered	Entradas
+	Entities give up waiting	As entidades desistem de esperar
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entidades ainda no sistema ao final de uma replicação ficam fora da espera média e do tempo médio no sistema.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	As entidades que desistem de esperar seguem este fluxo (para tentar de novo mais tarde, por exemplo); as demais seguem a outra saída da tarefa.
 	Erlang	Erlang
 	Error	Erro
 	Estimate from three values…	Estimar a partir de três valores…
@@ -167,12 +178,16 @@
 	Fri	sex
 	From	De
 	Gamma	Gama
+	Gave up	Desistiram
+	Gives up before it is done	Desiste antes de terminar
+	Gives up before service starts	Desiste antes de o serviço começar
 	Goes to	Vai para
 	Hands on finished parts while down	Repassa peças prontas mesmo em falha
 	Help	Ajuda
 	Hide Others	Ocultar outros
 	Hide {app}	Ocultar {app}
 	How many	Quantas
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Quantas peças os clientes querem destas saídas; os resultados mostram então o takt (o tempo disponível dividido pela demanda) e o tempo de ciclo de cada tarefa.
 	Inside over time	Dentro ao longo do tempo
 	Jump	Ir
 	Jump to time	Ir para o instante
@@ -202,6 +217,7 @@
 	Mean time blocked	Tempo médio bloqueado
 	Mean time in system	Tempo médio no sistema
 	Mean wait	Espera média
+	Mean wait before giving up	Espera média até desistir
 	Metric	Métrica
 	Middles	Centros verticais
 	Minimise	Minimizar
@@ -257,8 +273,13 @@
 	Parameter	Parâmetro
 	Parameters	Parâmetros
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	As peças que seguem este fluxo voltam para ser trabalhadas de novo; contam como retrabalho da última tarefa com recurso pela qual passaram.
+	Parts wanted	Peças pedidas
+	Parts wanted is a number above 0	As peças pedidas são um número maior que 0
 	Paste	Colar
+	Patience	Paciência
 	Pause	Pausar
+	Per	Período
+	Per shift needs a calendar: each period it is active is a shift.	“Por turno” precisa de um calendário: cada período em que ele está ativo é um turno.
 	Percentile	Percentil
 	Period {n} ends	Fim do período {n}
 	Period {n} repeats	Repetição do período {n}
@@ -365,6 +386,8 @@
 	Share	Proporção
 	Share of arrivals lost	Proporção de chegadas perdidas
 	Share of units blocked	Proporção de unidades bloqueadas
+	Share of work wasted	Proporção de trabalho desperdiçado
+	Share that gave up	Proporção que desistiu
 	Show All	Mostrar tudo
 	Show {id}	Mostrar {id}
 	Size	Dimensionar
@@ -389,6 +412,8 @@
 	Stopped watching	Acompanhamento parado
 	Sun	dom
 	Sweep a parameter	Varrer um parâmetro
+	Takt	Takt
+	Takt time	Takt time
 	Tandem line	Linha em tandem
 	Target	Meta
 	Target share	Parcela-meta
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	O modelo: experimento, conexões e problemas
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	A parcela de replicações iguais ou abaixo de cada valor. A faixa contém a distribuição real com confiança de {confidence}.
 	The values are numbers, separated by semicolons or spaces	Os valores são números separados por ponto e vírgula ou espaços
+	The whole clock	Todo o tempo
 	This block has a warning	Este bloco tem um aviso
 	This block has an error	Este bloco tem um erro
 	This run	Esta execução
 	Three-point estimate	Estimativa de três pontos
 	Thu	qui
+	Time available	Tempo disponível
+	Time before giving up	Tempo até desistir
 	Time between arrivals	Tempo entre chegadas
 	Time blocked	Tempo bloqueado
 	Time failed	Tempo em falha
@@ -466,6 +494,7 @@
 	Whole number	Número inteiro
 	Window	Janela
 	With every time at its mean: {units}	Com cada tempo na sua média: {units}
+	Work wasted on those who gave up	Trabalho desperdiçado com quem desistiu
 	XPDL with BPSim	XPDL com BPSim
 	Yes or no	Sim ou não
 	Your changes will be lost if you don't save them.	Suas alterações serão perdidas se você não as salvar.
@@ -479,6 +508,7 @@
 	decision: one way	decisão: um caminho
 	departures	saídas
 	egui and eframe (Craft suite fork)	egui e eframe (fork da suíte Craft)
+	for the whole run	para toda a execução
 	from its value	pelo seu valor
 	have left	saíram
 	hours	horas
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k de N: só k das N replicações tiveram um valor para esse resultado, e sua média e intervalo são sobre essas k.
 	n = {k} of {n}	n = {k} de {n}
 	nothing yet	nada ainda
+	per day	por dia
+	per shift	por turno
+	per week	por semana
 	seconds	segundos
 	split batches	separação de lotes
 	split or join: all ways	dividir ou unir: todos os caminhos

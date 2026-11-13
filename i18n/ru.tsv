@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95% интервал доли, достигшей цели: от {lo} до {hi}
 	95th percentile	95-й процентиль
 	95th percentile {value}	95-й процентиль {value}
+	A caller on hold: once a unit takes it, the entity stays.	Звонящий на удержании: как только единица берёт его, сущность остаётся.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Клиент с тайм-аутом: если его время истекает во время обслуживания, он уходит в этот момент, а единица всё равно доделывает работу (работа впустую).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Новый файл содержит только модель: то, что StochCraft не понимает в {file}, не сохраняется.
+	Abandoned	Ушедшие
+	Abandoned on {id}	Ушедшие на {id}
 	About StochCraft	О программе StochCraft
 	About {app}	О программе {app}
 	Across the range it changed by {change}: more than chance would explain.	На всём диапазоне изменился на {change}: больше, чем объяснила бы случайность.
@@ -102,7 +106,9 @@
 	Constant	Постоянное значение
 	Copy	Копировать
 	Counts against	Относится на
+	Customer demand	Спрос клиентов
 	Cut	Вырезать
+	Cycle time	Время цикла
 	Daily	Ежедневно
 	Dark	Тёмная
 	Data points	Точки данных
@@ -112,6 +118,8 @@
 	Decision (one way)	Решение (один путь)
 	Default flow	Поток по умолчанию
 	Delete	Удалить
+	Demand	Спрос
+	Demand met	Доля покрытого спроса
 	Departures	Выходы
 	Diagram	Диаграмма
 	Discard	Отменить
@@ -130,6 +138,7 @@
 	Duration	Длительность
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Каждый анализ запускает эксперимент несколько раз с одним и тем же начальным значением генератора, поэтому различия вызваны изменением, а не случайностью. Это может занять некоторое время.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Каждая сущность занимает первый из этих вариантов, который можно выполнить сейчас, целиком и сразу, и возвращает единицы, когда уходит.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Каждая сущность ждёт здесь не дольше случайного времени, выбранного для неё при прибытии, а затем уходит: идёт по выходу с пометкой «Ушедшие» или покидает модель.
 	Edit	Редактирование
 	Elasticity	Эластичность
 	Ends early	Завершается раньше
@@ -137,7 +146,9 @@
 	Energy per part	Энергия на деталь
 	Enough: {units}, meeting the target in {p} of replications	Достаточно: {units}, цель достигнута в {p} репликаций
 	Entered	Вошло
+	Entities give up waiting	Сущности перестают ждать
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Объекты, оставшиеся внутри в конце репликации, не учитываются в среднем времени ожидания и среднем времени в системе.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Сущности, которые перестают ждать, идут по этому потоку (например, чтобы попробовать позже); остальные идут по другому выходу задачи.
 	Erlang	Распределение Эрланга
 	Error	Ошибка
 	Estimate from three values…	Оценить по трём значениям…
@@ -167,12 +178,16 @@
 	Fri	пт
 	From	От
 	Gamma	Гамма-распределение
+	Gave up	Ушли
+	Gives up before it is done	Уходит до завершения
+	Gives up before service starts	Уходит до начала обслуживания
 	Goes to	Ведёт к
 	Hands on finished parts while down	Передаёт готовые детали и при отказе
 	Help	Справка
 	Hide Others	Скрыть остальные
 	Hide {app}	Скрыть {app}
 	How many	Сколько
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Сколько деталей клиенты хотят от этих выходов; тогда результаты показывают такт (доступное время, делённое на спрос) и время цикла каждой задачи.
 	Inside over time	Внутри во времени
 	Jump	Перейти
 	Jump to time	Перейти ко времени
@@ -202,6 +217,7 @@
 	Mean time blocked	Среднее время блокировки
 	Mean time in system	Среднее время в системе
 	Mean wait	Среднее время ожидания
+	Mean wait before giving up	Среднее время ожидания до ухода
 	Metric	Показатель
 	Middles	Центры по вертикали
 	Minimise	Свернуть
@@ -257,8 +273,13 @@
 	Parameter	Параметр
 	Parameters	Параметры
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Детали, идущие по этому потоку, возвращаются на повторную обработку; они учитываются как доработка последней задачи с ресурсом, которую они прошли.
+	Parts wanted	Нужно деталей
+	Parts wanted is a number above 0	Нужное число деталей должно быть больше 0
 	Paste	Вставить
+	Patience	Терпение
 	Pause	Пауза
+	Per	Период
+	Per shift needs a calendar: each period it is active is a shift.	«За смену» требует календаря: каждый период, когда он активен, — это смена.
 	Percentile	Процентиль
 	Period {n} ends	Конец периода {n}
 	Period {n} repeats	Повтор периода {n}
@@ -365,6 +386,8 @@
 	Share	Доля
 	Share of arrivals lost	Доля потерянных прибытий
 	Share of units blocked	Доля заблокированных единиц
+	Share of work wasted	Доля работы впустую
+	Share that gave up	Доля ушедших
 	Show All	Показать всё
 	Show {id}	Показать {id}
 	Size	Подобрать
@@ -389,6 +412,8 @@
 	Stopped watching	Наблюдение прекращено
 	Sun	вс
 	Sweep a parameter	Перебор параметра
+	Takt	Такт
+	Takt time	Время такта
 	Tandem line	Последовательная линия
 	Target	Цель
 	Target share	Целевая доля
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	Модель: эксперимент, соединения и проблемы
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Доля репликаций, не превышающих каждое значение. Полоса содержит истинное распределение с доверием {confidence}.
 	The values are numbers, separated by semicolons or spaces	Значения — это числа, разделённые точкой с запятой или пробелами
+	The whole clock	Всё время
 	This block has a warning	В этом блоке есть предупреждение
 	This block has an error	В этом блоке есть ошибка
 	This run	Этот запуск
 	Three-point estimate	Трёхточечная оценка
 	Thu	чт
+	Time available	Доступное время
+	Time before giving up	Время до ухода
 	Time between arrivals	Время между прибытиями
 	Time blocked	Время блокировки
 	Time failed	Время отказа
@@ -466,6 +494,7 @@
 	Whole number	Целое число
 	Window	Окно
 	With every time at its mean: {units}	Если каждое время равно своему среднему: {units}
+	Work wasted on those who gave up	Работа впустую на ушедших
 	XPDL with BPSim	XPDL с BPSim
 	Yes or no	Да или нет
 	Your changes will be lost if you don't save them.	Если не сохранить, изменения будут потеряны.
@@ -479,6 +508,7 @@
 	decision: one way	решение: один путь
 	departures	выходы
 	egui and eframe (Craft suite fork)	egui и eframe (ответвление набора Craft)
+	for the whole run	за весь запуск
 	from its value	по значению
 	have left	покинули
 	hours	часы
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k из N: только k из N репликаций имели значение для этого результата, и его среднее и интервал рассчитаны по этим k.
 	n = {k} of {n}	n = {k} из {n}
 	nothing yet	пока ничего
+	per day	в день
+	per shift	за смену
+	per week	в неделю
 	seconds	секунды
 	split batches	разделение партий
 	split or join: all ways	разделить или объединить: все пути

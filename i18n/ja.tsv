@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	目標を達成した割合の 95% 区間: {lo}〜{hi}
 	95th percentile	95 パーセンタイル
 	95th percentile {value}	95 パーセンタイル {value}
+	A caller on hold: once a unit takes it, the entity stays.	保留中の発信者: いったんユニットが受け付けると、エンティティは離脱しません。
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	タイムアウトするクライアント: サービス中に時間切れになると、その時点で離脱しますが、ユニットは作業を最後まで行います（無駄な作業）。
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	新しいファイルにはモデルだけが入ります。{file} のうち StochCraft が理解できない内容は含まれません。
+	Abandoned	離脱
+	Abandoned on {id}	{id} の離脱
 	About StochCraft	StochCraft について
 	About {app}	{app} について
 	Across the range it changed by {change}: more than chance would explain.	範囲全体で {change} 変化しました。偶然では説明できない大きさです。
@@ -102,7 +106,9 @@
 	Constant	定数
 	Copy	コピー
 	Counts against	計上先
+	Customer demand	顧客需要
 	Cut	切り取り
+	Cycle time	サイクルタイム
 	Daily	毎日
 	Dark	ダーク
 	Data points	データ点
@@ -112,6 +118,8 @@
 	Decision (one way)	分岐（1 つの経路）
 	Default flow	既定のフロー
 	Delete	削除
+	Demand	需要
+	Demand met	需要充足率
 	Departures	退出
 	Diagram	ダイアグラム
 	Discard	破棄
@@ -130,6 +138,7 @@
 	Duration	継続時間
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	各分析は同じ乱数シードで実験を何度か実行するため、差は偶然ではなく変更によるものです。時間がかかることがあります。
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	各エンティティは、これらのうち今すぐ一度にすべて満たせる最初のものを確保し、退出するときにユニットを返却します。
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	各エンティティは、到着時に抽選された時間を上限としてここで待ち、その後離脱します。「離脱」と表示された出口へ進むか、モデルから出ます。
 	Edit	編集
 	Elasticity	弾力性
 	Ends early	早期終了
@@ -137,7 +146,9 @@
 	Energy per part	部品あたりのエネルギー
 	Enough: {units}, meeting the target in {p} of replications	十分: {units}、反復実行の {p} で目標を達成
 	Entered	流入数
+	Entities give up waiting	エンティティが待ち切れずに離脱する
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	反復実行の終了時に内部に残っているエンティティは、平均待ち時間とシステム内の平均滞在時間に含まれません。
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	待ち切れずに離脱したエンティティはこのフローを通ります（後で再試行するなど）。それ以外はタスクのもう一方の出口を通ります。
 	Erlang	アーラン分布
 	Error	エラー
 	Estimate from three values…	3 つの値から見積もる…
@@ -167,12 +178,16 @@
 	Fri	金
 	From	接続元
 	Gamma	ガンマ分布
+	Gave up	離脱数
+	Gives up before it is done	完了前に離脱
+	Gives up before service starts	サービス開始前に離脱
 	Goes to	接続先
 	Hands on finished parts while down	故障中も完成した部品を渡す
 	Help	ヘルプ
 	Hide Others	その他を隠す
 	Hide {app}	{app} を隠す
 	How many	数
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	顧客がこれらの退出から求める部品の数。結果にはタクト（稼働可能時間を需要で割った値）と各タスクのサイクルタイムが表示されます。
 	Inside over time	内部の数の推移
 	Jump	移動
 	Jump to time	移動先の時刻
@@ -202,6 +217,7 @@
 	Mean time blocked	平均ブロック時間
 	Mean time in system	システム内の平均滞在時間
 	Mean wait	平均待ち時間
+	Mean wait before giving up	離脱までの平均待ち時間
 	Metric	指標
 	Middles	上下中央
 	Minimise	最小化
@@ -257,8 +273,13 @@
 	Parameter	パラメーター
 	Parameters	パラメータ
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	このフローを通る部品は再び加工するために戻ります。部品が最後に通ったリソースを使うタスクの手直しとして数えられます。
+	Parts wanted	必要数
+	Parts wanted is a number above 0	必要数は 0 より大きい数値です
 	Paste	貼り付け
+	Patience	途中離脱
 	Pause	一時停止
+	Per	期間
+	Per shift needs a calendar: each period it is active is a shift.	「1 シフトあたり」にはカレンダーが必要です。カレンダーが有効な各期間を 1 シフトとします。
 	Percentile	パーセンタイル
 	Period {n} ends	期間 {n} の終了
 	Period {n} repeats	期間 {n} の繰り返し
@@ -365,6 +386,8 @@
 	Share	割合
 	Share of arrivals lost	到着数の損失割合
 	Share of units blocked	処理単位のブロック割合
+	Share of work wasted	無駄な作業の割合
+	Share that gave up	離脱率
 	Show All	すべてを表示
 	Show {id}	{id} を表示
 	Size	サイズを決める
@@ -389,6 +412,8 @@
 	Stopped watching	観察を終了しました
 	Sun	日
 	Sweep a parameter	パラメーターのスイープ
+	Takt	タクトタイム
+	Takt time	タクトタイム
 	Tandem line	直列ライン
 	Target	目標
 	Target share	目標割合
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	モデル：実験、接続、問題
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	各値以下となった反復実行の割合。帯は {confidence} の信頼度で真の分布を含みます。
 	The values are numbers, separated by semicolons or spaces	値はセミコロンまたはスペースで区切った数値です
+	The whole clock	すべての時間
 	This block has a warning	このブロックには警告があります
 	This block has an error	このブロックにはエラーがあります
 	This run	この実行
 	Three-point estimate	三点見積もり
 	Thu	木
+	Time available	稼働可能時間
+	Time before giving up	離脱までの時間
 	Time between arrivals	到着間隔
 	Time blocked	ブロック時間
 	Time failed	故障時間
@@ -466,6 +494,7 @@
 	Whole number	整数
 	Window	ウィンドウ
 	With every time at its mean: {units}	すべての時間を平均値にした場合: {units}
+	Work wasted on those who gave up	離脱したものへの無駄な作業
 	XPDL with BPSim	BPSim 付き XPDL
 	Yes or no	はい／いいえ
 	Your changes will be lost if you don't save them.	保存しないと変更は失われます。
@@ -479,6 +508,7 @@
 	decision: one way	分岐：1 つの経路
 	departures	退出
 	egui and eframe (Craft suite fork)	egui と eframe（Craft スイートのフォーク）
+	for the whole run	実行全体で
 	from its value	値から判定
 	have left	出たとき
 	hours	時間
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N 回中 k 回: この結果に値があったのは N 回の反復実行のうち k 回だけで、その平均と区間はこの k 回によるものです。
 	n = {k} of {n}	n = {n} 回中 {k} 回
 	nothing yet	まだありません
+	per day	1 日あたり
+	per shift	1 シフトあたり
+	per week	1 週間あたり
 	seconds	秒
 	split batches	バッチの分割
 	split or join: all ways	分岐または結合：すべての経路

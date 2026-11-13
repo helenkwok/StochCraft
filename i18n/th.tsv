@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	ช่วง 95% ของสัดส่วนที่บรรลุเป้าหมาย: จาก {lo} ถึง {hi}
 	95th percentile	เปอร์เซ็นไทล์ที่ 95
 	95th percentile {value}	เปอร์เซ็นไทล์ที่ 95 {value}
+	A caller on hold: once a unit takes it, the entity stays.	ผู้โทรที่ถือสายรอ: เมื่อหน่วยรับไปแล้ว เอนทิตีจะอยู่ต่อ
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	ไคลเอนต์ที่หมดเวลา (timeout): หากเวลาหมดระหว่างให้บริการ จะเลิกในตอนนั้น และหน่วยยังทำงานนั้นจนเสร็จอยู่ดี (งานที่สูญเปล่า)
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	ไฟล์ใหม่มีเฉพาะแบบจำลอง: สิ่งที่ StochCraft ไม่เข้าใจใน {file} จะถูกละไว้
+	Abandoned	เลิกรอ
+	Abandoned on {id}	เลิกรอที่ {id}
 	About StochCraft	เกี่ยวกับ StochCraft
 	About {app}	เกี่ยวกับ {app}
 	Across the range it changed by {change}: more than chance would explain.	ตลอดช่วงเปลี่ยนไป {change}: มากกว่าที่ความบังเอิญจะอธิบายได้
@@ -102,7 +106,9 @@
 	Constant	ค่าคงที่
 	Copy	คัดลอก
 	Counts against	นับเข้างาน
+	Customer demand	ความต้องการของลูกค้า
 	Cut	ตัด
+	Cycle time	ไซเคิลไทม์
 	Daily	ทุกวัน
 	Dark	มืด
 	Data points	จุดข้อมูล
@@ -112,6 +118,8 @@
 	Decision (one way)	การตัดสินใจ (เลือกทางเดียว)
 	Default flow	โฟลว์เริ่มต้น
 	Delete	ลบ
+	Demand	ความต้องการ
+	Demand met	สัดส่วนความต้องการที่ตอบสนองได้
 	Departures	ขาออก
 	Diagram	แผนภาพ
 	Discard	ละทิ้ง
@@ -130,6 +138,7 @@
 	Duration	ระยะเวลา
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	การวิเคราะห์แต่ละแบบรันการทดลองหลายครั้งด้วยเมล็ดสุ่มเดียวกัน ความแตกต่างจึงมาจากการเปลี่ยนแปลง ไม่ใช่ความบังเอิญ อาจใช้เวลาสักครู่
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	แต่ละเอนทิตีจะใช้ทางเลือกแรกที่จัดหาให้ได้ครบทั้งหมดพร้อมกันในทันที และคืนหน่วยเหล่านั้นเมื่อออกไป
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	แต่ละเอนทิตีจะรอที่นี่ไม่เกินเวลาที่สุ่มให้เมื่อมาถึง แล้วจึงเลิกรอ: เอนทิตีจะไปทางออกที่ทำเครื่องหมายว่า "เลิกรอ" หรือออกจากแบบจำลอง
 	Edit	แก้ไข
 	Elasticity	ความยืดหยุ่น
 	Ends early	จบก่อนกำหนด
@@ -137,7 +146,9 @@
 	Energy per part	พลังงานต่อชิ้น
 	Enough: {units}, meeting the target in {p} of replications	เพียงพอ: {units} บรรลุเป้าหมายใน {p} ของรอบการจำลองซ้ำ
 	Entered	จำนวนที่เข้ามา
+	Entities give up waiting	เอนทิตีเลิกรอ
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	สิ่งที่ยังอยู่ภายในเมื่อรอบการจำลองซ้ำสิ้นสุด ไม่ถูกนับในเวลารอเฉลี่ยและเวลาเฉลี่ยในระบบ
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	เอนทิตีที่เลิกรอจะไปตามโฟลว์นี้ (เช่น เพื่อลองใหม่ภายหลัง) ส่วนที่เหลือไปทางออกอื่นของงาน
 	Erlang	เออร์แลง
 	Error	ข้อผิดพลาด
 	Estimate from three values…	ประมาณจากสามค่า…
@@ -167,12 +178,16 @@
 	Fri	ศ.
 	From	จาก
 	Gamma	แกมมา
+	Gave up	จำนวนที่เลิกรอ
+	Gives up before it is done	เลิกรอก่อนเสร็จ
+	Gives up before service starts	เลิกรอก่อนเริ่มให้บริการ
 	Goes to	ไปยัง
 	Hands on finished parts while down	ส่งต่อชิ้นงานที่เสร็จแล้วแม้ขณะขัดข้อง
 	Help	วิธีใช้
 	Hide Others	ซ่อนรายการอื่น
 	Hide {app}	ซ่อน {app}
 	How many	จำนวน
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ลูกค้าต้องการชิ้นงานกี่ชิ้นจากขาออกเหล่านี้ จากนั้นผลลัพธ์จะแสดงแท็กไทม์ (เวลาที่มีหารด้วยความต้องการ) และไซเคิลไทม์ของแต่ละงาน
 	Inside over time	จำนวนภายในตามเวลา
 	Jump	ข้าม
 	Jump to time	ข้ามไปยังเวลา
@@ -202,6 +217,7 @@
 	Mean time blocked	เวลาเฉลี่ยที่ถูกบล็อก
 	Mean time in system	เวลาเฉลี่ยในระบบ
 	Mean wait	เวลารอเฉลี่ย
+	Mean wait before giving up	เวลารอเฉลี่ยก่อนเลิกรอ
 	Metric	ตัวชี้วัด
 	Middles	กึ่งกลางแนวตั้ง
 	Minimise	ย่อหน้าต่าง
@@ -257,8 +273,13 @@
 	Parameter	พารามิเตอร์
 	Parameters	พารามิเตอร์
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ชิ้นงานที่ไปตามโฟลว์นี้จะกลับไปทำใหม่ และนับเป็นงานแก้ไขของงานที่ใช้ทรัพยากรงานสุดท้ายที่ชิ้นงานผ่าน
+	Parts wanted	จำนวนชิ้นที่ต้องการ
+	Parts wanted is a number above 0	จำนวนชิ้นที่ต้องการต้องเป็นตัวเลขที่มากกว่า 0
 	Paste	วาง
+	Patience	การเลิกรอ
 	Pause	หยุดชั่วคราว
+	Per	ช่วง
+	Per shift needs a calendar: each period it is active is a shift.	"ต่อกะ" ต้องมีปฏิทิน: แต่ละช่วงที่ปฏิทินเปิดใช้งานคือหนึ่งกะ
 	Percentile	เปอร์เซ็นไทล์
 	Period {n} ends	ช่วง {n} สิ้นสุด
 	Period {n} repeats	ช่วง {n} ซ้ำ
@@ -365,6 +386,8 @@
 	Share	สัดส่วน
 	Share of arrivals lost	สัดส่วนขาเข้าที่สูญเสีย
 	Share of units blocked	สัดส่วนหน่วยที่ถูกบล็อก
+	Share of work wasted	สัดส่วนงานที่สูญเปล่า
+	Share that gave up	สัดส่วนที่เลิกรอ
 	Show All	แสดงทั้งหมด
 	Show {id}	แสดง {id}
 	Size	กำหนดขนาด
@@ -389,6 +412,8 @@
 	Stopped watching	หยุดเฝ้าดูแล้ว
 	Sun	อา.
 	Sweep a parameter	กวาดพารามิเตอร์
+	Takt	แท็กไทม์
+	Takt time	แท็กไทม์
 	Tandem line	สายงานต่อเนื่อง
 	Target	เป้าหมาย
 	Target share	สัดส่วนเป้าหมาย
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	แบบจำลอง: การทดลอง การเชื่อมต่อ และปัญหา
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	สัดส่วนรอบการจำลองซ้ำที่เท่ากับหรือต่ำกว่าแต่ละค่า แถบครอบคลุมการแจกแจงจริงด้วยความเชื่อมั่น {confidence}
 	The values are numbers, separated by semicolons or spaces	ค่าต้องเป็นตัวเลขที่คั่นด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
+	The whole clock	เวลาทั้งหมด
 	This block has a warning	บล็อกนี้มีคำเตือน
 	This block has an error	บล็อกนี้มีข้อผิดพลาด
 	This run	การรันนี้
 	Three-point estimate	การประมาณสามจุด
 	Thu	พฤ.
+	Time available	เวลาที่มี
+	Time before giving up	เวลาก่อนเลิกรอ
 	Time between arrivals	เวลาระหว่างการมาถึง
 	Time blocked	เวลาที่ถูกบล็อก
 	Time failed	เวลาที่ขัดข้อง
@@ -466,6 +494,7 @@
 	Whole number	จำนวนเต็ม
 	Window	หน้าต่าง
 	With every time at its mean: {units}	เมื่อทุกเวลาเท่ากับค่าเฉลี่ย: {units}
+	Work wasted on those who gave up	งานที่สูญเปล่ากับผู้ที่เลิกรอ
 	XPDL with BPSim	XPDL พร้อม BPSim
 	Yes or no	ใช่หรือไม่
 	Your changes will be lost if you don't save them.	การเปลี่ยนแปลงจะสูญหายหากคุณไม่บันทึก
@@ -479,6 +508,7 @@
 	decision: one way	การตัดสินใจ: เลือกทางเดียว
 	departures	ขาออก
 	egui and eframe (Craft suite fork)	egui และ eframe (แยกจาก Craft suite)
+	for the whole run	ตลอดการรัน
 	from its value	จากค่าของมัน
 	have left	ออกไปแล้ว
 	hours	ชั่วโมง
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k จาก N: มีเพียง k จาก N รอบการจำลองซ้ำที่มีค่าของผลนั้น และค่าเฉลี่ยกับช่วงของผลนั้นคิดจาก k รอบนั้น
 	n = {k} of {n}	n = {k} จาก {n}
 	nothing yet	ยังไม่มีอะไร
+	per day	ต่อวัน
+	per shift	ต่อกะ
+	per week	ต่อสัปดาห์
 	seconds	วินาที
 	split batches	การแยกชุด
 	split or join: all ways	แยกหรือรวม: ทุกทาง

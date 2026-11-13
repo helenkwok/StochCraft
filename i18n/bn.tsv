@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	লক্ষ্য পূরণকারী অংশের ৯৫% ব্যবধান: {lo} থেকে {hi}
 	95th percentile	৯৫তম শতাংশক
 	95th percentile {value}	৯৫তম শতাংশক {value}
+	A caller on hold: once a unit takes it, the entity stays.	হোল্ডে থাকা কলার: কোনো একক তাকে নিলে সত্তাটি থেকে যায়।
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	টাইমআউট হওয়া ক্লায়েন্ট: সেবার মধ্যে তার সময় ফুরিয়ে গেলে সে তখনই ছেড়ে দেয়, আর একক তবুও কাজটি শেষ করে (নষ্ট কাজ)।
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	নতুন ফাইলে শুধু মডেলটি থাকে: {file}-এর যা StochCraft বোঝে না তা বাদ পড়ে।
+	Abandoned	ছেড়ে যাওয়া
+	Abandoned on {id}	{id}-এ ছেড়ে যাওয়া
 	About StochCraft	StochCraft সম্পর্কে
 	About {app}	{app} সম্পর্কে
 	Across the range it changed by {change}: more than chance would explain.	পুরো পরিসরে এটি {change} বদলেছে: দৈবক্রম যা ব্যাখ্যা করতে পারে তার চেয়ে বেশি।
@@ -102,7 +106,9 @@
 	Constant	ধ্রুবক
 	Copy	কপি করুন
 	Counts against	যে কাজের বিপরীতে গণনা হয়
+	Customer demand	গ্রাহকের চাহিদা
 	Cut	কাটুন
+	Cycle time	সাইকেল টাইম
 	Daily	প্রতিদিন
 	Dark	গাঢ়
 	Data points	ডেটা বিন্দু
@@ -112,6 +118,8 @@
 	Decision (one way)	সিদ্ধান্ত (একটি পথ)
 	Default flow	ডিফল্ট প্রবাহ
 	Delete	মুছুন
+	Demand	চাহিদা
+	Demand met	পূরণ হওয়া চাহিদার অংশ
 	Departures	প্রস্থান
 	Diagram	ডায়াগ্রাম
 	Discard	বাতিল
@@ -130,6 +138,7 @@
 	Duration	সময়কাল
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	প্রতিটি বিশ্লেষণ একই যদৃচ্ছ বীজে পরীক্ষাটি কয়েকবার চালায়, তাই পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রম থেকে নয়। কিছুটা সময় লাগতে পারে।
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	প্রতিটি সত্তা এগুলোর মধ্যে প্রথম সেটি নেয় যা এখনই একসঙ্গে পুরোপুরি পূরণ করা যায়, এবং বেরিয়ে যাওয়ার সময় এককগুলো ফেরত দেয়।
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	প্রতিটি সত্তা আগমনের সময় তার জন্য এলোমেলোভাবে নেওয়া একটি সময় পর্যন্ত এখানে অপেক্ষা করে, তারপর ছেড়ে দেয়: সেটি "ছেড়ে যাওয়া" চিহ্নিত বেরোনোর পথ ধরে, অথবা মডেল থেকে বেরিয়ে যায়।
 	Edit	সম্পাদনা
 	Elasticity	স্থিতিস্থাপকতা
 	Ends early	আগে শেষ হয়
@@ -137,7 +146,9 @@
 	Energy per part	প্রতি অংশে শক্তি
 	Enough: {units}, meeting the target in {p} of replications	যথেষ্ট: {units}, {p} পুনরাবৃত্তিতে লক্ষ্য পূরণ
 	Entered	প্রবেশ করেছে
+	Entities give up waiting	সত্তারা অপেক্ষা ছেড়ে দেয়
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	কোনো পুনরাবৃত্তির শেষে যেগুলো এখনও ভেতরে, সেগুলো গড় অপেক্ষার সময় ও সিস্টেমে গড় সময় থেকে বাদ থাকে।
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	যে সত্তারা অপেক্ষা ছেড়ে দেয় তারা এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে); বাকিরা কাজের অন্য বেরোনোর পথ ধরে।
 	Erlang	এরলাং
 	Error	ত্রুটি
 	Estimate from three values…	তিনটি মান থেকে অনুমান…
@@ -167,12 +178,16 @@
 	Fri	শুক্র
 	From	থেকে
 	Gamma	গামা
+	Gave up	ছেড়ে দিয়েছে
+	Gives up before it is done	কাজ শেষ হওয়ার আগে ছেড়ে দেয়
+	Gives up before service starts	সেবা শুরুর আগে ছেড়ে দেয়
 	Goes to	যেখানে যায়
 	Hands on finished parts while down	বিকল অবস্থাতেও তৈরি অংশ এগিয়ে দেয়
 	Help	সহায়তা
 	Hide Others	অন্যগুলো লুকান
 	Hide {app}	{app} লুকান
 	How many	কতগুলি
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	গ্রাহকেরা এই প্রস্থান থেকে কতগুলো অংশ চান; তখন ফলাফলে টাক্ট (প্রাপ্য সময়কে চাহিদা দিয়ে ভাগ করে) এবং প্রতিটি কাজের সাইকেল টাইম দেখায়।
 	Inside over time	সময়ের সাথে ভিতরে
 	Jump	যান
 	Jump to time	সময়ে যান
@@ -202,6 +217,7 @@
 	Mean time blocked	গড় অবরুদ্ধ সময়
 	Mean time in system	সিস্টেমে গড় সময়
 	Mean wait	গড় অপেক্ষার সময়
+	Mean wait before giving up	ছেড়ে দেওয়ার আগে গড় অপেক্ষার সময়
 	Metric	পরিমাপক
 	Middles	উল্লম্ব কেন্দ্র
 	Minimise	সর্বনিম্ন করুন
@@ -257,8 +273,13 @@
 	Parameter	প্যারামিটার
 	Parameters	পরামিতি
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	এই প্রবাহ ধরে যাওয়া অংশগুলো আবার কাজের জন্য ফিরে যায়; শেষ যে সম্পদসহ কাজ সেগুলো পার হয়েছে তার বিপরীতে পুনঃকাজ হিসেবে গণ্য হয়।
+	Parts wanted	চাওয়া অংশ
+	Parts wanted is a number above 0	চাওয়া অংশ 0-এর বেশি একটি সংখ্যা হতে হবে
 	Paste	পেস্ট করুন
+	Patience	ধৈর্য
 	Pause	বিরতি
+	Per	সময়কাল
+	Per shift needs a calendar: each period it is active is a shift.	"প্রতি শিফটে"-এর জন্য ক্যালেন্ডার লাগে: এটি যে প্রতিটি সময়কালে সক্রিয় থাকে, সেটি একটি শিফট।
 	Percentile	শতাংশক
 	Period {n} ends	সময়কাল {n} শেষ
 	Period {n} repeats	সময়কাল {n} পুনরাবৃত্তি
@@ -365,6 +386,8 @@
 	Share	অংশ
 	Share of arrivals lost	হারানো আগমনের অনুপাত
 	Share of units blocked	অবরুদ্ধ এককের অনুপাত
+	Share of work wasted	নষ্ট কাজের অনুপাত
+	Share that gave up	ছেড়ে দেওয়াদের অনুপাত
 	Show All	সব দেখান
 	Show {id}	{id} দেখান
 	Size	আকার নির্ধারণ
@@ -389,6 +412,8 @@
 	Stopped watching	দেখা বন্ধ হয়েছে
 	Sun	রবি
 	Sweep a parameter	একটি প্যারামিটার সুইপ
+	Takt	টাক্ট
+	Takt time	টাক্ট টাইম
 	Tandem line	ধারাবাহিক লাইন
 	Target	লক্ষ্য
 	Target share	লক্ষ্য অংশ
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	মডেল: পরীক্ষা, সংযোগ ও সমস্যা
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	প্রতিটি মানের সমান বা কম পুনরাবৃত্তির অংশ। ব্যান্ডটি {confidence} আস্থায় প্রকৃত বণ্টন ধারণ করে।
 	The values are numbers, separated by semicolons or spaces	মানগুলি সেমিকোলন বা স্পেস দিয়ে আলাদা সংখ্যা
+	The whole clock	পুরো সময়
 	This block has a warning	এই ব্লকে সতর্কতা আছে
 	This block has an error	এই ব্লকে ত্রুটি আছে
 	This run	এই রান
 	Three-point estimate	তিন-বিন্দু অনুমান
 	Thu	বৃহস্পতি
+	Time available	প্রাপ্য সময়
+	Time before giving up	ছেড়ে দেওয়ার আগের সময়
 	Time between arrivals	আগমনের মধ্যবর্তী সময়
 	Time blocked	অবরুদ্ধ সময়
 	Time failed	বিকল থাকার সময়
@@ -466,6 +494,7 @@
 	Whole number	পূর্ণসংখ্যা
 	Window	উইন্ডো
 	With every time at its mean: {units}	প্রতিটি সময় তার গড়ে: {units}
+	Work wasted on those who gave up	ছেড়ে দেওয়াদের ওপর নষ্ট কাজ
 	XPDL with BPSim	BPSim সহ XPDL
 	Yes or no	হ্যাঁ বা না
 	Your changes will be lost if you don't save them.	সংরক্ষণ না করলে পরিবর্তন মুছে যাবে।
@@ -479,6 +508,7 @@
 	decision: one way	সিদ্ধান্ত: একটি পথ
 	departures	প্রস্থান
 	egui and eframe (Craft suite fork)	egui ও eframe (Craft স্যুটের শাখা)
+	for the whole run	পুরো রানের জন্য
 	from its value	মান অনুযায়ী
 	have left	বেরিয়েছে
 	hours	ঘণ্টা
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N-টির মধ্যে k-টি: N-টি পুনরাবৃত্তির মধ্যে কেবল k-টিতে সেই ফলাফলের মান ছিল, এবং এর গড় ও ব্যবধান সেই k-টির উপর।
 	n = {k} of {n}	n = {n}টির মধ্যে {k}টি
 	nothing yet	এখনও কিছু নেই
+	per day	প্রতি দিনে
+	per shift	প্রতি শিফটে
+	per week	প্রতি সপ্তাহে
 	seconds	সেকেন্ড
 	split batches	ব্যাচ ভাগ করা
 	split or join: all ways	ভাগ বা একত্র করুন: সব পথ

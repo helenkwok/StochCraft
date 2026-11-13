@@ -55,6 +55,24 @@
   taking it failed their quality requirements and go back to be worked on again (ISO 22400-2's
   rework quantity), counted against the last task with a resource of its own they finished at.
 
+  stochcraft:patience, on a task's ElementParameters: the time an entity waits at the task before
+  it gives up (reneging), drawn for each entity as it enters (before any transfer), holding one
+  BPSim distribution or constant. With the attribute until="start" (the default) it gives up if
+  no unit of the task's resource has taken it by then; with until="done", also if its service is
+  not done by then (the unit finishes the job anyway, and the work is wasted). An entity that
+  gives up takes the way out marked stochcraft:abandoned, or leaves the model. BPSim 2.0 has no
+  parameter for this: its queueTime and waitTime are times every entity spends (they make up its
+  lagTime), and a boundary timer's interTriggerTimer is a repeating interval, not a deadline
+  drawn for each entity.
+
+    <bpsim:VendorExtension name="stochcraft:patience" xmlns:stochcraft="…">
+      <stochcraft:patience until="done"><bpsim:FloatingParameter value="30"/></stochcraft:patience>
+    </bpsim:VendorExtension>
+
+  stochcraft:abandoned, on a sequence flow's ElementParameters, with the value true: the way out
+  of a task with a patience that entities giving up take (a retry, a call back later), besides
+  the task's ordinary way out.
+
   stochcraft:scrap, on an end event's ElementParameters: what reaches it is scrap (ISO
   22400-2's scrap quantity), counted against the task the attribute chargedTo names (an
   inspection rejecting work done upstream), or else the last task with a resource of its own
@@ -62,6 +80,15 @@
 
     <bpsim:VendorExtension name="stochcraft:scrap" xmlns:stochcraft="…">
       <stochcraft:scrap chargedTo="machine"/>
+    </bpsim:VendorExtension>
+
+  stochcraft:demand, on an end event's ElementParameters: the customer demand it serves, for
+  takt (the available time divided by the demand over it): quantity parts per run (the measured
+  window), day, week or shift. With calendar, only the time that calendar is active counts as
+  available, and with per="shift" each active period of it is a shift (needed then).
+
+    <bpsim:VendorExtension name="stochcraft:demand" xmlns:stochcraft="…">
+      <stochcraft:demand quantity="480" per="shift" calendar="day-shift"/>
     </bpsim:VendorExtension>
 
   stochcraft:plannedRunTime, on a task's ElementParameters: the planned time for the task's
@@ -148,6 +175,38 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="plannedRunTime" type="stochcraft:Value"/>
+  <xs:element name="patience">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="stochcraft:Value">
+          <xs:attribute name="until" default="start">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="start"/>
+                <xs:enumeration value="done"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="demand">
+    <xs:complexType>
+      <xs:attribute name="quantity" type="xs:double" use="required"/>
+      <xs:attribute name="per" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="run"/>
+            <xs:enumeration value="day"/>
+            <xs:enumeration value="week"/>
+            <xs:enumeration value="shift"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="calendar" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="scrap">
     <xs:complexType>
       <xs:attribute name="chargedTo" type="xs:string"/>

@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	达到目标的比例的 95% 区间：{lo} 至 {hi}
 	95th percentile	第 95 百分位数
 	95th percentile {value}	第 95 百分位数 {value}
+	A caller on hold: once a unit takes it, the entity stays.	处于保持状态的来电者：一旦资源单元接手，实体就会留下。
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	会超时的客户端：如果其时间在服务期间用完，它就在那时放弃，而资源单元仍会完成这项作业（浪费的工作）。
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	新文件只包含模型：{file} 中 StochCraft 无法理解的内容将被略去。
+	Abandoned	放弃
+	Abandoned on {id}	{id} 上的放弃
 	About StochCraft	关于 StochCraft
 	About {app}	关于 {app}
 	Across the range it changed by {change}: more than chance would explain.	在整个范围内变化了 {change}：超出偶然所能解释的程度。
@@ -102,7 +106,9 @@
 	Constant	常数
 	Copy	复制
 	Counts against	计入任务
+	Customer demand	客户需求
 	Cut	剪切
+	Cycle time	周期时间
 	Daily	每天
 	Dark	深色
 	Data points	数据点
@@ -112,6 +118,8 @@
 	Decision (one way)	决策（单一路径）
 	Default flow	默认顺序流
 	Delete	删除
+	Demand	需求
+	Demand met	需求满足率
 	Departures	离开
 	Diagram	图表
 	Discard	放弃
@@ -130,6 +138,7 @@
 	Duration	持续时间
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	每项分析用同一随机种子多次运行实验，因此差异来自改动而不是偶然。可能需要一些时间。
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	每个实体会选取其中第一个当前能一次全部满足的方案，并在离开时归还这些资源单元。
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	每个实体在此最多等待到达时为其随机抽取的时间，然后放弃：它走标记为“放弃”的出口，或离开模型。
 	Edit	编辑
 	Elasticity	弹性
 	Ends early	提前结束
@@ -137,7 +146,9 @@
 	Energy per part	单件能耗
 	Enough: {units}, meeting the target in {p} of replications	足够：{units}，{p} 的重复运行达到目标
 	Entered	进入数
+	Entities give up waiting	实体会放弃等待
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	重复运行结束时仍在内部的实体不计入平均等待时间和系统内平均时间。
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	放弃等待的实体走此顺序流（例如稍后重试）；其他实体走任务的另一个出口。
 	Erlang	埃尔朗分布
 	Error	错误
 	Estimate from three values…	根据三个值估计…
@@ -167,12 +178,16 @@
 	Fri	周五
 	From	起点
 	Gamma	伽马分布
+	Gave up	放弃数
+	Gives up before it is done	在完成前放弃
+	Gives up before service starts	在服务开始前放弃
 	Goes to	流向
 	Hands on finished parts while down	故障时仍移交完成的工件
 	Help	帮助
 	Hide Others	隐藏其他
 	Hide {app}	隐藏 {app}
 	How many	数量
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	客户希望从这些离开处获得多少件；结果随后会显示节拍（可用时间除以需求）和每个任务的周期时间。
 	Inside over time	内部数量随时间变化
 	Jump	跳转
 	Jump to time	跳转到时间
@@ -202,6 +217,7 @@
 	Mean time blocked	平均阻塞时间
 	Mean time in system	系统内平均时间
 	Mean wait	平均等待时间
+	Mean wait before giving up	放弃前的平均等待时间
 	Metric	指标
 	Middles	垂直居中
 	Minimise	最小化
@@ -257,8 +273,13 @@
 	Parameter	参数
 	Parameters	参数
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	沿此顺序流的零件会返回重新加工；它们计为最后经过的需要资源的任务的返工。
+	Parts wanted	需求数量
+	Parts wanted is a number above 0	需求数量必须是大于 0 的数字
 	Paste	粘贴
+	Patience	耐心
 	Pause	暂停
+	Per	时段
+	Per shift needs a calendar: each period it is active is a shift.	“每班”需要日历：日历处于活动状态的每个时段为一个班次。
 	Percentile	百分位数
 	Period {n} ends	时段 {n} 结束
 	Period {n} repeats	时段 {n} 重复
@@ -365,6 +386,8 @@
 	Share	比例
 	Share of arrivals lost	到达流失比例
 	Share of units blocked	资源单元阻塞比例
+	Share of work wasted	浪费的工作比例
+	Share that gave up	放弃比例
 	Show All	全部显示
 	Show {id}	显示 {id}
 	Size	确定规模
@@ -389,6 +412,8 @@
 	Stopped watching	已停止观察
 	Sun	周日
 	Sweep a parameter	扫描一个参数
+	Takt	节拍
+	Takt time	节拍时间
 	Tandem line	串联流程
 	Target	目标
 	Target share	目标比例
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	模型：实验、连接和问题
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超过各值的重复运行比例。色带以 {confidence} 的置信度包含真实分布。
 	The values are numbers, separated by semicolons or spaces	值应为用分号或空格分隔的数字
+	The whole clock	全部时间
 	This block has a warning	此区块存在警告
 	This block has an error	此区块存在错误
 	This run	本次运行
 	Three-point estimate	三点估计
 	Thu	周四
+	Time available	可用时间
+	Time before giving up	放弃前的时间
 	Time between arrivals	到达间隔时间
 	Time blocked	阻塞时间
 	Time failed	故障时间
@@ -466,6 +494,7 @@
 	Whole number	整数
 	Window	窗口
 	With every time at its mean: {units}	所有时间取均值时：{units}
+	Work wasted on those who gave up	在放弃者身上浪费的工作
 	XPDL with BPSim	带 BPSim 的 XPDL
 	Yes or no	是或否
 	Your changes will be lost if you don't save them.	如果不存储，你的更改将会丢失。
@@ -479,6 +508,7 @@
 	decision: one way	决策：单一路径
 	departures	离开
 	egui and eframe (Craft suite fork)	egui 和 eframe（Craft 套件分支）
+	for the whole run	整个运行期间
 	from its value	根据其值
 	have left	离开
 	hours	小时
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N 次中的 k 次：N 次重复运行中只有 k 次有该结果的值，其平均值和区间基于这 k 次。
 	n = {k} of {n}	n = {n} 次中的 {k} 次
 	nothing yet	尚无内容
+	per day	每天
+	per shift	每班
+	per week	每周
 	seconds	秒
 	split batches	拆分批次
 	split or join: all ways	拆分或合并：所有路径

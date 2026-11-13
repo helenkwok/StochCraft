@@ -8,10 +8,10 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
-    Bounds, Breakdown, Change, Connection, Diagnostic, Dist, Element, ElementId, ElementKind,
-    Estimate, Experiment, Family, Model, Need, Power, Property, PropertyType, PropertyValue,
-    ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer,
-    Upper,
+    Bounds, Breakdown, Change, Connection, Demand, DemandPer, Diagnostic, Dist, Element, ElementId,
+    ElementKind, Estimate, Experiment, Family, Model, Need, Patience, PatienceUntil, Power,
+    Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Severity, Stop,
+    ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -233,6 +233,11 @@ pub enum KindSpec {
         /// OEE results; its mean is the plan. Not simulated. Left out when none.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         planned_run_time: Option<DistSpec>,
+        /// How long an entity waits before it gives up (and takes the way out marked
+        /// `abandoned`, or leaves the model); left out when entities wait for as long as it
+        /// takes.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        patience: Option<PatienceSpec>,
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
     /// entity takes what the first of `needs` that can be met now asks for, holds it for its
@@ -258,6 +263,9 @@ pub enum KindSpec {
     Sink {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         scrap: Option<ScrapSpec>,
+        /// The customer demand it serves, for takt; left out when none.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        demand: Option<DemandSpec>,
     },
     /// Sends each entity down one outgoing connection at once (a BPMN exclusive gateway): the
     /// first whose condition holds if any has one, else drawn by the connections'
@@ -782,6 +790,7 @@ impl From<&ElementKind> for KindSpec {
                 power,
                 setup,
                 planned_run_time,
+                patience,
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
@@ -797,6 +806,7 @@ impl From<&ElementKind> for KindSpec {
                 power: power.as_ref().map(Into::into),
                 setup: setup.as_ref().map(Into::into),
                 planned_run_time: planned_run_time.as_ref().map(Into::into),
+                patience: patience.as_ref().map(Into::into),
             },
             ElementKind::SharedTask {
                 service,
@@ -810,10 +820,11 @@ impl From<&ElementKind> for KindSpec {
             ElementKind::Delay { duration } => KindSpec::Delay {
                 duration: duration.into(),
             },
-            ElementKind::Sink { scrap } => KindSpec::Sink {
+            ElementKind::Sink { scrap, demand } => KindSpec::Sink {
                 scrap: scrap.as_ref().map(|s| ScrapSpec {
                     charged_to: s.charged_to.as_ref().map(ToString::to_string),
                 }),
+                demand: demand.as_ref().map(Into::into),
             },
             ElementKind::ExclusiveGateway { default, routing } => KindSpec::ExclusiveGateway {
                 default: default.as_ref().map(ToString::to_string),
@@ -852,6 +863,7 @@ impl From<KindSpec> for ElementKind {
                 power,
                 setup,
                 planned_run_time,
+                patience,
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
@@ -866,6 +878,7 @@ impl From<KindSpec> for ElementKind {
                 power: power.map(Into::into),
                 setup: setup.map(Into::into),
                 planned_run_time: planned_run_time.map(Into::into),
+                patience: patience.map(Into::into),
             },
             KindSpec::SharedTask {
                 service,
@@ -879,10 +892,11 @@ impl From<KindSpec> for ElementKind {
             KindSpec::Delay { duration } => ElementKind::Delay {
                 duration: duration.into(),
             },
-            KindSpec::Sink { scrap } => ElementKind::Sink {
+            KindSpec::Sink { scrap, demand } => ElementKind::Sink {
                 scrap: scrap.map(|s| Scrap {
                     charged_to: s.charged_to.as_deref().map(ElementId::unchecked),
                 }),
+                demand: demand.map(Into::into),
             },
             KindSpec::ExclusiveGateway { default, routing } => ElementKind::ExclusiveGateway {
                 default: default.as_deref().map(ElementId::unchecked),
@@ -1309,6 +1323,114 @@ pub struct ConnectionDoc {
     /// the OEE quality results; left out when false.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub rework: bool,
+    /// Out of a server with a patience: the way entities that give up take, besides its
+    /// ordinary way out; left out when false.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub abandoned: bool,
+}
+
+/// How long an entity waits at a server before it gives up, drawn as it enters, and what must
+/// happen in that time: its service start (`start`, the default, left out) or its service being
+/// done (`done`; a unit serving it finishes the job anyway, and the work is wasted).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct PatienceSpec {
+    pub time: DistSpec,
+    #[serde(default, skip_serializing_if = "PatienceUntilSpec::is_start")]
+    pub until: PatienceUntilSpec,
+}
+
+/// What an entity's patience must see happen in time.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum PatienceUntilSpec {
+    /// Its service starting.
+    #[default]
+    Start,
+    /// Its service being done.
+    Done,
+}
+
+impl PatienceUntilSpec {
+    fn is_start(&self) -> bool {
+        *self == PatienceUntilSpec::Start
+    }
+}
+
+impl From<&Patience> for PatienceSpec {
+    fn from(p: &Patience) -> Self {
+        PatienceSpec {
+            time: (&p.time).into(),
+            until: match p.until {
+                PatienceUntil::Start => PatienceUntilSpec::Start,
+                PatienceUntil::Done => PatienceUntilSpec::Done,
+            },
+        }
+    }
+}
+
+impl From<PatienceSpec> for Patience {
+    fn from(p: PatienceSpec) -> Self {
+        Patience {
+            time: p.time.into(),
+            until: match p.until {
+                PatienceUntilSpec::Start => PatienceUntil::Start,
+                PatienceUntilSpec::Done => PatienceUntil::Done,
+            },
+        }
+    }
+}
+
+/// The customer demand a sink serves, for takt: `quantity` parts each `per` period, with the
+/// time available that of the measured window, or of `calendar` only (needed per shift: each
+/// active period of it is a shift).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct DemandSpec {
+    pub quantity: f64,
+    pub per: DemandPerSpec,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub calendar: Option<String>,
+}
+
+/// The period a demand is for: the whole measured window, each day, each week, or each shift.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum DemandPerSpec {
+    Run,
+    Day,
+    Week,
+    Shift,
+}
+
+impl From<&Demand> for DemandSpec {
+    fn from(d: &Demand) -> Self {
+        DemandSpec {
+            quantity: d.quantity,
+            per: match d.per {
+                DemandPer::Run => DemandPerSpec::Run,
+                DemandPer::Day => DemandPerSpec::Day,
+                DemandPer::Week => DemandPerSpec::Week,
+                DemandPer::Shift => DemandPerSpec::Shift,
+            },
+            calendar: d.calendar.as_ref().map(ToString::to_string),
+        }
+    }
+}
+
+impl From<DemandSpec> for Demand {
+    fn from(d: DemandSpec) -> Self {
+        Demand {
+            quantity: d.quantity,
+            per: match d.per {
+                DemandPerSpec::Run => DemandPer::Run,
+                DemandPerSpec::Day => DemandPer::Day,
+                DemandPerSpec::Week => DemandPer::Week,
+                DemandPerSpec::Shift => DemandPer::Shift,
+            },
+            calendar: d.calendar.as_deref().map(ElementId::unchecked),
+        }
+    }
 }
 
 /// A sink that takes scrap: each entity reaching it counts against `charged_to`, a server (an
@@ -1419,6 +1541,7 @@ impl From<&Model> for ModelDoc {
                     condition: c.condition.clone(),
                     quantity: c.quantity,
                     rework: c.rework,
+                    abandoned: c.abandoned,
                 })
                 .collect(),
             resources: m.resources.iter().map(Into::into).collect(),
@@ -1471,6 +1594,7 @@ impl From<ModelDoc> for Model {
                     condition: c.condition,
                     quantity: c.quantity,
                     rework: c.rework,
+                    abandoned: c.abandoned,
                 })
                 .collect(),
             resources: m.resources.into_iter().map(Into::into).collect(),
@@ -1679,6 +1803,7 @@ mod tests {
                 power: None,
                 setup: None,
                 planned_run_time: None,
+                patience: None,
             })
         );
     }

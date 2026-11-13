@@ -178,6 +178,9 @@ pub enum ElementKind {
         /// OEE results: its mean is the plan. Not simulated; `None`: effectiveness and OEE are
         /// not reported. A StochCraft vendor extension (`stochcraft:plannedRunTime`).
         planned_run_time: Option<Dist>,
+        /// How long an entity waits before it gives up (reneging); `None`: entities wait for as
+        /// long as it takes. See [`Patience`].
+        patience: Option<Patience>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
@@ -196,8 +199,11 @@ pub enum ElementKind {
     /// Holds each entity for a time with no capacity limit (a task with no resource).
     Delay { duration: Dist },
     /// Removes entities (a BPMN end event). With `scrap`, what reaches it is scrap, for the
-    /// OEE quality results.
-    Sink { scrap: Option<Scrap> },
+    /// OEE quality results; with `demand`, the customer demand it serves, for takt.
+    Sink {
+        scrap: Option<Scrap>,
+        demand: Option<Demand>,
+    },
     /// Sends each entity down one outgoing connection, at once (a BPMN exclusive gateway). With
     /// [`Routing::Standard`]: if any outgoing connection has a condition, the first in model
     /// order whose condition holds is taken, else `default`, else the entity leaves the model
@@ -345,6 +351,55 @@ impl Transfer {
         Self {
             time,
             holds_sender: true,
+        }
+    }
+}
+
+/// How long an entity waits at a server before it gives up, drawn for each entity as it enters
+/// (a StochCraft vendor extension, `stochcraft:patience`, since BPSim has no parameter for it).
+/// The clock starts as it enters the server, before any transfer into it.
+///
+/// An entity that gives up is counted as abandoned (not as left) and takes the server's way out
+/// marked [`Connection::abandoned`], or leaves the model if there is none. A unit taking it at
+/// the deadline itself serves it. A patience of 0 gives up unless a unit is free at once
+/// (Erlang's loss system); negative draws count as 0. The model is Garnett, Mandelbaum and
+/// Reiman's M/M/N+M (Manufacturing & Service Operations Management 4(3), 2002) when patience,
+/// arrivals and service are exponential.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Patience {
+    pub time: Dist,
+    pub until: PatienceUntil,
+}
+
+/// What an entity's patience must see happen in time.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum PatienceUntil {
+    /// Its service starting (a caller who hangs up while on hold): once a unit takes it, it
+    /// stays.
+    #[default]
+    Start,
+    /// Its service being done (a client that times out): if the deadline passes while a unit
+    /// serves it, or while the unit holds it blocked after service, it gives up then, and a
+    /// stand-in (a new entity with its properties, creation time and last server) takes the
+    /// abandoned way at once; the unit finishes the job anyway (wasted work) and discards it.
+    Done,
+}
+
+impl PatienceUntil {
+    /// The name in files and on the wire.
+    pub fn name(self) -> &'static str {
+        match self {
+            PatienceUntil::Start => "start",
+            PatienceUntil::Done => "done",
+        }
+    }
+
+    /// The value named `s`.
+    pub fn from_name(s: &str) -> Option<Self> {
+        match s {
+            "start" => Some(PatienceUntil::Start),
+            "done" => Some(PatienceUntil::Done),
+            _ => None,
         }
     }
 }
@@ -507,6 +562,7 @@ impl ElementKind {
                 transfer,
                 setup,
                 planned_run_time,
+                patience,
                 ..
             } => {
                 let mut d = vec![("service", service)];
@@ -523,6 +579,9 @@ impl ElementKind {
                 }
                 if let Some(p) = planned_run_time {
                     d.push(("planned_run_time", p));
+                }
+                if let Some(p) = patience {
+                    d.push(("patience", &p.time));
                 }
                 d
             }
@@ -680,6 +739,59 @@ pub struct Connection {
     /// last server it finished at, for the OEE quality results. A StochCraft vendor extension
     /// (`stochcraft:rework`).
     pub rework: bool,
+    /// The way out of a server with a [`Patience`] that entities giving up take (a call back
+    /// later, a retry), apart from its ordinary way out. A StochCraft vendor extension
+    /// (`stochcraft:abandoned`).
+    pub abandoned: bool,
+}
+
+/// The customer demand a sink serves, for takt: `quantity` parts each `per` period. Takt is the
+/// available time divided by the demand over it (the Lean Enterprise Institute's Lean Lexicon:
+/// "the available production time divided by customer demand"). The available time is the
+/// measured window's, or with `calendar` only the time that calendar is active in it. A
+/// StochCraft vendor extension (`stochcraft:demand`).
+#[derive(Debug, Clone, PartialEq)]
+pub struct Demand {
+    pub quantity: f64,
+    pub per: DemandPer,
+    pub calendar: Option<ElementId>,
+}
+
+/// The period a [`Demand`]'s quantity is for.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum DemandPer {
+    /// The whole measured window.
+    Run,
+    /// Each day (24 hours) of the measured window.
+    Day,
+    /// Each week (7 days) of the measured window.
+    Week,
+    /// Each active period of the demand's calendar (a shift); one partly in the measured window
+    /// counts by the share of it inside.
+    Shift,
+}
+
+impl DemandPer {
+    /// The name in files and on the wire.
+    pub fn name(self) -> &'static str {
+        match self {
+            DemandPer::Run => "run",
+            DemandPer::Day => "day",
+            DemandPer::Week => "week",
+            DemandPer::Shift => "shift",
+        }
+    }
+
+    /// The period named `s`.
+    pub fn from_name(s: &str) -> Option<Self> {
+        match s {
+            "run" => Some(DemandPer::Run),
+            "day" => Some(DemandPer::Day),
+            "week" => Some(DemandPer::Week),
+            "shift" => Some(DemandPer::Shift),
+            _ => None,
+        }
+    }
 }
 
 /// A sink that takes scrap (ISO 22400-2's scrap quantity: produced, failed its quality
@@ -704,6 +816,7 @@ impl Connection {
             condition: None,
             quantity: None,
             rework: false,
+            abandoned: false,
         }
     }
 }
@@ -914,6 +1027,24 @@ pub enum Problem {
     },
     /// A planned run time per item whose mean is not above 0.
     PlannedRunTimeNotPositive,
+    /// A patience whose mean is below 0.
+    PatienceNegative,
+    /// A connection marked for entities that give up leaves an element with no patience.
+    AbandonedWithoutPatience {
+        connection: ElementId,
+    },
+    /// Several ways out of one server are marked for entities that give up.
+    SeveralAbandonedWays {
+        count: usize,
+    },
+    /// A demand whose quantity is not a number above 0.
+    DemandNotPositive,
+    /// A demand per shift with no calendar to say what a shift is.
+    ShiftWithoutCalendar,
+    /// A demand's calendar does not exist.
+    DemandCalendarUnknown {
+        id: ElementId,
+    },
     /// A probability outside 0 to 1.
     BadProbability {
         value: f64,
@@ -1075,6 +1206,12 @@ impl Problem {
             Problem::ChangesWithoutProperty => "changes_without_property",
             Problem::ScrapNotAgainstServer { .. } => "scrap_not_against_server",
             Problem::PlannedRunTimeNotPositive => "planned_run_time_not_positive",
+            Problem::PatienceNegative => "patience_negative",
+            Problem::AbandonedWithoutPatience { .. } => "abandoned_without_patience",
+            Problem::SeveralAbandonedWays { .. } => "several_abandoned_ways",
+            Problem::DemandNotPositive => "demand_not_positive",
+            Problem::ShiftWithoutCalendar => "shift_without_calendar",
+            Problem::DemandCalendarUnknown { .. } => "demand_calendar_unknown",
             Problem::BadProbability { .. } => "bad_probability",
             Problem::ProbabilitySum { .. } => "probability_sum",
             Problem::BadCondition { .. } => "bad_condition",
@@ -1218,9 +1355,34 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "its scrap counts against `{id}`, which is not a task with a resource of its own"
             ),
+            Problem::DemandNotPositive => {
+                write!(f, "its demand must be a number of parts above 0")
+            }
+            Problem::ShiftWithoutCalendar => write!(
+                f,
+                "its demand is per shift but names no calendar to say when the shifts are"
+            ),
+            Problem::DemandCalendarUnknown { id } => {
+                write!(
+                    f,
+                    "its demand names the calendar `{id}`, which does not exist"
+                )
+            }
             Problem::PlannedRunTimeNotPositive => {
                 write!(f, "its planned run time per item must have a mean above 0")
             }
+            Problem::PatienceNegative => {
+                write!(f, "its patience must have a mean of 0 or more")
+            }
+            Problem::AbandonedWithoutPatience { connection } => write!(
+                f,
+                "connection `{connection}` is the way for entities that give up, but they come \
+                 only from a task with a resource of its own and a patience"
+            ),
+            Problem::SeveralAbandonedWays { count } => write!(
+                f,
+                "{count} of its ways out are for entities that give up; at most one can be"
+            ),
             Problem::BadProbability { value } => {
                 write!(f, "probability {value} must be between 0 and 1")
             }
@@ -1426,6 +1588,20 @@ impl Model {
         let elements: BTreeMap<&ElementId, &Element> =
             self.elements.iter().map(|e| (&e.id, e)).collect();
         let mut outgoing: BTreeMap<&ElementId, Vec<&ElementId>> = BTreeMap::new();
+        // The ways entities take after their service: all but a patient server's way for those
+        // who give up, which entities leave by on their own (not a unit holding them).
+        let mut served: BTreeMap<&ElementId, Vec<&ElementId>> = BTreeMap::new();
+        let patient = |id: &ElementId| {
+            elements.get(id).is_some_and(|e| {
+                matches!(
+                    e.kind,
+                    ElementKind::Server {
+                        patience: Some(_),
+                        ..
+                    }
+                )
+            })
+        };
         for c in &self.connections {
             let mut ok = true;
             for end in [&c.from, &c.to] {
@@ -1471,12 +1647,34 @@ impl Model {
                 ));
                 ok = false;
             }
+            if c.abandoned && !patient(&c.from) {
+                out.push(Diagnostic::error(
+                    Some(&c.id),
+                    Problem::AbandonedWithoutPatience {
+                        connection: c.id.clone(),
+                    },
+                ));
+            }
             if ok {
                 outgoing.entry(&c.from).or_default().push(&c.to);
+                if !(c.abandoned && patient(&c.from)) {
+                    served.entry(&c.from).or_default().push(&c.to);
+                }
             }
         }
         for e in &self.elements {
-            let outs = outgoing.get(&e.id).map_or(0, Vec::len);
+            let outs = served.get(&e.id).map_or(0, Vec::len);
+            let abandoned = self
+                .connections
+                .iter()
+                .filter(|c| c.abandoned && c.from == e.id)
+                .count();
+            if abandoned > 1 && patient(&e.id) {
+                out.push(Diagnostic::error(
+                    Some(&e.id),
+                    Problem::SeveralAbandonedWays { count: abandoned },
+                ));
+            }
             match e.kind {
                 ElementKind::Sink { .. } => {}
                 _ if outs == 0 => out.push(Diagnostic::error(Some(&e.id), Problem::NoOutput)),
@@ -1522,6 +1720,7 @@ impl Model {
                 scrap: Some(Scrap {
                     charged_to: Some(c),
                 }),
+                ..
             } = &e.kind
                 && !self
                     .elements
@@ -1532,6 +1731,29 @@ impl Model {
                     Some(&e.id),
                     Problem::ScrapNotAgainstServer { id: c.to_string() },
                 ));
+            }
+            if let ElementKind::Sink {
+                demand: Some(d), ..
+            } = &e.kind
+            {
+                if !(d.quantity.is_finite() && d.quantity > 0.0) {
+                    out.push(Diagnostic::error(Some(&e.id), Problem::DemandNotPositive));
+                }
+                match &d.calendar {
+                    None if d.per == DemandPer::Shift => {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::ShiftWithoutCalendar,
+                        ));
+                    }
+                    Some(c) if !self.calendars.iter().any(|x| x.id == *c) => {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::DemandCalendarUnknown { id: c.clone() },
+                        ));
+                    }
+                    _ => {}
+                }
             }
             if let ElementKind::Server {
                 planned_run_time: Some(d),
@@ -1544,6 +1766,14 @@ impl Model {
                     Some(&e.id),
                     Problem::PlannedRunTimeNotPositive,
                 ));
+            }
+            if let ElementKind::Server {
+                patience: Some(p), ..
+            } = &e.kind
+                && p.time.check().is_ok()
+                && p.time.mean().is_some_and(|m| m < 0.0)
+            {
+                out.push(Diagnostic::error(Some(&e.id), Problem::PatienceNegative));
             }
             if let ElementKind::Server { setup: Some(s), .. } = &e.kind {
                 match &s.on_change_of {
@@ -1591,7 +1821,7 @@ impl Model {
         self.check_properties(&mut out);
         self.check_routing(&mut out);
         self.check_reachability(&outgoing, &mut out);
-        self.check_buffers(&outgoing, &mut out);
+        self.check_buffers(&served, &mut out);
         self.check_resources(&mut out);
         self.check_load(&mut out);
         // Stable order: errors first, then as found (model order).
@@ -2181,10 +2411,12 @@ impl Model {
     /// (Negative service draws count as 0, which only makes the true load higher.)
     fn check_load(&self, out: &mut Vec<Diagnostic>) {
         for e in &self.elements {
+            // Entities that give up keep a patient server's queue from growing without limit.
             let ElementKind::Server {
                 capacity,
                 service,
                 queue_capacity: None,
+                patience: None,
                 ..
             } = &e.kind
             else {
@@ -2564,6 +2796,7 @@ mod tests {
             condition: None,
             quantity: None,
             rework: false,
+            abandoned: false,
             id: id(i),
             from: id(from),
             to: id(to),
@@ -2582,8 +2815,13 @@ mod tests {
                 },
             ),
         );
-        m.elements
-            .push(el("scrap", ElementKind::Sink { scrap: None }));
+        m.elements.push(el(
+            "scrap",
+            ElementKind::Sink {
+                scrap: None,
+                demand: None,
+            },
+        ));
         m.elements.push(el("join", ElementKind::ParallelGateway));
         m.elements.push(el(
             "orphan",
@@ -2654,8 +2892,13 @@ mod tests {
                 },
             ),
         );
-        m.elements
-            .push(el("scrap", ElementKind::Sink { scrap: None }));
+        m.elements.push(el(
+            "scrap",
+            ElementKind::Sink {
+                scrap: None,
+                demand: None,
+            },
+        ));
         let mut a = Connection::new(id("a"), id("pick"), id("machine"));
         a.probability = Some(0.66);
         let mut b = Connection::new(id("b"), id("pick"), id("scrap"));
@@ -2731,9 +2974,16 @@ mod tests {
                         power: None,
                         setup: None,
                         planned_run_time: None,
+                        patience: None,
                     },
                 ),
-                el("exit", ElementKind::Sink { scrap: None }),
+                el(
+                    "exit",
+                    ElementKind::Sink {
+                        scrap: None,
+                        demand: None,
+                    },
+                ),
             ],
             connections: vec![
                 link("f1", "arrivals", "machine"),
@@ -2818,6 +3068,7 @@ mod tests {
             power: None,
             setup: None,
             planned_run_time: None,
+            patience: None,
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -2894,6 +3145,7 @@ mod tests {
                 power: None,
                 setup: None,
                 planned_run_time: None,
+                patience: None,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));
@@ -2929,8 +3181,13 @@ mod tests {
     #[test]
     fn branching_needs_a_gateway() {
         let mut m = mm1();
-        m.elements
-            .push(el("scrap", ElementKind::Sink { scrap: None }));
+        m.elements.push(el(
+            "scrap",
+            ElementKind::Sink {
+                scrap: None,
+                demand: None,
+            },
+        ));
         m.connections.push(link("f3", "machine", "scrap"));
         assert_eq!(
             problems(&m),
@@ -3084,7 +3341,13 @@ mod tests {
         let empty = Model::default();
         assert_eq!(empty.validate(), vec![]);
         let lonely = Model {
-            elements: vec![el("x", ElementKind::Sink { scrap: None })],
+            elements: vec![el(
+                "x",
+                ElementKind::Sink {
+                    scrap: None,
+                    demand: None,
+                },
+            )],
             ..Model::default()
         };
         assert!(problems(&lonely).iter().any(|(_, _, s)| s == "NoSource"));

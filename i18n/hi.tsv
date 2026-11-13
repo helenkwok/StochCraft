@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	लक्ष्य पूरा करने वाले हिस्से का 95% अंतराल: {lo} से {hi}
 	95th percentile	95वाँ प्रतिशतक
 	95th percentile {value}	95वाँ प्रतिशतक {value}
+	A caller on hold: once a unit takes it, the entity stays.	होल्ड पर कॉल करने वाला: एक बार कोई संसाधन इकाई उसे ले ले, तो इकाई रुकी रहती है।
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	टाइमआउट होने वाला क्लाइंट: अगर सेवा के दौरान उसका समय खत्म हो जाए, तो वह उसी समय छोड़ देता है, और संसाधन इकाई फिर भी काम पूरा करती है (व्यर्थ काम)।
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	नई फ़ाइल में केवल मॉडल रहता है: {file} में जो StochCraft नहीं समझता, वह छोड़ दिया जाता है।
+	Abandoned	छोड़कर गईं
+	Abandoned on {id}	{id} पर छोड़कर गईं
 	About StochCraft	StochCraft के बारे में
 	About {app}	{app} के बारे में
 	Across the range it changed by {change}: more than chance would explain.	पूरी सीमा में यह {change} बदला: संयोग जितना समझा सकता है उससे अधिक।
@@ -102,7 +106,9 @@
 	Constant	स्थिर
 	Copy	कॉपी करें
 	Counts against	किस कार्य के खाते में
+	Customer demand	ग्राहक मांग
 	Cut	काटें
+	Cycle time	चक्र समय
 	Daily	प्रतिदिन
 	Dark	गहरा
 	Data points	डेटा बिंदु
@@ -112,6 +118,8 @@
 	Decision (one way)	निर्णय (एक मार्ग)
 	Default flow	डिफ़ॉल्ट प्रवाह
 	Delete	मिटाएँ
+	Demand	मांग
+	Demand met	पूरी हुई मांग का हिस्सा
 	Departures	प्रस्थान
 	Diagram	आरेख
 	Discard	त्यागें
@@ -130,6 +138,7 @@
 	Duration	अवधि
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	हर विश्लेषण एक ही यादृच्छिक बीज से प्रयोग को कई बार चलाता है, ताकि अंतर बदलाव से आए, संयोग से नहीं। इसमें कुछ समय लग सकता है।
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	प्रत्येक इकाई इनमें से पहला ऐसा विकल्प लेती है जिसे अभी एक साथ पूरा किया जा सके, और बाहर निकलते समय संसाधन इकाइयाँ लौटा देती है।
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	प्रत्येक इकाई यहाँ अधिक से अधिक उतना समय प्रतीक्षा करती है जितना उसके आने पर उसके लिए यादृच्छिक रूप से चुना जाता है, फिर छोड़ देती है: वह "छोड़कर गईं" चिह्नित बाहर जाने का रास्ता लेती है, या मॉडल से बाहर निकल जाती है।
 	Edit	संपादित करें
 	Elasticity	लोच
 	Ends early	पहले समाप्त होता है
@@ -137,7 +146,9 @@
 	Energy per part	प्रति पुर्जा ऊर्जा
 	Enough: {units}, meeting the target in {p} of replications	पर्याप्त: {units}, {p} पुनरावृत्तियों में लक्ष्य पूरा
 	Entered	प्रवेश संख्या
+	Entities give up waiting	इकाइयाँ प्रतीक्षा छोड़ देती हैं
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	किसी पुनरावृत्ति के अंत में जो अब भी अंदर हैं, वे औसत प्रतीक्षा और सिस्टम में औसत समय में शामिल नहीं होते।
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	जो इकाइयाँ प्रतीक्षा छोड़ देती हैं, वे यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए); बाकी कार्य का दूसरा बाहर जाने का रास्ता लेती हैं।
 	Erlang	एरलांग
 	Error	त्रुटि
 	Estimate from three values…	तीन मानों से अनुमान लगाएँ…
@@ -167,12 +178,16 @@
 	Fri	शुक्र
 	From	से
 	Gamma	गामा
+	Gave up	छोड़ दिया
+	Gives up before it is done	काम पूरा होने से पहले छोड़ देती है
+	Gives up before service starts	सेवा शुरू होने से पहले छोड़ देती है
 	Goes to	यहाँ जाता है
 	Hands on finished parts while down	खराबी में भी तैयार पुर्जे आगे भेजता है
 	Help	सहायता
 	Hide Others	अन्य छिपाएँ
 	Hide {app}	{app} छिपाएँ
 	How many	कितने
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ग्राहक इन प्रस्थानों से कितने पुर्जे चाहते हैं; तब परिणाम टैक्ट (उपलब्ध समय को मांग से भाग देकर) और हर कार्य का चक्र समय दिखाते हैं।
 	Inside over time	समय के साथ अंदर
 	Jump	जाएँ
 	Jump to time	समय पर जाएँ
@@ -202,6 +217,7 @@
 	Mean time blocked	औसत अवरोध समय
 	Mean time in system	सिस्टम में औसत समय
 	Mean wait	औसत प्रतीक्षा
+	Mean wait before giving up	छोड़ने से पहले औसत प्रतीक्षा
 	Metric	मापदंड
 	Middles	लंबवत केंद्र
 	Minimise	न्यूनतम करें
@@ -257,8 +273,13 @@
 	Parameter	पैरामीटर
 	Parameters	पैरामीटर
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	इस प्रवाह से जाने वाले पुर्जे फिर से काम के लिए लौटते हैं; वे उस अंतिम संसाधन वाले कार्य के खाते में पुनःकार्य गिने जाते हैं जिससे वे गुज़रे।
+	Parts wanted	चाहे गए पुर्जे
+	Parts wanted is a number above 0	चाहे गए पुर्जे 0 से बड़ी संख्या होने चाहिए
 	Paste	चिपकाएँ
+	Patience	धैर्य
 	Pause	रोकें
+	Per	अवधि
+	Per shift needs a calendar: each period it is active is a shift.	"प्रति पाली" के लिए कैलेंडर चाहिए: जिस हर अवधि में वह सक्रिय है, वह एक पाली है।
 	Percentile	प्रतिशतक
 	Period {n} ends	अवधि {n} समाप्त
 	Period {n} repeats	अवधि {n} दोहराव
@@ -365,6 +386,8 @@
 	Share	हिस्सा
 	Share of arrivals lost	हानि हुए आगमन का अनुपात
 	Share of units blocked	अवरुद्ध इकाइयों का अनुपात
+	Share of work wasted	व्यर्थ काम का अनुपात
+	Share that gave up	छोड़ने वालों का अनुपात
 	Show All	सभी दिखाएँ
 	Show {id}	{id} दिखाएँ
 	Size	आकार तय करें
@@ -389,6 +412,8 @@
 	Stopped watching	देखना बंद किया गया
 	Sun	रवि
 	Sweep a parameter	पैरामीटर स्वीप करें
+	Takt	टैक्ट
+	Takt time	टैक्ट समय
 	Tandem line	क्रमिक लाइन
 	Target	लक्ष्य
 	Target share	लक्ष्य हिस्सा
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	मॉडल: प्रयोग, कनेक्शन और समस्याएँ
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	हर मान के बराबर या उससे कम पुनरावृत्तियों का हिस्सा। पट्टी में वास्तविक वितरण {confidence} विश्वास के साथ है।
 	The values are numbers, separated by semicolons or spaces	मान अर्धविराम या रिक्त स्थान से अलग की गई संख्याएँ हैं
+	The whole clock	पूरा समय
 	This block has a warning	इस ब्लॉक में चेतावनी है
 	This block has an error	इस ब्लॉक में त्रुटि है
 	This run	यह रन
 	Three-point estimate	त्रि-बिंदु अनुमान
 	Thu	गुरु
+	Time available	उपलब्ध समय
+	Time before giving up	छोड़ने से पहले का समय
 	Time between arrivals	आगमन के बीच का समय
 	Time blocked	अवरुद्ध समय
 	Time failed	खराबी में समय
@@ -466,6 +494,7 @@
 	Whole number	पूर्णांक
 	Window	विंडो
 	With every time at its mean: {units}	हर समय उसके माध्य पर: {units}
+	Work wasted on those who gave up	छोड़ने वालों पर व्यर्थ गया काम
 	XPDL with BPSim	BPSim सहित XPDL
 	Yes or no	हाँ या नहीं
 	Your changes will be lost if you don't save them.	यदि आप सहेजते नहीं हैं, तो परिवर्तन खो जाएँगे।
@@ -479,6 +508,7 @@
 	decision: one way	निर्णय: एक मार्ग
 	departures	प्रस्थान
 	egui and eframe (Craft suite fork)	egui और eframe (Craft सुइट का फ़ोर्क)
+	for the whole run	पूरे रन के लिए
 	from its value	इसके मान से
 	have left	निकल गए
 	hours	घंटे
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N में से k: N पुनरावृत्तियों में से केवल k में उस परिणाम का मान था, और उसका औसत और अंतराल उन्हीं k पर है।
 	n = {k} of {n}	n = {n} में से {k}
 	nothing yet	अभी कुछ नहीं
+	per day	प्रति दिन
+	per shift	प्रति पाली
+	per week	प्रति सप्ताह
 	seconds	सेकंड
 	split batches	बैच अलग करना
 	split or join: all ways	विभाजित या संयोजित करें: सभी मार्ग

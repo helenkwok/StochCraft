@@ -20,12 +20,12 @@ use crate::bpsim::{NS2, NSS};
 use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
-    availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
-    changeover_element, condition_element, dist_element, edge_ends, estimate_element,
-    interruptible_param, numeric, planned_element, power_element, probability_element,
-    property_element, quantity_element, quantity_param, queue_capacity_element, rework_element,
-    routing_element, scrap_element, size, start_param, stop_element, timer_param, transfer_element,
-    vendor_value_element,
+    abandoned_element, availability_param, batching_element, bpmn_local, breakdown_element,
+    calendar_element, changeover_element, condition_element, demand_element, dist_element,
+    edge_ends, estimate_element, interruptible_param, numeric, patience_element, planned_element,
+    power_element, probability_element, property_element, quantity_element, quantity_param,
+    queue_capacity_element, rework_element, routing_element, scrap_element, size, start_param,
+    stop_element, timer_param, transfer_element, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -1697,7 +1697,9 @@ impl Editor {
         // Bills of materials.
         let mut quantities: Vec<(String, Option<Element>)> = Vec::new();
         let mut reworks: Vec<(String, Option<Element>)> = Vec::new();
-        // Rework an inherited scenario sets comes back on reading unless this one says false.
+        let mut abandons: Vec<(String, Option<Element>)> = Vec::new();
+        // Rework (or a way for those who give up) an inherited scenario sets comes back on
+        // reading unless this one says false.
         let parents = ancestors(root, scenario);
         for c in &after.connections {
             let was = old(c);
@@ -1717,6 +1719,19 @@ impl Editor {
                 };
                 reworks.push((c.id.to_string(), v));
             }
+            if was.is_some_and(|o| o.abandoned) != c.abandoned {
+                let inherited = parents
+                    .iter()
+                    .any(|a| sets_vendor(a, c.id.as_str(), crate::bpsim::ABANDONED));
+                let v = if c.abandoned {
+                    Some(abandoned_element())
+                } else if inherited {
+                    Some(vendor_value_element(crate::bpsim::ABANDONED, "false"))
+                } else {
+                    None
+                };
+                abandons.push((c.id.to_string(), v));
+            }
         }
         // Writing nothing where there was nothing leaves the file alone.
         writes.retain(|(id, _, v)| {
@@ -1725,6 +1740,7 @@ impl Editor {
         if writes.is_empty()
             && quantities.iter().all(|(_, v)| v.is_none())
             && reworks.iter().all(|(_, v)| v.is_none())
+            && abandons.iter().all(|(_, v)| v.is_none())
         {
             if let Some(s) = scenario_mut(root, scenario) {
                 for (id, _) in quantities {
@@ -1732,6 +1748,9 @@ impl Editor {
                 }
                 for (id, _) in reworks {
                     set_vendor(s, &id, crate::bpsim::REWORK, None);
+                }
+                for (id, _) in abandons {
+                    set_vendor(s, &id, crate::bpsim::ABANDONED, None);
                 }
             }
             return Ok(());
@@ -1745,6 +1764,9 @@ impl Editor {
         }
         for (id, v) in reworks {
             set_vendor(s, &id, crate::bpsim::REWORK, v);
+        }
+        for (id, v) in abandons {
+            set_vendor(s, &id, crate::bpsim::ABANDONED, v);
         }
         Ok(())
     }
@@ -1948,6 +1970,22 @@ impl Editor {
                             new_planned.map(planned_element),
                         ));
                     }
+                    // The patience of entities waiting here.
+                    let old_patience = match was {
+                        Some(ElementKind::Server { patience, .. }) => patience.as_ref(),
+                        _ => None,
+                    };
+                    let new_patience = match &e.kind {
+                        ElementKind::Server { patience, .. } => patience.as_ref(),
+                        _ => None,
+                    };
+                    if new_patience != old_patience || (is_server && !was_server) {
+                        vendor_writes.push((
+                            id.clone(),
+                            crate::bpsim::PATIENCE,
+                            new_patience.map(patience_element),
+                        ));
+                    }
                     // The setup: BPSim's SetUpTime before every job, or a changeover.
                     let old_setup = match was {
                         Some(ElementKind::Server { setup, .. }) => setup.as_ref(),
@@ -2083,6 +2121,7 @@ impl Editor {
                         vendor_writes.push((id.clone(), crate::bpsim::TRANSFER_TIME, None));
                         vendor_writes.push((id.clone(), crate::bpsim::POWER, None));
                         vendor_writes.push((id.clone(), crate::bpsim::PLANNED_RUN_TIME, None));
+                        vendor_writes.push((id.clone(), crate::bpsim::PATIENCE, None));
                         vendor_writes.push((id.clone(), crate::bpsim::CHANGEOVER, None));
                         writes.push((id.clone(), "TimeParameters", "SetUpTime", None));
                         writes.push((id.clone(), "PriorityParameters", "Interruptible", None));
@@ -2092,13 +2131,34 @@ impl Editor {
                 | ElementKind::ExclusiveGateway { .. }
                 | ElementKind::ParallelGateway => {}
             }
+            // Customer demand at a sink.
+            let old_demand = match was {
+                Some(ElementKind::Sink { demand, .. }) => demand.as_ref(),
+                _ => None,
+            };
+            let new_demand = match &e.kind {
+                ElementKind::Sink { demand, .. } => demand.as_ref(),
+                _ => None,
+            };
+            if old_demand != new_demand {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::DEMAND,
+                    new_demand.map(|d| {
+                        // The calendar it names as the file's encoding needs.
+                        let mut v = demand_element(d);
+                        self.text_attrs(&mut v);
+                        v
+                    }),
+                ));
+            }
             // Scrap at a sink.
             let old_scrap = match was {
-                Some(ElementKind::Sink { scrap }) => scrap.as_ref(),
+                Some(ElementKind::Sink { scrap, .. }) => scrap.as_ref(),
                 _ => None,
             };
             let new_scrap = match &e.kind {
-                ElementKind::Sink { scrap } => scrap.as_ref(),
+                ElementKind::Sink { scrap, .. } => scrap.as_ref(),
                 _ => None,
             };
             if old_scrap != new_scrap {

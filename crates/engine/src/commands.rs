@@ -13,9 +13,10 @@ use stochcraft_model::{
 use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
-    self, AvailabilityDoc, BreakdownSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec, KindSpec,
-    ModelDoc, NeedSpec, PowerSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, RoutingSpec,
-    ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    self, AvailabilityDoc, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec,
+    KindSpec, ModelDoc, NeedSpec, PatienceSpec, PowerSpec, PropertyDoc, PropertyTypeSpec,
+    PropertyValueSpec, RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec,
+    TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -112,8 +113,9 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "power",
             "setup",
             "planned_run_time",
+            "patience",
         ],
-        Some("sink") => &["scrap"],
+        Some("sink") => &["scrap", "demand"],
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
         Some("exclusive_gateway") => &["default", "routing"],
@@ -326,11 +328,21 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<DistSpec>")]
     pub planned_run_time: Option<Option<DistSpec>>,
+    /// Servers: how long an entity waits before it gives up, and whether it gives up only
+    /// before its service starts (`until`: `start`, the default) or also before it is done
+    /// (`done`); `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<PatienceSpec>")]
+    pub patience: Option<Option<PatienceSpec>>,
     /// Sinks: what reaches it is scrap, counted against `charged_to`, a server, or else the
     /// last server each entity finished at; `null`: it is not.
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<ScrapSpec>")]
     pub scrap: Option<Option<ScrapSpec>>,
+    /// Sinks: the customer demand it serves, for takt; `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<DemandSpec>")]
+    pub demand: Option<Option<DemandSpec>>,
     /// Tasks with shared resources: what each entity needs, the alternatives in order.
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
@@ -482,6 +494,10 @@ pub struct FlowSet {
     /// at, for the OEE quality results.
     #[serde(default)]
     pub rework: Option<bool>,
+    /// Out of a server with a patience: whether this is the way entities that give up take,
+    /// besides its ordinary way out.
+    #[serde(default)]
+    pub abandoned: Option<bool>,
 }
 
 /// The connection's id, or the elements it joins.
@@ -929,10 +945,13 @@ fn estimate_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .three_point
         .fit()
         .map_err(|err| CommandError::new(ErrorCode::InvalidParams, err.to_string()))?;
-    let mut kind = e
-        .model()
-        .element(&id)
-        .map_or(ElementKind::Sink { scrap: None }, |el| el.kind.clone());
+    let mut kind = e.model().element(&id).map_or(
+        ElementKind::Sink {
+            scrap: None,
+            demand: None,
+        },
+        |el| el.kind.clone(),
+    );
     match &mut kind {
         ElementKind::Source {
             interarrival: d, ..
@@ -1042,10 +1061,13 @@ fn results_compare(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: BlockSet = parse(p)?;
     let id = existing_element(e.model(), &p.id)?;
-    let mut kind = e
-        .model()
-        .element(&id)
-        .map_or(ElementKind::Sink { scrap: None }, |el| el.kind.clone());
+    let mut kind = e.model().element(&id).map_or(
+        ElementKind::Sink {
+            scrap: None,
+            demand: None,
+        },
+        |el| el.kind.clone(),
+    );
     let given = [
         ("interarrival", p.interarrival.is_some()),
         ("limit", p.limit.is_some()),
@@ -1062,7 +1084,9 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("power", p.power.is_some()),
         ("setup", p.setup.is_some()),
         ("planned_run_time", p.planned_run_time.is_some()),
+        ("patience", p.patience.is_some()),
         ("scrap", p.scrap.is_some()),
+        ("demand", p.demand.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
@@ -1084,12 +1108,13 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "power",
             "setup",
             "planned_run_time",
+            "patience",
         ],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
         ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
         ElementKind::Batch { .. } => &["size"],
-        ElementKind::Sink { .. } => &["scrap"],
+        ElementKind::Sink { .. } => &["scrap", "demand"],
         ElementKind::ParallelGateway | ElementKind::Unbatch => &[],
     };
     if let Some((name, _)) = given.iter().find(|(n, g)| *g && !applies.contains(n)) {
@@ -1135,7 +1160,11 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             power,
             setup,
             planned_run_time,
+            patience,
         } => {
+            if let Some(x) = p.patience {
+                *patience = x.map(Into::into);
+            }
             if let Some(s) = p.setup {
                 *setup = s.map(Into::into);
             }
@@ -1216,7 +1245,10 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *size = n;
             }
         }
-        ElementKind::Sink { scrap } => {
+        ElementKind::Sink { scrap, demand } => {
+            if let Some(d) = p.demand {
+                *demand = d.map(Into::into);
+            }
             if let Some(s) = p.scrap {
                 *scrap = s.map(|s| stochcraft_model::Scrap {
                     charged_to: s.charged_to.as_deref().map(ElementId::unchecked),
@@ -1506,6 +1538,7 @@ fn connect(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 condition: p.condition,
                 quantity: p.quantity,
                 rework: false,
+                abandoned: false,
             },
         ),
     )?;
@@ -1529,10 +1562,11 @@ fn flow_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         && p.condition.is_none()
         && p.quantity.is_none()
         && p.rework.is_none()
+        && p.abandoned.is_none()
     {
         return Err(CommandError::new(
             ErrorCode::InvalidParams,
-            "nothing to set: give `probability`, `condition`, `quantity` or `rework`",
+            "nothing to set: give `probability`, `condition`, `quantity`, `rework` or `abandoned`",
         ));
     }
     let id = c.id.clone();
@@ -1546,7 +1580,10 @@ fn flow_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ops.push(Op::SetQuantity(id.clone(), q));
     }
     if let Some(r) = p.rework {
-        ops.push(Op::SetRework(id, r));
+        ops.push(Op::SetRework(id.clone(), r));
+    }
+    if let Some(a) = p.abandoned {
+        ops.push(Op::SetAbandoned(id, a));
     }
     let op = if ops.len() == 1 {
         ops.remove(0)

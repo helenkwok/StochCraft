@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95% interval podílu splňujícího cíl: {lo} až {hi}
 	95th percentile	95. percentil
 	95th percentile {value}	95. percentil {value}
+	A caller on hold: once a unit takes it, the entity stays.	Volající na lince: jakmile si ho jednotka vezme, entita zůstane.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Klient s časovým limitem: pokud mu čas vyprší během obsluhy, vzdá to v tu chvíli a jednotka práci stejně dokončí (zbytečná práce).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Nový soubor obsahuje jen model: čemu StochCraft v {file} nerozumí, se vynechá.
+	Abandoned	Vzdané
+	Abandoned on {id}	Vzdané na {id}
 	About StochCraft	O aplikaci StochCraft
 	About {app}	O aplikaci {app}
 	Across the range it changed by {change}: more than chance would explain.	V rozsahu se změnil o {change}: víc, než by vysvětlila náhoda.
@@ -102,7 +106,9 @@
 	Constant	Konstantní
 	Copy	Kopírovat
 	Counts against	Přičítá se
+	Customer demand	Poptávka zákazníků
 	Cut	Vyjmout
+	Cycle time	Čas cyklu
 	Daily	Denně
 	Dark	Tmavý
 	Data points	Datové body
@@ -112,6 +118,8 @@
 	Decision (one way)	Rozhodnutí (jedna cesta)
 	Default flow	Výchozí tok
 	Delete	Smazat
+	Demand	Poptávka
+	Demand met	Podíl splněné poptávky
 	Departures	Odchody
 	Diagram	Diagram
 	Discard	Zahodit
@@ -130,6 +138,7 @@
 	Duration	Doba trvání
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Každá analýza spouští experiment několikrát se stejnou počáteční hodnotou generátoru, takže rozdíly pocházejí ze změny, ne z náhody. Může to chvíli trvat.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Každá entita si vezme první z těchto možností, kterou lze právě splnit, celou najednou, a při odchodu jednotky vrátí.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Každá entita zde čeká nejvýše dobu, která se jí náhodně určí při příchodu, a pak to vzdá: odejde cestou označenou „Vzdané“, nebo opustí model.
 	Edit	Úpravy
 	Elasticity	Pružnost
 	Ends early	Končí dříve
@@ -137,7 +146,9 @@
 	Energy per part	Energie na díl
 	Enough: {units}, meeting the target in {p} of replications	Stačí: {units}, cíl splněn v {p} replikací
 	Entered	Vstoupilo
+	Entities give up waiting	Entity vzdávají čekání
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entity, které jsou na konci replikace stále uvnitř, nejsou zahrnuty do průměrné doby čekání ani průměrné doby v systému.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entity, které vzdají čekání, jdou tímto tokem (například aby to zkusily později znovu); ostatní jdou druhou cestou ven z úlohy.
 	Erlang	Erlangovo
 	Error	Chyba
 	Estimate from three values…	Odhadnout ze tří hodnot…
@@ -167,12 +178,16 @@
 	Fri	pá
 	From	Z
 	Gamma	Gama
+	Gave up	Vzdaly to
+	Gives up before it is done	Vzdá to před dokončením
+	Gives up before service starts	Vzdá to před začátkem obsluhy
 	Goes to	Vede do
 	Hands on finished parts while down	Předává hotové díly i v poruše
 	Help	Nápověda
 	Hide Others	Skrýt ostatní
 	Hide {app}	Skrýt {app}
 	How many	Kolik
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kolik dílů chtějí zákazníci z těchto odchodů; výsledky pak ukážou takt (dostupný čas dělený poptávkou) a čas cyklu každé úlohy.
 	Inside over time	Uvnitř v čase
 	Jump	Přejít
 	Jump to time	Přejít na čas
@@ -202,6 +217,7 @@
 	Mean time blocked	Průměrná doba blokování
 	Mean time in system	Průměrná doba v systému
 	Mean wait	Průměrná doba čekání
+	Mean wait before giving up	Průměrná doba čekání do vzdání
 	Metric	Metrika
 	Middles	Svislé středy
 	Minimise	Minimalizovat
@@ -257,8 +273,13 @@
 	Parameter	Parametr
 	Parameters	Parametry
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Díly, které jdou tímto tokem, se vracejí k opětovnému zpracování; počítají se jako přepracování poslední úlohy se zdrojem, kterou prošly.
+	Parts wanted	Požadované díly
+	Parts wanted is a number above 0	Počet požadovaných dílů je číslo větší než 0
 	Paste	Vložit
+	Patience	Trpělivost
 	Pause	Pozastavit
+	Per	Období
+	Per shift needs a calendar: each period it is active is a shift.	„Za směnu“ potřebuje kalendář: každé období, kdy je aktivní, je jedna směna.
 	Percentile	Percentil
 	Period {n} ends	Období {n} končí
 	Period {n} repeats	Období {n} se opakuje
@@ -365,6 +386,8 @@
 	Share	Podíl
 	Share of arrivals lost	Podíl ztracených příchodů
 	Share of units blocked	Podíl blokovaných jednotek
+	Share of work wasted	Podíl zbytečné práce
+	Share that gave up	Podíl těch, které to vzdaly
 	Show All	Zobrazit vše
 	Show {id}	Zobrazit {id}
 	Size	Dimenzovat
@@ -389,6 +412,8 @@
 	Stopped watching	Sledování ukončeno
 	Sun	ne
 	Sweep a parameter	Průchod parametrem
+	Takt	Takt
+	Takt time	Čas taktu
 	Tandem line	Tandemová linka
 	Target	Cíl
 	Target share	Cílový podíl
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	Model: experiment, propojení a problémy
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Podíl replikací rovných nebo menších než každá hodnota. Pás obsahuje skutečné rozdělení se spolehlivostí {confidence}.
 	The values are numbers, separated by semicolons or spaces	Hodnoty jsou čísla oddělená středníky nebo mezerami
+	The whole clock	Celý čas
 	This block has a warning	Tento blok obsahuje upozornění
 	This block has an error	Tento blok obsahuje chybu
 	This run	Tento běh
 	Three-point estimate	Tříbodový odhad
 	Thu	čt
+	Time available	Dostupný čas
+	Time before giving up	Doba do vzdání
 	Time between arrivals	Doba mezi příchody
 	Time blocked	Čas blokování
 	Time failed	Čas v poruše
@@ -466,6 +494,7 @@
 	Whole number	Celé číslo
 	Window	Okno
 	With every time at its mean: {units}	S každou dobou na průměru: {units}
+	Work wasted on those who gave up	Zbytečná práce na těch, které to vzdaly
 	XPDL with BPSim	XPDL s BPSim
 	Yes or no	Ano nebo ne
 	Your changes will be lost if you don't save them.	Pokud změny neuložíte, budou ztraceny.
@@ -479,6 +508,7 @@
 	decision: one way	rozhodnutí: jedna cesta
 	departures	odchody
 	egui and eframe (Craft suite fork)	egui a eframe (odvozená verze sady Craft)
+	for the whole run	za celý běh
 	from its value	podle hodnoty
 	have left	opustilo
 	hours	hodiny
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k z N: jen k z N replikací mělo pro tento výsledek hodnotu a jeho průměr a interval jsou z těchto k.
 	n = {k} of {n}	n = {k} z {n}
 	nothing yet	zatím nic
+	per day	za den
+	per shift	za směnu
+	per week	za týden
 	seconds	sekundy
 	split batches	rozdělení dávek
 	split or join: all ways	rozdělit nebo spojit: všechny cesty

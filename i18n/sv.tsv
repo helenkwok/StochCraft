@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95 %-intervall för andelen som når målet: {lo} till {hi}
 	95th percentile	95:e percentilen
 	95th percentile {value}	95:e percentilen {value}
+	A caller on hold: once a unit takes it, the entity stays.	En uppringare i kö: när en enhet har tagit den stannar entiteten.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	En klient med timeout: om dess tid tar slut under servicen ger den upp då, och enheten slutför jobbet ändå (bortkastat arbete).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Den nya filen innehåller bara modellen: det StochCraft inte förstår i {file} utelämnas.
+	Abandoned	Gav upp
+	Abandoned on {id}	Gav upp på {id}
 	About StochCraft	Om StochCraft
 	About {app}	Om {app}
 	Across the range it changed by {change}: more than chance would explain.	Över intervallet ändrades det med {change}: mer än slumpen skulle förklara.
@@ -102,7 +106,9 @@
 	Constant	Konstant
 	Copy	Kopiera
 	Counts against	Belastar
+	Customer demand	Kundefterfrågan
 	Cut	Klipp ut
+	Cycle time	Cykeltid
 	Daily	Dagligen
 	Dark	Mörkt
 	Data points	Datapunkter
@@ -112,6 +118,8 @@
 	Decision (one way)	Beslut (en väg)
 	Default flow	Standardflöde
 	Delete	Ta bort
+	Demand	Efterfrågan
+	Demand met	Andel uppfylld efterfrågan
 	Departures	Avgångar
 	Diagram	Diagram
 	Discard	Släng
@@ -130,6 +138,7 @@
 	Duration	Varaktighet
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Varje analys kör experimentet flera gånger med samma slumpfrö, så skillnaderna kommer från ändringen, inte från slumpen. Det kan ta en stund.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Varje entitet tar det första av dessa alternativ som kan uppfyllas nu, allt på en gång, och återlämnar enheterna när den lämnar uppgiften.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Varje entitet väntar här högst en tid som slumpas fram för den vid ankomsten och ger sedan upp: den tar vägen ut som är markerad ”Gav upp”, eller lämnar modellen.
 	Edit	Redigera
 	Elasticity	Elasticitet
 	Ends early	Slutar tidigare
@@ -137,7 +146,9 @@
 	Energy per part	Energi per detalj
 	Enough: {units}, meeting the target in {p} of replications	Tillräckligt: {units}, når målet i {p} av replikationerna
 	Entered	Inkomna
+	Entities give up waiting	Entiteter ger upp väntan
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Enheter som fortfarande är inuti vid slutet av en replikation räknas inte med i genomsnittlig väntetid och genomsnittlig tid i systemet.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteter som ger upp väntan tar detta flöde (för att försöka igen senare, till exempel); de andra tar uppgiftens andra väg ut.
 	Erlang	Erlang
 	Error	Fel
 	Estimate from three values…	Uppskatta från tre värden…
@@ -167,12 +178,16 @@
 	Fri	fre
 	From	Från
 	Gamma	Gamma
+	Gave up	Gav upp
+	Gives up before it is done	Ger upp innan den är klar
+	Gives up before service starts	Ger upp innan servicen börjar
 	Goes to	Går till
 	Hands on finished parts while down	Lämnar vidare färdiga detaljer även vid haveri
 	Help	Hjälp
 	Hide Others	Göm övriga
 	Hide {app}	Göm {app}
 	How many	Hur många
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hur många detaljer kunderna vill ha från dessa avgångar; resultaten visar då takten (tillgänglig tid delad med efterfrågan) och varje uppgifts cykeltid.
 	Inside over time	Inne över tid
 	Jump	Gå
 	Jump to time	Gå till tidpunkt
@@ -202,6 +217,7 @@
 	Mean time blocked	Genomsnittlig blockeringstid
 	Mean time in system	Genomsnittlig tid i systemet
 	Mean wait	Genomsnittlig väntetid
+	Mean wait before giving up	Genomsnittlig väntetid innan de gav upp
 	Metric	Mått
 	Middles	Lodräta mittpunkter
 	Minimise	Minimera
@@ -257,8 +273,13 @@
 	Parameter	Parameter
 	Parameters	Parametrar
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Detaljer som tar detta flöde går tillbaka för att bearbetas igen; de räknas som omarbetning för den sista uppgiften med resurs som de gick igenom.
+	Parts wanted	Önskade detaljer
+	Parts wanted is a number above 0	Antalet önskade detaljer är ett tal över 0
 	Paste	Klistra in
+	Patience	Tålamod
 	Pause	Pausa
+	Per	Period
+	Per shift needs a calendar: each period it is active is a shift.	”Per skift” kräver en kalender: varje period den är aktiv är ett skift.
 	Percentile	Percentil
 	Period {n} ends	Period {n} slutar
 	Period {n} repeats	Period {n} upprepas
@@ -365,6 +386,8 @@
 	Share	Andel
 	Share of arrivals lost	Andel förlorade ankomster
 	Share of units blocked	Andel blockerade enheter
+	Share of work wasted	Andel bortkastat arbete
+	Share that gave up	Andel som gav upp
 	Show All	Visa alla
 	Show {id}	Visa {id}
 	Size	Dimensionera
@@ -389,6 +412,8 @@
 	Stopped watching	Slutade följa
 	Sun	sön
 	Sweep a parameter	Svep en parameter
+	Takt	Takt
+	Takt time	Takttid
 	Tandem line	Tandemlinje
 	Target	Mål
 	Target share	Målandel
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	Modellen: experiment, anslutningar och problem
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen replikationer vid eller under varje värde. Bandet innehåller den sanna fördelningen med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Värdena är tal åtskilda med semikolon eller mellanslag
+	The whole clock	Hela tiden
 	This block has a warning	Det här blocket har en varning
 	This block has an error	Det här blocket har ett fel
 	This run	Den här körningen
 	Three-point estimate	Trepunktsskattning
 	Thu	tor
+	Time available	Tillgänglig tid
+	Time before giving up	Tid innan den ger upp
 	Time between arrivals	Tid mellan ankomster
 	Time blocked	Tid blockerad
 	Time failed	Tid i haveri
@@ -466,6 +494,7 @@
 	Whole number	Heltal
 	Window	Fönster
 	With every time at its mean: {units}	Med varje tid på sitt medelvärde: {units}
+	Work wasted on those who gave up	Bortkastat arbete på dem som gav upp
 	XPDL with BPSim	XPDL med BPSim
 	Yes or no	Ja eller nej
 	Your changes will be lost if you don't save them.	Dina ändringar går förlorade om du inte sparar dem.
@@ -479,6 +508,7 @@
 	decision: one way	beslut: en väg
 	departures	avgångar
 	egui and eframe (Craft suite fork)	egui och eframe (förgrening av Craft-sviten)
+	for the whole run	för hela körningen
 	from its value	utifrån värdet
 	have left	har lämnat
 	hours	timmar
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k av N: bara k av de N replikationerna hade ett värde för resultatet, och dess medelvärde och intervall gäller de k.
 	n = {k} of {n}	n = {k} av {n}
 	nothing yet	inget ännu
+	per day	per dag
+	per shift	per skift
+	per week	per vecka
 	seconds	sekunder
 	split batches	uppdelning av partier
 	split or join: all ways	dela eller sammanfoga: alla vägar

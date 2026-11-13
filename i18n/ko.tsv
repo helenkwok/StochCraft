@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	목표를 충족한 비율의 95% 구간: {lo}~{hi}
 	95th percentile	95번째 백분위수
 	95th percentile {value}	95번째 백분위수 {value}
+	A caller on hold: once a unit takes it, the entity stays.	대기 중인 통화: 자원 단위가 일단 받으면 엔터티는 남습니다.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	시간 초과되는 클라이언트: 서비스 중에 시간이 다 되면 그때 포기하고, 자원 단위는 그래도 작업을 끝냅니다(낭비된 작업).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	새 파일에는 모델만 들어갑니다. {file}에서 StochCraft가 이해하지 못하는 내용은 빠집니다.
+	Abandoned	포기
+	Abandoned on {id}	{id} 포기
 	About StochCraft	StochCraft 정보
 	About {app}	{app} 정보
 	Across the range it changed by {change}: more than chance would explain.	범위 전체에서 {change}만큼 바뀌었습니다. 우연으로는 설명되지 않는 크기입니다.
@@ -102,7 +106,9 @@
 	Constant	상수
 	Copy	복사
 	Counts against	귀속 작업
+	Customer demand	고객 수요
 	Cut	잘라내기
+	Cycle time	사이클 타임
 	Daily	매일
 	Dark	어둡게
 	Data points	데이터 점
@@ -112,6 +118,8 @@
 	Decision (one way)	의사 결정(한 경로)
 	Default flow	기본 흐름
 	Delete	삭제
+	Demand	수요
+	Demand met	수요 충족률
 	Departures	이탈
 	Diagram	다이어그램
 	Discard	삭제
@@ -130,6 +138,7 @@
 	Duration	길이
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	각 분석은 같은 난수 시드로 실험을 여러 번 실행하므로 차이는 우연이 아니라 변경에서 나옵니다. 시간이 걸릴 수 있습니다.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	각 엔터티는 이 중 지금 한꺼번에 모두 충족할 수 있는 첫 번째 항목을 가져가고, 떠날 때 자원 단위를 반환합니다.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	각 엔터티는 도착할 때 무작위로 정해진 시간까지만 여기서 기다린 뒤 포기합니다. '포기'로 표시된 나갈 경로로 가거나 모델을 떠납니다.
 	Edit	편집
 	Elasticity	탄력성
 	Ends early	일찍 끝남
@@ -137,7 +146,9 @@
 	Energy per part	부품당 에너지
 	Enough: {units}, meeting the target in {p} of replications	충분: {units}, 반복 실행의 {p}에서 목표 충족
 	Entered	진입 수
+	Entities give up waiting	엔터티가 대기를 포기함
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	반복 실행이 끝날 때 아직 내부에 있는 개체는 평균 대기 시간과 시스템 내 평균 체류 시간에서 빠집니다.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	대기를 포기한 엔터티는 이 흐름을 따릅니다(예를 들어 나중에 다시 시도하기 위해). 나머지는 작업의 다른 나갈 경로를 따릅니다.
 	Erlang	얼랑 분포
 	Error	오류
 	Estimate from three values…	세 값으로 추정…
@@ -167,12 +178,16 @@
 	Fri	금
 	From	시작 블록
 	Gamma	감마 분포
+	Gave up	포기 수
+	Gives up before it is done	완료 전에 포기
+	Gives up before service starts	서비스 시작 전에 포기
 	Goes to	도착 블록
 	Hands on finished parts while down	고장 중에도 완료된 부품 전달
 	Help	도움말
 	Hide Others	다른 항목 숨기기
 	Hide {app}	{app} 숨기기
 	How many	개수
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	고객이 이 이탈에서 원하는 부품 수입니다. 그러면 결과에 택트(가용 시간을 수요로 나눈 값)와 각 작업의 사이클 타임이 표시됩니다.
 	Inside over time	시간에 따른 내부 수
 	Jump	이동
 	Jump to time	이동할 시간
@@ -202,6 +217,7 @@
 	Mean time blocked	평균 차단 시간
 	Mean time in system	시스템 내 평균 체류 시간
 	Mean wait	평균 대기 시간
+	Mean wait before giving up	포기 전 평균 대기 시간
 	Metric	지표
 	Middles	세로 가운데
 	Minimise	최소화
@@ -257,8 +273,13 @@
 	Parameter	매개변수
 	Parameters	매개변수
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	이 흐름을 따르는 부품은 다시 작업하기 위해 되돌아가며, 마지막으로 거친 자원을 사용하는 작업의 재작업으로 집계됩니다.
+	Parts wanted	필요 수량
+	Parts wanted is a number above 0	필요 수량은 0보다 큰 숫자여야 합니다
 	Paste	붙여넣기
+	Patience	대기 포기
 	Pause	일시 중지
+	Per	기간
+	Per shift needs a calendar: each period it is active is a shift.	'근무조당'에는 캘린더가 필요합니다. 캘린더가 활성인 각 기간이 한 근무조입니다.
 	Percentile	백분위수
 	Period {n} ends	기간 {n} 종료
 	Period {n} repeats	기간 {n} 반복
@@ -365,6 +386,8 @@
 	Share	비율
 	Share of arrivals lost	도착 손실 비율
 	Share of units blocked	자원 단위 차단 비율
+	Share of work wasted	낭비된 작업 비율
+	Share that gave up	포기 비율
 	Show All	모두 표시
 	Show {id}	{id} 표시
 	Size	크기 정하기
@@ -389,6 +412,8 @@
 	Stopped watching	관찰을 중지함
 	Sun	일
 	Sweep a parameter	매개변수 스윕
+	Takt	택트 타임
+	Takt time	택트 타임
 	Tandem line	직렬 라인
 	Target	목표
 	Target share	목표 비율
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	모델: 실험, 연결 및 문제
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	각 값 이하인 반복 실행의 비율입니다. 띠는 {confidence} 신뢰도로 실제 분포를 포함합니다.
 	The values are numbers, separated by semicolons or spaces	값은 세미콜론이나 공백으로 구분한 숫자입니다
+	The whole clock	전체 시간
 	This block has a warning	이 블록에 경고가 있습니다
 	This block has an error	이 블록에 오류가 있습니다
 	This run	이 실행
 	Three-point estimate	3점 추정
 	Thu	목
+	Time available	가용 시간
+	Time before giving up	포기까지의 시간
 	Time between arrivals	도착 간격
 	Time blocked	차단 시간
 	Time failed	고장 시간
@@ -466,6 +494,7 @@
 	Whole number	정수
 	Window	창
 	With every time at its mean: {units}	모든 시간을 평균으로 둘 때: {units}
+	Work wasted on those who gave up	포기한 엔터티에 낭비된 작업
 	XPDL with BPSim	BPSim 포함 XPDL
 	Yes or no	예 또는 아니요
 	Your changes will be lost if you don't save them.	저장하지 않으면 변경 사항이 사라집니다.
@@ -479,6 +508,7 @@
 	decision: one way	의사 결정: 한 경로
 	departures	이탈
 	egui and eframe (Craft suite fork)	egui 및 eframe(Craft 제품군 포크)
+	for the whole run	실행 전체 동안
 	from its value	값에서 결정
 	have left	나갔을 때
 	hours	시간
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N회 중 k회: 이 결과의 값이 있는 반복 실행은 N회 중 k회뿐이며, 평균과 구간은 그 k회에 대한 것입니다.
 	n = {k} of {n}	n = {n}회 중 {k}회
 	nothing yet	아직 없음
+	per day	하루당
+	per shift	근무조당
+	per week	주당
 	seconds	초
 	split batches	배치 분리
 	split or join: all ways	분할 또는 병합: 모든 경로

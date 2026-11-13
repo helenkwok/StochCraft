@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Interval od 95% udjela koji postiže cilj: od {lo} do {hi}
 	95th percentile	95. percentil
 	95th percentile {value}	95. percentil {value}
+	A caller on hold: once a unit takes it, the entity stays.	Pozivalac na čekanju: kad ga jedinica preuzme, entitet ostaje.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Klijent kojem istekne vrijeme: ako mu vrijeme istekne tokom posluživanja, tada odustaje, a jedinica ipak završi posao (uzaludan rad).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Nova datoteka sadrži samo model: ono što StochCraft ne razumije u {file} se izostavlja.
+	Abandoned	Odustali
+	Abandoned on {id}	Odustali na {id}
 	About StochCraft	O aplikaciji StochCraft
 	About {app}	O aplikaciji {app}
 	Across the range it changed by {change}: more than chance would explain.	U rasponu se promijenio za {change}: više nego što bi objasnio slučaj.
@@ -102,7 +106,9 @@
 	Constant	Konstantna
 	Copy	Kopiraj
 	Counts against	Pripisuje se
+	Customer demand	Potražnja kupaca
 	Cut	Izreži
+	Cycle time	Vrijeme ciklusa
 	Daily	Dnevno
 	Dark	Tamno
 	Data points	Podatkovne tačke
@@ -112,6 +118,8 @@
 	Decision (one way)	Odluka (jedan put)
 	Default flow	Zadani tok
 	Delete	Izbriši
+	Demand	Potražnja
+	Demand met	Udio ispunjene potražnje
 	Departures	Odlasci
 	Diagram	Dijagram
 	Discard	Odbaci
@@ -130,6 +138,7 @@
 	Duration	Trajanje
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Svaka analiza pokreće eksperiment više puta s istim sjemenom, pa razlike dolaze od promjene, a ne od slučaja. To može potrajati.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Svaki entitet uzima prvu od ovih mogućnosti koja se sada može ispuniti, sve odjednom, i vraća jedinice kad izađe.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Svaki entitet ovdje čeka najviše vrijeme koje mu se nasumično odredi pri dolasku, a zatim odustaje: ide izlazom označenim kao „Odustali“ ili napušta model.
 	Edit	Uredi
 	Elasticity	Elastičnost
 	Ends early	Završava ranije
@@ -137,7 +146,9 @@
 	Energy per part	Energija po dijelu
 	Enough: {units}, meeting the target in {p} of replications	Dovoljno: {units}, cilj postignut u {p} replikacija
 	Entered	Ušlo
+	Entities give up waiting	Entiteti odustaju od čekanja
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entiteti koji su još unutra na kraju replikacije nisu uključeni u prosječno čekanje i prosječno vrijeme u sistemu.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteti koji odustanu od čekanja idu ovim tokom (da kasnije pokušaju ponovo, recimo); ostali idu drugim izlazom zadatka.
 	Erlang	Erlang
 	Error	Greška
 	Estimate from three values…	Procijeni iz tri vrijednosti…
@@ -167,12 +178,16 @@
 	Fri	pet
 	From	Od
 	Gamma	Gama
+	Gave up	Odustalo
+	Gives up before it is done	Odustaje prije završetka
+	Gives up before service starts	Odustaje prije početka posluživanja
 	Goes to	Vodi prema
 	Hands on finished parts while down	Predaje gotove dijelove i u kvaru
 	Help	Pomoć
 	Hide Others	Sakrij ostale
 	Hide {app}	Sakrij {app}
 	How many	Koliko
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Koliko dijelova kupci žele od ovih odlazaka; rezultati tada prikazuju takt (raspoloživo vrijeme podijeljeno s potražnjom) i vrijeme ciklusa svakog zadatka.
 	Inside over time	Unutra kroz vrijeme
 	Jump	Skoči
 	Jump to time	Skoči na vrijeme
@@ -202,6 +217,7 @@
 	Mean time blocked	Prosječno vrijeme blokiranja
 	Mean time in system	Prosječno vrijeme u sistemu
 	Mean wait	Prosječno čekanje
+	Mean wait before giving up	Prosječno čekanje do odustajanja
 	Metric	Metrika
 	Middles	Vertikalni centri
 	Minimise	Minimiziraj
@@ -257,8 +273,13 @@
 	Parameter	Parametar
 	Parameters	Parametri
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Dijelovi koji idu ovim tokom vraćaju se na ponovnu obradu; računaju se kao dorada posljednjeg zadatka s resursom kroz koji su prošli.
+	Parts wanted	Traženi dijelovi
+	Parts wanted is a number above 0	Broj traženih dijelova je broj veći od 0
 	Paste	Zalijepi
+	Patience	Strpljenje
 	Pause	Pauza
+	Per	Period
+	Per shift needs a calendar: each period it is active is a shift.	„Po smjeni“ traži kalendar: svaki period u kojem je aktivan je jedna smjena.
 	Percentile	Percentil
 	Period {n} ends	Period {n} završava
 	Period {n} repeats	Period {n} se ponavlja
@@ -365,6 +386,8 @@
 	Share	Udio
 	Share of arrivals lost	Udio izgubljenih dolazaka
 	Share of units blocked	Udio blokiranih jedinica
+	Share of work wasted	Udio uzaludnog rada
+	Share that gave up	Udio onih koji su odustali
 	Show All	Prikaži sve
 	Show {id}	Prikaži {id}
 	Size	Dimenzioniraj
@@ -389,6 +412,8 @@
 	Stopped watching	Praćenje zaustavljeno
 	Sun	ned
 	Sweep a parameter	Prolaz kroz parametar
+	Takt	Takt
+	Takt time	Takt vrijeme
 	Tandem line	Tandemska linija
 	Target	Cilj
 	Target share	Ciljni udio
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	Model: eksperiment, veze i problemi
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Udio replikacija jednakih ili manjih od svake vrijednosti. Pojas sadrži pravu distribuciju s pouzdanošću od {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vrijednosti su brojevi odvojeni tačkom-zarezom ili razmacima
+	The whole clock	Svo vrijeme
 	This block has a warning	Ovaj blok ima upozorenje
 	This block has an error	Ovaj blok ima grešku
 	This run	Ovo pokretanje
 	Three-point estimate	Procjena u tri tačke
 	Thu	čet
+	Time available	Raspoloživo vrijeme
+	Time before giving up	Vrijeme do odustajanja
 	Time between arrivals	Vrijeme između dolazaka
 	Time blocked	Vrijeme blokade
 	Time failed	Vrijeme u kvaru
@@ -466,6 +494,7 @@
 	Whole number	Cijeli broj
 	Window	Prozor
 	With every time at its mean: {units}	Sa svakim vremenom na srednjoj vrijednosti: {units}
+	Work wasted on those who gave up	Uzaludan rad na onima koji su odustali
 	XPDL with BPSim	XPDL s BPSim
 	Yes or no	Da ili ne
 	Your changes will be lost if you don't save them.	Vaše promjene će biti izgubljene ako ih ne sačuvate.
@@ -479,6 +508,7 @@
 	decision: one way	odluka: jedan put
 	departures	odlasci
 	egui and eframe (Craft suite fork)	egui i eframe (inačica paketa Craft)
+	for the whole run	za cijelo pokretanje
 	from its value	prema svojoj vrijednosti
 	have left	napustilo
 	hours	sati
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k od N: samo k od N replikacija ima vrijednost za taj rezultat, a njegov prosjek i interval su preko tih k.
 	n = {k} of {n}	n = {k} od {n}
 	nothing yet	još ništa
+	per day	po danu
+	per shift	po smjeni
+	per week	po sedmici
 	seconds	sekunde
 	split batches	razdvajanje serija
 	split or join: all ways	razdvoji ili spoji: svi putovi

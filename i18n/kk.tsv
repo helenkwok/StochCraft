@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Мақсатқа жеткен үлестің 95% аралығы: {lo} мен {hi} арасы
 	95th percentile	95-ші процентиль
 	95th percentile {value}	95-ші процентиль {value}
+	A caller on hold: once a unit takes it, the entity stays.	Күтудегі қоңырау шалушы: бірлік оны қабылдаған соң, нысан қалады.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Уақыты бітетін клиент (timeout): уақыты қызмет көрсету кезінде бітсе, сол сәтте бас тартады, ал бірлік жұмысты бәрібір аяқтайды (босқа кеткен жұмыс).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Жаңа файлда тек модель болады: {file} ішіндегі StochCraft түсінбейтін нәрселер қалдырылады.
+	Abandoned	Бас тартқандар
+	Abandoned on {id}	{id} ағынында бас тартқандар
 	About StochCraft	StochCraft туралы
 	About {app}	{app} туралы
 	Across the range it changed by {change}: more than chance would explain.	Ауқымда {change} өзгерді: кездейсоқтық түсіндіретіннен көп.
@@ -102,7 +106,9 @@
 	Constant	Тұрақты
 	Copy	Көшіру
 	Counts against	Жүктелетін тапсырма
+	Customer demand	Тұтынушы сұранысы
 	Cut	Қиып алу
+	Cycle time	Цикл уақыты
 	Daily	Күн сайын
 	Dark	Күңгірт
 	Data points	Дерек нүктелері
@@ -112,6 +118,8 @@
 	Decision (one way)	Шешім (бір жол)
 	Default flow	Әдепкі ағын
 	Delete	Жою
+	Demand	Сұраныс
+	Demand met	Қанағаттандырылған сұраныс үлесі
 	Departures	Кетулер
 	Diagram	Диаграмма
 	Discard	Елемеу
@@ -130,6 +138,7 @@
 	Duration	Ұзақтығы
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Әр талдау экспериментті бір кездейсоқ тұқыммен бірнеше рет орындайды, сондықтан айырмашылықтар кездейсоқтықтан емес, өзгерістен шығады. Біраз уақыт алуы мүмкін.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Әрбір нысан осылардың ішінен дәл қазір орындауға болатын біріншісін бірден толық алады да, шыққанда бірліктерді қайтарады.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Әрбір нысан мұнда келген кезде оған кездейсоқ таңдалған уақыттан аспайтын уақыт күтеді, содан кейін бас тартады: «Бас тартқандар» деп белгіленген шығатын жолмен кетеді немесе модельден шығады.
 	Edit	Түзету
 	Elasticity	Икемділік
 	Ends early	Ертерек аяқталады
@@ -137,7 +146,9 @@
 	Energy per part	Бір бөлшекке энергия
 	Enough: {units}, meeting the target in {p} of replications	Жеткілікті: {units}, мақсат қайталаулардың {p} бөлігінде орындалады
 	Entered	Кіргендер
+	Entities give up waiting	Нысандар күтуден бас тартады
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Қайталаудың соңында әлі ішінде қалған нысандар күтудің орташа уақытына және жүйедегі орташа уақытқа кірмейді.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Күтуден бас тартқан нысандар осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін); қалғандары тапсырманың басқа шығатын жолымен кетеді.
 	Erlang	Эрланг
 	Error	Қате
 	Estimate from three values…	Үш мәннен бағалау…
@@ -167,12 +178,16 @@
 	Fri	жм
 	From	Қайдан
 	Gamma	Гамма
+	Gave up	Бас тартқандар
+	Gives up before it is done	Аяқталғанға дейін бас тартады
+	Gives up before service starts	Қызмет көрсету басталғанға дейін бас тартады
 	Goes to	Қайда барады
 	Hands on finished parts while down	Ақаулы кезде де дайын бөлшектерді береді
 	Help	Көмек
 	Hide Others	Басқаларын жасыру
 	Hide {app}	{app} қолданбасын жасыру
 	How many	Қанша
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Тұтынушылар осы кетулерден қанша бөлшек қалайды; сонда нәтижелер тактіні (қолжетімді уақытты сұранысқа бөлгенде) және әр тапсырманың цикл уақытын көрсетеді.
 	Inside over time	Уақыт бойынша ішіндегілер
 	Jump	Өту
 	Jump to time	Уақытқа өту
@@ -202,6 +217,7 @@
 	Mean time blocked	Бұғатталудың орташа уақыты
 	Mean time in system	Жүйедегі орташа уақыт
 	Mean wait	Күтудің орташа уақыты
+	Mean wait before giving up	Бас тартқанға дейінгі орташа күту уақыты
 	Metric	Көрсеткіш
 	Middles	Тік орталықтар
 	Minimise	Кішірейту
@@ -257,8 +273,13 @@
 	Parameter	Параметр
 	Parameters	Параметрлер
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Осы ағынмен жүретін бөлшектер қайта өңделуге оралады; олар өздері өткен соңғы ресурсы бар тапсырмаға қайта өңдеу ретінде есептеледі.
+	Parts wanted	Қажетті бөлшектер
+	Parts wanted is a number above 0	Қажетті бөлшектер 0-ден үлкен сан болуы керек
 	Paste	Қою
+	Patience	Шыдамдылық
 	Pause	Кідірту
+	Per	Кезең
+	Per shift needs a calendar: each period it is active is a shift.	«Ауысымына» күнтізбені қажет етеді: ол белсенді болатын әр кезең — бір ауысым.
 	Percentile	Процентиль
 	Period {n} ends	{n}-кезең аяқталуы
 	Period {n} repeats	{n}-кезең қайталануы
@@ -365,6 +386,8 @@
 	Share	Үлес
 	Share of arrivals lost	Жоғалған келулер үлесі
 	Share of units blocked	Бұғатталған бірліктер үлесі
+	Share of work wasted	Босқа кеткен жұмыс үлесі
+	Share that gave up	Бас тартқандар үлесі
 	Show All	Барлығын көрсету
 	Show {id}	{id} көрсету
 	Size	Өлшемдеу
@@ -389,6 +412,8 @@
 	Stopped watching	Бақылау тоқтатылды
 	Sun	жс
 	Sweep a parameter	Параметрді сұрыптау
+	Takt	Такт
+	Takt time	Такт уақыты
 	Tandem line	Тізбекті желі
 	Target	Мақсат
 	Target share	Мақсатты үлес
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Әр мәнге тең немесе одан төмен қайталаулар үлесі. Жолақ шынайы үлестірімді {confidence} сенімділікпен қамтиды.
 	The values are numbers, separated by semicolons or spaces	Мәндер нүктелі үтірмен немесе бос орынмен бөлінген сандар
+	The whole clock	Бүкіл уақыт
 	This block has a warning	Бұл блокта ескерту бар
 	This block has an error	Бұл блокта қате бар
 	This run	Осы іске қосу
 	Three-point estimate	Үш нүктелі бағалау
 	Thu	бс
+	Time available	Қолжетімді уақыт
+	Time before giving up	Бас тартқанға дейінгі уақыт
 	Time between arrivals	Келулер арасындағы уақыт
 	Time blocked	Бұғатталған уақыт
 	Time failed	Ақаулы уақыт
@@ -466,6 +494,7 @@
 	Whole number	Бүтін сан
 	Window	Терезе
 	With every time at its mean: {units}	Әр уақыт өз орташасында: {units}
+	Work wasted on those who gave up	Бас тартқандарға босқа кеткен жұмыс
 	XPDL with BPSim	BPSim бар XPDL
 	Yes or no	Иә немесе жоқ
 	Your changes will be lost if you don't save them.	Сақтамасаңыз, өзгерістеріңіз жоғалады.
@@ -479,6 +508,7 @@
 	decision: one way	шешім: бір жол
 	departures	кетулер
 	egui and eframe (Craft suite fork)	egui және eframe (Craft жиынтығының тармағы)
+	for the whole run	бүкіл іске қосуға
 	from its value	мәні бойынша
 	have left	шықты
 	hours	сағат
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N ішінен k: N қайталаудың тек k-сында осы нәтиженің мәні болды, оның орташасы мен аралығы сол k бойынша.
 	n = {k} of {n}	n = {n} ішінен {k}
 	nothing yet	әзірге ештеңе жоқ
+	per day	күніне
+	per shift	ауысымына
+	per week	аптасына
 	seconds	секунд
 	split batches	топтамаларды бөлу
 	split or join: all ways	бөлу немесе біріктіру: барлық жолдар

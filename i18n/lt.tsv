@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Tikslą pasiekiančios dalies 95 % intervalas: nuo {lo} iki {hi}
 	95th percentile	95-asis procentilis
 	95th percentile {value}	95-asis procentilis {value}
+	A caller on hold: once a unit takes it, the entity stays.	Laukiantis skambintojas: kai jį priima vienetas, objektas lieka.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Klientas, kuriam baigiasi laikas (timeout): jei jo laikas baigiasi aptarnavimo metu, jis tuo metu pasitraukia, o vienetas vis tiek baigia darbą (iššvaistytas darbas).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Naujame faile yra tik modelis: tai, ko StochCraft nesupranta faile {file}, praleidžiama.
+	Abandoned	Pasitraukę
+	Abandoned on {id}	Pasitraukę sraute {id}
 	About StochCraft	Apie StochCraft
 	About {app}	Apie {app}
 	Across the range it changed by {change}: more than chance would explain.	Per visą intervalą pasikeitė {change}: daugiau, nei paaiškintų atsitiktinumas.
@@ -102,7 +106,9 @@
 	Constant	Konstanta
 	Copy	Kopijuoti
 	Counts against	Priskiriama
+	Customer demand	Klientų poreikis
 	Cut	Iškirpti
+	Cycle time	Ciklo laikas
 	Daily	Kasdien
 	Dark	Tamsi
 	Data points	Duomenų taškai
@@ -112,6 +118,8 @@
 	Decision (one way)	Sprendimas (vienas kelias)
 	Default flow	Numatytasis srautas
 	Delete	Ištrinti
+	Demand	Poreikis
+	Demand met	Patenkinto poreikio dalis
 	Departures	Išvykimai
 	Diagram	Diagrama
 	Discard	Atmesti
@@ -130,6 +138,7 @@
 	Duration	Trukmė
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Kiekviena analizė kelis kartus paleidžia eksperimentą su ta pačia sėkla, todėl skirtumai kyla iš pakeitimo, o ne iš atsitiktinumo. Tai gali užtrukti.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Kiekvienas objektas paima pirmąją iš šių alternatyvų, kurią galima įvykdyti dabar, visą iš karto, ir grąžina vienetus, kai palieka užduotį.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Kiekvienas objektas čia laukia ne ilgiau nei laikas, atsitiktinai parinktas jam atvykus, o tada pasitraukia: eina išėjimu, pažymėtu „Pasitraukę“, arba palieka modelį.
 	Edit	Redaguoti
 	Elasticity	Elastingumas
 	Ends early	Baigiasi anksčiau
@@ -137,7 +146,9 @@
 	Energy per part	Energija vienai detalei
 	Enough: {units}, meeting the target in {p} of replications	Pakanka: {units}, tikslas pasiekiamas {p} replikacijų
 	Entered	Įėjo
+	Entities give up waiting	Objektai nustoja laukti
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Objektai, kurie replikacijos pabaigoje dar viduje, neįskaičiuojami į vidutinį laukimo laiką ir vidutinį laiką sistemoje.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Laukti nustoję objektai eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą); kiti eina kitu užduoties išėjimu.
 	Erlang	Erlango
 	Error	Klaida
 	Estimate from three values…	Įvertinti pagal tris reikšmes…
@@ -167,12 +178,16 @@
 	Fri	pn
 	From	Iš
 	Gamma	Gama
+	Gave up	Pasitraukė
+	Gives up before it is done	Pasitraukia nebaigus aptarnavimo
+	Gives up before service starts	Pasitraukia prieš prasidedant aptarnavimui
 	Goes to	Veda į
 	Hands on finished parts while down	Gedimo metu perduoda baigtas detales
 	Help	Žinynas
 	Hide Others	Slėpti kitus
 	Hide {app}	Slėpti {app}
 	How many	Kiek
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kiek detalių klientai nori iš šių išvykimų; tada rezultatai rodo taktą (turimą laiką, padalytą iš poreikio) ir kiekvienos užduoties ciklo laiką.
 	Inside over time	Viduje per laiką
 	Jump	Pereiti
 	Jump to time	Pereiti į laiką
@@ -202,6 +217,7 @@
 	Mean time blocked	Vidutinė blokavimo trukmė
 	Mean time in system	Vidutinis laikas sistemoje
 	Mean wait	Vidutinis laukimo laikas
+	Mean wait before giving up	Vidutinis laukimo laikas iki pasitraukimo
 	Metric	Rodiklis
 	Middles	Vertikalūs centrai
 	Minimise	Minimizuoti
@@ -257,8 +273,13 @@
 	Parameter	Parametras
 	Parameters	Parametrai
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Šiuo srautu einančios detalės grįžta būti apdirbtos dar kartą; jos įskaitomos kaip perdirbimas paskutinei užduočiai su ištekliumi, kurią praėjo.
+	Parts wanted	Norimos detalės
+	Parts wanted is a number above 0	Norimų detalių skaičius turi būti didesnis už 0
 	Paste	Įklijuoti
+	Patience	Kantrybė
 	Pause	Pristabdyti
+	Per	Laikotarpis
+	Per shift needs a calendar: each period it is active is a shift.	„Per pamainą“ reikia kalendoriaus: kiekvienas laikotarpis, kai jis aktyvus, yra viena pamaina.
 	Percentile	Procentilis
 	Period {n} ends	{n} laikotarpio pabaiga
 	Period {n} repeats	{n} laikotarpio kartojimas
@@ -365,6 +386,8 @@
 	Share	Dalis
 	Share of arrivals lost	Prarastų atvykimų dalis
 	Share of units blocked	Blokuotų vienetų dalis
+	Share of work wasted	Iššvaistyto darbo dalis
+	Share that gave up	Pasitraukusiųjų dalis
 	Show All	Rodyti visus
 	Show {id}	Rodyti {id}
 	Size	Parinkti
@@ -389,6 +412,8 @@
 	Stopped watching	Stebėjimas baigtas
 	Sun	sk
 	Sweep a parameter	Parametro perėjimas
+	Takt	Taktas
+	Takt time	Takto laikas
 	Tandem line	Nuoseklioji linija
 	Target	Tikslas
 	Target share	Tikslinė dalis
@@ -406,11 +431,14 @@
 	The model: its experiment, connections and problems	Modelis: eksperimentas, jungtys ir problemos
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Replikacijų, ne didesnių už kiekvieną reikšmę, dalis. Juosta su {confidence} pasikliovimu apima tikrąjį skirstinį.
 	The values are numbers, separated by semicolons or spaces	Reikšmės yra skaičiai, atskirti kabliataškiais arba tarpais
+	The whole clock	Visas laikas
 	This block has a warning	Šiame bloke yra įspėjimas
 	This block has an error	Šiame bloke yra klaida
 	This run	Šis vykdymas
 	Three-point estimate	Trijų taškų įvertis
 	Thu	kt
+	Time available	Turimas laikas
+	Time before giving up	Laikas iki pasitraukimo
 	Time between arrivals	Laikas tarp atvykimų
 	Time blocked	Blokavimo laikas
 	Time failed	Gedimo laikas
@@ -466,6 +494,7 @@
 	Whole number	Sveikasis skaičius
 	Window	Langas
 	With every time at its mean: {units}	Kai kiekvienas laikas lygus vidurkiui: {units}
+	Work wasted on those who gave up	Pasitraukusiesiems iššvaistytas darbas
 	XPDL with BPSim	XPDL su BPSim
 	Yes or no	Taip arba ne
 	Your changes will be lost if you don't save them.	Jei pakeitimų neįrašysite, jie bus prarasti.
@@ -479,6 +508,7 @@
 	decision: one way	sprendimas: vienas kelias
 	departures	išvykimai
 	egui and eframe (Craft suite fork)	egui ir eframe (Craft paketo atšaka)
+	for the whole run	visam vykdymui
 	from its value	pagal jo reikšmę
 	have left	paliko
 	hours	valandos
@@ -490,6 +520,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k iš N: tik k iš N replikacijų turėjo šio rezultato reikšmę, o jo vidurkis ir intervalas skaičiuojami iš tų k.
 	n = {k} of {n}	n = {k} iš {n}
 	nothing yet	dar nieko
+	per day	per dieną
+	per shift	per pamainą
+	per week	per savaitę
 	seconds	sekundės
 	split batches	partijų skaidymas
 	split or join: all ways	skaidyti arba jungti: visi keliai

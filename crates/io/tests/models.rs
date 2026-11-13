@@ -56,9 +56,16 @@ fn bpmn_written_by_another_tool() {
             power: None,
             setup: None,
             planned_run_time: None,
+            patience: None,
         }
     );
-    assert_eq!(kind(m, "leave"), &ElementKind::Sink { scrap: None });
+    assert_eq!(
+        kind(m, "leave"),
+        &ElementKind::Sink {
+            scrap: None,
+            demand: None,
+        }
+    );
     let x = &m.experiment;
     assert_eq!(
         (x.time_unit, x.replications, x.seed),
@@ -85,6 +92,7 @@ fn inherited_scenario_changes_only_what_it_says() {
             power: None,
             setup: None,
             planned_run_time: None,
+            patience: None,
         }
     );
     assert_eq!(l.model.experiment.replications, 16);
@@ -152,6 +160,7 @@ fn xpdl_with_bpsim_1() {
             power: None,
             setup: None,
             planned_run_time: None,
+            patience: None,
         }
     );
     assert_eq!(

@@ -114,8 +114,12 @@ struct EncodedElement {
     entered: u64,
     left: u64,
     /// The optional metrics, in [`ElementReport`]'s order.
-    metrics: [Option<u64>; 25],
+    metrics: [Option<u64>; 29],
+    /// Servers with a patience: the abandoned share and wait, the work wasted and its share
+    /// (apart, since serde takes arrays of at most 32).
+    patience: [Option<u64>; 4],
     lost: Option<u64>,
+    abandoned: Option<u64>,
     work_in_progress: Option<u64>,
     properties: Vec<Option<u64>>,
 }
@@ -169,8 +173,19 @@ impl Encoded {
                         bits(e.scrap_ratio),
                         bits(e.rework_ratio),
                         bits(e.oee),
+                        bits(e.takt),
+                        bits(e.demand),
+                        bits(e.demand_met),
+                        bits(e.cycle_time),
+                    ],
+                    patience: [
+                        bits(e.abandoned_share),
+                        bits(e.abandoned_wait),
+                        bits(e.wasted),
+                        bits(e.wasted_share),
                     ],
                     lost: e.lost,
+                    abandoned: e.abandoned,
                     work_in_progress: e.work_in_progress,
                     properties: e.properties.iter().map(|(_, v)| bits(*v)).collect(),
                 })
@@ -217,7 +232,12 @@ impl Encoded {
                     scr,
                     rr,
                     oe2,
+                    tk,
+                    dm,
+                    dmet,
+                    ct,
                 ] = e.metrics;
+                let [ash, aw, wa, wsh] = e.patience;
                 Some(ElementReport {
                     id: t.id.clone(),
                     name: t.name.clone(),
@@ -236,6 +256,11 @@ impl Encoded {
                     availability: float(a),
                     lost: e.lost,
                     loss_probability: float(lp),
+                    abandoned: e.abandoned,
+                    abandoned_share: float(ash),
+                    abandoned_wait: float(aw),
+                    wasted: float(wa),
+                    wasted_share: float(wsh),
                     time_off_shift: float(off),
                     time_processing: float(pr),
                     time_starved: float(st),
@@ -249,6 +274,10 @@ impl Encoded {
                     scrap_ratio: float(scr),
                     rework_ratio: float(rr),
                     oee: float(oe2),
+                    takt: float(tk),
+                    demand: float(dm),
+                    demand_met: float(dmet),
+                    cycle_time: float(ct),
                     energy: float(en),
                     specific_energy: float(se),
                     properties: t
