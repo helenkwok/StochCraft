@@ -7,8 +7,8 @@
   <meta name="description" content="Discrete-event simulation in the browser: open a BPMN or XPDL model with BPSim data, run it and read the results.">
   
 <script type="module">
-import init, * as bindings from './stochcraft-web-6fea947bf7519eae.js';
-const wasm = await init({ module_or_path: './stochcraft-web-6fea947bf7519eae_bg.wasm' });
+import init, * as bindings from './stochcraft-web-8468a27ce8a78d1f.js';
+const wasm = await init({ module_or_path: './stochcraft-web-8468a27ce8a78d1f_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -40,7 +40,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     #stochcraft_loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
       color: #8c8c8c; font: 14px system-ui, sans-serif; pointer-events: none; }
   </style>
-<link rel="modulepreload" href="./stochcraft-web-6fea947bf7519eae.js" crossorigin="anonymous" integrity="sha384-o0/YaslmtttJXjR9rfKt9/l31juUQjp430/LUEow8PrmHmZRKO/k5LhndA7gqnVX"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./stochcraft-web-6fea947bf7519eae_bg.wasm" crossorigin="anonymous" integrity="sha384-hp4Ew/qyr+iWeS3fzUNeZygWB96jsWoy855lIUHYuZAvK8MFUQ+GohdH1dtnOLDm" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./stochcraft-web-8468a27ce8a78d1f.js" crossorigin="anonymous" integrity="sha384-XpgMFF245i71a5O1soO/hmUkdvRzBbIDVhakwuNXSo1WO6WnjCxianbAjCDZ+2Sx"><link rel="modulepreload" href="./snippets/eframe-d31a8450ea12dfc1/inline0.js" crossorigin="anonymous" integrity="sha384-uPZQ72BwgZ4v7Km6+UIFbkDDlt7ShGEsAVEHVN/+wZSGFhItJZB83iKMFQXauTSs"><link rel="preload" href="./stochcraft-web-8468a27ce8a78d1f_bg.wasm" crossorigin="anonymous" integrity="sha384-JmKBjuXaKKUYMFlgtn/nlrRRq4WcY50ZF4cILTo954M3VZSwrghTKmw2+UKnonZA" as="fetch" type="application/wasm"></head>
 <body>
   <canvas id="stochcraft_canvas"></canvas>
   <div id="stochcraft_loading" role="status">Loading StochCraft&hellip;</div>
