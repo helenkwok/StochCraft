@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Canviar la unitat de temps no converteix els temps que ja hi ha al model.
 	Chart	Gràfic
 	Chart hover	Gràfic sota el punter
+	Check every	Comprovar cada
 	Choose…	Tria…
 	Clear Menu	Buida el menú
 	Close	Tanca
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Cada anàlisi executa l'experiment diverses vegades amb la mateixa llavor, de manera que les diferències vénen del canvi, no de l'atzar. Pot trigar una estona.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entitat pren, tota alhora, la primera d'aquestes alternatives que es pugui satisfer en aquell moment i torna les unitats quan surt.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Cada entitat espera aquí com a màxim un temps que se li assigna a l'atzar quan arriba, i després abandona: pren la sortida marcada com a «Abandonades» o surt del model.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Cada servidor (unitat) es comprova cada cert temps, com un distribuïdor de càrrega sondeja els servidors que té darrere. El que falla, amb massa entitats esperant, es retira del servei per a un reinici i després torna.
 	Edit	Edita
 	Edit themes…	Edita els temes…
 	Elasticity	Elasticitat
@@ -172,6 +174,7 @@
 	Export table (CSV)	Exporta la taula (CSV)
 	Exported {file}	S'ha exportat {file}
 	Expression	Expressió
+	Fails above, waiting per working server	Falla per sobre de, en espera per servidor en servei
 	Failure interrupts the job	L'avaria interromp la feina
 	Family	Família
 	File	Fitxer
@@ -192,6 +195,7 @@
 	Goes to	Va cap a
 	Hands on finished parts while down	Passa les peces acabades durant l'avaria
 	Header	Capçalera
+	Health check	Comprovació d'estat
 	Help	Ajuda
 	Hide Others	Amaga els altres
 	Hide {app}	Amaga {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Quantes peces volen els clients d'aquestes sortides; aleshores els resultats mostren el takt (el temps disponible dividit per la demanda) i el temps de cicle de cada tasca.
 	In use	En ús
 	Inside over time	A dins al llarg del temps
+	Job under way on a server taken out:	Feina en curs en un servidor retirat:
 	Jump	Ves-hi
 	Jump to time	Ves a l'instant
+	Keep at least in service	Mantenir en servei com a mínim
 	Keep the time, without the estimate it came from	Conservar el temps, sense l'estimació d'on prové
 	Keyboard Shortcuts…	Dreceres de teclat…
 	Keyboard shortcuts saved	Dreceres de teclat desades
@@ -227,6 +233,7 @@
 	Mean queue length	Longitud mitjana de la cua
 	Mean time blocked	Temps mitjà bloquejat
 	Mean time in system	Temps mitjà al sistema
+	Mean units in service	Nombre mitjà d'unitats en servei
 	Mean wait	Espera mitjana
 	Mean wait before giving up	Espera mitjana abans d'abandonar
 	Metric	Mètrica
@@ -279,6 +286,7 @@
 	Opened {file}	S'ha obert {file}
 	Open…	Obre…
 	Or start from an example	O comença amb un exemple
+	Out for (restart)	Fora de servei durant (reinici)
 	PERT	PERT
 	PNG image	Imatge PNG
 	Parameter	Paràmetre
@@ -355,6 +363,8 @@
 	Result with a target	Resultat amb objectiu
 	Result, down and up	Resultat, avall i amunt
 	Results	Resultats
+	Resume after restart	Reprendre després del reinici
+	Retry elsewhere	Reintentar en un altre
 	Rework	Retreball
 	Rework on {id}	Retreball a {id}
 	Rework ratio	Proporció de retreball
@@ -430,6 +440,7 @@
 	Sun	dg.
 	Sweep a parameter	Escombrar un paràmetre
 	Table stripes	Franges de taula
+	Take servers out when overloaded	Retirar els servidors sobrecarregats
 	Takt	Takt
 	Takt time	Temps de takt
 	Tandem line	Línia en tàndem
@@ -442,6 +453,8 @@
 	Text	Text
 	Text on accent	Text sobre l'accent
 	Text on header	Text de la capçalera
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	La connexió cau i el client ho torna a intentar: l'entitat torna de seguida al capdavant de la cua, i el treball fet en ella es malbarata.
+	The entity waits on its server and the job carries on with what was left once the server is back.	L'entitat espera al seu servidor i la feina continua amb el que quedava quan el servidor torna.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'interval arriba per sota de la proporció objectiu del {share}, de manera que no es demostra amb un 95% de confiança que es compleixi; més rèpliques l'estretirien.
 	The last task with a resource it finished at	L'última tasca amb un recurs per on ha passat la peça
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	El temps mitjà fins a la condició d'aturada és només sobre les rèpliques que l'han complert; les altres han arribat al seu límit de temps.
@@ -466,6 +479,7 @@
 	Time failed	Temps avariat
 	Time off shift	Temps fora de torn
 	Time processing	Temps processant
+	Time restarting	Temps reiniciant
 	Time setting up	Temps preparant
 	Time starved	Temps sense feina
 	Time to failure	Temps fins a l'avaria
@@ -488,6 +502,7 @@
 	Unit	Unitat
 	Units	Unitats
 	Units by calendar	Unitats per calendari
+	Units taken out by health checks	Unitats retirades per les comprovacions d'estat
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unitats que comparteixen diverses tasques. Una tasca amb recursos compartits les pren per grup o per rol.
 	Untitled	Sense títol
 	Untitled model	Model sense títol
@@ -519,7 +534,7 @@
 	Whole number	Nombre enter
 	Window	Finestra
 	With every time at its mean: {units}	Amb cada temps a la seva mitjana: {units}
-	Work wasted on those who gave up	Treball malbaratat en les que han abandonat
+	Work wasted on jobs that did not finish	Treball malbaratat en feines no acabades
 	XPDL with BPSim	XPDL amb BPSim
 	Yes or no	Sí o no
 	Your changes will be lost if you don't save them.	Si no els deses, perdràs els canvis.

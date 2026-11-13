@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Att ändra tidsenheten omvandlar inte tiderna som redan finns i modellen.
 	Chart	Diagram
 	Chart hover	Diagram under pekaren
+	Check every	Kontroll var
 	Choose…	Välj…
 	Clear Menu	Rensa menyn
 	Close	Stäng
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Varje analys kör experimentet flera gånger med samma slumpfrö, så skillnaderna kommer från ändringen, inte från slumpen. Det kan ta en stund.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Varje entitet tar det första av dessa alternativ som kan uppfyllas nu, allt på en gång, och återlämnar enheterna när den lämnar uppgiften.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Varje entitet väntar här högst en tid som slumpas fram för den vid ankomsten och ger sedan upp: den tar vägen ut som är markerad ”Gav upp”, eller lämnar modellen.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Varje server (enhet) kontrolleras med jämna mellanrum, så som en lastbalanserare avsöker servrarna bakom den. En som inte klarar kontrollen, med för många väntande, tas ur drift för en omstart och kommer sedan tillbaka.
 	Edit	Redigera
 	Edit themes…	Redigera teman…
 	Elasticity	Elasticitet
@@ -172,6 +174,7 @@
 	Export table (CSV)	Exportera tabell (CSV)
 	Exported {file}	Exporterade {file}
 	Expression	Uttryck
+	Fails above, waiting per working server	Underkänd över (väntande per server i drift)
 	Failure interrupts the job	Haveri avbryter arbetet
 	Family	Familj
 	File	Arkiv
@@ -192,6 +195,7 @@
 	Goes to	Går till
 	Hands on finished parts while down	Lämnar vidare färdiga detaljer även vid haveri
 	Header	Toppfält
+	Health check	Hälsokontroll
 	Help	Hjälp
 	Hide Others	Göm övriga
 	Hide {app}	Göm {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hur många detaljer kunderna vill ha från dessa avgångar; resultaten visar då takten (tillgänglig tid delad med efterfrågan) och varje uppgifts cykeltid.
 	In use	Används
 	Inside over time	Inne över tid
+	Job under way on a server taken out:	Pågående jobb på en server som tas ur drift:
 	Jump	Gå
 	Jump to time	Gå till tidpunkt
+	Keep at least in service	Behåll minst i drift
 	Keep the time, without the estimate it came from	Behåll tiden, utan uppskattningen den kom från
 	Keyboard Shortcuts…	Kortkommandon…
 	Keyboard shortcuts saved	Tangentbordsgenvägar sparade
@@ -227,6 +233,7 @@
 	Mean queue length	Genomsnittlig kölängd
 	Mean time blocked	Genomsnittlig blockeringstid
 	Mean time in system	Genomsnittlig tid i systemet
+	Mean units in service	Genomsnittligt antal enheter i drift
 	Mean wait	Genomsnittlig väntetid
 	Mean wait before giving up	Genomsnittlig väntetid innan de gav upp
 	Metric	Mått
@@ -279,6 +286,7 @@
 	Opened {file}	Öppnade {file}
 	Open…	Öppna…
 	Or start from an example	Eller börja med ett exempel
+	Out for (restart)	Ur drift i (omstart)
 	PERT	PERT
 	PNG image	PNG-bild
 	Parameter	Parameter
@@ -355,6 +363,8 @@
 	Result with a target	Resultat med mål
 	Result, down and up	Resultat, nedåt och uppåt
 	Results	Resultat
+	Resume after restart	Återuppta efter omstart
+	Retry elsewhere	Försök igen på annat håll
 	Rework	Omarbetning
 	Rework on {id}	Omarbetning på {id}
 	Rework ratio	Omarbetningsandel
@@ -430,6 +440,7 @@
 	Sun	sön
 	Sweep a parameter	Svep en parameter
 	Table stripes	Tabellränder
+	Take servers out when overloaded	Ta servrar ur drift vid överbelastning
 	Takt	Takt
 	Takt time	Takttid
 	Tandem line	Tandemlinje
@@ -442,6 +453,8 @@
 	Text	Text
 	Text on accent	Text på accent
 	Text on header	Text på toppfält
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Anslutningen bryts och klienten försöker igen: entiteten går genast tillbaka först i kön, och arbetet som gjorts på den är bortkastat.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteten väntar vid sin server och jobbet fortsätter med det som var kvar när servern är tillbaka.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet når under målandelen {share}, så det är inte visat med 95 % säkerhet att andelen nås; fler replikationer skulle göra det smalare.
 	The last task with a resource it finished at	Den sista uppgiften med resurs som detaljen gick igenom
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Den genomsnittliga tiden till stoppvillkoret gäller bara replikationerna som nådde det; de övriga körde till sin tidsgräns.
@@ -466,6 +479,7 @@
 	Time failed	Tid i haveri
 	Time off shift	Tid utanför skift
 	Time processing	Tid i bearbetning
+	Time restarting	Tid i omstart
 	Time setting up	Tid i omställning
 	Time starved	Tid utan arbete
 	Time to failure	Tid till haveri
@@ -488,6 +502,7 @@
 	Unit	Enhet
 	Units	Enheter
 	Units by calendar	Enheter per kalender
+	Units taken out by health checks	Enheter tagna ur drift av hälsokontroller
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Resursenheter som flera uppgifter delar. En uppgift med delade resurser tar dem från en pool eller efter roll.
 	Untitled	Namnlös
 	Untitled model	Namnlös modell
@@ -519,7 +534,7 @@
 	Whole number	Heltal
 	Window	Fönster
 	With every time at its mean: {units}	Med varje tid på sitt medelvärde: {units}
-	Work wasted on those who gave up	Bortkastat arbete på dem som gav upp
+	Work wasted on jobs that did not finish	Bortkastat arbete på jobb som inte blev klara
 	XPDL with BPSim	XPDL med BPSim
 	Yes or no	Ja eller nej
 	Your changes will be lost if you don't save them.	Dina ändringar går förlorade om du inte sparar dem.

@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Als u de tijdseenheid wijzigt, worden bestaande tijden in het model niet omgerekend.
 	Chart	Grafiek
 	Chart hover	Grafiek onder aanwijzer
+	Check every	Controle elke
 	Choose…	Kies…
 	Clear Menu	Menu wissen
 	Close	Sluiten
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Elke analyse voert het experiment meerdere keren uit met dezelfde startwaarde, zodat de verschillen van de wijziging komen, niet van toeval. Dit kan even duren.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Elke entiteit neemt in één keer het eerste van deze alternatieven waaraan nu kan worden voldaan, en geeft de eenheden terug wanneer ze vertrekt.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Elke entiteit wacht hier hoogstens een tijd die bij aankomst willekeurig voor haar wordt getrokken, en haakt dan af: ze neemt de uitgang gemarkeerd als ‘Afgehaakt’ of verlaat het model.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Elke server (eenheid) wordt af en toe gecontroleerd, zoals een load balancer de servers achter zich peilt. Een server die zakt, met te veel wachtenden, wordt voor een herstart uit dienst genomen en komt daarna terug.
 	Edit	Bewerken
 	Edit themes…	Thema's bewerken…
 	Elasticity	Elasticiteit
@@ -172,6 +174,7 @@
 	Export table (CSV)	Tabel exporteren (CSV)
 	Exported {file}	{file} geëxporteerd
 	Expression	Expressie
+	Fails above, waiting per working server	Zakt boven (wachtenden per server in dienst)
 	Failure interrupts the job	Storing onderbreekt de bewerking
 	Family	Familie
 	File	Bestand
@@ -192,6 +195,7 @@
 	Goes to	Gaat naar
 	Hands on finished parts while down	Geeft gerede onderdelen door tijdens storing
 	Header	Kopbalk
+	Health check	Statuscontrole
 	Help	Help
 	Hide Others	Anderen verbergen
 	Hide {app}	{app} verbergen
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hoeveel onderdelen klanten van deze vertrekken willen; de resultaten tonen dan de takt (de beschikbare tijd gedeeld door de vraag) en de cyclustijd van elke taak.
 	In use	In gebruik
 	Inside over time	Binnen in de tijd
+	Job under way on a server taken out:	Bewerking in uitvoering op een server die uit dienst gaat:
 	Jump	Ga
 	Jump to time	Ga naar tijdstip
+	Keep at least in service	Minstens in dienst houden
 	Keep the time, without the estimate it came from	De tijd houden, zonder de schatting waar hij vandaan komt
 	Keyboard Shortcuts…	Sneltoetsen…
 	Keyboard shortcuts saved	Sneltoetsen opgeslagen
@@ -227,6 +233,7 @@
 	Mean queue length	Gemiddelde wachtrijlengte
 	Mean time blocked	Gemiddelde blokkeringstijd
 	Mean time in system	Gemiddelde tijd in het systeem
+	Mean units in service	Gemiddeld aantal eenheden in dienst
 	Mean wait	Gemiddelde wachttijd
 	Mean wait before giving up	Gemiddelde wachttijd tot afhaken
 	Metric	Metriek
@@ -279,6 +286,7 @@
 	Opened {file}	{file} geopend
 	Open…	Openen…
 	Or start from an example	Of begin met een voorbeeld
+	Out for (restart)	Uit dienst gedurende (herstart)
 	PERT	PERT
 	PNG image	PNG-afbeelding
 	Parameter	Parameter
@@ -355,6 +363,8 @@
 	Result with a target	Resultaat met doel
 	Result, down and up	Resultaat, omlaag en omhoog
 	Results	Resultaten
+	Resume after restart	Hervatten na herstart
+	Retry elsewhere	Elders opnieuw proberen
 	Rework	Herbewerking
 	Rework on {id}	Herbewerking op {id}
 	Rework ratio	Herbewerkingsaandeel
@@ -430,6 +440,7 @@
 	Sun	zo
 	Sweep a parameter	Eén parameter variëren
 	Table stripes	Tabelstrepen
+	Take servers out when overloaded	Overbelaste servers uit dienst nemen
 	Takt	Takt
 	Takt time	Takttijd
 	Tandem line	Tandemlijn
@@ -442,6 +453,8 @@
 	Text	Tekst
 	Text on accent	Tekst op accent
 	Text on header	Tekst op kopbalk
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	De verbinding valt weg en de client probeert het opnieuw: de entiteit gaat meteen terug naar de kop van de wachtrij, en het werk dat eraan gedaan is, is verspild.
+	The entity waits on its server and the job carries on with what was left once the server is back.	De entiteit wacht bij haar server en de bewerking gaat verder met wat er over was zodra de server terug is.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Het interval reikt tot onder het doelaandeel van {share}, dus het is niet met 95% betrouwbaarheid aangetoond dat het aandeel wordt gehaald; meer herhalingen zouden het smaller maken.
 	The last task with a resource it finished at	De laatste taak met een hulpbron die het onderdeel doorliep
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	De gemiddelde tijd tot de stopvoorwaarde is alleen over de herhalingen die haar haalden; de andere liepen tot hun tijdslimiet.
@@ -466,6 +479,7 @@
 	Time failed	Tijd in storing
 	Time off shift	Tijd buiten werktijd
 	Time processing	Tijd in bewerking
+	Time restarting	Tijd in herstart
 	Time setting up	Tijd met omstellen
 	Time starved	Tijd zonder werk
 	Time to failure	Tijd tot storing
@@ -488,6 +502,7 @@
 	Unit	Eenheid
 	Units	Eenheden
 	Units by calendar	Eenheden per kalender
+	Units taken out by health checks	Door statuscontroles uit dienst genomen eenheden
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Eenheden die door meerdere taken worden gedeeld. Een taak met gedeelde hulpbronnen neemt ze per pool of per rol.
 	Untitled	Naamloos
 	Untitled model	Naamloos model
@@ -519,7 +534,7 @@
 	Whole number	Geheel getal
 	Window	Venster
 	With every time at its mean: {units}	Met elke tijd op zijn gemiddelde: {units}
-	Work wasted on those who gave up	Verspild werk aan afhakers
+	Work wasted on jobs that did not finish	Verspild werk aan onvoltooide bewerkingen
 	XPDL with BPSim	XPDL met BPSim
 	Yes or no	Ja of nee
 	Your changes will be lost if you don't save them.	Je wijzigingen gaan verloren als je ze niet opslaat.

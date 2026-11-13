@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Zmiana jednostki czasu nie przelicza czasów już zapisanych w modelu.
 	Chart	Wykres
 	Chart hover	Wykres pod wskaźnikiem
+	Check every	Kontrola co
 	Choose…	Wybierz…
 	Clear Menu	Wyczyść menu
 	Close	Zamknij
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Każda analiza uruchamia eksperyment kilka razy z tym samym ziarnem, więc różnice wynikają ze zmiany, a nie z przypadku. Może to chwilę potrwać.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Każda jednostka bierze pierwszy z tych wariantów, który można teraz spełnić, wszystko naraz, i oddaje zajęte zasoby, gdy wychodzi.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Każda jednostka czeka tu najwyżej czas wylosowany dla niej przy przybyciu, a potem rezygnuje: idzie wyjściem oznaczonym „Rezygnacje” albo opuszcza model.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Każdy serwer (zasób) jest co jakiś czas sprawdzany, tak jak system równoważenia obciążenia odpytuje serwery stojące za nim. Serwer, który nie przejdzie kontroli, bo czeka na niego za dużo jednostek, zostaje wyłączony na ponowne uruchomienie, a potem wraca.
 	Edit	Edycja
 	Edit themes…	Edytuj motywy…
 	Elasticity	Elastyczność
@@ -172,6 +174,7 @@
 	Export table (CSV)	Eksportuj tabelę (CSV)
 	Exported {file}	Wyeksportowano {file}
 	Expression	Wyrażenie
+	Fails above, waiting per working server	Niezaliczona powyżej (czekających na czynny serwer)
 	Failure interrupts the job	Awaria przerywa pracę
 	Family	Rodzina
 	File	Plik
@@ -192,6 +195,7 @@
 	Goes to	Prowadzi do
 	Hands on finished parts while down	Przekazuje gotowe części także podczas awarii
 	Header	Nagłówek
+	Health check	Kontrola stanu
 	Help	Pomoc
 	Hide Others	Ukryj pozostałe
 	Hide {app}	Ukryj {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Ile części klienci chcą z tych wyjść; wyniki pokazują wtedy takt (dostępny czas podzielony przez popyt) i czas cyklu każdego zadania.
 	In use	W użyciu
 	Inside over time	Wewnątrz w czasie
+	Job under way on a server taken out:	Praca w toku na wyłączanym serwerze:
 	Jump	Przejdź
 	Jump to time	Przejdź do chwili
+	Keep at least in service	Co najmniej czynnych
 	Keep the time, without the estimate it came from	Zachowaj czas, bez szacunku, z którego pochodzi
 	Keyboard Shortcuts…	Skróty klawiaturowe…
 	Keyboard shortcuts saved	Zapisano skróty klawiaturowe
@@ -227,6 +233,7 @@
 	Mean queue length	Średnia długość kolejki
 	Mean time blocked	Średni czas blokowania
 	Mean time in system	Średni czas w systemie
+	Mean units in service	Średnia liczba czynnych zasobów
 	Mean wait	Średni czas oczekiwania
 	Mean wait before giving up	Średni czas oczekiwania do rezygnacji
 	Metric	Miara
@@ -279,6 +286,7 @@
 	Opened {file}	Otwarto {file}
 	Open…	Otwórz…
 	Or start from an example	Lub rozpocznij od przykładu
+	Out for (restart)	Czas wyłączenia (ponowne uruchomienie)
 	PERT	PERT
 	PNG image	Obraz PNG
 	Parameter	Parametr
@@ -355,6 +363,8 @@
 	Result with a target	Wynik z celem
 	Result, down and up	Wynik, w dół i w górę
 	Results	Wyniki
+	Resume after restart	Wznów po ponownym uruchomieniu
+	Retry elsewhere	Ponów gdzie indziej
 	Rework	Poprawki
 	Rework on {id}	Poprawki na {id}
 	Rework ratio	Udział poprawek
@@ -430,6 +440,7 @@
 	Sun	niedz
 	Sweep a parameter	Przegląd parametru
 	Table stripes	Pasy tabel
+	Take servers out when overloaded	Wyłączanie przeciążonych serwerów
 	Takt	Takt
 	Takt time	Czas taktu
 	Tandem line	Linia tandemowa
@@ -442,6 +453,8 @@
 	Text	Tekst
 	Text on accent	Tekst na akcencie
 	Text on header	Tekst na nagłówku
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Połączenie zostaje zerwane i klient próbuje ponownie: jednostka od razu wraca na początek kolejki, a wykonana na niej praca jest zmarnowana.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Jednostka czeka przy swoim serwerze, a praca jest kontynuowana od tego, co zostało, gdy serwer wróci.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Przedział sięga poniżej udziału docelowego {share}, więc nie wykazano z 95% ufnością, że udział jest osiągnięty; więcej replikacji by go zawęziło.
 	The last task with a resource it finished at	Ostatnie zadanie z zasobem, przez które przeszła część
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Średni czas do warunku zatrzymania dotyczy tylko replikacji, które go spełniły; pozostałe trwały do swojego limitu czasu.
@@ -466,6 +479,7 @@
 	Time failed	Czas awarii
 	Time off shift	Czas poza zmianą
 	Time processing	Czas przetwarzania
+	Time restarting	Czas ponownego uruchamiania
 	Time setting up	Czas przezbrajania
 	Time starved	Czas bez pracy
 	Time to failure	Czas do awarii
@@ -488,6 +502,7 @@
 	Unit	Jednostka
 	Units	Jednostki
 	Units by calendar	Jednostki według kalendarza
+	Units taken out by health checks	Zasoby wyłączone przez kontrole stanu
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Zasoby współdzielone przez kilka zadań. Zadanie ze współdzielonymi zasobami pobiera je z puli lub według roli.
 	Untitled	Bez tytułu
 	Untitled model	Model bez tytułu
@@ -519,7 +534,7 @@
 	Whole number	Liczba całkowita
 	Window	Okno
 	With every time at its mean: {units}	Przy każdym czasie równym średniej: {units}
-	Work wasted on those who gave up	Praca zmarnowana na rezygnujących
+	Work wasted on jobs that did not finish	Praca zmarnowana na niedokończonych pracach
 	XPDL with BPSim	XPDL z BPSim
 	Yes or no	Tak lub nie
 	Your changes will be lost if you don't save them.	Jeśli nie zapiszesz zmian, zostaną utracone.

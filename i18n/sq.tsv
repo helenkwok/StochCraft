@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Ndryshimi i njësisë së kohës nuk i konverton kohët që gjenden tashmë në model.
 	Chart	Grafik
 	Chart hover	Grafik nën tregues
+	Check every	Kontrollo çdo
 	Choose…	Zgjidh…
 	Clear Menu	Pastro menynë
 	Close	Mbyll
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Çdo analizë e ekzekuton eksperimentin disa herë me të njëjtën farë, kështu që ndryshimet vijnë nga ndryshimi, jo nga rastësia. Mund të zgjasë pak.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Çdo entitet merr njëherësh të plotë të parën nga këto alternativa që mund të plotësohet në atë çast dhe i kthen njësitë kur largohet.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Çdo entitet pret këtu të shumtën një kohë të hedhur në short për të kur mbërrin, pastaj heq dorë: merr daljen e shënuar „Hoqën dorë” ose largohet nga modeli.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Çdo server (njësi) kontrollohet herë pas here, ashtu si një balancues i ngarkesës kontrollon serverët pas tij. Ai që dështon, me shumë në pritje, nxirret nga puna për një rinisje, pastaj kthehet.
 	Edit	Redakto
 	Edit themes…	Redakto temat…
 	Elasticity	Elasticiteti
@@ -172,6 +174,7 @@
 	Export table (CSV)	Eksporto tabelën (CSV)
 	Exported {file}	U eksportua {file}
 	Expression	Shprehje
+	Fails above, waiting per working server	Dështon mbi (në pritje për server në punë)
 	Failure interrupts the job	Defekti ndërpret punën
 	Family	Familja
 	File	Skedar
@@ -192,6 +195,7 @@
 	Goes to	Shkon te
 	Hands on finished parts while down	Kalon pjesët e përfunduara edhe në defekt
 	Header	Shirit i kokës
+	Health check	Kontrolli i gjendjes
 	Help	Ndihmë
 	Hide Others	Fshih të tjerat
 	Hide {app}	Fshih {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Sa pjesë duan klientët nga këto largime; rezultatet tregojnë atëherë taktin (kohën e disponueshme pjesëtuar me kërkesën) dhe kohën e ciklit të çdo detyre.
 	In use	Në përdorim
 	Inside over time	Brenda gjatë kohës
+	Job under way on a server taken out:	Punë në vazhdim në një server të nxjerrë nga puna:
 	Jump	Shko
 	Jump to time	Shko te koha
+	Keep at least in service	Mbaj në punë të paktën
 	Keep the time, without the estimate it came from	Mbaj kohën, pa vlerësimin nga erdhi
 	Keyboard Shortcuts…	Shkurtoret e tastierës…
 	Keyboard shortcuts saved	Shkurtoret e tastierës u ruajtën
@@ -227,6 +233,7 @@
 	Mean queue length	Gjatësia mesatare e radhës
 	Mean time blocked	Koha mesatare e bllokimit
 	Mean time in system	Koha mesatare në sistem
+	Mean units in service	Numri mesatar i njësive në punë
 	Mean wait	Pritja mesatare
 	Mean wait before giving up	Pritja mesatare para heqjes dorë
 	Metric	Tregues
@@ -279,6 +286,7 @@
 	Opened {file}	U hap {file}
 	Open…	Hap…
 	Or start from an example	Ose filloni me një shembull
+	Out for (restart)	Jashtë pune për (rinisje)
 	PERT	PERT
 	PNG image	Imazh PNG
 	Parameter	Parametri
@@ -355,6 +363,8 @@
 	Result with a target	Rezultati me objektiv
 	Result, down and up	Rezultati, poshtë dhe lart
 	Results	Rezultatet
+	Resume after restart	Vazhdo pas rinisjes
+	Retry elsewhere	Provo sërish diku tjetër
 	Rework	Ripunim
 	Rework on {id}	Ripunim në {id}
 	Rework ratio	Raporti i ripunimit
@@ -430,6 +440,7 @@
 	Sun	Die
 	Sweep a parameter	Skano një parametër
 	Table stripes	Vija tabelash
+	Take servers out when overloaded	Nxirr nga puna serverët e mbingarkuar
 	Takt	Takt
 	Takt time	Koha e taktit
 	Tandem line	Linja në seri
@@ -442,6 +453,8 @@
 	Text	Tekst
 	Text on accent	Tekst mbi theksin
 	Text on header	Tekst në shiritin e kokës
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Lidhja bie dhe klienti provon sërish: entiteti kthehet menjëherë në krye të radhës, dhe puna e bërë mbi të humbet.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteti pret te serveri i tij dhe puna vazhdon me atë që kishte mbetur sapo serveri kthehet.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervali zbret nën pjesën objektiv prej {share}, ndaj nuk tregohet me besueshmëri 95% se pjesa arrihet; më shumë përsëritje do ta ngushtonin.
 	The last task with a resource it finished at	Detyra e fundit me burim nëpër të cilën kaloi pjesa
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Koha mesatare deri te kushti i ndalimit është vetëm mbi përsëritjet që e arritën; të tjerat shkuan deri në kufirin e kohës.
@@ -466,6 +479,7 @@
 	Time failed	Koha në defekt
 	Time off shift	Koha jashtë turnit
 	Time processing	Koha e përpunimit
+	Time restarting	Koha në rinisje
 	Time setting up	Koha në përgatitje
 	Time starved	Koha pa punë
 	Time to failure	Koha deri në defekt
@@ -488,6 +502,7 @@
 	Unit	Njësia
 	Units	Njësitë
 	Units by calendar	Njësitë sipas kalendarit
+	Units taken out by health checks	Njësi të nxjerra nga puna nga kontrollet e gjendjes
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Njësi që përdoren të përbashkëta nga disa detyra. Një detyrë me burime të përbashkëta i merr sipas grupit ose sipas rolit.
 	Untitled	Pa titull
 	Untitled model	Model pa titull
@@ -519,7 +534,7 @@
 	Whole number	Numër i plotë
 	Window	Dritarja
 	With every time at its mean: {units}	Me çdo kohë në mesataren e saj: {units}
-	Work wasted on those who gave up	Punë e humbur për ata që hoqën dorë
+	Work wasted on jobs that did not finish	Punë e humbur për punë të papërfunduara
 	XPDL with BPSim	XPDL me BPSim
 	Yes or no	Po ose jo
 	Your changes will be lost if you don't save them.	Ndryshimet do të humbasin nëse nuk i ruani.

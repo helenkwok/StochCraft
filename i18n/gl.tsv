@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Cambiar a unidade de tempo non converte os tempos xa definidos no modelo.
 	Chart	Gráfico
 	Chart hover	Gráfico baixo o punteiro
+	Check every	Comprobar cada
 	Choose…	Escoller…
 	Clear Menu	Baleirar menú
 	Close	Pechar
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Cada análise executa o experimento varias veces coa mesma semente, así que as diferenzas veñen do cambio, non do azar. Pode tardar un pouco.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entidade toma, toda á vez, a primeira destas alternativas que se poida cumprir nese momento e devolve as unidades ao saír.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Cada entidade agarda aquí como máximo un tempo que se lle asigna ao chou ao chegar, e despois abandona: toma a saída marcada como «Abandonadas» ou sae do modelo.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Cada servidor (unidade) compróbase cada certo tempo, como un balanceador de carga sondea os servidores que ten detrás. O que falla, con demasiadas entidades á espera, retírase de servizo para un reinicio e despois volve.
 	Edit	Editar
 	Edit themes…	Editar temas…
 	Elasticity	Elasticidade
@@ -172,6 +174,7 @@
 	Export table (CSV)	Exportar táboa (CSV)
 	Exported {file}	Exportouse {file}
 	Expression	Expresión
+	Fails above, waiting per working server	Falla por riba de, á espera por servidor en servizo
 	Failure interrupts the job	A avaría interrompe o traballo
 	Family	Familia
 	File	Ficheiro
@@ -192,6 +195,7 @@
 	Goes to	Vai a
 	Hands on finished parts while down	Pasa as pezas rematadas durante a avaría
 	Header	Cabeceira
+	Health check	Comprobación de estado
 	Help	Axuda
 	Hide Others	Ocultar outros
 	Hide {app}	Ocultar {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Cantas pezas queren os clientes destas saídas; os resultados amosan entón o takt (o tempo dispoñible dividido pola demanda) e o tempo de ciclo de cada tarefa.
 	In use	En uso
 	Inside over time	Dentro ao longo do tempo
+	Job under way on a server taken out:	Traballo en curso nun servidor retirado:
 	Jump	Ir
 	Jump to time	Ir ao instante
+	Keep at least in service	Manter en servizo polo menos
 	Keep the time, without the estimate it came from	Manter o tempo, sen a estimación da que procede
 	Keyboard Shortcuts…	Atallos de teclado…
 	Keyboard shortcuts saved	Atallos de teclado gardados
@@ -227,6 +233,7 @@
 	Mean queue length	Lonxitude media da cola
 	Mean time blocked	Tempo medio bloqueado
 	Mean time in system	Tempo medio no sistema
+	Mean units in service	Número medio de unidades en servizo
 	Mean wait	Espera media
 	Mean wait before giving up	Espera media antes de abandonar
 	Metric	Métrica
@@ -279,6 +286,7 @@
 	Opened {file}	Abriuse {file}
 	Open…	Abrir…
 	Or start from an example	Ou comece cun exemplo
+	Out for (restart)	Fóra de servizo durante (reinicio)
 	PERT	PERT
 	PNG image	Imaxe PNG
 	Parameter	Parámetro
@@ -355,6 +363,8 @@
 	Result with a target	Resultado con obxectivo
 	Result, down and up	Resultado, abaixo e arriba
 	Results	Resultados
+	Resume after restart	Retomar tras o reinicio
+	Retry elsewhere	Reintentar noutro
 	Rework	Retraballo
 	Rework on {id}	Retraballo en {id}
 	Rework ratio	Proporción de retraballo
@@ -430,6 +440,7 @@
 	Sun	dom
 	Sweep a parameter	Varrer un parámetro
 	Table stripes	Franxas de táboa
+	Take servers out when overloaded	Retirar os servidores sobrecargados
 	Takt	Takt
 	Takt time	Tempo takt
 	Tandem line	Liña en tándem
@@ -442,6 +453,8 @@
 	Text	Texto
 	Text on accent	Texto sobre o acento
 	Text on header	Texto na cabeceira
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	A conexión cae e o cliente volve intentalo: a entidade volve de inmediato á cabeza da cola, e o traballo feito nela desperdíciase.
+	The entity waits on its server and the job carries on with what was left once the server is back.	A entidade agarda no seu servidor e o traballo continúa co que quedaba cando o servidor volve.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	O intervalo chega por debaixo da proporción obxectivo do {share}, así que non se demostra cun 95 % de confianza que se cumpra; máis réplicas estreitaríano.
 	The last task with a resource it finished at	A última tarefa con recurso pola que pasou a peza
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	O tempo medio ata a condición de parada é só sobre as réplicas que a cumpriron; as demais chegaron ao seu límite de tempo.
@@ -466,6 +479,7 @@
 	Time failed	Tempo avariado
 	Time off shift	Tempo fóra de quenda
 	Time processing	Tempo procesando
+	Time restarting	Tempo reiniciando
 	Time setting up	Tempo preparando
 	Time starved	Tempo sen traballo
 	Time to failure	Tempo ata a avaría
@@ -488,6 +502,7 @@
 	Unit	Unidade
 	Units	Unidades
 	Units by calendar	Unidades por calendario
+	Units taken out by health checks	Unidades retiradas polas comprobacións de estado
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unidades que comparten varias tarefas. Unha tarefa con recursos compartidos tómaas por grupo ou por rol.
 	Untitled	Sen título
 	Untitled model	Modelo sen título
@@ -519,7 +534,7 @@
 	Whole number	Número enteiro
 	Window	Xanela
 	With every time at its mean: {units}	Con cada tempo na súa media: {units}
-	Work wasted on those who gave up	Traballo desperdiciado nas que abandonaron
+	Work wasted on jobs that did not finish	Traballo desperdiciado en traballos sen rematar
 	XPDL with BPSim	XPDL con BPSim
 	Yes or no	Si ou non
 	Your changes will be lost if you don't save them.	Os seus cambios perderanse se non os garda.

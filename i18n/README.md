@@ -160,14 +160,16 @@ engine's messages (validation, file notes) are English too.
   sr-latn rows (written in ekavian although those catalogs mix in ijekavian forms).
 - The rows for patience (PR "entities that give up waiting": the Patience section of a task, its
   two choices and their hints, the Abandoned mark on a flow, and the Gave up, Share that gave up,
-  Mean wait before giving up, Work wasted on those who gave up and Share of work wasted results)
-  were machine-drafted with Claude Code from the plain meaning of the English and each catalog's
-  existing words for entity, unit, flow, task, service, wait, share, mean, work, way out and model,
-  taken from its rows for the Rework mark, "Each entity takes the first…", "Mean wait" and "Share of
-  arrivals lost". Where a catalog already tells a unit from an entity by a longer word (da and nb
-  ressourceenhed, hi संसाधन इकाई, ka რესურსის ერთეული, ko 자원 단위, zh 资源单元/資源單元) the
-  hint "once a unit takes it, the entity stays" uses that word, and pl, whose entity is
-  "jednostka", says "zasób" as its catalog does. "Abandoned on {id}" follows each catalog's
+  Mean wait before giving up, Work wasted on those who gave up and Share of work wasted results;
+  Work wasted on those who gave up was later renamed Work wasted on jobs that did not finish, see
+  the health-check bullet) were machine-drafted with Claude Code from the plain meaning of the
+  English and each catalog's existing words for entity, unit, flow, task, service, wait, share,
+  mean, work, way out and model, taken from its rows for the Rework mark, "Each entity takes the
+  first…", "Mean wait" and "Share of arrivals lost". Where a catalog already tells a unit from an
+  entity by a longer word (da and nb ressourceenhed, hi संसाधन इकाई, ka რესურსის ერთეული, ko 자원
+  단위, zh 资源单元/資源單元) the hint "once a unit takes it, the entity stays" uses that word, and
+  pl, whose entity is "jednostka", says "zasób" as its catalog does.
+  "Abandoned on {id}" follows each catalog's
   "Rework on {id}", and the hint naming "the way out marked Abandoned" quotes the same word as the
   mark. Most catalogs use one verb for giving up throughout; id, lt, ru, uk and te say "stop
   waiting" for the checkbox and a leave or withdraw verb for the rest. The queueing term is reneging (in call
@@ -220,6 +222,76 @@ engine's messages (validation, file notes) are English too.
   "StochCraft" stays as it is in every language. Not checked against IATE, and not reviewed by
   native speakers. The least certain are lo, th, ta, te, kk, ka, bn and sq, and the calques for
   Raised surfaces, Side rail, Table stripes and Soft accent everywhere.
+- The rows for health checks (PR "health check": the Health check section of a task, its checkbox
+  Take servers out when overloaded and its hint, the fields Check every, Fails above, waiting per
+  working server, Out for (restart) and Keep at least in service, the choice for a job under way
+  on a server taken out, Retry elsewhere or Resume after restart, with their hints, and the Units
+  taken out by health checks, Mean units in service, Time restarting and Work wasted on jobs that
+  did not finish results) were machine-drafted with Claude Code from the plain meaning of the
+  English and each catalog's existing words for unit, entity, client, job, queue, wait, mean and
+  wasted work, taken from its rows for the patience hint "A client that times out…", "Units that
+  several tasks share…", "Each entity takes the first…", "Mean queue length", "Mean number
+  inside" and "Work wasted on those who gave up". That last row is gone from every catalog; its
+  successor keeps the same words for wasted work. "Time restarting" is phrased like the catalog's
+  "Time failed", and the longer unit words (da ressourceenhed, nb ressursenhet, hi संसाधन इकाई, ka
+  რესურსის ერთეული, ko 자원 단위, zh 资源单元/資源單元, pl zasób) are kept. "In service" means in
+  operation, not being served: de in Betrieb, nl in dienst, sv, da and nb i drift, cs v provozu,
+  sk v prevádzke, ru в работе, uk у роботі, ja 稼働, zh-hans 在线, zh-hant 上線; es, ca, gl, pt-br,
+  it, fr and tr keep their service word ("en servicio", "in servizio", "en service", "hizmet
+  dışı"), as that is the idiom there. Most catalogs use one word for both work and job, so "Work
+  wasted on jobs that did not finish" repeats it (es trabajo, it lavoro, cs and sk práce, pl
+  praca, id pekerjaan, vi công việc, sq punë); bg, ru and uk say "unfinished service" and nl
+  "unfinished bewerkingen" instead, and sl says opravila because "delih" would also read as
+  "parts". No catalog had a word for server. The sources checked were Wikipedia's articles on
+  load balancing (computing), server (computing), reboot, failover and downtime in their
+  interlanguage versions, searched by keyword for the health check, and IATE for load balancing,
+  load balancer, health check, server, reboot, restart, retry and out of service. IATE had
+  nothing for load balancer or reboot, and for load balancing only fr équilibrage de la charge
+  and nl load balancing. Server is the server article's title (bg сървър, el εξυπηρετητής, where
+  IATE also has διακομιστής, fi palvelin, hr poslužitelj, sl strežnik, ta வழங்கி, tr sunucu, vi
+  máy chủ, ja サーバ, zh 服务器, and server, serveur, servidor, serwer, сервер elsewhere), and IATE
+  agrees for the EU languages; zh-hant says 伺服器 (Taiwan usage), id keeps "server" though its
+  article says peladen, te says సర్వర్ though its article says పరిచారిక, sq, with no article, says
+  server, and lo, with no article, says ແມ່ຂ່າຍ to pair with the catalog's ລູກຂ່າຍ for client. The
+  keyword search found the health check named only in the de (Healthchecks), et
+  (tervisekontroll), ru (Проверка работоспособности) and zh (健康检查) articles, and those catalogs
+  use that term; sk's article keeps the English "health checking", ja's describes keepalive
+  monitoring (監視) without a name for it, and IATE has health check only in medical and
+  farm-policy senses, which were not used. Elsewhere the heading is the plain "check of the
+  state" (Kontrola stavu, Comprobación de estado, Statuscontrole, 상태 검사, …), except the
+  unsourced ja ヘルスチェック, uk Перевірка працездатності (ru's term; uk's article has none), and
+  the calques fr contrôle de santé, sv hälsokontroll, da sundhedstjek and nb helsesjekk. The load
+  balancer is the article's own noun where it has one: de, nl, bs and sk load balancer, fr
+  répartiteur de charge, es balanceador de carga, ca distribuïdor de
+  càrrega, cs vyvažovač zátěže, hu terheléselosztó, et koormusjaotur, tr yük dengeleyici, ru
+  балансировщик, hi लोड बैलेंसर, ja ロードバランサ and zh 负载均衡器. pl system równoważenia
+  obciążenia, gl and pt-br balanceador de carga, it bilanciatore di carico, fi kuormantasaaja, uk
+  балансувальник навантаження, ko 부하 분산기, el εξισορροπητής φόρτου and nb lastbalanserer are
+  formed from their articles' titles, whose text has no noun for the device; bg, bn, da, hr, id,
+  ka, kk, lo, lt, ro, sl, sq, sr, sr-latn, sv, ta, te, th and vi have no load-balancing article,
+  so their load balancer and health check were not checked against one. Restart follows IATE
+  or the reboot article where either has it: de Neustart, fr redémarrage, it riavvio, nl herstart, el
+  επανεκκίνηση, fi uudelleenkäynnistys, sl ponovni zagon, sv omstart, da genstart, pt-br
+  reinício, ca reinici, ru перезагрузка, uk перезавантаження, ja 再起動, ko 재기동, vi khởi động
+  lại, zh 重新启动/重新啟動. es and gl say reinicio where IATE gives rearranque and reanudación, id
+  says mulai ulang for its article's "mulai-awal ulang", bn says পুনরায় চালু and cs restart
+  where their articles' titles are রিবুট and Reboot, and ka says ხელახალი გაშვება because
+  გადატვირთვა (reboot) also means "overloaded". IATE's retry gave es reintentar, el νέα
+  προσπάθεια, nl opnieuw proberen and fi yrittää uudelleen, which are used, and its out of
+  service gave de außer Betrieb, fr hors service, it fuori servizio, es fuera de servicio and
+  retirar de servicio, pt fora de serviço and el εκτός λειτουργίας, also used; the other languages
+  have the plain meaning. "Fails above, waiting per working server" is hard to say briefly: most
+  catalogs put the "waiting per server in operation" part after a comma or in brackets, and bn,
+  hi, hu, ja, kk, ko, ta, te, tr and zh begin with "failure threshold". The colon after "Job under
+  way on a server taken out" follows each catalog's "Drag to add:" (fr with a space, zh
+  full-width). Check every, Fails above…, Out for (restart) and Keep at least in service are
+  field labels in form.rs, which the catalog test's source scan does not see and which none of
+  the screens it draws shows (the section opens only for a task with a health check, and no
+  example has one), so as far as can be told from reading the test, it does not check their rows.
+  Not reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka, kk and sq as
+  before, the unsourced health-check words above, the load-balancer nouns formed from titles,
+  the "Fails above…" label everywhere, and sr and sr-latn, written in ekavian but keeping the
+  catalogs' Prosječan and Vrijeme in the rows that follow "Mean number inside" and "Time failed".
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

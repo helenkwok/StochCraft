@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	更改时间单位不会换算模型中已有的时间值。
 	Chart	图表
 	Chart hover	悬停时的图表
+	Check every	检查间隔
 	Choose…	选择…
 	Clear Menu	清除菜单
 	Close	关闭
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	每项分析用同一随机种子多次运行实验，因此差异来自改动而不是偶然。可能需要一些时间。
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	每个实体会选取其中第一个当前能一次全部满足的方案，并在离开时归还这些资源单元。
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	每个实体在此最多等待到达时为其随机抽取的时间，然后放弃：它走标记为“放弃”的出口，或离开模型。
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	每台服务器（资源单元）每隔一段时间检查一次，就像负载均衡器探测其后的服务器一样。检查失败（等待者过多）的服务器会下线重新启动，然后恢复。
 	Edit	编辑
 	Edit themes…	编辑主题…
 	Elasticity	弹性
@@ -172,6 +174,7 @@
 	Export table (CSV)	导出表格 (CSV)
 	Exported {file}	已导出 {file}
 	Expression	表达式
+	Fails above, waiting per working server	失败阈值（每台在线服务器的等待数）
 	Failure interrupts the job	故障中断作业
 	Family	分布族
 	File	文件
@@ -192,6 +195,7 @@
 	Goes to	流向
 	Hands on finished parts while down	故障时仍移交完成的工件
 	Header	顶栏
+	Health check	健康检查
 	Help	帮助
 	Hide Others	隐藏其他
 	Hide {app}	隐藏 {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	客户希望从这些离开处获得多少件；结果随后会显示节拍（可用时间除以需求）和每个任务的周期时间。
 	In use	使用中
 	Inside over time	内部数量随时间变化
+	Job under way on a server taken out:	下线服务器上进行中的作业：
 	Jump	跳转
 	Jump to time	跳转到时间
+	Keep at least in service	至少保持在线
 	Keep the time, without the estimate it came from	保留时间，去掉其来源估计
 	Keyboard Shortcuts…	键盘快捷键…
 	Keyboard shortcuts saved	键盘快捷键已保存
@@ -227,6 +233,7 @@
 	Mean queue length	平均队列长度
 	Mean time blocked	平均阻塞时间
 	Mean time in system	系统内平均时间
+	Mean units in service	平均在线资源单元数
 	Mean wait	平均等待时间
 	Mean wait before giving up	放弃前的平均等待时间
 	Metric	指标
@@ -279,6 +286,7 @@
 	Opened {file}	已打开 {file}
 	Open…	打开…
 	Or start from an example	或从示例开始
+	Out for (restart)	下线时长（重新启动）
 	PERT	PERT
 	PNG image	PNG 图像
 	Parameter	参数
@@ -355,6 +363,8 @@
 	Result with a target	有目标的结果
 	Result, down and up	结果（调低与调高）
 	Results	结果
+	Resume after restart	重新启动后继续
+	Retry elsewhere	到别处重试
 	Rework	返工
 	Rework on {id}	{id} 上的返工
 	Rework ratio	返工率
@@ -430,6 +440,7 @@
 	Sun	周日
 	Sweep a parameter	扫描一个参数
 	Table stripes	表格条纹
+	Take servers out when overloaded	过载时将服务器下线
 	Takt	节拍
 	Takt time	节拍时间
 	Tandem line	串联流程
@@ -442,6 +453,8 @@
 	Text	文本
 	Text on accent	强调色上的文本
 	Text on header	顶栏文本
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	连接断开，客户端重试：实体立即回到队列最前面，已对其完成的工作被浪费。
+	The entity waits on its server and the job carries on with what was left once the server is back.	实体在其服务器上等待，服务器恢复后作业从剩余部分继续。
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	该区间低于目标比例 {share}，因此未能以 95% 的置信度表明达到了该比例；更多的重复运行会使区间变窄。
 	The last task with a resource it finished at	最后经过的需要资源的任务
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	到停止条件的平均时间只基于达到停止条件的重复运行；其余的运行到了时间上限。
@@ -466,6 +479,7 @@
 	Time failed	故障时间
 	Time off shift	非当班时间
 	Time processing	加工时间
+	Time restarting	重新启动时间
 	Time setting up	换型占用时间
 	Time starved	待料时间
 	Time to failure	故障前时间
@@ -488,6 +502,7 @@
 	Unit	单位
 	Units	数量
 	Units by calendar	按日历的数量
+	Units taken out by health checks	被健康检查下线的资源单元
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	由多个任务共享的资源单元。需要共享资源的任务按资源池或按角色获取这些单元。
 	Untitled	未命名
 	Untitled model	未命名模型
@@ -519,7 +534,7 @@
 	Whole number	整数
 	Window	窗口
 	With every time at its mean: {units}	所有时间取均值时：{units}
-	Work wasted on those who gave up	在放弃者身上浪费的工作
+	Work wasted on jobs that did not finish	在未完成作业上浪费的工作
 	XPDL with BPSim	带 BPSim 的 XPDL
 	Yes or no	是或否
 	Your changes will be lost if you don't save them.	如果不存储，你的更改将会丢失。

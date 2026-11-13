@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	การเปลี่ยนหน่วยเวลาไม่แปลงค่าเวลาที่มีอยู่ในแบบจำลอง
 	Chart	แผนภูมิ
 	Chart hover	แผนภูมิเมื่อชี้
+	Check every	ตรวจทุก
 	Choose…	เลือก…
 	Clear Menu	ล้างเมนู
 	Close	ปิด
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	การวิเคราะห์แต่ละแบบรันการทดลองหลายครั้งด้วยเมล็ดสุ่มเดียวกัน ความแตกต่างจึงมาจากการเปลี่ยนแปลง ไม่ใช่ความบังเอิญ อาจใช้เวลาสักครู่
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	แต่ละเอนทิตีจะใช้ทางเลือกแรกที่จัดหาให้ได้ครบทั้งหมดพร้อมกันในทันที และคืนหน่วยเหล่านั้นเมื่อออกไป
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	แต่ละเอนทิตีจะรอที่นี่ไม่เกินเวลาที่สุ่มให้เมื่อมาถึง แล้วจึงเลิกรอ: เอนทิตีจะไปทางออกที่ทำเครื่องหมายว่า "เลิกรอ" หรือออกจากแบบจำลอง
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	เซิร์ฟเวอร์ (หน่วย) แต่ละตัวจะถูกตรวจเป็นระยะ เหมือนตัวกระจายโหลดที่ตรวจเซิร์ฟเวอร์ที่อยู่เบื้องหลัง ตัวที่ไม่ผ่านการตรวจเพราะมีผู้รอมากเกินไปจะถูกนำออกจากการใช้งานเพื่อเริ่มระบบใหม่ แล้วจึงกลับมา
 	Edit	แก้ไข
 	Edit themes…	แก้ไขธีม…
 	Elasticity	ความยืดหยุ่น
@@ -172,6 +174,7 @@
 	Export table (CSV)	ส่งออกตาราง (CSV)
 	Exported {file}	ส่งออก {file} แล้ว
 	Expression	นิพจน์
+	Fails above, waiting per working server	ไม่ผ่านเมื่อเกิน (ผู้รอต่อเซิร์ฟเวอร์ที่ใช้งานอยู่)
 	Failure interrupts the job	การขัดข้องขัดจังหวะงาน
 	Family	ตระกูล
 	File	ไฟล์
@@ -192,6 +195,7 @@
 	Goes to	ไปยัง
 	Hands on finished parts while down	ส่งต่อชิ้นงานที่เสร็จแล้วแม้ขณะขัดข้อง
 	Header	แถบส่วนหัว
+	Health check	การตรวจสถานะ
 	Help	วิธีใช้
 	Hide Others	ซ่อนรายการอื่น
 	Hide {app}	ซ่อน {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ลูกค้าต้องการชิ้นงานกี่ชิ้นจากขาออกเหล่านี้ จากนั้นผลลัพธ์จะแสดงแท็กไทม์ (เวลาที่มีหารด้วยความต้องการ) และไซเคิลไทม์ของแต่ละงาน
 	In use	กำลังใช้
 	Inside over time	จำนวนภายในตามเวลา
+	Job under way on a server taken out:	งานที่กำลังทำบนเซิร์ฟเวอร์ที่ถูกนำออก:
 	Jump	ข้าม
 	Jump to time	ข้ามไปยังเวลา
+	Keep at least in service	คงไว้ในการใช้งานอย่างน้อย
 	Keep the time, without the estimate it came from	เก็บเวลาไว้ โดยไม่เก็บการประมาณที่มา
 	Keyboard Shortcuts…	ปุ่มลัด…
 	Keyboard shortcuts saved	บันทึกปุ่มลัดแล้ว
@@ -227,6 +233,7 @@
 	Mean queue length	ความยาวคิวเฉลี่ย
 	Mean time blocked	เวลาเฉลี่ยที่ถูกบล็อก
 	Mean time in system	เวลาเฉลี่ยในระบบ
+	Mean units in service	จำนวนหน่วยที่ใช้งานอยู่เฉลี่ย
 	Mean wait	เวลารอเฉลี่ย
 	Mean wait before giving up	เวลารอเฉลี่ยก่อนเลิกรอ
 	Metric	ตัวชี้วัด
@@ -279,6 +286,7 @@
 	Opened {file}	เปิด {file} แล้ว
 	Open…	เปิด…
 	Or start from an example	หรือเริ่มจากตัวอย่าง
+	Out for (restart)	นำออกจากการใช้งานนาน (เริ่มระบบใหม่)
 	PERT	PERT
 	PNG image	ภาพ PNG
 	Parameter	พารามิเตอร์
@@ -355,6 +363,8 @@
 	Result with a target	ผลลัพธ์ที่มีเป้าหมาย
 	Result, down and up	ผลลัพธ์ เมื่อลงและขึ้น
 	Results	ผลลัพธ์
+	Resume after restart	ทำต่อหลังเริ่มระบบใหม่
+	Retry elsewhere	ลองใหม่ที่อื่น
 	Rework	งานแก้ไข
 	Rework on {id}	งานแก้ไขที่ {id}
 	Rework ratio	สัดส่วนงานแก้ไข
@@ -430,6 +440,7 @@
 	Sun	อา.
 	Sweep a parameter	กวาดพารามิเตอร์
 	Table stripes	แถบสลับสีของตาราง
+	Take servers out when overloaded	นำเซิร์ฟเวอร์ที่โหลดเกินออกจากการใช้งาน
 	Takt	แท็กไทม์
 	Takt time	แท็กไทม์
 	Tandem line	สายงานต่อเนื่อง
@@ -442,6 +453,8 @@
 	Text	ข้อความ
 	Text on accent	ข้อความบนสีเน้น
 	Text on header	ข้อความบนแถบส่วนหัว
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	การเชื่อมต่อหลุดและไคลเอนต์ลองใหม่: เอนทิตีจะกลับไปหัวคิวทันที และงานที่ทำกับมันแล้วจะสูญเปล่า
+	The entity waits on its server and the job carries on with what was left once the server is back.	เอนทิตีรออยู่ที่เซิร์ฟเวอร์ของมัน และงานจะทำต่อจากส่วนที่เหลือเมื่อเซิร์ฟเวอร์กลับมา
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ช่วงนี้ลงต่ำกว่าสัดส่วนเป้าหมาย {share} จึงยังไม่แสดงด้วยความเชื่อมั่น 95% ว่าบรรลุสัดส่วนนั้น รอบการจำลองซ้ำที่มากขึ้นจะทำให้ช่วงแคบลง
 	The last task with a resource it finished at	งานที่ใช้ทรัพยากรงานสุดท้ายที่ชิ้นงานผ่าน
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	เวลาเฉลี่ยจนถึงเงื่อนไขหยุดคิดเฉพาะรอบการจำลองซ้ำที่ถึงเงื่อนไข รอบอื่นรันจนถึงขีดจำกัดเวลา
@@ -466,6 +479,7 @@
 	Time failed	เวลาที่ขัดข้อง
 	Time off shift	เวลานอกกะ
 	Time processing	เวลาประมวลผล
+	Time restarting	เวลาที่เริ่มระบบใหม่
 	Time setting up	เวลาที่ตั้งเครื่องอยู่
 	Time starved	เวลาที่ไม่มีงาน
 	Time to failure	เวลาจนถึงขัดข้อง
@@ -488,6 +502,7 @@
 	Unit	หน่วย
 	Units	จำนวนหน่วย
 	Units by calendar	จำนวนหน่วยตามปฏิทิน
+	Units taken out by health checks	หน่วยที่ถูกนำออกโดยการตรวจสถานะ
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	หน่วยที่หลายงานใช้ร่วมกัน งานที่ใช้ทรัพยากรร่วมกันจะรับหน่วยเหล่านี้ตามกลุ่มหรือตามบทบาท
 	Untitled	ยังไม่มีชื่อ
 	Untitled model	แบบจำลองไม่มีชื่อ
@@ -519,7 +534,7 @@
 	Whole number	จำนวนเต็ม
 	Window	หน้าต่าง
 	With every time at its mean: {units}	เมื่อทุกเวลาเท่ากับค่าเฉลี่ย: {units}
-	Work wasted on those who gave up	งานที่สูญเปล่ากับผู้ที่เลิกรอ
+	Work wasted on jobs that did not finish	งานที่สูญเปล่ากับงานที่ไม่เสร็จ
 	XPDL with BPSim	XPDL พร้อม BPSim
 	Yes or no	ใช่หรือไม่
 	Your changes will be lost if you don't save them.	การเปลี่ยนแปลงจะสูญหายหากคุณไม่บันทึก

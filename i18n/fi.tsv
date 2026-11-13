@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Aikayksikön vaihtaminen ei muunna mallissa jo olevia aikoja.
 	Chart	Kaavio
 	Chart hover	Kaavio osoittimen alla
+	Check every	Tarkistusväli
 	Choose…	Valitse…
 	Clear Menu	Tyhjennä valikko
 	Close	Sulje
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Jokainen analyysi ajaa kokeen useita kertoja samalla siemenellä, joten erot johtuvat muutoksesta eivätkä sattumasta. Tämä voi kestää hetken.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jokainen entiteetti ottaa näistä vaihtoehdoista ensimmäisen, joka voidaan täyttää heti, kaiken kerralla, ja palauttaa yksiköt poistuessaan tehtävästä.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Jokainen entiteetti odottaa tässä enintään ajan, joka arvotaan sille sen saapuessa, ja luopuu sitten: se kulkee reittiä ulos, joka on merkitty ”Luopuneet”, tai poistuu mallista.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Jokainen palvelin (yksikkö) tarkistetaan aika ajoin, kuten kuormantasaaja tarkistaa takanaan olevat palvelimet. Tarkistuksessa epäonnistunut palvelin, jolla odottaa liian moni, poistetaan käytöstä uudelleenkäynnistystä varten, ja se palaa sitten.
 	Edit	Muokkaa
 	Edit themes…	Muokkaa teemoja…
 	Elasticity	Jousto
@@ -172,6 +174,7 @@
 	Export table (CSV)	Vie taulukko (CSV)
 	Exported {file}	Vietiin {file}
 	Expression	Lauseke
+	Fails above, waiting per working server	Epäonnistuu yli, odottavia käytössä olevaa palvelinta kohti
 	Failure interrupts the job	Vika keskeyttää työn
 	Family	Jakaumaperhe
 	File	Tiedosto
@@ -192,6 +195,7 @@
 	Goes to	Menee kohteeseen
 	Hands on finished parts while down	Luovuttaa valmiit osat myös vikaantuneena
 	Header	Yläpalkki
+	Health check	Tilatarkistus
 	Help	Ohje
 	Hide Others	Piilota muut
 	Hide {app}	Piilota {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kuinka monta osaa asiakkaat haluavat näistä poistumisista; tulokset näyttävät silloin tahdin (käytettävissä oleva aika jaettuna kysynnällä) ja kunkin tehtävän sykliajan.
 	In use	Käytössä
 	Inside over time	Sisällä ajan mittaan
+	Job under way on a server taken out:	Kesken oleva työ käytöstä poistetulla palvelimella:
 	Jump	Siirry
 	Jump to time	Siirry hetkeen
+	Keep at least in service	Pidä käytössä vähintään
 	Keep the time, without the estimate it came from	Säilytä aika ilman arviota, josta se on peräisin
 	Keyboard Shortcuts…	Pikanäppäimet…
 	Keyboard shortcuts saved	Pikanäppäimet tallennettu
@@ -227,6 +233,7 @@
 	Mean queue length	Jonon keskipituus
 	Mean time blocked	Keskimääräinen estoaika
 	Mean time in system	Keskimääräinen aika järjestelmässä
+	Mean units in service	Keskimääräinen määrä yksiköitä käytössä
 	Mean wait	Keskimääräinen odotusaika
 	Mean wait before giving up	Keskimääräinen odotusaika ennen luopumista
 	Metric	Mittari
@@ -279,6 +286,7 @@
 	Opened {file}	Avattiin {file}
 	Open…	Avaa…
 	Or start from an example	Tai aloita esimerkistä
+	Out for (restart)	Poissa käytöstä (uudelleenkäynnistys)
 	PERT	PERT
 	PNG image	PNG-kuva
 	Parameter	Parametri
@@ -355,6 +363,8 @@
 	Result with a target	Tulos ja tavoite
 	Result, down and up	Tulos, alas ja ylös
 	Results	Tulokset
+	Resume after restart	Jatka uudelleenkäynnistyksen jälkeen
+	Retry elsewhere	Yritä uudelleen muualla
 	Rework	Uudelleentyöstö
 	Rework on {id}	Uudelleentyöstö virrassa {id}
 	Rework ratio	Uudelleentyöstöosuus
@@ -430,6 +440,7 @@
 	Sun	su
 	Sweep a parameter	Käy parametri läpi
 	Table stripes	Taulukon raidat
+	Take servers out when overloaded	Ylikuormittuneiden palvelimien poisto käytöstä
 	Takt	Tahti
 	Takt time	Tahtiaika
 	Tandem line	Sarjajono
@@ -442,6 +453,8 @@
 	Text	Teksti
 	Text on accent	Korostuksen teksti
 	Text on header	Yläpalkin teksti
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Yhteys katkeaa ja asiakas yrittää uudelleen: entiteetti palaa heti jonon kärkeen, ja siihen tehty työ hukataan.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteetti odottaa palvelimellaan, ja työ jatkuu jäljellä olevasta, kun palvelin on palannut.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Väli ulottuu alle tavoiteosuuden {share}, joten osuuden saavuttamista ei ole osoitettu 95 %:n luottamuksella; useampi toisto kaventaisi sitä.
 	The last task with a resource it finished at	Viimeisin resurssia käyttävä tehtävä, jonka osa läpäisi
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskimääräinen aika pysäytysehtoon lasketaan vain toistoista, jotka saavuttivat sen; muut ajettiin aikarajaansa asti.
@@ -466,6 +479,7 @@
 	Time failed	Aika vikaantuneena
 	Time off shift	Aika vuoron ulkopuolella
 	Time processing	Käsittelyaika
+	Time restarting	Aika uudelleenkäynnistyksessä
 	Time setting up	Aika asetuksessa
 	Time starved	Aika ilman työtä
 	Time to failure	Aika vikaantumiseen
@@ -488,6 +502,7 @@
 	Unit	Yksikkö
 	Units	Yksiköt
 	Units by calendar	Yksiköt kalenterin mukaan
+	Units taken out by health checks	Tilatarkistusten käytöstä poistamat yksiköt
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Yksiköt, joita useampi tehtävä käyttää yhteisesti. Jaettuja resursseja käyttävä tehtävä ottaa ne poolista tai roolin mukaan.
 	Untitled	Nimetön
 	Untitled model	Nimetön malli
@@ -519,7 +534,7 @@
 	Whole number	Kokonaisluku
 	Window	Ikkuna
 	With every time at its mean: {units}	Kun jokainen aika on keskiarvossaan: {units}
-	Work wasted on those who gave up	Luopuneisiin hukattu työ
+	Work wasted on jobs that did not finish	Kesken jääneisiin töihin hukattu työ
 	XPDL with BPSim	XPDL ja BPSim
 	Yes or no	Kyllä tai ei
 	Your changes will be lost if you don't save them.	Muutokset menetetään, jos niitä ei tallenneta.

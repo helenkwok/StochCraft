@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	సమయ ప్రమాణాన్ని మార్చడం వల్ల నమూనాలో ఇప్పటికే ఉన్న సమయాలు మారవు.
 	Chart	చార్ట్
 	Chart hover	పాయింటర్ కింద చార్ట్
+	Check every	తనిఖీ వ్యవధి
 	Choose…	ఎంచుకోండి…
 	Clear Menu	మెనూను క్లియర్ చేయి
 	Close	మూసివేయి
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ప్రతి విశ్లేషణ ఒకే యాదృచ్ఛిక బీజంతో ప్రయోగాన్ని చాలాసార్లు అమలు చేస్తుంది, కాబట్టి తేడాలు యాదృచ్ఛికత నుండి కాక మార్పు నుండి వస్తాయి. కొంత సమయం పట్టవచ్చు.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ప్రతి ఎంటిటీ వీటిలో ఇప్పుడే ఒకేసారి పూర్తిగా తీర్చగలిగే మొదటిదాన్ని తీసుకుంటుంది, బయటకు వెళ్లేటప్పుడు యూనిట్‌లను తిరిగి ఇస్తుంది.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ప్రతి ఎంటిటీ వచ్చినప్పుడు దానికోసం యాదృచ్ఛికంగా తీసిన సమయం వరకు మాత్రమే ఇక్కడ వేచి ఉంటుంది, తర్వాత వదిలి వెళ్తుంది: "వదిలి వెళ్లినవి" అని గుర్తించిన బయటికి దారిలో వెళ్తుంది, లేదా నమూనా నుండి బయటకు వెళ్తుంది.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	ప్రతి సర్వర్ (యూనిట్) అప్పుడప్పుడు తనిఖీ చేయబడుతుంది, లోడ్ బ్యాలెన్సర్ తన వెనుక ఉన్న సర్వర్‌లను పరిశీలించినట్లుగా. చాలా ఎక్కువ వేచి ఉన్నందున తనిఖీలో విఫలమైన సర్వర్‌ను పునఃప్రారంభం కోసం తొలగిస్తారు, తర్వాత అది తిరిగి వస్తుంది.
 	Edit	సవరణ
 	Edit themes…	థీమ్‌లను సవరించు…
 	Elasticity	స్థితిస్థాపకత
@@ -172,6 +174,7 @@
 	Export table (CSV)	పట్టికను ఎగుమతి చేయి (CSV)
 	Exported {file}	{file} ఎగుమతి చేయబడింది
 	Expression	వ్యక్తీకరణ
+	Fails above, waiting per working server	వైఫల్య పరిమితి, పనిచేస్తున్న ఒక్కో సర్వర్‌కు వేచి ఉన్నవి
 	Failure interrupts the job	లోపం పనికి అంతరాయం కలిగిస్తుంది
 	Family	కుటుంబం
 	File	ఫైల్
@@ -192,6 +195,7 @@
 	Goes to	వెళ్తుంది
 	Hands on finished parts while down	లోపం ఉన్నప్పుడూ పూర్తయిన భాగాలను పంపుతుంది
 	Header	హెడర్ బార్
+	Health check	స్థితి తనిఖీ
 	Help	సహాయం
 	Hide Others	ఇతరాలను దాచు
 	Hide {app}	{app} ను దాచు
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ఈ నిష్క్రమణల నుంచి కస్టమర్లు ఎన్ని భాగాలు కోరుకుంటున్నారు; అప్పుడు ఫలితాలు టాక్ట్ (అందుబాటులో ఉన్న సమయాన్ని డిమాండ్‌తో భాగించినది) మరియు ప్రతి పని యొక్క సైకిల్ సమయాన్ని చూపుతాయి.
 	In use	వాడుకలో ఉంది
 	Inside over time	కాలక్రమంలో లోపల
+	Job under way on a server taken out:	తొలగించిన సర్వర్‌పై జరుగుతున్న పని:
 	Jump	వెళ్ళు
 	Jump to time	సమయానికి వెళ్ళు
+	Keep at least in service	కనీసం ఇన్ని పనిలో ఉంచండి
 	Keep the time, without the estimate it came from	సమయాన్ని ఉంచు, అది వచ్చిన అంచనా లేకుండా
 	Keyboard Shortcuts…	కీబోర్డ్ షార్ట్‌కట్‌లు…
 	Keyboard shortcuts saved	కీబోర్డ్ షార్ట్‌కట్‌లు సేవ్ చేయబడ్డాయి
@@ -227,6 +233,7 @@
 	Mean queue length	సగటు క్యూలో పొడవు
 	Mean time blocked	నిరోధిత సగటు సమయం
 	Mean time in system	వ్యవస్థలో గడిపిన సగటు సమయం
+	Mean units in service	పనిలో ఉన్న యూనిట్‌ల సగటు సంఖ్య
 	Mean wait	సగటు వేచి ఉండే సమయం
 	Mean wait before giving up	వదిలి వెళ్లే ముందు సగటు వేచి ఉండే సమయం
 	Metric	కొలమానం
@@ -279,6 +286,7 @@
 	Opened {file}	{file} తెరవబడింది
 	Open…	తెరువు…
 	Or start from an example	లేదా ఒక ఉదాహరణతో ప్రారంభించండి
+	Out for (restart)	తొలగించి ఉంచే సమయం (పునఃప్రారంభం)
 	PERT	PERT
 	PNG image	PNG చిత్రం
 	Parameter	పరామితి
@@ -355,6 +363,8 @@
 	Result with a target	లక్ష్యం ఉన్న ఫలితం
 	Result, down and up	ఫలితం, కిందకు, పైకి
 	Results	ఫలితాలు
+	Resume after restart	పునఃప్రారంభం తర్వాత కొనసాగించండి
+	Retry elsewhere	వేరే చోట మళ్లీ ప్రయత్నించండి
 	Rework	పునఃపని
 	Rework on {id}	{id} వద్ద పునఃపని
 	Rework ratio	పునఃపని నిష్పత్తి
@@ -430,6 +440,7 @@
 	Sun	ఆది
 	Sweep a parameter	ఒక పరామితిని స్వీప్ చేయి
 	Table stripes	పట్టిక చారలు
+	Take servers out when overloaded	అధిక భారం ఉన్న సర్వర్‌లను తొలగించడం
 	Takt	టాక్ట్
 	Takt time	టాక్ట్ సమయం
 	Tandem line	వరుస ప్రక్రియ
@@ -442,6 +453,8 @@
 	Text	టెక్స్ట్
 	Text on accent	యాక్సెంట్ రంగుపై టెక్స్ట్
 	Text on header	హెడర్ బార్‌పై టెక్స్ట్
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	కనెక్షన్ తెగిపోతుంది, క్లయింట్ మళ్లీ ప్రయత్నిస్తుంది: ఎంటిటీ వెంటనే క్యూ ముందుకు తిరిగి వెళ్తుంది, దానిపై చేసిన పని వృథా అవుతుంది.
+	The entity waits on its server and the job carries on with what was left once the server is back.	ఎంటిటీ తన సర్వర్ వద్దే వేచి ఉంటుంది, సర్వర్ తిరిగి రాగానే మిగిలిన దానితో పని కొనసాగుతుంది.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	అంతరం {share} లక్ష్య వాటా కంటే కిందకు వెళ్తుంది, కాబట్టి వాటా చేరినట్లు 95% విశ్వాసంతో చూపబడలేదు; మరిన్ని పునరావృత్త అమలులు దానిని సన్నగా చేస్తాయి.
 	The last task with a resource it finished at	భాగం చివరిగా దాటిన వనరు అవసరమైన పని
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ఆపే షరతు వరకు సగటు సమయం దానిని చేరిన పునరావృత్త అమలులపై మాత్రమే; మిగిలినవి వాటి సమయ పరిమితి వరకు నడిచాయి.
@@ -466,6 +479,7 @@
 	Time failed	లోపం ఉన్న సమయం
 	Time off shift	షిఫ్ట్ వెలుపల సమయం
 	Time processing	ప్రాసెసింగ్ సమయం
+	Time restarting	పునఃప్రారంభ సమయం
 	Time setting up	సెటప్‌లో ఉన్న సమయం
 	Time starved	పని లేని సమయం
 	Time to failure	లోపం వచ్చే వరకు సమయం
@@ -488,6 +502,7 @@
 	Unit	ప్రమాణం
 	Units	యూనిట్‌లు
 	Units by calendar	క్యాలెండర్ ప్రకారం యూనిట్‌లు
+	Units taken out by health checks	స్థితి తనిఖీల వల్ల తొలగించిన యూనిట్‌లు
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	అనేక పనులు పంచుకునే యూనిట్‌లు. భాగస్వామ్య వనరులు అవసరమైన పని వాటిని పూల్ ప్రకారం లేదా పాత్ర ప్రకారం తీసుకుంటుంది.
 	Untitled	శీర్షిక లేదు
 	Untitled model	పేరు లేని నమూనా
@@ -519,7 +534,7 @@
 	Whole number	పూర్ణ సంఖ్య
 	Window	విండో
 	With every time at its mean: {units}	ప్రతి సమయం దాని సగటు వద్ద: {units}
-	Work wasted on those who gave up	వదిలి వెళ్లినవాటిపై వృథా అయిన పని
+	Work wasted on jobs that did not finish	పూర్తి కాని పనులపై వృథా అయిన పని
 	XPDL with BPSim	BPSim తో XPDL
 	Yes or no	అవును లేదా కాదు
 	Your changes will be lost if you don't save them.	మీరు సేవ్ చేయకపోతే మీ మార్పులు పోతాయి.

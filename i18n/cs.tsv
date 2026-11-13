@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Změna časové jednotky nepřepočítá časy, které již v modelu jsou.
 	Chart	Graf
 	Chart hover	Graf pod ukazatelem
+	Check every	Kontrola každých
 	Choose…	Vyberte…
 	Clear Menu	Vymazat nabídku
 	Close	Zavřít
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Každá analýza spouští experiment několikrát se stejnou počáteční hodnotou generátoru, takže rozdíly pocházejí ze změny, ne z náhody. Může to chvíli trvat.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Každá entita si vezme první z těchto možností, kterou lze právě splnit, celou najednou, a při odchodu jednotky vrátí.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Každá entita zde čeká nejvýše dobu, která se jí náhodně určí při příchodu, a pak to vzdá: odejde cestou označenou „Vzdané“, nebo opustí model.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Každý server (jednotka) se čas od času kontroluje, tak jako vyvažovač zátěže zkouší servery za sebou. Ten, který neprojde, protože na něj čeká příliš mnoho entit, se vyřadí z provozu na restart a pak se vrátí.
 	Edit	Úpravy
 	Edit themes…	Upravit motivy…
 	Elasticity	Pružnost
@@ -172,6 +174,7 @@
 	Export table (CSV)	Exportovat tabulku (CSV)
 	Exported {file}	Exportováno {file}
 	Expression	Výraz
+	Fails above, waiting per working server	Neprojde nad, čekajících na server v provozu
 	Failure interrupts the job	Porucha přeruší práci
 	Family	Rodina
 	File	Soubor
@@ -192,6 +195,7 @@
 	Goes to	Vede do
 	Hands on finished parts while down	Předává hotové díly i v poruše
 	Header	Záhlaví
+	Health check	Kontrola stavu
 	Help	Nápověda
 	Hide Others	Skrýt ostatní
 	Hide {app}	Skrýt {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kolik dílů chtějí zákazníci z těchto odchodů; výsledky pak ukážou takt (dostupný čas dělený poptávkou) a čas cyklu každé úlohy.
 	In use	Používá se
 	Inside over time	Uvnitř v čase
+	Job under way on a server taken out:	Rozpracovaná práce na vyřazeném serveru:
 	Jump	Přejít
 	Jump to time	Přejít na čas
+	Keep at least in service	Ponechat v provozu alespoň
 	Keep the time, without the estimate it came from	Ponechat dobu bez odhadu, ze kterého vznikla
 	Keyboard Shortcuts…	Klávesové zkratky…
 	Keyboard shortcuts saved	Klávesové zkratky byly uloženy
@@ -227,6 +233,7 @@
 	Mean queue length	Průměrná délka fronty
 	Mean time blocked	Průměrná doba blokování
 	Mean time in system	Průměrná doba v systému
+	Mean units in service	Průměrný počet jednotek v provozu
 	Mean wait	Průměrná doba čekání
 	Mean wait before giving up	Průměrná doba čekání do vzdání
 	Metric	Metrika
@@ -279,6 +286,7 @@
 	Opened {file}	Otevřen {file}
 	Open…	Otevřít…
 	Or start from an example	Nebo začněte příkladem
+	Out for (restart)	Mimo provoz po dobu (restart)
 	PERT	PERT
 	PNG image	Obrázek PNG
 	Parameter	Parametr
@@ -355,6 +363,8 @@
 	Result with a target	Výsledek s cílem
 	Result, down and up	Výsledek, dolů a nahoru
 	Results	Výsledky
+	Resume after restart	Pokračovat po restartu
+	Retry elsewhere	Zkusit znovu jinde
 	Rework	Přepracování
 	Rework on {id}	Přepracování na {id}
 	Rework ratio	Podíl přepracování
@@ -430,6 +440,7 @@
 	Sun	ne
 	Sweep a parameter	Průchod parametrem
 	Table stripes	Pruhy tabulek
+	Take servers out when overloaded	Vyřazovat přetížené servery
 	Takt	Takt
 	Takt time	Čas taktu
 	Tandem line	Tandemová linka
@@ -442,6 +453,8 @@
 	Text	Text
 	Text on accent	Text na zvýraznění
 	Text on header	Text v záhlaví
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Spojení spadne a klient to zkusí znovu: entita se hned vrátí na začátek fronty a práce na ní odvedená je zbytečná.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Entita čeká u svého serveru a práce pokračuje se zbytkem, jakmile je server zpět.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval sahá pod cílový podíl {share}, takže splnění podílu není prokázáno s 95% spolehlivostí; více replikací by ho zúžilo.
 	The last task with a resource it finished at	Poslední úloha se zdrojem, kterou díl prošel
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Průměrná doba do podmínky zastavení je jen z replikací, které ji splnily; ostatní běžely do svého časového limitu.
@@ -466,6 +479,7 @@
 	Time failed	Čas v poruše
 	Time off shift	Čas mimo směnu
 	Time processing	Čas zpracování
+	Time restarting	Čas v restartu
 	Time setting up	Čas seřizování
 	Time starved	Čas bez práce
 	Time to failure	Doba do poruchy
@@ -488,6 +502,7 @@
 	Unit	Jednotka
 	Units	Jednotky
 	Units by calendar	Jednotky podle kalendáře
+	Units taken out by health checks	Jednotky vyřazené kontrolami stavu
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Jednotky, které sdílí několik úloh. Úloha se sdílenými zdroji je bere z fondu nebo podle role.
 	Untitled	Bez názvu
 	Untitled model	Nepojmenovaný model
@@ -519,7 +534,7 @@
 	Whole number	Celé číslo
 	Window	Okno
 	With every time at its mean: {units}	S každou dobou na průměru: {units}
-	Work wasted on those who gave up	Zbytečná práce na těch, které to vzdaly
+	Work wasted on jobs that did not finish	Zbytečná práce na nedokončených pracích
 	XPDL with BPSim	XPDL s BPSim
 	Yes or no	Ano nebo ne
 	Your changes will be lost if you don't save them.	Pokud změny neuložíte, budou ztraceny.

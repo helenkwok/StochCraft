@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Pakeitus laiko vienetą, modelyje jau esančios laiko reikšmės nebus perskaičiuotos.
 	Chart	Diagrama
 	Chart hover	Diagrama po žymekliu
+	Check every	Tikrinti kas
 	Choose…	Pasirinkite…
 	Clear Menu	Išvalyti meniu
 	Close	Užverti
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Kiekviena analizė kelis kartus paleidžia eksperimentą su ta pačia sėkla, todėl skirtumai kyla iš pakeitimo, o ne iš atsitiktinumo. Tai gali užtrukti.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Kiekvienas objektas paima pirmąją iš šių alternatyvų, kurią galima įvykdyti dabar, visą iš karto, ir grąžina vienetus, kai palieka užduotį.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Kiekvienas objektas čia laukia ne ilgiau nei laikas, atsitiktinai parinktas jam atvykus, o tada pasitraukia: eina išėjimu, pažymėtu „Pasitraukę“, arba palieka modelį.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Kiekvienas serveris (vienetas) kas tam tikrą laiką tikrinamas, kaip apkrovos balansuotojas tikrina už jo esančius serverius. Patikros neišlaikęs serveris, kai laukia per daug, išimamas iš naudojimo paleisti iš naujo, paskui grįžta.
 	Edit	Redaguoti
 	Edit themes…	Redaguoti temas…
 	Elasticity	Elastingumas
@@ -172,6 +174,7 @@
 	Export table (CSV)	Eksportuoti lentelę (CSV)
 	Exported {file}	Eksportuota {file}
 	Expression	Išraiška
+	Fails above, waiting per working server	Neišlaiko virš (laukiančių vienam naudojamam serveriui)
 	Failure interrupts the job	Gedimas pertraukia darbą
 	Family	Šeima
 	File	Failas
@@ -192,6 +195,7 @@
 	Goes to	Veda į
 	Hands on finished parts while down	Gedimo metu perduoda baigtas detales
 	Header	Antraštės juosta
+	Health check	Būklės patikra
 	Help	Žinynas
 	Hide Others	Slėpti kitus
 	Hide {app}	Slėpti {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kiek detalių klientai nori iš šių išvykimų; tada rezultatai rodo taktą (turimą laiką, padalytą iš poreikio) ir kiekvienos užduoties ciklo laiką.
 	In use	Naudojama
 	Inside over time	Viduje per laiką
+	Job under way on a server taken out:	Vykdomas darbas iš naudojimo išimtame serveryje:
 	Jump	Pereiti
 	Jump to time	Pereiti į laiką
+	Keep at least in service	Palikti naudojamų ne mažiau
 	Keep the time, without the estimate it came from	Palikti laiką be įverčio, iš kurio jis gautas
 	Keyboard Shortcuts…	Spartieji klavišai…
 	Keyboard shortcuts saved	Spartieji klavišai įrašyti
@@ -227,6 +233,7 @@
 	Mean queue length	Vidutinis eilės ilgis
 	Mean time blocked	Vidutinė blokavimo trukmė
 	Mean time in system	Vidutinis laikas sistemoje
+	Mean units in service	Vidutinis naudojamų vienetų skaičius
 	Mean wait	Vidutinis laukimo laikas
 	Mean wait before giving up	Vidutinis laukimo laikas iki pasitraukimo
 	Metric	Rodiklis
@@ -279,6 +286,7 @@
 	Opened {file}	Atidaryta {file}
 	Open…	Atverti…
 	Or start from an example	Arba pradėkite nuo pavyzdžio
+	Out for (restart)	Išimtas iš naudojimo (paleidimas iš naujo)
 	PERT	PERT
 	PNG image	PNG paveikslas
 	Parameter	Parametras
@@ -355,6 +363,8 @@
 	Result with a target	Rezultatas su tikslu
 	Result, down and up	Rezultatas, žemyn ir aukštyn
 	Results	Rezultatai
+	Resume after restart	Tęsti po paleidimo iš naujo
+	Retry elsewhere	Bandyti dar kartą kitur
 	Rework	Perdirbimas
 	Rework on {id}	Perdirbimas sraute {id}
 	Rework ratio	Perdirbimo dalis
@@ -430,6 +440,7 @@
 	Sun	sk
 	Sweep a parameter	Parametro perėjimas
 	Table stripes	Lentelių juostos
+	Take servers out when overloaded	Perkrautų serverių išėmimas iš naudojimo
 	Takt	Taktas
 	Takt time	Takto laikas
 	Tandem line	Nuoseklioji linija
@@ -442,6 +453,8 @@
 	Text	Tekstas
 	Text on accent	Tekstas ant akcento
 	Text on header	Tekstas antraštės juostoje
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Ryšys nutrūksta ir klientas bando dar kartą: objektas iškart grįžta į eilės pradžią, o su juo atliktas darbas iššvaistomas.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Objektas laukia prie savo serverio, o darbas tęsiamas nuo to, kas liko, kai serveris grįžta.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalas siekia žemiau tikslinės dalies {share}, todėl 95 % patikimumu neparodyta, kad dalis pasiekta; daugiau replikacijų jį susiaurintų.
 	The last task with a resource it finished at	Paskutinė užduotis su ištekliumi, kurią detalė praėjo
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Vidutinis laikas iki stabdymo sąlygos skaičiuojamas tik iš replikacijų, kurios ją pasiekė; kitos truko iki savo laiko ribos.
@@ -466,6 +479,7 @@
 	Time failed	Gedimo laikas
 	Time off shift	Laikas ne pamainoje
 	Time processing	Apdorojimo laikas
+	Time restarting	Paleidimo iš naujo laikas
 	Time setting up	Laikas derinant
 	Time starved	Laikas be darbo
 	Time to failure	Laikas iki gedimo
@@ -488,6 +502,7 @@
 	Unit	Vienetas
 	Units	Vienetai
 	Units by calendar	Vienetai pagal kalendorių
+	Units taken out by health checks	Būklės patikrų išimti vienetai
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Vienetai, kuriuos bendrai naudoja kelios užduotys. Užduotis su bendrais ištekliais juos paima iš grupės arba pagal vaidmenį.
 	Untitled	Be pavadinimo
 	Untitled model	Modelis be pavadinimo
@@ -519,7 +534,7 @@
 	Whole number	Sveikasis skaičius
 	Window	Langas
 	With every time at its mean: {units}	Kai kiekvienas laikas lygus vidurkiui: {units}
-	Work wasted on those who gave up	Pasitraukusiesiems iššvaistytas darbas
+	Work wasted on jobs that did not finish	Nebaigtiems darbams iššvaistytas darbas
 	XPDL with BPSim	XPDL su BPSim
 	Yes or no	Taip arba ne
 	Your changes will be lost if you don't save them.	Jei pakeitimų neįrašysite, jie bus prarasti.

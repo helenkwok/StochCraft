@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Promjena vremenske jedinice ne pretvara vremena koja već postoje u modelu.
 	Chart	Grafikon
 	Chart hover	Grafikon pod pokazivačem
+	Check every	Provjera svakih
 	Choose…	Odaberi…
 	Clear Menu	Očisti meni
 	Close	Zatvori
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Svaka analiza pokreće eksperiment više puta s istim sjemenom, pa razlike dolaze od promjene, a ne od slučaja. To može potrajati.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Svaki entitet uzima prvu od ovih mogućnosti koja se sada može ispuniti, sve odjednom, i vraća jedinice kad izađe.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Svaki entitet ovdje čeka najviše vrijeme koje mu se nasumično odredi pri dolasku, a zatim odustaje: ide izlazom označenim kao „Odustali“ ili napušta model.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Svaki server (jedinica) provjerava se s vremena na vrijeme, kao što load balancer provjerava servere iza sebe. Onaj koji ne prođe, jer ih previše čeka, izbacuje se iz rada radi ponovnog pokretanja, a zatim se vraća.
 	Edit	Uredi
 	Edit themes…	Uredi teme…
 	Elasticity	Elastičnost
@@ -172,6 +174,7 @@
 	Export table (CSV)	Izvezi tablicu (CSV)
 	Exported {file}	Izvezeno: {file}
 	Expression	Izraz
+	Fails above, waiting per working server	Ne prolazi iznad, čekajućih po serveru u radu
 	Failure interrupts the job	Kvar prekida rad
 	Family	Porodica
 	File	Datoteka
@@ -192,6 +195,7 @@
 	Goes to	Vodi prema
 	Hands on finished parts while down	Predaje gotove dijelove i u kvaru
 	Header	Zaglavlje
+	Health check	Provjera stanja
 	Help	Pomoć
 	Hide Others	Sakrij ostale
 	Hide {app}	Sakrij {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Koliko dijelova kupci žele od ovih odlazaka; rezultati tada prikazuju takt (raspoloživo vrijeme podijeljeno s potražnjom) i vrijeme ciklusa svakog zadatka.
 	In use	U upotrebi
 	Inside over time	Unutra kroz vrijeme
+	Job under way on a server taken out:	Posao u toku na serveru izbačenom iz rada:
 	Jump	Skoči
 	Jump to time	Skoči na vrijeme
+	Keep at least in service	Zadrži u radu najmanje
 	Keep the time, without the estimate it came from	Zadrži vrijeme, bez procjene iz koje je nastalo
 	Keyboard Shortcuts…	Prečice na tastaturi…
 	Keyboard shortcuts saved	Prečice na tastaturi spremljeni
@@ -227,6 +233,7 @@
 	Mean queue length	Prosječna duljina reda
 	Mean time blocked	Prosječno vrijeme blokiranja
 	Mean time in system	Prosječno vrijeme u sistemu
+	Mean units in service	Prosječan broj jedinica u radu
 	Mean wait	Prosječno čekanje
 	Mean wait before giving up	Prosječno čekanje do odustajanja
 	Metric	Metrika
@@ -279,6 +286,7 @@
 	Opened {file}	Otvorena datoteka {file}
 	Open…	Otvori…
 	Or start from an example	Ili počnite s primjerom
+	Out for (restart)	Izvan rada tokom (ponovno pokretanje)
 	PERT	PERT
 	PNG image	Slika PNG
 	Parameter	Parametar
@@ -355,6 +363,8 @@
 	Result with a target	Rezultat s ciljem
 	Result, down and up	Rezultat, dolje i gore
 	Results	Rezultati
+	Resume after restart	Nastavi nakon ponovnog pokretanja
+	Retry elsewhere	Pokušaj ponovo drugdje
 	Rework	Dorada
 	Rework on {id}	Dorada na {id}
 	Rework ratio	Udio dorade
@@ -430,6 +440,7 @@
 	Sun	ned
 	Sweep a parameter	Prolaz kroz parametar
 	Table stripes	Pruge tabela
+	Take servers out when overloaded	Izbacivanje preopterećenih servera iz rada
 	Takt	Takt
 	Takt time	Takt vrijeme
 	Tandem line	Tandemska linija
@@ -442,6 +453,8 @@
 	Text	Tekst
 	Text on accent	Tekst na akcentu
 	Text on header	Tekst u zaglavlju
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Veza pukne i klijent pokuša ponovo: entitet se odmah vraća na čelo reda, a rad obavljen na njemu je uzaludan.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Entitet čeka na svom serveru, a posao se nastavlja s preostalim dijelom kad se server vrati.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval seže ispod ciljnog udjela od {share}, pa nije pokazano s pouzdanošću od 95% da je udio postignut; više replikacija bi ga suzilo.
 	The last task with a resource it finished at	Posljednji zadatak s resursom kroz koji je dio prošao
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Prosječno vrijeme do uslova zaustavljanja odnosi se samo na replikacije koje su ga postigle; ostale su trajale do svog vremenskog ograničenja.
@@ -466,6 +479,7 @@
 	Time failed	Vrijeme u kvaru
 	Time off shift	Vrijeme van smjene
 	Time processing	Vrijeme obrade
+	Time restarting	Vrijeme ponovnog pokretanja
 	Time setting up	Vrijeme u pripremi
 	Time starved	Vrijeme bez posla
 	Time to failure	Vrijeme do kvara
@@ -488,6 +502,7 @@
 	Unit	Jedinica
 	Units	Jedinice
 	Units by calendar	Jedinice po kalendaru
+	Units taken out by health checks	Jedinice izbačene iz rada provjerama stanja
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Jedinice koje dijeli više zadataka. Zadatak sa zajedničkim resursima uzima ih iz fonda ili po ulozi.
 	Untitled	Bez naslova
 	Untitled model	Neimenovani model
@@ -519,7 +534,7 @@
 	Whole number	Cijeli broj
 	Window	Prozor
 	With every time at its mean: {units}	Sa svakim vremenom na srednjoj vrijednosti: {units}
-	Work wasted on those who gave up	Uzaludan rad na onima koji su odustali
+	Work wasted on jobs that did not finish	Uzaludan rad na nedovršenim poslovima
 	XPDL with BPSim	XPDL s BPSim
 	Yes or no	Da ili ne
 	Your changes will be lost if you don't save them.	Vaše promjene će biti izgubljene ako ih ne sačuvate.

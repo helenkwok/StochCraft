@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	La modifica dell'unità di tempo non converte i tempi già presenti nel modello.
 	Chart	Grafico
 	Chart hover	Grafico sotto il puntatore
+	Check every	Controllo ogni
 	Choose…	Scegli…
 	Clear Menu	Cancella menu
 	Close	Chiudi
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Ogni analisi esegue l'esperimento più volte con lo stesso seme, così le differenze vengono dal cambiamento, non dal caso. Può richiedere un po' di tempo.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Ogni entità prende, tutta in una volta, la prima di queste alternative che può essere soddisfatta subito e restituisce le unità quando esce.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Ogni entità attende qui al massimo un tempo estratto a caso per lei al suo arrivo, poi abbandona: prende l'uscita contrassegnata come «Abbandonate» o lascia il modello.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Ogni server (unità) viene controllato a intervalli, come un bilanciatore di carico interroga i server dietro di sé. Quello che fallisce, con troppe entità in attesa, viene messo fuori servizio per un riavvio, poi torna.
 	Edit	Modifica
 	Edit themes…	Modifica temi…
 	Elasticity	Elasticità
@@ -172,6 +174,7 @@
 	Export table (CSV)	Esporta tabella (CSV)
 	Exported {file}	Esportato {file}
 	Expression	Espressione
+	Fails above, waiting per working server	Fallisce sopra (in attesa per server in servizio)
 	Failure interrupts the job	Il guasto interrompe la lavorazione
 	Family	Famiglia
 	File	File
@@ -192,6 +195,7 @@
 	Goes to	Va a
 	Hands on finished parts while down	Passa i pezzi finiti anche in guasto
 	Header	Intestazione
+	Health check	Controllo dello stato
 	Help	Aiuto
 	Hide Others	Nascondi altri
 	Hide {app}	Nascondi {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Quanti pezzi vogliono i clienti da queste partenze; i risultati mostrano allora il takt (il tempo disponibile diviso per la domanda) e il tempo ciclo di ogni attività.
 	In use	In uso
 	Inside over time	All'interno nel tempo
+	Job under way on a server taken out:	Lavoro in corso su un server messo fuori servizio:
 	Jump	Vai
 	Jump to time	Vai all'istante
+	Keep at least in service	Mantenere almeno in servizio
 	Keep the time, without the estimate it came from	Mantenere il tempo, senza la stima da cui proviene
 	Keyboard Shortcuts…	Scorciatoie da tastiera…
 	Keyboard shortcuts saved	Scorciatoie da tastiera salvate
@@ -227,6 +233,7 @@
 	Mean queue length	Lunghezza media della coda
 	Mean time blocked	Tempo medio di blocco
 	Mean time in system	Tempo medio nel sistema
+	Mean units in service	Numero medio di unità in servizio
 	Mean wait	Attesa media
 	Mean wait before giving up	Attesa media prima dell'abbandono
 	Metric	Metrica
@@ -279,6 +286,7 @@
 	Opened {file}	Aperto {file}
 	Open…	Apri…
 	Or start from an example	Oppure inizia da un esempio
+	Out for (restart)	Fuori servizio per (riavvio)
 	PERT	PERT
 	PNG image	Immagine PNG
 	Parameter	Parametro
@@ -355,6 +363,8 @@
 	Result with a target	Risultato con obiettivo
 	Result, down and up	Risultato, in giù e in su
 	Results	Risultati
+	Resume after restart	Riprendere dopo il riavvio
+	Retry elsewhere	Riprovare altrove
 	Rework	Rilavorazione
 	Rework on {id}	Rilavorazione su {id}
 	Rework ratio	Tasso di rilavorazione
@@ -430,6 +440,7 @@
 	Sun	dom
 	Sweep a parameter	Scansione di un parametro
 	Table stripes	Righe alternate delle tabelle
+	Take servers out when overloaded	Mettere fuori servizio i server sovraccarichi
 	Takt	Takt
 	Takt time	Takt time
 	Tandem line	Linea in tandem
@@ -442,6 +453,8 @@
 	Text	Testo
 	Text on accent	Testo sull'accento
 	Text on header	Testo dell'intestazione
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	La connessione cade e il client riprova: l'entità torna subito in testa alla coda, e il lavoro fatto su di essa è sprecato.
+	The entity waits on its server and the job carries on with what was left once the server is back.	L'entità attende sul suo server e il lavoro prosegue con ciò che restava appena il server torna.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'intervallo scende sotto la quota obiettivo del {share}, quindi non è dimostrato con una confidenza del 95% che la quota sia raggiunta; più repliche lo restringerebbero.
 	The last task with a resource it finished at	L'ultima attività con risorsa da cui è passato il pezzo
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Il tempo medio fino alla condizione di arresto riguarda solo le repliche che l'hanno raggiunta; le altre sono arrivate al loro limite di tempo.
@@ -466,6 +479,7 @@
 	Time failed	Tempo in guasto
 	Time off shift	Tempo fuori turno
 	Time processing	Tempo in lavorazione
+	Time restarting	Tempo in riavvio
 	Time setting up	Tempo in attrezzaggio
 	Time starved	Tempo senza lavoro
 	Time to failure	Tempo fino al guasto
@@ -488,6 +502,7 @@
 	Unit	Unità
 	Units	Unità
 	Units by calendar	Unità per calendario
+	Units taken out by health checks	Unità messe fuori servizio dai controlli dello stato
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unità condivise da più attività. Un'attività con risorse condivise le prende per pool o per ruolo.
 	Untitled	Senza titolo
 	Untitled model	Modello senza titolo
@@ -519,7 +534,7 @@
 	Whole number	Numero intero
 	Window	Finestra
 	With every time at its mean: {units}	Con ogni tempo alla sua media: {units}
-	Work wasted on those who gave up	Lavoro sprecato per chi ha abbandonato
+	Work wasted on jobs that did not finish	Lavoro sprecato su lavori non finiti
 	XPDL with BPSim	XPDL con BPSim
 	Yes or no	Sì o no
 	Your changes will be lost if you don't save them.	Se non le salvi, le modifiche andranno perse.

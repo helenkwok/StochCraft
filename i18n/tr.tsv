@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Zaman birimini değiştirmek modeldeki mevcut süreleri dönüştürmez.
 	Chart	Grafik
 	Chart hover	İşaretçi altındaki grafik
+	Check every	Denetim aralığı
 	Choose…	Seçin…
 	Clear Menu	Menüyü Temizle
 	Close	Kapat
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Her analiz deneyi aynı rastgelelik tohumuyla birkaç kez çalıştırır; böylece farklar şanstan değil değişiklikten gelir. Biraz sürebilir.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Her varlık, bunlardan şu anda karşılanabilen ilkini tek seferde tümüyle alır ve görevden ayrılırken birimleri geri verir.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Her varlık burada, gelişinde kendisi için rastgele çekilen süreden fazla beklemez, sonra vazgeçer: "Vazgeçenler" olarak işaretlenen çıkış yolunu izler ya da modelden ayrılır.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Her sunucu (birim), bir yük dengeleyicinin arkasındaki sunucuları yoklaması gibi, ara ara denetlenir. Çok fazla bekleyeni olduğu için denetimden geçemeyen sunucu yeniden başlatma için hizmetten çıkarılır, sonra geri gelir.
 	Edit	Düzen
 	Edit themes…	Temaları düzenle…
 	Elasticity	Esneklik
@@ -172,6 +174,7 @@
 	Export table (CSV)	Tabloyu dışa aktar (CSV)
 	Exported {file}	{file} dışa aktarıldı
 	Expression	İfade
+	Fails above, waiting per working server	Başarısızlık eşiği, hizmetteki sunucu başına bekleyen
 	Failure interrupts the job	Arıza işi keser
 	Family	Aile
 	File	Dosya
@@ -192,6 +195,7 @@
 	Goes to	Şuraya gider
 	Hands on finished parts while down	Arızalıyken de bitmiş parçaları aktarır
 	Header	Üst çubuk
+	Health check	Durum denetimi
 	Help	Yardım
 	Hide Others	Diğerlerini Gizle
 	Hide {app}	{app} Uygulamasını Gizle
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Müşterilerin bu çıkışlardan kaç parça istediği; sonuçlar o zaman taktı (kullanılabilir sürenin talebe bölümü) ve her görevin döngü süresini gösterir.
 	In use	Kullanımda
 	Inside over time	Zaman içinde içeridekiler
+	Job under way on a server taken out:	Hizmetten çıkarılan sunucuda süren iş:
 	Jump	Git
 	Jump to time	Zamana git
+	Keep at least in service	En az hizmette tutulacak
 	Keep the time, without the estimate it came from	Süreyi, geldiği tahmin olmadan koru
 	Keyboard Shortcuts…	Klavye Kısayolları…
 	Keyboard shortcuts saved	Klavye kısayolları kaydedildi
@@ -227,6 +233,7 @@
 	Mean queue length	Ortalama kuyruk uzunluğu
 	Mean time blocked	Ortalama engellenme süresi
 	Mean time in system	Sistemdeki ortalama süre
+	Mean units in service	Hizmetteki ortalama birim sayısı
 	Mean wait	Ortalama bekleme süresi
 	Mean wait before giving up	Vazgeçmeden önceki ortalama bekleme süresi
 	Metric	Ölçüt
@@ -279,6 +286,7 @@
 	Opened {file}	{file} açıldı
 	Open…	Aç…
 	Or start from an example	Veya bir örnekle başlayın
+	Out for (restart)	Hizmet dışı süresi (yeniden başlatma)
 	PERT	PERT
 	PNG image	PNG görüntüsü
 	Parameter	Parametre
@@ -355,6 +363,8 @@
 	Result with a target	Hedefli sonuç
 	Result, down and up	Sonuç, aşağı ve yukarı
 	Results	Sonuçlar
+	Resume after restart	Yeniden başlatmadan sonra sürdür
+	Retry elsewhere	Başka yerde yeniden dene
 	Rework	Yeniden işleme
 	Rework on {id}	{id} üzerinde yeniden işleme
 	Rework ratio	Yeniden işleme oranı
@@ -430,6 +440,7 @@
 	Sun	Paz
 	Sweep a parameter	Bir parametreyi tara
 	Table stripes	Tablo şeritleri
+	Take servers out when overloaded	Aşırı yüklenen sunucuları hizmetten çıkar
 	Takt	Takt
 	Takt time	Takt zamanı
 	Tandem line	Tandem hat
@@ -442,6 +453,8 @@
 	Text	Metin
 	Text on accent	Vurgu üzerindeki metin
 	Text on header	Üst çubuktaki metin
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Bağlantı kopar ve istemci yeniden dener: varlık hemen kuyruğun başına döner ve üzerinde yapılan iş boşa gider.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Varlık kendi sunucusunda bekler ve sunucu geri gelince iş kalan kısmıyla sürer.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Aralık {share} hedef oranının altına iniyor, bu yüzden oranın karşılandığı %95 güvenle gösterilmiş değil; daha fazla tekrar aralığı daraltır.
 	The last task with a resource it finished at	Parçanın geçtiği kaynak kullanan son görev
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Durdurma koşuluna kadarki ortalama süre yalnızca bu koşula ulaşan tekrarlara göredir; diğerleri süre sınırlarına kadar çalıştı.
@@ -466,6 +479,7 @@
 	Time failed	Arıza süresi
 	Time off shift	Vardiya dışı süre
 	Time processing	İşleme süresi
+	Time restarting	Yeniden başlatma süresi
 	Time setting up	Hazırlıkta geçen süre
 	Time starved	İş bekleme süresi
 	Time to failure	Arızaya kadar süre
@@ -488,6 +502,7 @@
 	Unit	Birim
 	Units	Birimler
 	Units by calendar	Takvime göre birimler
+	Units taken out by health checks	Durum denetimleriyle hizmetten çıkarılan birimler
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Birden çok görevin paylaştığı birimler. Paylaşılan kaynakları kullanan bir görev bunları havuzdan veya role göre alır.
 	Untitled	İsimsiz
 	Untitled model	Başlıksız model
@@ -519,7 +534,7 @@
 	Whole number	Tam sayı
 	Window	Pencere
 	With every time at its mean: {units}	Her süre ortalamasındayken: {units}
-	Work wasted on those who gave up	Vazgeçenlere boşa giden iş
+	Work wasted on jobs that did not finish	Bitmeyen işlere boşa giden iş
 	XPDL with BPSim	BPSim içeren XPDL
 	Yes or no	Evet veya hayır
 	Your changes will be lost if you don't save them.	Kaydetmezseniz değişiklikleriniz kaybolur.

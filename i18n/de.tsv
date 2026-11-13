@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Beim Ändern der Zeiteinheit werden bereits vorhandene Zeiten im Modell nicht umgerechnet.
 	Chart	Diagramm
 	Chart hover	Diagramm unter Mauszeiger
+	Check every	Prüfung alle
 	Choose…	Auswählen…
 	Clear Menu	Menü leeren
 	Close	Schließen
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Jede Analyse führt das Experiment mehrmals mit demselben Startwert aus, sodass die Unterschiede von der Änderung kommen, nicht vom Zufall. Das kann eine Weile dauern.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jede Entität belegt die erste dieser Alternativen, die sich jetzt erfüllen lässt, vollständig auf einmal und gibt die Einheiten zurück, wenn sie den Block verlässt.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Jede Entität wartet hier höchstens eine Zeit, die bei ihrer Ankunft zufällig für sie gezogen wird, und gibt dann auf: Sie nimmt den als „Abgebrochen“ markierten Ausgang oder verlässt das Modell.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Jeder Server (Einheit) wird in Abständen geprüft, so wie ein Load Balancer die Server hinter ihm abfragt. Fällt einer durch, weil zu viele warten, wird er für einen Neustart außer Betrieb genommen und kommt dann zurück.
 	Edit	Bearbeiten
 	Edit themes…	Farbschemata bearbeiten…
 	Elasticity	Elastizität
@@ -172,6 +174,7 @@
 	Export table (CSV)	Tabelle exportieren (CSV)
 	Exported {file}	{file} exportiert
 	Expression	Ausdruck
+	Fails above, waiting per working server	Fällt durch über (Wartende je Server in Betrieb)
 	Failure interrupts the job	Ausfall unterbricht die Bearbeitung
 	Family	Familie
 	File	Datei
@@ -192,6 +195,7 @@
 	Goes to	Geht zu
 	Hands on finished parts while down	Gibt fertige Teile auch im Ausfall weiter
 	Header	Kopfleiste
+	Health check	Healthcheck
 	Help	Hilfe
 	Hide Others	Andere ausblenden
 	Hide {app}	{app} ausblenden
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Wie viele Teile Kunden von diesen Abgängen wollen; die Ergebnisse zeigen dann den Takt (die verfügbare Zeit geteilt durch den Bedarf) und die Zykluszeit jeder Aufgabe.
 	In use	In Verwendung
 	Inside over time	Im Block über die Zeit
+	Job under way on a server taken out:	Laufender Auftrag auf einem Server, der außer Betrieb geht:
 	Jump	Springen
 	Jump to time	Springen zu Zeitpunkt
+	Keep at least in service	Mindestens in Betrieb halten
 	Keep the time, without the estimate it came from	Die Zeit behalten, ohne die Schätzung, aus der sie stammt
 	Keyboard Shortcuts…	Tastenkombinationen…
 	Keyboard shortcuts saved	Tastenkombinationen gespeichert
@@ -227,6 +233,7 @@
 	Mean queue length	Mittlere Warteschlangenlänge
 	Mean time blocked	Mittlere Blockierungszeit
 	Mean time in system	Mittlere Verweilzeit im System
+	Mean units in service	Mittlere Anzahl Einheiten in Betrieb
 	Mean wait	Mittlere Wartezeit
 	Mean wait before giving up	Mittlere Wartezeit bis zum Aufgeben
 	Metric	Kennzahl
@@ -279,6 +286,7 @@
 	Opened {file}	{file} geöffnet
 	Open…	Öffnen…
 	Or start from an example	Oder mit einem Beispiel beginnen
+	Out for (restart)	Außer Betrieb für (Neustart)
 	PERT	PERT
 	PNG image	PNG-Bild
 	Parameter	Parameter
@@ -355,6 +363,8 @@
 	Result with a target	Ergebnis mit Ziel
 	Result, down and up	Ergebnis, nach unten und oben
 	Results	Ergebnisse
+	Resume after restart	Nach dem Neustart fortsetzen
+	Retry elsewhere	Anderswo erneut versuchen
 	Rework	Nacharbeit
 	Rework on {id}	Nacharbeit bei {id}
 	Rework ratio	Nacharbeitsrate
@@ -430,6 +440,7 @@
 	Sun	So
 	Sweep a parameter	Einen Parameter variieren
 	Table stripes	Tabellenstreifen
+	Take servers out when overloaded	Server bei Überlastung außer Betrieb nehmen
 	Takt	Takt
 	Takt time	Taktzeit
 	Tandem line	Tandemlinie
@@ -442,6 +453,8 @@
 	Text	Text
 	Text on accent	Text auf Akzent
 	Text on header	Text auf Kopfleiste
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Die Verbindung bricht ab, und der Client versucht es erneut: Die Entität geht sofort an den Anfang der Warteschlange zurück, und die an ihr geleistete Arbeit ist verschwendet.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Die Entität wartet an ihrem Server, und der Auftrag läuft mit dem Rest weiter, sobald der Server zurück ist.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Das Intervall reicht unter den Zielanteil von {share}, daher ist nicht mit 95 % Konfidenz gezeigt, dass der Anteil erreicht wird; mehr Replikationen würden es verengen.
 	The last task with a resource it finished at	Die letzte Aufgabe mit Ressource, die das Teil durchlaufen hat
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Die mittlere Zeit bis zur Abbruchbedingung bezieht sich nur auf die Replikationen, die sie erreicht haben; die übrigen liefen bis zu ihrem Zeitlimit.
@@ -466,6 +479,7 @@
 	Time failed	Zeit im Ausfall
 	Time off shift	Zeit außerhalb der Schicht
 	Time processing	Zeit in Bearbeitung
+	Time restarting	Zeit im Neustart
 	Time setting up	Zeit beim Rüsten
 	Time starved	Zeit ohne Arbeit
 	Time to failure	Zeit bis zum Ausfall
@@ -488,6 +502,7 @@
 	Unit	Einheit
 	Units	Einheiten
 	Units by calendar	Einheiten nach Kalender
+	Units taken out by health checks	Durch Healthchecks außer Betrieb genommene Einheiten
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Einheiten, die sich mehrere Aufgaben teilen. Eine Aufgabe mit gemeinsamen Ressourcen belegt sie nach Pool oder nach Rolle.
 	Untitled	Unbenannt
 	Untitled model	Unbenanntes Modell
@@ -519,7 +534,7 @@
 	Whole number	Ganze Zahl
 	Window	Fenster
 	With every time at its mean: {units}	Mit jeder Zeit auf ihrem Mittelwert: {units}
-	Work wasted on those who gave up	Verschwendete Arbeit an Aufgebenden
+	Work wasted on jobs that did not finish	Verschwendete Arbeit an nicht beendeten Aufträgen
 	XPDL with BPSim	XPDL mit BPSim
 	Yes or no	Ja oder Nein
 	Your changes will be lost if you don't save them.	Ihre Änderungen gehen verloren, wenn Sie sie nicht speichern.

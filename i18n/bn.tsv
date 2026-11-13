@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	সময়ের একক পরিবর্তন করলে মডেলে আগে থেকে থাকা সময়ের মান রূপান্তরিত হয় না।
 	Chart	চার্ট
 	Chart hover	পয়েন্টারের নিচে চার্ট
+	Check every	পরীক্ষার ব্যবধান
 	Choose…	বেছে নিন…
 	Clear Menu	মেনু পরিষ্কার করুন
 	Close	বন্ধ
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	প্রতিটি বিশ্লেষণ একই যদৃচ্ছ বীজে পরীক্ষাটি কয়েকবার চালায়, তাই পার্থক্য আসে পরিবর্তন থেকে, দৈবক্রম থেকে নয়। কিছুটা সময় লাগতে পারে।
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	প্রতিটি সত্তা এগুলোর মধ্যে প্রথম সেটি নেয় যা এখনই একসঙ্গে পুরোপুরি পূরণ করা যায়, এবং বেরিয়ে যাওয়ার সময় এককগুলো ফেরত দেয়।
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	প্রতিটি সত্তা আগমনের সময় তার জন্য এলোমেলোভাবে নেওয়া একটি সময় পর্যন্ত এখানে অপেক্ষা করে, তারপর ছেড়ে দেয়: সেটি "ছেড়ে যাওয়া" চিহ্নিত বেরোনোর পথ ধরে, অথবা মডেল থেকে বেরিয়ে যায়।
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	প্রতিটি সার্ভার (একক) মাঝে মাঝে পরীক্ষা করা হয়, যেমন একটি লোড ব্যালান্সার তার পেছনের সার্ভারগুলো যাচাই করে। যে সার্ভার পরীক্ষায় ব্যর্থ হয়, কারণ খুব বেশি অপেক্ষায় আছে, তাকে পুনরায় চালুর জন্য সরিয়ে নেওয়া হয়, তারপর সে ফিরে আসে।
 	Edit	সম্পাদনা
 	Edit themes…	থিম সম্পাদনা…
 	Elasticity	স্থিতিস্থাপকতা
@@ -172,6 +174,7 @@
 	Export table (CSV)	সারণি রপ্তানি করুন (CSV)
 	Exported {file}	{file} রপ্তানি করা হয়েছে
 	Expression	অভিব্যক্তি
+	Fails above, waiting per working server	ব্যর্থতার সীমা, চালু সার্ভার প্রতি অপেক্ষমাণ
 	Failure interrupts the job	বিকলতা কাজ থামিয়ে দেয়
 	Family	পরিবার
 	File	ফাইল
@@ -192,6 +195,7 @@
 	Goes to	যেখানে যায়
 	Hands on finished parts while down	বিকল অবস্থাতেও তৈরি অংশ এগিয়ে দেয়
 	Header	শিরোনাম বার
+	Health check	অবস্থা পরীক্ষা
 	Help	সহায়তা
 	Hide Others	অন্যগুলো লুকান
 	Hide {app}	{app} লুকান
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	গ্রাহকেরা এই প্রস্থান থেকে কতগুলো অংশ চান; তখন ফলাফলে টাক্ট (প্রাপ্য সময়কে চাহিদা দিয়ে ভাগ করে) এবং প্রতিটি কাজের সাইকেল টাইম দেখায়।
 	In use	ব্যবহৃত হচ্ছে
 	Inside over time	সময়ের সাথে ভিতরে
+	Job under way on a server taken out:	সরিয়ে নেওয়া সার্ভারে চলমান কাজ:
 	Jump	যান
 	Jump to time	সময়ে যান
+	Keep at least in service	অন্তত এতগুলো চালু রাখুন
 	Keep the time, without the estimate it came from	সময় রাখুন, যে অনুমান থেকে এসেছে তা ছাড়া
 	Keyboard Shortcuts…	কীবোর্ড শর্টকাট…
 	Keyboard shortcuts saved	কীবোর্ড শর্টকাট সংরক্ষিত হয়েছে
@@ -227,6 +233,7 @@
 	Mean queue length	সারির গড় দৈর্ঘ্য
 	Mean time blocked	গড় অবরুদ্ধ সময়
 	Mean time in system	সিস্টেমে গড় সময়
+	Mean units in service	চালু এককের গড় সংখ্যা
 	Mean wait	গড় অপেক্ষার সময়
 	Mean wait before giving up	ছেড়ে দেওয়ার আগে গড় অপেক্ষার সময়
 	Metric	পরিমাপক
@@ -279,6 +286,7 @@
 	Opened {file}	{file} খোলা হয়েছে
 	Open…	খুলুন…
 	Or start from an example	অথবা উদাহরণ দিয়ে শুরু করুন
+	Out for (restart)	সরিয়ে রাখার সময় (পুনরায় চালু)
 	PERT	PERT
 	PNG image	PNG ছবি
 	Parameter	প্যারামিটার
@@ -355,6 +363,8 @@
 	Result with a target	লক্ষ্যসহ ফলাফল
 	Result, down and up	ফলাফল, নিচে ও উপরে
 	Results	ফলাফল
+	Resume after restart	পুনরায় চালুর পরে আবার শুরু
+	Retry elsewhere	অন্য কোথাও আবার চেষ্টা
 	Rework	পুনঃকাজ
 	Rework on {id}	{id}-এ পুনঃকাজ
 	Rework ratio	পুনঃকাজ অনুপাত
@@ -430,6 +440,7 @@
 	Sun	রবি
 	Sweep a parameter	একটি প্যারামিটার সুইপ
 	Table stripes	টেবিলের ডোরা
+	Take servers out when overloaded	অতিরিক্ত ভারে সার্ভার সরিয়ে নেওয়া
 	Takt	টাক্ট
 	Takt time	টাক্ট টাইম
 	Tandem line	ধারাবাহিক লাইন
@@ -442,6 +453,8 @@
 	Text	টেক্সট
 	Text on accent	অ্যাকসেন্ট রঙের ওপর টেক্সট
 	Text on header	শিরোনাম বারে টেক্সট
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	সংযোগ বিচ্ছিন্ন হয় এবং ক্লায়েন্ট আবার চেষ্টা করে: সত্তাটি সঙ্গে সঙ্গে সারির সামনে ফিরে যায়, আর তার ওপর করা কাজ নষ্ট হয়।
+	The entity waits on its server and the job carries on with what was left once the server is back.	সত্তাটি তার সার্ভারে অপেক্ষা করে, আর সার্ভার ফিরে এলে বাকি অংশ নিয়ে কাজ চলতে থাকে।
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ব্যবধানটি {share} লক্ষ্য অংশের নিচে নেমে যায়, তাই অংশটি ৯৫% আস্থায় পূরণ হয়েছে বলে দেখানো যায় না; আরও পুনরাবৃত্তি এটিকে সরু করবে।
 	The last task with a resource it finished at	শেষ যে সম্পদসহ কাজ অংশটি পার হয়েছে
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	থামার শর্ত পর্যন্ত গড় সময় কেবল সেই পুনরাবৃত্তিগুলোর উপর যেগুলো শর্তে পৌঁছেছে; বাকিগুলো তাদের সময়সীমা পর্যন্ত চলেছে।
@@ -466,6 +479,7 @@
 	Time failed	বিকল থাকার সময়
 	Time off shift	শিফটের বাইরে সময়
 	Time processing	প্রক্রিয়াকরণে সময়
+	Time restarting	পুনরায় চালু হওয়ার সময়
 	Time setting up	সেটআপে থাকা সময়
 	Time starved	কাজহীন সময়
 	Time to failure	বিকল হওয়া পর্যন্ত সময়
@@ -488,6 +502,7 @@
 	Unit	একক
 	Units	এককের সংখ্যা
 	Units by calendar	ক্যালেন্ডার অনুযায়ী এককের সংখ্যা
+	Units taken out by health checks	অবস্থা পরীক্ষায় সরিয়ে নেওয়া একক
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	যে এককগুলো একাধিক কাজ ভাগাভাগি করে ব্যবহার করে। ভাগ করা সম্পদসহ কাজ সেগুলো পুল বা ভূমিকা অনুযায়ী নেয়।
 	Untitled	শিরোনামহীন
 	Untitled model	শিরোনামহীন মডেল
@@ -519,7 +534,7 @@
 	Whole number	পূর্ণসংখ্যা
 	Window	উইন্ডো
 	With every time at its mean: {units}	প্রতিটি সময় তার গড়ে: {units}
-	Work wasted on those who gave up	ছেড়ে দেওয়াদের ওপর নষ্ট কাজ
+	Work wasted on jobs that did not finish	অসমাপ্ত কাজে নষ্ট কাজ
 	XPDL with BPSim	BPSim সহ XPDL
 	Yes or no	হ্যাঁ বা না
 	Your changes will be lost if you don't save them.	সংরক্ষণ না করলে পরিবর্তন মুছে যাবে।

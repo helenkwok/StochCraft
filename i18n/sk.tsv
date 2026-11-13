@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Zmena časovej jednotky neprepočíta časy, ktoré už sú v modeli.
 	Chart	Graf
 	Chart hover	Graf pod ukazovateľom
+	Check every	Kontrola každých
 	Choose…	Vyberte…
 	Clear Menu	Vymazať ponuku
 	Close	Zavrieť
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Každá analýza spúšťa experiment niekoľkokrát s rovnakou počiatočnou hodnotou generátora, takže rozdiely pochádzajú zo zmeny, nie z náhody. Môže to chvíľu trvať.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Každá entita si naraz vezme celú prvú z týchto alternatív, ktorú možno práve splniť, a jednotky vráti, keď odchádza.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Každá entita tu čaká najviac čas, ktorý sa jej náhodne určí pri príchode, a potom to vzdá: odíde cestou označenou „Vzdané“ alebo opustí model.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Každý server (jednotka) sa raz za čas kontroluje, tak ako load balancer skúša servery za sebou. Ten, ktorý neprejde, lebo naň čaká priveľa entít, sa vyradí z prevádzky na reštart a potom sa vráti.
 	Edit	Upraviť
 	Edit themes…	Upraviť motívy…
 	Elasticity	Pružnosť
@@ -172,6 +174,7 @@
 	Export table (CSV)	Exportovať tabuľku (CSV)
 	Exported {file}	Exportované {file}
 	Expression	Výraz
+	Fails above, waiting per working server	Neprejde nad, čakajúcich na server v prevádzke
 	Failure interrupts the job	Porucha preruší prácu
 	Family	Rodina
 	File	Súbor
@@ -192,6 +195,7 @@
 	Goes to	Vedie do
 	Hands on finished parts while down	Odovzdáva hotové diely aj počas poruchy
 	Header	Záhlavie
+	Health check	Kontrola stavu
 	Help	Pomocník
 	Hide Others	Skryť ostatné
 	Hide {app}	Skryť {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Koľko dielov chcú zákazníci z týchto odchodov; výsledky potom ukážu takt (dostupný čas delený dopytom) a čas cyklu každej úlohy.
 	In use	Používa sa
 	Inside over time	Vnútri v čase
+	Job under way on a server taken out:	Rozpracovaná práca na vyradenom serveri:
 	Jump	Prejsť
 	Jump to time	Prejsť na čas
+	Keep at least in service	Ponechať v prevádzke aspoň
 	Keep the time, without the estimate it came from	Ponechať čas bez odhadu, z ktorého vznikol
 	Keyboard Shortcuts…	Klávesové skratky…
 	Keyboard shortcuts saved	Klávesové skratky uložené
@@ -227,6 +233,7 @@
 	Mean queue length	Priemerná dĺžka radu
 	Mean time blocked	Priemerný čas blokovania
 	Mean time in system	Priemerný čas v systéme
+	Mean units in service	Priemerný počet jednotiek v prevádzke
 	Mean wait	Priemerný čas čakania
 	Mean wait before giving up	Priemerný čas čakania do vzdania
 	Metric	Metrika
@@ -279,6 +286,7 @@
 	Opened {file}	Otvorený {file}
 	Open…	Otvoriť…
 	Or start from an example	Alebo začnite príkladom
+	Out for (restart)	Mimo prevádzky počas (reštart)
 	PERT	PERT
 	PNG image	Obrázok PNG
 	Parameter	Parameter
@@ -355,6 +363,8 @@
 	Result with a target	Výsledok s cieľom
 	Result, down and up	Výsledok, nadol a nahor
 	Results	Výsledky
+	Resume after restart	Pokračovať po reštarte
+	Retry elsewhere	Skúsiť znova inde
 	Rework	Prepracovanie
 	Rework on {id}	Prepracovanie na {id}
 	Rework ratio	Podiel prepracovania
@@ -430,6 +440,7 @@
 	Sun	ne
 	Sweep a parameter	Prechod parametrom
 	Table stripes	Pruhy tabuliek
+	Take servers out when overloaded	Vyraďovať preťažené servery
 	Takt	Takt
 	Takt time	Čas taktu
 	Tandem line	Tandemová linka
@@ -442,6 +453,8 @@
 	Text	Text
 	Text on accent	Text na zvýraznení
 	Text on header	Text v záhlaví
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Spojenie spadne a klient to skúsi znova: entita sa hneď vráti na začiatok radu a práca na nej vykonaná je zbytočná.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Entita čaká pri svojom serveri a práca pokračuje so zvyškom, len čo je server späť.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval siaha pod cieľový podiel {share}, takže splnenie podielu nie je preukázané s 95 % spoľahlivosťou; viac replikácií by ho zúžilo.
 	The last task with a resource it finished at	Posledná úloha so zdrojom, ktorou diel prešiel
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Priemerný čas do podmienky zastavenia je iba z replikácií, ktoré ju splnili; ostatné bežali do svojho časového limitu.
@@ -466,6 +479,7 @@
 	Time failed	Čas poruchy
 	Time off shift	Čas mimo zmeny
 	Time processing	Čas spracovania
+	Time restarting	Čas v reštarte
 	Time setting up	Čas nastavovania
 	Time starved	Čas bez práce
 	Time to failure	Čas do poruchy
@@ -488,6 +502,7 @@
 	Unit	Jednotka
 	Units	Jednotky
 	Units by calendar	Jednotky podľa kalendára
+	Units taken out by health checks	Jednotky vyradené kontrolami stavu
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Jednotky, ktoré zdieľa viacero úloh. Úloha so zdieľanými zdrojmi ich berie podľa skupiny alebo podľa roly.
 	Untitled	Bez názvu
 	Untitled model	Nepomenovaný model
@@ -519,7 +534,7 @@
 	Whole number	Celé číslo
 	Window	Okno
 	With every time at its mean: {units}	S každým časom na priemere: {units}
-	Work wasted on those who gave up	Zbytočná práca na tých, ktoré to vzdali
+	Work wasted on jobs that did not finish	Zbytočná práca na nedokončených prácach
 	XPDL with BPSim	XPDL s BPSim
 	Yes or no	Áno alebo nie
 	Your changes will be lost if you don't save them.	Ak zmeny neuložíte, stratia sa.
