@@ -102,7 +102,9 @@
 	Constant	ค่าคงที่
 	Copy	คัดลอก
 	Counts against	นับเข้างาน
+	Customer demand	ความต้องการของลูกค้า
 	Cut	ตัด
+	Cycle time	ไซเคิลไทม์
 	Daily	ทุกวัน
 	Dark	มืด
 	Data points	จุดข้อมูล
@@ -112,6 +114,8 @@
 	Decision (one way)	การตัดสินใจ (เลือกทางเดียว)
 	Default flow	โฟลว์เริ่มต้น
 	Delete	ลบ
+	Demand	ความต้องการ
+	Demand met	สัดส่วนความต้องการที่ตอบสนองได้
 	Departures	ขาออก
 	Diagram	แผนภาพ
 	Discard	ละทิ้ง
@@ -173,6 +177,7 @@
 	Hide Others	ซ่อนรายการอื่น
 	Hide {app}	ซ่อน {app}
 	How many	จำนวน
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ลูกค้าต้องการชิ้นงานกี่ชิ้นจากขาออกเหล่านี้ จากนั้นผลลัพธ์จะแสดงแท็กไทม์ (เวลาที่มีหารด้วยความต้องการ) และไซเคิลไทม์ของแต่ละงาน
 	Inside over time	จำนวนภายในตามเวลา
 	Jump	ข้าม
 	Jump to time	ข้ามไปยังเวลา
@@ -257,8 +262,12 @@
 	Parameter	พารามิเตอร์
 	Parameters	พารามิเตอร์
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ชิ้นงานที่ไปตามโฟลว์นี้จะกลับไปทำใหม่ และนับเป็นงานแก้ไขของงานที่ใช้ทรัพยากรงานสุดท้ายที่ชิ้นงานผ่าน
+	Parts wanted	จำนวนชิ้นที่ต้องการ
+	Parts wanted is a number above 0	จำนวนชิ้นที่ต้องการต้องเป็นตัวเลขที่มากกว่า 0
 	Paste	วาง
 	Pause	หยุดชั่วคราว
+	Per	ช่วง
+	Per shift needs a calendar: each period it is active is a shift.	"ต่อกะ" ต้องมีปฏิทิน: แต่ละช่วงที่ปฏิทินเปิดใช้งานคือหนึ่งกะ
 	Percentile	เปอร์เซ็นไทล์
 	Period {n} ends	ช่วง {n} สิ้นสุด
 	Period {n} repeats	ช่วง {n} ซ้ำ
@@ -389,6 +398,8 @@
 	Stopped watching	หยุดเฝ้าดูแล้ว
 	Sun	อา.
 	Sweep a parameter	กวาดพารามิเตอร์
+	Takt	แท็กไทม์
+	Takt time	แท็กไทม์
 	Tandem line	สายงานต่อเนื่อง
 	Target	เป้าหมาย
 	Target share	สัดส่วนเป้าหมาย
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	แบบจำลอง: การทดลอง การเชื่อมต่อ และปัญหา
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	สัดส่วนรอบการจำลองซ้ำที่เท่ากับหรือต่ำกว่าแต่ละค่า แถบครอบคลุมการแจกแจงจริงด้วยความเชื่อมั่น {confidence}
 	The values are numbers, separated by semicolons or spaces	ค่าต้องเป็นตัวเลขที่คั่นด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
+	The whole clock	เวลาทั้งหมด
 	This block has a warning	บล็อกนี้มีคำเตือน
 	This block has an error	บล็อกนี้มีข้อผิดพลาด
 	This run	การรันนี้
 	Three-point estimate	การประมาณสามจุด
 	Thu	พฤ.
+	Time available	เวลาที่มี
 	Time between arrivals	เวลาระหว่างการมาถึง
 	Time blocked	เวลาที่ถูกบล็อก
 	Time failed	เวลาที่ขัดข้อง
@@ -479,6 +492,7 @@
 	decision: one way	การตัดสินใจ: เลือกทางเดียว
 	departures	ขาออก
 	egui and eframe (Craft suite fork)	egui และ eframe (แยกจาก Craft suite)
+	for the whole run	ตลอดการรัน
 	from its value	จากค่าของมัน
 	have left	ออกไปแล้ว
 	hours	ชั่วโมง
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k จาก N: มีเพียง k จาก N รอบการจำลองซ้ำที่มีค่าของผลนั้น และค่าเฉลี่ยกับช่วงของผลนั้นคิดจาก k รอบนั้น
 	n = {k} of {n}	n = {k} จาก {n}
 	nothing yet	ยังไม่มีอะไร
+	per day	ต่อวัน
+	per shift	ต่อกะ
+	per week	ต่อสัปดาห์
 	seconds	วินาที
 	split batches	การแยกชุด
 	split or join: all ways	แยกหรือรวม: ทุกทาง

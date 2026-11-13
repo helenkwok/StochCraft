@@ -102,7 +102,9 @@
 	Constant	Константна
 	Copy	Копирај
 	Counts against	Приписује се
+	Customer demand	Потражња купаца
 	Cut	Исеци
+	Cycle time	Време циклуса
 	Daily	Дневно
 	Dark	Тамна
 	Data points	Податковне тачке
@@ -112,6 +114,8 @@
 	Decision (one way)	Одлука (један пут)
 	Default flow	Подразумевани ток
 	Delete	Избриши
+	Demand	Потражња
+	Demand met	Удео испуњене потражње
 	Departures	Одласци
 	Diagram	Дијаграм
 	Discard	Одбаци
@@ -173,6 +177,7 @@
 	Hide Others	Сакриј остале
 	Hide {app}	Сакриј {app}
 	How many	Колико
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Колико делова купци желе од ових одлазака; резултати тада приказују такт (расположиво време подељено са потражњом) и време циклуса сваког задатка.
 	Inside over time	Унутра кроз време
 	Jump	Скочи
 	Jump to time	Скочи на време
@@ -257,8 +262,12 @@
 	Parameter	Параметар
 	Parameters	Параметри
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Делови који иду овим током враћају се на поновну обраду; рачунају се као дорада последњег задатка с ресурсом кроз који су прошли.
+	Parts wanted	Тражени делови
+	Parts wanted is a number above 0	Број тражених делова је број већи од 0
 	Paste	Налепи
 	Pause	Пауза
+	Per	Период
+	Per shift needs a calendar: each period it is active is a shift.	„По смени” захтева календар: сваки период у којем је активан једна је смена.
 	Percentile	Перцентил
 	Period {n} ends	Период {n} завршава
 	Period {n} repeats	Период {n} се понавља
@@ -389,6 +398,8 @@
 	Stopped watching	Праћење заустављено
 	Sun	нед
 	Sweep a parameter	Пролаз кроз параметар
+	Takt	Такт
+	Takt time	Такт време
 	Tandem line	Тандемска линија
 	Target	Циљ
 	Target share	Циљни удео
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Модел: експеримент, везе и проблеми
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Удео репликација једнаких или мањих од сваке вредности. Појас садржи праву расподелу са поузданошћу од {confidence}.
 	The values are numbers, separated by semicolons or spaces	Вредности су бројеви одвојени тачком и зарезом или размацима
+	The whole clock	Све време
 	This block has a warning	Овај блок има упозорење
 	This block has an error	Овај блок има грешку
 	This run	Ово покретање
 	Three-point estimate	Процена у три тачке
 	Thu	чет
+	Time available	Расположиво време
 	Time between arrivals	Време између долазака
 	Time blocked	Вријеме блокаде
 	Time failed	Вријеме у квару
@@ -479,6 +492,7 @@
 	decision: one way	одлука: један пут
 	departures	одласци
 	egui and eframe (Craft suite fork)	egui и eframe (иначица пакета Craft)
+	for the whole run	за цело покретање
 	from its value	према својој вредности
 	have left	напустило
 	hours	сати
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k од N: само k од N репликација има вредност за тај резултат, а његов просек и интервал су преко тих k.
 	n = {k} of {n}	n = {k} од {n}
 	nothing yet	још ништа
+	per day	по дану
+	per shift	по смени
+	per week	по недељи
 	seconds	секунде
 	split batches	раздвајање серија
 	split or join: all ways	раздвоји или споји: сви путови

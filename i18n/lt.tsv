@@ -102,7 +102,9 @@
 	Constant	Konstanta
 	Copy	Kopijuoti
 	Counts against	Priskiriama
+	Customer demand	Klientų poreikis
 	Cut	Iškirpti
+	Cycle time	Ciklo laikas
 	Daily	Kasdien
 	Dark	Tamsi
 	Data points	Duomenų taškai
@@ -112,6 +114,8 @@
 	Decision (one way)	Sprendimas (vienas kelias)
 	Default flow	Numatytasis srautas
 	Delete	Ištrinti
+	Demand	Poreikis
+	Demand met	Patenkinto poreikio dalis
 	Departures	Išvykimai
 	Diagram	Diagrama
 	Discard	Atmesti
@@ -173,6 +177,7 @@
 	Hide Others	Slėpti kitus
 	Hide {app}	Slėpti {app}
 	How many	Kiek
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kiek detalių klientai nori iš šių išvykimų; tada rezultatai rodo taktą (turimą laiką, padalytą iš poreikio) ir kiekvienos užduoties ciklo laiką.
 	Inside over time	Viduje per laiką
 	Jump	Pereiti
 	Jump to time	Pereiti į laiką
@@ -257,8 +262,12 @@
 	Parameter	Parametras
 	Parameters	Parametrai
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Šiuo srautu einančios detalės grįžta būti apdirbtos dar kartą; jos įskaitomos kaip perdirbimas paskutinei užduočiai su ištekliumi, kurią praėjo.
+	Parts wanted	Norimos detalės
+	Parts wanted is a number above 0	Norimų detalių skaičius turi būti didesnis už 0
 	Paste	Įklijuoti
 	Pause	Pristabdyti
+	Per	Laikotarpis
+	Per shift needs a calendar: each period it is active is a shift.	„Per pamainą“ reikia kalendoriaus: kiekvienas laikotarpis, kai jis aktyvus, yra viena pamaina.
 	Percentile	Procentilis
 	Period {n} ends	{n} laikotarpio pabaiga
 	Period {n} repeats	{n} laikotarpio kartojimas
@@ -389,6 +398,8 @@
 	Stopped watching	Stebėjimas baigtas
 	Sun	sk
 	Sweep a parameter	Parametro perėjimas
+	Takt	Taktas
+	Takt time	Takto laikas
 	Tandem line	Nuoseklioji linija
 	Target	Tikslas
 	Target share	Tikslinė dalis
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Modelis: eksperimentas, jungtys ir problemos
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Replikacijų, ne didesnių už kiekvieną reikšmę, dalis. Juosta su {confidence} pasikliovimu apima tikrąjį skirstinį.
 	The values are numbers, separated by semicolons or spaces	Reikšmės yra skaičiai, atskirti kabliataškiais arba tarpais
+	The whole clock	Visas laikas
 	This block has a warning	Šiame bloke yra įspėjimas
 	This block has an error	Šiame bloke yra klaida
 	This run	Šis vykdymas
 	Three-point estimate	Trijų taškų įvertis
 	Thu	kt
+	Time available	Turimas laikas
 	Time between arrivals	Laikas tarp atvykimų
 	Time blocked	Blokavimo laikas
 	Time failed	Gedimo laikas
@@ -479,6 +492,7 @@
 	decision: one way	sprendimas: vienas kelias
 	departures	išvykimai
 	egui and eframe (Craft suite fork)	egui ir eframe (Craft paketo atšaka)
+	for the whole run	visam vykdymui
 	from its value	pagal jo reikšmę
 	have left	paliko
 	hours	valandos
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k iš N: tik k iš N replikacijų turėjo šio rezultato reikšmę, o jo vidurkis ir intervalas skaičiuojami iš tų k.
 	n = {k} of {n}	n = {k} iš {n}
 	nothing yet	dar nieko
+	per day	per dieną
+	per shift	per pamainą
+	per week	per savaitę
 	seconds	sekundės
 	split batches	partijų skaidymas
 	split or join: all ways	skaidyti arba jungti: visi keliai

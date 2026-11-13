@@ -102,7 +102,9 @@
 	Constant	Konštantné
 	Copy	Kopírovať
 	Counts against	Pripisuje sa
+	Customer demand	Dopyt zákazníkov
 	Cut	Vystrihnúť
+	Cycle time	Čas cyklu
 	Daily	Denne
 	Dark	Tmavý
 	Data points	Dátové body
@@ -112,6 +114,8 @@
 	Decision (one way)	Rozhodnutie (jedna cesta)
 	Default flow	Predvolený tok
 	Delete	Odstrániť
+	Demand	Dopyt
+	Demand met	Podiel splneného dopytu
 	Departures	Odchody
 	Diagram	Diagram
 	Discard	Zahodiť
@@ -173,6 +177,7 @@
 	Hide Others	Skryť ostatné
 	Hide {app}	Skryť {app}
 	How many	Koľko
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Koľko dielov chcú zákazníci z týchto odchodov; výsledky potom ukážu takt (dostupný čas delený dopytom) a čas cyklu každej úlohy.
 	Inside over time	Vnútri v čase
 	Jump	Prejsť
 	Jump to time	Prejsť na čas
@@ -257,8 +262,12 @@
 	Parameter	Parameter
 	Parameters	Parametre
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Diely, ktoré idú týmto tokom, sa vracajú na opätovné spracovanie; počítajú sa ako prepracovanie poslednej úlohy so zdrojom, ktorou prešli.
+	Parts wanted	Požadované diely
+	Parts wanted is a number above 0	Počet požadovaných dielov je číslo väčšie ako 0
 	Paste	Prilepiť
 	Pause	Pozastaviť
+	Per	Obdobie
+	Per shift needs a calendar: each period it is active is a shift.	„Za zmenu“ potrebuje kalendár: každé obdobie, keď je aktívny, je jedna zmena.
 	Percentile	Percentil
 	Period {n} ends	Obdobie {n} končí
 	Period {n} repeats	Obdobie {n} sa opakuje
@@ -389,6 +398,8 @@
 	Stopped watching	Sledovanie ukončené
 	Sun	ne
 	Sweep a parameter	Prechod parametrom
+	Takt	Takt
+	Takt time	Čas taktu
 	Tandem line	Tandemová linka
 	Target	Cieľ
 	Target share	Cieľový podiel
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Model: experiment, prepojenia a problémy
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Podiel replikácií rovných alebo menších než každá hodnota. Pás obsahuje skutočné rozdelenie so spoľahlivosťou {confidence}.
 	The values are numbers, separated by semicolons or spaces	Hodnoty sú čísla oddelené bodkočiarkami alebo medzerami
+	The whole clock	Celý čas
 	This block has a warning	Tento blok obsahuje upozornenie
 	This block has an error	Tento blok obsahuje chybu
 	This run	Tento beh
 	Three-point estimate	Trojbodový odhad
 	Thu	št
+	Time available	Dostupný čas
 	Time between arrivals	Čas medzi príchodmi
 	Time blocked	Čas blokovania
 	Time failed	Čas poruchy
@@ -479,6 +492,7 @@
 	decision: one way	rozhodnutie: jedna cesta
 	departures	odchody
 	egui and eframe (Craft suite fork)	egui a eframe (odvodená verzia balíka Craft)
+	for the whole run	za celý beh
 	from its value	podľa hodnoty
 	have left	opustilo
 	hours	hodiny
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k z N: iba k z N replikácií malo pre tento výsledok hodnotu a jeho priemer a interval sú z týchto k.
 	n = {k} of {n}	n = {k} z {n}
 	nothing yet	zatiaľ nič
+	per day	za deň
+	per shift	za zmenu
+	per week	za týždeň
 	seconds	sekundy
 	split batches	rozdelenie dávok
 	split or join: all ways	rozdeliť alebo spojiť: všetky cesty

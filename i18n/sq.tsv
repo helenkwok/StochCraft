@@ -102,7 +102,9 @@
 	Constant	Konstante
 	Copy	Kopjo
 	Counts against	I ngarkohet
+	Customer demand	Kërkesa e klientëve
 	Cut	Prit
+	Cycle time	Koha e ciklit
 	Daily	Çdo ditë
 	Dark	E errët
 	Data points	Pikat e të dhënave
@@ -112,6 +114,8 @@
 	Decision (one way)	Vendim (një rrugë)
 	Default flow	Rrjedha e parazgjedhur
 	Delete	Fshi
+	Demand	Kërkesa
+	Demand met	Pjesa e kërkesës së plotësuar
 	Departures	Largimet
 	Diagram	Diagrami
 	Discard	Hidh poshtë
@@ -173,6 +177,7 @@
 	Hide Others	Fshih të tjerat
 	Hide {app}	Fshih {app}
 	How many	Sa
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Sa pjesë duan klientët nga këto largime; rezultatet tregojnë atëherë taktin (kohën e disponueshme pjesëtuar me kërkesën) dhe kohën e ciklit të çdo detyre.
 	Inside over time	Brenda gjatë kohës
 	Jump	Shko
 	Jump to time	Shko te koha
@@ -257,8 +262,12 @@
 	Parameter	Parametri
 	Parameters	Parametrat
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Pjesët që marrin këtë rrjedhë kthehen për t'u punuar sërish; ato llogariten si ripunim për detyrën e fundit me burim nëpër të cilën kaluan.
+	Parts wanted	Pjesë të kërkuara
+	Parts wanted is a number above 0	Numri i pjesëve të kërkuara është një numër mbi 0
 	Paste	Ngjit
 	Pause	Pauzë
+	Per	Periudha
+	Per shift needs a calendar: each period it is active is a shift.	„Për turn” kërkon një kalendar: çdo periudhë kur ai është aktiv është një turn.
 	Percentile	Përqindëshi
 	Period {n} ends	Periudha {n} mbaron
 	Period {n} repeats	Periudha {n} përsëritet
@@ -389,6 +398,8 @@
 	Stopped watching	Vëzhgimi u ndal
 	Sun	Die
 	Sweep a parameter	Skano një parametër
+	Takt	Takt
+	Takt time	Koha e taktit
 	Tandem line	Linja në seri
 	Target	Objektivi
 	Target share	Pjesa objektiv
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Modeli: eksperimenti, lidhjet dhe problemet
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Pjesa e përsëritjeve në ose nën çdo vlerë. Brezi përmban shpërndarjen e vërtetë me besueshmëri {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vlerat janë numra të ndarë me pikëpresje ose hapësira
+	The whole clock	Gjithë koha
 	This block has a warning	Ky bllok ka një paralajmërim
 	This block has an error	Ky bllok ka një gabim
 	This run	Ky ekzekutim
 	Three-point estimate	Vlerësim me tri pika
 	Thu	Enj
+	Time available	Koha e disponueshme
 	Time between arrivals	Koha ndërmjet mbërritjeve
 	Time blocked	Koha e bllokuar
 	Time failed	Koha në defekt
@@ -479,6 +492,7 @@
 	decision: one way	vendim: një rrugë
 	departures	largimet
 	egui and eframe (Craft suite fork)	egui dhe eframe (degë e paketës Craft)
+	for the whole run	për gjithë ekzekutimin
 	from its value	nga vlera e tij
 	have left	kanë dalë
 	hours	orë
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k nga N: vetëm k nga N përsëritjet kishin një vlerë për atë rezultat, dhe mesatarja dhe intervali i tij janë mbi ato k.
 	n = {k} of {n}	n = {k} nga {n}
 	nothing yet	ende asgjë
+	per day	në ditë
+	per shift	për turn
+	per week	në javë
 	seconds	sekonda
 	split batches	ndarje e grupeve
 	split or join: all ways	ndaj ose bashko: të gjitha rrugët

@@ -102,7 +102,9 @@
 	Constant	Konstant
 	Copy	Kopeeri
 	Counts against	Arvele kantakse
+	Customer demand	Kliendi nõudlus
 	Cut	Lõika
+	Cycle time	Tsükliaeg
 	Daily	Iga päev
 	Dark	Tume
 	Data points	Andmepunktid
@@ -112,6 +114,8 @@
 	Decision (one way)	Otsus (üks tee)
 	Default flow	Vaikevoog
 	Delete	Kustuta
+	Demand	Nõudlus
+	Demand met	Täidetud nõudluse osakaal
 	Departures	Lahkumised
 	Diagram	Diagramm
 	Discard	Loobu
@@ -173,6 +177,7 @@
 	Hide Others	Peida teised
 	Hide {app}	Peida {app}
 	How many	Mitu
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Mitu detaili kliendid neist lahkumistest soovivad; tulemused näitavad siis takti (saadaolev aeg jagatud nõudlusega) ja iga ülesande tsükliaega.
 	Inside over time	Sees aja jooksul
 	Jump	Mine
 	Jump to time	Mine ajahetkele
@@ -257,8 +262,12 @@
 	Parameter	Parameeter
 	Parameters	Parameetrid
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Seda voogu mööda liikuvad detailid lähevad tagasi uuesti töötlemisele; need loetakse ümbertöötluseks viimasele ressursiga ülesandele, mille nad läbisid.
+	Parts wanted	Soovitud detailid
+	Parts wanted is a number above 0	Soovitud detailide arv peab olema suurem kui 0
 	Paste	Kleebi
 	Pause	Paus
+	Per	Periood
+	Per shift needs a calendar: each period it is active is a shift.	„Vahetuses” vajab kalendrit: iga periood, mil see on aktiivne, on üks vahetus.
 	Percentile	Protsentiil
 	Period {n} ends	Periood {n} lõpeb
 	Period {n} repeats	Periood {n} kordub
@@ -389,6 +398,8 @@
 	Stopped watching	Jälgimine lõpetati
 	Sun	P
 	Sweep a parameter	Parameetri läbimine
+	Takt	Takt
+	Takt time	Taktiaeg
 	Tandem line	Tandemliin
 	Target	Eesmärk
 	Target share	Sihtosakaal
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Korduste osakaal, mis on iga väärtusega võrdsed või sellest väiksemad. Vöönd sisaldab tegelikku jaotust {confidence} usaldusega.
 	The values are numbers, separated by semicolons or spaces	Väärtused on arvud, eraldatud semikoolonite või tühikutega
+	The whole clock	Kogu aeg
 	This block has a warning	Selles plokis on hoiatus
 	This block has an error	Selles plokis on viga
 	This run	See käivitus
 	Three-point estimate	Kolmepunktihinnang
 	Thu	N
+	Time available	Saadaolev aeg
 	Time between arrivals	Saabumiste vaheline aeg
 	Time blocked	Blokeeritud aeg
 	Time failed	Rikkis oleku aeg
@@ -479,6 +492,7 @@
 	decision: one way	otsus: üks tee
 	departures	lahkumised
 	egui and eframe (Craft suite fork)	egui ja eframe (Crafti tarkvarakomplekti haru)
+	for the whole run	kogu käivituse kohta
 	from its value	selle väärtuse põhjal
 	have left	on lahkunud
 	hours	tunnid
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k / N: ainult k kordusel N-st oli selle tulemuse väärtus ning selle keskmine ja vahemik on nende k põhjal.
 	n = {k} of {n}	n = {k} / {n}
 	nothing yet	veel mitte midagi
+	per day	päevas
+	per shift	vahetuses
+	per week	nädalas
 	seconds	sekundid
 	split batches	partiide jagamine
 	split or join: all ways	hargneda või ühineda: kõik teed

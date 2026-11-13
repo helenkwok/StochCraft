@@ -102,7 +102,9 @@
 	Constant	Стала величина
 	Copy	Копіювати
 	Counts against	Віднесено на
+	Customer demand	Попит клієнтів
 	Cut	Вирізати
+	Cycle time	Час циклу
 	Daily	Щодня
 	Dark	Темний
 	Data points	Точки даних
@@ -112,6 +114,8 @@
 	Decision (one way)	Рішення (один шлях)
 	Default flow	Потік за замовчуванням
 	Delete	Видалити
+	Demand	Попит
+	Demand met	Частка покритого попиту
 	Departures	Вибуття
 	Diagram	Діаграма
 	Discard	Відкинути
@@ -173,6 +177,7 @@
 	Hide Others	Приховати інші
 	Hide {app}	Приховати {app}
 	How many	Скільки
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Скільки деталей клієнти хочуть від цих вибуттів; тоді результати показують такт (доступний час, поділений на попит) і час циклу кожного завдання.
 	Inside over time	Усередині в часі
 	Jump	Перейти
 	Jump to time	Перейти до часу
@@ -257,8 +262,12 @@
 	Parameter	Параметр
 	Parameters	Параметри
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Деталі, що йдуть цим потоком, повертаються на повторну обробку; вони враховуються як доопрацювання останнього завдання з ресурсом, яке вони пройшли.
+	Parts wanted	Потрібно деталей
+	Parts wanted is a number above 0	Потрібна кількість деталей має бути більшою за 0
 	Paste	Вставити
 	Pause	Пауза
+	Per	Період
+	Per shift needs a calendar: each period it is active is a shift.	«За зміну» потребує календаря: кожен період, коли він активний, — це зміна.
 	Percentile	Процентиль
 	Period {n} ends	Кінець періоду {n}
 	Period {n} repeats	Повторення періоду {n}
@@ -389,6 +398,8 @@
 	Stopped watching	Спостереження припинено
 	Sun	нд
 	Sweep a parameter	Перебір параметра
+	Takt	Такт
+	Takt time	Час такту
 	Tandem line	Послідовна лінія
 	Target	Мета
 	Target share	Цільова частка
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Модель: експеримент, з'єднання й проблеми
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Частка реплікацій, що не перевищують кожне значення. Смуга містить справжній розподіл із довірою {confidence}.
 	The values are numbers, separated by semicolons or spaces	Значення — це числа, розділені крапкою з комою або пробілами
+	The whole clock	Увесь час
 	This block has a warning	У цьому блоці є попередження
 	This block has an error	У цьому блоці є помилка
 	This run	Цей запуск
 	Three-point estimate	Триточкова оцінка
 	Thu	чт
+	Time available	Доступний час
 	Time between arrivals	Час між прибуттями
 	Time blocked	Час блокування
 	Time failed	Час відмови
@@ -479,6 +492,7 @@
 	decision: one way	рішення: один шлях
 	departures	вибуття
 	egui and eframe (Craft suite fork)	egui та eframe (відгалуження набору Craft)
+	for the whole run	за весь запуск
 	from its value	за значенням
 	have left	покинули
 	hours	години
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k з N: лише k з N реплікацій мали значення для цього результату, і його середнє та інтервал обчислено за цими k.
 	n = {k} of {n}	n = {k} з {n}
 	nothing yet	поки нічого
+	per day	на день
+	per shift	за зміну
+	per week	на тиждень
 	seconds	секунди
 	split batches	розділення партій
 	split or join: all ways	розділити або об'єднати: усі шляхи

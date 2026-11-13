@@ -102,7 +102,9 @@
 	Constant	Константа
 	Copy	Копиране
 	Counts against	Приписва се на
+	Customer demand	Клиентско търсене
 	Cut	Изрязване
+	Cycle time	Време на цикъла
 	Daily	Ежедневно
 	Dark	Тъмна
 	Data points	Точки с данни
@@ -112,6 +114,8 @@
 	Decision (one way)	Решение (един път)
 	Default flow	Поток по подразбиране
 	Delete	Изтриване
+	Demand	Търсене
+	Demand met	Дял на покритото търсене
 	Departures	Напускания
 	Diagram	Диаграма
 	Discard	Отхвърляне
@@ -173,6 +177,7 @@
 	Hide Others	Скриване на другите
 	Hide {app}	Скриване на {app}
 	How many	Колко
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Колко части искат клиентите от тези напускания; тогава резултатите показват такта (наличното време, разделено на търсенето) и времето на цикъла на всяка задача.
 	Inside over time	Вътре във времето
 	Jump	Отиване
 	Jump to time	Отиване към момент
@@ -257,8 +262,12 @@
 	Parameter	Параметър
 	Parameters	Параметри
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Частите, минаващи по този поток, се връщат за повторна обработка; отчитат се като преработка на последната задача с ресурс, през която са минали.
+	Parts wanted	Желани части
+	Parts wanted is a number above 0	Желаните части са число над 0
 	Paste	Поставяне
 	Pause	Пауза
+	Per	Период
+	Per shift needs a calendar: each period it is active is a shift.	„На смяна“ изисква календар: всеки период, в който той е активен, е смяна.
 	Percentile	Персентил
 	Period {n} ends	Период {n} завършва
 	Period {n} repeats	Период {n} се повтаря
@@ -389,6 +398,8 @@
 	Stopped watching	Наблюдението е спряно
 	Sun	нд
 	Sweep a parameter	Обхождане на параметър
+	Takt	Такт
+	Takt time	Време на такта
 	Tandem line	Тандемна линия
 	Target	Цел
 	Target share	Целеви дял
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Моделът: експеримент, връзки и проблеми
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Делът на репликациите при или под всяка стойност. Лентата съдържа истинското разпределение с доверие {confidence}.
 	The values are numbers, separated by semicolons or spaces	Стойностите са числа, разделени с точка и запетая или интервали
+	The whole clock	Цялото време
 	This block has a warning	Този блок има предупреждение
 	This block has an error	Този блок има грешка
 	This run	Това изпълнение
 	Three-point estimate	Оценка в три точки
 	Thu	чт
+	Time available	Налично време
 	Time between arrivals	Време между пристиганията
 	Time blocked	Време в блокиране
 	Time failed	Време в повреда
@@ -479,6 +492,7 @@
 	decision: one way	решение: един път
 	departures	напускания
 	egui and eframe (Craft suite fork)	egui и eframe (разклонение на пакета Craft)
+	for the whole run	за цялото изпълнение
 	from its value	според стойността му
 	have left	са напуснали
 	hours	часове
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k от N: само k от N репликации имат стойност за този резултат и средното и интервалът му са върху тези k.
 	n = {k} of {n}	n = {k} от {n}
 	nothing yet	все още нищо
+	per day	на ден
+	per shift	на смяна
+	per week	на седмица
 	seconds	секунди
 	split batches	разделяне на партиди
 	split or join: all ways	разделяне или обединяване: всички пътища

@@ -102,7 +102,9 @@
 	Constant	ຄ່າຄົງທີ່
 	Copy	ສຳເນົາ
 	Counts against	ນັບໃສ່ໜ້າວຽກ
+	Customer demand	ຄວາມຕ້ອງການຂອງລູກຄ້າ
 	Cut	ຕັດ
+	Cycle time	ເວລາຮອບວຽນ
 	Daily	ທຸກມື້
 	Dark	ມືດ
 	Data points	ຈຸດຂໍ້ມູນ
@@ -112,6 +114,8 @@
 	Decision (one way)	ການຕັດສິນໃຈ (ທາງດຽວ)
 	Default flow	ເສັ້ນທາງເລີ່ມຕົ້ນ
 	Delete	ລຶບ
+	Demand	ຄວາມຕ້ອງການ
+	Demand met	ສັດສ່ວນຄວາມຕ້ອງການທີ່ຕອບສະໜອງໄດ້
 	Departures	ການອອກ
 	Diagram	ແຜນວາດ
 	Discard	ຖິ້ມ
@@ -173,6 +177,7 @@
 	Hide Others	ເຊື່ອງລາຍການອື່ນ
 	Hide {app}	ເຊື່ອງ {app}
 	How many	ຈຳນວນ
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ລູກຄ້າຕ້ອງການຈັກຊິ້ນຈາກການອອກເຫຼົ່ານີ້; ຈາກນັ້ນຜົນຈະສະແດງແທັກ (ເວລາທີ່ມີຫານດ້ວຍຄວາມຕ້ອງການ) ແລະ ເວລາຮອບວຽນຂອງແຕ່ລະໜ້າວຽກ.
 	Inside over time	ຈຳນວນພາຍໃນຕາມເວລາ
 	Jump	ຂ້າມ
 	Jump to time	ຂ້າມໄປຫາເວລາ
@@ -257,8 +262,12 @@
 	Parameter	ພາຣາມິເຕີ
 	Parameters	ພາລາມິເຕີ
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ຊິ້ນງານທີ່ໄປຕາມເສັ້ນທາງນີ້ຈະກັບໄປເຮັດໃໝ່; ພວກມັນຖືກນັບເປັນການແກ້ໄຂງານຂອງໜ້າວຽກສຸດທ້າຍທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ພວກມັນຜ່ານມາ.
+	Parts wanted	ຈຳນວນຊິ້ນທີ່ຕ້ອງການ
+	Parts wanted is a number above 0	ຈຳນວນຊິ້ນທີ່ຕ້ອງການຕ້ອງເປັນຕົວເລກທີ່ຫຼາຍກວ່າ 0
 	Paste	ວາງ
 	Pause	ຢຸດຊົ່ວຄາວ
+	Per	ໄລຍະ
+	Per shift needs a calendar: each period it is active is a shift.	"ຕໍ່ກະ" ຕ້ອງມີປະຕິທິນ: ແຕ່ລະໄລຍະທີ່ປະຕິທິນເປີດໃຊ້ແມ່ນໜຶ່ງກະ.
 	Percentile	ເປີເຊັນໄທລ໌
 	Period {n} ends	ໄລຍະ {n} ສິ້ນສຸດ
 	Period {n} repeats	ໄລຍະ {n} ເຮັດຊ້ຳ
@@ -389,6 +398,8 @@
 	Stopped watching	ຢຸດຕິດຕາມແລ້ວ
 	Sun	ອາທິດ
 	Sweep a parameter	ກວາດພາຣາມິເຕີ
+	Takt	ເວລາແທັກ
+	Takt time	ເວລາແທັກ
 	Tandem line	ສາຍງານຕໍ່ເນື່ອງ
 	Target	ເປົ້າໝາຍ
 	Target share	ສັດສ່ວນເປົ້າໝາຍ
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	ແບບຈຳລອງ: ການທົດລອງ ການເຊື່ອມຕໍ່ ແລະ ບັນຫາ
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ສັດສ່ວນຮອບຈຳລອງຊ້ຳທີ່ເທົ່າກັບ ຫຼື ຕ່ຳກວ່າແຕ່ລະຄ່າ. ແຖບຄອບຄຸມການແຈກຢາຍແທ້ດ້ວຍຄວາມເຊື່ອໝັ້ນ {confidence}.
 	The values are numbers, separated by semicolons or spaces	ຄ່າຕ້ອງເປັນຕົວເລກທີ່ຂັ້ນດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ
+	The whole clock	ເວລາທັງໝົດ
 	This block has a warning	ບລັອກນີ້ມີຄຳເຕືອນ
 	This block has an error	ບລັອກນີ້ມີຂໍ້ຜິດພາດ
 	This run	ການປະມວນຜົນນີ້
 	Three-point estimate	ການປະມານສາມຈຸດ
 	Thu	ພະຫັດ
+	Time available	ເວລາທີ່ມີ
 	Time between arrivals	ເວລາລະຫວ່າງການມາຮອດ
 	Time blocked	ເວລາທີ່ຖືກຂັດຂວາງ
 	Time failed	ເວລາທີ່ເສຍ
@@ -479,6 +492,7 @@
 	decision: one way	ການຕັດສິນໃຈ: ທາງດຽວ
 	departures	ການອອກ
 	egui and eframe (Craft suite fork)	egui ແລະ eframe (ແຍກມາຈາກ Craft suite)
+	for the whole run	ສຳລັບການປະມວນຜົນທັງໝົດ
 	from its value	ຈາກຄ່າຂອງມັນ
 	have left	ອອກໄປແລ້ວ
 	hours	ຊົ່ວໂມງ
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k ຈາກ N: ມີພຽງ k ຈາກ N ຮອບຈຳລອງຊ້ຳທີ່ມີຄ່າສຳລັບຜົນນັ້ນ, ແລະ ຄ່າສະເລ່ຍ ແລະ ຊ່ວງຂອງມັນຄິດຈາກ k ຮອບນັ້ນ.
 	n = {k} of {n}	n = {k} ຈາກ {n}
 	nothing yet	ຍັງບໍ່ມີຫຍັງ
+	per day	ຕໍ່ມື້
+	per shift	ຕໍ່ກະ
+	per week	ຕໍ່ອາທິດ
 	seconds	ວິນາທີ
 	split batches	ແຍກຊຸດ
 	split or join: all ways	ແຍກ ຫຼື ລວມ: ທຸກທາງ

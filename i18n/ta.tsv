@@ -102,7 +102,9 @@
 	Constant	மாறிலி
 	Copy	நகலெடு
 	Counts against	கணக்கில் சேரும் பணி
+	Customer demand	வாடிக்கையாளர் தேவை
 	Cut	வெட்டு
+	Cycle time	சுழற்சி நேரம்
 	Daily	தினமும்
 	Dark	அடர்
 	Data points	தரவுப் புள்ளிகள்
@@ -112,6 +114,8 @@
 	Decision (one way)	முடிவு (ஒரு வழி)
 	Default flow	இயல்புநிலை ஓட்டம்
 	Delete	நீக்கு
+	Demand	தேவை
+	Demand met	நிறைவேற்றிய தேவையின் பங்கு
 	Departures	வெளியேற்றங்கள்
 	Diagram	வரைபடம்
 	Discard	நிராகரி
@@ -173,6 +177,7 @@
 	Hide Others	மற்றவற்றை மறை
 	Hide {app}	{app} ஐ மறை
 	How many	எத்தனை
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	இந்த வெளியேற்றங்களிலிருந்து வாடிக்கையாளர்கள் எத்தனை பாகங்களை விரும்புகிறார்கள்; அப்போது முடிவுகள் டாக்ட் (கிடைக்கும் நேரத்தைத் தேவையால் வகுத்தது) மற்றும் ஒவ்வொரு பணியின் சுழற்சி நேரத்தையும் காட்டும்.
 	Inside over time	நேரப்படி உள்ளே
 	Jump	செல்
 	Jump to time	நேரத்திற்குச் செல்
@@ -257,8 +262,12 @@
 	Parameter	அளவுரு
 	Parameters	அளவுருக்கள்
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	இந்த ஓட்டத்தில் செல்லும் பாகங்கள் மீண்டும் வேலை செய்யத் திரும்புகின்றன; அவை கடைசியாகக் கடந்த வளம் தேவைப்படும் பணியின் கணக்கில் மறுவேலையாகக் கணக்கிடப்படும்.
+	Parts wanted	விரும்பும் பாகங்கள்
+	Parts wanted is a number above 0	விரும்பும் பாகங்கள் 0-ஐ விடப் பெரிய எண்ணாக இருக்க வேண்டும்
 	Paste	ஒட்டு
 	Pause	இடைநிறுத்து
+	Per	காலம்
+	Per shift needs a calendar: each period it is active is a shift.	"ஒரு பணிமுறைக்கு" என்பதற்கு நாட்காட்டி தேவை: அது செயலில் இருக்கும் ஒவ்வொரு காலமும் ஒரு பணிமுறை.
 	Percentile	சதமானம்
 	Period {n} ends	காலம் {n} முடிவு
 	Period {n} repeats	காலம் {n} மீள்வருகை
@@ -389,6 +398,8 @@
 	Stopped watching	கவனிப்பது நிறுத்தப்பட்டது
 	Sun	ஞாயி
 	Sweep a parameter	ஒரு அளவுருவை வருடு
+	Takt	டாக்ட்
+	Takt time	டாக்ட் நேரம்
 	Tandem line	தொடர் பணிநிலைகள்
 	Target	இலக்கு
 	Target share	இலக்கு பங்கு
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	மாதிரி: அதன் சோதனை, இணைப்புகள், சிக்கல்கள்
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ஒவ்வொரு மதிப்புக்கும் சமமான அல்லது குறைவான மீள் இயக்கங்களின் பங்கு. பட்டை உண்மையான பரவலை {confidence} நம்பகத்தன்மையுடன் கொண்டுள்ளது.
 	The values are numbers, separated by semicolons or spaces	மதிப்புகள் அரைப்புள்ளி அல்லது இடைவெளியால் பிரிக்கப்பட்ட எண்கள்
+	The whole clock	முழு நேரமும்
 	This block has a warning	இந்தத் தொகுதியில் ஓர் எச்சரிக்கை உள்ளது
 	This block has an error	இந்தத் தொகுதியில் ஒரு பிழை உள்ளது
 	This run	இந்த இயக்கம்
 	Three-point estimate	மூன்று-புள்ளி மதிப்பீடு
 	Thu	வியா
+	Time available	கிடைக்கும் நேரம்
 	Time between arrivals	வருகைகளுக்கு இடையிலான நேரம்
 	Time blocked	தடுக்கப்பட்ட நேரம்
 	Time failed	பழுதடைந்த நேரம்
@@ -479,6 +492,7 @@
 	decision: one way	முடிவு: ஒரு வழி
 	departures	வெளியேற்றங்கள்
 	egui and eframe (Craft suite fork)	egui மற்றும் eframe (Craft suite பிரிவு)
+	for the whole run	முழு இயக்கத்திற்கும்
 	from its value	அதன் மதிப்பிலிருந்து
 	have left	வெளியேறின
 	hours	மணிநேரங்கள்
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N இல் k: N மீள் இயக்கங்களில் k மட்டுமே அந்த முடிவுக்கு மதிப்பைக் கொண்டிருந்தன; அதன் சராசரியும் இடைவெளியும் அந்த k மீதானவை.
 	n = {k} of {n}	n = {n} இல் {k}
 	nothing yet	இன்னும் ஏதுமில்லை
+	per day	ஒரு நாளுக்கு
+	per shift	ஒரு பணிமுறைக்கு
+	per week	ஒரு வாரத்திற்கு
 	seconds	வினாடிகள்
 	split batches	தொகுப்புகளைப் பிரித்தல்
 	split or join: all ways	பிரி அல்லது இணை: எல்லா வழிகளும்

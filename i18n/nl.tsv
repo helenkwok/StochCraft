@@ -102,7 +102,9 @@
 	Constant	Constant
 	Copy	Kopiëren
 	Counts against	Toegerekend aan
+	Customer demand	Klantvraag
 	Cut	Knippen
+	Cycle time	Cyclustijd
 	Daily	Dagelijks
 	Dark	Donker
 	Data points	Datapunten
@@ -112,6 +114,8 @@
 	Decision (one way)	Beslissing (één route)
 	Default flow	Standaardstroom
 	Delete	Verwijderen
+	Demand	Vraag
+	Demand met	Aandeel vervulde vraag
 	Departures	Vertrekken
 	Diagram	Diagram
 	Discard	Negeren
@@ -173,6 +177,7 @@
 	Hide Others	Anderen verbergen
 	Hide {app}	{app} verbergen
 	How many	Hoeveel
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hoeveel onderdelen klanten van deze vertrekken willen; de resultaten tonen dan de takt (de beschikbare tijd gedeeld door de vraag) en de cyclustijd van elke taak.
 	Inside over time	Binnen in de tijd
 	Jump	Ga
 	Jump to time	Ga naar tijdstip
@@ -257,8 +262,12 @@
 	Parameter	Parameter
 	Parameters	Parameters
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Onderdelen die deze stroom nemen, gaan terug om opnieuw bewerkt te worden; ze tellen als herbewerking voor de laatste taak met een hulpbron die ze doorliepen.
+	Parts wanted	Gewenste onderdelen
+	Parts wanted is a number above 0	Het aantal gewenste onderdelen is een getal boven 0
 	Paste	Plakken
 	Pause	Pauzeren
+	Per	Periode
+	Per shift needs a calendar: each period it is active is a shift.	‘Per ploeg’ heeft een kalender nodig: elke periode waarin die actief is, is een ploeg.
 	Percentile	Percentiel
 	Period {n} ends	Periode {n} eindigt
 	Period {n} repeats	Periode {n} herhaalt
@@ -389,6 +398,8 @@
 	Stopped watching	Gestopt met volgen
 	Sun	zo
 	Sweep a parameter	Eén parameter variëren
+	Takt	Takt
+	Takt time	Takttijd
 	Tandem line	Tandemlijn
 	Target	Doel
 	Target share	Doelaandeel
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Het aandeel herhalingen op of onder elke waarde. De band bevat de ware verdeling met {confidence} betrouwbaarheid.
 	The values are numbers, separated by semicolons or spaces	De waarden zijn getallen, gescheiden door puntkomma's of spaties
+	The whole clock	Alle tijd
 	This block has a warning	Dit blok heeft een waarschuwing
 	This block has an error	Dit blok heeft een fout
 	This run	Deze uitvoering
 	Three-point estimate	Driepuntsschatting
 	Thu	do
+	Time available	Beschikbare tijd
 	Time between arrivals	Tijd tussen aankomsten
 	Time blocked	Tijd geblokkeerd
 	Time failed	Tijd in storing
@@ -479,6 +492,7 @@
 	decision: one way	beslissing: één route
 	departures	vertrekken
 	egui and eframe (Craft suite fork)	egui en eframe (fork van de Craft-suite)
+	for the whole run	voor de hele uitvoering
 	from its value	op basis van de waarde
 	have left	hebben verlaten
 	hours	uren
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k van N: slechts k van de N herhalingen hadden een waarde voor dat resultaat, en het gemiddelde en interval zijn over die k.
 	n = {k} of {n}	n = {k} van {n}
 	nothing yet	nog niets
+	per day	per dag
+	per shift	per ploeg
+	per week	per week
 	seconds	seconden
 	split batches	batches splitsen
 	split or join: all ways	splitsen of samenvoegen: alle routes

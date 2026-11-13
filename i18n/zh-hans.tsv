@@ -102,7 +102,9 @@
 	Constant	常数
 	Copy	复制
 	Counts against	计入任务
+	Customer demand	客户需求
 	Cut	剪切
+	Cycle time	周期时间
 	Daily	每天
 	Dark	深色
 	Data points	数据点
@@ -112,6 +114,8 @@
 	Decision (one way)	决策（单一路径）
 	Default flow	默认顺序流
 	Delete	删除
+	Demand	需求
+	Demand met	需求满足率
 	Departures	离开
 	Diagram	图表
 	Discard	放弃
@@ -173,6 +177,7 @@
 	Hide Others	隐藏其他
 	Hide {app}	隐藏 {app}
 	How many	数量
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	客户希望从这些离开处获得多少件；结果随后会显示节拍（可用时间除以需求）和每个任务的周期时间。
 	Inside over time	内部数量随时间变化
 	Jump	跳转
 	Jump to time	跳转到时间
@@ -257,8 +262,12 @@
 	Parameter	参数
 	Parameters	参数
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	沿此顺序流的零件会返回重新加工；它们计为最后经过的需要资源的任务的返工。
+	Parts wanted	需求数量
+	Parts wanted is a number above 0	需求数量必须是大于 0 的数字
 	Paste	粘贴
 	Pause	暂停
+	Per	时段
+	Per shift needs a calendar: each period it is active is a shift.	“每班”需要日历：日历处于活动状态的每个时段为一个班次。
 	Percentile	百分位数
 	Period {n} ends	时段 {n} 结束
 	Period {n} repeats	时段 {n} 重复
@@ -389,6 +398,8 @@
 	Stopped watching	已停止观察
 	Sun	周日
 	Sweep a parameter	扫描一个参数
+	Takt	节拍
+	Takt time	节拍时间
 	Tandem line	串联流程
 	Target	目标
 	Target share	目标比例
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	模型：实验、连接和问题
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超过各值的重复运行比例。色带以 {confidence} 的置信度包含真实分布。
 	The values are numbers, separated by semicolons or spaces	值应为用分号或空格分隔的数字
+	The whole clock	全部时间
 	This block has a warning	此区块存在警告
 	This block has an error	此区块存在错误
 	This run	本次运行
 	Three-point estimate	三点估计
 	Thu	周四
+	Time available	可用时间
 	Time between arrivals	到达间隔时间
 	Time blocked	阻塞时间
 	Time failed	故障时间
@@ -479,6 +492,7 @@
 	decision: one way	决策：单一路径
 	departures	离开
 	egui and eframe (Craft suite fork)	egui 和 eframe（Craft 套件分支）
+	for the whole run	整个运行期间
 	from its value	根据其值
 	have left	离开
 	hours	小时
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N 次中的 k 次：N 次重复运行中只有 k 次有该结果的值，其平均值和区间基于这 k 次。
 	n = {k} of {n}	n = {n} 次中的 {k} 次
 	nothing yet	尚无内容
+	per day	每天
+	per shift	每班
+	per week	每周
 	seconds	秒
 	split batches	拆分批次
 	split or join: all ways	拆分或合并：所有路径

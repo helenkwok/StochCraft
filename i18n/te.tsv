@@ -102,7 +102,9 @@
 	Constant	స్థిర విలువ
 	Copy	కాపీ చేయి
 	Counts against	ఖాతాలో వేసే పని
+	Customer demand	కస్టమర్ డిమాండ్
 	Cut	కత్తిరించు
+	Cycle time	సైకిల్ సమయం
 	Daily	ప్రతిరోజూ
 	Dark	డార్క్
 	Data points	డేటా బిందువులు
@@ -112,6 +114,8 @@
 	Decision (one way)	నిర్ణయం (ఒక దారి)
 	Default flow	డిఫాల్ట్ ప్రవాహం
 	Delete	తొలగించు
+	Demand	డిమాండ్
+	Demand met	తీరిన డిమాండ్ వాటా
 	Departures	నిష్క్రమణలు
 	Diagram	రేఖాచిత్రం
 	Discard	విస్మరించు
@@ -173,6 +177,7 @@
 	Hide Others	ఇతరాలను దాచు
 	Hide {app}	{app} ను దాచు
 	How many	ఎన్ని
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ఈ నిష్క్రమణల నుంచి కస్టమర్లు ఎన్ని భాగాలు కోరుకుంటున్నారు; అప్పుడు ఫలితాలు టాక్ట్ (అందుబాటులో ఉన్న సమయాన్ని డిమాండ్‌తో భాగించినది) మరియు ప్రతి పని యొక్క సైకిల్ సమయాన్ని చూపుతాయి.
 	Inside over time	కాలక్రమంలో లోపల
 	Jump	వెళ్ళు
 	Jump to time	సమయానికి వెళ్ళు
@@ -257,8 +262,12 @@
 	Parameter	పరామితి
 	Parameters	పరామితులు
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ఈ ప్రవాహంలో వెళ్ళే భాగాలు మళ్ళీ పని కోసం వెనక్కి వెళ్తాయి; అవి చివరిగా దాటిన వనరు అవసరమైన పని ఖాతాలో పునఃపనిగా లెక్కించబడతాయి.
+	Parts wanted	కోరిన భాగాలు
+	Parts wanted is a number above 0	కోరిన భాగాలు 0 కంటే పెద్ద సంఖ్య కావాలి
 	Paste	అతికించు
 	Pause	విరామం
+	Per	వ్యవధి
+	Per shift needs a calendar: each period it is active is a shift.	"షిఫ్ట్‌కు" ఎంపికకు క్యాలెండర్ అవసరం: అది సక్రియంగా ఉన్న ప్రతి వ్యవధి ఒక షిఫ్ట్.
 	Percentile	శతాంశం
 	Period {n} ends	వ్యవధి {n} ముగింపు
 	Period {n} repeats	వ్యవధి {n} పునరావృతం
@@ -389,6 +398,8 @@
 	Stopped watching	గమనించడం ఆపబడింది
 	Sun	ఆది
 	Sweep a parameter	ఒక పరామితిని స్వీప్ చేయి
+	Takt	టాక్ట్
+	Takt time	టాక్ట్ సమయం
 	Tandem line	వరుస ప్రక్రియ
 	Target	లక్ష్యం
 	Target share	లక్ష్య వాటా
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	నమూనా: దాని ప్రయోగం, అనుసంధానాలు మరియు సమస్యలు
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ప్రతి విలువకు సమానమైన లేదా తక్కువైన పునరావృత్త అమలుల వాటా. పట్టీ నిజమైన పంపిణీని {confidence} విశ్వాసంతో కలిగి ఉంటుంది.
 	The values are numbers, separated by semicolons or spaces	విలువలు సెమీకోలన్ లేదా ఖాళీతో వేరు చేసిన సంఖ్యలు
+	The whole clock	మొత్తం సమయం
 	This block has a warning	ఈ బ్లాక్‌లో హెచ్చరిక ఉంది
 	This block has an error	ఈ బ్లాక్‌లో లోపం ఉంది
 	This run	ఈ అమలు
 	Three-point estimate	మూడు-బిందువుల అంచనా
 	Thu	గురు
+	Time available	అందుబాటులో ఉన్న సమయం
 	Time between arrivals	రాకల మధ్య సమయం
 	Time blocked	నిరోధిత సమయం
 	Time failed	లోపం ఉన్న సమయం
@@ -479,6 +492,7 @@
 	decision: one way	నిర్ణయం: ఒక దారి
 	departures	నిష్క్రమణలు
 	egui and eframe (Craft suite fork)	egui మరియు eframe (Craft suite నుంచి విడిపోయిన సంస్కరణ)
+	for the whole run	మొత్తం అమలుకు
 	from its value	దాని విలువ నుంచి
 	have left	వెళ్లిపోయాయి
 	hours	గంటలు
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = Nలో k: N పునరావృత్త అమలులలో k మాత్రమే ఆ ఫలితానికి విలువను కలిగి ఉన్నాయి; దాని సగటు మరియు అంతరం ఆ k పై ఉన్నాయి.
 	n = {k} of {n}	n = {n}లో {k}
 	nothing yet	ఇంకా ఏమీ లేదు
+	per day	రోజుకు
+	per shift	షిఫ్ట్‌కు
+	per week	వారానికి
 	seconds	సెకన్లు
 	split batches	బ్యాచ్‌ల విభజన
 	split or join: all ways	విభజించు లేదా కలుపు: అన్ని దారులు

@@ -102,7 +102,9 @@
 	Constant	Konstant
 	Copy	Kopiera
 	Counts against	Belastar
+	Customer demand	Kundefterfrågan
 	Cut	Klipp ut
+	Cycle time	Cykeltid
 	Daily	Dagligen
 	Dark	Mörkt
 	Data points	Datapunkter
@@ -112,6 +114,8 @@
 	Decision (one way)	Beslut (en väg)
 	Default flow	Standardflöde
 	Delete	Ta bort
+	Demand	Efterfrågan
+	Demand met	Andel uppfylld efterfrågan
 	Departures	Avgångar
 	Diagram	Diagram
 	Discard	Släng
@@ -173,6 +177,7 @@
 	Hide Others	Göm övriga
 	Hide {app}	Göm {app}
 	How many	Hur många
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hur många detaljer kunderna vill ha från dessa avgångar; resultaten visar då takten (tillgänglig tid delad med efterfrågan) och varje uppgifts cykeltid.
 	Inside over time	Inne över tid
 	Jump	Gå
 	Jump to time	Gå till tidpunkt
@@ -257,8 +262,12 @@
 	Parameter	Parameter
 	Parameters	Parametrar
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Detaljer som tar detta flöde går tillbaka för att bearbetas igen; de räknas som omarbetning för den sista uppgiften med resurs som de gick igenom.
+	Parts wanted	Önskade detaljer
+	Parts wanted is a number above 0	Antalet önskade detaljer är ett tal över 0
 	Paste	Klistra in
 	Pause	Pausa
+	Per	Period
+	Per shift needs a calendar: each period it is active is a shift.	”Per skift” kräver en kalender: varje period den är aktiv är ett skift.
 	Percentile	Percentil
 	Period {n} ends	Period {n} slutar
 	Period {n} repeats	Period {n} upprepas
@@ -389,6 +398,8 @@
 	Stopped watching	Slutade följa
 	Sun	sön
 	Sweep a parameter	Svep en parameter
+	Takt	Takt
+	Takt time	Takttid
 	Tandem line	Tandemlinje
 	Target	Mål
 	Target share	Målandel
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Modellen: experiment, anslutningar och problem
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen replikationer vid eller under varje värde. Bandet innehåller den sanna fördelningen med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Värdena är tal åtskilda med semikolon eller mellanslag
+	The whole clock	Hela tiden
 	This block has a warning	Det här blocket har en varning
 	This block has an error	Det här blocket har ett fel
 	This run	Den här körningen
 	Three-point estimate	Trepunktsskattning
 	Thu	tor
+	Time available	Tillgänglig tid
 	Time between arrivals	Tid mellan ankomster
 	Time blocked	Tid blockerad
 	Time failed	Tid i haveri
@@ -479,6 +492,7 @@
 	decision: one way	beslut: en väg
 	departures	avgångar
 	egui and eframe (Craft suite fork)	egui och eframe (förgrening av Craft-sviten)
+	for the whole run	för hela körningen
 	from its value	utifrån värdet
 	have left	har lämnat
 	hours	timmar
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k av N: bara k av de N replikationerna hade ett värde för resultatet, och dess medelvärde och intervall gäller de k.
 	n = {k} of {n}	n = {k} av {n}
 	nothing yet	inget ännu
+	per day	per dag
+	per shift	per skift
+	per week	per vecka
 	seconds	sekunder
 	split batches	uppdelning av partier
 	split or join: all ways	dela eller sammanfoga: alla vägar

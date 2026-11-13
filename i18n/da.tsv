@@ -102,7 +102,9 @@
 	Constant	Konstant
 	Copy	Kopiér
 	Counts against	Henføres til
+	Customer demand	Kundebehov
 	Cut	Klip
+	Cycle time	Cyklustid
 	Daily	Dagligt
 	Dark	Mørk
 	Data points	Datapunkter
@@ -112,6 +114,8 @@
 	Decision (one way)	Beslutning (én vej)
 	Default flow	Standardflow
 	Delete	Slet
+	Demand	Behov
+	Demand met	Andel af behovet dækket
 	Departures	Afgange
 	Diagram	Diagram
 	Discard	Kassér
@@ -173,6 +177,7 @@
 	Hide Others	Skjul andre
 	Hide {app}	Skjul {app}
 	How many	Hvor mange
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hvor mange emner kunderne ønsker fra disse afgange; resultaterne viser så takten (den tilgængelige tid divideret med behovet) og hver opgaves cyklustid.
 	Inside over time	Inde over tid
 	Jump	Gå
 	Jump to time	Gå til tidspunkt
@@ -257,8 +262,12 @@
 	Parameter	Parameter
 	Parameters	Parametre
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Emner, der tager dette flow, går tilbage for at blive bearbejdet igen; de tæller som omarbejde for den sidste opgave med ressource, de gik igennem.
+	Parts wanted	Ønskede emner
+	Parts wanted is a number above 0	Antallet af ønskede emner er et tal over 0
 	Paste	Indsæt
 	Pause	Pause
+	Per	Periode
+	Per shift needs a calendar: each period it is active is a shift.	»Pr. skift« kræver en kalender: hver periode, hvor den er aktiv, er et skift.
 	Percentile	Percentil
 	Period {n} ends	Periode {n} slutter
 	Period {n} repeats	Periode {n} gentages
@@ -389,6 +398,8 @@
 	Stopped watching	Stoppede med at følge
 	Sun	søn
 	Sweep a parameter	Gennemløb en parameter
+	Takt	Takt
+	Takt time	Takttid
 	Tandem line	Tandemlinje
 	Target	Mål
 	Target share	Målandel
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen af replikationer ved eller under hver værdi. Båndet indeholder den sande fordeling med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Værdierne er tal adskilt med semikolon eller mellemrum
+	The whole clock	Hele tiden
 	This block has a warning	Denne blok har en advarsel
 	This block has an error	Denne blok har en fejl
 	This run	Denne kørsel
 	Three-point estimate	Trepunktsskøn
 	Thu	tor
+	Time available	Tilgængelig tid
 	Time between arrivals	Tid mellem ankomster
 	Time blocked	Tid blokeret
 	Time failed	Tid i nedbrud
@@ -479,6 +492,7 @@
 	decision: one way	beslutning: én vej
 	departures	afgange
 	egui and eframe (Craft suite fork)	egui og eframe (forgrening af Craft-pakken)
+	for the whole run	for hele kørslen
 	from its value	ud fra værdien
 	have left	har forladt
 	hours	timer
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k af N: kun k af de N replikationer havde en værdi for dette resultat, og dets gennemsnit og interval er over disse k.
 	n = {k} of {n}	n = {k} af {n}
 	nothing yet	intet endnu
+	per day	pr. dag
+	per shift	pr. skift
+	per week	pr. uge
 	seconds	sekunder
 	split batches	opdeling af partier
 	split or join: all ways	opdel eller sammenflet: alle veje
