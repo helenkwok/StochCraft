@@ -800,6 +800,42 @@ fn a_patience_and_an_abandoned_way_are_set_in_the_inspector() {
     assert!(element(&h, "serve").get("patience").is_none());
 }
 
+/// A task with a resource is given a health check in the inspector, resuming the job under way
+/// rather than retrying it; unticking it removes it.
+#[test]
+fn a_health_check_is_set_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Closed on a server without one.
+    assert!(
+        h.query_by_label("Take servers out when overloaded")
+            .is_none()
+    );
+    click(&mut h, Role::DisclosureTriangle, "Health check");
+    click(&mut h, Role::CheckBox, "Take servers out when overloaded");
+    assert_eq!(
+        element(&h, "serve")["health_check"],
+        json!({
+            "interval": {"type": "exponential", "mean": 1.0},
+            "limit": 2.0,
+            "restart": {"type": "constant", "value": 1.0},
+        })
+    );
+    click(&mut h, Role::RadioButton, "Resume after restart");
+    assert_eq!(
+        element(&h, "serve")["health_check"]["on_takeout"],
+        json!("resume")
+    );
+    click(&mut h, Role::RadioButton, "Retry elsewhere");
+    assert!(
+        element(&h, "serve")["health_check"]
+            .get("on_takeout")
+            .is_none()
+    );
+    click(&mut h, Role::CheckBox, "Take servers out when overloaded");
+    assert!(element(&h, "serve").get("health_check").is_none());
+}
+
 /// A sink is made a scrap sink in the inspector, and its scrap counted against a server named
 /// there; unticking it makes it an ordinary end again.
 #[test]

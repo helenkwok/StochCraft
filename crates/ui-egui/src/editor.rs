@@ -542,6 +542,11 @@ impl App {
                 .id_salt(format!("{id}/patience"))
                 .default_open(el["patience"].is_object())
                 .show(ui, |ui| self.patience_section(ui, model, el, &id));
+            ui.add_space(6.0);
+            egui::CollapsingHeader::new(theme::strong(t("Health check")))
+                .id_salt(format!("{id}/health_check"))
+                .default_open(el["health_check"].is_object())
+                .show(ui, |ui| self.health_check_section(ui, model, el, &id));
         }
 
         section(ui, t("Flows"));
@@ -1095,6 +1100,123 @@ impl App {
                 p["until"] = json!(chosen);
             }
             self.execute("block.set", json!({ "id": id, "patience": p }));
+        }
+    }
+
+    /// Whether a task's units are checked and taken out for a restart when too many entities
+    /// wait (a load balancer's health check), and how.
+    fn health_check_section(&mut self, ui: &mut egui::Ui, model: &Value, el: &Value, id: &str) {
+        let check = el["health_check"].clone();
+        let mut on = check.is_object();
+        let r = ui
+            .checkbox(&mut on, t("Take servers out when overloaded"))
+            .on_hover_text(t(
+                "Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.",
+            ));
+        if r.changed() {
+            let v = if on {
+                json!({
+                    "interval": {"type": "exponential", "mean": 1.0},
+                    "limit": 2.0,
+                    "restart": {"type": "constant", "value": 1.0},
+                })
+            } else {
+                Value::Null
+            };
+            self.execute("block.set", json!({ "id": id, "health_check": v }));
+        }
+        if !on {
+            return;
+        }
+        // The times' editors, from the schema of block.set's health check; the counts are
+        // plain numbers (a keep of 0 is no floor).
+        let schema = params_schema("block.set");
+        let resolve = |n: &Value| -> Value {
+            let n = n["anyOf"]
+                .as_array()
+                .and_then(|a| a.iter().find(|x| x["type"] != "null"))
+                .unwrap_or(n);
+            match n["$ref"].as_str().and_then(|r| r.strip_prefix("#/$defs/")) {
+                Some(name) => schema["$defs"][name].clone(),
+                None => n.clone(),
+            }
+        };
+        let spec = resolve(&schema["properties"]["health_check"]);
+        let root = json!({
+            "properties": {
+                "check_interval": spec["properties"]["interval"],
+                "check_limit": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "description": "A server fails its check when more entities wait than this per server working (a probe's timeout times one server's service rate).",
+                },
+                "restart": spec["properties"]["restart"],
+                "keep_in_service": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "A failed check takes no server out when that would leave fewer than this working; 0: no floor.",
+                },
+            },
+            "$defs": schema["$defs"],
+        });
+        let unit = self.time_unit_label();
+        let calendars = form::calendars(model);
+        let mut changed = None;
+        for (name, wire, time) in [
+            ("check_interval", "interval", true),
+            ("check_limit", "limit", false),
+            ("restart", "restart", true),
+            ("keep_in_service", "keep", false),
+        ] {
+            let current = match wire {
+                "keep" if check[wire].is_null() => json!(0),
+                _ => check[wire].clone(),
+            };
+            let mut cx = form::Cx {
+                time_unit: &unit,
+                numbers: &self.numbers,
+                drafts: &mut self.drafts,
+                calendars: &calendars,
+            };
+            let key = format!("{id}/health_check/{name}");
+            if let Some(v) =
+                form::field(ui, &mut cx, Schema::new(&root), &key, name, &current, time)
+            {
+                changed = Some((wire, v));
+            }
+        }
+        let on_takeout = check["on_takeout"].as_str().unwrap_or("retry").to_owned();
+        let mut chosen = on_takeout.clone();
+        ui.label(t("Job under way on a server taken out:"));
+        ui.radio_value(&mut chosen, "retry".to_owned(), t("Retry elsewhere"))
+            .on_hover_text(t(
+                "The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.",
+            ));
+        ui.radio_value(&mut chosen, "resume".to_owned(), t("Resume after restart"))
+            .on_hover_text(t(
+                "The entity waits on its server and the job carries on with what was left once the server is back.",
+            ));
+        if chosen != on_takeout {
+            changed = Some((
+                "on_takeout",
+                if chosen == "retry" {
+                    Value::Null
+                } else {
+                    json!(chosen)
+                },
+            ));
+        }
+        if let Some((wire, v)) = changed {
+            let mut c = check.clone();
+            if let Some(o) = c.as_object_mut() {
+                // No floor, and retrying, are left out.
+                if v.is_null() || (wire == "keep" && v == json!(0)) {
+                    o.remove(wire);
+                } else {
+                    o.insert(wire.to_owned(), v);
+                }
+            }
+            self.execute("block.set", json!({ "id": id, "health_check": c }));
         }
     }
 
