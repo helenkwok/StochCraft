@@ -1464,11 +1464,11 @@ impl std::fmt::Display for Diagnostic {
             ),
             Problem::HealthCheckWithFiniteBuffer => write!(
                 f,
-                "a health check needs an unlimited waiting room; remove the buffer's limit or the                  health check"
+                "a health check needs an unlimited waiting room; remove the buffer's limit or the health check"
             ),
             Problem::HealthCheckLimitNotValid => write!(
                 f,
-                "its health check's limit (entities waiting per working unit) must be a number of                  0 or more"
+                "its health check's limit (entities waiting per working unit) must be a number of 0 or more"
             ),
             Problem::HealthCheckIntervalNotPositive => write!(
                 f,

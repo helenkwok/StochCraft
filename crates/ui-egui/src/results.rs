@@ -73,7 +73,7 @@ fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
         "abandoned" => (t("Gave up"), Unit::Count),
         "abandoned_share" => (t("Share that gave up"), Unit::Share),
         "abandoned_wait" => (t("Mean wait before giving up"), Unit::Time),
-        "wasted" => (t("Work wasted on those who gave up"), Unit::Time),
+        "wasted" => (t("Work wasted on jobs that did not finish"), Unit::Time),
         "wasted_share" => (t("Share of work wasted"), Unit::Share),
         "taken_out" => (t("Units taken out by health checks"), Unit::Count),
         "mean_in_service" => (t("Mean units in service"), Unit::Items),
