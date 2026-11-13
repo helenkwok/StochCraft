@@ -1292,10 +1292,14 @@ A line that makes several products, and results in the terms lean practice uses.
     index, setup ratio). Done: per server, `oee_availability` (production time over planned
     busy time, off shift being planned downtime), `oee_effectiveness` (from a planned run time
     per item, the vendor extension `stochcraft:plannedRunTime`; not reported without one, and
-    the results say how to get it) and `setup_ratio`. To do: the quality ratio and the OEE
-    index, from scrap sinks and rework connections the user marks (as FlexSim's by-percentage
-    ports and AnyLogic's SelectOutput, a probability route; charged to the last server the part
-    finished at, or one the scrap sink names; each pass counts as produced).
+    the results say how to get it) and `setup_ratio`. Also done: `quality_ratio`, `scrap_ratio`
+    and `rework_ratio` from scrap sinks (`stochcraft:scrap`) and rework connections
+    (`stochcraft:rework`) the user marks, as FlexSim's by-percentage ports and AnyLogic's
+    SelectOutput do it, by a probability route; charged to the last server the part finished
+    at (it travels as properties do), or one the scrap sink names; each pass counts as produced,
+    and good = produced − scrap − rework (deduced from ISO 22400-2's definitions in 5.5). And
+    `oee`, availability × effectiveness × quality ratio, with quality counted as 1 (and said so)
+    when the model marks no scrap or rework. Not yet: ISO's NEE index and per-product plans.
 - **Current and future state:** a current-state and a future-state value stream map as two
   scenarios of one model, compared with `results.compare` (paired when they share their seed
   and replications, #73).

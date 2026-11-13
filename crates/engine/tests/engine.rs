@@ -2754,3 +2754,36 @@ fn a_planned_run_time_gives_effectiveness_and_is_removed() {
     let m = ok(&mut e, "model.get", json!({}));
     assert!(!m.to_string().contains("planned_run_time"), "{m}");
 }
+
+/// A sink made a scrap sink and a connection made rework give the quality rows; unmarking them
+/// takes the rows away again.
+#[test]
+fn scrap_and_rework_are_set_run_and_removed() {
+    let mut e = help_desk();
+    let metric = |r: &serde_json::Value, name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(metric(&r, "quality_ratio"), None, "{r}");
+    // Everything that reaches the exit is scrap, counted against the desk.
+    ok(&mut e, "block.set", json!({"id": "exit", "scrap": {}}));
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(metric(&r, "scrap_ratio"), Some(1.0), "{r}");
+    assert_eq!(metric(&r, "quality_ratio"), Some(0.0), "{r}");
+    ok(&mut e, "block.set", json!({"id": "exit", "scrap": null}));
+    // The way out marked rework instead.
+    ok(&mut e, "flow.set", json!({"id": "flow-2", "rework": true}));
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(m.to_string().contains("\"rework\":true"), "{m}");
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(metric(&r, "rework_ratio"), Some(1.0), "{r}");
+    ok(&mut e, "flow.set", json!({"id": "flow-2", "rework": false}));
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(
+        !m.to_string().contains("rework") && !m.to_string().contains("scrap"),
+        "{m}"
+    );
+}

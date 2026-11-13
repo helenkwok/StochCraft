@@ -36,6 +36,8 @@ pub enum Op {
     SetRoute(ElementId, Option<f64>, Option<String>),
     /// Set a connection's bill-of-materials quantity.
     SetQuantity(ElementId, Option<u32>),
+    /// Set whether a connection's entities are rework.
+    SetRework(ElementId, bool),
     SetExperiment(Experiment),
     /// Replace the shared resource pools.
     SetResources(Vec<ResourcePool>),
@@ -155,6 +157,14 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
                 .find(|c| c.id == id)
                 .ok_or_else(|| not_found("connection", &id))?;
             Op::SetQuantity(id, std::mem::replace(&mut c.quantity, quantity))
+        }
+        Op::SetRework(id, rework) => {
+            let c = model
+                .connections
+                .iter_mut()
+                .find(|c| c.id == id)
+                .ok_or_else(|| not_found("connection", &id))?;
+            Op::SetRework(id, std::mem::replace(&mut c.rework, rework))
         }
         Op::SetRoute(id, probability, condition) => {
             let c = model

@@ -15,7 +15,7 @@ use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BreakdownSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec, KindSpec,
     ModelDoc, NeedSpec, PowerSpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, RoutingSpec,
-    SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -113,6 +113,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "setup",
             "planned_run_time",
         ],
+        Some("sink") => &["scrap"],
         Some("shared_task") => &["service", "needs", "priority"],
         Some("delay") => &["duration"],
         Some("exclusive_gateway") => &["default", "routing"],
@@ -325,6 +326,11 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<DistSpec>")]
     pub planned_run_time: Option<Option<DistSpec>>,
+    /// Sinks: what reaches it is scrap, counted against `charged_to`, a server, or else the
+    /// last server each entity finished at; `null`: it is not.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<ScrapSpec>")]
+    pub scrap: Option<Option<ScrapSpec>>,
     /// Tasks with shared resources: what each entity needs, the alternatives in order.
     #[serde(default)]
     pub needs: Option<Vec<NeedSpec>>,
@@ -472,6 +478,10 @@ pub struct FlowSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<u32>")]
     pub quantity: Option<Option<u32>>,
+    /// Whether entities taking it are rework, counted against the last server they finished
+    /// at, for the OEE quality results.
+    #[serde(default)]
+    pub rework: Option<bool>,
 }
 
 /// The connection's id, or the elements it joins.
@@ -922,7 +932,7 @@ fn estimate_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let mut kind = e
         .model()
         .element(&id)
-        .map_or(ElementKind::Sink, |el| el.kind.clone());
+        .map_or(ElementKind::Sink { scrap: None }, |el| el.kind.clone());
     match &mut kind {
         ElementKind::Source {
             interarrival: d, ..
@@ -1035,7 +1045,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let mut kind = e
         .model()
         .element(&id)
-        .map_or(ElementKind::Sink, |el| el.kind.clone());
+        .map_or(ElementKind::Sink { scrap: None }, |el| el.kind.clone());
     let given = [
         ("interarrival", p.interarrival.is_some()),
         ("limit", p.limit.is_some()),
@@ -1052,6 +1062,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("power", p.power.is_some()),
         ("setup", p.setup.is_some()),
         ("planned_run_time", p.planned_run_time.is_some()),
+        ("scrap", p.scrap.is_some()),
         ("needs", p.needs.is_some()),
         ("priority", p.priority.is_some()),
         ("duration", p.duration.is_some()),
@@ -1078,7 +1089,8 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Delay { .. } => &["duration"],
         ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
         ElementKind::Batch { .. } => &["size"],
-        ElementKind::Sink | ElementKind::ParallelGateway | ElementKind::Unbatch => &[],
+        ElementKind::Sink { .. } => &["scrap"],
+        ElementKind::ParallelGateway | ElementKind::Unbatch => &[],
     };
     if let Some((name, _)) = given.iter().find(|(n, g)| *g && !applies.contains(n)) {
         return Err(CommandError::new(
@@ -1204,7 +1216,14 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *size = n;
             }
         }
-        ElementKind::Sink | ElementKind::ParallelGateway | ElementKind::Unbatch => {}
+        ElementKind::Sink { scrap } => {
+            if let Some(s) = p.scrap {
+                *scrap = s.map(|s| stochcraft_model::Scrap {
+                    charged_to: s.charged_to.as_deref().map(ElementId::unchecked),
+                });
+            }
+        }
+        ElementKind::ParallelGateway | ElementKind::Unbatch => {}
     }
     e.edit("block.set", Op::SetKind(id, kind))?;
     Ok(json!({}))
@@ -1486,6 +1505,7 @@ fn connect(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 probability: p.probability,
                 condition: p.condition,
                 quantity: p.quantity,
+                rework: false,
             },
         ),
     )?;
@@ -1505,10 +1525,14 @@ fn flow_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 format!("no connection with id `{}`", p.id),
             )
         })?;
-    if p.probability.is_none() && p.condition.is_none() && p.quantity.is_none() {
+    if p.probability.is_none()
+        && p.condition.is_none()
+        && p.quantity.is_none()
+        && p.rework.is_none()
+    {
         return Err(CommandError::new(
             ErrorCode::InvalidParams,
-            "nothing to set: give `probability`, `condition` or `quantity`",
+            "nothing to set: give `probability`, `condition`, `quantity` or `rework`",
         ));
     }
     let id = c.id.clone();
@@ -1519,7 +1543,10 @@ fn flow_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ops.push(Op::SetRoute(id.clone(), probability, condition));
     }
     if let Some(q) = p.quantity {
-        ops.push(Op::SetQuantity(id, q));
+        ops.push(Op::SetQuantity(id.clone(), q));
+    }
+    if let Some(r) = p.rework {
+        ops.push(Op::SetRework(id, r));
     }
     let op = if ops.len() == 1 {
         ops.remove(0)

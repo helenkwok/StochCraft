@@ -500,7 +500,7 @@ fn removing_a_block_leaves_no_references_to_it() {
     // A task written again as another kind (an end event) keeps its place in the lane and its
     // note: it is still there.
     let mut m = loaded.model.clone();
-    element(&mut m, "serve").kind = ElementKind::Sink;
+    element(&mut m, "serve").kind = ElementKind::Sink { scrap: None };
     m.connections.retain(|c| c.id.as_str() != "f2");
     let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
     let t = text(&saved);

@@ -195,8 +195,9 @@ pub enum ElementKind {
     },
     /// Holds each entity for a time with no capacity limit (a task with no resource).
     Delay { duration: Dist },
-    /// Removes entities (a BPMN end event).
-    Sink,
+    /// Removes entities (a BPMN end event). With `scrap`, what reaches it is scrap, for the
+    /// OEE quality results.
+    Sink { scrap: Option<Scrap> },
     /// Sends each entity down one outgoing connection, at once (a BPMN exclusive gateway). With
     /// [`Routing::Standard`]: if any outgoing connection has a condition, the first in model
     /// order whose condition holds is taken, else `default`, else the entity leaves the model
@@ -475,7 +476,7 @@ impl ElementKind {
             ElementKind::Server { .. } => "server",
             ElementKind::SharedTask { .. } => "shared_task",
             ElementKind::Delay { .. } => "delay",
-            ElementKind::Sink => "sink",
+            ElementKind::Sink { .. } => "sink",
             ElementKind::ExclusiveGateway { .. } => "exclusive_gateway",
             ElementKind::ParallelGateway => "parallel_gateway",
             ElementKind::Batch { .. } => "batch",
@@ -527,7 +528,7 @@ impl ElementKind {
             }
             ElementKind::SharedTask { service, .. } => vec![("service", service)],
             ElementKind::Delay { duration } => vec![("duration", duration)],
-            ElementKind::Sink
+            ElementKind::Sink { .. }
             | ElementKind::ExclusiveGateway { .. }
             | ElementKind::ParallelGateway
             | ElementKind::Batch { .. }
@@ -674,6 +675,22 @@ pub struct Connection {
     /// one the join sends on (a bill of materials, the StochCraft vendor extension
     /// `stochcraft:quantity`). `None` is 1.
     pub quantity: Option<u32>,
+    /// Entities taking this connection are rework (ISO 22400-2's rework quantity): they failed
+    /// their quality requirements but go back to be worked on again. Each counts against the
+    /// last server it finished at, for the OEE quality results. A StochCraft vendor extension
+    /// (`stochcraft:rework`).
+    pub rework: bool,
+}
+
+/// A sink that takes scrap (ISO 22400-2's scrap quantity: produced, failed its quality
+/// requirements, scrapped or recycled), a StochCraft vendor extension (`stochcraft:scrap`). Each
+/// entity reaching it counts against `charged_to` if given (an inspection that rejects work done
+/// upstream), else the last server it finished at, which it carries as it does its properties
+/// (a copy keeps its original's; a batch is its first part's, and its parts keep their own
+/// once unbatched). One that has not finished at a server counts against none.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct Scrap {
+    pub charged_to: Option<ElementId>,
 }
 
 impl Connection {
@@ -686,6 +703,7 @@ impl Connection {
             probability: None,
             condition: None,
             quantity: None,
+            rework: false,
         }
     }
 }
@@ -795,7 +813,7 @@ impl ElementKind {
     /// 100 by 80.
     pub fn shape_size(&self) -> (f64, f64) {
         match self {
-            ElementKind::Source { .. } | ElementKind::Sink => (36.0, 36.0),
+            ElementKind::Source { .. } | ElementKind::Sink { .. } => (36.0, 36.0),
             ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => (50.0, 50.0),
             ElementKind::Server { .. }
             | ElementKind::SharedTask { .. }
@@ -890,6 +908,10 @@ pub enum Problem {
     },
     /// A setup has times for particular changes but no property whose changes it watches.
     ChangesWithoutProperty,
+    /// A scrap sink counts its scrap against an element that is not a server.
+    ScrapNotAgainstServer {
+        id: String,
+    },
     /// A probability outside 0 to 1.
     BadProbability {
         value: f64,
@@ -1049,6 +1071,7 @@ impl Problem {
             Problem::BadExpression { .. } => "bad_expression",
             Problem::UnknownProperty { .. } => "unknown_property",
             Problem::ChangesWithoutProperty => "changes_without_property",
+            Problem::ScrapNotAgainstServer { .. } => "scrap_not_against_server",
             Problem::BadProbability { .. } => "bad_probability",
             Problem::ProbabilitySum { .. } => "probability_sum",
             Problem::BadCondition { .. } => "bad_condition",
@@ -1187,6 +1210,10 @@ impl std::fmt::Display for Diagnostic {
             Problem::ChangesWithoutProperty => write!(
                 f,
                 "its setup has times for changes from one value to another but no property to watch"
+            ),
+            Problem::ScrapNotAgainstServer { id } => write!(
+                f,
+                "its scrap counts against `{id}`, which is not a task with a resource of its own"
             ),
             Problem::BadProbability { value } => {
                 write!(f, "probability {value} must be between 0 and 1")
@@ -1428,7 +1455,7 @@ impl Model {
                 ok = false;
             }
             if let Some(from) = elements.get(&c.from)
-                && matches!(from.kind, ElementKind::Sink)
+                && matches!(from.kind, ElementKind::Sink { .. })
             {
                 out.push(Diagnostic::error(
                     Some(&c.id),
@@ -1445,7 +1472,7 @@ impl Model {
         for e in &self.elements {
             let outs = outgoing.get(&e.id).map_or(0, Vec::len);
             match e.kind {
-                ElementKind::Sink => {}
+                ElementKind::Sink { .. } => {}
                 _ if outs == 0 => out.push(Diagnostic::error(Some(&e.id), Problem::NoOutput)),
                 _ if outs > 1 && !e.kind.is_gateway() => out.push(Diagnostic::error(
                     Some(&e.id),
@@ -1483,6 +1510,21 @@ impl Model {
                 out.push(Diagnostic::error(
                     Some(&e.id),
                     Problem::NoTimeBetweenArrivals,
+                ));
+            }
+            if let ElementKind::Sink {
+                scrap: Some(Scrap {
+                    charged_to: Some(c),
+                }),
+            } = &e.kind
+                && !self
+                    .elements
+                    .iter()
+                    .any(|x| x.id == *c && matches!(x.kind, ElementKind::Server { .. }))
+            {
+                out.push(Diagnostic::error(
+                    Some(&e.id),
+                    Problem::ScrapNotAgainstServer { id: c.to_string() },
                 ));
             }
             if let ElementKind::Server { setup: Some(s), .. } = &e.kind {
@@ -2331,7 +2373,7 @@ impl Model {
         let sinks: Vec<&ElementId> = self
             .elements
             .iter()
-            .filter(|e| matches!(e.kind, ElementKind::Sink))
+            .filter(|e| matches!(e.kind, ElementKind::Sink { .. }))
             .map(|e| &e.id)
             .collect();
         if sources.is_empty() && !self.elements.is_empty() {
@@ -2503,6 +2545,7 @@ mod tests {
             probability: None,
             condition: None,
             quantity: None,
+            rework: false,
             id: id(i),
             from: id(from),
             to: id(to),
@@ -2521,7 +2564,8 @@ mod tests {
                 },
             ),
         );
-        m.elements.push(el("scrap", ElementKind::Sink));
+        m.elements
+            .push(el("scrap", ElementKind::Sink { scrap: None }));
         m.elements.push(el("join", ElementKind::ParallelGateway));
         m.elements.push(el(
             "orphan",
@@ -2592,7 +2636,8 @@ mod tests {
                 },
             ),
         );
-        m.elements.push(el("scrap", ElementKind::Sink));
+        m.elements
+            .push(el("scrap", ElementKind::Sink { scrap: None }));
         let mut a = Connection::new(id("a"), id("pick"), id("machine"));
         a.probability = Some(0.66);
         let mut b = Connection::new(id("b"), id("pick"), id("scrap"));
@@ -2670,7 +2715,7 @@ mod tests {
                         planned_run_time: None,
                     },
                 ),
-                el("exit", ElementKind::Sink),
+                el("exit", ElementKind::Sink { scrap: None }),
             ],
             connections: vec![
                 link("f1", "arrivals", "machine"),
@@ -2866,7 +2911,8 @@ mod tests {
     #[test]
     fn branching_needs_a_gateway() {
         let mut m = mm1();
-        m.elements.push(el("scrap", ElementKind::Sink));
+        m.elements
+            .push(el("scrap", ElementKind::Sink { scrap: None }));
         m.connections.push(link("f3", "machine", "scrap"));
         assert_eq!(
             problems(&m),
@@ -3020,7 +3066,7 @@ mod tests {
         let empty = Model::default();
         assert_eq!(empty.validate(), vec![]);
         let lonely = Model {
-            elements: vec![el("x", ElementKind::Sink)],
+            elements: vec![el("x", ElementKind::Sink { scrap: None })],
             ..Model::default()
         };
         assert!(problems(&lonely).iter().any(|(_, _, s)| s == "NoSource"));

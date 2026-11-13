@@ -442,7 +442,7 @@ fn edits() -> Vec<Edit> {
                             *interarrival = Dist::Exponential { mean: 3.0 };
                             *limit = Some(25);
                         }
-                        ElementKind::Sink
+                        ElementKind::Sink { .. }
                         | ElementKind::ExclusiveGateway { .. }
                         | ElementKind::ParallelGateway
                         | ElementKind::Batch { .. }
@@ -479,7 +479,7 @@ fn edits() -> Vec<Edit> {
         (
             "remove",
             Box::new(move |m: &mut Model| {
-                if let Some(i) = first(m, |k| matches!(k, ElementKind::Sink)) {
+                if let Some(i) = first(m, |k| matches!(k, ElementKind::Sink { .. })) {
                     let id = m.elements.remove(i).id;
                     m.connections.retain(|c| c.from != id && c.to != id);
                     m.layout.remove(&id);
@@ -579,7 +579,7 @@ fn edits() -> Vec<Edit> {
             Box::new(move |m: &mut Model| {
                 // The run stops at the 5th entity out of the first end event; the first task's
                 // time is a PERT fitted from a three-point estimate, kept as its pedigree.
-                if let Some(i) = first(m, |k| matches!(k, ElementKind::Sink)) {
+                if let Some(i) = first(m, |k| matches!(k, ElementKind::Sink { .. })) {
                     m.experiment.stop = Some(Stop::Count {
                         element: m.elements[i].id.clone(),
                         count: 5,
@@ -876,6 +876,7 @@ fn showcase() -> Model {
     m.connect(previous, check);
     m.route(check, split, Some(0.9), None);
     m.route(check, scrap, Some(0.1), None);
+    m.scrap(scrap, Some(previous));
     m.connect(split, left);
     m.connect(split, right);
     m.connect(left, join);
@@ -926,6 +927,7 @@ fn showcase() -> Model {
     m.connect(fit, triage);
     m.route(triage, out, None, Some("1 < 2 and not(false())"));
     m.route(triage, other, None, None);
+    m.rework(triage, other);
     m.default_route(triage, other);
     m.build(Experiment {
         time_unit: TimeUnit::Hours,

@@ -764,3 +764,65 @@ fn a_planned_run_time_is_set_in_the_inspector() {
     click(&mut h, Role::Button, "None");
     assert!(element(&h, "serve").get("planned_run_time").is_none());
 }
+
+/// A sink is made a scrap sink in the inspector, and its scrap counted against a server named
+/// there; unticking it makes it an ordinary end again.
+#[test]
+fn a_sink_is_made_scrap_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Customer leaves");
+    click(&mut h, Role::CheckBox, "Scrap");
+    assert_eq!(element(&h, "leave")["scrap"], json!({}));
+    click(&mut h, Role::ComboBox, "Counts against");
+    click(&mut h, Role::Button, "Serve customer");
+    assert_eq!(
+        element(&h, "leave")["scrap"],
+        json!({"charged_to": "serve"})
+    );
+    click(&mut h, Role::CheckBox, "Scrap");
+    assert!(element(&h, "leave").get("scrap").is_none());
+}
+
+/// A decision's way out is marked rework in the inspector.
+#[test]
+fn a_way_out_of_a_decision_is_marked_rework() {
+    let mut h = harness();
+    h.state_mut()
+        .execute("model.new", json!({"name": "Rework"}));
+    settle(&mut h);
+    for kind in ["Arrivals", "Task", "Decision (one way)", "Departures"] {
+        click(&mut h, Role::Button, "+ Add block");
+        click(&mut h, Role::Button, kind);
+    }
+    let gw = "exclusive_gateway-1";
+    for (from, to) in [
+        ("source-1", "delay-1"),
+        ("delay-1", gw),
+        (gw, "sink-1"),
+        (gw, "delay-1"),
+    ] {
+        h.state_mut()
+            .execute("connect", json!({ "from": from, "to": to }));
+    }
+    settle(&mut h);
+    let back = model(&h)["connections"]
+        .as_array()
+        .and_then(|cs| {
+            cs.iter()
+                .find(|c| c["from"] == gw && c["to"] == "delay-1")
+                .and_then(|c| c["id"].as_str().map(str::to_owned))
+        })
+        .expect("the way back");
+    click(&mut h, Role::ListBoxOption, gw);
+    click(&mut h, Role::CheckBox, &format!("Rework on {back}"));
+    let rework = |h: &Harness<'static, App>| {
+        model(h)["connections"]
+            .as_array()
+            .and_then(|cs| cs.iter().find(|c| c["id"] == back.as_str()).cloned())
+            .unwrap_or_default()["rework"]
+            .clone()
+    };
+    assert_eq!(rework(&h), json!(true));
+    click(&mut h, Role::CheckBox, &format!("Rework on {back}"));
+    assert_eq!(rework(&h), Value::Null);
+}

@@ -10,7 +10,8 @@ use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
     Bounds, Breakdown, Change, Connection, Diagnostic, Dist, Element, ElementId, ElementKind,
     Estimate, Experiment, Family, Model, Need, Power, Property, PropertyType, PropertyValue,
-    ResourcePool, Routing, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer,
+    Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -252,8 +253,12 @@ pub enum KindSpec {
         #[serde(default = "constant_1")]
         duration: DistSpec,
     },
-    /// Removes entities (a BPMN end event).
-    Sink,
+    /// Removes entities (a BPMN end event). With `scrap`, what reaches it is scrap, for the OEE
+    /// quality results; left out when it is not.
+    Sink {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        scrap: Option<ScrapSpec>,
+    },
     /// Sends each entity down one outgoing connection at once (a BPMN exclusive gateway): the
     /// first whose condition holds if any has one, else drawn by the connections'
     /// probabilities (`flow.set`); or, with `routing` `shortest_queue`, to the way with the
@@ -805,7 +810,11 @@ impl From<&ElementKind> for KindSpec {
             ElementKind::Delay { duration } => KindSpec::Delay {
                 duration: duration.into(),
             },
-            ElementKind::Sink => KindSpec::Sink,
+            ElementKind::Sink { scrap } => KindSpec::Sink {
+                scrap: scrap.as_ref().map(|s| ScrapSpec {
+                    charged_to: s.charged_to.as_ref().map(ToString::to_string),
+                }),
+            },
             ElementKind::ExclusiveGateway { default, routing } => KindSpec::ExclusiveGateway {
                 default: default.as_ref().map(ToString::to_string),
                 routing: (*routing).into(),
@@ -870,7 +879,11 @@ impl From<KindSpec> for ElementKind {
             KindSpec::Delay { duration } => ElementKind::Delay {
                 duration: duration.into(),
             },
-            KindSpec::Sink => ElementKind::Sink,
+            KindSpec::Sink { scrap } => ElementKind::Sink {
+                scrap: scrap.map(|s| Scrap {
+                    charged_to: s.charged_to.as_deref().map(ElementId::unchecked),
+                }),
+            },
             KindSpec::ExclusiveGateway { default, routing } => ElementKind::ExclusiveGateway {
                 default: default.as_deref().map(ElementId::unchecked),
                 routing: routing.into(),
@@ -1292,6 +1305,19 @@ pub struct ConnectionDoc {
     /// sends on (an assembly's bill of materials); left out, 1.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub quantity: Option<u32>,
+    /// Entities taking it are rework, counted against the last server they finished at, for
+    /// the OEE quality results; left out when false.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub rework: bool,
+}
+
+/// A sink that takes scrap: each entity reaching it counts against `charged_to`, a server (an
+/// inspection rejecting work done upstream), or, left out, the last server it finished at.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ScrapSpec {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub charged_to: Option<String>,
 }
 
 /// How to run a model. `duration` excludes the warm-up.
@@ -1392,6 +1418,7 @@ impl From<&Model> for ModelDoc {
                     probability: c.probability,
                     condition: c.condition.clone(),
                     quantity: c.quantity,
+                    rework: c.rework,
                 })
                 .collect(),
             resources: m.resources.iter().map(Into::into).collect(),
@@ -1443,6 +1470,7 @@ impl From<ModelDoc> for Model {
                     probability: c.probability,
                     condition: c.condition,
                     quantity: c.quantity,
+                    rework: c.rework,
                 })
                 .collect(),
             resources: m.resources.into_iter().map(Into::into).collect(),

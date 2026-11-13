@@ -308,6 +308,7 @@ impl Compiled {
                 // is an assembly, whose inputs bring parts.
                 counts: r.input == 0 || assembly.get(r.to).copied().unwrap_or(false),
                 router: None,
+                rework: r.rework,
             })
         };
         let routers: Vec<Option<Rc<Router>>> = (0..elements.len())
@@ -422,7 +423,14 @@ impl Compiled {
                     spawn_shared(&mut sim, env, service, request, Rc::clone(&pools));
                 }
                 ElementKind::Delay { duration } => spawn_delay(&mut sim, env, duration),
-                ElementKind::Sink => spawn_sink(&mut sim, env),
+                ElementKind::Sink { scrap } => {
+                    // Scrap counts against the server it names, else each entity's last one.
+                    let scrap = scrap.map(|s| {
+                        s.charged_to
+                            .and_then(|c| elements.iter().position(|x| x.id == c))
+                    });
+                    spawn_sink(&mut sim, env, scrap);
+                }
                 ElementKind::ExclusiveGateway { .. } => {
                     let router = routers.get(i).cloned().flatten();
                     spawn_exclusive(&mut sim, env, outs, router)
@@ -728,6 +736,12 @@ impl Live<'_> {
         let now = self.now().min(self.end);
         let model = &self.compiled.model;
         let hours = model.experiment.time_unit.seconds() / 3_600.0;
+        // The quality results apply once the model marks scrap or rework somewhere.
+        let quality = model.connections.iter().any(|c| c.rework)
+            || model
+                .elements
+                .iter()
+                .any(|e| matches!(e.kind, ElementKind::Sink { scrap: Some(_) }));
         let mut elements: Vec<ElementReport> = model
             .elements
             .iter()
@@ -736,8 +750,18 @@ impl Live<'_> {
             .zip(self.feeds_buffer.iter().zip(&self.feeds_transfer))
             .zip(&self.compiled.inputs)
             .map(|((((e, s), a), (&blocks, &transfers)), &inputs)| {
-                s.borrow()
-                    .report(e, a, Sends { blocks, transfers }, inputs > 1, now, hours)
+                s.borrow().report(
+                    e,
+                    a,
+                    Sends {
+                        blocks,
+                        transfers,
+                        quality,
+                    },
+                    inputs > 1,
+                    now,
+                    hours,
+                )
             })
             .collect();
         // Energy per entity at each sink: the energy of every server with a power over the
@@ -749,7 +773,7 @@ impl Live<'_> {
         if powered {
             let total: f64 = elements.iter().filter_map(|e| e.energy).sum();
             for (r, e) in elements.iter_mut().zip(&model.elements) {
-                if matches!(e.kind, ElementKind::Sink) && r.left > 0 {
+                if matches!(e.kind, ElementKind::Sink { .. }) && r.left > 0 {
                     r.specific_energy = Some(total / r.left as f64);
                 }
             }
@@ -795,6 +819,10 @@ pub(crate) struct BlockStats {
     wait: Tally,
     /// Time from creation to reaching a sink.
     time_in_system: Tally,
+    /// Servers: entities that finished here and then reached a scrap sink charged to this
+    /// server, or took a rework connection (ISO 22400-2's scrap and rework quantities).
+    scrap: u64,
+    rework: u64,
     /// The values assigned to each of the element's properties.
     properties: Vec<Tally>,
     /// Units (servers) or entities (delays) holding a finished entity while the next buffer is
@@ -829,6 +857,8 @@ pub(crate) struct Sends {
     pub(crate) blocks: bool,
     /// A server with a transfer time.
     pub(crate) transfers: bool,
+    /// Whether the model marks scrap or rework anywhere (for the quality results).
+    pub(crate) quality: bool,
 }
 
 /// The state a server's unit is in: exactly one at every instant, the first that applies of
@@ -989,6 +1019,8 @@ impl BlockStats {
             busy: TimeWeighted::new(t, 0.0),
             wait: Tally::new(),
             time_in_system: Tally::new(),
+            scrap: 0,
+            rework: 0,
             properties: (0..properties).map(|_| Tally::new()).collect(),
             blocked: TimeWeighted::new(t, 0.0),
             blocked_time: Tally::new(),
@@ -1009,6 +1041,8 @@ impl BlockStats {
         self.busy.reset(t);
         self.wait = Tally::new();
         self.time_in_system = Tally::new();
+        self.scrap = 0;
+        self.rework = 0;
         self.properties.iter_mut().for_each(|p| *p = Tally::new());
         self.blocked.reset(t);
         self.blocked_time = Tally::new();
@@ -1063,7 +1097,11 @@ impl BlockStats {
         end: f64,
         hours: f64,
     ) -> ElementReport {
-        let Sends { blocks, transfers } = sends;
+        let Sends {
+            blocks,
+            transfers,
+            quality,
+        } = sends;
         let kind = &element.kind;
         // Servers with a power report the share of time in each state, and their energy.
         let powered = match kind {
@@ -1106,6 +1144,36 @@ impl BlockStats {
             ElementKind::Server { .. } | ElementKind::SharedTask { .. } | ElementKind::Delay { .. }
         );
         let offered = self.lost + self.entered;
+        // ISO 22400-2's OEE elements. Off shift is planned downtime, so the time planned to be
+        // busy is the units' time less it.
+        let oee_availability = match kind {
+            ElementKind::Server { capacity, .. } => self
+                .states
+                .processing
+                .average(end)
+                .zip(self.states.off_shift.average(end))
+                .and_then(|(p, o)| {
+                    let planned = f64::from(*capacity) - o;
+                    (planned > 0.0).then(|| p / planned)
+                }),
+            _ => None,
+        };
+        let oee_effectiveness = match kind {
+            ElementKind::Server {
+                planned_run_time: Some(plan),
+                ..
+            } => plan.mean().and_then(|m| {
+                let producing = self.states.processing.integral(end);
+                (producing > 0.0).then(|| m * self.left as f64 / producing)
+            }),
+            _ => None,
+        };
+        // A server's scrap or rework over what it produced (each pass counted).
+        let per_produced = |n: u64| match kind {
+            ElementKind::Server { .. } if self.left > 0 => Some(n as f64 / self.left as f64),
+            _ => None,
+        };
+        let quality_ratio = per_produced(self.left.saturating_sub(self.scrap + self.rework));
         ElementReport {
             id: element.id.clone(),
             name: element.name.clone(),
@@ -1147,7 +1215,7 @@ impl BlockStats {
                 ElementKind::ParallelGateway if join => self.mean_inside(end),
                 _ => None,
             },
-            mean_time_in_system: if matches!(kind, ElementKind::Sink) {
+            mean_time_in_system: if matches!(kind, ElementKind::Sink { .. }) {
                 self.time_in_system.mean()
             } else {
                 None
@@ -1213,30 +1281,19 @@ impl BlockStats {
                     .map(|x| x / f64::from(*capacity)),
                 _ => None,
             },
-            // ISO 22400-2's OEE elements. Off shift is planned downtime, so the time planned to
-            // be busy is the units' time less it.
-            oee_availability: match kind {
-                ElementKind::Server { capacity, .. } => self
-                    .states
-                    .processing
-                    .average(end)
-                    .zip(self.states.off_shift.average(end))
-                    .and_then(|(p, o)| {
-                        let planned = f64::from(*capacity) - o;
-                        (planned > 0.0).then(|| p / planned)
-                    }),
-                _ => None,
-            },
-            oee_effectiveness: match kind {
-                ElementKind::Server {
-                    planned_run_time: Some(plan),
-                    ..
-                } => plan.mean().and_then(|m| {
-                    let producing = self.states.processing.integral(end);
-                    (producing > 0.0).then(|| m * self.left as f64 / producing)
-                }),
-                _ => None,
-            },
+            oee_availability,
+            oee_effectiveness,
+            quality_ratio: quality_ratio.filter(|_| quality),
+            scrap_ratio: per_produced(self.scrap).filter(|_| quality),
+            rework_ratio: per_produced(self.rework).filter(|_| quality),
+            oee: oee_availability.zip(oee_effectiveness).map(|(a, e)| {
+                a * e
+                    * if quality {
+                        quality_ratio.unwrap_or(1.0)
+                    } else {
+                        1.0
+                    }
+            }),
             setup_ratio: match kind {
                 ElementKind::Server { setup: Some(_), .. } => self
                     .states
@@ -1297,6 +1354,8 @@ struct Port {
     /// When the next element is a shortest-queue gateway: its ways, which the sender routes
     /// to itself, so that it is the one waiting for room.
     router: Option<Rc<Router>>,
+    /// Entities sent this way are rework, counted against the last server they finished at.
+    rework: bool,
 }
 
 /// A finite buffer's places (see [`Compiled::run_for`]), with the one each entity there holds.
@@ -1468,7 +1527,17 @@ impl Port {
     }
 
     /// `e` enters the shortest-queue gateway of `router`, on its way to one of its ways.
+    /// Counts `e` as rework against the last server it finished at, if this way is rework.
+    fn count_rework(&self, e: &Entity) {
+        if self.rework
+            && let Some(s) = e.last_server.and_then(|i| self.stats.get(i))
+        {
+            s.borrow_mut().rework += 1;
+        }
+    }
+
     fn enter_gateway(&self, router: &Router, e: &mut Entity) {
+        self.count_rework(e);
         self.assigner.enter(router.index, e, &self.stats);
         if let Some(s) = self.stats.get(router.index) {
             s.borrow_mut().entered += 1;
@@ -1543,6 +1612,7 @@ impl Port {
     /// `e` sets off for the next element, into a transfer: it enters it (and is counted
     /// there, in transit) now, and joins its queue when the transfer ends ([`Port::arrive`]).
     fn depart(&self, now: f64, mut e: Entity) -> Entity {
+        self.count_rework(&e);
         self.assigner.enter(self.index, &mut e, &self.stats);
         if let Some(s) = self.stats.get(self.index) {
             let mut s = s.borrow_mut();
@@ -1602,6 +1672,7 @@ impl Port {
 
     fn send(&self, now: f64, mut e: Entity) {
         e.entered = now;
+        self.count_rework(&e);
         self.assigner.enter(self.index, &mut e, &self.stats);
         if let Some(s) = self.stats.get(self.index) {
             let mut s = s.borrow_mut();
@@ -1720,6 +1791,7 @@ fn spawn_source(
                 entered: now,
                 properties: Vec::new(),
                 members: Vec::new(),
+                last_server: None,
             };
             // A source sets its properties on the entities it creates.
             env.assigner.enter(env.me, &mut entity, &env.stats);
@@ -1872,6 +1944,8 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
                         d.holding = true;
                     });
                 }
+                let mut entity = entity;
+                entity.last_server = Some(env.borrow().me);
                 move_on(&env, &ctx, entity, &|| false, None).await;
                 book.change(&env.borrow(), u, |d| d.holding = false);
             }
@@ -2180,6 +2254,8 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                 // its repair ([`reserve_place`]).
                 let down = || units2.borrow().get(unit).is_some_and(|x| x.down);
                 let repaired = waits_for_repair.then(|| up2.get(unit)).flatten();
+                let mut entity = entity;
+                entity.last_server = Some(env2.borrow().me);
                 let kept = move_on(&env2, &c, entity, &down, repaired).await;
                 book2.change(&env2.borrow(), unit, |d| d.holding = false);
                 if let Some(x) = units2.borrow_mut().get_mut(unit) {
@@ -2588,6 +2664,10 @@ impl Pools {
                     oee_availability: None,
                     oee_effectiveness: None,
                     setup_ratio: None,
+                    quality_ratio: None,
+                    scrap_ratio: None,
+                    rework_ratio: None,
+                    oee: None,
                     energy: None,
                     specific_energy: None,
                     lost: None,
@@ -2672,7 +2752,9 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
     });
 }
 
-fn spawn_sink(sim: &mut Sim, env: BlockEnv) {
+/// A sink. With `scrap`, what reaches it is scrap, counted against the server given, or else
+/// against each entity's last server.
+fn spawn_sink(sim: &mut Sim, env: BlockEnv, scrap: Option<Option<usize>>) {
     sim.spawn_tagged(tag(env.me), async move {
         loop {
             let entity = env.input.get().await;
@@ -2682,6 +2764,12 @@ fn spawn_sink(sim: &mut Sim, env: BlockEnv) {
                 s.left += 1;
                 s.time_in_system.add(now - entity.created);
             });
+            if let Some(s) = scrap
+                .and_then(|charged| charged.or(entity.last_server))
+                .and_then(|i| env.stats.get(i))
+            {
+                s.borrow_mut().scrap += 1;
+            }
         }
     });
 }

@@ -430,7 +430,7 @@ impl App {
                     Align2::CENTER_BOTTOM,
                     false,
                 ),
-                ElementKind::Sink => pill(
+                ElementKind::Sink { .. } => pill(
                     tf("{n} done", &[("n", &count(s.left as f64))]),
                     above,
                     Align2::CENTER_BOTTOM,

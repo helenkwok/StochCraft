@@ -39,11 +39,11 @@ mod runtime;
 
 pub use runtime::{Live, LiveState};
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
-pub use stochcraft_model::{Breakdown, Change, Power, Routing, Setup, Transfer};
+pub use stochcraft_model::{Breakdown, Change, Power, Routing, Scrap, Setup, Transfer};
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
     Property, PropertyType, PropertyValue, ResourcePool, Severity, Timed,
@@ -115,6 +115,9 @@ pub struct Entity {
     /// A batch ([`ElementKind::Batch`]): the other entities it carries, until an
     /// [`ElementKind::Unbatch`] sends them on again. Empty for any other entity.
     pub members: Vec<Entity>,
+    /// The element index of the last server it finished at, which scrap and rework count
+    /// against. It travels as the properties do: a copy keeps its original's.
+    pub last_server: Option<usize>,
 }
 
 /// Where an assigned value comes from.
@@ -150,6 +153,8 @@ struct Route {
     condition: Option<expr::Expr>,
     /// The gateway's default connection.
     default: bool,
+    /// Entities taking it are rework.
+    rework: bool,
 }
 
 /// A model checked and ready to run.
@@ -381,6 +386,7 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                             None
                         },
                         default: default == Some(&c.id),
+                        rework: c.rework,
                     })
                 })
                 .collect()
@@ -544,6 +550,21 @@ pub enum Metric {
     /// Servers that set up: ISO 22400-2's setup ratio, the time setting up over the time
     /// setting up and producing.
     SetupRatio,
+    /// Servers, when the model marks scrap or rework: ISO 22400-2's quality ratio, the good
+    /// quantity over the produced quantity ([`Metric::Left`], each pass counted). The good
+    /// quantity is taken as what was produced less what was scrapped or sent to rework, charged
+    /// to this server (see [`stochcraft_model::Scrap`]).
+    QualityRatio,
+    /// Servers, when the model marks scrap or rework: ISO 22400-2's scrap ratio, the scrap
+    /// quantity charged to this server over its produced quantity.
+    ScrapRatio,
+    /// Servers, when the model marks scrap or rework: ISO 22400-2's rework ratio, the rework
+    /// quantity charged to this server over its produced quantity.
+    ReworkRatio,
+    /// Servers with a planned run time per item: ISO 22400-2's OEE index, availability times
+    /// effectiveness times the quality ratio, which counts as 1 when the model marks no scrap
+    /// or rework.
+    Oee,
     /// Servers with a power: energy used in the measured window, in kilowatt-hours: each
     /// state's power times the exact time the units spent in it, cut at the end of the warm-up
     /// and at the end of the run.
@@ -556,7 +577,7 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 25] = [
+    pub const ALL: [Metric; 29] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -580,6 +601,10 @@ impl Metric {
         Metric::OeeAvailability,
         Metric::OeeEffectiveness,
         Metric::SetupRatio,
+        Metric::QualityRatio,
+        Metric::ScrapRatio,
+        Metric::ReworkRatio,
+        Metric::Oee,
         Metric::Energy,
         Metric::SpecificEnergy,
     ];
@@ -615,6 +640,10 @@ impl Metric {
             Metric::OeeAvailability => "oee_availability",
             Metric::OeeEffectiveness => "oee_effectiveness",
             Metric::SetupRatio => "setup_ratio",
+            Metric::QualityRatio => "quality_ratio",
+            Metric::ScrapRatio => "scrap_ratio",
+            Metric::ReworkRatio => "rework_ratio",
+            Metric::Oee => "oee",
             Metric::Energy => "energy",
             Metric::SpecificEnergy => "specific_energy",
         }
@@ -662,6 +691,14 @@ pub struct ElementReport {
     pub oee_effectiveness: Option<f64>,
     /// Servers that set up: [`Metric::SetupRatio`].
     pub setup_ratio: Option<f64>,
+    /// Servers, when the model marks scrap or rework: [`Metric::QualityRatio`].
+    pub quality_ratio: Option<f64>,
+    /// Servers, when the model marks scrap or rework: [`Metric::ScrapRatio`].
+    pub scrap_ratio: Option<f64>,
+    /// Servers, when the model marks scrap or rework: [`Metric::ReworkRatio`].
+    pub rework_ratio: Option<f64>,
+    /// Servers with a planned run time per item: [`Metric::Oee`].
+    pub oee: Option<f64>,
     pub energy: Option<f64>,
     /// Sinks, when any server has a power: [`Metric::SpecificEnergy`].
     pub specific_energy: Option<f64>,
@@ -699,6 +736,10 @@ impl ElementReport {
             Metric::OeeAvailability => self.oee_availability,
             Metric::OeeEffectiveness => self.oee_effectiveness,
             Metric::SetupRatio => self.setup_ratio,
+            Metric::QualityRatio => self.quality_ratio,
+            Metric::ScrapRatio => self.scrap_ratio,
+            Metric::ReworkRatio => self.rework_ratio,
+            Metric::Oee => self.oee,
             Metric::Energy => self.energy,
             Metric::SpecificEnergy => self.specific_energy,
         }
@@ -999,6 +1040,8 @@ pub struct Builder {
     connections: Vec<(BlockId, BlockId, Option<f64>, Option<String>)>,
     /// Bills of materials: how many entities a connection gives a parallel gateway.
     quantities: BTreeMap<(BlockId, BlockId), u32>,
+    /// Connections whose entities are rework.
+    reworks: BTreeSet<(BlockId, BlockId)>,
     /// Shared resource pools.
     pools: Vec<ResourcePool>,
     calendars: Vec<Calendar>,
@@ -1265,7 +1308,7 @@ impl Builder {
 
     /// Removes entities from the model and records their time in system.
     pub fn sink(&mut self, name: &str) -> BlockId {
-        self.add(name, ElementKind::Sink)
+        self.add(name, ElementKind::Sink { scrap: None })
     }
 
     /// Sends each entity down one outgoing connection: by condition if any connection has one
@@ -1329,6 +1372,23 @@ impl Builder {
         self.quantities.insert((from, to), quantity);
     }
 
+    /// Makes the entities taking the connection from `from` to `to` rework, counted against
+    /// the last server each finished at. Connect them first.
+    pub fn rework(&mut self, from: BlockId, to: BlockId) {
+        self.reworks.insert((from, to));
+    }
+
+    /// Makes sink `block` take scrap, counted against server `charged_to`, or else the last
+    /// server each entity finished at.
+    pub fn scrap(&mut self, block: BlockId, charged_to: Option<BlockId>) {
+        let charged_to = charged_to
+            .and_then(|c| self.elements.get(c.0))
+            .map(|(name, ..)| ElementId::unchecked(name));
+        if let Some((_, ElementKind::Sink { scrap }, _)) = self.elements.get_mut(block.0) {
+            *scrap = Some(Scrap { charged_to });
+        }
+    }
+
     fn is_gateway(&self, b: BlockId) -> bool {
         self.elements
             .get(b.0)
@@ -1377,6 +1437,7 @@ impl Builder {
                 probability: *probability,
                 condition: condition.clone(),
                 quantity: self.quantities.get(&(*from, *to)).copied(),
+                rework: self.reworks.contains(&(*from, *to)),
             })
             .collect();
         let elements = self

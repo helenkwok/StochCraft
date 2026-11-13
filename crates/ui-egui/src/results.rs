@@ -80,6 +80,10 @@ fn metric<'a>(name: &'a str, kind: &str) -> (&'a str, Unit) {
         "oee_availability" => (t("OEE availability"), Unit::Share),
         "oee_effectiveness" => (t("OEE effectiveness"), Unit::Share),
         "setup_ratio" => (t("Setup ratio"), Unit::Share),
+        "quality_ratio" => (t("Quality ratio"), Unit::Share),
+        "scrap_ratio" => (t("Scrap ratio"), Unit::Share),
+        "rework_ratio" => (t("Rework ratio"), Unit::Share),
+        "oee" => (t("OEE"), Unit::Share),
         "energy" => (t("Energy"), Unit::Energy),
         "specific_energy" => (t("Energy per part"), Unit::Energy),
         other => (other, Unit::Count),
@@ -275,6 +279,14 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                         &n_of(m),
                     ],
                 );
+            }
+            // Without scrap or rework marked, OEE counts quality as 100%: say so.
+            if !e["metrics"]["oee"].is_null() && e["metrics"]["quality_ratio"].is_null() {
+                ui.add_space(2.0);
+                ui.label(theme::weak(
+                    ui,
+                    t("No scrap or rework is marked in this model, so OEE counts quality as 100%."),
+                ));
             }
             // OEE needs a plan to compare against; say how to get it rather than guess one.
             if !e["metrics"]["oee_availability"].is_null()
