@@ -789,7 +789,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         scenario.push(ep);
     }
     for c in &model.connections {
-        if c.probability.is_none() && c.condition.is_none() && c.quantity.is_none() {
+        if c.probability.is_none() && c.condition.is_none() && c.quantity.is_none() && !c.rework {
             continue;
         }
         let mut ep = s("ElementParameters").with_attr("elementRef", c.id.as_str());

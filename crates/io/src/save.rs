@@ -25,7 +25,7 @@ use crate::write::{
     estimate_element, interruptible_param, numeric, planned_element, power_element,
     probability_element, property_element, quantity_element, quantity_param,
     queue_capacity_element, rework_element, routing_element, scrap_element, size, start_param,
-    stop_element, timer_param, transfer_element,
+    stop_element, timer_param, transfer_element, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -749,7 +749,7 @@ impl Editor {
         self.pools(before, after)?;
         self.parameters(root, scenario, &old, &replaced, after, resources)?;
         self.extensions(root, scenario, before, after, &replaced)?;
-        self.routing(root, scenario, before, after)?;
+        self.routing(root, scenario, before, after, &replaced)?;
         if before.experiment != after.experiment {
             self.experiment(root, scenario, before, after)?;
         }
@@ -1654,17 +1654,29 @@ impl Editor {
         Ok(())
     }
 
-    /// Writes the probabilities and conditions of connections that changed (or are new).
+    /// Writes the probabilities and conditions of connections that changed (or are new). A
+    /// connection to or from an element written again as another kind (`replaced`) was written
+    /// again with it, without its parameters, so it counts as new.
     fn routing(
         &mut self,
         root: &mut Element,
         scenario: Option<&str>,
         before: &Model,
         after: &Model,
+        replaced: &BTreeSet<&str>,
     ) -> Result<(), SaveError> {
+        let old = |c: &Connection| {
+            before
+                .connections
+                .iter()
+                .find(|o| same_link(o, c))
+                .filter(|_| {
+                    !replaced.contains(c.from.as_str()) && !replaced.contains(c.to.as_str())
+                })
+        };
         let mut writes: Vec<(String, &'static str, Option<Element>)> = Vec::new();
         for c in &after.connections {
-            let was = before.connections.iter().find(|o| same_link(o, c));
+            let was = old(c);
             let (op, oc) = was.map_or((None, None), |o| (o.probability, o.condition.clone()));
             if op != c.probability {
                 writes.push((
@@ -1685,13 +1697,25 @@ impl Editor {
         // Bills of materials.
         let mut quantities: Vec<(String, Option<Element>)> = Vec::new();
         let mut reworks: Vec<(String, Option<Element>)> = Vec::new();
+        // Rework an inherited scenario sets comes back on reading unless this one says false.
+        let parents = ancestors(root, scenario);
         for c in &after.connections {
-            let was = before.connections.iter().find(|o| same_link(o, c));
+            let was = old(c);
             if was.and_then(|o| o.quantity) != c.quantity {
                 quantities.push((c.id.to_string(), c.quantity.map(quantity_element)));
             }
             if was.is_some_and(|o| o.rework) != c.rework {
-                reworks.push((c.id.to_string(), c.rework.then(rework_element)));
+                let inherited = parents
+                    .iter()
+                    .any(|a| sets_vendor(a, c.id.as_str(), crate::bpsim::REWORK));
+                let v = if c.rework {
+                    Some(rework_element())
+                } else if inherited {
+                    Some(vendor_value_element(crate::bpsim::REWORK, "false"))
+                } else {
+                    None
+                };
+                reworks.push((c.id.to_string(), v));
             }
         }
         // Writing nothing where there was nothing leaves the file alone.

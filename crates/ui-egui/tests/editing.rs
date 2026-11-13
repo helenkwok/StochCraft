@@ -848,3 +848,37 @@ fn a_demand_is_set_on_departures_in_the_inspector() {
     click(&mut h, Role::CheckBox, "Customer demand");
     assert!(element(&h, "leave").get("demand").is_none());
 }
+
+/// Any block's way out, not only a decision's, can be marked rework.
+#[test]
+fn a_way_out_of_a_task_is_marked_rework() {
+    let mut h = harness();
+    h.state_mut()
+        .execute("model.new", json!({"name": "Rework"}));
+    settle(&mut h);
+    for kind in ["Arrivals", "Task", "Departures"] {
+        click(&mut h, Role::Button, "+ Add block");
+        click(&mut h, Role::Button, kind);
+    }
+    for (from, to) in [("source-1", "delay-1"), ("delay-1", "sink-1")] {
+        h.state_mut()
+            .execute("connect", json!({ "from": from, "to": to }));
+    }
+    settle(&mut h);
+    let way = model(&h)["connections"]
+        .as_array()
+        .and_then(|cs| {
+            cs.iter()
+                .find(|c| c["from"] == "delay-1")
+                .and_then(|c| c["id"].as_str().map(str::to_owned))
+        })
+        .expect("the way out");
+    click(&mut h, Role::ListBoxOption, "delay-1");
+    click(&mut h, Role::CheckBox, &format!("Rework on {way}"));
+    let rework = model(&h)["connections"]
+        .as_array()
+        .and_then(|cs| cs.iter().find(|c| c["id"] == way.as_str()).cloned())
+        .unwrap_or_default()["rework"]
+        .clone();
+    assert_eq!(rework, json!(true));
+}

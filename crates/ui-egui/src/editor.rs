@@ -596,14 +596,16 @@ impl App {
                                 self.execute("disconnect", json!({ "id": cid }));
                             }
                         });
-                        // A decision's way out: its probability, condition and whether it is
-                        // rework, on a line of their own so the row fits the inspector.
-                        if decision && !incoming {
+                        // A way out: a decision's probability and condition, and for any whether
+                        // it is rework, on lines of their own so the row fits the inspector.
+                        if !incoming && kind != "source" {
                             let c = connection(model, cid);
-                            ui.horizontal(|ui| {
-                                ui.add_space(12.0);
-                                self.flow_fields(ui, cid, &c);
-                            });
+                            if decision {
+                                ui.horizontal(|ui| {
+                                    ui.add_space(12.0);
+                                    self.flow_fields(ui, cid, &c);
+                                });
+                            }
                             ui.horizontal(|ui| {
                                 ui.add_space(12.0);
                                 self.rework_field(ui, cid, &c);
