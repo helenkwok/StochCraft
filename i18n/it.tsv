@@ -25,6 +25,7 @@
 	Abandoned on {id}	Abbandonate su {id}
 	About StochCraft	Informazioni su StochCraft
 	About {app}	Informazioni su {app}
+	Accent	Accento
 	Across the range it changed by {change}: more than chance would explain.	Nell'intervallo è cambiato di {change}: più di quanto spiegherebbe il caso.
 	Across the range it changed by {change}: within what chance alone could do.	Nell'intervallo è cambiato di {change}: entro ciò che il solo caso potrebbe produrre.
 	Actual size	Dimensioni reali
@@ -47,6 +48,7 @@
 	Added pool {id}	Aggiunto pool {id}
 	Added {block} ({id})	Aggiunto {block} ({id})
 	Align	Allinea
+	All text meets the contrast minimums.	Tutto il testo rispetta i contrasti minimi.
 	Also: {rule}	Inoltre: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Analisi
@@ -69,11 +71,13 @@
 	Binomial	Binomiale
 	Block	Blocco
 	Boolean	Booleano
+	Borders	Bordi
 	Bottoms	Bordi inferiori
 	Breakdowns	Guasti
 	Breakdowns and availability	Guasti e disponibilità
 	Bring All to Front	Porta tutto in primo piano
 	Built with	Realizzato con
+	Built-in themes are read-only. Duplicate one to change its colours.	I temi predefiniti sono di sola lettura. Duplicane uno per cambiarne i colori.
 	Busiest	Più occupato
 	By role	Per ruolo
 	CSV table	Tabella CSV
@@ -83,6 +87,7 @@
 	Cancel	Annulla
 	Cancel Run	Annulla esecuzione
 	Cancel run	Annulla esecuzione
+	Canvas	Superficie principale
 	Capacity	Capacità
 	Centres	Centri orizzontali
 	Change	Variazione
@@ -93,6 +98,8 @@
 	Change the estimate	Modifica la stima
 	Changes	Modifiche
 	Changing the time unit does not convert the times already in the model.	La modifica dell'unità di tempo non converte i tempi già presenti nel modello.
+	Chart	Grafico
+	Chart hover	Grafico sotto il puntatore
 	Choose…	Scegli…
 	Clear Menu	Cancella menu
 	Close	Chiudi
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Ogni entità prende, tutta in una volta, la prima di queste alternative che può essere soddisfatta subito e restituisce le unità quando esce.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Ogni entità attende qui al massimo un tempo estratto a caso per lei al suo arrivo, poi abbandona: prende l'uscita contrassegnata come «Abbandonate» o lascia il modello.
 	Edit	Modifica
+	Edit themes…	Modifica temi…
 	Elasticity	Elasticità
 	Ends early	Termina prima
 	Energy	Energia
@@ -183,11 +191,14 @@
 	Gives up before service starts	Abbandona prima che inizi il servizio
 	Goes to	Va a
 	Hands on finished parts while down	Passa i pezzi finiti anche in guasto
+	Header	Intestazione
 	Help	Aiuto
 	Hide Others	Nascondi altri
 	Hide {app}	Nascondi {app}
+	High contrast	Contrasto elevato
 	How many	Quanti
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Quanti pezzi vogliono i clienti da queste partenze; i risultati mostrano allora il takt (il tempo disponibile diviso per la domanda) e il tempo ciclo di ogni attività.
+	In use	In uso
 	Inside over time	All'interno nel tempo
 	Jump	Vai
 	Jump to time	Vai all'istante
@@ -301,6 +312,7 @@
 	Quality ratio	Tasso di qualità
 	Quit	Esci
 	Quit {app}	Esci da {app}
+	Raised surfaces	Superfici rialzate
 	Random	Casuale
 	Rank the parameters	Ordina i parametri
 	Ready	Pronto
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Rimuovi questo blocco e i suoi flussi (Delete)
 	Remove this period	Rimuovi questo periodo
 	Removed {id}	Rimosso {id}
+	Rename	Rinomina
 	Rename Block	Rinomina blocco
 	Rename Model	Rinomina modello
 	Repair time	Tempo di riparazione
@@ -363,6 +376,7 @@
 	Save As…	Salva con nome…
 	Save Model	Salva modello
 	Save changes to {name}?	Salvare le modifiche a {name}?
+	Save name	Salva nome
 	Saved {file}	Salvato {file}
 	Scale	Scala
 	Scrap	Scarto
@@ -390,8 +404,10 @@
 	Share that gave up	Quota che ha abbandonato
 	Show All	Mostra tutto
 	Show {id}	Mostra {id}
+	Side rail	Barra laterale
 	Size	Dimensiona
 	Size the resources	Dimensiona le risorse
+	Soft accent	Accento tenue
 	Source	Fonte
 	Source: {source}	Fonte: {source}
 	Speed	Velocità
@@ -403,6 +419,7 @@
 	Stages (k)	Fasi (k)
 	Standard deviation	Deviazione standard
 	Step	Passo
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft è stato chiuso con modifiche non salvate a {name}. Recuperale come modello senza titolo oppure scartale.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft legge modelli di processo da file BPMN o XPDL con dati di simulazione BPSim, li esegue come esperimenti con repliche e riporta ogni risultato con il relativo intervallo di confidenza.
 	StochCraft {version} · model {digest}	StochCraft {version} · modello {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Osservazione interrotta
 	Sun	dom
 	Sweep a parameter	Scansione di un parametro
+	Table stripes	Righe alternate delle tabelle
 	Takt	Takt
 	Takt time	Takt time
 	Tandem line	Linea in tandem
@@ -422,6 +440,8 @@
 	Task with a resource	Attività con risorsa
 	Task with shared resources	Attività con risorse condivise
 	Text	Testo
+	Text on accent	Testo sull'accento
+	Text on header	Testo dell'intestazione
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'intervallo scende sotto la quota obiettivo del {share}, quindi non è dimostrato con una confidenza del 95% che la quota sia raggiunta; più repliche lo restringerebbero.
 	The last task with a resource it finished at	L'ultima attività con risorsa da cui è passato il pezzo
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Il tempo medio fino alla condizione di arresto riguarda solo le repliche che l'hanno raggiunta; le altre sono arrivate al loro limite di tempo.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Il modello non ha ancora calendari.
 	The model now has the units sizing found	Il modello ora ha le unità trovate dal dimensionamento
 	The model: its experiment, connections and problems	Il modello: esperimento, connessioni e problemi
+	The name is empty or already used.	Il nome è vuoto o già usato.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La quota di repliche pari o inferiori a ogni valore. La fascia contiene la vera distribuzione con una confidenza del {confidence}.
 	The values are numbers, separated by semicolons or spaces	I valori sono numeri separati da punti e virgola o spazi
 	The whole clock	Tutto il tempo
+	Themes	Temi
 	This block has a warning	Questo blocco presenta un avviso
 	This block has an error	Questo blocco presenta un errore
 	This run	Questa esecuzione
@@ -478,12 +500,15 @@
 	View	Visualizza
 	Waiting over time	In attesa nel tempo
 	Waiting room	Sala d'attesa
+	Warm	Caldo
 	Warm-up	Riscaldamento
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Riscaldamento di {warmup} {unit}, poi {duration} {unit} misurati
 	Warning	Avviso
 	Watch a Run	Osserva un'esecuzione
 	Watch a run	Osserva un'esecuzione
 	Watching replication 1	Osservazione della replica 1
+	Weak text	Testo attenuato
+	Weak text on header	Testo attenuato dell'intestazione
 	Wed	mer
 	Weekly	Ogni settimana
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} in attesa
 	{n} {unit} per second	{n} {unit} al secondo
 	{property} (set to, mean)	{property} (valore impostato, media)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} su {background}: {ratio}:1, serve {min}:1
 	{title}: now {now}, at most {most}	{title}: ora {now}, al massimo {most}
 	± 95% CI	± IC al 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± è la semiampiezza di un intervallo di confidenza Student-t al 95% della media tra le repliche.

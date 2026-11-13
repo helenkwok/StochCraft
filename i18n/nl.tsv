@@ -25,6 +25,7 @@
 	Abandoned on {id}	Afgehaakt op {id}
 	About StochCraft	Over StochCraft
 	About {app}	Over {app}
+	Accent	Accent
 	Across the range it changed by {change}: more than chance would explain.	Over het bereik veranderde het met {change}: meer dan toeval zou verklaren.
 	Across the range it changed by {change}: within what chance alone could do.	Over het bereik veranderde het met {change}: binnen wat toeval alleen kan doen.
 	Actual size	Werkelijke grootte
@@ -47,6 +48,7 @@
 	Added pool {id}	Pool {id} toegevoegd
 	Added {block} ({id})	{block} ({id}) toegevoegd
 	Align	Uitlijnen
+	All text meets the contrast minimums.	Alle tekst haalt de minimale contrasten.
 	Also: {rule}	Ook: {rule}
 	Alternative {n}	Alternatief {n}
 	Analysis	Analyse
@@ -69,11 +71,13 @@
 	Binomial	Binomiaal
 	Block	Blok
 	Boolean	Booleaans
+	Borders	Randen
 	Bottoms	Onderkanten
 	Breakdowns	Storingen
 	Breakdowns and availability	Storingen en beschikbaarheid
 	Bring All to Front	Alles naar voren halen
 	Built with	Gemaakt met
+	Built-in themes are read-only. Duplicate one to change its colours.	Ingebouwde thema's zijn alleen-lezen. Dupliceer er een om de kleuren te wijzigen.
 	Busiest	Drukst
 	By role	Per rol
 	CSV table	CSV-tabel
@@ -83,6 +87,7 @@
 	Cancel	Annuleren
 	Cancel Run	Uitvoering annuleren
 	Cancel run	Uitvoering annuleren
+	Canvas	Hoofdvlak
 	Capacity	Capaciteit
 	Centres	Horizontale middens
 	Change	Verandering
@@ -93,6 +98,8 @@
 	Change the estimate	Schatting wijzigen
 	Changes	Wijzigingen
 	Changing the time unit does not convert the times already in the model.	Als u de tijdseenheid wijzigt, worden bestaande tijden in het model niet omgerekend.
+	Chart	Grafiek
+	Chart hover	Grafiek onder aanwijzer
 	Choose…	Kies…
 	Clear Menu	Menu wissen
 	Close	Sluiten
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Elke entiteit neemt in één keer het eerste van deze alternatieven waaraan nu kan worden voldaan, en geeft de eenheden terug wanneer ze vertrekt.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Elke entiteit wacht hier hoogstens een tijd die bij aankomst willekeurig voor haar wordt getrokken, en haakt dan af: ze neemt de uitgang gemarkeerd als ‘Afgehaakt’ of verlaat het model.
 	Edit	Bewerken
+	Edit themes…	Thema's bewerken…
 	Elasticity	Elasticiteit
 	Ends early	Stopt eerder
 	Energy	Energie
@@ -183,11 +191,14 @@
 	Gives up before service starts	Haakt af voordat de service begint
 	Goes to	Gaat naar
 	Hands on finished parts while down	Geeft gerede onderdelen door tijdens storing
+	Header	Kopbalk
 	Help	Help
 	Hide Others	Anderen verbergen
 	Hide {app}	{app} verbergen
+	High contrast	Hoog contrast
 	How many	Hoeveel
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hoeveel onderdelen klanten van deze vertrekken willen; de resultaten tonen dan de takt (de beschikbare tijd gedeeld door de vraag) en de cyclustijd van elke taak.
+	In use	In gebruik
 	Inside over time	Binnen in de tijd
 	Jump	Ga
 	Jump to time	Ga naar tijdstip
@@ -301,6 +312,7 @@
 	Quality ratio	Kwaliteitsaandeel
 	Quit	Afsluiten
 	Quit {app}	{app} afsluiten
+	Raised surfaces	Verhoogde vlakken
 	Random	Willekeurig
 	Rank the parameters	Parameters rangschikken
 	Ready	Klaar
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Dit blok en zijn stromen verwijderen (Delete)
 	Remove this period	Deze periode verwijderen
 	Removed {id}	{id} verwijderd
+	Rename	Naam wijzigen
 	Rename Block	Blok hernoemen
 	Rename Model	Model hernoemen
 	Repair time	Reparatietijd
@@ -363,6 +376,7 @@
 	Save As…	Opslaan als…
 	Save Model	Model opslaan
 	Save changes to {name}?	Wijzigingen in {name} opslaan?
+	Save name	Naam opslaan
 	Saved {file}	{file} opgeslagen
 	Scale	Schaal
 	Scrap	Afkeur
@@ -390,8 +404,10 @@
 	Share that gave up	Aandeel afgehaakt
 	Show All	Alles tonen
 	Show {id}	{id} tonen
+	Side rail	Zijbalk
 	Size	Dimensioneren
 	Size the resources	De middelen dimensioneren
+	Soft accent	Zacht accent
 	Source	Bron
 	Source: {source}	Bron: {source}
 	Speed	Snelheid
@@ -403,6 +419,7 @@
 	Stages (k)	Fasen (k)
 	Standard deviation	Standaardafwijking
 	Step	Stap
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft is afgesloten met niet-opgeslagen wijzigingen in {name}. Herstel deze als een naamloos model of verwerp ze.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft leest procesmodellen uit BPMN- of XPDL-bestanden met BPSim-simulatiegegevens, voert ze uit als experimenten met herhalingen en rapporteert elk resultaat met het bijbehorende betrouwbaarheidsinterval.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Gestopt met volgen
 	Sun	zo
 	Sweep a parameter	Eén parameter variëren
+	Table stripes	Tabelstrepen
 	Takt	Takt
 	Takt time	Takttijd
 	Tandem line	Tandemlijn
@@ -422,6 +440,8 @@
 	Task with a resource	Taak met een hulpbron
 	Task with shared resources	Taak met gedeelde hulpbronnen
 	Text	Tekst
+	Text on accent	Tekst op accent
+	Text on header	Tekst op kopbalk
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Het interval reikt tot onder het doelaandeel van {share}, dus het is niet met 95% betrouwbaarheid aangetoond dat het aandeel wordt gehaald; meer herhalingen zouden het smaller maken.
 	The last task with a resource it finished at	De laatste taak met een hulpbron die het onderdeel doorliep
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	De gemiddelde tijd tot de stopvoorwaarde is alleen over de herhalingen die haar haalden; de andere liepen tot hun tijdslimiet.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Het model heeft nog geen kalenders.
 	The model now has the units sizing found	Het model heeft nu de eenheden die het dimensioneren vond
 	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
+	The name is empty or already used.	De naam is leeg of al in gebruik.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Het aandeel herhalingen op of onder elke waarde. De band bevat de ware verdeling met {confidence} betrouwbaarheid.
 	The values are numbers, separated by semicolons or spaces	De waarden zijn getallen, gescheiden door puntkomma's of spaties
 	The whole clock	Alle tijd
+	Themes	Thema's
 	This block has a warning	Dit blok heeft een waarschuwing
 	This block has an error	Dit blok heeft een fout
 	This run	Deze uitvoering
@@ -478,12 +500,15 @@
 	View	Beeld
 	Waiting over time	Wachtend in de tijd
 	Waiting room	Wachtruimte
+	Warm	Warm
 	Warm-up	Opwarmperiode
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Opwarmen gedurende {warmup} {unit}, daarna {duration} {unit} meten
 	Warning	Waarschuwing
 	Watch a Run	Een uitvoering volgen
 	Watch a run	Een uitvoering volgen
 	Watching replication 1	Herhaling 1 wordt gevolgd
+	Weak text	Gedempte tekst
+	Weak text on header	Gedempte tekst op kopbalk
 	Wed	wo
 	Weekly	Wekelijks
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} wachtend
 	{n} {unit} per second	{n} {unit} per seconde
 	{property} (set to, mean)	{property} (ingestelde waarde, gemiddelde)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} op {background}: {ratio}:1, nodig {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, hoogstens {most}
 	± 95% CI	± 95%-BI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± is de halve breedte van een 95%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de herhalingen.

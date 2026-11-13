@@ -25,6 +25,7 @@
 	Abandoned on {id}	Одустали на {id}
 	About StochCraft	О апликацији StochCraft
 	About {app}	О апликацији {app}
+	Accent	Акценат
 	Across the range it changed by {change}: more than chance would explain.	У опсегу се променио за {change}: више него што би објаснио случај.
 	Across the range it changed by {change}: within what chance alone could do.	У опсегу се променио за {change}: у оквиру онога што може сам случај.
 	Actual size	Стварна величина
@@ -47,6 +48,7 @@
 	Added pool {id}	Додат је фонд {id}
 	Added {block} ({id})	Додат је {block} ({id})
 	Align	Поравнај
+	All text meets the contrast minimums.	Сав текст испуњава минимални контраст.
 	Also: {rule}	Такође: {rule}
 	Alternative {n}	Алтернатива {n}
 	Analysis	Анализа
@@ -69,11 +71,13 @@
 	Binomial	Биномна
 	Block	Блок
 	Boolean	Логичка вредност
+	Borders	Ивице
 	Bottoms	Доње ивице
 	Breakdowns	Кварови
 	Breakdowns and availability	Кварови и расположивост
 	Bring All to Front	Све у први план
 	Built with	Направљено помоћу
+	Built-in themes are read-only. Duplicate one to change its colours.	Уграђене теме су само за читање. Дуплирајте једну да бисте променили њене боје.
 	Busiest	Најоптерећенији
 	By role	По улози
 	CSV table	Таблица CSV
@@ -83,6 +87,7 @@
 	Cancel	Откажи
 	Cancel Run	Откажи извршавање
 	Cancel run	Откажи извршавање
+	Canvas	Главна површина
 	Capacity	Капацитет
 	Centres	Хоризонтални центри
 	Change	Промена
@@ -93,6 +98,8 @@
 	Change the estimate	Промени процену
 	Changes	Промене
 	Changing the time unit does not convert the times already in the model.	Промјена временске јединице не претвара времена која већ постоје у моделу.
+	Chart	Графикон
+	Chart hover	Графикон под показивачем
 	Choose…	Изабери…
 	Clear Menu	Очисти мени
 	Close	Затвори
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Сваки ентитет узима прву од ових могућности која се сада може испунити, све одједном, и враћа јединице када изађе.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Сваки ентитет овде чека највише време које му се насумично одреди при доласку, а затим одустаје: иде излазом означеним као „Одустали” или напушта модел.
 	Edit	Уреди
+	Edit themes…	Уреди теме…
 	Elasticity	Еластичност
 	Ends early	Завршава раније
 	Energy	Енергија
@@ -183,11 +191,14 @@
 	Gives up before service starts	Одустаје пре почетка послуживања
 	Goes to	Води према
 	Hands on finished parts while down	Предаје готове делове и у квару
+	Header	Заглавље
 	Help	Помоћ
 	Hide Others	Сакриј остале
 	Hide {app}	Сакриј {app}
+	High contrast	Висок контраст
 	How many	Колико
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Колико делова купци желе од ових одлазака; резултати тада приказују такт (расположиво време подељено са потражњом) и време циклуса сваког задатка.
+	In use	У употреби
 	Inside over time	Унутра кроз време
 	Jump	Скочи
 	Jump to time	Скочи на време
@@ -301,6 +312,7 @@
 	Quality ratio	Удео квалитета
 	Quit	Изађи
 	Quit {app}	Затвори {app}
+	Raised surfaces	Издигнуте површине
 	Random	Насумично
 	Rank the parameters	Поређај параметре
 	Ready	Спремно
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Уклони овај блок и његове токове (Delete)
 	Remove this period	Уклони овај период
 	Removed {id}	Уклоњено: {id}
+	Rename	Преименуј
 	Rename Block	Преименуј блок
 	Rename Model	Преименуј модел
 	Repair time	Време поправке
@@ -363,6 +376,7 @@
 	Save As…	Сачувај као…
 	Save Model	Сачувај модел
 	Save changes to {name}?	Сачувати промене у {name}?
+	Save name	Сачувај име
 	Saved {file}	Сачувано: {file}
 	Scale	Скала
 	Scrap	Шкарт
@@ -390,8 +404,10 @@
 	Share that gave up	Удео оних који су одустали
 	Show All	Прикажи све
 	Show {id}	Прикажи {id}
+	Side rail	Бочна трака
 	Size	Димензиониши
 	Size the resources	Димензиониши ресурсе
+	Soft accent	Благи акценат
 	Source	Извор
 	Source: {source}	Извор: {source}
 	Speed	Брзина
@@ -403,6 +419,7 @@
 	Stages (k)	Фазе (k)
 	Standard deviation	Стандардна девијација
 	Step	Корак
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft је затворен са несачуваним изменама у моделу {name}. Вратите их као модел без наслова или их одбаците.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft учитава моделе процеса из BPMN или XPDL датотека са BPSim подацима за симулацију, извршава их као експерименте са репликацијама и приказује сваки резултат са интервалом поверења.
 	StochCraft {version} · model {digest}	StochCraft {version} · модел {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Праћење заустављено
 	Sun	нед
 	Sweep a parameter	Пролаз кроз параметар
+	Table stripes	Пруге табела
 	Takt	Такт
 	Takt time	Такт време
 	Tandem line	Тандемска линија
@@ -422,6 +440,8 @@
 	Task with a resource	Задатак с ресурсом
 	Task with shared resources	Задатак са заједничким ресурсима
 	Text	Текст
+	Text on accent	Текст на акценту
+	Text on header	Текст у заглављу
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Интервал сеже испод циљног удела од {share}, па није показано с поузданошћу од 95% да је удео постигнут; више репликација би га сузило.
 	The last task with a resource it finished at	Последњи задатак с ресурсом кроз који је део прошао
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Просјечно време до услова заустављања односи се само на репликације које су га постигле; остале су трајале до свог временског ограничења.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Модел још нема календара.
 	The model now has the units sizing found	Модел сада има јединице које је пронашло димензионисање
 	The model: its experiment, connections and problems	Модел: експеримент, везе и проблеми
+	The name is empty or already used.	Име је празно или се већ користи.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Удео репликација једнаких или мањих од сваке вредности. Појас садржи праву расподелу са поузданошћу од {confidence}.
 	The values are numbers, separated by semicolons or spaces	Вредности су бројеви одвојени тачком и зарезом или размацима
 	The whole clock	Све време
+	Themes	Теме
 	This block has a warning	Овај блок има упозорење
 	This block has an error	Овај блок има грешку
 	This run	Ово покретање
@@ -478,12 +500,15 @@
 	View	Приказ
 	Waiting over time	На чекању кроз време
 	Waiting room	Чекаоница
+	Warm	Топла
 	Warm-up	Загревање
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Загревање {warmup} {unit}, затим мерење {duration} {unit}
 	Warning	Упозорење
 	Watch a Run	Прати покретање
 	Watch a run	Прати покретање
 	Watching replication 1	Прати се репликација 1
+	Weak text	Бледи текст
+	Weak text on header	Бледи текст у заглављу
 	Wed	сре
 	Weekly	Недељно
 	Weibull	Wеибуллова
@@ -555,6 +580,7 @@
 	{n} waiting	Чека: {n}
 	{n} {unit} per second	{n} {unit} у секунди
 	{property} (set to, mean)	{property} (постављено на, средња вредност)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – позадина „{background}“: {ratio}:1, потребно {min}:1
 	{title}: now {now}, at most {most}	{title}: сада {now}, највише {most}
 	± 95% CI	± 95% ИП
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± је половина ширине 95% Student-t интервала поверења за средњу вредност кроз репликације.

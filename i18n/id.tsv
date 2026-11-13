@@ -25,6 +25,7 @@
 	Abandoned on {id}	Menyerah di {id}
 	About StochCraft	Tentang StochCraft
 	About {app}	Tentang {app}
+	Accent	Aksen
 	Across the range it changed by {change}: more than chance would explain.	Di seluruh rentang berubah sebesar {change}: lebih dari yang bisa dijelaskan oleh kebetulan.
 	Across the range it changed by {change}: within what chance alone could do.	Di seluruh rentang berubah sebesar {change}: masih dalam batas yang bisa ditimbulkan kebetulan saja.
 	Actual size	Ukuran sebenarnya
@@ -47,6 +48,7 @@
 	Added pool {id}	Kumpulan {id} ditambahkan
 	Added {block} ({id})	{block} ({id}) ditambahkan
 	Align	Ratakan
+	All text meets the contrast minimums.	Semua teks memenuhi kontras minimum.
 	Also: {rule}	Juga: {rule}
 	Alternative {n}	Alternatif {n}
 	Analysis	Analisis
@@ -69,11 +71,13 @@
 	Binomial	Binomial
 	Block	Blok
 	Boolean	Boolean
+	Borders	Garis tepi
 	Bottoms	Tepi bawah
 	Breakdowns	Kerusakan
 	Breakdowns and availability	Kerusakan dan ketersediaan
 	Bring All to Front	Bawa Semua ke Depan
 	Built with	Dibuat dengan
+	Built-in themes are read-only. Duplicate one to change its colours.	Tema bawaan hanya-baca. Duplikat salah satunya untuk mengubah warnanya.
 	Busiest	Tersibuk
 	By role	Menurut peran
 	CSV table	Tabel CSV
@@ -83,6 +87,7 @@
 	Cancel	Batal
 	Cancel Run	Batalkan Proses
 	Cancel run	Batalkan proses
+	Canvas	Permukaan utama
 	Capacity	Kapasitas
 	Centres	Tengah horizontal
 	Change	Perubahan
@@ -93,6 +98,8 @@
 	Change the estimate	Ubah perkiraan
 	Changes	Perubahan
 	Changing the time unit does not convert the times already in the model.	Mengubah satuan waktu tidak mengonversi waktu yang sudah ada dalam model.
+	Chart	Grafik
+	Chart hover	Grafik di bawah penunjuk
 	Choose…	Pilih…
 	Clear Menu	Bersihkan Menu
 	Close	Tutup
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Setiap entitas mengambil alternatif pertama di antara ini yang dapat dipenuhi sekarang, sekaligus semuanya, dan mengembalikan unitnya saat meninggalkan tugas.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Setiap entitas menunggu di sini paling lama selama waktu yang diundi untuknya saat tiba, lalu menyerah: entitas mengambil jalan keluar bertanda "Menyerah", atau meninggalkan model.
 	Edit	Edit
+	Edit themes…	Edit tema…
 	Elasticity	Elastisitas
 	Ends early	Berakhir lebih awal
 	Energy	Energi
@@ -183,11 +191,14 @@
 	Gives up before service starts	Menyerah sebelum layanan dimulai
 	Goes to	Menuju ke
 	Hands on finished parts while down	Tetap meneruskan komponen jadi saat rusak
+	Header	Bilah atas
 	Help	Bantuan
 	Hide Others	Sembunyikan yang lain
 	Hide {app}	Sembunyikan {app}
+	High contrast	Kontras tinggi
 	How many	Berapa
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Berapa komponen yang diinginkan pelanggan dari keberangkatan ini; hasilnya lalu menunjukkan takt (waktu tersedia dibagi permintaan) dan waktu siklus setiap tugas.
+	In use	Sedang dipakai
 	Inside over time	Di dalam dari waktu ke waktu
 	Jump	Lompat
 	Jump to time	Lompat ke waktu
@@ -301,6 +312,7 @@
 	Quality ratio	Rasio kualitas
 	Quit	Keluar
 	Quit {app}	Keluar dari {app}
+	Raised surfaces	Permukaan terangkat
 	Random	Acak
 	Rank the parameters	Urutkan parameter
 	Ready	Siap
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Hapus blok ini beserta alurnya (Delete)
 	Remove this period	Hapus periode ini
 	Removed {id}	{id} dihapus
+	Rename	Ganti nama
 	Rename Block	Ganti Nama Blok
 	Rename Model	Ganti Nama Model
 	Repair time	Waktu perbaikan
@@ -363,6 +376,7 @@
 	Save As…	Simpan Sebagai…
 	Save Model	Simpan Model
 	Save changes to {name}?	Simpan perubahan pada {name}?
+	Save name	Simpan nama
 	Saved {file}	{file} disimpan
 	Scale	Skala
 	Scrap	Skrap
@@ -390,8 +404,10 @@
 	Share that gave up	Proporsi yang menyerah
 	Show All	Tampilkan semua
 	Show {id}	Tampilkan {id}
+	Side rail	Bilah samping
 	Size	Tentukan ukuran
 	Size the resources	Tentukan ukuran sumber daya
+	Soft accent	Aksen lembut
 	Source	Sumber
 	Source: {source}	Sumber: {source}
 	Speed	Kecepatan
@@ -403,6 +419,7 @@
 	Stages (k)	Tahapan (k)
 	Standard deviation	Simpangan baku
 	Step	Langkah
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ditutup saat perubahan pada {name} belum disimpan. Pulihkan perubahan itu sebagai model tanpa judul atau buang.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft membaca model proses dari file BPMN atau XPDL dengan data simulasi BPSim, menjalankannya sebagai eksperimen dengan beberapa replikasi, dan melaporkan setiap hasil beserta interval kepercayaannya.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Berhenti mengamati
 	Sun	Min
 	Sweep a parameter	Sapu satu parameter
+	Table stripes	Belang tabel
 	Takt	Takt
 	Takt time	Waktu takt
 	Tandem line	Jalur tandem
@@ -422,6 +440,8 @@
 	Task with a resource	Tugas dengan sumber daya
 	Task with shared resources	Tugas dengan sumber daya bersama
 	Text	Teks
+	Text on accent	Teks di atas aksen
+	Text on header	Teks di bilah atas
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak replikasi akan mempersempitnya.
 	The last task with a resource it finished at	Tugas terakhir dengan sumber daya yang dilalui komponen
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas replikasi yang mencapainya; sisanya berjalan hingga batas waktunya.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Model belum memiliki kalender.
 	The model now has the units sizing found	Model kini memakai unit yang ditemukan penentuan ukuran
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
+	The name is empty or already used.	Nama kosong atau sudah dipakai.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian replikasi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
 	The values are numbers, separated by semicolons or spaces	Nilai berupa angka yang dipisahkan titik koma atau spasi
 	The whole clock	Seluruh waktu
+	Themes	Tema
 	This block has a warning	Blok ini memiliki peringatan
 	This block has an error	Blok ini memiliki kesalahan
 	This run	Jalannya ini
@@ -478,12 +500,15 @@
 	View	Tampilan
 	Waiting over time	Menunggu dari waktu ke waktu
 	Waiting room	Ruang tunggu
+	Warm	Hangat
 	Warm-up	Pemanasan
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Pemanasan {warmup} {unit}, lalu pengukuran {duration} {unit}
 	Warning	Peringatan
 	Watch a Run	Amati Jalannya Model
 	Watch a run	Amati jalannya model
 	Watching replication 1	Mengamati replikasi 1
+	Weak text	Teks redup
+	Weak text on header	Teks redup di bilah atas
 	Wed	Rab
 	Weekly	Mingguan
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} menunggu
 	{n} {unit} per second	{n} {unit} per detik
 	{property} (set to, mean)	{property} (nilai ditetapkan, rata-rata)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} di atas {background}: {ratio}:1, perlu {min}:1
 	{title}: now {now}, at most {most}	{title}: sekarang {now}, paling banyak {most}
 	± 95% CI	± IK 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± adalah setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh replikasi.

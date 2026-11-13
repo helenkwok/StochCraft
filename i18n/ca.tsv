@@ -25,6 +25,7 @@
 	Abandoned on {id}	Abandonades a {id}
 	About StochCraft	Quant a StochCraft
 	About {app}	Quant a {app}
+	Accent	Accent
 	Across the range it changed by {change}: more than chance would explain.	En l'interval ha canviat {change}: més del que explicaria l'atzar.
 	Across the range it changed by {change}: within what chance alone could do.	En l'interval ha canviat {change}: dins del que podria fer l'atzar tot sol.
 	Actual size	Mida real
@@ -47,6 +48,7 @@
 	Added pool {id}	S'ha afegit el grup {id}
 	Added {block} ({id})	S'ha afegit {block} ({id})
 	Align	Alinea
+	All text meets the contrast minimums.	Tot el text compleix els contrastos mínims.
 	Also: {rule}	També: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Anàlisi
@@ -69,11 +71,13 @@
 	Binomial	Binomial
 	Block	Bloc
 	Boolean	Booleà
+	Borders	Vores
 	Bottoms	Vores inferiors
 	Breakdowns	Avaries
 	Breakdowns and availability	Avaries i disponibilitat
 	Bring All to Front	Porta-ho tot al davant
 	Built with	Creat amb
+	Built-in themes are read-only. Duplicate one to change its colours.	Els temes integrats són només de lectura. Dupliqueu-ne un per canviar-ne els colors.
 	Busiest	El més ocupat
 	By role	Per rol
 	CSV table	Taula CSV
@@ -83,6 +87,7 @@
 	Cancel	Cancel·la
 	Cancel Run	Cancel·la l'execució
 	Cancel run	Cancel·la l'execució
+	Canvas	Superfície principal
 	Capacity	Capacitat
 	Centres	Centres horitzontals
 	Change	Canvi
@@ -93,6 +98,8 @@
 	Change the estimate	Canvia l'estimació
 	Changes	Canvis
 	Changing the time unit does not convert the times already in the model.	Canviar la unitat de temps no converteix els temps que ja hi ha al model.
+	Chart	Gràfic
+	Chart hover	Gràfic sota el punter
 	Choose…	Tria…
 	Clear Menu	Buida el menú
 	Close	Tanca
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entitat pren, tota alhora, la primera d'aquestes alternatives que es pugui satisfer en aquell moment i torna les unitats quan surt.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Cada entitat espera aquí com a màxim un temps que se li assigna a l'atzar quan arriba, i després abandona: pren la sortida marcada com a «Abandonades» o surt del model.
 	Edit	Edita
+	Edit themes…	Edita els temes…
 	Elasticity	Elasticitat
 	Ends early	Acaba abans
 	Energy	Energia
@@ -183,11 +191,14 @@
 	Gives up before service starts	Abandona abans que comenci el servei
 	Goes to	Va cap a
 	Hands on finished parts while down	Passa les peces acabades durant l'avaria
+	Header	Capçalera
 	Help	Ajuda
 	Hide Others	Amaga els altres
 	Hide {app}	Amaga {app}
+	High contrast	Alt contrast
 	How many	Quantes
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Quantes peces volen els clients d'aquestes sortides; aleshores els resultats mostren el takt (el temps disponible dividit per la demanda) i el temps de cicle de cada tasca.
+	In use	En ús
 	Inside over time	A dins al llarg del temps
 	Jump	Ves-hi
 	Jump to time	Ves a l'instant
@@ -301,6 +312,7 @@
 	Quality ratio	Proporció de qualitat
 	Quit	Surt
 	Quit {app}	Surt de {app}
+	Raised surfaces	Superfícies elevades
 	Random	Aleatori
 	Rank the parameters	Ordena els paràmetres
 	Ready	A punt
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Elimina aquest bloc i els seus fluxos (Delete)
 	Remove this period	Elimina aquest període
 	Removed {id}	S'ha eliminat {id}
+	Rename	Canvia el nom
 	Rename Block	Canvia el nom del bloc
 	Rename Model	Canvia el nom del model
 	Repair time	Temps de reparació
@@ -363,6 +376,7 @@
 	Save As…	Anomena i desa…
 	Save Model	Desa el model
 	Save changes to {name}?	Vols desar els canvis a {name}?
+	Save name	Desa el nom
 	Saved {file}	S'ha desat {file}
 	Scale	Escala
 	Scrap	Rebuig
@@ -390,8 +404,10 @@
 	Share that gave up	Proporció que ha abandonat
 	Show All	Mostra-ho tot
 	Show {id}	Mostra {id}
+	Side rail	Barra lateral
 	Size	Dimensiona
 	Size the resources	Dimensiona els recursos
+	Soft accent	Accent suau
 	Source	Font
 	Source: {source}	Font: {source}
 	Speed	Velocitat
@@ -403,6 +419,7 @@
 	Stages (k)	Etapes (k)
 	Standard deviation	Desviació estàndard
 	Step	Pas
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft s'ha tancat amb canvis sense desar a {name}. Recupereu-los com a model sense títol o descarteu-los.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft llegeix models de processos de fitxers BPMN o XPDL amb dades de simulació BPSim, els executa en experiments amb rèpliques i mostra cada resultat amb el seu interval de confiança.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	S'ha deixat d'observar
 	Sun	dg.
 	Sweep a parameter	Escombrar un paràmetre
+	Table stripes	Franges de taula
 	Takt	Takt
 	Takt time	Temps de takt
 	Tandem line	Línia en tàndem
@@ -422,6 +440,8 @@
 	Task with a resource	Tasca amb un recurs
 	Task with shared resources	Tasca amb recursos compartits
 	Text	Text
+	Text on accent	Text sobre l'accent
+	Text on header	Text de la capçalera
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'interval arriba per sota de la proporció objectiu del {share}, de manera que no es demostra amb un 95% de confiança que es compleixi; més rèpliques l'estretirien.
 	The last task with a resource it finished at	L'última tasca amb un recurs per on ha passat la peça
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	El temps mitjà fins a la condició d'aturada és només sobre les rèpliques que l'han complert; les altres han arribat al seu límit de temps.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	El model encara no té calendaris.
 	The model now has the units sizing found	El model té ara les unitats trobades en dimensionar
 	The model: its experiment, connections and problems	El model: experiment, connexions i problemes
+	The name is empty or already used.	El nom és buit o ja s'utilitza.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La proporció de rèpliques iguals o inferiors a cada valor. La banda conté la distribució real amb una confiança del {confidence}.
 	The values are numbers, separated by semicolons or spaces	Els valors són nombres separats per punts i comes o espais
 	The whole clock	Tot el temps
+	Themes	Temes
 	This block has a warning	Aquest bloc té un avís
 	This block has an error	Aquest bloc té un error
 	This run	Aquesta execució
@@ -478,12 +500,15 @@
 	View	Visualitza
 	Waiting over time	En espera al llarg del temps
 	Waiting room	Sala d'espera
+	Warm	Càlid
 	Warm-up	Escalfament
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Escalfament de {warmup} {unit}, després {duration} {unit} mesurats
 	Warning	Avís
 	Watch a Run	Observa una execució
 	Watch a run	Observa una execució
 	Watching replication 1	S'està observant la rèplica 1
+	Weak text	Text atenuat
+	Weak text on header	Text atenuat de la capçalera
 	Wed	dc.
 	Weekly	Cada setmana
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} en espera
 	{n} {unit} per second	{n} {unit} per segon
 	{property} (set to, mean)	{property} (valor definit, mitjana)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} sobre {background}: {ratio}:1, cal {min}:1
 	{title}: now {now}, at most {most}	{title}: ara {now}, com a màxim {most}
 	± 95% CI	± IC del 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± és la semiamplada d'un interval de confiança Student-t del 95% de la mitjana entre rèpliques.

@@ -25,6 +25,7 @@
 	Abandoned on {id}	Abandonadas en {id}
 	About StochCraft	Sobre StochCraft
 	About {app}	Sobre {app}
+	Accent	Acento
 	Across the range it changed by {change}: more than chance would explain.	No intervalo cambiou {change}: máis do que explicaría o azar.
 	Across the range it changed by {change}: within what chance alone could do.	No intervalo cambiou {change}: dentro do que podería facer o azar só.
 	Actual size	Tamaño real
@@ -47,6 +48,7 @@
 	Added pool {id}	Engadiuse o grupo {id}
 	Added {block} ({id})	Engadiuse {block} ({id})
 	Align	Aliñar
+	All text meets the contrast minimums.	Todo o texto cumpre os contrastes mínimos.
 	Also: {rule}	Ademais: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Análise
@@ -69,11 +71,13 @@
 	Binomial	Binomial
 	Block	Bloque
 	Boolean	Booleano
+	Borders	Bordos
 	Bottoms	Bordos inferiores
 	Breakdowns	Avarías
 	Breakdowns and availability	Avarías e dispoñibilidade
 	Bring All to Front	Traer todo á fronte
 	Built with	Feito con
+	Built-in themes are read-only. Duplicate one to change its colours.	Os temas integrados son de só lectura. Duplique un para cambiar as súas cores.
 	Busiest	Máis ocupado
 	By role	Por rol
 	CSV table	Táboa CSV
@@ -83,6 +87,7 @@
 	Cancel	Cancelar
 	Cancel Run	Cancelar execución
 	Cancel run	Cancelar execución
+	Canvas	Superficie principal
 	Capacity	Capacidade
 	Centres	Centros horizontais
 	Change	Cambio
@@ -93,6 +98,8 @@
 	Change the estimate	Cambiar a estimación
 	Changes	Cambios
 	Changing the time unit does not convert the times already in the model.	Cambiar a unidade de tempo non converte os tempos xa definidos no modelo.
+	Chart	Gráfico
+	Chart hover	Gráfico baixo o punteiro
 	Choose…	Escoller…
 	Clear Menu	Baleirar menú
 	Close	Pechar
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entidade toma, toda á vez, a primeira destas alternativas que se poida cumprir nese momento e devolve as unidades ao saír.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Cada entidade agarda aquí como máximo un tempo que se lle asigna ao chou ao chegar, e despois abandona: toma a saída marcada como «Abandonadas» ou sae do modelo.
 	Edit	Editar
+	Edit themes…	Editar temas…
 	Elasticity	Elasticidade
 	Ends early	Remata antes
 	Energy	Enerxía
@@ -183,11 +191,14 @@
 	Gives up before service starts	Abandona antes de que comece o servizo
 	Goes to	Vai a
 	Hands on finished parts while down	Pasa as pezas rematadas durante a avaría
+	Header	Cabeceira
 	Help	Axuda
 	Hide Others	Ocultar outros
 	Hide {app}	Ocultar {app}
+	High contrast	Alto contraste
 	How many	Cantas
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Cantas pezas queren os clientes destas saídas; os resultados amosan entón o takt (o tempo dispoñible dividido pola demanda) e o tempo de ciclo de cada tarefa.
+	In use	En uso
 	Inside over time	Dentro ao longo do tempo
 	Jump	Ir
 	Jump to time	Ir ao instante
@@ -301,6 +312,7 @@
 	Quality ratio	Proporción de calidade
 	Quit	Saír
 	Quit {app}	Saír de {app}
+	Raised surfaces	Superficies elevadas
 	Random	Aleatorio
 	Rank the parameters	Ordenar os parámetros
 	Ready	Listo
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Eliminar este bloque e os seus fluxos (Delete)
 	Remove this period	Eliminar este período
 	Removed {id}	Eliminouse {id}
+	Rename	Renomear
 	Rename Block	Renomear bloque
 	Rename Model	Renomear modelo
 	Repair time	Tempo de reparación
@@ -363,6 +376,7 @@
 	Save As…	Gardar como…
 	Save Model	Gardar modelo
 	Save changes to {name}?	Gardar os cambios en {name}?
+	Save name	Gardar o nome
 	Saved {file}	Gardouse {file}
 	Scale	Escala
 	Scrap	Refugo
@@ -390,8 +404,10 @@
 	Share that gave up	Proporción que abandonou
 	Show All	Amosar todo
 	Show {id}	Mostrar {id}
+	Side rail	Barra lateral
 	Size	Dimensionar
 	Size the resources	Dimensionar os recursos
+	Soft accent	Acento suave
 	Source	Fonte
 	Source: {source}	Fonte: {source}
 	Speed	Velocidade
@@ -403,6 +419,7 @@
 	Stages (k)	Etapas (k)
 	Standard deviation	Desviación estándar
 	Step	Paso
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft pechouse con cambios sen gardar en {name}. Recupéraos como un modelo sen título ou descártaos.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft le modelos de procesos de ficheiros BPMN ou XPDL con datos de simulación BPSim, execútaos como experimentos con réplicas e presenta cada resultado co seu intervalo de confianza.
 	StochCraft {version} · model {digest}	StochCraft {version} · modelo {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Deixouse de observar
 	Sun	dom
 	Sweep a parameter	Varrer un parámetro
+	Table stripes	Franxas de táboa
 	Takt	Takt
 	Takt time	Tempo takt
 	Tandem line	Liña en tándem
@@ -422,6 +440,8 @@
 	Task with a resource	Tarefa con recurso
 	Task with shared resources	Tarefa con recursos compartidos
 	Text	Texto
+	Text on accent	Texto sobre o acento
+	Text on header	Texto na cabeceira
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	O intervalo chega por debaixo da proporción obxectivo do {share}, así que non se demostra cun 95 % de confianza que se cumpra; máis réplicas estreitaríano.
 	The last task with a resource it finished at	A última tarefa con recurso pola que pasou a peza
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	O tempo medio ata a condición de parada é só sobre as réplicas que a cumpriron; as demais chegaron ao seu límite de tempo.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	O modelo aínda non ten calendarios.
 	The model now has the units sizing found	O modelo ten agora as unidades atopadas ao dimensionar
 	The model: its experiment, connections and problems	O modelo: experimento, conexións e problemas
+	The name is empty or already used.	O nome está baleiro ou xa se usa.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	A proporción de réplicas iguais ou inferiores a cada valor. A banda contén a distribución real cunha confianza do {confidence}.
 	The values are numbers, separated by semicolons or spaces	Os valores son números separados por punto e coma ou espazos
 	The whole clock	Todo o tempo
+	Themes	Temas
 	This block has a warning	Este bloque ten unha advertencia
 	This block has an error	Este bloque ten un erro
 	This run	Esta execución
@@ -478,12 +500,15 @@
 	View	Ver
 	Waiting over time	Agardando ao longo do tempo
 	Waiting room	Sala de espera
+	Warm	Cálido
 	Warm-up	Quecemento
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Quecemento de {warmup} {unit}, despois {duration} {unit} medidos
 	Warning	Aviso
 	Watch a Run	Observar unha execución
 	Watch a run	Observar unha execución
 	Watching replication 1	Observando a réplica 1
+	Weak text	Texto atenuado
+	Weak text on header	Texto atenuado na cabeceira
 	Wed	mér
 	Weekly	Cada semana
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} agardando
 	{n} {unit} per second	{n} {unit} por segundo
 	{property} (set to, mean)	{property} (valor definido, media)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} sobre {background}: {ratio}:1, necesita {min}:1
 	{title}: now {now}, at most {most}	{title}: agora {now}, como máximo {most}
 	± 95% CI	± IC do 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± é a metade da amplitude dun intervalo de confianza Student-t do 95 % da media entre réplicas.

@@ -25,6 +25,7 @@
 	Abandoned on {id}	Odnehale na {id}
 	About StochCraft	O programu StochCraft
 	About {app}	O programu {app}
+	Accent	Poudarek
 	Across the range it changed by {change}: more than chance would explain.	V razponu se je spremenil za {change}: več, kot bi pojasnilo naključje.
 	Across the range it changed by {change}: within what chance alone could do.	V razponu se je spremenil za {change}: v mejah tega, kar zmore samo naključje.
 	Actual size	Dejanska velikost
@@ -47,6 +48,7 @@
 	Added pool {id}	Dodana skupina {id}
 	Added {block} ({id})	Dodan {block} ({id})
 	Align	Poravnaj
+	All text meets the contrast minimums.	Vse besedilo dosega najmanjši kontrast.
 	Also: {rule}	Tudi: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Analiza
@@ -69,11 +71,13 @@
 	Binomial	Binomska
 	Block	Blok
 	Boolean	Logična vrednost
+	Borders	Obrobe
 	Bottoms	Spodnji robovi
 	Breakdowns	Okvare
 	Breakdowns and availability	Okvare in razpoložljivost
 	Bring All to Front	Vse v ospredje
 	Built with	Ustvarjeno z
+	Built-in themes are read-only. Duplicate one to change its colours.	Vgrajene teme so samo za branje. Če želite spremeniti barve, podvojite eno od njih.
 	Busiest	Najbolj obremenjen
 	By role	Po vlogi
 	CSV table	Tabela CSV
@@ -83,6 +87,7 @@
 	Cancel	Prekliči
 	Cancel Run	Prekliči izvajanje
 	Cancel run	Prekliči izvajanje
+	Canvas	Glavna površina
 	Capacity	Zmogljivost
 	Centres	Vodoravna središča
 	Change	Sprememba
@@ -93,6 +98,8 @@
 	Change the estimate	Spremeni oceno
 	Changes	Spremembe
 	Changing the time unit does not convert the times already in the model.	Sprememba časovne enote ne pretvori časov, ki so že v modelu.
+	Chart	Graf
+	Chart hover	Graf pod kazalcem
 	Choose…	Izberite …
 	Clear Menu	Počisti meni
 	Close	Zapri
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Vsaka entiteta vzame prvo od teh možnosti, ki jo je mogoče izpolniti zdaj, vse naenkrat, in enote vrne, ko odide.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Vsaka entiteta tu čaka največ čas, ki ji je naključno določen ob prihodu, nato odneha: gre skozi izhod, označen z »Odnehale«, ali zapusti model.
 	Edit	Urejanje
+	Edit themes…	Uredi teme…
 	Elasticity	Elastičnost
 	Ends early	Konča se prej
 	Energy	Energija
@@ -183,11 +191,14 @@
 	Gives up before service starts	Odneha pred začetkom strežbe
 	Goes to	Vodi v
 	Hands on finished parts while down	Dokončane kose preda tudi med okvaro
+	Header	Glava
 	Help	Pomoč
 	Hide Others	Skrij druge
 	Hide {app}	Skrij {app}
+	High contrast	Visok kontrast
 	How many	Koliko
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Koliko kosov kupci želijo od teh odhodov; rezultati nato pokažejo takt (razpoložljivi čas, deljen s povpraševanjem) in čas cikla vsake naloge.
+	In use	V uporabi
 	Inside over time	Notri skozi čas
 	Jump	Skoči
 	Jump to time	Skoči na čas
@@ -301,6 +312,7 @@
 	Quality ratio	Delež kakovosti
 	Quit	Izhod
 	Quit {app}	Končaj {app}
+	Raised surfaces	Dvignjene površine
 	Random	Naključno
 	Rank the parameters	Razvrsti parametre
 	Ready	Omogočeno
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Odstrani ta blok in njegove tokove (Delete)
 	Remove this period	Odstrani to obdobje
 	Removed {id}	Odstranjeno {id}
+	Rename	Preimenuj
 	Rename Block	Preimenuj blok
 	Rename Model	Preimenuj model
 	Repair time	Čas popravila
@@ -363,6 +376,7 @@
 	Save As…	Shrani kot…
 	Save Model	Shrani model
 	Save changes to {name}?	Shranim spremembe v {name}?
+	Save name	Shrani ime
 	Saved {file}	Shranjeno {file}
 	Scale	Merilo
 	Scrap	Izmet
@@ -390,8 +404,10 @@
 	Share that gave up	Delež tistih, ki so odnehale
 	Show All	Pokaži vse
 	Show {id}	Prikaži {id}
+	Side rail	Stranska vrstica
 	Size	Dimenzioniraj
 	Size the resources	Dimenzioniraj vire
+	Soft accent	Mehki poudarek
 	Source	Vir
 	Source: {source}	Vir: {source}
 	Speed	Hitrost
@@ -403,6 +419,7 @@
 	Stages (k)	Stopnje (k)
 	Standard deviation	Standardni odklon
 	Step	Korak
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft se je zaprl z neshranjenimi spremembami v modelu {name}. Obnovite jih kot neimenovan model ali jih zavrzite.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft bere procesne modele iz datotek BPMN ali XPDL s simulacijskimi podatki BPSim, jih izvaja kot poskuse s ponovitvami in vsak rezultat poda z intervalom zaupanja.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Spremljanje ustavljeno
 	Sun	ned
 	Sweep a parameter	Preletanje parametra
+	Table stripes	Črte tabel
 	Takt	Takt
 	Takt time	Takt čas
 	Tandem line	Zaporedna linija
@@ -422,6 +440,8 @@
 	Task with a resource	Naloga z virom
 	Task with shared resources	Naloga s skupnimi viri
 	Text	Besedilo
+	Text on accent	Besedilo na poudarku
+	Text on header	Besedilo v glavi
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval sega pod ciljni delež {share}, zato ni pokazano s 95-odstotno zanesljivostjo, da je delež dosežen; več ponovitev bi ga zožilo.
 	The last task with a resource it finished at	Zadnja naloga z virom, skozi katero je šel kos
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Povprečni čas do pogoja za ustavitev je le iz ponovitev, ki so ga dosegle; ostale so tekle do svoje časovne omejitve.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Model še nima koledarjev.
 	The model now has the units sizing found	Model ima zdaj enote, ki jih je našlo dimenzioniranje
 	The model: its experiment, connections and problems	Model: poskus, povezave in težave
+	The name is empty or already used.	Ime je prazno ali že uporabljeno.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Delež ponovitev, enakih ali manjših od vsake vrednosti. Pas vsebuje pravo porazdelitev z zaupanjem {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vrednosti so števila, ločena s podpičji ali presledki
 	The whole clock	Ves čas
+	Themes	Teme
 	This block has a warning	Ta blok ima opozorilo
 	This block has an error	Ta blok ima napako
 	This run	Ta zagon
@@ -478,12 +500,15 @@
 	View	Pogled
 	Waiting over time	Čakajoči skozi čas
 	Waiting room	Čakalnica
+	Warm	Toplo
 	Warm-up	Ogrevanje
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Ogrevanje {warmup} {unit}, nato merjenje {duration} {unit}
 	Warning	Opozorilo
 	Watch a Run	Spremljaj zagon
 	Watch a run	Spremljaj zagon
 	Watching replication 1	Spremljanje ponovitve 1
+	Weak text	Bledo besedilo
+	Weak text on header	Bledo besedilo v glavi
 	Wed	sre
 	Weekly	Tedensko
 	Weibull	Weibullova
@@ -555,6 +580,7 @@
 	{n} waiting	Čaka: {n}
 	{n} {unit} per second	{n} {unit} na sekundo
 	{property} (set to, mean)	{property} (nastavljena vrednost, povprečje)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – ozadje »{background}«: {ratio}:1, potrebno {min}:1
 	{title}: now {now}, at most {most}	{title}: zdaj {now}, največ {most}
 	± 95% CI	± 95% interval zaupanja
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± je polovica širine 95% Student-t intervala zaupanja za povprečje med ponovitvami.
