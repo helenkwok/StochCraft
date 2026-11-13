@@ -25,6 +25,7 @@
 	Abandoned on {id}	Rezygnacje na {id}
 	About StochCraft	O programie StochCraft
 	About {app}	O programie {app}
+	Accent	Akcent
 	Across the range it changed by {change}: more than chance would explain.	W całym zakresie zmienił się o {change}: bardziej, niż wyjaśniałby przypadek.
 	Across the range it changed by {change}: within what chance alone could do.	W całym zakresie zmienił się o {change}: w granicach tego, co może sam przypadek.
 	Actual size	Rzeczywisty rozmiar
@@ -47,6 +48,7 @@
 	Added pool {id}	Dodano pulę {id}
 	Added {block} ({id})	Dodano {block} ({id})
 	Align	Wyrównaj
+	All text meets the contrast minimums.	Cały tekst spełnia minimalne wymagania kontrastu.
 	Also: {rule}	Także: {rule}
 	Alternative {n}	Alternatywa {n}
 	Analysis	Analiza
@@ -69,11 +71,13 @@
 	Binomial	Dwumianowy
 	Block	Blok
 	Boolean	Wartość logiczna
+	Borders	Obramowania
 	Bottoms	Dolne krawędzie
 	Breakdowns	Awarie
 	Breakdowns and availability	Awarie i dostępność
 	Bring All to Front	Przenieś wszystkie na wierzch
 	Built with	Zbudowano przy użyciu
+	Built-in themes are read-only. Duplicate one to change its colours.	Wbudowane motywy są tylko do odczytu. Aby zmienić kolory, zduplikuj jeden z nich.
 	Busiest	Najbardziej obciążone
 	By role	Według roli
 	CSV table	Tabela CSV
@@ -83,6 +87,7 @@
 	Cancel	Anuluj
 	Cancel Run	Anuluj uruchomienie
 	Cancel run	Anuluj uruchomienie
+	Canvas	Główna powierzchnia
 	Capacity	Pojemność
 	Centres	Środki w poziomie
 	Change	Zmiana
@@ -93,6 +98,8 @@
 	Change the estimate	Zmień szacunek
 	Changes	Zmiany
 	Changing the time unit does not convert the times already in the model.	Zmiana jednostki czasu nie przelicza czasów już zapisanych w modelu.
+	Chart	Wykres
+	Chart hover	Wykres pod wskaźnikiem
 	Choose…	Wybierz…
 	Clear Menu	Wyczyść menu
 	Close	Zamknij
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Każda jednostka bierze pierwszy z tych wariantów, który można teraz spełnić, wszystko naraz, i oddaje zajęte zasoby, gdy wychodzi.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Każda jednostka czeka tu najwyżej czas wylosowany dla niej przy przybyciu, a potem rezygnuje: idzie wyjściem oznaczonym „Rezygnacje” albo opuszcza model.
 	Edit	Edycja
+	Edit themes…	Edytuj motywy…
 	Elasticity	Elastyczność
 	Ends early	Kończy się wcześniej
 	Energy	Energia
@@ -183,11 +191,14 @@
 	Gives up before service starts	Rezygnuje przed rozpoczęciem obsługi
 	Goes to	Prowadzi do
 	Hands on finished parts while down	Przekazuje gotowe części także podczas awarii
+	Header	Nagłówek
 	Help	Pomoc
 	Hide Others	Ukryj pozostałe
 	Hide {app}	Ukryj {app}
+	High contrast	Wysoki kontrast
 	How many	Ile
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Ile części klienci chcą z tych wyjść; wyniki pokazują wtedy takt (dostępny czas podzielony przez popyt) i czas cyklu każdego zadania.
+	In use	W użyciu
 	Inside over time	Wewnątrz w czasie
 	Jump	Przejdź
 	Jump to time	Przejdź do chwili
@@ -301,6 +312,7 @@
 	Quality ratio	Udział jakości
 	Quit	Zakończ
 	Quit {app}	Zakończ {app}
+	Raised surfaces	Uniesione powierzchnie
 	Random	Losowa
 	Rank the parameters	Uszereguj parametry
 	Ready	Gotowe
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Usuń ten blok i jego przepływy (Delete)
 	Remove this period	Usuń ten okres
 	Removed {id}	Usunięto {id}
+	Rename	Zmień nazwę
 	Rename Block	Zmień nazwę bloku
 	Rename Model	Zmień nazwę modelu
 	Repair time	Czas naprawy
@@ -363,6 +376,7 @@
 	Save As…	Zapisz jako…
 	Save Model	Zapisz model
 	Save changes to {name}?	Zapisać zmiany w {name}?
+	Save name	Zapisz nazwę
 	Saved {file}	Zapisano {file}
 	Scale	Skala
 	Scrap	Braki
@@ -390,8 +404,10 @@
 	Share that gave up	Odsetek rezygnacji
 	Show All	Pokaż wszystko
 	Show {id}	Pokaż {id}
+	Side rail	Pasek boczny
 	Size	Dobierz
 	Size the resources	Dobierz zasoby
+	Soft accent	Łagodny akcent
 	Source	Źródło
 	Source: {source}	Źródło: {source}
 	Speed	Szybkość
@@ -403,6 +419,7 @@
 	Stages (k)	Etapy (k)
 	Standard deviation	Odchylenie standardowe
 	Step	Krok
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft został zamknięty z niezapisanymi zmianami w modelu {name}. Przywróć je jako model bez tytułu lub odrzuć.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft odczytuje modele procesów z plików BPMN lub XPDL zawierających dane symulacyjne BPSim, uruchamia je jako eksperymenty z replikacjami i podaje każdy wynik wraz z przedziałem ufności.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Zakończono obserwację
 	Sun	niedz
 	Sweep a parameter	Przegląd parametru
+	Table stripes	Pasy tabel
 	Takt	Takt
 	Takt time	Czas taktu
 	Tandem line	Linia tandemowa
@@ -422,6 +440,8 @@
 	Task with a resource	Zadanie z zasobem
 	Task with shared resources	Zadanie ze współdzielonymi zasobami
 	Text	Tekst
+	Text on accent	Tekst na akcencie
+	Text on header	Tekst na nagłówku
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Przedział sięga poniżej udziału docelowego {share}, więc nie wykazano z 95% ufnością, że udział jest osiągnięty; więcej replikacji by go zawęziło.
 	The last task with a resource it finished at	Ostatnie zadanie z zasobem, przez które przeszła część
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Średni czas do warunku zatrzymania dotyczy tylko replikacji, które go spełniły; pozostałe trwały do swojego limitu czasu.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Model nie ma jeszcze kalendarzy.
 	The model now has the units sizing found	Model ma teraz jednostki znalezione przy doborze
 	The model: its experiment, connections and problems	Model: eksperyment, połączenia i problemy
+	The name is empty or already used.	Nazwa jest pusta lub już używana.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Udział replikacji równych lub mniejszych od każdej wartości. Pasmo zawiera prawdziwy rozkład z ufnością {confidence}.
 	The values are numbers, separated by semicolons or spaces	Wartości to liczby oddzielone średnikami lub spacjami
 	The whole clock	Cały czas
+	Themes	Motywy
 	This block has a warning	Ten blok ma ostrzeżenie
 	This block has an error	Ten blok ma błąd
 	This run	To uruchomienie
@@ -478,12 +500,15 @@
 	View	Widok
 	Waiting over time	Oczekujące w czasie
 	Waiting room	Poczekalnia
+	Warm	Ciepły
 	Warm-up	Rozgrzewka
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Rozgrzewka {warmup} {unit}, następnie pomiar przez {duration} {unit}
 	Warning	Ostrzeżenie
 	Watch a Run	Obserwuj uruchomienie
 	Watch a run	Obserwuj uruchomienie
 	Watching replication 1	Obserwacja replikacji 1
+	Weak text	Przygaszony tekst
+	Weak text on header	Przygaszony tekst na nagłówku
 	Wed	śr
 	Weekly	Co tydzień
 	Weibull	Weibulla
@@ -555,6 +580,7 @@
 	{n} waiting	Oczekuje: {n}
 	{n} {unit} per second	{n} {unit} na sekundę
 	{property} (set to, mean)	{property} (ustawiono na, średnia)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – tło „{background}”: {ratio}:1, wymagane {min}:1
 	{title}: now {now}, at most {most}	{title}: teraz {now}, najwyżej {most}
 	± 95% CI	± 95% PU
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± oznacza połowę szerokości 95% przedziału ufności Student-t dla średniej z replikacji.

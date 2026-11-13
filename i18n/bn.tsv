@@ -25,6 +25,7 @@
 	Abandoned on {id}	{id}-এ ছেড়ে যাওয়া
 	About StochCraft	StochCraft সম্পর্কে
 	About {app}	{app} সম্পর্কে
+	Accent	অ্যাকসেন্ট রং
 	Across the range it changed by {change}: more than chance would explain.	পুরো পরিসরে এটি {change} বদলেছে: দৈবক্রম যা ব্যাখ্যা করতে পারে তার চেয়ে বেশি।
 	Across the range it changed by {change}: within what chance alone could do.	পুরো পরিসরে এটি {change} বদলেছে: শুধু দৈবক্রম যতটা করতে পারে তার মধ্যে।
 	Actual size	প্রকৃত আকার
@@ -47,6 +48,7 @@
 	Added pool {id}	পুল {id} যোগ করা হয়েছে
 	Added {block} ({id})	{block} ({id}) যোগ করা হয়েছে
 	Align	সারিবদ্ধ করুন
+	All text meets the contrast minimums.	সব টেক্সট ন্যূনতম বৈপরীত্য পূরণ করে।
 	Also: {rule}	এছাড়াও: {rule}
 	Alternative {n}	বিকল্প {n}
 	Analysis	বিশ্লেষণ
@@ -69,11 +71,13 @@
 	Binomial	দ্বিপদী
 	Block	ব্লক
 	Boolean	বুলিয়ান
+	Borders	সীমানা
 	Bottoms	নিচের প্রান্ত
 	Breakdowns	বিকলতা
 	Breakdowns and availability	বিকলতা ও প্রাপ্যতা
 	Bring All to Front	সব সামনে আনুন
 	Built with	এগুলো দিয়ে তৈরি
+	Built-in themes are read-only. Duplicate one to change its colours.	অন্তর্নির্মিত থিমগুলি শুধু পড়ার জন্য। রং বদলাতে একটির প্রতিলিপি তৈরি করুন।
 	Busiest	সবচেয়ে ব্যস্ত
 	By role	ভূমিকা অনুযায়ী
 	CSV table	CSV সারণি
@@ -83,6 +87,7 @@
 	Cancel	বাতিল
 	Cancel Run	চালনা বাতিল
 	Cancel run	চালনা বাতিল
+	Canvas	মূল পৃষ্ঠ
 	Capacity	ধারণক্ষমতা
 	Centres	অনুভূমিক কেন্দ্র
 	Change	পরিবর্তন
@@ -93,6 +98,8 @@
 	Change the estimate	অনুমান বদলান
 	Changes	পরিবর্তন
 	Changing the time unit does not convert the times already in the model.	সময়ের একক পরিবর্তন করলে মডেলে আগে থেকে থাকা সময়ের মান রূপান্তরিত হয় না।
+	Chart	চার্ট
+	Chart hover	পয়েন্টারের নিচে চার্ট
 	Choose…	বেছে নিন…
 	Clear Menu	মেনু পরিষ্কার করুন
 	Close	বন্ধ
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	প্রতিটি সত্তা এগুলোর মধ্যে প্রথম সেটি নেয় যা এখনই একসঙ্গে পুরোপুরি পূরণ করা যায়, এবং বেরিয়ে যাওয়ার সময় এককগুলো ফেরত দেয়।
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	প্রতিটি সত্তা আগমনের সময় তার জন্য এলোমেলোভাবে নেওয়া একটি সময় পর্যন্ত এখানে অপেক্ষা করে, তারপর ছেড়ে দেয়: সেটি "ছেড়ে যাওয়া" চিহ্নিত বেরোনোর পথ ধরে, অথবা মডেল থেকে বেরিয়ে যায়।
 	Edit	সম্পাদনা
+	Edit themes…	থিম সম্পাদনা…
 	Elasticity	স্থিতিস্থাপকতা
 	Ends early	আগে শেষ হয়
 	Energy	শক্তি
@@ -183,11 +191,14 @@
 	Gives up before service starts	সেবা শুরুর আগে ছেড়ে দেয়
 	Goes to	যেখানে যায়
 	Hands on finished parts while down	বিকল অবস্থাতেও তৈরি অংশ এগিয়ে দেয়
+	Header	শিরোনাম বার
 	Help	সহায়তা
 	Hide Others	অন্যগুলো লুকান
 	Hide {app}	{app} লুকান
+	High contrast	উচ্চ বৈপরীত্য
 	How many	কতগুলি
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	গ্রাহকেরা এই প্রস্থান থেকে কতগুলো অংশ চান; তখন ফলাফলে টাক্ট (প্রাপ্য সময়কে চাহিদা দিয়ে ভাগ করে) এবং প্রতিটি কাজের সাইকেল টাইম দেখায়।
+	In use	ব্যবহৃত হচ্ছে
 	Inside over time	সময়ের সাথে ভিতরে
 	Jump	যান
 	Jump to time	সময়ে যান
@@ -301,6 +312,7 @@
 	Quality ratio	গুণমান অনুপাত
 	Quit	প্রস্থান করুন
 	Quit {app}	{app} থেকে প্রস্থান করুন
+	Raised surfaces	উঁচু পৃষ্ঠ
 	Random	দৈব
 	Rank the parameters	প্যারামিটার সাজান
 	Ready	প্রস্তুত
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	এই ব্লক ও এর প্রবাহগুলো সরান (Delete)
 	Remove this period	এই সময়কাল সরান
 	Removed {id}	{id} সরানো হয়েছে
+	Rename	নাম পরিবর্তন
 	Rename Block	ব্লকের নাম পরিবর্তন
 	Rename Model	মডেলের নাম পরিবর্তন
 	Repair time	মেরামতের সময়
@@ -363,6 +376,7 @@
 	Save As…	নতুন নামে…
 	Save Model	মডেল সংরক্ষণ
 	Save changes to {name}?	{name}-এর পরিবর্তন সংরক্ষণ করবেন?
+	Save name	নাম সংরক্ষণ
 	Saved {file}	{file} সংরক্ষিত হয়েছে
 	Scale	স্কেল
 	Scrap	স্ক্র্যাপ
@@ -390,8 +404,10 @@
 	Share that gave up	ছেড়ে দেওয়াদের অনুপাত
 	Show All	সব দেখান
 	Show {id}	{id} দেখান
+	Side rail	পার্শ্ব বার
 	Size	আকার নির্ধারণ
 	Size the resources	সম্পদের আকার নির্ধারণ
+	Soft accent	নরম অ্যাকসেন্ট রং
 	Source	উৎস
 	Source: {source}	উৎস: {source}
 	Speed	গতি
@@ -403,6 +419,7 @@
 	Stages (k)	ধাপ (k)
 	Standard deviation	প্রমিত বিচ্যুতি
 	Step	ধাপ
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft বন্ধ হওয়ার সময় {name}-এ সংরক্ষণ না করা পরিবর্তন ছিল। সেগুলো নামবিহীন মডেল হিসেবে পুনরুদ্ধার করুন, অথবা বাতিল করুন।
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft BPSim সিমুলেশন ডেটাসহ BPMN বা XPDL ফাইল থেকে প্রক্রিয়া মডেল পড়ে, সেগুলো একাধিক স্বতন্ত্র পুনরাবৃত্তির পরীক্ষায় চালায় এবং প্রতিটি ফলাফলের সঙ্গে তার আস্থা ব্যবধান দেখায়।
 	StochCraft {version} · model {digest}	StochCraft {version} · মডেল {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	দেখা বন্ধ হয়েছে
 	Sun	রবি
 	Sweep a parameter	একটি প্যারামিটার সুইপ
+	Table stripes	টেবিলের ডোরা
 	Takt	টাক্ট
 	Takt time	টাক্ট টাইম
 	Tandem line	ধারাবাহিক লাইন
@@ -422,6 +440,8 @@
 	Task with a resource	সম্পদসহ কাজ
 	Task with shared resources	ভাগ করা সম্পদসহ কাজ
 	Text	টেক্সট
+	Text on accent	অ্যাকসেন্ট রঙের ওপর টেক্সট
+	Text on header	শিরোনাম বারে টেক্সট
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ব্যবধানটি {share} লক্ষ্য অংশের নিচে নেমে যায়, তাই অংশটি ৯৫% আস্থায় পূরণ হয়েছে বলে দেখানো যায় না; আরও পুনরাবৃত্তি এটিকে সরু করবে।
 	The last task with a resource it finished at	শেষ যে সম্পদসহ কাজ অংশটি পার হয়েছে
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	থামার শর্ত পর্যন্ত গড় সময় কেবল সেই পুনরাবৃত্তিগুলোর উপর যেগুলো শর্তে পৌঁছেছে; বাকিগুলো তাদের সময়সীমা পর্যন্ত চলেছে।
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	মডেলে এখনও কোনো ক্যালেন্ডার নেই।
 	The model now has the units sizing found	মডেলে এখন আকার নির্ধারণে পাওয়া এককগুলি আছে
 	The model: its experiment, connections and problems	মডেল: পরীক্ষা, সংযোগ ও সমস্যা
+	The name is empty or already used.	নামটি খালি বা আগেই ব্যবহৃত।
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	প্রতিটি মানের সমান বা কম পুনরাবৃত্তির অংশ। ব্যান্ডটি {confidence} আস্থায় প্রকৃত বণ্টন ধারণ করে।
 	The values are numbers, separated by semicolons or spaces	মানগুলি সেমিকোলন বা স্পেস দিয়ে আলাদা সংখ্যা
 	The whole clock	পুরো সময়
+	Themes	থিম
 	This block has a warning	এই ব্লকে সতর্কতা আছে
 	This block has an error	এই ব্লকে ত্রুটি আছে
 	This run	এই রান
@@ -478,12 +500,15 @@
 	View	প্রদর্শন
 	Waiting over time	সময়ের সাথে অপেক্ষমাণ
 	Waiting room	অপেক্ষার ঘর
+	Warm	উষ্ণ
 	Warm-up	প্রাথমিক প্রস্তুতিকাল
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} প্রস্তুতিকাল, তারপর {duration} {unit} পরিমাপ
 	Warning	সতর্কতা
 	Watch a Run	একটি রান দেখুন
 	Watch a run	একটি রান দেখুন
 	Watching replication 1	পুনরাবৃত্তি 1 দেখা হচ্ছে
+	Weak text	ম্লান টেক্সট
+	Weak text on header	শিরোনাম বারে ম্লান টেক্সট
 	Wed	বুধ
 	Weekly	প্রতি সপ্তাহে
 	Weibull	ওয়েইবুল
@@ -555,6 +580,7 @@
 	{n} waiting	{n} অপেক্ষমাণ
 	{n} {unit} per second	প্রতি সেকেন্ডে {n} {unit}
 	{property} (set to, mean)	{property} (নির্ধারিত মান, গড়)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – পটভূমি {background}: {ratio}:1, প্রয়োজন {min}:1
 	{title}: now {now}, at most {most}	{title}: এখন {now}, সর্বোচ্চ {most}
 	± 95% CI	± 95% আস্থা ব্যবধান
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± হলো পুনরাবৃত্তিগুলো জুড়ে গড়ের 95% Student-t আস্থা ব্যবধানের অর্ধ-প্রস্থ।

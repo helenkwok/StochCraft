@@ -25,6 +25,7 @@
 	Abandoned on {id}	Pasitraukę sraute {id}
 	About StochCraft	Apie StochCraft
 	About {app}	Apie {app}
+	Accent	Akcentas
 	Across the range it changed by {change}: more than chance would explain.	Per visą intervalą pasikeitė {change}: daugiau, nei paaiškintų atsitiktinumas.
 	Across the range it changed by {change}: within what chance alone could do.	Per visą intervalą pasikeitė {change}: tiek, kiek gali vien atsitiktinumas.
 	Actual size	Tikrasis dydis
@@ -47,6 +48,7 @@
 	Added pool {id}	Pridėta grupė {id}
 	Added {block} ({id})	Pridėta {block} ({id})
 	Align	Lygiuoti
+	All text meets the contrast minimums.	Visas tekstas atitinka mažiausią kontrastą.
 	Also: {rule}	Taip pat: {rule}
 	Alternative {n}	Alternatyva {n}
 	Analysis	Analizė
@@ -69,11 +71,13 @@
 	Binomial	Binominis
 	Block	Blokas
 	Boolean	Loginė reikšmė
+	Borders	Kraštinės
 	Bottoms	Apatiniai kraštai
 	Breakdowns	Gedimai
 	Breakdowns and availability	Gedimai ir prieinamumas
 	Bring All to Front	Perkelti visus į priekį
 	Built with	Sukurta naudojant
+	Built-in themes are read-only. Duplicate one to change its colours.	Įtaisytosios temos skirtos tik skaityti. Norėdami pakeisti spalvas, dubliuokite vieną iš jų.
 	Busiest	Labiausiai apkrautas
 	By role	Pagal vaidmenį
 	CSV table	CSV lentelė
@@ -83,6 +87,7 @@
 	Cancel	Atšaukti
 	Cancel Run	Atšaukti vykdymą
 	Cancel run	Atšaukti vykdymą
+	Canvas	Pagrindinis paviršius
 	Capacity	Pajėgumas
 	Centres	Horizontalūs centrai
 	Change	Pokytis
@@ -93,6 +98,8 @@
 	Change the estimate	Keisti įvertį
 	Changes	Pakeitimai
 	Changing the time unit does not convert the times already in the model.	Pakeitus laiko vienetą, modelyje jau esančios laiko reikšmės nebus perskaičiuotos.
+	Chart	Diagrama
+	Chart hover	Diagrama po žymekliu
 	Choose…	Pasirinkite…
 	Clear Menu	Išvalyti meniu
 	Close	Užverti
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Kiekvienas objektas paima pirmąją iš šių alternatyvų, kurią galima įvykdyti dabar, visą iš karto, ir grąžina vienetus, kai palieka užduotį.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Kiekvienas objektas čia laukia ne ilgiau nei laikas, atsitiktinai parinktas jam atvykus, o tada pasitraukia: eina išėjimu, pažymėtu „Pasitraukę“, arba palieka modelį.
 	Edit	Redaguoti
+	Edit themes…	Redaguoti temas…
 	Elasticity	Elastingumas
 	Ends early	Baigiasi anksčiau
 	Energy	Energija
@@ -183,11 +191,14 @@
 	Gives up before service starts	Pasitraukia prieš prasidedant aptarnavimui
 	Goes to	Veda į
 	Hands on finished parts while down	Gedimo metu perduoda baigtas detales
+	Header	Antraštės juosta
 	Help	Žinynas
 	Hide Others	Slėpti kitus
 	Hide {app}	Slėpti {app}
+	High contrast	Didelis kontrastas
 	How many	Kiek
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kiek detalių klientai nori iš šių išvykimų; tada rezultatai rodo taktą (turimą laiką, padalytą iš poreikio) ir kiekvienos užduoties ciklo laiką.
+	In use	Naudojama
 	Inside over time	Viduje per laiką
 	Jump	Pereiti
 	Jump to time	Pereiti į laiką
@@ -301,6 +312,7 @@
 	Quality ratio	Kokybės dalis
 	Quit	Išeiti
 	Quit {app}	Išeiti iš {app}
+	Raised surfaces	Iškilūs paviršiai
 	Random	Atsitiktinė
 	Rank the parameters	Surikiuoti parametrus
 	Ready	Parengta
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Pašalinti šį bloką ir jo srautus (Delete)
 	Remove this period	Pašalinti šį laikotarpį
 	Removed {id}	Pašalinta {id}
+	Rename	Pervadinti
 	Rename Block	Pervadinti bloką
 	Rename Model	Pervadinti modelį
 	Repair time	Remonto laikas
@@ -363,6 +376,7 @@
 	Save As…	Įrašyti kaip…
 	Save Model	Įrašyti modelį
 	Save changes to {name}?	Įrašyti {name} pakeitimus?
+	Save name	Įrašyti pavadinimą
 	Saved {file}	Įrašyta {file}
 	Scale	Skalė
 	Scrap	Brokas
@@ -390,8 +404,10 @@
 	Share that gave up	Pasitraukusiųjų dalis
 	Show All	Rodyti visus
 	Show {id}	Rodyti {id}
+	Side rail	Šoninė juosta
 	Size	Parinkti
 	Size the resources	Parinkti išteklius
+	Soft accent	Švelnus akcentas
 	Source	Šaltinis
 	Source: {source}	Šaltinis: {source}
 	Speed	Greitis
@@ -403,6 +419,7 @@
 	Stages (k)	Etapai (k)
 	Standard deviation	Standartinis nuokrypis
 	Step	Žingsnis
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft užsidarė su neišsaugotais modelio {name} pakeitimais. Atkurkite juos kaip modelį be pavadinimo arba atmeskite.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft nuskaito procesų modelius iš BPMN arba XPDL failų su BPSim modeliavimo duomenimis, vykdo juos kaip kartotinius eksperimentus ir pateikia kiekvieną rezultatą su jo pasikliautinuoju intervalu.
 	StochCraft {version} · model {digest}	StochCraft {version} · modelis {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Stebėjimas baigtas
 	Sun	sk
 	Sweep a parameter	Parametro perėjimas
+	Table stripes	Lentelių juostos
 	Takt	Taktas
 	Takt time	Takto laikas
 	Tandem line	Nuoseklioji linija
@@ -422,6 +440,8 @@
 	Task with a resource	Užduotis su ištekliumi
 	Task with shared resources	Užduotis su bendrais ištekliais
 	Text	Tekstas
+	Text on accent	Tekstas ant akcento
+	Text on header	Tekstas antraštės juostoje
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalas siekia žemiau tikslinės dalies {share}, todėl 95 % patikimumu neparodyta, kad dalis pasiekta; daugiau replikacijų jį susiaurintų.
 	The last task with a resource it finished at	Paskutinė užduotis su ištekliumi, kurią detalė praėjo
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Vidutinis laikas iki stabdymo sąlygos skaičiuojamas tik iš replikacijų, kurios ją pasiekė; kitos truko iki savo laiko ribos.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Modelis dar neturi kalendorių.
 	The model now has the units sizing found	Modelyje dabar yra parinkimo rasti vienetai
 	The model: its experiment, connections and problems	Modelis: eksperimentas, jungtys ir problemos
+	The name is empty or already used.	Pavadinimas tuščias arba jau naudojamas.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Replikacijų, ne didesnių už kiekvieną reikšmę, dalis. Juosta su {confidence} pasikliovimu apima tikrąjį skirstinį.
 	The values are numbers, separated by semicolons or spaces	Reikšmės yra skaičiai, atskirti kabliataškiais arba tarpais
 	The whole clock	Visas laikas
+	Themes	Temos
 	This block has a warning	Šiame bloke yra įspėjimas
 	This block has an error	Šiame bloke yra klaida
 	This run	Šis vykdymas
@@ -478,12 +500,15 @@
 	View	Rodinys
 	Waiting over time	Laukiantys per laiką
 	Waiting room	Laukiamasis
+	Warm	Šilta
 	Warm-up	Įšilimo laikotarpis
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Įšilimas {warmup} {unit}, po to matavimas {duration} {unit}
 	Warning	Įspėjimas
 	Watch a Run	Stebėti vykdymą
 	Watch a run	Stebėti vykdymą
 	Watching replication 1	Stebima 1 replikacija
+	Weak text	Blankus tekstas
+	Weak text on header	Blankus tekstas antraštės juostoje
 	Wed	tr
 	Weekly	Kas savaitę
 	Weibull	Veibulo
@@ -555,6 +580,7 @@
 	{n} waiting	Laukia: {n}
 	{n} {unit} per second	{n} {unit} per sekundę
 	{property} (set to, mean)	{property} (nustatyta reikšmė, vidurkis)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – fonas „{background}“: {ratio}:1, reikia {min}:1
 	{title}: now {now}, at most {most}	{title}: dabar {now}, daugiausia {most}
 	± 95% CI	± 95% pasikliautinasis intervalas
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± yra 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp kartojimų, pusplotis.

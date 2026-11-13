@@ -25,6 +25,7 @@
 	Abandoned on {id}	Отказали се на {id}
 	About StochCraft	За StochCraft
 	About {app}	За {app}
+	Accent	Акцент
 	Across the range it changed by {change}: more than chance would explain.	В диапазона се промени с {change}: повече, отколкото би обяснила случайността.
 	Across the range it changed by {change}: within what chance alone could do.	В диапазона се промени с {change}: в рамките на това, което може само случайността.
 	Actual size	Действителен размер
@@ -47,6 +48,7 @@
 	Added pool {id}	Добавен е пул {id}
 	Added {block} ({id})	Добавен е {block} ({id})
 	Align	Подравняване
+	All text meets the contrast minimums.	Целият текст отговаря на минималния контраст.
 	Also: {rule}	Също: {rule}
 	Alternative {n}	Алтернатива {n}
 	Analysis	Анализ
@@ -69,11 +71,13 @@
 	Binomial	Биномиално
 	Block	Блок
 	Boolean	Булева стойност
+	Borders	Рамки
 	Bottoms	Долни ръбове
 	Breakdowns	Повреди
 	Breakdowns and availability	Повреди и наличност
 	Bring All to Front	Всички на преден план
 	Built with	Създадено с
+	Built-in themes are read-only. Duplicate one to change its colours.	Вградените теми са само за четене. Дублирайте някоя, за да промените цветовете ѝ.
 	Busiest	Най-натоварен
 	By role	По роля
 	CSV table	Таблица CSV
@@ -83,6 +87,7 @@
 	Cancel	Отказ
 	Cancel Run	Отмяна на изпълнението
 	Cancel run	Отмяна на изпълнението
+	Canvas	Основна повърхност
 	Capacity	Капацитет
 	Centres	Хоризонтални центрове
 	Change	Промяна
@@ -93,6 +98,8 @@
 	Change the estimate	Промяна на оценката
 	Changes	Промени
 	Changing the time unit does not convert the times already in the model.	Промяната на единицата за време не преобразува времената, които вече са в модела.
+	Chart	Графика
+	Chart hover	Графика под показалеца
 	Choose…	Изберете…
 	Clear Menu	Изчистване на менюто
 	Close	Затваряне
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Всяка същност взема първата от тези възможности, която може да бъде изпълнена сега, изцяло и наведнъж, и връща единиците, когато излезе.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Всяка същност чака тук най-много време, изтеглено случайно за нея при пристигането ѝ, след което се отказва: тръгва по изхода, отбелязан като „Отказали се“, или напуска модела.
 	Edit	Редактиране
+	Edit themes…	Редактиране на темите…
 	Elasticity	Еластичност
 	Ends early	Завършва по-рано
 	Energy	Енергия
@@ -183,11 +191,14 @@
 	Gives up before service starts	Отказва се преди началото на обслужването
 	Goes to	Отива към
 	Hands on finished parts while down	Предава готовите части и при повреда
+	Header	Заглавна лента
 	Help	Помощ
 	Hide Others	Скриване на другите
 	Hide {app}	Скриване на {app}
+	High contrast	Висок контраст
 	How many	Колко
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Колко части искат клиентите от тези напускания; тогава резултатите показват такта (наличното време, разделено на търсенето) и времето на цикъла на всяка задача.
+	In use	В употреба
 	Inside over time	Вътре във времето
 	Jump	Отиване
 	Jump to time	Отиване към момент
@@ -301,6 +312,7 @@
 	Quality ratio	Дял на годните
 	Quit	Изход
 	Quit {app}	Изход от {app}
+	Raised surfaces	Повдигнати повърхности
 	Random	Случайна
 	Rank the parameters	Подреждане на параметрите
 	Ready	Готово
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Премахване на този блок и потоците му (Delete)
 	Remove this period	Премахване на този период
 	Removed {id}	Премахнат е {id}
+	Rename	Преименуване
 	Rename Block	Преименуване на блок
 	Rename Model	Преименуване на модел
 	Repair time	Време за ремонт
@@ -363,6 +376,7 @@
 	Save As…	Запази като…
 	Save Model	Запазване на модел
 	Save changes to {name}?	Да се запазят ли промените в {name}?
+	Save name	Запазване на името
 	Saved {file}	Запазен е {file}
 	Scale	Мащаб
 	Scrap	Брак
@@ -390,8 +404,10 @@
 	Share that gave up	Дял на отказалите се
 	Show All	Показване на всичко
 	Show {id}	Показване на {id}
+	Side rail	Странична лента
 	Size	Оразмеряване
 	Size the resources	Оразмеряване на ресурсите
+	Soft accent	Мек акцент
 	Source	Източник
 	Source: {source}	Източник: {source}
 	Speed	Скорост
@@ -403,6 +419,7 @@
 	Stages (k)	Етапи (k)
 	Standard deviation	Стандартно отклонение
 	Step	Стъпка
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft се затвори с незапазени промени в {name}. Възстановете ги като модел без име или ги отхвърлете.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft чете модели на процеси от BPMN или XPDL файлове с данни за симулация BPSim, изпълнява ги като експерименти с повторения и отчита всеки резултат с доверителния му интервал.
 	StochCraft {version} · model {digest}	StochCraft {version} · модел {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Наблюдението е спряно
 	Sun	нд
 	Sweep a parameter	Обхождане на параметър
+	Table stripes	Ивици на таблиците
 	Takt	Такт
 	Takt time	Време на такта
 	Tandem line	Тандемна линия
@@ -422,6 +440,8 @@
 	Task with a resource	Задача с ресурс
 	Task with shared resources	Задача със споделени ресурси
 	Text	Текст
+	Text on accent	Текст върху акцента
+	Text on header	Текст в заглавната лента
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Интервалът стига под целевия дял от {share}, така че не е показано с 95% доверие, че делът е постигнат; повече репликации биха го стеснили.
 	The last task with a resource it finished at	Последната задача с ресурс, през която е минала частта
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Средното време до условието за спиране е само върху репликациите, които са го достигнали; останалите продължиха до времевия си лимит.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Моделът все още няма календари.
 	The model now has the units sizing found	Моделът вече има единиците, намерени при оразмеряването
 	The model: its experiment, connections and problems	Моделът: експеримент, връзки и проблеми
+	The name is empty or already used.	Името е празно или вече се използва.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Делът на репликациите при или под всяка стойност. Лентата съдържа истинското разпределение с доверие {confidence}.
 	The values are numbers, separated by semicolons or spaces	Стойностите са числа, разделени с точка и запетая или интервали
 	The whole clock	Цялото време
+	Themes	Теми
 	This block has a warning	Този блок има предупреждение
 	This block has an error	Този блок има грешка
 	This run	Това изпълнение
@@ -478,12 +500,15 @@
 	View	Изглед
 	Waiting over time	Чакащи във времето
 	Waiting room	Чакалня
+	Warm	Топла
 	Warm-up	Загряване
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Загряване {warmup} {unit}, след това измерване за {duration} {unit}
 	Warning	Предупреждение
 	Watch a Run	Наблюдение на изпълнение
 	Watch a run	Наблюдение на изпълнение
 	Watching replication 1	Наблюдава се репликация 1
+	Weak text	Блед текст
+	Weak text on header	Блед текст в заглавната лента
 	Wed	ср
 	Weekly	Ежеседмично
 	Weibull	Вайбул
@@ -555,6 +580,7 @@
 	{n} waiting	Чакащи: {n}
 	{n} {unit} per second	{n} {unit} в секунда
 	{property} (set to, mean)	{property} (зададена стойност, средна)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон „{background}“: {ratio}:1, нужно е {min}:1
 	{title}: now {now}, at most {most}	{title}: сега {now}, най-много {most}
 	± 95% CI	± 95% ДИ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± означава половината от ширината на 95% доверителен интервал по Student-t за средната стойност от повторенията.

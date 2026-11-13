@@ -25,6 +25,7 @@
 	Abandoned on {id}	Loobunud voos {id}
 	About StochCraft	Teave StochCrafti kohta
 	About {app}	Teave: {app}
+	Accent	Rõhuvärv
 	Across the range it changed by {change}: more than chance would explain.	Vahemikus muutus see {change} võrra: rohkem, kui juhus seletaks.
 	Across the range it changed by {change}: within what chance alone could do.	Vahemikus muutus see {change} võrra: piires, mida juhus üksi teha võib.
 	Actual size	Tegelik suurus
@@ -47,6 +48,7 @@
 	Added pool {id}	Lisati kogum {id}
 	Added {block} ({id})	Lisatud {block} ({id})
 	Align	Joonda
+	All text meets the contrast minimums.	Kogu tekst vastab kontrasti miinimumnõuetele.
 	Also: {rule}	Lisaks: {rule}
 	Alternative {n}	Alternatiiv {n}
 	Analysis	Analüüs
@@ -69,11 +71,13 @@
 	Binomial	Binoomjaotus
 	Block	Plokk
 	Boolean	Tõeväärtus
+	Borders	Äärised
 	Bottoms	Alaservad
 	Breakdowns	Rikked
 	Breakdowns and availability	Rikked ja saadavus
 	Bring All to Front	Too kõik esiplaanile
 	Built with	Loodud järgmistega
+	Built-in themes are read-only. Duplicate one to change its colours.	Sisseehitatud teemad on kirjutuskaitstud. Dubleeri üks, et selle värve muuta.
 	Busiest	Kõige koormatum
 	By role	Rolli järgi
 	CSV table	CSV-tabel
@@ -83,6 +87,7 @@
 	Cancel	Loobu
 	Cancel Run	Tühista käivitus
 	Cancel run	Tühista käivitus
+	Canvas	Põhipind
 	Capacity	Maht
 	Centres	Horisontaalsed keskkohad
 	Change	Muutus
@@ -93,6 +98,8 @@
 	Change the estimate	Muuda hinnangut
 	Changes	Muudatused
 	Changing the time unit does not convert the times already in the model.	Ajaühiku muutmine ei teisenda mudelis juba olevaid aegu.
+	Chart	Graafik
+	Chart hover	Graafik kursori all
 	Choose…	Vali…
 	Clear Menu	Tühjenda menüü
 	Close	Sulge
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Iga olem võtab neist esimese, mida saab kohe täita, kõik korraga, ja annab ühikud tagasi, kui ülesandest lahkub.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Iga olem ootab siin kõige rohkem aja, mis talle saabumisel juhuslikult määratakse, ja loobub siis: ta läheb väljapääsu kaudu, mis on märgitud „Loobunud”, või lahkub mudelist.
 	Edit	Muuda
+	Edit themes…	Muuda teemasid…
 	Elasticity	Elastsus
 	Ends early	Lõpeb varem
 	Energy	Energia
@@ -183,11 +191,14 @@
 	Gives up before service starts	Loobub enne teeninduse algust
 	Goes to	Viib kohta
 	Hands on finished parts while down	Annab rikkis olekus valmis detailid edasi
+	Header	Päis
 	Help	Abi
 	Hide Others	Peida teised
 	Hide {app}	Peida {app}
+	High contrast	Kõrge kontrast
 	How many	Mitu
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Mitu detaili kliendid neist lahkumistest soovivad; tulemused näitavad siis takti (saadaolev aeg jagatud nõudlusega) ja iga ülesande tsükliaega.
+	In use	Kasutusel
 	Inside over time	Sees aja jooksul
 	Jump	Mine
 	Jump to time	Mine ajahetkele
@@ -301,6 +312,7 @@
 	Quality ratio	Kvaliteedi osakaal
 	Quit	Välju
 	Quit {app}	Välju: {app}
+	Raised surfaces	Kõrgendatud pinnad
 	Random	Juhuslik
 	Rank the parameters	Järjesta parameetrid
 	Ready	Valmis
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Eemalda see plokk ja selle vood (Delete)
 	Remove this period	Eemalda see periood
 	Removed {id}	Eemaldati {id}
+	Rename	Nimeta ümber
 	Rename Block	Nimeta plokk ümber
 	Rename Model	Nimeta mudel ümber
 	Repair time	Remondiaeg
@@ -363,6 +376,7 @@
 	Save As…	Salvesta nimega…
 	Save Model	Salvesta mudel
 	Save changes to {name}?	Kas salvestada {name} muudatused?
+	Save name	Salvesta nimi
 	Saved {file}	Salvestati {file}
 	Scale	Skaala
 	Scrap	Praak
@@ -390,8 +404,10 @@
 	Share that gave up	Loobunute osakaal
 	Show All	Näita kõiki
 	Show {id}	Näita {id}
+	Side rail	Külgriba
 	Size	Dimensioneeri
 	Size the resources	Dimensioneeri ressursid
+	Soft accent	Pehme rõhuvärv
 	Source	Allikas
 	Source: {source}	Allikas: {source}
 	Speed	Kiirus
@@ -403,6 +419,7 @@
 	Stages (k)	Etapid (k)
 	Standard deviation	Standardhälve
 	Step	Samm
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft sulgus, kui mudelis {name} oli salvestamata muudatusi. Taasta need nimetu mudelina või hülga need.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft loeb protsessimudeleid BPMN- või XPDL-failidest, mis sisaldavad BPSim-simulatsiooniandmeid, käivitab need korduskatsetena ning esitab iga tulemuse koos usaldusvahemikuga.
 	StochCraft {version} · model {digest}	StochCraft {version} · mudel {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Jälgimine lõpetati
 	Sun	P
 	Sweep a parameter	Parameetri läbimine
+	Table stripes	Tabeli triibud
 	Takt	Takt
 	Takt time	Taktiaeg
 	Tandem line	Tandemliin
@@ -422,6 +440,8 @@
 	Task with a resource	Ressursiga ülesanne
 	Task with shared resources	Jagatud ressurssidega ülesanne
 	Text	Tekst
+	Text on accent	Tekst rõhuvärvil
+	Text on header	Tekst päisel
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Vahemik ulatub alla sihtosakaalu {share}, seega pole 95% usaldusega näidatud, et osakaal on saavutatud; rohkem kordusi kitsendaks seda.
 	The last task with a resource it finished at	Viimane ressursiga ülesanne, mille detail läbis
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskmine aeg peatamistingimuseni on ainult nende korduste põhjal, mis selle saavutasid; ülejäänud kestsid oma ajapiirini.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Mudelil pole veel kalendreid.
 	The model now has the units sizing found	Mudelil on nüüd dimensioneerimisel leitud ühikud
 	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
+	The name is empty or already used.	Nimi on tühi või juba kasutusel.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Korduste osakaal, mis on iga väärtusega võrdsed või sellest väiksemad. Vöönd sisaldab tegelikku jaotust {confidence} usaldusega.
 	The values are numbers, separated by semicolons or spaces	Väärtused on arvud, eraldatud semikoolonite või tühikutega
 	The whole clock	Kogu aeg
+	Themes	Teemad
 	This block has a warning	Selles plokis on hoiatus
 	This block has an error	Selles plokis on viga
 	This run	See käivitus
@@ -478,12 +500,15 @@
 	View	Vaade
 	Waiting over time	Ootel aja jooksul
 	Waiting room	Ooteruum
+	Warm	Soe
 	Warm-up	Soojendus
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Soojendus {warmup} {unit}, seejärel mõõtmine {duration} {unit}
 	Warning	Hoiatus
 	Watch a Run	Jälgi käivitust
 	Watch a run	Jälgi käivitust
 	Watching replication 1	Jälgitakse kordust 1
+	Weak text	Tuhm tekst
+	Weak text on header	Tuhm tekst päisel
 	Wed	K
 	Weekly	Iga nädal
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} ootel
 	{n} {unit} per second	{n} {unit} sekundis
 	{property} (set to, mean)	{property} (määratud väärtus, keskmine)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – taust „{background}“: {ratio}:1, vaja {min}:1
 	{title}: now {now}, at most {most}	{title}: praegu {now}, kõige rohkem {most}
 	± 95% CI	± 95% usaldusvahemik
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± on korduste keskmise 95% Student-t usaldusvahemiku poollaius.

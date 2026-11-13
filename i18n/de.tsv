@@ -25,6 +25,7 @@
 	Abandoned on {id}	Abgebrochen bei {id}
 	About StochCraft	Über StochCraft
 	About {app}	Über {app}
+	Accent	Akzent
 	Across the range it changed by {change}: more than chance would explain.	Über den Bereich änderte es sich um {change}: mehr, als der Zufall erklären würde.
 	Across the range it changed by {change}: within what chance alone could do.	Über den Bereich änderte es sich um {change}: im Rahmen dessen, was der Zufall allein bewirken kann.
 	Actual size	Originalgröße
@@ -47,6 +48,7 @@
 	Added pool {id}	Pool {id} hinzugefügt
 	Added {block} ({id})	{block} ({id}) hinzugefügt
 	Align	Ausrichten
+	All text meets the contrast minimums.	Alle Texte erreichen den Mindestkontrast.
 	Also: {rule}	Außerdem: {rule}
 	Alternative {n}	Alternative {n}
 	Analysis	Analyse
@@ -69,11 +71,13 @@
 	Binomial	Binomial
 	Block	Block
 	Boolean	Boolesch
+	Borders	Rahmen
 	Bottoms	Unterkanten
 	Breakdowns	Ausfälle
 	Breakdowns and availability	Ausfälle und Verfügbarkeit
 	Bring All to Front	Alle nach vorne bringen
 	Built with	Erstellt mit
+	Built-in themes are read-only. Duplicate one to change its colours.	Eingebaute Farbschemata sind schreibgeschützt. Zum Ändern der Farben eines davon duplizieren.
 	Busiest	Am meisten belastet
 	By role	Nach Rolle
 	CSV table	CSV-Tabelle
@@ -83,6 +87,7 @@
 	Cancel	Abbrechen
 	Cancel Run	Simulation abbrechen
 	Cancel run	Simulation abbrechen
+	Canvas	Arbeitsfläche
 	Capacity	Kapazität
 	Centres	Horizontal zentriert
 	Change	Änderung
@@ -93,6 +98,8 @@
 	Change the estimate	Schätzung ändern
 	Changes	Änderungen
 	Changing the time unit does not convert the times already in the model.	Beim Ändern der Zeiteinheit werden bereits vorhandene Zeiten im Modell nicht umgerechnet.
+	Chart	Diagramm
+	Chart hover	Diagramm unter Mauszeiger
 	Choose…	Auswählen…
 	Clear Menu	Menü leeren
 	Close	Schließen
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jede Entität belegt die erste dieser Alternativen, die sich jetzt erfüllen lässt, vollständig auf einmal und gibt die Einheiten zurück, wenn sie den Block verlässt.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Jede Entität wartet hier höchstens eine Zeit, die bei ihrer Ankunft zufällig für sie gezogen wird, und gibt dann auf: Sie nimmt den als „Abgebrochen“ markierten Ausgang oder verlässt das Modell.
 	Edit	Bearbeiten
+	Edit themes…	Farbschemata bearbeiten…
 	Elasticity	Elastizität
 	Ends early	Endet früher
 	Energy	Energie
@@ -183,11 +191,14 @@
 	Gives up before service starts	Gibt vor Beginn der Bearbeitung auf
 	Goes to	Geht zu
 	Hands on finished parts while down	Gibt fertige Teile auch im Ausfall weiter
+	Header	Kopfleiste
 	Help	Hilfe
 	Hide Others	Andere ausblenden
 	Hide {app}	{app} ausblenden
+	High contrast	Hoher Kontrast
 	How many	Wie viele
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Wie viele Teile Kunden von diesen Abgängen wollen; die Ergebnisse zeigen dann den Takt (die verfügbare Zeit geteilt durch den Bedarf) und die Zykluszeit jeder Aufgabe.
+	In use	In Verwendung
 	Inside over time	Im Block über die Zeit
 	Jump	Springen
 	Jump to time	Springen zu Zeitpunkt
@@ -301,6 +312,7 @@
 	Quality ratio	Qualitätsrate
 	Quit	Beenden
 	Quit {app}	{app} beenden
+	Raised surfaces	Erhöhte Flächen
 	Random	Zufällig
 	Rank the parameters	Parameter ordnen
 	Ready	Bereit
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Diesen Block und seine Verbindungen entfernen (Entf)
 	Remove this period	Diesen Zeitraum entfernen
 	Removed {id}	{id} entfernt
+	Rename	Umbenennen
 	Rename Block	Block umbenennen
 	Rename Model	Modell umbenennen
 	Repair time	Reparaturzeit
@@ -363,6 +376,7 @@
 	Save As…	Speichern unter…
 	Save Model	Modell speichern
 	Save changes to {name}?	Änderungen an {name} speichern?
+	Save name	Namen speichern
 	Saved {file}	{file} gespeichert
 	Scale	Skalenparameter
 	Scrap	Ausschuss
@@ -390,8 +404,10 @@
 	Share that gave up	Anteil, der aufgegeben hat
 	Show All	Alle einblenden
 	Show {id}	{id} anzeigen
+	Side rail	Seitenleiste
 	Size	Bemessen
 	Size the resources	Ressourcen bemessen
+	Soft accent	Dezenter Akzent
 	Source	Quelle
 	Source: {source}	Quelle: {source}
 	Speed	Geschwindigkeit
@@ -403,6 +419,7 @@
 	Stages (k)	Stufen (k)
 	Standard deviation	Standardabweichung
 	Step	Schritt
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft wurde mit ungespeicherten Änderungen an {name} beendet. Stellen Sie sie als unbenanntes Modell wieder her oder verwerfen Sie sie.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft liest Prozessmodelle als BPMN- oder XPDL-Dateien mit BPSim-Simulationsdaten, führt sie als replizierte Experimente aus und gibt jedes Ergebnis mit seinem Konfidenzintervall an.
 	StochCraft {version} · model {digest}	StochCraft {version} · Modell {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Beobachten beendet
 	Sun	So
 	Sweep a parameter	Einen Parameter variieren
+	Table stripes	Tabellenstreifen
 	Takt	Takt
 	Takt time	Taktzeit
 	Tandem line	Tandemlinie
@@ -422,6 +440,8 @@
 	Task with a resource	Aufgabe mit Ressource
 	Task with shared resources	Aufgabe mit gemeinsamen Ressourcen
 	Text	Text
+	Text on accent	Text auf Akzent
+	Text on header	Text auf Kopfleiste
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Das Intervall reicht unter den Zielanteil von {share}, daher ist nicht mit 95 % Konfidenz gezeigt, dass der Anteil erreicht wird; mehr Replikationen würden es verengen.
 	The last task with a resource it finished at	Die letzte Aufgabe mit Ressource, die das Teil durchlaufen hat
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Die mittlere Zeit bis zur Abbruchbedingung bezieht sich nur auf die Replikationen, die sie erreicht haben; die übrigen liefen bis zu ihrem Zeitlimit.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Das Modell hat noch keine Kalender.
 	The model now has the units sizing found	Das Modell hat jetzt die bei der Bemessung gefundenen Einheiten
 	The model: its experiment, connections and problems	Das Modell: Experiment, Verbindungen und Probleme
+	The name is empty or already used.	Der Name ist leer oder bereits vergeben.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Der Anteil der Replikationen bei oder unter jedem Wert. Das Band enthält die wahre Verteilung mit {confidence} Konfidenz.
 	The values are numbers, separated by semicolons or spaces	Die Werte sind Zahlen, getrennt durch Semikolons oder Leerzeichen
 	The whole clock	Die ganze Zeit
+	Themes	Farbschemata
 	This block has a warning	Dieser Block hat eine Warnung
 	This block has an error	Dieser Block hat einen Fehler
 	This run	Dieser Lauf
@@ -478,12 +500,15 @@
 	View	Ansicht
 	Waiting over time	Wartend über die Zeit
 	Waiting room	Warteraum
+	Warm	Warm
 	Warm-up	Einschwingphase
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Einschwingphase {warmup} {unit}, danach {duration} {unit} gemessen
 	Warning	Warnung
 	Watch a Run	Lauf beobachten
 	Watch a run	Lauf beobachten
 	Watching replication 1	Replikation 1 wird beobachtet
+	Weak text	Gedämpfter Text
+	Weak text on header	Gedämpfter Text auf Kopfleiste
 	Wed	Mi
 	Weekly	Wöchentlich
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} wartend
 	{n} {unit} per second	{n} {unit} pro Sekunde
 	{property} (set to, mean)	{property} (festgelegt auf, Mittelwert)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} auf {background}: {ratio}:1, nötig {min}:1
 	{title}: now {now}, at most {most}	{title}: jetzt {now}, höchstens {most}
 	± 95% CI	± 95% KI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± ist die halbe Breite eines 95-%-Konfidenzintervalls (Student-t) für den Mittelwert über die Replikationen.

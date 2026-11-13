@@ -25,6 +25,7 @@ mod live;
 mod pools;
 mod results;
 pub mod theme;
+mod theme_editor;
 
 use egui::{Key, Modifiers};
 use serde_json::{Value, json};
@@ -186,13 +187,30 @@ pub struct Keyboard {
     pub shortcuts: Option<Value>,
 }
 
-#[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct Appearance {
     pub theme: ThemeChoice,
     /// The interface language's code (`de`, `pt-br`); left out to follow the system.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
+    /// The colour theme in use, by name: a built-in one, or one of `custom_themes`. A name that
+    /// matches neither shows StochCraft's theme, and the name is kept as it was saved.
+    pub colors: String,
+    /// The user's own colour themes.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub custom_themes: Vec<theme::Theme>,
+}
+
+impl Default for Appearance {
+    fn default() -> Self {
+        Self {
+            theme: ThemeChoice::default(),
+            language: None,
+            colors: theme::DEFAULT.to_owned(),
+            custom_themes: Vec::new(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Default, serde::Serialize, serde::Deserialize)]
@@ -260,8 +278,8 @@ pub struct App {
     requests: Vec<Request>,
     /// The title last shown, so the shell sets it only when it changes.
     title: String,
-    /// The theme is installed (on the first frame).
-    styled: bool,
+    /// The colour theme last installed or applied to the context (none before the first frame).
+    styled: Option<theme::Theme>,
     /// The language whose font stack is installed: the fonts are installed again when the
     /// interface language changes, so its faces lead (and, on the web, are fetched).
     fonts_lang: Option<craft_i18n::Lang>,
@@ -301,6 +319,11 @@ pub struct App {
     /// Recently opened or saved files, newest first (desktop only).
     recent: Vec<String>,
     theme_choice: ThemeChoice,
+    /// The colour theme in use, by name, and the user's own colour themes (see [`Appearance`]).
+    colors: String,
+    custom_themes: Vec<theme::Theme>,
+    /// The Themes window, while it is open.
+    themes: Option<theme_editor::Editor>,
     /// The interface language as the user chose it (`None`: the system's), and as shown.
     language: Option<String>,
     lang: craft_i18n::Lang,
@@ -345,7 +368,7 @@ impl App {
             dropped: None,
             requests: Vec::new(),
             title: String::new(),
-            styled: false,
+            styled: None,
             fonts_lang: None,
             names_in_english: Vec::new(),
             selected: None,
@@ -365,6 +388,9 @@ impl App {
             dispatcher: craft_keymap::egui::Dispatcher::new(),
             recent: Vec::new(),
             theme_choice: ThemeChoice::System,
+            colors: theme::DEFAULT.to_owned(),
+            custom_themes: Vec::new(),
+            themes: None,
             language: None,
             lang: i18n::I18N.system_lang(),
             applied_theme: None,
@@ -428,6 +454,8 @@ impl App {
             appearance: Appearance {
                 theme: self.theme_choice,
                 language: self.language.clone(),
+                colors: self.colors.clone(),
+                custom_themes: self.custom_themes.clone(),
             },
             files: Files {
                 recent: self.recent.clone(),
@@ -447,6 +475,9 @@ impl App {
     /// Restores what was remembered.
     pub fn set_prefs(&mut self, prefs: &Prefs) {
         self.theme_choice = prefs.appearance.theme;
+        self.colors.clone_from(&prefs.appearance.colors);
+        self.custom_themes
+            .clone_from(&prefs.appearance.custom_themes);
         self.set_language(prefs.appearance.language.as_deref());
         self.recent = prefs.files.recent.clone();
         self.recent.truncate(RECENT_FILES);
@@ -1169,9 +1200,15 @@ impl App {
             theme::install_fonts(&ctx, i18n::code(self.lang));
             self.fonts_lang = Some(self.lang);
         }
-        if !self.styled {
-            theme::install(&ctx);
-            self.styled = true;
+        let theme = self.active_theme();
+        theme::use_palettes(&ctx, &theme);
+        if self.styled.as_ref() != Some(&theme) {
+            if self.styled.is_none() {
+                theme::install(&ctx, &theme);
+            } else {
+                theme::apply(&ctx, &theme);
+            }
+            self.styled = Some(theme);
         }
         if self.poll() {
             ctx.request_repaint();
@@ -1254,6 +1291,7 @@ impl App {
         self.new_file_dialog(&ctx);
         self.about_window(&ctx);
         self.shortcuts_window(&ctx);
+        self.themes_window(&ctx);
         self.recovery_dialog(&ctx);
     }
 

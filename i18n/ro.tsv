@@ -25,6 +25,7 @@
 	Abandoned on {id}	Renunțări pe {id}
 	About StochCraft	Despre StochCraft
 	About {app}	Despre {app}
+	Accent	Accent
 	Across the range it changed by {change}: more than chance would explain.	Pe interval s-a schimbat cu {change}: mai mult decât ar explica întâmplarea.
 	Across the range it changed by {change}: within what chance alone could do.	Pe interval s-a schimbat cu {change}: în limitele a ce poate face doar întâmplarea.
 	Actual size	Dimensiune reală
@@ -47,6 +48,7 @@
 	Added pool {id}	S-a adăugat grupul {id}
 	Added {block} ({id})	S-a adăugat {block} ({id})
 	Align	Aliniere
+	All text meets the contrast minimums.	Tot textul respectă contrastele minime.
 	Also: {rule}	De asemenea: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Analiză
@@ -69,11 +71,13 @@
 	Binomial	Binomială
 	Block	Bloc
 	Boolean	Boolean
+	Borders	Borduri
 	Bottoms	Marginile de jos
 	Breakdowns	Avarii
 	Breakdowns and availability	Avarii și disponibilitate
 	Bring All to Front	Adu totul în față
 	Built with	Creat cu
+	Built-in themes are read-only. Duplicate one to change its colours.	Temele integrate sunt doar în citire. Duplicați una pentru a-i schimba culorile.
 	Busiest	Cel mai ocupat
 	By role	După rol
 	CSV table	Tabel CSV
@@ -83,6 +87,7 @@
 	Cancel	Anulează
 	Cancel Run	Anulează rularea
 	Cancel run	Anulează rularea
+	Canvas	Suprafață principală
 	Capacity	Capacitate
 	Centres	Centre orizontale
 	Change	Modificare
@@ -93,6 +98,8 @@
 	Change the estimate	Modifică estimarea
 	Changes	Modificări
 	Changing the time unit does not convert the times already in the model.	Schimbarea unității de timp nu convertește timpii existenți în model.
+	Chart	Grafic
+	Chart hover	Grafic sub indicator
 	Choose…	Alege…
 	Clear Menu	Golește meniul
 	Close	Închide
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Fiecare entitate ia, integral și dintr-odată, prima dintre aceste alternative care poate fi satisfăcută în acel moment și returnează unitățile când pleacă.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Fiecare entitate așteaptă aici cel mult un timp extras la întâmplare pentru ea la sosire, apoi renunță: ia ieșirea marcată „Renunțări” sau părăsește modelul.
 	Edit	Editare
+	Edit themes…	Editează temele…
 	Elasticity	Elasticitate
 	Ends early	Se oprește mai devreme
 	Energy	Energie
@@ -183,11 +191,14 @@
 	Gives up before service starts	Renunță înainte de începerea servirii
 	Goes to	Merge către
 	Hands on finished parts while down	Predă piesele terminate și în avarie
+	Header	Antet
 	Help	Ajutor
 	Hide Others	Ascunde celelalte
 	Hide {app}	Ascunde {app}
+	High contrast	Contrast ridicat
 	How many	Câte
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Câte piese vor clienții de la aceste plecări; rezultatele arată atunci taktul (timpul disponibil împărțit la cerere) și timpul de ciclu al fiecărei sarcini.
+	In use	În uz
 	Inside over time	În interior în timp
 	Jump	Salt
 	Jump to time	Salt la momentul
@@ -301,6 +312,7 @@
 	Quality ratio	Ponderea calității
 	Quit	Ieșire
 	Quit {app}	Ieșire din {app}
+	Raised surfaces	Suprafețe ridicate
 	Random	Aleatoriu
 	Rank the parameters	Ordonează parametrii
 	Ready	Gata
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Elimină acest bloc și fluxurile sale (Delete)
 	Remove this period	Elimină această perioadă
 	Removed {id}	S-a eliminat {id}
+	Rename	Redenumește
 	Rename Block	Redenumește blocul
 	Rename Model	Redenumește modelul
 	Repair time	Timp de reparare
@@ -363,6 +376,7 @@
 	Save As…	Salvează ca…
 	Save Model	Salvează modelul
 	Save changes to {name}?	Salvați modificările pentru {name}?
+	Save name	Salvează numele
 	Saved {file}	S-a salvat {file}
 	Scale	Scară
 	Scrap	Rebut
@@ -390,8 +404,10 @@
 	Share that gave up	Proporția celor care au renunțat
 	Show All	Afișează tot
 	Show {id}	Afișează {id}
+	Side rail	Bară laterală
 	Size	Dimensionează
 	Size the resources	Dimensionează resursele
+	Soft accent	Accent discret
 	Source	Sursă
 	Source: {source}	Sursă: {source}
 	Speed	Viteză
@@ -403,6 +419,7 @@
 	Stages (k)	Etape (k)
 	Standard deviation	Abatere standard
 	Step	Pas
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft s-a închis cu modificări nesalvate în {name}. Recuperați-le ca model fără titlu sau renunțați la ele.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft citește modele de procese din fișiere BPMN sau XPDL cu date de simulare BPSim, le rulează ca experimente cu replicări și raportează fiecare rezultat împreună cu intervalul său de încredere.
 	StochCraft {version} · model {digest}	StochCraft {version} · model {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Urmărirea s-a oprit
 	Sun	dum
 	Sweep a parameter	Baleierea unui parametru
+	Table stripes	Dungi de tabel
 	Takt	Takt
 	Takt time	Timp takt
 	Tandem line	Linie în tandem
@@ -422,6 +440,8 @@
 	Task with a resource	Sarcină cu resursă
 	Task with shared resources	Sarcină cu resurse partajate
 	Text	Text
+	Text on accent	Text pe accent
+	Text on header	Text pe antet
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalul coboară sub ponderea țintă de {share}, deci nu este arătat cu 95% încredere că ponderea este atinsă; mai multe replicări l-ar îngusta.
 	The last task with a resource it finished at	Ultima sarcină cu resursă prin care a trecut piesa
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Timpul mediu până la condiția de oprire este doar pe replicările care au atins-o; celelalte au rulat până la limita de timp.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Modelul nu are încă calendare.
 	The model now has the units sizing found	Modelul are acum unitățile găsite la dimensionare
 	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
+	The name is empty or already used.	Numele este gol sau deja folosit.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Ponderea replicărilor egale cu sau sub fiecare valoare. Banda conține distribuția reală cu o încredere de {confidence}.
 	The values are numbers, separated by semicolons or spaces	Valorile sunt numere separate prin punct și virgulă sau spații
 	The whole clock	Tot timpul
+	Themes	Teme
 	This block has a warning	Acest bloc are un avertisment
 	This block has an error	Acest bloc are o eroare
 	This run	Această rulare
@@ -478,12 +500,15 @@
 	View	Vizualizare
 	Waiting over time	În așteptare în timp
 	Waiting room	Sală de așteptare
+	Warm	Cald
 	Warm-up	Perioadă de încălzire
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Încălzire {warmup} {unit}, apoi măsurare timp de {duration} {unit}
 	Warning	Avertisment
 	Watch a Run	Urmărește o rulare
 	Watch a run	Urmărește o rulare
 	Watching replication 1	Se urmărește replicarea 1
+	Weak text	Text estompat
+	Weak text on header	Text estompat pe antet
 	Wed	mie
 	Weekly	Săptămânal
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	În așteptare: {n}
 	{n} {unit} per second	{n} {unit} pe secundă
 	{property} (set to, mean)	{property} (valoare setată, medie)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} pe {background}: {ratio}:1, necesar {min}:1
 	{title}: now {now}, at most {most}	{title}: acum {now}, cel mult {most}
 	± 95% CI	± IC 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± reprezintă jumătate din lățimea unui interval de încredere Student-t de 95% pentru media dintre replicări.

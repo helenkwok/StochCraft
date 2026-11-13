@@ -25,6 +25,7 @@
 	Abandoned on {id}	{id} पर छोड़कर गईं
 	About StochCraft	StochCraft के बारे में
 	About {app}	{app} के बारे में
+	Accent	एक्सेंट रंग
 	Across the range it changed by {change}: more than chance would explain.	पूरी सीमा में यह {change} बदला: संयोग जितना समझा सकता है उससे अधिक।
 	Across the range it changed by {change}: within what chance alone could do.	पूरी सीमा में यह {change} बदला: उतने में, जितना अकेला संयोग कर सकता है।
 	Actual size	वास्तविक आकार
@@ -47,6 +48,7 @@
 	Added pool {id}	पूल {id} जोड़ा गया
 	Added {block} ({id})	{block} ({id}) जोड़ा गया
 	Align	संरेखित करें
+	All text meets the contrast minimums.	सभी पाठ न्यूनतम कंट्रास्ट पूरा करते हैं।
 	Also: {rule}	साथ ही: {rule}
 	Alternative {n}	विकल्प {n}
 	Analysis	विश्लेषण
@@ -69,11 +71,13 @@
 	Binomial	द्विपद
 	Block	ब्लॉक
 	Boolean	बूलियन
+	Borders	किनारे
 	Bottoms	निचले किनारे
 	Breakdowns	खराबियाँ
 	Breakdowns and availability	खराबियाँ और उपलब्धता
 	Bring All to Front	सभी को सामने लाएँ
 	Built with	इनसे बनाया गया
+	Built-in themes are read-only. Duplicate one to change its colours.	अंतर्निहित थीम केवल पढ़ने के लिए हैं। रंग बदलने के लिए किसी एक की प्रतिलिपि बनाएँ।
 	Busiest	सबसे व्यस्त
 	By role	भूमिका के अनुसार
 	CSV table	CSV तालिका
@@ -83,6 +87,7 @@
 	Cancel	रद्द करें
 	Cancel Run	रन रद्द करें
 	Cancel run	रन रद्द करें
+	Canvas	मुख्य सतह
 	Capacity	क्षमता
 	Centres	क्षैतिज केंद्र
 	Change	परिवर्तन
@@ -93,6 +98,8 @@
 	Change the estimate	अनुमान बदलें
 	Changes	परिवर्तन
 	Changing the time unit does not convert the times already in the model.	समय की इकाई बदलने से मॉडल में पहले से मौजूद समय मान परिवर्तित नहीं होते।
+	Chart	चार्ट
+	Chart hover	पॉइंटर के नीचे चार्ट
 	Choose…	चुनें…
 	Clear Menu	मेनू साफ़ करें
 	Close	बंद करें
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	प्रत्येक इकाई इनमें से पहला ऐसा विकल्प लेती है जिसे अभी एक साथ पूरा किया जा सके, और बाहर निकलते समय संसाधन इकाइयाँ लौटा देती है।
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	प्रत्येक इकाई यहाँ अधिक से अधिक उतना समय प्रतीक्षा करती है जितना उसके आने पर उसके लिए यादृच्छिक रूप से चुना जाता है, फिर छोड़ देती है: वह "छोड़कर गईं" चिह्नित बाहर जाने का रास्ता लेती है, या मॉडल से बाहर निकल जाती है।
 	Edit	संपादित करें
+	Edit themes…	थीम संपादित करें…
 	Elasticity	लोच
 	Ends early	पहले समाप्त होता है
 	Energy	ऊर्जा
@@ -183,11 +191,14 @@
 	Gives up before service starts	सेवा शुरू होने से पहले छोड़ देती है
 	Goes to	यहाँ जाता है
 	Hands on finished parts while down	खराबी में भी तैयार पुर्जे आगे भेजता है
+	Header	शीर्ष पट्टी
 	Help	सहायता
 	Hide Others	अन्य छिपाएँ
 	Hide {app}	{app} छिपाएँ
+	High contrast	उच्च कंट्रास्ट
 	How many	कितने
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ग्राहक इन प्रस्थानों से कितने पुर्जे चाहते हैं; तब परिणाम टैक्ट (उपलब्ध समय को मांग से भाग देकर) और हर कार्य का चक्र समय दिखाते हैं।
+	In use	उपयोग में
 	Inside over time	समय के साथ अंदर
 	Jump	जाएँ
 	Jump to time	समय पर जाएँ
@@ -301,6 +312,7 @@
 	Quality ratio	गुणवत्ता अनुपात
 	Quit	बाहर निकलें
 	Quit {app}	{app} से बाहर निकलें
+	Raised surfaces	उभरी सतहें
 	Random	यादृच्छिक
 	Rank the parameters	पैरामीटर क्रमित करें
 	Ready	तैयार
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	यह ब्लॉक और इसके प्रवाह हटाएँ (Delete)
 	Remove this period	यह अवधि हटाएँ
 	Removed {id}	{id} हटाया गया
+	Rename	नाम बदलें
 	Rename Block	ब्लॉक का नाम बदलें
 	Rename Model	मॉडल का नाम बदलें
 	Repair time	मरम्मत समय
@@ -363,6 +376,7 @@
 	Save As…	इस रूप में सहेजें…
 	Save Model	मॉडल सहेजें
 	Save changes to {name}?	{name} में परिवर्तन सहेजें?
+	Save name	नाम सहेजें
 	Saved {file}	{file} सहेजी गई
 	Scale	पैमाना
 	Scrap	स्क्रैप
@@ -390,8 +404,10 @@
 	Share that gave up	छोड़ने वालों का अनुपात
 	Show All	सभी दिखाएँ
 	Show {id}	{id} दिखाएँ
+	Side rail	पार्श्व पट्टी
 	Size	आकार तय करें
 	Size the resources	संसाधनों का आकार तय करें
+	Soft accent	कोमल एक्सेंट रंग
 	Source	स्रोत
 	Source: {source}	स्रोत: {source}
 	Speed	गति
@@ -403,6 +419,7 @@
 	Stages (k)	चरण (k)
 	Standard deviation	मानक विचलन
 	Step	चरण
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft बंद होने पर {name} में कुछ बदलाव सहेजे नहीं गए थे। उन्हें बिना शीर्षक वाले मॉडल के रूप में पुनर्स्थापित करें या छोड़ दें।
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft, BPSim सिमुलेशन डेटा वाली BPMN या XPDL फ़ाइलों से प्रक्रिया मॉडल पढ़ता है, उनके कई पुनरावृत्ति प्रयोग चलाता है और प्रत्येक परिणाम के साथ उसका विश्वास अंतराल दिखाता है।
 	StochCraft {version} · model {digest}	StochCraft {version} · मॉडल {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	देखना बंद किया गया
 	Sun	रवि
 	Sweep a parameter	पैरामीटर स्वीप करें
+	Table stripes	तालिका की धारियाँ
 	Takt	टैक्ट
 	Takt time	टैक्ट समय
 	Tandem line	क्रमिक लाइन
@@ -422,6 +440,8 @@
 	Task with a resource	संसाधन वाला कार्य
 	Task with shared resources	साझा संसाधनों वाला कार्य
 	Text	पाठ
+	Text on accent	एक्सेंट रंग पर पाठ
+	Text on header	शीर्ष पट्टी पर पाठ
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	अंतराल {share} के लक्ष्य हिस्से से नीचे तक जाता है, इसलिए 95% विश्वास के साथ यह नहीं दिखता कि हिस्सा पूरा हुआ; अधिक पुनरावृत्तियाँ इसे संकरा करेंगी।
 	The last task with a resource it finished at	अंतिम संसाधन वाला कार्य जिससे पुर्जा गुज़रा
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	रुकने की शर्त तक का औसत समय केवल उन पुनरावृत्तियों पर है जिन्होंने शर्त पूरी की; बाकी अपनी समय सीमा तक चलीं।
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	मॉडल में अभी कोई कैलेंडर नहीं है।
 	The model now has the units sizing found	मॉडल में अब आकार निर्धारण से मिली इकाइयाँ हैं
 	The model: its experiment, connections and problems	मॉडल: प्रयोग, कनेक्शन और समस्याएँ
+	The name is empty or already used.	नाम खाली है या पहले से उपयोग में है।
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	हर मान के बराबर या उससे कम पुनरावृत्तियों का हिस्सा। पट्टी में वास्तविक वितरण {confidence} विश्वास के साथ है।
 	The values are numbers, separated by semicolons or spaces	मान अर्धविराम या रिक्त स्थान से अलग की गई संख्याएँ हैं
 	The whole clock	पूरा समय
+	Themes	थीम
 	This block has a warning	इस ब्लॉक में चेतावनी है
 	This block has an error	इस ब्लॉक में त्रुटि है
 	This run	यह रन
@@ -478,12 +500,15 @@
 	View	दृश्य
 	Waiting over time	समय के साथ प्रतीक्षारत
 	Waiting room	प्रतीक्षा कक्ष
+	Warm	गर्म
 	Warm-up	वार्म-अप
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} वार्म-अप, फिर {duration} {unit} का मापन
 	Warning	चेतावनी
 	Watch a Run	एक रन देखें
 	Watch a run	एक रन देखें
 	Watching replication 1	पुनरावृत्ति 1 देखी जा रही है
+	Weak text	मद्धम पाठ
+	Weak text on header	शीर्ष पट्टी पर मद्धम पाठ
 	Wed	बुध
 	Weekly	साप्ताहिक
 	Weibull	वीबुल
@@ -555,6 +580,7 @@
 	{n} waiting	{n} प्रतीक्षारत
 	{n} {unit} per second	{n} {unit} प्रति सेकंड
 	{property} (set to, mean)	{property} (सेट किया गया मान, माध्य)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – पृष्ठभूमि {background}: {ratio}:1, आवश्यक {min}:1
 	{title}: now {now}, at most {most}	{title}: अभी {now}, अधिकतम {most}
 	± 95% CI	± 95% विश्वास अंतराल
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± पुनरावृत्तियों में प्राप्त माध्य के 95% Student-t विश्वास अंतराल की आधी चौड़ाई है।

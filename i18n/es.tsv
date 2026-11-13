@@ -25,6 +25,7 @@
 	Abandoned on {id}	Abandonadas en {id}
 	About StochCraft	Acerca de StochCraft
 	About {app}	Acerca de {app}
+	Accent	Acento
 	Across the range it changed by {change}: more than chance would explain.	En el intervalo cambió en {change}: más de lo que explicaría el azar.
 	Across the range it changed by {change}: within what chance alone could do.	En el intervalo cambió en {change}: dentro de lo que podría causar el azar.
 	Actual size	Tamaño real
@@ -47,6 +48,7 @@
 	Added pool {id}	Se añadió el grupo {id}
 	Added {block} ({id})	Se añadió {block} ({id})
 	Align	Alinear
+	All text meets the contrast minimums.	Todo el texto cumple los contrastes mínimos.
 	Also: {rule}	Además: {rule}
 	Alternative {n}	Alternativa {n}
 	Analysis	Análisis
@@ -69,11 +71,13 @@
 	Binomial	Binomial
 	Block	Bloque
 	Boolean	Booleano
+	Borders	Bordes
 	Bottoms	Bordes inferiores
 	Breakdowns	Averías
 	Breakdowns and availability	Averías y disponibilidad
 	Bring All to Front	Traer todo al frente
 	Built with	Creado con
+	Built-in themes are read-only. Duplicate one to change its colours.	Los temas integrados son de solo lectura. Duplique uno para cambiar sus colores.
 	Busiest	Más ocupado
 	By role	Por rol
 	CSV table	Tabla CSV
@@ -83,6 +87,7 @@
 	Cancel	Cancelar
 	Cancel Run	Cancelar ejecución
 	Cancel run	Cancelar ejecución
+	Canvas	Superficie principal
 	Capacity	Capacidad
 	Centres	Centros horizontales
 	Change	Cambio
@@ -93,6 +98,8 @@
 	Change the estimate	Cambiar la estimación
 	Changes	Cambios
 	Changing the time unit does not convert the times already in the model.	Cambiar la unidad de tiempo no convierte los tiempos ya definidos en el modelo.
+	Chart	Gráfico
+	Chart hover	Gráfico bajo el puntero
 	Choose…	Elegir…
 	Clear Menu	Borrar menú
 	Close	Cerrar
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entidad toma, toda a la vez, la primera de estas alternativas que pueda cumplirse en ese momento y devuelve las unidades al salir.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Cada entidad espera aquí como máximo un tiempo que se le asigna al azar al llegar, y luego abandona: toma la salida marcada como «Abandonadas» o sale del modelo.
 	Edit	Edición
+	Edit themes…	Editar temas…
 	Elasticity	Elasticidad
 	Ends early	Termina antes
 	Energy	Energía
@@ -183,11 +191,14 @@
 	Gives up before service starts	Abandona antes de que empiece el servicio
 	Goes to	Va a
 	Hands on finished parts while down	Entrega las piezas terminadas durante la avería
+	Header	Cabecera
 	Help	Ayuda
 	Hide Others	Ocultar otros
 	Hide {app}	Ocultar {app}
+	High contrast	Alto contraste
 	How many	Cuántas
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Cuántas piezas quieren los clientes de estas salidas; los resultados muestran entonces el takt (el tiempo disponible dividido por la demanda) y el tiempo de ciclo de cada tarea.
+	In use	En uso
 	Inside over time	Dentro a lo largo del tiempo
 	Jump	Ir
 	Jump to time	Ir al instante
@@ -301,6 +312,7 @@
 	Quality ratio	Proporción de calidad
 	Quit	Salir
 	Quit {app}	Salir de {app}
+	Raised surfaces	Superficies elevadas
 	Random	Aleatorio
 	Rank the parameters	Ordenar los parámetros
 	Ready	Listo
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Eliminar este bloque y sus flujos (Delete)
 	Remove this period	Eliminar este periodo
 	Removed {id}	Se eliminó {id}
+	Rename	Cambiar nombre
 	Rename Block	Cambiar nombre del bloque
 	Rename Model	Cambiar nombre del modelo
 	Repair time	Tiempo de reparación
@@ -363,6 +376,7 @@
 	Save As…	Guardar como…
 	Save Model	Guardar modelo
 	Save changes to {name}?	¿Guardar los cambios en {name}?
+	Save name	Guardar nombre
 	Saved {file}	Se guardó {file}
 	Scale	Escala
 	Scrap	Desecho
@@ -390,8 +404,10 @@
 	Share that gave up	Proporción que abandonó
 	Show All	Mostrar todo
 	Show {id}	Mostrar {id}
+	Side rail	Barra lateral
 	Size	Dimensionar
 	Size the resources	Dimensionar los recursos
+	Soft accent	Acento suave
 	Source	Fuente
 	Source: {source}	Fuente: {source}
 	Speed	Velocidad
@@ -403,6 +419,7 @@
 	Stages (k)	Etapas (k)
 	Standard deviation	Desviación estándar
 	Step	Paso
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft se cerró con cambios sin guardar en {name}. Recupérelos como un modelo sin título o descártelos.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft lee modelos de procesos de archivos BPMN o XPDL con datos de simulación BPSim, los ejecuta como experimentos con réplicas y presenta cada resultado con su intervalo de confianza.
 	StochCraft {version} · model {digest}	StochCraft {version} · modelo {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Se dejó de observar
 	Sun	dom
 	Sweep a parameter	Barrer un parámetro
+	Table stripes	Franjas de tabla
 	Takt	Takt
 	Takt time	Takt time
 	Tandem line	Línea en tándem
@@ -422,6 +440,8 @@
 	Task with a resource	Tarea con recurso
 	Task with shared resources	Tarea con recursos compartidos
 	Text	Texto
+	Text on accent	Texto sobre acento
+	Text on header	Texto en la cabecera
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	El intervalo llega por debajo de la proporción objetivo del {share}, así que no se demuestra con un 95 % de confianza que se cumpla; más réplicas lo estrecharían.
 	The last task with a resource it finished at	La última tarea con recurso por la que pasó la pieza
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	El tiempo medio hasta la condición de parada es solo sobre las réplicas que la cumplieron; las demás llegaron a su límite de tiempo.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	El modelo aún no tiene calendarios.
 	The model now has the units sizing found	El modelo tiene ahora las unidades halladas al dimensionar
 	The model: its experiment, connections and problems	El modelo: experimento, conexiones y problemas
+	The name is empty or already used.	El nombre está vacío o ya se usa.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La proporción de réplicas iguales o inferiores a cada valor. La banda contiene la distribución real con una confianza del {confidence}.
 	The values are numbers, separated by semicolons or spaces	Los valores son números separados por punto y coma o espacios
 	The whole clock	Todo el tiempo
+	Themes	Temas
 	This block has a warning	Este bloque tiene una advertencia
 	This block has an error	Este bloque tiene un error
 	This run	Esta ejecución
@@ -478,12 +500,15 @@
 	View	Vista
 	Waiting over time	En espera a lo largo del tiempo
 	Waiting room	Sala de espera
+	Warm	Cálido
 	Warm-up	Calentamiento
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Calentamiento de {warmup} {unit}, seguido de {duration} {unit} medidos
 	Warning	Advertencia
 	Watch a Run	Observar una ejecución
 	Watch a run	Observar una ejecución
 	Watching replication 1	Observando la réplica 1
+	Weak text	Texto atenuado
+	Weak text on header	Texto atenuado en la cabecera
 	Wed	mié
 	Weekly	Cada semana
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} en espera
 	{n} {unit} per second	{n} {unit} por segundo
 	{property} (set to, mean)	{property} (valor definido, media)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} sobre {background}: {ratio}:1, necesita {min}:1
 	{title}: now {now}, at most {most}	{title}: ahora {now}, como máximo {most}
 	± 95% CI	± IC del 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± es la mitad de la amplitud de un intervalo de confianza Student-t del 95% de la media entre réplicas.

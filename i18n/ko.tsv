@@ -25,6 +25,7 @@
 	Abandoned on {id}	{id} 포기
 	About StochCraft	StochCraft 정보
 	About {app}	{app} 정보
+	Accent	강조색
 	Across the range it changed by {change}: more than chance would explain.	범위 전체에서 {change}만큼 바뀌었습니다. 우연으로는 설명되지 않는 크기입니다.
 	Across the range it changed by {change}: within what chance alone could do.	범위 전체에서 {change}만큼 바뀌었습니다. 우연만으로도 생길 수 있는 범위입니다.
 	Actual size	실제 크기
@@ -47,6 +48,7 @@
 	Added pool {id}	풀 {id} 추가됨
 	Added {block} ({id})	{block} ({id}) 추가됨
 	Align	정렬
+	All text meets the contrast minimums.	모든 텍스트가 최소 명도 대비를 충족합니다.
 	Also: {rule}	기타: {rule}
 	Alternative {n}	대안 {n}
 	Analysis	분석
@@ -69,11 +71,13 @@
 	Binomial	이항 분포
 	Block	블록
 	Boolean	불리언
+	Borders	테두리
 	Bottoms	아래쪽 가장자리
 	Breakdowns	고장
 	Breakdowns and availability	고장 및 가용 여부
 	Bring All to Front	모두 앞으로 가져오기
 	Built with	사용 기술
+	Built-in themes are read-only. Duplicate one to change its colours.	기본 제공 테마는 읽기 전용입니다. 색을 바꾸려면 하나를 복제하세요.
 	Busiest	가장 바쁨
 	By role	역할별
 	CSV table	CSV 표
@@ -83,6 +87,7 @@
 	Cancel	취소
 	Cancel Run	실행 취소
 	Cancel run	실행 취소
+	Canvas	캔버스
 	Capacity	처리 용량
 	Centres	가로 가운데
 	Change	변화
@@ -93,6 +98,8 @@
 	Change the estimate	추정 변경
 	Changes	변경 사항
 	Changing the time unit does not convert the times already in the model.	시간 단위를 변경해도 모델에 이미 입력된 시간은 변환되지 않습니다.
+	Chart	차트
+	Chart hover	포인터 아래 차트
 	Choose…	선택…
 	Clear Menu	메뉴 지우기
 	Close	닫기
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	각 엔터티는 이 중 지금 한꺼번에 모두 충족할 수 있는 첫 번째 항목을 가져가고, 떠날 때 자원 단위를 반환합니다.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	각 엔터티는 도착할 때 무작위로 정해진 시간까지만 여기서 기다린 뒤 포기합니다. '포기'로 표시된 나갈 경로로 가거나 모델을 떠납니다.
 	Edit	편집
+	Edit themes…	테마 편집…
 	Elasticity	탄력성
 	Ends early	일찍 끝남
 	Energy	에너지
@@ -183,11 +191,14 @@
 	Gives up before service starts	서비스 시작 전에 포기
 	Goes to	도착 블록
 	Hands on finished parts while down	고장 중에도 완료된 부품 전달
+	Header	헤더
 	Help	도움말
 	Hide Others	다른 항목 숨기기
 	Hide {app}	{app} 숨기기
+	High contrast	고대비
 	How many	개수
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	고객이 이 이탈에서 원하는 부품 수입니다. 그러면 결과에 택트(가용 시간을 수요로 나눈 값)와 각 작업의 사이클 타임이 표시됩니다.
+	In use	사용 중
 	Inside over time	시간에 따른 내부 수
 	Jump	이동
 	Jump to time	이동할 시간
@@ -301,6 +312,7 @@
 	Quality ratio	양품률
 	Quit	종료
 	Quit {app}	{app} 종료
+	Raised surfaces	떠 있는 면
 	Random	무작위
 	Rank the parameters	매개변수 순위 매기기
 	Ready	준비됨
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	이 블록과 흐름 제거 (Delete)
 	Remove this period	이 기간 제거
 	Removed {id}	{id} 제거됨
+	Rename	이름 변경
 	Rename Block	블록 이름 변경
 	Rename Model	모델 이름 변경
 	Repair time	수리 시간
@@ -363,6 +376,7 @@
 	Save As…	다른 이름으로 저장…
 	Save Model	모델 저장
 	Save changes to {name}?	{name}의 변경 사항을 저장할까요?
+	Save name	이름 저장
 	Saved {file}	{file} 저장됨
 	Scale	척도
 	Scrap	폐기
@@ -390,8 +404,10 @@
 	Share that gave up	포기 비율
 	Show All	모두 표시
 	Show {id}	{id} 표시
+	Side rail	사이드바
 	Size	크기 정하기
 	Size the resources	자원 크기 정하기
+	Soft accent	연한 강조색
 	Source	출처
 	Source: {source}	출처: {source}
 	Speed	속도
@@ -403,6 +419,7 @@
 	Stages (k)	단계 수 (k)
 	Standard deviation	표준 편차
 	Step	단계
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft가 {name}의 변경 사항을 저장하지 않은 채 종료되었습니다. 변경 사항을 제목 없는 모델로 복구하거나 버리세요.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft는 BPSim 시뮬레이션 데이터가 포함된 BPMN 또는 XPDL 파일에서 프로세스 모델을 읽고, 반복 실험으로 실행한 뒤 각 결과를 신뢰 구간과 함께 보고합니다.
 	StochCraft {version} · model {digest}	StochCraft {version} · 모델 {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	관찰을 중지함
 	Sun	일
 	Sweep a parameter	매개변수 스윕
+	Table stripes	표 줄무늬
 	Takt	택트 타임
 	Takt time	택트 타임
 	Tandem line	직렬 라인
@@ -422,6 +440,8 @@
 	Task with a resource	자원을 사용하는 작업
 	Task with shared resources	공유 자원을 사용하는 작업
 	Text	텍스트
+	Text on accent	강조색 위 텍스트
+	Text on header	헤더의 텍스트
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	구간이 목표 비율 {share}보다 아래까지 내려가므로, 비율 충족이 95% 신뢰도로 확인되지 않았습니다. 반복 실행을 늘리면 구간이 좁아집니다.
 	The last task with a resource it finished at	부품이 마지막으로 거친 자원을 사용하는 작업
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	중지 조건까지의 평균 시간은 중지 조건에 도달한 반복 실행만으로 계산됩니다. 나머지는 시간 제한까지 실행되었습니다.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	모델에 아직 캘린더가 없습니다.
 	The model now has the units sizing found	이제 모델에 크기 정하기로 찾은 수량이 들어 있습니다
 	The model: its experiment, connections and problems	모델: 실험, 연결 및 문제
+	The name is empty or already used.	이름이 비어 있거나 이미 사용 중입니다.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	각 값 이하인 반복 실행의 비율입니다. 띠는 {confidence} 신뢰도로 실제 분포를 포함합니다.
 	The values are numbers, separated by semicolons or spaces	값은 세미콜론이나 공백으로 구분한 숫자입니다
 	The whole clock	전체 시간
+	Themes	테마
 	This block has a warning	이 블록에 경고가 있습니다
 	This block has an error	이 블록에 오류가 있습니다
 	This run	이 실행
@@ -478,12 +500,15 @@
 	View	보기
 	Waiting over time	시간에 따른 대기 수
 	Waiting room	대기실
+	Warm	따뜻한 색
 	Warm-up	준비 기간
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} 준비 후 {duration} {unit} 측정
 	Warning	경고
 	Watch a Run	실행 관찰
 	Watch a run	실행 관찰
 	Watching replication 1	반복 실행 1 관찰 중
+	Weak text	흐린 텍스트
+	Weak text on header	헤더의 흐린 텍스트
 	Wed	수
 	Weekly	매주
 	Weibull	와이블 분포
@@ -555,6 +580,7 @@
 	{n} waiting	대기 {n}
 	{n} {unit} per second	초당 {n} {unit}
 	{property} (set to, mean)	{property}(설정값, 평균)
+	{text} on {background}: {ratio}:1, needs {min}:1	{background} 위 {text}: {ratio}:1, 최소 {min}:1 필요
 	{title}: now {now}, at most {most}	{title}: 현재 {now}, 최대 {most}
 	± 95% CI	± 95% 신뢰 구간
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	±는 반복 실험의 평균에 대한 95% Student-t 신뢰 구간 너비의 절반입니다.

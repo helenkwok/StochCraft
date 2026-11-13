@@ -25,6 +25,7 @@
 	Abandoned on {id}	Lemondtak itt: {id}
 	About StochCraft	A StochCraft névjegye
 	About {app}	{app} névjegye
+	Accent	Kiemelőszín
 	Across the range it changed by {change}: more than chance would explain.	A tartományban {change} értékkel változott: többel, mint amit a véletlen megmagyarázna.
 	Across the range it changed by {change}: within what chance alone could do.	A tartományban {change} értékkel változott: azon belül, amit a véletlen egymaga okozhat.
 	Actual size	Tényleges méret
@@ -47,6 +48,7 @@
 	Added pool {id}	{id} készlet hozzáadva
 	Added {block} ({id})	{block} ({id}) hozzáadva
 	Align	Igazítás
+	All text meets the contrast minimums.	Minden szöveg eléri a minimális kontrasztot.
 	Also: {rule}	Továbbá: {rule}
 	Alternative {n}	{n}. alternatíva
 	Analysis	Elemzés
@@ -69,11 +71,13 @@
 	Binomial	Binomiális
 	Block	Blokk
 	Boolean	Logikai
+	Borders	Szegélyek
 	Bottoms	Alsó élek
 	Breakdowns	Meghibásodások
 	Breakdowns and availability	Meghibásodások és rendelkezésre állás
 	Bring All to Front	Az összes előtérbe hozása
 	Built with	Készült ezekkel
+	Built-in themes are read-only. Duplicate one to change its colours.	A beépített témák csak olvashatók. Színeik módosításához kettőzzön meg egyet.
 	Busiest	Legterheltebb
 	By role	Szerepkör szerint
 	CSV table	CSV-táblázat
@@ -83,6 +87,7 @@
 	Cancel	Mégse
 	Cancel Run	Futtatás megszakítása
 	Cancel run	Futtatás megszakítása
+	Canvas	Fő felület
 	Capacity	Kapacitás
 	Centres	Vízszintes középpontok
 	Change	Változtatás
@@ -93,6 +98,8 @@
 	Change the estimate	Becslés módosítása
 	Changes	Módosítások
 	Changing the time unit does not convert the times already in the model.	Az időegység módosítása nem váltja át a modellben már meglévő időértékeket.
+	Chart	Diagram
+	Chart hover	Diagram a mutató alatt
 	Choose…	Válasszon…
 	Clear Menu	Menü törlése
 	Close	Bezárás
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Minden entitás ezek közül az elsőt veszi, amely most teljesíthető, egyszerre az egészet, és távozáskor visszaadja az egységeket.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Minden entitás legfeljebb annyi ideig vár itt, amennyit érkezésekor véletlenszerűen sorsolnak neki, aztán lemond: a „Lemondtak” jelölésű kiutat választja, vagy elhagyja a modellt.
 	Edit	Szerkesztés
+	Edit themes…	Témák szerkesztése…
 	Elasticity	Rugalmasság
 	Ends early	Korábban ér véget
 	Energy	Energia
@@ -183,11 +191,14 @@
 	Gives up before service starts	A kiszolgálás kezdete előtt lemond
 	Goes to	Ide vezet
 	Hands on finished parts while down	Meghibásodott állapotban is továbbadja a kész darabokat
+	Header	Fejléc
 	Help	Súgó
 	Hide Others	Többi elrejtése
 	Hide {app}	{app} elrejtése
+	High contrast	Nagy kontraszt
 	How many	Hány
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hány darabot kérnek a vevők ezekből a távozásokból; az eredmények ekkor mutatják az ütemet (a rendelkezésre álló idő osztva az igénnyel) és minden feladat ciklusidejét.
+	In use	Használatban
 	Inside over time	Bent lévők az idő függvényében
 	Jump	Ugrás
 	Jump to time	Ugrás időpontra
@@ -301,6 +312,7 @@
 	Quality ratio	Minőségi arány
 	Quit	Kilépés
 	Quit {app}	Kilépés: {app}
+	Raised surfaces	Emelt felületek
 	Random	Véletlenszerű
 	Rank the parameters	Paraméterek rangsorolása
 	Ready	Kész
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	E blokk és folyamatainak eltávolítása (Delete)
 	Remove this period	Időszak eltávolítása
 	Removed {id}	{id} eltávolítva
+	Rename	Átnevezés
 	Rename Block	Blokk átnevezése
 	Rename Model	Modell átnevezése
 	Repair time	Javítási idő
@@ -363,6 +376,7 @@
 	Save As…	Mentés másként…
 	Save Model	Modell mentése
 	Save changes to {name}?	Menti a(z) {name} módosításait?
+	Save name	Név mentése
 	Saved {file}	{file} mentve
 	Scale	Skála
 	Scrap	Selejt
@@ -390,8 +404,10 @@
 	Share that gave up	Lemondók aránya
 	Show All	Összes megjelenítése
 	Show {id}	{id} megjelenítése
+	Side rail	Oldalsáv
 	Size	Méretezés
 	Size the resources	Erőforrások méretezése
+	Soft accent	Lágy kiemelőszín
 	Source	Forrás
 	Source: {source}	Forrás: {source}
 	Speed	Sebesség
@@ -403,6 +419,7 @@
 	Stages (k)	Szakaszok (k)
 	Standard deviation	Szórás
 	Step	Lépés
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	A StochCraft úgy zárult be, hogy a(z) {name} nem mentett módosításokat tartalmazott. Állítsa vissza őket névtelen modellként, vagy vesse el őket.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	A StochCraft BPSim-szimulációs adatokat tartalmazó BPMN- vagy XPDL-fájlokból olvassa be a folyamatmodelleket, ismételt kísérletekben futtatja őket, és minden eredményt a konfidenciaintervallumával együtt jelenít meg.
 	StochCraft {version} · model {digest}	StochCraft {version} · modell {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	A követés leállt
 	Sun	V
 	Sweep a parameter	Paraméter végigfuttatása
+	Table stripes	Táblázatcsíkok
 	Takt	Ütem
 	Takt time	Ütemidő
 	Tandem line	Tandemvonal
@@ -422,6 +440,8 @@
 	Task with a resource	Erőforrást használó feladat
 	Task with shared resources	Megosztott erőforrásokat használó feladat
 	Text	Szöveg
+	Text on accent	Szöveg a kiemelőszínen
+	Text on header	Szöveg a fejlécen
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Az intervallum a(z) {share} célarány alá nyúlik, így 95%-os megbízhatósággal nem igazolt, hogy az arány teljesül; több ismétlés szűkítené.
 	The last task with a resource it finished at	Az utolsó erőforrást használó feladat, amelyen a darab áthaladt
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	A leállási feltételig eltelt átlagos idő csak azokra az ismétlésekre vonatkozik, amelyek elérték; a többi az időkorlátjáig futott.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	A modellnek még nincs naptára.
 	The model now has the units sizing found	A modellben most a méretezés által talált egységek vannak
 	The model: its experiment, connections and problems	A modell: kísérlet, kapcsolatok és problémák
+	The name is empty or already used.	A név üres vagy már foglalt.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Az egyes értékeknél nem nagyobb ismétlések aránya. A sáv {confidence} megbízhatósággal tartalmazza a valódi eloszlást.
 	The values are numbers, separated by semicolons or spaces	Az értékek pontosvesszővel vagy szóközzel elválasztott számok
 	The whole clock	A teljes idő
+	Themes	Témák
 	This block has a warning	Ez a blokk figyelmeztetést tartalmaz
 	This block has an error	Ez a blokk hibát tartalmaz
 	This run	Ez a futtatás
@@ -478,12 +500,15 @@
 	View	Nézet
 	Waiting over time	Várakozók az idő függvényében
 	Waiting room	Várakozóhely
+	Warm	Meleg
 	Warm-up	Bemelegítés
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Bemelegítés {warmup} {unit}, majd mérés {duration} {unit} ideig
 	Warning	Figyelmeztetés
 	Watch a Run	Futtatás követése
 	Watch a run	Futtatás követése
 	Watching replication 1	Az 1. ismétlés követése
+	Weak text	Halvány szöveg
+	Weak text on header	Halvány szöveg a fejlécen
 	Wed	Sze
 	Weekly	Hetente
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} várakozik
 	{n} {unit} per second	{n} {unit} másodpercenként
 	{property} (set to, mean)	{property} (beállított érték, átlag)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – {background} háttér: {ratio}:1, legalább {min}:1 kell
 	{title}: now {now}, at most {most}	{title}: most {now}, legfeljebb {most}
 	± 95% CI	± 95%-os konfidenciaintervallum
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	A ± az ismétlések átlagára számított 95%-os Student-t-konfidenciaintervallum fél szélessége.

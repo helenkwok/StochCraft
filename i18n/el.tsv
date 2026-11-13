@@ -25,6 +25,7 @@
 	Abandoned on {id}	Εγκατάλειψη στο {id}
 	About StochCraft	Σχετικά με το StochCraft
 	About {app}	Σχετικά με το {app}
+	Accent	Χρώμα έμφασης
 	Across the range it changed by {change}: more than chance would explain.	Σε όλο το εύρος άλλαξε κατά {change}: περισσότερο απ' όσο θα εξηγούσε η τύχη.
 	Across the range it changed by {change}: within what chance alone could do.	Σε όλο το εύρος άλλαξε κατά {change}: εντός όσων μπορεί να κάνει μόνη της η τύχη.
 	Actual size	Πραγματικό μέγεθος
@@ -47,6 +48,7 @@
 	Added pool {id}	Προστέθηκε η δεξαμενή {id}
 	Added {block} ({id})	Προστέθηκε το {block} ({id})
 	Align	Στοίχιση
+	All text meets the contrast minimums.	Όλο το κείμενο πληροί την ελάχιστη αντίθεση.
 	Also: {rule}	Επίσης: {rule}
 	Alternative {n}	Εναλλακτική {n}
 	Analysis	Ανάλυση
@@ -69,11 +71,13 @@
 	Binomial	Διωνυμική
 	Block	Μπλοκ
 	Boolean	Λογική τιμή
+	Borders	Περιγράμματα
 	Bottoms	Κάτω άκρα
 	Breakdowns	Βλάβες
 	Breakdowns and availability	Βλάβες και διαθεσιμότητα
 	Bring All to Front	Μεταφορά όλων μπροστά
 	Built with	Δημιουργήθηκε με
+	Built-in themes are read-only. Duplicate one to change its colours.	Τα ενσωματωμένα θέματα είναι μόνο για ανάγνωση. Δημιουργήστε διπλότυπο ενός για να αλλάξετε τα χρώματά του.
 	Busiest	Πιο φορτωμένο
 	By role	Κατά ρόλο
 	CSV table	Πίνακας CSV
@@ -83,6 +87,7 @@
 	Cancel	Ακύρωση
 	Cancel Run	Ακύρωση εκτέλεσης
 	Cancel run	Ακύρωση εκτέλεσης
+	Canvas	Κύρια επιφάνεια
 	Capacity	Χωρητικότητα
 	Centres	Οριζόντια κέντρα
 	Change	Μεταβολή
@@ -93,6 +98,8 @@
 	Change the estimate	Αλλαγή εκτίμησης
 	Changes	Αλλαγές
 	Changing the time unit does not convert the times already in the model.	Η αλλαγή της μονάδας χρόνου δεν μετατρέπει τους χρόνους που υπάρχουν ήδη στο μοντέλο.
+	Chart	Γράφημα
+	Chart hover	Γράφημα κάτω από τον δείκτη
 	Choose…	Επιλογή…
 	Clear Menu	Εκκαθάριση μενού
 	Close	Κλείσιμο
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Κάθε οντότητα παίρνει την πρώτη από αυτές που μπορεί να ικανοποιηθεί τώρα, ολόκληρη μονομιάς, και επιστρέφει τις μονάδες όταν φεύγει από την εργασία.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Κάθε οντότητα περιμένει εδώ το πολύ έναν χρόνο που κληρώνεται γι' αυτήν κατά την άφιξή της και μετά εγκαταλείπει: παίρνει την έξοδο με την ένδειξη «Εγκατάλειψη» ή φεύγει από το μοντέλο.
 	Edit	Επεξεργασία
+	Edit themes…	Επεξεργασία θεμάτων…
 	Elasticity	Ελαστικότητα
 	Ends early	Τελειώνει νωρίτερα
 	Energy	Ενέργεια
@@ -183,11 +191,14 @@
 	Gives up before service starts	Εγκαταλείπει πριν αρχίσει η εξυπηρέτηση
 	Goes to	Οδηγεί σε
 	Hands on finished parts while down	Παραδίδει τα έτοιμα τεμάχια και σε βλάβη
+	Header	Κεφαλίδα
 	Help	Βοήθεια
 	Hide Others	Απόκρυψη άλλων
 	Hide {app}	Απόκρυψη {app}
+	High contrast	Υψηλή αντίθεση
 	How many	Πόσα
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Πόσα τεμάχια θέλουν οι πελάτες από αυτές τις αναχωρήσεις· τότε τα αποτελέσματα δείχνουν το takt (τον διαθέσιμο χρόνο διά τη ζήτηση) και τον χρόνο κύκλου κάθε εργασίας.
+	In use	Σε χρήση
 	Inside over time	Μέσα στη διάρκεια του χρόνου
 	Jump	Μετάβαση
 	Jump to time	Μετάβαση σε χρόνο
@@ -301,6 +312,7 @@
 	Quality ratio	Ποσοστό ποιότητας
 	Quit	Έξοδος
 	Quit {app}	Έξοδος από το {app}
+	Raised surfaces	Υπερυψωμένες επιφάνειες
 	Random	Τυχαία
 	Rank the parameters	Κατάταξη παραμέτρων
 	Ready	Έτοιμο
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Αφαίρεση αυτού του μπλοκ και των ροών του (Delete)
 	Remove this period	Αφαίρεση αυτής της περιόδου
 	Removed {id}	Αφαιρέθηκε το {id}
+	Rename	Μετονομασία
 	Rename Block	Μετονομασία μπλοκ
 	Rename Model	Μετονομασία μοντέλου
 	Repair time	Χρόνος επισκευής
@@ -363,6 +376,7 @@
 	Save As…	Αποθήκευση ως…
 	Save Model	Αποθήκευση μοντέλου
 	Save changes to {name}?	Αποθήκευση αλλαγών στο {name};
+	Save name	Αποθήκευση ονόματος
 	Saved {file}	Αποθηκεύτηκε το {file}
 	Scale	Κλίμακα
 	Scrap	Σκάρτα
@@ -390,8 +404,10 @@
 	Share that gave up	Ποσοστό που εγκατέλειψε
 	Show All	Εμφάνιση όλων
 	Show {id}	Εμφάνιση {id}
+	Side rail	Πλευρική μπάρα
 	Size	Διαστασιολόγηση
 	Size the resources	Διαστασιολόγηση πόρων
+	Soft accent	Απαλό χρώμα έμφασης
 	Source	Πηγή
 	Source: {source}	Πηγή: {source}
 	Speed	Ταχύτητα
@@ -403,6 +419,7 @@
 	Stages (k)	Στάδια (k)
 	Standard deviation	Τυπική απόκλιση
 	Step	Βήμα
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	Το StochCraft έκλεισε με μη αποθηκευμένες αλλαγές στο {name}. Ανακτήστε τις ως μοντέλο χωρίς τίτλο ή απορρίψτε τις.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	Το StochCraft διαβάζει μοντέλα διαδικασιών από αρχεία BPMN ή XPDL με δεδομένα προσομοίωσης BPSim, τα εκτελεί ως πειράματα με επαναλήψεις και παρουσιάζει κάθε αποτέλεσμα μαζί με το διάστημα εμπιστοσύνης του.
 	StochCraft {version} · model {digest}	StochCraft {version} · μοντέλο {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Η παρακολούθηση διακόπηκε
 	Sun	Κυρ
 	Sweep a parameter	Σάρωση παραμέτρου
+	Table stripes	Ρίγες πινάκων
 	Takt	Takt
 	Takt time	Χρόνος takt
 	Tandem line	Διαδοχική γραμμή
@@ -422,6 +440,8 @@
 	Task with a resource	Εργασία με πόρο
 	Task with shared resources	Εργασία με κοινόχρηστους πόρους
 	Text	Κείμενο
+	Text on accent	Κείμενο σε χρώμα έμφασης
+	Text on header	Κείμενο στην κεφαλίδα
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Το διάστημα φτάνει κάτω από το ποσοστό-στόχο {share}, άρα δεν φαίνεται με εμπιστοσύνη 95% ότι το ποσοστό επιτυγχάνεται· περισσότερες επαναλήψεις θα το στένευαν.
 	The last task with a resource it finished at	Η τελευταία εργασία με πόρο από την οποία πέρασε το τεμάχιο
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Ο μέσος χρόνος ως τη συνθήκη διακοπής αφορά μόνο τις επαναλήψεις που την έφτασαν· οι υπόλοιπες διήρκεσαν ως το χρονικό τους όριο.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Το μοντέλο δεν έχει ακόμη ημερολόγια.
 	The model now has the units sizing found	Το μοντέλο έχει πλέον τις μονάδες που βρήκε η διαστασιολόγηση
 	The model: its experiment, connections and problems	Το μοντέλο: πείραμα, συνδέσεις και προβλήματα
+	The name is empty or already used.	Το όνομα είναι κενό ή χρησιμοποιείται ήδη.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Το ποσοστό των επαναλήψεων έως και κάθε τιμή. Η ζώνη περιέχει την πραγματική κατανομή με εμπιστοσύνη {confidence}.
 	The values are numbers, separated by semicolons or spaces	Οι τιμές είναι αριθμοί που χωρίζονται με ερωτηματικά ή κενά
 	The whole clock	Όλος ο χρόνος
+	Themes	Θέματα
 	This block has a warning	Αυτό το μπλοκ έχει προειδοποίηση
 	This block has an error	Αυτό το μπλοκ έχει σφάλμα
 	This run	Αυτή η εκτέλεση
@@ -478,12 +500,15 @@
 	View	Προβολή
 	Waiting over time	Σε αναμονή στη διάρκεια του χρόνου
 	Waiting room	Χώρος αναμονής
+	Warm	Ζεστό
 	Warm-up	Προθέρμανση
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Προθέρμανση {warmup} {unit}, έπειτα μέτρηση {duration} {unit}
 	Warning	Προειδοποίηση
 	Watch a Run	Παρακολούθηση εκτέλεσης
 	Watch a run	Παρακολούθηση εκτέλεσης
 	Watching replication 1	Παρακολούθηση της επανάληψης 1
+	Weak text	Αχνό κείμενο
+	Weak text on header	Αχνό κείμενο στην κεφαλίδα
 	Wed	Τετ
 	Weekly	Εβδομαδιαία
 	Weibull	Βάιμπουλ
@@ -555,6 +580,7 @@
 	{n} waiting	{n} σε αναμονή
 	{n} {unit} per second	{n} {unit} ανά δευτερόλεπτο
 	{property} (set to, mean)	{property} (καθορισμένη τιμή, μέση τιμή)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – φόντο «{background}»: {ratio}:1, απαιτείται {min}:1
 	{title}: now {now}, at most {most}	{title}: τώρα {now}, το πολύ {most}
 	± 95% CI	± 95% ΔΕ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	Το ± είναι το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t 95% για τη μέση τιμή μεταξύ των επαναλήψεων.

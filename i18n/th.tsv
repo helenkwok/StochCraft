@@ -25,6 +25,7 @@
 	Abandoned on {id}	เลิกรอที่ {id}
 	About StochCraft	เกี่ยวกับ StochCraft
 	About {app}	เกี่ยวกับ {app}
+	Accent	สีเน้น
 	Across the range it changed by {change}: more than chance would explain.	ตลอดช่วงเปลี่ยนไป {change}: มากกว่าที่ความบังเอิญจะอธิบายได้
 	Across the range it changed by {change}: within what chance alone could do.	ตลอดช่วงเปลี่ยนไป {change}: อยู่ในขอบเขตที่ความบังเอิญอย่างเดียวก็ทำได้
 	Actual size	ขนาดจริง
@@ -47,6 +48,7 @@
 	Added pool {id}	เพิ่มกลุ่มทรัพยากร {id} แล้ว
 	Added {block} ({id})	เพิ่ม {block} ({id}) แล้ว
 	Align	จัดแนว
+	All text meets the contrast minimums.	ข้อความทั้งหมดผ่านเกณฑ์ความเปรียบต่างขั้นต่ำ
 	Also: {rule}	เพิ่มเติม: {rule}
 	Alternative {n}	ทางเลือก {n}
 	Analysis	การวิเคราะห์
@@ -69,11 +71,13 @@
 	Binomial	ทวินาม
 	Block	บล็อก
 	Boolean	บูลีน
+	Borders	เส้นขอบ
 	Bottoms	ขอบล่าง
 	Breakdowns	การขัดข้อง
 	Breakdowns and availability	การขัดข้องและความพร้อมใช้งาน
 	Bring All to Front	นำทั้งหมดมาไว้ด้านหน้า
 	Built with	พัฒนาด้วย
+	Built-in themes are read-only. Duplicate one to change its colours.	ธีมในตัวเป็นแบบอ่านอย่างเดียว ทำสำเนาธีมหนึ่งเพื่อเปลี่ยนสี
 	Busiest	ยุ่งที่สุด
 	By role	ตามบทบาท
 	CSV table	ตาราง CSV
@@ -83,6 +87,7 @@
 	Cancel	ยกเลิก
 	Cancel Run	ยกเลิกการรัน
 	Cancel run	ยกเลิกการรัน
+	Canvas	พื้นผิวหลัก
 	Capacity	ความจุ
 	Centres	กึ่งกลางแนวนอน
 	Change	การเปลี่ยนแปลง
@@ -93,6 +98,8 @@
 	Change the estimate	เปลี่ยนการประมาณ
 	Changes	การเปลี่ยนแปลง
 	Changing the time unit does not convert the times already in the model.	การเปลี่ยนหน่วยเวลาไม่แปลงค่าเวลาที่มีอยู่ในแบบจำลอง
+	Chart	แผนภูมิ
+	Chart hover	แผนภูมิเมื่อชี้
 	Choose…	เลือก…
 	Clear Menu	ล้างเมนู
 	Close	ปิด
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	แต่ละเอนทิตีจะใช้ทางเลือกแรกที่จัดหาให้ได้ครบทั้งหมดพร้อมกันในทันที และคืนหน่วยเหล่านั้นเมื่อออกไป
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	แต่ละเอนทิตีจะรอที่นี่ไม่เกินเวลาที่สุ่มให้เมื่อมาถึง แล้วจึงเลิกรอ: เอนทิตีจะไปทางออกที่ทำเครื่องหมายว่า "เลิกรอ" หรือออกจากแบบจำลอง
 	Edit	แก้ไข
+	Edit themes…	แก้ไขธีม…
 	Elasticity	ความยืดหยุ่น
 	Ends early	จบก่อนกำหนด
 	Energy	พลังงาน
@@ -183,11 +191,14 @@
 	Gives up before service starts	เลิกรอก่อนเริ่มให้บริการ
 	Goes to	ไปยัง
 	Hands on finished parts while down	ส่งต่อชิ้นงานที่เสร็จแล้วแม้ขณะขัดข้อง
+	Header	แถบส่วนหัว
 	Help	วิธีใช้
 	Hide Others	ซ่อนรายการอื่น
 	Hide {app}	ซ่อน {app}
+	High contrast	ความเปรียบต่างสูง
 	How many	จำนวน
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ลูกค้าต้องการชิ้นงานกี่ชิ้นจากขาออกเหล่านี้ จากนั้นผลลัพธ์จะแสดงแท็กไทม์ (เวลาที่มีหารด้วยความต้องการ) และไซเคิลไทม์ของแต่ละงาน
+	In use	กำลังใช้
 	Inside over time	จำนวนภายในตามเวลา
 	Jump	ข้าม
 	Jump to time	ข้ามไปยังเวลา
@@ -301,6 +312,7 @@
 	Quality ratio	สัดส่วนคุณภาพ
 	Quit	ออกจากโปรแกรม
 	Quit {app}	ออกจาก {app}
+	Raised surfaces	พื้นผิวยกระดับ
 	Random	สุ่ม
 	Rank the parameters	จัดอันดับพารามิเตอร์
 	Ready	พร้อม
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	นำบล็อกนี้และโฟลว์ที่เกี่ยวข้องออก (Delete)
 	Remove this period	นำช่วงนี้ออก
 	Removed {id}	นำ {id} ออกแล้ว
+	Rename	เปลี่ยนชื่อ
 	Rename Block	เปลี่ยนชื่อบล็อก
 	Rename Model	เปลี่ยนชื่อแบบจำลอง
 	Repair time	เวลาซ่อม
@@ -363,6 +376,7 @@
 	Save As…	บันทึกเป็น…
 	Save Model	บันทึกแบบจำลอง
 	Save changes to {name}?	บันทึกการเปลี่ยนแปลงใน {name} หรือไม่?
+	Save name	บันทึกชื่อ
 	Saved {file}	บันทึก {file} แล้ว
 	Scale	มาตราส่วน
 	Scrap	ของเสีย
@@ -390,8 +404,10 @@
 	Share that gave up	สัดส่วนที่เลิกรอ
 	Show All	แสดงทั้งหมด
 	Show {id}	แสดง {id}
+	Side rail	แถบด้านข้าง
 	Size	กำหนดขนาด
 	Size the resources	กำหนดขนาดทรัพยากร
+	Soft accent	สีเน้นอ่อน
 	Source	แหล่งที่มา
 	Source: {source}	แหล่งที่มา: {source}
 	Speed	ความเร็ว
@@ -403,6 +419,7 @@
 	Stages (k)	จำนวนขั้น (k)
 	Standard deviation	ส่วนเบี่ยงเบนมาตรฐาน
 	Step	ทีละขั้น
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft ปิดลงโดยยังมีการเปลี่ยนแปลงใน {name} ที่ไม่ได้บันทึก กู้คืนการเปลี่ยนแปลงเป็นโมเดลที่ไม่มีชื่อ หรือทิ้งการเปลี่ยนแปลงเหล่านั้น
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft อ่านโมเดลกระบวนการจากไฟล์ BPMN หรือ XPDL ที่มีข้อมูลการจำลอง BPSim นำไปรันเป็นการทดลองแบบทำซ้ำหลายครั้ง และรายงานผลแต่ละรายการพร้อมช่วงความเชื่อมั่น
 	StochCraft {version} · model {digest}	StochCraft {version} · แบบจำลอง {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	หยุดเฝ้าดูแล้ว
 	Sun	อา.
 	Sweep a parameter	กวาดพารามิเตอร์
+	Table stripes	แถบสลับสีของตาราง
 	Takt	แท็กไทม์
 	Takt time	แท็กไทม์
 	Tandem line	สายงานต่อเนื่อง
@@ -422,6 +440,8 @@
 	Task with a resource	งานที่ใช้ทรัพยากร
 	Task with shared resources	งานที่ใช้ทรัพยากรร่วมกัน
 	Text	ข้อความ
+	Text on accent	ข้อความบนสีเน้น
+	Text on header	ข้อความบนแถบส่วนหัว
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ช่วงนี้ลงต่ำกว่าสัดส่วนเป้าหมาย {share} จึงยังไม่แสดงด้วยความเชื่อมั่น 95% ว่าบรรลุสัดส่วนนั้น รอบการจำลองซ้ำที่มากขึ้นจะทำให้ช่วงแคบลง
 	The last task with a resource it finished at	งานที่ใช้ทรัพยากรงานสุดท้ายที่ชิ้นงานผ่าน
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	เวลาเฉลี่ยจนถึงเงื่อนไขหยุดคิดเฉพาะรอบการจำลองซ้ำที่ถึงเงื่อนไข รอบอื่นรันจนถึงขีดจำกัดเวลา
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	แบบจำลองยังไม่มีปฏิทิน
 	The model now has the units sizing found	ตอนนี้แบบจำลองมีจำนวนหน่วยที่การกำหนดขนาดพบแล้ว
 	The model: its experiment, connections and problems	แบบจำลอง: การทดลอง การเชื่อมต่อ และปัญหา
+	The name is empty or already used.	ชื่อว่างหรือถูกใช้แล้ว
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	สัดส่วนรอบการจำลองซ้ำที่เท่ากับหรือต่ำกว่าแต่ละค่า แถบครอบคลุมการแจกแจงจริงด้วยความเชื่อมั่น {confidence}
 	The values are numbers, separated by semicolons or spaces	ค่าต้องเป็นตัวเลขที่คั่นด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
 	The whole clock	เวลาทั้งหมด
+	Themes	ธีม
 	This block has a warning	บล็อกนี้มีคำเตือน
 	This block has an error	บล็อกนี้มีข้อผิดพลาด
 	This run	การรันนี้
@@ -478,12 +500,15 @@
 	View	มุมมอง
 	Waiting over time	จำนวนที่รอตามเวลา
 	Waiting room	พื้นที่รอ
+	Warm	โทนอุ่น
 	Warm-up	ระยะอุ่นเครื่อง
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	อุ่นเครื่อง {warmup} {unit} จากนั้นวัดผล {duration} {unit}
 	Warning	คำเตือน
 	Watch a Run	เฝ้าดูการรัน
 	Watch a run	เฝ้าดูการรัน
 	Watching replication 1	กำลังเฝ้าดูการจำลองซ้ำรอบที่ 1
+	Weak text	ข้อความจาง
+	Weak text on header	ข้อความจางบนแถบส่วนหัว
 	Wed	พ.
 	Weekly	ทุกสัปดาห์
 	Weibull	ไวบูลล์
@@ -555,6 +580,7 @@
 	{n} waiting	รอ {n}
 	{n} {unit} per second	{n} {unit} ต่อวินาที
 	{property} (set to, mean)	{property} (กำหนดเป็น, ค่าเฉลี่ย)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} บน {background}: {ratio}:1 ต้องการ {min}:1
 	{title}: now {now}, at most {most}	{title}: ขณะนี้ {now} สูงสุด {most}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± คือครึ่งหนึ่งของความกว้างของช่วงความเชื่อมั่น Student-t 95% สำหรับค่าเฉลี่ยจากการทดลองซ้ำ

@@ -25,6 +25,7 @@
 	Abandoned on {id}	{id} వద్ద వదిలి వెళ్లినవి
 	About StochCraft	StochCraft గురించి
 	About {app}	{app} గురించి
+	Accent	యాక్సెంట్ రంగు
 	Across the range it changed by {change}: more than chance would explain.	పూర్తి పరిధిలో ఇది {change} మారింది: యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ.
 	Across the range it changed by {change}: within what chance alone could do.	పూర్తి పరిధిలో ఇది {change} మారింది: యాదృచ్ఛికత ఒక్కటే చేయగలిగినంత లోపే.
 	Actual size	వాస్తవ పరిమాణం
@@ -47,6 +48,7 @@
 	Added pool {id}	{id} పూల్ జోడించబడింది
 	Added {block} ({id})	{block} ({id}) జోడించబడింది
 	Align	అమర్చు
+	All text meets the contrast minimums.	అన్ని టెక్స్ట్‌లు కనీస కాంట్రాస్ట్‌ను అందుకుంటాయి.
 	Also: {rule}	అలాగే: {rule}
 	Alternative {n}	ప్రత్యామ్నాయం {n}
 	Analysis	విశ్లేషణ
@@ -69,11 +71,13 @@
 	Binomial	ద్విపద పంపిణీ
 	Block	బ్లాక్
 	Boolean	బూలియన్
+	Borders	అంచులు
 	Bottoms	కింది అంచులు
 	Breakdowns	లోపాలు
 	Breakdowns and availability	లోపాలు మరియు లభ్యత
 	Bring All to Front	అన్నింటినీ ముందుకు తీసుకురా
 	Built with	దీనితో రూపొందించబడింది
+	Built-in themes are read-only. Duplicate one to change its colours.	అంతర్నిర్మిత థీమ్‌లు చదవడానికి మాత్రమే. రంగులు మార్చడానికి ఒకదానికి నకలు చేయండి.
 	Busiest	అత్యంత రద్దీ
 	By role	పాత్ర ప్రకారం
 	CSV table	CSV పట్టిక
@@ -83,6 +87,7 @@
 	Cancel	రద్దు చేయి
 	Cancel Run	అమలును రద్దు చేయి
 	Cancel run	అమలును రద్దు చేయి
+	Canvas	ప్రధాన ఉపరితలం
 	Capacity	సామర్థ్యం
 	Centres	అడ్డ కేంద్రాలు
 	Change	మార్పు
@@ -93,6 +98,8 @@
 	Change the estimate	అంచనాను మార్చు
 	Changes	మార్పులు
 	Changing the time unit does not convert the times already in the model.	సమయ ప్రమాణాన్ని మార్చడం వల్ల నమూనాలో ఇప్పటికే ఉన్న సమయాలు మారవు.
+	Chart	చార్ట్
+	Chart hover	పాయింటర్ కింద చార్ట్
 	Choose…	ఎంచుకోండి…
 	Clear Menu	మెనూను క్లియర్ చేయి
 	Close	మూసివేయి
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ప్రతి ఎంటిటీ వీటిలో ఇప్పుడే ఒకేసారి పూర్తిగా తీర్చగలిగే మొదటిదాన్ని తీసుకుంటుంది, బయటకు వెళ్లేటప్పుడు యూనిట్‌లను తిరిగి ఇస్తుంది.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ప్రతి ఎంటిటీ వచ్చినప్పుడు దానికోసం యాదృచ్ఛికంగా తీసిన సమయం వరకు మాత్రమే ఇక్కడ వేచి ఉంటుంది, తర్వాత వదిలి వెళ్తుంది: "వదిలి వెళ్లినవి" అని గుర్తించిన బయటికి దారిలో వెళ్తుంది, లేదా నమూనా నుండి బయటకు వెళ్తుంది.
 	Edit	సవరణ
+	Edit themes…	థీమ్‌లను సవరించు…
 	Elasticity	స్థితిస్థాపకత
 	Ends early	ముందుగా ముగుస్తుంది
 	Energy	శక్తి
@@ -183,11 +191,14 @@
 	Gives up before service starts	సేవ మొదలయ్యే ముందు వదిలి వెళ్తుంది
 	Goes to	వెళ్తుంది
 	Hands on finished parts while down	లోపం ఉన్నప్పుడూ పూర్తయిన భాగాలను పంపుతుంది
+	Header	హెడర్ బార్
 	Help	సహాయం
 	Hide Others	ఇతరాలను దాచు
 	Hide {app}	{app} ను దాచు
+	High contrast	అధిక కాంట్రాస్ట్
 	How many	ఎన్ని
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ఈ నిష్క్రమణల నుంచి కస్టమర్లు ఎన్ని భాగాలు కోరుకుంటున్నారు; అప్పుడు ఫలితాలు టాక్ట్ (అందుబాటులో ఉన్న సమయాన్ని డిమాండ్‌తో భాగించినది) మరియు ప్రతి పని యొక్క సైకిల్ సమయాన్ని చూపుతాయి.
+	In use	వాడుకలో ఉంది
 	Inside over time	కాలక్రమంలో లోపల
 	Jump	వెళ్ళు
 	Jump to time	సమయానికి వెళ్ళు
@@ -301,6 +312,7 @@
 	Quality ratio	నాణ్యత నిష్పత్తి
 	Quit	నిష్క్రమించు
 	Quit {app}	{app} నుంచి నిష్క్రమించు
+	Raised surfaces	ఎత్తైన ఉపరితలాలు
 	Random	యాదృచ్ఛికం
 	Rank the parameters	పరామితులను క్రమపరచు
 	Ready	సిద్ధం
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	ఈ బ్లాక్‌ను, దాని ప్రవాహాలను తొలగించు (Delete)
 	Remove this period	ఈ వ్యవధిని తొలగించు
 	Removed {id}	{id} తొలగించబడింది
+	Rename	పేరు మార్చు
 	Rename Block	బ్లాక్ పేరు మార్చు
 	Rename Model	నమూనా పేరు మార్చు
 	Repair time	మరమ్మతు సమయం
@@ -363,6 +376,7 @@
 	Save As…	ఇలా సేవ్ చేయి…
 	Save Model	నమూనాను సేవ్ చేయి
 	Save changes to {name}?	{name} లో మార్పులను సేవ్ చేయాలా?
+	Save name	పేరు సేవ్ చేయి
 	Saved {file}	{file} సేవ్ చేయబడింది
 	Scale	స్కేలు
 	Scrap	స్క్రాప్
@@ -390,8 +404,10 @@
 	Share that gave up	వదిలి వెళ్లినవాటి వాటా
 	Show All	అన్నీ చూపించు
 	Show {id}	{id} చూపించు
+	Side rail	పక్క బార్
 	Size	పరిమాణం నిర్ణయించు
 	Size the resources	వనరుల పరిమాణం నిర్ణయించు
+	Soft accent	మృదువైన యాక్సెంట్ రంగు
 	Source	మూలం
 	Source: {source}	మూలం: {source}
 	Speed	వేగం
@@ -403,6 +419,7 @@
 	Stages (k)	దశలు (k)
 	Standard deviation	ప్రామాణిక విచలనం
 	Step	దశ
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	{name}లో చేసిన మార్పులను సేవ్ చేయకుండానే StochCraft మూసివేయబడింది. వాటిని పేరులేని మోడల్‌గా పునరుద్ధరించండి లేదా విస్మరించండి.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft, BPSim సిమ్యులేషన్ డేటాతో కూడిన BPMN లేదా XPDL ఫైళ్ల నుంచి ప్రాసెస్ మోడళ్లను చదివి, వాటిని పునరావృత ప్రయోగాలుగా అమలు చేసి, ప్రతి ఫలితాన్ని దాని విశ్వసనీయత అంతరంతో నివేదిస్తుంది.
 	StochCraft {version} · model {digest}	StochCraft {version} · నమూనా {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	గమనించడం ఆపబడింది
 	Sun	ఆది
 	Sweep a parameter	ఒక పరామితిని స్వీప్ చేయి
+	Table stripes	పట్టిక చారలు
 	Takt	టాక్ట్
 	Takt time	టాక్ట్ సమయం
 	Tandem line	వరుస ప్రక్రియ
@@ -422,6 +440,8 @@
 	Task with a resource	వనరు అవసరమైన పని
 	Task with shared resources	భాగస్వామ్య వనరులు అవసరమైన పని
 	Text	టెక్స్ట్
+	Text on accent	యాక్సెంట్ రంగుపై టెక్స్ట్
+	Text on header	హెడర్ బార్‌పై టెక్స్ట్
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	అంతరం {share} లక్ష్య వాటా కంటే కిందకు వెళ్తుంది, కాబట్టి వాటా చేరినట్లు 95% విశ్వాసంతో చూపబడలేదు; మరిన్ని పునరావృత్త అమలులు దానిని సన్నగా చేస్తాయి.
 	The last task with a resource it finished at	భాగం చివరిగా దాటిన వనరు అవసరమైన పని
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ఆపే షరతు వరకు సగటు సమయం దానిని చేరిన పునరావృత్త అమలులపై మాత్రమే; మిగిలినవి వాటి సమయ పరిమితి వరకు నడిచాయి.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	నమూనాలో ఇంకా క్యాలెండర్‌లు లేవు.
 	The model now has the units sizing found	పరిమాణ నిర్ణయం కనుగొన్న యూనిట్‌లు ఇప్పుడు మోడల్‌లో ఉన్నాయి
 	The model: its experiment, connections and problems	నమూనా: దాని ప్రయోగం, అనుసంధానాలు మరియు సమస్యలు
+	The name is empty or already used.	పేరు ఖాళీగా ఉంది లేదా ఇప్పటికే వాడుకలో ఉంది.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ప్రతి విలువకు సమానమైన లేదా తక్కువైన పునరావృత్త అమలుల వాటా. పట్టీ నిజమైన పంపిణీని {confidence} విశ్వాసంతో కలిగి ఉంటుంది.
 	The values are numbers, separated by semicolons or spaces	విలువలు సెమీకోలన్ లేదా ఖాళీతో వేరు చేసిన సంఖ్యలు
 	The whole clock	మొత్తం సమయం
+	Themes	థీమ్‌లు
 	This block has a warning	ఈ బ్లాక్‌లో హెచ్చరిక ఉంది
 	This block has an error	ఈ బ్లాక్‌లో లోపం ఉంది
 	This run	ఈ అమలు
@@ -478,12 +500,15 @@
 	View	వీక్షణ
 	Waiting over time	కాలక్రమంలో వేచి ఉన్నవి
 	Waiting room	వేచి ఉండే గది
+	Warm	వెచ్చని
 	Warm-up	ప్రారంభ సర్దుబాటు సమయం
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	ప్రారంభ సర్దుబాటు {warmup} {unit}, ఆపై {duration} {unit} కొలవబడింది
 	Warning	హెచ్చరిక
 	Watch a Run	ఒక అమలును గమనించు
 	Watch a run	ఒక అమలును గమనించు
 	Watching replication 1	పునరావృత్త అమలు 1 గమనించబడుతోంది
+	Weak text	మసక టెక్స్ట్
+	Weak text on header	హెడర్ బార్‌పై మసక టెక్స్ట్
 	Wed	బుధ
 	Weekly	ప్రతి వారం
 	Weibull	వైబుల్
@@ -555,6 +580,7 @@
 	{n} waiting	{n} వేచి ఉన్నాయి
 	{n} {unit} per second	సెకనుకు {n} {unit}
 	{property} (set to, mean)	{property} (నిర్ణీత విలువ, సగటు)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – నేపథ్యం {background}: {ratio}:1, అవసరం {min}:1
 	{title}: now {now}, at most {most}	{title}: ఇప్పుడు {now}, గరిష్ఠం {most}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± అనేది పునరావృత ప్రయోగాల సగటుకు సంబంధించిన 95% Student-t విశ్వసనీయత అంతరం వెడల్పులో సగం.

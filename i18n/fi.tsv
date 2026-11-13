@@ -25,6 +25,7 @@
 	Abandoned on {id}	Luopuneet virrassa {id}
 	About StochCraft	Tietoja StochCraftista
 	About {app}	Tietoja: {app}
+	Accent	Korostus
 	Across the range it changed by {change}: more than chance would explain.	Alueella se muuttui {change}: enemmän kuin sattuma selittäisi.
 	Across the range it changed by {change}: within what chance alone could do.	Alueella se muuttui {change}: sen rajoissa, mihin pelkkä sattuma pystyy.
 	Actual size	Todellinen koko
@@ -47,6 +48,7 @@
 	Added pool {id}	Lisättiin pooli {id}
 	Added {block} ({id})	Lisättiin {block} ({id})
 	Align	Tasaa
+	All text meets the contrast minimums.	Kaikki teksti täyttää vähimmäiskontrastit.
 	Also: {rule}	Lisäksi: {rule}
 	Alternative {n}	Vaihtoehto {n}
 	Analysis	Analyysi
@@ -69,11 +71,13 @@
 	Binomial	Binomijakauma
 	Block	Lohko
 	Boolean	Totuusarvo
+	Borders	Reunat
 	Bottoms	Alareunat
 	Breakdowns	Vikaantumiset
 	Breakdowns and availability	Vikaantumiset ja käytettävyys
 	Bring All to Front	Tuo kaikki eteen
 	Built with	Toteutettu seuraavilla
+	Built-in themes are read-only. Duplicate one to change its colours.	Sisäänrakennetut teemat ovat vain luku -tilassa. Monista jokin, niin voit muuttaa sen värejä.
 	Busiest	Kuormitetuin
 	By role	Roolin mukaan
 	CSV table	CSV-taulukko
@@ -83,6 +87,7 @@
 	Cancel	Peruuta
 	Cancel Run	Peruuta suoritus
 	Cancel run	Peruuta suoritus
+	Canvas	Pääpinta
 	Capacity	Kapasiteetti
 	Centres	Vaakakeskikohdat
 	Change	Muutos
@@ -93,6 +98,8 @@
 	Change the estimate	Muuta arviota
 	Changes	Muutokset
 	Changing the time unit does not convert the times already in the model.	Aikayksikön vaihtaminen ei muunna mallissa jo olevia aikoja.
+	Chart	Kaavio
+	Chart hover	Kaavio osoittimen alla
 	Choose…	Valitse…
 	Clear Menu	Tyhjennä valikko
 	Close	Sulje
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Jokainen entiteetti ottaa näistä vaihtoehdoista ensimmäisen, joka voidaan täyttää heti, kaiken kerralla, ja palauttaa yksiköt poistuessaan tehtävästä.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Jokainen entiteetti odottaa tässä enintään ajan, joka arvotaan sille sen saapuessa, ja luopuu sitten: se kulkee reittiä ulos, joka on merkitty ”Luopuneet”, tai poistuu mallista.
 	Edit	Muokkaa
+	Edit themes…	Muokkaa teemoja…
 	Elasticity	Jousto
 	Ends early	Päättyy aiemmin
 	Energy	Energia
@@ -183,11 +191,14 @@
 	Gives up before service starts	Luopuu ennen palvelun alkua
 	Goes to	Menee kohteeseen
 	Hands on finished parts while down	Luovuttaa valmiit osat myös vikaantuneena
+	Header	Yläpalkki
 	Help	Ohje
 	Hide Others	Piilota muut
 	Hide {app}	Piilota {app}
+	High contrast	Suuri kontrasti
 	How many	Kuinka monta
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kuinka monta osaa asiakkaat haluavat näistä poistumisista; tulokset näyttävät silloin tahdin (käytettävissä oleva aika jaettuna kysynnällä) ja kunkin tehtävän sykliajan.
+	In use	Käytössä
 	Inside over time	Sisällä ajan mittaan
 	Jump	Siirry
 	Jump to time	Siirry hetkeen
@@ -301,6 +312,7 @@
 	Quality ratio	Laatuosuus
 	Quit	Lopeta
 	Quit {app}	Lopeta {app}
+	Raised surfaces	Korotetut pinnat
 	Random	Satunnainen
 	Rank the parameters	Järjestä parametrit
 	Ready	Valmis
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Poista tämä lohko ja sen virrat (Delete)
 	Remove this period	Poista tämä jakso
 	Removed {id}	Poistettiin {id}
+	Rename	Nimeä uudelleen
 	Rename Block	Nimeä lohko uudelleen
 	Rename Model	Nimeä malli uudelleen
 	Repair time	Korjausaika
@@ -363,6 +376,7 @@
 	Save As…	Tallenna nimellä…
 	Save Model	Tallenna malli
 	Save changes to {name}?	Tallennetaanko kohteen {name} muutokset?
+	Save name	Tallenna nimi
 	Saved {file}	Tallennettiin {file}
 	Scale	Skaala
 	Scrap	Hylky
@@ -390,8 +404,10 @@
 	Share that gave up	Luopuneiden osuus
 	Show All	Näytä kaikki
 	Show {id}	Näytä {id}
+	Side rail	Sivupalkki
 	Size	Mitoita
 	Size the resources	Mitoita resurssit
+	Soft accent	Pehmeä korostus
 	Source	Lähde
 	Source: {source}	Lähde: {source}
 	Speed	Nopeus
@@ -403,6 +419,7 @@
 	Stages (k)	Vaiheet (k)
 	Standard deviation	Keskihajonta
 	Step	Askel
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft suljettiin, kun mallissa {name} oli tallentamattomia muutoksia. Palauta muutokset nimettömänä mallina tai hylkää ne.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft lukee prosessimalleja BPMN- tai XPDL-tiedostoista, joissa on BPSim-simulointitietoja, suorittaa niillä toistettuja kokeita ja raportoi jokaisen tuloksen luottamusväleineen.
 	StochCraft {version} · model {digest}	StochCraft {version} · malli {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Seuraaminen lopetettiin
 	Sun	su
 	Sweep a parameter	Käy parametri läpi
+	Table stripes	Taulukon raidat
 	Takt	Tahti
 	Takt time	Tahtiaika
 	Tandem line	Sarjajono
@@ -422,6 +440,8 @@
 	Task with a resource	Resurssia käyttävä tehtävä
 	Task with shared resources	Jaettuja resursseja käyttävä tehtävä
 	Text	Teksti
+	Text on accent	Korostuksen teksti
+	Text on header	Yläpalkin teksti
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Väli ulottuu alle tavoiteosuuden {share}, joten osuuden saavuttamista ei ole osoitettu 95 %:n luottamuksella; useampi toisto kaventaisi sitä.
 	The last task with a resource it finished at	Viimeisin resurssia käyttävä tehtävä, jonka osa läpäisi
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskimääräinen aika pysäytysehtoon lasketaan vain toistoista, jotka saavuttivat sen; muut ajettiin aikarajaansa asti.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Mallissa ei ole vielä kalentereita.
 	The model now has the units sizing found	Mallissa on nyt mitoituksen löytämät yksiköt
 	The model: its experiment, connections and problems	Malli: koe, yhteydet ja ongelmat
+	The name is empty or already used.	Nimi on tyhjä tai jo käytössä.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Niiden toistojen osuus, jotka ovat kunkin arvon suuruisia tai pienempiä. Vyöhyke sisältää todellisen jakauman {confidence} luottamuksella.
 	The values are numbers, separated by semicolons or spaces	Arvot ovat lukuja, jotka erotetaan puolipisteillä tai välilyönneillä
 	The whole clock	Koko aika
+	Themes	Teemat
 	This block has a warning	Tässä lohkossa on varoitus
 	This block has an error	Tässä lohkossa on virhe
 	This run	Tämä ajo
@@ -478,12 +500,15 @@
 	View	Näytä
 	Waiting over time	Odottavat ajan mittaan
 	Waiting room	Odotustila
+	Warm	Lämmin
 	Warm-up	Alkulämmittely
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Alkulämmittely {warmup} {unit}, sitten mittaus {duration} {unit}
 	Warning	Varoitus
 	Watch a Run	Seuraa ajoa
 	Watch a run	Seuraa ajoa
 	Watching replication 1	Seurataan toistoa 1
+	Weak text	Himmeä teksti
+	Weak text on header	Yläpalkin himmeä teksti
 	Wed	ke
 	Weekly	Viikoittain
 	Weibull	Weibull
@@ -555,6 +580,7 @@
 	{n} waiting	{n} odottaa
 	{n} {unit} per second	{n} {unit} sekunnissa
 	{property} (set to, mean)	{property} (asetettu arvo, keskiarvo)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – tausta {background}: {ratio}:1, vaaditaan {min}:1
 	{title}: now {now}, at most {most}	{title}: nyt {now}, enintään {most}
 	± 95% CI	± 95%:n luottamusväli
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± tarkoittaa toistojen yli lasketun keskiarvon 95 %:n Student-t-luottamusvälin puolileveyttä.

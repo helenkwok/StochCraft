@@ -25,6 +25,7 @@
 	Abandoned on {id}	{id} ағынында бас тартқандар
 	About StochCraft	StochCraft туралы
 	About {app}	{app} туралы
+	Accent	Екпін түсі
 	Across the range it changed by {change}: more than chance would explain.	Ауқымда {change} өзгерді: кездейсоқтық түсіндіретіннен көп.
 	Across the range it changed by {change}: within what chance alone could do.	Ауқымда {change} өзгерді: тек кездейсоқтық жасай алатын шекте.
 	Actual size	Нақты өлшем
@@ -47,6 +48,7 @@
 	Added pool {id}	{id} қоры қосылды
 	Added {block} ({id})	{block} ({id}) қосылды
 	Align	Туралау
+	All text meets the contrast minimums.	Барлық мәтін ең төменгі контраст талаптарына сай.
 	Also: {rule}	Сондай-ақ: {rule}
 	Alternative {n}	{n}-балама
 	Analysis	Талдау
@@ -69,11 +71,13 @@
 	Binomial	Биномдық
 	Block	Блок
 	Boolean	Логикалық мән
+	Borders	Жиектер
 	Bottoms	Төменгі жиектер
 	Breakdowns	Ақаулар
 	Breakdowns and availability	Ақаулар және қолжетімділік
 	Bring All to Front	Барлығын алдыңғы қатарға шығару
 	Built with	Мына құралдармен жасалған
+	Built-in themes are read-only. Duplicate one to change its colours.	Кірістірілген тақырыптар тек оқуға арналған. Түстерін өзгерту үшін біреуінің көшірмесін жасаңыз.
 	Busiest	Ең жүктелген
 	By role	Рөл бойынша
 	CSV table	CSV кестесі
@@ -83,6 +87,7 @@
 	Cancel	Бас тарту
 	Cancel Run	Іске қосуды тоқтату
 	Cancel run	Іске қосуды тоқтату
+	Canvas	Негізгі бет
 	Capacity	Сыйымдылық
 	Centres	Көлденең орталықтар
 	Change	Өзгеріс
@@ -93,6 +98,8 @@
 	Change the estimate	Бағалауды өзгерту
 	Changes	Өзгерістер
 	Changing the time unit does not convert the times already in the model.	Уақыт бірлігін өзгерту модельдегі бұрыннан бар уақыт мәндерін түрлендірмейді.
+	Chart	Диаграмма
+	Chart hover	Меңзер астындағы диаграмма
 	Choose…	Таңдаңыз…
 	Clear Menu	Мәзірді тазалау
 	Close	Жабу
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Әрбір нысан осылардың ішінен дәл қазір орындауға болатын біріншісін бірден толық алады да, шыққанда бірліктерді қайтарады.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Әрбір нысан мұнда келген кезде оған кездейсоқ таңдалған уақыттан аспайтын уақыт күтеді, содан кейін бас тартады: «Бас тартқандар» деп белгіленген шығатын жолмен кетеді немесе модельден шығады.
 	Edit	Түзету
+	Edit themes…	Тақырыптарды түзету…
 	Elasticity	Икемділік
 	Ends early	Ертерек аяқталады
 	Energy	Энергия
@@ -183,11 +191,14 @@
 	Gives up before service starts	Қызмет көрсету басталғанға дейін бас тартады
 	Goes to	Қайда барады
 	Hands on finished parts while down	Ақаулы кезде де дайын бөлшектерді береді
+	Header	Жоғарғы жолақ
 	Help	Көмек
 	Hide Others	Басқаларын жасыру
 	Hide {app}	{app} қолданбасын жасыру
+	High contrast	Жоғары контраст
 	How many	Қанша
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Тұтынушылар осы кетулерден қанша бөлшек қалайды; сонда нәтижелер тактіні (қолжетімді уақытты сұранысқа бөлгенде) және әр тапсырманың цикл уақытын көрсетеді.
+	In use	Қолданыста
 	Inside over time	Уақыт бойынша ішіндегілер
 	Jump	Өту
 	Jump to time	Уақытқа өту
@@ -301,6 +312,7 @@
 	Quality ratio	Сапа үлесі
 	Quit	Шығу
 	Quit {app}	{app} қолданбасынан шығу
+	Raised surfaces	Көтерілген беттер
 	Random	Кездейсоқ
 	Rank the parameters	Параметрлерді реттеу
 	Ready	Дайын
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	Бұл блокты және оның ағындарын жою (Delete)
 	Remove this period	Осы кезеңді жою
 	Removed {id}	{id} жойылды
+	Rename	Атауын өзгерту
 	Rename Block	Блок атауын өзгерту
 	Rename Model	Модель атауын өзгерту
 	Repair time	Жөндеу уақыты
@@ -363,6 +376,7 @@
 	Save As…	Басқаша сақтау…
 	Save Model	Модельді сақтау
 	Save changes to {name}?	{name} өзгерістері сақталсын ба?
+	Save name	Атауды сақтау
 	Saved {file}	{file} сақталды
 	Scale	Масштаб
 	Scrap	Ақау
@@ -390,8 +404,10 @@
 	Share that gave up	Бас тартқандар үлесі
 	Show All	Барлығын көрсету
 	Show {id}	{id} көрсету
+	Side rail	Бүйір жолақ
 	Size	Өлшемдеу
 	Size the resources	Ресурстарды өлшемдеу
+	Soft accent	Жұмсақ екпін түсі
 	Source	Дереккөз
 	Source: {source}	Дереккөз: {source}
 	Speed	Жылдамдық
@@ -403,6 +419,7 @@
 	Stages (k)	Кезеңдер (k)
 	Standard deviation	Стандартты ауытқу
 	Step	Қадам
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft {name} үлгісіндегі сақталмаған өзгерістермен жабылды. Оларды атаусыз үлгі ретінде қалпына келтіріңіз немесе тастаңыз.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft BPSim симуляция деректері бар BPMN немесе XPDL файлдарынан процесс үлгілерін оқиды, оларды қайталанатын эксперименттер ретінде орындайды және әр нәтижені сенімділік аралығымен бірге көрсетеді.
 	StochCraft {version} · model {digest}	StochCraft {version} · модель {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	Бақылау тоқтатылды
 	Sun	жс
 	Sweep a parameter	Параметрді сұрыптау
+	Table stripes	Кесте жолақтары
 	Takt	Такт
 	Takt time	Такт уақыты
 	Tandem line	Тізбекті желі
@@ -422,6 +440,8 @@
 	Task with a resource	Ресурсы бар тапсырма
 	Task with shared resources	Ортақ ресурстары бар тапсырма
 	Text	Мәтін
+	Text on accent	Екпін түсіндегі мәтін
+	Text on header	Жоғарғы жолақтағы мәтін
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Аралық {share} мақсатты үлесінен төмен түседі, сондықтан үлестің орындалғаны 95% сенімділікпен көрсетілмеген; көбірек қайталау оны тарылтады.
 	The last task with a resource it finished at	Бөлшек өткен соңғы ресурсы бар тапсырма
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Тоқтату шартына дейінгі орташа уақыт тек оған жеткен қайталаулар бойынша; қалғандары уақыт шегіне дейін жүрді.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	Модельде әлі күнтізбе жоқ.
 	The model now has the units sizing found	Модельде енді өлшемдеу тапқан бірліктер бар
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
+	The name is empty or already used.	Атау бос немесе бұрыннан қолданылған.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Әр мәнге тең немесе одан төмен қайталаулар үлесі. Жолақ шынайы үлестірімді {confidence} сенімділікпен қамтиды.
 	The values are numbers, separated by semicolons or spaces	Мәндер нүктелі үтірмен немесе бос орынмен бөлінген сандар
 	The whole clock	Бүкіл уақыт
+	Themes	Тақырыптар
 	This block has a warning	Бұл блокта ескерту бар
 	This block has an error	Бұл блокта қате бар
 	This run	Осы іске қосу
@@ -478,12 +500,15 @@
 	View	Көрініс
 	Waiting over time	Уақыт бойынша күтушілер
 	Waiting room	Күту орны
+	Warm	Жылы
 	Warm-up	Қыздыру кезеңі
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} қыздыру, содан кейін {duration} {unit} өлшеу
 	Warning	Ескерту
 	Watch a Run	Іске қосуды бақылау
 	Watch a run	Іске қосуды бақылау
 	Watching replication 1	1-қайталау бақылануда
+	Weak text	Бозғылт мәтін
+	Weak text on header	Жоғарғы жолақтағы бозғылт мәтін
 	Wed	ср
 	Weekly	Апта сайын
 	Weibull	Вейбулл
@@ -555,6 +580,7 @@
 	{n} waiting	Күтуде: {n}
 	{n} {unit} per second	секундына {n} {unit}
 	{property} (set to, mean)	{property} (орнатылған мән, орташа)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон «{background}»: {ratio}:1, кемінде {min}:1 керек
 	{title}: now {now}, at most {most}	{title}: қазір {now}, ең көбі {most}
 	± 95% CI	± 95% сенімділік аралығы
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — қайталаулар арасындағы орташа мәннің 95% Student-t сенімділік аралығының жарты ені.

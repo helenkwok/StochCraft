@@ -25,6 +25,7 @@
 	Abandoned on {id}	უარი თქვეს ნაკადზე {id}
 	About StochCraft	StochCraft-ის შესახებ
 	About {app}	{app}-ის შესახებ
+	Accent	აქცენტი
 	Across the range it changed by {change}: more than chance would explain.	დიაპაზონში შეიცვალა {change}-ით: იმაზე მეტად, ვიდრე შემთხვევითობა ახსნიდა.
 	Across the range it changed by {change}: within what chance alone could do.	დიაპაზონში შეიცვალა {change}-ით: იმის ფარგლებში, რისი გაკეთებაც მხოლოდ შემთხვევითობას შეუძლია.
 	Actual size	რეალური ზომა
@@ -47,6 +48,7 @@
 	Added pool {id}	დამატებულია პული {id}
 	Added {block} ({id})	დამატებულია {block} ({id})
 	Align	სწორება
+	All text meets the contrast minimums.	მთელი ტექსტი აკმაყოფილებს მინიმალურ კონტრასტს.
 	Also: {rule}	ასევე: {rule}
 	Alternative {n}	ალტერნატივა {n}
 	Analysis	ანალიზი
@@ -69,11 +71,13 @@
 	Binomial	ბინომური
 	Block	ბლოკი
 	Boolean	ლოგიკური მნიშვნელობა
+	Borders	საზღვრები
 	Bottoms	ქვედა კიდეები
 	Breakdowns	გაუმართაობები
 	Breakdowns and availability	გაუმართაობები და ხელმისაწვდომობა
 	Bring All to Front	ყველაფრის წინ წამოწევა
 	Built with	შექმნილია შემდეგით
+	Built-in themes are read-only. Duplicate one to change its colours.	ჩაშენებული თემები მხოლოდ წასაკითხია. ფერების შესაცვლელად შექმენით რომელიმეს დუბლიკატი.
 	Busiest	ყველაზე დატვირთული
 	By role	როლის მიხედვით
 	CSV table	CSV ცხრილი
@@ -83,6 +87,7 @@
 	Cancel	გაუქმება
 	Cancel Run	გაშვების გაუქმება
 	Cancel run	გაშვების გაუქმება
+	Canvas	მთავარი ზედაპირი
 	Capacity	ტევადობა
 	Centres	ჰორიზონტალური ცენტრები
 	Change	ცვლილება
@@ -93,6 +98,8 @@
 	Change the estimate	შეფასების შეცვლა
 	Changes	ცვლილებები
 	Changing the time unit does not convert the times already in the model.	დროის ერთეულის შეცვლა მოდელში უკვე მითითებულ დროებს არ გარდაქმნის.
+	Chart	დიაგრამა
+	Chart hover	დიაგრამა მაჩვენებლის ქვეშ
 	Choose…	აირჩიეთ…
 	Clear Menu	მენიუს გასუფთავება
 	Close	დახურვა
@@ -140,6 +147,7 @@
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	თითოეული ერთეული იღებს ამათგან პირველს, რომლის სრულად დაკმაყოფილებაც ახლავე, ერთდროულად არის შესაძლებელი, და გასვლისას რესურსის ერთეულებს აბრუნებს.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	თითოეული ერთეული აქ ელოდება არაუმეტეს იმ დროისა, რომელიც მისთვის შემთხვევით შეირჩევა მოსვლისას, შემდეგ კი უარს ამბობს: მიდის გასასვლელით, რომელიც მონიშნულია როგორც „უარი თქვეს“, ან ტოვებს მოდელს.
 	Edit	რედაქტირება
+	Edit themes…	თემების რედაქტირება…
 	Elasticity	ელასტიკურობა
 	Ends early	ადრე მთავრდება
 	Energy	ენერგია
@@ -183,11 +191,14 @@
 	Gives up before service starts	უარს ამბობს მომსახურების დაწყებამდე
 	Goes to	მიდის აქ
 	Hands on finished parts while down	გაუმართაობისას გადასცემს დასრულებულ დეტალებს
+	Header	სათაურის ზოლი
 	Help	დახმარება
 	Hide Others	სხვების დამალვა
 	Hide {app}	{app}-ის დამალვა
+	High contrast	მაღალი კონტრასტი
 	How many	რამდენი
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	რამდენ დეტალს ითხოვენ მომხმარებლები ამ გასვლებიდან; შედეგები მაშინ აჩვენებს ტაქტს (ხელმისაწვდომი დრო გაყოფილი მოთხოვნაზე) და თითოეული დავალების ციკლის დროს.
+	In use	გამოიყენება
 	Inside over time	შიგნით დროის მიხედვით
 	Jump	გადასვლა
 	Jump to time	დროზე გადასვლა
@@ -301,6 +312,7 @@
 	Quality ratio	ხარისხის წილი
 	Quit	გასვლა
 	Quit {app}	{app}-დან გასვლა
+	Raised surfaces	ამაღლებული ზედაპირები
 	Random	შემთხვევითი
 	Rank the parameters	პარამეტრების დალაგება
 	Ready	მზადაა
@@ -323,6 +335,7 @@
 	Remove this block and its flows (Delete)	ამ ბლოკისა და მისი ნაკადების წაშლა (Delete)
 	Remove this period	ამ პერიოდის წაშლა
 	Removed {id}	წაშლილია {id}
+	Rename	გადარქმევა
 	Rename Block	ბლოკის გადარქმევა
 	Rename Model	მოდელის გადარქმევა
 	Repair time	შეკეთების დრო
@@ -363,6 +376,7 @@
 	Save As…	შენახვა როგორც…
 	Save Model	მოდელის შენახვა
 	Save changes to {name}?	შევინახოთ ცვლილებები {name}-ში?
+	Save name	სახელის შენახვა
 	Saved {file}	შენახულია {file}
 	Scale	მასშტაბი
 	Scrap	წუნი
@@ -390,8 +404,10 @@
 	Share that gave up	უარის მთქმელთა წილი
 	Show All	ყველას ჩვენება
 	Show {id}	{id}-ის ჩვენება
+	Side rail	გვერდითი ზოლი
 	Size	ზომის შერჩევა
 	Size the resources	რესურსების ზომის შერჩევა
+	Soft accent	რბილი აქცენტი
 	Source	წყარო
 	Source: {source}	წყარო: {source}
 	Speed	სიჩქარე
@@ -403,6 +419,7 @@
 	Stages (k)	ეტაპები (k)
 	Standard deviation	სტანდარტული გადახრა
 	Step	ნაბიჯი
+	StochCraft	StochCraft
 	StochCraft closed with unsaved changes to {name}. Recover them as an untitled model, or discard them.	StochCraft დაიხურა {name}-ში შეუნახავი ცვლილებებით. აღადგინეთ ისინი უსათაურო მოდელად ან გააუქმეთ.
 	StochCraft reads process models as BPMN or XPDL files with BPSim simulation data, runs them as replicated experiments and reports every result with its confidence interval.	StochCraft კითხულობს პროცესის მოდელებს BPMN ან XPDL ფაილებიდან, რომლებიც შეიცავს BPSim სიმულაციის მონაცემებს, ატარებს მათ რეპლიკაციურ ექსპერიმენტებად და თითოეულ შედეგს შესაბამის ნდობის ინტერვალთან ერთად აჩვენებს.
 	StochCraft {version} · model {digest}	StochCraft {version} · მოდელი {digest}
@@ -412,6 +429,7 @@
 	Stopped watching	დაკვირვება შეწყდა
 	Sun	კვი
 	Sweep a parameter	პარამეტრის გადარბენა
+	Table stripes	ცხრილის ზოლები
 	Takt	ტაქტი
 	Takt time	ტაქტის დრო
 	Tandem line	თანმიმდევრული ხაზი
@@ -422,6 +440,8 @@
 	Task with a resource	დავალება რესურსით
 	Task with shared resources	დავალება საზიარო რესურსებით
 	Text	ტექსტი
+	Text on accent	ტექსტი აქცენტზე
+	Text on header	ტექსტი სათაურის ზოლზე
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ინტერვალი {share} სამიზნე წილზე დაბლა ჩადის, ამიტომ 95%-იანი სანდოობით არ არის ნაჩვენები, რომ წილი მიღწეულია; მეტი გამეორება მას შეავიწროებს.
 	The last task with a resource it finished at	ბოლო დავალება რესურსით, რომელიც დეტალმა გაიარა
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	გაჩერების პირობამდე საშუალო დრო მხოლოდ იმ გამეორებებზეა გამოთვლილი, რომლებმაც მას მიაღწიეს; დანარჩენები დროის ლიმიტამდე გაგრძელდა.
@@ -429,9 +449,11 @@
 	The model has no calendars yet.	მოდელს ჯერ არ აქვს კალენდრები.
 	The model now has the units sizing found	მოდელს ახლა აქვს ზომის შერჩევით ნაპოვნი ერთეულები
 	The model: its experiment, connections and problems	მოდელი: ექსპერიმენტი, კავშირები და პრობლემები
+	The name is empty or already used.	სახელი ცარიელია ან უკვე გამოყენებულია.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	გამეორებების წილი, რომლებიც თითოეულ მნიშვნელობაზე ნაკლები ან ტოლია. ზოლი შეიცავს ნამდვილ განაწილებას {confidence} სანდოობით.
 	The values are numbers, separated by semicolons or spaces	მნიშვნელობები რიცხვებია, გამოყოფილი წერტილმძიმით ან ჰარით
 	The whole clock	მთელი დრო
+	Themes	თემები
 	This block has a warning	ამ ბლოკს აქვს გაფრთხილება
 	This block has an error	ამ ბლოკს აქვს შეცდომა
 	This run	ეს გაშვება
@@ -478,12 +500,15 @@
 	View	ხედი
 	Waiting over time	მომლოდინეები დროის მიხედვით
 	Waiting room	მოსაცდელი სივრცე
+	Warm	თბილი
 	Warm-up	გახურების პერიოდი
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	გახურება {warmup} {unit}, შემდეგ გაზომვა {duration} {unit}
 	Warning	გაფრთხილება
 	Watch a Run	გაშვებაზე დაკვირვება
 	Watch a run	გაშვებაზე დაკვირვება
 	Watching replication 1	მიმდინარეობს დაკვირვება გამეორება 1-ზე
+	Weak text	მკრთალი ტექსტი
+	Weak text on header	მკრთალი ტექსტი სათაურის ზოლზე
 	Wed	ოთხ
 	Weekly	ყოველკვირა
 	Weibull	ვეიბული
@@ -555,6 +580,7 @@
 	{n} waiting	ელოდება: {n}
 	{n} {unit} per second	{n} {unit} წამში
 	{property} (set to, mean)	{property} (მითითებული მნიშვნელობა, საშუალო)
+	{text} on {background}: {ratio}:1, needs {min}:1	{text} – ფონი „{background}“: {ratio}:1, საჭიროა {min}:1
 	{title}: now {now}, at most {most}	{title}: ახლა {now}, მაქსიმუმ {most}
 	± 95% CI	± 95% ნდობის ინტერვალი
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± არის რეპლიკაციებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე.
