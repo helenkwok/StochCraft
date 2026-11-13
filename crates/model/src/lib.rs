@@ -890,6 +890,8 @@ pub enum Problem {
     },
     /// A setup has times for particular changes but no property whose changes it watches.
     ChangesWithoutProperty,
+    /// A planned run time per item whose mean is not above 0.
+    PlannedRunTimeNotPositive,
     /// A probability outside 0 to 1.
     BadProbability {
         value: f64,
@@ -1049,6 +1051,7 @@ impl Problem {
             Problem::BadExpression { .. } => "bad_expression",
             Problem::UnknownProperty { .. } => "unknown_property",
             Problem::ChangesWithoutProperty => "changes_without_property",
+            Problem::PlannedRunTimeNotPositive => "planned_run_time_not_positive",
             Problem::BadProbability { .. } => "bad_probability",
             Problem::ProbabilitySum { .. } => "probability_sum",
             Problem::BadCondition { .. } => "bad_condition",
@@ -1188,6 +1191,9 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "its setup has times for changes from one value to another but no property to watch"
             ),
+            Problem::PlannedRunTimeNotPositive => {
+                write!(f, "its planned run time per item must have a mean above 0")
+            }
             Problem::BadProbability { value } => {
                 write!(f, "probability {value} must be between 0 and 1")
             }
@@ -1483,6 +1489,18 @@ impl Model {
                 out.push(Diagnostic::error(
                     Some(&e.id),
                     Problem::NoTimeBetweenArrivals,
+                ));
+            }
+            if let ElementKind::Server {
+                planned_run_time: Some(d),
+                ..
+            } = &e.kind
+                && d.check().is_ok()
+                && !d.mean().is_some_and(|m| m > 0.0)
+            {
+                out.push(Diagnostic::error(
+                    Some(&e.id),
+                    Problem::PlannedRunTimeNotPositive,
                 ));
             }
             if let ElementKind::Server { setup: Some(s), .. } = &e.kind {
