@@ -912,6 +912,8 @@ pub enum Problem {
     ScrapNotAgainstServer {
         id: String,
     },
+    /// A planned run time per item whose mean is not above 0.
+    PlannedRunTimeNotPositive,
     /// A probability outside 0 to 1.
     BadProbability {
         value: f64,
@@ -1072,6 +1074,7 @@ impl Problem {
             Problem::UnknownProperty { .. } => "unknown_property",
             Problem::ChangesWithoutProperty => "changes_without_property",
             Problem::ScrapNotAgainstServer { .. } => "scrap_not_against_server",
+            Problem::PlannedRunTimeNotPositive => "planned_run_time_not_positive",
             Problem::BadProbability { .. } => "bad_probability",
             Problem::ProbabilitySum { .. } => "probability_sum",
             Problem::BadCondition { .. } => "bad_condition",
@@ -1215,6 +1218,9 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "its scrap counts against `{id}`, which is not a task with a resource of its own"
             ),
+            Problem::PlannedRunTimeNotPositive => {
+                write!(f, "its planned run time per item must have a mean above 0")
+            }
             Problem::BadProbability { value } => {
                 write!(f, "probability {value} must be between 0 and 1")
             }
@@ -1525,6 +1531,18 @@ impl Model {
                 out.push(Diagnostic::error(
                     Some(&e.id),
                     Problem::ScrapNotAgainstServer { id: c.to_string() },
+                ));
+            }
+            if let ElementKind::Server {
+                planned_run_time: Some(d),
+                ..
+            } = &e.kind
+                && d.check().is_ok()
+                && !d.mean().is_some_and(|m| m > 0.0)
+            {
+                out.push(Diagnostic::error(
+                    Some(&e.id),
+                    Problem::PlannedRunTimeNotPositive,
                 ));
             }
             if let ElementKind::Server { setup: Some(s), .. } = &e.kind {

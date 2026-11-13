@@ -107,3 +107,44 @@ fn off_shift_is_planned_downtime() {
     close(e.oee_availability, 1.0, 1e-9);
     close(e.oee_effectiveness, 0.8, 1e-9);
 }
+
+/// A job done but held at the end, blocked by a full next element, counts as produced: the
+/// machine finishes two one-minute jobs against a plan of 1, sends the first on and holds the
+/// second, so effectiveness is 1.
+#[test]
+fn a_finished_job_held_while_blocked_counts_as_produced() {
+    let mut b = Builder::new();
+    let src = b.source("parts", Dist::Constant(0.5), Some(2));
+    let m = b.server("machine", 1, Dist::Constant(1.0));
+    b.planned_run_time(m, Dist::Constant(1.0));
+    let next = b.buffered_server("next", 1, Dist::Constant(1.0e9), 0);
+    b.connect(src, m);
+    b.connect(m, next);
+    let out = b.sink("out");
+    b.connect(next, out);
+    let Ok(r) = b.run(Rng::new(1), 0.0, 10.0) else {
+        panic!("no report")
+    };
+    let e = element(&r, "machine");
+    assert_eq!(e.left, 1, "{e:?}");
+    close(e.oee_effectiveness, 1.0, 1e-12);
+}
+
+/// A plan whose mean is not above 0 is refused before the run.
+#[test]
+fn a_plan_must_have_a_positive_mean() {
+    let mut b = Builder::new();
+    let src = b.source("parts", Dist::Constant(10.0), None);
+    let m = b.server("machine", 1, Dist::Constant(4.0));
+    b.planned_run_time(
+        m,
+        Dist::Normal {
+            mean: -1.0,
+            std_dev: 0.5,
+        },
+    );
+    let out = b.sink("out");
+    b.connect(src, m);
+    b.connect(m, out);
+    assert!(b.run(Rng::new(1), 0.0, 100.0).is_err());
+}

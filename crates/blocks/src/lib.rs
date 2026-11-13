@@ -543,9 +543,8 @@ pub enum Metric {
     /// [`Metric::Availability`], which only failures lower.
     OeeAvailability,
     /// Servers with a planned run time per item: ISO 22400-2's effectiveness, the planned run
-    /// time per item times the items produced ([`Metric::Left`]) over the time producing. Below
-    /// 1 when jobs take longer than planned. An item still held at the end, its job done but
-    /// not yet sent on (blocked), is not yet counted.
+    /// time per item times the items produced (jobs finished, including any still held while
+    /// blocked) over the time producing. Below 1 when jobs take longer than planned.
     OeeEffectiveness,
     /// Servers that set up: ISO 22400-2's setup ratio, the time setting up over the time
     /// setting up and producing.

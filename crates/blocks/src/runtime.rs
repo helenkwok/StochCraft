@@ -823,6 +823,9 @@ pub(crate) struct BlockStats {
     /// server, or took a rework connection (ISO 22400-2's scrap and rework quantities).
     scrap: u64,
     rework: u64,
+    /// Servers: jobs finished, whether or not the entity has left yet (ISO 22400-2's produced
+    /// quantity); `left` lags it by those held while blocked.
+    produced: u64,
     /// The values assigned to each of the element's properties.
     properties: Vec<Tally>,
     /// Units (servers) or entities (delays) holding a finished entity while the next buffer is
@@ -1021,6 +1024,7 @@ impl BlockStats {
             time_in_system: Tally::new(),
             scrap: 0,
             rework: 0,
+            produced: 0,
             properties: (0..properties).map(|_| Tally::new()).collect(),
             blocked: TimeWeighted::new(t, 0.0),
             blocked_time: Tally::new(),
@@ -1043,6 +1047,7 @@ impl BlockStats {
         self.time_in_system = Tally::new();
         self.scrap = 0;
         self.rework = 0;
+        self.produced = 0;
         self.properties.iter_mut().for_each(|p| *p = Tally::new());
         self.blocked.reset(t);
         self.blocked_time = Tally::new();
@@ -1164,16 +1169,18 @@ impl BlockStats {
                 ..
             } => plan.mean().and_then(|m| {
                 let producing = self.states.processing.integral(end);
-                (producing > 0.0).then(|| m * self.left as f64 / producing)
+                (producing > 0.0).then(|| m * self.produced as f64 / producing)
             }),
             _ => None,
         };
         // A server's scrap or rework over what it produced (each pass counted).
         let per_produced = |n: u64| match kind {
-            ElementKind::Server { .. } if self.left > 0 => Some(n as f64 / self.left as f64),
+            ElementKind::Server { .. } if self.produced > 0 => {
+                Some(n as f64 / self.produced as f64)
+            }
             _ => None,
         };
-        let quality_ratio = per_produced(self.left.saturating_sub(self.scrap + self.rework));
+        let quality_ratio = per_produced(self.produced.saturating_sub(self.scrap + self.rework));
         ElementReport {
             id: element.id.clone(),
             name: element.name.clone(),
@@ -1946,6 +1953,7 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
                 }
                 let mut entity = entity;
                 entity.last_server = Some(env.borrow().me);
+                env.borrow().with_stats(|s| s.produced += 1);
                 move_on(&env, &ctx, entity, &|| false, None).await;
                 book.change(&env.borrow(), u, |d| d.holding = false);
             }
@@ -2256,6 +2264,7 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                 let repaired = waits_for_repair.then(|| up2.get(unit)).flatten();
                 let mut entity = entity;
                 entity.last_server = Some(env2.borrow().me);
+                env2.borrow().with_stats(|s| s.produced += 1);
                 let kept = move_on(&env2, &c, entity, &down, repaired).await;
                 book2.change(&env2.borrow(), unit, |d| d.holding = false);
                 if let Some(x) = units2.borrow_mut().get_mut(unit) {
