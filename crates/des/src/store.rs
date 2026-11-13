@@ -207,6 +207,34 @@ impl<T> Store<T> {
         Some(item)
     }
 
+    /// Adds an item at the head of the line, without waiting: one that was taken out and comes
+    /// back to go first (a job whose server was taken out of service, retried at once). If a
+    /// process is waiting, the item goes straight to it. It goes in even when a bounded store is
+    /// full, since it held a place before. In a store ordered by priority it goes ahead of every
+    /// item of its priority or lower (first in a first-in, first-out store).
+    pub fn put_front(&self, item: T) {
+        let woken = {
+            let mut st = self.state.borrow_mut();
+            match st.getters.pop_front() {
+                Some((pid, slot)) => {
+                    *slot.borrow_mut() = Some(item);
+                    pid
+                }
+                None => {
+                    let p = st.priority_of(&item);
+                    let at = st
+                        .items
+                        .iter()
+                        .position(|(q, _)| *q <= p)
+                        .unwrap_or(st.items.len());
+                    st.items.insert(at, (p, item));
+                    return;
+                }
+            }
+        };
+        self.ctx.wake_now(woken);
+    }
+
     /// Waits for the next item.
     pub fn get(&self) -> Get<T> {
         Get {
@@ -497,6 +525,51 @@ mod tests {
         });
         sim.run();
         assert_eq!(*got.borrow(), ["b", "d", "c", "a", "e"]);
+    }
+
+    #[test]
+    fn put_front_goes_first_or_straight_to_a_waiting_getter() {
+        let mut sim = Sim::new();
+        let ctx = sim.ctx();
+        let store: Store<u32> = Store::bounded(&ctx, 2);
+        store.put(1);
+        store.put(2);
+        // Full, but it held a place before: it goes in, first.
+        store.put_front(9);
+        assert_eq!(store.len(), 3);
+        let got = log();
+        let (s, g) = (store.clone(), Rc::clone(&got));
+        sim.spawn(async move {
+            for _ in 0..4 {
+                let x = s.get().await;
+                g.borrow_mut().push(x);
+            }
+        });
+        let (c, s) = (ctx.clone(), store.clone());
+        sim.spawn(async move {
+            c.hold(1.0).await;
+            // The getter is waiting: it gets it at once.
+            s.put_front(7);
+        });
+        sim.run();
+        assert_eq!(*got.borrow(), [9, 1, 2, 7]);
+
+        // By priority: ahead of its own priority and lower, behind higher.
+        let store: Store<u32> = Store::new(&ctx).with_priority(|x| i64::from(*x / 10));
+        for x in [30, 10, 11] {
+            store.put(x);
+        }
+        store.put_front(12);
+        let got = log();
+        let (s, g) = (store.clone(), Rc::clone(&got));
+        sim.spawn(async move {
+            for _ in 0..4 {
+                let x = s.get().await;
+                g.borrow_mut().push(x);
+            }
+        });
+        sim.run();
+        assert_eq!(*got.borrow(), [30, 12, 10, 11]);
     }
 
     #[test]

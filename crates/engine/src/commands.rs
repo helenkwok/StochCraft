@@ -14,9 +14,9 @@ use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec,
-    KindSpec, ModelDoc, NeedSpec, PatienceSpec, PowerSpec, PropertyDoc, PropertyTypeSpec,
-    PropertyValueSpec, RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec,
-    TimedDist,
+    HealthCheckSpec, KindSpec, ModelDoc, NeedSpec, PatienceSpec, PowerSpec, PropertyDoc,
+    PropertyTypeSpec, PropertyValueSpec, RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp,
+    StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -114,6 +114,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "setup",
             "planned_run_time",
             "patience",
+            "health_check",
         ],
         Some("sink") => &["scrap", "demand"],
         Some("shared_task") => &["service", "needs", "priority"],
@@ -334,6 +335,13 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<PatienceSpec>")]
     pub patience: Option<Option<PatienceSpec>>,
+    /// Servers: each unit is checked every `interval` and taken out for `restart` when more
+    /// entities wait than `limit` per working unit, keeping at least `keep` working; a job
+    /// under way on a unit taken out is retried at once (`on_takeout`: `retry`, the default)
+    /// or resumes after the restart (`resume`); `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<HealthCheckSpec>")]
+    pub health_check: Option<Option<HealthCheckSpec>>,
     /// Sinks: what reaches it is scrap, counted against `charged_to`, a server, or else the
     /// last server each entity finished at; `null`: it is not.
     #[serde(default, deserialize_with = "some")]
@@ -1085,6 +1093,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("setup", p.setup.is_some()),
         ("planned_run_time", p.planned_run_time.is_some()),
         ("patience", p.patience.is_some()),
+        ("health_check", p.health_check.is_some()),
         ("scrap", p.scrap.is_some()),
         ("demand", p.demand.is_some()),
         ("needs", p.needs.is_some()),
@@ -1109,6 +1118,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "setup",
             "planned_run_time",
             "patience",
+            "health_check",
         ],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
@@ -1161,9 +1171,13 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             setup,
             planned_run_time,
             patience,
+            health_check,
         } => {
             if let Some(x) = p.patience {
                 *patience = x.map(Into::into);
+            }
+            if let Some(x) = p.health_check {
+                *health_check = x.map(Into::into);
             }
             if let Some(s) = p.setup {
                 *setup = s.map(Into::into);

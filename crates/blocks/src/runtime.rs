@@ -11,8 +11,8 @@ use stochcraft_des::{
 };
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
-    Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, Model, Need, PatienceUntil,
-    Power, ResourcePool, Routing, Setup, Timed,
+    Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, Model, Need, OnTakeout,
+    PatienceUntil, Power, ResourcePool, Routing, Setup, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -961,8 +961,11 @@ pub(crate) struct BlockStats {
     /// Servers with a patience: entities that gave up, and how long each had been here.
     abandoned: u64,
     abandoned_wait: Tally,
-    /// Servers with patience until done: service time spent on jobs whose entity gave up.
+    /// Servers with patience until done: service time spent on jobs whose entity gave up; with
+    /// a health check that retries, also the work done on jobs whose unit was taken out.
     wasted: f64,
+    /// Servers with a health check: units taken out by a failed check.
+    taken_out: u64,
 }
 
 /// What an element sends to, for its report.
@@ -979,12 +982,13 @@ pub(crate) struct Sends {
 }
 
 /// The state a server's unit is in: exactly one at every instant, the first that applies of
-/// failed (or under repair), processing (an entity, including a job that runs on into a break
+/// failed (or under repair), out restarting (taken out by a health check), processing (an entity, including a job that runs on into a break
 /// or resumes off shift after a repair), blocked (holding a finished entity), off shift (idle
 /// because the calendar has the units unavailable) and starved (idle, on shift and up).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum UnitState {
     Failed,
+    Restarting,
     Setup,
     Processing,
     Blocked,
@@ -995,6 +999,7 @@ enum UnitState {
 /// How many of a server's units are in each state, over time; they add up to its capacity.
 pub(crate) struct UnitStates {
     failed: TimeWeighted,
+    restarting: TimeWeighted,
     setup: TimeWeighted,
     off_shift: TimeWeighted,
     blocked: TimeWeighted,
@@ -1006,6 +1011,7 @@ impl UnitStates {
     fn new(t: f64) -> Self {
         Self {
             failed: TimeWeighted::new(t, 0.0),
+            restarting: TimeWeighted::new(t, 0.0),
             setup: TimeWeighted::new(t, 0.0),
             off_shift: TimeWeighted::new(t, 0.0),
             blocked: TimeWeighted::new(t, 0.0),
@@ -1016,6 +1022,7 @@ impl UnitStates {
 
     fn reset(&mut self, t: f64) {
         self.failed.reset(t);
+        self.restarting.reset(t);
         self.setup.reset(t);
         self.off_shift.reset(t);
         self.blocked.reset(t);
@@ -1026,6 +1033,7 @@ impl UnitStates {
     fn get(&mut self, s: UnitState) -> Option<&mut TimeWeighted> {
         match s {
             UnitState::Failed => Some(&mut self.failed),
+            UnitState::Restarting => Some(&mut self.restarting),
             UnitState::Setup => Some(&mut self.setup),
             UnitState::OffShift => Some(&mut self.off_shift),
             UnitState::Blocked => Some(&mut self.blocked),
@@ -1046,6 +1054,8 @@ struct Doing {
     holding: bool,
     /// Failed or under repair.
     down: bool,
+    /// Taken out of service by a health check, restarting.
+    out: bool,
 }
 
 /// What each of a server's units is doing and whether they are on shift, kept in step with
@@ -1071,6 +1081,8 @@ impl UnitBook {
     fn state(&self, d: Doing) -> UnitState {
         if d.down {
             UnitState::Failed
+        } else if d.out {
+            UnitState::Restarting
         } else if d.processing && d.setup {
             UnitState::Setup
         } else if d.processing {
@@ -1150,6 +1162,7 @@ impl BlockStats {
             abandoned: 0,
             abandoned_wait: Tally::new(),
             wasted: 0.0,
+            taken_out: 0,
         }
     }
 
@@ -1176,6 +1189,7 @@ impl BlockStats {
         self.abandoned = 0;
         self.abandoned_wait = Tally::new();
         self.wasted = 0.0;
+        self.taken_out = 0;
     }
 
     /// Entities inside the element now: on their way in (in transfer), waiting in its input,
@@ -1206,7 +1220,9 @@ impl BlockStats {
             + p.idle * s.starved.integral(end)
             + p.while_blocked() * s.blocked.integral(end)
             + p.while_failed() * s.failed.integral(end)
-            + p.while_off_shift() * s.off_shift.integral(end);
+            + p.while_off_shift() * s.off_shift.integral(end)
+            // A unit out restarting draws its idle power (0 without a health check).
+            + p.idle * s.restarting.integral(end);
         kw_units * hours
     }
 
@@ -1308,6 +1324,16 @@ impl BlockStats {
             } => Some(p.until),
             _ => None,
         };
+        let checked = match kind {
+            ElementKind::Server {
+                capacity,
+                health_check: Some(h),
+                ..
+            } => Some((f64::from(*capacity), h.on_takeout)),
+            _ => None,
+        };
+        let wastes = patient == Some(PatienceUntil::Done)
+            || checked.is_some_and(|(_, o)| o == OnTakeout::Retry);
         ElementReport {
             id: element.id.clone(),
             name: element.name.clone(),
@@ -1478,10 +1504,21 @@ impl BlockStats {
                 (ended > 0).then(|| self.abandoned as f64 / ended as f64)
             }),
             abandoned_wait: patient.and_then(|_| self.abandoned_wait.mean()),
-            wasted: (patient == Some(PatienceUntil::Done)).then_some(self.wasted),
-            wasted_share: (patient == Some(PatienceUntil::Done))
+            wasted: wastes.then_some(self.wasted),
+            wasted_share: wastes
                 .then(|| self.states.processing.integral(end) + self.states.setup.integral(end))
                 .and_then(|working| (working > 0.0).then(|| self.wasted / working)),
+            taken_out: checked.map(|_| self.taken_out),
+            // Units not failed, not out and not off shift (each unit is in one state).
+            mean_in_service: checked.and_then(|(c, _)| {
+                let s = &self.states;
+                let away = s.failed.average(end)?
+                    + s.restarting.average(end)?
+                    + s.off_shift.average(end)?;
+                Some(c - away)
+            }),
+            time_restarting: checked
+                .and_then(|(c, _)| self.states.restarting.average(end).map(|x| x / c)),
             properties: assigns
                 .iter()
                 .zip(&self.properties)
@@ -3127,6 +3164,9 @@ impl Pools {
                     abandoned_wait: None,
                     wasted: None,
                     wasted_share: None,
+                    taken_out: None,
+                    mean_in_service: None,
+                    time_restarting: None,
                     properties: Vec::new(),
                 }
             })

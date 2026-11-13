@@ -22,10 +22,11 @@ use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     abandoned_element, availability_param, batching_element, bpmn_local, breakdown_element,
     calendar_element, changeover_element, condition_element, demand_element, dist_element,
-    edge_ends, estimate_element, interruptible_param, numeric, patience_element, planned_element,
-    power_element, probability_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, rework_element, routing_element, scrap_element, size, start_param,
-    stop_element, timer_param, transfer_element, vendor_value_element,
+    edge_ends, estimate_element, health_check_element, interruptible_param, numeric,
+    patience_element, planned_element, power_element, probability_element, property_element,
+    quantity_element, quantity_param, queue_capacity_element, rework_element, routing_element,
+    scrap_element, size, start_param, stop_element, timer_param, transfer_element,
+    vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -1986,6 +1987,22 @@ impl Editor {
                             new_patience.map(patience_element),
                         ));
                     }
+                    // The health check on its units.
+                    let old_check = match was {
+                        Some(ElementKind::Server { health_check, .. }) => health_check.as_ref(),
+                        _ => None,
+                    };
+                    let new_check = match &e.kind {
+                        ElementKind::Server { health_check, .. } => health_check.as_ref(),
+                        _ => None,
+                    };
+                    if new_check != old_check || (is_server && !was_server) {
+                        vendor_writes.push((
+                            id.clone(),
+                            crate::bpsim::HEALTH_CHECK,
+                            new_check.map(health_check_element),
+                        ));
+                    }
                     // The setup: BPSim's SetUpTime before every job, or a changeover.
                     let old_setup = match was {
                         Some(ElementKind::Server { setup, .. }) => setup.as_ref(),
@@ -2122,6 +2139,7 @@ impl Editor {
                         vendor_writes.push((id.clone(), crate::bpsim::POWER, None));
                         vendor_writes.push((id.clone(), crate::bpsim::PLANNED_RUN_TIME, None));
                         vendor_writes.push((id.clone(), crate::bpsim::PATIENCE, None));
+                        vendor_writes.push((id.clone(), crate::bpsim::HEALTH_CHECK, None));
                         vendor_writes.push((id.clone(), crate::bpsim::CHANGEOVER, None));
                         writes.push((id.clone(), "TimeParameters", "SetUpTime", None));
                         writes.push((id.clone(), "PriorityParameters", "Interruptible", None));

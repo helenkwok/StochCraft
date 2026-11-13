@@ -44,8 +44,8 @@ use std::collections::{BTreeMap, BTreeSet};
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 pub use stochcraft_model::{
-    Breakdown, Change, Demand, DemandPer, Patience, PatienceUntil, Power, Routing, Scrap, Setup,
-    Transfer,
+    Breakdown, Change, Demand, DemandPer, HealthCheck, OnTakeout, Patience, PatienceUntil, Power,
+    Routing, Scrap, Setup, Transfer,
 };
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
@@ -536,12 +536,20 @@ pub enum Metric {
     /// Servers with a patience: the mean time those that gave up had been here when they did
     /// (their patience), from entering, transfer included.
     AbandonedWait,
-    /// Servers with patience until done: the service time (the time drawn for the job, and
-    /// its setup) spent on jobs whose entity gave up before they were done, in time units.
+    /// Servers with patience until done, or a health check that retries the job under way: the
+    /// service time (the time drawn for the job, and its setup) spent on jobs whose entity gave
+    /// up before they were done, and the part of a job done before its unit was taken out (the
+    /// entity starts afresh), in time units.
     Wasted,
-    /// Servers with patience until done: [`Metric::Wasted`] over the time the units spent
-    /// processing and setting up.
+    /// Servers with patience until done, or a health check that retries: [`Metric::Wasted`]
+    /// over the time the units spent processing and setting up.
     WastedShare,
+    /// Servers with a health check: units taken out of service by a failed check, each time
+    /// counted.
+    TakenOut,
+    /// Servers with a health check: time-average number of units in service (not failed or
+    /// under repair, not out restarting, and not off shift).
+    MeanInService,
     /// Servers whose units fail: time-average fraction of units up (not failed or under
     /// repair).
     Availability,
@@ -566,6 +574,9 @@ pub enum Metric {
     /// Servers with breakdowns (all with a power): time-average fraction of units failed or under repair; the
     /// complement of [`Metric::Availability`].
     TimeFailed,
+    /// Servers with a health check: time-average fraction of units out of service restarting
+    /// after a failed check (not counting those that fail meanwhile, which are failed).
+    TimeRestarting,
     /// Servers that set up (a setup before every job, or changeovers): time-average fraction of
     /// units setting up. Their utilisation includes it (a unit setting up holds its part).
     TimeSetup,
@@ -621,7 +632,7 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 38] = [
+    pub const ALL: [Metric; 41] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -640,12 +651,15 @@ impl Metric {
         Metric::AbandonedWait,
         Metric::Wasted,
         Metric::WastedShare,
+        Metric::TakenOut,
+        Metric::MeanInService,
         Metric::Availability,
         Metric::TimeOffShift,
         Metric::TimeProcessing,
         Metric::TimeStarved,
         Metric::TimeBlocked,
         Metric::TimeFailed,
+        Metric::TimeRestarting,
         Metric::TimeSetup,
         Metric::OeeAvailability,
         Metric::OeeEffectiveness,
@@ -688,12 +702,15 @@ impl Metric {
             Metric::AbandonedWait => "abandoned_wait",
             Metric::Wasted => "wasted",
             Metric::WastedShare => "wasted_share",
+            Metric::TakenOut => "taken_out",
+            Metric::MeanInService => "mean_in_service",
             Metric::Availability => "availability",
             Metric::TimeOffShift => "time_off_shift",
             Metric::TimeProcessing => "time_processing",
             Metric::TimeStarved => "time_starved",
             Metric::TimeBlocked => "time_blocked",
             Metric::TimeFailed => "time_failed",
+            Metric::TimeRestarting => "time_restarting",
             Metric::TimeSetup => "time_setup",
             Metric::OeeAvailability => "oee_availability",
             Metric::OeeEffectiveness => "oee_effectiveness",
@@ -777,9 +794,15 @@ pub struct ElementReport {
     pub abandoned: Option<u64>,
     pub abandoned_share: Option<f64>,
     pub abandoned_wait: Option<f64>,
-    /// Servers with patience until done: [`Metric::Wasted`] and [`Metric::WastedShare`].
+    /// Servers with patience until done, or a health check that retries:
+    /// [`Metric::Wasted`] and [`Metric::WastedShare`].
     pub wasted: Option<f64>,
     pub wasted_share: Option<f64>,
+    /// Servers with a health check: [`Metric::TakenOut`], [`Metric::MeanInService`] and
+    /// [`Metric::TimeRestarting`].
+    pub taken_out: Option<u64>,
+    pub mean_in_service: Option<f64>,
+    pub time_restarting: Option<f64>,
     /// For each property the element assigns, in the element's order: the mean of the values
     /// it assigned (`None` when it assigned none, or the property holds text).
     pub properties: Vec<(String, Option<f64>)>,
@@ -807,12 +830,15 @@ impl ElementReport {
             Metric::AbandonedWait => self.abandoned_wait,
             Metric::Wasted => self.wasted,
             Metric::WastedShare => self.wasted_share,
+            Metric::TakenOut => self.taken_out.map(|n| n as f64),
+            Metric::MeanInService => self.mean_in_service,
             Metric::Availability => self.availability,
             Metric::TimeOffShift => self.time_off_shift,
             Metric::TimeProcessing => self.time_processing,
             Metric::TimeStarved => self.time_starved,
             Metric::TimeBlocked => self.time_blocked,
             Metric::TimeFailed => self.time_failed,
+            Metric::TimeRestarting => self.time_restarting,
             Metric::TimeSetup => self.time_setup,
             Metric::OeeAvailability => self.oee_availability,
             Metric::OeeEffectiveness => self.oee_effectiveness,
@@ -1191,6 +1217,7 @@ impl Builder {
                 setup: None,
                 planned_run_time: None,
                 patience: None,
+                health_check: None,
             },
         )
     }
@@ -1219,6 +1246,7 @@ impl Builder {
                 setup: None,
                 planned_run_time: None,
                 patience: None,
+                health_check: None,
             },
         )
     }
@@ -1323,6 +1351,21 @@ impl Builder {
             self.elements.get_mut(block.0)
         {
             *p = Some(patience);
+        }
+    }
+
+    /// Gives server `block` a health check: units taken out for a restart when too many wait
+    /// ([`HealthCheck`]).
+    pub fn health_check(&mut self, block: BlockId, check: HealthCheck) {
+        if let Some((
+            _,
+            ElementKind::Server {
+                health_check: h, ..
+            },
+            _,
+        )) = self.elements.get_mut(block.0)
+        {
+            *h = Some(check);
         }
     }
 

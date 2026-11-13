@@ -57,6 +57,7 @@ fn bpmn_written_by_another_tool() {
             setup: None,
             planned_run_time: None,
             patience: None,
+            health_check: None,
         }
     );
     assert_eq!(
@@ -93,6 +94,7 @@ fn inherited_scenario_changes_only_what_it_says() {
             setup: None,
             planned_run_time: None,
             patience: None,
+            health_check: None,
         }
     );
     assert_eq!(l.model.experiment.replications, 16);
@@ -161,6 +163,7 @@ fn xpdl_with_bpsim_1() {
             setup: None,
             planned_run_time: None,
             patience: None,
+            health_check: None,
         }
     );
     assert_eq!(

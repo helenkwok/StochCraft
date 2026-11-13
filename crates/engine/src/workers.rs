@@ -118,8 +118,12 @@ struct EncodedElement {
     /// Servers with a patience: the abandoned share and wait, the work wasted and its share
     /// (apart, since serde takes arrays of at most 32).
     patience: [Option<u64>; 4],
+    /// Servers with a health check: the mean units in service and the share of time
+    /// restarting.
+    health: [Option<u64>; 2],
     lost: Option<u64>,
     abandoned: Option<u64>,
+    taken_out: Option<u64>,
     work_in_progress: Option<u64>,
     properties: Vec<Option<u64>>,
 }
@@ -184,8 +188,10 @@ impl Encoded {
                         bits(e.wasted),
                         bits(e.wasted_share),
                     ],
+                    health: [bits(e.mean_in_service), bits(e.time_restarting)],
                     lost: e.lost,
                     abandoned: e.abandoned,
+                    taken_out: e.taken_out,
                     work_in_progress: e.work_in_progress,
                     properties: e.properties.iter().map(|(_, v)| bits(*v)).collect(),
                 })
@@ -238,6 +244,7 @@ impl Encoded {
                     ct,
                 ] = e.metrics;
                 let [ash, aw, wa, wsh] = e.patience;
+                let [mis, rs] = e.health;
                 Some(ElementReport {
                     id: t.id.clone(),
                     name: t.name.clone(),
@@ -261,6 +268,9 @@ impl Encoded {
                     abandoned_wait: float(aw),
                     wasted: float(wa),
                     wasted_share: float(wsh),
+                    taken_out: e.taken_out,
+                    mean_in_service: float(mis),
+                    time_restarting: float(rs),
                     time_off_shift: float(off),
                     time_processing: float(pr),
                     time_starved: float(st),

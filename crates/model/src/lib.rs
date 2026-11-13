@@ -181,6 +181,10 @@ pub enum ElementKind {
         /// How long an entity waits before it gives up (reneging); `None`: entities wait for as
         /// long as it takes. See [`Patience`].
         patience: Option<Patience>,
+        /// Each unit is checked now and then and taken out of service for a restart when too
+        /// many entities wait (a StochCraft vendor extension, `stochcraft:healthCheck`); `None`:
+        /// units are never taken out. See [`HealthCheck`].
+        health_check: Option<HealthCheck>,
     },
     /// A task whose units come from shared resource pools ([`Model::resources`]): each entity
     /// takes what the first of `needs` that can be met right now asks for, all at once, holds it
@@ -404,6 +408,67 @@ impl PatienceUntil {
     }
 }
 
+/// A health check on a server's units, as a load balancer makes on the servers behind it (a
+/// StochCraft vendor extension, `stochcraft:healthCheck`, since BPSim has nothing for it).
+///
+/// Each unit is checked on its own, every `interval` (the first check one draw after the
+/// start). A check fails when more entities wait than `limit` per working unit (up, not out and
+/// on shift): a probe that would wait longer than its timeout, so `limit` is the timeout times
+/// one unit's service rate. A unit that fails is taken out for `restart`, then comes back; one
+/// off shift, failed or already out is not checked. Overload judged on the shared queue is
+/// the signal a timed-out probe gives, since every unit serves the one queue. Taking units out
+/// leaves fewer to serve the queue, which grows, so more fail: once tipped over, the server can
+/// stay collapsed long after the cause has gone (a metastable failure).
+///
+/// Failures ([`Breakdown`]) keep coming in elapsed time while a unit is out. A server with a
+/// health check needs an unlimited buffer.
+#[derive(Debug, Clone, PartialEq)]
+pub struct HealthCheck {
+    /// The time between one unit's checks.
+    pub interval: Dist,
+    /// The most entities waiting per working unit that still passes (0 or more).
+    pub limit: f64,
+    /// How long a unit taken out is out.
+    pub restart: Dist,
+    /// Keep at least this many units in service: a failed check takes no unit out when that
+    /// would leave fewer working. `None`: no floor.
+    pub keep: Option<u32>,
+    /// What happens to a job under way on a unit taken out.
+    pub on_takeout: OnTakeout,
+}
+
+/// What happens to a job under way on a unit a health check takes out.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum OnTakeout {
+    /// The connection drops and the client tries again: the entity goes back to the head of the
+    /// queue at once, for any unit to start afresh (a new attempt, with a fresh patience if the
+    /// server has one). The work done on it is wasted.
+    #[default]
+    Retry,
+    /// The entity waits on its unit and the job resumes with what was left after the restart,
+    /// as a job a failure interrupts does.
+    Resume,
+}
+
+impl OnTakeout {
+    /// The name in files and on the wire.
+    pub fn name(self) -> &'static str {
+        match self {
+            OnTakeout::Retry => "retry",
+            OnTakeout::Resume => "resume",
+        }
+    }
+
+    /// The value named `s`.
+    pub fn from_name(s: &str) -> Option<Self> {
+        match s {
+            "retry" => Some(OnTakeout::Retry),
+            "resume" => Some(OnTakeout::Resume),
+            _ => None,
+        }
+    }
+}
+
 /// How an exclusive gateway chooses the way each entity takes.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Routing {
@@ -563,6 +628,7 @@ impl ElementKind {
                 setup,
                 planned_run_time,
                 patience,
+                health_check,
                 ..
             } => {
                 let mut d = vec![("service", service)];
@@ -582,6 +648,10 @@ impl ElementKind {
                 }
                 if let Some(p) = patience {
                     d.push(("patience", &p.time));
+                }
+                if let Some(h) = health_check {
+                    d.push(("check_interval", &h.interval));
+                    d.push(("restart", &h.restart));
                 }
                 d
             }
@@ -1037,6 +1107,12 @@ pub enum Problem {
     SeveralAbandonedWays {
         count: usize,
     },
+    /// A health check on a server with a finite buffer (not supported yet).
+    HealthCheckWithFiniteBuffer,
+    /// A health check whose limit is not a number of 0 or more.
+    HealthCheckLimitNotValid,
+    /// A health check whose time between checks has a mean that is not above 0.
+    HealthCheckIntervalNotPositive,
     /// A demand whose quantity is not a number above 0.
     DemandNotPositive,
     /// A demand per shift with no calendar to say what a shift is.
@@ -1209,6 +1285,9 @@ impl Problem {
             Problem::PatienceNegative => "patience_negative",
             Problem::AbandonedWithoutPatience { .. } => "abandoned_without_patience",
             Problem::SeveralAbandonedWays { .. } => "several_abandoned_ways",
+            Problem::HealthCheckWithFiniteBuffer => "health_check_with_finite_buffer",
+            Problem::HealthCheckLimitNotValid => "health_check_limit_not_valid",
+            Problem::HealthCheckIntervalNotPositive => "health_check_interval_not_positive",
             Problem::DemandNotPositive => "demand_not_positive",
             Problem::ShiftWithoutCalendar => "shift_without_calendar",
             Problem::DemandCalendarUnknown { .. } => "demand_calendar_unknown",
@@ -1382,6 +1461,18 @@ impl std::fmt::Display for Diagnostic {
             Problem::SeveralAbandonedWays { count } => write!(
                 f,
                 "{count} of its ways out are for entities that give up; at most one can be"
+            ),
+            Problem::HealthCheckWithFiniteBuffer => write!(
+                f,
+                "a health check needs an unlimited waiting room; remove the buffer's limit or the                  health check"
+            ),
+            Problem::HealthCheckLimitNotValid => write!(
+                f,
+                "its health check's limit (entities waiting per working unit) must be a number of                  0 or more"
+            ),
+            Problem::HealthCheckIntervalNotPositive => write!(
+                f,
+                "its health check's time between checks must have a mean above 0"
             ),
             Problem::BadProbability { value } => {
                 write!(f, "probability {value} must be between 0 and 1")
@@ -1774,6 +1865,31 @@ impl Model {
                 && p.time.mean().is_some_and(|m| m < 0.0)
             {
                 out.push(Diagnostic::error(Some(&e.id), Problem::PatienceNegative));
+            }
+            if let ElementKind::Server {
+                health_check: Some(h),
+                queue_capacity,
+                ..
+            } = &e.kind
+            {
+                if queue_capacity.is_some() {
+                    out.push(Diagnostic::error(
+                        Some(&e.id),
+                        Problem::HealthCheckWithFiniteBuffer,
+                    ));
+                }
+                if h.limit.is_nan() || h.limit < 0.0 {
+                    out.push(Diagnostic::error(
+                        Some(&e.id),
+                        Problem::HealthCheckLimitNotValid,
+                    ));
+                }
+                if h.interval.check().is_ok() && h.interval.mean().is_some_and(|m| m <= 0.0) {
+                    out.push(Diagnostic::error(
+                        Some(&e.id),
+                        Problem::HealthCheckIntervalNotPositive,
+                    ));
+                }
             }
             if let ElementKind::Server { setup: Some(s), .. } = &e.kind {
                 match &s.on_change_of {
@@ -2417,6 +2533,7 @@ impl Model {
                 service,
                 queue_capacity: None,
                 patience: None,
+                health_check: None,
                 ..
             } = &e.kind
             else {
@@ -2975,6 +3092,7 @@ mod tests {
                         setup: None,
                         planned_run_time: None,
                         patience: None,
+                        health_check: None,
                     },
                 ),
                 el(
@@ -3069,6 +3187,7 @@ mod tests {
             setup: None,
             planned_run_time: None,
             patience: None,
+            health_check: None,
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -3146,6 +3265,7 @@ mod tests {
                 setup: None,
                 planned_run_time: None,
                 patience: None,
+                health_check: None,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

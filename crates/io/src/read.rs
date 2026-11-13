@@ -8,9 +8,9 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, Change, Connection, DateTime, Demand, DemandPer, Dist,
-    Element as ModelElement, ElementId, ElementKind, Estimate, Experiment, Family, Model, Need,
-    Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue, ResourcePool, Routing,
-    Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    Element as ModelElement, ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck,
+    Model, Need, OnTakeout, Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue,
+    ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -985,6 +985,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             setup: setup_of(scenario, id, unit, notes),
                             planned_run_time: planned_of(scenario, id, unit, notes),
                             patience: patience_of(scenario, id, unit, notes),
+                            health_check: health_check_of(scenario, id, unit, notes),
                         }
                     }
                     (None, None, None) => ElementKind::Delay { duration: time },
@@ -1056,6 +1057,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "a patience (stochcraft:patience) applies only to a task with a resource of its own; it is ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Server { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::HEALTH_CHECK)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "a health check (stochcraft:healthCheck) applies only to a task with a resource of its own; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::Sink { .. })
@@ -1302,6 +1313,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::POWER,
             bpsim::PLANNED_RUN_TIME,
             bpsim::PATIENCE,
+            bpsim::HEALTH_CHECK,
             bpsim::ABANDONED,
             bpsim::SCRAP,
             bpsim::DEMAND,
@@ -1688,6 +1700,83 @@ fn patience_of(
     Some(Patience {
         time: dist_of(body, "the patience", id, notes)?,
         until,
+    })
+}
+
+/// The health check StochCraft's vendor extension gives server `id`, if any.
+fn health_check_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+) -> Option<HealthCheck> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::HEALTH_CHECK))?;
+    let body = ext.elements().find(|e| e.local() == "healthCheck");
+    let part = |local: &str, notes: &mut Vec<Note>| {
+        let p = body?.elements().find(|e| e.local() == local)?;
+        dist_of(
+            bpsim::default_value(p, unit, notes, Some(id)),
+            &format!("the health check's {local}"),
+            id,
+            notes,
+        )
+    };
+    let (Some(interval), Some(restart)) = (part("interval", notes), part("restart", notes)) else {
+        notes.push(Note::error(
+            Some(id),
+            "a health check needs an interval and a restart distribution; the units are never taken out",
+        ));
+        return None;
+    };
+    let raw = body.and_then(|b| b.attr("limit"));
+    let limit = match raw.as_deref().map(str::trim) {
+        Some(s) if s.eq_ignore_ascii_case("INF") => Some(f64::INFINITY),
+        Some(s) => s.parse::<f64>().ok().filter(|x| *x >= 0.0),
+        None => None,
+    };
+    let Some(limit) = limit else {
+        notes.push(Note::error(
+            Some(id),
+            format!(
+                "a health check needs a limit of 0 or more, not `{}`; the units are never taken out",
+                raw.unwrap_or_default()
+            ),
+        ));
+        return None;
+    };
+    let keep = match body.and_then(|b| b.attr("keep")) {
+        None => None,
+        Some(k) => match k.trim().parse::<u32>() {
+            Ok(k) => Some(k),
+            Err(_) => {
+                notes.push(Note::error(
+                    Some(id),
+                    format!(
+                        "keep on a health check must be a whole number of at least 0, not `{k}`; no units are kept"
+                    ),
+                ));
+                None
+            }
+        },
+    };
+    let on_takeout = match body.and_then(|b| b.attr("onTakeout")).as_deref().map(str::trim) {
+        None => OnTakeout::Retry,
+        Some(s) => OnTakeout::from_name(s).unwrap_or_else(|| {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "onTakeout on a health check must be retry or resume, not `{s}`; a job under way is retried"
+                ),
+            ));
+            OnTakeout::Retry
+        }),
+    };
+    Some(HealthCheck {
+        interval,
+        limit,
+        restart,
+        keep,
+        on_takeout,
     })
 }
 
