@@ -21,11 +21,11 @@ use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
     availability_param, batching_element, bpmn_local, breakdown_element, calendar_element,
-    changeover_element, condition_element, dist_element, edge_ends, estimate_element,
-    interruptible_param, numeric, planned_element, power_element, probability_element,
-    property_element, quantity_element, quantity_param, queue_capacity_element, rework_element,
-    routing_element, scrap_element, size, start_param, stop_element, timer_param, transfer_element,
-    vendor_value_element,
+    changeover_element, condition_element, demand_element, dist_element, edge_ends,
+    estimate_element, interruptible_param, numeric, planned_element, power_element,
+    probability_element, property_element, quantity_element, quantity_param,
+    queue_capacity_element, rework_element, routing_element, scrap_element, size, start_param,
+    stop_element, timer_param, transfer_element, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -2092,13 +2092,34 @@ impl Editor {
                 | ElementKind::ExclusiveGateway { .. }
                 | ElementKind::ParallelGateway => {}
             }
+            // Customer demand at a sink.
+            let old_demand = match was {
+                Some(ElementKind::Sink { demand, .. }) => demand.as_ref(),
+                _ => None,
+            };
+            let new_demand = match &e.kind {
+                ElementKind::Sink { demand, .. } => demand.as_ref(),
+                _ => None,
+            };
+            if old_demand != new_demand {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::DEMAND,
+                    new_demand.map(|d| {
+                        // The calendar it names as the file's encoding needs.
+                        let mut v = demand_element(d);
+                        self.text_attrs(&mut v);
+                        v
+                    }),
+                ));
+            }
             // Scrap at a sink.
             let old_scrap = match was {
-                Some(ElementKind::Sink { scrap }) => scrap.as_ref(),
+                Some(ElementKind::Sink { scrap, .. }) => scrap.as_ref(),
                 _ => None,
             };
             let new_scrap = match &e.kind {
-                ElementKind::Sink { scrap } => scrap.as_ref(),
+                ElementKind::Sink { scrap, .. } => scrap.as_ref(),
                 _ => None,
             };
             if old_scrap != new_scrap {

@@ -129,6 +129,35 @@ engine's messages (validation, file notes) are English too.
   before, plus ja 廃棄 and ko 폐기 (which can read as the act of disposal rather than the scrapped
   item), sq Skarto (an Italian loan), hi's "Counts against" (phrased as a question), and pl,
   whose "Udział jakości" keeps the share word although Polish usage tends to say "wskaźnik".
+- The rows for takt (PR "takt from a customer demand on departures": the Takt section of a
+  Departures block, its demand, period and time-available pickers, the per-shift hint, and the
+  Takt time, Demand, Demand met and Cycle time results) were machine-drafted with Claude Code from
+  the plain meaning of the English and each catalog's existing words for Departures, task, part,
+  run, shift, period, day, week and share. "Takt time" follows the titles of the interlanguage
+  articles of Wikipedia's "Takt time" where there is one (ca Temps de takt, de Taktzeit, es and fr
+  Takt time, hi टैक्ट समय, ja タクトタイム, nb Takttid, pt Takt Time, tr Takt zamanı), the Wikidata
+  labels of that item for zh (节拍时间, and 節拍時間 for zh-hant) and it (takt time), and the
+  wording inside related articles for fi (tahtiaika, "Tahtituotanto"), hu (ütemidő, "Akadálytalan
+  áramlás"), ko (택트 타임, "공정관리") and vi (thời gian Takt, "Công nghệ dòng nhu cầu");
+  everywhere else it is the language's "takt" plus its time word from general lean usage, with no
+  source checked (ru Время такта, pl Czas taktu, sv Takttid…), and nl Takttijd and sr Такт време
+  keep that form although Wikidata's labels are "Takt time" and "takt tim". English Wikipedia's
+  "Cycle time" is the software sense, so its links were not used: "Cycle time" follows the takt
+  articles' own words for the manufacturing cycle where they give one (fr temps de cycle, ca temps
+  de cicle, nb syklustid, tr döngü süresi, hi चक्र समय from "चक्रिय समय", ja サイクルタイム from
+  the article "サイクル・タイム", de Zykluszeit as in German lean usage) and elsewhere is the
+  language's cycle-plus-time compound. The bare "Takt" heading is the loanword where the language
+  uses one, but ja, ko, lo and th repeat the full takt-time term because the bare loan reads as
+  something else (ja タクト is a conductor's baton), fi and hu use their own words (Tahti, Ütem),
+  and zh uses 节拍/節拍. "Per" is rendered as the catalog's period word (Zeitraum, Période, 期間,
+  Jakso…) because the choices already carry the preposition. "The whole clock" says "all the time"
+  rather than the metaphor. "Demand met" is the share of the demand met with the catalog's share
+  word, or a fill rate in ja, ko and zh (需要充足率, 수요 충족률, 需求满足率, 需求達成率), and de
+  Bedarfsdeckung. ko uses the catalog's 근무조 for shift, but nl says "ploeg" rather than its
+  catalog's "werktijd", which does not take "per". Not checked against IATE, and not reviewed by
+  native speakers. The least certain are lo and th (whose takt words ເວລາແທັກ and แท็กไทม์ are
+  unsourced transliterations), ta, te, bn, ka, kk and sq as before, plus et, lt and the sr and
+  sr-latn rows (written in ekavian although those catalogs mix in ijekavian forms).
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

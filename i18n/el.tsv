@@ -102,7 +102,9 @@
 	Constant	Σταθερή
 	Copy	Αντιγραφή
 	Counts against	Χρεώνεται σε
+	Customer demand	Ζήτηση πελατών
 	Cut	Αποκοπή
+	Cycle time	Χρόνος κύκλου
 	Daily	Καθημερινά
 	Dark	Σκούρο
 	Data points	Σημεία δεδομένων
@@ -112,6 +114,8 @@
 	Decision (one way)	Απόφαση (μία διαδρομή)
 	Default flow	Προεπιλεγμένη ροή
 	Delete	Διαγραφή
+	Demand	Ζήτηση
+	Demand met	Ποσοστό κάλυψης ζήτησης
 	Departures	Αναχωρήσεις
 	Diagram	Διάγραμμα
 	Discard	Απόρριψη
@@ -173,6 +177,7 @@
 	Hide Others	Απόκρυψη άλλων
 	Hide {app}	Απόκρυψη {app}
 	How many	Πόσα
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Πόσα τεμάχια θέλουν οι πελάτες από αυτές τις αναχωρήσεις· τότε τα αποτελέσματα δείχνουν το takt (τον διαθέσιμο χρόνο διά τη ζήτηση) και τον χρόνο κύκλου κάθε εργασίας.
 	Inside over time	Μέσα στη διάρκεια του χρόνου
 	Jump	Μετάβαση
 	Jump to time	Μετάβαση σε χρόνο
@@ -257,8 +262,12 @@
 	Parameter	Παράμετρος
 	Parameters	Παράμετροι
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Τα τεμάχια που ακολουθούν αυτή τη ροή επιστρέφουν για να υποστούν ξανά επεξεργασία. Μετρούν ως επανεπεξεργασία της τελευταίας εργασίας με πόρο από την οποία πέρασαν.
+	Parts wanted	Ζητούμενα τεμάχια
+	Parts wanted is a number above 0	Τα ζητούμενα τεμάχια είναι αριθμός μεγαλύτερος από 0
 	Paste	Επικόλληση
 	Pause	Παύση
+	Per	Περίοδος
+	Per shift needs a calendar: each period it is active is a shift.	Το «ανά βάρδια» χρειάζεται ημερολόγιο: κάθε περίοδος που είναι ενεργό είναι μία βάρδια.
 	Percentile	Εκατοστημόριο
 	Period {n} ends	Λήξη περιόδου {n}
 	Period {n} repeats	Επανάληψη περιόδου {n}
@@ -389,6 +398,8 @@
 	Stopped watching	Η παρακολούθηση διακόπηκε
 	Sun	Κυρ
 	Sweep a parameter	Σάρωση παραμέτρου
+	Takt	Takt
+	Takt time	Χρόνος takt
 	Tandem line	Διαδοχική γραμμή
 	Target	Στόχος
 	Target share	Ποσοστό-στόχος
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Το μοντέλο: πείραμα, συνδέσεις και προβλήματα
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Το ποσοστό των επαναλήψεων έως και κάθε τιμή. Η ζώνη περιέχει την πραγματική κατανομή με εμπιστοσύνη {confidence}.
 	The values are numbers, separated by semicolons or spaces	Οι τιμές είναι αριθμοί που χωρίζονται με ερωτηματικά ή κενά
+	The whole clock	Όλος ο χρόνος
 	This block has a warning	Αυτό το μπλοκ έχει προειδοποίηση
 	This block has an error	Αυτό το μπλοκ έχει σφάλμα
 	This run	Αυτή η εκτέλεση
 	Three-point estimate	Εκτίμηση τριών σημείων
 	Thu	Πέμ
+	Time available	Διαθέσιμος χρόνος
 	Time between arrivals	Χρόνος μεταξύ αφίξεων
 	Time blocked	Χρόνος αποκλεισμού
 	Time failed	Χρόνος βλάβης
@@ -479,6 +492,7 @@
 	decision: one way	απόφαση: μία διαδρομή
 	departures	αναχωρήσεις
 	egui and eframe (Craft suite fork)	egui και eframe (παρακλάδι της σουίτας Craft)
+	for the whole run	για όλη την εκτέλεση
 	from its value	από την τιμή του
 	have left	έχουν φύγει
 	hours	ώρες
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k από N: μόνο k από τις N επαναλήψεις είχαν τιμή για αυτό το αποτέλεσμα, και ο μέσος όρος και το διάστημά του αφορούν αυτές τις k.
 	n = {k} of {n}	n = {k} από {n}
 	nothing yet	τίποτα ακόμη
+	per day	ανά ημέρα
+	per shift	ανά βάρδια
+	per week	ανά εβδομάδα
 	seconds	δευτερόλεπτα
 	split batches	διαχωρισμός παρτίδων
 	split or join: all ways	διαχωρισμός ή ένωση: όλες οι διαδρομές

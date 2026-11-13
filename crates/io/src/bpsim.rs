@@ -87,6 +87,11 @@ pub const REWORK: &str = "stochcraft:rework";
 /// names, or else the last task with a resource of its own each entity finished at.
 pub const SCRAP: &str = "stochcraft:scrap";
 
+/// Customer demand: a `stochcraft:demand` element on an end event's `ElementParameters`, with
+/// attributes `quantity` (parts, above 0), `per` (`run`, `day`, `week` or `shift`) and an
+/// optional `calendar` whose active time is the time available (needed for `shift`), for takt.
+pub const DEMAND: &str = "stochcraft:demand";
+
 /// A terminating experiment's stop on a target count: `stochcraft:stopCount` on an element's
 /// `ElementParameters`, the run ending once that many entities have left the element.
 pub const STOP_COUNT: &str = "stochcraft:stopCount";

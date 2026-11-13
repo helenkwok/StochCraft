@@ -102,7 +102,9 @@
 	Constant	Hằng số
 	Copy	Sao chép
 	Counts against	Quy cho
+	Customer demand	Nhu cầu khách hàng
 	Cut	Cắt
+	Cycle time	Thời gian chu kỳ
 	Daily	Hằng ngày
 	Dark	Tối
 	Data points	Điểm dữ liệu
@@ -112,6 +114,8 @@
 	Decision (one way)	Quyết định (một hướng)
 	Default flow	Luồng mặc định
 	Delete	Xóa
+	Demand	Nhu cầu
+	Demand met	Tỷ lệ nhu cầu được đáp ứng
 	Departures	Lượt rời đi
 	Diagram	Sơ đồ
 	Discard	Loại bỏ
@@ -173,6 +177,7 @@
 	Hide Others	Ẩn các mục khác
 	Hide {app}	Ẩn {app}
 	How many	Bao nhiêu
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Khách hàng muốn bao nhiêu chi tiết từ các lượt rời đi này; khi đó kết quả hiển thị takt (thời gian khả dụng chia cho nhu cầu) và thời gian chu kỳ của mỗi tác vụ.
 	Inside over time	Bên trong theo thời gian
 	Jump	Đi
 	Jump to time	Đi tới thời điểm
@@ -257,8 +262,12 @@
 	Parameter	Tham số
 	Parameters	Tham số
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Các chi tiết đi theo luồng này quay lại để được gia công lại; chúng được tính là làm lại cho tác vụ có tài nguyên cuối cùng mà chúng đã đi qua.
+	Parts wanted	Số chi tiết cần
+	Parts wanted is a number above 0	Số chi tiết cần là một số lớn hơn 0
 	Paste	Dán
 	Pause	Tạm dừng
+	Per	Khoảng
+	Per shift needs a calendar: each period it is active is a shift.	"Mỗi ca" cần một lịch: mỗi khoảng thời gian lịch hoạt động là một ca.
 	Percentile	Phân vị
 	Period {n} ends	Khoảng {n} kết thúc
 	Period {n} repeats	Khoảng {n} lặp lại
@@ -389,6 +398,8 @@
 	Stopped watching	Đã ngừng theo dõi
 	Sun	CN
 	Sweep a parameter	Quét một tham số
+	Takt	Takt
+	Takt time	Thời gian takt
 	Tandem line	Dây chuyền nối tiếp
 	Target	Mục tiêu
 	Target share	Tỷ lệ mục tiêu
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Mô hình: thí nghiệm, kết nối và vấn đề
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Tỷ lệ lần lặp bằng hoặc dưới mỗi giá trị. Dải chứa phân phối thật với độ tin cậy {confidence}.
 	The values are numbers, separated by semicolons or spaces	Các giá trị là số, phân tách bằng dấu chấm phẩy hoặc dấu cách
+	The whole clock	Toàn bộ thời gian
 	This block has a warning	Khối này có cảnh báo
 	This block has an error	Khối này có lỗi
 	This run	Lần chạy này
 	Three-point estimate	Ước lượng ba điểm
 	Thu	T5
+	Time available	Thời gian khả dụng
 	Time between arrivals	Thời gian giữa các lượt đến
 	Time blocked	Thời gian bị chặn
 	Time failed	Thời gian hỏng hóc
@@ -479,6 +492,7 @@
 	decision: one way	quyết định: một hướng
 	departures	lượt rời đi
 	egui and eframe (Craft suite fork)	egui và eframe (bản phân nhánh của bộ Craft)
+	for the whole run	cho cả lần chạy
 	from its value	từ giá trị của nó
 	have left	đã rời
 	hours	giờ
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k trên N: chỉ k trong N lần lặp có giá trị cho kết quả đó, và giá trị trung bình cùng khoảng của nó tính trên k lần đó.
 	n = {k} of {n}	n = {k} trên {n}
 	nothing yet	chưa có gì
+	per day	mỗi ngày
+	per shift	mỗi ca
+	per week	mỗi tuần
 	seconds	giây
 	split batches	tách lô
 	split or join: all ways	tách hoặc gộp: mọi hướng

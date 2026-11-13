@@ -102,7 +102,9 @@
 	Constant	Konstan
 	Copy	Salin
 	Counts against	Dibebankan ke
+	Customer demand	Permintaan pelanggan
 	Cut	Potong
+	Cycle time	Waktu siklus
 	Daily	Harian
 	Dark	Gelap
 	Data points	Titik data
@@ -112,6 +114,8 @@
 	Decision (one way)	Keputusan (satu jalur)
 	Default flow	Alur default
 	Delete	Hapus
+	Demand	Permintaan
+	Demand met	Bagian permintaan terpenuhi
 	Departures	Keberangkatan
 	Diagram	Diagram
 	Discard	Buang
@@ -173,6 +177,7 @@
 	Hide Others	Sembunyikan yang lain
 	Hide {app}	Sembunyikan {app}
 	How many	Berapa
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Berapa komponen yang diinginkan pelanggan dari keberangkatan ini; hasilnya lalu menunjukkan takt (waktu tersedia dibagi permintaan) dan waktu siklus setiap tugas.
 	Inside over time	Di dalam dari waktu ke waktu
 	Jump	Lompat
 	Jump to time	Lompat ke waktu
@@ -257,8 +262,12 @@
 	Parameter	Parameter
 	Parameters	Parameter
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Komponen yang melalui alur ini kembali untuk dikerjakan lagi; komponen itu dihitung sebagai pengerjaan ulang pada tugas terakhir dengan sumber daya yang dilaluinya.
+	Parts wanted	Komponen diinginkan
+	Parts wanted is a number above 0	Komponen diinginkan harus berupa angka di atas 0
 	Paste	Tempel
 	Pause	Jeda
+	Per	Periode
+	Per shift needs a calendar: each period it is active is a shift.	"Per sif" memerlukan kalender: setiap periode saat kalender itu aktif adalah satu sif.
 	Percentile	Persentil
 	Period {n} ends	Periode {n} selesai
 	Period {n} repeats	Periode {n} berulang
@@ -389,6 +398,8 @@
 	Stopped watching	Berhenti mengamati
 	Sun	Min
 	Sweep a parameter	Sapu satu parameter
+	Takt	Takt
+	Takt time	Waktu takt
 	Tandem line	Jalur tandem
 	Target	Target
 	Target share	Bagian target
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian replikasi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
 	The values are numbers, separated by semicolons or spaces	Nilai berupa angka yang dipisahkan titik koma atau spasi
+	The whole clock	Seluruh waktu
 	This block has a warning	Blok ini memiliki peringatan
 	This block has an error	Blok ini memiliki kesalahan
 	This run	Jalannya ini
 	Three-point estimate	Perkiraan tiga titik
 	Thu	Kam
+	Time available	Waktu tersedia
 	Time between arrivals	Waktu antar kedatangan
 	Time blocked	Waktu terblokir
 	Time failed	Waktu rusak
@@ -479,6 +492,7 @@
 	decision: one way	keputusan: satu jalur
 	departures	keberangkatan
 	egui and eframe (Craft suite fork)	egui dan eframe (cabang dari rangkaian Craft)
+	for the whole run	untuk seluruh jalannya
 	from its value	berdasarkan nilainya
 	have left	telah keluar
 	hours	jam
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k dari N: hanya k dari N replikasi yang memiliki nilai untuk hasil itu, dan rata-rata serta intervalnya dihitung atas k tersebut.
 	n = {k} of {n}	n = {k} dari {n}
 	nothing yet	belum ada
+	per day	per hari
+	per shift	per sif
+	per week	per minggu
 	seconds	detik
 	split batches	pemisahan batch
 	split or join: all ways	pisahkan atau gabungkan: semua jalur

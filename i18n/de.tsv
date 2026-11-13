@@ -102,7 +102,9 @@
 	Constant	Konstant
 	Copy	Kopieren
 	Counts against	Zugerechnet zu
+	Customer demand	Kundenbedarf
 	Cut	Ausschneiden
+	Cycle time	Zykluszeit
 	Daily	Täglich
 	Dark	Dunkel
 	Data points	Datenpunkte
@@ -112,6 +114,8 @@
 	Decision (one way)	Entscheidung (ein Weg)
 	Default flow	Standardverbindung
 	Delete	Löschen
+	Demand	Bedarf
+	Demand met	Bedarfsdeckung
 	Departures	Abgänge
 	Diagram	Diagramm
 	Discard	Verwerfen
@@ -173,6 +177,7 @@
 	Hide Others	Andere ausblenden
 	Hide {app}	{app} ausblenden
 	How many	Wie viele
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Wie viele Teile Kunden von diesen Abgängen wollen; die Ergebnisse zeigen dann den Takt (die verfügbare Zeit geteilt durch den Bedarf) und die Zykluszeit jeder Aufgabe.
 	Inside over time	Im Block über die Zeit
 	Jump	Springen
 	Jump to time	Springen zu Zeitpunkt
@@ -257,8 +262,12 @@
 	Parameter	Parameter
 	Parameters	Parameter
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Teile, die diese Verbindung nehmen, gehen zur erneuten Bearbeitung zurück; sie zählen als Nacharbeit der letzten Aufgabe mit Ressource, die sie durchlaufen haben.
+	Parts wanted	Gewünschte Teile
+	Parts wanted is a number above 0	Die Anzahl gewünschter Teile ist eine Zahl über 0
 	Paste	Einfügen
 	Pause	Pause
+	Per	Zeitraum
+	Per shift needs a calendar: each period it is active is a shift.	„je Schicht“ braucht einen Kalender: Jeder Zeitraum, in dem er aktiv ist, ist eine Schicht.
 	Percentile	Perzentil
 	Period {n} ends	Zeitraum {n} endet
 	Period {n} repeats	Zeitraum {n} wiederholt sich
@@ -389,6 +398,8 @@
 	Stopped watching	Beobachten beendet
 	Sun	So
 	Sweep a parameter	Einen Parameter variieren
+	Takt	Takt
+	Takt time	Taktzeit
 	Tandem line	Tandemlinie
 	Target	Ziel
 	Target share	Zielanteil
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Das Modell: Experiment, Verbindungen und Probleme
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Der Anteil der Replikationen bei oder unter jedem Wert. Das Band enthält die wahre Verteilung mit {confidence} Konfidenz.
 	The values are numbers, separated by semicolons or spaces	Die Werte sind Zahlen, getrennt durch Semikolons oder Leerzeichen
+	The whole clock	Die ganze Zeit
 	This block has a warning	Dieser Block hat eine Warnung
 	This block has an error	Dieser Block hat einen Fehler
 	This run	Dieser Lauf
 	Three-point estimate	Dreipunktschätzung
 	Thu	Do
+	Time available	Verfügbare Zeit
 	Time between arrivals	Zeit zwischen Ankünften
 	Time blocked	Zeit blockiert
 	Time failed	Zeit im Ausfall
@@ -479,6 +492,7 @@
 	decision: one way	Entscheidung: ein Weg
 	departures	Abgänge
 	egui and eframe (Craft suite fork)	egui und eframe (Fork der Craft-Suite)
+	for the whole run	für den ganzen Lauf
 	from its value	aus seinem Wert
 	have left	verlassen haben
 	hours	Stunden
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k von N: nur k der N Replikationen hatten einen Wert für dieses Ergebnis; Mittelwert und Intervall beziehen sich auf diese k.
 	n = {k} of {n}	n = {k} von {n}
 	nothing yet	noch nichts
+	per day	je Tag
+	per shift	je Schicht
+	per week	je Woche
 	seconds	Sekunden
 	split batches	Chargen aufteilen
 	split or join: all ways	aufteilen oder zusammenführen: alle Wege

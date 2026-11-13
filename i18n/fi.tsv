@@ -102,7 +102,9 @@
 	Constant	Vakio
 	Copy	Kopioi
 	Counts against	Kirjataan tehtävälle
+	Customer demand	Asiakkaan kysyntä
 	Cut	Leikkaa
+	Cycle time	Sykliaika
 	Daily	Päivittäin
 	Dark	Tumma
 	Data points	Datapisteet
@@ -112,6 +114,8 @@
 	Decision (one way)	Päätös (yksi reitti)
 	Default flow	Oletusvirta
 	Delete	Poista
+	Demand	Kysyntä
+	Demand met	Täytetyn kysynnän osuus
 	Departures	Poistumiset
 	Diagram	Kaavio
 	Discard	Hylkää
@@ -173,6 +177,7 @@
 	Hide Others	Piilota muut
 	Hide {app}	Piilota {app}
 	How many	Kuinka monta
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kuinka monta osaa asiakkaat haluavat näistä poistumisista; tulokset näyttävät silloin tahdin (käytettävissä oleva aika jaettuna kysynnällä) ja kunkin tehtävän sykliajan.
 	Inside over time	Sisällä ajan mittaan
 	Jump	Siirry
 	Jump to time	Siirry hetkeen
@@ -257,8 +262,12 @@
 	Parameter	Parametri
 	Parameters	Parametrit
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Tätä virtaa kulkevat osat palaavat työstettäviksi uudelleen; ne lasketaan uudelleentyöstöksi viimeisimmälle resurssia käyttävälle tehtävälle, jonka ne läpäisivät.
+	Parts wanted	Halutut osat
+	Parts wanted is a number above 0	Haluttujen osien määrän on oltava yli 0
 	Paste	Liitä
 	Pause	Tauko
+	Per	Jakso
+	Per shift needs a calendar: each period it is active is a shift.	”Vuorossa” vaatii kalenterin: jokainen jakso, jona se on aktiivinen, on yksi vuoro.
 	Percentile	Persentiili
 	Period {n} ends	Jakso {n} päättyy
 	Period {n} repeats	Jakso {n} toistuu
@@ -389,6 +398,8 @@
 	Stopped watching	Seuraaminen lopetettiin
 	Sun	su
 	Sweep a parameter	Käy parametri läpi
+	Takt	Tahti
+	Takt time	Tahtiaika
 	Tandem line	Sarjajono
 	Target	Tavoite
 	Target share	Tavoiteosuus
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Malli: koe, yhteydet ja ongelmat
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Niiden toistojen osuus, jotka ovat kunkin arvon suuruisia tai pienempiä. Vyöhyke sisältää todellisen jakauman {confidence} luottamuksella.
 	The values are numbers, separated by semicolons or spaces	Arvot ovat lukuja, jotka erotetaan puolipisteillä tai välilyönneillä
+	The whole clock	Koko aika
 	This block has a warning	Tässä lohkossa on varoitus
 	This block has an error	Tässä lohkossa on virhe
 	This run	Tämä ajo
 	Three-point estimate	Kolmen pisteen arvio
 	Thu	to
+	Time available	Käytettävissä oleva aika
 	Time between arrivals	Saapumisten välinen aika
 	Time blocked	Aika estettynä
 	Time failed	Aika vikaantuneena
@@ -479,6 +492,7 @@
 	decision: one way	päätös: yksi reitti
 	departures	poistumiset
 	egui and eframe (Craft suite fork)	egui ja eframe (Craft-ohjelmistoperheen haaraversio)
+	for the whole run	koko ajolle
 	from its value	arvon perusteella
 	have left	on poistunut
 	hours	tuntia
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k/N: vain k toistolla N:stä oli arvo tälle tulokselle, ja sen keskiarvo ja väli lasketaan näistä k:sta.
 	n = {k} of {n}	n = {k}/{n}
 	nothing yet	ei vielä mitään
+	per day	päivässä
+	per shift	vuorossa
+	per week	viikossa
 	seconds	sekuntia
 	split batches	erien purku
 	split or join: all ways	haaroita tai yhdistä: kaikki reitit

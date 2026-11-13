@@ -102,7 +102,9 @@
 	Constant	常數
 	Copy	複製
 	Counts against	計入任務
+	Customer demand	客戶需求
 	Cut	剪下
+	Cycle time	週期時間
 	Daily	每天
 	Dark	深色
 	Data points	資料點
@@ -112,6 +114,8 @@
 	Decision (one way)	決策（單一路徑）
 	Default flow	預設順序流
 	Delete	刪除
+	Demand	需求
+	Demand met	需求達成率
 	Departures	離開
 	Diagram	圖表
 	Discard	捨棄
@@ -173,6 +177,7 @@
 	Hide Others	隱藏其他
 	Hide {app}	隱藏 {app}
 	How many	數量
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	客戶希望從這些離開處獲得多少件；結果隨後會顯示節拍（可用時間除以需求）和每個任務的週期時間。
 	Inside over time	內部數量隨時間變化
 	Jump	跳至
 	Jump to time	跳至時間
@@ -257,8 +262,12 @@
 	Parameter	參數
 	Parameters	參數
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	沿此順序流的零件會返回重新加工；它們計為最後經過的需要資源的任務的重工。
+	Parts wanted	需求數量
+	Parts wanted is a number above 0	需求數量必須是大於 0 的數值
 	Paste	貼上
 	Pause	暫停
+	Per	時段
+	Per shift needs a calendar: each period it is active is a shift.	「每班」需要行事曆：行事曆處於啟用狀態的每個時段為一個班次。
 	Percentile	百分位數
 	Period {n} ends	時段 {n} 結束
 	Period {n} repeats	時段 {n} 重複
@@ -389,6 +398,8 @@
 	Stopped watching	已停止觀察
 	Sun	週日
 	Sweep a parameter	掃描一個參數
+	Takt	節拍
+	Takt time	節拍時間
 	Tandem line	串聯流程
 	Target	目標
 	Target share	目標比例
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	模型：實驗、連接和問題
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超過各值的重複執行比例。色帶以 {confidence} 的信賴度包含真實分配。
 	The values are numbers, separated by semicolons or spaces	值應為以分號或空格分隔的數字
+	The whole clock	全部時間
 	This block has a warning	此區塊存在警告
 	This block has an error	此區塊存在錯誤
 	This run	本次執行
 	Three-point estimate	三點估計
 	Thu	週四
+	Time available	可用時間
 	Time between arrivals	到達間隔時間
 	Time blocked	阻塞時間
 	Time failed	故障時間
@@ -479,6 +492,7 @@
 	decision: one way	決策：單一路徑
 	departures	離開
 	egui and eframe (Craft suite fork)	egui 和 eframe（Craft 套件分支）
+	for the whole run	整個執行期間
 	from its value	依其值
 	have left	離開
 	hours	小時
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N 次中的 k 次：N 次重複執行中只有 k 次有該結果的值，其平均值與區間以這 k 次為準。
 	n = {k} of {n}	n = {n} 次中的 {k} 次
 	nothing yet	尚無內容
+	per day	每天
+	per shift	每班
+	per week	每週
 	seconds	秒
 	split batches	拆分批次
 	split or join: all ways	拆分或合併：所有路徑

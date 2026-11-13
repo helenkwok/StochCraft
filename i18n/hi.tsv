@@ -102,7 +102,9 @@
 	Constant	स्थिर
 	Copy	कॉपी करें
 	Counts against	किस कार्य के खाते में
+	Customer demand	ग्राहक मांग
 	Cut	काटें
+	Cycle time	चक्र समय
 	Daily	प्रतिदिन
 	Dark	गहरा
 	Data points	डेटा बिंदु
@@ -112,6 +114,8 @@
 	Decision (one way)	निर्णय (एक मार्ग)
 	Default flow	डिफ़ॉल्ट प्रवाह
 	Delete	मिटाएँ
+	Demand	मांग
+	Demand met	पूरी हुई मांग का हिस्सा
 	Departures	प्रस्थान
 	Diagram	आरेख
 	Discard	त्यागें
@@ -173,6 +177,7 @@
 	Hide Others	अन्य छिपाएँ
 	Hide {app}	{app} छिपाएँ
 	How many	कितने
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ग्राहक इन प्रस्थानों से कितने पुर्जे चाहते हैं; तब परिणाम टैक्ट (उपलब्ध समय को मांग से भाग देकर) और हर कार्य का चक्र समय दिखाते हैं।
 	Inside over time	समय के साथ अंदर
 	Jump	जाएँ
 	Jump to time	समय पर जाएँ
@@ -257,8 +262,12 @@
 	Parameter	पैरामीटर
 	Parameters	पैरामीटर
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	इस प्रवाह से जाने वाले पुर्जे फिर से काम के लिए लौटते हैं; वे उस अंतिम संसाधन वाले कार्य के खाते में पुनःकार्य गिने जाते हैं जिससे वे गुज़रे।
+	Parts wanted	चाहे गए पुर्जे
+	Parts wanted is a number above 0	चाहे गए पुर्जे 0 से बड़ी संख्या होने चाहिए
 	Paste	चिपकाएँ
 	Pause	रोकें
+	Per	अवधि
+	Per shift needs a calendar: each period it is active is a shift.	"प्रति पाली" के लिए कैलेंडर चाहिए: जिस हर अवधि में वह सक्रिय है, वह एक पाली है।
 	Percentile	प्रतिशतक
 	Period {n} ends	अवधि {n} समाप्त
 	Period {n} repeats	अवधि {n} दोहराव
@@ -389,6 +398,8 @@
 	Stopped watching	देखना बंद किया गया
 	Sun	रवि
 	Sweep a parameter	पैरामीटर स्वीप करें
+	Takt	टैक्ट
+	Takt time	टैक्ट समय
 	Tandem line	क्रमिक लाइन
 	Target	लक्ष्य
 	Target share	लक्ष्य हिस्सा
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	मॉडल: प्रयोग, कनेक्शन और समस्याएँ
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	हर मान के बराबर या उससे कम पुनरावृत्तियों का हिस्सा। पट्टी में वास्तविक वितरण {confidence} विश्वास के साथ है।
 	The values are numbers, separated by semicolons or spaces	मान अर्धविराम या रिक्त स्थान से अलग की गई संख्याएँ हैं
+	The whole clock	पूरा समय
 	This block has a warning	इस ब्लॉक में चेतावनी है
 	This block has an error	इस ब्लॉक में त्रुटि है
 	This run	यह रन
 	Three-point estimate	त्रि-बिंदु अनुमान
 	Thu	गुरु
+	Time available	उपलब्ध समय
 	Time between arrivals	आगमन के बीच का समय
 	Time blocked	अवरुद्ध समय
 	Time failed	खराबी में समय
@@ -479,6 +492,7 @@
 	decision: one way	निर्णय: एक मार्ग
 	departures	प्रस्थान
 	egui and eframe (Craft suite fork)	egui और eframe (Craft सुइट का फ़ोर्क)
+	for the whole run	पूरे रन के लिए
 	from its value	इसके मान से
 	have left	निकल गए
 	hours	घंटे
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N में से k: N पुनरावृत्तियों में से केवल k में उस परिणाम का मान था, और उसका औसत और अंतराल उन्हीं k पर है।
 	n = {k} of {n}	n = {n} में से {k}
 	nothing yet	अभी कुछ नहीं
+	per day	प्रति दिन
+	per shift	प्रति पाली
+	per week	प्रति सप्ताह
 	seconds	सेकंड
 	split batches	बैच अलग करना
 	split or join: all ways	विभाजित या संयोजित करें: सभी मार्ग

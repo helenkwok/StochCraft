@@ -7,10 +7,10 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Breakdown, Calendar, Change, Connection, DateTime, Dist, Element as ModelElement,
-    ElementId, ElementKind, Estimate, Experiment, Family, Model, Need, Power, Property,
-    PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit,
-    Timed, Transfer, Upper,
+    Bounds, Breakdown, Calendar, Change, Connection, DateTime, Demand, DemandPer, Dist,
+    Element as ModelElement, ElementId, ElementKind, Estimate, Experiment, Family, Model, Need,
+    Power, Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop,
+    ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -913,6 +913,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             }
             NodeKind::End => ElementKind::Sink {
                 scrap: scrap_of(scenario, id),
+                demand: demand_of(scenario, id, notes),
             },
             NodeKind::Task => {
                 for t in OTHER_TIMES {
@@ -1044,6 +1045,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "a planned run time (stochcraft:plannedRunTime) applies only to a task with a resource of its own; it is ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Sink { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::DEMAND)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "a demand (stochcraft:demand) applies only to an end event; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::Sink { .. })
@@ -1279,6 +1290,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::POWER,
             bpsim::PLANNED_RUN_TIME,
             bpsim::SCRAP,
+            bpsim::DEMAND,
             bpsim::REWORK,
             bpsim::BATCH_SIZE,
             bpsim::UNBATCH,
@@ -1355,6 +1367,40 @@ fn scrap_of(scenario: Option<&Scenario>, id: &str) -> Option<Scrap> {
         .filter(|c| !c.is_empty())
         .map(|c| ElementId::unchecked(&c));
     Some(Scrap { charged_to })
+}
+
+/// The customer demand StochCraft's vendor extension gives end event `id`, if any.
+fn demand_of(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) -> Option<Demand> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::DEMAND))?;
+    let body = ext.elements().find(|e| e.local() == "demand");
+    let quantity = body
+        .and_then(|b| b.attr("quantity"))
+        .and_then(|q| q.trim().parse::<f64>().ok());
+    let per = body
+        .and_then(|b| b.attr("per"))
+        .and_then(|p| DemandPer::from_name(p.trim()));
+    let calendar = body
+        .and_then(|b| b.attr("calendar"))
+        .map(|c| c.trim().to_owned())
+        .filter(|c| !c.is_empty())
+        .map(|c| ElementId::unchecked(&c));
+    match (quantity, per) {
+        (Some(quantity), Some(per)) => Some(Demand {
+            quantity,
+            per,
+            calendar,
+        }),
+        _ => {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "a demand (`{}`) needs a quantity and `per` (run, day, week or shift); it is ignored",
+                    bpsim::DEMAND
+                ),
+            ));
+            None
+        }
+    }
 }
 
 /// The batch or split StochCraft's vendor extensions make task `id`, if any.

@@ -40,7 +40,13 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
                     planned_run_time: None,
                 },
             ),
-            element("exit", ElementKind::Sink { scrap: None }),
+            element(
+                "exit",
+                ElementKind::Sink {
+                    scrap: None,
+                    demand: None,
+                },
+            ),
         ],
         connections: vec![
             flow("f1", "arrivals", "servers"),

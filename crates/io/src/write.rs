@@ -7,7 +7,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Breakdown, Calendar, DateTime, Dist, ElementKind, Estimate, Model, Need, Power,
+    Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate, Model, Need, Power,
     Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, Timed,
     Transfer,
 };
@@ -334,6 +334,21 @@ pub(crate) fn changeover_element(x: &Setup) -> Element {
     }
     s("VendorExtension")
         .with_attr("name", crate::bpsim::CHANGEOVER)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
+}
+
+/// A sink's customer demand as StochCraft's vendor extension ([`crate::bpsim::DEMAND`]).
+pub(crate) fn demand_element(d: &Demand) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:demand", Some(ns))
+        .with_attr("quantity", &num(d.quantity))
+        .with_attr("per", d.per.name());
+    if let Some(c) = &d.calendar {
+        body = body.with_attr("calendar", c.as_str());
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::DEMAND)
         .with_attr("xmlns:stochcraft", ns)
         .with_child(body)
 }
@@ -740,8 +755,14 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         {
             ep.push(planned_element(d));
         }
-        if let ElementKind::Sink { scrap: Some(x) } = &e.kind {
+        if let ElementKind::Sink { scrap: Some(x), .. } = &e.kind {
             ep.push(scrap_element(x));
+        }
+        if let ElementKind::Sink {
+            demand: Some(d), ..
+        } = &e.kind
+        {
+            ep.push(demand_element(d));
         }
         if let ElementKind::Server { setup: Some(x), .. } = &e.kind
             && x.on_change_of.is_some()

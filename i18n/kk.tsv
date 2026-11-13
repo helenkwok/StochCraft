@@ -102,7 +102,9 @@
 	Constant	Тұрақты
 	Copy	Көшіру
 	Counts against	Жүктелетін тапсырма
+	Customer demand	Тұтынушы сұранысы
 	Cut	Қиып алу
+	Cycle time	Цикл уақыты
 	Daily	Күн сайын
 	Dark	Күңгірт
 	Data points	Дерек нүктелері
@@ -112,6 +114,8 @@
 	Decision (one way)	Шешім (бір жол)
 	Default flow	Әдепкі ағын
 	Delete	Жою
+	Demand	Сұраныс
+	Demand met	Қанағаттандырылған сұраныс үлесі
 	Departures	Кетулер
 	Diagram	Диаграмма
 	Discard	Елемеу
@@ -173,6 +177,7 @@
 	Hide Others	Басқаларын жасыру
 	Hide {app}	{app} қолданбасын жасыру
 	How many	Қанша
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Тұтынушылар осы кетулерден қанша бөлшек қалайды; сонда нәтижелер тактіні (қолжетімді уақытты сұранысқа бөлгенде) және әр тапсырманың цикл уақытын көрсетеді.
 	Inside over time	Уақыт бойынша ішіндегілер
 	Jump	Өту
 	Jump to time	Уақытқа өту
@@ -257,8 +262,12 @@
 	Parameter	Параметр
 	Parameters	Параметрлер
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Осы ағынмен жүретін бөлшектер қайта өңделуге оралады; олар өздері өткен соңғы ресурсы бар тапсырмаға қайта өңдеу ретінде есептеледі.
+	Parts wanted	Қажетті бөлшектер
+	Parts wanted is a number above 0	Қажетті бөлшектер 0-ден үлкен сан болуы керек
 	Paste	Қою
 	Pause	Кідірту
+	Per	Кезең
+	Per shift needs a calendar: each period it is active is a shift.	«Ауысымына» күнтізбені қажет етеді: ол белсенді болатын әр кезең — бір ауысым.
 	Percentile	Процентиль
 	Period {n} ends	{n}-кезең аяқталуы
 	Period {n} repeats	{n}-кезең қайталануы
@@ -389,6 +398,8 @@
 	Stopped watching	Бақылау тоқтатылды
 	Sun	жс
 	Sweep a parameter	Параметрді сұрыптау
+	Takt	Такт
+	Takt time	Такт уақыты
 	Tandem line	Тізбекті желі
 	Target	Мақсат
 	Target share	Мақсатты үлес
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Әр мәнге тең немесе одан төмен қайталаулар үлесі. Жолақ шынайы үлестірімді {confidence} сенімділікпен қамтиды.
 	The values are numbers, separated by semicolons or spaces	Мәндер нүктелі үтірмен немесе бос орынмен бөлінген сандар
+	The whole clock	Бүкіл уақыт
 	This block has a warning	Бұл блокта ескерту бар
 	This block has an error	Бұл блокта қате бар
 	This run	Осы іске қосу
 	Three-point estimate	Үш нүктелі бағалау
 	Thu	бс
+	Time available	Қолжетімді уақыт
 	Time between arrivals	Келулер арасындағы уақыт
 	Time blocked	Бұғатталған уақыт
 	Time failed	Ақаулы уақыт
@@ -479,6 +492,7 @@
 	decision: one way	шешім: бір жол
 	departures	кетулер
 	egui and eframe (Craft suite fork)	egui және eframe (Craft жиынтығының тармағы)
+	for the whole run	бүкіл іске қосуға
 	from its value	мәні бойынша
 	have left	шықты
 	hours	сағат
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N ішінен k: N қайталаудың тек k-сында осы нәтиженің мәні болды, оның орташасы мен аралығы сол k бойынша.
 	n = {k} of {n}	n = {n} ішінен {k}
 	nothing yet	әзірге ештеңе жоқ
+	per day	күніне
+	per shift	ауысымына
+	per week	аптасына
 	seconds	секунд
 	split batches	топтамаларды бөлу
 	split or join: all ways	бөлу немесе біріктіру: барлық жолдар

@@ -102,7 +102,9 @@
 	Constant	Állandó
 	Copy	Másolás
 	Counts against	Terhelt feladat
+	Customer demand	Vevői igény
 	Cut	Kivágás
+	Cycle time	Ciklusidő
 	Daily	Naponta
 	Dark	Sötét
 	Data points	Adatpontok
@@ -112,6 +114,8 @@
 	Decision (one way)	Döntés (egy út)
 	Default flow	Alapértelmezett folyamat
 	Delete	Törlés
+	Demand	Igény
+	Demand met	Teljesített igény aránya
 	Departures	Távozások
 	Diagram	Diagram
 	Discard	Elvetés
@@ -173,6 +177,7 @@
 	Hide Others	Többi elrejtése
 	Hide {app}	{app} elrejtése
 	How many	Hány
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hány darabot kérnek a vevők ezekből a távozásokból; az eredmények ekkor mutatják az ütemet (a rendelkezésre álló idő osztva az igénnyel) és minden feladat ciklusidejét.
 	Inside over time	Bent lévők az idő függvényében
 	Jump	Ugrás
 	Jump to time	Ugrás időpontra
@@ -257,8 +262,12 @@
 	Parameter	Paraméter
 	Parameters	Paraméterek
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Az ezen a folyamaton haladó darabok visszamennek, hogy újra megmunkálják őket; újramunkálásként számítanak annak az utolsó erőforrást használó feladatnak, amelyen áthaladtak.
+	Parts wanted	Kért darabok
+	Parts wanted is a number above 0	A kért darabok száma 0-nál nagyobb szám
 	Paste	Beillesztés
 	Pause	Szünet
+	Per	Időszak
+	Per shift needs a calendar: each period it is active is a shift.	A „műszakonként” naptárt igényel: minden időszak, amikor aktív, egy műszak.
 	Percentile	Percentilis
 	Period {n} ends	{n}. időszak vége
 	Period {n} repeats	{n}. időszak ismétlődése
@@ -389,6 +398,8 @@
 	Stopped watching	A követés leállt
 	Sun	V
 	Sweep a parameter	Paraméter végigfuttatása
+	Takt	Ütem
+	Takt time	Ütemidő
 	Tandem line	Tandemvonal
 	Target	Cél
 	Target share	Célarány
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	A modell: kísérlet, kapcsolatok és problémák
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Az egyes értékeknél nem nagyobb ismétlések aránya. A sáv {confidence} megbízhatósággal tartalmazza a valódi eloszlást.
 	The values are numbers, separated by semicolons or spaces	Az értékek pontosvesszővel vagy szóközzel elválasztott számok
+	The whole clock	A teljes idő
 	This block has a warning	Ez a blokk figyelmeztetést tartalmaz
 	This block has an error	Ez a blokk hibát tartalmaz
 	This run	Ez a futtatás
 	Three-point estimate	Hárompontos becslés
 	Thu	Cs
+	Time available	Rendelkezésre álló idő
 	Time between arrivals	Érkezések közötti idő
 	Time blocked	Blokkolt idő
 	Time failed	Meghibásodott állapotban töltött idő
@@ -479,6 +492,7 @@
 	decision: one way	döntés: egy út
 	departures	távozások
 	egui and eframe (Craft suite fork)	egui és eframe (a Craft csomag elágazása)
+	for the whole run	a teljes futtatásra
 	from its value	az értékéből
 	have left	elhagyta
 	hours	óra
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k / N: az N ismétlésből csak k-nak volt értéke erre az eredményre, és átlaga és intervalluma erre a k-ra vonatkozik.
 	n = {k} of {n}	n = {k} / {n}
 	nothing yet	még semmi
+	per day	naponta
+	per shift	műszakonként
+	per week	hetente
 	seconds	másodperc
 	split batches	kötegek szétbontása
 	split or join: all ways	szétválasztás vagy egyesítés: minden út

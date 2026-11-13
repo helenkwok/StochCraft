@@ -11,8 +11,8 @@ use stochcraft_des::{
 };
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
-    Breakdown, Element, ElementId, ElementKind, Model, Need, Power, ResourcePool, Routing, Setup,
-    Timed,
+    Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, Model, Need, Power,
+    ResourcePool, Routing, Setup, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -423,7 +423,7 @@ impl Compiled {
                     spawn_shared(&mut sim, env, service, request, Rc::clone(&pools));
                 }
                 ElementKind::Delay { duration } => spawn_delay(&mut sim, env, duration),
-                ElementKind::Sink { scrap } => {
+                ElementKind::Sink { scrap, .. } => {
                     // Scrap counts against the server it names, else each entity's last one.
                     let scrap = scrap.map(|s| {
                         s.charged_to
@@ -736,12 +736,22 @@ impl Live<'_> {
         let now = self.now().min(self.end);
         let model = &self.compiled.model;
         let hours = model.experiment.time_unit.seconds() / 3_600.0;
+        // Cycle times are reported once some sink has a demand, to compare with its takt.
+        let takt = model.elements.iter().any(|e| {
+            matches!(
+                e.kind,
+                ElementKind::Sink {
+                    demand: Some(_),
+                    ..
+                }
+            )
+        });
         // The quality results apply once the model marks scrap or rework somewhere.
         let quality = model.connections.iter().any(|c| c.rework)
             || model
                 .elements
                 .iter()
-                .any(|e| matches!(e.kind, ElementKind::Sink { scrap: Some(_) }));
+                .any(|e| matches!(e.kind, ElementKind::Sink { scrap: Some(_), .. }));
         let mut elements: Vec<ElementReport> = model
             .elements
             .iter()
@@ -757,6 +767,7 @@ impl Live<'_> {
                         blocks,
                         transfers,
                         quality,
+                        takt,
                     },
                     inputs > 1,
                     now,
@@ -778,6 +789,22 @@ impl Live<'_> {
                 }
             }
         }
+        // Takt at each sink with a demand, over the measured window.
+        if takt {
+            let from = self.reset_at.get().unwrap_or(0.0);
+            for (r, e) in elements.iter_mut().zip(&model.elements) {
+                if let ElementKind::Sink {
+                    demand: Some(d), ..
+                } = &e.kind
+                    && let Some((available, wanted)) = takt_over(model, d, from, now)
+                    && wanted > 0.0
+                {
+                    r.demand = Some(wanted);
+                    r.takt = Some(available / wanted);
+                    r.demand_met = Some(r.left as f64 / wanted);
+                }
+            }
+        }
         // Then each shared pool, after the elements.
         elements.extend(self.pools.reports(&model.resources, now));
         let after_warmup = self.reset_at.get();
@@ -791,6 +818,45 @@ impl Live<'_> {
             after_warmup: after_warmup.is_some(),
         }
     }
+}
+
+/// The time available and the demand over the measured window `from`–`to` for `d`: the
+/// window's length, or the time `d`'s calendar is active in it; and the quantity times the
+/// days, weeks or shifts in it (a shift partly inside counting by its share), or once for the
+/// run. `None` when the window is empty or the calendar is unknown.
+fn takt_over(model: &Model, d: &Demand, from: f64, to: f64) -> Option<(f64, f64)> {
+    if to <= from {
+        return None;
+    }
+    let unit = model.experiment.time_unit;
+    let periods = match &d.calendar {
+        Some(c) => {
+            let cal = model.calendars.iter().find(|x| x.id == *c)?;
+            let origin = model
+                .experiment
+                .start
+                .or_else(|| Calendar::default_origin(&model.calendars))?;
+            Some(cal.periods(origin, unit, to))
+        }
+        None => None,
+    };
+    let inside = |(s, e): (f64, f64)| (e.min(to) - s.max(from)).max(0.0);
+    let available = match &periods {
+        Some(p) => p.iter().map(|&x| inside(x)).sum(),
+        None => to - from,
+    };
+    let day = 86_400.0 / unit.seconds();
+    let wanted = d.quantity
+        * match d.per {
+            DemandPer::Run => 1.0,
+            DemandPer::Day => (to - from) / day,
+            DemandPer::Week => (to - from) / (7.0 * day),
+            DemandPer::Shift => periods?
+                .iter()
+                .map(|&(s, e)| inside((s, e)) / (e - s))
+                .sum(),
+        };
+    Some((available, wanted))
 }
 
 /// The tag of element `index`'s processes (see [`Sim::spawn_tagged`]).
@@ -862,6 +928,8 @@ pub(crate) struct Sends {
     pub(crate) transfers: bool,
     /// Whether the model marks scrap or rework anywhere (for the quality results).
     pub(crate) quality: bool,
+    /// Whether any sink has a demand (for cycle times to compare with takt).
+    pub(crate) takt: bool,
 }
 
 /// The state a server's unit is in: exactly one at every instant, the first that applies of
@@ -1106,6 +1174,7 @@ impl BlockStats {
             blocks,
             transfers,
             quality,
+            takt,
         } = sends;
         let kind = &element.kind;
         // Servers with a power report the share of time in each state, and their energy.
@@ -1293,6 +1362,17 @@ impl BlockStats {
             quality_ratio: quality_ratio.filter(|_| quality),
             scrap_ratio: per_produced(self.scrap).filter(|_| quality),
             rework_ratio: per_produced(self.rework).filter(|_| quality),
+            cycle_time: match kind {
+                ElementKind::Server { capacity, .. } if takt && self.produced > 0 => Some(
+                    (self.states.processing.integral(end) + self.states.setup.integral(end))
+                        / self.produced as f64
+                        / f64::from(*capacity),
+                ),
+                _ => None,
+            },
+            takt: None,
+            demand: None,
+            demand_met: None,
             oee: oee_availability.zip(oee_effectiveness).map(|(a, e)| {
                 a * e
                     * if quality {
@@ -2677,6 +2757,10 @@ impl Pools {
                     scrap_ratio: None,
                     rework_ratio: None,
                     oee: None,
+                    takt: None,
+                    demand: None,
+                    demand_met: None,
+                    cycle_time: None,
                     energy: None,
                     specific_energy: None,
                     lost: None,

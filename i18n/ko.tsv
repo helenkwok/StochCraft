@@ -102,7 +102,9 @@
 	Constant	상수
 	Copy	복사
 	Counts against	귀속 작업
+	Customer demand	고객 수요
 	Cut	잘라내기
+	Cycle time	사이클 타임
 	Daily	매일
 	Dark	어둡게
 	Data points	데이터 점
@@ -112,6 +114,8 @@
 	Decision (one way)	의사 결정(한 경로)
 	Default flow	기본 흐름
 	Delete	삭제
+	Demand	수요
+	Demand met	수요 충족률
 	Departures	이탈
 	Diagram	다이어그램
 	Discard	삭제
@@ -173,6 +177,7 @@
 	Hide Others	다른 항목 숨기기
 	Hide {app}	{app} 숨기기
 	How many	개수
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	고객이 이 이탈에서 원하는 부품 수입니다. 그러면 결과에 택트(가용 시간을 수요로 나눈 값)와 각 작업의 사이클 타임이 표시됩니다.
 	Inside over time	시간에 따른 내부 수
 	Jump	이동
 	Jump to time	이동할 시간
@@ -257,8 +262,12 @@
 	Parameter	매개변수
 	Parameters	매개변수
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	이 흐름을 따르는 부품은 다시 작업하기 위해 되돌아가며, 마지막으로 거친 자원을 사용하는 작업의 재작업으로 집계됩니다.
+	Parts wanted	필요 수량
+	Parts wanted is a number above 0	필요 수량은 0보다 큰 숫자여야 합니다
 	Paste	붙여넣기
 	Pause	일시 중지
+	Per	기간
+	Per shift needs a calendar: each period it is active is a shift.	'근무조당'에는 캘린더가 필요합니다. 캘린더가 활성인 각 기간이 한 근무조입니다.
 	Percentile	백분위수
 	Period {n} ends	기간 {n} 종료
 	Period {n} repeats	기간 {n} 반복
@@ -389,6 +398,8 @@
 	Stopped watching	관찰을 중지함
 	Sun	일
 	Sweep a parameter	매개변수 스윕
+	Takt	택트 타임
+	Takt time	택트 타임
 	Tandem line	직렬 라인
 	Target	목표
 	Target share	목표 비율
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	모델: 실험, 연결 및 문제
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	각 값 이하인 반복 실행의 비율입니다. 띠는 {confidence} 신뢰도로 실제 분포를 포함합니다.
 	The values are numbers, separated by semicolons or spaces	값은 세미콜론이나 공백으로 구분한 숫자입니다
+	The whole clock	전체 시간
 	This block has a warning	이 블록에 경고가 있습니다
 	This block has an error	이 블록에 오류가 있습니다
 	This run	이 실행
 	Three-point estimate	3점 추정
 	Thu	목
+	Time available	가용 시간
 	Time between arrivals	도착 간격
 	Time blocked	차단 시간
 	Time failed	고장 시간
@@ -479,6 +492,7 @@
 	decision: one way	의사 결정: 한 경로
 	departures	이탈
 	egui and eframe (Craft suite fork)	egui 및 eframe(Craft 제품군 포크)
+	for the whole run	실행 전체 동안
 	from its value	값에서 결정
 	have left	나갔을 때
 	hours	시간
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N회 중 k회: 이 결과의 값이 있는 반복 실행은 N회 중 k회뿐이며, 평균과 구간은 그 k회에 대한 것입니다.
 	n = {k} of {n}	n = {n}회 중 {k}회
 	nothing yet	아직 없음
+	per day	하루당
+	per shift	근무조당
+	per week	주당
 	seconds	초
 	split batches	배치 분리
 	split or join: all ways	분할 또는 병합: 모든 경로

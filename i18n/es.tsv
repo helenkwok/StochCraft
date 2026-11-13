@@ -102,7 +102,9 @@
 	Constant	Constante
 	Copy	Copiar
 	Counts against	Se imputa a
+	Customer demand	Demanda del cliente
 	Cut	Cortar
+	Cycle time	Tiempo de ciclo
 	Daily	Cada día
 	Dark	Oscuro
 	Data points	Puntos de datos
@@ -112,6 +114,8 @@
 	Decision (one way)	Decisión (una salida)
 	Default flow	Flujo predeterminado
 	Delete	Eliminar
+	Demand	Demanda
+	Demand met	Proporción de demanda cubierta
 	Departures	Salidas
 	Diagram	Diagrama
 	Discard	Descartar
@@ -173,6 +177,7 @@
 	Hide Others	Ocultar otros
 	Hide {app}	Ocultar {app}
 	How many	Cuántas
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Cuántas piezas quieren los clientes de estas salidas; los resultados muestran entonces el takt (el tiempo disponible dividido por la demanda) y el tiempo de ciclo de cada tarea.
 	Inside over time	Dentro a lo largo del tiempo
 	Jump	Ir
 	Jump to time	Ir al instante
@@ -257,8 +262,12 @@
 	Parameter	Parámetro
 	Parameters	Parámetros
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Las piezas que toman este flujo vuelven a trabajarse; cuentan como retrabajo de la última tarea con recurso por la que pasaron.
+	Parts wanted	Piezas pedidas
+	Parts wanted is a number above 0	Las piezas pedidas son un número mayor que 0
 	Paste	Pegar
 	Pause	Pausa
+	Per	Periodo
+	Per shift needs a calendar: each period it is active is a shift.	«Por turno» necesita un calendario: cada periodo en que está activo es un turno.
 	Percentile	Percentil
 	Period {n} ends	Fin del periodo {n}
 	Period {n} repeats	Repetición del periodo {n}
@@ -389,6 +398,8 @@
 	Stopped watching	Se dejó de observar
 	Sun	dom
 	Sweep a parameter	Barrer un parámetro
+	Takt	Takt
+	Takt time	Takt time
 	Tandem line	Línea en tándem
 	Target	Objetivo
 	Target share	Proporción objetivo
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	El modelo: experimento, conexiones y problemas
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La proporción de réplicas iguales o inferiores a cada valor. La banda contiene la distribución real con una confianza del {confidence}.
 	The values are numbers, separated by semicolons or spaces	Los valores son números separados por punto y coma o espacios
+	The whole clock	Todo el tiempo
 	This block has a warning	Este bloque tiene una advertencia
 	This block has an error	Este bloque tiene un error
 	This run	Esta ejecución
 	Three-point estimate	Estimación de tres puntos
 	Thu	jue
+	Time available	Tiempo disponible
 	Time between arrivals	Tiempo entre llegadas
 	Time blocked	Tiempo bloqueado
 	Time failed	Tiempo averiado
@@ -479,6 +492,7 @@
 	decision: one way	decisión: una salida
 	departures	salidas
 	egui and eframe (Craft suite fork)	egui y eframe (bifurcación de la suite Craft)
+	for the whole run	para toda la ejecución
 	from its value	a partir de su valor
 	have left	han salido
 	hours	horas
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k de N: solo k de las N réplicas tuvieron un valor para ese resultado, y su media e intervalo son sobre esas k.
 	n = {k} of {n}	n = {k} de {n}
 	nothing yet	todavía nada
+	per day	por día
+	per shift	por turno
+	per week	por semana
 	seconds	segundos
 	split batches	separación de lotes
 	split or join: all ways	dividir o unir: todas las salidas

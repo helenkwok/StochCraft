@@ -102,7 +102,9 @@
 	Constant	Constantă
 	Copy	Copiază
 	Counts against	Imputat la
+	Customer demand	Cererea clienților
 	Cut	Decupează
+	Cycle time	Timp de ciclu
 	Daily	Zilnic
 	Dark	Întunecat
 	Data points	Puncte de date
@@ -112,6 +114,8 @@
 	Decision (one way)	Decizie (o singură cale)
 	Default flow	Flux implicit
 	Delete	Șterge
+	Demand	Cerere
+	Demand met	Ponderea cererii satisfăcute
 	Departures	Plecări
 	Diagram	Diagramă
 	Discard	Renunță
@@ -173,6 +177,7 @@
 	Hide Others	Ascunde celelalte
 	Hide {app}	Ascunde {app}
 	How many	Câte
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Câte piese vor clienții de la aceste plecări; rezultatele arată atunci taktul (timpul disponibil împărțit la cerere) și timpul de ciclu al fiecărei sarcini.
 	Inside over time	În interior în timp
 	Jump	Salt
 	Jump to time	Salt la momentul
@@ -257,8 +262,12 @@
 	Parameter	Parametru
 	Parameters	Parametri
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Piesele care urmează acest flux se întorc pentru a fi prelucrate din nou; ele contează ca reprelucrare a ultimei sarcini cu resursă prin care au trecut.
+	Parts wanted	Piese dorite
+	Parts wanted is a number above 0	Numărul de piese dorite este un număr mai mare decât 0
 	Paste	Lipește
 	Pause	Pauză
+	Per	Perioadă
+	Per shift needs a calendar: each period it is active is a shift.	„Pe tură” are nevoie de un calendar: fiecare perioadă în care este activ este o tură.
 	Percentile	Percentilă
 	Period {n} ends	Perioada {n} se termină
 	Period {n} repeats	Perioada {n} se repetă
@@ -389,6 +398,8 @@
 	Stopped watching	Urmărirea s-a oprit
 	Sun	dum
 	Sweep a parameter	Baleierea unui parametru
+	Takt	Takt
+	Takt time	Timp takt
 	Tandem line	Linie în tandem
 	Target	Țintă
 	Target share	Pondere țintă
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Ponderea replicărilor egale cu sau sub fiecare valoare. Banda conține distribuția reală cu o încredere de {confidence}.
 	The values are numbers, separated by semicolons or spaces	Valorile sunt numere separate prin punct și virgulă sau spații
+	The whole clock	Tot timpul
 	This block has a warning	Acest bloc are un avertisment
 	This block has an error	Acest bloc are o eroare
 	This run	Această rulare
 	Three-point estimate	Estimare în trei puncte
 	Thu	joi
+	Time available	Timp disponibil
 	Time between arrivals	Timp între sosiri
 	Time blocked	Timp blocat
 	Time failed	Timp în avarie
@@ -479,6 +492,7 @@
 	decision: one way	decizie: o singură cale
 	departures	plecări
 	egui and eframe (Craft suite fork)	egui și eframe (ramură a suitei Craft)
+	for the whole run	pentru toată rularea
 	from its value	din valoarea sa
 	have left	au ieșit
 	hours	ore
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k din N: doar k din cele N replicări au avut o valoare pentru acel rezultat, iar media și intervalul său sunt pe acele k.
 	n = {k} of {n}	n = {k} din {n}
 	nothing yet	nimic deocamdată
+	per day	pe zi
+	per shift	pe tură
+	per week	pe săptămână
 	seconds	secunde
 	split batches	separarea loturilor
 	split or join: all ways	divizează sau unește: toate căile

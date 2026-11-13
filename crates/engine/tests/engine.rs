@@ -2787,3 +2787,28 @@ fn scrap_and_rework_are_set_run_and_removed() {
         "{m}"
     );
 }
+
+/// A customer demand on the exit gives it takt and the desk a cycle time; a demand per shift
+/// with no calendar is the model's problem; removing the demand removes them.
+#[test]
+fn a_demand_gives_takt_and_is_removed() {
+    let mut e = help_desk();
+    let metric = |r: &serde_json::Value, id: &str, name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == id))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "exit", "demand": {"quantity": 30.0, "per": "run"}}),
+    );
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert!(metric(&r, "exit", "takt").is_some_and(|t| t > 0.0), "{r}");
+    assert!(metric(&r, "desk", "cycle_time").is_some(), "{r}");
+    ok(&mut e, "block.set", json!({"id": "exit", "demand": null}));
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(metric(&r, "exit", "takt"), None, "{r}");
+    assert_eq!(metric(&r, "desk", "cycle_time"), None, "{r}");
+}

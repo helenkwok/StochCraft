@@ -102,7 +102,9 @@
 	Constant	Konstantna
 	Copy	Kopiraj
 	Counts against	Pripisuje se
+	Customer demand	Potražnja kupaca
 	Cut	Izreži
+	Cycle time	Vrijeme ciklusa
 	Daily	Dnevno
 	Dark	Tamno
 	Data points	Podatkovne tačke
@@ -112,6 +114,8 @@
 	Decision (one way)	Odluka (jedan put)
 	Default flow	Zadani tok
 	Delete	Izbriši
+	Demand	Potražnja
+	Demand met	Udio ispunjene potražnje
 	Departures	Odlasci
 	Diagram	Dijagram
 	Discard	Odbaci
@@ -173,6 +177,7 @@
 	Hide Others	Sakrij ostale
 	Hide {app}	Sakrij {app}
 	How many	Koliko
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Koliko dijelova kupci žele od ovih odlazaka; rezultati tada prikazuju takt (raspoloživo vrijeme podijeljeno s potražnjom) i vrijeme ciklusa svakog zadatka.
 	Inside over time	Unutra kroz vrijeme
 	Jump	Skoči
 	Jump to time	Skoči na vrijeme
@@ -257,8 +262,12 @@
 	Parameter	Parametar
 	Parameters	Parametri
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Dijelovi koji idu ovim tokom vraćaju se na ponovnu obradu; računaju se kao dorada posljednjeg zadatka s resursom kroz koji su prošli.
+	Parts wanted	Traženi dijelovi
+	Parts wanted is a number above 0	Broj traženih dijelova je broj veći od 0
 	Paste	Zalijepi
 	Pause	Pauza
+	Per	Period
+	Per shift needs a calendar: each period it is active is a shift.	„Po smjeni“ traži kalendar: svaki period u kojem je aktivan je jedna smjena.
 	Percentile	Percentil
 	Period {n} ends	Period {n} završava
 	Period {n} repeats	Period {n} se ponavlja
@@ -389,6 +398,8 @@
 	Stopped watching	Praćenje zaustavljeno
 	Sun	ned
 	Sweep a parameter	Prolaz kroz parametar
+	Takt	Takt
+	Takt time	Takt vrijeme
 	Tandem line	Tandemska linija
 	Target	Cilj
 	Target share	Ciljni udio
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Model: eksperiment, veze i problemi
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Udio replikacija jednakih ili manjih od svake vrijednosti. Pojas sadrži pravu distribuciju s pouzdanošću od {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vrijednosti su brojevi odvojeni tačkom-zarezom ili razmacima
+	The whole clock	Svo vrijeme
 	This block has a warning	Ovaj blok ima upozorenje
 	This block has an error	Ovaj blok ima grešku
 	This run	Ovo pokretanje
 	Three-point estimate	Procjena u tri tačke
 	Thu	čet
+	Time available	Raspoloživo vrijeme
 	Time between arrivals	Vrijeme između dolazaka
 	Time blocked	Vrijeme blokade
 	Time failed	Vrijeme u kvaru
@@ -479,6 +492,7 @@
 	decision: one way	odluka: jedan put
 	departures	odlasci
 	egui and eframe (Craft suite fork)	egui i eframe (inačica paketa Craft)
+	for the whole run	za cijelo pokretanje
 	from its value	prema svojoj vrijednosti
 	have left	napustilo
 	hours	sati
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k od N: samo k od N replikacija ima vrijednost za taj rezultat, a njegov prosjek i interval su preko tih k.
 	n = {k} of {n}	n = {k} od {n}
 	nothing yet	još ništa
+	per day	po danu
+	per shift	po smjeni
+	per week	po sedmici
 	seconds	sekunde
 	split batches	razdvajanje serija
 	split or join: all ways	razdvoji ili spoji: svi putovi

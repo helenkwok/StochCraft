@@ -102,7 +102,9 @@
 	Constant	Постоянное значение
 	Copy	Копировать
 	Counts against	Относится на
+	Customer demand	Спрос клиентов
 	Cut	Вырезать
+	Cycle time	Время цикла
 	Daily	Ежедневно
 	Dark	Тёмная
 	Data points	Точки данных
@@ -112,6 +114,8 @@
 	Decision (one way)	Решение (один путь)
 	Default flow	Поток по умолчанию
 	Delete	Удалить
+	Demand	Спрос
+	Demand met	Доля покрытого спроса
 	Departures	Выходы
 	Diagram	Диаграмма
 	Discard	Отменить
@@ -173,6 +177,7 @@
 	Hide Others	Скрыть остальные
 	Hide {app}	Скрыть {app}
 	How many	Сколько
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Сколько деталей клиенты хотят от этих выходов; тогда результаты показывают такт (доступное время, делённое на спрос) и время цикла каждой задачи.
 	Inside over time	Внутри во времени
 	Jump	Перейти
 	Jump to time	Перейти ко времени
@@ -257,8 +262,12 @@
 	Parameter	Параметр
 	Parameters	Параметры
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Детали, идущие по этому потоку, возвращаются на повторную обработку; они учитываются как доработка последней задачи с ресурсом, которую они прошли.
+	Parts wanted	Нужно деталей
+	Parts wanted is a number above 0	Нужное число деталей должно быть больше 0
 	Paste	Вставить
 	Pause	Пауза
+	Per	Период
+	Per shift needs a calendar: each period it is active is a shift.	«За смену» требует календаря: каждый период, когда он активен, — это смена.
 	Percentile	Процентиль
 	Period {n} ends	Конец периода {n}
 	Period {n} repeats	Повтор периода {n}
@@ -389,6 +398,8 @@
 	Stopped watching	Наблюдение прекращено
 	Sun	вс
 	Sweep a parameter	Перебор параметра
+	Takt	Такт
+	Takt time	Время такта
 	Tandem line	Последовательная линия
 	Target	Цель
 	Target share	Целевая доля
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Модель: эксперимент, соединения и проблемы
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Доля репликаций, не превышающих каждое значение. Полоса содержит истинное распределение с доверием {confidence}.
 	The values are numbers, separated by semicolons or spaces	Значения — это числа, разделённые точкой с запятой или пробелами
+	The whole clock	Всё время
 	This block has a warning	В этом блоке есть предупреждение
 	This block has an error	В этом блоке есть ошибка
 	This run	Этот запуск
 	Three-point estimate	Трёхточечная оценка
 	Thu	чт
+	Time available	Доступное время
 	Time between arrivals	Время между прибытиями
 	Time blocked	Время блокировки
 	Time failed	Время отказа
@@ -479,6 +492,7 @@
 	decision: one way	решение: один путь
 	departures	выходы
 	egui and eframe (Craft suite fork)	egui и eframe (ответвление набора Craft)
+	for the whole run	за весь запуск
 	from its value	по значению
 	have left	покинули
 	hours	часы
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k из N: только k из N репликаций имели значение для этого результата, и его среднее и интервал рассчитаны по этим k.
 	n = {k} of {n}	n = {k} из {n}
 	nothing yet	пока ничего
+	per day	в день
+	per shift	за смену
+	per week	в неделю
 	seconds	секунды
 	split batches	разделение партий
 	split or join: all ways	разделить или объединить: все пути

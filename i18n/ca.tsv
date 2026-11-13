@@ -102,7 +102,9 @@
 	Constant	Constant
 	Copy	Copia
 	Counts against	S'imputa a
+	Customer demand	Demanda del client
 	Cut	Retalla
+	Cycle time	Temps de cicle
 	Daily	Cada dia
 	Dark	Fosc
 	Data points	Punts de dades
@@ -112,6 +114,8 @@
 	Decision (one way)	Decisió (un sol camí)
 	Default flow	Flux predeterminat
 	Delete	Suprimeix
+	Demand	Demanda
+	Demand met	Proporció de demanda satisfeta
 	Departures	Sortides
 	Diagram	Diagrama
 	Discard	Descarta
@@ -173,6 +177,7 @@
 	Hide Others	Amaga els altres
 	Hide {app}	Amaga {app}
 	How many	Quantes
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Quantes peces volen els clients d'aquestes sortides; aleshores els resultats mostren el takt (el temps disponible dividit per la demanda) i el temps de cicle de cada tasca.
 	Inside over time	A dins al llarg del temps
 	Jump	Ves-hi
 	Jump to time	Ves a l'instant
@@ -257,8 +262,12 @@
 	Parameter	Paràmetre
 	Parameters	Paràmetres
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Les peces que prenen aquest flux tornen a treballar-se; compten com a retreball de l'última tasca amb un recurs per on han passat.
+	Parts wanted	Peces demanades
+	Parts wanted is a number above 0	Les peces demanades són un nombre més gran que 0
 	Paste	Enganxa
 	Pause	Pausa
+	Per	Període
+	Per shift needs a calendar: each period it is active is a shift.	«Per torn» necessita un calendari: cada període en què està actiu és un torn.
 	Percentile	Percentil
 	Period {n} ends	Fi del període {n}
 	Period {n} repeats	Repetició del període {n}
@@ -389,6 +398,8 @@
 	Stopped watching	S'ha deixat d'observar
 	Sun	dg.
 	Sweep a parameter	Escombrar un paràmetre
+	Takt	Takt
+	Takt time	Temps de takt
 	Tandem line	Línia en tàndem
 	Target	Objectiu
 	Target share	Proporció objectiu
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	El model: experiment, connexions i problemes
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La proporció de rèpliques iguals o inferiors a cada valor. La banda conté la distribució real amb una confiança del {confidence}.
 	The values are numbers, separated by semicolons or spaces	Els valors són nombres separats per punts i comes o espais
+	The whole clock	Tot el temps
 	This block has a warning	Aquest bloc té un avís
 	This block has an error	Aquest bloc té un error
 	This run	Aquesta execució
 	Three-point estimate	Estimació de tres punts
 	Thu	dj.
+	Time available	Temps disponible
 	Time between arrivals	Temps entre arribades
 	Time blocked	Temps bloquejat
 	Time failed	Temps avariat
@@ -479,6 +492,7 @@
 	decision: one way	decisió: un sol camí
 	departures	sortides
 	egui and eframe (Craft suite fork)	egui i eframe (bifurcació del conjunt Craft)
+	for the whole run	per a tota l'execució
 	from its value	a partir del seu valor
 	have left	n'han sortit
 	hours	hores
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k de N: només k de les N rèpliques tenien un valor per a aquest resultat, i la seva mitjana i interval són sobre aquestes k.
 	n = {k} of {n}	n = {k} de {n}
 	nothing yet	encara res
+	per day	per dia
+	per shift	per torn
+	per week	per setmana
 	seconds	segons
 	split batches	separació de lots
 	split or join: all ways	divideix o uneix: tots els camins

@@ -102,7 +102,9 @@
 	Constant	Sabit
 	Copy	Kopyala
 	Counts against	Yazıldığı görev
+	Customer demand	Müşteri talebi
 	Cut	Kes
+	Cycle time	Döngü süresi
 	Daily	Günlük
 	Dark	Koyu
 	Data points	Veri noktaları
@@ -112,6 +114,8 @@
 	Decision (one way)	Karar (tek yol)
 	Default flow	Varsayılan akış
 	Delete	Sil
+	Demand	Talep
+	Demand met	Karşılanan talep oranı
 	Departures	Çıkışlar
 	Diagram	Diyagram
 	Discard	Yoksay
@@ -173,6 +177,7 @@
 	Hide Others	Diğerlerini Gizle
 	Hide {app}	{app} Uygulamasını Gizle
 	How many	Kaç
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Müşterilerin bu çıkışlardan kaç parça istediği; sonuçlar o zaman taktı (kullanılabilir sürenin talebe bölümü) ve her görevin döngü süresini gösterir.
 	Inside over time	Zaman içinde içeridekiler
 	Jump	Git
 	Jump to time	Zamana git
@@ -257,8 +262,12 @@
 	Parameter	Parametre
 	Parameters	Parametreler
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Bu akışı izleyen parçalar yeniden işlenmek üzere geri döner; geçtikleri kaynak kullanan son görevin yeniden işlemesi olarak sayılırlar.
+	Parts wanted	İstenen parça
+	Parts wanted is a number above 0	İstenen parça sayısı 0'dan büyük bir sayıdır
 	Paste	Yapıştır
 	Pause	Duraklat
+	Per	Dönem
+	Per shift needs a calendar: each period it is active is a shift.	"Vardiyada" bir takvim gerektirir: takvimin etkin olduğu her dönem bir vardiyadır.
 	Percentile	Yüzdelik
 	Period {n} ends	{n}. dönem bitişi
 	Period {n} repeats	{n}. dönem tekrarı
@@ -389,6 +398,8 @@
 	Stopped watching	İzleme durduruldu
 	Sun	Paz
 	Sweep a parameter	Bir parametreyi tara
+	Takt	Takt
+	Takt time	Takt zamanı
 	Tandem line	Tandem hat
 	Target	Hedef
 	Target share	Hedef oran
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Her değere eşit veya altındaki tekrarların oranı. Bant, gerçek dağılımı {confidence} güvenle içerir.
 	The values are numbers, separated by semicolons or spaces	Değerler noktalı virgül veya boşlukla ayrılmış sayılardır
+	The whole clock	Tüm süre
 	This block has a warning	Bu blokta uyarı var
 	This block has an error	Bu blokta hata var
 	This run	Bu çalıştırma
 	Three-point estimate	Üç noktalı tahmin
 	Thu	Per
+	Time available	Kullanılabilir süre
 	Time between arrivals	Gelişler arası süre
 	Time blocked	Engellenme süresi
 	Time failed	Arıza süresi
@@ -479,6 +492,7 @@
 	decision: one way	karar: tek yol
 	departures	çıkışlar
 	egui and eframe (Craft suite fork)	egui ve eframe (Craft paketinin çatallanmış sürümü)
+	for the whole run	tüm çalıştırma için
 	from its value	değerinden
 	have left	ayrıldı
 	hours	saat
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N tekrardan k: N tekrarın yalnızca k tanesinde bu sonucun bir değeri vardı; ortalaması ve aralığı bu k tekrara göredir.
 	n = {k} of {n}	n = {n} tekrardan {k}
 	nothing yet	henüz bir şey yok
+	per day	günde
+	per shift	vardiyada
+	per week	haftada
 	seconds	saniye
 	split batches	partileri ayırma
 	split or join: all ways	ayır veya birleştir: tüm yollar

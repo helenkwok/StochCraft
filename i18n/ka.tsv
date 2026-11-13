@@ -102,7 +102,9 @@
 	Constant	მუდმივი
 	Copy	კოპირება
 	Counts against	ეკისრება
+	Customer demand	მომხმარებლის მოთხოვნა
 	Cut	ამოჭრა
+	Cycle time	ციკლის დრო
 	Daily	ყოველდღე
 	Dark	მუქი
 	Data points	მონაცემთა წერტილები
@@ -112,6 +114,8 @@
 	Decision (one way)	გადაწყვეტილება (ერთი გზა)
 	Default flow	ნაგულისხმევი ნაკადი
 	Delete	წაშლა
+	Demand	მოთხოვნა
+	Demand met	დაკმაყოფილებული მოთხოვნის წილი
 	Departures	გასვლები
 	Diagram	დიაგრამა
 	Discard	გაუქმება
@@ -173,6 +177,7 @@
 	Hide Others	სხვების დამალვა
 	Hide {app}	{app}-ის დამალვა
 	How many	რამდენი
+	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	რამდენ დეტალს ითხოვენ მომხმარებლები ამ გასვლებიდან; შედეგები მაშინ აჩვენებს ტაქტს (ხელმისაწვდომი დრო გაყოფილი მოთხოვნაზე) და თითოეული დავალების ციკლის დროს.
 	Inside over time	შიგნით დროის მიხედვით
 	Jump	გადასვლა
 	Jump to time	დროზე გადასვლა
@@ -257,8 +262,12 @@
 	Parameter	პარამეტრი
 	Parameters	პარამეტრები
 	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ამ ნაკადით მიმავალი დეტალები ბრუნდება ხელახლა დასამუშავებლად; ისინი აღირიცხება გადამუშავებად ბოლო დავალებისთვის რესურსით, რომელიც გაიარეს.
+	Parts wanted	მოთხოვნილი დეტალები
+	Parts wanted is a number above 0	მოთხოვნილი დეტალები უნდა იყოს 0-ზე მეტი რიცხვი
 	Paste	ჩასმა
 	Pause	პაუზა
+	Per	პერიოდი
+	Per shift needs a calendar: each period it is active is a shift.	„ცვლაში“ საჭიროებს კალენდარს: ყოველი პერიოდი, როცა ის აქტიურია, ერთი ცვლაა.
 	Percentile	პროცენტილი
 	Period {n} ends	პერიოდი {n} მთავრდება
 	Period {n} repeats	პერიოდი {n} მეორდება
@@ -389,6 +398,8 @@
 	Stopped watching	დაკვირვება შეწყდა
 	Sun	კვი
 	Sweep a parameter	პარამეტრის გადარბენა
+	Takt	ტაქტი
+	Takt time	ტაქტის დრო
 	Tandem line	თანმიმდევრული ხაზი
 	Target	მიზანი
 	Target share	სამიზნე წილი
@@ -406,11 +417,13 @@
 	The model: its experiment, connections and problems	მოდელი: ექსპერიმენტი, კავშირები და პრობლემები
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	გამეორებების წილი, რომლებიც თითოეულ მნიშვნელობაზე ნაკლები ან ტოლია. ზოლი შეიცავს ნამდვილ განაწილებას {confidence} სანდოობით.
 	The values are numbers, separated by semicolons or spaces	მნიშვნელობები რიცხვებია, გამოყოფილი წერტილმძიმით ან ჰარით
+	The whole clock	მთელი დრო
 	This block has a warning	ამ ბლოკს აქვს გაფრთხილება
 	This block has an error	ამ ბლოკს აქვს შეცდომა
 	This run	ეს გაშვება
 	Three-point estimate	სამწერტილიანი შეფასება
 	Thu	ხუთ
+	Time available	ხელმისაწვდომი დრო
 	Time between arrivals	შემოსვლებს შორის დრო
 	Time blocked	დაბლოკვის დრო
 	Time failed	გაუმართაობის დრო
@@ -479,6 +492,7 @@
 	decision: one way	გადაწყვეტილება: ერთი გზა
 	departures	გასვლები
 	egui and eframe (Craft suite fork)	egui და eframe (Craft ნაკრების განშტოება)
+	for the whole run	მთელი გაშვებისთვის
 	from its value	მისი მნიშვნელობიდან
 	have left	დატოვეს
 	hours	საათი
@@ -490,6 +504,9 @@
 	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k N-დან: N გამეორებიდან მხოლოდ k-ს ჰქონდა ამ შედეგის მნიშვნელობა, და მისი საშუალო და ინტერვალი ამ k-ზეა გამოთვლილი.
 	n = {k} of {n}	n = {k} {n}-დან
 	nothing yet	ჯერ არაფერი
+	per day	დღეში
+	per shift	ცვლაში
+	per week	კვირაში
 	seconds	წამი
 	split batches	პარტიების დაყოფა
 	split or join: all ways	გაყოფა ან გაერთიანება: ყველა გზა
