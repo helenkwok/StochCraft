@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Interval del 95% de la proporció que compleix l'objectiu: de {lo} a {hi}
 	95th percentile	Percentil 95
 	95th percentile {value}	percentil 95 {value}
+	A caller on hold: once a unit takes it, the entity stays.	Una trucada en espera: un cop una unitat l'agafa, l'entitat es queda.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Un client que esgota el temps d'espera: si el temps se li acaba durant el servei, abandona en aquell moment, i la unitat acaba la feina igualment (treball malbaratat).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	El fitxer nou només conté el model: el que StochCraft no entén de {file} queda fora.
+	Abandoned	Abandonades
+	Abandoned on {id}	Abandonades a {id}
 	About StochCraft	Quant a StochCraft
 	About {app}	Quant a {app}
 	Across the range it changed by {change}: more than chance would explain.	En l'interval ha canviat {change}: més del que explicaria l'atzar.
@@ -134,6 +138,7 @@
 	Duration	Durada
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Cada anàlisi executa l'experiment diverses vegades amb la mateixa llavor, de manera que les diferències vénen del canvi, no de l'atzar. Pot trigar una estona.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entitat pren, tota alhora, la primera d'aquestes alternatives que es pugui satisfer en aquell moment i torna les unitats quan surt.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Cada entitat espera aquí com a màxim un temps que se li assigna a l'atzar quan arriba, i després abandona: pren la sortida marcada com a «Abandonades» o surt del model.
 	Edit	Edita
 	Elasticity	Elasticitat
 	Ends early	Acaba abans
@@ -141,7 +146,9 @@
 	Energy per part	Energia per peça
 	Enough: {units}, meeting the target in {p} of replications	Prou: {units}, compleix l'objectiu en el {p} de les rèpliques
 	Entered	Entrades
+	Entities give up waiting	Les entitats abandonen l'espera
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Les entitats encara a dins al final d'una rèplica no es tenen en compte en l'espera mitjana ni en el temps mitjà al sistema.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Les entitats que abandonen l'espera prenen aquest flux (per tornar-ho a provar més tard, per exemple); les altres prenen l'altra sortida de la tasca.
 	Erlang	Erlang
 	Error	Error
 	Estimate from three values…	Estima a partir de tres valors…
@@ -171,6 +178,9 @@
 	Fri	dv.
 	From	Des de
 	Gamma	Gamma
+	Gave up	Han abandonat
+	Gives up before it is done	Abandona abans d'acabar
+	Gives up before service starts	Abandona abans que comenci el servei
 	Goes to	Va cap a
 	Hands on finished parts while down	Passa les peces acabades durant l'avaria
 	Help	Ajuda
@@ -207,6 +217,7 @@
 	Mean time blocked	Temps mitjà bloquejat
 	Mean time in system	Temps mitjà al sistema
 	Mean wait	Espera mitjana
+	Mean wait before giving up	Espera mitjana abans d'abandonar
 	Metric	Mètrica
 	Middles	Centres verticals
 	Minimise	Minimitza
@@ -265,6 +276,7 @@
 	Parts wanted	Peces demanades
 	Parts wanted is a number above 0	Les peces demanades són un nombre més gran que 0
 	Paste	Enganxa
+	Patience	Paciència
 	Pause	Pausa
 	Per	Període
 	Per shift needs a calendar: each period it is active is a shift.	«Per torn» necessita un calendari: cada període en què està actiu és un torn.
@@ -374,6 +386,8 @@
 	Share	Proporció
 	Share of arrivals lost	Proporció d'arribades perdudes
 	Share of units blocked	Proporció d'unitats bloquejades
+	Share of work wasted	Proporció de treball malbaratat
+	Share that gave up	Proporció que ha abandonat
 	Show All	Mostra-ho tot
 	Show {id}	Mostra {id}
 	Size	Dimensiona
@@ -424,6 +438,7 @@
 	Three-point estimate	Estimació de tres punts
 	Thu	dj.
 	Time available	Temps disponible
+	Time before giving up	Temps abans d'abandonar
 	Time between arrivals	Temps entre arribades
 	Time blocked	Temps bloquejat
 	Time failed	Temps avariat
@@ -479,6 +494,7 @@
 	Whole number	Nombre enter
 	Window	Finestra
 	With every time at its mean: {units}	Amb cada temps a la seva mitjana: {units}
+	Work wasted on those who gave up	Treball malbaratat en les que han abandonat
 	XPDL with BPSim	XPDL amb BPSim
 	Yes or no	Sí o no
 	Your changes will be lost if you don't save them.	Si no els deses, perdràs els canvis.

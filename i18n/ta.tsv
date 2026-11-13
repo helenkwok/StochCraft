@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	இலக்கை அடையும் பங்கின் 95% இடைவெளி: {lo} முதல் {hi}
 	95th percentile	95-ஆம் சதமானம்
 	95th percentile {value}	95-ஆம் சதமானம் {value}
+	A caller on hold: once a unit takes it, the entity stays.	காத்திருப்பில் உள்ள அழைப்பாளர்: ஓர் அலகு அதை எடுத்துக்கொண்டதும், உருப்படி தங்கிவிடுகிறது.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	நேரம் கடந்துவிடும் (timeout) கிளையன்ட்: சேவையின்போது அதன் நேரம் முடிந்தால், அப்போதே கைவிடுகிறது; அலகு அந்த வேலையை எப்படியும் முடிக்கிறது (வீணான வேலை).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	புதிய கோப்பில் மாதிரி மட்டுமே இருக்கும்: {file} இல் StochCraft புரிந்துகொள்ளாதவை விடப்படும்.
+	Abandoned	கைவிட்டவை
+	Abandoned on {id}	{id} இல் கைவிட்டவை
 	About StochCraft	StochCraft பற்றி
 	About {app}	{app} பற்றி
 	Across the range it changed by {change}: more than chance would explain.	முழு வரம்பிலும் இது {change} மாறியது: தற்செயல் விளக்குவதை விட அதிகம்.
@@ -134,6 +138,7 @@
 	Duration	கால அளவு
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ஒவ்வொரு பகுப்பாய்வும் ஒரே சீரற்ற விதையுடன் சோதனையைப் பலமுறை இயக்குகிறது, எனவே வேறுபாடுகள் தற்செயலால் அல்ல, மாற்றத்தால் வருகின்றன. சிறிது நேரம் ஆகலாம்.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ஒவ்வொரு உருப்படியும் இவற்றில், இப்போதே ஒரே நேரத்தில் முழுமையாக நிறைவேற்றக்கூடிய முதலாவதை எடுத்துக்கொள்கிறது; வெளியேறும்போது அலகுகளைத் திருப்பித் தருகிறது.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ஒவ்வொரு உருப்படியும் வந்தடையும்போது அதற்காகச் சீரற்ற முறையில் எடுக்கப்பட்ட நேரம் வரை மட்டுமே இங்கே காத்திருந்து, பின்னர் கைவிடுகிறது: "கைவிட்டவை" எனக் குறிக்கப்பட்ட வெளியேறும் வழியில் செல்கிறது, அல்லது மாதிரியை விட்டு வெளியேறுகிறது.
 	Edit	திருத்து
 	Elasticity	நெகிழ்ச்சி
 	Ends early	முன்னதாக முடிகிறது
@@ -141,7 +146,9 @@
 	Energy per part	ஒரு பாகத்திற்கான ஆற்றல்
 	Enough: {units}, meeting the target in {p} of replications	போதும்: {units}, {p} மீள் இயக்கங்களில் இலக்கு அடையப்படுகிறது
 	Entered	உள்ளே நுழைந்தவை
+	Entities give up waiting	உருப்படிகள் காத்திருப்பைக் கைவிடுகின்றன
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ஒரு மீள் இயக்கத்தின் முடிவில் இன்னும் உள்ளே உள்ளவை சராசரி காத்திருப்பிலும் அமைப்பில் கழித்த சராசரி நேரத்திலும் சேர்க்கப்படவில்லை.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	காத்திருப்பைக் கைவிடும் உருப்படிகள் இந்த ஓட்டத்தில் செல்கின்றன (உதாரணமாக, பின்னர் மீண்டும் முயல); மற்றவை பணியின் மற்றொரு வெளியேறும் வழியில் செல்கின்றன.
 	Erlang	எர்லாங்
 	Error	பிழை
 	Estimate from three values…	மூன்று மதிப்புகளிலிருந்து மதிப்பிடு…
@@ -171,6 +178,9 @@
 	Fri	வெள்
 	From	இதிலிருந்து
 	Gamma	காமா
+	Gave up	கைவிட்டவை
+	Gives up before it is done	முடிவதற்கு முன் கைவிடுகிறது
+	Gives up before service starts	சேவை தொடங்கும் முன் கைவிடுகிறது
 	Goes to	இதற்குச் செல்கிறது
 	Hands on finished parts while down	பழுதடைந்திருக்கும்போதும் முடிந்த பாகங்களை அனுப்பும்
 	Help	உதவி
@@ -207,6 +217,7 @@
 	Mean time blocked	தடுக்கப்பட்ட சராசரி நேரம்
 	Mean time in system	அமைப்பில் கழித்த சராசரி நேரம்
 	Mean wait	சராசரி காத்திருப்பு
+	Mean wait before giving up	கைவிடுவதற்கு முந்தைய சராசரி காத்திருப்பு
 	Metric	அளவீடு
 	Middles	செங்குத்து மையங்கள்
 	Minimise	சிறிதாக்கு
@@ -265,6 +276,7 @@
 	Parts wanted	விரும்பும் பாகங்கள்
 	Parts wanted is a number above 0	விரும்பும் பாகங்கள் 0-ஐ விடப் பெரிய எண்ணாக இருக்க வேண்டும்
 	Paste	ஒட்டு
+	Patience	பொறுமை
 	Pause	இடைநிறுத்து
 	Per	காலம்
 	Per shift needs a calendar: each period it is active is a shift.	"ஒரு பணிமுறைக்கு" என்பதற்கு நாட்காட்டி தேவை: அது செயலில் இருக்கும் ஒவ்வொரு காலமும் ஒரு பணிமுறை.
@@ -374,6 +386,8 @@
 	Share	பங்கு
 	Share of arrivals lost	இழந்த வருகைகளின் விகிதம்
 	Share of units blocked	தடுக்கப்பட்ட அலகுகளின் விகிதம்
+	Share of work wasted	வீணான வேலையின் விகிதம்
+	Share that gave up	கைவிட்டவற்றின் விகிதம்
 	Show All	அனைத்தையும் காட்டு
 	Show {id}	{id} ஐக் காட்டு
 	Size	அளவிடு
@@ -424,6 +438,7 @@
 	Three-point estimate	மூன்று-புள்ளி மதிப்பீடு
 	Thu	வியா
 	Time available	கிடைக்கும் நேரம்
+	Time before giving up	கைவிடுவதற்கு முந்தைய நேரம்
 	Time between arrivals	வருகைகளுக்கு இடையிலான நேரம்
 	Time blocked	தடுக்கப்பட்ட நேரம்
 	Time failed	பழுதடைந்த நேரம்
@@ -479,6 +494,7 @@
 	Whole number	முழு எண்
 	Window	சாளரம்
 	With every time at its mean: {units}	ஒவ்வொரு நேரமும் அதன் சராசரியில்: {units}
+	Work wasted on those who gave up	கைவிட்டவற்றுக்காக வீணான வேலை
 	XPDL with BPSim	BPSim உடன் XPDL
 	Yes or no	ஆம் அல்லது இல்லை
 	Your changes will be lost if you don't save them.	சேமிக்காவிட்டால் உங்கள் மாற்றங்கள் இழக்கப்படும்.

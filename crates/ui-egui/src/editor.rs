@@ -535,6 +535,14 @@ impl App {
         }
 
         self.properties_section(ui, p, el);
+        // Patience, next to the flows entities that give up take; closed on a server without one.
+        if kind == "server" {
+            ui.add_space(6.0);
+            egui::CollapsingHeader::new(theme::strong(t("Patience")))
+                .id_salt(format!("{id}/patience"))
+                .default_open(el["patience"].is_object())
+                .show(ui, |ui| self.patience_section(ui, model, el, &id));
+        }
 
         section(ui, t("Flows"));
         let names = element_names(model);
@@ -609,6 +617,10 @@ impl App {
                             ui.horizontal(|ui| {
                                 ui.add_space(12.0);
                                 self.rework_field(ui, cid, &c);
+                                // Only a task with a resource of its own has entities giving up.
+                                if kind == "server" {
+                                    self.abandoned_field(ui, cid, &c);
+                                }
                             });
                         }
                     }
@@ -983,6 +995,106 @@ impl App {
         r.widget_info(|| egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, &name));
         if r.changed() {
             self.execute("flow.set", json!({ "id": cid, "rework": rework }));
+        }
+    }
+
+    /// Whether this way out is the one entities that give up take, besides the task's ordinary
+    /// way out.
+    fn abandoned_field(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) {
+        let mut abandoned = c["abandoned"].as_bool().unwrap_or(false);
+        let r = ui.checkbox(&mut abandoned, t("Abandoned")).on_hover_text(t(
+            "Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.",
+        ));
+        let (ticked, name) = (abandoned, tf("Abandoned on {id}", &[("id", cid)]));
+        r.widget_info(|| egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, &name));
+        if r.changed() {
+            self.execute("flow.set", json!({ "id": cid, "abandoned": abandoned }));
+        }
+    }
+
+    /// How long entities wait at a task with a resource before they give up, and whether they
+    /// give up only before their service starts or also before it is done.
+    fn patience_section(&mut self, ui: &mut egui::Ui, model: &Value, el: &Value, id: &str) {
+        let patience = el["patience"].clone();
+        let mut on = patience.is_object();
+        let r = ui.checkbox(&mut on, t("Entities give up waiting")).on_hover_text(t(
+            "Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.",
+        ));
+        if r.changed() {
+            let v = if on {
+                json!({"time": {"type": "exponential", "mean": 1.0}})
+            } else {
+                Value::Null
+            };
+            self.execute("block.set", json!({ "id": id, "patience": v }));
+        }
+        if !on {
+            return;
+        }
+        // The time's editor, from the schema of block.set's patience.
+        let schema = params_schema("block.set");
+        let resolve = |n: &Value| -> Value {
+            let n = n["anyOf"]
+                .as_array()
+                .and_then(|a| a.iter().find(|x| x["type"] != "null"))
+                .unwrap_or(n);
+            match n["$ref"].as_str().and_then(|r| r.strip_prefix("#/$defs/")) {
+                Some(name) => schema["$defs"][name].clone(),
+                None => n.clone(),
+            }
+        };
+        let spec = resolve(&schema["properties"]["patience"]);
+        let root = json!({
+            "properties": { "patience": spec["properties"]["time"] },
+            "$defs": schema["$defs"],
+        });
+        let unit = self.time_unit_label();
+        let calendars = form::calendars(model);
+        let mut cx = form::Cx {
+            time_unit: &unit,
+            numbers: &self.numbers,
+            drafts: &mut self.drafts,
+            calendars: &calendars,
+        };
+        let key = format!("{id}/patience");
+        let time = &patience["time"];
+        if let Some(v) = form::field(
+            ui,
+            &mut cx,
+            Schema::new(&root),
+            &key,
+            "patience",
+            time,
+            true,
+        ) {
+            let mut p = patience.clone();
+            p["time"] = v;
+            self.execute("block.set", json!({ "id": id, "patience": p }));
+        }
+        let until = patience["until"].as_str().unwrap_or("start").to_owned();
+        let mut chosen = until.clone();
+        ui.radio_value(
+            &mut chosen,
+            "start".to_owned(),
+            t("Gives up before service starts"),
+        )
+        .on_hover_text(t(
+            "A caller on hold: once a unit takes it, the entity stays.",
+        ));
+        ui.radio_value(&mut chosen, "done".to_owned(), t("Gives up before it is done"))
+            .on_hover_text(t(
+                "A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).",
+            ));
+        if chosen != until {
+            let mut p = patience.clone();
+            if chosen == "start" {
+                if let Some(o) = p.as_object_mut() {
+                    o.remove("until");
+                }
+            } else {
+                p["until"] = json!(chosen);
+            }
+            self.execute("block.set", json!({ "id": id, "patience": p }));
         }
     }
 

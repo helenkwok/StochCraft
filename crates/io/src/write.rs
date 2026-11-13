@@ -7,9 +7,9 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate, Model, Need, Power,
-    Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, Timed,
-    Transfer,
+    Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate, Model, Need,
+    Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue, ResourcePool, Routing,
+    Scrap, Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -369,6 +369,26 @@ pub(crate) fn scrap_element(x: &Scrap) -> Element {
 /// Rework on a connection as StochCraft's vendor extension ([`crate::bpsim::REWORK`]).
 pub(crate) fn rework_element() -> Element {
     vendor_value_element(crate::bpsim::REWORK, "true")
+}
+
+/// A way for entities that give up as StochCraft's vendor extension
+/// ([`crate::bpsim::ABANDONED`]).
+pub(crate) fn abandoned_element() -> Element {
+    vendor_value_element(crate::bpsim::ABANDONED, "true")
+}
+
+/// A server's patience as StochCraft's vendor extension ([`crate::bpsim::PATIENCE`]). `until`
+/// is written only when it is not the default (`start`).
+pub(crate) fn patience_element(p: &Patience) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:patience", Some(ns));
+    if p.until != PatienceUntil::Start {
+        body = body.with_attr("until", p.until.name());
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::PATIENCE)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body.with_child(dist_element(&p.time)))
 }
 
 /// A server's planned time to make one item as StochCraft's vendor extension
@@ -755,6 +775,12 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         {
             ep.push(planned_element(d));
         }
+        if let ElementKind::Server {
+            patience: Some(p), ..
+        } = &e.kind
+        {
+            ep.push(patience_element(p));
+        }
         if let ElementKind::Sink { scrap: Some(x), .. } = &e.kind {
             ep.push(scrap_element(x));
         }
@@ -789,7 +815,12 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         scenario.push(ep);
     }
     for c in &model.connections {
-        if c.probability.is_none() && c.condition.is_none() && c.quantity.is_none() && !c.rework {
+        if c.probability.is_none()
+            && c.condition.is_none()
+            && c.quantity.is_none()
+            && !c.rework
+            && !c.abandoned
+        {
             continue;
         }
         let mut ep = s("ElementParameters").with_attr("elementRef", c.id.as_str());
@@ -808,6 +839,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if c.rework {
             ep.push(rework_element());
+        }
+        if c.abandoned {
+            ep.push(abandoned_element());
         }
         scenario.push(ep);
     }

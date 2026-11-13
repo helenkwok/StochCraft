@@ -570,6 +570,7 @@ fn edits() -> Vec<Edit> {
                         power: None,
                         setup: None,
                         planned_run_time: None,
+                        patience: None,
                     };
                 }
             }),

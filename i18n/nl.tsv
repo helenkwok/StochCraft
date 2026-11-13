@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	95%-interval van het aandeel dat het doel haalt: {lo} tot {hi}
 	95th percentile	95e percentiel
 	95th percentile {value}	95e percentiel {value}
+	A caller on hold: once a unit takes it, the entity stays.	Een beller in de wacht: zodra een eenheid hem aanneemt, blijft de entiteit.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Een client met een time-out: als zijn tijd tijdens de service verloopt, haakt hij op dat moment af, en de eenheid maakt het werk toch af (verspild werk).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Het nieuwe bestand bevat alleen het model: wat StochCraft in {file} niet begrijpt, valt weg.
+	Abandoned	Afgehaakt
+	Abandoned on {id}	Afgehaakt op {id}
 	About StochCraft	Over StochCraft
 	About {app}	Over {app}
 	Across the range it changed by {change}: more than chance would explain.	Over het bereik veranderde het met {change}: meer dan toeval zou verklaren.
@@ -134,6 +138,7 @@
 	Duration	Duur
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Elke analyse voert het experiment meerdere keren uit met dezelfde startwaarde, zodat de verschillen van de wijziging komen, niet van toeval. Dit kan even duren.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Elke entiteit neemt in één keer het eerste van deze alternatieven waaraan nu kan worden voldaan, en geeft de eenheden terug wanneer ze vertrekt.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Elke entiteit wacht hier hoogstens een tijd die bij aankomst willekeurig voor haar wordt getrokken, en haakt dan af: ze neemt de uitgang gemarkeerd als ‘Afgehaakt’ of verlaat het model.
 	Edit	Bewerken
 	Elasticity	Elasticiteit
 	Ends early	Stopt eerder
@@ -141,7 +146,9 @@
 	Energy per part	Energie per onderdeel
 	Enough: {units}, meeting the target in {p} of replications	Genoeg: {units}, haalt het doel in {p} van de herhalingen
 	Entered	Binnengekomen
+	Entities give up waiting	Entiteiten haken af tijdens het wachten
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entiteiten die aan het eind van een herhaling nog binnen zijn, tellen niet mee in de gemiddelde wachttijd en de gemiddelde tijd in het systeem.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteiten die tijdens het wachten afhaken, nemen deze stroom (om het later opnieuw te proberen, bijvoorbeeld); de andere nemen de andere uitgang van de taak.
 	Erlang	Erlang
 	Error	Fout
 	Estimate from three values…	Schatten uit drie waarden…
@@ -171,6 +178,9 @@
 	Fri	vr
 	From	Van
 	Gamma	Gamma
+	Gave up	Afgehaakt
+	Gives up before it is done	Haakt af voordat ze klaar is
+	Gives up before service starts	Haakt af voordat de service begint
 	Goes to	Gaat naar
 	Hands on finished parts while down	Geeft gerede onderdelen door tijdens storing
 	Help	Help
@@ -207,6 +217,7 @@
 	Mean time blocked	Gemiddelde blokkeringstijd
 	Mean time in system	Gemiddelde tijd in het systeem
 	Mean wait	Gemiddelde wachttijd
+	Mean wait before giving up	Gemiddelde wachttijd tot afhaken
 	Metric	Metriek
 	Middles	Verticale middens
 	Minimise	Minimaliseren
@@ -265,6 +276,7 @@
 	Parts wanted	Gewenste onderdelen
 	Parts wanted is a number above 0	Het aantal gewenste onderdelen is een getal boven 0
 	Paste	Plakken
+	Patience	Geduld
 	Pause	Pauzeren
 	Per	Periode
 	Per shift needs a calendar: each period it is active is a shift.	‘Per ploeg’ heeft een kalender nodig: elke periode waarin die actief is, is een ploeg.
@@ -374,6 +386,8 @@
 	Share	Aandeel
 	Share of arrivals lost	Aandeel verloren aankomsten
 	Share of units blocked	Aandeel geblokkeerde eenheden
+	Share of work wasted	Aandeel verspild werk
+	Share that gave up	Aandeel afgehaakt
 	Show All	Alles tonen
 	Show {id}	{id} tonen
 	Size	Dimensioneren
@@ -424,6 +438,7 @@
 	Three-point estimate	Driepuntsschatting
 	Thu	do
 	Time available	Beschikbare tijd
+	Time before giving up	Tijd tot afhaken
 	Time between arrivals	Tijd tussen aankomsten
 	Time blocked	Tijd geblokkeerd
 	Time failed	Tijd in storing
@@ -479,6 +494,7 @@
 	Whole number	Geheel getal
 	Window	Venster
 	With every time at its mean: {units}	Met elke tijd op zijn gemiddelde: {units}
+	Work wasted on those who gave up	Verspild werk aan afhakers
 	XPDL with BPSim	XPDL met BPSim
 	Yes or no	Ja of nee
 	Your changes will be lost if you don't save them.	Je wijzigingen gaan verloren als je ze niet opslaat.

@@ -9,9 +9,9 @@ use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
     Bounds, Breakdown, Change, Connection, Demand, DemandPer, Diagnostic, Dist, Element, ElementId,
-    ElementKind, Estimate, Experiment, Family, Model, Need, Power, Property, PropertyType,
-    PropertyValue, ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit,
-    Timed, Transfer, Upper,
+    ElementKind, Estimate, Experiment, Family, Model, Need, Patience, PatienceUntil, Power,
+    Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Severity, Stop,
+    ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -233,6 +233,11 @@ pub enum KindSpec {
         /// OEE results; its mean is the plan. Not simulated. Left out when none.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         planned_run_time: Option<DistSpec>,
+        /// How long an entity waits before it gives up (and takes the way out marked
+        /// `abandoned`, or leaves the model); left out when entities wait for as long as it
+        /// takes.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        patience: Option<PatienceSpec>,
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
     /// entity takes what the first of `needs` that can be met now asks for, holds it for its
@@ -785,6 +790,7 @@ impl From<&ElementKind> for KindSpec {
                 power,
                 setup,
                 planned_run_time,
+                patience,
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
@@ -800,6 +806,7 @@ impl From<&ElementKind> for KindSpec {
                 power: power.as_ref().map(Into::into),
                 setup: setup.as_ref().map(Into::into),
                 planned_run_time: planned_run_time.as_ref().map(Into::into),
+                patience: patience.as_ref().map(Into::into),
             },
             ElementKind::SharedTask {
                 service,
@@ -856,6 +863,7 @@ impl From<KindSpec> for ElementKind {
                 power,
                 setup,
                 planned_run_time,
+                patience,
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
@@ -870,6 +878,7 @@ impl From<KindSpec> for ElementKind {
                 power: power.map(Into::into),
                 setup: setup.map(Into::into),
                 planned_run_time: planned_run_time.map(Into::into),
+                patience: patience.map(Into::into),
             },
             KindSpec::SharedTask {
                 service,
@@ -1314,6 +1323,62 @@ pub struct ConnectionDoc {
     /// the OEE quality results; left out when false.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub rework: bool,
+    /// Out of a server with a patience: the way entities that give up take, besides its
+    /// ordinary way out; left out when false.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub abandoned: bool,
+}
+
+/// How long an entity waits at a server before it gives up, drawn as it enters, and what must
+/// happen in that time: its service start (`start`, the default, left out) or its service being
+/// done (`done`; a unit serving it finishes the job anyway, and the work is wasted).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct PatienceSpec {
+    pub time: DistSpec,
+    #[serde(default, skip_serializing_if = "PatienceUntilSpec::is_start")]
+    pub until: PatienceUntilSpec,
+}
+
+/// What an entity's patience must see happen in time.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum PatienceUntilSpec {
+    /// Its service starting.
+    #[default]
+    Start,
+    /// Its service being done.
+    Done,
+}
+
+impl PatienceUntilSpec {
+    fn is_start(&self) -> bool {
+        *self == PatienceUntilSpec::Start
+    }
+}
+
+impl From<&Patience> for PatienceSpec {
+    fn from(p: &Patience) -> Self {
+        PatienceSpec {
+            time: (&p.time).into(),
+            until: match p.until {
+                PatienceUntil::Start => PatienceUntilSpec::Start,
+                PatienceUntil::Done => PatienceUntilSpec::Done,
+            },
+        }
+    }
+}
+
+impl From<PatienceSpec> for Patience {
+    fn from(p: PatienceSpec) -> Self {
+        Patience {
+            time: p.time.into(),
+            until: match p.until {
+                PatienceUntilSpec::Start => PatienceUntil::Start,
+                PatienceUntilSpec::Done => PatienceUntil::Done,
+            },
+        }
+    }
 }
 
 /// The customer demand a sink serves, for takt: `quantity` parts each `per` period, with the
@@ -1476,6 +1541,7 @@ impl From<&Model> for ModelDoc {
                     condition: c.condition.clone(),
                     quantity: c.quantity,
                     rework: c.rework,
+                    abandoned: c.abandoned,
                 })
                 .collect(),
             resources: m.resources.iter().map(Into::into).collect(),
@@ -1528,6 +1594,7 @@ impl From<ModelDoc> for Model {
                     condition: c.condition,
                     quantity: c.quantity,
                     rework: c.rework,
+                    abandoned: c.abandoned,
                 })
                 .collect(),
             resources: m.resources.into_iter().map(Into::into).collect(),
@@ -1736,6 +1803,7 @@ mod tests {
                 power: None,
                 setup: None,
                 planned_run_time: None,
+                patience: None,
             })
         );
     }

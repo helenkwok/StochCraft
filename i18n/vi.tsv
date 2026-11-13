@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Khoảng 95% của tỷ lệ đạt mục tiêu: từ {lo} đến {hi}
 	95th percentile	Phân vị thứ 95
 	95th percentile {value}	phân vị thứ 95 {value}
+	A caller on hold: once a unit takes it, the entity stays.	Người gọi đang chờ máy: khi một đơn vị đã nhận, thực thể ở lại.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Máy khách hết thời gian chờ (timeout): nếu hết thời gian trong lúc phục vụ, nó bỏ đi ngay lúc đó, và đơn vị vẫn làm xong công việc (công việc lãng phí).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Tệp mới chỉ chứa mô hình: những gì StochCraft không hiểu trong {file} sẽ bị bỏ qua.
+	Abandoned	Bỏ đi
+	Abandoned on {id}	Bỏ đi tại {id}
 	About StochCraft	Giới thiệu StochCraft
 	About {app}	Giới thiệu {app}
 	Across the range it changed by {change}: more than chance would explain.	Trên cả khoảng, nó thay đổi {change}: nhiều hơn mức ngẫu nhiên có thể giải thích.
@@ -134,6 +138,7 @@
 	Duration	Thời lượng
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Mỗi phân tích chạy thí nghiệm nhiều lần với cùng hạt giống ngẫu nhiên, nên khác biệt đến từ thay đổi chứ không phải ngẫu nhiên. Việc này có thể mất một lúc.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Mỗi thực thể lấy phương án đầu tiên trong số này có thể đáp ứng ngay, lấy tất cả cùng lúc, và trả lại các đơn vị khi rời khỏi tác vụ.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Mỗi thực thể chờ ở đây tối đa một khoảng thời gian được rút ngẫu nhiên cho nó khi đến, rồi bỏ đi: nó đi theo lối ra được đánh dấu "Bỏ đi", hoặc rời khỏi mô hình.
 	Edit	Chỉnh sửa
 	Elasticity	Độ co giãn
 	Ends early	Kết thúc sớm
@@ -141,7 +146,9 @@
 	Energy per part	Năng lượng trên mỗi chi tiết
 	Enough: {units}, meeting the target in {p} of replications	Đủ: {units}, đạt mục tiêu trong {p} số lần lặp
 	Entered	Đã vào
+	Entities give up waiting	Thực thể bỏ đi khi chờ quá lâu
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Các thực thể vẫn còn bên trong lúc một lần lặp kết thúc không được tính vào thời gian chờ trung bình và thời gian trung bình trong hệ thống.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Các thực thể bỏ đi khi chờ đi theo luồng này (chẳng hạn để thử lại sau); các thực thể khác đi theo lối ra còn lại của tác vụ.
 	Erlang	Erlang
 	Error	Lỗi
 	Estimate from three values…	Ước lượng từ ba giá trị…
@@ -171,6 +178,9 @@
 	Fri	T6
 	From	Từ
 	Gamma	Gamma
+	Gave up	Đã bỏ đi
+	Gives up before it is done	Bỏ đi trước khi xong
+	Gives up before service starts	Bỏ đi trước khi bắt đầu phục vụ
 	Goes to	Đi đến
 	Hands on finished parts while down	Vẫn chuyển tiếp chi tiết đã xong khi hỏng
 	Help	Trợ giúp
@@ -207,6 +217,7 @@
 	Mean time blocked	Thời gian bị chặn trung bình
 	Mean time in system	Thời gian trung bình trong hệ thống
 	Mean wait	Thời gian chờ trung bình
+	Mean wait before giving up	Thời gian chờ trung bình trước khi bỏ đi
 	Metric	Chỉ số
 	Middles	Tâm dọc
 	Minimise	Thu nhỏ tối đa
@@ -265,6 +276,7 @@
 	Parts wanted	Số chi tiết cần
 	Parts wanted is a number above 0	Số chi tiết cần là một số lớn hơn 0
 	Paste	Dán
+	Patience	Sự kiên nhẫn
 	Pause	Tạm dừng
 	Per	Khoảng
 	Per shift needs a calendar: each period it is active is a shift.	"Mỗi ca" cần một lịch: mỗi khoảng thời gian lịch hoạt động là một ca.
@@ -374,6 +386,8 @@
 	Share	Tỷ lệ
 	Share of arrivals lost	Tỷ lệ lượt đến bị mất
 	Share of units blocked	Tỷ lệ đơn vị bị chặn
+	Share of work wasted	Tỷ lệ công việc lãng phí
+	Share that gave up	Tỷ lệ bỏ đi
 	Show All	Hiện tất cả
 	Show {id}	Hiển thị {id}
 	Size	Định cỡ
@@ -424,6 +438,7 @@
 	Three-point estimate	Ước lượng ba điểm
 	Thu	T5
 	Time available	Thời gian khả dụng
+	Time before giving up	Thời gian trước khi bỏ đi
 	Time between arrivals	Thời gian giữa các lượt đến
 	Time blocked	Thời gian bị chặn
 	Time failed	Thời gian hỏng hóc
@@ -479,6 +494,7 @@
 	Whole number	Số nguyên
 	Window	Cửa sổ
 	With every time at its mean: {units}	Khi mọi thời gian bằng trung bình: {units}
+	Work wasted on those who gave up	Công việc lãng phí cho những thực thể bỏ đi
 	XPDL with BPSim	XPDL có BPSim
 	Yes or no	Có hoặc không
 	Your changes will be lost if you don't save them.	Các thay đổi sẽ bị mất nếu bạn không lưu.

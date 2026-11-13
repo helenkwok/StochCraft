@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Eesmärgi saavutanud osakaalu 95% vahemik: {lo} kuni {hi}
 	95th percentile	95. protsentiil
 	95th percentile {value}	95. protsentiil {value}
+	A caller on hold: once a unit takes it, the entity stays.	Ootel helistaja: kui ühik on ta vastu võtnud, jääb olem alles.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Ajalõpuga klient: kui tema aeg saab teeninduse ajal otsa, loobub ta siis ja ühik teeb töö ikkagi lõpuni (raisatud töö).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Uues failis on ainult mudel: see, millest StochCraft failis {file} aru ei saa, jäetakse välja.
+	Abandoned	Loobunud
+	Abandoned on {id}	Loobunud voos {id}
 	About StochCraft	Teave StochCrafti kohta
 	About {app}	Teave: {app}
 	Across the range it changed by {change}: more than chance would explain.	Vahemikus muutus see {change} võrra: rohkem, kui juhus seletaks.
@@ -134,6 +138,7 @@
 	Duration	Kestus
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Iga analüüs käitab eksperimenti mitu korda sama juhuarvuseemnega, nii et erinevused tulevad muudatusest, mitte juhusest. See võib võtta aega.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Iga olem võtab neist esimese, mida saab kohe täita, kõik korraga, ja annab ühikud tagasi, kui ülesandest lahkub.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Iga olem ootab siin kõige rohkem aja, mis talle saabumisel juhuslikult määratakse, ja loobub siis: ta läheb väljapääsu kaudu, mis on märgitud „Loobunud”, või lahkub mudelist.
 	Edit	Muuda
 	Elasticity	Elastsus
 	Ends early	Lõpeb varem
@@ -141,7 +146,9 @@
 	Energy per part	Energia detaili kohta
 	Enough: {units}, meeting the target in {p} of replications	Piisab: {units}, eesmärk saavutatakse {p} kordustest
 	Entered	Sisenenud
+	Entities give up waiting	Olemid loobuvad ootamisest
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Olemid, mis on korduse lõpus veel sees, jäetakse keskmisest ooteajast ja keskmisest ajast süsteemis välja.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Ootamisest loobuvad olemid lähevad seda voogu mööda (näiteks hiljem uuesti proovima); teised lähevad ülesande teise väljapääsu kaudu.
 	Erlang	Erlang
 	Error	Viga
 	Estimate from three values…	Hinda kolme väärtuse põhjal…
@@ -171,6 +178,9 @@
 	Fri	R
 	From	Alates
 	Gamma	Gamma
+	Gave up	Loobusid
+	Gives up before it is done	Loobub enne valmimist
+	Gives up before service starts	Loobub enne teeninduse algust
 	Goes to	Viib kohta
 	Hands on finished parts while down	Annab rikkis olekus valmis detailid edasi
 	Help	Abi
@@ -207,6 +217,7 @@
 	Mean time blocked	Keskmine blokeerimisaeg
 	Mean time in system	Keskmine aeg süsteemis
 	Mean wait	Keskmine ooteaeg
+	Mean wait before giving up	Keskmine ooteaeg enne loobumist
 	Metric	Mõõdik
 	Middles	Vertikaalsed keskkohad
 	Minimise	Minimeeri
@@ -265,6 +276,7 @@
 	Parts wanted	Soovitud detailid
 	Parts wanted is a number above 0	Soovitud detailide arv peab olema suurem kui 0
 	Paste	Kleebi
+	Patience	Kannatlikkus
 	Pause	Paus
 	Per	Periood
 	Per shift needs a calendar: each period it is active is a shift.	„Vahetuses” vajab kalendrit: iga periood, mil see on aktiivne, on üks vahetus.
@@ -374,6 +386,8 @@
 	Share	Osakaal
 	Share of arrivals lost	Kaotatud saabumiste osakaal
 	Share of units blocked	Blokeeritud ühikute osakaal
+	Share of work wasted	Raisatud töö osakaal
+	Share that gave up	Loobunute osakaal
 	Show All	Näita kõiki
 	Show {id}	Näita {id}
 	Size	Dimensioneeri
@@ -424,6 +438,7 @@
 	Three-point estimate	Kolmepunktihinnang
 	Thu	N
 	Time available	Saadaolev aeg
+	Time before giving up	Aeg loobumiseni
 	Time between arrivals	Saabumiste vaheline aeg
 	Time blocked	Blokeeritud aeg
 	Time failed	Rikkis oleku aeg
@@ -479,6 +494,7 @@
 	Whole number	Täisarv
 	Window	Aken
 	With every time at its mean: {units}	Kui iga aeg on oma keskmisel: {units}
+	Work wasted on those who gave up	Loobunutele raisatud töö
 	XPDL with BPSim	XPDL ja BPSim
 	Yes or no	Jah või ei
 	Your changes will be lost if you don't save them.	Salvestamata muudatused lähevad kaotsi.

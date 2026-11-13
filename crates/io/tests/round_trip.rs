@@ -3,8 +3,8 @@
 use stochcraft_blocks::{BlockId, Builder, Event, Rule};
 use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{
-    DateTime, Dist, ElementKind, Experiment, Model, Need, Property, PropertyType, PropertyValue,
-    Routing, TimeUnit,
+    DateTime, Dist, ElementKind, Experiment, Model, Need, Patience, PatienceUntil, Property,
+    PropertyType, PropertyValue, Routing, TimeUnit,
 };
 
 /// A model using every element kind and every distribution.
@@ -814,6 +814,108 @@ fn a_planned_run_time_is_written_saved_and_removed() {
     let text = String::from_utf8_lossy(&removed);
     assert!(!text.contains("plannedRunTime"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// A patience, until the service starts or is done, and the way for entities that give up are
+/// StochCraft's vendor extensions: written, read back, changed and removed in place.
+#[test]
+fn a_patience_and_an_abandoned_way_are_written_saved_and_removed() {
+    let mut m = Builder::new();
+    let src = m.source("calls", Dist::Exponential { mean: 5.0 }, None);
+    let desk = m.server("desk", 1, Dist::Exponential { mean: 4.0 });
+    m.patience(
+        desk,
+        Patience {
+            time: Dist::Exponential { mean: 10.0 },
+            until: PatienceUntil::Start,
+        },
+    );
+    let retry = m.delay("retry", Dist::Constant(30.0));
+    let out = m.sink("out");
+    m.connect(src, desk);
+    m.connect(desk, out);
+    m.abandoned(desk, retry);
+    m.connect(retry, desk);
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(text.contains("<stochcraft:patience>"), "{text}");
+    assert!(text.contains(r#"name="stochcraft:abandoned""#), "{text}");
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert_eq!(loaded.model, laid_out(model));
+
+    // Until done, a different time, and the retry no longer the way for those who give up.
+    let mut edited = loaded.model.clone();
+    if let ElementKind::Server { patience, .. } = &mut edited.elements[1].kind {
+        *patience = Some(Patience {
+            time: Dist::Constant(5.0),
+            until: PatienceUntil::Done,
+        });
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    assert!(String::from_utf8_lossy(&saved).contains(r#"until="done""#));
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    if let ElementKind::Server { patience, .. } = &mut edited.elements[1].kind {
+        *patience = None;
+    }
+    for c in &mut edited.connections {
+        c.abandoned = false;
+    }
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let removed = again.opened.save(&edited);
+    let Ok(removed) = removed else { unreachable!() };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(!text.contains("stochcraft:patience"), "{text}");
+    assert!(!text.contains("stochcraft:abandoned"), "{text}");
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// A patience with an unknown `until`, or on a task with no resource, is read with a note.
+#[test]
+fn a_misplaced_or_unknown_patience_is_noted() {
+    let mut m = Builder::new();
+    let src = m.source("calls", Dist::Exponential { mean: 5.0 }, None);
+    let desk = m.server("desk", 1, Dist::Exponential { mean: 4.0 });
+    m.patience(
+        desk,
+        Patience {
+            time: Dist::Constant(3.0),
+            until: PatienceUntil::Done,
+        },
+    );
+    let out = m.sink("out");
+    m.connect(src, desk);
+    m.connect(desk, out);
+    let text = String::from_utf8_lossy(&write_new(&m.build(Experiment::default())))
+        .replace(r#"until="done""#, r#"until="later""#);
+    let Ok(loaded) = read(text.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(
+        loaded
+            .notes
+            .iter()
+            .any(|n| n.message.contains("start or done")),
+        "{:?}",
+        loaded.notes
+    );
+    assert!(matches!(
+        &loaded.model.elements[1].kind,
+        ElementKind::Server {
+            patience: Some(Patience {
+                until: PatienceUntil::Start,
+                ..
+            }),
+            ..
+        }
+    ));
 }
 
 /// A scrap sink, with the server it counts against, and a rework connection are StochCraft's

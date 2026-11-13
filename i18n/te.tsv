@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	లక్ష్యాన్ని చేరిన వాటా యొక్క 95% అంతరం: {lo} నుండి {hi}
 	95th percentile	95వ శతాంశం
 	95th percentile {value}	95వ శతాంశం {value}
+	A caller on hold: once a unit takes it, the entity stays.	హోల్డ్‌లో ఉన్న కాలర్: ఒక యూనిట్ దాన్ని తీసుకున్న తర్వాత, ఎంటిటీ ఉండిపోతుంది.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	టైమ్‌అవుట్ అయ్యే క్లయింట్: సేవ జరుగుతుండగా దాని సమయం అయిపోతే, అప్పుడే వదిలి వెళ్తుంది, అయినా యూనిట్ ఆ పనిని పూర్తి చేస్తుంది (వృథా అయిన పని).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	కొత్త ఫైల్ లో నమూనా మాత్రమే ఉంటుంది: {file} లో StochCraft అర్థం చేసుకోనివి వదిలివేయబడతాయి.
+	Abandoned	వదిలి వెళ్లినవి
+	Abandoned on {id}	{id} వద్ద వదిలి వెళ్లినవి
 	About StochCraft	StochCraft గురించి
 	About {app}	{app} గురించి
 	Across the range it changed by {change}: more than chance would explain.	పూర్తి పరిధిలో ఇది {change} మారింది: యాదృచ్ఛికత వివరించగలదానికంటే ఎక్కువ.
@@ -134,6 +138,7 @@
 	Duration	వ్యవధి
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ప్రతి విశ్లేషణ ఒకే యాదృచ్ఛిక బీజంతో ప్రయోగాన్ని చాలాసార్లు అమలు చేస్తుంది, కాబట్టి తేడాలు యాదృచ్ఛికత నుండి కాక మార్పు నుండి వస్తాయి. కొంత సమయం పట్టవచ్చు.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ప్రతి ఎంటిటీ వీటిలో ఇప్పుడే ఒకేసారి పూర్తిగా తీర్చగలిగే మొదటిదాన్ని తీసుకుంటుంది, బయటకు వెళ్లేటప్పుడు యూనిట్‌లను తిరిగి ఇస్తుంది.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ప్రతి ఎంటిటీ వచ్చినప్పుడు దానికోసం యాదృచ్ఛికంగా తీసిన సమయం వరకు మాత్రమే ఇక్కడ వేచి ఉంటుంది, తర్వాత వదిలి వెళ్తుంది: "వదిలి వెళ్లినవి" అని గుర్తించిన బయటికి దారిలో వెళ్తుంది, లేదా నమూనా నుండి బయటకు వెళ్తుంది.
 	Edit	సవరణ
 	Elasticity	స్థితిస్థాపకత
 	Ends early	ముందుగా ముగుస్తుంది
@@ -141,7 +146,9 @@
 	Energy per part	ఒక్కో భాగానికి శక్తి
 	Enough: {units}, meeting the target in {p} of replications	సరిపోతుంది: {units}, {p} పునరావృత్త అమలులలో లక్ష్యం చేరుతుంది
 	Entered	ప్రవేశించినవి
+	Entities give up waiting	ఎంటిటీలు వేచి ఉండటం మానేస్తాయి
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	పునరావృత్త అమలు చివరికి ఇంకా లోపల ఉన్నవి సగటు వేచి ఉండే సమయంలోనూ వ్యవస్థలో గడిపిన సగటు సమయంలోనూ లెక్కించబడవు.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	వేచి ఉండటం మానేసిన ఎంటిటీలు ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి); మిగిలినవి పని యొక్క మరో బయటికి దారిలో వెళ్తాయి.
 	Erlang	ఎర్లాంగ్
 	Error	లోపం
 	Estimate from three values…	మూడు విలువల నుండి అంచనా వేయి…
@@ -171,6 +178,9 @@
 	Fri	శుక్ర
 	From	నుంచి
 	Gamma	గామా
+	Gave up	వదిలి వెళ్లినవి
+	Gives up before it is done	పూర్తయ్యే ముందు వదిలి వెళ్తుంది
+	Gives up before service starts	సేవ మొదలయ్యే ముందు వదిలి వెళ్తుంది
 	Goes to	వెళ్తుంది
 	Hands on finished parts while down	లోపం ఉన్నప్పుడూ పూర్తయిన భాగాలను పంపుతుంది
 	Help	సహాయం
@@ -207,6 +217,7 @@
 	Mean time blocked	నిరోధిత సగటు సమయం
 	Mean time in system	వ్యవస్థలో గడిపిన సగటు సమయం
 	Mean wait	సగటు వేచి ఉండే సమయం
+	Mean wait before giving up	వదిలి వెళ్లే ముందు సగటు వేచి ఉండే సమయం
 	Metric	కొలమానం
 	Middles	నిలువు కేంద్రాలు
 	Minimise	కనిష్ఠీకరించు
@@ -265,6 +276,7 @@
 	Parts wanted	కోరిన భాగాలు
 	Parts wanted is a number above 0	కోరిన భాగాలు 0 కంటే పెద్ద సంఖ్య కావాలి
 	Paste	అతికించు
+	Patience	ఓపిక
 	Pause	విరామం
 	Per	వ్యవధి
 	Per shift needs a calendar: each period it is active is a shift.	"షిఫ్ట్‌కు" ఎంపికకు క్యాలెండర్ అవసరం: అది సక్రియంగా ఉన్న ప్రతి వ్యవధి ఒక షిఫ్ట్.
@@ -374,6 +386,8 @@
 	Share	వాటా
 	Share of arrivals lost	కోల్పోయిన రాకల వాటా
 	Share of units blocked	నిరోధిత యూనిట్ల వాటా
+	Share of work wasted	వృథా అయిన పని వాటా
+	Share that gave up	వదిలి వెళ్లినవాటి వాటా
 	Show All	అన్నీ చూపించు
 	Show {id}	{id} చూపించు
 	Size	పరిమాణం నిర్ణయించు
@@ -424,6 +438,7 @@
 	Three-point estimate	మూడు-బిందువుల అంచనా
 	Thu	గురు
 	Time available	అందుబాటులో ఉన్న సమయం
+	Time before giving up	వదిలి వెళ్లే ముందు సమయం
 	Time between arrivals	రాకల మధ్య సమయం
 	Time blocked	నిరోధిత సమయం
 	Time failed	లోపం ఉన్న సమయం
@@ -479,6 +494,7 @@
 	Whole number	పూర్ణ సంఖ్య
 	Window	విండో
 	With every time at its mean: {units}	ప్రతి సమయం దాని సగటు వద్ద: {units}
+	Work wasted on those who gave up	వదిలి వెళ్లినవాటిపై వృథా అయిన పని
 	XPDL with BPSim	BPSim తో XPDL
 	Yes or no	అవును లేదా కాదు
 	Your changes will be lost if you don't save them.	మీరు సేవ్ చేయకపోతే మీ మార్పులు పోతాయి.

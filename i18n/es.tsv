@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Intervalo del 95 % de la proporción que cumple el objetivo: de {lo} a {hi}
 	95th percentile	Percentil 95
 	95th percentile {value}	percentil 95 {value}
+	A caller on hold: once a unit takes it, the entity stays.	Una llamada en espera: una vez que una unidad la atiende, la entidad se queda.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Un cliente que agota su tiempo de espera: si su tiempo se acaba durante el servicio, abandona en ese momento, y la unidad termina el trabajo de todos modos (trabajo desperdiciado).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	El archivo nuevo solo contiene el modelo: lo que StochCraft no entiende de {file} se omite.
+	Abandoned	Abandonadas
+	Abandoned on {id}	Abandonadas en {id}
 	About StochCraft	Acerca de StochCraft
 	About {app}	Acerca de {app}
 	Across the range it changed by {change}: more than chance would explain.	En el intervalo cambió en {change}: más de lo que explicaría el azar.
@@ -134,6 +138,7 @@
 	Duration	Duración
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Cada análisis ejecuta el experimento varias veces con la misma semilla, así que las diferencias vienen del cambio, no del azar. Puede tardar un rato.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entidad toma, toda a la vez, la primera de estas alternativas que pueda cumplirse en ese momento y devuelve las unidades al salir.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Cada entidad espera aquí como máximo un tiempo que se le asigna al azar al llegar, y luego abandona: toma la salida marcada como «Abandonadas» o sale del modelo.
 	Edit	Edición
 	Elasticity	Elasticidad
 	Ends early	Termina antes
@@ -141,7 +146,9 @@
 	Energy per part	Energía por pieza
 	Enough: {units}, meeting the target in {p} of replications	Suficiente: {units}, cumple el objetivo en {p} de las réplicas
 	Entered	Entradas
+	Entities give up waiting	Las entidades abandonan la espera
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Las entidades aún dentro al final de una réplica no se incluyen en la espera media ni en el tiempo medio en el sistema.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Las entidades que abandonan la espera toman este flujo (para volver a intentarlo más tarde, por ejemplo); las demás toman la otra salida de la tarea.
 	Erlang	Erlang
 	Error	Error
 	Estimate from three values…	Estimar a partir de tres valores…
@@ -171,6 +178,9 @@
 	Fri	vie
 	From	Desde
 	Gamma	Gamma
+	Gave up	Abandonaron
+	Gives up before it is done	Abandona antes de terminar
+	Gives up before service starts	Abandona antes de que empiece el servicio
 	Goes to	Va a
 	Hands on finished parts while down	Entrega las piezas terminadas durante la avería
 	Help	Ayuda
@@ -207,6 +217,7 @@
 	Mean time blocked	Tiempo medio bloqueado
 	Mean time in system	Tiempo medio en el sistema
 	Mean wait	Espera media
+	Mean wait before giving up	Espera media antes de abandonar
 	Metric	Métrica
 	Middles	Centros verticales
 	Minimise	Minimizar
@@ -265,6 +276,7 @@
 	Parts wanted	Piezas pedidas
 	Parts wanted is a number above 0	Las piezas pedidas son un número mayor que 0
 	Paste	Pegar
+	Patience	Paciencia
 	Pause	Pausa
 	Per	Periodo
 	Per shift needs a calendar: each period it is active is a shift.	«Por turno» necesita un calendario: cada periodo en que está activo es un turno.
@@ -374,6 +386,8 @@
 	Share	Proporción
 	Share of arrivals lost	Proporción de llegadas perdidas
 	Share of units blocked	Proporción de unidades bloqueadas
+	Share of work wasted	Proporción de trabajo desperdiciado
+	Share that gave up	Proporción que abandonó
 	Show All	Mostrar todo
 	Show {id}	Mostrar {id}
 	Size	Dimensionar
@@ -424,6 +438,7 @@
 	Three-point estimate	Estimación de tres puntos
 	Thu	jue
 	Time available	Tiempo disponible
+	Time before giving up	Tiempo antes de abandonar
 	Time between arrivals	Tiempo entre llegadas
 	Time blocked	Tiempo bloqueado
 	Time failed	Tiempo averiado
@@ -479,6 +494,7 @@
 	Whole number	Número entero
 	Window	Ventana
 	With every time at its mean: {units}	Con cada tiempo en su media: {units}
+	Work wasted on those who gave up	Trabajo desperdiciado en las que abandonaron
 	XPDL with BPSim	XPDL con BPSim
 	Yes or no	Sí o no
 	Your changes will be lost if you don't save them.	Si no los guardas, se perderán los cambios.

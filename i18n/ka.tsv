@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	მიზნის მიღწევის წილის 95%-იანი ინტერვალი: {lo}-დან {hi}-მდე
 	95th percentile	95-ე პროცენტილი
 	95th percentile {value}	95-ე პროცენტილი {value}
+	A caller on hold: once a unit takes it, the entity stays.	მოლოდინში მყოფი აბონენტი: როგორც კი რესურსის ერთეული მიიღებს, ერთეული რჩება.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	კლიენტი, რომელსაც დრო ეწურება (timeout): თუ მისი დრო მომსახურების დროს ამოიწურება, ის მაშინვე უარს ამბობს, რესურსის ერთეული კი სამუშაოს მაინც ასრულებს (ფუჭი სამუშაო).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	ახალი ფაილი მხოლოდ მოდელს შეიცავს: რაც {file}-ში StochCraft-ისთვის გაუგებარია, გამოტოვებულია.
+	Abandoned	უარი თქვეს
+	Abandoned on {id}	უარი თქვეს ნაკადზე {id}
 	About StochCraft	StochCraft-ის შესახებ
 	About {app}	{app}-ის შესახებ
 	Across the range it changed by {change}: more than chance would explain.	დიაპაზონში შეიცვალა {change}-ით: იმაზე მეტად, ვიდრე შემთხვევითობა ახსნიდა.
@@ -134,6 +138,7 @@
 	Duration	ხანგრძლივობა
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ყოველი ანალიზი ექსპერიმენტს რამდენჯერმე უშვებს ერთი და იმავე საწყისი მნიშვნელობით, ამიტომ განსხვავებები ცვლილებიდან მოდის და არა შემთხვევითობიდან. ამას შეიძლება დრო დასჭირდეს.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	თითოეული ერთეული იღებს ამათგან პირველს, რომლის სრულად დაკმაყოფილებაც ახლავე, ერთდროულად არის შესაძლებელი, და გასვლისას რესურსის ერთეულებს აბრუნებს.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	თითოეული ერთეული აქ ელოდება არაუმეტეს იმ დროისა, რომელიც მისთვის შემთხვევით შეირჩევა მოსვლისას, შემდეგ კი უარს ამბობს: მიდის გასასვლელით, რომელიც მონიშნულია როგორც „უარი თქვეს“, ან ტოვებს მოდელს.
 	Edit	რედაქტირება
 	Elasticity	ელასტიკურობა
 	Ends early	ადრე მთავრდება
@@ -141,7 +146,9 @@
 	Energy per part	ენერგია ერთ დეტალზე
 	Enough: {units}, meeting the target in {p} of replications	საკმარისია: {units}, მიზანი მიიღწევა გამეორებების {p}-ში
 	Entered	შესულა
+	Entities give up waiting	ერთეულები უარს ამბობენ ლოდინზე
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ობიექტები, რომლებიც გამეორების ბოლოს ჯერ კიდევ შიგნით არიან, არ შედის ლოდინის საშუალო დროსა და სისტემაში გატარებულ საშუალო დროში.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	ერთეულები, რომლებიც ლოდინზე უარს ამბობენ, ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად); დანარჩენები დავალების მეორე გასასვლელით მიდიან.
 	Erlang	ერლანგი
 	Error	შეცდომა
 	Estimate from three values…	შეფასება სამი მნიშვნელობით…
@@ -171,6 +178,9 @@
 	Fri	პარ
 	From	-დან
 	Gamma	გამა
+	Gave up	უარი თქვეს
+	Gives up before it is done	უარს ამბობს დასრულებამდე
+	Gives up before service starts	უარს ამბობს მომსახურების დაწყებამდე
 	Goes to	მიდის აქ
 	Hands on finished parts while down	გაუმართაობისას გადასცემს დასრულებულ დეტალებს
 	Help	დახმარება
@@ -207,6 +217,7 @@
 	Mean time blocked	დაბლოკვის საშუალო დრო
 	Mean time in system	სისტემაში გატარებული საშუალო დრო
 	Mean wait	ლოდინის საშუალო დრო
+	Mean wait before giving up	ლოდინის საშუალო დრო უარის თქმამდე
 	Metric	მაჩვენებელი
 	Middles	ვერტიკალური ცენტრები
 	Minimise	მინიმიზაცია
@@ -265,6 +276,7 @@
 	Parts wanted	მოთხოვნილი დეტალები
 	Parts wanted is a number above 0	მოთხოვნილი დეტალები უნდა იყოს 0-ზე მეტი რიცხვი
 	Paste	ჩასმა
+	Patience	მოთმინება
 	Pause	პაუზა
 	Per	პერიოდი
 	Per shift needs a calendar: each period it is active is a shift.	„ცვლაში“ საჭიროებს კალენდარს: ყოველი პერიოდი, როცა ის აქტიურია, ერთი ცვლაა.
@@ -374,6 +386,8 @@
 	Share	წილი
 	Share of arrivals lost	დაკარგული შემოსვლების წილი
 	Share of units blocked	დაბლოკილი ერთეულების წილი
+	Share of work wasted	ფუჭი სამუშაოს წილი
+	Share that gave up	უარის მთქმელთა წილი
 	Show All	ყველას ჩვენება
 	Show {id}	{id}-ის ჩვენება
 	Size	ზომის შერჩევა
@@ -424,6 +438,7 @@
 	Three-point estimate	სამწერტილიანი შეფასება
 	Thu	ხუთ
 	Time available	ხელმისაწვდომი დრო
+	Time before giving up	დრო უარის თქმამდე
 	Time between arrivals	შემოსვლებს შორის დრო
 	Time blocked	დაბლოკვის დრო
 	Time failed	გაუმართაობის დრო
@@ -479,6 +494,7 @@
 	Whole number	მთელი რიცხვი
 	Window	ფანჯარა
 	With every time at its mean: {units}	ყოველი დრო თავის საშუალოზე: {units}
+	Work wasted on those who gave up	უარის მთქმელებზე ფუჭად დახარჯული სამუშაო
 	XPDL with BPSim	XPDL BPSim-ით
 	Yes or no	დიახ ან არა
 	Your changes will be lost if you don't save them.	თუ არ შეინახავთ, ცვლილებები დაიკარგება.

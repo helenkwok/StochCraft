@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Hedefi karşılayan oranın %95 aralığı: {lo} ile {hi} arası
 	95th percentile	95. yüzdelik
 	95th percentile {value}	95. yüzdelik {value}
+	A caller on hold: once a unit takes it, the entity stays.	Hatta bekleyen arayan: bir birim onu aldığında varlık kalır.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Zaman aşımına uğrayan istemci: süresi hizmet sırasında dolarsa o anda vazgeçer ve birim işi yine de bitirir (boşa giden iş).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	Yeni dosya yalnızca modeli içerir: {file} içinde StochCraft'ın anlamadığı şeyler dışarıda kalır.
+	Abandoned	Vazgeçenler
+	Abandoned on {id}	{id} üzerinde vazgeçenler
 	About StochCraft	StochCraft hakkında
 	About {app}	{app} hakkında
 	Across the range it changed by {change}: more than chance would explain.	Aralık boyunca {change} değişti: şansın açıklayacağından fazla.
@@ -134,6 +138,7 @@
 	Duration	Süre
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Her analiz deneyi aynı rastgelelik tohumuyla birkaç kez çalıştırır; böylece farklar şanstan değil değişiklikten gelir. Biraz sürebilir.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Her varlık, bunlardan şu anda karşılanabilen ilkini tek seferde tümüyle alır ve görevden ayrılırken birimleri geri verir.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Her varlık burada, gelişinde kendisi için rastgele çekilen süreden fazla beklemez, sonra vazgeçer: "Vazgeçenler" olarak işaretlenen çıkış yolunu izler ya da modelden ayrılır.
 	Edit	Düzen
 	Elasticity	Esneklik
 	Ends early	Erken biter
@@ -141,7 +146,9 @@
 	Energy per part	Parça başına enerji
 	Enough: {units}, meeting the target in {p} of replications	Yeterli: {units}, hedef tekrarların {p} kadarında karşılanır
 	Entered	Giren
+	Entities give up waiting	Varlıklar beklemekten vazgeçer
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Bir tekrarın sonunda hâlâ içeride olan varlıklar ortalama bekleme süresine ve sistemdeki ortalama süreye katılmaz.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Beklemekten vazgeçen varlıklar bu akışı izler (örneğin daha sonra yeniden denemek için); diğerleri görevin öteki çıkış yolunu izler.
 	Erlang	Erlang
 	Error	Hata
 	Estimate from three values…	Üç değerden tahmin et…
@@ -171,6 +178,9 @@
 	Fri	Cum
 	From	Kaynak
 	Gamma	Gama
+	Gave up	Vazgeçen
+	Gives up before it is done	İş bitmeden vazgeçer
+	Gives up before service starts	Hizmet başlamadan vazgeçer
 	Goes to	Şuraya gider
 	Hands on finished parts while down	Arızalıyken de bitmiş parçaları aktarır
 	Help	Yardım
@@ -207,6 +217,7 @@
 	Mean time blocked	Ortalama engellenme süresi
 	Mean time in system	Sistemdeki ortalama süre
 	Mean wait	Ortalama bekleme süresi
+	Mean wait before giving up	Vazgeçmeden önceki ortalama bekleme süresi
 	Metric	Ölçüt
 	Middles	Dikey merkezler
 	Minimise	Simge durumuna küçült
@@ -265,6 +276,7 @@
 	Parts wanted	İstenen parça
 	Parts wanted is a number above 0	İstenen parça sayısı 0'dan büyük bir sayıdır
 	Paste	Yapıştır
+	Patience	Sabır
 	Pause	Duraklat
 	Per	Dönem
 	Per shift needs a calendar: each period it is active is a shift.	"Vardiyada" bir takvim gerektirir: takvimin etkin olduğu her dönem bir vardiyadır.
@@ -374,6 +386,8 @@
 	Share	Oran
 	Share of arrivals lost	Kaybedilen gelişlerin oranı
 	Share of units blocked	Engellenen birimlerin oranı
+	Share of work wasted	Boşa giden işin oranı
+	Share that gave up	Vazgeçenlerin oranı
 	Show All	Tümünü Göster
 	Show {id}	{id} göster
 	Size	Boyutlandır
@@ -424,6 +438,7 @@
 	Three-point estimate	Üç noktalı tahmin
 	Thu	Per
 	Time available	Kullanılabilir süre
+	Time before giving up	Vazgeçmeden önceki süre
 	Time between arrivals	Gelişler arası süre
 	Time blocked	Engellenme süresi
 	Time failed	Arıza süresi
@@ -479,6 +494,7 @@
 	Whole number	Tam sayı
 	Window	Pencere
 	With every time at its mean: {units}	Her süre ortalamasındayken: {units}
+	Work wasted on those who gave up	Vazgeçenlere boşa giden iş
 	XPDL with BPSim	BPSim içeren XPDL
 	Yes or no	Evet veya hayır
 	Your changes will be lost if you don't save them.	Kaydetmezseniz değişiklikleriniz kaybolur.

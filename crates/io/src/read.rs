@@ -9,8 +9,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, Change, Connection, DateTime, Demand, DemandPer, Dist,
     Element as ModelElement, ElementId, ElementKind, Estimate, Experiment, Family, Model, Need,
-    Power, Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop,
-    ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue, ResourcePool, Routing,
+    Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -984,6 +984,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             power: power_of(scenario, id, notes),
                             setup: setup_of(scenario, id, unit, notes),
                             planned_run_time: planned_of(scenario, id, unit, notes),
+                            patience: patience_of(scenario, id, unit, notes),
                         }
                     }
                     (None, None, None) => ElementKind::Delay { duration: time },
@@ -1045,6 +1046,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "a planned run time (stochcraft:plannedRunTime) applies only to a task with a resource of its own; it is ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Server { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::PATIENCE)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "a patience (stochcraft:patience) applies only to a task with a resource of its own; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::Sink { .. })
@@ -1151,6 +1162,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             condition,
             quantity: vendor_count(scenario, id, bpsim::QUANTITY, "a quantity", notes),
             rework: vendor_flag(scenario, id, bpsim::REWORK, notes),
+            abandoned: vendor_flag(scenario, id, bpsim::ABANDONED, notes),
         });
     }
     let mut experiment = experiment(scenario, notes);
@@ -1289,6 +1301,8 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::ROUTING,
             bpsim::POWER,
             bpsim::PLANNED_RUN_TIME,
+            bpsim::PATIENCE,
+            bpsim::ABANDONED,
             bpsim::SCRAP,
             bpsim::DEMAND,
             bpsim::REWORK,
@@ -1639,6 +1653,42 @@ fn planned_of(
         return None;
     }
     dist_of(body, "the planned run time", id, notes)
+}
+
+/// The patience StochCraft's vendor extension gives server `id`, if any.
+fn patience_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+) -> Option<Patience> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::PATIENCE))?;
+    let element = ext.elements().find(|e| e.local() == "patience");
+    let body = element.and_then(|b| bpsim::default_value(b, unit, notes, Some(id)));
+    if body.is_none() {
+        notes.push(Note::error(
+            Some(id),
+            "a patience needs a distribution or a constant; entities wait for as long as it takes",
+        ));
+        return None;
+    }
+    let until = element.and_then(|e| e.attr("until"));
+    let until = match until.as_deref().map(str::trim) {
+        None => PatienceUntil::Start,
+        Some(s) => PatienceUntil::from_name(s).unwrap_or_else(|| {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "until on a patience must be start or done, not `{s}`; entities give up only before their service starts"
+                ),
+            ));
+            PatienceUntil::Start
+        }),
+    };
+    Some(Patience {
+        time: dist_of(body, "the patience", id, notes)?,
+        until,
+    })
 }
 
 /// The routing rule StochCraft's vendor extension gives exclusive gateway `id` (BPMN's own

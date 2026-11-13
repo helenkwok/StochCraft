@@ -18,7 +18,11 @@
 	95% interval of the share meeting the target: {lo} to {hi}	Intervalo de 95% da parcela que atinge a meta: de {lo} a {hi}
 	95th percentile	Percentil 95
 	95th percentile {value}	percentil 95 {value}
+	A caller on hold: once a unit takes it, the entity stays.	Uma chamada em espera: assim que uma unidade a atende, a entidade fica.
+	A client that times out: if its time runs out during service, it gives up then, and the unit finishes the job anyway (wasted work).	Um cliente que expira (timeout): se o tempo dele se esgota durante o serviço, ele desiste nesse momento, e a unidade termina o trabalho mesmo assim (trabalho desperdiçado).
 	A new file holds the model alone: what StochCraft does not understand in {file} is left out.	O novo arquivo contém só o modelo: o que o StochCraft não entende em {file} fica de fora.
+	Abandoned	Desistências
+	Abandoned on {id}	Desistências em {id}
 	About StochCraft	Sobre o StochCraft
 	About {app}	Sobre o {app}
 	Across the range it changed by {change}: more than chance would explain.	No intervalo, mudou {change}: mais do que o acaso explicaria.
@@ -134,6 +138,7 @@
 	Duration	Duração
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Cada análise executa o experimento várias vezes com a mesma semente, então as diferenças vêm da mudança, não do acaso. Pode demorar um pouco.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Cada entidade pega, de uma só vez, a primeira destas alternativas que puder ser atendida no momento e devolve as unidades ao sair.
+	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Cada entidade espera aqui no máximo um tempo sorteado para ela na chegada e depois desiste: segue a saída marcada como “Desistências” ou sai do modelo.
 	Edit	Editar
 	Elasticity	Elasticidade
 	Ends early	Termina antes
@@ -141,7 +146,9 @@
 	Energy per part	Energia por peça
 	Enough: {units}, meeting the target in {p} of replications	Suficiente: {units}, atinge a meta em {p} das replicações
 	Entered	Entradas
+	Entities give up waiting	As entidades desistem de esperar
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entidades ainda no sistema ao final de uma replicação ficam fora da espera média e do tempo médio no sistema.
+	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	As entidades que desistem de esperar seguem este fluxo (para tentar de novo mais tarde, por exemplo); as demais seguem a outra saída da tarefa.
 	Erlang	Erlang
 	Error	Erro
 	Estimate from three values…	Estimar a partir de três valores…
@@ -171,6 +178,9 @@
 	Fri	sex
 	From	De
 	Gamma	Gama
+	Gave up	Desistiram
+	Gives up before it is done	Desiste antes de terminar
+	Gives up before service starts	Desiste antes de o serviço começar
 	Goes to	Vai para
 	Hands on finished parts while down	Repassa peças prontas mesmo em falha
 	Help	Ajuda
@@ -207,6 +217,7 @@
 	Mean time blocked	Tempo médio bloqueado
 	Mean time in system	Tempo médio no sistema
 	Mean wait	Espera média
+	Mean wait before giving up	Espera média até desistir
 	Metric	Métrica
 	Middles	Centros verticais
 	Minimise	Minimizar
@@ -265,6 +276,7 @@
 	Parts wanted	Peças pedidas
 	Parts wanted is a number above 0	As peças pedidas são um número maior que 0
 	Paste	Colar
+	Patience	Paciência
 	Pause	Pausar
 	Per	Período
 	Per shift needs a calendar: each period it is active is a shift.	“Por turno” precisa de um calendário: cada período em que ele está ativo é um turno.
@@ -374,6 +386,8 @@
 	Share	Proporção
 	Share of arrivals lost	Proporção de chegadas perdidas
 	Share of units blocked	Proporção de unidades bloqueadas
+	Share of work wasted	Proporção de trabalho desperdiçado
+	Share that gave up	Proporção que desistiu
 	Show All	Mostrar tudo
 	Show {id}	Mostrar {id}
 	Size	Dimensionar
@@ -424,6 +438,7 @@
 	Three-point estimate	Estimativa de três pontos
 	Thu	qui
 	Time available	Tempo disponível
+	Time before giving up	Tempo até desistir
 	Time between arrivals	Tempo entre chegadas
 	Time blocked	Tempo bloqueado
 	Time failed	Tempo em falha
@@ -479,6 +494,7 @@
 	Whole number	Número inteiro
 	Window	Janela
 	With every time at its mean: {units}	Com cada tempo na sua média: {units}
+	Work wasted on those who gave up	Trabalho desperdiçado com quem desistiu
 	XPDL with BPSim	XPDL com BPSim
 	Yes or no	Sim ou não
 	Your changes will be lost if you don't save them.	Suas alterações serão perdidas se você não as salvar.

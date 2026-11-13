@@ -65,6 +65,15 @@ pub const POWER: &str = "stochcraft:power";
 /// It does not change the simulation.
 pub const PLANNED_RUN_TIME: &str = "stochcraft:plannedRunTime";
 
+/// The vendor extension for a server's patience: a `stochcraft:patience` element holding one
+/// BPSim distribution or constant, the time an entity waits before it gives up, with an
+/// attribute `until`: `start` (the default; it gives up if its service has not started) or
+/// `done` (if its service is not done), in the task's `ElementParameters`. BPSim 2.0 has no
+/// parameter for it: its `QueueTime` and `WaitTime` are times every entity spends (parts of
+/// the lag time), and a boundary timer's `InterTriggerTimer` is a repeating interval, not a
+/// deadline drawn per entity.
+pub const PATIENCE: &str = "stochcraft:patience";
+
 /// A batch: `stochcraft:batchSize` on a task's `ElementParameters`, the number of entities it
 /// collects before sending them on together (a whole number of at least 1).
 pub const BATCH_SIZE: &str = "stochcraft:batchSize";
@@ -81,6 +90,11 @@ pub const QUANTITY: &str = "stochcraft:quantity";
 /// entities taking it failed their quality requirements and go back to be worked on again,
 /// counted against the last server they finished at (ISO 22400-2's rework quantity).
 pub const REWORK: &str = "stochcraft:rework";
+
+/// The way for entities that give up: `stochcraft:abandoned` with the value `true` on the
+/// `ElementParameters` of a sequence flow out of a task with a patience, besides its ordinary
+/// way out.
+pub const ABANDONED: &str = "stochcraft:abandoned";
 
 /// Scrap: a `stochcraft:scrap` element on an end event's `ElementParameters`: what reaches it
 /// is scrap (ISO 22400-2's scrap quantity), counted against the task its attribute `chargedTo`
