@@ -101,6 +101,7 @@
 	Connections	Forbindelser
 	Constant	Konstant
 	Copy	Kopier
+	Counts against	Belastes
 	Cut	Klipp ut
 	Daily	Daglig
 	Dark	Mørk
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Ingen forbindelser ennå: koble sammen blokkene nedenfor.
 	No replication met the stop condition: each ran to its time limit.	Ingen replikasjon nådde stoppbetingelsen: hver kjørte til sin tidsgrense.
 	No results yet	Ingen resultater ennå
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Ingen vrak eller omarbeid er merket i denne modellen, så OEE regner kvaliteten som 100 %.
 	No target	Intet mål
 	None	Ingen
 	None found. The model is ready to run.	Ingen problemer funnet. Modellen er klar til å kjøres.
@@ -232,6 +234,7 @@
 	Normal	Normal
 	Not reached, even with {units}	Ikke nådd, heller ikke med {units}
 	Number	Tall
+	OEE	OEE
 	OEE availability	OEE-tilgjengelighet
 	OEE effectiveness	OEE-effektivitet
 	On	Dager
@@ -253,6 +256,7 @@
 	PNG image	PNG-bilde
 	Parameter	Parameter
 	Parameters	Parametere
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Deler som tar denne flyten, går tilbake for å bearbeides på nytt; de telles som omarbeid for den siste oppgaven med ressurs de gikk gjennom.
 	Paste	Lim inn
 	Pause	Pause
 	Percentile	Persentil
@@ -272,6 +276,8 @@
 	Process	Prosess
 	Process models with BPSim	Prosessmodeller med BPSim
 	Properties	Egenskaper
+	Quality	Kvalitet
+	Quality ratio	Kvalitetsandel
 	Quit	Avslutt
 	Quit {app}	Avslutt {app}
 	Random	Tilfeldig
@@ -315,6 +321,9 @@
 	Result with a target	Resultat med mål
 	Result, down and up	Resultat, ned og opp
 	Results	Resultater
+	Rework	Omarbeid
+	Rework on {id}	Omarbeid på {id}
+	Rework ratio	Omarbeidsandel
 	Right edges	Høyrekanter
 	Roles	Roller
 	Run	Kjør
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Lagre endringer i {name}?
 	Saved {file}	Lagret {file}
 	Scale	Skala
+	Scrap	Vrak
+	Scrap ratio	Vrakandel
 	Seed	Tilfeldighetsfrø
 	Select All	Merk alt
 	Select a block to see its queue over time.	Velg en blokk for å se køen over tid.
@@ -387,6 +398,7 @@
 	Task with shared resources	Oppgave med delte ressurser
 	Text	Tekst
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhet at andelen nås; flere replikasjoner ville gjort det smalere.
+	The last task with a resource it finished at	Den siste oppgaven med ressurs delen gikk gjennom
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Gjennomsnittlig tid til stoppbetingelsen er bare over replikasjonene som nådde den; de øvrige kjørte til sin tidsgrense.
 	The model changed, so watching stopped	Modellen ble endret, så følgingen stoppet
 	The model has no calendars yet.	Modellen har ingen kalendere ennå.
@@ -447,6 +459,7 @@
 	Wed	ons
 	Weekly	Ukentlig
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Det som når disse avgangene, er vrak og telles i kvalitetsandelen for oppgaven det belastes.
 	When a task empties	Når en oppgave blir tom
 	When enough have left a block	Når nok har forlatt en blokk
 	Which parameters matter	Hvilke parametere som betyr noe

@@ -101,6 +101,7 @@
 	Connections	З'єднання
 	Constant	Стала величина
 	Copy	Копіювати
+	Counts against	Віднесено на
 	Cut	Вирізати
 	Daily	Щодня
 	Dark	Темний
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	З'єднань поки немає: з'єднайте блоки нижче.
 	No replication met the stop condition: each ran to its time limit.	Жодна реплікація не досягла умови зупинки: кожна тривала до своєї межі часу.
 	No results yet	Результатів поки немає
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	У цій моделі не позначено ні браку, ні доопрацювання, тому OEE вважає якість рівною 100%.
 	No target	Без мети
 	None	Немає
 	None found. The model is ready to run.	Проблем не знайдено. Модель готова до запуску.
@@ -232,6 +234,7 @@
 	Normal	Нормальний розподіл
 	Not reached, even with {units}	Не досягнуто навіть із {units}
 	Number	Число
+	OEE	OEE
 	OEE availability	Доступність OEE
 	OEE effectiveness	Результативність OEE
 	On	Дні
@@ -253,6 +256,7 @@
 	PNG image	Зображення PNG
 	Parameter	Параметр
 	Parameters	Параметри
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Деталі, що йдуть цим потоком, повертаються на повторну обробку; вони враховуються як доопрацювання останнього завдання з ресурсом, яке вони пройшли.
 	Paste	Вставити
 	Pause	Пауза
 	Percentile	Процентиль
@@ -272,6 +276,8 @@
 	Process	Процес
 	Process models with BPSim	Моделі процесів з BPSim
 	Properties	Властивості
+	Quality	Якість
+	Quality ratio	Частка придатних
 	Quit	Вийти
 	Quit {app}	Завершити {app}
 	Random	Випадкове
@@ -315,6 +321,9 @@
 	Result with a target	Результат із метою
 	Result, down and up	Результат, вниз і вгору
 	Results	Результати
+	Rework	Доопрацювання
+	Rework on {id}	Доопрацювання на {id}
+	Rework ratio	Частка доопрацювання
 	Right edges	Праві краї
 	Roles	Ролі
 	Run	Запустити
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Зберегти зміни в {name}?
 	Saved {file}	Збережено {file}
 	Scale	Масштаб
+	Scrap	Брак
+	Scrap ratio	Частка браку
 	Seed	Початкове значення генератора
 	Select All	Виділити все
 	Select a block to see its queue over time.	Виберіть блок, щоб побачити його чергу в часі.
@@ -387,6 +398,7 @@
 	Task with shared resources	Завдання зі спільними ресурсами
 	Text	Текст
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Інтервал сягає нижче цільової частки {share}, тож з довірою 95% не показано, що частку досягнуто; більше реплікацій звузили б його.
+	The last task with a resource it finished at	Останнє завдання з ресурсом, яке пройшла деталь
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Середній час до умови зупинки обчислено лише за реплікаціями, що її досягли; решта тривали до своєї межі часу.
 	The model changed, so watching stopped	Модель змінилася, тому спостереження припинено
 	The model has no calendars yet.	У моделі ще немає календарів.
@@ -447,6 +459,7 @@
 	Wed	ср
 	Weekly	Щотижня
 	Weibull	Розподіл Вейбулла
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Те, що досягає цих вибуттів, — брак; він ураховується в частці придатних того завдання, на яке його віднесено.
 	When a task empties	Коли завдання спорожніє
 	When enough have left a block	Коли блок покине достатньо сутностей
 	Which parameters matter	Які параметри важливі

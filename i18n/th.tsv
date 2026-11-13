@@ -101,6 +101,7 @@
 	Connections	การเชื่อมต่อ
 	Constant	ค่าคงที่
 	Copy	คัดลอก
+	Counts against	นับเข้างาน
 	Cut	ตัด
 	Daily	ทุกวัน
 	Dark	มืด
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	ยังไม่มีการเชื่อมต่อ: เชื่อมบล็อกด้านล่าง
 	No replication met the stop condition: each ran to its time limit.	ไม่มีรอบการจำลองซ้ำใดถึงเงื่อนไขหยุด: ทุกรอบรันจนถึงขีดจำกัดเวลา
 	No results yet	ยังไม่มีผลลัพธ์
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	ไม่มีการทำเครื่องหมายของเสียหรืองานแก้ไขในโมเดลนี้ OEE จึงนับคุณภาพเป็น 100%
 	No target	ไม่มีเป้าหมาย
 	None	ไม่มี
 	None found. The model is ready to run.	ไม่พบปัญหา แบบจำลองพร้อมรันแล้ว
@@ -232,6 +234,7 @@
 	Normal	ปกติ
 	Not reached, even with {units}	ไม่บรรลุ แม้มี {units}
 	Number	ตัวเลข
+	OEE	OEE
 	OEE availability	ความพร้อมใช้งาน OEE
 	OEE effectiveness	ประสิทธิผล OEE
 	On	วัน
@@ -253,6 +256,7 @@
 	PNG image	ภาพ PNG
 	Parameter	พารามิเตอร์
 	Parameters	พารามิเตอร์
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ชิ้นงานที่ไปตามโฟลว์นี้จะกลับไปทำใหม่ และนับเป็นงานแก้ไขของงานที่ใช้ทรัพยากรงานสุดท้ายที่ชิ้นงานผ่าน
 	Paste	วาง
 	Pause	หยุดชั่วคราว
 	Percentile	เปอร์เซ็นไทล์
@@ -272,6 +276,8 @@
 	Process	กระบวนการ
 	Process models with BPSim	แบบจำลองกระบวนการพร้อม BPSim
 	Properties	คุณสมบัติ
+	Quality	คุณภาพ
+	Quality ratio	สัดส่วนคุณภาพ
 	Quit	ออกจากโปรแกรม
 	Quit {app}	ออกจาก {app}
 	Random	สุ่ม
@@ -315,6 +321,9 @@
 	Result with a target	ผลลัพธ์ที่มีเป้าหมาย
 	Result, down and up	ผลลัพธ์ เมื่อลงและขึ้น
 	Results	ผลลัพธ์
+	Rework	งานแก้ไข
+	Rework on {id}	งานแก้ไขที่ {id}
+	Rework ratio	สัดส่วนงานแก้ไข
 	Right edges	ขอบขวา
 	Roles	บทบาท
 	Run	รัน
@@ -335,6 +344,8 @@
 	Save changes to {name}?	บันทึกการเปลี่ยนแปลงใน {name} หรือไม่?
 	Saved {file}	บันทึก {file} แล้ว
 	Scale	มาตราส่วน
+	Scrap	ของเสีย
+	Scrap ratio	สัดส่วนของเสีย
 	Seed	เมล็ดสุ่ม
 	Select All	เลือกทั้งหมด
 	Select a block to see its queue over time.	เลือกบล็อกเพื่อดูคิวตามเวลา
@@ -387,6 +398,7 @@
 	Task with shared resources	งานที่ใช้ทรัพยากรร่วมกัน
 	Text	ข้อความ
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ช่วงนี้ลงต่ำกว่าสัดส่วนเป้าหมาย {share} จึงยังไม่แสดงด้วยความเชื่อมั่น 95% ว่าบรรลุสัดส่วนนั้น รอบการจำลองซ้ำที่มากขึ้นจะทำให้ช่วงแคบลง
+	The last task with a resource it finished at	งานที่ใช้ทรัพยากรงานสุดท้ายที่ชิ้นงานผ่าน
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	เวลาเฉลี่ยจนถึงเงื่อนไขหยุดคิดเฉพาะรอบการจำลองซ้ำที่ถึงเงื่อนไข รอบอื่นรันจนถึงขีดจำกัดเวลา
 	The model changed, so watching stopped	โมเดลเปลี่ยนไป จึงหยุดเฝ้าดู
 	The model has no calendars yet.	แบบจำลองยังไม่มีปฏิทิน
@@ -447,6 +459,7 @@
 	Wed	พ.
 	Weekly	ทุกสัปดาห์
 	Weibull	ไวบูลล์
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	สิ่งที่มาถึงขาออกนี้เป็นของเสีย และนับรวมในสัดส่วนคุณภาพของงานที่ถูกนับเข้า
 	When a task empties	เมื่องานว่าง
 	When enough have left a block	เมื่อออกจากบล็อกมากพอ
 	Which parameters matter	พารามิเตอร์ใดมีผล

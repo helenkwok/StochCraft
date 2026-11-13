@@ -101,6 +101,7 @@
 	Connections	Байланыстар
 	Constant	Тұрақты
 	Copy	Көшіру
+	Counts against	Жүктелетін тапсырма
 	Cut	Қиып алу
 	Daily	Күн сайын
 	Dark	Күңгірт
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Әлі байланыстар жоқ: төмендегі блоктарды қосыңыз.
 	No replication met the stop condition: each ran to its time limit.	Ешбір қайталау тоқтату шартына жетпеді: әрқайсысы уақыт шегіне дейін жүрді.
 	No results yet	Әлі нәтижелер жоқ
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Бұл модельде ақау не қайта өңдеу белгіленбеген, сондықтан OEE сапаны 100% деп есептейді.
 	No target	Мақсат жоқ
 	None	Жоқ
 	None found. The model is ready to run.	Мәселе табылған жоқ. Модель іске қосуға дайын.
@@ -232,6 +234,7 @@
 	Normal	Нормальды
 	Not reached, even with {units}	Жетпеді, тіпті {units} болғанда да
 	Number	Сан
+	OEE	OEE
 	OEE availability	OEE қолжетімділігі
 	OEE effectiveness	OEE нәтижелілігі
 	On	Күндер
@@ -253,6 +256,7 @@
 	PNG image	PNG суреті
 	Parameter	Параметр
 	Parameters	Параметрлер
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Осы ағынмен жүретін бөлшектер қайта өңделуге оралады; олар өздері өткен соңғы ресурсы бар тапсырмаға қайта өңдеу ретінде есептеледі.
 	Paste	Қою
 	Pause	Кідірту
 	Percentile	Процентиль
@@ -272,6 +276,8 @@
 	Process	Процесс
 	Process models with BPSim	BPSim бар процесс модельдері
 	Properties	Қасиеттер
+	Quality	Сапа
+	Quality ratio	Сапа үлесі
 	Quit	Шығу
 	Quit {app}	{app} қолданбасынан шығу
 	Random	Кездейсоқ
@@ -315,6 +321,9 @@
 	Result with a target	Мақсаты бар нәтиже
 	Result, down and up	Нәтиже, төмен және жоғары
 	Results	Нәтижелер
+	Rework	Қайта өңдеу
+	Rework on {id}	{id} ағынында қайта өңдеу
+	Rework ratio	Қайта өңдеу үлесі
 	Right edges	Оң жақ жиектер
 	Roles	Рөлдер
 	Run	Іске қосу
@@ -335,6 +344,8 @@
 	Save changes to {name}?	{name} өзгерістері сақталсын ба?
 	Saved {file}	{file} сақталды
 	Scale	Масштаб
+	Scrap	Ақау
+	Scrap ratio	Ақау үлесі
 	Seed	Кездейсоқ тұқым
 	Select All	Барлығын таңдау
 	Select a block to see its queue over time.	Кезегін уақыт бойынша көру үшін блокты таңдаңыз.
@@ -387,6 +398,7 @@
 	Task with shared resources	Ортақ ресурстары бар тапсырма
 	Text	Мәтін
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Аралық {share} мақсатты үлесінен төмен түседі, сондықтан үлестің орындалғаны 95% сенімділікпен көрсетілмеген; көбірек қайталау оны тарылтады.
+	The last task with a resource it finished at	Бөлшек өткен соңғы ресурсы бар тапсырма
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Тоқтату шартына дейінгі орташа уақыт тек оған жеткен қайталаулар бойынша; қалғандары уақыт шегіне дейін жүрді.
 	The model changed, so watching stopped	Модель өзгерді, сондықтан бақылау тоқтатылды
 	The model has no calendars yet.	Модельде әлі күнтізбе жоқ.
@@ -447,6 +459,7 @@
 	Wed	ср
 	Weekly	Апта сайын
 	Weibull	Вейбулл
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Осы кетулерге жеткен нәрсе ақау болып саналады және ол жүктелетін тапсырманың сапа үлесіне есептеледі.
 	When a task empties	Тапсырма босағанда
 	When enough have left a block	Блоктан жеткілікті шыққанда
 	Which parameters matter	Қай параметрлер маңызды

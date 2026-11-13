@@ -101,6 +101,7 @@
 	Connections	ການເຊື່ອມຕໍ່
 	Constant	ຄ່າຄົງທີ່
 	Copy	ສຳເນົາ
+	Counts against	ນັບໃສ່ໜ້າວຽກ
 	Cut	ຕັດ
 	Daily	ທຸກມື້
 	Dark	ມືດ
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	ຍັງບໍ່ມີການເຊື່ອມຕໍ່: ເຊື່ອມບລັອກດ້ານລຸ່ມ.
 	No replication met the stop condition: each ran to its time limit.	ບໍ່ມີຮອບຈຳລອງຊ້ຳໃດຮອດເງື່ອນໄຂຢຸດ: ທຸກຮອບແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
 	No results yet	ຍັງບໍ່ມີຜົນໄດ້ຮັບ
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	ໃນແບບຈຳລອງນີ້ບໍ່ມີການໝາຍຂອງເສຍ ຫຼື ການແກ້ໄຂງານ, ດັ່ງນັ້ນ OEE ນັບຄຸນນະພາບເປັນ 100%.
 	No target	ບໍ່ມີເປົ້າໝາຍ
 	None	ບໍ່ມີ
 	None found. The model is ready to run.	ບໍ່ພົບບັນຫາ. ແບບຈຳລອງພ້ອມໃຊ້ງານ.
@@ -232,6 +234,7 @@
 	Normal	ນໍມອນ
 	Not reached, even with {units}	ບໍ່ບັນລຸ ເຖິງມີ {units}
 	Number	ຈຳນວນ
+	OEE	OEE
 	OEE availability	ຄວາມພ້ອມໃຊ້ OEE
 	OEE effectiveness	ປະສິດທິຜົນ OEE
 	On	ມື້
@@ -253,6 +256,7 @@
 	PNG image	ຮູບພາບ PNG
 	Parameter	ພາຣາມິເຕີ
 	Parameters	ພາລາມິເຕີ
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ຊິ້ນງານທີ່ໄປຕາມເສັ້ນທາງນີ້ຈະກັບໄປເຮັດໃໝ່; ພວກມັນຖືກນັບເປັນການແກ້ໄຂງານຂອງໜ້າວຽກສຸດທ້າຍທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ພວກມັນຜ່ານມາ.
 	Paste	ວາງ
 	Pause	ຢຸດຊົ່ວຄາວ
 	Percentile	ເປີເຊັນໄທລ໌
@@ -272,6 +276,8 @@
 	Process	ຂະບວນການ
 	Process models with BPSim	ແບບຈຳລອງຂະບວນການພ້ອມ BPSim
 	Properties	ຄຸນສົມບັດ
+	Quality	ຄຸນນະພາບ
+	Quality ratio	ສັດສ່ວນຄຸນນະພາບ
 	Quit	ອອກ
 	Quit {app}	ອອກຈາກ {app}
 	Random	ສຸ່ມ
@@ -315,6 +321,9 @@
 	Result with a target	ຜົນໄດ້ຮັບທີ່ມີເປົ້າໝາຍ
 	Result, down and up	ຜົນໄດ້ຮັບ ເມື່ອລົງ ແລະ ຂຶ້ນ
 	Results	ຜົນໄດ້ຮັບ
+	Rework	ການແກ້ໄຂງານ
+	Rework on {id}	ການແກ້ໄຂງານທີ່ {id}
+	Rework ratio	ສັດສ່ວນການແກ້ໄຂງານ
 	Right edges	ຂອບຂວາ
 	Roles	ບົດບາດ
 	Run	ປະມວນຜົນ
@@ -335,6 +344,8 @@
 	Save changes to {name}?	ບັນທຶກການປ່ຽນແປງໃນ {name} ບໍ?
 	Saved {file}	ບັນທຶກ {file} ແລ້ວ
 	Scale	ມາດຕາສ່ວນ
+	Scrap	ຂອງເສຍ
+	Scrap ratio	ສັດສ່ວນຂອງເສຍ
 	Seed	ເມັດສຸ່ມ
 	Select All	ເລືອກທັງໝົດ
 	Select a block to see its queue over time.	ເລືອກບລັອກເພື່ອເບິ່ງຄິວຂອງມັນຕາມເວລາ.
@@ -387,6 +398,7 @@
 	Task with shared resources	ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນຮ່ວມກັນ
 	Text	ຂໍ້ຄວາມ
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ຊ່ວງນີ້ລົງຕ່ຳກວ່າສັດສ່ວນເປົ້າໝາຍ {share}, ຈຶ່ງບໍ່ໄດ້ສະແດງດ້ວຍຄວາມເຊື່ອໝັ້ນ 95% ວ່າບັນລຸສັດສ່ວນນັ້ນ; ຮອບຈຳລອງຊ້ຳຫຼາຍຂຶ້ນຈະເຮັດໃຫ້ຊ່ວງແຄບລົງ.
+	The last task with a resource it finished at	ໜ້າວຽກສຸດທ້າຍທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ຊິ້ນງານຜ່ານມາ
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ເວລາສະເລ່ຍຈົນຮອດເງື່ອນໄຂຢຸດ ຄິດສະເພາະຮອບຈຳລອງຊ້ຳທີ່ຮອດເງື່ອນໄຂ; ຮອບອື່ນແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
 	The model changed, so watching stopped	ແບບຈຳລອງປ່ຽນໄປ ຈຶ່ງຢຸດຕິດຕາມ
 	The model has no calendars yet.	ແບບຈຳລອງຍັງບໍ່ມີປະຕິທິນ.
@@ -447,6 +459,7 @@
 	Wed	ພຸດ
 	Weekly	ທຸກອາທິດ
 	Weibull	ໄວບູນ
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	ສິ່ງທີ່ມາຮອດການອອກນີ້ແມ່ນຂອງເສຍ ແລະ ນັບເຂົ້າໃນສັດສ່ວນຄຸນນະພາບຂອງໜ້າວຽກທີ່ມັນຖືກນັບໃສ່.
 	When a task empties	ເມື່ອວຽກຫວ່າງ
 	When enough have left a block	ເມື່ອອອກຈາກບລັອກພຽງພໍ
 	Which parameters matter	ພາຣາມິເຕີໃດມີຜົນ

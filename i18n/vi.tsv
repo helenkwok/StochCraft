@@ -101,6 +101,7 @@
 	Connections	Kết nối
 	Constant	Hằng số
 	Copy	Sao chép
+	Counts against	Quy cho
 	Cut	Cắt
 	Daily	Hằng ngày
 	Dark	Tối
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Chưa có kết nối: hãy nối các khối bên dưới.
 	No replication met the stop condition: each ran to its time limit.	Không lần lặp nào đạt điều kiện dừng: mỗi lần đều chạy đến giới hạn thời gian.
 	No results yet	Chưa có kết quả
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Mô hình này không đánh dấu phế phẩm hay làm lại nào, nên OEE tính chất lượng là 100%.
 	No target	Không có mục tiêu
 	None	Không có
 	None found. The model is ready to run.	Không tìm thấy vấn đề. Mô hình đã sẵn sàng chạy.
@@ -232,6 +234,7 @@
 	Normal	Chuẩn
 	Not reached, even with {units}	Chưa đạt, kể cả với {units}
 	Number	Số
+	OEE	OEE
 	OEE availability	Độ khả dụng OEE
 	OEE effectiveness	Hiệu quả OEE
 	On	Các ngày
@@ -253,6 +256,7 @@
 	PNG image	Ảnh PNG
 	Parameter	Tham số
 	Parameters	Tham số
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Các chi tiết đi theo luồng này quay lại để được gia công lại; chúng được tính là làm lại cho tác vụ có tài nguyên cuối cùng mà chúng đã đi qua.
 	Paste	Dán
 	Pause	Tạm dừng
 	Percentile	Phân vị
@@ -272,6 +276,8 @@
 	Process	Quy trình
 	Process models with BPSim	Mô hình quy trình có BPSim
 	Properties	Thuộc tính
+	Quality	Chất lượng
+	Quality ratio	Tỷ lệ chất lượng
 	Quit	Thoát
 	Quit {app}	Thoát {app}
 	Random	Ngẫu nhiên
@@ -315,6 +321,9 @@
 	Result with a target	Kết quả có mục tiêu
 	Result, down and up	Kết quả, khi giảm và tăng
 	Results	Kết quả
+	Rework	Làm lại
+	Rework on {id}	Làm lại tại {id}
+	Rework ratio	Tỷ lệ làm lại
 	Right edges	Cạnh phải
 	Roles	Vai trò
 	Run	Chạy
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Lưu các thay đổi vào {name}?
 	Saved {file}	Đã lưu {file}
 	Scale	Tỷ lệ
+	Scrap	Phế phẩm
+	Scrap ratio	Tỷ lệ phế phẩm
 	Seed	Hạt giống ngẫu nhiên
 	Select All	Chọn tất cả
 	Select a block to see its queue over time.	Chọn một khối để xem hàng đợi của nó theo thời gian.
@@ -387,6 +398,7 @@
 	Task with shared resources	Tác vụ có tài nguyên dùng chung
 	Text	Văn bản
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Khoảng này xuống dưới tỷ lệ mục tiêu {share}, nên chưa cho thấy với độ tin cậy 95% rằng tỷ lệ đạt được; thêm lần lặp sẽ thu hẹp nó.
+	The last task with a resource it finished at	Tác vụ có tài nguyên cuối cùng mà chi tiết đã đi qua
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Thời gian trung bình đến điều kiện dừng chỉ tính trên các lần lặp đạt điều kiện đó; các lần khác chạy đến giới hạn thời gian.
 	The model changed, so watching stopped	Mô hình đã thay đổi nên việc theo dõi đã dừng
 	The model has no calendars yet.	Mô hình chưa có lịch nào.
@@ -447,6 +459,7 @@
 	Wed	T4
 	Weekly	Hằng tuần
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Những gì đến các lượt rời đi này là phế phẩm, được tính vào tỷ lệ chất lượng của tác vụ mà nó được quy cho.
 	When a task empties	Khi một tác vụ trống
 	When enough have left a block	Khi đủ số đã rời một khối
 	Which parameters matter	Tham số nào quan trọng

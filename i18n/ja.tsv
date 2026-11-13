@@ -101,6 +101,7 @@
 	Connections	接続
 	Constant	定数
 	Copy	コピー
+	Counts against	計上先
 	Cut	切り取り
 	Daily	毎日
 	Dark	ダーク
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	接続はまだありません。下のブロック同士をつないでください。
 	No replication met the stop condition: each ran to its time limit.	停止条件に達した反復実行はありません。すべて時間制限まで実行されました。
 	No results yet	結果はまだありません
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	このモデルには廃棄も手直しも指定されていないため、OEE は品質を 100% として数えます。
 	No target	目標なし
 	None	なし
 	None found. The model is ready to run.	問題は見つかりませんでした。モデルを実行できます。
@@ -232,6 +234,7 @@
 	Normal	正規分布
 	Not reached, even with {units}	{units} でも未達成
 	Number	数値
+	OEE	OEE
 	OEE availability	OEE 可動率
 	OEE effectiveness	OEE 有効性
 	On	曜日
@@ -253,6 +256,7 @@
 	PNG image	PNG 画像
 	Parameter	パラメーター
 	Parameters	パラメータ
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	このフローを通る部品は再び加工するために戻ります。部品が最後に通ったリソースを使うタスクの手直しとして数えられます。
 	Paste	貼り付け
 	Pause	一時停止
 	Percentile	パーセンタイル
@@ -272,6 +276,8 @@
 	Process	プロセス
 	Process models with BPSim	BPSim 付きプロセスモデル
 	Properties	プロパティ
+	Quality	品質
+	Quality ratio	良品率
 	Quit	終了
 	Quit {app}	{app} を終了
 	Random	ランダム
@@ -315,6 +321,9 @@
 	Result with a target	目標のある結果
 	Result, down and up	結果（下げた場合と上げた場合）
 	Results	結果
+	Rework	手直し
+	Rework on {id}	{id} の手直し
+	Rework ratio	手直し率
 	Right edges	右端
 	Roles	役割
 	Run	実行
@@ -335,6 +344,8 @@
 	Save changes to {name}?	{name} への変更を保存しますか？
 	Saved {file}	{file} を保存しました
 	Scale	尺度
+	Scrap	廃棄
+	Scrap ratio	廃棄率
 	Seed	乱数シード
 	Select All	すべて選択
 	Select a block to see its queue over time.	ブロックを選択すると、その待ち行列の推移が表示されます。
@@ -387,6 +398,7 @@
 	Task with shared resources	共有リソースを使うタスク
 	Text	テキスト
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	区間が目標割合 {share} を下回るため、割合が達成されたことは 95% の信頼度では示されていません。反復実行を増やすと区間は狭まります。
+	The last task with a resource it finished at	部品が最後に通ったリソースを使うタスク
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	停止条件までの平均時間は、停止条件に達した反復実行だけによるものです。それ以外は時間制限まで実行されました。
 	The model changed, so watching stopped	モデルが変更されたため、観察を終了しました
 	The model has no calendars yet.	モデルにはまだカレンダーがありません。
@@ -447,6 +459,7 @@
 	Wed	水
 	Weekly	毎週
 	Weibull	ワイブル分布
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	この退出に届くものは廃棄品で、計上先タスクの良品率に数えられます。
 	When a task empties	タスクが空になったとき
 	When enough have left a block	ブロックから十分な数が出たとき
 	Which parameters matter	効いているパラメーター

@@ -101,6 +101,7 @@
 	Connections	कनेक्शन
 	Constant	स्थिर
 	Copy	कॉपी करें
+	Counts against	किस कार्य के खाते में
 	Cut	काटें
 	Daily	प्रतिदिन
 	Dark	गहरा
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	अभी कोई कनेक्शन नहीं हैं: नीचे दिए ब्लॉक जोड़ें।
 	No replication met the stop condition: each ran to its time limit.	किसी पुनरावृत्ति ने रुकने की शर्त पूरी नहीं की: हर एक अपनी समय सीमा तक चली।
 	No results yet	अभी कोई परिणाम नहीं हैं
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	इस मॉडल में कोई स्क्रैप या पुनःकार्य चिह्नित नहीं है, इसलिए OEE गुणवत्ता को 100% मानता है।
 	No target	कोई लक्ष्य नहीं
 	None	कोई नहीं
 	None found. The model is ready to run.	कोई समस्या नहीं मिली। मॉडल चलाने के लिए तैयार है।
@@ -232,6 +234,7 @@
 	Normal	सामान्य
 	Not reached, even with {units}	पूरा नहीं हुआ, {units} के साथ भी नहीं
 	Number	संख्या
+	OEE	OEE
 	OEE availability	OEE उपलब्धता
 	OEE effectiveness	OEE प्रभावशीलता
 	On	दिन
@@ -253,6 +256,7 @@
 	PNG image	PNG छवि
 	Parameter	पैरामीटर
 	Parameters	पैरामीटर
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	इस प्रवाह से जाने वाले पुर्जे फिर से काम के लिए लौटते हैं; वे उस अंतिम संसाधन वाले कार्य के खाते में पुनःकार्य गिने जाते हैं जिससे वे गुज़रे।
 	Paste	चिपकाएँ
 	Pause	रोकें
 	Percentile	प्रतिशतक
@@ -272,6 +276,8 @@
 	Process	प्रक्रिया
 	Process models with BPSim	BPSim सहित प्रक्रिया मॉडल
 	Properties	गुण
+	Quality	गुणवत्ता
+	Quality ratio	गुणवत्ता अनुपात
 	Quit	बाहर निकलें
 	Quit {app}	{app} से बाहर निकलें
 	Random	यादृच्छिक
@@ -315,6 +321,9 @@
 	Result with a target	लक्ष्य वाला परिणाम
 	Result, down and up	परिणाम, नीचे और ऊपर
 	Results	परिणाम
+	Rework	पुनःकार्य
+	Rework on {id}	{id} पर पुनःकार्य
+	Rework ratio	पुनःकार्य अनुपात
 	Right edges	दाएँ किनारे
 	Roles	भूमिकाएँ
 	Run	चलाएँ
@@ -335,6 +344,8 @@
 	Save changes to {name}?	{name} में परिवर्तन सहेजें?
 	Saved {file}	{file} सहेजी गई
 	Scale	पैमाना
+	Scrap	स्क्रैप
+	Scrap ratio	स्क्रैप अनुपात
 	Seed	यादृच्छिक बीज
 	Select All	सभी चुनें
 	Select a block to see its queue over time.	समय के साथ किसी ब्लॉक की कतार देखने के लिए उसे चुनें।
@@ -387,6 +398,7 @@
 	Task with shared resources	साझा संसाधनों वाला कार्य
 	Text	पाठ
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	अंतराल {share} के लक्ष्य हिस्से से नीचे तक जाता है, इसलिए 95% विश्वास के साथ यह नहीं दिखता कि हिस्सा पूरा हुआ; अधिक पुनरावृत्तियाँ इसे संकरा करेंगी।
+	The last task with a resource it finished at	अंतिम संसाधन वाला कार्य जिससे पुर्जा गुज़रा
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	रुकने की शर्त तक का औसत समय केवल उन पुनरावृत्तियों पर है जिन्होंने शर्त पूरी की; बाकी अपनी समय सीमा तक चलीं।
 	The model changed, so watching stopped	मॉडल बदल गया, इसलिए देखना बंद हो गया
 	The model has no calendars yet.	मॉडल में अभी कोई कैलेंडर नहीं है।
@@ -447,6 +459,7 @@
 	Wed	बुध
 	Weekly	साप्ताहिक
 	Weibull	वीबुल
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	इन प्रस्थानों तक जो पहुँचता है वह स्क्रैप है, और जिस कार्य के खाते में गिना जाता है उसके गुणवत्ता अनुपात में शामिल होता है।
 	When a task empties	जब कोई कार्य खाली हो जाए
 	When enough have left a block	जब किसी ब्लॉक से पर्याप्त निकल जाएँ
 	Which parameters matter	कौन-से पैरामीटर मायने रखते हैं

@@ -101,6 +101,7 @@
 	Connections	Povezave
 	Constant	Konstantna
 	Copy	Kopiraj
+	Counts against	Pripiše se
 	Cut	Izreži
 	Daily	Dnevno
 	Dark	Temno
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Povezav še ni: povežite spodnje bloke.
 	No replication met the stop condition: each ran to its time limit.	Nobena ponovitev ni dosegla pogoja za ustavitev: vsaka je tekla do svoje časovne omejitve.
 	No results yet	Rezultatov še ni
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	V tem modelu ni označenega izmeta ali dodelave, zato OEE šteje kakovost kot 100 %.
 	No target	Brez cilja
 	None	Brez
 	None found. The model is ready to run.	Težav ni bilo najdenih. Model je pripravljen na izvajanje.
@@ -232,6 +234,7 @@
 	Normal	Normalna
 	Not reached, even with {units}	Ni doseženo, niti z {units}
 	Number	Število
+	OEE	OEE
 	OEE availability	Razpoložljivost OEE
 	OEE effectiveness	Učinkovitost OEE
 	On	Dnevi
@@ -253,6 +256,7 @@
 	PNG image	Slika PNG
 	Parameter	Parameter
 	Parameters	Parametri
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Kosi, ki gredo po tem toku, se vrnejo v ponovno obdelavo; štejejo se kot dodelava zadnje naloge z virom, skozi katero so šli.
 	Paste	Prilepi
 	Pause	Premor
 	Percentile	Percentil
@@ -272,6 +276,8 @@
 	Process	Proces
 	Process models with BPSim	Modeli procesov z BPSim
 	Properties	Lastnosti
+	Quality	Kakovost
+	Quality ratio	Delež kakovosti
 	Quit	Izhod
 	Quit {app}	Končaj {app}
 	Random	Naključno
@@ -315,6 +321,9 @@
 	Result with a target	Rezultat s ciljem
 	Result, down and up	Rezultat, navzdol in navzgor
 	Results	Rezultati
+	Rework	Dodelava
+	Rework on {id}	Dodelava na {id}
+	Rework ratio	Delež dodelave
 	Right edges	Desni robovi
 	Roles	Vloge
 	Run	Zaženi
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Shranim spremembe v {name}?
 	Saved {file}	Shranjeno {file}
 	Scale	Merilo
+	Scrap	Izmet
+	Scrap ratio	Delež izmeta
 	Seed	Seme
 	Select All	Izberi vse
 	Select a block to see its queue over time.	Izberite blok, da vidite njegovo vrsto skozi čas.
@@ -387,6 +398,7 @@
 	Task with shared resources	Naloga s skupnimi viri
 	Text	Besedilo
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval sega pod ciljni delež {share}, zato ni pokazano s 95-odstotno zanesljivostjo, da je delež dosežen; več ponovitev bi ga zožilo.
+	The last task with a resource it finished at	Zadnja naloga z virom, skozi katero je šel kos
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Povprečni čas do pogoja za ustavitev je le iz ponovitev, ki so ga dosegle; ostale so tekle do svoje časovne omejitve.
 	The model changed, so watching stopped	Model se je spremenil, zato se je spremljanje ustavilo
 	The model has no calendars yet.	Model še nima koledarjev.
@@ -447,6 +459,7 @@
 	Wed	sre
 	Weekly	Tedensko
 	Weibull	Weibullova
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Kar doseže te odhode, je izmet in se šteje v delež kakovosti naloge, ki se ji pripiše.
 	When a task empties	Ko se opravilo izprazni
 	When enough have left a block	Ko blok zapusti dovolj entitet
 	Which parameters matter	Kateri parametri so pomembni

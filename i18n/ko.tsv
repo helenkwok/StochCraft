@@ -101,6 +101,7 @@
 	Connections	연결
 	Constant	상수
 	Copy	복사
+	Counts against	귀속 작업
 	Cut	잘라내기
 	Daily	매일
 	Dark	어둡게
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	아직 연결이 없습니다. 아래에서 블록을 연결하세요.
 	No replication met the stop condition: each ran to its time limit.	중지 조건에 도달한 반복 실행이 없습니다. 모두 시간 제한까지 실행되었습니다.
 	No results yet	아직 결과가 없습니다
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	이 모델에는 폐기나 재작업이 표시되지 않았으므로 OEE는 품질을 100%로 계산합니다.
 	No target	목표 없음
 	None	없음
 	None found. The model is ready to run.	문제가 없습니다. 모델을 실행할 준비가 되었습니다.
@@ -232,6 +234,7 @@
 	Normal	정규 분포
 	Not reached, even with {units}	{units}로도 도달하지 못함
 	Number	숫자
+	OEE	OEE
 	OEE availability	OEE 가용성
 	OEE effectiveness	OEE 효과성
 	On	요일
@@ -253,6 +256,7 @@
 	PNG image	PNG 이미지
 	Parameter	매개변수
 	Parameters	매개변수
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	이 흐름을 따르는 부품은 다시 작업하기 위해 되돌아가며, 마지막으로 거친 자원을 사용하는 작업의 재작업으로 집계됩니다.
 	Paste	붙여넣기
 	Pause	일시 중지
 	Percentile	백분위수
@@ -272,6 +276,8 @@
 	Process	프로세스
 	Process models with BPSim	BPSim 포함 프로세스 모델
 	Properties	속성
+	Quality	품질
+	Quality ratio	양품률
 	Quit	종료
 	Quit {app}	{app} 종료
 	Random	무작위
@@ -315,6 +321,9 @@
 	Result with a target	목표가 있는 결과
 	Result, down and up	결과(낮췄을 때와 높였을 때)
 	Results	결과
+	Rework	재작업
+	Rework on {id}	{id} 재작업
+	Rework ratio	재작업률
 	Right edges	오른쪽 가장자리
 	Roles	역할
 	Run	실행
@@ -335,6 +344,8 @@
 	Save changes to {name}?	{name}의 변경 사항을 저장할까요?
 	Saved {file}	{file} 저장됨
 	Scale	척도
+	Scrap	폐기
+	Scrap ratio	폐기율
 	Seed	난수 시드
 	Select All	모두 선택
 	Select a block to see its queue over time.	블록을 선택하면 시간에 따른 대기열을 볼 수 있습니다.
@@ -387,6 +398,7 @@
 	Task with shared resources	공유 자원을 사용하는 작업
 	Text	텍스트
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	구간이 목표 비율 {share}보다 아래까지 내려가므로, 비율 충족이 95% 신뢰도로 확인되지 않았습니다. 반복 실행을 늘리면 구간이 좁아집니다.
+	The last task with a resource it finished at	부품이 마지막으로 거친 자원을 사용하는 작업
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	중지 조건까지의 평균 시간은 중지 조건에 도달한 반복 실행만으로 계산됩니다. 나머지는 시간 제한까지 실행되었습니다.
 	The model changed, so watching stopped	모델이 변경되어 관찰을 중지함
 	The model has no calendars yet.	모델에 아직 캘린더가 없습니다.
@@ -447,6 +459,7 @@
 	Wed	수
 	Weekly	매주
 	Weibull	와이블 분포
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	이 이탈에 도달하는 것은 폐기품이며, 귀속되는 작업의 양품률에 반영됩니다.
 	When a task empties	작업이 비었을 때
 	When enough have left a block	블록에서 충분히 나갔을 때
 	Which parameters matter	중요한 매개변수

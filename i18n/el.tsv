@@ -101,6 +101,7 @@
 	Connections	Συνδέσεις
 	Constant	Σταθερή
 	Copy	Αντιγραφή
+	Counts against	Χρεώνεται σε
 	Cut	Αποκοπή
 	Daily	Καθημερινά
 	Dark	Σκούρο
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Δεν υπάρχουν ακόμη συνδέσεις: συνδέστε τα παρακάτω μπλοκ.
 	No replication met the stop condition: each ran to its time limit.	Καμία επανάληψη δεν έφτασε τη συνθήκη διακοπής: κάθε μία διήρκεσε ως το χρονικό της όριο.
 	No results yet	Δεν υπάρχουν ακόμη αποτελέσματα
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Σε αυτό το μοντέλο δεν έχουν σημειωθεί σκάρτα ή επανεπεξεργασία, οπότε το OEE μετρά την ποιότητα ως 100%.
 	No target	Χωρίς στόχο
 	None	Κανένα
 	None found. The model is ready to run.	Δεν βρέθηκαν προβλήματα. Το μοντέλο είναι έτοιμο για εκτέλεση.
@@ -232,6 +234,7 @@
 	Normal	Κανονική
 	Not reached, even with {units}	Δεν επιτεύχθηκε ούτε με {units}
 	Number	Αριθμός
+	OEE	OEE
 	OEE availability	Διαθεσιμότητα OEE
 	OEE effectiveness	Αποτελεσματικότητα OEE
 	On	Ημέρες
@@ -253,6 +256,7 @@
 	PNG image	Εικόνα PNG
 	Parameter	Παράμετρος
 	Parameters	Παράμετροι
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Τα τεμάχια που ακολουθούν αυτή τη ροή επιστρέφουν για να υποστούν ξανά επεξεργασία. Μετρούν ως επανεπεξεργασία της τελευταίας εργασίας με πόρο από την οποία πέρασαν.
 	Paste	Επικόλληση
 	Pause	Παύση
 	Percentile	Εκατοστημόριο
@@ -272,6 +276,8 @@
 	Process	Διαδικασία
 	Process models with BPSim	Μοντέλα διεργασιών με BPSim
 	Properties	Ιδιότητες
+	Quality	Ποιότητα
+	Quality ratio	Ποσοστό ποιότητας
 	Quit	Έξοδος
 	Quit {app}	Έξοδος από το {app}
 	Random	Τυχαία
@@ -315,6 +321,9 @@
 	Result with a target	Αποτέλεσμα με στόχο
 	Result, down and up	Αποτέλεσμα, κάτω και πάνω
 	Results	Αποτελέσματα
+	Rework	Επανεπεξεργασία
+	Rework on {id}	Επανεπεξεργασία στο {id}
+	Rework ratio	Ποσοστό επανεπεξεργασίας
 	Right edges	Δεξιά άκρα
 	Roles	Ρόλοι
 	Run	Εκτέλεση
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Αποθήκευση αλλαγών στο {name};
 	Saved {file}	Αποθηκεύτηκε το {file}
 	Scale	Κλίμακα
+	Scrap	Σκάρτα
+	Scrap ratio	Ποσοστό σκάρτων
 	Seed	Αρχικός σπόρος
 	Select All	Επιλογή όλων
 	Select a block to see its queue over time.	Επιλέξτε ένα μπλοκ για να δείτε την ουρά του στη διάρκεια του χρόνου.
@@ -387,6 +398,7 @@
 	Task with shared resources	Εργασία με κοινόχρηστους πόρους
 	Text	Κείμενο
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Το διάστημα φτάνει κάτω από το ποσοστό-στόχο {share}, άρα δεν φαίνεται με εμπιστοσύνη 95% ότι το ποσοστό επιτυγχάνεται· περισσότερες επαναλήψεις θα το στένευαν.
+	The last task with a resource it finished at	Η τελευταία εργασία με πόρο από την οποία πέρασε το τεμάχιο
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Ο μέσος χρόνος ως τη συνθήκη διακοπής αφορά μόνο τις επαναλήψεις που την έφτασαν· οι υπόλοιπες διήρκεσαν ως το χρονικό τους όριο.
 	The model changed, so watching stopped	Το μοντέλο άλλαξε, οπότε η παρακολούθηση διακόπηκε
 	The model has no calendars yet.	Το μοντέλο δεν έχει ακόμη ημερολόγια.
@@ -447,6 +459,7 @@
 	Wed	Τετ
 	Weekly	Εβδομαδιαία
 	Weibull	Βάιμπουλ
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Ό,τι φτάνει σε αυτές τις αναχωρήσεις είναι σκάρτα και μετράει στο ποσοστό ποιότητας της εργασίας στην οποία χρεώνεται.
 	When a task empties	Όταν μια εργασία αδειάσει
 	When enough have left a block	Όταν αρκετές οντότητες έχουν φύγει από ένα μπλοκ
 	Which parameters matter	Ποιες παράμετροι μετρούν

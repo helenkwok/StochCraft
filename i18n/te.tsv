@@ -101,6 +101,7 @@
 	Connections	అనుసంధానాలు
 	Constant	స్థిర విలువ
 	Copy	కాపీ చేయి
+	Counts against	ఖాతాలో వేసే పని
 	Cut	కత్తిరించు
 	Daily	ప్రతిరోజూ
 	Dark	డార్క్
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	ఇంకా అనుసంధానాలు లేవు: దిగువన బ్లాక్‌లను కలపండి.
 	No replication met the stop condition: each ran to its time limit.	ఏ పునరావృత్త అమలూ ఆపే షరతును చేరలేదు: ప్రతిదీ దాని సమయ పరిమితి వరకు నడిచింది.
 	No results yet	ఇంకా ఫలితాలు లేవు
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	ఈ మోడల్‌లో స్క్రాప్ లేదా పునఃపని ఏదీ గుర్తించబడలేదు, కాబట్టి OEE నాణ్యతను 100%గా లెక్కిస్తుంది.
 	No target	లక్ష్యం లేదు
 	None	ఏదీ లేదు
 	None found. The model is ready to run.	ఏ సమస్యలూ కనబడలేదు. నమూనా అమలుకు సిద్ధంగా ఉంది.
@@ -232,6 +234,7 @@
 	Normal	సాధారణ పంపిణీ
 	Not reached, even with {units}	{units}తో కూడా చేరలేదు
 	Number	సంఖ్య
+	OEE	OEE
 	OEE availability	OEE లభ్యత
 	OEE effectiveness	OEE ప్రభావశీలత
 	On	రోజులు
@@ -253,6 +256,7 @@
 	PNG image	PNG చిత్రం
 	Parameter	పరామితి
 	Parameters	పరామితులు
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	ఈ ప్రవాహంలో వెళ్ళే భాగాలు మళ్ళీ పని కోసం వెనక్కి వెళ్తాయి; అవి చివరిగా దాటిన వనరు అవసరమైన పని ఖాతాలో పునఃపనిగా లెక్కించబడతాయి.
 	Paste	అతికించు
 	Pause	విరామం
 	Percentile	శతాంశం
@@ -272,6 +276,8 @@
 	Process	ప్రక్రియ
 	Process models with BPSim	BPSim తో ప్రక్రియ నమూనాలు
 	Properties	లక్షణాలు
+	Quality	నాణ్యత
+	Quality ratio	నాణ్యత నిష్పత్తి
 	Quit	నిష్క్రమించు
 	Quit {app}	{app} నుంచి నిష్క్రమించు
 	Random	యాదృచ్ఛికం
@@ -315,6 +321,9 @@
 	Result with a target	లక్ష్యం ఉన్న ఫలితం
 	Result, down and up	ఫలితం, కిందకు, పైకి
 	Results	ఫలితాలు
+	Rework	పునఃపని
+	Rework on {id}	{id} వద్ద పునఃపని
+	Rework ratio	పునఃపని నిష్పత్తి
 	Right edges	కుడి అంచులు
 	Roles	పాత్రలు
 	Run	అమలు చేయి
@@ -335,6 +344,8 @@
 	Save changes to {name}?	{name} లో మార్పులను సేవ్ చేయాలా?
 	Saved {file}	{file} సేవ్ చేయబడింది
 	Scale	స్కేలు
+	Scrap	స్క్రాప్
+	Scrap ratio	స్క్రాప్ నిష్పత్తి
 	Seed	యాదృచ్ఛిక బీజం
 	Select All	అన్నీ ఎంచుకో
 	Select a block to see its queue over time.	కాలక్రమంలో ఒక బ్లాక్ వరుసను చూడటానికి దాన్ని ఎంచుకోండి.
@@ -387,6 +398,7 @@
 	Task with shared resources	భాగస్వామ్య వనరులు అవసరమైన పని
 	Text	టెక్స్ట్
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	అంతరం {share} లక్ష్య వాటా కంటే కిందకు వెళ్తుంది, కాబట్టి వాటా చేరినట్లు 95% విశ్వాసంతో చూపబడలేదు; మరిన్ని పునరావృత్త అమలులు దానిని సన్నగా చేస్తాయి.
+	The last task with a resource it finished at	భాగం చివరిగా దాటిన వనరు అవసరమైన పని
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ఆపే షరతు వరకు సగటు సమయం దానిని చేరిన పునరావృత్త అమలులపై మాత్రమే; మిగిలినవి వాటి సమయ పరిమితి వరకు నడిచాయి.
 	The model changed, so watching stopped	నమూనా మారింది, కాబట్టి గమనించడం ఆగిపోయింది
 	The model has no calendars yet.	నమూనాలో ఇంకా క్యాలెండర్‌లు లేవు.
@@ -447,6 +459,7 @@
 	Wed	బుధ
 	Weekly	ప్రతి వారం
 	Weibull	వైబుల్
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	ఈ నిష్క్రమణలకు చేరేది స్క్రాప్; అది ఏ పని ఖాతాలో లెక్కించబడుతుందో ఆ పని నాణ్యత నిష్పత్తిలో లెక్కించబడుతుంది.
 	When a task empties	ఒక పని ఖాళీ అయినప్పుడు
 	When enough have left a block	ఒక బ్లాక్ నుండి తగినన్ని వెళ్లిపోయినప్పుడు
 	Which parameters matter	ఏ పరామితులు ముఖ్యం

@@ -101,6 +101,7 @@
 	Connections	Yhteydet
 	Constant	Vakio
 	Copy	Kopioi
+	Counts against	Kirjataan tehtävälle
 	Cut	Leikkaa
 	Daily	Päivittäin
 	Dark	Tumma
@@ -225,6 +226,7 @@
 	No connections yet: join blocks below.	Yhteyksiä ei vielä ole: yhdistä alla olevat lohkot.
 	No replication met the stop condition: each ran to its time limit.	Mikään toisto ei saavuttanut pysäytysehtoa: jokainen ajettiin aikarajaansa asti.
 	No results yet	Ei vielä tuloksia
+	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Tähän malliin ei ole merkitty hylkyä eikä uudelleentyöstöä, joten OEE laskee laaduksi 100 %.
 	No target	Ei tavoitetta
 	None	Ei mitään
 	None found. The model is ready to run.	Ongelmia ei löytynyt. Malli on valmis suoritettavaksi.
@@ -232,6 +234,7 @@
 	Normal	Normaalijakauma
 	Not reached, even with {units}	Ei saavutettu, ei edes yksiköillä {units}
 	Number	Luku
+	OEE	OEE
 	OEE availability	OEE-käytettävyys
 	OEE effectiveness	OEE-tehokkuus
 	On	Päivät
@@ -253,6 +256,7 @@
 	PNG image	PNG-kuva
 	Parameter	Parametri
 	Parameters	Parametrit
+	Parts taking this flow go back to be worked on again; they count as rework against the last task with a resource they finished at.	Tätä virtaa kulkevat osat palaavat työstettäviksi uudelleen; ne lasketaan uudelleentyöstöksi viimeisimmälle resurssia käyttävälle tehtävälle, jonka ne läpäisivät.
 	Paste	Liitä
 	Pause	Tauko
 	Percentile	Persentiili
@@ -272,6 +276,8 @@
 	Process	Prosessi
 	Process models with BPSim	Prosessimallit ja BPSim
 	Properties	Ominaisuudet
+	Quality	Laatu
+	Quality ratio	Laatuosuus
 	Quit	Lopeta
 	Quit {app}	Lopeta {app}
 	Random	Satunnainen
@@ -315,6 +321,9 @@
 	Result with a target	Tulos ja tavoite
 	Result, down and up	Tulos, alas ja ylös
 	Results	Tulokset
+	Rework	Uudelleentyöstö
+	Rework on {id}	Uudelleentyöstö virrassa {id}
+	Rework ratio	Uudelleentyöstöosuus
 	Right edges	Oikeat reunat
 	Roles	Roolit
 	Run	Suorita
@@ -335,6 +344,8 @@
 	Save changes to {name}?	Tallennetaanko kohteen {name} muutokset?
 	Saved {file}	Tallennettiin {file}
 	Scale	Skaala
+	Scrap	Hylky
+	Scrap ratio	Hylkyosuus
 	Seed	Satunnaislukusiemen
 	Select All	Valitse kaikki
 	Select a block to see its queue over time.	Valitse lohko nähdäksesi sen jonon ajan mittaan.
@@ -387,6 +398,7 @@
 	Task with shared resources	Jaettuja resursseja käyttävä tehtävä
 	Text	Teksti
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Väli ulottuu alle tavoiteosuuden {share}, joten osuuden saavuttamista ei ole osoitettu 95 %:n luottamuksella; useampi toisto kaventaisi sitä.
+	The last task with a resource it finished at	Viimeisin resurssia käyttävä tehtävä, jonka osa läpäisi
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskimääräinen aika pysäytysehtoon lasketaan vain toistoista, jotka saavuttivat sen; muut ajettiin aikarajaansa asti.
 	The model changed, so watching stopped	Malli muuttui, joten seuraaminen lopetettiin
 	The model has no calendars yet.	Mallissa ei ole vielä kalentereita.
@@ -447,6 +459,7 @@
 	Wed	ke
 	Weekly	Viikoittain
 	Weibull	Weibull
+	What reaches these departures is scrap, counted in the quality ratio of the task it counts against.	Näihin poistumisiin päätyvä on hylkyä, ja se lasketaan sen tehtävän laatuosuuteen, jolle se kirjataan.
 	When a task empties	Kun tehtävä tyhjenee
 	When enough have left a block	Kun tarpeeksi monta on poistunut lohkosta
 	Which parameters matter	Mitkä parametrit merkitsevät
