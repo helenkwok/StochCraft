@@ -1,0 +1,448 @@
+name: Release
+
+# A pushed version tag vX.Y.Z builds StochCraft (the app and stochcraft-cli) for Windows, Linux and
+# macOS and makes ONE draft GitHub release, "StochCraft vX.Y.Z" on that tag, holding every file plus
+# SHA256SUMS.txt (`sha256sum` format). The files are named like the Craft apps' releases
+# (<app>-<version>-<os>-<arch>.<ext>), so ArtCraft Launcher and anything else that reads those
+# releases finds them by the same names. A maintainer reviews the draft and publishes it by hand.
+#
+# The Windows build is unsigned. The macOS app, disk image and command line are signed with a
+# Developer ID and notarized when the repository variable MACOS_SIGN is "true" and a version tag is
+# pushed (secrets MACOS_CERT_P12, MACOS_CERT_PASSWORD, NOTARY_KEY_P8, NOTARY_KEY_ID and
+# NOTARY_ISSUER_ID, kept in the `release` environment); otherwise they carry only an ad-hoc
+# signature, and the launcher opens an installed copy on macOS but does not install it. No job that
+# compiles has a secret: macos-build compiles, and the macos job that signs never builds anything.
+# Only the last job can write to the repository (it creates the draft).
+#
+# A tag releases only when its commit is on main and the tag equals the version in Cargo.toml
+# (the `version` job checks both; every other job needs it).
+#
+# Run by hand (workflow_dispatch) it builds everything and keeps the files as workflow artifacts:
+# a dry run, on any branch or tag, that publishes, signs and notarizes nothing.
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  version:
+    name: Version
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      prerelease: ${{ steps.v.outputs.prerelease }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # All branches, to tell whether the tagged commit is on main.
+          fetch-depth: 0
+      - name: A release tag is a commit of main
+        if: github.ref_type == 'tag'
+        run: |
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" refs/remotes/origin/main; then
+            echo "::error::$GITHUB_REF_NAME points at $GITHUB_SHA, which is not on main: tag a commit that was merged"
+            exit 1
+          fi
+      - id: v
+        name: The tag is the version in Cargo.toml
+        run: |
+          VERSION=$(awk '/^\[workspace.package\]/{p=1;next} /^\[/{p=0} p && /^version *=/{gsub(/"/,"",$3); print $3; exit}' Cargo.toml)
+          if [ -z "$VERSION" ]; then
+            echo "::error::no version under [workspace.package] in Cargo.toml"
+            exit 1
+          fi
+          if [ "$GITHUB_REF_TYPE" = tag ] && [ "v$VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::tag $GITHUB_REF_NAME, but Cargo.toml says version $VERSION: bump the version, merge it, and tag that commit"
+            exit 1
+          fi
+          case "$VERSION" in *-*) pre=true ;; *) pre=false ;; esac
+          { echo "version=$VERSION"; echo "prerelease=$pre"; } >>"$GITHUB_OUTPUT"
+
+  linux:
+    name: Linux ${{ matrix.arch }}
+    needs: [version]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-24.04
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: release-linux-${{ matrix.arch }}
+      - name: Build
+        run: cargo build --release --locked -p stochcraft -p stochcraft-cli
+      - name: Package
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+          ARCH: ${{ matrix.arch }}
+        run: |
+          name="stochcraft-$VERSION-linux-$ARCH"
+          mkdir -p "dist/$name"
+          cp target/release/stochcraft target/release/stochcraft-cli "dist/$name/"
+          cp LICENSE-APACHE LICENSE-MIT NOTICE README.md "dist/$name/"
+          tar -C dist -czf "dist/$name.tar.gz" "$name"
+          rm -rf "dist/$name"
+          ls -l dist
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-linux-${{ matrix.arch }}
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+  windows:
+    name: Windows x64
+    needs: [version]
+    runs-on: windows-2025
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: release-windows-x64
+      - name: Build
+        run: cargo build --release --locked -p stochcraft -p stochcraft-cli
+      - name: Package
+        shell: pwsh
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          $name = "stochcraft-$env:VERSION-windows-x64-portable"
+          New-Item -ItemType Directory -Path "dist/$name" | Out-Null
+          Copy-Item target/release/stochcraft.exe, target/release/stochcraft-cli.exe "dist/$name/"
+          Copy-Item LICENSE-APACHE, LICENSE-MIT, NOTICE, README.md "dist/$name/"
+          Compress-Archive -Path "dist/$name" -DestinationPath "dist/$name.zip"
+          Remove-Item -Recurse "dist/$name"
+          Get-ChildItem dist
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-windows-x64
+          path: dist/*.zip
+          if-no-files-found: error
+
+  # Builds the universal programs. No secret is in reach of this job: it compiles, and the next job
+  # signs what it made without compiling anything.
+  macos-build:
+    name: macOS build
+    needs: [version]
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: release-macos-universal
+      - name: Build both architectures
+        run: |
+          cargo build --release --locked -p stochcraft -p stochcraft-cli --target aarch64-apple-darwin
+          cargo build --release --locked -p stochcraft -p stochcraft-cli --target x86_64-apple-darwin
+      - name: Join them into universal programs
+        run: |
+          mkdir -p prebuilt
+          for p in stochcraft stochcraft-cli; do
+            lipo -create \
+              "target/aarch64-apple-darwin/release/$p" \
+              "target/x86_64-apple-darwin/release/$p" \
+              -output "prebuilt/$p"
+            lipo -info "prebuilt/$p"
+          done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: build-macos
+          path: prebuilt/
+          if-no-files-found: error
+
+  # Makes the app, the disk image and the command-line archive from the programs the build job
+  # made. Never builds anything.
+  #
+  # Signing runs when the repository variable MACOS_SIGN is "true" and the run is a pushed version
+  # tag: the app, the command-line program and the disk image get a Developer ID signature with the
+  # hardened runtime and a secure timestamp, Apple's notary service checks all three, and the
+  # tickets are stapled to the app and the disk image so they open offline (a bare program cannot
+  # carry one: Gatekeeper fetches its ticket online on first run). The secrets live in the `release`
+  # environment, limited to version tags. Without the variable (or on a dry run) everything is
+  # ad-hoc signed and nothing is notarized. The certificate goes into a throwaway keychain that the
+  # last step deletes.
+  macos:
+    name: macOS app and disk image
+    needs: [version, macos-build]
+    runs-on: macos-latest
+    timeout-minutes: 60
+    environment: ${{ github.event_name == 'push' && github.ref_type == 'tag' && vars.MACOS_SIGN == 'true' && 'release' || '' }}
+    env:
+      SIGN: ${{ github.event_name == 'push' && github.ref_type == 'tag' && vars.MACOS_SIGN == 'true' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: build-macos
+          path: prebuilt
+      - name: Lay out the app and the command-line archive
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          # Artifacts don't keep the executable bit.
+          chmod 755 prebuilt/stochcraft prebuilt/stochcraft-cli
+          app="dist/stage/StochCraft.app"
+          mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
+          cp prebuilt/stochcraft "$app/Contents/MacOS/StochCraft"
+          cp LICENSE-APACHE LICENSE-MIT NOTICE "$app/Contents/Resources/"
+          cat >"$app/Contents/Info.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleName</key><string>StochCraft</string>
+            <key>CFBundleDisplayName</key><string>StochCraft</string>
+            <key>CFBundleExecutable</key><string>StochCraft</string>
+            <key>CFBundleIdentifier</key><string>io.github.helenkwok.stochcraft</string>
+            <key>CFBundlePackageType</key><string>APPL</string>
+            <key>CFBundleShortVersionString</key><string>${VERSION%%-*}</string>
+            <key>CFBundleVersion</key><string>${VERSION%%-*}</string>
+            <key>LSMinimumSystemVersion</key><string>11.0</string>
+            <key>NSHighResolutionCapable</key><true/>
+          </dict>
+          </plist>
+          PLIST
+          plutil -lint "$app/Contents/Info.plist"
+          # The command line, universal too, in its own archive (not inside the app).
+          cli="stochcraft-cli-$VERSION-macos-universal"
+          mkdir -p "dist/$cli"
+          cp prebuilt/stochcraft-cli "dist/$cli/stochcraft-cli"
+          cp LICENSE-APACHE LICENSE-MIT NOTICE README.md "dist/$cli/"
+      - name: Import the signing certificate
+        if: env.SIGN == 'true'
+        env:
+          CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
+          CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+        run: |
+          set -euo pipefail
+          for v in CERT_P12 CERT_PASSWORD; do
+            [ -n "${!v}" ] || { echo "::error::MACOS_SIGN is true but the secret for $v is not set in the release environment"; exit 1; }
+          done
+          keychain="$RUNNER_TEMP/signing.keychain-db"; kpass=$(openssl rand -hex 24)
+          security create-keychain -p "$kpass" "$keychain"
+          security set-keychain-settings -lut 3600 "$keychain"
+          security unlock-keychain -p "$kpass" "$keychain"
+          printf '%s' "$CERT_P12" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security import "$RUNNER_TEMP/cert.p12" -k "$keychain" -P "$CERT_PASSWORD" -T /usr/bin/codesign
+          rm -f "$RUNNER_TEMP/cert.p12"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$kpass" "$keychain" >/dev/null
+          security list-keychains -d user -s "$keychain"
+      - name: Sign and notarize the app and the command line
+        if: env.SIGN == 'true'
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+          NOTARY_KEY_P8: ${{ secrets.NOTARY_KEY_P8 }}
+          NOTARY_KEY_ID: ${{ secrets.NOTARY_KEY_ID }}
+          NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          app="dist/stage/StochCraft.app"
+          cli="dist/stochcraft-cli-$VERSION-macos-universal/stochcraft-cli"
+          codesign --force --options runtime --timestamp --keychain "$keychain" -s "Developer ID Application" "$app"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          codesign --force --options runtime --timestamp --keychain "$keychain" -s "Developer ID Application" "$cli"
+          codesign --verify --strict --verbose=2 "$cli"
+          printf '%s' "$NOTARY_KEY_P8" > "$RUNNER_TEMP/notary.p8"
+          notarize() {  # notarize <file> <name>: submit, wait, and fail unless Apple accepts it
+            xcrun notarytool submit "$1" --key "$RUNNER_TEMP/notary.p8" \
+              --key-id "$NOTARY_KEY_ID" --issuer "$NOTARY_ISSUER_ID" --wait --output-format json > "$RUNNER_TEMP/notary-$2.json"
+            status=$(plutil -extract status raw "$RUNNER_TEMP/notary-$2.json")
+            echo "$2 notarization: $status"
+            [ "$status" = Accepted ]
+          }
+          ditto -c -k --keepParent "$app" "$RUNNER_TEMP/app-notarize.zip"
+          notarize "$RUNNER_TEMP/app-notarize.zip" app
+          xcrun stapler staple "$app"
+          xcrun stapler validate "$app"
+          ditto -c -k "$cli" "$RUNNER_TEMP/cli-notarize.zip"
+          notarize "$RUNNER_TEMP/cli-notarize.zip" cli
+          rm -f "$RUNNER_TEMP/notary.p8"
+      - name: Ad-hoc sign (no signing configured)
+        if: env.SIGN != 'true'
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          # No Developer ID: Gatekeeper still asks, and the launcher does not install it.
+          codesign --force --deep --sign - dist/stage/StochCraft.app
+          codesign --verify --deep --strict dist/stage/StochCraft.app
+          codesign --force --sign - "dist/stochcraft-cli-$VERSION-macos-universal/stochcraft-cli"
+      - name: Make the disk image and the command-line archive
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          ln -s /Applications dist/stage/Applications
+          hdiutil create -volname StochCraft -srcfolder dist/stage -ov -format UDZO \
+            "dist/stochcraft-$VERSION-macos-universal.dmg"
+          cli="stochcraft-cli-$VERSION-macos-universal"
+          tar -C dist -czf "dist/$cli.tar.gz" "$cli"
+          rm -rf "dist/$cli"
+          ls -l dist
+      - name: Sign, notarize and staple the disk image
+        if: env.SIGN == 'true'
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+          NOTARY_KEY_P8: ${{ secrets.NOTARY_KEY_P8 }}
+          NOTARY_KEY_ID: ${{ secrets.NOTARY_KEY_ID }}
+          NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          dmg="dist/stochcraft-$VERSION-macos-universal.dmg"
+          codesign --force --timestamp --keychain "$keychain" -s "Developer ID Application" "$dmg"
+          codesign --verify --strict --verbose=2 "$dmg"
+          printf '%s' "$NOTARY_KEY_P8" > "$RUNNER_TEMP/notary.p8"
+          xcrun notarytool submit "$dmg" --key "$RUNNER_TEMP/notary.p8" \
+            --key-id "$NOTARY_KEY_ID" --issuer "$NOTARY_ISSUER_ID" --wait --output-format json > "$RUNNER_TEMP/notary-dmg.json"
+          rm -f "$RUNNER_TEMP/notary.p8"
+          status=$(plutil -extract status raw "$RUNNER_TEMP/notary-dmg.json")
+          echo "disk image notarization: $status"
+          [ "$status" = Accepted ]
+          xcrun stapler staple "$dmg"
+          xcrun stapler validate "$dmg"
+      - name: Remove the signing keychain
+        if: always() && env.SIGN == 'true'
+        run: |
+          security delete-keychain "$RUNNER_TEMP/signing.keychain-db" 2>/dev/null || true
+          rm -f "$RUNNER_TEMP/cert.p12" "$RUNNER_TEMP/notary.p8"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-macos-universal
+          path: |
+            dist/*.dmg
+            dist/*.tar.gz
+          if-no-files-found: error
+
+  # Opens the disk image the way a user would and checks the app inside is the universal one.
+  macos-smoke:
+    name: macOS disk image check
+    needs: [macos]
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-macos-universal
+          path: dist
+      - run: |
+          dmg=$(ls dist/*-macos-universal.dmg)
+          mnt=$(mktemp -d)
+          hdiutil attach "$dmg" -nobrowse -readonly -mountpoint "$mnt"
+          status=0
+          app="$mnt/StochCraft.app"
+          codesign --verify --deep --strict "$app" || status=1
+          lipo -archs "$app/Contents/MacOS/StochCraft" | tee archs
+          grep -q arm64 archs && grep -q x86_64 archs || status=1
+          plutil -p "$app/Contents/Info.plist" | grep -E "CFBundleIdentifier|CFBundleShortVersionString"
+          hdiutil detach "$mnt" || true
+          # A signed release is notarized and stapled: Gatekeeper accepts the image.
+          if [ "${{ github.event_name == 'push' && github.ref_type == 'tag' && vars.MACOS_SIGN == 'true' }}" = true ]; then
+            xcrun stapler validate "$dmg" || status=1
+            spctl --assess --type open --context context:primary-signature -v "$dmg" || status=1
+            codesign -dv --verbose=2 "$dmg" 2>&1 | grep -E "Authority|TeamIdentifier" || status=1
+          fi
+          exit $status
+
+  checksums:
+    name: Checksums
+    needs: [version, linux, windows, macos, macos-smoke]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: release-*
+          path: release
+          merge-multiple: true
+      - name: SHA256SUMS.txt
+        working-directory: release
+        run: |
+          ls -l
+          # Only the release files: a glob of every file could catch the list itself as it is written.
+          sha256sum -- *.zip *.tar.gz *.dmg > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          sha256sum --check SHA256SUMS.txt
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-files
+          path: release/*
+          if-no-files-found: error
+
+  # Always a draft: a maintainer checks it and publishes it by hand. A re-run replaces the files
+  # of the draft; a release already published when the run looks is left alone. Do not publish a
+  # draft while a run for its tag is going: the check and the file replacement are not one step
+  # (with immutable releases on, GitHub itself refuses changes to a published release).
+  draft:
+    name: Make the draft release
+    needs: [version, checksums]
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-files
+          path: release
+      - name: Create the draft release, or replace the files of the draft a re-run made
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          PRERELEASE: ${{ needs.version.outputs.prerelease }}
+        run: |
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            if [ "$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)" != "true" ]; then
+              echo "::error::release $TAG is already published; the workflow only makes and refreshes drafts"
+              exit 1
+            fi
+            gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | while read -r asset; do
+              gh release delete-asset "$TAG" "$asset" --repo "$GITHUB_REPOSITORY" --yes
+            done
+            gh release upload "$TAG" release/* --repo "$GITHUB_REPOSITORY"
+          else
+            flags=""
+            [ "$PRERELEASE" = true ] && flags="--prerelease"
+            gh release create "$TAG" release/* --repo "$GITHUB_REPOSITORY" \
+              --draft --verify-tag $flags \
+              --title "StochCraft $TAG" \
+              --notes "StochCraft $TAG. Check the files against SHA256SUMS.txt. The Windows and macOS builds are not signed."
+          fi

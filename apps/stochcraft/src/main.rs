@@ -12,6 +12,11 @@
 //! `stochcraft [FILE]` opens FILE at start. `stochcraft --control PORT` also listens on
 //! `127.0.0.1:PORT` for engine commands from the MCP server (`stochcraft-cli mcp --connect`,
 //! docs/mcp.md), so a person can watch an agent work in the window.
+//!
+//! On Windows a release build is a window-only program, so starting it opens no console window
+//! beside it; what it prints (the `--control` address, a usage error) is then not shown.
+
+#![cfg_attr(all(windows, not(debug_assertions)), windows_subsystem = "windows")]
 
 use std::path::{Path, PathBuf};
 use std::time::Instant;
@@ -333,7 +338,8 @@ impl eframe::App for Desktop {
     }
 }
 
-/// `[FILE] [--control PORT]`, in any order.
+/// `[FILE] [--control PORT]`, in any order. PORT is 1 to 65535: 0 would let the system pick one,
+/// whose number the app prints only to a console, which a Windows release build does not have.
 fn arguments(
     args: impl IntoIterator<Item = std::ffi::OsString>,
 ) -> Result<(Option<PathBuf>, Option<u16>), String> {
@@ -342,7 +348,8 @@ fn arguments(
     let parse = |v: Option<std::ffi::OsString>| -> Result<u16, String> {
         v.and_then(|v| v.into_string().ok())
             .and_then(|v| v.parse().ok())
-            .ok_or_else(|| "--control takes a port number".to_owned())
+            .filter(|&p: &u16| p != 0)
+            .ok_or_else(|| "--control takes a port number from 1 to 65535".to_owned())
     };
     while let Some(arg) = args.next() {
         match arg.to_str() {
@@ -406,6 +413,8 @@ mod tests {
         assert_eq!(a(&["--control=7071"]), Ok((None, Some(7071))));
         assert!(a(&["--control"]).is_err());
         assert!(a(&["--control", "x"]).is_err());
+        assert!(a(&["--control", "0"]).is_err());
+        assert!(a(&["--control=0"]).is_err());
         assert!(a(&["--nope"]).is_err());
         assert!(a(&["a.bpmn", "b.bpmn"]).is_err());
     }
