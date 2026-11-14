@@ -368,27 +368,60 @@ pub fn problems(p: &Palette) -> Vec<String> {
         .collect()
 }
 
-/// Colours as `"#rrggbb"` text, so a saved theme can be read and edited by hand.
-mod colour {
+/// Colours as `"#rrggbb"` text, so a saved theme can be read and edited by hand. Chart palettes
+/// (`chart_palette`) save their colours the same way, through [`colour_list`].
+pub(crate) mod colour {
     use egui::Color32;
     use serde::de::Error;
 
-    pub fn serialize<S: serde::Serializer>(c: &Color32, s: S) -> Result<S::Ok, S::Error> {
-        s.serialize_str(&format!("#{:02x}{:02x}{:02x}", c.r(), c.g(), c.b()))
+    /// `c` as `"#rrggbb"`.
+    pub(crate) fn hex(c: Color32) -> String {
+        format!("#{:02x}{:02x}{:02x}", c.r(), c.g(), c.b())
     }
 
-    pub fn deserialize<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Color32, D::Error> {
-        let text = <String as serde::Deserialize>::deserialize(d)?;
-        let hex = text.strip_prefix('#').unwrap_or(text.as_str());
-        if hex.len() != 6 || !hex.bytes().all(|b| b.is_ascii_hexdigit()) {
-            return Err(D::Error::custom(format!("expected #rrggbb, not {text:?}")));
+    /// Reads `"#rrggbb"` (the `#` optional); anything else is an error.
+    pub(crate) fn parse(text: &str) -> Result<Color32, String> {
+        let digits = text.strip_prefix('#').unwrap_or(text);
+        if digits.len() != 6 || !digits.bytes().all(|b| b.is_ascii_hexdigit()) {
+            return Err(format!("expected #rrggbb, not {text:?}"));
         }
-        let value = u32::from_str_radix(hex, 16).map_err(D::Error::custom)?;
+        let value = u32::from_str_radix(digits, 16).map_err(|e| e.to_string())?;
         Ok(Color32::from_rgb(
             (value >> 16) as u8,
             (value >> 8) as u8,
             value as u8,
         ))
+    }
+
+    pub fn serialize<S: serde::Serializer>(c: &Color32, s: S) -> Result<S::Ok, S::Error> {
+        s.serialize_str(&hex(*c))
+    }
+
+    pub fn deserialize<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Color32, D::Error> {
+        let text = <String as serde::Deserialize>::deserialize(d)?;
+        parse(&text).map_err(D::Error::custom)
+    }
+}
+
+/// A list of colours, each as `"#rrggbb"` text.
+pub(crate) mod colour_list {
+    use egui::Color32;
+    use serde::de::Error;
+
+    /// Generic over the container so the field can stay a `Vec` without a lint against `&Vec`.
+    pub fn serialize<T: AsRef<[Color32]>, S: serde::Serializer>(
+        c: &T,
+        s: S,
+    ) -> Result<S::Ok, S::Error> {
+        let list: Vec<String> = c.as_ref().iter().map(|c| super::colour::hex(*c)).collect();
+        serde::Serialize::serialize(&list, s)
+    }
+
+    pub fn deserialize<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Vec<Color32>, D::Error> {
+        let list = <Vec<String> as serde::Deserialize>::deserialize(d)?;
+        list.iter()
+            .map(|text| super::colour::parse(text).map_err(D::Error::custom))
+            .collect()
     }
 }
 

@@ -40,3 +40,19 @@ included.
 | assets/fonts/ibm-plex-mono/IBMPlexMono-Regular.ttf | IBM Corp. (IBM Plex Mono) | https://github.com/IBM/plex (via google/fonts), unmodified; licence text in assets/fonts/ibm-plex-mono/OFL.txt; numbers in results tables | SIL OFL 1.1 |
 | assets/fonts/ibm-plex-sans/OFL.txt, assets/fonts/ibm-plex-mono/OFL.txt | IBM Corp. | Unmodified accompanying font licences | SIL OFL 1.1 |
 | The web app's `fonts/` (not in this repository): BIZ UDPGothic Regular and Bold; Noto Sans CJK SC Regular; NanumGothic Regular; Noto Sans Arabic, Thai, Georgian, Hebrew, Devanagari, Symbols and Symbols 2 Regular | The BIZ UDGothic Project Authors (BIZ UDPGothic); the Noto CJK project, https://github.com/notofonts/noto-cjk (Noto Sans CJK SC; its OFL.txt names no copyright holder); NHN Corporation (NanumGothic, with the Reserved Font Names in its OFL.txt, served unmodified); the Noto Project Authors (the other Noto faces) | Copied unmodified at build time from craft-fonts (https://github.com/storytold/craft-fonts, commit aced413, pinned in .github/workflows/pages.yml), whose `fonts/manifest.txt` gives each file's upstream source and SHA-256; each face's OFL.txt is published beside it. Served beside the browser app and fetched when the interface needs those scripts (crates/ui-egui/build.rs). The desktop app embeds the same faces except the CJK ones when built with `CRAFT_FONTS_DIR` | SIL OFL 1.1 |
+
+## Colour palettes and formulas (chart_palette.rs)
+
+The chart palettes (View ▸ Appearance ▸ Chart colours…) use colour values from the published sources
+below, written into `crates/ui-egui/src/chart_palette.rs`. No chart colours are taken from any
+other product. The colour-vision and OKLab formulas are written for StochCraft from the published
+matrices; no code is copied.
+
+| Where in StochCraft | Source | Licence / terms |
+|---|---|---|
+| Okabe–Ito preset (eight colours, `chart_palette::presets`) | Masataka Okabe and Kei Ito, "Color Universal Design (CUD): how to make figures and presentations that are friendly to colorblind people" (https://jfly.uni-koeln.de/color/), Fig. 16 "Colorblind barrier-free color pallet", its "R,G,B (0-255)" column: black 0,0,0; orange 230,159,0; sky blue 86,180,233; bluish green 0,158,115; yellow 240,228,66; blue 0,114,178; vermilion 213,94,0; reddish purple 204,121,167. Black is put last rather than first so the first series shows on a dark canvas. | The authors' page gives the values for anyone to use; no licence text |
+| Tol bright, Tol muted, Tol sunset presets | Paul Tol, "Colour schemes" technical note (https://sronpersonalpages.nl/~pault), the qualitative and diverging sections, hex values as listed in the note. | No licence stated in the note; the author's note is the source |
+| ColorBrewer Dark2, Set2, Blues, RdBu presets | Cynthia Brewer, Mark Harrower and The Pennsylvania State University, ColorBrewer (https://colorbrewer2.org), the colour specifications of its scheme file, which says: "This product includes color specifications and designs developed by Cynthia Brewer (http://colorbrewer.org/)." | Apache-2.0 (the LICENCE.txt of https://github.com/axismaps/colorbrewer); the acknowledgement above is kept here |
+| Viridis preset (nine steps sampled from 256) | matplotlib's colormap data (Nathaniel J. Smith, Stefan van der Walt, Eric Firing; https://github.com/BIDS/colormap), `_viridis_data` in the saved file. | CC0 1.0 (the file's header) |
+| Colour-vision simulation (`PROTANOPIA`, `DEUTERANOPIA`) | Machado, Oliveira & Fernandes, "A Physiologically-based Model for Simulation of Color Vision Deficiency", IEEE TVCG 15(6), 2009, Table 1 at severity 1.0 (the matrices as published). | Published numbers; no licence stated |
+| OKLab conversion (`oklab`) | Björn Ottosson, "A perceptual color space for image processing" (https://bottosson.github.io/posts/oklab/, 2020), the matrices as published in the post. | No licence stated; formulas and matrices only, no code copied |
