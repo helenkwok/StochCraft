@@ -59,7 +59,7 @@
 	Arrivals	Ankomster
 	Arrivals by calendar	Ankomster per kalender
 	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Som for en server med feil: den holder en plass fri for enheter til den er tilbake, så venterommet rommer færre mens servere er ute av drift.
-	As a server off shift's: entities may take its place while it is out.	Som for en server utenfor skift: enheter kan ta plassen dens mens den er borte.
+	As a server off shift's: entities may take its place while it is out.	Som for en server utenfor skift: enheter kan bruke plassen dens mens den er borte.
 	At least	Minst
 	At most	Høyst
 	Availability	Tilgjengelighet

@@ -463,8 +463,8 @@ engine's messages (validation, file notes) are English too.
   uk, whose word is "waiting places", say "among the waiting places"); place is the language's word
   for a seat or slot, and "Kept" and "Open" agree with it. "Take its place" is rendered as occupy,
   not replace. Not checked against any other source. Not reviewed by native speakers. The least
-  certain are lo, th, ta, te, bn, ka and kk (whose waiting-room word already holds the word for
-  place), and ja and ko, where the choices read as actions (secure, open).
+  certain are lo, th, ta, te, bn and ka; kk and hu, whose waiting-room word already holds the word
+  for place; and ja and ko, where the choices read as actions (secure, open).
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
