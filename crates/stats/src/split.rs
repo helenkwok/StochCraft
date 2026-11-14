@@ -7,6 +7,8 @@
 //!   neighbouring distinct values of the sorted sample is tried, and the one with the least
 //!   within-group sum of squares is kept.
 //! - [`two_outcomes`]: that split, when it is clear enough to report (see its rule).
+//! - [`group_by_runs`]: the results whose splits put the same replications together, so that
+//!   one collapse seen in a dozen results reads as one finding.
 //!
 //! The separation of the two groups is measured with Ashman's D (K. M. Ashman, C. M. Bird and
 //! S. E. Zepeda, "Detecting bimodality in astronomical datasets", *Astronomical Journal* 108
@@ -152,6 +154,102 @@ pub fn two_outcomes(values: &[f64]) -> Option<Split> {
     let limit = if n < 30 { 0.05 } else { 0.10 };
     let big_enough = |g: &Group| g.n >= fewest && g.distinct >= 3;
     (big_enough(&s.low) && big_enough(&s.high) && s.d > 2.0 && s.within_share < limit).then_some(s)
+}
+
+/// Which side of `cut` each replication's value lies on (`true`: above it), in replication
+/// order; `None` where a replication has no finite value.
+pub fn sides(samples: &[Option<f64>], cut: f64) -> Vec<Option<bool>> {
+    samples
+        .iter()
+        .map(|v| v.filter(|v| v.is_finite()).map(|v| v > cut))
+        .collect()
+}
+
+/// Whether two splits (as [`sides`] gives them) put the same replications together, either way
+/// round (one result's high runs may be the other's low ones). Replications that either lacks
+/// are left out, but the ones both have must include runs from both of `a`'s sides: two splits
+/// that share only runs from one side say nothing about each other.
+pub fn same_runs(a: &[Option<bool>], b: &[Option<bool>]) -> bool {
+    let (mut same, mut flipped, mut low, mut high) = (0u64, 0u64, 0u64, 0u64);
+    for (x, y) in a.iter().zip(b) {
+        if let (Some(x), Some(y)) = (x, y) {
+            if x == y {
+                same += 1;
+            } else {
+                flipped += 1;
+            }
+            if *x {
+                high += 1;
+            } else {
+                low += 1;
+            }
+        }
+    }
+    low > 0 && high > 0 && (same == 0 || flipped == 0)
+}
+
+/// Results whose splits put the same replications together (see [`group_by_runs`]).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RunGroup {
+    /// The splits in the group, as indices into the list given, in its order; the first is the
+    /// group's lead.
+    pub members: Vec<usize>,
+    /// How many replications are on the lead's low side and on its high side, over every
+    /// replication some member has a value for (each member turned the lead's way round).
+    pub low: u64,
+    pub high: u64,
+}
+
+/// Groups splits (each as [`sides`] gives it) that put the same replications together. Each
+/// split is compared with the lead (first member) of each group so far, in order, and joins the
+/// first that matches by [`same_runs`]; otherwise it leads a new group. Comparing with the lead
+/// keeps the grouping independent of how the members' missing values happen to chain.
+pub fn group_by_runs(splits: &[Vec<Option<bool>>]) -> Vec<RunGroup> {
+    let mut groups: Vec<RunGroup> = Vec::new();
+    for (i, s) in splits.iter().enumerate() {
+        match groups
+            .iter_mut()
+            .find(|g| same_runs(&splits[g.members[0]], s))
+        {
+            Some(g) => g.members.push(i),
+            None => groups.push(RunGroup {
+                members: vec![i],
+                low: 0,
+                high: 0,
+            }),
+        }
+    }
+    for g in &mut groups {
+        let lead = &splits[g.members[0]];
+        let runs = g
+            .members
+            .iter()
+            .map(|m| splits[*m].len())
+            .max()
+            .unwrap_or(0);
+        for r in 0..runs {
+            // The first member with a value for this replication, turned the lead's way round.
+            let side = g.members.iter().find_map(|m| {
+                let s = &splits[*m];
+                let flipped = *m != g.members[0] && !same_way(lead, s);
+                s.get(r).copied().flatten().map(|x| x != flipped)
+            });
+            match side {
+                Some(true) => g.high += 1,
+                Some(false) => g.low += 1,
+                None => {}
+            }
+        }
+    }
+    groups
+}
+
+/// Whether `b` is the same way round as `a` (their shared replications agree, not flip).
+fn same_way(a: &[Option<bool>], b: &[Option<bool>]) -> bool {
+    a.iter()
+        .zip(b)
+        .find_map(|(x, y)| Some((*x)? == (*y)?))
+        .unwrap_or(true)
 }
 
 #[cfg(test)]
@@ -341,5 +439,73 @@ mod tests {
             split.is_some_and(|s| s.low.n == best_k as u64),
             "{split:?} {best_k}"
         );
+    }
+
+    /// Sides from a pattern: `l` low, `h` high, `.` no value.
+    fn pattern(p: &str) -> Vec<Option<bool>> {
+        p.chars()
+            .map(|c| match c {
+                'h' => Some(true),
+                'l' => Some(false),
+                _ => None,
+            })
+            .collect()
+    }
+
+    #[test]
+    fn sides_of_the_cut() {
+        let v = [Some(1.0), None, Some(9.0), Some(f64::NAN), Some(5.0)];
+        assert_eq!(sides(&v, 5.0), pattern("l.h.l"));
+    }
+
+    #[test]
+    fn results_from_the_same_runs_form_one_group() {
+        // Units served (low where the server collapsed) and the queue (high there): the same
+        // runs either way round, so one group, with the lead's sizes.
+        let served = pattern("llhhhhhlhh");
+        let queue = pattern("hhlllllhll");
+        assert!(same_runs(&served, &queue) && same_runs(&queue, &served));
+        // One run on the other side is a different split.
+        assert!(!same_runs(&served, &pattern("hhllllhlll")));
+        let groups = group_by_runs(&[served, queue]);
+        assert_eq!(
+            groups,
+            vec![RunGroup {
+                members: vec![0, 1],
+                low: 3,
+                high: 7
+            }]
+        );
+    }
+
+    #[test]
+    fn different_runs_form_different_groups() {
+        let a = pattern("llllhhhhhh");
+        let b = pattern("hhllllllhh");
+        let c = pattern("hhhhllllll");
+        let groups = group_by_runs(&[a, b, c]);
+        assert_eq!(groups.len(), 2, "{groups:?}");
+        assert_eq!(groups[0].members, vec![0, 2]);
+        assert_eq!((groups[0].low, groups[0].high), (4, 6));
+        assert_eq!(groups[1].members, vec![1]);
+        assert_eq!((groups[1].low, groups[1].high), (6, 4));
+    }
+
+    #[test]
+    fn missing_values_are_left_out_of_the_comparison() {
+        // The mean wait has no value in two runs; on the rest it splits as the queue does, and
+        // the group counts every run some member has.
+        let queue = pattern("hh.lllllll");
+        let wait = pattern("h.llllll..");
+        assert!(same_runs(&queue, &wait));
+        let groups = group_by_runs(&[queue, wait]);
+        assert_eq!(groups.len(), 1);
+        assert_eq!((groups[0].low, groups[0].high), (8, 2));
+        // Splits that share runs from one side only say nothing about each other.
+        let a = pattern("hhhll.....");
+        let b = pattern(".....hhlll");
+        let c = pattern("hh........");
+        assert!(!same_runs(&a, &b) && !same_runs(&a, &c));
+        assert_eq!(group_by_runs(&[a, b, c]).len(), 3);
     }
 }
