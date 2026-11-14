@@ -195,6 +195,8 @@ pub fn label(name: &str) -> String {
         "available" => "Available outside calendars",
         "availability" => "Availability by calendar",
         "shifts" => "Units by calendar",
+        "queue_shifts" => "Waiting room by calendar",
+        "places" => "Places",
         "calendar" => "Calendar",
         "setup" => "Setup",
         "time" => "Setup time",
