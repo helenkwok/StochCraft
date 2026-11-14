@@ -188,6 +188,7 @@
 	Failure interrupts the job	Porucha přeruší práci
 	Family	Rodina
 	File	Soubor
+	Finding	Zjištění
 	Finish, then go off	Dokončit, pak ukončit směnu
 	Finished at {time} {unit}	Dokončeno v čase {time} {unit}
 	Fit	Přizpůsobit
@@ -398,6 +399,7 @@
 	Run the sweep	Spustit průchod
 	Running	Probíhá
 	Running…	Probíhá…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikace se rozdělily: {low_n} z {n} blízko {low}, {high_n} blízko {high}. Průměr ({mean}) míchá dva odlišné výsledky; podívejte se na každou skupinu.
 	Sat	so
 	Save	Uložit
 	Save As…	Uložit jako…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Model má nyní jednotky nalezené dimenzováním
 	The model: its experiment, connections and problems	Model: experiment, propojení a problémy
 	The name is empty or already used.	Jméno je prázdné nebo se už používá.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikace se rozdělily na dva odlišné výsledky: {a} z {n} v jednom, {b} ve druhém. Výsledky rozdělené stejně: {count}, mezi nimi {result} ({element}); viz tabulka níže.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Server dokončí práci, kterou má, a pak ukončí směnu; do té doby se počítá jako na směně.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Podíl replikací rovných nebo menších než každá hodnota. Pás obsahuje skutečné rozdělení se spolehlivostí {confidence}.
 	The values are numbers, separated by semicolons or spaces	Hodnoty jsou čísla oddělená středníky nebo mezerami
@@ -623,6 +626,7 @@
 	{n} waiting	Čeká: {n}
 	{n} {unit} per second	{n} {unit} za sekundu
 	{property} (set to, mean)	{property} (nastaveno na, průměr)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – replikace se rozdělily na dva odlišné výsledky: viz tabulka níže.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadí „{background}“: {ratio}:1, je třeba {min}:1
 	{title}: now {now}, at most {most}	{title}: nyní {now}, nejvýše {most}
 	{word}: {message}	{word}: {message}

@@ -188,6 +188,7 @@
 	Failure interrupts the job	A avaría interrompe o traballo
 	Family	Familia
 	File	Ficheiro
+	Finding	Achado
 	Finish, then go off	Rematar e despois deixar a quenda
 	Finished at {time} {unit}	Rematou en {time} {unit}
 	Fit	Axustar
@@ -398,6 +399,7 @@
 	Run the sweep	Executar o varrido
 	Running	Executando
 	Running…	Executando…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Réplicas divididas: {low_n} de {n} preto de {low}, {high_n} preto de {high}. A media ({mean}) mestura dous resultados distintos; mira cada grupo.
 	Sat	sáb
 	Save	Gardar
 	Save As…	Gardar como…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	O modelo ten agora as unidades atopadas ao dimensionar
 	The model: its experiment, connections and problems	O modelo: experimento, conexións e problemas
 	The name is empty or already used.	O nome está baleiro ou xa se usa.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	As réplicas divídense en dous resultados distintos: {a} de {n} nun, {b} no outro. {count} resultados divídense do mesmo xeito, entre eles {result} ({element}); mira a táboa de abaixo.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	O servidor remata o traballo que ten e despois deixa a quenda; ata entón conta como de quenda.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	A proporción de réplicas iguais ou inferiores a cada valor. A banda contén a distribución real cunha confianza do {confidence}.
 	The values are numbers, separated by semicolons or spaces	Os valores son números separados por punto e coma ou espazos
@@ -623,6 +626,7 @@
 	{n} waiting	{n} agardando
 	{n} {unit} per second	{n} {unit} por segundo
 	{property} (set to, mean)	{property} (valor definido, media)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): as réplicas divídense en dous resultados distintos; mira a táboa de abaixo.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} sobre {background}: {ratio}:1, necesita {min}:1
 	{title}: now {now}, at most {most}	{title}: agora {now}, como máximo {most}
 	{word}: {message}	{word}: {message}

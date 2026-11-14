@@ -188,6 +188,7 @@
 	Failure interrupts the job	Η βλάβη διακόπτει την εργασία
 	Family	Οικογένεια
 	File	Αρχείο
+	Finding	Διαπίστωση
 	Finish, then go off	Ολοκλήρωση και μετά λήξη βάρδιας
 	Finished at {time} {unit}	Ολοκληρώθηκε στο {time} {unit}
 	Fit	Προσαρμογή
@@ -398,6 +399,7 @@
 	Run the sweep	Εκτέλεση σάρωσης
 	Running	Εκτελείται
 	Running…	Εκτελείται…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Οι επαναλήψεις χωρίζονται: {low_n} από {n} κοντά στο {low}, {high_n} κοντά στο {high}. Η μέση τιμή ({mean}) αναμειγνύει δύο εκβάσεις· δείτε κάθε ομάδα χωριστά.
 	Sat	Σάβ
 	Save	Αποθήκευση
 	Save As…	Αποθήκευση ως…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Το μοντέλο έχει πλέον τις μονάδες που βρήκε η διαστασιολόγηση
 	The model: its experiment, connections and problems	Το μοντέλο: πείραμα, συνδέσεις και προβλήματα
 	The name is empty or already used.	Το όνομα είναι κενό ή χρησιμοποιείται ήδη.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Οι επαναλήψεις χωρίζονται σε δύο εκβάσεις: {a} από {n} στη μία, {b} στην άλλη. {count} αποτελέσματα χωρίζονται με τον ίδιο τρόπο, ανάμεσά τους {result} ({element})· δείτε τον πίνακα παρακάτω.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Ο εξυπηρετητής ολοκληρώνει τη δουλειά που έχει και μετά βγαίνει από βάρδια· μέχρι τότε μετρά ως σε βάρδια.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Το ποσοστό των επαναλήψεων έως και κάθε τιμή. Η ζώνη περιέχει την πραγματική κατανομή με εμπιστοσύνη {confidence}.
 	The values are numbers, separated by semicolons or spaces	Οι τιμές είναι αριθμοί που χωρίζονται με ερωτηματικά ή κενά
@@ -623,6 +626,7 @@
 	{n} waiting	{n} σε αναμονή
 	{n} {unit} per second	{n} {unit} ανά δευτερόλεπτο
 	{property} (set to, mean)	{property} (καθορισμένη τιμή, μέση τιμή)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – οι επαναλήψεις χωρίζονται σε δύο εκβάσεις: δείτε τον πίνακα παρακάτω.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – φόντο «{background}»: {ratio}:1, απαιτείται {min}:1
 	{title}: now {now}, at most {most}	{title}: τώρα {now}, το πολύ {most}
 	{word}: {message}	{word}: {message}

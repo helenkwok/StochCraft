@@ -188,6 +188,7 @@
 	Failure interrupts the job	L'avaria interromp la feina
 	Family	Família
 	File	Fitxer
+	Finding	Constatació
 	Finish, then go off	Acabar i després deixar el torn
 	Finished at {time} {unit}	Ha acabat a {time} {unit}
 	Fit	Ajusta
@@ -398,6 +399,7 @@
 	Run the sweep	Executa l'escombratge
 	Running	En execució
 	Running…	Executant…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Rèpliques dividides: {low_n} de {n} prop de {low}, {high_n} prop de {high}. La mitjana ({mean}) barreja dos resultats diferents; mireu cada grup.
 	Sat	ds.
 	Save	Desa
 	Save As…	Anomena i desa…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	El model té ara les unitats trobades en dimensionar
 	The model: its experiment, connections and problems	El model: experiment, connexions i problemes
 	The name is empty or already used.	El nom és buit o ja s'utilitza.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Les rèpliques es divideixen en dos resultats diferents: {a} de {n} en un, {b} en l'altre. {count} resultats es divideixen de la mateixa manera, entre ells {result} ({element}); vegeu la taula de sota.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	El servidor acaba la feina que té i després deixa el torn; fins llavors compta com a servidor de torn.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La proporció de rèpliques iguals o inferiors a cada valor. La banda conté la distribució real amb una confiança del {confidence}.
 	The values are numbers, separated by semicolons or spaces	Els valors són nombres separats per punts i comes o espais
@@ -623,6 +626,7 @@
 	{n} waiting	{n} en espera
 	{n} {unit} per second	{n} {unit} per segon
 	{property} (set to, mean)	{property} (valor definit, mitjana)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): les rèpliques es divideixen en dos resultats diferents; vegeu la taula de sota.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} sobre {background}: {ratio}:1, cal {min}:1
 	{title}: now {now}, at most {most}	{title}: ara {now}, com a màxim {most}
 	{word}: {message}	{word}: {message}

@@ -188,6 +188,7 @@
 	Failure interrupts the job	Ausfall unterbricht die Bearbeitung
 	Family	Familie
 	File	Datei
+	Finding	Befund
 	Finish, then go off	Fertigstellen, dann Schicht beenden
 	Finished at {time} {unit}	Beendet bei {time} {unit}
 	Fit	Einpassen
@@ -398,6 +399,7 @@
 	Run the sweep	Variation ausführen
 	Running	Wird ausgeführt
 	Running…	Wird ausgeführt…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Die Replikationen teilen sich: {low_n} von {n} nahe {low}, {high_n} nahe {high}. Der Mittelwert ({mean}) vermischt zwei verschiedene Ergebnisse; sehen Sie sich jede Gruppe an.
 	Sat	Sa
 	Save	Speichern
 	Save As…	Speichern unter…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Das Modell hat jetzt die bei der Bemessung gefundenen Einheiten
 	The model: its experiment, connections and problems	Das Modell: Experiment, Verbindungen und Probleme
 	The name is empty or already used.	Der Name ist leer oder bereits vergeben.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Die Replikationen teilen sich in zwei verschiedene Ergebnisse: {a} von {n} im einen, {b} im anderen. {count} Ergebnisse teilen sich genauso, darunter {result} ({element}); siehe Tabelle unten.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Der Server stellt seinen laufenden Auftrag fertig und beendet dann die Schicht; bis dahin zählt er als in der Schicht.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Der Anteil der Replikationen bei oder unter jedem Wert. Das Band enthält die wahre Verteilung mit {confidence} Konfidenz.
 	The values are numbers, separated by semicolons or spaces	Die Werte sind Zahlen, getrennt durch Semikolons oder Leerzeichen
@@ -623,6 +626,7 @@
 	{n} waiting	{n} wartend
 	{n} {unit} per second	{n} {unit} pro Sekunde
 	{property} (set to, mean)	{property} (festgelegt auf, Mittelwert)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): Die Replikationen teilen sich in zwei verschiedene Ergebnisse; siehe Tabelle unten.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} auf {background}: {ratio}:1, nötig {min}:1
 	{title}: now {now}, at most {most}	{title}: jetzt {now}, höchstens {most}
 	{word}: {message}	{word}: {message}

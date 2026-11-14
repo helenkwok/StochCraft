@@ -188,6 +188,7 @@
 	Failure interrupts the job	Gedimas pertraukia darbą
 	Family	Šeima
 	File	Failas
+	Finding	Pastebėjimas
 	Finish, then go off	Baigti, tada išeiti iš pamainos
 	Finished at {time} {unit}	Baigta {time} {unit}
 	Fit	Pritaikyti
@@ -398,6 +399,7 @@
 	Run the sweep	Paleisti perėjimą
 	Running	Vykdoma
 	Running…	Vykdoma…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikacijos išsiskyrė: {low_n} iš {n} arti {low}, {high_n} arti {high}. Vidurkis ({mean}) sumaišo dvi skirtingas baigtis; peržiūrėkite kiekvieną grupę.
 	Sat	št
 	Save	Įrašyti
 	Save As…	Įrašyti kaip…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Modelyje dabar yra parinkimo rasti vienetai
 	The model: its experiment, connections and problems	Modelis: eksperimentas, jungtys ir problemos
 	The name is empty or already used.	Pavadinimas tuščias arba jau naudojamas.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikacijos išsiskyrė į dvi skirtingas baigtis: {a} iš {n} vienoje, {b} kitoje. Taip pat išsiskyrę rezultatai: {count}, tarp jų {result} ({element}); žr. lentelę žemiau.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Serveris baigia turimą darbą, tada išeina iš pamainos; iki tol jis laikomas esančiu pamainoje.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Replikacijų, ne didesnių už kiekvieną reikšmę, dalis. Juosta su {confidence} pasikliovimu apima tikrąjį skirstinį.
 	The values are numbers, separated by semicolons or spaces	Reikšmės yra skaičiai, atskirti kabliataškiais arba tarpais
@@ -623,6 +626,7 @@
 	{n} waiting	Laukia: {n}
 	{n} {unit} per second	{n} {unit} per sekundę
 	{property} (set to, mean)	{property} (nustatyta reikšmė, vidurkis)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – replikacijos išsiskyrė į dvi skirtingas baigtis: žr. lentelę žemiau.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – fonas „{background}“: {ratio}:1, reikia {min}:1
 	{title}: now {now}, at most {most}	{title}: dabar {now}, daugiausia {most}
 	{word}: {message}	{word}: {message}

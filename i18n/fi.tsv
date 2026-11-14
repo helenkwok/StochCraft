@@ -188,6 +188,7 @@
 	Failure interrupts the job	Vika keskeyttää työn
 	Family	Jakaumaperhe
 	File	Tiedosto
+	Finding	Havainto
 	Finish, then go off	Tee valmiiksi, lopeta sitten vuoro
 	Finished at {time} {unit}	Valmis hetkellä {time} {unit}
 	Fit	Sovita
@@ -398,6 +399,7 @@
 	Run the sweep	Aja läpikäynti
 	Running	Suoritetaan
 	Running…	Suoritetaan…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Toistot jakautuvat: {low_n}/{n} lähellä arvoa {low}, {high_n} lähellä arvoa {high}. Keskiarvo ({mean}) sekoittaa kaksi eri lopputulosta; katso kutakin ryhmää erikseen.
 	Sat	la
 	Save	Tallenna
 	Save As…	Tallenna nimellä…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Mallissa on nyt mitoituksen löytämät yksiköt
 	The model: its experiment, connections and problems	Malli: koe, yhteydet ja ongelmat
 	The name is empty or already used.	Nimi on tyhjä tai jo käytössä.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Toistot jakautuvat kahteen eri lopputulokseen: {a}/{n} yhteen, {b} toiseen. {count} tulosta jakautuu samalla tavalla, niiden joukossa {result} ({element}); katso alla olevaa taulukkoa.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Palvelin tekee kesken olevan työnsä valmiiksi ja lopettaa sitten vuoronsa; siihen asti se lasketaan vuorossa olevaksi.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Niiden toistojen osuus, jotka ovat kunkin arvon suuruisia tai pienempiä. Vyöhyke sisältää todellisen jakauman {confidence} luottamuksella.
 	The values are numbers, separated by semicolons or spaces	Arvot ovat lukuja, jotka erotetaan puolipisteillä tai välilyönneillä
@@ -623,6 +626,7 @@
 	{n} waiting	{n} odottaa
 	{n} {unit} per second	{n} {unit} sekunnissa
 	{property} (set to, mean)	{property} (asetettu arvo, keskiarvo)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – toistot jakautuvat kahteen eri lopputulokseen: katso alla olevaa taulukkoa.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – tausta {background}: {ratio}:1, vaaditaan {min}:1
 	{title}: now {now}, at most {most}	{title}: nyt {now}, enintään {most}
 	{word}: {message}	{word}: {message}

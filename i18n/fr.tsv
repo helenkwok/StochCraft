@@ -188,6 +188,7 @@
 	Failure interrupts the job	La panne interrompt le travail
 	Family	Famille
 	File	Fichier
+	Finding	Constatation
 	Finish, then go off	Terminer, puis quitter le poste
 	Finished at {time} {unit}	Terminé à {time} {unit}
 	Fit	Ajuster
@@ -398,6 +399,7 @@
 	Run the sweep	Lancer le balayage
 	Running	En cours
 	Running…	Exécution en cours…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Les réplications se partagent : {low_n} sur {n} près de {low}, {high_n} près de {high}. La moyenne ({mean}) mêle deux issues ; regardez chaque groupe.
 	Sat	sam
 	Save	Enregistrer
 	Save As…	Enregistrer sous…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Le modèle a maintenant les unités trouvées par le dimensionnement
 	The model: its experiment, connections and problems	Le modèle : expérience, connexions et problèmes
 	The name is empty or already used.	Le nom est vide ou déjà utilisé.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Les réplications se partagent en deux issues : {a} sur {n} dans l'une, {b} dans l'autre. {count} résultats se partagent de la même façon, dont {result} ({element}) ; voir le tableau ci-dessous.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Le serveur termine le travail en cours, puis quitte son poste ; d'ici là, il compte comme en poste.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La part des réplications inférieures ou égales à chaque valeur. La bande contient la vraie distribution avec une confiance de {confidence}.
 	The values are numbers, separated by semicolons or spaces	Les valeurs sont des nombres séparés par des points-virgules ou des espaces
@@ -623,6 +626,7 @@
 	{n} waiting	{n} en attente
 	{n} {unit} per second	{n} {unit} par seconde
 	{property} (set to, mean)	{property} (valeur définie, moyenne)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) : les réplications se partagent en deux issues ; voir le tableau ci-dessous.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} sur {background} : {ratio}:1, minimum {min}:1
 	{title}: now {now}, at most {most}	{title} : maintenant {now}, au plus {most}
 	{word}: {message}	{word} : {message}

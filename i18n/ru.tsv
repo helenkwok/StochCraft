@@ -188,6 +188,7 @@
 	Failure interrupts the job	Отказ прерывает работу
 	Family	Семейство
 	File	Файл
+	Finding	Наблюдение
 	Finish, then go off	Доделать, затем уйти со смены
 	Finished at {time} {unit}	Завершено в {time} {unit}
 	Fit	Вписать
@@ -398,6 +399,7 @@
 	Run the sweep	Запустить перебор
 	Running	Выполняется
 	Running…	Выполняется…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Репликации разделились: {low_n} из {n} около {low}, {high_n} около {high}. Среднее ({mean}) смешивает два исхода; посмотрите на каждую группу.
 	Sat	сб
 	Save	Сохранить
 	Save As…	Сохранить как…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	В модели теперь единицы, найденные при подборе
 	The model: its experiment, connections and problems	Модель: эксперимент, соединения и проблемы
 	The name is empty or already used.	Имя пустое или уже используется.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Репликации разделились на два исхода: {a} из {n} в одном, {b} в другом. Результаты, разделившиеся так же: {count}, среди них {result} ({element}); см. таблицу ниже.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Сервер доделывает имеющуюся работу, затем уходит со смены; до тех пор он считается на смене.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Доля репликаций, не превышающих каждое значение. Полоса содержит истинное распределение с доверием {confidence}.
 	The values are numbers, separated by semicolons or spaces	Значения — это числа, разделённые точкой с запятой или пробелами
@@ -623,6 +626,7 @@
 	{n} waiting	Ожидают: {n}
 	{n} {unit} per second	{n} {unit} в секунду
 	{property} (set to, mean)	{property} (заданное значение, среднее)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) — репликации разделились на два исхода: см. таблицу ниже.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} — фон «{background}»: {ratio}:1, нужно {min}:1
 	{title}: now {now}, at most {most}	{title}: сейчас {now}, не более {most}
 	{word}: {message}	{word}: {message}

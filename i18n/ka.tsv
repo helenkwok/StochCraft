@@ -188,6 +188,7 @@
 	Failure interrupts the job	გაუმართაობა წყვეტს სამუშაოს
 	Family	ოჯახი
 	File	ფაილი
+	Finding	მიგნება
 	Finish, then go off	დასრულება, შემდეგ ცვლის დატოვება
 	Finished at {time} {unit}	დასრულდა {time} {unit}-ზე
 	Fit	მორგება
@@ -398,6 +399,7 @@
 	Run the sweep	გადარბენის გაშვება
 	Running	მიმდინარეობს
 	Running…	მიმდინარეობს…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	გამეორებები ორად გაიყო: {n}-დან {low_n} – დაახლოებით {low}, {high_n} – დაახლოებით {high}. საშუალო ({mean}) ორ განსხვავებულ შედეგს ურევს ერთმანეთში; ნახეთ თითოეული ჯგუფი.
 	Sat	შაბ
 	Save	შენახვა
 	Save As…	შენახვა როგორც…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	მოდელს ახლა აქვს ზომის შერჩევით ნაპოვნი ერთეულები
 	The model: its experiment, connections and problems	მოდელი: ექსპერიმენტი, კავშირები და პრობლემები
 	The name is empty or already used.	სახელი ცარიელია ან უკვე გამოყენებულია.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	გამეორებები ორ განსხვავებულ შედეგად გაიყო: {n}-დან {a} – ერთში, {b} – მეორეში. ასევე გაიყო {count} შედეგი, მათ შორის {result} ({element}); იხილეთ ქვემოთ მოცემული ცხრილი.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	სერვერი ასრულებს მიმდინარე სამუშაოს და შემდეგ ტოვებს ცვლას; მანამდე ის ცვლაში მყოფად ითვლება.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	გამეორებების წილი, რომლებიც თითოეულ მნიშვნელობაზე ნაკლები ან ტოლია. ზოლი შეიცავს ნამდვილ განაწილებას {confidence} სანდოობით.
 	The values are numbers, separated by semicolons or spaces	მნიშვნელობები რიცხვებია, გამოყოფილი წერტილმძიმით ან ჰარით
@@ -623,6 +626,7 @@
 	{n} waiting	ელოდება: {n}
 	{n} {unit} per second	{n} {unit} წამში
 	{property} (set to, mean)	{property} (მითითებული მნიშვნელობა, საშუალო)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – გამეორებები ორ განსხვავებულ შედეგად გაიყო: იხილეთ ქვემოთ მოცემული ცხრილი.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – ფონი „{background}“: {ratio}:1, საჭიროა {min}:1
 	{title}: now {now}, at most {most}	{title}: ახლა {now}, მაქსიმუმ {most}
 	{word}: {message}	{word}: {message}

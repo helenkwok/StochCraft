@@ -188,6 +188,7 @@
 	Failure interrupts the job	Hỏng hóc làm gián đoạn công việc
 	Family	Họ phân phối
 	File	Tệp
+	Finding	Phát hiện
 	Finish, then go off	Làm xong rồi hết ca
 	Finished at {time} {unit}	Kết thúc tại {time} {unit}
 	Fit	Vừa khung
@@ -398,6 +399,7 @@
 	Run the sweep	Chạy quét
 	Running	Đang chạy
 	Running…	Đang chạy…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Các lần lặp tách thành hai nhóm: {low_n} trên {n} gần {low}, {high_n} gần {high}. Giá trị trung bình ({mean}) trộn lẫn hai kết cục; hãy xem từng nhóm.
 	Sat	T7
 	Save	Lưu
 	Save As…	Lưu thành…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Mô hình giờ có số đơn vị mà việc định cỡ tìm được
 	The model: its experiment, connections and problems	Mô hình: thí nghiệm, kết nối và vấn đề
 	The name is empty or already used.	Tên đang trống hoặc đã được dùng.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Các lần lặp tách thành hai kết cục: {a} trên {n} ở một bên, {b} ở bên kia. {count} kết quả tách theo cùng cách, trong đó có {result} ({element}); xem bảng bên dưới.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Máy chủ làm xong công việc đang có rồi mới hết ca; cho đến lúc đó nó vẫn được tính là trong ca.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Tỷ lệ lần lặp bằng hoặc dưới mỗi giá trị. Dải chứa phân phối thật với độ tin cậy {confidence}.
 	The values are numbers, separated by semicolons or spaces	Các giá trị là số, phân tách bằng dấu chấm phẩy hoặc dấu cách
@@ -623,6 +626,7 @@
 	{n} waiting	{n} đang chờ
 	{n} {unit} per second	{n} {unit} mỗi giây
 	{property} (set to, mean)	{property} (giá trị đặt, trung bình)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): các lần lặp tách thành hai kết cục; xem bảng bên dưới.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} trên {background}: {ratio}:1, cần {min}:1
 	{title}: now {now}, at most {most}	{title}: hiện tại {now}, tối đa {most}
 	{word}: {message}	{word}: {message}

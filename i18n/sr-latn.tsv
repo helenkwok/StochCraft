@@ -188,6 +188,7 @@
 	Failure interrupts the job	Kvar prekida rad
 	Family	Porodica
 	File	Fajl
+	Finding	Nalaz
 	Finish, then go off	Dovrši, pa završi smenu
 	Finished at {time} {unit}	Završeno u {time} {unit}
 	Fit	Uklopi
@@ -398,6 +399,7 @@
 	Run the sweep	Pokreni prolaz
 	Running	Izvršava se
 	Running…	Izvršavanje u tijeku…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikacije su podeljene: {low_n} od {n} blizu {low}, {high_n} blizu {high}. Srednja vrednost ({mean}) meša dva ishoda; pogledajte svaku grupu posebno.
 	Sat	sub
 	Save	Sačuvaj
 	Save As…	Sačuvaj kao…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Model sada ima jedinice koje je pronašlo dimenzionisanje
 	The model: its experiment, connections and problems	Model: eksperiment, veze i problemi
 	The name is empty or already used.	Ime je prazno ili se već koristi.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikacije su podeljene na dva ishoda: {a} od {n} u jednom, {b} u drugom. Rezultati podeljeni na isti način: {count}, među njima {result} ({element}); pogledajte tablicu ispod.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Server dovrši posao koji ima, pa završi smenu; do tada se računa kao da je u smeni.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Udeo replikacija jednakih ili manjih od svake vrednosti. Pojas sadrži pravu raspodelu sa pouzdanošću od {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vrednosti su brojevi odvojeni tačkom i zarezom ili razmacima
@@ -623,6 +626,7 @@
 	{n} waiting	Čeka: {n}
 	{n} {unit} per second	{n} {unit} u sekundi
 	{property} (set to, mean)	{property} (postavljeno na, srednja vrednost)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – replikacije su podeljene na dva ishoda: pogledajte tablicu ispod.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadina „{background}“: {ratio}:1, potrebno {min}:1
 	{title}: now {now}, at most {most}	{title}: sada {now}, najviše {most}
 	{word}: {message}	{word}: {message}

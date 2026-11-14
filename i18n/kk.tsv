@@ -188,6 +188,7 @@
 	Failure interrupts the job	Ақау жұмысты үзеді
 	Family	Отбасы
 	File	Файл
+	Finding	Тұжырым
 	Finish, then go off	Аяқтау, содан кейін ауысымнан шығу
 	Finished at {time} {unit}	{time} {unit} кезінде аяқталды
 	Fit	Сыйдыру
@@ -398,6 +399,7 @@
 	Run the sweep	Сұрыптауды орындау
 	Running	Орындалуда
 	Running…	Орындалуда…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Қайталаулар екіге бөлінді: {n} ішінен {low_n} – шамамен {low}, {high_n} – шамамен {high}. Орташа ({mean}) екі түрлі нәтижені араластырады; әр топты бөлек қараңыз.
 	Sat	сб
 	Save	Сақтау
 	Save As…	Басқаша сақтау…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Модельде енді өлшемдеу тапқан бірліктер бар
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
 	The name is empty or already used.	Атау бос немесе бұрыннан қолданылған.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Қайталаулар екі түрлі нәтижеге бөлінді: {n} ішінен {a} – біреуінде, {b} – екіншісінде. Дәл осылай бөлінген нәтижелер: {count}, олардың ішінде {result} ({element}); төмендегі кестені қараңыз.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Сервер қолындағы жұмысты аяқтайды, содан кейін ауысымнан шығады; оған дейін ол ауысымда деп есептеледі.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Әр мәнге тең немесе одан төмен қайталаулар үлесі. Жолақ шынайы үлестірімді {confidence} сенімділікпен қамтиды.
 	The values are numbers, separated by semicolons or spaces	Мәндер нүктелі үтірмен немесе бос орынмен бөлінген сандар
@@ -623,6 +626,7 @@
 	{n} waiting	Күтуде: {n}
 	{n} {unit} per second	секундына {n} {unit}
 	{property} (set to, mean)	{property} (орнатылған мән, орташа)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – қайталаулар екі түрлі нәтижеге бөлінді: төмендегі кестені қараңыз.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон «{background}»: {ratio}:1, кемінде {min}:1 керек
 	{title}: now {now}, at most {most}	{title}: қазір {now}, ең көбі {most}
 	{word}: {message}	{word}: {message}

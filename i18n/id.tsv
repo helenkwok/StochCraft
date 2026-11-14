@@ -188,6 +188,7 @@
 	Failure interrupts the job	Kerusakan menyela pekerjaan
 	Family	Keluarga
 	File	Berkas
+	Finding	Temuan
 	Finish, then go off	Selesaikan, lalu akhiri sif
 	Finished at {time} {unit}	Selesai pada {time} {unit}
 	Fit	Paskan
@@ -398,6 +399,7 @@
 	Run the sweep	Jalankan sapuan
 	Running	Berjalan
 	Running…	Sedang berjalan…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikasi terbagi: {low_n} dari {n} dekat {low}, {high_n} dekat {high}. Rata-rata ({mean}) mencampur dua hasil yang berbeda; lihat setiap kelompok.
 	Sat	Sab
 	Save	Simpan
 	Save As…	Simpan Sebagai…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Model kini memakai unit yang ditemukan penentuan ukuran
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
 	The name is empty or already used.	Nama kosong atau sudah dipakai.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikasi terbagi menjadi dua hasil yang berbeda: {a} dari {n} di satu, {b} di yang lain. {count} hasil terbagi dengan cara yang sama, di antaranya {result} ({element}); lihat tabel di bawah.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Server menyelesaikan pekerjaan yang sedang dikerjakannya, lalu mengakhiri sif; sampai saat itu server dihitung masih dalam sif.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian replikasi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
 	The values are numbers, separated by semicolons or spaces	Nilai berupa angka yang dipisahkan titik koma atau spasi
@@ -623,6 +626,7 @@
 	{n} waiting	{n} menunggu
 	{n} {unit} per second	{n} {unit} per detik
 	{property} (set to, mean)	{property} (nilai ditetapkan, rata-rata)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replikasi terbagi menjadi dua hasil yang berbeda; lihat tabel di bawah.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} di atas {background}: {ratio}:1, perlu {min}:1
 	{title}: now {now}, at most {most}	{title}: sekarang {now}, paling banyak {most}
 	{word}: {message}	{word}: {message}

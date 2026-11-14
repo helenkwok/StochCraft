@@ -188,6 +188,7 @@
 	Failure interrupts the job	Il guasto interrompe la lavorazione
 	Family	Famiglia
 	File	File
+	Finding	Riscontro
 	Finish, then go off	Finire, poi lasciare il turno
 	Finished at {time} {unit}	Terminato a {time} {unit}
 	Fit	Adatta
@@ -398,6 +399,7 @@
 	Run the sweep	Esegui la scansione
 	Running	In esecuzione
 	Running…	Esecuzione in corso…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Repliche divise: {low_n} su {n} vicino a {low}, {high_n} vicino a {high}. La media ({mean}) mescola due esiti; guarda ogni gruppo.
 	Sat	sab
 	Save	Salva
 	Save As…	Salva con nome…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Il modello ora ha le unità trovate dal dimensionamento
 	The model: its experiment, connections and problems	Il modello: esperimento, connessioni e problemi
 	The name is empty or already used.	Il nome è vuoto o già usato.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Le repliche si dividono in due esiti: {a} su {n} in uno, {b} nell'altro. {count} risultati si dividono allo stesso modo, tra cui {result} ({element}); vedi la tabella qui sotto.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Il server finisce il lavoro che ha, poi lascia il turno; fino ad allora conta come in turno.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La quota di repliche pari o inferiori a ogni valore. La fascia contiene la vera distribuzione con una confidenza del {confidence}.
 	The values are numbers, separated by semicolons or spaces	I valori sono numeri separati da punti e virgola o spazi
@@ -623,6 +626,7 @@
 	{n} waiting	{n} in attesa
 	{n} {unit} per second	{n} {unit} al secondo
 	{property} (set to, mean)	{property} (valore impostato, media)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): le repliche si dividono in due esiti; vedi la tabella qui sotto.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} su {background}: {ratio}:1, serve {min}:1
 	{title}: now {now}, at most {most}	{title}: ora {now}, al massimo {most}
 	{word}: {message}	{word}: {message}

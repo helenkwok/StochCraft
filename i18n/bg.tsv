@@ -188,6 +188,7 @@
 	Failure interrupts the job	Повредата прекъсва работата
 	Family	Семейство
 	File	Файл
+	Finding	Констатация
 	Finish, then go off	Довършване, после край на смяната
 	Finished at {time} {unit}	Завършено при {time} {unit}
 	Fit	Побиране
@@ -398,6 +399,7 @@
 	Run the sweep	Изпълнение на обхождането
 	Running	Изпълнява се
 	Running…	Изпълнява се…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Репликациите се разделят: {low_n} от {n} около {low}, {high_n} около {high}. Средната стойност ({mean}) смесва два различни резултата; разгледайте всяка група.
 	Sat	сб
 	Save	Запазване
 	Save As…	Запази като…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Моделът вече има единиците, намерени при оразмеряването
 	The model: its experiment, connections and problems	Моделът: експеримент, връзки и проблеми
 	The name is empty or already used.	Името е празно или вече се използва.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Репликациите се разделят на два различни резултата: {a} от {n} в единия, {b} в другия. Резултати със същото разделение: {count}, сред тях {result} ({element}); вижте таблицата по-долу.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Сървърът довършва работата, която има, после излиза от смяна; дотогава се брои за на смяна.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Делът на репликациите при или под всяка стойност. Лентата съдържа истинското разпределение с доверие {confidence}.
 	The values are numbers, separated by semicolons or spaces	Стойностите са числа, разделени с точка и запетая или интервали
@@ -623,6 +626,7 @@
 	{n} waiting	Чакащи: {n}
 	{n} {unit} per second	{n} {unit} в секунда
 	{property} (set to, mean)	{property} (зададена стойност, средна)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – репликациите се разделят на два различни резултата: вижте таблицата по-долу.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон „{background}“: {ratio}:1, нужно е {min}:1
 	{title}: now {now}, at most {most}	{title}: сега {now}, най-много {most}
 	{word}: {message}	{word}: {message}

@@ -188,6 +188,7 @@
 	Failure interrupts the job	Arıza işi keser
 	Family	Aile
 	File	Dosya
+	Finding	Bulgu
 	Finish, then go off	Bitir, sonra vardiyadan çık
 	Finished at {time} {unit}	{time} {unit} anında bitti
 	Fit	Sığdır
@@ -398,6 +399,7 @@
 	Run the sweep	Taramayı çalıştır
 	Running	Çalışıyor
 	Running…	Çalışıyor…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Tekrarlar ikiye ayrıldı: {n} tekrardan {low_n} tanesi {low} civarında, {high_n} tanesi {high} civarında. Ortalama ({mean}) iki farklı sonucu karıştırıyor; her grubu ayrı inceleyin.
 	Sat	Cmt
 	Save	Kaydet
 	Save As…	Farklı Kaydet…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Modelde artık boyutlandırmanın bulduğu birimler var
 	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
 	The name is empty or already used.	Ad boş veya zaten kullanılıyor.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Tekrarlar iki farklı sonuca ayrıldı: {n} tekrardan {a} tanesi birinde, {b} tanesi diğerinde. Aynı şekilde ayrılan {count} sonuç var, bunlardan biri {result} ({element}); aşağıdaki tabloya bakın.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Sunucu elindeki işi bitirir, sonra vardiyadan çıkar; o zamana kadar vardiyada sayılır.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Her değere eşit veya altındaki tekrarların oranı. Bant, gerçek dağılımı {confidence} güvenle içerir.
 	The values are numbers, separated by semicolons or spaces	Değerler noktalı virgül veya boşlukla ayrılmış sayılardır
@@ -623,6 +626,7 @@
 	{n} waiting	{n} bekliyor
 	{n} {unit} per second	saniyede {n} {unit}
 	{property} (set to, mean)	{property} (ayarlanan değer, ortalama)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): tekrarlar iki farklı sonuca ayrıldı; aşağıdaki tabloya bakın.
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} üzerinde {text}: {ratio}:1, en az {min}:1 gerekli
 	{title}: now {now}, at most {most}	{title}: şu an {now}, en fazla {most}
 	{word}: {message}	{word}: {message}

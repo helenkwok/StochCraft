@@ -188,6 +188,7 @@
 	Failure interrupts the job	Квар прекида рад
 	Family	Породица
 	File	Фајл
+	Finding	Налаз
 	Finish, then go off	Доврши, па заврши смену
 	Finished at {time} {unit}	Завршено у {time} {unit}
 	Fit	Уклопи
@@ -398,6 +399,7 @@
 	Run the sweep	Покрени пролаз
 	Running	Извршава се
 	Running…	Извршавање у тијеку…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Репликације су подељене: {low_n} од {n} близу {low}, {high_n} близу {high}. Средња вредност ({mean}) меша два исхода; погледајте сваку групу посебно.
 	Sat	суб
 	Save	Сачувај
 	Save As…	Сачувај као…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Модел сада има јединице које је пронашло димензионисање
 	The model: its experiment, connections and problems	Модел: експеримент, везе и проблеми
 	The name is empty or already used.	Име је празно или се већ користи.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Репликације су подељене на два исхода: {a} од {n} у једном, {b} у другом. Резултати подељени на исти начин: {count}, међу њима {result} ({element}); погледајте таблицу испод.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Сервер доврши посао који има, па заврши смену; до тада се рачуна као да је у смени.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Удео репликација једнаких или мањих од сваке вредности. Појас садржи праву расподелу са поузданошћу од {confidence}.
 	The values are numbers, separated by semicolons or spaces	Вредности су бројеви одвојени тачком и зарезом или размацима
@@ -623,6 +626,7 @@
 	{n} waiting	Чека: {n}
 	{n} {unit} per second	{n} {unit} у секунди
 	{property} (set to, mean)	{property} (постављено на, средња вредност)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – репликације су подељене на два исхода: погледајте таблицу испод.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – позадина „{background}“: {ratio}:1, потребно {min}:1
 	{title}: now {now}, at most {most}	{title}: сада {now}, највише {most}
 	{word}: {message}	{word}: {message}
