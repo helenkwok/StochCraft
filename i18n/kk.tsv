@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Уақыт бірлігін өзгерту модельдегі бұрыннан бар уақыт мәндерін түрлендірмейді.
 	Chart	Диаграмма
 	Chart hover	Меңзер астындағы диаграмма
+	Check every	Тексеру аралығы
 	Choose…	Таңдаңыз…
 	Clear Menu	Мәзірді тазалау
 	Close	Жабу
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Әр талдау экспериментті бір кездейсоқ тұқыммен бірнеше рет орындайды, сондықтан айырмашылықтар кездейсоқтықтан емес, өзгерістен шығады. Біраз уақыт алуы мүмкін.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Әрбір нысан осылардың ішінен дәл қазір орындауға болатын біріншісін бірден толық алады да, шыққанда бірліктерді қайтарады.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Әрбір нысан мұнда келген кезде оған кездейсоқ таңдалған уақыттан аспайтын уақыт күтеді, содан кейін бас тартады: «Бас тартқандар» деп белгіленген шығатын жолмен кетеді немесе модельден шығады.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Әр сервер (бірлік) жүктемені теңгеруші өзінің артындағы серверлерді тексеретіні сияқты, анда-санда тексеріледі. Күтетіндері тым көп болып, тексеруден өтпеген сервер қайта іске қосу үшін жұмыстан шығарылады, содан кейін қайтып келеді.
 	Edit	Түзету
 	Edit themes…	Тақырыптарды түзету…
 	Elasticity	Икемділік
@@ -172,6 +174,7 @@
 	Export table (CSV)	Кестені экспорттау (CSV)
 	Exported {file}	{file} экспортталды
 	Expression	Өрнек
+	Fails above, waiting per working server	Сәтсіздік шегі, жұмыстағы әр серверге күтетіндер
 	Failure interrupts the job	Ақау жұмысты үзеді
 	Family	Отбасы
 	File	Файл
@@ -192,6 +195,7 @@
 	Goes to	Қайда барады
 	Hands on finished parts while down	Ақаулы кезде де дайын бөлшектерді береді
 	Header	Жоғарғы жолақ
+	Health check	Күйді тексеру
 	Help	Көмек
 	Hide Others	Басқаларын жасыру
 	Hide {app}	{app} қолданбасын жасыру
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Тұтынушылар осы кетулерден қанша бөлшек қалайды; сонда нәтижелер тактіні (қолжетімді уақытты сұранысқа бөлгенде) және әр тапсырманың цикл уақытын көрсетеді.
 	In use	Қолданыста
 	Inside over time	Уақыт бойынша ішіндегілер
+	Job under way on a server taken out:	Жұмыстан шығарылған сервердегі орындалып жатқан жұмыс:
 	Jump	Өту
 	Jump to time	Уақытқа өту
+	Keep at least in service	Жұмыста кемінде қалдыру
 	Keep the time, without the estimate it came from	Уақытты ол шыққан бағалаусыз сақтау
 	Keyboard Shortcuts…	Пернетақта тіркесімдері…
 	Keyboard shortcuts saved	Пернетақта тіркесімдері сақталды
@@ -227,6 +233,7 @@
 	Mean queue length	Кезектің орташа ұзындығы
 	Mean time blocked	Бұғатталудың орташа уақыты
 	Mean time in system	Жүйедегі орташа уақыт
+	Mean units in service	Жұмыстағы бірліктердің орташа саны
 	Mean wait	Күтудің орташа уақыты
 	Mean wait before giving up	Бас тартқанға дейінгі орташа күту уақыты
 	Metric	Көрсеткіш
@@ -279,6 +286,7 @@
 	Opened {file}	{file} ашылды
 	Open…	Ашу…
 	Or start from an example	Немесе мысалдан бастаңыз
+	Out for (restart)	Жұмыстан тыс (қайта іске қосу)
 	PERT	PERT
 	PNG image	PNG суреті
 	Parameter	Параметр
@@ -355,6 +363,8 @@
 	Result with a target	Мақсаты бар нәтиже
 	Result, down and up	Нәтиже, төмен және жоғары
 	Results	Нәтижелер
+	Resume after restart	Қайта іске қосылғаннан кейін жалғастыру
+	Retry elsewhere	Басқа жерде қайталау
 	Rework	Қайта өңдеу
 	Rework on {id}	{id} ағынында қайта өңдеу
 	Rework ratio	Қайта өңдеу үлесі
@@ -430,6 +440,7 @@
 	Sun	жс
 	Sweep a parameter	Параметрді сұрыптау
 	Table stripes	Кесте жолақтары
+	Take servers out when overloaded	Шамадан тыс жүктелген серверлерді жұмыстан шығару
 	Takt	Такт
 	Takt time	Такт уақыты
 	Tandem line	Тізбекті желі
@@ -442,6 +453,8 @@
 	Text	Мәтін
 	Text on accent	Екпін түсіндегі мәтін
 	Text on header	Жоғарғы жолақтағы мәтін
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Байланыс үзіліп, клиент қайта әрекет етеді: нысан бірден кезектің басына оралады, ал оған жасалған жұмыс босқа кетеді.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Нысан өз серверінде күтеді, ал сервер қайтып келгенде жұмыс қалған бөлігімен жалғасады.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Аралық {share} мақсатты үлесінен төмен түседі, сондықтан үлестің орындалғаны 95% сенімділікпен көрсетілмеген; көбірек қайталау оны тарылтады.
 	The last task with a resource it finished at	Бөлшек өткен соңғы ресурсы бар тапсырма
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Тоқтату шартына дейінгі орташа уақыт тек оған жеткен қайталаулар бойынша; қалғандары уақыт шегіне дейін жүрді.
@@ -466,6 +479,7 @@
 	Time failed	Ақаулы уақыт
 	Time off shift	Ауысымнан тыс уақыт
 	Time processing	Өңдеу уақыты
+	Time restarting	Қайта іске қосу уақыты
 	Time setting up	Дайындықтағы уақыт
 	Time starved	Жұмыссыз уақыт
 	Time to failure	Ақауға дейінгі уақыт
@@ -488,6 +502,7 @@
 	Unit	Бірлік
 	Units	Бірлік саны
 	Units by calendar	Күнтізбе бойынша бірлік саны
+	Units taken out by health checks	Күйді тексеру арқылы жұмыстан шығарылған бірліктер
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Бірнеше тапсырма ортақ пайдаланатын бірліктер. Ортақ ресурстары бар тапсырма оларды қордан немесе рөл бойынша алады.
 	Untitled	Атаусыз
 	Untitled model	Атаусыз модель
@@ -519,7 +534,7 @@
 	Whole number	Бүтін сан
 	Window	Терезе
 	With every time at its mean: {units}	Әр уақыт өз орташасында: {units}
-	Work wasted on those who gave up	Бас тартқандарға босқа кеткен жұмыс
+	Work wasted on jobs that did not finish	Аяқталмаған жұмыстарға босқа кеткен жұмыс
 	XPDL with BPSim	BPSim бар XPDL
 	Yes or no	Иә немесе жоқ
 	Your changes will be lost if you don't save them.	Сақтамасаңыз, өзгерістеріңіз жоғалады.

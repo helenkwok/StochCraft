@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Зміна одиниці часу не перераховує час, уже заданий у моделі.
 	Chart	Діаграма
 	Chart hover	Діаграма під вказівником
+	Check every	Перевіряти кожні
 	Choose…	Виберіть…
 	Clear Menu	Очистити меню
 	Close	Закрити
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Кожен аналіз запускає експеримент кілька разів з тим самим початковим значенням генератора, тож відмінності спричинені зміною, а не випадковістю. Це може тривати деякий час.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Кожна сутність займає перший із цих варіантів, який можна виконати зараз, повністю й одразу, і повертає одиниці, коли виходить.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Кожна сутність чекає тут не довше за випадковий час, вибраний для неї під час прибуття, а потім іде: прямує виходом із позначкою «Пішли» або залишає модель.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Кожен сервер (одиниця) час від часу перевіряється, як балансувальник навантаження опитує сервери за ним. Сервер, що не пройшов перевірку, бо на нього чекає забагато, виводиться з роботи на перезавантаження, а потім повертається.
 	Edit	Редагування
 	Edit themes…	Змінити теми…
 	Elasticity	Еластичність
@@ -172,6 +174,7 @@
 	Export table (CSV)	Експортувати таблицю (CSV)
 	Exported {file}	Експортовано {file}
 	Expression	Вираз
+	Fails above, waiting per working server	Не проходить понад (тих, що чекають, на сервер у роботі)
 	Failure interrupts the job	Відмова перериває роботу
 	Family	Родина
 	File	Файл
@@ -192,6 +195,7 @@
 	Goes to	Веде до
 	Hands on finished parts while down	Передає готові деталі і під час відмови
 	Header	Верхня панель
+	Health check	Перевірка працездатності
 	Help	Довідка
 	Hide Others	Приховати інші
 	Hide {app}	Приховати {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Скільки деталей клієнти хочуть від цих вибуттів; тоді результати показують такт (доступний час, поділений на попит) і час циклу кожного завдання.
 	In use	Використовується
 	Inside over time	Усередині в часі
+	Job under way on a server taken out:	Робота, що триває на виведеному сервері:
 	Jump	Перейти
 	Jump to time	Перейти до часу
+	Keep at least in service	Залишати в роботі не менше
 	Keep the time, without the estimate it came from	Залишити час без оцінки, з якої він походить
 	Keyboard Shortcuts…	Клавіатурні скорочення…
 	Keyboard shortcuts saved	Клавіатурні скорочення збережено
@@ -227,6 +233,7 @@
 	Mean queue length	Середня довжина черги
 	Mean time blocked	Середній час блокування
 	Mean time in system	Середній час у системі
+	Mean units in service	Середня кількість одиниць у роботі
 	Mean wait	Середній час очікування
 	Mean wait before giving up	Середній час очікування до відходу
 	Metric	Показник
@@ -279,6 +286,7 @@
 	Opened {file}	Відкрито {file}
 	Open…	Відкрити…
 	Or start from an example	Або почніть із прикладу
+	Out for (restart)	Поза роботою на (перезавантаження)
 	PERT	PERT
 	PNG image	Зображення PNG
 	Parameter	Параметр
@@ -355,6 +363,8 @@
 	Result with a target	Результат із метою
 	Result, down and up	Результат, вниз і вгору
 	Results	Результати
+	Resume after restart	Продовжити після перезавантаження
+	Retry elsewhere	Повторити деінде
 	Rework	Доопрацювання
 	Rework on {id}	Доопрацювання на {id}
 	Rework ratio	Частка доопрацювання
@@ -430,6 +440,7 @@
 	Sun	нд
 	Sweep a parameter	Перебір параметра
 	Table stripes	Смуги таблиць
+	Take servers out when overloaded	Виводити перевантажені сервери з роботи
 	Takt	Такт
 	Takt time	Час такту
 	Tandem line	Послідовна лінія
@@ -442,6 +453,8 @@
 	Text	Текст
 	Text on accent	Текст на акценті
 	Text on header	Текст на верхній панелі
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	З'єднання обривається, і клієнт пробує знову: сутність одразу повертається на початок черги, а виконана над нею робота марна.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Сутність чекає на своєму сервері, і робота триває із залишку, щойно сервер повернеться.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Інтервал сягає нижче цільової частки {share}, тож з довірою 95% не показано, що частку досягнуто; більше реплікацій звузили б його.
 	The last task with a resource it finished at	Останнє завдання з ресурсом, яке пройшла деталь
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Середній час до умови зупинки обчислено лише за реплікаціями, що її досягли; решта тривали до своєї межі часу.
@@ -466,6 +479,7 @@
 	Time failed	Час відмови
 	Time off shift	Час поза зміною
 	Time processing	Час обробки
+	Time restarting	Час перезавантаження
 	Time setting up	Час у переналагодженні
 	Time starved	Час без роботи
 	Time to failure	Час до відмови
@@ -488,6 +502,7 @@
 	Unit	Одиниця вимірювання
 	Units	Одиниці
 	Units by calendar	Одиниці за календарем
+	Units taken out by health checks	Одиниці, виведені перевірками працездатності
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Одиниці, які спільно використовують кілька завдань. Завдання зі спільними ресурсами бере їх із пулу або за роллю.
 	Untitled	Без назви
 	Untitled model	Модель без назви
@@ -519,7 +534,7 @@
 	Whole number	Ціле число
 	Window	Вікно
 	With every time at its mean: {units}	Якщо кожен час дорівнює своєму середньому: {units}
-	Work wasted on those who gave up	Марна робота на тих, хто пішов
+	Work wasted on jobs that did not finish	Марна робота на незавершеному обслуговуванні
 	XPDL with BPSim	XPDL з BPSim
 	Yes or no	Так або ні
 	Your changes will be lost if you don't save them.	Якщо не зберегти зміни, їх буде втрачено.

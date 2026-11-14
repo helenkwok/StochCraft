@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Az időegység módosítása nem váltja át a modellben már meglévő időértékeket.
 	Chart	Diagram
 	Chart hover	Diagram a mutató alatt
+	Check every	Ellenőrzési időköz
 	Choose…	Válasszon…
 	Clear Menu	Menü törlése
 	Close	Bezárás
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Minden elemzés többször futtatja a kísérletet ugyanazzal a véletlenszám-maggal, így a különbségek a változtatásból erednek, nem a véletlenből. Ez eltarthat egy ideig.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Minden entitás ezek közül az elsőt veszi, amely most teljesíthető, egyszerre az egészet, és távozáskor visszaadja az egységeket.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Minden entitás legfeljebb annyi ideig vár itt, amennyit érkezésekor véletlenszerűen sorsolnak neki, aztán lemond: a „Lemondtak” jelölésű kiutat választja, vagy elhagyja a modellt.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Minden szervert (egységet) időnként ellenőriz a rendszer, ahogy egy terheléselosztó lekérdezi a mögötte álló szervereket. Amelyik megbukik, mert túl sokan várnak, azt újraindításra kivonják az üzemből, majd visszatér.
 	Edit	Szerkesztés
 	Edit themes…	Témák szerkesztése…
 	Elasticity	Rugalmasság
@@ -172,6 +174,7 @@
 	Export table (CSV)	Táblázat exportálása (CSV)
 	Exported {file}	{file} exportálva
 	Expression	Kifejezés
+	Fails above, waiting per working server	Bukási küszöb, várakozók üzemelő szerverenként
 	Failure interrupts the job	A meghibásodás megszakítja a munkát
 	Family	Család
 	File	Fájl
@@ -192,6 +195,7 @@
 	Goes to	Ide vezet
 	Hands on finished parts while down	Meghibásodott állapotban is továbbadja a kész darabokat
 	Header	Fejléc
+	Health check	Állapot-ellenőrzés
 	Help	Súgó
 	Hide Others	Többi elrejtése
 	Hide {app}	{app} elrejtése
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hány darabot kérnek a vevők ezekből a távozásokból; az eredmények ekkor mutatják az ütemet (a rendelkezésre álló idő osztva az igénnyel) és minden feladat ciklusidejét.
 	In use	Használatban
 	Inside over time	Bent lévők az idő függvényében
+	Job under way on a server taken out:	Folyamatban lévő munka egy kivont szerveren:
 	Jump	Ugrás
 	Jump to time	Ugrás időpontra
+	Keep at least in service	Legalább ennyi maradjon üzemben
 	Keep the time, without the estimate it came from	Az idő megtartása a becslés nélkül, amelyből származik
 	Keyboard Shortcuts…	Billentyűparancsok…
 	Keyboard shortcuts saved	Billentyűparancsok mentve
@@ -227,6 +233,7 @@
 	Mean queue length	Átlagos sorhossz
 	Mean time blocked	Átlagos blokkolási idő
 	Mean time in system	Átlagos rendszerben töltött idő
+	Mean units in service	Üzemelő egységek átlagos száma
 	Mean wait	Átlagos várakozási idő
 	Mean wait before giving up	Átlagos várakozási idő a lemondásig
 	Metric	Mérőszám
@@ -279,6 +286,7 @@
 	Opened {file}	{file} megnyitva
 	Open…	Megnyitás…
 	Or start from an example	Vagy kezdjen egy példával
+	Out for (restart)	Üzemen kívül (újraindítás)
 	PERT	PERT
 	PNG image	PNG-kép
 	Parameter	Paraméter
@@ -355,6 +363,8 @@
 	Result with a target	Eredmény céllal
 	Result, down and up	Eredmény, lent és fent
 	Results	Eredmények
+	Resume after restart	Folytatás újraindítás után
+	Retry elsewhere	Újrapróbálkozás máshol
 	Rework	Újramunkálás
 	Rework on {id}	Újramunkálás itt: {id}
 	Rework ratio	Újramunkálási arány
@@ -430,6 +440,7 @@
 	Sun	V
 	Sweep a parameter	Paraméter végigfuttatása
 	Table stripes	Táblázatcsíkok
+	Take servers out when overloaded	Túlterhelt szerverek kivonása az üzemből
 	Takt	Ütem
 	Takt time	Ütemidő
 	Tandem line	Tandemvonal
@@ -442,6 +453,8 @@
 	Text	Szöveg
 	Text on accent	Szöveg a kiemelőszínen
 	Text on header	Szöveg a fejlécen
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	A kapcsolat megszakad, és a kliens újrapróbálkozik: az entitás azonnal visszakerül a sor elejére, és a rajta végzett munka kárba vész (elvesztegetett munka).
+	The entity waits on its server and the job carries on with what was left once the server is back.	Az entitás a szerverénél vár, és a munka a hátralévő résszel folytatódik, amint a szerver visszatér.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Az intervallum a(z) {share} célarány alá nyúlik, így 95%-os megbízhatósággal nem igazolt, hogy az arány teljesül; több ismétlés szűkítené.
 	The last task with a resource it finished at	Az utolsó erőforrást használó feladat, amelyen a darab áthaladt
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	A leállási feltételig eltelt átlagos idő csak azokra az ismétlésekre vonatkozik, amelyek elérték; a többi az időkorlátjáig futott.
@@ -466,6 +479,7 @@
 	Time failed	Meghibásodott állapotban töltött idő
 	Time off shift	Műszakon kívüli idő
 	Time processing	Feldolgozási idő
+	Time restarting	Újraindítással töltött idő
 	Time setting up	Átállással töltött idő
 	Time starved	Munka nélküli idő
 	Time to failure	Meghibásodásig eltelt idő
@@ -488,6 +502,7 @@
 	Unit	Egység
 	Units	Egységek
 	Units by calendar	Egységek naptár szerint
+	Units taken out by health checks	Állapot-ellenőrzéssel kivont egységek
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Egységek, amelyeken több feladat osztozik. A megosztott erőforrásokat használó feladat készletből vagy szerepkör szerint veszi őket.
 	Untitled	Névtelen
 	Untitled model	Névtelen modell
@@ -519,7 +534,7 @@
 	Whole number	Egész szám
 	Window	Ablak
 	With every time at its mean: {units}	Minden idő az átlagán: {units}
-	Work wasted on those who gave up	A lemondókra elvesztegetett munka
+	Work wasted on jobs that did not finish	Be nem fejezett munkákra elvesztegetett munka
 	XPDL with BPSim	XPDL BPSim-mel
 	Yes or no	Igen vagy nem
 	Your changes will be lost if you don't save them.	Ha nem mented, a módosításaid elvesznek.

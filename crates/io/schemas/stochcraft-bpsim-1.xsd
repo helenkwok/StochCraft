@@ -69,6 +69,22 @@
       <stochcraft:patience until="done"><bpsim:FloatingParameter value="30"/></stochcraft:patience>
     </bpsim:VendorExtension>
 
+  stochcraft:healthCheck, on a task's ElementParameters: each unit of the task's resource is
+  checked every interval (its own checks, the first one interval after the start) and fails a
+  check when more entities wait at the task than limit per unit working (not failed, not out and
+  on shift); a unit that fails is out of service for the restart time, then comes back. The
+  optional keep is the fewest units left working: a failed check takes no unit out below it.
+  onTakeout="retry" (the default) sends a job under way on a unit taken out back to the head of
+  the queue at once (its work is wasted); onTakeout="resume" lets it wait on the unit and resume
+  after the restart. Only on a task with an unlimited waiting room. BPSim 2.0 has nothing for it.
+
+    <bpsim:VendorExtension name="stochcraft:healthCheck" xmlns:stochcraft="…">
+      <stochcraft:healthCheck limit="2" keep="3">
+        <stochcraft:interval><bpsim:FloatingParameter value="10"/></stochcraft:interval>
+        <stochcraft:restart><bpsim:FloatingParameter value="60"/></stochcraft:restart>
+      </stochcraft:healthCheck>
+    </bpsim:VendorExtension>
+
   stochcraft:abandoned, on a sequence flow's ElementParameters, with the value true: the way out
   of a task with a patience that entities giving up take (a retry, a call back later), besides
   the task's ordinary way out.
@@ -189,6 +205,30 @@
           </xs:attribute>
         </xs:extension>
       </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="healthCheck">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="interval" type="stochcraft:Value"/>
+        <xs:element name="restart" type="stochcraft:Value"/>
+      </xs:sequence>
+      <xs:attribute name="limit" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:double">
+            <xs:minInclusive value="0"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="keep" type="xs:nonNegativeInteger"/>
+      <xs:attribute name="onTakeout" default="retry">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="retry"/>
+            <xs:enumeration value="resume"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="demand">

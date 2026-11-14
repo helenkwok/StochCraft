@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	დროის ერთეულის შეცვლა მოდელში უკვე მითითებულ დროებს არ გარდაქმნის.
 	Chart	დიაგრამა
 	Chart hover	დიაგრამა მაჩვენებლის ქვეშ
+	Check every	შემოწმების ინტერვალი
 	Choose…	აირჩიეთ…
 	Clear Menu	მენიუს გასუფთავება
 	Close	დახურვა
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ყოველი ანალიზი ექსპერიმენტს რამდენჯერმე უშვებს ერთი და იმავე საწყისი მნიშვნელობით, ამიტომ განსხვავებები ცვლილებიდან მოდის და არა შემთხვევითობიდან. ამას შეიძლება დრო დასჭირდეს.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	თითოეული ერთეული იღებს ამათგან პირველს, რომლის სრულად დაკმაყოფილებაც ახლავე, ერთდროულად არის შესაძლებელი, და გასვლისას რესურსის ერთეულებს აბრუნებს.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	თითოეული ერთეული აქ ელოდება არაუმეტეს იმ დროისა, რომელიც მისთვის შემთხვევით შეირჩევა მოსვლისას, შემდეგ კი უარს ამბობს: მიდის გასასვლელით, რომელიც მონიშნულია როგორც „უარი თქვეს“, ან ტოვებს მოდელს.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	ყოველი სერვერი (რესურსის ერთეული) დროდადრო მოწმდება, ისე, როგორც დატვირთვის გამანაწილებელი ამოწმებს თავის უკან მდგომ სერვერებს. ის, რომელიც ვერ გაივლის შემოწმებას, რადგან ძალიან ბევრი ელოდება, მუშაობიდან გამოჰყავთ ხელახალი გაშვებისთვის და შემდეგ ბრუნდება.
 	Edit	რედაქტირება
 	Edit themes…	თემების რედაქტირება…
 	Elasticity	ელასტიკურობა
@@ -172,6 +174,7 @@
 	Export table (CSV)	ცხრილის ექსპორტი (CSV)
 	Exported {file}	ექსპორტირებულია {file}
 	Expression	გამოსახულება
+	Fails above, waiting per working server	ვერ გაივლის ზემოთ, მომლოდინე მუშაობაში მყოფ სერვერზე
 	Failure interrupts the job	გაუმართაობა წყვეტს სამუშაოს
 	Family	ოჯახი
 	File	ფაილი
@@ -192,6 +195,7 @@
 	Goes to	მიდის აქ
 	Hands on finished parts while down	გაუმართაობისას გადასცემს დასრულებულ დეტალებს
 	Header	სათაურის ზოლი
+	Health check	მდგომარეობის შემოწმება
 	Help	დახმარება
 	Hide Others	სხვების დამალვა
 	Hide {app}	{app}-ის დამალვა
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	რამდენ დეტალს ითხოვენ მომხმარებლები ამ გასვლებიდან; შედეგები მაშინ აჩვენებს ტაქტს (ხელმისაწვდომი დრო გაყოფილი მოთხოვნაზე) და თითოეული დავალების ციკლის დროს.
 	In use	გამოიყენება
 	Inside over time	შიგნით დროის მიხედვით
+	Job under way on a server taken out:	მუშაობიდან გამოყვანილ სერვერზე მიმდინარე სამუშაო:
 	Jump	გადასვლა
 	Jump to time	დროზე გადასვლა
+	Keep at least in service	მუშაობაში დატოვე სულ მცირე
 	Keep the time, without the estimate it came from	დროის შენარჩუნება იმ შეფასების გარეშე, საიდანაც ის მოდის
 	Keyboard Shortcuts…	კლავიატურის მალსახმობები…
 	Keyboard shortcuts saved	კლავიატურის მალსახმობები შენახულია
@@ -227,6 +233,7 @@
 	Mean queue length	რიგის საშუალო სიგრძე
 	Mean time blocked	დაბლოკვის საშუალო დრო
 	Mean time in system	სისტემაში გატარებული საშუალო დრო
+	Mean units in service	მუშაობაში მყოფი რესურსის ერთეულების საშუალო რაოდენობა
 	Mean wait	ლოდინის საშუალო დრო
 	Mean wait before giving up	ლოდინის საშუალო დრო უარის თქმამდე
 	Metric	მაჩვენებელი
@@ -279,6 +286,7 @@
 	Opened {file}	გახსნილია {file}
 	Open…	გახსნა…
 	Or start from an example	ან დაიწყეთ მაგალითით
+	Out for (restart)	მუშაობის გარეშე (ხელახალი გაშვება)
 	PERT	PERT
 	PNG image	PNG გამოსახულება
 	Parameter	პარამეტრი
@@ -355,6 +363,8 @@
 	Result with a target	შედეგი მიზნით
 	Result, down and up	შედეგი, ქვემოთ და ზემოთ
 	Results	შედეგები
+	Resume after restart	გაგრძელება ხელახალი გაშვების შემდეგ
+	Retry elsewhere	სხვაგან ხელახლა ცდა
 	Rework	გადამუშავება
 	Rework on {id}	გადამუშავება ნაკადზე {id}
 	Rework ratio	გადამუშავების წილი
@@ -430,6 +440,7 @@
 	Sun	კვი
 	Sweep a parameter	პარამეტრის გადარბენა
 	Table stripes	ცხრილის ზოლები
+	Take servers out when overloaded	ზედმეტად დატვირთული სერვერების მუშაობიდან გამოყვანა
 	Takt	ტაქტი
 	Takt time	ტაქტის დრო
 	Tandem line	თანმიმდევრული ხაზი
@@ -442,6 +453,8 @@
 	Text	ტექსტი
 	Text on accent	ტექსტი აქცენტზე
 	Text on header	ტექსტი სათაურის ზოლზე
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	კავშირი წყდება და კლიენტი ხელახლა ცდილობს: ერთეული მაშინვე ბრუნდება რიგის თავში, ხოლო მასზე შესრულებული სამუშაო ფუჭდება.
+	The entity waits on its server and the job carries on with what was left once the server is back.	ერთეული ელოდება თავის სერვერთან და სამუშაო გრძელდება დარჩენილით, როგორც კი სერვერი დაბრუნდება.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ინტერვალი {share} სამიზნე წილზე დაბლა ჩადის, ამიტომ 95%-იანი სანდოობით არ არის ნაჩვენები, რომ წილი მიღწეულია; მეტი გამეორება მას შეავიწროებს.
 	The last task with a resource it finished at	ბოლო დავალება რესურსით, რომელიც დეტალმა გაიარა
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	გაჩერების პირობამდე საშუალო დრო მხოლოდ იმ გამეორებებზეა გამოთვლილი, რომლებმაც მას მიაღწიეს; დანარჩენები დროის ლიმიტამდე გაგრძელდა.
@@ -466,6 +479,7 @@
 	Time failed	გაუმართაობის დრო
 	Time off shift	ცვლის გარეთ დრო
 	Time processing	დამუშავების დრო
+	Time restarting	ხელახალი გაშვების დრო
 	Time setting up	მომზადებაზე დახარჯული დრო
 	Time starved	სამუშაოს გარეშე დრო
 	Time to failure	დრო გაუმართაობამდე
@@ -488,6 +502,7 @@
 	Unit	ერთეული
 	Units	რაოდენობა
 	Units by calendar	რაოდენობა კალენდრის მიხედვით
+	Units taken out by health checks	შემოწმებით მუშაობიდან გამოყვანილი რესურსის ერთეულები
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	რესურსის ერთეულები, რომლებსაც რამდენიმე დავალება იზიარებს. დავალება საზიარო რესურსებით მათ იღებს პულის ან როლის მიხედვით.
 	Untitled	უსათაურო
 	Untitled model	უსათაურო მოდელი
@@ -519,7 +534,7 @@
 	Whole number	მთელი რიცხვი
 	Window	ფანჯარა
 	With every time at its mean: {units}	ყოველი დრო თავის საშუალოზე: {units}
-	Work wasted on those who gave up	უარის მთქმელებზე ფუჭად დახარჯული სამუშაო
+	Work wasted on jobs that did not finish	დაუსრულებელ სამუშაოებზე ფუჭად დახარჯული სამუშაო
 	XPDL with BPSim	XPDL BPSim-ით
 	Yes or no	დიახ ან არა
 	Your changes will be lost if you don't save them.	თუ არ შეინახავთ, ცვლილებები დაიკარგება.

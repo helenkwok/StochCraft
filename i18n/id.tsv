@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Mengubah satuan waktu tidak mengonversi waktu yang sudah ada dalam model.
 	Chart	Grafik
 	Chart hover	Grafik di bawah penunjuk
+	Check every	Periksa setiap
 	Choose…	Pilih…
 	Clear Menu	Bersihkan Menu
 	Close	Tutup
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Setiap analisis menjalankan eksperimen beberapa kali dengan benih acak yang sama, sehingga perbedaan berasal dari perubahan, bukan kebetulan. Ini bisa memakan waktu.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Setiap entitas mengambil alternatif pertama di antara ini yang dapat dipenuhi sekarang, sekaligus semuanya, dan mengembalikan unitnya saat meninggalkan tugas.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Setiap entitas menunggu di sini paling lama selama waktu yang diundi untuknya saat tiba, lalu menyerah: entitas mengambil jalan keluar bertanda "Menyerah", atau meninggalkan model.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Setiap server (unit) diperiksa sesekali, seperti penyeimbang beban memeriksa server di belakangnya. Server yang gagal, karena terlalu banyak yang menunggu, dikeluarkan dari operasi untuk dimulai ulang, lalu kembali.
 	Edit	Edit
 	Edit themes…	Edit tema…
 	Elasticity	Elastisitas
@@ -172,6 +174,7 @@
 	Export table (CSV)	Ekspor tabel (CSV)
 	Exported {file}	{file} diekspor
 	Expression	Ekspresi
+	Fails above, waiting per working server	Gagal di atas, menunggu per server yang beroperasi
 	Failure interrupts the job	Kerusakan menyela pekerjaan
 	Family	Keluarga
 	File	Berkas
@@ -192,6 +195,7 @@
 	Goes to	Menuju ke
 	Hands on finished parts while down	Tetap meneruskan komponen jadi saat rusak
 	Header	Bilah atas
+	Health check	Pemeriksaan kondisi
 	Help	Bantuan
 	Hide Others	Sembunyikan yang lain
 	Hide {app}	Sembunyikan {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Berapa komponen yang diinginkan pelanggan dari keberangkatan ini; hasilnya lalu menunjukkan takt (waktu tersedia dibagi permintaan) dan waktu siklus setiap tugas.
 	In use	Sedang dipakai
 	Inside over time	Di dalam dari waktu ke waktu
+	Job under way on a server taken out:	Pekerjaan berjalan di server yang dikeluarkan:
 	Jump	Lompat
 	Jump to time	Lompat ke waktu
+	Keep at least in service	Pertahankan beroperasi setidaknya
 	Keep the time, without the estimate it came from	Pertahankan waktu tanpa perkiraan asalnya
 	Keyboard Shortcuts…	Pintasan Keyboard…
 	Keyboard shortcuts saved	Pintasan keyboard disimpan
@@ -227,6 +233,7 @@
 	Mean queue length	Panjang antrean rata-rata
 	Mean time blocked	Waktu terblokir rata-rata
 	Mean time in system	Waktu rata-rata dalam sistem
+	Mean units in service	Jumlah rata-rata unit yang beroperasi
 	Mean wait	Waktu tunggu rata-rata
 	Mean wait before giving up	Waktu tunggu rata-rata sebelum menyerah
 	Metric	Metrik
@@ -279,6 +286,7 @@
 	Opened {file}	{file} dibuka
 	Open…	Buka…
 	Or start from an example	Atau mulai dari contoh
+	Out for (restart)	Keluar selama (mulai ulang)
 	PERT	PERT
 	PNG image	Gambar PNG
 	Parameter	Parameter
@@ -355,6 +363,8 @@
 	Result with a target	Hasil dengan target
 	Result, down and up	Hasil, turun dan naik
 	Results	Hasil
+	Resume after restart	Lanjutkan setelah mulai ulang
+	Retry elsewhere	Coba lagi di tempat lain
 	Rework	Pengerjaan ulang
 	Rework on {id}	Pengerjaan ulang di {id}
 	Rework ratio	Rasio pengerjaan ulang
@@ -430,6 +440,7 @@
 	Sun	Min
 	Sweep a parameter	Sapu satu parameter
 	Table stripes	Belang tabel
+	Take servers out when overloaded	Mengeluarkan server yang kelebihan beban
 	Takt	Takt
 	Takt time	Waktu takt
 	Tandem line	Jalur tandem
@@ -442,6 +453,8 @@
 	Text	Teks
 	Text on accent	Teks di atas aksen
 	Text on header	Teks di bilah atas
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Koneksi terputus dan klien mencoba lagi: entitas langsung kembali ke depan antrean, dan pekerjaan yang sudah dilakukan padanya sia-sia.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Entitas menunggu di servernya dan pekerjaan berlanjut dengan sisanya begitu server kembali.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak replikasi akan mempersempitnya.
 	The last task with a resource it finished at	Tugas terakhir dengan sumber daya yang dilalui komponen
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas replikasi yang mencapainya; sisanya berjalan hingga batas waktunya.
@@ -466,6 +479,7 @@
 	Time failed	Waktu rusak
 	Time off shift	Waktu di luar sif
 	Time processing	Waktu memproses
+	Time restarting	Waktu mulai ulang
 	Time setting up	Waktu menyiapkan
 	Time starved	Waktu tanpa pekerjaan
 	Time to failure	Waktu hingga rusak
@@ -488,6 +502,7 @@
 	Unit	Satuan
 	Units	Unit
 	Units by calendar	Unit per kalender
+	Units taken out by health checks	Unit yang dikeluarkan oleh pemeriksaan kondisi
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Unit yang digunakan bersama oleh beberapa tugas. Tugas dengan sumber daya bersama mengambilnya dari kumpulan atau menurut peran.
 	Untitled	Tanpa Judul
 	Untitled model	Model tanpa judul
@@ -519,7 +534,7 @@
 	Whole number	Bilangan bulat
 	Window	Jendela
 	With every time at its mean: {units}	Dengan setiap waktu pada rata-ratanya: {units}
-	Work wasted on those who gave up	Pekerjaan sia-sia untuk yang menyerah
+	Work wasted on jobs that did not finish	Pekerjaan sia-sia untuk pekerjaan yang tidak selesai
 	XPDL with BPSim	XPDL dengan BPSim
 	Yes or no	Ya atau tidak
 	Your changes will be lost if you don't save them.	Perubahan Anda akan hilang jika tidak disimpan.

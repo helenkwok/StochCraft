@@ -7,9 +7,9 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate, Model, Need,
-    Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue, ResourcePool, Routing,
-    Scrap, Setup, Stop, Timed, Transfer,
+    Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate, HealthCheck, Model,
+    Need, OnTakeout, Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue,
+    ResourcePool, Routing, Scrap, Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -389,6 +389,35 @@ pub(crate) fn patience_element(p: &Patience) -> Element {
         .with_attr("name", crate::bpsim::PATIENCE)
         .with_attr("xmlns:stochcraft", ns)
         .with_child(body.with_child(dist_element(&p.time)))
+}
+
+/// A server's health check as StochCraft's vendor extension ([`crate::bpsim::HEALTH_CHECK`]).
+/// `keep` and `onTakeout` are written only when set and not the default (`retry`); a limit of
+/// infinity is written `INF`, as XML Schema spells it.
+pub(crate) fn health_check_element(h: &HealthCheck) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let part = |local: &str, d: &Dist| {
+        Element::new(&format!("stochcraft:{local}"), Some(ns)).with_child(dist_element(d))
+    };
+    let limit = if h.limit == f64::INFINITY {
+        "INF".to_owned()
+    } else {
+        num(h.limit)
+    };
+    let mut body = Element::new("stochcraft:healthCheck", Some(ns)).with_attr("limit", &limit);
+    if let Some(k) = h.keep {
+        body = body.with_attr("keep", &k.to_string());
+    }
+    if h.on_takeout != OnTakeout::Retry {
+        body = body.with_attr("onTakeout", h.on_takeout.name());
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::HEALTH_CHECK)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(
+            body.with_child(part("interval", &h.interval))
+                .with_child(part("restart", &h.restart)),
+        )
 }
 
 /// A server's planned time to make one item as StochCraft's vendor extension
@@ -780,6 +809,13 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         } = &e.kind
         {
             ep.push(patience_element(p));
+        }
+        if let ElementKind::Server {
+            health_check: Some(h),
+            ..
+        } = &e.kind
+        {
+            ep.push(health_check_element(h));
         }
         if let ElementKind::Sink { scrap: Some(x), .. } = &e.kind {
             ep.push(scrap_element(x));

@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	நேர அலகை மாற்றுவது மாதிரியில் ஏற்கெனவே உள்ள நேரங்களை மாற்றிக் கணக்கிடாது.
 	Chart	வரைபடம்
 	Chart hover	சுட்டியின் கீழ் வரைபடம்
+	Check every	சோதனை இடைவெளி
 	Choose…	தேர்வுசெய்க…
 	Clear Menu	மெனுவை அழி
 	Close	மூடு
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ஒவ்வொரு பகுப்பாய்வும் ஒரே சீரற்ற விதையுடன் சோதனையைப் பலமுறை இயக்குகிறது, எனவே வேறுபாடுகள் தற்செயலால் அல்ல, மாற்றத்தால் வருகின்றன. சிறிது நேரம் ஆகலாம்.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ஒவ்வொரு உருப்படியும் இவற்றில், இப்போதே ஒரே நேரத்தில் முழுமையாக நிறைவேற்றக்கூடிய முதலாவதை எடுத்துக்கொள்கிறது; வெளியேறும்போது அலகுகளைத் திருப்பித் தருகிறது.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ஒவ்வொரு உருப்படியும் வந்தடையும்போது அதற்காகச் சீரற்ற முறையில் எடுக்கப்பட்ட நேரம் வரை மட்டுமே இங்கே காத்திருந்து, பின்னர் கைவிடுகிறது: "கைவிட்டவை" எனக் குறிக்கப்பட்ட வெளியேறும் வழியில் செல்கிறது, அல்லது மாதிரியை விட்டு வெளியேறுகிறது.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	ஒவ்வொரு வழங்கியும் (அலகு) அவ்வப்போது சோதிக்கப்படுகிறது, சுமை சமனாக்கி தனக்குப் பின்னால் உள்ள வழங்கிகளைச் சோதிப்பது போல. அதிகம் காத்திருப்பதால் சோதனையில் தோல்வியடையும் வழங்கி மறுதொடக்கத்துக்காக நீக்கப்பட்டு, பின்னர் திரும்புகிறது.
 	Edit	திருத்து
 	Edit themes…	தீம்களைத் திருத்து…
 	Elasticity	நெகிழ்ச்சி
@@ -172,6 +174,7 @@
 	Export table (CSV)	அட்டவணையை ஏற்றுமதி செய் (CSV)
 	Exported {file}	{file} ஏற்றுமதி செய்யப்பட்டது
 	Expression	கோவை
+	Fails above, waiting per working server	தோல்வி வரம்பு, இயங்கும் வழங்கி ஒன்றுக்குக் காத்திருப்பவை
 	Failure interrupts the job	பழுது வேலையை இடைநிறுத்தும்
 	Family	குடும்பம்
 	File	கோப்பு
@@ -192,6 +195,7 @@
 	Goes to	இதற்குச் செல்கிறது
 	Hands on finished parts while down	பழுதடைந்திருக்கும்போதும் முடிந்த பாகங்களை அனுப்பும்
 	Header	தலைப்புப் பட்டை
+	Health check	நிலைச் சோதனை
 	Help	உதவி
 	Hide Others	மற்றவற்றை மறை
 	Hide {app}	{app} ஐ மறை
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	இந்த வெளியேற்றங்களிலிருந்து வாடிக்கையாளர்கள் எத்தனை பாகங்களை விரும்புகிறார்கள்; அப்போது முடிவுகள் டாக்ட் (கிடைக்கும் நேரத்தைத் தேவையால் வகுத்தது) மற்றும் ஒவ்வொரு பணியின் சுழற்சி நேரத்தையும் காட்டும்.
 	In use	பயன்பாட்டில்
 	Inside over time	நேரப்படி உள்ளே
+	Job under way on a server taken out:	நீக்கப்பட்ட வழங்கியில் நடந்துகொண்டிருக்கும் வேலை:
 	Jump	செல்
 	Jump to time	நேரத்திற்குச் செல்
+	Keep at least in service	குறைந்தது இத்தனை இயக்கத்தில் வை
 	Keep the time, without the estimate it came from	நேரத்தை வைத்துக்கொள், அது வந்த மதிப்பீடு இல்லாமல்
 	Keyboard Shortcuts…	விசைப்பலகை குறுக்குவழிகள்…
 	Keyboard shortcuts saved	விசைப்பலகை குறுக்குவழிகள் சேமிக்கப்பட்டன
@@ -227,6 +233,7 @@
 	Mean queue length	சராசரி வரிசை நீளம்
 	Mean time blocked	தடுக்கப்பட்ட சராசரி நேரம்
 	Mean time in system	அமைப்பில் கழித்த சராசரி நேரம்
+	Mean units in service	இயக்கத்தில் உள்ள அலகுகளின் சராசரி எண்ணிக்கை
 	Mean wait	சராசரி காத்திருப்பு
 	Mean wait before giving up	கைவிடுவதற்கு முந்தைய சராசரி காத்திருப்பு
 	Metric	அளவீடு
@@ -279,6 +286,7 @@
 	Opened {file}	{file} திறக்கப்பட்டது
 	Open…	திற…
 	Or start from an example	அல்லது ஓர் எடுத்துக்காட்டில் தொடங்கவும்
+	Out for (restart)	நீக்கப்பட்டிருக்கும் நேரம் (மறுதொடக்கம்)
 	PERT	PERT
 	PNG image	PNG படம்
 	Parameter	அளவுரு
@@ -355,6 +363,8 @@
 	Result with a target	இலக்குள்ள முடிவு
 	Result, down and up	முடிவு, கீழும் மேலும்
 	Results	முடிவுகள்
+	Resume after restart	மறுதொடக்கத்துக்குப் பின் தொடர்
+	Retry elsewhere	வேறிடத்தில் மீண்டும் முயல்
 	Rework	மறுவேலை
 	Rework on {id}	{id} இல் மறுவேலை
 	Rework ratio	மறுவேலை விகிதம்
@@ -430,6 +440,7 @@
 	Sun	ஞாயி
 	Sweep a parameter	ஒரு அளவுருவை வருடு
 	Table stripes	அட்டவணைப் பட்டைகள்
+	Take servers out when overloaded	அதிகச் சுமையுள்ள வழங்கிகளை நீக்குதல்
 	Takt	டாக்ட்
 	Takt time	டாக்ட் நேரம்
 	Tandem line	தொடர் பணிநிலைகள்
@@ -442,6 +453,8 @@
 	Text	உரை
 	Text on accent	முனைப்பு நிறத்தில் உரை
 	Text on header	தலைப்புப் பட்டையில் உரை
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	இணைப்பு துண்டிக்கப்பட்டு கிளையன்ட் மீண்டும் முயல்கிறது: உருப்படி உடனே வரிசையின் முன்னுக்குத் திரும்புகிறது, அதன்மேல் செய்த வேலை வீணாகிறது.
+	The entity waits on its server and the job carries on with what was left once the server is back.	உருப்படி தன் வழங்கியிலேயே காத்திருக்கிறது, வழங்கி திரும்பியதும் மீதமுள்ளதிலிருந்து வேலை தொடர்கிறது.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	இடைவெளி {share} இலக்கு பங்குக்குக் கீழே செல்கிறது, எனவே பங்கு அடையப்பட்டது 95% நம்பிக்கையுடன் காட்டப்படவில்லை; கூடுதல் மீள் இயக்கங்கள் அதைக் குறுக்கும்.
 	The last task with a resource it finished at	பாகம் கடைசியாகக் கடந்த வளம் தேவைப்படும் பணி
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	நிறுத்த நிபந்தனை வரையிலான சராசரி நேரம் அதை அடைந்த மீள் இயக்கங்கள் மீது மட்டுமே; மற்றவை அவற்றின் நேர வரம்பு வரை இயங்கின.
@@ -466,6 +479,7 @@
 	Time failed	பழுதடைந்த நேரம்
 	Time off shift	பணிமுறைக்கு வெளியே நேரம்
 	Time processing	செயலாக்க நேரம்
+	Time restarting	மறுதொடக்க நேரம்
 	Time setting up	அமைவில் உள்ள நேரம்
 	Time starved	வேலையில்லா நேரம்
 	Time to failure	பழுது வரையிலான நேரம்
@@ -488,6 +502,7 @@
 	Unit	அலகு
 	Units	அலகு எண்ணிக்கை
 	Units by calendar	நாட்காட்டியின்படி அலகு எண்ணிக்கை
+	Units taken out by health checks	நிலைச் சோதனைகளால் நீக்கப்பட்ட அலகுகள்
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	பல பணிகள் பகிர்ந்துகொள்ளும் அலகுகள். பகிர்ந்த வளங்கள் தேவைப்படும் பணி, அவற்றைத் தொகுப்பு வாரியாகவோ பணிப்பங்கு வாரியாகவோ எடுத்துக்கொள்கிறது.
 	Untitled	தலைப்பிடப்படாதது
 	Untitled model	பெயரிடப்படாத மாதிரி
@@ -519,7 +534,7 @@
 	Whole number	முழு எண்
 	Window	சாளரம்
 	With every time at its mean: {units}	ஒவ்வொரு நேரமும் அதன் சராசரியில்: {units}
-	Work wasted on those who gave up	கைவிட்டவற்றுக்காக வீணான வேலை
+	Work wasted on jobs that did not finish	முடியாத வேலைகளில் வீணான வேலை
 	XPDL with BPSim	BPSim உடன் XPDL
 	Yes or no	ஆம் அல்லது இல்லை
 	Your changes will be lost if you don't save them.	சேமிக்காவிட்டால் உங்கள் மாற்றங்கள் இழக்கப்படும்.

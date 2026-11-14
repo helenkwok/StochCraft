@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Ajaühiku muutmine ei teisenda mudelis juba olevaid aegu.
 	Chart	Graafik
 	Chart hover	Graafik kursori all
+	Check every	Kontroll iga
 	Choose…	Vali…
 	Clear Menu	Tühjenda menüü
 	Close	Sulge
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Iga analüüs käitab eksperimenti mitu korda sama juhuarvuseemnega, nii et erinevused tulevad muudatusest, mitte juhusest. See võib võtta aega.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Iga olem võtab neist esimese, mida saab kohe täita, kõik korraga, ja annab ühikud tagasi, kui ülesandest lahkub.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Iga olem ootab siin kõige rohkem aja, mis talle saabumisel juhuslikult määratakse, ja loobub siis: ta läheb väljapääsu kaudu, mis on märgitud „Loobunud”, või lahkub mudelist.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Iga serverit (ühikut) kontrollitakse aeg-ajalt, nii nagu koormusjaotur kontrollib enda taga olevaid servereid. Kontrollis läbi kukkunud server, mille juures ootab liiga palju, võetakse taaskäivituseks kasutusest välja ja see tuleb siis tagasi.
 	Edit	Muuda
 	Edit themes…	Muuda teemasid…
 	Elasticity	Elastsus
@@ -172,6 +174,7 @@
 	Export table (CSV)	Ekspordi tabel (CSV)
 	Exported {file}	Eksporditud {file}
 	Expression	Avaldis
+	Fails above, waiting per working server	Kukub läbi üle, ootajaid kasutuses oleva serveri kohta
 	Failure interrupts the job	Rike katkestab töö
 	Family	Jaotuspere
 	File	Fail
@@ -192,6 +195,7 @@
 	Goes to	Viib kohta
 	Hands on finished parts while down	Annab rikkis olekus valmis detailid edasi
 	Header	Päis
+	Health check	Tervisekontroll
 	Help	Abi
 	Hide Others	Peida teised
 	Hide {app}	Peida {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Mitu detaili kliendid neist lahkumistest soovivad; tulemused näitavad siis takti (saadaolev aeg jagatud nõudlusega) ja iga ülesande tsükliaega.
 	In use	Kasutusel
 	Inside over time	Sees aja jooksul
+	Job under way on a server taken out:	Pooleli töö kasutusest välja võetud serveris:
 	Jump	Mine
 	Jump to time	Mine ajahetkele
+	Keep at least in service	Hoia kasutuses vähemalt
 	Keep the time, without the estimate it came from	Säilita aeg ilma hinnanguta, millest see tuli
 	Keyboard Shortcuts…	Klaviatuuri otseteed…
 	Keyboard shortcuts saved	Klaviatuuri otseteed salvestatud
@@ -227,6 +233,7 @@
 	Mean queue length	Järjekorra keskmine pikkus
 	Mean time blocked	Keskmine blokeerimisaeg
 	Mean time in system	Keskmine aeg süsteemis
+	Mean units in service	Kasutuses olevate ühikute keskmine arv
 	Mean wait	Keskmine ooteaeg
 	Mean wait before giving up	Keskmine ooteaeg enne loobumist
 	Metric	Mõõdik
@@ -279,6 +286,7 @@
 	Opened {file}	Avati {file}
 	Open…	Ava…
 	Or start from an example	Või alusta näitest
+	Out for (restart)	Kasutusest väljas (taaskäivitus)
 	PERT	PERT
 	PNG image	PNG-pilt
 	Parameter	Parameeter
@@ -355,6 +363,8 @@
 	Result with a target	Tulemus koos eesmärgiga
 	Result, down and up	Tulemus, alla ja üles
 	Results	Tulemused
+	Resume after restart	Jätka pärast taaskäivitust
+	Retry elsewhere	Proovi mujal uuesti
 	Rework	Ümbertöötlus
 	Rework on {id}	Ümbertöötlus voos {id}
 	Rework ratio	Ümbertöötluse osakaal
@@ -430,6 +440,7 @@
 	Sun	P
 	Sweep a parameter	Parameetri läbimine
 	Table stripes	Tabeli triibud
+	Take servers out when overloaded	Ülekoormatud serverite kasutusest kõrvaldamine
 	Takt	Takt
 	Takt time	Taktiaeg
 	Tandem line	Tandemliin
@@ -442,6 +453,8 @@
 	Text	Tekst
 	Text on accent	Tekst rõhuvärvil
 	Text on header	Tekst päisel
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Ühendus katkeb ja klient proovib uuesti: olem läheb kohe tagasi järjekorra algusesse ja talle tehtud töö on raisatud.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Olem ootab oma serveri juures ja töö jätkub ülejäänuga, kui server on tagasi.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Vahemik ulatub alla sihtosakaalu {share}, seega pole 95% usaldusega näidatud, et osakaal on saavutatud; rohkem kordusi kitsendaks seda.
 	The last task with a resource it finished at	Viimane ressursiga ülesanne, mille detail läbis
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskmine aeg peatamistingimuseni on ainult nende korduste põhjal, mis selle saavutasid; ülejäänud kestsid oma ajapiirini.
@@ -466,6 +479,7 @@
 	Time failed	Rikkis oleku aeg
 	Time off shift	Aeg vahetusest väljas
 	Time processing	Töötlemise aeg
+	Time restarting	Taaskäivituse aeg
 	Time setting up	Ümberseadistamise aeg
 	Time starved	Tööta aeg
 	Time to failure	Aeg rikkeni
@@ -488,6 +502,7 @@
 	Unit	Ühik
 	Units	Ühikud
 	Units by calendar	Ühikud kalendri järgi
+	Units taken out by health checks	Tervisekontrollidega kasutusest välja võetud ühikud
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Ühikud, mida mitu ülesannet jagavad. Jagatud ressurssidega ülesanne võtab need kogumist või rolli järgi.
 	Untitled	Pealkirjata
 	Untitled model	Pealkirjata mudel
@@ -519,7 +534,7 @@
 	Whole number	Täisarv
 	Window	Aken
 	With every time at its mean: {units}	Kui iga aeg on oma keskmisel: {units}
-	Work wasted on those who gave up	Loobunutele raisatud töö
+	Work wasted on jobs that did not finish	Lõpetamata töödele raisatud töö
 	XPDL with BPSim	XPDL ja BPSim
 	Yes or no	Jah või ei
 	Your changes will be lost if you don't save them.	Salvestamata muudatused lähevad kaotsi.

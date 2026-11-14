@@ -312,6 +312,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             setup: None,
             planned_run_time: None,
             patience: None,
+            health_check: None,
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -334,6 +335,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             setup: None,
             planned_run_time: None,
             patience: None,
+            health_check: None,
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -603,6 +605,7 @@ fn new_ids_never_clash_with_the_files_other_ids() {
             setup: None,
             planned_run_time: None,
             patience: None,
+            health_check: None,
         };
     });
     let t = text(&saved);
@@ -1283,6 +1286,7 @@ fn new_and_changed_servers_carry_their_buffer() {
             setup: None,
             planned_run_time: None,
             patience: None,
+            health_check: None,
         };
         set_queue(m, "weld", Some(1));
     });

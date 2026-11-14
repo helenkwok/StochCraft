@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	시간 단위를 변경해도 모델에 이미 입력된 시간은 변환되지 않습니다.
 	Chart	차트
 	Chart hover	포인터 아래 차트
+	Check every	검사 간격
 	Choose…	선택…
 	Clear Menu	메뉴 지우기
 	Close	닫기
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	각 분석은 같은 난수 시드로 실험을 여러 번 실행하므로 차이는 우연이 아니라 변경에서 나옵니다. 시간이 걸릴 수 있습니다.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	각 엔터티는 이 중 지금 한꺼번에 모두 충족할 수 있는 첫 번째 항목을 가져가고, 떠날 때 자원 단위를 반환합니다.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	각 엔터티는 도착할 때 무작위로 정해진 시간까지만 여기서 기다린 뒤 포기합니다. '포기'로 표시된 나갈 경로로 가거나 모델을 떠납니다.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	각 서버(자원 단위)는 부하 분산기가 뒤에 있는 서버를 확인하듯이 일정 간격으로 검사됩니다. 대기가 너무 많아 검사에 실패한 서버는 재기동을 위해 가동에서 제외되었다가 다시 돌아옵니다.
 	Edit	편집
 	Edit themes…	테마 편집…
 	Elasticity	탄력성
@@ -172,6 +174,7 @@
 	Export table (CSV)	표 내보내기 (CSV)
 	Exported {file}	{file} 내보냄
 	Expression	식
+	Fails above, waiting per working server	실패 기준(가동 중인 서버당 대기 수)
 	Failure interrupts the job	고장 시 작업 중단
 	Family	분포 계열
 	File	파일
@@ -192,6 +195,7 @@
 	Goes to	도착 블록
 	Hands on finished parts while down	고장 중에도 완료된 부품 전달
 	Header	헤더
+	Health check	상태 검사
 	Help	도움말
 	Hide Others	다른 항목 숨기기
 	Hide {app}	{app} 숨기기
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	고객이 이 이탈에서 원하는 부품 수입니다. 그러면 결과에 택트(가용 시간을 수요로 나눈 값)와 각 작업의 사이클 타임이 표시됩니다.
 	In use	사용 중
 	Inside over time	시간에 따른 내부 수
+	Job under way on a server taken out:	제외된 서버에서 진행 중인 작업:
 	Jump	이동
 	Jump to time	이동할 시간
+	Keep at least in service	최소 가동 유지 수
 	Keep the time, without the estimate it came from	시간은 그대로 두고 근거가 된 추정만 지웁니다
 	Keyboard Shortcuts…	키보드 단축키…
 	Keyboard shortcuts saved	키보드 단축키가 저장되었습니다
@@ -227,6 +233,7 @@
 	Mean queue length	평균 대기열 길이
 	Mean time blocked	평균 차단 시간
 	Mean time in system	시스템 내 평균 체류 시간
+	Mean units in service	평균 가동 자원 단위 수
 	Mean wait	평균 대기 시간
 	Mean wait before giving up	포기 전 평균 대기 시간
 	Metric	지표
@@ -279,6 +286,7 @@
 	Opened {file}	{file} 열림
 	Open…	열기…
 	Or start from an example	또는 예제로 시작
+	Out for (restart)	제외 시간(재기동)
 	PERT	PERT
 	PNG image	PNG 이미지
 	Parameter	매개변수
@@ -355,6 +363,8 @@
 	Result with a target	목표가 있는 결과
 	Result, down and up	결과(낮췄을 때와 높였을 때)
 	Results	결과
+	Resume after restart	재기동 후 재개
+	Retry elsewhere	다른 곳에서 재시도
 	Rework	재작업
 	Rework on {id}	{id} 재작업
 	Rework ratio	재작업률
@@ -430,6 +440,7 @@
 	Sun	일
 	Sweep a parameter	매개변수 스윕
 	Table stripes	표 줄무늬
+	Take servers out when overloaded	과부하 시 서버 제외
 	Takt	택트 타임
 	Takt time	택트 타임
 	Tandem line	직렬 라인
@@ -442,6 +453,8 @@
 	Text	텍스트
 	Text on accent	강조색 위 텍스트
 	Text on header	헤더의 텍스트
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	연결이 끊기고 클라이언트가 다시 시도합니다. 엔터티는 즉시 대기열 맨 앞으로 돌아가고, 그때까지 한 작업은 낭비됩니다.
+	The entity waits on its server and the job carries on with what was left once the server is back.	엔터티는 자기 서버에서 기다리고, 서버가 돌아오면 남은 작업부터 계속합니다.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	구간이 목표 비율 {share}보다 아래까지 내려가므로, 비율 충족이 95% 신뢰도로 확인되지 않았습니다. 반복 실행을 늘리면 구간이 좁아집니다.
 	The last task with a resource it finished at	부품이 마지막으로 거친 자원을 사용하는 작업
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	중지 조건까지의 평균 시간은 중지 조건에 도달한 반복 실행만으로 계산됩니다. 나머지는 시간 제한까지 실행되었습니다.
@@ -466,6 +479,7 @@
 	Time failed	고장 시간
 	Time off shift	근무 외 시간
 	Time processing	처리 시간
+	Time restarting	재기동 시간
 	Time setting up	셋업 중 시간
 	Time starved	작업 대기 시간
 	Time to failure	고장까지의 시간
@@ -488,6 +502,7 @@
 	Unit	단위
 	Units	수량
 	Units by calendar	캘린더별 수량
+	Units taken out by health checks	상태 검사로 제외된 자원 단위
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	여러 작업이 공유하는 자원 단위입니다. 공유 자원을 사용하는 작업은 풀 또는 역할을 기준으로 자원을 가져갑니다.
 	Untitled	제목 없음
 	Untitled model	제목 없는 모델
@@ -519,7 +534,7 @@
 	Whole number	정수
 	Window	창
 	With every time at its mean: {units}	모든 시간을 평균으로 둘 때: {units}
-	Work wasted on those who gave up	포기한 엔터티에 낭비된 작업
+	Work wasted on jobs that did not finish	완료되지 않은 작업에 낭비된 작업
 	XPDL with BPSim	BPSim 포함 XPDL
 	Yes or no	예 또는 아니요
 	Your changes will be lost if you don't save them.	저장하지 않으면 변경 사항이 사라집니다.

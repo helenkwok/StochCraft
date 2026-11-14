@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	ການປ່ຽນໜ່ວຍເວລາຈະບໍ່ແປງຄ່າເວລາທີ່ມີຢູ່ໃນແບບຈຳລອງ.
 	Chart	ແຜນພູມ
 	Chart hover	ແຜນພູມເມື່ອຊີ້
+	Check every	ກວດທຸກໆ
 	Choose…	ເລືອກ…
 	Clear Menu	ລ້າງເມນູ
 	Close	ປິດ
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	ການວິເຄາະແຕ່ລະອັນແລ່ນການທົດລອງຫຼາຍເທື່ອດ້ວຍເມັດສຸ່ມດຽວກັນ, ຄວາມແຕກຕ່າງຈຶ່ງມາຈາກການປ່ຽນແປງ ບໍ່ແມ່ນຄວາມບັງເອີນ. ອາດໃຊ້ເວລາຈັກໜ້ອຍ.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	ແຕ່ລະເອນທິຕີຈະເອົາທາງເລືອກທຳອິດທີ່ສາມາດຈັດໃຫ້ໄດ້ຄົບທັງໝົດພ້ອມກັນໃນທັນທີ ແລະ ສົ່ງໜ່ວຍເຫຼົ່ານັ້ນຄືນເມື່ອອອກໄປ.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	ແຕ່ລະເອນທິຕີຈະລໍຖ້າຢູ່ນີ້ບໍ່ເກີນເວລາທີ່ສຸ່ມໃຫ້ມັນເມື່ອມາຮອດ, ແລ້ວຈຶ່ງເຊົາລໍຖ້າ: ມັນໄປທາງອອກທີ່ໝາຍວ່າ "ເຊົາລໍຖ້າ" ຫຼື ອອກຈາກແບບຈຳລອງ.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	ແມ່ຂ່າຍ (ໜ່ວຍ) ແຕ່ລະເຄື່ອງຈະຖືກກວດເປັນໄລຍະ ຄືກັບຕົວກະຈາຍໂຫຼດທີ່ກວດແມ່ຂ່າຍທີ່ຢູ່ເບື້ອງຫຼັງມັນ. ເຄື່ອງທີ່ບໍ່ຜ່ານການກວດ ເພາະມີຜູ້ລໍຖ້າຫຼາຍເກີນໄປ ຈະຖືກເອົາອອກຈາກການໃຊ້ງານເພື່ອເລີ່ມໃໝ່ ແລ້ວຈຶ່ງກັບມາ.
 	Edit	ແກ້ໄຂ
 	Edit themes…	ແກ້ໄຂຊຸດສີ…
 	Elasticity	ຄວາມຢືດຢຸ່ນ
@@ -172,6 +174,7 @@
 	Export table (CSV)	ສົ່ງອອກຕາຕະລາງ (CSV)
 	Exported {file}	ສົ່ງອອກ {file} ແລ້ວ
 	Expression	ນິພົດ
+	Fails above, waiting per working server	ບໍ່ຜ່ານເມື່ອເກີນ (ຜູ້ລໍຖ້າຕໍ່ແມ່ຂ່າຍທີ່ໃຊ້ງານຢູ່)
 	Failure interrupts the job	ການເສຍຂັດຈັງຫວະວຽກ
 	Family	ຕະກູນ
 	File	ໄຟລ໌
@@ -192,6 +195,7 @@
 	Goes to	ໄປຫາ
 	Hands on finished parts while down	ສົ່ງຕໍ່ຊິ້ນທີ່ສຳເລັດແລ້ວແມ່ນແຕ່ໃນຂະນະເສຍ
 	Header	ແຖບຫົວ
+	Health check	ການກວດສະຖານະ
 	Help	ຊ່ວຍເຫຼືອ
 	Hide Others	ເຊື່ອງລາຍການອື່ນ
 	Hide {app}	ເຊື່ອງ {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ລູກຄ້າຕ້ອງການຈັກຊິ້ນຈາກການອອກເຫຼົ່ານີ້; ຈາກນັ້ນຜົນຈະສະແດງແທັກ (ເວລາທີ່ມີຫານດ້ວຍຄວາມຕ້ອງການ) ແລະ ເວລາຮອບວຽນຂອງແຕ່ລະໜ້າວຽກ.
 	In use	ກຳລັງໃຊ້
 	Inside over time	ຈຳນວນພາຍໃນຕາມເວລາ
+	Job under way on a server taken out:	ວຽກທີ່ກຳລັງເຮັດຢູ່ເທິງແມ່ຂ່າຍທີ່ຖືກເອົາອອກ:
 	Jump	ຂ້າມ
 	Jump to time	ຂ້າມໄປຫາເວລາ
+	Keep at least in service	ຮັກສາໄວ້ໃນການໃຊ້ງານຢ່າງໜ້ອຍ
 	Keep the time, without the estimate it came from	ເກັບເວລາໄວ້ ໂດຍບໍ່ເກັບການປະມານທີ່ມາ
 	Keyboard Shortcuts…	ປຸ່ມລັດ…
 	Keyboard shortcuts saved	ບັນທຶກປຸ່ມລັດແລ້ວ
@@ -227,6 +233,7 @@
 	Mean queue length	ຄວາມຍາວແຖວຄອຍສະເລ່ຍ
 	Mean time blocked	ເວລາສະເລ່ຍທີ່ຖືກຂັດຂວາງ
 	Mean time in system	ເວລາສະເລ່ຍໃນລະບົບ
+	Mean units in service	ຈຳນວນໜ່ວຍທີ່ໃຊ້ງານຢູ່ສະເລ່ຍ
 	Mean wait	ເວລາລໍຖ້າສະເລ່ຍ
 	Mean wait before giving up	ເວລາລໍຖ້າສະເລ່ຍກ່ອນເຊົາລໍຖ້າ
 	Metric	ຕົວຊີ້ວັດ
@@ -279,6 +286,7 @@
 	Opened {file}	ເປີດ {file} ແລ້ວ
 	Open…	ເປີດ…
 	Or start from an example	ຫຼື ເລີ່ມຈາກຕົວຢ່າງ
+	Out for (restart)	ອອກຈາກການໃຊ້ງານເປັນເວລາ (ເລີ່ມໃໝ່)
 	PERT	PERT
 	PNG image	ຮູບພາບ PNG
 	Parameter	ພາຣາມິເຕີ
@@ -355,6 +363,8 @@
 	Result with a target	ຜົນໄດ້ຮັບທີ່ມີເປົ້າໝາຍ
 	Result, down and up	ຜົນໄດ້ຮັບ ເມື່ອລົງ ແລະ ຂຶ້ນ
 	Results	ຜົນໄດ້ຮັບ
+	Resume after restart	ເຮັດຕໍ່ຫຼັງເລີ່ມໃໝ່
+	Retry elsewhere	ລອງໃໝ່ບ່ອນອື່ນ
 	Rework	ການແກ້ໄຂງານ
 	Rework on {id}	ການແກ້ໄຂງານທີ່ {id}
 	Rework ratio	ສັດສ່ວນການແກ້ໄຂງານ
@@ -430,6 +440,7 @@
 	Sun	ອາທິດ
 	Sweep a parameter	ກວາດພາຣາມິເຕີ
 	Table stripes	ແຖບລາຍຕາຕະລາງ
+	Take servers out when overloaded	ເອົາແມ່ຂ່າຍທີ່ໂຫຼດເກີນອອກຈາກການໃຊ້ງານ
 	Takt	ເວລາແທັກ
 	Takt time	ເວລາແທັກ
 	Tandem line	ສາຍງານຕໍ່ເນື່ອງ
@@ -442,6 +453,8 @@
 	Text	ຂໍ້ຄວາມ
 	Text on accent	ຂໍ້ຄວາມເທິງສີເນັ້ນ
 	Text on header	ຂໍ້ຄວາມເທິງແຖບຫົວ
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	ການເຊື່ອມຕໍ່ຫຼຸດ ແລະ ລູກຂ່າຍລອງໃໝ່: ເອນທິຕີຈະກັບໄປຫົວແຖວຄອຍທັນທີ ແລະ ວຽກທີ່ເຮັດກັບມັນແລ້ວຈະເສຍເປົ່າ.
+	The entity waits on its server and the job carries on with what was left once the server is back.	ເອນທິຕີລໍຖ້າຢູ່ທີ່ແມ່ຂ່າຍຂອງມັນ ແລະ ວຽກຈະເຮັດຕໍ່ຈາກສ່ວນທີ່ເຫຼືອເມື່ອແມ່ຂ່າຍກັບມາ.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ຊ່ວງນີ້ລົງຕ່ຳກວ່າສັດສ່ວນເປົ້າໝາຍ {share}, ຈຶ່ງບໍ່ໄດ້ສະແດງດ້ວຍຄວາມເຊື່ອໝັ້ນ 95% ວ່າບັນລຸສັດສ່ວນນັ້ນ; ຮອບຈຳລອງຊ້ຳຫຼາຍຂຶ້ນຈະເຮັດໃຫ້ຊ່ວງແຄບລົງ.
 	The last task with a resource it finished at	ໜ້າວຽກສຸດທ້າຍທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ຊິ້ນງານຜ່ານມາ
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ເວລາສະເລ່ຍຈົນຮອດເງື່ອນໄຂຢຸດ ຄິດສະເພາະຮອບຈຳລອງຊ້ຳທີ່ຮອດເງື່ອນໄຂ; ຮອບອື່ນແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
@@ -466,6 +479,7 @@
 	Time failed	ເວລາທີ່ເສຍ
 	Time off shift	ເວລານອກກະ
 	Time processing	ເວລາປະມວນຜົນ
+	Time restarting	ເວລາທີ່ກຳລັງເລີ່ມໃໝ່
 	Time setting up	ເວລາທີ່ກຳລັງຕັ້ງເຄື່ອງ
 	Time starved	ເວລາບໍ່ມີວຽກ
 	Time to failure	ເວລາຈົນກວ່າຈະເສຍ
@@ -488,6 +502,7 @@
 	Unit	ໜ່ວຍ
 	Units	ຈຳນວນໜ່ວຍ
 	Units by calendar	ຈຳນວນໜ່ວຍຕາມປະຕິທິນ
+	Units taken out by health checks	ໜ່ວຍທີ່ຖືກເອົາອອກໂດຍການກວດສະຖານະ
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	ໜ່ວຍທີ່ຫຼາຍໜ້າວຽກໃຊ້ຮ່ວມກັນ. ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນຮ່ວມກັນຈະເອົາໜ່ວຍເຫຼົ່ານີ້ຕາມກຸ່ມ ຫຼື ຕາມບົດບາດ.
 	Untitled	ບໍ່ມີຊື່
 	Untitled model	ແບບຈຳລອງບໍ່ມີຊື່
@@ -519,7 +534,7 @@
 	Whole number	ຈຳນວນເຕັມ
 	Window	ໜ້າຕ່າງ
 	With every time at its mean: {units}	ເມື່ອທຸກເວລາເທົ່າກັບຄ່າສະເລ່ຍ: {units}
-	Work wasted on those who gave up	ວຽກທີ່ເສຍເປົ່າກັບຜູ້ທີ່ເຊົາລໍຖ້າ
+	Work wasted on jobs that did not finish	ວຽກທີ່ເສຍເປົ່າກັບວຽກທີ່ບໍ່ສຳເລັດ
 	XPDL with BPSim	XPDL ພ້ອມ BPSim
 	Yes or no	ແມ່ນ ຫຼື ບໍ່
 	Your changes will be lost if you don't save them.	ການປ່ຽນແປງຈະສູນເສຍຖ້າທ່ານບໍ່ບັນທຶກ.

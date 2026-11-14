@@ -1274,6 +1274,33 @@ leaving before their service begins a central feature that Erlang B and C lack.
   depends on its length; the fixed-length case for sources is already there, M2.4); patience on
   tasks with shared resources; an entity that gives up while held blocked before a
   shortest-queue gateway still counts as passing through that gateway.
+- **Servers taken out by a failed health check:** done. A load balancer's health check, and the
+  metastable failure it can cause (servers taken out under load leave fewer to serve the queue,
+  which grows, so more fail; the collapse can outlast its cause). A task with a resource of its
+  own can have a health check (`stochcraft:healthCheck`): each unit is checked every `interval`
+  (its own checks), and fails when more entities wait than `limit` per working unit (up, not
+  out, on shift): the timeout of a probe that waits in the same queue, times one unit's service
+  rate. A unit that fails is out for `restart`, then comes back; one off shift, failed or out is
+  not checked, and `keep` units at least stay in service. The job under way on a unit taken out
+  goes back to the head of the queue at once (`retry`, the default: a dropped connection; a
+  fresh patience if the task has one, and its work so far counts as wasted), or waits on the
+  unit and resumes after the restart (`resume`). Failures go on in elapsed time while a unit is
+  out. The mean wait runs from arrival to the start of the attempt that finished. Results per
+  server: `taken_out`, `mean_in_service`, and `time_restarting` in where the time goes (a state
+  of its own, after failed); a unit out restarting draws its idle power. File format: the
+  attributes `limit` (`INF` for none), `keep` and `onTakeout="retry|resume"`, with
+  `stochcraft:interval` and `stochcraft:restart` inside, each a BPSim distribution; set by
+  `block.set` (`health_check`) and edited in the inspector's Health check section. BPSim 2.0 has
+  nothing for it. Checked (`blocks/tests/health_check.rs`): a limit never reached changes nothing
+  (the checks draw from a stream of their own); retrying with exponential checks, restarts and
+  service against the chain of (number inside, units out), solved in the test (mean queue,
+  takeouts, units in service, utilisation, time restarting); collapse near full load and none at
+  half; keep at least; the retried job first in line, with a fresh patience; a resumed job
+  finishing with what was left.
+- **Not yet (health checks):** a finite buffer with a health check (a model problem for now);
+  several failed checks in a row before a takeout, and a slow start after a restart; the case 5
+  demonstration (a short loss of servers tipping a healthy server into a collapse that persists)
+  as an example model; an exact check of the resume mode (only sanity checks so far).
 
 ### M2.11 Changeovers and lean measures
 

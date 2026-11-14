@@ -7,12 +7,13 @@ use std::collections::BTreeMap;
 use std::rc::{Rc, Weak};
 
 use stochcraft_des::{
-    Ctx, Gate, Resource, ResourceGuard, Signal, Sim, Stopped, Store, Watch, Watching,
+    Ctx, Gate, InterruptCause, Resource, ResourceGuard, Signal, Sim, Stopped, Store, Watch,
+    Watching,
 };
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
-    Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, Model, Need, PatienceUntil,
-    Power, ResourcePool, Routing, Setup, Timed,
+    Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, HealthCheck, Model, Need,
+    OnTakeout, PatienceUntil, Power, ResourcePool, Routing, Setup, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -427,6 +428,7 @@ impl Compiled {
                     available,
                     availability,
                     setup,
+                    health_check,
                     ..
                 } => {
                     let shifts = calendars.availability(available, &availability);
@@ -438,13 +440,14 @@ impl Compiled {
                         }),
                         setup,
                     });
-                    if breakdown.is_some() || !always || setup.is_some() {
+                    if breakdown.is_some() || !always || setup.is_some() || health_check.is_some() {
                         let parts = UnitServer {
                             capacity,
                             service,
                             breakdown,
                             shifts,
                             setup,
+                            health: health_check,
                         };
                         spawn_unit_server(&mut sim, env, parts);
                     } else {
@@ -961,8 +964,17 @@ pub(crate) struct BlockStats {
     /// Servers with a patience: entities that gave up, and how long each had been here.
     abandoned: u64,
     abandoned_wait: Tally,
-    /// Servers with patience until done: service time spent on jobs whose entity gave up.
+    /// Servers with patience until done: service time spent on jobs whose entity gave up; with
+    /// a health check that retries, also the work done on jobs whose unit was taken out.
     wasted: f64,
+    /// Servers with a health check: units taken out by a failed check.
+    taken_out: u64,
+    /// Servers with a health check: the waits recorded at starts that were retried, taken back
+    /// out of `wait`'s mean.
+    unwait: Tally,
+    /// How many times the statistics were reset (a warm-up), so a retried start's wait is taken
+    /// back only from the statistics it went into.
+    resets: u64,
 }
 
 /// What an element sends to, for its report.
@@ -979,12 +991,13 @@ pub(crate) struct Sends {
 }
 
 /// The state a server's unit is in: exactly one at every instant, the first that applies of
-/// failed (or under repair), processing (an entity, including a job that runs on into a break
+/// failed (or under repair), out restarting (taken out by a health check), processing (an entity, including a job that runs on into a break
 /// or resumes off shift after a repair), blocked (holding a finished entity), off shift (idle
 /// because the calendar has the units unavailable) and starved (idle, on shift and up).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum UnitState {
     Failed,
+    Restarting,
     Setup,
     Processing,
     Blocked,
@@ -995,6 +1008,7 @@ enum UnitState {
 /// How many of a server's units are in each state, over time; they add up to its capacity.
 pub(crate) struct UnitStates {
     failed: TimeWeighted,
+    restarting: TimeWeighted,
     setup: TimeWeighted,
     off_shift: TimeWeighted,
     blocked: TimeWeighted,
@@ -1006,6 +1020,7 @@ impl UnitStates {
     fn new(t: f64) -> Self {
         Self {
             failed: TimeWeighted::new(t, 0.0),
+            restarting: TimeWeighted::new(t, 0.0),
             setup: TimeWeighted::new(t, 0.0),
             off_shift: TimeWeighted::new(t, 0.0),
             blocked: TimeWeighted::new(t, 0.0),
@@ -1016,6 +1031,7 @@ impl UnitStates {
 
     fn reset(&mut self, t: f64) {
         self.failed.reset(t);
+        self.restarting.reset(t);
         self.setup.reset(t);
         self.off_shift.reset(t);
         self.blocked.reset(t);
@@ -1026,6 +1042,7 @@ impl UnitStates {
     fn get(&mut self, s: UnitState) -> Option<&mut TimeWeighted> {
         match s {
             UnitState::Failed => Some(&mut self.failed),
+            UnitState::Restarting => Some(&mut self.restarting),
             UnitState::Setup => Some(&mut self.setup),
             UnitState::OffShift => Some(&mut self.off_shift),
             UnitState::Blocked => Some(&mut self.blocked),
@@ -1046,6 +1063,8 @@ struct Doing {
     holding: bool,
     /// Failed or under repair.
     down: bool,
+    /// Taken out of service by a health check, restarting.
+    out: bool,
 }
 
 /// What each of a server's units is doing and whether they are on shift, kept in step with
@@ -1071,6 +1090,8 @@ impl UnitBook {
     fn state(&self, d: Doing) -> UnitState {
         if d.down {
             UnitState::Failed
+        } else if d.out {
+            UnitState::Restarting
         } else if d.processing && d.setup {
             UnitState::Setup
         } else if d.processing {
@@ -1150,6 +1171,9 @@ impl BlockStats {
             abandoned: 0,
             abandoned_wait: Tally::new(),
             wasted: 0.0,
+            taken_out: 0,
+            unwait: Tally::new(),
+            resets: 0,
         }
     }
 
@@ -1176,6 +1200,25 @@ impl BlockStats {
         self.abandoned = 0;
         self.abandoned_wait = Tally::new();
         self.wasted = 0.0;
+        self.taken_out = 0;
+        self.unwait = Tally::new();
+        self.resets += 1;
+    }
+
+    /// The mean of the waits recorded at service starts, less those of starts that were retried.
+    fn mean_wait(&self) -> Option<f64> {
+        let taken_back = self.unwait.count();
+        if taken_back == 0 {
+            return self.wait.mean();
+        }
+        let n = self
+            .wait
+            .count()
+            .checked_sub(taken_back)
+            .filter(|n| *n > 0)?;
+        let sum =
+            self.wait.mean()? * self.wait.count() as f64 - self.unwait.mean()? * taken_back as f64;
+        Some(sum / n as f64)
     }
 
     /// Entities inside the element now: on their way in (in transfer), waiting in its input,
@@ -1206,7 +1249,9 @@ impl BlockStats {
             + p.idle * s.starved.integral(end)
             + p.while_blocked() * s.blocked.integral(end)
             + p.while_failed() * s.failed.integral(end)
-            + p.while_off_shift() * s.off_shift.integral(end);
+            + p.while_off_shift() * s.off_shift.integral(end)
+            // A unit out restarting draws its idle power (0 without a health check).
+            + p.idle * s.restarting.integral(end);
         kw_units * hours
     }
 
@@ -1308,6 +1353,16 @@ impl BlockStats {
             } => Some(p.until),
             _ => None,
         };
+        let checked = match kind {
+            ElementKind::Server {
+                capacity,
+                health_check: Some(h),
+                ..
+            } => Some((f64::from(*capacity), h.on_takeout)),
+            _ => None,
+        };
+        let wastes = patient == Some(PatienceUntil::Done)
+            || checked.is_some_and(|(_, o)| o == OnTakeout::Retry);
         ElementReport {
             id: element.id.clone(),
             name: element.name.clone(),
@@ -1319,7 +1374,7 @@ impl BlockStats {
             } else {
                 None
             },
-            mean_wait: if server { self.wait.mean() } else { None },
+            mean_wait: if server { self.mean_wait() } else { None },
             utilisation: match kind {
                 ElementKind::Server { capacity, .. } => {
                     self.busy.average(end).map(|b| b / f64::from(*capacity))
@@ -1478,10 +1533,21 @@ impl BlockStats {
                 (ended > 0).then(|| self.abandoned as f64 / ended as f64)
             }),
             abandoned_wait: patient.and_then(|_| self.abandoned_wait.mean()),
-            wasted: (patient == Some(PatienceUntil::Done)).then_some(self.wasted),
-            wasted_share: (patient == Some(PatienceUntil::Done))
+            wasted: wastes.then_some(self.wasted),
+            wasted_share: wastes
                 .then(|| self.states.processing.integral(end) + self.states.setup.integral(end))
                 .and_then(|working| (working > 0.0).then(|| self.wasted / working)),
+            taken_out: checked.map(|_| self.taken_out),
+            // Units not failed, not out and not off shift (each unit is in one state).
+            mean_in_service: checked.and_then(|(c, _)| {
+                let s = &self.states;
+                let away = s.failed.average(end)?
+                    + s.restarting.average(end)?
+                    + s.off_shift.average(end)?;
+                Some(c - away)
+            }),
+            time_restarting: checked
+                .and_then(|(c, _)| self.states.restarting.average(end).map(|x| x / c)),
             properties: assigns
                 .iter()
                 .zip(&self.properties)
@@ -1778,6 +1844,21 @@ impl Patient {
     /// Entity `id` leaves the server, handed on.
     fn handed_on(&self, id: u64) {
         self.stays.borrow_mut().remove(&id);
+    }
+
+    /// Entity `id`'s job stopped as its unit was taken out by a health check, and it goes back
+    /// to the queue: a new attempt, with a fresh patience. Returns `false` if, with patience
+    /// until done, it had given up during the job already (its stand-in has gone): then it is no
+    /// longer here.
+    fn retry(self: &Rc<Self>, id: u64) -> bool {
+        let gone = matches!(
+            self.stays.borrow_mut().remove(&id).map(|s| s.stage),
+            Some(Stage::Serving { gone: true, .. })
+        );
+        if !gone {
+            self.arm(id, Stage::Waiting);
+        }
+        !gone
     }
 }
 
@@ -2355,7 +2436,10 @@ struct Unit {
     busy: bool,
     /// Failed or under repair.
     down: bool,
-    /// The job process while it is in service (so a failure can interrupt it).
+    /// Taken out of service by a health check, restarting.
+    out: bool,
+    /// The job process while it is in service (so a failure or a health check can interrupt
+    /// it).
     serving: Option<u64>,
     /// A failure is due and waits for the job to finish (non-interruptible).
     due: bool,
@@ -2397,6 +2481,16 @@ impl Setups {
 /// Mixed into the seed of a server's setup stream, so it is not its service stream's.
 const SETUP_STREAM: u64 = 0x5e7f_a11d_c4a9_6e01;
 
+/// Mixed into the seed of a server's health check stream, so it is not its service stream's
+/// or its setup stream's.
+const HEALTH_STREAM: u64 = 0x4ea1_7c4e_c0ff_ee05;
+
+/// The interrupt of a job whose unit fails ([`Breakdown`]).
+const FAILED: u64 = 0;
+
+/// The interrupt of a job whose unit a health check takes out ([`HealthCheck`]).
+const TAKEN_OUT: u64 = 1;
+
 /// What a server whose units fail, follow a calendar or set up runs with.
 struct UnitServer {
     capacity: u32,
@@ -2404,6 +2498,7 @@ struct UnitServer {
     breakdown: Option<Breakdown>,
     shifts: Vec<(f64, bool)>,
     setup: Option<Setups>,
+    health: Option<HealthCheck>,
 }
 
 /// A unit that is down and holds no entity cannot take one, so the place in the server's finite
@@ -2431,6 +2526,12 @@ fn reserve_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places
 /// A unit checks the calendar only as it takes an entity: a job under way when the shift ends
 /// finishes, and one a failure interrupted resumes after the repair, shift or not. Failures
 /// come in elapsed time, and repairs go on, through the breaks.
+///
+/// With a health check ([`HealthCheck`]), a process per unit checks it and takes it out for its
+/// restart; failures keep coming in elapsed time while it is out. The dispatcher then waits
+/// for a free unit before it takes the next entity from the queue, so every waiting entity
+/// stays in the queue, where a retried job goes ahead of them all. A retried start's wait is
+/// taken back, so the mean wait runs from arrival to the start of the attempt that finished.
 fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
     let UnitServer {
         capacity,
@@ -2438,6 +2539,7 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
         breakdown,
         shifts,
         setup,
+        health,
     } = parts;
     let ctx = env.ctx.clone();
     let me = tag(env.me);
@@ -2448,6 +2550,10 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
     let mut setup_rng = setup
         .as_ref()
         .map(|_| Rng::new(env.rng.clone().next_u64() ^ SETUP_STREAM));
+    // So do the health checks, seeded the same way: adding a check changes no other draw.
+    let mut health_rng = health
+        .as_ref()
+        .map(|_| Rng::new(env.rng.clone().next_u64() ^ HEALTH_STREAM));
     let units: Rc<RefCell<Vec<Unit>>> = Rc::new(RefCell::new(
         (0..capacity).map(|_| Unit::default()).collect(),
     ));
@@ -2458,6 +2564,8 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
     // failure waits for.
     let up: Rc<Vec<Gate>> = Rc::new((0..capacity).map(|_| Gate::new(&ctx, true)).collect());
     let done: Rc<Vec<Signal>> = Rc::new((0..capacity).map(|_| Signal::new(&ctx)).collect());
+    // Each unit's being back from a health check's restart, which a resumed job waits for.
+    let back: Rc<Vec<Gate>> = Rc::new((0..capacity).map(|_| Gate::new(&ctx, true)).collect());
     let env = Rc::new(RefCell::new(env));
     // Off shift from the start: every unit is (counted from time 0).
     if shifts.first().is_some_and(|(_, open)| !*open) {
@@ -2525,7 +2633,7 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                 let places = env.borrow().places.clone();
                 reserve_place(&units, u, places.as_ref());
                 if let Some(pid) = serving {
-                    c.interrupt(pid, 0);
+                    c.interrupt(pid, FAILED);
                 }
                 c.hold(b.repair.sample(&mut rng)).await;
                 let kept = units.borrow_mut().get_mut(u).and_then(|x| {
@@ -2548,35 +2656,106 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
         });
     }
 
+    for u in 0..capacity as usize {
+        let (Some(h), Some(health_rng)) = (health.clone(), health_rng.as_mut()) else {
+            break;
+        };
+        let (c, units, changed, back, env, book) = (
+            ctx.clone(),
+            Rc::clone(&units),
+            changed.clone(),
+            Rc::clone(&back),
+            Rc::clone(&env),
+            Rc::clone(&book),
+        );
+        let mut rng = health_rng.fork();
+        sim.spawn_tagged(me, async move {
+            loop {
+                c.hold(h.interval.sample(&mut rng)).await;
+                if !take_out(&units, u, &h, &book.open, &env) {
+                    continue;
+                }
+                let serving = units.borrow_mut().get_mut(u).and_then(|x| {
+                    x.out = true;
+                    x.serving.take()
+                });
+                if let Some(g) = back.get(u) {
+                    g.close();
+                }
+                {
+                    let e = env.borrow();
+                    e.with_stats(|s| s.taken_out += 1);
+                    book.change(&e, u, |d| d.out = true);
+                }
+                if let Some(pid) = serving {
+                    c.interrupt(pid, TAKEN_OUT);
+                }
+                c.hold(h.restart.sample(&mut rng)).await;
+                if let Some(x) = units.borrow_mut().get_mut(u) {
+                    x.out = false;
+                }
+                book.change(&env.borrow(), u, |d| d.out = false);
+                if let Some(g) = back.get(u) {
+                    g.open();
+                }
+                changed.notify_all();
+            }
+        });
+    }
+
     let patient = env.borrow().patient.clone();
+    let checked = health.is_some();
+    let retries = health
+        .as_ref()
+        .is_some_and(|h| h.on_takeout == OnTakeout::Retry);
     sim.spawn_tagged(me, async move {
+        // The first unit that is up, back, idle and on shift.
+        let free = || {
+            book.open
+                .get()
+                .then(|| {
+                    units
+                        .borrow()
+                        .iter()
+                        .position(|x| !x.busy && !x.down && !x.due && !x.out)
+                })
+                .flatten()
+        };
         loop {
             let input = env.borrow().input.clone();
-            let mut entity = Some(input.get().await);
-            // Still waiting while it waits for a unit here, so it can still give up.
-            if let Some(p) = &patient {
-                *p.held.borrow_mut() = entity.take();
-            }
-            // The first unit that is up, idle and on shift; else wait for one.
-            let unit = loop {
-                let free = book
-                    .open
-                    .get()
-                    .then(|| {
-                        units
-                            .borrow()
-                            .iter()
-                            .position(|x| !x.busy && !x.down && !x.due)
-                    })
-                    .flatten();
-                match free {
-                    Some(u) => break u,
-                    None => changed.wait().await,
+            let (entity, unit) = if checked {
+                // A unit first, then the entity, which so stays in the queue meanwhile.
+                while free().is_none() {
+                    changed.wait().await;
                 }
-            };
-            let Some(entity) = entity.or_else(|| patient.as_ref()?.held.borrow_mut().take()) else {
-                // It gave up meanwhile: the unit takes the next.
-                continue;
+                let entity = input.get().await;
+                match free() {
+                    Some(u) => (entity, u),
+                    // Taken out (or failed) while the entity came: back to the head.
+                    None => {
+                        input.put_front(entity);
+                        continue;
+                    }
+                }
+            } else {
+                let mut entity = Some(input.get().await);
+                // Still waiting while it waits for a unit here, so it can still give up.
+                if let Some(p) = &patient {
+                    *p.held.borrow_mut() = entity.take();
+                }
+                // The first unit that is up, idle and on shift; else wait for one.
+                let unit = loop {
+                    match free() {
+                        Some(u) => break u,
+                        None => changed.wait().await,
+                    }
+                };
+                let Some(entity) = entity.or_else(|| patient.as_ref()?.held.borrow_mut().take())
+                else {
+                    // It gave up meanwhile: the unit takes the next.
+                    continue;
+                };
+                (entity, unit)
             };
             let set_up = match (&setup, setup_rng.as_mut()) {
                 (Some(s), Some(rng)) => units
@@ -2585,10 +2764,16 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                     .and_then(|x| s.before(&entity, x, rng)),
                 _ => None,
             };
+            let started = ctx.now();
+            // The statistics this start's wait goes into (a warm-up may reset them).
+            let measured = env
+                .borrow()
+                .stats
+                .get(env.borrow().me)
+                .map_or(0, |s| s.borrow().resets);
             let duration = {
                 let mut e = env.borrow_mut();
-                let now = e.ctx.now();
-                e.with_stats(|s| s.wait.add(now - entity.entered));
+                e.with_stats(|s| s.wait.add(started - entity.entered));
                 e.adjust(|s| &mut s.waiting, -1.0);
                 e.adjust(|s| &mut s.busy, 1.0);
                 book.change(&e, unit, |d| {
@@ -2603,7 +2788,7 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
             if let Some(x) = units.borrow_mut().get_mut(unit) {
                 x.busy = true;
             }
-            let (c, units2, changed2, up2, done2, env2, book2) = (
+            let (c, units2, changed2, up2, done2, env2, book2, back2) = (
                 ctx.clone(),
                 Rc::clone(&units),
                 changed.clone(),
@@ -2611,12 +2796,17 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                 Rc::clone(&done),
                 Rc::clone(&env),
                 Rc::clone(&book),
+                Rc::clone(&back),
             );
-            let interruptible = breakdown.as_ref().is_some_and(|b| b.interruptible);
+            // With a health check, any job can be interrupted: by a takeout, and by a failure
+            // only if failures interrupt (a failure that waits for the job never does).
+            let interruptible = breakdown.as_ref().is_some_and(|b| b.interruptible) || checked;
             let waits_for_repair = breakdown.as_ref().is_some_and(|b| !b.hands_on_while_down);
             let pid = ctx.spawn(async move {
-                // The setup (if any), then the job; a failure interrupts either alike.
-                for (job, time) in [(false, set_up), (true, Some(duration))] {
+                // The setup (if any), then the job; a failure or a takeout interrupts either
+                // alike. Retried, the work done so far.
+                let mut retried = None;
+                'work: for (job, time) in [(false, set_up), (true, Some(duration))] {
                     let Some(mut left) = time else { continue };
                     if job {
                         book2.change(&env2.borrow(), unit, |d| d.setup = false);
@@ -2629,12 +2819,36 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                         match c.hold_interruptible(left).await {
                             Ok(()) => break,
                             Err(i) => {
-                                // Failed mid-job: wait for the repair, then carry on.
                                 left = i.remaining;
                                 if let Some(x) = units2.borrow_mut().get_mut(unit) {
                                     x.serving = None;
                                 }
-                                if let Some(g) = up2.get(unit) {
+                                if retries && i.cause == InterruptCause::Other(TAKEN_OUT) {
+                                    // The setup, or the setup and part of the job.
+                                    let setup = set_up.unwrap_or(0.0).max(0.0);
+                                    let work = if job {
+                                        setup + duration.max(0.0) - left
+                                    } else {
+                                        setup - left
+                                    };
+                                    retried = Some(work.max(0.0));
+                                    break 'work;
+                                }
+                                // Failed or taken out mid-job: wait for the repair and the
+                                // restart, then carry on.
+                                if checked {
+                                    loop {
+                                        let closed = [up2.get(unit), back2.get(unit)]
+                                            .into_iter()
+                                            .flatten()
+                                            .find(|g| !g.is_open())
+                                            .cloned();
+                                        match closed {
+                                            Some(g) => g.wait().await,
+                                            None => break,
+                                        }
+                                    }
+                                } else if let Some(g) = up2.get(unit) {
                                     g.wait().await;
                                 }
                                 if let (Some(x), Some(pid)) =
@@ -2648,6 +2862,17 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                 }
                 if let Some(x) = units2.borrow_mut().get_mut(unit) {
                     x.serving = None;
+                }
+                if let Some(work) = retried {
+                    retry(&env2, &book2, unit, entity, work, started, measured);
+                    if let Some(x) = units2.borrow_mut().get_mut(unit) {
+                        x.busy = false;
+                    }
+                    if let Some(d) = done2.get(unit) {
+                        d.notify_all();
+                    }
+                    changed2.notify_all();
+                    return;
                 }
                 {
                     let e = env2.borrow();
@@ -2682,6 +2907,64 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
             }
         }
     });
+}
+
+/// Whether a health check on unit `u` (now) takes it out: it is up, not out already and on
+/// shift (`open`), more entities wait than the limit per working unit, and taking it out
+/// leaves at least the units to keep working.
+fn take_out(
+    units: &RefCell<Vec<Unit>>,
+    u: usize,
+    h: &HealthCheck,
+    open: &Cell<bool>,
+    env: &Rc<RefCell<BlockEnv>>,
+) -> bool {
+    let units = units.borrow();
+    if !open.get() || units.get(u).is_none_or(|x| x.down || x.out) {
+        return false;
+    }
+    let working = units.iter().filter(|x| !x.down && !x.out).count();
+    // Waiting in the queue (the dispatcher holds none with a health check).
+    let waiting = {
+        let e = env.borrow();
+        e.stats
+            .get(e.me)
+            .map_or(0.0, |s| s.borrow().waiting.value())
+    };
+    waiting > h.limit * working as f64 && working > h.keep.map_or(0, |k| k as usize)
+}
+
+/// A job on unit `unit` stops as a health check takes the unit out: the `work` done on it is
+/// wasted, and the entity goes back to the head of the queue at once, for any unit to start
+/// afresh (with a fresh patience). One that had given up during the job already (patience
+/// until done) is discarded instead, neither left nor produced. The wait recorded as it started
+/// (`started`, into the statistics as they were after `resets` resets) is taken back.
+fn retry(
+    env: &Rc<RefCell<BlockEnv>>,
+    book: &UnitBook,
+    unit: usize,
+    entity: Entity,
+    work: f64,
+    started: f64,
+    resets: u64,
+) {
+    let e = env.borrow();
+    e.with_stats(|s| {
+        s.wasted += work;
+        if s.resets == resets {
+            s.unwait.add(started - entity.entered);
+        }
+    });
+    e.adjust(|s| &mut s.busy, -1.0);
+    book.change(&e, unit, |d| {
+        d.processing = false;
+        d.setup = false;
+    });
+    if e.patient.as_ref().is_some_and(|p| !p.retry(entity.id)) {
+        return;
+    }
+    e.adjust(|s| &mut s.waiting, 1.0);
+    e.input.put_front(entity);
 }
 
 /// An entity whose service or delay is over leaves for the next element. Into a full finite
@@ -3127,6 +3410,9 @@ impl Pools {
                     abandoned_wait: None,
                     wasted: None,
                     wasted_share: None,
+                    taken_out: None,
+                    mean_in_service: None,
+                    time_restarting: None,
                     properties: Vec::new(),
                 }
             })

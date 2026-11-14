@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Sprememba časovne enote ne pretvori časov, ki so že v modelu.
 	Chart	Graf
 	Chart hover	Graf pod kazalcem
+	Check every	Preverjanje vsakih
 	Choose…	Izberite …
 	Clear Menu	Počisti meni
 	Close	Zapri
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Vsaka analiza večkrat zažene poskus z istim semenom, zato razlike izhajajo iz spremembe, ne iz naključja. To lahko traja nekaj časa.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Vsaka entiteta vzame prvo od teh možnosti, ki jo je mogoče izpolniti zdaj, vse naenkrat, in enote vrne, ko odide.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Vsaka entiteta tu čaka največ čas, ki ji je naključno določen ob prihodu, nato odneha: gre skozi izhod, označen z »Odnehale«, ali zapusti model.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Vsak strežnik (enota) se občasno preveri, tako kot izenačevalnik obremenitve preizkuša strežnike za seboj. Tisti, ki ne prestane preverjanja, ker jih čaka preveč, se vzame iz delovanja za ponovni zagon in se nato vrne.
 	Edit	Urejanje
 	Edit themes…	Uredi teme…
 	Elasticity	Elastičnost
@@ -172,6 +174,7 @@
 	Export table (CSV)	Izvozi tabelo (CSV)
 	Exported {file}	Izvoženo {file}
 	Expression	Izraz
+	Fails above, waiting per working server	Ne prestane nad, čakajočih na strežnik v delovanju
 	Failure interrupts the job	Okvara prekine delo
 	Family	Družina
 	File	Datoteka
@@ -192,6 +195,7 @@
 	Goes to	Vodi v
 	Hands on finished parts while down	Dokončane kose preda tudi med okvaro
 	Header	Glava
+	Health check	Preverjanje stanja
 	Help	Pomoč
 	Hide Others	Skrij druge
 	Hide {app}	Skrij {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Koliko kosov kupci želijo od teh odhodov; rezultati nato pokažejo takt (razpoložljivi čas, deljen s povpraševanjem) in čas cikla vsake naloge.
 	In use	V uporabi
 	Inside over time	Notri skozi čas
+	Job under way on a server taken out:	Delo v teku na strežniku, vzetem iz delovanja:
 	Jump	Skoči
 	Jump to time	Skoči na čas
+	Keep at least in service	V delovanju obdrži vsaj
 	Keep the time, without the estimate it came from	Ohrani čas brez ocene, iz katere izhaja
 	Keyboard Shortcuts…	Bližnjice na tipkovnici…
 	Keyboard shortcuts saved	Bližnjice na tipkovnici shranjene
@@ -227,6 +233,7 @@
 	Mean queue length	Povprečna dolžina vrste
 	Mean time blocked	Povprečni čas blokiranja
 	Mean time in system	Povprečni čas v sistemu
+	Mean units in service	Povprečno število enot v delovanju
 	Mean wait	Povprečno čakanje
 	Mean wait before giving up	Povprečno čakanje do odnehanja
 	Metric	Kazalnik
@@ -279,6 +286,7 @@
 	Opened {file}	Odprto {file}
 	Open…	Odpri…
 	Or start from an example	Ali začnite s primerom
+	Out for (restart)	Zunaj delovanja za (ponovni zagon)
 	PERT	PERT
 	PNG image	Slika PNG
 	Parameter	Parameter
@@ -355,6 +363,8 @@
 	Result with a target	Rezultat s ciljem
 	Result, down and up	Rezultat, navzdol in navzgor
 	Results	Rezultati
+	Resume after restart	Nadaljuj po ponovnem zagonu
+	Retry elsewhere	Poskusi znova drugje
 	Rework	Dodelava
 	Rework on {id}	Dodelava na {id}
 	Rework ratio	Delež dodelave
@@ -430,6 +440,7 @@
 	Sun	ned
 	Sweep a parameter	Preletanje parametra
 	Table stripes	Črte tabel
+	Take servers out when overloaded	Jemanje preobremenjenih strežnikov iz delovanja
 	Takt	Takt
 	Takt time	Takt čas
 	Tandem line	Zaporedna linija
@@ -442,6 +453,8 @@
 	Text	Besedilo
 	Text on accent	Besedilo na poudarku
 	Text on header	Besedilo v glavi
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Povezava se prekine in odjemalec poskusi znova: entiteta se takoj vrne na začetek vrste, delo, opravljeno na njej, pa je zapravljeno.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteta čaka pri svojem strežniku in delo se nadaljuje s preostankom, ko se strežnik vrne.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval sega pod ciljni delež {share}, zato ni pokazano s 95-odstotno zanesljivostjo, da je delež dosežen; več ponovitev bi ga zožilo.
 	The last task with a resource it finished at	Zadnja naloga z virom, skozi katero je šel kos
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Povprečni čas do pogoja za ustavitev je le iz ponovitev, ki so ga dosegle; ostale so tekle do svoje časovne omejitve.
@@ -466,6 +479,7 @@
 	Time failed	Čas okvare
 	Time off shift	Čas zunaj izmene
 	Time processing	Čas obdelave
+	Time restarting	Čas ponovnega zagona
 	Time setting up	Čas v pripravi
 	Time starved	Čas brez dela
 	Time to failure	Čas do okvare
@@ -488,6 +502,7 @@
 	Unit	Enota
 	Units	Enote
 	Units by calendar	Enote po koledarju
+	Units taken out by health checks	Enote, vzete iz delovanja s preverjanji stanja
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Enote, ki si jih deli več nalog. Naloga s skupnimi viri jih vzame iz skupine ali po vlogi.
 	Untitled	Brez naslova
 	Untitled model	Neimenovan model
@@ -519,7 +534,7 @@
 	Whole number	Celo število
 	Window	Okno
 	With every time at its mean: {units}	Z vsakim časom na povprečju: {units}
-	Work wasted on those who gave up	Zapravljeno delo za tiste, ki so odnehale
+	Work wasted on jobs that did not finish	Zapravljeno delo na nedokončanih opravilih
 	XPDL with BPSim	XPDL z BPSim
 	Yes or no	Da ali ne
 	Your changes will be lost if you don't save them.	Vaše spremembe bodo izgubljene, če jih ne shranite.

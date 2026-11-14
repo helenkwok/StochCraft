@@ -9,9 +9,9 @@ use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
     Bounds, Breakdown, Change, Connection, Demand, DemandPer, Diagnostic, Dist, Element, ElementId,
-    ElementKind, Estimate, Experiment, Family, Model, Need, Patience, PatienceUntil, Power,
-    Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Severity, Stop,
-    ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    ElementKind, Estimate, Experiment, Family, HealthCheck, Model, Need, OnTakeout, Patience,
+    PatienceUntil, Power, Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap,
+    Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -238,6 +238,10 @@ pub enum KindSpec {
         /// takes.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         patience: Option<PatienceSpec>,
+        /// Each unit is checked now and then and taken out for a restart when too many
+        /// entities wait per working unit; left out when units are never taken out.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        health_check: Option<HealthCheckSpec>,
     },
     /// A task whose units come from the model's shared resource pools (`resources`): each
     /// entity takes what the first of `needs` that can be met now asks for, holds it for its
@@ -791,6 +795,7 @@ impl From<&ElementKind> for KindSpec {
                 setup,
                 planned_run_time,
                 patience,
+                health_check,
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
@@ -807,6 +812,7 @@ impl From<&ElementKind> for KindSpec {
                 setup: setup.as_ref().map(Into::into),
                 planned_run_time: planned_run_time.as_ref().map(Into::into),
                 patience: patience.as_ref().map(Into::into),
+                health_check: health_check.as_ref().map(Into::into),
             },
             ElementKind::SharedTask {
                 service,
@@ -864,6 +870,7 @@ impl From<KindSpec> for ElementKind {
                 setup,
                 planned_run_time,
                 patience,
+                health_check,
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
@@ -879,6 +886,7 @@ impl From<KindSpec> for ElementKind {
                 setup: setup.map(Into::into),
                 planned_run_time: planned_run_time.map(Into::into),
                 patience: patience.map(Into::into),
+                health_check: health_check.map(Into::into),
             },
             KindSpec::SharedTask {
                 service,
@@ -1369,6 +1377,77 @@ impl From<&Patience> for PatienceSpec {
     }
 }
 
+/// A health check on a server's units: each unit is checked every `interval` (on its own; the
+/// first check one interval after the start) and is taken out of service for `restart` when
+/// more entities wait than `limit` per working unit (up, not out and on shift). A unit off
+/// shift, failed or already out is not checked.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct HealthCheckSpec {
+    pub interval: DistSpec,
+    /// The most entities waiting per working unit that still passes (a probe's timeout times
+    /// one unit's service rate); left out, there is no limit and no check fails.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub limit: Option<f64>,
+    pub restart: DistSpec,
+    /// Keep at least this many units in service: a failed check takes no unit out when that
+    /// would leave fewer working. Left out when there is no floor.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub keep: Option<u32>,
+    /// What happens to a job under way on a unit taken out: `retry` (the default, left out),
+    /// back to the head of the queue at once, its work wasted; or `resume`, it waits on the
+    /// unit and resumes after the restart.
+    #[serde(default, skip_serializing_if = "OnTakeoutSpec::is_retry")]
+    pub on_takeout: OnTakeoutSpec,
+}
+
+/// What happens to a job under way on a unit a health check takes out.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum OnTakeoutSpec {
+    /// Back to the head of the queue at once, for any unit to start afresh.
+    #[default]
+    Retry,
+    /// It waits on the unit and resumes with what was left after the restart.
+    Resume,
+}
+
+impl OnTakeoutSpec {
+    fn is_retry(&self) -> bool {
+        *self == OnTakeoutSpec::Retry
+    }
+}
+
+impl From<&HealthCheck> for HealthCheckSpec {
+    fn from(h: &HealthCheck) -> Self {
+        HealthCheckSpec {
+            interval: (&h.interval).into(),
+            limit: h.limit.is_finite().then_some(h.limit),
+            restart: (&h.restart).into(),
+            keep: h.keep,
+            on_takeout: match h.on_takeout {
+                OnTakeout::Retry => OnTakeoutSpec::Retry,
+                OnTakeout::Resume => OnTakeoutSpec::Resume,
+            },
+        }
+    }
+}
+
+impl From<HealthCheckSpec> for HealthCheck {
+    fn from(h: HealthCheckSpec) -> Self {
+        HealthCheck {
+            interval: h.interval.into(),
+            limit: h.limit.unwrap_or(f64::INFINITY),
+            restart: h.restart.into(),
+            keep: h.keep,
+            on_takeout: match h.on_takeout {
+                OnTakeoutSpec::Retry => OnTakeout::Retry,
+                OnTakeoutSpec::Resume => OnTakeout::Resume,
+            },
+        }
+    }
+}
+
 impl From<PatienceSpec> for Patience {
     fn from(p: PatienceSpec) -> Self {
         Patience {
@@ -1804,6 +1883,7 @@ mod tests {
                 setup: None,
                 planned_run_time: None,
                 patience: None,
+                health_check: None,
             })
         );
     }

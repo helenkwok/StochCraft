@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Thay đổi đơn vị thời gian không chuyển đổi các giá trị thời gian đã có trong mô hình.
 	Chart	Biểu đồ
 	Chart hover	Biểu đồ khi trỏ chuột
+	Check every	Kiểm tra mỗi
 	Choose…	Chọn…
 	Clear Menu	Xóa menu
 	Close	Đóng
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Mỗi phân tích chạy thí nghiệm nhiều lần với cùng hạt giống ngẫu nhiên, nên khác biệt đến từ thay đổi chứ không phải ngẫu nhiên. Việc này có thể mất một lúc.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Mỗi thực thể lấy phương án đầu tiên trong số này có thể đáp ứng ngay, lấy tất cả cùng lúc, và trả lại các đơn vị khi rời khỏi tác vụ.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Mỗi thực thể chờ ở đây tối đa một khoảng thời gian được rút ngẫu nhiên cho nó khi đến, rồi bỏ đi: nó đi theo lối ra được đánh dấu "Bỏ đi", hoặc rời khỏi mô hình.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Mỗi máy chủ (đơn vị) được kiểm tra định kỳ, như bộ cân bằng tải thăm dò các máy chủ phía sau nó. Máy chủ nào không đạt, do có quá nhiều thực thể đang chờ, sẽ bị đưa ra khỏi hoạt động để khởi động lại, rồi quay lại.
 	Edit	Chỉnh sửa
 	Edit themes…	Chỉnh sửa chủ đề…
 	Elasticity	Độ co giãn
@@ -172,6 +174,7 @@
 	Export table (CSV)	Xuất bảng (CSV)
 	Exported {file}	Đã xuất {file}
 	Expression	Biểu thức
+	Fails above, waiting per working server	Không đạt khi vượt (số chờ trên mỗi máy chủ đang hoạt động)
 	Failure interrupts the job	Hỏng hóc làm gián đoạn công việc
 	Family	Họ phân phối
 	File	Tệp
@@ -192,6 +195,7 @@
 	Goes to	Đi đến
 	Hands on finished parts while down	Vẫn chuyển tiếp chi tiết đã xong khi hỏng
 	Header	Thanh tiêu đề
+	Health check	Kiểm tra tình trạng
 	Help	Trợ giúp
 	Hide Others	Ẩn các mục khác
 	Hide {app}	Ẩn {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Khách hàng muốn bao nhiêu chi tiết từ các lượt rời đi này; khi đó kết quả hiển thị takt (thời gian khả dụng chia cho nhu cầu) và thời gian chu kỳ của mỗi tác vụ.
 	In use	Đang dùng
 	Inside over time	Bên trong theo thời gian
+	Job under way on a server taken out:	Công việc đang dở trên máy chủ bị đưa ra:
 	Jump	Đi
 	Jump to time	Đi tới thời điểm
+	Keep at least in service	Giữ hoạt động ít nhất
 	Keep the time, without the estimate it came from	Giữ thời gian, bỏ ước lượng mà nó dựa vào
 	Keyboard Shortcuts…	Phím tắt…
 	Keyboard shortcuts saved	Đã lưu phím tắt
@@ -227,6 +233,7 @@
 	Mean queue length	Độ dài hàng đợi trung bình
 	Mean time blocked	Thời gian bị chặn trung bình
 	Mean time in system	Thời gian trung bình trong hệ thống
+	Mean units in service	Số đơn vị đang hoạt động trung bình
 	Mean wait	Thời gian chờ trung bình
 	Mean wait before giving up	Thời gian chờ trung bình trước khi bỏ đi
 	Metric	Chỉ số
@@ -279,6 +286,7 @@
 	Opened {file}	Đã mở {file}
 	Open…	Mở…
 	Or start from an example	Hoặc bắt đầu bằng ví dụ
+	Out for (restart)	Ngừng hoạt động trong (khởi động lại)
 	PERT	PERT
 	PNG image	Ảnh PNG
 	Parameter	Tham số
@@ -355,6 +363,8 @@
 	Result with a target	Kết quả có mục tiêu
 	Result, down and up	Kết quả, khi giảm và tăng
 	Results	Kết quả
+	Resume after restart	Tiếp tục sau khi khởi động lại
+	Retry elsewhere	Thử lại ở chỗ khác
 	Rework	Làm lại
 	Rework on {id}	Làm lại tại {id}
 	Rework ratio	Tỷ lệ làm lại
@@ -430,6 +440,7 @@
 	Sun	CN
 	Sweep a parameter	Quét một tham số
 	Table stripes	Sọc bảng
+	Take servers out when overloaded	Đưa máy chủ quá tải ra khỏi hoạt động
 	Takt	Takt
 	Takt time	Thời gian takt
 	Tandem line	Dây chuyền nối tiếp
@@ -442,6 +453,8 @@
 	Text	Văn bản
 	Text on accent	Văn bản trên màu nhấn
 	Text on header	Văn bản trên thanh tiêu đề
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Kết nối bị ngắt và máy khách thử lại: thực thể quay lại ngay đầu hàng đợi, và công việc đã làm cho nó bị lãng phí.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Thực thể chờ tại máy chủ của nó và công việc tiếp tục với phần còn lại khi máy chủ quay lại.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Khoảng này xuống dưới tỷ lệ mục tiêu {share}, nên chưa cho thấy với độ tin cậy 95% rằng tỷ lệ đạt được; thêm lần lặp sẽ thu hẹp nó.
 	The last task with a resource it finished at	Tác vụ có tài nguyên cuối cùng mà chi tiết đã đi qua
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Thời gian trung bình đến điều kiện dừng chỉ tính trên các lần lặp đạt điều kiện đó; các lần khác chạy đến giới hạn thời gian.
@@ -466,6 +479,7 @@
 	Time failed	Thời gian hỏng hóc
 	Time off shift	Thời gian ngoài ca
 	Time processing	Thời gian xử lý
+	Time restarting	Thời gian khởi động lại
 	Time setting up	Thời gian đang chuẩn bị máy
 	Time starved	Thời gian không có việc
 	Time to failure	Thời gian đến khi hỏng
@@ -488,6 +502,7 @@
 	Unit	Đơn vị
 	Units	Đơn vị
 	Units by calendar	Đơn vị theo lịch
+	Units taken out by health checks	Đơn vị bị đưa ra do kiểm tra tình trạng
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Các đơn vị mà nhiều tác vụ dùng chung. Tác vụ có tài nguyên dùng chung lấy chúng theo nhóm hoặc theo vai trò.
 	Untitled	Chưa đặt tên
 	Untitled model	Mô hình chưa đặt tên
@@ -519,7 +534,7 @@
 	Whole number	Số nguyên
 	Window	Cửa sổ
 	With every time at its mean: {units}	Khi mọi thời gian bằng trung bình: {units}
-	Work wasted on those who gave up	Công việc lãng phí cho những thực thể bỏ đi
+	Work wasted on jobs that did not finish	Công việc lãng phí cho các công việc chưa xong
 	XPDL with BPSim	XPDL có BPSim
 	Yes or no	Có hoặc không
 	Your changes will be lost if you don't save them.	Các thay đổi sẽ bị mất nếu bạn không lưu.

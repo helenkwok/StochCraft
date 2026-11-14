@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	時間単位を変更しても、モデル内の既存の時間は換算されません。
 	Chart	グラフ
 	Chart hover	ポインター下のグラフ
+	Check every	チェック間隔
 	Choose…	選択…
 	Clear Menu	メニューを消去
 	Close	閉じる
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	各分析は同じ乱数シードで実験を何度か実行するため、差は偶然ではなく変更によるものです。時間がかかることがあります。
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	各エンティティは、これらのうち今すぐ一度にすべて満たせる最初のものを確保し、退出するときにユニットを返却します。
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	各エンティティは、到着時に抽選された時間を上限としてここで待ち、その後離脱します。「離脱」と表示された出口へ進むか、モデルから出ます。
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	各サーバ（ユニット）は、ロードバランサが背後のサーバを調べるように、一定の間隔でチェックされます。待ちが多すぎてチェックに失敗したサーバは、再起動のために稼働から外され、その後戻ります。
 	Edit	編集
 	Edit themes…	テーマを編集…
 	Elasticity	弾力性
@@ -172,6 +174,7 @@
 	Export table (CSV)	表をエクスポート (CSV)
 	Exported {file}	{file} をエクスポートしました
 	Expression	式
+	Fails above, waiting per working server	失敗の上限（稼働中のサーバ1台あたりの待ち数）
 	Failure interrupts the job	故障で作業を中断
 	Family	分布族
 	File	ファイル
@@ -192,6 +195,7 @@
 	Goes to	接続先
 	Hands on finished parts while down	故障中も完成した部品を渡す
 	Header	ヘッダー
+	Health check	ヘルスチェック
 	Help	ヘルプ
 	Hide Others	その他を隠す
 	Hide {app}	{app} を隠す
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	顧客がこれらの退出から求める部品の数。結果にはタクト（稼働可能時間を需要で割った値）と各タスクのサイクルタイムが表示されます。
 	In use	使用中
 	Inside over time	内部の数の推移
+	Job under way on a server taken out:	切り離されたサーバで処理中の作業:
 	Jump	移動
 	Jump to time	移動先の時刻
+	Keep at least in service	稼働を維持する最小数
 	Keep the time, without the estimate it came from	時間は残し、元の見積もりは破棄します
 	Keyboard Shortcuts…	キーボードショートカット…
 	Keyboard shortcuts saved	キーボードショートカットを保存しました
@@ -227,6 +233,7 @@
 	Mean queue length	平均待ち行列長
 	Mean time blocked	平均ブロック時間
 	Mean time in system	システム内の平均滞在時間
+	Mean units in service	稼働中の平均ユニット数
 	Mean wait	平均待ち時間
 	Mean wait before giving up	離脱までの平均待ち時間
 	Metric	指標
@@ -279,6 +286,7 @@
 	Opened {file}	{file} を開きました
 	Open…	開く…
 	Or start from an example	またはサンプルから始める
+	Out for (restart)	停止時間（再起動）
 	PERT	PERT
 	PNG image	PNG 画像
 	Parameter	パラメーター
@@ -355,6 +363,8 @@
 	Result with a target	目標のある結果
 	Result, down and up	結果（下げた場合と上げた場合）
 	Results	結果
+	Resume after restart	再起動後に再開
+	Retry elsewhere	別のサーバで再試行
 	Rework	手直し
 	Rework on {id}	{id} の手直し
 	Rework ratio	手直し率
@@ -430,6 +440,7 @@
 	Sun	日
 	Sweep a parameter	パラメーターのスイープ
 	Table stripes	表の縞
+	Take servers out when overloaded	過負荷のサーバを切り離す
 	Takt	タクトタイム
 	Takt time	タクトタイム
 	Tandem line	直列ライン
@@ -442,6 +453,8 @@
 	Text	テキスト
 	Text on accent	アクセント上のテキスト
 	Text on header	ヘッダー上のテキスト
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	接続が切れてクライアントが再試行します。エンティティはすぐに待ち行列の先頭に戻り、それまでの作業は無駄になります。
+	The entity waits on its server and the job carries on with what was left once the server is back.	エンティティは自分のサーバで待ち、サーバが戻ると残りの作業から続けます。
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	区間が目標割合 {share} を下回るため、割合が達成されたことは 95% の信頼度では示されていません。反復実行を増やすと区間は狭まります。
 	The last task with a resource it finished at	部品が最後に通ったリソースを使うタスク
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	停止条件までの平均時間は、停止条件に達した反復実行だけによるものです。それ以外は時間制限まで実行されました。
@@ -466,6 +479,7 @@
 	Time failed	故障時間
 	Time off shift	シフト外の時間
 	Time processing	処理中の時間
+	Time restarting	再起動中の時間
 	Time setting up	段取り中の時間
 	Time starved	仕事待ちの時間
 	Time to failure	故障までの時間
@@ -488,6 +502,7 @@
 	Unit	単位
 	Units	数量
 	Units by calendar	カレンダーごとの数量
+	Units taken out by health checks	ヘルスチェックで切り離されたユニット
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	複数のタスクで共有するユニット。共有リソースを使うタスクは、プールまたは役割を指定してユニットを確保します。
 	Untitled	名称未設定
 	Untitled model	無題のモデル
@@ -519,7 +534,7 @@
 	Whole number	整数
 	Window	ウィンドウ
 	With every time at its mean: {units}	すべての時間を平均値にした場合: {units}
-	Work wasted on those who gave up	離脱したものへの無駄な作業
+	Work wasted on jobs that did not finish	未完了の処理に費やされた無駄な作業
 	XPDL with BPSim	BPSim 付き XPDL
 	Yes or no	はい／いいえ
 	Your changes will be lost if you don't save them.	保存しないと変更は失われます。

@@ -74,6 +74,13 @@ pub const PLANNED_RUN_TIME: &str = "stochcraft:plannedRunTime";
 /// deadline drawn per entity.
 pub const PATIENCE: &str = "stochcraft:patience";
 
+/// The vendor extension for a server's health check: a `stochcraft:healthCheck` element with
+/// attributes `limit` (the most entities waiting per working unit that passes; `INF` for no
+/// limit), optional `keep` (the fewest units left working) and optional `onTakeout` (`retry`,
+/// the default, or `resume`), holding `stochcraft:interval` and `stochcraft:restart`, each a
+/// BPSim distribution, in the task's `ElementParameters`. BPSim 2.0 has nothing for it.
+pub const HEALTH_CHECK: &str = "stochcraft:healthCheck";
+
 /// A batch: `stochcraft:batchSize` on a task's `ElementParameters`, the number of entities it
 /// collects before sending them on together (a whole number of at least 1).
 pub const BATCH_SIZE: &str = "stochcraft:batchSize";

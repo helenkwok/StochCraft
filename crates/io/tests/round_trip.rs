@@ -3,8 +3,8 @@
 use stochcraft_blocks::{BlockId, Builder, Event, Rule};
 use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{
-    DateTime, Dist, ElementKind, Experiment, Model, Need, Patience, PatienceUntil, Property,
-    PropertyType, PropertyValue, Routing, TimeUnit,
+    DateTime, Dist, ElementKind, Experiment, HealthCheck, Model, Need, OnTakeout, Patience,
+    PatienceUntil, Property, PropertyType, PropertyValue, Routing, TimeUnit,
 };
 
 /// A model using every element kind and every distribution.
@@ -916,6 +916,139 @@ fn a_misplaced_or_unknown_patience_is_noted() {
             ..
         }
     ));
+}
+
+/// A health check is StochCraft's vendor extension: written, read back, changed (resuming, a
+/// floor, no limit) and removed in place.
+#[test]
+fn a_health_check_is_written_saved_and_removed() {
+    let mut m = Builder::new();
+    let src = m.source("requests", Dist::Exponential { mean: 1.0 }, None);
+    let pool = m.server("pool", 10, Dist::Exponential { mean: 8.0 });
+    let out = m.sink("out");
+    m.connect(src, pool);
+    m.connect(pool, out);
+    m.health_check(
+        pool,
+        HealthCheck {
+            interval: Dist::Exponential { mean: 5.0 },
+            limit: 2.0,
+            restart: Dist::Constant(60.0),
+            keep: None,
+            on_takeout: OnTakeout::Retry,
+        },
+    );
+    let model = m.build(Experiment::default());
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(
+        text.contains(r#"<stochcraft:healthCheck limit="2">"#),
+        "{text}"
+    );
+    assert!(text.contains("<stochcraft:restart>"), "{text}");
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+
+    let mut edited = loaded.model.clone();
+    if let ElementKind::Server { health_check, .. } = &mut edited.elements[1].kind {
+        *health_check = Some(HealthCheck {
+            interval: Dist::Constant(10.0),
+            limit: f64::INFINITY,
+            restart: Dist::Exponential { mean: 30.0 },
+            keep: Some(7),
+            on_takeout: OnTakeout::Resume,
+        });
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(
+        text.contains(r#"limit="INF""#)
+            && text.contains(r#"keep="7""#)
+            && text.contains(r#"onTakeout="resume""#),
+        "{text}"
+    );
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    if let ElementKind::Server { health_check, .. } = &mut edited.elements[1].kind {
+        *health_check = None;
+    }
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let removed = again.opened.save(&edited);
+    let Ok(removed) = removed else { unreachable!() };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(!text.contains("stochcraft:healthCheck"), "{text}");
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// A health check with an unknown onTakeout or a bad limit, or on a task with no resource, is
+/// read with a note.
+#[test]
+fn a_misplaced_or_bad_health_check_is_noted() {
+    let mut m = Builder::new();
+    let src = m.source("requests", Dist::Exponential { mean: 1.0 }, None);
+    let pool = m.server("pool", 2, Dist::Exponential { mean: 1.5 });
+    let out = m.sink("out");
+    m.connect(src, pool);
+    m.connect(pool, out);
+    m.health_check(
+        pool,
+        HealthCheck {
+            interval: Dist::Constant(3.0),
+            limit: 1.0,
+            restart: Dist::Constant(9.0),
+            keep: None,
+            on_takeout: OnTakeout::Resume,
+        },
+    );
+    let text = String::from_utf8_lossy(&write_new(&m.build(Experiment::default()))).into_owned();
+    let notes = |text: &str| {
+        read(text.as_bytes())
+            .map(|l| (l.notes, l.model))
+            .unwrap_or_else(|_| unreachable!())
+    };
+    let (n, model) = notes(&text.replace(r#"onTakeout="resume""#, r#"onTakeout="later""#));
+    assert!(
+        n.iter().any(|n| n.message.contains("retry or resume")),
+        "{n:?}"
+    );
+    assert!(matches!(
+        &model.elements[1].kind,
+        ElementKind::Server {
+            health_check: Some(HealthCheck {
+                on_takeout: OnTakeout::Retry,
+                ..
+            }),
+            ..
+        }
+    ));
+    let (n, model) = notes(&text.replace(r#"limit="1""#, r#"limit="-1""#));
+    assert!(
+        n.iter().any(|n| n.message.contains("limit of 0 or more")),
+        "{n:?}"
+    );
+    assert!(matches!(
+        &model.elements[1].kind,
+        ElementKind::Server {
+            health_check: None,
+            ..
+        }
+    ));
+    // On the end event, which has no resource.
+    let moved = text.replace(r#"elementRef="pool""#, r#"elementRef="out""#);
+    let (n, _) = notes(&moved);
+    assert!(
+        n.iter().any(|n| n
+            .message
+            .contains("health check (stochcraft:healthCheck) applies only")),
+        "{n:?}"
+    );
 }
 
 /// A scrap sink, with the server it counts against, and a rework connection are StochCraft's

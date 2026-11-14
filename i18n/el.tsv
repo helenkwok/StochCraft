@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Η αλλαγή της μονάδας χρόνου δεν μετατρέπει τους χρόνους που υπάρχουν ήδη στο μοντέλο.
 	Chart	Γράφημα
 	Chart hover	Γράφημα κάτω από τον δείκτη
+	Check every	Έλεγχος κάθε
 	Choose…	Επιλογή…
 	Clear Menu	Εκκαθάριση μενού
 	Close	Κλείσιμο
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Κάθε ανάλυση εκτελεί το πείραμα πολλές φορές με τον ίδιο σπόρο, ώστε οι διαφορές να οφείλονται στην αλλαγή και όχι στην τύχη. Μπορεί να διαρκέσει λίγο.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Κάθε οντότητα παίρνει την πρώτη από αυτές που μπορεί να ικανοποιηθεί τώρα, ολόκληρη μονομιάς, και επιστρέφει τις μονάδες όταν φεύγει από την εργασία.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Κάθε οντότητα περιμένει εδώ το πολύ έναν χρόνο που κληρώνεται γι' αυτήν κατά την άφιξή της και μετά εγκαταλείπει: παίρνει την έξοδο με την ένδειξη «Εγκατάλειψη» ή φεύγει από το μοντέλο.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Κάθε εξυπηρετητής (μονάδα) ελέγχεται ανά διαστήματα, όπως ένας εξισορροπητής φόρτου ελέγχει τους εξυπηρετητές πίσω του. Όποιος αποτύχει, επειδή περιμένουν υπερβολικά πολλές, τίθεται εκτός λειτουργίας για επανεκκίνηση και μετά επιστρέφει.
 	Edit	Επεξεργασία
 	Edit themes…	Επεξεργασία θεμάτων…
 	Elasticity	Ελαστικότητα
@@ -172,6 +174,7 @@
 	Export table (CSV)	Εξαγωγή πίνακα (CSV)
 	Exported {file}	Εξήχθη το {file}
 	Expression	Έκφραση
+	Fails above, waiting per working server	Αποτυγχάνει πάνω από, σε αναμονή ανά εξυπηρετητή σε λειτουργία
 	Failure interrupts the job	Η βλάβη διακόπτει την εργασία
 	Family	Οικογένεια
 	File	Αρχείο
@@ -192,6 +195,7 @@
 	Goes to	Οδηγεί σε
 	Hands on finished parts while down	Παραδίδει τα έτοιμα τεμάχια και σε βλάβη
 	Header	Κεφαλίδα
+	Health check	Έλεγχος κατάστασης
 	Help	Βοήθεια
 	Hide Others	Απόκρυψη άλλων
 	Hide {app}	Απόκρυψη {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Πόσα τεμάχια θέλουν οι πελάτες από αυτές τις αναχωρήσεις· τότε τα αποτελέσματα δείχνουν το takt (τον διαθέσιμο χρόνο διά τη ζήτηση) και τον χρόνο κύκλου κάθε εργασίας.
 	In use	Σε χρήση
 	Inside over time	Μέσα στη διάρκεια του χρόνου
+	Job under way on a server taken out:	Δουλειά σε εξέλιξη σε εξυπηρετητή που τίθεται εκτός λειτουργίας:
 	Jump	Μετάβαση
 	Jump to time	Μετάβαση σε χρόνο
+	Keep at least in service	Τουλάχιστον σε λειτουργία
 	Keep the time, without the estimate it came from	Διατήρηση του χρόνου χωρίς την εκτίμηση από την οποία προήλθε
 	Keyboard Shortcuts…	Συντομεύσεις πληκτρολογίου…
 	Keyboard shortcuts saved	Οι συντομεύσεις πληκτρολογίου αποθηκεύτηκαν
@@ -227,6 +233,7 @@
 	Mean queue length	Μέσο μήκος ουράς
 	Mean time blocked	Μέσος χρόνος αποκλεισμού
 	Mean time in system	Μέσος χρόνος στο σύστημα
+	Mean units in service	Μέσο πλήθος μονάδων σε λειτουργία
 	Mean wait	Μέση αναμονή
 	Mean wait before giving up	Μέση αναμονή πριν από την εγκατάλειψη
 	Metric	Μετρική
@@ -279,6 +286,7 @@
 	Opened {file}	Άνοιξε το {file}
 	Open…	Άνοιγμα…
 	Or start from an example	Ή ξεκινήστε από ένα παράδειγμα
+	Out for (restart)	Εκτός λειτουργίας για (επανεκκίνηση)
 	PERT	PERT
 	PNG image	Εικόνα PNG
 	Parameter	Παράμετρος
@@ -355,6 +363,8 @@
 	Result with a target	Αποτέλεσμα με στόχο
 	Result, down and up	Αποτέλεσμα, κάτω και πάνω
 	Results	Αποτελέσματα
+	Resume after restart	Συνέχιση μετά την επανεκκίνηση
+	Retry elsewhere	Νέα προσπάθεια αλλού
 	Rework	Επανεπεξεργασία
 	Rework on {id}	Επανεπεξεργασία στο {id}
 	Rework ratio	Ποσοστό επανεπεξεργασίας
@@ -430,6 +440,7 @@
 	Sun	Κυρ
 	Sweep a parameter	Σάρωση παραμέτρου
 	Table stripes	Ρίγες πινάκων
+	Take servers out when overloaded	Θέση υπερφορτωμένων εξυπηρετητών εκτός λειτουργίας
 	Takt	Takt
 	Takt time	Χρόνος takt
 	Tandem line	Διαδοχική γραμμή
@@ -442,6 +453,8 @@
 	Text	Κείμενο
 	Text on accent	Κείμενο σε χρώμα έμφασης
 	Text on header	Κείμενο στην κεφαλίδα
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Η σύνδεση πέφτει και ο πελάτης προσπαθεί ξανά: η οντότητα επιστρέφει αμέσως στην κεφαλή της ουράς, και η δουλειά που έγινε σε αυτήν σπαταλιέται.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Η οντότητα περιμένει στον εξυπηρετητή της και η δουλειά συνεχίζεται με ό,τι απέμενε μόλις επιστρέψει ο εξυπηρετητής.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Το διάστημα φτάνει κάτω από το ποσοστό-στόχο {share}, άρα δεν φαίνεται με εμπιστοσύνη 95% ότι το ποσοστό επιτυγχάνεται· περισσότερες επαναλήψεις θα το στένευαν.
 	The last task with a resource it finished at	Η τελευταία εργασία με πόρο από την οποία πέρασε το τεμάχιο
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Ο μέσος χρόνος ως τη συνθήκη διακοπής αφορά μόνο τις επαναλήψεις που την έφτασαν· οι υπόλοιπες διήρκεσαν ως το χρονικό τους όριο.
@@ -466,6 +479,7 @@
 	Time failed	Χρόνος βλάβης
 	Time off shift	Χρόνος εκτός βάρδιας
 	Time processing	Χρόνος επεξεργασίας
+	Time restarting	Χρόνος επανεκκίνησης
 	Time setting up	Χρόνος σε προετοιμασία
 	Time starved	Χρόνος χωρίς εργασία
 	Time to failure	Χρόνος έως τη βλάβη
@@ -488,6 +502,7 @@
 	Unit	Μονάδα
 	Units	Μονάδες
 	Units by calendar	Μονάδες ανά ημερολόγιο
+	Units taken out by health checks	Μονάδες εκτός λειτουργίας από ελέγχους κατάστασης
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Μονάδες που μοιράζονται πολλές εργασίες. Μια εργασία με κοινόχρηστους πόρους τις παίρνει από δεξαμενή ή κατά ρόλο.
 	Untitled	Χωρίς τίτλο
 	Untitled model	Μοντέλο χωρίς τίτλο
@@ -519,7 +534,7 @@
 	Whole number	Ακέραιος αριθμός
 	Window	Παράθυρο
 	With every time at its mean: {units}	Με κάθε χρόνο στη μέση τιμή του: {units}
-	Work wasted on those who gave up	Σπαταλημένη δουλειά σε όσες εγκατέλειψαν
+	Work wasted on jobs that did not finish	Σπαταλημένη δουλειά σε ανολοκλήρωτες δουλειές
 	XPDL with BPSim	XPDL με BPSim
 	Yes or no	Ναι ή όχι
 	Your changes will be lost if you don't save them.	Οι αλλαγές σας θα χαθούν αν δεν τις αποθηκεύσετε.

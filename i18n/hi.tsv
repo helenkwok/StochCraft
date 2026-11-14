@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	समय की इकाई बदलने से मॉडल में पहले से मौजूद समय मान परिवर्तित नहीं होते।
 	Chart	चार्ट
 	Chart hover	पॉइंटर के नीचे चार्ट
+	Check every	जाँच का अंतराल
 	Choose…	चुनें…
 	Clear Menu	मेनू साफ़ करें
 	Close	बंद करें
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	हर विश्लेषण एक ही यादृच्छिक बीज से प्रयोग को कई बार चलाता है, ताकि अंतर बदलाव से आए, संयोग से नहीं। इसमें कुछ समय लग सकता है।
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	प्रत्येक इकाई इनमें से पहला ऐसा विकल्प लेती है जिसे अभी एक साथ पूरा किया जा सके, और बाहर निकलते समय संसाधन इकाइयाँ लौटा देती है।
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	प्रत्येक इकाई यहाँ अधिक से अधिक उतना समय प्रतीक्षा करती है जितना उसके आने पर उसके लिए यादृच्छिक रूप से चुना जाता है, फिर छोड़ देती है: वह "छोड़कर गईं" चिह्नित बाहर जाने का रास्ता लेती है, या मॉडल से बाहर निकल जाती है।
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	हर सर्वर (संसाधन इकाई) की समय-समय पर जाँच होती है, जैसे लोड बैलेंसर अपने पीछे के सर्वरों को जाँचता है। जो सर्वर जाँच में विफल होता है, क्योंकि बहुत अधिक प्रतीक्षा में हैं, उसे पुनः आरंभ के लिए हटा दिया जाता है, फिर वह लौट आता है।
 	Edit	संपादित करें
 	Edit themes…	थीम संपादित करें…
 	Elasticity	लोच
@@ -172,6 +174,7 @@
 	Export table (CSV)	तालिका निर्यात करें (CSV)
 	Exported {file}	{file} निर्यात किया गया
 	Expression	व्यंजक
+	Fails above, waiting per working server	विफलता सीमा, चालू सर्वर प्रति प्रतीक्षारत
 	Failure interrupts the job	खराबी काम रोक देती है
 	Family	परिवार
 	File	फ़ाइल
@@ -192,6 +195,7 @@
 	Goes to	यहाँ जाता है
 	Hands on finished parts while down	खराबी में भी तैयार पुर्जे आगे भेजता है
 	Header	शीर्ष पट्टी
+	Health check	स्थिति जाँच
 	Help	सहायता
 	Hide Others	अन्य छिपाएँ
 	Hide {app}	{app} छिपाएँ
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ग्राहक इन प्रस्थानों से कितने पुर्जे चाहते हैं; तब परिणाम टैक्ट (उपलब्ध समय को मांग से भाग देकर) और हर कार्य का चक्र समय दिखाते हैं।
 	In use	उपयोग में
 	Inside over time	समय के साथ अंदर
+	Job under way on a server taken out:	हटाए गए सर्वर पर चल रहा काम:
 	Jump	जाएँ
 	Jump to time	समय पर जाएँ
+	Keep at least in service	कम से कम चालू रखें
 	Keep the time, without the estimate it came from	समय रखें, जिस अनुमान से आया उसके बिना
 	Keyboard Shortcuts…	कीबोर्ड शॉर्टकट…
 	Keyboard shortcuts saved	कीबोर्ड शॉर्टकट सहेज दिए गए
@@ -227,6 +233,7 @@
 	Mean queue length	औसत कतार लंबाई
 	Mean time blocked	औसत अवरोध समय
 	Mean time in system	सिस्टम में औसत समय
+	Mean units in service	चालू संसाधन इकाइयों की औसत संख्या
 	Mean wait	औसत प्रतीक्षा
 	Mean wait before giving up	छोड़ने से पहले औसत प्रतीक्षा
 	Metric	मापदंड
@@ -279,6 +286,7 @@
 	Opened {file}	{file} खोली गई
 	Open…	खोलें…
 	Or start from an example	या किसी उदाहरण से शुरू करें
+	Out for (restart)	हटे रहने का समय (पुनः आरंभ)
 	PERT	PERT
 	PNG image	PNG छवि
 	Parameter	पैरामीटर
@@ -355,6 +363,8 @@
 	Result with a target	लक्ष्य वाला परिणाम
 	Result, down and up	परिणाम, नीचे और ऊपर
 	Results	परिणाम
+	Resume after restart	पुनः आरंभ के बाद जारी रखें
+	Retry elsewhere	कहीं और फिर कोशिश करें
 	Rework	पुनःकार्य
 	Rework on {id}	{id} पर पुनःकार्य
 	Rework ratio	पुनःकार्य अनुपात
@@ -430,6 +440,7 @@
 	Sun	रवि
 	Sweep a parameter	पैरामीटर स्वीप करें
 	Table stripes	तालिका की धारियाँ
+	Take servers out when overloaded	अधिक भार वाले सर्वर हटाएँ
 	Takt	टैक्ट
 	Takt time	टैक्ट समय
 	Tandem line	क्रमिक लाइन
@@ -442,6 +453,8 @@
 	Text	पाठ
 	Text on accent	एक्सेंट रंग पर पाठ
 	Text on header	शीर्ष पट्टी पर पाठ
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	कनेक्शन टूट जाता है और क्लाइंट फिर कोशिश करता है: इकाई तुरंत कतार के आगे लौट जाती है, और उस पर किया गया काम व्यर्थ जाता है।
+	The entity waits on its server and the job carries on with what was left once the server is back.	इकाई अपने सर्वर पर प्रतीक्षा करती है, और सर्वर लौटते ही काम बचे हुए हिस्से से आगे चलता है।
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	अंतराल {share} के लक्ष्य हिस्से से नीचे तक जाता है, इसलिए 95% विश्वास के साथ यह नहीं दिखता कि हिस्सा पूरा हुआ; अधिक पुनरावृत्तियाँ इसे संकरा करेंगी।
 	The last task with a resource it finished at	अंतिम संसाधन वाला कार्य जिससे पुर्जा गुज़रा
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	रुकने की शर्त तक का औसत समय केवल उन पुनरावृत्तियों पर है जिन्होंने शर्त पूरी की; बाकी अपनी समय सीमा तक चलीं।
@@ -466,6 +479,7 @@
 	Time failed	खराबी में समय
 	Time off shift	पाली से बाहर समय
 	Time processing	प्रसंस्करण में समय
+	Time restarting	पुनः आरंभ में समय
 	Time setting up	सेटअप में समय
 	Time starved	बिना काम का समय
 	Time to failure	खराबी तक का समय
@@ -488,6 +502,7 @@
 	Unit	इकाई
 	Units	मात्रा
 	Units by calendar	कैलेंडर के अनुसार मात्रा
+	Units taken out by health checks	स्थिति जाँच से हटाई गई संसाधन इकाइयाँ
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	संसाधन इकाइयाँ, जिन्हें कई कार्य साझा करते हैं। साझा संसाधनों वाला कार्य उन्हें पूल या भूमिका के अनुसार लेता है।
 	Untitled	बिना शीर्षक
 	Untitled model	बिना शीर्षक वाला मॉडल
@@ -519,7 +534,7 @@
 	Whole number	पूर्णांक
 	Window	विंडो
 	With every time at its mean: {units}	हर समय उसके माध्य पर: {units}
-	Work wasted on those who gave up	छोड़ने वालों पर व्यर्थ गया काम
+	Work wasted on jobs that did not finish	अधूरे कामों पर व्यर्थ गया काम
 	XPDL with BPSim	BPSim सहित XPDL
 	Yes or no	हाँ या नहीं
 	Your changes will be lost if you don't save them.	यदि आप सहेजते नहीं हैं, तो परिवर्तन खो जाएँगे।

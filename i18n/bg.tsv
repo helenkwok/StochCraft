@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Промяната на единицата за време не преобразува времената, които вече са в модела.
 	Chart	Графика
 	Chart hover	Графика под показалеца
+	Check every	Проверка на всеки
 	Choose…	Изберете…
 	Clear Menu	Изчистване на менюто
 	Close	Затваряне
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Всеки анализ изпълнява експеримента няколко пъти със същата начална стойност, така че разликите идват от промяната, а не от случайността. Може да отнеме време.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Всяка същност взема първата от тези възможности, която може да бъде изпълнена сега, изцяло и наведнъж, и връща единиците, когато излезе.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Всяка същност чака тук най-много време, изтеглено случайно за нея при пристигането ѝ, след което се отказва: тръгва по изхода, отбелязан като „Отказали се“, или напуска модела.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Всеки сървър (единица) се проверява от време на време, както балансьор на натоварването проверява сървърите зад себе си. Този, който не издържи проверката, защото чакат твърде много, се извежда от работа за рестартиране и после се връща.
 	Edit	Редактиране
 	Edit themes…	Редактиране на темите…
 	Elasticity	Еластичност
@@ -172,6 +174,7 @@
 	Export table (CSV)	Експортиране на таблица (CSV)
 	Exported {file}	Експортиран е {file}
 	Expression	Израз
+	Fails above, waiting per working server	Неуспех над, чакащи на сървър в работа
 	Failure interrupts the job	Повредата прекъсва работата
 	Family	Семейство
 	File	Файл
@@ -192,6 +195,7 @@
 	Goes to	Отива към
 	Hands on finished parts while down	Предава готовите части и при повреда
 	Header	Заглавна лента
+	Health check	Проверка на състоянието
 	Help	Помощ
 	Hide Others	Скриване на другите
 	Hide {app}	Скриване на {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Колко части искат клиентите от тези напускания; тогава резултатите показват такта (наличното време, разделено на търсенето) и времето на цикъла на всяка задача.
 	In use	В употреба
 	Inside over time	Вътре във времето
+	Job under way on a server taken out:	Работа в ход на изведен сървър:
 	Jump	Отиване
 	Jump to time	Отиване към момент
+	Keep at least in service	В работа да остават поне
 	Keep the time, without the estimate it came from	Запазване на времето без оценката, от която идва
 	Keyboard Shortcuts…	Клавишни комбинации…
 	Keyboard shortcuts saved	Клавишните комбинации са запазени
@@ -227,6 +233,7 @@
 	Mean queue length	Средна дължина на опашката
 	Mean time blocked	Средно време на блокиране
 	Mean time in system	Средно време в системата
+	Mean units in service	Среден брой единици в работа
 	Mean wait	Средно чакане
 	Mean wait before giving up	Средно чакане до отказване
 	Metric	Показател
@@ -279,6 +286,7 @@
 	Opened {file}	Отворен е {file}
 	Open…	Отваряне…
 	Or start from an example	Или започнете с пример
+	Out for (restart)	Извън работа за (рестартиране)
 	PERT	PERT
 	PNG image	Изображение PNG
 	Parameter	Параметър
@@ -355,6 +363,8 @@
 	Result with a target	Резултат с цел
 	Result, down and up	Резултат, надолу и нагоре
 	Results	Резултати
+	Resume after restart	Продължаване след рестартиране
+	Retry elsewhere	Нов опит другаде
 	Rework	Преработка
 	Rework on {id}	Преработка на {id}
 	Rework ratio	Дял на преработката
@@ -430,6 +440,7 @@
 	Sun	нд
 	Sweep a parameter	Обхождане на параметър
 	Table stripes	Ивици на таблиците
+	Take servers out when overloaded	Извеждане на претоварените сървъри от работа
 	Takt	Такт
 	Takt time	Време на такта
 	Tandem line	Тандемна линия
@@ -442,6 +453,8 @@
 	Text	Текст
 	Text on accent	Текст върху акцента
 	Text on header	Текст в заглавната лента
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Връзката прекъсва и клиентът опитва отново: същността веднага се връща в началото на опашката, а свършената по нея работа е пропиляна.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Същността чака на своя сървър и работата продължава с остатъка, щом сървърът се върне.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Интервалът стига под целевия дял от {share}, така че не е показано с 95% доверие, че делът е постигнат; повече репликации биха го стеснили.
 	The last task with a resource it finished at	Последната задача с ресурс, през която е минала частта
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Средното време до условието за спиране е само върху репликациите, които са го достигнали; останалите продължиха до времевия си лимит.
@@ -466,6 +479,7 @@
 	Time failed	Време в повреда
 	Time off shift	Време извън смяна
 	Time processing	Време в обработка
+	Time restarting	Време в рестартиране
 	Time setting up	Време в пренастройка
 	Time starved	Време без работа
 	Time to failure	Време до повреда
@@ -488,6 +502,7 @@
 	Unit	Единица
 	Units	Брой единици
 	Units by calendar	Брой единици по календар
+	Units taken out by health checks	Единици, изведени от проверките на състоянието
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Единици, които няколко задачи споделят. Задача със споделени ресурси ги взема от пул или по роля.
 	Untitled	Без заглавие
 	Untitled model	Модел без заглавие
@@ -519,7 +534,7 @@
 	Whole number	Цяло число
 	Window	Прозорец
 	With every time at its mean: {units}	С всяко време на средната му стойност: {units}
-	Work wasted on those who gave up	Пропиляна работа за отказалите се
+	Work wasted on jobs that did not finish	Пропиляна работа по недовършено обслужване
 	XPDL with BPSim	XPDL с BPSim
 	Yes or no	Да или не
 	Your changes will be lost if you don't save them.	Промените ви ще бъдат загубени, ако не ги запазите.

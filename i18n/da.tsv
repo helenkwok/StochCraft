@@ -100,6 +100,7 @@
 	Changing the time unit does not convert the times already in the model.	Ændring af tidsenheden omregner ikke tider, der allerede findes i modellen.
 	Chart	Diagram
 	Chart hover	Diagram under markøren
+	Check every	Kontrol hver
 	Choose…	Vælg…
 	Clear Menu	Ryd menu
 	Close	Luk
@@ -146,6 +147,7 @@
 	Each analysis runs the experiment several times with the same seed, so the differences come from the change, not from chance. They can take a while.	Hver analyse kører eksperimentet flere gange med samme tilfældighedsfrø, så forskellene kommer fra ændringen, ikke fra tilfældighed. Det kan tage et stykke tid.
 	Each entity takes the first of these that can be met now, all at once, and gives the units back when it leaves.	Hver enhed tager det første af disse alternativer, der kan opfyldes nu, alt på én gang, og giver ressourceenhederne tilbage, når den forlader opgaven.
 	Each entity waits here at most a time drawn for it as it arrives, then gives up: it takes the way out marked Abandoned, or leaves the model.	Hver enhed venter her højst en tid, der trækkes tilfældigt for den ved ankomsten, og giver så op: den tager vejen ud markeret »Gav op«, eller forlader modellen.
+	Each server (unit) is checked every so often, as a load balancer probes the servers behind it. One that fails, with too many waiting, is taken out of service for a restart, then comes back.	Hver server (ressourceenhed) kontrolleres med mellemrum, sådan som en load balancer afprøver serverne bag sig. En, der dumper, fordi for mange venter, tages ud af drift til en genstart og kommer så tilbage.
 	Edit	Redigér
 	Edit themes…	Redigér temaer…
 	Elasticity	Elasticitet
@@ -172,6 +174,7 @@
 	Export table (CSV)	Eksportér tabel (CSV)
 	Exported {file}	Eksporterede {file}
 	Expression	Udtryk
+	Fails above, waiting per working server	Dumper over, ventende pr. server i drift
 	Failure interrupts the job	Nedbrud afbryder arbejdet
 	Family	Familie
 	File	Filer
@@ -192,6 +195,7 @@
 	Goes to	Går til
 	Hands on finished parts while down	Afleverer færdige emner under nedbrud
 	Header	Topbjælke
+	Health check	Sundhedstjek
 	Help	Hjælp
 	Hide Others	Skjul andre
 	Hide {app}	Skjul {app}
@@ -200,8 +204,10 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hvor mange emner kunderne ønsker fra disse afgange; resultaterne viser så takten (den tilgængelige tid divideret med behovet) og hver opgaves cyklustid.
 	In use	I brug
 	Inside over time	Inde over tid
+	Job under way on a server taken out:	Job i gang på en server, der tages ud af drift:
 	Jump	Gå
 	Jump to time	Gå til tidspunkt
+	Keep at least in service	Hold mindst i drift
 	Keep the time, without the estimate it came from	Behold tiden, uden det skøn, den kom fra
 	Keyboard Shortcuts…	Tastaturgenveje…
 	Keyboard shortcuts saved	Tastaturgenveje gemt
@@ -227,6 +233,7 @@
 	Mean queue length	Gennemsnitlig kølængde
 	Mean time blocked	Gennemsnitlig blokeringstid
 	Mean time in system	Gennemsnitlig tid i systemet
+	Mean units in service	Gennemsnitligt antal ressourceenheder i drift
 	Mean wait	Gennemsnitlig ventetid
 	Mean wait before giving up	Gennemsnitlig ventetid før de gav op
 	Metric	Målepunkt
@@ -279,6 +286,7 @@
 	Opened {file}	Åbnede {file}
 	Open…	Åbn…
 	Or start from an example	Eller begynd med et eksempel
+	Out for (restart)	Ude af drift i (genstart)
 	PERT	PERT
 	PNG image	PNG-billede
 	Parameter	Parameter
@@ -355,6 +363,8 @@
 	Result with a target	Resultat med mål
 	Result, down and up	Resultat, ned og op
 	Results	Resultater
+	Resume after restart	Genoptag efter genstart
+	Retry elsewhere	Prøv igen et andet sted
 	Rework	Omarbejde
 	Rework on {id}	Omarbejde på {id}
 	Rework ratio	Omarbejdsandel
@@ -430,6 +440,7 @@
 	Sun	søn
 	Sweep a parameter	Gennemløb en parameter
 	Table stripes	Tabelstriber
+	Take servers out when overloaded	Tag servere ud af drift ved overbelastning
 	Takt	Takt
 	Takt time	Takttid
 	Tandem line	Tandemlinje
@@ -442,6 +453,8 @@
 	Text	Tekst
 	Text on accent	Tekst på accent
 	Text on header	Tekst på topbjælke
+	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Forbindelsen afbrydes, og klienten prøver igen: enheden går straks tilbage forrest i køen, og arbejdet udført på den er spildt.
+	The entity waits on its server and the job carries on with what was left once the server is back.	Enheden venter ved sin server, og jobbet fortsætter med det, der var tilbage, når serveren er tilbage.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhed, at andelen nås; flere replikationer ville gøre det smallere.
 	The last task with a resource it finished at	Den sidste opgave med ressource, emnet gik igennem
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Den gennemsnitlige tid til stopbetingelsen er kun over de replikationer, der nåede den; de øvrige kørte til deres tidsgrænse.
@@ -466,6 +479,7 @@
 	Time failed	Tid i nedbrud
 	Time off shift	Tid uden for skift
 	Time processing	Tid i bearbejdning
+	Time restarting	Tid i genstart
 	Time setting up	Tid i omstilling
 	Time starved	Tid uden arbejde
 	Time to failure	Tid til nedbrud
@@ -488,6 +502,7 @@
 	Unit	Enhed
 	Units	Enheder
 	Units by calendar	Enheder pr. kalender
+	Units taken out by health checks	Ressourceenheder taget ud af drift ved sundhedstjek
 	Units that several tasks share. A task with shared resources takes them by pool or by role.	Ressourceenheder, som flere opgaver deler. En opgave med delte ressourcer tager dem fra en pulje eller efter rolle.
 	Untitled	Uden navn
 	Untitled model	Model uden titel
@@ -519,7 +534,7 @@
 	Whole number	Heltal
 	Window	Vindue
 	With every time at its mean: {units}	Med hver tid på sit gennemsnit: {units}
-	Work wasted on those who gave up	Spildt arbejde på dem, der gav op
+	Work wasted on jobs that did not finish	Spildt arbejde på job, der ikke blev færdige
 	XPDL with BPSim	XPDL med BPSim
 	Yes or no	Ja eller nej
 	Your changes will be lost if you don't save them.	Dine ændringer går tabt, hvis du ikke gemmer dem.
