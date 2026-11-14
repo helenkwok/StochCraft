@@ -145,10 +145,10 @@ fn table_csv_and_out() {
         lines.next(),
         Some(
             "element,name,kind,metric,mean,half_width,std_dev,n,\
-             split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean"
+             split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean,split_group"
         )
     );
-    assert!(lines.all(|l| l.split(',').count() == 13), "{csv}");
+    assert!(lines.all(|l| l.split(',').count() == 14), "{csv}");
     let out = scratch("tandem.csv");
     let printed = ok(&[
         "run",

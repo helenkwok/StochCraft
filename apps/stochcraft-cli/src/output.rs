@@ -158,7 +158,7 @@ pub fn table(name: &str, results: &Value) -> String {
             "mean_wait and mean_time_in_system leave out entities still inside at the end"
         );
     }
-    split_lines(results, &order, &mut out);
+    split_lines(results, &mut out);
     stop_lines(results, &mut out);
     let notes: Vec<&Value> = results["record"]["warnings"]
         .as_array()
@@ -182,28 +182,50 @@ pub fn table(name: &str, results: &Value) -> String {
     out
 }
 
-/// A line for each result whose replications split into two outcomes: the two groups, and that
-/// the mean mixes them.
-fn split_lines(results: &Value, order: &[&str], out: &mut String) {
-    for e in results["elements"].as_array().into_iter().flatten() {
-        for metric in order {
-            let m = &e["metrics"][*metric];
-            let split = &m["split"];
-            let (Some(low_n), Some(high_n)) =
-                (split["low"]["n"].as_u64(), split["high"]["n"].as_u64())
-            else {
-                continue;
-            };
-            let _ = writeln!(
-                out,
-                "{} {metric}: runs split: {low_n} of {} near {}, {high_n} near {}; the mean {} \
-                 mixes two outcomes",
-                s(&e["id"]),
-                low_n + high_n,
-                f(&split["low"]["mean"]),
-                f(&split["high"]["mean"]),
-                f(&m["mean"])
-            );
+/// A block for each group of results whose replications split into two outcomes the same way
+/// (`splits`): how the runs split, then each result's two values, a few to a line.
+fn split_lines(results: &Value, out: &mut String) {
+    for group in results["splits"].as_array().into_iter().flatten() {
+        let members = group["results"].as_array().map_or(&[][..], Vec::as_slice);
+        let count = match members.len() {
+            1 => "1 result".to_owned(),
+            k => format!("{k} results split the same way"),
+        };
+        let _ = writeln!(
+            out,
+            "runs split into two outcomes: {} of {} in one, {} in the other; {count}:",
+            group["sizes"][0], group["n"], group["sizes"][1]
+        );
+        let items: Vec<String> = members
+            .iter()
+            .filter_map(|r| {
+                let (id, metric) = (r[0].as_str()?, r[1].as_str()?);
+                let e = results["elements"]
+                    .as_array()?
+                    .iter()
+                    .find(|e| e["id"] == id)?;
+                let split = &e["metrics"][metric]["split"];
+                Some(format!(
+                    "{id} {metric}: low ≈ {}, high ≈ {}",
+                    f(&split["low"]["mean"]),
+                    f(&split["high"]["mean"])
+                ))
+            })
+            .collect();
+        // A few to a line, so a group of two dozen results stays a short block.
+        let mut line = String::new();
+        for item in items {
+            if !line.is_empty() && line.chars().count() + item.chars().count() > 96 {
+                let _ = writeln!(out, "  {line};");
+                line.clear();
+            }
+            if !line.is_empty() {
+                line.push_str("; ");
+            }
+            line.push_str(&item);
+        }
+        if !line.is_empty() {
+            let _ = writeln!(out, "  {line}");
         }
     }
 }
@@ -248,12 +270,12 @@ fn csv_field(v: &str) -> String {
 }
 
 /// Results as CSV, one row per element and metric. Where a result's replications split into two
-/// outcomes, the last five columns give the cut and each group's count and mean (empty
-/// otherwise).
+/// outcomes, the last six columns give the cut, each group's count and mean, and which group of
+/// results that split the same runs it is in (empty otherwise).
 pub fn csv(results: &Value) -> String {
     let mut out = String::from(
         "element,name,kind,metric,mean,half_width,std_dev,n,\
-         split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean\n",
+         split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean,split_group\n",
     );
     for e in results["elements"].as_array().into_iter().flatten() {
         for metric in results["metrics"].as_array().into_iter().flatten() {
@@ -268,6 +290,7 @@ pub fn csv(results: &Value) -> String {
                 &split["low"]["mean"],
                 &split["high"]["n"],
                 &split["high"]["mean"],
+                &split["group"],
             ]
             .iter()
             .map(|v| {
@@ -350,40 +373,60 @@ mod tests {
     use super::*;
 
     #[test]
-    fn runs_that_split_get_a_line_and_csv_columns() {
+    fn runs_that_split_get_a_block_per_group_and_csv_columns() {
+        let m = |mean: f64, low: f64, high: f64, group: u64| {
+            serde_json::json!({
+                "mean": mean, "half_width": 0.6, "std_dev": 3.4, "n": 128,
+                "split": {
+                    "cut": 5.8,
+                    "low": { "n": 99, "mean": low },
+                    "high": { "n": 29, "mean": high },
+                    "group": group,
+                },
+            })
+        };
         let results = serde_json::json!({
             "replications": 128,
-            "metrics": ["entered", "mean_in_service"],
+            "metrics": ["entered", "left", "mean_queue_length", "mean_wait", "mean_in_service"],
             "elements": [{
                 "id": "desk", "name": "Desk", "kind": "server",
                 "metrics": {
                     "entered": { "mean": 500.0, "half_width": 3.0, "std_dev": 9.0, "n": 128 },
-                    "mean_in_service": {
-                        "mean": 3.8, "half_width": 0.6, "std_dev": 3.4, "n": 128,
-                        "split": {
-                            "cut": 5.8,
-                            "low": { "n": 99, "mean": 1.7 },
-                            "high": { "n": 29, "mean": 9.9 },
-                        },
-                    },
+                    "left": m(400.0, 380.0, 470.0, 2),
+                    "mean_queue_length": m(40.0, 1.5, 164.0, 1),
+                    "mean_wait": m(12.0, 0.2, 29.7, 1),
+                    "mean_in_service": m(3.8, 1.7, 9.9, 1),
                 },
             }],
+            "splits": [
+                {
+                    "id": 1, "n": 128, "sizes": [99, 29],
+                    "results": [
+                        ["desk", "mean_queue_length"],
+                        ["desk", "mean_wait"],
+                        ["desk", "mean_in_service"],
+                    ],
+                },
+                { "id": 2, "n": 128, "sizes": [99, 29], "results": [["desk", "left"]] },
+            ],
         });
         let text = table("m", &results);
-        assert!(
-            text.contains(
-                "desk mean_in_service: runs split: 99 of 128 near 1.7, 29 near 9.9; the mean 3.8 \
-                 mixes two outcomes"
-            ),
-            "{text}"
-        );
-        assert_eq!(text.matches("runs split").count(), 1, "{text}");
+        let expected = "runs split into two outcomes: 99 of 128 in one, 29 in the other; \
+                        3 results split the same way:\n  \
+                        desk mean_queue_length: low ≈ 1.5, high ≈ 164; \
+                        desk mean_wait: low ≈ 0.2, high ≈ 29.7;\n  \
+                        desk mean_in_service: low ≈ 1.7, high ≈ 9.9\n\
+                        runs split into two outcomes: 99 of 128 in one, 29 in the other; \
+                        1 result:\n  \
+                        desk left: low ≈ 380, high ≈ 470\n";
+        assert!(text.contains(expected), "{text}");
+        assert_eq!(text.matches("runs split").count(), 2, "{text}");
         let csv = csv(&results);
         let lines: Vec<&str> = csv.lines().collect();
-        assert_eq!(lines[1], "desk,Desk,server,entered,500.0,3.0,9.0,128,,,,,");
+        assert_eq!(lines[1], "desk,Desk,server,entered,500.0,3.0,9.0,128,,,,,,");
         assert_eq!(
-            lines[2],
-            "desk,Desk,server,mean_in_service,3.8,0.6,3.4,128,5.8,99,1.7,29,9.9"
+            lines[5],
+            "desk,Desk,server,mean_in_service,3.8,0.6,3.4,128,5.8,99,1.7,29,9.9,1"
         );
     }
 

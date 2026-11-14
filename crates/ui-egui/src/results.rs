@@ -451,31 +451,51 @@ fn split_strip(ui: &mut egui::Ui, p: &theme::Palette, values: &Value, cut: f64, 
     );
 }
 
-/// The findings at the top of the results: each result whose replications split into two
-/// outcomes, by name, so the answer comes before the tables. Draws nothing when there are none.
+/// The findings at the top of the results, so the answer comes before the tables: one per group
+/// of results whose replications split into two outcomes the same way (the engine's `splits`),
+/// so one collapse seen in many results reads as one finding. Draws nothing when there are none.
 pub fn findings(ui: &mut egui::Ui, results: &Value) {
     let p = theme::palette(ui.ctx());
-    let order: Vec<&str> = results["metrics"]
-        .as_array()
-        .map(|m| m.iter().filter_map(Value::as_str).collect())
-        .unwrap_or_default();
-    for e in results["elements"].as_array().into_iter().flatten() {
-        let id = e["id"].as_str().unwrap_or("");
-        let name = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
-        for key in &order {
-            if !e["metrics"][*key]["split"].is_object() {
-                continue;
-            }
-            let (label, _) = metric(key, e["kind"].as_str().unwrap_or(""));
+    for group in results["splits"].as_array().into_iter().flatten() {
+        if let Some(text) = finding(results, group) {
             ui.horizontal_wrapped(|ui| {
                 ui.label(theme::strong(t("Finding")).color(p.accent));
-                ui.label(tf(
-                    "{result} ({element}) split into two outcomes: see the table below.",
-                    &[("result", label), ("element", name)],
-                ));
+                ui.label(text);
             });
         }
     }
+}
+
+/// The finding for one group of results whose runs split the same way (an entry of the
+/// engine's `splits`), named by its lead: the first of them in table order.
+fn finding(results: &Value, group: &Value) -> Option<String> {
+    let members = group["results"].as_array()?;
+    let lead = members.first()?;
+    let (id, key) = (lead[0].as_str()?, lead[1].as_str()?);
+    let e = results["elements"]
+        .as_array()?
+        .iter()
+        .find(|e| e["id"] == id)?;
+    let name = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
+    let (label, _) = metric(key, e["kind"].as_str().unwrap_or(""));
+    if members.len() == 1 {
+        return Some(tf(
+            "{result} ({element}) split into two outcomes: see the table below.",
+            &[("result", label), ("element", name)],
+        ));
+    }
+    let count = |v: &Value| v.as_u64().map(|n| n.to_string());
+    Some(tf(
+        "The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.",
+        &[
+            ("a", &count(&group["sizes"][0])?),
+            ("n", &count(&group["n"])?),
+            ("b", &count(&group["sizes"][1])?),
+            ("count", &members.len().to_string()),
+            ("result", label),
+            ("element", name),
+        ],
+    ))
 }
 
 /// Column edges of a results row: the metric's name from the left, the mean and the half-width
@@ -659,6 +679,11 @@ mod tests {
                 "mean_in_service": runs,
                 "utilisation": runs.iter().map(|v| v / 10.0).collect::<Vec<_>>(),
             } },
+            // Both split the same runs: one group, led by the first in table order.
+            "splits": [{
+                "id": 1, "n": 128, "sizes": [99, 29],
+                "results": [["desk", "mean_in_service"], ["desk", "utilisation"]],
+            }],
         })
     }
 
@@ -672,12 +697,26 @@ mod tests {
         // A share reads as the table's percentage.
         let share = "Runs split: 99 of 128 near 17%, 29 near 99%. The mean (35.578%) mixes two outcomes; look at each group.";
         assert_eq!(h.query_all_by_label(share).count(), 2);
-        // And the findings at the top name each result.
+        // And one finding at the top for the group, named by its lead.
+        h.get_by_label(
+            "The runs split into two outcomes: 99 of 128 in one, 29 in the other. 2 results \
+             split the same way, among them Mean units in service (Desk); see the table below.",
+        );
+        assert_eq!(h.query_all_by_label("Finding").count(), 1);
+
+        // Two groups of one (different runs): a finding each, naming its result.
+        let mut apart = split();
+        apart["splits"] = serde_json::json!([
+            { "id": 1, "n": 128, "sizes": [99, 29], "results": [["desk", "mean_in_service"]] },
+            { "id": 2, "n": 128, "sizes": [70, 58], "results": [["desk", "utilisation"]] },
+        ]);
+        let h = draw(apart);
         h.get_by_label(
             "Mean units in service (Desk) split into two outcomes: see the table below.",
         );
         h.get_by_label("Utilisation (Desk) split into two outcomes: see the table below.");
         assert_eq!(h.query_all_by_label("Finding").count(), 2);
+        assert!(h.query_by_label_contains("split the same way").is_none());
 
         // Without a split: no sentence and no finding.
         let mut none = split();
@@ -685,6 +724,9 @@ mod tests {
             if let Some(o) = none["elements"][0]["metrics"][m].as_object_mut() {
                 o.remove("split");
             }
+        }
+        if let Some(o) = none.as_object_mut() {
+            o.remove("splits");
         }
         let h = draw(none);
         assert!(h.query_by_label_contains("Runs split").is_none());
