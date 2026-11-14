@@ -1378,6 +1378,60 @@ leaving before their service begins a central feature that Erlang B and C lack.
   simulated (each unit keeps its place), but not checked against theory; editing a pool's
   shifts and a server's are separate (a pool used by one task stays a pool); a file from
   elsewhere whose one-task resource varies by calendar is still read as a pool.
+- **Waiting rooms by timetable or per working server:** done. A server's finite waiting room
+  (`queueCapacity`) is fixed as before, or set by timetable (the most waiting while each
+  calendar is active, the value outside them) or per working server (the value times the units
+  up, not taken out and on shift now, so it follows failures, health checks, shifts and returns
+  by itself; a whole number). The two new ways hold no places: an entity is admitted when those
+  waiting (in the queue, or on their way in across a transfer) less the idle working units are
+  fewer than the limit now, so it gets in when an idle working unit can take it at once, or
+  when fewer than the limit wait; an entity whose job is paused on its unit is in service. When
+  the limit drops (a step of the timetable, a unit taken out, a failure, a shift's end), those
+  already waiting stay; only new arrivals are turned away until fewer wait than the limit.
+  Senders held up look again whenever a unit's state changes, an entity gives up or the
+  timetable steps. No unit keeps a place of its own (`placeWhileOut` changes nothing there, and
+  the inspector asks it only of a fixed room): per working server, a unit failed or out already
+  lowers the limit. File format: `stochcraft:perWorkingServer="true"` on
+  `stochcraft:queueCapacity`, or a `stochcraft:byShift` child holding BPSim values `validFor`
+  calendars; versions without them read the value as a fixed room. On the wire
+  `queue_per_working_server` and `queue_shifts` (`{calendar, places}`), exclusive; in the
+  inspector a choice under the waiting room (fixed, by calendar once the model has a calendar,
+  per working server) with the table of places by calendar.
+- **A way out for those turned away:** done. A server with a finite waiting room (any of the
+  three ways) can have one way out marked `stochcraft:turnedAway` (`turned_away` on the wire, a
+  tick on the flow in the inspector). Every entity finding no room, an arrival from a source or
+  an entity from any other element, takes it at once instead of being lost or waiting before the
+  server, so a gateway or a server feeding it is never held up, and no `buffer_behind_gateway`
+  warning or blocking loop is reported through it. They count in the existing `lost` (each
+  time, so with retries it counts attempts) and `loss_probability` (lost over lost plus
+  entered); a source still counts its own arrivals turned away as lost, which tells new
+  arrivals from retries. Without the way nothing changes. Validation: at most one per server
+  (`several_turned_away_ways`), only out of a server with a finite room
+  (`turned_away_without_room`), never also the abandoned way (`turned_away_and_abandoned`).
+- **Checks with known answers (waiting rooms):** done (`blocks/tests/admission.rs`). By hand:
+  admission at the limit; those waiting staying as a shift ends and as the timetable lowers the
+  limit; a sender blocked until the timetable opens the room; failures and a takeout per working
+  server, the place rule changing nothing; the way out from a source, a gateway (which never
+  waits) and a server (never blocked); a way never taken changing nothing. Heavy tests against
+  exact chains solved separately:
+
+  | Case | Quantity | Exact | StochCraft (95%) |
+  |---|---|---|---|
+  | A: c 3, λ 1.8, μ 1, health check (rate 1, limit 1.5, restart mean 2, retry), 2 waiting per working server; turned away wait (mean 3) and try again with probability 0.9 | mean queue | 1.8564 | 1.868 ± 0.036 |
+  | | mean in service (units working) | 2.4058 | 2.400 ± 0.014 |
+  | | busy (utilisation × 3) | 1.6007 | 1.599 ± 0.005 |
+  | | mean waiting to try again | 5.9793 | 6.014 ± 0.178 |
+  | | turned away per time unit (all; new arrivals) | 1.9931; 0.4996 | 2.004 ± 0.058; 0.504 ± 0.012 |
+  | | gave up, taken out, served per time unit | 0.1993, 0.2971, 1.6007 | 0.2007 ± 0.0057, 0.2993 ± 0.0068, 1.5999 ± 0.0055 |
+  | B: c 2, λ 1.5, μ 1, from empty, 1 waiting over [0, 50), 6 over [50, 100), run to 100 | turned away | 15.8626 | 15.831 ± 0.090 |
+  | | mean queue; mean in system | 0.6407; 1.9559 | 0.6401 ± 0.0042; 1.9551 ± 0.0055 |
+  | | in system at the end | 2.6240 | 2.631 ± 0.030 |
+
+- **Not yet (waiting rooms):** a fractional number per working server; a shortest-queue
+  gateway still chooses only among ways with room and waits (or, for a source, loses the
+  arrival at the gateway) when none has, rather than using a task's way for those turned away;
+  a sender held up and let in that then waits for its own unit's repair before handing on can
+  let one more in than the limit.
 
 ### M2.11 Changeovers and lean measures
 
