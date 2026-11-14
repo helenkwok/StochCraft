@@ -149,6 +149,19 @@
       </stochcraft:changeover>
     </bpsim:VendorExtension>
 
+  stochcraft:processingTimeBy, on a task's ElementParameters: processing times by the value of
+  the token property named by the attribute property (a time by product type). A token whose
+  value, as text, is the value of a stochcraft:time takes that time, a BPSim distribution or
+  constant; any other token (another value, or none) takes the task's own
+  TimeParameters/ProcessingTime. Each value appears once.
+
+    <bpsim:VendorExtension name="stochcraft:processingTimeBy" xmlns:stochcraft="…">
+      <stochcraft:processingTimeBy property="type">
+        <stochcraft:time value="A"><bpsim:FloatingParameter value="6"/></stochcraft:time>
+        <stochcraft:time value="B"><bpsim:FloatingParameter value="20"/></stochcraft:time>
+      </stochcraft:processingTimeBy>
+    </bpsim:VendorExtension>
+
   stochcraft:routing, on an exclusive gateway's ElementParameters, with the value shortestQueue
   (or standard, BPMN's own routing): each entity goes to the way with the fewest entities waiting
   or in transit among those with room, a tie to the way taken longest ago; while no way has
@@ -289,6 +302,22 @@
               <xs:extension base="stochcraft:Value">
                 <xs:attribute name="from" type="xs:string" use="required"/>
                 <xs:attribute name="to" type="xs:string" use="required"/>
+              </xs:extension>
+            </xs:complexContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="property" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="processingTimeBy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="time" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:complexContent>
+              <xs:extension base="stochcraft:Value">
+                <xs:attribute name="value" type="xs:string" use="required"/>
               </xs:extension>
             </xs:complexContent>
           </xs:complexType>

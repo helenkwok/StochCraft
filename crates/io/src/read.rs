@@ -7,11 +7,11 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Breakdown, Calendar, Change, Connection, DateTime, Demand, DemandPer, Dist,
+    Bounds, Breakdown, ByValue, Calendar, Change, Connection, DateTime, Demand, DemandPer, Dist,
     Element as ModelElement, ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck,
-    Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, Property,
-    PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit,
-    Timed, Transfer, Upper,
+    Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
+    ProcessingBy, Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop,
+    ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -958,6 +958,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     notes,
                 )
                 .unwrap_or(Dist::Constant(0.0));
+                let processing_by = processing_by_of(scenario, id, unit, notes);
                 let priority = match val(id, "PriorityParameters/Priority", notes) {
                     Some(Value::Number(x)) => Some(x),
                     Some(other) => {
@@ -976,6 +977,9 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                         if val(id, "TimeParameters/ProcessingTime", notes).is_some() {
                             ignored.push("its processing time");
                         }
+                        if processing_by.is_some() {
+                            ignored.push("its processing time by property");
+                        }
                         if shared.is_some() || own.is_some() {
                             ignored.push("its resource");
                         }
@@ -992,6 +996,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                     }
                     (None, Some(needs), _) => ElementKind::SharedTask {
                         service: time,
+                        processing_by,
                         needs: needs.clone(),
                         priority: priority.unwrap_or(0.0),
                     },
@@ -1012,6 +1017,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             shifts,
                             on_shift_end: on_shift_end_of(scenario, id, notes),
                             service: time,
+                            processing_by,
                             queue_capacity: queue,
                             breakdown: breakdown_of(scenario, id, unit, notes),
                             transfer: transfer_of(scenario, id, unit, notes),
@@ -1024,7 +1030,10 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             health_check: health_check_of(scenario, id, unit, notes),
                         }
                     }
-                    (None, None, None) => ElementKind::Delay { duration: time },
+                    (None, None, None) => ElementKind::Delay {
+                        duration: time,
+                        processing_by,
+                    },
                 }
             }
             NodeKind::Exclusive(default) => ElementKind::ExclusiveGateway {
@@ -1355,6 +1364,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::BREAKDOWN,
             bpsim::TRANSFER_TIME,
             bpsim::CHANGEOVER,
+            bpsim::PROCESSING_TIME_BY,
             bpsim::ROUTING,
             bpsim::POWER,
             bpsim::PLANNED_RUN_TIME,
@@ -1654,6 +1664,67 @@ fn setup_of(
         on_change_of: Some(property),
         by_change,
     })
+}
+
+/// Task `id`'s processing times by property value (StochCraft's vendor extension), if the
+/// file gives them.
+fn processing_by_of(
+    scenario: Option<&Scenario>,
+    id: &str,
+    unit: TimeUnit,
+    notes: &mut Vec<Note>,
+) -> Option<ProcessingBy> {
+    let ext = scenario.and_then(|s| {
+        s.param(
+            id,
+            &format!("VendorExtension/{}", bpsim::PROCESSING_TIME_BY),
+        )
+    })?;
+    let body = ext.elements().find(|e| e.local() == "processingTimeBy");
+    let Some(property) = body
+        .and_then(|b| b.attr("property"))
+        .map(|p| p.trim().to_owned())
+        .filter(|p| !p.is_empty())
+    else {
+        notes.push(Note::error(
+            Some(id),
+            "a processing time by property (stochcraft:processingTimeBy) needs a property; the task's own processing time applies to every entity",
+        ));
+        return None;
+    };
+    let mut by_value: Vec<ByValue> = Vec::new();
+    for t in body
+        .into_iter()
+        .flat_map(|b| b.elements())
+        .filter(|e| e.local() == "time")
+    {
+        let Some(value) = t.attr("value") else {
+            notes.push(Note::error(
+                Some(id),
+                "a processing time by property needs a `value` for each time; that time is left out",
+            ));
+            continue;
+        };
+        if by_value.iter().any(|b| b.value == value) {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "a processing time by property gives the value `{value}` more than once; only the first is used"
+                ),
+            ));
+            continue;
+        }
+        let d = bpsim::default_value(t, unit, notes, Some(id))
+            .and_then(|v| dist_of(Some(v), "a processing time by property", id, notes));
+        match d {
+            Some(time) => by_value.push(ByValue { value, time }),
+            None => notes.push(Note::error(
+                Some(id),
+                format!("the processing time for the value `{value}` needs a time; it is left out"),
+            )),
+        }
+    }
+    Some(ProcessingBy { property, by_value })
 }
 
 fn transfer_of(

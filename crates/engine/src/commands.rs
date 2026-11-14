@@ -15,8 +15,8 @@ use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec,
     HealthCheckSpec, KindSpec, ModelDoc, NeedSpec, OnShiftEndSpec, PatienceSpec, PowerSpec,
-    PropertyDoc, PropertyTypeSpec, PropertyValueSpec, RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc,
-    Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, RoutingSpec, ScrapSpec,
+    SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -104,6 +104,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
         Some("server") => &[
             "capacity",
             "service",
+            "processing_by",
             "queue_capacity",
             "breakdown",
             "transfer",
@@ -119,8 +120,8 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "on_shift_end",
         ],
         Some("sink") => &["scrap", "demand"],
-        Some("shared_task") => &["service", "needs", "priority"],
-        Some("delay") => &["duration"],
+        Some("shared_task") => &["service", "processing_by", "needs", "priority"],
+        Some("delay") => &["duration", "processing_by"],
         Some("exclusive_gateway") => &["default", "routing"],
         Some("batch") => &["size"],
         _ => &[],
@@ -285,6 +286,13 @@ pub struct BlockSet {
     /// Servers: time to serve one entity.
     #[serde(default)]
     pub service: Option<DistSpec>,
+    /// Servers, shared tasks and delays: processing times for entities with particular values
+    /// of a property (a time by product type): `{property, by_value: [{value, time}]}`, values
+    /// as text; an entity whose value has a time takes it, any other the task's own `service`
+    /// (or `duration`). `null` removes them.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<ProcessingBySpec>")]
+    pub processing_by: Option<Option<ProcessingBySpec>>,
     /// Servers: a finite buffer, the most entities that wait for a unit (not counting those in
     /// service); 0 means no waiting room. While it is full, a server or delay sending here
     /// holds its finished entity (blocking after service), a gateway waits, and a source's
@@ -979,7 +987,7 @@ fn estimate_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         }
         | ElementKind::Server { service: d, .. }
         | ElementKind::SharedTask { service: d, .. }
-        | ElementKind::Delay { duration: d } => *d = fitted.clone(),
+        | ElementKind::Delay { duration: d, .. } => *d = fitted.clone(),
         _ => {
             return Err(CommandError::new(
                 ErrorCode::InvalidParams,
@@ -1096,6 +1104,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("idle_outside", p.idle_outside.is_some()),
         ("capacity", p.capacity.is_some()),
         ("service", p.service.is_some()),
+        ("processing_by", p.processing_by.is_some()),
         ("queue_capacity", p.queue_capacity.is_some()),
         ("breakdown", p.breakdown.is_some()),
         ("transfer", p.transfer.is_some()),
@@ -1123,6 +1132,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ElementKind::Server { .. } => &[
             "capacity",
             "service",
+            "processing_by",
             "queue_capacity",
             "breakdown",
             "transfer",
@@ -1137,8 +1147,8 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "shifts",
             "on_shift_end",
         ],
-        ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
-        ElementKind::Delay { .. } => &["duration"],
+        ElementKind::SharedTask { .. } => &["service", "processing_by", "needs", "priority"],
+        ElementKind::Delay { .. } => &["duration", "processing_by"],
         ElementKind::ExclusiveGateway { .. } => &["default", "routing"],
         ElementKind::Batch { .. } => &["size"],
         ElementKind::Sink { .. } => &["scrap", "demand"],
@@ -1155,6 +1165,11 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             ErrorCode::InvalidParams,
             "nothing to set: give at least one parameter",
         ));
+    }
+    if let Some(x) = p.processing_by
+        && let Some(by) = kind.processing_by_mut()
+    {
+        *by = wire::processing_by(x);
     }
     match &mut kind {
         ElementKind::Source {
@@ -1191,6 +1206,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             health_check,
             shifts,
             on_shift_end,
+            ..
         } => {
             if let Some(s) = p.shifts {
                 *shifts = s.into_iter().map(Into::into).collect();
@@ -1255,6 +1271,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             service,
             needs,
             priority,
+            ..
         } => {
             if let Some(d) = p.service {
                 *service = d.into();
@@ -1266,7 +1283,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 *priority = x;
             }
         }
-        ElementKind::Delay { duration } => {
+        ElementKind::Delay { duration, .. } => {
             if let Some(d) = p.duration {
                 *duration = d.into();
             }

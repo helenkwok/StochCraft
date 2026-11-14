@@ -46,6 +46,7 @@ fn bpmn_written_by_another_tool() {
     assert_eq!(
         kind(m, "serve"),
         &ElementKind::Server {
+            processing_by: None,
             capacity: 1,
             service: Dist::Exponential { mean: 1.0 },
             queue_capacity: None,
@@ -85,6 +86,7 @@ fn inherited_scenario_changes_only_what_it_says() {
     assert_eq!(
         kind(&l.model, "serve"),
         &ElementKind::Server {
+            processing_by: None,
             capacity: 2,
             service: Dist::Exponential { mean: 1.0 },
             queue_capacity: None,
@@ -156,6 +158,7 @@ fn xpdl_with_bpsim_1() {
     assert_eq!(
         kind(m, "weld"),
         &ElementKind::Server {
+            processing_by: None,
             capacity: 3,
             service: Dist::Erlang { mean: 0.2, k: 2 },
             queue_capacity: None,
@@ -175,6 +178,7 @@ fn xpdl_with_bpsim_1() {
     assert_eq!(
         kind(m, "cool"),
         &ElementKind::Delay {
+            processing_by: None,
             duration: Dist::Constant(0.75)
         }
     );

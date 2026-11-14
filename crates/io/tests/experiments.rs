@@ -51,7 +51,7 @@ fn model() -> Model {
         let id = ElementId::unchecked(id);
         if let Some(el) = m.elements.iter_mut().find(|x| x.id == id) {
             match &mut el.kind {
-                ElementKind::Server { service: d, .. } | ElementKind::Delay { duration: d } => {
+                ElementKind::Server { service: d, .. } | ElementKind::Delay { duration: d, .. } => {
                     *d = fitted;
                 }
                 _ => {}
