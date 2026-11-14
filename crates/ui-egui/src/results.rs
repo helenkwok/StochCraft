@@ -2,7 +2,9 @@
 //! their units and the half-width of each 95% confidence interval, under the run record that
 //! makes them reproducible (the same content as `stochcraft-cli run`). A metric that only some
 //! replications have a value for says how many ("n = 4 of 10"), and notes under the tables say
-//! what the means leave out.
+//! what the means leave out. A result whose replications split into two outcomes (the engine's
+//! `split`) says so in words under its row, with a strip of every run's value, and in the
+//! findings at the top of the results ([`findings`]).
 
 use egui::RichText;
 use serde_json::Value;
@@ -252,12 +254,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                 }
                 let (label, kind) = metric(key, e["kind"].as_str().unwrap_or(""));
                 let (mean, hw) = (m["mean"].as_f64(), m["half_width"].as_f64());
-                let (scale, unit) = match kind {
-                    Unit::Share => (100.0, "%"),
-                    Unit::Time => (1.0, unit),
-                    Unit::Energy => (1.0, "kWh"),
-                    Unit::Count | Unit::Items => (1.0, ""),
-                };
+                let (scale, unit) = scale_and_unit(&kind, unit);
                 let show =
                     |v: Option<f64>| v.map_or_else(|| "–".to_owned(), |v| grouped(v * scale));
                 row(
@@ -266,6 +263,22 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                     Some(i % 2 == 0),
                     [label, &show(mean), &show(hw), unit, &n_of(m)],
                 );
+                // Where the runs split into two outcomes, the mean describes none of them: say
+                // so under the row, and show every run's value.
+                if let Some(sentence) = split_sentence(m, scale, unit) {
+                    ui.horizontal(|ui| {
+                        ui.add_space(COLUMNS[0].0);
+                        ui.add(egui::Label::new(RichText::new(&sentence).color(p.text)).wrap());
+                    });
+                    split_strip(
+                        ui,
+                        &p,
+                        &results["values"][id][*key],
+                        m["split"]["cut"].as_f64().unwrap_or(0.0),
+                        &sentence,
+                    );
+                    ui.add_space(4.0);
+                }
             }
             // The mean value this element assigned to each property it sets.
             let shown = order
@@ -345,6 +358,124 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
             .size(12.0),
         );
     });
+}
+
+/// How a metric of `kind` is shown: the factor its values are multiplied by, and its unit
+/// (`time` for times).
+fn scale_and_unit<'a>(kind: &Unit, time: &'a str) -> (f64, &'a str) {
+    match kind {
+        Unit::Share => (100.0, "%"),
+        Unit::Time => (1.0, time),
+        Unit::Energy => (1.0, "kWh"),
+        Unit::Count | Unit::Items => (1.0, ""),
+    }
+}
+
+/// A value of a result as a sentence writes it: the table's number, with its unit.
+fn with_unit(v: f64, scale: f64, unit: &str) -> String {
+    let n = grouped(v * scale);
+    match unit {
+        "" => n,
+        "%" => format!("{n}%"),
+        u => format!("{n} {u}"),
+    }
+}
+
+/// What a result whose replications split into two outcomes (its `split`) says in words: the
+/// two groups, and that the mean mixes them. `None` when it does not split.
+fn split_sentence(m: &Value, scale: f64, unit: &str) -> Option<String> {
+    let s = &m["split"];
+    let (low_n, high_n) = (s["low"]["n"].as_u64()?, s["high"]["n"].as_u64()?);
+    let v = |x: &Value| x.as_f64().map(|x| with_unit(x, scale, unit));
+    Some(tf(
+        "Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.",
+        &[
+            ("low_n", &low_n.to_string()),
+            ("n", &(low_n + high_n).to_string()),
+            ("low", &v(&s["low"]["mean"])?),
+            ("high_n", &high_n.to_string()),
+            ("high", &v(&s["high"]["mean"])?),
+            ("mean", &v(&m["mean"])?),
+        ],
+    ))
+}
+
+/// A strip of every replication's value of a result (one tick per run, from the lowest to the
+/// highest), with the cut between its two outcomes marked. `label` is what a screen reader
+/// says for it.
+fn split_strip(ui: &mut egui::Ui, p: &theme::Palette, values: &Value, cut: f64, label: &str) {
+    let xs: Vec<f64> = values
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_f64)
+        .collect();
+    let (lo, hi) = xs
+        .iter()
+        .fold((cut, cut), |(lo, hi), x| (lo.min(*x), hi.max(*x)));
+    let height = 18.0;
+    let (outer, response) =
+        ui.allocate_exact_size(egui::vec2(COLUMNS[4].1, height), egui::Sense::hover());
+    response.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Image, true, label));
+    let rect = egui::Rect::from_min_size(
+        outer.min + egui::vec2(COLUMNS[0].0, 0.0),
+        egui::vec2(COLUMNS[2].1 - COLUMNS[0].0, height),
+    );
+    let x = |v: f64| {
+        if hi > lo {
+            rect.left() + ((v - lo) / (hi - lo)) as f32 * rect.width()
+        } else {
+            rect.center().x
+        }
+    };
+    let painter = ui.painter_at(outer);
+    let y = rect.center().y;
+    painter.line_segment(
+        [egui::pos2(rect.left(), y), egui::pos2(rect.right(), y)],
+        egui::Stroke::new(1.0, p.border),
+    );
+    for v in &xs {
+        let at = x(*v);
+        painter.line_segment(
+            [
+                egui::pos2(at, rect.top() + 4.0),
+                egui::pos2(at, rect.bottom() - 4.0),
+            ],
+            egui::Stroke::new(1.0, p.chart),
+        );
+    }
+    let at = x(cut);
+    painter.line_segment(
+        [egui::pos2(at, rect.top()), egui::pos2(at, rect.bottom())],
+        egui::Stroke::new(2.0, p.accent),
+    );
+}
+
+/// The findings at the top of the results: each result whose replications split into two
+/// outcomes, by name, so the answer comes before the tables. Draws nothing when there are none.
+pub fn findings(ui: &mut egui::Ui, results: &Value) {
+    let p = theme::palette(ui.ctx());
+    let order: Vec<&str> = results["metrics"]
+        .as_array()
+        .map(|m| m.iter().filter_map(Value::as_str).collect())
+        .unwrap_or_default();
+    for e in results["elements"].as_array().into_iter().flatten() {
+        let id = e["id"].as_str().unwrap_or("");
+        let name = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
+        for key in &order {
+            if !e["metrics"][*key]["split"].is_object() {
+                continue;
+            }
+            let (label, _) = metric(key, e["kind"].as_str().unwrap_or(""));
+            ui.horizontal_wrapped(|ui| {
+                ui.label(theme::strong(t("Finding")).color(p.accent));
+                ui.label(tf(
+                    "{result} ({element}) split into two outcomes: see the table below.",
+                    &[("result", label), ("element", name)],
+                ));
+            });
+        }
+    }
 }
 
 /// Column edges of a results row: the metric's name from the left, the mean and the half-width
@@ -488,10 +619,77 @@ mod tests {
                 ui.ctx().request_repaint();
                 return;
             }
+            super::findings(ui, &results);
             super::show(ui, &results);
         });
         h.run();
         h
+    }
+
+    /// Results of 128 replications whose units in service split: 99 runs near 1.7, 29 near
+    /// 9.9, with the share in service (a percentage) split the same way.
+    fn split() -> serde_json::Value {
+        let runs: Vec<f64> = (0..128)
+            .map(|i| if i % 9 == 4 || i < 17 { 9.9 } else { 1.7 })
+            .collect();
+        let low = runs.iter().filter(|v| **v < 5.0).count();
+        assert_eq!(low, 99);
+        let mean = runs.iter().sum::<f64>() / 128.0;
+        let split = |scale: f64| {
+            serde_json::json!({
+                "cut": 5.8 * scale,
+                "low": { "n": 99, "mean": 1.7 * scale },
+                "high": { "n": 29, "mean": 9.9 * scale },
+            })
+        };
+        let m = |mean: f64, split: serde_json::Value| serde_json::json!({ "mean": mean, "half_width": 0.6, "std_dev": 3.4, "n": 128, "split": split });
+        serde_json::json!({
+            "replications": 128,
+            "record": { "replications": 128, "time_unit": "min" },
+            "metrics": ["entered", "mean_in_service", "utilisation"],
+            "elements": [{
+                "id": "desk", "name": "Desk", "kind": "server",
+                "metrics": {
+                    "entered": { "mean": 500.0, "half_width": 3.0, "std_dev": 9.0, "n": 128 },
+                    "mean_in_service": m(mean, split(1.0)),
+                    "utilisation": m(mean / 10.0, split(0.1)),
+                },
+            }],
+            "values": { "desk": {
+                "mean_in_service": runs,
+                "utilisation": runs.iter().map(|v| v / 10.0).collect::<Vec<_>>(),
+            } },
+        })
+    }
+
+    #[test]
+    fn runs_that_split_into_two_outcomes_say_so_in_words() {
+        use egui_kittest::kittest::Queryable;
+        let h = draw(split());
+        // The row's sentence, and the strip of runs read out with the same words.
+        let sentence = "Runs split: 99 of 128 near 1.7, 29 near 9.9. The mean (3.5578) mixes two outcomes; look at each group.";
+        assert_eq!(h.query_all_by_label(sentence).count(), 2);
+        // A share reads as the table's percentage.
+        let share = "Runs split: 99 of 128 near 17%, 29 near 99%. The mean (35.578%) mixes two outcomes; look at each group.";
+        assert_eq!(h.query_all_by_label(share).count(), 2);
+        // And the findings at the top name each result.
+        h.get_by_label(
+            "Mean units in service (Desk) split into two outcomes: see the table below.",
+        );
+        h.get_by_label("Utilisation (Desk) split into two outcomes: see the table below.");
+        assert_eq!(h.query_all_by_label("Finding").count(), 2);
+
+        // Without a split: no sentence and no finding.
+        let mut none = split();
+        for m in ["mean_in_service", "utilisation"] {
+            if let Some(o) = none["elements"][0]["metrics"][m].as_object_mut() {
+                o.remove("split");
+            }
+        }
+        let h = draw(none);
+        assert!(h.query_by_label_contains("Runs split").is_none());
+        assert!(h.query_by_label_contains("two outcomes").is_none());
+        assert!(h.query_by_label("Finding").is_none());
     }
 
     #[test]
