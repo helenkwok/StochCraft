@@ -2878,6 +2878,19 @@ fn waiting_rooms_that_change_and_a_turned_away_way_are_set_run_and_removed() {
         ErrorCode::InvalidParams
     );
     ok(&mut e, "run", json!({"replications": 2}));
+    // An unlimited room drops how its size was set.
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "queue_capacity": null}),
+    );
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(!m.contains("queue_shifts"), "{m}");
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "queue_capacity": 3, "queue_shifts": [{"calendar": "rush", "places": 4}]}),
+    );
     ok(
         &mut e,
         "block.set",

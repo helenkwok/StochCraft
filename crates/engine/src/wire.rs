@@ -1026,7 +1026,12 @@ impl From<KindSpec> for ElementKind {
                 service: service.into(),
                 processing_by: processing_by(by),
                 queue_capacity,
-                queue_limit: queue_limit(queue_per_working_server, queue_shifts),
+                // An unlimited room has no size to set.
+                queue_limit: if queue_capacity.is_some() {
+                    queue_limit(queue_per_working_server, queue_shifts)
+                } else {
+                    QueueLimit::Fixed
+                },
                 breakdown: breakdown.map(Into::into),
                 transfer: transfer.map(|t| Transfer {
                     time: t.into(),

@@ -1308,6 +1308,10 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 }
                 (None, None) => {}
             }
+            // An unlimited room has no size to set: fixed again if it is ever finite.
+            if queue_capacity.is_none() {
+                *queue_limit = QueueLimit::Fixed;
+            }
         }
         ElementKind::SharedTask {
             service,
