@@ -498,8 +498,9 @@ fn one_unit_with_a_break(
 /// started at 9 is under way at 10. Finishing, it ends at 10.5 and jobs from 20 end at 21.5, …,
 /// 29: 13 by 29.4. Retrying, it stops with 1 done (wasted), and starts afresh at 20: 6 + 6 = 12.
 /// Resuming, it pauses with 0.5 left and ends at 20.5, then 22, …, 28: 12. The paused job's unit
-/// is off shift from 10 to 20 (10 of 29.4), but with no shift quantities the utilisation stays
-/// the share holding a job (as before), so it counts the paused job: 1.
+/// is off shift from 10 to 20 (10 of 29.4). Utilisation is over the time on shift, 10 + 9.4: the
+/// unit holds a job all of it, retrying (the stopped job leaves at 10) and resuming (the paused
+/// job is neither working nor on shift) alike: 19.4/19.4 = 1.
 #[test]
 fn the_rule_applies_when_the_availability_closes() {
     let r = one_unit_with_a_break(1.5, None, OnShiftEnd::Finish, 29.4);
@@ -509,7 +510,7 @@ fn the_rule_applies_when_the_availability_closes() {
     assert_eq!(m.left, 12, "{m:?}");
     close("wasted", m.wasted, 1.0);
     close("off shift", m.time_off_shift, 10.0 / 29.4);
-    close("utilisation", m.utilisation, 19.4 / 29.4);
+    close("utilisation", m.utilisation, 19.4 / 19.4);
     let r = one_unit_with_a_break(1.5, None, OnShiftEnd::Resume, 29.4);
     let m = element(&r, "machine");
     assert_eq!(m.left, 12, "{m:?}");

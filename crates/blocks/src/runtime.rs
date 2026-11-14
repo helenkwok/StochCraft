@@ -1303,9 +1303,19 @@ impl BlockStats {
         // A server's units in all: its capacity, or with shifts the most on shift at once. The
         // shares of the units' time in each state are of these, off shift included.
         let units = f64::from(kind.most_units().unwrap_or(0));
-        // Servers whose number of units follows a timetable: their utilisation is over the
-        // units on shift.
+        // Servers whose number of units follows a timetable (shifts).
         let shifted = matches!(kind, ElementKind::Server { shifts, .. } if !shifts.is_empty());
+        // Servers whose units go off shift at all (shifts, or an availability calendar): their
+        // utilisation is over the units on shift, as a pool's.
+        let on_calendar = shifted
+            || matches!(
+                kind,
+                ElementKind::Server {
+                    available,
+                    availability,
+                    ..
+                } if !*available || !availability.is_empty()
+            );
         // Servers with a power report the share of time in each state, and their energy.
         let powered = match kind {
             ElementKind::Server { power: Some(p), .. } => Some(p),
@@ -1413,7 +1423,7 @@ impl BlockStats {
             utilisation: match kind {
                 // Jobs under way (paused ones left out) over the units on shift, both averaged
                 // over time; none on shift: 0.
-                ElementKind::Server { .. } if shifted => self
+                ElementKind::Server { .. } if on_calendar => self
                     .busy
                     .average(end)
                     .zip(self.paused.average(end))
@@ -1478,12 +1488,7 @@ impl BlockStats {
             },
             // Only for servers that follow a calendar or have a power, so others report as before.
             time_off_shift: match kind {
-                ElementKind::Server {
-                    available,
-                    availability,
-                    power,
-                    ..
-                } if !*available || !availability.is_empty() || shifted || power.is_some() => {
+                ElementKind::Server { power, .. } if on_calendar || power.is_some() => {
                     self.states.off_shift.average(end).map(|o| o / units)
                 }
                 _ => None,

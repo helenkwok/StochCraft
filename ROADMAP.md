@@ -819,6 +819,8 @@ taken together, and a large need waiting without holding back a smaller one.
     in every catalog).
     - `availability` stays the fraction of units not failed, whatever the calendar.
     - `utilisation` stays the fraction holding a job, through breaks and repairs alike.
+      (Changed in M2.10: over the units on shift, as for a pool; the breaks are in the unit
+      states.)
     - The saturation warning judges a server busy over the time its units were up and on
       shift.
   - **File:** BPSim's own `Availability` on the task's resource (`ResourceParameters`, values
@@ -833,7 +835,7 @@ taken together, and a large need waiting without holding back a smaller one.
   | Case | Theory | StochCraft |
   |---|---|---|
   | Jobs of 1.5 waiting from 0, off shift 10 to 20: jobs by 29.5 (the one under way at 10 finishes at 10.5) | 13 | 13 |
-  | Same: off-shift share (from 10.5), utilisation | 9.5/29.5, 20/29.5 | exact |
+  | Same: off-shift share (from 10.5), utilisation (over all time before M2.10: 20/29.5; over the time on shift since, 20/20) | 9.5/29.5, 1 | exact |
   | Jobs of 4, failure 7 after each repair, repairs of 5, interruptible, off shift 10 to 20: jobs by 30 (the job interrupted at 7 resumes at 12, off shift) | 3 | 3 |
   | Same: availability, off-shift share (the resumed job [12, 13) is processing) | 20/30, 6/30 | exact |
   | Saturated, failures exp(mean 100), repairs exp(mean 10), off shift midnight to 8: availability A | 0.90909 | 0.90942 ± 0.00437 |
@@ -1324,9 +1326,13 @@ leaving before their service begins a central feature that Erlang B and C lack.
   - **Health checks** count the units working as on shift, up and not out, and check no unit off
     shift (one finishing its job after its shift included: it takes no more entities). A unit
     taken out keeps its restart whatever the shift does.
-  - **Results:** a server with shifts reports its utilisation over the units on shift
-    (time-averaged, those finishing a job included; a job paused off shift is neither working
-    nor on shift), and its cycle time over the mean units on shift. The unit states are shares
+  - **Results:** **utilisation is now over the units on shift** for every server whose units
+    go off shift (shifts, or an availability calendar, as for a pool): time-averaged units
+    with a job over time-averaged units on shift (those finishing a job after their shift
+    included; a job paused off shift is neither working nor on shift). Before, a server with an
+    availability calendar reported busy over all its units through the breaks. Servers with no
+    calendar report as before. A server with shifts reports its cycle time over the mean units
+    on shift (an availability calendar's still over all its units). The unit states are shares
     of all its units (the most on shift at once), off shift being the units the timetable has
     off, a paused job's unit included. Retrying at a shift's end counts in the work wasted.
   - **File:** the resource's `Quantity` with values `validFor` calendars, as a pool's, and
@@ -1355,10 +1361,8 @@ leaving before their service begins a central feature that Erlang B and C lack.
 
 - **Not yet (units by shift):** a resource's units by shift on a task with a finite buffer are
   simulated (each unit keeps its place), but not checked against theory; editing a pool's
-  shifts and a server's are separate (a pool used by one task stays a pool); the utilisation of
-  a server with only an availability calendar is still over all its units (as before), unlike a
-  server with shifts; a file from elsewhere whose one-task resource varies by calendar is still
-  read as a pool.
+  shifts and a server's are separate (a pool used by one task stays a pool); a file from
+  elsewhere whose one-task resource varies by calendar is still read as a pool.
 
 ### M2.11 Changeovers and lean measures
 

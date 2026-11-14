@@ -488,9 +488,10 @@ pub enum Metric {
     /// entities that started service. Entities still waiting at the end are left out, so for an overloaded server the
     /// mean is biased low.
     MeanWait,
-    /// Servers: time-average fraction of units busy. A server whose units follow shifts
-    /// (`shifts`): the time-average of units with a job (a job paused off shift left out) over
-    /// the time-average of units on shift (those finishing a job after their shift included).
+    /// Servers: time-average fraction of units busy. A server whose units go off shift (shifts,
+    /// or an availability calendar): the time-average of units with a job (a job paused off
+    /// shift left out) over the time-average of units on shift (those finishing a job after
+    /// their shift included), as for a pool; the time off shift is in the unit states.
     Utilisation,
     /// Servers and delays: time-average number of entities being served or delayed.
     MeanContents,
@@ -1097,7 +1098,6 @@ pub fn run_warnings(model: &Model, summary: &ExperimentSummary) -> Vec<Diagnosti
         let Some(
             kind @ ElementKind::Server {
                 queue_capacity: None,
-                shifts,
                 ..
             },
         ) = model.element(&e.id).map(|x| &x.kind)
@@ -1112,14 +1112,9 @@ pub fn run_warnings(model: &Model, summary: &ExperimentSummary) -> Vec<Diagnosti
         ) else {
             continue;
         };
-        // Busy as a share of the time up and on shift, for servers whose units fail or follow
-        // a calendar. With shifts, the utilisation is already over the units on shift.
-        let off_shift = if shifts.is_empty() {
-            mean(Metric::TimeOffShift).unwrap_or(0.0)
-        } else {
-            0.0
-        };
-        let up = mean(Metric::Availability).unwrap_or(1.0) - off_shift;
+        // Busy as a share of the time up and on shift, for servers whose units fail: the
+        // utilisation is already over the units on shift.
+        let up = mean(Metric::Availability).unwrap_or(1.0);
         let utilisation = if up > 0.0 && up < 1.0 {
             busy / up
         } else {
