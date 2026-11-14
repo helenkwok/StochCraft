@@ -337,6 +337,7 @@
 	Process	流程
 	Process models with BPSim	含 BPSim 的流程模型
 	Properties	屬性
+	Property	屬性
 	Quality	品質
 	Quality ratio	良率
 	Quit	退出
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	請以分號或空格分隔各個值。
 	Sequential	順序
 	Service time	服務時間
+	Service time by property	服務時間依屬性而定
 	Services	服務
 	Set Property	設定屬性
 	Set a planned run time per item on this block to see its effectiveness.	為此區塊設定單件計畫運行時間，即可查看其效能。
@@ -515,6 +517,7 @@
 	Time to the stop condition	到達停止條件的時間
 	Time unit	時間單位
 	Times for particular changes	特定切換的時間
+	Times for particular values	特定值的時間
 	To	終點
 	Tops	頂邊
 	Transfer time	傳送時間

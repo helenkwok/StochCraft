@@ -51,6 +51,15 @@ pub const TRANSFER_TIME: &str = "stochcraft:transferTime";
 /// setup before every job is BPSim's own `TimeParameters/SetUpTime`.
 pub const CHANGEOVER: &str = "stochcraft:changeover";
 
+/// The vendor extension for a task's processing time by the value of an entity property (a
+/// time by product type): a `stochcraft:processingTimeBy` element whose attribute `property`
+/// names the property, holding any number of `stochcraft:time` elements, each with an attribute
+/// `value` and a BPSim distribution or constant, in the task's `ElementParameters`. An entity
+/// whose value (as text) has a time takes it; any other takes the task's own
+/// `TimeParameters/ProcessingTime`. BPSim 2.0 has one processing time per task, for every
+/// token.
+pub const PROCESSING_TIME_BY: &str = "stochcraft:processingTimeBy";
+
 /// An exclusive gateway's routing rule: `stochcraft:routing` with the value `shortestQueue` on
 /// the gateway's `ElementParameters` sends each entity to the way with the shortest queue that
 /// has room.

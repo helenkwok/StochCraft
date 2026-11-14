@@ -436,6 +436,7 @@ fn batches_and_assemblies_write_read_and_save() {
             "pack" => e.kind = ElementKind::Batch { size: 6 },
             "unpack" => {
                 e.kind = ElementKind::Delay {
+                    processing_by: None,
                     duration: Dist::Constant(1.0),
                 }
             }
@@ -1416,4 +1417,163 @@ fn a_quantity_by_calendar_without_the_marker_is_a_pool() {
             ..
         }
     ));
+}
+
+/// A task with processing times by property value: a server, a task with a shared pool and a
+/// delay, each with a time for some kinds.
+fn by_kind() -> Model {
+    let mut m = Builder::new();
+    let src = m.source("parts", Dist::Exponential { mean: 5.0 }, None);
+    m.property(
+        src,
+        "kind",
+        Some(PropertyType::String),
+        PropertyValue::Choice(vec![(0.7, "A".into()), (0.3, "B".into())]),
+    );
+    let machine = m.server("machine", 1, Dist::Constant(3.0));
+    m.processing_by(
+        machine,
+        "kind",
+        vec![
+            ("A", Dist::Exponential { mean: 0.6 }),
+            ("B", Dist::Uniform { min: 1.0, max: 3.0 }),
+        ],
+    );
+    m.pool("crew", 2, &[]);
+    let fit = m.shared_task(
+        "fit",
+        Dist::Constant(2.0),
+        vec![Need::Resource {
+            id: stochcraft_model::ElementId::unchecked("crew"),
+            quantity: 1,
+        }],
+        0.0,
+    );
+    m.processing_by(fit, "kind", vec![("B", Dist::Constant(4.0))]);
+    let cool = m.delay("cool", Dist::Constant(1.0));
+    m.processing_by(cool, "kind", vec![("A", Dist::Constant(0.5))]);
+    let out = m.sink("out");
+    m.connect(src, machine);
+    m.connect(machine, fit);
+    m.connect(fit, cool);
+    m.connect(cool, out);
+    m.build(Experiment::default())
+}
+
+/// Processing times by property value are StochCraft's vendor extension on every kind of task:
+/// written, read back, changed and removed in place.
+#[test]
+fn processing_times_by_property_are_written_saved_and_removed() {
+    let model = by_kind();
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes);
+    assert!(
+        text.contains(r#"<bpsim:VendorExtension name="stochcraft:processingTimeBy""#)
+            && text.contains(r#"<stochcraft:processingTimeBy property="kind">"#)
+            && text.contains(r#"<stochcraft:time value="B">"#),
+        "{text}"
+    );
+    assert_eq!(text.matches("<stochcraft:processingTimeBy ").count(), 3);
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:#?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+
+    // Changed in the opened file: a new time for the server, the delay's removed.
+    let mut edited = loaded.model.clone();
+    if let Some(Some(by)) = edited.elements[1].kind.processing_by_mut() {
+        by.by_value.push(stochcraft_model::ByValue {
+            value: "C".into(),
+            time: Dist::Constant(9.0),
+        });
+    }
+    if let Some(by) = edited.elements[3].kind.processing_by_mut() {
+        *by = None;
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    let text = String::from_utf8_lossy(&saved);
+    assert_eq!(
+        text.matches("<stochcraft:processingTimeBy ").count(),
+        2,
+        "{text}"
+    );
+    assert!(text.contains(r#"<stochcraft:time value="C">"#), "{text}");
+    let back = read(&saved);
+    assert!(
+        back.as_ref().is_ok_and(|l| l.notes.is_empty()),
+        "{:?}",
+        back.as_ref().map(|l| &l.notes)
+    );
+    assert_eq!(back.map(|l| l.model).ok(), Some(edited.clone()));
+
+    // A server that becomes a batch drops its times.
+    let mut batch = edited.clone();
+    batch.elements[1].kind = ElementKind::Batch { size: 2 };
+    let saved = loaded.opened.save(&batch);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    assert_eq!(
+        String::from_utf8_lossy(&saved)
+            .matches("<stochcraft:processingTimeBy ")
+            .count(),
+        1
+    );
+}
+
+/// Bad input is noted: no property (the task's own time then applies to all), a time without
+/// a value, a value twice.
+#[test]
+fn bad_processing_times_by_property_are_noted() {
+    let bytes = write_new(&by_kind());
+    let read_with = |from: &str, to: &str| {
+        let text = String::from_utf8_lossy(&bytes).replacen(from, to, 1);
+        let Ok(loaded) = read(text.as_bytes()) else {
+            unreachable!()
+        };
+        loaded
+    };
+    let noted = |l: &stochcraft_io::Loaded, what: &str| {
+        assert!(
+            l.notes.iter().any(|n| n.message.contains(what)),
+            "{what}: {:?}",
+            l.notes
+        );
+    };
+    let l = read_with(
+        r#"<stochcraft:processingTimeBy property="kind">"#,
+        "<stochcraft:processingTimeBy>",
+    );
+    noted(&l, "needs a `property`");
+    assert_eq!(l.model.elements[1].kind.processing_by(), None);
+    // An empty one is kept, for the model's check to report.
+    let l = read_with(
+        r#"<stochcraft:processingTimeBy property="kind">"#,
+        r#"<stochcraft:processingTimeBy property="">"#,
+    );
+    assert!(l.notes.is_empty(), "{:?}", l.notes);
+    assert!(
+        l.model
+            .validate()
+            .iter()
+            .any(|d| d.problem == stochcraft_model::Problem::TimesByValueWithoutProperty),
+        "{:?}",
+        l.model.validate()
+    );
+    let l = read_with(r#"<stochcraft:time value="A">"#, "<stochcraft:time>");
+    noted(&l, "needs a `value`");
+    let l = read_with(
+        r#"<stochcraft:time value="A">"#,
+        r#"<stochcraft:time value="B">"#,
+    );
+    noted(&l, "more than once");
+    assert_eq!(
+        l.model.elements[1]
+            .kind
+            .processing_by()
+            .map(|b| b.by_value.len()),
+        Some(1)
+    );
 }

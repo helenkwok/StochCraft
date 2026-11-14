@@ -143,6 +143,10 @@ pub enum ElementKind {
     Server {
         capacity: u32,
         service: Dist,
+        /// Processing times for entities with particular values of a property (a time by
+        /// product type), `service` applying to the others; `None`: `service` for every entity.
+        /// A StochCraft vendor extension (`stochcraft:processingTimeBy`). See [`ProcessingBy`].
+        processing_by: Option<ProcessingBy>,
         /// A finite buffer: at most this many entities wait for a unit (not counting those in
         /// service); `None` is unlimited. 0 means no waiting room: an entity gets in only when a
         /// unit is free. When the buffer is full, an element sending an entity here waits
@@ -206,13 +210,21 @@ pub enum ElementKind {
     /// `getResource`, `getResourceByRoles` and `orResource`, and `priority`.
     SharedTask {
         service: Dist,
+        /// Processing times for entities with particular values of a property, `service`
+        /// applying to the others; `None`: `service` for every entity. See [`ProcessingBy`].
+        processing_by: Option<ProcessingBy>,
         /// The alternatives, tried in order (BPSim `orResource`); at least one.
         needs: Vec<Need>,
         /// Who gets freed units first, higher first (BPSim `priority`; default 0).
         priority: f64,
     },
     /// Holds each entity for a time with no capacity limit (a task with no resource).
-    Delay { duration: Dist },
+    Delay {
+        duration: Dist,
+        /// Durations for entities with particular values of a property, `duration` applying
+        /// to the others; `None`: `duration` for every entity. See [`ProcessingBy`].
+        processing_by: Option<ProcessingBy>,
+    },
     /// Removes entities (a BPMN end event). With `scrap`, what reaches it is scrap, for the
     /// OEE quality results; with `demand`, the customer demand it serves, for takt.
     Sink {
@@ -352,6 +364,41 @@ impl Setup {
             .find(|c| c.from == from && c.to == to)
             .map_or(&self.time, |c| &c.time)
     }
+}
+
+/// A task's processing time by the value of an entity property (a time by product type; a
+/// StochCraft vendor extension, `stochcraft:processingTimeBy`, since BPSim 2.0 has none): an
+/// entity whose value of `property` has an entry in `by_value` takes that entry's time; any
+/// other entity (another value, or no value) takes the task's own processing time. Values are
+/// compared as text, as a changeover compares them (`A`, `2`, `true`).
+#[derive(Debug, Clone, PartialEq)]
+pub struct ProcessingBy {
+    pub property: String,
+    pub by_value: Vec<ByValue>,
+}
+
+/// The processing time of entities whose property value is `value`.
+#[derive(Debug, Clone, PartialEq)]
+pub struct ByValue {
+    pub value: String,
+    pub time: Dist,
+}
+
+impl ProcessingBy {
+    /// The time of an entity whose value is `value` (`None`: it has none), if it has an entry.
+    pub fn time_for(&self, value: Option<&str>) -> Option<&Dist> {
+        let value = value?;
+        self.by_value
+            .iter()
+            .find(|b| b.value == value)
+            .map(|b| &b.time)
+    }
+}
+
+/// The times of `by`'s entries (none without it).
+fn by_value_times(by: Option<&ProcessingBy>) -> impl Iterator<Item = &Dist> {
+    by.into_iter()
+        .flat_map(|b| b.by_value.iter().map(|v| &v.time))
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -713,6 +760,28 @@ impl ElementKind {
         }
     }
 
+    /// A task's processing times by property value (a server's, a task with shared resources'
+    /// or a delay's), if it has them.
+    pub fn processing_by(&self) -> Option<&ProcessingBy> {
+        match self {
+            ElementKind::Server { processing_by, .. }
+            | ElementKind::SharedTask { processing_by, .. }
+            | ElementKind::Delay { processing_by, .. } => processing_by.as_ref(),
+            _ => None,
+        }
+    }
+
+    /// The processing times by property value of a task, to change; `None` for an element
+    /// that is not a task with a processing time.
+    pub fn processing_by_mut(&mut self) -> Option<&mut Option<ProcessingBy>> {
+        match self {
+            ElementKind::Server { processing_by, .. }
+            | ElementKind::SharedTask { processing_by, .. }
+            | ElementKind::Delay { processing_by, .. } => Some(processing_by),
+            _ => None,
+        }
+    }
+
     /// Whether this is a gateway: it routes entities at once and holds none.
     pub fn is_gateway(&self) -> bool {
         matches!(
@@ -741,6 +810,7 @@ impl ElementKind {
                 ..
             } => {
                 let mut d = vec![("service", service)];
+                d.extend(by_value_times(self.processing_by()).map(|t| ("service", t)));
                 if let Some(s) = setup {
                     d.push(("setup", &s.time));
                     d.extend(s.by_change.iter().map(|c| ("setup", &c.time)));
@@ -764,8 +834,12 @@ impl ElementKind {
                 }
                 d
             }
-            ElementKind::SharedTask { service, .. } => vec![("service", service)],
-            ElementKind::Delay { duration } => vec![("duration", duration)],
+            ElementKind::SharedTask { service, .. } => std::iter::once(("service", service))
+                .chain(by_value_times(self.processing_by()).map(|t| ("service", t)))
+                .collect(),
+            ElementKind::Delay { duration, .. } => std::iter::once(("duration", duration))
+                .chain(by_value_times(self.processing_by()).map(|t| ("duration", t)))
+                .collect(),
             ElementKind::Sink { .. }
             | ElementKind::ExclusiveGateway { .. }
             | ElementKind::ParallelGateway
@@ -1200,6 +1274,16 @@ pub enum Problem {
     },
     /// A setup has times for particular changes but no property whose changes it watches.
     ChangesWithoutProperty,
+    /// Processing times by property value with no property to read the value of.
+    TimesByValueWithoutProperty,
+    /// Two processing times by property value for one value.
+    DuplicateTimeByValue {
+        value: String,
+    },
+    /// A processing time by property value whose mean is below 0.
+    TimeByValueNegative {
+        value: String,
+    },
     /// A scrap sink counts its scrap against an element that is not a server.
     ScrapNotAgainstServer {
         id: String,
@@ -1387,6 +1471,9 @@ impl Problem {
             Problem::BadExpression { .. } => "bad_expression",
             Problem::UnknownProperty { .. } => "unknown_property",
             Problem::ChangesWithoutProperty => "changes_without_property",
+            Problem::TimesByValueWithoutProperty => "times_by_value_without_property",
+            Problem::DuplicateTimeByValue { .. } => "duplicate_time_by_value",
+            Problem::TimeByValueNegative { .. } => "time_by_value_negative",
             Problem::ScrapNotAgainstServer { .. } => "scrap_not_against_server",
             Problem::PlannedRunTimeNotPositive => "planned_run_time_not_positive",
             Problem::PatienceNegative => "patience_negative",
@@ -1535,6 +1622,18 @@ impl std::fmt::Display for Diagnostic {
             Problem::ChangesWithoutProperty => write!(
                 f,
                 "its setup has times for changes from one value to another but no property to watch"
+            ),
+            Problem::TimesByValueWithoutProperty => write!(
+                f,
+                "it has processing times for particular values but no property to read them from"
+            ),
+            Problem::DuplicateTimeByValue { value } => write!(
+                f,
+                "it has two processing times for the value `{value}`; give each value one"
+            ),
+            Problem::TimeByValueNegative { value } => write!(
+                f,
+                "its processing time for the value `{value}` must have a mean of 0 or more"
             ),
             Problem::ScrapNotAgainstServer { id } => write!(
                 f,
@@ -2002,6 +2101,43 @@ impl Model {
                         ));
                     }
                     _ => {}
+                }
+            }
+            if let Some(by) = e.kind.processing_by() {
+                let name = by.property.trim();
+                if name.is_empty() {
+                    if !by.by_value.is_empty() {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::TimesByValueWithoutProperty,
+                        ));
+                    }
+                } else if !self.property_types().contains_key(name) {
+                    out.push(Diagnostic::error(
+                        Some(&e.id),
+                        Problem::UnknownProperty {
+                            name: name.to_owned(),
+                        },
+                    ));
+                }
+                let mut seen = BTreeSet::new();
+                for b in &by.by_value {
+                    if !seen.insert(b.value.as_str()) {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::DuplicateTimeByValue {
+                                value: b.value.clone(),
+                            },
+                        ));
+                    }
+                    if b.time.check().is_ok() && b.time.mean().is_some_and(|m| m < 0.0) {
+                        out.push(Diagnostic::error(
+                            Some(&e.id),
+                            Problem::TimeByValueNegative {
+                                value: b.value.clone(),
+                            },
+                        ));
+                    }
                 }
             }
             if let ElementKind::Server { power: Some(p), .. } = &e.kind {
@@ -2640,7 +2776,12 @@ impl Model {
             else {
                 continue;
             };
-            let Some(mean_service) = service.mean().filter(|m| m.is_finite() && *m > 0.0) else {
+            // With times by property value, the least of the means: a lower bound on the work.
+            let mean_service = std::iter::once(service)
+                .chain(by_value_times(e.kind.processing_by()))
+                .map(Dist::mean)
+                .try_fold(f64::INFINITY, |least, m| Some(least.min(m?)));
+            let Some(mean_service) = mean_service.filter(|m| m.is_finite() && *m > 0.0) else {
                 continue;
             };
             let rate: f64 = self
@@ -2728,7 +2869,7 @@ impl Model {
             ElementKind::Server { service, .. } | ElementKind::SharedTask { service, .. } => {
                 Some(service)
             }
-            ElementKind::Delay { duration } => Some(duration),
+            ElementKind::Delay { duration, .. } => Some(duration),
             _ => None,
         }
     }
@@ -3046,6 +3187,7 @@ mod tests {
         m.elements.push(el(
             "orphan",
             ElementKind::Delay {
+                processing_by: None,
                 duration: Dist::Constant(1.0),
             },
         ));
@@ -3184,6 +3326,7 @@ mod tests {
                 el(
                     "machine",
                     ElementKind::Server {
+                        processing_by: None,
                         capacity: 1,
                         service: Dist::exponential_rate(1.0),
                         queue_capacity: None,
@@ -3281,6 +3424,7 @@ mod tests {
     #[test]
     fn a_loop_of_finite_buffers_may_deadlock() {
         let server = |q| ElementKind::Server {
+            processing_by: None,
             capacity: 1,
             service: Dist::Constant(1.0),
             queue_capacity: q,
@@ -3355,12 +3499,14 @@ mod tests {
         m.elements.push(el(
             "machine",
             ElementKind::Delay {
+                processing_by: None,
                 duration: Dist::Constant(1.0),
             },
         ));
         m.elements.push(el(
             "idle",
             ElementKind::Server {
+                processing_by: None,
                 capacity: 0,
                 service: Dist::Uniform { min: 2.0, max: 1.0 },
                 queue_capacity: None,
@@ -3435,6 +3581,7 @@ mod tests {
         m.elements.push(el(
             "orphan",
             ElementKind::Delay {
+                processing_by: None,
                 duration: Dist::Constant(1.0),
             },
         ));
@@ -3442,12 +3589,14 @@ mod tests {
         m.elements.push(el(
             "a",
             ElementKind::Delay {
+                processing_by: None,
                 duration: Dist::Constant(1.0),
             },
         ));
         m.elements.push(el(
             "b",
             ElementKind::Delay {
+                processing_by: None,
                 duration: Dist::Constant(1.0),
             },
         ));

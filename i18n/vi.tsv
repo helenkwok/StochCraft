@@ -337,6 +337,7 @@
 	Process	Quy trình
 	Process models with BPSim	Mô hình quy trình có BPSim
 	Properties	Thuộc tính
+	Property	Thuộc tính
 	Quality	Chất lượng
 	Quality ratio	Tỷ lệ chất lượng
 	Quit	Thoát
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Phân tách các giá trị bằng dấu chấm phẩy hoặc dấu cách.
 	Sequential	Tuần tự
 	Service time	Thời gian phục vụ
+	Service time by property	Thời gian phục vụ theo thuộc tính
 	Services	Dịch vụ
 	Set Property	Đặt thuộc tính
 	Set a planned run time per item on this block to see its effectiveness.	Đặt thời gian chạy dự kiến trên mỗi chi tiết cho khối này để xem hiệu quả của nó.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Thời gian đến điều kiện dừng
 	Time unit	Đơn vị thời gian
 	Times for particular changes	Thời gian cho các thay đổi cụ thể
+	Times for particular values	Thời gian cho các giá trị cụ thể
 	To	Đến
 	Tops	Cạnh trên
 	Transfer time	Thời gian chuyển

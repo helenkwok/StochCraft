@@ -337,6 +337,7 @@
 	Process	செயல்முறை
 	Process models with BPSim	BPSim உடன் செயல்முறை மாதிரிகள்
 	Properties	பண்புகள்
+	Property	பண்பு
 	Quality	தரம்
 	Quality ratio	தர விகிதம்
 	Quit	வெளியேறு
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	மதிப்புகளை அரைப்புள்ளி அல்லது இடைவெளியால் பிரிக்கவும்.
 	Sequential	வரிசைமுறை
 	Service time	சேவை நேரம்
+	Service time by property	பண்பைப் பொறுத்த சேவை நேரம்
 	Services	சேவைகள்
 	Set Property	பண்பை அமை
 	Set a planned run time per item on this block to see its effectiveness.	இந்தத் தொகுதியின் பயனுறுதித்தன்மையைப் பார்க்க, அதற்கு ஒரு பாகத்திற்கான திட்டமிட்ட இயக்க நேரத்தை அமைக்கவும்.
@@ -515,6 +517,7 @@
 	Time to the stop condition	நிறுத்த நிபந்தனை வரையிலான நேரம்
 	Time unit	நேர அலகு
 	Times for particular changes	குறிப்பிட்ட மாற்றங்களுக்கான நேரங்கள்
+	Times for particular values	குறிப்பிட்ட மதிப்புகளுக்கான நேரங்கள்
 	To	இதற்கு
 	Tops	மேல் விளிம்புகள்
 	Transfer time	இடமாற்ற நேரம்

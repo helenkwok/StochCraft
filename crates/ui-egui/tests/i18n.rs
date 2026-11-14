@@ -501,6 +501,10 @@ fn looked_up_on_screen() -> BTreeSet<String> {
                     "on_change_of": "tier",
                     "by_change": [{"from": "a", "to": "b", "time": {"type": "constant", "value": 2.0}}],
                 },
+                "processing_by": {
+                    "property": "tier",
+                    "by_value": [{"value": "a", "time": {"type": "constant", "value": 3.0}}],
+                },
             }),
         )
         .expect("a server with breakdowns");

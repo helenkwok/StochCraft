@@ -337,6 +337,7 @@
 	Process	Procés
 	Process models with BPSim	Models de processos amb BPSim
 	Properties	Propietats
+	Property	Propietat
 	Quality	Qualitat
 	Quality ratio	Proporció de qualitat
 	Quit	Surt
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Separeu els valors amb punts i comes o espais.
 	Sequential	Seqüencials
 	Service time	Temps de servei
+	Service time by property	Temps de servei segons una propietat
 	Services	Serveis
 	Set Property	Defineix la propietat
 	Set a planned run time per item on this block to see its effectiveness.	Definiu un temps d'execució planificat per peça en aquest bloc per veure'n l'eficàcia.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Temps fins a la condició d'aturada
 	Time unit	Unitat de temps
 	Times for particular changes	Temps per a canvis concrets
+	Times for particular values	Temps per a valors concrets
 	To	Cap a
 	Tops	Vores superiors
 	Transfer time	Temps de transferència

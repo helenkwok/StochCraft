@@ -217,7 +217,7 @@ fn time_mut<'a>(model: &'a mut Model, id: &ElementId) -> Option<&'a mut Dist> {
         ElementKind::Server { service, .. } | ElementKind::SharedTask { service, .. } => {
             Some(service)
         }
-        ElementKind::Delay { duration } => Some(duration),
+        ElementKind::Delay { duration, .. } => Some(duration),
         _ => None,
     }
 }
@@ -572,8 +572,11 @@ pub fn deterministic(model: &Model) -> Model {
                 }
             }
             ElementKind::SharedTask { service, .. } => mean(service),
-            ElementKind::Delay { duration } => mean(duration),
+            ElementKind::Delay { duration, .. } => mean(duration),
             _ => {}
+        }
+        if let Some(Some(by)) = e.kind.processing_by_mut() {
+            by.by_value.iter_mut().for_each(|v| mean(&mut v.time));
         }
     }
     m

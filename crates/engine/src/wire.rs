@@ -8,11 +8,11 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
-    Bounds, Breakdown, Change, Connection, Demand, DemandPer, Diagnostic, Dist, Element, ElementId,
-    ElementKind, Estimate, Experiment, Family, HealthCheck, Model, Need, OnShiftEnd, OnTakeout,
-    Patience, PatienceUntil, PlaceWhileOut, Power, Property, PropertyType, PropertyValue,
-    ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer,
-    Upper,
+    Bounds, Breakdown, ByValue, Change, Connection, Demand, DemandPer, Diagnostic, Dist, Element,
+    ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck, Model, Need, OnShiftEnd,
+    OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType,
+    PropertyValue, ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit,
+    Timed, Transfer, Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -195,6 +195,10 @@ pub enum KindSpec {
         /// Time to serve one entity.
         #[serde(default = "exponential_1")]
         service: DistSpec,
+        /// Processing times for entities with particular values of a property (a time by
+        /// product type), `service` applying to the others; left out when none.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        processing_by: Option<ProcessingBySpec>,
         /// A finite buffer: at most this many entities wait for a unit (not counting those in
         /// service); left out, there is no limit. 0 means no waiting room. While it is full, a
         /// server or delay sending here holds its finished entity (blocking after service), a
@@ -263,6 +267,10 @@ pub enum KindSpec {
         /// Time to serve one entity.
         #[serde(default = "exponential_1")]
         service: DistSpec,
+        /// Processing times for entities with particular values of a property (a time by
+        /// product type), `service` applying to the others; left out when none.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        processing_by: Option<ProcessingBySpec>,
         /// The alternatives, tried in order (BPSim `orResource`).
         needs: Vec<NeedSpec>,
         /// Who gets freed units first, higher first; left out, 0.
@@ -273,6 +281,10 @@ pub enum KindSpec {
     Delay {
         #[serde(default = "constant_1")]
         duration: DistSpec,
+        /// Processing times for entities with particular values of a property (a time by
+        /// product type), `duration` applying to the others; left out when none.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        processing_by: Option<ProcessingBySpec>,
     },
     /// Removes entities (a BPMN end event). With `scrap`, what reaches it is scrap, for the OEE
     /// quality results; left out when it is not.
@@ -495,6 +507,60 @@ impl From<SetupSpec> for Setup {
                 .collect(),
         }
     }
+}
+
+/// A task's processing times by the value of an entity property (a time by product type): an
+/// entity whose value of `property`, as text, is the `value` of one of `by_value` takes that
+/// `time`; any other entity (another value, or none) takes the task's own time.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ProcessingBySpec {
+    pub property: String,
+    /// One time per value (values as text: `A`, `2`, `true`).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub by_value: Vec<ByValueSpec>,
+}
+
+/// The processing time of entities whose property value is `value`.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ByValueSpec {
+    pub value: String,
+    pub time: DistSpec,
+}
+
+impl From<&ProcessingBy> for ProcessingBySpec {
+    fn from(b: &ProcessingBy) -> Self {
+        Self {
+            property: b.property.clone(),
+            by_value: b
+                .by_value
+                .iter()
+                .map(|v| ByValueSpec {
+                    value: v.value.clone(),
+                    time: (&v.time).into(),
+                })
+                .collect(),
+        }
+    }
+}
+
+/// Processing times by property value from their wire form, the property's name trimmed. One
+/// with no property yet is kept (a table being filled in); the model's check reports times
+/// without one.
+pub fn processing_by(spec: Option<ProcessingBySpec>) -> Option<ProcessingBy> {
+    let s = spec?;
+    Some(ProcessingBy {
+        property: s.property.trim().to_owned(),
+        by_value: s
+            .by_value
+            .into_iter()
+            .map(|v| ByValue {
+                value: v.value,
+                time: v.time.into(),
+            })
+            .collect(),
+    })
 }
 
 /// How a server's units fail: each unit, independently, after a time to failure since its last
@@ -798,6 +864,7 @@ impl From<&ElementKind> for KindSpec {
             ElementKind::Server {
                 capacity,
                 service,
+                processing_by,
                 queue_capacity,
                 breakdown,
                 transfer,
@@ -813,6 +880,7 @@ impl From<&ElementKind> for KindSpec {
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
+                processing_by: processing_by.as_ref().map(Into::into),
                 queue_capacity: *queue_capacity,
                 breakdown: breakdown.as_ref().map(Into::into),
                 transfer: transfer.as_ref().map(|t| (&t.time).into()),
@@ -835,15 +903,21 @@ impl From<&ElementKind> for KindSpec {
             },
             ElementKind::SharedTask {
                 service,
+                processing_by,
                 needs,
                 priority,
             } => KindSpec::SharedTask {
                 service: service.into(),
+                processing_by: processing_by.as_ref().map(Into::into),
                 needs: needs.iter().map(Into::into).collect(),
                 priority: *priority,
             },
-            ElementKind::Delay { duration } => KindSpec::Delay {
+            ElementKind::Delay {
+                duration,
+                processing_by,
+            } => KindSpec::Delay {
                 duration: duration.into(),
+                processing_by: processing_by.as_ref().map(Into::into),
             },
             ElementKind::Sink { scrap, demand } => KindSpec::Sink {
                 scrap: scrap.as_ref().map(|s| ScrapSpec {
@@ -879,6 +953,7 @@ impl From<KindSpec> for ElementKind {
             KindSpec::Server {
                 capacity,
                 service,
+                processing_by: by,
                 queue_capacity,
                 breakdown,
                 transfer,
@@ -895,6 +970,7 @@ impl From<KindSpec> for ElementKind {
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
+                processing_by: processing_by(by),
                 queue_capacity,
                 breakdown: breakdown.map(Into::into),
                 transfer: transfer.map(|t| Transfer {
@@ -913,15 +989,21 @@ impl From<KindSpec> for ElementKind {
             },
             KindSpec::SharedTask {
                 service,
+                processing_by: by,
                 needs,
                 priority,
             } => ElementKind::SharedTask {
                 service: service.into(),
+                processing_by: processing_by(by),
                 needs: needs.into_iter().map(Into::into).collect(),
                 priority,
             },
-            KindSpec::Delay { duration } => ElementKind::Delay {
+            KindSpec::Delay {
+                duration,
+                processing_by: by,
+            } => ElementKind::Delay {
                 duration: duration.into(),
+                processing_by: processing_by(by),
             },
             KindSpec::Sink { scrap, demand } => ElementKind::Sink {
                 scrap: scrap.map(|s| Scrap {
@@ -2142,6 +2224,7 @@ mod tests {
         assert_eq!(
             k,
             Some(KindSpec::Server {
+                processing_by: None,
                 capacity: 1,
                 service: DistSpec::Exponential { mean: 1.0 },
                 queue_capacity: None,

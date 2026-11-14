@@ -337,6 +337,7 @@
 	Process	Process
 	Process models with BPSim	Processmodeller med BPSim
 	Properties	Egenskaper
+	Property	Egenskap
 	Quality	Kvalitet
 	Quality ratio	Kvalitetsandel
 	Quit	Avsluta
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Skilj värdena åt med semikolon eller mellanslag.
 	Sequential	Sekventiella
 	Service time	Servicetid
+	Service time by property	Servicetid efter egenskap
 	Services	Tjänster
 	Set Property	Ange egenskap
 	Set a planned run time per item on this block to see its effectiveness.	Ange en planerad körtid per detalj för detta block för att se dess effektivitet.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Tid till stoppvillkoret
 	Time unit	Tidsenhet
 	Times for particular changes	Tider för vissa byten
+	Times for particular values	Tider för vissa värden
 	To	Till
 	Tops	Överkanter
 	Transfer time	Överföringstid

@@ -140,6 +140,7 @@ fn compiling_a_model_directly() {
         ElementId::unchecked("spare"),
         "spare",
         ElementKind::Delay {
+            processing_by: None,
             duration: Dist::Constant(1.0),
         },
     ));

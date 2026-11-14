@@ -246,6 +246,10 @@ fn the_experiment_and_flows_are_edited_from_their_forms() {
 fn a_property_is_added_typed_given_an_expression_and_removed() {
     let mut h = mm1();
     click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Below the parameters: scrolled into view first.
+    h.get_by_role_and_label(Role::TextInput, "New property name")
+        .scroll_to_me();
+    settle(&mut h);
     h.get_by_role_and_label(Role::TextInput, "New property name")
         .click();
     settle(&mut h);
@@ -747,6 +751,38 @@ fn a_setup_and_a_changeover_are_set_in_the_inspector() {
     // Removing the setup is one step.
     click(&mut h, Role::CheckBox, "Setup");
     assert!(element(&h, "serve").get("setup").is_none());
+}
+
+/// Processing times by property value are set in the inspector like a changeover's times: a
+/// property, then a row per value.
+#[test]
+fn processing_times_by_property_are_set_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    click(&mut h, Role::CheckBox, "Service time by property");
+    assert_eq!(
+        element(&h, "serve")["processing_by"],
+        json!({"property": ""})
+    );
+    type_into(&mut h, "Property", "type");
+    assert_eq!(
+        element(&h, "serve")["processing_by"]["property"],
+        json!("type")
+    );
+    click(&mut h, Role::Button, "Add row");
+    type_into(&mut h, "Value", "A");
+    assert_eq!(
+        element(&h, "serve")["processing_by"]["by_value"],
+        json!([{"value": "A", "time": {"type": "exponential", "mean": 1.0}}])
+    );
+    // A row's time is a service time, not a setup's.
+    assert!(h.query_by_label("Setup time").is_none());
+    assert!(h.get_all_by_label("Service time").count() >= 2);
+    // No element sets `type` yet: the model says so.
+    h.get_by_label_contains("reads property `type`, which no element sets");
+    // Removing them is one step.
+    click(&mut h, Role::CheckBox, "Service time by property");
+    assert!(element(&h, "serve").get("processing_by").is_none());
 }
 
 /// A planned run time per item, for OEE, is set and removed in the inspector like a transfer

@@ -52,6 +52,7 @@ fn parameters(kind: &str) -> &'static [&'static str] {
             "capacity",
             "shifts",
             "service",
+            "processing_by",
             "queue_capacity",
             "transfer",
             "transfer_holds_sender",
@@ -59,8 +60,8 @@ fn parameters(kind: &str) -> &'static [&'static str] {
             "planned_run_time",
         ],
         // Its needs are edited with M2.5's window work; service and priority here.
-        "shared_task" => &["service", "priority"],
-        "delay" => &["duration"],
+        "shared_task" => &["service", "processing_by", "priority"],
+        "delay" => &["duration", "processing_by"],
         "batch" => &["size"],
         _ => &[],
     }

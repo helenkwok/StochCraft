@@ -337,6 +337,7 @@
 	Process	Процесс
 	Process models with BPSim	BPSim бар процесс модельдері
 	Properties	Қасиеттер
+	Property	Қасиет
 	Quality	Сапа
 	Quality ratio	Сапа үлесі
 	Quit	Шығу
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Мәндерді нүктелі үтірмен немесе бос орынмен бөліңіз.
 	Sequential	Реттік
 	Service time	Қызмет көрсету уақыты
+	Service time by property	Қасиетке қарай қызмет көрсету уақыты
 	Services	Қызметтер
 	Set Property	Қасиетті орнату
 	Set a planned run time per item on this block to see its effectiveness.	Нәтижелілігін көру үшін осы блокқа бір бөлшекке жоспарланған жұмыс уақытын орнатыңыз.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Тоқтату шартына дейінгі уақыт
 	Time unit	Уақыт бірлігі
 	Times for particular changes	Нақты өзгерістерге арналған уақыт
+	Times for particular values	Нақты мәндерге арналған уақыт
 	To	Қайда
 	Tops	Жоғарғы жиектер
 	Transfer time	Тасымалдау уақыты

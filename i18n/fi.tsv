@@ -337,6 +337,7 @@
 	Process	Prosessi
 	Process models with BPSim	Prosessimallit ja BPSim
 	Properties	Ominaisuudet
+	Property	Ominaisuus
 	Quality	Laatu
 	Quality ratio	Laatuosuus
 	Quit	Lopeta
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Erota arvot puolipisteillä tai välilyönneillä.
 	Sequential	Peräkkäiset
 	Service time	Palveluaika
+	Service time by property	Palveluaika ominaisuuden mukaan
 	Services	Palvelut
 	Set Property	Aseta ominaisuus
 	Set a planned run time per item on this block to see its effectiveness.	Aseta tälle lohkolle suunniteltu käyntiaika osaa kohden nähdäksesi sen tehokkuuden.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Aika pysäytysehtoon
 	Time unit	Aikayksikkö
 	Times for particular changes	Ajat tietyille muutoksille
+	Times for particular values	Ajat tietyille arvoille
 	To	Kohteeseen
 	Tops	Yläreunat
 	Transfer time	Siirtoaika

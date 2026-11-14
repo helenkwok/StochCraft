@@ -2928,3 +2928,65 @@ fn a_demand_gives_takt_and_is_removed() {
     assert_eq!(metric(&r, "exit", "takt"), None, "{r}");
     assert_eq!(metric(&r, "desk", "cycle_time"), None, "{r}");
 }
+
+/// Processing times by property value: set on a server, read back, run, refused where they do
+/// not apply, and removed.
+#[test]
+fn processing_times_by_property_are_set_run_and_removed() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "property.set",
+        json!({"element": "arrivals", "name": "tier",
+               "value": {"mix": [{"value": "gold", "share": 1.0}]}}),
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "processing_by": {
+            "property": "tier",
+            "by_value": [{"value": "gold", "time": {"type": "constant", "value": 0.125}}],
+        }}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let desk = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(desk["processing_by"]["property"], "tier", "{m}");
+    assert_eq!(desk["processing_by"]["by_value"][0]["value"], "gold", "{m}");
+    // Every entity is gold, served in 0.125 rather than the desk's own 1.5 on average: with an
+    // arrival every 2 on average, the desk is busy about 0.0625 of the time, not 0.75.
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    let busy = r["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|x| x["id"] == "desk"))
+        .and_then(|x| x["metrics"]["utilisation"]["mean"].as_f64());
+    assert!(busy.is_some_and(|b| (0.04..0.09).contains(&b)), "{r}");
+    // A sink takes none.
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "exit", "processing_by": {"property": "tier"}})
+        ),
+        ErrorCode::InvalidParams
+    );
+    // Misspelt fields are refused.
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "desk", "processing_by": {"propery": "tier"}})
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "processing_by": null}),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    assert!(!m.to_string().contains("processing_by"), "{m}");
+}

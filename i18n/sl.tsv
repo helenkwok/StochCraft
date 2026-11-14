@@ -337,6 +337,7 @@
 	Process	Proces
 	Process models with BPSim	Modeli procesov z BPSim
 	Properties	Lastnosti
+	Property	Lastnost
 	Quality	Kakovost
 	Quality ratio	Delež kakovosti
 	Quit	Izhod
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Vrednosti ločite s podpičji ali presledki.
 	Sequential	Zaporedne
 	Service time	Čas strežbe
+	Service time by property	Čas strežbe glede na lastnost
 	Services	Storitve
 	Set Property	Nastavi lastnost
 	Set a planned run time per item on this block to see its effectiveness.	Za ta blok nastavite načrtovani čas delovanja na kos, da vidite njegovo učinkovitost.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Čas do pogoja za ustavitev
 	Time unit	Časovna enota
 	Times for particular changes	Časi za določene spremembe
+	Times for particular values	Časi za določene vrednosti
 	To	V
 	Tops	Zgornji robovi
 	Transfer time	Čas prenosa

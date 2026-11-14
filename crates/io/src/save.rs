@@ -24,7 +24,7 @@ use crate::write::{
     calendar_element, changeover_element, condition_element, demand_element, dist_element,
     edge_ends, estimate_element, health_check_element, interruptible_param, numeric,
     on_shift_end_element, own_marker, patience_element, planned_element, power_element,
-    probability_element, property_element, quantity_element, quantity_param,
+    probability_element, processing_by_element, property_element, quantity_element, quantity_param,
     queue_capacity_element, rework_element, routing_element, scrap_element, size, start_param,
     stop_element, timer_param, transfer_element, units_param, vendor_value_element,
 };
@@ -165,7 +165,7 @@ fn within_noise(got: &Model, want: &Model, rescaled: &BTreeSet<(String, String)>
                 },
             ) if has("ControlParameters/InterTriggerTimer") && near_dist(a, b) => *a = b.clone(),
             (ElementKind::Server { service: a, .. }, ElementKind::Server { service: b, .. })
-            | (ElementKind::Delay { duration: a }, ElementKind::Delay { duration: b })
+            | (ElementKind::Delay { duration: a, .. }, ElementKind::Delay { duration: b, .. })
             | (
                 ElementKind::SharedTask { service: a, .. },
                 ElementKind::SharedTask { service: b, .. },
@@ -1862,10 +1862,10 @@ impl Editor {
                         }
                     }
                 }
-                ElementKind::Server { service: d, .. } | ElementKind::Delay { duration: d } => {
+                ElementKind::Server { service: d, .. } | ElementKind::Delay { duration: d, .. } => {
                     let od = match was {
                         Some(ElementKind::Server { service, .. }) => Some(service),
-                        Some(ElementKind::Delay { duration }) => Some(duration),
+                        Some(ElementKind::Delay { duration, .. }) => Some(duration),
                         _ => None,
                     };
                     if od != Some(d) {
@@ -2130,11 +2130,13 @@ impl Editor {
                     service,
                     needs,
                     priority,
+                    ..
                 } => {
                     let Some(ElementKind::SharedTask {
                         service: os,
                         needs: on,
                         priority: op,
+                        ..
                     }) = was
                     else {
                         return Err(fail(format!(
@@ -2185,6 +2187,22 @@ impl Editor {
                 ElementKind::Sink { .. }
                 | ElementKind::ExclusiveGateway { .. }
                 | ElementKind::ParallelGateway => {}
+            }
+            // A task's processing times by property value: written when they changed, and
+            // gone when the element is no longer a task with a processing time.
+            let old_by = was.and_then(ElementKind::processing_by);
+            let new_by = e.kind.processing_by();
+            if old_by != new_by {
+                vendor_writes.push((
+                    id.clone(),
+                    crate::bpsim::PROCESSING_TIME_BY,
+                    new_by.map(|x| {
+                        // Its property and values as the file's encoding needs.
+                        let mut v = processing_by_element(x);
+                        self.text_attrs(&mut v);
+                        v
+                    }),
+                ));
             }
             // Customer demand at a sink.
             let old_demand = match was {

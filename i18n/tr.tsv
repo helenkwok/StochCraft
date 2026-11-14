@@ -337,6 +337,7 @@
 	Process	Süreç
 	Process models with BPSim	BPSim içeren süreç modelleri
 	Properties	Özellikler
+	Property	Özellik
 	Quality	Kalite
 	Quality ratio	Kalite oranı
 	Quit	Çıkış
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Değerleri noktalı virgül veya boşlukla ayırın.
 	Sequential	Sıralı
 	Service time	Hizmet süresi
+	Service time by property	Özelliğe göre hizmet süresi
 	Services	Hizmetler
 	Set Property	Özelliği ayarla
 	Set a planned run time per item on this block to see its effectiveness.	Etkinliğini görmek için bu blokta parça başına planlanan çalışma süresini ayarlayın.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Durdurma koşuluna kadar geçen süre
 	Time unit	Zaman birimi
 	Times for particular changes	Belirli değişimler için süreler
+	Times for particular values	Belirli değerler için süreler
 	To	Hedef
 	Tops	Üst kenarlar
 	Transfer time	Aktarma süresi

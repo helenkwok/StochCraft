@@ -428,6 +428,7 @@ impl Compiled {
                 ElementKind::Server {
                     capacity,
                     service,
+                    processing_by,
                     breakdown,
                     available,
                     availability,
@@ -441,6 +442,7 @@ impl Compiled {
                     let most = element.kind.most_units().unwrap_or(capacity);
                     let shifts = calendars.units_over(capacity, shifts, available, &availability);
                     let always = matches!(shifts.as_slice(), [(_, n)] if *n == most);
+                    let service = Times::new(service, processing_by, &self.slots, &env.rng);
                     // A changeover reads the part's property from its slot.
                     let setup = setup.map(|setup| Setups {
                         slot: setup.on_change_of.as_deref().and_then(|name| {
@@ -465,9 +467,11 @@ impl Compiled {
                 }
                 ElementKind::SharedTask {
                     service,
+                    processing_by,
                     needs,
                     priority,
                 } => {
+                    let service = Times::new(service, processing_by, &self.slots, &env.rng);
                     let alternatives = alternatives(&self.model, &needs);
                     let request = Rc::new(Request {
                         alternatives,
@@ -475,7 +479,13 @@ impl Compiled {
                     });
                     spawn_shared(&mut sim, env, service, request, Rc::clone(&pools));
                 }
-                ElementKind::Delay { duration } => spawn_delay(&mut sim, env, duration),
+                ElementKind::Delay {
+                    duration,
+                    processing_by,
+                } => {
+                    let duration = Times::new(duration, processing_by, &self.slots, &env.rng);
+                    spawn_delay(&mut sim, env, duration)
+                }
                 ElementKind::Sink { scrap, .. } => {
                     // Scrap counts against the server it names, else each entity's last one.
                     let scrap = scrap.map(|s| {
@@ -2428,14 +2438,14 @@ fn spawn_shifts(sim: &mut Sim, pools: Rc<Pools>, pool: usize, changes: Vec<(f64,
     });
 }
 
-fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
+fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Rc<Times>) {
     let me = tag(env.me);
     let env = Rc::new(RefCell::new(env));
     let book = UnitBook::new(&env.borrow(), capacity);
     for u in 0..capacity as usize {
         let env = Rc::clone(&env);
         let book = Rc::clone(&book);
-        let service = service.clone();
+        let service = Rc::clone(&service);
         sim.spawn_tagged(me, async move {
             loop {
                 let (input, ctx) = {
@@ -2450,7 +2460,7 @@ fn spawn_server(sim: &mut Sim, env: BlockEnv, capacity: u32, service: Dist) {
                     e.adjust(|s| &mut s.waiting, -1.0);
                     e.adjust(|s| &mut s.busy, 1.0);
                     book.change(&e, u, |d| d.processing = true);
-                    service.sample(&mut e.rng)
+                    service.sample(&entity, &mut e.rng)
                 };
                 if let Some(p) = &env.borrow().patient {
                     p.start(&entity, duration);
@@ -2538,6 +2548,64 @@ const SETUP_STREAM: u64 = 0x5e7f_a11d_c4a9_6e01;
 /// or its setup stream's.
 const HEALTH_STREAM: u64 = 0x4ea1_7c4e_c0ff_ee05;
 
+/// Mixed into the seed of a task's stream for its processing times by property value, so it is
+/// not its service stream's, its setup stream's or its health check stream's.
+const BY_VALUE_STREAM: u64 = 0x7b1d_e5a1_0c3f_92d7;
+
+/// A task's processing time ([`stochcraft_model::ProcessingBy`]): an entity whose value of the
+/// property has an entry takes that entry's time, drawn from a stream of the task's own; any
+/// other takes the task's own time, from its service stream as without entries. That stream is
+/// seeded without drawing from the element's own, so a model without entries, or whose entries
+/// no entity matches, draws exactly what it did before, and the times of the other entities
+/// are the service stream's draws in the same order whatever the entries.
+struct Times {
+    default: Dist,
+    by: Option<ByValues>,
+}
+
+/// The entries of a task's processing times by property value, the slot of the property they
+/// read, and the stream they draw from.
+struct ByValues {
+    by: stochcraft_model::ProcessingBy,
+    slot: Option<usize>,
+    rng: RefCell<Rng>,
+}
+
+impl Times {
+    /// The times of a task whose own time is `default`, with entries `by`; `slots` are the
+    /// model's property slots and `rng` the task's own stream (not drawn from).
+    fn new(
+        default: Dist,
+        by: Option<stochcraft_model::ProcessingBy>,
+        slots: &[String],
+        rng: &Rng,
+    ) -> Rc<Self> {
+        let by = by.filter(|b| !b.by_value.is_empty()).map(|by| ByValues {
+            slot: slots
+                .binary_search_by(|s| s.as_str().cmp(by.property.trim()))
+                .ok(),
+            by,
+            rng: RefCell::new(Rng::new(rng.clone().next_u64() ^ BY_VALUE_STREAM)),
+        });
+        Rc::new(Self { default, by })
+    }
+
+    /// The processing time of `entity`, from its entry, else from `rng` (the task's own
+    /// stream).
+    fn sample(&self, entity: &Entity, rng: &mut Rng) -> f64 {
+        if let Some(b) = &self.by {
+            let value = b
+                .slot
+                .and_then(|k| entity.properties.get(k).cloned().flatten())
+                .map(|h| h.value().text());
+            if let Some(d) = b.by.time_for(value.as_deref()) {
+                return d.sample(&mut b.rng.borrow_mut());
+            }
+        }
+        self.default.sample(rng)
+    }
+}
+
 /// The interrupt of a job whose unit fails ([`Breakdown`]).
 const FAILED: u64 = 0;
 
@@ -2552,7 +2620,7 @@ const SHIFT_END: u64 = 2;
 struct UnitServer {
     /// Its units in all: the most ever on shift at once.
     capacity: u32,
-    service: Dist,
+    service: Rc<Times>,
     breakdown: Option<Breakdown>,
     /// From each time on, until the next, the units on shift (the first at 0).
     shifts: Vec<(f64, u32)>,
@@ -2886,7 +2954,7 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                     d.processing = true;
                     d.setup = set_up.is_some();
                 });
-                service.sample(&mut e.rng)
+                service.sample(&entity, &mut e.rng)
             };
             if let Some(p) = &patient {
                 p.start(&entity, set_up.unwrap_or(0.0).max(0.0) + duration.max(0.0));
@@ -3701,7 +3769,7 @@ impl Pools {
 fn spawn_shared(
     sim: &mut Sim,
     env: BlockEnv,
-    service: Dist,
+    service: Rc<Times>,
     request: Rc<Request>,
     pools: Rc<Pools>,
 ) {
@@ -3719,7 +3787,7 @@ fn spawn_shared(
                 Rc::clone(&request),
                 Rc::clone(&pools),
             );
-            let service = service.clone();
+            let service = Rc::clone(&service);
             ctx.spawn(async move {
                 let taken = pl.acquire(&req).await;
                 let duration = {
@@ -3728,7 +3796,7 @@ fn spawn_shared(
                     e.with_stats(|s| s.wait.add(now - entity.entered));
                     e.adjust(|s| &mut s.waiting, -1.0);
                     e.adjust(|s| &mut s.busy, 1.0);
-                    service.sample(&mut e.rng)
+                    service.sample(&entity, &mut e.rng)
                 };
                 c.hold(duration).await;
                 env2.borrow().adjust(|s| &mut s.busy, -1.0);
@@ -3739,7 +3807,7 @@ fn spawn_shared(
     });
 }
 
-fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
+fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Rc<Times>) {
     let me = tag(env.me);
     let env = Rc::new(RefCell::new(env));
     let mut sim_ctx = None;
@@ -3756,7 +3824,7 @@ fn spawn_delay(sim: &mut Sim, env: BlockEnv, duration: Dist) {
                 let mut e = env.borrow_mut();
                 e.adjust(|s| &mut s.waiting, -1.0);
                 e.adjust(|s| &mut s.busy, 1.0);
-                duration.sample(&mut e.rng)
+                duration.sample(&entity, &mut e.rng)
             };
             let (c, env2) = (ctx.clone(), Rc::clone(&env));
             ctx.spawn(async move {

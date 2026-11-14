@@ -337,6 +337,7 @@
 	Process	Protsess
 	Process models with BPSim	Protsessimudelid ja BPSim
 	Properties	Omadused
+	Property	Omadus
 	Quality	Kvaliteet
 	Quality ratio	Kvaliteedi osakaal
 	Quit	Välju
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Eralda väärtused semikoolonite või tühikutega.
 	Sequential	Järjestikused
 	Service time	Teenindusaeg
+	Service time by property	Teenindusaeg omaduse järgi
 	Services	Teenused
 	Set Property	Määra omadus
 	Set a planned run time per item on this block to see its effectiveness.	Määra selle ploki jaoks kavandatud tööaeg detaili kohta, et näha selle tõhusust.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Aeg peatamistingimuseni
 	Time unit	Ajaühik
 	Times for particular changes	Ajad konkreetsete muutuste jaoks
+	Times for particular values	Ajad konkreetsete väärtuste jaoks
 	To	Kuni
 	Tops	Ülaservad
 	Transfer time	Ülekandeaeg

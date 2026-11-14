@@ -337,6 +337,7 @@
 	Process	Proses
 	Process models with BPSim	Model proses dengan BPSim
 	Properties	Properti
+	Property	Properti
 	Quality	Kualitas
 	Quality ratio	Rasio kualitas
 	Quit	Keluar
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Pisahkan nilai dengan titik koma atau spasi.
 	Sequential	Sekuensial
 	Service time	Waktu layanan
+	Service time by property	Waktu layanan menurut properti
 	Services	Layanan
 	Set Property	Atur Properti
 	Set a planned run time per item on this block to see its effectiveness.	Tetapkan waktu jalan terencana per komponen pada blok ini untuk melihat efektivitasnya.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Waktu hingga kondisi berhenti
 	Time unit	Satuan waktu
 	Times for particular changes	Waktu untuk perubahan tertentu
+	Times for particular values	Waktu untuk nilai tertentu
 	To	Ke
 	Tops	Tepi atas
 	Transfer time	Waktu perpindahan

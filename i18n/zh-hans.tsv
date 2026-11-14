@@ -337,6 +337,7 @@
 	Process	流程
 	Process models with BPSim	带 BPSim 的流程模型
 	Properties	属性
+	Property	属性
 	Quality	质量
 	Quality ratio	合格率
 	Quit	退出
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	请用分号或空格分隔各个值。
 	Sequential	顺序
 	Service time	服务时间
+	Service time by property	服务时间随属性而定
 	Services	服务
 	Set Property	设置属性
 	Set a planned run time per item on this block to see its effectiveness.	为此区块设置单件计划运行时间，即可查看其效能。
@@ -515,6 +517,7 @@
 	Time to the stop condition	到达停止条件的时间
 	Time unit	时间单位
 	Times for particular changes	特定切换的时间
+	Times for particular values	特定值的时间
 	To	终点
 	Tops	顶边
 	Transfer time	传送时间

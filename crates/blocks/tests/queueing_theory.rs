@@ -30,6 +30,7 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
             element(
                 "servers",
                 ElementKind::Server {
+                    processing_by: None,
                     capacity: c,
                     service: Dist::exponential_rate(mu),
                     queue_capacity: None,

@@ -427,7 +427,7 @@ fn edits() -> Vec<Edit> {
                     match &mut e.kind {
                         ElementKind::Server { service: d, .. }
                         | ElementKind::SharedTask { service: d, .. }
-                        | ElementKind::Delay { duration: d } => {
+                        | ElementKind::Delay { duration: d, .. } => {
                             *d = Dist::Triangular {
                                 min: 1.0,
                                 mode: 2.0,
@@ -463,6 +463,7 @@ fn edits() -> Vec<Edit> {
                         new.clone(),
                         "Added",
                         ElementKind::Delay {
+                            processing_by: None,
                             duration: Dist::Constant(2.0),
                         },
                     ),
@@ -491,6 +492,7 @@ fn edits() -> Vec<Edit> {
             Box::new(move |m: &mut Model| {
                 if let Some(i) = first(m, |k| matches!(k, ElementKind::Server { .. })) {
                     m.elements[i].kind = ElementKind::Delay {
+                        processing_by: None,
                         duration: Dist::Constant(1.5),
                     };
                 }
@@ -560,6 +562,7 @@ fn edits() -> Vec<Edit> {
             Box::new(move |m: &mut Model| {
                 if let Some(i) = first(m, |k| matches!(k, ElementKind::Delay { .. })) {
                     m.elements[i].kind = ElementKind::Server {
+                        processing_by: None,
                         capacity: 2,
                         service: Dist::Constant(1.5),
                         queue_capacity: None,
@@ -608,7 +611,7 @@ fn edits() -> Vec<Edit> {
                     match &mut m.elements[i].kind {
                         ElementKind::Server { service: d, .. }
                         | ElementKind::SharedTask { service: d, .. }
-                        | ElementKind::Delay { duration: d } => *d = fitted,
+                        | ElementKind::Delay { duration: d, .. } => *d = fitted,
                         _ => {}
                     }
                     m.estimates.insert(
@@ -807,6 +810,14 @@ fn showcase() -> Model {
             }],
         },
     );
+    m.processing_by(
+        previous,
+        "issues",
+        vec![
+            ("0", Dist::Exponential { mean: 1.5 }),
+            ("2", Dist::Uniform { min: 2.0, max: 3.0 }),
+        ],
+    );
     m.power(
         previous,
         stochcraft_blocks::Power {
@@ -873,6 +884,7 @@ fn showcase() -> Model {
         m.delay("left", Dist::Constant(1.0)),
         m.delay("right", Dist::Constant(2.0)),
     );
+    m.processing_by(left, "issues", vec![("1", Dist::Constant(0.5))]);
     let join = m.parallel("join");
     let triage = m.exclusive("triage");
     let out = m.sink("exit");
@@ -911,6 +923,7 @@ fn showcase() -> Model {
         ],
         3.5,
     );
+    m.processing_by(fit, "issues", vec![("3", Dist::Constant(2.25))]);
     // Calendars: arrivals faster on weekday mornings, and a crew of 5 on the day shift.
     m.calendar(
         "mornings",

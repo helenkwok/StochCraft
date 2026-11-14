@@ -44,8 +44,8 @@ use std::collections::{BTreeMap, BTreeSet};
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 pub use stochcraft_model::{
-    Breakdown, Change, Demand, DemandPer, HealthCheck, OnShiftEnd, OnTakeout, Patience,
-    PatienceUntil, PlaceWhileOut, Power, Routing, Scrap, Setup, Transfer,
+    Breakdown, ByValue, Change, Demand, DemandPer, HealthCheck, OnShiftEnd, OnTakeout, Patience,
+    PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Routing, Scrap, Setup, Transfer,
 };
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
@@ -1210,6 +1210,7 @@ impl Builder {
         self.add(
             name,
             ElementKind::Server {
+                processing_by: None,
                 capacity,
                 service,
                 queue_capacity: None,
@@ -1241,6 +1242,7 @@ impl Builder {
         self.add(
             name,
             ElementKind::Server {
+                processing_by: None,
                 capacity,
                 service,
                 queue_capacity: Some(queue_capacity),
@@ -1423,6 +1425,27 @@ impl Builder {
         }
     }
 
+    /// Gives task `block` (a server, a task with shared resources or a delay) processing times
+    /// for entities with particular values of `property`: `(value, time)` pairs ([`ProcessingBy`]).
+    pub fn processing_by(&mut self, block: BlockId, property: &str, by_value: Vec<(&str, Dist)>) {
+        if let Some(p) = self
+            .elements
+            .get_mut(block.0)
+            .and_then(|(_, kind, _)| kind.processing_by_mut())
+        {
+            *p = Some(ProcessingBy {
+                property: property.to_owned(),
+                by_value: by_value
+                    .into_iter()
+                    .map(|(value, time)| ByValue {
+                        value: value.to_owned(),
+                        time,
+                    })
+                    .collect(),
+            });
+        }
+    }
+
     /// A calendar of `events`; its name is its id.
     pub fn calendar(&mut self, name: &str, events: Vec<Event>) {
         self.calendars.push(Calendar {
@@ -1482,6 +1505,7 @@ impl Builder {
         self.add(
             name,
             ElementKind::SharedTask {
+                processing_by: None,
                 service,
                 needs,
                 priority,
@@ -1491,7 +1515,13 @@ impl Builder {
 
     /// Holds every entity for a time drawn from `duration`, with no capacity limit.
     pub fn delay(&mut self, name: &str, duration: Dist) -> BlockId {
-        self.add(name, ElementKind::Delay { duration })
+        self.add(
+            name,
+            ElementKind::Delay {
+                duration,
+                processing_by: None,
+            },
+        )
     }
 
     /// Removes entities from the model and records their time in system.

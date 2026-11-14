@@ -337,6 +337,7 @@
 	Process	Процес
 	Process models with BPSim	Моделі процесів з BPSim
 	Properties	Властивості
+	Property	Властивість
 	Quality	Якість
 	Quality ratio	Частка придатних
 	Quit	Вийти
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Розділяйте значення крапкою з комою або пробілами.
 	Sequential	Послідовні
 	Service time	Час обслуговування
+	Service time by property	Час обслуговування залежно від властивості
 	Services	Служби
 	Set Property	Задати властивість
 	Set a planned run time per item on this block to see its effectiveness.	Задайте для цього блока планований час роботи на деталь, щоб побачити його результативність.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Час до умови зупинки
 	Time unit	Одиниця часу
 	Times for particular changes	Час для окремих переходів
+	Times for particular values	Час для окремих значень
 	To	До
 	Tops	Верхні краї
 	Transfer time	Час передачі

@@ -337,6 +337,7 @@
 	Process	Procesas
 	Process models with BPSim	Procesų modeliai su BPSim
 	Properties	Savybės
+	Property	Savybė
 	Quality	Kokybė
 	Quality ratio	Kokybės dalis
 	Quit	Išeiti
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Atskirkite reikšmes kabliataškiais arba tarpais.
 	Sequential	Nuosekliosios
 	Service time	Aptarnavimo laikas
+	Service time by property	Aptarnavimo laikas pagal savybę
 	Services	Paslaugos
 	Set Property	Nustatyti savybę
 	Set a planned run time per item on this block to see its effectiveness.	Nustatykite šiam blokui planuojamą veikimo laiką vienai detalei, kad matytumėte jo efektyvumą.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Laikas iki stabdymo sąlygos
 	Time unit	Laiko vienetas
 	Times for particular changes	Laikai konkretiems pakeitimams
+	Times for particular values	Laikai konkrečioms reikšmėms
 	To	Į
 	Tops	Viršutiniai kraštai
 	Transfer time	Perdavimo laikas

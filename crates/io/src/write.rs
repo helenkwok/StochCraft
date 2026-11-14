@@ -8,8 +8,9 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate, HealthCheck, Model,
-    Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, Property,
-    PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, Timed, Transfer,
+    Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy,
+    Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, Timed,
+    Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -352,6 +353,25 @@ pub(crate) fn changeover_element(x: &Setup) -> Element {
     }
     s("VendorExtension")
         .with_attr("name", crate::bpsim::CHANGEOVER)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
+}
+
+/// A task's processing times by property value as StochCraft's vendor extension
+/// ([`crate::bpsim::PROCESSING_TIME_BY`]).
+pub(crate) fn processing_by_element(x: &ProcessingBy) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body =
+        Element::new("stochcraft:processingTimeBy", Some(ns)).with_attr("property", &x.property);
+    for b in &x.by_value {
+        body.push(
+            Element::new("stochcraft:time", Some(ns))
+                .with_attr("value", &b.value)
+                .with_child(dist_element(&b.time)),
+        );
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::PROCESSING_TIME_BY)
         .with_attr("xmlns:stochcraft", ns)
         .with_child(body)
 }
@@ -760,6 +780,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 service,
                 needs,
                 priority,
+                ..
             } => {
                 ep.push(
                     s("TimeParameters").with_child(param("ProcessingTime", dist_element(service))),
@@ -773,7 +794,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                     );
                 }
             }
-            ElementKind::Delay { duration } => {
+            ElementKind::Delay { duration, .. } => {
                 ep.push(
                     s("TimeParameters").with_child(param("ProcessingTime", dist_element(duration))),
                 );
@@ -851,6 +872,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             && x.on_change_of.is_some()
         {
             ep.push(changeover_element(x));
+        }
+        if let Some(x) = e.kind.processing_by() {
+            ep.push(processing_by_element(x));
         }
         if let ElementKind::Server { on_shift_end, .. } = &e.kind
             && let Some(x) = on_shift_end_element(*on_shift_end)

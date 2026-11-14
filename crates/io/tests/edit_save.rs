@@ -174,7 +174,7 @@ fn parameter_edits_change_only_their_own_lines() {
         (
             "tandem.xpdl",
             Box::new(|m: &mut Model| {
-                if let ElementKind::Delay { duration } = &mut element(m, "cool").kind {
+                if let ElementKind::Delay { duration, .. } = &mut element(m, "cool").kind {
                     *duration = Dist::Constant(0.5);
                 }
             }),
@@ -253,6 +253,7 @@ fn add_delay_between(m: &mut Model, new: &str, from: &str, to: &str) {
             id(new),
             "Walk to the exit",
             ElementKind::Delay {
+                processing_by: None,
                 duration: Dist::Uniform { min: 0.5, max: 1.5 },
             },
         ),
@@ -301,6 +302,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
     let (saved, _) = edit_and_save("mm1.bpmn", None, |m| {
         add_delay_between(m, "pay", "serve", "leave");
         element(m, "pay").kind = ElementKind::Server {
+            processing_by: None,
             capacity: 2,
             service: Dist::Exponential { mean: 0.5 },
             queue_capacity: None,
@@ -321,11 +323,13 @@ fn blocks_and_connections_can_be_added_and_removed() {
     // Kinds change: a server becomes a delay and back, a sink becomes a source's target.
     edit_and_save("mm1.bpmn", None, |m| {
         element(m, "serve").kind = ElementKind::Delay {
+            processing_by: None,
             duration: Dist::Constant(1.0),
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
         element(m, "cool").kind = ElementKind::Server {
+            processing_by: None,
             capacity: 2,
             service: Dist::Constant(0.75),
             queue_capacity: None,
@@ -344,6 +348,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
     });
     edit_and_save("tandem.xpdl", None, |m| {
         element(m, "weld").kind = ElementKind::Delay {
+            processing_by: None,
             duration: Dist::Constant(0.2),
         };
     });
@@ -381,6 +386,26 @@ fn new_names_in_a_latin_1_file_are_character_references() {
     );
     let again = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(again.model, m);
+
+    // And processing times by property value.
+    let mut m = again.model.clone();
+    if let Some(by) = element(&mut m, "serve").kind.processing_by_mut() {
+        *by = Some(stochcraft_model::ProcessingBy {
+            property: "café".into(),
+            by_value: vec![stochcraft_model::ByValue {
+                value: "黒".into(),
+                time: Dist::Constant(2.0),
+            }],
+        });
+    }
+    let saved = again.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let t = text(&saved);
+    assert!(
+        t.contains("caf&#233;") && t.contains("&#40658;") && !t.contains('黒'),
+        "{t}"
+    );
+    let last = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(last.model, m);
 }
 
 #[test]
@@ -598,6 +623,7 @@ fn new_ids_never_clash_with_the_files_other_ids() {
         add_delay_between(m, "pay", "serve", "leave");
         add_delay_between(m, "pay_resource", "pay", "leave");
         element(m, "pay").kind = ElementKind::Server {
+            processing_by: None,
             capacity: 1,
             service: Dist::Constant(1.0),
             queue_capacity: None,
@@ -1015,6 +1041,7 @@ fn transfer_times_save_as_a_vendor_extension() {
         // Made a delay, the task leaves its transfer behind.
         let mut model = loaded.model.clone();
         element(&mut model, task).kind = ElementKind::Delay {
+            processing_by: None,
             duration: Dist::Constant(1.0),
         };
         let delay = loaded
@@ -1167,6 +1194,7 @@ fn powers_save_as_a_vendor_extension() {
         assert_eq!(text(&none), text(&original), "{name}");
         let mut model = loaded.model.clone();
         element(&mut model, task).kind = ElementKind::Delay {
+            processing_by: None,
             duration: Dist::Constant(1.0),
         };
         let delay = loaded
@@ -1281,6 +1309,7 @@ fn a_servers_availability_saves_on_its_resource() {
 fn new_and_changed_servers_carry_their_buffer() {
     let (saved, _) = edit_and_save("tandem.xpdl", None, |m| {
         element(m, "cool").kind = ElementKind::Server {
+            processing_by: None,
             capacity: 2,
             service: Dist::Constant(1.0),
             queue_capacity: Some(4),
@@ -1306,6 +1335,7 @@ fn new_and_changed_servers_carry_their_buffer() {
     let loaded = read_scenario(&back, None).unwrap_or_else(|e| panic!("{e}"));
     let mut model = loaded.model.clone();
     element(&mut model, "weld").kind = ElementKind::Delay {
+        processing_by: None,
         duration: Dist::Constant(1.0),
     };
     let delay = loaded.opened.save(&model).unwrap_or_else(|e| panic!("{e}"));
