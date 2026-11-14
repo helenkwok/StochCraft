@@ -340,7 +340,9 @@ pub struct BlockSet {
     /// Servers: each unit is checked every `interval` and taken out for `restart` when more
     /// entities wait than `limit` per working unit, keeping at least `keep` working; a job
     /// under way on a unit taken out is retried at once (`on_takeout`: `retry`, the default)
-    /// or resumes after the restart (`resume`); `null` removes it.
+    /// or resumes after the restart (`resume`); with a finite buffer, a unit out keeps a place
+    /// of it for itself (`place_while_out`: `reserved`, the default) or holds none (`open`);
+    /// `null` removes it.
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<HealthCheckSpec>")]
     pub health_check: Option<Option<HealthCheckSpec>>,

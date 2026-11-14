@@ -58,6 +58,8 @@
 	Arrival limit	Giới hạn lượt đến
 	Arrivals	Lượt đến
 	Arrivals by calendar	Lượt đến theo lịch
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Như chỗ của máy chủ hỏng hóc: máy chủ giữ một chỗ không cho thực thể vào cho đến khi quay lại, nên khu vực chờ chứa được ít hơn khi có máy chủ bị đưa ra.
+	As a server off shift's: entities may take its place while it is out.	Như chỗ của máy chủ ngoài ca: thực thể có thể chiếm chỗ của nó khi nó vắng mặt.
 	At least	Ít nhất
 	At most	Nhiều nhất
 	Availability	Độ khả dụng
@@ -222,6 +224,7 @@
 	Jump to time	Đi tới thời điểm
 	Keep at least in service	Giữ hoạt động ít nhất
 	Keep the time, without the estimate it came from	Giữ thời gian, bỏ ước lượng mà nó dựa vào
+	Kept while it restarts	Giữ lại trong lúc khởi động lại
 	Keyboard Shortcuts…	Phím tắt…
 	Keyboard shortcuts saved	Đã lưu phím tắt
 	Keyboard shortcuts unchanged	Phím tắt không thay đổi
@@ -299,6 +302,7 @@
 	Open a model first	Hãy mở mô hình trước
 	Open a model to simulate it	Mở mô hình để mô phỏng
 	Open a model…	Mở mô hình…
+	Open to entities	Mở cho thực thể
 	Opened {file}	Đã mở {file}
 	Open…	Mở…
 	Or start from an example	Hoặc bắt đầu bằng ví dụ
@@ -320,6 +324,7 @@
 	Period {n} repeats	Khoảng {n} lặp lại
 	Period {n} starts	Khoảng {n} bắt đầu
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Các khoảng thời gian mà độ khả dụng, lượt đến hoặc ca của nhóm thay đổi. Ngày giờ được viết như 2026-01-31T09:00:00.
+	Place in the waiting room of a server taken out:	Chỗ của máy chủ bị đưa ra trong khu vực chờ:
 	Planned run time per item	Thời gian chạy dự kiến trên mỗi chi tiết
 	Play	Phát
 	Points	Điểm

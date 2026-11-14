@@ -10,8 +10,9 @@ use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
     Bounds, Breakdown, Change, Connection, Demand, DemandPer, Diagnostic, Dist, Element, ElementId,
     ElementKind, Estimate, Experiment, Family, HealthCheck, Model, Need, OnShiftEnd, OnTakeout,
-    Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue, ResourcePool, Routing,
-    Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    Patience, PatienceUntil, PlaceWhileOut, Power, Property, PropertyType, PropertyValue,
+    ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer,
+    Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -1460,6 +1461,30 @@ pub struct HealthCheckSpec {
     /// unit and resumes after the restart.
     #[serde(default, skip_serializing_if = "OnTakeoutSpec::is_retry")]
     pub on_takeout: OnTakeoutSpec,
+    /// With a finite buffer, the place of a unit taken out while it restarts: `reserved` (the
+    /// default, left out), it keeps one for itself as a failed unit does, so the buffer holds
+    /// fewer while units are out; or `open`, it holds none. With an unlimited buffer it changes
+    /// nothing.
+    #[serde(default, skip_serializing_if = "PlaceWhileOutSpec::is_reserved")]
+    pub place_while_out: PlaceWhileOutSpec,
+}
+
+/// With a finite buffer, the place of a unit a health check takes out, while it restarts.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum PlaceWhileOutSpec {
+    /// It keeps a place for itself (one free at the takeout, once the job under way is back in
+    /// the queue) until its restart ends, as a failed unit does.
+    #[default]
+    Reserved,
+    /// It holds none, as a unit off shift.
+    Open,
+}
+
+impl PlaceWhileOutSpec {
+    fn is_reserved(&self) -> bool {
+        *self == PlaceWhileOutSpec::Reserved
+    }
 }
 
 /// What happens to a job under way on a unit a health check takes out.
@@ -1490,6 +1515,10 @@ impl From<&HealthCheck> for HealthCheckSpec {
                 OnTakeout::Retry => OnTakeoutSpec::Retry,
                 OnTakeout::Resume => OnTakeoutSpec::Resume,
             },
+            place_while_out: match h.place_while_out {
+                PlaceWhileOut::Reserved => PlaceWhileOutSpec::Reserved,
+                PlaceWhileOut::Open => PlaceWhileOutSpec::Open,
+            },
         }
     }
 }
@@ -1504,6 +1533,10 @@ impl From<HealthCheckSpec> for HealthCheck {
             on_takeout: match h.on_takeout {
                 OnTakeoutSpec::Retry => OnTakeout::Retry,
                 OnTakeoutSpec::Resume => OnTakeout::Resume,
+            },
+            place_while_out: match h.place_while_out {
+                PlaceWhileOutSpec::Reserved => PlaceWhileOut::Reserved,
+                PlaceWhileOutSpec::Open => PlaceWhileOut::Open,
             },
         }
     }

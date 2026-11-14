@@ -9,11 +9,18 @@
 //! (n − min(n, w) > L·w) and at least `keep` would still work. A unit taken out while serving
 //! sends its entity back to the queue, so n does not change; since service is exponential, the
 //! retried job's fresh start changes nothing else.
+//!
+//! With a finite buffer (c units, q waiting places, so c + q places), the chain adds the places
+//! that units out keep ([`PlaceWhileOut::Reserved`]): (n inside, k working, s places kept by units
+//! out). An arrival finding n + s = c + q is lost; a unit taken out keeps a place if n + s < c + q
+//! then, and gives it back as its restart ends. With [`PlaceWhileOut::Open`], s stays 0. The
+//! exact results of that chain (solved separately, to ten digits) are the targets of the heavy
+//! tests below.
 #![allow(clippy::panic)]
 
 use stochcraft_blocks::{
     Builder, ElementReport, ExperimentSummary, HealthCheck, Metric, OnTakeout, Patience,
-    PatienceUntil, Report, compile, summarise,
+    PatienceUntil, PlaceWhileOut, Report, compile, summarise,
 };
 use stochcraft_model::{Diagnostic, Experiment, Problem};
 use stochcraft_random::{Dist, Rng};
@@ -33,6 +40,15 @@ fn check(
         restart,
         keep,
         on_takeout: on,
+        place_while_out: PlaceWhileOut::Reserved,
+    }
+}
+
+/// `h` with the place of a unit out set to `place`.
+fn placed(h: HealthCheck, place: PlaceWhileOut) -> HealthCheck {
+    HealthCheck {
+        place_while_out: place,
+        ..h
     }
 }
 
@@ -454,34 +470,39 @@ fn a_resumed_job_continues_with_what_was_left() {
     balanced(&r);
 }
 
-/// A health check needs an unlimited waiting room, a limit of 0 or more and a positive time
-/// between checks.
+/// A health check needs a limit of 0 or more and a positive time between checks; a finite
+/// buffer is fine.
 #[test]
-fn a_health_check_on_a_finite_buffer_or_with_bad_values_is_refused() {
+fn a_health_check_with_bad_values_is_refused_and_a_finite_buffer_is_not() {
     let has = |ds: &[Diagnostic], f: fn(&Problem) -> bool| ds.iter().any(|d| f(&d.problem));
-    let mut b = Builder::new();
-    let arrivals = b.source("arrivals", Dist::Exponential { mean: 1.0 }, None);
-    let desk = b.buffered_server("desk", 1, Dist::Exponential { mean: 0.5 }, 5);
-    let exit = b.sink("exit");
-    b.connect(arrivals, desk);
-    b.connect(desk, exit);
-    b.health_check(
-        desk,
-        check(
-            Dist::Constant(0.0),
-            -1.0,
-            Dist::Constant(1.0),
-            None,
-            OnTakeout::Retry,
-        ),
-    );
-    let ds = compile(&b.build(Experiment::default()))
-        .err()
-        .unwrap_or_default();
-    assert!(
-        has(&ds, |p| matches!(p, Problem::HealthCheckWithFiniteBuffer)),
-        "{ds:?}"
-    );
+    let with = |h: HealthCheck| {
+        let mut b = Builder::new();
+        let arrivals = b.source("arrivals", Dist::Exponential { mean: 1.0 }, None);
+        let desk = b.buffered_server("desk", 1, Dist::Exponential { mean: 0.5 }, 5);
+        let exit = b.sink("exit");
+        b.connect(arrivals, desk);
+        b.connect(desk, exit);
+        b.health_check(desk, h);
+        b.build(Experiment::default())
+    };
+    let good = with(check(
+        Dist::Constant(1.0),
+        1.0,
+        Dist::Constant(1.0),
+        None,
+        OnTakeout::Retry,
+    ));
+    assert_eq!(good.validate(), vec![]);
+    assert!(compile(&good).is_ok());
+    let ds = compile(&with(check(
+        Dist::Constant(0.0),
+        -1.0,
+        Dist::Constant(1.0),
+        None,
+        OnTakeout::Retry,
+    )))
+    .err()
+    .unwrap_or_default();
     assert!(
         has(&ds, |p| matches!(p, Problem::HealthCheckLimitNotValid)),
         "{ds:?}"
@@ -492,5 +513,250 @@ fn a_health_check_on_a_finite_buffer_or_with_bad_values_is_refused() {
             Problem::HealthCheckIntervalNotPositive
         )),
         "{ds:?}"
+    );
+}
+
+/// With an unlimited buffer, the place of a unit out changes nothing, to the last bit.
+#[test]
+fn the_place_of_a_unit_out_changes_nothing_without_a_finite_buffer() {
+    let health = |on, place| {
+        placed(
+            check(
+                Dist::Exponential { mean: 1.0 },
+                0.5,
+                Dist::Exponential { mean: 2.0 },
+                None,
+                on,
+            ),
+            place,
+        )
+    };
+    for on in [OnTakeout::Retry, OnTakeout::Resume] {
+        let reserved = mmc(2.5, 1.0, 3, Some(health(on, PlaceWhileOut::Reserved)));
+        let open = mmc(2.5, 1.0, 3, Some(health(on, PlaceWhileOut::Open)));
+        for seed in 0..4 {
+            let a = reserved
+                .run(Rng::new(seed), 100.0, 2_000.0)
+                .unwrap_or_else(|e| panic!("{e:?}"));
+            let b = open
+                .run(Rng::new(seed), 100.0, 2_000.0)
+                .unwrap_or_else(|e| panic!("{e:?}"));
+            assert!(element(&a, "desk").taken_out.is_some_and(|n| n > 0));
+            assert_eq!(a, b, "{on:?}, seed {seed}");
+        }
+    }
+}
+
+/// One unit, a waiting room of 2 (3 places), service 10, a check every 4 that fails when anyone
+/// waits, a restart of 4, retrying. A and B arrive at 0: A is served, B waits. At 4 the check
+/// fails: A goes back to the queue, keeping its place, and the unit out keeps the third place
+/// (reserved), so C, arriving at 6, is lost. The unit is back at 8, gives its place back and
+/// takes A, so D, arriving at 9, gets in. Open, the unit keeps none: C gets in at 6, and D finds
+/// A, B and C there and is lost.
+#[test]
+fn a_unit_out_keeps_a_place_only_when_reserved() {
+    let run = |place| {
+        let mut b = Builder::new();
+        let first = b.source("first", Dist::Constant(0.0), Some(2));
+        let c = b.source("c", Dist::Constant(6.0), Some(1));
+        let d = b.source("d", Dist::Constant(9.0), Some(1));
+        let desk = b.buffered_server("desk", 1, Dist::Constant(10.0), 2);
+        let exit = b.sink("exit");
+        for s in [first, c, d] {
+            b.connect(s, desk);
+        }
+        b.connect(desk, exit);
+        b.health_check(
+            desk,
+            placed(
+                check(
+                    Dist::Constant(4.0),
+                    0.0,
+                    Dist::Constant(4.0),
+                    None,
+                    OnTakeout::Retry,
+                ),
+                place,
+            ),
+        );
+        b.run(Rng::new(1), 0.0, 9.5)
+            .unwrap_or_else(|e| panic!("{e:?}"))
+    };
+    let lost = |r: &Report, id: &str| element(r, id).lost.unwrap_or(0);
+    let r = run(PlaceWhileOut::Reserved);
+    let d = element(&r, "desk");
+    assert_eq!(d.taken_out, Some(1), "{d:?}");
+    assert_eq!((lost(&r, "c"), lost(&r, "d")), (1, 0), "{r:?}");
+    assert_eq!((d.entered, d.lost), (3, Some(1)), "{d:?}");
+    let r = run(PlaceWhileOut::Open);
+    let d = element(&r, "desk");
+    assert_eq!(d.taken_out, Some(1), "{d:?}");
+    assert_eq!((lost(&r, "c"), lost(&r, "d")), (0, 1), "{r:?}");
+    assert_eq!((d.entered, d.lost), (3, Some(1)), "{d:?}");
+}
+
+/// One unit, a waiting room of 2 (3 places), service 10, resuming. A and B arrive at 0; at 4
+/// the check fails and A waits on the unit, keeping its place; B keeps another. The unit,
+/// holding A's job, keeps no place of its own, so nothing changes with the rule: C, arriving at
+/// 6, gets the third place either way.
+#[test]
+fn a_unit_out_with_a_resumed_job_keeps_no_extra_place() {
+    for place in [PlaceWhileOut::Reserved, PlaceWhileOut::Open] {
+        let mut b = Builder::new();
+        let first = b.source("first", Dist::Constant(0.0), Some(2));
+        let c = b.source("c", Dist::Constant(6.0), Some(1));
+        let desk = b.buffered_server("desk", 1, Dist::Constant(10.0), 2);
+        let exit = b.sink("exit");
+        b.connect(first, desk);
+        b.connect(c, desk);
+        b.connect(desk, exit);
+        b.health_check(
+            desk,
+            placed(
+                check(
+                    Dist::Constant(4.0),
+                    0.0,
+                    Dist::Constant(4.0),
+                    None,
+                    OnTakeout::Resume,
+                ),
+                place,
+            ),
+        );
+        let r = b
+            .run(Rng::new(1), 0.0, 7.0)
+            .unwrap_or_else(|e| panic!("{e:?}"));
+        let d = element(&r, "desk");
+        assert_eq!(d.taken_out, Some(1), "{d:?}");
+        assert_eq!(element(&r, "c").lost, Some(0), "{place:?}: {r:?}");
+        assert_eq!(d.entered, 3, "{place:?}: {d:?}");
+    }
+}
+
+/// The exact long-run results of the chain with a finite buffer (module comment): mean number
+/// waiting, mean units in service, takeouts per time unit, loss probability and arrivals lost
+/// per time unit.
+struct Exact {
+    queue: f64,
+    in_service: f64,
+    takeouts: f64,
+    loss: f64,
+    lost: f64,
+}
+
+/// c units, `q` waiting places, arrivals at rate 2.5, service rate 1, checks at rate 1 per
+/// working unit, restarts at rate 0.5, retrying: the server's results match the chain's.
+fn matches_the_chain(q: u32, limit: f64, keep: Option<u32>, place: PlaceWhileOut, x: &Exact) {
+    let (lambda, mu, c, gamma, r) = (2.5, 1.0, 3, 1.0, 0.5);
+    let mut b = Builder::new();
+    let arrivals = b.source("arrivals", Dist::exponential_rate(lambda), None);
+    let desk = b.buffered_server("desk", c, Dist::exponential_rate(mu), q);
+    let exit = b.sink("exit");
+    b.connect(arrivals, desk);
+    b.connect(desk, exit);
+    b.health_check(
+        desk,
+        placed(
+            check(
+                Dist::exponential_rate(gamma),
+                limit,
+                Dist::exponential_rate(r),
+                keep,
+                OnTakeout::Retry,
+            ),
+            place,
+        ),
+    );
+    let duration = 100_000.0;
+    let (s, _) = run(&b, 1_000.0, duration);
+    covers(&s, "desk", Metric::MeanQueueLength, x.queue);
+    covers(&s, "desk", Metric::MeanInService, x.in_service);
+    covers(&s, "desk", Metric::TakenOut, x.takeouts * duration);
+    covers(&s, "desk", Metric::LossProbability, x.loss);
+    covers(&s, "desk", Metric::Lost, x.lost * duration);
+    // What is not lost is served: each busy unit finishes jobs at rate μ (a retried job's fresh
+    // start changes nothing, service being exponential).
+    covers(
+        &s,
+        "desk",
+        Metric::Utilisation,
+        (lambda - x.lost) / (mu * f64::from(c)),
+    );
+}
+
+/// Three units, two waiting places, a limit of 0.5, no floor, a unit out keeping its place.
+#[test]
+#[ignore = "long runs against the chain; CI runs it in release with the ignored tests"]
+fn a_finite_buffer_with_places_kept_matches_the_chain_a() {
+    matches_the_chain(
+        2,
+        0.5,
+        None,
+        PlaceWhileOut::Reserved,
+        &Exact {
+            queue: 1.760_175_164_7,
+            in_service: 1.942_362_711_6,
+            takeouts: 0.528_818_644_2,
+            loss: 0.410_739_262_5,
+            lost: 1.026_848_156_3,
+        },
+    );
+}
+
+/// As case A, a unit out holding no place.
+#[test]
+#[ignore = "long runs against the chain; CI runs it in release with the ignored tests"]
+fn a_finite_buffer_with_places_open_matches_the_chain_a() {
+    matches_the_chain(
+        2,
+        0.5,
+        None,
+        PlaceWhileOut::Open,
+        &Exact {
+            queue: 2.194_567_746,
+            in_service: 1.813_299_442_5,
+            takeouts: 0.593_350_278_7,
+            loss: 0.435_890_932,
+            lost: 1.089_727_33,
+        },
+    );
+}
+
+/// Three units, six waiting places, a limit of 1, keeping at least one, a unit out keeping its
+/// place.
+#[test]
+#[ignore = "long runs against the chain; CI runs it in release with the ignored tests"]
+fn a_finite_buffer_with_places_kept_matches_the_chain_b() {
+    matches_the_chain(
+        6,
+        1.0,
+        Some(1),
+        PlaceWhileOut::Reserved,
+        &Exact {
+            queue: 3.520_570_235_3,
+            in_service: 2.096_872_332_9,
+            takeouts: 0.451_563_833_6,
+            loss: 0.296_103_437,
+            lost: 0.740_258_592_6,
+        },
+    );
+}
+
+/// As case B, a unit out holding no place.
+#[test]
+#[ignore = "long runs against the chain; CI runs it in release with the ignored tests"]
+fn a_finite_buffer_with_places_open_matches_the_chain_b() {
+    matches_the_chain(
+        6,
+        1.0,
+        Some(1),
+        PlaceWhileOut::Open,
+        &Exact {
+            queue: 4.818_331_481_4,
+            in_service: 1.895_527_366_8,
+            takeouts: 0.552_236_316_6,
+            loss: 0.335_827_671_9,
+            lost: 0.839_569_179_7,
+        },
     );
 }

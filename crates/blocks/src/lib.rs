@@ -45,7 +45,7 @@ pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 pub use stochcraft_model::{
     Breakdown, Change, Demand, DemandPer, HealthCheck, OnShiftEnd, OnTakeout, Patience,
-    PatienceUntil, Power, Routing, Scrap, Setup, Transfer,
+    PatienceUntil, PlaceWhileOut, Power, Routing, Scrap, Setup, Transfer,
 };
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,

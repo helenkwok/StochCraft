@@ -58,6 +58,8 @@
 	Arrival limit	வருகை வரம்பு
 	Arrivals	வருகைகள்
 	Arrivals by calendar	நாட்காட்டியின்படி வருகைகள்
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	பழுதடைந்த வழங்கியைப் போல: அது திரும்பும் வரை உருப்படிகள் நுழைய முடியாத ஓர் இடத்தை ஒதுக்கி வைக்கிறது, எனவே வழங்கிகள் நீக்கப்பட்டிருக்கும்போது காத்திருப்பு அறையில் குறைவானவையே இருக்க முடியும்.
+	As a server off shift's: entities may take its place while it is out.	பணிமுறைக்கு வெளியே உள்ள வழங்கியைப் போல: அது இல்லாதபோது உருப்படிகள் அதன் இடத்தைப் பிடிக்கலாம்.
 	At least	குறைந்தது
 	At most	அதிகபட்சம்
 	Availability	கிடைக்கும் தன்மை
@@ -222,6 +224,7 @@
 	Jump to time	நேரத்திற்குச் செல்
 	Keep at least in service	குறைந்தது இத்தனை இயக்கத்தில் வை
 	Keep the time, without the estimate it came from	நேரத்தை வைத்துக்கொள், அது வந்த மதிப்பீடு இல்லாமல்
+	Kept while it restarts	மறுதொடக்கத்தின்போது ஒதுக்கி வைக்கப்படும்
 	Keyboard Shortcuts…	விசைப்பலகை குறுக்குவழிகள்…
 	Keyboard shortcuts saved	விசைப்பலகை குறுக்குவழிகள் சேமிக்கப்பட்டன
 	Keyboard shortcuts unchanged	விசைப்பலகை குறுக்குவழிகள் மாறவில்லை
@@ -299,6 +302,7 @@
 	Open a model first	முதலில் மாதிரியைத் திறக்கவும்
 	Open a model to simulate it	சிமுலேஷன் செய்ய ஒரு மாதிரியைத் திறக்கவும்
 	Open a model…	மாதிரியைத் திற…
+	Open to entities	உருப்படிகளுக்குத் திறந்தது
 	Opened {file}	{file} திறக்கப்பட்டது
 	Open…	திற…
 	Or start from an example	அல்லது ஓர் எடுத்துக்காட்டில் தொடங்கவும்
@@ -320,6 +324,7 @@
 	Period {n} repeats	காலம் {n} மீள்வருகை
 	Period {n} starts	காலம் {n} தொடக்கம்
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	கிடைக்கும் தன்மை, வருகைகள் அல்லது ஒரு தொகுப்பின் பணிமுறைகள் மாறும் காலங்கள். தேதியும் நேரமும் 2026-01-31T09:00:00 என எழுதப்படும்.
+	Place in the waiting room of a server taken out:	நீக்கப்பட்ட வழங்கிக்குக் காத்திருப்பு அறையில் உள்ள இடம்:
 	Planned run time per item	ஒரு பாகத்திற்கான திட்டமிட்ட இயக்க நேரம்
 	Play	இயக்கு
 	Points	புள்ளிகள்

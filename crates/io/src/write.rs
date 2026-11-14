@@ -8,8 +8,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate, HealthCheck, Model,
-    Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, Power, Property, PropertyType,
-    PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, Timed, Transfer,
+    Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, Property,
+    PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -410,8 +410,8 @@ pub(crate) fn patience_element(p: &Patience) -> Element {
 }
 
 /// A server's health check as StochCraft's vendor extension ([`crate::bpsim::HEALTH_CHECK`]).
-/// `keep` and `onTakeout` are written only when set and not the default (`retry`); a limit of
-/// infinity is written `INF`, as XML Schema spells it.
+/// `keep`, `onTakeout` and `placeWhileOut` are written only when set and not the default
+/// (`retry`, `reserved`); a limit of infinity is written `INF`, as XML Schema spells it.
 pub(crate) fn health_check_element(h: &HealthCheck) -> Element {
     let ns = crate::bpsim::STOCHCRAFT_NS;
     let part = |local: &str, d: &Dist| {
@@ -428,6 +428,9 @@ pub(crate) fn health_check_element(h: &HealthCheck) -> Element {
     }
     if h.on_takeout != OnTakeout::Retry {
         body = body.with_attr("onTakeout", h.on_takeout.name());
+    }
+    if h.place_while_out != PlaceWhileOut::Reserved {
+        body = body.with_attr("placeWhileOut", h.place_while_out.name());
     }
     s("VendorExtension")
         .with_attr("name", crate::bpsim::HEALTH_CHECK)

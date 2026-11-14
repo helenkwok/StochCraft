@@ -58,6 +58,8 @@
 	Arrival limit	Обмеження кількості прибуттів
 	Arrivals	Прибуття
 	Arrivals by calendar	Прибуття за календарем
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Як у сервера, що відмовив: він тримає одне місце вільним від сутностей, доки не повернеться, тож місць очікування для сутностей менше, поки сервери виведені.
+	As a server off shift's: entities may take its place while it is out.	Як у сервера поза зміною: сутності можуть зайняти його місце, поки його немає.
 	At least	Не менше
 	At most	Не більше
 	Availability	Коефіцієнт готовності
@@ -222,6 +224,7 @@
 	Jump to time	Перейти до часу
 	Keep at least in service	Залишати в роботі не менше
 	Keep the time, without the estimate it came from	Залишити час без оцінки, з якої він походить
+	Kept while it restarts	Зберігається на час перезавантаження
 	Keyboard Shortcuts…	Клавіатурні скорочення…
 	Keyboard shortcuts saved	Клавіатурні скорочення збережено
 	Keyboard shortcuts unchanged	Клавіатурні скорочення не змінено
@@ -299,6 +302,7 @@
 	Open a model first	Спочатку відкрийте модель
 	Open a model to simulate it	Відкрийте модель для моделювання
 	Open a model…	Відкрити модель…
+	Open to entities	Відкрите для сутностей
 	Opened {file}	Відкрито {file}
 	Open…	Відкрити…
 	Or start from an example	Або почніть із прикладу
@@ -320,6 +324,7 @@
 	Period {n} repeats	Повторення періоду {n}
 	Period {n} starts	Початок періоду {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Періоди, коли змінюються доступність, прибуття або зміни пулу. Дату й час записують як 2026-01-31T09:00:00.
+	Place in the waiting room of a server taken out:	Місце виведеного сервера серед місць очікування:
 	Planned run time per item	Планований час роботи на деталь
 	Play	Відтворити
 	Points	Точки

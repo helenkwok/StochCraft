@@ -18,7 +18,7 @@
 
 use stochcraft_blocks::{
     Breakdown, Builder, ElementReport, Event, ExperimentSummary, HealthCheck, Metric, OnShiftEnd,
-    OnTakeout, Report, compile, summarise,
+    OnTakeout, PlaceWhileOut, Report, compile, summarise,
 };
 use stochcraft_model::{DateTime, Dist, Experiment, Problem, Severity};
 use stochcraft_random::Rng;
@@ -239,6 +239,7 @@ fn a_health_check_counts_the_units_on_shift() {
             restart: Dist::Constant(5.0),
             keep: Some(2),
             on_takeout: OnTakeout::Retry,
+            place_while_out: PlaceWhileOut::Reserved,
         },
     );
     let out = b.sink("out");

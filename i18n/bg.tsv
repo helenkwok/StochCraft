@@ -58,6 +58,8 @@
 	Arrival limit	Лимит на пристиганията
 	Arrivals	Пристигания
 	Arrivals by calendar	Пристигания по календар
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Както при сървър в повреда: той държи едно място свободно от същности, докато се върне, така че чакалнята побира по-малко, докато има изведени сървъри.
+	As a server off shift's: entities may take its place while it is out.	Както при сървър извън смяна: същностите могат да заемат мястото му, докато го няма.
 	At least	Поне
 	At most	Най-много
 	Availability	Наличност
@@ -222,6 +224,7 @@
 	Jump to time	Отиване към момент
 	Keep at least in service	В работа да остават поне
 	Keep the time, without the estimate it came from	Запазване на времето без оценката, от която идва
+	Kept while it restarts	Запазено, докато се рестартира
 	Keyboard Shortcuts…	Клавишни комбинации…
 	Keyboard shortcuts saved	Клавишните комбинации са запазени
 	Keyboard shortcuts unchanged	Клавишните комбинации не са променени
@@ -299,6 +302,7 @@
 	Open a model first	Първо отворете модел
 	Open a model to simulate it	Отворете модел за симулация
 	Open a model…	Отваряне на модел…
+	Open to entities	Отворено за същностите
 	Opened {file}	Отворен е {file}
 	Open…	Отваряне…
 	Or start from an example	Или започнете с пример
@@ -320,6 +324,7 @@
 	Period {n} repeats	Период {n} се повтаря
 	Period {n} starts	Период {n} започва
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Периоди, в които се променят наличността, пристиганията или смените на пул. Датите и часовете се записват като 2026-01-31T09:00:00.
+	Place in the waiting room of a server taken out:	Място в чакалнята на изведен сървър:
 	Planned run time per item	Планирано време за работа на част
 	Play	Пускане
 	Points	Точки

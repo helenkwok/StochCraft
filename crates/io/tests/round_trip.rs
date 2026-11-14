@@ -4,7 +4,8 @@ use stochcraft_blocks::{BlockId, Builder, Event, Rule};
 use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{
     DateTime, Dist, ElementKind, Experiment, HealthCheck, Model, Need, OnShiftEnd, OnTakeout,
-    Patience, PatienceUntil, Property, PropertyType, PropertyValue, Routing, TimeUnit,
+    Patience, PatienceUntil, PlaceWhileOut, Property, PropertyType, PropertyValue, Routing,
+    TimeUnit,
 };
 
 /// A model using every element kind and every distribution.
@@ -936,6 +937,7 @@ fn a_health_check_is_written_saved_and_removed() {
             restart: Dist::Constant(60.0),
             keep: None,
             on_takeout: OnTakeout::Retry,
+            place_while_out: PlaceWhileOut::Reserved,
         },
     );
     let model = m.build(Experiment::default());
@@ -960,6 +962,7 @@ fn a_health_check_is_written_saved_and_removed() {
             restart: Dist::Exponential { mean: 30.0 },
             keep: Some(7),
             on_takeout: OnTakeout::Resume,
+            place_while_out: PlaceWhileOut::Open,
         });
     }
     let saved = loaded.opened.save(&edited);
@@ -969,10 +972,30 @@ fn a_health_check_is_written_saved_and_removed() {
     assert!(
         text.contains(r#"limit="INF""#)
             && text.contains(r#"keep="7""#)
-            && text.contains(r#"onTakeout="resume""#),
+            && text.contains(r#"onTakeout="resume""#)
+            && text.contains(r#"placeWhileOut="open""#),
         "{text}"
     );
     assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    // Only the place of a unit out changes, back to the default: saved in place, and left out.
+    if let ElementKind::Server {
+        health_check: Some(h),
+        ..
+    } = &mut edited.elements[1].kind
+    {
+        h.place_while_out = PlaceWhileOut::Reserved;
+    }
+    let Ok(reloaded) = read(&saved) else {
+        unreachable!()
+    };
+    let Ok(reserved) = reloaded.opened.save(&edited) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&reserved);
+    assert!(!text.contains("placeWhileOut"), "{text}");
+    assert!(text.contains(r#"onTakeout="resume""#), "{text}");
+    assert_eq!(read(&reserved).map(|l| l.model).ok(), Some(edited.clone()));
 
     if let ElementKind::Server { health_check, .. } = &mut edited.elements[1].kind {
         *health_check = None;
@@ -987,8 +1010,8 @@ fn a_health_check_is_written_saved_and_removed() {
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
 }
 
-/// A health check with an unknown onTakeout or a bad limit, or on a task with no resource, is
-/// read with a note.
+/// A health check with an unknown onTakeout or placeWhileOut or a bad limit, or on a task with no
+/// resource, is read with a note.
 #[test]
 fn a_misplaced_or_bad_health_check_is_noted() {
     let mut m = Builder::new();
@@ -1005,6 +1028,7 @@ fn a_misplaced_or_bad_health_check_is_noted() {
             restart: Dist::Constant(9.0),
             keep: None,
             on_takeout: OnTakeout::Resume,
+            place_while_out: PlaceWhileOut::Open,
         },
     );
     let text = String::from_utf8_lossy(&write_new(&m.build(Experiment::default()))).into_owned();
@@ -1023,6 +1047,21 @@ fn a_misplaced_or_bad_health_check_is_noted() {
         ElementKind::Server {
             health_check: Some(HealthCheck {
                 on_takeout: OnTakeout::Retry,
+                ..
+            }),
+            ..
+        }
+    ));
+    let (n, model) = notes(&text.replace(r#"placeWhileOut="open""#, r#"placeWhileOut="shut""#));
+    assert!(
+        n.iter().any(|n| n.message.contains("reserved or open")),
+        "{n:?}"
+    );
+    assert!(matches!(
+        &model.elements[1].kind,
+        ElementKind::Server {
+            health_check: Some(HealthCheck {
+                place_while_out: PlaceWhileOut::Reserved,
                 ..
             }),
             ..

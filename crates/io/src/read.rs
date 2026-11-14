@@ -9,9 +9,9 @@ use std::collections::{BTreeMap, BTreeSet};
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, Change, Connection, DateTime, Demand, DemandPer, Dist,
     Element as ModelElement, ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck,
-    Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, Power, Property, PropertyType,
-    PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed,
-    Transfer, Upper,
+    Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, Property,
+    PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit,
+    Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -1818,12 +1818,29 @@ fn health_check_of(
             OnTakeout::Retry
         }),
     };
+    let place_while_out = match body
+        .and_then(|b| b.attr("placeWhileOut"))
+        .as_deref()
+        .map(str::trim)
+    {
+        None => PlaceWhileOut::Reserved,
+        Some(s) => PlaceWhileOut::from_name(s).unwrap_or_else(|| {
+            notes.push(Note::error(
+                Some(id),
+                format!(
+                    "placeWhileOut on a health check must be reserved or open, not `{s}`; a unit out keeps its place"
+                ),
+            ));
+            PlaceWhileOut::Reserved
+        }),
+    };
     Some(HealthCheck {
         interval,
         limit,
         restart,
         keep,
         on_takeout,
+        place_while_out,
     })
 }
 

@@ -58,6 +58,8 @@
 	Arrival limit	Limit przybyć
 	Arrivals	Przybycia
 	Arrivals by calendar	Przybycia według kalendarza
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Jak przy serwerze z awarią: trzyma jedno miejsce wolne od jednostek, aż wróci, więc poczekalnia mieści mniej, dopóki serwery są wyłączone.
+	As a server off shift's: entities may take its place while it is out.	Jak przy serwerze poza zmianą: jednostki mogą zająć jego miejsce, dopóki go nie ma.
 	At least	Co najmniej
 	At most	Co najwyżej
 	Availability	Dostępność
@@ -222,6 +224,7 @@
 	Jump to time	Przejdź do chwili
 	Keep at least in service	Co najmniej czynnych
 	Keep the time, without the estimate it came from	Zachowaj czas, bez szacunku, z którego pochodzi
+	Kept while it restarts	Zarezerwowane na czas ponownego uruchamiania
 	Keyboard Shortcuts…	Skróty klawiaturowe…
 	Keyboard shortcuts saved	Zapisano skróty klawiaturowe
 	Keyboard shortcuts unchanged	Skróty klawiaturowe bez zmian
@@ -299,6 +302,7 @@
 	Open a model first	Najpierw otwórz model
 	Open a model to simulate it	Otwórz model, aby go symulować
 	Open a model…	Otwórz model…
+	Open to entities	Otwarte dla jednostek
 	Opened {file}	Otwarto {file}
 	Open…	Otwórz…
 	Or start from an example	Lub rozpocznij od przykładu
@@ -320,6 +324,7 @@
 	Period {n} repeats	Powtarzanie okresu {n}
 	Period {n} starts	Początek okresu {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Okresy, w których zmieniają się dostępność, przybycia lub zmiany puli. Daty i godziny zapisuje się jako 2026-01-31T09:00:00.
+	Place in the waiting room of a server taken out:	Miejsce wyłączonego serwera w poczekalni:
 	Planned run time per item	Planowany czas pracy na część
 	Play	Odtwórz
 	Points	Punkty

@@ -58,6 +58,8 @@
 	Arrival limit	Atvykimų limitas
 	Arrivals	Atvykimai
 	Arrivals by calendar	Atvykimai pagal kalendorių
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Kaip sugedusio serverio: jis laiko vieną vietą, kurios objektai negali užimti, kol grįš, todėl laukiamajame telpa mažiau, kol serveriai išimti.
+	As a server off shift's: entities may take its place while it is out.	Kaip serverio ne pamainoje: objektai gali užimti jo vietą, kol jo nėra.
 	At least	Ne mažiau
 	At most	Ne daugiau
 	Availability	Parengtis
@@ -222,6 +224,7 @@
 	Jump to time	Pereiti į laiką
 	Keep at least in service	Palikti naudojamų ne mažiau
 	Keep the time, without the estimate it came from	Palikti laiką be įverčio, iš kurio jis gautas
+	Kept while it restarts	Laikoma, kol jis paleidžiamas iš naujo
 	Keyboard Shortcuts…	Spartieji klavišai…
 	Keyboard shortcuts saved	Spartieji klavišai įrašyti
 	Keyboard shortcuts unchanged	Spartieji klavišai nepakeisti
@@ -299,6 +302,7 @@
 	Open a model first	Pirmiausia atidarykite modelį
 	Open a model to simulate it	Atidarykite modelį jo modeliavimui
 	Open a model…	Atidaryti modelį…
+	Open to entities	Atvira objektams
 	Opened {file}	Atidaryta {file}
 	Open…	Atverti…
 	Or start from an example	Arba pradėkite nuo pavyzdžio
@@ -320,6 +324,7 @@
 	Period {n} repeats	{n} laikotarpio kartojimas
 	Period {n} starts	{n} laikotarpio pradžia
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Laikotarpiai, kai keičiasi prieinamumas, atvykimai ar grupės pamainos. Datos ir laikai rašomi taip: 2026-01-31T09:00:00.
+	Place in the waiting room of a server taken out:	Iš naudojimo išimto serverio vieta laukiamajame:
 	Planned run time per item	Planuojamas veikimo laikas vienai detalei
 	Play	Leisti
 	Points	Taškai

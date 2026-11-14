@@ -78,9 +78,11 @@ pub const PATIENCE: &str = "stochcraft:patience";
 
 /// The vendor extension for a server's health check: a `stochcraft:healthCheck` element with
 /// attributes `limit` (the most entities waiting per working unit that passes; `INF` for no
-/// limit), optional `keep` (the fewest units left working) and optional `onTakeout` (`retry`,
-/// the default, or `resume`), holding `stochcraft:interval` and `stochcraft:restart`, each a
-/// BPSim distribution, in the task's `ElementParameters`. BPSim 2.0 has nothing for it.
+/// limit), optional `keep` (the fewest units left working), optional `onTakeout` (`retry`,
+/// the default, or `resume`) and optional `placeWhileOut` (`reserved`, the default: with a
+/// finite buffer, a unit out keeps a place of it, as a failed unit does; or `open`: it holds
+/// none), holding `stochcraft:interval` and `stochcraft:restart`, each a BPSim distribution, in
+/// the task's `ElementParameters`. BPSim 2.0 has nothing for it.
 pub const HEALTH_CHECK: &str = "stochcraft:healthCheck";
 
 /// What happens to a job under way on a unit of a task's own resource that goes off shift:

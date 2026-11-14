@@ -58,6 +58,8 @@
 	Arrival limit	Limite des arrivées
 	Arrivals	Arrivées
 	Arrivals by calendar	Arrivées par calendrier
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Comme pour un serveur en panne : il garde une place libre d'entités jusqu'à son retour, si bien que la salle d'attente en contient moins tant que des serveurs sont hors service.
+	As a server off shift's: entities may take its place while it is out.	Comme pour un serveur hors poste : des entités peuvent occuper sa place tant qu'il est absent.
 	At least	Au moins
 	At most	Au plus
 	Availability	Disponibilité
@@ -222,6 +224,7 @@
 	Jump to time	Aller à l'instant
 	Keep at least in service	Garder au moins en service
 	Keep the time, without the estimate it came from	Garder le temps, sans l'estimation dont il vient
+	Kept while it restarts	Gardée pendant son redémarrage
 	Keyboard Shortcuts…	Raccourcis clavier…
 	Keyboard shortcuts saved	Raccourcis clavier enregistrés
 	Keyboard shortcuts unchanged	Raccourcis clavier inchangés
@@ -299,6 +302,7 @@
 	Open a model first	Ouvrez d'abord un modèle
 	Open a model to simulate it	Ouvrez un modèle pour le simuler
 	Open a model…	Ouvrir un modèle…
+	Open to entities	Ouverte aux entités
 	Opened {file}	{file} ouvert
 	Open…	Ouvrir…
 	Or start from an example	Ou commencer avec un exemple
@@ -320,6 +324,7 @@
 	Period {n} repeats	Répétition de la période {n}
 	Period {n} starts	Début de la période {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Périodes pendant lesquelles changent la disponibilité, les arrivées ou les postes d'un pool. Les dates et heures s'écrivent 2026-01-31T09:00:00.
+	Place in the waiting room of a server taken out:	Place d'un serveur mis hors service dans la salle d'attente :
 	Planned run time per item	Temps d'exécution prévu par pièce
 	Play	Lecture
 	Points	Points

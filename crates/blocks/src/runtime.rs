@@ -13,7 +13,8 @@ use stochcraft_des::{
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
     Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, HealthCheck, Model, Need,
-    OnShiftEnd, OnTakeout, PatienceUntil, Power, ResourcePool, Routing, Setup, Timed,
+    OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, ResourcePool, Routing, Setup,
+    Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -2495,8 +2496,8 @@ struct Unit {
     serving: Option<u64>,
     /// A failure is due and waits for the job to finish (non-interruptible).
     due: bool,
-    /// While down with no entity: the server's place it keeps, so that no entity gets in for
-    /// it ([`reserve_place`]).
+    /// While down (or out restarting, with [`PlaceWhileOut::Reserved`]) with no entity: the
+    /// server's place it keeps, so that no entity gets in for it ([`reserve_place`]).
     reserved: Option<ResourceGuard>,
     /// For a changeover: the value of the watched property of the last entity it served
     /// (`None` before its first; `Some(None)` when that entity had none).
@@ -2564,16 +2565,36 @@ struct UnitServer {
 /// buffer that would be its own is kept free of entities until its repair: the buffer then holds
 /// no more than its waiting room (and the other units' places) meanwhile. Taken only if a place
 /// is free at that moment (none is when every place already holds an entity, such as one taken
-/// for the unit before a break).
-fn reserve_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places>>) {
+/// for the unit before a break). With `out_too` ([`PlaceWhileOut::Reserved`]), so does a unit
+/// out restarting after a health check, until its restart ends.
+fn reserve_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places>>, out_too: bool) {
     let Some(p) = places else { return };
     let mut units = units.borrow_mut();
     if let Some(x) = units.get_mut(u)
-        && x.down
+        && keeps_place(x, out_too)
         && !x.busy
         && x.reserved.is_none()
     {
         x.reserved = p.pool.try_acquire();
+    }
+}
+
+/// Whether unit `x` keeps its place in a finite buffer while it holds no entity: it is down, or
+/// (with `out_too`, [`PlaceWhileOut::Reserved`]) out restarting.
+fn keeps_place(x: &Unit, out_too: bool) -> bool {
+    x.down || (out_too && x.out)
+}
+
+/// Gives back the place unit `u` keeps ([`reserve_place`]) once it no longer should (repaired,
+/// and back from any restart that keeps one).
+fn release_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places>>, out_too: bool) {
+    let kept = units
+        .borrow_mut()
+        .get_mut(u)
+        .filter(|x| !keeps_place(x, out_too))
+        .and_then(|x| x.reserved.take());
+    if let (Some(g), Some(p)) = (kept, places) {
+        p.give_back(g);
     }
 }
 
@@ -2635,6 +2656,10 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
     // ([`OnShiftEnd`]): it then resumes, or is retried, as the rule says.
     let nudge: Rc<Vec<Signal>> = Rc::new((0..capacity).map(|_| Signal::new(&ctx)).collect());
     let stops = on_shift_end != OnShiftEnd::Finish;
+    // A unit out restarting keeps a place of a finite buffer, as a failed one does.
+    let out_too = health
+        .as_ref()
+        .is_some_and(|h| h.place_while_out == PlaceWhileOut::Reserved);
     let env = Rc::new(RefCell::new(env));
     // Fewer on shift from the start (counted from time 0).
     if let Some((_, n)) = shifts.first()
@@ -2704,18 +2729,15 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                     book.change(&e, u, |d| d.down = true);
                 }
                 let places = env.borrow().places.clone();
-                reserve_place(&units, u, places.as_ref());
+                reserve_place(&units, u, places.as_ref(), out_too);
                 if let Some(pid) = serving {
                     c.interrupt(pid, FAILED);
                 }
                 c.hold(b.repair.sample(&mut rng)).await;
-                let kept = units.borrow_mut().get_mut(u).and_then(|x| {
+                if let Some(x) = units.borrow_mut().get_mut(u) {
                     x.down = false;
-                    x.reserved.take()
-                });
-                if let (Some(g), Some(p)) = (kept, &places) {
-                    p.give_back(g);
                 }
+                release_place(&units, u, places.as_ref(), out_too);
                 {
                     let e = env.borrow();
                     e.adjust(|s| &mut s.down, -1.0);
@@ -2764,6 +2786,10 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                     e.with_stats(|s| s.taken_out += 1);
                     book.change(&e, u, |d| d.out = true);
                 }
+                // Its place, if it has no job (one retried takes it once the job is back in
+                // the queue).
+                let places = env.borrow().places.clone();
+                reserve_place(&units, u, places.as_ref(), out_too);
                 if let Some(pid) = serving {
                     c.interrupt(pid, TAKEN_OUT);
                 }
@@ -2771,6 +2797,7 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                 if let Some(x) = units.borrow_mut().get_mut(u) {
                     x.out = false;
                 }
+                release_place(&units, u, places.as_ref(), out_too);
                 book.change(&env.borrow(), u, |d| d.out = false);
                 if let Some(g) = back.get(u) {
                     g.open();
@@ -2979,6 +3006,9 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                 if let Some(work) = retried {
                     retry(&env2, &book2, unit, entity, work, started, measured);
                     free_unit(&units2, unit, &env2.borrow());
+                    // Taken out, the unit now takes its place ([`PlaceWhileOut::Reserved`]).
+                    let places = env2.borrow().places.clone();
+                    reserve_place(&units2, unit, places.as_ref(), out_too);
                     if let Some(d) = done2.get(unit) {
                         d.notify_all();
                     }
@@ -2993,9 +3023,14 @@ fn spawn_unit_server(sim: &mut Sim, mut env: BlockEnv, parts: UnitServer) {
                         d.holding = true;
                     });
                 }
-                // Handed on while down: now empty, the unit keeps the entity's place until
-                // its repair ([`reserve_place`]).
-                let down = || units2.borrow().get(unit).is_some_and(|x| x.down);
+                // Handed on while down (or out, keeping its place): now empty, the unit keeps
+                // the entity's place until its repair or restart ends ([`reserve_place`]).
+                let down = || {
+                    units2
+                        .borrow()
+                        .get(unit)
+                        .is_some_and(|x| keeps_place(x, out_too))
+                };
                 let repaired = waits_for_repair.then(|| up2.get(unit)).flatten();
                 let mut entity = entity;
                 entity.last_server = Some(env2.borrow().me);

@@ -58,6 +58,8 @@
 	Arrival limit	Batas kedatangan
 	Arrivals	Kedatangan
 	Arrivals by calendar	Kedatangan per kalender
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Seperti tempat server yang rusak: server itu menyisakan satu tempat yang tidak boleh diisi entitas sampai ia kembali, sehingga ruang tunggu menampung lebih sedikit selama ada server yang dikeluarkan.
+	As a server off shift's: entities may take its place while it is out.	Seperti tempat server di luar sif: entitas boleh menempati tempatnya selama server itu tidak ada.
 	At least	Setidaknya
 	At most	Paling banyak
 	Availability	Ketersediaan
@@ -222,6 +224,7 @@
 	Jump to time	Lompat ke waktu
 	Keep at least in service	Pertahankan beroperasi setidaknya
 	Keep the time, without the estimate it came from	Pertahankan waktu tanpa perkiraan asalnya
+	Kept while it restarts	Dicadangkan selama dimulai ulang
 	Keyboard Shortcuts…	Pintasan Keyboard…
 	Keyboard shortcuts saved	Pintasan keyboard disimpan
 	Keyboard shortcuts unchanged	Pintasan keyboard tidak berubah
@@ -299,6 +302,7 @@
 	Open a model first	Buka model terlebih dahulu
 	Open a model to simulate it	Buka model untuk menyimulasikannya
 	Open a model…	Buka model…
+	Open to entities	Terbuka untuk entitas
 	Opened {file}	{file} dibuka
 	Open…	Buka…
 	Or start from an example	Atau mulai dari contoh
@@ -320,6 +324,7 @@
 	Period {n} repeats	Periode {n} berulang
 	Period {n} starts	Periode {n} mulai
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periode saat ketersediaan, kedatangan, atau sif kumpulan berubah. Tanggal dan waktu ditulis 2026-01-31T09:00:00.
+	Place in the waiting room of a server taken out:	Tempat server yang dikeluarkan di ruang tunggu:
 	Planned run time per item	Waktu jalan terencana per komponen
 	Play	Putar
 	Points	Titik

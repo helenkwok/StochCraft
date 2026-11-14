@@ -58,6 +58,8 @@
 	Arrival limit	రాకల పరిమితి
 	Arrivals	రాకలు
 	Arrivals by calendar	క్యాలెండర్ ప్రకారం రాకలు
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	లోపం ఉన్న సర్వర్ లాగే: అది తిరిగి వచ్చే వరకు ఎంటిటీలు ప్రవేశించలేని ఒక స్థానాన్ని ఉంచుతుంది, కాబట్టి సర్వర్‌లు తొలగించబడి ఉన్నప్పుడు వేచి ఉండే గదిలో తక్కువ పడతాయి.
+	As a server off shift's: entities may take its place while it is out.	షిఫ్ట్ వెలుపల ఉన్న సర్వర్ లాగే: అది లేనప్పుడు ఎంటిటీలు దాని స్థానాన్ని ఆక్రమించవచ్చు.
 	At least	కనీసం
 	At most	గరిష్టంగా
 	Availability	లభ్యత
@@ -222,6 +224,7 @@
 	Jump to time	సమయానికి వెళ్ళు
 	Keep at least in service	కనీసం ఇన్ని పనిలో ఉంచండి
 	Keep the time, without the estimate it came from	సమయాన్ని ఉంచు, అది వచ్చిన అంచనా లేకుండా
+	Kept while it restarts	పునఃప్రారంభం సమయంలో కేటాయించి ఉంచబడుతుంది
 	Keyboard Shortcuts…	కీబోర్డ్ షార్ట్‌కట్‌లు…
 	Keyboard shortcuts saved	కీబోర్డ్ షార్ట్‌కట్‌లు సేవ్ చేయబడ్డాయి
 	Keyboard shortcuts unchanged	కీబోర్డ్ షార్ట్‌కట్‌లలో మార్పులేదు
@@ -299,6 +302,7 @@
 	Open a model first	ముందుగా నమూనాను తెరవండి
 	Open a model to simulate it	అనుకరణకు నమూనాను తెరవండి
 	Open a model…	నమూనాను తెరువు…
+	Open to entities	ఎంటిటీలకు తెరిచి ఉంది
 	Opened {file}	{file} తెరవబడింది
 	Open…	తెరువు…
 	Or start from an example	లేదా ఒక ఉదాహరణతో ప్రారంభించండి
@@ -320,6 +324,7 @@
 	Period {n} repeats	వ్యవధి {n} పునరావృతం
 	Period {n} starts	వ్యవధి {n} ప్రారంభం
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	లభ్యత, రాకలు లేదా పూల్ షిఫ్ట్‌లు మారే వ్యవధులు. తేదీలు, సమయాలు 2026-01-31T09:00:00 లాగా రాయాలి.
+	Place in the waiting room of a server taken out:	తొలగించిన సర్వర్‌కు వేచి ఉండే గదిలో ఉన్న స్థానం:
 	Planned run time per item	ఒక్కో భాగానికి ప్రణాళిక చేసిన రన్ సమయం
 	Play	ప్లే చేయి
 	Points	బిందువులు

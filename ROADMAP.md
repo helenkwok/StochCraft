@@ -1300,8 +1300,23 @@ leaving before their service begins a central feature that Erlang B and C lack.
   takeouts, units in service, utilisation, time restarting); collapse near full load and none at
   half; keep at least; the retried job first in line, with a fresh patience; a resumed job
   finishing with what was left.
-- **Not yet (health checks):** a finite buffer with a health check (a model problem for now);
-  several failed checks in a row before a takeout, and a slow start after a restart; the case 5
+- **A health check with a finite buffer:** done. An entity holds its place in the buffer
+  throughout: a retried job keeps it back in the queue, a resumed one keeps it waiting on its
+  unit. `placeWhileOut` says where the unit taken out stands while it restarts: `reserved` (the
+  default) keeps a place for it, as for a failed unit (once the job under way, if any, is back
+  in the queue, it takes a place free at that moment, if one is, and gives it back when the
+  restart ends), so the buffer holds fewer while units are out; `open` keeps none, as for a unit
+  off shift. A unit out holding a resumed job keeps no place of its own (the job's place is the
+  unit's); one holding a finished entity it cannot hand on yet keeps that entity's place once
+  it leaves, as a failed unit does. With an unlimited buffer the option changes nothing. On the
+  wire `place_while_out` (`reserved`, `open`); in the inspector, asked only with a finite buffer.
+  Checked (`blocks/tests/health_check.rs`): both rules against the exact chain of (number
+  inside, units working, places kept), with three units, retrying, two cases (two waiting
+  places, limit 0.5; six, limit 1, keep 1): mean queue, units in service, takeouts, loss
+  probability, arrivals lost and utilisation, each inside its 95% interval (the heavy tests); a
+  short run with constant times where only the kept place turns an arrival away; a resumed job
+  that keeps no extra place; the two rules identical to the last bit with an unlimited buffer.
+- **Not yet (health checks):** several failed checks in a row before a takeout, and a slow start after a restart; the case 5
   demonstration (a short loss of servers tipping a healthy server into a collapse that persists)
   as an example model; an exact check of the resume mode (only sanity checks so far).
 - **A task's own units by shift, and the job under way at a shift's end:** done. Case 5 of the

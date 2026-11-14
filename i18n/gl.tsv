@@ -58,6 +58,8 @@
 	Arrival limit	Límite de chegadas
 	Arrivals	Chegadas
 	Arrivals by calendar	Chegadas por calendario
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Como a dun servidor avariado: mantén unha praza libre de entidades ata que volve, así que a sala de espera admite menos mentres haxa servidores retirados.
+	As a server off shift's: entities may take its place while it is out.	Como a dun servidor fóra de quenda: as entidades poden ocupar a súa praza mentres non está.
 	At least	Polo menos
 	At most	Como máximo
 	Availability	Dispoñibilidade
@@ -222,6 +224,7 @@
 	Jump to time	Ir ao instante
 	Keep at least in service	Manter en servizo polo menos
 	Keep the time, without the estimate it came from	Manter o tempo, sen a estimación da que procede
+	Kept while it restarts	Reservada mentres se reinicia
 	Keyboard Shortcuts…	Atallos de teclado…
 	Keyboard shortcuts saved	Atallos de teclado gardados
 	Keyboard shortcuts unchanged	Atallos de teclado sen cambios
@@ -299,6 +302,7 @@
 	Open a model first	Abra primeiro un modelo
 	Open a model to simulate it	Abra un modelo para simulalo
 	Open a model…	Abrir modelo…
+	Open to entities	Aberta ás entidades
 	Opened {file}	Abriuse {file}
 	Open…	Abrir…
 	Or start from an example	Ou comece cun exemplo
@@ -320,6 +324,7 @@
 	Period {n} repeats	Repetición do período {n}
 	Period {n} starts	Inicio do período {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Períodos nos que cambian a dispoñibilidade, as chegadas ou as quendas dun grupo. As datas e horas escríbense 2026-01-31T09:00:00.
+	Place in the waiting room of a server taken out:	Praza dun servidor retirado na sala de espera:
 	Planned run time per item	Tempo de execución planificado por peza
 	Play	Reproducir
 	Points	Puntos

@@ -2810,8 +2810,8 @@ fn a_patience_and_an_abandoned_way_are_set_run_and_removed() {
     );
 }
 
-/// A health check is set by command, shows in the model, gives the server its rows, and is
-/// removed again; it is a server's only.
+/// A health check is set by command, shows in the model, runs with a finite buffer, gives the
+/// server its rows, and is removed again; it is a server's only.
 #[test]
 fn a_health_check_is_set_run_and_removed() {
     let mut e = help_desk();
@@ -2832,10 +2832,18 @@ fn a_health_check_is_set_run_and_removed() {
             "restart": {"type": "constant", "value": 0.5},
             "keep": 1,
             "on_takeout": "resume",
+            "place_while_out": "open",
         }}),
     );
     let m = ok(&mut e, "model.get", json!({})).to_string();
     assert!(m.contains("\"on_takeout\":\"resume\""), "{m}");
+    assert!(m.contains("\"place_while_out\":\"open\""), "{m}");
+    // A finite buffer is allowed with it.
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "queue_capacity": 5}),
+    );
     let r = ok(&mut e, "run", json!({"replications": 2}));
     assert!(metric(&r, "taken_out").is_some(), "{r}");
     assert!(metric(&r, "mean_in_service").is_some(), "{r}");

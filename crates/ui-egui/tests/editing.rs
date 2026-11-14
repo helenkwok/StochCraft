@@ -833,6 +833,23 @@ fn a_health_check_is_set_in_the_inspector() {
             .get("on_takeout")
             .is_none()
     );
+    // The place of a server taken out is asked only with a finite buffer.
+    assert!(h.query_by_label("Open to entities").is_none());
+    h.state_mut()
+        .execute("block.set", json!({"id": "serve", "queue_capacity": 4}))
+        .expect("buffer set");
+    settle(&mut h);
+    click(&mut h, Role::RadioButton, "Open to entities");
+    assert_eq!(
+        element(&h, "serve")["health_check"]["place_while_out"],
+        json!("open")
+    );
+    click(&mut h, Role::RadioButton, "Kept while it restarts");
+    assert!(
+        element(&h, "serve")["health_check"]
+            .get("place_while_out")
+            .is_none()
+    );
     click(&mut h, Role::CheckBox, "Take servers out when overloaded");
     assert!(element(&h, "serve").get("health_check").is_none());
 }
