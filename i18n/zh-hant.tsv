@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	內建調色盤為唯讀。若要變更顏色，請先為其中一個建立副本。
 	Built-in themes are read-only. Duplicate one to change its colours.	內建主題為唯讀。若要變更顏色，請先為其中一個建立副本。
 	Busiest	最忙碌
+	By calendar	依行事曆
 	By role	依角色
 	CSV table	CSV 表格
 	Calendar	行事曆
@@ -167,6 +168,7 @@
 	Energy per part	單件能耗
 	Enough: {units}, meeting the target in {p} of replications	足夠：{units}，{p} 的重複執行達到目標
 	Entered	進入數
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	發現等待區已滿的實體立即走此順序流（例如稍後重試），而不是流失或在任務前等待；此處計為流失。
 	Entities give up waiting	實體會放棄等待
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	重複執行結束時仍在內部的實體不計入平均等待時間與系統內平均時間。
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	放棄等待的實體走此順序流（例如稍後重試）；其他實體走任務的另一個出口。
@@ -198,6 +200,7 @@
 	Fit the time	擬合時間
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	將此區塊的時間擬合為最小值、最可能值以及最大值或第 95 百分位數。
 	Fitted the time of {id}	已擬合 {id} 的時間
+	Fixed	固定
 	Flows	順序流
 	Forget the estimate	捨棄估計
 	Fri	週五
@@ -319,12 +322,14 @@
 	Pause	暫停
 	Per	時段
 	Per shift needs a calendar: each period it is active is a shift.	「每班」需要行事曆：行事曆處於啟用狀態的每個時段為一個班次。
+	Per working server	每台上線伺服器
 	Percentile	百分位數
 	Period {n} ends	時段 {n} 結束
 	Period {n} repeats	時段 {n} 重複
 	Period {n} starts	時段 {n} 開始
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	可用性、到達或資源池的班次改變的時段。日期和時間寫作 2026-01-31T09:00:00。
 	Place in the waiting room of a server taken out:	下線伺服器在等待區的位置：
+	Places	位置數
 	Planned run time per item	單件計畫運行時間
 	Play	播放
 	Points	點
@@ -443,6 +448,7 @@
 	Show {id}	顯示 {id}
 	Side rail	側邊欄
 	Size	決定規模
+	Size of the waiting room:	等待區大小：
 	Size the resources	決定資源規模
 	Soft accent	柔和強調色
 	Source	來源
@@ -500,6 +506,9 @@
 	Themes	主題
 	This block has a warning	此區塊存在警告
 	This block has an error	此區塊存在錯誤
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	每台正在運作的伺服器（未故障、未下線、當班）可有這麼多實體等待，因此等待區隨伺服器變化。等待區縮小時，已在等待的實體留下。
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	行事曆外可有這麼多實體等待，行事曆生效期間依該行事曆的數量。數量減少時，已在等待的實體留下。
+	This many may wait, besides a place for each server; a failed server keeps its place.	除每台伺服器一個位置外，還可有這麼多實體等待；故障伺服器保留其位置。
 	This run	本次執行
 	Three-point estimate	三點估計
 	Thu	週四
@@ -525,6 +534,8 @@
 	Triangular	三角分布
 	Truncated normal	截斷常態分布
 	Tue	週二
+	Turned away	拒絕
+	Turned away on {id}	{id} 上的拒絕
 	Two stations in series, read from an XPDL file.	從 XPDL 檔案讀取的兩個串聯工作站。
 	Type	型別
 	Undid {action}	已復原 {action}
@@ -548,6 +559,7 @@
 	View	檢視
 	Waiting over time	等待數量隨時間變化
 	Waiting room	等待區
+	Waiting room by calendar	依行事曆的等待區
 	Warm	暖色
 	Warm-up	暖機期
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	暖機 {warmup} {unit}，隨後測量 {duration} {unit}

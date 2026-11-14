@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Paletele integrate sunt doar în citire. Duplicați una pentru a-i schimba culorile.
 	Built-in themes are read-only. Duplicate one to change its colours.	Temele integrate sunt doar în citire. Duplicați una pentru a-i schimba culorile.
 	Busiest	Cel mai ocupat
+	By calendar	Pe calendar
 	By role	După rol
 	CSV table	Tabel CSV
 	Calendar	Calendar
@@ -167,6 +168,7 @@
 	Energy per part	Energie pe piesă
 	Enough: {units}, meeting the target in {p} of replications	Suficient: {units}, atinge ținta în {p} din replicări
 	Entered	Intrări
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitățile care găsesc sala de așteptare plină iau imediat acest flux (pentru a încerca din nou mai târziu, de exemplu), în loc să fie pierdute sau să aștepte înaintea sarcinii; aici sunt numărate ca pierdute.
 	Entities give up waiting	Entitățile renunță să mai aștepte
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitățile încă în interior la finalul unei replicări sunt lăsate în afara timpului mediu de așteptare și a timpului mediu în sistem.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitățile care renunță să mai aștepte iau acest flux (pentru a încerca din nou mai târziu, de exemplu); celelalte iau cealaltă ieșire a sarcinii.
@@ -198,6 +200,7 @@
 	Fit the time	Ajustează timpul
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Ajustează timpul acestui bloc la un minim, o valoare cea mai probabilă și un maxim sau percentila 95.
 	Fitted the time of {id}	Timpul lui {id} a fost ajustat
+	Fixed	Fixă
 	Flows	Fluxuri
 	Forget the estimate	Uită estimarea
 	Fri	vin
@@ -319,12 +322,14 @@
 	Pause	Pauză
 	Per	Perioadă
 	Per shift needs a calendar: each period it is active is a shift.	„Pe tură” are nevoie de un calendar: fiecare perioadă în care este activ este o tură.
+	Per working server	Per server în funcțiune
 	Percentile	Percentilă
 	Period {n} ends	Perioada {n} se termină
 	Period {n} repeats	Perioada {n} se repetă
 	Period {n} starts	Perioada {n} începe
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioade în care se schimbă disponibilitatea, sosirile sau turele unui grup. Datele și orele se scriu 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Locul unui server scos din funcțiune în sala de așteptare:
+	Places	Locuri
 	Planned run time per item	Timp de execuție planificat pe piesă
 	Play	Redare
 	Points	Puncte
@@ -443,6 +448,7 @@
 	Show {id}	Afișează {id}
 	Side rail	Bară laterală
 	Size	Dimensionează
+	Size of the waiting room:	Mărimea sălii de așteptare:
 	Size the resources	Dimensionează resursele
 	Soft accent	Accent discret
 	Source	Sursă
@@ -500,6 +506,9 @@
 	Themes	Teme
 	This block has a warning	Acest bloc are un avertisment
 	This block has an error	Acest bloc are o eroare
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Pot aștepta atâtea pentru fiecare server care lucrează acum (nu în avarie, nu scos din funcțiune, în tură), așa că sala de așteptare urmează serverele. Când se micșorează, cele care așteaptă deja rămân.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Pot aștepta atâtea în afara calendarelor, iar cât timp un calendar este activ, numărul acestuia. Când numărul scade, cele care așteaptă deja rămân.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Pot aștepta atâtea, pe lângă un loc pentru fiecare server; un server în avarie își păstrează locul.
 	This run	Această rulare
 	Three-point estimate	Estimare în trei puncte
 	Thu	joi
@@ -525,6 +534,8 @@
 	Triangular	Triunghiulară
 	Truncated normal	Normală trunchiată
 	Tue	mar
+	Turned away	Respingeri
+	Turned away on {id}	Respingeri pe {id}
 	Two stations in series, read from an XPDL file.	Două stații în serie, citite dintr-un fișier XPDL.
 	Type	Tip
 	Undid {action}	S-a anulat {action}
@@ -548,6 +559,7 @@
 	View	Vizualizare
 	Waiting over time	În așteptare în timp
 	Waiting room	Sală de așteptare
+	Waiting room by calendar	Sală de așteptare pe calendar
 	Warm	Cald
 	Warm-up	Perioadă de încălzire
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Încălzire {warmup} {unit}, apoi măsurare timp de {duration} {unit}

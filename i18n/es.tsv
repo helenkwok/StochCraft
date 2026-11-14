@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Las paletas integradas son de solo lectura. Duplique una para cambiar sus colores.
 	Built-in themes are read-only. Duplicate one to change its colours.	Los temas integrados son de solo lectura. Duplique uno para cambiar sus colores.
 	Busiest	Más ocupado
+	By calendar	Por calendario
 	By role	Por rol
 	CSV table	Tabla CSV
 	Calendar	Calendario
@@ -167,6 +168,7 @@
 	Energy per part	Energía por pieza
 	Enough: {units}, meeting the target in {p} of replications	Suficiente: {units}, cumple el objetivo en {p} de las réplicas
 	Entered	Entradas
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Las entidades que encuentran la sala de espera llena toman este flujo de inmediato (para volver a intentarlo más tarde, por ejemplo), en lugar de perderse o esperar antes de la tarea; aquí cuentan como perdidas.
 	Entities give up waiting	Las entidades abandonan la espera
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Las entidades aún dentro al final de una réplica no se incluyen en la espera media ni en el tiempo medio en el sistema.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Las entidades que abandonan la espera toman este flujo (para volver a intentarlo más tarde, por ejemplo); las demás toman la otra salida de la tarea.
@@ -198,6 +200,7 @@
 	Fit the time	Ajustar el tiempo
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Ajustar el tiempo de este bloque a un mínimo, un valor más probable y un máximo o percentil 95.
 	Fitted the time of {id}	Tiempo de {id} ajustado
+	Fixed	Fijo
 	Flows	Flujos
 	Forget the estimate	Olvidar la estimación
 	Fri	vie
@@ -319,12 +322,14 @@
 	Pause	Pausa
 	Per	Periodo
 	Per shift needs a calendar: each period it is active is a shift.	«Por turno» necesita un calendario: cada periodo en que está activo es un turno.
+	Per working server	Por servidor en servicio
 	Percentile	Percentil
 	Period {n} ends	Fin del periodo {n}
 	Period {n} repeats	Repetición del periodo {n}
 	Period {n} starts	Inicio del periodo {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periodos en los que cambian la disponibilidad, las llegadas o los turnos de un grupo. Las fechas y horas se escriben 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Plaza de un servidor retirado en la sala de espera:
+	Places	Plazas
 	Planned run time per item	Tiempo de ejecución planificado por pieza
 	Play	Reproducir
 	Points	Puntos
@@ -443,6 +448,7 @@
 	Show {id}	Mostrar {id}
 	Side rail	Barra lateral
 	Size	Dimensionar
+	Size of the waiting room:	Tamaño de la sala de espera:
 	Size the resources	Dimensionar los recursos
 	Soft accent	Acento suave
 	Source	Fuente
@@ -500,6 +506,9 @@
 	Themes	Temas
 	This block has a warning	Este bloque tiene una advertencia
 	This block has an error	Este bloque tiene un error
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Pueden esperar este número por cada servidor que trabaja ahora (no averiado, no retirado, en turno), así que la sala de espera los sigue. Cuando se reduce, las que ya esperan se quedan.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Pueden esperar este número fuera de los calendarios y, mientras un calendario está activo, el número de ese calendario. Cuando el número baja, las que ya esperan se quedan.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Pueden esperar este número de entidades, además de una plaza para cada servidor; un servidor averiado conserva su plaza.
 	This run	Esta ejecución
 	Three-point estimate	Estimación de tres puntos
 	Thu	jue
@@ -525,6 +534,8 @@
 	Triangular	Triangular
 	Truncated normal	Normal truncada
 	Tue	mar
+	Turned away	Rechazadas
+	Turned away on {id}	Rechazadas en {id}
 	Two stations in series, read from an XPDL file.	Dos estaciones en serie, leídas de un archivo XPDL.
 	Type	Tipo
 	Undid {action}	Se deshizo {action}
@@ -548,6 +559,7 @@
 	View	Vista
 	Waiting over time	En espera a lo largo del tiempo
 	Waiting room	Sala de espera
+	Waiting room by calendar	Sala de espera por calendario
 	Warm	Cálido
 	Warm-up	Calentamiento
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Calentamiento de {warmup} {unit}, seguido de {duration} {unit} medidos

@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Vstavané palety sú len na čítanie. Ak chcete zmeniť farby, niektorú duplikujte.
 	Built-in themes are read-only. Duplicate one to change its colours.	Vstavané motívy sú len na čítanie. Ak chcete zmeniť farby, niektorý duplikujte.
 	Busiest	Najvyťaženejší
+	By calendar	Podľa kalendára
 	By role	Podľa roly
 	CSV table	Tabuľka CSV
 	Calendar	Kalendár
@@ -167,6 +168,7 @@
 	Energy per part	Energia na diel
 	Enough: {units}, meeting the target in {p} of replications	Stačí: {units}, cieľ splnený v {p} replikácií
 	Entered	Vstúpilo
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entity, ktoré nájdu čakáreň plnú, idú hneď týmto tokom (napríklad aby to neskôr skúsili znova), namiesto toho, aby sa stratili alebo čakali pred úlohou; tu sa počítajú ako stratené.
 	Entities give up waiting	Entity vzdávajú čakanie
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entity, ktoré sú na konci replikácie stále vnútri, nie sú zahrnuté do priemerného času čakania ani priemerného času v systéme.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entity, ktoré vzdajú čakanie, idú týmto tokom (napríklad aby to neskôr skúsili znova); ostatné idú druhou cestou von z úlohy.
@@ -198,6 +200,7 @@
 	Fit the time	Prispôsobiť čas
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Prispôsobiť čas tohto bloku minimu, najpravdepodobnejšej hodnote a maximu alebo 95. percentilu.
 	Fitted the time of {id}	Čas {id} prispôsobený
+	Fixed	Pevná
 	Flows	Toky
 	Forget the estimate	Zabudnúť odhad
 	Fri	pi
@@ -319,12 +322,14 @@
 	Pause	Pozastaviť
 	Per	Obdobie
 	Per shift needs a calendar: each period it is active is a shift.	„Za zmenu“ potrebuje kalendár: každé obdobie, keď je aktívny, je jedna zmena.
+	Per working server	Na server v prevádzke
 	Percentile	Percentil
 	Period {n} ends	Obdobie {n} končí
 	Period {n} repeats	Obdobie {n} sa opakuje
 	Period {n} starts	Obdobie {n} začína
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Obdobia, keď sa menia dostupnosť, príchody alebo zmeny skupiny. Dátumy a časy sa píšu ako 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Miesto vyradeného servera v čakárni:
+	Places	Miesta
 	Planned run time per item	Plánovaný čas behu na diel
 	Play	Prehrať
 	Points	Body
@@ -443,6 +448,7 @@
 	Show {id}	Zobraziť {id}
 	Side rail	Bočná lišta
 	Size	Dimenzovať
+	Size of the waiting room:	Veľkosť čakárne:
 	Size the resources	Dimenzovať zdroje
 	Soft accent	Jemné zvýraznenie
 	Source	Zdroj
@@ -500,6 +506,9 @@
 	Themes	Motívy
 	This block has a warning	Tento blok obsahuje upozornenie
 	This block has an error	Tento blok obsahuje chybu
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Toľko ich smie čakať na každý server, ktorý práve pracuje (nie je v poruche, nie je vyradený, je v zmene), takže čakáreň sa mení s nimi. Keď sa zmenší, tie, ktoré už čakajú, zostanú.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Toľko ich smie čakať mimo kalendárov a počas doby, keď je kalendár aktívny, jeho počet. Keď počet klesne, tie, ktoré už čakajú, zostanú.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Toľko ich smie čakať, navyše k jednému miestu pre každý server; server v poruche si svoje miesto ponechá.
 	This run	Tento beh
 	Three-point estimate	Trojbodový odhad
 	Thu	št
@@ -525,6 +534,8 @@
 	Triangular	Trojuholníkové
 	Truncated normal	Orezané normálne
 	Tue	ut
+	Turned away	Odmietnuté
+	Turned away on {id}	Odmietnuté na {id}
 	Two stations in series, read from an XPDL file.	Dve stanice v sérii načítané zo súboru XPDL.
 	Type	Typ
 	Undid {action}	Vrátené späť {action}
@@ -548,6 +559,7 @@
 	View	Zobrazenie
 	Waiting over time	Čakajúce v čase
 	Waiting room	Čakáreň
+	Waiting room by calendar	Čakáreň podľa kalendára
 	Warm	Teplý
 	Warm-up	Zahrievanie
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Zahrievanie {warmup} {unit}, potom meranie {duration} {unit}

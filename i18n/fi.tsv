@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Sisäänrakennetut paletit ovat vain luku -tilassa. Monista jokin, niin voit muuttaa sen värejä.
 	Built-in themes are read-only. Duplicate one to change its colours.	Sisäänrakennetut teemat ovat vain luku -tilassa. Monista jokin, niin voit muuttaa sen värejä.
 	Busiest	Kuormitetuin
+	By calendar	Kalenterin mukaan
 	By role	Roolin mukaan
 	CSV table	CSV-taulukko
 	Calendar	Kalenteri
@@ -167,6 +168,7 @@
 	Energy per part	Energia osaa kohden
 	Enough: {units}, meeting the target in {p} of replications	Riittää: {units}, tavoite saavutetaan {p} toistoista
 	Entered	Saapuneet
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteetit, jotka löytävät odotustilan täynnä, kulkevat heti tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen) sen sijaan, että ne menetettäisiin tai ne odottaisivat ennen tehtävää; ne lasketaan täällä menetetyiksi.
 	Entities give up waiting	Entiteetit luopuvat odottamisesta
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Toiston lopussa yhä sisällä olevat yksiköt jäävät pois keskimääräisestä odotusajasta ja keskimääräisestä ajasta järjestelmässä.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Odottamisesta luopuvat entiteetit kulkevat tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen); muut kulkevat tehtävän toista reittiä ulos.
@@ -198,6 +200,7 @@
 	Fit the time	Sovita aika
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Sovita tämän lohkon aika minimiin, todennäköisimpään arvoon ja maksimiin tai 95. persentiiliin.
 	Fitted the time of {id}	Lohkon {id} aika sovitettu
+	Fixed	Kiinteä
 	Flows	Virrat
 	Forget the estimate	Unohda arvio
 	Fri	pe
@@ -319,12 +322,14 @@
 	Pause	Tauko
 	Per	Jakso
 	Per shift needs a calendar: each period it is active is a shift.	”Vuorossa” vaatii kalenterin: jokainen jakso, jona se on aktiivinen, on yksi vuoro.
+	Per working server	Käytössä olevaa palvelinta kohti
 	Percentile	Persentiili
 	Period {n} ends	Jakso {n} päättyy
 	Period {n} repeats	Jakso {n} toistuu
 	Period {n} starts	Jakso {n} alkaa
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Jaksot, joiden aikana käytettävyys, saapumiset tai poolin vuorot muuttuvat. Päivämäärät ja ajat kirjoitetaan muodossa 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Käytöstä poistetun palvelimen paikka odotustilassa:
+	Places	Paikat
 	Planned run time per item	Suunniteltu käyntiaika osaa kohden
 	Play	Toista
 	Points	Pisteet
@@ -443,6 +448,7 @@
 	Show {id}	Näytä {id}
 	Side rail	Sivupalkki
 	Size	Mitoita
+	Size of the waiting room:	Odotustilan koko:
 	Size the resources	Mitoita resurssit
 	Soft accent	Pehmeä korostus
 	Source	Lähde
@@ -500,6 +506,9 @@
 	Themes	Teemat
 	This block has a warning	Tässä lohkossa on varoitus
 	This block has an error	Tässä lohkossa on virhe
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Näin moni saa odottaa jokaista nyt työskentelevää palvelinta kohti (ei vikaantunut, ei poistettu käytöstä, vuorossa), joten odotustila seuraa palvelimia. Kun se pienenee, jo odottavat jäävät.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Näin moni saa odottaa kalenterien ulkopuolella, ja kalenterin ollessa aktiivinen sen luku. Kun luku pienenee, jo odottavat jäävät.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Näin moni saa odottaa, minkä lisäksi jokaiselle palvelimelle on paikka; vikaantunut palvelin pitää paikkansa.
 	This run	Tämä ajo
 	Three-point estimate	Kolmen pisteen arvio
 	Thu	to
@@ -525,6 +534,8 @@
 	Triangular	Kolmiojakauma
 	Truncated normal	Katkaistu normaalijakauma
 	Tue	ti
+	Turned away	Käännytetyt
+	Turned away on {id}	Käännytetyt virrassa {id}
 	Two stations in series, read from an XPDL file.	Kaksi peräkkäistä asemaa, luettu XPDL-tiedostosta.
 	Type	Teksti
 	Undid {action}	Kumottiin {action}
@@ -548,6 +559,7 @@
 	View	Näytä
 	Waiting over time	Odottavat ajan mittaan
 	Waiting room	Odotustila
+	Waiting room by calendar	Odotustila kalenterin mukaan
 	Warm	Lämmin
 	Warm-up	Alkulämmittely
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Alkulämmittely {warmup} {unit}, sitten mittaus {duration} {unit}

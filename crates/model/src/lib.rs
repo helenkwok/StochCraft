@@ -152,7 +152,12 @@ pub enum ElementKind {
         /// unit is free. When the buffer is full, an element sending an entity here waits
         /// holding it (a server keeps its unit busy: blocking after service), except a source,
         /// whose arrival is lost. A StochCraft vendor extension (`stochcraft:queueCapacity`).
+        /// With a [`QueueLimit`] other than `Fixed`, the number means what that says.
         queue_capacity: Option<u32>,
+        /// How the waiting room's size is set: fixed at `queue_capacity` (the default), by
+        /// timetable, or per working server. See [`QueueLimit`]. Only with a finite
+        /// `queue_capacity`.
+        queue_limit: QueueLimit,
         /// Each unit fails now and then and is repaired (a StochCraft vendor extension,
         /// `stochcraft:breakdown`, since BPSim has none); `None`: units never fail.
         breakdown: Option<Breakdown>,
@@ -533,6 +538,55 @@ impl PlaceWhileOut {
             "open" => Some(PlaceWhileOut::Open),
             _ => None,
         }
+    }
+}
+
+/// How the size of a server's finite waiting room is set (its `queue_limit`, with
+/// `queue_capacity` giving the number).
+///
+/// `Fixed` is the waiting room as it always was: places for every unit plus `queue_capacity`,
+/// an entity holding one from entering until it leaves, a failed unit (or one out restarting,
+/// with [`PlaceWhileOut::Reserved`]) keeping one for itself.
+///
+/// The other two set a limit on the entities waiting that changes over time, and hold no
+/// places: an entity is admitted when the number waiting (in the queue, or on its way in
+/// across a transfer) less the idle working units ready to take them is below the limit now.
+/// So it gets in when an idle working unit can take it at once, or when fewer than the limit
+/// wait. Working is up, not out after a health check and on shift (as a health check counts
+/// it); idle is working and holding no entity. An entity whose job a failure, a takeout or a
+/// shift's end paused on its unit is in service, not waiting. When the limit drops, those
+/// already waiting stay: only new arrivals are turned away until fewer wait than the limit.
+/// No unit keeps a place for itself ([`PlaceWhileOut`] changes nothing): with
+/// `PerWorkingServer` a unit failed or out already lowers the limit.
+#[derive(Debug, Clone, PartialEq, Default)]
+pub enum QueueLimit {
+    /// Places for every unit plus `queue_capacity` waiting.
+    #[default]
+    Fixed,
+    /// At most this many waiting while a calendar is active, the first active one applying
+    /// (as units by shift); `queue_capacity` outside them. A StochCraft vendor extension (values
+    /// of `stochcraft:queueCapacity` `validFor` a calendar).
+    ByShift(Vec<Timed<u32>>),
+    /// At most `queue_capacity` waiting per working unit, so the limit follows failures,
+    /// takeouts, shifts and returns by itself. A StochCraft vendor extension
+    /// (`stochcraft:queueCapacity` with `perWorkingServer="true"`).
+    PerWorkingServer,
+}
+
+impl QueueLimit {
+    /// The calendars its values refer to.
+    pub fn calendars(&self) -> impl Iterator<Item = &ElementId> {
+        let timed: &[Timed<u32>] = match self {
+            QueueLimit::ByShift(t) => t,
+            _ => &[],
+        };
+        timed.iter().map(|t| &t.calendar)
+    }
+
+    /// Whether it holds places for every unit plus the waiting room (`Fixed`), rather than
+    /// limiting the number waiting.
+    pub fn is_fixed(&self) -> bool {
+        matches!(self, QueueLimit::Fixed)
     }
 }
 
@@ -996,6 +1050,11 @@ pub struct Connection {
     /// later, a retry), apart from its ordinary way out. A StochCraft vendor extension
     /// (`stochcraft:abandoned`).
     pub abandoned: bool,
+    /// The way out of a server with a finite waiting room that entities finding no room take
+    /// at once (turned away), instead of being lost (from a source) or waiting before it (from
+    /// any other element), apart from its ordinary way out. A StochCraft vendor extension
+    /// (`stochcraft:turnedAway`).
+    pub turned_away: bool,
 }
 
 /// The customer demand a sink serves, for takt: `quantity` parts each `per` period. Takt is the
@@ -1070,6 +1129,7 @@ impl Connection {
             quantity: None,
             rework: false,
             abandoned: false,
+            turned_away: false,
         }
     }
 }
@@ -1300,6 +1360,22 @@ pub enum Problem {
     SeveralAbandonedWays {
         count: usize,
     },
+    /// A connection marked for entities turned away leaves an element that is not a task with
+    /// a resource of its own and a finite waiting room.
+    TurnedAwayWithoutRoom {
+        connection: ElementId,
+    },
+    /// Several ways out of one server are marked for entities turned away.
+    SeveralTurnedAwayWays {
+        count: usize,
+    },
+    /// A connection is marked both for entities that give up and for those turned away.
+    TurnedAwayAndAbandoned {
+        connection: ElementId,
+    },
+    /// A waiting room by timetable or per working server with no number of places: it is
+    /// unlimited, and the setting is ignored.
+    QueueLimitWithoutRoom,
     /// A health check whose limit is not a number of 0 or more.
     HealthCheckLimitNotValid,
     /// A health check whose time between checks has a mean that is not above 0.
@@ -1479,6 +1555,10 @@ impl Problem {
             Problem::PatienceNegative => "patience_negative",
             Problem::AbandonedWithoutPatience { .. } => "abandoned_without_patience",
             Problem::SeveralAbandonedWays { .. } => "several_abandoned_ways",
+            Problem::TurnedAwayWithoutRoom { .. } => "turned_away_without_room",
+            Problem::SeveralTurnedAwayWays { .. } => "several_turned_away_ways",
+            Problem::TurnedAwayAndAbandoned { .. } => "turned_away_and_abandoned",
+            Problem::QueueLimitWithoutRoom => "queue_limit_without_room",
             Problem::HealthCheckLimitNotValid => "health_check_limit_not_valid",
             Problem::HealthCheckIntervalNotPositive => "health_check_interval_not_positive",
             Problem::DemandNotPositive => "demand_not_positive",
@@ -1666,6 +1746,25 @@ impl std::fmt::Display for Diagnostic {
             Problem::SeveralAbandonedWays { count } => write!(
                 f,
                 "{count} of its ways out are for entities that give up; at most one can be"
+            ),
+            Problem::TurnedAwayWithoutRoom { connection } => write!(
+                f,
+                "connection `{connection}` is the way for entities turned away, but they come \
+                 only from a task with a resource of its own and a finite waiting room"
+            ),
+            Problem::SeveralTurnedAwayWays { count } => write!(
+                f,
+                "{count} of its ways out are for entities turned away; at most one can be"
+            ),
+            Problem::TurnedAwayAndAbandoned { connection } => write!(
+                f,
+                "connection `{connection}` is marked both for entities that give up and for \
+                 those turned away; it can be one of them"
+            ),
+            Problem::QueueLimitWithoutRoom => write!(
+                f,
+                "its waiting room is set by timetable or per working server, but has no number \
+                 of places: it is unlimited"
             ),
             Problem::HealthCheckLimitNotValid => write!(
                 f,
@@ -1894,6 +1993,19 @@ impl Model {
                 )
             })
         };
+        // A task with a resource of its own and a finite waiting room, whose entities finding
+        // no room can be turned away.
+        let roomy = |id: &ElementId| {
+            elements.get(id).is_some_and(|e| {
+                matches!(
+                    e.kind,
+                    ElementKind::Server {
+                        queue_capacity: Some(_),
+                        ..
+                    }
+                )
+            })
+        };
         for c in &self.connections {
             let mut ok = true;
             for end in [&c.from, &c.to] {
@@ -1947,9 +2059,24 @@ impl Model {
                     },
                 ));
             }
+            if c.turned_away && c.abandoned {
+                out.push(Diagnostic::error(
+                    Some(&c.id),
+                    Problem::TurnedAwayAndAbandoned {
+                        connection: c.id.clone(),
+                    },
+                ));
+            } else if c.turned_away && !roomy(&c.from) {
+                out.push(Diagnostic::error(
+                    Some(&c.id),
+                    Problem::TurnedAwayWithoutRoom {
+                        connection: c.id.clone(),
+                    },
+                ));
+            }
             if ok {
                 outgoing.entry(&c.from).or_default().push(&c.to);
-                if !(c.abandoned && patient(&c.from)) {
+                if !((c.abandoned && patient(&c.from)) || (c.turned_away && roomy(&c.from))) {
                     served.entry(&c.from).or_default().push(&c.to);
                 }
             }
@@ -1965,6 +2092,29 @@ impl Model {
                 out.push(Diagnostic::error(
                     Some(&e.id),
                     Problem::SeveralAbandonedWays { count: abandoned },
+                ));
+            }
+            let turned_away = self
+                .connections
+                .iter()
+                .filter(|c| c.turned_away && c.from == e.id)
+                .count();
+            if turned_away > 1 && roomy(&e.id) {
+                out.push(Diagnostic::error(
+                    Some(&e.id),
+                    Problem::SeveralTurnedAwayWays { count: turned_away },
+                ));
+            }
+            if let ElementKind::Server {
+                queue_capacity: None,
+                queue_limit,
+                ..
+            } = &e.kind
+                && !queue_limit.is_fixed()
+            {
+                out.push(Diagnostic::warning(
+                    Some(&e.id),
+                    Problem::QueueLimitWithoutRoom,
                 ));
             }
             match e.kind {
@@ -2401,6 +2551,9 @@ impl Model {
             {
                 refs.extend(availability.iter().map(|t| (&e.id, &t.calendar)));
                 refs.extend(shifts.iter().map(|t| (&e.id, &t.calendar)));
+            }
+            if let ElementKind::Server { queue_limit, .. } = &e.kind {
+                refs.extend(queue_limit.calendars().map(|c| (&e.id, c)));
             }
         }
         for r in &self.resources {
@@ -2880,6 +3033,8 @@ impl Model {
         outgoing: &BTreeMap<&ElementId, Vec<&ElementId>>,
         out: &mut Vec<Diagnostic>,
     ) {
+        // A finite waiting room that holds its senders up: not one whose entities finding no
+        // room are turned away, which never wait before it.
         let finite = |id: &ElementId| {
             self.element(id).is_some_and(|e| {
                 matches!(
@@ -2889,7 +3044,10 @@ impl Model {
                         ..
                     }
                 )
-            })
+            }) && !self
+                .connections
+                .iter()
+                .any(|c| c.turned_away && &c.from == id)
         };
         for e in &self.elements {
             if !finite(&e.id) {
@@ -3158,6 +3316,7 @@ mod tests {
             quantity: None,
             rework: false,
             abandoned: false,
+            turned_away: false,
             id: id(i),
             from: id(from),
             to: id(to),
@@ -3341,6 +3500,7 @@ mod tests {
                         health_check: None,
                         shifts: Vec::new(),
                         on_shift_end: OnShiftEnd::Finish,
+                        queue_limit: QueueLimit::Fixed,
                     },
                 ),
                 el(
@@ -3439,6 +3599,7 @@ mod tests {
             health_check: None,
             shifts: Vec::new(),
             on_shift_end: OnShiftEnd::Finish,
+            queue_limit: QueueLimit::Fixed,
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -3521,6 +3682,7 @@ mod tests {
                 health_check: None,
                 shifts: Vec::new(),
                 on_shift_end: OnShiftEnd::Finish,
+                queue_limit: QueueLimit::Fixed,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

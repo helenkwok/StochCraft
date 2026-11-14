@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	అంతర్నిర్మిత పాలెట్‌లు చదవడానికి మాత్రమే. రంగులు మార్చడానికి ఒకదానికి నకలు చేయండి.
 	Built-in themes are read-only. Duplicate one to change its colours.	అంతర్నిర్మిత థీమ్‌లు చదవడానికి మాత్రమే. రంగులు మార్చడానికి ఒకదానికి నకలు చేయండి.
 	Busiest	అత్యంత రద్దీ
+	By calendar	క్యాలెండర్ ప్రకారం
 	By role	పాత్ర ప్రకారం
 	CSV table	CSV పట్టిక
 	Calendar	క్యాలెండర్
@@ -167,6 +168,7 @@
 	Energy per part	ఒక్కో భాగానికి శక్తి
 	Enough: {units}, meeting the target in {p} of replications	సరిపోతుంది: {units}, {p} పునరావృత్త అమలులలో లక్ష్యం చేరుతుంది
 	Entered	ప్రవేశించినవి
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	వేచి ఉండే గది నిండి ఉండటం చూసిన ఎంటిటీలు వెంటనే ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి), కోల్పోవడం లేదా పనికి ముందు వేచి ఉండటం బదులు; ఇక్కడ అవి కోల్పోయినవిగా లెక్కించబడతాయి.
 	Entities give up waiting	ఎంటిటీలు వేచి ఉండటం మానేస్తాయి
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	పునరావృత్త అమలు చివరికి ఇంకా లోపల ఉన్నవి సగటు వేచి ఉండే సమయంలోనూ వ్యవస్థలో గడిపిన సగటు సమయంలోనూ లెక్కించబడవు.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	వేచి ఉండటం మానేసిన ఎంటిటీలు ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి); మిగిలినవి పని యొక్క మరో బయటికి దారిలో వెళ్తాయి.
@@ -198,6 +200,7 @@
 	Fit the time	సమయాన్ని అమర్చు
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	ఈ బ్లాక్ సమయాన్ని కనిష్టం, అత్యంత సంభావ్య విలువ, గరిష్టం లేదా 95వ శతాంశానికి అమర్చండి.
 	Fitted the time of {id}	{id} సమయం అమర్చబడింది
+	Fixed	స్థిరం
 	Flows	ప్రవాహాలు
 	Forget the estimate	అంచనాను మర్చిపో
 	Fri	శుక్ర
@@ -319,12 +322,14 @@
 	Pause	విరామం
 	Per	వ్యవధి
 	Per shift needs a calendar: each period it is active is a shift.	"షిఫ్ట్‌కు" ఎంపికకు క్యాలెండర్ అవసరం: అది సక్రియంగా ఉన్న ప్రతి వ్యవధి ఒక షిఫ్ట్.
+	Per working server	పనిచేస్తున్న ఒక్కో సర్వర్‌కు
 	Percentile	శతాంశం
 	Period {n} ends	వ్యవధి {n} ముగింపు
 	Period {n} repeats	వ్యవధి {n} పునరావృతం
 	Period {n} starts	వ్యవధి {n} ప్రారంభం
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	లభ్యత, రాకలు లేదా పూల్ షిఫ్ట్‌లు మారే వ్యవధులు. తేదీలు, సమయాలు 2026-01-31T09:00:00 లాగా రాయాలి.
 	Place in the waiting room of a server taken out:	తొలగించిన సర్వర్‌కు వేచి ఉండే గదిలో ఉన్న స్థానం:
+	Places	స్థానాలు
 	Planned run time per item	ఒక్కో భాగానికి ప్రణాళిక చేసిన రన్ సమయం
 	Play	ప్లే చేయి
 	Points	బిందువులు
@@ -443,6 +448,7 @@
 	Show {id}	{id} చూపించు
 	Side rail	పక్క బార్
 	Size	పరిమాణం నిర్ణయించు
+	Size of the waiting room:	వేచి ఉండే గది పరిమాణం:
 	Size the resources	వనరుల పరిమాణం నిర్ణయించు
 	Soft accent	మృదువైన యాక్సెంట్ రంగు
 	Source	మూలం
@@ -500,6 +506,9 @@
 	Themes	థీమ్‌లు
 	This block has a warning	ఈ బ్లాక్‌లో హెచ్చరిక ఉంది
 	This block has an error	ఈ బ్లాక్‌లో లోపం ఉంది
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	ఇప్పుడు పనిచేస్తున్న ఒక్కో సర్వర్‌కు (లోపం లేనిది, తొలగించనిది, షిఫ్ట్‌లో ఉన్నది) ఇన్ని వేచి ఉండవచ్చు, కాబట్టి వేచి ఉండే గది సర్వర్‌లను అనుసరిస్తుంది. అది కుంచించుకుపోయినప్పుడు ఇప్పటికే వేచి ఉన్నవి అలాగే ఉంటాయి.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	క్యాలెండర్‌ల వెలుపల ఇన్ని వేచి ఉండవచ్చు, ఒక క్యాలెండర్ సక్రియంగా ఉన్నప్పుడు దాని సంఖ్య. సంఖ్య తగ్గినప్పుడు ఇప్పటికే వేచి ఉన్నవి అలాగే ఉంటాయి.
+	This many may wait, besides a place for each server; a failed server keeps its place.	ఒక్కో సర్వర్‌కు ఒక స్థానంతో పాటు, ఇన్ని వేచి ఉండవచ్చు; లోపం ఉన్న సర్వర్ తన స్థానాన్ని ఉంచుకుంటుంది.
 	This run	ఈ అమలు
 	Three-point estimate	మూడు-బిందువుల అంచనా
 	Thu	గురు
@@ -525,6 +534,8 @@
 	Triangular	త్రిభుజాకార పంపిణీ
 	Truncated normal	కత్తిరించిన సాధారణ పంపిణీ
 	Tue	మంగళ
+	Turned away	తిప్పి పంపినవి
+	Turned away on {id}	{id} వద్ద తిప్పి పంపినవి
 	Two stations in series, read from an XPDL file.	XPDL ఫైల్ నుంచి చదివిన వరుసలోని రెండు స్టేషన్‌లు.
 	Type	రకం
 	Undid {action}	{action} చర్య రద్దు చేయబడింది
@@ -548,6 +559,7 @@
 	View	వీక్షణ
 	Waiting over time	కాలక్రమంలో వేచి ఉన్నవి
 	Waiting room	వేచి ఉండే గది
+	Waiting room by calendar	క్యాలెండర్ ప్రకారం వేచి ఉండే గది
 	Warm	వెచ్చని
 	Warm-up	ప్రారంభ సర్దుబాటు సమయం
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	ప్రారంభ సర్దుబాటు {warmup} {unit}, ఆపై {duration} {unit} కొలవబడింది

@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Вградените палитри са само за четене. Дублирайте някоя, за да промените цветовете ѝ.
 	Built-in themes are read-only. Duplicate one to change its colours.	Вградените теми са само за четене. Дублирайте някоя, за да промените цветовете ѝ.
 	Busiest	Най-натоварен
+	By calendar	По календар
 	By role	По роля
 	CSV table	Таблица CSV
 	Calendar	Календар
@@ -167,6 +168,7 @@
 	Energy per part	Енергия на част
 	Enough: {units}, meeting the target in {p} of replications	Достатъчно: {units}, целта е постигната в {p} от репликациите
 	Entered	Влезли
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Същностите, които намират чакалнята пълна, веднага минават по този поток (например за да опитат отново по-късно), вместо да бъдат загубени или да чакат преди задачата; тук те се броят като загубени.
 	Entities give up waiting	Същностите се отказват от чакането
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Обектите, които са още вътре в края на репликация, не се включват в средното чакане и средното време в системата.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Същностите, които се отказват от чакането, минават по този поток (например за да опитат отново по-късно); останалите минават по другия изход на задачата.
@@ -198,6 +200,7 @@
 	Fit the time	Напасване на времето
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Напасване на времето на този блок към минимум, най-вероятна стойност и максимум или 95-и персентил.
 	Fitted the time of {id}	Времето на {id} е напаснато
+	Fixed	Фиксиран
 	Flows	Потоци
 	Forget the estimate	Забравяне на оценката
 	Fri	пт
@@ -319,12 +322,14 @@
 	Pause	Пауза
 	Per	Период
 	Per shift needs a calendar: each period it is active is a shift.	„На смяна“ изисква календар: всеки период, в който той е активен, е смяна.
+	Per working server	На сървър в работа
 	Percentile	Персентил
 	Period {n} ends	Период {n} завършва
 	Period {n} repeats	Период {n} се повтаря
 	Period {n} starts	Период {n} започва
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Периоди, в които се променят наличността, пристиганията или смените на пул. Датите и часовете се записват като 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Място в чакалнята на изведен сървър:
+	Places	Места
 	Planned run time per item	Планирано време за работа на част
 	Play	Пускане
 	Points	Точки
@@ -443,6 +448,7 @@
 	Show {id}	Показване на {id}
 	Side rail	Странична лента
 	Size	Оразмеряване
+	Size of the waiting room:	Размер на чакалнята:
 	Size the resources	Оразмеряване на ресурсите
 	Soft accent	Мек акцент
 	Source	Източник
@@ -500,6 +506,9 @@
 	Themes	Теми
 	This block has a warning	Този блок има предупреждение
 	This block has an error	Този блок има грешка
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Толкова могат да чакат на всеки сървър, който работи в момента (не е в повреда, не е изведен, на смяна е), така че чакалнята следва сървърите. Когато тя се смали, вече чакащите остават.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Толкова могат да чакат извън календарите, а докато даден календар е активен, неговият брой. Когато броят намалее, вече чакащите остават.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Толкова могат да чакат, освен по едно място за всеки сървър; сървър в повреда запазва мястото си.
 	This run	Това изпълнение
 	Three-point estimate	Оценка в три точки
 	Thu	чт
@@ -525,6 +534,8 @@
 	Triangular	Триъгълно
 	Truncated normal	Отсечено нормално
 	Tue	вт
+	Turned away	Отпратени
+	Turned away on {id}	Отпратени на {id}
 	Two stations in series, read from an XPDL file.	Две станции последователно, прочетени от XPDL файл.
 	Type	Тип
 	Undid {action}	Отменено е {action}
@@ -548,6 +559,7 @@
 	View	Изглед
 	Waiting over time	Чакащи във времето
 	Waiting room	Чакалня
+	Waiting room by calendar	Чакалня по календар
 	Warm	Топла
 	Warm-up	Загряване
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Загряване {warmup} {unit}, след това измерване за {duration} {unit}

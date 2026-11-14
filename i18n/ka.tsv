@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	ჩაშენებული პალიტრები მხოლოდ წასაკითხია. ფერების შესაცვლელად შექმენით რომელიმეს დუბლიკატი.
 	Built-in themes are read-only. Duplicate one to change its colours.	ჩაშენებული თემები მხოლოდ წასაკითხია. ფერების შესაცვლელად შექმენით რომელიმეს დუბლიკატი.
 	Busiest	ყველაზე დატვირთული
+	By calendar	კალენდრის მიხედვით
 	By role	როლის მიხედვით
 	CSV table	CSV ცხრილი
 	Calendar	კალენდარი
@@ -167,6 +168,7 @@
 	Energy per part	ენერგია ერთ დეტალზე
 	Enough: {units}, meeting the target in {p} of replications	საკმარისია: {units}, მიზანი მიიღწევა გამეორებების {p}-ში
 	Entered	შესულა
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	ერთეულები, რომლებიც მოსაცდელ სივრცეს სავსეს პოულობენ, მაშინვე ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად), ნაცვლად იმისა, რომ დაიკარგონ ან დავალების წინ დაელოდონ; აქ ისინი დაკარგულად ითვლება.
 	Entities give up waiting	ერთეულები უარს ამბობენ ლოდინზე
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ობიექტები, რომლებიც გამეორების ბოლოს ჯერ კიდევ შიგნით არიან, არ შედის ლოდინის საშუალო დროსა და სისტემაში გატარებულ საშუალო დროში.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	ერთეულები, რომლებიც ლოდინზე უარს ამბობენ, ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად); დანარჩენები დავალების მეორე გასასვლელით მიდიან.
@@ -198,6 +200,7 @@
 	Fit the time	დროის მორგება
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	ამ ბლოკის დროის მორგება მინიმუმზე, ყველაზე სავარაუდო მნიშვნელობაზე და მაქსიმუმზე ან 95-ე პროცენტილზე.
 	Fitted the time of {id}	{id}-ის დრო მორგებულია
+	Fixed	ფიქსირებული
 	Flows	ნაკადები
 	Forget the estimate	შეფასების დავიწყება
 	Fri	პარ
@@ -319,12 +322,14 @@
 	Pause	პაუზა
 	Per	პერიოდი
 	Per shift needs a calendar: each period it is active is a shift.	„ცვლაში“ საჭიროებს კალენდარს: ყოველი პერიოდი, როცა ის აქტიურია, ერთი ცვლაა.
+	Per working server	მუშაობაში მყოფ სერვერზე
 	Percentile	პროცენტილი
 	Period {n} ends	პერიოდი {n} მთავრდება
 	Period {n} repeats	პერიოდი {n} მეორდება
 	Period {n} starts	პერიოდი {n} იწყება
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	პერიოდები, როცა იცვლება ხელმისაწვდომობა, შემოსვლები ან პულის ცვლები. თარიღი და დრო იწერება ასე: 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	მუშაობიდან გამოყვანილი სერვერის ადგილი მოსაცდელ სივრცეში:
+	Places	ადგილები
 	Planned run time per item	დაგეგმილი მუშაობის დრო ერთ დეტალზე
 	Play	დაკვრა
 	Points	წერტილები
@@ -443,6 +448,7 @@
 	Show {id}	{id}-ის ჩვენება
 	Side rail	გვერდითი ზოლი
 	Size	ზომის შერჩევა
+	Size of the waiting room:	მოსაცდელი სივრცის ზომა:
 	Size the resources	რესურსების ზომის შერჩევა
 	Soft accent	რბილი აქცენტი
 	Source	წყარო
@@ -500,6 +506,9 @@
 	Themes	თემები
 	This block has a warning	ამ ბლოკს აქვს გაფრთხილება
 	This block has an error	ამ ბლოკს აქვს შეცდომა
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	ამდენს შეუძლია ლოდინი ამჟამად მომუშავე თითოეულ სერვერზე (არ არის გაუმართავი, არ არის გამოყვანილი, ცვლაშია), ასე რომ მოსაცდელი სივრცე სერვერებს მიჰყვება. როცა ის მცირდება, უკვე მომლოდინეები რჩებიან.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	ამდენს შეუძლია ლოდინი კალენდრების გარეთ, ხოლო სანამ კალენდარი აქტიურია, მისი რიცხვი. როცა რიცხვი მცირდება, უკვე მომლოდინეები რჩებიან.
+	This many may wait, besides a place for each server; a failed server keeps its place.	ამდენს შეუძლია ლოდინი, თითოეული სერვერის ერთი ადგილის გარდა; გაუმართავი სერვერი თავის ადგილს ინარჩუნებს.
 	This run	ეს გაშვება
 	Three-point estimate	სამწერტილიანი შეფასება
 	Thu	ხუთ
@@ -525,6 +534,8 @@
 	Triangular	სამკუთხა
 	Truncated normal	შეკვეცილი ნორმალური
 	Tue	სამ
+	Turned away	უარყოფილები
+	Turned away on {id}	უარყოფილები ნაკადზე {id}
 	Two stations in series, read from an XPDL file.	ორი მიმდევრობითი სადგური, წაკითხული XPDL ფაილიდან.
 	Type	ტიპი
 	Undid {action}	გაუქმდა {action}
@@ -548,6 +559,7 @@
 	View	ხედი
 	Waiting over time	მომლოდინეები დროის მიხედვით
 	Waiting room	მოსაცდელი სივრცე
+	Waiting room by calendar	მოსაცდელი სივრცე კალენდრის მიხედვით
 	Warm	თბილი
 	Warm-up	გახურების პერიოდი
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	გახურება {warmup} {unit}, შემდეგ გაზომვა {duration} {unit}

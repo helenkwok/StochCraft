@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Οι ενσωματωμένες παλέτες είναι μόνο για ανάγνωση. Δημιουργήστε διπλότυπο μίας για να αλλάξετε τα χρώματά της.
 	Built-in themes are read-only. Duplicate one to change its colours.	Τα ενσωματωμένα θέματα είναι μόνο για ανάγνωση. Δημιουργήστε διπλότυπο ενός για να αλλάξετε τα χρώματά του.
 	Busiest	Πιο φορτωμένο
+	By calendar	Ανά ημερολόγιο
 	By role	Κατά ρόλο
 	CSV table	Πίνακας CSV
 	Calendar	Ημερολόγιο
@@ -167,6 +168,7 @@
 	Energy per part	Ενέργεια ανά τεμάχιο
 	Enough: {units}, meeting the target in {p} of replications	Αρκετό: {units}, ο στόχος επιτυγχάνεται στο {p} των επαναλήψεων
 	Entered	Είσοδοι
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Οι οντότητες που βρίσκουν τον χώρο αναμονής γεμάτο ακολουθούν αμέσως αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε), αντί να χαθούν ή να περιμένουν πριν από την εργασία· εδώ μετρώνται ως απώλειες.
 	Entities give up waiting	Οι οντότητες εγκαταλείπουν την αναμονή
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Οι οντότητες που είναι ακόμη εντός στο τέλος μιας επανάληψης δεν περιλαμβάνονται στη μέση αναμονή και στον μέσο χρόνο στο σύστημα.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Οι οντότητες που εγκαταλείπουν την αναμονή ακολουθούν αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε)· οι υπόλοιπες παίρνουν την άλλη έξοδο της εργασίας.
@@ -198,6 +200,7 @@
 	Fit the time	Προσαρμογή χρόνου
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Προσαρμογή του χρόνου αυτού του μπλοκ σε ελάχιστο, πιθανότερη τιμή και μέγιστο ή 95ο εκατοστημόριο.
 	Fitted the time of {id}	Ο χρόνος του {id} προσαρμόστηκε
+	Fixed	Σταθερό
 	Flows	Ροές
 	Forget the estimate	Απόρριψη εκτίμησης
 	Fri	Παρ
@@ -319,12 +322,14 @@
 	Pause	Παύση
 	Per	Περίοδος
 	Per shift needs a calendar: each period it is active is a shift.	Το «ανά βάρδια» χρειάζεται ημερολόγιο: κάθε περίοδος που είναι ενεργό είναι μία βάρδια.
+	Per working server	Ανά εξυπηρετητή σε λειτουργία
 	Percentile	Εκατοστημόριο
 	Period {n} ends	Λήξη περιόδου {n}
 	Period {n} repeats	Επανάληψη περιόδου {n}
 	Period {n} starts	Έναρξη περιόδου {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Περίοδοι κατά τις οποίες αλλάζουν η διαθεσιμότητα, οι αφίξεις ή οι βάρδιες μιας δεξαμενής. Οι ημερομηνίες και οι ώρες γράφονται ως 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Θέση εξυπηρετητή εκτός λειτουργίας στον χώρο αναμονής:
+	Places	Θέσεις
 	Planned run time per item	Προγραμματισμένος χρόνος λειτουργίας ανά τεμάχιο
 	Play	Αναπαραγωγή
 	Points	Σημεία
@@ -443,6 +448,7 @@
 	Show {id}	Εμφάνιση {id}
 	Side rail	Πλευρική μπάρα
 	Size	Διαστασιολόγηση
+	Size of the waiting room:	Μέγεθος χώρου αναμονής:
 	Size the resources	Διαστασιολόγηση πόρων
 	Soft accent	Απαλό χρώμα έμφασης
 	Source	Πηγή
@@ -500,6 +506,9 @@
 	Themes	Θέματα
 	This block has a warning	Αυτό το μπλοκ έχει προειδοποίηση
 	This block has an error	Αυτό το μπλοκ έχει σφάλμα
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Τόσες μπορούν να περιμένουν για κάθε εξυπηρετητή που δουλεύει τώρα (όχι με βλάβη, όχι εκτός λειτουργίας, σε βάρδια), οπότε ο χώρος αναμονής τους ακολουθεί. Όταν μικραίνει, όσες ήδη περιμένουν μένουν.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Τόσες μπορούν να περιμένουν εκτός ημερολογίων, και όσο ένα ημερολόγιο είναι ενεργό, ο αριθμός του. Όταν ο αριθμός μειωθεί, όσες ήδη περιμένουν μένουν.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Τόσες μπορούν να περιμένουν, επιπλέον μίας θέσης για κάθε εξυπηρετητή· ένας εξυπηρετητής με βλάβη κρατά τη θέση του.
 	This run	Αυτή η εκτέλεση
 	Three-point estimate	Εκτίμηση τριών σημείων
 	Thu	Πέμ
@@ -525,6 +534,8 @@
 	Triangular	Τριγωνική
 	Truncated normal	Αποκομμένη κανονική
 	Tue	Τρί
+	Turned away	Απόρριψη
+	Turned away on {id}	Απόρριψη στο {id}
 	Two stations in series, read from an XPDL file.	Δύο σταθμοί σε σειρά, από αρχείο XPDL.
 	Type	Τύπος
 	Undid {action}	Αναιρέθηκε το {action}
@@ -548,6 +559,7 @@
 	View	Προβολή
 	Waiting over time	Σε αναμονή στη διάρκεια του χρόνου
 	Waiting room	Χώρος αναμονής
+	Waiting room by calendar	Χώρος αναμονής ανά ημερολόγιο
 	Warm	Ζεστό
 	Warm-up	Προθέρμανση
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Προθέρμανση {warmup} {unit}, έπειτα μέτρηση {duration} {unit}

@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	உள்ளமைந்த வண்ணத்தட்டுகளைப் படிக்க மட்டுமே முடியும். நிறங்களை மாற்ற ஒன்றின் நகலை உருவாக்கவும்.
 	Built-in themes are read-only. Duplicate one to change its colours.	உள்ளமைந்த தீம்களைப் படிக்க மட்டுமே முடியும். நிறங்களை மாற்ற ஒன்றின் நகலை உருவாக்கவும்.
 	Busiest	மிகவும் பணிச்சுமையுள்ளது
+	By calendar	நாட்காட்டியின்படி
 	By role	பணிப்பங்கு வாரியாக
 	CSV table	CSV அட்டவணை
 	Calendar	நாட்காட்டி
@@ -167,6 +168,7 @@
 	Energy per part	ஒரு பாகத்திற்கான ஆற்றல்
 	Enough: {units}, meeting the target in {p} of replications	போதும்: {units}, {p} மீள் இயக்கங்களில் இலக்கு அடையப்படுகிறது
 	Entered	உள்ளே நுழைந்தவை
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	காத்திருப்பு அறை நிரம்பியிருப்பதைக் காணும் உருப்படிகள் உடனே இந்த ஓட்டத்தில் செல்கின்றன (உதாரணமாக, பின்னர் மீண்டும் முயல), இழக்கப்படுவதற்கோ பணிக்கு முன் காத்திருப்பதற்கோ பதிலாக; இங்கு அவை இழந்தவையாகக் கணக்கிடப்படுகின்றன.
 	Entities give up waiting	உருப்படிகள் காத்திருப்பைக் கைவிடுகின்றன
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ஒரு மீள் இயக்கத்தின் முடிவில் இன்னும் உள்ளே உள்ளவை சராசரி காத்திருப்பிலும் அமைப்பில் கழித்த சராசரி நேரத்திலும் சேர்க்கப்படவில்லை.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	காத்திருப்பைக் கைவிடும் உருப்படிகள் இந்த ஓட்டத்தில் செல்கின்றன (உதாரணமாக, பின்னர் மீண்டும் முயல); மற்றவை பணியின் மற்றொரு வெளியேறும் வழியில் செல்கின்றன.
@@ -198,6 +200,7 @@
 	Fit the time	நேரத்தைப் பொருத்து
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	இந்தத் தொகுதியின் நேரத்தை குறைந்தபட்சம், அதிக வாய்ப்புள்ள மதிப்பு, அதிகபட்சம் அல்லது 95-ஆம் சதமானத்துடன் பொருத்தவும்.
 	Fitted the time of {id}	{id} இன் நேரம் பொருத்தப்பட்டது
+	Fixed	நிலையானது
 	Flows	ஓட்டங்கள்
 	Forget the estimate	மதிப்பீட்டை மறந்துவிடு
 	Fri	வெள்
@@ -319,12 +322,14 @@
 	Pause	இடைநிறுத்து
 	Per	காலம்
 	Per shift needs a calendar: each period it is active is a shift.	"ஒரு பணிமுறைக்கு" என்பதற்கு நாட்காட்டி தேவை: அது செயலில் இருக்கும் ஒவ்வொரு காலமும் ஒரு பணிமுறை.
+	Per working server	இயங்கும் வழங்கி ஒன்றுக்கு
 	Percentile	சதமானம்
 	Period {n} ends	காலம் {n} முடிவு
 	Period {n} repeats	காலம் {n} மீள்வருகை
 	Period {n} starts	காலம் {n} தொடக்கம்
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	கிடைக்கும் தன்மை, வருகைகள் அல்லது ஒரு தொகுப்பின் பணிமுறைகள் மாறும் காலங்கள். தேதியும் நேரமும் 2026-01-31T09:00:00 என எழுதப்படும்.
 	Place in the waiting room of a server taken out:	நீக்கப்பட்ட வழங்கிக்குக் காத்திருப்பு அறையில் உள்ள இடம்:
+	Places	இடங்கள்
 	Planned run time per item	ஒரு பாகத்திற்கான திட்டமிட்ட இயக்க நேரம்
 	Play	இயக்கு
 	Points	புள்ளிகள்
@@ -443,6 +448,7 @@
 	Show {id}	{id} ஐக் காட்டு
 	Side rail	பக்கப் பட்டை
 	Size	அளவிடு
+	Size of the waiting room:	காத்திருப்பு அறையின் அளவு:
 	Size the resources	வளங்களை அளவிடு
 	Soft accent	மென் முனைப்பு நிறம்
 	Source	மூலம்
@@ -500,6 +506,9 @@
 	Themes	தீம்கள்
 	This block has a warning	இந்தத் தொகுதியில் ஓர் எச்சரிக்கை உள்ளது
 	This block has an error	இந்தத் தொகுதியில் ஒரு பிழை உள்ளது
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	இப்போது இயங்கும் ஒவ்வொரு வழங்கிக்கும் (பழுதடையாதது, நீக்கப்படாதது, பணிமுறையில் உள்ளது) இத்தனை காத்திருக்கலாம், எனவே காத்திருப்பு அறை வழங்கிகளைப் பின்தொடரும். அது சுருங்கும்போது ஏற்கெனவே காத்திருப்பவை அப்படியே இருக்கும்.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	நாட்காட்டிகளுக்கு வெளியே இத்தனை காத்திருக்கலாம், ஒரு நாட்காட்டி செயலில் இருக்கும்போது அதன் எண்ணிக்கை. எண்ணிக்கை குறையும்போது ஏற்கெனவே காத்திருப்பவை அப்படியே இருக்கும்.
+	This many may wait, besides a place for each server; a failed server keeps its place.	ஒவ்வொரு வழங்கிக்கும் ஓர் இடத்துடன் கூடுதலாக, இத்தனை காத்திருக்கலாம்; பழுதடைந்த வழங்கி தன் இடத்தை வைத்துக்கொள்ளும்.
 	This run	இந்த இயக்கம்
 	Three-point estimate	மூன்று-புள்ளி மதிப்பீடு
 	Thu	வியா
@@ -525,6 +534,8 @@
 	Triangular	முக்கோணப் பரவல்
 	Truncated normal	வரம்பிட்ட இயல்புப் பரவல்
 	Tue	செவ்
+	Turned away	திருப்பி அனுப்பப்பட்டவை
+	Turned away on {id}	{id} இல் திருப்பி அனுப்பப்பட்டவை
 	Two stations in series, read from an XPDL file.	XPDL கோப்பிலிருந்து படிக்கப்பட்ட தொடர்ச்சியான இரண்டு நிலையங்கள்.
 	Type	வகை
 	Undid {action}	{action} செயல்தவிர்க்கப்பட்டது
@@ -548,6 +559,7 @@
 	View	பார்வை
 	Waiting over time	நேரப்படி காத்திருப்பவை
 	Waiting room	காத்திருப்பு அறை
+	Waiting room by calendar	நாட்காட்டியின்படி காத்திருப்பு அறை
 	Warm	வெதுவெதுப்பான
 	Warm-up	தொடக்கச் சீராக்க நேரம்
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	தொடக்கச் சீராக்கம் {warmup} {unit}; அதன் பின் {duration} {unit} அளவிடப்பட்டது

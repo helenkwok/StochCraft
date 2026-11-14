@@ -6,8 +6,8 @@ use serde::de::DeserializeOwned;
 use serde::{Deserialize, Deserializer};
 use serde_json::{Value, json};
 use stochcraft_model::{
-    Bounds, Connection, Element, ElementId, ElementKind, Model, Need, Property, ResourcePool,
-    Transfer, calendar::Calendar,
+    Bounds, Connection, Element, ElementId, ElementKind, Model, Need, Property, QueueLimit,
+    ResourcePool, Transfer, calendar::Calendar,
 };
 
 use crate::edit::Op;
@@ -15,8 +15,8 @@ use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec,
     HealthCheckSpec, KindSpec, ModelDoc, NeedSpec, OnShiftEndSpec, PatienceSpec, PowerSpec,
-    ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, RoutingSpec, ScrapSpec,
-    SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc, RoutingSpec,
+    ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -106,6 +106,8 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "service",
             "processing_by",
             "queue_capacity",
+            "queue_per_working_server",
+            "queue_shifts",
             "breakdown",
             "transfer",
             "transfer_holds_sender",
@@ -300,6 +302,18 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<u32>")]
     pub queue_capacity: Option<Option<u32>>,
+    /// Servers with a finite buffer: `queue_capacity` is the most waiting per unit working now
+    /// (up, not taken out and on shift), so the limit follows failures, health checks and
+    /// shifts (true), or a fixed number (false). Setting it true clears `queue_shifts`. An
+    /// entity is admitted when those waiting less the idle working units are fewer than the
+    /// limit; those already waiting stay when it drops.
+    #[serde(default)]
+    pub queue_per_working_server: Option<bool>,
+    /// Servers with a finite buffer: replaces the most waiting while each calendar is active
+    /// (the first active one applying; `queue_capacity` outside them), admitted as with
+    /// `queue_per_working_server`, which setting these clears. `[]` removes them.
+    #[serde(default)]
+    pub queue_shifts: Option<Vec<QueueShiftDoc>>,
     /// Servers: each unit fails after a time to failure and is repaired; `null` removes it.
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<BreakdownSpec>")]
@@ -527,6 +541,10 @@ pub struct FlowSet {
     /// besides its ordinary way out.
     #[serde(default)]
     pub abandoned: Option<bool>,
+    /// Out of a server with a finite waiting room: whether this is the way entities finding no
+    /// room take at once, besides its ordinary way out.
+    #[serde(default)]
+    pub turned_away: Option<bool>,
 }
 
 /// The connection's id, or the elements it joins.
@@ -1106,6 +1124,11 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("service", p.service.is_some()),
         ("processing_by", p.processing_by.is_some()),
         ("queue_capacity", p.queue_capacity.is_some()),
+        (
+            "queue_per_working_server",
+            p.queue_per_working_server.is_some(),
+        ),
+        ("queue_shifts", p.queue_shifts.is_some()),
         ("breakdown", p.breakdown.is_some()),
         ("transfer", p.transfer.is_some()),
         ("transfer_holds_sender", p.transfer_holds_sender.is_some()),
@@ -1134,6 +1157,8 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "service",
             "processing_by",
             "queue_capacity",
+            "queue_per_working_server",
+            "queue_shifts",
             "breakdown",
             "transfer",
             "transfer_holds_sender",
@@ -1195,6 +1220,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             capacity,
             service,
             queue_capacity,
+            queue_limit,
             breakdown,
             transfer,
             available,
@@ -1265,6 +1291,26 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             }
             if let Some(q) = p.queue_capacity {
                 *queue_capacity = q;
+            }
+            if p.queue_per_working_server == Some(true) && p.queue_shifts.is_some() {
+                return Err(CommandError::new(
+                    ErrorCode::InvalidParams,
+                    "a waiting room is either per working server or by calendar: give `queue_per_working_server` or `queue_shifts`, not both",
+                ));
+            }
+            match (p.queue_per_working_server, p.queue_shifts) {
+                (Some(true), _) => *queue_limit = QueueLimit::PerWorkingServer,
+                (_, Some(s)) => *queue_limit = wire::queue_limit(false, s),
+                (Some(false), None) => {
+                    if matches!(queue_limit, QueueLimit::PerWorkingServer) {
+                        *queue_limit = QueueLimit::Fixed;
+                    }
+                }
+                (None, None) => {}
+            }
+            // An unlimited room has no size to set: fixed again if it is ever finite.
+            if queue_capacity.is_none() {
+                *queue_limit = QueueLimit::Fixed;
             }
         }
         ElementKind::SharedTask {
@@ -1439,10 +1485,12 @@ fn calendar_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             ElementKind::Server {
                 availability,
                 shifts,
+                queue_limit,
                 ..
             } => {
                 availability.iter().any(|t| t.calendar.as_str() == p.id)
                     || shifts.iter().any(|t| t.calendar.as_str() == p.id)
+                    || queue_limit.calendars().any(|c| c.as_str() == p.id)
             }
             _ => false,
         })
@@ -1600,6 +1648,7 @@ fn connect(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 quantity: p.quantity,
                 rework: false,
                 abandoned: false,
+                turned_away: false,
             },
         ),
     )?;
@@ -1624,10 +1673,11 @@ fn flow_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         && p.quantity.is_none()
         && p.rework.is_none()
         && p.abandoned.is_none()
+        && p.turned_away.is_none()
     {
         return Err(CommandError::new(
             ErrorCode::InvalidParams,
-            "nothing to set: give `probability`, `condition`, `quantity`, `rework` or `abandoned`",
+            "nothing to set: give `probability`, `condition`, `quantity`, `rework`, `abandoned` or `turned_away`",
         ));
     }
     let id = c.id.clone();
@@ -1644,7 +1694,10 @@ fn flow_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ops.push(Op::SetRework(id.clone(), r));
     }
     if let Some(a) = p.abandoned {
-        ops.push(Op::SetAbandoned(id, a));
+        ops.push(Op::SetAbandoned(id.clone(), a));
+    }
+    if let Some(t) = p.turned_away {
+        ops.push(Op::SetTurnedAway(id, t));
     }
     let op = if ops.len() == 1 {
         ops.remove(0)

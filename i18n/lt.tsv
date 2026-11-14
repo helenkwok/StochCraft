@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Įtaisytosios paletės skirtos tik skaityti. Norėdami pakeisti spalvas, dubliuokite vieną iš jų.
 	Built-in themes are read-only. Duplicate one to change its colours.	Įtaisytosios temos skirtos tik skaityti. Norėdami pakeisti spalvas, dubliuokite vieną iš jų.
 	Busiest	Labiausiai apkrautas
+	By calendar	Pagal kalendorių
 	By role	Pagal vaidmenį
 	CSV table	CSV lentelė
 	Calendar	Kalendorius
@@ -167,6 +168,7 @@
 	Energy per part	Energija vienai detalei
 	Enough: {units}, meeting the target in {p} of replications	Pakanka: {units}, tikslas pasiekiamas {p} replikacijų
 	Entered	Įėjo
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Objektai, radę laukiamąjį pilną, iškart eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą), užuot buvę prarasti ar laukę prieš užduotį; čia jie skaičiuojami kaip prarasti.
 	Entities give up waiting	Objektai nustoja laukti
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Objektai, kurie replikacijos pabaigoje dar viduje, neįskaičiuojami į vidutinį laukimo laiką ir vidutinį laiką sistemoje.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Laukti nustoję objektai eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą); kiti eina kitu užduoties išėjimu.
@@ -198,6 +200,7 @@
 	Fit the time	Pritaikyti laiką
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Pritaikyti šio bloko laiką minimumui, labiausiai tikėtinai reikšmei ir maksimumui arba 95-ajam procentiliui.
 	Fitted the time of {id}	{id} laikas pritaikytas
+	Fixed	Pastovus
 	Flows	Srautai
 	Forget the estimate	Pamiršti įvertį
 	Fri	pn
@@ -319,12 +322,14 @@
 	Pause	Pristabdyti
 	Per	Laikotarpis
 	Per shift needs a calendar: each period it is active is a shift.	„Per pamainą“ reikia kalendoriaus: kiekvienas laikotarpis, kai jis aktyvus, yra viena pamaina.
+	Per working server	Vienam naudojamam serveriui
 	Percentile	Procentilis
 	Period {n} ends	{n} laikotarpio pabaiga
 	Period {n} repeats	{n} laikotarpio kartojimas
 	Period {n} starts	{n} laikotarpio pradžia
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Laikotarpiai, kai keičiasi prieinamumas, atvykimai ar grupės pamainos. Datos ir laikai rašomi taip: 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Iš naudojimo išimto serverio vieta laukiamajame:
+	Places	Vietos
 	Planned run time per item	Planuojamas veikimo laikas vienai detalei
 	Play	Leisti
 	Points	Taškai
@@ -443,6 +448,7 @@
 	Show {id}	Rodyti {id}
 	Side rail	Šoninė juosta
 	Size	Parinkti
+	Size of the waiting room:	Laukiamojo dydis:
 	Size the resources	Parinkti išteklius
 	Soft accent	Švelnus akcentas
 	Source	Šaltinis
@@ -500,6 +506,9 @@
 	Themes	Temos
 	This block has a warning	Šiame bloke yra įspėjimas
 	This block has an error	Šiame bloke yra klaida
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Tiek gali laukti kiekvienam dabar dirbančiam serveriui (nesugedusiam, neišimtam, pamainoje), todėl laukiamasis seka serverius. Kai jis sumažėja, jau laukiantys lieka.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Tiek gali laukti už kalendorių ribų, o kol kalendorius aktyvus, jo skaičius. Kai skaičius sumažėja, jau laukiantys lieka.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Tiek gali laukti, be po vieną vietą kiekvienam serveriui; sugedęs serveris išlaiko savo vietą.
 	This run	Šis vykdymas
 	Three-point estimate	Trijų taškų įvertis
 	Thu	kt
@@ -525,6 +534,8 @@
 	Triangular	Trikampis
 	Truncated normal	Apribotasis normalusis
 	Tue	an
+	Turned away	Atmesti
+	Turned away on {id}	Atmesti sraute {id}
 	Two stations in series, read from an XPDL file.	Dvi nuoseklios stotys, nuskaitytos iš XPDL failo.
 	Type	Tipas
 	Undid {action}	Atšaukta {action}
@@ -548,6 +559,7 @@
 	View	Rodinys
 	Waiting over time	Laukiantys per laiką
 	Waiting room	Laukiamasis
+	Waiting room by calendar	Laukiamasis pagal kalendorių
 	Warm	Šilta
 	Warm-up	Įšilimo laikotarpis
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Įšilimas {warmup} {unit}, po to matavimas {duration} {unit}
