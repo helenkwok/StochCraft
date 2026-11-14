@@ -535,18 +535,26 @@ mod tests {
 
     #[test]
     fn okabe_ito_passes_the_colour_vision_checks_on_white() {
-        // Only the surface-contrast warning, for orange, sky blue and yellow (slots 0, 1 and 3),
-        // which are too pale for 3:1 on white. Neighbours still differ enough for everyone, and
-        // no colour reads as grey (black is a neutral and exempt).
+        // Only surface contrast, for orange, sky blue and yellow (slots 0, 1 and 3), which are too
+        // pale for 3:1 on white: orange (2.2:1) and sky blue (2.3:1) are warnings, and yellow
+        // (1.3:1) all but vanishes, a failure. Neighbours still differ enough for everyone, and no
+        // colour reads as grey (black is a neutral and exempt).
         let found = check(&preset(DEFAULT), WHITE);
         assert!(
-            found
-                .iter()
-                .all(|f| f.level == Level::Warn && f.message.contains("contrast")),
+            found.iter().all(|f| f.message.contains("contrast")),
             "{found:?}"
         );
-        let slots: Vec<usize> = found.iter().flat_map(|f| f.slots.clone()).collect();
-        assert_eq!(slots, vec![0, 1, 3], "{found:?}");
+        let levels: Vec<(Vec<usize>, Level)> =
+            found.iter().map(|f| (f.slots.clone(), f.level)).collect();
+        assert_eq!(
+            levels,
+            vec![
+                (vec![0], Level::Warn),
+                (vec![1], Level::Warn),
+                (vec![3], Level::Fail)
+            ],
+            "{found:?}"
+        );
     }
 
     #[test]
