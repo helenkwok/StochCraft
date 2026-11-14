@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	A beépített paletták csak olvashatók. Színeik módosításához kettőzzön meg egyet.
 	Built-in themes are read-only. Duplicate one to change its colours.	A beépített témák csak olvashatók. Színeik módosításához kettőzzön meg egyet.
 	Busiest	Legterheltebb
+	By calendar	Naptár szerint
 	By role	Szerepkör szerint
 	CSV table	CSV-táblázat
 	Calendar	Naptár
@@ -167,6 +168,7 @@
 	Energy per part	Energia darabonként
 	Enough: {units}, meeting the target in {p} of replications	Elég: {units}, a cél az ismétlések {p} részében teljesül
 	Entered	Belépett
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	A várakozóhelyet telve találó entitások azonnal ezt a folyamatot követik (például hogy később újra próbálkozzanak), ahelyett hogy elvesznének vagy a feladat előtt várakoznának; itt elveszettként számítanak.
 	Entities give up waiting	Az entitások lemondanak a várakozásról
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Az ismétlés végén még bent lévő egyedek nem számítanak bele az átlagos várakozási időbe és az átlagos rendszerben töltött időbe.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	A várakozásról lemondó entitások ezt a folyamatot követik (például hogy később újra próbálkozzanak); a többiek a feladat másik kiútját választják.
@@ -198,6 +200,7 @@
 	Fit the time	Idő illesztése
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	A blokk idejének illesztése egy minimumra, egy legvalószínűbb értékre és egy maximumra vagy 95. percentilisre.
 	Fitted the time of {id}	{id} ideje illesztve
+	Fixed	Rögzített
 	Flows	Folyamatok
 	Forget the estimate	Becslés elvetése
 	Fri	P
@@ -319,12 +322,14 @@
 	Pause	Szünet
 	Per	Időszak
 	Per shift needs a calendar: each period it is active is a shift.	A „műszakonként” naptárt igényel: minden időszak, amikor aktív, egy műszak.
+	Per working server	Üzemelő szerverenként
 	Percentile	Percentilis
 	Period {n} ends	{n}. időszak vége
 	Period {n} repeats	{n}. időszak ismétlődése
 	Period {n} starts	{n}. időszak kezdete
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Időszakok, amikor a rendelkezésre állás, az érkezések vagy egy készlet műszakjai változnak. A dátumot és az időt így kell írni: 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Kivont szerver helye a várakozóhelyen:
+	Places	Helyek
 	Planned run time per item	Tervezett futási idő darabonként
 	Play	Lejátszás
 	Points	Pontok
@@ -443,6 +448,7 @@
 	Show {id}	{id} megjelenítése
 	Side rail	Oldalsáv
 	Size	Méretezés
+	Size of the waiting room:	A várakozóhely mérete:
 	Size the resources	Erőforrások méretezése
 	Soft accent	Lágy kiemelőszín
 	Source	Forrás
@@ -500,6 +506,9 @@
 	Themes	Témák
 	This block has a warning	Ez a blokk figyelmeztetést tartalmaz
 	This block has an error	Ez a blokk hibát tartalmaz
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Ennyien várakozhatnak minden éppen dolgozó szerverre (nem meghibásodott, nincs kivonva, műszakban van), így a várakozóhely követi a szervereket. Ha zsugorodik, a már várakozók maradnak.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Ennyien várakozhatnak a naptárakon kívül, és amíg egy naptár aktív, annak száma. Ha a szám csökken, a már várakozók maradnak.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Ennyien várakozhatnak, a szerverenkénti egy helyen felül; a meghibásodott szerver megtartja a helyét.
 	This run	Ez a futtatás
 	Three-point estimate	Hárompontos becslés
 	Thu	Cs
@@ -525,6 +534,8 @@
 	Triangular	Háromszög
 	Truncated normal	Csonkolt normális
 	Tue	K
+	Turned away	Elutasítottak
+	Turned away on {id}	Elutasítottak itt: {id}
 	Two stations in series, read from an XPDL file.	Két sorba kapcsolt állomás, XPDL-fájlból beolvasva.
 	Type	Típus
 	Undid {action}	{action} visszavonva
@@ -548,6 +559,7 @@
 	View	Nézet
 	Waiting over time	Várakozók az idő függvényében
 	Waiting room	Várakozóhely
+	Waiting room by calendar	Várakozóhely naptár szerint
 	Warm	Meleg
 	Warm-up	Bemelegítés
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Bemelegítés {warmup} {unit}, majd mérés {duration} {unit} ideig

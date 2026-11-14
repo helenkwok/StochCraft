@@ -45,6 +45,7 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
                     health_check: None,
                     shifts: Vec::new(),
                     on_shift_end: OnShiftEnd::Finish,
+                    queue_limit: stochcraft_model::QueueLimit::Fixed,
                 },
             ),
             element(

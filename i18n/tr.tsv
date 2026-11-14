@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Yerleşik paletler salt okunurdur. Renklerini değiştirmek için birini çoğaltın.
 	Built-in themes are read-only. Duplicate one to change its colours.	Yerleşik temalar salt okunurdur. Renklerini değiştirmek için birini çoğaltın.
 	Busiest	En yoğun
+	By calendar	Takvime göre
 	By role	Role göre
 	CSV table	CSV tablosu
 	Calendar	Takvim
@@ -167,6 +168,7 @@
 	Energy per part	Parça başına enerji
 	Enough: {units}, meeting the target in {p} of replications	Yeterli: {units}, hedef tekrarların {p} kadarında karşılanır
 	Entered	Giren
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Bekleme alanını dolu bulan varlıklar, kaybolmak ya da görevden önce beklemek yerine hemen bu akışı izler (örneğin daha sonra yeniden denemek için); burada kaybedilen sayılırlar.
 	Entities give up waiting	Varlıklar beklemekten vazgeçer
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Bir tekrarın sonunda hâlâ içeride olan varlıklar ortalama bekleme süresine ve sistemdeki ortalama süreye katılmaz.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Beklemekten vazgeçen varlıklar bu akışı izler (örneğin daha sonra yeniden denemek için); diğerleri görevin öteki çıkış yolunu izler.
@@ -198,6 +200,7 @@
 	Fit the time	Süreyi uydur
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Bu bloğun süresini bir en küçük, bir en olası değer ve bir en büyük ya da 95. yüzdeliğe uydur.
 	Fitted the time of {id}	{id} süresi uyduruldu
+	Fixed	Sabit
 	Flows	Akışlar
 	Forget the estimate	Tahmini unut
 	Fri	Cum
@@ -319,12 +322,14 @@
 	Pause	Duraklat
 	Per	Dönem
 	Per shift needs a calendar: each period it is active is a shift.	"Vardiyada" bir takvim gerektirir: takvimin etkin olduğu her dönem bir vardiyadır.
+	Per working server	Hizmetteki sunucu başına
 	Percentile	Yüzdelik
 	Period {n} ends	{n}. dönem bitişi
 	Period {n} repeats	{n}. dönem tekrarı
 	Period {n} starts	{n}. dönem başlangıcı
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Kullanılabilirliğin, gelişlerin veya bir havuzun vardiyalarının değiştiği dönemler. Tarih ve saatler 2026-01-31T09:00:00 biçiminde yazılır.
 	Place in the waiting room of a server taken out:	Hizmetten çıkarılan sunucunun bekleme alanındaki yeri:
+	Places	Yerler
 	Planned run time per item	Parça başına planlanan çalışma süresi
 	Play	Oynat
 	Points	Noktalar
@@ -443,6 +448,7 @@
 	Show {id}	{id} göster
 	Side rail	Yan çubuk
 	Size	Boyutlandır
+	Size of the waiting room:	Bekleme alanının boyutu:
 	Size the resources	Kaynakları boyutlandır
 	Soft accent	Yumuşak vurgu
 	Source	Kaynak
@@ -500,6 +506,9 @@
 	Themes	Temalar
 	This block has a warning	Bu blokta uyarı var
 	This block has an error	Bu blokta hata var
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Şu anda çalışan her sunucu için (arızalı değil, hizmetten çıkarılmamış, vardiyada) bu kadar bekleyebilir, böylece bekleme alanı sunucuları izler. Küçüldüğünde zaten bekleyenler kalır.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Takvimler dışında bu kadar, bir takvim etkinken de o takvimin sayısı kadar bekleyebilir. Sayı düştüğünde zaten bekleyenler kalır.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Her sunucu için bir yerin yanı sıra bu kadar varlık bekleyebilir; arızalı bir sunucu yerini korur.
 	This run	Bu çalıştırma
 	Three-point estimate	Üç noktalı tahmin
 	Thu	Per
@@ -525,6 +534,8 @@
 	Triangular	Üçgen
 	Truncated normal	Kesilmiş normal
 	Tue	Sal
+	Turned away	Geri çevrilenler
+	Turned away on {id}	{id} üzerinde geri çevrilenler
 	Two stations in series, read from an XPDL file.	XPDL dosyasından okunan seri bağlı iki istasyon.
 	Type	Tür
 	Undid {action}	{action} geri alındı
@@ -548,6 +559,7 @@
 	View	Görünüm
 	Waiting over time	Zaman içinde bekleyenler
 	Waiting room	Bekleme alanı
+	Waiting room by calendar	Takvime göre bekleme alanı
 	Warm	Sıcak
 	Warm-up	Isınma
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} ısınma, ardından {duration} {unit} ölçüm

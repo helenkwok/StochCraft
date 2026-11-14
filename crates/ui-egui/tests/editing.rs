@@ -837,6 +837,66 @@ fn a_patience_and_an_abandoned_way_are_set_in_the_inspector() {
     assert!(element(&h, "serve").get("patience").is_none());
 }
 
+/// A finite waiting room is set per working server or by calendar in the inspector, and a way
+/// out marked for those turned away; neither is offered without a finite room.
+#[test]
+fn a_waiting_room_that_changes_and_a_turned_away_way_are_set_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    assert!(h.query_by_label("Per working server").is_none());
+    let way = model(&h)["connections"]
+        .as_array()
+        .and_then(|cs| {
+            cs.iter()
+                .find(|c| c["from"] == "serve")
+                .and_then(|c| c["id"].as_str().map(str::to_owned))
+        })
+        .expect("the way out");
+    assert!(h.query_by_label(&format!("Turned away on {way}")).is_none());
+    h.state_mut()
+        .execute("block.set", json!({"id": "serve", "queue_capacity": 4}))
+        .expect("buffer set");
+    settle(&mut h);
+    // No calendar yet: no waiting room by calendar.
+    assert!(h.query_by_label("By calendar").is_none());
+    click(&mut h, Role::RadioButton, "Per working server");
+    assert_eq!(
+        element(&h, "serve")["queue_per_working_server"],
+        json!(true)
+    );
+    h.state_mut()
+        .execute(
+            "calendar.add",
+            json!({
+                "id": "rush",
+                "name": "Rush",
+                "events": [{"start": "2026-01-01T08:00:00", "end": "2026-01-01T10:00:00", "repeat": "FREQ=DAILY"}],
+            }),
+        )
+        .expect("a calendar");
+    settle(&mut h);
+    click(&mut h, Role::RadioButton, "By calendar");
+    let s = element(&h, "serve");
+    assert_eq!(
+        s["queue_shifts"],
+        json!([{"calendar": "rush", "places": 4}]),
+        "{s}"
+    );
+    assert!(s.get("queue_per_working_server").is_none(), "{s}");
+    h.get_by_label("Waiting room by calendar");
+    click(&mut h, Role::RadioButton, "Fixed");
+    let s = element(&h, "serve");
+    assert!(s.get("queue_shifts").is_none(), "{s}");
+    assert_eq!(s["queue_capacity"], json!(4));
+    click(&mut h, Role::CheckBox, &format!("Turned away on {way}"));
+    let turned = model(&h)["connections"]
+        .as_array()
+        .and_then(|cs| cs.iter().find(|c| c["id"] == way.as_str()).cloned())
+        .unwrap_or_default()["turned_away"]
+        .clone();
+    assert_eq!(turned, json!(true));
+}
+
 /// A task with a resource is given a health check in the inspector, resuming the job under way
 /// rather than retrying it; unticking it removes it.
 #[test]

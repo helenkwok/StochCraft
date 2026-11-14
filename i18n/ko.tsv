@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	기본 제공 팔레트는 읽기 전용입니다. 색을 바꾸려면 하나를 복제하세요.
 	Built-in themes are read-only. Duplicate one to change its colours.	기본 제공 테마는 읽기 전용입니다. 색을 바꾸려면 하나를 복제하세요.
 	Busiest	가장 바쁨
+	By calendar	캘린더별
 	By role	역할별
 	CSV table	CSV 표
 	Calendar	캘린더
@@ -167,6 +168,7 @@
 	Energy per part	부품당 에너지
 	Enough: {units}, meeting the target in {p} of replications	충분: {units}, 반복 실행의 {p}에서 목표 충족
 	Entered	진입 수
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	대기실이 가득 찬 것을 본 엔터티는 곧바로 이 흐름을 따릅니다(예를 들어 나중에 다시 시도하기 위해). 손실되거나 작업 앞에서 기다리지 않으며, 여기서는 손실로 셉니다.
 	Entities give up waiting	엔터티가 대기를 포기함
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	반복 실행이 끝날 때 아직 내부에 있는 개체는 평균 대기 시간과 시스템 내 평균 체류 시간에서 빠집니다.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	대기를 포기한 엔터티는 이 흐름을 따릅니다(예를 들어 나중에 다시 시도하기 위해). 나머지는 작업의 다른 나갈 경로를 따릅니다.
@@ -198,6 +200,7 @@
 	Fit the time	시간 맞추기
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	이 블록의 시간을 최솟값, 최빈값, 최댓값 또는 95번째 백분위수에 맞춥니다.
 	Fitted the time of {id}	{id}의 시간을 맞췄습니다
+	Fixed	고정
 	Flows	흐름
 	Forget the estimate	추정 잊기
 	Fri	금
@@ -319,12 +322,14 @@
 	Pause	일시 중지
 	Per	기간
 	Per shift needs a calendar: each period it is active is a shift.	'근무조당'에는 캘린더가 필요합니다. 캘린더가 활성인 각 기간이 한 근무조입니다.
+	Per working server	가동 중인 서버당
 	Percentile	백분위수
 	Period {n} ends	기간 {n} 종료
 	Period {n} repeats	기간 {n} 반복
 	Period {n} starts	기간 {n} 시작
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	가용 여부, 도착 또는 풀의 근무조가 바뀌는 기간입니다. 날짜와 시간은 2026-01-31T09:00:00 형식으로 씁니다.
 	Place in the waiting room of a server taken out:	제외된 서버의 대기실 자리:
+	Places	자리 수
 	Planned run time per item	부품당 계획 가동 시간
 	Play	재생
 	Points	점
@@ -443,6 +448,7 @@
 	Show {id}	{id} 표시
 	Side rail	사이드바
 	Size	크기 정하기
+	Size of the waiting room:	대기실 크기:
 	Size the resources	자원 크기 정하기
 	Soft accent	연한 강조색
 	Source	출처
@@ -500,6 +506,9 @@
 	Themes	테마
 	This block has a warning	이 블록에 경고가 있습니다
 	This block has an error	이 블록에 오류가 있습니다
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	지금 가동 중인(고장 나지 않고, 제외되지 않고, 근무 중인) 서버 하나당 이만큼 기다릴 수 있으므로 대기실이 서버 수를 따라갑니다. 줄어들어도 이미 기다리는 엔터티는 남습니다.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	캘린더 밖에서는 이만큼, 캘린더가 활성인 동안에는 그 캘린더의 수만큼 기다릴 수 있습니다. 수가 줄어도 이미 기다리는 엔터티는 남습니다.
+	This many may wait, besides a place for each server; a failed server keeps its place.	서버마다 자리 하나에 더해 이만큼 기다릴 수 있습니다. 고장 난 서버는 자기 자리를 유지합니다.
 	This run	이 실행
 	Three-point estimate	3점 추정
 	Thu	목
@@ -525,6 +534,8 @@
 	Triangular	삼각 분포
 	Truncated normal	절단 정규 분포
 	Tue	화
+	Turned away	거절
+	Turned away on {id}	{id} 거절
 	Two stations in series, read from an XPDL file.	XPDL 파일에서 읽어온 직렬 배치 작업장 두 개.
 	Type	종류
 	Undid {action}	{action} 실행 취소함
@@ -548,6 +559,7 @@
 	View	보기
 	Waiting over time	시간에 따른 대기 수
 	Waiting room	대기실
+	Waiting room by calendar	캘린더별 대기실
 	Warm	따뜻한 색
 	Warm-up	준비 기간
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} 준비 후 {duration} {unit} 측정

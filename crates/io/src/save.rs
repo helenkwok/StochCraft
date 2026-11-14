@@ -26,7 +26,8 @@ use crate::write::{
     on_shift_end_element, own_marker, patience_element, planned_element, power_element,
     probability_element, processing_by_element, property_element, quantity_element, quantity_param,
     queue_capacity_element, rework_element, routing_element, scrap_element, size, start_param,
-    stop_element, timer_param, transfer_element, units_param, vendor_value_element,
+    stop_element, timer_param, transfer_element, turned_away_element, units_param,
+    vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -1699,6 +1700,7 @@ impl Editor {
         let mut quantities: Vec<(String, Option<Element>)> = Vec::new();
         let mut reworks: Vec<(String, Option<Element>)> = Vec::new();
         let mut abandons: Vec<(String, Option<Element>)> = Vec::new();
+        let mut turned: Vec<(String, Option<Element>)> = Vec::new();
         // Rework (or a way for those who give up) an inherited scenario sets comes back on
         // reading unless this one says false.
         let parents = ancestors(root, scenario);
@@ -1733,6 +1735,19 @@ impl Editor {
                 };
                 abandons.push((c.id.to_string(), v));
             }
+            if was.is_some_and(|o| o.turned_away) != c.turned_away {
+                let inherited = parents
+                    .iter()
+                    .any(|a| sets_vendor(a, c.id.as_str(), crate::bpsim::TURNED_AWAY));
+                let v = if c.turned_away {
+                    Some(turned_away_element())
+                } else if inherited {
+                    Some(vendor_value_element(crate::bpsim::TURNED_AWAY, "false"))
+                } else {
+                    None
+                };
+                turned.push((c.id.to_string(), v));
+            }
         }
         // Writing nothing where there was nothing leaves the file alone.
         writes.retain(|(id, _, v)| {
@@ -1742,6 +1757,7 @@ impl Editor {
             && quantities.iter().all(|(_, v)| v.is_none())
             && reworks.iter().all(|(_, v)| v.is_none())
             && abandons.iter().all(|(_, v)| v.is_none())
+            && turned.iter().all(|(_, v)| v.is_none())
         {
             if let Some(s) = scenario_mut(root, scenario) {
                 for (id, _) in quantities {
@@ -1752,6 +1768,9 @@ impl Editor {
                 }
                 for (id, _) in abandons {
                     set_vendor(s, &id, crate::bpsim::ABANDONED, None);
+                }
+                for (id, _) in turned {
+                    set_vendor(s, &id, crate::bpsim::TURNED_AWAY, None);
                 }
             }
             return Ok(());
@@ -1768,6 +1787,9 @@ impl Editor {
         }
         for (id, v) in abandons {
             set_vendor(s, &id, crate::bpsim::ABANDONED, v);
+        }
+        for (id, v) in turned {
+            set_vendor(s, &id, crate::bpsim::TURNED_AWAY, v);
         }
         Ok(())
     }
@@ -1879,20 +1901,36 @@ impl Editor {
                     let was_server = matches!(was, Some(ElementKind::Server { .. }));
                     // The finite buffer: written when it changed; for a task that was not a
                     // server, any extension left in the file goes (a delay ignores it).
+                    // With how its size is set (fixed, by timetable or per working server).
                     let old_queue = match was {
-                        Some(ElementKind::Server { queue_capacity, .. }) => *queue_capacity,
+                        Some(ElementKind::Server {
+                            queue_capacity: Some(q),
+                            queue_limit,
+                            ..
+                        }) => Some((*q, queue_limit)),
                         _ => None,
                     };
                     let new_queue = match &e.kind {
-                        ElementKind::Server { queue_capacity, .. } => *queue_capacity,
+                        ElementKind::Server {
+                            queue_capacity: Some(q),
+                            queue_limit,
+                            ..
+                        } => Some((*q, queue_limit)),
                         _ => None,
                     };
                     let is_server = matches!(e.kind, ElementKind::Server { .. });
                     if new_queue != old_queue || (is_server && !was_server) {
+                        // Set another way, the extension is written afresh (an update keeps
+                        // only its value).
+                        if old_queue
+                            .is_some_and(|(_, was)| new_queue.is_some_and(|(_, l)| l != was))
+                        {
+                            vendor_writes.push((id.clone(), crate::bpsim::QUEUE_CAPACITY, None));
+                        }
                         vendor_writes.push((
                             id.clone(),
                             crate::bpsim::QUEUE_CAPACITY,
-                            new_queue.map(queue_capacity_element),
+                            new_queue.map(|(q, l)| queue_capacity_element(q, l)),
                         ));
                     }
                     // Breakdowns, and BPSim's `Interruptible` with them.

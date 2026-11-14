@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Встроенные палитры доступны только для чтения. Чтобы изменить цвета, создайте дубликат одной из них.
 	Built-in themes are read-only. Duplicate one to change its colours.	Встроенные темы доступны только для чтения. Чтобы изменить цвета, создайте дубликат одной из них.
 	Busiest	Самый загруженный
+	By calendar	По календарю
 	By role	По роли
 	CSV table	Таблица CSV
 	Calendar	Календарь
@@ -167,6 +168,7 @@
 	Energy per part	Энергия на деталь
 	Enough: {units}, meeting the target in {p} of replications	Достаточно: {units}, цель достигнута в {p} репликаций
 	Entered	Вошло
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Сущности, которые застают места ожидания занятыми, сразу идут по этому потоку (например, чтобы попробовать позже), а не теряются и не ждут перед задачей; здесь они считаются потерями.
 	Entities give up waiting	Сущности перестают ждать
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Объекты, оставшиеся внутри в конце репликации, не учитываются в среднем времени ожидания и среднем времени в системе.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Сущности, которые перестают ждать, идут по этому потоку (например, чтобы попробовать позже); остальные идут по другому выходу задачи.
@@ -198,6 +200,7 @@
 	Fit the time	Подобрать время
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Подобрать время этого блока по минимуму, наиболее вероятному значению и максимуму или 95-му процентилю.
 	Fitted the time of {id}	Время {id} подобрано
+	Fixed	Постоянное
 	Flows	Потоки
 	Forget the estimate	Забыть оценку
 	Fri	пт
@@ -319,12 +322,14 @@
 	Pause	Пауза
 	Per	Период
 	Per shift needs a calendar: each period it is active is a shift.	«За смену» требует календаря: каждый период, когда он активен, — это смена.
+	Per working server	На сервер в работе
 	Percentile	Процентиль
 	Period {n} ends	Конец периода {n}
 	Period {n} repeats	Повтор периода {n}
 	Period {n} starts	Начало периода {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Периоды, когда меняются доступность, прибытия или смены пула. Дата и время записываются как 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Место выведенного сервера среди мест ожидания:
+	Places	Места
 	Planned run time per item	Плановое время работы на деталь
 	Play	Воспроизвести
 	Points	Точки
@@ -443,6 +448,7 @@
 	Show {id}	Показать {id}
 	Side rail	Боковая панель
 	Size	Подобрать
+	Size of the waiting room:	Число мест ожидания:
 	Size the resources	Подбор ресурсов
 	Soft accent	Мягкий акцент
 	Source	Источник
@@ -500,6 +506,9 @@
 	Themes	Темы
 	This block has a warning	В этом блоке есть предупреждение
 	This block has an error	В этом блоке есть ошибка
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Столько может ждать на каждый сервер, работающий сейчас (не отказавший, не выведенный, на смене), так что места ожидания следуют за серверами. Когда их становится меньше, уже ждущие остаются.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Столько может ждать вне календарей, а пока календарь активен — его число. Когда число уменьшается, уже ждущие остаются.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Столько может ждать, помимо одного места на каждый сервер; отказавший сервер сохраняет своё место.
 	This run	Этот запуск
 	Three-point estimate	Трёхточечная оценка
 	Thu	чт
@@ -525,6 +534,8 @@
 	Triangular	Треугольное распределение
 	Truncated normal	Усечённое нормальное распределение
 	Tue	вт
+	Turned away	Отклонённые
+	Turned away on {id}	Отклонённые на {id}
 	Two stations in series, read from an XPDL file.	Два последовательно расположенных поста, загруженных из файла XPDL.
 	Type	Тип
 	Undid {action}	Отменено действие {action}
@@ -548,6 +559,7 @@
 	View	Вид
 	Waiting over time	Ожидающие во времени
 	Waiting room	Места ожидания
+	Waiting room by calendar	Места ожидания по календарю
 	Warm	Тёплая
 	Warm-up	Разогрев
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Разогрев {warmup} {unit}, затем измерение в течение {duration} {unit}

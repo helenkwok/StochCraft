@@ -45,7 +45,7 @@ pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 pub use stochcraft_model::{
     Breakdown, ByValue, Change, Demand, DemandPer, HealthCheck, OnShiftEnd, OnTakeout, Patience,
-    PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Routing, Scrap, Setup, Transfer,
+    PatienceUntil, PlaceWhileOut, Power, ProcessingBy, QueueLimit, Routing, Scrap, Setup, Transfer,
 };
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
@@ -161,6 +161,9 @@ struct Route {
     /// Out of a server with a patience: the way entities that give up take, not its ordinary
     /// way out.
     abandoned: bool,
+    /// Out of a server with a finite waiting room: the way entities finding no room take, not
+    /// its ordinary way out.
+    turned_away: bool,
 }
 
 /// A model checked and ready to run.
@@ -401,6 +404,14 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                                     ..
                                 }
                             ),
+                        turned_away: c.turned_away
+                            && matches!(
+                                e.kind,
+                                ElementKind::Server {
+                                    queue_capacity: Some(_),
+                                    ..
+                                }
+                            ),
                     })
                 })
                 .collect()
@@ -519,13 +530,15 @@ pub enum Metric {
     /// served entity while the next buffer is full).
     BlockingProbability,
     /// Entities lost. Servers with a finite buffer: arrivals from sources turned away because
-    /// the buffer was full (these never entered). Sources sending to a finite buffer: their
+    /// the buffer was full (these never entered); with a way out for those turned away, every
+    /// entity turned away, from a source or any other element, each time it is (it takes that
+    /// way rather than leave the model or wait). Sources sending to a finite buffer: their
     /// arrivals lost that way (these entered, but never left), so one lost arrival counts at
     /// both. Exclusive gateways: entities for which no condition held and there was no default
     /// connection, which leave the model there.
     Lost,
     /// Servers with a finite buffer: the fraction of arrivals lost (lost over lost plus
-    /// entered).
+    /// entered): of the attempts to get in, with a way out for those turned away.
     LossProbability,
     /// Servers with a patience: entities that gave up, counted once each as they give up
     /// (waiting, or in transfer here when the transfer ends; with patience until done, in
@@ -1159,6 +1172,8 @@ pub struct Builder {
     reworks: BTreeSet<(BlockId, BlockId)>,
     /// Ways out for entities that give up, besides each server's ordinary one.
     abandoned: Vec<(BlockId, BlockId)>,
+    /// Ways out for entities turned away, besides each server's ordinary one.
+    turned_away: Vec<(BlockId, BlockId)>,
     /// Shared resource pools.
     pools: Vec<ResourcePool>,
     calendars: Vec<Calendar>,
@@ -1225,6 +1240,7 @@ impl Builder {
                 health_check: None,
                 shifts: Vec::new(),
                 on_shift_end: OnShiftEnd::Finish,
+                queue_limit: stochcraft_model::QueueLimit::Fixed,
             },
         )
     }
@@ -1257,6 +1273,7 @@ impl Builder {
                 health_check: None,
                 shifts: Vec::new(),
                 on_shift_end: OnShiftEnd::Finish,
+                queue_limit: stochcraft_model::QueueLimit::Fixed,
             },
         )
     }
@@ -1416,6 +1433,58 @@ impl Builder {
     /// ([`Builder::patience`]); [`Builder::connect`] still sets its ordinary way out.
     pub fn abandoned(&mut self, from: BlockId, to: BlockId) {
         self.abandoned.push((from, to));
+    }
+
+    /// Gives server `from`, which has a finite waiting room ([`Builder::buffered_server`]), a
+    /// second way out, to `to`, that the entities finding no room take at once;
+    /// [`Builder::connect`] still sets its ordinary way out.
+    pub fn turned_away(&mut self, from: BlockId, to: BlockId) {
+        self.turned_away.push((from, to));
+    }
+
+    /// Server `block`'s waiting room by timetable: at most `outside` waiting outside the
+    /// calendars, and each calendar's number while it is active (the first active one
+    /// applying). See [`QueueLimit::ByShift`].
+    pub fn queue_by_shift(&mut self, block: BlockId, outside: u32, shifts: &[(&str, u32)]) {
+        if let Some((
+            _,
+            ElementKind::Server {
+                queue_capacity,
+                queue_limit,
+                ..
+            },
+            _,
+        )) = self.elements.get_mut(block.0)
+        {
+            *queue_capacity = Some(outside);
+            *queue_limit = QueueLimit::ByShift(
+                shifts
+                    .iter()
+                    .map(|(c, q)| Timed {
+                        calendar: ElementId::unchecked(c),
+                        value: *q,
+                    })
+                    .collect(),
+            );
+        }
+    }
+
+    /// Server `block`'s waiting room per working server: at most `per` waiting for each unit
+    /// working now. See [`QueueLimit::PerWorkingServer`].
+    pub fn queue_per_working_server(&mut self, block: BlockId, per: u32) {
+        if let Some((
+            _,
+            ElementKind::Server {
+                queue_capacity,
+                queue_limit,
+                ..
+            },
+            _,
+        )) = self.elements.get_mut(block.0)
+        {
+            *queue_capacity = Some(per);
+            *queue_limit = QueueLimit::PerWorkingServer;
+        }
     }
 
     /// Gives server `block` a setup: before every job, or a changeover ([`Setup`]).
@@ -1655,34 +1724,35 @@ impl Builder {
             let name = self.elements.get(i).map_or("", |(n, _, _)| n.as_str());
             ElementId::new(name).unwrap_or_else(|| ElementId::unchecked(name))
         };
-        // From, to, probability, condition, and whether it is the way for those who give up.
-        type Flow = (BlockId, BlockId, Option<f64>, Option<String>, bool);
+        // From, to, probability, condition, and what way it is: 0 an ordinary one, 1 the way
+        // for those who give up, 2 the way for those turned away.
+        type Flow = (BlockId, BlockId, Option<f64>, Option<String>, u8);
         let mut connections: Vec<Flow> = self
             .connections
             .iter()
-            .map(|(f, t, p, c)| (*f, *t, *p, c.clone(), false))
+            .map(|(f, t, p, c)| (*f, *t, *p, c.clone(), 0))
+            .chain(self.abandoned.iter().map(|(f, t)| (*f, *t, None, None, 1)))
             .chain(
-                self.abandoned
+                self.turned_away
                     .iter()
-                    .map(|(f, t)| (*f, *t, None, None, true)),
+                    .map(|(f, t)| (*f, *t, None, None, 2)),
             )
             .collect();
-        connections.sort_by_key(|(from, to, .., abandoned)| (*from, *abandoned, *to));
+        connections.sort_by_key(|(from, to, .., way)| (*from, *way, *to));
         let connections: Vec<Connection> = connections
             .into_iter()
             .enumerate()
-            .map(
-                |(n, (from, to, probability, condition, abandoned))| Connection {
-                    id: ElementId::unchecked(&format!("flow-{}", n + 1)),
-                    from: id(from.0),
-                    to: id(to.0),
-                    probability,
-                    condition,
-                    quantity: self.quantities.get(&(from, to)).copied(),
-                    rework: self.reworks.contains(&(from, to)),
-                    abandoned,
-                },
-            )
+            .map(|(n, (from, to, probability, condition, way))| Connection {
+                id: ElementId::unchecked(&format!("flow-{}", n + 1)),
+                from: id(from.0),
+                to: id(to.0),
+                probability,
+                condition,
+                quantity: self.quantities.get(&(from, to)).copied(),
+                rework: self.reworks.contains(&(from, to)),
+                abandoned: way == 1,
+                turned_away: way == 2,
+            })
             .collect();
         let elements = self
             .elements

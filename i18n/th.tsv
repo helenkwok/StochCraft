@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	จานสีในตัวเป็นแบบอ่านอย่างเดียว ทำสำเนาจานสีหนึ่งเพื่อเปลี่ยนสี
 	Built-in themes are read-only. Duplicate one to change its colours.	ธีมในตัวเป็นแบบอ่านอย่างเดียว ทำสำเนาธีมหนึ่งเพื่อเปลี่ยนสี
 	Busiest	ยุ่งที่สุด
+	By calendar	ตามปฏิทิน
 	By role	ตามบทบาท
 	CSV table	ตาราง CSV
 	Calendar	ปฏิทิน
@@ -167,6 +168,7 @@
 	Energy per part	พลังงานต่อชิ้น
 	Enough: {units}, meeting the target in {p} of replications	เพียงพอ: {units} บรรลุเป้าหมายใน {p} ของรอบการจำลองซ้ำ
 	Entered	จำนวนที่เข้ามา
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	เอนทิตีที่พบว่าพื้นที่รอเต็มจะไปตามโฟลว์นี้ทันที (เช่น เพื่อลองใหม่ภายหลัง) แทนที่จะสูญเสียหรือรอก่อนถึงงาน ที่นี่นับเป็นการสูญเสีย
 	Entities give up waiting	เอนทิตีเลิกรอ
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	สิ่งที่ยังอยู่ภายในเมื่อรอบการจำลองซ้ำสิ้นสุด ไม่ถูกนับในเวลารอเฉลี่ยและเวลาเฉลี่ยในระบบ
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	เอนทิตีที่เลิกรอจะไปตามโฟลว์นี้ (เช่น เพื่อลองใหม่ภายหลัง) ส่วนที่เหลือไปทางออกอื่นของงาน
@@ -198,6 +200,7 @@
 	Fit the time	ปรับเวลาให้เข้า
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	ปรับเวลาของบล็อกนี้ให้เข้ากับค่าต่ำสุด ค่าที่เป็นไปได้มากที่สุด และค่าสูงสุดหรือเปอร์เซ็นไทล์ที่ 95
 	Fitted the time of {id}	ปรับเวลาของ {id} แล้ว
+	Fixed	คงที่
 	Flows	โฟลว์
 	Forget the estimate	ลืมการประมาณ
 	Fri	ศ.
@@ -319,12 +322,14 @@
 	Pause	หยุดชั่วคราว
 	Per	ช่วง
 	Per shift needs a calendar: each period it is active is a shift.	"ต่อกะ" ต้องมีปฏิทิน: แต่ละช่วงที่ปฏิทินเปิดใช้งานคือหนึ่งกะ
+	Per working server	ต่อเซิร์ฟเวอร์ที่ใช้งานอยู่
 	Percentile	เปอร์เซ็นไทล์
 	Period {n} ends	ช่วง {n} สิ้นสุด
 	Period {n} repeats	ช่วง {n} ซ้ำ
 	Period {n} starts	ช่วง {n} เริ่ม
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	ช่วงเวลาที่ความพร้อมใช้งาน การมาถึง หรือกะของกลุ่มทรัพยากรเปลี่ยนไป วันที่และเวลาเขียนเป็น 2026-01-31T09:00:00
 	Place in the waiting room of a server taken out:	ที่ในพื้นที่รอของเซิร์ฟเวอร์ที่ถูกนำออก:
+	Places	จำนวนที่
 	Planned run time per item	เวลาเดินเครื่องตามแผนต่อชิ้น
 	Play	เล่น
 	Points	จุด
@@ -443,6 +448,7 @@
 	Show {id}	แสดง {id}
 	Side rail	แถบด้านข้าง
 	Size	กำหนดขนาด
+	Size of the waiting room:	ขนาดของพื้นที่รอ:
 	Size the resources	กำหนดขนาดทรัพยากร
 	Soft accent	สีเน้นอ่อน
 	Source	แหล่งที่มา
@@ -500,6 +506,9 @@
 	Themes	ธีม
 	This block has a warning	บล็อกนี้มีคำเตือน
 	This block has an error	บล็อกนี้มีข้อผิดพลาด
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	รอได้เท่านี้ต่อเซิร์ฟเวอร์แต่ละเครื่องที่กำลังทำงาน (ไม่ขัดข้อง ไม่ถูกนำออก อยู่ในกะ) พื้นที่รอจึงเปลี่ยนตามเซิร์ฟเวอร์ เมื่อพื้นที่รอเล็กลง ผู้ที่รออยู่แล้วยังคงอยู่ต่อ
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	นอกปฏิทินรอได้เท่านี้ และขณะที่ปฏิทินใดทำงานอยู่ก็รอได้ตามจำนวนของปฏิทินนั้น เมื่อจำนวนลดลง ผู้ที่รออยู่แล้วยังคงอยู่ต่อ
+	This many may wait, besides a place for each server; a failed server keeps its place.	รอได้เท่านี้ นอกเหนือจากที่หนึ่งที่สำหรับแต่ละเซิร์ฟเวอร์ เซิร์ฟเวอร์ที่ขัดข้องยังคงรักษาที่ของตนไว้
 	This run	การรันนี้
 	Three-point estimate	การประมาณสามจุด
 	Thu	พฤ.
@@ -525,6 +534,8 @@
 	Triangular	สามเหลี่ยม
 	Truncated normal	ปกติแบบตัดปลาย
 	Tue	อ.
+	Turned away	ถูกปฏิเสธ
+	Turned away on {id}	ถูกปฏิเสธที่ {id}
 	Two stations in series, read from an XPDL file.	สองสถานีต่ออนุกรม อ่านจากไฟล์ XPDL
 	Type	ชนิด
 	Undid {action}	เลิกทำ {action} แล้ว
@@ -548,6 +559,7 @@
 	View	มุมมอง
 	Waiting over time	จำนวนที่รอตามเวลา
 	Waiting room	พื้นที่รอ
+	Waiting room by calendar	พื้นที่รอตามปฏิทิน
 	Warm	โทนอุ่น
 	Warm-up	ระยะอุ่นเครื่อง
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	อุ่นเครื่อง {warmup} {unit} จากนั้นวัดผล {duration} {unit}

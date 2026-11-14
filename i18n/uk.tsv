@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Вбудовані палітри доступні лише для читання. Щоб змінити кольори, створіть дублікат однієї з них.
 	Built-in themes are read-only. Duplicate one to change its colours.	Вбудовані теми доступні лише для читання. Щоб змінити кольори, створіть дублікат однієї з них.
 	Busiest	Найзавантаженіший
+	By calendar	За календарем
 	By role	За роллю
 	CSV table	Таблиця CSV
 	Calendar	Календар
@@ -167,6 +168,7 @@
 	Energy per part	Енергія на деталь
 	Enough: {units}, meeting the target in {p} of replications	Досить: {units}, мету досягнуто в {p} реплікацій
 	Entered	Увійшло
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Сутності, які застають місця очікування зайнятими, одразу йдуть цим потоком (наприклад, щоб спробувати пізніше), а не втрачаються і не чекають перед завданням; тут вони рахуються як втрати.
 	Entities give up waiting	Сутності перестають чекати
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Об'єкти, що ще всередині наприкінці реплікації, не враховуються в середньому часі очікування та середньому часі в системі.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Сутності, які перестають чекати, ідуть цим потоком (наприклад, щоб спробувати пізніше); решта йде іншим виходом завдання.
@@ -198,6 +200,7 @@
 	Fit the time	Підібрати час
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Підібрати час цього блока за мінімумом, найімовірнішим значенням і максимумом або 95-м процентилем.
 	Fitted the time of {id}	Час {id} підібрано
+	Fixed	Стала
 	Flows	Потоки
 	Forget the estimate	Забути оцінку
 	Fri	пт
@@ -319,12 +322,14 @@
 	Pause	Пауза
 	Per	Період
 	Per shift needs a calendar: each period it is active is a shift.	«За зміну» потребує календаря: кожен період, коли він активний, — це зміна.
+	Per working server	На сервер у роботі
 	Percentile	Процентиль
 	Period {n} ends	Кінець періоду {n}
 	Period {n} repeats	Повторення періоду {n}
 	Period {n} starts	Початок періоду {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Періоди, коли змінюються доступність, прибуття або зміни пулу. Дату й час записують як 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Місце виведеного сервера серед місць очікування:
+	Places	Місця
 	Planned run time per item	Планований час роботи на деталь
 	Play	Відтворити
 	Points	Точки
@@ -443,6 +448,7 @@
 	Show {id}	Показати {id}
 	Side rail	Бічна панель
 	Size	Підібрати
+	Size of the waiting room:	Кількість місць очікування:
 	Size the resources	Підбір ресурсів
 	Soft accent	М’який акцент
 	Source	Джерело
@@ -500,6 +506,9 @@
 	Themes	Теми
 	This block has a warning	У цьому блоці є попередження
 	This block has an error	У цьому блоці є помилка
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Стільки може чекати на кожен сервер, що працює зараз (не відмовив, не виведений, на зміні), тож місця очікування йдуть за серверами. Коли їх стає менше, ті, що вже чекають, лишаються.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Стільки може чекати поза календарями, а поки календар активний — його число. Коли число зменшується, ті, що вже чекають, лишаються.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Стільки може чекати, крім одного місця на кожен сервер; сервер, що відмовив, зберігає своє місце.
 	This run	Цей запуск
 	Three-point estimate	Триточкова оцінка
 	Thu	чт
@@ -525,6 +534,8 @@
 	Triangular	Трикутний розподіл
 	Truncated normal	Усічений нормальний розподіл
 	Tue	вт
+	Turned away	Відхилені
+	Turned away on {id}	Відхилені на {id}
 	Two stations in series, read from an XPDL file.	Дві послідовні станції, завантажені з файлу XPDL.
 	Type	Тип
 	Undid {action}	Скасовано дію {action}
@@ -548,6 +559,7 @@
 	View	Перегляд
 	Waiting over time	Очікують у часі
 	Waiting room	Місця очікування
+	Waiting room by calendar	Місця очікування за календарем
 	Warm	Теплий
 	Warm-up	Розігрів
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Розігрів {warmup} {unit}, потім вимірювання протягом {duration} {unit}

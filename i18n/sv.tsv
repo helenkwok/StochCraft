@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Inbyggda paletter är skrivskyddade. Duplicera en för att ändra dess färger.
 	Built-in themes are read-only. Duplicate one to change its colours.	Inbyggda teman är skrivskyddade. Duplicera ett för att ändra dess färger.
 	Busiest	Mest belastad
+	By calendar	Per kalender
 	By role	Efter roll
 	CSV table	CSV-tabell
 	Calendar	Kalender
@@ -167,6 +168,7 @@
 	Energy per part	Energi per detalj
 	Enough: {units}, meeting the target in {p} of replications	Tillräckligt: {units}, når målet i {p} av replikationerna
 	Entered	Inkomna
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteter som finner väntrummet fullt tar genast detta flöde (för att försöka igen senare, till exempel) i stället för att gå förlorade eller vänta före uppgiften; de räknas här som förlorade.
 	Entities give up waiting	Entiteter ger upp väntan
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Enheter som fortfarande är inuti vid slutet av en replikation räknas inte med i genomsnittlig väntetid och genomsnittlig tid i systemet.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteter som ger upp väntan tar detta flöde (för att försöka igen senare, till exempel); de andra tar uppgiftens andra väg ut.
@@ -198,6 +200,7 @@
 	Fit the time	Anpassa tiden
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Anpassa blockets tid till ett minimum, ett mest sannolikt värde och ett maximum eller en 95:e percentil.
 	Fitted the time of {id}	Tiden för {id} anpassad
+	Fixed	Fast
 	Flows	Flöden
 	Forget the estimate	Glöm uppskattningen
 	Fri	fre
@@ -319,12 +322,14 @@
 	Pause	Pausa
 	Per	Period
 	Per shift needs a calendar: each period it is active is a shift.	”Per skift” kräver en kalender: varje period den är aktiv är ett skift.
+	Per working server	Per server i drift
 	Percentile	Percentil
 	Period {n} ends	Period {n} slutar
 	Period {n} repeats	Period {n} upprepas
 	Period {n} starts	Period {n} börjar
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioder då tillgänglighet, ankomster eller en pools skift ändras. Datum och tider skrivs 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Plats i väntrummet för en server tagen ur drift:
+	Places	Platser
 	Planned run time per item	Planerad körtid per detalj
 	Play	Spela upp
 	Points	Punkter
@@ -443,6 +448,7 @@
 	Show {id}	Visa {id}
 	Side rail	Sidofält
 	Size	Dimensionera
+	Size of the waiting room:	Väntrummets storlek:
 	Size the resources	Dimensionera resurserna
 	Soft accent	Mjuk accent
 	Source	Källa
@@ -500,6 +506,9 @@
 	Themes	Teman
 	This block has a warning	Det här blocket har en varning
 	This block has an error	Det här blocket har ett fel
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Så många får vänta för varje server som arbetar nu (inte i haveri, inte tagen ur drift, på skift), så väntrummet följer dem. När det krymper stannar de som redan väntar.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Så många får vänta utanför kalendrarna, och varje kalenders antal medan den är aktiv. När antalet sjunker stannar de som redan väntar.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Så många får vänta, utöver en plats för varje server; en server i haveri behåller sin plats.
 	This run	Den här körningen
 	Three-point estimate	Trepunktsskattning
 	Thu	tor
@@ -525,6 +534,8 @@
 	Triangular	Triangulär
 	Truncated normal	Trunkerad normal
 	Tue	tis
+	Turned away	Avvisade
+	Turned away on {id}	Avvisade på {id}
 	Two stations in series, read from an XPDL file.	Två stationer i serie, inlästa från en XPDL-fil.
 	Type	Typ
 	Undid {action}	Ångrade {action}
@@ -548,6 +559,7 @@
 	View	Visa
 	Waiting over time	Väntande över tid
 	Waiting room	Väntrum
+	Waiting room by calendar	Väntrum per kalender
 	Warm	Varmt
 	Warm-up	Uppvärmning
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Uppvärmning {warmup} {unit}, sedan mätning under {duration} {unit}

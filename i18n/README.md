@@ -479,6 +479,23 @@ engine's messages (validation, file notes) are English too.
   certain are lo, th, ta, te, bn, ka, kk and sq as before, plus ro "după o proprietate", nl
   "afhankelijk van een eigenschap" and the zh checkbox labels, which read as a statement rather than
   a name.
+- The rows for admission limits and entities turned away (the task's "Size of the waiting room:"
+  choice of "Fixed", "By calendar" or "Per working server" with a hover text for each, the "Waiting
+  room by calendar" table and its "Places" column, and a connection's "Turned away" checkbox,
+  "Turned away on {id}" and its hover text) were machine-drafted with Claude Code from the plain
+  meaning of the English and the model's own description of each choice, reusing each catalog's own
+  words for waiting room ("Waiting room", "Lost (waiting room full)"), by calendar ("Units by
+  calendar"), per working server ("Fails above, waiting per working server"), failed, taken out and
+  off shift (the health-check and place-in-the-waiting-room rows), place (as in "Place in the
+  waiting room of a server taken out:") and lost. "Turned away" follows the form of each catalog's
+  "Abandoned" and "Abandoned on {id}" (a participle where that is one, a noun such as fr Refus, el
+  Απόρριψη, pl Odrzucenia, ro Respingeri where that is a noun); "This many" is rendered as "so many"
+  or "this number" for the number in the Waiting room field. ru and uk, whose waiting-room word is
+  "waiting places", say "number of waiting places" for the size. Not checked against any other
+  source. Not reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka and kk as
+  before; hu Elutasítottak and sq U refuzuan, which mirror a verb form; ja 受入拒否 and ko 거절 for the
+  checkbox; and the size word chosen for each label (de Größe, fr Taille, ja 大きさ), which may read
+  more naturally as a capacity.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

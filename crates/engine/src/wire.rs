@@ -11,8 +11,8 @@ use stochcraft_model::{
     Bounds, Breakdown, ByValue, Change, Connection, Demand, DemandPer, Diagnostic, Dist, Element,
     ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck, Model, Need, OnShiftEnd,
     OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType,
-    PropertyValue, ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit,
-    Timed, Transfer, Upper,
+    PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint,
+    TimeUnit, Timed, Transfer, Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -202,9 +202,22 @@ pub enum KindSpec {
         /// A finite buffer: at most this many entities wait for a unit (not counting those in
         /// service); left out, there is no limit. 0 means no waiting room. While it is full, a
         /// server or delay sending here holds its finished entity (blocking after service), a
-        /// gateway waits, and a source's arrival is lost.
+        /// gateway waits, and a source's arrival is lost (unless a connection out of it is
+        /// marked `turned_away`: then they all take that way at once).
         #[serde(default, skip_serializing_if = "Option::is_none")]
         queue_capacity: Option<u32>,
+        /// With `queue_capacity`: at most that many waiting per unit working now (up, not taken
+        /// out and on shift), so the limit follows failures, health checks and shifts; left out
+        /// when false. Exclusive with `queue_shifts`. An entity is admitted when those waiting
+        /// less the idle working units are fewer than the limit; those waiting stay when it
+        /// drops; no places are kept for units (`place_while_out` changes nothing).
+        #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+        queue_per_working_server: bool,
+        /// With `queue_capacity`: the most waiting while a calendar is active, the first active
+        /// one applying (`queue_capacity` outside them), admitted as with
+        /// `queue_per_working_server`. Left out when none.
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        queue_shifts: Vec<QueueShiftDoc>,
         /// Each unit fails and is repaired; left out when units never fail.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         breakdown: Option<BreakdownSpec>,
@@ -662,6 +675,36 @@ pub struct ShiftDoc {
     pub quantity: u32,
 }
 
+/// The most entities waiting at a server while a calendar is active.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct QueueShiftDoc {
+    /// The calendar's id.
+    pub calendar: String,
+    pub places: u32,
+}
+
+impl From<QueueShiftDoc> for Timed<u32> {
+    fn from(d: QueueShiftDoc) -> Self {
+        Timed {
+            calendar: ElementId::unchecked(&d.calendar),
+            value: d.places,
+        }
+    }
+}
+
+/// How a server's waiting room is set, from its wire fields: per working server, by timetable
+/// (with values), or fixed.
+pub(crate) fn queue_limit(per_working_server: bool, shifts: Vec<QueueShiftDoc>) -> QueueLimit {
+    if per_working_server {
+        QueueLimit::PerWorkingServer
+    } else if shifts.is_empty() {
+        QueueLimit::Fixed
+    } else {
+        QueueLimit::ByShift(shifts.into_iter().map(Into::into).collect())
+    }
+}
+
 /// Whether a pool's or a server's units are available while a calendar is active.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -866,6 +909,7 @@ impl From<&ElementKind> for KindSpec {
                 service,
                 processing_by,
                 queue_capacity,
+                queue_limit,
                 breakdown,
                 transfer,
                 available,
@@ -882,6 +926,14 @@ impl From<&ElementKind> for KindSpec {
                 service: service.into(),
                 processing_by: processing_by.as_ref().map(Into::into),
                 queue_capacity: *queue_capacity,
+                queue_per_working_server: matches!(queue_limit, QueueLimit::PerWorkingServer),
+                queue_shifts: match queue_limit {
+                    QueueLimit::ByShift(t) => timed(t, |t| QueueShiftDoc {
+                        calendar: t.calendar.to_string(),
+                        places: t.value,
+                    }),
+                    _ => Vec::new(),
+                },
                 breakdown: breakdown.as_ref().map(Into::into),
                 transfer: transfer.as_ref().map(|t| (&t.time).into()),
                 transfer_holds_sender: transfer.as_ref().is_none_or(|t| t.holds_sender),
@@ -955,6 +1007,8 @@ impl From<KindSpec> for ElementKind {
                 service,
                 processing_by: by,
                 queue_capacity,
+                queue_per_working_server,
+                queue_shifts,
                 breakdown,
                 transfer,
                 transfer_holds_sender,
@@ -972,6 +1026,12 @@ impl From<KindSpec> for ElementKind {
                 service: service.into(),
                 processing_by: processing_by(by),
                 queue_capacity,
+                // An unlimited room has no size to set.
+                queue_limit: if queue_capacity.is_some() {
+                    queue_limit(queue_per_working_server, queue_shifts)
+                } else {
+                    QueueLimit::Fixed
+                },
                 breakdown: breakdown.map(Into::into),
                 transfer: transfer.map(|t| Transfer {
                     time: t.into(),
@@ -1440,6 +1500,11 @@ pub struct ConnectionDoc {
     /// ordinary way out; left out when false.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub abandoned: bool,
+    /// Out of a server with a finite waiting room: the way entities finding no room take at
+    /// once (from a source or any other element), besides its ordinary way out; counted as
+    /// lost by the server. Left out when false.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub turned_away: bool,
 }
 
 /// How long an entity waits at a server before it gives up, drawn as it enters, and what must
@@ -1797,6 +1862,7 @@ impl From<&Model> for ModelDoc {
                     quantity: c.quantity,
                     rework: c.rework,
                     abandoned: c.abandoned,
+                    turned_away: c.turned_away,
                 })
                 .collect(),
             resources: m.resources.iter().map(Into::into).collect(),
@@ -1850,6 +1916,7 @@ impl From<ModelDoc> for Model {
                     quantity: c.quantity,
                     rework: c.rework,
                     abandoned: c.abandoned,
+                    turned_away: c.turned_away,
                 })
                 .collect(),
             resources: m.resources.into_iter().map(Into::into).collect(),
@@ -2228,6 +2295,8 @@ mod tests {
                 capacity: 1,
                 service: DistSpec::Exponential { mean: 1.0 },
                 queue_capacity: None,
+                queue_per_working_server: false,
+                queue_shifts: Vec::new(),
                 breakdown: None,
                 transfer: None,
                 transfer_holds_sender: true,

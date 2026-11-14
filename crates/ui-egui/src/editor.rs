@@ -517,6 +517,10 @@ impl App {
             section(ui, t("Parameters"));
             self.block_fields(ui, model, el, &id, &fields);
         }
+        // How a finite waiting room's size is set, once there is one.
+        if kind == "server" && el["queue_capacity"].is_number() {
+            self.waiting_room_choice(ui, model, el, &id);
+        }
         // What a job under way does when its server goes off shift, once servers can.
         if kind == "server"
             && ["shifts", "available", "availability"]
@@ -642,6 +646,10 @@ impl App {
                                 // Only a task with a resource of its own has entities giving up.
                                 if kind == "server" {
                                     self.abandoned_field(ui, cid, &c);
+                                }
+                                // Only one with a finite waiting room turns entities away.
+                                if kind == "server" && el["queue_capacity"].is_number() {
+                                    self.turned_away_field(ui, cid, &c);
                                 }
                             });
                         }
@@ -1034,6 +1042,74 @@ impl App {
         }
     }
 
+    /// Whether this way out is the one entities finding no room in the task's waiting room take,
+    /// besides the task's ordinary way out.
+    fn turned_away_field(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) {
+        let mut turned = c["turned_away"].as_bool().unwrap_or(false);
+        let r = ui.checkbox(&mut turned, t("Turned away")).on_hover_text(t(
+            "Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.",
+        ));
+        let (ticked, name) = (turned, tf("Turned away on {id}", &[("id", cid)]));
+        r.widget_info(|| egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, &name));
+        if r.changed() {
+            self.execute("flow.set", json!({ "id": cid, "turned_away": turned }));
+        }
+    }
+
+    /// How a server's finite waiting room is set: a fixed number, a number by calendar (with
+    /// the table of them), or a number per working server.
+    fn waiting_room_choice(&mut self, ui: &mut egui::Ui, model: &Value, el: &Value, id: &str) {
+        let by_calendar = el["queue_shifts"].as_array().is_some_and(|a| !a.is_empty());
+        let current = if el["queue_per_working_server"] == json!(true) {
+            "per_working_server"
+        } else if by_calendar {
+            "by_calendar"
+        } else {
+            "fixed"
+        };
+        let mut chosen = current.to_owned();
+        ui.label(t("Size of the waiting room:"));
+        ui.radio_value(&mut chosen, "fixed".to_owned(), t("Fixed"))
+            .on_hover_text(t(
+                "This many may wait, besides a place for each server; a failed server keeps its place.",
+            ));
+        // A timetable needs a calendar: offered once the model has one.
+        let calendars = form::calendars(model);
+        if !calendars.is_empty() || by_calendar {
+            ui.radio_value(&mut chosen, "by_calendar".to_owned(), t("By calendar"))
+                .on_hover_text(t(
+                    "This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.",
+                ));
+        }
+        ui.radio_value(
+            &mut chosen,
+            "per_working_server".to_owned(),
+            t("Per working server"),
+        )
+        .on_hover_text(t(
+            "This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.",
+        ));
+        if chosen != current {
+            let v = match chosen.as_str() {
+                "per_working_server" => json!({ "id": id, "queue_per_working_server": true }),
+                "by_calendar" => {
+                    // A first row: the first calendar, with the number outside.
+                    let first = calendars
+                        .first()
+                        .map(|(c, _)| c.clone())
+                        .unwrap_or_default();
+                    let places = el["queue_capacity"].as_u64().unwrap_or(0);
+                    json!({ "id": id, "queue_shifts": [{ "calendar": first, "places": places }] })
+                }
+                _ => json!({ "id": id, "queue_per_working_server": false, "queue_shifts": [] }),
+            };
+            self.execute("block.set", v);
+        }
+        if current == "by_calendar" {
+            self.block_fields(ui, model, el, id, &["queue_shifts"]);
+        }
+    }
+
     /// How long entities wait at a task with a resource before they give up, and whether they
     /// give up only before their service starts or also before it is done.
     fn patience_section(&mut self, ui: &mut egui::Ui, model: &Value, el: &Value, id: &str) {
@@ -1247,8 +1323,11 @@ impl App {
                 },
             ));
         }
-        // Only a finite buffer has places to keep.
-        if !el["queue_capacity"].is_null() {
+        // Only a fixed finite buffer has places to keep.
+        if !el["queue_capacity"].is_null()
+            && el["queue_per_working_server"] != json!(true)
+            && el["queue_shifts"].as_array().is_none_or(|a| a.is_empty())
+        {
             let place = check["place_while_out"]
                 .as_str()
                 .unwrap_or("reserved")

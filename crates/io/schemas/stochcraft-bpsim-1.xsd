@@ -10,7 +10,30 @@
         xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="3"/>
 
   stochcraft:queueCapacity, on a task's ElementParameters: the most entities that wait for the
-  task's resource (not counting those in service), a whole number of at least 0.
+  task's resource (not counting those in service), a whole number of at least 0. By default the
+  task's waiting room has a place for every unit of its resource plus this many, an entity
+  holding one from entering until it leaves.
+
+  Two other ways set a limit on the number waiting that changes over time, and hold no places:
+  an entity is admitted when those waiting (in the queue, or on their way in across a transfer)
+  less the idle working units are fewer than the limit at that moment, so it gets in when an idle
+  working unit can take it at once, or when fewer than the limit wait. Working is up, not taken
+  out by a health check and on shift; an entity whose job is paused on its unit is in service.
+  When the limit drops, those already waiting stay. With perWorkingServer="true", the limit is
+  the value times the units working now, so it follows failures, health checks, shifts and
+  returns by itself. With a byShift element holding BPSim values validFor calendars (as a
+  resource's quantity by shift), the limit is the value of the first calendar active, and the
+  value outside them. Versions of StochCraft without these read the value alone, as a fixed
+  waiting room.
+
+    <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="…" stochcraft:value="1">
+      <stochcraft:byShift>
+        <bpsim:NumericParameter value="6" validFor="afternoon"/>
+      </stochcraft:byShift>
+    </bpsim:VendorExtension>
+
+    <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="…"
+        stochcraft:value="2" stochcraft:perWorkingServer="true"/>
 
   stochcraft:pool, on a resource's ElementParameters, with the value true: the resource is a
   shared pool, even when one task uses it or none. Without it, a resource that one task needs a
@@ -108,6 +131,13 @@
   of a task with a patience that entities giving up take (a retry, a call back later), besides
   the task's ordinary way out.
 
+  stochcraft:turnedAway, on a sequence flow's ElementParameters, with the value true: the way out
+  of a task with a queueCapacity that entities finding no room take at once (to try again later,
+  or go elsewhere), besides the task's ordinary way out. Without it, an arrival from a start
+  event finding no room is lost and an entity from any other element waits for room before the
+  task; with it, both take this way, counted as lost by the task (and by the start event, for
+  its arrivals). At most one per task.
+
   stochcraft:scrap, on an end event's ElementParameters: what reaches it is scrap (ISO
   22400-2's scrap quantity), counted against the task the attribute chargedTo names (an
   inspection rejecting work done upstream), or else the last task with a resource of its own
@@ -198,6 +228,15 @@
     targetNamespace="https://helenkwok.github.io/StochCraft/bpsim/1"
     elementFormDefault="qualified">
   <xs:attribute name="value" type="xs:string"/>
+  <xs:attribute name="perWorkingServer" type="xs:boolean"/>
+  <xs:element name="byShift">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:any namespace="http://www.bpsim.org/schemas/2.0 http://www.bpsim.org/schemas/1.0"
+            processContents="lax" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:complexType name="Value">
     <xs:sequence>
       <xs:any namespace="http://www.bpsim.org/schemas/2.0 http://www.bpsim.org/schemas/1.0"

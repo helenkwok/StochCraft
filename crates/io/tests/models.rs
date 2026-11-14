@@ -61,6 +61,7 @@ fn bpmn_written_by_another_tool() {
             health_check: None,
             shifts: Vec::new(),
             on_shift_end: OnShiftEnd::Finish,
+            queue_limit: stochcraft_model::QueueLimit::Fixed,
         }
     );
     assert_eq!(
@@ -101,6 +102,7 @@ fn inherited_scenario_changes_only_what_it_says() {
             health_check: None,
             shifts: Vec::new(),
             on_shift_end: OnShiftEnd::Finish,
+            queue_limit: stochcraft_model::QueueLimit::Fixed,
         }
     );
     assert_eq!(l.model.experiment.replications, 16);
@@ -173,6 +175,7 @@ fn xpdl_with_bpsim_1() {
             health_check: None,
             shifts: Vec::new(),
             on_shift_end: OnShiftEnd::Finish,
+            queue_limit: stochcraft_model::QueueLimit::Fixed,
         }
     );
     assert_eq!(

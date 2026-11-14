@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Paletat e integruara janë vetëm për lexim. Dyfishoni njërën për t'i ndryshuar ngjyrat.
 	Built-in themes are read-only. Duplicate one to change its colours.	Temat e integruara janë vetëm për lexim. Dyfishoni njërën për t'i ndryshuar ngjyrat.
 	Busiest	Më i ngarkuari
+	By calendar	Sipas kalendarit
 	By role	Sipas rolit
 	CSV table	Tabelë CSV
 	Calendar	Kalendari
@@ -167,6 +168,7 @@
 	Energy per part	Energjia për pjesë
 	Enough: {units}, meeting the target in {p} of replications	Mjafton: {units}, arrin objektivin në {p} të përsëritjeve
 	Entered	Hyrjet
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitetet që e gjejnë dhomën e pritjes plot marrin menjëherë këtë rrjedhë (për të provuar sërish më vonë, të themi), në vend që të humbasin ose të presin para detyrës; këtu numërohen si të humbura.
 	Entities give up waiting	Entitetet heqin dorë nga pritja
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitetet që janë ende brenda në fund të një përsëritjeje lihen jashtë pritjes mesatare dhe kohës mesatare në sistem.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitetet që heqin dorë nga pritja marrin këtë rrjedhë (për të provuar sërish më vonë, të themi); të tjerët marrin daljen tjetër të detyrës.
@@ -198,6 +200,7 @@
 	Fit the time	Përshtat kohën
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Përshtat kohën e këtij blloku me një minimum, një vlerë më të mundshme dhe një maksimum ose përqindëshin e 95-të.
 	Fitted the time of {id}	Koha e {id} u përshtat
+	Fixed	E fiksuar
 	Flows	Rrjedhat
 	Forget the estimate	Harro vlerësimin
 	Fri	Pre
@@ -319,12 +322,14 @@
 	Pause	Pauzë
 	Per	Periudha
 	Per shift needs a calendar: each period it is active is a shift.	„Për turn” kërkon një kalendar: çdo periudhë kur ai është aktiv është një turn.
+	Per working server	Për server në punë
 	Percentile	Përqindëshi
 	Period {n} ends	Periudha {n} mbaron
 	Period {n} repeats	Periudha {n} përsëritet
 	Period {n} starts	Periudha {n} nis
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periudha kur ndryshojnë disponueshmëria, mbërritjet ose turnet e një grupi. Datat dhe orët shkruhen 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Vendi i një serveri të nxjerrë nga puna në dhomën e pritjes:
+	Places	Vendet
 	Planned run time per item	Koha e planifikuar e punës për pjesë
 	Play	Luaj
 	Points	Pikat
@@ -443,6 +448,7 @@
 	Show {id}	Shfaq {id}
 	Side rail	Shirit anësor
 	Size	Përmaso
+	Size of the waiting room:	Madhësia e dhomës së pritjes:
 	Size the resources	Përmaso burimet
 	Soft accent	Theks i butë
 	Source	Burimi
@@ -500,6 +506,9 @@
 	Themes	Temat
 	This block has a warning	Ky bllok ka një paralajmërim
 	This block has an error	Ky bllok ka një gabim
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Kaq mund të presin për çdo server që punon tani (jo në defekt, jo i nxjerrë nga puna, në turn), kështu që dhoma e pritjes ndjek serverët. Kur ajo zvogëlohet, ata që presin tashmë mbeten.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Kaq mund të presin jashtë kalendarëve, dhe numri i çdo kalendari sa kohë që është aktiv. Kur numri bie, ata që presin tashmë mbeten.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Kaq mund të presin, përveç një vendi për çdo server; një server në defekt e mban vendin e vet.
 	This run	Ky ekzekutim
 	Three-point estimate	Vlerësim me tri pika
 	Thu	Enj
@@ -525,6 +534,8 @@
 	Triangular	Trekëndore
 	Truncated normal	Normale e prerë
 	Tue	Mar
+	Turned away	U refuzuan
+	Turned away on {id}	U refuzuan në {id}
 	Two stations in series, read from an XPDL file.	Dy stacione në seri, të lexuara nga një skedar XPDL.
 	Type	Lloji
 	Undid {action}	U zhbë {action}
@@ -548,6 +559,7 @@
 	View	Shiko
 	Waiting over time	Në pritje gjatë kohës
 	Waiting room	Dhoma e pritjes
+	Waiting room by calendar	Dhoma e pritjes sipas kalendarit
 	Warm	E ngrohtë
 	Warm-up	Ngrohja
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Ngrohje {warmup} {unit}, pastaj matje për {duration} {unit}

@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	অন্তর্নির্মিত প্যালেটগুলি শুধু পড়ার জন্য। রং বদলাতে একটির প্রতিলিপি তৈরি করুন।
 	Built-in themes are read-only. Duplicate one to change its colours.	অন্তর্নির্মিত থিমগুলি শুধু পড়ার জন্য। রং বদলাতে একটির প্রতিলিপি তৈরি করুন।
 	Busiest	সবচেয়ে ব্যস্ত
+	By calendar	ক্যালেন্ডার অনুযায়ী
 	By role	ভূমিকা অনুযায়ী
 	CSV table	CSV সারণি
 	Calendar	ক্যালেন্ডার
@@ -167,6 +168,7 @@
 	Energy per part	প্রতি অংশে শক্তি
 	Enough: {units}, meeting the target in {p} of replications	যথেষ্ট: {units}, {p} পুনরাবৃত্তিতে লক্ষ্য পূরণ
 	Entered	প্রবেশ করেছে
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	যে সত্তারা অপেক্ষার ঘর পূর্ণ পায় তারা সঙ্গে সঙ্গে এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে), হারিয়ে যাওয়া বা কাজের আগে অপেক্ষা করার বদলে; এখানে তাদের হারানো হিসেবে গোনা হয়।
 	Entities give up waiting	সত্তারা অপেক্ষা ছেড়ে দেয়
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	কোনো পুনরাবৃত্তির শেষে যেগুলো এখনও ভেতরে, সেগুলো গড় অপেক্ষার সময় ও সিস্টেমে গড় সময় থেকে বাদ থাকে।
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	যে সত্তারা অপেক্ষা ছেড়ে দেয় তারা এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে); বাকিরা কাজের অন্য বেরোনোর পথ ধরে।
@@ -198,6 +200,7 @@
 	Fit the time	সময় মেলান
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	এই ব্লকের সময় একটি সর্বনিম্ন, সবচেয়ে সম্ভাব্য মান এবং সর্বোচ্চ বা ৯৫তম শতাংশকের সঙ্গে মেলান।
 	Fitted the time of {id}	{id}-এর সময় মেলানো হয়েছে
+	Fixed	নির্দিষ্ট
 	Flows	প্রবাহ
 	Forget the estimate	অনুমান ভুলে যান
 	Fri	শুক্র
@@ -319,12 +322,14 @@
 	Pause	বিরতি
 	Per	সময়কাল
 	Per shift needs a calendar: each period it is active is a shift.	"প্রতি শিফটে"-এর জন্য ক্যালেন্ডার লাগে: এটি যে প্রতিটি সময়কালে সক্রিয় থাকে, সেটি একটি শিফট।
+	Per working server	চালু সার্ভার প্রতি
 	Percentile	শতাংশক
 	Period {n} ends	সময়কাল {n} শেষ
 	Period {n} repeats	সময়কাল {n} পুনরাবৃত্তি
 	Period {n} starts	সময়কাল {n} শুরু
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	যে সময়কালে প্রাপ্যতা, আগমন বা কোনো পুলের শিফট বদলায়। তারিখ ও সময় লেখা হয় 2026-01-31T09:00:00 রূপে।
 	Place in the waiting room of a server taken out:	সরিয়ে নেওয়া সার্ভারের অপেক্ষার ঘরে জায়গা:
+	Places	জায়গা
 	Planned run time per item	প্রতি অংশে পরিকল্পিত চলার সময়
 	Play	চালান
 	Points	বিন্দু
@@ -443,6 +448,7 @@
 	Show {id}	{id} দেখান
 	Side rail	পার্শ্ব বার
 	Size	আকার নির্ধারণ
+	Size of the waiting room:	অপেক্ষার ঘরের আকার:
 	Size the resources	সম্পদের আকার নির্ধারণ
 	Soft accent	নরম অ্যাকসেন্ট রং
 	Source	উৎস
@@ -500,6 +506,9 @@
 	Themes	থিম
 	This block has a warning	এই ব্লকে সতর্কতা আছে
 	This block has an error	এই ব্লকে ত্রুটি আছে
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	এখন কাজ করছে এমন প্রতিটি সার্ভারের জন্য এতগুলো অপেক্ষা করতে পারে (বিকল নয়, সরিয়ে নেওয়া নয়, শিফটে আছে), তাই অপেক্ষার ঘর সার্ভারগুলোর সঙ্গে বাড়ে-কমে। ঘর ছোট হলে যারা আগে থেকেই অপেক্ষা করছে তারা থেকে যায়।
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	ক্যালেন্ডারের বাইরে এতগুলো অপেক্ষা করতে পারে, আর কোনো ক্যালেন্ডার সক্রিয় থাকার সময় তার সংখ্যা। সংখ্যা কমে গেলে যারা আগে থেকেই অপেক্ষা করছে তারা থেকে যায়।
+	This many may wait, besides a place for each server; a failed server keeps its place.	প্রতিটি সার্ভারের জন্য একটি জায়গা ছাড়াও এতগুলো সত্তা অপেক্ষা করতে পারে; বিকল সার্ভার তার জায়গা রেখে দেয়।
 	This run	এই রান
 	Three-point estimate	তিন-বিন্দু অনুমান
 	Thu	বৃহস্পতি
@@ -525,6 +534,8 @@
 	Triangular	ত্রিভুজীয়
 	Truncated normal	ছাঁটা স্বাভাবিক
 	Tue	মঙ্গল
+	Turned away	ফিরিয়ে দেওয়া
+	Turned away on {id}	{id}-এ ফিরিয়ে দেওয়া
 	Two stations in series, read from an XPDL file.	XPDL ফাইল থেকে পড়া ধারাবাহিক দুটি স্টেশন।
 	Type	টাইপ
 	Undid {action}	{action} পূর্বাবস্থায় ফেরানো হয়েছে
@@ -548,6 +559,7 @@
 	View	প্রদর্শন
 	Waiting over time	সময়ের সাথে অপেক্ষমাণ
 	Waiting room	অপেক্ষার ঘর
+	Waiting room by calendar	ক্যালেন্ডার অনুযায়ী অপেক্ষার ঘর
 	Warm	উষ্ণ
 	Warm-up	প্রাথমিক প্রস্তুতিকাল
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} প্রস্তুতিকাল, তারপর {duration} {unit} পরিমাপ

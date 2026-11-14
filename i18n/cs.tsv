@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Vestavěné palety jsou jen pro čtení. Chcete-li změnit barvy, některou duplikujte.
 	Built-in themes are read-only. Duplicate one to change its colours.	Vestavěné motivy jsou jen pro čtení. Chcete-li změnit barvy, některý duplikujte.
 	Busiest	Nejvytíženější
+	By calendar	Podle kalendáře
 	By role	Podle role
 	CSV table	Tabulka CSV
 	Calendar	Kalendář
@@ -167,6 +168,7 @@
 	Energy per part	Energie na díl
 	Enough: {units}, meeting the target in {p} of replications	Stačí: {units}, cíl splněn v {p} replikací
 	Entered	Vstoupilo
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entity, které najdou čekárnu plnou, jdou hned tímto tokem (například aby to zkusily později znovu), místo aby se ztratily nebo čekaly před úlohou; zde se počítají jako ztracené.
 	Entities give up waiting	Entity vzdávají čekání
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entity, které jsou na konci replikace stále uvnitř, nejsou zahrnuty do průměrné doby čekání ani průměrné doby v systému.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entity, které vzdají čekání, jdou tímto tokem (například aby to zkusily později znovu); ostatní jdou druhou cestou ven z úlohy.
@@ -198,6 +200,7 @@
 	Fit the time	Přizpůsobit dobu
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Přizpůsobit dobu tohoto bloku minimu, nejpravděpodobnější hodnotě a maximu nebo 95. percentilu.
 	Fitted the time of {id}	Doba {id} přizpůsobena
+	Fixed	Pevná
 	Flows	Toky
 	Forget the estimate	Zapomenout odhad
 	Fri	pá
@@ -319,12 +322,14 @@
 	Pause	Pozastavit
 	Per	Období
 	Per shift needs a calendar: each period it is active is a shift.	„Za směnu“ potřebuje kalendář: každé období, kdy je aktivní, je jedna směna.
+	Per working server	Na server v provozu
 	Percentile	Percentil
 	Period {n} ends	Období {n} končí
 	Period {n} repeats	Období {n} se opakuje
 	Period {n} starts	Období {n} začíná
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Období, kdy se mění dostupnost, příchody nebo směny fondu. Data a časy se píší jako 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Místo vyřazeného serveru v čekárně:
+	Places	Místa
 	Planned run time per item	Plánovaná doba běhu na díl
 	Play	Přehrát
 	Points	Body
@@ -443,6 +448,7 @@
 	Show {id}	Zobrazit {id}
 	Side rail	Boční lišta
 	Size	Dimenzovat
+	Size of the waiting room:	Velikost čekárny:
 	Size the resources	Dimenzovat zdroje
 	Soft accent	Jemné zvýraznění
 	Source	Zdroj
@@ -500,6 +506,9 @@
 	Themes	Motivy
 	This block has a warning	Tento blok obsahuje upozornění
 	This block has an error	Tento blok obsahuje chybu
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Tolik jich smí čekat na každý server, který právě pracuje (není v poruše, není vyřazený, je ve směně), takže čekárna se mění s nimi. Když se zmenší, ty, které už čekají, zůstanou.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Tolik jich smí čekat mimo kalendáře a po dobu, kdy je kalendář aktivní, jeho počet. Když počet klesne, ty, které už čekají, zůstanou.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Tolik jich smí čekat, navíc k jednomu místu pro každý server; server v poruše si své místo ponechá.
 	This run	Tento běh
 	Three-point estimate	Tříbodový odhad
 	Thu	čt
@@ -525,6 +534,8 @@
 	Triangular	Trojúhelníkové
 	Truncated normal	Oříznuté normální
 	Tue	út
+	Turned away	Odmítnuté
+	Turned away on {id}	Odmítnuté na {id}
 	Two stations in series, read from an XPDL file.	Dvě stanice v sérii načtené ze souboru XPDL.
 	Type	Typ
 	Undid {action}	Vráceno zpět {action}
@@ -548,6 +559,7 @@
 	View	Zobrazení
 	Waiting over time	Čekající v čase
 	Waiting room	Čekárna
+	Waiting room by calendar	Čekárna podle kalendáře
 	Warm	Teplý
 	Warm-up	Zahřívání
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Zahřívání {warmup} {unit}, poté měření {duration} {unit}

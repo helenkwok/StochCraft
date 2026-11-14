@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Indbyggede paletter er skrivebeskyttede. Duplikér en for at ændre dens farver.
 	Built-in themes are read-only. Duplicate one to change its colours.	Indbyggede temaer er skrivebeskyttede. Duplikér et for at ændre dets farver.
 	Busiest	Travlest
+	By calendar	Pr. kalender
 	By role	Efter rolle
 	CSV table	CSV-tabel
 	Calendar	Kalender
@@ -167,6 +168,7 @@
 	Energy per part	Energi pr. emne
 	Enough: {units}, meeting the target in {p} of replications	Nok: {units}, når målet i {p} af replikationerne
 	Entered	Indgået
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Enheder, der finder venteværelset fuldt, tager straks dette flow (for at prøve igen senere, f.eks.) i stedet for at gå tabt eller vente før opgaven; de tælles her som tabt.
 	Entities give up waiting	Enheder opgiver at vente
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Enheder, der stadig er indeni ved slutningen af en replikation, er udeladt af den gennemsnitlige ventetid og den gennemsnitlige tid i systemet.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Enheder, der opgiver at vente, tager dette flow (for at prøve igen senere, f.eks.); de andre tager opgavens anden vej ud.
@@ -198,6 +200,7 @@
 	Fit the time	Tilpas tiden
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Tilpas blokkens tid til et minimum, en mest sandsynlig værdi og et maksimum eller en 95. percentil.
 	Fitted the time of {id}	Tiden for {id} tilpasset
+	Fixed	Fast
 	Flows	Flow
 	Forget the estimate	Glem skønnet
 	Fri	fre
@@ -319,12 +322,14 @@
 	Pause	Pause
 	Per	Periode
 	Per shift needs a calendar: each period it is active is a shift.	»Pr. skift« kræver en kalender: hver periode, hvor den er aktiv, er et skift.
+	Per working server	Pr. server i drift
 	Percentile	Percentil
 	Period {n} ends	Periode {n} slutter
 	Period {n} repeats	Periode {n} gentages
 	Period {n} starts	Periode {n} starter
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioder, hvor tilgængelighed, ankomster eller en puljes skift ændres. Datoer og klokkeslæt skrives 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Plads i venteværelset for en server taget ud af drift:
+	Places	Pladser
 	Planned run time per item	Planlagt kørselstid pr. emne
 	Play	Afspil
 	Points	Punkter
@@ -443,6 +448,7 @@
 	Show {id}	Vis {id}
 	Side rail	Sidebjælke
 	Size	Dimensionér
+	Size of the waiting room:	Venteværelsets størrelse:
 	Size the resources	Dimensionér ressourcerne
 	Soft accent	Blød accent
 	Source	Kilde
@@ -500,6 +506,9 @@
 	Themes	Temaer
 	This block has a warning	Denne blok har en advarsel
 	This block has an error	Denne blok har en fejl
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Så mange må vente for hver server, der arbejder nu (ikke med nedbrud, ikke taget ud af drift, på skift), så venteværelset følger dem. Når det skrumper, bliver de, der allerede venter.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Så mange må vente uden for kalenderne, og hver kalenders antal, mens den er aktiv. Når antallet falder, bliver de, der allerede venter.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Så mange må vente, ud over en plads til hver server; en server med nedbrud beholder sin plads.
 	This run	Denne kørsel
 	Three-point estimate	Trepunktsskøn
 	Thu	tor
@@ -525,6 +534,8 @@
 	Triangular	Trekantet
 	Truncated normal	Afkortet normal
 	Tue	tir
+	Turned away	Afvist
+	Turned away on {id}	Afvist på {id}
 	Two stations in series, read from an XPDL file.	To stationer i serie, læst fra en XPDL-fil.
 	Type	Tekst
 	Undid {action}	Fortrød {action}
@@ -548,6 +559,7 @@
 	View	Vis
 	Waiting over time	Ventende over tid
 	Waiting room	Venteværelse
+	Waiting room by calendar	Venteværelse pr. kalender
 	Warm	Varm
 	Warm-up	Opvarmning
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Opvarmning {warmup} {unit}, derefter måling i {duration} {unit}

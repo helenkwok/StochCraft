@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	ຈານສີທີ່ມີມາໃນຕົວແມ່ນອ່ານໄດ້ຢ່າງດຽວ. ເຮັດສຳເນົາອັນໜຶ່ງເພື່ອປ່ຽນສີຂອງມັນ.
 	Built-in themes are read-only. Duplicate one to change its colours.	ຊຸດສີທີ່ມີມາໃນຕົວແມ່ນອ່ານໄດ້ຢ່າງດຽວ. ເຮັດສຳເນົາອັນໜຶ່ງເພື່ອປ່ຽນສີຂອງມັນ.
 	Busiest	ຫຍຸ້ງທີ່ສຸດ
+	By calendar	ຕາມປະຕິທິນ
 	By role	ຕາມບົດບາດ
 	CSV table	ຕາຕະລາງ CSV
 	Calendar	ປະຕິທິນ
@@ -167,6 +168,7 @@
 	Energy per part	ພະລັງງານຕໍ່ຊິ້ນ
 	Enough: {units}, meeting the target in {p} of replications	ພຽງພໍ: {units}, ບັນລຸເປົ້າໝາຍໃນ {p} ຂອງຮອບຈຳລອງຊ້ຳ
 	Entered	ຈຳນວນທີ່ເຂົ້າ
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	ເອນທິຕີທີ່ພົບວ່າຫ້ອງລໍຖ້າເຕັມ ຈະໄປຕາມເສັ້ນທາງນີ້ທັນທີ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ) ແທນທີ່ຈະສູນເສຍ ຫຼື ລໍຖ້າກ່ອນໜ້າວຽກ; ຢູ່ນີ້ພວກມັນຖືກນັບເປັນການສູນເສຍ.
 	Entities give up waiting	ເອນທິຕີເຊົາລໍຖ້າ
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ສິ່ງທີ່ຍັງຢູ່ພາຍໃນເມື່ອຮອບຈຳລອງຊ້ຳສິ້ນສຸດ ບໍ່ຖືກນັບໃນເວລາລໍຖ້າສະເລ່ຍ ແລະ ເວລາສະເລ່ຍໃນລະບົບ.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	ເອນທິຕີທີ່ເຊົາລໍຖ້າຈະໄປຕາມເສັ້ນທາງນີ້ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ); ສ່ວນທີ່ເຫຼືອໄປທາງອອກອື່ນຂອງໜ້າວຽກ.
@@ -198,6 +200,7 @@
 	Fit the time	ປັບເວລາໃຫ້ເຂົ້າ
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	ປັບເວລາຂອງບລັອກນີ້ໃຫ້ເຂົ້າກັບຄ່າຕ່ຳສຸດ, ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ ແລະ ຄ່າສູງສຸດ ຫຼື ເປີເຊັນໄທລ໌ທີ 95.
 	Fitted the time of {id}	ປັບເວລາຂອງ {id} ແລ້ວ
+	Fixed	ຄົງທີ່
 	Flows	ເສັ້ນທາງ
 	Forget the estimate	ລືມການປະມານ
 	Fri	ສຸກ
@@ -319,12 +322,14 @@
 	Pause	ຢຸດຊົ່ວຄາວ
 	Per	ໄລຍະ
 	Per shift needs a calendar: each period it is active is a shift.	"ຕໍ່ກະ" ຕ້ອງມີປະຕິທິນ: ແຕ່ລະໄລຍະທີ່ປະຕິທິນເປີດໃຊ້ແມ່ນໜຶ່ງກະ.
+	Per working server	ຕໍ່ແມ່ຂ່າຍທີ່ໃຊ້ງານຢູ່
 	Percentile	ເປີເຊັນໄທລ໌
 	Period {n} ends	ໄລຍະ {n} ສິ້ນສຸດ
 	Period {n} repeats	ໄລຍະ {n} ເຮັດຊ້ຳ
 	Period {n} starts	ໄລຍະ {n} ເລີ່ມ
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	ໄລຍະເວລາທີ່ຄວາມພ້ອມໃຊ້, ການມາຮອດ ຫຼື ກະຂອງກຸ່ມຊັບພະຍາກອນປ່ຽນແປງ. ວັນທີ ແລະ ເວລາຂຽນເປັນ 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	ບ່ອນໃນຫ້ອງລໍຖ້າຂອງແມ່ຂ່າຍທີ່ຖືກເອົາອອກ:
+	Places	ບ່ອນ
 	Planned run time per item	ເວລາເດີນເຄື່ອງຕາມແຜນຕໍ່ຊິ້ນ
 	Play	ຫຼິ້ນ
 	Points	ຈຸດ
@@ -443,6 +448,7 @@
 	Show {id}	ສະແດງ {id}
 	Side rail	ແຖບຂ້າງ
 	Size	ກຳນົດຂະໜາດ
+	Size of the waiting room:	ຂະໜາດຂອງຫ້ອງລໍຖ້າ:
 	Size the resources	ກຳນົດຂະໜາດຊັບພະຍາກອນ
 	Soft accent	ສີເນັ້ນອ່ອນ
 	Source	ແຫຼ່ງທີ່ມາ
@@ -500,6 +506,9 @@
 	Themes	ຊຸດສີ
 	This block has a warning	ບລັອກນີ້ມີຄຳເຕືອນ
 	This block has an error	ບລັອກນີ້ມີຂໍ້ຜິດພາດ
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	ລໍຖ້າໄດ້ເທົ່ານີ້ຕໍ່ແມ່ຂ່າຍແຕ່ລະເຄື່ອງທີ່ກຳລັງເຮັດວຽກ (ບໍ່ເສຍ, ບໍ່ຖືກເອົາອອກ, ຢູ່ໃນກະ) ດັ່ງນັ້ນຫ້ອງລໍຖ້າຈຶ່ງປ່ຽນຕາມແມ່ຂ່າຍ. ເມື່ອມັນນ້ອຍລົງ ຜູ້ທີ່ລໍຖ້າຢູ່ແລ້ວຍັງຢູ່ຕໍ່.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	ນອກປະຕິທິນລໍຖ້າໄດ້ເທົ່ານີ້ ແລະ ໃນຂະນະທີ່ປະຕິທິນໃດໜຶ່ງເປີດໃຊ້ ກໍລໍຖ້າໄດ້ຕາມຈຳນວນຂອງປະຕິທິນນັ້ນ. ເມື່ອຈຳນວນຫຼຸດລົງ ຜູ້ທີ່ລໍຖ້າຢູ່ແລ້ວຍັງຢູ່ຕໍ່.
+	This many may wait, besides a place for each server; a failed server keeps its place.	ລໍຖ້າໄດ້ເທົ່ານີ້ ນອກຈາກບ່ອນໜຶ່ງສຳລັບແຕ່ລະແມ່ຂ່າຍ; ແມ່ຂ່າຍທີ່ເສຍຈະຮັກສາບ່ອນຂອງມັນໄວ້.
 	This run	ການປະມວນຜົນນີ້
 	Three-point estimate	ການປະມານສາມຈຸດ
 	Thu	ພະຫັດ
@@ -525,6 +534,8 @@
 	Triangular	ສາມຫຼ່ຽມ
 	Truncated normal	ນໍມອນແບບຕັດຂອບ
 	Tue	ອັງຄານ
+	Turned away	ຖືກປະຕິເສດ
+	Turned away on {id}	ຖືກປະຕິເສດທີ່ {id}
 	Two stations in series, read from an XPDL file.	ສອງສະຖານີຕໍ່ເນື່ອງ ອ່ານຈາກໄຟລ໌ XPDL.
 	Type	ປະເພດ
 	Undid {action}	ຍົກເລີກ {action} ແລ້ວ
@@ -548,6 +559,7 @@
 	View	ມຸມມອງ
 	Waiting over time	ຈຳນວນທີ່ລໍຖ້າຕາມເວລາ
 	Waiting room	ຫ້ອງລໍຖ້າ
+	Waiting room by calendar	ຫ້ອງລໍຖ້າຕາມປະຕິທິນ
 	Warm	ອົບອຸ່ນ
 	Warm-up	ໄລຍະອຸ່ນເຄື່ອງ
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	ອຸ່ນເຄື່ອງ {warmup} {unit} ແລ້ວວັດຜົນ {duration} {unit}

@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Ugrađene palete su samo za čitanje. Duplicirajte jednu da biste promijenili njezine boje.
 	Built-in themes are read-only. Duplicate one to change its colours.	Ugrađene teme su samo za čitanje. Duplicirajte jednu da biste promijenili njezine boje.
 	Busiest	Najopterećeniji
+	By calendar	Po kalendaru
 	By role	Po ulozi
 	CSV table	Tablica CSV
 	Calendar	Kalendar
@@ -167,6 +168,7 @@
 	Energy per part	Energija po dijelu
 	Enough: {units}, meeting the target in {p} of replications	Dovoljno: {units}, cilj postignut u {p} replikacija
 	Entered	Ušlo
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteti koji zateknu punu čekaonicu odmah idu ovim tokom (da kasnije pokušaju ponovno, recimo), umjesto da budu izgubljeni ili da čekaju prije zadatka; ovdje se broje kao izgubljeni.
 	Entities give up waiting	Entiteti odustaju od čekanja
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entiteti koji su još unutra na kraju replikacije nisu uključeni u prosječno čekanje i prosječno vrijeme u sustavu.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteti koji odustanu od čekanja idu ovim tokom (da kasnije pokušaju ponovno, recimo); ostali idu drugim izlazom zadatka.
@@ -198,6 +200,7 @@
 	Fit the time	Prilagodi vrijeme
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Prilagodi vrijeme ovog bloka minimumu, najvjerojatnijoj vrijednosti i maksimumu ili 95. percentilu.
 	Fitted the time of {id}	Vrijeme za {id} prilagođeno
+	Fixed	Fiksna
 	Flows	Tokovi
 	Forget the estimate	Zaboravi procjenu
 	Fri	pet
@@ -319,12 +322,14 @@
 	Pause	Pauza
 	Per	Razdoblje
 	Per shift needs a calendar: each period it is active is a shift.	„Po smjeni” traži kalendar: svako razdoblje u kojem je aktivan jedna je smjena.
+	Per working server	Po poslužitelju u radu
 	Percentile	Percentil
 	Period {n} ends	Razdoblje {n} završava
 	Period {n} repeats	Razdoblje {n} se ponavlja
 	Period {n} starts	Razdoblje {n} počinje
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Razdoblja u kojima se mijenjaju raspoloživost, dolasci ili smjene fonda. Datumi i vremena pišu se kao 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Mjesto poslužitelja izbačenog iz rada u čekaonici:
+	Places	Mjesta
 	Planned run time per item	Planirano vrijeme rada po dijelu
 	Play	Reproduciraj
 	Points	Točke
@@ -443,6 +448,7 @@
 	Show {id}	Prikaži {id}
 	Side rail	Bočna traka
 	Size	Dimenzioniraj
+	Size of the waiting room:	Veličina čekaonice:
 	Size the resources	Dimenzioniraj resurse
 	Soft accent	Blagi naglasak
 	Source	Izvor
@@ -500,6 +506,9 @@
 	Themes	Teme
 	This block has a warning	Ovaj blok ima upozorenje
 	This block has an error	Ovaj blok ima pogrešku
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Toliko ih smije čekati za svaki poslužitelj koji sada radi (nije u kvaru, nije izbačen iz rada, u smjeni je), pa čekaonica prati poslužitelje. Kada se smanji, oni koji već čekaju ostaju.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Toliko ih smije čekati izvan kalendara, a dok je neki kalendar aktivan, njegov broj. Kada se broj smanji, oni koji već čekaju ostaju.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Toliko ih smije čekati, uz po jedno mjesto za svaki poslužitelj; poslužitelj u kvaru zadržava svoje mjesto.
 	This run	Ovo pokretanje
 	Three-point estimate	Procjena u tri točke
 	Thu	čet
@@ -525,6 +534,8 @@
 	Triangular	Trokutasta
 	Truncated normal	Odsječena normalna
 	Tue	uto
+	Turned away	Odbijeni
+	Turned away on {id}	Odbijeni na {id}
 	Two stations in series, read from an XPDL file.	Dvije stanice u nizu, učitane iz XPDL datoteke.
 	Type	Vrsta
 	Undid {action}	Poništeno: {action}
@@ -548,6 +559,7 @@
 	View	Prikaz
 	Waiting over time	Na čekanju kroz vrijeme
 	Waiting room	Čekaonica
+	Waiting room by calendar	Čekaonica po kalendaru
 	Warm	Toplo
 	Warm-up	Zagrijavanje
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Zagrijavanje {warmup} {unit}, zatim mjerenje {duration} {unit}

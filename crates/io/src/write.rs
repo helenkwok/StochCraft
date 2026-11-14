@@ -9,8 +9,8 @@ use std::collections::{BTreeMap, BTreeSet};
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate, HealthCheck, Model,
     Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy,
-    Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, Timed,
-    Transfer,
+    Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Setup, Stop,
+    Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -267,9 +267,22 @@ pub(crate) fn bpmn_local(kind: &ElementKind) -> &'static str {
 }
 
 /// A connection's BPSim `ControlParameters` values: its probability and condition.
-/// A server's finite buffer as a StochCraft vendor extension.
-pub(crate) fn queue_capacity_element(n: u32) -> Element {
-    vendor_value_element(crate::bpsim::QUEUE_CAPACITY, &n.to_string())
+/// A server's finite buffer as a StochCraft vendor extension: `n` places waiting, or how it is
+/// set otherwise (`limit`): per working server, or by timetable (the values `validFor` their
+/// calendars in a `stochcraft:byShift`, `n` outside them).
+pub(crate) fn queue_capacity_element(n: u32, limit: &QueueLimit) -> Element {
+    let e = vendor_value_element(crate::bpsim::QUEUE_CAPACITY, &n.to_string());
+    match limit {
+        QueueLimit::Fixed => e,
+        QueueLimit::PerWorkingServer => e.with_attr("stochcraft:perWorkingServer", "true"),
+        QueueLimit::ByShift(timed) => {
+            let mut by = Element::new("stochcraft:byShift", Some(crate::bpsim::STOCHCRAFT_NS));
+            for t in timed {
+                by.push(numeric(u64::from(t.value)).with_attr("validFor", t.calendar.as_str()));
+            }
+            e.with_child(by)
+        }
+    }
 }
 
 /// A StochCraft vendor extension holding one value.
@@ -413,6 +426,12 @@ pub(crate) fn rework_element() -> Element {
 /// ([`crate::bpsim::ABANDONED`]).
 pub(crate) fn abandoned_element() -> Element {
     vendor_value_element(crate::bpsim::ABANDONED, "true")
+}
+
+/// A way for entities turned away as StochCraft's vendor extension
+/// ([`crate::bpsim::TURNED_AWAY`]).
+pub(crate) fn turned_away_element() -> Element {
+    vendor_value_element(crate::bpsim::TURNED_AWAY, "true")
 }
 
 /// A server's patience as StochCraft's vendor extension ([`crate::bpsim::PATIENCE`]). `until`
@@ -814,10 +833,11 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if let ElementKind::Server {
             queue_capacity: Some(q),
+            queue_limit,
             ..
-        } = e.kind
+        } = &e.kind
         {
-            ep.push(queue_capacity_element(q));
+            ep.push(queue_capacity_element(*q, queue_limit));
         }
         if let ElementKind::Server {
             breakdown: Some(b), ..
@@ -906,6 +926,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             && c.quantity.is_none()
             && !c.rework
             && !c.abandoned
+            && !c.turned_away
         {
             continue;
         }
@@ -928,6 +949,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if c.abandoned {
             ep.push(abandoned_element());
+        }
+        if c.turned_away {
+            ep.push(turned_away_element());
         }
         scenario.push(ep);
     }

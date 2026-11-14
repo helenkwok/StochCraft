@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Sisseehitatud paletid on kirjutuskaitstud. Dubleeri üks, et selle värve muuta.
 	Built-in themes are read-only. Duplicate one to change its colours.	Sisseehitatud teemad on kirjutuskaitstud. Dubleeri üks, et selle värve muuta.
 	Busiest	Kõige koormatum
+	By calendar	Kalendri järgi
 	By role	Rolli järgi
 	CSV table	CSV-tabel
 	Calendar	Kalender
@@ -167,6 +168,7 @@
 	Energy per part	Energia detaili kohta
 	Enough: {units}, meeting the target in {p} of replications	Piisab: {units}, eesmärk saavutatakse {p} kordustest
 	Entered	Sisenenud
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Olemid, kes leiavad ooteruumi täis olevat, lähevad kohe seda voogu mööda (näiteks hiljem uuesti proovima), selle asemel et kaotsi minna või enne ülesannet oodata; siin loetakse need kaotatuks.
 	Entities give up waiting	Olemid loobuvad ootamisest
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Olemid, mis on korduse lõpus veel sees, jäetakse keskmisest ooteajast ja keskmisest ajast süsteemis välja.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Ootamisest loobuvad olemid lähevad seda voogu mööda (näiteks hiljem uuesti proovima); teised lähevad ülesande teise väljapääsu kaudu.
@@ -198,6 +200,7 @@
 	Fit the time	Sobita aeg
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Sobita selle ploki aeg miinimumi, kõige tõenäolisema väärtuse ja maksimumi või 95. protsentiiliga.
 	Fitted the time of {id}	Ploki {id} aeg sobitatud
+	Fixed	Fikseeritud
 	Flows	Vood
 	Forget the estimate	Unusta hinnang
 	Fri	R
@@ -319,12 +322,14 @@
 	Pause	Paus
 	Per	Periood
 	Per shift needs a calendar: each period it is active is a shift.	„Vahetuses” vajab kalendrit: iga periood, mil see on aktiivne, on üks vahetus.
+	Per working server	Kasutuses oleva serveri kohta
 	Percentile	Protsentiil
 	Period {n} ends	Periood {n} lõpeb
 	Period {n} repeats	Periood {n} kordub
 	Period {n} starts	Periood {n} algab
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioodid, mil muutuvad saadavus, saabumised või kogumi vahetused. Kuupäevad ja kellaajad kirjutatakse kujul 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Kasutusest välja võetud serveri koht ooteruumis:
+	Places	Kohad
 	Planned run time per item	Kavandatud tööaeg detaili kohta
 	Play	Esita
 	Points	Punktid
@@ -443,6 +448,7 @@
 	Show {id}	Näita {id}
 	Side rail	Külgriba
 	Size	Dimensioneeri
+	Size of the waiting room:	Ooteruumi suurus:
 	Size the resources	Dimensioneeri ressursid
 	Soft accent	Pehme rõhuvärv
 	Source	Allikas
@@ -500,6 +506,9 @@
 	Themes	Teemad
 	This block has a warning	Selles plokis on hoiatus
 	This block has an error	Selles plokis on viga
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Nii palju võib oodata iga praegu töötava serveri kohta (pole rikkis, pole kasutusest välja võetud, on vahetuses), nii et ooteruum järgib servereid. Kui see kahaneb, jäävad juba ootajad alles.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Nii palju võib oodata väljaspool kalendreid ja kalendri aktiivsuse ajal selle kalendri arv. Kui arv väheneb, jäävad juba ootajad alles.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Nii palju võib oodata, lisaks ühele kohale iga serveri jaoks; rikkis server hoiab oma koha.
 	This run	See käivitus
 	Three-point estimate	Kolmepunktihinnang
 	Thu	N
@@ -525,6 +534,8 @@
 	Triangular	Kolmnurkne
 	Truncated normal	Kärbitud normaalne
 	Tue	T
+	Turned away	Tagasi lükatud
+	Turned away on {id}	Tagasi lükatud voos {id}
 	Two stations in series, read from an XPDL file.	Kaks järjestikust jaama, loetud XPDL-failist.
 	Type	Tüüp
 	Undid {action}	Võeti {action} tagasi
@@ -548,6 +559,7 @@
 	View	Vaade
 	Waiting over time	Ootel aja jooksul
 	Waiting room	Ooteruum
+	Waiting room by calendar	Ooteruum kalendri järgi
 	Warm	Soe
 	Warm-up	Soojendus
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Soojendus {warmup} {unit}, seejärel mõõtmine {duration} {unit}

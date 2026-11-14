@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	अंतर्निहित पैलेट केवल पढ़ने के लिए हैं। रंग बदलने के लिए किसी एक की प्रतिलिपि बनाएँ।
 	Built-in themes are read-only. Duplicate one to change its colours.	अंतर्निहित थीम केवल पढ़ने के लिए हैं। रंग बदलने के लिए किसी एक की प्रतिलिपि बनाएँ।
 	Busiest	सबसे व्यस्त
+	By calendar	कैलेंडर के अनुसार
 	By role	भूमिका के अनुसार
 	CSV table	CSV तालिका
 	Calendar	कैलेंडर
@@ -167,6 +168,7 @@
 	Energy per part	प्रति पुर्जा ऊर्जा
 	Enough: {units}, meeting the target in {p} of replications	पर्याप्त: {units}, {p} पुनरावृत्तियों में लक्ष्य पूरा
 	Entered	प्रवेश संख्या
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	जो इकाइयाँ प्रतीक्षा कक्ष भरा पाती हैं, वे तुरंत यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए), खो जाने या कार्य से पहले प्रतीक्षा करने के बजाय; यहाँ उन्हें हानि में गिना जाता है।
 	Entities give up waiting	इकाइयाँ प्रतीक्षा छोड़ देती हैं
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	किसी पुनरावृत्ति के अंत में जो अब भी अंदर हैं, वे औसत प्रतीक्षा और सिस्टम में औसत समय में शामिल नहीं होते।
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	जो इकाइयाँ प्रतीक्षा छोड़ देती हैं, वे यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए); बाकी कार्य का दूसरा बाहर जाने का रास्ता लेती हैं।
@@ -198,6 +200,7 @@
 	Fit the time	समय मिलाएँ
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	इस ब्लॉक के समय को न्यूनतम, सर्वाधिक संभावित मान और अधिकतम या 95वें प्रतिशतक से मिलाएँ।
 	Fitted the time of {id}	{id} का समय मिलाया गया
+	Fixed	निश्चित
 	Flows	प्रवाह
 	Forget the estimate	अनुमान भूल जाएँ
 	Fri	शुक्र
@@ -319,12 +322,14 @@
 	Pause	रोकें
 	Per	अवधि
 	Per shift needs a calendar: each period it is active is a shift.	"प्रति पाली" के लिए कैलेंडर चाहिए: जिस हर अवधि में वह सक्रिय है, वह एक पाली है।
+	Per working server	चालू सर्वर प्रति
 	Percentile	प्रतिशतक
 	Period {n} ends	अवधि {n} समाप्त
 	Period {n} repeats	अवधि {n} दोहराव
 	Period {n} starts	अवधि {n} शुरू
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	वे अवधियाँ जब उपलब्धता, आगमन या किसी पूल की पालियाँ बदलती हैं। दिनांक और समय 2026-01-31T09:00:00 की तरह लिखे जाते हैं।
 	Place in the waiting room of a server taken out:	हटाए गए सर्वर का प्रतीक्षा कक्ष में स्थान:
+	Places	स्थान
 	Planned run time per item	प्रति पुर्जा नियोजित चलन समय
 	Play	चलाएँ
 	Points	बिंदु
@@ -443,6 +448,7 @@
 	Show {id}	{id} दिखाएँ
 	Side rail	पार्श्व पट्टी
 	Size	आकार तय करें
+	Size of the waiting room:	प्रतीक्षा कक्ष का आकार:
 	Size the resources	संसाधनों का आकार तय करें
 	Soft accent	कोमल एक्सेंट रंग
 	Source	स्रोत
@@ -500,6 +506,9 @@
 	Themes	थीम
 	This block has a warning	इस ब्लॉक में चेतावनी है
 	This block has an error	इस ब्लॉक में त्रुटि है
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	अभी काम कर रहे हर सर्वर के लिए इतनी प्रतीक्षा कर सकती हैं (खराबी में नहीं, हटाया नहीं गया, पाली में), इसलिए प्रतीक्षा कक्ष सर्वरों के साथ घटता-बढ़ता है। उसके छोटा होने पर जो पहले से प्रतीक्षा कर रही हैं, वे रुकी रहती हैं।
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	कैलेंडरों के बाहर इतनी प्रतीक्षा कर सकती हैं, और कोई कैलेंडर सक्रिय रहने पर उसकी संख्या। संख्या घटने पर जो पहले से प्रतीक्षा कर रही हैं, वे रुकी रहती हैं।
+	This many may wait, besides a place for each server; a failed server keeps its place.	हर सर्वर के लिए एक स्थान के अलावा इतनी इकाइयाँ प्रतीक्षा कर सकती हैं; खराबी वाला सर्वर अपना स्थान रखता है।
 	This run	यह रन
 	Three-point estimate	त्रि-बिंदु अनुमान
 	Thu	गुरु
@@ -525,6 +534,8 @@
 	Triangular	त्रिकोणीय
 	Truncated normal	छँटा हुआ सामान्य
 	Tue	मंगल
+	Turned away	लौटाई गईं
+	Turned away on {id}	{id} पर लौटाई गईं
 	Two stations in series, read from an XPDL file.	XPDL फ़ाइल से पढ़े गए क्रम में दो स्टेशन।
 	Type	प्रकार
 	Undid {action}	{action} पूर्ववत किया गया
@@ -548,6 +559,7 @@
 	View	दृश्य
 	Waiting over time	समय के साथ प्रतीक्षारत
 	Waiting room	प्रतीक्षा कक्ष
+	Waiting room by calendar	कैलेंडर के अनुसार प्रतीक्षा कक्ष
 	Warm	गर्म
 	Warm-up	वार्म-अप
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} वार्म-अप, फिर {duration} {unit} का मापन

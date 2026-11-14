@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Các bảng màu có sẵn chỉ đọc. Hãy nhân bản một bảng màu để đổi màu của nó.
 	Built-in themes are read-only. Duplicate one to change its colours.	Các chủ đề có sẵn chỉ đọc. Hãy nhân bản một chủ đề để đổi màu của nó.
 	Busiest	Bận nhất
+	By calendar	Theo lịch
 	By role	Theo vai trò
 	CSV table	Bảng CSV
 	Calendar	Lịch
@@ -167,6 +168,7 @@
 	Energy per part	Năng lượng trên mỗi chi tiết
 	Enough: {units}, meeting the target in {p} of replications	Đủ: {units}, đạt mục tiêu trong {p} số lần lặp
 	Entered	Đã vào
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Các thực thể thấy khu vực chờ đầy sẽ đi theo luồng này ngay (chẳng hạn để thử lại sau), thay vì bị mất hoặc chờ trước tác vụ; ở đây chúng được tính là bị mất.
 	Entities give up waiting	Thực thể bỏ đi khi chờ quá lâu
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Các thực thể vẫn còn bên trong lúc một lần lặp kết thúc không được tính vào thời gian chờ trung bình và thời gian trung bình trong hệ thống.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Các thực thể bỏ đi khi chờ đi theo luồng này (chẳng hạn để thử lại sau); các thực thể khác đi theo lối ra còn lại của tác vụ.
@@ -198,6 +200,7 @@
 	Fit the time	Khớp thời gian
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Khớp thời gian của khối này với giá trị nhỏ nhất, giá trị có khả năng nhất và giá trị lớn nhất hoặc phân vị thứ 95.
 	Fitted the time of {id}	Đã khớp thời gian của {id}
+	Fixed	Cố định
 	Flows	Luồng
 	Forget the estimate	Bỏ ước lượng
 	Fri	T6
@@ -319,12 +322,14 @@
 	Pause	Tạm dừng
 	Per	Khoảng
 	Per shift needs a calendar: each period it is active is a shift.	"Mỗi ca" cần một lịch: mỗi khoảng thời gian lịch hoạt động là một ca.
+	Per working server	Trên mỗi máy chủ đang hoạt động
 	Percentile	Phân vị
 	Period {n} ends	Khoảng {n} kết thúc
 	Period {n} repeats	Khoảng {n} lặp lại
 	Period {n} starts	Khoảng {n} bắt đầu
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Các khoảng thời gian mà độ khả dụng, lượt đến hoặc ca của nhóm thay đổi. Ngày giờ được viết như 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Chỗ của máy chủ bị đưa ra trong khu vực chờ:
+	Places	Số chỗ
 	Planned run time per item	Thời gian chạy dự kiến trên mỗi chi tiết
 	Play	Phát
 	Points	Điểm
@@ -443,6 +448,7 @@
 	Show {id}	Hiển thị {id}
 	Side rail	Thanh bên
 	Size	Định cỡ
+	Size of the waiting room:	Kích thước khu vực chờ:
 	Size the resources	Định cỡ tài nguyên
 	Soft accent	Màu nhấn nhạt
 	Source	Nguồn
@@ -500,6 +506,9 @@
 	Themes	Chủ đề
 	This block has a warning	Khối này có cảnh báo
 	This block has an error	Khối này có lỗi
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Số này được phép chờ cho mỗi máy chủ đang làm việc (không hỏng hóc, không bị đưa ra, đang trong ca), nên khu vực chờ thay đổi theo các máy chủ. Khi khu vực chờ thu nhỏ, những thực thể đang chờ vẫn ở lại.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Số này được phép chờ ngoài các lịch, và khi một lịch đang hoạt động thì theo số của lịch đó. Khi số giảm, những thực thể đang chờ vẫn ở lại.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Số này được phép chờ, ngoài một chỗ cho mỗi máy chủ; máy chủ hỏng hóc vẫn giữ chỗ của nó.
 	This run	Lần chạy này
 	Three-point estimate	Ước lượng ba điểm
 	Thu	T5
@@ -525,6 +534,8 @@
 	Triangular	Tam giác
 	Truncated normal	Chuẩn cắt cụt
 	Tue	T3
+	Turned away	Bị từ chối
+	Turned away on {id}	Bị từ chối tại {id}
 	Two stations in series, read from an XPDL file.	Hai trạm nối tiếp, được đọc từ tệp XPDL.
 	Type	Loại
 	Undid {action}	Đã hoàn tác {action}
@@ -548,6 +559,7 @@
 	View	Xem
 	Waiting over time	Đang chờ theo thời gian
 	Waiting room	Khu vực chờ
+	Waiting room by calendar	Khu vực chờ theo lịch
 	Warm	Ấm
 	Warm-up	Giai đoạn khởi động
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Khởi động {warmup} {unit}, sau đó đo trong {duration} {unit}
