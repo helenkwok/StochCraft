@@ -338,7 +338,8 @@ impl eframe::App for Desktop {
     }
 }
 
-/// `[FILE] [--control PORT]`, in any order.
+/// `[FILE] [--control PORT]`, in any order. PORT is 1 to 65535: 0 would let the system pick one,
+/// whose number the app prints only to a console, which a Windows release build does not have.
 fn arguments(
     args: impl IntoIterator<Item = std::ffi::OsString>,
 ) -> Result<(Option<PathBuf>, Option<u16>), String> {
@@ -347,7 +348,8 @@ fn arguments(
     let parse = |v: Option<std::ffi::OsString>| -> Result<u16, String> {
         v.and_then(|v| v.into_string().ok())
             .and_then(|v| v.parse().ok())
-            .ok_or_else(|| "--control takes a port number".to_owned())
+            .filter(|&p: &u16| p != 0)
+            .ok_or_else(|| "--control takes a port number from 1 to 65535".to_owned())
     };
     while let Some(arg) = args.next() {
         match arg.to_str() {
@@ -411,6 +413,8 @@ mod tests {
         assert_eq!(a(&["--control=7071"]), Ok((None, Some(7071))));
         assert!(a(&["--control"]).is_err());
         assert!(a(&["--control", "x"]).is_err());
+        assert!(a(&["--control", "0"]).is_err());
+        assert!(a(&["--control=0"]).is_err());
         assert!(a(&["--nope"]).is_err());
         assert!(a(&["a.bpmn", "b.bpmn"]).is_err());
     }
