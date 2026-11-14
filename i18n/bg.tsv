@@ -38,6 +38,7 @@
 	Add alternative	Добавяне на алтернатива
 	Add calendar	Добавяне на календар
 	Add calendar entry	Добавяне на запис в календара
+	Add colour	Добавяне на цвят
 	Add period	Добавяне на период
 	Add point	Добавяне на точка
 	Add pool	Добавяне на пул
@@ -48,6 +49,7 @@
 	Added pool {id}	Добавен е пул {id}
 	Added {block} ({id})	Добавен е {block} ({id})
 	Align	Подравняване
+	All checks pass.	Всички проверки са успешни.
 	All text meets the contrast minimums.	Целият текст отговаря на минималния контраст.
 	Also: {rule}	Също: {rule}
 	Alternative {n}	Алтернатива {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Повреди и наличност
 	Bring All to Front	Всички на преден план
 	Built with	Създадено с
+	Built-in palettes are read-only. Duplicate one to change its colours.	Вградените палитри са само за четене. Дублирайте някоя, за да промените цветовете ѝ.
 	Built-in themes are read-only. Duplicate one to change its colours.	Вградените теми са само за четене. Дублирайте някоя, за да промените цветовете ѝ.
 	Busiest	Най-натоварен
 	By role	По роля
@@ -89,6 +92,7 @@
 	Cancel run	Отмяна на изпълнението
 	Canvas	Основна повърхност
 	Capacity	Капацитет
+	Categorical	Категорийни
 	Centres	Хоризонтални центрове
 	Change	Промяна
 	Change Block	Промяна на блок
@@ -99,12 +103,16 @@
 	Changes	Промени
 	Changing the time unit does not convert the times already in the model.	Промяната на единицата за време не преобразува времената, които вече са в модела.
 	Chart	Графика
+	Chart colours	Цветове на графиките
+	Chart colours…	Цветове на графиките…
 	Chart hover	Графика под показалеца
 	Check every	Проверка на всеки
+	Checks	Проверки
 	Choose…	Изберете…
 	Clear Menu	Изчистване на менюто
 	Close	Затваряне
 	Close Window	Затваряне на прозореца
+	Colour {n}	Цвят {n}
 	Comes from	Идва от
 	Condition of {id}	Условие за {id}
 	Connect	Свързване
@@ -135,6 +143,7 @@
 	Disconnect	Прекъсване на връзката
 	Discrete values	Дискретни стойности
 	Discrete-event simulation, from model files to results.	Симулация на дискретни събития, от файлове на модела до резултати.
+	Diverging	Разходящи
 	Does not repeat	Не се повтаря
 	Don't Save	Не записвай
 	Download	Изтегляне
@@ -174,6 +183,7 @@
 	Export table (CSV)	Експортиране на таблица (CSV)
 	Exported {file}	Експортиран е {file}
 	Expression	Израз
+	Fail	Неуспех
 	Fails above, waiting per working server	Неуспех над, чакащи на сървър в работа
 	Failure interrupts the job	Повредата прекъсва работата
 	Family	Семейство
@@ -218,6 +228,7 @@
 	Left edges	Леви ръбове
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Лицензирано по MIT License или Apache License 2.0, по ваш избор.
 	Light	Светла
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	Светлотата сменя посоката си между {first} и {second}; скалата трябва само да изсветлява или само да потъмнява.
 	Log-normal	Логнормално
 	Lost (no way out)	Загубени (няма изход)
 	Lost (waiting room full)	Загубени (чакалнята е пълна)
@@ -272,6 +283,8 @@
 	OEE availability	Наличност OEE
 	OEE effectiveness	Ефективност OEE
 	On	Дни
+	On the dark canvas	На тъмната основна повърхност
+	On the light canvas	На светлата основна повърхност
 	One change, which Undo takes back	Една промяна, която Отмяна връща
 	One clerk, random arrivals: the textbook queue, checked against theory.	Един служител, случайни пристигания: класическа опашка, проверена спрямо теорията.
 	One task per BPSim distribution, to compare their spread.	По една задача за всяко разпределение BPSim за сравнение на разсейването.
@@ -337,6 +350,7 @@
 	Remove Property	Премахване на свойство
 	Remove alternative {n}	Премахване на алтернатива {n}
 	Remove block	Премахване на блок
+	Remove colour	Премахване на цвят
 	Remove the calendar {id}	Премахване на календара {id}
 	Remove the flow {id}	Премахване на потока {id}
 	Remove the pool {id}	Премахване на пула {id}
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	Изберете блок, за да видите опашката му във времето.
 	Sender waits during transfer	Изпращачът чака по време на преноса
 	Separate the values with semicolons or spaces.	Разделете стойностите с точка и запетая или интервали.
+	Sequential	Последователни
 	Service time	Време за обслужване
 	Services	Услуги
 	Set Property	Задаване на свойство
@@ -508,6 +523,7 @@
 	Untitled model	Модел без заглавие
 	Upper value	Горна стойност
 	Use System Setting	Използване на системната настройка
+	Use for charts	Използване за графиките
 	Use these units in the model	Използване на тези единици в модела
 	Utilisation	Натовареност
 	Value	Стойност
@@ -581,10 +597,16 @@
 	years	години
 	{block}: units	{block}: единици
 	{busy} busy	Заети: {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – контраст {ratio}:1 спрямо фона на графиката, под 3:1: надпишете серията му или покажете числата в таблица.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} изглежда сив (наситеност {chroma}, нужно е 0.10).
 	{entered} in, {left} out, {lost} lost	Влезли: {entered}, излезли: {left}, загубени: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: минимум {min}, най-вероятна {mode}, {upper}
 	{field}: not editable here yet	{field}: тук все още не може да се редактира
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft записва нов файл само като BPMN; изберете име, завършващо на .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} и {second} се различават с {de} при нормално цветно зрение, нужно е 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} и {second} се различават с {de} при червено-зелена цветна слепота, нужно е 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} и {second} се различават с {de} при червено-зелена цветна слепота, нужно е 8: различавайте ги само по надписите.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} и {second} се различават по светлота с {step}, нужно е 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: вероятността е число от 0 до 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} от {of} репликации постигнаха целта: {p} (95% интервал от {lo} до {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (зададена стойност, средна)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон „{background}“: {ratio}:1, нужно е {min}:1
 	{title}: now {now}, at most {most}	{title}: сега {now}, най-много {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% ДИ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± означава половината от ширината на 95% доверителен интервал по Student-t за средната стойност от повторенията.
 	· no results yet	· все още няма резултати

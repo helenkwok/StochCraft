@@ -38,6 +38,7 @@
 	Add alternative	Shto alternativë
 	Add calendar	Shto kalendar
 	Add calendar entry	Shto hyrje kalendari
+	Add colour	Shto ngjyrë
 	Add period	Shto periudhë
 	Add point	Shto pikë
 	Add pool	Shto grup
@@ -48,6 +49,7 @@
 	Added pool {id}	U shtua grupi {id}
 	Added {block} ({id})	U shtua {block} ({id})
 	Align	Rreshto
+	All checks pass.	Të gjitha kontrollet kaluan.
 	All text meets the contrast minimums.	I gjithë teksti plotëson kontrastin minimal.
 	Also: {rule}	Gjithashtu: {rule}
 	Alternative {n}	Alternativa {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Defektet dhe disponueshmëria
 	Bring All to Front	Sill të gjitha përpara
 	Built with	Ndërtuar me
+	Built-in palettes are read-only. Duplicate one to change its colours.	Paletat e integruara janë vetëm për lexim. Dyfishoni njërën për t'i ndryshuar ngjyrat.
 	Built-in themes are read-only. Duplicate one to change its colours.	Temat e integruara janë vetëm për lexim. Dyfishoni njërën për t'i ndryshuar ngjyrat.
 	Busiest	Më i ngarkuari
 	By role	Sipas rolit
@@ -89,6 +92,7 @@
 	Cancel run	Anulo ekzekutimin
 	Canvas	Sipërfaqe kryesore
 	Capacity	Kapaciteti
+	Categorical	Kategorike
 	Centres	Qendrat horizontale
 	Change	Ndryshimi
 	Change Block	Ndrysho bllokun
@@ -99,12 +103,16 @@
 	Changes	Ndryshimet
 	Changing the time unit does not convert the times already in the model.	Ndryshimi i njësisë së kohës nuk i konverton kohët që gjenden tashmë në model.
 	Chart	Grafik
+	Chart colours	Ngjyrat e grafikëve
+	Chart colours…	Ngjyrat e grafikëve…
 	Chart hover	Grafik nën tregues
 	Check every	Kontrollo çdo
+	Checks	Kontrollet
 	Choose…	Zgjidh…
 	Clear Menu	Pastro menynë
 	Close	Mbyll
 	Close Window	Mbyll dritaren
+	Colour {n}	Ngjyra {n}
 	Comes from	Vjen nga
 	Condition of {id}	Kushti i {id}
 	Connect	Lidh
@@ -135,6 +143,7 @@
 	Disconnect	Shkëput
 	Discrete values	Vlera diskrete
 	Discrete-event simulation, from model files to results.	Simulim i ngjarjeve diskrete, nga skedarët e modelit te rezultatet.
+	Diverging	Divergjente
 	Does not repeat	Nuk përsëritet
 	Don't Save	Mos ruaj
 	Download	Shkarko
@@ -174,6 +183,7 @@
 	Export table (CSV)	Eksporto tabelën (CSV)
 	Exported {file}	U eksportua {file}
 	Expression	Shprehje
+	Fail	Dështim
 	Fails above, waiting per working server	Dështon mbi (në pritje për server në punë)
 	Failure interrupts the job	Defekti ndërpret punën
 	Family	Familja
@@ -218,6 +228,7 @@
 	Left edges	Skajet e majta
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencuar sipas MIT License ose Apache License 2.0, sipas zgjedhjes suaj.
 	Light	E çelët
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} dhe {second} – çelësia ndryshon drejtim; shkalla duhet vetëm të çelet ose vetëm të errësohet.
 	Log-normal	Log-normale
 	Lost (no way out)	Të humbura (pa rrugëdalje)
 	Lost (waiting room full)	Të humbura (dhoma e pritjes plot)
@@ -272,6 +283,8 @@
 	OEE availability	Disponueshmëria OEE
 	OEE effectiveness	Efektiviteti OEE
 	On	Ditët
+	On the dark canvas	Në sipërfaqen kryesore të errët
+	On the light canvas	Në sipërfaqen kryesore të çelët
 	One change, which Undo takes back	Një ndryshim, që Zhbëj e kthen
 	One clerk, random arrivals: the textbook queue, checked against theory.	Një punonjës, mbërritje të rastësishme: radha klasike, e verifikuar me teori.
 	One task per BPSim distribution, to compare their spread.	Një detyrë për çdo shpërndarje BPSim, për të krahasuar shpërndarjen e tyre.
@@ -337,6 +350,7 @@
 	Remove Property	Hiq vetinë
 	Remove alternative {n}	Hiq alternativën {n}
 	Remove block	Hiq bllokun
+	Remove colour	Hiq ngjyrën
 	Remove the calendar {id}	Hiq kalendarin {id}
 	Remove the flow {id}	Hiq rrjedhën {id}
 	Remove the pool {id}	Hiq grupin {id}
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	Përzgjidhni një bllok për të parë radhën e tij gjatë kohës.
 	Sender waits during transfer	Dërguesi pret gjatë transferimit
 	Separate the values with semicolons or spaces.	Ndaji vlerat me pikëpresje ose hapësira.
+	Sequential	Sekuenciale
 	Service time	Koha e shërbimit
 	Services	Shërbimet
 	Set Property	Cakto vetinë
@@ -508,6 +523,7 @@
 	Untitled model	Model pa titull
 	Upper value	Vlera e sipërme
 	Use System Setting	Përdor cilësimin e sistemit
+	Use for charts	Përdore për grafikët
 	Use these units in the model	Përdor këto njësi në model
 	Utilisation	Shfrytëzimi
 	Value	Vlera
@@ -581,10 +597,16 @@
 	years	vite
 	{block}: units	{block}: njësi
 	{busy} busy	{busy} të zëna
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrasti me sfondin e grafikut {ratio}:1, nën 3:1: etiketoni serinë e saj ose shfaqni numrat në një tabelë.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – duket gri (ngopja {chroma}, nevojitet 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} hyrje, {left} dalje, {lost} të humbura
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimumi {min}, më e mundshmja {mode}, {upper}
 	{field}: not editable here yet	{field}: ende nuk mund të redaktohet këtu
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft shkruan skedarë të rinj vetëm si BPMN; zgjidhni një emër që mbaron me .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} dhe {second} – ndryshimi për shikuesit me shikim normal të ngjyrave {de}, nevojitet 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} dhe {second} – ndryshimi për shikuesit me verbëri të ngjyrave të kuqe-të gjelbër {de}, nevojitet 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} dhe {second} – ndryshimi për shikuesit me verbëri të ngjyrave të kuqe-të gjelbër {de}, nevojitet 8: dallojini vetëm me etiketa.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} dhe {second} – ndryshimi në çelësi {step}, nevojitet 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: probabiliteti është numër nga 0 deri në 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} nga {of} përsëritje arritën objektivin: {p} (interval 95% nga {lo} në {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (vlera e caktuar, mesatarja)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – sfondi „{background}“: {ratio}:1, nevojitet {min}:1
 	{title}: now {now}, at most {most}	{title}: tani {now}, më së shumti {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% interval besimi
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± është gjysma e gjerësisë së një intervali besimi Student-t prej 95% për mesataren e përsëritjeve.
 	· no results yet	· ende nuk ka rezultate

@@ -38,6 +38,7 @@
 	Add alternative	เพิ่มทางเลือก
 	Add calendar	เพิ่มปฏิทิน
 	Add calendar entry	เพิ่มรายการปฏิทิน
+	Add colour	เพิ่มสี
 	Add period	เพิ่มช่วง
 	Add point	เพิ่มจุด
 	Add pool	เพิ่มกลุ่มทรัพยากร
@@ -48,6 +49,7 @@
 	Added pool {id}	เพิ่มกลุ่มทรัพยากร {id} แล้ว
 	Added {block} ({id})	เพิ่ม {block} ({id}) แล้ว
 	Align	จัดแนว
+	All checks pass.	ผ่านการตรวจสอบทั้งหมด
 	All text meets the contrast minimums.	ข้อความทั้งหมดผ่านเกณฑ์ความเปรียบต่างขั้นต่ำ
 	Also: {rule}	เพิ่มเติม: {rule}
 	Alternative {n}	ทางเลือก {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	การขัดข้องและความพร้อมใช้งาน
 	Bring All to Front	นำทั้งหมดมาไว้ด้านหน้า
 	Built with	พัฒนาด้วย
+	Built-in palettes are read-only. Duplicate one to change its colours.	จานสีในตัวเป็นแบบอ่านอย่างเดียว ทำสำเนาจานสีหนึ่งเพื่อเปลี่ยนสี
 	Built-in themes are read-only. Duplicate one to change its colours.	ธีมในตัวเป็นแบบอ่านอย่างเดียว ทำสำเนาธีมหนึ่งเพื่อเปลี่ยนสี
 	Busiest	ยุ่งที่สุด
 	By role	ตามบทบาท
@@ -89,6 +92,7 @@
 	Cancel run	ยกเลิกการรัน
 	Canvas	พื้นผิวหลัก
 	Capacity	ความจุ
+	Categorical	แบบหมวดหมู่
 	Centres	กึ่งกลางแนวนอน
 	Change	การเปลี่ยนแปลง
 	Change Block	เปลี่ยนบล็อก
@@ -99,12 +103,16 @@
 	Changes	การเปลี่ยนแปลง
 	Changing the time unit does not convert the times already in the model.	การเปลี่ยนหน่วยเวลาไม่แปลงค่าเวลาที่มีอยู่ในแบบจำลอง
 	Chart	แผนภูมิ
+	Chart colours	สีแผนภูมิ
+	Chart colours…	สีแผนภูมิ…
 	Chart hover	แผนภูมิเมื่อชี้
 	Check every	ตรวจทุก
+	Checks	การตรวจสอบ
 	Choose…	เลือก…
 	Clear Menu	ล้างเมนู
 	Close	ปิด
 	Close Window	ปิดหน้าต่าง
+	Colour {n}	สี {n}
 	Comes from	มาจาก
 	Condition of {id}	เงื่อนไขของ {id}
 	Connect	เชื่อมต่อ
@@ -135,6 +143,7 @@
 	Disconnect	ตัดการเชื่อมต่อ
 	Discrete values	ค่าที่ไม่ต่อเนื่อง
 	Discrete-event simulation, from model files to results.	การจำลองเหตุการณ์ไม่ต่อเนื่อง ตั้งแต่ไฟล์แบบจำลองถึงผลลัพธ์
+	Diverging	แบบแยกสองทาง
 	Does not repeat	ไม่ซ้ำ
 	Don't Save	ไม่บันทึก
 	Download	ดาวน์โหลด
@@ -174,6 +183,7 @@
 	Export table (CSV)	ส่งออกตาราง (CSV)
 	Exported {file}	ส่งออก {file} แล้ว
 	Expression	นิพจน์
+	Fail	ไม่ผ่าน
 	Fails above, waiting per working server	ไม่ผ่านเมื่อเกิน (ผู้รอต่อเซิร์ฟเวอร์ที่ใช้งานอยู่)
 	Failure interrupts the job	การขัดข้องขัดจังหวะงาน
 	Family	ตระกูล
@@ -218,6 +228,7 @@
 	Left edges	ขอบซ้าย
 	Licensed under the MIT License or the Apache License 2.0, at your option.	อนุญาตให้ใช้ภายใต้ MIT License หรือ Apache License 2.0 ตามที่คุณเลือก
 	Light	สว่าง
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	ความสว่างกลับทิศระหว่าง {first} และ {second} ลำดับสีต้องสว่างขึ้นอย่างเดียวหรือมืดลงอย่างเดียว
 	Log-normal	ล็อกนอร์มอล
 	Lost (no way out)	สูญเสีย (ไม่มีทางออก)
 	Lost (waiting room full)	สูญเสีย (พื้นที่รอเต็ม)
@@ -272,6 +283,8 @@
 	OEE availability	ความพร้อมใช้งาน OEE
 	OEE effectiveness	ประสิทธิผล OEE
 	On	วัน
+	On the dark canvas	บนพื้นผิวหลักมืด
+	On the light canvas	บนพื้นผิวหลักสว่าง
 	One change, which Undo takes back	การเปลี่ยนแปลงหนึ่งครั้ง ซึ่งเลิกทำได้
 	One clerk, random arrivals: the textbook queue, checked against theory.	พนักงานหนึ่งคนและการมาถึงแบบสุ่ม: คิวมาตรฐานที่ตรวจสอบเทียบกับทฤษฎี
 	One task per BPSim distribution, to compare their spread.	หนึ่งงานต่อการแจกแจง BPSim เพื่อเปรียบเทียบการกระจายของค่า
@@ -337,6 +350,7 @@
 	Remove Property	นำคุณสมบัติออก
 	Remove alternative {n}	นำทางเลือก {n} ออก
 	Remove block	นำบล็อกออก
+	Remove colour	นำสีออก
 	Remove the calendar {id}	นำปฏิทิน {id} ออก
 	Remove the flow {id}	นำโฟลว์ {id} ออก
 	Remove the pool {id}	นำกลุ่มทรัพยากร {id} ออก
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	เลือกบล็อกเพื่อดูคิวตามเวลา
 	Sender waits during transfer	ผู้ส่งรอระหว่างขนย้าย
 	Separate the values with semicolons or spaces.	คั่นค่าด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
+	Sequential	แบบลำดับ
 	Service time	เวลาให้บริการ
 	Services	บริการ
 	Set Property	กำหนดคุณสมบัติ
@@ -508,6 +523,7 @@
 	Untitled model	แบบจำลองไม่มีชื่อ
 	Upper value	ค่าบน
 	Use System Setting	ใช้การตั้งค่าระบบ
+	Use for charts	ใช้กับแผนภูมิ
 	Use these units in the model	ใช้จำนวนหน่วยเหล่านี้ในแบบจำลอง
 	Utilisation	อัตราการใช้ประโยชน์
 	Value	ค่า
@@ -581,10 +597,16 @@
 	years	ปี
 	{block}: units	{block}: จำนวนหน่วย
 	{busy} busy	ไม่ว่าง {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} มีความเปรียบต่าง {ratio}:1 บนพื้นหลังแผนภูมิ ต่ำกว่า 3:1: ใส่ป้ายให้ชุดข้อมูลของสีนี้ หรือแสดงตัวเลขในตาราง
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} ดูเป็นสีเทา (ความอิ่มตัว {chroma} ต้องการ 0.10)
 	{entered} in, {left} out, {lost} lost	เข้า {entered} ออก {left} สูญหาย {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: ต่ำสุด {min} เป็นไปได้มากที่สุด {mode} {upper}
 	{field}: not editable here yet	{field}: ยังแก้ไขที่นี่ไม่ได้
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft เขียนไฟล์ใหม่เป็น BPMN เท่านั้น เลือกชื่อที่ลงท้ายด้วย .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} และ {second} ต่างกัน {de} สำหรับผู้ที่มองเห็นสีปกติ ต้องการ 15
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} และ {second} ต่างกัน {de} สำหรับผู้ที่ตาบอดสีแดง-เขียว ต้องการ 8
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} และ {second} ต่างกัน {de} สำหรับผู้ที่ตาบอดสีแดง-เขียว ต้องการ 8: แยกแยะได้ด้วยป้ายเท่านั้น
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} และ {second} ต่างกันด้านความสว่าง {step} ต้องการ 0.06
 	{id}: a probability is a number from 0 to 1	{id}: ความน่าจะเป็นต้องเป็นตัวเลขตั้งแต่ 0 ถึง 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} จาก {of} รอบการจำลองซ้ำบรรลุเป้าหมาย: {p} (ช่วง 95% จาก {lo} ถึง {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (กำหนดเป็น, ค่าเฉลี่ย)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} บน {background}: {ratio}:1 ต้องการ {min}:1
 	{title}: now {now}, at most {most}	{title}: ขณะนี้ {now} สูงสุด {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± คือครึ่งหนึ่งของความกว้างของช่วงความเชื่อมั่น Student-t 95% สำหรับค่าเฉลี่ยจากการทดลองซ้ำ
 	· no results yet	· ยังไม่มีผลลัพธ์

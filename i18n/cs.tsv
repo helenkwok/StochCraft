@@ -38,6 +38,7 @@
 	Add alternative	Přidat alternativu
 	Add calendar	Přidat kalendář
 	Add calendar entry	Přidat položku kalendáře
+	Add colour	Přidat barvu
 	Add period	Přidat období
 	Add point	Přidat bod
 	Add pool	Přidat fond
@@ -48,6 +49,7 @@
 	Added pool {id}	Přidán fond {id}
 	Added {block} ({id})	Přidán {block} ({id})
 	Align	Zarovnat
+	All checks pass.	Všechny kontroly jsou v pořádku.
 	All text meets the contrast minimums.	Veškerý text splňuje minimální kontrast.
 	Also: {rule}	Také: {rule}
 	Alternative {n}	Alternativa {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Poruchy a dostupnost
 	Bring All to Front	Přenést vše do popředí
 	Built with	Vytvořeno pomocí
+	Built-in palettes are read-only. Duplicate one to change its colours.	Vestavěné palety jsou jen pro čtení. Chcete-li změnit barvy, některou duplikujte.
 	Built-in themes are read-only. Duplicate one to change its colours.	Vestavěné motivy jsou jen pro čtení. Chcete-li změnit barvy, některý duplikujte.
 	Busiest	Nejvytíženější
 	By role	Podle role
@@ -89,6 +92,7 @@
 	Cancel run	Zrušit běh
 	Canvas	Hlavní plocha
 	Capacity	Kapacita
+	Categorical	Kategoriální
 	Centres	Vodorovné středy
 	Change	Změna
 	Change Block	Změnit blok
@@ -99,12 +103,16 @@
 	Changes	Změny
 	Changing the time unit does not convert the times already in the model.	Změna časové jednotky nepřepočítá časy, které již v modelu jsou.
 	Chart	Graf
+	Chart colours	Barvy grafů
+	Chart colours…	Barvy grafů…
 	Chart hover	Graf pod ukazatelem
 	Check every	Kontrola každých
+	Checks	Kontroly
 	Choose…	Vyberte…
 	Clear Menu	Vymazat nabídku
 	Close	Zavřít
 	Close Window	Zavřít okno
+	Colour {n}	Barva {n}
 	Comes from	Pochází z
 	Condition of {id}	Podmínka pro {id}
 	Connect	Propojit
@@ -135,6 +143,7 @@
 	Disconnect	Odpojit
 	Discrete values	Diskrétní hodnoty
 	Discrete-event simulation, from model files to results.	Simulace diskrétních událostí, od souborů modelu k výsledkům.
+	Diverging	Divergentní
 	Does not repeat	Neopakuje se
 	Don't Save	Neukládat
 	Download	Stáhnout
@@ -174,6 +183,7 @@
 	Export table (CSV)	Exportovat tabulku (CSV)
 	Exported {file}	Exportováno {file}
 	Expression	Výraz
+	Fail	Nevyhovuje
 	Fails above, waiting per working server	Neprojde nad, čekajících na server v provozu
 	Failure interrupts the job	Porucha přeruší práci
 	Family	Rodina
@@ -218,6 +228,7 @@
 	Left edges	Levé okraje
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencováno podle MIT License nebo Apache License 2.0, dle vaší volby.
 	Light	Světlý
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} a {second} – světlost mění směr; škála musí jen světlat, nebo jen tmavnout.
 	Log-normal	Lognormální
 	Lost (no way out)	Ztraceno (žádná cesta ven)
 	Lost (waiting room full)	Ztraceno (čekárna je plná)
@@ -272,6 +283,8 @@
 	OEE availability	Dostupnost OEE
 	OEE effectiveness	Efektivnost OEE
 	On	Dny
+	On the dark canvas	Na tmavé hlavní ploše
+	On the light canvas	Na světlé hlavní ploše
 	One change, which Undo takes back	Jedna změna, kterou Zpět vrátí
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracovník, náhodné příchody: klasická fronta ověřená teorií.
 	One task per BPSim distribution, to compare their spread.	Jedna úloha pro každé rozdělení BPSim pro porovnání jejich variability.
@@ -337,6 +350,7 @@
 	Remove Property	Odebrat vlastnost
 	Remove alternative {n}	Odebrat alternativu {n}
 	Remove block	Odebrat blok
+	Remove colour	Odebrat barvu
 	Remove the calendar {id}	Odebrat kalendář {id}
 	Remove the flow {id}	Odebrat tok {id}
 	Remove the pool {id}	Odebrat fond {id}
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	Vyberte blok, abyste viděli jeho frontu v čase.
 	Sender waits during transfer	Odesílatel čeká během přesunu
 	Separate the values with semicolons or spaces.	Oddělte hodnoty středníky nebo mezerami.
+	Sequential	Sekvenční
 	Service time	Doba obsluhy
 	Services	Služby
 	Set Property	Nastavit vlastnost
@@ -508,6 +523,7 @@
 	Untitled model	Nepojmenovaný model
 	Upper value	Horní hodnota
 	Use System Setting	Použít systémové nastavení
+	Use for charts	Použít pro grafy
 	Use these units in the model	Použít tyto jednotky v modelu
 	Utilisation	Využití
 	Value	Hodnota
@@ -581,10 +597,16 @@
 	years	roky
 	{block}: units	{block}: jednotky
 	{busy} busy	Obsazeno: {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrast vůči pozadí grafu {ratio}:1, pod 3:1: popište její řadu nebo zobrazte čísla v tabulce.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – působí šedě (sytost {chroma}, je třeba 0.10).
 	{entered} in, {left} out, {lost} lost	Vstoupilo: {entered}, odešlo: {left}, ztraceno: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, nejpravděpodobnější {mode}, {upper}
 	{field}: not editable here yet	{field}: zde zatím nelze upravovat
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft zapisuje nový soubor pouze jako BPMN; zvolte název končící na .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} a {second} – rozdíl při normálním barevném vidění {de}, je třeba 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} a {second} – rozdíl při červeno-zelené barvosleposti {de}, je třeba 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} a {second} – rozdíl při červeno-zelené barvosleposti {de}, je třeba 8: rozlišujte je jen podle popisků.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} a {second} – rozdíl světlosti {step}, je třeba 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: pravděpodobnost je číslo od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikací splnilo cíl: {p} (95% interval {lo} až {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (nastaveno na, průměr)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadí „{background}“: {ratio}:1, je třeba {min}:1
 	{title}: now {now}, at most {most}	{title}: nyní {now}, nejvýše {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% interval spolehlivosti
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± představuje polovinu šířky 95% Student-t intervalu spolehlivosti průměru napříč replikacemi.
 	· no results yet	· zatím žádné výsledky

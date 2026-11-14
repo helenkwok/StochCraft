@@ -292,6 +292,80 @@ engine's messages (validation, file notes) are English too.
   before, the unsourced health-check words above, the load-balancer nouns formed from titles,
   the "Fails above…" label everywhere, and sr and sr-latn, written in ekavian but keeping the
   catalogs' Prosječan and Vrijeme in the rows that follow "Mean number inside" and "Time failed".
+- The rows for chart palettes (PR "chart palettes": Chart colours… in View > Appearance, the Chart
+  colours window and its hint, the headings Categorical, Sequential and Diverging, Use for charts,
+  Add colour, Remove colour, the colour slots "Colour {n}", Checks, On the light canvas and On the
+  dark canvas, All checks pass., the level Fail beside the existing Warning, "{word}: {message}",
+  and the seven check messages: contrast with the chart background, a colour that reads as grey, the
+  difference for normal colour vision and for red-green colour blindness, the lightness step and a
+  ramp that turns back) were machine-drafted with Claude Code from the plain meaning of the English
+  and each catalog's existing words, taken from its colour-themes rows: the hint is "Built-in themes
+  are read-only. Duplicate one to change its colours." with the palette word in place of the theme
+  word; chart and table come from Chart and Export table (CSV); the canvas rows reuse Canvas (mostly
+  "main surface"; ja, ko and zh say canvas) with Light and Dark agreeing with it; contrast comes
+  from "All text meets the contrast minimums.", and the "needs" word from "{text} on {background}:
+  {ratio}:1, needs {min}:1" (fr minimum, hu legalább … kell, tr en az … gerekli), which also gives
+  the background word in the catalogs that name the background there after a dash (elsewhere
+  background is the plain meaning). In use, Duplicate, Rename, Delete, Name, the name check, Save
+  name, Cancel and Warning are the existing rows, unchanged. The palette names (Okabe–Ito, Tol
+  bright, ColorBrewer Dark2, Viridis, …) are proper names that the code shows without a lookup, so
+  they are not translated. The sources checked were Wikipedia's articles on color blindness,
+  congenital red–green color blindness, dichromacy, color vision, color scheme, contrast (vision),
+  lightness, colorfulness, categorical variable, palette (computing) and grey in their interlanguage
+  versions (the color-blindness and colorfulness articles searched by keyword for red-green and
+  chroma), IATE for colour blindness, red-green colour blindness, colour vision deficiency, colour
+  vision, lightness, chroma, contrast ratio and colour scheme, and English Wiktionary's translation
+  tables for categorical, sequential, divergent, lightness, palette and color blindness. Red-green
+  colour blindness is the article's own term where it has one: ca daltonisme vermell-verd, es
+  daltonismo rojo-verde, fr daltonisme rouge-vert, it discromatopsia rosso-verde, da rød-grøn
+  farveblindhed, nb rød-grønn fargeblindhet, nl rood-groenkleurenblindheid, pl ślepota
+  czerwono-zielona, ru красно-зелёный дальтонизм, bs crveno-zelena sljepoća za boje, el αχρωματοψία
+  στο κόκκινο-πράσινο, sq verbëri e ngjyrave të kuqe-të gjelbër, tr kırmızı-yeşil renk körlüğü, te
+  ఎరుపు-ఆకుపచ్చ రంగు అంధత్వం, vi mù màu đỏ-lục, ko 적록 색각 이상, zh 红绿色盲/紅綠色盲, ja 赤緑 with the title
+  色覚異常, bn লাল-সবুজ and hi लाल … वर्णान्धता; de Rot-Grün-Sehschwäche and hu vörös-zöld színtévesztés
+  are the titles of their red-green articles, and sv joins its article's röd-grön to IATE's
+  färgblindhet. Elsewhere (bg, cs, et, fi, gl, hr, id, ka, kk, lt, pt-br, ro, sl, sr, sr-latn, ta,
+  th, uk) "red-green" is joined to the color-blindness article's title, and sk to Wiktionary's
+  farbosleposť, as sk has no such article; lo has no article. IATE's one entry covers colour
+  blindness and colour vision deficiency together, so the catalogs do not tell them apart. Normal
+  colour vision uses the color-vision titles or IATE (de Farbsehen, fr vision des couleurs, es
+  visión del color, nl kleurenzien, sv färgseende, da farvesans, fi väriaisti, et värvitaju, ru
+  цветовое зрение, uk кольоровідчуття, sr vid u boji, ja 色覚; zh 色觉/色覺 is the plain meaning, as zh's
+  title is 彩色视觉). Lightness follows IATE and Wiktionary's colour sense (fr clarté, de Helligkeit, nl
+  lichtheid, sv ljushet, da lyshed, fi vaaleus, it chiarezza, el φωτεινότητα) or the lightness
+  article (es luminosidad, pt-br luminosidade, et heledus, lt šviesumas, ru светлота, ja and zh 明度);
+  uk світлота and ko 명도 are from the text of their colorfulness articles (ko's lightness article is
+  titled 밝기), and bg светлота is the plain meaning (Wiktionary gives светлост). Chroma has its own
+  word where a source gave one: fr chroma, es and ca croma, tr kroma, et kromaatilisus, id
+  kemarakan, de Buntheit (a synonym in de's article), ja, ko and zh 彩度/채도, and from IATE ro cromă,
+  el χρωματική ένταση, pl nasycenie and fi värikkyys (in its chrominance entry); gl and pt-br croma,
+  it croma, hi क्रोमा and bn ক্রোমা follow es and ca without a source of their own; elsewhere it is
+  the saturation word that the colorfulness article is titled with (ru and uk say that is chroma in
+  CIELAB), so it may read as saturation. The en color-scheme article describes qualitative,
+  sequential and diverging schemes, but none of its five other versions (es, hi, ja, ko, zh) does,
+  so the three headings are dictionary words: Wiktionary's categorical (fr catégoriel, it
+  categoriale, ro categorial), the categorical-variable titles (de, es, pt, nl, ko 범주형, uk
+  категорійна, zh 分类; et calls it kvalitatiivne), Wiktionary's sequential (bg, ca, de, es, fi
+  peräkkäinen, ro) and divergent (bg разходящ, cs, fi hajaantuva, hu, ka განშლადი, pl rozbieżny, ru
+  расходящийся, zh 发散/發散), agreeing with the palette word where the language inflects for it.
+  Palette is Wiktionary's or the palette article's word (it tavolozza, zh 调色板/調色盤, kk палитра) and
+  differs from the theme word (de Paletten beside Farbschemata, lo ຈານສີ beside ຊຸດສີ). In languages
+  with cases the slot names stay in the nominative, so the messages start "{colour} – …" or "{first}
+  and {second} – …", with the dash of that catalog's contrast row (bg, bn, cs, el, et, fi, hi, hu,
+  ka, kk, lt, pl, sk, sl, sq, ta and te, ru and uk with "—", and bs, hr, sr and sr-latn where a
+  message needs it), so that a message shown after "{word}: " does not pile up colons; tr, which has
+  no dash there, uses a colon, and ko, ta and te write "{first}, {second}" so that no particle has
+  to follow a number. The limits 3:1, 0.10, 15, 8 and 0.06 keep "." as the decimal point, as the
+  code formats the measured values; "{word}: {message}" follows each catalog's colon (fr " : ", zh
+  full width), and el uses the ano teleia for the semicolon. "Tell them apart only with labels" is
+  an instruction in most catalogs and "can be told apart only by labels" in th and zh. Chart
+  colours… is a menu item, which the catalog test's source scan does not see; as far as can be told
+  from reading the test, it is checked through the menus the test lays out, as Edit themes… is. Not
+  reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka, kk and sq as before,
+  the red-green terms formed from titles (et, fi, ka, kk and lt most), the saturation words standing
+  for chroma and the unsourced chroma loanwords, the Sequential and Diverging headings everywhere
+  (no source uses them for colour schemes), and Fail, chosen per catalog as a status word beside
+  Warning.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
