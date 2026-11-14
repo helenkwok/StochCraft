@@ -158,6 +158,7 @@ pub fn table(name: &str, results: &Value) -> String {
             "mean_wait and mean_time_in_system leave out entities still inside at the end"
         );
     }
+    split_lines(results, &order, &mut out);
     stop_lines(results, &mut out);
     let notes: Vec<&Value> = results["record"]["warnings"]
         .as_array()
@@ -179,6 +180,32 @@ pub fn table(name: &str, results: &Value) -> String {
         }
     }
     out
+}
+
+/// A line for each result whose replications split into two outcomes: the two groups, and that
+/// the mean mixes them.
+fn split_lines(results: &Value, order: &[&str], out: &mut String) {
+    for e in results["elements"].as_array().into_iter().flatten() {
+        for metric in order {
+            let m = &e["metrics"][*metric];
+            let split = &m["split"];
+            let (Some(low_n), Some(high_n)) =
+                (split["low"]["n"].as_u64(), split["high"]["n"].as_u64())
+            else {
+                continue;
+            };
+            let _ = writeln!(
+                out,
+                "{} {metric}: runs split: {low_n} of {} near {}, {high_n} near {}; the mean {} \
+                 mixes two outcomes",
+                s(&e["id"]),
+                low_n + high_n,
+                f(&split["low"]["mean"]),
+                f(&split["high"]["mean"]),
+                f(&m["mean"])
+            );
+        }
+    }
 }
 
 /// A terminating run's stop: how many replications met it and when.
@@ -220,18 +247,40 @@ fn csv_field(v: &str) -> String {
     }
 }
 
-/// Results as CSV, one row per element and metric.
+/// Results as CSV, one row per element and metric. Where a result's replications split into two
+/// outcomes, the last five columns give the cut and each group's count and mean (empty
+/// otherwise).
 pub fn csv(results: &Value) -> String {
-    let mut out = String::from("element,name,kind,metric,mean,half_width,std_dev,n\n");
+    let mut out = String::from(
+        "element,name,kind,metric,mean,half_width,std_dev,n,\
+         split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean\n",
+    );
     for e in results["elements"].as_array().into_iter().flatten() {
         for metric in results["metrics"].as_array().into_iter().flatten() {
             let m = &e["metrics"][s(metric)];
             if m.is_null() {
                 continue;
             }
+            let split = &m["split"];
+            let split: Vec<String> = [
+                &split["cut"],
+                &split["low"]["n"],
+                &split["low"]["mean"],
+                &split["high"]["n"],
+                &split["high"]["mean"],
+            ]
+            .iter()
+            .map(|v| {
+                if v.is_null() {
+                    String::new()
+                } else {
+                    v.to_string()
+                }
+            })
+            .collect();
             let _ = writeln!(
                 out,
-                "{},{},{},{},{},{},{},{}",
+                "{},{},{},{},{},{},{},{},{}",
                 csv_field(s(&e["id"])),
                 csv_field(s(&e["name"])),
                 s(&e["kind"]),
@@ -239,7 +288,8 @@ pub fn csv(results: &Value) -> String {
                 m["mean"],
                 m["half_width"],
                 m["std_dev"],
-                m["n"]
+                m["n"],
+                split.join(",")
             );
         }
     }
@@ -298,6 +348,44 @@ pub fn validation(file: &Path, opened: &Value, errors: usize) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn runs_that_split_get_a_line_and_csv_columns() {
+        let results = serde_json::json!({
+            "replications": 128,
+            "metrics": ["entered", "mean_in_service"],
+            "elements": [{
+                "id": "desk", "name": "Desk", "kind": "server",
+                "metrics": {
+                    "entered": { "mean": 500.0, "half_width": 3.0, "std_dev": 9.0, "n": 128 },
+                    "mean_in_service": {
+                        "mean": 3.8, "half_width": 0.6, "std_dev": 3.4, "n": 128,
+                        "split": {
+                            "cut": 5.8,
+                            "low": { "n": 99, "mean": 1.7 },
+                            "high": { "n": 29, "mean": 9.9 },
+                        },
+                    },
+                },
+            }],
+        });
+        let text = table("m", &results);
+        assert!(
+            text.contains(
+                "desk mean_in_service: runs split: 99 of 128 near 1.7, 29 near 9.9; the mean 3.8 \
+                 mixes two outcomes"
+            ),
+            "{text}"
+        );
+        assert_eq!(text.matches("runs split").count(), 1, "{text}");
+        let csv = csv(&results);
+        let lines: Vec<&str> = csv.lines().collect();
+        assert_eq!(lines[1], "desk,Desk,server,entered,500.0,3.0,9.0,128,,,,,");
+        assert_eq!(
+            lines[2],
+            "desk,Desk,server,mean_in_service,3.8,0.6,3.4,128,5.8,99,1.7,29,9.9"
+        );
+    }
 
     #[test]
     fn numbers_read_well() {

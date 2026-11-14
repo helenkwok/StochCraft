@@ -513,7 +513,10 @@ fn results_export_as_csv_and_charts_are_drawn() {
     };
     assert_eq!(name, "mm1-results.csv");
     let text = String::from_utf8_lossy(bytes);
-    assert!(text.starts_with("element,name,kind,metric,mean,half_width,std_dev,n\n"));
+    assert!(text.starts_with(
+        "element,name,kind,metric,mean,half_width,std_dev,n,\
+         split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean\n"
+    ));
     assert!(text.contains("serve,Serve customer,server,utilisation,"));
     h.state_mut().exported("/tmp/mm1-results.csv");
     assert_eq!(h.state().status(), "Exported mm1-results.csv");

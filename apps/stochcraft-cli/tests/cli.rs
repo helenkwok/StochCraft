@@ -143,9 +143,12 @@ fn table_csv_and_out() {
     let mut lines = csv.lines();
     assert_eq!(
         lines.next(),
-        Some("element,name,kind,metric,mean,half_width,std_dev,n")
+        Some(
+            "element,name,kind,metric,mean,half_width,std_dev,n,\
+             split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean"
+        )
     );
-    assert!(lines.all(|l| l.split(',').count() == 8), "{csv}");
+    assert!(lines.all(|l| l.split(',').count() == 13), "{csv}");
     let out = scratch("tandem.csv");
     let printed = ok(&[
         "run",

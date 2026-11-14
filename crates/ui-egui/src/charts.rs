@@ -352,7 +352,9 @@ pub fn png(image: &egui::ColorImage, area: Rect, pixels_per_point: f32) -> Optio
 }
 
 /// The results as CSV, one row per element and metric (and per property it assigns), as
-/// `stochcraft-cli run --format csv` writes them.
+/// `stochcraft-cli run --format csv` writes them. Where a result's replications split into two
+/// outcomes, the last five columns give the cut and each group's count and mean (empty
+/// otherwise).
 pub fn csv(results: &Value) -> String {
     fn field(v: &str) -> String {
         if v.contains([',', '"', '\n']) {
@@ -361,7 +363,10 @@ pub fn csv(results: &Value) -> String {
             v.to_owned()
         }
     }
-    let mut out = String::from("element,name,kind,metric,mean,half_width,std_dev,n\n");
+    let mut out = String::from(
+        "element,name,kind,metric,mean,half_width,std_dev,n,\
+         split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean\n",
+    );
     for e in results["elements"].as_array().into_iter().flatten() {
         let s = |k: &str| e[k].as_str().unwrap_or("").to_owned();
         let mut rows: Vec<(String, &Value)> = results["metrics"]
@@ -377,7 +382,7 @@ pub fn csv(results: &Value) -> String {
         }
         for (metric, m) in rows {
             out.push_str(&format!(
-                "{},{},{},{},{},{},{},{}\n",
+                "{},{},{},{},{},{},{},{},{}\n",
                 field(&s("id")),
                 field(&s("name")),
                 s("kind"),
@@ -385,16 +390,48 @@ pub fn csv(results: &Value) -> String {
                 m["mean"],
                 m["half_width"],
                 m["std_dev"],
-                m["n"]
+                m["n"],
+                split_fields(&m["split"])
             ));
         }
     }
     out
 }
 
+/// The five split columns of a CSV row: the cut and each group's count and mean, or five empty
+/// fields where the result does not split.
+fn split_fields(split: &Value) -> String {
+    [
+        &split["cut"],
+        &split["low"]["n"],
+        &split["low"]["mean"],
+        &split["high"]["n"],
+        &split["high"]["mean"],
+    ]
+    .iter()
+    .map(|v| {
+        if v.is_null() {
+            String::new()
+        } else {
+            v.to_string()
+        }
+    })
+    .collect::<Vec<_>>()
+    .join(",")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn csv_gives_the_split_where_the_runs_split() {
+        let split = serde_json::json!({
+            "cut": 5.8, "low": { "n": 99, "mean": 1.7 }, "high": { "n": 29, "mean": 9.9 },
+        });
+        assert_eq!(split_fields(&split), "5.8,99,1.7,29,9.9");
+        assert_eq!(split_fields(&Value::Null), ",,,,");
+    }
 
     #[test]
     fn gridlines_fall_on_round_values() {
