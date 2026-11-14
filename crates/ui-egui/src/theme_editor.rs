@@ -207,7 +207,7 @@ fn themes_body(ui: &mut egui::Ui, ed: &mut Editor, colors: &mut String, custom: 
 }
 
 /// `base`, or `base` with the first number after it that no theme in `taken` has.
-fn unique_name(base: &str, taken: &[String]) -> String {
+pub(crate) fn unique_name(base: &str, taken: &[String]) -> String {
     if !taken.iter().any(|n| n.as_str() == base) {
         return base.to_owned();
     }

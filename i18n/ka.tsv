@@ -38,6 +38,7 @@
 	Add alternative	ალტერნატივის დამატება
 	Add calendar	კალენდრის დამატება
 	Add calendar entry	კალენდრის ჩანაწერის დამატება
+	Add colour	ფერის დამატება
 	Add period	პერიოდის დამატება
 	Add point	წერტილის დამატება
 	Add pool	პულის დამატება
@@ -48,6 +49,7 @@
 	Added pool {id}	დამატებულია პული {id}
 	Added {block} ({id})	დამატებულია {block} ({id})
 	Align	სწორება
+	All checks pass.	ყველა შემოწმება წარმატებულია.
 	All text meets the contrast minimums.	მთელი ტექსტი აკმაყოფილებს მინიმალურ კონტრასტს.
 	Also: {rule}	ასევე: {rule}
 	Alternative {n}	ალტერნატივა {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	გაუმართაობები და ხელმისაწვდომობა
 	Bring All to Front	ყველაფრის წინ წამოწევა
 	Built with	შექმნილია შემდეგით
+	Built-in palettes are read-only. Duplicate one to change its colours.	ჩაშენებული პალიტრები მხოლოდ წასაკითხია. ფერების შესაცვლელად შექმენით რომელიმეს დუბლიკატი.
 	Built-in themes are read-only. Duplicate one to change its colours.	ჩაშენებული თემები მხოლოდ წასაკითხია. ფერების შესაცვლელად შექმენით რომელიმეს დუბლიკატი.
 	Busiest	ყველაზე დატვირთული
 	By role	როლის მიხედვით
@@ -89,6 +92,7 @@
 	Cancel run	გაშვების გაუქმება
 	Canvas	მთავარი ზედაპირი
 	Capacity	ტევადობა
+	Categorical	კატეგორიული
 	Centres	ჰორიზონტალური ცენტრები
 	Change	ცვლილება
 	Change Block	ბლოკის შეცვლა
@@ -99,12 +103,16 @@
 	Changes	ცვლილებები
 	Changing the time unit does not convert the times already in the model.	დროის ერთეულის შეცვლა მოდელში უკვე მითითებულ დროებს არ გარდაქმნის.
 	Chart	დიაგრამა
+	Chart colours	დიაგრამების ფერები
+	Chart colours…	დიაგრამების ფერები…
 	Chart hover	დიაგრამა მაჩვენებლის ქვეშ
 	Check every	შემოწმების ინტერვალი
+	Checks	შემოწმებები
 	Choose…	აირჩიეთ…
 	Clear Menu	მენიუს გასუფთავება
 	Close	დახურვა
 	Close Window	ფანჯრის დახურვა
+	Colour {n}	ფერი {n}
 	Comes from	მოდის აქედან
 	Condition of {id}	{id}-ის პირობა
 	Connect	დაკავშირება
@@ -135,6 +143,7 @@
 	Disconnect	კავშირის გაწყვეტა
 	Discrete values	დისკრეტული მნიშვნელობები
 	Discrete-event simulation, from model files to results.	დისკრეტული მოვლენების სიმულაცია, მოდელის ფაილებიდან შედეგებამდე.
+	Diverging	განშლადი
 	Does not repeat	არ მეორდება
 	Don't Save	არ შეინახო
 	Download	ჩამოტვირთვა
@@ -174,6 +183,7 @@
 	Export table (CSV)	ცხრილის ექსპორტი (CSV)
 	Exported {file}	ექსპორტირებულია {file}
 	Expression	გამოსახულება
+	Fail	ვერ გაიარა
 	Fails above, waiting per working server	ვერ გაივლის ზემოთ, მომლოდინე მუშაობაში მყოფ სერვერზე
 	Failure interrupts the job	გაუმართაობა წყვეტს სამუშაოს
 	Family	ოჯახი
@@ -220,6 +230,7 @@
 	Left edges	მარცხენა კიდეები
 	Licensed under the MIT License or the Apache License 2.0, at your option.	ლიცენზირებულია MIT License-ით ან Apache License 2.0-ით, თქვენი არჩევანით.
 	Light	ღია
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} და {second} – სიღია მიმართულებას იცვლის; შკალა უნდა ხდებოდეს მხოლოდ უფრო ღია ან მხოლოდ უფრო მუქი.
 	Log-normal	ლოგნორმალური
 	Lost (no way out)	დაკარგული (გასასვლელი არ არის)
 	Lost (waiting room full)	დაკარგული (მოსაცდელი სივრცე სავსეა)
@@ -274,6 +285,8 @@
 	OEE availability	OEE ხელმისაწვდომობა
 	OEE effectiveness	OEE ეფექტიანობა
 	On	დღეები
+	On the dark canvas	მუქ მთავარ ზედაპირზე
+	On the light canvas	ღია მთავარ ზედაპირზე
 	One change, which Undo takes back	ერთი ცვლილება, რომელსაც დაბრუნება აუქმებს
 	One clerk, random arrivals: the textbook queue, checked against theory.	ერთი თანამშრომელი, შემთხვევითი შემოსვლები: თეორიით შემოწმებული კლასიკური რიგი.
 	One task per BPSim distribution, to compare their spread.	თითო დავალება ყოველ BPSim განაწილებაზე, მათი გაფანტვის შესადარებლად.
@@ -339,6 +352,7 @@
 	Remove Property	თვისების წაშლა
 	Remove alternative {n}	ალტერნატივა {n}-ის წაშლა
 	Remove block	ბლოკის წაშლა
+	Remove colour	ფერის წაშლა
 	Remove the calendar {id}	{id} კალენდრის წაშლა
 	Remove the flow {id}	{id} ნაკადის წაშლა
 	Remove the pool {id}	{id} პულის წაშლა
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	აირჩიეთ ბლოკი, რომ ნახოთ მისი რიგი დროის მიხედვით.
 	Sender waits during transfer	გამგზავნი ელოდება გადატანის დასრულებას
 	Separate the values with semicolons or spaces.	გამოყავით მნიშვნელობები წერტილმძიმით ან ჰარით.
+	Sequential	მიმდევრობითი
 	Service time	მომსახურების დრო
 	Services	სერვისები
 	Set Property	თვისების დაყენება
@@ -514,6 +529,7 @@
 	Untitled model	უსათაურო მოდელი
 	Upper value	ზედა მნიშვნელობა
 	Use System Setting	სისტემის პარამეტრის გამოყენება
+	Use for charts	დიაგრამებისთვის გამოყენება
 	Use these units in the model	ამ ერთეულების გამოყენება მოდელში
 	Utilisation	გამოყენების დონე
 	Value	მნიშვნელობა
@@ -587,10 +603,16 @@
 	years	წელი
 	{block}: units	{block}: ერთეულები
 	{busy} busy	დაკავებული: {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – კონტრასტი დიაგრამის ფონზე {ratio}:1, 3:1-ზე ნაკლები: მიაწერეთ წარწერები მის სერიას ან აჩვენეთ რიცხვები ცხრილში.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – ნაცრისფრად ჩანს (გაჯერება {chroma}, საჭიროა 0.10).
 	{entered} in, {left} out, {lost} lost	შევიდა: {entered}, გავიდა: {left}, დაიკარგა: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: მინიმუმი {min}, ყველაზე სავარაუდო {mode}, {upper}
 	{field}: not editable here yet	{field}: აქ ჯერ არ შეიძლება რედაქტირება
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft ახალ ფაილს მხოლოდ BPMN-ად წერს; აირჩიეთ სახელი, რომელიც .bpmn-ით მთავრდება
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} და {second} – სხვაობა ფერების ნორმალური აღქმისას {de}, საჭიროა 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} და {second} – სხვაობა წითელ-მწვანე დალტონიზმისას {de}, საჭიროა 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} და {second} – სხვაობა წითელ-მწვანე დალტონიზმისას {de}, საჭიროა 8: გაარჩიეთ ისინი მხოლოდ წარწერებით.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} და {second} – სიღიის სხვაობა {step}, საჭიროა 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: ალბათობა არის რიცხვი 0-დან 1-მდე
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} გამეორებიდან {met}-მა მიაღწია მიზანს: {p} (95%-იანი ინტერვალი {lo}-დან {hi}-მდე)
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (მითითებული მნიშვნელობა, საშუალო)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – ფონი „{background}“: {ratio}:1, საჭიროა {min}:1
 	{title}: now {now}, at most {most}	{title}: ახლა {now}, მაქსიმუმ {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% ნდობის ინტერვალი
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± არის რეპლიკაციებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე.
 	· no results yet	· შედეგები ჯერ არ არის

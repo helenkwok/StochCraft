@@ -38,6 +38,7 @@
 	Add alternative	Afegeix una alternativa
 	Add calendar	Afegeix un calendari
 	Add calendar entry	Afegeix una entrada de calendari
+	Add colour	Afegeix un color
 	Add period	Afegeix un període
 	Add point	Afegeix un punt
 	Add pool	Afegeix un grup
@@ -48,6 +49,7 @@
 	Added pool {id}	S'ha afegit el grup {id}
 	Added {block} ({id})	S'ha afegit {block} ({id})
 	Align	Alinea
+	All checks pass.	Totes les comprovacions són correctes.
 	All text meets the contrast minimums.	Tot el text compleix els contrastos mínims.
 	Also: {rule}	També: {rule}
 	Alternative {n}	Alternativa {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Avaries i disponibilitat
 	Bring All to Front	Porta-ho tot al davant
 	Built with	Creat amb
+	Built-in palettes are read-only. Duplicate one to change its colours.	Les paletes integrades són només de lectura. Dupliqueu-ne una per canviar-ne els colors.
 	Built-in themes are read-only. Duplicate one to change its colours.	Els temes integrats són només de lectura. Dupliqueu-ne un per canviar-ne els colors.
 	Busiest	El més ocupat
 	By role	Per rol
@@ -89,6 +92,7 @@
 	Cancel run	Cancel·la l'execució
 	Canvas	Superfície principal
 	Capacity	Capacitat
+	Categorical	Categòriques
 	Centres	Centres horitzontals
 	Change	Canvi
 	Change Block	Canvia el bloc
@@ -99,12 +103,16 @@
 	Changes	Canvis
 	Changing the time unit does not convert the times already in the model.	Canviar la unitat de temps no converteix els temps que ja hi ha al model.
 	Chart	Gràfic
+	Chart colours	Colors dels gràfics
+	Chart colours…	Colors dels gràfics…
 	Chart hover	Gràfic sota el punter
 	Check every	Comprovar cada
+	Checks	Comprovacions
 	Choose…	Tria…
 	Clear Menu	Buida el menú
 	Close	Tanca
 	Close Window	Tanca la finestra
+	Colour {n}	Color {n}
 	Comes from	Prové de
 	Condition of {id}	Condició de {id}
 	Connect	Connecta
@@ -135,6 +143,7 @@
 	Disconnect	Desconnecta
 	Discrete values	Valors discrets
 	Discrete-event simulation, from model files to results.	Simulació d'esdeveniments discrets: dels fitxers del model als resultats.
+	Diverging	Divergents
 	Does not repeat	No es repeteix
 	Don't Save	No desis
 	Download	Baixa
@@ -174,6 +183,7 @@
 	Export table (CSV)	Exporta la taula (CSV)
 	Exported {file}	S'ha exportat {file}
 	Expression	Expressió
+	Fail	Error
 	Fails above, waiting per working server	Falla per sobre de, en espera per servidor en servei
 	Failure interrupts the job	L'avaria interromp la feina
 	Family	Família
@@ -220,6 +230,7 @@
 	Left edges	Vores esquerres
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Sota MIT License o Apache License 2.0, a la vostra elecció.
 	Light	Clar
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	La lluminositat canvia de sentit entre {first} i {second}; una gradació ha de ser només cada cop més clara o només cada cop més fosca.
 	Log-normal	Log-normal
 	Lost (no way out)	Perdudes (sense sortida)
 	Lost (waiting room full)	Perdudes (sala d'espera plena)
@@ -274,6 +285,8 @@
 	OEE availability	Disponibilitat OEE
 	OEE effectiveness	Eficàcia OEE
 	On	Dies
+	On the dark canvas	Sobre la superfície principal fosca
+	On the light canvas	Sobre la superfície principal clara
 	One change, which Undo takes back	Un sol canvi, que Desfés reverteix
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un treballador, arribades aleatòries: la cua clàssica, contrastada amb la teoria.
 	One task per BPSim distribution, to compare their spread.	Una tasca per cada distribució BPSim per comparar-ne la dispersió.
@@ -339,6 +352,7 @@
 	Remove Property	Elimina la propietat
 	Remove alternative {n}	Elimina l'alternativa {n}
 	Remove block	Elimina el bloc
+	Remove colour	Elimina el color
 	Remove the calendar {id}	Elimina el calendari {id}
 	Remove the flow {id}	Elimina el flux {id}
 	Remove the pool {id}	Elimina el grup {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Seleccioneu un bloc per veure'n la cua al llarg del temps.
 	Sender waits during transfer	L'emissor espera durant la transferència
 	Separate the values with semicolons or spaces.	Separeu els valors amb punts i comes o espais.
+	Sequential	Seqüencials
 	Service time	Temps de servei
 	Services	Serveis
 	Set Property	Defineix la propietat
@@ -514,6 +529,7 @@
 	Untitled model	Model sense títol
 	Upper value	Valor superior
 	Use System Setting	Fes servir la configuració del sistema
+	Use for charts	Usa per als gràfics
 	Use these units in the model	Fes servir aquestes unitats al model
 	Utilisation	Utilització
 	Value	Valor
@@ -587,10 +603,16 @@
 	years	anys
 	{block}: units	{block}: unitats
 	{busy} busy	{busy} ocupats
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} té un contrast de {ratio}:1 sobre el fons del gràfic, per sota de 3:1: etiqueteu-ne la sèrie o mostreu els nombres en una taula.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} es veu gris (croma {chroma}, cal 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} entrades, {left} sortides, {lost} perdudes
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: mínim {min}, més probable {mode}, {upper}
 	{field}: not editable here yet	{field}: encara no es pot editar aquí
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft només escriu fitxers nous en BPMN; tria un nom acabat en .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} i {second} difereixen {de} per a persones amb una percepció del color normal, cal 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} i {second} difereixen {de} per a persones amb daltonisme vermell-verd, cal 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} i {second} difereixen {de} per a persones amb daltonisme vermell-verd, cal 8: distingiu-los només amb etiquetes.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} i {second} difereixen {step} en lluminositat, cal 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: una probabilitat és un nombre entre 0 i 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} de {of} rèpliques han complert l'objectiu: {p} (interval del 95% de {lo} a {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (valor definit, mitjana)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} sobre {background}: {ratio}:1, cal {min}:1
 	{title}: now {now}, at most {most}	{title}: ara {now}, com a màxim {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± IC del 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± és la semiamplada d'un interval de confiança Student-t del 95% de la mitjana entre rèpliques.
 	· no results yet	· encara no hi ha resultats

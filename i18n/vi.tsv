@@ -38,6 +38,7 @@
 	Add alternative	Thêm phương án
 	Add calendar	Thêm lịch
 	Add calendar entry	Thêm mục lịch
+	Add colour	Thêm màu
 	Add period	Thêm khoảng thời gian
 	Add point	Thêm điểm
 	Add pool	Thêm nhóm
@@ -48,6 +49,7 @@
 	Added pool {id}	Đã thêm nhóm {id}
 	Added {block} ({id})	Đã thêm {block} ({id})
 	Align	Căn chỉnh
+	All checks pass.	Đạt mọi kiểm tra.
 	All text meets the contrast minimums.	Mọi văn bản đều đạt độ tương phản tối thiểu.
 	Also: {rule}	Ngoài ra: {rule}
 	Alternative {n}	Phương án {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Hỏng hóc và độ khả dụng
 	Bring All to Front	Đưa tất cả ra trước
 	Built with	Được xây dựng bằng
+	Built-in palettes are read-only. Duplicate one to change its colours.	Các bảng màu có sẵn chỉ đọc. Hãy nhân bản một bảng màu để đổi màu của nó.
 	Built-in themes are read-only. Duplicate one to change its colours.	Các chủ đề có sẵn chỉ đọc. Hãy nhân bản một chủ đề để đổi màu của nó.
 	Busiest	Bận nhất
 	By role	Theo vai trò
@@ -89,6 +92,7 @@
 	Cancel run	Hủy chạy
 	Canvas	Bề mặt chính
 	Capacity	Công suất
+	Categorical	Phân loại
 	Centres	Tâm ngang
 	Change	Thay đổi
 	Change Block	Thay đổi khối
@@ -99,12 +103,16 @@
 	Changes	Các thay đổi
 	Changing the time unit does not convert the times already in the model.	Thay đổi đơn vị thời gian không chuyển đổi các giá trị thời gian đã có trong mô hình.
 	Chart	Biểu đồ
+	Chart colours	Màu biểu đồ
+	Chart colours…	Màu biểu đồ…
 	Chart hover	Biểu đồ khi trỏ chuột
 	Check every	Kiểm tra mỗi
+	Checks	Kiểm tra
 	Choose…	Chọn…
 	Clear Menu	Xóa menu
 	Close	Đóng
 	Close Window	Đóng cửa sổ
+	Colour {n}	Màu {n}
 	Comes from	Đến từ
 	Condition of {id}	Điều kiện của {id}
 	Connect	Kết nối
@@ -135,6 +143,7 @@
 	Disconnect	Ngắt kết nối
 	Discrete values	Giá trị rời rạc
 	Discrete-event simulation, from model files to results.	Mô phỏng sự kiện rời rạc, từ tệp mô hình đến kết quả.
+	Diverging	Phân kỳ
 	Does not repeat	Không lặp lại
 	Don't Save	Không lưu
 	Download	Tải xuống
@@ -174,6 +183,7 @@
 	Export table (CSV)	Xuất bảng (CSV)
 	Exported {file}	Đã xuất {file}
 	Expression	Biểu thức
+	Fail	Không đạt
 	Fails above, waiting per working server	Không đạt khi vượt (số chờ trên mỗi máy chủ đang hoạt động)
 	Failure interrupts the job	Hỏng hóc làm gián đoạn công việc
 	Family	Họ phân phối
@@ -220,6 +230,7 @@
 	Left edges	Cạnh trái
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Được cấp phép theo MIT License hoặc Apache License 2.0, tùy lựa chọn.
 	Light	Sáng
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	Độ sáng đổi chiều giữa {first} và {second}; một dải màu chỉ được sáng dần hoặc chỉ tối dần.
 	Log-normal	Chuẩn logarit
 	Lost (no way out)	Bị mất (không có lối ra)
 	Lost (waiting room full)	Bị mất (khu vực chờ đầy)
@@ -274,6 +285,8 @@
 	OEE availability	Độ khả dụng OEE
 	OEE effectiveness	Hiệu quả OEE
 	On	Các ngày
+	On the dark canvas	Trên bề mặt chính tối
+	On the light canvas	Trên bề mặt chính sáng
 	One change, which Undo takes back	Một thay đổi, có thể hoàn tác
 	One clerk, random arrivals: the textbook queue, checked against theory.	Một nhân viên phục vụ, lượt đến ngẫu nhiên: hàng đợi kinh điển được đối chiếu với lý thuyết.
 	One task per BPSim distribution, to compare their spread.	Mỗi phân phối BPSim có một tác vụ để so sánh độ phân tán.
@@ -339,6 +352,7 @@
 	Remove Property	Xóa thuộc tính
 	Remove alternative {n}	Xóa phương án {n}
 	Remove block	Xóa khối
+	Remove colour	Xóa màu
 	Remove the calendar {id}	Xóa lịch {id}
 	Remove the flow {id}	Xóa luồng {id}
 	Remove the pool {id}	Xóa nhóm {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Chọn một khối để xem hàng đợi của nó theo thời gian.
 	Sender waits during transfer	Bên gửi chờ trong khi chuyển
 	Separate the values with semicolons or spaces.	Phân tách các giá trị bằng dấu chấm phẩy hoặc dấu cách.
+	Sequential	Tuần tự
 	Service time	Thời gian phục vụ
 	Services	Dịch vụ
 	Set Property	Đặt thuộc tính
@@ -514,6 +529,7 @@
 	Untitled model	Mô hình chưa đặt tên
 	Upper value	Giá trị trên
 	Use System Setting	Dùng cài đặt hệ thống
+	Use for charts	Dùng cho biểu đồ
 	Use these units in the model	Dùng các đơn vị này trong mô hình
 	Utilisation	Mức sử dụng
 	Value	Giá trị
@@ -587,10 +603,16 @@
 	years	năm
 	{block}: units	{block}: đơn vị
 	{busy} busy	{busy} đang bận
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} có độ tương phản {ratio}:1 trên nền biểu đồ, dưới 3:1: hãy gắn nhãn cho chuỗi dữ liệu của nó hoặc hiển thị các số trong một bảng.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} trông như màu xám (độ bão hòa {chroma}, cần 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} vào, {left} ra, {lost} mất
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: nhỏ nhất {min}, có khả năng nhất {mode}, {upper}
 	{field}: not editable here yet	{field}: chưa thể chỉnh sửa tại đây
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft chỉ ghi tệp mới dưới dạng BPMN; hãy chọn tên kết thúc bằng .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} và {second} khác nhau {de} với người xem có sắc giác bình thường, cần 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} và {second} khác nhau {de} với người xem bị mù màu đỏ-lục, cần 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} và {second} khác nhau {de} với người xem bị mù màu đỏ-lục, cần 8: chỉ phân biệt chúng bằng nhãn.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} và {second} khác nhau về độ sáng {step}, cần 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: xác suất là số từ 0 đến 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} trên {of} lần lặp đạt mục tiêu: {p} (khoảng 95% từ {lo} đến {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (giá trị đặt, trung bình)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} trên {background}: {ratio}:1, cần {min}:1
 	{title}: now {now}, at most {most}	{title}: hiện tại {now}, tối đa {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± KTC 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± là một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần lặp.
 	· no results yet	· chưa có kết quả

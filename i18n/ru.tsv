@@ -38,6 +38,7 @@
 	Add alternative	Добавить альтернативу
 	Add calendar	Добавить календарь
 	Add calendar entry	Добавить запись календаря
+	Add colour	Добавить цвет
 	Add period	Добавить период
 	Add point	Добавить точку
 	Add pool	Добавить пул
@@ -48,6 +49,7 @@
 	Added pool {id}	Добавлен пул {id}
 	Added {block} ({id})	Добавлен {block} ({id})
 	Align	Выравнивание
+	All checks pass.	Все проверки пройдены.
 	All text meets the contrast minimums.	Весь текст соответствует минимальным требованиям к контрасту.
 	Also: {rule}	Также: {rule}
 	Alternative {n}	Альтернатива {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Отказы и доступность
 	Bring All to Front	Все окна на передний план
 	Built with	Создано с использованием
+	Built-in palettes are read-only. Duplicate one to change its colours.	Встроенные палитры доступны только для чтения. Чтобы изменить цвета, создайте дубликат одной из них.
 	Built-in themes are read-only. Duplicate one to change its colours.	Встроенные темы доступны только для чтения. Чтобы изменить цвета, создайте дубликат одной из них.
 	Busiest	Самый загруженный
 	By role	По роли
@@ -89,6 +92,7 @@
 	Cancel run	Отменить запуск
 	Canvas	Основная поверхность
 	Capacity	Количество обслуживающих единиц
+	Categorical	Категориальные
 	Centres	Центры по горизонтали
 	Change	Изменение
 	Change Block	Изменить блок
@@ -99,12 +103,16 @@
 	Changes	Изменения
 	Changing the time unit does not convert the times already in the model.	При изменении единицы времени уже заданные в модели времена не пересчитываются.
 	Chart	Диаграмма
+	Chart colours	Цвета диаграмм
+	Chart colours…	Цвета диаграмм…
 	Chart hover	Диаграмма под указателем
 	Check every	Проверять каждые
+	Checks	Проверки
 	Choose…	Выберите…
 	Clear Menu	Очистить меню
 	Close	Закрыть
 	Close Window	Закрыть окно
+	Colour {n}	Цвет {n}
 	Comes from	Поступает от
 	Condition of {id}	Условие для {id}
 	Connect	Соединить
@@ -135,6 +143,7 @@
 	Disconnect	Разъединить
 	Discrete values	Дискретные значения
 	Discrete-event simulation, from model files to results.	Дискретно-событийное моделирование: от файлов модели до результатов.
+	Diverging	Расходящиеся
 	Does not repeat	Не повторяется
 	Don't Save	Не сохранять
 	Download	Скачать
@@ -174,6 +183,7 @@
 	Export table (CSV)	Экспортировать таблицу (CSV)
 	Exported {file}	Экспортирован {file}
 	Expression	Выражение
+	Fail	Не пройдено
 	Fails above, waiting per working server	Не проходит выше (ожидающих на сервер в работе)
 	Failure interrupts the job	Отказ прерывает работу
 	Family	Семейство
@@ -220,6 +230,7 @@
 	Left edges	Левые края
 	Licensed under the MIT License or the Apache License 2.0, at your option.	На выбор: MIT License или Apache License 2.0.
 	Light	Светлая
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} и {second} — светлота меняет направление; шкала должна только светлеть или только темнеть.
 	Log-normal	Логнормальное распределение
 	Lost (no way out)	Потери (нет выхода)
 	Lost (waiting room full)	Потери (места ожидания заняты)
@@ -274,6 +285,8 @@
 	OEE availability	Доступность OEE
 	OEE effectiveness	Результативность OEE
 	On	Дни
+	On the dark canvas	На тёмной основной поверхности
+	On the light canvas	На светлой основной поверхности
 	One change, which Undo takes back	Одно изменение, которое отменяет Отменить
 	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, случайные прибытия: классическая очередь, проверенная по теории.
 	One task per BPSim distribution, to compare their spread.	По одной задаче на каждое распределение BPSim для сравнения разброса.
@@ -339,6 +352,7 @@
 	Remove Property	Удалить свойство
 	Remove alternative {n}	Удалить альтернативу {n}
 	Remove block	Удалить блок
+	Remove colour	Удалить цвет
 	Remove the calendar {id}	Удалить календарь {id}
 	Remove the flow {id}	Удалить поток {id}
 	Remove the pool {id}	Удалить пул {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Выберите блок, чтобы увидеть его очередь во времени.
 	Sender waits during transfer	Отправитель ждёт во время передачи
 	Separate the values with semicolons or spaces.	Разделяйте значения точкой с запятой или пробелами.
+	Sequential	Последовательные
 	Service time	Время обслуживания
 	Services	Службы
 	Set Property	Задать свойство
@@ -514,6 +529,7 @@
 	Untitled model	Модель без названия
 	Upper value	Верхнее значение
 	Use System Setting	Использовать системную настройку
+	Use for charts	Использовать для диаграмм
 	Use these units in the model	Использовать эти единицы в модели
 	Utilisation	Коэффициент использования
 	Value	Значение
@@ -587,10 +603,16 @@
 	years	годы
 	{block}: units	{block}: единицы
 	{busy} busy	Занято: {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} — контраст с фоном диаграммы {ratio}:1, ниже 3:1: подпишите его ряд или покажите числа в таблице.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} — выглядит серым (насыщенность {chroma}, нужно 0.10).
 	{entered} in, {left} out, {lost} lost	Вошло: {entered}, вышло: {left}, потеряно: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: минимум {min}, наиболее вероятное {mode}, {upper}
 	{field}: not editable here yet	{field}: здесь пока нельзя редактировать
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft записывает новый файл только в BPMN; выберите имя, оканчивающееся на .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} и {second} — различие при нормальном цветовом зрении {de}, нужно 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} и {second} — различие при красно-зелёном дальтонизме {de}, нужно 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} и {second} — различие при красно-зелёном дальтонизме {de}, нужно 8: различайте их только по подписям.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} и {second} — различие по светлоте {step}, нужно 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: вероятность должна быть числом от 0 до 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} из {of} репликаций достигли цели: {p} (95% интервал от {lo} до {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (заданное значение, среднее)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} — фон «{background}»: {ratio}:1, нужно {min}:1
 	{title}: now {now}, at most {most}	{title}: сейчас {now}, не более {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% ДИ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — половина ширины 95% доверительного интервала Student-t для среднего значения по повторениям.
 	· no results yet	· результатов пока нет

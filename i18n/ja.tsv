@@ -38,6 +38,7 @@
 	Add alternative	代替案を追加
 	Add calendar	カレンダーを追加
 	Add calendar entry	カレンダー項目を追加
+	Add colour	色を追加
 	Add period	期間を追加
 	Add point	点を追加
 	Add pool	プールを追加
@@ -48,6 +49,7 @@
 	Added pool {id}	プール {id} を追加しました
 	Added {block} ({id})	{block} ({id}) を追加しました
 	Align	整列
+	All checks pass.	すべてのチェックに合格しました。
 	All text meets the contrast minimums.	すべてのテキストが最低コントラストを満たしています。
 	Also: {rule}	その他: {rule}
 	Alternative {n}	代替案 {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	故障と稼働可否
 	Bring All to Front	すべてを手前に移動
 	Built with	使用技術
+	Built-in palettes are read-only. Duplicate one to change its colours.	組み込みパレットは読み取り専用です。色を変えるには、いずれかを複製してください。
 	Built-in themes are read-only. Duplicate one to change its colours.	組み込みテーマは読み取り専用です。色を変えるには、いずれかを複製してください。
 	Busiest	最も稼働率が高い
 	By role	役割で指定
@@ -89,6 +92,7 @@
 	Cancel run	実行をキャンセル
 	Canvas	キャンバス
 	Capacity	処理能力
+	Categorical	分類型
 	Centres	左右中央
 	Change	変化幅
 	Change Block	ブロックを変更
@@ -99,12 +103,16 @@
 	Changes	変更
 	Changing the time unit does not convert the times already in the model.	時間単位を変更しても、モデル内の既存の時間は換算されません。
 	Chart	グラフ
+	Chart colours	グラフの色
+	Chart colours…	グラフの色…
 	Chart hover	ポインター下のグラフ
 	Check every	チェック間隔
+	Checks	チェック
 	Choose…	選択…
 	Clear Menu	メニューを消去
 	Close	閉じる
 	Close Window	ウィンドウを閉じる
+	Colour {n}	色 {n}
 	Comes from	接続元
 	Condition of {id}	{id} の条件
 	Connect	接続
@@ -135,6 +143,7 @@
 	Disconnect	接続を解除
 	Discrete values	離散値
 	Discrete-event simulation, from model files to results.	モデルファイルから結果まで、離散事象シミュレーション。
+	Diverging	発散型
 	Does not repeat	繰り返さない
 	Don't Save	保存しない
 	Download	ダウンロード
@@ -174,6 +183,7 @@
 	Export table (CSV)	表をエクスポート (CSV)
 	Exported {file}	{file} をエクスポートしました
 	Expression	式
+	Fail	不合格
 	Fails above, waiting per working server	失敗の上限（稼働中のサーバ1台あたりの待ち数）
 	Failure interrupts the job	故障で作業を中断
 	Family	分布族
@@ -220,6 +230,7 @@
 	Left edges	左端
 	Licensed under the MIT License or the Apache License 2.0, at your option.	MIT License または Apache License 2.0 のいずれかを選択して利用できます。
 	Light	ライト
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} と {second} の間で明度の向きが逆になっています。グラデーションは明るくなる一方か暗くなる一方でなければなりません。
 	Log-normal	対数正規分布
 	Lost (no way out)	損失（出口なし）
 	Lost (waiting room full)	損失（待機場所が満員）
@@ -274,6 +285,8 @@
 	OEE availability	OEE 可動率
 	OEE effectiveness	OEE 有効性
 	On	曜日
+	On the dark canvas	ダークのキャンバス上
+	On the light canvas	ライトのキャンバス上
 	One change, which Undo takes back	元に戻すで取り消せる 1 回の変更
 	One clerk, random arrivals: the textbook queue, checked against theory.	窓口が 1 つ、到着はランダム。教科書的な待ち行列を理論値と比較します。
 	One task per BPSim distribution, to compare their spread.	各 BPSim 分布につき 1 つのタスクを使い、ばらつきを比較します。
@@ -339,6 +352,7 @@
 	Remove Property	プロパティを削除
 	Remove alternative {n}	代替案 {n} を削除
 	Remove block	ブロックを削除
+	Remove colour	色を削除
 	Remove the calendar {id}	カレンダー {id} を削除
 	Remove the flow {id}	フロー {id} を削除
 	Remove the pool {id}	プール {id} を削除
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	ブロックを選択すると、その待ち行列の推移が表示されます。
 	Sender waits during transfer	搬送中は送り元が待機
 	Separate the values with semicolons or spaces.	値はセミコロンまたはスペースで区切ってください。
+	Sequential	順序型
 	Service time	サービス時間
 	Services	サービス
 	Set Property	プロパティを設定
@@ -514,6 +529,7 @@
 	Untitled model	無題のモデル
 	Upper value	上限値
 	Use System Setting	システム設定を使用
+	Use for charts	グラフに使用
 	Use these units in the model	この数量をモデルで使う
 	Utilisation	稼働率
 	Value	値
@@ -587,10 +603,16 @@
 	years	年
 	{block}: units	{block}: 数量
 	{busy} busy	使用中 {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} はグラフの背景に対してコントラスト {ratio}:1 で、3:1 未満です。系列にラベルを付けるか、数値を表で示してください。
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} は灰色に見えます (彩度 {chroma}、0.10 以上が必要)。
 	{entered} in, {left} out, {lost} lost	入 {entered}・出 {left}・損失 {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: 最小値 {min}、最頻値 {mode}、{upper}
 	{field}: not editable here yet	{field}：ここではまだ編集できません
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft は新しいファイルを BPMN でのみ書き出します。.bpmn で終わる名前を選んでください
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} と {second} の差は、通常の色覚では {de} です。15 以上が必要です。
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} と {second} の差は、赤緑色覚異常では {de} です。8 以上が必要です。
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} と {second} の差は、赤緑色覚異常では {de} です。8 以上が必要です。ラベルだけで区別してください。
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} と {second} の明度の差は {step} です。0.06 以上が必要です。
 	{id}: a probability is a number from 0 to 1	{id}：確率は 0 から 1 までの数値です
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} 回中 {met} 回が目標を達成: {p}（95% 区間 {lo}〜{hi}）
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property}（設定値、平均）
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} 上の {text}: {ratio}:1、{min}:1 以上が必要
 	{title}: now {now}, at most {most}	{title}: 現在 {now}、最大 {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% 信頼区間
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± は、反復実行間の平均値に対する 95% Student-t 信頼区間の半幅です。
 	· no results yet	· 結果はまだありません

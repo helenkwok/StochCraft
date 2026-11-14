@@ -38,6 +38,7 @@
 	Add alternative	Lägg till alternativ
 	Add calendar	Lägg till kalender
 	Add calendar entry	Lägg till kalenderpost
+	Add colour	Lägg till färg
 	Add period	Lägg till period
 	Add point	Lägg till punkt
 	Add pool	Lägg till pool
@@ -48,6 +49,7 @@
 	Added pool {id}	Lade till poolen {id}
 	Added {block} ({id})	Lade till {block} ({id})
 	Align	Justera
+	All checks pass.	Alla kontroller godkända.
 	All text meets the contrast minimums.	All text når minimikontrasten.
 	Also: {rule}	Även: {rule}
 	Alternative {n}	Alternativ {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Haverier och tillgänglighet
 	Bring All to Front	Lägg alla överst
 	Built with	Skapad med
+	Built-in palettes are read-only. Duplicate one to change its colours.	Inbyggda paletter är skrivskyddade. Duplicera en för att ändra dess färger.
 	Built-in themes are read-only. Duplicate one to change its colours.	Inbyggda teman är skrivskyddade. Duplicera ett för att ändra dess färger.
 	Busiest	Mest belastad
 	By role	Efter roll
@@ -89,6 +92,7 @@
 	Cancel run	Avbryt körning
 	Canvas	Huvudyta
 	Capacity	Kapacitet
+	Categorical	Kategoriska
 	Centres	Vågräta mittpunkter
 	Change	Ändring
 	Change Block	Ändra block
@@ -99,12 +103,16 @@
 	Changes	Ändringar
 	Changing the time unit does not convert the times already in the model.	Att ändra tidsenheten omvandlar inte tiderna som redan finns i modellen.
 	Chart	Diagram
+	Chart colours	Diagramfärger
+	Chart colours…	Diagramfärger…
 	Chart hover	Diagram under pekaren
 	Check every	Kontroll var
+	Checks	Kontroller
 	Choose…	Välj…
 	Clear Menu	Rensa menyn
 	Close	Stäng
 	Close Window	Stäng fönster
+	Colour {n}	Färg {n}
 	Comes from	Kommer från
 	Condition of {id}	Villkor för {id}
 	Connect	Anslut
@@ -135,6 +143,7 @@
 	Disconnect	Koppla från
 	Discrete values	Diskreta värden
 	Discrete-event simulation, from model files to results.	Diskret händelsesimulering, från modellfiler till resultat.
+	Diverging	Divergerande
 	Does not repeat	Upprepas inte
 	Don't Save	Spara inte
 	Download	Hämta
@@ -174,6 +183,7 @@
 	Export table (CSV)	Exportera tabell (CSV)
 	Exported {file}	Exporterade {file}
 	Expression	Uttryck
+	Fail	Underkänd
 	Fails above, waiting per working server	Underkänd över (väntande per server i drift)
 	Failure interrupts the job	Haveri avbryter arbetet
 	Family	Familj
@@ -220,6 +230,7 @@
 	Left edges	Vänsterkanter
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licensierad enligt MIT License eller Apache License 2.0, enligt ditt val.
 	Light	Ljust
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	Ljusheten byter riktning mellan {first} och {second}; en skala får bara bli ljusare eller bara mörkare.
 	Log-normal	Lognormal
 	Lost (no way out)	Förlorade (ingen väg ut)
 	Lost (waiting room full)	Förlorade (väntrummet fullt)
@@ -274,6 +285,8 @@
 	OEE availability	OEE-tillgänglighet
 	OEE effectiveness	OEE-effektivitet
 	On	Dagar
+	On the dark canvas	På mörk huvudyta
+	On the light canvas	På ljus huvudyta
 	One change, which Undo takes back	En ändring, som Ångra tar tillbaka
 	One clerk, random arrivals: the textbook queue, checked against theory.	En handläggare, slumpmässiga ankomster: den klassiska kön, kontrollerad mot teorin.
 	One task per BPSim distribution, to compare their spread.	En uppgift per BPSim-fördelning för att jämföra deras spridning.
@@ -339,6 +352,7 @@
 	Remove Property	Ta bort egenskap
 	Remove alternative {n}	Ta bort alternativ {n}
 	Remove block	Ta bort block
+	Remove colour	Ta bort färg
 	Remove the calendar {id}	Ta bort kalendern {id}
 	Remove the flow {id}	Ta bort flödet {id}
 	Remove the pool {id}	Ta bort poolen {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Välj ett block för att se dess kö över tid.
 	Sender waits during transfer	Avsändaren väntar under överföringen
 	Separate the values with semicolons or spaces.	Skilj värdena åt med semikolon eller mellanslag.
+	Sequential	Sekventiella
 	Service time	Servicetid
 	Services	Tjänster
 	Set Property	Ange egenskap
@@ -514,6 +529,7 @@
 	Untitled model	Namnlös modell
 	Upper value	Övre värde
 	Use System Setting	Använd systeminställning
+	Use for charts	Använd för diagram
 	Use these units in the model	Använd dessa enheter i modellen
 	Utilisation	Utnyttjandegrad
 	Value	Värde
@@ -587,10 +603,16 @@
 	years	år
 	{block}: units	{block}: enheter
 	{busy} busy	{busy} upptagna
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} har kontrast {ratio}:1 mot diagrammets bakgrund, under 3:1: märk dess serie med etiketter eller visa talen i en tabell.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} ser grå ut (färgmättnad {chroma}, kräver 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} in, {left} ut, {lost} förlorade
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, mest sannolikt {mode}, {upper}
 	{field}: not editable here yet	{field}: kan ännu inte redigeras här
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft skriver bara nya filer som BPMN; välj ett namn som slutar på .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} och {second} skiljer sig med {de} för betraktare med normalt färgseende, kräver 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} och {second} skiljer sig med {de} för betraktare med röd-grön färgblindhet, kräver 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} och {second} skiljer sig med {de} för betraktare med röd-grön färgblindhet, kräver 8: skilj dem åt bara med etiketter.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} och {second} skiljer sig i ljushet med {step}, kräver 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: en sannolikhet är ett tal mellan 0 och 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} av {of} replikationer nådde målet: {p} (95 %-intervall {lo} till {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (angivet värde, medelvärde)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} på {background}: {ratio}:1, kräver {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, högst {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% KI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± är halva bredden av ett 95% Student-t-konfidensintervall för medelvärdet över replikationerna.
 	· no results yet	· inga resultat ännu

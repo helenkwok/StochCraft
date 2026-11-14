@@ -38,6 +38,7 @@
 	Add alternative	Ajouter une alternative
 	Add calendar	Ajouter un calendrier
 	Add calendar entry	Ajouter une entrée de calendrier
+	Add colour	Ajouter une couleur
 	Add period	Ajouter une période
 	Add point	Ajouter un point
 	Add pool	Ajouter un pool
@@ -48,6 +49,7 @@
 	Added pool {id}	Pool {id} ajouté
 	Added {block} ({id})	{block} ({id}) ajouté
 	Align	Aligner
+	All checks pass.	Toutes les vérifications sont réussies.
 	All text meets the contrast minimums.	Tout le texte atteint les contrastes minimaux.
 	Also: {rule}	Aussi : {rule}
 	Alternative {n}	Alternative {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Pannes et disponibilité
 	Bring All to Front	Tout ramener au premier plan
 	Built with	Développé avec
+	Built-in palettes are read-only. Duplicate one to change its colours.	Les palettes intégrées sont en lecture seule. Dupliquer l'une d'elles pour en changer les couleurs.
 	Built-in themes are read-only. Duplicate one to change its colours.	Les thèmes intégrés sont en lecture seule. Dupliquer l'un d'eux pour en changer les couleurs.
 	Busiest	Le plus occupé
 	By role	Par rôle
@@ -89,6 +92,7 @@
 	Cancel run	Annuler l'exécution
 	Canvas	Surface principale
 	Capacity	Capacité
+	Categorical	Catégorielles
 	Centres	Centres horizontaux
 	Change	Variation
 	Change Block	Modifier le bloc
@@ -99,12 +103,16 @@
 	Changes	Modifications
 	Changing the time unit does not convert the times already in the model.	Changer l'unité de temps ne convertit pas les durées déjà définies dans le modèle.
 	Chart	Graphique
+	Chart colours	Couleurs des graphiques
+	Chart colours…	Couleurs des graphiques…
 	Chart hover	Graphique sous le pointeur
 	Check every	Contrôler toutes les
+	Checks	Vérifications
 	Choose…	Choisir…
 	Clear Menu	Effacer le menu
 	Close	Fermer
 	Close Window	Fermer la fenêtre
+	Colour {n}	Couleur {n}
 	Comes from	Provient de
 	Condition of {id}	Condition de {id}
 	Connect	Connecter
@@ -135,6 +143,7 @@
 	Disconnect	Déconnecter
 	Discrete values	Valeurs discrètes
 	Discrete-event simulation, from model files to results.	Simulation à événements discrets, des fichiers de modèle aux résultats.
+	Diverging	Divergentes
 	Does not repeat	Ne se répète pas
 	Don't Save	Ne pas enregistrer
 	Download	Télécharger
@@ -174,6 +183,7 @@
 	Export table (CSV)	Exporter le tableau (CSV)
 	Exported {file}	{file} exporté
 	Expression	Expression
+	Fail	Échec
 	Fails above, waiting per working server	Échec au-delà de (en attente par serveur en service)
 	Failure interrupts the job	La panne interrompt le travail
 	Family	Famille
@@ -220,6 +230,7 @@
 	Left edges	Bords gauches
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Sous MIT License ou Apache License 2.0, au choix.
 	Light	Clair
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	La clarté change de sens entre {first} et {second} ; une gamme doit seulement s'éclaircir ou seulement s'assombrir.
 	Log-normal	Log-normale
 	Lost (no way out)	Perdus (aucune sortie)
 	Lost (waiting room full)	Perdus (salle d'attente pleine)
@@ -274,6 +285,8 @@
 	OEE availability	Disponibilité OEE
 	OEE effectiveness	Efficacité OEE
 	On	Jours
+	On the dark canvas	Sur la surface principale sombre
+	On the light canvas	Sur la surface principale claire
 	One change, which Undo takes back	Un seul changement, qu'Annuler défait
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un seul agent, des arrivées aléatoires : la file d'attente classique, vérifiée par la théorie.
 	One task per BPSim distribution, to compare their spread.	Une tâche par distribution BPSim pour comparer leur dispersion.
@@ -339,6 +352,7 @@
 	Remove Property	Supprimer la propriété
 	Remove alternative {n}	Supprimer l'alternative {n}
 	Remove block	Supprimer le bloc
+	Remove colour	Supprimer la couleur
 	Remove the calendar {id}	Supprimer le calendrier {id}
 	Remove the flow {id}	Supprimer le flux {id}
 	Remove the pool {id}	Supprimer le pool {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Sélectionnez un bloc pour voir sa file au fil du temps.
 	Sender waits during transfer	L'expéditeur attend pendant le transfert
 	Separate the values with semicolons or spaces.	Séparez les valeurs par des points-virgules ou des espaces.
+	Sequential	Séquentielles
 	Service time	Temps de service
 	Services	Services
 	Set Property	Définir la propriété
@@ -514,6 +529,7 @@
 	Untitled model	Modèle sans titre
 	Upper value	Valeur haute
 	Use System Setting	Utiliser le paramètre système
+	Use for charts	Utiliser pour les graphiques
 	Use these units in the model	Utiliser ces unités dans le modèle
 	Utilisation	Taux d'utilisation
 	Value	Valeur
@@ -587,10 +603,16 @@
 	years	années
 	{block}: units	{block} : unités
 	{busy} busy	{busy} occupés
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} a un contraste de {ratio}:1 sur le fond du graphique, sous 3:1 : étiqueter sa série ou afficher les nombres dans un tableau.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} paraît grise (chroma {chroma}, minimum 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} entrés, {left} sortis, {lost} perdus
 	{family}: minimum {min}, most likely {mode}, {upper}	{family} : minimum {min}, valeur la plus probable {mode}, {upper}
 	{field}: not editable here yet	{field} : non modifiable ici pour le moment
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file} : StochCraft n'écrit un nouveau fichier qu'en BPMN ; choisissez un nom se terminant par .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} et {second} diffèrent de {de} pour une vision des couleurs normale, minimum 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} et {second} diffèrent de {de} pour un daltonisme rouge-vert, minimum 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} et {second} diffèrent de {de} pour un daltonisme rouge-vert, minimum 8 : ne les distinguer qu'avec des étiquettes.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} et {second} diffèrent en clarté de {step}, minimum 0.06.
 	{id}: a probability is a number from 0 to 1	{id} : une probabilité est un nombre compris entre 0 et 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} réplications sur {of} ont atteint l'objectif : {p} (intervalle à 95 % de {lo} à {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (valeur définie, moyenne)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} sur {background} : {ratio}:1, minimum {min}:1
 	{title}: now {now}, at most {most}	{title} : maintenant {now}, au plus {most}
+	{word}: {message}	{word} : {message}
 	± 95% CI	± IC à 95 %
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± correspond à la demi-largeur d'un intervalle de confiance Student-t à 95 % de la moyenne sur les réplications.
 	· no results yet	· aucun résultat pour le moment

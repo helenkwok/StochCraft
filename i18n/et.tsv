@@ -38,6 +38,7 @@
 	Add alternative	Lisa alternatiiv
 	Add calendar	Lisa kalender
 	Add calendar entry	Lisa kalendrikirje
+	Add colour	Lisa värv
 	Add period	Lisa periood
 	Add point	Lisa punkt
 	Add pool	Lisa kogum
@@ -48,6 +49,7 @@
 	Added pool {id}	Lisati kogum {id}
 	Added {block} ({id})	Lisatud {block} ({id})
 	Align	Joonda
+	All checks pass.	Kõik kontrollid on läbitud.
 	All text meets the contrast minimums.	Kogu tekst vastab kontrasti miinimumnõuetele.
 	Also: {rule}	Lisaks: {rule}
 	Alternative {n}	Alternatiiv {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Rikked ja saadavus
 	Bring All to Front	Too kõik esiplaanile
 	Built with	Loodud järgmistega
+	Built-in palettes are read-only. Duplicate one to change its colours.	Sisseehitatud paletid on kirjutuskaitstud. Dubleeri üks, et selle värve muuta.
 	Built-in themes are read-only. Duplicate one to change its colours.	Sisseehitatud teemad on kirjutuskaitstud. Dubleeri üks, et selle värve muuta.
 	Busiest	Kõige koormatum
 	By role	Rolli järgi
@@ -89,6 +92,7 @@
 	Cancel run	Tühista käivitus
 	Canvas	Põhipind
 	Capacity	Maht
+	Categorical	Kvalitatiivsed
 	Centres	Horisontaalsed keskkohad
 	Change	Muutus
 	Change Block	Muuda plokki
@@ -99,12 +103,16 @@
 	Changes	Muudatused
 	Changing the time unit does not convert the times already in the model.	Ajaühiku muutmine ei teisenda mudelis juba olevaid aegu.
 	Chart	Graafik
+	Chart colours	Graafikute värvid
+	Chart colours…	Graafikute värvid…
 	Chart hover	Graafik kursori all
 	Check every	Kontroll iga
+	Checks	Kontrollid
 	Choose…	Vali…
 	Clear Menu	Tühjenda menüü
 	Close	Sulge
 	Close Window	Sulge aken
+	Colour {n}	Värv {n}
 	Comes from	Pärineb kohast
 	Condition of {id}	{id} tingimus
 	Connect	Ühenda
@@ -135,6 +143,7 @@
 	Disconnect	Katkesta ühendus
 	Discrete values	Diskreetsed väärtused
 	Discrete-event simulation, from model files to results.	Diskreetsete sündmuste simulatsioon mudelifailidest tulemusteni.
+	Diverging	Lahknevad
 	Does not repeat	Ei kordu
 	Don't Save	Ära salvesta
 	Download	Laadi alla
@@ -174,6 +183,7 @@
 	Export table (CSV)	Ekspordi tabel (CSV)
 	Exported {file}	Eksporditud {file}
 	Expression	Avaldis
+	Fail	Ei läbinud
 	Fails above, waiting per working server	Kukub läbi üle, ootajaid kasutuses oleva serveri kohta
 	Failure interrupts the job	Rike katkestab töö
 	Family	Jaotuspere
@@ -220,6 +230,7 @@
 	Left edges	Vasakud servad
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Litsentsitud valikuliselt MIT License'i või Apache License 2.0 alusel.
 	Light	Hele
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} ja {second} – heledus muudab suunda; skaala peab muutuma ainult heledamaks või ainult tumedamaks.
 	Log-normal	Lognormaalne
 	Lost (no way out)	Kaotatud (väljapääs puudub)
 	Lost (waiting room full)	Kaotatud (ooteruum täis)
@@ -274,6 +285,8 @@
 	OEE availability	OEE kättesaadavus
 	OEE effectiveness	OEE tõhusus
 	On	Päevad
+	On the dark canvas	Tumedal põhipinnal
+	On the light canvas	Heledal põhipinnal
 	One change, which Undo takes back	Üks muudatus, mille Võta tagasi tühistab
 	One clerk, random arrivals: the textbook queue, checked against theory.	Üks teenindaja, juhuslikud saabumised: klassikaline järjekord, mida kontrollitakse teooriaga.
 	One task per BPSim distribution, to compare their spread.	Üks ülesanne iga BPSim-jaotuse kohta nende hajuvuse võrdlemiseks.
@@ -339,6 +352,7 @@
 	Remove Property	Eemalda omadus
 	Remove alternative {n}	Eemalda alternatiiv {n}
 	Remove block	Eemalda plokk
+	Remove colour	Eemalda värv
 	Remove the calendar {id}	Eemalda kalender {id}
 	Remove the flow {id}	Eemalda voog {id}
 	Remove the pool {id}	Eemalda kogum {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Vali plokk, et näha selle järjekorda aja jooksul.
 	Sender waits during transfer	Saatja ootab ülekande ajal
 	Separate the values with semicolons or spaces.	Eralda väärtused semikoolonite või tühikutega.
+	Sequential	Järjestikused
 	Service time	Teenindusaeg
 	Services	Teenused
 	Set Property	Määra omadus
@@ -514,6 +529,7 @@
 	Untitled model	Pealkirjata mudel
 	Upper value	Ülemine väärtus
 	Use System Setting	Kasuta süsteemi seadet
+	Use for charts	Kasuta graafikutes
 	Use these units in the model	Kasuta neid ühikuid mudelis
 	Utilisation	Kasutusmäär
 	Value	Väärtus
@@ -587,10 +603,16 @@
 	years	aastad
 	{block}: units	{block}: ühikud
 	{busy} busy	{busy} hõivatud
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrast graafiku taustaga {ratio}:1, alla 3:1: märgista selle andmeseeria või näita arve tabelis.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – paistab hallina (kromaatilisus {chroma}, vaja 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} sisse, {left} välja, {lost} kadunud
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: miinimum {min}, kõige tõenäolisem {mode}, {upper}
 	{field}: not editable here yet	{field}: siin ei saa veel muuta
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft kirjutab uue faili ainult BPMN-vormingus; valige nimi, mis lõpeb laiendiga .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} ja {second} – erinevus normaalse värvitajuga vaatajale {de}, vaja 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} ja {second} – erinevus puna-rohelise värvipimedusega vaatajale {de}, vaja 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} ja {second} – erinevus puna-rohelise värvipimedusega vaatajale {de}, vaja 8: erista neid ainult siltide abil.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ja {second} – heleduse erinevus {step}, vaja 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: tõenäosus on arv vahemikus 0 kuni 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} kordust {of}-st saavutas eesmärgi: {p} (95% vahemik {lo} kuni {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (määratud väärtus, keskmine)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – taust „{background}“: {ratio}:1, vaja {min}:1
 	{title}: now {now}, at most {most}	{title}: praegu {now}, kõige rohkem {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% usaldusvahemik
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± on korduste keskmise 95% Student-t usaldusvahemiku poollaius.
 	· no results yet	· tulemusi veel pole

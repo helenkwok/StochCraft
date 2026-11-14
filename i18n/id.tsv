@@ -38,6 +38,7 @@
 	Add alternative	Tambah alternatif
 	Add calendar	Tambah kalender
 	Add calendar entry	Tambah entri kalender
+	Add colour	Tambah warna
 	Add period	Tambah periode
 	Add point	Tambah titik
 	Add pool	Tambah kumpulan
@@ -48,6 +49,7 @@
 	Added pool {id}	Kumpulan {id} ditambahkan
 	Added {block} ({id})	{block} ({id}) ditambahkan
 	Align	Ratakan
+	All checks pass.	Semua pemeriksaan lolos.
 	All text meets the contrast minimums.	Semua teks memenuhi kontras minimum.
 	Also: {rule}	Juga: {rule}
 	Alternative {n}	Alternatif {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Kerusakan dan ketersediaan
 	Bring All to Front	Bawa Semua ke Depan
 	Built with	Dibuat dengan
+	Built-in palettes are read-only. Duplicate one to change its colours.	Palet bawaan hanya-baca. Duplikat salah satunya untuk mengubah warnanya.
 	Built-in themes are read-only. Duplicate one to change its colours.	Tema bawaan hanya-baca. Duplikat salah satunya untuk mengubah warnanya.
 	Busiest	Tersibuk
 	By role	Menurut peran
@@ -89,6 +92,7 @@
 	Cancel run	Batalkan proses
 	Canvas	Permukaan utama
 	Capacity	Kapasitas
+	Categorical	Kategoris
 	Centres	Tengah horizontal
 	Change	Perubahan
 	Change Block	Ubah Blok
@@ -99,12 +103,16 @@
 	Changes	Perubahan
 	Changing the time unit does not convert the times already in the model.	Mengubah satuan waktu tidak mengonversi waktu yang sudah ada dalam model.
 	Chart	Grafik
+	Chart colours	Warna grafik
+	Chart colours…	Warna grafik…
 	Chart hover	Grafik di bawah penunjuk
 	Check every	Periksa setiap
+	Checks	Pemeriksaan
 	Choose…	Pilih…
 	Clear Menu	Bersihkan Menu
 	Close	Tutup
 	Close Window	Tutup Jendela
+	Colour {n}	Warna {n}
 	Comes from	Berasal dari
 	Condition of {id}	Kondisi {id}
 	Connect	Hubungkan
@@ -135,6 +143,7 @@
 	Disconnect	Putuskan koneksi
 	Discrete values	Nilai diskret
 	Discrete-event simulation, from model files to results.	Simulasi kejadian diskret, dari berkas model hingga hasil.
+	Diverging	Divergen
 	Does not repeat	Tidak berulang
 	Don't Save	Jangan Simpan
 	Download	Unduh
@@ -174,6 +183,7 @@
 	Export table (CSV)	Ekspor tabel (CSV)
 	Exported {file}	{file} diekspor
 	Expression	Ekspresi
+	Fail	Gagal
 	Fails above, waiting per working server	Gagal di atas, menunggu per server yang beroperasi
 	Failure interrupts the job	Kerusakan menyela pekerjaan
 	Family	Keluarga
@@ -220,6 +230,7 @@
 	Left edges	Tepi kiri
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Dilisensikan berdasarkan MIT License atau Apache License 2.0, sesuai pilihan Anda.
 	Light	Terang
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	Kecerahan berbalik arah antara {first} dan {second}; gradasi hanya boleh makin terang saja atau makin gelap saja.
 	Log-normal	Log-normal
 	Lost (no way out)	Hilang (tidak ada jalan keluar)
 	Lost (waiting room full)	Hilang (ruang tunggu penuh)
@@ -274,6 +285,8 @@
 	OEE availability	Ketersediaan OEE
 	OEE effectiveness	Efektivitas OEE
 	On	Hari
+	On the dark canvas	Di permukaan utama gelap
+	On the light canvas	Di permukaan utama terang
 	One change, which Undo takes back	Satu perubahan, yang dibatalkan oleh Urungkan
 	One clerk, random arrivals: the textbook queue, checked against theory.	Satu petugas, kedatangan acak: antrean klasik, diperiksa terhadap teori.
 	One task per BPSim distribution, to compare their spread.	Satu tugas per distribusi BPSim untuk membandingkan penyebarannya.
@@ -339,6 +352,7 @@
 	Remove Property	Hapus Properti
 	Remove alternative {n}	Hapus alternatif {n}
 	Remove block	Hapus blok
+	Remove colour	Hapus warna
 	Remove the calendar {id}	Hapus kalender {id}
 	Remove the flow {id}	Hapus alur {id}
 	Remove the pool {id}	Hapus kumpulan {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Pilih blok untuk melihat antreannya dari waktu ke waktu.
 	Sender waits during transfer	Pengirim menunggu selama perpindahan
 	Separate the values with semicolons or spaces.	Pisahkan nilai dengan titik koma atau spasi.
+	Sequential	Sekuensial
 	Service time	Waktu layanan
 	Services	Layanan
 	Set Property	Atur Properti
@@ -514,6 +529,7 @@
 	Untitled model	Model tanpa judul
 	Upper value	Nilai atas
 	Use System Setting	Gunakan Pengaturan Sistem
+	Use for charts	Gunakan untuk grafik
 	Use these units in the model	Gunakan unit ini dalam model
 	Utilisation	Tingkat pemanfaatan
 	Value	Nilai
@@ -587,10 +603,16 @@
 	years	tahun
 	{block}: units	{block}: unit
 	{busy} busy	{busy} sibuk
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} memiliki kontras {ratio}:1 di atas latar grafik, di bawah 3:1: beri label pada serinya atau tampilkan angkanya dalam tabel.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} tampak abu-abu (kemarakan {chroma}, perlu 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} masuk, {left} keluar, {lost} hilang
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, paling mungkin {mode}, {upper}
 	{field}: not editable here yet	{field}: belum dapat diedit di sini
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft menulis berkas baru hanya sebagai BPMN; pilih nama yang berakhiran .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} dan {second} berbeda {de} bagi pemirsa dengan penglihatan warna normal, perlu 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} dan {second} berbeda {de} bagi pemirsa dengan buta warna merah-hijau, perlu 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} dan {second} berbeda {de} bagi pemirsa dengan buta warna merah-hijau, perlu 8: bedakan keduanya hanya dengan label.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} dan {second} berbeda kecerahan {step}, perlu 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: probabilitas adalah angka dari 0 sampai 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} dari {of} replikasi memenuhi target: {p} (interval 95% dari {lo} sampai {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (nilai ditetapkan, rata-rata)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} di atas {background}: {ratio}:1, perlu {min}:1
 	{title}: now {now}, at most {most}	{title}: sekarang {now}, paling banyak {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± IK 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± adalah setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh replikasi.
 	· no results yet	· belum ada hasil

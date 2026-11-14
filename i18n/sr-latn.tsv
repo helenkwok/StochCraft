@@ -38,6 +38,7 @@
 	Add alternative	Dodaj alternativu
 	Add calendar	Dodaj kalendar
 	Add calendar entry	Dodaj stavku kalendara
+	Add colour	Dodaj boju
 	Add period	Dodaj period
 	Add point	Dodaj tačku
 	Add pool	Dodaj fond
@@ -48,6 +49,7 @@
 	Added pool {id}	Dodat je fond {id}
 	Added {block} ({id})	Dodat je {block} ({id})
 	Align	Poravnaj
+	All checks pass.	Sve provere su uspešne.
 	All text meets the contrast minimums.	Sav tekst ispunjava minimalni kontrast.
 	Also: {rule}	Takođe: {rule}
 	Alternative {n}	Alternativa {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Kvarovi i raspoloživost
 	Bring All to Front	Sve u prvi plan
 	Built with	Napravljeno pomoću
+	Built-in palettes are read-only. Duplicate one to change its colours.	Ugrađene palete su samo za čitanje. Duplirajte jednu da biste promenili njene boje.
 	Built-in themes are read-only. Duplicate one to change its colours.	Ugrađene teme su samo za čitanje. Duplirajte jednu da biste promenili njene boje.
 	Busiest	Najopterećeniji
 	By role	Po ulozi
@@ -89,6 +92,7 @@
 	Cancel run	Otkaži izvršavanje
 	Canvas	Glavna površina
 	Capacity	Kapacitet
+	Categorical	Kategorijske
 	Centres	Horizontalni centri
 	Change	Promena
 	Change Block	Promeni blok
@@ -99,12 +103,16 @@
 	Changes	Promene
 	Changing the time unit does not convert the times already in the model.	Promjena vremenske jedinice ne pretvara vremena koja već postoje u modelu.
 	Chart	Grafikon
+	Chart colours	Boje grafikona
+	Chart colours…	Boje grafikona…
 	Chart hover	Grafikon pod pokazivačem
 	Check every	Provera svakih
+	Checks	Provere
 	Choose…	Izaberi…
 	Clear Menu	Očisti meni
 	Close	Zatvori
 	Close Window	Zatvori prozor
+	Colour {n}	Boja {n}
 	Comes from	Dolazi iz
 	Condition of {id}	Uslov za {id}
 	Connect	Poveži
@@ -135,6 +143,7 @@
 	Disconnect	Prekini vezu
 	Discrete values	Diskretne vrednosti
 	Discrete-event simulation, from model files to results.	Simulacija diskretnih događaja, od fajl modela do rezultata.
+	Diverging	Divergentne
 	Does not repeat	Ne ponavlja se
 	Don't Save	Nemoj sačuvati
 	Download	Preuzmi
@@ -174,6 +183,7 @@
 	Export table (CSV)	Izvezi tablicu (CSV)
 	Exported {file}	Izvezeno: {file}
 	Expression	Izraz
+	Fail	Neuspeh
 	Fails above, waiting per working server	Ne prolazi iznad, čekajućih po serveru u radu
 	Failure interrupts the job	Kvar prekida rad
 	Family	Porodica
@@ -220,6 +230,7 @@
 	Left edges	Leve ivice
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencirano prema MIT License ili Apache License 2.0, po vašem izboru.
 	Light	Svetla
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} i {second} – svetlina menja smer; skala mora postajati samo svetlija ili samo tamnija.
 	Log-normal	Log-normalna
 	Lost (no way out)	Izgubljeno (nema izlaza)
 	Lost (waiting room full)	Izgubljeno (čekaonica je puna)
@@ -274,6 +285,8 @@
 	OEE availability	Raspoloživost OEE
 	OEE effectiveness	Efektivnost OEE
 	On	Dani
+	On the dark canvas	Na tamnoj glavnoj površini
+	On the light canvas	Na svetloj glavnoj površini
 	One change, which Undo takes back	Jedna promena, koju Opozovi vraća
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jedan službenik, nasumični dolasci: klasičan red čekanja, provjeren teorijom.
 	One task per BPSim distribution, to compare their spread.	Po jedan zadatak za svaku BPSim distribuciju radi usporedbe njihove raspršenosti.
@@ -339,6 +352,7 @@
 	Remove Property	Ukloni svojstvo
 	Remove alternative {n}	Ukloni alternativu {n}
 	Remove block	Ukloni blok
+	Remove colour	Ukloni boju
 	Remove the calendar {id}	Ukloni kalendar {id}
 	Remove the flow {id}	Ukloni tok {id}
 	Remove the pool {id}	Ukloni fond {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Izaberite blok da vidite njegov red kroz vreme.
 	Sender waits during transfer	Pošiljalac čeka tokom prenosa
 	Separate the values with semicolons or spaces.	Odvojite vrednosti tačkom i zarezom ili razmacima.
+	Sequential	Sekvencijalne
 	Service time	Vreme posluživanja
 	Services	Usluge
 	Set Property	Postavi svojstvo
@@ -514,6 +529,7 @@
 	Untitled model	Neimenovani model
 	Upper value	Gornja vrednost
 	Use System Setting	Koristi postavku sistema
+	Use for charts	Koristi za grafikone
 	Use these units in the model	Koristi ove jedinice u modelu
 	Utilisation	Iskorišćenost
 	Value	Vrednost
@@ -587,10 +603,16 @@
 	years	godine
 	{block}: units	{block}: jedinice
 	{busy} busy	Zauzeto: {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrast {ratio}:1 na pozadini grafikona, ispod 3:1: označite njenu seriju ili prikažite brojeve u tablici.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} izgleda sivo (zasićenje {chroma}, potrebno 0.10).
 	{entered} in, {left} out, {lost} lost	Ušlo: {entered}, izašlo: {left}, izgubljeno: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, najverovatnije {mode}, {upper}
 	{field}: not editable here yet	{field}: ovdje se još ne može uređivati
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft novi fajl zapisuje samo kao BPMN; izaberite naziv koji se završava na .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} i {second} razlikuju se za {de} kod normalnog vida u boji, potrebno 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} i {second} razlikuju se za {de} kod crveno-zelenog daltonizma, potrebno 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} i {second} razlikuju se za {de} kod crveno-zelenog daltonizma, potrebno 8: razlikujte ih samo po oznakama.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} i {second} razlikuju se po svetlini za {step}, potrebno 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: verovatnoća je broj od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} od {of} replikacija postiglo je cilj: {p} (interval od 95% od {lo} do {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (postavljeno na, srednja vrednost)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadina „{background}“: {ratio}:1, potrebno {min}:1
 	{title}: now {now}, at most {most}	{title}: sada {now}, najviše {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% IP
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± je polovina širine 95% Student-t intervala poverenja za srednju vrednost kroz replikacije.
 	· no results yet	· još nema rezultata

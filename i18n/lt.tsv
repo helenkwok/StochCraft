@@ -38,6 +38,7 @@
 	Add alternative	Pridėti alternatyvą
 	Add calendar	Pridėti kalendorių
 	Add calendar entry	Pridėti kalendoriaus įrašą
+	Add colour	Pridėti spalvą
 	Add period	Pridėti laikotarpį
 	Add point	Pridėti tašką
 	Add pool	Pridėti grupę
@@ -48,6 +49,7 @@
 	Added pool {id}	Pridėta grupė {id}
 	Added {block} ({id})	Pridėta {block} ({id})
 	Align	Lygiuoti
+	All checks pass.	Visos patikros sėkmingos.
 	All text meets the contrast minimums.	Visas tekstas atitinka mažiausią kontrastą.
 	Also: {rule}	Taip pat: {rule}
 	Alternative {n}	Alternatyva {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Gedimai ir prieinamumas
 	Bring All to Front	Perkelti visus į priekį
 	Built with	Sukurta naudojant
+	Built-in palettes are read-only. Duplicate one to change its colours.	Įtaisytosios paletės skirtos tik skaityti. Norėdami pakeisti spalvas, dubliuokite vieną iš jų.
 	Built-in themes are read-only. Duplicate one to change its colours.	Įtaisytosios temos skirtos tik skaityti. Norėdami pakeisti spalvas, dubliuokite vieną iš jų.
 	Busiest	Labiausiai apkrautas
 	By role	Pagal vaidmenį
@@ -89,6 +92,7 @@
 	Cancel run	Atšaukti vykdymą
 	Canvas	Pagrindinis paviršius
 	Capacity	Pajėgumas
+	Categorical	Kategorinės
 	Centres	Horizontalūs centrai
 	Change	Pokytis
 	Change Block	Keisti bloką
@@ -99,12 +103,16 @@
 	Changes	Pakeitimai
 	Changing the time unit does not convert the times already in the model.	Pakeitus laiko vienetą, modelyje jau esančios laiko reikšmės nebus perskaičiuotos.
 	Chart	Diagrama
+	Chart colours	Diagramų spalvos
+	Chart colours…	Diagramų spalvos…
 	Chart hover	Diagrama po žymekliu
 	Check every	Tikrinti kas
+	Checks	Patikros
 	Choose…	Pasirinkite…
 	Clear Menu	Išvalyti meniu
 	Close	Užverti
 	Close Window	Užverti langą
+	Colour {n}	Spalva {n}
 	Comes from	Ateina iš
 	Condition of {id}	{id} sąlyga
 	Connect	Sujungti
@@ -135,6 +143,7 @@
 	Disconnect	Atjungti
 	Discrete values	Diskrečiosios reikšmės
 	Discrete-event simulation, from model files to results.	Diskrečiųjų įvykių modeliavimas – nuo modelio failų iki rezultatų.
+	Diverging	Divergentinės
 	Does not repeat	Nesikartoja
 	Don't Save	Neįrašyti
 	Download	Atsisiųsti
@@ -174,6 +183,7 @@
 	Export table (CSV)	Eksportuoti lentelę (CSV)
 	Exported {file}	Eksportuota {file}
 	Expression	Išraiška
+	Fail	Neatitinka
 	Fails above, waiting per working server	Neišlaiko virš (laukiančių vienam naudojamam serveriui)
 	Failure interrupts the job	Gedimas pertraukia darbą
 	Family	Šeima
@@ -220,6 +230,7 @@
 	Left edges	Kairieji kraštai
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licencijuota pagal MIT License arba Apache License 2.0, jūsų pasirinkimu.
 	Light	Šviesi
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} ir {second} – šviesumas keičia kryptį; skalė turi tik šviesėti arba tik tamsėti.
 	Log-normal	Lognormalusis
 	Lost (no way out)	Prarasta (nėra išėjimo)
 	Lost (waiting room full)	Prarasta (laukiamasis pilnas)
@@ -274,6 +285,8 @@
 	OEE availability	OEE prieinamumas
 	OEE effectiveness	OEE efektyvumas
 	On	Dienos
+	On the dark canvas	Tamsiame pagrindiniame paviršiuje
+	On the light canvas	Šviesiame pagrindiniame paviršiuje
 	One change, which Undo takes back	Vienas pakeitimas, kurį atšaukia Anuliuoti
 	One clerk, random arrivals: the textbook queue, checked against theory.	Vienas darbuotojas, atsitiktiniai atvykimai: klasikinė eilė, patikrinta pagal teoriją.
 	One task per BPSim distribution, to compare their spread.	Po vieną užduotį kiekvienam BPSim skirstiniui, kad būtų galima palyginti jų sklaidą.
@@ -339,6 +352,7 @@
 	Remove Property	Pašalinti savybę
 	Remove alternative {n}	Pašalinti alternatyvą {n}
 	Remove block	Pašalinti bloką
+	Remove colour	Pašalinti spalvą
 	Remove the calendar {id}	Pašalinti kalendorių {id}
 	Remove the flow {id}	Pašalinti srautą {id}
 	Remove the pool {id}	Pašalinti grupę {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Pasirinkite bloką, kad matytumėte jo eilę per laiką.
 	Sender waits during transfer	Siuntėjas laukia perdavimo metu
 	Separate the values with semicolons or spaces.	Atskirkite reikšmes kabliataškiais arba tarpais.
+	Sequential	Nuosekliosios
 	Service time	Aptarnavimo laikas
 	Services	Paslaugos
 	Set Property	Nustatyti savybę
@@ -514,6 +529,7 @@
 	Untitled model	Modelis be pavadinimo
 	Upper value	Viršutinė reikšmė
 	Use System Setting	Naudoti sistemos nustatymą
+	Use for charts	Naudoti diagramoms
 	Use these units in the model	Naudoti šiuos vienetus modelyje
 	Utilisation	Panaudojimo koeficientas
 	Value	Reikšmė
@@ -587,10 +603,16 @@
 	years	metai
 	{block}: units	{block}: vienetai
 	{busy} busy	Užimta: {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrastas su diagramos fonu {ratio}:1, mažiau nei 3:1: pažymėkite jos seriją etiketėmis arba rodykite skaičius lentelėje.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – atrodo pilka (sodrumas {chroma}, reikia 0.10).
 	{entered} in, {left} out, {lost} lost	Įėjo: {entered}, išėjo: {left}, prarasta: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimumas {min}, labiausiai tikėtina {mode}, {upper}
 	{field}: not editable here yet	{field}: čia dar negalima redaguoti
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft naują failą įrašo tik BPMN formatu; pasirinkite pavadinimą, kuris baigiasi .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} ir {second} – skirtumas esant normaliam spalvų matymui {de}, reikia 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} ir {second} – skirtumas esant raudonai žaliam daltonizmui {de}, reikia 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} ir {second} – skirtumas esant raudonai žaliam daltonizmui {de}, reikia 8: atskirkite jas tik pagal etiketes.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ir {second} – šviesumo skirtumas {step}, reikia 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: tikimybė yra skaičius nuo 0 iki 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	Tikslą pasiekė {met} iš {of} replikacijų: {p} (95 % intervalas nuo {lo} iki {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (nustatyta reikšmė, vidurkis)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – fonas „{background}“: {ratio}:1, reikia {min}:1
 	{title}: now {now}, at most {most}	{title}: dabar {now}, daugiausia {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% pasikliautinasis intervalas
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± yra 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp kartojimų, pusplotis.
 	· no results yet	· rezultatų dar nėra

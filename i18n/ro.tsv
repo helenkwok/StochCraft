@@ -38,6 +38,7 @@
 	Add alternative	Adaugă alternativă
 	Add calendar	Adaugă calendar
 	Add calendar entry	Adaugă o intrare de calendar
+	Add colour	Adaugă culoare
 	Add period	Adaugă perioadă
 	Add point	Adaugă punct
 	Add pool	Adaugă grup
@@ -48,6 +49,7 @@
 	Added pool {id}	S-a adăugat grupul {id}
 	Added {block} ({id})	S-a adăugat {block} ({id})
 	Align	Aliniere
+	All checks pass.	Toate verificările au trecut.
 	All text meets the contrast minimums.	Tot textul respectă contrastele minime.
 	Also: {rule}	De asemenea: {rule}
 	Alternative {n}	Alternativa {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Avarii și disponibilitate
 	Bring All to Front	Adu totul în față
 	Built with	Creat cu
+	Built-in palettes are read-only. Duplicate one to change its colours.	Paletele integrate sunt doar în citire. Duplicați una pentru a-i schimba culorile.
 	Built-in themes are read-only. Duplicate one to change its colours.	Temele integrate sunt doar în citire. Duplicați una pentru a-i schimba culorile.
 	Busiest	Cel mai ocupat
 	By role	După rol
@@ -89,6 +92,7 @@
 	Cancel run	Anulează rularea
 	Canvas	Suprafață principală
 	Capacity	Capacitate
+	Categorical	Categoriale
 	Centres	Centre orizontale
 	Change	Modificare
 	Change Block	Modifică blocul
@@ -99,12 +103,16 @@
 	Changes	Modificări
 	Changing the time unit does not convert the times already in the model.	Schimbarea unității de timp nu convertește timpii existenți în model.
 	Chart	Grafic
+	Chart colours	Culorile graficelor
+	Chart colours…	Culorile graficelor…
 	Chart hover	Grafic sub indicator
 	Check every	Verificare la fiecare
+	Checks	Verificări
 	Choose…	Alege…
 	Clear Menu	Golește meniul
 	Close	Închide
 	Close Window	Închide fereastra
+	Colour {n}	Culoarea {n}
 	Comes from	Provine de la
 	Condition of {id}	Condiția pentru {id}
 	Connect	Conectează
@@ -135,6 +143,7 @@
 	Disconnect	Deconectează
 	Discrete values	Valori discrete
 	Discrete-event simulation, from model files to results.	Simulare cu evenimente discrete, de la fișiere de model la rezultate.
+	Diverging	Divergente
 	Does not repeat	Nu se repetă
 	Don't Save	Nu salva
 	Download	Descarcă
@@ -174,6 +183,7 @@
 	Export table (CSV)	Exportă tabelul (CSV)
 	Exported {file}	S-a exportat {file}
 	Expression	Expresie
+	Fail	Eșec
 	Fails above, waiting per working server	Pică peste (în așteptare per server în funcțiune)
 	Failure interrupts the job	Avaria întrerupe lucrul
 	Family	Familie
@@ -220,6 +230,7 @@
 	Left edges	Marginile din stânga
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licențiat sub MIT License sau Apache License 2.0, la alegere.
 	Light	Luminos
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	Luminozitatea își schimbă sensul între {first} și {second}; o gradație trebuie doar să se deschidă sau doar să se închidă.
 	Log-normal	Log-normală
 	Lost (no way out)	Pierdute (nicio ieșire)
 	Lost (waiting room full)	Pierdute (sala de așteptare plină)
@@ -274,6 +285,8 @@
 	OEE availability	Disponibilitate OEE
 	OEE effectiveness	Eficacitate OEE
 	On	Zile
+	On the dark canvas	Pe suprafața principală întunecată
+	On the light canvas	Pe suprafața principală luminoasă
 	One change, which Undo takes back	O singură modificare, pe care Anulează o desface
 	One clerk, random arrivals: the textbook queue, checked against theory.	Un operator, sosiri aleatorii: coada clasică, verificată față de teorie.
 	One task per BPSim distribution, to compare their spread.	Câte o sarcină pentru fiecare distribuție BPSim, pentru compararea dispersiei.
@@ -339,6 +352,7 @@
 	Remove Property	Elimină proprietatea
 	Remove alternative {n}	Elimină alternativa {n}
 	Remove block	Elimină blocul
+	Remove colour	Elimină culoarea
 	Remove the calendar {id}	Elimină calendarul {id}
 	Remove the flow {id}	Elimină fluxul {id}
 	Remove the pool {id}	Elimină grupul {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Selectați un bloc pentru a-i vedea coada în timp.
 	Sender waits during transfer	Expeditorul așteaptă în timpul transferului
 	Separate the values with semicolons or spaces.	Separă valorile cu punct și virgulă sau spații.
+	Sequential	Secvențiale
 	Service time	Timp de servire
 	Services	Servicii
 	Set Property	Setează proprietatea
@@ -514,6 +529,7 @@
 	Untitled model	Model fără titlu
 	Upper value	Valoare superioară
 	Use System Setting	Folosește setarea sistemului
+	Use for charts	Folosește pentru grafice
 	Use these units in the model	Folosește aceste unități în model
 	Utilisation	Grad de utilizare
 	Value	Valoare
@@ -587,10 +603,16 @@
 	years	ani
 	{block}: units	{block}: unități
 	{busy} busy	Ocupate: {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} are contrast {ratio}:1 pe fundalul graficului, sub 3:1: etichetați-i seria sau arătați numerele într-un tabel.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} pare gri (cromă {chroma}, necesar 0.10).
 	{entered} in, {left} out, {lost} lost	Intrate: {entered}, ieșite: {left}, pierdute: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minim {min}, cel mai probabil {mode}, {upper}
 	{field}: not editable here yet	{field}: nu se poate edita aici deocamdată
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft scrie fișiere noi doar ca BPMN; alegeți un nume care se termină în .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} și {second} diferă cu {de} pentru o vedere normală a culorilor, necesar 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} și {second} diferă cu {de} pentru cei cu daltonism roșu-verde, necesar 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} și {second} diferă cu {de} pentru cei cu daltonism roșu-verde, necesar 8: deosebiți-le doar prin etichete.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} și {second} diferă ca luminozitate cu {step}, necesar 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: probabilitatea este un număr între 0 și 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} din {of} replicări au atins ținta: {p} (interval de 95% de la {lo} la {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (valoare setată, medie)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} pe {background}: {ratio}:1, necesar {min}:1
 	{title}: now {now}, at most {most}	{title}: acum {now}, cel mult {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± IC 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± reprezintă jumătate din lățimea unui interval de încredere Student-t de 95% pentru media dintre replicări.
 	· no results yet	· nu există încă rezultate

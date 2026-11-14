@@ -38,6 +38,7 @@
 	Add alternative	विकल्प जोड़ें
 	Add calendar	कैलेंडर जोड़ें
 	Add calendar entry	कैलेंडर प्रविष्टि जोड़ें
+	Add colour	रंग जोड़ें
 	Add period	अवधि जोड़ें
 	Add point	बिंदु जोड़ें
 	Add pool	पूल जोड़ें
@@ -48,6 +49,7 @@
 	Added pool {id}	पूल {id} जोड़ा गया
 	Added {block} ({id})	{block} ({id}) जोड़ा गया
 	Align	संरेखित करें
+	All checks pass.	सभी जाँचें सफल रहीं।
 	All text meets the contrast minimums.	सभी पाठ न्यूनतम कंट्रास्ट पूरा करते हैं।
 	Also: {rule}	साथ ही: {rule}
 	Alternative {n}	विकल्प {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	खराबियाँ और उपलब्धता
 	Bring All to Front	सभी को सामने लाएँ
 	Built with	इनसे बनाया गया
+	Built-in palettes are read-only. Duplicate one to change its colours.	अंतर्निहित पैलेट केवल पढ़ने के लिए हैं। रंग बदलने के लिए किसी एक की प्रतिलिपि बनाएँ।
 	Built-in themes are read-only. Duplicate one to change its colours.	अंतर्निहित थीम केवल पढ़ने के लिए हैं। रंग बदलने के लिए किसी एक की प्रतिलिपि बनाएँ।
 	Busiest	सबसे व्यस्त
 	By role	भूमिका के अनुसार
@@ -89,6 +92,7 @@
 	Cancel run	रन रद्द करें
 	Canvas	मुख्य सतह
 	Capacity	क्षमता
+	Categorical	श्रेणीगत
 	Centres	क्षैतिज केंद्र
 	Change	परिवर्तन
 	Change Block	ब्लॉक बदलें
@@ -99,12 +103,16 @@
 	Changes	परिवर्तन
 	Changing the time unit does not convert the times already in the model.	समय की इकाई बदलने से मॉडल में पहले से मौजूद समय मान परिवर्तित नहीं होते।
 	Chart	चार्ट
+	Chart colours	चार्ट के रंग
+	Chart colours…	चार्ट के रंग…
 	Chart hover	पॉइंटर के नीचे चार्ट
 	Check every	जाँच का अंतराल
+	Checks	जाँचें
 	Choose…	चुनें…
 	Clear Menu	मेनू साफ़ करें
 	Close	बंद करें
 	Close Window	विंडो बंद करें
+	Colour {n}	रंग {n}
 	Comes from	यहाँ से आता है
 	Condition of {id}	{id} की शर्त
 	Connect	जोड़ें
@@ -135,6 +143,7 @@
 	Disconnect	कनेक्शन हटाएँ
 	Discrete values	असतत मान
 	Discrete-event simulation, from model files to results.	असतत-घटना सिमुलेशन, मॉडल फ़ाइलों से परिणामों तक।
+	Diverging	अपसारी
 	Does not repeat	नहीं दोहराता
 	Don't Save	सहेजें नहीं
 	Download	डाउनलोड करें
@@ -174,6 +183,7 @@
 	Export table (CSV)	तालिका निर्यात करें (CSV)
 	Exported {file}	{file} निर्यात किया गया
 	Expression	व्यंजक
+	Fail	विफल
 	Fails above, waiting per working server	विफलता सीमा, चालू सर्वर प्रति प्रतीक्षारत
 	Failure interrupts the job	खराबी काम रोक देती है
 	Family	परिवार
@@ -220,6 +230,7 @@
 	Left edges	बाएँ किनारे
 	Licensed under the MIT License or the Apache License 2.0, at your option.	अपनी पसंद के अनुसार MIT License या Apache License 2.0 के तहत लाइसेंस प्राप्त।
 	Light	हल्का
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} और {second} के बीच हल्कापन उलटी दिशा में मुड़ता है; रंगों का क्रम केवल हल्का होता जाए या केवल गहरा।
 	Log-normal	लॉग-सामान्य
 	Lost (no way out)	हानि (बाहर जाने का कोई रास्ता नहीं)
 	Lost (waiting room full)	हानि (प्रतीक्षा कक्ष भरा है)
@@ -274,6 +285,8 @@
 	OEE availability	OEE उपलब्धता
 	OEE effectiveness	OEE प्रभावशीलता
 	On	दिन
+	On the dark canvas	गहरी मुख्य सतह पर
+	On the light canvas	हल्की मुख्य सतह पर
 	One change, which Undo takes back	एक बदलाव, जिसे पूर्ववत करें वापस लेता है
 	One clerk, random arrivals: the textbook queue, checked against theory.	एक कर्मचारी, यादृच्छिक आगमन: सिद्धांत से सत्यापित पारंपरिक कतार।
 	One task per BPSim distribution, to compare their spread.	प्रसार की तुलना के लिए प्रत्येक BPSim वितरण पर एक कार्य।
@@ -339,6 +352,7 @@
 	Remove Property	गुण हटाएँ
 	Remove alternative {n}	विकल्प {n} हटाएँ
 	Remove block	ब्लॉक हटाएँ
+	Remove colour	रंग हटाएँ
 	Remove the calendar {id}	कैलेंडर {id} हटाएँ
 	Remove the flow {id}	प्रवाह {id} हटाएँ
 	Remove the pool {id}	पूल {id} हटाएँ
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	समय के साथ किसी ब्लॉक की कतार देखने के लिए उसे चुनें।
 	Sender waits during transfer	स्थानांतरण के दौरान भेजने वाला रुका रहता है
 	Separate the values with semicolons or spaces.	मानों को अर्धविराम या रिक्त स्थान से अलग करें।
+	Sequential	क्रमिक
 	Service time	सेवा समय
 	Services	सेवाएँ
 	Set Property	गुण सेट करें
@@ -514,6 +529,7 @@
 	Untitled model	बिना शीर्षक वाला मॉडल
 	Upper value	ऊपरी मान
 	Use System Setting	सिस्टम सेटिंग का उपयोग करें
+	Use for charts	चार्ट के लिए उपयोग करें
 	Use these units in the model	इन इकाइयों को मॉडल में उपयोग करें
 	Utilisation	उपयोग दर
 	Value	मान
@@ -587,10 +603,16 @@
 	years	वर्ष
 	{block}: units	{block}: इकाइयाँ
 	{busy} busy	{busy} व्यस्त
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – चार्ट की पृष्ठभूमि पर कंट्रास्ट {ratio}:1, 3:1 से कम: इसकी शृंखला पर लेबल लगाएँ या संख्याएँ तालिका में दिखाएँ।
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} धूसर दिखता है (क्रोमा {chroma}, आवश्यक 0.10)।
 	{entered} in, {left} out, {lost} lost	{entered} अंदर, {left} बाहर, {lost} खोए
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: न्यूनतम {min}, सर्वाधिक संभावित {mode}, {upper}
 	{field}: not editable here yet	{field}: यहाँ अभी संपादन संभव नहीं है
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft नई फ़ाइल केवल BPMN के रूप में लिखता है; .bpmn पर समाप्त होने वाला नाम चुनें
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	सामान्य रंग दृष्टि वाले दर्शकों के लिए {first} और {second} में {de} का अंतर है, आवश्यक 15।
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	लाल-हरी वर्णान्धता वाले दर्शकों के लिए {first} और {second} में {de} का अंतर है, आवश्यक 8।
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	लाल-हरी वर्णान्धता वाले दर्शकों के लिए {first} और {second} में {de} का अंतर है, आवश्यक 8: इन्हें केवल लेबलों से अलग पहचानें।
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} और {second} के हल्केपन में {step} का अंतर है, आवश्यक 0.06।
 	{id}: a probability is a number from 0 to 1	{id}: प्रायिकता 0 से 1 तक की संख्या होनी चाहिए
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} में से {met} पुनरावृत्तियों ने लक्ष्य पूरा किया: {p} (95% अंतराल {lo} से {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (सेट किया गया मान, माध्य)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – पृष्ठभूमि {background}: {ratio}:1, आवश्यक {min}:1
 	{title}: now {now}, at most {most}	{title}: अभी {now}, अधिकतम {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% विश्वास अंतराल
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± पुनरावृत्तियों में प्राप्त माध्य के 95% Student-t विश्वास अंतराल की आधी चौड़ाई है।
 	· no results yet	· अभी कोई परिणाम नहीं हैं

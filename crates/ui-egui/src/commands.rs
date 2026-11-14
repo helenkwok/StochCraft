@@ -40,6 +40,7 @@ pub const STOP_WATCHING: &str = "model.stop_watching";
 pub const THEME: &str = "view.theme";
 pub const COLOR_THEME: &str = "view.color_theme";
 pub const EDIT_THEMES: &str = "view.edit_themes";
+pub const EDIT_CHART_COLOURS: &str = "view.edit_chart_colours";
 pub const LANGUAGE: &str = "view.language";
 pub const ABOUT: &str = "help.about";
 pub const SHORTCUTS: &str = "app.keyboard_shortcuts";
@@ -215,6 +216,7 @@ impl App {
         }
         appearance.push(Node::Separator);
         appearance.push(item(EDIT_THEMES, "Edit themes…"));
+        appearance.push(item(EDIT_CHART_COLOURS, "Chart colours…"));
         let appearance = Node::submenu(t("Appearance"), appearance).role(ItemRole::Appearance);
         let mut view = vec![appearance];
         // View ▸ Language, once there is more than English to choose from.
@@ -318,6 +320,7 @@ impl App {
             || self.shortcuts_dialog.is_some()
             || self.recovery.is_some()
             || self.themes.is_some()
+            || self.chart_colours.is_some()
     }
 
     /// Runs a command from a menu, the macOS menu bar or a shortcut.
@@ -367,6 +370,7 @@ impl App {
                 }
             }
             EDIT_THEMES => self.open_themes(),
+            EDIT_CHART_COLOURS => self.open_chart_colours(),
             LANGUAGE => {
                 let code = command.params.as_str().filter(|c| *c != "auto");
                 self.set_language(code);

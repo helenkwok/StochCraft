@@ -38,6 +38,7 @@
 	Add alternative	Балама қосу
 	Add calendar	Күнтізбе қосу
 	Add calendar entry	Күнтізбе жазбасын қосу
+	Add colour	Түс қосу
 	Add period	Кезең қосу
 	Add point	Нүкте қосу
 	Add pool	Қор қосу
@@ -48,6 +49,7 @@
 	Added pool {id}	{id} қоры қосылды
 	Added {block} ({id})	{block} ({id}) қосылды
 	Align	Туралау
+	All checks pass.	Барлық тексеруден өтті.
 	All text meets the contrast minimums.	Барлық мәтін ең төменгі контраст талаптарына сай.
 	Also: {rule}	Сондай-ақ: {rule}
 	Alternative {n}	{n}-балама
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Ақаулар және қолжетімділік
 	Bring All to Front	Барлығын алдыңғы қатарға шығару
 	Built with	Мына құралдармен жасалған
+	Built-in palettes are read-only. Duplicate one to change its colours.	Кірістірілген палитралар тек оқуға арналған. Түстерін өзгерту үшін біреуінің көшірмесін жасаңыз.
 	Built-in themes are read-only. Duplicate one to change its colours.	Кірістірілген тақырыптар тек оқуға арналған. Түстерін өзгерту үшін біреуінің көшірмесін жасаңыз.
 	Busiest	Ең жүктелген
 	By role	Рөл бойынша
@@ -89,6 +92,7 @@
 	Cancel run	Іске қосуды тоқтату
 	Canvas	Негізгі бет
 	Capacity	Сыйымдылық
+	Categorical	Категориялық
 	Centres	Көлденең орталықтар
 	Change	Өзгеріс
 	Change Block	Блокты өзгерту
@@ -99,12 +103,16 @@
 	Changes	Өзгерістер
 	Changing the time unit does not convert the times already in the model.	Уақыт бірлігін өзгерту модельдегі бұрыннан бар уақыт мәндерін түрлендірмейді.
 	Chart	Диаграмма
+	Chart colours	Диаграмма түстері
+	Chart colours…	Диаграмма түстері…
 	Chart hover	Меңзер астындағы диаграмма
 	Check every	Тексеру аралығы
+	Checks	Тексерулер
 	Choose…	Таңдаңыз…
 	Clear Menu	Мәзірді тазалау
 	Close	Жабу
 	Close Window	Терезені жабу
+	Colour {n}	Түс {n}
 	Comes from	Мынадан келеді
 	Condition of {id}	{id} шарты
 	Connect	Қосу
@@ -135,6 +143,7 @@
 	Disconnect	Байланысты үзу
 	Discrete values	Дискретті мәндер
 	Discrete-event simulation, from model files to results.	Дискретті оқиғалар симуляциясы: модель файлдарынан нәтижелерге дейін.
+	Diverging	Алшақтайтын
 	Does not repeat	Қайталанбайды
 	Don't Save	Сақтамау
 	Download	Жүктеп алу
@@ -174,6 +183,7 @@
 	Export table (CSV)	Кестені экспорттау (CSV)
 	Exported {file}	{file} экспортталды
 	Expression	Өрнек
+	Fail	Өтпеді
 	Fails above, waiting per working server	Сәтсіздік шегі, жұмыстағы әр серверге күтетіндер
 	Failure interrupts the job	Ақау жұмысты үзеді
 	Family	Отбасы
@@ -220,6 +230,7 @@
 	Left edges	Сол жақ жиектер
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Таңдауыңыз бойынша MIT License немесе Apache License 2.0 лицензиясымен таратылады.
 	Light	Ашық
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} және {second} – ашықтық бағытын өзгертеді; шкала тек ашарып не тек күңгірттеніп отыруы керек.
 	Log-normal	Логнормальды
 	Lost (no way out)	Жоғалғандар (шығатын жол жоқ)
 	Lost (waiting room full)	Жоғалғандар (күту орны толы)
@@ -274,6 +285,8 @@
 	OEE availability	OEE қолжетімділігі
 	OEE effectiveness	OEE нәтижелілігі
 	On	Күндер
+	On the dark canvas	Күңгірт негізгі бетте
+	On the light canvas	Ашық негізгі бетте
 	One change, which Undo takes back	Болдырмау қайтаратын бір өзгеріс
 	One clerk, random arrivals: the textbook queue, checked against theory.	Бір қызметкер, кездейсоқ келулер: теориямен тексерілген классикалық кезек.
 	One task per BPSim distribution, to compare their spread.	Таралуын салыстыру үшін әр BPSim үлестіріміне бір тапсырма.
@@ -339,6 +352,7 @@
 	Remove Property	Қасиетті жою
 	Remove alternative {n}	{n}-баламаны жою
 	Remove block	Блокты жою
+	Remove colour	Түсті жою
 	Remove the calendar {id}	{id} күнтізбесін жою
 	Remove the flow {id}	{id} ағынын жою
 	Remove the pool {id}	{id} қорын жою
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Кезегін уақыт бойынша көру үшін блокты таңдаңыз.
 	Sender waits during transfer	Тасымалдау кезінде жіберуші күтеді
 	Separate the values with semicolons or spaces.	Мәндерді нүктелі үтірмен немесе бос орынмен бөліңіз.
+	Sequential	Реттік
 	Service time	Қызмет көрсету уақыты
 	Services	Қызметтер
 	Set Property	Қасиетті орнату
@@ -514,6 +529,7 @@
 	Untitled model	Атаусыз модель
 	Upper value	Жоғарғы мән
 	Use System Setting	Жүйе параметрін пайдалану
+	Use for charts	Диаграммалар үшін қолдану
 	Use these units in the model	Осы бірліктерді модельде қолдану
 	Utilisation	Пайдалану деңгейі
 	Value	Мән
@@ -587,10 +603,16 @@
 	years	жыл
 	{block}: units	{block}: бірліктер
 	{busy} busy	Бос емес: {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – диаграмма фонындағы контраст {ratio}:1, 3:1-ден төмен: оның қатарына белгі қойыңыз немесе сандарды кестеде көрсетіңіз.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – сұр болып көрінеді (қанықтық {chroma}, кемінде 0.10 керек).
 	{entered} in, {left} out, {lost} lost	Кірді: {entered}, шықты: {left}, жоғалды: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: минимум {min}, ең ықтимал {mode}, {upper}
 	{field}: not editable here yet	{field}: мұнда әзірше өңдеу мүмкін емес
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft жаңа файлды тек BPMN түрінде жазады; .bpmn деп аяқталатын атау таңдаңыз
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} және {second} – қалыпты түс көруде айырмашылық {de}, кемінде 15 керек.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} және {second} – қызыл-жасыл дальтонизмде айырмашылық {de}, кемінде 8 керек.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} және {second} – қызыл-жасыл дальтонизмде айырмашылық {de}, кемінде 8 керек: оларды тек белгілер арқылы ажыратыңыз.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} және {second} – ашықтық айырмашылығы {step}, кемінде 0.06 керек.
 	{id}: a probability is a number from 0 to 1	{id}: ықтималдық 0 мен 1 арасындағы сан болуы керек
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} қайталаудың {met} мақсатқа жетті: {p} (95% аралық {lo} мен {hi} арасы)
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (орнатылған мән, орташа)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон «{background}»: {ratio}:1, кемінде {min}:1 керек
 	{title}: now {now}, at most {most}	{title}: қазір {now}, ең көбі {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% сенімділік аралығы
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — қайталаулар арасындағы орташа мәннің 95% Student-t сенімділік аралығының жарты ені.
 	· no results yet	· әлі нәтижелер жоқ

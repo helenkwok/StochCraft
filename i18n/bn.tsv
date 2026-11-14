@@ -38,6 +38,7 @@
 	Add alternative	বিকল্প যোগ করুন
 	Add calendar	ক্যালেন্ডার যোগ করুন
 	Add calendar entry	ক্যালেন্ডার এন্ট্রি যোগ করুন
+	Add colour	রং যোগ করুন
 	Add period	সময়কাল যোগ করুন
 	Add point	বিন্দু যোগ করুন
 	Add pool	পুল যোগ করুন
@@ -48,6 +49,7 @@
 	Added pool {id}	পুল {id} যোগ করা হয়েছে
 	Added {block} ({id})	{block} ({id}) যোগ করা হয়েছে
 	Align	সারিবদ্ধ করুন
+	All checks pass.	সব পরীক্ষায় উত্তীর্ণ।
 	All text meets the contrast minimums.	সব টেক্সট ন্যূনতম বৈপরীত্য পূরণ করে।
 	Also: {rule}	এছাড়াও: {rule}
 	Alternative {n}	বিকল্প {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	বিকলতা ও প্রাপ্যতা
 	Bring All to Front	সব সামনে আনুন
 	Built with	এগুলো দিয়ে তৈরি
+	Built-in palettes are read-only. Duplicate one to change its colours.	অন্তর্নির্মিত প্যালেটগুলি শুধু পড়ার জন্য। রং বদলাতে একটির প্রতিলিপি তৈরি করুন।
 	Built-in themes are read-only. Duplicate one to change its colours.	অন্তর্নির্মিত থিমগুলি শুধু পড়ার জন্য। রং বদলাতে একটির প্রতিলিপি তৈরি করুন।
 	Busiest	সবচেয়ে ব্যস্ত
 	By role	ভূমিকা অনুযায়ী
@@ -89,6 +92,7 @@
 	Cancel run	চালনা বাতিল
 	Canvas	মূল পৃষ্ঠ
 	Capacity	ধারণক্ষমতা
+	Categorical	শ্রেণিগত
 	Centres	অনুভূমিক কেন্দ্র
 	Change	পরিবর্তন
 	Change Block	ব্লক পরিবর্তন
@@ -99,12 +103,16 @@
 	Changes	পরিবর্তন
 	Changing the time unit does not convert the times already in the model.	সময়ের একক পরিবর্তন করলে মডেলে আগে থেকে থাকা সময়ের মান রূপান্তরিত হয় না।
 	Chart	চার্ট
+	Chart colours	চার্টের রং
+	Chart colours…	চার্টের রং…
 	Chart hover	পয়েন্টারের নিচে চার্ট
 	Check every	পরীক্ষার ব্যবধান
+	Checks	পরীক্ষা
 	Choose…	বেছে নিন…
 	Clear Menu	মেনু পরিষ্কার করুন
 	Close	বন্ধ
 	Close Window	উইন্ডো বন্ধ করুন
+	Colour {n}	রং {n}
 	Comes from	যেখান থেকে আসে
 	Condition of {id}	{id}-এর শর্ত
 	Connect	সংযুক্ত করুন
@@ -135,6 +143,7 @@
 	Disconnect	সংযোগ বিচ্ছিন্ন করুন
 	Discrete values	বিচ্ছিন্ন মান
 	Discrete-event simulation, from model files to results.	বিচ্ছিন্ন-ঘটনা সিমুলেশন, মডেল ফাইল থেকে ফলাফল পর্যন্ত।
+	Diverging	অপসারী
 	Does not repeat	পুনরাবৃত্তি হয় না
 	Don't Save	সংরক্ষণ নয়
 	Download	ডাউনলোড
@@ -174,6 +183,7 @@
 	Export table (CSV)	সারণি রপ্তানি করুন (CSV)
 	Exported {file}	{file} রপ্তানি করা হয়েছে
 	Expression	অভিব্যক্তি
+	Fail	ব্যর্থ
 	Fails above, waiting per working server	ব্যর্থতার সীমা, চালু সার্ভার প্রতি অপেক্ষমাণ
 	Failure interrupts the job	বিকলতা কাজ থামিয়ে দেয়
 	Family	পরিবার
@@ -220,6 +230,7 @@
 	Left edges	বাম প্রান্ত
 	Licensed under the MIT License or the Apache License 2.0, at your option.	আপনার পছন্দ অনুযায়ী MIT License বা Apache License 2.0-এর অধীনে লাইসেন্সপ্রাপ্ত।
 	Light	হালকা
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} ও {second}-এর মধ্যে হালকাভাব উল্টো দিকে ফেরে; রঙের ক্রম কেবল হালকা বা কেবল গাঢ় হতে থাকবে।
 	Log-normal	লগ-স্বাভাবিক
 	Lost (no way out)	হারানো (বেরোনোর পথ নেই)
 	Lost (waiting room full)	হারানো (অপেক্ষার ঘর পূর্ণ)
@@ -274,6 +285,8 @@
 	OEE availability	OEE প্রাপ্যতা
 	OEE effectiveness	OEE কার্যকারিতা
 	On	দিন
+	On the dark canvas	গাঢ় মূল পৃষ্ঠে
+	On the light canvas	হালকা মূল পৃষ্ঠে
 	One change, which Undo takes back	একটি পরিবর্তন, যা পূর্বাবস্থায় ফেরান ফিরিয়ে নেয়
 	One clerk, random arrivals: the textbook queue, checked against theory.	একজন কর্মী, দৈব আগমন: প্রচলিত সারি, তত্ত্বের সঙ্গে যাচাই করা।
 	One task per BPSim distribution, to compare their spread.	প্রতিটি BPSim বণ্টনের জন্য একটি কাজ, তাদের বিস্তার তুলনা করতে।
@@ -339,6 +352,7 @@
 	Remove Property	বৈশিষ্ট্য সরান
 	Remove alternative {n}	বিকল্প {n} সরান
 	Remove block	ব্লক সরান
+	Remove colour	রং সরান
 	Remove the calendar {id}	ক্যালেন্ডার {id} সরান
 	Remove the flow {id}	প্রবাহ {id} সরান
 	Remove the pool {id}	পুল {id} সরান
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	সময়ের সাথে কোনো ব্লকের সারি দেখতে সেটি নির্বাচন করুন।
 	Sender waits during transfer	স্থানান্তরের সময় প্রেরক অপেক্ষা করে
 	Separate the values with semicolons or spaces.	মানগুলি সেমিকোলন বা স্পেস দিয়ে আলাদা করুন।
+	Sequential	ক্রমিক
 	Service time	সেবা সময়
 	Services	পরিষেবা
 	Set Property	বৈশিষ্ট্য নির্ধারণ
@@ -514,6 +529,7 @@
 	Untitled model	শিরোনামহীন মডেল
 	Upper value	উপরের মান
 	Use System Setting	সিস্টেম সেটিং ব্যবহার করুন
+	Use for charts	চার্টের জন্য ব্যবহার করুন
 	Use these units in the model	এই এককগুলি মডেলে ব্যবহার করুন
 	Utilisation	ব্যবহারের হার
 	Value	মান
@@ -587,10 +603,16 @@
 	years	বছর
 	{block}: units	{block}: একক
 	{busy} busy	{busy} ব্যস্ত
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – চার্টের পটভূমিতে বৈপরীত্য {ratio}:1, 3:1-এর কম: এর সিরিজে লেবেল দিন বা সংখ্যাগুলি সারণিতে দেখান।
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} ধূসর দেখায় (ক্রোমা {chroma}, প্রয়োজন 0.10)।
 	{entered} in, {left} out, {lost} lost	{entered} ঢুকেছে, {left} বেরিয়েছে, {lost} হারিয়েছে
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: সর্বনিম্ন {min}, সবচেয়ে সম্ভাব্য {mode}, {upper}
 	{field}: not editable here yet	{field}: এখানে এখনও সম্পাদনা করা যায় না
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft নতুন ফাইল শুধু BPMN হিসেবে লেখে; .bpmn দিয়ে শেষ হওয়া একটি নাম বেছে নিন
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	স্বাভাবিক বর্ণ দর্শনশক্তির দর্শকের কাছে {first} ও {second}-এর পার্থক্য {de}, প্রয়োজন 15।
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	লাল-সবুজ বর্ণান্ধতা থাকা দর্শকের কাছে {first} ও {second}-এর পার্থক্য {de}, প্রয়োজন 8।
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	লাল-সবুজ বর্ণান্ধতা থাকা দর্শকের কাছে {first} ও {second}-এর পার্থক্য {de}, প্রয়োজন 8: এগুলিকে কেবল লেবেল দিয়ে আলাদা করুন।
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ও {second}-এর হালকাভাবের পার্থক্য {step}, প্রয়োজন 0.06।
 	{id}: a probability is a number from 0 to 1	{id}: সম্ভাবনা 0 থেকে 1-এর মধ্যে একটি সংখ্যা
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of}টির মধ্যে {met}টি পুনরাবৃত্তি লক্ষ্য পূরণ করেছে: {p} (৯৫% ব্যবধান {lo} থেকে {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (নির্ধারিত মান, গড়)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – পটভূমি {background}: {ratio}:1, প্রয়োজন {min}:1
 	{title}: now {now}, at most {most}	{title}: এখন {now}, সর্বোচ্চ {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% আস্থা ব্যবধান
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± হলো পুনরাবৃত্তিগুলো জুড়ে গড়ের 95% Student-t আস্থা ব্যবধানের অর্ধ-প্রস্থ।
 	· no results yet	· এখনও কোনো ফলাফল নেই

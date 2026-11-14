@@ -38,6 +38,7 @@
 	Add alternative	Legg til alternativ
 	Add calendar	Legg til kalender
 	Add calendar entry	Legg til kalenderoppføring
+	Add colour	Legg til farge
 	Add period	Legg til periode
 	Add point	Legg til punkt
 	Add pool	Legg til pulje
@@ -48,6 +49,7 @@
 	Added pool {id}	La til puljen {id}
 	Added {block} ({id})	La til {block} ({id})
 	Align	Juster
+	All checks pass.	Alle kontroller er bestått.
 	All text meets the contrast minimums.	All tekst oppfyller minstekravene til kontrast.
 	Also: {rule}	I tillegg: {rule}
 	Alternative {n}	Alternativ {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Feil og tilgjengelighet
 	Bring All to Front	Legg alle fremst
 	Built with	Laget med
+	Built-in palettes are read-only. Duplicate one to change its colours.	Innebygde paletter er skrivebeskyttet. Dupliser en for å endre fargene.
 	Built-in themes are read-only. Duplicate one to change its colours.	Innebygde temaer er skrivebeskyttet. Dupliser ett for å endre fargene.
 	Busiest	Travlest
 	By role	Etter rolle
@@ -89,6 +92,7 @@
 	Cancel run	Avbryt kjøring
 	Canvas	Hovedflate
 	Capacity	Kapasitet
+	Categorical	Kategoriske
 	Centres	Vannrette midtpunkter
 	Change	Endring
 	Change Block	Endre blokk
@@ -99,12 +103,16 @@
 	Changes	Endringer
 	Changing the time unit does not convert the times already in the model.	Endring av tidsenheten konverterer ikke tidene som allerede finnes i modellen.
 	Chart	Diagram
+	Chart colours	Diagramfarger
+	Chart colours…	Diagramfarger…
 	Chart hover	Diagram under pekeren
 	Check every	Sjekk hver
+	Checks	Kontroller
 	Choose…	Velg …
 	Clear Menu	Tøm menyen
 	Close	Lukk
 	Close Window	Lukk vindu
+	Colour {n}	Farge {n}
 	Comes from	Kommer fra
 	Condition of {id}	Betingelse for {id}
 	Connect	Koble til
@@ -135,6 +143,7 @@
 	Disconnect	Koble fra
 	Discrete values	Diskrete verdier
 	Discrete-event simulation, from model files to results.	Diskret hendelsessimulering, fra modellfiler til resultater.
+	Diverging	Divergerende
 	Does not repeat	Gjentas ikke
 	Don't Save	Ikke lagre
 	Download	Last ned
@@ -174,6 +183,7 @@
 	Export table (CSV)	Eksporter tabell (CSV)
 	Exported {file}	Eksporterte {file}
 	Expression	Uttrykk
+	Fail	Ikke bestått
 	Fails above, waiting per working server	Stryker over, ventende per server i drift
 	Failure interrupts the job	Feil avbryter arbeidet
 	Family	Familie
@@ -220,6 +230,7 @@
 	Left edges	Venstrekanter
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Lisensiert under MIT License eller Apache License 2.0, etter eget valg.
 	Light	Lys
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	Lysheten skifter retning mellom {first} og {second}; en skala må bare bli lysere eller bare mørkere.
 	Log-normal	Lognormal
 	Lost (no way out)	Tapt (ingen vei ut)
 	Lost (waiting room full)	Tapt (venterommet fullt)
@@ -274,6 +285,8 @@
 	OEE availability	OEE-tilgjengelighet
 	OEE effectiveness	OEE-effektivitet
 	On	Dager
+	On the dark canvas	På mørk hovedflate
+	On the light canvas	På lys hovedflate
 	One change, which Undo takes back	Én endring, som Angre tar tilbake
 	One clerk, random arrivals: the textbook queue, checked against theory.	Én medarbeider, tilfeldige ankomster: den klassiske køen, kontrollert mot teorien.
 	One task per BPSim distribution, to compare their spread.	Én oppgave per BPSim-fordeling for å sammenligne spredningen.
@@ -339,6 +352,7 @@
 	Remove Property	Fjern egenskap
 	Remove alternative {n}	Fjern alternativ {n}
 	Remove block	Fjern blokk
+	Remove colour	Fjern farge
 	Remove the calendar {id}	Fjern kalenderen {id}
 	Remove the flow {id}	Fjern flyten {id}
 	Remove the pool {id}	Fjern puljen {id}
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Velg en blokk for å se køen over tid.
 	Sender waits during transfer	Avsenderen venter under overføringen
 	Separate the values with semicolons or spaces.	Skill verdiene med semikolon eller mellomrom.
+	Sequential	Sekvensielle
 	Service time	Servicetid
 	Services	Tjenester
 	Set Property	Angi egenskap
@@ -514,6 +529,7 @@
 	Untitled model	Modell uten tittel
 	Upper value	Øvre verdi
 	Use System Setting	Bruk systeminnstilling
+	Use for charts	Bruk for diagrammer
 	Use these units in the model	Bruk disse enhetene i modellen
 	Utilisation	Utnyttelsesgrad
 	Value	Verdi
@@ -587,10 +603,16 @@
 	years	år
 	{block}: units	{block}: enheter
 	{busy} busy	{busy} opptatt
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} har kontrast {ratio}:1 mot diagrambakgrunnen, under 3:1: merk serien med etiketter, eller vis tallene i en tabell.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} ser grå ut (fargemetning {chroma}, krever 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} inn, {left} ut, {lost} tapt
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, mest sannsynlig {mode}, {upper}
 	{field}: not editable here yet	{field}: kan ikke redigeres her ennå
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft skriver bare nye filer som BPMN; velg et navn som slutter på .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} og {second} skiller seg med {de} for seere med normalt fargesyn, krever 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} og {second} skiller seg med {de} for seere med rød-grønn fargeblindhet, krever 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} og {second} skiller seg med {de} for seere med rød-grønn fargeblindhet, krever 8: skill dem bare ved hjelp av etiketter.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} og {second} skiller seg i lyshet med {step}, krever 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: en sannsynlighet er et tall fra 0 til 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} av {of} replikasjoner nådde målet: {p} (95 %-intervall {lo} til {hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (angitt verdi, gjennomsnitt)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} på {background}: {ratio}:1, krever {min}:1
 	{title}: now {now}, at most {most}	{title}: nå {now}, høyst {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% KI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± er halve bredden av et 95% Student-t-konfidensintervall for gjennomsnittet på tvers av gjentakelser.
 	· no results yet	· ingen resultater ennå

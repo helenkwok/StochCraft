@@ -38,6 +38,7 @@
 	Add alternative	대안 추가
 	Add calendar	캘린더 추가
 	Add calendar entry	캘린더 항목 추가
+	Add colour	색 추가
 	Add period	기간 추가
 	Add point	점 추가
 	Add pool	풀 추가
@@ -48,6 +49,7 @@
 	Added pool {id}	풀 {id} 추가됨
 	Added {block} ({id})	{block} ({id}) 추가됨
 	Align	정렬
+	All checks pass.	모든 검사를 통과했습니다.
 	All text meets the contrast minimums.	모든 텍스트가 최소 명도 대비를 충족합니다.
 	Also: {rule}	기타: {rule}
 	Alternative {n}	대안 {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	고장 및 가용 여부
 	Bring All to Front	모두 앞으로 가져오기
 	Built with	사용 기술
+	Built-in palettes are read-only. Duplicate one to change its colours.	기본 제공 팔레트는 읽기 전용입니다. 색을 바꾸려면 하나를 복제하세요.
 	Built-in themes are read-only. Duplicate one to change its colours.	기본 제공 테마는 읽기 전용입니다. 색을 바꾸려면 하나를 복제하세요.
 	Busiest	가장 바쁨
 	By role	역할별
@@ -89,6 +92,7 @@
 	Cancel run	실행 취소
 	Canvas	캔버스
 	Capacity	처리 용량
+	Categorical	범주형
 	Centres	가로 가운데
 	Change	변화
 	Change Block	블록 변경
@@ -99,12 +103,16 @@
 	Changes	변경 사항
 	Changing the time unit does not convert the times already in the model.	시간 단위를 변경해도 모델에 이미 입력된 시간은 변환되지 않습니다.
 	Chart	차트
+	Chart colours	차트 색
+	Chart colours…	차트 색…
 	Chart hover	포인터 아래 차트
 	Check every	검사 간격
+	Checks	검사
 	Choose…	선택…
 	Clear Menu	메뉴 지우기
 	Close	닫기
 	Close Window	창 닫기
+	Colour {n}	색 {n}
 	Comes from	출발 위치
 	Condition of {id}	{id}의 조건
 	Connect	연결
@@ -135,6 +143,7 @@
 	Disconnect	연결 해제
 	Discrete values	이산 값
 	Discrete-event simulation, from model files to results.	모델 파일에서 결과까지, 이산 사건 시뮬레이션.
+	Diverging	발산형
 	Does not repeat	반복 안 함
 	Don't Save	저장 안 함
 	Download	다운로드
@@ -174,6 +183,7 @@
 	Export table (CSV)	표 내보내기 (CSV)
 	Exported {file}	{file} 내보냄
 	Expression	식
+	Fail	실패
 	Fails above, waiting per working server	실패 기준(가동 중인 서버당 대기 수)
 	Failure interrupts the job	고장 시 작업 중단
 	Family	분포 계열
@@ -220,6 +230,7 @@
 	Left edges	왼쪽 가장자리
 	Licensed under the MIT License or the Apache License 2.0, at your option.	MIT License 또는 Apache License 2.0 중 하나를 선택하여 사용할 수 있습니다.
 	Light	밝게
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first}, {second}: 명도의 방향이 바뀝니다. 색 단계는 밝아지기만 하거나 어두워지기만 해야 합니다.
 	Log-normal	로그 정규 분포
 	Lost (no way out)	손실(나갈 경로 없음)
 	Lost (waiting room full)	손실(대기실 가득 참)
@@ -274,6 +285,8 @@
 	OEE availability	OEE 가용성
 	OEE effectiveness	OEE 효과성
 	On	요일
+	On the dark canvas	어두운 캔버스에서
+	On the light canvas	밝은 캔버스에서
 	One change, which Undo takes back	실행 취소로 되돌릴 수 있는 한 번의 변경
 	One clerk, random arrivals: the textbook queue, checked against theory.	창구 하나, 무작위 도착: 교과서의 대기열을 이론과 비교합니다.
 	One task per BPSim distribution, to compare their spread.	각 BPSim 분포에 작업 하나를 배정하여 분산 정도를 비교합니다.
@@ -339,6 +352,7 @@
 	Remove Property	속성 제거
 	Remove alternative {n}	대안 {n} 제거
 	Remove block	블록 제거
+	Remove colour	색 제거
 	Remove the calendar {id}	캘린더 {id} 제거
 	Remove the flow {id}	흐름 {id} 제거
 	Remove the pool {id}	풀 {id} 제거
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	블록을 선택하면 시간에 따른 대기열을 볼 수 있습니다.
 	Sender waits during transfer	이송 중 보내는 쪽 대기
 	Separate the values with semicolons or spaces.	값은 세미콜론이나 공백으로 구분하세요.
+	Sequential	순차형
 	Service time	서비스 시간
 	Services	서비스
 	Set Property	속성 설정
@@ -514,6 +529,7 @@
 	Untitled model	제목 없는 모델
 	Upper value	상한값
 	Use System Setting	시스템 설정 사용
+	Use for charts	차트에 사용
 	Use these units in the model	이 수량을 모델에 사용
 	Utilisation	가동률
 	Value	값
@@ -587,10 +603,16 @@
 	years	년
 	{block}: units	{block}: 수량
 	{busy} busy	사용 중 {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour}: 차트 배경과의 명도 대비 {ratio}:1, 3:1 미만입니다. 해당 계열에 레이블을 붙이거나 숫자를 표로 보여 주세요.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour}: 회색으로 보입니다(채도 {chroma}, 최소 0.10 필요).
 	{entered} in, {left} out, {lost} lost	들어옴 {entered}, 나감 {left}, 손실 {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: 최솟값 {min}, 최빈값 {mode}, {upper}
 	{field}: not editable here yet	{field}: 여기서는 아직 편집할 수 없습니다
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft는 새 파일을 BPMN으로만 씁니다. .bpmn으로 끝나는 이름을 고르세요
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first}, {second}: 정상 색각에서의 차이 {de}, 최소 15 필요.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first}, {second}: 적록 색각 이상에서의 차이 {de}, 최소 8 필요.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first}, {second}: 적록 색각 이상에서의 차이 {de}, 최소 8 필요: 레이블로만 구별하세요.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}, {second}: 명도 차이 {step}, 최소 0.06 필요.
 	{id}: a probability is a number from 0 to 1	{id}: 확률은 0에서 1 사이의 숫자여야 합니다
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of}회 중 {met}회가 목표를 충족: {p}(95% 구간 {lo}~{hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property}(설정값, 평균)
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} 위 {text}: {ratio}:1, 최소 {min}:1 필요
 	{title}: now {now}, at most {most}	{title}: 현재 {now}, 최대 {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% 신뢰 구간
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	±는 반복 실험의 평균에 대한 95% Student-t 신뢰 구간 너비의 절반입니다.
 	· no results yet	· 아직 결과가 없습니다

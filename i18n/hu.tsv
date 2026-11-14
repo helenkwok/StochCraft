@@ -38,6 +38,7 @@
 	Add alternative	Alternatíva hozzáadása
 	Add calendar	Naptár hozzáadása
 	Add calendar entry	Naptárbejegyzés hozzáadása
+	Add colour	Szín hozzáadása
 	Add period	Időszak hozzáadása
 	Add point	Pont hozzáadása
 	Add pool	Készlet hozzáadása
@@ -48,6 +49,7 @@
 	Added pool {id}	{id} készlet hozzáadva
 	Added {block} ({id})	{block} ({id}) hozzáadva
 	Align	Igazítás
+	All checks pass.	Minden ellenőrzés sikeres.
 	All text meets the contrast minimums.	Minden szöveg eléri a minimális kontrasztot.
 	Also: {rule}	Továbbá: {rule}
 	Alternative {n}	{n}. alternatíva
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Meghibásodások és rendelkezésre állás
 	Bring All to Front	Az összes előtérbe hozása
 	Built with	Készült ezekkel
+	Built-in palettes are read-only. Duplicate one to change its colours.	A beépített paletták csak olvashatók. Színeik módosításához kettőzzön meg egyet.
 	Built-in themes are read-only. Duplicate one to change its colours.	A beépített témák csak olvashatók. Színeik módosításához kettőzzön meg egyet.
 	Busiest	Legterheltebb
 	By role	Szerepkör szerint
@@ -89,6 +92,7 @@
 	Cancel run	Futtatás megszakítása
 	Canvas	Fő felület
 	Capacity	Kapacitás
+	Categorical	Kategorikus
 	Centres	Vízszintes középpontok
 	Change	Változtatás
 	Change Block	Blokk módosítása
@@ -99,12 +103,16 @@
 	Changes	Módosítások
 	Changing the time unit does not convert the times already in the model.	Az időegység módosítása nem váltja át a modellben már meglévő időértékeket.
 	Chart	Diagram
+	Chart colours	Diagramszínek
+	Chart colours…	Diagramszínek…
 	Chart hover	Diagram a mutató alatt
 	Check every	Ellenőrzési időköz
+	Checks	Ellenőrzések
 	Choose…	Válasszon…
 	Clear Menu	Menü törlése
 	Close	Bezárás
 	Close Window	Ablak bezárása
+	Colour {n}	{n}. szín
 	Comes from	Innen érkezik
 	Condition of {id}	{id} feltétele
 	Connect	Csatlakoztatás
@@ -135,6 +143,7 @@
 	Disconnect	Kapcsolat bontása
 	Discrete values	Diszkrét értékek
 	Discrete-event simulation, from model files to results.	Diszkrét eseményes szimuláció, a modellfájloktól az eredményekig.
+	Diverging	Divergens
 	Does not repeat	Nem ismétlődik
 	Don't Save	Mentés nélkül
 	Download	Letöltés
@@ -174,6 +183,7 @@
 	Export table (CSV)	Táblázat exportálása (CSV)
 	Exported {file}	{file} exportálva
 	Expression	Kifejezés
+	Fail	Nem felel meg
 	Fails above, waiting per working server	Bukási küszöb, várakozók üzemelő szerverenként
 	Failure interrupts the job	A meghibásodás megszakítja a munkát
 	Family	Család
@@ -220,6 +230,7 @@
 	Left edges	Bal élek
 	Licensed under the MIT License or the Apache License 2.0, at your option.	A MIT License vagy az Apache License 2.0 szerint, választás szerint.
 	Light	Világos
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} és {second} – a világosság irányt vált; a skála csak világosodhat vagy csak sötétedhet.
 	Log-normal	Lognormális
 	Lost (no way out)	Elveszett (nincs kiút)
 	Lost (waiting room full)	Elveszett (a várakozóhely megtelt)
@@ -274,6 +285,8 @@
 	OEE availability	OEE rendelkezésre állás
 	OEE effectiveness	OEE hatékonyság
 	On	Napok
+	On the dark canvas	Sötét fő felületen
+	On the light canvas	Világos fő felületen
 	One change, which Undo takes back	Egy módosítás, amelyet a Visszavonás visszavesz
 	One clerk, random arrivals: the textbook queue, checked against theory.	Egy kiszolgáló, véletlenszerű érkezések: a klasszikus sor, elmélettel ellenőrizve.
 	One task per BPSim distribution, to compare their spread.	Minden BPSim-eloszláshoz egy feladat, a szóródás összehasonlítására.
@@ -339,6 +352,7 @@
 	Remove Property	Tulajdonság eltávolítása
 	Remove alternative {n}	{n}. alternatíva eltávolítása
 	Remove block	Blokk eltávolítása
+	Remove colour	Szín eltávolítása
 	Remove the calendar {id}	{id} naptár eltávolítása
 	Remove the flow {id}	{id} folyamat eltávolítása
 	Remove the pool {id}	{id} készlet eltávolítása
@@ -399,6 +413,7 @@
 	Select a block to see its queue over time.	Válasszon egy blokkot a sorának időbeli megtekintéséhez.
 	Sender waits during transfer	A küldő vár a továbbítás alatt
 	Separate the values with semicolons or spaces.	Pontosvesszővel vagy szóközzel válassza el az értékeket.
+	Sequential	Szekvenciális
 	Service time	Kiszolgálási idő
 	Services	Szolgáltatások
 	Set Property	Tulajdonság beállítása
@@ -514,6 +529,7 @@
 	Untitled model	Névtelen modell
 	Upper value	Felső érték
 	Use System Setting	Rendszerbeállítás használata
+	Use for charts	Használat a diagramokhoz
 	Use these units in the model	Ezek az egységek kerüljenek a modellbe
 	Utilisation	Kihasználtság
 	Value	Érték
@@ -587,10 +603,16 @@
 	years	év
 	{block}: units	{block}: egységek
 	{busy} busy	{busy} foglalt
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontraszt a diagram hátterén {ratio}:1, 3:1 alatt: lássa el címkékkel az adatsorát, vagy mutassa a számokat táblázatban.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – szürkének látszik (színtelítettség {chroma}, legalább 0.10 kell).
 	{entered} in, {left} out, {lost} lost	{entered} be, {left} ki, {lost} elveszett
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, legvalószínűbb {mode}, {upper}
 	{field}: not editable here yet	{field}: itt még nem szerkeszthető
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: a StochCraft új fájlt csak BPMN formátumban ír; válassz .bpmn végű nevet
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} és {second} – eltérés normál színlátással {de}, legalább 15 kell.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} és {second} – eltérés vörös-zöld színtévesztéssel {de}, legalább 8 kell.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} és {second} – eltérés vörös-zöld színtévesztéssel {de}, legalább 8 kell: csak címkékkel különböztesse meg őket.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} és {second} – világosságeltérés {step}, legalább 0.06 kell.
 	{id}: a probability is a number from 0 to 1	{id}: a valószínűség 0 és 1 közötti szám
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} ismétlésből {met} érte el a célt: {p} (95%-os intervallum {lo}–{hi})
@@ -603,6 +625,7 @@
 	{property} (set to, mean)	{property} (beállított érték, átlag)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – {background} háttér: {ratio}:1, legalább {min}:1 kell
 	{title}: now {now}, at most {most}	{title}: most {now}, legfeljebb {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95%-os konfidenciaintervallum
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	A ± az ismétlések átlagára számított 95%-os Student-t-konfidenciaintervallum fél szélessége.
 	· no results yet	· még nincsenek eredmények
