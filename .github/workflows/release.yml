@@ -1,0 +1,295 @@
+name: Release
+
+# A pushed version tag vX.Y.Z builds StochCraft for Windows, Linux and macOS and makes ONE draft
+# GitHub release, "StochCraft vX.Y.Z" on that tag, holding every file plus SHA256SUMS.txt
+# (`sha256sum` format). The files are named like the Craft apps' releases
+# (<app>-<version>-<os>-<arch>.<ext>), so ArtCraft Launcher and anything else that reads those
+# releases finds them by the same names. A maintainer reviews the draft and publishes it by hand.
+#
+# Nothing here is signed: the Windows build is unsigned, and the macOS app carries only an ad-hoc
+# signature, so the launcher opens an installed copy on macOS but does not install it there.
+# No job has a secret; the build jobs only read the repository, and only the last job can write
+# to it (it creates the draft).
+#
+# A tag releases only when its commit is on main and the tag equals the version in Cargo.toml
+# (the `version` job checks both; every other job needs it).
+#
+# Run by hand (workflow_dispatch) it builds everything and keeps the files as workflow artifacts:
+# a dry run, on any branch, that publishes nothing.
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  version:
+    name: Version
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      prerelease: ${{ steps.v.outputs.prerelease }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # All branches, to tell whether the tagged commit is on main.
+          fetch-depth: 0
+      - name: A release tag is a commit of main
+        if: github.ref_type == 'tag'
+        run: |
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" refs/remotes/origin/main; then
+            echo "::error::$GITHUB_REF_NAME points at $GITHUB_SHA, which is not on main: tag a commit that was merged"
+            exit 1
+          fi
+      - id: v
+        name: The tag is the version in Cargo.toml
+        run: |
+          VERSION=$(awk '/^\[workspace.package\]/{p=1;next} /^\[/{p=0} p && /^version *=/{gsub(/"/,"",$3); print $3; exit}' Cargo.toml)
+          if [ -z "$VERSION" ]; then
+            echo "::error::no version under [workspace.package] in Cargo.toml"
+            exit 1
+          fi
+          if [ "$GITHUB_REF_TYPE" = tag ] && [ "v$VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::tag $GITHUB_REF_NAME, but Cargo.toml says version $VERSION: bump the version, merge it, and tag that commit"
+            exit 1
+          fi
+          case "$VERSION" in *-*) pre=true ;; *) pre=false ;; esac
+          { echo "version=$VERSION"; echo "prerelease=$pre"; } >>"$GITHUB_OUTPUT"
+
+  linux:
+    name: Linux ${{ matrix.arch }}
+    needs: [version]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-24.04
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: release-linux-${{ matrix.arch }}
+      - name: Build
+        run: cargo build --release --locked -p stochcraft
+      - name: Package
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+          ARCH: ${{ matrix.arch }}
+        run: |
+          name="stochcraft-$VERSION-linux-$ARCH"
+          mkdir -p "dist/$name"
+          cp target/release/stochcraft "dist/$name/"
+          cp LICENSE-APACHE LICENSE-MIT NOTICE README.md "dist/$name/"
+          tar -C dist -czf "dist/$name.tar.gz" "$name"
+          rm -rf "dist/$name"
+          ls -l dist
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-linux-${{ matrix.arch }}
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+  windows:
+    name: Windows x64
+    needs: [version]
+    runs-on: windows-2025
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: release-windows-x64
+      - name: Build
+        run: cargo build --release --locked -p stochcraft
+      - name: Package
+        shell: pwsh
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          $name = "stochcraft-$env:VERSION-windows-x64-portable"
+          New-Item -ItemType Directory -Path "dist/$name" | Out-Null
+          Copy-Item target/release/stochcraft.exe "dist/$name/"
+          Copy-Item LICENSE-APACHE, LICENSE-MIT, NOTICE, README.md "dist/$name/"
+          Compress-Archive -Path "dist/$name" -DestinationPath "dist/$name.zip"
+          Remove-Item -Recurse "dist/$name"
+          Get-ChildItem dist
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-windows-x64
+          path: dist/*.zip
+          if-no-files-found: error
+
+  macos:
+    name: macOS universal
+    needs: [version]
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: release-macos-universal
+      - name: Build both architectures
+        run: |
+          cargo build --release --locked -p stochcraft --target aarch64-apple-darwin
+          cargo build --release --locked -p stochcraft --target x86_64-apple-darwin
+      - name: Make the app and the disk image
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          app="dist/stage/StochCraft.app"
+          mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
+          lipo -create \
+            target/aarch64-apple-darwin/release/stochcraft \
+            target/x86_64-apple-darwin/release/stochcraft \
+            -output "$app/Contents/MacOS/StochCraft"
+          lipo -info "$app/Contents/MacOS/StochCraft"
+          cp LICENSE-APACHE LICENSE-MIT NOTICE "$app/Contents/Resources/"
+          cat >"$app/Contents/Info.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleName</key><string>StochCraft</string>
+            <key>CFBundleDisplayName</key><string>StochCraft</string>
+            <key>CFBundleExecutable</key><string>StochCraft</string>
+            <key>CFBundleIdentifier</key><string>io.github.helenkwok.stochcraft</string>
+            <key>CFBundlePackageType</key><string>APPL</string>
+            <key>CFBundleShortVersionString</key><string>${VERSION%%-*}</string>
+            <key>CFBundleVersion</key><string>${VERSION%%-*}</string>
+            <key>LSMinimumSystemVersion</key><string>11.0</string>
+            <key>NSHighResolutionCapable</key><true/>
+          </dict>
+          </plist>
+          PLIST
+          plutil -lint "$app/Contents/Info.plist"
+          # Ad-hoc only: no Developer ID, so Gatekeeper still asks and the launcher does not install it.
+          codesign --force --deep --sign - "$app"
+          codesign --verify --deep --strict "$app"
+          ln -s /Applications dist/stage/Applications
+          hdiutil create -volname StochCraft -srcfolder dist/stage -ov -format UDZO \
+            "dist/stochcraft-$VERSION-macos-universal.dmg"
+          ls -l dist
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-macos-universal
+          path: dist/*.dmg
+          if-no-files-found: error
+
+  # Opens the disk image the way a user would and checks the app inside is the universal one.
+  macos-smoke:
+    name: macOS disk image check
+    needs: [macos]
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-macos-universal
+          path: dist
+      - run: |
+          dmg=$(ls dist/*-macos-universal.dmg)
+          mnt=$(mktemp -d)
+          hdiutil attach "$dmg" -nobrowse -readonly -mountpoint "$mnt"
+          status=0
+          app="$mnt/StochCraft.app"
+          codesign --verify --deep --strict "$app" || status=1
+          lipo -archs "$app/Contents/MacOS/StochCraft" | tee archs
+          grep -q arm64 archs && grep -q x86_64 archs || status=1
+          plutil -p "$app/Contents/Info.plist" | grep -E "CFBundleIdentifier|CFBundleShortVersionString"
+          hdiutil detach "$mnt" || true
+          exit $status
+
+  checksums:
+    name: Checksums
+    needs: [version, linux, windows, macos, macos-smoke]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: release-*
+          path: release
+          merge-multiple: true
+      - name: SHA256SUMS.txt
+        working-directory: release
+        run: |
+          ls -l
+          sha256sum -- * | tee SHA256SUMS.txt
+          sha256sum --check SHA256SUMS.txt
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-files
+          path: release/*
+          if-no-files-found: error
+
+  # Always a draft: a maintainer checks it and publishes it by hand. A re-run replaces the files
+  # of the draft; a release that is already published is never changed here.
+  draft:
+    name: Make the draft release
+    needs: [version, checksums]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-files
+          path: release
+      - name: Create the draft release, or replace the files of the draft a re-run made
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          PRERELEASE: ${{ needs.version.outputs.prerelease }}
+        run: |
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            if [ "$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)" != "true" ]; then
+              echo "::error::release $TAG is already published; the workflow only makes and refreshes drafts"
+              exit 1
+            fi
+            gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | while read -r asset; do
+              gh release delete-asset "$TAG" "$asset" --repo "$GITHUB_REPOSITORY" --yes
+            done
+            gh release upload "$TAG" release/* --repo "$GITHUB_REPOSITORY"
+          else
+            flags=""
+            [ "$PRERELEASE" = true ] && flags="--prerelease"
+            gh release create "$TAG" release/* --repo "$GITHUB_REPOSITORY" \
+              --draft --verify-tag $flags \
+              --title "StochCraft $TAG" \
+              --notes "StochCraft $TAG. Check the files against SHA256SUMS.txt. The Windows and macOS builds are not signed."
+          fi
