@@ -38,6 +38,7 @@
 	Add alternative	Dodaj alternatywę
 	Add calendar	Dodaj kalendarz
 	Add calendar entry	Dodaj wpis kalendarza
+	Add colour	Dodaj kolor
 	Add period	Dodaj okres
 	Add point	Dodaj punkt
 	Add pool	Dodaj pulę
@@ -48,6 +49,7 @@
 	Added pool {id}	Dodano pulę {id}
 	Added {block} ({id})	Dodano {block} ({id})
 	Align	Wyrównaj
+	All checks pass.	Wszystkie kontrole zaliczone.
 	All text meets the contrast minimums.	Cały tekst spełnia minimalne wymagania kontrastu.
 	Also: {rule}	Także: {rule}
 	Alternative {n}	Alternatywa {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Awarie i dostępność
 	Bring All to Front	Przenieś wszystkie na wierzch
 	Built with	Zbudowano przy użyciu
+	Built-in palettes are read-only. Duplicate one to change its colours.	Wbudowane palety są tylko do odczytu. Aby zmienić kolory, zduplikuj jedną z nich.
 	Built-in themes are read-only. Duplicate one to change its colours.	Wbudowane motywy są tylko do odczytu. Aby zmienić kolory, zduplikuj jeden z nich.
 	Busiest	Najbardziej obciążone
 	By role	Według roli
@@ -89,6 +92,7 @@
 	Cancel run	Anuluj uruchomienie
 	Canvas	Główna powierzchnia
 	Capacity	Pojemność
+	Categorical	Kategorialne
 	Centres	Środki w poziomie
 	Change	Zmiana
 	Change Block	Zmień blok
@@ -99,12 +103,16 @@
 	Changes	Zmiany
 	Changing the time unit does not convert the times already in the model.	Zmiana jednostki czasu nie przelicza czasów już zapisanych w modelu.
 	Chart	Wykres
+	Chart colours	Kolory wykresów
+	Chart colours…	Kolory wykresów…
 	Chart hover	Wykres pod wskaźnikiem
 	Check every	Kontrola co
+	Checks	Kontrole
 	Choose…	Wybierz…
 	Clear Menu	Wyczyść menu
 	Close	Zamknij
 	Close Window	Zamknij okno
+	Colour {n}	Kolor {n}
 	Comes from	Pochodzi z
 	Condition of {id}	Warunek dla {id}
 	Connect	Połącz
@@ -135,6 +143,7 @@
 	Disconnect	Rozłącz
 	Discrete values	Wartości dyskretne
 	Discrete-event simulation, from model files to results.	Symulacja zdarzeń dyskretnych: od plików modeli do wyników.
+	Diverging	Rozbieżne
 	Does not repeat	Nie powtarza się
 	Don't Save	Nie zapisuj
 	Download	Pobierz
@@ -174,6 +183,7 @@
 	Export table (CSV)	Eksportuj tabelę (CSV)
 	Exported {file}	Wyeksportowano {file}
 	Expression	Wyrażenie
+	Fail	Niezaliczone
 	Fails above, waiting per working server	Niezaliczona powyżej (czekających na czynny serwer)
 	Failure interrupts the job	Awaria przerywa pracę
 	Family	Rodzina
@@ -218,6 +228,7 @@
 	Left edges	Lewe krawędzie
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Na licencji MIT License lub Apache License 2.0, do wyboru.
 	Light	Jasny
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} i {second} – jasność zmienia kierunek; skala musi tylko jaśnieć albo tylko ciemnieć.
 	Log-normal	Logarytmiczno-normalny
 	Lost (no way out)	Utracone (brak wyjścia)
 	Lost (waiting room full)	Utracone (poczekalnia pełna)
@@ -272,6 +283,8 @@
 	OEE availability	Dostępność OEE
 	OEE effectiveness	Efektywność OEE
 	On	Dni
+	On the dark canvas	Na ciemnej głównej powierzchni
+	On the light canvas	Na jasnej głównej powierzchni
 	One change, which Undo takes back	Jedna zmiana, którą cofa Cofnij
 	One clerk, random arrivals: the textbook queue, checked against theory.	Jeden pracownik, losowe przybycia: klasyczna kolejka zweryfikowana teorią.
 	One task per BPSim distribution, to compare their spread.	Jedno zadanie dla każdego rozkładu BPSim, aby porównać ich rozrzut.
@@ -337,6 +350,7 @@
 	Remove Property	Usuń właściwość
 	Remove alternative {n}	Usuń alternatywę {n}
 	Remove block	Usuń blok
+	Remove colour	Usuń kolor
 	Remove the calendar {id}	Usuń kalendarz {id}
 	Remove the flow {id}	Usuń przepływ {id}
 	Remove the pool {id}	Usuń pulę {id}
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	Zaznacz blok, aby zobaczyć jego kolejkę w czasie.
 	Sender waits during transfer	Nadawca czeka podczas transferu
 	Separate the values with semicolons or spaces.	Oddziel wartości średnikami lub spacjami.
+	Sequential	Sekwencyjne
 	Service time	Czas obsługi
 	Services	Usługi
 	Set Property	Ustaw właściwość
@@ -508,6 +523,7 @@
 	Untitled model	Model bez tytułu
 	Upper value	Wartość górna
 	Use System Setting	Użyj ustawienia systemowego
+	Use for charts	Użyj dla wykresów
 	Use these units in the model	Użyj tych jednostek w modelu
 	Utilisation	Wykorzystanie
 	Value	Wartość
@@ -581,10 +597,16 @@
 	years	lata
 	{block}: units	{block}: jednostki
 	{busy} busy	Zajęte: {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrast z tłem wykresu {ratio}:1, poniżej 3:1: opisz jego serię etykietami lub pokaż liczby w tabeli.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – wygląda na szary (nasycenie {chroma}, wymagane 0.10).
 	{entered} in, {left} out, {lost} lost	Weszło: {entered}, wyszło: {left}, utracono: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, najbardziej prawdopodobna {mode}, {upper}
 	{field}: not editable here yet	{field}: tutaj nie można jeszcze edytować
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft zapisuje nowy plik tylko jako BPMN; wybierz nazwę kończącą się na .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} i {second} – różnica przy prawidłowym widzeniu barw {de}, wymagane 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} i {second} – różnica przy ślepocie czerwono-zielonej {de}, wymagane 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} i {second} – różnica przy ślepocie czerwono-zielonej {de}, wymagane 8: rozróżniaj je tylko po etykietach.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} i {second} – różnica jasności {step}, wymagane 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: prawdopodobieństwo musi być liczbą od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikacji osiągnęło cel: {p} (przedział 95% od {lo} do {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (ustawiono na, średnia)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – tło „{background}”: {ratio}:1, wymagane {min}:1
 	{title}: now {now}, at most {most}	{title}: teraz {now}, najwyżej {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% PU
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± oznacza połowę szerokości 95% przedziału ufności Student-t dla średniej z replikacji.
 	· no results yet	· brak wyników

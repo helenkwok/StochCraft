@@ -38,6 +38,7 @@
 	Add alternative	Alternatif ekle
 	Add calendar	Takvim ekle
 	Add calendar entry	Takvim girdisi ekle
+	Add colour	Renk ekle
 	Add period	Dönem ekle
 	Add point	Nokta ekle
 	Add pool	Havuz ekle
@@ -48,6 +49,7 @@
 	Added pool {id}	{id} havuzu eklendi
 	Added {block} ({id})	{block} ({id}) eklendi
 	Align	Hizala
+	All checks pass.	Tüm denetimler geçti.
 	All text meets the contrast minimums.	Tüm metinler en düşük kontrast değerlerini karşılıyor.
 	Also: {rule}	Ayrıca: {rule}
 	Alternative {n}	Alternatif {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Arızalar ve kullanılabilirlik
 	Bring All to Front	Tümünü Öne Getir
 	Built with	Şunlarla geliştirildi
+	Built-in palettes are read-only. Duplicate one to change its colours.	Yerleşik paletler salt okunurdur. Renklerini değiştirmek için birini çoğaltın.
 	Built-in themes are read-only. Duplicate one to change its colours.	Yerleşik temalar salt okunurdur. Renklerini değiştirmek için birini çoğaltın.
 	Busiest	En yoğun
 	By role	Role göre
@@ -89,6 +92,7 @@
 	Cancel run	Çalıştırmayı iptal et
 	Canvas	Ana yüzey
 	Capacity	Kapasite
+	Categorical	Kategorik
 	Centres	Yatay merkezler
 	Change	Değişim
 	Change Block	Bloğu değiştir
@@ -99,12 +103,16 @@
 	Changes	Değişiklikler
 	Changing the time unit does not convert the times already in the model.	Zaman birimini değiştirmek modeldeki mevcut süreleri dönüştürmez.
 	Chart	Grafik
+	Chart colours	Grafik renkleri
+	Chart colours…	Grafik renkleri…
 	Chart hover	İşaretçi altındaki grafik
 	Check every	Denetim aralığı
+	Checks	Denetimler
 	Choose…	Seçin…
 	Clear Menu	Menüyü Temizle
 	Close	Kapat
 	Close Window	Pencereyi Kapat
+	Colour {n}	Renk {n}
 	Comes from	Şuradan gelir
 	Condition of {id}	{id} koşulu
 	Connect	Bağla
@@ -135,6 +143,7 @@
 	Disconnect	Bağlantıyı kes
 	Discrete values	Ayrık değerler
 	Discrete-event simulation, from model files to results.	Model dosyalarından sonuçlara ayrık olay simülasyonu.
+	Diverging	Iraksak
 	Does not repeat	Tekrarlanmaz
 	Don't Save	Kaydetme
 	Download	İndir
@@ -174,6 +183,7 @@
 	Export table (CSV)	Tabloyu dışa aktar (CSV)
 	Exported {file}	{file} dışa aktarıldı
 	Expression	İfade
+	Fail	Başarısız
 	Fails above, waiting per working server	Başarısızlık eşiği, hizmetteki sunucu başına bekleyen
 	Failure interrupts the job	Arıza işi keser
 	Family	Aile
@@ -218,6 +228,7 @@
 	Left edges	Sol kenarlar
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Tercihinize göre MIT License veya Apache License 2.0 ile lisanslanmıştır.
 	Light	Açık
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} ve {second}: açıklık yön değiştiriyor; bir skala yalnızca açılmalı ya da yalnızca koyulaşmalı.
 	Log-normal	Log-normal
 	Lost (no way out)	Kaybedilen (çıkış yolu yok)
 	Lost (waiting room full)	Kaybedilen (bekleme alanı dolu)
@@ -272,6 +283,8 @@
 	OEE availability	OEE kullanılabilirliği
 	OEE effectiveness	OEE etkinliği
 	On	Günler
+	On the dark canvas	Koyu ana yüzeyde
+	On the light canvas	Açık ana yüzeyde
 	One change, which Undo takes back	Geri Al ile geri alınan tek bir değişiklik
 	One clerk, random arrivals: the textbook queue, checked against theory.	Bir görevli, rastgele gelişler: teoriyle doğrulanan klasik kuyruk.
 	One task per BPSim distribution, to compare their spread.	Dağılımlarını karşılaştırmak için her BPSim dağılımına bir görev.
@@ -337,6 +350,7 @@
 	Remove Property	Özelliği kaldır
 	Remove alternative {n}	{n}. alternatifi kaldır
 	Remove block	Bloğu kaldır
+	Remove colour	Rengi kaldır
 	Remove the calendar {id}	{id} takvimini kaldır
 	Remove the flow {id}	{id} akışını kaldır
 	Remove the pool {id}	{id} havuzunu kaldır
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	Kuyruğunu zaman içinde görmek için bir blok seçin.
 	Sender waits during transfer	Gönderen aktarma sırasında bekler
 	Separate the values with semicolons or spaces.	Değerleri noktalı virgül veya boşlukla ayırın.
+	Sequential	Sıralı
 	Service time	Hizmet süresi
 	Services	Hizmetler
 	Set Property	Özelliği ayarla
@@ -508,6 +523,7 @@
 	Untitled model	Başlıksız model
 	Upper value	Üst değer
 	Use System Setting	Sistem ayarını kullan
+	Use for charts	Grafiklerde kullan
 	Use these units in the model	Bu birimleri modelde kullan
 	Utilisation	Kullanım oranı
 	Value	Değer
@@ -581,10 +597,16 @@
 	years	yıl
 	{block}: units	{block}: birimler
 	{busy} busy	{busy} meşgul
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour}: grafik arka planı üzerinde kontrast {ratio}:1, 3:1'in altında: serisini etiketleyin veya sayıları bir tabloda gösterin.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour}: gri görünüyor (kroma {chroma}, en az 0.10 gerekli).
 	{entered} in, {left} out, {lost} lost	{entered} giriş, {left} çıkış, {lost} kayıp
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: en küçük {min}, en olası {mode}, {upper}
 	{field}: not editable here yet	{field}: burada henüz düzenlenemiyor
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft yeni dosyayı yalnızca BPMN olarak yazar; .bpmn ile biten bir ad seçin
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} ve {second}: normal renk görüşünde fark {de}, en az 15 gerekli.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} ve {second}: kırmızı-yeşil renk körlüğünde fark {de}, en az 8 gerekli.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} ve {second}: kırmızı-yeşil renk körlüğünde fark {de}, en az 8 gerekli: bunları yalnızca etiketlerle ayırt edin.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ve {second}: açıklık farkı {step}, en az 0.06 gerekli.
 	{id}: a probability is a number from 0 to 1	{id}: olasılık 0 ile 1 arasında bir sayıdır
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} tekrardan {met} tanesi hedefi karşıladı: {p} (%95 aralık {lo} ile {hi} arası)
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (ayarlanan değer, ortalama)
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} üzerinde {text}: {ratio}:1, en az {min}:1 gerekli
 	{title}: now {now}, at most {most}	{title}: şu an {now}, en fazla {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% güven aralığı
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	±, tekrarlamalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliğidir.
 	· no results yet	· henüz sonuç yok

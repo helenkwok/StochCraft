@@ -38,6 +38,7 @@
 	Add alternative	Додати альтернативу
 	Add calendar	Додати календар
 	Add calendar entry	Додати запис календаря
+	Add colour	Додати колір
 	Add period	Додати період
 	Add point	Додати точку
 	Add pool	Додати пул
@@ -48,6 +49,7 @@
 	Added pool {id}	Додано пул {id}
 	Added {block} ({id})	Додано {block} ({id})
 	Align	Вирівнювання
+	All checks pass.	Усі перевірки пройдено.
 	All text meets the contrast minimums.	Увесь текст відповідає мінімальним вимогам до контрасту.
 	Also: {rule}	Також: {rule}
 	Alternative {n}	Альтернатива {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Відмови та доступність
 	Bring All to Front	Усі вікна на передній план
 	Built with	Створено за допомогою
+	Built-in palettes are read-only. Duplicate one to change its colours.	Вбудовані палітри доступні лише для читання. Щоб змінити кольори, створіть дублікат однієї з них.
 	Built-in themes are read-only. Duplicate one to change its colours.	Вбудовані теми доступні лише для читання. Щоб змінити кольори, створіть дублікат однієї з них.
 	Busiest	Найзавантаженіший
 	By role	За роллю
@@ -89,6 +92,7 @@
 	Cancel run	Скасувати запуск
 	Canvas	Основна поверхня
 	Capacity	Потужність
+	Categorical	Категорійні
 	Centres	Центри по горизонталі
 	Change	Зміна
 	Change Block	Змінити блок
@@ -99,12 +103,16 @@
 	Changes	Зміни
 	Changing the time unit does not convert the times already in the model.	Зміна одиниці часу не перераховує час, уже заданий у моделі.
 	Chart	Діаграма
+	Chart colours	Кольори діаграм
+	Chart colours…	Кольори діаграм…
 	Chart hover	Діаграма під вказівником
 	Check every	Перевіряти кожні
+	Checks	Перевірки
 	Choose…	Виберіть…
 	Clear Menu	Очистити меню
 	Close	Закрити
 	Close Window	Закрити вікно
+	Colour {n}	Колір {n}
 	Comes from	Надходить від
 	Condition of {id}	Умова для {id}
 	Connect	З'єднати
@@ -135,6 +143,7 @@
 	Disconnect	Роз'єднати
 	Discrete values	Дискретні значення
 	Discrete-event simulation, from model files to results.	Дискретно-подієве моделювання: від файлів моделі до результатів.
+	Diverging	Розбіжні
 	Does not repeat	Не повторюється
 	Don't Save	Не зберігати
 	Download	Завантажити
@@ -174,6 +183,7 @@
 	Export table (CSV)	Експортувати таблицю (CSV)
 	Exported {file}	Експортовано {file}
 	Expression	Вираз
+	Fail	Не пройдено
 	Fails above, waiting per working server	Не проходить понад (тих, що чекають, на сервер у роботі)
 	Failure interrupts the job	Відмова перериває роботу
 	Family	Родина
@@ -218,6 +228,7 @@
 	Left edges	Ліві краї
 	Licensed under the MIT License or the Apache License 2.0, at your option.	На вибір: MIT License або Apache License 2.0.
 	Light	Світлий
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} і {second} — світлота змінює напрямок; шкала має лише світлішати або лише темнішати.
 	Log-normal	Логнормальний розподіл
 	Lost (no way out)	Втрати (немає виходу)
 	Lost (waiting room full)	Втрати (місця очікування зайняті)
@@ -272,6 +283,8 @@
 	OEE availability	Доступність OEE
 	OEE effectiveness	Результативність OEE
 	On	Дні
+	On the dark canvas	На темній основній поверхні
+	On the light canvas	На світлій основній поверхні
 	One change, which Undo takes back	Одна зміна, яку скасовує Скасувати
 	One clerk, random arrivals: the textbook queue, checked against theory.	Один оператор, випадкові прибуття: класична черга, перевірена теорією.
 	One task per BPSim distribution, to compare their spread.	По одному завданню на кожний розподіл BPSim для порівняння розкиду.
@@ -337,6 +350,7 @@
 	Remove Property	Видалити властивість
 	Remove alternative {n}	Видалити альтернативу {n}
 	Remove block	Видалити блок
+	Remove colour	Видалити колір
 	Remove the calendar {id}	Видалити календар {id}
 	Remove the flow {id}	Видалити потік {id}
 	Remove the pool {id}	Видалити пул {id}
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	Виберіть блок, щоб побачити його чергу в часі.
 	Sender waits during transfer	Відправник чекає під час передачі
 	Separate the values with semicolons or spaces.	Розділяйте значення крапкою з комою або пробілами.
+	Sequential	Послідовні
 	Service time	Час обслуговування
 	Services	Служби
 	Set Property	Задати властивість
@@ -508,6 +523,7 @@
 	Untitled model	Модель без назви
 	Upper value	Верхнє значення
 	Use System Setting	Використати системне налаштування
+	Use for charts	Використовувати для діаграм
 	Use these units in the model	Використати ці одиниці в моделі
 	Utilisation	Коефіцієнт використання
 	Value	Значення
@@ -581,10 +597,16 @@
 	years	роки
 	{block}: units	{block}: одиниці
 	{busy} busy	Зайнято: {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} — контраст із тлом діаграми {ratio}:1, нижче 3:1: підпишіть його ряд або покажіть числа в таблиці.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} — виглядає сірим (насиченість {chroma}, потрібно 0.10).
 	{entered} in, {left} out, {lost} lost	Увійшло: {entered}, вийшло: {left}, втрачено: {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: мінімум {min}, найімовірніше {mode}, {upper}
 	{field}: not editable here yet	{field}: тут поки не можна редагувати
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft записує новий файл лише як BPMN; виберіть назву, що закінчується на .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} і {second} — різниця за нормального кольоровідчуття {de}, потрібно 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} і {second} — різниця за червоно-зеленого дальтонізму {de}, потрібно 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} і {second} — різниця за червоно-зеленого дальтонізму {de}, потрібно 8: розрізняйте їх лише за підписами.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} і {second} — різниця за світлотою {step}, потрібно 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: імовірність має бути числом від 0 до 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} з {of} реплікацій досягли мети: {p} (95% інтервал від {lo} до {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (задане значення, середнє)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} — тло «{background}»: {ratio}:1, потрібно {min}:1
 	{title}: now {now}, at most {most}	{title}: зараз {now}, щонайбільше {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% ДІ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — половина ширини 95% довірчого інтервалу Student-t для середнього значення за повтореннями.
 	· no results yet	· результатів поки немає

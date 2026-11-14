@@ -38,6 +38,7 @@
 	Add alternative	Προσθήκη εναλλακτικής
 	Add calendar	Προσθήκη ημερολογίου
 	Add calendar entry	Προσθήκη καταχώρισης ημερολογίου
+	Add colour	Προσθήκη χρώματος
 	Add period	Προσθήκη περιόδου
 	Add point	Προσθήκη σημείου
 	Add pool	Προσθήκη δεξαμενής
@@ -48,6 +49,7 @@
 	Added pool {id}	Προστέθηκε η δεξαμενή {id}
 	Added {block} ({id})	Προστέθηκε το {block} ({id})
 	Align	Στοίχιση
+	All checks pass.	Όλοι οι έλεγχοι πέρασαν.
 	All text meets the contrast minimums.	Όλο το κείμενο πληροί την ελάχιστη αντίθεση.
 	Also: {rule}	Επίσης: {rule}
 	Alternative {n}	Εναλλακτική {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Βλάβες και διαθεσιμότητα
 	Bring All to Front	Μεταφορά όλων μπροστά
 	Built with	Δημιουργήθηκε με
+	Built-in palettes are read-only. Duplicate one to change its colours.	Οι ενσωματωμένες παλέτες είναι μόνο για ανάγνωση. Δημιουργήστε διπλότυπο μίας για να αλλάξετε τα χρώματά της.
 	Built-in themes are read-only. Duplicate one to change its colours.	Τα ενσωματωμένα θέματα είναι μόνο για ανάγνωση. Δημιουργήστε διπλότυπο ενός για να αλλάξετε τα χρώματά του.
 	Busiest	Πιο φορτωμένο
 	By role	Κατά ρόλο
@@ -89,6 +92,7 @@
 	Cancel run	Ακύρωση εκτέλεσης
 	Canvas	Κύρια επιφάνεια
 	Capacity	Χωρητικότητα
+	Categorical	Κατηγορικές
 	Centres	Οριζόντια κέντρα
 	Change	Μεταβολή
 	Change Block	Αλλαγή μπλοκ
@@ -99,12 +103,16 @@
 	Changes	Αλλαγές
 	Changing the time unit does not convert the times already in the model.	Η αλλαγή της μονάδας χρόνου δεν μετατρέπει τους χρόνους που υπάρχουν ήδη στο μοντέλο.
 	Chart	Γράφημα
+	Chart colours	Χρώματα γραφημάτων
+	Chart colours…	Χρώματα γραφημάτων…
 	Chart hover	Γράφημα κάτω από τον δείκτη
 	Check every	Έλεγχος κάθε
+	Checks	Έλεγχοι
 	Choose…	Επιλογή…
 	Clear Menu	Εκκαθάριση μενού
 	Close	Κλείσιμο
 	Close Window	Κλείσιμο παραθύρου
+	Colour {n}	Χρώμα {n}
 	Comes from	Προέρχεται από
 	Condition of {id}	Συνθήκη του {id}
 	Connect	Σύνδεση
@@ -135,6 +143,7 @@
 	Disconnect	Αποσύνδεση
 	Discrete values	Διακριτές τιμές
 	Discrete-event simulation, from model files to results.	Προσομοίωση διακριτών γεγονότων, από αρχεία μοντέλων έως αποτελέσματα.
+	Diverging	Αποκλίνουσες
 	Does not repeat	Χωρίς επανάληψη
 	Don't Save	Να μην αποθηκευτεί
 	Download	Λήψη
@@ -174,6 +183,7 @@
 	Export table (CSV)	Εξαγωγή πίνακα (CSV)
 	Exported {file}	Εξήχθη το {file}
 	Expression	Έκφραση
+	Fail	Αποτυχία
 	Fails above, waiting per working server	Αποτυγχάνει πάνω από, σε αναμονή ανά εξυπηρετητή σε λειτουργία
 	Failure interrupts the job	Η βλάβη διακόπτει την εργασία
 	Family	Οικογένεια
@@ -218,6 +228,7 @@
 	Left edges	Αριστερά άκρα
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Διατίθεται με MIT License ή Apache License 2.0, κατ' επιλογή.
 	Light	Ανοιχτό
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first} και {second} – η φωτεινότητα αλλάζει κατεύθυνση· μια διαβάθμιση πρέπει μόνο να γίνεται ανοιχτότερη ή μόνο σκουρότερη.
 	Log-normal	Λογαριθμοκανονική
 	Lost (no way out)	Απώλειες (καμία διέξοδος)
 	Lost (waiting room full)	Απώλειες (γεμάτος χώρος αναμονής)
@@ -272,6 +283,8 @@
 	OEE availability	Διαθεσιμότητα OEE
 	OEE effectiveness	Αποτελεσματικότητα OEE
 	On	Ημέρες
+	On the dark canvas	Στη σκούρα κύρια επιφάνεια
+	On the light canvas	Στην ανοιχτή κύρια επιφάνεια
 	One change, which Undo takes back	Μία αλλαγή, που την αναιρεί η Αναίρεση
 	One clerk, random arrivals: the textbook queue, checked against theory.	Ένας υπάλληλος, τυχαίες αφίξεις: η κλασική ουρά, ελεγμένη με τη θεωρία.
 	One task per BPSim distribution, to compare their spread.	Μία εργασία ανά κατανομή BPSim για σύγκριση της διασποράς τους.
@@ -337,6 +350,7 @@
 	Remove Property	Αφαίρεση ιδιότητας
 	Remove alternative {n}	Αφαίρεση εναλλακτικής {n}
 	Remove block	Αφαίρεση μπλοκ
+	Remove colour	Αφαίρεση χρώματος
 	Remove the calendar {id}	Αφαίρεση ημερολογίου {id}
 	Remove the flow {id}	Αφαίρεση ροής {id}
 	Remove the pool {id}	Αφαίρεση δεξαμενής {id}
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	Επιλέξτε ένα μπλοκ για να δείτε την ουρά του στη διάρκεια του χρόνου.
 	Sender waits during transfer	Ο αποστολέας περιμένει κατά τη μεταφορά
 	Separate the values with semicolons or spaces.	Διαχωρίστε τις τιμές με ερωτηματικά (;) ή κενά.
+	Sequential	Διαδοχικές
 	Service time	Χρόνος εξυπηρέτησης
 	Services	Υπηρεσίες
 	Set Property	Ορισμός ιδιότητας
@@ -508,6 +523,7 @@
 	Untitled model	Μοντέλο χωρίς τίτλο
 	Upper value	Άνω τιμή
 	Use System Setting	Χρήση ρύθμισης συστήματος
+	Use for charts	Χρήση για γραφήματα
 	Use these units in the model	Χρήση αυτών των μονάδων στο μοντέλο
 	Utilisation	Βαθμός χρησιμοποίησης
 	Value	Τιμή
@@ -581,10 +597,16 @@
 	years	έτη
 	{block}: units	{block}: μονάδες
 	{busy} busy	{busy} απασχολημένα
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – αντίθεση {ratio}:1 στο φόντο του γραφήματος, κάτω από 3:1: προσθέστε ετικέτες στη σειρά του ή δείξτε τους αριθμούς σε πίνακα.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – φαίνεται γκρι (χρωματική ένταση {chroma}, απαιτείται 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} μέσα, {left} έξω, {lost} χαμένα
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: ελάχιστο {min}, πιθανότερη {mode}, {upper}
 	{field}: not editable here yet	{field}: δεν είναι ακόμη επεξεργάσιμο εδώ
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: το StochCraft γράφει νέα αρχεία μόνο ως BPMN· επιλέξτε όνομα που τελειώνει σε .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} και {second} διαφέρουν κατά {de} για θεατές με φυσιολογική χρωματική όραση, απαιτείται 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} και {second} διαφέρουν κατά {de} για θεατές με αχρωματοψία στο κόκκινο-πράσινο, απαιτείται 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} και {second} διαφέρουν κατά {de} για θεατές με αχρωματοψία στο κόκκινο-πράσινο, απαιτείται 8: ξεχωρίστε τα μόνο με ετικέτες.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} και {second} διαφέρουν σε φωτεινότητα κατά {step}, απαιτείται 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: η πιθανότητα είναι αριθμός από 0 έως 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} από {of} επαναλήψεις πέτυχαν τον στόχο: {p} (διάστημα 95% από {lo} έως {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (καθορισμένη τιμή, μέση τιμή)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – φόντο «{background}»: {ratio}:1, απαιτείται {min}:1
 	{title}: now {now}, at most {most}	{title}: τώρα {now}, το πολύ {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% ΔΕ
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	Το ± είναι το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t 95% για τη μέση τιμή μεταξύ των επαναλήψεων.
 	· no results yet	· δεν υπάρχουν ακόμη αποτελέσματα

@@ -38,6 +38,7 @@
 	Add alternative	ເພີ່ມທາງເລືອກ
 	Add calendar	ເພີ່ມປະຕິທິນ
 	Add calendar entry	ເພີ່ມລາຍການປະຕິທິນ
+	Add colour	ເພີ່ມສີ
 	Add period	ເພີ່ມໄລຍະ
 	Add point	ເພີ່ມຈຸດ
 	Add pool	ເພີ່ມກຸ່ມຊັບພະຍາກອນ
@@ -48,6 +49,7 @@
 	Added pool {id}	ເພີ່ມກຸ່ມຊັບພະຍາກອນ {id} ແລ້ວ
 	Added {block} ({id})	ເພີ່ມ {block} ({id}) ແລ້ວ
 	Align	ຈັດແຖວ
+	All checks pass.	ຜ່ານການກວດທັງໝົດ.
 	All text meets the contrast minimums.	ຂໍ້ຄວາມທັງໝົດຜ່ານຄວາມຄົມຊັດຂັ້ນຕ່ຳ.
 	Also: {rule}	ນອກຈາກນີ້: {rule}
 	Alternative {n}	ທາງເລືອກ {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	ການເສຍ ແລະ ຄວາມພ້ອມໃຊ້
 	Bring All to Front	ນຳທັງໝົດມາໄວ້ດ້ານໜ້າ
 	Built with	ສ້າງດ້ວຍ
+	Built-in palettes are read-only. Duplicate one to change its colours.	ຈານສີທີ່ມີມາໃນຕົວແມ່ນອ່ານໄດ້ຢ່າງດຽວ. ເຮັດສຳເນົາອັນໜຶ່ງເພື່ອປ່ຽນສີຂອງມັນ.
 	Built-in themes are read-only. Duplicate one to change its colours.	ຊຸດສີທີ່ມີມາໃນຕົວແມ່ນອ່ານໄດ້ຢ່າງດຽວ. ເຮັດສຳເນົາອັນໜຶ່ງເພື່ອປ່ຽນສີຂອງມັນ.
 	Busiest	ຫຍຸ້ງທີ່ສຸດ
 	By role	ຕາມບົດບາດ
@@ -89,6 +92,7 @@
 	Cancel run	ຍົກເລີກການປະມວນຜົນ
 	Canvas	ພື້ນຜິວຫຼັກ
 	Capacity	ຄວາມຈຸ
+	Categorical	ແບບໝວດໝູ່
 	Centres	ກາງແນວນອນ
 	Change	ການປ່ຽນແປງ
 	Change Block	ປ່ຽນບລັອກ
@@ -99,12 +103,16 @@
 	Changes	ການປ່ຽນແປງ
 	Changing the time unit does not convert the times already in the model.	ການປ່ຽນໜ່ວຍເວລາຈະບໍ່ແປງຄ່າເວລາທີ່ມີຢູ່ໃນແບບຈຳລອງ.
 	Chart	ແຜນພູມ
+	Chart colours	ສີແຜນພູມ
+	Chart colours…	ສີແຜນພູມ…
 	Chart hover	ແຜນພູມເມື່ອຊີ້
 	Check every	ກວດທຸກໆ
+	Checks	ການກວດ
 	Choose…	ເລືອກ…
 	Clear Menu	ລ້າງເມນູ
 	Close	ປິດ
 	Close Window	ປິດໜ້າຕ່າງ
+	Colour {n}	ສີ {n}
 	Comes from	ມາຈາກ
 	Condition of {id}	ເງື່ອນໄຂຂອງ {id}
 	Connect	ເຊື່ອມຕໍ່
@@ -135,6 +143,7 @@
 	Disconnect	ຕັດການເຊື່ອມຕໍ່
 	Discrete values	ຄ່າບໍ່ຕໍ່ເນື່ອງ
 	Discrete-event simulation, from model files to results.	ການຈຳລອງເຫດການບໍ່ຕໍ່ເນື່ອງ ຈາກໄຟລ໌ແບບຈຳລອງໄປສູ່ຜົນໄດ້ຮັບ.
+	Diverging	ແບບແຍກສອງທາງ
 	Does not repeat	ບໍ່ເຮັດຊ້ຳ
 	Don't Save	ບໍ່ບັນທຶກ
 	Download	ດາວໂຫຼດ
@@ -174,6 +183,7 @@
 	Export table (CSV)	ສົ່ງອອກຕາຕະລາງ (CSV)
 	Exported {file}	ສົ່ງອອກ {file} ແລ້ວ
 	Expression	ນິພົດ
+	Fail	ບໍ່ຜ່ານ
 	Fails above, waiting per working server	ບໍ່ຜ່ານເມື່ອເກີນ (ຜູ້ລໍຖ້າຕໍ່ແມ່ຂ່າຍທີ່ໃຊ້ງານຢູ່)
 	Failure interrupts the job	ການເສຍຂັດຈັງຫວະວຽກ
 	Family	ຕະກູນ
@@ -218,6 +228,7 @@
 	Left edges	ຂອບຊ້າຍ
 	Licensed under the MIT License or the Apache License 2.0, at your option.	ໃຊ້ໄດ້ພາຍໃຕ້ MIT License ຫຼື Apache License 2.0 ຕາມທີ່ທ່ານເລືອກ.
 	Light	ແຈ້ງ
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	ຄວາມແຈ້ງປີ້ນທິດລະຫວ່າງ {first} ແລະ {second}; ລຳດັບສີຕ້ອງແຈ້ງຂຶ້ນຢ່າງດຽວ ຫຼື ມືດລົງຢ່າງດຽວ.
 	Log-normal	ລອກ-ນໍມອນ
 	Lost (no way out)	ສູນເສຍ (ບໍ່ມີທາງອອກ)
 	Lost (waiting room full)	ສູນເສຍ (ຫ້ອງລໍຖ້າເຕັມ)
@@ -272,6 +283,8 @@
 	OEE availability	ຄວາມພ້ອມໃຊ້ OEE
 	OEE effectiveness	ປະສິດທິຜົນ OEE
 	On	ມື້
+	On the dark canvas	ເທິງພື້ນຜິວຫຼັກມືດ
+	On the light canvas	ເທິງພື້ນຜິວຫຼັກແຈ້ງ
 	One change, which Undo takes back	ການປ່ຽນແປງໜຶ່ງເທື່ອ ເຊິ່ງຍົກເລີກໄດ້
 	One clerk, random arrivals: the textbook queue, checked against theory.	ພະນັກງານໜຶ່ງຄົນ ແລະ ການມາຮອດແບບສຸ່ມ: ແຖວຄອຍພື້ນຖານທີ່ກວດທຽບກັບທິດສະດີ.
 	One task per BPSim distribution, to compare their spread.	ໜຶ່ງໜ້າວຽກຕໍ່ແຕ່ລະການແຈກຢາຍ BPSim ເພື່ອປຽບທຽບການກະຈາຍ.
@@ -337,6 +350,7 @@
 	Remove Property	ລຶບຄຸນສົມບັດ
 	Remove alternative {n}	ລຶບທາງເລືອກ {n}
 	Remove block	ລຶບບລັອກ
+	Remove colour	ລຶບສີ
 	Remove the calendar {id}	ລຶບປະຕິທິນ {id}
 	Remove the flow {id}	ລຶບເສັ້ນທາງ {id}
 	Remove the pool {id}	ລຶບກຸ່ມຊັບພະຍາກອນ {id}
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	ເລືອກບລັອກເພື່ອເບິ່ງຄິວຂອງມັນຕາມເວລາ.
 	Sender waits during transfer	ຜູ້ສົ່ງລໍຖ້າລະຫວ່າງຂົນຍ້າຍ
 	Separate the values with semicolons or spaces.	ຂັ້ນຄ່າດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ.
+	Sequential	ແບບລຳດັບ
 	Service time	ເວລາໃຫ້ບໍລິການ
 	Services	ບໍລິການ
 	Set Property	ຕັ້ງຄຸນສົມບັດ
@@ -508,6 +523,7 @@
 	Untitled model	ແບບຈຳລອງບໍ່ມີຊື່
 	Upper value	ຄ່າເທິງ
 	Use System Setting	ໃຊ້ການຕັ້ງຄ່າລະບົບ
+	Use for charts	ໃຊ້ສຳລັບແຜນພູມ
 	Use these units in the model	ໃຊ້ຈຳນວນໜ່ວຍເຫຼົ່ານີ້ໃນແບບຈຳລອງ
 	Utilisation	ອັດຕາການນຳໃຊ້
 	Value	ຄ່າ
@@ -581,10 +597,16 @@
 	years	ປີ
 	{block}: units	{block}: ຈຳນວນໜ່ວຍ
 	{busy} busy	ບໍ່ຫວ່າງ {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} ມີຄວາມຄົມຊັດ {ratio}:1 ເທິງພື້ນຫຼັງແຜນພູມ, ຕ່ຳກວ່າ 3:1: ໃສ່ປ້າຍໃຫ້ຊຸດຂໍ້ມູນຂອງມັນ ຫຼື ສະແດງຕົວເລກໃນຕາຕະລາງ.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} ເບິ່ງຄືສີເທົາ (ຄວາມອີ່ມຕົວ {chroma}, ຕ້ອງການ 0.10).
 	{entered} in, {left} out, {lost} lost	ເຂົ້າ {entered} ອອກ {left} ສູນເສຍ {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: ຕ່ຳສຸດ {min}, ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ {mode}, {upper}
 	{field}: not editable here yet	{field}: ຍັງບໍ່ສາມາດແກ້ໄຂຢູ່ນີ້ໄດ້
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft ຂຽນໄຟລ໌ໃໝ່ເປັນ BPMN ເທົ່ານັ້ນ; ເລືອກຊື່ທີ່ລົງທ້າຍດ້ວຍ .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} ແລະ {second} ຕ່າງກັນ {de} ສຳລັບຜູ້ເບິ່ງທີ່ເຫັນສີປົກກະຕິ, ຕ້ອງການ 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} ແລະ {second} ຕ່າງກັນ {de} ສຳລັບຜູ້ເບິ່ງທີ່ຕາບອດສີແດງ-ຂຽວ, ຕ້ອງການ 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} ແລະ {second} ຕ່າງກັນ {de} ສຳລັບຜູ້ເບິ່ງທີ່ຕາບອດສີແດງ-ຂຽວ, ຕ້ອງການ 8: ແຍກພວກມັນດ້ວຍປ້າຍເທົ່ານັ້ນ.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ແລະ {second} ຕ່າງກັນດ້ານຄວາມແຈ້ງ {step}, ຕ້ອງການ 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: ຄວາມເປັນໄປໄດ້ຕ້ອງເປັນຕົວເລກຈາກ 0 ຫາ 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} ຈາກ {of} ຮອບຈຳລອງຊ້ຳບັນລຸເປົ້າໝາຍ: {p} (ຊ່ວງ 95% ຈາກ {lo} ຫາ {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (ກຳນົດເປັນ, ຄ່າສະເລ່ຍ)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} ເທິງ {background}: {ratio}:1, ຕ້ອງການ {min}:1
 	{title}: now {now}, at most {most}	{title}: ຕອນນີ້ {now} ສູງສຸດ {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ.
 	· no results yet	· ຍັງບໍ່ມີຜົນໄດ້ຮັບ

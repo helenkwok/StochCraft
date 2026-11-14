@@ -38,6 +38,7 @@
 	Add alternative	Alternative hinzufügen
 	Add calendar	Kalender hinzufügen
 	Add calendar entry	Kalendereintrag hinzufügen
+	Add colour	Farbe hinzufügen
 	Add period	Zeitraum hinzufügen
 	Add point	Punkt hinzufügen
 	Add pool	Pool hinzufügen
@@ -48,6 +49,7 @@
 	Added pool {id}	Pool {id} hinzugefügt
 	Added {block} ({id})	{block} ({id}) hinzugefügt
 	Align	Ausrichten
+	All checks pass.	Alle Prüfungen bestanden.
 	All text meets the contrast minimums.	Alle Texte erreichen den Mindestkontrast.
 	Also: {rule}	Außerdem: {rule}
 	Alternative {n}	Alternative {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Ausfälle und Verfügbarkeit
 	Bring All to Front	Alle nach vorne bringen
 	Built with	Erstellt mit
+	Built-in palettes are read-only. Duplicate one to change its colours.	Eingebaute Paletten sind schreibgeschützt. Zum Ändern der Farben eine davon duplizieren.
 	Built-in themes are read-only. Duplicate one to change its colours.	Eingebaute Farbschemata sind schreibgeschützt. Zum Ändern der Farben eines davon duplizieren.
 	Busiest	Am meisten belastet
 	By role	Nach Rolle
@@ -89,6 +92,7 @@
 	Cancel run	Simulation abbrechen
 	Canvas	Arbeitsfläche
 	Capacity	Kapazität
+	Categorical	Kategorial
 	Centres	Horizontal zentriert
 	Change	Änderung
 	Change Block	Block ändern
@@ -99,12 +103,16 @@
 	Changes	Änderungen
 	Changing the time unit does not convert the times already in the model.	Beim Ändern der Zeiteinheit werden bereits vorhandene Zeiten im Modell nicht umgerechnet.
 	Chart	Diagramm
+	Chart colours	Diagrammfarben
+	Chart colours…	Diagrammfarben…
 	Chart hover	Diagramm unter Mauszeiger
 	Check every	Prüfung alle
+	Checks	Prüfungen
 	Choose…	Auswählen…
 	Clear Menu	Menü leeren
 	Close	Schließen
 	Close Window	Fenster schließen
+	Colour {n}	Farbe {n}
 	Comes from	Kommt von
 	Condition of {id}	Bedingung von {id}
 	Connect	Verbinden
@@ -135,6 +143,7 @@
 	Disconnect	Verbindung trennen
 	Discrete values	Diskrete Werte
 	Discrete-event simulation, from model files to results.	Diskrete Ereignissimulation – von Modelldateien zu Ergebnissen.
+	Diverging	Divergierend
 	Does not repeat	Keine Wiederholung
 	Don't Save	Nicht speichern
 	Download	Herunterladen
@@ -174,6 +183,7 @@
 	Export table (CSV)	Tabelle exportieren (CSV)
 	Exported {file}	{file} exportiert
 	Expression	Ausdruck
+	Fail	Nicht bestanden
 	Fails above, waiting per working server	Fällt durch über (Wartende je Server in Betrieb)
 	Failure interrupts the job	Ausfall unterbricht die Bearbeitung
 	Family	Familie
@@ -218,6 +228,7 @@
 	Left edges	Linke Kanten
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Lizenziert unter der MIT License oder der Apache License 2.0, nach Ihrer Wahl.
 	Light	Hell
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	Die Helligkeit kehrt zwischen {first} und {second} um; ein Verlauf darf nur heller oder nur dunkler werden.
 	Log-normal	Lognormal
 	Lost (no way out)	Verloren (kein Ausweg)
 	Lost (waiting room full)	Verloren (Warteraum voll)
@@ -272,6 +283,8 @@
 	OEE availability	OEE-Verfügbarkeit
 	OEE effectiveness	OEE-Effektivität
 	On	Tage
+	On the dark canvas	Auf dunkler Arbeitsfläche
+	On the light canvas	Auf heller Arbeitsfläche
 	One change, which Undo takes back	Eine Änderung, die Rückgängig zurücknimmt
 	One clerk, random arrivals: the textbook queue, checked against theory.	Ein Mitarbeiter, zufällige Ankünfte: die klassische Warteschlange, mit der Theorie verglichen.
 	One task per BPSim distribution, to compare their spread.	Eine Aufgabe je BPSim-Verteilung, um ihre Streuung zu vergleichen.
@@ -337,6 +350,7 @@
 	Remove Property	Eigenschaft entfernen
 	Remove alternative {n}	Alternative {n} entfernen
 	Remove block	Block entfernen
+	Remove colour	Farbe entfernen
 	Remove the calendar {id}	Kalender {id} entfernen
 	Remove the flow {id}	Verbindung {id} entfernen
 	Remove the pool {id}	Pool {id} entfernen
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	Wählen Sie einen Block, um seine Warteschlange über die Zeit zu sehen.
 	Sender waits during transfer	Absender wartet während des Transfers
 	Separate the values with semicolons or spaces.	Trennen Sie die Werte durch Semikolons oder Leerzeichen.
+	Sequential	Sequenziell
 	Service time	Bearbeitungszeit
 	Services	Dienste
 	Set Property	Eigenschaft festlegen
@@ -508,6 +523,7 @@
 	Untitled model	Unbenanntes Modell
 	Upper value	Oberer Wert
 	Use System Setting	Systemeinstellung verwenden
+	Use for charts	Für Diagramme verwenden
 	Use these units in the model	Diese Einheiten im Modell verwenden
 	Utilisation	Auslastung
 	Value	Wert
@@ -581,10 +597,16 @@
 	years	Jahre
 	{block}: units	{block}: Einheiten
 	{busy} busy	{busy} belegt
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} hat auf dem Diagrammhintergrund einen Kontrast von {ratio}:1, unter 3:1: ihre Datenreihe beschriften oder die Zahlen in einer Tabelle zeigen.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} wirkt grau (Buntheit {chroma}, nötig 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} hinein, {left} hinaus, {lost} verloren
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: Minimum {min}, wahrscheinlichster Wert {mode}, {upper}
 	{field}: not editable here yet	{field}: hier noch nicht bearbeitbar
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft schreibt neue Dateien nur als BPMN; wählen Sie einen Namen, der auf .bpmn endet
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} und {second} unterscheiden sich bei normalem Farbsehen um {de}, nötig 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} und {second} unterscheiden sich bei Rot-Grün-Sehschwäche um {de}, nötig 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} und {second} unterscheiden sich bei Rot-Grün-Sehschwäche um {de}, nötig 8: nur anhand von Beschriftungen auseinanderhalten.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} und {second} unterscheiden sich in der Helligkeit um {step}, nötig 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: Eine Wahrscheinlichkeit ist eine Zahl zwischen 0 und 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} von {of} Replikationen erreichten das Ziel: {p} (95-%-Intervall {lo} bis {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (festgelegt auf, Mittelwert)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} auf {background}: {ratio}:1, nötig {min}:1
 	{title}: now {now}, at most {most}	{title}: jetzt {now}, höchstens {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% KI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± ist die halbe Breite eines 95-%-Konfidenzintervalls (Student-t) für den Mittelwert über die Replikationen.
 	· no results yet	· noch keine Ergebnisse

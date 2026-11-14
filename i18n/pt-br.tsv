@@ -38,6 +38,7 @@
 	Add alternative	Adicionar alternativa
 	Add calendar	Adicionar calendário
 	Add calendar entry	Adicionar entrada de calendário
+	Add colour	Adicionar cor
 	Add period	Adicionar período
 	Add point	Adicionar ponto
 	Add pool	Adicionar pool
@@ -48,6 +49,7 @@
 	Added pool {id}	Pool {id} adicionado
 	Added {block} ({id})	{block} ({id}) adicionado
 	Align	Alinhar
+	All checks pass.	Todas as verificações passaram.
 	All text meets the contrast minimums.	Todo o texto atende aos contrastes mínimos.
 	Also: {rule}	Também: {rule}
 	Alternative {n}	Alternativa {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Falhas e disponibilidade
 	Bring All to Front	Trazer tudo para a frente
 	Built with	Desenvolvido com
+	Built-in palettes are read-only. Duplicate one to change its colours.	As paletas integradas são somente leitura. Duplique uma para mudar as cores dela.
 	Built-in themes are read-only. Duplicate one to change its colours.	Os temas integrados são somente leitura. Duplique um para mudar as cores dele.
 	Busiest	Mais ocupado
 	By role	Por função
@@ -89,6 +92,7 @@
 	Cancel run	Cancelar execução
 	Canvas	Superfície principal
 	Capacity	Capacidade
+	Categorical	Categóricas
 	Centres	Centros horizontais
 	Change	Variação
 	Change Block	Alterar bloco
@@ -99,12 +103,16 @@
 	Changes	Alterações
 	Changing the time unit does not convert the times already in the model.	Alterar a unidade de tempo não converte os tempos já existentes no modelo.
 	Chart	Gráfico
+	Chart colours	Cores dos gráficos
+	Chart colours…	Cores dos gráficos…
 	Chart hover	Gráfico sob o ponteiro
 	Check every	Verificar a cada
+	Checks	Verificações
 	Choose…	Escolher…
 	Clear Menu	Limpar menu
 	Close	Fechar
 	Close Window	Fechar janela
+	Colour {n}	Cor {n}
 	Comes from	Vem de
 	Condition of {id}	Condição de {id}
 	Connect	Conectar
@@ -135,6 +143,7 @@
 	Disconnect	Desconectar
 	Discrete values	Valores discretos
 	Discrete-event simulation, from model files to results.	Simulação de eventos discretos: dos arquivos de modelo aos resultados.
+	Diverging	Divergentes
 	Does not repeat	Não se repete
 	Don't Save	Não Salvar
 	Download	Baixar
@@ -174,6 +183,7 @@
 	Export table (CSV)	Exportar tabela (CSV)
 	Exported {file}	{file} exportado
 	Expression	Expressão
+	Fail	Falha
 	Fails above, waiting per working server	Falha acima de (em espera por servidor em serviço)
 	Failure interrupts the job	A falha interrompe o trabalho
 	Family	Família
@@ -218,6 +228,7 @@
 	Left edges	Bordas esquerdas
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Licenciado sob MIT License ou Apache License 2.0, à sua escolha.
 	Light	Claro
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	A luminosidade muda de sentido entre {first} e {second}; uma gradação deve só clarear ou só escurecer.
 	Log-normal	Log-normal
 	Lost (no way out)	Perdidas (sem saída)
 	Lost (waiting room full)	Perdidas (sala de espera lotada)
@@ -272,6 +283,8 @@
 	OEE availability	Disponibilidade OEE
 	OEE effectiveness	Eficácia OEE
 	On	Dias
+	On the dark canvas	Sobre a superfície principal escura
+	On the light canvas	Sobre a superfície principal clara
 	One change, which Undo takes back	Uma alteração, que Desfazer reverte
 	One clerk, random arrivals: the textbook queue, checked against theory.	Um atendente, chegadas aleatórias: a fila clássica, verificada pela teoria.
 	One task per BPSim distribution, to compare their spread.	Uma tarefa por distribuição BPSim, para comparar a dispersão.
@@ -337,6 +350,7 @@
 	Remove Property	Remover propriedade
 	Remove alternative {n}	Remover alternativa {n}
 	Remove block	Remover bloco
+	Remove colour	Remover cor
 	Remove the calendar {id}	Remover o calendário {id}
 	Remove the flow {id}	Remover o fluxo {id}
 	Remove the pool {id}	Remover o pool {id}
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	Selecione um bloco para ver a fila dele ao longo do tempo.
 	Sender waits during transfer	O remetente espera durante a transferência
 	Separate the values with semicolons or spaces.	Separe os valores com ponto e vírgula ou espaços.
+	Sequential	Sequenciais
 	Service time	Tempo de serviço
 	Services	Serviços
 	Set Property	Definir propriedade
@@ -508,6 +523,7 @@
 	Untitled model	Modelo sem título
 	Upper value	Valor superior
 	Use System Setting	Usar configuração do sistema
+	Use for charts	Usar nos gráficos
 	Use these units in the model	Usar estas unidades no modelo
 	Utilisation	Utilização
 	Value	Valor
@@ -581,10 +597,16 @@
 	years	anos
 	{block}: units	{block}: unidades
 	{busy} busy	{busy} ocupados
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} tem contraste de {ratio}:1 sobre o fundo do gráfico, abaixo de 3:1: rotule a série dela ou mostre os números em uma tabela.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} parece cinza (croma {chroma}, precisa de 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} entraram, {left} saíram, {lost} perdidos
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: mínimo {min}, mais provável {mode}, {upper}
 	{field}: not editable here yet	{field}: ainda não é possível editar aqui
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: o StochCraft só grava arquivos novos em BPMN; escolha um nome terminado em .bpmn
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} e {second} diferem em {de} para quem tem visão das cores normal, precisa de 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} e {second} diferem em {de} para quem tem daltonismo vermelho-verde, precisa de 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} e {second} diferem em {de} para quem tem daltonismo vermelho-verde, precisa de 8: distinga-as só por rótulos.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} e {second} diferem em luminosidade por {step}, precisa de 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: uma probabilidade é um número de 0 a 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} de {of} replicações atingiram a meta: {p} (intervalo de 95% de {lo} a {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (valor definido, média)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} sobre {background}: {ratio}:1, precisa de {min}:1
 	{title}: now {now}, at most {most}	{title}: agora {now}, no máximo {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± IC de 95%
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± é a metade da largura de um intervalo de confiança Student-t de 95% para a média entre as replicações.
 	· no results yet	· ainda não há resultados

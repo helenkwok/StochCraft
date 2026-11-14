@@ -38,6 +38,7 @@
 	Add alternative	Alternatief toevoegen
 	Add calendar	Kalender toevoegen
 	Add calendar entry	Kalenderitem toevoegen
+	Add colour	Kleur toevoegen
 	Add period	Periode toevoegen
 	Add point	Punt toevoegen
 	Add pool	Pool toevoegen
@@ -48,6 +49,7 @@
 	Added pool {id}	Pool {id} toegevoegd
 	Added {block} ({id})	{block} ({id}) toegevoegd
 	Align	Uitlijnen
+	All checks pass.	Alle controles geslaagd.
 	All text meets the contrast minimums.	Alle tekst haalt de minimale contrasten.
 	Also: {rule}	Ook: {rule}
 	Alternative {n}	Alternatief {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	Storingen en beschikbaarheid
 	Bring All to Front	Alles naar voren halen
 	Built with	Gemaakt met
+	Built-in palettes are read-only. Duplicate one to change its colours.	Ingebouwde paletten zijn alleen-lezen. Dupliceer er een om de kleuren te wijzigen.
 	Built-in themes are read-only. Duplicate one to change its colours.	Ingebouwde thema's zijn alleen-lezen. Dupliceer er een om de kleuren te wijzigen.
 	Busiest	Drukst
 	By role	Per rol
@@ -89,6 +92,7 @@
 	Cancel run	Uitvoering annuleren
 	Canvas	Hoofdvlak
 	Capacity	Capaciteit
+	Categorical	Categorisch
 	Centres	Horizontale middens
 	Change	Verandering
 	Change Block	Blok wijzigen
@@ -99,12 +103,16 @@
 	Changes	Wijzigingen
 	Changing the time unit does not convert the times already in the model.	Als u de tijdseenheid wijzigt, worden bestaande tijden in het model niet omgerekend.
 	Chart	Grafiek
+	Chart colours	Grafiekkleuren
+	Chart colours…	Grafiekkleuren…
 	Chart hover	Grafiek onder aanwijzer
 	Check every	Controle elke
+	Checks	Controles
 	Choose…	Kies…
 	Clear Menu	Menu wissen
 	Close	Sluiten
 	Close Window	Venster sluiten
+	Colour {n}	Kleur {n}
 	Comes from	Komt van
 	Condition of {id}	Voorwaarde van {id}
 	Connect	Verbinden
@@ -135,6 +143,7 @@
 	Disconnect	Verbinding verbreken
 	Discrete values	Discrete waarden
 	Discrete-event simulation, from model files to results.	Discrete-evenementensimulatie, van modelbestanden tot resultaten.
+	Diverging	Divergerend
 	Does not repeat	Herhaalt niet
 	Don't Save	Niet opslaan
 	Download	Downloaden
@@ -174,6 +183,7 @@
 	Export table (CSV)	Tabel exporteren (CSV)
 	Exported {file}	{file} geëxporteerd
 	Expression	Expressie
+	Fail	Niet geslaagd
 	Fails above, waiting per working server	Zakt boven (wachtenden per server in dienst)
 	Failure interrupts the job	Storing onderbreekt de bewerking
 	Family	Familie
@@ -218,6 +228,7 @@
 	Left edges	Linkerkanten
 	Licensed under the MIT License or the Apache License 2.0, at your option.	Onder MIT License of Apache License 2.0, naar keuze.
 	Light	Licht
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	De lichtheid keert om tussen {first} en {second}; een verloop mag alleen lichter of alleen donkerder worden.
 	Log-normal	Lognormaal
 	Lost (no way out)	Verloren (geen uitweg)
 	Lost (waiting room full)	Verloren (wachtruimte vol)
@@ -272,6 +283,8 @@
 	OEE availability	OEE-beschikbaarheid
 	OEE effectiveness	OEE-effectiviteit
 	On	Dagen
+	On the dark canvas	Op donker hoofdvlak
+	On the light canvas	Op licht hoofdvlak
 	One change, which Undo takes back	Eén wijziging, die Ongedaan maken terugdraait
 	One clerk, random arrivals: the textbook queue, checked against theory.	Eén medewerker, willekeurige aankomsten: de klassieke wachtrij, getoetst aan de theorie.
 	One task per BPSim distribution, to compare their spread.	Eén taak per BPSim-verdeling om de spreiding te vergelijken.
@@ -337,6 +350,7 @@
 	Remove Property	Eigenschap verwijderen
 	Remove alternative {n}	Alternatief {n} verwijderen
 	Remove block	Blok verwijderen
+	Remove colour	Kleur verwijderen
 	Remove the calendar {id}	Kalender {id} verwijderen
 	Remove the flow {id}	Stroom {id} verwijderen
 	Remove the pool {id}	Pool {id} verwijderen
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	Selecteer een blok om de wachtrij in de tijd te zien.
 	Sender waits during transfer	Afzender wacht tijdens transfer
 	Separate the values with semicolons or spaces.	Scheid de waarden met puntkomma's of spaties.
+	Sequential	Sequentieel
 	Service time	Servicetijd
 	Services	Diensten
 	Set Property	Eigenschap instellen
@@ -508,6 +523,7 @@
 	Untitled model	Naamloos model
 	Upper value	Bovenwaarde
 	Use System Setting	Systeeminstelling gebruiken
+	Use for charts	Gebruiken voor grafieken
 	Use these units in the model	Deze eenheden in het model gebruiken
 	Utilisation	Bezettingsgraad
 	Value	Waarde
@@ -581,10 +597,16 @@
 	years	jaren
 	{block}: units	{block}: eenheden
 	{busy} busy	{busy} bezet
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} heeft contrast {ratio}:1 op de grafiekachtergrond, onder 3:1: geef de reeks labels of toon de getallen in een tabel.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} oogt grijs (kleurverzadiging {chroma}, nodig 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} in, {left} uit, {lost} verloren
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: minimum {min}, meest waarschijnlijk {mode}, {upper}
 	{field}: not editable here yet	{field}: hier nog niet bewerkbaar
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft schrijft een nieuw bestand alleen als BPMN; kies een naam die op .bpmn eindigt
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first} en {second} verschillen {de} voor kijkers met normaal kleurenzien, nodig 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} en {second} verschillen {de} voor kijkers met rood-groenkleurenblindheid, nodig 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} en {second} verschillen {de} voor kijkers met rood-groenkleurenblindheid, nodig 8: onderscheid ze alleen met labels.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} en {second} verschillen {step} in lichtheid, nodig 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: een kans is een getal tussen 0 en 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} van {of} herhalingen haalden het doel: {p} (95%-interval {lo} tot {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (ingestelde waarde, gemiddelde)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} op {background}: {ratio}:1, nodig {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, hoogstens {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95%-BI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± is de halve breedte van een 95%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de herhalingen.
 	· no results yet	· nog geen resultaten

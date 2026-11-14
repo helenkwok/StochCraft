@@ -38,6 +38,7 @@
 	Add alternative	添加备选方案
 	Add calendar	添加日历
 	Add calendar entry	添加日历条目
+	Add colour	添加颜色
 	Add period	添加时段
 	Add point	添加点
 	Add pool	添加资源池
@@ -48,6 +49,7 @@
 	Added pool {id}	已添加资源池 {id}
 	Added {block} ({id})	已添加 {block} ({id})
 	Align	对齐
+	All checks pass.	所有检查均通过。
 	All text meets the contrast minimums.	所有文本均达到最低对比度。
 	Also: {rule}	另外：{rule}
 	Alternative {n}	备选方案 {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	故障与可用性
 	Bring All to Front	全部移到最前
 	Built with	使用以下技术构建
+	Built-in palettes are read-only. Duplicate one to change its colours.	内置调色板为只读。要更改颜色，请先为其中一个创建副本。
 	Built-in themes are read-only. Duplicate one to change its colours.	内置主题为只读。要更改颜色，请先为其中一个创建副本。
 	Busiest	最繁忙
 	By role	按角色
@@ -89,6 +92,7 @@
 	Cancel run	取消运行
 	Canvas	画布
 	Capacity	容量
+	Categorical	分类
 	Centres	水平居中
 	Change	变化
 	Change Block	更改区块
@@ -99,12 +103,16 @@
 	Changes	更改
 	Changing the time unit does not convert the times already in the model.	更改时间单位不会换算模型中已有的时间值。
 	Chart	图表
+	Chart colours	图表颜色
+	Chart colours…	图表颜色…
 	Chart hover	悬停时的图表
 	Check every	检查间隔
+	Checks	检查
 	Choose…	选择…
 	Clear Menu	清除菜单
 	Close	关闭
 	Close Window	关闭窗口
+	Colour {n}	颜色 {n}
 	Comes from	来源于
 	Condition of {id}	{id} 的条件
 	Connect	连接
@@ -135,6 +143,7 @@
 	Disconnect	断开连接
 	Discrete values	离散值
 	Discrete-event simulation, from model files to results.	离散事件仿真：从模型文件到结果。
+	Diverging	发散
 	Does not repeat	不重复
 	Don't Save	不保存
 	Download	下载
@@ -174,6 +183,7 @@
 	Export table (CSV)	导出表格 (CSV)
 	Exported {file}	已导出 {file}
 	Expression	表达式
+	Fail	未通过
 	Fails above, waiting per working server	失败阈值（每台在线服务器的等待数）
 	Failure interrupts the job	故障中断作业
 	Family	分布族
@@ -218,6 +228,7 @@
 	Left edges	左边
 	Licensed under the MIT License or the Apache License 2.0, at your option.	可选择采用 MIT License 或 Apache License 2.0 授权。
 	Light	浅色
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	明度在{first}与{second}之间折返；渐变只能一直变浅或一直变深。
 	Log-normal	对数正态分布
 	Lost (no way out)	流失（无出路）
 	Lost (waiting room full)	流失（等待区已满）
@@ -272,6 +283,8 @@
 	OEE availability	OEE 时间开动率
 	OEE effectiveness	OEE 效能
 	On	星期
+	On the dark canvas	在深色画布上
+	On the light canvas	在浅色画布上
 	One change, which Undo takes back	一次更改，可用撤销还原
 	One clerk, random arrivals: the textbook queue, checked against theory.	一名服务员、随机到达：经典排队模型，并与理论结果对照。
 	One task per BPSim distribution, to compare their spread.	每种 BPSim 分布各设一个任务，用于比较其离散程度。
@@ -337,6 +350,7 @@
 	Remove Property	移除属性
 	Remove alternative {n}	移除备选方案 {n}
 	Remove block	移除区块
+	Remove colour	移除颜色
 	Remove the calendar {id}	移除日历 {id}
 	Remove the flow {id}	移除顺序流 {id}
 	Remove the pool {id}	移除资源池 {id}
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	选择一个区块以查看其队列随时间的变化。
 	Sender waits during transfer	传送期间发送方等待
 	Separate the values with semicolons or spaces.	请用分号或空格分隔各个值。
+	Sequential	顺序
 	Service time	服务时间
 	Services	服务
 	Set Property	设置属性
@@ -508,6 +523,7 @@
 	Untitled model	未命名模型
 	Upper value	上限值
 	Use System Setting	使用系统设置
+	Use for charts	用于图表
 	Use these units in the model	在模型中使用这些数量
 	Utilisation	利用率
 	Value	值
@@ -581,10 +597,16 @@
 	years	年
 	{block}: units	{block}：数量
 	{busy} busy	忙碌 {busy}
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour}在图表背景上的对比度为 {ratio}:1，低于 3:1：请为其系列添加标签，或用表格显示数值。
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour}看起来是灰色（彩度 {chroma}，需要 0.10）。
 	{entered} in, {left} out, {lost} lost	进入 {entered}，离开 {left}，丢失 {lost}
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}：最小值 {min}，最可能值 {mode}，{upper}
 	{field}: not editable here yet	{field}：暂时无法在此编辑
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}：StochCraft 只能将新文件写为 BPMN；请选择以 .bpmn 结尾的名称
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	对色觉正常的观看者，{first}与{second}相差 {de}，需要 15。
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	对红绿色盲的观看者，{first}与{second}相差 {de}，需要 8。
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	对红绿色盲的观看者，{first}与{second}相差 {de}，需要 8：只能靠标签区分。
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}与{second}的明度相差 {step}，需要 0.06。
 	{id}: a probability is a number from 0 to 1	{id}：概率必须是 0 到 1 之间的数字
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} 次重复运行中有 {met} 次达到目标：{p}（95% 区间 {lo} 至 {hi}）
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property}（所设值的均值）
 	{text} on {background}: {ratio}:1, needs {min}:1	{background}上的{text}：{ratio}:1，需要 {min}:1
 	{title}: now {now}, at most {most}	{title}：当前 {now}，最多 {most}
+	{word}: {message}	{word}：{message}
 	± 95% CI	± 95% 置信区间
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± 表示各次重复运行均值的 95% Student-t 置信区间的半宽。
 	· no results yet	· 尚无结果

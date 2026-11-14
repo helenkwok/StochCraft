@@ -38,6 +38,7 @@
 	Add alternative	ప్రత్యామ్నాయాన్ని జోడించు
 	Add calendar	క్యాలెండర్‌ను జోడించు
 	Add calendar entry	క్యాలెండర్ ఎంట్రీని జోడించు
+	Add colour	రంగును జోడించు
 	Add period	వ్యవధిని జోడించు
 	Add point	బిందువును జోడించు
 	Add pool	పూల్‌ను జోడించు
@@ -48,6 +49,7 @@
 	Added pool {id}	{id} పూల్ జోడించబడింది
 	Added {block} ({id})	{block} ({id}) జోడించబడింది
 	Align	అమర్చు
+	All checks pass.	అన్ని తనిఖీలు ఉత్తీర్ణమయ్యాయి.
 	All text meets the contrast minimums.	అన్ని టెక్స్ట్‌లు కనీస కాంట్రాస్ట్‌ను అందుకుంటాయి.
 	Also: {rule}	అలాగే: {rule}
 	Alternative {n}	ప్రత్యామ్నాయం {n}
@@ -77,6 +79,7 @@
 	Breakdowns and availability	లోపాలు మరియు లభ్యత
 	Bring All to Front	అన్నింటినీ ముందుకు తీసుకురా
 	Built with	దీనితో రూపొందించబడింది
+	Built-in palettes are read-only. Duplicate one to change its colours.	అంతర్నిర్మిత పాలెట్‌లు చదవడానికి మాత్రమే. రంగులు మార్చడానికి ఒకదానికి నకలు చేయండి.
 	Built-in themes are read-only. Duplicate one to change its colours.	అంతర్నిర్మిత థీమ్‌లు చదవడానికి మాత్రమే. రంగులు మార్చడానికి ఒకదానికి నకలు చేయండి.
 	Busiest	అత్యంత రద్దీ
 	By role	పాత్ర ప్రకారం
@@ -89,6 +92,7 @@
 	Cancel run	అమలును రద్దు చేయి
 	Canvas	ప్రధాన ఉపరితలం
 	Capacity	సామర్థ్యం
+	Categorical	వర్గీకృత
 	Centres	అడ్డ కేంద్రాలు
 	Change	మార్పు
 	Change Block	బ్లాక్‌ను మార్చు
@@ -99,12 +103,16 @@
 	Changes	మార్పులు
 	Changing the time unit does not convert the times already in the model.	సమయ ప్రమాణాన్ని మార్చడం వల్ల నమూనాలో ఇప్పటికే ఉన్న సమయాలు మారవు.
 	Chart	చార్ట్
+	Chart colours	చార్ట్ రంగులు
+	Chart colours…	చార్ట్ రంగులు…
 	Chart hover	పాయింటర్ కింద చార్ట్
 	Check every	తనిఖీ వ్యవధి
+	Checks	తనిఖీలు
 	Choose…	ఎంచుకోండి…
 	Clear Menu	మెనూను క్లియర్ చేయి
 	Close	మూసివేయి
 	Close Window	విండోను మూసివేయి
+	Colour {n}	రంగు {n}
 	Comes from	దీని నుంచి వస్తుంది
 	Condition of {id}	{id} యొక్క షరతు
 	Connect	అనుసంధానించు
@@ -135,6 +143,7 @@
 	Disconnect	అనుసంధానాన్ని తొలగించు
 	Discrete values	విచ్ఛిన్న విలువలు
 	Discrete-event simulation, from model files to results.	నమూనా ఫైళ్ల నుంచి ఫలితాల వరకు విచ్ఛిన్న-సంఘటన అనుకరణ.
+	Diverging	అపసరణ
 	Does not repeat	పునరావృతం కాదు
 	Don't Save	సేవ్ చేయవద్దు
 	Download	డౌన్‌లోడ్ చేయి
@@ -174,6 +183,7 @@
 	Export table (CSV)	పట్టికను ఎగుమతి చేయి (CSV)
 	Exported {file}	{file} ఎగుమతి చేయబడింది
 	Expression	వ్యక్తీకరణ
+	Fail	విఫలం
 	Fails above, waiting per working server	వైఫల్య పరిమితి, పనిచేస్తున్న ఒక్కో సర్వర్‌కు వేచి ఉన్నవి
 	Failure interrupts the job	లోపం పనికి అంతరాయం కలిగిస్తుంది
 	Family	కుటుంబం
@@ -218,6 +228,7 @@
 	Left edges	ఎడమ అంచులు
 	Licensed under the MIT License or the Apache License 2.0, at your option.	మీ ఎంపిక ప్రకారం MIT License లేదా Apache License 2.0 కింద లైసెన్స్ ఇవ్వబడింది.
 	Light	లైట్
+	Lightness turns back between {first} and {second}; a ramp must only get lighter or only darker.	{first}, {second} – లేతదనం దిశ మారుతుంది; క్రమం కేవలం లేతగా లేదా కేవలం ముదురుగా మారుతూ ఉండాలి.
 	Log-normal	లాగ్-నార్మల్
 	Lost (no way out)	కోల్పోయినవి (బయటికి దారి లేదు)
 	Lost (waiting room full)	కోల్పోయినవి (వేచి ఉండే గది నిండింది)
@@ -272,6 +283,8 @@
 	OEE availability	OEE లభ్యత
 	OEE effectiveness	OEE ప్రభావశీలత
 	On	రోజులు
+	On the dark canvas	డార్క్ ప్రధాన ఉపరితలంపై
+	On the light canvas	లైట్ ప్రధాన ఉపరితలంపై
 	One change, which Undo takes back	రద్దు చేయి వెనక్కి తీసుకునే ఒక మార్పు
 	One clerk, random arrivals: the textbook queue, checked against theory.	ఒక గుమాస్తా, యాదృచ్ఛిక రాకలు: సిద్ధాంతంతో ధృవీకరించిన ప్రామాణిక క్యూ.
 	One task per BPSim distribution, to compare their spread.	వ్యాప్తిని పోల్చడానికి ప్రతి BPSim పంపిణీకి ఒక పని.
@@ -337,6 +350,7 @@
 	Remove Property	లక్షణాన్ని తొలగించు
 	Remove alternative {n}	ప్రత్యామ్నాయం {n} ను తొలగించు
 	Remove block	బ్లాక్‌ను తొలగించు
+	Remove colour	రంగును తొలగించు
 	Remove the calendar {id}	{id} క్యాలెండర్‌ను తొలగించు
 	Remove the flow {id}	{id} ప్రవాహాన్ని తొలగించు
 	Remove the pool {id}	{id} పూల్‌ను తొలగించు
@@ -396,6 +410,7 @@
 	Select a block to see its queue over time.	కాలక్రమంలో ఒక బ్లాక్ వరుసను చూడటానికి దాన్ని ఎంచుకోండి.
 	Sender waits during transfer	బదిలీ సమయంలో పంపే యంత్రం వేచి ఉంటుంది
 	Separate the values with semicolons or spaces.	విలువలను సెమీకోలన్ లేదా ఖాళీతో వేరు చేయండి.
+	Sequential	క్రమానుగత
 	Service time	సేవా సమయం
 	Services	సేవలు
 	Set Property	లక్షణాన్ని సెట్ చేయి
@@ -508,6 +523,7 @@
 	Untitled model	పేరు లేని నమూనా
 	Upper value	ఎగువ విలువ
 	Use System Setting	సిస్టమ్ సెట్టింగ్‌ను ఉపయోగించు
+	Use for charts	చార్ట్‌లకు ఉపయోగించు
 	Use these units in the model	ఈ యూనిట్‌లను మోడల్‌లో ఉపయోగించు
 	Utilisation	వినియోగ శాతం
 	Value	విలువ
@@ -581,10 +597,16 @@
 	years	సంవత్సరాలు
 	{block}: units	{block}: యూనిట్‌లు
 	{busy} busy	{busy} పనిలో
+	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – చార్ట్ నేపథ్యంపై కాంట్రాస్ట్ {ratio}:1, 3:1 కంటే తక్కువ: దాని సిరీస్‌కు లేబుల్ ఇవ్వండి లేదా సంఖ్యలను పట్టికలో చూపండి.
+	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – బూడిద రంగులా కనిపిస్తుంది (సంతృప్తత {chroma}, అవసరం 0.10).
 	{entered} in, {left} out, {lost} lost	{entered} లోపలికి, {left} బయటికి, {lost} కోల్పోయినవి
 	{family}: minimum {min}, most likely {mode}, {upper}	{family}: కనిష్టం {min}, అత్యంత సంభావ్యం {mode}, {upper}
 	{field}: not editable here yet	{field}: ఇక్కడ ఇంకా సవరించలేరు
 	{file}: StochCraft writes a new file only as BPMN; choose a name ending in .bpmn	{file}: StochCraft కొత్త ఫైల్ ను BPMN రూపంలో మాత్రమే రాస్తుంది; .bpmn తో ముగిసే పేరును ఎంచుకోండి
+	{first} and {second} differ by {de} to viewers with normal colour vision, needs 15.	{first}, {second} – సాధారణ వర్ణ దృష్టి ఉన్నవారికి తేడా {de}, అవసరం 15.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first}, {second} – ఎరుపు-ఆకుపచ్చ రంగు అంధత్వం ఉన్నవారికి తేడా {de}, అవసరం 8.
+	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first}, {second} – ఎరుపు-ఆకుపచ్చ రంగు అంధత్వం ఉన్నవారికి తేడా {de}, అవసరం 8: వీటిని లేబుళ్లతో మాత్రమే వేరుగా గుర్తించండి.
+	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}, {second} – లేతదనంలో తేడా {step}, అవసరం 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: సంభావ్యత 0 నుంచి 1 మధ్య సంఖ్య కావాలి
 	{kind} {name}	{kind} {name}
 	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} పునరావృత్త అమలులలో {met} లక్ష్యాన్ని చేరాయి: {p} (95% అంతరం {lo} నుండి {hi})
@@ -597,6 +619,7 @@
 	{property} (set to, mean)	{property} (నిర్ణీత విలువ, సగటు)
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – నేపథ్యం {background}: {ratio}:1, అవసరం {min}:1
 	{title}: now {now}, at most {most}	{title}: ఇప్పుడు {now}, గరిష్ఠం {most}
+	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% CI
 	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± అనేది పునరావృత ప్రయోగాల సగటుకు సంబంధించిన 95% Student-t విశ్వసనీయత అంతరం వెడల్పులో సగం.
 	· no results yet	· ఇంకా ఫలితాలు లేవు

@@ -14,6 +14,8 @@
 mod autosave;
 mod calendars;
 mod canvas;
+mod chart_editor;
+pub mod chart_palette;
 mod charts;
 pub mod commands;
 mod decide;
@@ -197,9 +199,15 @@ pub struct Appearance {
     /// The colour theme in use, by name: a built-in one, or one of `custom_themes`. A name that
     /// matches neither shows StochCraft's theme, and the name is kept as it was saved.
     pub colors: String,
+    /// The categorical palette series use, by name: a built-in one, or one of `custom_palettes`.
+    /// A name that matches none, or a palette that isn't categorical, shows the default.
+    pub chart_palette: String,
     /// The user's own colour themes.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub custom_themes: Vec<theme::Theme>,
+    /// The user's own chart palettes.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub custom_palettes: Vec<chart_palette::ChartPalette>,
 }
 
 impl Default for Appearance {
@@ -208,7 +216,9 @@ impl Default for Appearance {
             theme: ThemeChoice::default(),
             language: None,
             colors: theme::DEFAULT.to_owned(),
+            chart_palette: chart_palette::DEFAULT.to_owned(),
             custom_themes: Vec::new(),
+            custom_palettes: Vec::new(),
         }
     }
 }
@@ -324,6 +334,11 @@ pub struct App {
     custom_themes: Vec<theme::Theme>,
     /// The Themes window, while it is open.
     themes: Option<theme_editor::Editor>,
+    /// The categorical palette series use, by name, and the user's own chart palettes (see
+    /// [`Appearance`]), and the Chart colours window while it is open.
+    chart_palette: String,
+    custom_palettes: Vec<chart_palette::ChartPalette>,
+    chart_colours: Option<chart_editor::Editor>,
     /// The interface language as the user chose it (`None`: the system's), and as shown.
     language: Option<String>,
     lang: craft_i18n::Lang,
@@ -391,6 +406,9 @@ impl App {
             colors: theme::DEFAULT.to_owned(),
             custom_themes: Vec::new(),
             themes: None,
+            chart_palette: chart_palette::DEFAULT.to_owned(),
+            custom_palettes: Vec::new(),
+            chart_colours: None,
             language: None,
             lang: i18n::I18N.system_lang(),
             applied_theme: None,
@@ -455,7 +473,9 @@ impl App {
                 theme: self.theme_choice,
                 language: self.language.clone(),
                 colors: self.colors.clone(),
+                chart_palette: self.chart_palette.clone(),
                 custom_themes: self.custom_themes.clone(),
+                custom_palettes: self.custom_palettes.clone(),
             },
             files: Files {
                 recent: self.recent.clone(),
@@ -478,6 +498,10 @@ impl App {
         self.colors.clone_from(&prefs.appearance.colors);
         self.custom_themes
             .clone_from(&prefs.appearance.custom_themes);
+        self.chart_palette
+            .clone_from(&prefs.appearance.chart_palette);
+        self.custom_palettes
+            .clone_from(&prefs.appearance.custom_palettes);
         self.set_language(prefs.appearance.language.as_deref());
         self.recent = prefs.files.recent.clone();
         self.recent.truncate(RECENT_FILES);
@@ -1202,6 +1226,7 @@ impl App {
         }
         let theme = self.active_theme();
         theme::use_palettes(&ctx, &theme);
+        chart_palette::use_palette(&ctx, &self.active_chart_palette());
         if self.styled.as_ref() != Some(&theme) {
             if self.styled.is_none() {
                 theme::install(&ctx, &theme);
@@ -1292,6 +1317,7 @@ impl App {
         self.about_window(&ctx);
         self.shortcuts_window(&ctx);
         self.themes_window(&ctx);
+        self.chart_colours_window(&ctx);
         self.recovery_dialog(&ctx);
     }
 
