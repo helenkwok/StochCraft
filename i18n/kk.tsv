@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Кірістірілген палитралар тек оқуға арналған. Түстерін өзгерту үшін біреуінің көшірмесін жасаңыз.
 	Built-in themes are read-only. Duplicate one to change its colours.	Кірістірілген тақырыптар тек оқуға арналған. Түстерін өзгерту үшін біреуінің көшірмесін жасаңыз.
 	Busiest	Ең жүктелген
+	By calendar	Күнтізбе бойынша
 	By role	Рөл бойынша
 	CSV table	CSV кестесі
 	Calendar	Күнтізбе
@@ -167,6 +168,7 @@
 	Energy per part	Бір бөлшекке энергия
 	Enough: {units}, meeting the target in {p} of replications	Жеткілікті: {units}, мақсат қайталаулардың {p} бөлігінде орындалады
 	Entered	Кіргендер
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Күту орнын толы деп тапқан нысандар бірден осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін), жоғалудың немесе тапсырма алдында күтудің орнына; мұнда олар жоғалған деп саналады.
 	Entities give up waiting	Нысандар күтуден бас тартады
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Қайталаудың соңында әлі ішінде қалған нысандар күтудің орташа уақытына және жүйедегі орташа уақытқа кірмейді.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Күтуден бас тартқан нысандар осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін); қалғандары тапсырманың басқа шығатын жолымен кетеді.
@@ -198,6 +200,7 @@
 	Fit the time	Уақытты сәйкестендіру
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Бұл блоктың уақытын минимумға, ең ықтимал мәнге және максимумға немесе 95-ші процентильге сәйкестендіру.
 	Fitted the time of {id}	{id} уақыты сәйкестендірілді
+	Fixed	Тұрақты
 	Flows	Ағындар
 	Forget the estimate	Бағалауды ұмыту
 	Fri	жм
@@ -319,12 +322,14 @@
 	Pause	Кідірту
 	Per	Кезең
 	Per shift needs a calendar: each period it is active is a shift.	«Ауысымына» күнтізбені қажет етеді: ол белсенді болатын әр кезең — бір ауысым.
+	Per working server	Жұмыстағы әр серверге
 	Percentile	Процентиль
 	Period {n} ends	{n}-кезең аяқталуы
 	Period {n} repeats	{n}-кезең қайталануы
 	Period {n} starts	{n}-кезең басталуы
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Қолжетімділік, келулер немесе қордың ауысымдары өзгеретін кезеңдер. Күн мен уақыт 2026-01-31T09:00:00 түрінде жазылады.
 	Place in the waiting room of a server taken out:	Жұмыстан шығарылған сервердің күту орнындағы орны:
+	Places	Орындар
 	Planned run time per item	Бір бөлшекке жоспарланған жұмыс уақыты
 	Play	Ойнату
 	Points	Нүктелер
@@ -443,6 +448,7 @@
 	Show {id}	{id} көрсету
 	Side rail	Бүйір жолақ
 	Size	Өлшемдеу
+	Size of the waiting room:	Күту орнының көлемі:
 	Size the resources	Ресурстарды өлшемдеу
 	Soft accent	Жұмсақ екпін түсі
 	Source	Дереккөз
@@ -500,6 +506,9 @@
 	Themes	Тақырыптар
 	This block has a warning	Бұл блокта ескерту бар
 	This block has an error	Бұл блокта қате бар
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Қазір жұмыс істеп тұрған әр серверге (ақаулы емес, жұмыстан шығарылмаған, ауысымда) осынша күте алады, сондықтан күту орны серверлерге ілеседі. Ол кішірейгенде, бұрыннан күтіп тұрғандар қалады.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Күнтізбелерден тыс осынша күте алады, ал күнтізбе белсенді кезде оның саны. Сан азайғанда, бұрыннан күтіп тұрғандар қалады.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Әр серверге бір орыннан бөлек, осынша нысан күте алады; ақаулы сервер өз орнын сақтайды.
 	This run	Осы іске қосу
 	Three-point estimate	Үш нүктелі бағалау
 	Thu	бс
@@ -525,6 +534,8 @@
 	Triangular	Үшбұрышты
 	Truncated normal	Қиылған нормальды
 	Tue	сс
+	Turned away	Қабылданбағандар
+	Turned away on {id}	{id} ағынында қабылданбағандар
 	Two stations in series, read from an XPDL file.	XPDL файлынан оқылған тізбектей екі станция.
 	Type	Түрі
 	Undid {action}	{action} болдырылмады
@@ -548,6 +559,7 @@
 	View	Көрініс
 	Waiting over time	Уақыт бойынша күтушілер
 	Waiting room	Күту орны
+	Waiting room by calendar	Күнтізбе бойынша күту орны
 	Warm	Жылы
 	Warm-up	Қыздыру кезеңі
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	{warmup} {unit} қыздыру, содан кейін {duration} {unit} өлшеу

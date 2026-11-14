@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Wbudowane palety są tylko do odczytu. Aby zmienić kolory, zduplikuj jedną z nich.
 	Built-in themes are read-only. Duplicate one to change its colours.	Wbudowane motywy są tylko do odczytu. Aby zmienić kolory, zduplikuj jeden z nich.
 	Busiest	Najbardziej obciążone
+	By calendar	Według kalendarza
 	By role	Według roli
 	CSV table	Tabela CSV
 	Calendar	Kalendarz
@@ -167,6 +168,7 @@
 	Energy per part	Energia na część
 	Enough: {units}, meeting the target in {p} of replications	Wystarczy: {units}, cel osiągnięty w {p} replikacji
 	Entered	Weszło
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Jednostki, które zastają pełną poczekalnię, od razu idą tym przepływem (na przykład, aby spróbować później ponownie), zamiast przepaść lub czekać przed zadaniem; tutaj liczą się jako utracone.
 	Entities give up waiting	Jednostki rezygnują z czekania
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Obiekty, które na końcu replikacji są wciąż wewnątrz, nie są wliczane do średniego czasu oczekiwania ani średniego czasu w systemie.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Jednostki, które rezygnują z czekania, idą tym przepływem (na przykład, aby spróbować później ponownie); pozostałe idą drugim wyjściem zadania.
@@ -198,6 +200,7 @@
 	Fit the time	Dopasuj czas
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Dopasuj czas tego bloku do minimum, wartości najbardziej prawdopodobnej i maksimum lub 95. percentyla.
 	Fitted the time of {id}	Dopasowano czas {id}
+	Fixed	Stały
 	Flows	Przepływy
 	Forget the estimate	Zapomnij szacunek
 	Fri	pt
@@ -319,12 +322,14 @@
 	Pause	Wstrzymaj
 	Per	Okres
 	Per shift needs a calendar: each period it is active is a shift.	„Na zmianę” wymaga kalendarza: każdy okres, w którym jest aktywny, to jedna zmiana.
+	Per working server	Na czynny serwer
 	Percentile	Percentyl
 	Period {n} ends	Koniec okresu {n}
 	Period {n} repeats	Powtarzanie okresu {n}
 	Period {n} starts	Początek okresu {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Okresy, w których zmieniają się dostępność, przybycia lub zmiany puli. Daty i godziny zapisuje się jako 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Miejsce wyłączonego serwera w poczekalni:
+	Places	Miejsca
 	Planned run time per item	Planowany czas pracy na część
 	Play	Odtwórz
 	Points	Punkty
@@ -443,6 +448,7 @@
 	Show {id}	Pokaż {id}
 	Side rail	Pasek boczny
 	Size	Dobierz
+	Size of the waiting room:	Rozmiar poczekalni:
 	Size the resources	Dobierz zasoby
 	Soft accent	Łagodny akcent
 	Source	Źródło
@@ -500,6 +506,9 @@
 	Themes	Motywy
 	This block has a warning	Ten blok ma ostrzeżenie
 	This block has an error	Ten blok ma błąd
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Tyle może czekać na każdy serwer, który teraz pracuje (bez awarii, niewyłączony, na zmianie), więc poczekalnia podąża za serwerami. Gdy się zmniejsza, te, które już czekają, zostają.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Tyle może czekać poza kalendarzami, a gdy kalendarz jest aktywny, jego liczba. Gdy liczba spada, te, które już czekają, zostają.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Tyle może czekać, oprócz jednego miejsca dla każdego serwera; serwer z awarią zachowuje swoje miejsce.
 	This run	To uruchomienie
 	Three-point estimate	Szacunek trzypunktowy
 	Thu	czw
@@ -525,6 +534,8 @@
 	Triangular	Trójkątny
 	Truncated normal	Normalny ucięty
 	Tue	wt
+	Turned away	Odrzucenia
+	Turned away on {id}	Odrzucenia na {id}
 	Two stations in series, read from an XPDL file.	Dwa stanowiska szeregowe wczytane z pliku XPDL.
 	Type	Typ
 	Undid {action}	Cofnięto {action}
@@ -548,6 +559,7 @@
 	View	Widok
 	Waiting over time	Oczekujące w czasie
 	Waiting room	Poczekalnia
+	Waiting room by calendar	Poczekalnia według kalendarza
 	Warm	Ciepły
 	Warm-up	Rozgrzewka
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Rozgrzewka {warmup} {unit}, następnie pomiar przez {duration} {unit}

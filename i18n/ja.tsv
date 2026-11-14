@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	組み込みパレットは読み取り専用です。色を変えるには、いずれかを複製してください。
 	Built-in themes are read-only. Duplicate one to change its colours.	組み込みテーマは読み取り専用です。色を変えるには、いずれかを複製してください。
 	Busiest	最も稼働率が高い
+	By calendar	カレンダーごと
 	By role	役割で指定
 	CSV table	CSV 表
 	Calendar	カレンダー
@@ -167,6 +168,7 @@
 	Energy per part	部品あたりのエネルギー
 	Enough: {units}, meeting the target in {p} of replications	十分: {units}、反復実行の {p} で目標を達成
 	Entered	流入数
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	待機場所が満員のときに来たエンティティは、すぐにこのフローを通ります（後で再試行するなど）。失われることも、タスクの手前で待つこともありません。ここでは損失として数えます。
 	Entities give up waiting	エンティティが待ち切れずに離脱する
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	反復実行の終了時に内部に残っているエンティティは、平均待ち時間とシステム内の平均滞在時間に含まれません。
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	待ち切れずに離脱したエンティティはこのフローを通ります（後で再試行するなど）。それ以外はタスクのもう一方の出口を通ります。
@@ -198,6 +200,7 @@
 	Fit the time	時間を当てはめる
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	このブロックの時間を、最小値・最頻値・最大値または 95 パーセンタイルに当てはめます。
 	Fitted the time of {id}	{id} の時間を当てはめました
+	Fixed	固定
 	Flows	フロー
 	Forget the estimate	見積もりを破棄
 	Fri	金
@@ -319,12 +322,14 @@
 	Pause	一時停止
 	Per	期間
 	Per shift needs a calendar: each period it is active is a shift.	「1 シフトあたり」にはカレンダーが必要です。カレンダーが有効な各期間を 1 シフトとします。
+	Per working server	稼働中のサーバ1台あたり
 	Percentile	パーセンタイル
 	Period {n} ends	期間 {n} の終了
 	Period {n} repeats	期間 {n} の繰り返し
 	Period {n} starts	期間 {n} の開始
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	稼働可否、到着、プールのシフトが変わる期間です。日時は 2026-01-31T09:00:00 のように書きます。
 	Place in the waiting room of a server taken out:	切り離されたサーバの待機場所の枠:
+	Places	枠数
 	Planned run time per item	部品あたりの計画実行時間
 	Play	再生
 	Points	点
@@ -443,6 +448,7 @@
 	Show {id}	{id} を表示
 	Side rail	サイドバー
 	Size	サイズを決める
+	Size of the waiting room:	待機場所の大きさ:
 	Size the resources	リソースのサイズ決定
 	Soft accent	淡いアクセント
 	Source	出典
@@ -500,6 +506,9 @@
 	Themes	テーマ
 	This block has a warning	このブロックには警告があります
 	This block has an error	このブロックにはエラーがあります
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	いま稼働中のサーバ（故障しておらず、切り離されておらず、シフト中のもの）1台につきこの数だけ待てるため、待機場所はサーバの台数に合わせて変わります。小さくなっても、すでに待っているエンティティはそのまま残ります。
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	カレンダー外ではこの数だけ待て、カレンダーが有効な間はそのカレンダーの数だけ待てます。数が減っても、すでに待っているエンティティはそのまま残ります。
+	This many may wait, besides a place for each server; a failed server keeps its place.	サーバごとの枠1つに加えて、この数だけ待てます。故障したサーバは自分の枠を保ちます。
 	This run	この実行
 	Three-point estimate	三点見積もり
 	Thu	木
@@ -525,6 +534,8 @@
 	Triangular	三角分布
 	Truncated normal	切断正規分布
 	Tue	火
+	Turned away	受入拒否
+	Turned away on {id}	{id} の受入拒否
 	Two stations in series, read from an XPDL file.	XPDL ファイルから読み込んだ、直列の 2 つのステーション。
 	Type	種類
 	Undid {action}	{action} を元に戻しました
@@ -548,6 +559,7 @@
 	View	表示
 	Waiting over time	待ち数の推移
 	Waiting room	待機場所
+	Waiting room by calendar	カレンダーごとの待機場所
 	Warm	ウォーム
 	Warm-up	ウォームアップ
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	ウォームアップ {warmup} {unit}、続いて {duration} {unit} を測定

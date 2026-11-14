@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	内置调色板为只读。要更改颜色，请先为其中一个创建副本。
 	Built-in themes are read-only. Duplicate one to change its colours.	内置主题为只读。要更改颜色，请先为其中一个创建副本。
 	Busiest	最繁忙
+	By calendar	按日历
 	By role	按角色
 	CSV table	CSV 表格
 	Calendar	日历
@@ -167,6 +168,7 @@
 	Energy per part	单件能耗
 	Enough: {units}, meeting the target in {p} of replications	足够：{units}，{p} 的重复运行达到目标
 	Entered	进入数
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	发现等待区已满的实体立即走此顺序流（例如稍后重试），而不是流失或在任务前等待；此处计为流失。
 	Entities give up waiting	实体会放弃等待
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	重复运行结束时仍在内部的实体不计入平均等待时间和系统内平均时间。
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	放弃等待的实体走此顺序流（例如稍后重试）；其他实体走任务的另一个出口。
@@ -198,6 +200,7 @@
 	Fit the time	拟合时间
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	将此区块的时间拟合为最小值、最可能值以及最大值或第 95 百分位数。
 	Fitted the time of {id}	已拟合 {id} 的时间
+	Fixed	固定
 	Flows	顺序流
 	Forget the estimate	舍弃估计
 	Fri	周五
@@ -319,12 +322,14 @@
 	Pause	暂停
 	Per	时段
 	Per shift needs a calendar: each period it is active is a shift.	“每班”需要日历：日历处于活动状态的每个时段为一个班次。
+	Per working server	每台在线服务器
 	Percentile	百分位数
 	Period {n} ends	时段 {n} 结束
 	Period {n} repeats	时段 {n} 重复
 	Period {n} starts	时段 {n} 开始
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	可用性、到达或资源池的班次发生变化的时段。日期和时间写作 2026-01-31T09:00:00。
 	Place in the waiting room of a server taken out:	下线服务器在等待区的位置：
+	Places	位置数
 	Planned run time per item	单件计划运行时间
 	Play	播放
 	Points	点
@@ -443,6 +448,7 @@
 	Show {id}	显示 {id}
 	Side rail	侧边栏
 	Size	确定规模
+	Size of the waiting room:	等待区大小：
 	Size the resources	确定资源规模
 	Soft accent	柔和强调色
 	Source	来源
@@ -500,6 +506,9 @@
 	Themes	主题
 	This block has a warning	此区块存在警告
 	This block has an error	此区块存在错误
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	每台正在工作的服务器（未故障、未下线、当班）可有这么多实体等待，因此等待区随服务器变化。等待区缩小时，已在等待的实体留下。
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	日历外可有这么多实体等待，日历生效期间按该日历的数量。数量减少时，已在等待的实体留下。
+	This many may wait, besides a place for each server; a failed server keeps its place.	除每台服务器一个位置外，还可有这么多实体等待；故障服务器保留其位置。
 	This run	本次运行
 	Three-point estimate	三点估计
 	Thu	周四
@@ -525,6 +534,8 @@
 	Triangular	三角分布
 	Truncated normal	截断正态分布
 	Tue	周二
+	Turned away	拒绝
+	Turned away on {id}	{id} 上的拒绝
 	Two stations in series, read from an XPDL file.	从 XPDL 文件读取的两个串联工作站。
 	Type	类型
 	Undid {action}	已撤销 {action}
@@ -548,6 +559,7 @@
 	View	视图
 	Waiting over time	等待数量随时间变化
 	Waiting room	等待区
+	Waiting room by calendar	按日历的等待区
 	Warm	暖色
 	Warm-up	预热期
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	预热 {warmup} {unit}，随后测量 {duration} {unit}

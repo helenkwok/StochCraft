@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Les paletes integrades són només de lectura. Dupliqueu-ne una per canviar-ne els colors.
 	Built-in themes are read-only. Duplicate one to change its colours.	Els temes integrats són només de lectura. Dupliqueu-ne un per canviar-ne els colors.
 	Busiest	El més ocupat
+	By calendar	Per calendari
 	By role	Per rol
 	CSV table	Taula CSV
 	Calendar	Calendari
@@ -167,6 +168,7 @@
 	Energy per part	Energia per peça
 	Enough: {units}, meeting the target in {p} of replications	Prou: {units}, compleix l'objectiu en el {p} de les rèpliques
 	Entered	Entrades
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Les entitats que troben la sala d'espera plena prenen aquest flux de seguida (per tornar-ho a provar més tard, per exemple), en lloc de perdre's o d'esperar abans de la tasca; aquí compten com a perdudes.
 	Entities give up waiting	Les entitats abandonen l'espera
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Les entitats encara a dins al final d'una rèplica no es tenen en compte en l'espera mitjana ni en el temps mitjà al sistema.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Les entitats que abandonen l'espera prenen aquest flux (per tornar-ho a provar més tard, per exemple); les altres prenen l'altra sortida de la tasca.
@@ -198,6 +200,7 @@
 	Fit the time	Ajusta el temps
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Ajustar el temps d'aquest bloc a un mínim, un valor més probable i un màxim o percentil 95.
 	Fitted the time of {id}	S'ha ajustat el temps de {id}
+	Fixed	Fixa
 	Flows	Fluxos
 	Forget the estimate	Oblida l'estimació
 	Fri	dv.
@@ -319,12 +322,14 @@
 	Pause	Pausa
 	Per	Període
 	Per shift needs a calendar: each period it is active is a shift.	«Per torn» necessita un calendari: cada període en què està actiu és un torn.
+	Per working server	Per servidor en servei
 	Percentile	Percentil
 	Period {n} ends	Fi del període {n}
 	Period {n} repeats	Repetició del període {n}
 	Period {n} starts	Inici del període {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Períodes en què canvien la disponibilitat, les arribades o els torns d'un grup. Les dates i hores s'escriuen 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Lloc d'un servidor retirat a la sala d'espera:
+	Places	Llocs
 	Planned run time per item	Temps d'execució planificat per peça
 	Play	Reprodueix
 	Points	Punts
@@ -443,6 +448,7 @@
 	Show {id}	Mostra {id}
 	Side rail	Barra lateral
 	Size	Dimensiona
+	Size of the waiting room:	Mida de la sala d'espera:
 	Size the resources	Dimensiona els recursos
 	Soft accent	Accent suau
 	Source	Font
@@ -500,6 +506,9 @@
 	Themes	Temes
 	This block has a warning	Aquest bloc té un avís
 	This block has an error	Aquest bloc té un error
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Poden esperar aquest nombre per cada servidor que treballa ara (no avariat, no retirat, en torn), de manera que la sala d'espera els segueix. Quan s'encongeix, les que ja esperen es queden.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Poden esperar aquest nombre fora dels calendaris i, mentre un calendari està actiu, el nombre d'aquest calendari. Quan el nombre baixa, les que ja esperen es queden.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Poden esperar aquest nombre d'entitats, a més d'un lloc per a cada servidor; un servidor avariat conserva el seu lloc.
 	This run	Aquesta execució
 	Three-point estimate	Estimació de tres punts
 	Thu	dj.
@@ -525,6 +534,8 @@
 	Triangular	Triangular
 	Truncated normal	Normal truncada
 	Tue	dt.
+	Turned away	Rebutjades
+	Turned away on {id}	Rebutjades a {id}
 	Two stations in series, read from an XPDL file.	Dues estacions en sèrie, llegides d'un fitxer XPDL.
 	Type	Tipus
 	Undid {action}	S'ha desfet {action}
@@ -548,6 +559,7 @@
 	View	Visualitza
 	Waiting over time	En espera al llarg del temps
 	Waiting room	Sala d'espera
+	Waiting room by calendar	Sala d'espera per calendari
 	Warm	Càlid
 	Warm-up	Escalfament
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Escalfament de {warmup} {unit}, després {duration} {unit} mesurats

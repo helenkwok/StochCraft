@@ -84,6 +84,7 @@
 	Built-in palettes are read-only. Duplicate one to change its colours.	Palet bawaan hanya-baca. Duplikat salah satunya untuk mengubah warnanya.
 	Built-in themes are read-only. Duplicate one to change its colours.	Tema bawaan hanya-baca. Duplikat salah satunya untuk mengubah warnanya.
 	Busiest	Tersibuk
+	By calendar	Per kalender
 	By role	Menurut peran
 	CSV table	Tabel CSV
 	Calendar	Kalender
@@ -167,6 +168,7 @@
 	Energy per part	Energi per komponen
 	Enough: {units}, meeting the target in {p} of replications	Cukup: {units}, target terpenuhi pada {p} replikasi
 	Entered	Masuk
+	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitas yang mendapati ruang tunggu penuh langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang atau menunggu sebelum tugas; di sini mereka dihitung sebagai hilang.
 	Entities give up waiting	Entitas berhenti menunggu
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitas yang masih di dalam pada akhir replikasi tidak dihitung dalam waktu tunggu rata-rata dan waktu rata-rata dalam sistem.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitas yang berhenti menunggu mengambil alur ini (misalnya untuk mencoba lagi nanti); yang lain mengambil jalan keluar lain dari tugas.
@@ -198,6 +200,7 @@
 	Fit the time	Cocokkan waktu
 	Fit this block's time to a minimum, a most likely value and a maximum or 95th percentile.	Cocokkan waktu blok ini dengan minimum, nilai paling mungkin, dan maksimum atau persentil ke-95.
 	Fitted the time of {id}	Waktu {id} dicocokkan
+	Fixed	Tetap
 	Flows	Alur
 	Forget the estimate	Lupakan perkiraan
 	Fri	Jum
@@ -319,12 +322,14 @@
 	Pause	Jeda
 	Per	Periode
 	Per shift needs a calendar: each period it is active is a shift.	"Per sif" memerlukan kalender: setiap periode saat kalender itu aktif adalah satu sif.
+	Per working server	Per server yang beroperasi
 	Percentile	Persentil
 	Period {n} ends	Periode {n} selesai
 	Period {n} repeats	Periode {n} berulang
 	Period {n} starts	Periode {n} mulai
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periode saat ketersediaan, kedatangan, atau sif kumpulan berubah. Tanggal dan waktu ditulis 2026-01-31T09:00:00.
 	Place in the waiting room of a server taken out:	Tempat server yang dikeluarkan di ruang tunggu:
+	Places	Tempat
 	Planned run time per item	Waktu jalan terencana per komponen
 	Play	Putar
 	Points	Titik
@@ -443,6 +448,7 @@
 	Show {id}	Tampilkan {id}
 	Side rail	Bilah samping
 	Size	Tentukan ukuran
+	Size of the waiting room:	Ukuran ruang tunggu:
 	Size the resources	Tentukan ukuran sumber daya
 	Soft accent	Aksen lembut
 	Source	Sumber
@@ -500,6 +506,9 @@
 	Themes	Tema
 	This block has a warning	Blok ini memiliki peringatan
 	This block has an error	Blok ini memiliki kesalahan
+	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Sebanyak ini boleh menunggu untuk setiap server yang sedang bekerja (tidak rusak, tidak dikeluarkan, dalam sif), sehingga ruang tunggu mengikuti server. Saat ruang tunggu menyusut, yang sudah menunggu tetap tinggal.
+	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Sebanyak ini boleh menunggu di luar kalender, dan jumlah tiap kalender selama kalender itu aktif. Saat jumlahnya turun, yang sudah menunggu tetap tinggal.
+	This many may wait, besides a place for each server; a failed server keeps its place.	Sebanyak ini boleh menunggu, selain satu tempat untuk setiap server; server yang rusak tetap memegang tempatnya.
 	This run	Jalannya ini
 	Three-point estimate	Perkiraan tiga titik
 	Thu	Kam
@@ -525,6 +534,8 @@
 	Triangular	Segitiga
 	Truncated normal	Normal terpotong
 	Tue	Sel
+	Turned away	Ditolak
+	Turned away on {id}	Ditolak di {id}
 	Two stations in series, read from an XPDL file.	Dua stasiun berurutan, dibaca dari berkas XPDL.
 	Type	Teks
 	Undid {action}	{action} dibatalkan
@@ -548,6 +559,7 @@
 	View	Tampilan
 	Waiting over time	Menunggu dari waktu ke waktu
 	Waiting room	Ruang tunggu
+	Waiting room by calendar	Ruang tunggu per kalender
 	Warm	Hangat
 	Warm-up	Pemanasan
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Pemanasan {warmup} {unit}, lalu pengukuran {duration} {unit}
