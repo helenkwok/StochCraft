@@ -20,12 +20,12 @@
 //! but the groups here come from a hard cut, which trims each group's tails and so shrinks its
 //! spread. Cutting one normal sample at its mean already gives D ≈ 2.65 (halves with means
 //! ±0.80σ and standard deviations 0.60σ), an exponential sample D ≈ 2.6 and a uniform one
-//! D ≈ 3.46. In simulation (10 to 512 values) D > 2 flagged over 90% of normal samples. The
-//! rule therefore also asks that the cut explain nearly all of the spread: the within-group sum
-//! of squares must be a small share of the total (the statistic of J. Engelman and J. A.
-//! Hartigan's test for clusters, "Percentage points of a test for clusters", *Journal of the
-//! American Statistical Association* 64 (1969) 1647–1648). For two equal groups of equal
-//! spread, a share below 0.10 is the same as D > 6.
+//! D ≈ 3.46. In simulation (2,000 samples each of 10, 30 and 128 values) D > 2 flagged 93% of
+//! normal samples of 10 and all of 128. The rule therefore also asks that the cut explain
+//! nearly all of the spread: the within-group sum of squares must be a small share of the
+//! total (the statistic of L. Engelman and J. A. Hartigan's test for clusters, "Percentage
+//! points of a test for clusters", *Journal of the American Statistical Association* 64 (1969)
+//! 1647–1648). For two equal groups of equal spread, a share below 0.10 is the same as D > 6.
 
 use crate::Tally;
 
@@ -34,6 +34,8 @@ use crate::Tally;
 pub struct Group {
     /// How many values are in it.
     pub n: u64,
+    /// How many different values are in it.
+    pub distinct: u64,
     pub mean: f64,
     /// The sample standard deviation (n − 1 denominator); 0 for a single value.
     pub std_dev: f64,
@@ -95,6 +97,8 @@ pub fn best_split(values: &[f64]) -> Option<Split> {
         g.iter().for_each(|x| t.add(*x));
         Group {
             n: t.count(),
+            // `g` is sorted, so each new value starts where it differs from the one before.
+            distinct: 1 + g.windows(2).filter(|w| w[0] != w[1]).count() as u64,
             mean: t.mean().unwrap_or(0.0),
             std_dev: t.std_dev().unwrap_or(0.0),
         }
@@ -120,17 +124,24 @@ pub fn best_split(values: &[f64]) -> Option<Split> {
 /// to report:
 ///
 /// - at least [`MIN_VALUES`] values;
-/// - each group holds at least max(2, ⌈n/10⌉) of them;
+/// - each group holds at least max(2, ⌈n/10⌉) of them, and at least 3 different values;
 /// - Ashman's D > 2;
 /// - the within-group sum of squares is less than 5% of the total with fewer than 30 values,
 ///   less than 10% with 30 or more.
 ///
-/// The two share limits were chosen by simulation (2,000 samples each of 10 to 512 values):
-/// single-peaked samples (normal, gamma(2), exponential, uniform, Poisson(3), lognormal with
-/// σ = 1) are reported in at most 2% of samples with 10 values and in none from 30 on; the very
-/// skewed lognormal with σ = 1.5 in at most 4%. A sample of a few distinct values far apart
-/// (a count that is 0 in some runs and 1 in the others) has no spread within its groups, and
-/// is reported whenever each value holds enough runs: the mean then describes no run.
+/// The 3 different values keep out results that take only a few values, such as a count of
+/// entities left inside at the end that is 0 in most runs and 1 or 2 in the rest: such a count
+/// splits trivially at a step, with no spread inside its groups, but the runs did not have two
+/// outcomes.
+///
+/// The two share limits were chosen by simulating this rule (2,000 samples each of 10, 15, 20,
+/// 29, 30, 50 and 128 values, 500 of 512): single-peaked samples (normal, gamma(2),
+/// exponential, uniform, lognormal with σ = 1, Poisson(0.3) and Poisson(3), 0 or 1 with
+/// probability 0.3) are reported in at most 0.6% of samples of any size, the very skewed
+/// lognormal with σ = 1.5 in at most 1.9% (at 30 values, where the limit rises). Two clearly
+/// separate outcomes (77% of runs near 1.7 with σ = 0.4, the rest near 9.9 with σ = 1.5) are
+/// reported in 29% of samples of 10, 60% of 20, 97% of 30 and all of 128; two humps 5σ apart
+/// are rarely reported (at most 17%), so only clearly separate outcomes are.
 pub fn two_outcomes(values: &[f64]) -> Option<Split> {
     let n = values.iter().filter(|x| x.is_finite()).count() as u64;
     if n < MIN_VALUES {
@@ -139,7 +150,8 @@ pub fn two_outcomes(values: &[f64]) -> Option<Split> {
     let s = best_split(values)?;
     let fewest = n.div_ceil(10).max(2);
     let limit = if n < 30 { 0.05 } else { 0.10 };
-    (s.low.n >= fewest && s.high.n >= fewest && s.d > 2.0 && s.within_share < limit).then_some(s)
+    let big_enough = |g: &Group| g.n >= fewest && g.distinct >= 3;
+    (big_enough(&s.low) && big_enough(&s.high) && s.d > 2.0 && s.within_share < limit).then_some(s)
 }
 
 #[cfg(test)]
@@ -252,21 +264,49 @@ mod tests {
 
     #[test]
     fn groups_without_spread_have_infinite_d() {
-        // A count that is 0 in 7 runs and 1 in 5: the mean 5/12 describes no run.
+        // A count that is 0 in 7 runs and 1 in 5: the best split has no spread inside its
+        // groups, so D is infinite.
         let mut v = vec![0.0; 7];
         v.extend([1.0; 5]);
-        let split = two_outcomes(&v);
+        let split = best_split(&v);
         assert!(
             split.is_some_and(|s| s.d.is_infinite()
                 && s.within_share == 0.0
                 && (s.low.n, s.high.n) == (7, 5)
+                && (s.low.distinct, s.high.distinct) == (1, 1)
                 && s.cut == 0.5),
             "{split:?}"
         );
         // One group without spread and one with: D is finite.
         let mut v = vec![0.0; 7];
         v.extend([10.0, 10.2, 10.4, 10.6, 10.8]);
-        assert!(two_outcomes(&v).is_some_and(|s| s.d.is_finite() && s.d > 2.0));
+        assert!(best_split(&v).is_some_and(|s| s.d.is_finite() && s.d > 2.0));
+    }
+
+    #[test]
+    fn results_of_only_a_few_values_are_not_reported() {
+        // Entities left inside at the end: 0 in most runs, 1 or 2 in the rest. It splits at
+        // the step from 0, but the runs did not have two outcomes.
+        // Without the 3 different values, every other condition would report it.
+        let mut v = vec![0.0; 90];
+        v.extend([1.0; 36]);
+        v.extend([2.0; 2]);
+        assert!(
+            best_split(&v).is_some_and(|s| s.low.distinct == 1
+                && s.high.distinct == 2
+                && s.d > 2.0
+                && s.within_share < 0.10),
+            "{:?}",
+            best_split(&v)
+        );
+        assert_eq!(two_outcomes(&v), None);
+        let mut v = vec![0.0; 7];
+        v.extend([1.0; 5]);
+        assert_eq!(two_outcomes(&v), None);
+        // Counts with enough different values in each group can split.
+        let mut v: Vec<f64> = (0..20).map(|i| f64::from(i % 3)).collect();
+        v.extend((0..10).map(|i| 40.0 + f64::from(i % 4)));
+        assert!(two_outcomes(&v).is_some_and(|s| (s.low.n, s.high.n) == (20, 10)));
     }
 
     #[test]
