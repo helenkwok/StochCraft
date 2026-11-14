@@ -1649,9 +1649,8 @@ impl Editor {
                 remove_all(root, &|e| e.is(BPMN, "resource") && has_id(e, "id", r));
             }
             Format::Xpdl => {
-                let empty = |e: &Element| {
-                    e.is_any(&XPDL, "Participants") && e.elements().next().is_none()
-                };
+                let empty =
+                    |e: &Element| e.is_any(&XPDL, "Participants") && e.elements().next().is_none();
                 // Only a list this leaves empty goes (an empty one is not written); with one
                 // already empty in the file, the file keeps its lists as they are.
                 let none_empty = !root.descendants().iter().any(|e| empty(e));
