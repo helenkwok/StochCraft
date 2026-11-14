@@ -17,8 +17,8 @@
 #![allow(clippy::panic)]
 
 use stochcraft_blocks::{
-    Builder, ElementReport, Event, ExperimentSummary, HealthCheck, Metric, OnShiftEnd, OnTakeout,
-    Report, compile, summarise,
+    Breakdown, Builder, ElementReport, Event, ExperimentSummary, HealthCheck, Metric, OnShiftEnd,
+    OnTakeout, Report, compile, summarise,
 };
 use stochcraft_model::{DateTime, Dist, Experiment, Problem, Severity};
 use stochcraft_random::Rng;
@@ -469,4 +469,88 @@ fn resuming_matches_the_chain_with_the_paused_jobs_set_apart() {
         s.get("desk", Metric::MeanContents)
             .is_some_and(|g| !g.contains(other))
     );
+}
+
+/// One unit with jobs of `service` waiting from 0, off shift from 10 to 20 by its availability
+/// (no shift quantities), failing as `breakdown` says, the rule `rule`, run for `duration`.
+fn one_unit_with_a_break(
+    service: f64,
+    breakdown: Option<Breakdown>,
+    rule: OnShiftEnd,
+    duration: f64,
+) -> Report {
+    let mut b = Builder::new();
+    b.calendar("break", vec![once((0, 10, 0), (0, 20, 0))]);
+    let src = b.source("jobs", Dist::Constant(0.0), Some(100));
+    let m = b.server("machine", 1, Dist::Constant(service));
+    b.availability(m, true, &[("break", false)]);
+    b.server_shifts(m, 1, &[], rule);
+    if let Some(x) = breakdown {
+        b.breakdown(m, x);
+    }
+    let out = b.sink("out");
+    b.connect(src, m);
+    b.connect(m, out);
+    run_once(&b, duration)
+}
+
+/// The rule applies to the availability closing too. Jobs of 1.5 end at 1.5, …, 9; the one
+/// started at 9 is under way at 10. Finishing, it ends at 10.5 and jobs from 20 end at 21.5, …,
+/// 29: 13 by 29.4. Retrying, it stops with 1 done (wasted), and starts afresh at 20: 6 + 6 = 12.
+/// Resuming, it pauses with 0.5 left and ends at 20.5, then 22, …, 28: 12. The paused job's unit
+/// is off shift from 10 to 20 (10 of 29.4), but with no shift quantities the utilisation stays
+/// the share holding a job (as before), so it counts the paused job: 1.
+#[test]
+fn the_rule_applies_when_the_availability_closes() {
+    let r = one_unit_with_a_break(1.5, None, OnShiftEnd::Finish, 29.4);
+    assert_eq!(element(&r, "machine").left, 13);
+    let r = one_unit_with_a_break(1.5, None, OnShiftEnd::Retry, 29.4);
+    let m = element(&r, "machine");
+    assert_eq!(m.left, 12, "{m:?}");
+    close("wasted", m.wasted, 1.0);
+    close("off shift", m.time_off_shift, 10.0 / 29.4);
+    close("utilisation", m.utilisation, 19.4 / 29.4);
+    let r = one_unit_with_a_break(1.5, None, OnShiftEnd::Resume, 29.4);
+    let m = element(&r, "machine");
+    assert_eq!(m.left, 12, "{m:?}");
+    close("off shift", m.time_off_shift, 10.0 / 29.4);
+    close("utilisation", m.utilisation, 1.0);
+}
+
+/// A job a failure has stopped when its unit goes off. Jobs of 4, a failure 7 after each
+/// repair, repairs of 5, interruptible, off shift from 10 to 20, to 30: the second job stops at
+/// 7 with 1 left, under repair to 12; the next failure comes at 19, repaired at 24.
+/// - Finishing (as before): it resumes at 12 and ends at 13; jobs out at 4, 13, 28.
+/// - Retrying: at 10 it goes back to the queue at once, its 3 done wasted; the unit, repaired
+///   at 12, is off shift, then failed from 19 to 24; a job then runs 24 to 28: 2 out, off shift
+///   from 12 to 19 (7 of 30).
+/// - Resuming: it waits for the repair and the shift; the unit is failed again when the shift
+///   ends, so the job resumes at 24 and ends at 25, the next at 29: 3 out, off shift (holding
+///   the paused job) from 12 to 19.
+#[test]
+fn a_job_a_failure_stopped_follows_the_rule_when_its_unit_goes_off() {
+    let fails = || {
+        Some(Breakdown {
+            time_to_failure: Dist::Constant(7.0),
+            repair: Dist::Constant(5.0),
+            interruptible: true,
+            hands_on_while_down: true,
+        })
+    };
+    let r = one_unit_with_a_break(4.0, fails(), OnShiftEnd::Finish, 30.0);
+    let m = element(&r, "machine");
+    assert_eq!(m.left, 3, "{m:?}");
+    close("off shift", m.time_off_shift, 6.0 / 30.0);
+    let r = one_unit_with_a_break(4.0, fails(), OnShiftEnd::Retry, 30.0);
+    let m = element(&r, "machine");
+    assert_eq!(m.left, 2, "{m:?}");
+    close("wasted", m.wasted, 3.0);
+    close("off shift", m.time_off_shift, 7.0 / 30.0);
+    close("availability", m.availability, 1.0 - 10.0 / 30.0);
+    let r = one_unit_with_a_break(4.0, fails(), OnShiftEnd::Resume, 30.0);
+    let m = element(&r, "machine");
+    assert_eq!(m.left, 3, "{m:?}");
+    close("off shift", m.time_off_shift, 7.0 / 30.0);
+    // Out at 4, 25 and 29.
+    assert_eq!(element(&r, "out").entered, 3);
 }

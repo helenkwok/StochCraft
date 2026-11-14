@@ -1348,8 +1348,10 @@ leaving before their service begins a central feature that Erlang B and C lack.
   | One job of 30 on 3 units, 1 on shift from 10.5: the idle units go off, nothing wasted | 0 | 0 |
   | Units only in a shift (2 from 10 to 20), jobs of 4: jobs by 30, off-shift share | 6, 36/60 | exact |
   | Health check (limit 0, keep 2), 4 units, 2 on shift from 10.5 to 40.5, checks at 15, 30, 45: taken out; mean in service | 2; 122/46 | exact |
-  | M/M/c, λ 7, μ 1, c 10 then 4 from 60 to 80, then 10, to 200, retry: mean queue, jobs out | transient chain | within 95% |
-  | Same, resume (the paused jobs set apart): mean queue, jobs out | transient chain | within 95% |
+  | One unit, off shift 10 to 20 by availability, jobs of 1.5: jobs by 29.4 finish / retry (1 wasted) / resume | 13 / 12 / 12 | exact |
+  | One unit, jobs of 4, failure 7 after each repair, repair 5, off 10 to 20: jobs by 30 finish / retry (3 wasted) / resume; off-shift share | 3 / 2 / 3; 6/30, 7/30, 7/30 | exact |
+  | M/M/c, λ 7, μ 1, c 10 then 4 from 60 to 80, then 10, measured 60 to 90, retry: mean queue, mean held, jobs out | transient chain (36.75, 5.98, 179.3) | within 95% |
+  | Same, resume (the paused jobs set apart) | transient chain (34.91, 8.04, 179.1) | within 95% |
 
 - **Not yet (units by shift):** a resource's units by shift on a task with a finite buffer are
   simulated (each unit keeps its place), but not checked against theory; editing a pool's
