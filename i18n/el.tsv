@@ -337,6 +337,7 @@
 	Process	Διαδικασία
 	Process models with BPSim	Μοντέλα διεργασιών με BPSim
 	Properties	Ιδιότητες
+	Property	Ιδιότητα
 	Quality	Ποιότητα
 	Quality ratio	Ποσοστό ποιότητας
 	Quit	Έξοδος
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Διαχωρίστε τις τιμές με ερωτηματικά (;) ή κενά.
 	Sequential	Διαδοχικές
 	Service time	Χρόνος εξυπηρέτησης
+	Service time by property	Χρόνος εξυπηρέτησης βάσει ιδιότητας
 	Services	Υπηρεσίες
 	Set Property	Ορισμός ιδιότητας
 	Set a planned run time per item on this block to see its effectiveness.	Ορίστε προγραμματισμένο χρόνο λειτουργίας ανά τεμάχιο σε αυτό το μπλοκ για να δείτε την αποτελεσματικότητά του.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Χρόνος ως τη συνθήκη διακοπής
 	Time unit	Μονάδα χρόνου
 	Times for particular changes	Χρόνοι για συγκεκριμένες αλλαγές
+	Times for particular values	Χρόνοι για συγκεκριμένες τιμές
 	To	Προς
 	Tops	Πάνω άκρα
 	Transfer time	Χρόνος μεταφοράς

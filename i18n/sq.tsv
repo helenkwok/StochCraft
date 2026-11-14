@@ -337,6 +337,7 @@
 	Process	Procesi
 	Process models with BPSim	Modele procesesh me BPSim
 	Properties	Vetitë
+	Property	Vetia
 	Quality	Cilësia
 	Quality ratio	Raporti i cilësisë
 	Quit	Dil
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Ndaji vlerat me pikëpresje ose hapësira.
 	Sequential	Sekuenciale
 	Service time	Koha e shërbimit
+	Service time by property	Koha e shërbimit sipas një vetie
 	Services	Shërbimet
 	Set Property	Cakto vetinë
 	Set a planned run time per item on this block to see its effectiveness.	Caktoni një kohë të planifikuar pune për pjesë në këtë bllok për të parë efektivitetin e tij.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Koha deri te kushti i ndalimit
 	Time unit	Njësia e kohës
 	Times for particular changes	Kohët për ndryshime të caktuara
+	Times for particular values	Kohët për vlera të caktuara
 	To	Te
 	Tops	Skajet e sipërme
 	Transfer time	Koha e transferimit

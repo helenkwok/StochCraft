@@ -465,6 +465,20 @@ engine's messages (validation, file notes) are English too.
   Not checked against any other source. Not reviewed by native speakers. The least certain are lo,
   th, ta, te, bn and ka; kk and hu, whose waiting-room word already holds the word for place; and ja
   and ko, where the choices read as actions (secure, open).
+- The rows for service time by property (the task's "Service time by property" checkbox, its
+  "Property" field and the heading "Times for particular values" over the rows that give each value
+  its own service time) were machine-drafted with Claude Code from the plain meaning of the English,
+  reusing each catalog's own words for service time ("Service time"), property ("Properties", "New
+  property", "Only when this property changes"), value ("Value", "Values") and, for the heading, the
+  wording of the changeover table's "Times for particular changes" with its word for changes
+  replaced by the plural of value. "By property" is rendered as "depending on" or "according to" a
+  property (de nach, fr selon, fi mukaan, pl według, ru and uk "in dependence on"), not as one time
+  per property; ja and ko use the suffix 別, 별 ("by", "per"), and zh says "the service time
+  depends on the property". "Property" is the bare noun, definite where the catalog's field labels
+  are (sq Vetia). Not checked against any other source. Not reviewed by native speakers. The least
+  certain are lo, th, ta, te, bn, ka, kk and sq as before, plus ro "după o proprietate", nl
+  "afhankelijk van een eigenschap" and the zh checkbox labels, which read as a statement rather than
+  a name.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

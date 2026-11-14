@@ -337,6 +337,7 @@
 	Process	Processo
 	Process models with BPSim	Modelli di processo con BPSim
 	Properties	Proprietà
+	Property	Proprietà
 	Quality	Qualità
 	Quality ratio	Tasso di qualità
 	Quit	Esci
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Separa i valori con punti e virgola o spazi.
 	Sequential	Sequenziali
 	Service time	Tempo di servizio
+	Service time by property	Tempo di servizio in base a una proprietà
 	Services	Servizi
 	Set Property	Imposta proprietà
 	Set a planned run time per item on this block to see its effectiveness.	Imposta un tempo di esecuzione pianificato per pezzo su questo blocco per vederne l'efficacia.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Tempo fino alla condizione di arresto
 	Time unit	Unità di tempo
 	Times for particular changes	Tempi per cambi specifici
+	Times for particular values	Tempi per valori specifici
 	To	A
 	Tops	Bordi superiori
 	Transfer time	Tempo di trasferimento

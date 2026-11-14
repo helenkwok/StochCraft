@@ -337,6 +337,7 @@
 	Process	Proces
 	Process models with BPSim	Procesmodellen met BPSim
 	Properties	Eigenschappen
+	Property	Eigenschap
 	Quality	Kwaliteit
 	Quality ratio	Kwaliteitsaandeel
 	Quit	Afsluiten
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Scheid de waarden met puntkomma's of spaties.
 	Sequential	Sequentieel
 	Service time	Servicetijd
+	Service time by property	Servicetijd afhankelijk van een eigenschap
 	Services	Diensten
 	Set Property	Eigenschap instellen
 	Set a planned run time per item on this block to see its effectiveness.	Stel voor dit blok een geplande looptijd per onderdeel in om de effectiviteit te zien.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Tijd tot de stopvoorwaarde
 	Time unit	Tijdseenheid
 	Times for particular changes	Tijden voor bepaalde wissels
+	Times for particular values	Tijden voor bepaalde waarden
 	To	Naar
 	Tops	Bovenkanten
 	Transfer time	Transfertijd

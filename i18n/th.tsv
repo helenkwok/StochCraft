@@ -337,6 +337,7 @@
 	Process	กระบวนการ
 	Process models with BPSim	แบบจำลองกระบวนการพร้อม BPSim
 	Properties	คุณสมบัติ
+	Property	คุณสมบัติ
 	Quality	คุณภาพ
 	Quality ratio	สัดส่วนคุณภาพ
 	Quit	ออกจากโปรแกรม
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	คั่นค่าด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
 	Sequential	แบบลำดับ
 	Service time	เวลาให้บริการ
+	Service time by property	เวลาให้บริการตามคุณสมบัติ
 	Services	บริการ
 	Set Property	กำหนดคุณสมบัติ
 	Set a planned run time per item on this block to see its effectiveness.	กำหนดเวลาเดินเครื่องตามแผนต่อชิ้นให้บล็อกนี้เพื่อดูประสิทธิผล
@@ -515,6 +517,7 @@
 	Time to the stop condition	เวลาจนถึงเงื่อนไขหยุด
 	Time unit	หน่วยเวลา
 	Times for particular changes	เวลาสำหรับการเปลี่ยนเฉพาะ
+	Times for particular values	เวลาสำหรับค่าเฉพาะ
 	To	ไปยัง
 	Tops	ขอบบน
 	Transfer time	เวลาขนย้าย

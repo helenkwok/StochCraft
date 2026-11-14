@@ -337,6 +337,7 @@
 	Process	प्रक्रिया
 	Process models with BPSim	BPSim सहित प्रक्रिया मॉडल
 	Properties	गुण
+	Property	गुण
 	Quality	गुणवत्ता
 	Quality ratio	गुणवत्ता अनुपात
 	Quit	बाहर निकलें
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	मानों को अर्धविराम या रिक्त स्थान से अलग करें।
 	Sequential	क्रमिक
 	Service time	सेवा समय
+	Service time by property	गुण के अनुसार सेवा समय
 	Services	सेवाएँ
 	Set Property	गुण सेट करें
 	Set a planned run time per item on this block to see its effectiveness.	इस ब्लॉक की प्रभावशीलता देखने के लिए उस पर प्रति पुर्जा नियोजित चलन समय सेट करें।
@@ -515,6 +517,7 @@
 	Time to the stop condition	रुकने की शर्त तक का समय
 	Time unit	समय की इकाई
 	Times for particular changes	विशेष बदलावों के समय
+	Times for particular values	विशेष मानों के समय
 	To	तक
 	Tops	ऊपरी किनारे
 	Transfer time	स्थानांतरण समय

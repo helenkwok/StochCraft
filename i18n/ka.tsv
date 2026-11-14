@@ -337,6 +337,7 @@
 	Process	პროცესი
 	Process models with BPSim	პროცესის მოდელები BPSim-ით
 	Properties	თვისებები
+	Property	თვისება
 	Quality	ხარისხი
 	Quality ratio	ხარისხის წილი
 	Quit	გასვლა
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	გამოყავით მნიშვნელობები წერტილმძიმით ან ჰარით.
 	Sequential	მიმდევრობითი
 	Service time	მომსახურების დრო
+	Service time by property	მომსახურების დრო თვისების მიხედვით
 	Services	სერვისები
 	Set Property	თვისების დაყენება
 	Set a planned run time per item on this block to see its effectiveness.	დააყენეთ ამ ბლოკზე დაგეგმილი მუშაობის დრო ერთ დეტალზე, რომ ნახოთ მისი ეფექტიანობა.
@@ -515,6 +517,7 @@
 	Time to the stop condition	დრო გაჩერების პირობამდე
 	Time unit	დროის ერთეული
 	Times for particular changes	დროები კონკრეტული ცვლილებებისთვის
+	Times for particular values	დროები კონკრეტული მნიშვნელობებისთვის
 	To	-მდე
 	Tops	ზედა კიდეები
 	Transfer time	გადატანის დრო

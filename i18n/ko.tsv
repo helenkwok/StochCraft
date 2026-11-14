@@ -337,6 +337,7 @@
 	Process	프로세스
 	Process models with BPSim	BPSim 포함 프로세스 모델
 	Properties	속성
+	Property	속성
 	Quality	품질
 	Quality ratio	양품률
 	Quit	종료
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	값은 세미콜론이나 공백으로 구분하세요.
 	Sequential	순차형
 	Service time	서비스 시간
+	Service time by property	속성별 서비스 시간
 	Services	서비스
 	Set Property	속성 설정
 	Set a planned run time per item on this block to see its effectiveness.	이 블록에 부품당 계획 가동 시간을 설정하면 효과성을 볼 수 있습니다.
@@ -515,6 +517,7 @@
 	Time to the stop condition	중지 조건까지의 시간
 	Time unit	시간 단위
 	Times for particular changes	특정 변경별 시간
+	Times for particular values	특정 값별 시간
 	To	끝 블록
 	Tops	위쪽 가장자리
 	Transfer time	이송 시간

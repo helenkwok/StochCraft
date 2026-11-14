@@ -337,6 +337,7 @@
 	Process	Proces
 	Process models with BPSim	Modely procesov s BPSim
 	Properties	Vlastnosti
+	Property	Vlastnosť
 	Quality	Kvalita
 	Quality ratio	Podiel kvality
 	Quit	Ukončiť
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Oddeľte hodnoty bodkočiarkami alebo medzerami.
 	Sequential	Sekvenčné
 	Service time	Čas obsluhy
+	Service time by property	Čas obsluhy podľa vlastnosti
 	Services	Služby
 	Set Property	Nastaviť vlastnosť
 	Set a planned run time per item on this block to see its effectiveness.	Nastavte pre tento blok plánovaný čas behu na diel, aby ste videli jeho efektívnosť.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Čas do podmienky zastavenia
 	Time unit	Časová jednotka
 	Times for particular changes	Časy pre konkrétne zmeny
+	Times for particular values	Časy pre konkrétne hodnoty
 	To	Do
 	Tops	Horné okraje
 	Transfer time	Čas presunu

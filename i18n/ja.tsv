@@ -337,6 +337,7 @@
 	Process	プロセス
 	Process models with BPSim	BPSim 付きプロセスモデル
 	Properties	プロパティ
+	Property	プロパティ
 	Quality	品質
 	Quality ratio	良品率
 	Quit	終了
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	値はセミコロンまたはスペースで区切ってください。
 	Sequential	順序型
 	Service time	サービス時間
+	Service time by property	プロパティ別のサービス時間
 	Services	サービス
 	Set Property	プロパティを設定
 	Set a planned run time per item on this block to see its effectiveness.	このブロックに部品あたりの計画実行時間を設定すると、その有効性が表示されます。
@@ -515,6 +517,7 @@
 	Time to the stop condition	停止条件までの時間
 	Time unit	時間単位
 	Times for particular changes	特定の切り替えの時間
+	Times for particular values	特定の値の時間
 	To	接続先
 	Tops	上端
 	Transfer time	搬送時間

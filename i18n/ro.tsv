@@ -337,6 +337,7 @@
 	Process	Proces
 	Process models with BPSim	Modele de procese cu BPSim
 	Properties	Proprietăți
+	Property	Proprietate
 	Quality	Calitate
 	Quality ratio	Ponderea calității
 	Quit	Ieșire
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Separă valorile cu punct și virgulă sau spații.
 	Sequential	Secvențiale
 	Service time	Timp de servire
+	Service time by property	Timp de servire după o proprietate
 	Services	Servicii
 	Set Property	Setează proprietatea
 	Set a planned run time per item on this block to see its effectiveness.	Setați un timp de execuție planificat pe piesă pentru acest bloc pentru a-i vedea eficacitatea.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Timp până la condiția de oprire
 	Time unit	Unitate de timp
 	Times for particular changes	Timpi pentru anumite schimbări
+	Times for particular values	Timpi pentru anumite valori
 	To	Către
 	Tops	Marginile de sus
 	Transfer time	Timp de transfer

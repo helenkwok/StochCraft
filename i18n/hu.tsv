@@ -337,6 +337,7 @@
 	Process	Folyamat
 	Process models with BPSim	Folyamatmodellek BPSim-mel
 	Properties	Tulajdonságok
+	Property	Tulajdonság
 	Quality	Minőség
 	Quality ratio	Minőségi arány
 	Quit	Kilépés
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	Pontosvesszővel vagy szóközzel válassza el az értékeket.
 	Sequential	Szekvenciális
 	Service time	Kiszolgálási idő
+	Service time by property	Kiszolgálási idő tulajdonság szerint
 	Services	Szolgáltatások
 	Set Property	Tulajdonság beállítása
 	Set a planned run time per item on this block to see its effectiveness.	Adjon meg ennél a blokknál tervezett futási időt darabonként a hatékonyságának megtekintéséhez.
@@ -515,6 +517,7 @@
 	Time to the stop condition	Idő a leállási feltételig
 	Time unit	Időegység
 	Times for particular changes	Idők adott váltásokhoz
+	Times for particular values	Idők adott értékekhez
 	To	Ide
 	Tops	Felső élek
 	Transfer time	Továbbítási idő

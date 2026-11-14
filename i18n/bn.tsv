@@ -337,6 +337,7 @@
 	Process	প্রক্রিয়া
 	Process models with BPSim	BPSim সহ প্রক্রিয়া মডেল
 	Properties	বৈশিষ্ট্য
+	Property	বৈশিষ্ট্য
 	Quality	গুণমান
 	Quality ratio	গুণমান অনুপাত
 	Quit	প্রস্থান করুন
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	মানগুলি সেমিকোলন বা স্পেস দিয়ে আলাদা করুন।
 	Sequential	ক্রমিক
 	Service time	সেবা সময়
+	Service time by property	বৈশিষ্ট্য অনুযায়ী সেবা সময়
 	Services	পরিষেবা
 	Set Property	বৈশিষ্ট্য নির্ধারণ
 	Set a planned run time per item on this block to see its effectiveness.	এই ব্লকের কার্যকারিতা দেখতে এতে প্রতি অংশে পরিকল্পিত চলার সময় নির্ধারণ করুন।
@@ -515,6 +517,7 @@
 	Time to the stop condition	থামার শর্ত পর্যন্ত সময়
 	Time unit	সময়ের একক
 	Times for particular changes	নির্দিষ্ট পরিবর্তনের সময়
+	Times for particular values	নির্দিষ্ট মানের সময়
 	To	পর্যন্ত
 	Tops	উপরের প্রান্ত
 	Transfer time	স্থানান্তরের সময়

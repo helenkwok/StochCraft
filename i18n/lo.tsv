@@ -337,6 +337,7 @@
 	Process	ຂະບວນການ
 	Process models with BPSim	ແບບຈຳລອງຂະບວນການພ້ອມ BPSim
 	Properties	ຄຸນສົມບັດ
+	Property	ຄຸນສົມບັດ
 	Quality	ຄຸນນະພາບ
 	Quality ratio	ສັດສ່ວນຄຸນນະພາບ
 	Quit	ອອກ
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	ຂັ້ນຄ່າດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ.
 	Sequential	ແບບລຳດັບ
 	Service time	ເວລາໃຫ້ບໍລິການ
+	Service time by property	ເວລາໃຫ້ບໍລິການຕາມຄຸນສົມບັດ
 	Services	ບໍລິການ
 	Set Property	ຕັ້ງຄຸນສົມບັດ
 	Set a planned run time per item on this block to see its effectiveness.	ກຳນົດເວລາເດີນເຄື່ອງຕາມແຜນຕໍ່ຊິ້ນໃຫ້ບລັອກນີ້ເພື່ອເບິ່ງປະສິດທິຜົນຂອງມັນ.
@@ -515,6 +517,7 @@
 	Time to the stop condition	ເວລາຈົນຮອດເງື່ອນໄຂຢຸດ
 	Time unit	ໜ່ວຍເວລາ
 	Times for particular changes	ເວລາສຳລັບການປ່ຽນສະເພາະ
+	Times for particular values	ເວລາສຳລັບຄ່າສະເພາະ
 	To	ໄປຫາ
 	Tops	ຂອບເທິງ
 	Transfer time	ເວລາຂົນຍ້າຍ

@@ -337,6 +337,7 @@
 	Process	ప్రక్రియ
 	Process models with BPSim	BPSim తో ప్రక్రియ నమూనాలు
 	Properties	లక్షణాలు
+	Property	లక్షణం
 	Quality	నాణ్యత
 	Quality ratio	నాణ్యత నిష్పత్తి
 	Quit	నిష్క్రమించు
@@ -422,6 +423,7 @@
 	Separate the values with semicolons or spaces.	విలువలను సెమీకోలన్ లేదా ఖాళీతో వేరు చేయండి.
 	Sequential	క్రమానుగత
 	Service time	సేవా సమయం
+	Service time by property	లక్షణాన్ని బట్టి సేవా సమయం
 	Services	సేవలు
 	Set Property	లక్షణాన్ని సెట్ చేయి
 	Set a planned run time per item on this block to see its effectiveness.	ఈ బ్లాక్ ప్రభావశీలతను చూడటానికి దానికి ఒక్కో భాగానికి ప్రణాళిక చేసిన రన్ సమయాన్ని సెట్ చేయండి.
@@ -515,6 +517,7 @@
 	Time to the stop condition	ఆపే షరతు వరకు సమయం
 	Time unit	సమయ ప్రమాణం
 	Times for particular changes	నిర్దిష్ట మార్పుల సమయాలు
+	Times for particular values	నిర్దిష్ట విలువల సమయాలు
 	To	కు
 	Tops	పై అంచులు
 	Transfer time	బదిలీ సమయం
