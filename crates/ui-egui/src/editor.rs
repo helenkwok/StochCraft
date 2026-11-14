@@ -1246,10 +1246,37 @@ impl App {
                 },
             ));
         }
+        // Only a finite buffer has places to keep.
+        if !el["queue_capacity"].is_null() {
+            let place = check["place_while_out"]
+                .as_str()
+                .unwrap_or("reserved")
+                .to_owned();
+            let mut chosen = place.clone();
+            ui.label(t("Place in the buffer of a server taken out:"));
+            ui.radio_value(&mut chosen, "reserved".to_owned(), t("Kept while it restarts"))
+                .on_hover_text(t(
+                    "As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.",
+                ));
+            ui.radio_value(&mut chosen, "open".to_owned(), t("Open to entities"))
+                .on_hover_text(t(
+                    "As a server off shift's: entities may take its place while it is out.",
+                ));
+            if chosen != place {
+                changed = Some((
+                    "place_while_out",
+                    if chosen == "reserved" {
+                        Value::Null
+                    } else {
+                        json!(chosen)
+                    },
+                ));
+            }
+        }
         if let Some((wire, v)) = changed {
             let mut c = check.clone();
             if let Some(o) = c.as_object_mut() {
-                // No floor, and retrying, are left out.
+                // No floor, retrying, and a kept place, are left out.
                 if v.is_null() || (wire == "keep" && v == json!(0)) {
                     o.remove(wire);
                 } else {
