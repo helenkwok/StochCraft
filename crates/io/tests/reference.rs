@@ -1136,6 +1136,36 @@ fn everything_stochcraft_writes_is_schema_valid() {
     r.connect(a, out);
     r.connect(c, out);
     validate(&write_new(&r.build(Experiment::default())), "routing", &xsd);
+    // Waiting rooms by timetable and per working server, and a way out for those turned away.
+    let mut w = Builder::new();
+    w.calendar(
+        "rush",
+        vec![Event {
+            start: DateTime::new(2016, 1, 1, 8, 0, 0).unwrap_or(DateTime(0)),
+            end: DateTime::new(2016, 1, 1, 10, 0, 0).unwrap_or(DateTime(0)),
+            rule: Rule::parse("FREQ=DAILY").ok(),
+        }],
+    );
+    let src = w.source("calls", Dist::Exponential { mean: 1.0 }, None);
+    let first = w.server("first", 2, Dist::Exponential { mean: 1.5 });
+    let second = w.server("second", 3, Dist::Exponential { mean: 2.0 });
+    w.queue_by_shift(first, 1, &[("rush", 6)]);
+    w.queue_per_working_server(second, 2);
+    let later = w.delay("later", Dist::Constant(30.0));
+    let out = w.sink("out");
+    w.connect(src, first);
+    w.connect(first, second);
+    w.connect(second, out);
+    w.turned_away(first, later);
+    w.connect(later, first);
+    validate(
+        &write_new(&w.build(Experiment {
+            start: Some(DateTime::new(2016, 1, 1, 0, 0, 0).unwrap_or(DateTime(0))),
+            ..Experiment::default()
+        })),
+        "waiting rooms",
+        &xsd,
+    );
     // Each reference model, as StochCraft reads it, written again as a new BPMN file.
     let Some(paths) = models() else { return };
     for p in &paths {
