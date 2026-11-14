@@ -26,7 +26,7 @@
 
 use stochcraft_blocks::{
     Breakdown, Builder, ElementReport, Event, ExperimentSummary, HealthCheck, Metric, OnShiftEnd,
-    OnTakeout, PlaceWhileOut, Report, RunError, compile, summarise,
+    OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Report, RunError, compile, summarise,
 };
 use stochcraft_model::{DateTime, Diagnostic, Dist, Experiment, Problem, Severity};
 use stochcraft_random::Rng;
@@ -373,6 +373,83 @@ fn the_turned_away_way_takes_entities_from_a_server_which_is_never_blocked() {
     assert!(f.mean_blocked_time.is_none_or(|t| t == 0.0), "{f:?}");
     assert_eq!(element(&r, "desk").lost, Some(2));
     assert_eq!(element(&r, "away").left, 2);
+}
+
+/// Turned away into a second full room that turns away too, an entity is turned away there
+/// again, not let in: arrivals at 1, 2 and 3 to `desk` (one unit, service 10, no room); the
+/// second goes the way for those turned away to `back` (the same) and gets its unit; the third
+/// finds `back` full as well and goes on to `away`.
+#[test]
+fn turned_away_into_a_full_room_that_turns_away_is_turned_away_again() {
+    let mut b = Builder::new();
+    let arrivals = b.source("arrivals", Dist::Constant(1.0), Some(3));
+    let desk = b.buffered_server("desk", 1, Dist::Constant(10.0), 0);
+    let back = b.buffered_server("back", 1, Dist::Constant(10.0), 0);
+    let exit = b.sink("exit");
+    let away = b.sink("away");
+    b.connect(arrivals, desk);
+    b.connect(desk, exit);
+    b.turned_away(desk, back);
+    b.connect(back, exit);
+    b.turned_away(back, away);
+    let r = run_once(&b, 5.0);
+    assert_eq!(element(&r, "desk").lost, Some(2));
+    let k = element(&r, "back");
+    assert_eq!(k.entered, 1, "{k:?}");
+    assert_eq!(k.lost, Some(1), "{k:?}");
+    assert_eq!(element(&r, "away").left, 1);
+}
+
+/// One giving up, sent its way into a full room that turns away, is turned away there, not
+/// let in: arrivals at 1, 2 and 3 to `desk` (one unit, service 10, patience 0.5); the second
+/// gives up at 2.5 and gets `back`'s one unit (no room to wait); the third gives up at 3.5,
+/// finds `back` full and goes on to `away`.
+#[test]
+fn giving_up_into_a_full_room_that_turns_away_is_turned_away() {
+    let mut b = Builder::new();
+    let arrivals = b.source("arrivals", Dist::Constant(1.0), Some(3));
+    let desk = b.server("desk", 1, Dist::Constant(10.0));
+    let back = b.buffered_server("back", 1, Dist::Constant(10.0), 0);
+    let exit = b.sink("exit");
+    let away = b.sink("away");
+    b.connect(arrivals, desk);
+    b.connect(desk, exit);
+    b.patience(
+        desk,
+        Patience {
+            time: Dist::Constant(0.5),
+            until: PatienceUntil::Start,
+        },
+    );
+    b.abandoned(desk, back);
+    b.connect(back, exit);
+    b.turned_away(back, away);
+    let r = run_once(&b, 5.0);
+    assert_eq!(element(&r, "desk").abandoned, Some(2));
+    let k = element(&r, "back");
+    assert_eq!(k.entered, 1, "{k:?}");
+    assert_eq!(k.lost, Some(1), "{k:?}");
+    assert_eq!(element(&r, "away").left, 1);
+}
+
+/// A waiting room by timetable needs a calendar's value: an empty timetable is an error (the
+/// file could not hold it).
+#[test]
+fn an_empty_timetable_for_the_room_is_an_error() {
+    let mut b = Builder::new();
+    let arrivals = b.source("arrivals", Dist::exponential_rate(1.0), None);
+    let desk = b.server("desk", 1, Dist::exponential_rate(2.0));
+    let exit = b.sink("exit");
+    b.connect(arrivals, desk);
+    b.connect(desk, exit);
+    b.queue_by_shift(desk, 3, &[]);
+    assert!(
+        errors(&b)
+            .iter()
+            .any(|d| matches!(d.problem, Problem::QueueByShiftEmpty)),
+        "{:?}",
+        errors(&b)
+    );
 }
 
 /// At most one way for those turned away, only out of a task with a finite waiting room; no

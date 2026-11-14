@@ -1376,6 +1376,9 @@ pub enum Problem {
     /// A waiting room by timetable or per working server with no number of places: it is
     /// unlimited, and the setting is ignored.
     QueueLimitWithoutRoom,
+    /// A waiting room by timetable with no calendar's value: the file cannot hold it (it would
+    /// read back as a fixed room, which holds places).
+    QueueByShiftEmpty,
     /// A health check whose limit is not a number of 0 or more.
     HealthCheckLimitNotValid,
     /// A health check whose time between checks has a mean that is not above 0.
@@ -1559,6 +1562,7 @@ impl Problem {
             Problem::SeveralTurnedAwayWays { .. } => "several_turned_away_ways",
             Problem::TurnedAwayAndAbandoned { .. } => "turned_away_and_abandoned",
             Problem::QueueLimitWithoutRoom => "queue_limit_without_room",
+            Problem::QueueByShiftEmpty => "queue_by_shift_empty",
             Problem::HealthCheckLimitNotValid => "health_check_limit_not_valid",
             Problem::HealthCheckIntervalNotPositive => "health_check_interval_not_positive",
             Problem::DemandNotPositive => "demand_not_positive",
@@ -1765,6 +1769,11 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "its waiting room is set by timetable or per working server, but has no number \
                  of places: it is unlimited"
+            ),
+            Problem::QueueByShiftEmpty => write!(
+                f,
+                "its waiting room is set by timetable, but no calendar has a value: give one, or \
+                 make the room fixed"
             ),
             Problem::HealthCheckLimitNotValid => write!(
                 f,
@@ -2116,6 +2125,14 @@ impl Model {
                     Some(&e.id),
                     Problem::QueueLimitWithoutRoom,
                 ));
+            }
+            if let ElementKind::Server {
+                queue_limit: QueueLimit::ByShift(timed),
+                ..
+            } = &e.kind
+                && timed.is_empty()
+            {
+                out.push(Diagnostic::error(Some(&e.id), Problem::QueueByShiftEmpty));
             }
             match e.kind {
                 ElementKind::Sink { .. } => {}
