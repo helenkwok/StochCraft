@@ -58,6 +58,8 @@
 	Arrival limit	Limit příchodů
 	Arrivals	Příchody
 	Arrivals by calendar	Příchody podle kalendáře
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Jako u serveru v poruše: drží jedno místo, kam entity nemohou, dokud se nevrátí, takže čekárna pojme méně, dokud jsou servery vyřazené.
+	As a server off shift's: entities may take its place while it is out.	Jako u serveru mimo směnu: entity mohou jeho místo obsadit, dokud je pryč.
 	At least	Alespoň
 	At most	Nejvýše
 	Availability	Pohotovost
@@ -222,6 +224,7 @@
 	Jump to time	Přejít na čas
 	Keep at least in service	Ponechat v provozu alespoň
 	Keep the time, without the estimate it came from	Ponechat dobu bez odhadu, ze kterého vznikla
+	Kept while it restarts	Rezervované během restartu
 	Keyboard Shortcuts…	Klávesové zkratky…
 	Keyboard shortcuts saved	Klávesové zkratky byly uloženy
 	Keyboard shortcuts unchanged	Klávesové zkratky beze změny
@@ -299,6 +302,7 @@
 	Open a model first	Nejprve otevřete model
 	Open a model to simulate it	Otevřete model pro simulaci
 	Open a model…	Otevřít model…
+	Open to entities	Otevřené pro entity
 	Opened {file}	Otevřen {file}
 	Open…	Otevřít…
 	Or start from an example	Nebo začněte příkladem
@@ -320,6 +324,7 @@
 	Period {n} repeats	Období {n} se opakuje
 	Period {n} starts	Období {n} začíná
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Období, kdy se mění dostupnost, příchody nebo směny fondu. Data a časy se píší jako 2026-01-31T09:00:00.
+	Place in the buffer of a server taken out:	Místo vyřazeného serveru v čekárně:
 	Planned run time per item	Plánovaná doba běhu na díl
 	Play	Přehrát
 	Points	Body

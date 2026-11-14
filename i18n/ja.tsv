@@ -58,6 +58,8 @@
 	Arrival limit	到着数の上限
 	Arrivals	到着
 	Arrivals by calendar	カレンダーごとの到着
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	故障したサーバと同じく、戻るまでエンティティの入れない枠を1つ確保するため、サーバが外れている間は待機場所に入れる数が減ります。
+	As a server off shift's: entities may take its place while it is out.	シフト外のサーバと同じく、外れている間はエンティティがその枠を使えます。
 	At least	以上
 	At most	以下
 	Availability	可用率
@@ -222,6 +224,7 @@
 	Jump to time	移動先の時刻
 	Keep at least in service	稼働を維持する最小数
 	Keep the time, without the estimate it came from	時間は残し、元の見積もりは破棄します
+	Kept while it restarts	再起動中も確保する
 	Keyboard Shortcuts…	キーボードショートカット…
 	Keyboard shortcuts saved	キーボードショートカットを保存しました
 	Keyboard shortcuts unchanged	キーボードショートカットは変更されていません
@@ -299,6 +302,7 @@
 	Open a model first	先にモデルを開いてください
 	Open a model to simulate it	シミュレーションするモデルを開いてください
 	Open a model…	モデルを開く…
+	Open to entities	エンティティに開放する
 	Opened {file}	{file} を開きました
 	Open…	開く…
 	Or start from an example	またはサンプルから始める
@@ -320,6 +324,7 @@
 	Period {n} repeats	期間 {n} の繰り返し
 	Period {n} starts	期間 {n} の開始
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	稼働可否、到着、プールのシフトが変わる期間です。日時は 2026-01-31T09:00:00 のように書きます。
+	Place in the buffer of a server taken out:	切り離されたサーバの待機場所の枠:
 	Planned run time per item	部品あたりの計画実行時間
 	Play	再生
 	Points	点

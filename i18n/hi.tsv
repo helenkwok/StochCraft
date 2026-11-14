@@ -58,6 +58,8 @@
 	Arrival limit	आगमन सीमा
 	Arrivals	आगमन
 	Arrivals by calendar	कैलेंडर के अनुसार आगमन
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	खराबी वाले सर्वर की तरह: लौटने तक वह एक स्थान इकाइयों से खाली रखता है, इसलिए सर्वर हटे रहने तक प्रतीक्षा कक्ष में कम इकाइयाँ समाती हैं।
+	As a server off shift's: entities may take its place while it is out.	पाली से बाहर सर्वर की तरह: उसके बाहर रहने पर इकाइयाँ उसका स्थान घेर सकती हैं।
 	At least	कम से कम
 	At most	अधिक से अधिक
 	Availability	उपलब्धता
@@ -222,6 +224,7 @@
 	Jump to time	समय पर जाएँ
 	Keep at least in service	कम से कम चालू रखें
 	Keep the time, without the estimate it came from	समय रखें, जिस अनुमान से आया उसके बिना
+	Kept while it restarts	पुनः आरंभ के दौरान सुरक्षित रहता है
 	Keyboard Shortcuts…	कीबोर्ड शॉर्टकट…
 	Keyboard shortcuts saved	कीबोर्ड शॉर्टकट सहेज दिए गए
 	Keyboard shortcuts unchanged	कीबोर्ड शॉर्टकट अपरिवर्तित हैं
@@ -299,6 +302,7 @@
 	Open a model first	पहले मॉडल खोलें
 	Open a model to simulate it	सिमुलेशन के लिए मॉडल खोलें
 	Open a model…	मॉडल खोलें…
+	Open to entities	इकाइयों के लिए खुला
 	Opened {file}	{file} खोली गई
 	Open…	खोलें…
 	Or start from an example	या किसी उदाहरण से शुरू करें
@@ -320,6 +324,7 @@
 	Period {n} repeats	अवधि {n} दोहराव
 	Period {n} starts	अवधि {n} शुरू
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	वे अवधियाँ जब उपलब्धता, आगमन या किसी पूल की पालियाँ बदलती हैं। दिनांक और समय 2026-01-31T09:00:00 की तरह लिखे जाते हैं।
+	Place in the buffer of a server taken out:	हटाए गए सर्वर का प्रतीक्षा कक्ष में स्थान:
 	Planned run time per item	प्रति पुर्जा नियोजित चलन समय
 	Play	चलाएँ
 	Points	बिंदु

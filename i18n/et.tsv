@@ -58,6 +58,8 @@
 	Arrival limit	Saabumiste piirang
 	Arrivals	Saabumised
 	Arrivals by calendar	Saabumised kalendri järgi
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Nagu rikkis serveril: see hoiab üht kohta olemitest vaba, kuni naaseb, nii et ooteruum mahutab vähem, kui servereid on kasutusest väljas.
+	As a server off shift's: entities may take its place while it is out.	Nagu vahetusest väljas oleval serveril: olemid võivad selle koha hõivata, kuni see on eemal.
 	At least	Vähemalt
 	At most	Kõige rohkem
 	Availability	Käideldavus
@@ -222,6 +224,7 @@
 	Jump to time	Mine ajahetkele
 	Keep at least in service	Hoia kasutuses vähemalt
 	Keep the time, without the estimate it came from	Säilita aeg ilma hinnanguta, millest see tuli
+	Kept while it restarts	Hoitakse taaskäivituse ajal
 	Keyboard Shortcuts…	Klaviatuuri otseteed…
 	Keyboard shortcuts saved	Klaviatuuri otseteed salvestatud
 	Keyboard shortcuts unchanged	Klaviatuuri otseteed muutmata
@@ -299,6 +302,7 @@
 	Open a model first	Ava esmalt mudel
 	Open a model to simulate it	Ava mudel selle simuleerimiseks
 	Open a model…	Ava mudel…
+	Open to entities	Avatud olemitele
 	Opened {file}	Avati {file}
 	Open…	Ava…
 	Or start from an example	Või alusta näitest
@@ -320,6 +324,7 @@
 	Period {n} repeats	Periood {n} kordub
 	Period {n} starts	Periood {n} algab
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioodid, mil muutuvad saadavus, saabumised või kogumi vahetused. Kuupäevad ja kellaajad kirjutatakse kujul 2026-01-31T09:00:00.
+	Place in the buffer of a server taken out:	Kasutusest välja võetud serveri koht ooteruumis:
 	Planned run time per item	Kavandatud tööaeg detaili kohta
 	Play	Esita
 	Points	Punktid

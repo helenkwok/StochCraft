@@ -58,6 +58,8 @@
 	Arrival limit	到达上限
 	Arrivals	到达
 	Arrivals by calendar	按日历的到达
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	与故障服务器相同：在其恢复前保留一个位置，实体不能占用，因此服务器下线期间等待区能容纳的实体更少。
+	As a server off shift's: entities may take its place while it is out.	与非当班服务器相同：服务器离开期间，实体可以占用其位置。
 	At least	至少
 	At most	至多
 	Availability	可用率
@@ -222,6 +224,7 @@
 	Jump to time	跳转到时间
 	Keep at least in service	至少保持在线
 	Keep the time, without the estimate it came from	保留时间，去掉其来源估计
+	Kept while it restarts	重新启动期间保留
 	Keyboard Shortcuts…	键盘快捷键…
 	Keyboard shortcuts saved	键盘快捷键已保存
 	Keyboard shortcuts unchanged	键盘快捷键未更改
@@ -299,6 +302,7 @@
 	Open a model first	请先打开模型
 	Open a model to simulate it	打开模型以进行仿真
 	Open a model…	打开模型…
+	Open to entities	向实体开放
 	Opened {file}	已打开 {file}
 	Open…	打开…
 	Or start from an example	或从示例开始
@@ -320,6 +324,7 @@
 	Period {n} repeats	时段 {n} 重复
 	Period {n} starts	时段 {n} 开始
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	可用性、到达或资源池的班次发生变化的时段。日期和时间写作 2026-01-31T09:00:00。
+	Place in the buffer of a server taken out:	下线服务器在等待区的位置：
 	Planned run time per item	单件计划运行时间
 	Play	播放
 	Points	点

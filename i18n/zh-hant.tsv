@@ -58,6 +58,8 @@
 	Arrival limit	到達上限
 	Arrivals	到達
 	Arrivals by calendar	依行事曆的到達
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	與故障伺服器相同：在其恢復前保留一個位置，實體不能佔用，因此伺服器下線期間等待區能容納的實體更少。
+	As a server off shift's: entities may take its place while it is out.	與非當班伺服器相同：伺服器離開期間，實體可以佔用其位置。
 	At least	至少
 	At most	至多
 	Availability	可用率
@@ -222,6 +224,7 @@
 	Jump to time	跳至時間
 	Keep at least in service	至少保持上線
 	Keep the time, without the estimate it came from	保留時間，去除其來源估計
+	Kept while it restarts	重新啟動期間保留
 	Keyboard Shortcuts…	鍵盤快捷鍵…
 	Keyboard shortcuts saved	鍵盤快捷鍵已儲存
 	Keyboard shortcuts unchanged	鍵盤快捷鍵未變更
@@ -299,6 +302,7 @@
 	Open a model first	請先開啟模型
 	Open a model to simulate it	開啟模型以進行模擬
 	Open a model…	開啟模型…
+	Open to entities	向實體開放
 	Opened {file}	已開啟 {file}
 	Open…	開啟…
 	Or start from an example	或從範例開始
@@ -320,6 +324,7 @@
 	Period {n} repeats	時段 {n} 重複
 	Period {n} starts	時段 {n} 開始
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	可用性、到達或資源池的班次改變的時段。日期和時間寫作 2026-01-31T09:00:00。
+	Place in the buffer of a server taken out:	下線伺服器在等待區的位置：
 	Planned run time per item	單件計畫運行時間
 	Play	播放
 	Points	點

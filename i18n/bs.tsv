@@ -58,6 +58,8 @@
 	Arrival limit	Ograničenje dolazaka
 	Arrivals	Dolasci
 	Arrivals by calendar	Dolasci po kalendaru
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Kao kod servera u kvaru: drži jedno mjesto u koje entiteti ne mogu ući dok se ne vrati, pa čekaonica prima manje dok su serveri izbačeni iz rada.
+	As a server off shift's: entities may take its place while it is out.	Kao kod servera van smjene: entiteti mogu zauzeti njegovo mjesto dok ga nema.
 	At least	Najmanje
 	At most	Najviše
 	Availability	Raspoloživost
@@ -222,6 +224,7 @@
 	Jump to time	Skoči na vrijeme
 	Keep at least in service	Zadrži u radu najmanje
 	Keep the time, without the estimate it came from	Zadrži vrijeme, bez procjene iz koje je nastalo
+	Kept while it restarts	Čuva se dok se ponovno pokreće
 	Keyboard Shortcuts…	Prečice na tastaturi…
 	Keyboard shortcuts saved	Prečice na tastaturi spremljeni
 	Keyboard shortcuts unchanged	Prečice na tastaturi nisu promijenjeni
@@ -299,6 +302,7 @@
 	Open a model first	Prvo otvorite model
 	Open a model to simulate it	Otvorite model za simulaciju
 	Open a model…	Otvori model…
+	Open to entities	Otvoreno za entitete
 	Opened {file}	Otvorena datoteka {file}
 	Open…	Otvori…
 	Or start from an example	Ili počnite s primjerom
@@ -320,6 +324,7 @@
 	Period {n} repeats	Period {n} se ponavlja
 	Period {n} starts	Period {n} počinje
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periodi u kojima se mijenjaju raspoloživost, dolasci ili smjene fonda. Datumi i vremena pišu se kao 2026-01-31T09:00:00.
+	Place in the buffer of a server taken out:	Mjesto servera izbačenog iz rada u čekaonici:
 	Planned run time per item	Planirano vrijeme rada po dijelu
 	Play	Reproduciraj
 	Points	Tačke

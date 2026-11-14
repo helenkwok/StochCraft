@@ -58,6 +58,8 @@
 	Arrival limit	Ограничение числа прибытий
 	Arrivals	Прибытия
 	Arrivals by calendar	Прибытия по календарю
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Как у отказавшего сервера: он держит одно место свободным от сущностей, пока не вернётся, поэтому мест ожидания для сущностей меньше, пока серверы выведены.
+	As a server off shift's: entities may take its place while it is out.	Как у сервера вне смены: сущности могут занять его место, пока его нет.
 	At least	Не меньше
 	At most	Не больше
 	Availability	Коэффициент готовности
@@ -222,6 +224,7 @@
 	Jump to time	Перейти ко времени
 	Keep at least in service	Оставлять в работе не меньше
 	Keep the time, without the estimate it came from	Оставить время без оценки, из которой оно получено
+	Kept while it restarts	Сохраняется на время перезагрузки
 	Keyboard Shortcuts…	Сочетания клавиш…
 	Keyboard shortcuts saved	Сочетания клавиш сохранены
 	Keyboard shortcuts unchanged	Сочетания клавиш не изменены
@@ -299,6 +302,7 @@
 	Open a model first	Сначала откройте модель
 	Open a model to simulate it	Откройте модель, чтобы запустить моделирование
 	Open a model…	Открыть модель…
+	Open to entities	Открыто для сущностей
 	Opened {file}	Открыт {file}
 	Open…	Открыть…
 	Or start from an example	Или начните с примера
@@ -320,6 +324,7 @@
 	Period {n} repeats	Повтор периода {n}
 	Period {n} starts	Начало периода {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Периоды, когда меняются доступность, прибытия или смены пула. Дата и время записываются как 2026-01-31T09:00:00.
+	Place in the buffer of a server taken out:	Место выведенного сервера среди мест ожидания:
 	Planned run time per item	Плановое время работы на деталь
 	Play	Воспроизвести
 	Points	Точки

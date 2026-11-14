@@ -58,6 +58,8 @@
 	Arrival limit	Grense for ankomster
 	Arrivals	Ankomster
 	Arrivals by calendar	Ankomster per kalender
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Som for en server med feil: den holder en plass fri for enheter til den er tilbake, så venterommet rommer færre mens servere er ute av drift.
+	As a server off shift's: entities may take its place while it is out.	Som for en server utenfor skift: enheter kan ta plassen dens mens den er borte.
 	At least	Minst
 	At most	Høyst
 	Availability	Tilgjengelighet
@@ -222,6 +224,7 @@
 	Jump to time	Gå til tidspunkt
 	Keep at least in service	Hold minst i drift
 	Keep the time, without the estimate it came from	Behold tiden, uten anslaget den kom fra
+	Kept while it restarts	Reservert under omstarten
 	Keyboard Shortcuts…	Hurtigtaster…
 	Keyboard shortcuts saved	Hurtigtaster lagret
 	Keyboard shortcuts unchanged	Hurtigtaster uendret
@@ -299,6 +302,7 @@
 	Open a model first	Åpne en modell først
 	Open a model to simulate it	Åpne en modell for å simulere den
 	Open a model…	Åpne modell…
+	Open to entities	Åpen for enheter
 	Opened {file}	Åpnet {file}
 	Open…	Åpne…
 	Or start from an example	Eller start med et eksempel
@@ -320,6 +324,7 @@
 	Period {n} repeats	Periode {n} gjentas
 	Period {n} starts	Periode {n} starter
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioder der tilgjengelighet, ankomster eller en puljes skift endres. Datoer og klokkeslett skrives 2026-01-31T09:00:00.
+	Place in the buffer of a server taken out:	Plass i venterommet for en server tatt ut av drift:
 	Planned run time per item	Planlagt kjøretid per del
 	Play	Spill av
 	Points	Punkter

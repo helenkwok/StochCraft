@@ -58,6 +58,8 @@
 	Arrival limit	Aankomstlimiet
 	Arrivals	Aankomsten
 	Arrivals by calendar	Aankomsten per kalender
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Zoals bij een server in storing: die houdt een plaats vrij van entiteiten tot hij terug is, dus de wachtruimte bevat er minder zolang servers uit dienst zijn.
+	As a server off shift's: entities may take its place while it is out.	Zoals bij een server buiten werktijd: entiteiten mogen zijn plaats innemen zolang hij weg is.
 	At least	Minstens
 	At most	Hoogstens
 	Availability	Beschikbaarheid
@@ -222,6 +224,7 @@
 	Jump to time	Ga naar tijdstip
 	Keep at least in service	Minstens in dienst houden
 	Keep the time, without the estimate it came from	De tijd houden, zonder de schatting waar hij vandaan komt
+	Kept while it restarts	Gereserveerd tijdens de herstart
 	Keyboard Shortcuts…	Sneltoetsen…
 	Keyboard shortcuts saved	Sneltoetsen opgeslagen
 	Keyboard shortcuts unchanged	Sneltoetsen ongewijzigd
@@ -299,6 +302,7 @@
 	Open a model first	Open eerst een model
 	Open a model to simulate it	Open een model om het te simuleren
 	Open a model…	Model openen…
+	Open to entities	Open voor entiteiten
 	Opened {file}	{file} geopend
 	Open…	Openen…
 	Or start from an example	Of begin met een voorbeeld
@@ -320,6 +324,7 @@
 	Period {n} repeats	Periode {n} herhaalt
 	Period {n} starts	Periode {n} begint
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioden waarin beschikbaarheid, aankomsten of de werktijden van een pool veranderen. Datums en tijden schrijf je als 2026-01-31T09:00:00.
+	Place in the buffer of a server taken out:	Plaats in de wachtruimte van een uit dienst genomen server:
 	Planned run time per item	Geplande looptijd per onderdeel
 	Play	Afspelen
 	Points	Punten

@@ -58,6 +58,8 @@
 	Arrival limit	Келу шегі
 	Arrivals	Келулер
 	Arrivals by calendar	Күнтізбе бойынша келулер
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Ақаулы сервердікі сияқты: ол қайтып келгенше бір орынды нысандардан бос ұстайды, сондықтан серверлер жұмыстан шығарылып тұрғанда күту орны азырақ сыйғызады.
+	As a server off shift's: entities may take its place while it is out.	Ауысымнан тыс сервердікі сияқты: ол жоқ кезде нысандар оның орнын иелене алады.
 	At least	Кемінде
 	At most	Көп дегенде
 	Availability	Қолжетімділік
@@ -222,6 +224,7 @@
 	Jump to time	Уақытқа өту
 	Keep at least in service	Жұмыста кемінде қалдыру
 	Keep the time, without the estimate it came from	Уақытты ол шыққан бағалаусыз сақтау
+	Kept while it restarts	Қайта іске қосылғанша сақталады
 	Keyboard Shortcuts…	Пернетақта тіркесімдері…
 	Keyboard shortcuts saved	Пернетақта тіркесімдері сақталды
 	Keyboard shortcuts unchanged	Пернетақта тіркесімдері өзгермеді
@@ -299,6 +302,7 @@
 	Open a model first	Алдымен модельді ашыңыз
 	Open a model to simulate it	Симуляциялау үшін модельді ашыңыз
 	Open a model…	Модельді ашу…
+	Open to entities	Нысандарға ашық
 	Opened {file}	{file} ашылды
 	Open…	Ашу…
 	Or start from an example	Немесе мысалдан бастаңыз
@@ -320,6 +324,7 @@
 	Period {n} repeats	{n}-кезең қайталануы
 	Period {n} starts	{n}-кезең басталуы
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Қолжетімділік, келулер немесе қордың ауысымдары өзгеретін кезеңдер. Күн мен уақыт 2026-01-31T09:00:00 түрінде жазылады.
+	Place in the buffer of a server taken out:	Жұмыстан шығарылған сервердің күту орнындағы орны:
 	Planned run time per item	Бір бөлшекке жоспарланған жұмыс уақыты
 	Play	Ойнату
 	Points	Нүктелер

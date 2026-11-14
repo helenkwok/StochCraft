@@ -58,6 +58,8 @@
 	Arrival limit	Límit d'arribades
 	Arrivals	Arribades
 	Arrivals by calendar	Arribades per calendari
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Com el d'un servidor avariat: manté un lloc lliure d'entitats fins que torna, de manera que la sala d'espera n'admet menys mentre hi ha servidors retirats.
+	As a server off shift's: entities may take its place while it is out.	Com el d'un servidor fora de torn: les entitats poden ocupar el seu lloc mentre és fora.
 	At least	Com a mínim
 	At most	Com a màxim
 	Availability	Disponibilitat
@@ -222,6 +224,7 @@
 	Jump to time	Ves a l'instant
 	Keep at least in service	Mantenir en servei com a mínim
 	Keep the time, without the estimate it came from	Conservar el temps, sense l'estimació d'on prové
+	Kept while it restarts	Reservat mentre es reinicia
 	Keyboard Shortcuts…	Dreceres de teclat…
 	Keyboard shortcuts saved	Dreceres de teclat desades
 	Keyboard shortcuts unchanged	Dreceres de teclat sense canvis
@@ -299,6 +302,7 @@
 	Open a model first	Primer obre un model
 	Open a model to simulate it	Obre un model per simular-lo
 	Open a model…	Obre un model…
+	Open to entities	Obert a les entitats
 	Opened {file}	S'ha obert {file}
 	Open…	Obre…
 	Or start from an example	O comença amb un exemple
@@ -320,6 +324,7 @@
 	Period {n} repeats	Repetició del període {n}
 	Period {n} starts	Inici del període {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Períodes en què canvien la disponibilitat, les arribades o els torns d'un grup. Les dates i hores s'escriuen 2026-01-31T09:00:00.
+	Place in the buffer of a server taken out:	Lloc d'un servidor retirat a la sala d'espera:
 	Planned run time per item	Temps d'execució planificat per peça
 	Play	Reprodueix
 	Points	Punts

@@ -58,6 +58,8 @@
 	Arrival limit	შემოსვლის ლიმიტი
 	Arrivals	შემოსვლები
 	Arrivals by calendar	შემოსვლები კალენდრის მიხედვით
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	როგორც გაუმართავი სერვერისა: ის ერთ ადგილს ერთეულებისგან თავისუფალს ინახავს, სანამ დაბრუნდება, ამიტომ მოსაცდელი სივრცე ნაკლებს იტევს, სანამ სერვერები გამოყვანილია.
+	As a server off shift's: entities may take its place while it is out.	როგორც ცვლის გარეთ მყოფი სერვერისა: ერთეულებს შეუძლიათ დაიკავონ მისი ადგილი, სანამ ის არ არის.
 	At least	სულ მცირე
 	At most	მაქსიმუმ
 	Availability	ხელმისაწვდომობა
@@ -222,6 +224,7 @@
 	Jump to time	დროზე გადასვლა
 	Keep at least in service	მუშაობაში დატოვე სულ მცირე
 	Keep the time, without the estimate it came from	დროის შენარჩუნება იმ შეფასების გარეშე, საიდანაც ის მოდის
+	Kept while it restarts	ინახება ხელახალი გაშვების დროს
 	Keyboard Shortcuts…	კლავიატურის მალსახმობები…
 	Keyboard shortcuts saved	კლავიატურის მალსახმობები შენახულია
 	Keyboard shortcuts unchanged	კლავიატურის მალსახმობები უცვლელია
@@ -299,6 +302,7 @@
 	Open a model first	ჯერ გახსენით მოდელი
 	Open a model to simulate it	გახსენით მოდელი სიმულაციისთვის
 	Open a model…	მოდელის გახსნა…
+	Open to entities	ღია ერთეულებისთვის
 	Opened {file}	გახსნილია {file}
 	Open…	გახსნა…
 	Or start from an example	ან დაიწყეთ მაგალითით
@@ -320,6 +324,7 @@
 	Period {n} repeats	პერიოდი {n} მეორდება
 	Period {n} starts	პერიოდი {n} იწყება
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	პერიოდები, როცა იცვლება ხელმისაწვდომობა, შემოსვლები ან პულის ცვლები. თარიღი და დრო იწერება ასე: 2026-01-31T09:00:00.
+	Place in the buffer of a server taken out:	მუშაობიდან გამოყვანილი სერვერის ადგილი მოსაცდელ სივრცეში:
 	Planned run time per item	დაგეგმილი მუშაობის დრო ერთ დეტალზე
 	Play	დაკვრა
 	Points	წერტილები

@@ -58,6 +58,8 @@
 	Arrival limit	Limită de sosiri
 	Arrivals	Sosiri
 	Arrivals by calendar	Sosiri pe calendar
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Ca al unui server în avarie: păstrează un loc liber de entități până revine, așa că sala de așteptare primește mai puține cât timp sunt servere scoase din funcțiune.
+	As a server off shift's: entities may take its place while it is out.	Ca al unui server în afara turei: entitățile îi pot ocupa locul cât timp lipsește.
 	At least	Cel puțin
 	At most	Cel mult
 	Availability	Disponibilitate
@@ -222,6 +224,7 @@
 	Jump to time	Salt la momentul
 	Keep at least in service	Menține cel puțin în funcțiune
 	Keep the time, without the estimate it came from	Păstrează timpul, fără estimarea din care provine
+	Kept while it restarts	Rezervat cât timp repornește
 	Keyboard Shortcuts…	Comenzi rapide de la tastatură…
 	Keyboard shortcuts saved	Comenzile rapide au fost salvate
 	Keyboard shortcuts unchanged	Comenzile rapide nu s-au modificat
@@ -299,6 +302,7 @@
 	Open a model first	Deschideți mai întâi un model
 	Open a model to simulate it	Deschideți un model pentru a-l simula
 	Open a model…	Deschide model…
+	Open to entities	Deschis entităților
 	Opened {file}	S-a deschis {file}
 	Open…	Deschide…
 	Or start from an example	Sau începeți cu un exemplu
@@ -320,6 +324,7 @@
 	Period {n} repeats	Perioada {n} se repetă
 	Period {n} starts	Perioada {n} începe
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioade în care se schimbă disponibilitatea, sosirile sau turele unui grup. Datele și orele se scriu 2026-01-31T09:00:00.
+	Place in the buffer of a server taken out:	Locul unui server scos din funcțiune în sala de așteptare:
 	Planned run time per item	Timp de execuție planificat pe piesă
 	Play	Redare
 	Points	Puncte

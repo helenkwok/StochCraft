@@ -58,6 +58,8 @@
 	Arrival limit	จำนวนขาเข้าสูงสุด
 	Arrivals	ขาเข้า
 	Arrivals by calendar	การมาถึงตามปฏิทิน
+	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	เหมือนเซิร์ฟเวอร์ที่ขัดข้อง: เซิร์ฟเวอร์จะกันที่ไว้หนึ่งที่ไม่ให้เอนทิตีเข้า จนกว่าจะกลับมา พื้นที่รอจึงรับได้น้อยลงขณะที่มีเซิร์ฟเวอร์ถูกนำออก
+	As a server off shift's: entities may take its place while it is out.	เหมือนเซิร์ฟเวอร์ที่อยู่นอกกะ: เอนทิตีเข้าใช้ที่ของเซิร์ฟเวอร์ได้ขณะที่เซิร์ฟเวอร์ไม่อยู่
 	At least	อย่างน้อย
 	At most	อย่างมาก
 	Availability	อัตราความพร้อมใช้งาน
@@ -222,6 +224,7 @@
 	Jump to time	ข้ามไปยังเวลา
 	Keep at least in service	คงไว้ในการใช้งานอย่างน้อย
 	Keep the time, without the estimate it came from	เก็บเวลาไว้ โดยไม่เก็บการประมาณที่มา
+	Kept while it restarts	จองไว้ระหว่างเริ่มระบบใหม่
 	Keyboard Shortcuts…	ปุ่มลัด…
 	Keyboard shortcuts saved	บันทึกปุ่มลัดแล้ว
 	Keyboard shortcuts unchanged	ปุ่มลัดไม่มีการเปลี่ยนแปลง
@@ -299,6 +302,7 @@
 	Open a model first	เปิดแบบจำลองก่อน
 	Open a model to simulate it	เปิดแบบจำลองเพื่อจำลองการทำงาน
 	Open a model…	เปิดแบบจำลอง…
+	Open to entities	เปิดให้เอนทิตี
 	Opened {file}	เปิด {file} แล้ว
 	Open…	เปิด…
 	Or start from an example	หรือเริ่มจากตัวอย่าง
@@ -320,6 +324,7 @@
 	Period {n} repeats	ช่วง {n} ซ้ำ
 	Period {n} starts	ช่วง {n} เริ่ม
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	ช่วงเวลาที่ความพร้อมใช้งาน การมาถึง หรือกะของกลุ่มทรัพยากรเปลี่ยนไป วันที่และเวลาเขียนเป็น 2026-01-31T09:00:00
+	Place in the buffer of a server taken out:	ที่ในพื้นที่รอของเซิร์ฟเวอร์ที่ถูกนำออก:
 	Planned run time per item	เวลาเดินเครื่องตามแผนต่อชิ้น
 	Play	เล่น
 	Points	จุด
