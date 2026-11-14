@@ -13,8 +13,8 @@ use stochcraft_des::{
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
     Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, HealthCheck, Model, Need,
-    OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, ResourcePool, Routing, Setup,
-    Timed,
+    OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, QueueLimit, ResourcePool, Routing,
+    Setup, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -156,27 +156,77 @@ impl Compiled {
             .iter()
             .map(|&n| (0..n.max(1)).map(|_| Store::new(&ctx)).collect())
             .collect();
+        let end = warmup + duration;
+        let calendars = Calendars::new(&self.model, end);
         // A finite buffer's places: one per unit plus the waiting room. An entity holds one from
         // the moment it gets in (waiting, in service, or blocked on its way out) until it has
         // left, so a sender finding none free is blocked (or, for a source, loses its arrival).
+        // A waiting room by timetable or per working server holds no places: a limit on the
+        // number waiting instead ([`QueueLimit`]).
         let places: Vec<Option<Rc<Places>>> = elements
             .iter()
-            .map(|e| match e.kind {
+            .enumerate()
+            .map(|(i, e)| match &e.kind {
                 ElementKind::Server {
                     queue_capacity: Some(q),
+                    queue_limit,
                     ..
-                } => Some(Rc::new(Places {
-                    // Every unit's place, on shift or not.
-                    pool: Resource::new(
-                        &ctx,
-                        u64::from(e.kind.most_units().unwrap_or(0)) + u64::from(q),
-                    ),
-                    held: RefCell::new(BTreeMap::new()),
-                    watchers: RefCell::new(Vec::new()),
-                })),
+                } => {
+                    let room = match queue_limit {
+                        // Every unit's place, on shift or not.
+                        QueueLimit::Fixed => Room::Fixed(Resource::new(
+                            &ctx,
+                            u64::from(e.kind.most_units().unwrap_or(0)) + u64::from(*q),
+                        )),
+                        QueueLimit::ByShift(timed) => {
+                            let steps = calendars
+                                .timeline(timed)
+                                .into_iter()
+                                .map(|(t, k)| {
+                                    (t, k.and_then(|k| timed.get(k)).map_or(*q, |x| x.value))
+                                })
+                                .collect();
+                            Room::Limit(Limit::new(&ctx, i, &stats, LimitRule::ByShift(steps)))
+                        }
+                        QueueLimit::PerWorkingServer => Room::Limit(Limit::new(
+                            &ctx,
+                            i,
+                            &stats,
+                            LimitRule::PerWorkingServer(*q),
+                        )),
+                    };
+                    Some(Rc::new(Places {
+                        room,
+                        held: RefCell::new(BTreeMap::new()),
+                        watchers: RefCell::new(Vec::new()),
+                        away: RefCell::new(Weak::new()),
+                    }))
+                }
                 _ => None,
             })
             .collect();
+        // A limit by timetable that rises lets in those waiting for room then.
+        for p in places.iter().flatten() {
+            if let Room::Limit(Limit {
+                rule: LimitRule::ByShift(steps),
+                ..
+            }) = &p.room
+                && steps.len() > 1
+            {
+                let (c, p, times) = (
+                    ctx.clone(),
+                    Rc::clone(p),
+                    steps.iter().skip(1).map(|(t, _)| *t).collect::<Vec<f64>>(),
+                );
+                sim.spawn(async move {
+                    for t in times {
+                        let now = c.now();
+                        c.hold(t - now).await;
+                        p.notify();
+                    }
+                });
+            }
+        }
         // Shortest-queue gateways: an element sending into one routes through it itself, so
         // what it sends to is the gateway's ways.
         let routes_itself = |i: usize| {
@@ -197,7 +247,7 @@ impl Compiled {
                 .get(i)
                 .into_iter()
                 .flatten()
-                .filter(|r| !r.abandoned)
+                .filter(|r| !r.abandoned && !r.turned_away)
                 .flat_map(|r| {
                     if routes_itself(r.to) {
                         self.routes
@@ -235,8 +285,6 @@ impl Compiled {
                 })
             })
             .collect();
-        let end = warmup + duration;
-        let calendars = Calendars::new(&self.model, end);
         let units: Vec<Vec<(f64, u32)>> = self
             .model
             .resources
@@ -364,6 +412,9 @@ impl Compiled {
                 })
             })
             .collect();
+        // Each finite waiting room's way out for those turned away, if it has one. Kept here
+        // (the rooms hold them weakly, since a way can lead back to its own room).
+        let mut aways: Vec<Rc<Away>> = Vec::new();
         for ((i, element), rng) in elements.iter().enumerate().zip(streams) {
             let routed = |r: &Route| {
                 let mut port = plain_port(r)?;
@@ -373,7 +424,7 @@ impl Compiled {
             let routes = self.routes.get(i).into_iter().flatten();
             let outs: Vec<Out> = routes
                 .clone()
-                .filter(|r| !r.abandoned)
+                .filter(|r| !r.abandoned && !r.turned_away)
                 .filter_map(|r| {
                     Some(Out {
                         port: routed(r)?,
@@ -386,6 +437,18 @@ impl Compiled {
             let patient = patients.get(i).cloned().flatten();
             if let Some(p) = &patient {
                 *p.way.borrow_mut() = routes.clone().filter(|r| r.abandoned).find_map(routed);
+            }
+            if let (Some(way), Some(p)) = (
+                routes.clone().filter(|r| r.turned_away).find_map(routed),
+                places.get(i).and_then(Option::as_ref),
+            ) {
+                let away = Rc::new(Away {
+                    index: i,
+                    ctx: ctx.clone(),
+                    way,
+                });
+                *p.away.borrow_mut() = Rc::downgrade(&away);
+                aways.push(away);
             }
             let Some(ins) = inputs.get(i).cloned() else {
                 continue;
@@ -536,6 +599,7 @@ impl Compiled {
             sim,
             stats,
             pools,
+            _aways: aways,
             feeds_buffer,
             feeds_transfer,
             warmup,
@@ -581,6 +645,8 @@ pub struct Live<'a> {
     sim: Sim,
     stats: Rc<Vec<RefCell<BlockStats>>>,
     pools: Rc<Pools>,
+    /// The ways out for entities turned away, which the finite waiting rooms hold weakly.
+    _aways: Vec<Rc<Away>>,
     feeds_buffer: Vec<bool>,
     feeds_transfer: Vec<bool>,
     warmup: f64,
@@ -968,7 +1034,8 @@ pub(crate) struct BlockStats {
     /// Time each entity that left waited for room in the next buffer (blocking after service).
     blocked_time: Tally,
     /// Entities lost here. A server with a finite buffer: arrivals from sources turned away
-    /// because the buffer was full (they never entered). A source: its own arrivals lost that
+    /// because the buffer was full (they never entered), or, with a way out for those turned
+    /// away, any entity turned away (each time). A source: its own arrivals lost that
     /// way (they entered and never left; the same arrival counts at the full buffer too). An
     /// exclusive gateway: entities with no connection to take (no condition held and there is
     /// no default), which leave the model there; or, routing to the shortest queue, arrivals
@@ -1118,9 +1185,25 @@ impl UnitBook {
             s.states.starved.set(now, f64::from(capacity));
             s.staffed.set(now, f64::from(capacity));
         });
-        Rc::new(Self {
+        let book = Rc::new(Self {
             doing: RefCell::new(vec![Doing::default(); capacity as usize]),
-        })
+        });
+        if let Some(p) = &env.places {
+            p.watch_units(&book);
+        }
+        book
+    }
+
+    /// The units working now (up, not out and on shift, as a health check counts them), and
+    /// of those the idle ones (holding no entity).
+    fn working_and_idle(&self) -> (usize, usize) {
+        let doing = self.doing.borrow();
+        let working = doing.iter().filter(|d| !d.down && !d.out && !d.off);
+        let idle = working
+            .clone()
+            .filter(|d| !d.processing && !d.holding && !d.paused)
+            .count();
+        (working.count(), idle)
     }
 
     fn state(&self, d: Doing) -> UnitState {
@@ -1171,6 +1254,11 @@ impl UnitBook {
             (from, self.state(*d))
         };
         Self::count(env, from, to);
+        // A unit taking an entity, coming free, or working again: a limit on those waiting
+        // may let more in.
+        if let Some(p) = &env.places {
+            p.notify();
+        }
     }
 
     /// Whether unit `u` holds a finished entity (blocked, or through a transfer).
@@ -1636,15 +1724,178 @@ struct Port {
     patient: Option<Weak<Patient>>,
 }
 
-/// A finite buffer's places (see [`Compiled::run_for`]), with the one each entity there holds.
+/// A finite buffer's places (see [`Compiled::run_for`]), with the one each entity there holds;
+/// or, for a waiting room by timetable or per working server, its limit on those waiting.
 struct Places {
-    pool: Resource,
+    room: Room,
     held: RefCell<BTreeMap<u64, ResourceGuard>>,
-    /// Woken whenever a place here is given back (routers waiting for room on any way).
+    /// Woken whenever a place here is given back, or the room may have room again (routers
+    /// waiting for room on any way).
     watchers: RefCell<Vec<Signal>>,
+    /// The server's way out for entities turned away, if it has one.
+    away: RefCell<Weak<Away>>,
+}
+
+/// How a finite waiting room admits entities ([`QueueLimit`]).
+enum Room {
+    /// A place for every unit plus the waiting room, held from entering until leaving.
+    Fixed(Resource),
+    /// A limit on the number waiting that changes over time.
+    Limit(Limit),
+}
+
+/// A limit on the entities waiting at a server ([`QueueLimit::ByShift`] and
+/// [`QueueLimit::PerWorkingServer`]): an entity is admitted when those waiting (in the queue
+/// or in transfer here) less the idle working units are fewer than the limit now.
+struct Limit {
+    ctx: Ctx,
+    /// The server (its statistics).
+    index: usize,
+    stats: Rc<Vec<RefCell<BlockStats>>>,
+    rule: LimitRule,
+    /// The server's units, once it runs.
+    units: RefCell<Weak<UnitBook>>,
+    /// Woken whenever the room may have room again.
+    changed: Signal,
+}
+
+enum LimitRule {
+    /// From each time on, until the next, the most waiting (the first at 0).
+    ByShift(Vec<(f64, u32)>),
+    /// The most waiting per working unit.
+    PerWorkingServer(u32),
+}
+
+impl Limit {
+    fn new(ctx: &Ctx, index: usize, stats: &Rc<Vec<RefCell<BlockStats>>>, rule: LimitRule) -> Self {
+        Self {
+            ctx: ctx.clone(),
+            index,
+            stats: Rc::clone(stats),
+            rule,
+            units: RefCell::new(Weak::new()),
+            changed: Signal::new(ctx),
+        }
+    }
+
+    /// Whether an entity is admitted now.
+    fn admits(&self) -> bool {
+        let waiting = self.stats.get(self.index).map_or(0.0, |s| {
+            let s = s.borrow();
+            s.waiting.value() + s.transit.value()
+        });
+        let (working, idle) = self
+            .units
+            .borrow()
+            .upgrade()
+            .map_or((0, 0), |book| book.working_and_idle());
+        let limit = match &self.rule {
+            LimitRule::ByShift(steps) => {
+                let now = self.ctx.now();
+                let k = steps.partition_point(|(t, _)| *t <= now);
+                steps
+                    .get(k.saturating_sub(1))
+                    .map_or(0.0, |(_, n)| f64::from(*n))
+            }
+            LimitRule::PerWorkingServer(n) => f64::from(*n) * working as f64,
+        };
+        waiting - (idle as f64) < limit
+    }
+}
+
+/// A server's way out for entities turned away ([`stochcraft_model::Connection::turned_away`]).
+struct Away {
+    /// The server.
+    index: usize,
+    ctx: Ctx,
+    way: Port,
+}
+
+impl Away {
+    /// `e`, turned away, takes the way at once; it waits for room there on its own, as a
+    /// process, if the way can hold it up.
+    fn take(&self, e: Entity) {
+        let way = self.way.clone();
+        if way.may_block() {
+            let c = self.ctx.clone();
+            self.ctx.spawn_tagged(tag(self.index), async move {
+                way.deliver(&c, e).await;
+            });
+        } else {
+            way.dispatch(&self.ctx, e);
+        }
+    }
 }
 
 impl Places {
+    /// Whether entities finding no room here are turned away, rather than wait for it.
+    fn turns_away(&self) -> bool {
+        self.away.borrow().strong_count() > 0
+    }
+
+    /// Waits for room for entity `id` and takes it.
+    async fn wait_room(&self, id: u64) {
+        match &self.room {
+            Room::Fixed(pool) => {
+                let guard = pool.acquire().await;
+                self.enter(id, guard);
+            }
+            Room::Limit(l) => {
+                // Nothing waits between seeing room and taking it.
+                while !l.admits() {
+                    l.changed.wait().await;
+                }
+            }
+        }
+    }
+
+    /// Takes room for entity `id` if there is some now (for places, a place freed at this
+    /// instant counts) and returns `true`; else `false`.
+    async fn try_room(&self, id: u64) -> bool {
+        match &self.room {
+            Room::Fixed(pool) => match pool.acquire_within(0.0).await {
+                Ok(guard) => {
+                    self.enter(id, guard);
+                    true
+                }
+                Err(_) => false,
+            },
+            Room::Limit(l) => l.admits(),
+        }
+    }
+
+    /// A place for a unit to keep for itself, if one is free ([`reserve_place`]); never with a
+    /// limit on those waiting, which holds no places.
+    fn reserve(&self) -> Option<ResourceGuard> {
+        match &self.room {
+            Room::Fixed(pool) => pool.try_acquire(),
+            Room::Limit(_) => None,
+        }
+    }
+
+    /// The server's units now run: a limit counts them.
+    fn watch_units(&self, book: &Rc<UnitBook>) {
+        if let Room::Limit(l) = &self.room {
+            *l.units.borrow_mut() = Rc::downgrade(book);
+        }
+    }
+
+    /// With a limit on those waiting: the room may have room again, so whoever waits for it
+    /// looks again. Places tell their waiters themselves.
+    fn notify(&self) {
+        if let Room::Limit(l) = &self.room {
+            l.changed.notify_all();
+            for w in self.watchers.borrow().iter() {
+                w.notify_all();
+            }
+        }
+    }
+
+    /// The way out for entities turned away, if there is one.
+    fn away(&self) -> Option<Rc<Away>> {
+        self.away.borrow().upgrade()
+    }
+
     /// Takes the place `guard` for entity `id`, as it gets in.
     fn enter(&self, id: u64, guard: ResourceGuard) {
         self.held.borrow_mut().insert(id, guard);
@@ -1670,11 +1921,16 @@ impl Places {
                 w.notify_all();
             }
         }
+        // One fewer may be waiting (one gave up).
+        self.notify();
     }
 
-    /// Whether a place is free now.
+    /// Whether a place is free now (or, with a limit, an entity is admitted now).
     fn has_room(&self) -> bool {
-        self.pool.in_use() < self.pool.capacity()
+        match &self.room {
+            Room::Fixed(pool) => pool.in_use() < pool.capacity(),
+            Room::Limit(l) => l.admits(),
+        }
     }
 
     /// Gives back a place held for no entity (a broken unit's, [`reserve_place`]).
@@ -1996,9 +2252,8 @@ impl Router {
     async fn route_now(&self, e: &Entity) -> Option<Port> {
         let way = self.choose()?.clone();
         if let Some(p) = &way.places {
-            // `choose` found a free place, which a request takes at once.
-            let guard = p.pool.acquire().await;
-            p.enter(e.id, guard);
+            // `choose` found room, which a request takes at once.
+            p.wait_room(e.id).await;
         }
         Some(way)
     }
@@ -2013,11 +2268,12 @@ impl Port {
         })
     }
 
-    /// Whether sending here can be held up by a full buffer.
+    /// Whether sending here can be held up by a full buffer (not one that turns away those
+    /// finding no room).
     fn may_block(&self) -> bool {
         match &self.router {
             Some(r) => r.may_block(),
-            None => self.places.is_some(),
+            None => self.places.as_ref().is_some_and(|p| !p.turns_away()),
         }
     }
 
@@ -2059,24 +2315,45 @@ impl Port {
 
     /// Waits for a place in the next element's finite buffer, if it has one, and takes it for
     /// `e`; returns where `e` goes: here, or, through a shortest-queue gateway, the way chosen.
-    async fn make_room(&self, e: &mut Entity) -> Port {
+    /// `None` if the buffer turns away those finding no room and has none now: then `e` goes
+    /// to [`Port::turn_away`] instead.
+    async fn make_room(&self, e: &mut Entity) -> Option<Port> {
         if let Some(r) = &self.router {
             self.enter_gateway(r, e);
             let way = r.route(e).await;
             self.leave_gateway(r, false);
-            return way;
+            return Some(way);
         }
         if let Some(p) = &self.places {
-            let guard = p.pool.acquire().await;
-            p.enter(e.id, guard);
+            if p.turns_away() {
+                if !p.try_room(e.id).await {
+                    return None;
+                }
+            } else {
+                p.wait_room(e.id).await;
+            }
         }
-        self.clone()
+        Some(self.clone())
     }
 
-    /// Sends `e`, first waiting for room in a finite buffer; any transfer goes on by itself.
+    /// Sends `e`, first waiting for room in a finite buffer (or, finding none in one that turns
+    /// away, down its way for those); any transfer goes on by itself.
     async fn deliver(&self, ctx: &Ctx, mut e: Entity) {
-        let to = self.make_room(&mut e).await;
-        to.dispatch(ctx, e);
+        match self.make_room(&mut e).await {
+            Some(to) => to.dispatch(ctx, e),
+            None => self.turn_away(e),
+        }
+    }
+
+    /// `e` finds no room in the next element's finite buffer: it is turned away, counted as
+    /// lost there, and takes the element's way out for those, if it has one (else it is gone).
+    fn turn_away(&self, e: Entity) {
+        if let Some(s) = self.stats.get(self.index) {
+            s.borrow_mut().lost += 1;
+        }
+        if let Some(away) = self.places.as_ref().and_then(|p| p.away()) {
+            away.take(e);
+        }
     }
 
     /// Sends `e`, which already has its place: at once, or into a transfer that goes on by
@@ -2176,16 +2453,11 @@ impl Port {
                 None => false,
             };
         }
-        if let Some(p) = &self.places {
-            match p.pool.acquire_within(0.0).await {
-                Ok(guard) => p.enter(e.id, guard),
-                Err(_) => {
-                    if let Some(s) = self.stats.get(self.index) {
-                        s.borrow_mut().lost += 1;
-                    }
-                    return false;
-                }
-            }
+        if let Some(p) = &self.places
+            && !p.try_room(e.id).await
+        {
+            self.turn_away(e);
+            return false;
         }
         self.dispatch(ctx, e);
         true
@@ -2643,7 +2915,7 @@ fn reserve_place(units: &RefCell<Vec<Unit>>, u: usize, places: Option<&Rc<Places
         && !x.busy
         && x.reserved.is_none()
     {
-        x.reserved = p.pool.try_acquire();
+        x.reserved = p.reserve();
     }
 }
 
@@ -3339,6 +3611,8 @@ async fn move_on(
         }
     }
     let out = env.borrow().out.clone();
+    // The next element, if it turns the entity away (finding no room there).
+    let mut turned = None;
     // Where the entity goes: the next element, or the way a shortest-queue gateway there gives.
     let out = match out {
         Some(out) if out.may_block() => {
@@ -3353,15 +3627,24 @@ async fn move_on(
             // It gave up while held: the place it got next goes back unused. (Through a
             // shortest-queue gateway, the gateway has counted it passing.)
             if let Some(work) = gave_up(entity.id) {
-                if let Some(p) = &to.places {
+                if let Some(p) = to.as_ref().and_then(|to| to.places.as_ref()) {
                     p.leave(entity.id);
                 }
                 return discard(env, entity.id, work, keep);
             }
             env.borrow().with_stats(|s| s.blocked_time.add(now - start));
-            Some(to)
+            if to.is_none() {
+                turned = Some(out);
+            }
+            to
         }
-        Some(out) => Some(out.make_room(&mut entity).await),
+        Some(out) => {
+            let to = out.make_room(&mut entity).await;
+            if to.is_none() {
+                turned = Some(out);
+            }
+            to
+        }
         None => None,
     };
     if let Some(p) = &patient {
@@ -3396,6 +3679,9 @@ async fn move_on(
             };
             if let Some(out) = out {
                 out.travel(ctx, entity, transfer);
+            } else if let Some(t) = turned {
+                // Turned away there, it has left here all the same.
+                t.turn_away(entity);
             }
             kept
         }
