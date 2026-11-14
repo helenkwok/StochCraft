@@ -58,7 +58,7 @@
 	Arrival limit	আগমনের সীমা
 	Arrivals	আগমন
 	Arrivals by calendar	ক্যালেন্ডার অনুযায়ী আগমন
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	বিকল সার্ভারের মতো: সে ফিরে না আসা পর্যন্ত একটি জায়গা ধরে রাখে, যেখানে কোনো সত্তা ঢুকতে পারে না, তাই সার্ভার সরানো থাকার সময় অপেক্ষার ঘরে কম সত্তা ধরে।
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	বিকল সার্ভারের মতো: সে ফিরে না আসা পর্যন্ত একটি জায়গা ধরে রাখে, যেখানে কোনো সত্তা ঢুকতে পারে না, তাই সার্ভার সরানো থাকার সময় অপেক্ষার ঘরে কম সত্তা ধরে।
 	As a server off shift's: entities may take its place while it is out.	শিফটের বাইরে থাকা সার্ভারের মতো: সার্ভারটি বাইরে থাকার সময় সত্তারা তার জায়গা দখল করতে পারে।
 	At least	অন্তত
 	At most	সর্বোচ্চ
@@ -324,7 +324,7 @@
 	Period {n} repeats	সময়কাল {n} পুনরাবৃত্তি
 	Period {n} starts	সময়কাল {n} শুরু
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	যে সময়কালে প্রাপ্যতা, আগমন বা কোনো পুলের শিফট বদলায়। তারিখ ও সময় লেখা হয় 2026-01-31T09:00:00 রূপে।
-	Place in the buffer of a server taken out:	সরিয়ে নেওয়া সার্ভারের অপেক্ষার ঘরে জায়গা:
+	Place in the waiting room of a server taken out:	সরিয়ে নেওয়া সার্ভারের অপেক্ষার ঘরে জায়গা:
 	Planned run time per item	প্রতি অংশে পরিকল্পিত চলার সময়
 	Play	চালান
 	Points	বিন্দু

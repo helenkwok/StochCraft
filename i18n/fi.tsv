@@ -58,7 +58,7 @@
 	Arrival limit	Saapumisraja
 	Arrivals	Saapumiset
 	Arrivals by calendar	Saapumiset kalenterin mukaan
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Kuten vikaantuneella palvelimella: se pitää yhden paikan vapaana entiteeteistä, kunnes palaa, joten odotustilaan mahtuu vähemmän, kun palvelimia on poissa käytöstä.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Kuten vikaantuneella palvelimella: se pitää yhden paikan vapaana entiteeteistä, kunnes palaa, joten odotustilaan mahtuu vähemmän, kun palvelimia on poissa käytöstä.
 	As a server off shift's: entities may take its place while it is out.	Kuten vuoron ulkopuolella olevalla palvelimella: entiteetit voivat ottaa sen paikan käyttöönsä, kun se on poissa.
 	At least	Vähintään
 	At most	Enintään
@@ -324,7 +324,7 @@
 	Period {n} repeats	Jakso {n} toistuu
 	Period {n} starts	Jakso {n} alkaa
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Jaksot, joiden aikana käytettävyys, saapumiset tai poolin vuorot muuttuvat. Päivämäärät ja ajat kirjoitetaan muodossa 2026-01-31T09:00:00.
-	Place in the buffer of a server taken out:	Käytöstä poistetun palvelimen paikka odotustilassa:
+	Place in the waiting room of a server taken out:	Käytöstä poistetun palvelimen paikka odotustilassa:
 	Planned run time per item	Suunniteltu käyntiaika osaa kohden
 	Play	Toista
 	Points	Pisteet

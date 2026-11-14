@@ -454,17 +454,17 @@ engine's messages (validation, file notes) are English too.
   ta, te, bn, ka, kk and sq as before, the Finding heading everywhere (no source gives it as a
   heading over results), and the third string's word order in ko and ja, where the sentence is split
   in two.
-- The rows for the place in the buffer of a server taken out by a health check ("Place in the buffer
-  of a server taken out:", "Kept while it restarts", "Open to entities" and their two hover texts)
-  were machine-drafted with Claude Code from the plain meaning of the English, reusing each
-  catalog's own words for waiting room, server, taken out (as in "Units taken out by health
-  checks"), failed ("Time failed"), off shift, restart and entities. No catalog has a word for
-  buffer, so the buffer is the catalog's Waiting room, the label of the field that sets it (ru and
-  uk, whose word is "waiting places", say "among the waiting places"); place is the language's word
-  for a seat or slot, and "Kept" and "Open" agree with it. "Take its place" is rendered as occupy,
-  not replace. Not checked against any other source. Not reviewed by native speakers. The least
-  certain are lo, th, ta, te, bn and ka; kk and hu, whose waiting-room word already holds the word
-  for place; and ja and ko, where the choices read as actions (secure, open).
+- The rows for the place in the waiting room of a server taken out by a health check ("Place in the
+  waiting room of a server taken out:", "Kept while it restarts", "Open to entities" and their two
+  hover texts) were machine-drafted with Claude Code from the plain meaning of the English, reusing
+  each catalog's own words for waiting room, server, taken out (as in "Units taken out by health
+  checks"), failed ("Time failed"), off shift, restart and entities. The English says waiting room,
+  as the field that sets it is labelled Waiting room, and so does every catalog (ru and uk, whose
+  word is "waiting places", say "among the waiting places"); place is the language's word for a seat
+  or slot, and "Kept" and "Open" agree with it. "Take its place" is rendered as occupy, not replace.
+  Not checked against any other source. Not reviewed by native speakers. The least certain are lo,
+  th, ta, te, bn and ka; kk and hu, whose waiting-room word already holds the word for place; and ja
+  and ko, where the choices read as actions (secure, open).
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -58,7 +58,7 @@
 	Arrival limit	Limite degli arrivi
 	Arrivals	Arrivi
 	Arrivals by calendar	Arrivi per calendario
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Come quello di un server guasto: tiene un posto libero da entità finché non torna, quindi la sala d'attesa ne accoglie meno mentre ci sono server fuori servizio.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Come quello di un server guasto: tiene un posto libero da entità finché non torna, quindi la sala d'attesa ne accoglie meno mentre ci sono server fuori servizio.
 	As a server off shift's: entities may take its place while it is out.	Come quello di un server fuori turno: le entità possono occuparne il posto mentre è assente.
 	At least	Almeno
 	At most	Al massimo
@@ -324,7 +324,7 @@
 	Period {n} repeats	Ripetizione del periodo {n}
 	Period {n} starts	Inizio del periodo {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Periodi in cui cambiano la disponibilità, gli arrivi o i turni di un pool. Date e ore si scrivono 2026-01-31T09:00:00.
-	Place in the buffer of a server taken out:	Posto di un server messo fuori servizio nella sala d'attesa:
+	Place in the waiting room of a server taken out:	Posto di un server messo fuori servizio nella sala d'attesa:
 	Planned run time per item	Tempo di esecuzione pianificato per pezzo
 	Play	Riproduci
 	Points	Punti

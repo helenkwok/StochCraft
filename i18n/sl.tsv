@@ -58,7 +58,7 @@
 	Arrival limit	Omejitev prihodov
 	Arrivals	Prihodi
 	Arrivals by calendar	Prihodi po koledarju
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Kot pri strežniku v okvari: drži eno mesto, ki ga entitete ne smejo zasesti, dokler se ne vrne, zato čakalnica sprejme manj, dokler so strežniki vzeti iz delovanja.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Kot pri strežniku v okvari: drži eno mesto, ki ga entitete ne smejo zasesti, dokler se ne vrne, zato čakalnica sprejme manj, dokler so strežniki vzeti iz delovanja.
 	As a server off shift's: entities may take its place while it is out.	Kot pri strežniku zunaj izmene: entitete lahko zasedejo njegovo mesto, dokler ga ni.
 	At least	Vsaj
 	At most	Največ
@@ -324,7 +324,7 @@
 	Period {n} repeats	Ponavljanje obdobja {n}
 	Period {n} starts	Začetek obdobja {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Obdobja, ko se spremenijo razpoložljivost, prihodi ali izmene skupine. Datumi in časi se pišejo kot 2026-01-31T09:00:00.
-	Place in the buffer of a server taken out:	Mesto strežnika, vzetega iz delovanja, v čakalnici:
+	Place in the waiting room of a server taken out:	Mesto strežnika, vzetega iz delovanja, v čakalnici:
 	Planned run time per item	Načrtovani čas delovanja na kos
 	Play	Predvajaj
 	Points	Točke

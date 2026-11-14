@@ -58,7 +58,7 @@
 	Arrival limit	Geliş sınırı
 	Arrivals	Gelişler
 	Arrivals by calendar	Takvime göre gelişler
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Arızalı bir sunucununki gibi: geri dönene kadar bir yeri varlıklara kapalı tutar, bu yüzden sunucular hizmet dışındayken bekleme alanı daha az alır.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Arızalı bir sunucununki gibi: geri dönene kadar bir yeri varlıklara kapalı tutar, bu yüzden sunucular hizmet dışındayken bekleme alanı daha az alır.
 	As a server off shift's: entities may take its place while it is out.	Vardiya dışındaki bir sunucununki gibi: o yokken varlıklar onun yerini kullanabilir.
 	At least	En az
 	At most	En çok
@@ -324,7 +324,7 @@
 	Period {n} repeats	{n}. dönem tekrarı
 	Period {n} starts	{n}. dönem başlangıcı
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Kullanılabilirliğin, gelişlerin veya bir havuzun vardiyalarının değiştiği dönemler. Tarih ve saatler 2026-01-31T09:00:00 biçiminde yazılır.
-	Place in the buffer of a server taken out:	Hizmetten çıkarılan sunucunun bekleme alanındaki yeri:
+	Place in the waiting room of a server taken out:	Hizmetten çıkarılan sunucunun bekleme alanındaki yeri:
 	Planned run time per item	Parça başına planlanan çalışma süresi
 	Play	Oynat
 	Points	Noktalar

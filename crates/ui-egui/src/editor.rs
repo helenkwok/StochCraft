@@ -1253,10 +1253,10 @@ impl App {
                 .unwrap_or("reserved")
                 .to_owned();
             let mut chosen = place.clone();
-            ui.label(t("Place in the buffer of a server taken out:"));
+            ui.label(t("Place in the waiting room of a server taken out:"));
             ui.radio_value(&mut chosen, "reserved".to_owned(), t("Kept while it restarts"))
                 .on_hover_text(t(
-                    "As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.",
+                    "As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.",
                 ));
             ui.radio_value(&mut chosen, "open".to_owned(), t("Open to entities"))
                 .on_hover_text(t(

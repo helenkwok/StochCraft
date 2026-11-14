@@ -58,7 +58,7 @@
 	Arrival limit	Érkezési korlát
 	Arrivals	Érkezések
 	Arrivals by calendar	Érkezések naptár szerint
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Mint egy meghibásodott szerveré: egy helyet entitásoktól szabadon tart, amíg vissza nem tér, így a várakozóhely kevesebbet fogad be, amíg szerverek ki vannak vonva.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Mint egy meghibásodott szerveré: egy helyet entitásoktól szabadon tart, amíg vissza nem tér, így a várakozóhely kevesebbet fogad be, amíg szerverek ki vannak vonva.
 	As a server off shift's: entities may take its place while it is out.	Mint egy műszakon kívüli szerveré: entitások elfoglalhatják a helyét, amíg távol van.
 	At least	Legalább
 	At most	Legfeljebb
@@ -324,7 +324,7 @@
 	Period {n} repeats	{n}. időszak ismétlődése
 	Period {n} starts	{n}. időszak kezdete
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Időszakok, amikor a rendelkezésre állás, az érkezések vagy egy készlet műszakjai változnak. A dátumot és az időt így kell írni: 2026-01-31T09:00:00.
-	Place in the buffer of a server taken out:	Kivont szerver helye a várakozóhelyen:
+	Place in the waiting room of a server taken out:	Kivont szerver helye a várakozóhelyen:
 	Planned run time per item	Tervezett futási idő darabonként
 	Play	Lejátszás
 	Points	Pontok

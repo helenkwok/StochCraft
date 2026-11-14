@@ -58,7 +58,7 @@
 	Arrival limit	도착 수 제한
 	Arrivals	도착
 	Arrivals by calendar	캘린더별 도착
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	고장 난 서버의 자리처럼: 돌아올 때까지 엔터티가 들어올 수 없는 자리를 하나 유지하므로, 서버가 제외된 동안 대기실에 들어갈 수 있는 수가 줄어듭니다.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	고장 난 서버의 자리처럼: 돌아올 때까지 엔터티가 들어올 수 없는 자리를 하나 유지하므로, 서버가 제외된 동안 대기실에 들어갈 수 있는 수가 줄어듭니다.
 	As a server off shift's: entities may take its place while it is out.	근무 외 서버의 자리처럼: 서버가 빠져 있는 동안 엔터티가 그 자리를 차지할 수 있습니다.
 	At least	이상
 	At most	이하
@@ -324,7 +324,7 @@
 	Period {n} repeats	기간 {n} 반복
 	Period {n} starts	기간 {n} 시작
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	가용 여부, 도착 또는 풀의 근무조가 바뀌는 기간입니다. 날짜와 시간은 2026-01-31T09:00:00 형식으로 씁니다.
-	Place in the buffer of a server taken out:	제외된 서버의 대기실 자리:
+	Place in the waiting room of a server taken out:	제외된 서버의 대기실 자리:
 	Planned run time per item	부품당 계획 가동 시간
 	Play	재생
 	Points	점

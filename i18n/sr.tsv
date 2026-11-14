@@ -58,7 +58,7 @@
 	Arrival limit	Ограничење долазака
 	Arrivals	Доласци
 	Arrivals by calendar	Доласци по календару
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Као код сервера у квару: држи једно место у које ентитети не могу да уђу док се не врати, па чекаоница прима мање док су сервери избачени из рада.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Као код сервера у квару: држи једно место у које ентитети не могу да уђу док се не врати, па чекаоница прима мање док су сервери избачени из рада.
 	As a server off shift's: entities may take its place while it is out.	Као код сервера ван смене: ентитети могу да заузму његово место док га нема.
 	At least	Најмање
 	At most	Највише
@@ -324,7 +324,7 @@
 	Period {n} repeats	Период {n} се понавља
 	Period {n} starts	Период {n} почиње
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Периоди у којима се мењају расположивост, доласци или смене фонда. Датуми и времена пишу се као 2026-01-31T09:00:00.
-	Place in the buffer of a server taken out:	Место сервера избаченог из рада у чекаоници:
+	Place in the waiting room of a server taken out:	Место сервера избаченог из рада у чекаоници:
 	Planned run time per item	Планирано време рада по делу
 	Play	Пусти
 	Points	Тачке

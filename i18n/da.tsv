@@ -58,7 +58,7 @@
 	Arrival limit	Grænse for ankomster
 	Arrivals	Ankomster
 	Arrivals by calendar	Ankomster pr. kalender
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Som for en server med nedbrud: den holder en plads fri for enheder, til den er tilbage, så venteværelset rummer færre, mens servere er ude af drift.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Som for en server med nedbrud: den holder en plads fri for enheder, til den er tilbage, så venteværelset rummer færre, mens servere er ude af drift.
 	As a server off shift's: entities may take its place while it is out.	Som for en server uden for skift: enheder må optage dens plads, mens den er væk.
 	At least	Mindst
 	At most	Højst
@@ -324,7 +324,7 @@
 	Period {n} repeats	Periode {n} gentages
 	Period {n} starts	Periode {n} starter
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Perioder, hvor tilgængelighed, ankomster eller en puljes skift ændres. Datoer og klokkeslæt skrives 2026-01-31T09:00:00.
-	Place in the buffer of a server taken out:	Plads i venteværelset for en server taget ud af drift:
+	Place in the waiting room of a server taken out:	Plads i venteværelset for en server taget ud af drift:
 	Planned run time per item	Planlagt kørselstid pr. emne
 	Play	Afspil
 	Points	Punkter

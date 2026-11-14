@@ -58,7 +58,7 @@
 	Arrival limit	Ограничение числа прибытий
 	Arrivals	Прибытия
 	Arrivals by calendar	Прибытия по календарю
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Как у отказавшего сервера: он держит одно место свободным от сущностей, пока не вернётся, поэтому мест ожидания для сущностей меньше, пока серверы выведены.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Как у отказавшего сервера: он держит одно место свободным от сущностей, пока не вернётся, поэтому мест ожидания для сущностей меньше, пока серверы выведены.
 	As a server off shift's: entities may take its place while it is out.	Как у сервера вне смены: сущности могут занять его место, пока его нет.
 	At least	Не меньше
 	At most	Не больше
@@ -324,7 +324,7 @@
 	Period {n} repeats	Повтор периода {n}
 	Period {n} starts	Начало периода {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Периоды, когда меняются доступность, прибытия или смены пула. Дата и время записываются как 2026-01-31T09:00:00.
-	Place in the buffer of a server taken out:	Место выведенного сервера среди мест ожидания:
+	Place in the waiting room of a server taken out:	Место выведенного сервера среди мест ожидания:
 	Planned run time per item	Плановое время работы на деталь
 	Play	Воспроизвести
 	Points	Точки

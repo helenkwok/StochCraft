@@ -58,7 +58,7 @@
 	Arrival limit	Όριο αφίξεων
 	Arrivals	Αφίξεις
 	Arrivals by calendar	Αφίξεις ανά ημερολόγιο
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	Όπως ενός εξυπηρετητή με βλάβη: κρατά μία θέση ελεύθερη από οντότητες μέχρι να επιστρέψει, οπότε ο χώρος αναμονής χωρά λιγότερες όσο εξυπηρετητές είναι εκτός λειτουργίας.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	Όπως ενός εξυπηρετητή με βλάβη: κρατά μία θέση ελεύθερη από οντότητες μέχρι να επιστρέψει, οπότε ο χώρος αναμονής χωρά λιγότερες όσο εξυπηρετητές είναι εκτός λειτουργίας.
 	As a server off shift's: entities may take its place while it is out.	Όπως ενός εξυπηρετητή εκτός βάρδιας: οι οντότητες μπορούν να καταλάβουν τη θέση του όσο λείπει.
 	At least	Τουλάχιστον
 	At most	Το πολύ
@@ -324,7 +324,7 @@
 	Period {n} repeats	Επανάληψη περιόδου {n}
 	Period {n} starts	Έναρξη περιόδου {n}
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	Περίοδοι κατά τις οποίες αλλάζουν η διαθεσιμότητα, οι αφίξεις ή οι βάρδιες μιας δεξαμενής. Οι ημερομηνίες και οι ώρες γράφονται ως 2026-01-31T09:00:00.
-	Place in the buffer of a server taken out:	Θέση εξυπηρετητή εκτός λειτουργίας στον χώρο αναμονής:
+	Place in the waiting room of a server taken out:	Θέση εξυπηρετητή εκτός λειτουργίας στον χώρο αναμονής:
 	Planned run time per item	Προγραμματισμένος χρόνος λειτουργίας ανά τεμάχιο
 	Play	Αναπαραγωγή
 	Points	Σημεία

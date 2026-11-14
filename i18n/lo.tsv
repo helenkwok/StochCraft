@@ -58,7 +58,7 @@
 	Arrival limit	ຂີດຈຳກັດການມາຮອດ
 	Arrivals	ການມາຮອດ
 	Arrivals by calendar	ການມາຮອດຕາມປະຕິທິນ
-	As a failed server's: it keeps a place free of entities until it is back, so the buffer holds fewer while servers are out.	ຄືກັບແມ່ຂ່າຍທີ່ເສຍ: ມັນຈອງບ່ອນໜຶ່ງໄວ້ບໍ່ໃຫ້ເອນທິຕີເຂົ້າ ຈົນກວ່າມັນຈະກັບມາ ດັ່ງນັ້ນຫ້ອງລໍຖ້າຈຶ່ງຮັບໄດ້ໜ້ອຍລົງ ໃນຂະນະທີ່ມີແມ່ຂ່າຍຖືກເອົາອອກ.
+	As a failed server's: it keeps a place free of entities until it is back, so the waiting room holds fewer while servers are out.	ຄືກັບແມ່ຂ່າຍທີ່ເສຍ: ມັນຈອງບ່ອນໜຶ່ງໄວ້ບໍ່ໃຫ້ເອນທິຕີເຂົ້າ ຈົນກວ່າມັນຈະກັບມາ ດັ່ງນັ້ນຫ້ອງລໍຖ້າຈຶ່ງຮັບໄດ້ໜ້ອຍລົງ ໃນຂະນະທີ່ມີແມ່ຂ່າຍຖືກເອົາອອກ.
 	As a server off shift's: entities may take its place while it is out.	ຄືກັບແມ່ຂ່າຍທີ່ຢູ່ນອກກະ: ເອນທິຕີສາມາດເຂົ້າໃຊ້ບ່ອນຂອງມັນໄດ້ ໃນຂະນະທີ່ມັນບໍ່ຢູ່.
 	At least	ຢ່າງໜ້ອຍ
 	At most	ຢ່າງຫຼາຍ
@@ -324,7 +324,7 @@
 	Period {n} repeats	ໄລຍະ {n} ເຮັດຊ້ຳ
 	Period {n} starts	ໄລຍະ {n} ເລີ່ມ
 	Periods when availability, arrivals or a pool's shifts change. Dates and times are written 2026-01-31T09:00:00.	ໄລຍະເວລາທີ່ຄວາມພ້ອມໃຊ້, ການມາຮອດ ຫຼື ກະຂອງກຸ່ມຊັບພະຍາກອນປ່ຽນແປງ. ວັນທີ ແລະ ເວລາຂຽນເປັນ 2026-01-31T09:00:00.
-	Place in the buffer of a server taken out:	ບ່ອນໃນຫ້ອງລໍຖ້າຂອງແມ່ຂ່າຍທີ່ຖືກເອົາອອກ:
+	Place in the waiting room of a server taken out:	ບ່ອນໃນຫ້ອງລໍຖ້າຂອງແມ່ຂ່າຍທີ່ຖືກເອົາອອກ:
 	Planned run time per item	ເວລາເດີນເຄື່ອງຕາມແຜນຕໍ່ຊິ້ນ
 	Play	ຫຼິ້ນ
 	Points	ຈຸດ
