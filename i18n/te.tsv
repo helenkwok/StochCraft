@@ -178,6 +178,7 @@
 	Failure interrupts the job	లోపం పనికి అంతరాయం కలిగిస్తుంది
 	Family	కుటుంబం
 	File	ఫైల్
+	Finish, then go off	పూర్తి చేసి, ఆపై షిఫ్ట్ ముగించండి
 	Finished at {time} {unit}	{time} {unit} వద్ద ముగిసింది
 	Fit	సరిపెట్టు
 	Fit the diagram to the view	రేఖాచిత్రాన్ని వీక్షణకు సరిపెట్టు
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ఈ నిష్క్రమణల నుంచి కస్టమర్లు ఎన్ని భాగాలు కోరుకుంటున్నారు; అప్పుడు ఫలితాలు టాక్ట్ (అందుబాటులో ఉన్న సమయాన్ని డిమాండ్‌తో భాగించినది) మరియు ప్రతి పని యొక్క సైకిల్ సమయాన్ని చూపుతాయి.
 	In use	వాడుకలో ఉంది
 	Inside over time	కాలక్రమంలో లోపల
+	Job under way on a server going off shift:	షిఫ్ట్ ముగుస్తున్న సర్వర్‌పై జరుగుతున్న పని:
 	Job under way on a server taken out:	తొలగించిన సర్వర్‌పై జరుగుతున్న పని:
 	Jump	వెళ్ళు
 	Jump to time	సమయానికి వెళ్ళు
@@ -364,6 +366,7 @@
 	Result, down and up	ఫలితం, కిందకు, పైకి
 	Results	ఫలితాలు
 	Resume after restart	పునఃప్రారంభం తర్వాత కొనసాగించండి
+	Resume when back on shift	షిఫ్ట్‌కు తిరిగి వచ్చాక కొనసాగించండి
 	Retry elsewhere	వేరే చోట మళ్లీ ప్రయత్నించండి
 	Rework	పునఃపని
 	Rework on {id}	{id} వద్ద పునఃపని
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	కనెక్షన్ తెగిపోతుంది, క్లయింట్ మళ్లీ ప్రయత్నిస్తుంది: ఎంటిటీ వెంటనే క్యూ ముందుకు తిరిగి వెళ్తుంది, దానిపై చేసిన పని వృథా అవుతుంది.
 	The entity waits on its server and the job carries on with what was left once the server is back.	ఎంటిటీ తన సర్వర్ వద్దే వేచి ఉంటుంది, సర్వర్ తిరిగి రాగానే మిగిలిన దానితో పని కొనసాగుతుంది.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	అంతరం {share} లక్ష్య వాటా కంటే కిందకు వెళ్తుంది, కాబట్టి వాటా చేరినట్లు 95% విశ్వాసంతో చూపబడలేదు; మరిన్ని పునరావృత్త అమలులు దానిని సన్నగా చేస్తాయి.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	పని వెంటనే ఆగిపోతుంది: ఎంటిటీ షిఫ్ట్‌లో ఉన్న ఏ సర్వర్ కోసమైనా క్యూ ముందుకు తిరిగి వెళ్తుంది, దానిపై చేసిన పని వృథా అవుతుంది.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	పని వెంటనే ఆగిపోతుంది; ఎంటిటీ తన సర్వర్ వద్దే వేచి ఉంటుంది, ఆ సర్వర్ మళ్లీ షిఫ్ట్‌లోకి రాగానే మిగిలిన దానితో పని కొనసాగుతుంది.
 	The last task with a resource it finished at	భాగం చివరిగా దాటిన వనరు అవసరమైన పని
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ఆపే షరతు వరకు సగటు సమయం దానిని చేరిన పునరావృత్త అమలులపై మాత్రమే; మిగిలినవి వాటి సమయ పరిమితి వరకు నడిచాయి.
 	The model changed, so watching stopped	నమూనా మారింది, కాబట్టి గమనించడం ఆగిపోయింది
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	పరిమాణ నిర్ణయం కనుగొన్న యూనిట్‌లు ఇప్పుడు మోడల్‌లో ఉన్నాయి
 	The model: its experiment, connections and problems	నమూనా: దాని ప్రయోగం, అనుసంధానాలు మరియు సమస్యలు
 	The name is empty or already used.	పేరు ఖాళీగా ఉంది లేదా ఇప్పటికే వాడుకలో ఉంది.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	సర్వర్ తన దగ్గర ఉన్న పనిని పూర్తి చేసి, ఆపై షిఫ్ట్ ముగిస్తుంది; అప్పటివరకు అది షిఫ్ట్‌లో ఉన్నట్లు లెక్కించబడుతుంది.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ప్రతి విలువకు సమానమైన లేదా తక్కువైన పునరావృత్త అమలుల వాటా. పట్టీ నిజమైన పంపిణీని {confidence} విశ్వాసంతో కలిగి ఉంటుంది.
 	The values are numbers, separated by semicolons or spaces	విలువలు సెమీకోలన్ లేదా ఖాళీతో వేరు చేసిన సంఖ్యలు
 	The whole clock	మొత్తం సమయం

@@ -292,6 +292,43 @@ engine's messages (validation, file notes) are English too.
   before, the unsourced health-check words above, the load-balancer nouns formed from titles,
   the "Fails above…" label everywhere, and sr and sr-latn, written in ekavian but keeping the
   catalogs' Prosječan and Vrijeme in the rows that follow "Mean number inside" and "Time failed".
+- The rows for units by shift (PR "server shifts": the choice for a job under way on a server
+  going off shift, Finish, then go off or Resume when back on shift, with their hints, and the
+  hint of Retry elsewhere in that choice) were machine-drafted with Claude Code from the plain
+  meaning of the English and each catalog's existing words. The label, the radios and the hints
+  are built on the health-check rows "Job under way on a server taken out:", "Retry elsewhere",
+  "Resume after restart", "The connection drops and the client tries again…" and "The entity
+  waits on its server…", whose words for server, entity, queue, job and wasted work they repeat,
+  and the shift word is the one in the catalog's "Time off shift", "per shift" and "Per shift
+  needs a calendar…" rows (de Schicht, fr poste, es and it turno, nl werktijd, pl zmiana, ru
+  смена, ja シフト, ko 근무, zh 当班/當班, …). On shift is that word with the catalog's usual
+  preposition (de in der Schicht, fr en poste, es and gl de turno, pt-br no turno, ru на смене);
+  going off shift is said as "whose shift ends" or "leaves the shift" (de dessen Schicht endet,
+  fr quitte son poste, da går af skift, ru у которого кончается смена), and zh uses 下班, a word
+  the catalog did not have. The sources checked were Wikipedia's article on shift work in its
+  interlanguage versions and IATE for shift work, shift, work shift, on shift and off shift. The
+  article exists in de, es, fi, fr, gl, id, ja, ko, nl, nb, pt, ro, ru, sv, tr, vi and zh; its
+  titles use the catalogs' words in de Schichtarbeit, es and pt trabajo/trabalho por turnos, fi
+  Vuorotyö, fr Travail posté, gl Traballo por quendas, ja シフト勤務, nb Skift- og turnusarbeid,
+  ru Сменная работа, sv Skiftarbete, tr Vardiyalı iş and vi Việc làm theo ca, share only a root
+  in ko 교대 근무 and zh 輪班工作制 (근무, 班), and differ in ro Muncă în schimburi, id Kerja
+  bergilir and nl Ploegendienst, where the catalogs' tură, sif and werktijd were kept for
+  consistency with their existing rows (nl has both ploeg, in "per ploeg", and werktijd, in "Time
+  off shift"; the new rows follow werktijd). IATE's shift work entry is built on the catalogs'
+  words (cs práce na směny, da skiftearbejde, de Schichtarbeit, el εργασία κατά βάρδιες, es and
+  pt trabajo/trabalho por turnos, et vahetustega töö, fi vuorotyö, fr travail posté, hr rad u
+  smjenama, it servizio a turni, lt pamaininis darbas, pl praca w systemie zmianowym, sk práca na
+  zmeny, sv skiftarbete), and nl gives ploegenarbeid; its entries for shift in the work sense
+  give da skift, de Schicht, el βάρδια, fi vuoro, it turno di lavoro, nl ploeg, pt turno and sv
+  skift. IATE had nothing matching work shift, on shift or off shift, so the on-shift and
+  going-off-shift phrases are formed from the catalogs' words and are not sourced. nl says
+  "binnen werktijd" for on shift and lets the server end its werktijd, because "uit dienst" is
+  already the health check's phrase. In bg, et, fi, ka and tr the on-shift phrase is the same as
+  the catalog's "per shift" row (на смяна, vahetuses, vuorossa, ცვლაში, vardiyada), which is
+  worth a look. th uses a space where the English has a semicolon, as its catalog has no
+  semicolons. Not reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka, kk
+  and sq as before, the going-off-shift phrasing everywhere, and sr and sr-latn, written in
+  ekavian (smena) though their "Time off shift" row says "Vrijeme van smjene".
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

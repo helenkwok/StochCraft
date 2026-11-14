@@ -178,6 +178,7 @@
 	Failure interrupts the job	Haveri avbryter arbetet
 	Family	Familj
 	File	Arkiv
+	Finish, then go off	Gör klart och gå sedan av skift
 	Finished at {time} {unit}	Klar vid {time} {unit}
 	Fit	Anpassa
 	Fit the diagram to the view	Anpassa diagrammet till vyn
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hur många detaljer kunderna vill ha från dessa avgångar; resultaten visar då takten (tillgänglig tid delad med efterfrågan) och varje uppgifts cykeltid.
 	In use	Används
 	Inside over time	Inne över tid
+	Job under way on a server going off shift:	Pågående jobb på en server som går av skift:
 	Job under way on a server taken out:	Pågående jobb på en server som tas ur drift:
 	Jump	Gå
 	Jump to time	Gå till tidpunkt
@@ -364,6 +366,7 @@
 	Result, down and up	Resultat, nedåt och uppåt
 	Results	Resultat
 	Resume after restart	Återuppta efter omstart
+	Resume when back on shift	Återuppta när den är på skift igen
 	Retry elsewhere	Försök igen på annat håll
 	Rework	Omarbetning
 	Rework on {id}	Omarbetning på {id}
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Anslutningen bryts och klienten försöker igen: entiteten går genast tillbaka först i kön, och arbetet som gjorts på den är bortkastat.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteten väntar vid sin server och jobbet fortsätter med det som var kvar när servern är tillbaka.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet når under målandelen {share}, så det är inte visat med 95 % säkerhet att andelen nås; fler replikationer skulle göra det smalare.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Jobbet avbryts genast: entiteten går tillbaka först i kön för vilken server på skift som helst, och arbetet som gjorts på den är bortkastat.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Jobbet avbryts genast; entiteten väntar vid sin server och jobbet fortsätter med det som var kvar när den servern är på skift igen.
 	The last task with a resource it finished at	Den sista uppgiften med resurs som detaljen gick igenom
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Den genomsnittliga tiden till stoppvillkoret gäller bara replikationerna som nådde det; de övriga körde till sin tidsgräns.
 	The model changed, so watching stopped	Modellen ändrades, så följningen stoppades
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	Modellen har nu enheterna som dimensioneringen hittade
 	The model: its experiment, connections and problems	Modellen: experiment, anslutningar och problem
 	The name is empty or already used.	Namnet är tomt eller används redan.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Servern gör klart jobbet den har och går sedan av skift; till dess räknas den som på skift.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen replikationer vid eller under varje värde. Bandet innehåller den sanna fördelningen med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Värdena är tal åtskilda med semikolon eller mellanslag
 	The whole clock	Hela tiden

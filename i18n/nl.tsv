@@ -178,6 +178,7 @@
 	Failure interrupts the job	Storing onderbreekt de bewerking
 	Family	Familie
 	File	Bestand
+	Finish, then go off	Afmaken, dan einde werktijd
 	Finished at {time} {unit}	Klaar op {time} {unit}
 	Fit	Passend maken
 	Fit the diagram to the view	Diagram passend in de weergave maken
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hoeveel onderdelen klanten van deze vertrekken willen; de resultaten tonen dan de takt (de beschikbare tijd gedeeld door de vraag) en de cyclustijd van elke taak.
 	In use	In gebruik
 	Inside over time	Binnen in de tijd
+	Job under way on a server going off shift:	Bewerking in uitvoering op een server waarvan de werktijd eindigt:
 	Job under way on a server taken out:	Bewerking in uitvoering op een server die uit dienst gaat:
 	Jump	Ga
 	Jump to time	Ga naar tijdstip
@@ -364,6 +366,7 @@
 	Result, down and up	Resultaat, omlaag en omhoog
 	Results	Resultaten
 	Resume after restart	Hervatten na herstart
+	Resume when back on shift	Hervatten zodra weer binnen werktijd
 	Retry elsewhere	Elders opnieuw proberen
 	Rework	Herbewerking
 	Rework on {id}	Herbewerking op {id}
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	De verbinding valt weg en de client probeert het opnieuw: de entiteit gaat meteen terug naar de kop van de wachtrij, en het werk dat eraan gedaan is, is verspild.
 	The entity waits on its server and the job carries on with what was left once the server is back.	De entiteit wacht bij haar server en de bewerking gaat verder met wat er over was zodra de server terug is.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Het interval reikt tot onder het doelaandeel van {share}, dus het is niet met 95% betrouwbaarheid aangetoond dat het aandeel wordt gehaald; meer herhalingen zouden het smaller maken.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	De bewerking stopt meteen: de entiteit gaat terug naar de kop van de wachtrij voor een willekeurige server binnen werktijd, en het werk dat eraan gedaan is, is verspild.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	De bewerking stopt meteen; de entiteit wacht bij haar server en de bewerking gaat verder met wat er over was zodra die server weer binnen werktijd is.
 	The last task with a resource it finished at	De laatste taak met een hulpbron die het onderdeel doorliep
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	De gemiddelde tijd tot de stopvoorwaarde is alleen over de herhalingen die haar haalden; de andere liepen tot hun tijdslimiet.
 	The model changed, so watching stopped	Het model is gewijzigd, dus het volgen is gestopt
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	Het model heeft nu de eenheden die het dimensioneren vond
 	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
 	The name is empty or already used.	De naam is leeg of al in gebruik.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	De server maakt de bewerking die hij heeft af en beëindigt dan zijn werktijd; tot dan telt hij als binnen werktijd.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Het aandeel herhalingen op of onder elke waarde. De band bevat de ware verdeling met {confidence} betrouwbaarheid.
 	The values are numbers, separated by semicolons or spaces	De waarden zijn getallen, gescheiden door puntkomma's of spaties
 	The whole clock	Alle tijd

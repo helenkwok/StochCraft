@@ -178,6 +178,7 @@
 	Failure interrupts the job	Awaria przerywa pracę
 	Family	Rodzina
 	File	Plik
+	Finish, then go off	Dokończ, potem zejdź ze zmiany
 	Finished at {time} {unit}	Zakończono w chwili {time} {unit}
 	Fit	Dopasuj
 	Fit the diagram to the view	Dopasuj diagram do widoku
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Ile części klienci chcą z tych wyjść; wyniki pokazują wtedy takt (dostępny czas podzielony przez popyt) i czas cyklu każdego zadania.
 	In use	W użyciu
 	Inside over time	Wewnątrz w czasie
+	Job under way on a server going off shift:	Praca w toku na serwerze kończącym zmianę:
 	Job under way on a server taken out:	Praca w toku na wyłączanym serwerze:
 	Jump	Przejdź
 	Jump to time	Przejdź do chwili
@@ -364,6 +366,7 @@
 	Result, down and up	Wynik, w dół i w górę
 	Results	Wyniki
 	Resume after restart	Wznów po ponownym uruchomieniu
+	Resume when back on shift	Wznów po powrocie na zmianę
 	Retry elsewhere	Ponów gdzie indziej
 	Rework	Poprawki
 	Rework on {id}	Poprawki na {id}
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Połączenie zostaje zerwane i klient próbuje ponownie: jednostka od razu wraca na początek kolejki, a wykonana na niej praca jest zmarnowana.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Jednostka czeka przy swoim serwerze, a praca jest kontynuowana od tego, co zostało, gdy serwer wróci.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Przedział sięga poniżej udziału docelowego {share}, więc nie wykazano z 95% ufnością, że udział jest osiągnięty; więcej replikacji by go zawęziło.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Praca od razu się zatrzymuje: jednostka wraca na początek kolejki do dowolnego serwera na zmianie, a wykonana na niej praca jest zmarnowana.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Praca od razu się zatrzymuje; jednostka czeka przy swoim serwerze, a praca jest kontynuowana od tego, co zostało, gdy ten serwer znów jest na zmianie.
 	The last task with a resource it finished at	Ostatnie zadanie z zasobem, przez które przeszła część
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Średni czas do warunku zatrzymania dotyczy tylko replikacji, które go spełniły; pozostałe trwały do swojego limitu czasu.
 	The model changed, so watching stopped	Model się zmienił, więc obserwacja została zakończona
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	Model ma teraz jednostki znalezione przy doborze
 	The model: its experiment, connections and problems	Model: eksperyment, połączenia i problemy
 	The name is empty or already used.	Nazwa jest pusta lub już używana.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Serwer kończy pracę, którą ma, a potem schodzi ze zmiany; do tego czasu liczy się jako na zmianie.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Udział replikacji równych lub mniejszych od każdej wartości. Pasmo zawiera prawdziwy rozkład z ufnością {confidence}.
 	The values are numbers, separated by semicolons or spaces	Wartości to liczby oddzielone średnikami lub spacjami
 	The whole clock	Cały czas

@@ -178,6 +178,7 @@
 	Failure interrupts the job	A falha interrompe o trabalho
 	Family	Família
 	File	Arquivo
+	Finish, then go off	Terminar e depois sair do turno
 	Finished at {time} {unit}	Terminou em {time} {unit}
 	Fit	Ajustar
 	Fit the diagram to the view	Ajustar o diagrama à visualização
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Quantas peças os clientes querem destas saídas; os resultados mostram então o takt (o tempo disponível dividido pela demanda) e o tempo de ciclo de cada tarefa.
 	In use	Em uso
 	Inside over time	Dentro ao longo do tempo
+	Job under way on a server going off shift:	Trabalho em andamento em um servidor que sai do turno:
 	Job under way on a server taken out:	Trabalho em andamento em um servidor retirado:
 	Jump	Ir
 	Jump to time	Ir para o instante
@@ -364,6 +366,7 @@
 	Result, down and up	Resultado, para baixo e para cima
 	Results	Resultados
 	Resume after restart	Retomar após o reinício
+	Resume when back on shift	Retomar ao voltar ao turno
 	Retry elsewhere	Tentar de novo em outro
 	Rework	Retrabalho
 	Rework on {id}	Retrabalho em {id}
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	A conexão cai e o cliente tenta de novo: a entidade volta na hora para o início da fila, e o trabalho feito nela é desperdiçado.
 	The entity waits on its server and the job carries on with what was left once the server is back.	A entidade espera no seu servidor e o trabalho continua com o que faltava assim que o servidor volta.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	O intervalo vai abaixo da parcela-meta de {share}, então não está mostrado com 95% de confiança que a parcela é atingida; mais replicações o estreitariam.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	O trabalho para na hora: a entidade volta para o início da fila para qualquer servidor no turno, e o trabalho feito nela é desperdiçado.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	O trabalho para na hora; a entidade espera no seu servidor e o trabalho continua com o que faltava assim que esse servidor volta ao turno.
 	The last task with a resource it finished at	A última tarefa com recurso pela qual a peça passou
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	O tempo médio até a condição de parada é só sobre as replicações que a atingiram; as demais foram até o seu limite de tempo.
 	The model changed, so watching stopped	O modelo mudou, então o acompanhamento parou
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	O modelo agora tem as unidades encontradas no dimensionamento
 	The model: its experiment, connections and problems	O modelo: experimento, conexões e problemas
 	The name is empty or already used.	O nome está vazio ou já está em uso.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	O servidor termina o trabalho que tem e depois sai do turno; até lá, conta como no turno.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	A parcela de replicações iguais ou abaixo de cada valor. A faixa contém a distribuição real com confiança de {confidence}.
 	The values are numbers, separated by semicolons or spaces	Os valores são números separados por ponto e vírgula ou espaços
 	The whole clock	Todo o tempo

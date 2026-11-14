@@ -178,6 +178,7 @@
 	Failure interrupts the job	Vika keskeyttää työn
 	Family	Jakaumaperhe
 	File	Tiedosto
+	Finish, then go off	Tee valmiiksi, lopeta sitten vuoro
 	Finished at {time} {unit}	Valmis hetkellä {time} {unit}
 	Fit	Sovita
 	Fit the diagram to the view	Sovita kaavio näkymään
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kuinka monta osaa asiakkaat haluavat näistä poistumisista; tulokset näyttävät silloin tahdin (käytettävissä oleva aika jaettuna kysynnällä) ja kunkin tehtävän sykliajan.
 	In use	Käytössä
 	Inside over time	Sisällä ajan mittaan
+	Job under way on a server going off shift:	Kesken oleva työ palvelimella, jonka vuoro päättyy:
 	Job under way on a server taken out:	Kesken oleva työ käytöstä poistetulla palvelimella:
 	Jump	Siirry
 	Jump to time	Siirry hetkeen
@@ -364,6 +366,7 @@
 	Result, down and up	Tulos, alas ja ylös
 	Results	Tulokset
 	Resume after restart	Jatka uudelleenkäynnistyksen jälkeen
+	Resume when back on shift	Jatka, kun palvelin palaa vuoroon
 	Retry elsewhere	Yritä uudelleen muualla
 	Rework	Uudelleentyöstö
 	Rework on {id}	Uudelleentyöstö virrassa {id}
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Yhteys katkeaa ja asiakas yrittää uudelleen: entiteetti palaa heti jonon kärkeen, ja siihen tehty työ hukataan.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteetti odottaa palvelimellaan, ja työ jatkuu jäljellä olevasta, kun palvelin on palannut.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Väli ulottuu alle tavoiteosuuden {share}, joten osuuden saavuttamista ei ole osoitettu 95 %:n luottamuksella; useampi toisto kaventaisi sitä.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Työ keskeytyy heti: entiteetti palaa jonon kärkeen odottamaan mitä tahansa vuorossa olevaa palvelinta, ja siihen tehty työ hukataan.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Työ keskeytyy heti; entiteetti odottaa palvelimellaan, ja työ jatkuu jäljellä olevasta, kun tuo palvelin on taas vuorossa.
 	The last task with a resource it finished at	Viimeisin resurssia käyttävä tehtävä, jonka osa läpäisi
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskimääräinen aika pysäytysehtoon lasketaan vain toistoista, jotka saavuttivat sen; muut ajettiin aikarajaansa asti.
 	The model changed, so watching stopped	Malli muuttui, joten seuraaminen lopetettiin
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	Mallissa on nyt mitoituksen löytämät yksiköt
 	The model: its experiment, connections and problems	Malli: koe, yhteydet ja ongelmat
 	The name is empty or already used.	Nimi on tyhjä tai jo käytössä.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Palvelin tekee kesken olevan työnsä valmiiksi ja lopettaa sitten vuoronsa; siihen asti se lasketaan vuorossa olevaksi.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Niiden toistojen osuus, jotka ovat kunkin arvon suuruisia tai pienempiä. Vyöhyke sisältää todellisen jakauman {confidence} luottamuksella.
 	The values are numbers, separated by semicolons or spaces	Arvot ovat lukuja, jotka erotetaan puolipisteillä tai välilyönneillä
 	The whole clock	Koko aika

@@ -178,6 +178,7 @@
 	Failure interrupts the job	Avaria întrerupe lucrul
 	Family	Familie
 	File	Fișier
+	Finish, then go off	Terminare, apoi ieșire din tură
 	Finished at {time} {unit}	Încheiat la {time} {unit}
 	Fit	Încadrează
 	Fit the diagram to the view	Încadrează diagrama în vizualizare
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Câte piese vor clienții de la aceste plecări; rezultatele arată atunci taktul (timpul disponibil împărțit la cerere) și timpul de ciclu al fiecărei sarcini.
 	In use	În uz
 	Inside over time	În interior în timp
+	Job under way on a server going off shift:	Lucru în curs pe un server care iese din tură:
 	Job under way on a server taken out:	Lucru în curs pe un server scos din funcțiune:
 	Jump	Salt
 	Jump to time	Salt la momentul
@@ -364,6 +366,7 @@
 	Result, down and up	Rezultat, în jos și în sus
 	Results	Rezultate
 	Resume after restart	Reluare după repornire
+	Resume when back on shift	Reluare la revenirea în tură
 	Retry elsewhere	Reîncercare în altă parte
 	Rework	Reprelucrare
 	Rework on {id}	Reprelucrare pe {id}
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Conexiunea cade și clientul încearcă din nou: entitatea revine imediat în capul cozii, iar munca făcută pe ea este irosită.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entitatea așteaptă la serverul ei, iar lucrul continuă cu ce a rămas după ce serverul revine.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalul coboară sub ponderea țintă de {share}, deci nu este arătat cu 95% încredere că ponderea este atinsă; mai multe replicări l-ar îngusta.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Lucrul se oprește imediat: entitatea revine în capul cozii pentru orice server aflat în tură, iar munca făcută pe ea este irosită.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Lucrul se oprește imediat; entitatea așteaptă la serverul ei, iar lucrul continuă cu ce a rămas după ce acel server revine în tură.
 	The last task with a resource it finished at	Ultima sarcină cu resursă prin care a trecut piesa
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Timpul mediu până la condiția de oprire este doar pe replicările care au atins-o; celelalte au rulat până la limita de timp.
 	The model changed, so watching stopped	Modelul s-a schimbat, așa că urmărirea s-a oprit
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	Modelul are acum unitățile găsite la dimensionare
 	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
 	The name is empty or already used.	Numele este gol sau deja folosit.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Serverul termină lucrul pe care îl are, apoi iese din tură; până atunci contează ca fiind în tură.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Ponderea replicărilor egale cu sau sub fiecare valoare. Banda conține distribuția reală cu o încredere de {confidence}.
 	The values are numbers, separated by semicolons or spaces	Valorile sunt numere separate prin punct și virgulă sau spații
 	The whole clock	Tot timpul

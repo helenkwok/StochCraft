@@ -178,6 +178,7 @@
 	Failure interrupts the job	გაუმართაობა წყვეტს სამუშაოს
 	Family	ოჯახი
 	File	ფაილი
+	Finish, then go off	დასრულება, შემდეგ ცვლის დატოვება
 	Finished at {time} {unit}	დასრულდა {time} {unit}-ზე
 	Fit	მორგება
 	Fit the diagram to the view	დიაგრამის ხედზე მორგება
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	რამდენ დეტალს ითხოვენ მომხმარებლები ამ გასვლებიდან; შედეგები მაშინ აჩვენებს ტაქტს (ხელმისაწვდომი დრო გაყოფილი მოთხოვნაზე) და თითოეული დავალების ციკლის დროს.
 	In use	გამოიყენება
 	Inside over time	შიგნით დროის მიხედვით
+	Job under way on a server going off shift:	ცვლიდან გამავალ სერვერზე მიმდინარე სამუშაო:
 	Job under way on a server taken out:	მუშაობიდან გამოყვანილ სერვერზე მიმდინარე სამუშაო:
 	Jump	გადასვლა
 	Jump to time	დროზე გადასვლა
@@ -364,6 +366,7 @@
 	Result, down and up	შედეგი, ქვემოთ და ზემოთ
 	Results	შედეგები
 	Resume after restart	გაგრძელება ხელახალი გაშვების შემდეგ
+	Resume when back on shift	გაგრძელება ცვლაში დაბრუნებისას
 	Retry elsewhere	სხვაგან ხელახლა ცდა
 	Rework	გადამუშავება
 	Rework on {id}	გადამუშავება ნაკადზე {id}
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	კავშირი წყდება და კლიენტი ხელახლა ცდილობს: ერთეული მაშინვე ბრუნდება რიგის თავში, ხოლო მასზე შესრულებული სამუშაო ფუჭდება.
 	The entity waits on its server and the job carries on with what was left once the server is back.	ერთეული ელოდება თავის სერვერთან და სამუშაო გრძელდება დარჩენილით, როგორც კი სერვერი დაბრუნდება.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ინტერვალი {share} სამიზნე წილზე დაბლა ჩადის, ამიტომ 95%-იანი სანდოობით არ არის ნაჩვენები, რომ წილი მიღწეულია; მეტი გამეორება მას შეავიწროებს.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	სამუშაო მაშინვე ჩერდება: ერთეული ბრუნდება რიგის თავში ცვლაში მყოფი ნებისმიერი სერვერისთვის, ხოლო მასზე შესრულებული სამუშაო ფუჭდება.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	სამუშაო მაშინვე ჩერდება; ერთეული ელოდება თავის სერვერთან და სამუშაო გრძელდება დარჩენილით, როგორც კი ეს სერვერი ისევ ცვლაში იქნება.
 	The last task with a resource it finished at	ბოლო დავალება რესურსით, რომელიც დეტალმა გაიარა
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	გაჩერების პირობამდე საშუალო დრო მხოლოდ იმ გამეორებებზეა გამოთვლილი, რომლებმაც მას მიაღწიეს; დანარჩენები დროის ლიმიტამდე გაგრძელდა.
 	The model changed, so watching stopped	მოდელი შეიცვალა, ამიტომ დაკვირვება შეწყდა
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	მოდელს ახლა აქვს ზომის შერჩევით ნაპოვნი ერთეულები
 	The model: its experiment, connections and problems	მოდელი: ექსპერიმენტი, კავშირები და პრობლემები
 	The name is empty or already used.	სახელი ცარიელია ან უკვე გამოყენებულია.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	სერვერი ასრულებს მიმდინარე სამუშაოს და შემდეგ ტოვებს ცვლას; მანამდე ის ცვლაში მყოფად ითვლება.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	გამეორებების წილი, რომლებიც თითოეულ მნიშვნელობაზე ნაკლები ან ტოლია. ზოლი შეიცავს ნამდვილ განაწილებას {confidence} სანდოობით.
 	The values are numbers, separated by semicolons or spaces	მნიშვნელობები რიცხვებია, გამოყოფილი წერტილმძიმით ან ჰარით
 	The whole clock	მთელი დრო

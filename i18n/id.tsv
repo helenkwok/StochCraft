@@ -178,6 +178,7 @@
 	Failure interrupts the job	Kerusakan menyela pekerjaan
 	Family	Keluarga
 	File	Berkas
+	Finish, then go off	Selesaikan, lalu akhiri sif
 	Finished at {time} {unit}	Selesai pada {time} {unit}
 	Fit	Paskan
 	Fit the diagram to the view	Paskan diagram ke tampilan
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Berapa komponen yang diinginkan pelanggan dari keberangkatan ini; hasilnya lalu menunjukkan takt (waktu tersedia dibagi permintaan) dan waktu siklus setiap tugas.
 	In use	Sedang dipakai
 	Inside over time	Di dalam dari waktu ke waktu
+	Job under way on a server going off shift:	Pekerjaan berjalan di server yang mengakhiri sif:
 	Job under way on a server taken out:	Pekerjaan berjalan di server yang dikeluarkan:
 	Jump	Lompat
 	Jump to time	Lompat ke waktu
@@ -364,6 +366,7 @@
 	Result, down and up	Hasil, turun dan naik
 	Results	Hasil
 	Resume after restart	Lanjutkan setelah mulai ulang
+	Resume when back on shift	Lanjutkan saat kembali dalam sif
 	Retry elsewhere	Coba lagi di tempat lain
 	Rework	Pengerjaan ulang
 	Rework on {id}	Pengerjaan ulang di {id}
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Koneksi terputus dan klien mencoba lagi: entitas langsung kembali ke depan antrean, dan pekerjaan yang sudah dilakukan padanya sia-sia.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entitas menunggu di servernya dan pekerjaan berlanjut dengan sisanya begitu server kembali.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak replikasi akan mempersempitnya.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Pekerjaan langsung berhenti: entitas kembali ke depan antrean untuk server mana pun yang sedang dalam sif, dan pekerjaan yang sudah dilakukan padanya sia-sia.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Pekerjaan langsung berhenti; entitas menunggu di servernya dan pekerjaan berlanjut dengan sisanya begitu server itu kembali dalam sif.
 	The last task with a resource it finished at	Tugas terakhir dengan sumber daya yang dilalui komponen
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas replikasi yang mencapainya; sisanya berjalan hingga batas waktunya.
 	The model changed, so watching stopped	Model berubah, jadi pengamatan dihentikan
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	Model kini memakai unit yang ditemukan penentuan ukuran
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
 	The name is empty or already used.	Nama kosong atau sudah dipakai.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Server menyelesaikan pekerjaan yang sedang dikerjakannya, lalu mengakhiri sif; sampai saat itu server dihitung masih dalam sif.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian replikasi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
 	The values are numbers, separated by semicolons or spaces	Nilai berupa angka yang dipisahkan titik koma atau spasi
 	The whole clock	Seluruh waktu

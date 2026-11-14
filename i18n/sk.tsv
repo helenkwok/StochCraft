@@ -178,6 +178,7 @@
 	Failure interrupts the job	Porucha preruší prácu
 	Family	Rodina
 	File	Súbor
+	Finish, then go off	Dokončiť, potom ukončiť zmenu
 	Finished at {time} {unit}	Dokončené v čase {time} {unit}
 	Fit	Prispôsobiť
 	Fit the diagram to the view	Prispôsobiť diagram zobrazeniu
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Koľko dielov chcú zákazníci z týchto odchodov; výsledky potom ukážu takt (dostupný čas delený dopytom) a čas cyklu každej úlohy.
 	In use	Používa sa
 	Inside over time	Vnútri v čase
+	Job under way on a server going off shift:	Rozpracovaná práca na serveri, ktorému končí zmena:
 	Job under way on a server taken out:	Rozpracovaná práca na vyradenom serveri:
 	Jump	Prejsť
 	Jump to time	Prejsť na čas
@@ -364,6 +366,7 @@
 	Result, down and up	Výsledok, nadol a nahor
 	Results	Výsledky
 	Resume after restart	Pokračovať po reštarte
+	Resume when back on shift	Pokračovať po návrate na zmenu
 	Retry elsewhere	Skúsiť znova inde
 	Rework	Prepracovanie
 	Rework on {id}	Prepracovanie na {id}
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Spojenie spadne a klient to skúsi znova: entita sa hneď vráti na začiatok radu a práca na nej vykonaná je zbytočná.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entita čaká pri svojom serveri a práca pokračuje so zvyškom, len čo je server späť.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval siaha pod cieľový podiel {share}, takže splnenie podielu nie je preukázané s 95 % spoľahlivosťou; viac replikácií by ho zúžilo.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Práca sa hneď zastaví: entita sa vráti na začiatok radu pre ktorýkoľvek server na zmene a práca na nej vykonaná je zbytočná.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Práca sa hneď zastaví; entita čaká pri svojom serveri a práca pokračuje so zvyškom, len čo je tento server opäť na zmene.
 	The last task with a resource it finished at	Posledná úloha so zdrojom, ktorou diel prešiel
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Priemerný čas do podmienky zastavenia je iba z replikácií, ktoré ju splnili; ostatné bežali do svojho časového limitu.
 	The model changed, so watching stopped	Model sa zmenil, preto sa sledovanie ukončilo
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	Model má teraz jednotky nájdené dimenzovaním
 	The model: its experiment, connections and problems	Model: experiment, prepojenia a problémy
 	The name is empty or already used.	Názov je prázdny alebo sa už používa.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Server dokončí prácu, ktorú má, a potom ukončí zmenu; dovtedy sa počíta ako na zmene.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Podiel replikácií rovných alebo menších než každá hodnota. Pás obsahuje skutočné rozdelenie so spoľahlivosťou {confidence}.
 	The values are numbers, separated by semicolons or spaces	Hodnoty sú čísla oddelené bodkočiarkami alebo medzerami
 	The whole clock	Celý čas

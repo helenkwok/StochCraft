@@ -178,6 +178,7 @@
 	Failure interrupts the job	Arıza işi keser
 	Family	Aile
 	File	Dosya
+	Finish, then go off	Bitir, sonra vardiyadan çık
 	Finished at {time} {unit}	{time} {unit} anında bitti
 	Fit	Sığdır
 	Fit the diagram to the view	Diyagramı görünüme sığdır
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Müşterilerin bu çıkışlardan kaç parça istediği; sonuçlar o zaman taktı (kullanılabilir sürenin talebe bölümü) ve her görevin döngü süresini gösterir.
 	In use	Kullanımda
 	Inside over time	Zaman içinde içeridekiler
+	Job under way on a server going off shift:	Vardiyası biten sunucuda süren iş:
 	Job under way on a server taken out:	Hizmetten çıkarılan sunucuda süren iş:
 	Jump	Git
 	Jump to time	Zamana git
@@ -364,6 +366,7 @@
 	Result, down and up	Sonuç, aşağı ve yukarı
 	Results	Sonuçlar
 	Resume after restart	Yeniden başlatmadan sonra sürdür
+	Resume when back on shift	Vardiyaya dönünce sürdür
 	Retry elsewhere	Başka yerde yeniden dene
 	Rework	Yeniden işleme
 	Rework on {id}	{id} üzerinde yeniden işleme
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Bağlantı kopar ve istemci yeniden dener: varlık hemen kuyruğun başına döner ve üzerinde yapılan iş boşa gider.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Varlık kendi sunucusunda bekler ve sunucu geri gelince iş kalan kısmıyla sürer.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Aralık {share} hedef oranının altına iniyor, bu yüzden oranın karşılandığı %95 güvenle gösterilmiş değil; daha fazla tekrar aralığı daraltır.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	İş hemen durur: varlık vardiyadaki herhangi bir sunucu için kuyruğun başına döner ve üzerinde yapılan iş boşa gider.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	İş hemen durur; varlık kendi sunucusunda bekler ve o sunucu yeniden vardiyaya gelince iş kalan kısmıyla sürer.
 	The last task with a resource it finished at	Parçanın geçtiği kaynak kullanan son görev
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Durdurma koşuluna kadarki ortalama süre yalnızca bu koşula ulaşan tekrarlara göredir; diğerleri süre sınırlarına kadar çalıştı.
 	The model changed, so watching stopped	Model değişti, bu nedenle izleme durduruldu
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	Modelde artık boyutlandırmanın bulduğu birimler var
 	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
 	The name is empty or already used.	Ad boş veya zaten kullanılıyor.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Sunucu elindeki işi bitirir, sonra vardiyadan çıkar; o zamana kadar vardiyada sayılır.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Her değere eşit veya altındaki tekrarların oranı. Bant, gerçek dağılımı {confidence} güvenle içerir.
 	The values are numbers, separated by semicolons or spaces	Değerler noktalı virgül veya boşlukla ayrılmış sayılardır
 	The whole clock	Tüm süre

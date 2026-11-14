@@ -178,6 +178,7 @@
 	Failure interrupts the job	বিকলতা কাজ থামিয়ে দেয়
 	Family	পরিবার
 	File	ফাইল
+	Finish, then go off	শেষ করে তারপর শিফট শেষ
 	Finished at {time} {unit}	{time} {unit}-এ শেষ হয়েছে
 	Fit	ফিট করুন
 	Fit the diagram to the view	ডায়াগ্রামটি দৃশ্যে ফিট করুন
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	গ্রাহকেরা এই প্রস্থান থেকে কতগুলো অংশ চান; তখন ফলাফলে টাক্ট (প্রাপ্য সময়কে চাহিদা দিয়ে ভাগ করে) এবং প্রতিটি কাজের সাইকেল টাইম দেখায়।
 	In use	ব্যবহৃত হচ্ছে
 	Inside over time	সময়ের সাথে ভিতরে
+	Job under way on a server going off shift:	শিফট শেষ হতে চলা সার্ভারে চলমান কাজ:
 	Job under way on a server taken out:	সরিয়ে নেওয়া সার্ভারে চলমান কাজ:
 	Jump	যান
 	Jump to time	সময়ে যান
@@ -364,6 +366,7 @@
 	Result, down and up	ফলাফল, নিচে ও উপরে
 	Results	ফলাফল
 	Resume after restart	পুনরায় চালুর পরে আবার শুরু
+	Resume when back on shift	শিফটে ফিরলে আবার শুরু
 	Retry elsewhere	অন্য কোথাও আবার চেষ্টা
 	Rework	পুনঃকাজ
 	Rework on {id}	{id}-এ পুনঃকাজ
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	সংযোগ বিচ্ছিন্ন হয় এবং ক্লায়েন্ট আবার চেষ্টা করে: সত্তাটি সঙ্গে সঙ্গে সারির সামনে ফিরে যায়, আর তার ওপর করা কাজ নষ্ট হয়।
 	The entity waits on its server and the job carries on with what was left once the server is back.	সত্তাটি তার সার্ভারে অপেক্ষা করে, আর সার্ভার ফিরে এলে বাকি অংশ নিয়ে কাজ চলতে থাকে।
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ব্যবধানটি {share} লক্ষ্য অংশের নিচে নেমে যায়, তাই অংশটি ৯৫% আস্থায় পূরণ হয়েছে বলে দেখানো যায় না; আরও পুনরাবৃত্তি এটিকে সরু করবে।
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	কাজটি সঙ্গে সঙ্গে থেমে যায়: সত্তাটি শিফটে থাকা যেকোনো সার্ভারের জন্য সারির সামনে ফিরে যায়, আর তার ওপর করা কাজ নষ্ট হয়।
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	কাজটি সঙ্গে সঙ্গে থেমে যায়; সত্তাটি তার সার্ভারে অপেক্ষা করে, আর সেই সার্ভার আবার শিফটে এলে বাকি অংশ নিয়ে কাজ চলতে থাকে।
 	The last task with a resource it finished at	শেষ যে সম্পদসহ কাজ অংশটি পার হয়েছে
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	থামার শর্ত পর্যন্ত গড় সময় কেবল সেই পুনরাবৃত্তিগুলোর উপর যেগুলো শর্তে পৌঁছেছে; বাকিগুলো তাদের সময়সীমা পর্যন্ত চলেছে।
 	The model changed, so watching stopped	মডেল বদলেছে, তাই দেখা বন্ধ হয়েছে
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	মডেলে এখন আকার নির্ধারণে পাওয়া এককগুলি আছে
 	The model: its experiment, connections and problems	মডেল: পরীক্ষা, সংযোগ ও সমস্যা
 	The name is empty or already used.	নামটি খালি বা আগেই ব্যবহৃত।
+	The server finishes the job it has, then goes off; until then it counts as on shift.	সার্ভারটি হাতের কাজটি শেষ করে, তারপর শিফট থেকে চলে যায়; ততক্ষণ সেটিকে শিফটে আছে বলে গণ্য করা হয়।
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	প্রতিটি মানের সমান বা কম পুনরাবৃত্তির অংশ। ব্যান্ডটি {confidence} আস্থায় প্রকৃত বণ্টন ধারণ করে।
 	The values are numbers, separated by semicolons or spaces	মানগুলি সেমিকোলন বা স্পেস দিয়ে আলাদা সংখ্যা
 	The whole clock	পুরো সময়

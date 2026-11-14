@@ -178,6 +178,7 @@
 	Failure interrupts the job	故障で作業を中断
 	Family	分布族
 	File	ファイル
+	Finish, then go off	完了してからシフト終了
 	Finished at {time} {unit}	{time} {unit} で終了しました
 	Fit	全体表示
 	Fit the diagram to the view	ダイアグラム全体をビューに収める
@@ -204,6 +205,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	顧客がこれらの退出から求める部品の数。結果にはタクト（稼働可能時間を需要で割った値）と各タスクのサイクルタイムが表示されます。
 	In use	使用中
 	Inside over time	内部の数の推移
+	Job under way on a server going off shift:	シフトを外れるサーバで処理中の作業:
 	Job under way on a server taken out:	切り離されたサーバで処理中の作業:
 	Jump	移動
 	Jump to time	移動先の時刻
@@ -364,6 +366,7 @@
 	Result, down and up	結果（下げた場合と上げた場合）
 	Results	結果
 	Resume after restart	再起動後に再開
+	Resume when back on shift	シフトに戻ったら再開
 	Retry elsewhere	別のサーバで再試行
 	Rework	手直し
 	Rework on {id}	{id} の手直し
@@ -456,6 +459,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	接続が切れてクライアントが再試行します。エンティティはすぐに待ち行列の先頭に戻り、それまでの作業は無駄になります。
 	The entity waits on its server and the job carries on with what was left once the server is back.	エンティティは自分のサーバで待ち、サーバが戻ると残りの作業から続けます。
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	区間が目標割合 {share} を下回るため、割合が達成されたことは 95% の信頼度では示されていません。反復実行を増やすと区間は狭まります。
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	作業はすぐに止まります。エンティティはシフト中のいずれかのサーバを待つ待ち行列の先頭に戻り、それまでの作業は無駄になります。
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	作業はすぐに止まります。エンティティは自分のサーバで待ち、そのサーバが再びシフト中になると残りの作業から続けます。
 	The last task with a resource it finished at	部品が最後に通ったリソースを使うタスク
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	停止条件までの平均時間は、停止条件に達した反復実行だけによるものです。それ以外は時間制限まで実行されました。
 	The model changed, so watching stopped	モデルが変更されたため、観察を終了しました
@@ -463,6 +468,7 @@
 	The model now has the units sizing found	サイズ決定で求めた数量をモデルに反映しました
 	The model: its experiment, connections and problems	モデル：実験、接続、問題
 	The name is empty or already used.	名前が空か、すでに使われています。
+	The server finishes the job it has, then goes off; until then it counts as on shift.	サーバは手元の作業を終えてからシフトを外れます。それまではシフト中として数えます。
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	各値以下となった反復実行の割合。帯は {confidence} の信頼度で真の分布を含みます。
 	The values are numbers, separated by semicolons or spaces	値はセミコロンまたはスペースで区切った数値です
 	The whole clock	すべての時間
