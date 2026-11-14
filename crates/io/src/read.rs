@@ -1681,14 +1681,15 @@ fn processing_by_of(
         )
     })?;
     let body = ext.elements().find(|e| e.local() == "processingTimeBy");
+    // An empty property is kept (a table being filled in); the model's check reports times
+    // without one.
     let Some(property) = body
         .and_then(|b| b.attr("property"))
         .map(|p| p.trim().to_owned())
-        .filter(|p| !p.is_empty())
     else {
         notes.push(Note::error(
             Some(id),
-            "a processing time by property (stochcraft:processingTimeBy) needs a property; the task's own processing time applies to every entity",
+            "a processing time by property (stochcraft:processingTimeBy) needs a `property`; the task's own processing time applies to every entity",
         ));
         return None;
     };

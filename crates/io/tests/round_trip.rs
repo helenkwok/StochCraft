@@ -1547,8 +1547,22 @@ fn bad_processing_times_by_property_are_noted() {
         r#"<stochcraft:processingTimeBy property="kind">"#,
         "<stochcraft:processingTimeBy>",
     );
-    noted(&l, "needs a property");
+    noted(&l, "needs a `property`");
     assert_eq!(l.model.elements[1].kind.processing_by(), None);
+    // An empty one is kept, for the model's check to report.
+    let l = read_with(
+        r#"<stochcraft:processingTimeBy property="kind">"#,
+        r#"<stochcraft:processingTimeBy property="">"#,
+    );
+    assert!(l.notes.is_empty(), "{:?}", l.notes);
+    assert!(
+        l.model
+            .validate()
+            .iter()
+            .any(|d| d.problem == stochcraft_model::Problem::TimesByValueWithoutProperty),
+        "{:?}",
+        l.model.validate()
+    );
     let l = read_with(r#"<stochcraft:time value="A">"#, "<stochcraft:time>");
     noted(&l, "needs a `value`");
     let l = read_with(

@@ -545,13 +545,13 @@ impl From<&ProcessingBy> for ProcessingBySpec {
     }
 }
 
-/// Processing times by property value from their wire form: none when there is neither a
-/// property nor a time.
+/// Processing times by property value from their wire form, the property's name trimmed. One
+/// with no property yet is kept (a table being filled in); the model's check reports times
+/// without one.
 pub fn processing_by(spec: Option<ProcessingBySpec>) -> Option<ProcessingBy> {
     let s = spec?;
-    let property = s.property.trim().to_owned();
-    (!property.is_empty() || !s.by_value.is_empty()).then(|| ProcessingBy {
-        property,
+    Some(ProcessingBy {
+        property: s.property.trim().to_owned(),
         by_value: s
             .by_value
             .into_iter()
