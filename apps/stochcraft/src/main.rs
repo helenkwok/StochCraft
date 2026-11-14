@@ -12,6 +12,11 @@
 //! `stochcraft [FILE]` opens FILE at start. `stochcraft --control PORT` also listens on
 //! `127.0.0.1:PORT` for engine commands from the MCP server (`stochcraft-cli mcp --connect`,
 //! docs/mcp.md), so a person can watch an agent work in the window.
+//!
+//! On Windows a release build is a window-only program, so starting it opens no console window
+//! beside it; what it prints (the `--control` address, a usage error) is then not shown.
+
+#![cfg_attr(all(windows, not(debug_assertions)), windows_subsystem = "windows")]
 
 use std::path::{Path, PathBuf};
 use std::time::Instant;

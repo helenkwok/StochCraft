@@ -98,7 +98,9 @@ Errors work as follows:
 ## The control channel
 
 `stochcraft --control PORT` listens on `127.0.0.1:PORT` (the loopback interface only), and the
-window runs the commands that arrive there, so the person at it sees each change.
+window runs the commands that arrive there, so the person at it sees each change. On Windows a
+release build has no console, so the line saying where it listens is not shown; the port is the
+one you gave.
 
 Each request is one JSON line, and the app answers each with one line:
 
