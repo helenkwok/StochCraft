@@ -78,7 +78,13 @@
   optional keep is the fewest units left working: a failed check takes no unit out below it.
   onTakeout="retry" (the default) sends a job under way on a unit taken out back to the head of
   the queue at once (its work is wasted); onTakeout="resume" lets it wait on the unit and resume
-  after the restart. Only on a task with an unlimited waiting room. BPSim 2.0 has nothing for it.
+  after the restart. With a finite waiting room, an entity keeps its place throughout (back in
+  the queue, or waiting on its unit); placeWhileOut="reserved" (the default) has a unit taken out
+  keep a place for itself while it restarts, as a failed unit does: once the job under way (if
+  any) is back in the queue, it takes a place that is free at that moment, if one is, and gives
+  it back when its restart ends, so the buffer holds fewer while units are out.
+  placeWhileOut="open" has it hold none, as a unit off shift. With an unlimited waiting room it
+  changes nothing. BPSim 2.0 has nothing for it.
 
     <bpsim:VendorExtension name="stochcraft:healthCheck" xmlns:stochcraft="…">
       <stochcraft:healthCheck limit="2" keep="3">
@@ -239,6 +245,14 @@
           <xs:restriction base="xs:string">
             <xs:enumeration value="retry"/>
             <xs:enumeration value="resume"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="placeWhileOut" default="reserved">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="reserved"/>
+            <xs:enumeration value="open"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

@@ -431,8 +431,10 @@ impl PatienceUntil {
 /// leaves fewer to serve the queue, which grows, so more fail: once tipped over, the server can
 /// stay collapsed long after the cause has gone (a metastable failure).
 ///
-/// Failures ([`Breakdown`]) keep coming in elapsed time while a unit is out. A server with a
-/// health check needs an unlimited buffer.
+/// Failures ([`Breakdown`]) keep coming in elapsed time while a unit is out. With a finite
+/// buffer, an entity holds its place there throughout: a retried job keeps it back in the
+/// queue, a resumed one keeps it waiting on its unit. `place_while_out` says whether a unit out
+/// restarting also keeps a place of the buffer for itself.
 #[derive(Debug, Clone, PartialEq)]
 pub struct HealthCheck {
     /// The time between one unit's checks.
@@ -446,6 +448,45 @@ pub struct HealthCheck {
     pub keep: Option<u32>,
     /// What happens to a job under way on a unit taken out.
     pub on_takeout: OnTakeout,
+    /// With a finite buffer, whether a unit out restarting keeps a place of it for itself (as
+    /// a failed unit does) or holds none (as a unit off shift); with an unlimited buffer it
+    /// changes nothing.
+    pub place_while_out: PlaceWhileOut,
+}
+
+/// With a finite buffer, the place of a unit a health check takes out, while it restarts.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum PlaceWhileOut {
+    /// As a failed unit's: at the takeout, once the job under way (if any) has gone back to the
+    /// queue, the unit takes a place that is free at that moment (if one is), so no entity
+    /// gets in for it, and gives it back when its restart ends. The buffer holds fewer while
+    /// units are out. A unit with a job waiting on it (resumed) takes none: the job's place is
+    /// the unit's; one holding a finished entity it cannot hand on yet keeps that entity's
+    /// place once it leaves.
+    #[default]
+    Reserved,
+    /// The unit holds no place while it is out, as a unit off shift: entities may fill the
+    /// buffer up to every unit's place and the waiting room.
+    Open,
+}
+
+impl PlaceWhileOut {
+    /// The name in files and on the wire.
+    pub fn name(self) -> &'static str {
+        match self {
+            PlaceWhileOut::Reserved => "reserved",
+            PlaceWhileOut::Open => "open",
+        }
+    }
+
+    /// The value named `s`.
+    pub fn from_name(s: &str) -> Option<Self> {
+        match s {
+            "reserved" => Some(PlaceWhileOut::Reserved),
+            "open" => Some(PlaceWhileOut::Open),
+            _ => None,
+        }
+    }
 }
 
 /// What happens to a job under way on a unit a health check takes out.
@@ -1175,8 +1216,6 @@ pub enum Problem {
     SeveralAbandonedWays {
         count: usize,
     },
-    /// A health check on a server with a finite buffer (not supported yet).
-    HealthCheckWithFiniteBuffer,
     /// A health check whose limit is not a number of 0 or more.
     HealthCheckLimitNotValid,
     /// A health check whose time between checks has a mean that is not above 0.
@@ -1353,7 +1392,6 @@ impl Problem {
             Problem::PatienceNegative => "patience_negative",
             Problem::AbandonedWithoutPatience { .. } => "abandoned_without_patience",
             Problem::SeveralAbandonedWays { .. } => "several_abandoned_ways",
-            Problem::HealthCheckWithFiniteBuffer => "health_check_with_finite_buffer",
             Problem::HealthCheckLimitNotValid => "health_check_limit_not_valid",
             Problem::HealthCheckIntervalNotPositive => "health_check_interval_not_positive",
             Problem::DemandNotPositive => "demand_not_positive",
@@ -1529,10 +1567,6 @@ impl std::fmt::Display for Diagnostic {
             Problem::SeveralAbandonedWays { count } => write!(
                 f,
                 "{count} of its ways out are for entities that give up; at most one can be"
-            ),
-            Problem::HealthCheckWithFiniteBuffer => write!(
-                f,
-                "a health check needs an unlimited waiting room; remove the buffer's limit or the health check"
             ),
             Problem::HealthCheckLimitNotValid => write!(
                 f,
@@ -1937,16 +1971,9 @@ impl Model {
             }
             if let ElementKind::Server {
                 health_check: Some(h),
-                queue_capacity,
                 ..
             } = &e.kind
             {
-                if queue_capacity.is_some() {
-                    out.push(Diagnostic::error(
-                        Some(&e.id),
-                        Problem::HealthCheckWithFiniteBuffer,
-                    ));
-                }
                 if h.limit.is_nan() || h.limit < 0.0 {
                     out.push(Diagnostic::error(
                         Some(&e.id),
