@@ -14,7 +14,8 @@
 #![allow(clippy::panic)]
 
 use stochcraft_blocks::{
-    Breakdown, Builder, ExperimentSummary, Metric, OnShiftEnd, Report, Setup, compile, summarise,
+    Breakdown, Builder, ExperimentSummary, HealthCheck, Metric, OnShiftEnd, OnTakeout, Patience,
+    PatienceUntil, PlaceWhileOut, Report, Setup, compile, summarise,
 };
 use stochcraft_model::{Dist, ElementId, Experiment, Need, Problem, PropertyValue, Severity};
 use stochcraft_random::Rng;
@@ -80,21 +81,45 @@ fn run_once(b: &Builder, duration: f64) -> Report {
 #[test]
 fn each_kind_takes_its_own_time_on_every_kind_of_task() {
     // How the work is done: 0 a server, 1 a server whose units set up (no time) and so run as
-    // units of their own, 2 a task with a shared pool, 3 a delay.
-    for how in 0..4 {
+    // units of their own, 2 a task with a shared pool, 3 a delay, 4 a server with a health
+    // check that never fails and a patience until done that never runs out (units of their
+    // own), 5 a server with that patience only.
+    for how in 0..6 {
         let mut b = Builder::new();
         let src = b.source("parts", Dist::Constant(10.0), None);
         kinds(&mut b, src);
         let task = match how {
-            0 | 1 => b.server("task", 1, Dist::Constant(50.0)),
             2 => {
                 b.pool("crew", 1, &[]);
                 b.shared_task("task", Dist::Constant(50.0), vec![crew()], 0.0)
             }
-            _ => b.delay("task", Dist::Constant(50.0)),
+            3 => b.delay("task", Dist::Constant(50.0)),
+            _ => b.server("task", 1, Dist::Constant(50.0)),
         };
         if how == 1 {
             b.setup(task, Setup::every_job(Dist::Constant(0.0)));
+        }
+        if how == 4 {
+            b.health_check(
+                task,
+                HealthCheck {
+                    interval: Dist::Constant(1.0),
+                    limit: f64::INFINITY,
+                    restart: Dist::Constant(1.0),
+                    keep: None,
+                    on_takeout: OnTakeout::Resume,
+                    place_while_out: PlaceWhileOut::Reserved,
+                },
+            );
+        }
+        if how >= 4 {
+            b.patience(
+                task,
+                Patience {
+                    time: Dist::Constant(100.0),
+                    until: PatienceUntil::Done,
+                },
+            );
         }
         b.processing_by(
             task,

@@ -1513,9 +1513,8 @@ fn processing_times_by_property_are_written_saved_and_removed() {
     let mut batch = edited.clone();
     batch.elements[1].kind = ElementKind::Batch { size: 2 };
     let saved = loaded.opened.save(&batch);
-    let Ok(saved) = saved else {
-        return;
-    };
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
     assert_eq!(
         String::from_utf8_lossy(&saved)
             .matches("<stochcraft:processingTimeBy ")
