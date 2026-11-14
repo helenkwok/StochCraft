@@ -64,7 +64,8 @@ fn colours(values: &[u32]) -> Vec<Color32> {
 /// The built-in palettes, the default first. Sources (ATTRIBUTION.md):
 /// - Okabe–Ito: Okabe and Ito, "Color Universal Design", Fig. 16, R,G,B (0-255). Order:
 ///   orange, sky blue, bluish green, yellow, blue, vermilion, reddish purple, black (the authors
-///   list black first; it is last here so the first series stays visible on a dark canvas).
+///   list black first; it is last here so the first series stays visible on a dark canvas). On a
+///   light canvas yellow and black swap places ([`draw_order`]).
 /// - Tol bright, Tol muted, Tol sunset: Paul Tol, "Colour schemes" (sronpersonalpages.nl/~pault).
 /// - ColorBrewer Dark2, Set2, Blues, RdBu: Cynthia Brewer, colorbrewer2.org (9/11-class, or the
 ///   8-class qualitative schemes).
@@ -185,11 +186,32 @@ pub fn in_use(name: &str, custom: &[ChartPalette]) -> ChartPalette {
 static ACTIVE: std::sync::LazyLock<egui::Id> =
     std::sync::LazyLock::new(|| egui::Id::unique("stochcraft-chart-palette"));
 
-/// Makes `palette` the one [`series_color`] reads. The app calls it every frame with the palette in
-/// use, as it does for colour themes.
-pub fn use_palette(ctx: &egui::Context, palette: &ChartPalette) {
-    let colors = palette.colors.clone();
+/// Makes `palette` the one [`series_color`] reads, in its order for the chart `canvas`
+/// ([`draw_order`]). The app calls it every frame with the palette in use, as it does for colour
+/// themes.
+pub fn use_palette(ctx: &egui::Context, palette: &ChartPalette, canvas: Color32) {
+    let colors = draw_order(palette, canvas)
+        .into_iter()
+        .filter_map(|i| palette.colors.get(i).copied())
+        .collect::<Vec<_>>();
     ctx.data_mut(|d| d.insert_temp(*ACTIVE, colors));
+}
+
+/// Whether `canvas` is a light one: it contrasts more with black than with white.
+fn is_light(canvas: Color32) -> bool {
+    theme::contrast(canvas, Color32::BLACK) > theme::contrast(canvas, Color32::WHITE)
+}
+
+/// The order series take the colours of `p` in on `canvas`, as indices into its colours. The
+/// palette's own order, except the default Okabe–Ito on a light canvas: its yellow (1.3:1 on white)
+/// and black swap places, so yellow is the last colour used and the first seven all show. On a
+/// dark canvas black (1.1:1) is last already.
+pub fn draw_order(p: &ChartPalette, canvas: Color32) -> Vec<usize> {
+    let mut order: Vec<usize> = (0..p.colors.len()).collect();
+    if p.name == DEFAULT && p.colors.len() == 8 && is_light(canvas) {
+        order.swap(3, 7);
+    }
+    order
 }
 
 /// The colour of series `i` in the palette in use. Beyond the palette's last colour this returns
@@ -335,15 +357,27 @@ fn slot_name(i: usize) -> String {
 /// the surface, colours differ enough for neighbours with normal vision and with red-green colour
 /// blindness, and no colour reads as grey. Sequential and diverging: lightness goes one way
 /// (diverging: from each end towards the middle) and neighbours differ enough in lightness.
+///
+/// A categorical palette is checked in the order its colours are drawn on `surface`
+/// ([`draw_order`]): neighbours are neighbours there. Findings still name each colour by its place
+/// in the palette, as the editor shows it.
 pub fn check(p: &ChartPalette, surface: Color32) -> Vec<Finding> {
     match p.kind {
-        PaletteKind::Categorical => categorical(&p.colors, surface),
+        PaletteKind::Categorical => categorical(&p.colors, &draw_order(p, surface), surface),
         PaletteKind::Sequential => ramp(&p.colors, false),
         PaletteKind::Diverging => ramp(&p.colors, true),
     }
 }
 
-fn categorical(colors: &[Color32], surface: Color32) -> Vec<Finding> {
+/// `order`: the colours' indices in drawing order ([`draw_order`]).
+fn categorical(stored: &[Color32], order: &[usize], surface: Color32) -> Vec<Finding> {
+    let colors: Vec<Color32> = order
+        .iter()
+        .filter_map(|&i| stored.get(i).copied())
+        .collect();
+    // A colour's place in the palette, which the findings name.
+    let slot = |k: usize| order.get(k).copied().unwrap_or(k);
+    let slot_name = |k: usize| slot_name(slot(k));
     let mut found = Vec::new();
     let normal: Vec<Lab> = colors.iter().map(|c| lab(*c)).collect();
     for (i, c) in colors.iter().enumerate() {
@@ -357,7 +391,7 @@ fn categorical(colors: &[Color32], surface: Color32) -> Vec<Finding> {
                 } else {
                     Level::Warn
                 },
-                slots: vec![i],
+                slots: vec![slot(i)],
                 message: tf(
                     "{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.",
                     &[
@@ -371,7 +405,7 @@ fn categorical(colors: &[Color32], surface: Color32) -> Vec<Finding> {
         if l.l >= NEUTRAL_L && l.chroma() < CHROMA_MIN {
             found.push(Finding {
                 level: Level::Warn,
-                slots: vec![i],
+                slots: vec![slot(i)],
                 message: tf(
                     "{colour} reads as grey (chroma {chroma}, needs 0.10).",
                     &[
@@ -384,7 +418,7 @@ fn categorical(colors: &[Color32], surface: Color32) -> Vec<Finding> {
     }
     for i in 0..colors.len().saturating_sub(1) {
         let (a, b) = (i, i + 1);
-        let slots = vec![a, b];
+        let slots = vec![slot(a), slot(b)];
         let names = [slot_name(a), slot_name(b)];
         let de_normal = delta_e(normal[a], normal[b]);
         if de_normal < NORMAL_MIN {
@@ -531,6 +565,54 @@ mod tests {
             .into_iter()
             .find(|p| p.name == name)
             .expect("a preset")
+    }
+
+    /// On a light canvas Okabe–Ito's yellow and black swap places, so the first seven series show;
+    /// on a dark one the order is the palette's (black is last already). Other palettes, and a
+    /// custom copy of Okabe–Ito's colours, keep their own order.
+    #[test]
+    fn okabe_ito_puts_yellow_last_on_a_light_canvas() {
+        let okabe = preset(DEFAULT);
+        let dark = Color32::from_rgb(0x14, 0x17, 0x1b);
+        assert_eq!(draw_order(&okabe, WHITE), vec![0, 1, 2, 7, 4, 5, 6, 3]);
+        assert_eq!(draw_order(&okabe, dark), (0..8).collect::<Vec<_>>());
+        let first_seven = |canvas| {
+            draw_order(&okabe, canvas)[..7]
+                .iter()
+                .map(|&i| theme::contrast(okabe.colors[i], canvas))
+                .fold(f32::INFINITY, f32::min)
+        };
+        assert!(
+            first_seven(WHITE) >= SURFACE_CONTRAST_FAIL,
+            "{}",
+            first_seven(WHITE)
+        );
+        assert!(
+            first_seven(dark) >= SURFACE_CONTRAST_FAIL,
+            "{}",
+            first_seven(dark)
+        );
+        let copy = ChartPalette {
+            name: "Mine".to_owned(),
+            ..okabe.clone()
+        };
+        assert_eq!(draw_order(&copy, WHITE), (0..8).collect::<Vec<_>>());
+        let tol = preset("Tol bright");
+        assert_eq!(draw_order(&tol, WHITE), (0..7).collect::<Vec<_>>());
+    }
+
+    /// Checked in drawing order: on white, black's new neighbours (bluish green, blue) and yellow's
+    /// (reddish purple) raise nothing, and the findings still name yellow as the palette's fourth.
+    #[test]
+    fn the_light_order_is_what_is_checked() {
+        let found = check(&preset(DEFAULT), WHITE);
+        assert!(found.iter().all(|f| f.slots.len() == 1), "{found:?}");
+        assert!(
+            found.iter().any(|f| f.slots == vec![3]
+                && f.level == Level::Fail
+                && f.message.contains("Colour 4")),
+            "{found:?}"
+        );
     }
 
     #[test]

@@ -1225,8 +1225,8 @@ impl App {
             self.fonts_lang = Some(self.lang);
         }
         let theme = self.active_theme();
+        let canvases = [theme.light.canvas, theme.dark.canvas];
         theme::use_palettes(&ctx, &theme);
-        chart_palette::use_palette(&ctx, &self.active_chart_palette());
         if self.styled.as_ref() != Some(&theme) {
             if self.styled.is_none() {
                 theme::install(&ctx, &theme);
@@ -1243,6 +1243,9 @@ impl App {
             ctx.set_theme(self.theme_choice.preference());
             self.applied_theme = Some(self.theme_choice);
         }
+        // After the theme, so the order follows the canvas charts are drawn on now.
+        let canvas = canvases[usize::from(ctx.theme() == egui::Theme::Dark)];
+        chart_palette::use_palette(&ctx, &self.active_chart_palette(), canvas);
         self.shortcuts(&ctx);
         self.tick_watching(&ctx);
         self.drop_stale_results();
