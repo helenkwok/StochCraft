@@ -202,6 +202,9 @@ pub fn label(name: &str) -> String {
         "by_change" => "Times for particular changes",
         "from" => "From",
         "to" => "To",
+        "processing_by" => "Processing time by property",
+        "property" => "Property",
+        "by_value" => "Times for particular values",
         _ => "",
     };
     if !known.is_empty() {
@@ -864,9 +867,12 @@ fn records(
             ui.indent(&k, |ui| {
                 for f in &fields {
                     let fnode = &item["properties"][f.as_str()];
-                    // Within an entry, "available" is the entry's own setting.
+                    // Within an entry, "available" is the entry's own setting, and a time for a
+                    // value is a processing time (a time for a change is a setup's).
                     let flabel = if f == "available" {
                         t("Available").to_owned()
+                    } else if f == "time" && key.contains("/processing_by/") {
+                        t("Processing time").to_owned()
                     } else {
                         label_for(f)
                     };
