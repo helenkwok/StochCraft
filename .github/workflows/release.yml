@@ -6,10 +6,13 @@ name: Release
 # (<app>-<version>-<os>-<arch>.<ext>), so ArtCraft Launcher and anything else that reads those
 # releases finds them by the same names. A maintainer reviews the draft and publishes it by hand.
 #
-# Nothing here is signed: the Windows build is unsigned, and the macOS app carries only an ad-hoc
-# signature, so the launcher opens an installed copy on macOS but does not install it there.
-# No job has a secret; the build jobs only read the repository, and only the last job can write
-# to it (it creates the draft).
+# The Windows build is unsigned. The macOS app, disk image and command line are signed with a
+# Developer ID and notarized when the repository variable MACOS_SIGN is "true" and a version tag is
+# pushed (secrets MACOS_CERT_P12, MACOS_CERT_PASSWORD, NOTARY_KEY_P8, NOTARY_KEY_ID and
+# NOTARY_ISSUER_ID, kept in the `release` environment); otherwise they carry only an ad-hoc
+# signature, and the launcher opens an installed copy on macOS but does not install it. No job that
+# compiles has a secret: macos-build compiles, and the macos job that signs never builds anything.
+# Only the last job can write to the repository (it creates the draft).
 #
 # A tag releases only when its commit is on main and the tag equals the version in Cargo.toml
 # (the `version` job checks both; every other job needs it).
@@ -147,8 +150,10 @@ jobs:
           path: dist/*.zip
           if-no-files-found: error
 
-  macos:
-    name: macOS universal
+  # Builds the universal programs. No secret is in reach of this job: it compiles, and the next job
+  # signs what it made without compiling anything.
+  macos-build:
+    name: macOS build
     needs: [version]
     runs-on: macos-latest
     timeout-minutes: 90
@@ -167,17 +172,58 @@ jobs:
         run: |
           cargo build --release --locked -p stochcraft -p stochcraft-cli --target aarch64-apple-darwin
           cargo build --release --locked -p stochcraft -p stochcraft-cli --target x86_64-apple-darwin
-      - name: Make the app and the disk image
+      - name: Join them into universal programs
+        run: |
+          mkdir -p prebuilt
+          for p in stochcraft stochcraft-cli; do
+            lipo -create \
+              "target/aarch64-apple-darwin/release/$p" \
+              "target/x86_64-apple-darwin/release/$p" \
+              -output "prebuilt/$p"
+            lipo -info "prebuilt/$p"
+          done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: build-macos
+          path: prebuilt/
+          if-no-files-found: error
+
+  # Makes the app, the disk image and the command-line archive from the programs the build job
+  # made. Never builds anything.
+  #
+  # Signing runs when the repository variable MACOS_SIGN is "true" and the run is a pushed version
+  # tag: the app, the command-line program and the disk image get a Developer ID signature with the
+  # hardened runtime and a secure timestamp, Apple's notary service checks all three, and the
+  # tickets are stapled to the app and the disk image so they open offline (a bare program cannot
+  # carry one: Gatekeeper fetches its ticket online on first run). The secrets live in the `release`
+  # environment, limited to version tags. Without the variable (or on a dry run) everything is
+  # ad-hoc signed and nothing is notarized. The certificate goes into a throwaway keychain that the
+  # last step deletes.
+  macos:
+    name: macOS app and disk image
+    needs: [version, macos-build]
+    runs-on: macos-latest
+    timeout-minutes: 60
+    environment: ${{ github.ref_type == 'tag' && vars.MACOS_SIGN == 'true' && 'release' || '' }}
+    env:
+      SIGN: ${{ github.ref_type == 'tag' && vars.MACOS_SIGN == 'true' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: build-macos
+          path: prebuilt
+      - name: Lay out the app and the command-line archive
         env:
           VERSION: ${{ needs.version.outputs.version }}
         run: |
+          # Artifacts don't keep the executable bit.
+          chmod 755 prebuilt/stochcraft prebuilt/stochcraft-cli
           app="dist/stage/StochCraft.app"
           mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
-          lipo -create \
-            target/aarch64-apple-darwin/release/stochcraft \
-            target/x86_64-apple-darwin/release/stochcraft \
-            -output "$app/Contents/MacOS/StochCraft"
-          lipo -info "$app/Contents/MacOS/StochCraft"
+          cp prebuilt/stochcraft "$app/Contents/MacOS/StochCraft"
           cp LICENSE-APACHE LICENSE-MIT NOTICE "$app/Contents/Resources/"
           cat >"$app/Contents/Info.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
@@ -197,25 +243,108 @@ jobs:
           </plist>
           PLIST
           plutil -lint "$app/Contents/Info.plist"
-          # Ad-hoc only: no Developer ID, so Gatekeeper still asks and the launcher does not install it.
-          codesign --force --deep --sign - "$app"
-          codesign --verify --deep --strict "$app"
-          ln -s /Applications dist/stage/Applications
-          hdiutil create -volname StochCraft -srcfolder dist/stage -ov -format UDZO \
-            "dist/stochcraft-$VERSION-macos-universal.dmg"
           # The command line, universal too, in its own archive (not inside the app).
           cli="stochcraft-cli-$VERSION-macos-universal"
           mkdir -p "dist/$cli"
-          lipo -create \
-            target/aarch64-apple-darwin/release/stochcraft-cli \
-            target/x86_64-apple-darwin/release/stochcraft-cli \
-            -output "dist/$cli/stochcraft-cli"
-          lipo -info "dist/$cli/stochcraft-cli"
-          codesign --force --sign - "dist/$cli/stochcraft-cli"
+          cp prebuilt/stochcraft-cli "dist/$cli/stochcraft-cli"
           cp LICENSE-APACHE LICENSE-MIT NOTICE README.md "dist/$cli/"
+      - name: Import the signing certificate
+        if: env.SIGN == 'true'
+        env:
+          CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
+          CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+        run: |
+          set -euo pipefail
+          for v in CERT_P12 CERT_PASSWORD; do
+            [ -n "${!v}" ] || { echo "::error::MACOS_SIGN is true but the secret for $v is not set in the release environment"; exit 1; }
+          done
+          keychain="$RUNNER_TEMP/signing.keychain-db"; kpass=$(openssl rand -hex 24)
+          security create-keychain -p "$kpass" "$keychain"
+          security set-keychain-settings -lut 3600 "$keychain"
+          security unlock-keychain -p "$kpass" "$keychain"
+          printf '%s' "$CERT_P12" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security import "$RUNNER_TEMP/cert.p12" -k "$keychain" -P "$CERT_PASSWORD" -T /usr/bin/codesign
+          rm -f "$RUNNER_TEMP/cert.p12"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$kpass" "$keychain" >/dev/null
+          security list-keychains -d user -s "$keychain"
+      - name: Sign and notarize the app and the command line
+        if: env.SIGN == 'true'
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+          NOTARY_KEY_P8: ${{ secrets.NOTARY_KEY_P8 }}
+          NOTARY_KEY_ID: ${{ secrets.NOTARY_KEY_ID }}
+          NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          app="dist/stage/StochCraft.app"
+          cli="dist/stochcraft-cli-$VERSION-macos-universal/stochcraft-cli"
+          codesign --force --options runtime --timestamp --keychain "$keychain" -s "Developer ID Application" "$app"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          codesign --force --options runtime --timestamp --keychain "$keychain" -s "Developer ID Application" "$cli"
+          codesign --verify --strict --verbose=2 "$cli"
+          printf '%s' "$NOTARY_KEY_P8" > "$RUNNER_TEMP/notary.p8"
+          notarize() {  # notarize <file> <name>: submit, wait, and fail unless Apple accepts it
+            xcrun notarytool submit "$1" --key "$RUNNER_TEMP/notary.p8" \
+              --key-id "$NOTARY_KEY_ID" --issuer "$NOTARY_ISSUER_ID" --wait --output-format json > "$RUNNER_TEMP/notary-$2.json"
+            status=$(plutil -extract status raw "$RUNNER_TEMP/notary-$2.json")
+            echo "$2 notarization: $status"
+            [ "$status" = Accepted ]
+          }
+          ditto -c -k --keepParent "$app" "$RUNNER_TEMP/app-notarize.zip"
+          notarize "$RUNNER_TEMP/app-notarize.zip" app
+          xcrun stapler staple "$app"
+          xcrun stapler validate "$app"
+          ditto -c -k "$cli" "$RUNNER_TEMP/cli-notarize.zip"
+          notarize "$RUNNER_TEMP/cli-notarize.zip" cli
+          rm -f "$RUNNER_TEMP/notary.p8"
+      - name: Ad-hoc sign (no signing configured)
+        if: env.SIGN != 'true'
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          # No Developer ID: Gatekeeper still asks, and the launcher does not install it.
+          codesign --force --deep --sign - dist/stage/StochCraft.app
+          codesign --verify --deep --strict dist/stage/StochCraft.app
+          codesign --force --sign - "dist/stochcraft-cli-$VERSION-macos-universal/stochcraft-cli"
+      - name: Make the disk image and the command-line archive
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          ln -s /Applications dist/stage/Applications
+          hdiutil create -volname StochCraft -srcfolder dist/stage -ov -format UDZO \
+            "dist/stochcraft-$VERSION-macos-universal.dmg"
+          cli="stochcraft-cli-$VERSION-macos-universal"
           tar -C dist -czf "dist/$cli.tar.gz" "$cli"
           rm -rf "dist/$cli"
           ls -l dist
+      - name: Sign, notarize and staple the disk image
+        if: env.SIGN == 'true'
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+          NOTARY_KEY_P8: ${{ secrets.NOTARY_KEY_P8 }}
+          NOTARY_KEY_ID: ${{ secrets.NOTARY_KEY_ID }}
+          NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          dmg="dist/stochcraft-$VERSION-macos-universal.dmg"
+          codesign --force --timestamp --keychain "$keychain" -s "Developer ID Application" "$dmg"
+          codesign --verify --strict --verbose=2 "$dmg"
+          printf '%s' "$NOTARY_KEY_P8" > "$RUNNER_TEMP/notary.p8"
+          xcrun notarytool submit "$dmg" --key "$RUNNER_TEMP/notary.p8" \
+            --key-id "$NOTARY_KEY_ID" --issuer "$NOTARY_ISSUER_ID" --wait --output-format json > "$RUNNER_TEMP/notary-dmg.json"
+          rm -f "$RUNNER_TEMP/notary.p8"
+          status=$(plutil -extract status raw "$RUNNER_TEMP/notary-dmg.json")
+          echo "disk image notarization: $status"
+          [ "$status" = Accepted ]
+          xcrun stapler staple "$dmg"
+          xcrun stapler validate "$dmg"
+      - name: Remove the signing keychain
+        if: always() && env.SIGN == 'true'
+        run: |
+          security delete-keychain "$RUNNER_TEMP/signing.keychain-db" 2>/dev/null || true
+          rm -f "$RUNNER_TEMP/cert.p12" "$RUNNER_TEMP/notary.p8"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-macos-universal
@@ -246,6 +375,12 @@ jobs:
           grep -q arm64 archs && grep -q x86_64 archs || status=1
           plutil -p "$app/Contents/Info.plist" | grep -E "CFBundleIdentifier|CFBundleShortVersionString"
           hdiutil detach "$mnt" || true
+          # A signed release is notarized and stapled: Gatekeeper accepts the image.
+          if [ "${{ github.ref_type == 'tag' && vars.MACOS_SIGN == 'true' }}" = true ]; then
+            xcrun stapler validate "$dmg" || status=1
+            spctl --assess --type open --context context:primary-signature -v "$dmg" || status=1
+            codesign -dv --verbose=2 "$dmg" 2>&1 | grep -E "Authority|TeamIdentifier" || status=1
+          fi
           exit $status
 
   checksums:
