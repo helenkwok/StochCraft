@@ -3,8 +3,8 @@
 use stochcraft_blocks::{BlockId, Builder, Event, Rule};
 use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{
-    DateTime, Dist, ElementKind, Experiment, HealthCheck, Model, Need, OnTakeout, Patience,
-    PatienceUntil, Property, PropertyType, PropertyValue, Routing, TimeUnit,
+    DateTime, Dist, ElementKind, Experiment, HealthCheck, Model, Need, OnShiftEnd, OnTakeout,
+    Patience, PatienceUntil, Property, PropertyType, PropertyValue, Routing, TimeUnit,
 };
 
 /// A model using every element kind and every distribution.
@@ -1201,4 +1201,180 @@ fn a_plain_rework_way_is_written_in_a_new_file() {
     let text = String::from_utf8_lossy(&bytes);
     assert!(text.contains(r#"name="stochcraft:rework""#), "{text}");
     assert_eq!(read(&bytes).map(|l| l.model).ok(), Some(laid_out(model)));
+}
+
+/// A task's own units by shift: its resource's quantity by calendar, marked as no pool so it
+/// reads back as the task's own, and what happens to a job at a shift's end. Written, read back,
+/// changed and removed in place; without the marker (a file from elsewhere) the resource is a
+/// pool, as before.
+#[test]
+fn a_servers_units_by_shift_are_written_saved_and_removed() {
+    let at = |h: u32| DateTime::new(2016, 1, 1, h, 0, 0).unwrap_or(DateTime(0));
+    let mut m = Builder::new();
+    m.calendar(
+        "night",
+        vec![Event {
+            start: at(0),
+            end: at(8),
+            rule: Rule::parse("FREQ=DAILY").ok(),
+        }],
+    );
+    let src = m.source("requests", Dist::Exponential { mean: 1.0 }, None);
+    let desk = m.server("desk", 10, Dist::Exponential { mean: 8.0 });
+    m.server_shifts(desk, 10, &[("night", 4)], OnShiftEnd::Retry);
+    let out = m.sink("out");
+    m.connect(src, desk);
+    m.connect(desk, out);
+    let model = m.build(Experiment {
+        start: Some(at(0)),
+        ..Experiment::default()
+    });
+    assert_eq!(model.validate(), vec![]);
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes).into_owned();
+    let marker = r#"<bpsim:VendorExtension name="stochcraft:pool" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="false"/>"#;
+    assert!(text.contains(marker), "{text}");
+    assert!(
+        text.contains(r#"<bpsim:NumericParameter value="4" validFor="night"/>"#),
+        "{text}"
+    );
+    assert!(
+        text.contains(r#"name="stochcraft:onShiftEnd""#)
+            && text.contains(r#"stochcraft:value="retry""#),
+        "{text}"
+    );
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+
+    // More units, another count by night, and resuming: saved in place.
+    let mut edited = loaded.model.clone();
+    if let ElementKind::Server {
+        capacity,
+        shifts,
+        on_shift_end,
+        ..
+    } = &mut edited.elements[1].kind
+    {
+        *capacity = 12;
+        shifts[0].value = 6;
+        *on_shift_end = OnShiftEnd::Resume;
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(
+        text.contains(r#"value="6" validFor="night""#) && text.contains(r#"value="resume""#),
+        "{text}"
+    );
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    // No shifts and finishing (the defaults): the marker, the shift values and the rule go.
+    if let ElementKind::Server {
+        shifts,
+        on_shift_end,
+        ..
+    } = &mut edited.elements[1].kind
+    {
+        shifts.clear();
+        *on_shift_end = OnShiftEnd::Finish;
+    }
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let removed = again.opened.save(&edited);
+    assert!(removed.is_ok(), "{removed:?}");
+    let Ok(removed) = removed else { return };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(
+        !text.contains("stochcraft:pool")
+            && !text.contains("stochcraft:onShiftEnd")
+            && !text.contains(r#"validFor="night""#),
+        "{text}"
+    );
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited.clone()));
+
+    // A server that gets shifts in place, from none.
+    if let ElementKind::Server { shifts, .. } = &mut edited.elements[1].kind {
+        shifts.push(stochcraft_model::Timed {
+            calendar: stochcraft_model::ElementId::unchecked("night"),
+            value: 2,
+        });
+    }
+    let Ok(third) = read(&removed) else {
+        unreachable!()
+    };
+    let added = third.opened.save(&edited);
+    assert!(added.is_ok(), "{added:?}");
+    let Ok(added) = added else { return };
+    assert_eq!(read(&added).map(|l| l.model).ok(), Some(edited));
+}
+
+/// Without StochCraft's marker, a resource whose quantity varies by calendar is a pool even when
+/// one task uses it, as before: a file from elsewhere reads as it always has. An unknown rule
+/// for a job at a shift's end is noted, and the job finishes.
+#[test]
+fn a_quantity_by_calendar_without_the_marker_is_a_pool() {
+    let at = |h: u32| DateTime::new(2016, 1, 1, h, 0, 0).unwrap_or(DateTime(0));
+    let mut m = Builder::new();
+    m.calendar(
+        "night",
+        vec![Event {
+            start: at(0),
+            end: at(8),
+            rule: None,
+        }],
+    );
+    let src = m.source("requests", Dist::Exponential { mean: 1.0 }, None);
+    let desk = m.server("desk", 3, Dist::Exponential { mean: 2.0 });
+    m.server_shifts(desk, 3, &[("night", 1)], OnShiftEnd::Resume);
+    let out = m.sink("out");
+    m.connect(src, desk);
+    m.connect(desk, out);
+    let text = String::from_utf8_lossy(&write_new(&m.build(Experiment::default()))).into_owned();
+    let marker = r#"<bpsim:VendorExtension name="stochcraft:pool" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="false"/>"#;
+    let foreign = text.replace(marker, "");
+    let Ok(l) = read(foreign.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(
+        matches!(l.model.elements[1].kind, ElementKind::SharedTask { .. }),
+        "{:?}",
+        l.model.elements[1]
+    );
+    assert_eq!(l.model.resources.len(), 1);
+    assert_eq!(l.model.resources[0].quantity, 3);
+    assert_eq!(l.model.resources[0].shifts.len(), 1);
+    // The rule was on a task that is now a shared task: noted.
+    assert!(
+        l.notes
+            .iter()
+            .any(|n| n.message.contains("stochcraft:onShiftEnd) applies only")),
+        "{:?}",
+        l.notes
+    );
+
+    let Ok(l) = read(
+        text.replace(r#"value="resume""#, r#"value="later""#)
+            .as_bytes(),
+    ) else {
+        unreachable!()
+    };
+    assert!(
+        l.notes
+            .iter()
+            .any(|n| n.message.contains("must be finish, retry or resume")),
+        "{:?}",
+        l.notes
+    );
+    assert!(matches!(
+        l.model.elements[1].kind,
+        ElementKind::Server {
+            on_shift_end: OnShiftEnd::Finish,
+            ..
+        }
+    ));
 }

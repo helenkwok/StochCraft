@@ -44,8 +44,8 @@ use std::collections::{BTreeMap, BTreeSet};
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 pub use stochcraft_model::{
-    Breakdown, Change, Demand, DemandPer, HealthCheck, OnTakeout, Patience, PatienceUntil, Power,
-    Routing, Scrap, Setup, Transfer,
+    Breakdown, Change, Demand, DemandPer, HealthCheck, OnShiftEnd, OnTakeout, Patience,
+    PatienceUntil, Power, Routing, Scrap, Setup, Transfer,
 };
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
@@ -488,7 +488,9 @@ pub enum Metric {
     /// entities that started service. Entities still waiting at the end are left out, so for an overloaded server the
     /// mean is biased low.
     MeanWait,
-    /// Servers: time-average fraction of units busy.
+    /// Servers: time-average fraction of units busy. A server whose units follow shifts
+    /// (`shifts`): the time-average of units with a job (a job paused off shift left out) over
+    /// the time-average of units on shift (those finishing a job after their shift included).
     Utilisation,
     /// Servers and delays: time-average number of entities being served or delayed.
     MeanContents,
@@ -536,13 +538,13 @@ pub enum Metric {
     /// Servers with a patience: the mean time those that gave up had been here when they did
     /// (their patience), from entering, transfer included.
     AbandonedWait,
-    /// Servers with patience until done, or a health check that retries the job under way: the
-    /// service time (the time drawn for the job, and its setup) spent on jobs whose entity gave
-    /// up before they were done, and the part of a job done before its unit was taken out (the
-    /// entity starts afresh), in time units.
+    /// Servers with patience until done, or a health check or a shift's end that retries the job
+    /// under way: the service time (the time drawn for the job, and its setup) spent on jobs
+    /// whose entity gave up before they were done, and the part of a job done before its unit
+    /// was taken out or went off shift (the entity starts afresh), in time units.
     Wasted,
-    /// Servers with patience until done, or a health check that retries: [`Metric::Wasted`]
-    /// over the time the units spent processing and setting up.
+    /// Servers with patience until done, or a health check or a shift's end that retries:
+    /// [`Metric::Wasted`] over the time the units spent processing and setting up.
     WastedShare,
     /// Servers with a health check: units taken out of service by a failed check, each time
     /// counted.
@@ -794,7 +796,7 @@ pub struct ElementReport {
     pub abandoned: Option<u64>,
     pub abandoned_share: Option<f64>,
     pub abandoned_wait: Option<f64>,
-    /// Servers with patience until done, or a health check that retries:
+    /// Servers with patience until done, or a health check or a shift's end that retries:
     /// [`Metric::Wasted`] and [`Metric::WastedShare`].
     pub wasted: Option<f64>,
     pub wasted_share: Option<f64>,
@@ -1092,11 +1094,13 @@ pub fn run_warnings(model: &Model, summary: &ExperimentSummary) -> Vec<Diagnosti
         });
     }
     for e in &summary.elements {
-        let Some(ElementKind::Server {
-            capacity,
-            queue_capacity: None,
-            ..
-        }) = model.element(&e.id).map(|x| &x.kind)
+        let Some(
+            kind @ ElementKind::Server {
+                queue_capacity: None,
+                shifts,
+                ..
+            },
+        ) = model.element(&e.id).map(|x| &x.kind)
         else {
             continue;
         };
@@ -1109,15 +1113,20 @@ pub fn run_warnings(model: &Model, summary: &ExperimentSummary) -> Vec<Diagnosti
             continue;
         };
         // Busy as a share of the time up and on shift, for servers whose units fail or follow
-        // a calendar.
-        let up =
-            mean(Metric::Availability).unwrap_or(1.0) - mean(Metric::TimeOffShift).unwrap_or(0.0);
+        // a calendar. With shifts, the utilisation is already over the units on shift.
+        let off_shift = if shifts.is_empty() {
+            mean(Metric::TimeOffShift).unwrap_or(0.0)
+        } else {
+            0.0
+        };
+        let up = mean(Metric::Availability).unwrap_or(1.0) - off_shift;
         let utilisation = if up > 0.0 && up < 1.0 {
             busy / up
         } else {
             busy
         };
-        let backlog = inside - f64::from(*capacity);
+        // Beyond every unit the server has (with shifts, the most on shift at once).
+        let backlog = inside - f64::from(kind.most_units().unwrap_or(0));
         if utilisation >= SATURATED_UTILISATION
             && backlog >= BACKLOG_MIN
             && backlog >= BACKLOG_SHARE * left
@@ -1218,6 +1227,8 @@ impl Builder {
                 planned_run_time: None,
                 patience: None,
                 health_check: None,
+                shifts: Vec::new(),
+                on_shift_end: OnShiftEnd::Finish,
             },
         )
     }
@@ -1247,6 +1258,8 @@ impl Builder {
                 planned_run_time: None,
                 patience: None,
                 health_check: None,
+                shifts: Vec::new(),
+                on_shift_end: OnShiftEnd::Finish,
             },
         )
     }
@@ -1319,6 +1332,39 @@ impl Builder {
                     value: *v,
                 })
                 .collect();
+        }
+    }
+
+    /// Server `block`'s units while each calendar is active (the first active one applying),
+    /// `outside` outside them: its timetable of units on shift. And what happens to a job under
+    /// way on a unit that goes off shift.
+    pub fn server_shifts(
+        &mut self,
+        block: BlockId,
+        outside: u32,
+        shifts: &[(&str, u32)],
+        on_shift_end: OnShiftEnd,
+    ) {
+        if let Some((
+            _,
+            ElementKind::Server {
+                capacity,
+                shifts: s,
+                on_shift_end: o,
+                ..
+            },
+            _,
+        )) = self.elements.get_mut(block.0)
+        {
+            *capacity = outside;
+            *s = shifts
+                .iter()
+                .map(|(c, q)| Timed {
+                    calendar: ElementId::unchecked(c),
+                    value: *q,
+                })
+                .collect();
+            *o = on_shift_end;
         }
     }
 

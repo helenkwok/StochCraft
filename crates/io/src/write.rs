@@ -8,8 +8,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate, HealthCheck, Model,
-    Need, OnTakeout, Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue,
-    ResourcePool, Routing, Scrap, Setup, Stop, Timed, Transfer,
+    Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, Power, Property, PropertyType,
+    PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -188,14 +188,32 @@ pub(crate) fn timer_param(
 
 /// A pool's `Quantity`: its units outside its shifts, then each shift's.
 pub(crate) fn quantity_param(r: &ResourcePool) -> Element {
+    units_param(r.quantity, &r.shifts)
+}
+
+/// A resource's `Quantity`: `quantity` units outside its shifts, then each shift's (a pool's,
+/// or a task's own by shift).
+pub(crate) fn units_param(quantity: u32, shifts: &[Timed<u32>]) -> Element {
     timed_param(
         "Quantity",
-        Some(numeric(u64::from(r.quantity))),
-        r.shifts
+        Some(numeric(u64::from(quantity))),
+        shifts
             .iter()
             .map(|t| (t.calendar.as_str(), numeric(u64::from(t.value))))
             .collect(),
     )
+}
+
+/// What happens to a job under way on a server's unit that goes off shift, as StochCraft's
+/// vendor extension ([`crate::bpsim::ON_SHIFT_END`]); `None` for the default (it finishes).
+pub(crate) fn on_shift_end_element(o: OnShiftEnd) -> Option<Element> {
+    (o != OnShiftEnd::Finish).then(|| vendor_value_element(crate::bpsim::ON_SHIFT_END, o.name()))
+}
+
+/// The pool marker on a server's own resource whose units follow shifts, so it reads back as
+/// the task's own and not as a pool ([`crate::bpsim::POOL`] `false`); `None` without shifts.
+pub(crate) fn own_marker(shifts: &[Timed<u32>]) -> Option<Element> {
+    (!shifts.is_empty()).then(|| vendor_value_element(crate::bpsim::POOL, "false"))
 }
 
 fn boolean(b: bool) -> Element {
@@ -831,6 +849,11 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         {
             ep.push(changeover_element(x));
         }
+        if let ElementKind::Server { on_shift_end, .. } = &e.kind
+            && let Some(x) = on_shift_end_element(*on_shift_end)
+        {
+            ep.push(x);
+        }
         if let Some(x) = batching_element(&e.kind) {
             ep.push(x);
         }
@@ -887,22 +910,24 @@ pub fn write_new(model: &Model) -> Vec<u8> {
                 capacity,
                 available,
                 availability,
+                shifts,
                 ..
             },
             Some(rid),
         ) = (&e.kind, resource_of.get(e.id.as_str()))
         {
-            let quantity = numeric(u64::from(*capacity));
             let mut rp = s("ResourceParameters");
             if let Some(a) = availability_param(*available, availability) {
                 rp.push(a);
             }
-            rp.push(param("Quantity", quantity));
-            scenario.push(
-                s("ElementParameters")
-                    .with_attr("elementRef", rid)
-                    .with_child(rp),
-            );
+            rp.push(units_param(*capacity, shifts));
+            let mut ep = s("ElementParameters")
+                .with_attr("elementRef", rid)
+                .with_child(rp);
+            if let Some(m) = own_marker(shifts) {
+                ep.push(m);
+            }
+            scenario.push(ep);
         }
     }
     for r in &model.resources {

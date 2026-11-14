@@ -14,7 +14,9 @@
 
   stochcraft:pool, on a resource's ElementParameters, with the value true: the resource is a
   shared pool, even when one task uses it or none. Without it, a resource that one task needs a
-  single unit of may be read as that task's own resource.
+  single unit of may be read as that task's own resource, unless its quantity has values
+  validFor a calendar. With the value false, such a resource is that task's own even then: the
+  task's units follow its shifts.
 
   stochcraft:batchSize, on a task's ElementParameters: the task collects this many entities
   (a whole number of at least 1) and sends them on together as one batch.
@@ -84,6 +86,17 @@
         <stochcraft:restart><bpsim:FloatingParameter value="60"/></stochcraft:restart>
       </stochcraft:healthCheck>
     </bpsim:VendorExtension>
+
+  stochcraft:onShiftEnd, on a task's ElementParameters, with the value finish, retry or resume:
+  what happens to a job under way on a unit of the task's own resource that goes off shift (the
+  units on shift drop, by the resource's quantity validFor a calendar, or its availability
+  ends). finish (the default) lets the unit finish the job, then go off; retry sends it back to
+  the head of the queue at once (its work is wasted); resume lets it wait on the unit and carry
+  on with what was left when the unit is on shift again. Units go off idle ones first, then
+  failed or restarting ones, then busy ones, the job started last first.
+
+    <bpsim:VendorExtension name="stochcraft:onShiftEnd"
+        xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="retry"/>
 
   stochcraft:abandoned, on a sequence flow's ElementParameters, with the value true: the way out
   of a task with a patience that entities giving up take (a retry, a call back later), besides

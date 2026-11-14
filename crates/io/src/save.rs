@@ -12,7 +12,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Connection, Dist, Element as ModelElement, ElementId, ElementKind, Model,
+    Bounds, Connection, Dist, Element as ModelElement, ElementId, ElementKind, Model, OnShiftEnd,
     PropertyValue, ResourcePool, Routing, Stop, TimeUnit,
 };
 
@@ -23,10 +23,10 @@ use crate::write::{
     abandoned_element, availability_param, batching_element, bpmn_local, breakdown_element,
     calendar_element, changeover_element, condition_element, demand_element, dist_element,
     edge_ends, estimate_element, health_check_element, interruptible_param, numeric,
-    patience_element, planned_element, power_element, probability_element, property_element,
-    quantity_element, quantity_param, queue_capacity_element, rework_element, routing_element,
-    scrap_element, size, start_param, stop_element, timer_param, transfer_element,
-    vendor_value_element,
+    on_shift_end_element, own_marker, patience_element, planned_element, power_element,
+    probability_element, property_element, quantity_element, quantity_param,
+    queue_capacity_element, rework_element, routing_element, scrap_element, size, start_param,
+    stop_element, timer_param, transfer_element, units_param, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -2003,6 +2003,19 @@ impl Editor {
                             new_check.map(health_check_element),
                         ));
                     }
+                    // What happens to a job under way on a unit going off shift.
+                    let shift_end = |k: Option<&ElementKind>| match k {
+                        Some(ElementKind::Server { on_shift_end, .. }) => *on_shift_end,
+                        _ => OnShiftEnd::Finish,
+                    };
+                    let new_end = shift_end(Some(&e.kind));
+                    if new_end != shift_end(was) || (is_server && !was_server) {
+                        vendor_writes.push((
+                            id.clone(),
+                            crate::bpsim::ON_SHIFT_END,
+                            on_shift_end_element(new_end),
+                        ));
+                    }
                     // The setup: BPSim's SetUpTime before every job, or a changeover.
                     let old_setup = match was {
                         Some(ElementKind::Server { setup, .. }) => setup.as_ref(),
@@ -2038,17 +2051,24 @@ impl Editor {
                                 capacity,
                                 available,
                                 availability,
+                                shifts,
                                 ..
                             },
                             Some(ElementKind::Server {
                                 capacity: oc,
                                 available: oa,
                                 availability: ov,
+                                shifts: os,
                                 ..
                             }),
-                        ) if capacity != oc || available != oa || availability != ov => {
-                            // The capacity and the availability are the task's own resource's.
-                            let what = if capacity != oc {
+                        ) if capacity != oc
+                            || available != oa
+                            || availability != ov
+                            || shifts != os =>
+                        {
+                            // The capacity, the shifts and the availability are the task's own
+                            // resource's.
+                            let what = if capacity != oc || shifts != os {
                                 "capacity"
                             } else {
                                 "availability"
@@ -2064,7 +2084,23 @@ impl Editor {
                                     "the {what} of `{id}` is resource `{r}`'s, which {users} tasks share; shared resources can be edited from M2.5"
                                 )));
                             }
-                            if capacity != oc {
+                            if shifts != os || (!shifts.is_empty() && capacity != oc) {
+                                // The whole quantity, by shift; marked as the task's own while
+                                // it has shifts, which would otherwise make it a pool.
+                                writes.push((
+                                    r.clone(),
+                                    "ResourceParameters",
+                                    "Quantity",
+                                    Some(units_param(*capacity, shifts)),
+                                ));
+                                if shifts.is_empty() != os.is_empty() {
+                                    vendor_writes.push((
+                                        r.clone(),
+                                        crate::bpsim::POOL,
+                                        own_marker(shifts),
+                                    ));
+                                }
+                            } else if capacity != oc {
                                 writes.push((
                                     r.clone(),
                                     "ResourceParameters",
@@ -2140,6 +2176,7 @@ impl Editor {
                         vendor_writes.push((id.clone(), crate::bpsim::PLANNED_RUN_TIME, None));
                         vendor_writes.push((id.clone(), crate::bpsim::PATIENCE, None));
                         vendor_writes.push((id.clone(), crate::bpsim::HEALTH_CHECK, None));
+                        vendor_writes.push((id.clone(), crate::bpsim::ON_SHIFT_END, None));
                         vendor_writes.push((id.clone(), crate::bpsim::CHANGEOVER, None));
                         writes.push((id.clone(), "TimeParameters", "SetUpTime", None));
                         writes.push((id.clone(), "PriorityParameters", "Interruptible", None));
@@ -2255,17 +2292,25 @@ impl Editor {
                     capacity,
                     available,
                     availability,
+                    shifts,
                     ..
                 } = &e.kind
                 {
                     if let Some(a) = availability_param(*available, availability) {
                         writes.push((rid.clone(), "ResourceParameters", "Availability", Some(a)));
                     }
+                    if let Some(m) = own_marker(shifts) {
+                        vendor_writes.push((rid.clone(), crate::bpsim::POOL, Some(m)));
+                    }
                     writes.push((
                         rid,
                         "ResourceParameters",
                         "Quantity",
-                        Some(numeric(u64::from(*capacity))),
+                        Some(if shifts.is_empty() {
+                            numeric(u64::from(*capacity))
+                        } else {
+                            units_param(*capacity, shifts)
+                        }),
                     ));
                 }
             } else {

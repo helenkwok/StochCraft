@@ -162,11 +162,22 @@ pub enum ElementKind {
         /// Availability while a calendar is active, the first active one applying (BPSim
         /// `availability` values `validFor` a calendar), as for a pool. All the units follow it.
         ///
-        /// A unit checks it only when it takes its next entity: a job under way when the units
-        /// go off shift finishes first, and a job interrupted by a failure resumes after its
-        /// repair even if the shift has ended meanwhile. Failures ([`Breakdown`]) keep coming
-        /// in elapsed time through the breaks, and a repair goes on through them.
+        /// A job under way when the units go off shift finishes first (unless `on_shift_end`
+        /// says otherwise), and a job interrupted by a failure resumes after its repair even if
+        /// the shift has ended meanwhile. Failures ([`Breakdown`]) keep coming in elapsed time
+        /// through the breaks, and a repair goes on through them.
         availability: Vec<Timed<bool>>,
+        /// Units while a calendar is active (BPSim `quantity` values `validFor` a calendar on the
+        /// task's own resource), the first active one applying, as for a pool; `capacity` is the
+        /// units outside them (0 when the file gives only shift values). Empty: always
+        /// `capacity`. The units on shift at a time are the shift's units while the units are
+        /// available, else none. [`ElementKind::most_units`] is how many units there are in all.
+        shifts: Vec<Timed<u32>>,
+        /// What happens to a job under way on a unit that goes off shift (fewer units on
+        /// shift, or the availability closing): it finishes first (the default), is retried
+        /// elsewhere, or resumes when the unit is on shift again. A StochCraft vendor extension
+        /// (`stochcraft:onShiftEnd`). See [`OnShiftEnd`].
+        on_shift_end: OnShiftEnd,
         /// The power each unit draws in each of its states, for energy results; `None`: no
         /// energy is reported. A StochCraft vendor extension (`stochcraft:power`).
         power: Option<Power>,
@@ -469,6 +480,52 @@ impl OnTakeout {
     }
 }
 
+/// What happens to a job under way on a server's unit that goes off shift: the units on shift
+/// drop (a shift with fewer, [`ElementKind::Server`]'s `shifts`) or the availability closes.
+///
+/// Which units go off when the count drops by some number: first idle units that are up and
+/// in service, the highest numbered first; then units failed or out restarting after a health
+/// check (the highest numbered first); then busy units, those holding a finished entity first,
+/// then the job started most recently first (the least work lost). When the count rises, units
+/// still finishing a job before going off stay on first; then units come back, those holding a
+/// job paused off shift first, then the lowest numbered first. A failed or out unit comes back
+/// still failed or out until its repair or restart ends.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum OnShiftEnd {
+    /// The unit finishes the job, then goes off; until then it counts as on shift. A job a
+    /// failure interrupted resumes after the repair, shift or not.
+    #[default]
+    Finish,
+    /// The job stops at once and the entity goes back to the head of the queue, for any unit
+    /// to start afresh (with a fresh patience if the server has one). The work done on it is
+    /// wasted.
+    Retry,
+    /// The job stops at once; the entity waits on its unit and the job carries on with what
+    /// was left once that unit is on shift again.
+    Resume,
+}
+
+impl OnShiftEnd {
+    /// The name in files and on the wire.
+    pub fn name(self) -> &'static str {
+        match self {
+            OnShiftEnd::Finish => "finish",
+            OnShiftEnd::Retry => "retry",
+            OnShiftEnd::Resume => "resume",
+        }
+    }
+
+    /// The value named `s`.
+    pub fn from_name(s: &str) -> Option<Self> {
+        match s {
+            "finish" => Some(OnShiftEnd::Finish),
+            "retry" => Some(OnShiftEnd::Retry),
+            "resume" => Some(OnShiftEnd::Resume),
+            _ => None,
+        }
+    }
+}
+
 /// How an exclusive gateway chooses the way each entity takes.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Routing {
@@ -601,6 +658,17 @@ impl ElementKind {
             ElementKind::ParallelGateway => "parallel_gateway",
             ElementKind::Batch { .. } => "batch",
             ElementKind::Unbatch => "unbatch",
+        }
+    }
+
+    /// A server's units in all: the most its timetable ever puts on shift (its `capacity`, or
+    /// a shift's units if more). `None` for other elements.
+    pub fn most_units(&self) -> Option<u32> {
+        match self {
+            ElementKind::Server {
+                capacity, shifts, ..
+            } => Some(shifts.iter().map(|s| s.value).fold(*capacity, u32::max)),
+            _ => None,
         }
     }
 
@@ -1775,7 +1843,8 @@ impl Model {
                 )),
                 _ => {}
             }
-            if let ElementKind::Server { capacity: 0, .. } = e.kind {
+            // No units ever: none outside the shifts and none in any of them.
+            if e.kind.most_units() == Some(0) {
                 out.push(Diagnostic::error(Some(&e.id), Problem::ZeroCapacity));
             }
             if let ElementKind::Batch { size: 0 } = e.kind {
@@ -2161,8 +2230,14 @@ impl Model {
                     out.push(Diagnostic::warning(Some(&e.id), Problem::TimedIgnored));
                 }
             }
-            if let ElementKind::Server { availability, .. } = &e.kind {
+            if let ElementKind::Server {
+                availability,
+                shifts,
+                ..
+            } = &e.kind
+            {
                 refs.extend(availability.iter().map(|t| (&e.id, &t.calendar)));
+                refs.extend(shifts.iter().map(|t| (&e.id, &t.calendar)));
             }
         }
         for r in &self.resources {
@@ -2529,7 +2604,6 @@ impl Model {
         for e in &self.elements {
             // Entities that give up keep a patient server's queue from growing without limit.
             let ElementKind::Server {
-                capacity,
                 service,
                 queue_capacity: None,
                 patience: None,
@@ -2559,7 +2633,9 @@ impl Model {
                     _ => None,
                 })
                 .sum();
-            let load = rate * mean_service / f64::from((*capacity).max(1));
+            // With shifts, over the most units on shift: a lower bound on the load.
+            let units = e.kind.most_units().unwrap_or(1).max(1);
+            let load = rate * mean_service / f64::from(units);
             if load >= 1.0 {
                 out.push(Diagnostic::warning(
                     Some(&e.id),
@@ -3093,6 +3169,8 @@ mod tests {
                         planned_run_time: None,
                         patience: None,
                         health_check: None,
+                        shifts: Vec::new(),
+                        on_shift_end: OnShiftEnd::Finish,
                     },
                 ),
                 el(
@@ -3188,6 +3266,8 @@ mod tests {
             planned_run_time: None,
             patience: None,
             health_check: None,
+            shifts: Vec::new(),
+            on_shift_end: OnShiftEnd::Finish,
         };
         let mut m = mm1();
         m.elements.push(el("a", server(Some(1))));
@@ -3266,6 +3346,8 @@ mod tests {
                 planned_run_time: None,
                 patience: None,
                 health_check: None,
+                shifts: Vec::new(),
+                on_shift_end: OnShiftEnd::Finish,
             },
         ));
         m.connections.push(link("f3", "exit", "arrivals"));

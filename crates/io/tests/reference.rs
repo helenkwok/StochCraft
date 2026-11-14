@@ -18,7 +18,7 @@ use stochcraft_io::bpsim::{self, NS2};
 use stochcraft_io::{read, read_scenario, write_new, xml};
 use stochcraft_model::{
     Connection, DateTime, Dist, Element, ElementId, ElementKind, Estimate, Experiment, Family,
-    Model, Property, PropertyType, PropertyValue, Stop, ThreePoint, TimeUnit, Upper,
+    Model, OnShiftEnd, Property, PropertyType, PropertyValue, Stop, ThreePoint, TimeUnit, Upper,
 };
 
 fn required() -> bool {
@@ -572,6 +572,8 @@ fn edits() -> Vec<Edit> {
                         planned_run_time: None,
                         patience: None,
                         health_check: None,
+                        shifts: Vec::new(),
+                        on_shift_end: OnShiftEnd::Finish,
                     };
                 }
             }),

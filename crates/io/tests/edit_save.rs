@@ -7,7 +7,7 @@ use std::collections::BTreeMap;
 
 use stochcraft_io::{SaveError, read_scenario};
 use stochcraft_model::{
-    Connection, Dist, Element, ElementId, ElementKind, Model, TimeUnit, Transfer,
+    Connection, Dist, Element, ElementId, ElementKind, Model, OnShiftEnd, TimeUnit, Transfer,
 };
 
 fn file(name: &str) -> Vec<u8> {
@@ -313,6 +313,8 @@ fn blocks_and_connections_can_be_added_and_removed() {
             planned_run_time: None,
             patience: None,
             health_check: None,
+            shifts: Vec::new(),
+            on_shift_end: OnShiftEnd::Finish,
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -336,6 +338,8 @@ fn blocks_and_connections_can_be_added_and_removed() {
             planned_run_time: None,
             patience: None,
             health_check: None,
+            shifts: Vec::new(),
+            on_shift_end: OnShiftEnd::Finish,
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -606,6 +610,8 @@ fn new_ids_never_clash_with_the_files_other_ids() {
             planned_run_time: None,
             patience: None,
             health_check: None,
+            shifts: Vec::new(),
+            on_shift_end: OnShiftEnd::Finish,
         };
     });
     let t = text(&saved);
@@ -1287,6 +1293,8 @@ fn new_and_changed_servers_carry_their_buffer() {
             planned_run_time: None,
             patience: None,
             health_check: None,
+            shifts: Vec::new(),
+            on_shift_end: OnShiftEnd::Finish,
         };
         set_queue(m, "weld", Some(1));
     });

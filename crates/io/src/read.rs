@@ -9,8 +9,9 @@ use std::collections::{BTreeMap, BTreeSet};
 use stochcraft_model::{
     Bounds, Breakdown, Calendar, Change, Connection, DateTime, Demand, DemandPer, Dist,
     Element as ModelElement, ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck,
-    Model, Need, OnTakeout, Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue,
-    ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, Power, Property, PropertyType,
+    PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed,
+    Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -610,15 +611,10 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
     }
     let mut of_task = BTreeMap::new();
     let mut shared = BTreeMap::new();
-    // A resource whose number of units follows a calendar is a pool, even for one task. One
-    // that is only available or not by calendar can be a task's own (a server's units follow
-    // its availability).
-    let timed = |r: &str| {
-        scenario.is_some_and(|s| {
-            s.param(r, "ResourceParameters/Quantity")
-                .is_some_and(|q| q.elements().any(|v| v.attr("validFor").is_some()))
-        })
-    };
+    // A resource whose number of units follows a calendar is a pool, even for one task, unless
+    // StochCraft marked it as no pool (a task's own units by shift). One that is only available
+    // or not by calendar can be a task's own (a server's units follow its availability).
+    let timed = |r: &str| quantity_by_calendar(scenario, r);
     // A resource StochCraft marked as a pool is one. In a file without the marker, a resource
     // with a role, or used by a task with a priority, is a pool too: StochCraft never writes
     // either for a task's own resource.
@@ -631,7 +627,7 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
         let own = match needs.as_slice() {
             [Need::Resource { id, quantity: 1 }]
                 if users.get(id.as_str()).is_none_or(|u| u.len() <= 1)
-                    && !timed(id.as_str())
+                    && (!timed(id.as_str()) || is_marked_own(scenario, id.as_str()))
                     && !pool(id.as_str(), &task) =>
             {
                 Some(id.to_string())
@@ -655,12 +651,31 @@ fn assign_resources(p: &Process, scenario: Option<&Scenario>, notes: &mut Vec<No
     }
 }
 
+/// Whether resource `r`'s quantity has values `validFor` a calendar (units by shift).
+fn quantity_by_calendar(scenario: Option<&Scenario>, r: &str) -> bool {
+    scenario.is_some_and(|s| {
+        s.param(r, "ResourceParameters/Quantity")
+            .is_some_and(|q| q.elements().any(|v| v.attr("validFor").is_some()))
+    })
+}
+
 /// Whether `r` carries StochCraft's pool marker ([`bpsim::POOL`]).
 fn is_marked_pool(scenario: Option<&Scenario>, r: &str) -> bool {
+    pool_marker(scenario, r).as_deref() == Some("true")
+}
+
+/// Whether StochCraft marked `r` as no pool ([`bpsim::POOL`] `false`): a task's own resource,
+/// even with a quantity by calendar.
+fn is_marked_own(scenario: Option<&Scenario>, r: &str) -> bool {
+    pool_marker(scenario, r).as_deref() == Some("false")
+}
+
+/// The value of `r`'s pool marker, trimmed.
+fn pool_marker(scenario: Option<&Scenario>, r: &str) -> Option<String> {
     scenario
         .and_then(|s| s.param(r, &format!("VendorExtension/{}", bpsim::POOL)))
         .and_then(bpsim::vendor_value)
-        .is_some_and(|v| v.trim() == "true")
+        .map(|v| v.trim().to_owned())
 }
 
 /// Looks up a parameter's default value: (element, key, notes).
@@ -702,26 +717,39 @@ fn pool_of(
     scenario: Option<&Scenario>,
     notes: &mut Vec<Note>,
 ) -> ResourcePool {
-    let unit = scenario.map_or(TimeUnit::Minutes, |s| s.settings.base_time_unit);
-    let param = |key: &str| scenario.and_then(|s| s.param(r, key));
     let mut pool = ResourcePool::new(ElementId::unchecked(r), name, 1, roles);
-    if let Some(p) = param("ResourceParameters/Quantity") {
+    (pool.quantity, pool.shifts) = units_by_shift(r, scenario, notes);
+    (pool.available, pool.availability) = availability_of(r, scenario, notes);
+    pool
+}
+
+/// Resource `r`'s units outside its shifts (BPSim `quantity`, default 1; 0 when it has only
+/// values `validFor` a calendar) and each shift's: a pool's, or a task's own by shift.
+fn units_by_shift(
+    r: &str,
+    scenario: Option<&Scenario>,
+    notes: &mut Vec<Note>,
+) -> (u32, Vec<Timed<u32>>) {
+    let unit = scenario.map_or(TimeUnit::Minutes, |s| s.settings.base_time_unit);
+    let mut quantity = 1;
+    let mut by_shift = Vec::new();
+    if let Some(p) = scenario.and_then(|s| s.param(r, "ResourceParameters/Quantity")) {
         let shifts = bpsim::timed_values(p, unit, notes, Some(r));
         match bpsim::default_value(p, unit, notes, Some(r)) {
             Some(v) => match units(&v) {
-                Some(q) => pool.quantity = q,
+                Some(q) => quantity = q,
                 None => notes.push(Note::error(
                     Some(r),
                     format!("resource quantity must be a whole number, not {v:?}; 1 is used"),
                 )),
             },
             // Only shift values: no units outside them.
-            None if !shifts.is_empty() => pool.quantity = 0,
+            None if !shifts.is_empty() => quantity = 0,
             None => {}
         }
         for (c, v) in shifts {
             match units(&v) {
-                Some(q) => pool.shifts.push(Timed {
+                Some(q) => by_shift.push(Timed {
                     calendar: ElementId::unchecked(&c),
                     value: q,
                 }),
@@ -732,8 +760,7 @@ fn pool_of(
             }
         }
     }
-    (pool.available, pool.availability) = availability_of(r, scenario, notes);
-    pool
+    (quantity, by_shift)
 }
 
 /// Resource `r`'s availability (BPSim `availability`, default true) and its values while
@@ -973,8 +1000,17 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             notes.push(Note::info(Some(id), "a priority matters only among tasks that share a resource; this task has its own"));
                         }
                         let (available, availability) = availability_of(r, scenario, notes);
+                        // Units by shift (only on a resource marked as the task's own), else
+                        // one quantity.
+                        let (capacity, shifts) = if quantity_by_calendar(scenario, r) {
+                            units_by_shift(r, scenario, notes)
+                        } else {
+                            (quantity_of(r, &val, notes), Vec::new())
+                        };
                         ElementKind::Server {
-                            capacity: quantity_of(r, &val, notes),
+                            capacity,
+                            shifts,
+                            on_shift_end: on_shift_end_of(scenario, id, notes),
                             service: time,
                             queue_capacity: queue,
                             breakdown: breakdown_of(scenario, id, unit, notes),
@@ -1067,6 +1103,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "a health check (stochcraft:healthCheck) applies only to a task with a resource of its own; it is ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Server { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::ON_SHIFT_END)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "what happens to a job at a shift's end (stochcraft:onShiftEnd) applies only to a task with a resource of its own; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::Sink { .. })
@@ -1314,6 +1360,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::PLANNED_RUN_TIME,
             bpsim::PATIENCE,
             bpsim::HEALTH_CHECK,
+            bpsim::ON_SHIFT_END,
             bpsim::ABANDONED,
             bpsim::SCRAP,
             bpsim::DEMAND,
@@ -1777,6 +1824,28 @@ fn health_check_of(
         restart,
         keep,
         on_takeout,
+    })
+}
+
+/// What StochCraft's vendor extension says happens to a job under way on a unit of server
+/// `id` that goes off shift ([`OnShiftEnd::Finish`] when none).
+fn on_shift_end_of(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) -> OnShiftEnd {
+    let Some(ext) =
+        scenario.and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::ON_SHIFT_END)))
+    else {
+        return OnShiftEnd::Finish;
+    };
+    let raw = bpsim::vendor_value(ext).unwrap_or_default();
+    OnShiftEnd::from_name(raw.trim()).unwrap_or_else(|| {
+        notes.push(Note::error(
+            Some(id),
+            format!(
+                "what happens to a job at a shift's end (`{}`) must be finish, retry or resume, not `{}`; the job finishes",
+                bpsim::ON_SHIFT_END,
+                raw.trim()
+            ),
+        ));
+        OnShiftEnd::Finish
     })
 }
 
