@@ -188,6 +188,7 @@
 	Failure interrupts the job	Haveri avbryter arbetet
 	Family	Familj
 	File	Arkiv
+	Finding	Iakttagelse
 	Finish, then go off	Gör klart och gå sedan av skift
 	Finished at {time} {unit}	Klar vid {time} {unit}
 	Fit	Anpassa
@@ -398,6 +399,7 @@
 	Run the sweep	Kör svepet
 	Running	Körs
 	Running…	Körs…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikationerna delar sig: {low_n} av {n} nära {low}, {high_n} nära {high}. Medelvärdet ({mean}) blandar två utfall; titta på varje grupp.
 	Sat	lör
 	Save	Spara
 	Save As…	Spara som…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Modellen har nu enheterna som dimensioneringen hittade
 	The model: its experiment, connections and problems	Modellen: experiment, anslutningar och problem
 	The name is empty or already used.	Namnet är tomt eller används redan.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikationerna delar sig i två utfall: {a} av {n} i det ena, {b} i det andra. {count} resultat delar sig på samma sätt, bland dem {result} ({element}); se tabellen nedan.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Servern gör klart jobbet den har och går sedan av skift; till dess räknas den som på skift.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen replikationer vid eller under varje värde. Bandet innehåller den sanna fördelningen med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Värdena är tal åtskilda med semikolon eller mellanslag
@@ -623,6 +626,7 @@
 	{n} waiting	{n} väntar
 	{n} {unit} per second	{n} {unit} per sekund
 	{property} (set to, mean)	{property} (angivet värde, medelvärde)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replikationerna delar sig i två utfall; se tabellen nedan.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} på {background}: {ratio}:1, kräver {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, högst {most}
 	{word}: {message}	{word}: {message}

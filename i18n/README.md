@@ -403,6 +403,57 @@ engine's messages (validation, file notes) are English too.
   semicolons. Not reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka, kk
   and sq as before, the going-off-shift phrasing everywhere, and sr and sr-latn, written in
   ekavian (smena) though their "Time off shift" row says "Vrijeme van smjene".
+- The rows for split outcomes (branch "split-outcomes": the heading Finding, the line "Runs split:
+  {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at
+  each group." under a result whose replications fall into two groups, and "{result} ({element})
+  split into two outcomes: see the table below.") were machine-drafted with Claude Code from the
+  plain meaning of the English and each catalog's existing words. The runs are called by the
+  catalog's word for replications, from "n = k of N: only k of the N replications had a value…",
+  "{n} replication · mean {mean} · …" and "One replication of {n}: …" (de Replikationen, fr
+  réplications, es and gl réplicas, it repliche, nl herhalingen, fi toistot, et kordused, hu
+  ismétlések, sl ponovitve, sq përsëritjet, tr tekrarlar, vi lần lặp, ja and ko 反復実行/반복 실행, zh
+  重复运行/重複執行, …), as the English "runs" means the same thing. "{low_n} of {n}" follows those rows' "k
+  of N" (von, sur, de, z, od, iš, из, 中, …); mean is the word of the catalog's Mean row and its "·
+  mean {mean} ·" row, table that of "Export table (CSV)", and below that of "No connections yet:
+  join blocks below.", and the instruction "look at each group" takes the imperative of "Run the
+  experiment again to see this result's spread." (de Sie, fr vous, it and ro tu, …). Where a count
+  would stand right before a value ("99 1.7"), et, hu, hi, ka, kk, ta and te put a dash between them
+  (et also the word for replications) and et, ka and kk say "about {low}", so that no case ending
+  follows a number. The third string does not let a verb agree with {result}, as result names
+  include plurals and past participles (Entered, Gave up, Units taken out by health checks): the
+  replications are the subject instead, after a colon (de, fr, es, ca, gl, it, pt-br, ro, nl, da,
+  nb, sv, id, vi, tr) or, in the catalogs that use one for such messages, a dash (bg, bn, bs, cs,
+  el, et, fi, hi, hr, hu, ka, kk, lt, pl, sk, sl, sq, sr, sr-latn, ta, te, and ru and uk with "—");
+  ja, ko, zh, lo and th need no agreement. The sources checked were Wikipedia's article on
+  multimodal distribution, Wiktionary's finding and outcome, and IATE for bimodal, bimodal
+  distribution, finding and outcome. The multimodal-distribution article exists only in ca, de, fr,
+  ko and uk, and IATE gives bimodal distribution in most EU languages (de bimodale Verteilung, fr
+  distribution bimodale, fi kaksihuippuinen jakauma, hu kétmóduszú eloszlás, nl tweetoppige
+  verdeling, …); as the English avoids the jargon, neither was used. Outcome is the word Wiktionary
+  or IATE gives where it is not the catalog's Result word: fr issue, el έκβαση, hu kimenetel, nl
+  uitkomst, ru исход, bs, hr, sr and sr-latn ishod, sv utfall, da udfald, and it esito (IATE); nb
+  utfall (as sv), sl izid, lt baigtis, pt-br desfecho, sq përfundim, bn পরিণতি, ta விளைவு and vi kết
+  cục are dictionary words for outcome that no source here gave. bg kept резултат, as Wiktionary's
+  изход is the catalog's "way out" for entities that give up; de, es, ca, gl, ro, cs, sk, pl, uk,
+  et, fi, id, hi, ka, kk, tr, ja, ko, zh, lo, th and te say "two different results" with the
+  catalog's Result word or one close to it, which is worth a look. Finding follows IATE's
+  audit-finding entries where they have the singular (bg констатация, cs zjištění, el διαπίστωση, fi
+  havainto, fr constatation, lt pastebėjimas, nl bevinding, pl ustalenie, pt-br constatação, ro
+  constatare, sk zistenie, sl ugotovitev) and Wiktionary (de Befund, it riscontro); es hallazgo, gl
+  achado, hu megállapítás (Wiktionary's lelet reads as a find), sv iakttagelse, da iagttagelse, nb
+  funn, ru наблюдение, uk спостереження, ka მიგნება, kk тұжырым, hi निष्कर्ष, bn পর্যবেক্ষণ, ta
+  கண்டறிதல், te పరిశీలన, sq gjetje, tr bulgu, id temuan, vi phát hiện, th ข้อค้นพบ, lo ຂໍ້ຄົ້ນພົບ,
+  ja 所見, ko 발견 사항 and zh 发现/發現 are dictionary words, so the heading means "finding" in some catalogs
+  and "observation" or "conclusion" (hi, kk) in others. No catalog had a finding word to reuse. The
+  later row "The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results
+  split the same way, among them {result} ({element}); see the table below.", for two or more
+  results that split the same runs, repeats those words; as {count} is filled in without a plural
+  form, bg, bs, cs, hr, kk, lt, pl, ro, ru, sk, sl, sr, sr-latn, ta, te and uk put it after a colon
+  ("Results split the same way: {count}") so that no noun agrees with it, and the others use a noun
+  form right for any number from 2. Not reviewed by native speakers. The least certain are lo, th,
+  ta, te, bn, ka, kk and sq as before, the Finding heading everywhere (no source gives it as a
+  heading over results), and the third string's word order in ko and ja, where the sentence is split
+  in two.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

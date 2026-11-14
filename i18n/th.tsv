@@ -188,6 +188,7 @@
 	Failure interrupts the job	การขัดข้องขัดจังหวะงาน
 	Family	ตระกูล
 	File	ไฟล์
+	Finding	ข้อค้นพบ
 	Finish, then go off	ทำให้เสร็จ แล้วจึงออกกะ
 	Finished at {time} {unit}	สิ้นสุดที่ {time} {unit}
 	Fit	พอดี
@@ -398,6 +399,7 @@
 	Run the sweep	รันการกวาด
 	Running	กำลังรัน
 	Running…	กำลังรัน…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	รอบการจำลองซ้ำแยกเป็นสองกลุ่ม: {low_n} จาก {n} ใกล้ {low} และ {high_n} ใกล้ {high} ค่าเฉลี่ย ({mean}) ผสมผลสองแบบเข้าด้วยกัน ให้ดูแต่ละกลุ่ม
 	Sat	ส.
 	Save	บันทึก
 	Save As…	บันทึกเป็น…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	ตอนนี้แบบจำลองมีจำนวนหน่วยที่การกำหนดขนาดพบแล้ว
 	The model: its experiment, connections and problems	แบบจำลอง: การทดลอง การเชื่อมต่อ และปัญหา
 	The name is empty or already used.	ชื่อว่างหรือถูกใช้แล้ว
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	รอบการจำลองซ้ำแยกเป็นผลสองแบบ: {a} จาก {n} อยู่ในแบบหนึ่ง และ {b} อยู่ในอีกแบบ มีผลลัพธ์ {count} รายการที่แยกแบบเดียวกัน รวมถึง {result} ({element}) ดูตารางด้านล่าง
 	The server finishes the job it has, then goes off; until then it counts as on shift.	เซิร์ฟเวอร์ทำงานที่มีอยู่ให้เสร็จ แล้วจึงออกกะ จนถึงตอนนั้นยังนับว่าอยู่ในกะ
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	สัดส่วนรอบการจำลองซ้ำที่เท่ากับหรือต่ำกว่าแต่ละค่า แถบครอบคลุมการแจกแจงจริงด้วยความเชื่อมั่น {confidence}
 	The values are numbers, separated by semicolons or spaces	ค่าต้องเป็นตัวเลขที่คั่นด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
@@ -623,6 +626,7 @@
 	{n} waiting	รอ {n}
 	{n} {unit} per second	{n} {unit} ต่อวินาที
 	{property} (set to, mean)	{property} (กำหนดเป็น, ค่าเฉลี่ย)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) แยกเป็นผลสองแบบ: ดูตารางด้านล่าง
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} บน {background}: {ratio}:1 ต้องการ {min}:1
 	{title}: now {now}, at most {most}	{title}: ขณะนี้ {now} สูงสุด {most}
 	{word}: {message}	{word}: {message}

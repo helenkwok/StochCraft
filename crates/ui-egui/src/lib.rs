@@ -1373,7 +1373,9 @@ impl App {
                 });
                 results::record_line(ui, &results);
                 self.stop_line(ui, &results);
-                ui.add_space(12.0);
+                ui.add_space(6.0);
+                results::findings(ui, &results);
+                ui.add_space(6.0);
                 self.charts_rect = charts::show(ui, &results);
                 ui.add_space(6.0);
                 results::show(ui, &results);

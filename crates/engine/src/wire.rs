@@ -13,6 +13,7 @@ use stochcraft_model::{
     Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue, ResourcePool, Routing,
     Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
+use stochcraft_stats::split::{self, Split};
 
 /// A probability distribution. Times are in the experiment's time unit.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -1766,26 +1767,59 @@ pub fn diagnostics(ds: &[Diagnostic]) -> Value {
 }
 
 /// An experiment's results as JSON: per element, each metric's mean, 95% half-width, standard
-/// deviation and number of replications.
+/// deviation and number of replications, and, where the replications split into two outcomes
+/// ([`stochcraft_stats::split::two_outcomes`]), the two groups as `split`. Results whose splits
+/// put the same replications together share a `group` (from 1), and `splits` lists each group
+/// once: its replications on either side (`sizes`, the lead's low side first) and its results
+/// in table order, the lead first.
 pub fn results(model: &Model, replications: u64, seed: u64, summary: &ExperimentSummary) -> Value {
     let x = &model.experiment;
+    // Every result whose runs split, in table order, with the side of each replication.
+    let found: Vec<(usize, Metric, Split, Vec<Option<bool>>)> = summary
+        .elements
+        .iter()
+        .enumerate()
+        .flat_map(|(i, e)| {
+            e.samples.iter().filter_map(move |(m, samples)| {
+                let values: Vec<f64> = samples.iter().flatten().copied().collect();
+                let s = split::two_outcomes(&values)?;
+                Some((i, *m, s, split::sides(samples, s.cut)))
+            })
+        })
+        .collect();
+    let groups = split::group_by_runs(&found.iter().map(|f| f.3.clone()).collect::<Vec<_>>());
+    let group_of = |k: usize| {
+        groups
+            .iter()
+            .position(|g| g.members.contains(&k))
+            .map(|g| g + 1)
+    };
     let elements: Vec<Value> = summary
         .elements
         .iter()
-        .map(|e| {
+        .enumerate()
+        .map(|(i, e)| {
             let metrics: serde_json::Map<String, Value> = e
                 .metrics
                 .iter()
                 .map(|(m, s)| {
-                    (
-                        m.name().to_owned(),
-                        json!({
-                            "mean": s.mean,
-                            "half_width": s.half_width,
-                            "std_dev": s.std_dev,
-                            "n": s.n,
-                        }),
-                    )
+                    let mut v = json!({
+                        "mean": s.mean,
+                        "half_width": s.half_width,
+                        "std_dev": s.std_dev,
+                        "n": s.n,
+                    });
+                    // Only where the runs split, so other results are as before.
+                    if let Some(k) = found.iter().position(|f| f.0 == i && f.1 == *m) {
+                        let s = &found[k].2;
+                        v["split"] = json!({
+                            "cut": s.cut,
+                            "low": { "n": s.low.n, "mean": s.low.mean },
+                            "high": { "n": s.high.n, "mean": s.high.mean },
+                            "group": group_of(k),
+                        });
+                    }
+                    (m.name().to_owned(), v)
                 })
                 .collect();
             let mut v =
@@ -1860,12 +1894,156 @@ pub fn results(model: &Model, replications: u64, seed: u64, summary: &Experiment
         s["times"] = json!(summary.stop_times);
         v["stop"] = s;
     }
+    // Left out when nothing splits, so other results are as before.
+    if !groups.is_empty() {
+        v["splits"] = groups
+            .iter()
+            .enumerate()
+            .map(|(g, run)| {
+                let results: Vec<Value> = run
+                    .members
+                    .iter()
+                    .map(|k| {
+                        let (i, m, _, _) = &found[*k];
+                        json!([summary.elements[*i].id.as_str(), m.name()])
+                    })
+                    .collect();
+                json!({
+                    "id": g + 1,
+                    "n": run.low + run.high,
+                    "sizes": [run.low, run.high],
+                    "results": results,
+                })
+            })
+            .collect();
+    }
     v
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn results_give_the_two_outcomes_where_the_runs_split() {
+        use stochcraft_blocks::ElementSummary;
+        use stochcraft_stats::Summary;
+        // Units in service: about 1.7 in 9 runs, about 9.9 in 3, and a metric that does not
+        // split.
+        let split: Vec<f64> = (0..12)
+            .map(|i| {
+                if i % 4 == 3 {
+                    9.9 + 0.01 * f64::from(i)
+                } else {
+                    1.7 - 0.01 * f64::from(i)
+                }
+            })
+            .collect();
+        let even: Vec<f64> = (0..12).map(f64::from).collect();
+        // The queue splits the same runs the other way round (long where few were in
+        // service), with no value in the first run; units left split other runs.
+        let queue: Vec<Option<f64>> = (0..12)
+            .map(|i| {
+                (i > 0).then(|| {
+                    if i % 4 == 3 {
+                        0.5 + 0.01 * f64::from(i)
+                    } else {
+                        50.0 + f64::from(i)
+                    }
+                })
+            })
+            .collect();
+        let left: Vec<f64> = (0..12)
+            .map(|i| {
+                if i < 4 {
+                    100.0 + f64::from(i)
+                } else {
+                    10.0 + 0.1 * f64::from(i)
+                }
+            })
+            .collect();
+        let summary = |v: &[f64]| {
+            Summary::of(v).unwrap_or(Summary {
+                n: 0,
+                mean: 0.0,
+                std_dev: 0.0,
+                half_width: 0.0,
+            })
+        };
+        let queued: Vec<f64> = queue.iter().flatten().copied().collect();
+        let element = ElementSummary {
+            id: ElementId::unchecked("desk"),
+            name: "Desk".into(),
+            kind: "server",
+            metrics: vec![
+                (Metric::Entered, summary(&even)),
+                (Metric::Left, summary(&left)),
+                (Metric::MeanQueueLength, summary(&queued)),
+                (Metric::MeanInService, summary(&split)),
+            ],
+            properties: vec![],
+            samples: vec![
+                (Metric::Entered, even.iter().copied().map(Some).collect()),
+                (Metric::Left, left.iter().copied().map(Some).collect()),
+                (Metric::MeanQueueLength, queue),
+                (
+                    Metric::MeanInService,
+                    split.iter().copied().map(Some).chain([None]).collect(),
+                ),
+            ],
+        };
+        let s = ExperimentSummary {
+            replications: 13,
+            elements: vec![element],
+            stopped: None,
+            stop_times: vec![],
+            measured: vec![],
+        };
+        let r = results(&Model::default(), 13, 1, &s);
+        let metrics = &r["elements"][0]["metrics"];
+        assert!(metrics["entered"].get("split").is_none(), "{metrics}");
+        let got = &metrics["mean_in_service"]["split"];
+        assert_eq!(
+            (&got["low"]["n"], &got["high"]["n"]),
+            (&json!(9), &json!(3))
+        );
+        assert!(
+            got["cut"].as_f64().is_some_and(|c| c > 1.7 && c < 9.9),
+            "{got}"
+        );
+        assert!(
+            got["high"]["mean"]
+                .as_f64()
+                .is_some_and(|m| (m - 9.97).abs() < 1e-9),
+            "{got}"
+        );
+        // Units left split other runs: a group of their own. The queue and the units in
+        // service split the same runs: one group, led by the queue (first in table order), its
+        // low side (3 runs) first, over the 12 runs either has.
+        assert_eq!(metrics["left"]["split"]["group"], json!(1));
+        assert_eq!(metrics["mean_queue_length"]["split"]["group"], json!(2));
+        assert_eq!(got["group"], json!(2));
+        assert_eq!(
+            r["splits"],
+            json!([
+                { "id": 1, "n": 12, "sizes": [8, 4], "results": [["desk", "left"]] },
+                {
+                    "id": 2, "n": 12, "sizes": [3, 9],
+                    "results": [["desk", "mean_queue_length"], ["desk", "mean_in_service"]],
+                },
+            ])
+        );
+        // Nothing splits: no `splits`.
+        let mut calm = s.clone();
+        calm.elements[0]
+            .samples
+            .retain(|(m, _)| *m == Metric::Entered);
+        assert!(
+            results(&Model::default(), 13, 1, &calm)
+                .get("splits")
+                .is_none()
+        );
+    }
 
     #[test]
     fn every_distribution_round_trips() {

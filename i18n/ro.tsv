@@ -188,6 +188,7 @@
 	Failure interrupts the job	Avaria întrerupe lucrul
 	Family	Familie
 	File	Fișier
+	Finding	Constatare
 	Finish, then go off	Terminare, apoi ieșire din tură
 	Finished at {time} {unit}	Încheiat la {time} {unit}
 	Fit	Încadrează
@@ -398,6 +399,7 @@
 	Run the sweep	Rulează baleierea
 	Running	Se rulează
 	Running…	Se rulează…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replicări împărțite: {low_n} din {n} aproape de {low}, {high_n} aproape de {high}. Media ({mean}) amestecă două rezultate diferite; privește fiecare grup.
 	Sat	sâm
 	Save	Salvează
 	Save As…	Salvează ca…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Modelul are acum unitățile găsite la dimensionare
 	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
 	The name is empty or already used.	Numele este gol sau deja folosit.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replicările se împart în două rezultate diferite: {a} din {n} într-unul, {b} în celălalt. Rezultate împărțite la fel: {count}, printre ele {result} ({element}); vezi tabelul de mai jos.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Serverul termină lucrul pe care îl are, apoi iese din tură; până atunci contează ca fiind în tură.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Ponderea replicărilor egale cu sau sub fiecare valoare. Banda conține distribuția reală cu o încredere de {confidence}.
 	The values are numbers, separated by semicolons or spaces	Valorile sunt numere separate prin punct și virgulă sau spații
@@ -623,6 +626,7 @@
 	{n} waiting	În așteptare: {n}
 	{n} {unit} per second	{n} {unit} pe secundă
 	{property} (set to, mean)	{property} (valoare setată, medie)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replicările se împart în două rezultate diferite; vezi tabelul de mai jos.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} pe {background}: {ratio}:1, necesar {min}:1
 	{title}: now {now}, at most {most}	{title}: acum {now}, cel mult {most}
 	{word}: {message}	{word}: {message}

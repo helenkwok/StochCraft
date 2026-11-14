@@ -188,6 +188,7 @@
 	Failure interrupts the job	లోపం పనికి అంతరాయం కలిగిస్తుంది
 	Family	కుటుంబం
 	File	ఫైల్
+	Finding	పరిశీలన
 	Finish, then go off	పూర్తి చేసి, ఆపై షిఫ్ట్ ముగించండి
 	Finished at {time} {unit}	{time} {unit} వద్ద ముగిసింది
 	Fit	సరిపెట్టు
@@ -398,6 +399,7 @@
 	Run the sweep	స్వీప్ అమలు చేయి
 	Running	అమలవుతోంది
 	Running…	అమలవుతోంది…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	పునరావృత్త అమలులు రెండుగా విడిపోయాయి: {n}లో {low_n} – {low} దగ్గర, {high_n} – {high} దగ్గర. సగటు ({mean}) రెండు వేర్వేరు ఫలితాలను కలుపుతుంది; ప్రతి సమూహాన్ని చూడండి.
 	Sat	శని
 	Save	సేవ్ చేయి
 	Save As…	ఇలా సేవ్ చేయి…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	పరిమాణ నిర్ణయం కనుగొన్న యూనిట్‌లు ఇప్పుడు మోడల్‌లో ఉన్నాయి
 	The model: its experiment, connections and problems	నమూనా: దాని ప్రయోగం, అనుసంధానాలు మరియు సమస్యలు
 	The name is empty or already used.	పేరు ఖాళీగా ఉంది లేదా ఇప్పటికే వాడుకలో ఉంది.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	పునరావృత్త అమలులు రెండు వేర్వేరు ఫలితాలుగా విడిపోయాయి: {n}లో {a} – ఒకదానిలో, {b} – మరొకదానిలో. ఇదే విధంగా విడిపోయిన ఫలితాలు: {count}, వాటిలో {result} ({element}); దిగువ పట్టికను చూడండి.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	సర్వర్ తన దగ్గర ఉన్న పనిని పూర్తి చేసి, ఆపై షిఫ్ట్ ముగిస్తుంది; అప్పటివరకు అది షిఫ్ట్‌లో ఉన్నట్లు లెక్కించబడుతుంది.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ప్రతి విలువకు సమానమైన లేదా తక్కువైన పునరావృత్త అమలుల వాటా. పట్టీ నిజమైన పంపిణీని {confidence} విశ్వాసంతో కలిగి ఉంటుంది.
 	The values are numbers, separated by semicolons or spaces	విలువలు సెమీకోలన్ లేదా ఖాళీతో వేరు చేసిన సంఖ్యలు
@@ -623,6 +626,7 @@
 	{n} waiting	{n} వేచి ఉన్నాయి
 	{n} {unit} per second	సెకనుకు {n} {unit}
 	{property} (set to, mean)	{property} (నిర్ణీత విలువ, సగటు)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – పునరావృత్త అమలులు రెండు వేర్వేరు ఫలితాలుగా విడిపోయాయి: దిగువ పట్టికను చూడండి.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – నేపథ్యం {background}: {ratio}:1, అవసరం {min}:1
 	{title}: now {now}, at most {most}	{title}: ఇప్పుడు {now}, గరిష్ఠం {most}
 	{word}: {message}	{word}: {message}

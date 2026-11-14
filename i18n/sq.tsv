@@ -188,6 +188,7 @@
 	Failure interrupts the job	Defekti ndërpret punën
 	Family	Familja
 	File	Skedar
+	Finding	Gjetje
 	Finish, then go off	Përfundo, pastaj dil nga turni
 	Finished at {time} {unit}	Përfundoi në {time} {unit}
 	Fit	Përshtat
@@ -398,6 +399,7 @@
 	Run the sweep	Ekzekuto skanimin
 	Running	Duke u ekzekutuar
 	Running…	Duke u ekzekutuar…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Përsëritjet ndahen: {low_n} nga {n} pranë {low}, {high_n} pranë {high}. Mesatarja ({mean}) përzien dy përfundime; shiko secilin grup.
 	Sat	Sht
 	Save	Ruaj
 	Save As…	Ruaj si…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Modeli tani ka njësitë që gjeti përmasimi
 	The model: its experiment, connections and problems	Modeli: eksperimenti, lidhjet dhe problemet
 	The name is empty or already used.	Emri është bosh ose është përdorur tashmë.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Përsëritjet ndahen në dy përfundime: {a} nga {n} në njërin, {b} në tjetrin. {count} rezultate ndahen në të njëjtën mënyrë, mes tyre {result} ({element}); shiko tabelën më poshtë.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Serveri përfundon punën që ka, pastaj del nga turni; deri atëherë llogaritet si në turn.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Pjesa e përsëritjeve në ose nën çdo vlerë. Brezi përmban shpërndarjen e vërtetë me besueshmëri {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vlerat janë numra të ndarë me pikëpresje ose hapësira
@@ -623,6 +626,7 @@
 	{n} waiting	{n} në pritje
 	{n} {unit} per second	{n} {unit} në sekondë
 	{property} (set to, mean)	{property} (vlera e caktuar, mesatarja)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – përsëritjet ndahen në dy përfundime: shiko tabelën më poshtë.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – sfondi „{background}“: {ratio}:1, nevojitet {min}:1
 	{title}: now {now}, at most {most}	{title}: tani {now}, më së shumti {most}
 	{word}: {message}	{word}: {message}

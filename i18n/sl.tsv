@@ -188,6 +188,7 @@
 	Failure interrupts the job	Okvara prekine delo
 	Family	Družina
 	File	Datoteka
+	Finding	Ugotovitev
 	Finish, then go off	Dokončaj, nato končaj izmeno
 	Finished at {time} {unit}	Končano ob {time} {unit}
 	Fit	Prilagodi
@@ -398,6 +399,7 @@
 	Run the sweep	Zaženi preletanje
 	Running	Izvaja se
 	Running…	Izvaja se…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Ponovitve so se razdelile: {low_n} od {n} blizu {low}, {high_n} blizu {high}. Povprečje ({mean}) meša dva izida; oglejte si vsako skupino.
 	Sat	sob
 	Save	Shrani
 	Save As…	Shrani kot…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Model ima zdaj enote, ki jih je našlo dimenzioniranje
 	The model: its experiment, connections and problems	Model: poskus, povezave in težave
 	The name is empty or already used.	Ime je prazno ali že uporabljeno.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Ponovitve so se razdelile na dva izida: {a} od {n} v enem, {b} v drugem. Rezultati, ki so se razdelili enako: {count}, med njimi {result} ({element}); glejte tabelo spodaj.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Strežnik dokonča delo, ki ga ima, nato konča izmeno; do takrat šteje, kot da je v izmeni.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Delež ponovitev, enakih ali manjših od vsake vrednosti. Pas vsebuje pravo porazdelitev z zaupanjem {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vrednosti so števila, ločena s podpičji ali presledki
@@ -623,6 +626,7 @@
 	{n} waiting	Čaka: {n}
 	{n} {unit} per second	{n} {unit} na sekundo
 	{property} (set to, mean)	{property} (nastavljena vrednost, povprečje)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – ponovitve so se razdelile na dva izida: glejte tabelo spodaj.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – ozadje »{background}«: {ratio}:1, potrebno {min}:1
 	{title}: now {now}, at most {most}	{title}: zdaj {now}, največ {most}
 	{word}: {message}	{word}: {message}

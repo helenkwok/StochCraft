@@ -188,6 +188,7 @@
 	Failure interrupts the job	故障中断作业
 	Family	分布族
 	File	文件
+	Finding	发现
 	Finish, then go off	完成后下班
 	Finished at {time} {unit}	已于 {time} {unit} 结束
 	Fit	适应
@@ -398,6 +399,7 @@
 	Run the sweep	运行扫描
 	Running	正在运行
 	Running…	正在运行…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	重复运行分成两组：{n} 次中 {low_n} 次接近 {low}，{high_n} 次接近 {high}。均值（{mean}）混合了两种结果；请分别查看每一组。
 	Sat	周六
 	Save	保存
 	Save As…	另存为…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	模型现在使用规模确定得出的数量
 	The model: its experiment, connections and problems	模型：实验、连接和问题
 	The name is empty or already used.	名称为空或已被使用。
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	重复运行分成两种结果：{n} 次中 {a} 次属于一种，{b} 次属于另一种。有 {count} 个结果以同样方式分开，其中包括 {result}（{element}）；请查看下方的表格。
 	The server finishes the job it has, then goes off; until then it counts as on shift.	服务器完成手头的作业后下班；在此之前仍算当班。
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超过各值的重复运行比例。色带以 {confidence} 的置信度包含真实分布。
 	The values are numbers, separated by semicolons or spaces	值应为用分号或空格分隔的数字
@@ -623,6 +626,7 @@
 	{n} waiting	等待 {n}
 	{n} {unit} per second	每秒 {n} {unit}
 	{property} (set to, mean)	{property}（所设值的均值）
+	{result} ({element}) split into two outcomes: see the table below.	{result}（{element}）分成两种结果：请查看下方的表格。
 	{text} on {background}: {ratio}:1, needs {min}:1	{background}上的{text}：{ratio}:1，需要 {min}:1
 	{title}: now {now}, at most {most}	{title}：当前 {now}，最多 {most}
 	{word}: {message}	{word}：{message}

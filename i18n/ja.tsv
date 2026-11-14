@@ -188,6 +188,7 @@
 	Failure interrupts the job	故障で作業を中断
 	Family	分布族
 	File	ファイル
+	Finding	所見
 	Finish, then go off	完了してからシフト終了
 	Finished at {time} {unit}	{time} {unit} で終了しました
 	Fit	全体表示
@@ -398,6 +399,7 @@
 	Run the sweep	スイープを実行
 	Running	実行中
 	Running…	実行中…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	反復実行が 2 つに分かれました: {n} 回中 {low_n} 回は {low} 付近、{high_n} 回は {high} 付近です。平均 ({mean}) は 2 通りの結果が混ざったものです。それぞれのグループを見てください。
 	Sat	土
 	Save	保存
 	Save As…	別名で保存…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	サイズ決定で求めた数量をモデルに反映しました
 	The model: its experiment, connections and problems	モデル：実験、接続、問題
 	The name is empty or already used.	名前が空か、すでに使われています。
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	反復実行が 2 通りの結果に分かれました: {n} 回中 {a} 回が一方、{b} 回がもう一方です。同じように分かれた結果は {count} 件あり、{result} ({element}) もその 1 つです。下の表を見てください。
 	The server finishes the job it has, then goes off; until then it counts as on shift.	サーバは手元の作業を終えてからシフトを外れます。それまではシフト中として数えます。
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	各値以下となった反復実行の割合。帯は {confidence} の信頼度で真の分布を含みます。
 	The values are numbers, separated by semicolons or spaces	値はセミコロンまたはスペースで区切った数値です
@@ -623,6 +626,7 @@
 	{n} waiting	待ち {n}
 	{n} {unit} per second	毎秒 {n} {unit}
 	{property} (set to, mean)	{property}（設定値、平均）
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) は 2 通りの結果に分かれました。下の表を見てください。
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} 上の {text}: {ratio}:1、{min}:1 以上が必要
 	{title}: now {now}, at most {most}	{title}: 現在 {now}、最大 {most}
 	{word}: {message}	{word}: {message}

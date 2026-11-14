@@ -188,6 +188,7 @@
 	Failure interrupts the job	Storing onderbreekt de bewerking
 	Family	Familie
 	File	Bestand
+	Finding	Bevinding
 	Finish, then go off	Afmaken, dan einde werktijd
 	Finished at {time} {unit}	Klaar op {time} {unit}
 	Fit	Passend maken
@@ -398,6 +399,7 @@
 	Run the sweep	Reeks uitvoeren
 	Running	Wordt uitgevoerd
 	Running…	Wordt uitgevoerd…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Herhalingen gesplitst: {low_n} van {n} rond {low}, {high_n} rond {high}. Het gemiddelde ({mean}) mengt twee uitkomsten; bekijk elke groep.
 	Sat	za
 	Save	Opslaan
 	Save As…	Opslaan als…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Het model heeft nu de eenheden die het dimensioneren vond
 	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
 	The name is empty or already used.	De naam is leeg of al in gebruik.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	De herhalingen vallen uiteen in twee uitkomsten: {a} van {n} in de ene, {b} in de andere. {count} resultaten vallen op dezelfde manier uiteen, waaronder {result} ({element}); zie de tabel hieronder.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	De server maakt de bewerking die hij heeft af en beëindigt dan zijn werktijd; tot dan telt hij als binnen werktijd.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Het aandeel herhalingen op of onder elke waarde. De band bevat de ware verdeling met {confidence} betrouwbaarheid.
 	The values are numbers, separated by semicolons or spaces	De waarden zijn getallen, gescheiden door puntkomma's of spaties
@@ -623,6 +626,7 @@
 	{n} waiting	{n} wachtend
 	{n} {unit} per second	{n} {unit} per seconde
 	{property} (set to, mean)	{property} (ingestelde waarde, gemiddelde)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): de herhalingen vallen uiteen in twee uitkomsten; zie de tabel hieronder.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} op {background}: {ratio}:1, nodig {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, hoogstens {most}
 	{word}: {message}	{word}: {message}

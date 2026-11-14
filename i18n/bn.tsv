@@ -188,6 +188,7 @@
 	Failure interrupts the job	বিকলতা কাজ থামিয়ে দেয়
 	Family	পরিবার
 	File	ফাইল
+	Finding	পর্যবেক্ষণ
 	Finish, then go off	শেষ করে তারপর শিফট শেষ
 	Finished at {time} {unit}	{time} {unit}-এ শেষ হয়েছে
 	Fit	ফিট করুন
@@ -398,6 +399,7 @@
 	Run the sweep	সুইপ চালান
 	Running	চলছে
 	Running…	চলছে…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	পুনরাবৃত্তিগুলি দুই ভাগে বিভক্ত: {n}টির মধ্যে {low_n}টি {low}-এর কাছাকাছি, {high_n}টি {high}-এর কাছাকাছি। গড় ({mean}) দুটি ভিন্ন পরিণতি মিশিয়ে দেয়; প্রতিটি দল আলাদা করে দেখুন।
 	Sat	শনি
 	Save	সংরক্ষণ
 	Save As…	নতুন নামে…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	মডেলে এখন আকার নির্ধারণে পাওয়া এককগুলি আছে
 	The model: its experiment, connections and problems	মডেল: পরীক্ষা, সংযোগ ও সমস্যা
 	The name is empty or already used.	নামটি খালি বা আগেই ব্যবহৃত।
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	পুনরাবৃত্তিগুলি দুটি পরিণতিতে বিভক্ত: {n}টির মধ্যে {a}টি একটিতে, {b}টি অন্যটিতে। {count}টি ফলাফল একইভাবে বিভক্ত, তার মধ্যে {result} ({element}); নিচের সারণিটি দেখুন।
 	The server finishes the job it has, then goes off; until then it counts as on shift.	সার্ভারটি হাতের কাজটি শেষ করে, তারপর শিফট থেকে চলে যায়; ততক্ষণ সেটিকে শিফটে আছে বলে গণ্য করা হয়।
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	প্রতিটি মানের সমান বা কম পুনরাবৃত্তির অংশ। ব্যান্ডটি {confidence} আস্থায় প্রকৃত বণ্টন ধারণ করে।
 	The values are numbers, separated by semicolons or spaces	মানগুলি সেমিকোলন বা স্পেস দিয়ে আলাদা সংখ্যা
@@ -623,6 +626,7 @@
 	{n} waiting	{n} অপেক্ষমাণ
 	{n} {unit} per second	প্রতি সেকেন্ডে {n} {unit}
 	{property} (set to, mean)	{property} (নির্ধারিত মান, গড়)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – পুনরাবৃত্তিগুলি দুটি পরিণতিতে বিভক্ত: নিচের সারণিটি দেখুন।
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – পটভূমি {background}: {ratio}:1, প্রয়োজন {min}:1
 	{title}: now {now}, at most {most}	{title}: এখন {now}, সর্বোচ্চ {most}
 	{word}: {message}	{word}: {message}

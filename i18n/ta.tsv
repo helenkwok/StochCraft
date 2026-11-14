@@ -188,6 +188,7 @@
 	Failure interrupts the job	பழுது வேலையை இடைநிறுத்தும்
 	Family	குடும்பம்
 	File	கோப்பு
+	Finding	கண்டறிதல்
 	Finish, then go off	முடித்துவிட்டு பணிமுறையிலிருந்து விலகு
 	Finished at {time} {unit}	{time} {unit} இல் முடிந்தது
 	Fit	பொருத்து
@@ -398,6 +399,7 @@
 	Run the sweep	வருடலை இயக்கு
 	Running	இயங்குகிறது
 	Running…	இயங்குகிறது…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	மீள் இயக்கங்கள் இரண்டாகப் பிரிந்தன: {n} இல் {low_n} – {low} அருகில், {high_n} – {high} அருகில். சராசரி ({mean}) இரண்டு வெவ்வேறு விளைவுகளைக் கலக்கிறது; ஒவ்வொரு குழுவையும் பார்க்கவும்.
 	Sat	சனி
 	Save	சேமி
 	Save As…	இவ்வாறு சேமி…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	அளவிடுதல் கண்டறிந்த அலகுகள் இப்போது மாதிரியில் உள்ளன
 	The model: its experiment, connections and problems	மாதிரி: அதன் சோதனை, இணைப்புகள், சிக்கல்கள்
 	The name is empty or already used.	பெயர் காலியாக உள்ளது அல்லது ஏற்கெனவே பயன்பாட்டில் உள்ளது.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	மீள் இயக்கங்கள் இரண்டு விளைவுகளாகப் பிரிந்தன: {n} இல் {a} – ஒன்றில், {b} – மற்றொன்றில். இதே முறையில் பிரிந்த முடிவுகள்: {count}, அவற்றில் {result} ({element}); கீழே உள்ள அட்டவணையைப் பார்க்கவும்.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	வழங்கி கையில் உள்ள வேலையை முடித்துவிட்டுப் பணிமுறையிலிருந்து விலகுகிறது; அதுவரை அது பணிமுறையில் இருப்பதாகக் கணக்கிடப்படுகிறது.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ஒவ்வொரு மதிப்புக்கும் சமமான அல்லது குறைவான மீள் இயக்கங்களின் பங்கு. பட்டை உண்மையான பரவலை {confidence} நம்பகத்தன்மையுடன் கொண்டுள்ளது.
 	The values are numbers, separated by semicolons or spaces	மதிப்புகள் அரைப்புள்ளி அல்லது இடைவெளியால் பிரிக்கப்பட்ட எண்கள்
@@ -623,6 +626,7 @@
 	{n} waiting	{n} காத்திருக்கின்றன
 	{n} {unit} per second	வினாடிக்கு {n} {unit}
 	{property} (set to, mean)	{property} (அமைக்கப்பட்ட மதிப்பு, சராசரி)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – மீள் இயக்கங்கள் இரண்டு விளைவுகளாகப் பிரிந்தன: கீழே உள்ள அட்டவணையைப் பார்க்கவும்.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – பின்னணி {background}: {ratio}:1, தேவை {min}:1
 	{title}: now {now}, at most {most}	{title}: இப்போது {now}, அதிகபட்சம் {most}
 	{word}: {message}	{word}: {message}

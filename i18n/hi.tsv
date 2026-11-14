@@ -188,6 +188,7 @@
 	Failure interrupts the job	खराबी काम रोक देती है
 	Family	परिवार
 	File	फ़ाइल
+	Finding	निष्कर्ष
 	Finish, then go off	पूरा करें, फिर पाली से हटें
 	Finished at {time} {unit}	{time} {unit} पर समाप्त
 	Fit	फ़िट करें
@@ -398,6 +399,7 @@
 	Run the sweep	स्वीप चलाएँ
 	Running	चल रहा है
 	Running…	चल रहा है…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	पुनरावृत्तियाँ दो हिस्सों में बँटीं: {n} में से {low_n} – {low} के पास, {high_n} – {high} के पास। माध्य ({mean}) दो अलग नतीजों को मिला देता है; हर समूह को अलग से देखें।
 	Sat	शनि
 	Save	सहेजें
 	Save As…	इस रूप में सहेजें…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	मॉडल में अब आकार निर्धारण से मिली इकाइयाँ हैं
 	The model: its experiment, connections and problems	मॉडल: प्रयोग, कनेक्शन और समस्याएँ
 	The name is empty or already used.	नाम खाली है या पहले से उपयोग में है।
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	पुनरावृत्तियाँ दो अलग नतीजों में बँटीं: {n} में से {a} एक में, {b} दूसरे में। {count} परिणाम इसी तरह बँटे, उनमें {result} ({element}) भी है; नीचे दी गई तालिका देखें।
 	The server finishes the job it has, then goes off; until then it counts as on shift.	सर्वर हाथ का काम पूरा करता है, फिर पाली से हट जाता है; तब तक उसे पाली में गिना जाता है।
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	हर मान के बराबर या उससे कम पुनरावृत्तियों का हिस्सा। पट्टी में वास्तविक वितरण {confidence} विश्वास के साथ है।
 	The values are numbers, separated by semicolons or spaces	मान अर्धविराम या रिक्त स्थान से अलग की गई संख्याएँ हैं
@@ -623,6 +626,7 @@
 	{n} waiting	{n} प्रतीक्षारत
 	{n} {unit} per second	{n} {unit} प्रति सेकंड
 	{property} (set to, mean)	{property} (सेट किया गया मान, माध्य)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – पुनरावृत्तियाँ दो अलग नतीजों में बँटीं: नीचे दी गई तालिका देखें।
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – पृष्ठभूमि {background}: {ratio}:1, आवश्यक {min}:1
 	{title}: now {now}, at most {most}	{title}: अभी {now}, अधिकतम {most}
 	{word}: {message}	{word}: {message}

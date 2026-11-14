@@ -188,6 +188,7 @@
 	Failure interrupts the job	Rike katkestab töö
 	Family	Jaotuspere
 	File	Fail
+	Finding	Tähelepanek
 	Finish, then go off	Lõpeta, siis lahku vahetusest
 	Finished at {time} {unit}	Lõppes ajal {time} {unit}
 	Fit	Sobita
@@ -398,6 +399,7 @@
 	Run the sweep	Käivita läbimine
 	Running	Käib
 	Running…	Käivitamine…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Kordused jagunevad: {low_n} kordust {n}-st – umbes {low}, {high_n} – umbes {high}. Keskmine ({mean}) segab kahte eri tulemust; vaata iga rühma eraldi.
 	Sat	L
 	Save	Salvesta
 	Save As…	Salvesta nimega…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Mudelil on nüüd dimensioneerimisel leitud ühikud
 	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
 	The name is empty or already used.	Nimi on tühi või juba kasutusel.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Kordused jagunevad kaheks eri tulemuseks: {a} kordust {n}-st ühes, {b} teises. {count} tulemust jaguneb samamoodi, nende seas {result} ({element}); vaata allolevat tabelit.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Server lõpetab oma pooleli töö ja lahkub siis vahetusest; seni loetakse ta vahetuses olevaks.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Korduste osakaal, mis on iga väärtusega võrdsed või sellest väiksemad. Vöönd sisaldab tegelikku jaotust {confidence} usaldusega.
 	The values are numbers, separated by semicolons or spaces	Väärtused on arvud, eraldatud semikoolonite või tühikutega
@@ -623,6 +626,7 @@
 	{n} waiting	{n} ootel
 	{n} {unit} per second	{n} {unit} sekundis
 	{property} (set to, mean)	{property} (määratud väärtus, keskmine)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – kordused jagunevad kaheks eri tulemuseks: vaata allolevat tabelit.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – taust „{background}“: {ratio}:1, vaja {min}:1
 	{title}: now {now}, at most {most}	{title}: praegu {now}, kõige rohkem {most}
 	{word}: {message}	{word}: {message}

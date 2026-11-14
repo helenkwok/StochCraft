@@ -188,6 +188,7 @@
 	Failure interrupts the job	A meghibásodás megszakítja a munkát
 	Family	Család
 	File	Fájl
+	Finding	Megállapítás
 	Finish, then go off	Befejezés, aztán műszak vége
 	Finished at {time} {unit}	Befejeződött: {time} {unit}
 	Fit	Igazítás a nézethez
@@ -398,6 +399,7 @@
 	Run the sweep	Végigfuttatás
 	Running	Fut
 	Running…	Futtatás…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Az ismétlések kettéválnak: {n} ismétlésből {low_n} – {low} közelében, {high_n} – {high} közelében. Az átlag ({mean}) két kimenetelt kever; nézze meg külön mindkét csoportot.
 	Sat	Szo
 	Save	Mentés
 	Save As…	Mentés másként…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	A modellben most a méretezés által talált egységek vannak
 	The model: its experiment, connections and problems	A modell: kísérlet, kapcsolatok és problémák
 	The name is empty or already used.	A név üres vagy már foglalt.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Az ismétlések két kimenetelre válnak szét: {n} ismétlésből {a} az egyikre, {b} a másikra. {count} eredmény ugyanígy válik szét, köztük {result} ({element}); lásd az alábbi táblázatot.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	A szerver befejezi a nála lévő munkát, aztán befejezi a műszakot; addig műszakban lévőnek számít.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Az egyes értékeknél nem nagyobb ismétlések aránya. A sáv {confidence} megbízhatósággal tartalmazza a valódi eloszlást.
 	The values are numbers, separated by semicolons or spaces	Az értékek pontosvesszővel vagy szóközzel elválasztott számok
@@ -623,6 +626,7 @@
 	{n} waiting	{n} várakozik
 	{n} {unit} per second	{n} {unit} másodpercenként
 	{property} (set to, mean)	{property} (beállított érték, átlag)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – az ismétlések két kimenetelre válnak szét: lásd az alábbi táblázatot.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – {background} háttér: {ratio}:1, legalább {min}:1 kell
 	{title}: now {now}, at most {most}	{title}: most {now}, legfeljebb {most}
 	{word}: {message}	{word}: {message}

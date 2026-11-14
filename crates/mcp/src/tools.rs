@@ -153,8 +153,10 @@ pub fn tool_definitions() -> Vec<Value> {
             "Run the model's experiment now (run) and return the results: for each element and \
              metric (entered, left, mean queue length, mean wait, utilisation, mean time in \
              system, …) the mean across replications with its 95% confidence interval \
-             (half_width), and the run record (seed, replications, warm-up, duration, model \
-             digest) that reproduces them.",
+             (half_width), where the replications split into two outcomes the two groups \
+             (split: cut, and each group's n and mean; the mean then describes no actual run), \
+             and the run record (seed, replications, warm-up, duration, model digest) that \
+             reproduces them.",
             obj(
                 json!({
                     "replications": integer("Replications (default: the experiment's)"),

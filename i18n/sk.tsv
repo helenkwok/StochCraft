@@ -188,6 +188,7 @@
 	Failure interrupts the job	Porucha preruší prácu
 	Family	Rodina
 	File	Súbor
+	Finding	Zistenie
 	Finish, then go off	Dokončiť, potom ukončiť zmenu
 	Finished at {time} {unit}	Dokončené v čase {time} {unit}
 	Fit	Prispôsobiť
@@ -398,6 +399,7 @@
 	Run the sweep	Spustiť prechod
 	Running	Prebieha
 	Running…	Prebieha…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikácie sa rozdelili: {low_n} z {n} blízko {low}, {high_n} blízko {high}. Priemer ({mean}) mieša dva odlišné výsledky; pozrite sa na každú skupinu.
 	Sat	so
 	Save	Uložiť
 	Save As…	Uložiť ako…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Model má teraz jednotky nájdené dimenzovaním
 	The model: its experiment, connections and problems	Model: experiment, prepojenia a problémy
 	The name is empty or already used.	Názov je prázdny alebo sa už používa.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikácie sa rozdelili na dva odlišné výsledky: {a} z {n} v jednom, {b} v druhom. Výsledky rozdelené rovnako: {count}, medzi nimi {result} ({element}); pozrite tabuľku nižšie.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Server dokončí prácu, ktorú má, a potom ukončí zmenu; dovtedy sa počíta ako na zmene.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Podiel replikácií rovných alebo menších než každá hodnota. Pás obsahuje skutočné rozdelenie so spoľahlivosťou {confidence}.
 	The values are numbers, separated by semicolons or spaces	Hodnoty sú čísla oddelené bodkočiarkami alebo medzerami
@@ -623,6 +626,7 @@
 	{n} waiting	Čaká: {n}
 	{n} {unit} per second	{n} {unit} za sekundu
 	{property} (set to, mean)	{property} (nastavené na, priemer)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – replikácie sa rozdelili na dva odlišné výsledky: pozrite tabuľku nižšie.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadie „{background}“: {ratio}:1, treba {min}:1
 	{title}: now {now}, at most {most}	{title}: teraz {now}, najviac {most}
 	{word}: {message}	{word}: {message}

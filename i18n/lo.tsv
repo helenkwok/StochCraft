@@ -188,6 +188,7 @@
 	Failure interrupts the job	ການເສຍຂັດຈັງຫວະວຽກ
 	Family	ຕະກູນ
 	File	ໄຟລ໌
+	Finding	ຂໍ້ຄົ້ນພົບ
 	Finish, then go off	ເຮັດໃຫ້ແລ້ວ ແລ້ວຈຶ່ງອອກກະ
 	Finished at {time} {unit}	ສິ້ນສຸດທີ່ {time} {unit}
 	Fit	ພໍດີ
@@ -398,6 +399,7 @@
 	Run the sweep	ແລ່ນການກວາດ
 	Running	ກຳລັງປະມວນຜົນ
 	Running…	ກຳລັງປະມວນຜົນ…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	ຮອບຈຳລອງຊ້ຳແບ່ງເປັນສອງກຸ່ມ: {low_n} ຈາກ {n} ໃກ້ກັບ {low}, {high_n} ໃກ້ກັບ {high}. ຄ່າສະເລ່ຍ ({mean}) ປະສົມສອງຜົນທີ່ຕ່າງກັນ; ເບິ່ງແຕ່ລະກຸ່ມ.
 	Sat	ເສົາ
 	Save	ບັນທຶກ
 	Save As…	ບັນທຶກເປັນ…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	ຕອນນີ້ແບບຈຳລອງມີຈຳນວນໜ່ວຍທີ່ການກຳນົດຂະໜາດພົບແລ້ວ
 	The model: its experiment, connections and problems	ແບບຈຳລອງ: ການທົດລອງ ການເຊື່ອມຕໍ່ ແລະ ບັນຫາ
 	The name is empty or already used.	ຊື່ຫວ່າງເປົ່າ ຫຼື ຖືກໃຊ້ແລ້ວ.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	ຮອບຈຳລອງຊ້ຳແບ່ງເປັນສອງຜົນທີ່ຕ່າງກັນ: {a} ຈາກ {n} ຢູ່ໃນກຸ່ມໜຶ່ງ, {b} ຢູ່ໃນອີກກຸ່ມໜຶ່ງ. ມີ {count} ຜົນທີ່ແບ່ງແບບດຽວກັນ, ລວມທັງ {result} ({element}); ເບິ່ງຕາຕະລາງດ້ານລຸ່ມ.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	ແມ່ຂ່າຍເຮັດວຽກທີ່ມີຢູ່ໃຫ້ແລ້ວ ແລ້ວຈຶ່ງອອກກະ; ຈົນກວ່າຈະຮອດຕອນນັ້ນ ມັນຍັງຖືວ່າຢູ່ໃນກະ.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ສັດສ່ວນຮອບຈຳລອງຊ້ຳທີ່ເທົ່າກັບ ຫຼື ຕ່ຳກວ່າແຕ່ລະຄ່າ. ແຖບຄອບຄຸມການແຈກຢາຍແທ້ດ້ວຍຄວາມເຊື່ອໝັ້ນ {confidence}.
 	The values are numbers, separated by semicolons or spaces	ຄ່າຕ້ອງເປັນຕົວເລກທີ່ຂັ້ນດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ
@@ -623,6 +626,7 @@
 	{n} waiting	ລໍຖ້າ {n}
 	{n} {unit} per second	{n} {unit} ຕໍ່ວິນາທີ
 	{property} (set to, mean)	{property} (ກຳນົດເປັນ, ຄ່າສະເລ່ຍ)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) ແບ່ງເປັນສອງຜົນທີ່ຕ່າງກັນ: ເບິ່ງຕາຕະລາງດ້ານລຸ່ມ.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} ເທິງ {background}: {ratio}:1, ຕ້ອງການ {min}:1
 	{title}: now {now}, at most {most}	{title}: ຕອນນີ້ {now} ສູງສຸດ {most}
 	{word}: {message}	{word}: {message}

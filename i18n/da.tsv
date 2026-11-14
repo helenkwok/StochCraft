@@ -188,6 +188,7 @@
 	Failure interrupts the job	Nedbrud afbryder arbejdet
 	Family	Familie
 	File	Filer
+	Finding	Iagttagelse
 	Finish, then go off	Gør færdig, og gå så af skift
 	Finished at {time} {unit}	Færdig ved {time} {unit}
 	Fit	Tilpas
@@ -398,6 +399,7 @@
 	Run the sweep	Kør gennemløbet
 	Running	Kører
 	Running…	Kører…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikationerne deler sig: {low_n} af {n} nær {low}, {high_n} nær {high}. Gennemsnittet ({mean}) blander to udfald; se på hver gruppe.
 	Sat	lør
 	Save	Gem
 	Save As…	Gem som…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	Modellen har nu de enheder, dimensioneringen fandt
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
 	The name is empty or already used.	Navnet er tomt eller allerede i brug.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikationerne deler sig i to udfald: {a} af {n} i det ene, {b} i det andet. {count} resultater deler sig på samme måde, blandt dem {result} ({element}); se tabellen nedenfor.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Serveren gør det job, den har, færdigt og går så af skift; indtil da tæller den som på skift.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen af replikationer ved eller under hver værdi. Båndet indeholder den sande fordeling med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Værdierne er tal adskilt med semikolon eller mellemrum
@@ -623,6 +626,7 @@
 	{n} waiting	{n} venter
 	{n} {unit} per second	{n} {unit} pr. sekund
 	{property} (set to, mean)	{property} (angivet værdi, gennemsnit)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replikationerne deler sig i to udfald; se tabellen nedenfor.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} på {background}: {ratio}:1, kræver {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, højst {most}
 	{word}: {message}	{word}: {message}

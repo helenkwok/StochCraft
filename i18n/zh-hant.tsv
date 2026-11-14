@@ -188,6 +188,7 @@
 	Failure interrupts the job	故障中斷作業
 	Family	分配族
 	File	檔案
+	Finding	發現
 	Finish, then go off	完成後下班
 	Finished at {time} {unit}	已於 {time} {unit} 結束
 	Fit	符合
@@ -398,6 +399,7 @@
 	Run the sweep	執行掃描
 	Running	正在執行
 	Running…	正在執行…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	重複執行分成兩組：{n} 次中 {low_n} 次接近 {low}，{high_n} 次接近 {high}。平均值（{mean}）混合了兩種結果；請分別查看每一組。
 	Sat	週六
 	Save	儲存
 	Save As…	另存新檔…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	模型現在使用規模決定得出的數量
 	The model: its experiment, connections and problems	模型：實驗、連接和問題
 	The name is empty or already used.	名稱是空的或已被使用。
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	重複執行分成兩種結果：{n} 次中 {a} 次屬於一種，{b} 次屬於另一種。有 {count} 個結果以同樣方式分開，其中包括 {result}（{element}）；請查看下方的表格。
 	The server finishes the job it has, then goes off; until then it counts as on shift.	伺服器完成手頭的作業後下班；在此之前仍算當班。
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超過各值的重複執行比例。色帶以 {confidence} 的信賴度包含真實分配。
 	The values are numbers, separated by semicolons or spaces	值應為以分號或空格分隔的數字
@@ -623,6 +626,7 @@
 	{n} waiting	等待 {n}
 	{n} {unit} per second	每秒 {n} {unit}
 	{property} (set to, mean)	{property}（所設值的平均值）
+	{result} ({element}) split into two outcomes: see the table below.	{result}（{element}）分成兩種結果：請查看下方的表格。
 	{text} on {background}: {ratio}:1, needs {min}:1	{background}上的{text}：{ratio}:1，需要 {min}:1
 	{title}: now {now}, at most {most}	{title}：目前 {now}，最多 {most}
 	{word}: {message}	{word}：{message}

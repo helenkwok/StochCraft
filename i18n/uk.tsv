@@ -188,6 +188,7 @@
 	Failure interrupts the job	Відмова перериває роботу
 	Family	Родина
 	File	Файл
+	Finding	Спостереження
 	Finish, then go off	Доробити, потім піти зі зміни
 	Finished at {time} {unit}	Завершено о {time} {unit}
 	Fit	Умістити
@@ -398,6 +399,7 @@
 	Run the sweep	Запустити перебір
 	Running	Виконується
 	Running…	Виконується…
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Реплікації розділилися: {low_n} з {n} близько {low}, {high_n} близько {high}. Середнє ({mean}) змішує два різні результати; перегляньте кожну групу.
 	Sat	сб
 	Save	Зберегти
 	Save As…	Зберегти як…
@@ -483,6 +485,7 @@
 	The model now has the units sizing found	У моделі тепер одиниці, знайдені під час підбору
 	The model: its experiment, connections and problems	Модель: експеримент, з'єднання й проблеми
 	The name is empty or already used.	Ім’я порожнє або вже використовується.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Реплікації розділилися на два різні результати: {a} з {n} в одному, {b} в іншому. Результати, що розділилися так само: {count}, серед них {result} ({element}); див. таблицю нижче.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Сервер доробляє наявну роботу, потім іде зі зміни; доти він вважається на зміні.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Частка реплікацій, що не перевищують кожне значення. Смуга містить справжній розподіл із довірою {confidence}.
 	The values are numbers, separated by semicolons or spaces	Значення — це числа, розділені крапкою з комою або пробілами
@@ -623,6 +626,7 @@
 	{n} waiting	Очікують: {n}
 	{n} {unit} per second	{n} {unit} за секунду
 	{property} (set to, mean)	{property} (задане значення, середнє)
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) — реплікації розділилися на два різні результати: див. таблицю нижче.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} — тло «{background}»: {ratio}:1, потрібно {min}:1
 	{title}: now {now}, at most {most}	{title}: зараз {now}, щонайбільше {most}
 	{word}: {message}	{word}: {message}
