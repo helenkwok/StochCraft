@@ -1,8 +1,8 @@
 name: Release
 
-# A pushed version tag vX.Y.Z builds StochCraft for Windows, Linux and macOS and makes ONE draft
-# GitHub release, "StochCraft vX.Y.Z" on that tag, holding every file plus SHA256SUMS.txt
-# (`sha256sum` format). The files are named like the Craft apps' releases
+# A pushed version tag vX.Y.Z builds StochCraft (the app and stochcraft-cli) for Windows, Linux and
+# macOS and makes ONE draft GitHub release, "StochCraft vX.Y.Z" on that tag, holding every file plus
+# SHA256SUMS.txt (`sha256sum` format). The files are named like the Craft apps' releases
 # (<app>-<version>-<os>-<arch>.<ext>), so ArtCraft Launcher and anything else that reads those
 # releases finds them by the same names. A maintainer reviews the draft and publishes it by hand.
 #
@@ -93,7 +93,7 @@ jobs:
         with:
           key: release-linux-${{ matrix.arch }}
       - name: Build
-        run: cargo build --release --locked -p stochcraft
+        run: cargo build --release --locked -p stochcraft -p stochcraft-cli
       - name: Package
         env:
           VERSION: ${{ needs.version.outputs.version }}
@@ -101,7 +101,7 @@ jobs:
         run: |
           name="stochcraft-$VERSION-linux-$ARCH"
           mkdir -p "dist/$name"
-          cp target/release/stochcraft "dist/$name/"
+          cp target/release/stochcraft target/release/stochcraft-cli "dist/$name/"
           cp LICENSE-APACHE LICENSE-MIT NOTICE README.md "dist/$name/"
           tar -C dist -czf "dist/$name.tar.gz" "$name"
           rm -rf "dist/$name"
@@ -128,7 +128,7 @@ jobs:
         with:
           key: release-windows-x64
       - name: Build
-        run: cargo build --release --locked -p stochcraft
+        run: cargo build --release --locked -p stochcraft -p stochcraft-cli
       - name: Package
         shell: pwsh
         env:
@@ -136,7 +136,7 @@ jobs:
         run: |
           $name = "stochcraft-$env:VERSION-windows-x64-portable"
           New-Item -ItemType Directory -Path "dist/$name" | Out-Null
-          Copy-Item target/release/stochcraft.exe "dist/$name/"
+          Copy-Item target/release/stochcraft.exe, target/release/stochcraft-cli.exe "dist/$name/"
           Copy-Item LICENSE-APACHE, LICENSE-MIT, NOTICE, README.md "dist/$name/"
           Compress-Archive -Path "dist/$name" -DestinationPath "dist/$name.zip"
           Remove-Item -Recurse "dist/$name"
@@ -165,8 +165,8 @@ jobs:
           key: release-macos-universal
       - name: Build both architectures
         run: |
-          cargo build --release --locked -p stochcraft --target aarch64-apple-darwin
-          cargo build --release --locked -p stochcraft --target x86_64-apple-darwin
+          cargo build --release --locked -p stochcraft -p stochcraft-cli --target aarch64-apple-darwin
+          cargo build --release --locked -p stochcraft -p stochcraft-cli --target x86_64-apple-darwin
       - name: Make the app and the disk image
         env:
           VERSION: ${{ needs.version.outputs.version }}
@@ -203,11 +203,25 @@ jobs:
           ln -s /Applications dist/stage/Applications
           hdiutil create -volname StochCraft -srcfolder dist/stage -ov -format UDZO \
             "dist/stochcraft-$VERSION-macos-universal.dmg"
+          # The command line, universal too, in its own archive (not inside the app).
+          cli="stochcraft-cli-$VERSION-macos-universal"
+          mkdir -p "dist/$cli"
+          lipo -create \
+            target/aarch64-apple-darwin/release/stochcraft-cli \
+            target/x86_64-apple-darwin/release/stochcraft-cli \
+            -output "dist/$cli/stochcraft-cli"
+          lipo -info "dist/$cli/stochcraft-cli"
+          codesign --force --sign - "dist/$cli/stochcraft-cli"
+          cp LICENSE-APACHE LICENSE-MIT NOTICE README.md "dist/$cli/"
+          tar -C dist -czf "dist/$cli.tar.gz" "$cli"
+          rm -rf "dist/$cli"
           ls -l dist
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-macos-universal
-          path: dist/*.dmg
+          path: |
+            dist/*.dmg
+            dist/*.tar.gz
           if-no-files-found: error
 
   # Opens the disk image the way a user would and checks the app inside is the universal one.
