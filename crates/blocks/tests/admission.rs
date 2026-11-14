@@ -623,7 +623,11 @@ fn a_turned_away_loop_that_takes_no_time_is_stopped() {
         b.connect(back, desk);
         match mode {
             1 => b.queue_per_working_server(desk, 0),
-            2 => b.queue_by_shift(desk, 0, &[]),
+            // By timetable, the room stays shut: no places within the calendar or outside it.
+            2 => {
+                b.calendar("later", vec![once((2, 0, 0), (3, 0, 0))]);
+                b.queue_by_shift(desk, 0, &[("later", 0)]);
+            }
             _ => {}
         }
         let compiled = compile(&b.build(experiment(0.0, 5.0, 1)))
