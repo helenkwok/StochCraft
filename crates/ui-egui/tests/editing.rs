@@ -603,8 +603,9 @@ fn a_servers_transfer_breakdowns_and_availability_are_edited_in_its_inspector() 
         json!([{"calendar": "lunch", "available": false}])
     );
     h.get_by_role_and_label(Role::ComboBox, "Calendar 1");
-    // The first active entry applies, so a calendar has one entry: none left to add.
-    assert!(h.query_by_label("Add calendar entry").is_none());
+    // The first active entry applies, so a calendar has one entry: none left to add (the one
+    // left is for the units by calendar, in the parameters).
+    assert_eq!(h.query_all_by_label("Add calendar entry").count(), 1);
     click(&mut h, Role::CheckBox, "Available outside calendars");
     assert_eq!(element(&h, "serve")["available"], json!(false));
     // Each edit is one undo step.
@@ -952,4 +953,43 @@ fn a_way_out_of_a_task_is_marked_rework() {
         .unwrap_or_default()["rework"]
         .clone();
     assert_eq!(rework, json!(true));
+}
+
+#[test]
+fn a_servers_units_by_shift_and_its_job_rule_are_edited_in_its_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    // No calendar yet: no units by calendar, and no choice for a job at a shift's end.
+    assert!(h.query_by_label("Units by calendar").is_none());
+    assert!(h.query_by_label("Retry elsewhere").is_none());
+
+    h.state_mut()
+        .execute(
+            "calendar.add",
+            json!({
+                "id": "night",
+                "name": "Night",
+                "events": [{"start": "2026-01-01T00:00:00", "end": "2026-01-01T08:00:00", "repeat": "FREQ=DAILY"}],
+            }),
+        )
+        .expect("a calendar");
+    settle(&mut h);
+    h.get_by_label("Units by calendar");
+    click(&mut h, Role::Button, "Add calendar entry");
+    let shifts = element(&h, "serve")["shifts"].clone();
+    assert_eq!(shifts[0]["calendar"], json!("night"), "{shifts}");
+
+    // Now its servers can go off shift: what happens to a job under way, finishing by default.
+    let finish = h.get_by_role_and_label(Role::RadioButton, "Finish, then go off");
+    assert_eq!(
+        finish.accesskit_node().toggled(),
+        Some(egui::accesskit::Toggled::True)
+    );
+    click(&mut h, Role::RadioButton, "Retry elsewhere");
+    assert_eq!(element(&h, "serve")["on_shift_end"], json!("retry"));
+    click(&mut h, Role::RadioButton, "Resume when back on shift");
+    assert_eq!(element(&h, "serve")["on_shift_end"], json!("resume"));
+    // Back to finishing, the default, which the model leaves out.
+    click(&mut h, Role::RadioButton, "Finish, then go off");
+    assert!(element(&h, "serve").get("on_shift_end").is_none());
 }
