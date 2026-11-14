@@ -1766,7 +1766,8 @@ pub fn diagnostics(ds: &[Diagnostic]) -> Value {
 }
 
 /// An experiment's results as JSON: per element, each metric's mean, 95% half-width, standard
-/// deviation and number of replications.
+/// deviation and number of replications, and, where the replications split into two outcomes
+/// ([`stochcraft_stats::split::two_outcomes`]), the two groups as `split`.
 pub fn results(model: &Model, replications: u64, seed: u64, summary: &ExperimentSummary) -> Value {
     let x = &model.experiment;
     let elements: Vec<Value> = summary
@@ -1777,15 +1778,17 @@ pub fn results(model: &Model, replications: u64, seed: u64, summary: &Experiment
                 .metrics
                 .iter()
                 .map(|(m, s)| {
-                    (
-                        m.name().to_owned(),
-                        json!({
-                            "mean": s.mean,
-                            "half_width": s.half_width,
-                            "std_dev": s.std_dev,
-                            "n": s.n,
-                        }),
-                    )
+                    let mut v = json!({
+                        "mean": s.mean,
+                        "half_width": s.half_width,
+                        "std_dev": s.std_dev,
+                        "n": s.n,
+                    });
+                    // Only where the runs split, so other results are as before.
+                    if let Some(split) = e.samples(*m).and_then(split) {
+                        v["split"] = split;
+                    }
+                    (m.name().to_owned(), v)
                 })
                 .collect();
             let mut v =
@@ -1863,9 +1866,89 @@ pub fn results(model: &Model, replications: u64, seed: u64, summary: &Experiment
     v
 }
 
+/// The two outcomes `samples` (one value per replication) split into, as `split`: the cut
+/// between them and each group's count and mean, low first; `None` when they do not split.
+fn split(samples: &[Option<f64>]) -> Option<Value> {
+    let values: Vec<f64> = samples.iter().flatten().copied().collect();
+    let s = stochcraft_stats::split::two_outcomes(&values)?;
+    Some(json!({
+        "cut": s.cut,
+        "low": { "n": s.low.n, "mean": s.low.mean },
+        "high": { "n": s.high.n, "mean": s.high.mean },
+    }))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn results_give_the_two_outcomes_where_the_runs_split() {
+        use stochcraft_blocks::ElementSummary;
+        use stochcraft_stats::Summary;
+        // Units in service: about 1.7 in 9 runs, about 9.9 in 3, and a metric that does not
+        // split.
+        let split: Vec<f64> = (0..12)
+            .map(|i| {
+                if i % 4 == 3 {
+                    9.9 + 0.01 * f64::from(i)
+                } else {
+                    1.7 - 0.01 * f64::from(i)
+                }
+            })
+            .collect();
+        let even: Vec<f64> = (0..12).map(f64::from).collect();
+        let summary = |v: &[f64]| {
+            Summary::of(v).unwrap_or(Summary {
+                n: 0,
+                mean: 0.0,
+                std_dev: 0.0,
+                half_width: 0.0,
+            })
+        };
+        let element = ElementSummary {
+            id: ElementId::unchecked("desk"),
+            name: "Desk".into(),
+            kind: "server",
+            metrics: vec![
+                (Metric::Entered, summary(&even)),
+                (Metric::MeanInService, summary(&split)),
+            ],
+            properties: vec![],
+            samples: vec![
+                (Metric::Entered, even.iter().copied().map(Some).collect()),
+                (
+                    Metric::MeanInService,
+                    split.iter().copied().map(Some).chain([None]).collect(),
+                ),
+            ],
+        };
+        let s = ExperimentSummary {
+            replications: 13,
+            elements: vec![element],
+            stopped: None,
+            stop_times: vec![],
+            measured: vec![],
+        };
+        let r = results(&Model::default(), 13, 1, &s);
+        let metrics = &r["elements"][0]["metrics"];
+        assert!(metrics["entered"].get("split").is_none(), "{metrics}");
+        let got = &metrics["mean_in_service"]["split"];
+        assert_eq!(
+            (&got["low"]["n"], &got["high"]["n"]),
+            (&json!(9), &json!(3))
+        );
+        assert!(
+            got["cut"].as_f64().is_some_and(|c| c > 1.7 && c < 9.9),
+            "{got}"
+        );
+        assert!(
+            got["high"]["mean"]
+                .as_f64()
+                .is_some_and(|m| (m - 9.97).abs() < 1e-9),
+            "{got}"
+        );
+    }
 
     #[test]
     fn every_distribution_round_trips() {
