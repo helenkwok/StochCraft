@@ -577,6 +577,7 @@ fn edits() -> Vec<Edit> {
                         health_check: None,
                         shifts: Vec::new(),
                         on_shift_end: OnShiftEnd::Finish,
+                        queue_limit: stochcraft_model::QueueLimit::Fixed,
                     };
                 }
             }),

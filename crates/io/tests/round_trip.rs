@@ -4,8 +4,8 @@ use stochcraft_blocks::{BlockId, Builder, Event, Rule};
 use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{
     DateTime, Dist, ElementKind, Experiment, HealthCheck, Model, Need, OnShiftEnd, OnTakeout,
-    Patience, PatienceUntil, PlaceWhileOut, Property, PropertyType, PropertyValue, Routing,
-    TimeUnit,
+    Patience, PatienceUntil, PlaceWhileOut, Property, PropertyType, PropertyValue, QueueLimit,
+    Routing, TimeUnit,
 };
 
 /// A model using every element kind and every distribution.
@@ -1414,6 +1414,7 @@ fn a_quantity_by_calendar_without_the_marker_is_a_pool() {
         l.model.elements[1].kind,
         ElementKind::Server {
             on_shift_end: OnShiftEnd::Finish,
+            queue_limit: stochcraft_model::QueueLimit::Fixed,
             ..
         }
     ));
@@ -1576,4 +1577,122 @@ fn bad_processing_times_by_property_are_noted() {
             .map(|b| b.by_value.len()),
         Some(1)
     );
+}
+
+/// A waiting room by timetable or per working server, and the way for entities turned away, are
+/// StochCraft's vendor extensions: written, read back, changed and removed in place.
+#[test]
+fn waiting_rooms_by_timetable_or_per_working_server_and_turned_away_ways_round_trip() {
+    let at = |h: u32| DateTime::new(2016, 1, 1, h, 0, 0).unwrap_or(DateTime(0));
+    let mut m = Builder::new();
+    m.calendar(
+        "rush",
+        vec![Event {
+            start: at(8),
+            end: at(10),
+            rule: Rule::parse("FREQ=DAILY").ok(),
+        }],
+    );
+    let src = m.source("calls", Dist::Exponential { mean: 1.0 }, None);
+    let desk = m.server("desk", 3, Dist::Exponential { mean: 2.0 });
+    m.queue_by_shift(desk, 1, &[("rush", 6)]);
+    let retry = m.delay("retry", Dist::Constant(30.0));
+    let out = m.sink("out");
+    m.connect(src, desk);
+    m.connect(desk, out);
+    m.turned_away(desk, retry);
+    m.connect(retry, desk);
+    let model = m.build(Experiment {
+        start: Some(at(0)),
+        ..Experiment::default()
+    });
+    assert_eq!(model.validate(), vec![]);
+    let bytes = write_new(&model);
+    let text = String::from_utf8_lossy(&bytes).into_owned();
+    assert!(
+        text.contains("<stochcraft:byShift>")
+            && text.contains(r#"<bpsim:NumericParameter value="6" validFor="rush"/>"#),
+        "{text}"
+    );
+    assert!(text.contains(r#"name="stochcraft:turnedAway""#), "{text}");
+    let Ok(loaded) = read(&bytes) else {
+        unreachable!()
+    };
+    assert!(loaded.notes.is_empty(), "{:?}", loaded.notes);
+    assert_eq!(loaded.model, laid_out(model));
+
+    // Per working server instead: saved in place.
+    let mut edited = loaded.model.clone();
+    if let ElementKind::Server {
+        queue_capacity,
+        queue_limit,
+        ..
+    } = &mut edited.elements[1].kind
+    {
+        *queue_capacity = Some(2);
+        *queue_limit = QueueLimit::PerWorkingServer;
+    }
+    let saved = loaded.opened.save(&edited);
+    assert!(saved.is_ok(), "{saved:?}");
+    let Ok(saved) = saved else { return };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(
+        text.contains(r#"stochcraft:perWorkingServer="true""#) && !text.contains("byShift"),
+        "{text}"
+    );
+    assert_eq!(read(&saved).map(|l| l.model).ok(), Some(edited.clone()));
+
+    // A fixed room again, and no way for those turned away: the extensions go.
+    if let ElementKind::Server { queue_limit, .. } = &mut edited.elements[1].kind {
+        *queue_limit = QueueLimit::Fixed;
+    }
+    for c in &mut edited.connections {
+        c.turned_away = false;
+    }
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    let removed = again.opened.save(&edited);
+    let Ok(removed) = removed else { unreachable!() };
+    let text = String::from_utf8_lossy(&removed);
+    assert!(
+        !text.contains("perWorkingServer") && !text.contains("stochcraft:turnedAway"),
+        "{text}"
+    );
+    assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// A bad perWorkingServer flag, or a way for those turned away out of a task with no finite
+/// waiting room, is noted.
+#[test]
+fn a_bad_waiting_room_setting_is_noted() {
+    let mut m = Builder::new();
+    let src = m.source("calls", Dist::Exponential { mean: 1.0 }, None);
+    let desk = m.buffered_server("desk", 1, Dist::Exponential { mean: 0.5 }, 3);
+    let out = m.sink("out");
+    m.connect(src, desk);
+    m.connect(desk, out);
+    let text = String::from_utf8_lossy(&write_new(&m.build(Experiment::default()))).replace(
+        r#"stochcraft:value="3""#,
+        r#"stochcraft:value="3" stochcraft:perWorkingServer="maybe""#,
+    );
+    let Ok(loaded) = read(text.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(
+        loaded
+            .notes
+            .iter()
+            .any(|n| n.message.contains("perWorkingServer")),
+        "{:?}",
+        loaded.notes
+    );
+    assert!(matches!(
+        &loaded.model.elements[1].kind,
+        ElementKind::Server {
+            queue_capacity: Some(3),
+            queue_limit: QueueLimit::Fixed,
+            ..
+        }
+    ));
 }

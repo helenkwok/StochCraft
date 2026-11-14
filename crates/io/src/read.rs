@@ -10,8 +10,8 @@ use stochcraft_model::{
     Bounds, Breakdown, ByValue, Calendar, Change, Connection, DateTime, Demand, DemandPer, Dist,
     Element as ModelElement, ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck,
     Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
-    ProcessingBy, Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap, Setup, Stop,
-    ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap,
+    Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -1019,6 +1019,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             service: time,
                             processing_by,
                             queue_capacity: queue,
+                            queue_limit: queue_limit_of(scenario, id, notes),
                             breakdown: breakdown_of(scenario, id, unit, notes),
                             transfer: transfer_of(scenario, id, unit, notes),
                             available,
@@ -1229,6 +1230,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             quantity: vendor_count(scenario, id, bpsim::QUANTITY, "a quantity", notes),
             rework: vendor_flag(scenario, id, bpsim::REWORK, notes),
             abandoned: vendor_flag(scenario, id, bpsim::ABANDONED, notes),
+            turned_away: vendor_flag(scenario, id, bpsim::TURNED_AWAY, notes),
         });
     }
     let mut experiment = experiment(scenario, notes);
@@ -1372,6 +1374,7 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::HEALTH_CHECK,
             bpsim::ON_SHIFT_END,
             bpsim::ABANDONED,
+            bpsim::TURNED_AWAY,
             bpsim::SCRAP,
             bpsim::DEMAND,
             bpsim::REWORK,
@@ -1394,6 +1397,66 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
         }
     }
     queue
+}
+
+/// How StochCraft's vendor extension sets the size of element `id`'s waiting room
+/// ([`bpsim::QUEUE_CAPACITY`]): per working server with `perWorkingServer="true"`, by timetable
+/// with values `validFor` calendars in a `byShift` child, else fixed. Both: per working server,
+/// with a note.
+fn queue_limit_of(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) -> QueueLimit {
+    let Some(ext) =
+        scenario.and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::QUEUE_CAPACITY)))
+    else {
+        return QueueLimit::Fixed;
+    };
+    let unit = scenario.map_or(TimeUnit::Minutes, |s| s.settings.base_time_unit);
+    let per = ext
+        .attrs
+        .iter()
+        .find(|(n, _)| {
+            n.split_once(':')
+                .is_some_and(|(_, l)| l == "perWorkingServer")
+        })
+        .map(|(_, v)| crate::xml::unescape(v));
+    let per = match per.as_deref().map(str::trim) {
+        None | Some("false" | "0") => false,
+        Some("true" | "1") => true,
+        Some(other) => {
+            notes.push(Note::error(
+                Some(id),
+                format!("perWorkingServer on a queue capacity must be true or false, not `{other}`; the waiting room is fixed"),
+            ));
+            false
+        }
+    };
+    let mut by_shift = Vec::new();
+    if let Some(timed) = ext.elements().find(|e| e.local() == "byShift") {
+        for (c, v) in bpsim::timed_values(timed, unit, notes, Some(id)) {
+            match units(&v) {
+                Some(q) => by_shift.push(Timed {
+                    calendar: ElementId::unchecked(&c),
+                    value: q,
+                }),
+                None => notes.push(Note::error(
+                    Some(id),
+                    format!("a queue capacity by calendar must be a whole number of at least 0, not {v:?}; it is ignored"),
+                )),
+            }
+        }
+    }
+    if per {
+        if !by_shift.is_empty() {
+            notes.push(Note::warning(
+                Some(id),
+                "a queue capacity is either per working server or by calendar; it is per working server, and the values by calendar are ignored",
+            ));
+        }
+        QueueLimit::PerWorkingServer
+    } else if by_shift.is_empty() {
+        QueueLimit::Fixed
+    } else {
+        QueueLimit::ByShift(by_shift)
+    }
 }
 
 /// A whole number of at least 1 that StochCraft's vendor extension `name` gives element `id`,

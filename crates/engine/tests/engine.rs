@@ -2810,6 +2810,96 @@ fn a_patience_and_an_abandoned_way_are_set_run_and_removed() {
     );
 }
 
+/// A waiting room per working server or by calendar, and a way for those turned away, are set
+/// by command, show in the model, run, and are removed again; a calendar in use by one is
+/// guarded, and both ways at once are refused.
+#[test]
+fn waiting_rooms_that_change_and_a_turned_away_way_are_set_run_and_removed() {
+    let mut e = help_desk();
+    let metric = |r: &serde_json::Value, id: &str, name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == id))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "queue_capacity": 0, "queue_per_working_server": true}),
+    );
+    ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "sink", "id": "elsewhere"}),
+    );
+    let way = ok(
+        &mut e,
+        "connect",
+        json!({"from": "desk", "to": "elsewhere"}),
+    );
+    let way = way["id"].as_str().unwrap_or_default().to_owned();
+    ok(&mut e, "flow.set", json!({"id": way, "turned_away": true}));
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(m.contains("\"turned_away\":true"), "{m}");
+    assert!(m.contains("\"queue_per_working_server\":true"), "{m}");
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert!(metric(&r, "desk", "lost").is_some_and(|x| x > 0.0), "{r}");
+    assert!(
+        metric(&r, "elsewhere", "left").is_some_and(|x| x > 0.0),
+        "{r}"
+    );
+    // By calendar instead: per working server goes.
+    ok(
+        &mut e,
+        "calendar.add",
+        json!({"id": "rush", "events": [{"start": "2016-01-01T08:00:00", "end": "2016-01-01T12:00:00", "repeat": "FREQ=DAILY"}]}),
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "queue_shifts": [{"calendar": "rush", "places": 4}]}),
+    );
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(
+        m.contains("\"queue_shifts\":[{\"calendar\":\"rush\",\"places\":4}]")
+            && !m.contains("queue_per_working_server"),
+        "{m}"
+    );
+    assert_eq!(
+        err(&mut e, "calendar.remove", json!({"id": "rush"})),
+        ErrorCode::Conflict
+    );
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "desk", "queue_per_working_server": true, "queue_shifts": []}),
+        ),
+        ErrorCode::InvalidParams
+    );
+    ok(&mut e, "run", json!({"replications": 2}));
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "queue_shifts": []}),
+    );
+    ok(&mut e, "flow.set", json!({"id": way, "turned_away": false}));
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(
+        !m.contains("turned_away") && !m.contains("queue_shifts"),
+        "{m}"
+    );
+    // A waiting room's settings are a server's only.
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "arrivals", "queue_per_working_server": true}),
+        ),
+        ErrorCode::InvalidParams
+    );
+}
+
 /// A health check is set by command, shows in the model, runs with a finite buffer, gives the
 /// server its rows, and is removed again; it is a server's only.
 #[test]

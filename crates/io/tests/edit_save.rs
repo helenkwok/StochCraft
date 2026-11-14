@@ -317,6 +317,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             health_check: None,
             shifts: Vec::new(),
             on_shift_end: OnShiftEnd::Finish,
+            queue_limit: stochcraft_model::QueueLimit::Fixed,
         };
     });
     assert!(text(&saved).contains("pay_resource"));
@@ -344,6 +345,7 @@ fn blocks_and_connections_can_be_added_and_removed() {
             health_check: None,
             shifts: Vec::new(),
             on_shift_end: OnShiftEnd::Finish,
+            queue_limit: stochcraft_model::QueueLimit::Fixed,
         };
     });
     edit_and_save("tandem.xpdl", None, |m| {
@@ -638,6 +640,7 @@ fn new_ids_never_clash_with_the_files_other_ids() {
             health_check: None,
             shifts: Vec::new(),
             on_shift_end: OnShiftEnd::Finish,
+            queue_limit: stochcraft_model::QueueLimit::Fixed,
         };
     });
     let t = text(&saved);
@@ -1324,6 +1327,7 @@ fn new_and_changed_servers_carry_their_buffer() {
             health_check: None,
             shifts: Vec::new(),
             on_shift_end: OnShiftEnd::Finish,
+            queue_limit: stochcraft_model::QueueLimit::Fixed,
         };
         set_queue(m, "weld", Some(1));
     });

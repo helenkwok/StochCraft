@@ -22,7 +22,10 @@ pub const STOCHCRAFT_NS: &str = "https://helenkwok.github.io/StochCraft/bpsim/1"
 /// The prefix StochCraft's vendor extension names start with.
 pub const STOCHCRAFT: &str = "stochcraft:";
 /// A server's finite buffer: `<bpsim:VendorExtension name="stochcraft:queueCapacity"
-/// xmlns:stochcraft="…" stochcraft:value="3"/>` in the task's `ElementParameters`.
+/// xmlns:stochcraft="…" stochcraft:value="3"/>` in the task's `ElementParameters`. With
+/// `stochcraft:perWorkingServer="true"`, the value is the most waiting per working unit; with
+/// a `stochcraft:byShift` child holding BPSim values `validFor` calendars, those are the most
+/// waiting while each calendar is active, and the value applies outside them.
 pub const QUEUE_CAPACITY: &str = "stochcraft:queueCapacity";
 
 /// A shared pool: `stochcraft:pool` with the value `true` on a resource's `ElementParameters`.
@@ -121,6 +124,11 @@ pub const REWORK: &str = "stochcraft:rework";
 /// `ElementParameters` of a sequence flow out of a task with a patience, besides its ordinary
 /// way out.
 pub const ABANDONED: &str = "stochcraft:abandoned";
+
+/// The way for entities turned away: `stochcraft:turnedAway` with the value `true` on the
+/// `ElementParameters` of a sequence flow out of a task with a finite waiting room, besides
+/// its ordinary way out. Entities finding no room take it at once.
+pub const TURNED_AWAY: &str = "stochcraft:turnedAway";
 
 /// Scrap: a `stochcraft:scrap` element on an end event's `ElementParameters`: what reaches it
 /// is scrap (ISO 22400-2's scrap quantity), counted against the task its attribute `chargedTo`
