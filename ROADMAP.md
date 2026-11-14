@@ -1397,6 +1397,17 @@ A line that makes several products, and results in the terms lean practice uses.
   reported as `time_setup`; it counts in utilisation, draws processing power, and a failure
   interrupts it like a job. Setups draw from their own random stream, so service times stay
   those of the same model without setups.
+- **Processing time by product type:** done. A task (a server, a task with shared resources
+  or a delay) can name a property and give a processing time for particular values of it: a
+  part whose value has a time takes it, and any other part (another value, or none) takes the
+  task's own processing time. The vendor extension `stochcraft:processingTimeBy`, since BPSim
+  2.0 has one processing time per task. The times for values draw from a stream of the task's
+  own, so a model without them, or whose values no part has, gives exactly the results it gave
+  before, and the other parts keep the task's own draws. A job a failure, a health check or a
+  shift's end stops resumes with the part's own remaining work, and one retried draws afresh
+  from the part's own time. Checked against M/G/1 with
+  hyperexponential service (Pollaczek-Khinchine), overall and per type. Not here: results per
+  product type (route by type to separate sinks for each type's time in system).
 - **Lean results:**
   - cycle time per station and for the line;
   - throughput against takt, from a demand and a shift time the user enters (takt as available
