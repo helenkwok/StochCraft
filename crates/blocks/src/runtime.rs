@@ -1812,18 +1812,19 @@ struct Away {
 }
 
 impl Away {
-    /// `e`, turned away, takes the way at once; it waits for room there on its own, as a
-    /// process, if the way can hold it up.
+    /// `e`, turned away, takes the way at once, on its own, as a process (started now): it
+    /// waits for room there if the way can hold it up. Being a process, a way that leads
+    /// straight back to a room that stays full goes round through the event queue, where the
+    /// guard on events at one time stops it, rather than looping within one step.
     fn take(&self, e: Entity) {
-        let way = self.way.clone();
-        if way.may_block() {
-            let c = self.ctx.clone();
-            self.ctx.spawn_tagged(tag(self.index), async move {
+        let (way, c) = (self.way.clone(), self.ctx.clone());
+        self.ctx.spawn_tagged(tag(self.index), async move {
+            if way.may_block() {
                 way.deliver(&c, e).await;
-            });
-        } else {
-            way.dispatch(&self.ctx, e);
-        }
+            } else {
+                way.dispatch(&c, e);
+            }
+        });
     }
 }
 

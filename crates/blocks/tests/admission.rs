@@ -26,7 +26,7 @@
 
 use stochcraft_blocks::{
     Breakdown, Builder, ElementReport, Event, ExperimentSummary, HealthCheck, Metric, OnShiftEnd,
-    OnTakeout, PlaceWhileOut, Report, compile, summarise,
+    OnTakeout, PlaceWhileOut, Report, RunError, compile, summarise,
 };
 use stochcraft_model::{DateTime, Diagnostic, Dist, Experiment, Problem, Severity};
 use stochcraft_random::Rng;
@@ -527,4 +527,43 @@ fn a_waiting_room_by_timetable_matches_the_transient_chain() {
         covers(&s, "desk", Metric::WorkInProgress, 1.0, 2.624_005_361_1),
     ];
     assert!(checks.iter().all(|c| *c), "{checks:?}");
+}
+
+/// A way for those turned away that leads straight back, in no time, to a room that stays
+/// full goes round for ever at one instant: the guard on events at one time stops it, naming
+/// an element of the loop, rather than the run hanging. For each way of setting the room.
+#[test]
+fn a_turned_away_loop_that_takes_no_time_is_stopped() {
+    for mode in 0..3 {
+        let mut b = Builder::new();
+        let arrivals = b.source("arrivals", Dist::Constant(1.0), Some(2));
+        let desk = b.buffered_server("desk", 1, Dist::Constant(10.0), 0);
+        let exit = b.sink("exit");
+        let back = b.exclusive("back");
+        b.connect(arrivals, desk);
+        b.connect(desk, exit);
+        b.turned_away(desk, back);
+        b.connect(back, desk);
+        match mode {
+            1 => b.queue_per_working_server(desk, 0),
+            2 => b.queue_by_shift(desk, 0, &[]),
+            _ => {}
+        }
+        let compiled = compile(&b.build(experiment(0.0, 5.0, 1)))
+            .unwrap_or_else(|d| panic!("{d:?}"))
+            .max_events_at_one_time(10_000);
+        let (tx, rx) = std::sync::mpsc::channel();
+        std::thread::spawn(move || {
+            let _ = tx.send(compiled.run(Rng::new(1)));
+        });
+        let r = rx
+            .recv_timeout(std::time::Duration::from_secs(60))
+            .unwrap_or_else(|_| panic!("mode {mode}: still running after 60 s"));
+        let Err(RunError::TimeStopped { time, element, .. }) = &r else {
+            panic!("mode {mode}: {r:?}")
+        };
+        assert_eq!(*time, 2.0, "mode {mode}");
+        let at = element.as_ref().map(|(id, _)| id.as_str());
+        assert!(matches!(at, Some("desk" | "back")), "mode {mode}: {at:?}");
+    }
 }
