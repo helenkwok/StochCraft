@@ -2076,7 +2076,7 @@ impl Model {
             }
             if ok {
                 outgoing.entry(&c.from).or_default().push(&c.to);
-                if !(c.abandoned && patient(&c.from)) && !(c.turned_away && roomy(&c.from)) {
+                if !((c.abandoned && patient(&c.from)) || (c.turned_away && roomy(&c.from))) {
                     served.entry(&c.from).or_default().push(&c.to);
                 }
             }
