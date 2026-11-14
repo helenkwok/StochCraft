@@ -1747,7 +1747,10 @@ fn a_delay_made_a_server_per_working_server_replaces_the_extension_it_kept() {
         unreachable!()
     };
     let mut m = loaded.model.clone();
-    assert!(matches!(serve(&mut m), ElementKind::Delay { .. }), "read as a delay");
+    assert!(
+        matches!(serve(&mut m), ElementKind::Delay { .. }),
+        "read as a delay"
+    );
     *serve(&mut m) = ElementKind::Server {
         processing_by: None,
         capacity: 1,
@@ -1771,7 +1774,10 @@ fn a_delay_made_a_server_per_working_server_replaces_the_extension_it_kept() {
         unreachable!("{saved:?}")
     };
     let text = String::from_utf8_lossy(&saved);
-    assert!(text.contains(r#"stochcraft:perWorkingServer="true""#), "{text}");
+    assert!(
+        text.contains(r#"stochcraft:perWorkingServer="true""#),
+        "{text}"
+    );
     let Ok(mut back) = read(&saved).map(|l| l.model) else {
         unreachable!()
     };
