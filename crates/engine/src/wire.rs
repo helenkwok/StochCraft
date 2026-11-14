@@ -9,9 +9,9 @@ use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
     Bounds, Breakdown, Change, Connection, Demand, DemandPer, Diagnostic, Dist, Element, ElementId,
-    ElementKind, Estimate, Experiment, Family, HealthCheck, Model, Need, OnTakeout, Patience,
-    PatienceUntil, Power, Property, PropertyType, PropertyValue, ResourcePool, Routing, Scrap,
-    Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    ElementKind, Estimate, Experiment, Family, HealthCheck, Model, Need, OnShiftEnd, OnTakeout,
+    Patience, PatienceUntil, Power, Property, PropertyType, PropertyValue, ResourcePool, Routing,
+    Scrap, Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 /// A probability distribution. Times are in the experiment's time unit.
@@ -221,6 +221,16 @@ pub enum KindSpec {
         /// finishes first; failures and repairs go on through the breaks. Left out when none.
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
         availability: Vec<AvailabilityDoc>,
+        /// Units while a calendar is active (a shift), the first active one applying; `capacity`
+        /// applies outside them. The units on shift are the shift's while the units are
+        /// available. Left out when none.
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        shifts: Vec<ShiftDoc>,
+        /// What happens to a job under way on a unit that goes off shift: `finish` (the default,
+        /// left out) finishes it first; `retry` sends it back to the head of the queue at once,
+        /// its work wasted; `resume` pauses it on the unit until the unit is on shift again.
+        #[serde(default, skip_serializing_if = "OnShiftEndSpec::is_finish")]
+        on_shift_end: OnShiftEndSpec,
         /// The power each unit draws in each state, in kilowatts, for energy results; left out
         /// when none.
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -796,6 +806,8 @@ impl From<&ElementKind> for KindSpec {
                 planned_run_time,
                 patience,
                 health_check,
+                shifts,
+                on_shift_end,
             } => KindSpec::Server {
                 capacity: *capacity,
                 service: service.into(),
@@ -813,6 +825,11 @@ impl From<&ElementKind> for KindSpec {
                 planned_run_time: planned_run_time.as_ref().map(Into::into),
                 patience: patience.as_ref().map(Into::into),
                 health_check: health_check.as_ref().map(Into::into),
+                shifts: timed(shifts, |t| ShiftDoc {
+                    calendar: t.calendar.to_string(),
+                    quantity: t.value,
+                }),
+                on_shift_end: (*on_shift_end).into(),
             },
             ElementKind::SharedTask {
                 service,
@@ -871,6 +888,8 @@ impl From<KindSpec> for ElementKind {
                 planned_run_time,
                 patience,
                 health_check,
+                shifts,
+                on_shift_end,
             } => ElementKind::Server {
                 capacity,
                 service: service.into(),
@@ -887,6 +906,8 @@ impl From<KindSpec> for ElementKind {
                 planned_run_time: planned_run_time.map(Into::into),
                 patience: patience.map(Into::into),
                 health_check: health_check.map(Into::into),
+                shifts: shifts.into_iter().map(Into::into).collect(),
+                on_shift_end: on_shift_end.into(),
             },
             KindSpec::SharedTask {
                 service,
@@ -1373,6 +1394,45 @@ impl From<&Patience> for PatienceSpec {
                 PatienceUntil::Start => PatienceUntilSpec::Start,
                 PatienceUntil::Done => PatienceUntilSpec::Done,
             },
+        }
+    }
+}
+
+/// What happens to a job under way on a server's unit that goes off shift.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum OnShiftEndSpec {
+    /// The unit finishes it, then goes off.
+    #[default]
+    Finish,
+    /// Back to the head of the queue at once, for any unit to start afresh; its work is wasted.
+    Retry,
+    /// It waits on the unit and carries on with what was left when the unit is on shift again.
+    Resume,
+}
+
+impl OnShiftEndSpec {
+    fn is_finish(&self) -> bool {
+        *self == OnShiftEndSpec::Finish
+    }
+}
+
+impl From<OnShiftEnd> for OnShiftEndSpec {
+    fn from(o: OnShiftEnd) -> Self {
+        match o {
+            OnShiftEnd::Finish => OnShiftEndSpec::Finish,
+            OnShiftEnd::Retry => OnShiftEndSpec::Retry,
+            OnShiftEnd::Resume => OnShiftEndSpec::Resume,
+        }
+    }
+}
+
+impl From<OnShiftEndSpec> for OnShiftEnd {
+    fn from(o: OnShiftEndSpec) -> Self {
+        match o {
+            OnShiftEndSpec::Finish => OnShiftEnd::Finish,
+            OnShiftEndSpec::Retry => OnShiftEnd::Retry,
+            OnShiftEndSpec::Resume => OnShiftEnd::Resume,
         }
     }
 }
@@ -1884,6 +1944,8 @@ mod tests {
                 planned_run_time: None,
                 patience: None,
                 health_check: None,
+                shifts: Vec::new(),
+                on_shift_end: OnShiftEndSpec::Finish,
             })
         );
     }

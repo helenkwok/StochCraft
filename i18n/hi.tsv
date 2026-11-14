@@ -188,6 +188,7 @@
 	Failure interrupts the job	खराबी काम रोक देती है
 	Family	परिवार
 	File	फ़ाइल
+	Finish, then go off	पूरा करें, फिर पाली से हटें
 	Finished at {time} {unit}	{time} {unit} पर समाप्त
 	Fit	फ़िट करें
 	Fit the diagram to the view	आरेख को दृश्य में फ़िट करें
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ग्राहक इन प्रस्थानों से कितने पुर्जे चाहते हैं; तब परिणाम टैक्ट (उपलब्ध समय को मांग से भाग देकर) और हर कार्य का चक्र समय दिखाते हैं।
 	In use	उपयोग में
 	Inside over time	समय के साथ अंदर
+	Job under way on a server going off shift:	पाली से हट रहे सर्वर पर चल रहा काम:
 	Job under way on a server taken out:	हटाए गए सर्वर पर चल रहा काम:
 	Jump	जाएँ
 	Jump to time	समय पर जाएँ
@@ -378,6 +380,7 @@
 	Result, down and up	परिणाम, नीचे और ऊपर
 	Results	परिणाम
 	Resume after restart	पुनः आरंभ के बाद जारी रखें
+	Resume when back on shift	पाली में लौटने पर जारी रखें
 	Retry elsewhere	कहीं और फिर कोशिश करें
 	Rework	पुनःकार्य
 	Rework on {id}	{id} पर पुनःकार्य
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	कनेक्शन टूट जाता है और क्लाइंट फिर कोशिश करता है: इकाई तुरंत कतार के आगे लौट जाती है, और उस पर किया गया काम व्यर्थ जाता है।
 	The entity waits on its server and the job carries on with what was left once the server is back.	इकाई अपने सर्वर पर प्रतीक्षा करती है, और सर्वर लौटते ही काम बचे हुए हिस्से से आगे चलता है।
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	अंतराल {share} के लक्ष्य हिस्से से नीचे तक जाता है, इसलिए 95% विश्वास के साथ यह नहीं दिखता कि हिस्सा पूरा हुआ; अधिक पुनरावृत्तियाँ इसे संकरा करेंगी।
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	काम तुरंत रुक जाता है: इकाई पाली में मौजूद किसी भी सर्वर के लिए कतार के आगे लौट जाती है, और उस पर किया गया काम व्यर्थ जाता है।
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	काम तुरंत रुक जाता है; इकाई अपने सर्वर पर प्रतीक्षा करती है, और वह सर्वर फिर पाली में आते ही काम बचे हुए हिस्से से आगे चलता है।
 	The last task with a resource it finished at	अंतिम संसाधन वाला कार्य जिससे पुर्जा गुज़रा
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	रुकने की शर्त तक का औसत समय केवल उन पुनरावृत्तियों पर है जिन्होंने शर्त पूरी की; बाकी अपनी समय सीमा तक चलीं।
 	The model changed, so watching stopped	मॉडल बदल गया, इसलिए देखना बंद हो गया
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	मॉडल में अब आकार निर्धारण से मिली इकाइयाँ हैं
 	The model: its experiment, connections and problems	मॉडल: प्रयोग, कनेक्शन और समस्याएँ
 	The name is empty or already used.	नाम खाली है या पहले से उपयोग में है।
+	The server finishes the job it has, then goes off; until then it counts as on shift.	सर्वर हाथ का काम पूरा करता है, फिर पाली से हट जाता है; तब तक उसे पाली में गिना जाता है।
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	हर मान के बराबर या उससे कम पुनरावृत्तियों का हिस्सा। पट्टी में वास्तविक वितरण {confidence} विश्वास के साथ है।
 	The values are numbers, separated by semicolons or spaces	मान अर्धविराम या रिक्त स्थान से अलग की गई संख्याएँ हैं
 	The whole clock	पूरा समय

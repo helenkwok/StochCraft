@@ -2,7 +2,9 @@
 //! 95% confidence interval that must cover the theoretical value.
 
 use stochcraft_blocks::{ExperimentSummary, Metric, compile, summarise};
-use stochcraft_model::{Connection, Dist, Element, ElementId, ElementKind, Experiment, Model};
+use stochcraft_model::{
+    Connection, Dist, Element, ElementId, ElementKind, Experiment, Model, OnShiftEnd,
+};
 use stochcraft_random::Rng;
 
 fn id(s: &str) -> ElementId {
@@ -40,6 +42,8 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
                     planned_run_time: None,
                     patience: None,
                     health_check: None,
+                    shifts: Vec::new(),
+                    on_shift_end: OnShiftEnd::Finish,
                 },
             ),
             element(

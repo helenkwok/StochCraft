@@ -264,14 +264,16 @@ fn server_with_a_break(
 /// Jobs of 1.5 and a break from 10 to 20: jobs end at 1.5, 3, …, 9; the one started at 9 is
 /// under way at 10 and finishes at 10.5; none starts until 20; then they end at 21.5, …, 29 by
 /// 29.5. 13 jobs. The job finishing at 10.5 is processing; the unit is off shift from then to the
-/// end of the break, 9.5 of 29.5, and busy 10.5 + 9.5.
+/// end of the break, 9.5 of 29.5, and busy 10.5 + 9.5 = 20. Utilisation is over the time on
+/// shift, the unit finishing its job counted until 10.5: 10.5 + 9.5 = 20, so 20/20 = 1 (over all
+/// time, as before M2.10, it was 20/29.5).
 #[test]
 fn a_server_stops_taking_jobs_for_its_break() {
     let r = server_with_a_break(1.5, None, 29.5);
     let m = r.element("machine");
     assert_eq!(m.map(|e| e.left), Some(13), "{r:?}");
     close(m.and_then(|e| e.time_off_shift), 9.5 / 29.5);
-    close(m.and_then(|e| e.utilisation), 20.0 / 29.5);
+    close(m.and_then(|e| e.utilisation), 20.0 / 20.0);
     // Units that never fail report no availability.
     assert_eq!(m.and_then(|e| e.availability), None);
 }

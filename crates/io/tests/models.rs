@@ -4,7 +4,7 @@
 
 use stochcraft_blocks::{Metric, compile, summarise};
 use stochcraft_io::{Format, Severity, read_scenario};
-use stochcraft_model::{Dist, ElementKind, Model, TimeUnit};
+use stochcraft_model::{Dist, ElementKind, Model, OnShiftEnd, TimeUnit};
 use stochcraft_random::Rng;
 
 fn load(name: &str, scenario: Option<&str>) -> stochcraft_io::Loaded {
@@ -58,6 +58,8 @@ fn bpmn_written_by_another_tool() {
             planned_run_time: None,
             patience: None,
             health_check: None,
+            shifts: Vec::new(),
+            on_shift_end: OnShiftEnd::Finish,
         }
     );
     assert_eq!(
@@ -95,6 +97,8 @@ fn inherited_scenario_changes_only_what_it_says() {
             planned_run_time: None,
             patience: None,
             health_check: None,
+            shifts: Vec::new(),
+            on_shift_end: OnShiftEnd::Finish,
         }
     );
     assert_eq!(l.model.experiment.replications, 16);
@@ -164,6 +168,8 @@ fn xpdl_with_bpsim_1() {
             planned_run_time: None,
             patience: None,
             health_check: None,
+            shifts: Vec::new(),
+            on_shift_end: OnShiftEnd::Finish,
         }
     );
     assert_eq!(

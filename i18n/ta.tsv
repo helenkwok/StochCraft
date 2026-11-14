@@ -188,6 +188,7 @@
 	Failure interrupts the job	பழுது வேலையை இடைநிறுத்தும்
 	Family	குடும்பம்
 	File	கோப்பு
+	Finish, then go off	முடித்துவிட்டு பணிமுறையிலிருந்து விலகு
 	Finished at {time} {unit}	{time} {unit} இல் முடிந்தது
 	Fit	பொருத்து
 	Fit the diagram to the view	வரைபடத்தைக் காட்சியில் பொருத்து
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	இந்த வெளியேற்றங்களிலிருந்து வாடிக்கையாளர்கள் எத்தனை பாகங்களை விரும்புகிறார்கள்; அப்போது முடிவுகள் டாக்ட் (கிடைக்கும் நேரத்தைத் தேவையால் வகுத்தது) மற்றும் ஒவ்வொரு பணியின் சுழற்சி நேரத்தையும் காட்டும்.
 	In use	பயன்பாட்டில்
 	Inside over time	நேரப்படி உள்ளே
+	Job under way on a server going off shift:	பணிமுறை முடியும் வழங்கியில் நடந்துகொண்டிருக்கும் வேலை:
 	Job under way on a server taken out:	நீக்கப்பட்ட வழங்கியில் நடந்துகொண்டிருக்கும் வேலை:
 	Jump	செல்
 	Jump to time	நேரத்திற்குச் செல்
@@ -378,6 +380,7 @@
 	Result, down and up	முடிவு, கீழும் மேலும்
 	Results	முடிவுகள்
 	Resume after restart	மறுதொடக்கத்துக்குப் பின் தொடர்
+	Resume when back on shift	பணிமுறைக்குத் திரும்பியதும் தொடர்
 	Retry elsewhere	வேறிடத்தில் மீண்டும் முயல்
 	Rework	மறுவேலை
 	Rework on {id}	{id} இல் மறுவேலை
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	இணைப்பு துண்டிக்கப்பட்டு கிளையன்ட் மீண்டும் முயல்கிறது: உருப்படி உடனே வரிசையின் முன்னுக்குத் திரும்புகிறது, அதன்மேல் செய்த வேலை வீணாகிறது.
 	The entity waits on its server and the job carries on with what was left once the server is back.	உருப்படி தன் வழங்கியிலேயே காத்திருக்கிறது, வழங்கி திரும்பியதும் மீதமுள்ளதிலிருந்து வேலை தொடர்கிறது.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	இடைவெளி {share} இலக்கு பங்குக்குக் கீழே செல்கிறது, எனவே பங்கு அடையப்பட்டது 95% நம்பிக்கையுடன் காட்டப்படவில்லை; கூடுதல் மீள் இயக்கங்கள் அதைக் குறுக்கும்.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	வேலை உடனே நிற்கிறது: உருப்படி பணிமுறையில் உள்ள எந்த வழங்கிக்காகவும் வரிசையின் முன்னுக்குத் திரும்புகிறது, அதன்மேல் செய்த வேலை வீணாகிறது.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	வேலை உடனே நிற்கிறது; உருப்படி தன் வழங்கியிலேயே காத்திருக்கிறது, அந்த வழங்கி மீண்டும் பணிமுறைக்கு வந்ததும் மீதமுள்ளதிலிருந்து வேலை தொடர்கிறது.
 	The last task with a resource it finished at	பாகம் கடைசியாகக் கடந்த வளம் தேவைப்படும் பணி
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	நிறுத்த நிபந்தனை வரையிலான சராசரி நேரம் அதை அடைந்த மீள் இயக்கங்கள் மீது மட்டுமே; மற்றவை அவற்றின் நேர வரம்பு வரை இயங்கின.
 	The model changed, so watching stopped	மாதிரி மாறியதால் கவனிப்பது நிறுத்தப்பட்டது
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	அளவிடுதல் கண்டறிந்த அலகுகள் இப்போது மாதிரியில் உள்ளன
 	The model: its experiment, connections and problems	மாதிரி: அதன் சோதனை, இணைப்புகள், சிக்கல்கள்
 	The name is empty or already used.	பெயர் காலியாக உள்ளது அல்லது ஏற்கெனவே பயன்பாட்டில் உள்ளது.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	வழங்கி கையில் உள்ள வேலையை முடித்துவிட்டுப் பணிமுறையிலிருந்து விலகுகிறது; அதுவரை அது பணிமுறையில் இருப்பதாகக் கணக்கிடப்படுகிறது.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ஒவ்வொரு மதிப்புக்கும் சமமான அல்லது குறைவான மீள் இயக்கங்களின் பங்கு. பட்டை உண்மையான பரவலை {confidence} நம்பகத்தன்மையுடன் கொண்டுள்ளது.
 	The values are numbers, separated by semicolons or spaces	மதிப்புகள் அரைப்புள்ளி அல்லது இடைவெளியால் பிரிக்கப்பட்ட எண்கள்
 	The whole clock	முழு நேரமும்

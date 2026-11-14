@@ -188,6 +188,7 @@
 	Failure interrupts the job	Ausfall unterbricht die Bearbeitung
 	Family	Familie
 	File	Datei
+	Finish, then go off	Fertigstellen, dann Schicht beenden
 	Finished at {time} {unit}	Beendet bei {time} {unit}
 	Fit	Einpassen
 	Fit the diagram to the view	Diagramm in die Ansicht einpassen
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Wie viele Teile Kunden von diesen Abgängen wollen; die Ergebnisse zeigen dann den Takt (die verfügbare Zeit geteilt durch den Bedarf) und die Zykluszeit jeder Aufgabe.
 	In use	In Verwendung
 	Inside over time	Im Block über die Zeit
+	Job under way on a server going off shift:	Laufender Auftrag auf einem Server, dessen Schicht endet:
 	Job under way on a server taken out:	Laufender Auftrag auf einem Server, der außer Betrieb geht:
 	Jump	Springen
 	Jump to time	Springen zu Zeitpunkt
@@ -378,6 +380,7 @@
 	Result, down and up	Ergebnis, nach unten und oben
 	Results	Ergebnisse
 	Resume after restart	Nach dem Neustart fortsetzen
+	Resume when back on shift	Fortsetzen, sobald wieder in der Schicht
 	Retry elsewhere	Anderswo erneut versuchen
 	Rework	Nacharbeit
 	Rework on {id}	Nacharbeit bei {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Die Verbindung bricht ab, und der Client versucht es erneut: Die Entität geht sofort an den Anfang der Warteschlange zurück, und die an ihr geleistete Arbeit ist verschwendet.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Die Entität wartet an ihrem Server, und der Auftrag läuft mit dem Rest weiter, sobald der Server zurück ist.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Das Intervall reicht unter den Zielanteil von {share}, daher ist nicht mit 95 % Konfidenz gezeigt, dass der Anteil erreicht wird; mehr Replikationen würden es verengen.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Der Auftrag bricht sofort ab: Die Entität geht an den Anfang der Warteschlange für einen beliebigen Server in der Schicht zurück, und die an ihr geleistete Arbeit ist verschwendet.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Der Auftrag bricht sofort ab; die Entität wartet an ihrem Server, und der Auftrag läuft mit dem Rest weiter, sobald dieser Server wieder in der Schicht ist.
 	The last task with a resource it finished at	Die letzte Aufgabe mit Ressource, die das Teil durchlaufen hat
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Die mittlere Zeit bis zur Abbruchbedingung bezieht sich nur auf die Replikationen, die sie erreicht haben; die übrigen liefen bis zu ihrem Zeitlimit.
 	The model changed, so watching stopped	Das Modell wurde geändert, daher wurde das Beobachten beendet
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	Das Modell hat jetzt die bei der Bemessung gefundenen Einheiten
 	The model: its experiment, connections and problems	Das Modell: Experiment, Verbindungen und Probleme
 	The name is empty or already used.	Der Name ist leer oder bereits vergeben.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Der Server stellt seinen laufenden Auftrag fertig und beendet dann die Schicht; bis dahin zählt er als in der Schicht.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Der Anteil der Replikationen bei oder unter jedem Wert. Das Band enthält die wahre Verteilung mit {confidence} Konfidenz.
 	The values are numbers, separated by semicolons or spaces	Die Werte sind Zahlen, getrennt durch Semikolons oder Leerzeichen
 	The whole clock	Die ganze Zeit

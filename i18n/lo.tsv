@@ -188,6 +188,7 @@
 	Failure interrupts the job	ການເສຍຂັດຈັງຫວະວຽກ
 	Family	ຕະກູນ
 	File	ໄຟລ໌
+	Finish, then go off	ເຮັດໃຫ້ແລ້ວ ແລ້ວຈຶ່ງອອກກະ
 	Finished at {time} {unit}	ສິ້ນສຸດທີ່ {time} {unit}
 	Fit	ພໍດີ
 	Fit the diagram to the view	ປັບແຜນວາດໃຫ້ພໍດີກັບມຸມມອງ
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ລູກຄ້າຕ້ອງການຈັກຊິ້ນຈາກການອອກເຫຼົ່ານີ້; ຈາກນັ້ນຜົນຈະສະແດງແທັກ (ເວລາທີ່ມີຫານດ້ວຍຄວາມຕ້ອງການ) ແລະ ເວລາຮອບວຽນຂອງແຕ່ລະໜ້າວຽກ.
 	In use	ກຳລັງໃຊ້
 	Inside over time	ຈຳນວນພາຍໃນຕາມເວລາ
+	Job under way on a server going off shift:	ວຽກທີ່ກຳລັງເຮັດຢູ່ເທິງແມ່ຂ່າຍທີ່ກຳລັງໝົດກະ:
 	Job under way on a server taken out:	ວຽກທີ່ກຳລັງເຮັດຢູ່ເທິງແມ່ຂ່າຍທີ່ຖືກເອົາອອກ:
 	Jump	ຂ້າມ
 	Jump to time	ຂ້າມໄປຫາເວລາ
@@ -378,6 +380,7 @@
 	Result, down and up	ຜົນໄດ້ຮັບ ເມື່ອລົງ ແລະ ຂຶ້ນ
 	Results	ຜົນໄດ້ຮັບ
 	Resume after restart	ເຮັດຕໍ່ຫຼັງເລີ່ມໃໝ່
+	Resume when back on shift	ເຮັດຕໍ່ເມື່ອກັບເຂົ້າກະ
 	Retry elsewhere	ລອງໃໝ່ບ່ອນອື່ນ
 	Rework	ການແກ້ໄຂງານ
 	Rework on {id}	ການແກ້ໄຂງານທີ່ {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	ການເຊື່ອມຕໍ່ຫຼຸດ ແລະ ລູກຂ່າຍລອງໃໝ່: ເອນທິຕີຈະກັບໄປຫົວແຖວຄອຍທັນທີ ແລະ ວຽກທີ່ເຮັດກັບມັນແລ້ວຈະເສຍເປົ່າ.
 	The entity waits on its server and the job carries on with what was left once the server is back.	ເອນທິຕີລໍຖ້າຢູ່ທີ່ແມ່ຂ່າຍຂອງມັນ ແລະ ວຽກຈະເຮັດຕໍ່ຈາກສ່ວນທີ່ເຫຼືອເມື່ອແມ່ຂ່າຍກັບມາ.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ຊ່ວງນີ້ລົງຕ່ຳກວ່າສັດສ່ວນເປົ້າໝາຍ {share}, ຈຶ່ງບໍ່ໄດ້ສະແດງດ້ວຍຄວາມເຊື່ອໝັ້ນ 95% ວ່າບັນລຸສັດສ່ວນນັ້ນ; ຮອບຈຳລອງຊ້ຳຫຼາຍຂຶ້ນຈະເຮັດໃຫ້ຊ່ວງແຄບລົງ.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	ວຽກຢຸດທັນທີ: ເອນທິຕີຈະກັບໄປຫົວແຖວຄອຍສຳລັບແມ່ຂ່າຍໃດກໍໄດ້ທີ່ຢູ່ໃນກະ ແລະ ວຽກທີ່ເຮັດກັບມັນແລ້ວຈະເສຍເປົ່າ.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	ວຽກຢຸດທັນທີ; ເອນທິຕີລໍຖ້າຢູ່ທີ່ແມ່ຂ່າຍຂອງມັນ ແລະ ວຽກຈະເຮັດຕໍ່ຈາກສ່ວນທີ່ເຫຼືອເມື່ອແມ່ຂ່າຍນັ້ນກັບເຂົ້າກະອີກ.
 	The last task with a resource it finished at	ໜ້າວຽກສຸດທ້າຍທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ຊິ້ນງານຜ່ານມາ
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ເວລາສະເລ່ຍຈົນຮອດເງື່ອນໄຂຢຸດ ຄິດສະເພາະຮອບຈຳລອງຊ້ຳທີ່ຮອດເງື່ອນໄຂ; ຮອບອື່ນແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
 	The model changed, so watching stopped	ແບບຈຳລອງປ່ຽນໄປ ຈຶ່ງຢຸດຕິດຕາມ
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	ຕອນນີ້ແບບຈຳລອງມີຈຳນວນໜ່ວຍທີ່ການກຳນົດຂະໜາດພົບແລ້ວ
 	The model: its experiment, connections and problems	ແບບຈຳລອງ: ການທົດລອງ ການເຊື່ອມຕໍ່ ແລະ ບັນຫາ
 	The name is empty or already used.	ຊື່ຫວ່າງເປົ່າ ຫຼື ຖືກໃຊ້ແລ້ວ.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	ແມ່ຂ່າຍເຮັດວຽກທີ່ມີຢູ່ໃຫ້ແລ້ວ ແລ້ວຈຶ່ງອອກກະ; ຈົນກວ່າຈະຮອດຕອນນັ້ນ ມັນຍັງຖືວ່າຢູ່ໃນກະ.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ສັດສ່ວນຮອບຈຳລອງຊ້ຳທີ່ເທົ່າກັບ ຫຼື ຕ່ຳກວ່າແຕ່ລະຄ່າ. ແຖບຄອບຄຸມການແຈກຢາຍແທ້ດ້ວຍຄວາມເຊື່ອໝັ້ນ {confidence}.
 	The values are numbers, separated by semicolons or spaces	ຄ່າຕ້ອງເປັນຕົວເລກທີ່ຂັ້ນດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ
 	The whole clock	ເວລາທັງໝົດ

@@ -188,6 +188,7 @@
 	Failure interrupts the job	L'avaria interromp la feina
 	Family	Família
 	File	Fitxer
+	Finish, then go off	Acabar i després deixar el torn
 	Finished at {time} {unit}	Ha acabat a {time} {unit}
 	Fit	Ajusta
 	Fit the diagram to the view	Ajusta el diagrama a la vista
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Quantes peces volen els clients d'aquestes sortides; aleshores els resultats mostren el takt (el temps disponible dividit per la demanda) i el temps de cicle de cada tasca.
 	In use	En ús
 	Inside over time	A dins al llarg del temps
+	Job under way on a server going off shift:	Feina en curs en un servidor que acaba el torn:
 	Job under way on a server taken out:	Feina en curs en un servidor retirat:
 	Jump	Ves-hi
 	Jump to time	Ves a l'instant
@@ -378,6 +380,7 @@
 	Result, down and up	Resultat, avall i amunt
 	Results	Resultats
 	Resume after restart	Reprendre després del reinici
+	Resume when back on shift	Reprendre en tornar al torn
 	Retry elsewhere	Reintentar en un altre
 	Rework	Retreball
 	Rework on {id}	Retreball a {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	La connexió cau i el client ho torna a intentar: l'entitat torna de seguida al capdavant de la cua, i el treball fet en ella es malbarata.
 	The entity waits on its server and the job carries on with what was left once the server is back.	L'entitat espera al seu servidor i la feina continua amb el que quedava quan el servidor torna.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'interval arriba per sota de la proporció objectiu del {share}, de manera que no es demostra amb un 95% de confiança que es compleixi; més rèpliques l'estretirien.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	La feina s'atura de seguida: l'entitat torna al capdavant de la cua per a qualsevol servidor de torn, i el treball fet en ella es malbarata.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	La feina s'atura de seguida; l'entitat espera al seu servidor i la feina continua amb el que quedava quan aquest servidor torna a ser de torn.
 	The last task with a resource it finished at	L'última tasca amb un recurs per on ha passat la peça
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	El temps mitjà fins a la condició d'aturada és només sobre les rèpliques que l'han complert; les altres han arribat al seu límit de temps.
 	The model changed, so watching stopped	El model ha canviat, així que s'ha deixat d'observar
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	El model té ara les unitats trobades en dimensionar
 	The model: its experiment, connections and problems	El model: experiment, connexions i problemes
 	The name is empty or already used.	El nom és buit o ja s'utilitza.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	El servidor acaba la feina que té i després deixa el torn; fins llavors compta com a servidor de torn.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La proporció de rèpliques iguals o inferiors a cada valor. La banda conté la distribució real amb una confiança del {confidence}.
 	The values are numbers, separated by semicolons or spaces	Els valors són nombres separats per punts i comes o espais
 	The whole clock	Tot el temps

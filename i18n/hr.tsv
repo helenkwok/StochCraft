@@ -188,6 +188,7 @@
 	Failure interrupts the job	Kvar prekida rad
 	Family	Obitelj
 	File	Datoteka
+	Finish, then go off	Dovrši, pa završi smjenu
 	Finished at {time} {unit}	Završeno u {time} {unit}
 	Fit	Prilagodi
 	Fit the diagram to the view	Prilagodi dijagram prikazu
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Koliko dijelova kupci žele od ovih odlazaka; rezultati tada prikazuju takt (raspoloživo vrijeme podijeljeno s potražnjom) i vrijeme ciklusa svakog zadatka.
 	In use	U upotrebi
 	Inside over time	Unutra kroz vrijeme
+	Job under way on a server going off shift:	Posao u tijeku na poslužitelju kojemu završava smjena:
 	Job under way on a server taken out:	Posao u tijeku na poslužitelju izbačenom iz rada:
 	Jump	Skoči
 	Jump to time	Skoči na vrijeme
@@ -378,6 +380,7 @@
 	Result, down and up	Rezultat, dolje i gore
 	Results	Rezultati
 	Resume after restart	Nastavi nakon ponovnog pokretanja
+	Resume when back on shift	Nastavi po povratku u smjenu
 	Retry elsewhere	Pokušaj ponovno drugdje
 	Rework	Dorada
 	Rework on {id}	Dorada na {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Veza pukne i klijent pokuša ponovno: entitet se odmah vraća na čelo reda, a rad obavljen na njemu je uzaludan.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entitet čeka na svom poslužitelju, a posao se nastavlja s preostalim dijelom kad se poslužitelj vrati.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval seže ispod ciljnog udjela od {share}, pa nije pokazano s pouzdanošću od 95 % da je udio postignut; više replikacija bi ga suzilo.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Posao se odmah prekida: entitet se vraća na čelo reda za bilo koji poslužitelj u smjeni, a rad obavljen na njemu je uzaludan.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Posao se odmah prekida; entitet čeka na svom poslužitelju, a posao se nastavlja s preostalim dijelom kad taj poslužitelj ponovno bude u smjeni.
 	The last task with a resource it finished at	Posljednji zadatak s resursom kroz koji je dio prošao
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Prosječno vrijeme do uvjeta zaustavljanja odnosi se samo na replikacije koje su ga postigle; ostale su trajale do svog vremenskog ograničenja.
 	The model changed, so watching stopped	Model se promijenio, pa je praćenje zaustavljeno
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	Model sada ima jedinice koje je pronašlo dimenzioniranje
 	The model: its experiment, connections and problems	Model: eksperiment, veze i problemi
 	The name is empty or already used.	Naziv je prazan ili se već upotrebljava.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Poslužitelj dovrši posao koji ima, pa završi smjenu; do tada se računa kao da je u smjeni.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Udio replikacija jednakih ili manjih od svake vrijednosti. Pojas sadrži pravu distribuciju s pouzdanošću od {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vrijednosti su brojevi odvojeni točkom sa zarezom ili razmacima
 	The whole clock	Sve vrijeme

@@ -188,6 +188,7 @@
 	Failure interrupts the job	Відмова перериває роботу
 	Family	Родина
 	File	Файл
+	Finish, then go off	Доробити, потім піти зі зміни
 	Finished at {time} {unit}	Завершено о {time} {unit}
 	Fit	Умістити
 	Fit the diagram to the view	Умістити діаграму у вікно
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Скільки деталей клієнти хочуть від цих вибуттів; тоді результати показують такт (доступний час, поділений на попит) і час циклу кожного завдання.
 	In use	Використовується
 	Inside over time	Усередині в часі
+	Job under way on a server going off shift:	Робота, що триває на сервері, у якого закінчується зміна:
 	Job under way on a server taken out:	Робота, що триває на виведеному сервері:
 	Jump	Перейти
 	Jump to time	Перейти до часу
@@ -378,6 +380,7 @@
 	Result, down and up	Результат, вниз і вгору
 	Results	Результати
 	Resume after restart	Продовжити після перезавантаження
+	Resume when back on shift	Продовжити після повернення на зміну
 	Retry elsewhere	Повторити деінде
 	Rework	Доопрацювання
 	Rework on {id}	Доопрацювання на {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	З'єднання обривається, і клієнт пробує знову: сутність одразу повертається на початок черги, а виконана над нею робота марна.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Сутність чекає на своєму сервері, і робота триває із залишку, щойно сервер повернеться.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Інтервал сягає нижче цільової частки {share}, тож з довірою 95% не показано, що частку досягнуто; більше реплікацій звузили б його.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Робота одразу зупиняється: сутність повертається на початок черги до будь-якого сервера на зміні, а виконана над нею робота марна.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Робота одразу зупиняється; сутність чекає на своєму сервері, і робота триває із залишку, щойно цей сервер знову на зміні.
 	The last task with a resource it finished at	Останнє завдання з ресурсом, яке пройшла деталь
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Середній час до умови зупинки обчислено лише за реплікаціями, що її досягли; решта тривали до своєї межі часу.
 	The model changed, so watching stopped	Модель змінилася, тому спостереження припинено
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	У моделі тепер одиниці, знайдені під час підбору
 	The model: its experiment, connections and problems	Модель: експеримент, з'єднання й проблеми
 	The name is empty or already used.	Ім’я порожнє або вже використовується.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Сервер доробляє наявну роботу, потім іде зі зміни; доти він вважається на зміні.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Частка реплікацій, що не перевищують кожне значення. Смуга містить справжній розподіл із довірою {confidence}.
 	The values are numbers, separated by semicolons or spaces	Значення — це числа, розділені крапкою з комою або пробілами
 	The whole clock	Увесь час

@@ -14,9 +14,9 @@ use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
     self, AvailabilityDoc, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec,
-    HealthCheckSpec, KindSpec, ModelDoc, NeedSpec, PatienceSpec, PowerSpec, PropertyDoc,
-    PropertyTypeSpec, PropertyValueSpec, RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp,
-    StopSpec, TimeUnitSpec, TimedDist,
+    HealthCheckSpec, KindSpec, ModelDoc, NeedSpec, OnShiftEndSpec, PatienceSpec, PowerSpec,
+    PropertyDoc, PropertyTypeSpec, PropertyValueSpec, RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc,
+    Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -115,6 +115,8 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "planned_run_time",
             "patience",
             "health_check",
+            "shifts",
+            "on_shift_end",
         ],
         Some("sink") => &["scrap", "demand"],
         Some("shared_task") => &["service", "needs", "priority"],
@@ -342,6 +344,15 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<HealthCheckSpec>")]
     pub health_check: Option<Option<HealthCheckSpec>>,
+    /// Servers: replaces the units while each calendar is active (a shift, the first active one
+    /// applying); `capacity` applies outside them. `[]` removes them.
+    #[serde(default)]
+    pub shifts: Option<Vec<ShiftDoc>>,
+    /// Servers: what happens to a job under way on a unit that goes off shift: `finish` (it
+    /// finishes first), `retry` (back to the head of the queue at once, its work wasted) or
+    /// `resume` (it waits on the unit until the unit is on shift again).
+    #[serde(default)]
+    pub on_shift_end: Option<OnShiftEndSpec>,
     /// Sinks: what reaches it is scrap, counted against `charged_to`, a server, or else the
     /// last server each entity finished at; `null`: it is not.
     #[serde(default, deserialize_with = "some")]
@@ -1094,6 +1105,8 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("planned_run_time", p.planned_run_time.is_some()),
         ("patience", p.patience.is_some()),
         ("health_check", p.health_check.is_some()),
+        ("shifts", p.shifts.is_some()),
+        ("on_shift_end", p.on_shift_end.is_some()),
         ("scrap", p.scrap.is_some()),
         ("demand", p.demand.is_some()),
         ("needs", p.needs.is_some()),
@@ -1119,6 +1132,8 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "planned_run_time",
             "patience",
             "health_check",
+            "shifts",
+            "on_shift_end",
         ],
         ElementKind::SharedTask { .. } => &["service", "needs", "priority"],
         ElementKind::Delay { .. } => &["duration"],
@@ -1172,7 +1187,15 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             planned_run_time,
             patience,
             health_check,
+            shifts,
+            on_shift_end,
         } => {
+            if let Some(s) = p.shifts {
+                *shifts = s.into_iter().map(Into::into).collect();
+            }
+            if let Some(o) = p.on_shift_end {
+                *on_shift_end = o.into();
+            }
             if let Some(x) = p.patience {
                 *patience = x.map(Into::into);
             }
@@ -1394,8 +1417,13 @@ fn calendar_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         .iter()
         .filter(|el| match &el.kind {
             ElementKind::Source { timed, .. } => timed.iter().any(|t| t.calendar.as_str() == p.id),
-            ElementKind::Server { availability, .. } => {
+            ElementKind::Server {
+                availability,
+                shifts,
+                ..
+            } => {
                 availability.iter().any(|t| t.calendar.as_str() == p.id)
+                    || shifts.iter().any(|t| t.calendar.as_str() == p.id)
             }
             _ => false,
         })

@@ -188,6 +188,7 @@
 	Failure interrupts the job	A meghibásodás megszakítja a munkát
 	Family	Család
 	File	Fájl
+	Finish, then go off	Befejezés, aztán műszak vége
 	Finished at {time} {unit}	Befejeződött: {time} {unit}
 	Fit	Igazítás a nézethez
 	Fit the diagram to the view	A diagram igazítása a nézethez
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hány darabot kérnek a vevők ezekből a távozásokból; az eredmények ekkor mutatják az ütemet (a rendelkezésre álló idő osztva az igénnyel) és minden feladat ciklusidejét.
 	In use	Használatban
 	Inside over time	Bent lévők az idő függvényében
+	Job under way on a server going off shift:	Folyamatban lévő munka egy műszakot befejező szerveren:
 	Job under way on a server taken out:	Folyamatban lévő munka egy kivont szerveren:
 	Jump	Ugrás
 	Jump to time	Ugrás időpontra
@@ -378,6 +380,7 @@
 	Result, down and up	Eredmény, lent és fent
 	Results	Eredmények
 	Resume after restart	Folytatás újraindítás után
+	Resume when back on shift	Folytatás a műszakba visszatéréskor
 	Retry elsewhere	Újrapróbálkozás máshol
 	Rework	Újramunkálás
 	Rework on {id}	Újramunkálás itt: {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	A kapcsolat megszakad, és a kliens újrapróbálkozik: az entitás azonnal visszakerül a sor elejére, és a rajta végzett munka kárba vész (elvesztegetett munka).
 	The entity waits on its server and the job carries on with what was left once the server is back.	Az entitás a szerverénél vár, és a munka a hátralévő résszel folytatódik, amint a szerver visszatér.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Az intervallum a(z) {share} célarány alá nyúlik, így 95%-os megbízhatósággal nem igazolt, hogy az arány teljesül; több ismétlés szűkítené.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	A munka azonnal leáll: az entitás visszakerül a sor elejére bármely műszakban lévő szerver számára, és a rajta végzett munka kárba vész.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	A munka azonnal leáll; az entitás a szerverénél vár, és a munka a hátralévő résszel folytatódik, amint az a szerver újra műszakban van.
 	The last task with a resource it finished at	Az utolsó erőforrást használó feladat, amelyen a darab áthaladt
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	A leállási feltételig eltelt átlagos idő csak azokra az ismétlésekre vonatkozik, amelyek elérték; a többi az időkorlátjáig futott.
 	The model changed, so watching stopped	A modell megváltozott, ezért a követés leállt
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	A modellben most a méretezés által talált egységek vannak
 	The model: its experiment, connections and problems	A modell: kísérlet, kapcsolatok és problémák
 	The name is empty or already used.	A név üres vagy már foglalt.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	A szerver befejezi a nála lévő munkát, aztán befejezi a műszakot; addig műszakban lévőnek számít.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Az egyes értékeknél nem nagyobb ismétlések aránya. A sáv {confidence} megbízhatósággal tartalmazza a valódi eloszlást.
 	The values are numbers, separated by semicolons or spaces	Az értékek pontosvesszővel vagy szóközzel elválasztott számok
 	The whole clock	A teljes idő

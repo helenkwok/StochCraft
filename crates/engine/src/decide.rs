@@ -30,7 +30,8 @@ fn not_found(message: impl Into<String>) -> CommandError {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Field {
-    /// A task's units (a task with a resource of its own).
+    /// A task's units (a task with a resource of its own; with shifts, the units of every
+    /// shift that has any).
     Capacity,
     /// A shared pool's units (with shifts: the units of every shift that has any).
     Quantity,
@@ -97,12 +98,14 @@ impl Param {
                 .and_then(Dist::mean)
                 .ok_or_else(|| invalid(format!("`{id}` has no time distribution with a mean"))),
             Field::Capacity | Field::QueueCapacity => match model.element(&id).map(|e| &e.kind) {
-                Some(ElementKind::Server {
-                    capacity,
-                    queue_capacity,
-                    ..
-                }) => match self.field {
-                    Field::Capacity => Ok(f64::from(*capacity)),
+                Some(
+                    k @ ElementKind::Server {
+                        capacity,
+                        queue_capacity,
+                        ..
+                    },
+                ) => match self.field {
+                    Field::Capacity => Ok(f64::from(k.most_units().unwrap_or(*capacity))),
                     _ => queue_capacity
                         .map(f64::from)
                         .ok_or_else(|| invalid(format!("`{id}` has no finite buffer"))),
@@ -159,6 +162,7 @@ impl Param {
                 if let Some(ElementKind::Server {
                     capacity,
                     queue_capacity,
+                    shifts,
                     ..
                 }) = model
                     .elements
@@ -167,7 +171,15 @@ impl Param {
                     .map(|e| &mut e.kind)
                 {
                     match self.field {
-                        Field::Capacity => *capacity = n,
+                        Field::Capacity => {
+                            // As for a pool: every count that is not 0.
+                            if shifts.is_empty() || *capacity > 0 {
+                                *capacity = n;
+                            }
+                            for s in shifts.iter_mut().filter(|s| s.value > 0) {
+                                s.value = n;
+                            }
+                        }
                         _ => *queue_capacity = Some(n),
                     }
                 }

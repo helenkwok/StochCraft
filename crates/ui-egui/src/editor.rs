@@ -50,6 +50,7 @@ fn parameters(kind: &str) -> &'static [&'static str] {
         "source" => &["interarrival", "limit"],
         "server" => &[
             "capacity",
+            "shifts",
             "service",
             "queue_capacity",
             "transfer",
@@ -503,10 +504,25 @@ impl App {
             self.execute("block.rename", json!({ "id": id, "name": n }));
         }
 
-        let fields = parameters(&kind);
+        // Units by calendar need a calendar: shown once the model has one (or the server has
+        // some already).
+        let by_calendar = !form::calendars(model).is_empty() || is_set(el, "shifts");
+        let fields: Vec<&str> = parameters(&kind)
+            .iter()
+            .copied()
+            .filter(|f| *f != "shifts" || by_calendar)
+            .collect();
         if !fields.is_empty() {
             section(ui, t("Parameters"));
-            self.block_fields(ui, model, el, &id, fields);
+            self.block_fields(ui, model, el, &id, &fields);
+        }
+        // What a job under way does when its server goes off shift, once servers can.
+        if kind == "server"
+            && ["shifts", "available", "availability"]
+                .iter()
+                .any(|f| is_set(el, f))
+        {
+            self.shift_end_choice(ui, el, &id);
         }
         let more = timed_parameters(&kind);
         if !more.is_empty() {
@@ -1100,6 +1116,30 @@ impl App {
                 p["until"] = json!(chosen);
             }
             self.execute("block.set", json!({ "id": id, "patience": p }));
+        }
+    }
+
+    /// What happens to a job under way on a server that goes off shift (fewer on shift, or the
+    /// availability ending): it finishes first, is retried elsewhere, or resumes when the
+    /// server is back.
+    fn shift_end_choice(&mut self, ui: &mut egui::Ui, el: &Value, id: &str) {
+        let current = el["on_shift_end"].as_str().unwrap_or("finish").to_owned();
+        let mut chosen = current.clone();
+        ui.label(t("Job under way on a server going off shift:"));
+        ui.radio_value(&mut chosen, "finish".to_owned(), t("Finish, then go off"))
+            .on_hover_text(t(
+                "The server finishes the job it has, then goes off; until then it counts as on shift.",
+            ));
+        ui.radio_value(&mut chosen, "retry".to_owned(), t("Retry elsewhere"))
+            .on_hover_text(t(
+                "The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.",
+            ));
+        ui.radio_value(&mut chosen, "resume".to_owned(), t("Resume when back on shift"))
+            .on_hover_text(t(
+                "The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.",
+            ));
+        if chosen != current {
+            self.execute("block.set", json!({ "id": id, "on_shift_end": chosen }));
         }
     }
 

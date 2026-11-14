@@ -188,6 +188,7 @@
 	Failure interrupts the job	고장 시 작업 중단
 	Family	분포 계열
 	File	파일
+	Finish, then go off	마친 후 근무 종료
 	Finished at {time} {unit}	{time} {unit}에 끝남
 	Fit	맞춤
 	Fit the diagram to the view	다이어그램을 보기에 맞춤
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	고객이 이 이탈에서 원하는 부품 수입니다. 그러면 결과에 택트(가용 시간을 수요로 나눈 값)와 각 작업의 사이클 타임이 표시됩니다.
 	In use	사용 중
 	Inside over time	시간에 따른 내부 수
+	Job under way on a server going off shift:	근무가 끝나는 서버에서 진행 중인 작업:
 	Job under way on a server taken out:	제외된 서버에서 진행 중인 작업:
 	Jump	이동
 	Jump to time	이동할 시간
@@ -378,6 +380,7 @@
 	Result, down and up	결과(낮췄을 때와 높였을 때)
 	Results	결과
 	Resume after restart	재기동 후 재개
+	Resume when back on shift	근무 복귀 시 재개
 	Retry elsewhere	다른 곳에서 재시도
 	Rework	재작업
 	Rework on {id}	{id} 재작업
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	연결이 끊기고 클라이언트가 다시 시도합니다. 엔터티는 즉시 대기열 맨 앞으로 돌아가고, 그때까지 한 작업은 낭비됩니다.
 	The entity waits on its server and the job carries on with what was left once the server is back.	엔터티는 자기 서버에서 기다리고, 서버가 돌아오면 남은 작업부터 계속합니다.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	구간이 목표 비율 {share}보다 아래까지 내려가므로, 비율 충족이 95% 신뢰도로 확인되지 않았습니다. 반복 실행을 늘리면 구간이 좁아집니다.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	작업이 즉시 멈춥니다. 엔터티는 근무 중인 아무 서버를 기다리도록 대기열 맨 앞으로 돌아가고, 그때까지 한 작업은 낭비됩니다.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	작업이 즉시 멈춥니다. 엔터티는 자기 서버에서 기다리고, 그 서버가 다시 근무하면 남은 작업부터 계속합니다.
 	The last task with a resource it finished at	부품이 마지막으로 거친 자원을 사용하는 작업
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	중지 조건까지의 평균 시간은 중지 조건에 도달한 반복 실행만으로 계산됩니다. 나머지는 시간 제한까지 실행되었습니다.
 	The model changed, so watching stopped	모델이 변경되어 관찰을 중지함
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	이제 모델에 크기 정하기로 찾은 수량이 들어 있습니다
 	The model: its experiment, connections and problems	모델: 실험, 연결 및 문제
 	The name is empty or already used.	이름이 비어 있거나 이미 사용 중입니다.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	서버는 하던 작업을 마친 후 근무를 끝냅니다. 그때까지는 근무 중으로 계산합니다.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	각 값 이하인 반복 실행의 비율입니다. 띠는 {confidence} 신뢰도로 실제 분포를 포함합니다.
 	The values are numbers, separated by semicolons or spaces	값은 세미콜론이나 공백으로 구분한 숫자입니다
 	The whole clock	전체 시간

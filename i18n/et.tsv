@@ -188,6 +188,7 @@
 	Failure interrupts the job	Rike katkestab töö
 	Family	Jaotuspere
 	File	Fail
+	Finish, then go off	Lõpeta, siis lahku vahetusest
 	Finished at {time} {unit}	Lõppes ajal {time} {unit}
 	Fit	Sobita
 	Fit the diagram to the view	Sobita diagramm vaatesse
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Mitu detaili kliendid neist lahkumistest soovivad; tulemused näitavad siis takti (saadaolev aeg jagatud nõudlusega) ja iga ülesande tsükliaega.
 	In use	Kasutusel
 	Inside over time	Sees aja jooksul
+	Job under way on a server going off shift:	Pooleli töö serveris, mille vahetus lõpeb:
 	Job under way on a server taken out:	Pooleli töö kasutusest välja võetud serveris:
 	Jump	Mine
 	Jump to time	Mine ajahetkele
@@ -378,6 +380,7 @@
 	Result, down and up	Tulemus, alla ja üles
 	Results	Tulemused
 	Resume after restart	Jätka pärast taaskäivitust
+	Resume when back on shift	Jätka vahetusse naastes
 	Retry elsewhere	Proovi mujal uuesti
 	Rework	Ümbertöötlus
 	Rework on {id}	Ümbertöötlus voos {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Ühendus katkeb ja klient proovib uuesti: olem läheb kohe tagasi järjekorra algusesse ja talle tehtud töö on raisatud.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Olem ootab oma serveri juures ja töö jätkub ülejäänuga, kui server on tagasi.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Vahemik ulatub alla sihtosakaalu {share}, seega pole 95% usaldusega näidatud, et osakaal on saavutatud; rohkem kordusi kitsendaks seda.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Töö peatub kohe: olem läheb tagasi järjekorra algusesse ükskõik millise vahetuses oleva serveri jaoks ja talle tehtud töö on raisatud.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Töö peatub kohe; olem ootab oma serveri juures ja töö jätkub ülejäänuga, kui see server on taas vahetuses.
 	The last task with a resource it finished at	Viimane ressursiga ülesanne, mille detail läbis
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskmine aeg peatamistingimuseni on ainult nende korduste põhjal, mis selle saavutasid; ülejäänud kestsid oma ajapiirini.
 	The model changed, so watching stopped	Mudel muutus, seega jälgimine lõpetati
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	Mudelil on nüüd dimensioneerimisel leitud ühikud
 	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
 	The name is empty or already used.	Nimi on tühi või juba kasutusel.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Server lõpetab oma pooleli töö ja lahkub siis vahetusest; seni loetakse ta vahetuses olevaks.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Korduste osakaal, mis on iga väärtusega võrdsed või sellest väiksemad. Vöönd sisaldab tegelikku jaotust {confidence} usaldusega.
 	The values are numbers, separated by semicolons or spaces	Väärtused on arvud, eraldatud semikoolonite või tühikutega
 	The whole clock	Kogu aeg

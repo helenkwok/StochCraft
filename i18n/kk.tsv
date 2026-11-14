@@ -188,6 +188,7 @@
 	Failure interrupts the job	Ақау жұмысты үзеді
 	Family	Отбасы
 	File	Файл
+	Finish, then go off	Аяқтау, содан кейін ауысымнан шығу
 	Finished at {time} {unit}	{time} {unit} кезінде аяқталды
 	Fit	Сыйдыру
 	Fit the diagram to the view	Диаграмманы көрініске сыйдыру
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Тұтынушылар осы кетулерден қанша бөлшек қалайды; сонда нәтижелер тактіні (қолжетімді уақытты сұранысқа бөлгенде) және әр тапсырманың цикл уақытын көрсетеді.
 	In use	Қолданыста
 	Inside over time	Уақыт бойынша ішіндегілер
+	Job under way on a server going off shift:	Ауысымы аяқталатын сервердегі орындалып жатқан жұмыс:
 	Job under way on a server taken out:	Жұмыстан шығарылған сервердегі орындалып жатқан жұмыс:
 	Jump	Өту
 	Jump to time	Уақытқа өту
@@ -378,6 +380,7 @@
 	Result, down and up	Нәтиже, төмен және жоғары
 	Results	Нәтижелер
 	Resume after restart	Қайта іске қосылғаннан кейін жалғастыру
+	Resume when back on shift	Ауысымға оралғанда жалғастыру
 	Retry elsewhere	Басқа жерде қайталау
 	Rework	Қайта өңдеу
 	Rework on {id}	{id} ағынында қайта өңдеу
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Байланыс үзіліп, клиент қайта әрекет етеді: нысан бірден кезектің басына оралады, ал оған жасалған жұмыс босқа кетеді.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Нысан өз серверінде күтеді, ал сервер қайтып келгенде жұмыс қалған бөлігімен жалғасады.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Аралық {share} мақсатты үлесінен төмен түседі, сондықтан үлестің орындалғаны 95% сенімділікпен көрсетілмеген; көбірек қайталау оны тарылтады.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Жұмыс бірден тоқтайды: нысан ауысымдағы кез келген сервер үшін кезектің басына оралады, ал оған жасалған жұмыс босқа кетеді.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Жұмыс бірден тоқтайды; нысан өз серверінде күтеді, ал сол сервер қайта ауысымға шыққанда жұмыс қалған бөлігімен жалғасады.
 	The last task with a resource it finished at	Бөлшек өткен соңғы ресурсы бар тапсырма
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Тоқтату шартына дейінгі орташа уақыт тек оған жеткен қайталаулар бойынша; қалғандары уақыт шегіне дейін жүрді.
 	The model changed, so watching stopped	Модель өзгерді, сондықтан бақылау тоқтатылды
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	Модельде енді өлшемдеу тапқан бірліктер бар
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
 	The name is empty or already used.	Атау бос немесе бұрыннан қолданылған.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Сервер қолындағы жұмысты аяқтайды, содан кейін ауысымнан шығады; оған дейін ол ауысымда деп есептеледі.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Әр мәнге тең немесе одан төмен қайталаулар үлесі. Жолақ шынайы үлестірімді {confidence} сенімділікпен қамтиды.
 	The values are numbers, separated by semicolons or spaces	Мәндер нүктелі үтірмен немесе бос орынмен бөлінген сандар
 	The whole clock	Бүкіл уақыт

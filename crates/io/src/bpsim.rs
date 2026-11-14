@@ -27,7 +27,9 @@ pub const QUEUE_CAPACITY: &str = "stochcraft:queueCapacity";
 
 /// A shared pool: `stochcraft:pool` with the value `true` on a resource's `ElementParameters`.
 /// BPMN with BPSim cannot otherwise tell a pool that one task uses, or none, from a task's own
-/// resource; a resource with this marker is always read as a pool.
+/// resource; a resource with this marker is always read as a pool. With the value `false`, a
+/// resource one task needs a single unit of is that task's own even when its quantity varies by
+/// calendar (a task's units by shift); without the marker such a resource is a pool.
 pub const POOL: &str = "stochcraft:pool";
 
 /// The vendor extension for a server's breakdowns: a `stochcraft:breakdown` element holding
@@ -80,6 +82,12 @@ pub const PATIENCE: &str = "stochcraft:patience";
 /// the default, or `resume`), holding `stochcraft:interval` and `stochcraft:restart`, each a
 /// BPSim distribution, in the task's `ElementParameters`. BPSim 2.0 has nothing for it.
 pub const HEALTH_CHECK: &str = "stochcraft:healthCheck";
+
+/// What happens to a job under way on a unit of a task's own resource that goes off shift:
+/// `stochcraft:onShiftEnd` with the value `finish` (the default: the unit finishes it first),
+/// `retry` (back to the head of the queue at once, its work wasted) or `resume` (it waits on
+/// the unit and resumes when the unit is on shift again), on the task's `ElementParameters`.
+pub const ON_SHIFT_END: &str = "stochcraft:onShiftEnd";
 
 /// A batch: `stochcraft:batchSize` on a task's `ElementParameters`, the number of entities it
 /// collects before sending them on together (a whole number of at least 1).

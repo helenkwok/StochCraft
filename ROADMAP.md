@@ -799,7 +799,8 @@ taken together, and a large need waiting without holding back a smaller one.
   pool's do, alongside any breakdowns.
   - **Model:** `available` (outside the calendars, default true) and `availability` (on or off
     while each calendar is active, the first active one applying) on the server; all its units
-    follow them. Varying the number of units by calendar (`quantity` shifts) stays a pool's.
+    follow them. Varying the number of units by calendar (`quantity` shifts) stays a pool's
+    (until a task's own units by shift, M2.10).
   - **Semantics:**
     - A unit checks the calendar only when it takes its next entity, so a job under way when a
       break starts finishes first (as a pool's unit does).
@@ -818,6 +819,8 @@ taken together, and a large need waiting without holding back a smaller one.
     in every catalog).
     - `availability` stays the fraction of units not failed, whatever the calendar.
     - `utilisation` stays the fraction holding a job, through breaks and repairs alike.
+      (Changed in M2.10: over the units on shift, as for a pool; the breaks are in the unit
+      states.)
     - The saturation warning judges a server busy over the time its units were up and on
       shift.
   - **File:** BPSim's own `Availability` on the task's resource (`ResourceParameters`, values
@@ -832,7 +835,7 @@ taken together, and a large need waiting without holding back a smaller one.
   | Case | Theory | StochCraft |
   |---|---|---|
   | Jobs of 1.5 waiting from 0, off shift 10 to 20: jobs by 29.5 (the one under way at 10 finishes at 10.5) | 13 | 13 |
-  | Same: off-shift share (from 10.5), utilisation | 9.5/29.5, 20/29.5 | exact |
+  | Same: off-shift share (from 10.5), utilisation (over all time before M2.10: 20/29.5; over the time on shift since, 20/20) | 9.5/29.5, 1 | exact |
   | Jobs of 4, failure 7 after each repair, repairs of 5, interruptible, off shift 10 to 20: jobs by 30 (the job interrupted at 7 resumes at 12, off shift) | 3 | 3 |
   | Same: availability, off-shift share (the resumed job [12, 13) is processing) | 20/30, 6/30 | exact |
   | Saturated, failures exp(mean 100), repairs exp(mean 10), off shift midnight to 8: availability A | 0.90909 | 0.90942 ± 0.00437 |
@@ -1301,6 +1304,65 @@ leaving before their service begins a central feature that Erlang B and C lack.
   several failed checks in a row before a takeout, and a slow start after a restart; the case 5
   demonstration (a short loss of servers tipping a healthy server into a collapse that persists)
   as an example model; an exact check of the resume mode (only sanity checks so far).
+- **A task's own units by shift, and the job under way at a shift's end:** done. Case 5 of the
+  outage study loses 6 of 10 servers for a while, not all of them. A task's own resource can
+  have units by shift, as a pool's: BPSim `Quantity` values `validFor` a calendar (`shifts`;
+  the default value outside every shift, 0 when there are only shift values), the units on
+  shift being the shift's while the resource is available, else none. What happens to a job
+  under way on a unit that goes off shift, fewer on shift or the availability ending, is the
+  task's choice (`on_shift_end`, `stochcraft:onShiftEnd`):
+  - `finish` (the default, and the rule so far and pools' rule): the unit finishes the job, then
+    goes off, counting as on shift until then;
+  - `retry`: the job stops at once and the entity goes back to the head of the queue for any
+    unit, its work wasted, with a fresh patience (the health check's retry);
+  - `resume`: the job stops at once; the entity waits on its unit and carries on with what was
+    left once that unit is on shift (and up, and back) again.
+  - **Which units go off** when the count drops: idle units up and in service first, the
+    highest numbered first; then units failed or out restarting; then busy units, those holding
+    a finished entity first (it is handed on first), then the job started last first (the least
+    work lost). When it rises, units still finishing a job before going off stay on first; then
+    units come back, those holding a paused job first, then the lowest numbered (a failed or out
+    unit comes back still failed or out until its repair or restart ends).
+  - **Health checks** count the units working as on shift, up and not out, and check no unit off
+    shift (one finishing its job after its shift included: it takes no more entities). A unit
+    taken out keeps its restart whatever the shift does.
+  - **Results:** **utilisation is now over the units on shift** for every server whose units
+    go off shift (shifts, or an availability calendar, as for a pool): time-averaged units
+    with a job over time-averaged units on shift (those finishing a job after their shift
+    included; a job paused off shift is neither working nor on shift). Before, a server with an
+    availability calendar reported busy over all its units through the breaks. Servers with no
+    calendar report as before. A server with shifts reports its cycle time over the mean units
+    on shift (an availability calendar's still over all its units). The unit states are shares
+    of all its units (the most on shift at once), off shift being the units the timetable has
+    off, a paused job's unit included. Retrying at a shift's end counts in the work wasted.
+  - **File:** the resource's `Quantity` with values `validFor` calendars, as a pool's, and
+    `stochcraft:pool` with the value `false` on it, so it reads back as the task's own: without
+    that marker a resource whose quantity varies by calendar is still read as a pool, so files
+    from elsewhere read as before. `stochcraft:onShiftEnd` (value `finish`, `retry` or
+    `resume`) on the task, written only when not `finish`. Set by `block.set` (`shifts`,
+    `on_shift_end`) and edited in the inspector (units by calendar next to the units, and the
+    choice for a job under way once the server can go off shift). Servers without shift
+    values, or with `finish`, run exactly as before.
+  - **Checked** (`blocks/tests/server_shifts.rs`):
+
+  | Case | Theory | StochCraft |
+  |---|---|---|
+  | 3 units, jobs of 6 arriving every minute, 1 on shift from 10.5 to 20.5, finish: jobs by 27 (units 2 and 1, started last, go off) | 10 | 10 |
+  | Same: utilisation, off-shift share | 63/69, 12/81 | exact |
+  | Same, retry: jobs by 27, work wasted, utilisation | 8, 4, 55/61 | exact |
+  | Same, resume: jobs by 27, utilisation, off-shift share | 8, 55/61, 20/81 | exact |
+  | One job of 30 on 3 units, 1 on shift from 10.5: the idle units go off, nothing wasted | 0 | 0 |
+  | Units only in a shift (2 from 10 to 20), jobs of 4: jobs by 30, off-shift share | 6, 36/60 | exact |
+  | Health check (limit 0, keep 2), 4 units, 2 on shift from 10.5 to 40.5, checks at 15, 30, 45: taken out; mean in service | 2; 122/46 | exact |
+  | One unit, off shift 10 to 20 by availability, jobs of 1.5: jobs by 29.4 finish / retry (1 wasted) / resume | 13 / 12 / 12 | exact |
+  | One unit, jobs of 4, failure 7 after each repair, repair 5, off 10 to 20: jobs by 30 finish / retry (3 wasted) / resume; off-shift share | 3 / 2 / 3; 6/30, 7/30, 7/30 | exact |
+  | M/M/c, λ 7, μ 1, c 10 then 4 from 60 to 80, then 10, measured 60 to 90, retry: mean queue, mean held, jobs out | transient chain (36.75, 5.98, 179.3) | within 95% |
+  | Same, resume (the paused jobs set apart) | transient chain (34.91, 8.04, 179.1) | within 95% |
+
+- **Not yet (units by shift):** a resource's units by shift on a task with a finite buffer are
+  simulated (each unit keeps its place), but not checked against theory; editing a pool's
+  shifts and a server's are separate (a pool used by one task stays a pool); a file from
+  elsewhere whose one-task resource varies by calendar is still read as a pool.
 
 ### M2.11 Changeovers and lean measures
 

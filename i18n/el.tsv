@@ -188,6 +188,7 @@
 	Failure interrupts the job	Η βλάβη διακόπτει την εργασία
 	Family	Οικογένεια
 	File	Αρχείο
+	Finish, then go off	Ολοκλήρωση και μετά λήξη βάρδιας
 	Finished at {time} {unit}	Ολοκληρώθηκε στο {time} {unit}
 	Fit	Προσαρμογή
 	Fit the diagram to the view	Προσαρμογή του διαγράμματος στην προβολή
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Πόσα τεμάχια θέλουν οι πελάτες από αυτές τις αναχωρήσεις· τότε τα αποτελέσματα δείχνουν το takt (τον διαθέσιμο χρόνο διά τη ζήτηση) και τον χρόνο κύκλου κάθε εργασίας.
 	In use	Σε χρήση
 	Inside over time	Μέσα στη διάρκεια του χρόνου
+	Job under way on a server going off shift:	Δουλειά σε εξέλιξη σε εξυπηρετητή που βγαίνει από βάρδια:
 	Job under way on a server taken out:	Δουλειά σε εξέλιξη σε εξυπηρετητή που τίθεται εκτός λειτουργίας:
 	Jump	Μετάβαση
 	Jump to time	Μετάβαση σε χρόνο
@@ -378,6 +380,7 @@
 	Result, down and up	Αποτέλεσμα, κάτω και πάνω
 	Results	Αποτελέσματα
 	Resume after restart	Συνέχιση μετά την επανεκκίνηση
+	Resume when back on shift	Συνέχιση με την επιστροφή σε βάρδια
 	Retry elsewhere	Νέα προσπάθεια αλλού
 	Rework	Επανεπεξεργασία
 	Rework on {id}	Επανεπεξεργασία στο {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Η σύνδεση πέφτει και ο πελάτης προσπαθεί ξανά: η οντότητα επιστρέφει αμέσως στην κεφαλή της ουράς, και η δουλειά που έγινε σε αυτήν σπαταλιέται.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Η οντότητα περιμένει στον εξυπηρετητή της και η δουλειά συνεχίζεται με ό,τι απέμενε μόλις επιστρέψει ο εξυπηρετητής.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Το διάστημα φτάνει κάτω από το ποσοστό-στόχο {share}, άρα δεν φαίνεται με εμπιστοσύνη 95% ότι το ποσοστό επιτυγχάνεται· περισσότερες επαναλήψεις θα το στένευαν.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Η δουλειά σταματά αμέσως: η οντότητα επιστρέφει στην κεφαλή της ουράς για οποιονδήποτε εξυπηρετητή σε βάρδια, και η δουλειά που έγινε σε αυτήν σπαταλιέται.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Η δουλειά σταματά αμέσως· η οντότητα περιμένει στον εξυπηρετητή της και η δουλειά συνεχίζεται με ό,τι απέμενε μόλις ο εξυπηρετητής αυτός είναι ξανά σε βάρδια.
 	The last task with a resource it finished at	Η τελευταία εργασία με πόρο από την οποία πέρασε το τεμάχιο
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Ο μέσος χρόνος ως τη συνθήκη διακοπής αφορά μόνο τις επαναλήψεις που την έφτασαν· οι υπόλοιπες διήρκεσαν ως το χρονικό τους όριο.
 	The model changed, so watching stopped	Το μοντέλο άλλαξε, οπότε η παρακολούθηση διακόπηκε
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	Το μοντέλο έχει πλέον τις μονάδες που βρήκε η διαστασιολόγηση
 	The model: its experiment, connections and problems	Το μοντέλο: πείραμα, συνδέσεις και προβλήματα
 	The name is empty or already used.	Το όνομα είναι κενό ή χρησιμοποιείται ήδη.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Ο εξυπηρετητής ολοκληρώνει τη δουλειά που έχει και μετά βγαίνει από βάρδια· μέχρι τότε μετρά ως σε βάρδια.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Το ποσοστό των επαναλήψεων έως και κάθε τιμή. Η ζώνη περιέχει την πραγματική κατανομή με εμπιστοσύνη {confidence}.
 	The values are numbers, separated by semicolons or spaces	Οι τιμές είναι αριθμοί που χωρίζονται με ερωτηματικά ή κενά
 	The whole clock	Όλος ο χρόνος

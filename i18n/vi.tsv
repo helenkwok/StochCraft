@@ -188,6 +188,7 @@
 	Failure interrupts the job	Hỏng hóc làm gián đoạn công việc
 	Family	Họ phân phối
 	File	Tệp
+	Finish, then go off	Làm xong rồi hết ca
 	Finished at {time} {unit}	Kết thúc tại {time} {unit}
 	Fit	Vừa khung
 	Fit the diagram to the view	Thu phóng sơ đồ cho vừa khung nhìn
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Khách hàng muốn bao nhiêu chi tiết từ các lượt rời đi này; khi đó kết quả hiển thị takt (thời gian khả dụng chia cho nhu cầu) và thời gian chu kỳ của mỗi tác vụ.
 	In use	Đang dùng
 	Inside over time	Bên trong theo thời gian
+	Job under way on a server going off shift:	Công việc đang dở trên máy chủ sắp hết ca:
 	Job under way on a server taken out:	Công việc đang dở trên máy chủ bị đưa ra:
 	Jump	Đi
 	Jump to time	Đi tới thời điểm
@@ -378,6 +380,7 @@
 	Result, down and up	Kết quả, khi giảm và tăng
 	Results	Kết quả
 	Resume after restart	Tiếp tục sau khi khởi động lại
+	Resume when back on shift	Tiếp tục khi vào ca lại
 	Retry elsewhere	Thử lại ở chỗ khác
 	Rework	Làm lại
 	Rework on {id}	Làm lại tại {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Kết nối bị ngắt và máy khách thử lại: thực thể quay lại ngay đầu hàng đợi, và công việc đã làm cho nó bị lãng phí.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Thực thể chờ tại máy chủ của nó và công việc tiếp tục với phần còn lại khi máy chủ quay lại.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Khoảng này xuống dưới tỷ lệ mục tiêu {share}, nên chưa cho thấy với độ tin cậy 95% rằng tỷ lệ đạt được; thêm lần lặp sẽ thu hẹp nó.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Công việc dừng ngay: thực thể quay lại đầu hàng đợi cho bất kỳ máy chủ nào trong ca, và công việc đã làm cho nó bị lãng phí.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Công việc dừng ngay; thực thể chờ tại máy chủ của nó và công việc tiếp tục với phần còn lại khi máy chủ đó vào ca trở lại.
 	The last task with a resource it finished at	Tác vụ có tài nguyên cuối cùng mà chi tiết đã đi qua
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Thời gian trung bình đến điều kiện dừng chỉ tính trên các lần lặp đạt điều kiện đó; các lần khác chạy đến giới hạn thời gian.
 	The model changed, so watching stopped	Mô hình đã thay đổi nên việc theo dõi đã dừng
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	Mô hình giờ có số đơn vị mà việc định cỡ tìm được
 	The model: its experiment, connections and problems	Mô hình: thí nghiệm, kết nối và vấn đề
 	The name is empty or already used.	Tên đang trống hoặc đã được dùng.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Máy chủ làm xong công việc đang có rồi mới hết ca; cho đến lúc đó nó vẫn được tính là trong ca.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Tỷ lệ lần lặp bằng hoặc dưới mỗi giá trị. Dải chứa phân phối thật với độ tin cậy {confidence}.
 	The values are numbers, separated by semicolons or spaces	Các giá trị là số, phân tách bằng dấu chấm phẩy hoặc dấu cách
 	The whole clock	Toàn bộ thời gian

@@ -188,6 +188,7 @@
 	Failure interrupts the job	故障中斷作業
 	Family	分配族
 	File	檔案
+	Finish, then go off	完成後下班
 	Finished at {time} {unit}	已於 {time} {unit} 結束
 	Fit	符合
 	Fit the diagram to the view	使圖表符合檢視
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	客戶希望從這些離開處獲得多少件；結果隨後會顯示節拍（可用時間除以需求）和每個任務的週期時間。
 	In use	使用中
 	Inside over time	內部數量隨時間變化
+	Job under way on a server going off shift:	即將下班的伺服器上進行中的作業：
 	Job under way on a server taken out:	下線伺服器上進行中的作業：
 	Jump	跳至
 	Jump to time	跳至時間
@@ -378,6 +380,7 @@
 	Result, down and up	結果（調低與調高）
 	Results	結果
 	Resume after restart	重新啟動後繼續
+	Resume when back on shift	重新當班後繼續
 	Retry elsewhere	到別處重試
 	Rework	重工
 	Rework on {id}	{id} 上的重工
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	連線中斷，用戶端重試：實體立即回到佇列最前面，已對其完成的工作被浪費。
 	The entity waits on its server and the job carries on with what was left once the server is back.	實體在其伺服器上等待，伺服器恢復後作業從剩餘部分繼續。
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	該區間低於目標比例 {share}，因此未能以 95% 的信賴度顯示已達到該比例；更多的重複執行會使區間變窄。
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	作業立即停止：實體回到佇列最前面，等待任一當班伺服器，已對其完成的工作被浪費。
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	作業立即停止；實體在其伺服器上等待，該伺服器重新當班後作業從剩餘部分繼續。
 	The last task with a resource it finished at	最後經過的需要資源的任務
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	到停止條件的平均時間只以達到停止條件的重複執行為準；其餘的執行到時間上限。
 	The model changed, so watching stopped	模型已變更，因此已停止觀察
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	模型現在使用規模決定得出的數量
 	The model: its experiment, connections and problems	模型：實驗、連接和問題
 	The name is empty or already used.	名稱是空的或已被使用。
+	The server finishes the job it has, then goes off; until then it counts as on shift.	伺服器完成手頭的作業後下班；在此之前仍算當班。
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超過各值的重複執行比例。色帶以 {confidence} 的信賴度包含真實分配。
 	The values are numbers, separated by semicolons or spaces	值應為以分號或空格分隔的數字
 	The whole clock	全部時間

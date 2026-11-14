@@ -188,6 +188,7 @@
 	Failure interrupts the job	การขัดข้องขัดจังหวะงาน
 	Family	ตระกูล
 	File	ไฟล์
+	Finish, then go off	ทำให้เสร็จ แล้วจึงออกกะ
 	Finished at {time} {unit}	สิ้นสุดที่ {time} {unit}
 	Fit	พอดี
 	Fit the diagram to the view	ปรับแผนภาพให้พอดีกับมุมมอง
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ลูกค้าต้องการชิ้นงานกี่ชิ้นจากขาออกเหล่านี้ จากนั้นผลลัพธ์จะแสดงแท็กไทม์ (เวลาที่มีหารด้วยความต้องการ) และไซเคิลไทม์ของแต่ละงาน
 	In use	กำลังใช้
 	Inside over time	จำนวนภายในตามเวลา
+	Job under way on a server going off shift:	งานที่กำลังทำบนเซิร์ฟเวอร์ที่กำลังออกกะ:
 	Job under way on a server taken out:	งานที่กำลังทำบนเซิร์ฟเวอร์ที่ถูกนำออก:
 	Jump	ข้าม
 	Jump to time	ข้ามไปยังเวลา
@@ -378,6 +380,7 @@
 	Result, down and up	ผลลัพธ์ เมื่อลงและขึ้น
 	Results	ผลลัพธ์
 	Resume after restart	ทำต่อหลังเริ่มระบบใหม่
+	Resume when back on shift	ทำต่อเมื่อกลับเข้ากะ
 	Retry elsewhere	ลองใหม่ที่อื่น
 	Rework	งานแก้ไข
 	Rework on {id}	งานแก้ไขที่ {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	การเชื่อมต่อหลุดและไคลเอนต์ลองใหม่: เอนทิตีจะกลับไปหัวคิวทันที และงานที่ทำกับมันแล้วจะสูญเปล่า
 	The entity waits on its server and the job carries on with what was left once the server is back.	เอนทิตีรออยู่ที่เซิร์ฟเวอร์ของมัน และงานจะทำต่อจากส่วนที่เหลือเมื่อเซิร์ฟเวอร์กลับมา
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ช่วงนี้ลงต่ำกว่าสัดส่วนเป้าหมาย {share} จึงยังไม่แสดงด้วยความเชื่อมั่น 95% ว่าบรรลุสัดส่วนนั้น รอบการจำลองซ้ำที่มากขึ้นจะทำให้ช่วงแคบลง
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	งานหยุดทันที: เอนทิตีจะกลับไปหัวคิวสำหรับเซิร์ฟเวอร์ใดก็ได้ที่อยู่ในกะ และงานที่ทำกับมันแล้วจะสูญเปล่า
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	งานหยุดทันที เอนทิตีรออยู่ที่เซิร์ฟเวอร์ของมัน และงานจะทำต่อจากส่วนที่เหลือเมื่อเซิร์ฟเวอร์นั้นกลับเข้ากะอีกครั้ง
 	The last task with a resource it finished at	งานที่ใช้ทรัพยากรงานสุดท้ายที่ชิ้นงานผ่าน
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	เวลาเฉลี่ยจนถึงเงื่อนไขหยุดคิดเฉพาะรอบการจำลองซ้ำที่ถึงเงื่อนไข รอบอื่นรันจนถึงขีดจำกัดเวลา
 	The model changed, so watching stopped	โมเดลเปลี่ยนไป จึงหยุดเฝ้าดู
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	ตอนนี้แบบจำลองมีจำนวนหน่วยที่การกำหนดขนาดพบแล้ว
 	The model: its experiment, connections and problems	แบบจำลอง: การทดลอง การเชื่อมต่อ และปัญหา
 	The name is empty or already used.	ชื่อว่างหรือถูกใช้แล้ว
+	The server finishes the job it has, then goes off; until then it counts as on shift.	เซิร์ฟเวอร์ทำงานที่มีอยู่ให้เสร็จ แล้วจึงออกกะ จนถึงตอนนั้นยังนับว่าอยู่ในกะ
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	สัดส่วนรอบการจำลองซ้ำที่เท่ากับหรือต่ำกว่าแต่ละค่า แถบครอบคลุมการแจกแจงจริงด้วยความเชื่อมั่น {confidence}
 	The values are numbers, separated by semicolons or spaces	ค่าต้องเป็นตัวเลขที่คั่นด้วยเครื่องหมายอัฒภาคหรือช่องว่าง
 	The whole clock	เวลาทั้งหมด

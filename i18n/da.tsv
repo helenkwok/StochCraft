@@ -188,6 +188,7 @@
 	Failure interrupts the job	Nedbrud afbryder arbejdet
 	Family	Familie
 	File	Filer
+	Finish, then go off	Gør færdig, og gå så af skift
 	Finished at {time} {unit}	Færdig ved {time} {unit}
 	Fit	Tilpas
 	Fit the diagram to the view	Tilpas diagrammet til visningen
@@ -214,6 +215,7 @@
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hvor mange emner kunderne ønsker fra disse afgange; resultaterne viser så takten (den tilgængelige tid divideret med behovet) og hver opgaves cyklustid.
 	In use	I brug
 	Inside over time	Inde over tid
+	Job under way on a server going off shift:	Job i gang på en server, der går af skift:
 	Job under way on a server taken out:	Job i gang på en server, der tages ud af drift:
 	Jump	Gå
 	Jump to time	Gå til tidspunkt
@@ -378,6 +380,7 @@
 	Result, down and up	Resultat, ned og op
 	Results	Resultater
 	Resume after restart	Genoptag efter genstart
+	Resume when back on shift	Genoptag, når den er på skift igen
 	Retry elsewhere	Prøv igen et andet sted
 	Rework	Omarbejde
 	Rework on {id}	Omarbejde på {id}
@@ -471,6 +474,8 @@
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Forbindelsen afbrydes, og klienten prøver igen: enheden går straks tilbage forrest i køen, og arbejdet udført på den er spildt.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Enheden venter ved sin server, og jobbet fortsætter med det, der var tilbage, når serveren er tilbage.
 	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhed, at andelen nås; flere replikationer ville gøre det smallere.
+	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Jobbet stopper straks: enheden går tilbage forrest i køen til en hvilken som helst server på skift, og arbejdet udført på den er spildt.
+	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Jobbet stopper straks; enheden venter ved sin server, og jobbet fortsætter med det, der var tilbage, når den server er på skift igen.
 	The last task with a resource it finished at	Den sidste opgave med ressource, emnet gik igennem
 	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Den gennemsnitlige tid til stopbetingelsen er kun over de replikationer, der nåede den; de øvrige kørte til deres tidsgrænse.
 	The model changed, so watching stopped	Modellen blev ændret, så følgningen stoppede
@@ -478,6 +483,7 @@
 	The model now has the units sizing found	Modellen har nu de enheder, dimensioneringen fandt
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
 	The name is empty or already used.	Navnet er tomt eller allerede i brug.
+	The server finishes the job it has, then goes off; until then it counts as on shift.	Serveren gør det job, den har, færdigt og går så af skift; indtil da tæller den som på skift.
 	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen af replikationer ved eller under hver værdi. Båndet indeholder den sande fordeling med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Værdierne er tal adskilt med semikolon eller mellemrum
 	The whole clock	Hele tiden
