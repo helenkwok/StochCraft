@@ -29,8 +29,8 @@ The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app
 | `blocks` | L2 | Compiles a model: source, server, shared task, delay, sink, exclusive and parallel gateways, merges, batch and unbatch, assembly; finite buffers with blocking after service and loss; shared pools with roles, alternatives, priorities and shifts; breakdowns; calendars; stop conditions; work left inside at the end; entities carry typed properties; per-element statistics; warm-up; one replication stepped and read as it runs (`Live`) |
 | `experiment` | L3 | Parallel replications with reproducible streams, progress and cancellation |
 | `io` | L3 | BPSim on BPMN and XPDL: read (gateways, routing, embedded sub-processes in line, calendars, diagram layout, `stochcraft:` vendor extensions), write new, save edits into opened files |
-| `engine` | L4 | Commands with JSON schemas, undo and redo, journal; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity and sizing; `results.distribution` and `results.compare`; live runs |
-| `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `exec`, `schema`, `mcp` |
+| `engine` | L4 | Commands with JSON schemas, undo and redo, journal; runs on threads, on the page's workers or in slices; editing commands for blocks, flows, pools, calendars, properties, estimates and layout, and `batch` for several as one step; sweeps, sensitivity, designed experiments and sizing; `results.distribution` and `results.compare`; live runs |
+| `stochcraft-cli` | app | `new`, `validate`, `run` with a run record, `design`, `exec`, `schema`, `mcp` |
 | `ui-egui` | L5 | The app's window: menus and shortcuts; the flowchart canvas and inspector; runs with results, charts and the spread across replications; the Analysis view; watching a run; autosave; 44 languages |
 | `mcp` | L5 | The MCP server: the engine's commands as tools for agents, headless (with optional read and write roots) or driving the app through its control channel |
 | `stochcraft`, `stochcraft-web` | apps | The desktop shell (native file dialogs, `--control` for agents) and the browser shell, published on GitHub Pages |
@@ -1199,9 +1199,47 @@ id since #152; before that the same search stopped at 6 ovens.)
     compared from its own value up.
 - **Tests:** `ui-egui/tests/decide.rs`; the strings in all 44 catalogs.
 
-**Not yet:** sizing several resources a step at a time, or by cost; designed experiments with
-several factors at once (factorial, Latin hypercube); saving targets in the model file; and
-running analyses in the background or on the browser's web workers.
+**Done (third part): designed experiments with several factors at once.**
+`experiment.design` varies several parameters together, as Python users do with
+`itertools.product` or a grid drawn as a heatmap. Each factor is a parameter as a sweep takes it
+(`{id, field}`), with its levels or its range.
+- **Full factorial** (the default): every combination of the levels, the last factor changing
+  fastest, as `itertools.product` does. Each factor's **main effect** is the mean of a result at
+  its highest level minus at its lowest, over the other factors' levels. For factors with two
+  levels, each pair's **two-way interaction** is Law's e12 for a 2^k design (*Simulation
+  Modeling and Analysis*, 5th ed., section 12.2): half the change in one factor's effect between
+  the other's two levels.
+- **Latin hypercube** (McKay, Beckman and Conover, *Technometrics* 21(2), 1979): `points`
+  points, each factor's range cut into that many strata, each used once. Each factor draws its
+  permutation and offsets from its own stream, `Rng::keyed(seed, "design/<id>.<field>")`, so the
+  same seed gives the same design, and adding a factor leaves the other columns alone. A count
+  given as a range takes its whole numbers. Each factor's rank (Spearman) correlation with each
+  result is reported.
+- Every point runs the same replications on the same seed (common random numbers, #66), so each
+  effect is worked out replication by replication and judged by its paired 95% t interval, with
+  `tests` and the Bonferroni note as in a sensitivity analysis. Points run one after another,
+  each with its replications in parallel, as in a sweep.
+- A design of more than 10,000 runs (points × replications, `design::MAX_RUNS`) is refused,
+  with the number it would take. Designs are recorded in later runs' records, as sweeps are.
+- `stochcraft-cli design MODEL --factor id.field=1,2,3 --factor id.field=min..max --result
+  element.metric`: a table of the points, then the main effects and interactions (or the
+  correlations); `--format csv` gives one row per point and result.
+
+**Validation** (`engine/tests/engine.rs`, `stochcraft-cli/tests/cli.rs`):
+
+| Case | Theory | StochCraft |
+|---|---|---|
+| Help desk 2 × 2: time between arrivals a ∈ {2, 3}, mean service s ∈ {0.8, 1.2}; M/M/1 wait in queue s² / (a − s) at the four points | 0.533, 1.8, 0.291, 0.8 | 0.531 ± 0.010, 1.794 ± 0.052, 0.286 ± 0.009, 0.789 ± 0.021 |
+| Same: main effects of a and s | −0.621, +0.888 | −0.625 ± 0.024, +0.882 ± 0.026 |
+| Same: their interaction | −0.379 | −0.380 ± 0.019 |
+| A second server's service time on the first server's wait | 0 | 0, not significant |
+| M/M/1 of issue #66, 2 × 2 of small changes: half-width of a main effect, paired against independent points | narrower | 0.068 and 0.062 against 0.21 |
+| Latin hypercube, 8 points: values per eighth of each range | one each | one each; same seed, same design |
+
+**Not yet:** sizing several resources a step at a time, or by cost; saving targets in the model
+file; running analyses in the background or on the browser's web workers. For designed
+experiments: the window's form and a heatmap of a two-factor grid; fitting a response surface
+(a regression on the factors); and fractional factorials (2^(k−p)) for many two-level factors.
 
 ### M2.9 Output analysis
 
