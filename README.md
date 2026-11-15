@@ -1,99 +1,60 @@
+<div align="center">
+
 # StochCraft
 
-Discrete-event simulation of flows for factories, logistics, services and IT operations: an
-open-source, clean-room simulation application in pure Rust, for native desktops and the browser.
+**Draw how work flows through your factory, warehouse, clinic or service. StochCraft runs it many
+times with random delays and tells you where the waiting is, how busy each step is, and how sure
+those numbers are.**
 
-For how the window compares with other simulation tools, see
-[docs/target-app-parity.md](docs/target-app-parity.md).
+[![Try it in your browser](https://img.shields.io/badge/Try%20it%20in%20your%20browser-0b6e86?style=for-the-badge)](https://helenkwok.github.io/StochCraft/)
 
-**Status:** model files, the engine and a command line (M1), the core flow logic for factories and logistics (M2.1–M2.8), abandonment (M2.10, except balking and the gaps listed there), changeovers, product-type times and OEE (M2.11, except ISO's NEE index and per-product plans), and the desktop and browser app (M3) are done; output-analysis help (M2.9, beyond its existing checks), the other lean results and the current-state and future-state comparison (M2.11), system dynamics (M4) and transport (M5) come next, see [ROADMAP.md](ROADMAP.md). `stochcraft-des` runs SimPy-style async processes with resources on a deterministic event queue; `stochcraft-experiment` runs replications in parallel with reproducible random streams (`stochcraft-random`) and reports 95% confidence intervals (`stochcraft-stats`). `stochcraft-blocks` compiles models of sources, servers, tasks sharing resource pools, delays, sinks, decisions, splits and joins, batches and assemblies, with processing times by product type, finite buffers (fixed, by timetable or per working server, with a way out for those turned away), shifts, breakdowns and stop conditions, and reports per-element statistics; `stochcraft-io` reads and writes them as BPSim on BPMN or XPDL, the open standards other process tools use; `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo, and a replayable journal, and adds sweeps, sensitivity analysis and capacity sizing; `stochcraft-cli` runs models from the command line, and the app runs them in a window on the desktop or [in the browser](https://helenkwok.github.io/StochCraft/). Checked against queueing theory and exact results: M/M/1, M/M/c (Erlang C), M/M/1/K, priority queues, machine repair, a Jackson network, a two-machine line with a finite buffer, E₄/M/1 batches, assembly, arrivals by time of day, breakdowns and activity networks, and against L-SIM's published results for the BPSim car repair model; about 54× faster than SimPy on an M/M/1 benchmark ([bench/](bench/README.md)).
+[Try it](https://helenkwok.github.io/StochCraft/) · [Install](docs/installation.md) ·
+[User guide](docs/user-guide.md) · [Developers](docs/developers.md) · [Roadmap](ROADMAP.md)
 
-## Building
+</div>
 
-```bash
-cargo xtask ci
-```
+![StochCraft watching a run of a queue: counts on each block, the run clock and controls above the canvas, the experiment settings on the right](docs/screenshots/watch.png)
 
-## The app
+StochCraft is a discrete-event simulation tool: free, open source and written in Rust. It runs in
+your browser or as a desktop app on Windows, macOS and Linux. Nothing needs an account or a
+server; your models stay on your computer.
 
-Try it in the browser at [helenkwok.github.io/StochCraft](https://helenkwok.github.io/StochCraft/)
-(every pull request also gets a preview, linked from the pull request), or run it on the
-desktop:
+## Try it
 
-```bash
-cargo run --release -p stochcraft
-```
+Open [helenkwok.github.io/StochCraft](https://helenkwok.github.io/StochCraft/) and pick an
+example. The browser app works offline once loaded, and your browser can install it like an app.
 
-Open a BPMN or XPDL model with BPSim data (or one of the examples under File ▸ Open Example), or
-build one on the flowchart canvas: add blocks with **+ Add block** or drag them from the palette,
-and drag between them to connect them. Select a block
-to edit its parameters and flows, run with F5 and read the results with their confidence
-intervals, as charts and a table; export the table as CSV and the charts as PNG. Model ▸ Watch a
-Run steps one replication on the canvas, and the Analysis view sweeps a parameter, ranks
-parameters by sensitivity and sizes capacity to a target. Every edit can be undone.
+To run it on your desktop, see the [installation guide](docs/installation.md). There is no
+downloadable release yet, so for now the desktop app is built from source.
 
-To build the browser app locally, install [trunk](https://trunkrs.dev) and run it from
-`apps/stochcraft-web`:
+## How it works
 
-```bash
-trunk serve --release
-```
+| ![The start screen with three examples](docs/screenshots/start.png) | ![A model on the canvas with a block selected](docs/screenshots/model.png) | ![Results with charts and a table of means and 95% confidence intervals](docs/screenshots/results.png) |
+| :---: | :---: | :---: |
+| **1. Open an example or a model file**, or start a new one | **2. Draw the flow** and set each step's times, capacity, breakdowns and shifts | **3. Run** and read each result with its 95% confidence interval |
 
-In the browser, runs use a web worker for each core but one (up to 16), and the app can be
-installed and used offline.
+## What it does
 
-Without more, the browser app has only IBM Plex and egui's faces, so Japanese, Korean, Chinese,
-Hindi, Thai and other scripts draw only with fonts the visitor's system has, or as boxes. Set `CRAFT_FONTS_DIR` to a checkout of
-[craft-fonts](https://github.com/storytold/craft-fonts) (the commit `.github/workflows/pages.yml`
-pins) and the build serves its faces beside the app as `fonts/`, fetched when the interface
-language or a character needs them, as on the published site (`crates/ui-egui/build.rs`). Bengali,
-Tamil, Telugu and Lao have no face there yet: they draw only with fonts the visitor's own system
-has.
+| In the window | Also |
+| --- | --- |
+| Draw the flow: arrivals, tasks, decisions, splits and joins, batches, departures | Open and save BPMN and XPDL files with BPSim data, the open standards other process tools use |
+| Times as distributions, with a three-point estimate when you only know a minimum, a likely value and a maximum | A [command line](docs/developers.md#the-command-line) for scripted and batch runs, with CSV and JSON output |
+| Capacity, waiting-room limits, shared resource pools, breakdowns, shifts and setups | An [MCP server](docs/mcp.md), so an AI agent can build, run and compare models |
+| Replications run in parallel, each result with its 95% confidence interval | Checked against queueing theory and published results ([details](docs/developers.md#how-it-is-checked)) |
+| Watch one run move through the model, step by step | Undo and redo for every change |
+| Sweep a parameter, rank parameters by sensitivity, size capacity to a target | The interface in English and 44 other languages |
+| Lean measures: OEE, takt and cycle time, time in each state | Light, dark and custom themes |
+| Export the results table as CSV and the charts as PNG | |
 
-## Using the command line
+## Documentation
 
-```bash
-cargo install --path apps/stochcraft-cli
-```
-
-Write a starting model (`--list` shows the templates), check it, and run it:
-
-```bash
-stochcraft-cli new --template mm1 queue.bpmn
-```
-
-```bash
-stochcraft-cli validate queue.bpmn
-```
-
-```bash
-stochcraft-cli run queue.bpmn --reps 20
-```
-
-`run` prints each element's statistics with the half-width of a 95% confidence interval, under a
-run record (version, model digest, scenario, seed, replications, warm-up and duration) that is
-enough to reproduce the numbers. `--format json` or `--format csv` gives machine-readable
-results, `--out` writes them to a file, and `--seed`, `--warmup` and `--duration` override the
-model's scenario for that run. Any BPMN or XPDL file with BPSim data can be run the same way.
-
-Changes can be scripted as engine commands (`stochcraft-cli schema` lists them with their
-parameters) and replayed:
-
-```bash
-stochcraft-cli exec changes.json --open queue.bpmn
-```
-
-## Using it from an AI agent
-
-`stochcraft-cli mcp` serves the engine's commands over the Model Context Protocol, so an agent
-such as Claude Code can open, build, run and compare models:
-
-```bash
-claude mcp add stochcraft -- /path/to/stochcraft-cli mcp
-```
-
-Start the app with `stochcraft --control 7070` and add `--connect 127.0.0.1:7070` to watch the
-agent work in the window. [docs/mcp.md](docs/mcp.md) has the tools and options.
+- [User guide](docs/user-guide.md): build a model, run it, read the results, what-if analysis, save and export
+- [Installation guide](docs/installation.md): the browser app and the desktop app
+- [Developers guide](docs/developers.md): build from source, the crates, the command line, how
+  results are checked
+- [Using it from an AI agent](docs/mcp.md)
+- [Roadmap](ROADMAP.md): what is done and what comes next
+- [How the window compares with other simulation tools](docs/target-app-parity.md)
 
 ## Contributing
 
