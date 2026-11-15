@@ -47,8 +47,9 @@ pub fn mser5(series: &[f64]) -> Option<Truncation> {
     if series.iter().any(|y| !y.is_finite()) {
         return None;
     }
-    let batches: Vec<f64> = series
-        .chunks_exact(MSER_BATCH)
+    let (whole, _) = series.as_chunks::<MSER_BATCH>();
+    let batches: Vec<f64> = whole
+        .iter()
         .map(|b| b.iter().sum::<f64>() / MSER_BATCH as f64)
         .collect();
     let m = batches.len();
