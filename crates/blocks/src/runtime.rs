@@ -1813,13 +1813,14 @@ struct Away {
 
 impl Away {
     /// `e`, turned away, takes the way at once, on its own, as a process (started now): it
-    /// waits for room there if the way can hold it up. Being a process, a way that leads
-    /// straight back to a room that stays full goes round through the event queue, where the
-    /// guard on events at one time stops it, rather than looping within one step.
+    /// waits for room there if the way can hold it up, or is turned away again there. Being a
+    /// process, a way that leads straight back to a room that stays full goes round through the
+    /// event queue, where the guard on events at one time stops it, rather than looping within
+    /// one step.
     fn take(&self, e: Entity) {
         let (way, c) = (self.way.clone(), self.ctx.clone());
         self.ctx.spawn_tagged(tag(self.index), async move {
-            if way.may_block() {
+            if way.needs_room() {
                 way.deliver(&c, e).await;
             } else {
                 way.dispatch(&c, e);
@@ -2088,8 +2089,8 @@ impl Patient {
         let Some(way) = self.way.borrow().clone() else {
             return;
         };
-        if way.may_block() {
-            // It waits for room on its own, as a process.
+        if way.needs_room() {
+            // It waits for room on its own, as a process (or is turned away there).
             let c = self.ctx.clone();
             self.ctx.spawn_tagged(tag(self.index), async move {
                 way.deliver(&c, e).await;
@@ -2275,6 +2276,17 @@ impl Port {
         match &self.router {
             Some(r) => r.may_block(),
             None => self.places.as_ref().is_some_and(|p| !p.turns_away()),
+        }
+    }
+
+    /// Whether sending here must first find room ([`Port::deliver`]): a finite buffer, whether
+    /// it holds the sender up or turns away those finding none, or a shortest-queue gateway
+    /// with one. Only where this is false may an entity be sent straight on
+    /// ([`Port::dispatch`]).
+    fn needs_room(&self) -> bool {
+        match &self.router {
+            Some(r) => r.may_block(),
+            None => self.places.is_some(),
         }
     }
 

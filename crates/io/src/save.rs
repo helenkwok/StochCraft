@@ -1920,13 +1920,8 @@ impl Editor {
                     };
                     let is_server = matches!(e.kind, ElementKind::Server { .. });
                     if new_queue != old_queue || (is_server && !was_server) {
-                        // Set another way, the extension is written afresh (an update keeps
-                        // only its value).
-                        if old_queue
-                            .is_some_and(|(_, was)| new_queue.is_some_and(|(_, l)| l != was))
-                        {
-                            vendor_writes.push((id.clone(), crate::bpsim::QUEUE_CAPACITY, None));
-                        }
+                        // Set another way, the extension is written afresh by `set_vendor`, so
+                        // nothing of an old one (kept by a delay, say) stays.
                         vendor_writes.push((
                             id.clone(),
                             crate::bpsim::QUEUE_CAPACITY,
@@ -3239,12 +3234,13 @@ fn set_vendor(s: &mut Element, element: &str, name: &str, value: Option<Element>
     };
     let new_value = crate::bpsim::vendor_value(&value).unwrap_or_default();
     if let Some(old) = ep.elements_mut().filter(|v| is_ext(v)).last() {
-        // Keep the extension as written (its prefix for StochCraft's namespace) where it can.
+        // Keep the extension as written (its prefix for StochCraft's namespace) where only its
+        // value changes; one set another way (another attribute, a child) is written afresh.
         let at = old.attrs.iter().position(|(n, _)| {
             n.split_once(':')
                 .is_some_and(|(p, l)| p != "xmlns" && l == "value")
         });
-        if let Some(at) = at {
+        if let Some(at) = at.filter(|_| differs_only_in_value(old, &value)) {
             let attr = old.attrs[at].0.clone();
             old.set_attr(&attr, &new_value);
             return;
@@ -3254,6 +3250,26 @@ fn set_vendor(s: &mut Element, element: &str, name: &str, value: Option<Element>
     }
     let at = end_of(ep);
     ep.children.insert(at, Node::Element(value));
+}
+
+/// Whether vendor extensions `a` and `b` say the same but for their value: neither has a child,
+/// and their other attributes (by local name, leaving out namespace declarations) are the same.
+fn differs_only_in_value(a: &Element, b: &Element) -> bool {
+    let rest = |e: &Element| {
+        let mut v: Vec<(String, String)> = e
+            .attrs
+            .iter()
+            .filter(|(n, _)| n != "xmlns" && !n.starts_with("xmlns:"))
+            .map(|(n, v)| {
+                let local = n.split_once(':').map_or(n.as_str(), |(_, l)| l);
+                (local.to_owned(), v.clone())
+            })
+            .filter(|(l, _)| l != "value")
+            .collect();
+        v.sort();
+        v
+    };
+    a.elements().next().is_none() && b.elements().next().is_none() && rest(a) == rest(b)
 }
 
 /// The `ElementParameters` of `element` in scenario `s` to write into: the last for which `has`

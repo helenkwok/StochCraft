@@ -1407,7 +1407,9 @@ leaving before their service begins a central feature that Erlang B and C lack.
   entered); a source still counts its own arrivals turned away as lost, which tells new
   arrivals from retries. Without the way nothing changes. Validation: at most one per server
   (`several_turned_away_ways`), only out of a server with a finite room
-  (`turned_away_without_room`), never also the abandoned way (`turned_away_and_abandoned`).
+  (`turned_away_without_room`), never also the abandoned way (`turned_away_and_abandoned`); a
+  room by timetable needs a calendar's value (`queue_by_shift_empty`). An entity turned away
+  or giving up into another finite room is let in or turned away there by that room's rule.
 - **Checks with known answers (waiting rooms):** done (`blocks/tests/admission.rs`). By hand:
   admission at the limit; those waiting staying as a shift ends and as the timetable lowers the
   limit; a sender blocked until the timetable opens the room; failures and a takeout per working

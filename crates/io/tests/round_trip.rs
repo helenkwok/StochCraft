@@ -1696,3 +1696,127 @@ fn a_bad_waiting_room_setting_is_noted() {
         }
     ));
 }
+
+/// `tests/models/mm1.bpmn` with a fixed waiting room of 3 on `serve` in the base scenario
+/// (a StochCraft vendor extension, as written by hand), and, with `delay`, `serve` made a delay
+/// (no resource) that keeps it, as a file from elsewhere may.
+fn mm1_with_room(delay: bool) -> String {
+    let path = format!("{}/../../tests/models/mm1.bpmn", env!("CARGO_MANIFEST_DIR"));
+    let text = std::fs::read_to_string(&path).unwrap_or_else(|e| unreachable!("{path}: {e}"));
+    let text = text.replace(
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+        r#"<bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:queueCapacity" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="3"/>"#,
+    );
+    assert!(text.contains("stochcraft:queueCapacity"));
+    if !delay {
+        return text;
+    }
+    let text = text
+        .replace(
+            "<semantic:performer><semantic:resourceRef>clerk</semantic:resourceRef></semantic:performer>",
+            "",
+        )
+        .replace(
+            r#"<bpsim:ResourceParameters>
+              <bpsim:Selection><bpsim:ExpressionParameter value="bpsim:getResource('clerk', 1)"/></bpsim:Selection>
+            </bpsim:ResourceParameters>"#,
+            "",
+        );
+    assert!(!text.contains("getResource"));
+    text
+}
+
+fn serve(m: &mut Model) -> &mut ElementKind {
+    &mut m
+        .elements
+        .iter_mut()
+        .find(|e| e.id.as_str() == "serve")
+        .unwrap_or_else(|| unreachable!("no serve"))
+        .kind
+}
+
+/// A delay keeping a waiting room's extension from elsewhere, made a server with a room per
+/// working server, is saved with the extension written afresh, not just its value changed.
+#[test]
+fn a_delay_made_a_server_per_working_server_replaces_the_extension_it_kept() {
+    let original = mm1_with_room(true);
+    let Ok(loaded) = stochcraft_io::read_scenario(original.as_bytes(), None) else {
+        unreachable!()
+    };
+    let mut m = loaded.model.clone();
+    assert!(
+        matches!(serve(&mut m), ElementKind::Delay { .. }),
+        "read as a delay"
+    );
+    *serve(&mut m) = ElementKind::Server {
+        processing_by: None,
+        capacity: 1,
+        service: Dist::Exponential { mean: 1.0 },
+        queue_capacity: Some(2),
+        breakdown: None,
+        transfer: None,
+        available: true,
+        availability: Vec::new(),
+        power: None,
+        setup: None,
+        planned_run_time: None,
+        patience: None,
+        health_check: None,
+        shifts: Vec::new(),
+        on_shift_end: OnShiftEnd::Finish,
+        queue_limit: QueueLimit::PerWorkingServer,
+    };
+    let saved = loaded.opened.save(&m);
+    let Ok(saved) = saved else {
+        unreachable!("{saved:?}")
+    };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(
+        text.contains(r#"stochcraft:perWorkingServer="true""#),
+        "{text}"
+    );
+    let Ok(mut back) = read(&saved).map(|l| l.model) else {
+        unreachable!()
+    };
+    assert_eq!(serve(&mut back), serve(&mut m));
+}
+
+/// A waiting room an inherited scenario sets, set another way in the scenario opened, is saved
+/// there (the inherited one is overridden, not removed); the parent keeps its own.
+#[test]
+fn an_inherited_waiting_room_set_another_way_is_saved() {
+    let original = mm1_with_room(false);
+    let Ok(child) = stochcraft_io::read_scenario(original.as_bytes(), Some("two-clerks")) else {
+        unreachable!()
+    };
+    let mut m = child.model.clone();
+    let ElementKind::Server {
+        queue_capacity,
+        queue_limit,
+        ..
+    } = serve(&mut m)
+    else {
+        unreachable!()
+    };
+    assert_eq!(*queue_capacity, Some(3), "the inherited room is read");
+    *queue_limit = QueueLimit::PerWorkingServer;
+    let saved = child.opened.save(&m);
+    let Ok(saved) = saved else {
+        unreachable!("{saved:?}")
+    };
+    let read_as = |id| {
+        let Ok(l) = stochcraft_io::read_scenario(&saved, Some(id)) else {
+            unreachable!()
+        };
+        l.model
+    };
+    assert_eq!(read_as("two-clerks"), m);
+    let Ok(mut base) = stochcraft_io::read_scenario(original.as_bytes(), Some("base")) else {
+        unreachable!()
+    };
+    let mut saved_base = read_as("base");
+    assert_eq!(serve(&mut saved_base), serve(&mut base.model));
+}

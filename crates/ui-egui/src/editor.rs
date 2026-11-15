@@ -647,8 +647,11 @@ impl App {
                                 if kind == "server" {
                                     self.abandoned_field(ui, cid, &c);
                                 }
-                                // Only one with a finite waiting room turns entities away.
-                                if kind == "server" && el["queue_capacity"].is_number() {
+                                // Only one with a finite waiting room turns entities away;
+                                // a way still marked shows, so the mark can be taken off.
+                                if (kind == "server" && el["queue_capacity"].is_number())
+                                    || c["turned_away"].as_bool() == Some(true)
+                                {
                                     self.turned_away_field(ui, cid, &c);
                                 }
                             });
