@@ -2,8 +2,9 @@
 
 Where StochCraft is going next and in what order. Five milestones: **M1** model files, the
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
-desktop app (and the browser app built from it); **M4** Monte Carlo, system dynamics, agents and hybrid models; **M5**
-transport and layout. M1 and M3 are done. M2.1–M2.8 are done, and so is M2.10 (abandonment)
+desktop app (and the browser app built from it); **M4** Monte Carlo, system dynamics, agents and
+hybrid models; **M5** transport and layout. M1 and M3.1–M3.6 are done; M3.7, a redesign that
+makes results answer the question, comes next. M2.1–M2.8 are done, and so is M2.10 (abandonment)
 apart from the gaps listed in it. M2.11 (changeovers and lean measures) has its changeovers,
 product-type times, takt and cycle times, state times and most of OEE done; M2.9 (output analysis) has only the checks it already
 had. M4 and M5 are being planned. Each milestone is a series of pull requests small enough to
@@ -1787,8 +1788,67 @@ replications other than the first.
 FlexSim-style factory layouts via the shared `craft-factory` data from CADCraft.
 
 **M3 size:** about six PRs; M3.1–M3.3 make a usable app, M3.4–M3.5 make it a modelling tool.
-**M3 is complete.** CI builds and tests on Linux only (#45); the full test suite also passes on
+**M3.1–M3.6 are complete.** CI builds and tests on Linux only (#45); the full test suite also passes on
 Windows (checked by hand); macOS is unchecked.
+
+### M3.7 Redesign: results that answer
+
+**Outcome:** a newcomer or a switcher from another simulation tool opens an example, sees it
+move, and gets an answer they can trust in their first session. The window explains instead of
+assuming the user already knows. It follows the UX evaluation of 2026-11-15
+([docs/gaps.md](docs/gaps.md), ranked) and its seven mock-up screens (kept privately, v2), and
+comes before M4, whose models need the same results over time and a second kind of diagram.
+
+**Words (settled, Helen, 2026-11-15):** "run" is one pass of the model with its own random
+numbers, and "experiment" is all the runs together, so the window says "10 runs", "run 3 of 10"
+and "Use 40 runs". The glossary says "Run (also called a replication)". "Block" names every
+object on the canvas, "entity" what flows, and "waiting room (queue)" a task's buffer. Only the
+window's words change: the command line, the JSON results and the file keep `replications`.
+
+The steps, in the order of gaps.md, each a series of pull requests:
+
+1. **Words and messages** (gaps 7). One vocabulary in the window, the results and the engine's
+   messages, which name the block and say how to fix the problem; engine messages through the
+   catalogs. Every rewritten string is a row in each language's catalog, translated from
+   dictionaries, Wikipedia, IATE or the literature only.
+2. **Problems where they are** (gaps 8). Limits on fields; "Run (1 problem)" that selects the
+   block and field; a problems chip and clickable status-bar errors; a fixed place for problems
+   so the inspector never jumps; Basics first in the inspector (name, capacity, times), the rest
+   folded into rows that show a summary when set.
+3. **Results that answer** (gaps 1, screen 1a). In this order: two to four finding sentences,
+   each linked to its evidence; "How sure are these numbers?" with one-click fixes ("Use 40
+   runs", "Set a 1 h warm-up") and what is already settled; four key measures per block, the
+   rest under "All measures"; two default charts chosen for the question. Numbers are rounded by
+   one rule: the half-width to one significant figure (two if it starts with 1), the mean to the
+   same place. The chart of a measure over the run needs values recorded at fixed times, the
+   recorder that M2.9's warm-up plot and M4's results over time also need; it is built here, once.
+4. **Baseline and now** (gaps 4, screen 1b). Results stay visible and marked out of date after an
+   edit; "Keep as baseline"; then baseline, now, the paired difference with its interval (the
+   engine's `results.compare`, on the same seeds), and a verdict in words and an icon ("Real:
+   lower", "Could be chance"). The scenario table follows later.
+5. **The first hour** (gaps 5, screens 4a and 4b). A start page that asks "What do you want to
+   find out?", with examples by question and industry, each with its question, what it teaches,
+   and a proof tag where one applies; doors for newcomers (a guided 5-step first model on the real
+   canvas), for people coming from another tool, and for opening a file. Help as a side panel:
+   Getting started, a glossary, keyboard shortcuts and the user guide; a term's definition on
+   hover and on keyboard focus. New examples join only with a checked answer, as "Examples for
+   teaching" requires.
+6. **The library** (gaps 3, screen 2a). A Library | Outline switch in the rail; the library
+   grouped (flow in and out, work, routing, batching), searchable, each kind with an original
+   BPMN-style glyph, its name and a one-line hint; click or drag to place, and a quick add at the
+   pointer. Larger blocks with their names inside.
+7. **The look of a simulation** (gaps 2, screens 2b and 3). Results laid over the model after a
+   run (busy, waiting, time in the line, or off), with the bottleneck named; while watching,
+   entities move along the flows and stack in front of tasks, unit slots show busy, idle and
+   down, and badges pair a shape with words; reduced motion starts a run paused.
+
+**Design rules** for every step: the existing look (`ui-egui/src/theme.rs`: the ink header, one
+accent, IBM Plex) with the proposed tokens for control borders and soft error and warning
+tints; colour never alone; each screen keyboard-reachable with one visible focus ring; no
+modal where a panel or an inline row will do.
+
+**Size:** about 150–345 h for steps 1–7 (gaps.md's estimates at their first step).
+
 
 ---
 
