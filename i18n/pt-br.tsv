@@ -100,6 +100,7 @@
 	Change	Variação
 	Change Block	Alterar bloco
 	Change Calendar	Alterar calendário
+	Change Estimate	Alterar estimativa
 	Change Flow	Alterar fluxo
 	Change Pool	Alterar pool
 	Change the estimate	Alterar a estimativa
@@ -367,6 +368,7 @@
 	Remove	Remover
 	Remove Block	Remover bloco
 	Remove Calendar	Remover calendário
+	Remove Estimate	Remover estimativa
 	Remove Pool	Remover pool
 	Remove Property	Remover propriedade
 	Remove alternative {n}	Remover alternativa {n}
@@ -455,6 +457,7 @@
 	Show {id}	Mostrar {id}
 	Side rail	Barra lateral
 	Size	Dimensionar
+	Size Resources	Dimensionar recursos
 	Size of the waiting room:	Tamanho da sala de espera:
 	Size the resources	Dimensionar os recursos
 	Soft accent	Destaque suave

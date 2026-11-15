@@ -100,6 +100,7 @@
 	Change	Verandering
 	Change Block	Blok wijzigen
 	Change Calendar	Kalender wijzigen
+	Change Estimate	Schatting wijzigen
 	Change Flow	Stroom wijzigen
 	Change Pool	Pool wijzigen
 	Change the estimate	Schatting wijzigen
@@ -367,6 +368,7 @@
 	Remove	Verwijderen
 	Remove Block	Blok verwijderen
 	Remove Calendar	Kalender verwijderen
+	Remove Estimate	Schatting verwijderen
 	Remove Pool	Pool verwijderen
 	Remove Property	Eigenschap verwijderen
 	Remove alternative {n}	Alternatief {n} verwijderen
@@ -455,6 +457,7 @@
 	Show {id}	{id} tonen
 	Side rail	Zijbalk
 	Size	Dimensioneren
+	Size Resources	Middelen dimensioneren
 	Size of the waiting room:	Grootte van de wachtruimte:
 	Size the resources	De middelen dimensioneren
 	Soft accent	Zacht accent

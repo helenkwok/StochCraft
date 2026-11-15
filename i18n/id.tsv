@@ -100,6 +100,7 @@
 	Change	Perubahan
 	Change Block	Ubah Blok
 	Change Calendar	Ubah Kalender
+	Change Estimate	Ubah Perkiraan
 	Change Flow	Ubah Alur
 	Change Pool	Ubah Kumpulan
 	Change the estimate	Ubah perkiraan
@@ -367,6 +368,7 @@
 	Remove	Hapus
 	Remove Block	Hapus Blok
 	Remove Calendar	Hapus Kalender
+	Remove Estimate	Hapus Perkiraan
 	Remove Pool	Hapus Kumpulan
 	Remove Property	Hapus Properti
 	Remove alternative {n}	Hapus alternatif {n}
@@ -455,6 +457,7 @@
 	Show {id}	Tampilkan {id}
 	Side rail	Bilah samping
 	Size	Tentukan ukuran
+	Size Resources	Tentukan Ukuran Sumber Daya
 	Size of the waiting room:	Ukuran ruang tunggu:
 	Size the resources	Tentukan ukuran sumber daya
 	Soft accent	Aksen lembut

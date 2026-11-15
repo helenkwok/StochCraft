@@ -100,6 +100,7 @@
 	Change	変化幅
 	Change Block	ブロックを変更
 	Change Calendar	カレンダーを変更
+	Change Estimate	見積もりを変更
 	Change Flow	フローを変更
 	Change Pool	プールを変更
 	Change the estimate	見積もりを変更
@@ -367,6 +368,7 @@
 	Remove	削除
 	Remove Block	ブロックを削除
 	Remove Calendar	カレンダーを削除
+	Remove Estimate	見積もりを削除
 	Remove Pool	プールを削除
 	Remove Property	プロパティを削除
 	Remove alternative {n}	代替案 {n} を削除
@@ -455,6 +457,7 @@
 	Show {id}	{id} を表示
 	Side rail	サイドバー
 	Size	サイズを決める
+	Size Resources	リソースのサイズを決定
 	Size of the waiting room:	待機場所の大きさ:
 	Size the resources	リソースのサイズ決定
 	Soft accent	淡いアクセント

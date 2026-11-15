@@ -2246,8 +2246,11 @@ fn change_label(command: &str) -> &str {
         "flow.set" => "Change Flow",
         "disconnect" => "Disconnect",
         "experiment.set" => "Experiment Settings",
+        "experiment.size" => "Size Resources",
         "property.set" => "Set Property",
         "property.remove" => "Remove Property",
+        "estimate.set" => "Change Estimate",
+        "estimate.remove" => "Remove Estimate",
         "resource.add" => "Add Pool",
         "resource.set" => "Change Pool",
         "resource.remove" => "Remove Pool",
@@ -2275,4 +2278,24 @@ fn extension(path: &str) -> String {
         .rsplit_once('.')
         .map(|(_, e)| e.to_ascii_lowercase())
         .unwrap_or_default()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use stochcraft_engine::{COMMANDS, CommandKind};
+
+    /// Every command that goes on the undo history is named in the Edit menu and the status bar
+    /// by its own label, not its command name (`change_label` returns the name when it has none).
+    #[test]
+    fn every_undoable_command_has_a_label() {
+        for c in COMMANDS.iter().filter(|c| c.kind == CommandKind::Edit) {
+            assert_ne!(
+                change_label(c.name),
+                c.name,
+                "`{}` has no undo label",
+                c.name
+            );
+        }
+    }
 }

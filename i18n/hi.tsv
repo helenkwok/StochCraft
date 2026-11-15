@@ -100,6 +100,7 @@
 	Change	परिवर्तन
 	Change Block	ब्लॉक बदलें
 	Change Calendar	कैलेंडर बदलें
+	Change Estimate	अनुमान बदलें
 	Change Flow	प्रवाह बदलें
 	Change Pool	पूल बदलें
 	Change the estimate	अनुमान बदलें
@@ -367,6 +368,7 @@
 	Remove	हटाएँ
 	Remove Block	ब्लॉक हटाएँ
 	Remove Calendar	कैलेंडर हटाएँ
+	Remove Estimate	अनुमान हटाएँ
 	Remove Pool	पूल हटाएँ
 	Remove Property	गुण हटाएँ
 	Remove alternative {n}	विकल्प {n} हटाएँ
@@ -455,6 +457,7 @@
 	Show {id}	{id} दिखाएँ
 	Side rail	पार्श्व पट्टी
 	Size	आकार तय करें
+	Size Resources	संसाधनों का आकार तय करें
 	Size of the waiting room:	प्रतीक्षा कक्ष का आकार:
 	Size the resources	संसाधनों का आकार तय करें
 	Soft accent	कोमल एक्सेंट रंग

@@ -100,6 +100,7 @@
 	Change	Canvi
 	Change Block	Canvia el bloc
 	Change Calendar	Canvia el calendari
+	Change Estimate	Canvia l'estimació
 	Change Flow	Canvia el flux
 	Change Pool	Canvia el grup
 	Change the estimate	Canvia l'estimació
@@ -367,6 +368,7 @@
 	Remove	Elimina
 	Remove Block	Elimina el bloc
 	Remove Calendar	Elimina el calendari
+	Remove Estimate	Elimina l'estimació
 	Remove Pool	Elimina el grup
 	Remove Property	Elimina la propietat
 	Remove alternative {n}	Elimina l'alternativa {n}
@@ -455,6 +457,7 @@
 	Show {id}	Mostra {id}
 	Side rail	Barra lateral
 	Size	Dimensiona
+	Size Resources	Dimensiona els recursos
 	Size of the waiting room:	Mida de la sala d'espera:
 	Size the resources	Dimensiona els recursos
 	Soft accent	Accent suau

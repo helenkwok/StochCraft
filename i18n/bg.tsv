@@ -100,6 +100,7 @@
 	Change	Промяна
 	Change Block	Промяна на блок
 	Change Calendar	Промяна на календар
+	Change Estimate	Промяна на оценка
 	Change Flow	Промяна на поток
 	Change Pool	Промяна на пул
 	Change the estimate	Промяна на оценката
@@ -367,6 +368,7 @@
 	Remove	Премахване
 	Remove Block	Премахване на блок
 	Remove Calendar	Премахване на календар
+	Remove Estimate	Премахване на оценка
 	Remove Pool	Премахване на пул
 	Remove Property	Премахване на свойство
 	Remove alternative {n}	Премахване на алтернатива {n}
@@ -455,6 +457,7 @@
 	Show {id}	Показване на {id}
 	Side rail	Странична лента
 	Size	Оразмеряване
+	Size Resources	Оразмеряване на ресурси
 	Size of the waiting room:	Размер на чакалнята:
 	Size the resources	Оразмеряване на ресурсите
 	Soft accent	Мек акцент

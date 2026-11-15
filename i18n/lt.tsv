@@ -100,6 +100,7 @@
 	Change	Pokytis
 	Change Block	Keisti bloką
 	Change Calendar	Keisti kalendorių
+	Change Estimate	Keisti įvertį
 	Change Flow	Keisti srautą
 	Change Pool	Keisti grupę
 	Change the estimate	Keisti įvertį
@@ -367,6 +368,7 @@
 	Remove	Pašalinti
 	Remove Block	Pašalinti bloką
 	Remove Calendar	Pašalinti kalendorių
+	Remove Estimate	Pašalinti įvertį
 	Remove Pool	Pašalinti grupę
 	Remove Property	Pašalinti savybę
 	Remove alternative {n}	Pašalinti alternatyvą {n}
@@ -455,6 +457,7 @@
 	Show {id}	Rodyti {id}
 	Side rail	Šoninė juosta
 	Size	Parinkti
+	Size Resources	Parinkti išteklius
 	Size of the waiting room:	Laukiamojo dydis:
 	Size the resources	Parinkti išteklius
 	Soft accent	Švelnus akcentas

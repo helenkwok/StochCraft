@@ -13,6 +13,8 @@ the credibility, experiment and digital-twin items (NASA-STD-7009B, DES practice
 and the Aerospace Corporation, digital-twin reviews) is summarised in
 [docs/research.md](docs/research.md).
 
+The window's UX parity and its gaps: [docs/target-app-parity.md](docs/target-app-parity.md).
+
 ## Where we are
 
 | Crate | Layer | State |

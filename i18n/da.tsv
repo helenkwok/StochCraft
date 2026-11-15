@@ -100,6 +100,7 @@
 	Change	Ændring
 	Change Block	Rediger blok
 	Change Calendar	Rediger kalender
+	Change Estimate	Rediger skøn
 	Change Flow	Rediger flow
 	Change Pool	Rediger pulje
 	Change the estimate	Ret skønnet
@@ -367,6 +368,7 @@
 	Remove	Fjern
 	Remove Block	Fjern blok
 	Remove Calendar	Fjern kalender
+	Remove Estimate	Fjern skøn
 	Remove Pool	Fjern pulje
 	Remove Property	Fjern egenskab
 	Remove alternative {n}	Fjern alternativ {n}
@@ -455,6 +457,7 @@
 	Show {id}	Vis {id}
 	Side rail	Sidebjælke
 	Size	Dimensionér
+	Size Resources	Dimensionér ressourcer
 	Size of the waiting room:	Venteværelsets størrelse:
 	Size the resources	Dimensionér ressourcerne
 	Soft accent	Blød accent

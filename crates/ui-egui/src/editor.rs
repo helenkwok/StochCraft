@@ -59,7 +59,7 @@ fn parameters(kind: &str) -> &'static [&'static str] {
             "setup",
             "planned_run_time",
         ],
-        // Its needs are edited with M2.5's window work; service and priority here.
+        // Its needs are edited by `needs_section` in pools.rs; service and priority here.
         "shared_task" => &["service", "processing_by", "priority"],
         "delay" => &["duration", "processing_by"],
         "batch" => &["size"],
@@ -253,7 +253,7 @@ impl App {
         ui.add_space(8.0);
         // The name.
         let name = model["name"].as_str().unwrap_or("").to_owned();
-        if let Some(n) = self.text_field(ui, "model/name", t("Name"), &name) {
+        if let Some(n) = self.text_field(ui, "model/name", t("Name"), &name, true) {
             self.execute("model.rename", json!({ "name": n }));
         }
 
@@ -501,7 +501,7 @@ impl App {
             self.problem_row(ui, p, pr, false);
         }
 
-        if let Some(n) = self.text_field(ui, &format!("{id}/name"), t("Name"), &name) {
+        if let Some(n) = self.text_field(ui, &format!("{id}/name"), t("Name"), &name, true) {
             self.execute("block.rename", json!({ "id": id, "name": n }));
         }
 
@@ -741,8 +741,13 @@ impl App {
             .as_f64()
             .map(crate::results::grouped)
             .unwrap_or_default();
-        if let Some(text) = self.text_field(ui, &format!("{id}/demand"), t("Parts wanted"), &q_now)
-        {
+        if let Some(text) = self.text_field(
+            ui,
+            &format!("{id}/demand"),
+            t("Parts wanted"),
+            &q_now,
+            false,
+        ) {
             match self.numbers.parse(&text) {
                 Ok(q) if q.is_finite() && q > 0.0 => {
                     let d = set(&demand, "quantity", json!(q));
@@ -1530,13 +1535,16 @@ impl App {
         }
     }
 
-    /// A text field that commits on Enter or losing focus; Esc restores it.
+    /// A text field that commits on Enter or losing focus; Esc restores it. Empty text commits
+    /// only where `empty_ok`: a name (which falls back to the id) or a list of roles, where
+    /// empty is a real value. A required value (a number) is refused, so the caller can say why.
     pub(crate) fn text_field(
         &mut self,
         ui: &mut egui::Ui,
         key: &str,
         label: &str,
         current: &str,
+        empty_ok: bool,
     ) -> Option<String> {
         let mut out = None;
         ui.horizontal(|ui| {
@@ -1554,7 +1562,7 @@ impl App {
                 r.surrender_focus();
             } else if r.lost_focus() {
                 self.drafts.remove(key);
-                if text.trim() != current && !text.trim().is_empty() {
+                if text.trim() != current && (empty_ok || !text.trim().is_empty()) {
                     out = Some(text.trim().to_owned());
                 }
             } else if r.has_focus() || r.changed() {

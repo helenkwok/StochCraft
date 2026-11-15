@@ -100,6 +100,7 @@
 	Change	Sprememba
 	Change Block	Spremeni blok
 	Change Calendar	Spremeni koledar
+	Change Estimate	Spremeni oceno
 	Change Flow	Spremeni tok
 	Change Pool	Spremeni skupino
 	Change the estimate	Spremeni oceno
@@ -367,6 +368,7 @@
 	Remove	Odstrani
 	Remove Block	Odstrani blok
 	Remove Calendar	Odstrani koledar
+	Remove Estimate	Odstrani oceno
 	Remove Pool	Odstrani skupino
 	Remove Property	Odstrani lastnost
 	Remove alternative {n}	Odstrani alternativo {n}
@@ -455,6 +457,7 @@
 	Show {id}	Prikaži {id}
 	Side rail	Stranska vrstica
 	Size	Dimenzioniraj
+	Size Resources	Dimenzioniraj vire
 	Size of the waiting room:	Velikost čakalnice:
 	Size the resources	Dimenzioniraj vire
 	Soft accent	Mehki poudarek

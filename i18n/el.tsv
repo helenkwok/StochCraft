@@ -100,6 +100,7 @@
 	Change	Μεταβολή
 	Change Block	Αλλαγή μπλοκ
 	Change Calendar	Αλλαγή ημερολογίου
+	Change Estimate	Αλλαγή εκτίμησης
 	Change Flow	Αλλαγή ροής
 	Change Pool	Αλλαγή δεξαμενής
 	Change the estimate	Αλλαγή εκτίμησης
@@ -367,6 +368,7 @@
 	Remove	Αφαίρεση
 	Remove Block	Αφαίρεση μπλοκ
 	Remove Calendar	Αφαίρεση ημερολογίου
+	Remove Estimate	Αφαίρεση εκτίμησης
 	Remove Pool	Αφαίρεση δεξαμενής
 	Remove Property	Αφαίρεση ιδιότητας
 	Remove alternative {n}	Αφαίρεση εναλλακτικής {n}
@@ -455,6 +457,7 @@
 	Show {id}	Εμφάνιση {id}
 	Side rail	Πλευρική μπάρα
 	Size	Διαστασιολόγηση
+	Size Resources	Διαστασιολόγηση πόρων
 	Size of the waiting room:	Μέγεθος χώρου αναμονής:
 	Size the resources	Διαστασιολόγηση πόρων
 	Soft accent	Απαλό χρώμα έμφασης

@@ -153,7 +153,10 @@ impl App {
         let events = c["events"].as_array().cloned().unwrap_or_default();
         ui.add_space(6.0);
         ui.horizontal(|ui| {
-            ui.label(theme::strong(c["name"].as_str().unwrap_or(&id)));
+            // An empty name shows the id, as the other places that name a calendar do.
+            ui.label(theme::strong(
+                c["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(&id),
+            ));
             ui.label(theme::weak(ui, &id).monospace());
             if ui
                 .add(egui::Button::new(
@@ -171,6 +174,7 @@ impl App {
             &format!("calendar/{id}/name"),
             t("Calendar name"),
             c["name"].as_str().unwrap_or(""),
+            true,
         ) {
             self.execute("calendar.set", json!({ "id": id, "name": n }));
         }

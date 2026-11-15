@@ -100,6 +100,7 @@
 	Change	Өзгеріс
 	Change Block	Блокты өзгерту
 	Change Calendar	Күнтізбені өзгерту
+	Change Estimate	Бағалауды өзгерту
 	Change Flow	Ағынды өзгерту
 	Change Pool	Қорды өзгерту
 	Change the estimate	Бағалауды өзгерту
@@ -367,6 +368,7 @@
 	Remove	Жою
 	Remove Block	Блокты жою
 	Remove Calendar	Күнтізбені жою
+	Remove Estimate	Бағалауды жою
 	Remove Pool	Қорды жою
 	Remove Property	Қасиетті жою
 	Remove alternative {n}	{n}-баламаны жою
@@ -455,6 +457,7 @@
 	Show {id}	{id} көрсету
 	Side rail	Бүйір жолақ
 	Size	Өлшемдеу
+	Size Resources	Ресурстарды өлшемдеу
 	Size of the waiting room:	Күту орнының көлемі:
 	Size the resources	Ресурстарды өлшемдеу
 	Soft accent	Жұмсақ екпін түсі

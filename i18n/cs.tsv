@@ -100,6 +100,7 @@
 	Change	Změna
 	Change Block	Změnit blok
 	Change Calendar	Změnit kalendář
+	Change Estimate	Změnit odhad
 	Change Flow	Změnit tok
 	Change Pool	Změnit fond
 	Change the estimate	Změnit odhad
@@ -367,6 +368,7 @@
 	Remove	Odebrat
 	Remove Block	Odebrat blok
 	Remove Calendar	Odebrat kalendář
+	Remove Estimate	Odebrat odhad
 	Remove Pool	Odebrat fond
 	Remove Property	Odebrat vlastnost
 	Remove alternative {n}	Odebrat alternativu {n}
@@ -455,6 +457,7 @@
 	Show {id}	Zobrazit {id}
 	Side rail	Boční lišta
 	Size	Dimenzovat
+	Size Resources	Dimenzovat zdroje
 	Size of the waiting room:	Velikost čekárny:
 	Size the resources	Dimenzovat zdroje
 	Soft accent	Jemné zvýraznění

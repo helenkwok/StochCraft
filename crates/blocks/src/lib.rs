@@ -750,7 +750,9 @@ impl Metric {
 pub struct ElementReport {
     pub id: ElementId,
     pub name: String,
-    /// "source", "server", "delay" or "sink".
+    /// The element's kind: its `ElementKind` name (`source`, `server`, `shared_task`, `delay`,
+    /// `sink`, `exclusive_gateway`, `parallel_gateway`, `batch` or `unbatch`), or `resource` for a
+    /// pool's report.
     pub kind: &'static str,
     pub entered: u64,
     pub left: u64,
