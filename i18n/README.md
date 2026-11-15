@@ -525,6 +525,18 @@ engine's messages (validation, file notes) are English too.
   certain are lo, th, ta, te, ka, kk, bn and sq as before, the word for a control (fr commandes, nl
   bedieningselementen, tr Denetim, vi điều khiển), and the focus wording of the header item (hu, ta,
   te).
+- The rows for issue #146 (problems where they are: the three reasons a number field refuses a
+  value, "Run ({n} problem)" and the problems chip as plurals, "More settings" and the "?"
+  explanations of Capacity, Service time and Waiting room) were machine-drafted from the plain
+  meaning of the English and each catalog's existing terms: the verb of its Run button, the noun
+  of its Problems heading (in the singular and plural forms its other `@plural` rows use), its
+  Settings word, and its words for a unit and an entity from "A caller on hold: once a unit takes
+  it, the entity stays." (so da and nb ressource-/ressursenhed for a unit and enhed for an
+  entity, pl zasób and jednostka, hi, ka, ko and zh 资源单元/資源單元 with their resource-unit
+  words). The reasons end without a full stop, as the line under the field adds one. Not checked
+  against any other source, and not reviewed by native speakers. The least certain are lo, th, ta,
+  te, ka, kk, bn and sq as before, and the word for "drawn anew" (a random draw) in each
+  explanation of the service time.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

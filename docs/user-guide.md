@@ -156,8 +156,30 @@ The model overview's **Problems** section lists every error and warning, each wi
 link that selects the block. Blocks with a problem are also marked in the left rail and on the
 canvas. When it says **None found. The model is ready to run.**, you are set.
 
-Fields check what you type: a value that is not a number is outlined and explained under the
-field, and the model keeps its old value until you fix it.
+While the model has errors, the header's button says how many, for example **Run (2 problems)**,
+and a chip above the canvas names the blocks, for example **2 problems: Paint, Inspect**.
+Clicking either (or pressing F5, or **Model ▸ Run**) does not run: it selects the block with the
+next error, focuses its field when it is a number such as the capacity or the main time, and
+says what is wrong in the status bar. Click again for the next one. An error in the status bar
+that belongs to a block selects it when clicked. Warnings alone do not stop a run.
+
+A block's own problems show at the top of its inspector, in a place of fixed height, so the
+fields below do not move when one appears.
+
+Fields check what you type: a value that is not a number, or one the model cannot use (a
+negative time or mean, a capacity or batch size below 1, a probability outside 0 to 1), is
+outlined and explained under the field, and the model keeps its old value until you fix it.
+Esc, or selecting another block, puts the model's value back in the field.
+
+### The inspector: basics first
+
+A block's inspector shows its basic fields first: its name, capacity and main time (and a task's
+waiting room). The rest is folded: **More settings** (transfer, setup, times by property, planned
+run time), **Breakdowns and availability**, **Patience** and **Health check**. A folded section
+says what is set in it beside its title, for example **Breakdowns: Exponential 120 min,
+Constant 6 min**, or **None**; a section with something set starts open. The **?** beside
+**Capacity**, **Service time** and **Waiting room** opens a one-line explanation under the field;
+it can be reached with Tab and opened with Enter or Space.
 
 ### Undo
 
@@ -302,6 +324,8 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 ## Troubleshooting
 
 - **Run is greyed out:** the model has no blocks yet, or a dialog is open. While a run is going, the button reads **Cancel run** instead.
+- **Run says "Run (1 problem)" and does not run:** the model has an error. The click selected the
+  block and field concerned; fix it, or click Run again for the next problem (see Fix problems).
 - **The results disappeared:** the model changed after the run. Run it again.
 - **A number field has a red outline:** the text is not a valid value. The message under it says
   why; the model keeps the old value until you fix it.
