@@ -2126,7 +2126,9 @@ impl Model {
                     Problem::QueueLimitWithoutRoom,
                 ));
             }
+            // Only for a finite room: an unlimited one ignores the setting (warned of above).
             if let ElementKind::Server {
+                queue_capacity: Some(_),
                 queue_limit: QueueLimit::ByShift(timed),
                 ..
             } = &e.kind

@@ -432,8 +432,9 @@ fn giving_up_into_a_full_room_that_turns_away_is_turned_away() {
     assert_eq!(element(&r, "away").left, 1);
 }
 
-/// A waiting room by timetable needs a calendar's value: an empty timetable is an error (the
-/// file could not hold it).
+/// A finite waiting room by timetable needs a calendar's value: an empty timetable is an error
+/// (the file could not hold it). An unlimited room ignores the setting: only the warning that
+/// it does.
 #[test]
 fn an_empty_timetable_for_the_room_is_an_error() {
     let mut b = Builder::new();
@@ -449,6 +450,25 @@ fn an_empty_timetable_for_the_room_is_an_error() {
             .any(|d| matches!(d.problem, Problem::QueueByShiftEmpty)),
         "{:?}",
         errors(&b)
+    );
+    let mut model = b.build(experiment(0.0, 10.0, 1));
+    for e in &mut model.elements {
+        if let stochcraft_model::ElementKind::Server { queue_capacity, .. } = &mut e.kind {
+            *queue_capacity = None;
+        }
+    }
+    let diagnostics = model.validate();
+    assert!(
+        !diagnostics
+            .iter()
+            .any(|d| matches!(d.problem, Problem::QueueByShiftEmpty)),
+        "{diagnostics:?}"
+    );
+    assert!(
+        diagnostics
+            .iter()
+            .any(|d| matches!(d.problem, Problem::QueueLimitWithoutRoom)),
+        "{diagnostics:?}"
     );
 }
 
