@@ -1816,8 +1816,7 @@ over time, a second kind of diagram on the canvas). Then M4.1, the smallest and 
 reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
 space are built with M5, which needs the same layout and travel.
 
-Not started. Decisions D10–D13 and D15–D18 below are to settle first; #71 has the system
-dynamics ones.
+Not started. D15–D17 are settled; D10–D13 (#71 has them) and D18 are to settle first.
 
 ### M4.1 Monte Carlo
 
@@ -2142,7 +2141,7 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D12 | Bulk flow (tanks, pipes) (M4) | Exact events: with rates constant between changes, the time a level is reached is worked out and scheduled in `des`, rather than found up to one step late by a fixed-step `sd` |
 | D13 | Hybrid model files (M4) | One BPMN and BPSim file, naming XMILE variables through a `stochcraft:` vendor extension, with the couplings declared in it |
 | D14 | The BPMN MIWG test suite (github.com/bpmn-miwg/bpmn-miwg-test-suite, CC BY 3.0 by its `LICENSE.txt`) as test files | Settled: fetched in CI at a pinned commit and never committed, as for D7, so the repository stays under one licence; bpmn.io's bpmn-js-integration (MIT) does the same, cloning its own copy of the suite into `tmp/` in its CI. Only its `Reference/` folder is used, for reading, round-trip and diagnostics tests; the other folders are exports from commercial modelling tools and are not used. If a few files are ever needed offline, only those reference models are committed, each with a row in ATTRIBUTION.md and the CC BY 3.0 notice |
-| D15 | Monte Carlo model files (M4.1) | Open. A BPMN file with no process, whose BPSim scenario holds the inputs as parameters with their distributions and the outputs as `stochcraft:` vendor extensions (expressions, units, targets, correlations), so D1 holds; CSV import and export of the input table |
+| D15 | Monte Carlo model files (M4.1) | Settled (Helen, 2026-11-15): a BPMN file with no process, whose BPSim scenario holds the inputs as parameters with their distributions and the outputs as `stochcraft:` vendor extensions (expressions, units, targets, correlations), so D1 holds; CSV import and export of the input table |
 | D16 | Agent behaviour in files (M4.3) | Settled (Helen, 2026-11-15): each agent type's state chart is a W3C SCXML 1.0 document (Recommendation, 1 September 2015), referenced from the BPMN file by a `stochcraft:` vendor extension; populations, the environment and the links to blocks are `stochcraft:` extensions |
-| D17 | SCXML data model and timing (M4.3) | Open. SCXML lets a platform define its own data model (§5.1, Appendix B), and the Recommendation defines only the null and ECMAScript ones in full. Recommendation: a `stochcraft` data model using BPSim's XPath 1.0 subset (D6) for `cond`, `expr` and `location`, with SCXML's `In()`; random timeouts through `<send delayexpr>` calling the distribution functions, since `delay` itself is a fixed CSS2 time; no `<script>`. Other tools then read the charts' structure, but not our expressions |
+| D17 | SCXML data model and timing (M4.3) | Settled (Helen, 2026-11-15). SCXML lets a platform define its own data model (§5.1, Appendix B), and the Recommendation defines only the null and ECMAScript ones in full. So: a `stochcraft` data model using BPSim's XPath 1.0 subset (D6) for `cond`, `expr` and `location`, with SCXML's `In()`; random timeouts through `<send delayexpr>` calling the distribution functions, since `delay` itself is a fixed CSS2 time; no `<script>`. Other tools then read the charts' structure, but not our expressions |
 | D18 | Agent scheduling (M4.3) | Open. Event-driven on the `des` event list, with a stepped mode only for models written that way; events at the same time in a fixed order (time, then population, then agent id), and one random stream per population and purpose (to confirm) |
