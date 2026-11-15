@@ -39,7 +39,7 @@ fn an_agents_commands_show_in_the_window() {
         .control("run", json!({ "replications": 2 }))
         .expect("runs");
     assert_eq!(h.state().results(), Some(&results));
-    assert_eq!(h.state().status(), "Finished 2 replications");
+    assert_eq!(h.state().status(), "Finished 2 runs");
     h.run_steps(2);
     // The results are on screen.
     assert!(h.query_all_by_label("± 95% CI").count() >= 1);

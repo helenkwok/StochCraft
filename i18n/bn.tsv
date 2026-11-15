@@ -13,7 +13,7 @@
 
 @id	language.name	বাংলা
 	% down and up	% নিচে ও উপরে
-	% of replications	% পুনরাবৃত্তিতে
+	% of runs	% পুনরাবৃত্তিতে
 	+ Add block	+ ব্লক যোগ করুন
 	95% interval of the share meeting the target: {lo} to {hi}	লক্ষ্য পূরণকারী অংশের ৯৫% ব্যবধান: {lo} থেকে {hi}
 	95th percentile	৯৫তম শতাংশক
@@ -34,7 +34,7 @@
 	Add Pool	পুল যোগ করুন
 	Add a flow from…	প্রবাহ যোগ করুন (উৎস)…
 	Add a flow to…	প্রবাহ যোগ করুন (গন্তব্য)…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	পর্যাপ্ত পুনরাবৃত্তি লক্ষ্য পূরণ না করা পর্যন্ত সবচেয়ে ব্যস্ত কাজ বা পুলে একটি করে একক যোগ করুন। প্রতিটি সময় তার গড়ে রেখে পাওয়া উত্তরও দেখানো হয়; সেটি সাধারণত খুব ছোট।
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	পর্যাপ্ত পুনরাবৃত্তি লক্ষ্য পূরণ না করা পর্যন্ত সবচেয়ে ব্যস্ত কাজ বা পুলে একটি করে একক যোগ করুন। প্রতিটি সময় তার গড়ে রেখে পাওয়া উত্তরও দেখানো হয়; সেটি সাধারণত খুব ছোট।
 	Add alternative	বিকল্প যোগ করুন
 	Add calendar	ক্যালেন্ডার যোগ করুন
 	Add calendar entry	ক্যালেন্ডার এন্ট্রি যোগ করুন
@@ -169,12 +169,12 @@
 	Ends early	আগে শেষ হয়
 	Energy	শক্তি
 	Energy per part	প্রতি অংশে শক্তি
-	Enough: {units}, meeting the target in {p} of replications	যথেষ্ট: {units}, {p} পুনরাবৃত্তিতে লক্ষ্য পূরণ
+	Enough: {units}, meeting the target in {p} of runs	যথেষ্ট: {units}, {p} পুনরাবৃত্তিতে লক্ষ্য পূরণ
 	Enter a number	একটি সংখ্যা লিখুন
 	Entered	প্রবেশ করেছে
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	যে সত্তারা অপেক্ষার ঘর পূর্ণ পায় তারা সঙ্গে সঙ্গে এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে), হারিয়ে যাওয়া বা কাজের আগে অপেক্ষা করার বদলে; এখানে তাদের হারানো হিসেবে গোনা হয়।
 	Entities give up waiting	সত্তারা অপেক্ষা ছেড়ে দেয়
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	কোনো পুনরাবৃত্তির শেষে যেগুলো এখনও ভেতরে, সেগুলো গড় অপেক্ষার সময় ও সিস্টেমে গড় সময় থেকে বাদ থাকে।
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	কোনো পুনরাবৃত্তির শেষে যেগুলো এখনও ভেতরে, সেগুলো গড় অপেক্ষার সময় ও সিস্টেমে গড় সময় থেকে বাদ থাকে।
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	যে সত্তারা অপেক্ষা ছেড়ে দেয় তারা এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে); বাকিরা কাজের অন্য বেরোনোর পথ ধরে।
 	Erlang	এরলাং
 	Error	ত্রুটি
@@ -252,7 +252,7 @@
 	Maximum	সর্বাধিক
 	Mean	গড়
 	Mean number inside	ভেতরে গড় সংখ্যা
-	One replication of {n}: the results of the others differ.	{n}টির মধ্যে একটি পুনরাবৃত্তি: বাকিগুলোর ফলাফল ভিন্ন।
+	One run of {n}: the results of the others differ.	{n}টির মধ্যে একটি পুনরাবৃত্তি: বাকিগুলোর ফলাফল ভিন্ন।
 	Save as a new BPMN file?	নতুন BPMN ফাইল হিসেবে সংরক্ষণ করবেন?
 	Still inside at the end	শেষে এখনও ভেতরে
 	Mean work in progress	গড় প্রক্রিয়াধীন কাজ
@@ -284,7 +284,7 @@
 	No arrivals outside calendars	ক্যালেন্ডারের বাইরে কোনো আগমন নেই
 	No blocks yet. Open a model, or add blocks to build one.	এখনও কোনো ব্লক নেই। মডেল খুলুন, অথবা ব্লক যোগ করে একটি তৈরি করুন।
 	No connections yet: join blocks below.	এখনও কোনো সংযোগ নেই: নিচের ব্লকগুলো যুক্ত করুন।
-	No replication met the stop condition: each ran to its time limit.	কোনো পুনরাবৃত্তি থামার শর্তে পৌঁছায়নি: প্রতিটি তার সময়সীমা পর্যন্ত চলেছে।
+	No run met the stop condition: each ran to its time limit.	কোনো পুনরাবৃত্তি থামার শর্তে পৌঁছায়নি: প্রতিটি তার সময়সীমা পর্যন্ত চলেছে।
 	No results yet	এখনও কোনো ফলাফল নেই
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	এই মডেলে কোনো স্ক্র্যাপ বা পুনঃকাজ চিহ্নিত নেই, তাই OEE গুণমানকে ১০০% ধরে।
 	No target	কোনো লক্ষ্য নেই
@@ -386,11 +386,11 @@
 	Repair time	মেরামতের সময়
 	Repeats	পুনরাবৃত্তি
 	Replace Model	মডেল প্রতিস্থাপন
-	Replication 1 · {time} of {end} {unit}	পুনরাবৃত্তি 1 · {end} {unit}-এর মধ্যে {time}
-	Replication 1 · {time} of {end} {unit} · warm-up	পুনরাবৃত্তি 1 · {end} {unit}-এর মধ্যে {time} · প্রাথমিক প্রস্তুতিকাল
-	Replications	পুনরাবৃত্তি
-	Replications meeting the target	লক্ষ্য পূরণকারী পুনরাবৃত্তি
-	Replications that never met the stop condition count as later than their time limit.	যে পুনরাবৃত্তি কখনো থামার শর্তে পৌঁছায়নি, সেগুলি তাদের সময়সীমার পরের বলে গণ্য হয়।
+	Run 1 · {time} of {end} {unit}	পুনরাবৃত্তি 1 · {end} {unit}-এর মধ্যে {time}
+	Run 1 · {time} of {end} {unit} · warm-up	পুনরাবৃত্তি 1 · {end} {unit}-এর মধ্যে {time} · প্রাথমিক প্রস্তুতিকাল
+	Runs	পুনরাবৃত্তি
+	Runs meeting the target	লক্ষ্য পূরণকারী পুনরাবৃত্তি
+	Runs that never met the stop condition count as later than their time limit.	যে পুনরাবৃত্তি কখনো থামার শর্তে পৌঁছায়নি, সেগুলি তাদের সময়সীমার পরের বলে গণ্য হয়।
 	Resource pool	সম্পদ পুল
 	Resource pools	সম্পদ পুলসমূহ
 	Restore	পুনরুদ্ধার করুন
@@ -411,7 +411,7 @@
 	Run	চালান
 	Run cancelled	চালনা বাতিল করা হয়েছে
 	Run experiment	পরীক্ষা চালান
-	Run replication 1 step by step and see each block's queue on the diagram	পুনরাবৃত্তি 1 ধাপে ধাপে চালান এবং ডায়াগ্রামে প্রতিটি ব্লকের সারি দেখুন
+	Play run 1 step by step and see each block's queue on the diagram	পুনরাবৃত্তি 1 ধাপে ধাপে চালান এবং ডায়াগ্রামে প্রতিটি ব্লকের সারি দেখুন
 	Run the experiment ({shortcut})	পরীক্ষা চালান ({shortcut})
 	Run the experiment again to see this result's spread.	এই ফলাফলের বিস্তার দেখতে পরীক্ষাটি আবার চালান।
 	Run the experiment at each value of one parameter, and compare a result.	একটি প্যারামিটারের প্রতিটি মানে পরীক্ষা চালিয়ে একটি ফলাফল তুলনা করুন।
@@ -467,7 +467,7 @@
 	Split batches	ব্যাচ ভাগ করুন
 	Split or join	ভাগ বা একত্র করুন
 	Split or join (all ways)	ভাগ বা একত্র করুন (সব পথ)
-	Spread across replications	পুনরাবৃত্তিগুলির মধ্যে বিস্তার
+	Spread across runs	পুনরাবৃত্তিগুলির মধ্যে বিস্তার
 	Spread out	ছড়িয়ে দিন
 	Stages (k)	ধাপ (k)
 	Standard deviation	প্রমিত বিচ্যুতি
@@ -498,11 +498,11 @@
 	Text on header	শিরোনাম বারে টেক্সট
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	সংযোগ বিচ্ছিন্ন হয় এবং ক্লায়েন্ট আবার চেষ্টা করে: সত্তাটি সঙ্গে সঙ্গে সারির সামনে ফিরে যায়, আর তার ওপর করা কাজ নষ্ট হয়।
 	The entity waits on its server and the job carries on with what was left once the server is back.	সত্তাটি তার সার্ভারে অপেক্ষা করে, আর সার্ভার ফিরে এলে বাকি অংশ নিয়ে কাজ চলতে থাকে।
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ব্যবধানটি {share} লক্ষ্য অংশের নিচে নেমে যায়, তাই অংশটি ৯৫% আস্থায় পূরণ হয়েছে বলে দেখানো যায় না; আরও পুনরাবৃত্তি এটিকে সরু করবে।
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	ব্যবধানটি {share} লক্ষ্য অংশের নিচে নেমে যায়, তাই অংশটি ৯৫% আস্থায় পূরণ হয়েছে বলে দেখানো যায় না; আরও পুনরাবৃত্তি এটিকে সরু করবে।
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	কাজটি সঙ্গে সঙ্গে থেমে যায়: সত্তাটি শিফটে থাকা যেকোনো সার্ভারের জন্য সারির সামনে ফিরে যায়, আর তার ওপর করা কাজ নষ্ট হয়।
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	কাজটি সঙ্গে সঙ্গে থেমে যায়; সত্তাটি তার সার্ভারে অপেক্ষা করে, আর সেই সার্ভার আবার শিফটে এলে বাকি অংশ নিয়ে কাজ চলতে থাকে।
 	The last task with a resource it finished at	শেষ যে সম্পদসহ কাজ অংশটি পার হয়েছে
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	থামার শর্ত পর্যন্ত গড় সময় কেবল সেই পুনরাবৃত্তিগুলোর উপর যেগুলো শর্তে পৌঁছেছে; বাকিগুলো তাদের সময়সীমা পর্যন্ত চলেছে।
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	থামার শর্ত পর্যন্ত গড় সময় কেবল সেই পুনরাবৃত্তিগুলোর উপর যেগুলো শর্তে পৌঁছেছে; বাকিগুলো তাদের সময়সীমা পর্যন্ত চলেছে।
 	The model changed, so watching stopped	মডেল বদলেছে, তাই দেখা বন্ধ হয়েছে
 	The model has no calendars yet.	মডেলে এখনও কোনো ক্যালেন্ডার নেই।
 	The model now has the units sizing found	মডেলে এখন আকার নির্ধারণে পাওয়া এককগুলি আছে
@@ -510,7 +510,7 @@
 	The name is empty or already used.	নামটি খালি বা আগেই ব্যবহৃত।
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	পুনরাবৃত্তিগুলি দুটি পরিণতিতে বিভক্ত: {n}টির মধ্যে {a}টি একটিতে, {b}টি অন্যটিতে। {count}টি ফলাফল একইভাবে বিভক্ত, তার মধ্যে {result} ({element}); নিচের সারণিটি দেখুন।
 	The server finishes the job it has, then goes off; until then it counts as on shift.	সার্ভারটি হাতের কাজটি শেষ করে, তারপর শিফট থেকে চলে যায়; ততক্ষণ সেটিকে শিফটে আছে বলে গণ্য করা হয়।
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	প্রতিটি মানের সমান বা কম পুনরাবৃত্তির অংশ। ব্যান্ডটি {confidence} আস্থায় প্রকৃত বণ্টন ধারণ করে।
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	প্রতিটি মানের সমান বা কম পুনরাবৃত্তির অংশ। ব্যান্ডটি {confidence} আস্থায় প্রকৃত বণ্টন ধারণ করে।
 	The values are numbers, separated by semicolons or spaces	মানগুলি সেমিকোলন বা স্পেস দিয়ে আলাদা সংখ্যা
 	The whole clock	পুরো সময়
 	Themes	থিম
@@ -578,7 +578,7 @@
 	Warning	সতর্কতা
 	Watch a Run	একটি রান দেখুন
 	Watch a run	একটি রান দেখুন
-	Watching replication 1	পুনরাবৃত্তি 1 দেখা হচ্ছে
+	Watching run 1	পুনরাবৃত্তি 1 দেখা হচ্ছে
 	Weak text	ম্লান টেক্সট
 	Weak text on header	শিরোনাম বারে ম্লান টেক্সট
 	Wed	বুধ
@@ -614,7 +614,7 @@
 	maximum {value}	সর্বোচ্চ {value}
 	milliseconds	মিলিসেকেন্ড
 	minutes	মিনিট
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N-টির মধ্যে k-টি: N-টি পুনরাবৃত্তির মধ্যে কেবল k-টিতে সেই ফলাফলের মান ছিল, এবং এর গড় ও ব্যবধান সেই k-টির উপর।
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N-টির মধ্যে k-টি: N-টি পুনরাবৃত্তির মধ্যে কেবল k-টিতে সেই ফলাফলের মান ছিল, এবং এর গড় ও ব্যবধান সেই k-টির উপর।
 	n = {k} of {n}	n = {n}টির মধ্যে {k}টি
 	nothing yet	এখনও কিছু নেই
 	per day	প্রতি দিনে
@@ -650,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ও {second}-এর হালকাভাবের পার্থক্য {step}, প্রয়োজন 0.06।
 	{id}: a probability is a number from 0 to 1	{id}: সম্ভাবনা 0 থেকে 1-এর মধ্যে একটি সংখ্যা
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of}টির মধ্যে {met}টি পুনরাবৃত্তি লক্ষ্য পূরণ করেছে: {p} (৯৫% ব্যবধান {lo} থেকে {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of}টির মধ্যে {met}টি পুনরাবৃত্তি লক্ষ্য পূরণ করেছে: {p} (৯৫% ব্যবধান {lo} থেকে {hi})
 	{name} — edited	{name} — সম্পাদিত
 	{n} created	{n} তৈরি
 	{n} done	{n} সম্পন্ন
@@ -664,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: এখন {now}, সর্বোচ্চ {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% আস্থা ব্যবধান
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± হলো পুনরাবৃত্তিগুলো জুড়ে গড়ের 95% Student-t আস্থা ব্যবধানের অর্ধ-প্রস্থ।
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± হলো পুনরাবৃত্তিগুলো জুড়ে গড়ের 95% Student-t আস্থা ব্যবধানের অর্ধ-প্রস্থ।
 	· no results yet	· এখনও কোনো ফলাফল নেই
 unit	d	দিন
 unit	h	h
@@ -674,16 +674,16 @@ unit	s	s
 unit	yr	বছর
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
-@plural	Finished {n} replication|Finished {n} replications	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে
+@plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} খোলা হয়েছে ({n}টি সতর্কতা)|{file} খোলা হয়েছে ({n}টি সতর্কতা)
 @plural	Removed {n} block|Removed {n} blocks	{n}টি ব্লক সরানো হয়েছে|{n}টি ব্লক সরানো হয়েছে
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি উপাদানের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।|বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি উপাদানের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	থামার শর্ত {n}টির মধ্যে {met}টি পুনরাবৃত্তিতে, গড়ে {time} {unit} পরে পূরণ হয়েছে।|থামার শর্ত {n}টির মধ্যে {met}টি পুনরাবৃত্তিতে, গড়ে {time} {unit} পরে পূরণ হয়েছে।
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}টির মধ্যে {done}টি পুনরাবৃত্তি সম্পন্ন|{n}টির মধ্যে {done}টি পুনরাবৃত্তি সম্পন্ন
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% ব্যবধান {low} থেকে {high}{unit}\n{n}টি পুনরাবৃত্তিতে|{name}: {mean}{unit}\n95% ব্যবধান {low} থেকে {high}{unit}\n{n}টি পুনরাবৃত্তিতে
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি উপাদানের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।|বীজ {seed} থেকে মডেলের {n}টি স্বাধীন পুনরাবৃত্তি চালায়। প্রতিটি উপাদানের ফলে 95% আস্থা ব্যবধানের অর্ধপ্রস্থ দেওয়া হয়।
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	থামার শর্ত {n}টির মধ্যে {met}টি পুনরাবৃত্তিতে, গড়ে {time} {unit} পরে পূরণ হয়েছে।|থামার শর্ত {n}টির মধ্যে {met}টি পুনরাবৃত্তিতে, গড়ে {time} {unit} পরে পূরণ হয়েছে।
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{n}টির মধ্যে {done}টি পুনরাবৃত্তি সম্পন্ন|{n}টির মধ্যে {done}টি পুনরাবৃত্তি সম্পন্ন
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% ব্যবধান {low} থেকে {high}{unit}\n{n}টি পুনরাবৃত্তিতে|{name}: {mean}{unit}\n95% ব্যবধান {low} থেকে {high}{unit}\n{n}টি পুনরাবৃত্তিতে
 @plural	{n} block selected|{n} blocks selected	{n}টি ব্লক নির্বাচিত|{n}টি ব্লক নির্বাচিত
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	প্রতি ধাপে {n}টি পুনরাবৃত্তি · বীজ {seed}|প্রতি ধাপে {n}টি পুনরাবৃত্তি · বীজ {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n}টি পুনরাবৃত্তি · গড় {mean} · {min} থেকে {max}|{n}টি পুনরাবৃত্তি · গড় {mean} · {min} থেকে {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n}টি পুনরাবৃত্তি · বীজ {seed} · প্রস্তুতিকাল {warmup} {unit} · পরিমাপ {duration} {unit}|{n}টি পুনরাবৃত্তি · বীজ {seed} · প্রস্তুতিকাল {warmup} {unit} · পরিমাপ {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n}টি পুনরাবৃত্তি · বীজ {seed}|{n}টি পুনরাবৃত্তি · বীজ {seed}
-@plural	{n} replication|{n} replications	{n}টি পুনরাবৃত্তি|{n}টি পুনরাবৃত্তি
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	প্রতি ধাপে {n}টি পুনরাবৃত্তি · বীজ {seed}|প্রতি ধাপে {n}টি পুনরাবৃত্তি · বীজ {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n}টি পুনরাবৃত্তি · গড় {mean} · {min} থেকে {max}|{n}টি পুনরাবৃত্তি · গড় {mean} · {min} থেকে {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n}টি পুনরাবৃত্তি · বীজ {seed} · প্রস্তুতিকাল {warmup} {unit} · পরিমাপ {duration} {unit}|{n}টি পুনরাবৃত্তি · বীজ {seed} · প্রস্তুতিকাল {warmup} {unit} · পরিমাপ {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n}টি পুনরাবৃত্তি · বীজ {seed}|{n}টি পুনরাবৃত্তি · বীজ {seed}
+@plural	{n} run|{n} runs	{n}টি পুনরাবৃত্তি|{n}টি পুনরাবৃত্তি

@@ -13,7 +13,7 @@
 
 @id	language.name	Tiếng Việt
 	% down and up	% xuống và lên
-	% of replications	% số lần lặp
+	% of runs	% số lần lặp
 	+ Add block	+ Thêm khối
 	95% interval of the share meeting the target: {lo} to {hi}	Khoảng 95% của tỷ lệ đạt mục tiêu: từ {lo} đến {hi}
 	95th percentile	Phân vị thứ 95
@@ -34,7 +34,7 @@
 	Add Pool	Thêm nhóm
 	Add a flow from…	Thêm luồng từ…
 	Add a flow to…	Thêm luồng đến…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Thêm một đơn vị vào tác vụ hoặc nhóm bận nhất cho đến khi đủ số lần lặp đạt mục tiêu. Câu trả lời khi mọi thời gian bằng giá trị trung bình cũng được hiển thị; nó thường quá nhỏ.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Thêm một đơn vị vào tác vụ hoặc nhóm bận nhất cho đến khi đủ số lần lặp đạt mục tiêu. Câu trả lời khi mọi thời gian bằng giá trị trung bình cũng được hiển thị; nó thường quá nhỏ.
 	Add alternative	Thêm phương án
 	Add calendar	Thêm lịch
 	Add calendar entry	Thêm mục lịch
@@ -169,12 +169,12 @@
 	Ends early	Kết thúc sớm
 	Energy	Năng lượng
 	Energy per part	Năng lượng trên mỗi chi tiết
-	Enough: {units}, meeting the target in {p} of replications	Đủ: {units}, đạt mục tiêu trong {p} số lần lặp
+	Enough: {units}, meeting the target in {p} of runs	Đủ: {units}, đạt mục tiêu trong {p} số lần lặp
 	Enter a number	Nhập một số
 	Entered	Đã vào
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Các thực thể thấy khu vực chờ đầy sẽ đi theo luồng này ngay (chẳng hạn để thử lại sau), thay vì bị mất hoặc chờ trước tác vụ; ở đây chúng được tính là bị mất.
 	Entities give up waiting	Thực thể bỏ đi khi chờ quá lâu
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Các thực thể vẫn còn bên trong lúc một lần lặp kết thúc không được tính vào thời gian chờ trung bình và thời gian trung bình trong hệ thống.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Các thực thể vẫn còn bên trong lúc một lần lặp kết thúc không được tính vào thời gian chờ trung bình và thời gian trung bình trong hệ thống.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Các thực thể bỏ đi khi chờ đi theo luồng này (chẳng hạn để thử lại sau); các thực thể khác đi theo lối ra còn lại của tác vụ.
 	Erlang	Erlang
 	Error	Lỗi
@@ -252,7 +252,7 @@
 	Maximum	Giá trị lớn nhất
 	Mean	Trung bình
 	Mean number inside	Số lượng trung bình bên trong
-	One replication of {n}: the results of the others differ.	Một lần lặp trong {n}: kết quả của các lần khác sẽ khác.
+	One run of {n}: the results of the others differ.	Một lần lặp trong {n}: kết quả của các lần khác sẽ khác.
 	Save as a new BPMN file?	Lưu thành tệp BPMN mới?
 	Still inside at the end	Vẫn còn bên trong lúc kết thúc
 	Mean work in progress	Sản phẩm dở dang trung bình
@@ -284,7 +284,7 @@
 	No arrivals outside calendars	Không có lượt đến ngoài các lịch
 	No blocks yet. Open a model, or add blocks to build one.	Chưa có khối nào. Hãy mở một mô hình hoặc thêm các khối để tạo mô hình.
 	No connections yet: join blocks below.	Chưa có kết nối: hãy nối các khối bên dưới.
-	No replication met the stop condition: each ran to its time limit.	Không lần lặp nào đạt điều kiện dừng: mỗi lần đều chạy đến giới hạn thời gian.
+	No run met the stop condition: each ran to its time limit.	Không lần lặp nào đạt điều kiện dừng: mỗi lần đều chạy đến giới hạn thời gian.
 	No results yet	Chưa có kết quả
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Mô hình này không đánh dấu phế phẩm hay làm lại nào, nên OEE tính chất lượng là 100%.
 	No target	Không có mục tiêu
@@ -386,11 +386,11 @@
 	Repair time	Thời gian sửa chữa
 	Repeats	Lặp lại
 	Replace Model	Thay thế mô hình
-	Replication 1 · {time} of {end} {unit}	Lần lặp 1 · {time} / {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Lần lặp 1 · {time} / {end} {unit} · khởi động
-	Replications	Số lần lặp
-	Replications meeting the target	Số lần lặp đạt mục tiêu
-	Replications that never met the stop condition count as later than their time limit.	Các lần lặp chưa bao giờ đạt điều kiện dừng được tính là muộn hơn giới hạn thời gian của chúng.
+	Run 1 · {time} of {end} {unit}	Lần lặp 1 · {time} / {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Lần lặp 1 · {time} / {end} {unit} · khởi động
+	Runs	Số lần lặp
+	Runs meeting the target	Số lần lặp đạt mục tiêu
+	Runs that never met the stop condition count as later than their time limit.	Các lần lặp chưa bao giờ đạt điều kiện dừng được tính là muộn hơn giới hạn thời gian của chúng.
 	Resource pool	Nhóm tài nguyên
 	Resource pools	Các nhóm tài nguyên
 	Restore	Khôi phục cửa sổ
@@ -411,7 +411,7 @@
 	Run	Chạy
 	Run cancelled	Đã hủy chạy
 	Run experiment	Chạy thí nghiệm
-	Run replication 1 step by step and see each block's queue on the diagram	Chạy lần lặp 1 từng bước và xem hàng đợi của mỗi khối trên sơ đồ
+	Play run 1 step by step and see each block's queue on the diagram	Chạy lần lặp 1 từng bước và xem hàng đợi của mỗi khối trên sơ đồ
 	Run the experiment ({shortcut})	Chạy thí nghiệm ({shortcut})
 	Run the experiment again to see this result's spread.	Hãy chạy lại thí nghiệm để xem độ phân tán của kết quả này.
 	Run the experiment at each value of one parameter, and compare a result.	Chạy thí nghiệm với từng giá trị của một tham số và so sánh một kết quả.
@@ -467,7 +467,7 @@
 	Split batches	Tách lô
 	Split or join	Tách hoặc gộp
 	Split or join (all ways)	Tách hoặc gộp (mọi hướng)
-	Spread across replications	Độ phân tán giữa các lần lặp
+	Spread across runs	Độ phân tán giữa các lần lặp
 	Spread out	Dàn đều
 	Stages (k)	Số giai đoạn (k)
 	Standard deviation	Độ lệch chuẩn
@@ -498,11 +498,11 @@
 	Text on header	Văn bản trên thanh tiêu đề
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Kết nối bị ngắt và máy khách thử lại: thực thể quay lại ngay đầu hàng đợi, và công việc đã làm cho nó bị lãng phí.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Thực thể chờ tại máy chủ của nó và công việc tiếp tục với phần còn lại khi máy chủ quay lại.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Khoảng này xuống dưới tỷ lệ mục tiêu {share}, nên chưa cho thấy với độ tin cậy 95% rằng tỷ lệ đạt được; thêm lần lặp sẽ thu hẹp nó.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Khoảng này xuống dưới tỷ lệ mục tiêu {share}, nên chưa cho thấy với độ tin cậy 95% rằng tỷ lệ đạt được; thêm lần lặp sẽ thu hẹp nó.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Công việc dừng ngay: thực thể quay lại đầu hàng đợi cho bất kỳ máy chủ nào trong ca, và công việc đã làm cho nó bị lãng phí.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Công việc dừng ngay; thực thể chờ tại máy chủ của nó và công việc tiếp tục với phần còn lại khi máy chủ đó vào ca trở lại.
 	The last task with a resource it finished at	Tác vụ có tài nguyên cuối cùng mà chi tiết đã đi qua
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Thời gian trung bình đến điều kiện dừng chỉ tính trên các lần lặp đạt điều kiện đó; các lần khác chạy đến giới hạn thời gian.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Thời gian trung bình đến điều kiện dừng chỉ tính trên các lần lặp đạt điều kiện đó; các lần khác chạy đến giới hạn thời gian.
 	The model changed, so watching stopped	Mô hình đã thay đổi nên việc theo dõi đã dừng
 	The model has no calendars yet.	Mô hình chưa có lịch nào.
 	The model now has the units sizing found	Mô hình giờ có số đơn vị mà việc định cỡ tìm được
@@ -510,7 +510,7 @@
 	The name is empty or already used.	Tên đang trống hoặc đã được dùng.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Các lần lặp tách thành hai kết cục: {a} trên {n} ở một bên, {b} ở bên kia. {count} kết quả tách theo cùng cách, trong đó có {result} ({element}); xem bảng bên dưới.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Máy chủ làm xong công việc đang có rồi mới hết ca; cho đến lúc đó nó vẫn được tính là trong ca.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Tỷ lệ lần lặp bằng hoặc dưới mỗi giá trị. Dải chứa phân phối thật với độ tin cậy {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Tỷ lệ lần lặp bằng hoặc dưới mỗi giá trị. Dải chứa phân phối thật với độ tin cậy {confidence}.
 	The values are numbers, separated by semicolons or spaces	Các giá trị là số, phân tách bằng dấu chấm phẩy hoặc dấu cách
 	The whole clock	Toàn bộ thời gian
 	Themes	Chủ đề
@@ -578,7 +578,7 @@
 	Warning	Cảnh báo
 	Watch a Run	Theo dõi một lần chạy
 	Watch a run	Theo dõi một lần chạy
-	Watching replication 1	Đang theo dõi lần lặp 1
+	Watching run 1	Đang theo dõi lần lặp 1
 	Weak text	Văn bản mờ
 	Weak text on header	Văn bản mờ trên thanh tiêu đề
 	Wed	T4
@@ -614,7 +614,7 @@
 	maximum {value}	lớn nhất {value}
 	milliseconds	mili giây
 	minutes	phút
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k trên N: chỉ k trong N lần lặp có giá trị cho kết quả đó, và giá trị trung bình cùng khoảng của nó tính trên k lần đó.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k trên N: chỉ k trong N lần lặp có giá trị cho kết quả đó, và giá trị trung bình cùng khoảng của nó tính trên k lần đó.
 	n = {k} of {n}	n = {k} trên {n}
 	nothing yet	chưa có gì
 	per day	mỗi ngày
@@ -650,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} và {second} khác nhau về độ sáng {step}, cần 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: xác suất là số từ 0 đến 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} trên {of} lần lặp đạt mục tiêu: {p} (khoảng 95% từ {lo} đến {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} trên {of} lần lặp đạt mục tiêu: {p} (khoảng 95% từ {lo} đến {hi})
 	{name} — edited	{name} — đã chỉnh sửa
 	{n} created	{n} đã tạo
 	{n} done	{n} đã xong
@@ -664,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: hiện tại {now}, tối đa {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± KTC 95%
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± là một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần lặp.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± là một nửa độ rộng của khoảng tin cậy Student-t 95% cho giá trị trung bình qua các lần lặp.
 	· no results yet	· chưa có kết quả
 unit	d	ngày
 unit	h	giờ
@@ -674,16 +674,16 @@ unit	s	s
 unit	yr	năm
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
-@plural	Finished {n} replication|Finished {n} replications	Đã hoàn thành {n} lần lặp
+@plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần lặp
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Đã mở {file} ({n} cảnh báo)
 @plural	Removed {n} block|Removed {n} blocks	Đã xóa {n} khối
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Chạy {n} lần lặp độc lập của mô hình từ hạt giống {seed}. Kết quả của mỗi phần tử kèm nửa độ rộng khoảng tin cậy 95%.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Điều kiện dừng đạt được trong {met} trên {n} lần lặp, trung bình sau {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	Đã hoàn thành {done}/{n} lần lặp
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nKhoảng 95% từ {low} đến {high}{unit}\nqua {n} lần lặp
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Chạy {n} lần lặp độc lập của mô hình từ hạt giống {seed}. Kết quả của mỗi phần tử kèm nửa độ rộng khoảng tin cậy 95%.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Điều kiện dừng đạt được trong {met} trên {n} lần lặp, trung bình sau {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Đã hoàn thành {done}/{n} lần lặp
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nKhoảng 95% từ {low} đến {high}{unit}\nqua {n} lần lặp
 @plural	{n} block selected|{n} blocks selected	Đã chọn {n} khối
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} lần lặp mỗi bước · hạt giống {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} lần lặp · trung bình {mean} · từ {min} đến {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} lần lặp · hạt giống {seed} · khởi động {warmup} {unit} · đo {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} lần lặp · hạt giống {seed}
-@plural	{n} replication|{n} replications	{n} lần lặp
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} lần lặp mỗi bước · hạt giống {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} lần lặp · trung bình {mean} · từ {min} đến {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} lần lặp · hạt giống {seed} · khởi động {warmup} {unit} · đo {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} lần lặp · hạt giống {seed}
+@plural	{n} run|{n} runs	{n} lần lặp

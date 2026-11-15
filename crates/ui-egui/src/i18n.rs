@@ -165,10 +165,7 @@ mod tests {
             tf("Opened {file}", &[("file", "mm1.bpmn")]),
             "Opened mm1.bpmn"
         );
-        assert_eq!(
-            tn(1, "{n} replication", "{n} replications"),
-            "1 replication"
-        );
+        assert_eq!(tn(1, "{n} run", "{n} runs"), "1 run");
         assert_eq!(languages().first().map(|l| l.0), Some(Lang::EN));
     }
 

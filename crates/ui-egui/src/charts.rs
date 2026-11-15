@@ -278,8 +278,8 @@ fn chart(ui: &mut egui::Ui, m: &Measure, bars: &[Bar], unit: &str, width: f32) {
         if hover {
             let tip = tnf(
                 b.n,
-                "{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication",
-                "{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications",
+                "{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run",
+                "{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs",
                 &[
                     ("name", &b.name),
                     ("mean", &grouped(b.mean)),

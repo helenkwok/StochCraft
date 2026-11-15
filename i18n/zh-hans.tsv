@@ -13,7 +13,7 @@
 
 @id	language.name	简体中文
 	% down and up	% 上下
-	% of replications	% 的重复运行
+	% of runs	% 的重复运行
 	+ Add block	+ 添加区块
 	95% interval of the share meeting the target: {lo} to {hi}	达到目标的比例的 95% 区间：{lo} 至 {hi}
 	95th percentile	第 95 百分位数
@@ -34,7 +34,7 @@
 	Add Pool	添加资源池
 	Add a flow from…	添加顺序流，来自…
 	Add a flow to…	添加顺序流，通往…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	在最繁忙的任务或资源池上逐个增加单位，直到足够多的重复运行达到目标。同时显示所有时间取均值时的答案；它通常偏小。
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	在最繁忙的任务或资源池上逐个增加单位，直到足够多的重复运行达到目标。同时显示所有时间取均值时的答案；它通常偏小。
 	Add alternative	添加备选方案
 	Add calendar	添加日历
 	Add calendar entry	添加日历条目
@@ -169,12 +169,12 @@
 	Ends early	提前结束
 	Energy	能耗
 	Energy per part	单件能耗
-	Enough: {units}, meeting the target in {p} of replications	足够：{units}，{p} 的重复运行达到目标
+	Enough: {units}, meeting the target in {p} of runs	足够：{units}，{p} 的重复运行达到目标
 	Enter a number	请输入数字
 	Entered	进入数
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	发现等待区已满的实体立即走此顺序流（例如稍后重试），而不是流失或在任务前等待；此处计为流失。
 	Entities give up waiting	实体会放弃等待
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	重复运行结束时仍在内部的实体不计入平均等待时间和系统内平均时间。
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	重复运行结束时仍在内部的实体不计入平均等待时间和系统内平均时间。
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	放弃等待的实体走此顺序流（例如稍后重试）；其他实体走任务的另一个出口。
 	Erlang	埃尔朗分布
 	Error	错误
@@ -252,7 +252,7 @@
 	Maximum	最大值
 	Mean	均值
 	Mean number inside	内部平均数量
-	One replication of {n}: the results of the others differ.	{n} 次中的一次重复运行：其他重复运行的结果不同。
+	One run of {n}: the results of the others differ.	{n} 次中的一次重复运行：其他重复运行的结果不同。
 	Save as a new BPMN file?	另存为新的 BPMN 文件？
 	Still inside at the end	结束时仍在内部的数量
 	Mean work in progress	平均在制品数
@@ -284,7 +284,7 @@
 	No arrivals outside calendars	日历外无到达
 	No blocks yet. Open a model, or add blocks to build one.	尚无区块。请打开模型，或添加区块来构建模型。
 	No connections yet: join blocks below.	尚无连接：请在下方连接区块。
-	No replication met the stop condition: each ran to its time limit.	没有重复运行达到停止条件：每次都运行到时间上限。
+	No run met the stop condition: each ran to its time limit.	没有重复运行达到停止条件：每次都运行到时间上限。
 	No results yet	尚无结果
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	此模型中未标记废品或返工，因此 OEE 将质量计为 100%。
 	No target	无目标
@@ -386,11 +386,11 @@
 	Repair time	维修时间
 	Repeats	重复
 	Replace Model	替换模型
-	Replication 1 · {time} of {end} {unit}	第 1 次重复运行 · {time} / {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	第 1 次重复运行 · {time} / {end} {unit} · 预热期
-	Replications	重复运行次数
-	Replications meeting the target	达到目标的重复运行
-	Replications that never met the stop condition count as later than their time limit.	从未达到停止条件的重复运行按晚于其时间上限计。
+	Run 1 · {time} of {end} {unit}	第 1 次重复运行 · {time} / {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	第 1 次重复运行 · {time} / {end} {unit} · 预热期
+	Runs	重复运行次数
+	Runs meeting the target	达到目标的重复运行
+	Runs that never met the stop condition count as later than their time limit.	从未达到停止条件的重复运行按晚于其时间上限计。
 	Resource pool	资源池
 	Resource pools	资源池
 	Restore	还原
@@ -411,7 +411,7 @@
 	Run	运行
 	Run cancelled	运行已取消
 	Run experiment	运行实验
-	Run replication 1 step by step and see each block's queue on the diagram	逐步执行第 1 次重复运行，并在图表上查看每个区块的队列
+	Play run 1 step by step and see each block's queue on the diagram	逐步执行第 1 次重复运行，并在图表上查看每个区块的队列
 	Run the experiment ({shortcut})	运行实验 ({shortcut})
 	Run the experiment again to see this result's spread.	请再次运行实验以查看此结果的离散情况。
 	Run the experiment at each value of one parameter, and compare a result.	在一个参数的每个取值下运行实验，并比较一个结果。
@@ -467,7 +467,7 @@
 	Split batches	拆分批次
 	Split or join	拆分或合并
 	Split or join (all ways)	拆分或合并（所有路径）
-	Spread across replications	各次重复运行间的离散
+	Spread across runs	各次重复运行间的离散
 	Spread out	均匀分布
 	Stages (k)	阶段数 (k)
 	Standard deviation	标准差
@@ -498,11 +498,11 @@
 	Text on header	顶栏文本
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	连接断开，客户端重试：实体立即回到队列最前面，已对其完成的工作被浪费。
 	The entity waits on its server and the job carries on with what was left once the server is back.	实体在其服务器上等待，服务器恢复后作业从剩余部分继续。
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	该区间低于目标比例 {share}，因此未能以 95% 的置信度表明达到了该比例；更多的重复运行会使区间变窄。
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	该区间低于目标比例 {share}，因此未能以 95% 的置信度表明达到了该比例；更多的重复运行会使区间变窄。
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	作业立即停止：实体回到队列最前面，等待任一当班服务器，已对其完成的工作被浪费。
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	作业立即停止；实体在其服务器上等待，该服务器重新当班后作业从剩余部分继续。
 	The last task with a resource it finished at	最后经过的需要资源的任务
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	到停止条件的平均时间只基于达到停止条件的重复运行；其余的运行到了时间上限。
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	到停止条件的平均时间只基于达到停止条件的重复运行；其余的运行到了时间上限。
 	The model changed, so watching stopped	模型已更改，因此已停止观察
 	The model has no calendars yet.	模型还没有日历。
 	The model now has the units sizing found	模型现在使用规模确定得出的数量
@@ -510,7 +510,7 @@
 	The name is empty or already used.	名称为空或已被使用。
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	重复运行分成两种结果：{n} 次中 {a} 次属于一种，{b} 次属于另一种。有 {count} 个结果以同样方式分开，其中包括 {result}（{element}）；请查看下方的表格。
 	The server finishes the job it has, then goes off; until then it counts as on shift.	服务器完成手头的作业后下班；在此之前仍算当班。
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超过各值的重复运行比例。色带以 {confidence} 的置信度包含真实分布。
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	取值不超过各值的重复运行比例。色带以 {confidence} 的置信度包含真实分布。
 	The values are numbers, separated by semicolons or spaces	值应为用分号或空格分隔的数字
 	The whole clock	全部时间
 	Themes	主题
@@ -578,7 +578,7 @@
 	Warning	警告
 	Watch a Run	观察运行
 	Watch a run	观察运行
-	Watching replication 1	正在观察第 1 次重复运行
+	Watching run 1	正在观察第 1 次重复运行
 	Weak text	弱化文本
 	Weak text on header	顶栏弱化文本
 	Wed	周三
@@ -614,7 +614,7 @@
 	maximum {value}	最大值 {value}
 	milliseconds	毫秒
 	minutes	分钟
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N 次中的 k 次：N 次重复运行中只有 k 次有该结果的值，其平均值和区间基于这 k 次。
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N 次中的 k 次：N 次重复运行中只有 k 次有该结果的值，其平均值和区间基于这 k 次。
 	n = {k} of {n}	n = {n} 次中的 {k} 次
 	nothing yet	尚无内容
 	per day	每天
@@ -650,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}与{second}的明度相差 {step}，需要 0.06。
 	{id}: a probability is a number from 0 to 1	{id}：概率必须是 0 到 1 之间的数字
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} 次重复运行中有 {met} 次达到目标：{p}（95% 区间 {lo} 至 {hi}）
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} 次重复运行中有 {met} 次达到目标：{p}（95% 区间 {lo} 至 {hi}）
 	{name} — edited	{name} — 已编辑
 	{n} created	已创建 {n}
 	{n} done	已完成 {n}
@@ -664,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}：当前 {now}，最多 {most}
 	{word}: {message}	{word}：{message}
 	± 95% CI	± 95% 置信区间
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± 表示各次重复运行均值的 95% Student-t 置信区间的半宽。
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± 表示各次重复运行均值的 95% Student-t 置信区间的半宽。
 	· no results yet	· 尚无结果
 unit	d	天
 unit	h	小时
@@ -674,16 +674,16 @@ unit	s	秒
 unit	yr	年
 @plural	Added {n} block|Added {n} blocks	已添加 {n} 个区块
 @plural	Copied {n} block|Copied {n} blocks	已复制 {n} 个区块
-@plural	Finished {n} replication|Finished {n} replications	已完成 {n} 次重复运行
+@plural	Finished {n} run|Finished {n} runs	已完成 {n} 次重复运行
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	已打开 {file}（{n} 条警告）
 @plural	Removed {n} block|Removed {n} blocks	已移除 {n} 个区块
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	从随机种子 {seed} 开始，对模型进行 {n} 次独立重复运行。每个元素的结果都包含 95% 置信区间的半宽。
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	{n} 次重复运行中有 {met} 次达到停止条件，平均用时 {time} {unit}。
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	已完成 {done}/{n} 次重复运行
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}：{mean}{unit}\n95% 区间：{low} 至 {high}{unit}\n基于 {n} 次重复运行
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	从随机种子 {seed} 开始，对模型进行 {n} 次独立重复运行。每个元素的结果都包含 95% 置信区间的半宽。
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	{n} 次重复运行中有 {met} 次达到停止条件，平均用时 {time} {unit}。
+@plural	{done} of {n} run finished|{done} of {n} runs finished	已完成 {done}/{n} 次重复运行
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}：{mean}{unit}\n95% 区间：{low} 至 {high}{unit}\n基于 {n} 次重复运行
 @plural	{n} block selected|{n} blocks selected	已选择 {n} 个区块
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	每步 {n} 次重复运行 · 种子 {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} 次重复运行 · 均值 {mean} · {min} 至 {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 次重复运行 · 随机种子 {seed} · 预热 {warmup} {unit} · 测量 {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} 次重复运行 · 随机种子 {seed}
-@plural	{n} replication|{n} replications	{n} 次重复运行
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	每步 {n} 次重复运行 · 种子 {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} 次重复运行 · 均值 {mean} · {min} 至 {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 次重复运行 · 随机种子 {seed} · 预热 {warmup} {unit} · 测量 {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} 次重复运行 · 随机种子 {seed}
+@plural	{n} run|{n} runs	{n} 次重复运行
