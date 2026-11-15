@@ -1207,7 +1207,7 @@ id since #152; before that the same search stopped at 6 ovens.)
   fastest, as `itertools.product` does. Each factor's **main effect** is the mean of a result at
   its highest level minus at its lowest, over the other factors' levels. For factors with two
   levels, each pair's **two-way interaction** is Law's e12 for a 2^k design (*Simulation
-  Modeling and Analysis*, 5th ed., section 12.2): half the change in one factor's effect between
+  Modeling and Analysis*, 5th ed., chapter 12): half the change in one factor's effect between
   the other's two levels.
 - **Latin hypercube** (McKay, Beckman and Conover, *Technometrics* 21(2), 1979): `points`
   points, each factor's range cut into that many strata, each used once. Each factor draws its

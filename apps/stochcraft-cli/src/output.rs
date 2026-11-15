@@ -255,7 +255,8 @@ pub fn design_table(name: &str, d: &Value) -> String {
     if let Some(corr) = d["correlations"].as_array().filter(|c| !c.is_empty()) {
         let _ = writeln!(
             out,
-            "\nrank (Spearman) correlations across the points, from −1 to 1"
+            "\nrank (Spearman) correlations across the points, from −1 to 1; with few points one \
+             factor's effect can hide another's, so a value near 0 does not show no effect"
         );
         let mut rows = vec![
             ["factor", "result", "spearman", "n"]

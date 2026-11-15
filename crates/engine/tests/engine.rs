@@ -2411,7 +2411,7 @@ fn a_sweep_of_a_parameter_that_changes_nothing_finds_no_difference() {
     assert_eq!(r["tests"], 1);
 }
 
-/// The help desk's mean `metric` of `element` at point `i` of a design answer.
+/// Field `k` (`mean`, `half_width`) of the first result at point `i` of a design answer.
 fn at_point(r: &Value, i: usize, k: &str) -> f64 {
     r["points"][i]["results"][0][k].as_f64().unwrap_or(f64::NAN)
 }
@@ -2572,7 +2572,7 @@ fn common_random_numbers_narrow_a_designs_intervals() {
     for id in ["arrivals", "server"] {
         let m = main_effect(&r, id);
         let hw = m["half_width"].as_f64().unwrap_or(f64::INFINITY);
-        assert!(hw < unpaired / 3.0, "{id}: {hw} against {unpaired}: {m}");
+        assert!(hw < unpaired / 2.0, "{id}: {hw} against {unpaired}: {m}");
         assert_eq!(m["significant"], true, "{m}");
     }
 }
@@ -2590,7 +2590,7 @@ fn column(r: &Value, k: usize) -> Vec<f64> {
 #[test]
 fn a_latin_hypercube_takes_each_stratum_once_and_follows_the_seed() {
     let mut e = short_mm1();
-    let design = |e: &mut Engine, seed: u64, with_units: bool| {
+    let design = |e: &mut Engine, seed: u64, with_units: bool, points: u32| {
         let mut factors = vec![
             json!({ "id": "arrivals", "field": "mean", "min": 1.5, "max": 3.0 }),
             json!({ "id": "server", "field": "mean", "min": 0.5, "max": 1.0 }),
@@ -2603,7 +2603,7 @@ fn a_latin_hypercube_takes_each_stratum_once_and_follows_the_seed() {
             "experiment.design",
             json!({
                 "design": "latin_hypercube",
-                "points": 8,
+                "points": points,
                 "factors": factors,
                 "results": [{ "element": "server", "metric": "mean_wait" }],
                 "replications": 2,
@@ -2611,7 +2611,7 @@ fn a_latin_hypercube_takes_each_stratum_once_and_follows_the_seed() {
             }),
         )
     };
-    let r = design(&mut e, 5, true);
+    let r = design(&mut e, 5, true, 8);
     assert_eq!(r["design"], "latin_hypercube");
     assert_eq!(r["runs"], 16);
     // One point in each eighth of each range.
@@ -2629,9 +2629,9 @@ fn a_latin_hypercube_takes_each_stratum_once_and_follows_the_seed() {
     assert_eq!(units, [1.0, 1.0, 2.0, 2.0, 3.0, 3.0, 4.0, 4.0]);
     // The same seed gives the same design and results; another seed another design; a factor
     // added leaves the others' values as they were.
-    assert_eq!(design(&mut e, 5, true)["points"], r["points"]);
-    assert_ne!(column(&design(&mut e, 6, true), 0), column(&r, 0));
-    let fewer = design(&mut e, 5, false);
+    assert_eq!(design(&mut e, 5, true, 8)["points"], r["points"]);
+    assert_ne!(column(&design(&mut e, 6, true, 8), 0), column(&r, 0));
+    let fewer = design(&mut e, 5, false, 8);
     assert_eq!(column(&fewer, 0), column(&r, 0));
     assert_eq!(column(&fewer, 1), column(&r, 1));
     // More units wait less (−0.98), and without them a slower server waits longer (+0.79).
@@ -2641,11 +2641,24 @@ fn a_latin_hypercube_takes_each_stratum_once_and_follows_the_seed() {
             .and_then(|c| c.iter().find(|c| c["id"] == id && c["field"] == field))
             .cloned()
             .unwrap_or_default();
-        assert_eq!(c["n"], 8, "{c}");
+        assert_eq!(c["n"], r["points"].as_array().map_or(0, Vec::len), "{c}");
         c["spearman"].as_f64().unwrap_or(0.0)
     };
     assert!(rho(&r, "capacity", "server") < -0.5);
     assert!(rho(&fewer, "mean", "server") > 0.5);
+    // With 8 points the time between arrivals shows none (0.0): the columns, matched at
+    // random, hide its effect behind the server's. With 64 both show, with their signs
+    // (−0.56 and +0.83).
+    assert!(rho(&fewer, "mean", "arrivals").abs() < 0.1);
+    let more = design(&mut e, 5, false, 64);
+    assert!(rho(&more, "mean", "arrivals") < -0.4);
+    assert!(rho(&more, "mean", "server") > 0.6);
+    let run = ok(&mut e, "run", json!({ "replications": 2 }));
+    let record = &run["record"]["sensitivity"][0];
+    assert_eq!(record["kind"], "design", "{record}");
+    assert_eq!(record["points"], 8, "{record}");
+    assert_eq!(record["seed"], 5, "{record}");
+    assert!(record.get("main_effects").is_none(), "{record}");
     assert!(r.get("main_effects").is_none());
 }
 

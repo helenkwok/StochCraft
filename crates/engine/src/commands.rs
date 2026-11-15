@@ -1064,16 +1064,28 @@ fn experiment_sensitivity(e: &mut Engine, p: Value) -> Result<Value, CommandErro
 fn experiment_design(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: crate::design::DesignParams = parse(p)?;
     let v = crate::design::design(e.model(), &p)?;
-    e.sensitivity.push(json!({
+    let mut record = json!({
         "kind": "design",
         "model_digest": crate::model_digest(e.model()),
-        "design": v["design"],
-        "factors": v["factors"],
-        "replications": v["replications"],
-        "main_effects": v["main_effects"],
-        "interactions": v["interactions"],
-        "correlations": v["correlations"],
-    }));
+    });
+    // What reproduces the design, and its findings: only the keys this kind of design has.
+    for key in [
+        "design",
+        "factors",
+        "replications",
+        "seed",
+        "main_effects",
+        "interactions",
+        "correlations",
+    ] {
+        if let Some(x) = v.get(key) {
+            record[key] = x.clone();
+        }
+    }
+    if v["design"] == "latin_hypercube" {
+        record["points"] = json!(v["points"].as_array().map_or(0, Vec::len));
+    }
+    e.sensitivity.push(record);
     Ok(v)
 }
 

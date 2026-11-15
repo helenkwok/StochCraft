@@ -331,7 +331,7 @@ The methods of M2.8, each implemented from its published description:
   and reports how many it tested; it does not adjust for the number of tests (Bonferroni's
   inequality, Law, section 10.3, would ask each to be at 1 − 0.05/tests).
 - **Designed experiments**: a full factorial's main effects and two-way interactions are those
-  of a 2^k design (Law, above, section 12.2), each worked out replication by replication and
+  of a 2^k design (Law, above, chapter 12), each worked out replication by replication and
   given its t interval; a Latin hypercube stratifies each factor's range as M. D. McKay, R. J.
   Beckman and W. J. Conover, "A comparison of three methods for selecting values of input
   variables in the analysis of output from a computer code", *Technometrics* 21(2), 1979,

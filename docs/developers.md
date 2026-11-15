@@ -50,7 +50,8 @@ draw only with fonts the visitor's own system has.
   statistics.
 - `stochcraft-io` reads and writes models as BPSim on BPMN or XPDL.
 - `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo,
-  and a replayable journal, and adds sweeps, sensitivity analysis and capacity sizing.
+  and a replayable journal, and adds sweeps, sensitivity analysis, designed experiments and
+  capacity sizing.
 - `stochcraft-cli` runs models from the command line; the app (`apps/stochcraft`,
   `apps/stochcraft-web`, UI in `crates/ui-egui`) runs them in a window.
 

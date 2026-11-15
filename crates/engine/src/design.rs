@@ -6,14 +6,14 @@
 //! Law, *Simulation Modeling and Analysis*, 5th ed., McGraw-Hill, 2015, section 11.2). An effect
 //! is a contrast between points, worked out replication by replication; its 95% interval is the
 //! t interval on those per-replication contrasts, n − 1 degrees of freedom for n replications
-//! (Law, section 12.2, for 2^k designs).
+//! (Law, chapter 12, for 2^k designs).
 //!
 //! - **Full factorial**: the points are every combination of the levels, in the order of
 //!   Python's `itertools.product` (the last factor changes fastest). The main effect of a
 //!   factor is the mean of the result over the points at its highest level minus the mean over
 //!   the points at its lowest (by value), so averaged over the other factors' levels. For two
 //!   factors with two levels each, the two-way interaction is half the change in one factor's
-//!   effect between the other's high and low level, Law's e12 (section 12.2): the mean over
+//!   effect between the other's high and low level, Law's e12 (chapter 12): the mean over
 //!   the points where both are high or both low minus the mean over the rest.
 //! - **Latin hypercube** (M. D. McKay, R. J. Beckman and W. J. Conover, "A comparison of three
 //!   methods for selecting values of input variables in the analysis of output from a computer
@@ -503,7 +503,7 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
             answer["interactions"] = json!(inter);
             answer["tests"] = json!(tests);
             answer["method"] = json!(
-                "full factorial: every combination of the levels, the last factor changing fastest, each point run with the same seed (common random numbers), so replication i of every point meets the same random numbers; main effect: the mean of the result over the points at the factor's highest level minus the mean over the points at its lowest, so averaged over the other factors' levels; interaction (two factors with two levels each, as in a 2^k design, Law section 12.2): half the change in one factor's effect between the other's high and low level, the mean over the points where both are high or both low minus the mean over the rest; each effect is worked out replication by replication, and half_width is the 95% t half-width of those values (n − 1 degrees of freedom, n the replications where every point involved has a value); significant: that interval excludes 0 (null with fewer than two replications). Each of the `tests` effects is tested on its own at 95%, so about one in twenty of those with no real effect still shows as significant by chance; for 95% confidence in all of them at once (Bonferroni), each would need its own interval at 1 − 0.05/tests, which is wider"
+                "full factorial: every combination of the levels, the last factor changing fastest, each point run with the same seed (common random numbers), so replication i of every point meets the same random numbers; main effect: the mean of the result over the points at the factor's highest level minus the mean over the points at its lowest, so averaged over the other factors' levels; interaction (two factors with two levels each, as in a 2^k design, Law chapter 12): half the change in one factor's effect between the other's high and low level, the mean over the points where both are high or both low minus the mean over the rest; each effect is worked out replication by replication, and half_width is the 95% t half-width of those values (n − 1 degrees of freedom, n the replications where every point involved has a value); significant: that interval excludes 0 (null with fewer than two replications). Each of the `tests` effects is tested on its own at 95%, so about one in twenty of those with no real effect still shows as significant by chance; for 95% confidence in all of them at once (Bonferroni), each would need its own interval at 1 − 0.05/tests, which is wider"
             );
         }
         Kind::LatinHypercube => {
@@ -527,7 +527,7 @@ pub fn design(model: &Model, p: &DesignParams) -> Result<Value, CommandError> {
             }
             answer["correlations"] = json!(corr);
             answer["method"] = json!(
-                "Latin hypercube (McKay, Beckman and Conover, Technometrics 21, 1979): each factor's range cut into as many equal strata as there are points, each stratum used once, the strata matched at random between factors; the draws come from the seed, so the same seed gives the same design; each point run with the same seed (common random numbers); spearman: the rank correlation across the points between the factor's value and the result's mean (ties share their mean rank; null with fewer than three points with a value or when either is constant), from −1 to 1, near 0 when the factor does not drive the result in one direction"
+                "Latin hypercube (McKay, Beckman and Conover, Technometrics 21, 1979): each factor's range cut into as many equal strata as there are points, each stratum used once, the strata matched at random between factors; the draws come from the seed, so the same seed gives the same design; each point run with the same seed (common random numbers); spearman: the rank correlation across the points between the factor's value and the result's mean (ties share their mean rank; null with fewer than three points with a value or when either is constant), from −1 to 1, near 0 when the factor does not drive the result in one direction. With few points the factors' columns, matched at random, can be correlated with each other by chance, so one factor's effect can hide another's: a value near 0 from a few points does not show that a factor has no effect"
             );
         }
     }
