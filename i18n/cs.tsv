@@ -274,6 +274,9 @@
 	Most likely	Nejpravděpodobnější
 	Move	Přesun
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Postupně posunout každý parametr dolů a nahoru a seřadit je podle toho, jak moc se výsledek pohne.
+	Must be from {min} to {max}	Musí být od {min} do {max}
+	Must be more than {min}	Musí být více než {min}
+	Must be {min} or more	Musí být {min} nebo více
 	Name	Jméno
 	Needs	Požadavky
 	Never: it runs for its duration	Nikdy: běží celou dobu trvání
@@ -687,3 +690,5 @@ unit	yr	r.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikace · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}|{n} replikace · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}|{n} replikací · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikace · počáteční hodnota {seed}|{n} replikace · počáteční hodnota {seed}|{n} replikací · počáteční hodnota {seed}
 @plural	{n} run|{n} runs	{n} replikace|{n} replikace|{n} replikací
+@plural	Run ({n} problem)|Run ({n} problems)	Spustit ({n} problém)|Spustit ({n} problémy)|Spustit ({n} problémů)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problém: {blocks}|{n} problémy: {blocks}|{n} problémů: {blocks}

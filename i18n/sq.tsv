@@ -274,6 +274,9 @@
 	Most likely	Më e mundshmja
 	Move	Zhvendos
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Lëviz çdo parametër poshtë dhe lart me radhë dhe rendit sipas sa lëviz rezultati.
+	Must be from {min} to {max}	Duhet të jetë nga {min} deri në {max}
+	Must be more than {min}	Duhet të jetë më shumë se {min}
+	Must be {min} or more	Duhet të jetë {min} ose më shumë
 	Name	Emri
 	Needs	Nevojat
 	Never: it runs for its duration	Kurrë: zgjat gjatë gjithë kohëzgjatjes
@@ -687,3 +690,5 @@ unit	yr	v
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}|{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} përsëritje · fara {seed}|{n} përsëritje · fara {seed}
 @plural	{n} run|{n} runs	{n} përsëritje|{n} përsëritje
+@plural	Run ({n} problem)|Run ({n} problems)	Ekzekuto ({n} problem)|Ekzekuto ({n} probleme)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} probleme: {blocks}

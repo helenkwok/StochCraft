@@ -274,6 +274,9 @@
 	Most likely	Legvalószínűbb
 	Move	Áthelyezés
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Minden paraméter sorban lejjebb és feljebb állítása, és rangsorolásuk aszerint, mennyit mozdul az eredmény.
+	Must be from {min} to {max}	{min} és {max} között legyen
+	Must be more than {min}	Nagyobb legyen, mint {min}
+	Must be {min} or more	Legalább {min} legyen
 	Name	Név
 	Needs	Igények
 	Never: it runs for its duration	Soha: a teljes időtartamig fut
@@ -687,3 +690,5 @@ unit	yr	év
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}|{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} ismétlés · mag {seed}|{n} ismétlés · mag {seed}
 @plural	{n} run|{n} runs	{n} ismétlés|{n} ismétlés
+@plural	Run ({n} problem)|Run ({n} problems)	Futtatás ({n} probléma)|Futtatás ({n} probléma)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probléma: {blocks}|{n} probléma: {blocks}

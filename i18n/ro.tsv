@@ -274,6 +274,9 @@
 	Most likely	Cel mai probabil
 	Move	Mutare
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Mută pe rând fiecare parametru în jos și în sus și ordonează-i după cât de mult se mișcă rezultatul.
+	Must be from {min} to {max}	Trebuie să fie între {min} și {max}
+	Must be more than {min}	Trebuie să fie mai mare decât {min}
+	Must be {min} or more	Trebuie să fie {min} sau mai mult
 	Name	Nume
 	Needs	Necesar
 	Never: it runs for its duration	Niciodată: rulează toată durata
@@ -687,3 +690,5 @@ unit	yr	a
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replicare · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replicare · sămânță {seed}|{n} replicări · sămânță {seed}|{n} replicări · sămânță {seed}
 @plural	{n} run|{n} runs	{n} replicare|{n} replicări|{n} replicări
+@plural	Run ({n} problem)|Run ({n} problems)	Rulează ({n} problemă)|Rulează ({n} probleme)|Rulează ({n} de probleme)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problemă: {blocks}|{n} probleme: {blocks}|{n} de probleme: {blocks}

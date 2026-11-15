@@ -274,6 +274,9 @@
 	Most likely	Máis probable
 	Move	Mover
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Mover cada parámetro abaixo e arriba por quendas, e ordenalos segundo canto se move o resultado.
+	Must be from {min} to {max}	Debe estar entre {min} e {max}
+	Must be more than {min}	Debe ser maior ca {min}
+	Must be {min} or more	Debe ser {min} ou máis
 	Name	Nome
 	Needs	Necesidades
 	Never: it runs for its duration	Nunca: dura toda a súa duración
@@ -687,3 +690,5 @@ unit	yr	a
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} réplica · semente {seed} · quecemento {warmup} {unit} · {duration} {unit} medidos|{n} réplicas · semente {seed} · quecemento {warmup} {unit} · {duration} {unit} medidos
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} réplica · semente {seed}|{n} réplicas · semente {seed}
 @plural	{n} run|{n} runs	{n} réplica|{n} réplicas
+@plural	Run ({n} problem)|Run ({n} problems)	Executar ({n} problema)|Executar ({n} problemas)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemas: {blocks}

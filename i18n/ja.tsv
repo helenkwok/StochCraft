@@ -274,6 +274,9 @@
 	Most likely	最頻値
 	Move	移動
 	Move each parameter down and up in turn, and rank them by how much the result moves.	各パラメーターを順に上下させ、結果がどれだけ動くかで順位を付けます。
+	Must be from {min} to {max}	{min} から {max} の範囲にしてください
+	Must be more than {min}	{min} より大きくしてください
+	Must be {min} or more	{min} 以上にしてください
 	Name	名前
 	Needs	必要なリソース
 	Never: it runs for its duration	なし: 継続時間いっぱい実行
@@ -687,3 +690,5 @@ unit	yr	年
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 回の反復実行 · シード {seed} · ウォームアップ {warmup} {unit} · 測定 {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} 回の反復実行 · シード {seed}
 @plural	{n} run|{n} runs	{n} 回の反復実行
+@plural	Run ({n} problem)|Run ({n} problems)	実行 (問題 {n} 件)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	問題 {n} 件: {blocks}

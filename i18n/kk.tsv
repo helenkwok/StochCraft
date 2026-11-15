@@ -274,6 +274,9 @@
 	Most likely	Ең ықтимал
 	Move	Жылжыту
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Әр параметрді кезекпен төмен және жоғары жылжытып, нәтиже қаншалықты өзгеретініне қарай реттеу.
+	Must be from {min} to {max}	{min} мен {max} аралығында болуы керек
+	Must be more than {min}	{min} мәнінен көп болуы керек
+	Must be {min} or more	{min} немесе одан көп болуы керек
 	Name	Аты-жөні
 	Needs	Қажеттіліктер
 	Never: it runs for its duration	Ешқашан: бүкіл ұзақтығы бойы жүреді
@@ -687,3 +690,5 @@ unit	yr	ж.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} қайталау · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}|{n} қайталау · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} қайталау · тұқым {seed}|{n} қайталау · тұқым {seed}
 @plural	{n} run|{n} runs	{n} қайталау|{n} қайталау
+@plural	Run ({n} problem)|Run ({n} problems)	Іске қосу ({n} мәселе)|Іске қосу ({n} мәселе)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} мәселе: {blocks}|{n} мәселе: {blocks}

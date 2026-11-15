@@ -132,6 +132,74 @@ fn text_that_is_not_a_number_stays_in_its_field_until_fixed() {
     assert!(h.query_by_label_contains("is still").is_none());
 }
 
+/// A number the model would refuse is refused in its field: it stays there, outlined, with the
+/// reason under it, and the model keeps its value until the field holds one it takes.
+#[test]
+fn a_negative_mean_is_refused_and_the_model_keeps_its_value() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    type_into(&mut h, "Mean", "-2");
+    assert_eq!(element(&h, "serve")["service"]["mean"], json!(1.0));
+    assert!(!h.state().has_unsaved_changes());
+    h.get_by_label("Must be 0 or more. Mean is still 1.");
+    // The field keeps what was typed.
+    assert_eq!(
+        h.get_by_role_and_label(Role::TextInput, "Mean")
+            .accesskit_node()
+            .value()
+            .as_deref(),
+        Some("-2")
+    );
+    type_into(&mut h, "Mean", "2");
+    assert_eq!(element(&h, "serve")["service"]["mean"], json!(2.0));
+    assert!(h.query_by_label_contains("is still").is_none());
+}
+
+#[test]
+fn a_capacity_below_one_is_refused_and_esc_puts_the_models_back() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    type_into(&mut h, "Capacity", "0");
+    assert_eq!(element(&h, "serve")["capacity"], json!(1));
+    h.get_by_label("Must be 1 or more. Capacity is still 1.");
+    // Esc in the field drops what was refused (and goes back to the model).
+    h.get_by_role_and_label(Role::TextInput, "Capacity").click();
+    settle(&mut h);
+    h.key_press(egui::Key::Escape);
+    settle(&mut h);
+    if h.query_by_role_and_label(Role::TextInput, "Capacity")
+        .is_none()
+    {
+        // Esc also went back to the model: the block again.
+        click(&mut h, Role::ListBoxOption, "Serve customer");
+    }
+    assert!(h.query_by_label_contains("is still").is_none());
+    assert_eq!(
+        h.get_by_role_and_label(Role::TextInput, "Capacity")
+            .accesskit_node()
+            .value()
+            .as_deref(),
+        Some("1")
+    );
+    assert_eq!(element(&h, "serve")["capacity"], json!(1));
+}
+
+#[test]
+fn a_probability_above_one_is_refused() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    h.state_mut()
+        .execute(
+            "block.set",
+            json!({"id": "serve", "service": {"type": "binomial", "probability": 0.5, "trials": 4}}),
+        )
+        .expect("a binomial service");
+    settle(&mut h);
+    type_into(&mut h, "Probability", "1.5");
+    assert_eq!(element(&h, "serve")["service"]["probability"], json!(0.5));
+    h.get_by_label("Must be from 0 to 1. Probability is still 0.5.");
+}
+
 #[test]
 fn numbers_are_read_as_the_users_region_writes_them() {
     let mut h = mm1();

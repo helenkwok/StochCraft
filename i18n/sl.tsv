@@ -274,6 +274,9 @@
 	Most likely	Najverjetnejša vrednost
 	Move	Premik
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Vsak parameter po vrsti premaknite navzdol in navzgor ter jih razvrstite po tem, koliko se rezultat premakne.
+	Must be from {min} to {max}	Biti mora od {min} do {max}
+	Must be more than {min}	Biti mora več kot {min}
+	Must be {min} or more	Biti mora {min} ali več
 	Name	Ime
 	Needs	Zahteve
 	Never: it runs for its duration	Nikoli: teče ves čas trajanja
@@ -687,3 +690,5 @@ unit	yr	l.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitvi · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitve · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} ponovitev · seme {seed}|{n} ponovitvi · seme {seed}|{n} ponovitve · seme {seed}|{n} ponovitev · seme {seed}
 @plural	{n} run|{n} runs	{n} ponovitev|{n} ponovitvi|{n} ponovitve|{n} ponovitev
+@plural	Run ({n} problem)|Run ({n} problems)	Zaženi ({n} težava)|Zaženi ({n} težavi)|Zaženi ({n} težave)|Zaženi ({n} težav)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} težava: {blocks}|{n} težavi: {blocks}|{n} težave: {blocks}|{n} težav: {blocks}

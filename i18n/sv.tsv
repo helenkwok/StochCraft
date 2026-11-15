@@ -274,6 +274,9 @@
 	Most likely	Mest sannolikt
 	Move	Flytta
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Flytta varje parameter nedåt och uppåt i tur och ordning, och rangordna dem efter hur mycket resultatet rör sig.
+	Must be from {min} to {max}	Måste vara från {min} till {max}
+	Must be more than {min}	Måste vara mer än {min}
+	Must be {min} or more	Måste vara {min} eller mer
 	Name	Namn
 	Needs	Behov
 	Never: it runs for its duration	Aldrig: körs hela sin varaktighet
@@ -687,3 +690,5 @@ unit	yr	år
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikation · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta|{n} replikationer · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikation · slumpfrö {seed}|{n} replikationer · slumpfrö {seed}
 @plural	{n} run|{n} runs	{n} replikation|{n} replikationer
+@plural	Run ({n} problem)|Run ({n} problems)	Kör ({n} problem)|Kör ({n} problem)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problem: {blocks}

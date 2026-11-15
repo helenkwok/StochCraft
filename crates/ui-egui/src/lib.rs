@@ -274,6 +274,8 @@ pub struct App {
     status: String,
     /// The status is an error.
     status_error: bool,
+    /// The block the status-bar error concerns, which clicking it shows.
+    status_at: Option<String>,
     /// Waiting for the user to save or discard changes before this.
     confirm: Option<Replace>,
     /// Do this once the save in progress has been written.
@@ -305,8 +307,11 @@ pub struct App {
     watching: Option<live::Watching>,
     /// The model last validated and its problems, so a frame validates at most once.
     problems_of: Option<(stochcraft_model::Model, Vec<editor::Problem>)>,
-    /// Text being typed into form fields, until it commits.
+    /// Text being typed into form fields, until it commits, and numbers a field refused, until
+    /// they are fixed or another block is shown.
     drafts: std::collections::HashMap<String, String>,
+    /// The block the inspector showed last (`None`: the overview), whose drafts these are.
+    drafts_of: Option<String>,
     /// The connections table's choices, before Connect.
     connect_from: Option<String>,
     connect_to: Option<String>,
@@ -375,6 +380,7 @@ impl App {
             workers: None,
             status: String::new(),
             status_error: false,
+            status_at: None,
             confirm: None,
             after_save: None,
             new_file: None,
@@ -391,6 +397,7 @@ impl App {
             watching: None,
             problems_of: None,
             drafts: std::collections::HashMap::new(),
+            drafts_of: None,
             connect_from: None,
             connect_to: None,
             show_results: false,
@@ -667,22 +674,34 @@ impl App {
     fn info(&mut self, message: impl Into<String>) {
         self.status = message.into();
         self.status_error = false;
+        self.status_at = None;
     }
 
     /// Shows `message` as an error in the status bar (for the shell's failures).
     pub fn report_error(&mut self, message: impl Into<String>) {
         self.status = message.into();
         self.status_error = true;
+        self.status_at = None;
         self.after_save = None;
     }
 
-    /// Runs an engine command, showing its error in the status bar if it fails. Every change the
-    /// interface makes to the model goes through here.
+    /// Runs an engine command, showing its error in the status bar if it fails, with the block
+    /// of the first error its diagnostics place (a run that finds a problem only by running).
+    /// Every change the interface makes to the model goes through here.
     pub fn execute(&mut self, command: &str, params: Value) -> Option<Value> {
         match self.engine.execute(command, params) {
             Ok(v) => Some(v),
             Err(e) => {
+                let at = e
+                    .details
+                    .as_ref()
+                    .and_then(Value::as_array)
+                    .into_iter()
+                    .flatten()
+                    .filter(|d| d["severity"] == "error")
+                    .find_map(|d| d["at"].as_str().map(str::to_owned));
                 self.report_error(e.message);
+                self.status_at = self.block_of(at.as_deref());
                 None
             }
         }
@@ -1048,9 +1067,10 @@ impl App {
         self.workers = Some(workers);
     }
 
-    /// Model ▸ Run: starts the experiment in the background.
+    /// Model ▸ Run: starts the experiment in the background. A model with errors doesn't run:
+    /// its next error is shown instead (warnings alone don't stop it).
     pub fn run(&mut self) {
-        if self.running.is_some() {
+        if self.running.is_some() || self.go_to_problem() {
             return;
         }
         let on_workers = self.workers.is_some() && self.start_on_workers();
@@ -1358,8 +1378,62 @@ impl App {
             ui.set_max_width(ui.available_width());
             self.editor(ui, p);
         });
+        self.problems_chip(ui, p);
         self.watch_bar(ui, p);
         self.canvas(ui, p);
+    }
+
+    /// The model's errors above the canvas, with the blocks they are on ("2 problems: Paint,
+    /// Capacity"); a click shows the next, as Run does. Nothing when there are none.
+    fn problems_chip(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        let errors: Vec<editor::Problem> =
+            self.problems().into_iter().filter(|p| p.error).collect();
+        if errors.is_empty() {
+            return;
+        }
+        let mut names: Vec<String> = Vec::new();
+        for pr in &errors {
+            let name = match self.block_of(pr.at.as_deref()) {
+                Some(b) => self.block_name(&b),
+                None => t("Model").to_owned(),
+            };
+            if !names.contains(&name) {
+                names.push(name);
+            }
+        }
+        let text = tnf(
+            errors.len() as u64,
+            "{n} problem: {blocks}",
+            "{n} problems: {blocks}",
+            &[("blocks", &names.join(", "))],
+        );
+        let clicked = ui
+            .horizontal(|ui| {
+                let (rect, _) =
+                    ui.allocate_exact_size(egui::vec2(14.0, 14.0), egui::Sense::hover());
+                theme::paint_error_mark(ui.painter(), rect.center(), 6.5, p);
+                ui.add(
+                    egui::Button::new(egui::RichText::new(text).color(p.error))
+                        .stroke(egui::Stroke::new(1.0, p.error))
+                        .corner_radius(12.0),
+                )
+                .clicked()
+            })
+            .inner;
+        ui.add_space(8.0);
+        if clicked {
+            self.go_to_problem();
+        }
+    }
+
+    /// A block's name, or its id when it has none.
+    fn block_name(&self, id: &str) -> String {
+        self.engine
+            .model()
+            .elements
+            .iter()
+            .find(|e| e.id.as_str() == id && !e.name.is_empty())
+            .map_or_else(|| id.to_owned(), |e| e.name.clone())
     }
 
     /// The results: export buttons, the charts, then the table.
@@ -1490,6 +1564,13 @@ impl App {
         let header = ui.max_rect();
         let running = self.running.is_some();
         let can_run = !self.engine.model().elements.is_empty();
+        // With errors, Run says how many; clicking it shows them one by one rather than run.
+        let errors = self.problems().iter().filter(|p| p.error).count() as u64;
+        let run_label = if errors > 0 {
+            tn(errors, "Run ({n} problem)", "Run ({n} problems)")
+        } else {
+            t("Run").to_owned()
+        };
         let (_, clicked) = egui::Sides::new().shrink_left().show(
             ui,
             |ui| {
@@ -1524,7 +1605,7 @@ impl App {
                     ui.add(cancel).on_hover_text("Esc").clicked()
                 } else {
                     let shortcut = run_key.clone();
-                    ui.add_enabled(can_run, theme::primary(ui, t("Run")))
+                    ui.add_enabled(can_run, theme::primary(ui, &run_label))
                         .on_hover_text(tf(
                             "Run the experiment ({shortcut})",
                             &[("shortcut", &shortcut)],
@@ -1588,7 +1669,23 @@ impl App {
         ui.horizontal(|ui| {
             if self.status_error {
                 ui.label(theme::strong(t("Error")).color(p.error));
-                ui.label(egui::RichText::new(&self.status).color(p.error));
+                let text = egui::RichText::new(&self.status).color(p.error);
+                match self.status_at.clone() {
+                    // An error with its place: a click (or Enter) shows that block.
+                    Some(at) => {
+                        let name = self.block_name(&at);
+                        if ui
+                            .add(egui::Button::new(text.underline()).frame(false))
+                            .on_hover_text(tf("Show {id}", &[("id", &name)]))
+                            .clicked()
+                        {
+                            self.show_block(Some(at));
+                        }
+                    }
+                    None => {
+                        ui.label(text);
+                    }
+                }
             } else if self.status.is_empty() {
                 ui.label(theme::weak(ui, t("Ready")));
             } else {

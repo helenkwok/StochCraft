@@ -274,6 +274,9 @@
 	Most likely	Més probable
 	Move	Mou
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Moure cada paràmetre avall i amunt per torns, i ordenar-los segons quant es mou el resultat.
+	Must be from {min} to {max}	Ha de ser entre {min} i {max}
+	Must be more than {min}	Ha de ser més de {min}
+	Must be {min} or more	Ha de ser {min} o més
 	Name	Nom
 	Needs	Necessitats
 	Never: it runs for its duration	Mai: dura tota la seva durada
@@ -687,3 +690,5 @@ unit	yr	a
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} rèplica · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats|{n} rèpliques · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} rèplica · llavor {seed}|{n} rèpliques · llavor {seed}
 @plural	{n} run|{n} runs	{n} rèplica|{n} rèpliques
+@plural	Run ({n} problem)|Run ({n} problems)	Executa ({n} problema)|Executa ({n} problemes)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemes: {blocks}

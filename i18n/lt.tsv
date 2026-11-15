@@ -274,6 +274,9 @@
 	Most likely	Labiausiai tikėtina
 	Move	Perkėlimas
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Paeiliui keisti kiekvieną parametrą žemyn ir aukštyn ir surikiuoti juos pagal tai, kiek pasikeičia rezultatas.
+	Must be from {min} to {max}	Turi būti nuo {min} iki {max}
+	Must be more than {min}	Turi būti daugiau nei {min}
+	Must be {min} or more	Turi būti {min} arba daugiau
 	Name	Pavadinimas
 	Needs	Poreikiai
 	Never: it runs for its duration	Niekada: trunka visą trukmę
@@ -687,3 +690,5 @@ unit	yr	m.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacija · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijos · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijų · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikacija · sėkla {seed}|{n} replikacijos · sėkla {seed}|{n} replikacijų · sėkla {seed}
 @plural	{n} run|{n} runs	{n} replikacija|{n} replikacijos|{n} replikacijų
+@plural	Run ({n} problem)|Run ({n} problems)	Vykdyti ({n} problema)|Vykdyti ({n} problemos)|Vykdyti ({n} problemų)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemos: {blocks}|{n} problemų: {blocks}

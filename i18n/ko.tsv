@@ -274,6 +274,9 @@
 	Most likely	최빈값
 	Move	이동
 	Move each parameter down and up in turn, and rank them by how much the result moves.	각 매개변수를 차례로 낮추고 높여서 결과가 얼마나 움직이는지에 따라 순위를 매깁니다.
+	Must be from {min} to {max}	{min}에서 {max} 사이여야 합니다
+	Must be more than {min}	{min}보다 커야 합니다
+	Must be {min} or more	{min} 이상이어야 합니다
 	Name	이름
 	Needs	필요 자원
 	Never: it runs for its duration	안 함: 길이만큼 실행
@@ -687,3 +690,5 @@ unit	yr	년
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	반복 실행 {n}회 · 시드 {seed} · 준비 {warmup} {unit} · 측정 {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	반복 실행 {n}회 · 시드 {seed}
 @plural	{n} run|{n} runs	반복 실행 {n}회
+@plural	Run ({n} problem)|Run ({n} problems)	실행 (문제 {n}개)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	문제 {n}개: {blocks}

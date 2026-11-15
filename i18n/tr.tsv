@@ -274,6 +274,9 @@
 	Most likely	En olası
 	Move	Taşı
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Her parametreyi sırayla aşağı ve yukarı oynat, sonucun ne kadar değiştiğine göre sırala.
+	Must be from {min} to {max}	{min} ile {max} arasında olmalı
+	Must be more than {min}	{min} değerinden büyük olmalı
+	Must be {min} or more	{min} veya daha fazla olmalı
 	Name	Ad
 	Needs	İhtiyaçlar
 	Never: it runs for its duration	Hiçbir zaman: süresince çalışır
@@ -687,3 +690,5 @@ unit	yr	yıl
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü|{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} tekrar · tohum {seed}|{n} tekrar · tohum {seed}
 @plural	{n} run|{n} runs	{n} tekrar|{n} tekrar
+@plural	Run ({n} problem)|Run ({n} problems)	Çalıştır ({n} sorun)|Çalıştır ({n} sorun)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} sorun: {blocks}|{n} sorun: {blocks}

@@ -274,6 +274,9 @@
 	Most likely	最可能值
 	Move	移动
 	Move each parameter down and up in turn, and rank them by how much the result moves.	依次将每个参数调低和调高，并按结果的变化幅度排序。
+	Must be from {min} to {max}	必须在 {min} 到 {max} 之间
+	Must be more than {min}	必须大于 {min}
+	Must be {min} or more	必须不小于 {min}
 	Name	名称
 	Needs	所需资源
 	Never: it runs for its duration	从不：运行完整个持续时间
@@ -687,3 +690,5 @@ unit	yr	年
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 次重复运行 · 随机种子 {seed} · 预热 {warmup} {unit} · 测量 {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} 次重复运行 · 随机种子 {seed}
 @plural	{n} run|{n} runs	{n} 次重复运行
+@plural	Run ({n} problem)|Run ({n} problems)	运行（{n} 个问题）
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} 个问题：{blocks}

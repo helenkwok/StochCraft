@@ -274,6 +274,9 @@
 	Most likely	最可能值
 	Move	移動
 	Move each parameter down and up in turn, and rank them by how much the result moves.	依序將每個參數調低和調高，並依結果的變動幅度排序。
+	Must be from {min} to {max}	必須介於 {min} 到 {max} 之間
+	Must be more than {min}	必須大於 {min}
+	Must be {min} or more	必須不小於 {min}
 	Name	名稱
 	Needs	所需資源
 	Never: it runs for its duration	從不：執行完整個持續時間
@@ -687,3 +690,5 @@ unit	yr	年
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 次重複執行 · 隨機種子 {seed} · 暖機 {warmup} {unit} · 測量 {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} 次重複執行 · 隨機種子 {seed}
 @plural	{n} run|{n} runs	{n} 次重複執行
+@plural	Run ({n} problem)|Run ({n} problems)	執行（{n} 個問題）
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} 個問題：{blocks}

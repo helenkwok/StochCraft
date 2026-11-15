@@ -274,6 +274,9 @@
 	Most likely	Πιθανότερη τιμή
 	Move	Μετακίνηση
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Μετακίνηση κάθε παραμέτρου διαδοχικά προς τα κάτω και πάνω, και κατάταξή τους κατά το πόσο μετακινείται το αποτέλεσμα.
+	Must be from {min} to {max}	Πρέπει να είναι από {min} έως {max}
+	Must be more than {min}	Πρέπει να είναι μεγαλύτερο από {min}
+	Must be {min} or more	Πρέπει να είναι {min} ή περισσότερο
 	Name	Όνομα
 	Needs	Ανάγκες
 	Never: it runs for its duration	Ποτέ: διαρκεί όλη τη διάρκειά του
@@ -687,3 +690,5 @@ unit	yr	έτ
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} επανάληψη · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}|{n} επαναλήψεις · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} επανάληψη · σπόρος {seed}|{n} επαναλήψεις · σπόρος {seed}
 @plural	{n} run|{n} runs	{n} επανάληψη|{n} επαναλήψεις
+@plural	Run ({n} problem)|Run ({n} problems)	Εκτέλεση ({n} πρόβλημα)|Εκτέλεση ({n} προβλήματα)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} πρόβλημα: {blocks}|{n} προβλήματα: {blocks}

@@ -274,6 +274,9 @@
 	Most likely	Valeur la plus probable
 	Move	Déplacer
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Faire varier chaque paramètre vers le bas puis vers le haut, et les classer selon l'ampleur du changement du résultat.
+	Must be from {min} to {max}	Doit être entre {min} et {max}
+	Must be more than {min}	Doit être supérieur à {min}
+	Must be {min} or more	Doit être au moins {min}
 	Name	Nom
 	Needs	Besoins
 	Never: it runs for its duration	Jamais : elle dure toute sa durée
@@ -687,3 +690,5 @@ unit	yr	an
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} réplication · graine {seed} · préchauffage {warmup} {unit} · {duration} {unit} mesurés|{n} réplications · graine {seed} · préchauffage {warmup} {unit} · {duration} {unit} mesurés
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} réplication · graine {seed}|{n} réplications · graine {seed}
 @plural	{n} run|{n} runs	{n} réplication|{n} réplications
+@plural	Run ({n} problem)|Run ({n} problems)	Exécuter ({n} problème)|Exécuter ({n} problèmes)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problème : {blocks}|{n} problèmes : {blocks}

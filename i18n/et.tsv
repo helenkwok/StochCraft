@@ -274,6 +274,9 @@
 	Most likely	Kõige tõenäolisem
 	Move	Teisaldamine
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Liiguta iga parameetrit kordamööda alla ja üles ning järjesta need selle järgi, kui palju tulemus liigub.
+	Must be from {min} to {max}	Peab olema vahemikus {min} kuni {max}
+	Must be more than {min}	Peab olema suurem kui {min}
+	Must be {min} or more	Peab olema {min} või rohkem
 	Name	Nimi
 	Needs	Vajadused
 	Never: it runs for its duration	Mitte kunagi: kestab kogu oma kestuse
@@ -687,3 +690,5 @@ unit	yr	a
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} kordus · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}|{n} kordust · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} kordus · seeme {seed}|{n} kordust · seeme {seed}
 @plural	{n} run|{n} runs	{n} kordus|{n} kordust
+@plural	Run ({n} problem)|Run ({n} problems)	Käivita ({n} probleem)|Käivita ({n} probleemi)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probleem: {blocks}|{n} probleemi: {blocks}

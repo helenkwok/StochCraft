@@ -274,6 +274,9 @@
 	Most likely	அதிக வாய்ப்புள்ள மதிப்பு
 	Move	நகர்த்தல்
 	Move each parameter down and up in turn, and rank them by how much the result moves.	ஒவ்வொரு அளவுருவையும் வரிசையாகக் கீழும் மேலும் நகர்த்தி, முடிவு எவ்வளவு நகர்கிறது என்பதன்படி தரவரிசைப்படுத்தவும்.
+	Must be from {min} to {max}	{min} முதல் {max} வரை இருக்க வேண்டும்
+	Must be more than {min}	{min}-ஐ விட அதிகமாக இருக்க வேண்டும்
+	Must be {min} or more	{min} அல்லது அதற்கு மேல் இருக்க வேண்டும்
 	Name	பெயர்
 	Needs	தேவைகள்
 	Never: it runs for its duration	ஒருபோதும் இல்லை: முழுக் கால அளவும் இயங்கும்
@@ -687,3 +690,5 @@ unit	yr	ஆண்டு
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} மீள் இயக்கம் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது|{n} மீள் இயக்கங்கள் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} மீள் இயக்கம் · விதை {seed}|{n} மீள் இயக்கங்கள் · விதை {seed}
 @plural	{n} run|{n} runs	{n} மீள் இயக்கம்|{n} மீள் இயக்கங்கள்
+@plural	Run ({n} problem)|Run ({n} problems)	இயக்கு ({n} சிக்கல்)|இயக்கு ({n} சிக்கல்கள்)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} சிக்கல்: {blocks}|{n} சிக்கல்கள்: {blocks}

@@ -274,6 +274,9 @@
 	Most likely	Meest waarschijnlijk
 	Move	Verplaatsen
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Elke parameter om de beurt omlaag en omhoog zetten, en ze rangschikken naar hoeveel het resultaat verschuift.
+	Must be from {min} to {max}	Moet tussen {min} en {max} liggen
+	Must be more than {min}	Moet groter zijn dan {min}
+	Must be {min} or more	Moet {min} of meer zijn
 	Name	Naam
 	Needs	Behoeften
 	Never: it runs for its duration	Nooit: loopt zijn hele duur
@@ -687,3 +690,5 @@ unit	yr	j
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} herhaling · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten|{n} herhalingen · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} herhaling · startwaarde {seed}|{n} herhalingen · startwaarde {seed}
 @plural	{n} run|{n} runs	{n} herhaling|{n} herhalingen
+@plural	Run ({n} problem)|Run ({n} problems)	Uitvoeren ({n} probleem)|Uitvoeren ({n} problemen)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probleem: {blocks}|{n} problemen: {blocks}

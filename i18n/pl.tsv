@@ -274,6 +274,9 @@
 	Most likely	Najbardziej prawdopodobna
 	Move	Przeniesienie
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Przesuwaj kolejno każdy parametr w dół i w górę i uszereguj je według tego, jak bardzo zmienia się wynik.
+	Must be from {min} to {max}	Musi wynosić od {min} do {max}
+	Must be more than {min}	Musi być większe niż {min}
+	Must be {min} or more	Musi wynosić co najmniej {min}
 	Name	Nazwa
 	Needs	Wymagania
 	Never: it runs for its duration	Nigdy: trwa przez cały czas trwania
@@ -687,3 +690,5 @@ unit	yr	r.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacja · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} replikacje · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} replikacji · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikacja · ziarno {seed}|{n} replikacje · ziarno {seed}|{n} replikacji · ziarno {seed}
 @plural	{n} run|{n} runs	{n} replikacja|{n} replikacje|{n} replikacji
+@plural	Run ({n} problem)|Run ({n} problems)	Uruchom ({n} problem)|Uruchom ({n} problemy)|Uruchom ({n} problemów)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemy: {blocks}|{n} problemów: {blocks}

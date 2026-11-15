@@ -274,6 +274,9 @@
 	Most likely	ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ
 	Move	ຍ້າຍ
 	Move each parameter down and up in turn, and rank them by how much the result moves.	ປັບແຕ່ລະພາຣາມິເຕີລົງ ແລະ ຂຶ້ນເທື່ອລະອັນ ແລ້ວຈັດອັນດັບຕາມວ່າຜົນໄດ້ຮັບຂະຫຍັບຫຼາຍເທົ່າໃດ.
+	Must be from {min} to {max}	ຕ້ອງຢູ່ລະຫວ່າງ {min} ຫາ {max}
+	Must be more than {min}	ຕ້ອງຫຼາຍກວ່າ {min}
+	Must be {min} or more	ຕ້ອງເປັນ {min} ຫຼື ຫຼາຍກວ່າ
 	Name	ຊື່
 	Needs	ສິ່ງທີ່ຕ້ອງໃຊ້
 	Never: it runs for its duration	ບໍ່ເຄີຍ: ແລ່ນຈົນຄົບໄລຍະເວລາ
@@ -687,3 +690,5 @@ unit	yr	ປີ
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed} · ອຸ່ນເຄື່ອງ {warmup} {unit} · ວັດຜົນ {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed}
 @plural	{n} run|{n} runs	ຈຳລອງຊ້ຳ {n} ຮອບ
+@plural	Run ({n} problem)|Run ({n} problems)	ປະມວນຜົນ ({n} ບັນຫາ)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} ບັນຫາ: {blocks}

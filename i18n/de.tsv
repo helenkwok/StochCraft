@@ -274,6 +274,9 @@
 	Most likely	Wahrscheinlichster Wert
 	Move	Verschieben
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Jeden Parameter nacheinander senken und erhöhen und sie danach ordnen, wie stark sich das Ergebnis bewegt.
+	Must be from {min} to {max}	Muss zwischen {min} und {max} liegen
+	Must be more than {min}	Muss größer als {min} sein
+	Must be {min} or more	Muss {min} oder mehr sein
 	Name	Name
 	Needs	Bedarf
 	Never: it runs for its duration	Nie: läuft für seine Dauer
@@ -687,3 +690,5 @@ unit	yr	J.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} Replikation · Startwert {seed} · Einschwingphase {warmup} {unit} · {duration} {unit} gemessen|{n} Replikationen · Startwert {seed} · Einschwingphase {warmup} {unit} · {duration} {unit} gemessen
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} Replikation · Startwert {seed}|{n} Replikationen · Startwert {seed}
 @plural	{n} run|{n} runs	{n} Replikation|{n} Replikationen
+@plural	Run ({n} problem)|Run ({n} problems)	Ausführen ({n} Problem)|Ausführen ({n} Probleme)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} Problem: {blocks}|{n} Probleme: {blocks}

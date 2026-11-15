@@ -274,6 +274,9 @@
 	Most likely	ค่าที่เป็นไปได้มากที่สุด
 	Move	ย้าย
 	Move each parameter down and up in turn, and rank them by how much the result moves.	ปรับแต่ละพารามิเตอร์ลงและขึ้นทีละตัว แล้วจัดอันดับตามว่าผลลัพธ์ขยับมากเท่าใด
+	Must be from {min} to {max}	ต้องอยู่ระหว่าง {min} ถึง {max}
+	Must be more than {min}	ต้องมากกว่า {min}
+	Must be {min} or more	ต้องเป็น {min} ขึ้นไป
 	Name	ชื่อ
 	Needs	สิ่งที่ต้องใช้
 	Never: it runs for its duration	ไม่เลย: รันจนครบระยะเวลา
@@ -687,3 +690,5 @@ unit	yr	ปี
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	จำลองซ้ำ {n} รอบ · เมล็ดสุ่ม {seed} · อุ่นเครื่อง {warmup} {unit} · วัดผล {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	จำลองซ้ำ {n} รอบ · เมล็ดสุ่ม {seed}
 @plural	{n} run|{n} runs	จำลองซ้ำ {n} รอบ
+@plural	Run ({n} problem)|Run ({n} problems)	รัน (ปัญหา {n} รายการ)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	ปัญหา {n} รายการ: {blocks}

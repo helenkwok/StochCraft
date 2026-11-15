@@ -274,6 +274,9 @@
 	Most likely	Najvjerojatnije
 	Move	Premeštanje
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Pomeri redom svaki parametar dole i gore i poređaj ih prema tome koliko se rezultat pomeri.
+	Must be from {min} to {max}	Mora biti od {min} do {max}
+	Must be more than {min}	Mora biti više od {min}
+	Must be {min} or more	Mora biti {min} ili više
 	Name	Ime
 	Needs	Zahtevi
 	Never: it runs for its duration	Nikad: traje celo trajanje
@@ -687,3 +690,5 @@ unit	yr	god.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacija · seme {seed} · zagrevanje {warmup} {unit} · mereno {duration} {unit}|{n} replikacije · seme {seed} · zagrevanje {warmup} {unit} · mereno {duration} {unit}|{n} replikacija · seme {seed} · zagrevanje {warmup} {unit} · mereno {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikacija · seme {seed}|{n} replikacije · seme {seed}|{n} replikacija · seme {seed}
 @plural	{n} run|{n} runs	{n} replikacija|{n} replikacije|{n} replikacija
+@plural	Run ({n} problem)|Run ({n} problems)	Pokreni ({n} problem)|Pokreni ({n} problema)|Pokreni ({n} problema)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problema: {blocks}|{n} problema: {blocks}

@@ -274,6 +274,9 @@
 	Most likely	అత్యంత సంభావ్య విలువ
 	Move	తరలింపు
 	Move each parameter down and up in turn, and rank them by how much the result moves.	ప్రతి పరామితిని వరుసగా కిందకు, పైకి కదిలించి, ఫలితం ఎంత కదులుతుందో దాని ప్రకారం క్రమపరచండి.
+	Must be from {min} to {max}	{min} నుండి {max} మధ్య ఉండాలి
+	Must be more than {min}	{min} కంటే ఎక్కువ ఉండాలి
+	Must be {min} or more	{min} లేదా అంతకంటే ఎక్కువ ఉండాలి
 	Name	పేరు
 	Needs	అవసరాలు
 	Never: it runs for its duration	ఎప్పుడూ కాదు: పూర్తి వ్యవధి నడుస్తుంది
@@ -687,3 +690,5 @@ unit	yr	సం.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} పునరావృత్తం · బీజం {seed} · ప్రారంభ సర్దుబాటు {warmup} {unit} · కొలత {duration} {unit}|{n} పునరావృత్తాలు · బీజం {seed} · ప్రారంభ సర్దుబాటు {warmup} {unit} · కొలత {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} పునరావృత్తం · బీజం {seed}|{n} పునరావృత్తాలు · బీజం {seed}
 @plural	{n} run|{n} runs	{n} పునరావృత్త అమలు|{n} పునరావృత్త అమలులు
+@plural	Run ({n} problem)|Run ({n} problems)	అమలు చేయి ({n} సమస్య)|అమలు చేయి ({n} సమస్యలు)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} సమస్య: {blocks}|{n} సమస్యలు: {blocks}

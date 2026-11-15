@@ -274,6 +274,9 @@
 	Most likely	सर्वाधिक संभावित
 	Move	स्थानांतरण
 	Move each parameter down and up in turn, and rank them by how much the result moves.	हर पैरामीटर को बारी-बारी से नीचे और ऊपर करें, और परिणाम कितना हिलता है उसके अनुसार क्रम दें।
+	Must be from {min} to {max}	{min} से {max} के बीच होना चाहिए
+	Must be more than {min}	{min} से अधिक होना चाहिए
+	Must be {min} or more	{min} या उससे अधिक होना चाहिए
 	Name	नाम
 	Needs	आवश्यकताएँ
 	Never: it runs for its duration	कभी नहीं: पूरी अवधि चलता है
@@ -687,3 +690,5 @@ unit	yr	वर्ष
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} पुनरावृत्ति · बीज {seed} · वार्म-अप {warmup} {unit} · {duration} {unit} मापा गया|{n} पुनरावृत्तियाँ · बीज {seed} · वार्म-अप {warmup} {unit} · {duration} {unit} मापा गया
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} पुनरावृत्ति · बीज {seed}|{n} पुनरावृत्तियाँ · बीज {seed}
 @plural	{n} run|{n} runs	{n} पुनरावृत्ति|{n} पुनरावृत्तियाँ
+@plural	Run ({n} problem)|Run ({n} problems)	चलाएँ ({n} समस्या)|चलाएँ ({n} समस्याएँ)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} समस्या: {blocks}|{n} समस्याएँ: {blocks}

@@ -274,6 +274,9 @@
 	Most likely	Наиболее вероятное значение
 	Move	Перемещение
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Сдвигать каждый параметр по очереди вниз и вверх и упорядочить их по тому, насколько меняется результат.
+	Must be from {min} to {max}	Должно быть от {min} до {max}
+	Must be more than {min}	Должно быть больше {min}
+	Must be {min} or more	Должно быть не меньше {min}
 	Name	Имя
 	Needs	Потребности
 	Never: it runs for its duration	Никогда: идёт всю длительность
@@ -687,3 +690,5 @@ unit	yr	г.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликация · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликации · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликаций · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} репликация · начальное значение {seed}|{n} репликации · начальное значение {seed}|{n} репликаций · начальное значение {seed}
 @plural	{n} run|{n} runs	{n} репликация|{n} репликации|{n} репликаций
+@plural	Run ({n} problem)|Run ({n} problems)	Запустить ({n} проблема)|Запустить ({n} проблемы)|Запустить ({n} проблем)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} проблема: {blocks}|{n} проблемы: {blocks}|{n} проблем: {blocks}

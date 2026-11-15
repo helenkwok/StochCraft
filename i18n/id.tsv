@@ -274,6 +274,9 @@
 	Most likely	Paling mungkin
 	Move	Pindahkan
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Turunkan dan naikkan setiap parameter bergantian, lalu urutkan menurut seberapa besar hasil bergerak.
+	Must be from {min} to {max}	Harus antara {min} dan {max}
+	Must be more than {min}	Harus lebih dari {min}
+	Must be {min} or more	Harus {min} atau lebih
 	Name	Nama
 	Needs	Kebutuhan
 	Never: it runs for its duration	Tidak pernah: berjalan sepanjang durasinya
@@ -687,3 +690,5 @@ unit	yr	thn
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasi · benih {seed} · pemanasan {warmup} {unit} · {duration} {unit} diukur
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikasi · benih {seed}
 @plural	{n} run|{n} runs	{n} replikasi
+@plural	Run ({n} problem)|Run ({n} problems)	Jalankan ({n} masalah)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} masalah: {blocks}

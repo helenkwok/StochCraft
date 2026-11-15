@@ -274,6 +274,9 @@
 	Most likely	Todennäköisin
 	Move	Siirto
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Siirrä kutakin parametria vuorollaan alas ja ylös ja järjestä ne sen mukaan, kuinka paljon tulos muuttuu.
+	Must be from {min} to {max}	Oltava välillä {min}–{max}
+	Must be more than {min}	Oltava suurempi kuin {min}
+	Must be {min} or more	Oltava vähintään {min}
 	Name	Nimi
 	Needs	Tarpeet
 	Never: it runs for its duration	Ei koskaan: ajetaan koko kesto
@@ -687,3 +690,5 @@ unit	yr	v
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} toisto · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}|{n} toistoa · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} toisto · siemen {seed}|{n} toistoa · siemen {seed}
 @plural	{n} run|{n} runs	{n} toisto|{n} toistoa
+@plural	Run ({n} problem)|Run ({n} problems)	Suorita ({n} ongelma)|Suorita ({n} ongelmaa)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} ongelma: {blocks}|{n} ongelmaa: {blocks}

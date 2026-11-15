@@ -274,6 +274,9 @@
 	Most likely	ყველაზე სავარაუდო
 	Move	გადატანა
 	Move each parameter down and up in turn, and rank them by how much the result moves.	თითოეული პარამეტრის რიგრიგობით ქვემოთ და ზემოთ გადაწევა და დალაგება იმის მიხედვით, რამდენად იცვლება შედეგი.
+	Must be from {min} to {max}	უნდა იყოს {min}-დან {max}-მდე
+	Must be more than {min}	უნდა იყოს {min}-ზე მეტი
+	Must be {min} or more	უნდა იყოს {min} ან მეტი
 	Name	სახელი
 	Needs	საჭიროებები
 	Never: it runs for its duration	არასოდეს: გრძელდება მთელი ხანგრძლივობა
@@ -687,3 +690,5 @@ unit	yr	წელი
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}|{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} გამეორება · საწყისი მნიშვნელობა {seed}|{n} გამეორება · საწყისი მნიშვნელობა {seed}
 @plural	{n} run|{n} runs	{n} გამეორება|{n} გამეორება
+@plural	Run ({n} problem)|Run ({n} problems)	გაშვება ({n} პრობლემა)|გაშვება ({n} პრობლემა)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} პრობლემა: {blocks}|{n} პრობლემა: {blocks}

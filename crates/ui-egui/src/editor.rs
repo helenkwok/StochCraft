@@ -132,7 +132,58 @@ pub(crate) fn params_schema(command: &str) -> Value {
 pub struct Problem {
     pub error: bool,
     pub at: Option<String>,
+    /// The engine's stable code for it (`zero_capacity`, `bad_distribution`…).
+    pub code: String,
     pub message: String,
+}
+
+impl Problem {
+    /// The message without the engine's "error at `id`: " or "error: ": the word is a label of
+    /// its own, and the place is the block shown.
+    pub fn short_message(&self) -> &str {
+        let m = &self.message;
+        ["error at `", "warning at `"]
+            .iter()
+            .find_map(|head| {
+                m.strip_prefix(head)
+                    .and_then(|rest| rest.split_once("`: "))
+                    .map(|(_, m)| m)
+            })
+            .or_else(|| m.strip_prefix("error: "))
+            .or_else(|| m.strip_prefix("warning: "))
+            .unwrap_or(m)
+    }
+
+    /// The field it concerns, as the inspector keys it under its block (`capacity`,
+    /// `service`, `breakdown/repair`) or the model page keys it (`x/replications`), when known.
+    pub fn field(&self) -> Option<String> {
+        let f = match self.code.as_str() {
+            "zero_capacity" => "capacity",
+            "zero_batch_size" => "size",
+            "no_time_between_arrivals" => "interarrival",
+            "planned_run_time_not_positive" => "planned_run_time",
+            "patience_negative" => "patience",
+            "health_check_interval_not_positive" => "health_check/check_interval",
+            "health_check_limit_not_valid" => "health_check/check_limit",
+            // "`id`: service: the mean …": the parameter named first.
+            "bad_distribution" => match self.short_message().split_once(':')?.0 {
+                p @ ("interarrival" | "service" | "duration" | "transfer" | "setup"
+                | "planned_run_time" | "patience") => p,
+                "time_to_failure" => "breakdown/time_to_failure",
+                "repair" => "breakdown/repair",
+                _ => return None,
+            },
+            "bad_experiment" => {
+                let m = self.short_message();
+                return ["replications", "warm-up", "duration"]
+                    .iter()
+                    .find(|f| m.contains(*f))
+                    .map(|f| format!("x/{}", f.replace("warm-up", "warmup")));
+            }
+            _ => return None,
+        };
+        Some(f.to_owned())
+    }
 }
 
 impl App {
@@ -161,9 +212,63 @@ impl App {
             .map(|d| Problem {
                 error: d["severity"] == "error",
                 at: d["at"].as_str().map(str::to_owned),
+                code: d["code"].as_str().unwrap_or("").to_owned(),
                 message: d["message"].as_str().unwrap_or("").to_owned(),
             })
             .collect()
+    }
+
+    /// The block a problem at `at` is shown on: the block itself, or the one a flow leaves (a
+    /// flow's problems are listed in its blocks' inspectors); `None` for the model page.
+    pub(crate) fn block_of(&self, at: Option<&str>) -> Option<String> {
+        let at = at?;
+        let m = self.engine.model();
+        if m.elements.iter().any(|e| e.id.as_str() == at) {
+            return Some(at.to_owned());
+        }
+        m.connections
+            .iter()
+            .find(|c| c.id.as_str() == at)
+            .map(|c| c.from.as_str().to_owned())
+    }
+
+    /// Shows the model's next error: the first one past those of the selected block, or the
+    /// first. Its block is selected (or the model page, for the experiment's), its field focused
+    /// when known, and the status bar says what is wrong. False when there is none.
+    pub(crate) fn go_to_problem(&mut self) -> bool {
+        let errors: Vec<Problem> = self.problems().into_iter().filter(|p| p.error).collect();
+        let blocks: Vec<Option<String>> = errors
+            .iter()
+            .map(|p| self.block_of(p.at.as_deref()))
+            .collect();
+        let here = blocks
+            .iter()
+            .rposition(|b| b.is_some() && *b == self.selected);
+        let i = match here {
+            Some(i) if i + 1 < errors.len() => i + 1,
+            _ => 0,
+        };
+        let Some(pr) = errors.get(i) else {
+            return false;
+        };
+        let block = blocks[i].clone();
+        self.show_block(block.clone());
+        form::focus(pr.field().map(|f| match &block {
+            Some(b) if !f.starts_with("x/") => format!("{b}/{f}"),
+            _ => f,
+        }));
+        self.report_error(pr.short_message().to_owned());
+        self.status_at = block;
+        true
+    }
+
+    /// Selects `block` (`None`: the model page) in the model view.
+    pub(crate) fn show_block(&mut self, block: Option<String>) {
+        self.show_results = false;
+        self.show_analysis = false;
+        self.canvas.flow = None;
+        self.canvas.multi.clear();
+        self.selected = block;
     }
 
     /// Adds a block of `kind` after the selection, joins the selection to it when the selected
@@ -242,6 +347,13 @@ impl App {
     pub(crate) fn editor(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         let problems = self.problems();
         let model = stochcraft_engine::wire::model(self.engine.model());
+        // A refused number belongs to the block it was typed for: showing another drops it
+        // (Esc in the field drops it too, and also goes back to the model).
+        if self.drafts_of != self.selected {
+            self.drafts.clear();
+            self.drafts_of = self.selected.clone();
+        }
+        let shown = self.selected.clone();
         egui::ScrollArea::vertical()
             .auto_shrink([false, false])
             .show(ui, |ui| {
@@ -267,6 +379,15 @@ impl App {
                     None => self.overview(ui, p, &model, &problems),
                 }
             });
+        // A field to focus on the page just drawn was taken, or is not there: forgotten. (One on
+        // a page chosen meanwhile, by a Show link, waits for that page.)
+        let page = match &shown {
+            Some(id) => format!("{id}/"),
+            None => "x/".to_owned(),
+        };
+        if form::focus_key().is_some_and(|k| k.starts_with(&page)) {
+            form::focus(None);
+        }
     }
 
     pub(crate) fn time_unit_label(&self) -> String {
@@ -289,7 +410,11 @@ impl App {
         }
 
         section(ui, t("Experiment"));
-        let schema = params_schema("experiment.set");
+        let mut schema = params_schema("experiment.set");
+        // The limits the model checks the experiment against, so its fields refuse the rest.
+        schema["properties"]["replications"]["minimum"] = json!(1);
+        schema["properties"]["warmup"]["minimum"] = json!(0.0);
+        schema["properties"]["duration"]["exclusiveMinimum"] = json!(0.0);
         let unit = self.time_unit_label();
         let x = model["experiment"].clone();
         for (f, time) in [
@@ -346,25 +471,20 @@ impl App {
                 (t("Warning"), p.warning)
             };
             ui.label(theme::strong(word).color(color));
-            // The engine's message starts "error at `id`: " or "error: "; the word is the label
-            // and the place is the inspector or the Show link, so only the rest is shown.
-            let message = ["error at `", "warning at `"]
-                .iter()
-                .find_map(|head| {
-                    pr.message
-                        .strip_prefix(head)
-                        .and_then(|rest| rest.split_once("`: "))
-                        .map(|(_, m)| m)
-                })
-                .or_else(|| pr.message.strip_prefix("error: "))
-                .or_else(|| pr.message.strip_prefix("warning: "))
-                .unwrap_or(&pr.message);
-            ui.label(message);
+            // The word is the label and the place is the inspector or the Show link, so only
+            // the rest of the engine's message is shown.
+            ui.label(pr.short_message());
             if link
                 && let Some(at) = &pr.at
                 && ui.link(tf("Show {id}", &[("id", at)])).clicked()
             {
-                self.selected = Some(at.clone());
+                // A flow's problem is shown on the block it leaves.
+                let block = self.block_of(Some(at));
+                self.show_block(block);
+                form::focus(
+                    pr.field()
+                        .and_then(|f| Some(format!("{}/{f}", self.selected.as_ref()?))),
+                );
             }
         });
     }
@@ -444,7 +564,13 @@ impl App {
         id: &str,
         fields: &[&str],
     ) {
-        let schema = params_schema("block.set");
+        let mut schema = params_schema("block.set");
+        // The limits the model checks, so the fields refuse the rest: a server has a unit (or
+        // none outside the calendars, with units by calendar), a batch at least one entity.
+        if !is_set(el, "shifts") {
+            schema["properties"]["capacity"]["minimum"] = json!(1);
+        }
+        schema["properties"]["size"]["minimum"] = json!(1);
         let unit = self.time_unit_label();
         let calendars = form::calendars(model);
         for f in fields {
@@ -568,9 +694,12 @@ impl App {
                 t("Arrivals by calendar")
             };
             ui.add_space(6.0);
+            // Open for a problem's field in it.
+            let wanted = more.iter().any(|f| form::focus_waits(&format!("{id}/{f}")));
             egui::CollapsingHeader::new(theme::strong(title))
                 .id_salt(format!("{id}/timed"))
                 .default_open(more.iter().any(|f| is_set(el, f)))
+                .open(wanted.then_some(true))
                 .show(ui, |ui| self.block_fields(ui, model, el, &id, more));
         }
 
@@ -593,11 +722,13 @@ impl App {
             egui::CollapsingHeader::new(theme::strong(t("Patience")))
                 .id_salt(format!("{id}/patience"))
                 .default_open(el["patience"].is_object())
+                .open(form::focus_waits(&format!("{id}/patience")).then_some(true))
                 .show(ui, |ui| self.patience_section(ui, model, el, &id));
             ui.add_space(6.0);
             egui::CollapsingHeader::new(theme::strong(t("Health check")))
                 .id_salt(format!("{id}/health_check"))
                 .default_open(el["health_check"].is_object())
+                .open(form::focus_waits(&format!("{id}/health_check")).then_some(true))
                 .show(ui, |ui| self.health_check_section(ui, model, el, &id));
         }
 

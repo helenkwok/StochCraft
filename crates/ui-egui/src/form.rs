@@ -454,7 +454,11 @@ fn row<R>(
 /// A number field: craft-ui's `NumberField`, which reads and writes numbers the way the user's
 /// region does (its decimal mark and grouping), commits on Enter or leaving the field, steps with
 /// the arrow keys, and leaves text that isn't a number in the field, outlined with the reason,
-/// until it is fixed or Esc restores the value. Returns the new value when it changed.
+/// until it is fixed or Esc restores the value. A number outside the field's limits (its schema's
+/// `minimum`, `exclusiveMinimum` and `maximum`, see [`Limits`]) is refused the same way: it stays
+/// in the field, outlined, with the reason under it, and the model keeps its value until the
+/// field holds one within them or Esc puts the model's back. Returns the new value when it
+/// changed.
 #[allow(clippy::too_many_arguments)]
 fn number(
     ui: &mut egui::Ui,
@@ -467,49 +471,79 @@ fn number(
     unit: Option<&str>,
 ) -> Option<Value> {
     let unit = unit.map(|u| Unit::new(&format!("{{n}} {u}")));
+    let limits = Limits::of(node, integer);
+    let decimals = if integer { 0..=0 } else { 0..=6 };
+    // The model's value, and the refused one the field holds instead (in `drafts` under the
+    // field's key, as the user's region writes it), until it is fixed or Esc drops it.
+    let model = if integer {
+        current.as_u64().map_or(0.0, |v| v as f64)
+    } else {
+        current.as_f64().unwrap_or(0.0)
+    };
+    let held = cx.drafts.get(key).and_then(|s| cx.numbers.parse(s).ok());
     // A column, so a message can go under the field; always one, so the field's id (and the
     // text typed into it) doesn't change when a message appears.
     ui.vertical(|ui| {
-        let r;
         // Whatever reason craft-ui gives for this field's text, this frame (see `messages`).
         DESCRIBED.with(|d| d.borrow_mut().take());
-        let (out, shown) = if integer {
-            let max = if node["format"] == "uint32" {
-                f64::from(u32::MAX)
-            } else {
-                u64::MAX as f64
-            };
-            let mut v = current.as_u64().unwrap_or(0);
-            let mut field = NumberField::new(&mut v, cx.numbers)
-                .id_salt(key)
-                .range(0.0..=max)
-                .desired_width(110.0);
-            if let Some(u) = unit {
-                field = field.unit(u);
-            }
-            r = ui.add(field);
-            (
-                r.changed().then(|| json!(v)),
-                cx.numbers.format(v as f64, 0..=0),
-            )
-        } else {
-            let mut v = current.as_f64().unwrap_or(0.0);
-            let mut field = NumberField::new(&mut v, cx.numbers)
-                .id_salt(key)
-                .decimals(0..=6)
-                .desired_width(110.0);
-            if let Some(u) = unit {
-                field = field.unit(u);
-            }
-            r = ui.add(field);
-            (r.changed().then(|| json!(v)), cx.numbers.format(v, 0..=6))
-        };
+        // Without a range of its own, so what was typed reaches the limits below rather than
+        // being clamped to them; an integer field rounds to whole numbers.
+        let mut v = held.unwrap_or(model);
+        let mut field = NumberField::new(&mut v, cx.numbers)
+            .id_salt(key)
+            .decimals(decimals.clone())
+            .desired_width(110.0);
+        if let Some(u) = unit {
+            field = field.unit(u);
+        }
+        let r = ui.add(field);
         let reason = DESCRIBED.with(|d| d.borrow_mut().take());
         // Named for assistive technology (and tests) by the row's label.
         r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, label));
-        // Text that isn't a number, in words under the field once the user has left it (while
-        // typing, craft-ui's tooltip says the same), so the error isn't the red outline alone.
-        if let Some(reason) = reason
+        // A problem's field, asked for by Run, the problems chip or the status bar.
+        if FOCUS.with(|f| {
+            f.borrow()
+                .as_deref()
+                .is_some_and(|k| key == k || key.starts_with(&format!("{k}/")))
+        }) {
+            FOCUS.with(|f| f.borrow_mut().take());
+            r.request_focus();
+            r.scroll_to_me(Some(egui::Align::Center));
+        }
+        let mut out = None;
+        if r.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape)) {
+            // Esc: the model's value again.
+            cx.drafts.remove(key);
+        } else if r.changed() {
+            if limits.refuse(v, cx.numbers).is_some() {
+                cx.drafts
+                    .insert(key.to_owned(), cx.numbers.format(v, decimals.clone()));
+            } else {
+                cx.drafts.remove(key);
+                if v != model {
+                    out = Some(if integer { json!(v as u64) } else { json!(v) });
+                }
+            }
+        }
+        let shown = cx.numbers.format(model, decimals);
+        // Text that isn't a number, or a number the limits refuse, in words under the field once
+        // the user has left it (while typing, craft-ui's tooltip says the same for text), so the
+        // error isn't the red outline alone.
+        let refused = cx
+            .drafts
+            .get(key)
+            .and_then(|s| cx.numbers.parse(s).ok())
+            .and_then(|bad| limits.refuse(bad, cx.numbers));
+        if refused.is_some() {
+            let p = theme::palette(ui.ctx());
+            ui.painter().rect_stroke(
+                r.rect,
+                4.0,
+                egui::Stroke::new(1.5, p.error),
+                egui::StrokeKind::Inside,
+            );
+        }
+        if let Some(reason) = reason.or(refused)
             && !r.has_focus()
         {
             theme::error_message(
@@ -525,11 +559,109 @@ fn number(
     .inner
 }
 
+/// The values a number field takes, from its schema: `minimum`, `exclusiveMinimum` and
+/// `maximum`, and for an integer the most its format holds. The engine's command schemas give
+/// unsigned integers their minimum of 0; the forms add the limits the model checks for (a
+/// distribution's, see [`with_limits`]; at least one unit or entity, see `editor.rs`).
+struct Limits {
+    min: Option<f64>,
+    above: Option<f64>,
+    max: Option<f64>,
+    /// The maximum is the schema's (a probability's 1), not just the most the format holds.
+    range: bool,
+}
+
+impl Limits {
+    fn of(node: &Value, integer: bool) -> Self {
+        let most = match node["format"].as_str() {
+            Some("uint32") => Some(f64::from(u32::MAX)),
+            _ if integer => Some(u64::MAX as f64),
+            _ => None,
+        };
+        Self {
+            min: node["minimum"].as_f64().or(integer.then_some(0.0)),
+            above: node["exclusiveMinimum"].as_f64(),
+            max: node["maximum"].as_f64().or(most),
+            range: node["maximum"].is_number(),
+        }
+    }
+
+    /// Why `v` is refused, in words, or `None` if it is within the limits.
+    fn refuse(&self, v: f64, numbers: &LocaleNumbers) -> Option<String> {
+        let n = |x: f64| numbers.format(x, 0..=6);
+        let low = self.min.is_some_and(|m| v < m) || self.above.is_some_and(|m| v <= m);
+        let high = self.max.is_some_and(|m| v > m);
+        if !(low || high) {
+            return None;
+        }
+        Some(match (self.min, self.above, self.max) {
+            (Some(min), _, Some(max)) if self.range => tf(
+                "Must be from {min} to {max}",
+                &[("min", &n(min)), ("max", &n(max))],
+            ),
+            _ if high => t("Number too large").to_owned(),
+            (_, Some(above), _) => tf("Must be more than {min}", &[("min", &n(above))]),
+            (Some(min), _, _) => tf("Must be {min} or more", &[("min", &n(min))]),
+            _ => return None,
+        })
+    }
+}
+
+/// A distribution's field `f` with the limits the model checks it against
+/// (`Dist::check`), and with none below 0 when it is a time: no time is negative.
+fn with_limits(node: &Value, dist: &str, f: &str, time: bool) -> Value {
+    let mut n = node.clone();
+    if !n.is_object() {
+        return n;
+    }
+    match (dist, f) {
+        // A user distribution's points are weights.
+        ("user", "probability") => n["minimum"] = json!(0.0),
+        (_, "probability") => {
+            n["minimum"] = json!(0.0);
+            n["maximum"] = json!(1.0);
+        }
+        ("truncated_normal", "std_dev") | ("log_normal", "mean") | (_, "shape" | "scale") => {
+            n["exclusiveMinimum"] = json!(0.0);
+        }
+        (_, "k") => n["minimum"] = json!(1),
+        (_, "std_dev") | ("exponential" | "erlang" | "poisson", "mean") => {
+            n["minimum"] = json!(0.0);
+        }
+        _ if time => n["minimum"] = json!(0.0),
+        _ => {}
+    }
+    n
+}
+
 thread_local! {
     /// The reason craft-ui last gave for text that isn't a number, as it describes it: a number
     /// field's error is its own, so the form reads it from here, just after drawing the field.
     /// Per thread, as the interface draws on one (and each test on its own).
     static DESCRIBED: std::cell::RefCell<Option<String>> = const { std::cell::RefCell::new(None) };
+    /// The key of a field to focus and scroll to when it is next drawn (a problem's field): the
+    /// first number field with this key, or under it, takes it.
+    static FOCUS: std::cell::RefCell<Option<String>> = const { std::cell::RefCell::new(None) };
+}
+
+/// Focuses the number field with `key` (or the first under it) when it is next drawn; `None`
+/// forgets a focus not taken.
+pub(crate) fn focus(key: Option<String>) {
+    FOCUS.with(|f| *f.borrow_mut() = key);
+}
+
+/// The key of the field waiting to be focused, if any.
+pub(crate) fn focus_key() -> Option<String> {
+    FOCUS.with(|f| f.borrow().clone())
+}
+
+/// Whether a field with `key`, or under it, waits to be focused (its section opens for it).
+pub(crate) fn focus_waits(key: &str) -> bool {
+    FOCUS.with(|f| {
+        f.borrow()
+            .as_deref()
+            .is_some_and(|k| k == key || k.starts_with(&format!("{key}/")))
+    })
 }
 
 /// `numbers`, with craft-ui's reasons for text that isn't a number in the interface language,
@@ -623,12 +755,15 @@ fn tagged(
         ui.indent(key, |ui| {
             for f in fields {
                 let k = format!("{key}/{f}");
-                let fnode = &v["properties"][f];
+                // The model's limits on the field, and none below 0 for a time (a property's
+                // random value, under `…/random`, is not a time).
+                let time = is_time(&now, f) && !key.ends_with("/random");
+                let fnode = with_limits(schema.resolve(&v["properties"][f]), &now, f, time);
                 let changed = edit(
                     ui,
                     cx,
                     schema,
-                    fnode,
+                    &fnode,
                     &k,
                     &label_for(f),
                     fnode["description"].as_str(),
@@ -1043,7 +1178,7 @@ fn array(
                     &format!("{} {}", label_for(f), i + 1),
                     &it[f],
                     item["properties"][f]["type"] == "integer",
-                    &item["properties"][f],
+                    &with_limits(&item["properties"][f], "user", f, false),
                     unit.as_deref(),
                 ) {
                     let mut all = out.clone().unwrap_or_else(|| items.clone());

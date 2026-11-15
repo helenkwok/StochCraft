@@ -274,6 +274,9 @@
 	Most likely	Mest sandsynlig
 	Move	Flyt
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Flyt hver parameter ned og op efter tur, og ranger dem efter, hvor meget resultatet flytter sig.
+	Must be from {min} to {max}	Skal være fra {min} til {max}
+	Must be more than {min}	Skal være mere end {min}
+	Must be {min} or more	Skal være {min} eller mere
 	Name	Navn
 	Needs	Behov
 	Never: it runs for its duration	Aldrig: kører hele sin varighed
@@ -687,3 +690,5 @@ unit	yr	år
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikation · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt|{n} replikationer · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikation · frø {seed}|{n} replikationer · frø {seed}
 @plural	{n} run|{n} runs	{n} replikation|{n} replikationer
+@plural	Run ({n} problem)|Run ({n} problems)	Kør ({n} problem)|Kør ({n} problemer)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemer: {blocks}

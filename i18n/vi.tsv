@@ -274,6 +274,9 @@
 	Most likely	Có khả năng nhất
 	Move	Di chuyển
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Lần lượt giảm và tăng từng tham số, rồi xếp hạng theo mức kết quả thay đổi.
+	Must be from {min} to {max}	Phải từ {min} đến {max}
+	Must be more than {min}	Phải lớn hơn {min}
+	Must be {min} or more	Phải từ {min} trở lên
 	Name	Tên
 	Needs	Nhu cầu
 	Never: it runs for its duration	Không bao giờ: chạy hết thời lượng
@@ -687,3 +690,5 @@ unit	yr	năm
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} lần lặp · hạt giống {seed} · khởi động {warmup} {unit} · đo {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} lần lặp · hạt giống {seed}
 @plural	{n} run|{n} runs	{n} lần lặp
+@plural	Run ({n} problem)|Run ({n} problems)	Chạy ({n} vấn đề)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} vấn đề: {blocks}

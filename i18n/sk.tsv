@@ -274,6 +274,9 @@
 	Most likely	Najpravdepodobnejšia hodnota
 	Move	Presun
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Postupne posunúť každý parameter nadol a nahor a zoradiť ich podľa toho, ako veľmi sa výsledok pohne.
+	Must be from {min} to {max}	Musí byť od {min} do {max}
+	Must be more than {min}	Musí byť viac ako {min}
+	Must be {min} or more	Musí byť {min} alebo viac
 	Name	Názov
 	Needs	Potreby
 	Never: it runs for its duration	Nikdy: beží celé trvanie
@@ -687,3 +690,5 @@ unit	yr	r.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikácia · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} replikácie · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} replikácií · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikácia · počiatočná hodnota {seed}|{n} replikácie · počiatočná hodnota {seed}|{n} replikácií · počiatočná hodnota {seed}
 @plural	{n} run|{n} runs	{n} replikácia|{n} replikácie|{n} replikácií
+@plural	Run ({n} problem)|Run ({n} problems)	Spustiť ({n} problém)|Spustiť ({n} problémy)|Spustiť ({n} problémov)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problém: {blocks}|{n} problémy: {blocks}|{n} problémov: {blocks}

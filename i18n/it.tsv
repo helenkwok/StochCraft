@@ -274,6 +274,9 @@
 	Most likely	Più probabile
 	Move	Sposta
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Spostare ogni parametro in giù e in su a turno, e ordinarli secondo quanto si muove il risultato.
+	Must be from {min} to {max}	Deve essere tra {min} e {max}
+	Must be more than {min}	Deve essere maggiore di {min}
+	Must be {min} or more	Deve essere {min} o più
 	Name	Nome
 	Needs	Fabbisogno
 	Never: it runs for its duration	Mai: dura per tutta la sua durata
@@ -687,3 +690,5 @@ unit	yr	a
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replica · seme {seed} · riscaldamento {warmup} {unit} · {duration} {unit} misurati|{n} repliche · seme {seed} · riscaldamento {warmup} {unit} · {duration} {unit} misurati
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replica · seme {seed}|{n} repliche · seme {seed}
 @plural	{n} run|{n} runs	{n} replica|{n} repliche
+@plural	Run ({n} problem)|Run ({n} problems)	Esegui ({n} problema)|Esegui ({n} problemi)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemi: {blocks}
