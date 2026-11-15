@@ -2,7 +2,7 @@
 
 Where StochCraft is going next and in what order. Five milestones: **M1** model files, the
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
-desktop app (and the browser app built from it); **M4** system dynamics and hybrid models; **M5**
+desktop app (and the browser app built from it); **M4** Monte Carlo, system dynamics, agents and hybrid models; **M5**
 transport and layout. M1 and M3 are done. M2.1–M2.8 are done, and so is M2.10 (abandonment)
 apart from the gaps listed in it. M2.11 (changeovers and lean measures) has its changeovers,
 product-type times, takt and cycle times, state times and most of OEE done; M2.9 (output analysis) has only the checks it already
@@ -85,6 +85,7 @@ Open standards exist for exactly what StochCraft models:
 |---|---|---|
 | **BPSim 2.0** (WfMC, December 2016, CC BY 3.0) on **BPMN 2.0** (OMG; ISO/IEC 19510) or **XPDL 2.2** (WfMC) | The process model (start events, tasks, gateways, end events, sequence flows, resources, diagram layout) is BPMN or XPDL; BPSim adds scenarios of simulation parameters that reference its elements by id | **Native model file** (M1) |
 | **XMILE 1.0** (OASIS, 2015) | System dynamics: stocks, flows, auxiliaries | Read and written by the `sd` crate (M4); a hybrid model's BPMN+BPSim file names its XMILE variables (D13) |
+| **SCXML 1.0** (W3C Recommendation, 2015) | State charts: states, transitions, events, timers | Each agent type's behaviour (M4.3, D16) |
 | **CMSD** (SISO-STD-008-2010 and -01-2012) | Manufacturing data: resources, parts, routings, schedules | Import for factory models (later) |
 
 ### What BPSim 2.0 defines (checked against the specification)
@@ -171,7 +172,7 @@ changes from what `xtask/src/layers.rs` holds today:
 |---|---|---|
 | L0 | `random`, `stats` (standalone) | unchanged |
 | L1 | `des`, **`model`** | `model` moves up from L0 so it can use `random::Dist` instead of duplicating it |
-| L2 | `blocks`, `agents`, `sd` | `blocks` compiles a `model::Model` into a simulation |
+| L2 | `blocks`, `agents`, `sd`, `mc` | `blocks` compiles a `model::Model` into a simulation |
 | L3 | `experiment`, **`io`** | `io` reads and writes BPMN + BPSim files and exports results (bytes in, bytes out, so the browser uses the same code) |
 | L4 | **`engine`** | new: commands, history, journal, runs |
 | L5 | `render`, `ui-egui`, `mcp` | moved up from L4; `UI_MIN_LAYER` becomes 5 |
@@ -1791,14 +1792,92 @@ Windows (checked by hand); macOS is unchecked.
 
 ---
 
-## M4: system dynamics and hybrid models
+## M4: Monte Carlo, system dynamics, agents and hybrid models
 
-**Outcome:** a model can hold stocks and flows (the `sd` crate) and agents with behaviours (the
-`agents` crate) beside its discrete blocks, all on one clock, saved in the same file and run
-with the same replications, results and determinism as M2's models.
+**Outcome:** besides discrete-event models, StochCraft runs the three other kinds of simulation
+that people expect from a simulation tool, and that they can already write in Python:
 
-Not started. These are the decisions to settle before the crates are written (#71); none is a
-bug in today's code. Chapter references are to Brailsford, Churilov and Dangerfield (eds.),
+- **Monte Carlo:** a calculation with uncertain inputs, sampled many times, with no clock (M4.1);
+- **system dynamics:** stocks and flows over time (M4.2);
+- **agents:** individuals with their own state and behaviour, in a flow, in a population or in
+  space (M4.3);
+
+and any of them together in one model, on one clock (M4.4). All of them are saved in open
+formats, run with the same replications, seeds and determinism as M2's models, and report
+results with their confidence intervals.
+
+**The bar is what Python users already have.** Someone who can write the model in a few dozen
+lines of Python with numpy and scipy (Monte Carlo), PySD (system dynamics) or Mesa (agents) has
+no reason to use StochCraft unless it does at least as much, with less effort, and explains
+what it finds. Each part below lists what that means for its kind of model.
+
+**Order.** After the redesign of the results and the canvas, because all three need it (results
+over time, a second kind of diagram on the canvas). Then M4.1, the smallest and the one that
+reuses most of what exists; then M4.2 and M4.3 (agents in flows first); then M4.4. Agents in
+space are built with M5, which needs the same layout and travel.
+
+Not started. D15–D18 are settled; D10–D13 (#71 has them) are to settle first.
+
+### M4.1 Monte Carlo
+
+**What it is:** a model of a calculation, not a process. Inputs are distributions (a cost, a
+duration, a demand), outputs are expressions over them (a total cost, a finish date, a profit),
+and each trial draws every input once and evaluates every output. There is no clock and no
+queue. Typical uses are cost and schedule risk, capacity and budget checks, and the outer loop
+of parameter uncertainty around a discrete-event or hybrid model (D10).
+
+**What Python users already have, and so the minimum:**
+
+- every distribution in scipy.stats that BPSim also has, which `stochcraft-random` already
+  implements, plus discrete and empirical (data) inputs, which BPSim's `UserDistribution`
+  covers;
+- correlated inputs: a rank correlation between inputs, as the Iman–Conover method gives
+  (Iman and Conover, *A distribution-free approach to inducing rank correlation among input
+  variables*, Communications in Statistics B 11(3), 1982);
+- plain random sampling and Latin hypercube sampling (shared with M2.8's planned Latin hypercube
+  designs);
+- many trials fast: 10⁶ trials of a small model in seconds, in parallel on every core and in
+  the browser's workers;
+- results: mean with its confidence interval, percentiles (P5, P50, P95 and any other), the
+  probability of meeting a target with its interval (M2.8's code), a histogram and the
+  cumulative curve;
+- which inputs matter: a tornado chart from one-at-a-time swings, rank correlation of each input
+  with the output, and variance-based (Sobol) indices for models with few inputs (Saltelli et
+  al., *Global Sensitivity Analysis: The Primer*, Wiley, 2008);
+- convergence: the interval's half-width as trials grow, and a stop rule ("until P95 is known
+  within ±1%").
+
+**What StochCraft adds:** findings in words ("a 1 in 5 chance the project overruns"), the
+inputs that matter named first, every number with its interval, and the same model reused as
+the uncertainty around a process model.
+
+**In the window:** a third kind of document beside process models. A table of inputs (name,
+distribution, unit, correlation) and outputs (name, expression, unit, target), using the
+existing distribution editor and expression language; then Run and the results above. A model
+can be built from a spreadsheet's columns by pasting them.
+
+**Engine:** a new L2 crate, `mc`, on `stochcraft-random` and `stochcraft-stats`; each trial is a
+replication with its own random stream, so results are reproducible and independent of the
+number of cores. Expressions use BPSim's XPath 1.0 subset (D6), extended with the arithmetic
+and functions a cost model needs (min, max, if, round, sums over a list).
+
+**Checks with known answers:** the sum of independent normals (exact mean and variance); the
+product of log-normals (exact); a PERT schedule's finish on a single path against its
+distribution; the induced rank correlation against its target; Sobol indices of the Ishigami
+function against their closed form.
+
+### M4.2 System dynamics
+
+**What Python users already have, and so the minimum:** PySD runs models from the common
+system dynamics formats, with their stocks, flows, auxiliaries, delays, lookups and arrays, and
+returns every variable over time; runs with changed parameters are a loop away. So StochCraft
+reads and writes XMILE (OASIS, 2015) models, runs them with the numerics below, draws stocks and
+flows on the canvas, plots any variable over time, and runs the same model many times with
+uncertain parameters (M4.1) to give bands over time instead of a single line.
+
+These are the decisions to settle before the `sd` crate is written (#71); none is a bug in
+today's code. The clock, replications and results over time are shared with M4.3 and M4.4.
+Chapter references are to Brailsford, Churilov and Dangerfield (eds.),
 *Discrete-Event Simulation and System Dynamics for Management Decision Making* (Wiley, 2014).
 
 - **One clock** (D11). `blocks`, `agents` and `sd` all sit on L2, and `INTRA_LAYER_ORDER` in
@@ -1835,6 +1914,82 @@ bug in today's code. Chapter references are to Brailsford, Churilov and Dangerfi
   - A command that halves the step, to check that results do not depend on it.
   - Tests: a delay's pulse response against the Erlang density, logistic growth against its
     closed form, Euler's error halving when the step halves; golden SD and hybrid models.
+### M4.3 Agents
+
+**What it is:** individuals that each keep their own state and memory and decide what to do
+next, rather than being moved by the process. Three kinds, planned together and built in this
+order:
+
+1. **Agents in a flow:** today's entities and resources given behaviour. A client that retries
+   with growing back-off and gives up, a patient whose condition worsens while waiting, a
+   machine with its own modes. They still pass through the blocks; their state chart decides
+   what they do between and inside them. This is the first step because it builds on the
+   blocks, and it is what the retry-storm and triage cases need.
+2. **Populations:** agents outside any flow that meet and influence each other, through a
+   network (who knows whom) or through contacts at random or by place: product adoption, word of
+   mouth, an epidemic, a workforce. Results are counts over time, as in system dynamics, and
+   the classic checks compare the two (D11's clock).
+3. **Agents in space:** agents with a position that move: people walking through a building,
+   vehicles and robots on a layout. Built with M5, which needs the same layout, distances and
+   travel; continuous space and grids first, the walking of crowds later.
+
+**What Python users already have, and so the minimum:** Mesa gives agents with their own step,
+activation in a fixed or random order, grids, continuous space and networks, a data collector
+for any agent or model variable over time, batch runs over parameters, and a browser view.
+StochCraft matches that and adds:
+
+- **Behaviour without code:** state charts drawn on the canvas, with states, transitions on a
+  timeout (fixed or random), a condition, a message or a rate, and actions in the expression
+  language; no Python.
+- **Time that is exact:** agents act at the times their events fall, on the `des` event list,
+  not in fixed steps (a stepped mode is available for models written that way).
+- **Replications and intervals:** every result over time comes with its band across
+  replications, like the rest of StochCraft, which a hand-written Mesa loop does not give.
+- **Reproducible:** one random stream per agent population and purpose, so adding an agent does
+  not change every other agent's draws.
+
+**Building blocks** (generic terms; what each needs from `des` and `blocks` is in #71 §9):
+
+- **Agent type:** its variables (with BPSim's property types, D3), its state chart, and the
+  statistics to collect.
+- **Population:** a number of agents of one type, created at the start, from arrivals, or by
+  other agents; removed when their state chart ends.
+- **State chart:** states nested and in parallel, entry and exit actions, transitions on a
+  timeout, a condition, a message, an arrival rate, or another agent's change; history states.
+- **Messages:** to one agent, to a random one, to neighbours (in the network or within a
+  distance), or to all of a population.
+- **Environment:** a network (random, small-world, scale-free, or read from a file), a grid, or
+  continuous space with M5's layout.
+- **Links to the flow:** an agent enters a block as an entity, waits for a resource, leaves;
+  a block can send an agent a message; a resource unit can be an agent.
+- **Statistics:** counts by state over time, means over a population, and any agent variable.
+
+**Engine:** a new L2 crate, `agents`, beside `blocks` and `sd`, all on the `des` clock (D11).
+State charts follow SCXML's semantics: run to completion, a fixed order for conflicting
+transitions, internal events before external ones, which makes each agent deterministic for a
+given stream (W3C SCXML 1.0, §3.13 and Appendix D).
+
+**In the window:** the agent types and their state charts drawn on the canvas with the redesign's
+blocks; populations and the environment set in the inspector; Watch a run shows agents in their
+states (coloured by state, with words), and moving when they have a place.
+
+**Checks with known answers:**
+
+- the SIR epidemic in a large, well-mixed population against its system dynamics equations
+  (Kermack and McKendrick, 1927), and its final size against the closed-form equation;
+- the Bass diffusion model of adoption as agents against its closed-form curve (Bass, *A new
+  product growth for model consumer durables*, Management Science 15(5), 1969);
+- a population of independent agents each failing at a constant rate: the count still working
+  is binomial, exactly;
+- agents in a flow: M/M/1 with clients that give up after an exponential patience against
+  M2.10's M/M/1+M results, now with the patience as a state chart.
+
+### M4.4 Hybrid models
+
+System dynamics and agents together with discrete blocks in one model, on one clock (D11),
+with the couplings declared in the file rather than written as code; and Monte Carlo (M4.1) as
+the outer loop of parameter uncertainty around any of them (D10).
+
 - **Coupling primitives**, declared in the file rather than written as code (ch. 12 §12.2):
   - an SD threshold triggers a DES event;
   - DES writes only stocks;
@@ -1843,11 +1998,6 @@ bug in today's code. Chapter references are to Brailsford, Churilov and Dangerfi
   - discrete entities to continuous amounts and back without losing any.
 - **File format** (D13): a BPMN and BPSim file names XMILE variables through a `stochcraft:`
   vendor extension.
-- **What `agents` needs from `blocks`** (ch. 12 §12.1 and §12.4; ch. 14 §14.2.2):
-  - entities injected without a source, and a given entity removed;
-  - statecharts with timeouts and triggers;
-  - populations with statistics;
-  - model instances.
 - **Linking runs** (ch. 3 §3.4.5, ch. 11 §11.5.2.1, ch. 13 §13.4, ch. 15 §15.6 and the ch. 14
   cases):
   - starting a run from a given state;
@@ -1856,8 +2006,8 @@ bug in today's code. Chapter references are to Brailsford, Churilov and Dangerfi
   - calibration to historical series.
 
 Already in place: arrival rates are redrawn at each rate change (M2.6), and an agent over MCP
-can open, edit and run models and drive the window (M3.6). The journal becomes an audit trail once it records its version and
-starting state (#44).
+can open, edit and run models and drive the window (M3.6). The journal becomes an audit trail
+once it records its version and starting state (#44).
 
 ---
 
@@ -1962,7 +2112,7 @@ M1.1 model ─ M1.2 compile ─ M1.3 io ─ M1.4 engine ─ M1.5 cli ─ M1.6 de
                                    in M3 forms
                                          │
                      ┌───────────────────┴───────────────────┐
-              M4 system dynamics, hybrid models       M5 transport and layout
+              M4 Monte Carlo, SD, agents, hybrid      M5 transport and layout
 ```
 
 Examples for teaching are added alongside, as each feature they need lands.
@@ -1991,3 +2141,7 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D12 | Bulk flow (tanks, pipes) (M4) | Exact events: with rates constant between changes, the time a level is reached is worked out and scheduled in `des`, rather than found up to one step late by a fixed-step `sd` |
 | D13 | Hybrid model files (M4) | One BPMN and BPSim file, naming XMILE variables through a `stochcraft:` vendor extension, with the couplings declared in it |
 | D14 | The BPMN MIWG test suite (github.com/bpmn-miwg/bpmn-miwg-test-suite, CC BY 3.0 by its `LICENSE.txt`) as test files | Settled: fetched in CI at a pinned commit and never committed, as for D7, so the repository stays under one licence; bpmn.io's bpmn-js-integration (MIT) does the same, cloning its own copy of the suite into `tmp/` in its CI. Only its `Reference/` folder is used, for reading, round-trip and diagnostics tests; the other folders are exports from commercial modelling tools and are not used. If a few files are ever needed offline, only those reference models are committed, each with a row in ATTRIBUTION.md and the CC BY 3.0 notice |
+| D15 | Monte Carlo model files (M4.1) | Settled (Helen, 2026-11-15): a BPMN file with no process, whose BPSim scenario holds the inputs as parameters with their distributions and the outputs as `stochcraft:` vendor extensions (expressions, units, targets, correlations), so D1 holds; CSV import and export of the input table |
+| D16 | Agent behaviour in files (M4.3) | Settled (Helen, 2026-11-15): each agent type's state chart is a W3C SCXML 1.0 document (Recommendation, 1 September 2015), referenced from the BPMN file by a `stochcraft:` vendor extension; populations, the environment and the links to blocks are `stochcraft:` extensions |
+| D17 | SCXML data model and timing (M4.3) | Settled (Helen, 2026-11-15). SCXML lets a platform define its own data model (§5.1, Appendix B), and the Recommendation defines only the null and ECMAScript ones in full. So: a `stochcraft` data model using BPSim's XPath 1.0 subset (D6) for `cond`, `expr` and `location`, with SCXML's `In()`; random timeouts through `<send delayexpr>` calling the distribution functions, since `delay` itself is a fixed CSS2 time; no `<script>`. Other tools then read the charts' structure, but not our expressions |
+| D18 | Agent scheduling and random streams (M4.3) | Settled (Helen, 2026-11-15). Agents run event-driven on the `des` event list; a stepped mode only for models written that way, activating agents in a set or a random order each step. Events at the same time run by time, then priority, then an order the experiment sets openly: first scheduled first (the default, as today, so validated results do not change), last scheduled first, or random from a stream of its own, so a model can be checked for depending on the order. Initial events, step activations and broadcasts are scheduled in population, then agent order. Each `des` event delivered to an agent is one SCXML external event, handled by a complete zero-time macrostep; `<raise>` and `#_internal` events stay inside the agent; delayed and zero-delay `<send>`s become `des` events, and `<cancel>` marks them stale; a limit on microsteps per macrostep stops a run that loops. Each agent has its own random stream, derived from the replication's seed, its population and its serial number, with a stream per purpose, so adding an agent never changes another's numbers |
