@@ -94,6 +94,21 @@
       <stochcraft:patience until="done"><bpsim:FloatingParameter value="30"/></stochcraft:patience>
     </bpsim:VendorExtension>
 
+  stochcraft:balking, on a task's ElementParameters: an entity arriving at the task looks at its
+  queue and joins with a chance that depends on the number n it finds there; otherwise it balks
+  (it never enters, and takes the way out marked stochcraft:balked, or leaves the model). n counts
+  those waiting (in the queue, or in transfer to the task), or with countsInService="true" also
+  those in service. With rule="table" (the default) the chance is given by stochcraft:join rows,
+  in increasing order of waiting: from each row's number on, its probability; below the first
+  row, 1. With rule="reciprocal" it is 1/(n + 1). BPSim 2.0 has no parameter for it.
+
+    <bpsim:VendorExtension name="stochcraft:balking" xmlns:stochcraft="…">
+      <stochcraft:balking>
+        <stochcraft:join waiting="2" probability="0.5"/>
+        <stochcraft:join waiting="5" probability="0"/>
+      </stochcraft:balking>
+    </bpsim:VendorExtension>
+
   stochcraft:healthCheck, on a task's ElementParameters: each unit of the task's resource is
   checked every interval (its own checks, the first one interval after the start) and fails a
   check when more entities wait at the task than limit per unit working (not failed, not out and
@@ -137,6 +152,10 @@
   event finding no room is lost and an entity from any other element waits for room before the
   task; with it, both take this way, counted as lost by the task (and by the start event, for
   its arrivals). At most one per task.
+
+  stochcraft:balked, on a sequence flow's ElementParameters, with the value true: the way out of
+  a task with stochcraft:balking that entities not joining its queue take at once (to try again
+  later, or go elsewhere), besides the task's ordinary way out. At most one per task.
 
   stochcraft:scrap, on an end event's ElementParameters: what reaches it is scrap (ISO
   22400-2's scrap quantity), counted against the task the attribute chargedTo names (an
@@ -308,6 +327,34 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="balking">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="join" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="waiting" type="xs:nonNegativeInteger" use="required"/>
+            <xs:attribute name="probability" use="required">
+              <xs:simpleType>
+                <xs:restriction base="xs:double">
+                  <xs:minInclusive value="0"/>
+                  <xs:maxInclusive value="1"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="rule" default="table">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="table"/>
+            <xs:enumeration value="reciprocal"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="countsInService" type="xs:boolean" default="false"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="demand">

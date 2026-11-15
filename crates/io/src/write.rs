@@ -7,10 +7,10 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate, HealthCheck, Model,
-    Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy,
-    Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Setup, Stop,
-    Timed, Transfer,
+    BalkJoin, Balking, Bounds, Breakdown, Calendar, DateTime, Demand, Dist, ElementKind, Estimate,
+    HealthCheck, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
+    ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap,
+    Setup, Stop, Timed, Transfer,
 };
 
 use crate::bpsim::NS2;
@@ -432,6 +432,37 @@ pub(crate) fn abandoned_element() -> Element {
 /// ([`crate::bpsim::TURNED_AWAY`]).
 pub(crate) fn turned_away_element() -> Element {
     vendor_value_element(crate::bpsim::TURNED_AWAY, "true")
+}
+
+/// A way for entities that balk as StochCraft's vendor extension ([`crate::bpsim::BALKED`]).
+pub(crate) fn balked_element() -> Element {
+    vendor_value_element(crate::bpsim::BALKED, "true")
+}
+
+/// A server's balking as StochCraft's vendor extension ([`crate::bpsim::BALKING`]). `rule` is
+/// written only for `reciprocal`, and `countsInService` only when true.
+pub(crate) fn balking_element(b: &Balking) -> Element {
+    let ns = crate::bpsim::STOCHCRAFT_NS;
+    let mut body = Element::new("stochcraft:balking", Some(ns));
+    if b.counts_in_service {
+        body = body.with_attr("countsInService", "true");
+    }
+    match &b.join {
+        BalkJoin::Reciprocal => body = body.with_attr("rule", "reciprocal"),
+        BalkJoin::Table(rows) => {
+            for r in rows {
+                body = body.with_child(
+                    Element::new("stochcraft:join", Some(ns))
+                        .with_attr("waiting", &r.waiting.to_string())
+                        .with_attr("probability", &num(r.probability)),
+                );
+            }
+        }
+    }
+    s("VendorExtension")
+        .with_attr("name", crate::bpsim::BALKING)
+        .with_attr("xmlns:stochcraft", ns)
+        .with_child(body)
 }
 
 /// A server's patience as StochCraft's vendor extension ([`crate::bpsim::PATIENCE`]). `until`
@@ -873,6 +904,12 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             ep.push(patience_element(p));
         }
         if let ElementKind::Server {
+            balking: Some(b), ..
+        } = &e.kind
+        {
+            ep.push(balking_element(b));
+        }
+        if let ElementKind::Server {
             health_check: Some(h),
             ..
         } = &e.kind
@@ -927,6 +964,7 @@ pub fn write_new(model: &Model) -> Vec<u8> {
             && !c.rework
             && !c.abandoned
             && !c.turned_away
+            && !c.balked
         {
             continue;
         }
@@ -952,6 +990,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         }
         if c.turned_away {
             ep.push(turned_away_element());
+        }
+        if c.balked {
+            ep.push(balked_element());
         }
         scenario.push(ep);
     }

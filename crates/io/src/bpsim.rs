@@ -88,6 +88,14 @@ pub const PLANNED_RUN_TIME: &str = "stochcraft:plannedRunTime";
 /// deadline drawn per entity.
 pub const PATIENCE: &str = "stochcraft:patience";
 
+/// The vendor extension for balking at a server: a `stochcraft:balking` element, in the task's
+/// `ElementParameters`, with an attribute `rule`: `table` (the default: the chance of joining
+/// from each number found on, in `stochcraft:join` children with attributes `waiting` and
+/// `probability`, in increasing order of `waiting`) or `reciprocal` (1/(n + 1)), and an
+/// optional `countsInService="true"` (n counts those in service as well as those waiting).
+/// BPSim 2.0 has no parameter for it.
+pub const BALKING: &str = "stochcraft:balking";
+
 /// The vendor extension for a server's health check: a `stochcraft:healthCheck` element with
 /// attributes `limit` (the most entities waiting per working unit that passes; `INF` for no
 /// limit), optional `keep` (the fewest units left working), optional `onTakeout` (`retry`,
@@ -129,6 +137,11 @@ pub const ABANDONED: &str = "stochcraft:abandoned";
 /// `ElementParameters` of a sequence flow out of a task with a finite waiting room, besides
 /// its ordinary way out. Entities finding no room take it at once.
 pub const TURNED_AWAY: &str = "stochcraft:turnedAway";
+
+/// The way for entities that balk: `stochcraft:balked` with the value `true` on the
+/// `ElementParameters` of a sequence flow out of a task with balking, besides its ordinary way
+/// out. Entities not joining take it at once.
+pub const BALKED: &str = "stochcraft:balked";
 
 /// Scrap: a `stochcraft:scrap` element on an end event's `ElementParameters`: what reaches it
 /// is scrap (ISO 22400-2's scrap quantity), counted against the task its attribute `chargedTo`

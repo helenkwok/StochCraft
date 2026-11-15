@@ -121,6 +121,9 @@ struct EncodedElement {
     /// Servers with a health check: the mean units in service and the share of time
     /// restarting.
     health: [Option<u64>; 2],
+    /// Servers with balking: the share balked.
+    balking: [Option<u64>; 1],
+    balked: Option<u64>,
     lost: Option<u64>,
     abandoned: Option<u64>,
     taken_out: Option<u64>,
@@ -189,6 +192,8 @@ impl Encoded {
                         bits(e.wasted_share),
                     ],
                     health: [bits(e.mean_in_service), bits(e.time_restarting)],
+                    balking: [bits(e.balked_share)],
+                    balked: e.balked,
                     lost: e.lost,
                     abandoned: e.abandoned,
                     taken_out: e.taken_out,
@@ -245,6 +250,7 @@ impl Encoded {
                 ] = e.metrics;
                 let [ash, aw, wa, wsh] = e.patience;
                 let [mis, rs] = e.health;
+                let [bsh] = e.balking;
                 Some(ElementReport {
                     id: t.id.clone(),
                     name: t.name.clone(),
@@ -266,6 +272,8 @@ impl Encoded {
                     abandoned: e.abandoned,
                     abandoned_share: float(ash),
                     abandoned_wait: float(aw),
+                    balked: e.balked,
+                    balked_share: float(bsh),
                     wasted: float(wa),
                     wasted_share: float(wsh),
                     taken_out: e.taken_out,

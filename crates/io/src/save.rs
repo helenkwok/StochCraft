@@ -20,14 +20,14 @@ use crate::bpsim::{NS2, NSS};
 use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
-    abandoned_element, availability_param, batching_element, bpmn_local, breakdown_element,
-    calendar_element, changeover_element, condition_element, demand_element, dist_element,
-    edge_ends, estimate_element, health_check_element, interruptible_param, numeric,
-    on_shift_end_element, own_marker, patience_element, planned_element, power_element,
-    probability_element, processing_by_element, property_element, quantity_element, quantity_param,
-    queue_capacity_element, rework_element, routing_element, scrap_element, size, start_param,
-    stop_element, timer_param, transfer_element, turned_away_element, units_param,
-    vendor_value_element,
+    abandoned_element, availability_param, balked_element, balking_element, batching_element,
+    bpmn_local, breakdown_element, calendar_element, changeover_element, condition_element,
+    demand_element, dist_element, edge_ends, estimate_element, health_check_element,
+    interruptible_param, numeric, on_shift_end_element, own_marker, patience_element,
+    planned_element, power_element, probability_element, processing_by_element, property_element,
+    quantity_element, quantity_param, queue_capacity_element, rework_element, routing_element,
+    scrap_element, size, start_param, stop_element, timer_param, transfer_element,
+    turned_away_element, units_param, vendor_value_element,
 };
 use crate::xml::{self, Element, Node};
 use crate::{Format, SaveError};
@@ -1738,6 +1738,7 @@ impl Editor {
         let mut reworks: Vec<(String, Option<Element>)> = Vec::new();
         let mut abandons: Vec<(String, Option<Element>)> = Vec::new();
         let mut turned: Vec<(String, Option<Element>)> = Vec::new();
+        let mut balks: Vec<(String, Option<Element>)> = Vec::new();
         // Rework (or a way for those who give up) an inherited scenario sets comes back on
         // reading unless this one says false.
         let parents = ancestors(root, scenario);
@@ -1785,6 +1786,19 @@ impl Editor {
                 };
                 turned.push((c.id.to_string(), v));
             }
+            if was.is_some_and(|o| o.balked) != c.balked {
+                let inherited = parents
+                    .iter()
+                    .any(|a| sets_vendor(a, c.id.as_str(), crate::bpsim::BALKED));
+                let v = if c.balked {
+                    Some(balked_element())
+                } else if inherited {
+                    Some(vendor_value_element(crate::bpsim::BALKED, "false"))
+                } else {
+                    None
+                };
+                balks.push((c.id.to_string(), v));
+            }
         }
         // Writing nothing where there was nothing leaves the file alone.
         writes.retain(|(id, _, v)| {
@@ -1795,6 +1809,7 @@ impl Editor {
             && reworks.iter().all(|(_, v)| v.is_none())
             && abandons.iter().all(|(_, v)| v.is_none())
             && turned.iter().all(|(_, v)| v.is_none())
+            && balks.iter().all(|(_, v)| v.is_none())
         {
             if let Some(s) = scenario_mut(root, scenario) {
                 for (id, _) in quantities {
@@ -1808,6 +1823,9 @@ impl Editor {
                 }
                 for (id, _) in turned {
                     set_vendor(s, &id, crate::bpsim::TURNED_AWAY, None);
+                }
+                for (id, _) in balks {
+                    set_vendor(s, &id, crate::bpsim::BALKED, None);
                 }
             }
             return Ok(());
@@ -1827,6 +1845,9 @@ impl Editor {
         }
         for (id, v) in turned {
             set_vendor(s, &id, crate::bpsim::TURNED_AWAY, v);
+        }
+        for (id, v) in balks {
+            set_vendor(s, &id, crate::bpsim::BALKED, v);
         }
         Ok(())
     }
@@ -2057,6 +2078,22 @@ impl Editor {
                             new_patience.map(patience_element),
                         ));
                     }
+                    // Whether arrivals may not join the queue here.
+                    let old_balking = match was {
+                        Some(ElementKind::Server { balking, .. }) => balking.as_ref(),
+                        _ => None,
+                    };
+                    let new_balking = match &e.kind {
+                        ElementKind::Server { balking, .. } => balking.as_ref(),
+                        _ => None,
+                    };
+                    if new_balking != old_balking || (is_server && !was_server) {
+                        vendor_writes.push((
+                            id.clone(),
+                            crate::bpsim::BALKING,
+                            new_balking.map(balking_element),
+                        ));
+                    }
                     // The health check on its units.
                     let old_check = match was {
                         Some(ElementKind::Server { health_check, .. }) => health_check.as_ref(),
@@ -2247,6 +2284,7 @@ impl Editor {
                         vendor_writes.push((id.clone(), crate::bpsim::POWER, None));
                         vendor_writes.push((id.clone(), crate::bpsim::PLANNED_RUN_TIME, None));
                         vendor_writes.push((id.clone(), crate::bpsim::PATIENCE, None));
+                        vendor_writes.push((id.clone(), crate::bpsim::BALKING, None));
                         vendor_writes.push((id.clone(), crate::bpsim::HEALTH_CHECK, None));
                         vendor_writes.push((id.clone(), crate::bpsim::ON_SHIFT_END, None));
                         vendor_writes.push((id.clone(), crate::bpsim::CHANGEOVER, None));

@@ -44,8 +44,9 @@ use std::collections::{BTreeMap, BTreeSet};
 pub use stochcraft_model::calendar::{Calendar, Event, Rule};
 use stochcraft_model::expr;
 pub use stochcraft_model::{
-    Breakdown, ByValue, Change, Demand, DemandPer, HealthCheck, OnShiftEnd, OnTakeout, Patience,
-    PatienceUntil, PlaceWhileOut, Power, ProcessingBy, QueueLimit, Routing, Scrap, Setup, Transfer,
+    BalkJoin, BalkRow, Balking, Breakdown, ByValue, Change, Demand, DemandPer, HealthCheck,
+    OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, QueueLimit,
+    Routing, Scrap, Setup, Transfer,
 };
 use stochcraft_model::{
     Connection, Diagnostic, Element, ElementId, ElementKind, Experiment, Model, Need, Problem,
@@ -164,6 +165,9 @@ struct Route {
     /// Out of a server with a finite waiting room: the way entities finding no room take, not
     /// its ordinary way out.
     turned_away: bool,
+    /// Out of a server with balking: the way entities not joining its queue take, not its
+    /// ordinary way out.
+    balked: bool,
 }
 
 /// A model checked and ready to run.
@@ -412,6 +416,14 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
                                     ..
                                 }
                             ),
+                        balked: c.balked
+                            && matches!(
+                                e.kind,
+                                ElementKind::Server {
+                                    balking: Some(_),
+                                    ..
+                                }
+                            ),
                     })
                 })
                 .collect()
@@ -552,6 +564,12 @@ pub enum Metric {
     /// Servers with a patience: the mean time those that gave up had been here when they did
     /// (their patience), from entering, transfer included.
     AbandonedWait,
+    /// Servers with balking: arrivals that did not join the queue, counted each time (so with
+    /// retries it counts attempts). They never enter, so every server still balances.
+    Balked,
+    /// Servers with balking: the share of arrivals that balked, balked over balked plus lost
+    /// (turned away) plus entered.
+    BalkedShare,
     /// Servers with patience until done, or a health check or a shift's end that retries the job
     /// under way: the service time (the time drawn for the job, and its setup) spent on jobs
     /// whose entity gave up before they were done, and the part of a job done before its unit
@@ -648,7 +666,7 @@ pub enum Metric {
 }
 
 impl Metric {
-    pub const ALL: [Metric; 41] = [
+    pub const ALL: [Metric; 43] = [
         Metric::Entered,
         Metric::Left,
         Metric::MeanQueueLength,
@@ -665,6 +683,8 @@ impl Metric {
         Metric::Abandoned,
         Metric::AbandonedShare,
         Metric::AbandonedWait,
+        Metric::Balked,
+        Metric::BalkedShare,
         Metric::Wasted,
         Metric::WastedShare,
         Metric::TakenOut,
@@ -716,6 +736,8 @@ impl Metric {
             Metric::Abandoned => "abandoned",
             Metric::AbandonedShare => "abandoned_share",
             Metric::AbandonedWait => "abandoned_wait",
+            Metric::Balked => "balked",
+            Metric::BalkedShare => "balked_share",
             Metric::Wasted => "wasted",
             Metric::WastedShare => "wasted_share",
             Metric::TakenOut => "taken_out",
@@ -812,6 +834,9 @@ pub struct ElementReport {
     pub abandoned: Option<u64>,
     pub abandoned_share: Option<f64>,
     pub abandoned_wait: Option<f64>,
+    /// Servers with balking: [`Metric::Balked`] and [`Metric::BalkedShare`].
+    pub balked: Option<u64>,
+    pub balked_share: Option<f64>,
     /// Servers with patience until done, or a health check or a shift's end that retries:
     /// [`Metric::Wasted`] and [`Metric::WastedShare`].
     pub wasted: Option<f64>,
@@ -846,6 +871,8 @@ impl ElementReport {
             Metric::Abandoned => self.abandoned.map(|n| n as f64),
             Metric::AbandonedShare => self.abandoned_share,
             Metric::AbandonedWait => self.abandoned_wait,
+            Metric::Balked => self.balked.map(|n| n as f64),
+            Metric::BalkedShare => self.balked_share,
             Metric::Wasted => self.wasted,
             Metric::WastedShare => self.wasted_share,
             Metric::TakenOut => self.taken_out.map(|n| n as f64),
@@ -1176,6 +1203,8 @@ pub struct Builder {
     abandoned: Vec<(BlockId, BlockId)>,
     /// Ways out for entities turned away, besides each server's ordinary one.
     turned_away: Vec<(BlockId, BlockId)>,
+    /// Ways out for entities that balk, besides each server's ordinary one.
+    balked: Vec<(BlockId, BlockId)>,
     /// Shared resource pools.
     pools: Vec<ResourcePool>,
     calendars: Vec<Calendar>,
@@ -1239,6 +1268,7 @@ impl Builder {
                 setup: None,
                 planned_run_time: None,
                 patience: None,
+                balking: None,
                 health_check: None,
                 shifts: Vec::new(),
                 on_shift_end: OnShiftEnd::Finish,
@@ -1272,6 +1302,7 @@ impl Builder {
                 setup: None,
                 planned_run_time: None,
                 patience: None,
+                balking: None,
                 health_check: None,
                 shifts: Vec::new(),
                 on_shift_end: OnShiftEnd::Finish,
@@ -1442,6 +1473,21 @@ impl Builder {
     /// [`Builder::connect`] still sets its ordinary way out.
     pub fn turned_away(&mut self, from: BlockId, to: BlockId) {
         self.turned_away.push((from, to));
+    }
+
+    /// Gives server `block` balking: arrivals may not join its queue ([`Balking`]).
+    pub fn balking(&mut self, block: BlockId, balking: Balking) {
+        if let Some((_, ElementKind::Server { balking: b, .. }, _)) = self.elements.get_mut(block.0)
+        {
+            *b = Some(balking);
+        }
+    }
+
+    /// Gives server `from`, which has balking ([`Builder::balking`]), a second way out, to `to`,
+    /// that the entities not joining its queue take at once; [`Builder::connect`] still sets its
+    /// ordinary way out.
+    pub fn balked(&mut self, from: BlockId, to: BlockId) {
+        self.balked.push((from, to));
     }
 
     /// Server `block`'s waiting room by timetable: at most `outside` waiting outside the
@@ -1727,7 +1773,7 @@ impl Builder {
             ElementId::new(name).unwrap_or_else(|| ElementId::unchecked(name))
         };
         // From, to, probability, condition, and what way it is: 0 an ordinary one, 1 the way
-        // for those who give up, 2 the way for those turned away.
+        // for those who give up, 2 the way for those turned away, 3 the way for those balking.
         type Flow = (BlockId, BlockId, Option<f64>, Option<String>, u8);
         let mut connections: Vec<Flow> = self
             .connections
@@ -1739,6 +1785,7 @@ impl Builder {
                     .iter()
                     .map(|(f, t)| (*f, *t, None, None, 2)),
             )
+            .chain(self.balked.iter().map(|(f, t)| (*f, *t, None, None, 3)))
             .collect();
         connections.sort_by_key(|(from, to, .., way)| (*from, *way, *to));
         let connections: Vec<Connection> = connections
@@ -1754,6 +1801,7 @@ impl Builder {
                 rework: self.reworks.contains(&(from, to)),
                 abandoned: way == 1,
                 turned_away: way == 2,
+                balked: way == 3,
             })
             .collect();
         let elements = self

@@ -7,11 +7,11 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use stochcraft_model::{
-    Bounds, Breakdown, ByValue, Calendar, Change, Connection, DateTime, Demand, DemandPer, Dist,
-    Element as ModelElement, ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck,
-    Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
-    ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap,
-    Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
+    BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Calendar, Change, Connection, DateTime,
+    Demand, DemandPer, Dist, Element as ModelElement, ElementId, ElementKind, Estimate, Experiment,
+    Family, HealthCheck, Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil,
+    PlaceWhileOut, Power, ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit,
+    ResourcePool, Routing, Scrap, Setup, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 
 use crate::bpsim::{self, NSS, Scenario, Value};
@@ -1028,6 +1028,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
                             setup: setup_of(scenario, id, unit, notes),
                             planned_run_time: planned_of(scenario, id, unit, notes),
                             patience: patience_of(scenario, id, unit, notes),
+                            balking: balking_of(scenario, id, notes),
                             health_check: health_check_of(scenario, id, unit, notes),
                         }
                     }
@@ -1103,6 +1104,16 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             notes.push(Note::warning(
                 Some(id),
                 "a patience (stochcraft:patience) applies only to a task with a resource of its own; it is ignored here",
+            ));
+        }
+        if !matches!(kind, ElementKind::Server { .. })
+            && scenario
+                .and_then(|s| s.param(id, &format!("VendorExtension/{}", bpsim::BALKING)))
+                .is_some()
+        {
+            notes.push(Note::warning(
+                Some(id),
+                "balking (stochcraft:balking) applies only to a task with a resource of its own; it is ignored here",
             ));
         }
         if !matches!(kind, ElementKind::Server { .. })
@@ -1231,6 +1242,7 @@ fn to_model(p: Process, scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> M
             rework: vendor_flag(scenario, id, bpsim::REWORK, notes),
             abandoned: vendor_flag(scenario, id, bpsim::ABANDONED, notes),
             turned_away: vendor_flag(scenario, id, bpsim::TURNED_AWAY, notes),
+            balked: vendor_flag(scenario, id, bpsim::BALKED, notes),
         });
     }
     let mut experiment = experiment(scenario, notes);
@@ -1371,10 +1383,12 @@ fn queue_capacity(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) 
             bpsim::POWER,
             bpsim::PLANNED_RUN_TIME,
             bpsim::PATIENCE,
+            bpsim::BALKING,
             bpsim::HEALTH_CHECK,
             bpsim::ON_SHIFT_END,
             bpsim::ABANDONED,
             bpsim::TURNED_AWAY,
+            bpsim::BALKED,
             bpsim::SCRAP,
             bpsim::DEMAND,
             bpsim::REWORK,
@@ -1882,6 +1896,70 @@ fn patience_of(
     Some(Patience {
         time: dist_of(body, "the patience", id, notes)?,
         until,
+    })
+}
+
+/// The balking StochCraft's vendor extension gives server `id`, if any. A row that cannot be
+/// read is left out, with an error note.
+fn balking_of(scenario: Option<&Scenario>, id: &str, notes: &mut Vec<Note>) -> Option<Balking> {
+    let ext = scenario?.param(id, &format!("VendorExtension/{}", bpsim::BALKING))?;
+    let Some(body) = ext.elements().find(|e| e.local() == "balking") else {
+        notes.push(Note::error(
+            Some(id),
+            "balking needs a stochcraft:balking element; every entity joins",
+        ));
+        return None;
+    };
+    let counts_in_service = match body.attr("countsInService").as_deref().map(str::trim) {
+        None | Some("false") => false,
+        Some("true") => true,
+        Some(other) => {
+            notes.push(Note::error(
+                Some(id),
+                format!("countsInService on balking must be true or false, not `{other}`; it counts those waiting"),
+            ));
+            false
+        }
+    };
+    let join = match body.attr("rule").as_deref().map(str::trim) {
+        Some("reciprocal") => BalkJoin::Reciprocal,
+        rule => {
+            if let Some(other) = rule.filter(|r| *r != "table") {
+                notes.push(Note::error(
+                    Some(id),
+                    format!("the rule of balking must be table or reciprocal, not `{other}`; it is read as a table"),
+                ));
+            }
+            let rows = body
+                .elements()
+                .filter(|e| e.local() == "join")
+                .filter_map(|row| {
+                    let waiting = row.attr("waiting").and_then(|w| w.trim().parse::<u32>().ok());
+                    let probability = row
+                        .attr("probability")
+                        .and_then(|p| p.trim().parse::<f64>().ok())
+                        .filter(|p| p.is_finite());
+                    match (waiting, probability) {
+                        (Some(waiting), Some(probability)) => Some(BalkRow {
+                            waiting,
+                            probability,
+                        }),
+                        _ => {
+                            notes.push(Note::error(
+                                Some(id),
+                                "a row of a balking table needs a whole number `waiting` of at least 0 and a number `probability`; it is left out",
+                            ));
+                            None
+                        }
+                    }
+                })
+                .collect();
+            BalkJoin::Table(rows)
+        }
+    };
+    Some(Balking {
+        join,
+        counts_in_service,
     })
 }
 

@@ -42,6 +42,8 @@ pub enum Op {
     SetAbandoned(ElementId, bool),
     /// Set whether a connection is the way for entities turned away.
     SetTurnedAway(ElementId, bool),
+    /// Set whether a connection is the way for entities that balk.
+    SetBalked(ElementId, bool),
     SetExperiment(Experiment),
     /// Replace the shared resource pools.
     SetResources(Vec<ResourcePool>),
@@ -185,6 +187,14 @@ pub fn apply(model: &mut Model, op: Op) -> Result<Op, CommandError> {
                 .find(|c| c.id == id)
                 .ok_or_else(|| not_found("connection", &id))?;
             Op::SetTurnedAway(id, std::mem::replace(&mut c.turned_away, turned_away))
+        }
+        Op::SetBalked(id, balked) => {
+            let c = model
+                .connections
+                .iter_mut()
+                .find(|c| c.id == id)
+                .ok_or_else(|| not_found("connection", &id))?;
+            Op::SetBalked(id, std::mem::replace(&mut c.balked, balked))
         }
         Op::SetRoute(id, probability, condition) => {
             let c = model
