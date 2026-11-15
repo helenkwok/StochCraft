@@ -11,12 +11,14 @@
 //!   meeting a target with Wilson's interval.
 //! - [`difference`]: the difference between two systems' results with a 95% confidence interval:
 //!   paired-t for runs with common random numbers, Welch's two-sample t otherwise.
+//! - [`warmup`]: where the start-up of a series ends (MSER-5), for choosing a warm-up.
 //! - [`split`]: whether the replications split into two outcomes (some runs near one value, the
 //!   rest near another), so that their mean describes no actual run.
 
 pub mod difference;
 pub mod split;
 pub mod spread;
+pub mod warmup;
 pub use difference::Difference;
 pub use split::Split;
 pub use spread::{Ecdf, Proportion};
