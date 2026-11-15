@@ -125,8 +125,11 @@ fn text_that_is_not_a_number_stays_in_its_field_until_fixed() {
     // Not committed (craft-ui's NumberField keeps the text, outlined, with the reason).
     assert_eq!(element(&h, "serve")["capacity"], json!(1));
     assert!(!h.state().has_unsaved_changes());
+    // Said in words under the field once it is left, not by the red outline alone.
+    h.get_by_label("Not a number. Capacity is still 1.");
     type_into(&mut h, "Capacity", "2");
     assert_eq!(element(&h, "serve")["capacity"], json!(2));
+    assert!(h.query_by_label_contains("is still").is_none());
 }
 
 #[test]
@@ -1105,4 +1108,34 @@ fn a_servers_units_by_shift_and_its_job_rule_are_edited_in_its_inspector() {
     // Back to finishing, the default, which the model leaves out.
     click(&mut h, Role::RadioButton, "Finish, then go off");
     assert!(element(&h, "serve").get("on_shift_end").is_none());
+}
+
+/// The accessibility descriptions of the widgets with `role`: a block's problem, in words.
+fn descriptions(h: &Harness<'static, App>, role: Role) -> Vec<String> {
+    h.get_all_by_role(role)
+        .filter_map(|n| n.accesskit_node().description())
+        .collect()
+}
+
+#[test]
+fn a_block_with_a_problem_says_so_in_words_on_the_canvas_and_in_the_outline() {
+    let mut h = mm1();
+    let said = |d: &String| d.starts_with("This block has an");
+    assert!(!descriptions(&h, Role::ListBoxOption).iter().any(said));
+    // An arrival with nowhere to go is a problem.
+    h.state_mut()
+        .execute("model.new", json!({"name": "Clinic"}));
+    settle(&mut h);
+    click(&mut h, Role::Button, "+ Add block");
+    click(&mut h, Role::Button, "Arrivals");
+    assert!(
+        descriptions(&h, Role::ListBoxOption).iter().any(said),
+        "{:?}",
+        descriptions(&h, Role::ListBoxOption)
+    );
+    assert!(
+        descriptions(&h, Role::Button).iter().any(said),
+        "{:?}",
+        descriptions(&h, Role::Button)
+    );
 }

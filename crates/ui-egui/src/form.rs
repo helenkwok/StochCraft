@@ -420,7 +420,11 @@ pub fn label_cell(
 pub fn field_outline(ui: &egui::Ui, r: &egui::Response) {
     if !r.has_focus() {
         let p = theme::palette(ui.ctx());
-        let stroke = if r.hovered() { p.text_weak } else { p.border };
+        let stroke = if r.hovered() {
+            p.text_weak
+        } else {
+            p.control_border
+        };
         ui.painter().rect_stroke(
             r.rect,
             4.0,
@@ -463,38 +467,79 @@ fn number(
     unit: Option<&str>,
 ) -> Option<Value> {
     let unit = unit.map(|u| Unit::new(&format!("{{n}} {u}")));
-    let r;
-    let out = if integer {
-        let max = if node["format"] == "uint32" {
-            f64::from(u32::MAX)
+    // A column, so a message can go under the field; always one, so the field's id (and the
+    // text typed into it) doesn't change when a message appears.
+    ui.vertical(|ui| {
+        let r;
+        // Whatever reason craft-ui gives for this field's text, this frame (see `messages`).
+        DESCRIBED.with(|d| d.borrow_mut().take());
+        let (out, shown) = if integer {
+            let max = if node["format"] == "uint32" {
+                f64::from(u32::MAX)
+            } else {
+                u64::MAX as f64
+            };
+            let mut v = current.as_u64().unwrap_or(0);
+            let mut field = NumberField::new(&mut v, cx.numbers)
+                .id_salt(key)
+                .range(0.0..=max)
+                .desired_width(110.0);
+            if let Some(u) = unit {
+                field = field.unit(u);
+            }
+            r = ui.add(field);
+            (
+                r.changed().then(|| json!(v)),
+                cx.numbers.format(v as f64, 0..=0),
+            )
         } else {
-            u64::MAX as f64
+            let mut v = current.as_f64().unwrap_or(0.0);
+            let mut field = NumberField::new(&mut v, cx.numbers)
+                .id_salt(key)
+                .decimals(0..=6)
+                .desired_width(110.0);
+            if let Some(u) = unit {
+                field = field.unit(u);
+            }
+            r = ui.add(field);
+            (r.changed().then(|| json!(v)), cx.numbers.format(v, 0..=6))
         };
-        let mut v = current.as_u64().unwrap_or(0);
-        let mut field = NumberField::new(&mut v, cx.numbers)
-            .id_salt(key)
-            .range(0.0..=max)
-            .desired_width(110.0);
-        if let Some(u) = unit {
-            field = field.unit(u);
+        let reason = DESCRIBED.with(|d| d.borrow_mut().take());
+        // Named for assistive technology (and tests) by the row's label.
+        r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, label));
+        // Text that isn't a number, in words under the field once the user has left it (while
+        // typing, craft-ui's tooltip says the same), so the error isn't the red outline alone.
+        if let Some(reason) = reason
+            && !r.has_focus()
+        {
+            theme::error_message(
+                ui,
+                tf(
+                    "{reason}. {field} is still {value}.",
+                    &[("reason", &reason), ("field", label), ("value", &shown)],
+                ),
+            );
         }
-        r = ui.add(field);
-        r.changed().then(|| json!(v))
-    } else {
-        let mut v = current.as_f64().unwrap_or(0.0);
-        let mut field = NumberField::new(&mut v, cx.numbers)
-            .id_salt(key)
-            .decimals(0..=6)
-            .desired_width(110.0);
-        if let Some(u) = unit {
-            field = field.unit(u);
-        }
-        r = ui.add(field);
-        r.changed().then(|| json!(v))
-    };
-    // Named for assistive technology (and tests) by the row's label.
-    r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, label));
-    out
+        out
+    })
+    .inner
+}
+
+thread_local! {
+    /// The reason craft-ui last gave for text that isn't a number, as it describes it: a number
+    /// field's error is its own, so the form reads it from here, just after drawing the field.
+    /// Per thread, as the interface draws on one (and each test on its own).
+    static DESCRIBED: std::cell::RefCell<Option<String>> = const { std::cell::RefCell::new(None) };
+}
+
+/// `numbers`, with craft-ui's reasons for text that isn't a number in the interface language,
+/// each kept for the form to show under its field.
+pub(crate) fn messages(numbers: LocaleNumbers) -> LocaleNumbers {
+    numbers.with_messages(|english| {
+        let shown = t(english).to_owned();
+        DESCRIBED.with(|d| *d.borrow_mut() = Some(shown.clone()));
+        shown
+    })
 }
 
 /// A tagged union (a distribution): its kind as a choice, then the chosen kind's fields. When

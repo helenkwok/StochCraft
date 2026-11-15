@@ -63,6 +63,8 @@ pub(crate) struct Watching {
     states: BTreeMap<String, LiveState>,
     /// Text typed into the jump field.
     jump: String,
+    /// The jump field's text wasn't a time when Jump was last pressed; cleared by typing.
+    jump_invalid: bool,
     /// A time a step or a jump is going to, over as many frames as it takes, and whether to
     /// say so when it gets to the end.
     heading: Option<(f64, bool)>,
@@ -102,6 +104,7 @@ impl Watching {
             trace: Vec::new(),
             states: BTreeMap::new(),
             jump: String::new(),
+            jump_invalid: false,
             heading: None,
         };
         w.sample();
@@ -315,11 +318,19 @@ impl App {
             field.widget_info(|| {
                 egui::WidgetInfo::labeled(egui::Role::TextInput, true, t("Jump to time"))
             });
+            if field.changed() {
+                w.jump_invalid = false;
+            }
             let entered = field.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Enter));
-            if (ui.add(theme::secondary(ui, t("Jump"))).clicked() || entered)
-                && let Ok(v) = self.numbers.parse(w.jump.trim())
-            {
-                jump = Some(v);
+            if ui.add(theme::secondary(ui, t("Jump"))).clicked() || entered {
+                // Text that isn't a time is said so, not ignored (WCAG 3.3.1).
+                match self.numbers.parse(w.jump.trim()) {
+                    Ok(v) => {
+                        jump = Some(v);
+                        w.jump_invalid = false;
+                    }
+                    Err(_) => w.jump_invalid = true,
+                }
             }
             if ui.add(theme::secondary(ui, t("Stop watching"))).clicked() {
                 stop = true;
@@ -328,6 +339,15 @@ impl App {
         // The clock: where the run is, the warm-up, and the end.
         let now = w.run.now();
         let end = w.run.end();
+        if w.jump_invalid {
+            theme::error_message(
+                ui,
+                tf(
+                    "Type a time from 0 to {end} {unit}.",
+                    &[("end", &grouped(end)), ("unit", &unit)],
+                ),
+            );
+        }
         let warm = w.run.warmup();
         let clock = if now < warm {
             tf(

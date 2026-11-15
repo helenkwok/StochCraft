@@ -12,6 +12,8 @@ use crate::storage;
 
 const CANVAS_ID: &str = "stochcraft_canvas";
 const LOADING_ID: &str = "stochcraft_loading";
+/// The page's visually hidden `aria-live` region (index.html), which screen readers announce.
+const STATUS_ID: &str = "stochcraft_status";
 
 /// Files read in the background, waiting for the next frame: whether each was dropped (rather
 /// than picked after File ▸ Open), its name and contents.
@@ -25,6 +27,9 @@ struct Web {
     /// The prefix of this page's storage keys: a pull request's preview keeps its own
     /// ([`storage::scope`]).
     scope: Option<String>,
+    /// What the live region and the page's `lang` last said, so each is set only on a change.
+    announced: String,
+    lang: &'static str,
 }
 
 /// Where the browser keeps the app's preferences (eframe's storage: the page's local storage).
@@ -102,6 +107,31 @@ impl eframe::App for Web {
             document.set_title(&title);
         }
         *self.unsaved.borrow_mut() = self.app.has_unsaved_changes();
+        self.mirror_for_screen_readers();
+    }
+}
+
+impl Web {
+    /// The canvas shows no text a screen reader can read, so the status bar's message goes into
+    /// the page's live region, and the page's `lang` follows the interface language.
+    fn mirror_for_screen_readers(&mut self) {
+        let Some(document) = web_sys::window().and_then(|w| w.document()) else {
+            return;
+        };
+        let status = self.app.status_announcement();
+        if status != self.announced {
+            if let Some(region) = document.get_element_by_id(STATUS_ID) {
+                region.set_text_content(Some(&status));
+            }
+            self.announced = status;
+        }
+        let lang = self.app.language_code();
+        if lang != self.lang {
+            if let Some(root) = document.document_element() {
+                let _ = root.set_attribute("lang", lang);
+            }
+            self.lang = lang;
+        }
     }
 }
 
@@ -214,6 +244,8 @@ pub fn start() {
                         inbox: Inbox::default(),
                         unsaved,
                         scope,
+                        announced: String::new(),
+                        lang: "",
                     }))
                 }),
             )
