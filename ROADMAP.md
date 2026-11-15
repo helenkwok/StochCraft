@@ -4,7 +4,7 @@ Where StochCraft is going next and in what order. Six milestones: **M1** model f
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
 desktop app (and the browser app built from it); **M4** Monte Carlo, system dynamics, agents and
 hybrid models; **M5** transport and layout; **M6** Python and plugins. M1 and M3.1–M3.6 are done; M3.7, a redesign that
-makes results answer the question, comes next. M2.1–M2.8 are done, and so is M2.10 (abandonment)
+makes results answer the question, comes next. M2.1–M2.8 are done, and so is M2.10 (abandonment and balking)
 apart from the gaps listed in it. M2.11 (changeovers and lean measures) has its changeovers,
 product-type times, takt and cycle times, state times and most of OEE done; M2.9 (output analysis) has only the checks it already
 had. M4 and M5 are being planned. Each milestone is a series of pull requests small enough to
@@ -1281,10 +1281,55 @@ leaving before their service begins a central feature that Erlang B and C lack.
   1.5, which abandonment keeps stable), and once more through the unit server; patience 0 against
   Erlang B; the tie at the deadline; patience until done in service and while blocked; a patience
   running out in transfer; retry loops whose counts balance on every element.
-- **Not yet:** balking (not joining a queue at or above a length, or with a probability that
-  depends on its length; the fixed-length case for sources is already there, M2.4); patience on
-  tasks with shared resources; an entity that gives up while held blocked before a
-  shortest-queue gateway still counts as passing through that gateway.
+- **Balking:** done. A task with a resource of its own can have balking
+  (`stochcraft:balking`): an arriving entity joins with a chance b(n) of the number n it finds,
+  else it balks: counted as balked (it never enters, so entered = left + lost + abandoned +
+  inside still holds) and takes the server's way out marked `stochcraft:balked` at once (one at
+  most, never also the abandoned or turned-away way), or leaves the model. b(n) is a table (rows
+  of `waiting` and `probability`: from each row's number on, its chance; below the first row, 1)
+  or 1/(n + 1) (`reciprocal`). n counts those waiting (in the queue or in transfer, as a waiting
+  room counts them), or with `counts_in_service` everyone inside, as Gross and Harris do. The
+  choice is made as the entity arrives, from any element, before it asks for room in a finite
+  waiting room (one that joins and finds none is turned away, or waits, as before); an arrival
+  from a source that balks has left its source. A chance strictly between 0 and 1 is drawn from
+  the server's own keyed stream (`balking/<id>`), so models without balking draw exactly as
+  before (golden digests unchanged). Results per server: `balked` and `balked_share` (balked
+  over balked plus lost plus entered). File: `stochcraft:balking` with `stochcraft:join` rows,
+  `rule="reciprocal"` and `countsInService="true"`; `stochcraft:balked` on a sequence flow; read,
+  written, saved in place (removal gives back the original bytes), in the vendor schema; set by
+  `block.set` (`balking`, `{type: table, join: [...]}` or `{type: reciprocal}`) and `flow.set`
+  (`balked`), and in the inspector's Balking section, drawn from the command schema, with a
+  Balked tick on the flow. Validation: `balking_probability`, `balking_rows_order`,
+  `balked_without_balking`, `several_balked_ways`, `balked_and_other_way`.
+  - **Not joining at or above a length L** needs no balking: it is a waiting room of L
+    (`queue_capacity`) with a way out marked turned away (they count as lost, not balked).
+    Without that way only arrivals from a source are lost; anything else waits for room. A
+    table of 1 below L and 0 from L gives the same results run for run, balked equal to lost
+    (checked exactly).
+  - **Checked** (`blocks/tests/balking.rs`) against birth–death chains solved in the test (rate
+    λ·b(n) up, min(k, c)·μ down; the share balked 1 − Σ p(k)·b(n(k)) by PASTA), 64 replications
+    of 20,000 after a warm-up of 1,000. Gross and Harris's M/M/1 with b(n) = 1/(n + 1), n in the
+    system: p(k) = e^(−ρ) ρ^k / k!, so L = ρ, the share balked is 1 − (1 − e^(−ρ))/ρ and the
+    throughput μ(1 − e^(−ρ)) (the chain agrees with these to 1e-9). With n those waiting the
+    same rule gives p(k) = p(0) ρ^k / (k − 1)! for k ≥ 1, p(0) = 1/(1 + ρe^ρ). Queue length,
+    utilisation and every element's balance are checked too; a table always joining gives the
+    same results to the last bit as none, and balking at one server leaves another's draws
+    alone.
+
+  | Case | Quantity | Theory | StochCraft (95%) |
+  |---|---|---|---|
+  | M/M/1, b = 1/(n + 1), n in the system, λ 0.8, μ 1 | L; share balked; throughput | 0.8; 0.31166; 0.55067 | 0.7993 ± 0.0025; 0.31091 ± 0.00085; 0.55048 ± 0.00095 |
+  | Same, λ 2 (stable only by balking) | L; share balked; throughput | 2; 0.56767; 0.86466 | 2.0027 ± 0.0064; 0.56774 ± 0.00067; 0.86433 ± 0.00131 |
+  | M/M/1, b = 1/(n + 1), n waiting, λ 1.5, μ 1 | L; share balked; throughput | 2.17627; 0.41966; 0.87051 | 2.1792 ± 0.0060; 0.41973 ± 0.00100; 0.86990 ± 0.00138 |
+  | Two units, λ 2.4, μ 1, b 1 below 2 waiting, 0.5 from 2, 0.2 from 5 | L; share balked; throughput | 3.42061; 0.26294; 1.76895 | 3.4266 ± 0.0069; 0.26318 ± 0.00083; 1.76789 ± 0.00191 |
+  | b 1 below 3 waiting, 0 from 3, λ 0.9, μ 1: M/M/1/4 | L; share balked (= blocking); throughput | 1.79029; 0.16022; 0.75581 | 1.7888 ± 0.0054; 0.15954 ± 0.00109; 0.75526 ± 0.00107 |
+
+- **Not yet:** balking through a shortest-queue gateway (an entity routed by one to a server
+  with balking always joins: the gateway picks a way with room and the entity is sent there);
+  balking at tasks with shared resources; a chance of joining that depends on anything but the
+  number found (the wait expected, the entity's properties); patience on tasks with shared
+  resources; an entity that gives up while held blocked before a shortest-queue gateway still
+  counts as passing through that gateway.
 - **Servers taken out by a failed health check:** done. A load balancer's health check, and the
   metastable failure it can cause (servers taken out under load leave fewer to serve the queue,
   which grows, so more fail; the collapse can outlast its cause). A task with a resource of its
