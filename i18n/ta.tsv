@@ -13,7 +13,7 @@
 
 @id	language.name	தமிழ்
 	% down and up	% கீழும் மேலும்
-	% of replications	% மீள் இயக்கங்களில்
+	% of runs	% மீள் இயக்கங்களில்
 	+ Add block	+ தொகுதியைச் சேர்
 	95% interval of the share meeting the target: {lo} to {hi}	இலக்கை அடையும் பங்கின் 95% இடைவெளி: {lo} முதல் {hi}
 	95th percentile	95-ஆம் சதமானம்
@@ -34,7 +34,7 @@
 	Add Pool	தொகுப்பைச் சேர்
 	Add a flow from…	இதிலிருந்து ஓட்டத்தைச் சேர்…
 	Add a flow to…	இதற்கு ஓட்டத்தைச் சேர்…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	போதுமான மீள் இயக்கங்கள் இலக்கை அடையும் வரை மிகவும் பணிச்சுமையுள்ள பணிக்கோ குழுவுக்கோ ஒரு அலகைச் சேர்க்கவும். ஒவ்வொரு நேரத்தையும் அதன் சராசரியில் வைத்த பதிலும் காட்டப்படும்; அது பொதுவாக மிகச் சிறியது.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	போதுமான மீள் இயக்கங்கள் இலக்கை அடையும் வரை மிகவும் பணிச்சுமையுள்ள பணிக்கோ குழுவுக்கோ ஒரு அலகைச் சேர்க்கவும். ஒவ்வொரு நேரத்தையும் அதன் சராசரியில் வைத்த பதிலும் காட்டப்படும்; அது பொதுவாக மிகச் சிறியது.
 	Add alternative	மாற்றுத் தேர்வைச் சேர்
 	Add calendar	நாட்காட்டியைச் சேர்
 	Add calendar entry	நாட்காட்டிப் பதிவைச் சேர்
@@ -169,12 +169,12 @@
 	Ends early	முன்னதாக முடிகிறது
 	Energy	ஆற்றல்
 	Energy per part	ஒரு பாகத்திற்கான ஆற்றல்
-	Enough: {units}, meeting the target in {p} of replications	போதும்: {units}, {p} மீள் இயக்கங்களில் இலக்கு அடையப்படுகிறது
+	Enough: {units}, meeting the target in {p} of runs	போதும்: {units}, {p} மீள் இயக்கங்களில் இலக்கு அடையப்படுகிறது
 	Enter a number	ஓர் எண்ணை உள்ளிடவும்
 	Entered	உள்ளே நுழைந்தவை
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	காத்திருப்பு அறை நிரம்பியிருப்பதைக் காணும் உருப்படிகள் உடனே இந்த ஓட்டத்தில் செல்கின்றன (உதாரணமாக, பின்னர் மீண்டும் முயல), இழக்கப்படுவதற்கோ பணிக்கு முன் காத்திருப்பதற்கோ பதிலாக; இங்கு அவை இழந்தவையாகக் கணக்கிடப்படுகின்றன.
 	Entities give up waiting	உருப்படிகள் காத்திருப்பைக் கைவிடுகின்றன
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ஒரு மீள் இயக்கத்தின் முடிவில் இன்னும் உள்ளே உள்ளவை சராசரி காத்திருப்பிலும் அமைப்பில் கழித்த சராசரி நேரத்திலும் சேர்க்கப்படவில்லை.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	ஒரு மீள் இயக்கத்தின் முடிவில் இன்னும் உள்ளே உள்ளவை சராசரி காத்திருப்பிலும் அமைப்பில் கழித்த சராசரி நேரத்திலும் சேர்க்கப்படவில்லை.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	காத்திருப்பைக் கைவிடும் உருப்படிகள் இந்த ஓட்டத்தில் செல்கின்றன (உதாரணமாக, பின்னர் மீண்டும் முயல); மற்றவை பணியின் மற்றொரு வெளியேறும் வழியில் செல்கின்றன.
 	Erlang	எர்லாங்
 	Error	பிழை
@@ -252,7 +252,7 @@
 	Maximum	அதிகபட்சம்
 	Mean	சராசரி
 	Mean number inside	உள்ளே உள்ள சராசரி எண்ணிக்கை
-	One replication of {n}: the results of the others differ.	{n} இல் ஒரு மீள் இயக்கம்: மற்றவற்றின் முடிவுகள் வேறுபடும்.
+	One run of {n}: the results of the others differ.	{n} இல் ஒரு மீள் இயக்கம்: மற்றவற்றின் முடிவுகள் வேறுபடும்.
 	Save as a new BPMN file?	புதிய BPMN கோப்பாகச் சேமிக்கவா?
 	Still inside at the end	முடிவில் இன்னும் உள்ளே உள்ளவை
 	Mean work in progress	சராசரி நடைபெறும் பணி
@@ -284,7 +284,7 @@
 	No arrivals outside calendars	நாட்காட்டிகளுக்கு வெளியே வருகைகள் இல்லை
 	No blocks yet. Open a model, or add blocks to build one.	இன்னும் தொகுதிகள் இல்லை. மாதிரியைத் திறக்கவும் அல்லது தொகுதிகளைச் சேர்த்து உருவாக்கவும்.
 	No connections yet: join blocks below.	இன்னும் இணைப்புகள் இல்லை: கீழே தொகுதிகளை இணைக்கவும்.
-	No replication met the stop condition: each ran to its time limit.	எந்த மீள் இயக்கமும் நிறுத்த நிபந்தனையை அடையவில்லை: ஒவ்வொன்றும் அதன் நேர வரம்பு வரை இயங்கியது.
+	No run met the stop condition: each ran to its time limit.	எந்த மீள் இயக்கமும் நிறுத்த நிபந்தனையை அடையவில்லை: ஒவ்வொன்றும் அதன் நேர வரம்பு வரை இயங்கியது.
 	No results yet	இன்னும் முடிவுகள் இல்லை
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	இந்த மாதிரியில் கழிவு அல்லது மறுவேலை எதுவும் குறிக்கப்படவில்லை, எனவே OEE தரத்தை 100% எனக் கணக்கிடுகிறது.
 	No target	இலக்கு இல்லை
@@ -386,11 +386,11 @@
 	Repair time	பழுதுபார்ப்பு நேரம்
 	Repeats	மீள்வருகை
 	Replace Model	மாதிரியை மாற்றி வை
-	Replication 1 · {time} of {end} {unit}	மீள் இயக்கம் 1 · {end} {unit} இல் {time}
-	Replication 1 · {time} of {end} {unit} · warm-up	மீள் இயக்கம் 1 · {end} {unit} இல் {time} · தொடக்கச் சீராக்க நேரம்
-	Replications	மீள் இயக்கங்கள்
-	Replications meeting the target	இலக்கை அடைந்த மீள் இயக்கங்கள்
-	Replications that never met the stop condition count as later than their time limit.	நிறுத்த நிபந்தனையை ஒருபோதும் அடையாத மீள் இயக்கங்கள் அவற்றின் நேர வரம்பை விடப் பிந்தையவையாகக் கணக்கிடப்படும்.
+	Run 1 · {time} of {end} {unit}	மீள் இயக்கம் 1 · {end} {unit} இல் {time}
+	Run 1 · {time} of {end} {unit} · warm-up	மீள் இயக்கம் 1 · {end} {unit} இல் {time} · தொடக்கச் சீராக்க நேரம்
+	Runs	மீள் இயக்கங்கள்
+	Runs meeting the target	இலக்கை அடைந்த மீள் இயக்கங்கள்
+	Runs that never met the stop condition count as later than their time limit.	நிறுத்த நிபந்தனையை ஒருபோதும் அடையாத மீள் இயக்கங்கள் அவற்றின் நேர வரம்பை விடப் பிந்தையவையாகக் கணக்கிடப்படும்.
 	Resource pool	வளத் தொகுப்பு
 	Resource pools	வளத் தொகுப்புகள்
 	Restore	சாளர அளவை மீட்டமை
@@ -411,7 +411,7 @@
 	Run	இயக்கு
 	Run cancelled	இயக்கம் ரத்துசெய்யப்பட்டது
 	Run experiment	சோதனையை இயக்கு
-	Run replication 1 step by step and see each block's queue on the diagram	மீள் இயக்கம் 1 ஐப் படிப்படியாக இயக்கி, வரைபடத்தில் ஒவ்வொரு தொகுதியின் வரிசையையும் பார்
+	Play run 1 step by step and see each block's queue on the diagram	மீள் இயக்கம் 1 ஐப் படிப்படியாக இயக்கி, வரைபடத்தில் ஒவ்வொரு தொகுதியின் வரிசையையும் பார்
 	Run the experiment ({shortcut})	சோதனையை இயக்கு ({shortcut})
 	Run the experiment again to see this result's spread.	இந்த முடிவின் பரவலைக் காண சோதனையை மீண்டும் இயக்கவும்.
 	Run the experiment at each value of one parameter, and compare a result.	ஒரு அளவுருவின் ஒவ்வொரு மதிப்பிலும் சோதனையை இயக்கி ஒரு முடிவை ஒப்பிடவும்.
@@ -467,7 +467,7 @@
 	Split batches	தொகுப்புகளைப் பிரி
 	Split or join	பிரி அல்லது இணை
 	Split or join (all ways)	பிரி அல்லது இணை (எல்லா வழிகளும்)
-	Spread across replications	மீள் இயக்கங்களிடையே பரவல்
+	Spread across runs	மீள் இயக்கங்களிடையே பரவல்
 	Spread out	பரப்பு
 	Stages (k)	படிநிலைகள் (k)
 	Standard deviation	திட்ட விலக்கம்
@@ -498,11 +498,11 @@
 	Text on header	தலைப்புப் பட்டையில் உரை
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	இணைப்பு துண்டிக்கப்பட்டு கிளையன்ட் மீண்டும் முயல்கிறது: உருப்படி உடனே வரிசையின் முன்னுக்குத் திரும்புகிறது, அதன்மேல் செய்த வேலை வீணாகிறது.
 	The entity waits on its server and the job carries on with what was left once the server is back.	உருப்படி தன் வழங்கியிலேயே காத்திருக்கிறது, வழங்கி திரும்பியதும் மீதமுள்ளதிலிருந்து வேலை தொடர்கிறது.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	இடைவெளி {share} இலக்கு பங்குக்குக் கீழே செல்கிறது, எனவே பங்கு அடையப்பட்டது 95% நம்பிக்கையுடன் காட்டப்படவில்லை; கூடுதல் மீள் இயக்கங்கள் அதைக் குறுக்கும்.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	இடைவெளி {share} இலக்கு பங்குக்குக் கீழே செல்கிறது, எனவே பங்கு அடையப்பட்டது 95% நம்பிக்கையுடன் காட்டப்படவில்லை; கூடுதல் மீள் இயக்கங்கள் அதைக் குறுக்கும்.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	வேலை உடனே நிற்கிறது: உருப்படி பணிமுறையில் உள்ள எந்த வழங்கிக்காகவும் வரிசையின் முன்னுக்குத் திரும்புகிறது, அதன்மேல் செய்த வேலை வீணாகிறது.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	வேலை உடனே நிற்கிறது; உருப்படி தன் வழங்கியிலேயே காத்திருக்கிறது, அந்த வழங்கி மீண்டும் பணிமுறைக்கு வந்ததும் மீதமுள்ளதிலிருந்து வேலை தொடர்கிறது.
 	The last task with a resource it finished at	பாகம் கடைசியாகக் கடந்த வளம் தேவைப்படும் பணி
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	நிறுத்த நிபந்தனை வரையிலான சராசரி நேரம் அதை அடைந்த மீள் இயக்கங்கள் மீது மட்டுமே; மற்றவை அவற்றின் நேர வரம்பு வரை இயங்கின.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	நிறுத்த நிபந்தனை வரையிலான சராசரி நேரம் அதை அடைந்த மீள் இயக்கங்கள் மீது மட்டுமே; மற்றவை அவற்றின் நேர வரம்பு வரை இயங்கின.
 	The model changed, so watching stopped	மாதிரி மாறியதால் கவனிப்பது நிறுத்தப்பட்டது
 	The model has no calendars yet.	மாதிரியில் இன்னும் நாட்காட்டிகள் இல்லை.
 	The model now has the units sizing found	அளவிடுதல் கண்டறிந்த அலகுகள் இப்போது மாதிரியில் உள்ளன
@@ -510,7 +510,7 @@
 	The name is empty or already used.	பெயர் காலியாக உள்ளது அல்லது ஏற்கெனவே பயன்பாட்டில் உள்ளது.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	மீள் இயக்கங்கள் இரண்டு விளைவுகளாகப் பிரிந்தன: {n} இல் {a} – ஒன்றில், {b} – மற்றொன்றில். இதே முறையில் பிரிந்த முடிவுகள்: {count}, அவற்றில் {result} ({element}); கீழே உள்ள அட்டவணையைப் பார்க்கவும்.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	வழங்கி கையில் உள்ள வேலையை முடித்துவிட்டுப் பணிமுறையிலிருந்து விலகுகிறது; அதுவரை அது பணிமுறையில் இருப்பதாகக் கணக்கிடப்படுகிறது.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ஒவ்வொரு மதிப்புக்கும் சமமான அல்லது குறைவான மீள் இயக்கங்களின் பங்கு. பட்டை உண்மையான பரவலை {confidence} நம்பகத்தன்மையுடன் கொண்டுள்ளது.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	ஒவ்வொரு மதிப்புக்கும் சமமான அல்லது குறைவான மீள் இயக்கங்களின் பங்கு. பட்டை உண்மையான பரவலை {confidence} நம்பகத்தன்மையுடன் கொண்டுள்ளது.
 	The values are numbers, separated by semicolons or spaces	மதிப்புகள் அரைப்புள்ளி அல்லது இடைவெளியால் பிரிக்கப்பட்ட எண்கள்
 	The whole clock	முழு நேரமும்
 	Themes	தீம்கள்
@@ -578,7 +578,7 @@
 	Warning	எச்சரிக்கை
 	Watch a Run	ஓர் இயக்கத்தைக் கவனி
 	Watch a run	ஓர் இயக்கத்தைக் கவனி
-	Watching replication 1	மீள் இயக்கம் 1 கவனிக்கப்படுகிறது
+	Watching run 1	மீள் இயக்கம் 1 கவனிக்கப்படுகிறது
 	Weak text	மங்கிய உரை
 	Weak text on header	தலைப்புப் பட்டையில் மங்கிய உரை
 	Wed	புத
@@ -614,7 +614,7 @@
 	maximum {value}	அதிகபட்சம் {value}
 	milliseconds	மில்லிவினாடிகள்
 	minutes	நிமிடங்கள்
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N இல் k: N மீள் இயக்கங்களில் k மட்டுமே அந்த முடிவுக்கு மதிப்பைக் கொண்டிருந்தன; அதன் சராசரியும் இடைவெளியும் அந்த k மீதானவை.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N இல் k: N மீள் இயக்கங்களில் k மட்டுமே அந்த முடிவுக்கு மதிப்பைக் கொண்டிருந்தன; அதன் சராசரியும் இடைவெளியும் அந்த k மீதானவை.
 	n = {k} of {n}	n = {n} இல் {k}
 	nothing yet	இன்னும் ஏதுமில்லை
 	per day	ஒரு நாளுக்கு
@@ -650,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}, {second} – வெளிர்மை வேறுபாடு {step}, தேவை 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: நிகழ்தகவு 0 முதல் 1 வரையிலான எண்ணாக இருக்க வேண்டும்
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} மீள் இயக்கங்களில் {met} இலக்கை அடைந்தன: {p} (95% இடைவெளி {lo} முதல் {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} மீள் இயக்கங்களில் {met} இலக்கை அடைந்தன: {p} (95% இடைவெளி {lo} முதல் {hi})
 	{name} — edited	{name} — திருத்தப்பட்டது
 	{n} created	{n} உருவாக்கப்பட்டன
 	{n} done	{n} முடிந்தன
@@ -664,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: இப்போது {now}, அதிகபட்சம் {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% CI
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± என்பது மீள்சோதனைகளின் சராசரிக்கான 95% Student-t நம்பிக்கை இடைவெளியின் அகலத்தில் பாதியாகும்.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± என்பது மீள்சோதனைகளின் சராசரிக்கான 95% Student-t நம்பிக்கை இடைவெளியின் அகலத்தில் பாதியாகும்.
 	· no results yet	· இன்னும் முடிவுகள் இல்லை
 unit	d	நாள்
 unit	h	மணி
@@ -674,16 +674,16 @@ unit	s	வி
 unit	yr	ஆண்டு
 @plural	Added {n} block|Added {n} blocks	{n} தொகுதி சேர்க்கப்பட்டது|{n} தொகுதிகள் சேர்க்கப்பட்டன
 @plural	Copied {n} block|Copied {n} blocks	{n} தொகுதி நகலெடுக்கப்பட்டது|{n} தொகுதிகள் நகலெடுக்கப்பட்டன
-@plural	Finished {n} replication|Finished {n} replications	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன
+@plural	Finished {n} run|Finished {n} runs	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} திறக்கப்பட்டது ({n} எச்சரிக்கை)|{file} திறக்கப்பட்டது ({n} எச்சரிக்கைகள்)
 @plural	Removed {n} block|Removed {n} blocks	{n} தொகுதி அகற்றப்பட்டது|{n} தொகுதிகள் அகற்றப்பட்டன
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கத்தை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.|{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கங்களை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் அவற்றின் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	நிறுத்த நிபந்தனை {n} மீள் இயக்கத்தில் {met} இல், சராசரியாக {time} {unit} பிறகு அடையப்பட்டது.|நிறுத்த நிபந்தனை {n} மீள் இயக்கங்களில் {met} இல், சராசரியாக {time} {unit} பிறகு அடையப்பட்டது.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{n} இல் {done} மீள் இயக்கம் முடிந்தது|{n} இல் {done} மீள் இயக்கங்கள் முடிந்தன
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கத்தில்|{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கங்களில்
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கத்தை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.|{seed} என்ற சீரற்ற விதையிலிருந்து மாதிரியின் {n} தனித்த மீள் இயக்கங்களை நடத்துகிறது. ஒவ்வொரு உறுப்பின் முடிவும் அவற்றின் 95% நம்பிக்கை இடைவெளியின் அரை அகலத்துடன் வழங்கப்படுகிறது.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	நிறுத்த நிபந்தனை {n} மீள் இயக்கத்தில் {met} இல், சராசரியாக {time} {unit} பிறகு அடையப்பட்டது.|நிறுத்த நிபந்தனை {n} மீள் இயக்கங்களில் {met} இல், சராசரியாக {time} {unit} பிறகு அடையப்பட்டது.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{n} இல் {done} மீள் இயக்கம் முடிந்தது|{n} இல் {done} மீள் இயக்கங்கள் முடிந்தன
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கத்தில்|{name}: {mean}{unit}\n95% இடைவெளி {low} முதல் {high}{unit} வரை\n{n} மீள் இயக்கங்களில்
 @plural	{n} block selected|{n} blocks selected	{n} தொகுதி தேர்ந்தெடுக்கப்பட்டது|{n} தொகுதிகள் தேர்ந்தெடுக்கப்பட்டன
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	ஒவ்வொரு படியிலும் {n} மீள் இயக்கம் · விதை {seed}|ஒவ்வொரு படியிலும் {n} மீள் இயக்கங்கள் · விதை {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} மீள் இயக்கம் · சராசரி {mean} · {min} முதல் {max}|{n} மீள் இயக்கங்கள் · சராசரி {mean} · {min} முதல் {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} மீள் இயக்கம் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது|{n} மீள் இயக்கங்கள் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} மீள் இயக்கம் · விதை {seed}|{n} மீள் இயக்கங்கள் · விதை {seed}
-@plural	{n} replication|{n} replications	{n} மீள் இயக்கம்|{n} மீள் இயக்கங்கள்
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	ஒவ்வொரு படியிலும் {n} மீள் இயக்கம் · விதை {seed}|ஒவ்வொரு படியிலும் {n} மீள் இயக்கங்கள் · விதை {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} மீள் இயக்கம் · சராசரி {mean} · {min} முதல் {max}|{n} மீள் இயக்கங்கள் · சராசரி {mean} · {min} முதல் {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} மீள் இயக்கம் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது|{n} மீள் இயக்கங்கள் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} மீள் இயக்கம் · விதை {seed}|{n} மீள் இயக்கங்கள் · விதை {seed}
+@plural	{n} run|{n} runs	{n} மீள் இயக்கம்|{n} மீள் இயக்கங்கள்

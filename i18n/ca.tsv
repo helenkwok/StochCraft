@@ -13,7 +13,7 @@
 
 @id	language.name	Català
 	% down and up	% avall i amunt
-	% of replications	% de les rèpliques
+	% of runs	% de les rèpliques
 	+ Add block	+ Afegeix un bloc
 	95% interval of the share meeting the target: {lo} to {hi}	Interval del 95% de la proporció que compleix l'objectiu: de {lo} a {hi}
 	95th percentile	Percentil 95
@@ -34,7 +34,7 @@
 	Add Pool	Afegeix un grup
 	Add a flow from…	Afegeix un flux des de…
 	Add a flow to…	Afegeix un flux cap a…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Afegir una unitat a la tasca o al grup més ocupat fins que prou rèpliques compleixin un objectiu. També es mostra la resposta amb cada temps a la seva mitjana; sol ser massa petita.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Afegir una unitat a la tasca o al grup més ocupat fins que prou rèpliques compleixin un objectiu. També es mostra la resposta amb cada temps a la seva mitjana; sol ser massa petita.
 	Add alternative	Afegeix una alternativa
 	Add calendar	Afegeix un calendari
 	Add calendar entry	Afegeix una entrada de calendari
@@ -169,12 +169,12 @@
 	Ends early	Acaba abans
 	Energy	Energia
 	Energy per part	Energia per peça
-	Enough: {units}, meeting the target in {p} of replications	Prou: {units}, compleix l'objectiu en el {p} de les rèpliques
+	Enough: {units}, meeting the target in {p} of runs	Prou: {units}, compleix l'objectiu en el {p} de les rèpliques
 	Enter a number	Introduïu un nombre
 	Entered	Entrades
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Les entitats que troben la sala d'espera plena prenen aquest flux de seguida (per tornar-ho a provar més tard, per exemple), en lloc de perdre's o d'esperar abans de la tasca; aquí compten com a perdudes.
 	Entities give up waiting	Les entitats abandonen l'espera
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Les entitats encara a dins al final d'una rèplica no es tenen en compte en l'espera mitjana ni en el temps mitjà al sistema.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Les entitats encara a dins al final d'una rèplica no es tenen en compte en l'espera mitjana ni en el temps mitjà al sistema.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Les entitats que abandonen l'espera prenen aquest flux (per tornar-ho a provar més tard, per exemple); les altres prenen l'altra sortida de la tasca.
 	Erlang	Erlang
 	Error	Error
@@ -252,7 +252,7 @@
 	Maximum	Màxim
 	Mean	Mitjana
 	Mean number inside	Nombre mitjà a dins
-	One replication of {n}: the results of the others differ.	Una rèplica de {n}: els resultats de les altres són diferents.
+	One run of {n}: the results of the others differ.	Una rèplica de {n}: els resultats de les altres són diferents.
 	Save as a new BPMN file?	Vols desar-ho com a fitxer BPMN nou?
 	Still inside at the end	Encara a dins al final
 	Mean work in progress	Treball en curs mitjà
@@ -284,7 +284,7 @@
 	No arrivals outside calendars	Cap arribada fora dels calendaris
 	No blocks yet. Open a model, or add blocks to build one.	Encara no hi ha blocs. Obre un model o afegeix blocs per crear-ne un.
 	No connections yet: join blocks below.	Encara no hi ha connexions: connecta els blocs de sota.
-	No replication met the stop condition: each ran to its time limit.	Cap rèplica ha complert la condició d'aturada: cadascuna ha arribat al seu límit de temps.
+	No run met the stop condition: each ran to its time limit.	Cap rèplica ha complert la condició d'aturada: cadascuna ha arribat al seu límit de temps.
 	No results yet	Encara no hi ha resultats
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	En aquest model no hi ha cap rebuig ni retreball marcat, de manera que l'OEE compta la qualitat com a 100%.
 	No target	Sense objectiu
@@ -386,11 +386,11 @@
 	Repair time	Temps de reparació
 	Repeats	Es repeteix
 	Replace Model	Substitueix el model
-	Replication 1 · {time} of {end} {unit}	Rèplica 1 · {time} de {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Rèplica 1 · {time} de {end} {unit} · escalfament
-	Replications	Rèpliques
-	Replications meeting the target	Rèpliques que compleixen l'objectiu
-	Replications that never met the stop condition count as later than their time limit.	Les rèpliques que mai no han complert la condició d'aturada compten com a posteriors al seu límit de temps.
+	Run 1 · {time} of {end} {unit}	Rèplica 1 · {time} de {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Rèplica 1 · {time} de {end} {unit} · escalfament
+	Runs	Rèpliques
+	Runs meeting the target	Rèpliques que compleixen l'objectiu
+	Runs that never met the stop condition count as later than their time limit.	Les rèpliques que mai no han complert la condició d'aturada compten com a posteriors al seu límit de temps.
 	Resource pool	Grup de recursos
 	Resource pools	Grups de recursos
 	Restore	Restaura
@@ -411,7 +411,7 @@
 	Run	Executa
 	Run cancelled	Execució cancel·lada
 	Run experiment	Executa l'experiment
-	Run replication 1 step by step and see each block's queue on the diagram	Executa la rèplica 1 pas a pas i mostra la cua de cada bloc al diagrama
+	Play run 1 step by step and see each block's queue on the diagram	Executa la rèplica 1 pas a pas i mostra la cua de cada bloc al diagrama
 	Run the experiment ({shortcut})	Executa l'experiment ({shortcut})
 	Run the experiment again to see this result's spread.	Torneu a executar l'experiment per veure la dispersió d'aquest resultat.
 	Run the experiment at each value of one parameter, and compare a result.	Executar l'experiment amb cada valor d'un paràmetre i comparar un resultat.
@@ -467,7 +467,7 @@
 	Split batches	Separa els lots
 	Split or join	Divideix o uneix
 	Split or join (all ways)	Divideix o uneix (tots els camins)
-	Spread across replications	Dispersió entre rèpliques
+	Spread across runs	Dispersió entre rèpliques
 	Spread out	Distribueix
 	Stages (k)	Etapes (k)
 	Standard deviation	Desviació estàndard
@@ -498,11 +498,11 @@
 	Text on header	Text de la capçalera
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	La connexió cau i el client ho torna a intentar: l'entitat torna de seguida al capdavant de la cua, i el treball fet en ella es malbarata.
 	The entity waits on its server and the job carries on with what was left once the server is back.	L'entitat espera al seu servidor i la feina continua amb el que quedava quan el servidor torna.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'interval arriba per sota de la proporció objectiu del {share}, de manera que no es demostra amb un 95% de confiança que es compleixi; més rèpliques l'estretirien.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	L'interval arriba per sota de la proporció objectiu del {share}, de manera que no es demostra amb un 95% de confiança que es compleixi; més rèpliques l'estretirien.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	La feina s'atura de seguida: l'entitat torna al capdavant de la cua per a qualsevol servidor de torn, i el treball fet en ella es malbarata.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	La feina s'atura de seguida; l'entitat espera al seu servidor i la feina continua amb el que quedava quan aquest servidor torna a ser de torn.
 	The last task with a resource it finished at	L'última tasca amb un recurs per on ha passat la peça
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	El temps mitjà fins a la condició d'aturada és només sobre les rèpliques que l'han complert; les altres han arribat al seu límit de temps.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	El temps mitjà fins a la condició d'aturada és només sobre les rèpliques que l'han complert; les altres han arribat al seu límit de temps.
 	The model changed, so watching stopped	El model ha canviat, així que s'ha deixat d'observar
 	The model has no calendars yet.	El model encara no té calendaris.
 	The model now has the units sizing found	El model té ara les unitats trobades en dimensionar
@@ -510,7 +510,7 @@
 	The name is empty or already used.	El nom és buit o ja s'utilitza.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Les rèpliques es divideixen en dos resultats diferents: {a} de {n} en un, {b} en l'altre. {count} resultats es divideixen de la mateixa manera, entre ells {result} ({element}); vegeu la taula de sota.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	El servidor acaba la feina que té i després deixa el torn; fins llavors compta com a servidor de torn.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La proporció de rèpliques iguals o inferiors a cada valor. La banda conté la distribució real amb una confiança del {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	La proporció de rèpliques iguals o inferiors a cada valor. La banda conté la distribució real amb una confiança del {confidence}.
 	The values are numbers, separated by semicolons or spaces	Els valors són nombres separats per punts i comes o espais
 	The whole clock	Tot el temps
 	Themes	Temes
@@ -578,7 +578,7 @@
 	Warning	Avís
 	Watch a Run	Observa una execució
 	Watch a run	Observa una execució
-	Watching replication 1	S'està observant la rèplica 1
+	Watching run 1	S'està observant la rèplica 1
 	Weak text	Text atenuat
 	Weak text on header	Text atenuat de la capçalera
 	Wed	dc.
@@ -614,7 +614,7 @@
 	maximum {value}	màxim {value}
 	milliseconds	mil·lisegons
 	minutes	minuts
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k de N: només k de les N rèpliques tenien un valor per a aquest resultat, i la seva mitjana i interval són sobre aquestes k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k de N: només k de les N rèpliques tenien un valor per a aquest resultat, i la seva mitjana i interval són sobre aquestes k.
 	n = {k} of {n}	n = {k} de {n}
 	nothing yet	encara res
 	per day	per dia
@@ -650,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} i {second} difereixen {step} en lluminositat, cal 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: una probabilitat és un nombre entre 0 i 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} de {of} rèpliques han complert l'objectiu: {p} (interval del 95% de {lo} a {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} de {of} rèpliques han complert l'objectiu: {p} (interval del 95% de {lo} a {hi})
 	{name} — edited	{name} — editat
 	{n} created	{n} creats
 	{n} done	{n} acabats
@@ -664,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: ara {now}, com a màxim {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± IC del 95%
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± és la semiamplada d'un interval de confiança Student-t del 95% de la mitjana entre rèpliques.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± és la semiamplada d'un interval de confiança Student-t del 95% de la mitjana entre rèpliques.
 	· no results yet	· encara no hi ha resultats
 unit	d	d
 unit	h	h
@@ -674,16 +674,16 @@ unit	s	s
 unit	yr	a
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
-@plural	Finished {n} replication|Finished {n} replications	Acabada {n} rèplica|Acabades {n} rèpliques
+@plural	Finished {n} run|Finished {n} runs	Acabada {n} rèplica|Acabades {n} rèpliques
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S'ha obert {file} ({n} avís)|S'ha obert {file} ({n} avisos)
 @plural	Removed {n} block|Removed {n} blocks	S'ha eliminat {n} bloc|S'han eliminat {n} blocs
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Executa {n} rèplica independent del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.|Executa {n} rèpliques independents del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	La condició d'aturada s'ha complert en {met} de {n} rèplica, després de {time} {unit} de mitjana.|La condició d'aturada s'ha complert en {met} de {n} rèpliques, després de {time} {unit} de mitjana.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	Acabada {done} de {n} rèplica|Acabades {done} de {n} rèpliques
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} rèplica|{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} rèpliques
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Executa {n} rèplica independent del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.|Executa {n} rèpliques independents del model a partir de la llavor {seed}. Els resultats de cada element inclouen la semiamplada d'un interval de confiança del 95%.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	La condició d'aturada s'ha complert en {met} de {n} rèplica, després de {time} {unit} de mitjana.|La condició d'aturada s'ha complert en {met} de {n} rèpliques, després de {time} {unit} de mitjana.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Acabada {done} de {n} rèplica|Acabades {done} de {n} rèpliques
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} rèplica|{name}: {mean}{unit}\nInterval del 95% de {low} a {high}{unit}\nen {n} rèpliques
 @plural	{n} block selected|{n} blocks selected	{n} bloc seleccionat|{n} blocs seleccionats
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} rèplica per pas · llavor {seed}|{n} rèpliques per pas · llavor {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} rèplica · mitjana {mean} · de {min} a {max}|{n} rèpliques · mitjana {mean} · de {min} a {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} rèplica · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats|{n} rèpliques · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} rèplica · llavor {seed}|{n} rèpliques · llavor {seed}
-@plural	{n} replication|{n} replications	{n} rèplica|{n} rèpliques
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} rèplica per pas · llavor {seed}|{n} rèpliques per pas · llavor {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} rèplica · mitjana {mean} · de {min} a {max}|{n} rèpliques · mitjana {mean} · de {min} a {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} rèplica · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats|{n} rèpliques · llavor {seed} · escalfament {warmup} {unit} · {duration} {unit} mesurats
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} rèplica · llavor {seed}|{n} rèpliques · llavor {seed}
+@plural	{n} run|{n} runs	{n} rèplica|{n} rèpliques

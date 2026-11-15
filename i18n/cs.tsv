@@ -13,7 +13,7 @@
 
 @id	language.name	Čeština
 	% down and up	% dolů a nahoru
-	% of replications	% replikací
+	% of runs	% replikací
 	+ Add block	+ Přidat blok
 	95% interval of the share meeting the target: {lo} to {hi}	95% interval podílu splňujícího cíl: {lo} až {hi}
 	95th percentile	95. percentil
@@ -34,7 +34,7 @@
 	Add Pool	Přidat fond
 	Add a flow from…	Přidat tok z…
 	Add a flow to…	Přidat tok do…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Přidávat jednotku u nejvytíženější úlohy nebo fondu, dokud dost replikací nesplní cíl. Zobrazí se i odpověď s každou dobou na průměru; bývá příliš malá.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Přidávat jednotku u nejvytíženější úlohy nebo fondu, dokud dost replikací nesplní cíl. Zobrazí se i odpověď s každou dobou na průměru; bývá příliš malá.
 	Add alternative	Přidat alternativu
 	Add calendar	Přidat kalendář
 	Add calendar entry	Přidat položku kalendáře
@@ -169,12 +169,12 @@
 	Ends early	Končí dříve
 	Energy	Energie
 	Energy per part	Energie na díl
-	Enough: {units}, meeting the target in {p} of replications	Stačí: {units}, cíl splněn v {p} replikací
+	Enough: {units}, meeting the target in {p} of runs	Stačí: {units}, cíl splněn v {p} replikací
 	Enter a number	Zadejte číslo
 	Entered	Vstoupilo
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entity, které najdou čekárnu plnou, jdou hned tímto tokem (například aby to zkusily později znovu), místo aby se ztratily nebo čekaly před úlohou; zde se počítají jako ztracené.
 	Entities give up waiting	Entity vzdávají čekání
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entity, které jsou na konci replikace stále uvnitř, nejsou zahrnuty do průměrné doby čekání ani průměrné doby v systému.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entity, které jsou na konci replikace stále uvnitř, nejsou zahrnuty do průměrné doby čekání ani průměrné doby v systému.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entity, které vzdají čekání, jdou tímto tokem (například aby to zkusily později znovu); ostatní jdou druhou cestou ven z úlohy.
 	Erlang	Erlangovo
 	Error	Chyba
@@ -252,7 +252,7 @@
 	Maximum	Maximum
 	Mean	Průměr
 	Mean number inside	Průměrný počet uvnitř
-	One replication of {n}: the results of the others differ.	Jedna replikace z {n}: výsledky ostatních se liší.
+	One run of {n}: the results of the others differ.	Jedna replikace z {n}: výsledky ostatních se liší.
 	Save as a new BPMN file?	Uložit jako nový soubor BPMN?
 	Still inside at the end	Na konci stále uvnitř
 	Mean work in progress	Průměrná nedokončená výroba
@@ -284,7 +284,7 @@
 	No arrivals outside calendars	Žádné příchody mimo kalendáře
 	No blocks yet. Open a model, or add blocks to build one.	Zatím žádné bloky. Otevřete model nebo přidejte bloky a vytvořte jej.
 	No connections yet: join blocks below.	Zatím žádná propojení: propojte bloky níže.
-	No replication met the stop condition: each ran to its time limit.	Žádná replikace nesplnila podmínku zastavení: každá běžela do svého časového limitu.
+	No run met the stop condition: each ran to its time limit.	Žádná replikace nesplnila podmínku zastavení: každá běžela do svého časového limitu.
 	No results yet	Zatím žádné výsledky
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	V tomto modelu nejsou označeny žádné zmetky ani přepracování, takže OEE počítá kvalitu jako 100%.
 	No target	Bez cíle
@@ -386,11 +386,11 @@
 	Repair time	Doba opravy
 	Repeats	Opakování
 	Replace Model	Nahradit model
-	Replication 1 · {time} of {end} {unit}	Replikace 1 · {time} z {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Replikace 1 · {time} z {end} {unit} · zahřívání
-	Replications	Replikace
-	Replications meeting the target	Replikace splňující cíl
-	Replications that never met the stop condition count as later than their time limit.	Replikace, které podmínku zastavení nikdy nesplnily, se počítají jako pozdější než jejich časový limit.
+	Run 1 · {time} of {end} {unit}	Replikace 1 · {time} z {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Replikace 1 · {time} z {end} {unit} · zahřívání
+	Runs	Replikace
+	Runs meeting the target	Replikace splňující cíl
+	Runs that never met the stop condition count as later than their time limit.	Replikace, které podmínku zastavení nikdy nesplnily, se počítají jako pozdější než jejich časový limit.
 	Resource pool	Fond zdrojů
 	Resource pools	Fondy zdrojů
 	Restore	Obnovit velikost
@@ -411,7 +411,7 @@
 	Run	Spustit
 	Run cancelled	Běh byl zrušen
 	Run experiment	Spustit experiment
-	Run replication 1 step by step and see each block's queue on the diagram	Spustit replikaci 1 krok za krokem a sledovat frontu každého bloku v diagramu
+	Play run 1 step by step and see each block's queue on the diagram	Spustit replikaci 1 krok za krokem a sledovat frontu každého bloku v diagramu
 	Run the experiment ({shortcut})	Spustit experiment ({shortcut})
 	Run the experiment again to see this result's spread.	Spusťte experiment znovu, abyste viděli rozptyl tohoto výsledku.
 	Run the experiment at each value of one parameter, and compare a result.	Spustit experiment pro každou hodnotu jednoho parametru a porovnat výsledek.
@@ -467,7 +467,7 @@
 	Split batches	Rozdělení dávek
 	Split or join	Rozdělit nebo spojit
 	Split or join (all ways)	Rozdělit nebo spojit (všechny cesty)
-	Spread across replications	Rozptyl mezi replikacemi
+	Spread across runs	Rozptyl mezi replikacemi
 	Spread out	Rozmístit
 	Stages (k)	Fáze (k)
 	Standard deviation	Směrodatná odchylka
@@ -498,11 +498,11 @@
 	Text on header	Text v záhlaví
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Spojení spadne a klient to zkusí znovu: entita se hned vrátí na začátek fronty a práce na ní odvedená je zbytečná.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entita čeká u svého serveru a práce pokračuje se zbytkem, jakmile je server zpět.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval sahá pod cílový podíl {share}, takže splnění podílu není prokázáno s 95% spolehlivostí; více replikací by ho zúžilo.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval sahá pod cílový podíl {share}, takže splnění podílu není prokázáno s 95% spolehlivostí; více replikací by ho zúžilo.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Práce se hned zastaví: entita se vrátí na začátek fronty pro kterýkoli server na směně a práce na ní odvedená je zbytečná.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Práce se hned zastaví; entita čeká u svého serveru a práce pokračuje se zbytkem, jakmile je tento server opět na směně.
 	The last task with a resource it finished at	Poslední úloha se zdrojem, kterou díl prošel
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Průměrná doba do podmínky zastavení je jen z replikací, které ji splnily; ostatní běžely do svého časového limitu.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Průměrná doba do podmínky zastavení je jen z replikací, které ji splnily; ostatní běžely do svého časového limitu.
 	The model changed, so watching stopped	Model se změnil, proto bylo sledování ukončeno
 	The model has no calendars yet.	Model zatím nemá žádné kalendáře.
 	The model now has the units sizing found	Model má nyní jednotky nalezené dimenzováním
@@ -510,7 +510,7 @@
 	The name is empty or already used.	Jméno je prázdné nebo se už používá.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikace se rozdělily na dva odlišné výsledky: {a} z {n} v jednom, {b} ve druhém. Výsledky rozdělené stejně: {count}, mezi nimi {result} ({element}); viz tabulka níže.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Server dokončí práci, kterou má, a pak ukončí směnu; do té doby se počítá jako na směně.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Podíl replikací rovných nebo menších než každá hodnota. Pás obsahuje skutečné rozdělení se spolehlivostí {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Podíl replikací rovných nebo menších než každá hodnota. Pás obsahuje skutečné rozdělení se spolehlivostí {confidence}.
 	The values are numbers, separated by semicolons or spaces	Hodnoty jsou čísla oddělená středníky nebo mezerami
 	The whole clock	Celý čas
 	Themes	Motivy
@@ -578,7 +578,7 @@
 	Warning	Upozornění
 	Watch a Run	Sledovat běh
 	Watch a run	Sledovat běh
-	Watching replication 1	Sleduje se replikace 1
+	Watching run 1	Sleduje se replikace 1
 	Weak text	Tlumený text
 	Weak text on header	Tlumený text v záhlaví
 	Wed	st
@@ -614,7 +614,7 @@
 	maximum {value}	maximum {value}
 	milliseconds	milisekundy
 	minutes	minuty
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k z N: jen k z N replikací mělo pro tento výsledek hodnotu a jeho průměr a interval jsou z těchto k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k z N: jen k z N replikací mělo pro tento výsledek hodnotu a jeho průměr a interval jsou z těchto k.
 	n = {k} of {n}	n = {k} z {n}
 	nothing yet	zatím nic
 	per day	za den
@@ -650,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} a {second} – rozdíl světlosti {step}, je třeba 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: pravděpodobnost je číslo od 0 do 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikací splnilo cíl: {p} (95% interval {lo} až {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikací splnilo cíl: {p} (95% interval {lo} až {hi})
 	{name} — edited	{name} — upraveno
 	{n} created	Vytvořeno: {n}
 	{n} done	Hotovo: {n}
@@ -664,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: nyní {now}, nejvýše {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% interval spolehlivosti
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± představuje polovinu šířky 95% Student-t intervalu spolehlivosti průměru napříč replikacemi.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± představuje polovinu šířky 95% Student-t intervalu spolehlivosti průměru napříč replikacemi.
 	· no results yet	· zatím žádné výsledky
 unit	d	d
 unit	h	h
@@ -674,16 +674,16 @@ unit	s	s
 unit	yr	r.
 @plural	Added {n} block|Added {n} blocks	Přidán {n} blok|Přidány {n} bloky|Přidáno {n} bloků
 @plural	Copied {n} block|Copied {n} blocks	Zkopírován {n} blok|Zkopírovány {n} bloky|Zkopírováno {n} bloků
-@plural	Finished {n} replication|Finished {n} replications	Dokončena {n} replikace|Dokončeny {n} replikace|Dokončeno {n} replikací
+@plural	Finished {n} run|Finished {n} runs	Dokončena {n} replikace|Dokončeny {n} replikace|Dokončeno {n} replikací
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otevřen {file} ({n} upozornění)|Otevřen {file} ({n} upozornění)|Otevřen {file} ({n} upozornění)
 @plural	Removed {n} block|Removed {n} blocks	Odebrán {n} blok|Odebrány {n} bloky|Odebráno {n} bloků
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislou replikaci modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislé replikace modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislých replikací modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Podmínka zastavení byla splněna v {met} z {n} replikace, v průměru po {time} {unit}.|Podmínka zastavení byla splněna v {met} z {n} replikací, v průměru po {time} {unit}.|Podmínka zastavení byla splněna v {met} z {n} replikací, v průměru po {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	Dokončena {done} z {n} replikace|Dokončeno {done} z {n} replikací|Dokončeno {done} z {n} replikací
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikace|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikací|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikací
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislou replikaci modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislé replikace modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.|Spustí {n} nezávislých replikací modelu z počáteční hodnoty {seed}. Výsledky každého prvku zahrnují poloviční šířku 95% intervalu spolehlivosti.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Podmínka zastavení byla splněna v {met} z {n} replikace, v průměru po {time} {unit}.|Podmínka zastavení byla splněna v {met} z {n} replikací, v průměru po {time} {unit}.|Podmínka zastavení byla splněna v {met} z {n} replikací, v průměru po {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Dokončena {done} z {n} replikace|Dokončeno {done} z {n} replikací|Dokončeno {done} z {n} replikací
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikace|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikací|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikací
 @plural	{n} block selected|{n} blocks selected	Vybrán {n} blok|Vybrány {n} bloky|Vybráno {n} bloků
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikace na krok · počáteční hodnota {seed}|{n} replikace na krok · počáteční hodnota {seed}|{n} replikací na krok · počáteční hodnota {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikace · průměr {mean} · od {min} do {max}|{n} replikace · průměr {mean} · od {min} do {max}|{n} replikací · průměr {mean} · od {min} do {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikace · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}|{n} replikace · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}|{n} replikací · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikace · počáteční hodnota {seed}|{n} replikace · počáteční hodnota {seed}|{n} replikací · počáteční hodnota {seed}
-@plural	{n} replication|{n} replications	{n} replikace|{n} replikace|{n} replikací
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} replikace na krok · počáteční hodnota {seed}|{n} replikace na krok · počáteční hodnota {seed}|{n} replikací na krok · počáteční hodnota {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} replikace · průměr {mean} · od {min} do {max}|{n} replikace · průměr {mean} · od {min} do {max}|{n} replikací · průměr {mean} · od {min} do {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikace · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}|{n} replikace · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}|{n} replikací · počáteční hodnota {seed} · zahřívání {warmup} {unit} · měřeno {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikace · počáteční hodnota {seed}|{n} replikace · počáteční hodnota {seed}|{n} replikací · počáteční hodnota {seed}
+@plural	{n} run|{n} runs	{n} replikace|{n} replikace|{n} replikací

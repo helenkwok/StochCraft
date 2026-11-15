@@ -759,11 +759,7 @@ impl App {
                 self.results = Some(result.clone());
                 self.show_results = true;
                 let n = result["replications"].as_u64().unwrap_or(0);
-                self.info(tn(
-                    n,
-                    "Finished {n} replication",
-                    "Finished {n} replications",
-                ));
+                self.info(tn(n, "Finished {n} run", "Finished {n} runs"));
             }
             _ => {}
         }
@@ -1152,11 +1148,7 @@ impl App {
                 self.results = Some(status["result"].clone());
                 self.show_results = true;
                 let n = status["total"].as_u64().unwrap_or(0);
-                self.info(tn(
-                    n,
-                    "Finished {n} replication",
-                    "Finished {n} replications",
-                ));
+                self.info(tn(n, "Finished {n} run", "Finished {n} runs"));
                 false
             }
             _ => {
@@ -1720,8 +1712,8 @@ impl App {
             ));
             ui.label(tnf(
                 u64::from(x.replications),
-                "{n} replication · seed {seed}",
-                "{n} replications · seed {seed}",
+                "{n} run · seed {seed}",
+                "{n} runs · seed {seed}",
                 &[("seed", &x.seed.to_string())],
             ));
             ui.add_space(2.0);
@@ -1790,9 +1782,9 @@ impl App {
             ui,
             tnf(
                 u64::from(x.replications),
-                "Runs {n} independent replication of the model from seed {seed}. Each \
+                "Makes {n} independent run of the model from seed {seed}. Each \
                  element's results come with the half-width of a 95% confidence interval.",
-                "Runs {n} independent replications of the model from seed {seed}. Each \
+                "Makes {n} independent runs of the model from seed {seed}. Each \
                  element's results come with the half-width of a 95% confidence interval across \
                  them.",
                 &[("seed", &x.seed.to_string())],
@@ -1827,8 +1819,8 @@ impl App {
             ui,
             tnf(
                 total,
-                "{done} of {n} replication finished",
-                "{done} of {n} replications finished",
+                "{done} of {n} run finished",
+                "{done} of {n} runs finished",
                 &[("done", &done.to_string())],
             ),
         ));

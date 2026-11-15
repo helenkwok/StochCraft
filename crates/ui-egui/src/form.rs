@@ -173,7 +173,7 @@ pub fn label(name: &str) -> String {
         "service" => "Service time",
         "duration" => "Duration",
         "warmup" => "Warm-up",
-        "replications" => "Replications",
+        "replications" => "Runs",
         "seed" => "Seed",
         "time_unit" => "Time unit",
         "type" => "Type",

@@ -13,7 +13,7 @@
 
 @id	language.name	한국어
 	% down and up	% 낮추고 높이기
-	% of replications	% 반복 실행에서
+	% of runs	% 반복 실행에서
 	+ Add block	+ 블록 추가
 	95% interval of the share meeting the target: {lo} to {hi}	목표를 충족한 비율의 95% 구간: {lo}~{hi}
 	95th percentile	95번째 백분위수
@@ -34,7 +34,7 @@
 	Add Pool	풀 추가
 	Add a flow from…	시작 블록…
 	Add a flow to…	끝 블록…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	충분한 반복 실행이 목표를 충족할 때까지 가장 바쁜 작업이나 풀에 단위를 하나씩 추가합니다. 모든 시간을 평균으로 둔 답도 함께 표시하지만 보통 너무 작습니다.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	충분한 반복 실행이 목표를 충족할 때까지 가장 바쁜 작업이나 풀에 단위를 하나씩 추가합니다. 모든 시간을 평균으로 둔 답도 함께 표시하지만 보통 너무 작습니다.
 	Add alternative	대안 추가
 	Add calendar	캘린더 추가
 	Add calendar entry	캘린더 항목 추가
@@ -169,12 +169,12 @@
 	Ends early	일찍 끝남
 	Energy	에너지
 	Energy per part	부품당 에너지
-	Enough: {units}, meeting the target in {p} of replications	충분: {units}, 반복 실행의 {p}에서 목표 충족
+	Enough: {units}, meeting the target in {p} of runs	충분: {units}, 반복 실행의 {p}에서 목표 충족
 	Enter a number	숫자를 입력하세요
 	Entered	진입 수
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	대기실이 가득 찬 것을 본 엔터티는 곧바로 이 흐름을 따릅니다(예를 들어 나중에 다시 시도하기 위해). 손실되거나 작업 앞에서 기다리지 않으며, 여기서는 손실로 셉니다.
 	Entities give up waiting	엔터티가 대기를 포기함
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	반복 실행이 끝날 때 아직 내부에 있는 개체는 평균 대기 시간과 시스템 내 평균 체류 시간에서 빠집니다.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	반복 실행이 끝날 때 아직 내부에 있는 개체는 평균 대기 시간과 시스템 내 평균 체류 시간에서 빠집니다.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	대기를 포기한 엔터티는 이 흐름을 따릅니다(예를 들어 나중에 다시 시도하기 위해). 나머지는 작업의 다른 나갈 경로를 따릅니다.
 	Erlang	얼랑 분포
 	Error	오류
@@ -252,7 +252,7 @@
 	Maximum	최댓값
 	Mean	평균
 	Mean number inside	내부 평균 개수
-	One replication of {n}: the results of the others differ.	{n}회 중 1회의 반복 실행입니다. 다른 반복 실행의 결과는 다릅니다.
+	One run of {n}: the results of the others differ.	{n}회 중 1회의 반복 실행입니다. 다른 반복 실행의 결과는 다릅니다.
 	Save as a new BPMN file?	새 BPMN 파일로 저장할까요?
 	Still inside at the end	종료 시 내부에 남은 개수
 	Mean work in progress	평균 재공품 수
@@ -284,7 +284,7 @@
 	No arrivals outside calendars	캘린더 밖에서는 도착 없음
 	No blocks yet. Open a model, or add blocks to build one.	아직 블록이 없습니다. 모델을 열거나 블록을 추가하여 만드세요.
 	No connections yet: join blocks below.	아직 연결이 없습니다. 아래에서 블록을 연결하세요.
-	No replication met the stop condition: each ran to its time limit.	중지 조건에 도달한 반복 실행이 없습니다. 모두 시간 제한까지 실행되었습니다.
+	No run met the stop condition: each ran to its time limit.	중지 조건에 도달한 반복 실행이 없습니다. 모두 시간 제한까지 실행되었습니다.
 	No results yet	아직 결과가 없습니다
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	이 모델에는 폐기나 재작업이 표시되지 않았으므로 OEE는 품질을 100%로 계산합니다.
 	No target	목표 없음
@@ -386,11 +386,11 @@
 	Repair time	수리 시간
 	Repeats	반복
 	Replace Model	모델 바꾸기
-	Replication 1 · {time} of {end} {unit}	반복 실행 1 · {time} / {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	반복 실행 1 · {time} / {end} {unit} · 준비 기간
-	Replications	반복 실행 횟수
-	Replications meeting the target	목표를 충족한 반복 실행
-	Replications that never met the stop condition count as later than their time limit.	중지 조건에 도달하지 못한 반복 실행은 시간 제한보다 늦은 것으로 셉니다.
+	Run 1 · {time} of {end} {unit}	반복 실행 1 · {time} / {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	반복 실행 1 · {time} / {end} {unit} · 준비 기간
+	Runs	반복 실행 횟수
+	Runs meeting the target	목표를 충족한 반복 실행
+	Runs that never met the stop condition count as later than their time limit.	중지 조건에 도달하지 못한 반복 실행은 시간 제한보다 늦은 것으로 셉니다.
 	Resource pool	자원 풀
 	Resource pools	자원 풀
 	Restore	복원
@@ -411,7 +411,7 @@
 	Run	실행
 	Run cancelled	실행이 취소되었습니다
 	Run experiment	실험 실행
-	Run replication 1 step by step and see each block's queue on the diagram	반복 실행 1을 단계별로 실행하고 다이어그램에서 각 블록의 대기열 보기
+	Play run 1 step by step and see each block's queue on the diagram	반복 실행 1을 단계별로 실행하고 다이어그램에서 각 블록의 대기열 보기
 	Run the experiment ({shortcut})	실험 실행 ({shortcut})
 	Run the experiment again to see this result's spread.	이 결과의 분포를 보려면 실험을 다시 실행하세요.
 	Run the experiment at each value of one parameter, and compare a result.	한 매개변수의 각 값에서 실험을 실행하고 결과를 비교합니다.
@@ -467,7 +467,7 @@
 	Split batches	배치 분리
 	Split or join	분할 또는 병합
 	Split or join (all ways)	분할 또는 병합(모든 경로)
-	Spread across replications	반복 실행 간 분포
+	Spread across runs	반복 실행 간 분포
 	Spread out	균등 배치
 	Stages (k)	단계 수 (k)
 	Standard deviation	표준 편차
@@ -498,11 +498,11 @@
 	Text on header	헤더의 텍스트
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	연결이 끊기고 클라이언트가 다시 시도합니다. 엔터티는 즉시 대기열 맨 앞으로 돌아가고, 그때까지 한 작업은 낭비됩니다.
 	The entity waits on its server and the job carries on with what was left once the server is back.	엔터티는 자기 서버에서 기다리고, 서버가 돌아오면 남은 작업부터 계속합니다.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	구간이 목표 비율 {share}보다 아래까지 내려가므로, 비율 충족이 95% 신뢰도로 확인되지 않았습니다. 반복 실행을 늘리면 구간이 좁아집니다.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	구간이 목표 비율 {share}보다 아래까지 내려가므로, 비율 충족이 95% 신뢰도로 확인되지 않았습니다. 반복 실행을 늘리면 구간이 좁아집니다.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	작업이 즉시 멈춥니다. 엔터티는 근무 중인 아무 서버를 기다리도록 대기열 맨 앞으로 돌아가고, 그때까지 한 작업은 낭비됩니다.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	작업이 즉시 멈춥니다. 엔터티는 자기 서버에서 기다리고, 그 서버가 다시 근무하면 남은 작업부터 계속합니다.
 	The last task with a resource it finished at	부품이 마지막으로 거친 자원을 사용하는 작업
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	중지 조건까지의 평균 시간은 중지 조건에 도달한 반복 실행만으로 계산됩니다. 나머지는 시간 제한까지 실행되었습니다.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	중지 조건까지의 평균 시간은 중지 조건에 도달한 반복 실행만으로 계산됩니다. 나머지는 시간 제한까지 실행되었습니다.
 	The model changed, so watching stopped	모델이 변경되어 관찰을 중지함
 	The model has no calendars yet.	모델에 아직 캘린더가 없습니다.
 	The model now has the units sizing found	이제 모델에 크기 정하기로 찾은 수량이 들어 있습니다
@@ -510,7 +510,7 @@
 	The name is empty or already used.	이름이 비어 있거나 이미 사용 중입니다.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	반복 실행이 두 가지 결과로 나뉩니다: {n}회 중 {a}회는 한쪽, {b}회는 다른 쪽입니다. 같은 식으로 나뉜 결과는 {count}개이며 {result}({element})도 그중 하나입니다. 아래 표를 보세요.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	서버는 하던 작업을 마친 후 근무를 끝냅니다. 그때까지는 근무 중으로 계산합니다.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	각 값 이하인 반복 실행의 비율입니다. 띠는 {confidence} 신뢰도로 실제 분포를 포함합니다.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	각 값 이하인 반복 실행의 비율입니다. 띠는 {confidence} 신뢰도로 실제 분포를 포함합니다.
 	The values are numbers, separated by semicolons or spaces	값은 세미콜론이나 공백으로 구분한 숫자입니다
 	The whole clock	전체 시간
 	Themes	테마
@@ -578,7 +578,7 @@
 	Warning	경고
 	Watch a Run	실행 관찰
 	Watch a run	실행 관찰
-	Watching replication 1	반복 실행 1 관찰 중
+	Watching run 1	반복 실행 1 관찰 중
 	Weak text	흐린 텍스트
 	Weak text on header	헤더의 흐린 텍스트
 	Wed	수
@@ -614,7 +614,7 @@
 	maximum {value}	최댓값 {value}
 	milliseconds	밀리초
 	minutes	분
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = N회 중 k회: 이 결과의 값이 있는 반복 실행은 N회 중 k회뿐이며, 평균과 구간은 그 k회에 대한 것입니다.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N회 중 k회: 이 결과의 값이 있는 반복 실행은 N회 중 k회뿐이며, 평균과 구간은 그 k회에 대한 것입니다.
 	n = {k} of {n}	n = {n}회 중 {k}회
 	nothing yet	아직 없음
 	per day	하루당
@@ -650,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}, {second}: 명도 차이 {step}, 최소 0.06 필요.
 	{id}: a probability is a number from 0 to 1	{id}: 확률은 0에서 1 사이의 숫자여야 합니다
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of}회 중 {met}회가 목표를 충족: {p}(95% 구간 {lo}~{hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of}회 중 {met}회가 목표를 충족: {p}(95% 구간 {lo}~{hi})
 	{name} — edited	{name} — 편집됨
 	{n} created	생성 {n}
 	{n} done	완료 {n}
@@ -664,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: 현재 {now}, 최대 {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% 신뢰 구간
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	±는 반복 실험의 평균에 대한 95% Student-t 신뢰 구간 너비의 절반입니다.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	±는 반복 실험의 평균에 대한 95% Student-t 신뢰 구간 너비의 절반입니다.
 	· no results yet	· 아직 결과가 없습니다
 unit	d	일
 unit	h	시간
@@ -674,16 +674,16 @@ unit	s	초
 unit	yr	년
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
-@plural	Finished {n} replication|Finished {n} replications	반복 실행 {n}회 완료
+@plural	Finished {n} run|Finished {n} runs	반복 실행 {n}회 완료
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} 열림(경고 {n}개)
 @plural	Removed {n} block|Removed {n} blocks	블록 {n}개 제거됨
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	시드 {seed}부터 모델을 독립적으로 {n}회 반복 실행합니다. 각 요소의 결과에는 95% 신뢰 구간의 반폭이 포함됩니다.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	중지 조건은 {n}회 중 {met}회의 반복 실행에서 평균 {time} {unit} 후에 도달했습니다.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}회 중 {done}회 반복 실행 완료
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% 구간 {low}~{high}{unit}\n{n}회 반복 실행 기준
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	시드 {seed}부터 모델을 독립적으로 {n}회 반복 실행합니다. 각 요소의 결과에는 95% 신뢰 구간의 반폭이 포함됩니다.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	중지 조건은 {n}회 중 {met}회의 반복 실행에서 평균 {time} {unit} 후에 도달했습니다.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{n}회 중 {done}회 반복 실행 완료
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% 구간 {low}~{high}{unit}\n{n}회 반복 실행 기준
 @plural	{n} block selected|{n} blocks selected	블록 {n}개 선택됨
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	단계마다 반복 실행 {n}회 · 시드 {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	반복 실행 {n}회 · 평균 {mean} · {min}~{max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	반복 실행 {n}회 · 시드 {seed} · 준비 {warmup} {unit} · 측정 {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	반복 실행 {n}회 · 시드 {seed}
-@plural	{n} replication|{n} replications	반복 실행 {n}회
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	단계마다 반복 실행 {n}회 · 시드 {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	반복 실행 {n}회 · 평균 {mean} · {min}~{max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	반복 실행 {n}회 · 시드 {seed} · 준비 {warmup} {unit} · 측정 {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	반복 실행 {n}회 · 시드 {seed}
+@plural	{n} run|{n} runs	반복 실행 {n}회
