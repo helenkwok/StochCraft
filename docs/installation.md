@@ -6,7 +6,7 @@ results for the same model and seed.
 ## In the browser (nothing to install)
 
 Open [helenkwok.github.io/StochCraft](https://helenkwok.github.io/StochCraft/) in a current
-Chrome, Edge, Firefox or Safari.
+desktop browser.
 
 - **Offline.** Once the page has loaded, it keeps working without a connection.
 - **As an app.** Your browser can install it so it opens in its own window: in Chrome or Edge,

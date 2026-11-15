@@ -301,7 +301,7 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 
 ## Troubleshooting
 
-- **Run is greyed out:** the model has no blocks yet, or a run is already going.
+- **Run is greyed out:** the model has no blocks yet, or a dialog is open. While a run is going, the button reads **Cancel run** instead.
 - **The results disappeared:** the model changed after the run. Run it again.
 - **A number field has a red outline:** the text is not a valid value. The message under it says
   why; the model keeps the old value until you fix it.
@@ -315,7 +315,7 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 
 - There is no downloadable desktop release yet; see the [installation guide](installation.md).
 - There is no side-by-side comparison of two versions of a model in the window yet; use the
-  Analysis view, or the [command line](developers.md#the-command-line) for scenarios.
+  Analysis view, or run each version with the [command line](developers.md#the-command-line) and compare the numbers.
 - Charts can't be configured beyond their colours.
 - The canvas is one drawn surface, so screen readers can't yet read its blocks; the menus,
   dialogs and status messages are readable.
