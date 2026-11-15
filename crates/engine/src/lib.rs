@@ -469,6 +469,7 @@ impl Engine {
         replications: Option<u32>,
         seed: Option<u64>,
         threads: Option<u32>,
+        series: bool,
     ) -> Result<Plan, CommandError> {
         let compiled = compile(&self.model).map_err(|ds| CommandError {
             code: ErrorCode::InvalidModel,
@@ -476,6 +477,12 @@ impl Engine {
             details: Some(wire::diagnostics(&ds)),
         })?;
         let x = &self.model.experiment;
+        // Results over time, for the warm-up suggestion and charts over the run.
+        let compiled = compiled.record_every(
+            series
+                .then(|| stochcraft_blocks::record_interval(x))
+                .flatten(),
+        );
         let mut experiment = Experiment::new(
             u64::from(replications.unwrap_or(x.replications)),
             seed.unwrap_or(x.seed),

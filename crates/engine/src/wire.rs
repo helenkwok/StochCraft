@@ -1960,6 +1960,10 @@ pub fn diagnostics(ds: &[Diagnostic]) -> Value {
 /// put the same replications together share a `group` (from 1), and `splits` lists each group
 /// once: its replications on either side (`sizes`, the lead's low side first) and its results
 /// in table order, the lead first.
+///
+/// With the replications' results over time (`Compiled::record_every`), `series` gives them and
+/// `warmup_suggestion` the warm-up MSER-5 suggests ([`series`] and [`warmup_suggestion`]);
+/// both are `null` otherwise.
 pub fn results(model: &Model, replications: u64, seed: u64, summary: &ExperimentSummary) -> Value {
     let x = &model.experiment;
     // Every result whose runs split, in table order, with the side of each replication.
@@ -2070,6 +2074,12 @@ pub fn results(model: &Model, replications: u64, seed: u64, summary: &Experiment
         },
         // What the results show that the model could not: as the run record's warnings.
         "warnings": diagnostics(&stochcraft_blocks::run_warnings(model, summary)),
+        "series": summary.series.as_ref().map_or(Value::Null, series),
+        "warmup_suggestion": summary
+            .series
+            .as_ref()
+            .and_then(|s| s.warmup.as_ref())
+            .map_or(Value::Null, warmup_suggestion),
     });
     if let Some(stop) = &x.stop {
         let met = summary.stop_times.iter().flatten().count();
@@ -2106,6 +2116,84 @@ pub fn results(model: &Model, replications: u64, seed: u64, summary: &Experiment
             .collect();
     }
     v
+}
+
+/// Results over time as JSON: the `interval` and the `times` recorded at (time 0, then every
+/// interval to the end), `n`, the replications that reached each time, and for each element
+/// (by id) each quantity it records (`queue_length`, `work_in_progress`, `busy`, `entered`,
+/// `left`: see [`stochcraft_blocks::Quantity`]) as four arrays with a value per time: `mean`
+/// across replications, `half_width` of its 95% Student-t interval (`null` where one
+/// replication reached the time), and the 2.5th and 97.5th percentiles across replications,
+/// `low` and `high`.
+pub fn series(s: &stochcraft_blocks::Series) -> Value {
+    let elements: serde_json::Map<String, Value> = s
+        .elements
+        .iter()
+        .map(|e| {
+            let quantities: serde_json::Map<String, Value> = e
+                .quantities
+                .iter()
+                .map(|(q, b)| {
+                    (
+                        q.name().to_owned(),
+                        json!({
+                            "mean": b.mean,
+                            "half_width": b.half_width,
+                            "low": b.low,
+                            "high": b.high,
+                        }),
+                    )
+                })
+                .collect();
+            (e.id.to_string(), Value::Object(quantities))
+        })
+        .collect();
+    json!({
+        "interval": s.interval,
+        "times": s.times,
+        "n": s.n,
+        "elements": elements,
+    })
+}
+
+/// A warm-up suggestion as JSON: the `method` (`mser-5`) and the `quantity` it judges
+/// (`work_in_progress`); the suggested `warmup` (in the model's time unit; `null` when every
+/// task's series is too short to tell) and the task it comes from (`at`); `too_short`, whether
+/// some task's series was still settling halfway through; and for each task (servers and tasks
+/// with shared resources, by id) its own `warmup`, the `shift` that leaving it out makes to the
+/// task's mean number inside and the `start` of the run against its second half (each `{mean,
+/// half_width, n}` or `null`), and whether the start-up `matters` (what the `no_warmup`
+/// warning asks).
+pub fn warmup_suggestion(w: &stochcraft_blocks::series::WarmupSuggestion) -> Value {
+    let summary = |s: Option<stochcraft_stats::Summary>| {
+        s.map_or(
+            Value::Null,
+            |s| json!({ "mean": s.mean, "half_width": s.half_width, "n": s.n }),
+        )
+    };
+    let elements: serde_json::Map<String, Value> = w
+        .elements
+        .iter()
+        .map(|e| {
+            (
+                e.id.to_string(),
+                json!({
+                    "warmup": e.warmup,
+                    "shift": summary(e.shift),
+                    "start": summary(e.start),
+                    "matters": e.matters(),
+                }),
+            )
+        })
+        .collect();
+    json!({
+        "method": "mser-5",
+        "quantity": stochcraft_blocks::series::WARMUP_QUANTITY.name(),
+        "warmup": w.warmup,
+        "at": w.at.as_ref().map(ElementId::as_str),
+        "too_short": w.too_short,
+        "elements": elements,
+    })
 }
 
 #[cfg(test)]
@@ -2186,6 +2274,7 @@ mod tests {
             stopped: None,
             stop_times: vec![],
             measured: vec![],
+            series: None,
         };
         let r = results(&Model::default(), 13, 1, &s);
         let metrics = &r["elements"][0]["metrics"];
