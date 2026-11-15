@@ -225,6 +225,41 @@ fn copies_paste_with_new_ids_and_their_connections() {
     assert_eq!(ids(&h), ["arrive", "serve", "leave", "serve-copy"]);
 }
 
+/// A block pasted with no name gets one as a new block does, so the copy never shows the engine's
+/// id. The original keeps its empty name.
+#[test]
+fn a_pasted_block_without_a_name_is_named_like_a_new_one() {
+    let mut h = mm1();
+    h.state_mut()
+        .execute(
+            "block.add",
+            json!({
+                "kind": "source",
+                "name": "",
+                "interarrival": { "type": "exponential", "mean": 1.0 },
+            }),
+        )
+        .expect("a block with no name");
+    settle(&mut h);
+    command(&mut h, commands::SELECT_ALL);
+    command(&mut h, commands::COPY);
+    command(&mut h, commands::PASTE);
+    let names: Vec<String> = h
+        .state()
+        .engine()
+        .model()
+        .elements
+        .iter()
+        .map(|e| e.name.clone())
+        .collect();
+    assert_eq!(
+        names.iter().filter(|n| *n == "Arrivals 1").count(),
+        1,
+        "{names:?}"
+    );
+    assert!(names.iter().any(String::is_empty), "{names:?}");
+}
+
 #[test]
 fn the_view_zooms_and_a_click_on_the_background_selects_nothing() {
     let mut h = mm1();

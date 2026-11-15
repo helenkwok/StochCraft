@@ -899,6 +899,11 @@ impl App {
     /// Adds a block of `kind` with its shape centred on `at` (diagram units).
     pub(crate) fn add_block_at(&mut self, kind: &str, at: (f64, f64)) {
         let mut params = crate::editor::new_block(kind);
+        params["name"] = json!(crate::editor::default_block_name(
+            self.engine.model(),
+            &[],
+            kind
+        ));
         if kind == "shared_task" {
             let Some(pool) = self.first_pool() else {
                 return;
@@ -1034,6 +1039,8 @@ impl App {
         }
         let mut ids: BTreeMap<String, String> = BTreeMap::new();
         let mut defaults: Vec<(String, String)> = Vec::new();
+        // The names the pasted blocks have, so that new ones are numbered after them.
+        let mut named: Vec<(String, String)> = Vec::new();
         for e in clip["elements"].as_array().into_iter().flatten() {
             let Some(old) = e["id"].as_str() else {
                 continue;
@@ -1043,6 +1050,15 @@ impl App {
             ids.insert(old.to_owned(), new.clone());
             let mut params = e.clone();
             params["id"] = json!(new);
+            // A copy with no name, or only its id (the engine's default), gets a name as a new
+            // block does, so a paste does not bring the engine's ids back into view.
+            let kind = e["kind"].as_str().unwrap_or("");
+            let name = match e["name"].as_str() {
+                Some(n) if !n.is_empty() && n != old => n.to_owned(),
+                _ => crate::editor::default_block_name(model, &named, kind),
+            };
+            named.push((kind.to_owned(), name.clone()));
+            params["name"] = json!(name);
             if let Some(obj) = params.as_object_mut() {
                 obj.remove("bounds");
                 if let Some(d) = obj

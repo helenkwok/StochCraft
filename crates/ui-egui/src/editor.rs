@@ -4,6 +4,7 @@
 
 use serde_json::{Value, json};
 use stochcraft_engine::COMMANDS;
+use stochcraft_model::Model;
 
 use crate::form::{self, Schema};
 use crate::i18n::{t, tf};
@@ -41,6 +42,35 @@ pub fn new_block(kind: &str) -> Value {
         "batch" => json!({"kind": "batch", "size": 2}),
         "unbatch" => json!({"kind": "unbatch"}),
         _ => json!({"kind": "sink"}),
+    }
+}
+
+/// A name for a new block of `kind`: the kind's short label, as the results name it, with a
+/// number ("Arrivals 1"), the lowest
+/// number no block of that kind already has. `pending` holds the names of blocks about to be
+/// added in the same step. Blocks show words, not the engine's ids ("source-1").
+pub(crate) fn default_block_name(
+    model: &Model,
+    pending: &[(String, String)],
+    kind: &str,
+) -> String {
+    // The results' label is translated with each language's own capitals (no rule for the
+    // first letter, which would be wrong in Turkish or German).
+    let base = crate::results::kind_label(kind);
+    let taken = |name: &str| {
+        model
+            .elements
+            .iter()
+            .any(|e| e.kind.name() == kind && e.name == name)
+            || pending.iter().any(|(k, n)| k == kind && n == name)
+    };
+    let mut n: u32 = 1;
+    loop {
+        let name = format!("{base} {n}");
+        if !taken(&name) {
+            return name;
+        }
+        n += 1;
     }
 }
 
@@ -140,6 +170,7 @@ impl App {
     /// block sends entities on, and selects it.
     pub(crate) fn add_block(&mut self, kind: &str) {
         let mut params = new_block(kind);
+        params["name"] = json!(default_block_name(self.engine.model(), &[], kind));
         if kind == "shared_task" {
             let Some(pool) = self.first_pool() else {
                 return;
