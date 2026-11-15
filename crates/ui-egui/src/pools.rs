@@ -42,7 +42,10 @@ impl App {
             let id = r["id"].as_str().unwrap_or("").to_owned();
             ui.add_space(6.0);
             ui.horizontal(|ui| {
-                ui.label(theme::strong(r["name"].as_str().unwrap_or(&id)));
+                // An empty name shows the id, as the other places that name a pool do.
+                ui.label(theme::strong(
+                    r["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(&id),
+                ));
                 ui.label(theme::weak(ui, &id).monospace());
                 if ui
                     .add(egui::Button::new(
@@ -59,6 +62,7 @@ impl App {
                 &format!("pool/{id}/name"),
                 t("Name"),
                 r["name"].as_str().unwrap_or(""),
+                true,
             ) {
                 self.execute("resource.set", json!({ "id": id, "name": n }));
             }
@@ -84,6 +88,7 @@ impl App {
                 &format!("pool/{id}/roles"),
                 t("Roles"),
                 &roles_text(&r["roles"]),
+                true,
             ) {
                 self.execute(
                     "resource.set",
@@ -208,6 +213,8 @@ impl App {
                     &format!("{id}/need/{i}/roles"),
                     t("Roles"),
                     &roles_text(&need["roles"]),
+                    // A need with no roles would take any pool, so it must name one.
+                    false,
                 )
             {
                 let mut all = needs.clone();

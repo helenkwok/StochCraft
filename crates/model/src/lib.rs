@@ -119,7 +119,9 @@ impl TimeUnit {
     }
 }
 
-/// What an element does. M2 adds resources and the rest (ROADMAP.md).
+/// What an element does: a source, a task with a resource (a server), a task with shared
+/// resources, a delay, a sink, a gateway, a batch or an unbatch. Resource pools are separate
+/// ([`ResourcePool`]).
 #[derive(Debug, Clone, PartialEq)]
 // The document form of a block: one per element, cloned with the model, never in the event
 // loop, so a server's many settings stay inline rather than boxed.
