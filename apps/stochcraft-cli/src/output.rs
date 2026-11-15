@@ -82,6 +82,237 @@ fn record_lines(name: &str, results: &Value, out: &mut String) {
     );
 }
 
+/// `rows` as aligned columns, two spaces apart: text left where `left` says so, numbers right.
+fn aligned<R: AsRef<[String]>>(rows: &[R], left: &[bool], out: &mut String) {
+    let cols = rows.iter().map(|r| r.as_ref().len()).max().unwrap_or(0);
+    let widths: Vec<usize> = (0..cols)
+        .map(|c| {
+            rows.iter()
+                .filter_map(|r| r.as_ref().get(c))
+                .map(|cell| cell.chars().count())
+                .max()
+                .unwrap_or(0)
+        })
+        .collect();
+    for row in rows {
+        let line: Vec<String> = row
+            .as_ref()
+            .iter()
+            .enumerate()
+            .map(|(c, cell)| {
+                let pad = " ".repeat(widths[c] - cell.chars().count());
+                if left.get(c).copied().unwrap_or(false) {
+                    format!("{cell}{pad}")
+                } else {
+                    format!("{pad}{cell}")
+                }
+            })
+            .collect();
+        let _ = writeln!(out, "{}", line.join("  ").trim_end());
+    }
+}
+
+/// A factor or parameter `{id, field}` as `id.field`.
+fn label(v: &Value) -> String {
+    format!("{}.{}", s(&v["id"]), s(&v["field"]))
+}
+
+fn yes_no(v: &Value) -> &'static str {
+    match v.as_bool() {
+        Some(true) => "yes",
+        Some(false) => "no",
+        None => "-",
+    }
+}
+
+/// A designed experiment (`experiment.design`) as text: what was run, a table of the points,
+/// then the main effects and interactions (a full factorial) or the rank correlations (a Latin
+/// hypercube).
+pub fn design_table(name: &str, d: &Value) -> String {
+    let mut out = String::new();
+    let factors = d["factors"].as_array().map_or(&[][..], Vec::as_slice);
+    let points = d["points"].as_array().map_or(&[][..], Vec::as_slice);
+    let title = if name.is_empty() {
+        "(unnamed model)"
+    } else {
+        name
+    };
+    let kind = match s(&d["design"]) {
+        "latin_hypercube" => "Latin hypercube",
+        _ => "full factorial",
+    };
+    let _ = writeln!(
+        out,
+        "{title}: {kind} of {} factor{}, {} points × {} replications = {} runs, seed {}",
+        factors.len(),
+        if factors.len() == 1 { "" } else { "s" },
+        points.len(),
+        d["replications"],
+        d["runs"],
+        d["seed"]
+    );
+    let _ = writeln!(
+        out,
+        "every point runs on the same seed (common random numbers); ± is the half-width of a 95% \
+         Student-t confidence interval across replications\n"
+    );
+    let mut header = vec!["point".to_owned()];
+    header.extend(factors.iter().map(label));
+    header.extend(["result", "mean", "± half-width", "n"].map(String::from));
+    let mut rows = vec![header];
+    for (i, p) in points.iter().enumerate() {
+        for (j, r) in p["results"].as_array().into_iter().flatten().enumerate() {
+            let mut row = vec![if j == 0 {
+                (i + 1).to_string()
+            } else {
+                String::new()
+            }];
+            row.extend((0..factors.len()).map(|k| {
+                if j == 0 {
+                    f(&p["values"][k])
+                } else {
+                    String::new()
+                }
+            }));
+            row.push(format!("{}.{}", s(&r["element"]), s(&r["metric"])));
+            row.push(f(&r["mean"]));
+            row.push(f(&r["half_width"]));
+            row.push(r["n"].to_string());
+            rows.push(row);
+        }
+    }
+    let mut left = vec![true];
+    left.extend(std::iter::repeat_n(false, factors.len()));
+    left.push(true);
+    aligned(&rows, &left, &mut out);
+    let effect_rows = |what: &[Value], first: &dyn Fn(&Value) -> Vec<String>| {
+        what.iter()
+            .map(|e| {
+                let mut row = first(e);
+                row.push(format!("{}.{}", s(&e["element"]), s(&e["metric"])));
+                row.push(f(&e["effect"]));
+                row.push(f(&e["half_width"]));
+                row.push(yes_no(&e["significant"]).to_owned());
+                row
+            })
+            .collect::<Vec<_>>()
+    };
+    if let Some(main) = d["main_effects"].as_array().filter(|m| !m.is_empty()) {
+        let _ = writeln!(
+            out,
+            "\nmain effects: the mean at the factor's highest level minus at its lowest, over the \
+             other factors' levels, paired replication by replication"
+        );
+        let mut rows = vec![
+            [
+                "factor",
+                "low",
+                "high",
+                "result",
+                "effect",
+                "± half-width",
+                "significant",
+            ]
+            .map(String::from)
+            .to_vec(),
+        ];
+        rows.extend(effect_rows(main, &|e| {
+            vec![label(e), f(&e["low"]), f(&e["high"])]
+        }));
+        aligned(
+            &rows,
+            &[true, false, false, true, false, false, true],
+            &mut out,
+        );
+    }
+    if let Some(inter) = d["interactions"].as_array().filter(|m| !m.is_empty()) {
+        let _ = writeln!(
+            out,
+            "\ntwo-way interactions (two-level factors): half the change in one factor's effect \
+             between the other's high and low level"
+        );
+        let mut rows = vec![
+            ["factors", "result", "effect", "± half-width", "significant"]
+                .map(String::from)
+                .to_vec(),
+        ];
+        rows.extend(effect_rows(inter, &|e| {
+            vec![format!(
+                "{} × {}",
+                label(&e["factors"][0]),
+                label(&e["factors"][1])
+            )]
+        }));
+        aligned(&rows, &[true, true, false, false, true], &mut out);
+    }
+    if let Some(tests) = d["tests"].as_u64().filter(|t| *t > 1) {
+        let _ = writeln!(
+            out,
+            "\n{tests} effects, each tested at 95% on its own: about one in twenty with no real \
+             effect still shows as significant by chance"
+        );
+    }
+    if let Some(corr) = d["correlations"].as_array().filter(|c| !c.is_empty()) {
+        let _ = writeln!(
+            out,
+            "\nrank (Spearman) correlations across the points, from −1 to 1"
+        );
+        let mut rows = vec![
+            ["factor", "result", "spearman", "n"]
+                .map(String::from)
+                .to_vec(),
+        ];
+        rows.extend(corr.iter().map(|c| {
+            vec![
+                label(c),
+                format!("{}.{}", s(&c["element"]), s(&c["metric"])),
+                f(&c["spearman"]),
+                c["n"].to_string(),
+            ]
+        }));
+        aligned(&rows, &[true, true, false, false], &mut out);
+    }
+    out
+}
+
+/// A designed experiment as CSV, one row per point and result: the point's number, each
+/// factor's value (a column named `id.field`), the result, its mean, half-width and n.
+pub fn design_csv(d: &Value) -> String {
+    let factors = d["factors"].as_array().map_or(&[][..], Vec::as_slice);
+    let mut out = String::from("point");
+    for fa in factors {
+        out.push(',');
+        out.push_str(&csv_field(&label(fa)));
+    }
+    out.push_str(",element,metric,mean,half_width,n\n");
+    let num = |v: &Value| {
+        if v.is_null() {
+            String::new()
+        } else {
+            v.to_string()
+        }
+    };
+    for (i, p) in d["points"].as_array().into_iter().flatten().enumerate() {
+        let values: Vec<String> = (0..factors.len()).map(|k| num(&p["values"][k])).collect();
+        for r in p["results"].as_array().into_iter().flatten() {
+            let _ = write!(out, "{}", i + 1);
+            for v in &values {
+                let _ = write!(out, ",{v}");
+            }
+            let _ = writeln!(
+                out,
+                ",{},{},{},{},{}",
+                csv_field(s(&r["element"])),
+                csv_field(s(&r["metric"])),
+                num(&r["mean"]),
+                num(&r["half_width"]),
+                num(&r["n"])
+            );
+        }
+    }
+    out
+}
+
 /// Results as an aligned table: element, metric, mean, ± half-width, n.
 pub fn table(name: &str, results: &Value) -> String {
     let mut out = String::new();
@@ -123,26 +354,7 @@ pub fn table(name: &str, results: &Value) -> String {
             first = false;
         }
     }
-    let widths: Vec<usize> = (0..5)
-        .map(|c| rows.iter().map(|r| r[c].chars().count()).max().unwrap_or(0))
-        .collect();
-    for row in &rows {
-        let line: Vec<String> = row
-            .iter()
-            .enumerate()
-            .map(|(c, cell)| {
-                let w = widths[c];
-                let pad = w - cell.chars().count();
-                // Text left, numbers right.
-                if c < 2 {
-                    format!("{cell}{}", " ".repeat(pad))
-                } else {
-                    format!("{}{cell}", " ".repeat(pad))
-                }
-            })
-            .collect();
-        let _ = writeln!(out, "{}", line.join("  ").trim_end());
-    }
+    aligned(&rows, &[true, true, false, false, false], &mut out);
     let left_inside = results["elements"]
         .as_array()
         .into_iter()

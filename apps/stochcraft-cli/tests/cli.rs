@@ -260,3 +260,131 @@ fn mistakes_are_reported_plainly() {
     // Usage errors come from clap with its own exit code.
     assert_eq!(cli(&["run"]).status.code(), Some(2));
 }
+
+#[test]
+fn design_runs_a_factorial_and_a_hypercube() {
+    let m = model("mm1.bpmn");
+    let factorial = |format: &str| {
+        ok(&[
+            "design",
+            &m,
+            "--factor",
+            "arrive.mean=1.3333,2",
+            "--factor",
+            "serve.mean=0.8,1",
+            "--result",
+            "serve.mean_wait",
+            "--result",
+            "leave.mean_time_in_system",
+            "--reps",
+            "4",
+            "--format",
+            format,
+        ])
+    };
+    let table = factorial("table");
+    for expected in [
+        "full factorial of 2 factors, 4 points × 4 replications = 16 runs, seed 2026",
+        "arrive.mean",
+        "serve.mean_wait",
+        "± half-width",
+        "main effects",
+        "two-way interactions",
+        "arrive.mean × serve.mean",
+        "6 effects, each tested at 95% on its own",
+    ] {
+        assert!(table.contains(expected), "{expected} missing:\n{table}");
+    }
+    let r = json(&factorial("json"));
+    assert_eq!(r["points"].as_array().map(Vec::len), Some(4));
+    assert_eq!(r["points"][1]["values"], serde_json::json!([1.3333, 1.0]));
+    // Faster arrivals (a shorter time between them) wait longer: a negative main effect.
+    let arrive = r["main_effects"]
+        .as_array()
+        .and_then(|m| {
+            m.iter()
+                .find(|e| e["id"] == "arrive" && e["element"] == "serve")
+        })
+        .cloned()
+        .unwrap_or_default();
+    assert!(arrive["effect"].as_f64().unwrap_or(0.0) < 0.0, "{arrive}");
+    let csv = factorial("csv");
+    let lines: Vec<&str> = csv.lines().collect();
+    assert_eq!(
+        lines[0],
+        "point,arrive.mean,serve.mean,element,metric,mean,half_width,n"
+    );
+    assert_eq!(lines.len(), 1 + 4 * 2, "{csv}");
+    assert!(
+        lines[1].starts_with("1,1.3333,0.8,serve,mean_wait,"),
+        "{csv}"
+    );
+    assert!(lines.iter().all(|l| l.split(',').count() == 8), "{csv}");
+
+    let hypercube = || {
+        ok(&[
+            "design",
+            &m,
+            "--design",
+            "latin-hypercube",
+            "--points",
+            "5",
+            "--factor",
+            "arrive.mean=1.5..3",
+            "--factor",
+            "serve.capacity=1..3",
+            "--result",
+            "serve.mean_wait",
+            "--reps",
+            "2",
+        ])
+    };
+    let text = hypercube();
+    assert!(
+        text.contains("Latin hypercube of 2 factors, 5 points"),
+        "{text}"
+    );
+    assert!(text.contains("spearman"), "{text}");
+    assert_eq!(hypercube(), text);
+}
+
+#[test]
+fn a_design_too_large_or_mistyped_is_refused() {
+    let m = model("mm1.bpmn");
+    let big = cli(&[
+        "design",
+        &m,
+        "--factor",
+        "arrive.mean=1.5,3",
+        "--result",
+        "serve.mean_wait",
+        "--reps",
+        "6000",
+    ]);
+    assert_eq!(big.status.code(), Some(1));
+    assert!(
+        stderr(&big).contains("12000 runs") && stderr(&big).contains("the limit is 10000"),
+        "{}",
+        stderr(&big)
+    );
+    let typo = cli(&[
+        "design",
+        &m,
+        "--factor",
+        "arrive=1,2",
+        "--result",
+        "serve.mean_wait",
+    ]);
+    assert_eq!(typo.status.code(), Some(1));
+    assert!(
+        stderr(&typo).contains("id.field=1,2,3"),
+        "{}",
+        stderr(&typo)
+    );
+    assert_eq!(
+        cli(&["design", &m, "--result", "serve.mean_wait"])
+            .status
+            .code(),
+        Some(2)
+    );
+}
