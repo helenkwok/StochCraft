@@ -15,6 +15,7 @@
 	% down and up	% 上下
 	% of replications	% 的重複執行
 	+ Add block	+ 新增區塊
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	達到目標的比例之 95% 區間：{lo} 至 {hi}
 	95th percentile	第 95 百分位數
 	95th percentile {value}	第 95 百分位數 {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	行事曆外可用
 	BPMN with BPSim	含 BPSim 的 BPMN
 	Back to the model (Esc)	返回模型 (Esc)
+	Balked	止步
+	Balked on {id}	{id} 上的止步
+	Balking	止步
 	Batch	批次
 	Batch (collect, then send together)	批次（收集後一起傳送）
 	Batch size	批量大小
@@ -127,6 +131,7 @@
 	Constant	常數
 	Control outlines	控制項輪廓
 	Copy	複製
+	Count those in service	計入服務中的實體
 	Counts against	計入任務
 	Customer demand	客戶需求
 	Cut	剪下
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	發現等待區已滿的實體立即走此順序流（例如稍後重試），而不是流失或在任務前等待；此處計為流失。
 	Entities give up waiting	實體會放棄等待
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	重複執行結束時仍在內部的實體不計入平均等待時間與系統內平均時間。
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	不加入佇列的實體立即走此順序流（例如稍後重試），而不是流失；此處計為止步。
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	放棄等待的實體走此順序流（例如稍後重試）；其他實體走任務的另一個出口。
 	Erlang	爾朗分布
 	Error	錯誤
@@ -229,6 +235,7 @@
 	Inside over time	內部數量隨時間變化
 	Job under way on a server going off shift:	即將下班的伺服器上進行中的作業：
 	Job under way on a server taken out:	下線伺服器上進行中的作業：
+	Joins with probability	加入佇列的機率
 	Jump	跳至
 	Jump to time	跳至時間
 	Keep at least in service	至少保持上線
@@ -252,8 +259,10 @@
 	Maximum	最大值
 	Mean	平均值
 	Mean number inside	內部平均數量
+	Number waiting	等待數量
 	One replication of {n}: the results of the others differ.	{n} 次中的一次重複執行：其他重複執行的結果不同。
 	Save as a new BPMN file?	另存為新的 BPMN 檔案？
+	Share balked	止步比例
 	Still inside at the end	結束時仍在內部的數量
 	Mean work in progress	平均在製品數
 	Mean queue length	平均佇列長度
@@ -482,6 +491,7 @@
 	Stopped watching	已停止觀察
 	Sun	週日
 	Sweep a parameter	掃描一個參數
+	Table	表格
 	Table stripes	表格條紋
 	Take servers out when overloaded	過載時將伺服器下線
 	Takt	節拍

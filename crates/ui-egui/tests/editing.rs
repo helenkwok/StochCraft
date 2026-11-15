@@ -1216,3 +1216,51 @@ fn a_block_with_a_problem_says_so_in_words_on_the_canvas_and_in_the_outline() {
         descriptions(&h, Role::Button)
     );
 }
+
+/// A task with a resource is given balking in the inspector, by a table and then by 1/(n + 1)
+/// counting those in service, and a way out marked for those that balk; None removes it.
+#[test]
+fn balking_and_a_balked_way_are_set_in_the_inspector() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    let way = model(&h)["connections"]
+        .as_array()
+        .and_then(|cs| {
+            cs.iter()
+                .find(|c| c["from"] == "serve")
+                .and_then(|c| c["id"].as_str().map(str::to_owned))
+        })
+        .expect("the way out");
+    // Closed on a server without balking, and no balked way offered.
+    assert!(h.query_by_label("Joins with probability").is_none());
+    assert!(h.query_by_label(&format!("Balked on {way}")).is_none());
+    click(&mut h, Role::DisclosureTriangle, "Balking");
+    click(&mut h, Role::ComboBox, "Balking");
+    click(&mut h, Role::Button, "Table");
+    assert_eq!(
+        element(&h, "serve")["balking"],
+        json!({"type": "table", "join": [{"waiting": 1, "probability": 0.5}]})
+    );
+    h.get_by_label("Joins with probability");
+    click(&mut h, Role::ComboBox, "Balking");
+    click(&mut h, Role::Button, "1/(n + 1)");
+    assert_eq!(
+        element(&h, "serve")["balking"],
+        json!({"type": "reciprocal"})
+    );
+    click(&mut h, Role::CheckBox, "Count those in service");
+    assert_eq!(
+        element(&h, "serve")["balking"],
+        json!({"type": "reciprocal", "counts_in_service": true})
+    );
+    click(&mut h, Role::CheckBox, &format!("Balked on {way}"));
+    let balked = model(&h)["connections"]
+        .as_array()
+        .and_then(|cs| cs.iter().find(|c| c["id"] == way.as_str()).cloned())
+        .unwrap_or_default()["balked"]
+        .clone();
+    assert_eq!(balked, json!(true));
+    click(&mut h, Role::ComboBox, "Balking");
+    click(&mut h, Role::Button, "None");
+    assert!(element(&h, "serve").get("balking").is_none());
+}

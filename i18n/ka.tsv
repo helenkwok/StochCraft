@@ -15,6 +15,7 @@
 	% down and up	% ქვემოთ და ზემოთ
 	% of replications	% გამეორებებიდან
 	+ Add block	+ ბლოკის დამატება
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	მიზნის მიღწევის წილის 95%-იანი ინტერვალი: {lo}-დან {hi}-მდე
 	95th percentile	95-ე პროცენტილი
 	95th percentile {value}	95-ე პროცენტილი {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	ხელმისაწვდომია კალენდრების გარეთ
 	BPMN with BPSim	BPMN BPSim-ით
 	Back to the model (Esc)	მოდელზე დაბრუნება (Esc)
+	Balked	რიგში არ ჩადგნენ
+	Balked on {id}	რიგში არ ჩადგნენ ნაკადზე {id}
+	Balking	რიგში არჩადგომა
 	Batch	პარტია
 	Batch (collect, then send together)	პარტია (შეაგროვე, შემდეგ ერთად გაგზავნე)
 	Batch size	პარტიის ზომა
@@ -127,6 +131,7 @@
 	Constant	მუდმივი
 	Control outlines	მართვის ელემენტების კონტურები
 	Copy	კოპირება
+	Count those in service	მომსახურებაში მყოფებიც ჩაითვალოს
 	Counts against	ეკისრება
 	Customer demand	მომხმარებლის მოთხოვნა
 	Cut	ამოჭრა
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	ერთეულები, რომლებიც მოსაცდელ სივრცეს სავსეს პოულობენ, მაშინვე ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად), ნაცვლად იმისა, რომ დაიკარგონ ან დავალების წინ დაელოდონ; აქ ისინი დაკარგულად ითვლება.
 	Entities give up waiting	ერთეულები უარს ამბობენ ლოდინზე
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ობიექტები, რომლებიც გამეორების ბოლოს ჯერ კიდევ შიგნით არიან, არ შედის ლოდინის საშუალო დროსა და სისტემაში გატარებულ საშუალო დროში.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ერთეულები, რომლებიც რიგში არ დგებიან, მაშინვე ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად), ნაცვლად იმისა, რომ დაიკარგონ; აქ ისინი რიგში არჩამდგარად ითვლება.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	ერთეულები, რომლებიც ლოდინზე უარს ამბობენ, ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად); დანარჩენები დავალების მეორე გასასვლელით მიდიან.
 	Erlang	ერლანგი
 	Error	შეცდომა
@@ -229,6 +235,7 @@
 	Inside over time	შიგნით დროის მიხედვით
 	Job under way on a server going off shift:	ცვლიდან გამავალ სერვერზე მიმდინარე სამუშაო:
 	Job under way on a server taken out:	მუშაობიდან გამოყვანილ სერვერზე მიმდინარე სამუშაო:
+	Joins with probability	რიგში ჩადგომის ალბათობა
 	Jump	გადასვლა
 	Jump to time	დროზე გადასვლა
 	Keep at least in service	მუშაობაში დატოვე სულ მცირე
@@ -252,8 +259,10 @@
 	Maximum	მაქსიმუმი
 	Mean	საშუალო
 	Mean number inside	საშუალო რაოდენობა შიგნით
+	Number waiting	მომლოდინეთა რაოდენობა
 	One replication of {n}: the results of the others differ.	ერთი გამეორება {n}-დან: დანარჩენების შედეგები განსხვავდება.
 	Save as a new BPMN file?	შევინახოთ ახალ BPMN ფაილად?
+	Share balked	რიგში არჩამდგართა წილი
 	Still inside at the end	ბოლოს ჯერ კიდევ შიგნით
 	Mean work in progress	დაუმთავრებელი წარმოების საშუალო რაოდენობა
 	Mean queue length	რიგის საშუალო სიგრძე
@@ -482,6 +491,7 @@
 	Stopped watching	დაკვირვება შეწყდა
 	Sun	კვი
 	Sweep a parameter	პარამეტრის გადარბენა
+	Table	ცხრილი
 	Table stripes	ცხრილის ზოლები
 	Take servers out when overloaded	ზედმეტად დატვირთული სერვერების მუშაობიდან გამოყვანა
 	Takt	ტაქტი

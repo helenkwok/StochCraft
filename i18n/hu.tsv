@@ -15,6 +15,7 @@
 	% down and up	% le és fel
 	% of replications	% az ismétlésekből
 	+ Add block	+ Blokk hozzáadása
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	A célt elérő arány 95%-os intervalluma: {lo}–{hi}
 	95th percentile	95. percentilis
 	95th percentile {value}	95. percentilis {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Elérhető a naptárakon kívül
 	BPMN with BPSim	BPMN BPSim-mel
 	Back to the model (Esc)	Vissza a modellhez (Esc)
+	Balked	Nem álltak sorba
+	Balked on {id}	Nem álltak sorba itt: {id}
+	Balking	Sorba be nem állás
 	Batch	Köteg
 	Batch (collect, then send together)	Köteg (gyűjtés, majd együttes továbbítás)
 	Batch size	Kötegméret
@@ -127,6 +131,7 @@
 	Constant	Állandó
 	Control outlines	Vezérlők körvonala
 	Copy	Másolás
+	Count those in service	A kiszolgálás alattiak is számítanak
 	Counts against	Terhelt feladat
 	Customer demand	Vevői igény
 	Cut	Kivágás
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	A várakozóhelyet telve találó entitások azonnal ezt a folyamatot követik (például hogy később újra próbálkozzanak), ahelyett hogy elvesznének vagy a feladat előtt várakoznának; itt elveszettként számítanak.
 	Entities give up waiting	Az entitások lemondanak a várakozásról
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Az ismétlés végén még bent lévő egyedek nem számítanak bele az átlagos várakozási időbe és az átlagos rendszerben töltött időbe.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	A sorba be nem álló entitások azonnal ezt a folyamatot követik (például hogy később újra próbálkozzanak), ahelyett hogy elvesznének; itt sorba be nem állóként számítanak.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	A várakozásról lemondó entitások ezt a folyamatot követik (például hogy később újra próbálkozzanak); a többiek a feladat másik kiútját választják.
 	Erlang	Erlang
 	Error	Hiba
@@ -229,6 +235,7 @@
 	Inside over time	Bent lévők az idő függvényében
 	Job under way on a server going off shift:	Folyamatban lévő munka egy műszakot befejező szerveren:
 	Job under way on a server taken out:	Folyamatban lévő munka egy kivont szerveren:
+	Joins with probability	Beállási valószínűség
 	Jump	Ugrás
 	Jump to time	Ugrás időpontra
 	Keep at least in service	Legalább ennyi maradjon üzemben
@@ -252,8 +259,10 @@
 	Maximum	Maximum
 	Mean	Átlag
 	Mean number inside	Átlagos belső darabszám
+	Number waiting	Várakozók száma
 	One replication of {n}: the results of the others differ.	Egy ismétlés a(z) {n}-ból/-ből: a többi eredménye eltér.
 	Save as a new BPMN file?	Mentés új BPMN-fájlként?
+	Share balked	Sorba be nem állók aránya
 	Still inside at the end	A végén még bent
 	Mean work in progress	Átlagos befejezetlen termelés
 	Mean queue length	Átlagos sorhossz
@@ -482,6 +491,7 @@
 	Stopped watching	A követés leállt
 	Sun	V
 	Sweep a parameter	Paraméter végigfuttatása
+	Table	Táblázat
 	Table stripes	Táblázatcsíkok
 	Take servers out when overloaded	Túlterhelt szerverek kivonása az üzemből
 	Takt	Ütem

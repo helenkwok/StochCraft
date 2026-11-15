@@ -15,6 +15,7 @@
 	% down and up	% navzdol in navzgor
 	% of replications	% ponovitev
 	+ Add block	+ Dodaj blok
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	95-odstotni interval deleža, ki doseže cilj: od {lo} do {hi}
 	95th percentile	95. percentil
 	95th percentile {value}	95. percentil {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Na voljo zunaj koledarjev
 	BPMN with BPSim	BPMN z BPSim
 	Back to the model (Esc)	Nazaj na model (Esc)
+	Balked	Niso se pridružile
+	Balked on {id}	Niso se pridružile na {id}
+	Balking	Nepridružitev vrsti
 	Batch	Serija
 	Batch (collect, then send together)	Serija (zberi, nato pošlji skupaj)
 	Batch size	Velikost serije
@@ -127,6 +131,7 @@
 	Constant	Konstantna
 	Control outlines	Obrisi kontrolnikov
 	Copy	Kopiraj
+	Count those in service	Štej tudi tiste v strežbi
 	Counts against	Pripiše se
 	Customer demand	Povpraševanje kupcev
 	Cut	Izreži
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitete, ki najdejo čakalnico polno, gredo takoj po tem toku (da bi denimo kasneje poskusile znova), namesto da bi se izgubile ali čakale pred nalogo; tukaj štejejo kot izgubljene.
 	Entities give up waiting	Entitete odnehajo s čakanjem
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitete, ki so ob koncu ponovitve še znotraj, niso upoštevane v povprečnem čakanju in povprečnem času v sistemu.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitete, ki se ne pridružijo vrsti, gredo takoj po tem toku (da bi denimo kasneje poskusile znova), namesto da bi se izgubile; tukaj štejejo kot nepridružene.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitete, ki odnehajo s čakanjem, gredo po tem toku (da bi denimo kasneje poskusile znova); druge gredo skozi drugi izhod naloge.
 	Erlang	Erlangova
 	Error	Napaka
@@ -229,6 +235,7 @@
 	Inside over time	Notri skozi čas
 	Job under way on a server going off shift:	Delo v teku na strežniku, ki mu poteče izmena:
 	Job under way on a server taken out:	Delo v teku na strežniku, vzetem iz delovanja:
+	Joins with probability	Pridruži se vrsti z verjetnostjo
 	Jump	Skoči
 	Jump to time	Skoči na čas
 	Keep at least in service	V delovanju obdrži vsaj
@@ -252,8 +259,10 @@
 	Maximum	Največja vrednost
 	Mean	Povprečje
 	Mean number inside	Povprečno število znotraj
+	Number waiting	Število čakajočih
 	One replication of {n}: the results of the others differ.	Ena ponovitev od {n}: rezultati drugih se razlikujejo.
 	Save as a new BPMN file?	Shranim kot novo datoteko BPMN?
+	Share balked	Delež nepridruženih
 	Still inside at the end	Ob koncu še znotraj
 	Mean work in progress	Povprečna nedokončana proizvodnja
 	Mean queue length	Povprečna dolžina vrste
@@ -482,6 +491,7 @@
 	Stopped watching	Spremljanje ustavljeno
 	Sun	ned
 	Sweep a parameter	Preletanje parametra
+	Table	Tabela
 	Table stripes	Črte tabel
 	Take servers out when overloaded	Jemanje preobremenjenih strežnikov iz delovanja
 	Takt	Takt

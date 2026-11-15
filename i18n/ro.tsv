@@ -15,6 +15,7 @@
 	% down and up	% în jos și în sus
 	% of replications	% din replicări
 	+ Add block	+ Adaugă bloc
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Interval de 95% al ponderii care atinge ținta: de la {lo} la {hi}
 	95th percentile	Percentila 95
 	95th percentile {value}	percentila 95 {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Disponibil în afara calendarelor
 	BPMN with BPSim	BPMN cu BPSim
 	Back to the model (Esc)	Înapoi la model (Esc)
+	Balked	Nu au intrat în coadă
+	Balked on {id}	Nu au intrat în coadă pe {id}
+	Balking	Neintrare în coadă
 	Batch	Lot
 	Batch (collect, then send together)	Lot (adună, apoi trimite împreună)
 	Batch size	Mărimea lotului
@@ -127,6 +131,7 @@
 	Constant	Constantă
 	Control outlines	Contururile controalelor
 	Copy	Copiază
+	Count those in service	Numără și entitățile în servire
 	Counts against	Imputat la
 	Customer demand	Cererea clienților
 	Cut	Decupează
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitățile care găsesc sala de așteptare plină iau imediat acest flux (pentru a încerca din nou mai târziu, de exemplu), în loc să fie pierdute sau să aștepte înaintea sarcinii; aici sunt numărate ca pierdute.
 	Entities give up waiting	Entitățile renunță să mai aștepte
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitățile încă în interior la finalul unei replicări sunt lăsate în afara timpului mediu de așteptare și a timpului mediu în sistem.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitățile care nu intră în coadă iau imediat acest flux (pentru a încerca din nou mai târziu, de exemplu), în loc să fie pierdute; aici sunt numărate ca neintrate în coadă.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitățile care renunță să mai aștepte iau acest flux (pentru a încerca din nou mai târziu, de exemplu); celelalte iau cealaltă ieșire a sarcinii.
 	Erlang	Erlang
 	Error	Eroare
@@ -229,6 +235,7 @@
 	Inside over time	În interior în timp
 	Job under way on a server going off shift:	Lucru în curs pe un server care iese din tură:
 	Job under way on a server taken out:	Lucru în curs pe un server scos din funcțiune:
+	Joins with probability	Intră în coadă cu probabilitatea
 	Jump	Salt
 	Jump to time	Salt la momentul
 	Keep at least in service	Menține cel puțin în funcțiune
@@ -252,8 +259,10 @@
 	Maximum	Maxim
 	Mean	Medie
 	Mean number inside	Număr mediu în interior
+	Number waiting	Număr în așteptare
 	One replication of {n}: the results of the others differ.	O replicare din {n}: rezultatele celorlalte diferă.
 	Save as a new BPMN file?	Salvați ca fișier BPMN nou?
+	Share balked	Proporția celor care nu au intrat în coadă
 	Still inside at the end	Încă în interior la final
 	Mean work in progress	Producția medie în curs de execuție
 	Mean queue length	Lungimea medie a cozii
@@ -482,6 +491,7 @@
 	Stopped watching	Urmărirea s-a oprit
 	Sun	dum
 	Sweep a parameter	Baleierea unui parametru
+	Table	Tabel
 	Table stripes	Dungi de tabel
 	Take servers out when overloaded	Scoaterea din funcțiune a serverelor supraîncărcate
 	Takt	Takt

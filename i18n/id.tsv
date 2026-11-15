@@ -15,6 +15,7 @@
 	% down and up	% turun dan naik
 	% of replications	% replikasi
 	+ Add block	+ Tambah blok
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Interval 95% dari bagian yang memenuhi target: {lo} sampai {hi}
 	95th percentile	Persentil ke-95
 	95th percentile {value}	persentil ke-95 {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Tersedia di luar kalender
 	BPMN with BPSim	BPMN dengan BPSim
 	Back to the model (Esc)	Kembali ke model (Esc)
+	Balked	Batal mengantre
+	Balked on {id}	Batal mengantre di {id}
+	Balking	Batal mengantre
 	Batch	Batch
 	Batch (collect, then send together)	Batch (kumpulkan, lalu kirim bersama)
 	Batch size	Ukuran batch
@@ -127,6 +131,7 @@
 	Constant	Konstan
 	Control outlines	Garis luar kontrol
 	Copy	Salin
+	Count those in service	Hitung juga yang sedang dilayani
 	Counts against	Dibebankan ke
 	Customer demand	Permintaan pelanggan
 	Cut	Potong
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitas yang mendapati ruang tunggu penuh langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang atau menunggu sebelum tugas; di sini mereka dihitung sebagai hilang.
 	Entities give up waiting	Entitas berhenti menunggu
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitas yang masih di dalam pada akhir replikasi tidak dihitung dalam waktu tunggu rata-rata dan waktu rata-rata dalam sistem.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitas yang tidak masuk antrean langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang; di sini mereka dihitung sebagai batal mengantre.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitas yang berhenti menunggu mengambil alur ini (misalnya untuk mencoba lagi nanti); yang lain mengambil jalan keluar lain dari tugas.
 	Erlang	Erlang
 	Error	Galat
@@ -229,6 +235,7 @@
 	Inside over time	Di dalam dari waktu ke waktu
 	Job under way on a server going off shift:	Pekerjaan berjalan di server yang mengakhiri sif:
 	Job under way on a server taken out:	Pekerjaan berjalan di server yang dikeluarkan:
+	Joins with probability	Masuk antrean dengan probabilitas
 	Jump	Lompat
 	Jump to time	Lompat ke waktu
 	Keep at least in service	Pertahankan beroperasi setidaknya
@@ -252,8 +259,10 @@
 	Maximum	Maksimum
 	Mean	Rata-rata
 	Mean number inside	Jumlah rata-rata di dalam
+	Number waiting	Jumlah menunggu
 	One replication of {n}: the results of the others differ.	Satu replikasi dari {n}: hasil replikasi lain berbeda.
 	Save as a new BPMN file?	Simpan sebagai berkas BPMN baru?
+	Share balked	Proporsi yang batal mengantre
 	Still inside at the end	Masih di dalam pada akhir
 	Mean work in progress	Barang dalam proses rata-rata
 	Mean queue length	Panjang antrean rata-rata
@@ -482,6 +491,7 @@
 	Stopped watching	Berhenti mengamati
 	Sun	Min
 	Sweep a parameter	Sapu satu parameter
+	Table	Tabel
 	Table stripes	Belang tabel
 	Take servers out when overloaded	Mengeluarkan server yang kelebihan beban
 	Takt	Takt

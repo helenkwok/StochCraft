@@ -15,6 +15,7 @@
 	% down and up	% ລົງ ແລະ ຂຶ້ນ
 	% of replications	% ຂອງຮອບຈຳລອງຊ້ຳ
 	+ Add block	+ ເພີ່ມບລັອກ
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	ຊ່ວງ 95% ຂອງສັດສ່ວນທີ່ບັນລຸເປົ້າໝາຍ: ຈາກ {lo} ຫາ {hi}
 	95th percentile	ເປີເຊັນໄທລ໌ທີ 95
 	95th percentile {value}	ເປີເຊັນໄທລ໌ທີ 95 {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	ພ້ອມໃຊ້ນອກປະຕິທິນ
 	BPMN with BPSim	BPMN ພ້ອມ BPSim
 	Back to the model (Esc)	ກັບໄປຫາແບບຈຳລອງ (Esc)
+	Balked	ບໍ່ເຂົ້າແຖວ
+	Balked on {id}	ບໍ່ເຂົ້າແຖວທີ່ {id}
+	Balking	ການບໍ່ເຂົ້າແຖວ
 	Batch	ຊຸດ
 	Batch (collect, then send together)	ຊຸດ (ເກັບລວມ, ແລ້ວສົ່ງໄປພ້ອມກັນ)
 	Batch size	ຂະໜາດຊຸດ
@@ -127,6 +131,7 @@
 	Constant	ຄ່າຄົງທີ່
 	Control outlines	ເສັ້ນຂອບຂອງຕົວຄວບຄຸມ
 	Copy	ສຳເນົາ
+	Count those in service	ນັບລວມທີ່ກຳລັງຮັບບໍລິການ
 	Counts against	ນັບໃສ່ໜ້າວຽກ
 	Customer demand	ຄວາມຕ້ອງການຂອງລູກຄ້າ
 	Cut	ຕັດ
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	ເອນທິຕີທີ່ພົບວ່າຫ້ອງລໍຖ້າເຕັມ ຈະໄປຕາມເສັ້ນທາງນີ້ທັນທີ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ) ແທນທີ່ຈະສູນເສຍ ຫຼື ລໍຖ້າກ່ອນໜ້າວຽກ; ຢູ່ນີ້ພວກມັນຖືກນັບເປັນການສູນເສຍ.
 	Entities give up waiting	ເອນທິຕີເຊົາລໍຖ້າ
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ສິ່ງທີ່ຍັງຢູ່ພາຍໃນເມື່ອຮອບຈຳລອງຊ້ຳສິ້ນສຸດ ບໍ່ຖືກນັບໃນເວລາລໍຖ້າສະເລ່ຍ ແລະ ເວລາສະເລ່ຍໃນລະບົບ.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ເອນທິຕີທີ່ບໍ່ເຂົ້າແຖວຄອຍ ຈະໄປຕາມເສັ້ນທາງນີ້ທັນທີ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ) ແທນທີ່ຈະສູນເສຍ; ຢູ່ນີ້ພວກມັນຖືກນັບເປັນການບໍ່ເຂົ້າແຖວ.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	ເອນທິຕີທີ່ເຊົາລໍຖ້າຈະໄປຕາມເສັ້ນທາງນີ້ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ); ສ່ວນທີ່ເຫຼືອໄປທາງອອກອື່ນຂອງໜ້າວຽກ.
 	Erlang	ເອີລັງ
 	Error	ຂໍ້ຜິດພາດ
@@ -229,6 +235,7 @@
 	Inside over time	ຈຳນວນພາຍໃນຕາມເວລາ
 	Job under way on a server going off shift:	ວຽກທີ່ກຳລັງເຮັດຢູ່ເທິງແມ່ຂ່າຍທີ່ກຳລັງໝົດກະ:
 	Job under way on a server taken out:	ວຽກທີ່ກຳລັງເຮັດຢູ່ເທິງແມ່ຂ່າຍທີ່ຖືກເອົາອອກ:
+	Joins with probability	ຄວາມເປັນໄປໄດ້ທີ່ເຂົ້າແຖວ
 	Jump	ຂ້າມ
 	Jump to time	ຂ້າມໄປຫາເວລາ
 	Keep at least in service	ຮັກສາໄວ້ໃນການໃຊ້ງານຢ່າງໜ້ອຍ
@@ -252,8 +259,10 @@
 	Maximum	ຄ່າສູງສຸດ
 	Mean	ຄ່າສະເລ່ຍ
 	Mean number inside	ຈຳນວນສະເລ່ຍພາຍໃນ
+	Number waiting	ຈຳນວນທີ່ລໍຖ້າ
 	One replication of {n}: the results of the others differ.	ໜຶ່ງຮອບຈຳລອງຊ້ຳຈາກ {n}: ຜົນຂອງຮອບອື່ນແຕກຕ່າງກັນ.
 	Save as a new BPMN file?	ບັນທຶກເປັນໄຟລ໌ BPMN ໃໝ່ບໍ?
+	Share balked	ສັດສ່ວນທີ່ບໍ່ເຂົ້າແຖວ
 	Still inside at the end	ຍັງຢູ່ພາຍໃນເມື່ອສິ້ນສຸດ
 	Mean work in progress	ສິນຄ້າລະຫວ່າງຜະລິດສະເລ່ຍ
 	Mean queue length	ຄວາມຍາວແຖວຄອຍສະເລ່ຍ
@@ -482,6 +491,7 @@
 	Stopped watching	ຢຸດຕິດຕາມແລ້ວ
 	Sun	ອາທິດ
 	Sweep a parameter	ກວາດພາຣາມິເຕີ
+	Table	ຕາຕະລາງ
 	Table stripes	ແຖບລາຍຕາຕະລາງ
 	Take servers out when overloaded	ເອົາແມ່ຂ່າຍທີ່ໂຫຼດເກີນອອກຈາກການໃຊ້ງານ
 	Takt	ເວລາແທັກ

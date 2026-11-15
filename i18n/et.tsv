@@ -15,6 +15,7 @@
 	% down and up	% alla ja üles
 	% of replications	% kordustest
 	+ Add block	+ Lisa plokk
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Eesmärgi saavutanud osakaalu 95% vahemik: {lo} kuni {hi}
 	95th percentile	95. protsentiil
 	95th percentile {value}	95. protsentiil {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Saadaval väljaspool kalendreid
 	BPMN with BPSim	BPMN ja BPSim
 	Back to the model (Esc)	Tagasi mudeli juurde (Esc)
+	Balked	Ei liitunud järjekorraga
+	Balked on {id}	Ei liitunud järjekorraga voos {id}
+	Balking	Järjekorraga mitteliitumine
 	Batch	Partii
 	Batch (collect, then send together)	Partii (kogu ja saada koos edasi)
 	Batch size	Partii suurus
@@ -127,6 +131,7 @@
 	Constant	Konstant
 	Control outlines	Juhtelementide piirjooned
 	Copy	Kopeeri
+	Count those in service	Arvesta ka teenindatavaid
 	Counts against	Arvele kantakse
 	Customer demand	Kliendi nõudlus
 	Cut	Lõika
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Olemid, kes leiavad ooteruumi täis olevat, lähevad kohe seda voogu mööda (näiteks hiljem uuesti proovima), selle asemel et kaotsi minna või enne ülesannet oodata; siin loetakse need kaotatuks.
 	Entities give up waiting	Olemid loobuvad ootamisest
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Olemid, mis on korduse lõpus veel sees, jäetakse keskmisest ooteajast ja keskmisest ajast süsteemis välja.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Olemid, kes järjekorraga ei liitu, lähevad kohe seda voogu mööda (näiteks hiljem uuesti proovima), selle asemel et kaotsi minna; siin loetakse need järjekorraga mitteliitunuks.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Ootamisest loobuvad olemid lähevad seda voogu mööda (näiteks hiljem uuesti proovima); teised lähevad ülesande teise väljapääsu kaudu.
 	Erlang	Erlang
 	Error	Viga
@@ -229,6 +235,7 @@
 	Inside over time	Sees aja jooksul
 	Job under way on a server going off shift:	Pooleli töö serveris, mille vahetus lõpeb:
 	Job under way on a server taken out:	Pooleli töö kasutusest välja võetud serveris:
+	Joins with probability	Liitub järjekorraga tõenäosusega
 	Jump	Mine
 	Jump to time	Mine ajahetkele
 	Keep at least in service	Hoia kasutuses vähemalt
@@ -252,8 +259,10 @@
 	Maximum	Maksimum
 	Mean	Keskmine
 	Mean number inside	Keskmine arv sees
+	Number waiting	Ootel olevate arv
 	One replication of {n}: the results of the others differ.	Üks kordus {n}-st: teiste tulemused erinevad.
 	Save as a new BPMN file?	Kas salvestada uue BPMN-failina?
+	Share balked	Järjekorraga mitteliitunute osakaal
 	Still inside at the end	Lõpus veel sees
 	Mean work in progress	Keskmine lõpetamata toodang
 	Mean queue length	Järjekorra keskmine pikkus
@@ -482,6 +491,7 @@
 	Stopped watching	Jälgimine lõpetati
 	Sun	P
 	Sweep a parameter	Parameetri läbimine
+	Table	Tabel
 	Table stripes	Tabeli triibud
 	Take servers out when overloaded	Ülekoormatud serverite kasutusest kõrvaldamine
 	Takt	Takt

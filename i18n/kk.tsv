@@ -15,6 +15,7 @@
 	% down and up	% төмен және жоғары
 	% of replications	% қайталаулардың
 	+ Add block	+ Блок қосу
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Мақсатқа жеткен үлестің 95% аралығы: {lo} мен {hi} арасы
 	95th percentile	95-ші процентиль
 	95th percentile {value}	95-ші процентиль {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Күнтізбелерден тыс қолжетімді
 	BPMN with BPSim	BPSim бар BPMN
 	Back to the model (Esc)	Модельге оралу (Esc)
+	Balked	Кезекке тұрмағандар
+	Balked on {id}	{id} ағынында кезекке тұрмағандар
+	Balking	Кезекке тұрмау
 	Batch	Топтама
 	Batch (collect, then send together)	Топтама (жинап, бірге жіберу)
 	Batch size	Топтама өлшемі
@@ -127,6 +131,7 @@
 	Constant	Тұрақты
 	Control outlines	Басқару элементтерінің контурлары
 	Copy	Көшіру
+	Count those in service	Қызмет көрсетілетіндерді де санау
 	Counts against	Жүктелетін тапсырма
 	Customer demand	Тұтынушы сұранысы
 	Cut	Қиып алу
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Күту орнын толы деп тапқан нысандар бірден осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін), жоғалудың немесе тапсырма алдында күтудің орнына; мұнда олар жоғалған деп саналады.
 	Entities give up waiting	Нысандар күтуден бас тартады
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Қайталаудың соңында әлі ішінде қалған нысандар күтудің орташа уақытына және жүйедегі орташа уақытқа кірмейді.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Кезекке тұрмайтын нысандар бірден осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін), жоғалудың орнына; мұнда олар кезекке тұрмаған деп саналады.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Күтуден бас тартқан нысандар осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін); қалғандары тапсырманың басқа шығатын жолымен кетеді.
 	Erlang	Эрланг
 	Error	Қате
@@ -229,6 +235,7 @@
 	Inside over time	Уақыт бойынша ішіндегілер
 	Job under way on a server going off shift:	Ауысымы аяқталатын сервердегі орындалып жатқан жұмыс:
 	Job under way on a server taken out:	Жұмыстан шығарылған сервердегі орындалып жатқан жұмыс:
+	Joins with probability	Кезекке тұру ықтималдығы
 	Jump	Өту
 	Jump to time	Уақытқа өту
 	Keep at least in service	Жұмыста кемінде қалдыру
@@ -252,8 +259,10 @@
 	Maximum	Максимум
 	Mean	Орташа
 	Mean number inside	Ішіндегі орташа саны
+	Number waiting	Күтушілер саны
 	One replication of {n}: the results of the others differ.	{n} ішінен бір қайталау: қалғандарының нәтижелері басқаша.
 	Save as a new BPMN file?	Жаңа BPMN файлы ретінде сақталсын ба?
+	Share balked	Кезекке тұрмағандар үлесі
 	Still inside at the end	Соңында әлі ішінде
 	Mean work in progress	Аяқталмаған өндірістің орташа мөлшері
 	Mean queue length	Кезектің орташа ұзындығы
@@ -482,6 +491,7 @@
 	Stopped watching	Бақылау тоқтатылды
 	Sun	жс
 	Sweep a parameter	Параметрді сұрыптау
+	Table	Кесте
 	Table stripes	Кесте жолақтары
 	Take servers out when overloaded	Шамадан тыс жүктелген серверлерді жұмыстан шығару
 	Takt	Такт

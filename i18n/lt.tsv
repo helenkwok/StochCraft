@@ -15,6 +15,7 @@
 	% down and up	% žemyn ir aukštyn
 	% of replications	% replikacijų
 	+ Add block	+ Pridėti bloką
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Tikslą pasiekiančios dalies 95 % intervalas: nuo {lo} iki {hi}
 	95th percentile	95-asis procentilis
 	95th percentile {value}	95-asis procentilis {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Prieinama už kalendorių ribų
 	BPMN with BPSim	BPMN su BPSim
 	Back to the model (Esc)	Grįžti į modelį (Esc)
+	Balked	Nestojo į eilę
+	Balked on {id}	Nestojo į eilę sraute {id}
+	Balking	Nestojimas į eilę
 	Batch	Partija
 	Batch (collect, then send together)	Partija (surinkti, tada siųsti kartu)
 	Batch size	Partijos dydis
@@ -127,6 +131,7 @@
 	Constant	Konstanta
 	Control outlines	Valdiklių kontūrai
 	Copy	Kopijuoti
+	Count those in service	Skaičiuoti ir aptarnaujamus
 	Counts against	Priskiriama
 	Customer demand	Klientų poreikis
 	Cut	Iškirpti
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Objektai, radę laukiamąjį pilną, iškart eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą), užuot buvę prarasti ar laukę prieš užduotį; čia jie skaičiuojami kaip prarasti.
 	Entities give up waiting	Objektai nustoja laukti
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Objektai, kurie replikacijos pabaigoje dar viduje, neįskaičiuojami į vidutinį laukimo laiką ir vidutinį laiką sistemoje.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Objektai, kurie nestoja į eilę, iškart eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą), užuot buvę prarasti; čia jie skaičiuojami kaip nestoję į eilę.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Laukti nustoję objektai eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą); kiti eina kitu užduoties išėjimu.
 	Erlang	Erlango
 	Error	Klaida
@@ -229,6 +235,7 @@
 	Inside over time	Viduje per laiką
 	Job under way on a server going off shift:	Vykdomas darbas serveryje, kurio pamaina baigiasi:
 	Job under way on a server taken out:	Vykdomas darbas iš naudojimo išimtame serveryje:
+	Joins with probability	Stoja į eilę su tikimybe
 	Jump	Pereiti
 	Jump to time	Pereiti į laiką
 	Keep at least in service	Palikti naudojamų ne mažiau
@@ -252,8 +259,10 @@
 	Maximum	Maksimumas
 	Mean	Vidurkis
 	Mean number inside	Vidutinis skaičius viduje
+	Number waiting	Laukiančiųjų skaičius
 	One replication of {n}: the results of the others differ.	Viena replikacija iš {n}: kitų rezultatai skiriasi.
 	Save as a new BPMN file?	Įrašyti kaip naują BPMN failą?
+	Share balked	Nestojusiųjų į eilę dalis
 	Still inside at the end	Pabaigoje dar viduje
 	Mean work in progress	Vidutinė nebaigta gamyba
 	Mean queue length	Vidutinis eilės ilgis
@@ -482,6 +491,7 @@
 	Stopped watching	Stebėjimas baigtas
 	Sun	sk
 	Sweep a parameter	Parametro perėjimas
+	Table	Lentelė
 	Table stripes	Lentelių juostos
 	Take servers out when overloaded	Perkrautų serverių išėmimas iš naudojimo
 	Takt	Taktas

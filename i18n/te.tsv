@@ -15,6 +15,7 @@
 	% down and up	% కిందకు, పైకి
 	% of replications	% పునరావృత్త అమలులలో
 	+ Add block	+ బ్లాక్‌ను జోడించు
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	లక్ష్యాన్ని చేరిన వాటా యొక్క 95% అంతరం: {lo} నుండి {hi}
 	95th percentile	95వ శతాంశం
 	95th percentile {value}	95వ శతాంశం {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	క్యాలెండర్‌ల వెలుపల అందుబాటులో ఉంది
 	BPMN with BPSim	BPSim తో BPMN
 	Back to the model (Esc)	నమూనాకు తిరిగి వెళ్లు (Esc)
+	Balked	క్యూలో చేరనివి
+	Balked on {id}	{id} వద్ద క్యూలో చేరనివి
+	Balking	క్యూలో చేరకపోవడం
 	Batch	బ్యాచ్
 	Batch (collect, then send together)	బ్యాచ్ (సేకరించి, కలిసి పంపు)
 	Batch size	బ్యాచ్ పరిమాణం
@@ -127,6 +131,7 @@
 	Constant	స్థిర విలువ
 	Control outlines	నియంత్రణల అవుట్‌లైన్‌లు
 	Copy	కాపీ చేయి
+	Count those in service	సేవలో ఉన్నవాటినీ లెక్కించు
 	Counts against	ఖాతాలో వేసే పని
 	Customer demand	కస్టమర్ డిమాండ్
 	Cut	కత్తిరించు
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	వేచి ఉండే గది నిండి ఉండటం చూసిన ఎంటిటీలు వెంటనే ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి), కోల్పోవడం లేదా పనికి ముందు వేచి ఉండటం బదులు; ఇక్కడ అవి కోల్పోయినవిగా లెక్కించబడతాయి.
 	Entities give up waiting	ఎంటిటీలు వేచి ఉండటం మానేస్తాయి
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	పునరావృత్త అమలు చివరికి ఇంకా లోపల ఉన్నవి సగటు వేచి ఉండే సమయంలోనూ వ్యవస్థలో గడిపిన సగటు సమయంలోనూ లెక్కించబడవు.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	క్యూలో చేరని ఎంటిటీలు వెంటనే ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి), కోల్పోవడం బదులు; ఇక్కడ అవి క్యూలో చేరనివిగా లెక్కించబడతాయి.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	వేచి ఉండటం మానేసిన ఎంటిటీలు ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి); మిగిలినవి పని యొక్క మరో బయటికి దారిలో వెళ్తాయి.
 	Erlang	ఎర్లాంగ్
 	Error	లోపం
@@ -229,6 +235,7 @@
 	Inside over time	కాలక్రమంలో లోపల
 	Job under way on a server going off shift:	షిఫ్ట్ ముగుస్తున్న సర్వర్‌పై జరుగుతున్న పని:
 	Job under way on a server taken out:	తొలగించిన సర్వర్‌పై జరుగుతున్న పని:
+	Joins with probability	క్యూలో చేరే సంభావ్యత
 	Jump	వెళ్ళు
 	Jump to time	సమయానికి వెళ్ళు
 	Keep at least in service	కనీసం ఇన్ని పనిలో ఉంచండి
@@ -252,8 +259,10 @@
 	Maximum	గరిష్ఠం
 	Mean	సగటు
 	Mean number inside	లోపల ఉన్నవాటి సగటు సంఖ్య
+	Number waiting	వేచి ఉన్నవాటి సంఖ్య
 	One replication of {n}: the results of the others differ.	{n}లో ఒక పునరావృత్త అమలు: మిగిలిన వాటి ఫలితాలు వేరుగా ఉంటాయి.
 	Save as a new BPMN file?	కొత్త BPMN ఫైల్ రూపంలో సేవ్ చేయాలా?
+	Share balked	క్యూలో చేరనివాటి వాటా
 	Still inside at the end	చివరికి ఇంకా లోపల ఉన్నవి
 	Mean work in progress	సగటు పురోగతిలో ఉన్న పని
 	Mean queue length	సగటు క్యూలో పొడవు
@@ -482,6 +491,7 @@
 	Stopped watching	గమనించడం ఆపబడింది
 	Sun	ఆది
 	Sweep a parameter	ఒక పరామితిని స్వీప్ చేయి
+	Table	పట్టిక
 	Table stripes	పట్టిక చారలు
 	Take servers out when overloaded	అధిక భారం ఉన్న సర్వర్‌లను తొలగించడం
 	Takt	టాక్ట్

@@ -15,6 +15,7 @@
 	% down and up	% abaixo e arriba
 	% of replications	% das réplicas
 	+ Add block	+ Engadir bloque
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Intervalo do 95 % da proporción que cumpre o obxectivo: de {lo} a {hi}
 	95th percentile	Percentil 95
 	95th percentile {value}	percentil 95 {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Dispoñible fóra dos calendarios
 	BPMN with BPSim	BPMN con BPSim
 	Back to the model (Esc)	Volver ao modelo (Esc)
+	Balked	Non se uniron
+	Balked on {id}	Non se uniron en {id}
+	Balking	Non unirse á cola
 	Batch	Lote
 	Batch (collect, then send together)	Lote (xuntar e enviar xuntos)
 	Batch size	Tamaño do lote
@@ -127,6 +131,7 @@
 	Constant	Constante
 	Control outlines	Contornos dos controis
 	Copy	Copiar
+	Count those in service	Contar tamén as que están en servizo
 	Counts against	Impútase a
 	Customer demand	Demanda do cliente
 	Cut	Cortar
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	As entidades que atopan a sala de espera chea toman este fluxo de inmediato (para tentalo de novo máis tarde, por exemplo), en lugar de perderse ou agardar antes da tarefa; aquí contan como perdidas.
 	Entities give up waiting	As entidades abandonan a espera
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	As entidades aínda dentro ao final dunha réplica non se inclúen na espera media nin no tempo medio no sistema.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	As entidades que non se unen á cola toman este fluxo de inmediato (para tentalo de novo máis tarde, por exemplo), en lugar de perderse; aquí contan como non unidas á cola.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	As entidades que abandonan a espera toman este fluxo (para tentalo de novo máis tarde, por exemplo); as demais toman a outra saída da tarefa.
 	Erlang	Erlang
 	Error	Erro
@@ -229,6 +235,7 @@
 	Inside over time	Dentro ao longo do tempo
 	Job under way on a server going off shift:	Traballo en curso nun servidor que remata a súa quenda:
 	Job under way on a server taken out:	Traballo en curso nun servidor retirado:
+	Joins with probability	Únese á cola con probabilidade
 	Jump	Ir
 	Jump to time	Ir ao instante
 	Keep at least in service	Manter en servizo polo menos
@@ -252,8 +259,10 @@
 	Maximum	Máximo
 	Mean	Media
 	Mean number inside	Número medio dentro
+	Number waiting	Número en espera
 	One replication of {n}: the results of the others differ.	Unha réplica de {n}: os resultados das demais son distintos.
 	Save as a new BPMN file?	Gardar como un ficheiro BPMN novo?
+	Share balked	Proporción que non se uniu
 	Still inside at the end	Aínda dentro ao final
 	Mean work in progress	Inventario en proceso medio
 	Mean queue length	Lonxitude media da cola
@@ -482,6 +491,7 @@
 	Stopped watching	Deixouse de observar
 	Sun	dom
 	Sweep a parameter	Varrer un parámetro
+	Table	Táboa
 	Table stripes	Franxas de táboa
 	Take servers out when overloaded	Retirar os servidores sobrecargados
 	Takt	Takt

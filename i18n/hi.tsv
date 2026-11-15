@@ -15,6 +15,7 @@
 	% down and up	% नीचे और ऊपर
 	% of replications	% पुनरावृत्तियों में
 	+ Add block	+ ब्लॉक जोड़ें
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	लक्ष्य पूरा करने वाले हिस्से का 95% अंतराल: {lo} से {hi}
 	95th percentile	95वाँ प्रतिशतक
 	95th percentile {value}	95वाँ प्रतिशतक {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	कैलेंडरों के बाहर उपलब्ध
 	BPMN with BPSim	BPSim सहित BPMN
 	Back to the model (Esc)	मॉडल पर वापस जाएँ (Esc)
+	Balked	कतार में नहीं लगीं
+	Balked on {id}	{id} पर कतार में नहीं लगीं
+	Balking	कतार में न लगना
 	Batch	बैच
 	Batch (collect, then send together)	बैच (इकट्ठा करें, फिर एक साथ भेजें)
 	Batch size	बैच का आकार
@@ -127,6 +131,7 @@
 	Constant	स्थिर
 	Control outlines	नियंत्रणों की रूपरेखा
 	Copy	कॉपी करें
+	Count those in service	सेवा में चल रही इकाइयाँ भी गिनें
 	Counts against	किस कार्य के खाते में
 	Customer demand	ग्राहक मांग
 	Cut	काटें
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	जो इकाइयाँ प्रतीक्षा कक्ष भरा पाती हैं, वे तुरंत यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए), खो जाने या कार्य से पहले प्रतीक्षा करने के बजाय; यहाँ उन्हें हानि में गिना जाता है।
 	Entities give up waiting	इकाइयाँ प्रतीक्षा छोड़ देती हैं
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	किसी पुनरावृत्ति के अंत में जो अब भी अंदर हैं, वे औसत प्रतीक्षा और सिस्टम में औसत समय में शामिल नहीं होते।
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	जो इकाइयाँ कतार में नहीं लगतीं, वे तुरंत यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए), खो जाने के बजाय; यहाँ उन्हें कतार में न लगने वालों में गिना जाता है।
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	जो इकाइयाँ प्रतीक्षा छोड़ देती हैं, वे यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए); बाकी कार्य का दूसरा बाहर जाने का रास्ता लेती हैं।
 	Erlang	एरलांग
 	Error	त्रुटि
@@ -229,6 +235,7 @@
 	Inside over time	समय के साथ अंदर
 	Job under way on a server going off shift:	पाली से हट रहे सर्वर पर चल रहा काम:
 	Job under way on a server taken out:	हटाए गए सर्वर पर चल रहा काम:
+	Joins with probability	कतार में लगने की प्रायिकता
 	Jump	जाएँ
 	Jump to time	समय पर जाएँ
 	Keep at least in service	कम से कम चालू रखें
@@ -252,8 +259,10 @@
 	Maximum	अधिकतम
 	Mean	माध्य
 	Mean number inside	अंदर की औसत संख्या
+	Number waiting	प्रतीक्षारत संख्या
 	One replication of {n}: the results of the others differ.	{n} में से एक पुनरावृत्ति: बाकी के परिणाम अलग होते हैं।
 	Save as a new BPMN file?	नई BPMN फ़ाइल के रूप में सहेजें?
+	Share balked	कतार में न लगने वालों का अनुपात
 	Still inside at the end	अंत में अब भी अंदर
 	Mean work in progress	औसत प्रक्रियाधीन कार्य
 	Mean queue length	औसत कतार लंबाई
@@ -482,6 +491,7 @@
 	Stopped watching	देखना बंद किया गया
 	Sun	रवि
 	Sweep a parameter	पैरामीटर स्वीप करें
+	Table	तालिका
 	Table stripes	तालिका की धारियाँ
 	Take servers out when overloaded	अधिक भार वाले सर्वर हटाएँ
 	Takt	टैक्ट

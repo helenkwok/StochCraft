@@ -15,6 +15,7 @@
 	% down and up	% alas ja ylös
 	% of replications	% toistoista
 	+ Add block	+ Lisää lohko
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Tavoitteen saavuttavan osuuden 95 %:n väli: {lo}–{hi}
 	95th percentile	95. persentiili
 	95th percentile {value}	95. persentiili {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Käytettävissä kalenterien ulkopuolella
 	BPMN with BPSim	BPMN ja BPSim
 	Back to the model (Esc)	Takaisin malliin (Esc)
+	Balked	Eivät liittyneet jonoon
+	Balked on {id}	Eivät liittyneet jonoon virrassa {id}
+	Balking	Jonoon liittymättä jättäminen
 	Batch	Erä
 	Batch (collect, then send together)	Erä (kerää ja lähetä yhdessä)
 	Batch size	Erän koko
@@ -127,6 +131,7 @@
 	Constant	Vakio
 	Control outlines	Ohjainten ääriviivat
 	Copy	Kopioi
+	Count those in service	Laske mukaan myös palveltavat
 	Counts against	Kirjataan tehtävälle
 	Customer demand	Asiakkaan kysyntä
 	Cut	Leikkaa
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteetit, jotka löytävät odotustilan täynnä, kulkevat heti tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen) sen sijaan, että ne menetettäisiin tai ne odottaisivat ennen tehtävää; ne lasketaan täällä menetetyiksi.
 	Entities give up waiting	Entiteetit luopuvat odottamisesta
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Toiston lopussa yhä sisällä olevat yksiköt jäävät pois keskimääräisestä odotusajasta ja keskimääräisestä ajasta järjestelmässä.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteetit, jotka eivät liity jonoon, kulkevat heti tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen) sen sijaan, että ne menetettäisiin; ne lasketaan täällä jonoon liittymättömiksi.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Odottamisesta luopuvat entiteetit kulkevat tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen); muut kulkevat tehtävän toista reittiä ulos.
 	Erlang	Erlang
 	Error	Virhe
@@ -229,6 +235,7 @@
 	Inside over time	Sisällä ajan mittaan
 	Job under way on a server going off shift:	Kesken oleva työ palvelimella, jonka vuoro päättyy:
 	Job under way on a server taken out:	Kesken oleva työ käytöstä poistetulla palvelimella:
+	Joins with probability	Liittyy jonoon todennäköisyydellä
 	Jump	Siirry
 	Jump to time	Siirry hetkeen
 	Keep at least in service	Pidä käytössä vähintään
@@ -252,8 +259,10 @@
 	Maximum	Maksimi
 	Mean	Keskiarvo
 	Mean number inside	Keskimääräinen määrä sisällä
+	Number waiting	Odottavien määrä
 	One replication of {n}: the results of the others differ.	Yksi toisto {n}:stä: muiden tulokset poikkeavat.
 	Save as a new BPMN file?	Tallennetaanko uutena BPMN-tiedostona?
+	Share balked	Jonoon liittymättömien osuus
 	Still inside at the end	Lopussa yhä sisällä
 	Mean work in progress	Keskimääräinen keskeneräinen tuotanto
 	Mean queue length	Jonon keskipituus
@@ -482,6 +491,7 @@
 	Stopped watching	Seuraaminen lopetettiin
 	Sun	su
 	Sweep a parameter	Käy parametri läpi
+	Table	Taulukko
 	Table stripes	Taulukon raidat
 	Take servers out when overloaded	Ylikuormittuneiden palvelimien poisto käytöstä
 	Takt	Tahti

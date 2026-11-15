@@ -525,6 +525,26 @@ engine's messages (validation, file notes) are English too.
   certain are lo, th, ta, te, ka, kk, bn and sq as before, the word for a control (fr commandes, nl
   bedieningselementen, tr Denetim, vi điều khiển), and the focus wording of the header item (hu, ta,
   te).
+- The rows for balking (the task's "Balking" section and choice, its "Table" and "1/(n + 1)"
+  choices, "Joins with probability", "Number waiting" and "Count those in service", a
+  connection's "Balked" checkbox, "Balked on {id}" and its hover text, and the "Balked" and
+  "Share balked" results) were drafted from the plain meaning of the English, reusing each
+  catalog's own words for queue ("Mean queue length"), waiting, probability ("Probability"), lost,
+  share ("Share that gave up", "Share of arrivals lost") and flow; "Table" takes the word of the
+  catalog's "CSV table" row (sr-latn Tablica, as there). "Balked" and "Balked on {id}" follow
+  the form of each catalog's "Abandoned" and "Turned away" rows, and the hover text follows its
+  sentence for entities finding the waiting room full. "In service" here means entities being
+  served (de In Bedienung, es en servicio, pt-br em atendimento), not the "in service" of units
+  in the health-check rows. "1/(n + 1)" is the same in every catalog. For "Balking" the
+  queueing literature gives an established term in zh-hans and zh-hant (止步, from a Chinese
+  university paper on queues where customers join or balk) and fr (Dérobade, from a French
+  thesis on queues with balking); de, es, it, nl, the Nordic, Slavic, Baltic and the other
+  languages use a phrase meaning "not joining the queue" (de Nicht einreihen; Abwandern was
+  left out, as German teaching material uses it for reneging). Not reviewed by native speakers.
+  The least certain are ja 入列断念 and ko 진입 포기 (coined, no source found), bg Отминаване and
+  Отминали, ka, kk, lo, th, ta, te, bn, sq, et and lt as before, sl "Niso se pridružile" as a
+  results label, da "Fravalgte køen", el "Μη είσοδος" as a count, and the endings of the
+  Slavic, Baltic and Finnish hover texts.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

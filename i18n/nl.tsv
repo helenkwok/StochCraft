@@ -15,6 +15,7 @@
 	% down and up	% omlaag en omhoog
 	% of replications	% van de herhalingen
 	+ Add block	+ Blok toevoegen
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	95%-interval van het aandeel dat het doel haalt: {lo} tot {hi}
 	95th percentile	95e percentiel
 	95th percentile {value}	95e percentiel {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Beschikbaar buiten kalenders
 	BPMN with BPSim	BPMN met BPSim
 	Back to the model (Esc)	Terug naar het model (Esc)
+	Balked	Niet aangesloten
+	Balked on {id}	Niet aangesloten op {id}
+	Balking	Niet aansluiten
 	Batch	Batch
 	Batch (collect, then send together)	Batch (verzamelen, dan samen doorsturen)
 	Batch size	Batchgrootte
@@ -127,6 +131,7 @@
 	Constant	Constant
 	Control outlines	Omtrekken van bedieningselementen
 	Copy	Kopiëren
+	Count those in service	Ook die in bediening meetellen
 	Counts against	Toegerekend aan
 	Customer demand	Klantvraag
 	Cut	Knippen
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteiten die de wachtruimte vol aantreffen, nemen meteen deze stroom (om het later opnieuw te proberen, bijvoorbeeld), in plaats van verloren te gaan of vóór de taak te wachten; ze tellen hier als verloren.
 	Entities give up waiting	Entiteiten haken af tijdens het wachten
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entiteiten die aan het eind van een herhaling nog binnen zijn, tellen niet mee in de gemiddelde wachttijd en de gemiddelde tijd in het systeem.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteiten die niet in de wachtrij aansluiten, nemen meteen deze stroom (om het later opnieuw te proberen, bijvoorbeeld), in plaats van verloren te gaan; ze tellen hier als niet aangesloten.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteiten die tijdens het wachten afhaken, nemen deze stroom (om het later opnieuw te proberen, bijvoorbeeld); de andere nemen de andere uitgang van de taak.
 	Erlang	Erlang
 	Error	Fout
@@ -229,6 +235,7 @@
 	Inside over time	Binnen in de tijd
 	Job under way on a server going off shift:	Bewerking in uitvoering op een server waarvan de werktijd eindigt:
 	Job under way on a server taken out:	Bewerking in uitvoering op een server die uit dienst gaat:
+	Joins with probability	Sluit aan met kans
 	Jump	Ga
 	Jump to time	Ga naar tijdstip
 	Keep at least in service	Minstens in dienst houden
@@ -252,8 +259,10 @@
 	Maximum	Maximum
 	Mean	Gemiddelde
 	Mean number inside	Gemiddeld aantal binnen
+	Number waiting	Aantal wachtend
 	One replication of {n}: the results of the others differ.	Eén herhaling van {n}: de resultaten van de andere verschillen.
 	Save as a new BPMN file?	Opslaan als nieuw BPMN-bestand?
+	Share balked	Aandeel niet aangesloten
 	Still inside at the end	Aan het eind nog binnen
 	Mean work in progress	Gemiddeld onderhanden werk
 	Mean queue length	Gemiddelde wachtrijlengte
@@ -482,6 +491,7 @@
 	Stopped watching	Gestopt met volgen
 	Sun	zo
 	Sweep a parameter	Eén parameter variëren
+	Table	Tabel
 	Table stripes	Tabelstrepen
 	Take servers out when overloaded	Overbelaste servers uit dienst nemen
 	Takt	Takt

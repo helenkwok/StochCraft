@@ -15,6 +15,7 @@
 	% down and up	% вниз і вгору
 	% of replications	% реплікацій
 	+ Add block	+ Додати блок
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	95% інтервал частки, що досягає мети: від {lo} до {hi}
 	95th percentile	95-й процентиль
 	95th percentile {value}	95-й процентиль {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Доступно поза календарями
 	BPMN with BPSim	BPMN з BPSim
 	Back to the model (Esc)	Повернутися до моделі (Esc)
+	Balked	Відмовилися
+	Balked on {id}	Відмовилися на {id}
+	Balking	Відмова від черги
 	Batch	Партія
 	Batch (collect, then send together)	Партія (зібрати й надіслати разом)
 	Batch size	Розмір партії
@@ -127,6 +131,7 @@
 	Constant	Стала величина
 	Control outlines	Контури елементів керування
 	Copy	Копіювати
+	Count those in service	Враховувати й тих, що обслуговуються
 	Counts against	Віднесено на
 	Customer demand	Попит клієнтів
 	Cut	Вирізати
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Сутності, які застають місця очікування зайнятими, одразу йдуть цим потоком (наприклад, щоб спробувати пізніше), а не втрачаються і не чекають перед завданням; тут вони рахуються як втрати.
 	Entities give up waiting	Сутності перестають чекати
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Об'єкти, що ще всередині наприкінці реплікації, не враховуються в середньому часі очікування та середньому часі в системі.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Сутності, які не стають у чергу, одразу йдуть цим потоком (наприклад, щоб спробувати пізніше), а не втрачаються; тут вони рахуються як відмови.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Сутності, які перестають чекати, ідуть цим потоком (наприклад, щоб спробувати пізніше); решта йде іншим виходом завдання.
 	Erlang	Розподіл Ерланга
 	Error	Помилка
@@ -229,6 +235,7 @@
 	Inside over time	Усередині в часі
 	Job under way on a server going off shift:	Робота, що триває на сервері, у якого закінчується зміна:
 	Job under way on a server taken out:	Робота, що триває на виведеному сервері:
+	Joins with probability	Стає в чергу з імовірністю
 	Jump	Перейти
 	Jump to time	Перейти до часу
 	Keep at least in service	Залишати в роботі не менше
@@ -252,8 +259,10 @@
 	Maximum	Максимум
 	Mean	Середнє
 	Mean number inside	Середня кількість усередині
+	Number waiting	Кількість в очікуванні
 	One replication of {n}: the results of the others differ.	Одна реплікація з {n}: результати інших відрізняються.
 	Save as a new BPMN file?	Зберегти як новий файл BPMN?
+	Share balked	Частка тих, хто відмовився
 	Still inside at the end	Ще всередині наприкінці
 	Mean work in progress	Середній обсяг незавершеного виробництва
 	Mean queue length	Середня довжина черги
@@ -482,6 +491,7 @@
 	Stopped watching	Спостереження припинено
 	Sun	нд
 	Sweep a parameter	Перебір параметра
+	Table	Таблиця
 	Table stripes	Смуги таблиць
 	Take servers out when overloaded	Виводити перевантажені сервери з роботи
 	Takt	Такт

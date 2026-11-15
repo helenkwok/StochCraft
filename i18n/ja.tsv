@@ -15,6 +15,7 @@
 	% down and up	% ずつ上下
 	% of replications	% の反復実行
 	+ Add block	+ ブロックを追加
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	目標を達成した割合の 95% 区間: {lo}〜{hi}
 	95th percentile	95 パーセンタイル
 	95th percentile {value}	95 パーセンタイル {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	カレンダー外でも稼働可能
 	BPMN with BPSim	BPSim 付き BPMN
 	Back to the model (Esc)	モデルに戻る (Esc)
+	Balked	入列断念
+	Balked on {id}	{id} の入列断念
+	Balking	入列断念
 	Batch	バッチ
 	Batch (collect, then send together)	バッチ (集めてからまとめて送る)
 	Batch size	バッチサイズ
@@ -127,6 +131,7 @@
 	Constant	定数
 	Control outlines	コントロールの輪郭線
 	Copy	コピー
+	Count those in service	サービス中も数える
 	Counts against	計上先
 	Customer demand	顧客需要
 	Cut	切り取り
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	待機場所が満員のときに来たエンティティは、すぐにこのフローを通ります（後で再試行するなど）。失われることも、タスクの手前で待つこともありません。ここでは損失として数えます。
 	Entities give up waiting	エンティティが待ち切れずに離脱する
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	反復実行の終了時に内部に残っているエンティティは、平均待ち時間とシステム内の平均滞在時間に含まれません。
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	待ち行列に加わらないエンティティは、すぐにこのフローを通ります（後で再試行するなど）。失われることはありません。ここでは入列断念として数えます。
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	待ち切れずに離脱したエンティティはこのフローを通ります（後で再試行するなど）。それ以外はタスクのもう一方の出口を通ります。
 	Erlang	アーラン分布
 	Error	エラー
@@ -229,6 +235,7 @@
 	Inside over time	内部の数の推移
 	Job under way on a server going off shift:	シフトを外れるサーバで処理中の作業:
 	Job under way on a server taken out:	切り離されたサーバで処理中の作業:
+	Joins with probability	列に加わる確率
 	Jump	移動
 	Jump to time	移動先の時刻
 	Keep at least in service	稼働を維持する最小数
@@ -252,8 +259,10 @@
 	Maximum	最大値
 	Mean	平均
 	Mean number inside	内部の平均数
+	Number waiting	待ち数
 	One replication of {n}: the results of the others differ.	{n} 回中の 1 回の反復実行です。ほかの反復実行の結果は異なります。
 	Save as a new BPMN file?	新しい BPMN ファイルとして保存しますか？
+	Share balked	入列断念率
 	Still inside at the end	終了時に内部に残っている数
 	Mean work in progress	平均仕掛品数
 	Mean queue length	平均待ち行列長
@@ -482,6 +491,7 @@
 	Stopped watching	観察を終了しました
 	Sun	日
 	Sweep a parameter	パラメーターのスイープ
+	Table	表
 	Table stripes	表の縞
 	Take servers out when overloaded	過負荷のサーバを切り離す
 	Takt	タクトタイム

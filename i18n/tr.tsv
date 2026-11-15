@@ -15,6 +15,7 @@
 	% down and up	% aşağı ve yukarı
 	% of replications	% tekrarın
 	+ Add block	+ Blok ekle
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Hedefi karşılayan oranın %95 aralığı: {lo} ile {hi} arası
 	95th percentile	95. yüzdelik
 	95th percentile {value}	95. yüzdelik {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Takvimler dışında kullanılabilir
 	BPMN with BPSim	BPSim içeren BPMN
 	Back to the model (Esc)	Modele dön (Esc)
+	Balked	Kuyruğa katılmayanlar
+	Balked on {id}	{id} üzerinde kuyruğa katılmayanlar
+	Balking	Kuyruğa katılmama
 	Batch	Parti
 	Batch (collect, then send together)	Parti (topla, sonra birlikte gönder)
 	Batch size	Parti boyutu
@@ -127,6 +131,7 @@
 	Constant	Sabit
 	Control outlines	Denetim dış çizgileri
 	Copy	Kopyala
+	Count those in service	Hizmet alanları da say
 	Counts against	Yazıldığı görev
 	Customer demand	Müşteri talebi
 	Cut	Kes
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Bekleme alanını dolu bulan varlıklar, kaybolmak ya da görevden önce beklemek yerine hemen bu akışı izler (örneğin daha sonra yeniden denemek için); burada kaybedilen sayılırlar.
 	Entities give up waiting	Varlıklar beklemekten vazgeçer
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Bir tekrarın sonunda hâlâ içeride olan varlıklar ortalama bekleme süresine ve sistemdeki ortalama süreye katılmaz.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Kuyruğa katılmayan varlıklar, kaybolmak yerine hemen bu akışı izler (örneğin daha sonra yeniden denemek için); burada kuyruğa katılmayan sayılırlar.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Beklemekten vazgeçen varlıklar bu akışı izler (örneğin daha sonra yeniden denemek için); diğerleri görevin öteki çıkış yolunu izler.
 	Erlang	Erlang
 	Error	Hata
@@ -229,6 +235,7 @@
 	Inside over time	Zaman içinde içeridekiler
 	Job under way on a server going off shift:	Vardiyası biten sunucuda süren iş:
 	Job under way on a server taken out:	Hizmetten çıkarılan sunucuda süren iş:
+	Joins with probability	Kuyruğa katılma olasılığı
 	Jump	Git
 	Jump to time	Zamana git
 	Keep at least in service	En az hizmette tutulacak
@@ -252,8 +259,10 @@
 	Maximum	Maksimum
 	Mean	Ortalama
 	Mean number inside	İçerideki ortalama sayı
+	Number waiting	Bekleyen sayısı
 	One replication of {n}: the results of the others differ.	{n} tekrardan biri: diğerlerinin sonuçları farklıdır.
 	Save as a new BPMN file?	Yeni bir BPMN dosyası olarak kaydedilsin mi?
+	Share balked	Kuyruğa katılmayanların oranı
 	Still inside at the end	Sonda hâlâ içeride
 	Mean work in progress	Ortalama süreç içi stok
 	Mean queue length	Ortalama kuyruk uzunluğu
@@ -482,6 +491,7 @@
 	Stopped watching	İzleme durduruldu
 	Sun	Paz
 	Sweep a parameter	Bir parametreyi tara
+	Table	Tablo
 	Table stripes	Tablo şeritleri
 	Take servers out when overloaded	Aşırı yüklenen sunucuları hizmetten çıkar
 	Takt	Takt

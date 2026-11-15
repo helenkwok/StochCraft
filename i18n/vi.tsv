@@ -15,6 +15,7 @@
 	% down and up	% xuống và lên
 	% of replications	% số lần lặp
 	+ Add block	+ Thêm khối
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Khoảng 95% của tỷ lệ đạt mục tiêu: từ {lo} đến {hi}
 	95th percentile	Phân vị thứ 95
 	95th percentile {value}	phân vị thứ 95 {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Khả dụng ngoài các lịch
 	BPMN with BPSim	BPMN có BPSim
 	Back to the model (Esc)	Quay lại mô hình (Esc)
+	Balked	Không vào hàng
+	Balked on {id}	Không vào hàng tại {id}
+	Balking	Không vào hàng đợi
 	Batch	Lô
 	Batch (collect, then send together)	Lô (gom lại rồi gửi cùng nhau)
 	Batch size	Kích thước lô
@@ -127,6 +131,7 @@
 	Constant	Hằng số
 	Control outlines	Đường bao điều khiển
 	Copy	Sao chép
+	Count those in service	Tính cả thực thể đang được phục vụ
 	Counts against	Quy cho
 	Customer demand	Nhu cầu khách hàng
 	Cut	Cắt
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Các thực thể thấy khu vực chờ đầy sẽ đi theo luồng này ngay (chẳng hạn để thử lại sau), thay vì bị mất hoặc chờ trước tác vụ; ở đây chúng được tính là bị mất.
 	Entities give up waiting	Thực thể bỏ đi khi chờ quá lâu
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Các thực thể vẫn còn bên trong lúc một lần lặp kết thúc không được tính vào thời gian chờ trung bình và thời gian trung bình trong hệ thống.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Các thực thể không vào hàng đợi sẽ đi theo luồng này ngay (chẳng hạn để thử lại sau), thay vì bị mất; ở đây chúng được tính là không vào hàng.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Các thực thể bỏ đi khi chờ đi theo luồng này (chẳng hạn để thử lại sau); các thực thể khác đi theo lối ra còn lại của tác vụ.
 	Erlang	Erlang
 	Error	Lỗi
@@ -229,6 +235,7 @@
 	Inside over time	Bên trong theo thời gian
 	Job under way on a server going off shift:	Công việc đang dở trên máy chủ sắp hết ca:
 	Job under way on a server taken out:	Công việc đang dở trên máy chủ bị đưa ra:
+	Joins with probability	Vào hàng đợi với xác suất
 	Jump	Đi
 	Jump to time	Đi tới thời điểm
 	Keep at least in service	Giữ hoạt động ít nhất
@@ -252,8 +259,10 @@
 	Maximum	Giá trị lớn nhất
 	Mean	Trung bình
 	Mean number inside	Số lượng trung bình bên trong
+	Number waiting	Số đang chờ
 	One replication of {n}: the results of the others differ.	Một lần lặp trong {n}: kết quả của các lần khác sẽ khác.
 	Save as a new BPMN file?	Lưu thành tệp BPMN mới?
+	Share balked	Tỷ lệ không vào hàng
 	Still inside at the end	Vẫn còn bên trong lúc kết thúc
 	Mean work in progress	Sản phẩm dở dang trung bình
 	Mean queue length	Độ dài hàng đợi trung bình
@@ -482,6 +491,7 @@
 	Stopped watching	Đã ngừng theo dõi
 	Sun	CN
 	Sweep a parameter	Quét một tham số
+	Table	Bảng
 	Table stripes	Sọc bảng
 	Take servers out when overloaded	Đưa máy chủ quá tải ra khỏi hoạt động
 	Takt	Takt

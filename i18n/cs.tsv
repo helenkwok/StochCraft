@@ -15,6 +15,7 @@
 	% down and up	% dolů a nahoru
 	% of replications	% replikací
 	+ Add block	+ Přidat blok
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	95% interval podílu splňujícího cíl: {lo} až {hi}
 	95th percentile	95. percentil
 	95th percentile {value}	95. percentil {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Dostupné mimo kalendáře
 	BPMN with BPSim	BPMN s BPSim
 	Back to the model (Esc)	Zpět k modelu (Esc)
+	Balked	Nezařazené
+	Balked on {id}	Nezařazené na {id}
+	Balking	Nezařazení do fronty
 	Batch	Dávka
 	Batch (collect, then send together)	Dávka (shromáždit a poslat společně)
 	Batch size	Velikost dávky
@@ -127,6 +131,7 @@
 	Constant	Konstantní
 	Control outlines	Obrysy ovládacích prvků
 	Copy	Kopírovat
+	Count those in service	Započítat i obsluhované
 	Counts against	Přičítá se
 	Customer demand	Poptávka zákazníků
 	Cut	Vyjmout
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entity, které najdou čekárnu plnou, jdou hned tímto tokem (například aby to zkusily později znovu), místo aby se ztratily nebo čekaly před úlohou; zde se počítají jako ztracené.
 	Entities give up waiting	Entity vzdávají čekání
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entity, které jsou na konci replikace stále uvnitř, nejsou zahrnuty do průměrné doby čekání ani průměrné doby v systému.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entity, které se nezařadí do fronty, jdou hned tímto tokem (například aby to zkusily později znovu), místo aby se ztratily; zde se počítají jako nezařazené.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entity, které vzdají čekání, jdou tímto tokem (například aby to zkusily později znovu); ostatní jdou druhou cestou ven z úlohy.
 	Erlang	Erlangovo
 	Error	Chyba
@@ -229,6 +235,7 @@
 	Inside over time	Uvnitř v čase
 	Job under way on a server going off shift:	Rozpracovaná práce na serveru, kterému končí směna:
 	Job under way on a server taken out:	Rozpracovaná práce na vyřazeném serveru:
+	Joins with probability	Zařadí se do fronty s pravděpodobností
 	Jump	Přejít
 	Jump to time	Přejít na čas
 	Keep at least in service	Ponechat v provozu alespoň
@@ -252,8 +259,10 @@
 	Maximum	Maximum
 	Mean	Průměr
 	Mean number inside	Průměrný počet uvnitř
+	Number waiting	Počet čekajících
 	One replication of {n}: the results of the others differ.	Jedna replikace z {n}: výsledky ostatních se liší.
 	Save as a new BPMN file?	Uložit jako nový soubor BPMN?
+	Share balked	Podíl nezařazených
 	Still inside at the end	Na konci stále uvnitř
 	Mean work in progress	Průměrná nedokončená výroba
 	Mean queue length	Průměrná délka fronty
@@ -482,6 +491,7 @@
 	Stopped watching	Sledování ukončeno
 	Sun	ne
 	Sweep a parameter	Průchod parametrem
+	Table	Tabulka
 	Table stripes	Pruhy tabulek
 	Take servers out when overloaded	Vyřazovat přetížené servery
 	Takt	Takt

@@ -15,6 +15,7 @@
 	% down and up	% கீழும் மேலும்
 	% of replications	% மீள் இயக்கங்களில்
 	+ Add block	+ தொகுதியைச் சேர்
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	இலக்கை அடையும் பங்கின் 95% இடைவெளி: {lo} முதல் {hi}
 	95th percentile	95-ஆம் சதமானம்
 	95th percentile {value}	95-ஆம் சதமானம் {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	நாட்காட்டிகளுக்கு வெளியேயும் கிடைக்கும்
 	BPMN with BPSim	BPSim உடன் BPMN
 	Back to the model (Esc)	மாதிரிக்குத் திரும்பு (Esc)
+	Balked	வரிசையில் சேராதவை
+	Balked on {id}	{id} இல் வரிசையில் சேராதவை
+	Balking	வரிசையில் சேராமை
 	Batch	தொகுப்பு
 	Batch (collect, then send together)	தொகுப்பு (சேகரித்து, பின் சேர்த்து அனுப்பு)
 	Batch size	தொகுப்பு அளவு
@@ -127,6 +131,7 @@
 	Constant	மாறிலி
 	Control outlines	கட்டுப்பாடுகளின் வெளிக்கோடுகள்
 	Copy	நகலெடு
+	Count those in service	சேவையில் உள்ளவற்றையும் எண்ணு
 	Counts against	கணக்கில் சேரும் பணி
 	Customer demand	வாடிக்கையாளர் தேவை
 	Cut	வெட்டு
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	காத்திருப்பு அறை நிரம்பியிருப்பதைக் காணும் உருப்படிகள் உடனே இந்த ஓட்டத்தில் செல்கின்றன (உதாரணமாக, பின்னர் மீண்டும் முயல), இழக்கப்படுவதற்கோ பணிக்கு முன் காத்திருப்பதற்கோ பதிலாக; இங்கு அவை இழந்தவையாகக் கணக்கிடப்படுகின்றன.
 	Entities give up waiting	உருப்படிகள் காத்திருப்பைக் கைவிடுகின்றன
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ஒரு மீள் இயக்கத்தின் முடிவில் இன்னும் உள்ளே உள்ளவை சராசரி காத்திருப்பிலும் அமைப்பில் கழித்த சராசரி நேரத்திலும் சேர்க்கப்படவில்லை.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	வரிசையில் சேராத உருப்படிகள் உடனே இந்த ஓட்டத்தில் செல்கின்றன (உதாரணமாக, பின்னர் மீண்டும் முயல), இழக்கப்படுவதற்குப் பதிலாக; இங்கு அவை வரிசையில் சேராதவையாகக் கணக்கிடப்படுகின்றன.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	காத்திருப்பைக் கைவிடும் உருப்படிகள் இந்த ஓட்டத்தில் செல்கின்றன (உதாரணமாக, பின்னர் மீண்டும் முயல); மற்றவை பணியின் மற்றொரு வெளியேறும் வழியில் செல்கின்றன.
 	Erlang	எர்லாங்
 	Error	பிழை
@@ -229,6 +235,7 @@
 	Inside over time	நேரப்படி உள்ளே
 	Job under way on a server going off shift:	பணிமுறை முடியும் வழங்கியில் நடந்துகொண்டிருக்கும் வேலை:
 	Job under way on a server taken out:	நீக்கப்பட்ட வழங்கியில் நடந்துகொண்டிருக்கும் வேலை:
+	Joins with probability	வரிசையில் சேரும் நிகழ்தகவு
 	Jump	செல்
 	Jump to time	நேரத்திற்குச் செல்
 	Keep at least in service	குறைந்தது இத்தனை இயக்கத்தில் வை
@@ -252,8 +259,10 @@
 	Maximum	அதிகபட்சம்
 	Mean	சராசரி
 	Mean number inside	உள்ளே உள்ள சராசரி எண்ணிக்கை
+	Number waiting	காத்திருப்பவற்றின் எண்ணிக்கை
 	One replication of {n}: the results of the others differ.	{n} இல் ஒரு மீள் இயக்கம்: மற்றவற்றின் முடிவுகள் வேறுபடும்.
 	Save as a new BPMN file?	புதிய BPMN கோப்பாகச் சேமிக்கவா?
+	Share balked	வரிசையில் சேராதவற்றின் விகிதம்
 	Still inside at the end	முடிவில் இன்னும் உள்ளே உள்ளவை
 	Mean work in progress	சராசரி நடைபெறும் பணி
 	Mean queue length	சராசரி வரிசை நீளம்
@@ -482,6 +491,7 @@
 	Stopped watching	கவனிப்பது நிறுத்தப்பட்டது
 	Sun	ஞாயி
 	Sweep a parameter	ஒரு அளவுருவை வருடு
+	Table	அட்டவணை
 	Table stripes	அட்டவணைப் பட்டைகள்
 	Take servers out when overloaded	அதிகச் சுமையுள்ள வழங்கிகளை நீக்குதல்
 	Takt	டாக்ட்

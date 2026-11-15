@@ -15,6 +15,7 @@
 	% down and up	% poshtë dhe lart
 	% of replications	% e përsëritjeve
 	+ Add block	+ Shto bllok
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Intervali 95% i pjesës që arrin objektivin: nga {lo} në {hi}
 	95th percentile	Përqindëshi i 95-të
 	95th percentile {value}	përqindëshi i 95-të {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	I disponueshëm jashtë kalendarëve
 	BPMN with BPSim	BPMN me BPSim
 	Back to the model (Esc)	Kthehu te modeli (Esc)
+	Balked	Nuk hynë në radhë
+	Balked on {id}	Nuk hynë në radhë në {id}
+	Balking	Moshyrja në radhë
 	Batch	Grup
 	Batch (collect, then send together)	Grup (mblidh, pastaj dërgo së bashku)
 	Batch size	Madhësia e grupit
@@ -127,6 +131,7 @@
 	Constant	Konstante
 	Control outlines	Konturet e kontrolleve
 	Copy	Kopjo
+	Count those in service	Numëro edhe ata në shërbim
 	Counts against	I ngarkohet
 	Customer demand	Kërkesa e klientëve
 	Cut	Prit
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitetet që e gjejnë dhomën e pritjes plot marrin menjëherë këtë rrjedhë (për të provuar sërish më vonë, të themi), në vend që të humbasin ose të presin para detyrës; këtu numërohen si të humbura.
 	Entities give up waiting	Entitetet heqin dorë nga pritja
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitetet që janë ende brenda në fund të një përsëritjeje lihen jashtë pritjes mesatare dhe kohës mesatare në sistem.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitetet që nuk hyjnë në radhë marrin menjëherë këtë rrjedhë (për të provuar sërish më vonë, të themi), në vend që të humbasin; këtu numërohen si moshyrje në radhë.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitetet që heqin dorë nga pritja marrin këtë rrjedhë (për të provuar sërish më vonë, të themi); të tjerët marrin daljen tjetër të detyrës.
 	Erlang	Erlang
 	Error	Gabim
@@ -229,6 +235,7 @@
 	Inside over time	Brenda gjatë kohës
 	Job under way on a server going off shift:	Punë në vazhdim në një server që del nga turni:
 	Job under way on a server taken out:	Punë në vazhdim në një server të nxjerrë nga puna:
+	Joins with probability	Hyn në radhë me probabilitet
 	Jump	Shko
 	Jump to time	Shko te koha
 	Keep at least in service	Mbaj në punë të paktën
@@ -252,8 +259,10 @@
 	Maximum	Maksimumi
 	Mean	Mesatarja
 	Mean number inside	Numri mesatar brenda
+	Number waiting	Numri në pritje
 	One replication of {n}: the results of the others differ.	Një përsëritje nga {n}: rezultatet e të tjerave ndryshojnë.
 	Save as a new BPMN file?	Të ruhet si skedar i ri BPMN?
+	Share balked	Pjesa që nuk hyri në radhë
 	Still inside at the end	Ende brenda në fund
 	Mean work in progress	Prodhimi mesatar në proces
 	Mean queue length	Gjatësia mesatare e radhës
@@ -482,6 +491,7 @@
 	Stopped watching	Vëzhgimi u ndal
 	Sun	Die
 	Sweep a parameter	Skano një parametër
+	Table	Tabelë
 	Table stripes	Vija tabelash
 	Take servers out when overloaded	Nxirr nga puna serverët e mbingarkuar
 	Takt	Takt

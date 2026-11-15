@@ -15,6 +15,7 @@
 	% down and up	% προς τα κάτω και πάνω
 	% of replications	% των επαναλήψεων
 	+ Add block	+ Προσθήκη μπλοκ
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Διάστημα 95% του ποσοστού που πετυχαίνει τον στόχο: από {lo} έως {hi}
 	95th percentile	95ο εκατοστημόριο
 	95th percentile {value}	95ο εκατοστημόριο {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Διαθέσιμο εκτός ημερολογίων
 	BPMN with BPSim	BPMN με BPSim
 	Back to the model (Esc)	Πίσω στο μοντέλο (Esc)
+	Balked	Μη είσοδος
+	Balked on {id}	Μη είσοδος στο {id}
+	Balking	Μη είσοδος στην ουρά
 	Batch	Παρτίδα
 	Batch (collect, then send together)	Παρτίδα (συλλογή και αποστολή μαζί)
 	Batch size	Μέγεθος παρτίδας
@@ -127,6 +131,7 @@
 	Constant	Σταθερή
 	Control outlines	Περιγράμματα στοιχείων ελέγχου
 	Copy	Αντιγραφή
+	Count those in service	Να μετρώνται και όσες εξυπηρετούνται
 	Counts against	Χρεώνεται σε
 	Customer demand	Ζήτηση πελατών
 	Cut	Αποκοπή
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Οι οντότητες που βρίσκουν τον χώρο αναμονής γεμάτο ακολουθούν αμέσως αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε), αντί να χαθούν ή να περιμένουν πριν από την εργασία· εδώ μετρώνται ως απώλειες.
 	Entities give up waiting	Οι οντότητες εγκαταλείπουν την αναμονή
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Οι οντότητες που είναι ακόμη εντός στο τέλος μιας επανάληψης δεν περιλαμβάνονται στη μέση αναμονή και στον μέσο χρόνο στο σύστημα.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Οι οντότητες που δεν μπαίνουν στην ουρά ακολουθούν αμέσως αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε), αντί να χαθούν· εδώ μετρώνται ως μη είσοδος.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Οι οντότητες που εγκαταλείπουν την αναμονή ακολουθούν αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε)· οι υπόλοιπες παίρνουν την άλλη έξοδο της εργασίας.
 	Erlang	Έρλανγκ
 	Error	Σφάλμα
@@ -229,6 +235,7 @@
 	Inside over time	Μέσα στη διάρκεια του χρόνου
 	Job under way on a server going off shift:	Δουλειά σε εξέλιξη σε εξυπηρετητή που βγαίνει από βάρδια:
 	Job under way on a server taken out:	Δουλειά σε εξέλιξη σε εξυπηρετητή που τίθεται εκτός λειτουργίας:
+	Joins with probability	Μπαίνει στην ουρά με πιθανότητα
 	Jump	Μετάβαση
 	Jump to time	Μετάβαση σε χρόνο
 	Keep at least in service	Τουλάχιστον σε λειτουργία
@@ -252,8 +259,10 @@
 	Maximum	Μέγιστο
 	Mean	Μέση τιμή
 	Mean number inside	Μέσο πλήθος εντός
+	Number waiting	Πλήθος σε αναμονή
 	One replication of {n}: the results of the others differ.	Μία επανάληψη από {n}: τα αποτελέσματα των άλλων διαφέρουν.
 	Save as a new BPMN file?	Αποθήκευση ως νέο αρχείο BPMN;
+	Share balked	Ποσοστό μη εισόδου
 	Still inside at the end	Ακόμη εντός στο τέλος
 	Mean work in progress	Μέση παραγωγή σε εξέλιξη
 	Mean queue length	Μέσο μήκος ουράς
@@ -482,6 +491,7 @@
 	Stopped watching	Η παρακολούθηση διακόπηκε
 	Sun	Κυρ
 	Sweep a parameter	Σάρωση παραμέτρου
+	Table	Πίνακας
 	Table stripes	Ρίγες πινάκων
 	Take servers out when overloaded	Θέση υπερφορτωμένων εξυπηρετητών εκτός λειτουργίας
 	Takt	Takt

@@ -15,6 +15,7 @@
 	% down and up	% nach unten und oben
 	% of replications	% der Replikationen
 	+ Add block	+ Block hinzufügen
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	95-%-Intervall des Anteils, der das Ziel erreicht: {lo} bis {hi}
 	95th percentile	95. Perzentil
 	95th percentile {value}	95. Perzentil {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Außerhalb der Kalender verfügbar
 	BPMN with BPSim	BPMN mit BPSim
 	Back to the model (Esc)	Zurück zum Modell (Esc)
+	Balked	Nicht eingereiht
+	Balked on {id}	Nicht eingereiht bei {id}
+	Balking	Nicht einreihen
 	Batch	Charge
 	Batch (collect, then send together)	Charge (sammeln, dann gemeinsam weitergeben)
 	Batch size	Chargengröße
@@ -127,6 +131,7 @@
 	Constant	Konstant
 	Control outlines	Umrisse der Steuerelemente
 	Copy	Kopieren
+	Count those in service	In Bedienung befindliche mitzählen
 	Counts against	Zugerechnet zu
 	Customer demand	Kundenbedarf
 	Cut	Ausschneiden
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitäten, die den Warteraum voll vorfinden, nehmen sofort diese Verbindung (etwa um es später erneut zu versuchen), statt verloren zu gehen oder vor der Aufgabe zu warten; sie zählen hier als verloren.
 	Entities give up waiting	Entitäten geben das Warten auf
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Einheiten, die am Ende einer Replikation noch im System sind, gehen nicht in die mittlere Wartezeit und die mittlere Verweilzeit im System ein.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitäten, die sich nicht in die Warteschlange einreihen, nehmen sofort diese Verbindung (etwa um es später erneut zu versuchen), statt verloren zu gehen; sie zählen hier als nicht eingereiht.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitäten, die das Warten aufgeben, nehmen diese Verbindung (etwa um es später erneut zu versuchen); die anderen nehmen den anderen Ausgang der Aufgabe.
 	Erlang	Erlang
 	Error	Fehler
@@ -229,6 +235,7 @@
 	Inside over time	Im Block über die Zeit
 	Job under way on a server going off shift:	Laufender Auftrag auf einem Server, dessen Schicht endet:
 	Job under way on a server taken out:	Laufender Auftrag auf einem Server, der außer Betrieb geht:
+	Joins with probability	Reiht sich ein mit Wahrscheinlichkeit
 	Jump	Springen
 	Jump to time	Springen zu Zeitpunkt
 	Keep at least in service	Mindestens in Betrieb halten
@@ -252,8 +259,10 @@
 	Maximum	Maximum
 	Mean	Mittelwert
 	Mean number inside	Mittlere Anzahl im System
+	Number waiting	Anzahl Wartender
 	One replication of {n}: the results of the others differ.	Eine Replikation von {n}: Die Ergebnisse der anderen weichen ab.
 	Save as a new BPMN file?	Als neue BPMN-Datei speichern?
+	Share balked	Anteil nicht eingereihter Ankünfte
 	Still inside at the end	Am Ende noch im System
 	Mean work in progress	Mittlerer Umlaufbestand
 	Mean queue length	Mittlere Warteschlangenlänge
@@ -482,6 +491,7 @@
 	Stopped watching	Beobachten beendet
 	Sun	So
 	Sweep a parameter	Einen Parameter variieren
+	Table	Tabelle
 	Table stripes	Tabellenstreifen
 	Take servers out when overloaded	Server bei Überlastung außer Betrieb nehmen
 	Takt	Takt

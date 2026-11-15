@@ -15,6 +15,7 @@
 	% down and up	% নিচে ও উপরে
 	% of replications	% পুনরাবৃত্তিতে
 	+ Add block	+ ব্লক যোগ করুন
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	লক্ষ্য পূরণকারী অংশের ৯৫% ব্যবধান: {lo} থেকে {hi}
 	95th percentile	৯৫তম শতাংশক
 	95th percentile {value}	৯৫তম শতাংশক {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	ক্যালেন্ডারের বাইরে প্রাপ্য
 	BPMN with BPSim	BPSim সহ BPMN
 	Back to the model (Esc)	মডেলে ফিরে যান (Esc)
+	Balked	সারিতে না দাঁড়ানো
+	Balked on {id}	{id}-এ সারিতে না দাঁড়ানো
+	Balking	সারিতে না দাঁড়ানো
 	Batch	ব্যাচ
 	Batch (collect, then send together)	ব্যাচ (জড়ো করে একসাথে পাঠান)
 	Batch size	ব্যাচের আকার
@@ -127,6 +131,7 @@
 	Constant	ধ্রুবক
 	Control outlines	নিয়ন্ত্রণের রূপরেখা
 	Copy	কপি করুন
+	Count those in service	পরিষেবাধীনদেরও গুনুন
 	Counts against	যে কাজের বিপরীতে গণনা হয়
 	Customer demand	গ্রাহকের চাহিদা
 	Cut	কাটুন
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	যে সত্তারা অপেক্ষার ঘর পূর্ণ পায় তারা সঙ্গে সঙ্গে এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে), হারিয়ে যাওয়া বা কাজের আগে অপেক্ষা করার বদলে; এখানে তাদের হারানো হিসেবে গোনা হয়।
 	Entities give up waiting	সত্তারা অপেক্ষা ছেড়ে দেয়
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	কোনো পুনরাবৃত্তির শেষে যেগুলো এখনও ভেতরে, সেগুলো গড় অপেক্ষার সময় ও সিস্টেমে গড় সময় থেকে বাদ থাকে।
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	যে সত্তারা সারিতে যোগ দেয় না তারা সঙ্গে সঙ্গে এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে), হারিয়ে যাওয়ার বদলে; এখানে তাদের সারিতে না দাঁড়ানো হিসেবে গোনা হয়।
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	যে সত্তারা অপেক্ষা ছেড়ে দেয় তারা এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে); বাকিরা কাজের অন্য বেরোনোর পথ ধরে।
 	Erlang	এরলাং
 	Error	ত্রুটি
@@ -229,6 +235,7 @@
 	Inside over time	সময়ের সাথে ভিতরে
 	Job under way on a server going off shift:	শিফট শেষ হতে চলা সার্ভারে চলমান কাজ:
 	Job under way on a server taken out:	সরিয়ে নেওয়া সার্ভারে চলমান কাজ:
+	Joins with probability	সারিতে যোগ দেওয়ার সম্ভাবনা
 	Jump	যান
 	Jump to time	সময়ে যান
 	Keep at least in service	অন্তত এতগুলো চালু রাখুন
@@ -252,8 +259,10 @@
 	Maximum	সর্বাধিক
 	Mean	গড়
 	Mean number inside	ভেতরে গড় সংখ্যা
+	Number waiting	অপেক্ষমাণ সংখ্যা
 	One replication of {n}: the results of the others differ.	{n}টির মধ্যে একটি পুনরাবৃত্তি: বাকিগুলোর ফলাফল ভিন্ন।
 	Save as a new BPMN file?	নতুন BPMN ফাইল হিসেবে সংরক্ষণ করবেন?
+	Share balked	সারিতে না দাঁড়ানোদের অনুপাত
 	Still inside at the end	শেষে এখনও ভেতরে
 	Mean work in progress	গড় প্রক্রিয়াধীন কাজ
 	Mean queue length	সারির গড় দৈর্ঘ্য
@@ -482,6 +491,7 @@
 	Stopped watching	দেখা বন্ধ হয়েছে
 	Sun	রবি
 	Sweep a parameter	একটি প্যারামিটার সুইপ
+	Table	সারণি
 	Table stripes	টেবিলের ডোরা
 	Take servers out when overloaded	অতিরিক্ত ভারে সার্ভার সরিয়ে নেওয়া
 	Takt	টাক্ট

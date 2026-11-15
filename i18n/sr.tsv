@@ -15,6 +15,7 @@
 	% down and up	% доле и горе
 	% of replications	% репликација
 	+ Add block	+ Додај блок
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Интервал од 95% удела који постиже циљ: од {lo} до {hi}
 	95th percentile	95. перцентил
 	95th percentile {value}	95. перцентил {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Расположиво ван календара
 	BPMN with BPSim	BPMN с BPSim
 	Back to the model (Esc)	Повратак на модел (Esc)
+	Balked	Нису ушли у ред
+	Balked on {id}	Нису ушли у ред на {id}
+	Balking	Неулазак у ред
 	Batch	Серија
 	Batch (collect, then send together)	Серија (прикупи, па пошаљи заједно)
 	Batch size	Величина серије
@@ -127,6 +131,7 @@
 	Constant	Константна
 	Control outlines	Обриси контрола
 	Copy	Копирај
+	Count those in service	Бројати и оне на услуживању
 	Counts against	Приписује се
 	Customer demand	Потражња купаца
 	Cut	Исеци
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Ентитети који затекну пуну чекаоницу одмах иду овим током (да касније покушају поново, рецимо), уместо да буду изгубљени или да чекају пре задатка; овде се броје као изгубљени.
 	Entities give up waiting	Ентитети одустају од чекања
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Ентитети који су још унутра на крају репликације нису укључени у просјечно чекање и просјечно време у систему.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Ентитети који не уђу у ред одмах иду овим током (да касније покушају поново, рецимо), уместо да буду изгубљени; овде се броје као они који нису ушли у ред.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Ентитети који одустану од чекања иду овим током (да касније покушају поново, рецимо); остали иду другим излазом задатка.
 	Erlang	Ерланг
 	Error	Грешка
@@ -229,6 +235,7 @@
 	Inside over time	Унутра кроз време
 	Job under way on a server going off shift:	Посао у току на серверу којем завршава смена:
 	Job under way on a server taken out:	Посао у току на серверу избаченом из рада:
+	Joins with probability	Улази у ред са вероватноћом
 	Jump	Скочи
 	Jump to time	Скочи на време
 	Keep at least in service	Задржи у раду најмање
@@ -252,8 +259,10 @@
 	Maximum	Максимум
 	Mean	Средња вредност
 	Mean number inside	Просјечан број унутра
+	Number waiting	Број на чекању
 	One replication of {n}: the results of the others differ.	Једна репликација од {n}: резултати осталих се разликују.
 	Save as a new BPMN file?	Сачувати као нови BPMN фајл?
+	Share balked	Удео оних који нису ушли у ред
 	Still inside at the end	Још унутра на крају
 	Mean work in progress	Просјечна недовршена производња
 	Mean queue length	Просјечна дуљина реда
@@ -482,6 +491,7 @@
 	Stopped watching	Праћење заустављено
 	Sun	нед
 	Sweep a parameter	Пролаз кроз параметар
+	Table	Таблица
 	Table stripes	Пруге табела
 	Take servers out when overloaded	Избацивање преоптерећених сервера из рада
 	Takt	Такт

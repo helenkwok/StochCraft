@@ -15,6 +15,7 @@
 	% down and up	% nedåt och uppåt
 	% of replications	% av replikationerna
 	+ Add block	+ Lägg till block
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	95 %-intervall för andelen som når målet: {lo} till {hi}
 	95th percentile	95:e percentilen
 	95th percentile {value}	95:e percentilen {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Tillgänglig utanför kalendrar
 	BPMN with BPSim	BPMN med BPSim
 	Back to the model (Esc)	Tillbaka till modellen (Esc)
+	Balked	Ställde sig inte i kö
+	Balked on {id}	Ställde sig inte i kö på {id}
+	Balking	Avstå från kö
 	Batch	Parti
 	Batch (collect, then send together)	Parti (samla, skicka sedan tillsammans)
 	Batch size	Partistorlek
@@ -127,6 +131,7 @@
 	Constant	Konstant
 	Control outlines	Konturer för kontroller
 	Copy	Kopiera
+	Count those in service	Räkna med dem som betjänas
 	Counts against	Belastar
 	Customer demand	Kundefterfrågan
 	Cut	Klipp ut
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteter som finner väntrummet fullt tar genast detta flöde (för att försöka igen senare, till exempel) i stället för att gå förlorade eller vänta före uppgiften; de räknas här som förlorade.
 	Entities give up waiting	Entiteter ger upp väntan
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Enheter som fortfarande är inuti vid slutet av en replikation räknas inte med i genomsnittlig väntetid och genomsnittlig tid i systemet.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteter som inte ställer sig i kön tar genast detta flöde (för att försöka igen senare, till exempel) i stället för att gå förlorade; de räknas här som att de inte ställde sig i kö.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteter som ger upp väntan tar detta flöde (för att försöka igen senare, till exempel); de andra tar uppgiftens andra väg ut.
 	Erlang	Erlang
 	Error	Fel
@@ -229,6 +235,7 @@
 	Inside over time	Inne över tid
 	Job under way on a server going off shift:	Pågående jobb på en server som går av skift:
 	Job under way on a server taken out:	Pågående jobb på en server som tas ur drift:
+	Joins with probability	Ställer sig i kö med sannolikhet
 	Jump	Gå
 	Jump to time	Gå till tidpunkt
 	Keep at least in service	Behåll minst i drift
@@ -252,8 +259,10 @@
 	Maximum	Maximum
 	Mean	Medelvärde
 	Mean number inside	Genomsnittligt antal inuti
+	Number waiting	Antal väntande
 	One replication of {n}: the results of the others differ.	En replikation av {n}: de övrigas resultat skiljer sig.
 	Save as a new BPMN file?	Spara som ny BPMN-fil?
+	Share balked	Andel som inte ställde sig i kö
 	Still inside at the end	Fortfarande inuti vid slutet
 	Mean work in progress	Genomsnittligt antal produkter i arbete
 	Mean queue length	Genomsnittlig kölängd
@@ -482,6 +491,7 @@
 	Stopped watching	Slutade följa
 	Sun	sön
 	Sweep a parameter	Svep en parameter
+	Table	Tabell
 	Table stripes	Tabellränder
 	Take servers out when overloaded	Ta servrar ur drift vid överbelastning
 	Takt	Takt

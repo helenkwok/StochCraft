@@ -15,6 +15,7 @@
 	% down and up	% w dół i w górę
 	% of replications	% replikacji
 	+ Add block	+ Dodaj blok
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Przedział 95% udziału osiągającego cel: od {lo} do {hi}
 	95th percentile	95. percentyl
 	95th percentile {value}	95. percentyl {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Dostępne poza kalendarzami
 	BPMN with BPSim	BPMN z BPSim
 	Back to the model (Esc)	Powrót do modelu (Esc)
+	Balked	Nie dołączyły
+	Balked on {id}	Nie dołączyły na {id}
+	Balking	Niedołączanie do kolejki
 	Batch	Partia
 	Batch (collect, then send together)	Partia (zbierz, a potem wyślij razem)
 	Batch size	Wielkość partii
@@ -127,6 +131,7 @@
 	Constant	Stały
 	Control outlines	Kontury kontrolek
 	Copy	Kopiuj
+	Count those in service	Licz też obsługiwane
 	Counts against	Przypisane do
 	Customer demand	Popyt klientów
 	Cut	Wytnij
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Jednostki, które zastają pełną poczekalnię, od razu idą tym przepływem (na przykład, aby spróbować później ponownie), zamiast przepaść lub czekać przed zadaniem; tutaj liczą się jako utracone.
 	Entities give up waiting	Jednostki rezygnują z czekania
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Obiekty, które na końcu replikacji są wciąż wewnątrz, nie są wliczane do średniego czasu oczekiwania ani średniego czasu w systemie.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Jednostki, które nie dołączają do kolejki, od razu idą tym przepływem (na przykład, aby spróbować później ponownie), zamiast przepaść; tutaj liczą się jako niedołączone.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Jednostki, które rezygnują z czekania, idą tym przepływem (na przykład, aby spróbować później ponownie); pozostałe idą drugim wyjściem zadania.
 	Erlang	Rozkład Erlanga
 	Error	Błąd
@@ -229,6 +235,7 @@
 	Inside over time	Wewnątrz w czasie
 	Job under way on a server going off shift:	Praca w toku na serwerze kończącym zmianę:
 	Job under way on a server taken out:	Praca w toku na wyłączanym serwerze:
+	Joins with probability	Dołącza do kolejki z prawdopodobieństwem
 	Jump	Przejdź
 	Jump to time	Przejdź do chwili
 	Keep at least in service	Co najmniej czynnych
@@ -252,8 +259,10 @@
 	Maximum	Maksimum
 	Mean	Średnia
 	Mean number inside	Średnia liczba wewnątrz
+	Number waiting	Liczba oczekujących
 	One replication of {n}: the results of the others differ.	Jedna replikacja z {n}: wyniki pozostałych są inne.
 	Save as a new BPMN file?	Zapisać jako nowy plik BPMN?
+	Share balked	Odsetek niedołączeń
 	Still inside at the end	Wciąż wewnątrz na końcu
 	Mean work in progress	Średnia produkcja w toku
 	Mean queue length	Średnia długość kolejki
@@ -482,6 +491,7 @@
 	Stopped watching	Zakończono obserwację
 	Sun	niedz
 	Sweep a parameter	Przegląd parametru
+	Table	Tabela
 	Table stripes	Pasy tabel
 	Take servers out when overloaded	Wyłączanie przeciążonych serwerów
 	Takt	Takt

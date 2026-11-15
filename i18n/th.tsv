@@ -15,6 +15,7 @@
 	% down and up	% ลงและขึ้น
 	% of replications	% ของรอบการจำลองซ้ำ
 	+ Add block	+ เพิ่มบล็อก
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	ช่วง 95% ของสัดส่วนที่บรรลุเป้าหมาย: จาก {lo} ถึง {hi}
 	95th percentile	เปอร์เซ็นไทล์ที่ 95
 	95th percentile {value}	เปอร์เซ็นไทล์ที่ 95 {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	พร้อมใช้งานนอกปฏิทิน
 	BPMN with BPSim	BPMN พร้อม BPSim
 	Back to the model (Esc)	กลับไปยังแบบจำลอง (Esc)
+	Balked	ไม่เข้าคิว
+	Balked on {id}	ไม่เข้าคิวที่ {id}
+	Balking	การไม่เข้าคิว
 	Batch	ชุด
 	Batch (collect, then send together)	ชุด (รวบรวม แล้วส่งไปพร้อมกัน)
 	Batch size	ขนาดชุด
@@ -127,6 +131,7 @@
 	Constant	ค่าคงที่
 	Control outlines	เส้นขอบของตัวควบคุม
 	Copy	คัดลอก
+	Count those in service	นับรวมที่กำลังรับบริการ
 	Counts against	นับเข้างาน
 	Customer demand	ความต้องการของลูกค้า
 	Cut	ตัด
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	เอนทิตีที่พบว่าพื้นที่รอเต็มจะไปตามโฟลว์นี้ทันที (เช่น เพื่อลองใหม่ภายหลัง) แทนที่จะสูญเสียหรือรอก่อนถึงงาน ที่นี่นับเป็นการสูญเสีย
 	Entities give up waiting	เอนทิตีเลิกรอ
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	สิ่งที่ยังอยู่ภายในเมื่อรอบการจำลองซ้ำสิ้นสุด ไม่ถูกนับในเวลารอเฉลี่ยและเวลาเฉลี่ยในระบบ
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	เอนทิตีที่ไม่เข้าคิวจะไปตามโฟลว์นี้ทันที (เช่น เพื่อลองใหม่ภายหลัง) แทนที่จะสูญเสีย ที่นี่นับเป็นการไม่เข้าคิว
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	เอนทิตีที่เลิกรอจะไปตามโฟลว์นี้ (เช่น เพื่อลองใหม่ภายหลัง) ส่วนที่เหลือไปทางออกอื่นของงาน
 	Erlang	เออร์แลง
 	Error	ข้อผิดพลาด
@@ -229,6 +235,7 @@
 	Inside over time	จำนวนภายในตามเวลา
 	Job under way on a server going off shift:	งานที่กำลังทำบนเซิร์ฟเวอร์ที่กำลังออกกะ:
 	Job under way on a server taken out:	งานที่กำลังทำบนเซิร์ฟเวอร์ที่ถูกนำออก:
+	Joins with probability	ความน่าจะเป็นที่เข้าคิว
 	Jump	ข้าม
 	Jump to time	ข้ามไปยังเวลา
 	Keep at least in service	คงไว้ในการใช้งานอย่างน้อย
@@ -252,8 +259,10 @@
 	Maximum	ค่าสูงสุด
 	Mean	ค่าเฉลี่ย
 	Mean number inside	จำนวนเฉลี่ยภายใน
+	Number waiting	จำนวนที่รอ
 	One replication of {n}: the results of the others differ.	หนึ่งรอบการจำลองซ้ำจาก {n}: ผลของรอบอื่นแตกต่างกัน
 	Save as a new BPMN file?	บันทึกเป็นไฟล์ BPMN ใหม่หรือไม่?
+	Share balked	สัดส่วนที่ไม่เข้าคิว
 	Still inside at the end	ยังอยู่ภายในเมื่อสิ้นสุด
 	Mean work in progress	งานระหว่างทำเฉลี่ย
 	Mean queue length	ความยาวคิวเฉลี่ย
@@ -482,6 +491,7 @@
 	Stopped watching	หยุดเฝ้าดูแล้ว
 	Sun	อา.
 	Sweep a parameter	กวาดพารามิเตอร์
+	Table	ตาราง
 	Table stripes	แถบสลับสีของตาราง
 	Take servers out when overloaded	นำเซิร์ฟเวอร์ที่โหลดเกินออกจากการใช้งาน
 	Takt	แท็กไทม์

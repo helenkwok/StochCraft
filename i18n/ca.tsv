@@ -15,6 +15,7 @@
 	% down and up	% avall i amunt
 	% of replications	% de les rèpliques
 	+ Add block	+ Afegeix un bloc
+	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Interval del 95% de la proporció que compleix l'objectiu: de {lo} a {hi}
 	95th percentile	Percentil 95
 	95th percentile {value}	percentil 95 {value}
@@ -68,6 +69,9 @@
 	Available outside calendars	Disponible fora dels calendaris
 	BPMN with BPSim	BPMN amb BPSim
 	Back to the model (Esc)	Torna al model (Esc)
+	Balked	No s'hi han afegit
+	Balked on {id}	No s'hi han afegit a {id}
+	Balking	No afegir-se a la cua
 	Batch	Lot
 	Batch (collect, then send together)	Lot (aplega i envia junts)
 	Batch size	Mida del lot
@@ -127,6 +131,7 @@
 	Constant	Constant
 	Control outlines	Contorns dels controls
 	Copy	Copia
+	Count those in service	Comptar també les que són en servei
 	Counts against	S'imputa a
 	Customer demand	Demanda del client
 	Cut	Retalla
@@ -175,6 +180,7 @@
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Les entitats que troben la sala d'espera plena prenen aquest flux de seguida (per tornar-ho a provar més tard, per exemple), en lloc de perdre's o d'esperar abans de la tasca; aquí compten com a perdudes.
 	Entities give up waiting	Les entitats abandonen l'espera
 	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Les entitats encara a dins al final d'una rèplica no es tenen en compte en l'espera mitjana ni en el temps mitjà al sistema.
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Les entitats que no s'afegeixen a la cua prenen aquest flux de seguida (per tornar-ho a provar més tard, per exemple), en lloc de perdre's; aquí compten com a no afegides a la cua.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Les entitats que abandonen l'espera prenen aquest flux (per tornar-ho a provar més tard, per exemple); les altres prenen l'altra sortida de la tasca.
 	Erlang	Erlang
 	Error	Error
@@ -229,6 +235,7 @@
 	Inside over time	A dins al llarg del temps
 	Job under way on a server going off shift:	Feina en curs en un servidor que acaba el torn:
 	Job under way on a server taken out:	Feina en curs en un servidor retirat:
+	Joins with probability	S'afegeix a la cua amb probabilitat
 	Jump	Ves-hi
 	Jump to time	Ves a l'instant
 	Keep at least in service	Mantenir en servei com a mínim
@@ -252,8 +259,10 @@
 	Maximum	Màxim
 	Mean	Mitjana
 	Mean number inside	Nombre mitjà a dins
+	Number waiting	Nombre en espera
 	One replication of {n}: the results of the others differ.	Una rèplica de {n}: els resultats de les altres són diferents.
 	Save as a new BPMN file?	Vols desar-ho com a fitxer BPMN nou?
+	Share balked	Proporció que no s'hi ha afegit
 	Still inside at the end	Encara a dins al final
 	Mean work in progress	Treball en curs mitjà
 	Mean queue length	Longitud mitjana de la cua
@@ -482,6 +491,7 @@
 	Stopped watching	S'ha deixat d'observar
 	Sun	dg.
 	Sweep a parameter	Escombrar un paràmetre
+	Table	Taula
 	Table stripes	Franges de taula
 	Take servers out when overloaded	Retirar els servidors sobrecarregats
 	Takt	Takt
