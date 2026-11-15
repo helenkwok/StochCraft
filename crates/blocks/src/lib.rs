@@ -36,8 +36,10 @@
 //! ```
 
 mod runtime;
+pub mod series;
 
 pub use runtime::{Live, LiveState};
+pub use series::{Quantity, Recording, Series, record_interval, summarise_series};
 
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -186,6 +188,8 @@ pub struct Compiled {
     first_arrival_at_zero: bool,
     /// See [`Compiled::max_events_at_one_time`].
     max_events_at_one_time: u64,
+    /// See [`Compiled::record_every`].
+    record: Option<f64>,
 }
 
 /// The most events a replication may process at one simulated time before it stops with
@@ -440,6 +444,7 @@ pub fn compile(model: &Model) -> Result<Compiled, Vec<Diagnostic>> {
         assigns,
         first_arrival_at_zero: false,
         max_events_at_one_time: MAX_EVENTS_AT_ONE_TIME,
+        record: None,
     })
 }
 
@@ -463,6 +468,20 @@ impl Compiled {
     pub fn max_events_at_one_time(mut self, events: u64) -> Self {
         self.max_events_at_one_time = events.max(1);
         self
+    }
+
+    /// Records each element's state at time 0 and every `interval` after it in every
+    /// replication, into [`Report::recording`] (see [`series`]; [`record_interval`] gives the
+    /// interval the experiment asks for). `None`, the default, records nothing. Recording
+    /// changes no event, draw or result.
+    pub fn record_every(mut self, interval: Option<f64>) -> Self {
+        self.record = interval.filter(|i| i.is_finite() && *i > 0.0);
+        self
+    }
+
+    /// The interval set by [`Compiled::record_every`].
+    pub fn recorded_every(&self) -> Option<f64> {
+        self.record
     }
 
     /// The names of the properties entities can carry, in slot order.
@@ -895,6 +914,8 @@ pub struct Report {
     /// the warm-up ended, when they come from the warm-up alone and [`summarise`] leaves them
     /// out.
     pub after_warmup: bool,
+    /// The values recorded at fixed times, when asked for ([`Compiled::record_every`]).
+    pub recording: Option<Recording>,
 }
 
 impl Report {
@@ -951,6 +972,8 @@ pub struct ExperimentSummary {
     pub stop_times: Vec<Option<f64>>,
     /// What each replication measured, in replication order.
     pub measured: Vec<Measured>,
+    /// Results over time, when the replications recorded them ([`Compiled::record_every`]).
+    pub series: Option<Series>,
 }
 
 /// The span one replication's statistics cover, and whether they are used.
@@ -1055,6 +1078,7 @@ pub fn summarise(reports: &[Report]) -> ExperimentSummary {
                 used: r.after_warmup,
             })
             .collect(),
+        series: summarise_series(reports),
     }
 }
 
@@ -1096,8 +1120,40 @@ pub const BACKLOG_SHARE: f64 = 0.05;
 ///   so it never counts entities in service. Only servers with an unlimited queue are judged: a
 ///   finite buffer loses arrivals instead of growing, and tasks with shared resources report no
 ///   utilisation of their own.
+/// - A run with one replication ([`stochcraft_model::Problem::OneReplication`]).
+/// - A run with no stop condition and no warm-up whose replications recorded results over time
+///   ([`Compiled::record_every`]), in which MSER-5 finds a start-up at some task that moves its
+///   mean number inside by more than chance ([`stochcraft_model::Problem::NoWarmup`]; see
+///   [`series::WarmupSuggestion`]): the latest such task's.
 pub fn run_warnings(model: &Model, summary: &ExperimentSummary) -> Vec<Diagnostic> {
     let mut out = Vec::new();
+    if summary.replications == 1 {
+        out.push(Diagnostic {
+            severity: Severity::Warning,
+            at: None,
+            problem: Problem::OneReplication,
+        });
+    }
+    let x = &model.experiment;
+    let suggested = summary.series.as_ref().and_then(|s| s.warmup.as_ref());
+    if let Some(w) = suggested.filter(|_| x.stop.is_none() && x.warmup <= 0.0) {
+        // The latest start-up that matters; one too long to place counts as the latest.
+        let worst = w.elements.iter().filter(|e| e.matters()).max_by(|a, b| {
+            let t = |e: &series::ElementWarmup| e.warmup.unwrap_or(f64::INFINITY);
+            t(a).total_cmp(&t(b))
+        });
+        if let Some(e) = worst {
+            out.push(Diagnostic {
+                severity: Severity::Warning,
+                at: Some(e.id.clone()),
+                problem: Problem::NoWarmup {
+                    warmup: e.warmup,
+                    shift: e.shift.map_or(0.0, |s| s.mean),
+                    unit: x.time_unit.bpsim_name(),
+                },
+            });
+        }
+    }
     let unused = summary.measured.iter().filter(|m| !m.used).count() as u64;
     if unused > 0 {
         out.push(Diagnostic {

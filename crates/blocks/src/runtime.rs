@@ -19,6 +19,7 @@ use stochcraft_model::{
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
 
+use crate::series::{Quantity, Recording};
 use crate::{Assign, Compiled, ElementReport, Entity, Held, Report, Route, RunError, Source};
 
 /// What an element assigns to entities as they enter, and the stream it draws values from.
@@ -615,6 +616,16 @@ impl Compiled {
             stopped_at: None,
             reset_at,
             watching: Watching::new(0.0),
+            recording: self.record.map(|interval| Recording {
+                interval,
+                times: Vec::new(),
+                elements: elements
+                    .iter()
+                    .map(|e| Quantity::of_kind(&e.kind))
+                    .chain(self.model.resources.iter().map(|_| Quantity::POOL))
+                    .map(|qs| qs.iter().map(|q| (*q, Vec::new())).collect())
+                    .collect(),
+            }),
         }
     }
 
@@ -668,6 +679,9 @@ pub struct Live<'a> {
     /// How far the simulation has got, kept between advances so that a run in slices
     /// ([`Live::advance_by`]) counts the events at one time across them.
     watching: Watching,
+    /// The values recorded so far, when the compiled model records them
+    /// ([`Compiled::record_every`]).
+    recording: Option<Recording>,
 }
 
 /// A block's state at one moment of a [`Live`] run. Counts are since the warm-up ended (since
@@ -784,6 +798,11 @@ impl Live<'_> {
     /// Runs the events up to `until` (at most the end), at most `budget` of them; returns
     /// whether it got to `until` (false: the budget ran out first, and the next call carries on
     /// exactly where this one stopped).
+    ///
+    /// When recording, it stops at each time to record at (once every event at that time has
+    /// run, so a budget that runs out at that time leaves the record to the next call) and reads
+    /// the blocks' state there. Stopping the clock between events changes none of them: the
+    /// events and their order are those of one advance (as for a run in slices).
     fn advance_watched(
         &mut self,
         until: f64,
@@ -798,6 +817,79 @@ impl Live<'_> {
         if until < self.now() {
             return Ok(true);
         }
+        if self.recording.is_none() {
+            return self.advance_events(until, cancelled, budget);
+        }
+        let mut left = budget;
+        loop {
+            let to = until.min(self.end);
+            let next = self.next_record_time();
+            let target = match next {
+                Some(t) if t <= to => t,
+                _ => to,
+            };
+            let before = self.watching.events();
+            if !self.advance_events(target, cancelled, left)? {
+                return Ok(false);
+            }
+            left = left.saturating_sub(self.watching.events().saturating_sub(before));
+            // Not when the stop condition ended the run before the time to record at.
+            if next == Some(target) && target <= self.end {
+                self.record(target);
+                continue;
+            }
+            return Ok(true);
+        }
+    }
+
+    /// The next time to record at, if the run has not ended before it.
+    fn next_record_time(&self) -> Option<f64> {
+        let r = self.recording.as_ref()?;
+        let t = r.times.len() as f64 * r.interval;
+        // The last interval can overshoot the end by a rounding error: it is the end.
+        let t = if t > self.end && t - self.end <= 1e-9 * self.end.abs().max(1.0) {
+            self.end
+        } else {
+            t
+        };
+        (t <= self.end).then_some(t)
+    }
+
+    /// Records the state of every element and pool at time `t` (now).
+    fn record(&mut self, t: f64) {
+        let pools = self.pools.states(&self.compiled.model.resources);
+        let Some(r) = self.recording.as_mut() else {
+            return;
+        };
+        r.times.push(t);
+        let n = self.stats.len();
+        for (i, quantities) in r.elements.iter_mut().enumerate() {
+            let element = self.stats.get(i).map(RefCell::borrow);
+            let pool = i.checked_sub(n).and_then(|p| pools.get(p));
+            for (q, values) in quantities.iter_mut() {
+                let v = match (&element, pool) {
+                    (Some(s), _) => match q {
+                        Quantity::QueueLength => s.waiting.value(),
+                        Quantity::WorkInProgress => s.inside() as f64,
+                        Quantity::Busy => s.busy.value(),
+                        Quantity::Entered => (s.entered_before + s.entered) as f64,
+                        Quantity::Left => (s.left_before + s.left) as f64,
+                    },
+                    (None, Some(p)) => p.busy,
+                    (None, None) => f64::NAN,
+                };
+                values.push(v);
+            }
+        }
+    }
+
+    /// [`Live::advance_watched`] without recording.
+    fn advance_events(
+        &mut self,
+        until: f64,
+        cancelled: &dyn Fn() -> bool,
+        budget: u64,
+    ) -> Result<bool, RunError> {
         let watch = Watch {
             max_events_at_one_time: self.compiled.max_events_at_one_time,
             cancelled,
@@ -956,6 +1048,7 @@ impl Live<'_> {
             measured_from: after_warmup.unwrap_or(0.0),
             measured_to: now,
             after_warmup: after_warmup.is_some(),
+            recording: self.recording.clone(),
         }
     }
 }
