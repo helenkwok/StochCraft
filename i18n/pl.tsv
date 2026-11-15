@@ -100,6 +100,7 @@
 	Change	Zmiana
 	Change Block	Zmień blok
 	Change Calendar	Zmień kalendarz
+	Change Estimate	Zmień szacunek
 	Change Flow	Zmień przepływ
 	Change Pool	Zmień pulę
 	Change the estimate	Zmień szacunek
@@ -360,6 +361,7 @@
 	Remove	Usuń
 	Remove Block	Usuń blok
 	Remove Calendar	Usuń kalendarz
+	Remove Estimate	Usuń szacunek
 	Remove Pool	Usuń pulę
 	Remove Property	Usuń właściwość
 	Remove alternative {n}	Usuń alternatywę {n}
@@ -448,6 +450,7 @@
 	Show {id}	Pokaż {id}
 	Side rail	Pasek boczny
 	Size	Dobierz
+	Size Resources	Dobierz zasoby
 	Size of the waiting room:	Rozmiar poczekalni:
 	Size the resources	Dobierz zasoby
 	Soft accent	Łagodny akcent

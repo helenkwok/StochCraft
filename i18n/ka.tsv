@@ -100,6 +100,7 @@
 	Change	ცვლილება
 	Change Block	ბლოკის შეცვლა
 	Change Calendar	კალენდრის შეცვლა
+	Change Estimate	შეფასების შეცვლა
 	Change Flow	ნაკადის შეცვლა
 	Change Pool	პულის შეცვლა
 	Change the estimate	შეფასების შეცვლა
@@ -360,6 +361,7 @@
 	Remove	წაშლა
 	Remove Block	ბლოკის წაშლა
 	Remove Calendar	კალენდრის წაშლა
+	Remove Estimate	შეფასების წაშლა
 	Remove Pool	პულის წაშლა
 	Remove Property	თვისების წაშლა
 	Remove alternative {n}	ალტერნატივა {n}-ის წაშლა
@@ -448,6 +450,7 @@
 	Show {id}	{id}-ის ჩვენება
 	Side rail	გვერდითი ზოლი
 	Size	ზომის შერჩევა
+	Size Resources	რესურსების ზომის შერჩევა
 	Size of the waiting room:	მოსაცდელი სივრცის ზომა:
 	Size the resources	რესურსების ზომის შერჩევა
 	Soft accent	რბილი აქცენტი

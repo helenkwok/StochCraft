@@ -100,6 +100,7 @@
 	Change	變化
 	Change Block	變更區塊
 	Change Calendar	變更行事曆
+	Change Estimate	變更估計
 	Change Flow	變更順序流
 	Change Pool	變更資源池
 	Change the estimate	變更估計
@@ -360,6 +361,7 @@
 	Remove	移除
 	Remove Block	移除區塊
 	Remove Calendar	移除行事曆
+	Remove Estimate	移除估計
 	Remove Pool	移除資源池
 	Remove Property	移除屬性
 	Remove alternative {n}	移除替代方案 {n}
@@ -448,6 +450,7 @@
 	Show {id}	顯示 {id}
 	Side rail	側邊欄
 	Size	決定規模
+	Size Resources	決定資源規模
 	Size of the waiting room:	等待區大小：
 	Size the resources	決定資源規模
 	Soft accent	柔和強調色

@@ -100,6 +100,7 @@
 	Change	Промена
 	Change Block	Промени блок
 	Change Calendar	Промени календар
+	Change Estimate	Промени процену
 	Change Flow	Промени ток
 	Change Pool	Промени фонд
 	Change the estimate	Промени процену
@@ -360,6 +361,7 @@
 	Remove	Уклони
 	Remove Block	Уклони блок
 	Remove Calendar	Уклони календар
+	Remove Estimate	Уклони процену
 	Remove Pool	Уклони фонд
 	Remove Property	Уклони својство
 	Remove alternative {n}	Уклони алтернативу {n}
@@ -448,6 +450,7 @@
 	Show {id}	Прикажи {id}
 	Side rail	Бочна трака
 	Size	Димензиониши
+	Size Resources	Димензиониши ресурсе
 	Size of the waiting room:	Величина чекаонице:
 	Size the resources	Димензиониши ресурсе
 	Soft accent	Благи акценат

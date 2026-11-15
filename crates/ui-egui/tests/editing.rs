@@ -462,6 +462,28 @@ fn results_are_written_as_the_users_region_writes_numbers() {
 }
 
 #[test]
+fn a_pools_roles_can_be_cleared() {
+    let mut h = mm1();
+    click(&mut h, Role::Button, "Add pool");
+    type_into(&mut h, "Roles", "agent");
+    assert_eq!(model(&h)["resources"][0]["roles"], json!(["agent"]));
+    // Clear the field and press Enter: empty is a valid list of roles (the pool plays none).
+    h.get_by_role_and_label(Role::TextInput, "Roles").click();
+    settle(&mut h);
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
+    h.key_press(egui::Key::Backspace);
+    settle(&mut h);
+    h.key_press(egui::Key::Enter);
+    settle(&mut h);
+    // An empty list is left out of the file.
+    assert!(
+        model(&h)["resources"][0]["roles"]
+            .as_array()
+            .is_none_or(Vec::is_empty)
+    );
+}
+
+#[test]
 fn pools_are_added_and_a_shared_task_needs_them_by_pool_or_role() {
     let mut h = mm1();
     // The overview: add a pool, give it 3 units and a role.

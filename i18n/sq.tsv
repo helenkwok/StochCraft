@@ -100,6 +100,7 @@
 	Change	Ndryshimi
 	Change Block	Ndrysho bllokun
 	Change Calendar	Ndrysho kalendarin
+	Change Estimate	Ndrysho vlerësimin
 	Change Flow	Ndrysho rrjedhën
 	Change Pool	Ndrysho grupin
 	Change the estimate	Ndrysho vlerësimin
@@ -360,6 +361,7 @@
 	Remove	Hiq
 	Remove Block	Hiq bllokun
 	Remove Calendar	Hiq kalendarin
+	Remove Estimate	Hiq vlerësimin
 	Remove Pool	Hiq grupin
 	Remove Property	Hiq vetinë
 	Remove alternative {n}	Hiq alternativën {n}
@@ -448,6 +450,7 @@
 	Show {id}	Shfaq {id}
 	Side rail	Shirit anësor
 	Size	Përmaso
+	Size Resources	Përmaso burimet
 	Size of the waiting room:	Madhësia e dhomës së pritjes:
 	Size the resources	Përmaso burimet
 	Soft accent	Theks i butë

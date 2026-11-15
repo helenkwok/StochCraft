@@ -100,6 +100,7 @@
 	Change	ການປ່ຽນແປງ
 	Change Block	ປ່ຽນບລັອກ
 	Change Calendar	ປ່ຽນປະຕິທິນ
+	Change Estimate	ປ່ຽນການປະມານ
 	Change Flow	ປ່ຽນເສັ້ນທາງ
 	Change Pool	ປ່ຽນກຸ່ມຊັບພະຍາກອນ
 	Change the estimate	ປ່ຽນການປະມານ
@@ -360,6 +361,7 @@
 	Remove	ລຶບ
 	Remove Block	ລຶບບລັອກ
 	Remove Calendar	ລຶບປະຕິທິນ
+	Remove Estimate	ລຶບການປະມານ
 	Remove Pool	ລຶບກຸ່ມຊັບພະຍາກອນ
 	Remove Property	ລຶບຄຸນສົມບັດ
 	Remove alternative {n}	ລຶບທາງເລືອກ {n}
@@ -448,6 +450,7 @@
 	Show {id}	ສະແດງ {id}
 	Side rail	ແຖບຂ້າງ
 	Size	ກຳນົດຂະໜາດ
+	Size Resources	ກຳນົດຂະໜາດຊັບພະຍາກອນ
 	Size of the waiting room:	ຂະໜາດຂອງຫ້ອງລໍຖ້າ:
 	Size the resources	ກຳນົດຂະໜາດຊັບພະຍາກອນ
 	Soft accent	ສີເນັ້ນອ່ອນ

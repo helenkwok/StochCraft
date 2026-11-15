@@ -100,6 +100,7 @@
 	Change	Változtatás
 	Change Block	Blokk módosítása
 	Change Calendar	Naptár módosítása
+	Change Estimate	Becslés módosítása
 	Change Flow	Folyamat módosítása
 	Change Pool	Készlet módosítása
 	Change the estimate	Becslés módosítása
@@ -360,6 +361,7 @@
 	Remove	Eltávolítás
 	Remove Block	Blokk eltávolítása
 	Remove Calendar	Naptár eltávolítása
+	Remove Estimate	Becslés eltávolítása
 	Remove Pool	Készlet eltávolítása
 	Remove Property	Tulajdonság eltávolítása
 	Remove alternative {n}	{n}. alternatíva eltávolítása
@@ -448,6 +450,7 @@
 	Show {id}	{id} megjelenítése
 	Side rail	Oldalsáv
 	Size	Méretezés
+	Size Resources	Erőforrások méretezése
 	Size of the waiting room:	A várakozóhely mérete:
 	Size the resources	Erőforrások méretezése
 	Soft accent	Lágy kiemelőszín

@@ -100,6 +100,7 @@
 	Change	மாற்றம்
 	Change Block	தொகுதியை மாற்று
 	Change Calendar	நாட்காட்டியை மாற்று
+	Change Estimate	மதிப்பீட்டை மாற்று
 	Change Flow	ஓட்டத்தை மாற்று
 	Change Pool	தொகுப்பை மாற்று
 	Change the estimate	மதிப்பீட்டை மாற்று
@@ -360,6 +361,7 @@
 	Remove	அகற்று
 	Remove Block	தொகுதியை அகற்று
 	Remove Calendar	நாட்காட்டியை அகற்று
+	Remove Estimate	மதிப்பீட்டை அகற்று
 	Remove Pool	தொகுப்பை அகற்று
 	Remove Property	பண்பை அகற்று
 	Remove alternative {n}	மாற்றுத் தேர்வு {n} ஐ அகற்று
@@ -448,6 +450,7 @@
 	Show {id}	{id} ஐக் காட்டு
 	Side rail	பக்கப் பட்டை
 	Size	அளவிடு
+	Size Resources	வளங்களை அளவிடு
 	Size of the waiting room:	காத்திருப்பு அறையின் அளவு:
 	Size the resources	வளங்களை அளவிடு
 	Soft accent	மென் முனைப்பு நிறம்

@@ -100,6 +100,7 @@
 	Change	Variazione
 	Change Block	Modifica blocco
 	Change Calendar	Modifica calendario
+	Change Estimate	Modifica stima
 	Change Flow	Modifica flusso
 	Change Pool	Modifica pool
 	Change the estimate	Modifica la stima
@@ -360,6 +361,7 @@
 	Remove	Rimuovi
 	Remove Block	Rimuovi blocco
 	Remove Calendar	Rimuovi calendario
+	Remove Estimate	Rimuovi stima
 	Remove Pool	Rimuovi pool
 	Remove Property	Rimuovi proprietà
 	Remove alternative {n}	Rimuovi alternativa {n}
@@ -448,6 +450,7 @@
 	Show {id}	Mostra {id}
 	Side rail	Barra laterale
 	Size	Dimensiona
+	Size Resources	Dimensiona risorse
 	Size of the waiting room:	Dimensione della sala d'attesa:
 	Size the resources	Dimensiona le risorse
 	Soft accent	Accento tenue

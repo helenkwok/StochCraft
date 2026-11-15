@@ -100,6 +100,7 @@
 	Change	การเปลี่ยนแปลง
 	Change Block	เปลี่ยนบล็อก
 	Change Calendar	เปลี่ยนปฏิทิน
+	Change Estimate	เปลี่ยนการประมาณ
 	Change Flow	เปลี่ยนโฟลว์
 	Change Pool	เปลี่ยนกลุ่มทรัพยากร
 	Change the estimate	เปลี่ยนการประมาณ
@@ -360,6 +361,7 @@
 	Remove	นำออก
 	Remove Block	นำบล็อกออก
 	Remove Calendar	นำปฏิทินออก
+	Remove Estimate	นำการประมาณออก
 	Remove Pool	นำกลุ่มทรัพยากรออก
 	Remove Property	นำคุณสมบัติออก
 	Remove alternative {n}	นำทางเลือก {n} ออก
@@ -448,6 +450,7 @@
 	Show {id}	แสดง {id}
 	Side rail	แถบด้านข้าง
 	Size	กำหนดขนาด
+	Size Resources	กำหนดขนาดทรัพยากร
 	Size of the waiting room:	ขนาดของพื้นที่รอ:
 	Size the resources	กำหนดขนาดทรัพยากร
 	Soft accent	สีเน้นอ่อน

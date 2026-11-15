@@ -100,6 +100,7 @@
 	Change	మార్పు
 	Change Block	బ్లాక్‌ను మార్చు
 	Change Calendar	క్యాలెండర్‌ను మార్చు
+	Change Estimate	అంచనాను మార్చు
 	Change Flow	ప్రవాహాన్ని మార్చు
 	Change Pool	పూల్‌ను మార్చు
 	Change the estimate	అంచనాను మార్చు
@@ -360,6 +361,7 @@
 	Remove	తొలగించు
 	Remove Block	బ్లాక్‌ను తొలగించు
 	Remove Calendar	క్యాలెండర్‌ను తొలగించు
+	Remove Estimate	అంచనాను తొలగించు
 	Remove Pool	పూల్‌ను తొలగించు
 	Remove Property	లక్షణాన్ని తొలగించు
 	Remove alternative {n}	ప్రత్యామ్నాయం {n} ను తొలగించు
@@ -448,6 +450,7 @@
 	Show {id}	{id} చూపించు
 	Side rail	పక్క బార్
 	Size	పరిమాణం నిర్ణయించు
+	Size Resources	వనరుల పరిమాణం నిర్ణయించు
 	Size of the waiting room:	వేచి ఉండే గది పరిమాణం:
 	Size the resources	వనరుల పరిమాణం నిర్ణయించు
 	Soft accent	మృదువైన యాక్సెంట్ రంగు

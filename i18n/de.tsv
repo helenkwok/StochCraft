@@ -100,6 +100,7 @@
 	Change	Änderung
 	Change Block	Block ändern
 	Change Calendar	Kalender ändern
+	Change Estimate	Schätzung ändern
 	Change Flow	Verbindung ändern
 	Change Pool	Pool ändern
 	Change the estimate	Schätzung ändern
@@ -360,6 +361,7 @@
 	Remove	Entfernen
 	Remove Block	Block entfernen
 	Remove Calendar	Kalender entfernen
+	Remove Estimate	Schätzung entfernen
 	Remove Pool	Pool entfernen
 	Remove Property	Eigenschaft entfernen
 	Remove alternative {n}	Alternative {n} entfernen
@@ -448,6 +450,7 @@
 	Show {id}	{id} anzeigen
 	Side rail	Seitenleiste
 	Size	Bemessen
+	Size Resources	Ressourcen bemessen
 	Size of the waiting room:	Größe des Warteraums:
 	Size the resources	Ressourcen bemessen
 	Soft accent	Dezenter Akzent

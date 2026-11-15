@@ -100,6 +100,7 @@
 	Change	Modificare
 	Change Block	Modifică blocul
 	Change Calendar	Modifică calendarul
+	Change Estimate	Modifică estimarea
 	Change Flow	Modifică fluxul
 	Change Pool	Modifică grupul
 	Change the estimate	Modifică estimarea
@@ -360,6 +361,7 @@
 	Remove	Elimină
 	Remove Block	Elimină blocul
 	Remove Calendar	Elimină calendarul
+	Remove Estimate	Elimină estimarea
 	Remove Pool	Elimină grupul
 	Remove Property	Elimină proprietatea
 	Remove alternative {n}	Elimină alternativa {n}
@@ -448,6 +450,7 @@
 	Show {id}	Afișează {id}
 	Side rail	Bară laterală
 	Size	Dimensionează
+	Size Resources	Dimensionează resursele
 	Size of the waiting room:	Mărimea sălii de așteptare:
 	Size the resources	Dimensionează resursele
 	Soft accent	Accent discret

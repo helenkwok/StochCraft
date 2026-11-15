@@ -100,6 +100,7 @@
 	Change	Promjena
 	Change Block	Promijeni blok
 	Change Calendar	Promijeni kalendar
+	Change Estimate	Promijeni procjenu
 	Change Flow	Promijeni tok
 	Change Pool	Promijeni fond
 	Change the estimate	Promijeni procjenu
@@ -360,6 +361,7 @@
 	Remove	Ukloni
 	Remove Block	Ukloni blok
 	Remove Calendar	Ukloni kalendar
+	Remove Estimate	Ukloni procjenu
 	Remove Pool	Ukloni fond
 	Remove Property	Ukloni svojstvo
 	Remove alternative {n}	Ukloni alternativu {n}
@@ -448,6 +450,7 @@
 	Show {id}	Prikaži {id}
 	Side rail	Bočna traka
 	Size	Dimenzioniraj
+	Size Resources	Dimenzioniraj resurse
 	Size of the waiting room:	Veličina čekaonice:
 	Size the resources	Dimenzioniraj resurse
 	Soft accent	Blagi akcent
