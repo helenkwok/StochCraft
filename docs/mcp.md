@@ -162,6 +162,16 @@ the target; `confidence`, its name before #69, is still accepted, and the answer
 The share is not a statistical confidence: the answer's `stochastic.interval` is its Wilson 95%
 interval, and when its lower end is below `target_share` the share is not shown to be met.
 
+`experiment.design` varies several parameters at once. Each factor is a parameter as a sweep
+takes it (`{id, field}`) with its `levels`, or its range as `min` and `max`. The default design,
+`full_factorial`, runs every combination of the levels (the last factor changing fastest);
+`latin_hypercube` with `points` samples each range in that many strata, the same design for the
+same seed. Every point runs the same replications on the same seed, so a full factorial's
+`main_effects` and two-way `interactions` (between factors with two levels) come with paired 95%
+intervals, and a Latin hypercube's `correlations` give each factor's rank (Spearman) correlation
+with each result. A design of more than 10,000 runs (points × replications) is refused with the
+number it would take, so an agent can drop levels, points or replications and try again.
+
 `crates/mcp/tests/session.rs` covers four areas:
 - a session like this one, checked only through MCP;
 - malformed messages, oversized lines and batches, and arguments that do not match the schema;
