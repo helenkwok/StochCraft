@@ -3,9 +3,11 @@
 Where StochCraft is going next and in what order. Five milestones: **M1** model files, the
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
 desktop app (and the browser app built from it); **M4** system dynamics and hybrid models; **M5**
-transport and layout. M1 and M3 are done, M2 has three parts left (M2.9, M2.10, M2.11), and M4
-and M5 are being planned. Each milestone is a series of pull requests small enough to review in one sitting;
-every one keeps `cargo xtask ci` green.
+transport and layout. M1 and M3 are done. M2.1–M2.8 are done, and so is M2.10 (abandonment)
+apart from the gaps listed in it. M2.11 (changeovers and lean measures) has its changeovers,
+product-type times and most of OEE done; M2.9 (output analysis) has only the checks it already
+had. M4 and M5 are being planned. Each milestone is a series of pull requests small enough to
+review in one sitting; every one keeps `cargo xtask ci` green.
 
 Decisions still open are marked **Decision** with a recommendation; the rest follows the
 patterns of the sibling Craft apps (FieldCraft, CADCraft, SolidCraft). The published work behind

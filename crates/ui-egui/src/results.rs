@@ -109,7 +109,7 @@ pub(crate) fn metric_label<'a>(name: &'a str, kind: &str) -> &'a str {
     metric(name, kind).0
 }
 
-fn kind_label(kind: &str) -> &str {
+pub(crate) fn kind_label(kind: &str) -> &str {
     match kind {
         "source" => t("Arrivals"),
         "server" => t("Task with a resource"),

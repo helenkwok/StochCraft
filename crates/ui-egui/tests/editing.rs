@@ -174,7 +174,9 @@ fn a_model_is_built_from_blocks_connected_and_run() {
     // Join them from the model overview's connections table.
     h.key_press(egui::Key::Escape);
     settle(&mut h);
-    for (from, to) in [("source-1", "server-1"), ("server-1", "sink-1")] {
+    // Blocks added from the menu are named for their kind (the connections list shows names).
+    let (arrivals, task, departures) = ("Arrivals 1", "Task with a resource 1", "Departures 1");
+    for (from, to) in [(arrivals, task), (task, departures)] {
         click(&mut h, Role::ComboBox, "From");
         click(&mut h, Role::Button, from);
         click(&mut h, Role::ComboBox, "To");
@@ -193,6 +195,59 @@ fn a_model_is_built_from_blocks_connected_and_run() {
     }
     settle(&mut h);
     assert!(h.state().results().is_some(), "{}", h.state().status());
+}
+
+/// The names of the model's blocks, in order.
+fn block_names(h: &Harness<'static, App>) -> Vec<String> {
+    model(h)["elements"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(|e| e["name"].as_str().map(str::to_owned))
+        .collect()
+}
+
+/// A block added from the menu is named for its kind and the lowest number free for it. An undo
+/// takes its name with it, in one step.
+#[test]
+fn added_blocks_are_named_for_their_kind_and_numbered() {
+    let mut h = harness();
+    h.state_mut().execute("model.new", json!({"name": "Named"}));
+    settle(&mut h);
+    for _ in 0..2 {
+        click(&mut h, Role::Button, "+ Add block");
+        click(&mut h, Role::Button, "Arrivals");
+    }
+    assert_eq!(block_names(&h), ["Arrivals 1", "Arrivals 2"]);
+
+    h.state_mut().undo();
+    settle(&mut h);
+    assert_eq!(h.state().status(), "Undid Add Block");
+    assert_eq!(block_names(&h), ["Arrivals 1"]);
+    h.state_mut().redo();
+    settle(&mut h);
+    assert_eq!(block_names(&h), ["Arrivals 1", "Arrivals 2"]);
+}
+
+/// A removed block's number is free again: the next block of its kind takes the lowest one.
+#[test]
+fn a_new_block_takes_the_lowest_number_free_for_its_kind() {
+    let mut h = harness();
+    h.state_mut().execute("model.new", json!({"name": "Named"}));
+    settle(&mut h);
+    for _ in 0..2 {
+        click(&mut h, Role::Button, "+ Add block");
+        click(&mut h, Role::Button, "Arrivals");
+    }
+    h.state_mut()
+        .execute("block.remove", json!({"id": "source-1"}))
+        .expect("the first arrivals block");
+    settle(&mut h);
+    click(&mut h, Role::Button, "+ Add block");
+    click(&mut h, Role::Button, "Arrivals");
+    let mut names = block_names(&h);
+    names.sort();
+    assert_eq!(names, ["Arrivals 1", "Arrivals 2"]);
 }
 
 #[test]
@@ -349,7 +404,7 @@ fn a_decision_routes_by_probability_and_condition() {
     let first = flow_to(&h, "delay-1");
 
     // The decision's inspector: a probability on one way out, blank on the other.
-    click(&mut h, Role::ListBoxOption, gw);
+    click(&mut h, Role::ListBoxOption, "Decision 1");
     type_into(&mut h, &format!("Probability of {first}"), "0.3");
     let conn = |h: &Harness<'static, App>, id: &str| {
         model(h)["connections"]
@@ -366,7 +421,7 @@ fn a_decision_routes_by_probability_and_condition() {
 
     // A default way out.
     click(&mut h, Role::ComboBox, "Default flow");
-    click(&mut h, Role::Button, "to delay-2");
+    click(&mut h, Role::Button, "to Task 2");
     assert_eq!(element(&h, gw)["default"], json!(flow_to(&h, "delay-2")));
 
     // A condition that can't be read is the decision's problem, shown on it.
@@ -1020,7 +1075,7 @@ fn a_way_out_of_a_decision_is_marked_rework() {
                 .and_then(|c| c["id"].as_str().map(str::to_owned))
         })
         .expect("the way back");
-    click(&mut h, Role::ListBoxOption, gw);
+    click(&mut h, Role::ListBoxOption, "Decision 1");
     click(&mut h, Role::CheckBox, &format!("Rework on {back}"));
     let rework = |h: &Harness<'static, App>| {
         model(h)["connections"]
@@ -1080,7 +1135,7 @@ fn a_way_out_of_a_task_is_marked_rework() {
                 .and_then(|c| c["id"].as_str().map(str::to_owned))
         })
         .expect("the way out");
-    click(&mut h, Role::ListBoxOption, "delay-1");
+    click(&mut h, Role::ListBoxOption, "Task 1");
     click(&mut h, Role::CheckBox, &format!("Rework on {way}"));
     let rework = model(&h)["connections"]
         .as_array()
