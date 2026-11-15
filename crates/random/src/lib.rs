@@ -110,6 +110,24 @@ impl Rng {
     pub fn fork(&mut self) -> Rng {
         Rng::new(self.next_u64())
     }
+
+    /// The generator for the sub-stream named `key` under `base` (one draw of a parent stream).
+    ///
+    /// Unlike [`Rng::fork`], it depends only on `base` and `key`, never on how many streams were
+    /// made before it, so adding or removing a stream leaves every other one as it was. The key
+    /// is hashed with 64-bit FNV-1a (Fowler, Noll and Vo; offset basis 0xcbf29ce484222325, prime
+    /// 0x100000001b3), and the hash and `base` are mixed through SplitMix64 before seeding.
+    pub fn keyed(base: u64, key: &str) -> Rng {
+        let mixed = SplitMix64::new(fnv1a64(key)).next_u64();
+        Rng::new(SplitMix64::new(base ^ mixed).next_u64())
+    }
+}
+
+/// 64-bit FNV-1a of `s`'s bytes.
+fn fnv1a64(s: &str) -> u64 {
+    s.bytes().fold(0xcbf2_9ce4_8422_2325, |h, b| {
+        (h ^ u64::from(b)).wrapping_mul(0x0000_0100_0000_01b3)
+    })
 }
 
 mod dist;
@@ -174,5 +192,29 @@ mod tests {
         assert_eq!(r.uniform_range(3.0, 3.0), 3.0);
         assert_eq!(Dist::Constant(-2.0).sample(&mut r), 0.0);
         assert_eq!(Dist::exponential_rate(0.0), Dist::Exponential { mean: 0.0 });
+    }
+
+    #[test]
+    fn fnv1a64_matches_the_published_test_vectors() {
+        // From the FNV test suite (Fowler, Noll and Vo): "" and "a".
+        assert_eq!(fnv1a64(""), 0xcbf2_9ce4_8422_2325);
+        assert_eq!(fnv1a64("a"), 0xaf63_dc4c_8601_ec8c);
+    }
+
+    #[test]
+    fn keyed_streams_depend_only_on_base_and_key() {
+        let draws = |mut r: Rng| [r.next_u64(), r.next_u64()];
+        assert_eq!(
+            draws(Rng::keyed(7, "element/a")),
+            draws(Rng::keyed(7, "element/a"))
+        );
+        assert_ne!(
+            draws(Rng::keyed(7, "element/a")),
+            draws(Rng::keyed(7, "element/b"))
+        );
+        assert_ne!(
+            draws(Rng::keyed(7, "element/a")),
+            draws(Rng::keyed(8, "element/a"))
+        );
     }
 }

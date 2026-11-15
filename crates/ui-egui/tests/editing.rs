@@ -511,12 +511,12 @@ fn results_are_written_as_the_users_region_writes_numbers() {
         h.step();
     }
     settle(&mut h);
-    // About 14,990 arrivals in 20,000 minutes, grouped with a point in German.
+    // About 15,065 arrivals in 20,000 minutes, grouped with a point in German.
     assert!(
-        !h.get_all_by_label("14.990").collect::<Vec<_>>().is_empty(),
+        !h.get_all_by_label("15.065").collect::<Vec<_>>().is_empty(),
         "no German grouping in the results"
     );
-    assert!(h.query_by_label("14,990").is_none());
+    assert!(h.query_by_label("15,065").is_none());
 }
 
 #[test]

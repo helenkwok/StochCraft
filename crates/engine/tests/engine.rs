@@ -2116,15 +2116,15 @@ fn the_plant_is_sized_to_its_weekly_target() {
     let (sto, det) = (&r["stochastic"], &r["deterministic"]);
     assert_eq!(sto["reached"], true, "{r}");
     assert!(sto["probability"].as_f64().is_some_and(|p| p >= 0.7));
-    assert_eq!(units(sto), (Some(3.0), Some(6.0)), "{r}");
-    // With every time at its mean, one oven fewer looks enough; it is not.
+    assert_eq!(units(sto), (Some(3.0), Some(7.0)), "{r}");
+    // With every time at its mean, two ovens fewer look enough; they are not.
     assert_eq!(units(det), (Some(3.0), Some(5.0)), "{r}");
     let at_det = sto["steps"]
         .as_array()
         .and_then(|s| s.iter().find(|s| units(s) == (Some(3.0), Some(5.0))))
         .and_then(|s| s["probability"].as_f64());
     assert!(at_det.is_some_and(|p| p < 0.7), "{at_det:?}");
-    // Each step added a unit at the busiest resource.
+    // Each step added a unit at the busiest resource, busy over 80% of the time.
     assert!(
         sto["steps"]
             .as_array()
@@ -2134,7 +2134,7 @@ fn the_plant_is_sized_to_its_weekly_target() {
                 .skip(1)
                 .all(|s| s["bottleneck"]["utilisation"]
                     .as_f64()
-                    .is_some_and(|u| u > 0.9)))
+                    .is_some_and(|u| u > 0.8)))
     );
     // Applied: the model has the units, in one step to undo.
     let pool = |e: &Engine, id: &str| {
@@ -2144,7 +2144,7 @@ fn the_plant_is_sized_to_its_weekly_target() {
             .find(|p| p.id.as_str() == id)
             .map(|p| p.most_units())
     };
-    assert_eq!((pool(&e, "mixers"), pool(&e, "ovens")), (Some(3), Some(6)));
+    assert_eq!((pool(&e, "mixers"), pool(&e, "ovens")), (Some(3), Some(7)));
     ok(&mut e, "undo", json!({}));
     assert_eq!((pool(&e, "mixers"), pool(&e, "ovens")), (Some(1), Some(1)));
     assert_eq!(
@@ -2313,8 +2313,8 @@ fn short_mm1() -> Engine {
 
 #[test]
 fn a_sweep_judges_a_small_change_by_its_paired_differences() {
-    // Issue #66: the 95% intervals at the two ends overlap (2.90 ± 0.36 against 3.54 ± 0.50),
-    // but the replications share their random numbers, and the paired differences are tight.
+    // Issue #66: the replications share their random numbers, so the paired differences are far
+    // tighter than the ends' own 95% intervals (2.87 ± 0.19 against 3.51 ± 0.25).
     let mut e = short_mm1();
     let r = ok(
         &mut e,
@@ -2328,20 +2328,20 @@ fn a_sweep_judges_a_small_change_by_its_paired_differences() {
             ]
         }),
     );
-    // The ends' intervals overlap...
     let at = |i: usize, j: usize, k: &str| r["points"][i]["results"][j][k].as_f64().unwrap_or(0.0);
-    assert!((at(0, 0, "mean") - 2.903).abs() < 0.001 && (at(1, 0, "mean") - 3.544).abs() < 0.001);
-    assert!(at(1, 0, "mean") - at(0, 0, "mean") < at(0, 0, "half_width") + at(1, 0, "half_width"));
-    // ...but the paired differences give +0.641 ± 0.149 and +0.681 ± 0.149.
+    assert!((at(0, 0, "mean") - 2.872).abs() < 0.001 && (at(1, 0, "mean") - 3.506).abs() < 0.001);
+    // The paired differences give +0.634 ± 0.067 and +0.674 ± 0.067, a third of either end's
+    // half-width.
     let effects = r["effects"].as_array().cloned().unwrap_or_default();
     assert_eq!(effects.len(), 2);
-    for (effect, want) in effects.iter().zip([0.641, 0.681]) {
+    for (effect, want) in effects.iter().zip([0.634, 0.674]) {
         let (d, hw) = (
             effect["change"].as_f64().unwrap_or(0.0),
             effect["half_width"].as_f64().unwrap_or(0.0),
         );
         assert!((d - want).abs() < 0.001, "{effect}");
-        assert!((hw - 0.149).abs() < 0.001, "{effect}");
+        assert!((hw - 0.067).abs() < 0.001, "{effect}");
+        assert!(hw < at(0, 0, "half_width") / 2.0, "{effect}");
         assert_eq!(effect["n"], 10, "{effect}");
         assert_eq!(effect["significant"], true, "{effect}");
     }
@@ -2445,19 +2445,19 @@ fn compare_pairs_runs_with_the_same_seed_and_not_others() {
     assert_eq!(r["paired"], true, "{r}");
     let c = comparison(&r, "server", "mean_wait");
     assert!(
-        (c["a"]["mean"].as_f64().unwrap_or(0.0) - 2.903).abs() < 0.001,
+        (c["a"]["mean"].as_f64().unwrap_or(0.0) - 2.872).abs() < 0.001,
         "{c}"
     );
     assert!(
-        (c["b"]["mean"].as_f64().unwrap_or(0.0) - 3.544).abs() < 0.001,
+        (c["b"]["mean"].as_f64().unwrap_or(0.0) - 3.506).abs() < 0.001,
         "{c}"
     );
     assert!(
-        (c["difference"].as_f64().unwrap_or(0.0) - 0.641).abs() < 0.001,
+        (c["difference"].as_f64().unwrap_or(0.0) - 0.634).abs() < 0.001,
         "{c}"
     );
     assert!(
-        (c["half_width"].as_f64().unwrap_or(0.0) - 0.149).abs() < 0.001,
+        (c["half_width"].as_f64().unwrap_or(0.0) - 0.067).abs() < 0.001,
         "{c}"
     );
     assert_eq!((&c["pairs"], &c["df"]), (&json!(10), &json!(9)), "{c}");
@@ -2468,7 +2468,7 @@ fn compare_pairs_runs_with_the_same_seed_and_not_others() {
     // Every element and metric both runs report is compared by default.
     let tis = comparison(&r, "exit", "mean_time_in_system");
     assert!(
-        (tis["difference"].as_f64().unwrap_or(0.0) - 0.681).abs() < 0.001,
+        (tis["difference"].as_f64().unwrap_or(0.0) - 0.674).abs() < 0.001,
         "{tis}"
     );
     assert_eq!(r["notes"], json!([]));

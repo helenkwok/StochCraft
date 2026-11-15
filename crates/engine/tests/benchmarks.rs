@@ -27,14 +27,20 @@ use stochcraft_model::ElementKind;
 
 /// The 95% Student-t quantile for 24 degrees of freedom (25 replications).
 const T_24: f64 = 2.063_898_561_628_021;
+/// The 95% Student-t quantile for 99 degrees of freedom (100 replications).
+const T_99: f64 = 1.984_216_951_835_19;
 
-/// The mean of `xs` and the half-width of its 95% confidence interval (25 values).
+/// The mean of `xs` and the half-width of its 95% confidence interval (25 or 100 values).
 fn mean_hw(xs: &[f64]) -> (f64, f64) {
-    assert_eq!(xs.len(), 25);
+    let t = match xs.len() {
+        25 => T_24,
+        100 => T_99,
+        n => panic!("no t quantile for {n} values"),
+    };
     let n = xs.len() as f64;
     let mean = xs.iter().sum::<f64>() / n;
     let var = xs.iter().map(|x| (x - mean) * (x - mean)).sum::<f64>() / (n - 1.0);
-    (mean, T_24 * (var / n).sqrt())
+    (mean, t * (var / n).sqrt())
 }
 
 fn case_a() -> Vec<Report> {
@@ -141,7 +147,10 @@ fn case_a_matches_the_published_line() {
 /// days after 1 day of warm-up. The paper gives no confidence intervals and its published model
 /// adds storage that Table 6 does not list, so the targets are those of an independent model of
 /// the specification (100 replications, a unit under repair handing on its finished part), and
-/// StochCraft's mean must lie within the half-width of a difference of the two means. Each
+/// StochCraft's mean, also over 100 replications, must lie within the half-width of a difference
+/// of the two means. (With the file's 25, six checks at 95% on one seed fail a correct model
+/// about one run in four: seed 1 did after #152, at 27.19 parts an hour, while seeds 1–10
+/// average 27.13 before and after it.) Each
 /// buffer's delay is checked both as a minimum time in the buffer (the file, which matches the
 /// paper's 27.26 parts an hour) and as a transfer that holds the sending machine.
 fn case_b(holds_sender: bool) -> Vec<Report> {
@@ -164,8 +173,9 @@ fn case_b(holds_sender: bool) -> Vec<Report> {
         (25, 86_400.0, 604_800.0)
     );
     let c = compile(&model).unwrap_or_else(|e| panic!("{e:?}"));
-    let streams = Experiment::new(u64::from(x.replications), x.seed);
-    (0..u64::from(x.replications))
+    let replications = 100;
+    let streams = Experiment::new(replications, x.seed);
+    (0..replications)
         .map(|i| c.run(streams.stream(i)).unwrap_or_else(|e| panic!("{e}")))
         .collect()
 }
