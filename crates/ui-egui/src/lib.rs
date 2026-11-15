@@ -419,8 +419,11 @@ impl App {
             recovery: None,
             quitting: false,
             title_bar: None,
-            numbers: craft_ui::localized::LocaleNumbers::new(std::sync::Arc::new(
-                craft_i18n::Format::new(&craft_i18n::Region::system(), craft_i18n::Digits::Locale),
+            numbers: form::messages(craft_ui::localized::LocaleNumbers::new(
+                std::sync::Arc::new(craft_i18n::Format::new(
+                    &craft_i18n::Region::system(),
+                    craft_i18n::Digits::Locale,
+                )),
             )),
         }
     }
@@ -443,6 +446,21 @@ impl App {
     /// The status-bar message.
     pub fn status(&self) -> &str {
         &self.status
+    }
+
+    /// The status-bar message as a screen reader should hear it: an error says so in words, as
+    /// the bar shows "Error" beside it. Empty when there is nothing to say.
+    pub fn status_announcement(&self) -> String {
+        if self.status_error && !self.status.is_empty() {
+            tf("Error: {message}", &[("message", &self.status)])
+        } else {
+            self.status.clone()
+        }
+    }
+
+    /// The interface language's code (`de`, `pt-br`), for the web page's `lang`.
+    pub fn language_code(&self) -> &'static str {
+        i18n::code(self.lang)
     }
 
     /// Results of the last finished run, if the model has not changed since.
@@ -584,7 +602,7 @@ impl App {
     /// Writes and reads numbers in the fields as `tag`'s region does (`de-CH`, `ar-EG`), in place
     /// of the system's region.
     pub fn set_number_region(&mut self, tag: &str) {
-        self.numbers = craft_ui::localized::LocaleNumbers::from_tag(tag);
+        self.numbers = form::messages(craft_ui::localized::LocaleNumbers::from_tag(tag));
     }
 
     /// A dialog is open (menu commands wait).
@@ -1465,12 +1483,19 @@ impl App {
             craft_window::title_bar::empty_area(ui, ui.max_rect());
         }
         // Text and hover on the dark shell.
+        // A focused item takes egui's `active` look: lit like an open one, never the soft accent,
+        // which header text can't be read on (theme::problems checks the pair). Its outline is
+        // drawn below, once the header's widgets are laid out.
         let v = ui.visuals_mut();
         v.override_text_color = Some(p.on_shell);
-        v.widgets.hovered.weak_bg_fill = p.on_shell.gamma_multiply(0.12);
+        v.widgets.hovered.weak_bg_fill = theme::header_hover(p);
         v.widgets.hovered.bg_stroke = egui::Stroke::NONE;
         v.widgets.inactive.bg_stroke = egui::Stroke::NONE;
-        v.widgets.open.weak_bg_fill = p.on_shell.gamma_multiply(0.16);
+        v.widgets.open.weak_bg_fill = theme::header_lit(p);
+        v.widgets.active.weak_bg_fill = theme::header_lit(p);
+        v.widgets.active.bg_fill = theme::header_lit(p);
+        v.widgets.active.bg_stroke = egui::Stroke::NONE;
+        let header = ui.max_rect();
         let running = self.running.is_some();
         let can_run = !self.engine.model().elements.is_empty();
         let (_, clicked) = egui::Sides::new().shrink_left().show(
@@ -1517,6 +1542,19 @@ impl App {
                 }
             },
         );
+        // The keyboard's place in the header: a ring in the header's text colour around the
+        // focused menu title or button (WCAG 2.4.7). The menu bar draws its titles without one.
+        if let Some(focused) = ui.memory(|m| m.focused())
+            && let Some(r) = ui.ctx().read_response(focused)
+            && header.contains_rect(r.rect)
+        {
+            ui.painter().rect_stroke(
+                r.rect.expand(1.0),
+                6.0,
+                egui::Stroke::new(1.5, p.on_shell),
+                egui::StrokeKind::Outside,
+            );
+        }
         if clicked {
             if running {
                 self.cancel_run();
@@ -2014,7 +2052,7 @@ fn window_button(ui: &mut egui::Ui, p: &theme::Palette, button: craft_window::Bu
 
 /// One block in the outline's process line: its BPMN shape (a thin circle for a start event, a
 /// rounded box for a task, a thick circle for an end event), joined to its neighbours. Clicking
-/// it selects the block; a dot marks a problem (red for an error, amber for a warning).
+/// it selects the block; a mark shows a problem (theme's error and warning marks).
 struct FlowRow<'a> {
     kind: &'a str,
     title: &'a str,
@@ -2134,13 +2172,19 @@ impl FlowRow<'_> {
             p.text_weak,
         );
         if let Some(error) = self.flag {
-            let color = if error { p.error } else { p.warning };
-            painter.circle_filled(egui::pos2(rect.right() - 12.0, cy), 4.0, color);
-            return response.on_hover_text(if error {
+            // A shape as well as a colour: a circle with × for an error, a triangle with ! for a
+            // warning; and the same words for screen readers, after the block's name.
+            let at = egui::pos2(rect.right() - 14.0, cy);
+            let words = if error {
+                theme::paint_error_mark(&painter, at, 6.5, p);
                 t("This block has an error")
             } else {
+                theme::paint_warning_mark(&painter, at, 6.5, p);
                 t("This block has a warning")
-            });
+            };
+            ui.ctx()
+                .accesskit_node_builder(response.id, |n| n.set_description(words));
+            return response.on_hover_text(words);
         }
         response
     }

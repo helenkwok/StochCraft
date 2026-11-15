@@ -271,16 +271,30 @@ impl App {
                     ui.label(theme::weak(ui, t("Drag to add:")));
                     for (kind, label) in KINDS {
                         let id = egui::Id::unique(("palette", *kind));
-                        let r = ui
-                            .dnd_drag_source(id, (*kind).to_owned(), |ui| {
-                                ui.add(
-                                    egui::Button::new(
-                                        egui::RichText::new(crate::kind_text(kind)).size(12.0),
-                                    )
-                                    .sense(Sense::click_and_drag()),
+                        let chip = ui.dnd_drag_source(id, (*kind).to_owned(), |ui| {
+                            ui.add(
+                                egui::Button::new(
+                                    egui::RichText::new(crate::kind_text(kind)).size(12.0),
                                 )
-                            })
-                            .response;
+                                .sense(Sense::click_and_drag()),
+                            )
+                        });
+                        let (button, r) = (chip.inner, chip.response);
+                        // The strip scrolls, so a chip the keyboard reaches is scrolled into
+                        // view (WCAG 2.4.11). Both the button and egui's drag area around it
+                        // take focus; the drag area draws nothing of its own, so it gets a ring.
+                        if button.gained_focus() || r.gained_focus() {
+                            r.scroll_to_me(None);
+                        }
+                        if r.has_focus() {
+                            let p = theme::palette(ui.ctx());
+                            ui.painter().rect_stroke(
+                                r.rect,
+                                6.0,
+                                Stroke::new(1.5, p.accent),
+                                StrokeKind::Outside,
+                            );
+                        }
                         let r = r.on_hover_text(crate::i18n::td(label));
                         if r.clicked() {
                             // Clicked rather than dragged: added after the selection, as from the list.
@@ -637,6 +651,32 @@ impl App {
                 ],
             );
             resp.widget_info(|| egui::WidgetInfo::selected(egui::Role::Button, true, on, &label));
+            // A problem by shape as well as colour, at the block's top-right corner: a circle
+            // with × for an error, a triangle with ! for a warning; in words for screen readers.
+            let badge = (5.5 * view.zoom).clamp(4.5, 9.0);
+            let problem = if errors.contains(&id) {
+                theme::paint_error_mark(&painter, r.right_top(), badge, p);
+                Some(t("This block has an error"))
+            } else if warnings.contains(&id) {
+                theme::paint_warning_mark(&painter, r.right_top(), badge, p);
+                Some(t("This block has a warning"))
+            } else {
+                None
+            };
+            if let Some(words) = problem {
+                ui.ctx()
+                    .accesskit_node_builder(resp.id, |n| n.set_description(words));
+            }
+            // The keyboard's place: a ring outside the shape, apart from the selection's
+            // outline and fill, as the outline rail draws one (WCAG 2.4.7).
+            if resp.has_focus() {
+                painter.rect_stroke(
+                    r.expand(4.0 * view.zoom.max(0.5)),
+                    8.0 * view.zoom,
+                    Stroke::new(2.0, p.accent),
+                    StrokeKind::Outside,
+                );
+            }
             if resp.clicked() {
                 let add = ui.input(|i| i.modifiers.shift || i.modifiers.command);
                 clicked = Some((id.clone(), add));
@@ -651,6 +691,16 @@ impl App {
                 drag_end = true;
             }
             shape_rects.push((id, r));
+        }
+
+        // The diagram itself takes focus too, so it shows a ring inside its edge when it has it.
+        if bg.has_focus() {
+            painter.rect_stroke(
+                rect.shrink(1.0),
+                4.0,
+                Stroke::new(2.0, p.accent),
+                StrokeKind::Inside,
+            );
         }
 
         // A run being watched: each block's state on its shape.
@@ -701,7 +751,8 @@ impl App {
                     tf("Connect from {name}", &[("name", &hid)]),
                 )
             });
-            let hot = hresp.hovered() || hresp.dragged();
+            // Lit when the keyboard is on it too, so its focus shows.
+            let hot = hresp.hovered() || hresp.dragged() || hresp.has_focus();
             painter.circle(
                 at,
                 if hot { 6.5 } else { 5.0 },

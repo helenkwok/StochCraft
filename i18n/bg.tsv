@@ -111,6 +111,7 @@
 	Chart colours…	Цветове на графиките…
 	Chart hover	Графика под показалеца
 	Check every	Проверка на всеки
+	Check the decimal and grouping marks	Проверете десетичния знак и знака за групиране
 	Checks	Проверки
 	Choose…	Изберете…
 	Clear Menu	Изчистване на менюто
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	{from} е свързан с {to}
 	Connections	Връзки
 	Constant	Константа
+	Control outlines	Контури на контролите
 	Copy	Копиране
 	Counts against	Приписва се на
 	Customer demand	Клиентско търсене
@@ -168,6 +170,7 @@
 	Energy	Енергия
 	Energy per part	Енергия на част
 	Enough: {units}, meeting the target in {p} of replications	Достатъчно: {units}, целта е постигната в {p} от репликациите
+	Enter a number	Въведете число
 	Entered	Влезли
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Същностите, които намират чакалнята пълна, веднага минават по този поток (например за да опитат отново по-късно), вместо да бъдат загубени или да чакат преди задачата; тук те се броят като загубени.
 	Entities give up waiting	Същностите се отказват от чакането
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Същностите, които се отказват от чакането, минават по този поток (например за да опитат отново по-късно); останалите минават по другия изход на задачата.
 	Erlang	Ерланг
 	Error	Грешка
+	Error: {message}	Грешка: {message}
 	Estimate from three values…	Оценка от три стойности…
 	Evenly across	Равномерно по хоризонтала
 	Evenly down	Равномерно по вертикала
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Времето на {id} е напаснато
 	Fixed	Фиксиран
 	Flows	Потоци
+	Focused header item	Фокусиран елемент в заглавната лента
 	Forget the estimate	Забравяне на оценката
 	Fri	пт
 	From	От
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Не са открити проблеми. Моделът е готов за изпълнение.
 	None picked: the day the period starts.	Нищо не е избрано: денят, в който започва периодът.
 	Normal	Нормално
+	Not a number	Не е число
 	Not reached, even with {units}	Не е постигната дори с {units}
 	Number	Число
+	Number too large	Числото е твърде голямо
 	OEE	OEE
 	OEE availability	Наличност OEE
 	OEE effectiveness	Ефективност OEE
@@ -541,6 +548,7 @@
 	Turned away on {id}	Отпратени на {id}
 	Two stations in series, read from an XPDL file.	Две станции последователно, прочетени от XPDL файл.
 	Type	Тип
+	Type a time from 0 to {end} {unit}.	Въведете момент от 0 до {end} {unit}.
 	Undid {action}	Отменено е {action}
 	Undo	Отмяна
 	Undo {action}	Отмяна: {action}
@@ -555,6 +563,7 @@
 	Upper value	Горна стойност
 	Use System Setting	Използване на системната настройка
 	Use for charts	Използване за графиките
+	Use one kind of digits	Използвайте един вид цифри
 	Use these units in the model	Използване на тези единици в модела
 	Utilisation	Натовареност
 	Value	Стойност
@@ -649,6 +658,7 @@
 	{n} waiting	Чакащи: {n}
 	{n} {unit} per second	{n} {unit} в секунда
 	{property} (set to, mean)	{property} (зададена стойност, средна)
+	{reason}. {field} is still {value}.	{reason}. {field} остава {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – репликациите се разделят на два различни резултата: вижте таблицата по-долу.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон „{background}“: {ratio}:1, нужно е {min}:1
 	{title}: now {now}, at most {most}	{title}: сега {now}, най-много {most}

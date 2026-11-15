@@ -148,6 +148,33 @@ fn colour_themes_are_remembered_as_hex_text_and_old_preferences_still_load() {
     assert_eq!(old.appearance.theme, ThemeChoice::Dark);
     assert_eq!(old.appearance.colors, "StochCraft");
     assert!(old.appearance.custom_themes.is_empty());
+
+    // A custom theme saved before control outlines had a colour of their own still loads, with
+    // the rest of the preferences, its outlines in its weak text colour.
+    let before = text.replace(
+        &format!(
+            ",\"control_border\":\"{}\"",
+            hex(theme::LIGHT.control_border)
+        ),
+        "",
+    );
+    let before = before.replace(
+        &format!(
+            ",\"control_border\":\"{}\"",
+            hex(theme::DARK.control_border)
+        ),
+        "",
+    );
+    assert!(!before.contains("control_border"), "{before}");
+    let old: Prefs = serde_json::from_str(&before).expect("prefs with an older theme");
+    assert_eq!(old.appearance.colors, "Warm");
+    let mine = &old.appearance.custom_themes[0];
+    assert_eq!(mine.light.control_border, theme::LIGHT.text_weak);
+    assert_eq!(mine.dark.control_border, theme::DARK.text_weak);
+}
+
+fn hex(c: egui::Color32) -> String {
+    format!("#{:02x}{:02x}{:02x}", c.r(), c.g(), c.b())
 }
 
 #[test]

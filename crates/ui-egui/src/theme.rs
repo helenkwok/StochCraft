@@ -41,8 +41,14 @@ pub struct Palette {
     pub text: Color32,
     #[serde(with = "colour")]
     pub text_weak: Color32,
+    /// Dividers and window edges: decoration, so they may be faint.
     #[serde(with = "colour")]
     pub border: Color32,
+    /// The outline of a text field, checkbox, choice box or secondary button at rest: it tells
+    /// the control apart from the surface, so it needs 3:1 (WCAG 1.4.11). A theme saved before
+    /// this role existed reads without it and gets its weak text colour ([`Theme`]'s loading).
+    #[serde(with = "colour", default = "missing_colour")]
+    pub control_border: Color32,
     /// Alternate table rows.
     #[serde(with = "colour")]
     pub stripe: Color32,
@@ -74,6 +80,7 @@ pub const LIGHT: Palette = Palette {
     text: Color32::from_rgb(0x1b, 0x1f, 0x24),
     text_weak: Color32::from_rgb(0x55, 0x5e, 0x69),
     border: Color32::from_rgb(0xd9, 0xdd, 0xe3),
+    control_border: Color32::from_rgb(0x7d, 0x86, 0x91),
     stripe: Color32::from_rgb(0xf2, 0xf4, 0xf6),
     accent: Color32::from_rgb(0x0b, 0x6e, 0x86),
     on_accent: Color32::from_rgb(0xff, 0xff, 0xff),
@@ -94,6 +101,7 @@ pub const DARK: Palette = Palette {
     text: Color32::from_rgb(0xe6, 0xe9, 0xec),
     text_weak: Color32::from_rgb(0x9c, 0xa6, 0xb1),
     border: Color32::from_rgb(0x2e, 0x35, 0x3e),
+    control_border: Color32::from_rgb(0x73, 0x7c, 0x88),
     stripe: Color32::from_rgb(0x1a, 0x1e, 0x23),
     accent: Color32::from_rgb(0x4c, 0xc4, 0xdb),
     on_accent: Color32::from_rgb(0x06, 0x1a, 0x20),
@@ -104,12 +112,49 @@ pub const DARK: Palette = Palette {
     chart_hover: Color32::from_rgb(0x3d, 0xb5, 0xcf),
 };
 
+/// A role a saved palette left out. Never a colour read from text, which is always opaque.
+fn missing_colour() -> Color32 {
+    Color32::TRANSPARENT
+}
+
+impl Palette {
+    /// Fills the roles a palette saved by an older version left out, from roles it has.
+    fn fill_missing(&mut self) {
+        if self.control_border == missing_colour() {
+            self.control_border = self.text_weak;
+        }
+    }
+}
+
 /// A colour theme: one palette for light mode and one for dark mode, under a name.
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(from = "SavedTheme")]
 pub struct Theme {
     pub name: String,
     pub light: Palette,
     pub dark: Palette,
+}
+
+/// A theme as read from the preferences, before the roles an older version left out are filled
+/// in, so a theme saved before a role existed still loads.
+#[derive(serde::Deserialize)]
+struct SavedTheme {
+    name: String,
+    light: Palette,
+    dark: Palette,
+}
+
+impl From<SavedTheme> for Theme {
+    fn from(saved: SavedTheme) -> Self {
+        let SavedTheme {
+            name,
+            mut light,
+            mut dark,
+        } = saved;
+        light.fill_missing();
+        dark.fill_missing();
+        Theme { name, light, dark }
+    }
 }
 
 /// The name of the theme the app starts with.
@@ -127,6 +172,7 @@ const HIGH_CONTRAST_LIGHT: Palette = Palette {
     text: Color32::from_rgb(0x00, 0x00, 0x00),
     text_weak: Color32::from_rgb(0x33, 0x33, 0x33),
     border: Color32::from_rgb(0x00, 0x00, 0x00),
+    control_border: Color32::from_rgb(0x00, 0x00, 0x00),
     stripe: Color32::from_rgb(0xe6, 0xe6, 0xe6),
     accent: Color32::from_rgb(0x00, 0x38, 0xa8),
     on_accent: Color32::from_rgb(0xff, 0xff, 0xff),
@@ -147,6 +193,7 @@ const HIGH_CONTRAST_DARK: Palette = Palette {
     text: Color32::from_rgb(0xff, 0xff, 0xff),
     text_weak: Color32::from_rgb(0xd4, 0xd4, 0xd4),
     border: Color32::from_rgb(0xbd, 0xbd, 0xbd),
+    control_border: Color32::from_rgb(0xbd, 0xbd, 0xbd),
     stripe: Color32::from_rgb(0x1a, 0x1a, 0x1a),
     accent: Color32::from_rgb(0x66, 0xb3, 0xff),
     on_accent: Color32::from_rgb(0x00, 0x00, 0x00),
@@ -168,6 +215,7 @@ const WARM_LIGHT: Palette = Palette {
     text: Color32::from_rgb(0x2b, 0x26, 0x22),
     text_weak: Color32::from_rgb(0x6b, 0x5f, 0x55),
     border: Color32::from_rgb(0xd8, 0xcd, 0xbf),
+    control_border: Color32::from_rgb(0x8a, 0x7b, 0x6c),
     stripe: Color32::from_rgb(0xf3, 0xec, 0xe2),
     accent: Color32::from_rgb(0xa4, 0x45, 0x2a),
     on_accent: Color32::from_rgb(0xff, 0xff, 0xff),
@@ -188,6 +236,7 @@ const WARM_DARK: Palette = Palette {
     text: Color32::from_rgb(0xec, 0xe4, 0xd8),
     text_weak: Color32::from_rgb(0xb3, 0xa5, 0x96),
     border: Color32::from_rgb(0x44, 0x3b, 0x32),
+    control_border: Color32::from_rgb(0x84, 0x77, 0x6a),
     stripe: Color32::from_rgb(0x20, 0x1c, 0x18),
     accent: Color32::from_rgb(0xe0, 0x8a, 0x66),
     on_accent: Color32::from_rgb(0x2a, 0x13, 0x07),
@@ -247,7 +296,7 @@ pub fn shown_name(name: &str) -> String {
 
 /// Every role of a palette with its plain-English name, for the theme editor. Destructuring means
 /// a palette with a new role doesn't build until the role is listed here.
-pub fn roles(p: &mut Palette) -> [(&'static str, &mut Color32); 17] {
+pub fn roles(p: &mut Palette) -> [(&'static str, &mut Color32); 18] {
     let Palette {
         shell,
         on_shell,
@@ -258,6 +307,7 @@ pub fn roles(p: &mut Palette) -> [(&'static str, &mut Color32); 17] {
         text,
         text_weak,
         border,
+        control_border,
         stripe,
         accent,
         on_accent,
@@ -277,6 +327,7 @@ pub fn roles(p: &mut Palette) -> [(&'static str, &mut Color32); 17] {
         (t("Text"), text),
         (t("Weak text"), text_weak),
         (t("Borders"), border),
+        (t("Control outlines"), control_border),
         (t("Table stripes"), stripe),
         (t("Accent"), accent),
         (t("Text on accent"), on_accent),
@@ -305,6 +356,31 @@ fn luminance(c: Color32) -> f32 {
 pub fn contrast(a: Color32, b: Color32) -> f32 {
     let (a, b) = (luminance(a), luminance(b));
     (a.max(b) + 0.05) / (a.min(b) + 0.05)
+}
+
+/// `a` moved `amount` (0 to 1) of the way to `b`, opaque: a tint that can be checked for contrast
+/// as it is drawn.
+fn mix(a: Color32, b: Color32, amount: f32) -> Color32 {
+    let channel = |x: u8, y: u8| {
+        let v = f32::from(x) + (f32::from(y) - f32::from(x)) * amount;
+        v.round().clamp(0.0, 255.0) as u8
+    };
+    Color32::from_rgb(
+        channel(a.r(), b.r()),
+        channel(a.g(), b.g()),
+        channel(a.b(), b.b()),
+    )
+}
+
+/// A hovered header item's fill: the header lit a little with its own text colour.
+pub fn header_hover(p: &Palette) -> Color32 {
+    mix(p.shell, p.on_shell, 0.12)
+}
+
+/// A focused, pressed or open header item's fill, a little lighter than a hovered one. Header
+/// text stays on it, so [`problems`] checks the pair.
+pub fn header_lit(p: &Palette) -> Color32 {
+    mix(p.shell, p.on_shell, 0.16)
 }
 
 /// The text and background pairs of a palette that fall below their contrast minimum, in words:
@@ -339,9 +415,47 @@ pub fn problems(p: &Palette) -> Vec<String> {
             p.shell,
             3.0,
         ),
+        (
+            t("Text on header"),
+            p.on_shell,
+            t("Focused header item"),
+            header_lit(p),
+            4.5,
+        ),
         (t("Text on accent"), p.on_accent, t("Accent"), p.accent, 4.5),
         (t("Accent"), p.accent, t("Canvas"), p.canvas, 3.0),
-        (t("Error"), p.error, t("Canvas"), p.canvas, 3.0),
+        // A control's edge against every surface a control sits on (WCAG 1.4.11).
+        (
+            t("Control outlines"),
+            p.control_border,
+            t("Canvas"),
+            p.canvas,
+            3.0,
+        ),
+        (
+            t("Control outlines"),
+            p.control_border,
+            t("Raised surfaces"),
+            p.raised,
+            3.0,
+        ),
+        (
+            t("Control outlines"),
+            p.control_border,
+            t("Side rail"),
+            p.rail,
+            3.0,
+        ),
+        (
+            t("Control outlines"),
+            p.control_border,
+            t("Table stripes"),
+            p.stripe,
+            3.0,
+        ),
+        // Error messages are text: under a field, and in the status bar on the rail.
+        (t("Error"), p.error, t("Canvas"), p.canvas, 4.5),
+        (t("Error"), p.error, t("Side rail"), p.rail, 4.5),
         (t("Warning"), p.warning, t("Canvas"), p.canvas, 3.0),
         (t("Chart"), p.chart, t("Canvas"), p.canvas, 3.0),
     ];
@@ -637,10 +751,11 @@ fn style(s: &mut egui::Style, p: &Palette) {
     w.noninteractive.bg_stroke = egui::Stroke::new(1.0, p.border);
     w.noninteractive.fg_stroke = egui::Stroke::new(1.0, p.text);
     for (state, fill, stroke) in [
-        (&mut w.inactive, p.stripe, p.border),
+        // At rest a control's outline is the 3:1 control border, not the faint divider colour.
+        (&mut w.inactive, p.stripe, p.control_border),
         (&mut w.hovered, p.accent_soft, p.accent),
         (&mut w.active, p.accent_soft, p.accent),
-        (&mut w.open, p.accent_soft, p.border),
+        (&mut w.open, p.accent_soft, p.control_border),
     ] {
         state.bg_fill = fill;
         state.weak_bg_fill = fill;
@@ -668,8 +783,61 @@ pub fn primary(ui: &egui::Ui, label: &str) -> egui::Button<'static> {
 pub fn secondary(ui: &egui::Ui, label: &str) -> egui::Button<'static> {
     let p = palette(ui.ctx());
     egui::Button::new(label.to_owned())
-        .stroke(egui::Stroke::new(1.0, p.border))
+        .stroke(egui::Stroke::new(1.0, p.control_border))
         .min_size(egui::vec2(0.0, 30.0))
+}
+
+/// The error mark: a filled circle with a ×, drawn rather than a font glyph so it looks the same
+/// in every script. Its shape, not only its colour, tells it from [`paint_warning_mark`].
+pub fn paint_error_mark(painter: &egui::Painter, centre: egui::Pos2, radius: f32, p: &Palette) {
+    painter.circle_filled(centre, radius, p.error);
+    let d = radius * 0.4;
+    let ink = egui::Stroke::new((radius * 0.25).max(1.2), p.raised);
+    painter.line_segment(
+        [centre + egui::vec2(-d, -d), centre + egui::vec2(d, d)],
+        ink,
+    );
+    painter.line_segment(
+        [centre + egui::vec2(-d, d), centre + egui::vec2(d, -d)],
+        ink,
+    );
+}
+
+/// The warning mark: a filled triangle with a !, the shape telling it from an error's circle.
+pub fn paint_warning_mark(painter: &egui::Painter, centre: egui::Pos2, radius: f32, p: &Palette) {
+    let r = radius * 1.1;
+    let points = vec![
+        centre + egui::vec2(0.0, -r),
+        centre + egui::vec2(r, r * 0.8),
+        centre + egui::vec2(-r, r * 0.8),
+    ];
+    painter.add(egui::Shape::convex_polygon(
+        points,
+        p.warning,
+        egui::Stroke::NONE,
+    ));
+    let ink = egui::Stroke::new((radius * 0.22).max(1.2), p.raised);
+    painter.line_segment(
+        [
+            centre + egui::vec2(0.0, -r * 0.45),
+            centre + egui::vec2(0.0, r * 0.2),
+        ],
+        ink,
+    );
+    painter.circle_filled(centre + egui::vec2(0.0, r * 0.5), ink.width * 0.6, p.raised);
+}
+
+/// An error message in words, with the error mark before it: text, so the error is not told by
+/// colour alone (WCAG 3.3.1, 1.4.1).
+pub fn error_message(ui: &mut egui::Ui, text: impl Into<String>) -> egui::Response {
+    let p = palette(ui.ctx());
+    ui.horizontal(|ui| {
+        let size = egui::vec2(14.0, 14.0);
+        let (rect, _) = ui.allocate_exact_size(size, egui::Sense::hover());
+        paint_error_mark(ui.painter(), rect.center(), 6.5, &p);
+        ui.add(egui::Label::new(egui::RichText::new(text).color(p.error)).wrap())
+    })
+    .inner
 }
 
 /// Text in the semibold family.
@@ -683,6 +851,7 @@ pub fn weak(ui: &egui::Ui, text: impl Into<String>) -> egui::RichText {
 }
 
 #[cfg(test)]
+#[allow(clippy::expect_used)]
 mod tests {
     use super::*;
 
@@ -710,6 +879,79 @@ mod tests {
             found.iter().all(|m| !m.starts_with("Text on Canvas")),
             "{found:?}"
         );
+    }
+
+    #[test]
+    fn a_faint_control_outline_is_named() {
+        let mut p = LIGHT;
+        p.control_border = p.border;
+        let found = problems(&p);
+        for surface in ["Canvas", "Raised surfaces", "Side rail", "Table stripes"] {
+            let start = format!("Control outlines on {surface}: ");
+            assert!(
+                found
+                    .iter()
+                    .any(|m| m.starts_with(&start) && m.ends_with(":1, needs 3.0:1")),
+                "{surface}: {found:?}"
+            );
+        }
+    }
+
+    #[test]
+    fn header_text_stays_readable_on_a_focused_item() {
+        for theme in presets() {
+            for p in [theme.light, theme.dark] {
+                assert!(
+                    contrast(p.on_shell, header_lit(&p)) >= 4.5,
+                    "{}",
+                    theme.name
+                );
+                assert!(
+                    contrast(p.on_shell, header_hover(&p)) >= 4.5,
+                    "{}",
+                    theme.name
+                );
+            }
+        }
+        // A header whose text is close to its colour is reported for its focused items too.
+        let mut p = LIGHT;
+        p.on_shell = Color32::from_rgb(0x50, 0x5a, 0x66);
+        assert!(
+            problems(&p)
+                .iter()
+                .any(|m| m.starts_with("Text on header on Focused header item: ")),
+            "{:?}",
+            problems(&p)
+        );
+    }
+
+    #[test]
+    fn every_control_border_is_three_to_one_on_every_surface() {
+        for theme in presets() {
+            for p in [theme.light, theme.dark] {
+                for surface in [p.canvas, p.raised, p.rail, p.stripe] {
+                    assert!(contrast(p.control_border, surface) >= 3.0, "{}", theme.name);
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn a_theme_saved_before_control_outlines_gets_its_weak_text_colour() {
+        let mut saved = serde_json::to_value(default_theme()).expect("a theme as JSON");
+        for mode in ["light", "dark"] {
+            saved[mode]
+                .as_object_mut()
+                .expect("a palette")
+                .remove("control_border");
+        }
+        let back: Theme = serde_json::from_value(saved).expect("an old theme");
+        assert_eq!(back.light.control_border, LIGHT.text_weak);
+        assert_eq!(back.dark.control_border, DARK.text_weak);
+        // A theme that has the role keeps it.
+        let text = serde_json::to_string(&default_theme()).expect("JSON");
+        let again: Theme = serde_json::from_str(&text).expect("a theme");
+        assert_eq!(again, default_theme());
     }
 
     #[test]

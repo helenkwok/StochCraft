@@ -111,6 +111,7 @@
 	Chart colours…	Kolory wykresów…
 	Chart hover	Wykres pod wskaźnikiem
 	Check every	Kontrola co
+	Check the decimal and grouping marks	Sprawdź separator dziesiętny i separator tysięcy
 	Checks	Kontrole
 	Choose…	Wybierz…
 	Clear Menu	Wyczyść menu
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	Połączono {from} z {to}
 	Connections	Połączenia
 	Constant	Stały
+	Control outlines	Kontury kontrolek
 	Copy	Kopiuj
 	Counts against	Przypisane do
 	Customer demand	Popyt klientów
@@ -168,6 +170,7 @@
 	Energy	Energia
 	Energy per part	Energia na część
 	Enough: {units}, meeting the target in {p} of replications	Wystarczy: {units}, cel osiągnięty w {p} replikacji
+	Enter a number	Wpisz liczbę
 	Entered	Weszło
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Jednostki, które zastają pełną poczekalnię, od razu idą tym przepływem (na przykład, aby spróbować później ponownie), zamiast przepaść lub czekać przed zadaniem; tutaj liczą się jako utracone.
 	Entities give up waiting	Jednostki rezygnują z czekania
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Jednostki, które rezygnują z czekania, idą tym przepływem (na przykład, aby spróbować później ponownie); pozostałe idą drugim wyjściem zadania.
 	Erlang	Rozkład Erlanga
 	Error	Błąd
+	Error: {message}	Błąd: {message}
 	Estimate from three values…	Oszacuj z trzech wartości…
 	Evenly across	Równomiernie w poziomie
 	Evenly down	Równomiernie w pionie
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Dopasowano czas {id}
 	Fixed	Stały
 	Flows	Przepływy
+	Focused header item	Element nagłówka z fokusem
 	Forget the estimate	Zapomnij szacunek
 	Fri	pt
 	From	Od
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Nie znaleziono problemów. Model jest gotowy do uruchomienia.
 	None picked: the day the period starts.	Nic nie wybrano: dzień, w którym zaczyna się okres.
 	Normal	Normalny
+	Not a number	To nie jest liczba
 	Not reached, even with {units}	Nieosiągnięty, nawet przy {units}
 	Number	Liczba
+	Number too large	Liczba jest za duża
 	OEE	OEE
 	OEE availability	Dostępność OEE
 	OEE effectiveness	Efektywność OEE
@@ -541,6 +548,7 @@
 	Turned away on {id}	Odrzucenia na {id}
 	Two stations in series, read from an XPDL file.	Dwa stanowiska szeregowe wczytane z pliku XPDL.
 	Type	Typ
+	Type a time from 0 to {end} {unit}.	Wpisz chwilę od 0 do {end} {unit}.
 	Undid {action}	Cofnięto {action}
 	Undo	Cofnij
 	Undo {action}	Cofnij: {action}
@@ -555,6 +563,7 @@
 	Upper value	Wartość górna
 	Use System Setting	Użyj ustawienia systemowego
 	Use for charts	Użyj dla wykresów
+	Use one kind of digits	Użyj jednego rodzaju cyfr
 	Use these units in the model	Użyj tych jednostek w modelu
 	Utilisation	Wykorzystanie
 	Value	Wartość
@@ -649,6 +658,7 @@
 	{n} waiting	Oczekuje: {n}
 	{n} {unit} per second	{n} {unit} na sekundę
 	{property} (set to, mean)	{property} (ustawiono na, średnia)
+	{reason}. {field} is still {value}.	{reason}. {field} nadal wynosi {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – replikacje dzielą się na dwa różne wyniki: zob. tabelę poniżej.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – tło „{background}”: {ratio}:1, wymagane {min}:1
 	{title}: now {now}, at most {most}	{title}: teraz {now}, najwyżej {most}

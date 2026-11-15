@@ -111,6 +111,7 @@
 	Chart colours…	차트 색…
 	Chart hover	포인터 아래 차트
 	Check every	검사 간격
+	Check the decimal and grouping marks	소수점과 자릿수 구분 기호를 확인하세요
 	Checks	검사
 	Choose…	선택…
 	Clear Menu	메뉴 지우기
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	{from}을(를) {to}에 연결함
 	Connections	연결
 	Constant	상수
+	Control outlines	컨트롤 윤곽선
 	Copy	복사
 	Counts against	귀속 작업
 	Customer demand	고객 수요
@@ -168,6 +170,7 @@
 	Energy	에너지
 	Energy per part	부품당 에너지
 	Enough: {units}, meeting the target in {p} of replications	충분: {units}, 반복 실행의 {p}에서 목표 충족
+	Enter a number	숫자를 입력하세요
 	Entered	진입 수
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	대기실이 가득 찬 것을 본 엔터티는 곧바로 이 흐름을 따릅니다(예를 들어 나중에 다시 시도하기 위해). 손실되거나 작업 앞에서 기다리지 않으며, 여기서는 손실로 셉니다.
 	Entities give up waiting	엔터티가 대기를 포기함
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	대기를 포기한 엔터티는 이 흐름을 따릅니다(예를 들어 나중에 다시 시도하기 위해). 나머지는 작업의 다른 나갈 경로를 따릅니다.
 	Erlang	얼랑 분포
 	Error	오류
+	Error: {message}	오류: {message}
 	Estimate from three values…	세 값으로 추정…
 	Evenly across	가로로 균등 배치
 	Evenly down	세로로 균등 배치
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	{id}의 시간을 맞췄습니다
 	Fixed	고정
 	Flows	흐름
+	Focused header item	포커스가 있는 헤더 항목
 	Forget the estimate	추정 잊기
 	Fri	금
 	From	시작 블록
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	문제가 없습니다. 모델을 실행할 준비가 되었습니다.
 	None picked: the day the period starts.	선택하지 않으면: 기간이 시작하는 요일.
 	Normal	정규 분포
+	Not a number	숫자가 아닙니다
 	Not reached, even with {units}	{units}로도 도달하지 못함
 	Number	숫자
+	Number too large	숫자가 너무 큽니다
 	OEE	OEE
 	OEE availability	OEE 가용성
 	OEE effectiveness	OEE 효과성
@@ -541,6 +548,7 @@
 	Turned away on {id}	{id} 거절
 	Two stations in series, read from an XPDL file.	XPDL 파일에서 읽어온 직렬 배치 작업장 두 개.
 	Type	종류
+	Type a time from 0 to {end} {unit}.	0에서 {end} {unit} 사이의 시간을 입력하세요.
 	Undid {action}	{action} 실행 취소함
 	Undo	실행 취소
 	Undo {action}	{action} 실행 취소
@@ -555,6 +563,7 @@
 	Upper value	상한값
 	Use System Setting	시스템 설정 사용
 	Use for charts	차트에 사용
+	Use one kind of digits	한 종류의 숫자만 사용하세요
 	Use these units in the model	이 수량을 모델에 사용
 	Utilisation	가동률
 	Value	값
@@ -649,6 +658,7 @@
 	{n} waiting	대기 {n}
 	{n} {unit} per second	초당 {n} {unit}
 	{property} (set to, mean)	{property}(설정값, 평균)
+	{reason}. {field} is still {value}.	{reason}. {field} 값은 여전히 {value}입니다.
 	{result} ({element}) split into two outcomes: see the table below.	{result}({element}): 두 가지 결과로 나뉩니다. 아래 표를 보세요.
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} 위 {text}: {ratio}:1, 최소 {min}:1 필요
 	{title}: now {now}, at most {most}	{title}: 현재 {now}, 최대 {most}

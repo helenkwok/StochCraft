@@ -111,6 +111,7 @@
 	Chart colours…	圖表顏色…
 	Chart hover	游標停留時的圖表
 	Check every	檢查間隔
+	Check the decimal and grouping marks	請檢查小數點與千分位符號
 	Checks	檢查
 	Choose…	選擇…
 	Clear Menu	清除選單
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	已將 {from} 連接到 {to}
 	Connections	連接
 	Constant	常數
+	Control outlines	控制項輪廓
 	Copy	複製
 	Counts against	計入任務
 	Customer demand	客戶需求
@@ -168,6 +170,7 @@
 	Energy	能耗
 	Energy per part	單件能耗
 	Enough: {units}, meeting the target in {p} of replications	足夠：{units}，{p} 的重複執行達到目標
+	Enter a number	請輸入數值
 	Entered	進入數
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	發現等待區已滿的實體立即走此順序流（例如稍後重試），而不是流失或在任務前等待；此處計為流失。
 	Entities give up waiting	實體會放棄等待
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	放棄等待的實體走此順序流（例如稍後重試）；其他實體走任務的另一個出口。
 	Erlang	爾朗分布
 	Error	錯誤
+	Error: {message}	錯誤：{message}
 	Estimate from three values…	根據三個值估計…
 	Evenly across	水平平均分佈
 	Evenly down	垂直平均分佈
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	已擬合 {id} 的時間
 	Fixed	固定
 	Flows	順序流
+	Focused header item	頂端列焦點項目
 	Forget the estimate	捨棄估計
 	Fri	週五
 	From	起點
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	未發現問題。模型可以執行。
 	None picked: the day the period starts.	未選取：時段開始的那一天。
 	Normal	常態分布
+	Not a number	不是數值
 	Not reached, even with {units}	即使有 {units} 也未達成
 	Number	數值
+	Number too large	數值過大
 	OEE	OEE
 	OEE availability	OEE 稼動率
 	OEE effectiveness	OEE 效能
@@ -541,6 +548,7 @@
 	Turned away on {id}	{id} 上的拒絕
 	Two stations in series, read from an XPDL file.	從 XPDL 檔案讀取的兩個串聯工作站。
 	Type	型別
+	Type a time from 0 to {end} {unit}.	請輸入 0 到 {end} {unit} 之間的時間。
 	Undid {action}	已復原 {action}
 	Undo	復原
 	Undo {action}	復原{action}
@@ -555,6 +563,7 @@
 	Upper value	上限值
 	Use System Setting	使用系統設定
 	Use for charts	用於圖表
+	Use one kind of digits	請只使用一種數字
 	Use these units in the model	在模型中使用這些數量
 	Utilisation	利用率
 	Value	值
@@ -649,6 +658,7 @@
 	{n} waiting	等待 {n}
 	{n} {unit} per second	每秒 {n} {unit}
 	{property} (set to, mean)	{property}（所設值的平均值）
+	{reason}. {field} is still {value}.	{reason}。{field}仍為 {value}。
 	{result} ({element}) split into two outcomes: see the table below.	{result}（{element}）分成兩種結果：請查看下方的表格。
 	{text} on {background}: {ratio}:1, needs {min}:1	{background}上的{text}：{ratio}:1，需要 {min}:1
 	{title}: now {now}, at most {most}	{title}：目前 {now}，最多 {most}

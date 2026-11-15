@@ -111,6 +111,7 @@
 	Chart colours…	グラフの色…
 	Chart hover	ポインター下のグラフ
 	Check every	チェック間隔
+	Check the decimal and grouping marks	小数点と桁区切り記号を確認してください
 	Checks	チェック
 	Choose…	選択…
 	Clear Menu	メニューを消去
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	{from} を {to} に接続しました
 	Connections	接続
 	Constant	定数
+	Control outlines	コントロールの輪郭線
 	Copy	コピー
 	Counts against	計上先
 	Customer demand	顧客需要
@@ -168,6 +170,7 @@
 	Energy	エネルギー
 	Energy per part	部品あたりのエネルギー
 	Enough: {units}, meeting the target in {p} of replications	十分: {units}、反復実行の {p} で目標を達成
+	Enter a number	数値を入力してください
 	Entered	流入数
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	待機場所が満員のときに来たエンティティは、すぐにこのフローを通ります（後で再試行するなど）。失われることも、タスクの手前で待つこともありません。ここでは損失として数えます。
 	Entities give up waiting	エンティティが待ち切れずに離脱する
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	待ち切れずに離脱したエンティティはこのフローを通ります（後で再試行するなど）。それ以外はタスクのもう一方の出口を通ります。
 	Erlang	アーラン分布
 	Error	エラー
+	Error: {message}	エラー：{message}
 	Estimate from three values…	3 つの値から見積もる…
 	Evenly across	左右に均等配置
 	Evenly down	上下に均等配置
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	{id} の時間を当てはめました
 	Fixed	固定
 	Flows	フロー
+	Focused header item	フォーカスのあるヘッダー項目
 	Forget the estimate	見積もりを破棄
 	Fri	金
 	From	接続元
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	問題は見つかりませんでした。モデルを実行できます。
 	None picked: the day the period starts.	未選択の場合: 期間が始まる曜日。
 	Normal	正規分布
+	Not a number	数値ではありません
 	Not reached, even with {units}	{units} でも未達成
 	Number	数値
+	Number too large	数値が大きすぎます
 	OEE	OEE
 	OEE availability	OEE 可動率
 	OEE effectiveness	OEE 有効性
@@ -541,6 +548,7 @@
 	Turned away on {id}	{id} の受入拒否
 	Two stations in series, read from an XPDL file.	XPDL ファイルから読み込んだ、直列の 2 つのステーション。
 	Type	種類
+	Type a time from 0 to {end} {unit}.	0 から {end} {unit} までの時刻を入力してください。
 	Undid {action}	{action} を元に戻しました
 	Undo	取り消し
 	Undo {action}	元に戻す: {action}
@@ -555,6 +563,7 @@
 	Upper value	上限値
 	Use System Setting	システム設定を使用
 	Use for charts	グラフに使用
+	Use one kind of digits	1 種類の数字だけを使ってください
 	Use these units in the model	この数量をモデルで使う
 	Utilisation	稼働率
 	Value	値
@@ -649,6 +658,7 @@
 	{n} waiting	待ち {n}
 	{n} {unit} per second	毎秒 {n} {unit}
 	{property} (set to, mean)	{property}（設定値、平均）
+	{reason}. {field} is still {value}.	{reason}。{field} は {value} のままです。
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) は 2 通りの結果に分かれました。下の表を見てください。
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} 上の {text}: {ratio}:1、{min}:1 以上が必要
 	{title}: now {now}, at most {most}	{title}: 現在 {now}、最大 {most}

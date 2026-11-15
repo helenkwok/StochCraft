@@ -111,6 +111,7 @@
 	Chart colours…	Diagramų spalvos…
 	Chart hover	Diagrama po žymekliu
 	Check every	Tikrinti kas
+	Check the decimal and grouping marks	Patikrinkite dešimtainį ir skaitmenų grupių skyriklius
 	Checks	Patikros
 	Choose…	Pasirinkite…
 	Clear Menu	Išvalyti meniu
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	{from} sujungta su {to}
 	Connections	Jungtys
 	Constant	Konstanta
+	Control outlines	Valdiklių kontūrai
 	Copy	Kopijuoti
 	Counts against	Priskiriama
 	Customer demand	Klientų poreikis
@@ -168,6 +170,7 @@
 	Energy	Energija
 	Energy per part	Energija vienai detalei
 	Enough: {units}, meeting the target in {p} of replications	Pakanka: {units}, tikslas pasiekiamas {p} replikacijų
+	Enter a number	Įveskite skaičių
 	Entered	Įėjo
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Objektai, radę laukiamąjį pilną, iškart eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą), užuot buvę prarasti ar laukę prieš užduotį; čia jie skaičiuojami kaip prarasti.
 	Entities give up waiting	Objektai nustoja laukti
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Laukti nustoję objektai eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą); kiti eina kitu užduoties išėjimu.
 	Erlang	Erlango
 	Error	Klaida
+	Error: {message}	Klaida: {message}
 	Estimate from three values…	Įvertinti pagal tris reikšmes…
 	Evenly across	Tolygiai horizontaliai
 	Evenly down	Tolygiai vertikaliai
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	{id} laikas pritaikytas
 	Fixed	Pastovus
 	Flows	Srautai
+	Focused header item	Sufokusuotas antraštės juostos elementas
 	Forget the estimate	Pamiršti įvertį
 	Fri	pn
 	From	Iš
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Problemų nerasta. Modelis paruoštas vykdyti.
 	None picked: the day the period starts.	Nieko nepasirinkta: diena, kai prasideda laikotarpis.
 	Normal	Normalusis
+	Not a number	Ne skaičius
 	Not reached, even with {units}	Nepasiekta net su {units}
 	Number	Skaičius
+	Number too large	Skaičius per didelis
 	OEE	OEE
 	OEE availability	OEE prieinamumas
 	OEE effectiveness	OEE efektyvumas
@@ -541,6 +548,7 @@
 	Turned away on {id}	Atmesti sraute {id}
 	Two stations in series, read from an XPDL file.	Dvi nuoseklios stotys, nuskaitytos iš XPDL failo.
 	Type	Tipas
+	Type a time from 0 to {end} {unit}.	Įveskite laiką nuo 0 iki {end} {unit}.
 	Undid {action}	Atšaukta {action}
 	Undo	Anuliuoti
 	Undo {action}	Atšaukti {action}
@@ -555,6 +563,7 @@
 	Upper value	Viršutinė reikšmė
 	Use System Setting	Naudoti sistemos nustatymą
 	Use for charts	Naudoti diagramoms
+	Use one kind of digits	Naudokite vienos rūšies skaitmenis
 	Use these units in the model	Naudoti šiuos vienetus modelyje
 	Utilisation	Panaudojimo koeficientas
 	Value	Reikšmė
@@ -649,6 +658,7 @@
 	{n} waiting	Laukia: {n}
 	{n} {unit} per second	{n} {unit} per sekundę
 	{property} (set to, mean)	{property} (nustatyta reikšmė, vidurkis)
+	{reason}. {field} is still {value}.	{reason}. {field} vis dar yra {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – replikacijos išsiskyrė į dvi skirtingas baigtis: žr. lentelę žemiau.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – fonas „{background}“: {ratio}:1, reikia {min}:1
 	{title}: now {now}, at most {most}	{title}: dabar {now}, daugiausia {most}

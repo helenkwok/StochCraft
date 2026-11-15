@@ -111,6 +111,7 @@
 	Chart colours…	Colors dels gràfics…
 	Chart hover	Gràfic sota el punter
 	Check every	Comprovar cada
+	Check the decimal and grouping marks	Reviseu els separadors decimal i de milers
 	Checks	Comprovacions
 	Choose…	Tria…
 	Clear Menu	Buida el menú
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	S'ha connectat {from} amb {to}
 	Connections	Connexions
 	Constant	Constant
+	Control outlines	Contorns dels controls
 	Copy	Copia
 	Counts against	S'imputa a
 	Customer demand	Demanda del client
@@ -168,6 +170,7 @@
 	Energy	Energia
 	Energy per part	Energia per peça
 	Enough: {units}, meeting the target in {p} of replications	Prou: {units}, compleix l'objectiu en el {p} de les rèpliques
+	Enter a number	Introduïu un nombre
 	Entered	Entrades
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Les entitats que troben la sala d'espera plena prenen aquest flux de seguida (per tornar-ho a provar més tard, per exemple), en lloc de perdre's o d'esperar abans de la tasca; aquí compten com a perdudes.
 	Entities give up waiting	Les entitats abandonen l'espera
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Les entitats que abandonen l'espera prenen aquest flux (per tornar-ho a provar més tard, per exemple); les altres prenen l'altra sortida de la tasca.
 	Erlang	Erlang
 	Error	Error
+	Error: {message}	Error: {message}
 	Estimate from three values…	Estima a partir de tres valors…
 	Evenly across	Distribueix horitzontalment
 	Evenly down	Distribueix verticalment
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	S'ha ajustat el temps de {id}
 	Fixed	Fixa
 	Flows	Fluxos
+	Focused header item	Element de la capçalera amb el focus
 	Forget the estimate	Oblida l'estimació
 	Fri	dv.
 	From	Des de
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	No s'han trobat problemes. El model està a punt per executar-se.
 	None picked: the day the period starts.	Cap triat: el dia en què comença el període.
 	Normal	Normal
+	Not a number	No és un nombre
 	Not reached, even with {units}	No assolit, ni tan sols amb {units}
 	Number	Nombre
+	Number too large	Nombre massa gran
 	OEE	OEE
 	OEE availability	Disponibilitat OEE
 	OEE effectiveness	Eficàcia OEE
@@ -541,6 +548,7 @@
 	Turned away on {id}	Rebutjades a {id}
 	Two stations in series, read from an XPDL file.	Dues estacions en sèrie, llegides d'un fitxer XPDL.
 	Type	Tipus
+	Type a time from 0 to {end} {unit}.	Escriviu un instant de 0 a {end} {unit}.
 	Undid {action}	S'ha desfet {action}
 	Undo	Desfés
 	Undo {action}	Desfés {action}
@@ -555,6 +563,7 @@
 	Upper value	Valor superior
 	Use System Setting	Fes servir la configuració del sistema
 	Use for charts	Usa per als gràfics
+	Use one kind of digits	Feu servir un sol tipus de xifres
 	Use these units in the model	Fes servir aquestes unitats al model
 	Utilisation	Utilització
 	Value	Valor
@@ -649,6 +658,7 @@
 	{n} waiting	{n} en espera
 	{n} {unit} per second	{n} {unit} per segon
 	{property} (set to, mean)	{property} (valor definit, mitjana)
+	{reason}. {field} is still {value}.	{reason}. {field} continua sent {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): les rèpliques es divideixen en dos resultats diferents; vegeu la taula de sota.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} sobre {background}: {ratio}:1, cal {min}:1
 	{title}: now {now}, at most {most}	{title}: ara {now}, com a màxim {most}

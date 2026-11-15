@@ -111,6 +111,7 @@
 	Chart colours…	Diagramfarver…
 	Chart hover	Diagram under markøren
 	Check every	Kontrol hver
+	Check the decimal and grouping marks	Kontrollér decimaltegn og tusindtalsseparator
 	Checks	Kontroller
 	Choose…	Vælg…
 	Clear Menu	Ryd menu
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	Forbandt {from} med {to}
 	Connections	Forbindelser
 	Constant	Konstant
+	Control outlines	Kanter på kontrolelementer
 	Copy	Kopiér
 	Counts against	Henføres til
 	Customer demand	Kundebehov
@@ -168,6 +170,7 @@
 	Energy	Energi
 	Energy per part	Energi pr. emne
 	Enough: {units}, meeting the target in {p} of replications	Nok: {units}, når målet i {p} af replikationerne
+	Enter a number	Indtast et tal
 	Entered	Indgået
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Enheder, der finder venteværelset fuldt, tager straks dette flow (for at prøve igen senere, f.eks.) i stedet for at gå tabt eller vente før opgaven; de tælles her som tabt.
 	Entities give up waiting	Enheder opgiver at vente
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Enheder, der opgiver at vente, tager dette flow (for at prøve igen senere, f.eks.); de andre tager opgavens anden vej ud.
 	Erlang	Erlang
 	Error	Fejl
+	Error: {message}	Fejl: {message}
 	Estimate from three values…	Skøn ud fra tre værdier…
 	Evenly across	Fordel jævnt vandret
 	Evenly down	Fordel jævnt lodret
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Tiden for {id} tilpasset
 	Fixed	Fast
 	Flows	Flow
+	Focused header item	Fokuseret element på topbjælke
 	Forget the estimate	Glem skønnet
 	Fri	fre
 	From	Fra
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Ingen problemer fundet. Modellen er klar til at køre.
 	None picked: the day the period starts.	Ingen valgt: den dag, perioden starter.
 	Normal	Normal
+	Not a number	Ikke et tal
 	Not reached, even with {units}	Ikke nået, heller ikke med {units}
 	Number	Tal
+	Number too large	Tallet er for stort
 	OEE	OEE
 	OEE availability	OEE-tilgængelighed
 	OEE effectiveness	OEE-effektivitet
@@ -541,6 +548,7 @@
 	Turned away on {id}	Afvist på {id}
 	Two stations in series, read from an XPDL file.	To stationer i serie, læst fra en XPDL-fil.
 	Type	Tekst
+	Type a time from 0 to {end} {unit}.	Indtast et tidspunkt fra 0 til {end} {unit}.
 	Undid {action}	Fortrød {action}
 	Undo	Fortryd
 	Undo {action}	Fortryd {action}
@@ -555,6 +563,7 @@
 	Upper value	Øvre værdi
 	Use System Setting	Brug systemindstilling
 	Use for charts	Brug til diagrammer
+	Use one kind of digits	Brug én slags cifre
 	Use these units in the model	Brug disse enheder i modellen
 	Utilisation	Udnyttelsesgrad
 	Value	Værdi
@@ -649,6 +658,7 @@
 	{n} waiting	{n} venter
 	{n} {unit} per second	{n} {unit} pr. sekund
 	{property} (set to, mean)	{property} (angivet værdi, gennemsnit)
+	{reason}. {field} is still {value}.	{reason}. {field} er stadig {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replikationerne deler sig i to udfald; se tabellen nedenfor.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} på {background}: {ratio}:1, kræver {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, højst {most}

@@ -111,6 +111,7 @@
 	Chart colours…	Màu biểu đồ…
 	Chart hover	Biểu đồ khi trỏ chuột
 	Check every	Kiểm tra mỗi
+	Check the decimal and grouping marks	Kiểm tra dấu thập phân và dấu phân cách hàng nghìn
 	Checks	Kiểm tra
 	Choose…	Chọn…
 	Clear Menu	Xóa menu
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	Đã kết nối {from} với {to}
 	Connections	Kết nối
 	Constant	Hằng số
+	Control outlines	Đường bao điều khiển
 	Copy	Sao chép
 	Counts against	Quy cho
 	Customer demand	Nhu cầu khách hàng
@@ -168,6 +170,7 @@
 	Energy	Năng lượng
 	Energy per part	Năng lượng trên mỗi chi tiết
 	Enough: {units}, meeting the target in {p} of replications	Đủ: {units}, đạt mục tiêu trong {p} số lần lặp
+	Enter a number	Nhập một số
 	Entered	Đã vào
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Các thực thể thấy khu vực chờ đầy sẽ đi theo luồng này ngay (chẳng hạn để thử lại sau), thay vì bị mất hoặc chờ trước tác vụ; ở đây chúng được tính là bị mất.
 	Entities give up waiting	Thực thể bỏ đi khi chờ quá lâu
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Các thực thể bỏ đi khi chờ đi theo luồng này (chẳng hạn để thử lại sau); các thực thể khác đi theo lối ra còn lại của tác vụ.
 	Erlang	Erlang
 	Error	Lỗi
+	Error: {message}	Lỗi: {message}
 	Estimate from three values…	Ước lượng từ ba giá trị…
 	Evenly across	Dàn đều theo chiều ngang
 	Evenly down	Dàn đều theo chiều dọc
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Đã khớp thời gian của {id}
 	Fixed	Cố định
 	Flows	Luồng
+	Focused header item	Mục đang có tiêu điểm trên thanh tiêu đề
 	Forget the estimate	Bỏ ước lượng
 	Fri	T6
 	From	Từ
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Không tìm thấy vấn đề. Mô hình đã sẵn sàng chạy.
 	None picked: the day the period starts.	Không chọn: ngày khoảng thời gian bắt đầu.
 	Normal	Chuẩn
+	Not a number	Không phải là số
 	Not reached, even with {units}	Chưa đạt, kể cả với {units}
 	Number	Số
+	Number too large	Số quá lớn
 	OEE	OEE
 	OEE availability	Độ khả dụng OEE
 	OEE effectiveness	Hiệu quả OEE
@@ -541,6 +548,7 @@
 	Turned away on {id}	Bị từ chối tại {id}
 	Two stations in series, read from an XPDL file.	Hai trạm nối tiếp, được đọc từ tệp XPDL.
 	Type	Loại
+	Type a time from 0 to {end} {unit}.	Nhập thời điểm từ 0 đến {end} {unit}.
 	Undid {action}	Đã hoàn tác {action}
 	Undo	Hoàn tác
 	Undo {action}	Hoàn tác {action}
@@ -555,6 +563,7 @@
 	Upper value	Giá trị trên
 	Use System Setting	Dùng cài đặt hệ thống
 	Use for charts	Dùng cho biểu đồ
+	Use one kind of digits	Chỉ dùng một loại chữ số
 	Use these units in the model	Dùng các đơn vị này trong mô hình
 	Utilisation	Mức sử dụng
 	Value	Giá trị
@@ -649,6 +658,7 @@
 	{n} waiting	{n} đang chờ
 	{n} {unit} per second	{n} {unit} mỗi giây
 	{property} (set to, mean)	{property} (giá trị đặt, trung bình)
+	{reason}. {field} is still {value}.	{reason}. {field} vẫn là {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): các lần lặp tách thành hai kết cục; xem bảng bên dưới.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} trên {background}: {ratio}:1, cần {min}:1
 	{title}: now {now}, at most {most}	{title}: hiện tại {now}, tối đa {most}

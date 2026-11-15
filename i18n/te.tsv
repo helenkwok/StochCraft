@@ -111,6 +111,7 @@
 	Chart colours…	చార్ట్ రంగులు…
 	Chart hover	పాయింటర్ కింద చార్ట్
 	Check every	తనిఖీ వ్యవధి
+	Check the decimal and grouping marks	దశాంశ గుర్తును, సమూహ గుర్తును తనిఖీ చేయండి
 	Checks	తనిఖీలు
 	Choose…	ఎంచుకోండి…
 	Clear Menu	మెనూను క్లియర్ చేయి
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	{from} ను {to} కు అనుసంధానించబడింది
 	Connections	అనుసంధానాలు
 	Constant	స్థిర విలువ
+	Control outlines	నియంత్రణల అవుట్‌లైన్‌లు
 	Copy	కాపీ చేయి
 	Counts against	ఖాతాలో వేసే పని
 	Customer demand	కస్టమర్ డిమాండ్
@@ -168,6 +170,7 @@
 	Energy	శక్తి
 	Energy per part	ఒక్కో భాగానికి శక్తి
 	Enough: {units}, meeting the target in {p} of replications	సరిపోతుంది: {units}, {p} పునరావృత్త అమలులలో లక్ష్యం చేరుతుంది
+	Enter a number	ఒక సంఖ్యను నమోదు చేయండి
 	Entered	ప్రవేశించినవి
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	వేచి ఉండే గది నిండి ఉండటం చూసిన ఎంటిటీలు వెంటనే ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి), కోల్పోవడం లేదా పనికి ముందు వేచి ఉండటం బదులు; ఇక్కడ అవి కోల్పోయినవిగా లెక్కించబడతాయి.
 	Entities give up waiting	ఎంటిటీలు వేచి ఉండటం మానేస్తాయి
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	వేచి ఉండటం మానేసిన ఎంటిటీలు ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి); మిగిలినవి పని యొక్క మరో బయటికి దారిలో వెళ్తాయి.
 	Erlang	ఎర్లాంగ్
 	Error	లోపం
+	Error: {message}	లోపం: {message}
 	Estimate from three values…	మూడు విలువల నుండి అంచనా వేయి…
 	Evenly across	అడ్డంగా సమానంగా పంచు
 	Evenly down	నిలువుగా సమానంగా పంచు
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	{id} సమయం అమర్చబడింది
 	Fixed	స్థిరం
 	Flows	ప్రవాహాలు
+	Focused header item	హెడర్ బార్‌పై ఫోకస్‌లో ఉన్న అంశం
 	Forget the estimate	అంచనాను మర్చిపో
 	Fri	శుక్ర
 	From	నుంచి
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	ఏ సమస్యలూ కనబడలేదు. నమూనా అమలుకు సిద్ధంగా ఉంది.
 	None picked: the day the period starts.	ఏదీ ఎంచుకోలేదు: వ్యవధి ప్రారంభమయ్యే రోజు.
 	Normal	సాధారణ పంపిణీ
+	Not a number	సంఖ్య కాదు
 	Not reached, even with {units}	{units}తో కూడా చేరలేదు
 	Number	సంఖ్య
+	Number too large	సంఖ్య చాలా పెద్దది
 	OEE	OEE
 	OEE availability	OEE లభ్యత
 	OEE effectiveness	OEE ప్రభావశీలత
@@ -541,6 +548,7 @@
 	Turned away on {id}	{id} వద్ద తిప్పి పంపినవి
 	Two stations in series, read from an XPDL file.	XPDL ఫైల్ నుంచి చదివిన వరుసలోని రెండు స్టేషన్‌లు.
 	Type	రకం
+	Type a time from 0 to {end} {unit}.	0 నుంచి {end} {unit} మధ్య సమయాన్ని టైప్ చేయండి.
 	Undid {action}	{action} చర్య రద్దు చేయబడింది
 	Undo	రద్దు చేయి
 	Undo {action}	రద్దు చేయి: {action}
@@ -555,6 +563,7 @@
 	Upper value	ఎగువ విలువ
 	Use System Setting	సిస్టమ్ సెట్టింగ్‌ను ఉపయోగించు
 	Use for charts	చార్ట్‌లకు ఉపయోగించు
+	Use one kind of digits	ఒకే రకమైన అంకెలను ఉపయోగించండి
 	Use these units in the model	ఈ యూనిట్‌లను మోడల్‌లో ఉపయోగించు
 	Utilisation	వినియోగ శాతం
 	Value	విలువ
@@ -649,6 +658,7 @@
 	{n} waiting	{n} వేచి ఉన్నాయి
 	{n} {unit} per second	సెకనుకు {n} {unit}
 	{property} (set to, mean)	{property} (నిర్ణీత విలువ, సగటు)
+	{reason}. {field} is still {value}.	{reason}. {field} ఇప్పటికీ {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – పునరావృత్త అమలులు రెండు వేర్వేరు ఫలితాలుగా విడిపోయాయి: దిగువ పట్టికను చూడండి.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – నేపథ్యం {background}: {ratio}:1, అవసరం {min}:1
 	{title}: now {now}, at most {most}	{title}: ఇప్పుడు {now}, గరిష్ఠం {most}

@@ -28,10 +28,16 @@
     #stochcraft_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
     #stochcraft_loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
       color: #8c8c8c; font: 14px system-ui, sans-serif; pointer-events: none; }
+    /* Read by screen readers, not shown: the status bar's messages (web.rs mirrors them). */
+    .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+      clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
   </style>
 </head>
 <body>
-  <canvas id="stochcraft_canvas"></canvas>
+  <!-- The app draws everything on the canvas, so a screen reader gets only its name and the
+       status messages below; the desktop app has the full accessibility tree. -->
+  <canvas id="stochcraft_canvas" role="application" aria-label="StochCraft model editor"></canvas>
+  <div id="stochcraft_status" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
   <div id="stochcraft_loading" role="status">Loading StochCraft&hellip;</div>
   <noscript>StochCraft needs JavaScript and WebAssembly.</noscript>
 </body>

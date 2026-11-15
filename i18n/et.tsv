@@ -111,6 +111,7 @@
 	Chart colours…	Graafikute värvid…
 	Chart hover	Graafik kursori all
 	Check every	Kontroll iga
+	Check the decimal and grouping marks	Kontrolli kümnenderaldajat ja tuhandeliste eraldajat
 	Checks	Kontrollid
 	Choose…	Vali…
 	Clear Menu	Tühjenda menüü
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	Ühendati {from} plokiga {to}
 	Connections	Ühendused
 	Constant	Konstant
+	Control outlines	Juhtelementide piirjooned
 	Copy	Kopeeri
 	Counts against	Arvele kantakse
 	Customer demand	Kliendi nõudlus
@@ -168,6 +170,7 @@
 	Energy	Energia
 	Energy per part	Energia detaili kohta
 	Enough: {units}, meeting the target in {p} of replications	Piisab: {units}, eesmärk saavutatakse {p} kordustest
+	Enter a number	Sisesta arv
 	Entered	Sisenenud
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Olemid, kes leiavad ooteruumi täis olevat, lähevad kohe seda voogu mööda (näiteks hiljem uuesti proovima), selle asemel et kaotsi minna või enne ülesannet oodata; siin loetakse need kaotatuks.
 	Entities give up waiting	Olemid loobuvad ootamisest
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Ootamisest loobuvad olemid lähevad seda voogu mööda (näiteks hiljem uuesti proovima); teised lähevad ülesande teise väljapääsu kaudu.
 	Erlang	Erlang
 	Error	Viga
+	Error: {message}	Viga: {message}
 	Estimate from three values…	Hinda kolme väärtuse põhjal…
 	Evenly across	Jaota ühtlaselt horisontaalselt
 	Evenly down	Jaota ühtlaselt vertikaalselt
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Ploki {id} aeg sobitatud
 	Fixed	Fikseeritud
 	Flows	Vood
+	Focused header item	Fookuses päiseelement
 	Forget the estimate	Unusta hinnang
 	Fri	R
 	From	Alates
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Probleeme ei leitud. Mudel on käivitamiseks valmis.
 	None picked: the day the period starts.	Midagi pole valitud: päev, mil periood algab.
 	Normal	Normaalne
+	Not a number	Pole arv
 	Not reached, even with {units}	Ei saavutatud, isegi mitte {units} korral
 	Number	Arv
+	Number too large	Arv on liiga suur
 	OEE	OEE
 	OEE availability	OEE kättesaadavus
 	OEE effectiveness	OEE tõhusus
@@ -541,6 +548,7 @@
 	Turned away on {id}	Tagasi lükatud voos {id}
 	Two stations in series, read from an XPDL file.	Kaks järjestikust jaama, loetud XPDL-failist.
 	Type	Tüüp
+	Type a time from 0 to {end} {unit}.	Sisesta ajahetk vahemikus 0 kuni {end} {unit}.
 	Undid {action}	Võeti {action} tagasi
 	Undo	Võta tagasi
 	Undo {action}	Võta tagasi: {action}
@@ -555,6 +563,7 @@
 	Upper value	Ülemine väärtus
 	Use System Setting	Kasuta süsteemi seadet
 	Use for charts	Kasuta graafikutes
+	Use one kind of digits	Kasuta üht liiki numbreid
 	Use these units in the model	Kasuta neid ühikuid mudelis
 	Utilisation	Kasutusmäär
 	Value	Väärtus
@@ -649,6 +658,7 @@
 	{n} waiting	{n} ootel
 	{n} {unit} per second	{n} {unit} sekundis
 	{property} (set to, mean)	{property} (määratud väärtus, keskmine)
+	{reason}. {field} is still {value}.	{reason}. {field} on endiselt {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – kordused jagunevad kaheks eri tulemuseks: vaata allolevat tabelit.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – taust „{background}“: {ratio}:1, vaja {min}:1
 	{title}: now {now}, at most {most}	{title}: praegu {now}, kõige rohkem {most}

@@ -111,6 +111,7 @@
 	Chart colours…	Кольори діаграм…
 	Chart hover	Діаграма під вказівником
 	Check every	Перевіряти кожні
+	Check the decimal and grouping marks	Перевірте десятковий роздільник і роздільник розрядів
 	Checks	Перевірки
 	Choose…	Виберіть…
 	Clear Menu	Очистити меню
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	{from} з'єднано з {to}
 	Connections	З'єднання
 	Constant	Стала величина
+	Control outlines	Контури елементів керування
 	Copy	Копіювати
 	Counts against	Віднесено на
 	Customer demand	Попит клієнтів
@@ -168,6 +170,7 @@
 	Energy	Енергія
 	Energy per part	Енергія на деталь
 	Enough: {units}, meeting the target in {p} of replications	Досить: {units}, мету досягнуто в {p} реплікацій
+	Enter a number	Введіть число
 	Entered	Увійшло
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Сутності, які застають місця очікування зайнятими, одразу йдуть цим потоком (наприклад, щоб спробувати пізніше), а не втрачаються і не чекають перед завданням; тут вони рахуються як втрати.
 	Entities give up waiting	Сутності перестають чекати
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Сутності, які перестають чекати, ідуть цим потоком (наприклад, щоб спробувати пізніше); решта йде іншим виходом завдання.
 	Erlang	Розподіл Ерланга
 	Error	Помилка
+	Error: {message}	Помилка: {message}
 	Estimate from three values…	Оцінити за трьома значеннями…
 	Evenly across	Рівномірно по горизонталі
 	Evenly down	Рівномірно по вертикалі
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Час {id} підібрано
 	Fixed	Стала
 	Flows	Потоки
+	Focused header item	Елемент верхньої панелі у фокусі
 	Forget the estimate	Забути оцінку
 	Fri	пт
 	From	Від
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Проблем не знайдено. Модель готова до запуску.
 	None picked: the day the period starts.	Нічого не вибрано: день початку періоду.
 	Normal	Нормальний розподіл
+	Not a number	Не число
 	Not reached, even with {units}	Не досягнуто навіть із {units}
 	Number	Число
+	Number too large	Завелике число
 	OEE	OEE
 	OEE availability	Доступність OEE
 	OEE effectiveness	Результативність OEE
@@ -541,6 +548,7 @@
 	Turned away on {id}	Відхилені на {id}
 	Two stations in series, read from an XPDL file.	Дві послідовні станції, завантажені з файлу XPDL.
 	Type	Тип
+	Type a time from 0 to {end} {unit}.	Введіть час від 0 до {end} {unit}.
 	Undid {action}	Скасовано дію {action}
 	Undo	Скасувати
 	Undo {action}	Скасувати: {action}
@@ -555,6 +563,7 @@
 	Upper value	Верхнє значення
 	Use System Setting	Використати системне налаштування
 	Use for charts	Використовувати для діаграм
+	Use one kind of digits	Використовуйте цифри одного виду
 	Use these units in the model	Використати ці одиниці в моделі
 	Utilisation	Коефіцієнт використання
 	Value	Значення
@@ -649,6 +658,7 @@
 	{n} waiting	Очікують: {n}
 	{n} {unit} per second	{n} {unit} за секунду
 	{property} (set to, mean)	{property} (задане значення, середнє)
+	{reason}. {field} is still {value}.	{reason}. {field}: досі {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) — реплікації розділилися на два різні результати: див. таблицю нижче.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} — тло «{background}»: {ratio}:1, потрібно {min}:1
 	{title}: now {now}, at most {most}	{title}: зараз {now}, щонайбільше {most}

@@ -111,6 +111,7 @@
 	Chart colours…	Couleurs des graphiques…
 	Chart hover	Graphique sous le pointeur
 	Check every	Contrôler toutes les
+	Check the decimal and grouping marks	Vérifiez les séparateurs décimal et de milliers
 	Checks	Vérifications
 	Choose…	Choisir…
 	Clear Menu	Effacer le menu
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	{from} connecté à {to}
 	Connections	Connexions
 	Constant	Constante
+	Control outlines	Contours des commandes
 	Copy	Copier
 	Counts against	Imputé à
 	Customer demand	Demande client
@@ -168,6 +170,7 @@
 	Energy	Énergie
 	Energy per part	Énergie par pièce
 	Enough: {units}, meeting the target in {p} of replications	Suffisant : {units}, l'objectif est atteint dans {p} des réplications
+	Enter a number	Saisissez un nombre
 	Entered	Entrées
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Les entités qui trouvent la salle d'attente pleine prennent aussitôt ce flux (pour réessayer plus tard, par exemple), au lieu d'être perdues ou d'attendre avant la tâche ; elles comptent ici comme perdues.
 	Entities give up waiting	Les entités abandonnent l'attente
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Les entités qui abandonnent l'attente prennent ce flux (pour réessayer plus tard, par exemple) ; les autres prennent l'autre sortie de la tâche.
 	Erlang	Erlang
 	Error	Erreur
+	Error: {message}	Erreur : {message}
 	Estimate from three values…	Estimer à partir de trois valeurs…
 	Evenly across	Répartir horizontalement
 	Evenly down	Répartir verticalement
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Temps de {id} ajusté
 	Fixed	Fixe
 	Flows	Flux
+	Focused header item	Élément de l'en-tête ayant le focus
 	Forget the estimate	Oublier l'estimation
 	Fri	ven
 	From	De
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Aucun problème détecté. Le modèle est prêt à être exécuté.
 	None picked: the day the period starts.	Aucun choisi : le jour où commence la période.
 	Normal	Normale
+	Not a number	Ce n'est pas un nombre
 	Not reached, even with {units}	Non atteint, même avec {units}
 	Number	Nombre
+	Number too large	Nombre trop grand
 	OEE	OEE
 	OEE availability	Disponibilité OEE
 	OEE effectiveness	Efficacité OEE
@@ -541,6 +548,7 @@
 	Turned away on {id}	Refus sur {id}
 	Two stations in series, read from an XPDL file.	Deux postes en série, lus depuis un fichier XPDL.
 	Type	Type
+	Type a time from 0 to {end} {unit}.	Saisissez un instant de 0 à {end} {unit}.
 	Undid {action}	{action} annulé
 	Undo	Annuler
 	Undo {action}	Annuler {action}
@@ -555,6 +563,7 @@
 	Upper value	Valeur haute
 	Use System Setting	Utiliser le paramètre système
 	Use for charts	Utiliser pour les graphiques
+	Use one kind of digits	Utilisez un seul type de chiffres
 	Use these units in the model	Utiliser ces unités dans le modèle
 	Utilisation	Taux d'utilisation
 	Value	Valeur
@@ -649,6 +658,7 @@
 	{n} waiting	{n} en attente
 	{n} {unit} per second	{n} {unit} par seconde
 	{property} (set to, mean)	{property} (valeur définie, moyenne)
+	{reason}. {field} is still {value}.	{reason}. {field} reste à {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) : les réplications se partagent en deux issues ; voir le tableau ci-dessous.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} sur {background} : {ratio}:1, minimum {min}:1
 	{title}: now {now}, at most {most}	{title} : maintenant {now}, au plus {most}

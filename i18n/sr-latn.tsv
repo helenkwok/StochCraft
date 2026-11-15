@@ -111,6 +111,7 @@
 	Chart colours…	Boje grafikona…
 	Chart hover	Grafikon pod pokazivačem
 	Check every	Provera svakih
+	Check the decimal and grouping marks	Proverite decimalni znak i znak za grupisanje
 	Checks	Provere
 	Choose…	Izaberi…
 	Clear Menu	Očisti meni
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	{from} je povezan sa {to}
 	Connections	Veze
 	Constant	Konstantna
+	Control outlines	Obrisi kontrola
 	Copy	Kopiraj
 	Counts against	Pripisuje se
 	Customer demand	Potražnja kupaca
@@ -168,6 +170,7 @@
 	Energy	Energija
 	Energy per part	Energija po dijelu
 	Enough: {units}, meeting the target in {p} of replications	Dovoljno: {units}, cilj postignut u {p} replikacija
+	Enter a number	Unesite broj
 	Entered	Ušlo
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteti koji zateknu punu čekaonicu odmah idu ovim tokom (da kasnije pokušaju ponovo, recimo), umesto da budu izgubljeni ili da čekaju pre zadatka; ovde se broje kao izgubljeni.
 	Entities give up waiting	Entiteti odustaju od čekanja
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteti koji odustanu od čekanja idu ovim tokom (da kasnije pokušaju ponovo, recimo); ostali idu drugim izlazom zadatka.
 	Erlang	Erlang
 	Error	Greška
+	Error: {message}	Greška: {message}
 	Estimate from three values…	Proceni iz tri vrednosti…
 	Evenly across	Ravnomerno horizontalno
 	Evenly down	Ravnomerno vertikalno
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Vreme za {id} prilagođeno
 	Fixed	Fiksna
 	Flows	Tokovi
+	Focused header item	Fokusirana stavka u zaglavlju
 	Forget the estimate	Zaboravi procenu
 	Fri	pet
 	From	Od
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Nisu pronađeni problemi. Model je spreman za izvršavanje.
 	None picked: the day the period starts.	Ništa nije izabrano: dan kada period počinje.
 	Normal	Normalna
+	Not a number	Nije broj
 	Not reached, even with {units}	Nije postignuto, ni sa {units}
 	Number	Broj
+	Number too large	Broj je prevelik
 	OEE	OEE
 	OEE availability	Raspoloživost OEE
 	OEE effectiveness	Efektivnost OEE
@@ -541,6 +548,7 @@
 	Turned away on {id}	Odbijeni na {id}
 	Two stations in series, read from an XPDL file.	Dvije stanice u nizu, učitane iz XPDL fajla.
 	Type	Tip
+	Type a time from 0 to {end} {unit}.	Unesite vreme od 0 do {end} {unit}.
 	Undid {action}	Poništeno: {action}
 	Undo	Opozovi
 	Undo {action}	Opozovi {action}
@@ -555,6 +563,7 @@
 	Upper value	Gornja vrednost
 	Use System Setting	Koristi postavku sistema
 	Use for charts	Koristi za grafikone
+	Use one kind of digits	Koristite jednu vrstu cifara
 	Use these units in the model	Koristi ove jedinice u modelu
 	Utilisation	Iskorišćenost
 	Value	Vrednost
@@ -649,6 +658,7 @@
 	{n} waiting	Čeka: {n}
 	{n} {unit} per second	{n} {unit} u sekundi
 	{property} (set to, mean)	{property} (postavljeno na, srednja vrednost)
+	{reason}. {field} is still {value}.	{reason}. {field} je i dalje {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – replikacije su podeljene na dva ishoda: pogledajte tablicu ispod.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadina „{background}“: {ratio}:1, potrebno {min}:1
 	{title}: now {now}, at most {most}	{title}: sada {now}, najviše {most}

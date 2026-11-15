@@ -111,6 +111,7 @@
 	Chart colours…	Warna grafik…
 	Chart hover	Grafik di bawah penunjuk
 	Check every	Periksa setiap
+	Check the decimal and grouping marks	Periksa tanda desimal dan pemisah ribuan
 	Checks	Pemeriksaan
 	Choose…	Pilih…
 	Clear Menu	Bersihkan Menu
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	{from} dihubungkan ke {to}
 	Connections	Koneksi
 	Constant	Konstan
+	Control outlines	Garis luar kontrol
 	Copy	Salin
 	Counts against	Dibebankan ke
 	Customer demand	Permintaan pelanggan
@@ -168,6 +170,7 @@
 	Energy	Energi
 	Energy per part	Energi per komponen
 	Enough: {units}, meeting the target in {p} of replications	Cukup: {units}, target terpenuhi pada {p} replikasi
+	Enter a number	Masukkan angka
 	Entered	Masuk
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitas yang mendapati ruang tunggu penuh langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang atau menunggu sebelum tugas; di sini mereka dihitung sebagai hilang.
 	Entities give up waiting	Entitas berhenti menunggu
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitas yang berhenti menunggu mengambil alur ini (misalnya untuk mencoba lagi nanti); yang lain mengambil jalan keluar lain dari tugas.
 	Erlang	Erlang
 	Error	Galat
+	Error: {message}	Galat: {message}
 	Estimate from three values…	Perkirakan dari tiga nilai…
 	Evenly across	Sebar rata mendatar
 	Evenly down	Sebar rata menurun
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Waktu {id} dicocokkan
 	Fixed	Tetap
 	Flows	Alur
+	Focused header item	Item bilah atas yang difokuskan
 	Forget the estimate	Lupakan perkiraan
 	Fri	Jum
 	From	Dari
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Tidak ditemukan masalah. Model siap dijalankan.
 	None picked: the day the period starts.	Tidak ada yang dipilih: hari periode dimulai.
 	Normal	Normal
+	Not a number	Bukan angka
 	Not reached, even with {units}	Tidak tercapai, bahkan dengan {units}
 	Number	Angka
+	Number too large	Angka terlalu besar
 	OEE	OEE
 	OEE availability	Ketersediaan OEE
 	OEE effectiveness	Efektivitas OEE
@@ -541,6 +548,7 @@
 	Turned away on {id}	Ditolak di {id}
 	Two stations in series, read from an XPDL file.	Dua stasiun berurutan, dibaca dari berkas XPDL.
 	Type	Teks
+	Type a time from 0 to {end} {unit}.	Ketik waktu dari 0 sampai {end} {unit}.
 	Undid {action}	{action} dibatalkan
 	Undo	Urungkan
 	Undo {action}	Urungkan {action}
@@ -555,6 +563,7 @@
 	Upper value	Nilai atas
 	Use System Setting	Gunakan Pengaturan Sistem
 	Use for charts	Gunakan untuk grafik
+	Use one kind of digits	Gunakan satu jenis digit
 	Use these units in the model	Gunakan unit ini dalam model
 	Utilisation	Tingkat pemanfaatan
 	Value	Nilai
@@ -649,6 +658,7 @@
 	{n} waiting	{n} menunggu
 	{n} {unit} per second	{n} {unit} per detik
 	{property} (set to, mean)	{property} (nilai ditetapkan, rata-rata)
+	{reason}. {field} is still {value}.	{reason}. {field} tetap {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replikasi terbagi menjadi dua hasil yang berbeda; lihat tabel di bawah.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} di atas {background}: {ratio}:1, perlu {min}:1
 	{title}: now {now}, at most {most}	{title}: sekarang {now}, paling banyak {most}

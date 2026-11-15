@@ -111,6 +111,7 @@
 	Chart colours…	Цвета диаграмм…
 	Chart hover	Диаграмма под указателем
 	Check every	Проверять каждые
+	Check the decimal and grouping marks	Проверьте десятичный разделитель и разделитель разрядов
 	Checks	Проверки
 	Choose…	Выберите…
 	Clear Menu	Очистить меню
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	{from} соединён с {to}
 	Connections	Соединения
 	Constant	Постоянное значение
+	Control outlines	Контуры элементов управления
 	Copy	Копировать
 	Counts against	Относится на
 	Customer demand	Спрос клиентов
@@ -168,6 +170,7 @@
 	Energy	Энергия
 	Energy per part	Энергия на деталь
 	Enough: {units}, meeting the target in {p} of replications	Достаточно: {units}, цель достигнута в {p} репликаций
+	Enter a number	Введите число
 	Entered	Вошло
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Сущности, которые застают места ожидания занятыми, сразу идут по этому потоку (например, чтобы попробовать позже), а не теряются и не ждут перед задачей; здесь они считаются потерями.
 	Entities give up waiting	Сущности перестают ждать
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Сущности, которые перестают ждать, идут по этому потоку (например, чтобы попробовать позже); остальные идут по другому выходу задачи.
 	Erlang	Распределение Эрланга
 	Error	Ошибка
+	Error: {message}	Ошибка: {message}
 	Estimate from three values…	Оценить по трём значениям…
 	Evenly across	Равномерно по горизонтали
 	Evenly down	Равномерно по вертикали
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Время {id} подобрано
 	Fixed	Постоянное
 	Flows	Потоки
+	Focused header item	Элемент верхней панели в фокусе
 	Forget the estimate	Забыть оценку
 	Fri	пт
 	From	От
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Проблем не обнаружено. Модель готова к запуску.
 	None picked: the day the period starts.	Ничего не выбрано: день начала периода.
 	Normal	Нормальное распределение
+	Not a number	Не число
 	Not reached, even with {units}	Не достигнута даже при {units}
 	Number	Число
+	Number too large	Слишком большое число
 	OEE	OEE
 	OEE availability	Доступность OEE
 	OEE effectiveness	Результативность OEE
@@ -541,6 +548,7 @@
 	Turned away on {id}	Отклонённые на {id}
 	Two stations in series, read from an XPDL file.	Два последовательно расположенных поста, загруженных из файла XPDL.
 	Type	Тип
+	Type a time from 0 to {end} {unit}.	Введите время от 0 до {end} {unit}.
 	Undid {action}	Отменено действие {action}
 	Undo	Отменить
 	Undo {action}	Отменить: {action}
@@ -555,6 +563,7 @@
 	Upper value	Верхнее значение
 	Use System Setting	Использовать системную настройку
 	Use for charts	Использовать для диаграмм
+	Use one kind of digits	Используйте цифры одного вида
 	Use these units in the model	Использовать эти единицы в модели
 	Utilisation	Коэффициент использования
 	Value	Значение
@@ -649,6 +658,7 @@
 	{n} waiting	Ожидают: {n}
 	{n} {unit} per second	{n} {unit} в секунду
 	{property} (set to, mean)	{property} (заданное значение, среднее)
+	{reason}. {field} is still {value}.	{reason}. {field}: по-прежнему {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) — репликации разделились на два исхода: см. таблицу ниже.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} — фон «{background}»: {ratio}:1, нужно {min}:1
 	{title}: now {now}, at most {most}	{title}: сейчас {now}, не более {most}

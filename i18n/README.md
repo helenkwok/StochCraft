@@ -509,6 +509,22 @@ engine's messages (validation, file notes) are English too.
   Not reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka, kk and sq as
   before, ko 자원 크기 정하기 (a verb phrase where the other undo names end in a noun), the re-formed ru
   and uk verbs, and the bg and sv article and noun choices.
+- The rows for the accessibility fixes (PR "accessibility quick fixes": the "Control outlines"
+  colour role and the "Focused header item" contrast check of the theme editor, "Error: {message}"
+  for screen readers, the line under a number field whose text is not a number, the line under the
+  live view's Jump to time field, and craft-ui's five number-field messages from "Enter a number" to
+  "Number too large") were machine-drafted with Claude Code from the plain meaning of the English
+  and each catalog's existing terms: its "Borders" word kept apart from the outline word, its header
+  word of "Text on header", its "Error" and the colon of its "{error}" rows, its time word of "Jump
+  to time" and its number word of "Number". craft-i18n's `common.tsv` (commit e56d262) has none of
+  the five number-field messages in any language, so they are StochCraft's own rows. The messages
+  end without a full stop, as the line under the field adds one; that line keeps the field's name
+  uninflected ("still" as a verb or adverb, ru and uk with a colon, el with "the field"). "Use one
+  kind of digits" means one script of digits, and "grouping marks" are rendered as the thousands
+  separator. Not checked against any other source, and not reviewed by native speakers. The least
+  certain are lo, th, ta, te, ka, kk, bn and sq as before, the word for a control (fr commandes, nl
+  bedieningselementen, tr Denetim, vi điều khiển), and the focus wording of the header item (hu, ta,
+  te).
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

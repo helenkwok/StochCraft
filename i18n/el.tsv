@@ -111,6 +111,7 @@
 	Chart colours…	Χρώματα γραφημάτων…
 	Chart hover	Γράφημα κάτω από τον δείκτη
 	Check every	Έλεγχος κάθε
+	Check the decimal and grouping marks	Ελέγξτε την υποδιαστολή και το διαχωριστικό χιλιάδων
 	Checks	Έλεγχοι
 	Choose…	Επιλογή…
 	Clear Menu	Εκκαθάριση μενού
@@ -124,6 +125,7 @@
 	Connected {from} to {to}	Συνδέθηκε το {from} με το {to}
 	Connections	Συνδέσεις
 	Constant	Σταθερή
+	Control outlines	Περιγράμματα στοιχείων ελέγχου
 	Copy	Αντιγραφή
 	Counts against	Χρεώνεται σε
 	Customer demand	Ζήτηση πελατών
@@ -168,6 +170,7 @@
 	Energy	Ενέργεια
 	Energy per part	Ενέργεια ανά τεμάχιο
 	Enough: {units}, meeting the target in {p} of replications	Αρκετό: {units}, ο στόχος επιτυγχάνεται στο {p} των επαναλήψεων
+	Enter a number	Εισαγάγετε αριθμό
 	Entered	Είσοδοι
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Οι οντότητες που βρίσκουν τον χώρο αναμονής γεμάτο ακολουθούν αμέσως αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε), αντί να χαθούν ή να περιμένουν πριν από την εργασία· εδώ μετρώνται ως απώλειες.
 	Entities give up waiting	Οι οντότητες εγκαταλείπουν την αναμονή
@@ -175,6 +178,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Οι οντότητες που εγκαταλείπουν την αναμονή ακολουθούν αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε)· οι υπόλοιπες παίρνουν την άλλη έξοδο της εργασίας.
 	Erlang	Έρλανγκ
 	Error	Σφάλμα
+	Error: {message}	Σφάλμα: {message}
 	Estimate from three values…	Εκτίμηση από τρεις τιμές…
 	Evenly across	Ομοιόμορφη κατανομή οριζόντια
 	Evenly down	Ομοιόμορφη κατανομή κάθετα
@@ -203,6 +207,7 @@
 	Fitted the time of {id}	Ο χρόνος του {id} προσαρμόστηκε
 	Fixed	Σταθερό
 	Flows	Ροές
+	Focused header item	Εστιασμένο στοιχείο κεφαλίδας
 	Forget the estimate	Απόρριψη εκτίμησης
 	Fri	Παρ
 	From	Από
@@ -287,8 +292,10 @@
 	None found. The model is ready to run.	Δεν βρέθηκαν προβλήματα. Το μοντέλο είναι έτοιμο για εκτέλεση.
 	None picked: the day the period starts.	Καμία επιλογή: η ημέρα που αρχίζει η περίοδος.
 	Normal	Κανονική
+	Not a number	Δεν είναι αριθμός
 	Not reached, even with {units}	Δεν επιτεύχθηκε ούτε με {units}
 	Number	Αριθμός
+	Number too large	Πολύ μεγάλος αριθμός
 	OEE	OEE
 	OEE availability	Διαθεσιμότητα OEE
 	OEE effectiveness	Αποτελεσματικότητα OEE
@@ -541,6 +548,7 @@
 	Turned away on {id}	Απόρριψη στο {id}
 	Two stations in series, read from an XPDL file.	Δύο σταθμοί σε σειρά, από αρχείο XPDL.
 	Type	Τύπος
+	Type a time from 0 to {end} {unit}.	Πληκτρολογήστε χρόνο από 0 έως {end} {unit}.
 	Undid {action}	Αναιρέθηκε το {action}
 	Undo	Αναίρεση
 	Undo {action}	Αναίρεση ενέργειας: {action}
@@ -555,6 +563,7 @@
 	Upper value	Άνω τιμή
 	Use System Setting	Χρήση ρύθμισης συστήματος
 	Use for charts	Χρήση για γραφήματα
+	Use one kind of digits	Χρησιμοποιήστε ένα είδος ψηφίων
 	Use these units in the model	Χρήση αυτών των μονάδων στο μοντέλο
 	Utilisation	Βαθμός χρησιμοποίησης
 	Value	Τιμή
@@ -649,6 +658,7 @@
 	{n} waiting	{n} σε αναμονή
 	{n} {unit} per second	{n} {unit} ανά δευτερόλεπτο
 	{property} (set to, mean)	{property} (καθορισμένη τιμή, μέση τιμή)
+	{reason}. {field} is still {value}.	{reason}. Το πεδίο {field} παραμένει {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – οι επαναλήψεις χωρίζονται σε δύο εκβάσεις: δείτε τον πίνακα παρακάτω.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – φόντο «{background}»: {ratio}:1, απαιτείται {min}:1
 	{title}: now {now}, at most {most}	{title}: τώρα {now}, το πολύ {most}
