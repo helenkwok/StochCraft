@@ -13,7 +13,7 @@
 
 @id	language.name	Italiano
 	% down and up	% in giù e in su
-	% of runs	% delle repliche
+	% of runs	% delle esecuzioni
 	+ Add block	+ Aggiungi blocco
 	95% interval of the share meeting the target: {lo} to {hi}	Intervallo al 95% della quota che raggiunge l'obiettivo: da {lo} a {hi}
 	95th percentile	95° percentile
@@ -34,7 +34,7 @@
 	Add Pool	Aggiungi pool
 	Add a flow from…	Aggiungi un flusso da…
 	Add a flow to…	Aggiungi un flusso verso…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Aggiungere un'unità all'attività o al pool più occupato finché abbastanza repliche raggiungono un obiettivo. È mostrata anche la risposta con ogni tempo alla sua media; di solito è troppo piccola.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Aggiungere un'unità all'attività o al pool più occupato finché abbastanza esecuzioni raggiungono un obiettivo. È mostrata anche la risposta con ogni tempo alla sua media; di solito è troppo piccola.
 	Add alternative	Aggiungi alternativa
 	Add calendar	Aggiungi calendario
 	Add calendar entry	Aggiungi voce di calendario
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Tutto il testo rispetta i contrasti minimi.
 	Also: {rule}	Inoltre: {rule}
 	Alternative {n}	Alternativa {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Un'entità prende il primo flusso la cui condizione è vera; senza condizioni, un flusso estratto secondo le probabilità (quelle lasciate vuote si dividono ciò che le altre lasciano).
 	Analysis	Analisi
 	Appearance	Aspetto
 	Arrival limit	Limite degli arrivi
@@ -169,12 +170,12 @@
 	Ends early	Termina prima
 	Energy	Energia
 	Energy per part	Energia per pezzo
-	Enough: {units}, meeting the target in {p} of runs	Sufficiente: {units}, raggiunge l'obiettivo nel {p} delle repliche
+	Enough: {units}, meeting the target in {p} of runs	Sufficiente: {units}, raggiunge l'obiettivo nel {p} delle esecuzioni
 	Enter a number	Inserisci un numero
 	Entered	Ingressi
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Le entità che trovano la sala d'attesa piena prendono subito questo flusso (per riprovare più tardi, ad esempio), invece di andare perse o di attendere prima dell'attività; qui contano come perse.
 	Entities give up waiting	Le entità abbandonano l'attesa
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Le entità ancora all'interno alla fine di una replica sono escluse dall'attesa media e dal tempo medio nel sistema.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Le entità ancora all'interno alla fine di un'esecuzione sono escluse dall'attesa media e dal tempo medio nel sistema.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Le entità che abbandonano l'attesa prendono questo flusso (per riprovare più tardi, ad esempio); le altre prendono l'altra uscita dell'attività.
 	Erlang	Erlang
 	Error	Errore
@@ -252,7 +253,7 @@
 	Maximum	Massimo
 	Mean	Media
 	Mean number inside	Numero medio all'interno
-	One run of {n}: the results of the others differ.	Una replica su {n}: i risultati delle altre sono diversi.
+	One run of {n}: the results of the others differ.	Un'esecuzione su {n}: i risultati delle altre sono diversi.
 	Save as a new BPMN file?	Salvare come nuovo file BPMN?
 	Still inside at the end	Ancora all'interno alla fine
 	Mean work in progress	Quantità media in lavorazione
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	Nessun arrivo fuori dai calendari
 	No blocks yet. Open a model, or add blocks to build one.	Non ci sono ancora blocchi. Apri un modello o aggiungi blocchi per crearne uno.
 	No connections yet: join blocks below.	Non ci sono ancora connessioni: collega i blocchi qui sotto.
-	No run met the stop condition: each ran to its time limit.	Nessuna replica ha raggiunto la condizione di arresto: ognuna è arrivata al suo limite di tempo.
+	No run met the stop condition: each ran to its time limit.	Nessuna esecuzione ha raggiunto la condizione di arresto: ognuna è arrivata al suo limite di tempo.
 	No results yet	Nessun risultato per ora
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	In questo modello non sono segnati scarti né rilavorazioni, quindi l'OEE conta la qualità come 100%.
 	No target	Nessun obiettivo
@@ -386,11 +387,11 @@
 	Repair time	Tempo di riparazione
 	Repeats	Si ripete
 	Replace Model	Sostituisci modello
-	Run 1 · {time} of {end} {unit}	Replica 1 · {time} di {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	Replica 1 · {time} di {end} {unit} · riscaldamento
-	Runs	Repliche
-	Runs meeting the target	Repliche che raggiungono l'obiettivo
-	Runs that never met the stop condition count as later than their time limit.	Le repliche che non hanno mai raggiunto la condizione di arresto contano come successive al loro limite di tempo.
+	Run 1 · {time} of {end} {unit}	Esecuzione 1 · {time} di {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Esecuzione 1 · {time} di {end} {unit} · riscaldamento
+	Runs	Esecuzioni
+	Runs meeting the target	Esecuzioni che raggiungono l'obiettivo
+	Runs that never met the stop condition count as later than their time limit.	Le esecuzioni che non hanno mai raggiunto la condizione di arresto contano come successive al loro limite di tempo.
 	Resource pool	Pool di risorse
 	Resource pools	Pool di risorse
 	Restore	Ripristina
@@ -411,7 +412,7 @@
 	Run	Esegui
 	Run cancelled	Esecuzione annullata
 	Run experiment	Esegui esperimento
-	Play run 1 step by step and see each block's queue on the diagram	Esegui la replica 1 passo per passo e osserva la coda di ogni blocco nel diagramma
+	Play run 1 step by step and see each block's queue on the diagram	Riproduci l'esecuzione 1 passo per passo e osserva la coda di ogni blocco nel diagramma
 	Run the experiment ({shortcut})	Esegui l'esperimento ({shortcut})
 	Run the experiment again to see this result's spread.	Esegui di nuovo l'esperimento per vedere la dispersione di questo risultato.
 	Run the experiment at each value of one parameter, and compare a result.	Eseguire l'esperimento per ogni valore di un parametro e confrontare un risultato.
@@ -419,7 +420,7 @@
 	Run the sweep	Esegui la scansione
 	Running	In esecuzione
 	Running…	Esecuzione in corso…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Repliche divise: {low_n} su {n} vicino a {low}, {high_n} vicino a {high}. La media ({mean}) mescola due esiti; guarda ogni gruppo.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Esecuzioni divise: {low_n} su {n} vicino a {low}, {high_n} vicino a {high}. La media ({mean}) mescola due esiti; guarda ogni gruppo.
 	Sat	sab
 	Save	Salva
 	Save As…	Salva con nome…
@@ -467,7 +468,7 @@
 	Split batches	Separa i lotti
 	Split or join	Dividi o unisci
 	Split or join (all ways)	Dividi o unisci (tutte le vie)
-	Spread across runs	Dispersione tra le repliche
+	Spread across runs	Dispersione tra le esecuzioni
 	Spread out	Distribuisci
 	Stages (k)	Fasi (k)
 	Standard deviation	Deviazione standard
@@ -498,19 +499,19 @@
 	Text on header	Testo dell'intestazione
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	La connessione cade e il client riprova: l'entità torna subito in testa alla coda, e il lavoro fatto su di essa è sprecato.
 	The entity waits on its server and the job carries on with what was left once the server is back.	L'entità attende sul suo server e il lavoro prosegue con ciò che restava appena il server torna.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	L'intervallo scende sotto la quota obiettivo del {share}, quindi non è dimostrato con una confidenza del 95% che la quota sia raggiunta; più repliche lo restringerebbero.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	L'intervallo scende sotto la quota obiettivo del {share}, quindi non è dimostrato con una confidenza del 95% che la quota sia raggiunta; più esecuzioni lo restringerebbero.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Il lavoro si ferma subito: l'entità torna in testa alla coda per qualsiasi server in turno, e il lavoro fatto su di essa è sprecato.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Il lavoro si ferma subito; l'entità attende sul suo server e il lavoro prosegue con ciò che restava appena quel server torna in turno.
 	The last task with a resource it finished at	L'ultima attività con risorsa da cui è passato il pezzo
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Il tempo medio fino alla condizione di arresto riguarda solo le repliche che l'hanno raggiunta; le altre sono arrivate al loro limite di tempo.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Il tempo medio fino alla condizione di arresto riguarda solo le esecuzioni che l'hanno raggiunta; le altre sono arrivate al loro limite di tempo.
 	The model changed, so watching stopped	Il modello è cambiato, quindi l'osservazione si è interrotta
 	The model has no calendars yet.	Il modello non ha ancora calendari.
 	The model now has the units sizing found	Il modello ora ha le unità trovate dal dimensionamento
 	The model: its experiment, connections and problems	Il modello: esperimento, connessioni e problemi
 	The name is empty or already used.	Il nome è vuoto o già usato.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Le repliche si dividono in due esiti: {a} su {n} in uno, {b} nell'altro. {count} risultati si dividono allo stesso modo, tra cui {result} ({element}); vedi la tabella qui sotto.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Le esecuzioni si dividono in due esiti: {a} su {n} in uno, {b} nell'altro. {count} risultati si dividono allo stesso modo, tra cui {result} ({element}); vedi la tabella qui sotto.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Il server finisce il lavoro che ha, poi lascia il turno; fino ad allora conta come in turno.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	La quota di repliche pari o inferiori a ogni valore. La fascia contiene la vera distribuzione con una confidenza del {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	La quota di esecuzioni pari o inferiori a ogni valore. La fascia contiene la vera distribuzione con una confidenza del {confidence}.
 	The values are numbers, separated by semicolons or spaces	I valori sono numeri separati da punti e virgola o spazi
 	The whole clock	Tutto il tempo
 	Themes	Temi
@@ -578,7 +579,7 @@
 	Warning	Avviso
 	Watch a Run	Osserva un'esecuzione
 	Watch a run	Osserva un'esecuzione
-	Watching run 1	Osservazione della replica 1
+	Watching run 1	Osservazione dell'esecuzione 1
 	Weak text	Testo attenuato
 	Weak text on header	Testo attenuato dell'intestazione
 	Wed	mer
@@ -614,7 +615,7 @@
 	maximum {value}	massimo {value}
 	milliseconds	millisecondi
 	minutes	minuti
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k su N: solo k delle N repliche avevano un valore per quel risultato, e la sua media e il suo intervallo riguardano quelle k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k su N: solo k delle N esecuzioni avevano un valore per quel risultato, e la sua media e il suo intervallo riguardano quelle k.
 	n = {k} of {n}	n = {k} su {n}
 	nothing yet	ancora niente
 	per day	al giorno
@@ -650,7 +651,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} e {second} differiscono in chiarezza di {step}, serve 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: una probabilità è un numero da 0 a 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} repliche su {of} hanno raggiunto l'obiettivo: {p} (intervallo al 95% da {lo} a {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} esecuzioni su {of} hanno raggiunto l'obiettivo: {p} (intervallo al 95% da {lo} a {hi})
 	{name} — edited	{name} — modificato
 	{n} created	{n} creati
 	{n} done	{n} completati
@@ -659,12 +660,12 @@
 	{n} {unit} per second	{n} {unit} al secondo
 	{property} (set to, mean)	{property} (valore impostato, media)
 	{reason}. {field} is still {value}.	{reason}. {field} resta {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): le repliche si dividono in due esiti; vedi la tabella qui sotto.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): le esecuzioni si dividono in due esiti; vedi la tabella qui sotto.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} su {background}: {ratio}:1, serve {min}:1
 	{title}: now {now}, at most {most}	{title}: ora {now}, al massimo {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± IC al 95%
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± è la semiampiezza di un intervallo di confidenza Student-t al 95% della media tra le repliche.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± è la semiampiezza di un intervallo di confidenza Student-t al 95% della media tra le esecuzioni.
 	· no results yet	· nessun risultato per ora
 unit	d	g
 unit	h	h
@@ -674,16 +675,16 @@ unit	s	s
 unit	yr	a
 @plural	Added {n} block|Added {n} blocks	Aggiunto {n} blocco|Aggiunti {n} blocchi
 @plural	Copied {n} block|Copied {n} blocks	Copiato {n} blocco|Copiati {n} blocchi
-@plural	Finished {n} run|Finished {n} runs	Completata {n} replica|Completate {n} repliche
+@plural	Finished {n} run|Finished {n} runs	Completata {n} esecuzione|Completate {n} esecuzioni
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Aperto {file} ({n} avviso)|Aperto {file} ({n} avvisi)
 @plural	Removed {n} block|Removed {n} blocks	Rimosso {n} blocco|Rimossi {n} blocchi
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Esegue {n} replica indipendente del modello dal seme {seed}. I risultati di ogni elemento includono la semiampiezza di un intervallo di confidenza al 95%.|Esegue {n} repliche indipendenti del modello dal seme {seed}. I risultati di ogni elemento includono la semiampiezza di un intervallo di confidenza al 95%.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	La condizione di arresto è stata raggiunta in {met} replica su {n}, dopo {time} {unit} in media.|La condizione di arresto è stata raggiunta in {met} repliche su {n}, dopo {time} {unit} in media.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	Completata {done} replica su {n}|Completate {done} repliche su {n}
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nIntervallo al 95% da {low} a {high}{unit}\nsu {n} replica|{name}: {mean}{unit}\nIntervallo al 95% da {low} a {high}{unit}\nsu {n} repliche
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Effettua {n} esecuzione indipendente del modello dal seme {seed}. I risultati di ogni elemento includono la semiampiezza di un intervallo di confidenza al 95%.|Effettua {n} esecuzioni indipendenti del modello dal seme {seed}. I risultati di ogni elemento includono la semiampiezza di un intervallo di confidenza al 95%.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	La condizione di arresto è stata raggiunta in {met} esecuzione su {n}, dopo {time} {unit} in media.|La condizione di arresto è stata raggiunta in {met} esecuzioni su {n}, dopo {time} {unit} in media.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Completata {done} esecuzione su {n}|Completate {done} esecuzioni su {n}
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nIntervallo al 95% da {low} a {high}{unit}\nsu {n} esecuzione|{name}: {mean}{unit}\nIntervallo al 95% da {low} a {high}{unit}\nsu {n} esecuzioni
 @plural	{n} block selected|{n} blocks selected	{n} blocco selezionato|{n} blocchi selezionati
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} replica per passo · seme {seed}|{n} repliche per passo · seme {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} replica · media {mean} · da {min} a {max}|{n} repliche · media {mean} · da {min} a {max}
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replica · seme {seed} · riscaldamento {warmup} {unit} · {duration} {unit} misurati|{n} repliche · seme {seed} · riscaldamento {warmup} {unit} · {duration} {unit} misurati
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replica · seme {seed}|{n} repliche · seme {seed}
-@plural	{n} run|{n} runs	{n} replica|{n} repliche
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} esecuzione per passo · seme {seed}|{n} esecuzioni per passo · seme {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} esecuzione · media {mean} · da {min} a {max}|{n} esecuzioni · media {mean} · da {min} a {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} esecuzione · seme {seed} · riscaldamento {warmup} {unit} · {duration} {unit} misurati|{n} esecuzioni · seme {seed} · riscaldamento {warmup} {unit} · {duration} {unit} misurati
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} esecuzione · seme {seed}|{n} esecuzioni · seme {seed}
+@plural	{n} run|{n} runs	{n} esecuzione|{n} esecuzioni
