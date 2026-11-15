@@ -5,7 +5,7 @@ engine and a command line; **M2** the flow logic a factory or logistics model ne
 desktop app (and the browser app built from it); **M4** system dynamics and hybrid models; **M5**
 transport and layout. M1 and M3 are done. M2.1–M2.8 are done, and so is M2.10 (abandonment)
 apart from the gaps listed in it. M2.11 (changeovers and lean measures) has its changeovers,
-product-type times and most of OEE done; M2.9 (output analysis) has only the checks it already
+product-type times, takt and cycle times, state times and most of OEE done; M2.9 (output analysis) has only the checks it already
 had. M4 and M5 are being planned. Each milestone is a series of pull requests small enough to
 review in one sitting; every one keeps `cargo xtask ci` green.
 
@@ -1469,13 +1469,19 @@ A line that makes several products, and results in the terms lean practice uses.
   hyperexponential service (Pollaczek-Khinchine), overall and per type. Not here: results per
   product type (route by type to separate sinks for each type's time in system).
 - **Lean results:**
-  - cycle time per station and for the line;
-  - throughput against takt, from a demand and a shift time the user enters (takt as available
-    time divided by demand; the definition to cite from a primary source, to verify);
-  - each station's time split into busy, idle, blocked, starved, down and in setup. Today the
-    results have busy (`utilisation`), blocked (`blocking_probability`) and up
-    (`availability`, so down is the rest); idle is not reported on its own, and starved and in
-    setup do not exist yet;
+  - takt and cycle time: done (#123). A departures block can have a customer demand, a
+    quantity per run, day, week or shift of a calendar (the vendor extension
+    `stochcraft:demand`). It then reports `takt` (the available time divided by the demand, the
+    Lean Enterprise Institute's Lean Lexicon: "the available production time divided by
+    customer demand"; with a calendar, only the time it is active), `demand` and `demand_met`,
+    and every server reports `cycle_time` (each part's setup and processing over its units) to
+    compare with takt. Set in the window, in every catalog. Not yet: a cycle time for the line
+    as a whole;
+  - each station's time split into states: done. Every server reports `time_processing` and
+    `time_starved` (idle, on shift and up), with `time_blocked`, `time_failed`,
+    `time_off_shift`, `time_setup` and `time_restarting` where the server can be in that state;
+    the shares add up to 1 (the states of calendars on servers and of energy per server state,
+    under M2.6);
   - OEE from ISO 22400-2:2014+A1:2017 (KPIs availability, effectiveness, quality ratio, OEE
     index, setup ratio). Done: per server, `oee_availability` (production time over planned
     busy time, off shift being planned downtime), `oee_effectiveness` (from a planned run time
@@ -1496,9 +1502,10 @@ A line that makes several products, and results in the terms lean practice uses.
 `traceOutput`). Conveyors and travel networks are M5; agent behaviours and stock-and-flow are
 M4.
 
-**M2 size:** about nine PRs for M2.1–M2.8 and one or two each for M2.9, M2.10 and M2.11, each independently mergeable after M1. **M2.1–M2.8 are complete.**
-What each leaves for later is under its own "Not yet" or "Not here". M2.9 (output analysis),
-M2.10 (abandonment) and M2.11 (changeovers and lean measures) are next.
+**M2 size:** about nine PRs for M2.1–M2.8 and one or two each for M2.9, M2.10 and M2.11, each independently mergeable after M1. **M2.1–M2.8 are complete**, and so is M2.10 apart from the gaps listed in it.
+What each leaves for later is under its own "Not yet" or "Not here". M2.9 (output analysis) and
+the rest of M2.11 (a line cycle time, ISO's NEE index, per-product plans, current and future
+state) are next.
 
 ---
 
