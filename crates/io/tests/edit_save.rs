@@ -55,7 +55,19 @@ fn edit_and_save(
     edit: impl Fn(&mut Model),
 ) -> (Vec<u8>, usize) {
     let original = file(name);
-    let loaded = read_scenario(&original, scenario).unwrap_or_else(|e| panic!("{name}: {e}"));
+    let saved = edit_bytes(name, &original, scenario, edit);
+    let n = changed_lines(&original, &saved);
+    (saved, n)
+}
+
+/// Like [`edit_and_save`], for file contents `original` (called `name` in messages).
+fn edit_bytes(
+    name: &str,
+    original: &[u8],
+    scenario: Option<&str>,
+    edit: impl Fn(&mut Model),
+) -> Vec<u8> {
+    let loaded = read_scenario(original, scenario).unwrap_or_else(|e| panic!("{name}: {e}"));
     let mut model = loaded.model.clone();
     edit(&mut model);
     let saved = loaded
@@ -71,8 +83,35 @@ fn edit_and_save(
         back.opened.save(&back.model).ok().as_deref(),
         Some(&saved[..])
     );
-    let n = changed_lines(&original, &saved);
-    (saved, n)
+    saved
+}
+
+fn delay_kind() -> ElementKind {
+    ElementKind::Delay {
+        processing_by: None,
+        duration: Dist::Constant(1.0),
+    }
+}
+
+fn server_kind() -> ElementKind {
+    ElementKind::Server {
+        processing_by: None,
+        capacity: 1,
+        service: Dist::Constant(1.0),
+        queue_capacity: None,
+        breakdown: None,
+        transfer: None,
+        available: true,
+        availability: Vec::new(),
+        power: None,
+        setup: None,
+        planned_run_time: None,
+        patience: None,
+        health_check: None,
+        shifts: Vec::new(),
+        on_shift_end: OnShiftEnd::Finish,
+        queue_limit: stochcraft_model::QueueLimit::Fixed,
+    }
 }
 
 /// The lines only in `a` (-) or only in `b` (+).
@@ -1592,4 +1631,96 @@ fn unmarking_an_inherited_abandoned_way_writes_false() {
             .iter()
             .any(|c| c.id.as_str() == "f2" && c.abandoned)
     );
+}
+
+/// A server made a delay takes its resource along: its definition, its parameters in every
+/// scenario and the references to it (BPMN and XPDL).
+#[test]
+fn a_server_made_a_delay_takes_its_resource_along() {
+    let (saved, _) = edit_and_save("mm1.bpmn", None, |m| {
+        element(m, "serve").kind = delay_kind();
+    });
+    let t = text(&saved);
+    for gone in [
+        r#"id="clerk""#,
+        r#"elementRef="clerk""#,
+        "getResource('clerk'",
+        ">clerk<",
+    ] {
+        assert!(!t.contains(gone), "{gone} left behind:\n{t}");
+    }
+    let (saved, _) = edit_and_save("tandem.xpdl", None, |m| {
+        element(m, "weld").kind = delay_kind();
+    });
+    let t = text(&saved);
+    assert!(!t.contains("welder"), "{t}");
+    // The other participant, which no server uses, stays.
+    assert!(t.contains(r#"<Participant Id="team""#), "{t}");
+}
+
+/// A resource that a task in another scenario still uses stays, with that use.
+#[test]
+fn a_resource_another_scenario_uses_stays() {
+    let original = text(&file("mm1.bpmn"))
+        .replace(
+            "</semantic:process>",
+            "  <semantic:userTask id=\"pay\" name=\"Pay\"/>\n  </semantic:process>",
+        )
+        .replace(
+            "</bpsim:BPSimData>",
+            r#"<bpsim:Scenario id="pay-by-clerk" name="Pay by clerk">
+          <bpsim:ElementParameters elementRef="pay">
+            <bpsim:ResourceParameters>
+              <bpsim:Selection><bpsim:ExpressionParameter value="bpsim:getResource('clerk', 1)"/></bpsim:Selection>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>"#,
+        );
+    let saved = edit_bytes("mm1.bpmn", original.as_bytes(), None, |m| {
+        element(m, "serve").kind = delay_kind();
+    });
+    let t = text(&saved);
+    assert!(t.contains(r#"id="clerk""#), "{t}");
+    assert!(t.contains("getResource('clerk', 1)"), "{t}");
+}
+
+/// A resource that another scenario marks as a pool stays, with its marker.
+#[test]
+fn a_pool_another_scenario_marks_stays() {
+    let original = text(&file("mm1.bpmn")).replace(
+        "</bpsim:BPSimData>",
+        r#"<bpsim:Scenario id="pooled" name="Pooled">
+          <bpsim:ElementParameters elementRef="clerk">
+            <bpsim:VendorExtension name="stochcraft:pool" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1" stochcraft:value="true"/>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>"#,
+    );
+    let saved = edit_bytes("mm1.bpmn", original.as_bytes(), None, |m| {
+        element(m, "serve").kind = delay_kind();
+    });
+    let t = text(&saved);
+    assert!(t.contains(r#"id="clerk""#), "{t}");
+    assert!(t.contains(r#"name="stochcraft:pool""#), "{t}");
+}
+
+/// A delay made a server again, after its server's resource was saved away, gets one resource:
+/// the file does not keep the old one beside the new one (BPMN and XPDL).
+#[test]
+fn a_delay_made_a_server_again_leaves_one_resource() {
+    for (name, task, resource) in [
+        ("mm1.bpmn", "serve", "<semantic:resource "),
+        ("tandem.xpdl", "weld", r#"Type="RESOURCE""#),
+    ] {
+        let delayed = edit_and_save(name, None, |m| {
+            element(m, task).kind = delay_kind();
+        })
+        .0;
+        let saved = edit_bytes(name, &delayed, None, |m| {
+            element(m, task).kind = server_kind();
+        });
+        let t = text(&saved);
+        assert_eq!(t.matches(resource).count(), 1, "{name}:\n{t}");
+    }
 }

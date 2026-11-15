@@ -1609,8 +1609,9 @@ impl Editor {
         rid
     }
 
-    /// Takes away a task's resource assignment (it becomes a delay).
-    fn remove_resource(&self, root: &mut Element, task: &str) {
+    /// Takes away a task's resource assignment (it becomes a delay). The task's own resource
+    /// `own` goes too, unless something else still uses it.
+    fn remove_resource(&self, root: &mut Element, task: &str, own: Option<&str>) {
         match self.format {
             Format::Bpmn => {
                 if let Some(n) = find_mut(root, &|e| {
@@ -1633,6 +1634,42 @@ impl Editor {
                 }
             }
         }
+        // Checked only now, with the task's own links gone, so the file's other uses are read as
+        // they are left.
+        if let Some(r) = own.filter(|r| !resource_in_use(root, r, task)) {
+            self.remove_resource_definition(root, r);
+        }
+    }
+
+    /// Removes resource `r` for good: its definition (a BPMN `resource`, an XPDL participant),
+    /// its BPSim parameters in every scenario, and the diagram and associations that name it.
+    fn remove_resource_definition(&self, root: &mut Element, r: &str) {
+        match self.format {
+            Format::Bpmn => {
+                remove_all(root, &|e| e.is(BPMN, "resource") && has_id(e, "id", r));
+            }
+            Format::Xpdl => {
+                let empty =
+                    |e: &Element| e.is_any(&XPDL, "Participants") && e.elements().next().is_none();
+                // Only a list this leaves empty goes (an empty one is not written); with one
+                // already empty in the file, the file keeps its lists as they are.
+                let none_empty = !root.descendants().iter().any(|e| empty(e));
+                let gone = remove_all(root, &|e| {
+                    e.is_any(&XPDL, "Participant") && has_id(e, "Id", r)
+                });
+                if gone > 0 && none_empty {
+                    remove_all(root, &|e| {
+                        e.is_any(&XPDL, "Participants") && e.elements().next().is_none()
+                    });
+                }
+            }
+        }
+        remove_all(root, &|e| {
+            (e.is(BPMNDI, "BPMNShape") || e.is(BPMNDI, "BPMNEdge"))
+                && e.attr("bpmnElement").as_deref() == Some(r)
+        });
+        remove_associations(root, r);
+        remove_params(root, r);
     }
 
     /// Sets (or removes) a BPMN exclusive gateway's `default` flow. XPDL marks it with a
@@ -2374,7 +2411,8 @@ impl Editor {
                         remove_all(ep, &|x| x.is_any(&NSS, "Selection"));
                     }
                 }
-                self.remove_resource(root, &task);
+                let own = resources.of_task.get(&task).map(String::as_str);
+                self.remove_resource(root, &task, own);
             }
         }
         // A parameter an inherited scenario sets comes back on reading, whatever this one does
@@ -3127,6 +3165,48 @@ fn remove_associations(root: &mut Element, id: &str) {
             e.is(BPMNDI, "BPMNEdge") && e.attr("bpmnElement").as_deref() == Some(l.as_str())
         });
     }
+}
+
+/// Whether resource `r` is still used by a task other than `task` in some scenario of the file
+/// (a task that needs it, read as the reader reads it), made a pool by a role, or marked as a
+/// pool. Such a resource stays with its uses: a scenario that still names it must not lose it.
+fn resource_in_use(root: &Element, r: &str, task: &str) -> bool {
+    let mut scenarios: Vec<Option<String>> = crate::bpsim::find_data(root)
+        .map(|d| {
+            d.children_named(&NSS, "Scenario")
+                .filter(|s| s.attr("result").is_none())
+                .map(|s| s.attr("id"))
+                .collect()
+        })
+        .unwrap_or_default();
+    // A file with no scenarios still has its performers.
+    if scenarios.is_empty() {
+        scenarios.push(None);
+    }
+    pool_marked(root, r)
+        || scenarios.iter().any(|s| {
+            let res = read::resources(root, s.as_deref());
+            res.users
+                .get(r)
+                .is_some_and(|users| users.iter().any(|t| t != task))
+                || res.roles.get(r).is_some_and(|roles| !roles.is_empty())
+        })
+}
+
+/// Whether any scenario marks resource `r` as a pool ([`crate::bpsim::POOL`] `true`).
+fn pool_marked(root: &Element, r: &str) -> bool {
+    crate::bpsim::find_data(root).is_some_and(|d| {
+        d.children_named(&NSS, "Scenario").any(|s| {
+            s.children_named(&NSS, "ElementParameters")
+                .filter(|ep| ep.attr("elementRef").as_deref() == Some(r))
+                .flat_map(|ep| ep.elements())
+                .any(|v| {
+                    v.is_any(&NSS, "VendorExtension")
+                        && v.attr("name").as_deref() == Some(crate::bpsim::POOL)
+                        && crate::bpsim::vendor_value(v).is_some_and(|x| x.trim() == "true")
+                })
+        })
+    })
 }
 
 /// Removes every scenario's parameters for `id` (an element or connection that is gone).
