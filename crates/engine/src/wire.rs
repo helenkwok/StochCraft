@@ -1780,6 +1780,10 @@ pub struct ExperimentDoc {
     /// plus the duration is then its time limit.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub stop: Option<StopSpec>,
+    /// How often results over time are recorded, in seconds (BPSim `baseResultFrequency`); left
+    /// out when the file gives none.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub result_frequency: Option<f64>,
 }
 
 impl From<&Experiment> for ExperimentDoc {
@@ -1792,6 +1796,7 @@ impl From<&Experiment> for ExperimentDoc {
             seed: x.seed,
             start: x.start.map(Stamp),
             stop: x.stop.as_ref().map(Into::into),
+            result_frequency: x.result_frequency,
         }
     }
 }
@@ -1806,6 +1811,7 @@ impl From<ExperimentDoc> for Experiment {
             seed: x.seed,
             start: x.start.map(|s| s.0),
             stop: x.stop.map(Into::into),
+            result_frequency: x.result_frequency,
         }
     }
 }

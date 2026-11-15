@@ -1153,6 +1153,10 @@ pub struct Experiment {
     /// the duration is then its time limit. A StochCraft vendor extension on the scenario
     /// (`stochcraft:stop`), since BPSim runs for a fixed duration.
     pub stop: Option<Stop>,
+    /// How often results over time are recorded (BPSim scenario `baseResultFrequency`), in
+    /// seconds: an `xs:duration` in the file, so it does not depend on the time unit. `None`
+    /// when the file gives none (the run then records about 100 points over its length).
+    pub result_frequency: Option<f64>,
 }
 
 /// What ends a replication before its time limit. Checked after everything that happens at one
@@ -1197,6 +1201,7 @@ impl Default for Experiment {
             seed: 1,
             start: None,
             stop: None,
+            result_frequency: None,
         }
     }
 }
