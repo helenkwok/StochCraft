@@ -53,7 +53,7 @@ driven for this checklist.
 | Hierarchy: containers, sub-flows, sub-models | missing | FlexSim: containers, nested logic flows and sub-models. AnyLogic: nested model components (from public summaries, not confirmed). StochCraft reads embedded BPMN sub-processes in line but cannot edit nested levels |
 | Connectors with bends; lanes and pools; resizing shapes by hand | missing | "Not yet" in ROADMAP M3.4 |
 | Undo and redo | done | [nv] Every edit is one engine command and one named undo step |
-| Keyboard shortcuts and an editor for them | done | Settings ▸ Keyboard Shortcuts… records new bindings and shows conflicts. FlexSim lists fixed shortcuts |
+| Keyboard shortcuts and an editor for them | done | Settings ▸ Keyboard Shortcuts… records new bindings (how it handles conflicts not verified). FlexSim lists fixed shortcuts |
 
 ## 3 Connecting and flow logic
 
@@ -110,8 +110,8 @@ driven for this checklist.
 | Run speed control | done | **[1h]** FlexSim: a speed slider and menu. AnyLogic: a real-time scale, slower, faster or as fast as possible (from public summaries, not confirmed). StochCraft: simulated time per second, by default about a minute for the whole run |
 | Jump to a time | done (ours) | FlexSim's manual describes stop times, speed and skipping ahead, not jumping to a chosen time (not found in the pages read). StochCraft: Jump with a time field |
 | Stop time and warm-up | done | **[1h]** FlexSim: on the control bar. StochCraft: Warm-up and Duration in the model overview, and stop conditions that end a replication early |
-| A control panel of chosen model inputs | missing | FlexSim: input widgets on a dashboard form a control panel for changing chosen values before each run. AnyLogic: controls placed on the model's animation (not verified). StochCraft: inputs are edited in the overview and inspector; changing anything a run depends on stops watching |
-| Watch any replication | partial | The vendors animate the one run they run. StochCraft watches replication 1 of N only, and says the others differ |
+| A control panel of chosen model inputs | missing | FlexSim: input widgets on a dashboard form a control panel for changing chosen values before each run. StochCraft: inputs are edited in the overview and inspector; changing anything a run depends on stops watching |
+| Watch any replication | partial | FlexSim animates the one run it runs. StochCraft watches replication 1 of N only, and says the others differ |
 | Repeatable runs | done | FlexSim: the same random streams every run. StochCraft: the experiment's seed |
 
 ## 8 Statistics on objects while running
@@ -135,7 +135,7 @@ driven for this checklist.
 | Replications until a precision is reached | missing | AnyLogic: replications per scenario can stop once a confidence level is met (from public summaries, not confirmed). FlexSim: optimisation can run replications until the objective's confidence is met. StochCraft: a fixed number |
 | Results kept between runs; add replications later | missing | FlexSim: a results file beside the model; finished tasks are not rerun, and replications or scenarios can be added later |
 | Progress per scenario and replication | partial | FlexSim: a status chart with one box per task. StochCraft: a progress bar and Cancel in the status bar |
-| Run on other machines | partial | FlexSim: runs spread over machines on a network. AnyLogic: experiments in its cloud service (from public summaries, not confirmed). StochCraft: all cores on the desktop, web workers in the browser; no remote runs |
+| Run on other machines | partial | FlexSim: runs spread over machines on a network. AnyLogic: experiments in its cloud service (from public summaries, not confirmed). StochCraft: parallel threads on the desktop, web workers in the browser; no remote runs |
 
 ## 10 Results, charts, dashboards, export
 
@@ -177,7 +177,7 @@ driven for this checklist.
 |---|---|---|
 | Open, save, save as, unsaved-change prompts, recent files | done | [nv] ROADMAP M3.1a and M3.1b |
 | Autosave and crash recovery | done | [nv] Every ten seconds on the desktop (the browser's interval not verified) |
-| An open file format other tools read | done (ours) | BPMN 2.0 or XPDL with BPSim; a model drawn in another BPMN editor opens with its layout. Both vendors save to formats of their own |
+| An open file format other tools read | done (ours) | BPMN 2.0 or XPDL with BPSim; a model drawn in another BPMN editor opens with its layout. FlexSim and AnyLogic save to formats of their own (AnyLogic: from public summaries, not confirmed) |
 | Open vendor models | missing | No import; a switcher rebuilds the model |
 | Runs in a browser, offline | done (ours) | The GitHub Pages build installs and works offline. AnyLogic's features page (read directly) offers modelling in the browser too; FlexSim is a Windows desktop program |
 | Version control friendly | done | Text XML files. AnyLogic added Git support in a recent release (from public summaries, not confirmed) |

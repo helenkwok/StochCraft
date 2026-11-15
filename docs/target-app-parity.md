@@ -40,19 +40,23 @@ help, and an app that works for keyboard and screen-reader users.
 | Audience | Ready | Work that dominates |
 |---|---|---|
 | FlexSim switcher | ~51% | layout and animation weigh most (a 3D-first tool): moving entities ([gaps](gaps.md) #2), the library (#3), user-chosen charts and dashboards (#10); a 2D layout and 3D later |
-| AnyLogic switcher | ~54% | flowchart users lean on parameters and experiments: what-if comparison and scenarios (#4), named parameters and outputs (#11), the library (#3), moving entities (#2) |
+| AnyLogic switcher | ~54% | flowchart users lean on parameters and experiments (from public summaries, not confirmed): what-if comparison and scenarios (#4), named parameters and outputs (#11), the library (#3), moving entities (#2) |
 | Newcomer to simulation | ~51% | results that answer the question (#1), help, a guided first model and examples that show something (#5), one vocabulary (#7), field errors (#8) |
 
-Estimated remaining effort, from the checklist's gap estimates (one worker, sequential, tests
-included): **~175–315 h** to a credible first hour for a switcher (the library, moving entities in
-2D, help and tutorials, user-chosen charts, resources on the canvas, a guided distribution choice
-and option menus beside fields), and **~580–1,065 h** to broad parity including a 2D layout with
-transport (M5) and 3D. [gaps.md](gaps.md) has the work in the order it should be done.
+Estimated remaining effort (one worker, sequential, tests included), summed from the hour ranges
+of the parity rows in [gaps.md](gaps.md): **~175–315 h** to a credible first hour for a switcher
+(the library with a visible queue, moving entities in 2D, help and tutorials, chart choice and
+dashboards, pools on the canvas, the guided distribution choice and editing), and **~580–1,065 h**
+to broad parity, adding scenarios, named parameters and outputs, state and time views, debugging
+views, new-model set-up, data in, export, the 2D layout (M5) and 3D. Both leave out the findings,
+accessibility, wording, field-error and release work, so they are a different grouping from the
+"steps 1–4" total in [gaps.md](gaps.md#order).
 
 ## By area
 
-Fidelity counts only rows with a vendor counterpart; readiness also counts StochCraft's own
-strengths ("done (ours)").
+Fidelity counts the done, partial and missing rows whose vendor side was checked; readiness also
+counts StochCraft's own strengths ("done (ours)"). One partial row, findings stated in words, has
+no vendor counterpart but counts in fidelity like any partial (see the end of this page).
 
 | # | Area | FlexSim weight | AnyLogic weight | Newcomer weight | Fidelity | Ready |
 |---|---|---|---|---|---|---|
@@ -94,8 +98,8 @@ Checked in the code (`crates/ui-egui/src`) or the ROADMAP:
 - **Validation as you edit**, with no build step; each edit is one named undo step.
 - **Three-point estimates**: fit a time to a minimum, a most likely value and a maximum or 95th
   percentile, and keep the estimate as the time's pedigree.
-- **Open files and automation**: BPMN 2.0 or XPDL with BPSim, read by other process tools; the same
-  engine from the command line and over MCP.
+- **Open files and automation**: BPMN 2.0 or XPDL with BPSim, so a model drawn in another BPMN
+  editor opens with its layout; the same engine from the command line and over MCP.
 - **In the browser, offline, with no install or account**; 44 translation catalogs besides
   English; rebindable keyboard shortcuts; colour-blind-safe chart palettes with a contrast check.
 
