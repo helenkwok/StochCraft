@@ -1,0 +1,173 @@
+# StochCraft parity with FlexSim and AnyLogic
+
+> **Last reviewed:** 2026-11-15 · **Last updated:** 2026-11-15 · **Target:** what users of FlexSim
+> (User Manual 2026) and AnyLogic 8 (public help) see and do, from the start screen to the report
+
+How close StochCraft's window is to what a FlexSim or AnyLogic user expects, and to what a
+newcomer to simulation needs. The checklist behind the numbers is [ui-parity.md](ui-parity.md);
+the ranked work list is [gaps.md](gaps.md). This is about the user experience only. The engine's
+results are checked against queueing theory and published papers (README, ROADMAP); no results of
+the vendor tools are compared here.
+
+## Headline
+
+| Number | Value | Kind |
+|---|---|---|
+| UI/UX fidelity, weighted to the first hour | **~44%** | estimated from the checklist (rule below) |
+| Fidelity of the 23 first-hour rows alone | **~55%** | estimated (7 done, 2 done (ours), 9 partial, 5 missing) |
+| FlexSim's first tutorial (its first two tasks) done in StochCraft | **9.5 of 17 steps** | estimated, step by step |
+| AnyLogic's first tutorial (its first four phases) done in StochCraft | **6 of 11 steps** | estimated, step by step; the steps are from public summaries, not confirmed |
+| Ready for a FlexSim switcher | **~51%** | estimated (area weights below) |
+| Ready for an AnyLogic switcher | **~54%** | estimated |
+| Ready for a newcomer to simulation | **~51%** | estimated |
+| Nielsen's ten heuristics | **20 / 40** | judged; the bottom of the "acceptable" band (most real interfaces score 20–32) |
+| Cognitive-load checklist | **5 of 8 failed** | judged; critical |
+| WCAG 2.2 AA | **fails**: 2 critical, 8 major, 7 minor findings | tested on the browser app with the keyboard; see [Accessibility](#accessibility) |
+| Rows graded | 91: 27 done, 10 done (ours), 26 partial, 28 missing | counted from the checklist |
+
+**Verdict.** The engine is ahead of the interface. A switcher can do a little over half of their
+usual first-hour steps, but the missing half is the visible half: the first run shows counts in
+badges where FlexSim shows items moving and piling up in a queue (and AnyLogic, from public
+summaries, not confirmed, animates them once the space is drawn); the library is a strip of text
+chips where the vendors have a docked panel of icons; there is nothing like their user-built
+dashboards; and Help holds only About. The visual style is calm and readable and does not look
+machine-made. What is missing is the simulation-tool experience: a library to pick objects from,
+things that move when the model runs, results that answer the question, a what-if you can compare,
+help, and an app that works for keyboard and screen-reader users.
+
+## Readiness by audience
+
+| Audience | Ready | Work that dominates |
+|---|---|---|
+| FlexSim switcher | ~51% | layout and animation weigh most (a 3D-first tool): moving entities ([gaps](gaps.md) #2), the library (#3), user-chosen charts and dashboards (#10); a 2D layout and 3D later |
+| AnyLogic switcher | ~54% | flowchart users lean on parameters and experiments (from public summaries, not confirmed): what-if comparison and scenarios (#4), named parameters and outputs (#11), the library (#3), moving entities (#2) |
+| Newcomer to simulation | ~51% | results that answer the question (#1), help, a guided first model and examples that show something (#5), one vocabulary (#7), field errors (#8) |
+
+Estimated remaining effort (one worker, sequential, tests included), summed from the hour ranges
+of the parity rows in [gaps.md](gaps.md): **~175–315 h** to a credible first hour for a switcher
+(the library with a visible queue, moving entities in 2D, help and tutorials, chart choice and
+dashboards, pools on the canvas, the guided distribution choice and editing), and **~580–1,065 h**
+to broad parity, adding scenarios, named parameters and outputs, state and time views, debugging
+views, new-model set-up, data in, export, the 2D layout (M5) and 3D. Both leave out the findings,
+accessibility, wording, field-error and release work, so they are a different grouping from the
+"steps 1–4" total in [gaps.md](gaps.md#order).
+
+## By area
+
+Fidelity counts the done, partial and missing rows whose vendor side was checked; readiness also
+counts StochCraft's own strengths ("done (ours)"). One partial row, findings stated in words, has
+no vendor counterpart but counts in fidelity like any partial (see the end of this page).
+
+| # | Area | FlexSim weight | AnyLogic weight | Newcomer weight | Fidelity | Ready |
+|---|---|---|---|---|---|---|
+| 1 | Start screen, new model, examples | 5 | 5 | 10 | 44% | 50% |
+| 2 | Library and canvas | 15 | 15 | 10 | 46% | 56% |
+| 3 | Connecting and flow logic | 5 | 8 | 5 | 67% | 67% |
+| 4 | Properties and parameters | 10 | 12 | 8 | 58% | 61% |
+| 5 | Distributions and input data | 8 | 6 | 4 | 42% | 50% |
+| 6 | **Layout, 2D/3D and animation** | 20 | 10 | 5 | **32%** | **32%** |
+| 7 | Running and run controls | 8 | 8 | 8 | 88% | 88% |
+| 8 | Statistics on objects while running | 6 | 6 | 6 | 55% | 55% |
+| 9 | Experiments | 8 | 12 | 10 | 44% | 50% |
+| 10 | **Results, charts, dashboards, export** | 10 | 10 | 14 | **23%** | 44% |
+| 11 | **Help and learning** | 3 | 4 | 14 | **17%** | **17%** |
+| 12 | Errors, validation, debugging | 2 | 4 | 6 | 0% (only the two missing debugging rows have a vendor side checked) | 71% |
+| 13 | Files and projects | 0 | 0 | 0 | 50% | 86% |
+
+Area 2 is where the first impression is made, so treat it as a fourth weak area beside 6, 10 and
+11. Why these weights: FlexSim is taught 3D first (its opening tutorial builds a 3D layout before
+any logic), so layout and animation weigh most for its users; AnyLogic users start from a flowchart
+of process blocks and lean on parameters, code and experiments (from public summaries, not
+confirmed); a newcomer needs the start screen,
+help, explained results and errors most. Files carry no weight: StochCraft's are already at par or
+ahead, and a switcher does not judge a tool by them in the first hour.
+
+## Where StochCraft is ahead
+
+Checked in the code (`crates/ui-egui/src`) or the ROADMAP:
+
+- **Every run is replicated.** Run gives 10 replications by default, in parallel, each mean with a
+  95% interval and the method stated, with a run record and a digest of the model. In FlexSim's
+  window a run is one replication, and replications need an experiment set up first (AnyLogic the
+  same, from public summaries, not confirmed).
+- **The spread across replications**: percentiles, the empirical distribution with its confidence
+  band and the probability of meeting a target, with no set-up.
+- **Sensitivity and sizing with no set-up**: rank every parameter by its effect on a result; add
+  units at the busiest task or pool until a share of replications meets a target.
+- **Jump to a time** while watching a run (not found in the vendor pages read).
+- **Validation as you edit**, with no build step; each edit is one named undo step.
+- **Three-point estimates**: fit a time to a minimum, a most likely value and a maximum or 95th
+  percentile, and keep the estimate as the time's pedigree.
+- **Open files and automation**: BPMN 2.0 or XPDL with BPSim, so a model drawn in another BPMN
+  editor opens with its layout; the same engine from the command line and over MCP.
+- **In the browser, offline, with no install or account**; 44 translation catalogs besides
+  English; rebindable keyboard shortcuts; colour-blind-safe chart palettes with a contrast check.
+
+A switcher meets most of these only after the first impression has formed.
+
+Not ahead, although it may look so: findings in words exist only where replications split into two
+outcomes (#129). There is no general finding yet, such as the busiest block, a warm-up that is too
+short or an interval too wide to act on ([gaps](gaps.md) #1).
+
+## Nielsen's heuristics
+
+| # | Heuristic | Score (0–4) | Main issue |
+|---|---|---|---|
+| 1 | Visibility of system status | 2 | Any edit drops the last results; Run with problems gives one status-bar line |
+| 2 | Match with the real world | 2 | Engine words leak: new blocks named `source-1`, `server-1`, `sink-1`; messages about entities and sinks |
+| 3 | User control and freedom | 3 | Named undo and redo, Esc, cancel; no context menu on the canvas; no way to keep results while editing |
+| 4 | Consistency and standards | 2 | Different names for the same kind in the palette and the menu; result names that are easy to confuse |
+| 5 | Error prevention | 2 | Run stays enabled with problems; negative means accepted, then flagged; no warning for a run from empty with no warm-up |
+| 6 | Recognition rather than recall | 2 | Library chips off-screen; the connect handle appears only on the selected block |
+| 7 | Flexibility and efficiency | 2 | Shortcuts, a keymap, CLI and MCP; no context menu, no command palette, no run comparison |
+| 8 | Aesthetic and minimalist design | 2 | Calm look, but 11 result rows for a plain task and a small model in a large empty canvas |
+| 9 | Help users recover from errors | 2 | Problems marked on blocks, but status-bar errors name no block and messages use field keys |
+| 10 | Help and documentation | 1 | Help holds only About; no glossary or hover explanations for the statistical terms |
+| | **Total** | **20 / 40** | |
+
+## Accessibility
+
+WCAG 2.2 AA fails. The two critical findings: the browser app exposes nothing to screen readers (one
+unlabelled canvas; the desktop app has an accessibility tree, the web build does not), and about 12
+Tab stops show no focus (library chips scrolled out of view, blocks on the canvas). The eight major
+findings: an unreadable focused header menu label, control borders below 3:1, invalid input shown
+by a red outline only, status messages not announced, errors and warnings told apart by colour
+only, explanations in mouse-only tooltips, no reflow at 360 px, and results tables and charts
+without table or chart semantics. Passes: target size (2.5.8), pointer alternatives to dragging
+(2.5.7), and text contrast in the built-in themes.
+
+Limits: the desktop app was not tested with a screen reader; the contrast ratios were computed
+with the WCAG formula by the reviewer and not re-checked; the empty accessibility tree on the web
+agrees with eframe's web backend having no AccessKit adapter.
+
+## How it was measured, and its limits
+
+- **Four independent reviews**, none seeing the others: a design critique (Nielsen's heuristics,
+  a cognitive-load checklist, personas for a switcher, a newcomer and a keyboard and screen-reader
+  user); the parity checklist; accessibility (WCAG 2.2 AA) and interface wording; positioning and
+  onboarding. The design and accessibility reviews drove the browser app built from main
+  `6292048` (at 1440 × 900, and at 640 and 360 px for reflow).
+- **The parity checklist** was graded from screenshots of a first session, the ROADMAP's M3
+  sections, the README and the module documentation in `crates/ui-egui/src`, at `7ed5776`, two
+  commits before `6292048` (those two change the waiting-room and delay logic and seven lines of
+  the inspector). The app itself was not driven for it, and no click counts were measured: step
+  counts are the steps of the vendors' own first tutorials.
+- **FlexSim**: 39 pages of the public User Manual 2026 read as text; most cited pages read in full,
+  about ten only in their opening paragraphs.
+- **AnyLogic**: its help pages refuse automated reading, so its rows rest on search summaries of
+  the official help pages and say "from public summaries, not confirmed"; a person with a browser
+  should confirm them. The vendor's features page was read directly. Rows describe AnyLogic 8
+  (desktop) unless they say otherwise.
+- **Clean room** (ROADMAP principle 6): the vendors' documentation was read as prose and is
+  described here in generic terms. Nothing was copied, no vendor software was run, and no vendor
+  images or example models were used. A vendor behaviour not found in the pages read is "not found
+  in the pages read", not "missing in the product".
+- **Scoring.** done 1, partial 0.5, missing 0; first-hour rows **[1h]** count three times.
+  Fidelity leaves out "done (ours)" rows and rows whose vendor side was not checked **[nv]**;
+  readiness counts "done (ours)" as 1. Areas are weighted by the sum of the three audience weights
+  for fidelity and by each audience's weights for readiness. Row statuses are judgements and the
+  weights are written above to be argued with, so every percentage is an estimate.
+- **Changed from the review.** The review listed "findings stated in words" as done (ours); the
+  code has them only for split outcomes, so the row is partial here. That moves fidelity from ~43%
+  to ~44% (the row now counts) and FlexSim readiness from ~52% to ~51%.
+- StochCraft has no users yet; nothing here is user research.
