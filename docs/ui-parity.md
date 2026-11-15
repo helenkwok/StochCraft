@@ -157,7 +157,7 @@ driven for this checklist.
 | Item | Status | Notes |
 |---|---|---|
 | Help menu with the manual | missing | FlexSim: the user manual opens inside the program. AnyLogic: help and example models from the Help menu (from public summaries, not confirmed). StochCraft: Help holds one item, About StochCraft |
-| Step-by-step tutorials | missing | **[1h]** FlexSim: a tutorial series from the basics to experiments. AnyLogic: tutorials from a first queueing model to pedestrians, traffic and system dynamics (from public summaries, not confirmed). StochCraft: none (the README only) |
+| Step-by-step tutorials | missing | **[1h]** FlexSim: a tutorial series from the basics to experiments. AnyLogic: tutorials from a first queueing model to pedestrians, traffic and system dynamics (from public summaries, not confirmed). StochCraft: no tutorials; a task-by-task user guide (docs/user-guide.md) |
 | Explanation of a field where it is | partial | StochCraft: sentences under section headings and some hover texts (by mouse only, not by keyboard). FlexSim: a reference page per object in the manual |
 | An assistant that explains and builds models | partial | AnyLogic's features page (read directly) describes a built-in AI assistant that answers questions, explains models and builds simple ones from text; which versions have it not verified. StochCraft: an MCP server, so an outside AI agent can build and run models in the window; nothing inside the app |
 
