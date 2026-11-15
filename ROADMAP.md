@@ -1136,8 +1136,8 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   pool, then runs again, until the share of replications meeting the target reaches the target
   share. Beside it is the answer with every time at its mean, from one replication. `apply`
   makes the answer the model's, as one step to undo.
-  - The target share was called `confidence` until #69, which it is not: 16 of 20 weeks (80%)
-    has a Wilson 95% interval of 0.58 to 0.92, so a 70% share is not shown to be met. The old
+  - The target share was called `confidence` until #69, which it is not: 15 of 20 weeks (75%)
+    has a Wilson 95% interval of 0.53 to 0.89, so a 70% share is not shown to be met. The old
     name is still read, and answers carry both keys. The window shows the interval of the share
     found and says when it reaches below the target share.
 - **Acceptance model** (`tests/models/plant.json`, an engine script for `stochcraft-cli exec`):
@@ -1151,13 +1151,15 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
 
 | Mixers, ovens | Weeks meeting the target (20) | Wilson 95% interval |
 |---|---|---|
-| 2, 5 | 20% | 0.08–0.42 |
-| 3, 5 (the answer from mean times) | 55% | 0.34–0.74 |
-| 3, 6 (StochCraft's answer) | 80% | 0.58–0.92 |
+| 2, 5 | 15% | 0.05–0.36 |
+| 3, 5 (the answer from mean times) | 50% | 0.30–0.70 |
+| 3, 6 | 65% | 0.43–0.82 |
+| 3, 7 (StochCraft's answer) | 75% | 0.53–0.89 |
 
 With every time at its mean, 3 mixers and 5 ovens look enough. With the variability they meet
-the target in only 55% of weeks, and 6 ovens are needed: the deterministic answer is too small,
-as the NNSA study found.
+the target in only half the weeks, and 7 ovens are needed: the deterministic answer is too small,
+as the NNSA study found. (Seed 7, 20 replications, with each block's random stream keyed by its
+id since #152; before that the same search stopped at 6 ovens.)
 
 **Validation** (`engine/tests/engine.rs`):
 

@@ -89,8 +89,9 @@ impl Assigner {
 
 impl Compiled {
     /// Runs one replication for the experiment's warm-up plus duration, with random numbers from
-    /// `rng` (each element draws from its own forked stream, in model order; then each element's
-    /// property values from another, so properties never change the other draws), and reports
+    /// `rng` (each element draws from its own streams, keyed by its id and their purpose, so adding,
+    /// removing or reordering elements leaves the others' draws as they were; property values
+    /// come from streams of their own, so properties never change the other draws), and reports
     /// the statistics collected after the warm-up.
     ///
     /// A model whose entities can go round a loop without simulated time moving would never
@@ -304,26 +305,30 @@ impl Compiled {
             }
         }
         let next_id = Rc::new(RefCell::new(0u64));
-        // The elements' streams first, in model order as always; then the properties'.
-        let streams: Vec<Rng> = elements.iter().map(|_| rng.fork()).collect();
-        let mut prop_root = rng.fork();
-        // Then a stream for each server's transfer times, in model order (only for servers that
-        // have one, so models without transfers draw exactly as before).
+        // Every stream is keyed by its element's id and its purpose, never by its position, so
+        // adding, removing or reordering an element changes no other element's draws.
+        let base = rng.next_u64();
+        let stream = |purpose: &str, i: usize| {
+            let id = elements.get(i).map_or("", |e| e.id.as_str());
+            Rng::keyed(base, &format!("{purpose}/{id}"))
+        };
+        let streams: Vec<Rng> = (0..elements.len()).map(|i| stream("element", i)).collect();
+        // A stream for each server's transfer times.
         let transfers: Vec<Option<Rc<Transfer>>> = elements
             .iter()
-            .map(|e| match &e.kind {
+            .enumerate()
+            .map(|(i, e)| match &e.kind {
                 ElementKind::Server {
                     transfer: Some(t), ..
                 } => Some(Rc::new(Transfer {
                     time: t.time.clone(),
                     holds_sender: t.holds_sender,
-                    rng: RefCell::new(rng.fork()),
+                    rng: RefCell::new(stream("transfer", i)),
                 })),
                 _ => None,
             })
             .collect();
-        // Then a stream for each server's patience, in model order (only for servers that have
-        // one, so models without patience draw exactly as before).
+        // A stream for each server's patience.
         let patients: Vec<Option<Rc<Patient>>> = elements
             .iter()
             .enumerate()
@@ -334,7 +339,7 @@ impl Compiled {
                     index: i,
                     until: p.until,
                     time: p.time.clone(),
-                    rng: RefCell::new(rng.fork()),
+                    rng: RefCell::new(stream("patience", i)),
                     ctx: ctx.clone(),
                     input: inputs.get(i)?.first()?.clone(),
                     places: places.get(i).cloned().flatten(),
@@ -353,9 +358,10 @@ impl Compiled {
             elements: self
                 .assigns
                 .iter()
-                .map(|a| Props {
+                .enumerate()
+                .map(|(i, a)| Props {
                     assigns: a.clone(),
-                    rng: RefCell::new(prop_root.fork()),
+                    rng: RefCell::new(stream("properties", i)),
                 })
                 .collect(),
         });
