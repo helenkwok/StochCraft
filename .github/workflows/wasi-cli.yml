@@ -63,18 +63,42 @@ jobs:
           head -c 600 wasi-result.json; echo
           node -e 'const r=JSON.parse(require("fs").readFileSync("wasi-result.json","utf8"));console.log("keys:",Object.keys(r).join(","))'
       - name: The native build gives the same results
-        # Informative: fields that are not results (timings, ordering) may differ; read the log.
-        continue-on-error: true
+        # The run record names the model file as each run saw it (/work/mm1.bpmn under WASI,
+        # tests/models/mm1.bpmn natively), so only its base name is compared; any timing field is
+        # left out. Everything else must match exactly, or the step fails naming the first field
+        # that differs.
         run: |
           set -euo pipefail
           cargo run --release --locked -q -p stochcraft-cli -- run tests/models/mm1.bpmn --reps 16 --seed 2026 --threads 1 --format json > native-result.json
-          node -e '
-            const fs=require("fs");
-            const strip=(o)=>JSON.stringify(o,(k,v)=>/^(elapsed|seconds|duration_ms|started|finished|wall)/i.test(k)?undefined:v);
-            const a=strip(JSON.parse(fs.readFileSync("wasi-result.json","utf8")));
-            const b=strip(JSON.parse(fs.readFileSync("native-result.json","utf8")));
-            console.log("identical:",a===b);
-            if(a!==b){console.log("wasi  :",a.slice(0,400));console.log("native:",b.slice(0,400));process.exit(1)}'
+          cat >compare.mjs <<'EOF'
+          import { readFileSync } from "node:fs";
+          import { exit } from "node:process";
+          const timing = /^(elapsed|seconds|duration_ms|started|finished|wall)/i;
+          const load = (path) => {
+            const r = JSON.parse(readFileSync(path, "utf8"));
+            if (r.record && typeof r.record.file === "string") r.record.file = r.record.file.split("/").pop();
+            return r;
+          };
+          // The first path where a and b differ, or null.
+          const differ = (a, b, path) => {
+            if (typeof a !== typeof b || Array.isArray(a) !== Array.isArray(b) || (a === null) !== (b === null)) return path;
+            if (a === null || typeof a !== "object") return a === b ? null : path;
+            const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+            for (const k of [...keys].sort()) {
+              if (timing.test(k)) continue;
+              const d = differ(a[k], b[k], `${path}/${k}`);
+              if (d) return d;
+            }
+            return null;
+          };
+          const at = differ(load("wasi-result.json"), load("native-result.json"), "");
+          if (at) {
+            console.log(`WASI and native results differ at ${at}`);
+            exit(1);
+          }
+          console.log("WASI and native results are identical");
+          EOF
+          node compare.mjs
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
@@ -82,5 +106,6 @@ jobs:
           path: |
             target/wasm32-wasip1/release/stochcraft-cli.wasm
             wasi-result.json
+            native-result.json
             run-wasi.mjs
           if-no-files-found: warn
