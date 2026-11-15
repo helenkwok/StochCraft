@@ -1,9 +1,9 @@
 # StochCraft roadmap
 
-Where StochCraft is going next and in what order. Five milestones: **M1** model files, the
+Where StochCraft is going next and in what order. Six milestones: **M1** model files, the
 engine and a command line; **M2** the flow logic a factory or logistics model needs; **M3** the
 desktop app (and the browser app built from it); **M4** Monte Carlo, system dynamics, agents and
-hybrid models; **M5** transport and layout. M1 and M3.1–M3.6 are done; M3.7, a redesign that
+hybrid models; **M5** transport and layout; **M6** Python and plugins. M1 and M3.1–M3.6 are done; M3.7, a redesign that
 makes results answer the question, comes next. M2.1–M2.8 are done, and so is M2.10 (abandonment)
 apart from the gaps listed in it. M2.11 (changeovers and lean measures) has its changeovers,
 product-type times, takt and cycle times, state times and most of OEE done; M2.9 (output analysis) has only the checks it already
@@ -2111,6 +2111,76 @@ speeds and positions.
 
 **Later:** the 2D view of entities moving between stations and 3D (M3's "Later").
 
+## M6: Python and plugins
+
+**Outcome:** people who already work in Python script StochCraft from Python, and anyone can
+extend it with plugins, without forking it, while every run stays reproducible.
+
+Python is how many simulation users already work (SimPy, numpy, pandas, notebooks), and the
+Craft apps already extend themselves with sandboxed plugins (FigCraft and PhotoCraft: WebAssembly
+modules run in `wasmi`, acting through the app's commands). StochCraft takes both, in this order:
+the Python package first, since it only wraps the engine (M1.4); command plugins after M3.7;
+logic plugins with or after M4.3, which needs the same calls into a running model.
+
+### M6.1 The Python package (settled, Helen, 2026-11-16)
+
+- `pip install stochcraft`: the Rust engine compiled into a Python module with PyO3 and maturin,
+  as abi3 wheels for Windows, macOS (Apple silicon and Intel) and Linux (x86-64 and ARM64), built
+  and published by the release workflow. No Python inside the engine, so results, seeds and
+  speed are the same as in the app and the command line.
+- **What a script can do:** open, build and save models (BPMN and XPDL with BPSim, so the app
+  opens what a script saves); every engine command, with its JSON schema, as a method; run an
+  experiment and get the results as a table (a pandas DataFrame when pandas is installed, plain
+  lists otherwise) with the means, half-widths and the run record; sweeps, sensitivity, sizing
+  and paired comparisons; the per-replication values for the user's own statistics and plots.
+- **Shape:** a thin, typed Python layer over the engine (`stochcraft.Model`, `model.run(...)`,
+  `results.table()`), with type stubs and docstrings generated from the command schemas, so
+  editors and AI assistants complete it; examples as notebooks.
+- **The same rules as the rest:** no hidden randomness (a seed is part of every run record);
+  long runs release Python's lock and use every core, as the CLI does; errors are Python
+  exceptions carrying the engine's message and code.
+- **Not in M6.1:** writing a block's logic in Python and calling it during a run. That would be
+  slow, would not run in the browser and would break reproducibility across machines; custom
+  logic is M6.3's job.
+- **Checks:** the Python tests run every example of the user guide and compare a run's results
+  with `stochcraft-cli run` on the same model and seed, value for value.
+
+### M6.2 Command plugins
+
+As in FigCraft:
+
+- A plugin is a WebAssembly module with a JSON manifest, run in `wasmi` (a pure-Rust interpreter,
+  MIT OR Apache-2.0) in the desktop app and the browser alike, with no WASI: no file system,
+  network, clock or randomness of its own. A run has an instruction budget and a memory cap.
+- It acts only through the engine's commands, within the permissions its manifest asks for (read
+  only, or edit; optionally a list of commands). Everything one run does is one undo step, named
+  after the plugin; a failed run puts the model back as it was.
+- Uses: building a model from a company's data, checks of a company's own modelling rules,
+  custom reports and charts from results, importers for other formats.
+- In the window: Plugins in the menu, a dialog generated from the plugin's parameters, Manage
+  plugins (install from a file, remove); later a plugin directory, as FigCraft's.
+- A Rust SDK and example plugins in `plugins/`; other languages that compile to WebAssembly work
+  too.
+
+### M6.3 Logic plugins
+
+Custom behaviour inside a run, the logic SimPy users write by hand:
+
+- **Hooks:** a routing choice (which way an entity goes), a time (a service, a setup or a delay
+  computed from the entity and the model's state), a condition, and later a block of its own
+  with its own ports and statistics.
+- **Deterministic:** each call gets the entity's properties, the time and the state it asks for,
+  and random numbers only from a stream the engine gives it (keyed by the block and the hook, as
+  since #152), so the same seed gives the same results on every machine and in the browser.
+- **Bounded:** an instruction budget per call and a memory cap, as in M6.2, which also applies
+  when a module is instantiated (the memory it declares counts); running out of either stops the
+  replication with an error that names the plugin and the block.
+- **In the file:** a block names the plugin and its version through a `stochcraft:` vendor
+  extension; a model whose plugin is missing opens, and says what it cannot run.
+- **Speed:** `wasmi` interprets; a hook is called once per event, so the cost is measured on the
+  benchmark models before this ships, and a compiled runtime is considered only if it is too slow
+  and still deterministic.
+
 ---
 
 ## Examples for teaching
@@ -2175,6 +2245,9 @@ M1.1 model ─ M1.2 compile ─ M1.3 io ─ M1.4 engine ─ M1.5 cli ─ M1.6 de
                                          │
                      ┌───────────────────┴───────────────────┐
               M4 Monte Carlo, SD, agents, hybrid      M5 transport and layout
+
+M6.1 the Python package: any time after M1.4 (it wraps the engine)
+M6.2 command plugins: after M3.7     M6.3 logic plugins: with or after M4.3
 ```
 
 Examples for teaching are added alongside, as each feature they need lands.
@@ -2207,3 +2280,5 @@ and the Pages preview of an M3 pull request shows the blocks already merged.
 | D16 | Agent behaviour in files (M4.3) | Settled (Helen, 2026-11-15): each agent type's state chart is a W3C SCXML 1.0 document (Recommendation, 1 September 2015), referenced from the BPMN file by a `stochcraft:` vendor extension; populations, the environment and the links to blocks are `stochcraft:` extensions |
 | D17 | SCXML data model and timing (M4.3) | Settled (Helen, 2026-11-15). SCXML lets a platform define its own data model (§5.1, Appendix B), and the Recommendation defines only the null and ECMAScript ones in full. So: a `stochcraft` data model using BPSim's XPath 1.0 subset (D6) for `cond`, `expr` and `location`, with SCXML's `In()`; random timeouts through `<send delayexpr>` calling the distribution functions, since `delay` itself is a fixed CSS2 time; no `<script>`. Other tools then read the charts' structure, but not our expressions |
 | D18 | Agent scheduling and random streams (M4.3) | Settled (Helen, 2026-11-15). Agents run event-driven on the `des` event list; a stepped mode only for models written that way, activating agents in a set or a random order each step. Events at the same time run by time, then priority, then an order the experiment sets openly: first scheduled first (the default, as today, so validated results do not change), last scheduled first, or random from a stream of its own, so a model can be checked for depending on the order. Initial events, step activations and broadcasts are scheduled in population, then agent order. Each `des` event delivered to an agent is one SCXML external event, handled by a complete zero-time macrostep; `<raise>` and `#_internal` events stay inside the agent; delayed and zero-delay `<send>`s become `des` events, and `<cancel>` marks them stale; a limit on microsteps per macrostep stops a run that loops. Each agent has its own random stream, derived from the replication's seed, its population and its serial number, with a stream per purpose, so adding an agent never changes another's numbers |
+| D19 | Python (M6.1) | Settled (Helen, 2026-11-16): a native package, `pip install stochcraft`, the engine built into a Python module with PyO3 and maturin; Python drives models from outside, and logic inside a run is M6.3's, not Python's |
+| D20 | Plugins (M6.2, M6.3) | Settled (Helen, 2026-11-16): sandboxed WebAssembly plugins in `wasmi`, as the other Craft apps have; command plugins first (through the engine's commands, one undo step, permissions in a manifest), then logic plugins called during a run with the engine's random streams, an instruction budget and a memory cap |
