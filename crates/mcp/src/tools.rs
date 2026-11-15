@@ -155,8 +155,10 @@ pub fn tool_definitions() -> Vec<Value> {
              system, …) the mean across replications with its 95% confidence interval \
              (half_width), where the replications split into two outcomes the two groups \
              (split: cut, and each group's n and mean; the mean then describes no actual run), \
-             and the run record (seed, replications, warm-up, duration, model digest) that \
-             reproduces them.",
+             the warm-up MSER-5 suggests (warmup_suggestion), warnings about the results \
+             (one_replication, no_warmup, no_steady_state, …), and the run record (seed, \
+             replications, warm-up, duration, model digest) that reproduces them. The values \
+             over the run (series) are left out; the execute tool's run command gives them.",
             obj(
                 json!({
                     "replications": integer("Replications (default: the experiment's)"),
@@ -323,7 +325,16 @@ fn dispatch(b: &mut dyn Backend, name: &str, a: &Map<String, Value>) -> Result<V
         "check_model" => b.execute("model.validate", json!({})),
         "open" => b.execute("file.open", pick(a, &["path", "scenario"])),
         "save" => b.execute("file.save", pick(a, &["path", "as_new"])),
-        "run" => b.execute("run", pick(a, &["replications", "seed"])),
+        "run" => {
+            // Without the results over time, which multiply the reply's size for a chart an
+            // agent rarely needs; the warm-up suggested from them stays. `execute` with `run`
+            // gives them.
+            let mut r = b.execute("run", pick(a, &["replications", "seed"]))?;
+            if let Some(o) = r.as_object_mut() {
+                o.remove("series");
+            }
+            Ok(r)
+        }
         "undo" => b.execute("undo", json!({})),
         "redo" => b.execute("redo", json!({})),
         _ => Err(format!(

@@ -130,6 +130,18 @@ fn an_agent_opens_builds_checks_runs_and_saves() {
     let results = s.ok("run", json!({"replications": 3, "seed": 5}));
     assert_eq!(results["replications"], 3);
     assert_eq!(results["record"]["seed"], 5);
+    // The warm-up suggestion, without the values over the run that it comes from, which
+    // `execute` gives.
+    assert_eq!(
+        results["warmup_suggestion"]["method"], "mser-5",
+        "{results}"
+    );
+    assert!(results.get("series").is_none());
+    let full = s.ok(
+        "execute",
+        json!({"command": "run", "params": {"replications": 3, "seed": 5}}),
+    );
+    assert!(full["series"]["times"].is_array());
 
     // A model built from blocks in one batch, checked, run and undone.
     s.ok("execute", json!({"command": "model.new"}));
