@@ -223,8 +223,11 @@
 	Hide Others	Anderen verbergen
 	Hide {app}	{app} verbergen
 	High contrast	Hoog contrast
+	How long one unit takes to serve one entity, drawn anew for each entity.	Hoe lang één eenheid nodig heeft om één entiteit te bedienen; voor elke entiteit opnieuw getrokken.
 	How many	Hoeveel
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hoeveel entiteiten hier mogen wachten op een vrije eenheid, naast de entiteiten die bediend worden; zonder vinkje onbeperkt.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hoeveel onderdelen klanten van deze vertrekken willen; de resultaten tonen dan de takt (de beschikbare tijd gedeeld door de vraag) en de cyclustijd van elke taak.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Hoeveel eenheden hier tegelijk bedienen, zoals machines of personeel, elk één entiteit tegelijk.
 	In use	In gebruik
 	Inside over time	Binnen in de tijd
 	Job under way on a server going off shift:	Bewerking in uitvoering op een server waarvan de werktijd eindigt:
@@ -271,6 +274,7 @@
 	Model	Model
 	Model time 0 is	Modeltijd 0 is
 	Mon	ma
+	More settings	Meer instellingen
 	Most likely	Meest waarschijnlijk
 	Move	Verplaatsen
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Elke parameter om de beurt omlaag en omhoog zetten, en ze rangschikken naar hoeveel het resultaat verschuift.

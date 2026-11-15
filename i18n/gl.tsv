@@ -223,8 +223,11 @@
 	Hide Others	Ocultar outros
 	Hide {app}	Ocultar {app}
 	High contrast	Alto contraste
+	How long one unit takes to serve one entity, drawn anew for each entity.	Canto tarda unha unidade en atender unha entidade; extráese de novo para cada entidade.
 	How many	Cantas
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Cantas entidades poden agardar aquí por unha unidade libre, ademais das que se atenden; sen marcar, calquera número.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Cantas pezas queren os clientes destas saídas; os resultados amosan entón o takt (o tempo dispoñible dividido pola demanda) e o tempo de ciclo de cada tarefa.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Cantas unidades atenden aquí á vez, como máquinas ou persoal, cada unha a unha entidade cada vez.
 	In use	En uso
 	Inside over time	Dentro ao longo do tempo
 	Job under way on a server going off shift:	Traballo en curso nun servidor que remata a súa quenda:
@@ -271,6 +274,7 @@
 	Model	Modelo
 	Model time 0 is	O tempo 0 do modelo é
 	Mon	lun
+	More settings	Máis axustes
 	Most likely	Máis probable
 	Move	Mover
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Mover cada parámetro abaixo e arriba por quendas, e ordenalos segundo canto se move o resultado.

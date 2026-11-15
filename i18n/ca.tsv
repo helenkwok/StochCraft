@@ -223,8 +223,11 @@
 	Hide Others	Amaga els altres
 	Hide {app}	Amaga {app}
 	High contrast	Alt contrast
+	How long one unit takes to serve one entity, drawn anew for each entity.	Quant de temps triga una unitat a servir una entitat; es mostreja de nou per a cada entitat.
 	How many	Quantes
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Quantes entitats poden esperar aquí una unitat lliure, a més de les que s'estan servint; sense marcar, qualsevol nombre.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Quantes peces volen els clients d'aquestes sortides; aleshores els resultats mostren el takt (el temps disponible dividit per la demanda) i el temps de cicle de cada tasca.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Quantes unitats serveixen aquí alhora, com ara màquines o personal, cadascuna una entitat cada vegada.
 	In use	En ús
 	Inside over time	A dins al llarg del temps
 	Job under way on a server going off shift:	Feina en curs en un servidor que acaba el torn:
@@ -271,6 +274,7 @@
 	Model	Model
 	Model time 0 is	El temps 0 del model és
 	Mon	dl.
+	More settings	Més configuració
 	Most likely	Més probable
 	Move	Mou
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Moure cada paràmetre avall i amunt per torns, i ordenar-los segons quant es mou el resultat.

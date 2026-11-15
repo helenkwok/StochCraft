@@ -223,8 +223,11 @@
 	Hide Others	Fshih të tjerat
 	Hide {app}	Fshih {app}
 	High contrast	Kontrast i lartë
+	How long one unit takes to serve one entity, drawn anew for each entity.	Sa kohë i duhet një njësie për t'i shërbyer një entiteti; hidhet sërish për çdo entitet.
 	How many	Sa
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Sa entitete mund të presin këtu për një njësi të lirë, përveç atyre që po u shërbehet; pa shenjë, sa të duan.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Sa pjesë duan klientët nga këto largime; rezultatet tregojnë atëherë taktin (kohën e disponueshme pjesëtuar me kërkesën) dhe kohën e ciklit të çdo detyre.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Sa njësi shërbejnë këtu njëkohësisht, si makina ose personel, secila një entitet në një kohë.
 	In use	Në përdorim
 	Inside over time	Brenda gjatë kohës
 	Job under way on a server going off shift:	Punë në vazhdim në një server që del nga turni:
@@ -271,6 +274,7 @@
 	Model	Modeli
 	Model time 0 is	Koha 0 e modelit është
 	Mon	Hën
+	More settings	Më shumë cilësime
 	Most likely	Më e mundshmja
 	Move	Zhvendos
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Lëviz çdo parametër poshtë dhe lart me radhë dhe rendit sipas sa lëviz rezultati.

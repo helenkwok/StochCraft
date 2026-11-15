@@ -45,9 +45,9 @@ fn shape(h: &Harness<'static, App>, name: &str) -> egui::Rect {
         .find(|n| {
             // A shape is named by its kind and name; the problems chip ("1 problem: source-1")
             // ends with names too.
-            n.accesskit_node().label().is_some_and(|l| {
-                l != name && l.ends_with(&format!(" {name}")) && !l.contains(": ")
-            })
+            n.accesskit_node()
+                .label()
+                .is_some_and(|l| l != name && l.ends_with(&format!(" {name}")) && !l.contains(": "))
         })
         .unwrap_or_else(|| panic!("no shape for {name}"))
         .rect()

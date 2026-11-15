@@ -223,8 +223,11 @@
 	Hide Others	その他を隠す
 	Hide {app}	{app} を隠す
 	High contrast	ハイコントラスト
+	How long one unit takes to serve one entity, drawn anew for each entity.	1 つのユニットが 1 つのエンティティにサービスする時間で、エンティティごとに新たに抽出されます。
 	How many	数
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	サービス中のもの以外に、ここで空いたユニットを待てるエンティティの数で、チェックなしなら無制限です。
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	顧客がこれらの退出から求める部品の数。結果にはタクト（稼働可能時間を需要で割った値）と各タスクのサイクルタイムが表示されます。
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	ここで同時にサービスするユニット (機械や人員など) の数で、各ユニットは一度に 1 つのエンティティを扱います。
 	In use	使用中
 	Inside over time	内部の数の推移
 	Job under way on a server going off shift:	シフトを外れるサーバで処理中の作業:
@@ -271,6 +274,7 @@
 	Model	モデル
 	Model time 0 is	モデル時刻 0 は
 	Mon	月
+	More settings	その他の設定
 	Most likely	最頻値
 	Move	移動
 	Move each parameter down and up in turn, and rank them by how much the result moves.	各パラメーターを順に上下させ、結果がどれだけ動くかで順位を付けます。

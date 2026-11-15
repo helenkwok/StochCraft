@@ -223,8 +223,11 @@
 	Hide Others	ఇతరాలను దాచు
 	Hide {app}	{app} ను దాచు
 	High contrast	అధిక కాంట్రాస్ట్
+	How long one unit takes to serve one entity, drawn anew for each entity.	ఒక యూనిట్ ఒక ఎంటిటీకి సేవ చేయడానికి పట్టే సమయం; ప్రతి ఎంటిటీకి కొత్తగా తీసుకోబడుతుంది.
 	How many	ఎన్ని
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	సేవ పొందుతున్నవి కాకుండా, ఖాళీ యూనిట్ కోసం ఇక్కడ ఎన్ని ఎంటిటీలు వేచి ఉండవచ్చు; టిక్ లేకపోతే ఎన్నైనా.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ఈ నిష్క్రమణల నుంచి కస్టమర్లు ఎన్ని భాగాలు కోరుకుంటున్నారు; అప్పుడు ఫలితాలు టాక్ట్ (అందుబాటులో ఉన్న సమయాన్ని డిమాండ్‌తో భాగించినది) మరియు ప్రతి పని యొక్క సైకిల్ సమయాన్ని చూపుతాయి.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	ఇక్కడ ఒకేసారి ఎన్ని యూనిట్‌లు సేవ చేస్తాయి, ఉదా. యంత్రాలు లేదా సిబ్బంది, ఒక్కొక్కటి ఒకసారి ఒక ఎంటిటీకి.
 	In use	వాడుకలో ఉంది
 	Inside over time	కాలక్రమంలో లోపల
 	Job under way on a server going off shift:	షిఫ్ట్ ముగుస్తున్న సర్వర్‌పై జరుగుతున్న పని:
@@ -271,6 +274,7 @@
 	Model	మోడల్
 	Model time 0 is	నమూనా సమయం 0 అంటే
 	Mon	సోమ
+	More settings	మరిన్ని సెట్టింగ్‌లు
 	Most likely	అత్యంత సంభావ్య విలువ
 	Move	తరలింపు
 	Move each parameter down and up in turn, and rank them by how much the result moves.	ప్రతి పరామితిని వరుసగా కిందకు, పైకి కదిలించి, ఫలితం ఎంత కదులుతుందో దాని ప్రకారం క్రమపరచండి.

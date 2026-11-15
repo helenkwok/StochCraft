@@ -223,8 +223,11 @@
 	Hide Others	Приховати інші
 	Hide {app}	Приховати {app}
 	High contrast	Високий контраст
+	How long one unit takes to serve one entity, drawn anew for each entity.	Скільки часу одна одиниця обслуговує одну сутність; розігрується заново для кожної сутності.
 	How many	Скільки
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Скільки сутностей може чекати тут на вільну одиницю, крім тих, що обслуговуються; без позначки — скільки завгодно.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Скільки деталей клієнти хочуть від цих вибуттів; тоді результати показують такт (доступний час, поділений на попит) і час циклу кожного завдання.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Скільки одиниць обслуговують тут одночасно, наприклад верстати чи персонал, кожна по одній сутності за раз.
 	In use	Використовується
 	Inside over time	Усередині в часі
 	Job under way on a server going off shift:	Робота, що триває на сервері, у якого закінчується зміна:
@@ -271,6 +274,7 @@
 	Model	Модель
 	Model time 0 is	Час моделі 0 —
 	Mon	пн
+	More settings	Інші налаштування
 	Most likely	Найімовірніше значення
 	Move	Переміщення
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Зсувати кожен параметр по черзі вниз і вгору та впорядкувати їх за тим, наскільки змінюється результат.

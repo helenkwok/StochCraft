@@ -223,8 +223,11 @@
 	Hide Others	অন্যগুলো লুকান
 	Hide {app}	{app} লুকান
 	High contrast	উচ্চ বৈপরীত্য
+	How long one unit takes to serve one entity, drawn anew for each entity.	একটি একক একটি সত্তাকে সেবা দিতে কত সময় নেয়; প্রতিটি সত্তার জন্য নতুন করে নেওয়া হয়।
 	How many	কতগুলি
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	সেবা পাওয়া সত্তাগুলো ছাড়াও কতগুলো সত্তা এখানে খালি এককের জন্য অপেক্ষা করতে পারে; টিক না থাকলে যতগুলো খুশি।
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	গ্রাহকেরা এই প্রস্থান থেকে কতগুলো অংশ চান; তখন ফলাফলে টাক্ট (প্রাপ্য সময়কে চাহিদা দিয়ে ভাগ করে) এবং প্রতিটি কাজের সাইকেল টাইম দেখায়।
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	এখানে একই সময়ে কতগুলো একক সেবা দেয়, যেমন মেশিন বা কর্মী; প্রতিটি একবারে একটি সত্তাকে।
 	In use	ব্যবহৃত হচ্ছে
 	Inside over time	সময়ের সাথে ভিতরে
 	Job under way on a server going off shift:	শিফট শেষ হতে চলা সার্ভারে চলমান কাজ:
@@ -271,6 +274,7 @@
 	Model	মডেল
 	Model time 0 is	মডেল সময় 0 হলো
 	Mon	সোম
+	More settings	আরও সেটিংস
 	Most likely	সবচেয়ে সম্ভাব্য
 	Move	সরানো
 	Move each parameter down and up in turn, and rank them by how much the result moves.	প্রতিটি প্যারামিটার পালা করে নিচে ও উপরে সরিয়ে, ফলাফল কতটা নড়ে সেই অনুযায়ী সাজান।

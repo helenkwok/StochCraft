@@ -223,8 +223,11 @@
 	Hide Others	Басқаларын жасыру
 	Hide {app}	{app} қолданбасын жасыру
 	High contrast	Жоғары контраст
+	How long one unit takes to serve one entity, drawn anew for each entity.	Бір бірліктің бір нысанға қызмет көрсетуге кететін уақыты; әр нысан үшін қайта таңдалады.
 	How many	Қанша
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Қызмет алып жатқандардан бөлек, мұнда бос бірлікті қанша нысан күте алады; белгісіз болса, кез келген сан.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Тұтынушылар осы кетулерден қанша бөлшек қалайды; сонда нәтижелер тактіні (қолжетімді уақытты сұранысқа бөлгенде) және әр тапсырманың цикл уақытын көрсетеді.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Мұнда бір мезгілде қанша бірлік қызмет көрсетеді, мысалы, машиналар не қызметкерлер, әрқайсысы бір уақытта бір нысанға.
 	In use	Қолданыста
 	Inside over time	Уақыт бойынша ішіндегілер
 	Job under way on a server going off shift:	Ауысымы аяқталатын сервердегі орындалып жатқан жұмыс:
@@ -271,6 +274,7 @@
 	Model	Модель
 	Model time 0 is	Модельдің 0 уақыты
 	Mon	дс
+	More settings	Қосымша параметрлер
 	Most likely	Ең ықтимал
 	Move	Жылжыту
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Әр параметрді кезекпен төмен және жоғары жылжытып, нәтиже қаншалықты өзгеретініне қарай реттеу.

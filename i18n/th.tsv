@@ -223,8 +223,11 @@
 	Hide Others	ซ่อนรายการอื่น
 	Hide {app}	ซ่อน {app}
 	High contrast	ความเปรียบต่างสูง
+	How long one unit takes to serve one entity, drawn anew for each entity.	เวลาที่หน่วยหนึ่งใช้ให้บริการเอนทิตีหนึ่ง สุ่มใหม่สำหรับแต่ละเอนทิตี
 	How many	จำนวน
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	จำนวนเอนทิตีที่รอหน่วยว่างที่นี่ได้ นอกเหนือจากที่กำลังรับบริการ หากไม่เลือกจะรอได้ไม่จำกัด
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ลูกค้าต้องการชิ้นงานกี่ชิ้นจากขาออกเหล่านี้ จากนั้นผลลัพธ์จะแสดงแท็กไทม์ (เวลาที่มีหารด้วยความต้องการ) และไซเคิลไทม์ของแต่ละงาน
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	จำนวนหน่วยที่ให้บริการที่นี่พร้อมกัน เช่น เครื่องจักรหรือพนักงาน แต่ละหน่วยครั้งละหนึ่งเอนทิตี
 	In use	กำลังใช้
 	Inside over time	จำนวนภายในตามเวลา
 	Job under way on a server going off shift:	งานที่กำลังทำบนเซิร์ฟเวอร์ที่กำลังออกกะ:
@@ -271,6 +274,7 @@
 	Model	แบบจำลอง
 	Model time 0 is	เวลา 0 ของแบบจำลองคือ
 	Mon	จ.
+	More settings	การตั้งค่าเพิ่มเติม
 	Most likely	ค่าที่เป็นไปได้มากที่สุด
 	Move	ย้าย
 	Move each parameter down and up in turn, and rank them by how much the result moves.	ปรับแต่ละพารามิเตอร์ลงและขึ้นทีละตัว แล้วจัดอันดับตามว่าผลลัพธ์ขยับมากเท่าใด

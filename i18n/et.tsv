@@ -223,8 +223,11 @@
 	Hide Others	Peida teised
 	Hide {app}	Peida {app}
 	High contrast	Kõrge kontrast
+	How long one unit takes to serve one entity, drawn anew for each entity.	Kui kaua kulub ühel ühikul ühe olemi teenindamiseks; loositakse iga olemi jaoks uuesti.
 	How many	Mitu
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Mitu olemit võib siin vaba ühikut oodata, lisaks teenindatavatele; märkimata suvaline arv.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Mitu detaili kliendid neist lahkumistest soovivad; tulemused näitavad siis takti (saadaolev aeg jagatud nõudlusega) ja iga ülesande tsükliaega.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Mitu ühikut siin korraga teenindab, näiteks masinad või töötajad, igaüks üht olemit korraga.
 	In use	Kasutusel
 	Inside over time	Sees aja jooksul
 	Job under way on a server going off shift:	Pooleli töö serveris, mille vahetus lõpeb:
@@ -271,6 +274,7 @@
 	Model	Mudel
 	Model time 0 is	Mudeli aeg 0 on
 	Mon	E
+	More settings	Rohkem seadeid
 	Most likely	Kõige tõenäolisem
 	Move	Teisaldamine
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Liiguta iga parameetrit kordamööda alla ja üles ning järjesta need selle järgi, kui palju tulemus liigub.

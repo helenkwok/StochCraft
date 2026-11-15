@@ -223,8 +223,11 @@
 	Hide Others	Slėpti kitus
 	Hide {app}	Slėpti {app}
 	High contrast	Didelis kontrastas
+	How long one unit takes to serve one entity, drawn anew for each entity.	Kiek laiko vienam vienetui užtrunka aptarnauti vieną objektą; kiekvienam objektui traukiama iš naujo.
 	How many	Kiek
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Kiek objektų gali čia laukti laisvo vieneto, be aptarnaujamų; nepažymėjus – kiek tik nori.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kiek detalių klientai nori iš šių išvykimų; tada rezultatai rodo taktą (turimą laiką, padalytą iš poreikio) ir kiekvienos užduoties ciklo laiką.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Kiek vienetų čia aptarnauja vienu metu, pvz., mašinos ar darbuotojai, kiekvienas po vieną objektą.
 	In use	Naudojama
 	Inside over time	Viduje per laiką
 	Job under way on a server going off shift:	Vykdomas darbas serveryje, kurio pamaina baigiasi:
@@ -271,6 +274,7 @@
 	Model	Modelis
 	Model time 0 is	Modelio laikas 0 yra
 	Mon	pr
+	More settings	Daugiau nuostatų
 	Most likely	Labiausiai tikėtina
 	Move	Perkėlimas
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Paeiliui keisti kiekvieną parametrą žemyn ir aukštyn ir surikiuoti juos pagal tai, kiek pasikeičia rezultatas.

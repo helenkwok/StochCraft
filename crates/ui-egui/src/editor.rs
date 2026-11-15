@@ -74,26 +74,49 @@ pub(crate) fn default_block_name(
     }
 }
 
-/// The parameters each kind of block has, in the order the inspector shows them.
+/// The basic parameters of each kind of block, first in the inspector in this order: its
+/// capacity and main time.
 fn parameters(kind: &str) -> &'static [&'static str] {
     match kind {
-        "source" => &["interarrival", "limit"],
+        "source" => &["interarrival"],
+        "server" => &["capacity", "shifts", "service", "queue_capacity"],
+        // Its needs are edited by `needs_section` in pools.rs; service and priority here.
+        "shared_task" => &["service", "priority"],
+        "delay" => &["duration"],
+        "batch" => &["size"],
+        _ => &[],
+    }
+}
+
+/// The rest of a kind's parameters, folded under More settings, in this order.
+fn more_parameters(kind: &str) -> &'static [&'static str] {
+    match kind {
+        "source" => &["limit"],
         "server" => &[
-            "capacity",
-            "shifts",
-            "service",
-            "processing_by",
-            "queue_capacity",
             "transfer",
             "transfer_holds_sender",
             "setup",
+            "processing_by",
             "planned_run_time",
         ],
-        // Its needs are edited by `needs_section` in pools.rs; service and priority here.
-        "shared_task" => &["service", "processing_by", "priority"],
-        "delay" => &["duration", "processing_by"],
-        "batch" => &["size"],
+        "shared_task" | "delay" => &["processing_by"],
         _ => &[],
+    }
+}
+
+/// What the "?" beside a basic parameter's label explains.
+fn explanation(f: &str) -> Option<&'static str> {
+    match f {
+        "capacity" => Some(t(
+            "How many units serve here at the same time, such as machines or staff, each one entity at a time.",
+        )),
+        "service" => Some(t(
+            "How long one unit takes to serve one entity, drawn anew for each entity.",
+        )),
+        "queue_capacity" => Some(t(
+            "How many entities may wait here for a free unit, besides those being served; unticked, any number may.",
+        )),
+        _ => None,
     }
 }
 
@@ -390,6 +413,52 @@ impl App {
         }
     }
 
+    /// What is set of a block's parameters `fields`, in a line: each with its main number
+    /// ("Transfer time Constant 2 min, Setup Exponential 1 min"), or None.
+    fn summary(&self, el: &Value, fields: &[&str]) -> String {
+        let unit = self.time_unit_label();
+        let dist = |d: &Value| -> String {
+            let kind = form::choice_label(d["type"].as_str().unwrap_or(""));
+            match ["mean", "value", "mode"]
+                .iter()
+                .find_map(|k| d[*k].as_f64())
+            {
+                Some(x) => format!("{kind} {} {unit}", self.numbers.format(x, 0..=3)),
+                None => kind,
+            }
+        };
+        let parts: Vec<String> = fields
+            .iter()
+            .filter(|f| is_set(el, f) && !matches!(**f, "transfer_holds_sender" | "available"))
+            .map(|f| {
+                let v = &el[*f];
+                let label = form::label(f);
+                match *f {
+                    "breakdown" => format!(
+                        "{label}: {}, {}",
+                        dist(&v["time_to_failure"]),
+                        dist(&v["repair"])
+                    ),
+                    "patience" => dist(&v["time"]),
+                    "health_check" => {
+                        format!("{} {}", form::label("check_interval"), dist(&v["interval"]))
+                    }
+                    "setup" => format!("{label} {}", dist(&v["time"])),
+                    _ if v["type"].is_string() => format!("{label} {}", dist(v)),
+                    _ => match v.as_f64() {
+                        Some(x) => format!("{label} {}", self.numbers.format(x, 0..=3)),
+                        None => label,
+                    },
+                }
+            })
+            .collect();
+        if parts.is_empty() {
+            t("None").to_owned()
+        } else {
+            parts.join(", ")
+        }
+    }
+
     pub(crate) fn time_unit_label(&self) -> String {
         crate::time_unit(&self.engine)
     }
@@ -595,8 +664,11 @@ impl App {
                 *f,
                 "interarrival" | "service" | "duration" | "transfer" | "planned_run_time"
             );
-            if let Some(v) = form::field(ui, &mut cx, Schema::new(&schema), &key, f, &current, time)
-            {
+            // The basics' "?", on the task's own fields (not a time by value, say).
+            form::explain(&key, explanation(f).filter(|_| el["kind"] != "delay"));
+            let changed = form::field(ui, &mut cx, Schema::new(&schema), &key, f, &current, time);
+            form::explain(&key, None);
+            if let Some(v) = changed {
                 self.execute("block.set", json!({ "id": id, *f: v }));
             }
         }
@@ -648,15 +720,28 @@ impl App {
         ui.label(theme::weak(ui, tf("id {id}", &[("id", &id)])).monospace());
         ui.add_space(8.0);
 
-        // The block's own problems, and those of the flows into and out of it.
+        // The block's own problems, and those of the flows into and out of it, in a place of
+        // fixed height (two lines, scrolling beyond), so the form under it doesn't move when one
+        // appears or goes.
         let flows = flows_of(model, &id);
-        for pr in problems.iter().filter(|pr| {
-            pr.at
-                .as_deref()
-                .is_some_and(|at| at == id || flows.iter().any(|f| f == at))
-        }) {
-            self.problem_row(ui, p, pr, false);
-        }
+        let mine: Vec<&Problem> = problems
+            .iter()
+            .filter(|pr| {
+                pr.at
+                    .as_deref()
+                    .is_some_and(|at| at == id || flows.iter().any(|f| f == at))
+            })
+            .collect();
+        egui::ScrollArea::vertical()
+            .id_salt(("block problems", id.as_str()))
+            .max_height(PROBLEMS_HEIGHT)
+            .min_scrolled_height(PROBLEMS_HEIGHT)
+            .auto_shrink([false, false])
+            .show(ui, |ui| {
+                for pr in mine {
+                    self.problem_row(ui, p, pr, false);
+                }
+            });
 
         if let Some(n) = self.text_field(ui, &format!("{id}/name"), t("Name"), &name, true) {
             self.execute("block.rename", json!({ "id": id, "name": n }));
@@ -673,6 +758,21 @@ impl App {
         if !fields.is_empty() {
             section(ui, t("Parameters"));
             self.block_fields(ui, model, el, &id, &fields);
+        }
+        // The rest, folded with a summary of what is set; open when anything is.
+        let more = more_parameters(&kind);
+        if !more.is_empty() {
+            ui.add_space(6.0);
+            let summary = self.summary(el, more);
+            fold(
+                ui,
+                &format!("{id}/more"),
+                t("More settings"),
+                &summary,
+                more.iter().any(|f| is_set(el, f)),
+                more.iter().any(|f| form::focus_waits(&format!("{id}/{f}"))),
+                |ui| self.block_fields(ui, model, el, &id, more),
+            );
         }
         // How a finite waiting room's size is set, once there is one.
         if kind == "server" && el["queue_capacity"].is_number() {
@@ -694,13 +794,17 @@ impl App {
                 t("Arrivals by calendar")
             };
             ui.add_space(6.0);
-            // Open for a problem's field in it.
-            let wanted = more.iter().any(|f| form::focus_waits(&format!("{id}/{f}")));
-            egui::CollapsingHeader::new(theme::strong(title))
-                .id_salt(format!("{id}/timed"))
-                .default_open(more.iter().any(|f| is_set(el, f)))
-                .open(wanted.then_some(true))
-                .show(ui, |ui| self.block_fields(ui, model, el, &id, more));
+            let summary = self.summary(el, more);
+            fold(
+                ui,
+                &format!("{id}/timed"),
+                title,
+                &summary,
+                more.iter().any(|f| is_set(el, f)),
+                // Open for a problem's field in it.
+                more.iter().any(|f| form::focus_waits(&format!("{id}/{f}"))),
+                |ui| self.block_fields(ui, model, el, &id, more),
+            );
         }
 
         if kind == "shared_task" {
@@ -719,17 +823,27 @@ impl App {
         // Patience, next to the flows entities that give up take; closed on a server without one.
         if kind == "server" {
             ui.add_space(6.0);
-            egui::CollapsingHeader::new(theme::strong(t("Patience")))
-                .id_salt(format!("{id}/patience"))
-                .default_open(el["patience"].is_object())
-                .open(form::focus_waits(&format!("{id}/patience")).then_some(true))
-                .show(ui, |ui| self.patience_section(ui, model, el, &id));
+            let summary = self.summary(el, &["patience"]);
+            fold(
+                ui,
+                &format!("{id}/patience"),
+                t("Patience"),
+                &summary,
+                el["patience"].is_object(),
+                form::focus_waits(&format!("{id}/patience")),
+                |ui| self.patience_section(ui, model, el, &id),
+            );
             ui.add_space(6.0);
-            egui::CollapsingHeader::new(theme::strong(t("Health check")))
-                .id_salt(format!("{id}/health_check"))
-                .default_open(el["health_check"].is_object())
-                .open(form::focus_waits(&format!("{id}/health_check")).then_some(true))
-                .show(ui, |ui| self.health_check_section(ui, model, el, &id));
+            let summary = self.summary(el, &["health_check"]);
+            fold(
+                ui,
+                &format!("{id}/health_check"),
+                t("Health check"),
+                &summary,
+                el["health_check"].is_object(),
+                form::focus_waits(&format!("{id}/health_check")),
+                |ui| self.health_check_section(ui, model, el, &id),
+            );
         }
 
         section(ui, t("Flows"));
@@ -1733,6 +1847,51 @@ impl App {
         });
         out
     }
+}
+
+/// The height of the inspector's place for its block's problems: two lines.
+const PROBLEMS_HEIGHT: f32 = 44.0;
+
+/// A folded part of the inspector: `title`, and beside it, while closed, `summary` (what is set
+/// in it, or None), which a screen reader hears as the title's description. It starts open
+/// when `set`, and opens for a problem's field in it (`wanted`). Its id is `salt`'s.
+fn fold(
+    ui: &mut egui::Ui,
+    salt: &str,
+    title: &str,
+    summary: &str,
+    set: bool,
+    wanted: bool,
+    body: impl FnOnce(&mut egui::Ui),
+) {
+    let r = egui::CollapsingHeader::new(theme::strong(title))
+        .id_salt(salt)
+        .default_open(set)
+        .open(wanted.then_some(true))
+        .show(ui, body);
+    let header = r.header_response;
+    ui.ctx()
+        .accesskit_node_builder(header.id, |n| n.set_description(summary));
+    if r.openness > 0.0 {
+        return;
+    }
+    // On the header's line, after its title, cut to the room there is.
+    let p = theme::palette(ui.ctx());
+    let left = header.rect.right() + 10.0;
+    let room = ui.max_rect().right() - left;
+    if room < 24.0 {
+        return;
+    }
+    let mut job = egui::text::LayoutJob::simple_singleline(
+        summary.to_owned(),
+        egui::TextStyle::Body.resolve(ui.style()),
+        p.text_weak,
+    );
+    job.wrap = egui::text::TextWrapping::truncate_at_width(room);
+    let galley = ui.painter().layout_job(job);
+    let top = header.rect.center().y - galley.size().y / 2.0;
+    ui.painter()
+        .galley(egui::pos2(left, top), galley, p.text_weak);
 }
 
 /// A section heading in a form: more space above than below.

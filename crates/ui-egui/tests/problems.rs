@@ -143,3 +143,103 @@ fn a_status_bar_error_shows_its_block_when_clicked() {
     settle(&mut h);
     assert_eq!(shown(&h).as_deref(), Some("serve"));
 }
+
+/// The Name field's place in the inspector of the selected block.
+fn name_field(h: &Harness<'static, App>) -> egui::Rect {
+    h.get_by_role_and_label(Role::TextInput, "Name").rect()
+}
+
+#[test]
+fn the_inspector_keeps_its_place_when_a_problem_appears() {
+    let mut h = mm1();
+    h.get_by_role_and_label(Role::ListBoxOption, "Serve customer")
+        .click();
+    settle(&mut h);
+    let before = name_field(&h);
+    set(&mut h, json!({"id": "serve", "capacity": 0}));
+    h.get_by_label("a server needs at least 1 unit");
+    assert_eq!(name_field(&h), before);
+    set(&mut h, json!({"id": "serve", "capacity": 1}));
+    assert!(h.query_by_label("a server needs at least 1 unit").is_none());
+    assert_eq!(name_field(&h), before);
+}
+
+/// The description of the folded section `title`: what is set in it, in a line.
+fn summary(h: &Harness<'static, App>, title: &str) -> String {
+    h.get_by_role_and_label(Role::DisclosureTriangle, title)
+        .accesskit_node()
+        .description()
+        .unwrap_or_default()
+}
+
+#[test]
+fn the_basics_come_first_and_a_folded_section_says_what_is_set() {
+    let mut h = mm1();
+    h.get_by_role_and_label(Role::ListBoxOption, "Serve customer")
+        .click();
+    settle(&mut h);
+    // The basics are on show; the rest folded, closed with nothing set in it.
+    h.get_by_role_and_label(Role::TextInput, "Capacity");
+    h.get_by_role_and_label(Role::ComboBox, "Service time");
+    assert!(h.query_by_label("Transfer time").is_none());
+    assert_eq!(summary(&h, "More settings"), "None");
+    assert_eq!(summary(&h, "Patience"), "None");
+
+    // Set, it starts open; closed, it says what is set.
+    set(
+        &mut h,
+        json!({"id": "serve", "transfer": {"type": "constant", "value": 2.0}}),
+    );
+    let unit =
+        stochcraft_engine::wire::model(h.state().engine().model())["experiment"]["time_unit"]
+            .as_str()
+            .map(str::to_owned)
+            .unwrap_or_default();
+    let said = summary(&h, "More settings");
+    assert!(
+        said.starts_with("Transfer time Constant 2"),
+        "{said} ({unit})"
+    );
+    set(
+        &mut h,
+        json!({"id": "serve", "breakdown": {
+            "time_to_failure": {"type": "exponential", "mean": 120.0},
+            "repair": {"type": "constant", "value": 6.0},
+        }}),
+    );
+    let said = summary(&h, "Breakdowns and availability");
+    assert!(
+        said.starts_with("Breakdowns: Exponential 120") && said.contains(", Constant 6"),
+        "{said}"
+    );
+}
+
+#[test]
+fn the_question_mark_opens_its_explanation_from_the_keyboard() {
+    let mut h = mm1();
+    h.get_by_role_and_label(Role::ListBoxOption, "Serve customer")
+        .click();
+    settle(&mut h);
+    let says = "How many units serve here at the same time, such as machines or staff, each one \
+                entity at a time.";
+    assert!(h.query_by_label(says).is_none());
+    h.get_by_role_and_label(Role::Button, "Capacity ?").focus();
+    settle(&mut h);
+    h.key_press(egui::Key::Enter);
+    settle(&mut h);
+    h.get_by_label(says);
+    assert_eq!(
+        h.get_by_role_and_label(Role::Button, "Capacity ?")
+            .accesskit_node()
+            .data()
+            .is_expanded(),
+        Some(true)
+    );
+    // Again, and it closes.
+    h.key_press(egui::Key::Enter);
+    settle(&mut h);
+    assert!(h.query_by_label(says).is_none());
+    // Service time and the waiting room have one too.
+    h.get_by_role_and_label(Role::Button, "Service time ?");
+    h.get_by_role_and_label(Role::Button, "Waiting room ?");
+}

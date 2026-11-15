@@ -223,8 +223,11 @@
 	Hide Others	Skjul andre
 	Hide {app}	Skjul {app}
 	High contrast	Høj kontrast
+	How long one unit takes to serve one entity, drawn anew for each entity.	Hvor lang tid én ressourceenhed er om at betjene én enhed; trækkes på ny for hver enhed.
 	How many	Hvor mange
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hvor mange enheder der må vente her på en ledig ressourceenhed, ud over dem der betjenes; uden flueben et vilkårligt antal.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hvor mange emner kunderne ønsker fra disse afgange; resultaterne viser så takten (den tilgængelige tid divideret med behovet) og hver opgaves cyklustid.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Hvor mange ressourceenheder der betjener her samtidig, f.eks. maskiner eller personale, hver én enhed ad gangen.
 	In use	I brug
 	Inside over time	Inde over tid
 	Job under way on a server going off shift:	Job i gang på en server, der går af skift:
@@ -271,6 +274,7 @@
 	Model	Model
 	Model time 0 is	Modeltid 0 er
 	Mon	man
+	More settings	Flere indstillinger
 	Most likely	Mest sandsynlig
 	Move	Flyt
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Flyt hver parameter ned og op efter tur, og ranger dem efter, hvor meget resultatet flytter sig.

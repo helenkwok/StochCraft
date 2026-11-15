@@ -223,8 +223,11 @@
 	Hide Others	Ascunde celelalte
 	Hide {app}	Ascunde {app}
 	High contrast	Contrast ridicat
+	How long one unit takes to serve one entity, drawn anew for each entity.	Cât îi ia unei unități să servească o entitate; extras din nou pentru fiecare entitate.
 	How many	Câte
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Câte entități pot aștepta aici o unitate liberă, pe lângă cele servite; nebifat, oricâte.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Câte piese vor clienții de la aceste plecări; rezultatele arată atunci taktul (timpul disponibil împărțit la cerere) și timpul de ciclu al fiecărei sarcini.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Câte unități servesc aici în același timp, cum ar fi mașini sau personal, fiecare câte o entitate odată.
 	In use	În uz
 	Inside over time	În interior în timp
 	Job under way on a server going off shift:	Lucru în curs pe un server care iese din tură:
@@ -271,6 +274,7 @@
 	Model	Model
 	Model time 0 is	Timpul 0 al modelului este
 	Mon	lun
+	More settings	Mai multe setări
 	Most likely	Cel mai probabil
 	Move	Mutare
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Mută pe rând fiecare parametru în jos și în sus și ordonează-i după cât de mult se mișcă rezultatul.

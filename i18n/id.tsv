@@ -223,8 +223,11 @@
 	Hide Others	Sembunyikan yang lain
 	Hide {app}	Sembunyikan {app}
 	High contrast	Kontras tinggi
+	How long one unit takes to serve one entity, drawn anew for each entity.	Berapa lama satu unit melayani satu entitas; diambil ulang untuk setiap entitas.
 	How many	Berapa
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Berapa entitas boleh menunggu unit yang kosong di sini, selain yang sedang dilayani; tanpa centang, berapa pun.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Berapa komponen yang diinginkan pelanggan dari keberangkatan ini; hasilnya lalu menunjukkan takt (waktu tersedia dibagi permintaan) dan waktu siklus setiap tugas.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Berapa unit yang melayani di sini sekaligus, seperti mesin atau staf, masing-masing satu entitas sekali waktu.
 	In use	Sedang dipakai
 	Inside over time	Di dalam dari waktu ke waktu
 	Job under way on a server going off shift:	Pekerjaan berjalan di server yang mengakhiri sif:
@@ -271,6 +274,7 @@
 	Model	Model
 	Model time 0 is	Waktu model 0 adalah
 	Mon	Sen
+	More settings	Pengaturan lainnya
 	Most likely	Paling mungkin
 	Move	Pindahkan
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Turunkan dan naikkan setiap parameter bergantian, lalu urutkan menurut seberapa besar hasil bergerak.

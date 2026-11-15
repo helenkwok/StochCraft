@@ -223,8 +223,11 @@
 	Hide Others	隐藏其他
 	Hide {app}	隐藏 {app}
 	High contrast	高对比度
+	How long one unit takes to serve one entity, drawn anew for each entity.	一个资源单元服务一个实体所需的时间，每个实体重新抽取。
 	How many	数量
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	除正在服务的实体外，可在此等待空闲资源单元的实体数量；不勾选则不限数量。
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	客户希望从这些离开处获得多少件；结果随后会显示节拍（可用时间除以需求）和每个任务的周期时间。
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	此处同时服务的资源单元数量，如机器或人员，每个单元一次服务一个实体。
 	In use	使用中
 	Inside over time	内部数量随时间变化
 	Job under way on a server going off shift:	即将下班的服务器上进行中的作业：
@@ -271,6 +274,7 @@
 	Model	模型
 	Model time 0 is	模型时间 0 为
 	Mon	周一
+	More settings	更多设置
 	Most likely	最可能值
 	Move	移动
 	Move each parameter down and up in turn, and rank them by how much the result moves.	依次将每个参数调低和调高，并按结果的变化幅度排序。

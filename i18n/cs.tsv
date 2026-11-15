@@ -223,8 +223,11 @@
 	Hide Others	Skrýt ostatní
 	Hide {app}	Skrýt {app}
 	High contrast	Vysoký kontrast
+	How long one unit takes to serve one entity, drawn anew for each entity.	Jak dlouho trvá jedné jednotce obsloužit jednu entitu; losuje se znovu pro každou entitu.
 	How many	Kolik
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Kolik entit zde smí čekat na volnou jednotku, kromě obsluhovaných; bez zaškrtnutí libovolný počet.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Kolik dílů chtějí zákazníci z těchto odchodů; výsledky pak ukážou takt (dostupný čas dělený poptávkou) a čas cyklu každé úlohy.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Kolik jednotek zde obsluhuje současně, např. stroje nebo pracovníci, každá jednu entitu najednou.
 	In use	Používá se
 	Inside over time	Uvnitř v čase
 	Job under way on a server going off shift:	Rozpracovaná práce na serveru, kterému končí směna:
@@ -271,6 +274,7 @@
 	Model	Model
 	Model time 0 is	Čas modelu 0 je
 	Mon	po
+	More settings	Další nastavení
 	Most likely	Nejpravděpodobnější
 	Move	Přesun
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Postupně posunout každý parametr dolů a nahoru a seřadit je podle toho, jak moc se výsledek pohne.

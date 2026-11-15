@@ -223,8 +223,11 @@
 	Hide Others	Diğerlerini Gizle
 	Hide {app}	{app} Uygulamasını Gizle
 	High contrast	Yüksek kontrast
+	How long one unit takes to serve one entity, drawn anew for each entity.	Bir birimin bir varlığa hizmet vermesinin ne kadar sürdüğü; her varlık için yeniden çekilir.
 	How many	Kaç
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hizmet alanların yanı sıra burada boş bir birimi kaç varlığın bekleyebileceği; işaretsizse istenen sayıda.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Müşterilerin bu çıkışlardan kaç parça istediği; sonuçlar o zaman taktı (kullanılabilir sürenin talebe bölümü) ve her görevin döngü süresini gösterir.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Burada aynı anda kaç birimin hizmet verdiği, örneğin makineler veya personel; her biri aynı anda bir varlığa.
 	In use	Kullanımda
 	Inside over time	Zaman içinde içeridekiler
 	Job under way on a server going off shift:	Vardiyası biten sunucuda süren iş:
@@ -271,6 +274,7 @@
 	Model	Model
 	Model time 0 is	Model zamanı 0
 	Mon	Pzt
+	More settings	Diğer ayarlar
 	Most likely	En olası
 	Move	Taşı
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Her parametreyi sırayla aşağı ve yukarı oynat, sonucun ne kadar değiştiğine göre sırala.

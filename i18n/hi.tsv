@@ -223,8 +223,11 @@
 	Hide Others	अन्य छिपाएँ
 	Hide {app}	{app} छिपाएँ
 	High contrast	उच्च कंट्रास्ट
+	How long one unit takes to serve one entity, drawn anew for each entity.	एक संसाधन इकाई को एक इकाई की सेवा में कितना समय लगता है; हर इकाई के लिए नए सिरे से निकाला जाता है।
 	How many	कितने
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	सेवा पा रही इकाइयों के अलावा कितनी इकाइयाँ यहाँ खाली संसाधन इकाई की प्रतीक्षा कर सकती हैं; बिना टिक के, कितनी भी।
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ग्राहक इन प्रस्थानों से कितने पुर्जे चाहते हैं; तब परिणाम टैक्ट (उपलब्ध समय को मांग से भाग देकर) और हर कार्य का चक्र समय दिखाते हैं।
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	यहाँ एक साथ कितनी संसाधन इकाइयाँ सेवा देती हैं, जैसे मशीनें या कर्मचारी; हर एक बार में एक इकाई को।
 	In use	उपयोग में
 	Inside over time	समय के साथ अंदर
 	Job under way on a server going off shift:	पाली से हट रहे सर्वर पर चल रहा काम:
@@ -271,6 +274,7 @@
 	Model	मॉडल
 	Model time 0 is	मॉडल समय 0 है
 	Mon	सोम
+	More settings	अधिक सेटिंग
 	Most likely	सर्वाधिक संभावित
 	Move	स्थानांतरण
 	Move each parameter down and up in turn, and rank them by how much the result moves.	हर पैरामीटर को बारी-बारी से नीचे और ऊपर करें, और परिणाम कितना हिलता है उसके अनुसार क्रम दें।

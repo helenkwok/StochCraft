@@ -223,8 +223,11 @@
 	Hide Others	Сакриј остале
 	Hide {app}	Сакриј {app}
 	High contrast	Висок контраст
+	How long one unit takes to serve one entity, drawn anew for each entity.	Колико је једној јединици потребно да послужи један ентитет; извлачи се изнова за сваки ентитет.
 	How many	Колико
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Колико ентитета сме овде да чека слободну јединицу, поред оних који се послужују; без ознаке, колико год.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Колико делова купци желе од ових одлазака; резултати тада приказују такт (расположиво време подељено са потражњом) и време циклуса сваког задатка.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Колико јединица овде послужује истовремено, нпр. машине или особље, свака по један ентитет.
 	In use	У употреби
 	Inside over time	Унутра кроз време
 	Job under way on a server going off shift:	Посао у току на серверу којем завршава смена:
@@ -271,6 +274,7 @@
 	Model	Модел
 	Model time 0 is	Време модела 0 је
 	Mon	пон
+	More settings	Још поставки
 	Most likely	Највјеројатније
 	Move	Премештање
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Помери редом сваки параметар доле и горе и поређај их према томе колико се резултат помери.

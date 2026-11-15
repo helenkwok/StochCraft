@@ -223,8 +223,11 @@
 	Hide Others	Απόκρυψη άλλων
 	Hide {app}	Απόκρυψη {app}
 	High contrast	Υψηλή αντίθεση
+	How long one unit takes to serve one entity, drawn anew for each entity.	Πόσο χρόνο χρειάζεται μία μονάδα για να εξυπηρετήσει μία οντότητα· κληρώνεται εκ νέου για κάθε οντότητα.
 	How many	Πόσα
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Πόσες οντότητες μπορούν να περιμένουν εδώ για ελεύθερη μονάδα, εκτός από όσες εξυπηρετούνται· χωρίς επιλογή, όσες θέλουν.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Πόσα τεμάχια θέλουν οι πελάτες από αυτές τις αναχωρήσεις· τότε τα αποτελέσματα δείχνουν το takt (τον διαθέσιμο χρόνο διά τη ζήτηση) και τον χρόνο κύκλου κάθε εργασίας.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Πόσες μονάδες εξυπηρετούν εδώ ταυτόχρονα, όπως μηχανές ή προσωπικό, η καθεμία μία οντότητα τη φορά.
 	In use	Σε χρήση
 	Inside over time	Μέσα στη διάρκεια του χρόνου
 	Job under way on a server going off shift:	Δουλειά σε εξέλιξη σε εξυπηρετητή που βγαίνει από βάρδια:
@@ -271,6 +274,7 @@
 	Model	Μοντέλο
 	Model time 0 is	Ο χρόνος 0 του μοντέλου είναι
 	Mon	Δευ
+	More settings	Περισσότερες ρυθμίσεις
 	Most likely	Πιθανότερη τιμή
 	Move	Μετακίνηση
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Μετακίνηση κάθε παραμέτρου διαδοχικά προς τα κάτω και πάνω, και κατάταξή τους κατά το πόσο μετακινείται το αποτέλεσμα.

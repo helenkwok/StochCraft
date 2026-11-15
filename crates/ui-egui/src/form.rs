@@ -434,21 +434,65 @@ pub fn field_outline(ui: &egui::Ui, r: &egui::Response) {
     }
 }
 
-/// A form row: the label in a fixed column, the editor beside it.
+/// A form row: the label in a fixed column, the editor beside it. A row given an explanation
+/// (see [`explain`]) has a "?" beside its label that opens it under the row: a button, so the
+/// keyboard reaches it, rather than a tooltip only a pointer finds.
 fn row<R>(
     ui: &mut egui::Ui,
     label: &str,
     help: Option<&str>,
     editor: impl FnOnce(&mut egui::Ui) -> Option<R>,
 ) -> Option<R> {
-    ui.horizontal(|ui| {
-        let r = label_cell(ui, label, 26.0);
-        if let Some(h) = help {
-            r.on_hover_text(h);
-        }
-        editor(ui)
-    })
-    .inner
+    let explained = EXPLAIN.with(|e| e.borrow_mut().take());
+    let open_id = explained
+        .as_ref()
+        .map(|(key, _)| egui::Id::unique(("form explain", key.as_str())));
+    let mut open = open_id.is_some_and(|id| ui.data(|d| d.get_temp(id).unwrap_or(false)));
+    let out = ui
+        .horizontal(|ui| {
+            let r = match open_id {
+                Some(id) => {
+                    // The label and its "?" share the label column, so the editors line up.
+                    ui.allocate_ui_with_layout(
+                        egui::vec2(170.0, 26.0),
+                        egui::Layout::left_to_right(egui::Align::Center),
+                        |ui| {
+                            ui.set_min_size(egui::vec2(170.0, 26.0));
+                            ui.set_max_width(170.0);
+                            let r = ui.add(egui::Label::new(label));
+                            let q = ui.add(egui::Button::new("?").small().corner_radius(8.0));
+                            q.widget_info(|| {
+                                egui::WidgetInfo::labeled(
+                                    egui::Role::Button,
+                                    true,
+                                    format!("{label} ?"),
+                                )
+                            });
+                            ui.ctx()
+                                .accesskit_node_builder(q.id, |n| n.set_expanded(open));
+                            if q.clicked() {
+                                open = !open;
+                                ui.data_mut(|d| d.insert_temp(id, open));
+                            }
+                            r
+                        },
+                    )
+                    .inner
+                }
+                None => label_cell(ui, label, 26.0),
+            };
+            if let Some(h) = help {
+                r.on_hover_text(h);
+            }
+            editor(ui)
+        })
+        .inner;
+    if let Some((_, text)) = explained
+        && open
+    {
+        ui.add(egui::Label::new(theme::weak(ui, text)).wrap());
+    }
+    out
 }
 
 /// A number field: craft-ui's `NumberField`, which reads and writes numbers the way the user's
@@ -642,6 +686,15 @@ thread_local! {
     /// The key of a field to focus and scroll to when it is next drawn (a problem's field): the
     /// first number field with this key, or under it, takes it.
     static FOCUS: std::cell::RefCell<Option<String>> = const { std::cell::RefCell::new(None) };
+    /// The explanation the next form row opens from its "?", with the field's key.
+    static EXPLAIN: std::cell::RefCell<Option<(String, &'static str)>> =
+        const { std::cell::RefCell::new(None) };
+}
+
+/// Gives the next form row drawn, the field with `key`, a "?" that opens `text` under it
+/// (`None`: no "?").
+pub(crate) fn explain(key: &str, text: Option<&'static str>) {
+    EXPLAIN.with(|e| *e.borrow_mut() = text.map(|t| (key.to_owned(), t)));
 }
 
 /// Focuses the number field with `key` (or the first under it) when it is next drawn; `None`

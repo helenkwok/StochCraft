@@ -223,8 +223,11 @@
 	Hide Others	Többi elrejtése
 	Hide {app}	{app} elrejtése
 	High contrast	Nagy kontraszt
+	How long one unit takes to serve one entity, drawn anew for each entity.	Mennyi idő alatt szolgál ki egy egység egy entitást; minden entitásra újra sorsolva.
 	How many	Hány
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hány entitás várakozhat itt szabad egységre a kiszolgáltakon felül; bejelöletlenül bármennyi.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hány darabot kérnek a vevők ezekből a távozásokból; az eredmények ekkor mutatják az ütemet (a rendelkezésre álló idő osztva az igénnyel) és minden feladat ciklusidejét.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Hány egység szolgál ki itt egyszerre, például gépek vagy személyzet, mindegyik egyszerre egy entitást.
 	In use	Használatban
 	Inside over time	Bent lévők az idő függvényében
 	Job under way on a server going off shift:	Folyamatban lévő munka egy műszakot befejező szerveren:
@@ -271,6 +274,7 @@
 	Model	Modell
 	Model time 0 is	A modell 0. időpontja
 	Mon	H
+	More settings	További beállítások
 	Most likely	Legvalószínűbb
 	Move	Áthelyezés
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Minden paraméter sorban lejjebb és feljebb állítása, és rangsorolásuk aszerint, mennyit mozdul az eredmény.

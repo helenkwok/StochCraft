@@ -223,8 +223,11 @@
 	Hide Others	다른 항목 숨기기
 	Hide {app}	{app} 숨기기
 	High contrast	고대비
+	How long one unit takes to serve one entity, drawn anew for each entity.	자원 단위 하나가 엔터티 하나를 서비스하는 데 걸리는 시간이며, 엔터티마다 새로 추출됩니다.
 	How many	개수
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	서비스 중인 엔터티 외에 여기서 빈 자원 단위를 기다릴 수 있는 엔터티 수이며, 선택하지 않으면 제한이 없습니다.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	고객이 이 이탈에서 원하는 부품 수입니다. 그러면 결과에 택트(가용 시간을 수요로 나눈 값)와 각 작업의 사이클 타임이 표시됩니다.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	여기서 동시에 서비스하는 자원 단위(기계나 인력 등)의 수이며, 각 단위는 한 번에 엔터티 하나를 처리합니다.
 	In use	사용 중
 	Inside over time	시간에 따른 내부 수
 	Job under way on a server going off shift:	근무가 끝나는 서버에서 진행 중인 작업:
@@ -271,6 +274,7 @@
 	Model	모델
 	Model time 0 is	모델 시간 0
 	Mon	월
+	More settings	추가 설정
 	Most likely	최빈값
 	Move	이동
 	Move each parameter down and up in turn, and rank them by how much the result moves.	각 매개변수를 차례로 낮추고 높여서 결과가 얼마나 움직이는지에 따라 순위를 매깁니다.

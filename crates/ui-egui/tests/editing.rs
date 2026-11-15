@@ -658,6 +658,8 @@ fn pools_are_added_and_a_shared_task_needs_them_by_pool_or_role() {
 fn a_servers_transfer_breakdowns_and_availability_are_edited_in_its_inspector() {
     let mut h = mm1();
     click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Folded under More settings, closed while nothing in it is set.
+    click(&mut h, Role::DisclosureTriangle, "More settings");
 
     // A transfer time: none at first, then a constant one, whose sender is then freed at once.
     click(&mut h, Role::ComboBox, "Transfer time");
@@ -879,6 +881,8 @@ fn a_product_mix_is_set_on_the_arrivals() {
 fn a_setup_and_a_changeover_are_set_in_the_inspector() {
     let mut h = mm1();
     click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Folded under More settings, closed while nothing in it is set.
+    click(&mut h, Role::DisclosureTriangle, "More settings");
     click(&mut h, Role::CheckBox, "Setup");
     assert_eq!(
         element(&h, "serve")["setup"],
@@ -907,6 +911,8 @@ fn a_setup_and_a_changeover_are_set_in_the_inspector() {
 fn processing_times_by_property_are_set_in_the_inspector() {
     let mut h = mm1();
     click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Folded under More settings, closed while nothing in it is set.
+    click(&mut h, Role::DisclosureTriangle, "More settings");
     click(&mut h, Role::CheckBox, "Service time by property");
     assert_eq!(
         element(&h, "serve")["processing_by"],
@@ -939,6 +945,8 @@ fn processing_times_by_property_are_set_in_the_inspector() {
 fn a_planned_run_time_is_set_in_the_inspector() {
     let mut h = mm1();
     click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Folded under More settings, closed while nothing in it is set.
+    click(&mut h, Role::DisclosureTriangle, "More settings");
     click(&mut h, Role::ComboBox, "Planned run time per item");
     click(&mut h, Role::Button, "Constant");
     assert_eq!(

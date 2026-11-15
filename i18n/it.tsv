@@ -223,8 +223,11 @@
 	Hide Others	Nascondi altri
 	Hide {app}	Nascondi {app}
 	High contrast	Contrasto elevato
+	How long one unit takes to serve one entity, drawn anew for each entity.	Quanto impiega un'unità a servire un'entità; estratto di nuovo per ogni entità.
 	How many	Quanti
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Quante entità possono attendere qui un'unità libera, oltre a quelle servite; senza spunta, qualsiasi numero.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Quanti pezzi vogliono i clienti da queste partenze; i risultati mostrano allora il takt (il tempo disponibile diviso per la domanda) e il tempo ciclo di ogni attività.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Quante unità servono qui contemporaneamente, come macchine o personale, ciascuna un'entità alla volta.
 	In use	In uso
 	Inside over time	All'interno nel tempo
 	Job under way on a server going off shift:	Lavoro in corso su un server che finisce il turno:
@@ -271,6 +274,7 @@
 	Model	Modello
 	Model time 0 is	Il tempo 0 del modello è
 	Mon	lun
+	More settings	Altre impostazioni
 	Most likely	Più probabile
 	Move	Sposta
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Spostare ogni parametro in giù e in su a turno, e ordinarli secondo quanto si muove il risultato.

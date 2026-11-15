@@ -223,8 +223,11 @@
 	Hide Others	ເຊື່ອງລາຍການອື່ນ
 	Hide {app}	ເຊື່ອງ {app}
 	High contrast	ຄວາມຄົມຊັດສູງ
+	How long one unit takes to serve one entity, drawn anew for each entity.	ເວລາທີ່ໜ່ວຍໜຶ່ງໃຊ້ໃຫ້ບໍລິການເອນທິຕີໜຶ່ງ ສຸ່ມໃໝ່ສຳລັບແຕ່ລະເອນທິຕີ.
 	How many	ຈຳນວນ
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	ຈຳນວນເອນທິຕີທີ່ລໍຖ້າໜ່ວຍທີ່ວ່າງຢູ່ນີ້ໄດ້ ນອກຈາກທີ່ກຳລັງຮັບບໍລິການ; ຖ້າບໍ່ໝາຍ ຈະເທົ່າໃດກໍໄດ້.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	ລູກຄ້າຕ້ອງການຈັກຊິ້ນຈາກການອອກເຫຼົ່ານີ້; ຈາກນັ້ນຜົນຈະສະແດງແທັກ (ເວລາທີ່ມີຫານດ້ວຍຄວາມຕ້ອງການ) ແລະ ເວລາຮອບວຽນຂອງແຕ່ລະໜ້າວຽກ.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	ຈຳນວນໜ່ວຍທີ່ໃຫ້ບໍລິການຢູ່ນີ້ພ້ອມກັນ ເຊັ່ນ ເຄື່ອງຈັກ ຫຼື ພະນັກງານ ແຕ່ລະໜ່ວຍເທື່ອລະໜຶ່ງເອນທິຕີ.
 	In use	ກຳລັງໃຊ້
 	Inside over time	ຈຳນວນພາຍໃນຕາມເວລາ
 	Job under way on a server going off shift:	ວຽກທີ່ກຳລັງເຮັດຢູ່ເທິງແມ່ຂ່າຍທີ່ກຳລັງໝົດກະ:
@@ -271,6 +274,7 @@
 	Model	ແບບຈຳລອງ
 	Model time 0 is	ເວລາ 0 ຂອງແບບຈຳລອງແມ່ນ
 	Mon	ຈັນ
+	More settings	ການຕັ້ງຄ່າເພີ່ມເຕີມ
 	Most likely	ຄ່າທີ່ເປັນໄປໄດ້ຫຼາຍທີ່ສຸດ
 	Move	ຍ້າຍ
 	Move each parameter down and up in turn, and rank them by how much the result moves.	ປັບແຕ່ລະພາຣາມິເຕີລົງ ແລະ ຂຶ້ນເທື່ອລະອັນ ແລ້ວຈັດອັນດັບຕາມວ່າຜົນໄດ້ຮັບຂະຫຍັບຫຼາຍເທົ່າໃດ.
