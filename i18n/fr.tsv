@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} et {second} diffèrent de {de} pour un daltonisme rouge-vert, minimum 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} et {second} diffèrent de {de} pour un daltonisme rouge-vert, minimum 8 : ne les distinguer qu'avec des étiquettes.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} et {second} diffèrent en clarté de {step}, minimum 0.06.
-	{id}: a probability is a number from 0 to 1	{id} : une probabilité est un nombre compris entre 0 et 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} réplications sur {of} ont atteint l'objectif : {p} (intervalle à 95 % de {lo} à {hi})
 	{name} — edited	{name} — modifié

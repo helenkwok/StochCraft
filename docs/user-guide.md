@@ -167,8 +167,9 @@ A block's own problems show at the top of its inspector, in a place of fixed hei
 fields below do not move when one appears.
 
 Fields check what you type: a value that is not a number, or one the model cannot use (a
-negative time or mean, a capacity or batch size below 1, a probability outside 0 to 1), is
-outlined and explained under the field, and the model keeps its old value until you fix it.
+negative time or mean, a capacity or batch size below 1, a probability outside 0 to 1, such as
+a decision's), is outlined and explained under the field, and the model keeps its old value
+until you fix it.
 Esc, or selecting another block, puts the model's value back in the field.
 
 ### The inspector: basics first

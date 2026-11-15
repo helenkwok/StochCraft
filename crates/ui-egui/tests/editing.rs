@@ -184,6 +184,38 @@ fn a_capacity_below_one_is_refused_and_esc_puts_the_models_back() {
     assert_eq!(element(&h, "serve")["capacity"], json!(1));
 }
 
+/// A refusal holds only while the limits do: another kind of distribution, which takes the
+/// value, gives the field back to the model's.
+#[test]
+fn a_refusal_that_no_longer_holds_is_dropped() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    h.state_mut()
+        .execute(
+            "block.set",
+            json!({"id": "serve", "service": {"type": "log_normal", "mean": 1.0, "std_dev": 0.5}}),
+        )
+        .expect("a log-normal service");
+    settle(&mut h);
+    type_into(&mut h, "Mean", "0");
+    h.get_by_label("Must be more than 0. Mean is still 1.");
+    h.state_mut()
+        .execute(
+            "block.set",
+            json!({"id": "serve", "service": {"type": "exponential", "mean": 1.0}}),
+        )
+        .expect("an exponential service");
+    settle(&mut h);
+    assert!(h.query_by_label_contains("is still").is_none());
+    assert_eq!(
+        h.get_by_role_and_label(Role::TextInput, "Mean")
+            .accesskit_node()
+            .value()
+            .as_deref(),
+        Some("1")
+    );
+}
+
 #[test]
 fn a_probability_above_one_is_refused() {
     let mut h = mm1();
@@ -489,6 +521,12 @@ fn a_decision_routes_by_probability_and_condition() {
     assert_eq!(h.state().status(), "Undid Change Flow");
     h.state_mut().redo();
     settle(&mut h);
+    // A probability above 1 stays in its field, with the reason under it, until it is fixed.
+    type_into(&mut h, &format!("Probability of {first}"), "1.5");
+    assert_eq!(conn(&h, &first)["probability"], json!(0.3));
+    h.get_by_label("Must be from 0 to 1. Probability is still 0.3.");
+    type_into(&mut h, &format!("Probability of {first}"), "0.3");
+    assert!(h.query_by_label_contains("is still").is_none());
 
     // A default way out.
     click(&mut h, Role::ComboBox, "Default flow");

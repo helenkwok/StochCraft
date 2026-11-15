@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} dan {second} berbeda {de} bagi pemirsa dengan buta warna merah-hijau, perlu 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} dan {second} berbeda {de} bagi pemirsa dengan buta warna merah-hijau, perlu 8: bedakan keduanya hanya dengan label.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} dan {second} berbeda kecerahan {step}, perlu 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: probabilitas adalah angka dari 0 sampai 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} dari {of} replikasi memenuhi target: {p} (interval 95% dari {lo} sampai {hi})
 	{name} — edited	{name} — diedit

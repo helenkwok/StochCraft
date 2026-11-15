@@ -253,6 +253,7 @@ impl App {
             .iter()
             .find(|c| c.id.as_str() == at)
             .map(|c| c.from.as_str().to_owned())
+            .filter(|from| m.elements.iter().any(|e| e.id.as_str() == from))
     }
 
     /// Shows the model's next error: the first one past those of the selected block, or the
@@ -264,13 +265,17 @@ impl App {
             .iter()
             .map(|p| self.block_of(p.at.as_deref()))
             .collect();
-        let here = blocks
-            .iter()
-            .rposition(|b| b.is_some() && *b == self.selected);
-        let i = match here {
-            Some(i) if i + 1 < errors.len() => i + 1,
-            _ => 0,
-        };
+        // Past the error shown last, while its page is still the one shown; otherwise past the
+        // selected block's last; otherwise the first.
+        let here = self
+            .problem_shown
+            .filter(|&i| i < errors.len() && blocks[i] == self.selected)
+            .or_else(|| {
+                self.selected.as_ref()?;
+                blocks.iter().rposition(|b| *b == self.selected)
+            });
+        let i = here.map_or(0, |i| (i + 1) % errors.len().max(1));
+        self.problem_shown = Some(i);
         let Some(pr) = errors.get(i) else {
             return false;
         };
@@ -429,7 +434,7 @@ impl App {
         };
         let parts: Vec<String> = fields
             .iter()
-            .filter(|f| is_set(el, f) && !matches!(**f, "transfer_holds_sender" | "available"))
+            .filter(|f| is_set(el, f) && **f != "transfer_holds_sender")
             .map(|f| {
                 let v = &el[*f];
                 let label = form::label(f);
@@ -444,6 +449,8 @@ impl App {
                         format!("{} {}", form::label("check_interval"), dist(&v["interval"]))
                     }
                     "setup" => format!("{label} {}", dist(&v["time"])),
+                    // Set only when false: no units outside the calendars.
+                    "available" => format!("{label}: {}", t("None")),
                     _ if v["type"].is_string() => format!("{label} {}", dist(v)),
                     _ => match v.as_f64() {
                         Some(x) => format!("{label} {}", self.numbers.format(x, 0..=3)),
@@ -911,10 +918,18 @@ impl App {
                         if !incoming && kind != "source" {
                             let c = connection(model, cid);
                             if decision {
-                                ui.horizontal(|ui| {
-                                    ui.add_space(12.0);
-                                    self.flow_fields(ui, cid, &c);
-                                });
+                                let refused = ui
+                                    .horizontal(|ui| {
+                                        ui.add_space(12.0);
+                                        self.flow_fields(ui, cid, &c)
+                                    })
+                                    .inner;
+                                if let Some(why) = refused {
+                                    ui.horizontal(|ui| {
+                                        ui.add_space(12.0);
+                                        theme::error_message(ui, why);
+                                    });
+                                }
                             }
                             ui.horizontal(|ui| {
                                 ui.add_space(12.0);
@@ -1253,36 +1268,66 @@ impl App {
     }
 
     /// A decision's way out: its probability and condition, each blank when unset. Each commits
-    /// on Enter or leaving the field, as one `flow.set`.
-    fn flow_fields(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) {
+    /// on Enter or leaving the field, as one `flow.set`. A probability that isn't a number from
+    /// 0 to 1 stays in its field, outlined, until it is fixed or Esc drops it; the reason is
+    /// returned, for the line under the row.
+    fn flow_fields(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) -> Option<String> {
         let p_now = c["probability"]
             .as_f64()
             .map(crate::results::grouped)
             .unwrap_or_default();
-        if let Some(t) = self.small_field(
+        let key = format!("{cid}/p");
+        // Marks the text in `key` as refused (see `small_field`).
+        let mark = format!("{key}!");
+        if let Some(typed) = self.small_field(
             ui,
-            &format!("{cid}/p"),
+            &key,
             &tf("Probability of {id}", &[("id", cid)]),
             "p",
             &p_now,
             56.0,
         ) {
-            let t = t.trim();
-            if t.is_empty() {
+            let typed = typed.trim();
+            self.drafts.remove(&mark);
+            if typed.is_empty() {
                 self.execute("flow.set", json!({ "id": cid, "probability": null }));
             } else {
                 // As the user's region writes it ("0,5" in German), or with a point.
-                match self.numbers.parse(t) {
+                let why = match self.numbers.parse(typed) {
                     Ok(v) if (0.0..=1.0).contains(&v) => {
                         self.execute("flow.set", json!({ "id": cid, "probability": v }));
+                        None
                     }
-                    _ => self.report_error(tf(
-                        "{id}: a probability is a number from 0 to 1",
-                        &[("id", cid)],
+                    Ok(_) => Some(tf(
+                        "Must be from {min} to {max}",
+                        &[("min", "0"), ("max", "1")],
                     )),
+                    Err(_) => Some(t("Not a number").to_owned()),
+                };
+                if let Some(why) = why {
+                    self.drafts.insert(key.clone(), typed.to_owned());
+                    self.drafts.insert(mark.clone(), why);
                 }
             }
         }
+        // Esc, or a fix, took the text away.
+        if !self.drafts.contains_key(&key) {
+            self.drafts.remove(&mark);
+        }
+        let refused = self.drafts.get(&mark).map(|why| {
+            if p_now.is_empty() {
+                why.clone()
+            } else {
+                tf(
+                    "{reason}. {field} is still {value}.",
+                    &[
+                        ("reason", why),
+                        ("field", t("Probability")),
+                        ("value", &p_now),
+                    ],
+                )
+            }
+        });
         let c_now = c["condition"].as_str().unwrap_or("").to_owned();
         if let Some(t) = self.small_field(
             ui,
@@ -1296,6 +1341,7 @@ impl App {
             let v = if t.is_empty() { Value::Null } else { json!(t) };
             self.execute("flow.set", json!({ "id": cid, "condition": v }));
         }
+        refused
     }
 
     /// Whether parts sent this way go back to be worked on again: rework, for the quality
@@ -1674,6 +1720,15 @@ impl App {
                 .font(egui::TextStyle::Monospace),
         );
         form::field_outline(ui, &r);
+        // Text its caller refused (marked `key!`), outlined as an error until it is fixed.
+        if self.drafts.contains_key(&format!("{key}!")) {
+            ui.painter().rect_stroke(
+                r.rect,
+                4.0,
+                egui::Stroke::new(1.5, theme::palette(ui.ctx()).error),
+                egui::StrokeKind::Inside,
+            );
+        }
         r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, name));
         if r.has_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape)) {
             self.drafts.remove(key);

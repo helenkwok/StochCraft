@@ -459,7 +459,14 @@ fn row<R>(
                         |ui| {
                             ui.set_min_size(egui::vec2(170.0, 26.0));
                             ui.set_max_width(170.0);
-                            let r = ui.add(egui::Label::new(label));
+                            // Cut short, so the "?" keeps its room in a long label.
+                            let r = ui
+                                .allocate_ui_with_layout(
+                                    egui::vec2(144.0, 26.0),
+                                    egui::Layout::left_to_right(egui::Align::Center),
+                                    |ui| ui.add(egui::Label::new(label).truncate()),
+                                )
+                                .inner;
                             let q = ui.add(egui::Button::new("?").small().corner_radius(8.0));
                             q.widget_info(|| {
                                 egui::WidgetInfo::labeled(
@@ -524,7 +531,16 @@ fn number(
     } else {
         current.as_f64().unwrap_or(0.0)
     };
-    let held = cx.drafts.get(key).and_then(|s| cx.numbers.parse(s).ok());
+    // Only while the limits refuse it: a refusal that no longer holds (the distribution's kind
+    // changed, units by calendar were added) gives the field back to the model's value.
+    let held = cx
+        .drafts
+        .get(key)
+        .and_then(|s| cx.numbers.parse(s).ok())
+        .filter(|v| limits.refuse(*v, cx.numbers).is_some());
+    if held.is_none() {
+        cx.drafts.remove(key);
+    }
     // A column, so a message can go under the field; always one, so the field's id (and the
     // text typed into it) doesn't change when a message appears.
     ui.vertical(|ui| {

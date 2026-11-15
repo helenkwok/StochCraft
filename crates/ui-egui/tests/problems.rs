@@ -243,3 +243,25 @@ fn the_question_mark_opens_its_explanation_from_the_keyboard() {
     h.get_by_role_and_label(Role::Button, "Service time ?");
     h.get_by_role_and_label(Role::Button, "Waiting room ?");
 }
+
+#[test]
+fn run_reaches_a_blocks_error_after_the_models_own() {
+    let mut h = mm1();
+    h.state_mut()
+        .execute("experiment.set", json!({"replications": 0}))
+        .expect("no runs");
+    set(&mut h, json!({"id": "serve", "capacity": 0}));
+    let mut seen = Vec::new();
+    for _ in 0..3 {
+        h.get_by_role_and_label(Role::Button, "Run (2 problems)")
+            .click();
+        settle(&mut h);
+        seen.push(shown(&h));
+    }
+    assert!(seen.contains(&None), "{seen:?}");
+    assert!(seen.contains(&Some("serve".to_owned())), "{seen:?}");
+    // The model page's field, when that error is shown.
+    if seen[0].is_none() {
+        assert_eq!(seen[1].as_deref(), Some("serve"));
+    }
+}

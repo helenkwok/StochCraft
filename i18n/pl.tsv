@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} i {second} – różnica przy ślepocie czerwono-zielonej {de}, wymagane 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} i {second} – różnica przy ślepocie czerwono-zielonej {de}, wymagane 8: rozróżniaj je tylko po etykietach.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} i {second} – różnica jasności {step}, wymagane 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: prawdopodobieństwo musi być liczbą od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikacji osiągnęło cel: {p} (przedział 95% od {lo} do {hi})
 	{name} — edited	{name} — edytowano

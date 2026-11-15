@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} และ {second} ต่างกัน {de} สำหรับผู้ที่ตาบอดสีแดง-เขียว ต้องการ 8
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} และ {second} ต่างกัน {de} สำหรับผู้ที่ตาบอดสีแดง-เขียว ต้องการ 8: แยกแยะได้ด้วยป้ายเท่านั้น
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} และ {second} ต่างกันด้านความสว่าง {step} ต้องการ 0.06
-	{id}: a probability is a number from 0 to 1	{id}: ความน่าจะเป็นต้องเป็นตัวเลขตั้งแต่ 0 ถึง 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} จาก {of} รอบการจำลองซ้ำบรรลุเป้าหมาย: {p} (ช่วง 95% จาก {lo} ถึง {hi})
 	{name} — edited	{name} — แก้ไขแล้ว

@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} ແລະ {second} ຕ່າງກັນ {de} ສຳລັບຜູ້ເບິ່ງທີ່ຕາບອດສີແດງ-ຂຽວ, ຕ້ອງການ 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} ແລະ {second} ຕ່າງກັນ {de} ສຳລັບຜູ້ເບິ່ງທີ່ຕາບອດສີແດງ-ຂຽວ, ຕ້ອງການ 8: ແຍກພວກມັນດ້ວຍປ້າຍເທົ່ານັ້ນ.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ແລະ {second} ຕ່າງກັນດ້ານຄວາມແຈ້ງ {step}, ຕ້ອງການ 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: ຄວາມເປັນໄປໄດ້ຕ້ອງເປັນຕົວເລກຈາກ 0 ຫາ 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} ຈາກ {of} ຮອບຈຳລອງຊ້ຳບັນລຸເປົ້າໝາຍ: {p} (ຊ່ວງ 95% ຈາກ {lo} ຫາ {hi})
 	{name} — edited	{name} — ແກ້ໄຂແລ້ວ

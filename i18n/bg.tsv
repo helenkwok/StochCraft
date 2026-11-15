@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} и {second} се различават с {de} при червено-зелена цветна слепота, нужно е 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} и {second} се различават с {de} при червено-зелена цветна слепота, нужно е 8: различавайте ги само по надписите.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} и {second} се различават по светлота с {step}, нужно е 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: вероятността е число от 0 до 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} от {of} репликации постигнаха целта: {p} (95% интервал от {lo} до {hi})
 	{name} — edited	{name} — редактирано

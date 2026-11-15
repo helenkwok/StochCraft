@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} és {second} – eltérés vörös-zöld színtévesztéssel {de}, legalább 8 kell.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} és {second} – eltérés vörös-zöld színtévesztéssel {de}, legalább 8 kell: csak címkékkel különböztesse meg őket.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} és {second} – világosságeltérés {step}, legalább 0.06 kell.
-	{id}: a probability is a number from 0 to 1	{id}: a valószínűség 0 és 1 közötti szám
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} ismétlésből {met} érte el a célt: {p} (95%-os intervallum {lo}–{hi})
 	{name} — edited	{name} — szerkesztve

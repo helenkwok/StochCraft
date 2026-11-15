@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	लाल-हरी वर्णान्धता वाले दर्शकों के लिए {first} और {second} में {de} का अंतर है, आवश्यक 8।
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	लाल-हरी वर्णान्धता वाले दर्शकों के लिए {first} और {second} में {de} का अंतर है, आवश्यक 8: इन्हें केवल लेबलों से अलग पहचानें।
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} और {second} के हल्केपन में {step} का अंतर है, आवश्यक 0.06।
-	{id}: a probability is a number from 0 to 1	{id}: प्रायिकता 0 से 1 तक की संख्या होनी चाहिए
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} में से {met} पुनरावृत्तियों ने लक्ष्य पूरा किया: {p} (95% अंतराल {lo} से {hi})
 	{name} — edited	{name} — संपादित

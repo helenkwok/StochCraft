@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first}, {second} – சிவப்பு-பச்சை நிறக்குருடு உள்ளவர்களுக்கு வேறுபாடு {de}, தேவை 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first}, {second} – சிவப்பு-பச்சை நிறக்குருடு உள்ளவர்களுக்கு வேறுபாடு {de}, தேவை 8: இவற்றைச் சிட்டைகளால் மட்டுமே பிரித்தறியவும்.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}, {second} – வெளிர்மை வேறுபாடு {step}, தேவை 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: நிகழ்தகவு 0 முதல் 1 வரையிலான எண்ணாக இருக்க வேண்டும்
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} மீள் இயக்கங்களில் {met} இலக்கை அடைந்தன: {p} (95% இடைவெளி {lo} முதல் {hi})
 	{name} — edited	{name} — திருத்தப்பட்டது

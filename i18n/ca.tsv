@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} i {second} difereixen {de} per a persones amb daltonisme vermell-verd, cal 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} i {second} difereixen {de} per a persones amb daltonisme vermell-verd, cal 8: distingiu-los només amb etiquetes.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} i {second} difereixen {step} en lluminositat, cal 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: una probabilitat és un nombre entre 0 i 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} de {of} rèpliques han complert l'objectiu: {p} (interval del 95% de {lo} a {hi})
 	{name} — edited	{name} — editat

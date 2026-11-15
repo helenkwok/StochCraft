@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	对红绿色盲的观看者，{first}与{second}相差 {de}，需要 8。
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	对红绿色盲的观看者，{first}与{second}相差 {de}，需要 8：只能靠标签区分。
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}与{second}的明度相差 {step}，需要 0.06。
-	{id}: a probability is a number from 0 to 1	{id}：概率必须是 0 到 1 之间的数字
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} 次重复运行中有 {met} 次达到目标：{p}（95% 区间 {lo} 至 {hi}）
 	{name} — edited	{name} — 已编辑

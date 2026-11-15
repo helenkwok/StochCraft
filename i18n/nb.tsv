@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} og {second} skiller seg med {de} for seere med rød-grønn fargeblindhet, krever 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} og {second} skiller seg med {de} for seere med rød-grønn fargeblindhet, krever 8: skill dem bare ved hjelp av etiketter.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} og {second} skiller seg i lyshet med {step}, krever 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: en sannsynlighet er et tall fra 0 til 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} av {of} replikasjoner nådde målet: {p} (95 %-intervall {lo} til {hi})
 	{name} — edited	{name} — redigert

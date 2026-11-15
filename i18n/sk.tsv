@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} a {second} – rozdiel pri červeno-zelenej farbosleposti {de}, treba 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} a {second} – rozdiel pri červeno-zelenej farbosleposti {de}, treba 8: rozlišujte ich len podľa popisov.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} a {second} – rozdiel svetlosti {step}, treba 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: pravdepodobnosť je číslo od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikácií splnilo cieľ: {p} (95 % interval {lo} až {hi})
 	{name} — edited	{name} — upravené

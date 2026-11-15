@@ -276,6 +276,9 @@ pub struct App {
     status_error: bool,
     /// The block the status-bar error concerns, which clicking it shows.
     status_at: Option<String>,
+    /// The error Run or the problems chip showed last (by its place in the list), so the next
+    /// click shows the one after it.
+    problem_shown: Option<usize>,
     /// Waiting for the user to save or discard changes before this.
     confirm: Option<Replace>,
     /// Do this once the save in progress has been written.
@@ -381,6 +384,7 @@ impl App {
             status: String::new(),
             status_error: false,
             status_at: None,
+            problem_shown: None,
             confirm: None,
             after_save: None,
             new_file: None,
@@ -692,16 +696,8 @@ impl App {
         match self.engine.execute(command, params) {
             Ok(v) => Some(v),
             Err(e) => {
-                let at = e
-                    .details
-                    .as_ref()
-                    .and_then(Value::as_array)
-                    .into_iter()
-                    .flatten()
-                    .filter(|d| d["severity"] == "error")
-                    .find_map(|d| d["at"].as_str().map(str::to_owned));
                 self.report_error(e.message);
-                self.status_at = self.block_of(at.as_deref());
+                self.status_at = e.details.as_ref().and_then(|d| self.error_block(d));
                 None
             }
         }
@@ -1178,6 +1174,7 @@ impl App {
                     .unwrap_or(t("the run stopped"))
                     .to_owned();
                 self.report_error(message);
+                self.status_at = self.error_block(&status["error"]["details"]);
                 false
             }
         }
@@ -1424,6 +1421,19 @@ impl App {
         if clicked {
             self.go_to_problem();
         }
+    }
+
+    /// The block an engine error's details place it on: the first error of its diagnostics, or
+    /// the element a run stopped at.
+    fn error_block(&self, details: &Value) -> Option<String> {
+        let at = match details.as_array() {
+            Some(ds) => ds
+                .iter()
+                .filter(|d| d["severity"] == "error")
+                .find_map(|d| d["at"].as_str()),
+            None => details["at"].as_str(),
+        };
+        self.block_of(at)
     }
 
     /// A block's name, or its id when it has none.

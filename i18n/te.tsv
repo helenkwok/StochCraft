@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first}, {second} – ఎరుపు-ఆకుపచ్చ రంగు అంధత్వం ఉన్నవారికి తేడా {de}, అవసరం 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first}, {second} – ఎరుపు-ఆకుపచ్చ రంగు అంధత్వం ఉన్నవారికి తేడా {de}, అవసరం 8: వీటిని లేబుళ్లతో మాత్రమే వేరుగా గుర్తించండి.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}, {second} – లేతదనంలో తేడా {step}, అవసరం 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: సంభావ్యత 0 నుంచి 1 మధ్య సంఖ్య కావాలి
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} పునరావృత్త అమలులలో {met} లక్ష్యాన్ని చేరాయి: {p} (95% అంతరం {lo} నుండి {hi})
 	{name} — edited	{name} — సవరించబడింది

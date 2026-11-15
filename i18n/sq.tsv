@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} dhe {second} – ndryshimi për shikuesit me verbëri të ngjyrave të kuqe-të gjelbër {de}, nevojitet 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} dhe {second} – ndryshimi për shikuesit me verbëri të ngjyrave të kuqe-të gjelbër {de}, nevojitet 8: dallojini vetëm me etiketa.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} dhe {second} – ndryshimi në çelësi {step}, nevojitet 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: probabiliteti është numër nga 0 deri në 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} nga {of} përsëritje arritën objektivin: {p} (interval 95% nga {lo} në {hi})
 	{name} — edited	{name} — redaktuar

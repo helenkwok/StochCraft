@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} и {second} — различие при красно-зелёном дальтонизме {de}, нужно 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} и {second} — различие при красно-зелёном дальтонизме {de}, нужно 8: различайте их только по подписям.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} и {second} — различие по светлоте {step}, нужно 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: вероятность должна быть числом от 0 до 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} из {of} репликаций достигли цели: {p} (95% интервал от {lo} до {hi})
 	{name} — edited	{name} — изменено

@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} i {second} razlikuju se za {de} kod crveno-zelenog daltonizma, potrebno 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} i {second} razlikuju se za {de} kod crveno-zelenog daltonizma, potrebno 8: razlikujte ih samo po oznakama.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} i {second} razlikuju se po svetlini za {step}, potrebno 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: verovatnoća je broj od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} od {of} replikacija postiglo je cilj: {p} (interval od 95% od {lo} do {hi})
 	{name} — edited	{name} — uređeno

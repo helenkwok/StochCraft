@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first}, {second}: 적록 색각 이상에서의 차이 {de}, 최소 8 필요.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first}, {second}: 적록 색각 이상에서의 차이 {de}, 최소 8 필요: 레이블로만 구별하세요.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}, {second}: 명도 차이 {step}, 최소 0.06 필요.
-	{id}: a probability is a number from 0 to 1	{id}: 확률은 0에서 1 사이의 숫자여야 합니다
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of}회 중 {met}회가 목표를 충족: {p}(95% 구간 {lo}~{hi})
 	{name} — edited	{name} — 편집됨

@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} ir {second} – skirtumas esant raudonai žaliam daltonizmui {de}, reikia 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} ir {second} – skirtumas esant raudonai žaliam daltonizmui {de}, reikia 8: atskirkite jas tik pagal etiketes.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ir {second} – šviesumo skirtumas {step}, reikia 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: tikimybė yra skaičius nuo 0 iki 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	Tikslą pasiekė {met} iš {of} replikacijų: {p} (95 % intervalas nuo {lo} iki {hi})
 	{name} — edited	{name} — redaguota

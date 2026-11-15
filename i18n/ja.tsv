@@ -655,7 +655,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} と {second} の差は、赤緑色覚異常では {de} です。8 以上が必要です。
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} と {second} の差は、赤緑色覚異常では {de} です。8 以上が必要です。ラベルだけで区別してください。
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} と {second} の明度の差は {step} です。0.06 以上が必要です。
-	{id}: a probability is a number from 0 to 1	{id}：確率は 0 から 1 までの数値です
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} 回中 {met} 回が目標を達成: {p}（95% 区間 {lo}〜{hi}）
 	{name} — edited	{name} — 編集済み
