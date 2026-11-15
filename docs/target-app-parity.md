@@ -136,6 +136,13 @@ only, explanations in mouse-only tooltips, no reflow at 360 px, and results tabl
 without table or chart semantics. Passes: target size (2.5.8), pointer alternatives to dragging
 (2.5.7), and text contrast in the built-in themes.
 
+Since the review, #140 fixed the quick part: the canvas has a role and a name and the status bar
+is announced, Tab stops show their focus (checked on blocks, the block list, tabs, the library
+chips and fields), the focused header item is readable, control borders
+are 3:1 or more, a number field says why its text is not a number, and errors and warnings have an
+icon and words. The scores above are those of the review and were not re-measured; the screen
+reader still sees one canvas, not the controls in it (that needs a DOM mirror, [gaps](gaps.md) #6).
+
 Limits: the desktop app was not tested with a screen reader; the contrast ratios were computed
 with the WCAG formula by the reviewer and not re-checked; the empty accessibility tree on the web
 agrees with eframe's web backend having no AccessKit adapter.
