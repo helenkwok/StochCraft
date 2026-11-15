@@ -1913,7 +1913,7 @@ impl std::fmt::Display for Diagnostic {
             ),
             Problem::OneReplication => write!(
                 f,
-                "the run has one replication, so its results have no confidence interval (the ± shows as –) and cannot be told from chance; run at least 2, and usually 10 or more"
+                "the run has one replication, so its results have no confidence interval (no ± half-width) and cannot be told from chance; run at least 2, and usually 10 or more"
             ),
             Problem::NoWarmup {
                 warmup: Some(w),
