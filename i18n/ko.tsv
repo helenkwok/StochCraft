@@ -100,6 +100,7 @@
 	Change	변화
 	Change Block	블록 변경
 	Change Calendar	캘린더 변경
+	Change Estimate	추정 변경
 	Change Flow	흐름 변경
 	Change Pool	풀 변경
 	Change the estimate	추정 변경
@@ -360,6 +361,7 @@
 	Remove	제거
 	Remove Block	블록 제거
 	Remove Calendar	캘린더 제거
+	Remove Estimate	추정 제거
 	Remove Pool	풀 제거
 	Remove Property	속성 제거
 	Remove alternative {n}	대안 {n} 제거
@@ -448,6 +450,7 @@
 	Show {id}	{id} 표시
 	Side rail	사이드바
 	Size	크기 정하기
+	Size Resources	자원 크기 정하기
 	Size of the waiting room:	대기실 크기:
 	Size the resources	자원 크기 정하기
 	Soft accent	연한 강조색

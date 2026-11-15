@@ -100,6 +100,7 @@
 	Change	变化
 	Change Block	更改区块
 	Change Calendar	更改日历
+	Change Estimate	更改估计
 	Change Flow	更改顺序流
 	Change Pool	更改资源池
 	Change the estimate	更改估计
@@ -360,6 +361,7 @@
 	Remove	移除
 	Remove Block	移除区块
 	Remove Calendar	移除日历
+	Remove Estimate	移除估计
 	Remove Pool	移除资源池
 	Remove Property	移除属性
 	Remove alternative {n}	移除备选方案 {n}
@@ -448,6 +450,7 @@
 	Show {id}	显示 {id}
 	Side rail	侧边栏
 	Size	确定规模
+	Size Resources	确定资源规模
 	Size of the waiting room:	等待区大小：
 	Size the resources	确定资源规模
 	Soft accent	柔和强调色

@@ -100,6 +100,7 @@
 	Change	Muutus
 	Change Block	Muuda plokki
 	Change Calendar	Muuda kalendrit
+	Change Estimate	Muuda hinnangut
 	Change Flow	Muuda voogu
 	Change Pool	Muuda kogumit
 	Change the estimate	Muuda hinnangut
@@ -360,6 +361,7 @@
 	Remove	Eemalda
 	Remove Block	Eemalda plokk
 	Remove Calendar	Eemalda kalender
+	Remove Estimate	Eemalda hinnang
 	Remove Pool	Eemalda kogum
 	Remove Property	Eemalda omadus
 	Remove alternative {n}	Eemalda alternatiiv {n}
@@ -448,6 +450,7 @@
 	Show {id}	Näita {id}
 	Side rail	Külgriba
 	Size	Dimensioneeri
+	Size Resources	Dimensioneeri ressursid
 	Size of the waiting room:	Ooteruumi suurus:
 	Size the resources	Dimensioneeri ressursid
 	Soft accent	Pehme rõhuvärv

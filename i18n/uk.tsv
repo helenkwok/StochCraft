@@ -100,6 +100,7 @@
 	Change	Зміна
 	Change Block	Змінити блок
 	Change Calendar	Змінити календар
+	Change Estimate	Змінити оцінку
 	Change Flow	Змінити потік
 	Change Pool	Змінити пул
 	Change the estimate	Змінити оцінку
@@ -360,6 +361,7 @@
 	Remove	Видалити
 	Remove Block	Видалити блок
 	Remove Calendar	Видалити календар
+	Remove Estimate	Видалити оцінку
 	Remove Pool	Видалити пул
 	Remove Property	Видалити властивість
 	Remove alternative {n}	Видалити альтернативу {n}
@@ -448,6 +450,7 @@
 	Show {id}	Показати {id}
 	Side rail	Бічна панель
 	Size	Підібрати
+	Size Resources	Підібрати ресурси
 	Size of the waiting room:	Кількість місць очікування:
 	Size the resources	Підбір ресурсів
 	Soft accent	М’який акцент

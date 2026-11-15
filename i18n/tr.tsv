@@ -100,6 +100,7 @@
 	Change	Değişim
 	Change Block	Bloğu değiştir
 	Change Calendar	Takvimi değiştir
+	Change Estimate	Tahmini değiştir
 	Change Flow	Akışı değiştir
 	Change Pool	Havuzu değiştir
 	Change the estimate	Tahmini değiştir
@@ -360,6 +361,7 @@
 	Remove	Kaldır
 	Remove Block	Bloğu kaldır
 	Remove Calendar	Takvimi kaldır
+	Remove Estimate	Tahmini kaldır
 	Remove Pool	Havuzu kaldır
 	Remove Property	Özelliği kaldır
 	Remove alternative {n}	{n}. alternatifi kaldır
@@ -448,6 +450,7 @@
 	Show {id}	{id} göster
 	Side rail	Yan çubuk
 	Size	Boyutlandır
+	Size Resources	Kaynakları boyutlandır
 	Size of the waiting room:	Bekleme alanının boyutu:
 	Size the resources	Kaynakları boyutlandır
 	Soft accent	Yumuşak vurgu

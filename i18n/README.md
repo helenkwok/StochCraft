@@ -496,6 +496,19 @@ engine's messages (validation, file notes) are English too.
   before; hu Elutasítottak and sq U refuzuan, which mirror a verb form; ja 受入拒否 and ko 거절 for the
   checkbox; and the size word chosen for each label (de Größe, fr Taille, ja 大きさ), which may read
   more naturally as a capacity.
+- The rows for the undo names "Size Resources", "Change Estimate" and "Remove Estimate" (PR "small
+  UI fixes from #47": the Edit menu and status bar name every change) were machine-drafted with
+  Claude Code from each catalog's own undo names and its "Size the resources", "Three-point
+  estimate" and "Change the estimate" rows. "Change Estimate" and "Remove Estimate" follow the
+  article, case and verbs of "Change Pool" and "Remove Pool" (so "Remove", not the "Forget" of the
+  estimate button), with the catalog's noun for an estimate; sv takes uppskattning from the button
+  rather than the skattning of Trepunktsskattning. "Size Resources" is the section title put in the
+  form of the other undo names: without an article where they have none (es, gl, it, pt-br, da, nb,
+  sv, nl, bg), as a verb where they are one (ru Подобрать ресурсы, uk Підібрати ресурси, from the
+  nouns Подбор, Підбір), with ja を決定 and in id's Title Case. Not checked against any other source.
+  Not reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka, kk and sq as
+  before, ko 자원 크기 정하기 (a verb phrase where the other undo names end in a noun), the re-formed ru
+  and uk verbs, and the bg and sv article and noun choices.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

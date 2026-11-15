@@ -100,6 +100,7 @@
 	Change	Zmena
 	Change Block	Zmeniť blok
 	Change Calendar	Zmeniť kalendár
+	Change Estimate	Zmeniť odhad
 	Change Flow	Zmeniť tok
 	Change Pool	Zmeniť skupinu
 	Change the estimate	Zmeniť odhad
@@ -360,6 +361,7 @@
 	Remove	Odstrániť
 	Remove Block	Odstrániť blok
 	Remove Calendar	Odstrániť kalendár
+	Remove Estimate	Odstrániť odhad
 	Remove Pool	Odstrániť skupinu
 	Remove Property	Odstrániť vlastnosť
 	Remove alternative {n}	Odstrániť alternatívu {n}
@@ -448,6 +450,7 @@
 	Show {id}	Zobraziť {id}
 	Side rail	Bočná lišta
 	Size	Dimenzovať
+	Size Resources	Dimenzovať zdroje
 	Size of the waiting room:	Veľkosť čakárne:
 	Size the resources	Dimenzovať zdroje
 	Soft accent	Jemné zvýraznenie

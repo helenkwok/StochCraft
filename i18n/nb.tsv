@@ -100,6 +100,7 @@
 	Change	Endring
 	Change Block	Endre blokk
 	Change Calendar	Endre kalender
+	Change Estimate	Endre anslag
 	Change Flow	Endre flyt
 	Change Pool	Endre pulje
 	Change the estimate	Endre anslaget
@@ -360,6 +361,7 @@
 	Remove	Fjern
 	Remove Block	Fjern blokk
 	Remove Calendar	Fjern kalender
+	Remove Estimate	Fjern anslag
 	Remove Pool	Fjern pulje
 	Remove Property	Fjern egenskap
 	Remove alternative {n}	Fjern alternativ {n}
@@ -448,6 +450,7 @@
 	Show {id}	Vis {id}
 	Side rail	Sidefelt
 	Size	Dimensjoner
+	Size Resources	Dimensjoner ressurser
 	Size of the waiting room:	Størrelse på venterommet:
 	Size the resources	Dimensjoner ressursene
 	Soft accent	Myk aksent

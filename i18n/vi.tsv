@@ -100,6 +100,7 @@
 	Change	Thay đổi
 	Change Block	Thay đổi khối
 	Change Calendar	Thay đổi lịch
+	Change Estimate	Thay đổi ước lượng
 	Change Flow	Thay đổi luồng
 	Change Pool	Thay đổi nhóm
 	Change the estimate	Đổi ước lượng
@@ -360,6 +361,7 @@
 	Remove	Xóa
 	Remove Block	Xóa khối
 	Remove Calendar	Xóa lịch
+	Remove Estimate	Xóa ước lượng
 	Remove Pool	Xóa nhóm
 	Remove Property	Xóa thuộc tính
 	Remove alternative {n}	Xóa phương án {n}
@@ -448,6 +450,7 @@
 	Show {id}	Hiển thị {id}
 	Side rail	Thanh bên
 	Size	Định cỡ
+	Size Resources	Định cỡ tài nguyên
 	Size of the waiting room:	Kích thước khu vực chờ:
 	Size the resources	Định cỡ tài nguyên
 	Soft accent	Màu nhấn nhạt
