@@ -110,6 +110,7 @@
 	Chart colours…	დიაგრამების ფერები…
 	Chart hover	დიაგრამა მაჩვენებლის ქვეშ
 	Check every	შემოწმების ინტერვალი
+	Check the decimal and grouping marks	შეამოწმეთ ათწილადის და დაჯგუფების ნიშნები
 	Checks	შემოწმებები
 	Choose…	აირჩიეთ…
 	Clear Menu	მენიუს გასუფთავება
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	{from} დაკავშირდა {to}-თან
 	Connections	კავშირები
 	Constant	მუდმივი
+	Control outlines	მართვის ელემენტების კონტურები
 	Copy	კოპირება
 	Counts against	ეკისრება
 	Customer demand	მომხმარებლის მოთხოვნა
@@ -167,6 +169,7 @@
 	Energy	ენერგია
 	Energy per part	ენერგია ერთ დეტალზე
 	Enough: {units}, meeting the target in {p} of replications	საკმარისია: {units}, მიზანი მიიღწევა გამეორებების {p}-ში
+	Enter a number	შეიყვანეთ რიცხვი
 	Entered	შესულა
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	ერთეულები, რომლებიც მოსაცდელ სივრცეს სავსეს პოულობენ, მაშინვე ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად), ნაცვლად იმისა, რომ დაიკარგონ ან დავალების წინ დაელოდონ; აქ ისინი დაკარგულად ითვლება.
 	Entities give up waiting	ერთეულები უარს ამბობენ ლოდინზე
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	ერთეულები, რომლებიც ლოდინზე უარს ამბობენ, ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად); დანარჩენები დავალების მეორე გასასვლელით მიდიან.
 	Erlang	ერლანგი
 	Error	შეცდომა
+	Error: {message}	შეცდომა: {message}
 	Estimate from three values…	შეფასება სამი მნიშვნელობით…
 	Evenly across	თანაბრად ჰორიზონტალურად
 	Evenly down	თანაბრად ვერტიკალურად
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	{id}-ის დრო მორგებულია
 	Fixed	ფიქსირებული
 	Flows	ნაკადები
+	Focused header item	ფოკუსირებული ელემენტი სათაურის ზოლზე
 	Forget the estimate	შეფასების დავიწყება
 	Fri	პარ
 	From	-დან
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	პრობლემა არ მოიძებნა. მოდელი მზადაა გასაშვებად.
 	None picked: the day the period starts.	არაფერია არჩეული: დღე, როცა პერიოდი იწყება.
 	Normal	ნორმალური
+	Not a number	ეს არ არის რიცხვი
 	Not reached, even with {units}	ვერ მიიღწა, თუნდაც {units}-ით
 	Number	რიცხვი
+	Number too large	რიცხვი ძალიან დიდია
 	OEE	OEE
 	OEE availability	OEE ხელმისაწვდომობა
 	OEE effectiveness	OEE ეფექტიანობა
@@ -538,6 +545,7 @@
 	Turned away on {id}	უარყოფილები ნაკადზე {id}
 	Two stations in series, read from an XPDL file.	ორი მიმდევრობითი სადგური, წაკითხული XPDL ფაილიდან.
 	Type	ტიპი
+	Type a time from 0 to {end} {unit}.	შეიყვანეთ დრო დიაპაზონში 0 – {end} {unit}.
 	Undid {action}	გაუქმდა {action}
 	Undo	გაუქმება
 	Undo {action}	გააუქმეთ {action}
@@ -552,6 +560,7 @@
 	Upper value	ზედა მნიშვნელობა
 	Use System Setting	სისტემის პარამეტრის გამოყენება
 	Use for charts	დიაგრამებისთვის გამოყენება
+	Use one kind of digits	გამოიყენეთ ერთი სახის ციფრები
 	Use these units in the model	ამ ერთეულების გამოყენება მოდელში
 	Utilisation	გამოყენების დონე
 	Value	მნიშვნელობა
@@ -646,6 +655,7 @@
 	{n} waiting	ელოდება: {n}
 	{n} {unit} per second	{n} {unit} წამში
 	{property} (set to, mean)	{property} (მითითებული მნიშვნელობა, საშუალო)
+	{reason}. {field} is still {value}.	{reason}. {field} კვლავ არის {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – გამეორებები ორ განსხვავებულ შედეგად გაიყო: იხილეთ ქვემოთ მოცემული ცხრილი.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – ფონი „{background}“: {ratio}:1, საჭიროა {min}:1
 	{title}: now {now}, at most {most}	{title}: ახლა {now}, მაქსიმუმ {most}

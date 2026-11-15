@@ -110,6 +110,7 @@
 	Chart colours…	Grafik renkleri…
 	Chart hover	İşaretçi altındaki grafik
 	Check every	Denetim aralığı
+	Check the decimal and grouping marks	Ondalık ve basamak ayırıcılarını denetleyin
 	Checks	Denetimler
 	Choose…	Seçin…
 	Clear Menu	Menüyü Temizle
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	{from}, {to} öğesine bağlandı
 	Connections	Bağlantılar
 	Constant	Sabit
+	Control outlines	Denetim dış çizgileri
 	Copy	Kopyala
 	Counts against	Yazıldığı görev
 	Customer demand	Müşteri talebi
@@ -167,6 +169,7 @@
 	Energy	Enerji
 	Energy per part	Parça başına enerji
 	Enough: {units}, meeting the target in {p} of replications	Yeterli: {units}, hedef tekrarların {p} kadarında karşılanır
+	Enter a number	Bir sayı girin
 	Entered	Giren
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Bekleme alanını dolu bulan varlıklar, kaybolmak ya da görevden önce beklemek yerine hemen bu akışı izler (örneğin daha sonra yeniden denemek için); burada kaybedilen sayılırlar.
 	Entities give up waiting	Varlıklar beklemekten vazgeçer
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Beklemekten vazgeçen varlıklar bu akışı izler (örneğin daha sonra yeniden denemek için); diğerleri görevin öteki çıkış yolunu izler.
 	Erlang	Erlang
 	Error	Hata
+	Error: {message}	Hata: {message}
 	Estimate from three values…	Üç değerden tahmin et…
 	Evenly across	Yatay olarak eşit dağıt
 	Evenly down	Dikey olarak eşit dağıt
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	{id} süresi uyduruldu
 	Fixed	Sabit
 	Flows	Akışlar
+	Focused header item	Üst çubukta odaklanmış öğe
 	Forget the estimate	Tahmini unut
 	Fri	Cum
 	From	Kaynak
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	Sorun bulunamadı. Model çalıştırılmaya hazır.
 	None picked: the day the period starts.	Seçim yok: dönemin başladığı gün.
 	Normal	Normal
+	Not a number	Sayı değil
 	Not reached, even with {units}	Ulaşılamadı, {units} ile bile
 	Number	Sayı
+	Number too large	Sayı çok büyük
 	OEE	OEE
 	OEE availability	OEE kullanılabilirliği
 	OEE effectiveness	OEE etkinliği
@@ -538,6 +545,7 @@
 	Turned away on {id}	{id} üzerinde geri çevrilenler
 	Two stations in series, read from an XPDL file.	XPDL dosyasından okunan seri bağlı iki istasyon.
 	Type	Tür
+	Type a time from 0 to {end} {unit}.	0 ile {end} {unit} arasında bir zaman yazın.
 	Undid {action}	{action} geri alındı
 	Undo	Geri Al
 	Undo {action}	Geri Al: {action}
@@ -552,6 +560,7 @@
 	Upper value	Üst değer
 	Use System Setting	Sistem ayarını kullan
 	Use for charts	Grafiklerde kullan
+	Use one kind of digits	Tek tür rakam kullanın
 	Use these units in the model	Bu birimleri modelde kullan
 	Utilisation	Kullanım oranı
 	Value	Değer
@@ -646,6 +655,7 @@
 	{n} waiting	{n} bekliyor
 	{n} {unit} per second	saniyede {n} {unit}
 	{property} (set to, mean)	{property} (ayarlanan değer, ortalama)
+	{reason}. {field} is still {value}.	{reason}. {field} hâlâ {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): tekrarlar iki farklı sonuca ayrıldı; aşağıdaki tabloya bakın.
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} üzerinde {text}: {ratio}:1, en az {min}:1 gerekli
 	{title}: now {now}, at most {most}	{title}: şu an {now}, en fazla {most}

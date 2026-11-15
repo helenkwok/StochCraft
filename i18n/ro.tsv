@@ -110,6 +110,7 @@
 	Chart colours…	Culorile graficelor…
 	Chart hover	Grafic sub indicator
 	Check every	Verificare la fiecare
+	Check the decimal and grouping marks	Verificați separatorul zecimal și cel al miilor
 	Checks	Verificări
 	Choose…	Alege…
 	Clear Menu	Golește meniul
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	S-a conectat {from} la {to}
 	Connections	Conexiuni
 	Constant	Constantă
+	Control outlines	Contururile controalelor
 	Copy	Copiază
 	Counts against	Imputat la
 	Customer demand	Cererea clienților
@@ -167,6 +169,7 @@
 	Energy	Energie
 	Energy per part	Energie pe piesă
 	Enough: {units}, meeting the target in {p} of replications	Suficient: {units}, atinge ținta în {p} din replicări
+	Enter a number	Introduceți un număr
 	Entered	Intrări
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitățile care găsesc sala de așteptare plină iau imediat acest flux (pentru a încerca din nou mai târziu, de exemplu), în loc să fie pierdute sau să aștepte înaintea sarcinii; aici sunt numărate ca pierdute.
 	Entities give up waiting	Entitățile renunță să mai aștepte
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitățile care renunță să mai aștepte iau acest flux (pentru a încerca din nou mai târziu, de exemplu); celelalte iau cealaltă ieșire a sarcinii.
 	Erlang	Erlang
 	Error	Eroare
+	Error: {message}	Eroare: {message}
 	Estimate from three values…	Estimează din trei valori…
 	Evenly across	Uniform pe orizontală
 	Evenly down	Uniform pe verticală
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	Timpul lui {id} a fost ajustat
 	Fixed	Fixă
 	Flows	Fluxuri
+	Focused header item	Element din antet cu focalizare
 	Forget the estimate	Uită estimarea
 	Fri	vin
 	From	De la
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	Nu s-au găsit probleme. Modelul este gata de rulare.
 	None picked: the day the period starts.	Nimic ales: ziua în care începe perioada.
 	Normal	Normală
+	Not a number	Nu este un număr
 	Not reached, even with {units}	Neatinsă, nici cu {units}
 	Number	Număr
+	Number too large	Număr prea mare
 	OEE	OEE
 	OEE availability	Disponibilitate OEE
 	OEE effectiveness	Eficacitate OEE
@@ -538,6 +545,7 @@
 	Turned away on {id}	Respingeri pe {id}
 	Two stations in series, read from an XPDL file.	Două stații în serie, citite dintr-un fișier XPDL.
 	Type	Tip
+	Type a time from 0 to {end} {unit}.	Introduceți un moment de la 0 la {end} {unit}.
 	Undid {action}	S-a anulat {action}
 	Undo	Anulează
 	Undo {action}	Anulează {action}
@@ -552,6 +560,7 @@
 	Upper value	Valoare superioară
 	Use System Setting	Folosește setarea sistemului
 	Use for charts	Folosește pentru grafice
+	Use one kind of digits	Folosiți un singur tip de cifre
 	Use these units in the model	Folosește aceste unități în model
 	Utilisation	Grad de utilizare
 	Value	Valoare
@@ -646,6 +655,7 @@
 	{n} waiting	În așteptare: {n}
 	{n} {unit} per second	{n} {unit} pe secundă
 	{property} (set to, mean)	{property} (valoare setată, medie)
+	{reason}. {field} is still {value}.	{reason}. {field} rămâne {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replicările se împart în două rezultate diferite; vezi tabelul de mai jos.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} pe {background}: {ratio}:1, necesar {min}:1
 	{title}: now {now}, at most {most}	{title}: acum {now}, cel mult {most}

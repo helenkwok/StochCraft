@@ -110,6 +110,7 @@
 	Chart colours…	Диаграмма түстері…
 	Chart hover	Меңзер астындағы диаграмма
 	Check every	Тексеру аралығы
+	Check the decimal and grouping marks	Ондық белгі мен топтау белгісін тексеріңіз
 	Checks	Тексерулер
 	Choose…	Таңдаңыз…
 	Clear Menu	Мәзірді тазалау
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	{from} мен {to} қосылды
 	Connections	Байланыстар
 	Constant	Тұрақты
+	Control outlines	Басқару элементтерінің контурлары
 	Copy	Көшіру
 	Counts against	Жүктелетін тапсырма
 	Customer demand	Тұтынушы сұранысы
@@ -167,6 +169,7 @@
 	Energy	Энергия
 	Energy per part	Бір бөлшекке энергия
 	Enough: {units}, meeting the target in {p} of replications	Жеткілікті: {units}, мақсат қайталаулардың {p} бөлігінде орындалады
+	Enter a number	Сан енгізіңіз
 	Entered	Кіргендер
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Күту орнын толы деп тапқан нысандар бірден осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін), жоғалудың немесе тапсырма алдында күтудің орнына; мұнда олар жоғалған деп саналады.
 	Entities give up waiting	Нысандар күтуден бас тартады
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Күтуден бас тартқан нысандар осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін); қалғандары тапсырманың басқа шығатын жолымен кетеді.
 	Erlang	Эрланг
 	Error	Қате
+	Error: {message}	Қате: {message}
 	Estimate from three values…	Үш мәннен бағалау…
 	Evenly across	Көлденеңінен біркелкі
 	Evenly down	Тігінен біркелкі
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	{id} уақыты сәйкестендірілді
 	Fixed	Тұрақты
 	Flows	Ағындар
+	Focused header item	Жоғарғы жолақтағы фокустағы элемент
 	Forget the estimate	Бағалауды ұмыту
 	Fri	жм
 	From	Қайдан
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	Мәселе табылған жоқ. Модель іске қосуға дайын.
 	None picked: the day the period starts.	Ештеңе таңдалмаған: кезең басталатын күн.
 	Normal	Нормальды
+	Not a number	Сан емес
 	Not reached, even with {units}	Жетпеді, тіпті {units} болғанда да
 	Number	Сан
+	Number too large	Сан тым үлкен
 	OEE	OEE
 	OEE availability	OEE қолжетімділігі
 	OEE effectiveness	OEE нәтижелілігі
@@ -538,6 +545,7 @@
 	Turned away on {id}	{id} ағынында қабылданбағандар
 	Two stations in series, read from an XPDL file.	XPDL файлынан оқылған тізбектей екі станция.
 	Type	Түрі
+	Type a time from 0 to {end} {unit}.	0 мен {end} {unit} аралығындағы уақытты енгізіңіз.
 	Undid {action}	{action} болдырылмады
 	Undo	Болдырмау
 	Undo {action}	Болдырмау: {action}
@@ -552,6 +560,7 @@
 	Upper value	Жоғарғы мән
 	Use System Setting	Жүйе параметрін пайдалану
 	Use for charts	Диаграммалар үшін қолдану
+	Use one kind of digits	Цифрлардың бір түрін ғана пайдаланыңыз
 	Use these units in the model	Осы бірліктерді модельде қолдану
 	Utilisation	Пайдалану деңгейі
 	Value	Мән
@@ -646,6 +655,7 @@
 	{n} waiting	Күтуде: {n}
 	{n} {unit} per second	секундына {n} {unit}
 	{property} (set to, mean)	{property} (орнатылған мән, орташа)
+	{reason}. {field} is still {value}.	{reason}. {field} әлі де {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – қайталаулар екі түрлі нәтижеге бөлінді: төмендегі кестені қараңыз.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон «{background}»: {ratio}:1, кемінде {min}:1 керек
 	{title}: now {now}, at most {most}	{title}: қазір {now}, ең көбі {most}

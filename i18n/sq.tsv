@@ -110,6 +110,7 @@
 	Chart colours…	Ngjyrat e grafikëve…
 	Chart hover	Grafik nën tregues
 	Check every	Kontrollo çdo
+	Check the decimal and grouping marks	Kontrolloni ndarësin dhjetor dhe ndarësin e mijëshëve
 	Checks	Kontrollet
 	Choose…	Zgjidh…
 	Clear Menu	Pastro menynë
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	U lidh {from} me {to}
 	Connections	Lidhjet
 	Constant	Konstante
+	Control outlines	Konturet e kontrolleve
 	Copy	Kopjo
 	Counts against	I ngarkohet
 	Customer demand	Kërkesa e klientëve
@@ -167,6 +169,7 @@
 	Energy	Energjia
 	Energy per part	Energjia për pjesë
 	Enough: {units}, meeting the target in {p} of replications	Mjafton: {units}, arrin objektivin në {p} të përsëritjeve
+	Enter a number	Shkruani një numër
 	Entered	Hyrjet
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitetet që e gjejnë dhomën e pritjes plot marrin menjëherë këtë rrjedhë (për të provuar sërish më vonë, të themi), në vend që të humbasin ose të presin para detyrës; këtu numërohen si të humbura.
 	Entities give up waiting	Entitetet heqin dorë nga pritja
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitetet që heqin dorë nga pritja marrin këtë rrjedhë (për të provuar sërish më vonë, të themi); të tjerët marrin daljen tjetër të detyrës.
 	Erlang	Erlang
 	Error	Gabim
+	Error: {message}	Gabim: {message}
 	Estimate from three values…	Vlerëso nga tri vlera…
 	Evenly across	Shpërndaj njëtrajtësisht horizontalisht
 	Evenly down	Shpërndaj njëtrajtësisht vertikalisht
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	Koha e {id} u përshtat
 	Fixed	E fiksuar
 	Flows	Rrjedhat
+	Focused header item	Elementi i fokusuar në shiritin e kokës
 	Forget the estimate	Harro vlerësimin
 	Fri	Pre
 	From	Nga
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	Nuk u gjetën probleme. Modeli është gati për ekzekutim.
 	None picked: the day the period starts.	Asnjë e zgjedhur: dita kur nis periudha.
 	Normal	Normale
+	Not a number	Nuk është numër
 	Not reached, even with {units}	Nuk u arrit, as me {units}
 	Number	Numër
+	Number too large	Numri është shumë i madh
 	OEE	OEE
 	OEE availability	Disponueshmëria OEE
 	OEE effectiveness	Efektiviteti OEE
@@ -538,6 +545,7 @@
 	Turned away on {id}	U refuzuan në {id}
 	Two stations in series, read from an XPDL file.	Dy stacione në seri, të lexuara nga një skedar XPDL.
 	Type	Lloji
+	Type a time from 0 to {end} {unit}.	Shkruani një kohë nga 0 deri në {end} {unit}.
 	Undid {action}	U zhbë {action}
 	Undo	Zhbëj
 	Undo {action}	Zhbëj {action}
@@ -552,6 +560,7 @@
 	Upper value	Vlera e sipërme
 	Use System Setting	Përdor cilësimin e sistemit
 	Use for charts	Përdore për grafikët
+	Use one kind of digits	Përdorni një lloj shifrash
 	Use these units in the model	Përdor këto njësi në model
 	Utilisation	Shfrytëzimi
 	Value	Vlera
@@ -646,6 +655,7 @@
 	{n} waiting	{n} në pritje
 	{n} {unit} per second	{n} {unit} në sekondë
 	{property} (set to, mean)	{property} (vlera e caktuar, mesatarja)
+	{reason}. {field} is still {value}.	{reason}. {field} është ende {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – përsëritjet ndahen në dy përfundime: shiko tabelën më poshtë.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – sfondi „{background}“: {ratio}:1, nevojitet {min}:1
 	{title}: now {now}, at most {most}	{title}: tani {now}, më së shumti {most}

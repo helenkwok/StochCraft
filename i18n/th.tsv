@@ -110,6 +110,7 @@
 	Chart colours…	สีแผนภูมิ…
 	Chart hover	แผนภูมิเมื่อชี้
 	Check every	ตรวจทุก
+	Check the decimal and grouping marks	ตรวจสอบเครื่องหมายทศนิยมและเครื่องหมายคั่นหลักพัน
 	Checks	การตรวจสอบ
 	Choose…	เลือก…
 	Clear Menu	ล้างเมนู
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	เชื่อมต่อ {from} กับ {to} แล้ว
 	Connections	การเชื่อมต่อ
 	Constant	ค่าคงที่
+	Control outlines	เส้นขอบของตัวควบคุม
 	Copy	คัดลอก
 	Counts against	นับเข้างาน
 	Customer demand	ความต้องการของลูกค้า
@@ -167,6 +169,7 @@
 	Energy	พลังงาน
 	Energy per part	พลังงานต่อชิ้น
 	Enough: {units}, meeting the target in {p} of replications	เพียงพอ: {units} บรรลุเป้าหมายใน {p} ของรอบการจำลองซ้ำ
+	Enter a number	ป้อนตัวเลข
 	Entered	จำนวนที่เข้ามา
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	เอนทิตีที่พบว่าพื้นที่รอเต็มจะไปตามโฟลว์นี้ทันที (เช่น เพื่อลองใหม่ภายหลัง) แทนที่จะสูญเสียหรือรอก่อนถึงงาน ที่นี่นับเป็นการสูญเสีย
 	Entities give up waiting	เอนทิตีเลิกรอ
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	เอนทิตีที่เลิกรอจะไปตามโฟลว์นี้ (เช่น เพื่อลองใหม่ภายหลัง) ส่วนที่เหลือไปทางออกอื่นของงาน
 	Erlang	เออร์แลง
 	Error	ข้อผิดพลาด
+	Error: {message}	ข้อผิดพลาด: {message}
 	Estimate from three values…	ประมาณจากสามค่า…
 	Evenly across	กระจายเท่ากันแนวนอน
 	Evenly down	กระจายเท่ากันแนวตั้ง
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	ปรับเวลาของ {id} แล้ว
 	Fixed	คงที่
 	Flows	โฟลว์
+	Focused header item	รายการบนแถบส่วนหัวที่มีโฟกัส
 	Forget the estimate	ลืมการประมาณ
 	Fri	ศ.
 	From	จาก
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	ไม่พบปัญหา แบบจำลองพร้อมรันแล้ว
 	None picked: the day the period starts.	ไม่ได้เลือก: วันที่ช่วงเริ่ม
 	Normal	ปกติ
+	Not a number	ไม่ใช่ตัวเลข
 	Not reached, even with {units}	ไม่บรรลุ แม้มี {units}
 	Number	ตัวเลข
+	Number too large	ตัวเลขใหญ่เกินไป
 	OEE	OEE
 	OEE availability	ความพร้อมใช้งาน OEE
 	OEE effectiveness	ประสิทธิผล OEE
@@ -538,6 +545,7 @@
 	Turned away on {id}	ถูกปฏิเสธที่ {id}
 	Two stations in series, read from an XPDL file.	สองสถานีต่ออนุกรม อ่านจากไฟล์ XPDL
 	Type	ชนิด
+	Type a time from 0 to {end} {unit}.	พิมพ์เวลาตั้งแต่ 0 ถึง {end} {unit}
 	Undid {action}	เลิกทำ {action} แล้ว
 	Undo	เลิกทำ
 	Undo {action}	เลิกทำ {action}
@@ -552,6 +560,7 @@
 	Upper value	ค่าบน
 	Use System Setting	ใช้การตั้งค่าระบบ
 	Use for charts	ใช้กับแผนภูมิ
+	Use one kind of digits	ใช้ตัวเลขเพียงชนิดเดียว
 	Use these units in the model	ใช้จำนวนหน่วยเหล่านี้ในแบบจำลอง
 	Utilisation	อัตราการใช้ประโยชน์
 	Value	ค่า
@@ -646,6 +655,7 @@
 	{n} waiting	รอ {n}
 	{n} {unit} per second	{n} {unit} ต่อวินาที
 	{property} (set to, mean)	{property} (กำหนดเป็น, ค่าเฉลี่ย)
+	{reason}. {field} is still {value}.	{reason} {field} ยังคงเป็น {value}
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) แยกเป็นผลสองแบบ: ดูตารางด้านล่าง
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} บน {background}: {ratio}:1 ต้องการ {min}:1
 	{title}: now {now}, at most {most}	{title}: ขณะนี้ {now} สูงสุด {most}

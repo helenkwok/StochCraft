@@ -110,6 +110,7 @@
 	Chart colours…	Diagrammfarben…
 	Chart hover	Diagramm unter Mauszeiger
 	Check every	Prüfung alle
+	Check the decimal and grouping marks	Prüfen Sie Dezimal- und Tausendertrennzeichen
 	Checks	Prüfungen
 	Choose…	Auswählen…
 	Clear Menu	Menü leeren
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	{from} mit {to} verbunden
 	Connections	Verbindungen
 	Constant	Konstant
+	Control outlines	Umrisse der Steuerelemente
 	Copy	Kopieren
 	Counts against	Zugerechnet zu
 	Customer demand	Kundenbedarf
@@ -167,6 +169,7 @@
 	Energy	Energie
 	Energy per part	Energie je Teil
 	Enough: {units}, meeting the target in {p} of replications	Genug: {units}, das Ziel wird in {p} der Replikationen erreicht
+	Enter a number	Geben Sie eine Zahl ein
 	Entered	Eingetreten
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitäten, die den Warteraum voll vorfinden, nehmen sofort diese Verbindung (etwa um es später erneut zu versuchen), statt verloren zu gehen oder vor der Aufgabe zu warten; sie zählen hier als verloren.
 	Entities give up waiting	Entitäten geben das Warten auf
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitäten, die das Warten aufgeben, nehmen diese Verbindung (etwa um es später erneut zu versuchen); die anderen nehmen den anderen Ausgang der Aufgabe.
 	Erlang	Erlang
 	Error	Fehler
+	Error: {message}	Fehler: {message}
 	Estimate from three values…	Aus drei Werten schätzen…
 	Evenly across	Gleichmäßig nebeneinander
 	Evenly down	Gleichmäßig untereinander
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	Zeit von {id} angepasst
 	Fixed	Fest
 	Flows	Verbindungen
+	Focused header item	Fokussiertes Element auf Kopfleiste
 	Forget the estimate	Schätzung verwerfen
 	Fri	Fr
 	From	Von
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	Keine gefunden. Das Modell kann ausgeführt werden.
 	None picked: the day the period starts.	Keiner gewählt: der Tag, an dem der Zeitraum beginnt.
 	Normal	Normal
+	Not a number	Keine Zahl
 	Not reached, even with {units}	Nicht erreicht, auch nicht mit {units}
 	Number	Zahl
+	Number too large	Zahl zu groß
 	OEE	OEE
 	OEE availability	OEE-Verfügbarkeit
 	OEE effectiveness	OEE-Effektivität
@@ -538,6 +545,7 @@
 	Turned away on {id}	Abgewiesen bei {id}
 	Two stations in series, read from an XPDL file.	Zwei Stationen in Reihe, aus einer XPDL-Datei gelesen.
 	Type	Typ
+	Type a time from 0 to {end} {unit}.	Geben Sie einen Zeitpunkt von 0 bis {end} {unit} ein.
 	Undid {action}	{action} rückgängig gemacht
 	Undo	Rückgängig
 	Undo {action}	{action} rückgängig machen
@@ -552,6 +560,7 @@
 	Upper value	Oberer Wert
 	Use System Setting	Systemeinstellung verwenden
 	Use for charts	Für Diagramme verwenden
+	Use one kind of digits	Verwenden Sie nur eine Art von Ziffern
 	Use these units in the model	Diese Einheiten im Modell verwenden
 	Utilisation	Auslastung
 	Value	Wert
@@ -646,6 +655,7 @@
 	{n} waiting	{n} wartend
 	{n} {unit} per second	{n} {unit} pro Sekunde
 	{property} (set to, mean)	{property} (festgelegt auf, Mittelwert)
+	{reason}. {field} is still {value}.	{reason}. {field} ist weiterhin {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): Die Replikationen teilen sich in zwei verschiedene Ergebnisse; siehe Tabelle unten.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} auf {background}: {ratio}:1, nötig {min}:1
 	{title}: now {now}, at most {most}	{title}: jetzt {now}, höchstens {most}

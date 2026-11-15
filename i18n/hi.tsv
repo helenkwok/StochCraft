@@ -110,6 +110,7 @@
 	Chart colours…	चार्ट के रंग…
 	Chart hover	पॉइंटर के नीचे चार्ट
 	Check every	जाँच का अंतराल
+	Check the decimal and grouping marks	दशमलव और हज़ार-विभाजक चिह्न जाँचें
 	Checks	जाँचें
 	Choose…	चुनें…
 	Clear Menu	मेनू साफ़ करें
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	{from} को {to} से जोड़ा गया
 	Connections	कनेक्शन
 	Constant	स्थिर
+	Control outlines	नियंत्रणों की रूपरेखा
 	Copy	कॉपी करें
 	Counts against	किस कार्य के खाते में
 	Customer demand	ग्राहक मांग
@@ -167,6 +169,7 @@
 	Energy	ऊर्जा
 	Energy per part	प्रति पुर्जा ऊर्जा
 	Enough: {units}, meeting the target in {p} of replications	पर्याप्त: {units}, {p} पुनरावृत्तियों में लक्ष्य पूरा
+	Enter a number	कोई संख्या दर्ज करें
 	Entered	प्रवेश संख्या
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	जो इकाइयाँ प्रतीक्षा कक्ष भरा पाती हैं, वे तुरंत यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए), खो जाने या कार्य से पहले प्रतीक्षा करने के बजाय; यहाँ उन्हें हानि में गिना जाता है।
 	Entities give up waiting	इकाइयाँ प्रतीक्षा छोड़ देती हैं
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	जो इकाइयाँ प्रतीक्षा छोड़ देती हैं, वे यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए); बाकी कार्य का दूसरा बाहर जाने का रास्ता लेती हैं।
 	Erlang	एरलांग
 	Error	त्रुटि
+	Error: {message}	त्रुटि: {message}
 	Estimate from three values…	तीन मानों से अनुमान लगाएँ…
 	Evenly across	क्षैतिज रूप से समान रूप से फैलाएँ
 	Evenly down	लंबवत रूप से समान रूप से फैलाएँ
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	{id} का समय मिलाया गया
 	Fixed	निश्चित
 	Flows	प्रवाह
+	Focused header item	शीर्ष पट्टी पर फ़ोकस वाला आइटम
 	Forget the estimate	अनुमान भूल जाएँ
 	Fri	शुक्र
 	From	से
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	कोई समस्या नहीं मिली। मॉडल चलाने के लिए तैयार है।
 	None picked: the day the period starts.	कोई नहीं चुना: जिस दिन अवधि शुरू होती है।
 	Normal	सामान्य
+	Not a number	संख्या नहीं है
 	Not reached, even with {units}	पूरा नहीं हुआ, {units} के साथ भी नहीं
 	Number	संख्या
+	Number too large	संख्या बहुत बड़ी है
 	OEE	OEE
 	OEE availability	OEE उपलब्धता
 	OEE effectiveness	OEE प्रभावशीलता
@@ -538,6 +545,7 @@
 	Turned away on {id}	{id} पर लौटाई गईं
 	Two stations in series, read from an XPDL file.	XPDL फ़ाइल से पढ़े गए क्रम में दो स्टेशन।
 	Type	प्रकार
+	Type a time from 0 to {end} {unit}.	0 से {end} {unit} तक का समय लिखें।
 	Undid {action}	{action} पूर्ववत किया गया
 	Undo	पूर्ववत करें
 	Undo {action}	{action} पूर्ववत करें
@@ -552,6 +560,7 @@
 	Upper value	ऊपरी मान
 	Use System Setting	सिस्टम सेटिंग का उपयोग करें
 	Use for charts	चार्ट के लिए उपयोग करें
+	Use one kind of digits	एक ही प्रकार के अंक इस्तेमाल करें
 	Use these units in the model	इन इकाइयों को मॉडल में उपयोग करें
 	Utilisation	उपयोग दर
 	Value	मान
@@ -646,6 +655,7 @@
 	{n} waiting	{n} प्रतीक्षारत
 	{n} {unit} per second	{n} {unit} प्रति सेकंड
 	{property} (set to, mean)	{property} (सेट किया गया मान, माध्य)
+	{reason}. {field} is still {value}.	{reason}। {field} अब भी {value} है।
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – पुनरावृत्तियाँ दो अलग नतीजों में बँटीं: नीचे दी गई तालिका देखें।
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – पृष्ठभूमि {background}: {ratio}:1, आवश्यक {min}:1
 	{title}: now {now}, at most {most}	{title}: अभी {now}, अधिकतम {most}

@@ -110,6 +110,7 @@
 	Chart colours…	Farby grafov…
 	Chart hover	Graf pod ukazovateľom
 	Check every	Kontrola každých
+	Check the decimal and grouping marks	Skontrolujte desatinný oddeľovač a oddeľovač tisícov
 	Checks	Kontroly
 	Choose…	Vyberte…
 	Clear Menu	Vymazať ponuku
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	{from} prepojené s {to}
 	Connections	Prepojenia
 	Constant	Konštantné
+	Control outlines	Obrysy ovládacích prvkov
 	Copy	Kopírovať
 	Counts against	Pripisuje sa
 	Customer demand	Dopyt zákazníkov
@@ -167,6 +169,7 @@
 	Energy	Energia
 	Energy per part	Energia na diel
 	Enough: {units}, meeting the target in {p} of replications	Stačí: {units}, cieľ splnený v {p} replikácií
+	Enter a number	Zadajte číslo
 	Entered	Vstúpilo
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entity, ktoré nájdu čakáreň plnú, idú hneď týmto tokom (napríklad aby to neskôr skúsili znova), namiesto toho, aby sa stratili alebo čakali pred úlohou; tu sa počítajú ako stratené.
 	Entities give up waiting	Entity vzdávajú čakanie
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entity, ktoré vzdajú čakanie, idú týmto tokom (napríklad aby to neskôr skúsili znova); ostatné idú druhou cestou von z úlohy.
 	Erlang	Erlangovo
 	Error	Chyba
+	Error: {message}	Chyba: {message}
 	Estimate from three values…	Odhadnúť z troch hodnôt…
 	Evenly across	Rovnomerne vodorovne
 	Evenly down	Rovnomerne zvisle
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	Čas {id} prispôsobený
 	Fixed	Pevná
 	Flows	Toky
+	Focused header item	Položka záhlavia s fokusom
 	Forget the estimate	Zabudnúť odhad
 	Fri	pi
 	From	Z
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	Nenašli sa žiadne problémy. Model je pripravený na spustenie.
 	None picked: the day the period starts.	Nič nevybraté: deň, keď obdobie začína.
 	Normal	Normálne
+	Not a number	Nie je číslo
 	Not reached, even with {units}	Nesplnené ani s {units}
 	Number	Číslo
+	Number too large	Číslo je príliš veľké
 	OEE	OEE
 	OEE availability	Dostupnosť OEE
 	OEE effectiveness	Efektívnosť OEE
@@ -538,6 +545,7 @@
 	Turned away on {id}	Odmietnuté na {id}
 	Two stations in series, read from an XPDL file.	Dve stanice v sérii načítané zo súboru XPDL.
 	Type	Typ
+	Type a time from 0 to {end} {unit}.	Zadajte čas od 0 do {end} {unit}.
 	Undid {action}	Vrátené späť {action}
 	Undo	Späť
 	Undo {action}	Vrátiť späť {action}
@@ -552,6 +560,7 @@
 	Upper value	Horná hodnota
 	Use System Setting	Použiť systémové nastavenie
 	Use for charts	Použiť pre grafy
+	Use one kind of digits	Použite jeden druh číslic
 	Use these units in the model	Použiť tieto jednotky v modeli
 	Utilisation	Využitie
 	Value	Hodnota
@@ -646,6 +655,7 @@
 	{n} waiting	Čaká: {n}
 	{n} {unit} per second	{n} {unit} za sekundu
 	{property} (set to, mean)	{property} (nastavené na, priemer)
+	{reason}. {field} is still {value}.	{reason}. {field} je stále {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – replikácie sa rozdelili na dva odlišné výsledky: pozrite tabuľku nižšie.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadie „{background}“: {ratio}:1, treba {min}:1
 	{title}: now {now}, at most {most}	{title}: teraz {now}, najviac {most}

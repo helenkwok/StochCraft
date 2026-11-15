@@ -110,6 +110,7 @@
 	Chart colours…	Diagramfärger…
 	Chart hover	Diagram under pekaren
 	Check every	Kontroll var
+	Check the decimal and grouping marks	Kontrollera decimaltecken och tusentalsavgränsare
 	Checks	Kontroller
 	Choose…	Välj…
 	Clear Menu	Rensa menyn
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	Anslöt {from} till {to}
 	Connections	Anslutningar
 	Constant	Konstant
+	Control outlines	Konturer för kontroller
 	Copy	Kopiera
 	Counts against	Belastar
 	Customer demand	Kundefterfrågan
@@ -167,6 +169,7 @@
 	Energy	Energi
 	Energy per part	Energi per detalj
 	Enough: {units}, meeting the target in {p} of replications	Tillräckligt: {units}, når målet i {p} av replikationerna
+	Enter a number	Ange ett tal
 	Entered	Inkomna
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteter som finner väntrummet fullt tar genast detta flöde (för att försöka igen senare, till exempel) i stället för att gå förlorade eller vänta före uppgiften; de räknas här som förlorade.
 	Entities give up waiting	Entiteter ger upp väntan
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteter som ger upp väntan tar detta flöde (för att försöka igen senare, till exempel); de andra tar uppgiftens andra väg ut.
 	Erlang	Erlang
 	Error	Fel
+	Error: {message}	Fel: {message}
 	Estimate from three values…	Uppskatta från tre värden…
 	Evenly across	Fördela jämnt vågrätt
 	Evenly down	Fördela jämnt lodrätt
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	Tiden för {id} anpassad
 	Fixed	Fast
 	Flows	Flöden
+	Focused header item	Fokuserat element på toppfält
 	Forget the estimate	Glöm uppskattningen
 	Fri	fre
 	From	Från
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	Inga problem hittades. Modellen är redo att köras.
 	None picked: the day the period starts.	Inget valt: den dag perioden börjar.
 	Normal	Normal
+	Not a number	Inte ett tal
 	Not reached, even with {units}	Inte nått, inte ens med {units}
 	Number	Tal
+	Number too large	Talet är för stort
 	OEE	OEE
 	OEE availability	OEE-tillgänglighet
 	OEE effectiveness	OEE-effektivitet
@@ -538,6 +545,7 @@
 	Turned away on {id}	Avvisade på {id}
 	Two stations in series, read from an XPDL file.	Två stationer i serie, inlästa från en XPDL-fil.
 	Type	Typ
+	Type a time from 0 to {end} {unit}.	Skriv en tidpunkt från 0 till {end} {unit}.
 	Undid {action}	Ångrade {action}
 	Undo	Ångra
 	Undo {action}	Ångra {action}
@@ -552,6 +560,7 @@
 	Upper value	Övre värde
 	Use System Setting	Använd systeminställning
 	Use for charts	Använd för diagram
+	Use one kind of digits	Använd en sorts siffror
 	Use these units in the model	Använd dessa enheter i modellen
 	Utilisation	Utnyttjandegrad
 	Value	Värde
@@ -646,6 +655,7 @@
 	{n} waiting	{n} väntar
 	{n} {unit} per second	{n} {unit} per sekund
 	{property} (set to, mean)	{property} (angivet värde, medelvärde)
+	{reason}. {field} is still {value}.	{reason}. {field} är fortfarande {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replikationerna delar sig i två utfall; se tabellen nedan.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} på {background}: {ratio}:1, kräver {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, högst {most}

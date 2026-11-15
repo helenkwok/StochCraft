@@ -110,6 +110,7 @@
 	Chart colours…	ສີແຜນພູມ…
 	Chart hover	ແຜນພູມເມື່ອຊີ້
 	Check every	ກວດທຸກໆ
+	Check the decimal and grouping marks	ກວດເບິ່ງເຄື່ອງໝາຍທົດສະນິຍົມ ແລະ ເຄື່ອງໝາຍຂັ້ນຫຼັກພັນ
 	Checks	ການກວດ
 	Choose…	ເລືອກ…
 	Clear Menu	ລ້າງເມນູ
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	ເຊື່ອມຕໍ່ {from} ກັບ {to} ແລ້ວ
 	Connections	ການເຊື່ອມຕໍ່
 	Constant	ຄ່າຄົງທີ່
+	Control outlines	ເສັ້ນຂອບຂອງຕົວຄວບຄຸມ
 	Copy	ສຳເນົາ
 	Counts against	ນັບໃສ່ໜ້າວຽກ
 	Customer demand	ຄວາມຕ້ອງການຂອງລູກຄ້າ
@@ -167,6 +169,7 @@
 	Energy	ພະລັງງານ
 	Energy per part	ພະລັງງານຕໍ່ຊິ້ນ
 	Enough: {units}, meeting the target in {p} of replications	ພຽງພໍ: {units}, ບັນລຸເປົ້າໝາຍໃນ {p} ຂອງຮອບຈຳລອງຊ້ຳ
+	Enter a number	ປ້ອນຕົວເລກ
 	Entered	ຈຳນວນທີ່ເຂົ້າ
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	ເອນທິຕີທີ່ພົບວ່າຫ້ອງລໍຖ້າເຕັມ ຈະໄປຕາມເສັ້ນທາງນີ້ທັນທີ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ) ແທນທີ່ຈະສູນເສຍ ຫຼື ລໍຖ້າກ່ອນໜ້າວຽກ; ຢູ່ນີ້ພວກມັນຖືກນັບເປັນການສູນເສຍ.
 	Entities give up waiting	ເອນທິຕີເຊົາລໍຖ້າ
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	ເອນທິຕີທີ່ເຊົາລໍຖ້າຈະໄປຕາມເສັ້ນທາງນີ້ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ); ສ່ວນທີ່ເຫຼືອໄປທາງອອກອື່ນຂອງໜ້າວຽກ.
 	Erlang	ເອີລັງ
 	Error	ຂໍ້ຜິດພາດ
+	Error: {message}	ຂໍ້ຜິດພາດ: {message}
 	Estimate from three values…	ປະມານຈາກສາມຄ່າ…
 	Evenly across	ກະຈາຍເທົ່າກັນແນວນອນ
 	Evenly down	ກະຈາຍເທົ່າກັນແນວຕັ້ງ
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	ປັບເວລາຂອງ {id} ແລ້ວ
 	Fixed	ຄົງທີ່
 	Flows	ເສັ້ນທາງ
+	Focused header item	ລາຍການເທິງແຖບຫົວທີ່ມີໂຟກັສ
 	Forget the estimate	ລືມການປະມານ
 	Fri	ສຸກ
 	From	ຈາກ
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	ບໍ່ພົບບັນຫາ. ແບບຈຳລອງພ້ອມໃຊ້ງານ.
 	None picked: the day the period starts.	ບໍ່ໄດ້ເລືອກ: ມື້ທີ່ໄລຍະເລີ່ມ.
 	Normal	ນໍມອນ
+	Not a number	ບໍ່ແມ່ນຕົວເລກ
 	Not reached, even with {units}	ບໍ່ບັນລຸ ເຖິງມີ {units}
 	Number	ຈຳນວນ
+	Number too large	ຕົວເລກໃຫຍ່ເກີນໄປ
 	OEE	OEE
 	OEE availability	ຄວາມພ້ອມໃຊ້ OEE
 	OEE effectiveness	ປະສິດທິຜົນ OEE
@@ -538,6 +545,7 @@
 	Turned away on {id}	ຖືກປະຕິເສດທີ່ {id}
 	Two stations in series, read from an XPDL file.	ສອງສະຖານີຕໍ່ເນື່ອງ ອ່ານຈາກໄຟລ໌ XPDL.
 	Type	ປະເພດ
+	Type a time from 0 to {end} {unit}.	ພິມເວລາຈາກ 0 ຫາ {end} {unit}
 	Undid {action}	ຍົກເລີກ {action} ແລ້ວ
 	Undo	ຍ້ອນກັບ
 	Undo {action}	ຍ້ອນກັບ {action}
@@ -552,6 +560,7 @@
 	Upper value	ຄ່າເທິງ
 	Use System Setting	ໃຊ້ການຕັ້ງຄ່າລະບົບ
 	Use for charts	ໃຊ້ສຳລັບແຜນພູມ
+	Use one kind of digits	ໃຊ້ຕົວເລກພຽງຊະນິດດຽວ
 	Use these units in the model	ໃຊ້ຈຳນວນໜ່ວຍເຫຼົ່ານີ້ໃນແບບຈຳລອງ
 	Utilisation	ອັດຕາການນຳໃຊ້
 	Value	ຄ່າ
@@ -646,6 +655,7 @@
 	{n} waiting	ລໍຖ້າ {n}
 	{n} {unit} per second	{n} {unit} ຕໍ່ວິນາທີ
 	{property} (set to, mean)	{property} (ກຳນົດເປັນ, ຄ່າສະເລ່ຍ)
+	{reason}. {field} is still {value}.	{reason} {field} ຍັງເປັນ {value}
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) ແບ່ງເປັນສອງຜົນທີ່ຕ່າງກັນ: ເບິ່ງຕາຕະລາງດ້ານລຸ່ມ.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} ເທິງ {background}: {ratio}:1, ຕ້ອງການ {min}:1
 	{title}: now {now}, at most {most}	{title}: ຕອນນີ້ {now} ສູງສຸດ {most}

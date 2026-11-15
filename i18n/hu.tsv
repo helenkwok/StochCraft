@@ -110,6 +110,7 @@
 	Chart colours…	Diagramszínek…
 	Chart hover	Diagram a mutató alatt
 	Check every	Ellenőrzési időköz
+	Check the decimal and grouping marks	Ellenőrizze a tizedesjelet és az ezreselválasztót
 	Checks	Ellenőrzések
 	Choose…	Válasszon…
 	Clear Menu	Menü törlése
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	{from} összekötve ezzel: {to}
 	Connections	Kapcsolatok
 	Constant	Állandó
+	Control outlines	Vezérlők körvonala
 	Copy	Másolás
 	Counts against	Terhelt feladat
 	Customer demand	Vevői igény
@@ -167,6 +169,7 @@
 	Energy	Energia
 	Energy per part	Energia darabonként
 	Enough: {units}, meeting the target in {p} of replications	Elég: {units}, a cél az ismétlések {p} részében teljesül
+	Enter a number	Adjon meg egy számot
 	Entered	Belépett
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	A várakozóhelyet telve találó entitások azonnal ezt a folyamatot követik (például hogy később újra próbálkozzanak), ahelyett hogy elvesznének vagy a feladat előtt várakoznának; itt elveszettként számítanak.
 	Entities give up waiting	Az entitások lemondanak a várakozásról
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	A várakozásról lemondó entitások ezt a folyamatot követik (például hogy később újra próbálkozzanak); a többiek a feladat másik kiútját választják.
 	Erlang	Erlang
 	Error	Hiba
+	Error: {message}	Hiba: {message}
 	Estimate from three values…	Becslés három értékből…
 	Evenly across	Egyenletes elosztás vízszintesen
 	Evenly down	Egyenletes elosztás függőlegesen
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	{id} ideje illesztve
 	Fixed	Rögzített
 	Flows	Folyamatok
+	Focused header item	Fókuszban lévő fejlécelem
 	Forget the estimate	Becslés elvetése
 	Fri	P
 	From	Innen
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	Nem találhatók problémák. A modell futtatásra kész.
 	None picked: the day the period starts.	Nincs kiválasztva: az időszak kezdőnapja.
 	Normal	Normális
+	Not a number	Nem szám
 	Not reached, even with {units}	Nem teljesül, még ezzel sem: {units}
 	Number	Szám
+	Number too large	Túl nagy szám
 	OEE	OEE
 	OEE availability	OEE rendelkezésre állás
 	OEE effectiveness	OEE hatékonyság
@@ -538,6 +545,7 @@
 	Turned away on {id}	Elutasítottak itt: {id}
 	Two stations in series, read from an XPDL file.	Két sorba kapcsolt állomás, XPDL-fájlból beolvasva.
 	Type	Típus
+	Type a time from 0 to {end} {unit}.	Adjon meg egy időpontot 0 és {end} {unit} között.
 	Undid {action}	{action} visszavonva
 	Undo	Visszavonás
 	Undo {action}	Visszavonás: {action}
@@ -552,6 +560,7 @@
 	Upper value	Felső érték
 	Use System Setting	Rendszerbeállítás használata
 	Use for charts	Használat a diagramokhoz
+	Use one kind of digits	Egyféle számjegyet használjon
 	Use these units in the model	Ezek az egységek kerüljenek a modellbe
 	Utilisation	Kihasználtság
 	Value	Érték
@@ -646,6 +655,7 @@
 	{n} waiting	{n} várakozik
 	{n} {unit} per second	{n} {unit} másodpercenként
 	{property} (set to, mean)	{property} (beállított érték, átlag)
+	{reason}. {field} is still {value}.	{reason}. {field} továbbra is {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – az ismétlések két kimenetelre válnak szét: lásd az alábbi táblázatot.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – {background} háttér: {ratio}:1, legalább {min}:1 kell
 	{title}: now {now}, at most {most}	{title}: most {now}, legfeljebb {most}

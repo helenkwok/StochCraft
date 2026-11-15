@@ -110,6 +110,7 @@
 	Chart colours…	Kaavioiden värit…
 	Chart hover	Kaavio osoittimen alla
 	Check every	Tarkistusväli
+	Check the decimal and grouping marks	Tarkista desimaalierotin ja tuhaterotin
 	Checks	Tarkistukset
 	Choose…	Valitse…
 	Clear Menu	Tyhjennä valikko
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	Yhdistettiin {from} kohteeseen {to}
 	Connections	Yhteydet
 	Constant	Vakio
+	Control outlines	Ohjainten ääriviivat
 	Copy	Kopioi
 	Counts against	Kirjataan tehtävälle
 	Customer demand	Asiakkaan kysyntä
@@ -167,6 +169,7 @@
 	Energy	Energia
 	Energy per part	Energia osaa kohden
 	Enough: {units}, meeting the target in {p} of replications	Riittää: {units}, tavoite saavutetaan {p} toistoista
+	Enter a number	Kirjoita luku
 	Entered	Saapuneet
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteetit, jotka löytävät odotustilan täynnä, kulkevat heti tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen) sen sijaan, että ne menetettäisiin tai ne odottaisivat ennen tehtävää; ne lasketaan täällä menetetyiksi.
 	Entities give up waiting	Entiteetit luopuvat odottamisesta
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Odottamisesta luopuvat entiteetit kulkevat tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen); muut kulkevat tehtävän toista reittiä ulos.
 	Erlang	Erlang
 	Error	Virhe
+	Error: {message}	Virhe: {message}
 	Estimate from three values…	Arvioi kolmesta arvosta…
 	Evenly across	Jaa tasaisesti vaakasuunnassa
 	Evenly down	Jaa tasaisesti pystysuunnassa
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	Lohkon {id} aika sovitettu
 	Fixed	Kiinteä
 	Flows	Virrat
+	Focused header item	Kohdistettu yläpalkin kohde
 	Forget the estimate	Unohda arvio
 	Fri	pe
 	From	Kohteesta
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	Ongelmia ei löytynyt. Malli on valmis suoritettavaksi.
 	None picked: the day the period starts.	Ei valintaa: päivä, jona jakso alkaa.
 	Normal	Normaalijakauma
+	Not a number	Ei luku
 	Not reached, even with {units}	Ei saavutettu, ei edes yksiköillä {units}
 	Number	Luku
+	Number too large	Luku on liian suuri
 	OEE	OEE
 	OEE availability	OEE-käytettävyys
 	OEE effectiveness	OEE-tehokkuus
@@ -538,6 +545,7 @@
 	Turned away on {id}	Käännytetyt virrassa {id}
 	Two stations in series, read from an XPDL file.	Kaksi peräkkäistä asemaa, luettu XPDL-tiedostosta.
 	Type	Teksti
+	Type a time from 0 to {end} {unit}.	Kirjoita hetki väliltä 0–{end} {unit}.
 	Undid {action}	Kumottiin {action}
 	Undo	Kumoa
 	Undo {action}	Kumoa {action}
@@ -552,6 +560,7 @@
 	Upper value	Yläarvo
 	Use System Setting	Käytä järjestelmäasetusta
 	Use for charts	Käytä kaavioissa
+	Use one kind of digits	Käytä vain yhdenlaisia numeroita
 	Use these units in the model	Käytä näitä yksiköitä mallissa
 	Utilisation	Käyttöaste
 	Value	Arvo
@@ -646,6 +655,7 @@
 	{n} waiting	{n} odottaa
 	{n} {unit} per second	{n} {unit} sekunnissa
 	{property} (set to, mean)	{property} (asetettu arvo, keskiarvo)
+	{reason}. {field} is still {value}.	{reason}. {field} on edelleen {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – toistot jakautuvat kahteen eri lopputulokseen: katso alla olevaa taulukkoa.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – tausta {background}: {ratio}:1, vaaditaan {min}:1
 	{title}: now {now}, at most {most}	{title}: nyt {now}, enintään {most}

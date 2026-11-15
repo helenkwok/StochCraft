@@ -110,6 +110,7 @@
 	Chart colours…	Grafiekkleuren…
 	Chart hover	Grafiek onder aanwijzer
 	Check every	Controle elke
+	Check the decimal and grouping marks	Controleer het decimaalteken en het scheidingsteken voor duizendtallen
 	Checks	Controles
 	Choose…	Kies…
 	Clear Menu	Menu wissen
@@ -123,6 +124,7 @@
 	Connected {from} to {to}	{from} verbonden met {to}
 	Connections	Verbindingen
 	Constant	Constant
+	Control outlines	Omtrekken van bedieningselementen
 	Copy	Kopiëren
 	Counts against	Toegerekend aan
 	Customer demand	Klantvraag
@@ -167,6 +169,7 @@
 	Energy	Energie
 	Energy per part	Energie per onderdeel
 	Enough: {units}, meeting the target in {p} of replications	Genoeg: {units}, haalt het doel in {p} van de herhalingen
+	Enter a number	Voer een getal in
 	Entered	Binnengekomen
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteiten die de wachtruimte vol aantreffen, nemen meteen deze stroom (om het later opnieuw te proberen, bijvoorbeeld), in plaats van verloren te gaan of vóór de taak te wachten; ze tellen hier als verloren.
 	Entities give up waiting	Entiteiten haken af tijdens het wachten
@@ -174,6 +177,7 @@
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteiten die tijdens het wachten afhaken, nemen deze stroom (om het later opnieuw te proberen, bijvoorbeeld); de andere nemen de andere uitgang van de taak.
 	Erlang	Erlang
 	Error	Fout
+	Error: {message}	Fout: {message}
 	Estimate from three values…	Schatten uit drie waarden…
 	Evenly across	Gelijkmatig naast elkaar
 	Evenly down	Gelijkmatig onder elkaar
@@ -202,6 +206,7 @@
 	Fitted the time of {id}	Tijd van {id} gepast
 	Fixed	Vast
 	Flows	Stromen
+	Focused header item	Element op kopbalk met focus
 	Forget the estimate	Schatting vergeten
 	Fri	vr
 	From	Van
@@ -286,8 +291,10 @@
 	None found. The model is ready to run.	Geen problemen gevonden. Het model is klaar om uit te voeren.
 	None picked: the day the period starts.	Niets gekozen: de dag waarop de periode begint.
 	Normal	Normaal
+	Not a number	Geen getal
 	Not reached, even with {units}	Niet gehaald, zelfs niet met {units}
 	Number	Getal
+	Number too large	Getal te groot
 	OEE	OEE
 	OEE availability	OEE-beschikbaarheid
 	OEE effectiveness	OEE-effectiviteit
@@ -538,6 +545,7 @@
 	Turned away on {id}	Afgewezen op {id}
 	Two stations in series, read from an XPDL file.	Twee stations achter elkaar, gelezen uit een XPDL-bestand.
 	Type	Type
+	Type a time from 0 to {end} {unit}.	Typ een tijdstip van 0 tot {end} {unit}.
 	Undid {action}	{action} ongedaan gemaakt
 	Undo	Ongedaan maken
 	Undo {action}	{action} ongedaan maken
@@ -552,6 +560,7 @@
 	Upper value	Bovenwaarde
 	Use System Setting	Systeeminstelling gebruiken
 	Use for charts	Gebruiken voor grafieken
+	Use one kind of digits	Gebruik één soort cijfers
 	Use these units in the model	Deze eenheden in het model gebruiken
 	Utilisation	Bezettingsgraad
 	Value	Waarde
@@ -646,6 +655,7 @@
 	{n} waiting	{n} wachtend
 	{n} {unit} per second	{n} {unit} per seconde
 	{property} (set to, mean)	{property} (ingestelde waarde, gemiddelde)
+	{reason}. {field} is still {value}.	{reason}. {field} is nog steeds {value}.
 	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): de herhalingen vallen uiteen in twee uitkomsten; zie de tabel hieronder.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} op {background}: {ratio}:1, nodig {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, hoogstens {most}
