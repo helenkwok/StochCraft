@@ -1,7 +1,7 @@
 //! Choosing a warm-up: where the start-up of a series ends, by the MSER-5 rule.
 //!
 //! White's marginal standard error rule (MSER; K. P. White Jr., "An effective truncation
-//! heuristic for bias reduction in simulation output", *Simulation* 69(6):323–334, 1997) deletes
+//! heuristic for bias reduction in simulation output", *Simulation* 69(6):323–334, 1997, doi:10.1177/003754979706900601) deletes
 //! the first d observations of an output series Y₁ … Yₙ, choosing the d that minimises
 //!
 //! ```text
@@ -13,9 +13,11 @@
 //! MSER-5 applies it to the means of consecutive batches of 5 observations, which smooths the
 //! series and makes the choice more stable (K. P. White Jr., M. J. Cobb and S. C. Spratt, "A
 //! comparison of five steady-state truncation heuristics for simulation", *Proceedings of the
-//! 2000 Winter Simulation Conference*, 755–760). As those papers advise, a truncation in the
-//! second half of the series is not considered: there the statistic rests on too few batches,
-//! and a minimum there says the series is too short to show its steady state.
+//! 2000 Winter Simulation Conference*, 755–760, doi:10.1109/WSC.2000.899843). As is usually
+//! recommended, a truncation in the second half of the series is not considered: there the
+//! statistic rests on too few batches, and a minimum there says the series is too short to show
+//! its steady state. (The statistic is as secondary descriptions of these papers give it; the
+//! papers themselves were not at hand.)
 //!
 //! In a simulation the series is usually the mean, across replications, of a quantity recorded
 //! at fixed times (Welch's plot); the rule then says how many of those times to leave out.

@@ -64,9 +64,11 @@ impl Quantity {
         match kind {
             ElementKind::Server { .. } => &[QueueLength, WorkInProgress, Busy, Entered, Left],
             ElementKind::SharedTask { .. } => &[QueueLength, WorkInProgress, Entered, Left],
-            ElementKind::Delay { .. } | ElementKind::Batch { .. } | ElementKind::Unbatch => {
+            ElementKind::Delay { .. } | ElementKind::Batch { .. } => {
                 &[WorkInProgress, Entered, Left]
             }
+            // Splits each batch at once, holding nothing.
+            ElementKind::Unbatch => &[Entered, Left],
             ElementKind::Source { .. } => &[Entered, Left],
             ElementKind::Sink { .. } => &[Entered],
             ElementKind::ExclusiveGateway { .. } | ElementKind::ParallelGateway => &[Entered, Left],
@@ -196,6 +198,14 @@ pub struct WarmupSuggestion {
     /// start-up may last longer than half of it.
     pub too_short: bool,
     pub elements: Vec<ElementWarmup>,
+}
+
+impl WarmupSuggestion {
+    /// Whether the start-up matters at some task ([`ElementWarmup::matters`]): what the
+    /// `no_warmup` warning asks, and whether the suggestion is clearer than chance.
+    pub fn matters(&self) -> bool {
+        self.elements.iter().any(ElementWarmup::matters)
+    }
 }
 
 /// MSER-5's suggestion for one task.

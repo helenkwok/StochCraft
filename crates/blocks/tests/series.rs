@@ -355,3 +355,73 @@ fn a_stop_condition_gives_series_of_different_lengths() {
         .unwrap_or_else(|| panic!("no work in progress"));
     assert_eq!(wip.mean.len(), series.times.len());
 }
+
+#[test]
+fn each_kind_records_what_it_reports() {
+    // Every kind of element: batches made and split, a delay, both gateways, a pool.
+    let mut b = Builder::new();
+    let src = b.source("in", Dist::exponential_rate(2.0), None);
+    let pack = b.batch("pack", 2);
+    let ship = b.delay("ship", Dist::Constant(1.0));
+    let open = b.unbatch("open");
+    let pick = b.exclusive("pick");
+    let fork = b.parallel("fork");
+    let out = b.sink("out");
+    let lost = b.sink("lost");
+    b.connect(src, pack);
+    b.connect(pack, ship);
+    b.connect(ship, open);
+    b.connect(open, pick);
+    b.route(pick, fork, Some(0.5), None);
+    b.route(pick, lost, Some(0.5), None);
+    b.connect(fork, out);
+    let mut model = b.build(Experiment {
+        duration: 100.0,
+        ..Experiment::default()
+    });
+    model.elements.extend(plant().elements.iter().map(|e| {
+        let mut e = e.clone();
+        e.id = ElementId::unchecked(&format!("p-{}", e.id));
+        e
+    }));
+    let plant = plant();
+    model.resources = plant.resources.clone();
+    model.connections.extend(plant.connections.iter().map(|c| {
+        let mut c = c.clone();
+        c.id = ElementId::unchecked(&format!("p-{}", c.id));
+        c.from = ElementId::unchecked(&format!("p-{}", c.from));
+        c.to = ElementId::unchecked(&format!("p-{}", c.to));
+        c
+    }));
+    let c = compiled(&model).record_every(Some(5.0));
+    let r = run(&c, 1);
+    let rec = r.recording.clone().unwrap_or_default();
+    assert_eq!(rec.elements.len(), r.elements.len());
+    for (e, quantities) in r.elements.iter().zip(&rec.elements) {
+        assert!(!quantities.is_empty(), "{} records nothing", e.id);
+        for (q, values) in quantities {
+            let reported = match q {
+                Quantity::QueueLength => e.mean_queue_length.is_some(),
+                Quantity::WorkInProgress => e.work_in_progress.is_some(),
+                Quantity::Busy => e.utilisation.is_some(),
+                Quantity::Entered | Quantity::Left => true,
+            };
+            assert!(
+                reported,
+                "{} ({}) records {q:?} but reports none",
+                e.id, e.kind
+            );
+            assert_eq!(values.len(), rec.times.len());
+            assert!(values.iter().all(|v| v.is_finite() && *v >= 0.0));
+        }
+        // What something passed through is not flat (a pool records only its busy units).
+        if e.entered > 0 && e.kind != "resource" {
+            let entered = quantities.iter().find(|(q, _)| *q == Quantity::Entered);
+            assert!(
+                entered.is_some_and(|(_, v)| v.last() > v.first()),
+                "{}",
+                e.id
+            );
+        }
+    }
+}

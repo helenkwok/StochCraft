@@ -2159,7 +2159,8 @@ pub fn series(s: &stochcraft_blocks::Series) -> Value {
 /// A warm-up suggestion as JSON: the `method` (`mser-5`) and the `quantity` it judges
 /// (`work_in_progress`); the suggested `warmup` (in the model's time unit; `null` when every
 /// task's series is too short to tell) and the task it comes from (`at`); `too_short`, whether
-/// some task's series was still settling halfway through; and for each task (servers and tasks
+/// some task's series was still settling halfway through; `matters`, whether the start-up at
+/// some task is clearer than chance (what the `no_warmup` warning asks); and for each task (servers and tasks
 /// with shared resources, by id) its own `warmup`, the `shift` that leaving it out makes to the
 /// task's mean number inside and the `start` of the run against its second half (each `{mean,
 /// half_width, n}` or `null`), and whether the start-up `matters` (what the `no_warmup`
@@ -2192,6 +2193,7 @@ pub fn warmup_suggestion(w: &stochcraft_blocks::series::WarmupSuggestion) -> Val
         "warmup": w.warmup,
         "at": w.at.as_ref().map(ElementId::as_str),
         "too_short": w.too_short,
+        "matters": w.matters(),
         "elements": elements,
     })
 }

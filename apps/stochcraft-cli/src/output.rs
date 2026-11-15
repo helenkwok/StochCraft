@@ -285,6 +285,11 @@ fn warmup_line(results: &Value, out: &mut String) {
             let _ = write!(out, "cannot tell, still settling halfway through the run");
         }
     }
+    // MSER-5 cuts something from many runs with no start-up at all: say when the start of the
+    // run is no clearer than chance.
+    if w["matters"] == false && w["warmup"].as_f64() != Some(0.0) {
+        let _ = write!(out, " (no clearer than chance)");
+    }
     if w["too_short"] == true && w["warmup"].is_number() {
         let _ = write!(out, "; some task is still settling halfway through the run");
     }

@@ -94,6 +94,7 @@ fn a_run_carries_its_results_over_time() {
     let t = w["warmup"].as_f64().unwrap_or(0.0);
     assert!(t > 0.0 && t <= 1_000.0, "{w}");
     assert_eq!(w["elements"]["desk"]["matters"], true, "{w}");
+    assert_eq!(w["matters"], true, "{w}");
     assert_eq!(codes(&r), vec!["no_warmup"]);
     let message = r["warnings"][0]["message"].as_str().unwrap_or("");
     assert!(
@@ -137,6 +138,7 @@ fn a_light_queue_is_not_warned_about() {
     let r = ok(&mut e, "run", json!({ "replications": 10 }));
     assert!(codes(&r).is_empty(), "{}", r["warnings"]);
     assert!(r["warmup_suggestion"]["elements"]["desk"]["matters"] == false);
+    assert!(r["warmup_suggestion"]["matters"] == false);
 }
 
 #[test]
@@ -213,5 +215,63 @@ fn series_false_records_nothing_and_changes_no_result() {
         "results: {} bytes without the series, {} with",
         size(&without),
         size(&with)
+    );
+}
+
+/// mm1.bpmn with a result frequency of 30 minutes in its scenario.
+fn with_frequency() -> Vec<u8> {
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/models/mm1.bpmn");
+    let text = std::fs::read_to_string(&path).unwrap_or_default();
+    let old = r#"baseTimeUnit="min">"#;
+    assert!(text.contains(old));
+    text.replacen(old, r#"baseTimeUnit="min" baseResultFrequency="PT30M">"#, 1)
+        .into_bytes()
+}
+
+fn opened(bytes: &[u8]) -> Engine {
+    let mut e = Engine::new();
+    let r = e.open_bytes("mm1.bpmn", bytes, None);
+    assert!(r.is_ok(), "{r:?}");
+    e
+}
+
+fn saved(e: &Engine) -> Vec<u8> {
+    let r = e.save_bytes(false);
+    assert!(r.is_ok(), "{r:?}");
+    r.unwrap_or_default()
+}
+
+#[test]
+fn saves_in_place_keep_the_result_frequency() {
+    let bytes = with_frequency();
+    let mut e = opened(&bytes);
+    assert_eq!(e.model().experiment.result_frequency, Some(1_800.0));
+    // Saved unchanged: byte for byte.
+    assert_eq!(saved(&e), bytes);
+    // An unrelated edit, then a change of time unit: still there, still 30 minutes.
+    ok(&mut e, "experiment.set", json!({ "warmup": 500.0 }));
+    let again = opened(&saved(&e));
+    assert_eq!(again.model().experiment.result_frequency, Some(1_800.0));
+    assert_eq!(again.model().experiment.warmup, 500.0);
+    ok(&mut e, "experiment.set", json!({ "time_unit": "hour" }));
+    let again = opened(&saved(&e));
+    assert_eq!(again.model().experiment.result_frequency, Some(1_800.0));
+    // A new frequency is not silently dropped: a save in place, which does not write it yet,
+    // refuses with the reason.
+    let mut doc = ok(&mut e, "model.get", json!({}));
+    doc["experiment"]["result_frequency"] = json!(600.0);
+    ok(&mut e, "model.set", json!({ "model": doc }));
+    let refused = e.save_bytes(false);
+    assert!(
+        refused
+            .as_ref()
+            .is_err_and(|err| err.message.contains("would not read back")),
+        "{refused:?}"
+    );
+    // As a new file it is written.
+    let new = e.save_bytes(true).unwrap_or_default();
+    assert_eq!(
+        opened(&new).model().experiment.result_frequency,
+        Some(600.0)
     );
 }
