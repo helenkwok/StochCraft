@@ -502,9 +502,6 @@ fn results_export_as_csv_and_charts_are_drawn() {
     menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
     menu(&mut h, &["Model", "Run"]);
     finish_run(&mut h);
-    // Tall enough to show the charts under the trust line and the key measures.
-    h.set_size(egui::vec2(1000.0, 2400.0));
-    h.run();
     // Two charts for the question: where an entity's time goes (a straight line of one task),
     // and the waiting before the busiest task over the run; the rest folded.
     h.get_by_label_contains("in the system goes");
@@ -529,6 +526,26 @@ fn results_export_as_csv_and_charts_are_drawn() {
     assert!(text.contains("serve,Serve customer,server,utilisation,"));
     h.state_mut().exported("/tmp/mm1-results.csv");
     assert_eq!(h.state().status(), "Exported mm1-results.csv");
+}
+
+#[test]
+fn exporting_the_charts_brings_them_into_view_first() {
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    // In a 700-point window the charts are below the key measures, out of view, where a
+    // screenshot cannot see them.
+    let title = "Waiting before Serve customer over the run";
+    let bottom = |h: &Harness<'static, App>| h.get_by_label(title).rect().bottom();
+    assert!(bottom(&h) > 700.0, "{}", bottom(&h));
+    click(&mut h, "Export charts (PNG)");
+    for _ in 0..6 {
+        h.step();
+    }
+    // Scrolled into view before the screenshot is asked for.
+    let top = h.get_by_label(title).rect().top();
+    assert!(top > 0.0 && bottom(&h) < 700.0, "{top} {}", bottom(&h));
 }
 
 /// Workers that run the replications they are given on this thread, the last first, two per

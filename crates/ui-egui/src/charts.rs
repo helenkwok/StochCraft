@@ -248,22 +248,56 @@ fn parts(results: &Value, line: &[String]) -> Option<Vec<Part>> {
         .map(|id| {
             let e = elements.iter().find(|e| e["id"] == id.as_str())?;
             let m = &e["metrics"];
-            let left = m["left"]["mean"].as_f64().filter(|l| *l > 0.0)?;
-            let contents = m["mean_contents"]["mean"].as_f64()?;
             let wait = m["mean_wait"]["mean"].as_f64().unwrap_or(0.0);
-            let id = e["id"].as_str().unwrap_or("");
+            let work = match work_per_run(results, id) {
+                Some(w) => w,
+                None => {
+                    let left = m["left"]["mean"].as_f64().filter(|l| *l > 0.0)?;
+                    m["mean_contents"]["mean"].as_f64()? / (left / measured)
+                }
+            };
             Some(Part {
                 name: e["name"]
                     .as_str()
                     .filter(|n| !n.is_empty())
                     .unwrap_or(id)
                     .to_owned(),
-                // The number in service (a task's `mean_contents`) over the rate through it.
-                work: contents / (left / measured),
+                work,
                 wait,
             })
         })
         .collect()
+}
+
+/// A task's mean time worked on, run by run as the other means are: in each run whose
+/// statistics are used, the number in service (`mean_contents`) over the rate through it
+/// (`left` over the time that run measured), then the mean over those runs. With a stop
+/// condition the runs measure different times, and the means of the parts would not give it.
+/// `None` without each run's values and spans.
+fn work_per_run(results: &Value, id: &str) -> Option<f64> {
+    let spans: Vec<(f64, bool)> = results["measured"]["spans"]
+        .as_array()?
+        .iter()
+        .map(|s| {
+            let d = s["to"].as_f64().unwrap_or(0.0) - s["from"].as_f64().unwrap_or(0.0);
+            (d, s["used"].as_bool().unwrap_or(true))
+        })
+        .collect();
+    let contents = results["values"][id]["mean_contents"].as_array()?;
+    let left = results["values"][id]["left"].as_array()?;
+    if contents.len() != spans.len() || left.len() != spans.len() {
+        return None;
+    }
+    let works: Vec<f64> = spans
+        .iter()
+        .zip(contents.iter().zip(left))
+        .filter(|((d, used), _)| *used && *d > 0.0)
+        .filter_map(|((d, _), (c, l))| {
+            let (c, l) = (c.as_f64()?, l.as_f64().filter(|l| *l > 0.0)?);
+            Some(c / (l / d))
+        })
+        .collect();
+    (!works.is_empty()).then(|| works.iter().sum::<f64>() / works.len() as f64)
 }
 
 /// "Where an entity's time goes": one bar the length of the time in the system's parts, each
@@ -862,6 +896,25 @@ mod tests {
         let mut none = results.clone();
         none["elements"][0]["metrics"]["left"] = m(0.0);
         assert!(super::parts(&none, &["serve".to_owned()]).is_none());
+    }
+
+    #[test]
+    fn work_is_worked_out_run_by_run_when_runs_measure_different_times() {
+        // Two runs measuring 10 and 100: 10 and 50 left, 1 and 0.5 in service, so 1 worked on
+        // in each. The means of the parts (0.75 in service, 30 left in 55) would give 1.375.
+        let results = serde_json::json!({
+            "measured": { "mean_duration": 55.0, "spans": [
+                { "from": 0.0, "to": 10.0, "used": true },
+                { "from": 0.0, "to": 100.0, "used": true },
+            ] },
+            "elements": [{ "id": "serve", "name": "Serve", "kind": "server", "metrics": {
+                "left": { "mean": 30.0 }, "mean_contents": { "mean": 0.75 }, "mean_wait": { "mean": 2.0 },
+            } }],
+            "values": { "serve": { "mean_contents": [1.0, 0.5], "left": [10.0, 50.0] } },
+        });
+        let parts = super::parts(&results, &["serve".to_owned()]).unwrap_or_default();
+        assert_eq!(parts.len(), 1);
+        assert!((parts[0].work - 1.0).abs() < 1e-12, "{}", parts[0].work);
     }
 
     #[test]

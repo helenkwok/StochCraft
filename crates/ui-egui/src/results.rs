@@ -1028,9 +1028,14 @@ fn answers(results: &Value) -> Vec<(String, String)> {
         .map(Vec::as_slice)
         .unwrap_or(&[]);
     let mut out = Vec::new();
+    // A mean the runs split on describes none of them: a sentence built on one is left out, and
+    // the split's own finding says what happened instead.
+    let split = |m: &Value| m["split"].is_object();
 
     // What limits the flow.
-    if let Some(e) = busiest(results) {
+    if let Some(e) = busiest(results).filter(|e| {
+        !split(&e["metrics"]["utilisation"]) && !split(&e["metrics"]["mean_queue_length"])
+    }) {
         let m = &e["metrics"];
         let busy = m["utilisation"]["mean"].as_f64().unwrap_or(0.0);
         let blocked = m["time_blocked"]["mean"].as_f64().unwrap_or(0.0);
@@ -1057,13 +1062,20 @@ fn answers(results: &Value) -> Vec<(String, String)> {
         out.push((text, e["id"].as_str().unwrap_or("").to_owned()));
     }
 
-    // Where the time goes: the time in the system, and the longest wait in it.
-    let sink = elements.iter().find(|e| {
-        e["kind"] == "sink"
-            && e["metrics"]["mean_time_in_system"]["mean"]
-                .as_f64()
-                .is_some()
-    });
+    // Where the time goes: the time in the system, and the longest wait in it. Only with one
+    // departures block, so that every wait is part of the time in the system it reports (with
+    // two, the longest wait may be on the other one's route).
+    let sinks: Vec<&Value> = elements.iter().filter(|e| e["kind"] == "sink").collect();
+    let sink = match sinks.as_slice() {
+        [s] if s["metrics"]["mean_time_in_system"]["mean"]
+            .as_f64()
+            .is_some()
+            && !split(&s["metrics"]["mean_time_in_system"]) =>
+        {
+            Some(*s)
+        }
+        _ => None,
+    };
     let longest = elements
         .iter()
         .filter(|e| {
@@ -1075,7 +1087,7 @@ fn answers(results: &Value) -> Vec<(String, String)> {
             let w = |e: &Value| e["metrics"]["mean_wait"]["mean"].as_f64().unwrap_or(0.0);
             w(a).total_cmp(&w(b))
         });
-    if let (Some(s), Some(w)) = (sink, longest) {
+    if let (Some(s), Some(w)) = (sink, longest.filter(|w| !split(&w["metrics"]["mean_wait"]))) {
         let text = tf(
             "An entity spends {total} in the system, {wait} of it waiting at {block}.",
             &[
@@ -1107,7 +1119,7 @@ fn answers(results: &Value) -> Vec<(String, String)> {
             .map(|e| &e["metrics"][key])
             .filter(|m| m["mean"].as_f64().is_some())
             .collect();
-        (!ms.is_empty()).then(|| {
+        (!ms.is_empty() && !ms.iter().any(|m| split(m))).then(|| {
             ms.iter().fold((0.0, 0.0), |(mean, hw), m| {
                 (
                     mean + m["mean"].as_f64().unwrap_or(0.0),
@@ -1575,6 +1587,30 @@ mod tests {
             .map(|(_, b)| b)
             .collect();
         assert_eq!(blocks, ["paint", "paint", "out"]);
+    }
+
+    #[test]
+    fn a_finding_leaves_out_a_mean_the_runs_split_on_and_a_second_route() {
+        // Paint's utilisation split: no sentence on it (the split's own finding says so).
+        let mut split = line(0.01);
+        split["elements"][2]["metrics"]["utilisation"]["split"] = serde_json::json!({ "cut": 0.5 });
+        let said: Vec<String> = super::answers(&split).into_iter().map(|(t, _)| t).collect();
+        assert!(said.iter().all(|t| !t.contains("busy")), "{said:?}");
+        assert_eq!(said.len(), 2);
+        // Two departures blocks: the longest wait may be on the other route, so no time sentence.
+        let mut two = line(0.01);
+        if let Some(es) = two["elements"].as_array_mut() {
+            es.push(
+                serde_json::json!({ "id": "scrap", "name": "Scrapped", "kind": "sink",
+                "metrics": { "entered": { "mean": 8.0, "half_width": 1.0 },
+                             "mean_time_in_system": { "mean": 2.0, "half_width": 0.5 } } }),
+            );
+        }
+        let said: Vec<String> = super::answers(&two).into_iter().map(|(t, _)| t).collect();
+        assert!(
+            said.iter().all(|t| !t.contains("in the system,")),
+            "{said:?}"
+        );
     }
 
     /// Results of 10 replications in which only 4 had a mean wait, and work was left inside.

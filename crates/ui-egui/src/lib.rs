@@ -331,6 +331,9 @@ pub struct App {
     screenshot: std::sync::Arc<std::sync::Mutex<Option<std::sync::Arc<egui::ColorImage>>>>,
     /// The charts' area and scale when the screenshot was asked for.
     pending_png: Option<(egui::Rect, f32)>,
+    /// Frames left to bring the charts into view before exporting them: the screenshot holds
+    /// only what is on screen, and the charts sit below the key measures.
+    png_scroll: u8,
     /// Commands and their shortcuts (craft-keymap), and the frame's key dispatch.
     keymap: craft_keymap::Keymap,
     dispatcher: craft_keymap::egui::Dispatcher,
@@ -410,6 +413,7 @@ impl App {
             charts_rect: None,
             screenshot: std::sync::Arc::default(),
             pending_png: None,
+            png_scroll: 0,
             keymap: commands::keymap(craft_keymap::Platform::current()),
             dispatcher: craft_keymap::egui::Dispatcher::new(),
             recent: Vec::new(),
@@ -1524,7 +1528,9 @@ impl App {
                         } else {
                             (t("Download charts (PNG)"), t("Download table (CSV)"))
                         };
-                        png = ui.add(theme::secondary(ui, charts)).clicked();
+                        if ui.add(theme::secondary(ui, charts)).clicked() {
+                            self.png_scroll = 4;
+                        }
                         csv = ui.add(theme::secondary(ui, table)).clicked();
                     });
                 });
@@ -1539,6 +1545,23 @@ impl App {
                 ui.add_space(6.0);
                 let line = self.straight_line();
                 self.charts_rect = charts::show(ui, &results, line.as_deref());
+                // An export asked for: scroll the charts into view, and capture them once they
+                // are all on screen (or after a few frames, if the window is too short for them).
+                if self.png_scroll > 0 {
+                    if let Some(area) = self.charts_rect {
+                        if ui.clip_rect().contains_rect(area) || self.png_scroll == 1 {
+                            self.png_scroll = 0;
+                            png = true;
+                        } else {
+                            ui.scroll_to_rect(area, Some(egui::Align::TOP));
+                            self.png_scroll -= 1;
+                            ui.ctx().request_repaint();
+                        }
+                    } else {
+                        self.png_scroll = 0;
+                        png = true;
+                    }
+                }
                 ui.add_space(6.0);
                 results::show(ui, &results);
                 self.distribution_section(ui, &results);
