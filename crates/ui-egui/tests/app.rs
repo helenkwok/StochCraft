@@ -502,10 +502,19 @@ fn results_export_as_csv_and_charts_are_drawn() {
     menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
     menu(&mut h, &["Model", "Run"]);
     finish_run(&mut h);
-    // One chart per measure that applies, titled with its unit.
-    h.get_by_label("Utilisation (%)");
-    h.get_by_label("Mean wait (min)");
-    h.get_by_label("Mean time in system (min)");
+    // Tall enough to show the charts under the trust line and the key measures.
+    h.set_size(egui::vec2(1000.0, 2400.0));
+    h.run();
+    // Two charts for the question: where an entity's time goes (a straight line of one task),
+    // and the waiting before the busiest task over the run; the rest folded.
+    h.get_by_label_contains("in the system goes");
+    h.get_by_label("Waiting before Serve customer over the run");
+    h.get_by_label("Worked on");
+    h.get_by_label("More charts");
+    assert!(h.query_by_label("Utilisation (%)").is_none());
+    // And the findings above them.
+    h.get_by_label("What the run found");
+    h.get_by_label_contains("Serve customer is the busiest block: busy");
     click(&mut h, "Export table (CSV)");
     let requests = h.state_mut().take_requests();
     let [Request::Export { name, bytes }] = requests.as_slice() else {

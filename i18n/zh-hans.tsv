@@ -700,6 +700,22 @@ unit	yr	年
 	Set a {value} warm-up	设置 {value} 的预热期
 	The run is too short to suggest a warm-up: make it longer, then set one.	运行时间太短，无法建议预热期：请延长运行，然后设置预热期。
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} 个关键指标中有 {k} 个已稳定：每个都精确到 ± 5%（比例为 ± 1 个百分点）或更好。
+	What the run found	本次运行的发现
+	See the numbers	查看数字
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} 限制了流量：{busy} 的时间处于忙碌，前面平均有 {queue} 在等待。
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} 是最忙的区块：{busy} 的时间处于忙碌，前面平均有 {queue} 在等待。
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	一个实体在系统中停留 {total}，其中 {wait} 在 {block} 等待。
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	每 {unit} 到达 {in}，每 {unit} 离开系统 {out}。
+	Where an entity's {total} in the system goes	实体在系统中的 {total} 用在哪里
+	Worked on	加工中
+	Waiting	等待
+	{block}: worked on {work}, waiting {wait}	{block}：加工 {work}，等待 {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	各部分合计 {sum}；{total} 的其余部分是受阻时间或区块之间的时间。
+	Waiting before {block} over the run	运行期间 {block} 前的等待
+	Mean number waiting, with its 95% band	平均等待数量及其 95% 区间带
+	At {time}: {value} waiting	在 {time}：{value} 在等待
+	Still settling at the end of the run: run it longer to see where it levels off.	运行结束时仍在趋于稳定：请延长运行以查看它在何处趋平。
+	More charts	更多图表
 @plural	Added {n} block|Added {n} blocks	已添加 {n} 个区块
 @plural	Copied {n} block|Copied {n} blocks	已复制 {n} 个区块
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次运行

@@ -700,6 +700,22 @@ unit	yr	a
 	Set a {value} warm-up	Imposta un riscaldamento di {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	L'esecuzione è troppo breve per suggerire un riscaldamento: allungala, poi impostane uno.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} metriche principali su {m} sono stabili: ciascuna è nota a ± 5% (± 1 punto per una quota) o meglio.
+	What the run found	Cosa ha trovato l'esecuzione
+	See the numbers	Vedi i numeri
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} limita il flusso: occupato {busy} del tempo, con in media {queue} in attesa davanti.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} è il blocco più occupato: occupato {busy} del tempo, con in media {queue} in attesa davanti.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Un'entità passa {total} nel sistema, di cui {wait} in attesa presso {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} per {unit} lasciano il sistema, su {in} per {unit} in arrivo.
+	Where an entity's {total} in the system goes	Dove vanno i {total} di un'entità nel sistema
+	Worked on	In lavorazione
+	Waiting	In attesa
+	{block}: worked on {work}, waiting {wait}	{block}: lavorazione {work}, attesa {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Le parti sommano {sum}; il resto dei {total} è tempo bloccato o tra i blocchi.
+	Waiting before {block} over the run	Attesa davanti a {block} nel corso dell'esecuzione
+	Mean number waiting, with its 95% band	Numero medio in attesa, con la sua banda al 95%
+	At {time}: {value} waiting	A {time}: {value} in attesa
+	Still settling at the end of the run: run it longer to see where it levels off.	Ancora in assestamento alla fine dell'esecuzione: allungala per vedere dove si stabilizza.
+	More charts	Altri grafici
 @plural	Added {n} block|Added {n} blocks	Aggiunto {n} blocco|Aggiunti {n} blocchi
 @plural	Copied {n} block|Copied {n} blocks	Copiato {n} blocco|Copiati {n} blocchi
 @plural	Finished {n} run|Finished {n} runs	Completata {n} esecuzione|Completate {n} esecuzioni

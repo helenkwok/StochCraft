@@ -700,6 +700,22 @@ unit	yr	বছর
 	Set a {value} warm-up	{value} প্রাথমিক প্রস্তুতিকাল নির্ধারণ করুন
 	The run is too short to suggest a warm-up: make it longer, then set one.	প্রাথমিক প্রস্তুতিকাল প্রস্তাব করার জন্য পুনরাবৃত্তিটি খুব ছোট: এটি দীর্ঘ করুন, তারপর একটি নির্ধারণ করুন।
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m}টির মধ্যে {k}টি প্রধান পরিমাপক স্থির: প্রতিটি ± 5% (অনুপাতের ক্ষেত্রে ± 1 শতাংশ বিন্দু) বা তার চেয়ে ভালো নির্ভুলতায় জানা।
+	What the run found	পুনরাবৃত্তিতে যা পাওয়া গেল
+	See the numbers	সংখ্যাগুলি দেখুন
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} প্রবাহকে সীমিত করে: {busy} সময় ব্যস্ত, এর সামনে গড়ে {queue}টি অপেক্ষা করে।
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} সবচেয়ে ব্যস্ত ব্লক: {busy} সময় ব্যস্ত, এর সামনে গড়ে {queue}টি অপেক্ষা করে।
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	একটি একক সিস্টেমে {total} কাটায়, যার {wait} {block}-এ অপেক্ষায়।
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	প্রতি {unit}-এ {in}টি আসে, তার মধ্যে প্রতি {unit}-এ {out}টি সিস্টেম ছেড়ে যায়।
+	Where an entity's {total} in the system goes	একটি এককের সিস্টেমে {total} কোথায় যায়
+	Worked on	কাজ চলছে
+	Waiting	অপেক্ষা
+	{block}: worked on {work}, waiting {wait}	{block}: কাজ {work}, অপেক্ষা {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	অংশগুলির যোগফল {sum}; {total}-এর বাকিটা আটকে থাকা বা ব্লকগুলির মাঝের সময়।
+	Waiting before {block} over the run	পুনরাবৃত্তি জুড়ে {block}-এর সামনে অপেক্ষা
+	Mean number waiting, with its 95% band	গড় অপেক্ষমাণ সংখ্যা, 95% ব্যবধানসহ
+	At {time}: {value} waiting	{time}-এ: {value}টি অপেক্ষায়
+	Still settling at the end of the run: run it longer to see where it levels off.	পুনরাবৃত্তির শেষেও স্থির হচ্ছে: কোথায় সমান হয় দেখতে এটি দীর্ঘ করুন।
+	More charts	আরও চার্ট
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে

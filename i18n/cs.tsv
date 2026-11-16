@@ -700,6 +700,22 @@ unit	yr	r.
 	Set a {value} warm-up	Nastavit zahřívání {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Běh je příliš krátký na návrh zahřívání: prodlužte ho a pak zahřívání nastavte.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} z {m} klíčových metrik je ustálených: každá je známa s přesností ± 5% (± 1 procentní bod u podílu) nebo lepší.
+	What the run found	Co běh zjistil
+	See the numbers	Zobrazit čísla
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} omezuje tok: je obsazený {busy} času a před ním čeká v průměru {queue}.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} je nejvytíženější blok: je obsazený {busy} času a před ním čeká v průměru {queue}.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Entita stráví v systému {total}, z toho {wait} čekáním u bloku {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	Ze systému odchází {out} za {unit} z {in} za {unit} příchozích.
+	Where an entity's {total} in the system goes	Kam jde {total}, které entita stráví v systému
+	Worked on	Zpracování
+	Waiting	Čekání
+	{block}: worked on {work}, waiting {wait}	{block}: zpracování {work}, čekání {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Části dávají dohromady {sum}; zbytek z {total} je doba blokování nebo mezi bloky.
+	Waiting before {block} over the run	Čekání před blokem {block} v průběhu běhu
+	Mean number waiting, with its 95% band	Průměrný počet čekajících s 95% pásmem
+	At {time}: {value} waiting	V čase {time}: čeká {value}
+	Still settling at the end of the run: run it longer to see where it levels off.	Na konci běhu se stále ustaluje: prodlužte ho, abyste viděli, kde se vyrovná.
+	More charts	Další grafy
 @plural	Added {n} block|Added {n} blocks	Přidán {n} blok|Přidány {n} bloky|Přidáno {n} bloků
 @plural	Copied {n} block|Copied {n} blocks	Zkopírován {n} blok|Zkopírovány {n} bloky|Zkopírováno {n} bloků
 @plural	Finished {n} run|Finished {n} runs	Dokončen {n} běh|Dokončeny {n} běhy|Dokončeno {n} běhů

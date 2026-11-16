@@ -700,6 +700,22 @@ unit	yr	år
 	Set a {value} warm-up	Angiv en opvarmning på {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Kørslen er for kort til at foreslå en opvarmning: gør den længere, og angiv derefter en.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} af {m} vigtige målepunkter er stabile: hvert kendes med ± 5% (± 1 procentpoint for en andel) eller bedre.
+	What the run found	Hvad kørslen fandt
+	See the numbers	Se tallene
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} begrænser flowet: optaget {busy} af tiden, med {queue} ventende foran i gennemsnit.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} er den travleste blok: optaget {busy} af tiden, med {queue} ventende foran i gennemsnit.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	En enhed er {total} i systemet, heraf {wait} i kø ved {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} pr. {unit} forlader systemet, af {in} pr. {unit} der ankommer.
+	Where an entity's {total} in the system goes	Hvor en enheds {total} i systemet går hen
+	Worked on	Under bearbejdning
+	Waiting	Venter
+	{block}: worked on {work}, waiting {wait}	{block}: bearbejdning {work}, venter {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Delene giver tilsammen {sum}; resten af de {total} er tid blokeret eller mellem blokke.
+	Waiting before {block} over the run	Venten foran {block} gennem kørslen
+	Mean number waiting, with its 95% band	Gennemsnitligt antal ventende med 95%-bånd
+	At {time}: {value} waiting	Ved {time}: {value} venter
+	Still settling at the end of the run: run it longer to see where it levels off.	Er stadig ved at falde til ro ved slutningen af kørslen: gør den længere for at se, hvor den flader ud.
+	More charts	Flere diagrammer
 @plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
 @plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført

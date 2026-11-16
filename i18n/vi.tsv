@@ -700,6 +700,22 @@ unit	yr	năm
 	Set a {value} warm-up	Đặt giai đoạn khởi động {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Lần chạy quá ngắn để đề xuất giai đoạn khởi động: hãy kéo dài lần chạy rồi đặt giai đoạn khởi động.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k}/{m} chỉ số chính đã ổn định: mỗi chỉ số được biết đến mức ± 5% (± 1 điểm phần trăm với tỷ lệ) hoặc tốt hơn.
+	What the run found	Những gì lần chạy tìm thấy
+	See the numbers	Xem các con số
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} giới hạn dòng chảy: bận {busy} thời gian, trung bình có {queue} chờ phía trước.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} là khối bận nhất: bận {busy} thời gian, trung bình có {queue} chờ phía trước.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Một thực thể ở trong hệ thống {total}, trong đó {wait} là chờ tại {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} mỗi {unit} rời hệ thống, trên {in} mỗi {unit} đến.
+	Where an entity's {total} in the system goes	{total} của một thực thể trong hệ thống đi đâu
+	Worked on	Đang xử lý
+	Waiting	Đang chờ
+	{block}: worked on {work}, waiting {wait}	{block}: xử lý {work}, chờ {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Các phần cộng lại là {sum}; phần còn lại của {total} là thời gian bị chặn hoặc giữa các khối.
+	Waiting before {block} over the run	Chờ trước {block} trong suốt lần chạy
+	Mean number waiting, with its 95% band	Số trung bình đang chờ, với dải 95%
+	At {time}: {value} waiting	Tại {time}: {value} đang chờ
+	Still settling at the end of the run: run it longer to see where it levels off.	Vẫn đang ổn định ở cuối lần chạy: hãy kéo dài lần chạy để xem nó ổn định ở đâu.
+	More charts	Thêm biểu đồ
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy

@@ -700,6 +700,22 @@ unit	yr	v
 	Set a {value} warm-up	Aseta {value} alkulämmittely
 	The run is too short to suggest a warm-up: make it longer, then set one.	Ajo on liian lyhyt alkulämmittelyn ehdottamiseen: pidennä sitä ja aseta sitten alkulämmittely.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k}/{m} tärkeimmästä mittarista on vakiintunut: kukin tunnetaan ± 5% (osuuksilla ± 1 prosenttiyksikön) tarkkuudella tai paremmin.
+	What the run found	Mitä ajo osoitti
+	See the numbers	Katso luvut
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} rajoittaa virtausta: varattuna {busy} ajasta, ja sen edessä odottaa keskimäärin {queue}.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} on kuormitetuin lohko: varattuna {busy} ajasta, ja sen edessä odottaa keskimäärin {queue}.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Yksikkö viettää järjestelmässä {total}, siitä {wait} odottaen lohkossa {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	Järjestelmästä poistuu {out} / {unit}, saapuvia {in} / {unit}.
+	Where an entity's {total} in the system goes	Mihin yksikön {total} järjestelmässä kuluu
+	Worked on	Käsittelyssä
+	Waiting	Odottaa
+	{block}: worked on {work}, waiting {wait}	{block}: käsittely {work}, odotus {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Osat ovat yhteensä {sum}; loput ajasta {total} on estettynä tai lohkojen välissä.
+	Waiting before {block} over the run	Odotus ennen lohkoa {block} ajon aikana
+	Mean number waiting, with its 95% band	Odottavien keskimääräinen määrä ja sen 95 %:n vyöhyke
+	At {time}: {value} waiting	Kohdassa {time}: {value} odottaa
+	Still settling at the end of the run: run it longer to see where it levels off.	Vakiintuu yhä ajon lopussa: pidennä sitä nähdäksesi, mihin se tasaantuu.
+	More charts	Lisää kaavioita
 @plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
 @plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
 @plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui

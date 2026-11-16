@@ -700,6 +700,22 @@ unit	yr	a
 	Set a {value} warm-up	Definir aquecimento de {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	A execução é curta demais para sugerir um aquecimento: aumente-a e depois defina um.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} de {m} métricas principais estão estáveis: cada uma é conhecida com ± 5% (± 1 ponto percentual para uma proporção) ou melhor.
+	What the run found	O que a execução encontrou
+	See the numbers	Ver os números
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} limita o fluxo: ocupado {busy} do tempo, com {queue} esperando à frente em média.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} é o bloco mais ocupado: ocupado {busy} do tempo, com {queue} esperando à frente em média.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Uma entidade passa {total} no sistema, {wait} disso esperando em {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} por {unit} saem do sistema, de {in} por {unit} que chegam.
+	Where an entity's {total} in the system goes	Para onde vão os {total} de uma entidade no sistema
+	Worked on	Em processamento
+	Waiting	Esperando
+	{block}: worked on {work}, waiting {wait}	{block}: processamento {work}, espera {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	As partes somam {sum}; o resto dos {total} é tempo bloqueado ou entre blocos.
+	Waiting before {block} over the run	Espera diante de {block} ao longo da execução
+	Mean number waiting, with its 95% band	Número médio em espera, com sua faixa de 95%
+	At {time}: {value} waiting	Em {time}: {value} esperando
+	Still settling at the end of the run: run it longer to see where it levels off.	Ainda se estabilizando ao final da execução: aumente-a para ver onde se nivela.
+	More charts	Mais gráficos
 @plural	Added {n} block|Added {n} blocks	{n} bloco adicionado|{n} blocos adicionados
 @plural	Copied {n} block|Copied {n} blocks	{n} bloco copiado|{n} blocos copiados
 @plural	Finished {n} run|Finished {n} runs	Concluída {n} execução|Concluídas {n} execuções

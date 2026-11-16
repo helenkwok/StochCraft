@@ -700,6 +700,22 @@ unit	yr	an
 	Set a {value} warm-up	Définir un préchauffage de {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	L'exécution est trop courte pour suggérer un préchauffage : allongez-la, puis définissez-en un.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} indicateurs clés sur {m} sont stables : chacun est connu à ± 5 % (± 1 point pour une part) près ou mieux.
+	What the run found	Ce que l'exécution a trouvé
+	See the numbers	Voir les chiffres
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} limite le flux : occupé {busy} du temps, avec {queue} en attente devant lui en moyenne.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} est le bloc le plus occupé : occupé {busy} du temps, avec {queue} en attente devant lui en moyenne.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Une entité passe {total} dans le système, dont {wait} à attendre à {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} par {unit} quittent le système, pour {in} par {unit} qui arrivent.
+	Where an entity's {total} in the system goes	Où passent les {total} d'une entité dans le système
+	Worked on	En traitement
+	Waiting	En attente
+	{block}: worked on {work}, waiting {wait}	{block} : traitement {work}, attente {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Les parties totalisent {sum} ; le reste des {total} est du temps bloqué ou entre les blocs.
+	Waiting before {block} over the run	Attente devant {block} au fil de l'exécution
+	Mean number waiting, with its 95% band	Nombre moyen en attente, avec sa bande à 95 %
+	At {time}: {value} waiting	À {time} : {value} en attente
+	Still settling at the end of the run: run it longer to see where it levels off.	Encore en train de se stabiliser à la fin de l'exécution : allongez-la pour voir où elle se stabilise.
+	More charts	Plus de graphiques
 @plural	Added {n} block|Added {n} blocks	{n} bloc ajouté|{n} blocs ajoutés
 @plural	Copied {n} block|Copied {n} blocks	{n} bloc copié|{n} blocs copiés
 @plural	Finished {n} run|Finished {n} runs	{n} exécution terminée|{n} exécutions terminées

@@ -700,6 +700,22 @@ unit	yr	г.
 	Set a {value} warm-up	Задаване на загряване {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Изпълнението е твърде кратко, за да се предложи загряване: удължете го и след това задайте загряване.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} от {m} основни показатели са установени: всеки е известен с точност ± 5% (± 1 процентен пункт за дял) или по-добре.
+	What the run found	Какво установи изпълнението
+	See the numbers	Вижте числата
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ограничава потока: зает {busy} от времето, като пред него чакат средно {queue}.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} е най-натовареният блок: зает {busy} от времето, като пред него чакат средно {queue}.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Един обект прекарва {total} в системата, от които {wait} в чакане при {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} на {unit} напускат системата при {in} на {unit} пристигащи.
+	Where an entity's {total} in the system goes	Къде отиват {total} на обекта в системата
+	Worked on	Обработка
+	Waiting	Чакане
+	{block}: worked on {work}, waiting {wait}	{block}: обработка {work}, чакане {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Частите са общо {sum}; останалото от {total} е време в блокиране или между блоковете.
+	Waiting before {block} over the run	Чакане пред {block} по време на изпълнението
+	Mean number waiting, with its 95% band	Среден брой чакащи с 95% интервал
+	At {time}: {value} waiting	При {time}: чакат {value}
+	Still settling at the end of the run: run it longer to see where it levels off.	Още се установява в края на изпълнението: удължете го, за да видите къде се изравнява.
+	More charts	Още диаграми
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения

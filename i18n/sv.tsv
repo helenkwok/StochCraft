@@ -700,6 +700,22 @@ unit	yr	år
 	Set a {value} warm-up	Ange en uppvärmning på {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Körningen är för kort för att föreslå en uppvärmning: gör den längre och ange sedan en.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} av {m} viktiga mått är stabila: vart och ett är känt med ± 5% (± 1 procentenhet för en andel) eller bättre.
+	What the run found	Vad körningen fann
+	See the numbers	Se siffrorna
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} begränsar flödet: upptagen {busy} av tiden, med {queue} som väntar framför i genomsnitt.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} är det mest belastade blocket: upptagen {busy} av tiden, med {queue} som väntar framför i genomsnitt.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	En enhet tillbringar {total} i systemet, varav {wait} i kö vid {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} per {unit} lämnar systemet, av {in} per {unit} som anländer.
+	Where an entity's {total} in the system goes	Vart en enhets {total} i systemet tar vägen
+	Worked on	Under bearbetning
+	Waiting	Väntar
+	{block}: worked on {work}, waiting {wait}	{block}: bearbetning {work}, väntan {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Delarna blir sammanlagt {sum}; resten av de {total} är tid blockerad eller mellan block.
+	Waiting before {block} over the run	Väntan framför {block} under körningen
+	Mean number waiting, with its 95% band	Genomsnittligt antal som väntar, med 95 %-band
+	At {time}: {value} waiting	Vid {time}: {value} väntar
+	Still settling at the end of the run: run it longer to see where it levels off.	Stabiliseras fortfarande i slutet av körningen: gör den längre för att se var den planar ut.
+	More charts	Fler diagram
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara

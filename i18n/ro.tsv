@@ -700,6 +700,22 @@ unit	yr	a
 	Set a {value} warm-up	Setează o perioadă de încălzire de {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Rularea este prea scurtă pentru a sugera o perioadă de încălzire: prelungiți-o, apoi setați una.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} din {m} indicatori principali sunt stabili: fiecare este cunoscut cu ± 5% (± 1 punct procentual pentru o pondere) sau mai bine.
+	What the run found	Ce a găsit rularea
+	See the numbers	Vezi cifrele
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} limitează fluxul: ocupat {busy} din timp, cu {queue} în așteptare în fața lui în medie.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} este blocul cel mai ocupat: ocupat {busy} din timp, cu {queue} în așteptare în fața lui în medie.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	O entitate petrece {total} în sistem, din care {wait} așteptând la {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} pe {unit} părăsesc sistemul, din {in} pe {unit} care sosesc.
+	Where an entity's {total} in the system goes	Unde se duc cele {total} ale unei entități în sistem
+	Worked on	În prelucrare
+	Waiting	În așteptare
+	{block}: worked on {work}, waiting {wait}	{block}: prelucrare {work}, așteptare {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Părțile însumează {sum}; restul din {total} este timp blocat sau între blocuri.
+	Waiting before {block} over the run	Așteptarea în fața {block} pe parcursul rulării
+	Mean number waiting, with its 95% band	Numărul mediu în așteptare, cu banda de 95%
+	At {time}: {value} waiting	La {time}: {value} în așteptare
+	Still settling at the end of the run: run it longer to see where it levels off.	Încă se stabilizează la finalul rulării: prelungiți-o pentru a vedea unde se nivelează.
+	More charts	Mai multe grafice
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări

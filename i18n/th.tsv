@@ -700,6 +700,22 @@ unit	yr	ปี
 	Set a {value} warm-up	กำหนดระยะอุ่นเครื่อง {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	การรันสั้นเกินกว่าจะแนะนำระยะอุ่นเครื่องได้: ให้ยืดการรันออก แล้วจึงกำหนดระยะอุ่นเครื่อง
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	ตัวชี้วัดหลัก {k} จาก {m} คงที่แล้ว: แต่ละตัวทราบได้ภายใน ± 5% (± 1 จุดร้อยละสำหรับสัดส่วน) หรือดีกว่า
+	What the run found	สิ่งที่การรันพบ
+	See the numbers	ดูตัวเลข
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} จำกัดการไหล: ไม่ว่าง {busy} ของเวลา โดยมี {queue} รออยู่ข้างหน้าโดยเฉลี่ย
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} เป็นบล็อกที่ยุ่งที่สุด: ไม่ว่าง {busy} ของเวลา โดยมี {queue} รออยู่ข้างหน้าโดยเฉลี่ย
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	สิ่งหนึ่งใช้เวลา {total} ในระบบ ในจำนวนนั้น {wait} เป็นการรอที่ {block}
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} ต่อ {unit} ออกจากระบบ จาก {in} ต่อ {unit} ที่เข้ามา
+	Where an entity's {total} in the system goes	เวลา {total} ของสิ่งหนึ่งในระบบไปที่ใด
+	Worked on	กำลังทำงาน
+	Waiting	รอ
+	{block}: worked on {work}, waiting {wait}	{block}: ทำงาน {work}, รอ {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	ส่วนต่างๆ รวมกันได้ {sum} ส่วนที่เหลือของ {total} คือเวลาที่ถูกกีดขวางหรืออยู่ระหว่างบล็อก
+	Waiting before {block} over the run	การรอหน้า {block} ตลอดการรัน
+	Mean number waiting, with its 95% band	จำนวนที่รอโดยเฉลี่ย พร้อมแถบ 95%
+	At {time}: {value} waiting	ที่ {time}: รอ {value}
+	Still settling at the end of the run: run it longer to see where it levels off.	ยังไม่คงที่เมื่อสิ้นสุดการรัน: ให้ยืดการรันเพื่อดูว่าจะคงที่ที่ใด
+	More charts	แผนภูมิเพิ่มเติม
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ

@@ -1446,6 +1446,65 @@ impl App {
             .map_or_else(|| id.to_owned(), |e| e.name.clone())
     }
 
+    /// The tasks of a model that is one straight line, in flow order: one arrivals block, one
+    /// departures block, and between them tasks each with one way in and one way out, no
+    /// decisions, splits or batches. `None` for any other model, where the time an entity spends
+    /// is not the sum of each task's.
+    fn straight_line(&self) -> Option<Vec<String>> {
+        let model = self.engine.model();
+        let kind = |id: &str| {
+            model
+                .elements
+                .iter()
+                .find(|e| e.id.as_str() == id)
+                .map(|e| e.kind.name())
+        };
+        let sources: Vec<_> = model
+            .elements
+            .iter()
+            .filter(|e| e.kind.name() == "source")
+            .collect();
+        let sinks = model
+            .elements
+            .iter()
+            .filter(|e| e.kind.name() == "sink")
+            .count();
+        if sources.len() != 1 || sinks != 1 {
+            return None;
+        }
+        let mut line = Vec::new();
+        let mut at = sources[0].id.as_str().to_owned();
+        for _ in 0..=model.elements.len() {
+            let out: Vec<_> = model
+                .connections
+                .iter()
+                .filter(|c| c.from.as_str() == at)
+                .collect();
+            let [next] = out.as_slice() else {
+                return None;
+            };
+            let to = next.to.as_str();
+            if model
+                .connections
+                .iter()
+                .filter(|c| c.to.as_str() == to)
+                .count()
+                != 1
+            {
+                return None;
+            }
+            match kind(to)? {
+                "sink" => return Some(line),
+                "server" | "shared_task" | "delay" => {
+                    line.push(to.to_owned());
+                    at = to.to_owned();
+                }
+                _ => return None,
+            }
+        }
+        None
+    }
+
     /// The results: export buttons, the charts, then the table.
     fn results_view(&mut self, ui: &mut egui::Ui) {
         let Some(results) = self.results.clone() else {
@@ -1478,7 +1537,8 @@ impl App {
                 ui.add_space(10.0);
                 results::key(ui, &results);
                 ui.add_space(6.0);
-                self.charts_rect = charts::show(ui, &results);
+                let line = self.straight_line();
+                self.charts_rect = charts::show(ui, &results, line.as_deref());
                 ui.add_space(6.0);
                 results::show(ui, &results);
                 self.distribution_section(ui, &results);

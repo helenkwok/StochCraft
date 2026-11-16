@@ -700,6 +700,22 @@ unit	yr	r.
 	Set a {value} warm-up	Ustaw rozgrzewkę {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Uruchomienie jest za krótkie, by zaproponować rozgrzewkę: wydłuż je, a następnie ustaw rozgrzewkę.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} z {m} najważniejszych miar jest ustalonych: każda jest znana z dokładnością ± 5% (± 1 punkt procentowy dla udziału) lub lepszą.
+	What the run found	Co wykazało uruchomienie
+	See the numbers	Zobacz liczby
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ogranicza przepływ: zajęty przez {busy} czasu, a przed nim czeka średnio {queue}.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} to najbardziej zajęty blok: zajęty przez {busy} czasu, a przed nim czeka średnio {queue}.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Obiekt spędza w systemie {total}, z czego {wait} czekając przy {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} na {unit} opuszcza system, z {in} na {unit} przybywających.
+	Where an entity's {total} in the system goes	Na co obiekt zużywa {total} w systemie
+	Worked on	Obróbka
+	Waiting	Oczekiwanie
+	{block}: worked on {work}, waiting {wait}	{block}: obróbka {work}, oczekiwanie {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Części sumują się do {sum}; reszta z {total} to czas zablokowania lub między blokami.
+	Waiting before {block} over the run	Oczekiwanie przed {block} w trakcie uruchomienia
+	Mean number waiting, with its 95% band	Średnia liczba oczekujących z pasmem 95%
+	At {time}: {value} waiting	W chwili {time}: czeka {value}
+	Still settling at the end of the run: run it longer to see where it levels off.	Na końcu uruchomienia wciąż się stabilizuje: wydłuż je, aby zobaczyć, gdzie się wyrównuje.
+	More charts	Więcej wykresów
 @plural	Added {n} block|Added {n} blocks	Dodano {n} blok|Dodano {n} bloki|Dodano {n} bloków
 @plural	Copied {n} block|Copied {n} blocks	Skopiowano {n} blok|Skopiowano {n} bloki|Skopiowano {n} bloków
 @plural	Finished {n} run|Finished {n} runs	Zakończono {n} uruchomienie|Zakończono {n} uruchomienia|Zakończono {n} uruchomień
