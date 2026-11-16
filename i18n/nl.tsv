@@ -13,7 +13,7 @@
 
 @id	language.name	Nederlands
 	% down and up	% omlaag en omhoog
-	% of replications	% van de herhalingen
+	% of runs	% van de uitvoeringen
 	+ Add block	+ Blok toevoegen
 	95% interval of the share meeting the target: {lo} to {hi}	95%-interval van het aandeel dat het doel haalt: {lo} tot {hi}
 	95th percentile	95e percentiel
@@ -34,7 +34,7 @@
 	Add Pool	Pool toevoegen
 	Add a flow from…	Stroom toevoegen vanaf…
 	Add a flow to…	Stroom toevoegen naar…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Een eenheid toevoegen bij de drukste taak of pool tot genoeg herhalingen een doel halen. Het antwoord met elke tijd op zijn gemiddelde staat er ook bij; dat is meestal te klein.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Een eenheid toevoegen bij de drukste taak of pool tot genoeg uitvoeringen een doel halen. Het antwoord met elke tijd op zijn gemiddelde staat er ook bij; dat is meestal te klein.
 	Add alternative	Alternatief toevoegen
 	Add calendar	Kalender toevoegen
 	Add calendar entry	Kalenderitem toevoegen
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Alle tekst haalt de minimale contrasten.
 	Also: {rule}	Ook: {rule}
 	Alternative {n}	Alternatief {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Een entiteit neemt de eerste stroom waarvan de voorwaarde geldt; zonder voorwaarden wordt een stroom getrokken volgens de kansen (lege kansen delen wat de andere overlaten).
 	Analysis	Analyse
 	Appearance	Uiterlijk
 	Arrival limit	Aankomstlimiet
@@ -169,12 +170,12 @@
 	Ends early	Stopt eerder
 	Energy	Energie
 	Energy per part	Energie per onderdeel
-	Enough: {units}, meeting the target in {p} of replications	Genoeg: {units}, haalt het doel in {p} van de herhalingen
+	Enough: {units}, meeting the target in {p} of runs	Genoeg: {units}, haalt het doel in {p} van de uitvoeringen
 	Enter a number	Voer een getal in
 	Entered	Binnengekomen
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteiten die de wachtruimte vol aantreffen, nemen meteen deze stroom (om het later opnieuw te proberen, bijvoorbeeld), in plaats van verloren te gaan of vóór de taak te wachten; ze tellen hier als verloren.
 	Entities give up waiting	Entiteiten haken af tijdens het wachten
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entiteiten die aan het eind van een herhaling nog binnen zijn, tellen niet mee in de gemiddelde wachttijd en de gemiddelde tijd in het systeem.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entiteiten die aan het eind van een uitvoering nog binnen zijn, tellen niet mee in de gemiddelde wachttijd en de gemiddelde tijd in het systeem.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteiten die tijdens het wachten afhaken, nemen deze stroom (om het later opnieuw te proberen, bijvoorbeeld); de andere nemen de andere uitgang van de taak.
 	Erlang	Erlang
 	Error	Fout
@@ -252,7 +253,7 @@
 	Maximum	Maximum
 	Mean	Gemiddelde
 	Mean number inside	Gemiddeld aantal binnen
-	One replication of {n}: the results of the others differ.	Eén herhaling van {n}: de resultaten van de andere verschillen.
+	One run of {n}: the results of the others differ.	Eén uitvoering van {n}: de resultaten van de andere verschillen.
 	Save as a new BPMN file?	Opslaan als nieuw BPMN-bestand?
 	Still inside at the end	Aan het eind nog binnen
 	Mean work in progress	Gemiddeld onderhanden werk
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	Geen aankomsten buiten kalenders
 	No blocks yet. Open a model, or add blocks to build one.	Nog geen blokken. Open een model of voeg blokken toe om er een te maken.
 	No connections yet: join blocks below.	Nog geen verbindingen: verbind hieronder de blokken.
-	No replication met the stop condition: each ran to its time limit.	Geen herhaling haalde de stopvoorwaarde: elke liep tot haar tijdslimiet.
+	No run met the stop condition: each ran to its time limit.	Geen uitvoering haalde de stopvoorwaarde: elke liep tot haar tijdslimiet.
 	No results yet	Nog geen resultaten
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	In dit model is geen afkeur of herbewerking gemarkeerd, dus telt de OEE de kwaliteit als 100%.
 	No target	Geen doel
@@ -386,11 +387,11 @@
 	Repair time	Reparatietijd
 	Repeats	Herhaling
 	Replace Model	Model vervangen
-	Replication 1 · {time} of {end} {unit}	Herhaling 1 · {time} van {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Herhaling 1 · {time} van {end} {unit} · opwarmperiode
-	Replications	Herhalingen
-	Replications meeting the target	Herhalingen die het doel halen
-	Replications that never met the stop condition count as later than their time limit.	Herhalingen die de stopvoorwaarde nooit haalden, tellen als later dan hun tijdslimiet.
+	Run 1 · {time} of {end} {unit}	Uitvoering 1 · {time} van {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Uitvoering 1 · {time} van {end} {unit} · opwarmperiode
+	Runs	Uitvoeringen
+	Runs meeting the target	Uitvoeringen die het doel halen
+	Runs that never met the stop condition count as later than their time limit.	Uitvoeringen die de stopvoorwaarde nooit haalden, tellen als later dan hun tijdslimiet.
 	Resource pool	Hulpbronnenpool
 	Resource pools	Hulpbronnenpools
 	Restore	Venster herstellen
@@ -411,7 +412,7 @@
 	Run	Uitvoeren
 	Run cancelled	Uitvoering geannuleerd
 	Run experiment	Experiment uitvoeren
-	Run replication 1 step by step and see each block's queue on the diagram	Herhaling 1 stap voor stap uitvoeren en de wachtrij van elk blok in het diagram zien
+	Play run 1 step by step and see each block's queue on the diagram	Uitvoering 1 stap voor stap afspelen en de wachtrij van elk blok in het diagram zien
 	Run the experiment ({shortcut})	Het experiment uitvoeren ({shortcut})
 	Run the experiment again to see this result's spread.	Voer het experiment opnieuw uit om de spreiding van dit resultaat te zien.
 	Run the experiment at each value of one parameter, and compare a result.	Het experiment uitvoeren bij elke waarde van één parameter en een resultaat vergelijken.
@@ -419,7 +420,7 @@
 	Run the sweep	Reeks uitvoeren
 	Running	Wordt uitgevoerd
 	Running…	Wordt uitgevoerd…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Herhalingen gesplitst: {low_n} van {n} rond {low}, {high_n} rond {high}. Het gemiddelde ({mean}) mengt twee uitkomsten; bekijk elke groep.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Uitvoeringen gesplitst: {low_n} van {n} rond {low}, {high_n} rond {high}. Het gemiddelde ({mean}) mengt twee uitkomsten; bekijk elke groep.
 	Sat	za
 	Save	Opslaan
 	Save As…	Opslaan als…
@@ -467,7 +468,7 @@
 	Split batches	Batches splitsen
 	Split or join	Splitsen of samenvoegen
 	Split or join (all ways)	Splitsen of samenvoegen (alle routes)
-	Spread across replications	Spreiding over herhalingen
+	Spread across runs	Spreiding over uitvoeringen
 	Spread out	Verdelen
 	Stages (k)	Fasen (k)
 	Standard deviation	Standaardafwijking
@@ -498,19 +499,19 @@
 	Text on header	Tekst op kopbalk
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	De verbinding valt weg en de client probeert het opnieuw: de entiteit gaat meteen terug naar de kop van de wachtrij, en het werk dat eraan gedaan is, is verspild.
 	The entity waits on its server and the job carries on with what was left once the server is back.	De entiteit wacht bij haar server en de bewerking gaat verder met wat er over was zodra de server terug is.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Het interval reikt tot onder het doelaandeel van {share}, dus het is niet met 95% betrouwbaarheid aangetoond dat het aandeel wordt gehaald; meer herhalingen zouden het smaller maken.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Het interval reikt tot onder het doelaandeel van {share}, dus het is niet met 95% betrouwbaarheid aangetoond dat het aandeel wordt gehaald; meer uitvoeringen zouden het smaller maken.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	De bewerking stopt meteen: de entiteit gaat terug naar de kop van de wachtrij voor een willekeurige server binnen werktijd, en het werk dat eraan gedaan is, is verspild.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	De bewerking stopt meteen; de entiteit wacht bij haar server en de bewerking gaat verder met wat er over was zodra die server weer binnen werktijd is.
 	The last task with a resource it finished at	De laatste taak met een hulpbron die het onderdeel doorliep
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	De gemiddelde tijd tot de stopvoorwaarde is alleen over de herhalingen die haar haalden; de andere liepen tot hun tijdslimiet.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	De gemiddelde tijd tot de stopvoorwaarde is alleen over de uitvoeringen die haar haalden; de andere liepen tot hun tijdslimiet.
 	The model changed, so watching stopped	Het model is gewijzigd, dus het volgen is gestopt
 	The model has no calendars yet.	Het model heeft nog geen kalenders.
 	The model now has the units sizing found	Het model heeft nu de eenheden die het dimensioneren vond
 	The model: its experiment, connections and problems	Het model: experiment, verbindingen en problemen
 	The name is empty or already used.	De naam is leeg of al in gebruik.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	De herhalingen vallen uiteen in twee uitkomsten: {a} van {n} in de ene, {b} in de andere. {count} resultaten vallen op dezelfde manier uiteen, waaronder {result} ({element}); zie de tabel hieronder.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	De uitvoeringen vallen uiteen in twee uitkomsten: {a} van {n} in de ene, {b} in de andere. {count} resultaten vallen op dezelfde manier uiteen, waaronder {result} ({element}); zie de tabel hieronder.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	De server maakt de bewerking die hij heeft af en beëindigt dan zijn werktijd; tot dan telt hij als binnen werktijd.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Het aandeel herhalingen op of onder elke waarde. De band bevat de ware verdeling met {confidence} betrouwbaarheid.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Het aandeel uitvoeringen op of onder elke waarde. De band bevat de ware verdeling met {confidence} betrouwbaarheid.
 	The values are numbers, separated by semicolons or spaces	De waarden zijn getallen, gescheiden door puntkomma's of spaties
 	The whole clock	Alle tijd
 	Themes	Thema's
@@ -578,7 +579,7 @@
 	Warning	Waarschuwing
 	Watch a Run	Een uitvoering volgen
 	Watch a run	Een uitvoering volgen
-	Watching replication 1	Herhaling 1 wordt gevolgd
+	Watching run 1	Uitvoering 1 wordt gevolgd
 	Weak text	Gedempte tekst
 	Weak text on header	Gedempte tekst op kopbalk
 	Wed	wo
@@ -614,7 +615,7 @@
 	maximum {value}	maximum {value}
 	milliseconds	milliseconden
 	minutes	minuten
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k van N: slechts k van de N herhalingen hadden een waarde voor dat resultaat, en het gemiddelde en interval zijn over die k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k van N: slechts k van de N uitvoeringen hadden een waarde voor dat resultaat, en het gemiddelde en interval zijn over die k.
 	n = {k} of {n}	n = {k} van {n}
 	nothing yet	nog niets
 	per day	per dag
@@ -648,9 +649,8 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} en {second} verschillen {de} voor kijkers met rood-groenkleurenblindheid, nodig 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} en {second} verschillen {de} voor kijkers met rood-groenkleurenblindheid, nodig 8: onderscheid ze alleen met labels.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} en {second} verschillen {step} in lichtheid, nodig 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: een kans is een getal tussen 0 en 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} van {of} herhalingen haalden het doel: {p} (95%-interval {lo} tot {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} van {of} uitvoeringen haalden het doel: {p} (95%-interval {lo} tot {hi})
 	{name} — edited	{name} — bewerkt
 	{n} created	{n} gemaakt
 	{n} done	{n} klaar
@@ -659,12 +659,12 @@
 	{n} {unit} per second	{n} {unit} per seconde
 	{property} (set to, mean)	{property} (ingestelde waarde, gemiddelde)
 	{reason}. {field} is still {value}.	{reason}. {field} is nog steeds {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): de herhalingen vallen uiteen in twee uitkomsten; zie de tabel hieronder.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): de uitvoeringen vallen uiteen in twee uitkomsten; zie de tabel hieronder.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} op {background}: {ratio}:1, nodig {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, hoogstens {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95%-BI
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± is de halve breedte van een 95%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de herhalingen.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± is de halve breedte van een 95%-Student-t-betrouwbaarheidsinterval voor het gemiddelde over de uitvoeringen.
 	· no results yet	· nog geen resultaten
 unit	d	d
 unit	h	u
@@ -672,18 +672,27 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	j
+	How long one unit takes to serve one entity, drawn anew for each entity.	Hoe lang één eenheid nodig heeft om één entiteit te bedienen; voor elke entiteit opnieuw getrokken.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hoeveel entiteiten hier mogen wachten op een vrije eenheid, naast de entiteiten die bediend worden; zonder vinkje onbeperkt.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Hoeveel eenheden hier tegelijk bedienen, zoals machines of personeel, elk één entiteit tegelijk.
+	More settings	Meer instellingen
+	Must be from {min} to {max}	Moet tussen {min} en {max} liggen
+	Must be more than {min}	Moet groter zijn dan {min}
+	Must be {min} or more	Moet {min} of meer zijn
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
-@plural	Finished {n} replication|Finished {n} replications	{n} herhaling voltooid|{n} herhalingen voltooid
+@plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} geopend ({n} waarschuwing)|{file} geopend ({n} waarschuwingen)
 @plural	Removed {n} block|Removed {n} blocks	{n} blok verwijderd|{n} blokken verwijderd
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Voert {n} onafhankelijke herhaling van het model uit met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.|Voert {n} onafhankelijke herhalingen van het model uit met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	De stopvoorwaarde werd gehaald in {met} van {n} herhaling, na gemiddeld {time} {unit}.|De stopvoorwaarde werd gehaald in {met} van {n} herhalingen, na gemiddeld {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} van {n} herhaling voltooid|{done} van {n} herhalingen voltooid
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} herhaling|{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} herhalingen
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Doet {n} onafhankelijke uitvoering van het model met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.|Doet {n} onafhankelijke uitvoeringen van het model met startwaarde {seed}. De resultaten van elk element bevatten de halve breedte van een 95%-betrouwbaarheidsinterval.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	De stopvoorwaarde werd gehaald in {met} van {n} uitvoering, na gemiddeld {time} {unit}.|De stopvoorwaarde werd gehaald in {met} van {n} uitvoeringen, na gemiddeld {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} van {n} uitvoering voltooid|{done} van {n} uitvoeringen voltooid
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} uitvoering|{name}: {mean}{unit}\n95%-interval van {low} tot {high}{unit}\nover {n} uitvoeringen
 @plural	{n} block selected|{n} blocks selected	{n} blok geselecteerd|{n} blokken geselecteerd
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} herhaling per stap · startwaarde {seed}|{n} herhalingen per stap · startwaarde {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} herhaling · gemiddelde {mean} · van {min} tot {max}|{n} herhalingen · gemiddelde {mean} · van {min} tot {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} herhaling · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten|{n} herhalingen · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} herhaling · startwaarde {seed}|{n} herhalingen · startwaarde {seed}
-@plural	{n} replication|{n} replications	{n} herhaling|{n} herhalingen
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} uitvoering per stap · startwaarde {seed}|{n} uitvoeringen per stap · startwaarde {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} uitvoering · gemiddelde {mean} · van {min} tot {max}|{n} uitvoeringen · gemiddelde {mean} · van {min} tot {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} uitvoering · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten|{n} uitvoeringen · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} uitvoering · startwaarde {seed}|{n} uitvoeringen · startwaarde {seed}
+@plural	{n} run|{n} runs	{n} uitvoering|{n} uitvoeringen
+@plural	Run ({n} problem)|Run ({n} problems)	Uitvoeren ({n} probleem)|Uitvoeren ({n} problemen)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probleem: {blocks}|{n} problemen: {blocks}

@@ -74,26 +74,49 @@ pub(crate) fn default_block_name(
     }
 }
 
-/// The parameters each kind of block has, in the order the inspector shows them.
+/// The basic parameters of each kind of block, first in the inspector in this order: its
+/// capacity and main time.
 fn parameters(kind: &str) -> &'static [&'static str] {
     match kind {
-        "source" => &["interarrival", "limit"],
+        "source" => &["interarrival"],
+        "server" => &["capacity", "shifts", "service", "queue_capacity"],
+        // Its needs are edited by `needs_section` in pools.rs; service and priority here.
+        "shared_task" => &["service", "priority"],
+        "delay" => &["duration"],
+        "batch" => &["size"],
+        _ => &[],
+    }
+}
+
+/// The rest of a kind's parameters, folded under More settings, in this order.
+fn more_parameters(kind: &str) -> &'static [&'static str] {
+    match kind {
+        "source" => &["limit"],
         "server" => &[
-            "capacity",
-            "shifts",
-            "service",
-            "processing_by",
-            "queue_capacity",
             "transfer",
             "transfer_holds_sender",
             "setup",
+            "processing_by",
             "planned_run_time",
         ],
-        // Its needs are edited by `needs_section` in pools.rs; service and priority here.
-        "shared_task" => &["service", "processing_by", "priority"],
-        "delay" => &["duration", "processing_by"],
-        "batch" => &["size"],
+        "shared_task" | "delay" => &["processing_by"],
         _ => &[],
+    }
+}
+
+/// What the "?" beside a basic parameter's label explains.
+fn explanation(f: &str) -> Option<&'static str> {
+    match f {
+        "capacity" => Some(t(
+            "How many units serve here at the same time, such as machines or staff, each one entity at a time.",
+        )),
+        "service" => Some(t(
+            "How long one unit takes to serve one entity, drawn anew for each entity.",
+        )),
+        "queue_capacity" => Some(t(
+            "How many entities may wait here for a free unit, besides those being served; unticked, any number may.",
+        )),
+        _ => None,
     }
 }
 
@@ -132,7 +155,58 @@ pub(crate) fn params_schema(command: &str) -> Value {
 pub struct Problem {
     pub error: bool,
     pub at: Option<String>,
+    /// The engine's stable code for it (`zero_capacity`, `bad_distribution`…).
+    pub code: String,
     pub message: String,
+}
+
+impl Problem {
+    /// The message without the engine's "error at `id`: " or "error: ": the word is a label of
+    /// its own, and the place is the block shown.
+    pub fn short_message(&self) -> &str {
+        let m = &self.message;
+        ["error at `", "warning at `"]
+            .iter()
+            .find_map(|head| {
+                m.strip_prefix(head)
+                    .and_then(|rest| rest.split_once("`: "))
+                    .map(|(_, m)| m)
+            })
+            .or_else(|| m.strip_prefix("error: "))
+            .or_else(|| m.strip_prefix("warning: "))
+            .unwrap_or(m)
+    }
+
+    /// The field it concerns, as the inspector keys it under its block (`capacity`,
+    /// `service`, `breakdown/repair`) or the model page keys it (`x/replications`), when known.
+    pub fn field(&self) -> Option<String> {
+        let f = match self.code.as_str() {
+            "zero_capacity" => "capacity",
+            "zero_batch_size" => "size",
+            "no_time_between_arrivals" => "interarrival",
+            "planned_run_time_not_positive" => "planned_run_time",
+            "patience_negative" => "patience",
+            "health_check_interval_not_positive" => "health_check/check_interval",
+            "health_check_limit_not_valid" => "health_check/check_limit",
+            // "`id`: service: the mean …": the parameter named first.
+            "bad_distribution" => match self.short_message().split_once(':')?.0 {
+                p @ ("interarrival" | "service" | "duration" | "transfer" | "setup"
+                | "planned_run_time" | "patience") => p,
+                "time_to_failure" => "breakdown/time_to_failure",
+                "repair" => "breakdown/repair",
+                _ => return None,
+            },
+            "bad_experiment" => {
+                let m = self.short_message();
+                return ["replications", "warm-up", "duration"]
+                    .iter()
+                    .find(|f| m.contains(*f))
+                    .map(|f| format!("x/{}", f.replace("warm-up", "warmup")));
+            }
+            _ => return None,
+        };
+        Some(f.to_owned())
+    }
 }
 
 impl App {
@@ -161,9 +235,68 @@ impl App {
             .map(|d| Problem {
                 error: d["severity"] == "error",
                 at: d["at"].as_str().map(str::to_owned),
+                code: d["code"].as_str().unwrap_or("").to_owned(),
                 message: d["message"].as_str().unwrap_or("").to_owned(),
             })
             .collect()
+    }
+
+    /// The block a problem at `at` is shown on: the block itself, or the one a flow leaves (a
+    /// flow's problems are listed in its blocks' inspectors); `None` for the model page.
+    pub(crate) fn block_of(&self, at: Option<&str>) -> Option<String> {
+        let at = at?;
+        let m = self.engine.model();
+        if m.elements.iter().any(|e| e.id.as_str() == at) {
+            return Some(at.to_owned());
+        }
+        m.connections
+            .iter()
+            .find(|c| c.id.as_str() == at)
+            .map(|c| c.from.as_str().to_owned())
+            .filter(|from| m.elements.iter().any(|e| e.id.as_str() == from))
+    }
+
+    /// Shows the model's next error: the first one past those of the selected block, or the
+    /// first. Its block is selected (or the model page, for the experiment's), its field focused
+    /// when known, and the status bar says what is wrong. False when there is none.
+    pub(crate) fn go_to_problem(&mut self) -> bool {
+        let errors: Vec<Problem> = self.problems().into_iter().filter(|p| p.error).collect();
+        let blocks: Vec<Option<String>> = errors
+            .iter()
+            .map(|p| self.block_of(p.at.as_deref()))
+            .collect();
+        // Past the error shown last, while its page is still the one shown; otherwise past the
+        // selected block's last; otherwise the first.
+        let here = self
+            .problem_shown
+            .filter(|&i| i < errors.len() && blocks[i] == self.selected)
+            .or_else(|| {
+                self.selected.as_ref()?;
+                blocks.iter().rposition(|b| *b == self.selected)
+            });
+        let i = here.map_or(0, |i| (i + 1) % errors.len().max(1));
+        self.problem_shown = Some(i);
+        let Some(pr) = errors.get(i) else {
+            return false;
+        };
+        let block = blocks[i].clone();
+        self.show_block(block.clone());
+        form::focus(pr.field().map(|f| match &block {
+            Some(b) if !f.starts_with("x/") => format!("{b}/{f}"),
+            _ => f,
+        }));
+        self.report_error(pr.short_message().to_owned());
+        self.status_at = block;
+        true
+    }
+
+    /// Selects `block` (`None`: the model page) in the model view.
+    pub(crate) fn show_block(&mut self, block: Option<String>) {
+        self.show_results = false;
+        self.show_analysis = false;
+        self.canvas.flow = None;
+        self.canvas.multi.clear();
+        self.selected = block;
     }
 
     /// Adds a block of `kind` after the selection, joins the selection to it when the selected
@@ -242,6 +375,13 @@ impl App {
     pub(crate) fn editor(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         let problems = self.problems();
         let model = stochcraft_engine::wire::model(self.engine.model());
+        // A refused number belongs to the block it was typed for: showing another drops it
+        // (Esc in the field drops it too, and also goes back to the model).
+        if self.drafts_of != self.selected {
+            self.drafts.clear();
+            self.drafts_of = self.selected.clone();
+        }
+        let shown = self.selected.clone();
         egui::ScrollArea::vertical()
             .auto_shrink([false, false])
             .show(ui, |ui| {
@@ -267,6 +407,63 @@ impl App {
                     None => self.overview(ui, p, &model, &problems),
                 }
             });
+        // A field to focus on the page just drawn was taken, or is not there: forgotten. (One on
+        // a page chosen meanwhile, by a Show link, waits for that page.)
+        let page = match &shown {
+            Some(id) => format!("{id}/"),
+            None => "x/".to_owned(),
+        };
+        if form::focus_key().is_some_and(|k| k.starts_with(&page)) {
+            form::focus(None);
+        }
+    }
+
+    /// What is set of a block's parameters `fields`, in a line: each with its main number
+    /// ("Transfer time Constant 2 min, Setup Exponential 1 min"), or None.
+    fn summary(&self, el: &Value, fields: &[&str]) -> String {
+        let unit = self.time_unit_label();
+        let dist = |d: &Value| -> String {
+            let kind = form::choice_label(d["type"].as_str().unwrap_or(""));
+            match ["mean", "value", "mode"]
+                .iter()
+                .find_map(|k| d[*k].as_f64())
+            {
+                Some(x) => format!("{kind} {} {unit}", self.numbers.format(x, 0..=3)),
+                None => kind,
+            }
+        };
+        let parts: Vec<String> = fields
+            .iter()
+            .filter(|f| is_set(el, f) && **f != "transfer_holds_sender")
+            .map(|f| {
+                let v = &el[*f];
+                let label = form::label(f);
+                match *f {
+                    "breakdown" => format!(
+                        "{label}: {}, {}",
+                        dist(&v["time_to_failure"]),
+                        dist(&v["repair"])
+                    ),
+                    "patience" => dist(&v["time"]),
+                    "health_check" => {
+                        format!("{} {}", form::label("check_interval"), dist(&v["interval"]))
+                    }
+                    "setup" => format!("{label} {}", dist(&v["time"])),
+                    // Set only when false: no units outside the calendars.
+                    "available" => format!("{label}: {}", t("None")),
+                    _ if v["type"].is_string() => format!("{label} {}", dist(v)),
+                    _ => match v.as_f64() {
+                        Some(x) => format!("{label} {}", self.numbers.format(x, 0..=3)),
+                        None => label,
+                    },
+                }
+            })
+            .collect();
+        if parts.is_empty() {
+            t("None").to_owned()
+        } else {
+            parts.join(", ")
+        }
     }
 
     pub(crate) fn time_unit_label(&self) -> String {
@@ -289,7 +486,11 @@ impl App {
         }
 
         section(ui, t("Experiment"));
-        let schema = params_schema("experiment.set");
+        let mut schema = params_schema("experiment.set");
+        // The limits the model checks the experiment against, so its fields refuse the rest.
+        schema["properties"]["replications"]["minimum"] = json!(1);
+        schema["properties"]["warmup"]["minimum"] = json!(0.0);
+        schema["properties"]["duration"]["exclusiveMinimum"] = json!(0.0);
         let unit = self.time_unit_label();
         let x = model["experiment"].clone();
         for (f, time) in [
@@ -346,25 +547,20 @@ impl App {
                 (t("Warning"), p.warning)
             };
             ui.label(theme::strong(word).color(color));
-            // The engine's message starts "error at `id`: " or "error: "; the word is the label
-            // and the place is the inspector or the Show link, so only the rest is shown.
-            let message = ["error at `", "warning at `"]
-                .iter()
-                .find_map(|head| {
-                    pr.message
-                        .strip_prefix(head)
-                        .and_then(|rest| rest.split_once("`: "))
-                        .map(|(_, m)| m)
-                })
-                .or_else(|| pr.message.strip_prefix("error: "))
-                .or_else(|| pr.message.strip_prefix("warning: "))
-                .unwrap_or(&pr.message);
-            ui.label(message);
+            // The word is the label and the place is the inspector or the Show link, so only
+            // the rest of the engine's message is shown.
+            ui.label(pr.short_message());
             if link
                 && let Some(at) = &pr.at
                 && ui.link(tf("Show {id}", &[("id", at)])).clicked()
             {
-                self.selected = Some(at.clone());
+                // A flow's problem is shown on the block it leaves.
+                let block = self.block_of(Some(at));
+                self.show_block(block);
+                form::focus(
+                    pr.field()
+                        .and_then(|f| Some(format!("{}/{f}", self.selected.as_ref()?))),
+                );
             }
         });
     }
@@ -444,7 +640,13 @@ impl App {
         id: &str,
         fields: &[&str],
     ) {
-        let schema = params_schema("block.set");
+        let mut schema = params_schema("block.set");
+        // The limits the model checks, so the fields refuse the rest: a server has a unit (or
+        // none outside the calendars, with units by calendar), a batch at least one entity.
+        if !is_set(el, "shifts") {
+            schema["properties"]["capacity"]["minimum"] = json!(1);
+        }
+        schema["properties"]["size"]["minimum"] = json!(1);
         let unit = self.time_unit_label();
         let calendars = form::calendars(model);
         for f in fields {
@@ -469,8 +671,11 @@ impl App {
                 *f,
                 "interarrival" | "service" | "duration" | "transfer" | "planned_run_time"
             );
-            if let Some(v) = form::field(ui, &mut cx, Schema::new(&schema), &key, f, &current, time)
-            {
+            // The basics' "?", on the task's own fields (not a time by value, say).
+            form::explain(&key, explanation(f).filter(|_| el["kind"] != "delay"));
+            let changed = form::field(ui, &mut cx, Schema::new(&schema), &key, f, &current, time);
+            form::explain(&key, None);
+            if let Some(v) = changed {
                 self.execute("block.set", json!({ "id": id, *f: v }));
             }
         }
@@ -522,15 +727,28 @@ impl App {
         ui.label(theme::weak(ui, tf("id {id}", &[("id", &id)])).monospace());
         ui.add_space(8.0);
 
-        // The block's own problems, and those of the flows into and out of it.
+        // The block's own problems, and those of the flows into and out of it, in a place of
+        // fixed height (two lines, scrolling beyond), so the form under it doesn't move when one
+        // appears or goes.
         let flows = flows_of(model, &id);
-        for pr in problems.iter().filter(|pr| {
-            pr.at
-                .as_deref()
-                .is_some_and(|at| at == id || flows.iter().any(|f| f == at))
-        }) {
-            self.problem_row(ui, p, pr, false);
-        }
+        let mine: Vec<&Problem> = problems
+            .iter()
+            .filter(|pr| {
+                pr.at
+                    .as_deref()
+                    .is_some_and(|at| at == id || flows.iter().any(|f| f == at))
+            })
+            .collect();
+        egui::ScrollArea::vertical()
+            .id_salt(("block problems", id.as_str()))
+            .max_height(PROBLEMS_HEIGHT)
+            .min_scrolled_height(PROBLEMS_HEIGHT)
+            .auto_shrink([false, false])
+            .show(ui, |ui| {
+                for pr in mine {
+                    self.problem_row(ui, p, pr, false);
+                }
+            });
 
         if let Some(n) = self.text_field(ui, &format!("{id}/name"), t("Name"), &name, true) {
             self.execute("block.rename", json!({ "id": id, "name": n }));
@@ -547,6 +765,21 @@ impl App {
         if !fields.is_empty() {
             section(ui, t("Parameters"));
             self.block_fields(ui, model, el, &id, &fields);
+        }
+        // The rest, folded with a summary of what is set; open when anything is.
+        let more = more_parameters(&kind);
+        if !more.is_empty() {
+            ui.add_space(6.0);
+            let summary = self.summary(el, more);
+            fold(
+                ui,
+                &format!("{id}/more"),
+                t("More settings"),
+                &summary,
+                more.iter().any(|f| is_set(el, f)),
+                more.iter().any(|f| form::focus_waits(&format!("{id}/{f}"))),
+                |ui| self.block_fields(ui, model, el, &id, more),
+            );
         }
         // How a finite waiting room's size is set, once there is one.
         if kind == "server" && el["queue_capacity"].is_number() {
@@ -568,10 +801,17 @@ impl App {
                 t("Arrivals by calendar")
             };
             ui.add_space(6.0);
-            egui::CollapsingHeader::new(theme::strong(title))
-                .id_salt(format!("{id}/timed"))
-                .default_open(more.iter().any(|f| is_set(el, f)))
-                .show(ui, |ui| self.block_fields(ui, model, el, &id, more));
+            let summary = self.summary(el, more);
+            fold(
+                ui,
+                &format!("{id}/timed"),
+                title,
+                &summary,
+                more.iter().any(|f| is_set(el, f)),
+                // Open for a problem's field in it.
+                more.iter().any(|f| form::focus_waits(&format!("{id}/{f}"))),
+                |ui| self.block_fields(ui, model, el, &id, more),
+            );
         }
 
         if kind == "shared_task" {
@@ -590,15 +830,27 @@ impl App {
         // Patience, next to the flows entities that give up take; closed on a server without one.
         if kind == "server" {
             ui.add_space(6.0);
-            egui::CollapsingHeader::new(theme::strong(t("Patience")))
-                .id_salt(format!("{id}/patience"))
-                .default_open(el["patience"].is_object())
-                .show(ui, |ui| self.patience_section(ui, model, el, &id));
+            let summary = self.summary(el, &["patience"]);
+            fold(
+                ui,
+                &format!("{id}/patience"),
+                t("Patience"),
+                &summary,
+                el["patience"].is_object(),
+                form::focus_waits(&format!("{id}/patience")),
+                |ui| self.patience_section(ui, model, el, &id),
+            );
             ui.add_space(6.0);
-            egui::CollapsingHeader::new(theme::strong(t("Health check")))
-                .id_salt(format!("{id}/health_check"))
-                .default_open(el["health_check"].is_object())
-                .show(ui, |ui| self.health_check_section(ui, model, el, &id));
+            let summary = self.summary(el, &["health_check"]);
+            fold(
+                ui,
+                &format!("{id}/health_check"),
+                t("Health check"),
+                &summary,
+                el["health_check"].is_object(),
+                form::focus_waits(&format!("{id}/health_check")),
+                |ui| self.health_check_section(ui, model, el, &id),
+            );
         }
 
         section(ui, t("Flows"));
@@ -625,8 +877,10 @@ impl App {
         if decision {
             ui.label(theme::weak(
                 ui,
-                "An entity takes the first flow whose condition holds; with no conditions, a flow \
-                 drawn by the probabilities (blank ones share what the others leave).",
+                t(
+                    "An entity takes the first flow whose condition holds; with no conditions, a \
+                   flow drawn by the probabilities (blank ones share what the others leave).",
+                ),
             ));
             ui.add_space(4.0);
         }
@@ -666,10 +920,18 @@ impl App {
                         if !incoming && kind != "source" {
                             let c = connection(model, cid);
                             if decision {
-                                ui.horizontal(|ui| {
-                                    ui.add_space(12.0);
-                                    self.flow_fields(ui, cid, &c);
-                                });
+                                let refused = ui
+                                    .horizontal(|ui| {
+                                        ui.add_space(12.0);
+                                        self.flow_fields(ui, cid, &c)
+                                    })
+                                    .inner;
+                                if let Some(why) = refused {
+                                    ui.horizontal(|ui| {
+                                        ui.add_space(12.0);
+                                        theme::error_message(ui, why);
+                                    });
+                                }
                             }
                             ui.horizontal(|ui| {
                                 ui.add_space(12.0);
@@ -1008,36 +1270,66 @@ impl App {
     }
 
     /// A decision's way out: its probability and condition, each blank when unset. Each commits
-    /// on Enter or leaving the field, as one `flow.set`.
-    fn flow_fields(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) {
+    /// on Enter or leaving the field, as one `flow.set`. A probability that isn't a number from
+    /// 0 to 1 stays in its field, outlined, until it is fixed or Esc drops it; the reason is
+    /// returned, for the line under the row.
+    fn flow_fields(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) -> Option<String> {
         let p_now = c["probability"]
             .as_f64()
             .map(crate::results::grouped)
             .unwrap_or_default();
-        if let Some(t) = self.small_field(
+        let key = format!("{cid}/p");
+        // Marks the text in `key` as refused (see `small_field`).
+        let mark = format!("{key}!");
+        if let Some(typed) = self.small_field(
             ui,
-            &format!("{cid}/p"),
+            &key,
             &tf("Probability of {id}", &[("id", cid)]),
             "p",
             &p_now,
             56.0,
         ) {
-            let t = t.trim();
-            if t.is_empty() {
+            let typed = typed.trim();
+            self.drafts.remove(&mark);
+            if typed.is_empty() {
                 self.execute("flow.set", json!({ "id": cid, "probability": null }));
             } else {
                 // As the user's region writes it ("0,5" in German), or with a point.
-                match self.numbers.parse(t) {
+                let why = match self.numbers.parse(typed) {
                     Ok(v) if (0.0..=1.0).contains(&v) => {
                         self.execute("flow.set", json!({ "id": cid, "probability": v }));
+                        None
                     }
-                    _ => self.report_error(tf(
-                        "{id}: a probability is a number from 0 to 1",
-                        &[("id", cid)],
+                    Ok(_) => Some(tf(
+                        "Must be from {min} to {max}",
+                        &[("min", "0"), ("max", "1")],
                     )),
+                    Err(_) => Some(t("Not a number").to_owned()),
+                };
+                if let Some(why) = why {
+                    self.drafts.insert(key.clone(), typed.to_owned());
+                    self.drafts.insert(mark.clone(), why);
                 }
             }
         }
+        // Esc, or a fix, took the text away.
+        if !self.drafts.contains_key(&key) {
+            self.drafts.remove(&mark);
+        }
+        let refused = self.drafts.get(&mark).map(|why| {
+            if p_now.is_empty() {
+                why.clone()
+            } else {
+                tf(
+                    "{reason}. {field} is still {value}.",
+                    &[
+                        ("reason", why),
+                        ("field", t("Probability")),
+                        ("value", &p_now),
+                    ],
+                )
+            }
+        });
         let c_now = c["condition"].as_str().unwrap_or("").to_owned();
         if let Some(t) = self.small_field(
             ui,
@@ -1051,6 +1343,7 @@ impl App {
             let v = if t.is_empty() { Value::Null } else { json!(t) };
             self.execute("flow.set", json!({ "id": cid, "condition": v }));
         }
+        refused
     }
 
     /// Whether parts sent this way go back to be worked on again: rework, for the quality
@@ -1429,6 +1722,15 @@ impl App {
                 .font(egui::TextStyle::Monospace),
         );
         form::field_outline(ui, &r);
+        // Text its caller refused (marked `key!`), outlined as an error until it is fixed.
+        if self.drafts.contains_key(&format!("{key}!")) {
+            ui.painter().rect_stroke(
+                r.rect,
+                4.0,
+                egui::Stroke::new(1.5, theme::palette(ui.ctx()).error),
+                egui::StrokeKind::Inside,
+            );
+        }
         r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::TextInput, true, name));
         if r.has_focus() && ui.input(|i| i.key_pressed(egui::Key::Escape)) {
             self.drafts.remove(key);
@@ -1602,6 +1904,51 @@ impl App {
         });
         out
     }
+}
+
+/// The height of the inspector's place for its block's problems: two lines.
+const PROBLEMS_HEIGHT: f32 = 44.0;
+
+/// A folded part of the inspector: `title`, and beside it, while closed, `summary` (what is set
+/// in it, or None), which a screen reader hears as the title's description. It starts open
+/// when `set`, and opens for a problem's field in it (`wanted`). Its id is `salt`'s.
+fn fold(
+    ui: &mut egui::Ui,
+    salt: &str,
+    title: &str,
+    summary: &str,
+    set: bool,
+    wanted: bool,
+    body: impl FnOnce(&mut egui::Ui),
+) {
+    let r = egui::CollapsingHeader::new(theme::strong(title))
+        .id_salt(salt)
+        .default_open(set)
+        .open(wanted.then_some(true))
+        .show(ui, body);
+    let header = r.header_response;
+    ui.ctx()
+        .accesskit_node_builder(header.id, |n| n.set_description(summary));
+    if r.openness > 0.0 {
+        return;
+    }
+    // On the header's line, after its title, cut to the room there is.
+    let p = theme::palette(ui.ctx());
+    let left = header.rect.right() + 10.0;
+    let room = ui.max_rect().right() - left;
+    if room < 24.0 {
+        return;
+    }
+    let mut job = egui::text::LayoutJob::simple_singleline(
+        summary.to_owned(),
+        egui::TextStyle::Body.resolve(ui.style()),
+        p.text_weak,
+    );
+    job.wrap = egui::text::TextWrapping::truncate_at_width(room);
+    let galley = ui.painter().layout_job(job);
+    let top = header.rect.center().y - galley.size().y / 2.0;
+    ui.painter()
+        .galley(egui::pos2(left, top), galley, p.text_weak);
 }
 
 /// A section heading in a form: more space above than below.

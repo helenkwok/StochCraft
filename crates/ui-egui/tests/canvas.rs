@@ -43,9 +43,11 @@ fn mm1() -> Harness<'static, App> {
 fn shape(h: &Harness<'static, App>, name: &str) -> egui::Rect {
     h.query_all(By::new().role(Role::Button))
         .find(|n| {
+            // A shape is named by its kind and name; the problems chip ("1 problem: source-1")
+            // ends with names too.
             n.accesskit_node()
                 .label()
-                .is_some_and(|l| l != name && l.ends_with(&format!(" {name}")))
+                .is_some_and(|l| l != name && l.ends_with(&format!(" {name}")) && !l.contains(": "))
         })
         .unwrap_or_else(|| panic!("no shape for {name}"))
         .rect()

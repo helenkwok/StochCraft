@@ -1153,6 +1153,10 @@ pub struct Experiment {
     /// the duration is then its time limit. A StochCraft vendor extension on the scenario
     /// (`stochcraft:stop`), since BPSim runs for a fixed duration.
     pub stop: Option<Stop>,
+    /// How often results over time are recorded (BPSim scenario `baseResultFrequency`), in
+    /// seconds: an `xs:duration` in the file, so it does not depend on the time unit. `None`
+    /// when the file gives none (the run then records about 100 points over its length).
+    pub result_frequency: Option<f64>,
 }
 
 /// What ends a replication before its time limit. Checked after everything that happens at one
@@ -1197,6 +1201,7 @@ impl Default for Experiment {
             seed: 1,
             start: None,
             stop: None,
+            result_frequency: None,
         }
     }
 }
@@ -1503,6 +1508,19 @@ pub enum Problem {
         left: f64,
         utilisation: f64,
     },
+    /// Found from a run's results, not by [`Model::validate`]: the run had one replication, so
+    /// its results have no confidence interval and cannot be told from chance.
+    OneReplication,
+    /// Found from a run's results, not by [`Model::validate`]: a run with no warm-up and no stop
+    /// condition, in which the number inside a task settles only after about `warmup` (in
+    /// `unit`; `None`: later than half the run), by MSER-5 on its mean across replications, and
+    /// leaving that start-up out would move the task's mean number inside by `shift`, more than
+    /// chance. Its results are biased by the start from empty.
+    NoWarmup {
+        warmup: Option<f64>,
+        shift: f64,
+        unit: &'static str,
+    },
     /// A three-point estimate for an element with no time distribution to fit (or no such
     /// element).
     EstimateIgnored,
@@ -1598,6 +1616,8 @@ impl Problem {
             Problem::EndedInWarmup { .. } => "ended_in_warmup",
             Problem::Overloaded { .. } => "overloaded",
             Problem::NoSteadyState { .. } => "no_steady_state",
+            Problem::OneReplication => "one_replication",
+            Problem::NoWarmup { .. } => "no_warmup",
             Problem::EstimateIgnored => "estimate_ignored",
             Problem::BadEstimate { .. } => "bad_estimate",
             Problem::EstimateMismatch => "estimate_mismatch",
@@ -1891,6 +1911,32 @@ impl std::fmt::Display for Diagnostic {
                 "busy {:.1}% of the time and, on average, at least {backlog:.0} entities still waiting at the end against {left:.0} that left: work arrives faster than it is done, so the queue grows with the run length and its means describe no steady state (or the run ends with a backlog it could not clear)",
                 utilisation * 100.0
             ),
+            Problem::OneReplication => write!(
+                f,
+                "the run has one replication, so its results have no confidence interval (no ± half-width) and cannot be told from chance; run at least 2, and usually 10 or more"
+            ),
+            Problem::NoWarmup {
+                warmup: Some(w),
+                shift,
+                unit,
+            } => write!(
+                f,
+                "the run has no warm-up, and the number inside settles only after about {} {unit} (MSER-5 on its mean across replications): the start from empty {} its mean by {}; set a warm-up of about {} {unit}",
+                short(*w),
+                if *shift < 0.0 { "lowers" } else { "raises" },
+                short(shift.abs()),
+                short(*w)
+            ),
+            Problem::NoWarmup {
+                warmup: None,
+                shift,
+                unit: _,
+            } => write!(
+                f,
+                "the run has no warm-up, and the number inside is still settling halfway through the run (MSER-5 on its mean across replications): the start from empty {} its mean by {}; lengthen the run and set a warm-up",
+                if *shift < 0.0 { "lowers" } else { "raises" },
+                short(shift.abs())
+            ),
             Problem::EndedInWarmup { replications, of } => write!(
                 f,
                 "{replications} of {of} replications stopped before the warm-up ended; their statistics, all from the warm-up, are left out of every metric (their stop times still count)"
@@ -1909,6 +1955,16 @@ impl std::fmt::Display for Diagnostic {
                 "{parameter}: this normal distribution draws below 0 more than 1 time in 100 (its mean is less than 2.33 standard deviations), and each such time counts as 0, so the times are longer on average than its mean; use a truncated normal with min 0, or a log-normal"
             ),
         }
+    }
+}
+
+/// `v` to at most four decimals, without trailing zeros: a time for a message.
+fn short(v: f64) -> String {
+    let s = format!("{v:.4}");
+    if s.contains('.') {
+        s.trim_end_matches('0').trim_end_matches('.').to_owned()
+    } else {
+        s
     }
 }
 

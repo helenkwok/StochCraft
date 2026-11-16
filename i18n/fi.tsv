@@ -13,7 +13,7 @@
 
 @id	language.name	Suomi
 	% down and up	% alas ja ylös
-	% of replications	% toistoista
+	% of runs	% ajoista
 	+ Add block	+ Lisää lohko
 	95% interval of the share meeting the target: {lo} to {hi}	Tavoitteen saavuttavan osuuden 95 %:n väli: {lo}–{hi}
 	95th percentile	95. persentiili
@@ -34,7 +34,7 @@
 	Add Pool	Lisää pooli
 	Add a flow from…	Lisää virta kohteesta…
 	Add a flow to…	Lisää virta kohteeseen…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lisää yksikkö kuormitetuimpaan tehtävään tai pooliin, kunnes tarpeeksi monta toistoa saavuttaa tavoitteen. Myös vastaus, jossa jokainen aika on keskiarvossaan, näytetään; se on yleensä liian pieni.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lisää yksikkö kuormitetuimpaan tehtävään tai pooliin, kunnes tarpeeksi monta ajoa saavuttaa tavoitteen. Myös vastaus, jossa jokainen aika on keskiarvossaan, näytetään; se on yleensä liian pieni.
 	Add alternative	Lisää vaihtoehto
 	Add calendar	Lisää kalenteri
 	Add calendar entry	Lisää kalenterimerkintä
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Kaikki teksti täyttää vähimmäiskontrastit.
 	Also: {rule}	Lisäksi: {rule}
 	Alternative {n}	Vaihtoehto {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Entiteetti kulkee ensimmäistä virtaa, jonka ehto täyttyy; ilman ehtoja virta arvotaan todennäköisyyksien mukaan (tyhjät jakavat sen, mitä muut jättävät).
 	Analysis	Analyysi
 	Appearance	Ulkoasu
 	Arrival limit	Saapumisraja
@@ -169,12 +170,12 @@
 	Ends early	Päättyy aiemmin
 	Energy	Energia
 	Energy per part	Energia osaa kohden
-	Enough: {units}, meeting the target in {p} of replications	Riittää: {units}, tavoite saavutetaan {p} toistoista
+	Enough: {units}, meeting the target in {p} of runs	Riittää: {units}, tavoite saavutetaan {p} ajoista
 	Enter a number	Kirjoita luku
 	Entered	Saapuneet
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteetit, jotka löytävät odotustilan täynnä, kulkevat heti tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen) sen sijaan, että ne menetettäisiin tai ne odottaisivat ennen tehtävää; ne lasketaan täällä menetetyiksi.
 	Entities give up waiting	Entiteetit luopuvat odottamisesta
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Toiston lopussa yhä sisällä olevat yksiköt jäävät pois keskimääräisestä odotusajasta ja keskimääräisestä ajasta järjestelmässä.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Ajon lopussa yhä sisällä olevat yksiköt jäävät pois keskimääräisestä odotusajasta ja keskimääräisestä ajasta järjestelmässä.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Odottamisesta luopuvat entiteetit kulkevat tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen); muut kulkevat tehtävän toista reittiä ulos.
 	Erlang	Erlang
 	Error	Virhe
@@ -252,7 +253,7 @@
 	Maximum	Maksimi
 	Mean	Keskiarvo
 	Mean number inside	Keskimääräinen määrä sisällä
-	One replication of {n}: the results of the others differ.	Yksi toisto {n}:stä: muiden tulokset poikkeavat.
+	One run of {n}: the results of the others differ.	Yksi ajo {n}:stä: muiden tulokset poikkeavat.
 	Save as a new BPMN file?	Tallennetaanko uutena BPMN-tiedostona?
 	Still inside at the end	Lopussa yhä sisällä
 	Mean work in progress	Keskimääräinen keskeneräinen tuotanto
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	Ei saapumisia kalenterien ulkopuolella
 	No blocks yet. Open a model, or add blocks to build one.	Lohkoja ei vielä ole. Avaa malli tai lisää lohkoja luodaksesi mallin.
 	No connections yet: join blocks below.	Yhteyksiä ei vielä ole: yhdistä alla olevat lohkot.
-	No replication met the stop condition: each ran to its time limit.	Mikään toisto ei saavuttanut pysäytysehtoa: jokainen ajettiin aikarajaansa asti.
+	No run met the stop condition: each ran to its time limit.	Mikään ajo ei saavuttanut pysäytysehtoa: jokainen ajettiin aikarajaansa asti.
 	No results yet	Ei vielä tuloksia
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Tähän malliin ei ole merkitty hylkyä eikä uudelleentyöstöä, joten OEE laskee laaduksi 100 %.
 	No target	Ei tavoitetta
@@ -386,11 +387,11 @@
 	Repair time	Korjausaika
 	Repeats	Toistuu
 	Replace Model	Korvaa malli
-	Replication 1 · {time} of {end} {unit}	Toisto 1 · {time}/{end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Toisto 1 · {time}/{end} {unit} · alkulämmittely
-	Replications	Toistot
-	Replications meeting the target	Tavoitteen saavuttavat toistot
-	Replications that never met the stop condition count as later than their time limit.	Toistot, jotka eivät koskaan saavuttaneet pysäytysehtoa, lasketaan aikarajaansa myöhäisemmiksi.
+	Run 1 · {time} of {end} {unit}	Ajo 1 · {time}/{end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Ajo 1 · {time}/{end} {unit} · alkulämmittely
+	Runs	Ajot
+	Runs meeting the target	Tavoitteen saavuttavat ajot
+	Runs that never met the stop condition count as later than their time limit.	Ajot, jotka eivät koskaan saavuttaneet pysäytysehtoa, lasketaan aikarajaansa myöhäisemmiksi.
 	Resource pool	Resurssipooli
 	Resource pools	Resurssipoolit
 	Restore	Palauta ikkuna
@@ -411,7 +412,7 @@
 	Run	Suorita
 	Run cancelled	Suoritus peruutettu
 	Run experiment	Suorita koe
-	Run replication 1 step by step and see each block's queue on the diagram	Suorita toisto 1 vaihe vaiheelta ja näe kunkin lohkon jono kaaviossa
+	Play run 1 step by step and see each block's queue on the diagram	Suorita ajo 1 vaihe vaiheelta ja näe kunkin lohkon jono kaaviossa
 	Run the experiment ({shortcut})	Suorita koe ({shortcut})
 	Run the experiment again to see this result's spread.	Aja koe uudelleen nähdäksesi tämän tuloksen hajonnan.
 	Run the experiment at each value of one parameter, and compare a result.	Aja koe parametrin jokaisella arvolla ja vertaa tulosta.
@@ -419,7 +420,7 @@
 	Run the sweep	Aja läpikäynti
 	Running	Suoritetaan
 	Running…	Suoritetaan…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Toistot jakautuvat: {low_n}/{n} lähellä arvoa {low}, {high_n} lähellä arvoa {high}. Keskiarvo ({mean}) sekoittaa kaksi eri lopputulosta; katso kutakin ryhmää erikseen.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Ajot jakautuvat: {low_n}/{n} lähellä arvoa {low}, {high_n} lähellä arvoa {high}. Keskiarvo ({mean}) sekoittaa kaksi eri lopputulosta; katso kutakin ryhmää erikseen.
 	Sat	la
 	Save	Tallenna
 	Save As…	Tallenna nimellä…
@@ -467,7 +468,7 @@
 	Split batches	Erien purku
 	Split or join	Haaroita tai yhdistä
 	Split or join (all ways)	Haaroita tai yhdistä (kaikki reitit)
-	Spread across replications	Hajonta toistojen välillä
+	Spread across runs	Hajonta ajojen välillä
 	Spread out	Jaa tasaisesti
 	Stages (k)	Vaiheet (k)
 	Standard deviation	Keskihajonta
@@ -498,19 +499,19 @@
 	Text on header	Yläpalkin teksti
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Yhteys katkeaa ja asiakas yrittää uudelleen: entiteetti palaa heti jonon kärkeen, ja siihen tehty työ hukataan.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteetti odottaa palvelimellaan, ja työ jatkuu jäljellä olevasta, kun palvelin on palannut.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Väli ulottuu alle tavoiteosuuden {share}, joten osuuden saavuttamista ei ole osoitettu 95 %:n luottamuksella; useampi toisto kaventaisi sitä.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Väli ulottuu alle tavoiteosuuden {share}, joten osuuden saavuttamista ei ole osoitettu 95 %:n luottamuksella; useampi ajo kaventaisi sitä.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Työ keskeytyy heti: entiteetti palaa jonon kärkeen odottamaan mitä tahansa vuorossa olevaa palvelinta, ja siihen tehty työ hukataan.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Työ keskeytyy heti; entiteetti odottaa palvelimellaan, ja työ jatkuu jäljellä olevasta, kun tuo palvelin on taas vuorossa.
 	The last task with a resource it finished at	Viimeisin resurssia käyttävä tehtävä, jonka osa läpäisi
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Keskimääräinen aika pysäytysehtoon lasketaan vain toistoista, jotka saavuttivat sen; muut ajettiin aikarajaansa asti.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Keskimääräinen aika pysäytysehtoon lasketaan vain ajoista, jotka saavuttivat sen; muut ajettiin aikarajaansa asti.
 	The model changed, so watching stopped	Malli muuttui, joten seuraaminen lopetettiin
 	The model has no calendars yet.	Mallissa ei ole vielä kalentereita.
 	The model now has the units sizing found	Mallissa on nyt mitoituksen löytämät yksiköt
 	The model: its experiment, connections and problems	Malli: koe, yhteydet ja ongelmat
 	The name is empty or already used.	Nimi on tyhjä tai jo käytössä.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Toistot jakautuvat kahteen eri lopputulokseen: {a}/{n} yhteen, {b} toiseen. {count} tulosta jakautuu samalla tavalla, niiden joukossa {result} ({element}); katso alla olevaa taulukkoa.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Ajot jakautuvat kahteen eri lopputulokseen: {a}/{n} yhteen, {b} toiseen. {count} tulosta jakautuu samalla tavalla, niiden joukossa {result} ({element}); katso alla olevaa taulukkoa.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Palvelin tekee kesken olevan työnsä valmiiksi ja lopettaa sitten vuoronsa; siihen asti se lasketaan vuorossa olevaksi.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Niiden toistojen osuus, jotka ovat kunkin arvon suuruisia tai pienempiä. Vyöhyke sisältää todellisen jakauman {confidence} luottamuksella.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Niiden ajojen osuus, jotka ovat kunkin arvon suuruisia tai pienempiä. Vyöhyke sisältää todellisen jakauman {confidence} luottamuksella.
 	The values are numbers, separated by semicolons or spaces	Arvot ovat lukuja, jotka erotetaan puolipisteillä tai välilyönneillä
 	The whole clock	Koko aika
 	Themes	Teemat
@@ -578,7 +579,7 @@
 	Warning	Varoitus
 	Watch a Run	Seuraa ajoa
 	Watch a run	Seuraa ajoa
-	Watching replication 1	Seurataan toistoa 1
+	Watching run 1	Seurataan ajoa 1
 	Weak text	Himmeä teksti
 	Weak text on header	Yläpalkin himmeä teksti
 	Wed	ke
@@ -614,7 +615,7 @@
 	maximum {value}	maksimi {value}
 	milliseconds	millisekuntia
 	minutes	minuuttia
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k/N: vain k toistolla N:stä oli arvo tälle tulokselle, ja sen keskiarvo ja väli lasketaan näistä k:sta.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k/N: vain k ajolla N:stä oli arvo tälle tulokselle, ja sen keskiarvo ja väli lasketaan näistä k:sta.
 	n = {k} of {n}	n = {k}/{n}
 	nothing yet	ei vielä mitään
 	per day	päivässä
@@ -648,9 +649,8 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} ja {second} – ero puna-vihervärisokealle katsojalle {de}, vaaditaan 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} ja {second} – ero puna-vihervärisokealle katsojalle {de}, vaaditaan 8: erota ne vain tunnisteiden avulla.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ja {second} – vaaleuden ero {step}, vaaditaan 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: todennäköisyyden on oltava luku väliltä 0–1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met}/{of} toistoa saavutti tavoitteen: {p} (95 %:n väli {lo}–{hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met}/{of} ajoa saavutti tavoitteen: {p} (95 %:n väli {lo}–{hi})
 	{name} — edited	{name} — muokattu
 	{n} created	{n} luotu
 	{n} done	{n} valmis
@@ -659,12 +659,12 @@
 	{n} {unit} per second	{n} {unit} sekunnissa
 	{property} (set to, mean)	{property} (asetettu arvo, keskiarvo)
 	{reason}. {field} is still {value}.	{reason}. {field} on edelleen {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – toistot jakautuvat kahteen eri lopputulokseen: katso alla olevaa taulukkoa.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – ajot jakautuvat kahteen eri lopputulokseen: katso alla olevaa taulukkoa.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – tausta {background}: {ratio}:1, vaaditaan {min}:1
 	{title}: now {now}, at most {most}	{title}: nyt {now}, enintään {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95%:n luottamusväli
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± tarkoittaa toistojen yli lasketun keskiarvon 95 %:n Student-t-luottamusvälin puolileveyttä.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± tarkoittaa ajojen yli lasketun keskiarvon 95 %:n Student-t-luottamusvälin puolileveyttä.
 	· no results yet	· ei vielä tuloksia
 unit	d	pv
 unit	h	h
@@ -672,18 +672,27 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	v
+	How long one unit takes to serve one entity, drawn anew for each entity.	Kuinka kauan yhdeltä yksiköltä kestää palvella yksi entiteetti; arvotaan uudelleen jokaiselle entiteetille.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Kuinka monta entiteettiä saa odottaa täällä vapaata yksikköä palveltavien lisäksi; ilman valintaa rajattomasti.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Kuinka monta yksikköä palvelee täällä yhtä aikaa, esimerkiksi koneita tai henkilöstöä, kukin yhtä entiteettiä kerrallaan.
+	More settings	Lisää asetuksia
+	Must be from {min} to {max}	Oltava välillä {min}–{max}
+	Must be more than {min}	Oltava suurempi kuin {min}
+	Must be {min} or more	Oltava vähintään {min}
 @plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
 @plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
-@plural	Finished {n} replication|Finished {n} replications	{n} toisto valmistui|{n} toistoa valmistui
+@plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avattiin {file} ({n} varoitus)|Avattiin {file} ({n} varoitusta)
 @plural	Removed {n} block|Removed {n} blocks	Poistettiin {n} lohko|Poistettiin {n} lohkoa
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Suorittaa {n} mallin riippumattoman toiston siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.|Suorittaa {n} mallin riippumatonta toistoa siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Pysäytysehto saavutettiin {met}/{n} toistossa, keskimäärin {time} {unit} jälkeen.|Pysäytysehto saavutettiin {met}/{n} toistossa, keskimäärin {time} {unit} jälkeen.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} / {n} toisto valmistui|{done} / {n} toistoa valmistui
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} toiston perusteella|{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} toiston perusteella
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Suorittaa {n} mallin riippumattoman ajon siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.|Suorittaa {n} mallin riippumatonta ajoa siemenellä {seed}. Kunkin elementin tulokset sisältävät 95%:n luottamusvälin puolileveyden.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Pysäytysehto saavutettiin {met}/{n} ajossa, keskimäärin {time} {unit} jälkeen.|Pysäytysehto saavutettiin {met}/{n} ajossa, keskimäärin {time} {unit} jälkeen.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} / {n} ajo valmistui|{done} / {n} ajoa valmistui
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} ajon perusteella|{name}: {mean}{unit}\n95%:n väli {low}–{high}{unit}\n{n} ajon perusteella
 @plural	{n} block selected|{n} blocks selected	{n} lohko valittu|{n} lohkoa valittu
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} toisto kussakin vaiheessa · siemen {seed}|{n} toistoa kussakin vaiheessa · siemen {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} toisto · keskiarvo {mean} · {min}–{max}|{n} toistoa · keskiarvo {mean} · {min}–{max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} toisto · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}|{n} toistoa · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} toisto · siemen {seed}|{n} toistoa · siemen {seed}
-@plural	{n} replication|{n} replications	{n} toisto|{n} toistoa
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} ajo kussakin vaiheessa · siemen {seed}|{n} ajoa kussakin vaiheessa · siemen {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} ajo · keskiarvo {mean} · {min}–{max}|{n} ajoa · keskiarvo {mean} · {min}–{max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ajo · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}|{n} ajoa · siemen {seed} · alkulämmittely {warmup} {unit} · mitattu {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} ajo · siemen {seed}|{n} ajoa · siemen {seed}
+@plural	{n} run|{n} runs	{n} ajo|{n} ajoa
+@plural	Run ({n} problem)|Run ({n} problems)	Suorita ({n} ongelma)|Suorita ({n} ongelmaa)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} ongelma: {blocks}|{n} ongelmaa: {blocks}

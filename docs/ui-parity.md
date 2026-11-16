@@ -165,7 +165,7 @@ driven for this checklist.
 
 | Item | Status | Notes |
 |---|---|---|
-| Problems found before running, linked to the object | done (ours) | **[1h]** AnyLogic: building lists the errors, each leading to its place (from public summaries, not confirmed). StochCraft: validation as you edit, with no build step: problems listed in the overview and outlined on their blocks. Run with problems refuses with a status-bar line that names no block ([gaps](gaps.md) #8) |
+| Problems found before running, linked to the object | done (ours) | **[1h]** AnyLogic: building lists the errors, each leading to its place (from public summaries, not confirmed). StochCraft: validation as you edit, with no build step: problems listed in the overview and outlined on their blocks. With errors, Run says how many and shows the next one's block and field instead of running; a chip above the canvas and the status bar lead to them too ([gaps](gaps.md) #8, #146) |
 | Bad input in a field | done | The text stays in its field, outlined, until fixed; a number field says why under it, with an icon ("Not a number. Capacity is still 0."), since #140 |
 | Errors during a run | done | [nv] A model whose time stops moving is reported within seconds; a failed run says why in the status bar (detail not verified) |
 | Event list, event log, tracing one item | missing | FlexSim: an event list, an event log and tracing of one token. AnyLogic: a panel with the event queue and a console (from public summaries, not confirmed). StochCraft: the engine journal records commands, not events |

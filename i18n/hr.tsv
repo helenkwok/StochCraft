@@ -13,7 +13,7 @@
 
 @id	language.name	Hrvatski
 	% down and up	% dolje i gore
-	% of replications	% replikacija
+	% of runs	% pokretanja
 	+ Add block	+ Dodaj blok
 	95% interval of the share meeting the target: {lo} to {hi}	Interval od 95 % udjela koji postiže cilj: od {lo} do {hi}
 	95th percentile	95. percentil
@@ -34,7 +34,7 @@
 	Add Pool	Dodaj fond
 	Add a flow from…	Dodaj tok od…
 	Add a flow to…	Dodaj tok prema…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Dodaj jedinicu najopterećenijem zadatku ili skupini dok dovoljno replikacija ne postigne cilj. Prikazan je i odgovor sa svakim vremenom na srednjoj vrijednosti; obično je premalen.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Dodaj jedinicu najopterećenijem zadatku ili skupini dok dovoljno pokretanja ne postigne cilj. Prikazan je i odgovor sa svakim vremenom na srednjoj vrijednosti; obično je premalen.
 	Add alternative	Dodaj alternativu
 	Add calendar	Dodaj kalendar
 	Add calendar entry	Dodaj stavku kalendara
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Sav tekst zadovoljava minimalni kontrast.
 	Also: {rule}	Također: {rule}
 	Alternative {n}	Alternativa {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Entitet ide prvim tokom čiji je uvjet ispunjen; bez uvjeta ide tokom izvučenim prema vjerojatnostima (prazne dijele ono što ostale ostave).
 	Analysis	Analiza
 	Appearance	Izgled
 	Arrival limit	Ograničenje dolazaka
@@ -169,12 +170,12 @@
 	Ends early	Završava ranije
 	Energy	Energija
 	Energy per part	Energija po dijelu
-	Enough: {units}, meeting the target in {p} of replications	Dovoljno: {units}, cilj postignut u {p} replikacija
+	Enough: {units}, meeting the target in {p} of runs	Dovoljno: {units}, cilj postignut u {p} pokretanja
 	Enter a number	Upišite broj
 	Entered	Ušlo
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteti koji zateknu punu čekaonicu odmah idu ovim tokom (da kasnije pokušaju ponovno, recimo), umjesto da budu izgubljeni ili da čekaju prije zadatka; ovdje se broje kao izgubljeni.
 	Entities give up waiting	Entiteti odustaju od čekanja
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entiteti koji su još unutra na kraju replikacije nisu uključeni u prosječno čekanje i prosječno vrijeme u sustavu.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entiteti koji su još unutra na kraju pokretanja nisu uključeni u prosječno čekanje i prosječno vrijeme u sustavu.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteti koji odustanu od čekanja idu ovim tokom (da kasnije pokušaju ponovno, recimo); ostali idu drugim izlazom zadatka.
 	Erlang	Erlang
 	Error	Pogreška
@@ -252,7 +253,7 @@
 	Maximum	Maksimum
 	Mean	Srednja vrijednost
 	Mean number inside	Prosječan broj unutra
-	One replication of {n}: the results of the others differ.	Jedna replikacija od {n}: rezultati ostalih se razlikuju.
+	One run of {n}: the results of the others differ.	Jedno pokretanje od {n}: rezultati ostalih se razlikuju.
 	Save as a new BPMN file?	Spremiti kao novu BPMN datoteku?
 	Still inside at the end	Još unutra na kraju
 	Mean work in progress	Prosječna nedovršena proizvodnja
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	Nema dolazaka izvan kalendara
 	No blocks yet. Open a model, or add blocks to build one.	Još nema blokova. Otvorite model ili dodajte blokove da biste ga izradili.
 	No connections yet: join blocks below.	Još nema veza: povežite blokove ispod.
-	No replication met the stop condition: each ran to its time limit.	Nijedna replikacija nije postigla uvjet zaustavljanja: svaka je trajala do svog vremenskog ograničenja.
+	No run met the stop condition: each ran to its time limit.	Nijedno pokretanje nije postiglo uvjet zaustavljanja: svako je trajalo do svog vremenskog ograničenja.
 	No results yet	Još nema rezultata
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	U ovom modelu nije označen škart ni dorada, pa OEE računa kvalitetu kao 100 %.
 	No target	Bez cilja
@@ -386,11 +387,11 @@
 	Repair time	Vrijeme popravka
 	Repeats	Ponavljanje
 	Replace Model	Zamijeni model
-	Replication 1 · {time} of {end} {unit}	Replikacija 1 · {time} od {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Replikacija 1 · {time} od {end} {unit} · zagrijavanje
-	Replications	Replikacije
-	Replications meeting the target	Replikacije koje postižu cilj
-	Replications that never met the stop condition count as later than their time limit.	Replikacije koje nikad nisu postigle uvjet zaustavljanja računaju se kao kasnije od svog vremenskog ograničenja.
+	Run 1 · {time} of {end} {unit}	Pokretanje 1 · {time} od {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Pokretanje 1 · {time} od {end} {unit} · zagrijavanje
+	Runs	Pokretanja
+	Runs meeting the target	Pokretanja koja postižu cilj
+	Runs that never met the stop condition count as later than their time limit.	Pokretanja koja nikad nisu postigla uvjet zaustavljanja računaju se kao kasnija od svog vremenskog ograničenja.
 	Resource pool	Fond resursa
 	Resource pools	Fondovi resursa
 	Restore	Vrati
@@ -411,7 +412,7 @@
 	Run	Pokreni
 	Run cancelled	Izvođenje otkazano
 	Run experiment	Pokreni eksperiment
-	Run replication 1 step by step and see each block's queue on the diagram	Pokreni replikaciju 1 korak po korak i prati red svakog bloka na dijagramu
+	Play run 1 step by step and see each block's queue on the diagram	Prikaži pokretanje 1 korak po korak i prati red svakog bloka na dijagramu
 	Run the experiment ({shortcut})	Pokreni eksperiment ({shortcut})
 	Run the experiment again to see this result's spread.	Ponovno pokrenite eksperiment da biste vidjeli raspršenost ovog rezultata.
 	Run the experiment at each value of one parameter, and compare a result.	Pokreni eksperiment za svaku vrijednost jednog parametra i usporedi rezultat.
@@ -419,7 +420,7 @@
 	Run the sweep	Pokreni prolaz
 	Running	Izvodi se
 	Running…	Izvođenje u tijeku…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikacije su podijeljene: {low_n} od {n} blizu {low}, {high_n} blizu {high}. Srednja vrijednost ({mean}) miješa dva ishoda; pogledajte svaku skupinu zasebno.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Pokretanja su podijeljena: {low_n} od {n} blizu {low}, {high_n} blizu {high}. Srednja vrijednost ({mean}) miješa dva ishoda; pogledajte svaku skupinu zasebno.
 	Sat	sub
 	Save	Spremi
 	Save As…	Spremi kao…
@@ -467,7 +468,7 @@
 	Split batches	Razdvajanje serija
 	Split or join	Razdvoji ili spoji
 	Split or join (all ways)	Razdvoji ili spoji (svi putovi)
-	Spread across replications	Raspršenost među replikacijama
+	Spread across runs	Raspršenost među pokretanjima
 	Spread out	Rasporedi
 	Stages (k)	Faze (k)
 	Standard deviation	Standardna devijacija
@@ -498,19 +499,19 @@
 	Text on header	Tekst u zaglavlju
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Veza pukne i klijent pokuša ponovno: entitet se odmah vraća na čelo reda, a rad obavljen na njemu je uzaludan.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entitet čeka na svom poslužitelju, a posao se nastavlja s preostalim dijelom kad se poslužitelj vrati.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval seže ispod ciljnog udjela od {share}, pa nije pokazano s pouzdanošću od 95 % da je udio postignut; više replikacija bi ga suzilo.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval seže ispod ciljnog udjela od {share}, pa nije pokazano s pouzdanošću od 95 % da je udio postignut; više pokretanja bi ga suzilo.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Posao se odmah prekida: entitet se vraća na čelo reda za bilo koji poslužitelj u smjeni, a rad obavljen na njemu je uzaludan.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Posao se odmah prekida; entitet čeka na svom poslužitelju, a posao se nastavlja s preostalim dijelom kad taj poslužitelj ponovno bude u smjeni.
 	The last task with a resource it finished at	Posljednji zadatak s resursom kroz koji je dio prošao
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Prosječno vrijeme do uvjeta zaustavljanja odnosi se samo na replikacije koje su ga postigle; ostale su trajale do svog vremenskog ograničenja.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Prosječno vrijeme do uvjeta zaustavljanja odnosi se samo na pokretanja koja su ga postigla; ostala su trajala do svog vremenskog ograničenja.
 	The model changed, so watching stopped	Model se promijenio, pa je praćenje zaustavljeno
 	The model has no calendars yet.	Model još nema kalendara.
 	The model now has the units sizing found	Model sada ima jedinice koje je pronašlo dimenzioniranje
 	The model: its experiment, connections and problems	Model: eksperiment, veze i problemi
 	The name is empty or already used.	Naziv je prazan ili se već upotrebljava.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikacije su podijeljene na dva ishoda: {a} od {n} u jednom, {b} u drugom. Rezultati podijeljeni na isti način: {count}, među njima {result} ({element}); pogledajte tablicu ispod.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Pokretanja su podijeljena na dva ishoda: {a} od {n} u jednom, {b} u drugom. Rezultati podijeljeni na isti način: {count}, među njima {result} ({element}); pogledajte tablicu ispod.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Poslužitelj dovrši posao koji ima, pa završi smjenu; do tada se računa kao da je u smjeni.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Udio replikacija jednakih ili manjih od svake vrijednosti. Pojas sadrži pravu distribuciju s pouzdanošću od {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Udio pokretanja jednakih ili manjih od svake vrijednosti. Pojas sadrži pravu distribuciju s pouzdanošću od {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vrijednosti su brojevi odvojeni točkom sa zarezom ili razmacima
 	The whole clock	Sve vrijeme
 	Themes	Teme
@@ -578,7 +579,7 @@
 	Warning	Upozorenje
 	Watch a Run	Prati pokretanje
 	Watch a run	Prati pokretanje
-	Watching replication 1	Prati se replikacija 1
+	Watching run 1	Prati se pokretanje 1
 	Weak text	Blijedi tekst
 	Weak text on header	Blijedi tekst u zaglavlju
 	Wed	sri
@@ -614,7 +615,7 @@
 	maximum {value}	maksimum {value}
 	milliseconds	milisekunde
 	minutes	minute
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k od N: samo k od N replikacija ima vrijednost za taj rezultat, a njegov prosjek i interval su preko tih k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k od N: samo k od N pokretanja ima vrijednost za taj rezultat, a njegov prosjek i interval su preko tih k.
 	n = {k} of {n}	n = {k} od {n}
 	nothing yet	još ništa
 	per day	po danu
@@ -648,9 +649,8 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} i {second} razlikuju se za {de} kod crveno-zelenog daltonizma, potrebno 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} i {second} razlikuju se za {de} kod crveno-zelenog daltonizma, potrebno 8: razlikujte ih samo po oznakama.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} i {second} razlikuju se po svjetlini za {step}, potrebno 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: vjerojatnost je broj od 0 do 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} od {of} replikacija postiglo je cilj: {p} (interval od 95 % od {lo} do {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} od {of} pokretanja postiglo je cilj: {p} (interval od 95 % od {lo} do {hi})
 	{name} — edited	{name} — uređeno
 	{n} created	Stvoreno: {n}
 	{n} done	Završeno: {n}
@@ -659,12 +659,12 @@
 	{n} {unit} per second	{n} {unit} u sekundi
 	{property} (set to, mean)	{property} (postavljeno na, srednja vrijednost)
 	{reason}. {field} is still {value}.	{reason}. {field} i dalje je {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – replikacije su podijeljene na dva ishoda: pogledajte tablicu ispod.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – pokretanja su podijeljena na dva ishoda: pogledajte tablicu ispod.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadina „{background}“: {ratio}:1, potrebno {min}:1
 	{title}: now {now}, at most {most}	{title}: sada {now}, najviše {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% IP
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± je polovica širine 95% Student-t intervala pouzdanosti srednje vrijednosti kroz replikacije.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± je polovica širine 95% Student-t intervala pouzdanosti srednje vrijednosti kroz pokretanja.
 	· no results yet	· još nema rezultata
 unit	d	d
 unit	h	h
@@ -672,18 +672,27 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	god.
+	How long one unit takes to serve one entity, drawn anew for each entity.	Koliko jednoj jedinici treba da posluži jedan entitet; izvlači se iznova za svaki entitet.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Koliko entiteta smije ovdje čekati slobodnu jedinicu, uz one koji se poslužuju; bez kvačice, bilo koliko.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Koliko jedinica ovdje poslužuje istodobno, npr. strojevi ili osoblje, svaka po jedan entitet.
+	More settings	Više postavki
+	Must be from {min} to {max}	Mora biti od {min} do {max}
+	Must be more than {min}	Mora biti više od {min}
+	Must be {min} or more	Mora biti {min} ili više
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana su {n} bloka|Dodano je {n} blokova
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana su {n} bloka|Kopirano je {n} blokova
-@plural	Finished {n} replication|Finished {n} replications	Završena je {n} replikacija|Završene su {n} replikacije|Završeno je {n} replikacija
+@plural	Finished {n} run|Finished {n} runs	Završeno je {n} pokretanje|Završena su {n} pokretanja|Završeno je {n} pokretanja
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otvorena datoteka {file} ({n} upozorenje)|Otvorena datoteka {file} ({n} upozorenja)|Otvorena datoteka {file} ({n} upozorenja)
 @plural	Removed {n} block|Removed {n} blocks	Uklonjen je {n} blok|Uklonjena su {n} bloka|Uklonjeno je {n} blokova
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Pokreće {n} neovisnu replikaciju modela od sjemena {seed}. Rezultati svakog elementa uključuju poluširinu 95% intervala pouzdanosti.|Pokreće {n} neovisne replikacije modela od sjemena {seed}. Rezultati svakog elementa uključuju poluširinu 95% intervala pouzdanosti.|Pokreće {n} neovisnih replikacija modela od sjemena {seed}. Rezultati svakog elementa uključuju poluširinu 95% intervala pouzdanosti.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Uvjet zaustavljanja postignut je u {met} od {n} replikacije, u prosjeku nakon {time} {unit}.|Uvjet zaustavljanja postignut je u {met} od {n} replikacije, u prosjeku nakon {time} {unit}.|Uvjet zaustavljanja postignut je u {met} od {n} replikacija, u prosjeku nakon {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	Završena je {done} od {n} replikacije|Završeno je {done} od {n} replikacija|Završeno je {done} od {n} replikacija
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nna temelju {n} replikacije|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nna temelju {n} replikacije|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nna temelju {n} replikacija
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Izvodi {n} neovisno pokretanje modela od sjemena {seed}. Rezultati svakog elementa uključuju poluširinu 95% intervala pouzdanosti.|Izvodi {n} neovisna pokretanja modela od sjemena {seed}. Rezultati svakog elementa uključuju poluširinu 95% intervala pouzdanosti.|Izvodi {n} neovisnih pokretanja modela od sjemena {seed}. Rezultati svakog elementa uključuju poluširinu 95% intervala pouzdanosti.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Uvjet zaustavljanja postignut je u {met} od {n} pokretanja, u prosjeku nakon {time} {unit}.|Uvjet zaustavljanja postignut je u {met} od {n} pokretanja, u prosjeku nakon {time} {unit}.|Uvjet zaustavljanja postignut je u {met} od {n} pokretanja, u prosjeku nakon {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Završeno je {done} od {n} pokretanja|Završeno je {done} od {n} pokretanja|Završeno je {done} od {n} pokretanja
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nna temelju {n} pokretanja|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nna temelju {n} pokretanja|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nna temelju {n} pokretanja
 @plural	{n} block selected|{n} blocks selected	Odabran je {n} blok|Odabrana su {n} bloka|Odabrano je {n} blokova
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikacija po koraku · sjeme {seed}|{n} replikacije po koraku · sjeme {seed}|{n} replikacija po koraku · sjeme {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikacija · srednja vrijednost {mean} · od {min} do {max}|{n} replikacije · srednja vrijednost {mean} · od {min} do {max}|{n} replikacija · srednja vrijednost {mean} · od {min} do {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacija · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}|{n} replikacije · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}|{n} replikacija · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacija · sjeme {seed}|{n} replikacije · sjeme {seed}|{n} replikacija · sjeme {seed}
-@plural	{n} replication|{n} replications	{n} replikacija|{n} replikacije|{n} replikacija
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} pokretanje po koraku · sjeme {seed}|{n} pokretanja po koraku · sjeme {seed}|{n} pokretanja po koraku · sjeme {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} pokretanje · srednja vrijednost {mean} · od {min} do {max}|{n} pokretanja · srednja vrijednost {mean} · od {min} do {max}|{n} pokretanja · srednja vrijednost {mean} · od {min} do {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} pokretanje · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}|{n} pokretanja · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}|{n} pokretanja · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} pokretanje · sjeme {seed}|{n} pokretanja · sjeme {seed}|{n} pokretanja · sjeme {seed}
+@plural	{n} run|{n} runs	{n} pokretanje|{n} pokretanja|{n} pokretanja
+@plural	Run ({n} problem)|Run ({n} problems)	Pokreni ({n} problem)|Pokreni ({n} problema)|Pokreni ({n} problema)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problema: {blocks}|{n} problema: {blocks}

@@ -85,7 +85,7 @@ asks, so an agent driving it is not confined.
 | `check_model` | — | `model.validate`: every problem, errors first, with the element, a stable code and a message. |
 | `open` | `path`, `scenario?` | `file.open`: a `.bpmn` or `.xpdl` file with BPSim data. |
 | `save` | `path?`, `as_new?` | `file.save`: into the model's own file (keeping what StochCraft does not understand), or to `path`. |
-| `run` | `replications?`, `seed?` | `run`: each element's metrics as means with 95% confidence intervals, and the run record. |
+| `run` | `replications?`, `seed?` | `run`: each element's metrics as means with 95% confidence intervals, the warm-up MSER-5 suggests (`warmup_suggestion`), the warnings about the results, and the run record. The values over the run (`series`) are left out, since they multiply the reply's size; `execute` with `run` gives them. |
 | `undo`, `redo` | — | `undo`, `redo`. |
 
 Resources: `stochcraft://model` (`model.get`) and `stochcraft://commands` (the command catalogue).

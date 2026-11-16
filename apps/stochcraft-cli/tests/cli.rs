@@ -124,6 +124,26 @@ fn results_do_not_depend_on_threads_and_follow_the_seed() {
 }
 
 #[test]
+fn run_gives_the_warm_up_suggestion_and_its_warnings() {
+    let m = model("mm1.bpmn");
+    let table = ok(&["run", &m, "--reps", "3"]);
+    assert!(
+        table.contains("warm-up suggested (MSER-5 on the number inside): "),
+        "{table}"
+    );
+    // One replication is warned about, in words.
+    let one = ok(&["run", &m, "--reps", "1"]);
+    assert!(one.contains("the run has one replication"), "{one}");
+    // As JSON: the values over the run and the suggestion, beside the keys there were.
+    let r = json(&ok(&["run", &m, "--reps", "3", "--format", "json"]));
+    for key in ["elements", "values", "measured", "warnings", "record"] {
+        assert!(!r[key].is_null(), "{key}");
+    }
+    assert_eq!(r["series"]["times"].as_array().map_or(0, Vec::len), 101);
+    assert_eq!(r["warmup_suggestion"]["method"], "mser-5");
+}
+
+#[test]
 fn table_csv_and_out() {
     let m = model("tandem.xpdl");
     let table = ok(&["run", &m, "--reps", "3"]);

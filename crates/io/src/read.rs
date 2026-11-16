@@ -2126,6 +2126,7 @@ fn experiment(scenario: Option<&Scenario>, notes: &mut Vec<Note>) -> Experiment 
         seed,
         start,
         stop: None,
+        result_frequency: s.result_frequency,
     }
 }
 
