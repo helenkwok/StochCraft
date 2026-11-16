@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	எல்லா உரையும் குறைந்தபட்ச மாறுபாட்டைப் பூர்த்தி செய்கிறது.
 	Also: {rule}	மேலும்: {rule}
 	Alternative {n}	மாற்றுத் தேர்வு {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	ஓர் உருப்படி நிபந்தனை உண்மையாகும் முதல் ஓட்டத்தை எடுத்துக்கொள்கிறது; நிபந்தனைகள் இல்லையெனில், நிகழ்தகவுகளின்படி ஒரு ஓட்டம் தேர்ந்தெடுக்கப்படும் (வெற்றாக விடப்பட்டவை மற்றவை விட்டுச்செல்லும் பங்கைச் சமமாகப் பகிர்ந்துகொள்ளும்).
 	Analysis	பகுப்பாய்வு
 	Appearance	தோற்றம்
 	Arrival limit	வருகை வரம்பு

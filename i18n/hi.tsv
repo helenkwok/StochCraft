@@ -13,7 +13,7 @@
 
 @id	language.name	हिन्दी
 	% down and up	% नीचे और ऊपर
-	% of runs	% पुनरावृत्तियों में
+	% of runs	% रनों में
 	+ Add block	+ ब्लॉक जोड़ें
 	95% interval of the share meeting the target: {lo} to {hi}	लक्ष्य पूरा करने वाले हिस्से का 95% अंतराल: {lo} से {hi}
 	95th percentile	95वाँ प्रतिशतक
@@ -34,7 +34,7 @@
 	Add Pool	पूल जोड़ें
 	Add a flow from…	प्रवाह जोड़ें (स्रोत)…
 	Add a flow to…	प्रवाह जोड़ें (लक्ष्य)…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	सबसे व्यस्त कार्य या पूल में एक इकाई जोड़ें, जब तक पर्याप्त पुनरावृत्तियाँ लक्ष्य पूरा न कर लें। हर समय को उसके माध्य पर रखकर मिला उत्तर भी दिखता है; वह प्रायः बहुत छोटा होता है।
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	सबसे व्यस्त कार्य या पूल में एक इकाई जोड़ें, जब तक पर्याप्त रन लक्ष्य पूरा न कर लें। हर समय को उसके माध्य पर रखकर मिला उत्तर भी दिखता है; वह प्रायः बहुत छोटा होता है।
 	Add alternative	विकल्प जोड़ें
 	Add calendar	कैलेंडर जोड़ें
 	Add calendar entry	कैलेंडर प्रविष्टि जोड़ें
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	सभी पाठ न्यूनतम कंट्रास्ट पूरा करते हैं।
 	Also: {rule}	साथ ही: {rule}
 	Alternative {n}	विकल्प {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	इकाई वह पहला प्रवाह लेती है जिसकी शर्त सही हो; शर्तें न हों तो प्रवाह प्रायिकताओं के अनुसार चुना जाता है (खाली प्रायिकता वाले प्रवाह बाकी बचा हिस्सा बराबर बाँटते हैं)।
 	Analysis	विश्लेषण
 	Appearance	दिखावट
 	Arrival limit	आगमन सीमा
@@ -169,12 +170,12 @@
 	Ends early	पहले समाप्त होता है
 	Energy	ऊर्जा
 	Energy per part	प्रति पुर्जा ऊर्जा
-	Enough: {units}, meeting the target in {p} of runs	पर्याप्त: {units}, {p} पुनरावृत्तियों में लक्ष्य पूरा
+	Enough: {units}, meeting the target in {p} of runs	पर्याप्त: {units}, {p} रनों में लक्ष्य पूरा
 	Enter a number	कोई संख्या दर्ज करें
 	Entered	प्रवेश संख्या
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	जो इकाइयाँ प्रतीक्षा कक्ष भरा पाती हैं, वे तुरंत यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए), खो जाने या कार्य से पहले प्रतीक्षा करने के बजाय; यहाँ उन्हें हानि में गिना जाता है।
 	Entities give up waiting	इकाइयाँ प्रतीक्षा छोड़ देती हैं
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	किसी पुनरावृत्ति के अंत में जो अब भी अंदर हैं, वे औसत प्रतीक्षा और सिस्टम में औसत समय में शामिल नहीं होते।
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	किसी रन के अंत में जो अब भी अंदर हैं, वे औसत प्रतीक्षा और सिस्टम में औसत समय में शामिल नहीं होते।
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	जो इकाइयाँ प्रतीक्षा छोड़ देती हैं, वे यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए); बाकी कार्य का दूसरा बाहर जाने का रास्ता लेती हैं।
 	Erlang	एरलांग
 	Error	त्रुटि
@@ -252,7 +253,7 @@
 	Maximum	अधिकतम
 	Mean	माध्य
 	Mean number inside	अंदर की औसत संख्या
-	One run of {n}: the results of the others differ.	{n} में से एक पुनरावृत्ति: बाकी के परिणाम अलग होते हैं।
+	One run of {n}: the results of the others differ.	{n} में से एक रन: बाकी के परिणाम अलग होते हैं।
 	Save as a new BPMN file?	नई BPMN फ़ाइल के रूप में सहेजें?
 	Still inside at the end	अंत में अब भी अंदर
 	Mean work in progress	औसत प्रक्रियाधीन कार्य
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	कैलेंडरों के बाहर कोई आगमन नहीं
 	No blocks yet. Open a model, or add blocks to build one.	अभी कोई ब्लॉक नहीं हैं। मॉडल खोलें या ब्लॉक जोड़कर मॉडल बनाएँ।
 	No connections yet: join blocks below.	अभी कोई कनेक्शन नहीं हैं: नीचे दिए ब्लॉक जोड़ें।
-	No run met the stop condition: each ran to its time limit.	किसी पुनरावृत्ति ने रुकने की शर्त पूरी नहीं की: हर एक अपनी समय सीमा तक चली।
+	No run met the stop condition: each ran to its time limit.	किसी रन ने रुकने की शर्त पूरी नहीं की: हर एक अपनी समय सीमा तक चला।
 	No results yet	अभी कोई परिणाम नहीं हैं
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	इस मॉडल में कोई स्क्रैप या पुनःकार्य चिह्नित नहीं है, इसलिए OEE गुणवत्ता को 100% मानता है।
 	No target	कोई लक्ष्य नहीं
@@ -386,11 +387,11 @@
 	Repair time	मरम्मत समय
 	Repeats	दोहराव
 	Replace Model	मॉडल बदलें
-	Run 1 · {time} of {end} {unit}	पुनरावृत्ति 1 · {end} {unit} में से {time}
-	Run 1 · {time} of {end} {unit} · warm-up	पुनरावृत्ति 1 · {end} {unit} में से {time} · वार्म-अप
-	Runs	पुनरावृत्तियाँ
-	Runs meeting the target	लक्ष्य पूरा करने वाली पुनरावृत्तियाँ
-	Runs that never met the stop condition count as later than their time limit.	जिन पुनरावृत्तियों ने रुकने की शर्त कभी पूरी नहीं की, वे अपनी समय सीमा से बाद की गिनी जाती हैं।
+	Run 1 · {time} of {end} {unit}	रन 1 · {end} {unit} में से {time}
+	Run 1 · {time} of {end} {unit} · warm-up	रन 1 · {end} {unit} में से {time} · वार्म-अप
+	Runs	रन
+	Runs meeting the target	लक्ष्य पूरा करने वाले रन
+	Runs that never met the stop condition count as later than their time limit.	जिन रनों ने रुकने की शर्त कभी पूरी नहीं की, वे अपनी समय सीमा से बाद के गिने जाते हैं।
 	Resource pool	संसाधन पूल
 	Resource pools	संसाधन पूल
 	Restore	पुनर्स्थापित करें
@@ -411,7 +412,7 @@
 	Run	चलाएँ
 	Run cancelled	रन रद्द किया गया
 	Run experiment	प्रयोग चलाएँ
-	Play run 1 step by step and see each block's queue on the diagram	पुनरावृत्ति 1 को चरण-दर-चरण चलाएँ और आरेख पर हर ब्लॉक की कतार देखें
+	Play run 1 step by step and see each block's queue on the diagram	रन 1 को चरण-दर-चरण चलाएँ और आरेख पर हर ब्लॉक की कतार देखें
 	Run the experiment ({shortcut})	प्रयोग चलाएँ ({shortcut})
 	Run the experiment again to see this result's spread.	इस परिणाम का फैलाव देखने के लिए प्रयोग फिर से चलाएँ।
 	Run the experiment at each value of one parameter, and compare a result.	एक पैरामीटर के हर मान पर प्रयोग चलाएँ और एक परिणाम की तुलना करें।
@@ -419,7 +420,7 @@
 	Run the sweep	स्वीप चलाएँ
 	Running	चल रहा है
 	Running…	चल रहा है…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	पुनरावृत्तियाँ दो हिस्सों में बँटीं: {n} में से {low_n} – {low} के पास, {high_n} – {high} के पास। माध्य ({mean}) दो अलग नतीजों को मिला देता है; हर समूह को अलग से देखें।
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	रन दो हिस्सों में बँटे: {n} में से {low_n} – {low} के पास, {high_n} – {high} के पास। माध्य ({mean}) दो अलग नतीजों को मिला देता है; हर समूह को अलग से देखें।
 	Sat	शनि
 	Save	सहेजें
 	Save As…	इस रूप में सहेजें…
@@ -467,7 +468,7 @@
 	Split batches	बैच अलग करें
 	Split or join	विभाजित या संयोजित करें
 	Split or join (all ways)	विभाजित या संयोजित करें (सभी मार्ग)
-	Spread across runs	पुनरावृत्तियों में फैलाव
+	Spread across runs	रनों में फैलाव
 	Spread out	फैलाएँ
 	Stages (k)	चरण (k)
 	Standard deviation	मानक विचलन
@@ -498,19 +499,19 @@
 	Text on header	शीर्ष पट्टी पर पाठ
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	कनेक्शन टूट जाता है और क्लाइंट फिर कोशिश करता है: इकाई तुरंत कतार के आगे लौट जाती है, और उस पर किया गया काम व्यर्थ जाता है।
 	The entity waits on its server and the job carries on with what was left once the server is back.	इकाई अपने सर्वर पर प्रतीक्षा करती है, और सर्वर लौटते ही काम बचे हुए हिस्से से आगे चलता है।
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	अंतराल {share} के लक्ष्य हिस्से से नीचे तक जाता है, इसलिए 95% विश्वास के साथ यह नहीं दिखता कि हिस्सा पूरा हुआ; अधिक पुनरावृत्तियाँ इसे संकरा करेंगी।
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	अंतराल {share} के लक्ष्य हिस्से से नीचे तक जाता है, इसलिए 95% विश्वास के साथ यह नहीं दिखता कि हिस्सा पूरा हुआ; अधिक रन इसे संकरा करेंगे।
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	काम तुरंत रुक जाता है: इकाई पाली में मौजूद किसी भी सर्वर के लिए कतार के आगे लौट जाती है, और उस पर किया गया काम व्यर्थ जाता है।
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	काम तुरंत रुक जाता है; इकाई अपने सर्वर पर प्रतीक्षा करती है, और वह सर्वर फिर पाली में आते ही काम बचे हुए हिस्से से आगे चलता है।
 	The last task with a resource it finished at	अंतिम संसाधन वाला कार्य जिससे पुर्जा गुज़रा
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	रुकने की शर्त तक का औसत समय केवल उन पुनरावृत्तियों पर है जिन्होंने शर्त पूरी की; बाकी अपनी समय सीमा तक चलीं।
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	रुकने की शर्त तक का औसत समय केवल उन रनों पर है जिन्होंने शर्त पूरी की; बाकी अपनी समय सीमा तक चले।
 	The model changed, so watching stopped	मॉडल बदल गया, इसलिए देखना बंद हो गया
 	The model has no calendars yet.	मॉडल में अभी कोई कैलेंडर नहीं है।
 	The model now has the units sizing found	मॉडल में अब आकार निर्धारण से मिली इकाइयाँ हैं
 	The model: its experiment, connections and problems	मॉडल: प्रयोग, कनेक्शन और समस्याएँ
 	The name is empty or already used.	नाम खाली है या पहले से उपयोग में है।
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	पुनरावृत्तियाँ दो अलग नतीजों में बँटीं: {n} में से {a} एक में, {b} दूसरे में। {count} परिणाम इसी तरह बँटे, उनमें {result} ({element}) भी है; नीचे दी गई तालिका देखें।
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	रन दो अलग नतीजों में बँटे: {n} में से {a} एक में, {b} दूसरे में। {count} परिणाम इसी तरह बँटे, उनमें {result} ({element}) भी है; नीचे दी गई तालिका देखें।
 	The server finishes the job it has, then goes off; until then it counts as on shift.	सर्वर हाथ का काम पूरा करता है, फिर पाली से हट जाता है; तब तक उसे पाली में गिना जाता है।
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	हर मान के बराबर या उससे कम पुनरावृत्तियों का हिस्सा। पट्टी में वास्तविक वितरण {confidence} विश्वास के साथ है।
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	हर मान के बराबर या उससे कम रनों का हिस्सा। पट्टी में वास्तविक वितरण {confidence} विश्वास के साथ है।
 	The values are numbers, separated by semicolons or spaces	मान अर्धविराम या रिक्त स्थान से अलग की गई संख्याएँ हैं
 	The whole clock	पूरा समय
 	Themes	थीम
@@ -578,7 +579,7 @@
 	Warning	चेतावनी
 	Watch a Run	एक रन देखें
 	Watch a run	एक रन देखें
-	Watching run 1	पुनरावृत्ति 1 देखी जा रही है
+	Watching run 1	रन 1 देखा जा रहा है
 	Weak text	मद्धम पाठ
 	Weak text on header	शीर्ष पट्टी पर मद्धम पाठ
 	Wed	बुध
@@ -614,7 +615,7 @@
 	maximum {value}	अधिकतम {value}
 	milliseconds	मिलीसेकंड
 	minutes	मिनट
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N में से k: N पुनरावृत्तियों में से केवल k में उस परिणाम का मान था, और उसका औसत और अंतराल उन्हीं k पर है।
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N में से k: N रनों में से केवल k में उस परिणाम का मान था, और उसका औसत और अंतराल उन्हीं k पर है।
 	n = {k} of {n}	n = {n} में से {k}
 	nothing yet	अभी कुछ नहीं
 	per day	प्रति दिन
@@ -650,7 +651,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} और {second} के हल्केपन में {step} का अंतर है, आवश्यक 0.06।
 	{id}: a probability is a number from 0 to 1	{id}: प्रायिकता 0 से 1 तक की संख्या होनी चाहिए
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} में से {met} पुनरावृत्तियों ने लक्ष्य पूरा किया: {p} (95% अंतराल {lo} से {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} में से {met} रनों ने लक्ष्य पूरा किया: {p} (95% अंतराल {lo} से {hi})
 	{name} — edited	{name} — संपादित
 	{n} created	{n} बनाए गए
 	{n} done	{n} पूरे
@@ -659,12 +660,12 @@
 	{n} {unit} per second	{n} {unit} प्रति सेकंड
 	{property} (set to, mean)	{property} (सेट किया गया मान, माध्य)
 	{reason}. {field} is still {value}.	{reason}। {field} अब भी {value} है।
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – पुनरावृत्तियाँ दो अलग नतीजों में बँटीं: नीचे दी गई तालिका देखें।
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – रन दो अलग नतीजों में बँटे: नीचे दी गई तालिका देखें।
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – पृष्ठभूमि {background}: {ratio}:1, आवश्यक {min}:1
 	{title}: now {now}, at most {most}	{title}: अभी {now}, अधिकतम {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% विश्वास अंतराल
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± पुनरावृत्तियों में प्राप्त माध्य के 95% Student-t विश्वास अंतराल की आधी चौड़ाई है।
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± रनों में प्राप्त माध्य के 95% Student-t विश्वास अंतराल की आधी चौड़ाई है।
 	· no results yet	· अभी कोई परिणाम नहीं हैं
 unit	d	दिन
 unit	h	h
@@ -674,16 +675,16 @@ unit	s	s
 unit	yr	वर्ष
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
-@plural	Finished {n} run|Finished {n} runs	{n} पुनरावृत्ति पूरी हुई|{n} पुनरावृत्तियाँ पूरी हुईं
+@plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} खोली गई ({n} चेतावनी)|{file} खोली गई ({n} चेतावनियाँ)
 @plural	Removed {n} block|Removed {n} blocks	{n} ब्लॉक हटाया गया|{n} ब्लॉक हटाए गए
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	बीज {seed} से मॉडल की {n} स्वतंत्र पुनरावृत्ति चलाता है। प्रत्येक तत्व के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।|बीज {seed} से मॉडल की {n} स्वतंत्र पुनरावृत्तियाँ चलाता है। प्रत्येक तत्व के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	रुकने की शर्त {n} में से {met} पुनरावृत्ति में, औसतन {time} {unit} बाद पूरी हुई।|रुकने की शर्त {n} में से {met} पुनरावृत्तियों में, औसतन {time} {unit} बाद पूरी हुई।
-@plural	{done} of {n} run finished|{done} of {n} runs finished	{n} में से {done} पुनरावृत्ति पूरी हुई|{n} में से {done} पुनरावृत्तियाँ पूरी हुईं
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% अंतराल {low} से {high}{unit}\n{n} पुनरावृत्ति के आधार पर|{name}: {mean}{unit}\n95% अंतराल {low} से {high}{unit}\n{n} पुनरावृत्तियों के आधार पर
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	बीज {seed} से मॉडल का {n} स्वतंत्र रन चलाता है। प्रत्येक तत्व के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।|बीज {seed} से मॉडल के {n} स्वतंत्र रन चलाता है। प्रत्येक तत्व के परिणामों में 95% विश्वास अंतराल की आधी चौड़ाई शामिल है।
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	रुकने की शर्त {n} में से {met} रन में, औसतन {time} {unit} बाद पूरी हुई।|रुकने की शर्त {n} में से {met} रनों में, औसतन {time} {unit} बाद पूरी हुई।
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{n} में से {done} रन पूरा हुआ|{n} में से {done} रन पूरे हुए
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% अंतराल {low} से {high}{unit}\n{n} रन के आधार पर|{name}: {mean}{unit}\n95% अंतराल {low} से {high}{unit}\n{n} रनों के आधार पर
 @plural	{n} block selected|{n} blocks selected	{n} ब्लॉक चुना गया|{n} ब्लॉक चुने गए
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	हर चरण में {n} पुनरावृत्ति · बीज {seed}|हर चरण में {n} पुनरावृत्तियाँ · बीज {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} पुनरावृत्ति · माध्य {mean} · {min} से {max}|{n} पुनरावृत्तियाँ · माध्य {mean} · {min} से {max}
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} पुनरावृत्ति · बीज {seed} · वार्म-अप {warmup} {unit} · {duration} {unit} मापा गया|{n} पुनरावृत्तियाँ · बीज {seed} · वार्म-अप {warmup} {unit} · {duration} {unit} मापा गया
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} पुनरावृत्ति · बीज {seed}|{n} पुनरावृत्तियाँ · बीज {seed}
-@plural	{n} run|{n} runs	{n} पुनरावृत्ति|{n} पुनरावृत्तियाँ
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	हर चरण में {n} रन · बीज {seed}|हर चरण में {n} रन · बीज {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} रन · माध्य {mean} · {min} से {max}|{n} रन · माध्य {mean} · {min} से {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} रन · बीज {seed} · वार्म-अप {warmup} {unit} · {duration} {unit} मापा गया|{n} रन · बीज {seed} · वार्म-अप {warmup} {unit} · {duration} {unit} मापा गया
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} रन · बीज {seed}|{n} रन · बीज {seed}
+@plural	{n} run|{n} runs	{n} रन|{n} रन

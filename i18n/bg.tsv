@@ -13,7 +13,7 @@
 
 @id	language.name	Български
 	% down and up	% надолу и нагоре
-	% of runs	% от репликациите
+	% of runs	% от изпълненията
 	+ Add block	+ Добавяне на блок
 	95% interval of the share meeting the target: {lo} to {hi}	95% интервал на дела, постигнал целта: от {lo} до {hi}
 	95th percentile	95-и персентил
@@ -34,7 +34,7 @@
 	Add Pool	Добавяне на пул
 	Add a flow from…	Добавяне на поток от…
 	Add a flow to…	Добавяне на поток към…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Добавяне на единица към най-натоварената задача или група, докато достатъчно репликации постигнат целта. Показва се и отговорът с всяко време на средната му стойност; обикновено е твърде малък.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Добавяне на единица към най-натоварената задача или група, докато достатъчно изпълнения постигнат целта. Показва се и отговорът с всяко време на средната му стойност; обикновено е твърде малък.
 	Add alternative	Добавяне на алтернатива
 	Add calendar	Добавяне на календар
 	Add calendar entry	Добавяне на запис в календара
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Целият текст отговаря на минималния контраст.
 	Also: {rule}	Също: {rule}
 	Alternative {n}	Алтернатива {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Същността минава по първия поток, чието условие е вярно; ако няма условия – по поток, избран според вероятностите (потоците с празна вероятност си поделят поравно това, което оставят другите).
 	Analysis	Анализ
 	Appearance	Външен вид
 	Arrival limit	Лимит на пристиганията
@@ -169,12 +170,12 @@
 	Ends early	Завършва по-рано
 	Energy	Енергия
 	Energy per part	Енергия на част
-	Enough: {units}, meeting the target in {p} of runs	Достатъчно: {units}, целта е постигната в {p} от репликациите
+	Enough: {units}, meeting the target in {p} of runs	Достатъчно: {units}, целта е постигната в {p} от изпълненията
 	Enter a number	Въведете число
 	Entered	Влезли
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Същностите, които намират чакалнята пълна, веднага минават по този поток (например за да опитат отново по-късно), вместо да бъдат загубени или да чакат преди задачата; тук те се броят като загубени.
 	Entities give up waiting	Същностите се отказват от чакането
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Обектите, които са още вътре в края на репликация, не се включват в средното чакане и средното време в системата.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Обектите, които са още вътре в края на изпълнение, не се включват в средното чакане и средното време в системата.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Същностите, които се отказват от чакането, минават по този поток (например за да опитат отново по-късно); останалите минават по другия изход на задачата.
 	Erlang	Ерланг
 	Error	Грешка
@@ -252,7 +253,7 @@
 	Maximum	Максимум
 	Mean	Средна стойност
 	Mean number inside	Среден брой вътре
-	One run of {n}: the results of the others differ.	Една репликация от {n}: резултатите на останалите се различават.
+	One run of {n}: the results of the others differ.	Едно изпълнение от {n}: резултатите на останалите се различават.
 	Save as a new BPMN file?	Да се запази ли като нов BPMN файл?
 	Still inside at the end	Още вътре в края
 	Mean work in progress	Средно незавършено производство
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	Без пристигания извън календарите
 	No blocks yet. Open a model, or add blocks to build one.	Все още няма блокове. Отворете модел или добавете блокове, за да създадете такъв.
 	No connections yet: join blocks below.	Все още няма връзки: свържете блоковете по-долу.
-	No run met the stop condition: each ran to its time limit.	Нито една репликация не достигна условието за спиране: всяка продължи до времевия си лимит.
+	No run met the stop condition: each ran to its time limit.	Нито едно изпълнение не достигна условието за спиране: всяко продължи до времевия си лимит.
 	No results yet	Все още няма резултати
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	В този модел не е отбелязан брак или преработка, затова OEE отчита качеството като 100%.
 	No target	Без цел
@@ -386,11 +387,11 @@
 	Repair time	Време за ремонт
 	Repeats	Повторение
 	Replace Model	Замяна на модел
-	Run 1 · {time} of {end} {unit}	Репликация 1 · {time} от {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	Репликация 1 · {time} от {end} {unit} · загряване
-	Runs	Репликации
-	Runs meeting the target	Репликации, постигащи целта
-	Runs that never met the stop condition count as later than their time limit.	Репликациите, които не достигнаха условието за спиране, се броят като по-късни от времевия си лимит.
+	Run 1 · {time} of {end} {unit}	Изпълнение 1 · {time} от {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Изпълнение 1 · {time} от {end} {unit} · загряване
+	Runs	Изпълнения
+	Runs meeting the target	Изпълнения, постигащи целта
+	Runs that never met the stop condition count as later than their time limit.	Изпълненията, които не достигнаха условието за спиране, се броят като по-късни от времевия си лимит.
 	Resource pool	Пул от ресурси
 	Resource pools	Пулове от ресурси
 	Restore	Възстановяване на прозореца
@@ -411,7 +412,7 @@
 	Run	Стартиране
 	Run cancelled	Изпълнението е отменено
 	Run experiment	Стартиране на експеримент
-	Play run 1 step by step and see each block's queue on the diagram	Изпълнение на репликация 1 стъпка по стъпка с опашката на всеки блок в диаграмата
+	Play run 1 step by step and see each block's queue on the diagram	Възпроизвеждане на изпълнение 1 стъпка по стъпка с опашката на всеки блок в диаграмата
 	Run the experiment ({shortcut})	Стартиране на експеримента ({shortcut})
 	Run the experiment again to see this result's spread.	Изпълнете експеримента отново, за да видите разсейването на този резултат.
 	Run the experiment at each value of one parameter, and compare a result.	Изпълнение на експеримента при всяка стойност на един параметър и сравнение на резултат.
@@ -419,7 +420,7 @@
 	Run the sweep	Изпълнение на обхождането
 	Running	Изпълнява се
 	Running…	Изпълнява се…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Репликациите се разделят: {low_n} от {n} около {low}, {high_n} около {high}. Средната стойност ({mean}) смесва два различни резултата; разгледайте всяка група.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Изпълненията се разделят: {low_n} от {n} около {low}, {high_n} около {high}. Средната стойност ({mean}) смесва два различни резултата; разгледайте всяка група.
 	Sat	сб
 	Save	Запазване
 	Save As…	Запази като…
@@ -467,7 +468,7 @@
 	Split batches	Разделяне на партиди
 	Split or join	Разделяне или обединяване
 	Split or join (all ways)	Разделяне или обединяване (всички пътища)
-	Spread across runs	Разсейване между репликациите
+	Spread across runs	Разсейване между изпълненията
 	Spread out	Разпределяне
 	Stages (k)	Етапи (k)
 	Standard deviation	Стандартно отклонение
@@ -498,19 +499,19 @@
 	Text on header	Текст в заглавната лента
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Връзката прекъсва и клиентът опитва отново: същността веднага се връща в началото на опашката, а свършената по нея работа е пропиляна.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Същността чака на своя сървър и работата продължава с остатъка, щом сървърът се върне.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Интервалът стига под целевия дял от {share}, така че не е показано с 95% доверие, че делът е постигнат; повече репликации биха го стеснили.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Интервалът стига под целевия дял от {share}, така че не е показано с 95% доверие, че делът е постигнат; повече изпълнения биха го стеснили.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Работата спира веднага: същността се връща в началото на опашката за който и да е сървър на смяна, а свършената по нея работа е пропиляна.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Работата спира веднага; същността чака на своя сървър и работата продължава с остатъка, щом този сървър отново е на смяна.
 	The last task with a resource it finished at	Последната задача с ресурс, през която е минала частта
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Средното време до условието за спиране е само върху репликациите, които са го достигнали; останалите продължиха до времевия си лимит.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Средното време до условието за спиране е само върху изпълненията, които са го достигнали; останалите продължиха до времевия си лимит.
 	The model changed, so watching stopped	Моделът се промени, затова наблюдението спря
 	The model has no calendars yet.	Моделът все още няма календари.
 	The model now has the units sizing found	Моделът вече има единиците, намерени при оразмеряването
 	The model: its experiment, connections and problems	Моделът: експеримент, връзки и проблеми
 	The name is empty or already used.	Името е празно или вече се използва.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Репликациите се разделят на два различни резултата: {a} от {n} в единия, {b} в другия. Резултати със същото разделение: {count}, сред тях {result} ({element}); вижте таблицата по-долу.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Изпълненията се разделят на два различни резултата: {a} от {n} в единия, {b} в другия. Резултати със същото разделение: {count}, сред тях {result} ({element}); вижте таблицата по-долу.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Сървърът довършва работата, която има, после излиза от смяна; дотогава се брои за на смяна.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Делът на репликациите при или под всяка стойност. Лентата съдържа истинското разпределение с доверие {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Делът на изпълненията при или под всяка стойност. Лентата съдържа истинското разпределение с доверие {confidence}.
 	The values are numbers, separated by semicolons or spaces	Стойностите са числа, разделени с точка и запетая или интервали
 	The whole clock	Цялото време
 	Themes	Теми
@@ -578,7 +579,7 @@
 	Warning	Предупреждение
 	Watch a Run	Наблюдение на изпълнение
 	Watch a run	Наблюдение на изпълнение
-	Watching run 1	Наблюдава се репликация 1
+	Watching run 1	Наблюдава се изпълнение 1
 	Weak text	Блед текст
 	Weak text on header	Блед текст в заглавната лента
 	Wed	ср
@@ -614,7 +615,7 @@
 	maximum {value}	максимум {value}
 	milliseconds	милисекунди
 	minutes	минути
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k от N: само k от N репликации имат стойност за този резултат и средното и интервалът му са върху тези k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k от N: само k от N изпълнения имат стойност за този резултат и средното и интервалът му са върху тези k.
 	n = {k} of {n}	n = {k} от {n}
 	nothing yet	все още нищо
 	per day	на ден
@@ -650,7 +651,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} и {second} се различават по светлота с {step}, нужно е 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: вероятността е число от 0 до 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} от {of} репликации постигнаха целта: {p} (95% интервал от {lo} до {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} от {of} изпълнения постигнаха целта: {p} (95% интервал от {lo} до {hi})
 	{name} — edited	{name} — редактирано
 	{n} created	Създадени: {n}
 	{n} done	Завършени: {n}
@@ -659,12 +660,12 @@
 	{n} {unit} per second	{n} {unit} в секунда
 	{property} (set to, mean)	{property} (зададена стойност, средна)
 	{reason}. {field} is still {value}.	{reason}. {field} остава {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – репликациите се разделят на два различни резултата: вижте таблицата по-долу.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – изпълненията се разделят на два различни резултата: вижте таблицата по-долу.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон „{background}“: {ratio}:1, нужно е {min}:1
 	{title}: now {now}, at most {most}	{title}: сега {now}, най-много {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% ДИ
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± означава половината от ширината на 95% доверителен интервал по Student-t за средната стойност от повторенията.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± означава половината от ширината на 95% доверителен интервал по Student-t за средната стойност от изпълненията.
 	· no results yet	· все още няма резултати
 unit	d	д
 unit	h	ч
@@ -674,16 +675,16 @@ unit	s	с
 unit	yr	г.
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
-@plural	Finished {n} run|Finished {n} runs	Завършена е {n} репликация|Завършени са {n} репликации
+@plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Отворен е {file} ({n} предупреждение)|Отворен е {file} ({n} предупреждения)
 @plural	Removed {n} block|Removed {n} blocks	Премахнат е {n} блок|Премахнати са {n} блока
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Изпълнява {n} независима репликация на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.|Изпълнява {n} независими репликации на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Условието за спиране е достигнато в {met} от {n} репликация, средно след {time} {unit}.|Условието за спиране е достигнато в {met} от {n} репликации, средно след {time} {unit}.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	Завършена е {done} от {n} репликация|Завършени са {done} от {n} репликации
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} репликация|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} репликации
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Прави {n} независимо изпълнение на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.|Прави {n} независими изпълнения на модела с начална стойност {seed}. Резултатите за всеки елемент включват половината ширина на 95% доверителен интервал.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Условието за спиране е достигнато в {met} от {n} изпълнение, средно след {time} {unit}.|Условието за спиране е достигнато в {met} от {n} изпълнения, средно след {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Завършено е {done} от {n} изпълнение|Завършени са {done} от {n} изпълнения
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} изпълнение|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nза {n} изпълнения
 @plural	{n} block selected|{n} blocks selected	Избран е {n} блок|Избрани са {n} блока
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} репликация на стъпка · начална стойност {seed}|{n} репликации на стъпка · начална стойност {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} репликация · средна {mean} · от {min} до {max}|{n} репликации · средна {mean} · от {min} до {max}
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликация · начална стойност {seed} · загряване {warmup} {unit} · измерено {duration} {unit}|{n} репликации · начална стойност {seed} · загряване {warmup} {unit} · измерено {duration} {unit}
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} репликация · начална стойност {seed}|{n} репликации · начална стойност {seed}
-@plural	{n} run|{n} runs	{n} репликация|{n} репликации
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} изпълнение на стъпка · начална стойност {seed}|{n} изпълнения на стъпка · начална стойност {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} изпълнение · средна {mean} · от {min} до {max}|{n} изпълнения · средна {mean} · от {min} до {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} изпълнение · начална стойност {seed} · загряване {warmup} {unit} · измерено {duration} {unit}|{n} изпълнения · начална стойност {seed} · загряване {warmup} {unit} · измерено {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} изпълнение · начална стойност {seed}|{n} изпълнения · начална стойност {seed}
+@plural	{n} run|{n} runs	{n} изпълнение|{n} изпълнения

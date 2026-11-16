@@ -13,7 +13,7 @@
 
 @id	language.name	Eesti
 	% down and up	% alla ja üles
-	% of runs	% kordustest
+	% of runs	% käivitamistest
 	+ Add block	+ Lisa plokk
 	95% interval of the share meeting the target: {lo} to {hi}	Eesmärgi saavutanud osakaalu 95% vahemik: {lo} kuni {hi}
 	95th percentile	95. protsentiil
@@ -34,7 +34,7 @@
 	Add Pool	Lisa kogum
 	Add a flow from…	Lisa voog alates…
 	Add a flow to…	Lisa voog kuni…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lisa kõige koormatumale tööle või kogumile üks ühik, kuni piisavalt kordusi saavutab eesmärgi. Näidatakse ka vastust, kus iga aeg on oma keskmisel; see on tavaliselt liiga väike.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lisa kõige koormatumale tööle või kogumile üks ühik, kuni piisavalt käivitamisi saavutab eesmärgi. Näidatakse ka vastust, kus iga aeg on oma keskmisel; see on tavaliselt liiga väike.
 	Add alternative	Lisa alternatiiv
 	Add calendar	Lisa kalender
 	Add calendar entry	Lisa kalendrikirje
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Kogu tekst vastab kontrasti miinimumnõuetele.
 	Also: {rule}	Lisaks: {rule}
 	Alternative {n}	Alternatiiv {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Olem läheb mööda esimest voogu, mille tingimus kehtib; tingimuste puudumisel loositakse voog tõenäosuste järgi (tühjad jagavad seda, mis teistest üle jääb).
 	Analysis	Analüüs
 	Appearance	Välimus
 	Arrival limit	Saabumiste piirang
@@ -169,12 +170,12 @@
 	Ends early	Lõpeb varem
 	Energy	Energia
 	Energy per part	Energia detaili kohta
-	Enough: {units}, meeting the target in {p} of runs	Piisab: {units}, eesmärk saavutatakse {p} kordustest
+	Enough: {units}, meeting the target in {p} of runs	Piisab: {units}, eesmärk saavutatakse {p} käivitamistest
 	Enter a number	Sisesta arv
 	Entered	Sisenenud
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Olemid, kes leiavad ooteruumi täis olevat, lähevad kohe seda voogu mööda (näiteks hiljem uuesti proovima), selle asemel et kaotsi minna või enne ülesannet oodata; siin loetakse need kaotatuks.
 	Entities give up waiting	Olemid loobuvad ootamisest
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Olemid, mis on korduse lõpus veel sees, jäetakse keskmisest ooteajast ja keskmisest ajast süsteemis välja.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Olemid, mis on käivitamise lõpus veel sees, jäetakse keskmisest ooteajast ja keskmisest ajast süsteemis välja.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Ootamisest loobuvad olemid lähevad seda voogu mööda (näiteks hiljem uuesti proovima); teised lähevad ülesande teise väljapääsu kaudu.
 	Erlang	Erlang
 	Error	Viga
@@ -252,7 +253,7 @@
 	Maximum	Maksimum
 	Mean	Keskmine
 	Mean number inside	Keskmine arv sees
-	One run of {n}: the results of the others differ.	Üks kordus {n}-st: teiste tulemused erinevad.
+	One run of {n}: the results of the others differ.	Üks käivitamine {n}-st: teiste tulemused erinevad.
 	Save as a new BPMN file?	Kas salvestada uue BPMN-failina?
 	Still inside at the end	Lõpus veel sees
 	Mean work in progress	Keskmine lõpetamata toodang
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	Väljaspool kalendreid saabumisi pole
 	No blocks yet. Open a model, or add blocks to build one.	Plokke veel pole. Ava mudel või lisa selle loomiseks plokke.
 	No connections yet: join blocks below.	Ühendusi veel pole: ühenda allolevad plokid.
-	No run met the stop condition: each ran to its time limit.	Ükski kordus ei jõudnud peatamistingimuseni: iga kordus kestis oma ajapiirini.
+	No run met the stop condition: each ran to its time limit.	Ükski käivitamine ei jõudnud peatamistingimuseni: iga käivitamine kestis oma ajapiirini.
 	No results yet	Tulemusi veel pole
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Selles mudelis pole praaki ega ümbertöötlust märgitud, seega arvestab OEE kvaliteediks 100%.
 	No target	Eesmärk puudub
@@ -386,11 +387,11 @@
 	Repair time	Remondiaeg
 	Repeats	Kordub
 	Replace Model	Asenda mudel
-	Run 1 · {time} of {end} {unit}	Kordus 1 · {time} / {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	Kordus 1 · {time} / {end} {unit} · soojendus
-	Runs	Kordused
-	Runs meeting the target	Eesmärgi saavutanud kordused
-	Runs that never met the stop condition count as later than their time limit.	Kordused, mis peatamistingimuseni ei jõudnud, loetakse ajapiirist hilisemaks.
+	Run 1 · {time} of {end} {unit}	Käivitamine 1 · {time} / {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Käivitamine 1 · {time} / {end} {unit} · soojendus
+	Runs	Käivitamised
+	Runs meeting the target	Eesmärgi saavutanud käivitamised
+	Runs that never met the stop condition count as later than their time limit.	Käivitamised, mis peatamistingimuseni ei jõudnud, loetakse ajapiirist hilisemaks.
 	Resource pool	Ressursikogum
 	Resource pools	Ressursikogumid
 	Restore	Taasta aken
@@ -411,7 +412,7 @@
 	Run	Käivita
 	Run cancelled	Käivitus tühistatud
 	Run experiment	Käivita eksperiment
-	Play run 1 step by step and see each block's queue on the diagram	Käivita kordus 1 samm-sammult ja vaata iga ploki järjekorda diagrammil
+	Play run 1 step by step and see each block's queue on the diagram	Esita käivitamine 1 samm-sammult ja vaata iga ploki järjekorda diagrammil
 	Run the experiment ({shortcut})	Käivita eksperiment ({shortcut})
 	Run the experiment again to see this result's spread.	Käivita eksperiment uuesti, et näha selle tulemuse hajuvust.
 	Run the experiment at each value of one parameter, and compare a result.	Käivita eksperiment ühe parameetri iga väärtusega ja võrdle tulemust.
@@ -419,7 +420,7 @@
 	Run the sweep	Käivita läbimine
 	Running	Käib
 	Running…	Käivitamine…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Kordused jagunevad: {low_n} kordust {n}-st – umbes {low}, {high_n} – umbes {high}. Keskmine ({mean}) segab kahte eri tulemust; vaata iga rühma eraldi.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Käivitamised jagunevad: {low_n} käivitamist {n}-st – umbes {low}, {high_n} – umbes {high}. Keskmine ({mean}) segab kahte eri tulemust; vaata iga rühma eraldi.
 	Sat	L
 	Save	Salvesta
 	Save As…	Salvesta nimega…
@@ -467,7 +468,7 @@
 	Split batches	Partiide jagamine
 	Split or join	Hargneda või ühineda
 	Split or join (all ways)	Hargneda või ühineda (kõik teed)
-	Spread across runs	Hajuvus korduste vahel
+	Spread across runs	Hajuvus käivitamiste vahel
 	Spread out	Jaota
 	Stages (k)	Etapid (k)
 	Standard deviation	Standardhälve
@@ -498,19 +499,19 @@
 	Text on header	Tekst päisel
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Ühendus katkeb ja klient proovib uuesti: olem läheb kohe tagasi järjekorra algusesse ja talle tehtud töö on raisatud.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Olem ootab oma serveri juures ja töö jätkub ülejäänuga, kui server on tagasi.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Vahemik ulatub alla sihtosakaalu {share}, seega pole 95% usaldusega näidatud, et osakaal on saavutatud; rohkem kordusi kitsendaks seda.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Vahemik ulatub alla sihtosakaalu {share}, seega pole 95% usaldusega näidatud, et osakaal on saavutatud; rohkem käivitamisi kitsendaks seda.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Töö peatub kohe: olem läheb tagasi järjekorra algusesse ükskõik millise vahetuses oleva serveri jaoks ja talle tehtud töö on raisatud.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Töö peatub kohe; olem ootab oma serveri juures ja töö jätkub ülejäänuga, kui see server on taas vahetuses.
 	The last task with a resource it finished at	Viimane ressursiga ülesanne, mille detail läbis
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Keskmine aeg peatamistingimuseni on ainult nende korduste põhjal, mis selle saavutasid; ülejäänud kestsid oma ajapiirini.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Keskmine aeg peatamistingimuseni on ainult nende käivitamiste põhjal, mis selle saavutasid; ülejäänud kestsid oma ajapiirini.
 	The model changed, so watching stopped	Mudel muutus, seega jälgimine lõpetati
 	The model has no calendars yet.	Mudelil pole veel kalendreid.
 	The model now has the units sizing found	Mudelil on nüüd dimensioneerimisel leitud ühikud
 	The model: its experiment, connections and problems	Mudel: eksperiment, ühendused ja probleemid
 	The name is empty or already used.	Nimi on tühi või juba kasutusel.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Kordused jagunevad kaheks eri tulemuseks: {a} kordust {n}-st ühes, {b} teises. {count} tulemust jaguneb samamoodi, nende seas {result} ({element}); vaata allolevat tabelit.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Käivitamised jagunevad kaheks eri tulemuseks: {a} käivitamist {n}-st ühes, {b} teises. {count} tulemust jaguneb samamoodi, nende seas {result} ({element}); vaata allolevat tabelit.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Server lõpetab oma pooleli töö ja lahkub siis vahetusest; seni loetakse ta vahetuses olevaks.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Korduste osakaal, mis on iga väärtusega võrdsed või sellest väiksemad. Vöönd sisaldab tegelikku jaotust {confidence} usaldusega.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Käivitamiste osakaal, mis on iga väärtusega võrdsed või sellest väiksemad. Vöönd sisaldab tegelikku jaotust {confidence} usaldusega.
 	The values are numbers, separated by semicolons or spaces	Väärtused on arvud, eraldatud semikoolonite või tühikutega
 	The whole clock	Kogu aeg
 	Themes	Teemad
@@ -519,7 +520,7 @@
 	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Nii palju võib oodata iga praegu töötava serveri kohta (pole rikkis, pole kasutusest välja võetud, on vahetuses), nii et ooteruum järgib servereid. Kui see kahaneb, jäävad juba ootajad alles.
 	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Nii palju võib oodata väljaspool kalendreid ja kalendri aktiivsuse ajal selle kalendri arv. Kui arv väheneb, jäävad juba ootajad alles.
 	This many may wait, besides a place for each server; a failed server keeps its place.	Nii palju võib oodata, lisaks ühele kohale iga serveri jaoks; rikkis server hoiab oma koha.
-	This run	See käivitus
+	This run	See käivitamine
 	Three-point estimate	Kolmepunktihinnang
 	Thu	N
 	Time available	Saadaolev aeg
@@ -576,9 +577,9 @@
 	Warm-up	Soojendus
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Soojendus {warmup} {unit}, seejärel mõõtmine {duration} {unit}
 	Warning	Hoiatus
-	Watch a Run	Jälgi käivitust
-	Watch a run	Jälgi käivitust
-	Watching run 1	Jälgitakse kordust 1
+	Watch a Run	Jälgi käivitamist
+	Watch a run	Jälgi käivitamist
+	Watching run 1	Jälgitakse käivitamist 1
 	Weak text	Tuhm tekst
 	Weak text on header	Tuhm tekst päisel
 	Wed	K
@@ -605,7 +606,7 @@
 	decision: one way	otsus: üks tee
 	departures	lahkumised
 	egui and eframe (Craft suite fork)	egui ja eframe (Crafti tarkvarakomplekti haru)
-	for the whole run	kogu käivituse kohta
+	for the whole run	kogu käivitamise kohta
 	from its value	selle väärtuse põhjal
 	have left	on lahkunud
 	hours	tunnid
@@ -614,7 +615,7 @@
 	maximum {value}	maksimum {value}
 	milliseconds	millisekundid
 	minutes	minutid
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k / N: ainult k kordusel N-st oli selle tulemuse väärtus ning selle keskmine ja vahemik on nende k põhjal.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k / N: ainult k käivitamisel N-st oli selle tulemuse väärtus ning selle keskmine ja vahemik on nende k põhjal.
 	n = {k} of {n}	n = {k} / {n}
 	nothing yet	veel mitte midagi
 	per day	päevas
@@ -650,7 +651,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ja {second} – heleduse erinevus {step}, vaja 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: tõenäosus on arv vahemikus 0 kuni 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} kordust {of}-st saavutas eesmärgi: {p} (95% vahemik {lo} kuni {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} käivitamist {of}-st saavutas eesmärgi: {p} (95% vahemik {lo} kuni {hi})
 	{name} — edited	{name} — muudetud
 	{n} created	{n} loodud
 	{n} done	{n} valmis
@@ -659,12 +660,12 @@
 	{n} {unit} per second	{n} {unit} sekundis
 	{property} (set to, mean)	{property} (määratud väärtus, keskmine)
 	{reason}. {field} is still {value}.	{reason}. {field} on endiselt {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – kordused jagunevad kaheks eri tulemuseks: vaata allolevat tabelit.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – käivitamised jagunevad kaheks eri tulemuseks: vaata allolevat tabelit.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – taust „{background}“: {ratio}:1, vaja {min}:1
 	{title}: now {now}, at most {most}	{title}: praegu {now}, kõige rohkem {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% usaldusvahemik
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± on korduste keskmise 95% Student-t usaldusvahemiku poollaius.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± on käivitamiste keskmise 95% Student-t usaldusvahemiku poollaius.
 	· no results yet	· tulemusi veel pole
 unit	d	p
 unit	h	h
@@ -674,16 +675,16 @@ unit	s	s
 unit	yr	a
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
-@plural	Finished {n} run|Finished {n} runs	{n} kordus lõpetatud|{n} kordust lõpetatud
+@plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Avati {file} ({n} hoiatus)|Avati {file} ({n} hoiatust)
 @plural	Removed {n} block|Removed {n} blocks	Eemaldati {n} plokk|Eemaldati {n} plokki
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Käivitab {n} sõltumatu mudeli korduse seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.|Käivitab {n} sõltumatut mudeli kordust seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Peatamistingimus saavutati {met} korral {n} kordusest, keskmiselt {time} {unit} järel.|Peatamistingimus saavutati {met} korral {n} kordusest, keskmiselt {time} {unit} järel.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} kordus {n}-st lõpetatud|{done} kordust {n}-st lõpetatud
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} korduse põhjal|{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} korduse põhjal
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Teeb {n} sõltumatu mudeli käivitamise seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.|Teeb {n} sõltumatut mudeli käivitamist seemnega {seed}. Iga elemendi tulemused sisaldavad 95% usaldusvahemiku poollaiust.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Peatamistingimus saavutati {met} korral {n} käivitamisest, keskmiselt {time} {unit} järel.|Peatamistingimus saavutati {met} korral {n} käivitamisest, keskmiselt {time} {unit} järel.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} käivitamine {n}-st lõpetatud|{done} käivitamist {n}-st lõpetatud
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} käivitamise põhjal|{name}: {mean}{unit}\n95% vahemik {low} kuni {high}{unit}\n{n} käivitamise põhjal
 @plural	{n} block selected|{n} blocks selected	{n} plokk valitud|{n} plokki valitud
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} kordus igal sammul · juhuarvuseeme {seed}|{n} kordust igal sammul · juhuarvuseeme {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} kordus · keskmine {mean} · {min} kuni {max}|{n} kordust · keskmine {mean} · {min} kuni {max}
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} kordus · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}|{n} kordust · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} kordus · seeme {seed}|{n} kordust · seeme {seed}
-@plural	{n} run|{n} runs	{n} kordus|{n} kordust
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} käivitamine igal sammul · juhuarvuseeme {seed}|{n} käivitamist igal sammul · juhuarvuseeme {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} käivitamine · keskmine {mean} · {min} kuni {max}|{n} käivitamist · keskmine {mean} · {min} kuni {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} käivitamine · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}|{n} käivitamist · seeme {seed} · soojendus {warmup} {unit} · mõõdetud {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} käivitamine · seeme {seed}|{n} käivitamist · seeme {seed}
+@plural	{n} run|{n} runs	{n} käivitamine|{n} käivitamist
