@@ -225,7 +225,7 @@ cleared.
 
 ## Read the results
 
-![Results: charts with confidence whiskers, then a table per block](screenshots/results.png)
+![Results: what the run found, how sure the numbers are, key measures per block, and two charts](screenshots/results.png)
 
 The **Results** tab shows, from the top:
 

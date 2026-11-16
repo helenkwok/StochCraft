@@ -29,7 +29,7 @@ downloadable release yet, so for now the desktop app is built from source.
 
 ## How it works
 
-| ![The start screen with three examples](docs/screenshots/start.png) | ![A model on the canvas with a block selected](docs/screenshots/model.png) | ![Results with charts and a table of means and 95% confidence intervals](docs/screenshots/results.png) |
+| ![The start screen with three examples](docs/screenshots/start.png) | ![A model on the canvas with a block selected](docs/screenshots/model.png) | ![Results: what the run found, how sure the numbers are, key measures and two charts](docs/screenshots/results.png) |
 | :---: | :---: | :---: |
 | **1. Open an example or a model file**, or start a new one | **2. Draw the flow** and set each step's times, capacity, breakdowns and shifts | **3. Run** and read each result with its 95% confidence interval |
 
