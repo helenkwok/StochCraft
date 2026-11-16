@@ -105,7 +105,8 @@ jobs:
           name="stochcraft-$VERSION-linux-$ARCH"
           mkdir -p "dist/$name"
           cp target/release/stochcraft target/release/stochcraft-cli "dist/$name/"
-          cp LICENSE-APACHE LICENSE-MIT NOTICE README.md "dist/$name/"
+          cp LICENSE-APACHE LICENSE-MIT NOTICE "dist/$name/"
+          bash .github/scripts/release-readme.sh "$VERSION" "dist/$name/README.md"
           tar -C dist -czf "dist/$name.tar.gz" "$name"
           rm -rf "dist/$name"
           ls -l dist
@@ -140,7 +141,9 @@ jobs:
           $name = "stochcraft-$env:VERSION-windows-x64-portable"
           New-Item -ItemType Directory -Path "dist/$name" | Out-Null
           Copy-Item target/release/stochcraft.exe, target/release/stochcraft-cli.exe "dist/$name/"
-          Copy-Item LICENSE-APACHE, LICENSE-MIT, NOTICE, README.md "dist/$name/"
+          Copy-Item LICENSE-APACHE, LICENSE-MIT, NOTICE "dist/$name/"
+          bash .github/scripts/release-readme.sh "$env:VERSION" "dist/$name/README.md"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Compress-Archive -Path "dist/$name" -DestinationPath "dist/$name.zip"
           Remove-Item -Recurse "dist/$name"
           Get-ChildItem dist
@@ -247,7 +250,8 @@ jobs:
           cli="stochcraft-cli-$VERSION-macos-universal"
           mkdir -p "dist/$cli"
           cp prebuilt/stochcraft-cli "dist/$cli/stochcraft-cli"
-          cp LICENSE-APACHE LICENSE-MIT NOTICE README.md "dist/$cli/"
+          cp LICENSE-APACHE LICENSE-MIT NOTICE "dist/$cli/"
+          bash .github/scripts/release-readme.sh "$VERSION" "dist/$cli/README.md"
       - name: Import the signing certificate
         if: env.SIGN == 'true'
         env:

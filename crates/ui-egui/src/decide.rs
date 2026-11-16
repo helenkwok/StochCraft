@@ -648,12 +648,12 @@ impl App {
         let met = stop["met"].as_u64().unwrap_or(0);
         let unit = unit_label(results["record"]["time_unit"].as_str().unwrap_or(""));
         let text = if met == 0 {
-            t("No replication met the stop condition: each ran to its time limit.").to_owned()
+            t("No run met the stop condition: each ran to its time limit.").to_owned()
         } else {
             tnf(
                 n,
-                "The stop condition was met in {met} of {n} replication, after {time} {unit} on average.",
-                "The stop condition was met in {met} of {n} replications, after {time} {unit} on average.",
+                "The stop condition was met in {met} of {n} run, after {time} {unit} on average.",
+                "The stop condition was met in {met} of {n} runs, after {time} {unit} on average.",
                 &[
                     ("met", &met.to_string()),
                     ("time", &mean_pm(&stop["time"])),
@@ -665,7 +665,7 @@ impl App {
         if met > 0 && met < n {
             ui.label(theme::weak(
                 ui,
-                t("The mean time to the stop condition is over the replications that met it only; the others ran to their time limit."),
+                t("The mean time to the stop condition is over the runs that met it only; the others ran to their time limit."),
             ));
         }
     }
@@ -686,7 +686,7 @@ impl App {
         if options.is_empty() {
             return;
         }
-        section(ui, t("Spread across replications"));
+        section(ui, t("Spread across runs"));
         let mut chosen = self
             .decide
             .dist
@@ -763,8 +763,8 @@ impl App {
             ui,
             tnf(
                 d["n"].as_u64().unwrap_or(0),
-                "{n} replication · mean {mean} · from {min} to {max}",
-                "{n} replications · mean {mean} · from {min} to {max}",
+                "{n} run · mean {mean} · from {min} to {max}",
+                "{n} runs · mean {mean} · from {min} to {max}",
                 &[
                     ("mean", &mean_pm(&d)),
                     ("min", &d["min"].as_f64().map(grouped).unwrap_or_default()),
@@ -800,7 +800,7 @@ impl App {
             let hi = interval[1].as_f64().unwrap_or(0.0);
             ui.add_space(6.0);
             ui.label(theme::strong(tf(
-                "{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})",
+                "{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})",
                 &[
                     ("met", &target["met"].to_string()),
                     ("of", &target["of"].to_string()),
@@ -813,7 +813,7 @@ impl App {
         if d["censored"].as_u64().is_some_and(|c| c > 0) {
             ui.label(theme::weak(
                 ui,
-                t("Replications that never met the stop condition count as later than their time limit."),
+                t("Runs that never met the stop condition count as later than their time limit."),
             ));
         }
     }
@@ -1131,7 +1131,7 @@ impl App {
         section(ui, t("Size the resources"));
         ui.label(theme::weak(
             ui,
-            t("Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small."),
+            t("Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small."),
         ));
         if self.decide.size_bound == Bound::None {
             self.decide.size_bound = Bound::AtMost;
@@ -1178,7 +1178,7 @@ impl App {
                 &mut self.decide.size_target_share,
                 50.0,
             );
-            ui.label(t("% of replications"));
+            ui.label(t("% of runs"));
             let ready = self.decide.size_out.is_some();
             go = ui
                 .add_enabled(ready, theme::primary(ui, t("Size")))
@@ -1219,7 +1219,7 @@ impl App {
         ui.add_space(6.0);
         if st["reached"] == true {
             ui.label(theme::strong(tf(
-                "Enough: {units}, meeting the target in {p} of replications",
+                "Enough: {units}, meeting the target in {p} of runs",
                 &[
                     ("units", &units_text(model, &st["units"])),
                     ("p", &percent(st["probability"].as_f64().unwrap_or(0.0))),
@@ -1245,7 +1245,7 @@ impl App {
             ui.label(theme::weak(
                 ui,
                 tf(
-                    "The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.",
+                    "The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.",
                     &[("share", &percent(share))],
                 ),
             ));
@@ -1256,11 +1256,7 @@ impl App {
             &[("units", &units_text(model, &det["units"]))],
         ));
         grid(ui, "size/steps", 3, |ui| {
-            for h in [
-                t("Units"),
-                t("Replications meeting the target"),
-                t("Busiest"),
-            ] {
+            for h in [t("Units"), t("Runs meeting the target"), t("Busiest")] {
                 ui.label(theme::weak(ui, h));
             }
             ui.end_row();
@@ -1331,8 +1327,8 @@ fn share_not_shown(stochastic: &Value, share: f64) -> bool {
 fn replications_line(r: &Value) -> String {
     tnf(
         r["replications"].as_u64().unwrap_or(0),
-        "{n} replication at each step · seed {seed}",
-        "{n} replications at each step · seed {seed}",
+        "{n} run at each step · seed {seed}",
+        "{n} runs at each step · seed {seed}",
         &[("seed", &r["seed"].to_string())],
     )
 }
@@ -1417,7 +1413,7 @@ fn ecdf_chart(ui: &mut egui::Ui, d: &Value, unit: &str) {
     ui.label(theme::weak(
         ui,
         tf(
-            "The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.",
+            "The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.",
             &[("confidence", &percent(d["confidence"].as_f64().unwrap_or(0.95)))],
         ),
     ));

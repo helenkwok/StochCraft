@@ -25,11 +25,11 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 
 - **Block:** one step of the process on the canvas: arrivals, a task, a decision, departures.
 - **Entity:** what flows through the blocks: a part, a patient, an order.
-- **Replication:** one run of the model from start to end with its own random numbers. An
-  **experiment** is all the replications together.
+- **Run:** one pass of the model from start to end with its own random numbers (textbooks call
+  it a replication). An **experiment** is all the runs together.
 - **95% confidence interval (± 95% CI):** the range the true mean most likely lies in, given the
-  replications. More replications make it narrower.
-- **Warm-up:** time at the start of each replication that is simulated but not measured, so an
+  runs. More runs make it narrower.
+- **Warm-up:** time at the start of each run that is simulated but not measured, so an
   empty model filling up does not distort the results.
 - **Utilisation:** the share of the time a task's units are busy, counted over the time they are
   on shift.
@@ -156,8 +156,31 @@ The model overview's **Problems** section lists every error and warning, each wi
 link that selects the block. Blocks with a problem are also marked in the left rail and on the
 canvas. When it says **None found. The model is ready to run.**, you are set.
 
-Fields check what you type: a value that is not a number is outlined and explained under the
-field, and the model keeps its old value until you fix it.
+While the model has errors, the header's button says how many, for example **Run (2 problems)**,
+and a chip above the canvas names the blocks, for example **2 problems: Paint, Inspect**.
+Clicking either (or pressing F5, or **Model ▸ Run**) does not run: it selects the block with the
+next error, focuses its field when it is a number such as the capacity or the main time, and
+says what is wrong in the status bar. Click again for the next one. An error in the status bar
+that belongs to a block selects it when clicked. Warnings alone do not stop a run.
+
+A block's own problems show at the top of its inspector, in a place of fixed height, so the
+fields below do not move when one appears.
+
+Fields check what you type: a value that is not a number, or one the model cannot use (a
+negative time or mean, a capacity or batch size below 1, a probability outside 0 to 1, such as
+a decision's), is outlined and explained under the field, and the model keeps its old value
+until you fix it.
+Esc, or selecting another block, puts the model's value back in the field.
+
+### The inspector: basics first
+
+A block's inspector shows its basic fields first: its name, capacity and main time (and a task's
+waiting room). The rest is folded: **More settings** (transfer, setup, times by property, planned
+run time), **Breakdowns and availability**, **Patience** and **Health check**. A folded section
+says what is set in it beside its title, for example **Breakdowns: Exponential 120 min,
+Constant 6 min**, or **None**; a section with something set starts open. The **?** beside
+**Capacity**, **Service time** and **Waiting room** opens a one-line explanation under the field;
+it can be reached with Tab and opened with Enter or Space.
 
 ### Undo
 
@@ -168,26 +191,26 @@ for example **Undo Rename Block**.
 
 With nothing selected, the **Experiment** section of the inspector sets how the model is run:
 
-- **Replications:** how many independent runs. More runs give narrower confidence intervals but
+- **Runs:** how many independent runs. More runs give narrower confidence intervals but
   take longer.
 - **Seed:** the starting point of the random numbers. The same model and seed always give the same
   results.
 - **Warm-up:** time simulated before measuring starts.
-- **Duration:** how long each replication is measured, after the warm-up.
+- **Duration:** how long each run is measured, after the warm-up.
 - **Time unit:** the unit for every time in the model. Changing it does not convert the times
   already in the model.
-- **Ends early:** stop each replication when enough entities have left a block, or when a task
+- **Ends early:** stop each run when enough entities have left a block, or when a task
   empties, instead of after its duration.
 
-The left rail's summary shows the current settings, for example "10 replications · seed 7".
+The left rail's summary shows the current settings, for example "10 runs · seed 7".
 
 ## Run it
 
 Press **Run** at the top right, or F5, or **Model ▸ Run**. A progress bar shows how many
-replications have finished; **Cancel run** (or Esc) stops it. The status bar then says
-"Finished 10 replications" and the **Results** tab opens.
+runs have finished; **Cancel run** (or Esc) stops it. The status bar then says
+"Finished 10 runs" and the **Results** tab opens.
 
-In the browser, the replications run in parallel on every processor core but one, up to 16.
+In the browser, the runs go in parallel on every processor core but one, up to 16.
 
 Results belong to the model as it was run: when you change the model, the old results are
 cleared.
@@ -198,9 +221,9 @@ cleared.
 
 The **Results** tab shows, from the top:
 
-1. **The run record:** replications, seed, warm-up and measured time, so you can reproduce the
+1. **The run record:** runs, seed, warm-up and measured time, so you can reproduce the
    numbers.
-2. **Findings**, when there are any. For example, if the replications split into two different
+2. **Findings**, when there are any. For example, if the runs split into two different
    outcomes (some lines collapse while others recover), StochCraft says so instead of reporting a
    mean that fits neither.
 3. **Charts:** utilisation, mean wait, mean queue length, mean time in system, and the shares of
@@ -210,17 +233,17 @@ The **Results** tab shows, from the top:
    a resource also report the time spent processing, starved, blocked, failed, off shift and
    setting up, and OEE when a planned run time is set. Departures with a demand report takt time,
    demand met and cycle time.
-5. **Spread across replications:** pick a result to see its percentiles and how often it met a
-   target, for example "the wait is at most 5 minutes in 14 of 16 replications".
+5. **Spread across runs:** pick a result to see its percentiles and how often it met a
+   target, for example "the wait is at most 5 minutes in 14 of 16 runs".
 
 **How sure is a number?** "2.99 ± 0.09" means the mean is most likely between 2.90 and 3.08. If
-the ± is large compared with the difference you care about, add replications. Notes under the
+the ± is large compared with the difference you care about, add runs. Notes under the
 table explain anything left out, such as entities still inside at the end.
 
 ## Watch a run
 
 To see the model move, click **Watch a run** above the canvas, or **Model ▸ Watch a Run**. It
-plays the first replication on the canvas: each block shows how many entities were created,
+plays the first run on the canvas: each block shows how many entities were created,
 are waiting, are busy or are done.
 
 - **Play/Pause** (Space), **Step** to the next event, and a **Speed** list.
@@ -228,7 +251,7 @@ are waiting, are busy or are done.
 - Select a block to see its queue over time in the inspector, under **This run**.
 - **Stop watching** returns to editing.
 
-This is one replication of many: its numbers differ from the others and from the averages in
+This is one run of many: its numbers differ from the others and from the averages in
 **Results**.
 
 ![Watching a run: counts on each block and the run's clock above the canvas](screenshots/watch.png)
@@ -243,8 +266,8 @@ come from your change, not from chance. Each analysis can take a while.
   whether the result changed by more than chance would explain.
 - **Which parameters matter:** moves each parameter down and up by a percentage and ranks them by
   how much the chosen result moves.
-- **Size the resources:** adds a unit at the busiest task or pool until enough replications meet a
-  target, such as "mean wait at most 5 minutes in 70% of replications". **Use these units in the
+- **Size the resources:** adds a unit at the busiest task or pool until enough runs meet a
+  target, such as "mean wait at most 5 minutes in 70% of runs". **Use these units in the
   model** applies the answer as one change you can undo.
 
 ## Save, open and export
@@ -265,7 +288,7 @@ standards that process-modelling tools share.
   **Recover** them the next time it starts.
 - **Export results:** on the **Results** tab, **Export table (CSV)** and **Export charts (PNG)**
   (in the browser: **Download**). The CSV has one row per block and metric, with the mean, the
-  half-width of its confidence interval, the standard deviation and the number of replications.
+  half-width of its confidence interval, the standard deviation and the number of runs.
 
 ## Change how it looks and which keys do what
 
@@ -302,13 +325,15 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 ## Troubleshooting
 
 - **Run is greyed out:** the model has no blocks yet, or a dialog is open. While a run is going, the button reads **Cancel run** instead.
+- **Run says "Run (1 problem)" and does not run:** the model has an error. The click selected the
+  block and field concerned; fix it, or click Run again for the next problem (see Fix problems).
 - **The results disappeared:** the model changed after the run. Run it again.
 - **A number field has a red outline:** the text is not a valid value. The message under it says
   why; the model keeps the old value until you fix it.
 - **Japanese, Chinese, Thai or other text shows as boxes in the browser:** the font is fetched
   when the language needs it; give it a moment online. Bengali, Tamil, Telugu and Lao use the
   fonts on your own system.
-- **The results look unstable from run to run:** add replications, or a warm-up if the model
+- **The results look unstable from run to run:** add runs, or a warm-up if the model
   starts empty.
 
 ## Limitations

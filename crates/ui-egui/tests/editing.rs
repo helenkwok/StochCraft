@@ -132,6 +132,106 @@ fn text_that_is_not_a_number_stays_in_its_field_until_fixed() {
     assert!(h.query_by_label_contains("is still").is_none());
 }
 
+/// A number the model would refuse is refused in its field: it stays there, outlined, with the
+/// reason under it, and the model keeps its value until the field holds one it takes.
+#[test]
+fn a_negative_mean_is_refused_and_the_model_keeps_its_value() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    type_into(&mut h, "Mean", "-2");
+    assert_eq!(element(&h, "serve")["service"]["mean"], json!(1.0));
+    assert!(!h.state().has_unsaved_changes());
+    h.get_by_label("Must be 0 or more. Mean is still 1.");
+    // The field keeps what was typed.
+    assert_eq!(
+        h.get_by_role_and_label(Role::TextInput, "Mean")
+            .accesskit_node()
+            .value()
+            .as_deref(),
+        Some("-2")
+    );
+    type_into(&mut h, "Mean", "2");
+    assert_eq!(element(&h, "serve")["service"]["mean"], json!(2.0));
+    assert!(h.query_by_label_contains("is still").is_none());
+}
+
+#[test]
+fn a_capacity_below_one_is_refused_and_esc_puts_the_models_back() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    type_into(&mut h, "Capacity", "0");
+    assert_eq!(element(&h, "serve")["capacity"], json!(1));
+    h.get_by_label("Must be 1 or more. Capacity is still 1.");
+    // Esc in the field drops what was refused (and goes back to the model).
+    h.get_by_role_and_label(Role::TextInput, "Capacity").click();
+    settle(&mut h);
+    h.key_press(egui::Key::Escape);
+    settle(&mut h);
+    if h.query_by_role_and_label(Role::TextInput, "Capacity")
+        .is_none()
+    {
+        // Esc also went back to the model: the block again.
+        click(&mut h, Role::ListBoxOption, "Serve customer");
+    }
+    assert!(h.query_by_label_contains("is still").is_none());
+    assert_eq!(
+        h.get_by_role_and_label(Role::TextInput, "Capacity")
+            .accesskit_node()
+            .value()
+            .as_deref(),
+        Some("1")
+    );
+    assert_eq!(element(&h, "serve")["capacity"], json!(1));
+}
+
+/// A refusal holds only while the limits do: another kind of distribution, which takes the
+/// value, gives the field back to the model's.
+#[test]
+fn a_refusal_that_no_longer_holds_is_dropped() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    h.state_mut()
+        .execute(
+            "block.set",
+            json!({"id": "serve", "service": {"type": "log_normal", "mean": 1.0, "std_dev": 0.5}}),
+        )
+        .expect("a log-normal service");
+    settle(&mut h);
+    type_into(&mut h, "Mean", "0");
+    h.get_by_label("Must be more than 0. Mean is still 1.");
+    h.state_mut()
+        .execute(
+            "block.set",
+            json!({"id": "serve", "service": {"type": "exponential", "mean": 1.0}}),
+        )
+        .expect("an exponential service");
+    settle(&mut h);
+    assert!(h.query_by_label_contains("is still").is_none());
+    assert_eq!(
+        h.get_by_role_and_label(Role::TextInput, "Mean")
+            .accesskit_node()
+            .value()
+            .as_deref(),
+        Some("1")
+    );
+}
+
+#[test]
+fn a_probability_above_one_is_refused() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    h.state_mut()
+        .execute(
+            "block.set",
+            json!({"id": "serve", "service": {"type": "binomial", "probability": 0.5, "trials": 4}}),
+        )
+        .expect("a binomial service");
+    settle(&mut h);
+    type_into(&mut h, "Probability", "1.5");
+    assert_eq!(element(&h, "serve")["service"]["probability"], json!(0.5));
+    h.get_by_label("Must be from 0 to 1. Probability is still 0.5.");
+}
+
 #[test]
 fn numbers_are_read_as_the_users_region_writes_them() {
     let mut h = mm1();
@@ -284,7 +384,7 @@ fn the_keyboard_moves_through_blocks_and_deletes_one() {
 #[test]
 fn the_experiment_and_flows_are_edited_from_their_forms() {
     let mut h = mm1();
-    type_into(&mut h, "Replications", "32");
+    type_into(&mut h, "Runs", "32");
     assert_eq!(model(&h)["experiment"]["replications"], json!(32));
     click(&mut h, Role::ComboBox, "Time unit");
     click(&mut h, Role::Button, "hours");
@@ -421,6 +521,12 @@ fn a_decision_routes_by_probability_and_condition() {
     assert_eq!(h.state().status(), "Undid Change Flow");
     h.state_mut().redo();
     settle(&mut h);
+    // A probability above 1 stays in its field, with the reason under it, until it is fixed.
+    type_into(&mut h, &format!("Probability of {first}"), "1.5");
+    assert_eq!(conn(&h, &first)["probability"], json!(0.3));
+    h.get_by_label("Must be from 0 to 1. Probability is still 0.3.");
+    type_into(&mut h, &format!("Probability of {first}"), "0.3");
+    assert!(h.query_by_label_contains("is still").is_none());
 
     // A default way out.
     click(&mut h, Role::ComboBox, "Default flow");
@@ -590,6 +696,8 @@ fn pools_are_added_and_a_shared_task_needs_them_by_pool_or_role() {
 fn a_servers_transfer_breakdowns_and_availability_are_edited_in_its_inspector() {
     let mut h = mm1();
     click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Folded under More settings, closed while nothing in it is set.
+    click(&mut h, Role::DisclosureTriangle, "More settings");
 
     // A transfer time: none at first, then a constant one, whose sender is then freed at once.
     click(&mut h, Role::ComboBox, "Transfer time");
@@ -811,6 +919,8 @@ fn a_product_mix_is_set_on_the_arrivals() {
 fn a_setup_and_a_changeover_are_set_in_the_inspector() {
     let mut h = mm1();
     click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Folded under More settings, closed while nothing in it is set.
+    click(&mut h, Role::DisclosureTriangle, "More settings");
     click(&mut h, Role::CheckBox, "Setup");
     assert_eq!(
         element(&h, "serve")["setup"],
@@ -839,6 +949,8 @@ fn a_setup_and_a_changeover_are_set_in_the_inspector() {
 fn processing_times_by_property_are_set_in_the_inspector() {
     let mut h = mm1();
     click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Folded under More settings, closed while nothing in it is set.
+    click(&mut h, Role::DisclosureTriangle, "More settings");
     click(&mut h, Role::CheckBox, "Service time by property");
     assert_eq!(
         element(&h, "serve")["processing_by"],
@@ -871,6 +983,8 @@ fn processing_times_by_property_are_set_in_the_inspector() {
 fn a_planned_run_time_is_set_in_the_inspector() {
     let mut h = mm1();
     click(&mut h, Role::ListBoxOption, "Serve customer");
+    // Folded under More settings, closed while nothing in it is set.
+    click(&mut h, Role::DisclosureTriangle, "More settings");
     click(&mut h, Role::ComboBox, "Planned run time per item");
     click(&mut h, Role::Button, "Constant");
     assert_eq!(

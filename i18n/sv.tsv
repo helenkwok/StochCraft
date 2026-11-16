@@ -13,7 +13,7 @@
 
 @id	language.name	Svenska
 	% down and up	% nedåt och uppåt
-	% of replications	% av replikationerna
+	% of runs	% av körningarna
 	+ Add block	+ Lägg till block
 	95% interval of the share meeting the target: {lo} to {hi}	95 %-intervall för andelen som når målet: {lo} till {hi}
 	95th percentile	95:e percentilen
@@ -34,7 +34,7 @@
 	Add Pool	Lägg till pool
 	Add a flow from…	Lägg till flöde från…
 	Add a flow to…	Lägg till flöde till…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lägg till en enhet vid den mest belastade uppgiften eller poolen tills tillräckligt många replikationer når ett mål. Svaret med varje tid på sitt medelvärde visas också; det är oftast för litet.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Lägg till en enhet vid den mest belastade uppgiften eller poolen tills tillräckligt många körningar når ett mål. Svaret med varje tid på sitt medelvärde visas också; det är oftast för litet.
 	Add alternative	Lägg till alternativ
 	Add calendar	Lägg till kalender
 	Add calendar entry	Lägg till kalenderpost
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	All text når minimikontrasten.
 	Also: {rule}	Även: {rule}
 	Alternative {n}	Alternativ {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	En entitet tar det första flödet vars villkor är uppfyllt; utan villkor dras ett flöde enligt sannolikheterna (tomma delar på det som de andra lämnar över).
 	Analysis	Analys
 	Appearance	Utseende
 	Arrival limit	Gräns för ankomster
@@ -169,12 +170,12 @@
 	Ends early	Slutar tidigare
 	Energy	Energi
 	Energy per part	Energi per detalj
-	Enough: {units}, meeting the target in {p} of replications	Tillräckligt: {units}, når målet i {p} av replikationerna
+	Enough: {units}, meeting the target in {p} of runs	Tillräckligt: {units}, når målet i {p} av körningarna
 	Enter a number	Ange ett tal
 	Entered	Inkomna
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entiteter som finner väntrummet fullt tar genast detta flöde (för att försöka igen senare, till exempel) i stället för att gå förlorade eller vänta före uppgiften; de räknas här som förlorade.
 	Entities give up waiting	Entiteter ger upp väntan
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Enheter som fortfarande är inuti vid slutet av en replikation räknas inte med i genomsnittlig väntetid och genomsnittlig tid i systemet.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Enheter som fortfarande är inuti vid slutet av en körning räknas inte med i genomsnittlig väntetid och genomsnittlig tid i systemet.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entiteter som ger upp väntan tar detta flöde (för att försöka igen senare, till exempel); de andra tar uppgiftens andra väg ut.
 	Erlang	Erlang
 	Error	Fel
@@ -252,7 +253,7 @@
 	Maximum	Maximum
 	Mean	Medelvärde
 	Mean number inside	Genomsnittligt antal inuti
-	One replication of {n}: the results of the others differ.	En replikation av {n}: de övrigas resultat skiljer sig.
+	One run of {n}: the results of the others differ.	En körning av {n}: de övrigas resultat skiljer sig.
 	Save as a new BPMN file?	Spara som ny BPMN-fil?
 	Still inside at the end	Fortfarande inuti vid slutet
 	Mean work in progress	Genomsnittligt antal produkter i arbete
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	Inga ankomster utanför kalendrar
 	No blocks yet. Open a model, or add blocks to build one.	Inga block ännu. Öppna en modell eller lägg till block för att skapa en.
 	No connections yet: join blocks below.	Inga anslutningar ännu: koppla ihop blocken nedan.
-	No replication met the stop condition: each ran to its time limit.	Ingen replikation nådde stoppvillkoret: var och en körde till sin tidsgräns.
+	No run met the stop condition: each ran to its time limit.	Ingen körning nådde stoppvillkoret: var och en körde till sin tidsgräns.
 	No results yet	Inga resultat ännu
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Ingen kassation eller omarbetning är markerad i den här modellen, så OEE räknar kvaliteten som 100 %.
 	No target	Inget mål
@@ -386,11 +387,11 @@
 	Repair time	Reparationstid
 	Repeats	Upprepas
 	Replace Model	Ersätt modell
-	Replication 1 · {time} of {end} {unit}	Replikation 1 · {time} av {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Replikation 1 · {time} av {end} {unit} · uppvärmning
-	Replications	Replikationer
-	Replications meeting the target	Replikationer som når målet
-	Replications that never met the stop condition count as later than their time limit.	Replikationer som aldrig nådde stoppvillkoret räknas som senare än sin tidsgräns.
+	Run 1 · {time} of {end} {unit}	Körning 1 · {time} av {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Körning 1 · {time} av {end} {unit} · uppvärmning
+	Runs	Körningar
+	Runs meeting the target	Körningar som når målet
+	Runs that never met the stop condition count as later than their time limit.	Körningar som aldrig nådde stoppvillkoret räknas som senare än sin tidsgräns.
 	Resource pool	Resurspool
 	Resource pools	Resurspooler
 	Restore	Återställ fönster
@@ -411,7 +412,7 @@
 	Run	Kör
 	Run cancelled	Körning avbruten
 	Run experiment	Kör experiment
-	Run replication 1 step by step and see each block's queue on the diagram	Kör replikation 1 steg för steg och se varje blocks kö i diagrammet
+	Play run 1 step by step and see each block's queue on the diagram	Spela upp körning 1 steg för steg och se varje blocks kö i diagrammet
 	Run the experiment ({shortcut})	Kör experimentet ({shortcut})
 	Run the experiment again to see this result's spread.	Kör experimentet igen för att se spridningen i det här resultatet.
 	Run the experiment at each value of one parameter, and compare a result.	Kör experimentet vid varje värde av en parameter och jämför ett resultat.
@@ -419,7 +420,7 @@
 	Run the sweep	Kör svepet
 	Running	Körs
 	Running…	Körs…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikationerna delar sig: {low_n} av {n} nära {low}, {high_n} nära {high}. Medelvärdet ({mean}) blandar två utfall; titta på varje grupp.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Körningarna delar sig: {low_n} av {n} nära {low}, {high_n} nära {high}. Medelvärdet ({mean}) blandar två utfall; titta på varje grupp.
 	Sat	lör
 	Save	Spara
 	Save As…	Spara som…
@@ -467,7 +468,7 @@
 	Split batches	Dela upp partier
 	Split or join	Dela eller sammanfoga
 	Split or join (all ways)	Dela eller sammanfoga (alla vägar)
-	Spread across replications	Spridning mellan replikationer
+	Spread across runs	Spridning mellan körningar
 	Spread out	Fördela
 	Stages (k)	Steg (k)
 	Standard deviation	Standardavvikelse
@@ -498,19 +499,19 @@
 	Text on header	Text på toppfält
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Anslutningen bryts och klienten försöker igen: entiteten går genast tillbaka först i kön, och arbetet som gjorts på den är bortkastat.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteten väntar vid sin server och jobbet fortsätter med det som var kvar när servern är tillbaka.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet når under målandelen {share}, så det är inte visat med 95 % säkerhet att andelen nås; fler replikationer skulle göra det smalare.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervallet når under målandelen {share}, så det är inte visat med 95 % säkerhet att andelen nås; fler körningar skulle göra det smalare.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Jobbet avbryts genast: entiteten går tillbaka först i kön för vilken server på skift som helst, och arbetet som gjorts på den är bortkastat.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Jobbet avbryts genast; entiteten väntar vid sin server och jobbet fortsätter med det som var kvar när den servern är på skift igen.
 	The last task with a resource it finished at	Den sista uppgiften med resurs som detaljen gick igenom
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Den genomsnittliga tiden till stoppvillkoret gäller bara replikationerna som nådde det; de övriga körde till sin tidsgräns.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Den genomsnittliga tiden till stoppvillkoret gäller bara körningarna som nådde det; de övriga körde till sin tidsgräns.
 	The model changed, so watching stopped	Modellen ändrades, så följningen stoppades
 	The model has no calendars yet.	Modellen har inga kalendrar än.
 	The model now has the units sizing found	Modellen har nu enheterna som dimensioneringen hittade
 	The model: its experiment, connections and problems	Modellen: experiment, anslutningar och problem
 	The name is empty or already used.	Namnet är tomt eller används redan.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikationerna delar sig i två utfall: {a} av {n} i det ena, {b} i det andra. {count} resultat delar sig på samma sätt, bland dem {result} ({element}); se tabellen nedan.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Körningarna delar sig i två utfall: {a} av {n} i det ena, {b} i det andra. {count} resultat delar sig på samma sätt, bland dem {result} ({element}); se tabellen nedan.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Servern gör klart jobbet den har och går sedan av skift; till dess räknas den som på skift.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen replikationer vid eller under varje värde. Bandet innehåller den sanna fördelningen med {confidence} konfidens.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen körningar vid eller under varje värde. Bandet innehåller den sanna fördelningen med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Värdena är tal åtskilda med semikolon eller mellanslag
 	The whole clock	Hela tiden
 	Themes	Teman
@@ -578,7 +579,7 @@
 	Warning	Varning
 	Watch a Run	Följ en körning
 	Watch a run	Följ en körning
-	Watching replication 1	Följer replikation 1
+	Watching run 1	Följer körning 1
 	Weak text	Svag text
 	Weak text on header	Svag text på toppfält
 	Wed	ons
@@ -614,7 +615,7 @@
 	maximum {value}	maximum {value}
 	milliseconds	millisekunder
 	minutes	minuter
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k av N: bara k av de N replikationerna hade ett värde för resultatet, och dess medelvärde och intervall gäller de k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k av N: bara k av de N körningarna hade ett värde för resultatet, och dess medelvärde och intervall gäller de k.
 	n = {k} of {n}	n = {k} av {n}
 	nothing yet	inget ännu
 	per day	per dag
@@ -648,9 +649,8 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} och {second} skiljer sig med {de} för betraktare med röd-grön färgblindhet, kräver 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} och {second} skiljer sig med {de} för betraktare med röd-grön färgblindhet, kräver 8: skilj dem åt bara med etiketter.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} och {second} skiljer sig i ljushet med {step}, kräver 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: en sannolikhet är ett tal mellan 0 och 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} av {of} replikationer nådde målet: {p} (95 %-intervall {lo} till {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} av {of} körningar nådde målet: {p} (95 %-intervall {lo} till {hi})
 	{name} — edited	{name} — redigerad
 	{n} created	{n} skapade
 	{n} done	{n} klara
@@ -659,12 +659,12 @@
 	{n} {unit} per second	{n} {unit} per sekund
 	{property} (set to, mean)	{property} (angivet värde, medelvärde)
 	{reason}. {field} is still {value}.	{reason}. {field} är fortfarande {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replikationerna delar sig i två utfall; se tabellen nedan.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): körningarna delar sig i två utfall; se tabellen nedan.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} på {background}: {ratio}:1, kräver {min}:1
 	{title}: now {now}, at most {most}	{title}: nu {now}, högst {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% KI
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± är halva bredden av ett 95% Student-t-konfidensintervall för medelvärdet över replikationerna.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± är halva bredden av ett 95% Student-t-konfidensintervall för medelvärdet över körningarna.
 	· no results yet	· inga resultat ännu
 unit	d	d
 unit	h	h
@@ -672,18 +672,27 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	år
+	How long one unit takes to serve one entity, drawn anew for each entity.	Hur lång tid en enhet tar på sig att betjäna en entitet; dras på nytt för varje entitet.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hur många entiteter som får vänta här på en ledig enhet, utöver dem som betjänas; utan bock hur många som helst.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Hur många enheter som betjänar här samtidigt, till exempel maskiner eller personal, var och en en entitet i taget.
+	More settings	Fler inställningar
+	Must be from {min} to {max}	Måste vara från {min} till {max}
+	Must be more than {min}	Måste vara mer än {min}
+	Must be {min} or more	Måste vara {min} eller mer
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
-@plural	Finished {n} replication|Finished {n} replications	{n} replikation klar|{n} replikationer klara
+@plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Öppnade {file} ({n} varning)|Öppnade {file} ({n} varningar)
 @plural	Removed {n} block|Removed {n} blocks	Tog bort {n} block|Tog bort {n} block
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kör {n} oberoende replikation av modellen från slumpfrö {seed}. Resultaten för varje element visar halva bredden på ett 95% konfidensintervall.|Kör {n} oberoende replikationer av modellen från slumpfrö {seed}. Resultaten för varje element visar halva bredden på ett 95% konfidensintervall.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Stoppvillkoret nåddes i {met} av {n} replikation, efter i medel {time} {unit}.|Stoppvillkoret nåddes i {met} av {n} replikationer, efter i medel {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} av {n} replikation klar|{done} av {n} replikationer klara
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% intervall från {low} till {high}{unit}\növer {n} replikation|{name}: {mean}{unit}\n95% intervall från {low} till {high}{unit}\növer {n} replikationer
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Gör {n} oberoende körning av modellen från slumpfrö {seed}. Resultaten för varje element visar halva bredden på ett 95% konfidensintervall.|Gör {n} oberoende körningar av modellen från slumpfrö {seed}. Resultaten för varje element visar halva bredden på ett 95% konfidensintervall.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Stoppvillkoret nåddes i {met} av {n} körning, efter i medel {time} {unit}.|Stoppvillkoret nåddes i {met} av {n} körningar, efter i medel {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} av {n} körning klar|{done} av {n} körningar klara
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% intervall från {low} till {high}{unit}\növer {n} körning|{name}: {mean}{unit}\n95% intervall från {low} till {high}{unit}\növer {n} körningar
 @plural	{n} block selected|{n} blocks selected	{n} block markerat|{n} block markerade
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikation per steg · slumpfrö {seed}|{n} replikationer per steg · slumpfrö {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikation · medelvärde {mean} · från {min} till {max}|{n} replikationer · medelvärde {mean} · från {min} till {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikation · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta|{n} replikationer · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikation · slumpfrö {seed}|{n} replikationer · slumpfrö {seed}
-@plural	{n} replication|{n} replications	{n} replikation|{n} replikationer
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} körning per steg · slumpfrö {seed}|{n} körningar per steg · slumpfrö {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} körning · medelvärde {mean} · från {min} till {max}|{n} körningar · medelvärde {mean} · från {min} till {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} körning · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta|{n} körningar · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} körning · slumpfrö {seed}|{n} körningar · slumpfrö {seed}
+@plural	{n} run|{n} runs	{n} körning|{n} körningar
+@plural	Run ({n} problem)|Run ({n} problems)	Kör ({n} problem)|Kör ({n} problem)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problem: {blocks}
