@@ -545,6 +545,73 @@ engine's messages (validation, file notes) are English too.
   Отминали, ka, kk, lo, th, ta, te, bn, sq, et and lt as before, sl "Niso se pridružile" as a
   results label, da "Fravalgte køen", el "Μη είσοδος" as a count, and the endings of the
   Slavic, Baltic and Finnish hover texts.
+- A run (issue #145): the window now calls one pass of the model with its own random numbers a
+  run, not a replication. So the rows that count, name or average over replications (the Runs
+  field, "{n} runs", "Watching run 1", "% of runs", the split-outcome notes…) use each language's
+  noun for a run of a program or model. Where a source supported it, the noun is the word the
+  catalog already used for "This run" and "Watch a run". It was checked against outside sources,
+  never against another product's translations. IATE has no "simulation run" entry; the IATE ids
+  below are its computing-sense entries for a run of a program (1610411 "run, machine run", 771037
+  "program run"). Sources:
+  - bg изпълнение: Wikipedia "Декоратор (шаблон)", изпълнение на програмата.
+  - bs pokretanje: Wikipedia "Runtime", pokretanje programa.
+  - ca execució: Wikipedia "Simulació d'ordinador".
+  - cs běh: Wikipedia "Řízení projektů" ("100 běhů … každý běh simulace") and "Využití metody
+    Monte Carlo ve financích".
+  - da kørsel: IATE 1610411; Wikipedia "Computersimulation".
+  - de Lauf: IATE 1610411.
+  - el εκτέλεση: IATE 1610411, εκτέλεση προγράμματος.
+  - es ejecución: IATE 1610411; Wikipedia "Simulación (informática)", la ejecución de la
+    simulación.
+  - et käivitamine: Wikipedia "TempleOS", "Run: programmi käivitamine". It replaces the catalog's
+    käivitus, in "This run" and "Watch a run" too.
+  - fi ajo: IATE 1610411; Wikipedia "Simulointi", simulointiajoja.
+  - fr exécution: IATE 771037; Wikipedia "Simulation informatique".
+  - gl execución: Wikipedia "Cola de prioridade", a execución da simulación.
+  - hi रन: Wikipedia "माइक्रो-कैप", सिमुलेशन रन.
+  - hr pokretanje: Wikipedia "DOS" and "Virtualni stroj", pokretanje programa.
+  - hu futás: Wikipedia "Szimuláció", a szimulációs modell futása. It replaces the catalog's
+    futtatás, in "This run" and "Watch a run" too.
+  - id eksekusi: Wikipedia "Pemrograman prosedural", eksekusi program. It replaces the catalog's
+    jalannya, in "This run" and "Watch a run" too.
+  - it esecuzione: IATE 1610411.
+  - ja 実行: Wiktionary 実行, its computing sense.
+  - ka გაშვება: Wikipedia "ვიდეო თამაში", პროგრამის გაშვება.
+  - kk іске қосу: Wikipedia "Жүйелік талаптар", бағдарламаны іске қосу.
+  - ko 실행: Wikipedia "컴퓨터 시뮬레이션", 시스템 모델의 실행.
+  - lt vykdymas: Wikipedia "Imitacija", imitacinio modelio vykdymas.
+  - nb kjøring: Wikipedia "Geoteknisk bæreevne", flere kjøringer.
+  - nl uitvoering: IATE 771037, programma-uitvoering.
+  - pl uruchomienie: Wikipedia "Multisymulacje", każde kolejne uruchomienie symulacji.
+  - pt-br execução: IATE 1610411; Wikipedia "Simulação de eventos discretos", "cada replicação
+    representa uma diferente execução completa do modelo".
+  - ro rulare: Wikipedia "Modelul unui sistem" (o rulare unică a simulării) and "Populația minimă
+    viabilă" (30 din 100 de rulări).
+  - ru запуск: Wiktionary запуск; Wikipedia "Симулятор" for the verb.
+  - sk beh: Wikipedia "C (programovací jazyk)", beh programu.
+  - sl zagon: Wikipedia "Mozilla Firefox", zagon programa.
+  - sq ekzekutim: Wikipedia "Destruktorët", ekzekutimi i programit.
+  - sr and sr-latn покретање/pokretanje: Wikipedia "Логичка симулација".
+  - sv körning: IATE 1610411.
+  - te అమలు: Wikipedia "కంప్యూటర్ ప్రోగ్రామ్".
+  - th การรัน: Wikipedia "SimPy", รันแบบจำลองหลายครั้ง. The source has the verb; the noun is its
+    การ- form.
+  - tr çalıştırma: Wiktionary çalıştırma; Wikipedia "Simülasyon", programı çalıştırmak.
+  - uk запуск: Wikipedia "Цифрове моделювання", процес запуску моделі.
+  - vi lần chạy: Wikipedia "Mô phỏng", các lần chạy.
+  - zh-hans 运行 and zh-hant 執行: Wikipedia "计算机模拟" in its mainland and Taiwan forms, 一次系统模型的运行
+    and 一次系統模型的執行.
+
+  bn, lo and ta are unresolved and keep their word for replication. No source gave a clear noun
+  for a run: bn's রান and lo's ການປະມວນຜົນ are not found in that sense, and ta Wikipedia has only
+  the verb இயக்கு. Several of the nouns above literally mean starting or launching a program (bs,
+  hr, sr pokretanje, sl zagon, kk, ka, pl uruchomienie, ru and uk запуск, et käivitamine). They
+  were kept because the sources use them for running a program or a simulation. The rest of each
+  row keeps the catalog's own wording. Not reviewed by native speakers.
+- The decision block's help sentence (issue #145: "An entity takes the first flow whose condition
+  holds…") was drafted from the plain meaning of the English, with each catalog's own words for
+  entity, flow, condition and probability. Not checked against any other source, and not reviewed
+  by native speakers.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

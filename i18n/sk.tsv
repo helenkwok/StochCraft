@@ -13,7 +13,7 @@
 
 @id	language.name	Slovenčina
 	% down and up	% nadol a nahor
-	% of runs	% replikácií
+	% of runs	% behov
 	+ Add block	+ Pridať blok
 	95% interval of the share meeting the target: {lo} to {hi}	95 % interval podielu, ktorý splnil cieľ: {lo} až {hi}
 	95th percentile	95. percentil
@@ -34,7 +34,7 @@
 	Add Pool	Pridať skupinu
 	Add a flow from…	Pridať tok z…
 	Add a flow to…	Pridať tok do…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Pridávať jednotku pri najvyťaženejšej úlohe alebo fonde, kým dosť replikácií nesplní cieľ. Zobrazí sa aj odpoveď s každým časom na priemere; býva príliš malá.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Pridávať jednotku pri najvyťaženejšej úlohe alebo fonde, kým dosť behov nesplní cieľ. Zobrazí sa aj odpoveď s každým časom na priemere; býva príliš malá.
 	Add alternative	Pridať alternatívu
 	Add calendar	Pridať kalendár
 	Add calendar entry	Pridať položku kalendára
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Všetok text spĺňa minimálny kontrast.
 	Also: {rule}	Tiež: {rule}
 	Alternative {n}	Alternatíva {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Entita ide prvým tokom, ktorého podmienka platí; bez podmienok ide tokom vylosovaným podľa pravdepodobností (prázdne si rozdelia to, čo zostane po ostatných).
 	Analysis	Analýza
 	Appearance	Vzhľad
 	Arrival limit	Limit príchodov
@@ -169,12 +170,12 @@
 	Ends early	Končí skôr
 	Energy	Energia
 	Energy per part	Energia na diel
-	Enough: {units}, meeting the target in {p} of runs	Stačí: {units}, cieľ splnený v {p} replikácií
+	Enough: {units}, meeting the target in {p} of runs	Stačí: {units}, cieľ splnený v {p} behov
 	Enter a number	Zadajte číslo
 	Entered	Vstúpilo
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entity, ktoré nájdu čakáreň plnú, idú hneď týmto tokom (napríklad aby to neskôr skúsili znova), namiesto toho, aby sa stratili alebo čakali pred úlohou; tu sa počítajú ako stratené.
 	Entities give up waiting	Entity vzdávajú čakanie
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entity, ktoré sú na konci replikácie stále vnútri, nie sú zahrnuté do priemerného času čakania ani priemerného času v systéme.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entity, ktoré sú na konci behu stále vnútri, nie sú zahrnuté do priemerného času čakania ani priemerného času v systéme.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entity, ktoré vzdajú čakanie, idú týmto tokom (napríklad aby to neskôr skúsili znova); ostatné idú druhou cestou von z úlohy.
 	Erlang	Erlangovo
 	Error	Chyba
@@ -252,7 +253,7 @@
 	Maximum	Maximum
 	Mean	Priemer
 	Mean number inside	Priemerný počet vnútri
-	One run of {n}: the results of the others differ.	Jedna replikácia z {n}: výsledky ostatných sa líšia.
+	One run of {n}: the results of the others differ.	Jeden beh z {n}: výsledky ostatných sa líšia.
 	Save as a new BPMN file?	Uložiť ako nový súbor BPMN?
 	Still inside at the end	Na konci stále vnútri
 	Mean work in progress	Priemerná nedokončená výroba
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	Žiadne príchody mimo kalendárov
 	No blocks yet. Open a model, or add blocks to build one.	Zatiaľ žiadne bloky. Otvorte model alebo pridajte bloky na jeho vytvorenie.
 	No connections yet: join blocks below.	Zatiaľ žiadne prepojenia: prepojte bloky nižšie.
-	No run met the stop condition: each ran to its time limit.	Žiadna replikácia nesplnila podmienku zastavenia: každá bežala do svojho časového limitu.
+	No run met the stop condition: each ran to its time limit.	Žiadny beh nesplnil podmienku zastavenia: každý bežal do svojho časového limitu.
 	No results yet	Zatiaľ žiadne výsledky
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	V tomto modeli nie sú označené žiadne nepodarky ani prepracovanie, takže OEE počíta kvalitu ako 100 %.
 	No target	Bez cieľa
@@ -386,11 +387,11 @@
 	Repair time	Čas opravy
 	Repeats	Opakovanie
 	Replace Model	Nahradiť model
-	Run 1 · {time} of {end} {unit}	Replikácia 1 · {time} z {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	Replikácia 1 · {time} z {end} {unit} · zahrievanie
-	Runs	Replikácie
-	Runs meeting the target	Replikácie spĺňajúce cieľ
-	Runs that never met the stop condition count as later than their time limit.	Replikácie, ktoré podmienku zastavenia nikdy nesplnili, sa počítajú ako neskoršie než ich časový limit.
+	Run 1 · {time} of {end} {unit}	Beh 1 · {time} z {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Beh 1 · {time} z {end} {unit} · zahrievanie
+	Runs	Behy
+	Runs meeting the target	Behy spĺňajúce cieľ
+	Runs that never met the stop condition count as later than their time limit.	Behy, ktoré podmienku zastavenia nikdy nesplnili, sa počítajú ako neskoršie než ich časový limit.
 	Resource pool	Skupina zdrojov
 	Resource pools	Skupiny zdrojov
 	Restore	Obnoviť veľkosť
@@ -411,7 +412,7 @@
 	Run	Spustiť
 	Run cancelled	Beh bol zrušený
 	Run experiment	Spustiť experiment
-	Play run 1 step by step and see each block's queue on the diagram	Spustiť replikáciu 1 krok za krokom a sledovať front každého bloku v diagrame
+	Play run 1 step by step and see each block's queue on the diagram	Prehrať beh 1 krok za krokom a sledovať front každého bloku v diagrame
 	Run the experiment ({shortcut})	Spustiť experiment ({shortcut})
 	Run the experiment again to see this result's spread.	Spustite experiment znova, aby ste videli rozptyl tohto výsledku.
 	Run the experiment at each value of one parameter, and compare a result.	Spustiť experiment pre každú hodnotu jedného parametra a porovnať výsledok.
@@ -419,7 +420,7 @@
 	Run the sweep	Spustiť prechod
 	Running	Prebieha
 	Running…	Prebieha…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikácie sa rozdelili: {low_n} z {n} blízko {low}, {high_n} blízko {high}. Priemer ({mean}) mieša dva odlišné výsledky; pozrite sa na každú skupinu.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Behy sa rozdelili: {low_n} z {n} blízko {low}, {high_n} blízko {high}. Priemer ({mean}) mieša dva odlišné výsledky; pozrite sa na každú skupinu.
 	Sat	so
 	Save	Uložiť
 	Save As…	Uložiť ako…
@@ -467,7 +468,7 @@
 	Split batches	Rozdelenie dávok
 	Split or join	Rozdeliť alebo spojiť
 	Split or join (all ways)	Rozdeliť alebo spojiť (všetky cesty)
-	Spread across runs	Rozptyl medzi replikáciami
+	Spread across runs	Rozptyl medzi behmi
 	Spread out	Rozmiestniť
 	Stages (k)	Fázy (k)
 	Standard deviation	Štandardná odchýlka
@@ -498,19 +499,19 @@
 	Text on header	Text v záhlaví
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Spojenie spadne a klient to skúsi znova: entita sa hneď vráti na začiatok radu a práca na nej vykonaná je zbytočná.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entita čaká pri svojom serveri a práca pokračuje so zvyškom, len čo je server späť.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval siaha pod cieľový podiel {share}, takže splnenie podielu nie je preukázané s 95 % spoľahlivosťou; viac replikácií by ho zúžilo.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval siaha pod cieľový podiel {share}, takže splnenie podielu nie je preukázané s 95 % spoľahlivosťou; viac behov by ho zúžilo.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Práca sa hneď zastaví: entita sa vráti na začiatok radu pre ktorýkoľvek server na zmene a práca na nej vykonaná je zbytočná.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Práca sa hneď zastaví; entita čaká pri svojom serveri a práca pokračuje so zvyškom, len čo je tento server opäť na zmene.
 	The last task with a resource it finished at	Posledná úloha so zdrojom, ktorou diel prešiel
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Priemerný čas do podmienky zastavenia je iba z replikácií, ktoré ju splnili; ostatné bežali do svojho časového limitu.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Priemerný čas do podmienky zastavenia je iba z behov, ktoré ju splnili; ostatné bežali do svojho časového limitu.
 	The model changed, so watching stopped	Model sa zmenil, preto sa sledovanie ukončilo
 	The model has no calendars yet.	Model zatiaľ nemá žiadne kalendáre.
 	The model now has the units sizing found	Model má teraz jednotky nájdené dimenzovaním
 	The model: its experiment, connections and problems	Model: experiment, prepojenia a problémy
 	The name is empty or already used.	Názov je prázdny alebo sa už používa.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikácie sa rozdelili na dva odlišné výsledky: {a} z {n} v jednom, {b} v druhom. Výsledky rozdelené rovnako: {count}, medzi nimi {result} ({element}); pozrite tabuľku nižšie.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Behy sa rozdelili na dva odlišné výsledky: {a} z {n} v jednom, {b} v druhom. Výsledky rozdelené rovnako: {count}, medzi nimi {result} ({element}); pozrite tabuľku nižšie.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Server dokončí prácu, ktorú má, a potom ukončí zmenu; dovtedy sa počíta ako na zmene.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Podiel replikácií rovných alebo menších než každá hodnota. Pás obsahuje skutočné rozdelenie so spoľahlivosťou {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Podiel behov rovných alebo menších než každá hodnota. Pás obsahuje skutočné rozdelenie so spoľahlivosťou {confidence}.
 	The values are numbers, separated by semicolons or spaces	Hodnoty sú čísla oddelené bodkočiarkami alebo medzerami
 	The whole clock	Celý čas
 	Themes	Motívy
@@ -578,7 +579,7 @@
 	Warning	Upozornenie
 	Watch a Run	Sledovať beh
 	Watch a run	Sledovať beh
-	Watching run 1	Sleduje sa replikácia 1
+	Watching run 1	Sleduje sa beh 1
 	Weak text	Tlmený text
 	Weak text on header	Tlmený text v záhlaví
 	Wed	st
@@ -614,7 +615,7 @@
 	maximum {value}	maximum {value}
 	milliseconds	milisekundy
 	minutes	minúty
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k z N: iba k z N replikácií malo pre tento výsledok hodnotu a jeho priemer a interval sú z týchto k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k z N: iba k z N behov malo pre tento výsledok hodnotu a jeho priemer a interval sú z týchto k.
 	n = {k} of {n}	n = {k} z {n}
 	nothing yet	zatiaľ nič
 	per day	za deň
@@ -650,7 +651,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} a {second} – rozdiel svetlosti {step}, treba 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: pravdepodobnosť je číslo od 0 do 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} z {of} replikácií splnilo cieľ: {p} (95 % interval {lo} až {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} z {of} behov splnilo cieľ: {p} (95 % interval {lo} až {hi})
 	{name} — edited	{name} — upravené
 	{n} created	Vytvorené: {n}
 	{n} done	Hotové: {n}
@@ -659,12 +660,12 @@
 	{n} {unit} per second	{n} {unit} za sekundu
 	{property} (set to, mean)	{property} (nastavené na, priemer)
 	{reason}. {field} is still {value}.	{reason}. {field} je stále {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – replikácie sa rozdelili na dva odlišné výsledky: pozrite tabuľku nižšie.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – behy sa rozdelili na dva odlišné výsledky: pozrite tabuľku nižšie.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – pozadie „{background}“: {ratio}:1, treba {min}:1
 	{title}: now {now}, at most {most}	{title}: teraz {now}, najviac {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% interval spoľahlivosti
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± predstavuje polovicu šírky 95% Student-t intervalu spoľahlivosti priemeru naprieč replikáciami.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± predstavuje polovicu šírky 95% Student-t intervalu spoľahlivosti priemeru naprieč behmi.
 	· no results yet	· zatiaľ žiadne výsledky
 unit	d	d
 unit	h	h
@@ -684,16 +685,16 @@ unit	yr	r.
 	Table	Tabuľka
 @plural	Added {n} block|Added {n} blocks	Pridaný {n} blok|Pridané {n} bloky|Pridaných {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Skopírovaný {n} blok|Skopírované {n} bloky|Skopírovaných {n} blokov
-@plural	Finished {n} run|Finished {n} runs	Dokončená {n} replikácia|Dokončené {n} replikácie|Dokončených {n} replikácií
+@plural	Finished {n} run|Finished {n} runs	Dokončený {n} beh|Dokončené {n} behy|Dokončených {n} behov
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Otvorený {file} ({n} upozornenie)|Otvorený {file} ({n} upozornenia)|Otvorený {file} ({n} upozornení)
 @plural	Removed {n} block|Removed {n} blocks	Odstránený {n} blok|Odstránené {n} bloky|Odstránených {n} blokov
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislú replikáciu modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislé replikácie modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislých replikácií modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Podmienka zastavenia bola splnená v {met} z {n} replikácie, v priemere po {time} {unit}.|Podmienka zastavenia bola splnená v {met} z {n} replikácií, v priemere po {time} {unit}.|Podmienka zastavenia bola splnená v {met} z {n} replikácií, v priemere po {time} {unit}.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	Dokončená {done} z {n} replikácie|Dokončených {done} z {n} replikácií|Dokončených {done} z {n} replikácií
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikácie|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikácií|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} replikácií
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Spustí {n} nezávislý beh modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislé behy modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.|Spustí {n} nezávislých behov modelu od počiatočnej hodnoty {seed}. Výsledky každého prvku obsahujú polovičnú šírku 95% intervalu spoľahlivosti.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Podmienka zastavenia bola splnená v {met} z {n} behu, v priemere po {time} {unit}.|Podmienka zastavenia bola splnená v {met} z {n} behov, v priemere po {time} {unit}.|Podmienka zastavenia bola splnená v {met} z {n} behov, v priemere po {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Dokončený {done} z {n} behu|Dokončených {done} z {n} behov|Dokončených {done} z {n} behov
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} behu|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} behov|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nz {n} behov
 @plural	{n} block selected|{n} blocks selected	Vybraný {n} blok|Vybrané {n} bloky|Vybraných {n} blokov
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} replikácia na krok · počiatočná hodnota {seed}|{n} replikácie na krok · počiatočná hodnota {seed}|{n} replikácií na krok · počiatočná hodnota {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} replikácia · priemer {mean} · od {min} do {max}|{n} replikácie · priemer {mean} · od {min} do {max}|{n} replikácií · priemer {mean} · od {min} do {max}
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikácia · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} replikácie · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} replikácií · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikácia · počiatočná hodnota {seed}|{n} replikácie · počiatočná hodnota {seed}|{n} replikácií · počiatočná hodnota {seed}
-@plural	{n} run|{n} runs	{n} replikácia|{n} replikácie|{n} replikácií
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} beh na krok · počiatočná hodnota {seed}|{n} behy na krok · počiatočná hodnota {seed}|{n} behov na krok · počiatočná hodnota {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} beh · priemer {mean} · od {min} do {max}|{n} behy · priemer {mean} · od {min} do {max}|{n} behov · priemer {mean} · od {min} do {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} beh · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} behy · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} behov · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} beh · počiatočná hodnota {seed}|{n} behy · počiatočná hodnota {seed}|{n} behov · počiatočná hodnota {seed}
+@plural	{n} run|{n} runs	{n} beh|{n} behy|{n} behov

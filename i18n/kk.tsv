@@ -13,7 +13,7 @@
 
 @id	language.name	Қазақша
 	% down and up	% төмен және жоғары
-	% of runs	% қайталаулардың
+	% of runs	% іске қосулардың
 	+ Add block	+ Блок қосу
 	95% interval of the share meeting the target: {lo} to {hi}	Мақсатқа жеткен үлестің 95% аралығы: {lo} мен {hi} арасы
 	95th percentile	95-ші процентиль
@@ -34,7 +34,7 @@
 	Add Pool	Қор қосу
 	Add a flow from…	Қайдан…
 	Add a flow to…	Қайда…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Жеткілікті қайталаулар мақсатқа жеткенше ең жүктелген тапсырмаға немесе пулға бір бірлік қосу. Әр уақыт өз орташасында болатын жауап та көрсетіледі; ол әдетте тым аз.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Жеткілікті іске қосулар мақсатқа жеткенше ең жүктелген тапсырмаға немесе пулға бір бірлік қосу. Әр уақыт өз орташасында болатын жауап та көрсетіледі; ол әдетте тым аз.
 	Add alternative	Балама қосу
 	Add calendar	Күнтізбе қосу
 	Add calendar entry	Күнтізбе жазбасын қосу
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Барлық мәтін ең төменгі контраст талаптарына сай.
 	Also: {rule}	Сондай-ақ: {rule}
 	Alternative {n}	{n}-балама
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Нысан шарты орындалатын бірінші ағынмен жүреді; шарттар болмаса, ықтималдықтар бойынша таңдалған ағынмен жүреді (ықтималдығы бос ағындар қалғандары қалдырған үлесті тең бөліседі).
 	Analysis	Талдау
 	Appearance	Сыртқы түрі
 	Arrival limit	Келу шегі
@@ -169,12 +170,12 @@
 	Ends early	Ертерек аяқталады
 	Energy	Энергия
 	Energy per part	Бір бөлшекке энергия
-	Enough: {units}, meeting the target in {p} of runs	Жеткілікті: {units}, мақсат қайталаулардың {p} бөлігінде орындалады
+	Enough: {units}, meeting the target in {p} of runs	Жеткілікті: {units}, мақсат іске қосулардың {p} бөлігінде орындалады
 	Enter a number	Сан енгізіңіз
 	Entered	Кіргендер
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Күту орнын толы деп тапқан нысандар бірден осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін), жоғалудың немесе тапсырма алдында күтудің орнына; мұнда олар жоғалған деп саналады.
 	Entities give up waiting	Нысандар күтуден бас тартады
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Қайталаудың соңында әлі ішінде қалған нысандар күтудің орташа уақытына және жүйедегі орташа уақытқа кірмейді.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Іске қосудың соңында әлі ішінде қалған нысандар күтудің орташа уақытына және жүйедегі орташа уақытқа кірмейді.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Күтуден бас тартқан нысандар осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін); қалғандары тапсырманың басқа шығатын жолымен кетеді.
 	Erlang	Эрланг
 	Error	Қате
@@ -252,7 +253,7 @@
 	Maximum	Максимум
 	Mean	Орташа
 	Mean number inside	Ішіндегі орташа саны
-	One run of {n}: the results of the others differ.	{n} ішінен бір қайталау: қалғандарының нәтижелері басқаша.
+	One run of {n}: the results of the others differ.	{n} ішінен бір іске қосу: қалғандарының нәтижелері басқаша.
 	Save as a new BPMN file?	Жаңа BPMN файлы ретінде сақталсын ба?
 	Still inside at the end	Соңында әлі ішінде
 	Mean work in progress	Аяқталмаған өндірістің орташа мөлшері
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	Күнтізбелерден тыс келулер жоқ
 	No blocks yet. Open a model, or add blocks to build one.	Әлі блоктар жоқ. Модельді ашыңыз немесе блоктар қосып жасаңыз.
 	No connections yet: join blocks below.	Әлі байланыстар жоқ: төмендегі блоктарды қосыңыз.
-	No run met the stop condition: each ran to its time limit.	Ешбір қайталау тоқтату шартына жетпеді: әрқайсысы уақыт шегіне дейін жүрді.
+	No run met the stop condition: each ran to its time limit.	Ешбір іске қосу тоқтату шартына жетпеді: әрқайсысы уақыт шегіне дейін жүрді.
 	No results yet	Әлі нәтижелер жоқ
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Бұл модельде ақау не қайта өңдеу белгіленбеген, сондықтан OEE сапаны 100% деп есептейді.
 	No target	Мақсат жоқ
@@ -386,11 +387,11 @@
 	Repair time	Жөндеу уақыты
 	Repeats	Қайталану
 	Replace Model	Модельді ауыстыру
-	Run 1 · {time} of {end} {unit}	1-қайталау · {time} / {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	1-қайталау · {time} / {end} {unit} · қыздыру кезеңі
-	Runs	Қайталаулар
-	Runs meeting the target	Мақсатқа жеткен қайталаулар
-	Runs that never met the stop condition count as later than their time limit.	Тоқтату шартына ешқашан жетпеген қайталаулар уақыт шегінен кеш деп есептеледі.
+	Run 1 · {time} of {end} {unit}	1-іске қосу · {time} / {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	1-іске қосу · {time} / {end} {unit} · қыздыру кезеңі
+	Runs	Іске қосулар
+	Runs meeting the target	Мақсатқа жеткен іске қосулар
+	Runs that never met the stop condition count as later than their time limit.	Тоқтату шартына ешқашан жетпеген іске қосулар уақыт шегінен кеш деп есептеледі.
 	Resource pool	Ресурс қоры
 	Resource pools	Ресурс қорлары
 	Restore	Терезені қалпына келтіру
@@ -411,7 +412,7 @@
 	Run	Іске қосу
 	Run cancelled	Іске қосу тоқтатылды
 	Run experiment	Экспериментті іске қосу
-	Play run 1 step by step and see each block's queue on the diagram	1-қайталауды қадаммен орындап, диаграммада әр блоктың кезегін көру
+	Play run 1 step by step and see each block's queue on the diagram	1-іске қосуды қадаммен орындап, диаграммада әр блоктың кезегін көру
 	Run the experiment ({shortcut})	Экспериментті іске қосу ({shortcut})
 	Run the experiment again to see this result's spread.	Бұл нәтиженің шашырауын көру үшін экспериментті қайта орындаңыз.
 	Run the experiment at each value of one parameter, and compare a result.	Экспериментті бір параметрдің әр мәнінде орындап, нәтижені салыстыру.
@@ -419,7 +420,7 @@
 	Run the sweep	Сұрыптауды орындау
 	Running	Орындалуда
 	Running…	Орындалуда…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Қайталаулар екіге бөлінді: {n} ішінен {low_n} – шамамен {low}, {high_n} – шамамен {high}. Орташа ({mean}) екі түрлі нәтижені араластырады; әр топты бөлек қараңыз.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Іске қосулар екіге бөлінді: {n} ішінен {low_n} – шамамен {low}, {high_n} – шамамен {high}. Орташа ({mean}) екі түрлі нәтижені араластырады; әр топты бөлек қараңыз.
 	Sat	сб
 	Save	Сақтау
 	Save As…	Басқаша сақтау…
@@ -467,7 +468,7 @@
 	Split batches	Топтамаларды бөлу
 	Split or join	Бөлу немесе біріктіру
 	Split or join (all ways)	Бөлу немесе біріктіру (барлық жолдар)
-	Spread across runs	Қайталаулар арасындағы шашырау
+	Spread across runs	Іске қосулар арасындағы шашырау
 	Spread out	Үлестіру
 	Stages (k)	Кезеңдер (k)
 	Standard deviation	Стандартты ауытқу
@@ -498,19 +499,19 @@
 	Text on header	Жоғарғы жолақтағы мәтін
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Байланыс үзіліп, клиент қайта әрекет етеді: нысан бірден кезектің басына оралады, ал оған жасалған жұмыс босқа кетеді.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Нысан өз серверінде күтеді, ал сервер қайтып келгенде жұмыс қалған бөлігімен жалғасады.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Аралық {share} мақсатты үлесінен төмен түседі, сондықтан үлестің орындалғаны 95% сенімділікпен көрсетілмеген; көбірек қайталау оны тарылтады.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Аралық {share} мақсатты үлесінен төмен түседі, сондықтан үлестің орындалғаны 95% сенімділікпен көрсетілмеген; көбірек іске қосу оны тарылтады.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Жұмыс бірден тоқтайды: нысан ауысымдағы кез келген сервер үшін кезектің басына оралады, ал оған жасалған жұмыс босқа кетеді.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Жұмыс бірден тоқтайды; нысан өз серверінде күтеді, ал сол сервер қайта ауысымға шыққанда жұмыс қалған бөлігімен жалғасады.
 	The last task with a resource it finished at	Бөлшек өткен соңғы ресурсы бар тапсырма
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Тоқтату шартына дейінгі орташа уақыт тек оған жеткен қайталаулар бойынша; қалғандары уақыт шегіне дейін жүрді.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Тоқтату шартына дейінгі орташа уақыт тек оған жеткен іске қосулар бойынша; қалғандары уақыт шегіне дейін жүрді.
 	The model changed, so watching stopped	Модель өзгерді, сондықтан бақылау тоқтатылды
 	The model has no calendars yet.	Модельде әлі күнтізбе жоқ.
 	The model now has the units sizing found	Модельде енді өлшемдеу тапқан бірліктер бар
 	The model: its experiment, connections and problems	Модель: эксперимент, байланыстар және мәселелер
 	The name is empty or already used.	Атау бос немесе бұрыннан қолданылған.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Қайталаулар екі түрлі нәтижеге бөлінді: {n} ішінен {a} – біреуінде, {b} – екіншісінде. Дәл осылай бөлінген нәтижелер: {count}, олардың ішінде {result} ({element}); төмендегі кестені қараңыз.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Іске қосулар екі түрлі нәтижеге бөлінді: {n} ішінен {a} – біреуінде, {b} – екіншісінде. Дәл осылай бөлінген нәтижелер: {count}, олардың ішінде {result} ({element}); төмендегі кестені қараңыз.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Сервер қолындағы жұмысты аяқтайды, содан кейін ауысымнан шығады; оған дейін ол ауысымда деп есептеледі.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Әр мәнге тең немесе одан төмен қайталаулар үлесі. Жолақ шынайы үлестірімді {confidence} сенімділікпен қамтиды.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Әр мәнге тең немесе одан төмен іске қосулар үлесі. Жолақ шынайы үлестірімді {confidence} сенімділікпен қамтиды.
 	The values are numbers, separated by semicolons or spaces	Мәндер нүктелі үтірмен немесе бос орынмен бөлінген сандар
 	The whole clock	Бүкіл уақыт
 	Themes	Тақырыптар
@@ -578,7 +579,7 @@
 	Warning	Ескерту
 	Watch a Run	Іске қосуды бақылау
 	Watch a run	Іске қосуды бақылау
-	Watching run 1	1-қайталау бақылануда
+	Watching run 1	1-іске қосу бақылануда
 	Weak text	Бозғылт мәтін
 	Weak text on header	Жоғарғы жолақтағы бозғылт мәтін
 	Wed	ср
@@ -614,7 +615,7 @@
 	maximum {value}	максимум {value}
 	milliseconds	миллисекунд
 	minutes	минут
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N ішінен k: N қайталаудың тек k-сында осы нәтиженің мәні болды, оның орташасы мен аралығы сол k бойынша.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N ішінен k: N іске қосудың тек k-сында осы нәтиженің мәні болды, оның орташасы мен аралығы сол k бойынша.
 	n = {k} of {n}	n = {n} ішінен {k}
 	nothing yet	әзірге ештеңе жоқ
 	per day	күніне
@@ -650,7 +651,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} және {second} – ашықтық айырмашылығы {step}, кемінде 0.06 керек.
 	{id}: a probability is a number from 0 to 1	{id}: ықтималдық 0 мен 1 арасындағы сан болуы керек
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} қайталаудың {met} мақсатқа жетті: {p} (95% аралық {lo} мен {hi} арасы)
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} іске қосудың {met} мақсатқа жетті: {p} (95% аралық {lo} мен {hi} арасы)
 	{name} — edited	{name} — өңделді
 	{n} created	Жасалды: {n}
 	{n} done	Аяқталды: {n}
@@ -659,12 +660,12 @@
 	{n} {unit} per second	секундына {n} {unit}
 	{property} (set to, mean)	{property} (орнатылған мән, орташа)
 	{reason}. {field} is still {value}.	{reason}. {field} әлі де {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – қайталаулар екі түрлі нәтижеге бөлінді: төмендегі кестені қараңыз.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – іске қосулар екі түрлі нәтижеге бөлінді: төмендегі кестені қараңыз.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – фон «{background}»: {ratio}:1, кемінде {min}:1 керек
 	{title}: now {now}, at most {most}	{title}: қазір {now}, ең көбі {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% сенімділік аралығы
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± — қайталаулар арасындағы орташа мәннің 95% Student-t сенімділік аралығының жарты ені.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± — іске қосулар арасындағы орташа мәннің 95% Student-t сенімділік аралығының жарты ені.
 	· no results yet	· әлі нәтижелер жоқ
 unit	d	күн
 unit	h	сағ
@@ -684,16 +685,16 @@ unit	yr	ж.
 	Table	Кесте
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
-@plural	Finished {n} run|Finished {n} runs	{n} қайталау аяқталды|{n} қайталау аяқталды
+@plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} ашылды ({n} ескерту)|{file} ашылды ({n} ескерту)
 @plural	Removed {n} block|Removed {n} blocks	{n} блок жойылды|{n} блок жойылды
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Модельдің {n} тәуелсіз қайталауын {seed} тұқымынан іске қосады. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.|Модельдің {n} тәуелсіз қайталауын {seed} тұқымынан іске қосады. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Тоқтату шарты {n} қайталаудың {met} ішінде, орта есеппен {time} {unit} кейін орындалды.|Тоқтату шарты {n} қайталаудың {met} ішінде, орта есеппен {time} {unit} кейін орындалды.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	{n} қайталаудың {done} аяқталды|{n} қайталаудың {done} аяқталды
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} қайталау бойынша|{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} қайталау бойынша
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Модельдің {n} тәуелсіз іске қосуын {seed} тұқымынан орындайды. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.|Модельдің {n} тәуелсіз іске қосуын {seed} тұқымынан орындайды. Әр элемент нәтижесінде 95% сенімділік аралығының жарты ені беріледі.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Тоқтату шарты {n} іске қосудың {met} ішінде, орта есеппен {time} {unit} кейін орындалды.|Тоқтату шарты {n} іске қосудың {met} ішінде, орта есеппен {time} {unit} кейін орындалды.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{n} іске қосудың {done} аяқталды|{n} іске қосудың {done} аяқталды
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} іске қосу бойынша|{name}: {mean}{unit}\n95% аралық {low} пен {high}{unit} арасында\n{n} іске қосу бойынша
 @plural	{n} block selected|{n} blocks selected	{n} блок таңдалды|{n} блок таңдалды
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	Әр қадамда {n} қайталау · тұқым {seed}|Әр қадамда {n} қайталау · тұқым {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} қайталау · орташа {mean} · {min} мен {max} арасы|{n} қайталау · орташа {mean} · {min} мен {max} арасы
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} қайталау · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}|{n} қайталау · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} қайталау · тұқым {seed}|{n} қайталау · тұқым {seed}
-@plural	{n} run|{n} runs	{n} қайталау|{n} қайталау
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	Әр қадамда {n} іске қосу · тұқым {seed}|Әр қадамда {n} іске қосу · тұқым {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} іске қосу · орташа {mean} · {min} мен {max} арасы|{n} іске қосу · орташа {mean} · {min} мен {max} арасы
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} іске қосу · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}|{n} іске қосу · тұқым {seed} · қыздыру {warmup} {unit} · өлшеу {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} іске қосу · тұқым {seed}|{n} іске қосу · тұқым {seed}
+@plural	{n} run|{n} runs	{n} іске қосу|{n} іске қосу

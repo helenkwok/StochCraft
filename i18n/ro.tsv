@@ -13,7 +13,7 @@
 
 @id	language.name	Română
 	% down and up	% în jos și în sus
-	% of runs	% din replicări
+	% of runs	% din rulări
 	+ Add block	+ Adaugă bloc
 	95% interval of the share meeting the target: {lo} to {hi}	Interval de 95% al ponderii care atinge ținta: de la {lo} la {hi}
 	95th percentile	Percentila 95
@@ -34,7 +34,7 @@
 	Add Pool	Adaugă grup
 	Add a flow from…	Adaugă un flux de la…
 	Add a flow to…	Adaugă un flux către…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Adaugă o unitate la sarcina sau grupul cel mai ocupat până când suficiente replicări ating o țintă. Este afișat și răspunsul cu fiecare timp la media sa; de obicei e prea mic.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Adaugă o unitate la sarcina sau grupul cel mai ocupat până când suficiente rulări ating o țintă. Este afișat și răspunsul cu fiecare timp la media sa; de obicei e prea mic.
 	Add alternative	Adaugă alternativă
 	Add calendar	Adaugă calendar
 	Add calendar entry	Adaugă o intrare de calendar
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Tot textul respectă contrastele minime.
 	Also: {rule}	De asemenea: {rule}
 	Alternative {n}	Alternativa {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	O entitate ia primul flux a cărui condiție este îndeplinită; fără condiții, un flux tras la sorți după probabilități (cele lăsate goale împart ce lasă celelalte).
 	Analysis	Analiză
 	Appearance	Aspect
 	Arrival limit	Limită de sosiri
@@ -169,12 +170,12 @@
 	Ends early	Se oprește mai devreme
 	Energy	Energie
 	Energy per part	Energie pe piesă
-	Enough: {units}, meeting the target in {p} of runs	Suficient: {units}, atinge ținta în {p} din replicări
+	Enough: {units}, meeting the target in {p} of runs	Suficient: {units}, atinge ținta în {p} din rulări
 	Enter a number	Introduceți un număr
 	Entered	Intrări
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitățile care găsesc sala de așteptare plină iau imediat acest flux (pentru a încerca din nou mai târziu, de exemplu), în loc să fie pierdute sau să aștepte înaintea sarcinii; aici sunt numărate ca pierdute.
 	Entities give up waiting	Entitățile renunță să mai aștepte
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entitățile încă în interior la finalul unei replicări sunt lăsate în afara timpului mediu de așteptare și a timpului mediu în sistem.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entitățile încă în interior la finalul unei rulări sunt lăsate în afara timpului mediu de așteptare și a timpului mediu în sistem.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitățile care renunță să mai aștepte iau acest flux (pentru a încerca din nou mai târziu, de exemplu); celelalte iau cealaltă ieșire a sarcinii.
 	Erlang	Erlang
 	Error	Eroare
@@ -252,7 +253,7 @@
 	Maximum	Maxim
 	Mean	Medie
 	Mean number inside	Număr mediu în interior
-	One run of {n}: the results of the others differ.	O replicare din {n}: rezultatele celorlalte diferă.
+	One run of {n}: the results of the others differ.	O rulare din {n}: rezultatele celorlalte diferă.
 	Save as a new BPMN file?	Salvați ca fișier BPMN nou?
 	Still inside at the end	Încă în interior la final
 	Mean work in progress	Producția medie în curs de execuție
@@ -284,7 +285,7 @@
 	No arrivals outside calendars	Fără sosiri în afara calendarelor
 	No blocks yet. Open a model, or add blocks to build one.	Nu există încă blocuri. Deschideți un model sau adăugați blocuri pentru a crea unul.
 	No connections yet: join blocks below.	Nu există încă conexiuni: conectați blocurile de mai jos.
-	No run met the stop condition: each ran to its time limit.	Nicio replicare nu a atins condiția de oprire: fiecare a rulat până la limita de timp.
+	No run met the stop condition: each ran to its time limit.	Nicio rulare nu a atins condiția de oprire: fiecare a rulat până la limita de timp.
 	No results yet	Nu există încă rezultate
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	În acest model nu este marcat niciun rebut sau reprelucrare, așa că OEE consideră calitatea 100%.
 	No target	Fără țintă
@@ -386,11 +387,11 @@
 	Repair time	Timp de reparare
 	Repeats	Repetare
 	Replace Model	Înlocuiește modelul
-	Run 1 · {time} of {end} {unit}	Replicarea 1 · {time} din {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	Replicarea 1 · {time} din {end} {unit} · încălzire
-	Runs	Replicări
-	Runs meeting the target	Replicări care ating ținta
-	Runs that never met the stop condition count as later than their time limit.	Replicările care nu au atins niciodată condiția de oprire contează ca mai târzii decât limita lor de timp.
+	Run 1 · {time} of {end} {unit}	Rularea 1 · {time} din {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Rularea 1 · {time} din {end} {unit} · încălzire
+	Runs	Rulări
+	Runs meeting the target	Rulări care ating ținta
+	Runs that never met the stop condition count as later than their time limit.	Rulările care nu au atins niciodată condiția de oprire contează ca mai târzii decât limita lor de timp.
 	Resource pool	Grup de resurse
 	Resource pools	Grupuri de resurse
 	Restore	Restabilește
@@ -411,7 +412,7 @@
 	Run	Rulează
 	Run cancelled	Rulare anulată
 	Run experiment	Rulează experimentul
-	Play run 1 step by step and see each block's queue on the diagram	Rulează replicarea 1 pas cu pas și vezi coada fiecărui bloc în diagramă
+	Play run 1 step by step and see each block's queue on the diagram	Redă rularea 1 pas cu pas și vezi coada fiecărui bloc în diagramă
 	Run the experiment ({shortcut})	Rulează experimentul ({shortcut})
 	Run the experiment again to see this result's spread.	Rulează din nou experimentul ca să vezi împrăștierea acestui rezultat.
 	Run the experiment at each value of one parameter, and compare a result.	Rulează experimentul la fiecare valoare a unui parametru și compară un rezultat.
@@ -419,7 +420,7 @@
 	Run the sweep	Rulează baleierea
 	Running	Se rulează
 	Running…	Se rulează…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replicări împărțite: {low_n} din {n} aproape de {low}, {high_n} aproape de {high}. Media ({mean}) amestecă două rezultate diferite; privește fiecare grup.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Rulări împărțite: {low_n} din {n} aproape de {low}, {high_n} aproape de {high}. Media ({mean}) amestecă două rezultate diferite; privește fiecare grup.
 	Sat	sâm
 	Save	Salvează
 	Save As…	Salvează ca…
@@ -467,7 +468,7 @@
 	Split batches	Separarea loturilor
 	Split or join	Divizează sau unește
 	Split or join (all ways)	Divizează sau unește (toate căile)
-	Spread across runs	Împrăștierea între replicări
+	Spread across runs	Împrăștierea între rulări
 	Spread out	Distribuie
 	Stages (k)	Etape (k)
 	Standard deviation	Abatere standard
@@ -498,19 +499,19 @@
 	Text on header	Text pe antet
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Conexiunea cade și clientul încearcă din nou: entitatea revine imediat în capul cozii, iar munca făcută pe ea este irosită.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entitatea așteaptă la serverul ei, iar lucrul continuă cu ce a rămas după ce serverul revine.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervalul coboară sub ponderea țintă de {share}, deci nu este arătat cu 95% încredere că ponderea este atinsă; mai multe replicări l-ar îngusta.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervalul coboară sub ponderea țintă de {share}, deci nu este arătat cu 95% încredere că ponderea este atinsă; mai multe rulări l-ar îngusta.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Lucrul se oprește imediat: entitatea revine în capul cozii pentru orice server aflat în tură, iar munca făcută pe ea este irosită.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Lucrul se oprește imediat; entitatea așteaptă la serverul ei, iar lucrul continuă cu ce a rămas după ce acel server revine în tură.
 	The last task with a resource it finished at	Ultima sarcină cu resursă prin care a trecut piesa
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Timpul mediu până la condiția de oprire este doar pe replicările care au atins-o; celelalte au rulat până la limita de timp.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Timpul mediu până la condiția de oprire este doar pe rulările care au atins-o; celelalte au rulat până la limita de timp.
 	The model changed, so watching stopped	Modelul s-a schimbat, așa că urmărirea s-a oprit
 	The model has no calendars yet.	Modelul nu are încă calendare.
 	The model now has the units sizing found	Modelul are acum unitățile găsite la dimensionare
 	The model: its experiment, connections and problems	Modelul: experiment, conexiuni și probleme
 	The name is empty or already used.	Numele este gol sau deja folosit.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replicările se împart în două rezultate diferite: {a} din {n} într-unul, {b} în celălalt. Rezultate împărțite la fel: {count}, printre ele {result} ({element}); vezi tabelul de mai jos.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Rulările se împart în două rezultate diferite: {a} din {n} într-unul, {b} în celălalt. Rezultate împărțite la fel: {count}, printre ele {result} ({element}); vezi tabelul de mai jos.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Serverul termină lucrul pe care îl are, apoi iese din tură; până atunci contează ca fiind în tură.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Ponderea replicărilor egale cu sau sub fiecare valoare. Banda conține distribuția reală cu o încredere de {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Ponderea rulărilor egale cu sau sub fiecare valoare. Banda conține distribuția reală cu o încredere de {confidence}.
 	The values are numbers, separated by semicolons or spaces	Valorile sunt numere separate prin punct și virgulă sau spații
 	The whole clock	Tot timpul
 	Themes	Teme
@@ -578,7 +579,7 @@
 	Warning	Avertisment
 	Watch a Run	Urmărește o rulare
 	Watch a run	Urmărește o rulare
-	Watching run 1	Se urmărește replicarea 1
+	Watching run 1	Se urmărește rularea 1
 	Weak text	Text estompat
 	Weak text on header	Text estompat pe antet
 	Wed	mie
@@ -614,7 +615,7 @@
 	maximum {value}	maxim {value}
 	milliseconds	milisecunde
 	minutes	minute
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k din N: doar k din cele N replicări au avut o valoare pentru acel rezultat, iar media și intervalul său sunt pe acele k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k din N: doar k din cele N rulări au avut o valoare pentru acel rezultat, iar media și intervalul său sunt pe acele k.
 	n = {k} of {n}	n = {k} din {n}
 	nothing yet	nimic deocamdată
 	per day	pe zi
@@ -650,7 +651,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} și {second} diferă ca luminozitate cu {step}, necesar 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: probabilitatea este un număr între 0 și 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} din {of} replicări au atins ținta: {p} (interval de 95% de la {lo} la {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} din {of} rulări au atins ținta: {p} (interval de 95% de la {lo} la {hi})
 	{name} — edited	{name} — modificat
 	{n} created	Create: {n}
 	{n} done	Terminate: {n}
@@ -659,12 +660,12 @@
 	{n} {unit} per second	{n} {unit} pe secundă
 	{property} (set to, mean)	{property} (valoare setată, medie)
 	{reason}. {field} is still {value}.	{reason}. {field} rămâne {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replicările se împart în două rezultate diferite; vezi tabelul de mai jos.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): rulările se împart în două rezultate diferite; vezi tabelul de mai jos.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} pe {background}: {ratio}:1, necesar {min}:1
 	{title}: now {now}, at most {most}	{title}: acum {now}, cel mult {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± IC 95%
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± reprezintă jumătate din lățimea unui interval de încredere Student-t de 95% pentru media dintre replicări.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± reprezintă jumătate din lățimea unui interval de încredere Student-t de 95% pentru media dintre rulări.
 	· no results yet	· nu există încă rezultate
 unit	d	z
 unit	h	h
@@ -684,16 +685,16 @@ unit	yr	a
 	Table	Tabel
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
-@plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} replicare|S-au încheiat {n} replicări|S-au încheiat {n} replicări
+@plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	S-a deschis {file} ({n} avertisment)|S-a deschis {file} ({n} avertismente)|S-a deschis {file} ({n} avertismente)
 @plural	Removed {n} block|Removed {n} blocks	S-a eliminat {n} bloc|S-au eliminat {n} blocuri|S-au eliminat {n} de blocuri
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Rulează {n} replicare independentă a modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Rulează {n} replicări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Rulează {n} replicări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Condiția de oprire a fost atinsă în {met} din {n} replicare, după {time} {unit} în medie.|Condiția de oprire a fost atinsă în {met} din {n} replicări, după {time} {unit} în medie.|Condiția de oprire a fost atinsă în {met} din {n} de replicări, după {time} {unit} în medie.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	S-a încheiat {done} din {n} replicare|S-au încheiat {done} din {n} replicări|S-au încheiat {done} din {n} replicări
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicare|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicări|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} replicări
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Efectuează {n} rulare independentă a modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Efectuează {n} rulări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.|Efectuează {n} de rulări independente ale modelului de la sămânța {seed}. Rezultatele fiecărui element includ semilățimea unui interval de încredere de 95%.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Condiția de oprire a fost atinsă în {met} din {n} rulare, după {time} {unit} în medie.|Condiția de oprire a fost atinsă în {met} din {n} rulări, după {time} {unit} în medie.|Condiția de oprire a fost atinsă în {met} din {n} de rulări, după {time} {unit} în medie.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	S-a încheiat {done} din {n} rulare|S-au încheiat {done} din {n} rulări|S-au încheiat {done} din {n} de rulări
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} rulare|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} rulări|{name}: {mean}{unit}\nInterval 95% de la {low} la {high}{unit}\npe {n} de rulări
 @plural	{n} block selected|{n} blocks selected	{n} bloc selectat|{n} blocuri selectate|{n} de blocuri selectate
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} replicare la fiecare pas · sămânță {seed}|{n} replicări la fiecare pas · sămânță {seed}|{n} de replicări la fiecare pas · sămânță {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} replicare · medie {mean} · de la {min} la {max}|{n} replicări · medie {mean} · de la {min} la {max}|{n} de replicări · medie {mean} · de la {min} la {max}
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replicare · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} replicări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replicare · sămânță {seed}|{n} replicări · sămânță {seed}|{n} replicări · sămânță {seed}
-@plural	{n} run|{n} runs	{n} replicare|{n} replicări|{n} replicări
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} rulare la fiecare pas · sămânță {seed}|{n} rulări la fiecare pas · sămânță {seed}|{n} de rulări la fiecare pas · sămânță {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} rulare · medie {mean} · de la {min} la {max}|{n} rulări · medie {mean} · de la {min} la {max}|{n} de rulări · medie {mean} · de la {min} la {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} rulare · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} rulări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate|{n} de rulări · sămânță {seed} · încălzire {warmup} {unit} · {duration} {unit} măsurate
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} rulare · sămânță {seed}|{n} rulări · sămânță {seed}|{n} de rulări · sămânță {seed}
+@plural	{n} run|{n} runs	{n} rulare|{n} rulări|{n} de rulări

@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	সব টেক্সট ন্যূনতম বৈপরীত্য পূরণ করে।
 	Also: {rule}	এছাড়াও: {rule}
 	Alternative {n}	বিকল্প {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	একটি সত্তা প্রথম সেই প্রবাহটি নেয় যার শর্ত পূরণ হয়; শর্ত না থাকলে সম্ভাবনা অনুযায়ী একটি প্রবাহ বেছে নেওয়া হয় (ফাঁকা সম্ভাবনার প্রবাহগুলো বাকিদের রেখে যাওয়া অংশ সমানভাবে ভাগ করে নেয়)।
 	Analysis	বিশ্লেষণ
 	Appearance	দৃশ্যরূপ
 	Arrival limit	আগমনের সীমা
