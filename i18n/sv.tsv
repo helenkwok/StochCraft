@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} och {second} skiljer sig med {de} för betraktare med röd-grön färgblindhet, kräver 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} och {second} skiljer sig med {de} för betraktare med röd-grön färgblindhet, kräver 8: skilj dem åt bara med etiketter.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} och {second} skiljer sig i ljushet med {step}, kräver 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: en sannolikhet är ett tal mellan 0 och 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} av {of} körningar nådde målet: {p} (95 %-intervall {lo} till {hi})
 	{name} — edited	{name} — redigerad
@@ -673,6 +672,13 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	år
+	How long one unit takes to serve one entity, drawn anew for each entity.	Hur lång tid en enhet tar på sig att betjäna en entitet; dras på nytt för varje entitet.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hur många entiteter som får vänta här på en ledig enhet, utöver dem som betjänas; utan bock hur många som helst.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Hur många enheter som betjänar här samtidigt, till exempel maskiner eller personal, var och en en entitet i taget.
+	More settings	Fler inställningar
+	Must be from {min} to {max}	Måste vara från {min} till {max}
+	Must be more than {min}	Måste vara mer än {min}
+	Must be {min} or more	Måste vara {min} eller mer
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara
@@ -688,3 +694,5 @@ unit	yr	år
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} körning · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta|{n} körningar · slumpfrö {seed} · uppvärmning {warmup} {unit} · {duration} {unit} uppmätta
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} körning · slumpfrö {seed}|{n} körningar · slumpfrö {seed}
 @plural	{n} run|{n} runs	{n} körning|{n} körningar
+@plural	Run ({n} problem)|Run ({n} problems)	Kör ({n} problem)|Kör ({n} problem)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problem: {blocks}

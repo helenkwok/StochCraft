@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first}, {second}: 적록 색각 이상에서의 차이 {de}, 최소 8 필요.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first}, {second}: 적록 색각 이상에서의 차이 {de}, 최소 8 필요: 레이블로만 구별하세요.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}, {second}: 명도 차이 {step}, 최소 0.06 필요.
-	{id}: a probability is a number from 0 to 1	{id}: 확률은 0에서 1 사이의 숫자여야 합니다
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of}회 중 {met}회가 목표를 충족: {p}(95% 구간 {lo}~{hi})
 	{name} — edited	{name} — 편집됨
@@ -673,6 +672,13 @@ unit	min	분
 unit	ms	밀리초
 unit	s	초
 unit	yr	년
+	How long one unit takes to serve one entity, drawn anew for each entity.	자원 단위 하나가 엔터티 하나를 서비스하는 데 걸리는 시간이며, 엔터티마다 새로 추출됩니다.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	서비스 중인 엔터티 외에 여기서 빈 자원 단위를 기다릴 수 있는 엔터티 수이며, 선택하지 않으면 제한이 없습니다.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	여기서 동시에 서비스하는 자원 단위(기계나 인력 등)의 수이며, 각 단위는 한 번에 엔터티 하나를 처리합니다.
+	More settings	추가 설정
+	Must be from {min} to {max}	{min}에서 {max} 사이여야 합니다
+	Must be more than {min}	{min}보다 커야 합니다
+	Must be {min} or more	{min} 이상이어야 합니다
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료
@@ -688,3 +694,5 @@ unit	yr	년
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	실행 {n}회 · 시드 {seed} · 준비 {warmup} {unit} · 측정 {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	실행 {n}회 · 시드 {seed}
 @plural	{n} run|{n} runs	실행 {n}회
+@plural	Run ({n} problem)|Run ({n} problems)	실행 (문제 {n}개)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	문제 {n}개: {blocks}

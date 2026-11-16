@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} და {second} – სხვაობა წითელ-მწვანე დალტონიზმისას {de}, საჭიროა 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} და {second} – სხვაობა წითელ-მწვანე დალტონიზმისას {de}, საჭიროა 8: გაარჩიეთ ისინი მხოლოდ წარწერებით.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} და {second} – სიღიის სხვაობა {step}, საჭიროა 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: ალბათობა არის რიცხვი 0-დან 1-მდე
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} გაშვებიდან {met}-მა მიაღწია მიზანს: {p} (95%-იანი ინტერვალი {lo}-დან {hi}-მდე)
 	{name} — edited	{name} — რედაქტირებულია
@@ -673,6 +672,13 @@ unit	min	წთ
 unit	ms	მწმ
 unit	s	წმ
 unit	yr	წელი
+	How long one unit takes to serve one entity, drawn anew for each entity.	რამდენ დროს ანდომებს ერთი რესურსის ერთეული ერთი ერთეულის მომსახურებას; ყოველი ერთეულისთვის თავიდან ირჩევა.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	რამდენ ერთეულს შეუძლია აქ თავისუფალი რესურსის ერთეულის ლოდინი, მომსახურებაში მყოფების გარდა; მოუნიშნავად — ნებისმიერ რაოდენობას.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	რამდენი რესურსის ერთეული ემსახურება აქ ერთდროულად, მაგ. მანქანები ან პერსონალი, თითოეული ერთ ერთეულს ერთ ჯერზე.
+	More settings	სხვა პარამეტრები
+	Must be from {min} to {max}	უნდა იყოს {min}-დან {max}-მდე
+	Must be more than {min}	უნდა იყოს {min}-ზე მეტი
+	Must be {min} or more	უნდა იყოს {min} ან მეტი
 @plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
 @plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
 @plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გაშვება|დასრულდა {n} გაშვება
@@ -688,3 +694,5 @@ unit	yr	წელი
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} გაშვება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}|{n} გაშვება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} გაშვება · საწყისი მნიშვნელობა {seed}|{n} გაშვება · საწყისი მნიშვნელობა {seed}
 @plural	{n} run|{n} runs	{n} გაშვება|{n} გაშვება
+@plural	Run ({n} problem)|Run ({n} problems)	გაშვება ({n} პრობლემა)|გაშვება ({n} პრობლემა)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} პრობლემა: {blocks}|{n} პრობლემა: {blocks}

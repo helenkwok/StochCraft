@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} en {second} verschillen {de} voor kijkers met rood-groenkleurenblindheid, nodig 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} en {second} verschillen {de} voor kijkers met rood-groenkleurenblindheid, nodig 8: onderscheid ze alleen met labels.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} en {second} verschillen {step} in lichtheid, nodig 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: een kans is een getal tussen 0 en 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} van {of} uitvoeringen haalden het doel: {p} (95%-interval {lo} tot {hi})
 	{name} — edited	{name} — bewerkt
@@ -673,6 +672,13 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	j
+	How long one unit takes to serve one entity, drawn anew for each entity.	Hoe lang één eenheid nodig heeft om één entiteit te bedienen; voor elke entiteit opnieuw getrokken.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hoeveel entiteiten hier mogen wachten op een vrije eenheid, naast de entiteiten die bediend worden; zonder vinkje onbeperkt.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Hoeveel eenheden hier tegelijk bedienen, zoals machines of personeel, elk één entiteit tegelijk.
+	More settings	Meer instellingen
+	Must be from {min} to {max}	Moet tussen {min} en {max} liggen
+	Must be more than {min}	Moet groter zijn dan {min}
+	Must be {min} or more	Moet {min} of meer zijn
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid
@@ -688,3 +694,5 @@ unit	yr	j
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} uitvoering · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten|{n} uitvoeringen · startwaarde {seed} · opwarmen {warmup} {unit} · {duration} {unit} gemeten
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} uitvoering · startwaarde {seed}|{n} uitvoeringen · startwaarde {seed}
 @plural	{n} run|{n} runs	{n} uitvoering|{n} uitvoeringen
+@plural	Run ({n} problem)|Run ({n} problems)	Uitvoeren ({n} probleem)|Uitvoeren ({n} problemen)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probleem: {blocks}|{n} problemen: {blocks}
