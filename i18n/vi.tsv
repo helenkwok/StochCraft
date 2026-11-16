@@ -689,6 +689,9 @@ unit	yr	năm
 	Number waiting	Số đang chờ
 	Share balked	Tỷ lệ không vào hàng
 	Table	Bảng
+	Key measures	Chỉ số chính
+	Up to 4 per block, rounded to what the interval supports	Tối đa 4 mỗi khối, làm tròn theo khoảng tin cậy
+	All measures ({n} more)	Tất cả chỉ số (thêm {n})
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy

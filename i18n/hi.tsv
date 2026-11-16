@@ -689,6 +689,9 @@ unit	yr	वर्ष
 	Number waiting	प्रतीक्षारत संख्या
 	Share balked	कतार में न लगने वालों का अनुपात
 	Table	तालिका
+	Key measures	मुख्य मापदंड
+	Up to 4 per block, rounded to what the interval supports	प्रति ब्लॉक अधिकतम 4, विश्वास अंतराल के अनुसार पूर्णांकित
+	All measures ({n} more)	सभी मापदंड ({n} और)
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए

@@ -617,12 +617,22 @@ fn results_are_written_as_the_users_region_writes_numbers() {
         h.step();
     }
     settle(&mut h);
-    // About 15,065 arrivals in 20,000 minutes, grouped with a point in German.
-    assert!(
-        !h.get_all_by_label("15.065").collect::<Vec<_>>().is_empty(),
-        "no German grouping in the results"
-    );
-    assert!(h.query_by_label("15,065").is_none());
+    // About 15,065 arrivals in 20,000 minutes (rounded to what their interval supports),
+    // grouped with a point in German and never with a comma. A label's text is its value.
+    let grouped = |sep: char| {
+        h.query_all(egui_kittest::kittest::by().predicate(move |n| {
+            n.value().or_else(|| n.label()).is_some_and(|l| {
+                let parts: Vec<&str> = l.split(sep).collect();
+                parts.len() > 1
+                    && (1..=3).contains(&parts[0].len())
+                    && parts[1..].iter().all(|p| p.len() == 3)
+                    && parts.iter().all(|p| p.chars().all(|c| c.is_ascii_digit()))
+            })
+        }))
+        .count()
+    };
+    assert!(grouped('.') > 0, "no German grouping in the results");
+    assert_eq!(grouped(','), 0);
 }
 
 #[test]

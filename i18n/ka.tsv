@@ -689,6 +689,9 @@ unit	yr	წელი
 	Number waiting	მომლოდინეთა რაოდენობა
 	Share balked	რიგში არჩამდგართა წილი
 	Table	ცხრილი
+	Key measures	ძირითადი მაჩვენებლები
+	Up to 4 per block, rounded to what the interval supports	ბლოკზე მაქსიმუმ 4, დამრგვალებული ნდობის ინტერვალის მიხედვით
+	All measures ({n} more)	ყველა მაჩვენებელი (კიდევ {n})
 @plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
 @plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
 @plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გაშვება|დასრულდა {n} გაშვება

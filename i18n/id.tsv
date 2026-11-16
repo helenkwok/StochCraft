@@ -689,6 +689,9 @@ unit	yr	thn
 	Number waiting	Jumlah menunggu
 	Share balked	Proporsi yang batal mengantre
 	Table	Tabel
+	Key measures	Metrik utama
+	Up to 4 per block, rounded to what the interval supports	Hingga 4 per blok, dibulatkan sesuai interval
+	All measures ({n} more)	Semua metrik ({n} lagi)
 @plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
 @plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
 @plural	Finished {n} run|Finished {n} runs	Selesai {n} eksekusi

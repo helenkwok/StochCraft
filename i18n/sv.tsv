@@ -689,6 +689,9 @@ unit	yr	år
 	Number waiting	Antal väntande
 	Share balked	Andel som inte ställde sig i kö
 	Table	Tabell
+	Key measures	Viktigaste mått
+	Up to 4 per block, rounded to what the interval supports	Upp till 4 per block, avrundade efter intervallet
+	All measures ({n} more)	Alla mått ({n} till)
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara

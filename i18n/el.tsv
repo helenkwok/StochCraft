@@ -689,6 +689,9 @@ unit	yr	έτ
 	Number waiting	Πλήθος σε αναμονή
 	Share balked	Ποσοστό μη εισόδου
 	Table	Πίνακας
+	Key measures	Κύριες μετρικές
+	Up to 4 per block, rounded to what the interval supports	Έως 4 ανά μπλοκ, στρογγυλεμένες σύμφωνα με το διάστημα
+	All measures ({n} more)	Όλες οι μετρικές ({n} ακόμη)
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις

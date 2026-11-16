@@ -689,6 +689,9 @@ unit	yr	ปี
 	Number waiting	จำนวนที่รอ
 	Share balked	สัดส่วนที่ไม่เข้าคิว
 	Table	ตาราง
+	Key measures	ตัวชี้วัดหลัก
+	Up to 4 per block, rounded to what the interval supports	สูงสุด 4 ตัวต่อบล็อก ปัดเศษตามช่วงความเชื่อมั่น
+	All measures ({n} more)	ตัวชี้วัดทั้งหมด (อีก {n})
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ

@@ -624,6 +624,14 @@ engine's messages (validation, file notes) are English too.
   holds…") was drafted from the plain meaning of the English, with each catalog's own words for
   entity, flow, condition and probability. Not checked against any other source, and not reviewed
   by native speakers.
+- The key measures (issue #147: "Key measures", "Up to 4 per block, rounded to what the interval
+  supports", "All measures ({n} more)") use each catalog's own words for metric, block and
+  confidence interval. The word for rounding a number is from Wiktionary "round off" (sense 4,
+  mathematics; revision 95488408) in bg закръглявам, de runden, es redondear, fr arrondir,
+  gl redondear, ja and zh-hans/zh-hant 四捨五入/四舍五入, ko 반올림, pl zaokrąglać, pt arredondar and
+  ru округлять. Wiktionary lists no word for that sense in the other 32 catalogs, whose
+  rounding word was drafted from the plain meaning of the English and is not yet checked against
+  a source (least certain: lo ປັດເສດ, ta, te, bn). Not reviewed by native speakers.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -689,6 +689,9 @@ unit	yr	år
 	Number waiting	Antall ventende
 	Share balked	Andel som ikke gikk i kø
 	Table	Tabell
+	Key measures	Viktigste måltall
+	Up to 4 per block, rounded to what the interval supports	Opptil 4 per blokk, avrundet etter intervallet
+	All measures ({n} more)	Alle måltall ({n} til)
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
 @plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført

@@ -689,6 +689,9 @@ unit	yr	年
 	Number waiting	等待数量
 	Share balked	止步比例
 	Table	表格
+	Key measures	关键指标
+	Up to 4 per block, rounded to what the interval supports	每个区块最多 4 项，按置信区间四舍五入
+	All measures ({n} more)	全部指标（另有 {n} 项）
 @plural	Added {n} block|Added {n} blocks	已添加 {n} 个区块
 @plural	Copied {n} block|Copied {n} blocks	已复制 {n} 个区块
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次运行

@@ -689,6 +689,9 @@ unit	yr	an
 	Number waiting	Nombre en attente
 	Share balked	Part des dérobades
 	Table	Tableau
+	Key measures	Indicateurs clés
+	Up to 4 per block, rounded to what the interval supports	Jusqu'à 4 par bloc, arrondis selon l'intervalle
+	All measures ({n} more)	Tous les indicateurs ({n} de plus)
 @plural	Added {n} block|Added {n} blocks	{n} bloc ajouté|{n} blocs ajoutés
 @plural	Copied {n} block|Copied {n} blocks	{n} bloc copié|{n} blocs copiés
 @plural	Finished {n} run|Finished {n} runs	{n} exécution terminée|{n} exécutions terminées

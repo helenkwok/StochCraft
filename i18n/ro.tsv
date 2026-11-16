@@ -689,6 +689,9 @@ unit	yr	a
 	Number waiting	Număr în așteptare
 	Share balked	Proporția celor care nu au intrat în coadă
 	Table	Tabel
+	Key measures	Indicatori principali
+	Up to 4 per block, rounded to what the interval supports	Până la 4 pe bloc, rotunjiți după interval
+	All measures ({n} more)	Toți indicatorii (încă {n})
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări

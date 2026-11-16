@@ -169,27 +169,68 @@ pub fn record_line(ui: &mut egui::Ui, results: &Value) {
     ));
 }
 
-/// Draws `results` (the engine's `run` result).
-pub fn show(ui: &mut egui::Ui, results: &Value) {
-    let p = theme::palette(ui.ctx());
-    let r = &results["record"];
-    let unit = unit_label(r["time_unit"].as_str().unwrap_or(""));
-
-    let order: Vec<&str> = results["metrics"]
-        .as_array()
-        .map(|m| m.iter().filter_map(Value::as_str).collect())
-        .unwrap_or_default();
+/// "n = k of N" for result `m` where only k of the N replications of `results` had a value;
+/// empty otherwise.
+fn n_of(results: &Value, m: &Value) -> String {
     let replications = results["replications"]
         .as_u64()
-        .or_else(|| r["replications"].as_u64());
-    // "n = k of N" where only k of the N replications had a value (empty otherwise).
-    let n_of = |m: &Value| match (m["n"].as_u64(), replications) {
+        .or_else(|| results["record"]["replications"].as_u64());
+    match (m["n"].as_u64(), replications) {
         (Some(k), Some(n)) if k < n => tf(
             "n = {k} of {n}",
             &[("k", &k.to_string()), ("n", &n.to_string())],
         ),
         _ => String::new(),
-    };
+    }
+}
+
+/// The order of the results' tables: the engine's `metrics`.
+fn order(results: &Value) -> Vec<&str> {
+    results["metrics"]
+        .as_array()
+        .map(|m| m.iter().filter_map(Value::as_str).collect())
+        .unwrap_or_default()
+}
+
+/// The top of the results under the findings: the warnings, then each block's key measures
+/// ([`key_measures`]).
+pub fn key(ui: &mut egui::Ui, results: &Value) {
+    let p = theme::palette(ui.ctx());
+    let r = &results["record"];
+    let unit = unit_label(r["time_unit"].as_str().unwrap_or(""));
+    // Warnings from before the run (the record's), from its results, and the file's notes.
+    let notes: Vec<&str> = r["warnings"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .chain(results["warnings"].as_array().into_iter().flatten())
+        .chain(r["file_notes"].as_array().into_iter().flatten())
+        .filter(|n| n["severity"] != "info")
+        .filter_map(|n| n["message"].as_str())
+        .collect();
+    ui.vertical(|ui| {
+        ui.set_max_width(COLUMNS[4].1);
+        for n in &notes {
+            ui.horizontal_wrapped(|ui| {
+                ui.label(theme::strong(t("Warning")).color(p.warning));
+                ui.label(*n);
+            });
+        }
+    });
+    if !notes.is_empty() {
+        ui.add_space(10.0);
+    }
+    key_measures(ui, &p, results, unit, &|m| n_of(results, m));
+}
+
+/// Every result, folded under "All measures" (open where runs split, since the findings send the
+/// reader to that table), then the notes on what the numbers mean and the run's version line.
+pub fn show(ui: &mut egui::Ui, results: &Value) {
+    let p = theme::palette(ui.ctx());
+    let r = &results["record"];
+    let unit = unit_label(r["time_unit"].as_str().unwrap_or(""));
+    let order = order(results);
+    let n_of = |m: &Value| n_of(results, m);
     let partial = results["elements"]
         .as_array()
         .into_iter()
@@ -212,26 +253,33 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
         });
     ui.vertical(|ui| {
         ui.set_max_width(COLUMNS[4].1);
-        // Warnings from before the run (the record's), from its results, and the file's notes.
-        let notes: Vec<&str> = r["warnings"]
+        let shown: usize = results["elements"]
             .as_array()
             .into_iter()
             .flatten()
-            .chain(results["warnings"].as_array().into_iter().flatten())
-            .chain(r["file_notes"].as_array().into_iter().flatten())
-            .filter(|n| n["severity"] != "info")
-            .filter_map(|n| n["message"].as_str())
-            .collect();
-        for n in &notes {
-            ui.horizontal_wrapped(|ui| {
-                ui.label(theme::strong(t("Warning")).color(p.warning));
-                ui.label(*n);
-            });
-        }
-        if !notes.is_empty() {
-            ui.add_space(10.0);
-        }
-
+            .map(|e| key_of(e).len())
+            .sum();
+        let rows = results["elements"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .map(|e| {
+                let metrics = order
+                    .iter()
+                    .filter(|k| !e["metrics"][**k].is_null() && !hidden(e, k))
+                    .count();
+                metrics + e["properties"].as_object().map_or(0, serde_json::Map::len)
+            })
+            .sum::<usize>();
+        let split = results["splits"].as_array().is_some_and(|s| !s.is_empty());
+        ui.add_space(8.0);
+        egui::CollapsingHeader::new(theme::strong(tf(
+            "All measures ({n} more)",
+            &[("n", &rows.saturating_sub(shown).to_string())],
+        )))
+        .id_salt("all-measures")
+        .default_open(split)
+        .show(ui, |ui| {
         for e in results["elements"].as_array().into_iter().flatten() {
             let id = e["id"].as_str().unwrap_or("");
             let name = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
@@ -251,19 +299,17 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
             );
             for (i, key) in order.iter().enumerate() {
                 let m = &e["metrics"][*key];
-                if m.is_null() {
+                if m.is_null() || hidden(e, key) {
                     continue;
                 }
                 let (label, kind) = metric(key, e["kind"].as_str().unwrap_or(""));
-                let (mean, hw) = (m["mean"].as_f64(), m["half_width"].as_f64());
                 let (scale, unit) = scale_and_unit(&kind, unit);
-                let show =
-                    |v: Option<f64>| v.map_or_else(|| "–".to_owned(), |v| grouped(v * scale));
+                let (mean, hw) = mean_and_half_width(m, scale);
                 row(
                     ui,
                     &p,
                     Some(i % 2 == 0),
-                    [label, &show(mean), &show(hw), unit, &n_of(m)],
+                    [label, &mean, &hw, unit, &n_of(m)],
                 );
                 // Where the runs split into two outcomes, the mean describes none of them: say
                 // so under the row, and show every run's value.
@@ -285,7 +331,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
             // The mean value this element assigned to each property it sets.
             let shown = order
                 .iter()
-                .filter(|k| !e["metrics"][**k].is_null())
+                .filter(|k| !e["metrics"][**k].is_null() && !hidden(e, k))
                 .count();
             for (j, (name, m)) in e["properties"]
                 .as_object()
@@ -293,15 +339,15 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
                 .flatten()
                 .enumerate()
             {
-                let show = |v: Option<f64>| v.map_or_else(|| "–".to_owned(), grouped);
+                let (mean, hw) = mean_and_half_width(m, 1.0);
                 row(
                     ui,
                     &p,
                     Some((shown + j) % 2 == 0),
                     [
                         &tf("{property} (set to, mean)", &[("property", name)]),
-                        &show(m["mean"].as_f64()),
-                        &show(m["half_width"].as_f64()),
+                        &mean,
+                        &hw,
                         "",
                         &n_of(m),
                     ],
@@ -327,6 +373,7 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
             }
             ui.add_space(16.0);
         }
+        });
         if partial {
             ui.label(theme::weak(
                 ui,
@@ -360,6 +407,245 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
             .size(12.0),
         );
     });
+}
+
+/// Whether a result of element `e` is left out of the tables: OEE and its availability where no
+/// planned run time is set (without a plan to compare against, they only restate availability).
+fn hidden(e: &Value, key: &str) -> bool {
+    key.starts_with("oee") && e["metrics"]["oee_effectiveness"].is_null()
+}
+
+/// The results a block's key measures are chosen from, in order, by its kind: the first four
+/// with a value are shown. Those marked `false` are shown only when not zero (a block that
+/// never failed has no "Time failed" row among its key measures).
+fn key_candidates(kind: &str) -> &'static [(&'static str, bool)] {
+    match kind {
+        "server" | "shared_task" => &[
+            ("utilisation", true),
+            ("mean_wait", true),
+            ("mean_queue_length", true),
+            ("time_failed", false),
+            ("abandoned_share", false),
+            ("balked_share", false),
+            ("loss_probability", false),
+            ("left", true),
+        ],
+        "delay" | "batch" | "unbatch" => {
+            &[("mean_contents", true), ("left", true), ("lost", false)]
+        }
+        "sink" => &[
+            ("entered", true),
+            ("mean_time_in_system", true),
+            ("cycle_time", true),
+            ("demand_met", true),
+        ],
+        "source" => &[
+            ("left", true),
+            ("balked", false),
+            ("lost", false),
+            ("loss_probability", false),
+        ],
+        "resource" => &[
+            ("utilisation", true),
+            ("mean_in_service", true),
+            ("time_failed", false),
+        ],
+        "exclusive_gateway" => &[("left", true), ("lost", false)],
+        _ => &[("left", true), ("entered", true)],
+    }
+}
+
+/// The key measures of block `e`: up to four of its results by [`key_candidates`].
+fn key_of(e: &Value) -> Vec<&'static str> {
+    let kind = e["kind"].as_str().unwrap_or("");
+    key_candidates(kind)
+        .iter()
+        .filter(|(k, always)| {
+            let m = &e["metrics"][*k];
+            !m.is_null()
+                && !hidden(e, k)
+                && (*always || m["mean"].as_f64().is_some_and(|v| v != 0.0))
+        })
+        .map(|(k, _)| *k)
+        .take(4)
+        .collect()
+}
+
+/// Column edges of a key-measures row: the measure, its mean with the unit, the half-width, and
+/// how many runs had a value where not all did.
+const KEY_COLUMNS: [(f32, f32); 4] = [(8.0, 150.0), (150.0, 236.0), (242.0, 300.0), (306.0, 380.0)];
+
+/// The key measures: up to four results per block in a compact table, the blocks side by side
+/// where the width allows.
+fn key_measures(
+    ui: &mut egui::Ui,
+    p: &theme::Palette,
+    results: &Value,
+    time: &str,
+    n_of: &dyn Fn(&Value) -> String,
+) {
+    let blocks: Vec<(&Value, Vec<&str>)> = results["elements"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .map(|e| (e, key_of(e)))
+        .filter(|(_, keys)| !keys.is_empty())
+        .collect();
+    if blocks.is_empty() {
+        return;
+    }
+    ui.horizontal_wrapped(|ui| {
+        ui.label(theme::strong(t("Key measures")).size(15.0));
+        ui.label(theme::weak(
+            ui,
+            t("Up to 4 per block, rounded to what the interval supports"),
+        ));
+    });
+    ui.add_space(4.0);
+    let width = KEY_COLUMNS[3].1;
+    let gap = 28.0;
+    let per_line = (((ui.available_width() + gap) / (width + gap)).floor() as usize).max(1);
+    for line in blocks.chunks(per_line) {
+        ui.horizontal_top(|ui| {
+            for (e, keys) in line {
+                {
+                    ui.vertical(|ui| {
+                        ui.set_width(width);
+                        let id = e["id"].as_str().unwrap_or("");
+                        let name = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
+                        let kind = e["kind"].as_str().unwrap_or("");
+                        ui.horizontal(|ui| {
+                            ui.label(theme::strong(name));
+                            ui.label(theme::weak(ui, kind_label(kind)));
+                        });
+                        key_row(ui, p, None, [t("Metric"), t("Mean"), t("± 95% CI"), ""]);
+                        for (i, key) in keys.iter().enumerate() {
+                            let m = &e["metrics"][*key];
+                            let (label, unit_kind) = metric(key, kind);
+                            let (scale, unit) = scale_and_unit(&unit_kind, time);
+                            let (mean, hw) = mean_and_half_width(m, scale);
+                            let mean = match unit {
+                                "" => mean,
+                                "%" if mean != "–" => format!("{mean}%"),
+                                u if mean != "–" => format!("{mean} {u}"),
+                                _ => mean,
+                            };
+                            key_row(ui, p, Some(i % 2 == 0), [label, &mean, &hw, &n_of(m)]);
+                        }
+                    });
+                }
+                ui.add_space(gap);
+            }
+        });
+        ui.add_space(10.0);
+    }
+}
+
+/// One row of a block's key measures. `stripe` is `None` for the header row.
+fn key_row(ui: &mut egui::Ui, p: &theme::Palette, stripe: Option<bool>, cells: [&str; 4]) {
+    let height = if stripe.is_some() { 26.0 } else { 20.0 };
+    let (rect, _) =
+        ui.allocate_exact_size(egui::vec2(KEY_COLUMNS[3].1, height), egui::Sense::hover());
+    if stripe == Some(true) {
+        ui.painter().rect_filled(rect, 4.0, p.stripe);
+    }
+    for (c, text) in cells.into_iter().enumerate() {
+        if text.is_empty() {
+            continue;
+        }
+        let (l, r) = KEY_COLUMNS[c];
+        let cell = egui::Rect::from_x_y_ranges(rect.left() + l..=rect.left() + r, rect.y_range());
+        let numeric = c == 1 || c == 2;
+        let layout = if numeric {
+            egui::Layout::right_to_left(egui::Align::Center)
+        } else {
+            egui::Layout::left_to_right(egui::Align::Center)
+        };
+        let mut t = RichText::new(text);
+        if stripe.is_none() {
+            t = t.size(12.0).color(p.text_weak);
+        } else if c == 2 || c == 3 {
+            t = t.color(p.text_weak);
+        }
+        ui.scope_builder(egui::UiBuilder::new().max_rect(cell).layout(layout), |ui| {
+            ui.label(t);
+        });
+    }
+}
+
+/// A result's mean and half-width as the tables show them, each multiplied by `scale`: rounded
+/// together by [`rounded`] where both are known, otherwise as they are ("–" where missing).
+fn mean_and_half_width(m: &Value, scale: f64) -> (String, String) {
+    let show = |v: Option<f64>| v.map_or_else(|| "–".to_owned(), |v| grouped(v * scale));
+    match (m["mean"].as_f64(), m["half_width"].as_f64()) {
+        (Some(mean), Some(hw)) => rounded(mean * scale, hw * scale),
+        (mean, hw) => (show(mean), show(hw)),
+    }
+}
+
+/// A mean and the half-width of its interval, rounded to what the interval supports: the
+/// half-width to one significant figure (two where that figure would be a 1), and the mean to
+/// the same decimal place, so 38.4 ± 12.3 reads "38 ± 12" and 2.04 ± 0.61 reads "2.0 ± 0.6".
+/// A half-width of zero (every run gave the same value) or one that is not a number leaves the
+/// mean as [`grouped`] writes it.
+pub fn rounded(mean: f64, half_width: f64) -> (String, String) {
+    if !(mean.is_finite() && half_width.is_finite() && half_width > 0.0) {
+        return (grouped(mean), grouped(half_width));
+    }
+    // The decimal place of the half-width's first significant figure; one place further where,
+    // once rounded there, it reads as a 1 (0.96 → 1.0, 0.14 → 0.14, 12.3 → 12).
+    let first = |v: f64| -magnitude(v);
+    let mut places = first(half_width);
+    let hw = round_to(half_width, places);
+    if (hw / pow10(magnitude(hw))).round() as i64 == 1 {
+        places = first(hw) + 1;
+    }
+    (
+        fixed(round_to(mean, places), places),
+        fixed(round_to(half_width, places), places),
+    )
+}
+
+/// The power of ten of `v`'s first significant figure (`v` finite and not zero), by repeated
+/// scaling rather than `log10`, as in [`number`].
+fn magnitude(v: f64) -> i32 {
+    let mut m = 0i32;
+    let mut a = v.abs();
+    while a >= 10.0 && m < 400 {
+        a /= 10.0;
+        m += 1;
+    }
+    while a < 1.0 && m > -400 {
+        a *= 10.0;
+        m -= 1;
+    }
+    m
+}
+
+/// Ten to the power `e`, by repeated multiplication (`powi` is disallowed: it can differ between
+/// platforms); exact for the few places a table rounds to.
+fn pow10(e: i32) -> f64 {
+    let f = (0..e.unsigned_abs().min(400)).fold(1.0, |f, _| f * 10.0);
+    if e < 0 { 1.0 / f } else { f }
+}
+
+/// `v` rounded to `places` decimal places (to tens, hundreds… where `places` is negative).
+fn round_to(v: f64, places: i32) -> f64 {
+    let f = pow10(places);
+    (v * f).round() / f
+}
+
+/// `v` with `places` decimals (none where `places` is negative) in the user's region, grouped
+/// as [`grouped`] groups.
+fn fixed(v: f64, places: i32) -> String {
+    let places = places.clamp(0, 12) as usize;
+    // No "-0" where a small negative mean rounds to zero.
+    let v = if v == 0.0 { 0.0 } else { v };
+    if let Some(local) = NUMBERS.with(|n| n.borrow().as_ref().map(|n| n.format(v, places..=places)))
+    {
+        return local;
+    }
+    group(&format!("{v:.places$}"))
 }
 
 /// How a metric of `kind` is shown: the factor its values are multiplied by, and its unit
@@ -574,12 +860,18 @@ pub fn grouped(v: f64) -> String {
     }) {
         return local;
     }
-    let (sign, rest) = s.strip_prefix('-').map_or(("", s.as_str()), |r| ("-", r));
+    group(&s)
+}
+
+/// A number written with a decimal point, its thousands grouped with commas where the whole part
+/// has five digits or more.
+fn group(s: &str) -> String {
+    let (sign, rest) = s.strip_prefix('-').map_or(("", s), |r| ("-", r));
     let (int, frac) = rest
         .split_once('.')
         .map_or((rest, None), |(i, f)| (i, Some(f)));
     if int.len() <= 4 {
-        return s;
+        return s.to_owned();
     }
     let mut out = String::new();
     for (i, ch) in int.chars().enumerate() {
@@ -612,6 +904,67 @@ mod tests {
         assert_eq!(super::grouped(-123456.0), "-123,456");
     }
 
+    #[test]
+    fn a_mean_is_rounded_to_what_its_interval_supports() {
+        use super::rounded;
+        let r = |m, h| {
+            let (m, h) = rounded(m, h);
+            format!("{m} ± {h}")
+        };
+        // One significant figure in the half-width, the mean to the same place.
+        assert_eq!(r(80.696, 2.8373), "81 ± 3");
+        assert_eq!(r(2.04, 0.61), "2.0 ± 0.6");
+        assert_eq!(r(0.3042, 0.0813), "0.30 ± 0.08");
+        // Two where the first figure is a 1, also once rounded (0.96 → 1.0).
+        assert_eq!(r(38.4, 12.3), "38 ± 12");
+        assert_eq!(r(5.03, 0.14), "5.03 ± 0.14");
+        assert_eq!(r(7.37, 0.96), "7.4 ± 1.0");
+        // Tens and hundreds where the interval is that wide; thousands grouped.
+        assert_eq!(r(14990.0, 312.0), "15,000 ± 300");
+        assert_eq!(r(1234.0, 56.0), "1230 ± 60");
+        // No "-0", and a mean every run agreed on is left as it is.
+        assert_eq!(r(-0.004, 0.2), "0.0 ± 0.2");
+        assert_eq!(r(12.5, 0.0), "12.5 ± 0");
+    }
+
+    #[test]
+    fn each_block_shows_its_key_measures_and_folds_the_rest() {
+        use egui_kittest::kittest::Queryable;
+        let m = |mean: f64, hw: f64| serde_json::json!({ "mean": mean, "half_width": hw, "std_dev": 1.0, "n": 10 });
+        let results = serde_json::json!({
+            "replications": 10,
+            "record": { "replications": 10, "time_unit": "min" },
+            "metrics": ["entered", "left", "mean_queue_length", "mean_wait", "utilisation",
+                        "time_failed", "oee_availability", "oee"],
+            "elements": [{
+                "id": "paint", "name": "Paint", "kind": "server",
+                "metrics": {
+                    "entered": m(80.0, 3.0),
+                    "left": m(79.0, 3.0),
+                    "mean_queue_length": m(6.04, 2.1),
+                    "mean_wait": m(38.4, 12.3),
+                    "utilisation": m(0.9213, 0.0207),
+                    "time_failed": m(0.0, 0.0),
+                    // No planned run time: no effectiveness, so neither OEE row is shown.
+                    "oee_availability": m(0.95, 0.01),
+                },
+            }],
+        });
+        let h = draw(results);
+        h.get_by_label("Key measures");
+        // Busy, the wait and the waiting room, rounded, with their units; a block that never
+        // failed has no "Time failed" row among them, so the fourth is what left.
+        h.get_by_label("92%");
+        h.get_by_label("38 min");
+        h.get_by_label("12");
+        h.get_by_label("6");
+        h.get_by_label("79");
+        // Six rows in all (OEE left out), four of them key: two more, folded.
+        h.get_by_label("All measures (2 more)");
+        assert!(h.query_by_label("Time failed").is_none());
+        assert!(h.query_by_label("OEE availability").is_none());
+    }
+
     /// Results of 10 replications in which only 4 had a mean wait, and work was left inside.
     fn partial() -> serde_json::Value {
         let m = |mean: f64, n: u64| serde_json::json!({ "mean": mean, "half_width": 0.5, "std_dev": 1.0, "n": n });
@@ -642,6 +995,7 @@ mod tests {
                 return;
             }
             super::findings(ui, &results);
+            super::key(ui, &results);
             super::show(ui, &results);
         });
         h.run();

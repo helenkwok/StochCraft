@@ -689,6 +689,9 @@ unit	yr	v
 	Number waiting	Odottavien määrä
 	Share balked	Jonoon liittymättömien osuus
 	Table	Taulukko
+	Key measures	Tärkeimmät mittarit
+	Up to 4 per block, rounded to what the interval supports	Enintään 4 lohkoa kohden, pyöristetty luottamusvälin mukaan
+	All measures ({n} more)	Kaikki mittarit ({n} lisää)
 @plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
 @plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
 @plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui

@@ -689,6 +689,9 @@ unit	yr	년
 	Number waiting	대기 수
 	Share balked	진입 포기 비율
 	Table	표
+	Key measures	주요 지표
+	Up to 4 per block, rounded to what the interval supports	블록당 최대 4개, 신뢰 구간에 맞춰 반올림
+	All measures ({n} more)	모든 지표({n}개 더)
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료

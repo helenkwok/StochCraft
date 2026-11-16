@@ -689,6 +689,9 @@ unit	yr	বছর
 	Number waiting	অপেক্ষমাণ সংখ্যা
 	Share balked	সারিতে না দাঁড়ানোদের অনুপাত
 	Table	সারণি
+	Key measures	প্রধান পরিমাপক
+	Up to 4 per block, rounded to what the interval supports	প্রতি ব্লকে সর্বোচ্চ 4টি, আস্থা ব্যবধান অনুযায়ী আসন্নীকৃত
+	All measures ({n} more)	সব পরিমাপক (আরও {n}টি)
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে
