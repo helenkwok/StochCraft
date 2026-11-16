@@ -877,8 +877,10 @@ impl App {
         if decision {
             ui.label(theme::weak(
                 ui,
-                "An entity takes the first flow whose condition holds; with no conditions, a flow \
-                 drawn by the probabilities (blank ones share what the others leave).",
+                t(
+                    "An entity takes the first flow whose condition holds; with no conditions, a \
+                   flow drawn by the probabilities (blank ones share what the others leave).",
+                ),
             ));
             ui.add_space(4.0);
         }

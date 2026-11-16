@@ -13,7 +13,7 @@
 
 @id	language.name	Türkçe
 	% down and up	% aşağı ve yukarı
-	% of runs	% tekrarın
+	% of runs	% çalıştırmanın
 	+ Add block	+ Blok ekle
 	95% interval of the share meeting the target: {lo} to {hi}	Hedefi karşılayan oranın %95 aralığı: {lo} ile {hi} arası
 	95th percentile	95. yüzdelik
@@ -34,7 +34,7 @@
 	Add Pool	Havuz ekle
 	Add a flow from…	Kaynak…
 	Add a flow to…	Hedef…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Yeterince tekrar bir hedefe ulaşana dek en yoğun göreve ya da havuza bir birim ekle. Her sürenin ortalamasında olduğu yanıt da gösterilir; genellikle fazla küçüktür.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Yeterince çalıştırma bir hedefe ulaşana dek en yoğun göreve ya da havuza bir birim ekle. Her sürenin ortalamasında olduğu yanıt da gösterilir; genellikle fazla küçüktür.
 	Add alternative	Alternatif ekle
 	Add calendar	Takvim ekle
 	Add calendar entry	Takvim girdisi ekle
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Tüm metinler en düşük kontrast değerlerini karşılıyor.
 	Also: {rule}	Ayrıca: {rule}
 	Alternative {n}	Alternatif {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Bir varlık, koşulu sağlanan ilk akışı alır; koşul yoksa akış olasılıklara göre rastgele seçilir (boş bırakılanlar, diğerlerinden kalanı eşit paylaşır).
 	Analysis	Analiz
 	Appearance	Görünüm
 	Arrival limit	Geliş sınırı
@@ -169,12 +170,12 @@
 	Ends early	Erken biter
 	Energy	Enerji
 	Energy per part	Parça başına enerji
-	Enough: {units}, meeting the target in {p} of runs	Yeterli: {units}, hedef tekrarların {p} kadarında karşılanır
+	Enough: {units}, meeting the target in {p} of runs	Yeterli: {units}, hedef çalıştırmaların {p} kadarında karşılanır
 	Enter a number	Bir sayı girin
 	Entered	Giren
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Bekleme alanını dolu bulan varlıklar, kaybolmak ya da görevden önce beklemek yerine hemen bu akışı izler (örneğin daha sonra yeniden denemek için); burada kaybedilen sayılırlar.
 	Entities give up waiting	Varlıklar beklemekten vazgeçer
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Bir tekrarın sonunda hâlâ içeride olan varlıklar ortalama bekleme süresine ve sistemdeki ortalama süreye katılmaz.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Bir çalıştırmanın sonunda hâlâ içeride olan varlıklar ortalama bekleme süresine ve sistemdeki ortalama süreye katılmaz.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Beklemekten vazgeçen varlıklar bu akışı izler (örneğin daha sonra yeniden denemek için); diğerleri görevin öteki çıkış yolunu izler.
 	Erlang	Erlang
 	Error	Hata
@@ -223,11 +224,8 @@
 	Hide Others	Diğerlerini Gizle
 	Hide {app}	{app} Uygulamasını Gizle
 	High contrast	Yüksek kontrast
-	How long one unit takes to serve one entity, drawn anew for each entity.	Bir birimin bir varlığa hizmet vermesinin ne kadar sürdüğü; her varlık için yeniden çekilir.
 	How many	Kaç
-	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hizmet alanların yanı sıra burada boş bir birimi kaç varlığın bekleyebileceği; işaretsizse istenen sayıda.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Müşterilerin bu çıkışlardan kaç parça istediği; sonuçlar o zaman taktı (kullanılabilir sürenin talebe bölümü) ve her görevin döngü süresini gösterir.
-	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Burada aynı anda kaç birimin hizmet verdiği, örneğin makineler veya personel; her biri aynı anda bir varlığa.
 	In use	Kullanımda
 	Inside over time	Zaman içinde içeridekiler
 	Job under way on a server going off shift:	Vardiyası biten sunucuda süren iş:
@@ -255,7 +253,7 @@
 	Maximum	Maksimum
 	Mean	Ortalama
 	Mean number inside	İçerideki ortalama sayı
-	One run of {n}: the results of the others differ.	{n} tekrardan biri: diğerlerinin sonuçları farklıdır.
+	One run of {n}: the results of the others differ.	{n} çalıştırmadan biri: diğerlerinin sonuçları farklıdır.
 	Save as a new BPMN file?	Yeni bir BPMN dosyası olarak kaydedilsin mi?
 	Still inside at the end	Sonda hâlâ içeride
 	Mean work in progress	Ortalama süreç içi stok
@@ -274,13 +272,9 @@
 	Model	Model
 	Model time 0 is	Model zamanı 0
 	Mon	Pzt
-	More settings	Diğer ayarlar
 	Most likely	En olası
 	Move	Taşı
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Her parametreyi sırayla aşağı ve yukarı oynat, sonucun ne kadar değiştiğine göre sırala.
-	Must be from {min} to {max}	{min} ile {max} arasında olmalı
-	Must be more than {min}	{min} değerinden büyük olmalı
-	Must be {min} or more	{min} veya daha fazla olmalı
 	Name	Ad
 	Needs	İhtiyaçlar
 	Never: it runs for its duration	Hiçbir zaman: süresince çalışır
@@ -291,7 +285,7 @@
 	No arrivals outside calendars	Takvimler dışında geliş yok
 	No blocks yet. Open a model, or add blocks to build one.	Henüz blok yok. Bir model açın veya blok ekleyerek oluşturun.
 	No connections yet: join blocks below.	Henüz bağlantı yok: aşağıdaki blokları bağlayın.
-	No run met the stop condition: each ran to its time limit.	Hiçbir tekrar durdurma koşuluna ulaşmadı: her biri süre sınırına kadar çalıştı.
+	No run met the stop condition: each ran to its time limit.	Hiçbir çalıştırma durdurma koşuluna ulaşmadı: her biri süre sınırına kadar çalıştı.
 	No results yet	Henüz sonuç yok
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Bu modelde hurda veya yeniden işleme işaretlenmemiştir, bu yüzden OEE kaliteyi %100 sayar.
 	No target	Hedef yok
@@ -393,11 +387,11 @@
 	Repair time	Onarım süresi
 	Repeats	Tekrar
 	Replace Model	Modeli değiştir
-	Run 1 · {time} of {end} {unit}	Tekrar 1 · {time} / {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	Tekrar 1 · {time} / {end} {unit} · ısınma
-	Runs	Tekrarlar
-	Runs meeting the target	Hedefi karşılayan tekrarlar
-	Runs that never met the stop condition count as later than their time limit.	Durdurma koşuluna hiç ulaşmayan tekrarlar süre sınırından sonra sayılır.
+	Run 1 · {time} of {end} {unit}	Çalıştırma 1 · {time} / {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Çalıştırma 1 · {time} / {end} {unit} · ısınma
+	Runs	Çalıştırmalar
+	Runs meeting the target	Hedefi karşılayan çalıştırmalar
+	Runs that never met the stop condition count as later than their time limit.	Durdurma koşuluna hiç ulaşmayan çalıştırmalar süre sınırından sonra sayılır.
 	Resource pool	Kaynak havuzu
 	Resource pools	Kaynak havuzları
 	Restore	Geri yükle
@@ -418,7 +412,7 @@
 	Run	Çalıştır
 	Run cancelled	Çalıştırma iptal edildi
 	Run experiment	Deneyi çalıştır
-	Play run 1 step by step and see each block's queue on the diagram	Tekrar 1'i adım adım çalıştır ve her bloğun kuyruğunu diyagramda gör
+	Play run 1 step by step and see each block's queue on the diagram	Çalıştırma 1'i adım adım oynat ve her bloğun kuyruğunu diyagramda gör
 	Run the experiment ({shortcut})	Deneyi çalıştır ({shortcut})
 	Run the experiment again to see this result's spread.	Bu sonucun yayılımını görmek için deneyi yeniden çalıştırın.
 	Run the experiment at each value of one parameter, and compare a result.	Deneyi bir parametrenin her değerinde çalıştır ve bir sonucu karşılaştır.
@@ -426,7 +420,7 @@
 	Run the sweep	Taramayı çalıştır
 	Running	Çalışıyor
 	Running…	Çalışıyor…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Tekrarlar ikiye ayrıldı: {n} tekrardan {low_n} tanesi {low} civarında, {high_n} tanesi {high} civarında. Ortalama ({mean}) iki farklı sonucu karıştırıyor; her grubu ayrı inceleyin.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Çalıştırmalar ikiye ayrıldı: {n} çalıştırmadan {low_n} tanesi {low} civarında, {high_n} tanesi {high} civarında. Ortalama ({mean}) iki farklı sonucu karıştırıyor; her grubu ayrı inceleyin.
 	Sat	Cmt
 	Save	Kaydet
 	Save As…	Farklı Kaydet…
@@ -474,7 +468,7 @@
 	Split batches	Partileri ayır
 	Split or join	Ayır veya birleştir
 	Split or join (all ways)	Ayır veya birleştir (tüm yollar)
-	Spread across runs	Tekrarlar arası yayılım
+	Spread across runs	Çalıştırmalar arası yayılım
 	Spread out	Dağıt
 	Stages (k)	Aşamalar (k)
 	Standard deviation	Standart sapma
@@ -505,19 +499,19 @@
 	Text on header	Üst çubuktaki metin
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Bağlantı kopar ve istemci yeniden dener: varlık hemen kuyruğun başına döner ve üzerinde yapılan iş boşa gider.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Varlık kendi sunucusunda bekler ve sunucu geri gelince iş kalan kısmıyla sürer.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Aralık {share} hedef oranının altına iniyor, bu yüzden oranın karşılandığı %95 güvenle gösterilmiş değil; daha fazla tekrar aralığı daraltır.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Aralık {share} hedef oranının altına iniyor, bu yüzden oranın karşılandığı %95 güvenle gösterilmiş değil; daha fazla çalıştırma aralığı daraltır.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	İş hemen durur: varlık vardiyadaki herhangi bir sunucu için kuyruğun başına döner ve üzerinde yapılan iş boşa gider.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	İş hemen durur; varlık kendi sunucusunda bekler ve o sunucu yeniden vardiyaya gelince iş kalan kısmıyla sürer.
 	The last task with a resource it finished at	Parçanın geçtiği kaynak kullanan son görev
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Durdurma koşuluna kadarki ortalama süre yalnızca bu koşula ulaşan tekrarlara göredir; diğerleri süre sınırlarına kadar çalıştı.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Durdurma koşuluna kadarki ortalama süre yalnızca bu koşula ulaşan çalıştırmalara göredir; diğerleri süre sınırlarına kadar çalıştı.
 	The model changed, so watching stopped	Model değişti, bu nedenle izleme durduruldu
 	The model has no calendars yet.	Modelde henüz takvim yok.
 	The model now has the units sizing found	Modelde artık boyutlandırmanın bulduğu birimler var
 	The model: its experiment, connections and problems	Model: deney, bağlantılar ve sorunlar
 	The name is empty or already used.	Ad boş veya zaten kullanılıyor.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Tekrarlar iki farklı sonuca ayrıldı: {n} tekrardan {a} tanesi birinde, {b} tanesi diğerinde. Aynı şekilde ayrılan {count} sonuç var, bunlardan biri {result} ({element}); aşağıdaki tabloya bakın.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Çalıştırmalar iki farklı sonuca ayrıldı: {n} çalıştırmadan {a} tanesi birinde, {b} tanesi diğerinde. Aynı şekilde ayrılan {count} sonuç var, bunlardan biri {result} ({element}); aşağıdaki tabloya bakın.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Sunucu elindeki işi bitirir, sonra vardiyadan çıkar; o zamana kadar vardiyada sayılır.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Her değere eşit veya altındaki tekrarların oranı. Bant, gerçek dağılımı {confidence} güvenle içerir.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Her değere eşit veya altındaki çalıştırmaların oranı. Bant, gerçek dağılımı {confidence} güvenle içerir.
 	The values are numbers, separated by semicolons or spaces	Değerler noktalı virgül veya boşlukla ayrılmış sayılardır
 	The whole clock	Tüm süre
 	Themes	Temalar
@@ -585,7 +579,7 @@
 	Warning	Uyarı
 	Watch a Run	Bir Çalıştırmayı İzle
 	Watch a run	Bir çalıştırmayı izle
-	Watching run 1	Tekrar 1 izleniyor
+	Watching run 1	Çalıştırma 1 izleniyor
 	Weak text	Soluk metin
 	Weak text on header	Üst çubuktaki soluk metin
 	Wed	Çar
@@ -621,8 +615,8 @@
 	maximum {value}	en büyük {value}
 	milliseconds	milisaniye
 	minutes	dakika
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N tekrardan k: N tekrarın yalnızca k tanesinde bu sonucun bir değeri vardı; ortalaması ve aralığı bu k tekrara göredir.
-	n = {k} of {n}	n = {n} tekrardan {k}
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = N çalıştırmadan k: N çalıştırmanın yalnızca k tanesinde bu sonucun bir değeri vardı; ortalaması ve aralığı bu k çalıştırmaya göredir.
+	n = {k} of {n}	n = {n} çalıştırmadan {k}
 	nothing yet	henüz bir şey yok
 	per day	günde
 	per shift	vardiyada
@@ -656,7 +650,7 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} ve {second}: kırmızı-yeşil renk körlüğünde fark {de}, en az 8 gerekli: bunları yalnızca etiketlerle ayırt edin.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ve {second}: açıklık farkı {step}, en az 0.06 gerekli.
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} tekrardan {met} tanesi hedefi karşıladı: {p} (%95 aralık {lo} ile {hi} arası)
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} çalıştırmadan {met} tanesi hedefi karşıladı: {p} (%95 aralık {lo} ile {hi} arası)
 	{name} — edited	{name} — düzenlendi
 	{n} created	{n} oluşturuldu
 	{n} done	{n} tamamlandı
@@ -665,12 +659,12 @@
 	{n} {unit} per second	saniyede {n} {unit}
 	{property} (set to, mean)	{property} (ayarlanan değer, ortalama)
 	{reason}. {field} is still {value}.	{reason}. {field} hâlâ {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): tekrarlar iki farklı sonuca ayrıldı; aşağıdaki tabloya bakın.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): çalıştırmalar iki farklı sonuca ayrıldı; aşağıdaki tabloya bakın.
 	{text} on {background}: {ratio}:1, needs {min}:1	{background} üzerinde {text}: {ratio}:1, en az {min}:1 gerekli
 	{title}: now {now}, at most {most}	{title}: şu an {now}, en fazla {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% güven aralığı
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	±, tekrarlamalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliğidir.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	±, çalıştırmalar arasındaki ortalama için %95'lik Student-t güven aralığının yarı genişliğidir.
 	· no results yet	· henüz sonuç yok
 unit	d	gün
 unit	h	sa
@@ -678,20 +672,27 @@ unit	min	dk
 unit	ms	ms
 unit	s	sn
 unit	yr	yıl
+	How long one unit takes to serve one entity, drawn anew for each entity.	Bir birimin bir varlığa hizmet vermesinin ne kadar sürdüğü; her varlık için yeniden çekilir.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hizmet alanların yanı sıra burada boş bir birimi kaç varlığın bekleyebileceği; işaretsizse istenen sayıda.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Burada aynı anda kaç birimin hizmet verdiği, örneğin makineler veya personel; her biri aynı anda bir varlığa.
+	More settings	Diğer ayarlar
+	Must be from {min} to {max}	{min} ile {max} arasında olmalı
+	Must be more than {min}	{min} değerinden büyük olmalı
+	Must be {min} or more	{min} veya daha fazla olmalı
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
-@plural	Finished {n} run|Finished {n} runs	{n} tekrar tamamlandı|{n} tekrar tamamlandı
+@plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} açıldı ({n} uyarı)|{file} açıldı ({n} uyarı)
 @plural	Removed {n} block|Removed {n} blocks	{n} blok kaldırıldı|{n} blok kaldırıldı
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Modelin {n} bağımsız tekrarını {seed} tohumundan çalıştırır. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.|Modelin {n} bağımsız tekrarını {seed} tohumundan çalıştırır. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Durdurma koşuluna {n} tekrardan {met} tanesinde, ortalama {time} {unit} sonra ulaşıldı.|Durdurma koşuluna {n} tekrardan {met} tanesinde, ortalama {time} {unit} sonra ulaşıldı.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	{n} tekrardan {done} tanesi tamamlandı|{n} tekrardan {done} tanesi tamamlandı
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} tekrar üzerinden|{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} tekrar üzerinden
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Modelin {n} bağımsız çalıştırmasını {seed} tohumundan yapar. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.|Modelin {n} bağımsız çalıştırmasını {seed} tohumundan yapar. Her öğenin sonuçları 95% güven aralığının yarı genişliğini içerir.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Durdurma koşuluna {n} çalıştırmadan {met} tanesinde, ortalama {time} {unit} sonra ulaşıldı.|Durdurma koşuluna {n} çalıştırmadan {met} tanesinde, ortalama {time} {unit} sonra ulaşıldı.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{n} çalıştırmadan {done} tanesi tamamlandı|{n} çalıştırmadan {done} tanesi tamamlandı
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} çalıştırma üzerinden|{name}: {mean}{unit}\n95% aralığı {low} ile {high}{unit} arasında\n{n} çalıştırma üzerinden
 @plural	{n} block selected|{n} blocks selected	{n} blok seçildi|{n} blok seçildi
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	Her adımda {n} tekrar · tohum {seed}|Her adımda {n} tekrar · tohum {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} tekrar · ortalama {mean} · {min} ile {max} arası|{n} tekrar · ortalama {mean} · {min} ile {max} arası
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü|{n} tekrar · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} tekrar · tohum {seed}|{n} tekrar · tohum {seed}
-@plural	{n} run|{n} runs	{n} tekrar|{n} tekrar
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	Her adımda {n} çalıştırma · tohum {seed}|Her adımda {n} çalıştırma · tohum {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} çalıştırma · ortalama {mean} · {min} ile {max} arası|{n} çalıştırma · ortalama {mean} · {min} ile {max} arası
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} çalıştırma · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü|{n} çalıştırma · tohum {seed} · ısınma {warmup} {unit} · {duration} {unit} ölçüldü
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} çalıştırma · tohum {seed}|{n} çalıştırma · tohum {seed}
+@plural	{n} run|{n} runs	{n} çalıştırma|{n} çalıştırma
 @plural	Run ({n} problem)|Run ({n} problems)	Çalıştır ({n} sorun)|Çalıştır ({n} sorun)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} sorun: {blocks}|{n} sorun: {blocks}

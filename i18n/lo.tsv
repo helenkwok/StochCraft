@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	ຂໍ້ຄວາມທັງໝົດຜ່ານຄວາມຄົມຊັດຂັ້ນຕ່ຳ.
 	Also: {rule}	ນອກຈາກນີ້: {rule}
 	Alternative {n}	ທາງເລືອກ {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	ເອນທິຕີຈະໄປຕາມເສັ້ນທາງທຳອິດທີ່ເງື່ອນໄຂເປັນຈິງ; ຖ້າບໍ່ມີເງື່ອນໄຂ, ຈະສຸ່ມເລືອກເສັ້ນທາງຕາມຄວາມເປັນໄປໄດ້ (ເສັ້ນທາງທີ່ປະວ່າງໄວ້ຈະແບ່ງສ່ວນທີ່ເສັ້ນທາງອື່ນເຫຼືອໄວ້ເທົ່າໆກັນ).
 	Analysis	ການວິເຄາະ
 	Appearance	ຮູບລັກສະນະ
 	Arrival limit	ຂີດຈຳກັດການມາຮອດ

@@ -13,7 +13,7 @@
 
 @id	language.name	Slovenščina
 	% down and up	% navzdol in navzgor
-	% of runs	% ponovitev
+	% of runs	% zagonov
 	+ Add block	+ Dodaj blok
 	95% interval of the share meeting the target: {lo} to {hi}	95-odstotni interval deleža, ki doseže cilj: od {lo} do {hi}
 	95th percentile	95. percentil
@@ -34,7 +34,7 @@
 	Add Pool	Dodaj skupino
 	Add a flow from…	Dodaj tok iz…
 	Add a flow to…	Dodaj tok v…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Dodajajte enoto pri najbolj obremenjenem opravilu ali skupini, dokler dovolj ponovitev ne doseže cilja. Prikazan je tudi odgovor, pri katerem je vsak čas na svojem povprečju; običajno je premajhen.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Dodajajte enoto pri najbolj obremenjenem opravilu ali skupini, dokler dovolj zagonov ne doseže cilja. Prikazan je tudi odgovor, pri katerem je vsak čas na svojem povprečju; običajno je premajhen.
 	Add alternative	Dodaj alternativo
 	Add calendar	Dodaj koledar
 	Add calendar entry	Dodaj vnos koledarja
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Vse besedilo dosega najmanjši kontrast.
 	Also: {rule}	Tudi: {rule}
 	Alternative {n}	Alternativa {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Entiteta gre po prvem toku, katerega pogoj velja; brez pogojev gre po toku, izžrebanem po verjetnostih (prazne si razdelijo, kar ostane od drugih).
 	Analysis	Analiza
 	Appearance	Videz
 	Arrival limit	Omejitev prihodov
@@ -169,12 +170,12 @@
 	Ends early	Konča se prej
 	Energy	Energija
 	Energy per part	Energija na kos
-	Enough: {units}, meeting the target in {p} of runs	Dovolj: {units}, cilj dosežen v {p} ponovitev
+	Enough: {units}, meeting the target in {p} of runs	Dovolj: {units}, cilj dosežen v {p} zagonov
 	Enter a number	Vnesite število
 	Entered	Vstopilo
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitete, ki najdejo čakalnico polno, gredo takoj po tem toku (da bi denimo kasneje poskusile znova), namesto da bi se izgubile ali čakale pred nalogo; tukaj štejejo kot izgubljene.
 	Entities give up waiting	Entitete odnehajo s čakanjem
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entitete, ki so ob koncu ponovitve še znotraj, niso upoštevane v povprečnem čakanju in povprečnem času v sistemu.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entitete, ki so ob koncu zagona še znotraj, niso upoštevane v povprečnem čakanju in povprečnem času v sistemu.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitete, ki odnehajo s čakanjem, gredo po tem toku (da bi denimo kasneje poskusile znova); druge gredo skozi drugi izhod naloge.
 	Erlang	Erlangova
 	Error	Napaka
@@ -223,11 +224,8 @@
 	Hide Others	Skrij druge
 	Hide {app}	Skrij {app}
 	High contrast	Visok kontrast
-	How long one unit takes to serve one entity, drawn anew for each entity.	Koliko časa potrebuje ena enota, da postreže eno entiteto; za vsako entiteto izžrebano znova.
 	How many	Koliko
-	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Koliko entitet sme tu čakati na prosto enoto, poleg tistih, ki jim streže; brez kljukice poljubno število.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Koliko kosov kupci želijo od teh odhodov; rezultati nato pokažejo takt (razpoložljivi čas, deljen s povpraševanjem) in čas cikla vsake naloge.
-	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Koliko enot tu streže hkrati, na primer stroji ali osebje, vsaka po eno entiteto naenkrat.
 	In use	V uporabi
 	Inside over time	Notri skozi čas
 	Job under way on a server going off shift:	Delo v teku na strežniku, ki mu poteče izmena:
@@ -255,7 +253,7 @@
 	Maximum	Največja vrednost
 	Mean	Povprečje
 	Mean number inside	Povprečno število znotraj
-	One run of {n}: the results of the others differ.	Ena ponovitev od {n}: rezultati drugih se razlikujejo.
+	One run of {n}: the results of the others differ.	En zagon od {n}: rezultati drugih se razlikujejo.
 	Save as a new BPMN file?	Shranim kot novo datoteko BPMN?
 	Still inside at the end	Ob koncu še znotraj
 	Mean work in progress	Povprečna nedokončana proizvodnja
@@ -274,13 +272,9 @@
 	Model	Model
 	Model time 0 is	Čas modela 0 je
 	Mon	pon
-	More settings	Več nastavitev
 	Most likely	Najverjetnejša vrednost
 	Move	Premik
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Vsak parameter po vrsti premaknite navzdol in navzgor ter jih razvrstite po tem, koliko se rezultat premakne.
-	Must be from {min} to {max}	Biti mora od {min} do {max}
-	Must be more than {min}	Biti mora več kot {min}
-	Must be {min} or more	Biti mora {min} ali več
 	Name	Ime
 	Needs	Zahteve
 	Never: it runs for its duration	Nikoli: teče ves čas trajanja
@@ -291,7 +285,7 @@
 	No arrivals outside calendars	Brez prihodov zunaj koledarjev
 	No blocks yet. Open a model, or add blocks to build one.	Blokov še ni. Odprite model ali dodajte bloke za ustvarjanje modela.
 	No connections yet: join blocks below.	Povezav še ni: povežite spodnje bloke.
-	No run met the stop condition: each ran to its time limit.	Nobena ponovitev ni dosegla pogoja za ustavitev: vsaka je tekla do svoje časovne omejitve.
+	No run met the stop condition: each ran to its time limit.	Noben zagon ni dosegel pogoja za ustavitev: vsak je tekel do svoje časovne omejitve.
 	No results yet	Rezultatov še ni
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	V tem modelu ni označenega izmeta ali dodelave, zato OEE šteje kakovost kot 100 %.
 	No target	Brez cilja
@@ -393,11 +387,11 @@
 	Repair time	Čas popravila
 	Repeats	Ponavljanje
 	Replace Model	Zamenjaj model
-	Run 1 · {time} of {end} {unit}	Ponovitev 1 · {time} od {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	Ponovitev 1 · {time} od {end} {unit} · ogrevanje
-	Runs	Ponovitve
-	Runs meeting the target	Ponovitve, ki dosežejo cilj
-	Runs that never met the stop condition count as later than their time limit.	Ponovitve, ki nikoli niso dosegle pogoja za ustavitev, štejejo kot poznejše od svoje časovne omejitve.
+	Run 1 · {time} of {end} {unit}	Zagon 1 · {time} od {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Zagon 1 · {time} od {end} {unit} · ogrevanje
+	Runs	Zagoni
+	Runs meeting the target	Zagoni, ki dosežejo cilj
+	Runs that never met the stop condition count as later than their time limit.	Zagoni, ki nikoli niso dosegli pogoja za ustavitev, štejejo kot poznejši od svoje časovne omejitve.
 	Resource pool	Skupina virov
 	Resource pools	Skupine virov
 	Restore	Obnovi okno
@@ -418,7 +412,7 @@
 	Run	Zaženi
 	Run cancelled	Izvajanje preklicano
 	Run experiment	Zaženi poskus
-	Play run 1 step by step and see each block's queue on the diagram	Zaženi ponovitev 1 korak za korakom in spremljaj vrsto vsakega bloka v diagramu
+	Play run 1 step by step and see each block's queue on the diagram	Predvajaj zagon 1 korak za korakom in spremljaj vrsto vsakega bloka v diagramu
 	Run the experiment ({shortcut})	Zaženi poskus ({shortcut})
 	Run the experiment again to see this result's spread.	Znova zaženite poskus, da vidite razpršenost tega rezultata.
 	Run the experiment at each value of one parameter, and compare a result.	Zaženite poskus pri vsaki vrednosti enega parametra in primerjajte rezultat.
@@ -426,7 +420,7 @@
 	Run the sweep	Zaženi preletanje
 	Running	Izvaja se
 	Running…	Izvaja se…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Ponovitve so se razdelile: {low_n} od {n} blizu {low}, {high_n} blizu {high}. Povprečje ({mean}) meša dva izida; oglejte si vsako skupino.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Zagoni so se razdelili: {low_n} od {n} blizu {low}, {high_n} blizu {high}. Povprečje ({mean}) meša dva izida; oglejte si vsako skupino.
 	Sat	sob
 	Save	Shrani
 	Save As…	Shrani kot…
@@ -474,7 +468,7 @@
 	Split batches	Razdelitev serij
 	Split or join	Razdeli ali združi
 	Split or join (all ways)	Razdeli ali združi (vse poti)
-	Spread across runs	Razpršenost med ponovitvami
+	Spread across runs	Razpršenost med zagoni
 	Spread out	Razporedi
 	Stages (k)	Stopnje (k)
 	Standard deviation	Standardni odklon
@@ -505,19 +499,19 @@
 	Text on header	Besedilo v glavi
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Povezava se prekine in odjemalec poskusi znova: entiteta se takoj vrne na začetek vrste, delo, opravljeno na njej, pa je zapravljeno.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteta čaka pri svojem strežniku in delo se nadaljuje s preostankom, ko se strežnik vrne.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval sega pod ciljni delež {share}, zato ni pokazano s 95-odstotno zanesljivostjo, da je delež dosežen; več ponovitev bi ga zožilo.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval sega pod ciljni delež {share}, zato ni pokazano s 95-odstotno zanesljivostjo, da je delež dosežen; več zagonov bi ga zožilo.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Delo se takoj ustavi: entiteta se vrne na začetek vrste za kateri koli strežnik v izmeni, delo, opravljeno na njej, pa je zapravljeno.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Delo se takoj ustavi; entiteta čaka pri svojem strežniku in delo se nadaljuje s preostankom, ko je ta strežnik spet v izmeni.
 	The last task with a resource it finished at	Zadnja naloga z virom, skozi katero je šel kos
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Povprečni čas do pogoja za ustavitev je le iz ponovitev, ki so ga dosegle; ostale so tekle do svoje časovne omejitve.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Povprečni čas do pogoja za ustavitev je le iz zagonov, ki so ga dosegli; ostali so tekli do svoje časovne omejitve.
 	The model changed, so watching stopped	Model se je spremenil, zato se je spremljanje ustavilo
 	The model has no calendars yet.	Model še nima koledarjev.
 	The model now has the units sizing found	Model ima zdaj enote, ki jih je našlo dimenzioniranje
 	The model: its experiment, connections and problems	Model: poskus, povezave in težave
 	The name is empty or already used.	Ime je prazno ali že uporabljeno.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Ponovitve so se razdelile na dva izida: {a} od {n} v enem, {b} v drugem. Rezultati, ki so se razdelili enako: {count}, med njimi {result} ({element}); glejte tabelo spodaj.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Zagoni so se razdelili na dva izida: {a} od {n} v enem, {b} v drugem. Rezultati, ki so se razdelili enako: {count}, med njimi {result} ({element}); glejte tabelo spodaj.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Strežnik dokonča delo, ki ga ima, nato konča izmeno; do takrat šteje, kot da je v izmeni.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Delež ponovitev, enakih ali manjših od vsake vrednosti. Pas vsebuje pravo porazdelitev z zaupanjem {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Delež zagonov, enakih ali manjših od vsake vrednosti. Pas vsebuje pravo porazdelitev z zaupanjem {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vrednosti so števila, ločena s podpičji ali presledki
 	The whole clock	Ves čas
 	Themes	Teme
@@ -585,7 +579,7 @@
 	Warning	Opozorilo
 	Watch a Run	Spremljaj zagon
 	Watch a run	Spremljaj zagon
-	Watching run 1	Spremljanje ponovitve 1
+	Watching run 1	Spremljanje zagona 1
 	Weak text	Bledo besedilo
 	Weak text on header	Bledo besedilo v glavi
 	Wed	sre
@@ -621,7 +615,7 @@
 	maximum {value}	maksimum {value}
 	milliseconds	milisekunde
 	minutes	minute
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k od N: le k od N ponovitev je imelo vrednost za ta rezultat, njegovo povprečje in interval pa sta iz teh k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k od N: le k od N zagonov je imelo vrednost za ta rezultat, njegovo povprečje in interval pa sta iz teh k.
 	n = {k} of {n}	n = {k} od {n}
 	nothing yet	še nič
 	per day	na dan
@@ -656,7 +650,7 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} in {second} – razlika pri rdeče-zeleni barvni slepoti {de}, potrebno 8: ločite ju samo po oznakah.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} in {second} – razlika v svetlosti {step}, potrebno 0.06.
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} od {of} ponovitev je doseglo cilj: {p} (95-odstotni interval od {lo} do {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} od {of} zagonov je doseglo cilj: {p} (95-odstotni interval od {lo} do {hi})
 	{name} — edited	{name} — urejeno
 	{n} created	Ustvarjeno: {n}
 	{n} done	Končano: {n}
@@ -665,12 +659,12 @@
 	{n} {unit} per second	{n} {unit} na sekundo
 	{property} (set to, mean)	{property} (nastavljena vrednost, povprečje)
 	{reason}. {field} is still {value}.	{reason}. {field} je še vedno {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – ponovitve so se razdelile na dva izida: glejte tabelo spodaj.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – zagoni so se razdelili na dva izida: glejte tabelo spodaj.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – ozadje »{background}«: {ratio}:1, potrebno {min}:1
 	{title}: now {now}, at most {most}	{title}: zdaj {now}, največ {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% interval zaupanja
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± je polovica širine 95% Student-t intervala zaupanja za povprečje med ponovitvami.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± je polovica širine 95% Student-t intervala zaupanja za povprečje med zagoni.
 	· no results yet	· rezultatov še ni
 unit	d	d
 unit	h	h
@@ -678,20 +672,27 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	l.
+	How long one unit takes to serve one entity, drawn anew for each entity.	Koliko časa potrebuje ena enota, da postreže eno entiteto; za vsako entiteto izžrebano znova.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Koliko entitet sme tu čakati na prosto enoto, poleg tistih, ki jim streže; brez kljukice poljubno število.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Koliko enot tu streže hkrati, na primer stroji ali osebje, vsaka po eno entiteto naenkrat.
+	More settings	Več nastavitev
+	Must be from {min} to {max}	Biti mora od {min} do {max}
+	Must be more than {min}	Biti mora več kot {min}
+	Must be {min} or more	Biti mora {min} ali več
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
-@plural	Finished {n} run|Finished {n} runs	Končana je {n} ponovitev|Končani sta {n} ponovitvi|Končane so {n} ponovitve|Končanih je {n} ponovitev
+@plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Odprto {file} ({n} opozorilo)|Odprto {file} ({n} opozorili)|Odprto {file} ({n} opozorila)|Odprto {file} ({n} opozoril)
 @plural	Removed {n} block|Removed {n} blocks	Odstranjen je {n} blok|Odstranjena sta {n} bloka|Odstranjeni so {n} bloki|Odstranjenih je {n} blokov
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Izvede {n} neodvisno ponovitev modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisni ponovitvi modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisne ponovitve modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisnih ponovitev modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Pogoj za ustavitev je bil dosežen v {met} od {n} ponovitve, v povprečju po {time} {unit}.|Pogoj za ustavitev je bil dosežen v {met} od {n} ponovitev, v povprečju po {time} {unit}.|Pogoj za ustavitev je bil dosežen v {met} od {n} ponovitev, v povprečju po {time} {unit}.|Pogoj za ustavitev je bil dosežen v {met} od {n} ponovitev, v povprečju po {time} {unit}.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	Končana {done} od {n} ponovitve|Končani {done} od {n} ponovitev|Končane {done} od {n} ponovitev|Končanih {done} od {n} ponovitev
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvi|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} ponovitvah
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Izvede {n} neodvisen zagon modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisna zagona modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisne zagone modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.|Izvede {n} neodvisnih zagonov modela s semenom {seed}. Rezultati vsakega elementa vključujejo polovično širino 95% intervala zaupanja.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Pogoj za ustavitev je bil dosežen v {met} od {n} zagona, v povprečju po {time} {unit}.|Pogoj za ustavitev je bil dosežen v {met} od {n} zagonov, v povprečju po {time} {unit}.|Pogoj za ustavitev je bil dosežen v {met} od {n} zagonov, v povprečju po {time} {unit}.|Pogoj za ustavitev je bil dosežen v {met} od {n} zagonov, v povprečju po {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Končan {done} od {n} zagona|Končana {done} od {n} zagonov|Končani {done} od {n} zagonov|Končanih {done} od {n} zagonov
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} zagonu|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} zagonih|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} zagonih|{name}: {mean}{unit}\n95% interval od {low} do {high}{unit}\nv {n} zagonih
 @plural	{n} block selected|{n} blocks selected	Izbran je {n} blok|Izbrana sta {n} bloka|Izbrani so {n} bloki|Izbranih je {n} blokov
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} ponovitev na korak · seme {seed}|{n} ponovitvi na korak · seme {seed}|{n} ponovitve na korak · seme {seed}|{n} ponovitev na korak · seme {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} ponovitev · povprečje {mean} · od {min} do {max}|{n} ponovitvi · povprečje {mean} · od {min} do {max}|{n} ponovitve · povprečje {mean} · od {min} do {max}|{n} ponovitev · povprečje {mean} · od {min} do {max}
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitvi · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitve · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} ponovitev · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} ponovitev · seme {seed}|{n} ponovitvi · seme {seed}|{n} ponovitve · seme {seed}|{n} ponovitev · seme {seed}
-@plural	{n} run|{n} runs	{n} ponovitev|{n} ponovitvi|{n} ponovitve|{n} ponovitev
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} zagon na korak · seme {seed}|{n} zagona na korak · seme {seed}|{n} zagoni na korak · seme {seed}|{n} zagonov na korak · seme {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} zagon · povprečje {mean} · od {min} do {max}|{n} zagona · povprečje {mean} · od {min} do {max}|{n} zagoni · povprečje {mean} · od {min} do {max}|{n} zagonov · povprečje {mean} · od {min} do {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} zagon · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} zagona · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} zagoni · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}|{n} zagonov · seme {seed} · ogrevanje {warmup} {unit} · merjeno {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} zagon · seme {seed}|{n} zagona · seme {seed}|{n} zagoni · seme {seed}|{n} zagonov · seme {seed}
+@plural	{n} run|{n} runs	{n} zagon|{n} zagona|{n} zagoni|{n} zagonov
 @plural	Run ({n} problem)|Run ({n} problems)	Zaženi ({n} težava)|Zaženi ({n} težavi)|Zaženi ({n} težave)|Zaženi ({n} težav)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} težava: {blocks}|{n} težavi: {blocks}|{n} težave: {blocks}|{n} težav: {blocks}

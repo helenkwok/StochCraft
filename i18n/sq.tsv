@@ -13,7 +13,7 @@
 
 @id	language.name	Shqip
 	% down and up	% poshtë dhe lart
-	% of runs	% e përsëritjeve
+	% of runs	% e ekzekutimeve
 	+ Add block	+ Shto bllok
 	95% interval of the share meeting the target: {lo} to {hi}	Intervali 95% i pjesës që arrin objektivin: nga {lo} në {hi}
 	95th percentile	Përqindëshi i 95-të
@@ -34,7 +34,7 @@
 	Add Pool	Shto grup
 	Add a flow from…	Shto rrjedhë nga…
 	Add a flow to…	Shto rrjedhë te…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Shto një njësi te detyra ose grupi më i ngarkuar derisa mjaft përsëritje të arrijnë një objektiv. Tregohet edhe përgjigjja me çdo kohë në mesataren e saj; zakonisht është shumë e vogël.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Shto një njësi te detyra ose grupi më i ngarkuar derisa mjaft ekzekutime të arrijnë një objektiv. Tregohet edhe përgjigjja me çdo kohë në mesataren e saj; zakonisht është shumë e vogël.
 	Add alternative	Shto alternativë
 	Add calendar	Shto kalendar
 	Add calendar entry	Shto hyrje kalendari
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	I gjithë teksti plotëson kontrastin minimal.
 	Also: {rule}	Gjithashtu: {rule}
 	Alternative {n}	Alternativa {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Një entitet merr rrjedhën e parë, kushti i së cilës plotësohet; pa kushte, merr një rrjedhë të zgjedhur sipas probabiliteteve (rrjedhat me probabilitet bosh ndajnë në mënyrë të barabartë atë që lënë të tjerat).
 	Analysis	Analiza
 	Appearance	Pamja
 	Arrival limit	Kufiri i mbërritjeve
@@ -169,12 +170,12 @@
 	Ends early	Mbaron më herët
 	Energy	Energjia
 	Energy per part	Energjia për pjesë
-	Enough: {units}, meeting the target in {p} of runs	Mjafton: {units}, arrin objektivin në {p} të përsëritjeve
+	Enough: {units}, meeting the target in {p} of runs	Mjafton: {units}, arrin objektivin në {p} të ekzekutimeve
 	Enter a number	Shkruani një numër
 	Entered	Hyrjet
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitetet që e gjejnë dhomën e pritjes plot marrin menjëherë këtë rrjedhë (për të provuar sërish më vonë, të themi), në vend që të humbasin ose të presin para detyrës; këtu numërohen si të humbura.
 	Entities give up waiting	Entitetet heqin dorë nga pritja
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entitetet që janë ende brenda në fund të një përsëritjeje lihen jashtë pritjes mesatare dhe kohës mesatare në sistem.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entitetet që janë ende brenda në fund të një ekzekutimi lihen jashtë pritjes mesatare dhe kohës mesatare në sistem.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitetet që heqin dorë nga pritja marrin këtë rrjedhë (për të provuar sërish më vonë, të themi); të tjerët marrin daljen tjetër të detyrës.
 	Erlang	Erlang
 	Error	Gabim
@@ -223,11 +224,8 @@
 	Hide Others	Fshih të tjerat
 	Hide {app}	Fshih {app}
 	High contrast	Kontrast i lartë
-	How long one unit takes to serve one entity, drawn anew for each entity.	Sa kohë i duhet një njësie për t'i shërbyer një entiteti; hidhet sërish për çdo entitet.
 	How many	Sa
-	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Sa entitete mund të presin këtu për një njësi të lirë, përveç atyre që po u shërbehet; pa shenjë, sa të duan.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Sa pjesë duan klientët nga këto largime; rezultatet tregojnë atëherë taktin (kohën e disponueshme pjesëtuar me kërkesën) dhe kohën e ciklit të çdo detyre.
-	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Sa njësi shërbejnë këtu njëkohësisht, si makina ose personel, secila një entitet në një kohë.
 	In use	Në përdorim
 	Inside over time	Brenda gjatë kohës
 	Job under way on a server going off shift:	Punë në vazhdim në një server që del nga turni:
@@ -255,7 +253,7 @@
 	Maximum	Maksimumi
 	Mean	Mesatarja
 	Mean number inside	Numri mesatar brenda
-	One run of {n}: the results of the others differ.	Një përsëritje nga {n}: rezultatet e të tjerave ndryshojnë.
+	One run of {n}: the results of the others differ.	Një ekzekutim nga {n}: rezultatet e të tjerave ndryshojnë.
 	Save as a new BPMN file?	Të ruhet si skedar i ri BPMN?
 	Still inside at the end	Ende brenda në fund
 	Mean work in progress	Prodhimi mesatar në proces
@@ -274,13 +272,9 @@
 	Model	Modeli
 	Model time 0 is	Koha 0 e modelit është
 	Mon	Hën
-	More settings	Më shumë cilësime
 	Most likely	Më e mundshmja
 	Move	Zhvendos
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Lëviz çdo parametër poshtë dhe lart me radhë dhe rendit sipas sa lëviz rezultati.
-	Must be from {min} to {max}	Duhet të jetë nga {min} deri në {max}
-	Must be more than {min}	Duhet të jetë më shumë se {min}
-	Must be {min} or more	Duhet të jetë {min} ose më shumë
 	Name	Emri
 	Needs	Nevojat
 	Never: it runs for its duration	Kurrë: zgjat gjatë gjithë kohëzgjatjes
@@ -291,7 +285,7 @@
 	No arrivals outside calendars	Pa mbërritje jashtë kalendarëve
 	No blocks yet. Open a model, or add blocks to build one.	Nuk ka ende blloqe. Hapni një model ose shtoni blloqe për ta krijuar.
 	No connections yet: join blocks below.	Nuk ka ende lidhje: lidhni blloqet më poshtë.
-	No run met the stop condition: each ran to its time limit.	Asnjë përsëritje nuk arriti kushtin e ndalimit: secila shkoi deri në kufirin e kohës.
+	No run met the stop condition: each ran to its time limit.	Asnjë ekzekutim nuk arriti kushtin e ndalimit: secili shkoi deri në kufirin e kohës.
 	No results yet	Nuk ka ende rezultate
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Në këtë model nuk është shënuar asnjë skarto apo ripunim, ndaj OEE e llogarit cilësinë si 100%.
 	No target	Pa objektiv
@@ -393,11 +387,11 @@
 	Repair time	Koha e riparimit
 	Repeats	Përsëritet
 	Replace Model	Zëvendëso modelin
-	Run 1 · {time} of {end} {unit}	Përsëritja 1 · {time} nga {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	Përsëritja 1 · {time} nga {end} {unit} · ngrohja
-	Runs	Përsëritjet
-	Runs meeting the target	Përsëritjet që arrijnë objektivin
-	Runs that never met the stop condition count as later than their time limit.	Përsëritjet që nuk e arritën kurrë kushtin e ndalimit numërohen si më vonë se kufiri i tyre i kohës.
+	Run 1 · {time} of {end} {unit}	Ekzekutimi 1 · {time} nga {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Ekzekutimi 1 · {time} nga {end} {unit} · ngrohja
+	Runs	Ekzekutimet
+	Runs meeting the target	Ekzekutimet që arrijnë objektivin
+	Runs that never met the stop condition count as later than their time limit.	Ekzekutimet që nuk e arritën kurrë kushtin e ndalimit numërohen si më vonë se kufiri i tyre i kohës.
 	Resource pool	Grup burimesh
 	Resource pools	Grupet e burimeve
 	Restore	Rikthe dritaren
@@ -418,7 +412,7 @@
 	Run	Ekzekuto
 	Run cancelled	Ekzekutimi u anulua
 	Run experiment	Ekzekuto eksperimentin
-	Play run 1 step by step and see each block's queue on the diagram	Ekzekuto përsëritjen 1 hap pas hapi dhe shiko radhën e çdo blloku në diagram
+	Play run 1 step by step and see each block's queue on the diagram	Luaj ekzekutimin 1 hap pas hapi dhe shiko radhën e çdo blloku në diagram
 	Run the experiment ({shortcut})	Ekzekuto eksperimentin ({shortcut})
 	Run the experiment again to see this result's spread.	Ekzekuto sërish eksperimentin për të parë shpërndarjen e këtij rezultati.
 	Run the experiment at each value of one parameter, and compare a result.	Ekzekuto eksperimentin në çdo vlerë të një parametri dhe krahaso një rezultat.
@@ -426,7 +420,7 @@
 	Run the sweep	Ekzekuto skanimin
 	Running	Duke u ekzekutuar
 	Running…	Duke u ekzekutuar…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Përsëritjet ndahen: {low_n} nga {n} pranë {low}, {high_n} pranë {high}. Mesatarja ({mean}) përzien dy përfundime; shiko secilin grup.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Ekzekutimet ndahen: {low_n} nga {n} pranë {low}, {high_n} pranë {high}. Mesatarja ({mean}) përzien dy përfundime; shiko secilin grup.
 	Sat	Sht
 	Save	Ruaj
 	Save As…	Ruaj si…
@@ -474,7 +468,7 @@
 	Split batches	Ndaj grupet
 	Split or join	Ndaj ose bashko
 	Split or join (all ways)	Ndaj ose bashko (të gjitha rrugët)
-	Spread across runs	Shpërndarja ndërmjet përsëritjeve
+	Spread across runs	Shpërndarja ndërmjet ekzekutimeve
 	Spread out	Shpërndaj
 	Stages (k)	Fazat (k)
 	Standard deviation	Devijimi standard
@@ -505,19 +499,19 @@
 	Text on header	Tekst në shiritin e kokës
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Lidhja bie dhe klienti provon sërish: entiteti kthehet menjëherë në krye të radhës, dhe puna e bërë mbi të humbet.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entiteti pret te serveri i tij dhe puna vazhdon me atë që kishte mbetur sapo serveri kthehet.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervali zbret nën pjesën objektiv prej {share}, ndaj nuk tregohet me besueshmëri 95% se pjesa arrihet; më shumë përsëritje do ta ngushtonin.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervali zbret nën pjesën objektiv prej {share}, ndaj nuk tregohet me besueshmëri 95% se pjesa arrihet; më shumë ekzekutime do ta ngushtonin.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Puna ndalet menjëherë: entiteti kthehet në krye të radhës për çdo server në turn, dhe puna e bërë mbi të humbet.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Puna ndalet menjëherë; entiteti pret te serveri i tij dhe puna vazhdon me atë që kishte mbetur sapo ai server rikthehet në turn.
 	The last task with a resource it finished at	Detyra e fundit me burim nëpër të cilën kaloi pjesa
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Koha mesatare deri te kushti i ndalimit është vetëm mbi përsëritjet që e arritën; të tjerat shkuan deri në kufirin e kohës.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Koha mesatare deri te kushti i ndalimit është vetëm mbi ekzekutimet që e arritën; të tjerat shkuan deri në kufirin e kohës.
 	The model changed, so watching stopped	Modeli ndryshoi, prandaj vëzhgimi u ndal
 	The model has no calendars yet.	Modeli nuk ka ende kalendarë.
 	The model now has the units sizing found	Modeli tani ka njësitë që gjeti përmasimi
 	The model: its experiment, connections and problems	Modeli: eksperimenti, lidhjet dhe problemet
 	The name is empty or already used.	Emri është bosh ose është përdorur tashmë.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Përsëritjet ndahen në dy përfundime: {a} nga {n} në njërin, {b} në tjetrin. {count} rezultate ndahen në të njëjtën mënyrë, mes tyre {result} ({element}); shiko tabelën më poshtë.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Ekzekutimet ndahen në dy përfundime: {a} nga {n} në njërin, {b} në tjetrin. {count} rezultate ndahen në të njëjtën mënyrë, mes tyre {result} ({element}); shiko tabelën më poshtë.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Serveri përfundon punën që ka, pastaj del nga turni; deri atëherë llogaritet si në turn.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Pjesa e përsëritjeve në ose nën çdo vlerë. Brezi përmban shpërndarjen e vërtetë me besueshmëri {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Pjesa e ekzekutimeve në ose nën çdo vlerë. Brezi përmban shpërndarjen e vërtetë me besueshmëri {confidence}.
 	The values are numbers, separated by semicolons or spaces	Vlerat janë numra të ndarë me pikëpresje ose hapësira
 	The whole clock	Gjithë koha
 	Themes	Temat
@@ -585,7 +579,7 @@
 	Warning	Paralajmërim
 	Watch a Run	Vëzhgo një ekzekutim
 	Watch a run	Vëzhgo një ekzekutim
-	Watching run 1	Po vëzhgohet përsëritja 1
+	Watching run 1	Po vëzhgohet ekzekutimi 1
 	Weak text	Tekst i zbehtë
 	Weak text on header	Tekst i zbehtë në shiritin e kokës
 	Wed	Mër
@@ -621,7 +615,7 @@
 	maximum {value}	maksimumi {value}
 	milliseconds	milisekonda
 	minutes	minuta
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k nga N: vetëm k nga N përsëritjet kishin një vlerë për atë rezultat, dhe mesatarja dhe intervali i tij janë mbi ato k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k nga N: vetëm k nga N ekzekutimet kishin një vlerë për atë rezultat, dhe mesatarja dhe intervali i tij janë mbi ato k.
 	n = {k} of {n}	n = {k} nga {n}
 	nothing yet	ende asgjë
 	per day	në ditë
@@ -656,7 +650,7 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} dhe {second} – ndryshimi për shikuesit me verbëri të ngjyrave të kuqe-të gjelbër {de}, nevojitet 8: dallojini vetëm me etiketa.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} dhe {second} – ndryshimi në çelësi {step}, nevojitet 0.06.
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} nga {of} përsëritje arritën objektivin: {p} (interval 95% nga {lo} në {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} nga {of} ekzekutime arritën objektivin: {p} (interval 95% nga {lo} në {hi})
 	{name} — edited	{name} — redaktuar
 	{n} created	{n} të krijuara
 	{n} done	{n} të përfunduara
@@ -665,12 +659,12 @@
 	{n} {unit} per second	{n} {unit} në sekondë
 	{property} (set to, mean)	{property} (vlera e caktuar, mesatarja)
 	{reason}. {field} is still {value}.	{reason}. {field} është ende {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – përsëritjet ndahen në dy përfundime: shiko tabelën më poshtë.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}) – ekzekutimet ndahen në dy përfundime: shiko tabelën më poshtë.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} – sfondi „{background}“: {ratio}:1, nevojitet {min}:1
 	{title}: now {now}, at most {most}	{title}: tani {now}, më së shumti {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% interval besimi
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± është gjysma e gjerësisë së një intervali besimi Student-t prej 95% për mesataren e përsëritjeve.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± është gjysma e gjerësisë së një intervali besimi Student-t prej 95% për mesataren e ekzekutimeve.
 	· no results yet	· ende nuk ka rezultate
 unit	d	d
 unit	h	h
@@ -678,20 +672,27 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	v
+	How long one unit takes to serve one entity, drawn anew for each entity.	Sa kohë i duhet një njësie për t'i shërbyer një entiteti; hidhet sërish për çdo entitet.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Sa entitete mund të presin këtu për një njësi të lirë, përveç atyre që po u shërbehet; pa shenjë, sa të duan.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Sa njësi shërbejnë këtu njëkohësisht, si makina ose personel, secila një entitet në një kohë.
+	More settings	Më shumë cilësime
+	Must be from {min} to {max}	Duhet të jetë nga {min} deri në {max}
+	Must be more than {min}	Duhet të jetë më shumë se {min}
+	Must be {min} or more	Duhet të jetë {min} ose më shumë
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
-@plural	Finished {n} run|Finished {n} runs	Përfundoi {n} përsëritje|Përfunduan {n} përsëritje
+@plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	U hap {file} ({n} paralajmërim)|U hap {file} ({n} paralajmërime)
 @plural	Removed {n} block|Removed {n} blocks	U hoq {n} bllok|U hoqën {n} blloqe
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Ekzekuton {n} përsëritje të pavarur të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.|Ekzekuton {n} përsëritje të pavarura të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Kushti i ndalimit u arrit në {met} nga {n} përsëritje, pas {time} {unit} mesatarisht.|Kushti i ndalimit u arrit në {met} nga {n} përsëritje, pas {time} {unit} mesatarisht.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	U përfundua {done} nga {n} përsëritje|U përfunduan {done} nga {n} përsëritje
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} përsëritje|{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} përsëritje
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Bën {n} ekzekutim të pavarur të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.|Bën {n} ekzekutime të pavarura të modelit nga fara {seed}. Rezultatet e çdo elementi përfshijnë gjysmën e gjerësisë së intervalit të besimit 95%.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Kushti i ndalimit u arrit në {met} nga {n} ekzekutim, pas {time} {unit} mesatarisht.|Kushti i ndalimit u arrit në {met} nga {n} ekzekutime, pas {time} {unit} mesatarisht.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	U përfundua {done} nga {n} ekzekutim|U përfunduan {done} nga {n} ekzekutime
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} ekzekutim|{name}: {mean}{unit}\nIntervali 95% nga {low} në {high}{unit}\nmbi {n} ekzekutime
 @plural	{n} block selected|{n} blocks selected	{n} bllok i përzgjedhur|{n} blloqe të përzgjedhura
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} përsëritje për çdo hap · fara {seed}|{n} përsëritje për çdo hap · fara {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} përsëritje · mesatarja {mean} · nga {min} në {max}|{n} përsëritje · mesatarja {mean} · nga {min} në {max}
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}|{n} përsëritje · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} përsëritje · fara {seed}|{n} përsëritje · fara {seed}
-@plural	{n} run|{n} runs	{n} përsëritje|{n} përsëritje
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} ekzekutim për çdo hap · fara {seed}|{n} ekzekutime për çdo hap · fara {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} ekzekutim · mesatarja {mean} · nga {min} në {max}|{n} ekzekutime · mesatarja {mean} · nga {min} në {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ekzekutim · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}|{n} ekzekutime · fara {seed} · ngrohje {warmup} {unit} · matur {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} ekzekutim · fara {seed}|{n} ekzekutime · fara {seed}
+@plural	{n} run|{n} runs	{n} ekzekutim|{n} ekzekutime
 @plural	Run ({n} problem)|Run ({n} problems)	Ekzekuto ({n} problem)|Ekzekuto ({n} probleme)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} probleme: {blocks}

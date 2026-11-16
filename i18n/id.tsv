@@ -13,7 +13,7 @@
 
 @id	language.name	Bahasa Indonesia
 	% down and up	% turun dan naik
-	% of runs	% replikasi
+	% of runs	% eksekusi
 	+ Add block	+ Tambah blok
 	95% interval of the share meeting the target: {lo} to {hi}	Interval 95% dari bagian yang memenuhi target: {lo} sampai {hi}
 	95th percentile	Persentil ke-95
@@ -34,7 +34,7 @@
 	Add Pool	Tambah Kumpulan
 	Add a flow from…	Tambahkan alur dari…
 	Add a flow to…	Tambahkan alur ke…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Tambahkan satu unit pada tugas atau kumpulan tersibuk sampai cukup banyak replikasi memenuhi target. Jawaban dengan setiap waktu pada rata-ratanya juga ditampilkan; biasanya terlalu kecil.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Tambahkan satu unit pada tugas atau kumpulan tersibuk sampai cukup banyak eksekusi memenuhi target. Jawaban dengan setiap waktu pada rata-ratanya juga ditampilkan; biasanya terlalu kecil.
 	Add alternative	Tambah alternatif
 	Add calendar	Tambah kalender
 	Add calendar entry	Tambah entri kalender
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	Semua teks memenuhi kontras minimum.
 	Also: {rule}	Juga: {rule}
 	Alternative {n}	Alternatif {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	Entitas mengambil alur pertama yang kondisinya terpenuhi; tanpa kondisi, satu alur dipilih secara acak menurut probabilitas (alur yang probabilitasnya kosong membagi rata sisa yang ditinggalkan alur lain).
 	Analysis	Analisis
 	Appearance	Tampilan
 	Arrival limit	Batas kedatangan
@@ -169,12 +170,12 @@
 	Ends early	Berakhir lebih awal
 	Energy	Energi
 	Energy per part	Energi per komponen
-	Enough: {units}, meeting the target in {p} of runs	Cukup: {units}, target terpenuhi pada {p} replikasi
+	Enough: {units}, meeting the target in {p} of runs	Cukup: {units}, target terpenuhi pada {p} eksekusi
 	Enter a number	Masukkan angka
 	Entered	Masuk
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitas yang mendapati ruang tunggu penuh langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang atau menunggu sebelum tugas; di sini mereka dihitung sebagai hilang.
 	Entities give up waiting	Entitas berhenti menunggu
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entitas yang masih di dalam pada akhir replikasi tidak dihitung dalam waktu tunggu rata-rata dan waktu rata-rata dalam sistem.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entitas yang masih di dalam pada akhir eksekusi tidak dihitung dalam waktu tunggu rata-rata dan waktu rata-rata dalam sistem.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitas yang berhenti menunggu mengambil alur ini (misalnya untuk mencoba lagi nanti); yang lain mengambil jalan keluar lain dari tugas.
 	Erlang	Erlang
 	Error	Galat
@@ -223,11 +224,8 @@
 	Hide Others	Sembunyikan yang lain
 	Hide {app}	Sembunyikan {app}
 	High contrast	Kontras tinggi
-	How long one unit takes to serve one entity, drawn anew for each entity.	Berapa lama satu unit melayani satu entitas; diambil ulang untuk setiap entitas.
 	How many	Berapa
-	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Berapa entitas boleh menunggu unit yang kosong di sini, selain yang sedang dilayani; tanpa centang, berapa pun.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Berapa komponen yang diinginkan pelanggan dari keberangkatan ini; hasilnya lalu menunjukkan takt (waktu tersedia dibagi permintaan) dan waktu siklus setiap tugas.
-	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Berapa unit yang melayani di sini sekaligus, seperti mesin atau staf, masing-masing satu entitas sekali waktu.
 	In use	Sedang dipakai
 	Inside over time	Di dalam dari waktu ke waktu
 	Job under way on a server going off shift:	Pekerjaan berjalan di server yang mengakhiri sif:
@@ -255,7 +253,7 @@
 	Maximum	Maksimum
 	Mean	Rata-rata
 	Mean number inside	Jumlah rata-rata di dalam
-	One run of {n}: the results of the others differ.	Satu replikasi dari {n}: hasil replikasi lain berbeda.
+	One run of {n}: the results of the others differ.	Satu eksekusi dari {n}: hasil eksekusi lain berbeda.
 	Save as a new BPMN file?	Simpan sebagai berkas BPMN baru?
 	Still inside at the end	Masih di dalam pada akhir
 	Mean work in progress	Barang dalam proses rata-rata
@@ -274,13 +272,9 @@
 	Model	Model
 	Model time 0 is	Waktu model 0 adalah
 	Mon	Sen
-	More settings	Pengaturan lainnya
 	Most likely	Paling mungkin
 	Move	Pindahkan
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Turunkan dan naikkan setiap parameter bergantian, lalu urutkan menurut seberapa besar hasil bergerak.
-	Must be from {min} to {max}	Harus antara {min} dan {max}
-	Must be more than {min}	Harus lebih dari {min}
-	Must be {min} or more	Harus {min} atau lebih
 	Name	Nama
 	Needs	Kebutuhan
 	Never: it runs for its duration	Tidak pernah: berjalan sepanjang durasinya
@@ -291,7 +285,7 @@
 	No arrivals outside calendars	Tanpa kedatangan di luar kalender
 	No blocks yet. Open a model, or add blocks to build one.	Belum ada blok. Buka model atau tambahkan blok untuk membuatnya.
 	No connections yet: join blocks below.	Belum ada koneksi: hubungkan blok di bawah.
-	No run met the stop condition: each ran to its time limit.	Tidak ada replikasi yang mencapai kondisi berhenti: masing-masing berjalan hingga batas waktunya.
+	No run met the stop condition: each ran to its time limit.	Tidak ada eksekusi yang mencapai kondisi berhenti: masing-masing berjalan hingga batas waktunya.
 	No results yet	Belum ada hasil
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Tidak ada skrap atau pengerjaan ulang yang ditandai dalam model ini, jadi OEE menghitung kualitas sebagai 100%.
 	No target	Tanpa target
@@ -393,11 +387,11 @@
 	Repair time	Waktu perbaikan
 	Repeats	Berulang
 	Replace Model	Ganti Model
-	Run 1 · {time} of {end} {unit}	Replikasi 1 · {time} dari {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	Replikasi 1 · {time} dari {end} {unit} · pemanasan
-	Runs	Replikasi
-	Runs meeting the target	Replikasi yang memenuhi target
-	Runs that never met the stop condition count as later than their time limit.	Replikasi yang tidak pernah mencapai kondisi berhenti dihitung lebih lambat dari batas waktunya.
+	Run 1 · {time} of {end} {unit}	Eksekusi 1 · {time} dari {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Eksekusi 1 · {time} dari {end} {unit} · pemanasan
+	Runs	Jumlah eksekusi
+	Runs meeting the target	Eksekusi yang memenuhi target
+	Runs that never met the stop condition count as later than their time limit.	Eksekusi yang tidak pernah mencapai kondisi berhenti dihitung lebih lambat dari batas waktunya.
 	Resource pool	Kumpulan sumber daya
 	Resource pools	Kumpulan sumber daya
 	Restore	Pulihkan jendela
@@ -418,7 +412,7 @@
 	Run	Jalankan
 	Run cancelled	Proses dibatalkan
 	Run experiment	Jalankan eksperimen
-	Play run 1 step by step and see each block's queue on the diagram	Jalankan replikasi 1 langkah demi langkah dan lihat antrean tiap blok di diagram
+	Play run 1 step by step and see each block's queue on the diagram	Putar eksekusi 1 langkah demi langkah dan lihat antrean tiap blok di diagram
 	Run the experiment ({shortcut})	Jalankan eksperimen ({shortcut})
 	Run the experiment again to see this result's spread.	Jalankan eksperimen lagi untuk melihat sebaran hasil ini.
 	Run the experiment at each value of one parameter, and compare a result.	Jalankan eksperimen pada setiap nilai satu parameter dan bandingkan suatu hasil.
@@ -426,7 +420,7 @@
 	Run the sweep	Jalankan sapuan
 	Running	Berjalan
 	Running…	Sedang berjalan…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikasi terbagi: {low_n} dari {n} dekat {low}, {high_n} dekat {high}. Rata-rata ({mean}) mencampur dua hasil yang berbeda; lihat setiap kelompok.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Eksekusi terbagi: {low_n} dari {n} dekat {low}, {high_n} dekat {high}. Rata-rata ({mean}) mencampur dua hasil yang berbeda; lihat setiap kelompok.
 	Sat	Sab
 	Save	Simpan
 	Save As…	Simpan Sebagai…
@@ -474,7 +468,7 @@
 	Split batches	Pisahkan batch
 	Split or join	Pisahkan atau gabungkan
 	Split or join (all ways)	Pisahkan atau gabungkan (semua jalur)
-	Spread across runs	Sebaran antar-replikasi
+	Spread across runs	Sebaran antar-eksekusi
 	Spread out	Sebarkan
 	Stages (k)	Tahapan (k)
 	Standard deviation	Simpangan baku
@@ -505,19 +499,19 @@
 	Text on header	Teks di bilah atas
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Koneksi terputus dan klien mencoba lagi: entitas langsung kembali ke depan antrean, dan pekerjaan yang sudah dilakukan padanya sia-sia.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entitas menunggu di servernya dan pekerjaan berlanjut dengan sisanya begitu server kembali.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak replikasi akan mempersempitnya.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak eksekusi akan mempersempitnya.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Pekerjaan langsung berhenti: entitas kembali ke depan antrean untuk server mana pun yang sedang dalam sif, dan pekerjaan yang sudah dilakukan padanya sia-sia.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Pekerjaan langsung berhenti; entitas menunggu di servernya dan pekerjaan berlanjut dengan sisanya begitu server itu kembali dalam sif.
 	The last task with a resource it finished at	Tugas terakhir dengan sumber daya yang dilalui komponen
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas replikasi yang mencapainya; sisanya berjalan hingga batas waktunya.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas eksekusi yang mencapainya; sisanya berjalan hingga batas waktunya.
 	The model changed, so watching stopped	Model berubah, jadi pengamatan dihentikan
 	The model has no calendars yet.	Model belum memiliki kalender.
 	The model now has the units sizing found	Model kini memakai unit yang ditemukan penentuan ukuran
 	The model: its experiment, connections and problems	Model: eksperimen, koneksi, dan masalah
 	The name is empty or already used.	Nama kosong atau sudah dipakai.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikasi terbagi menjadi dua hasil yang berbeda: {a} dari {n} di satu, {b} di yang lain. {count} hasil terbagi dengan cara yang sama, di antaranya {result} ({element}); lihat tabel di bawah.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Eksekusi terbagi menjadi dua hasil yang berbeda: {a} dari {n} di satu, {b} di yang lain. {count} hasil terbagi dengan cara yang sama, di antaranya {result} ({element}); lihat tabel di bawah.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Server menyelesaikan pekerjaan yang sedang dikerjakannya, lalu mengakhiri sif; sampai saat itu server dihitung masih dalam sif.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian replikasi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian eksekusi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
 	The values are numbers, separated by semicolons or spaces	Nilai berupa angka yang dipisahkan titik koma atau spasi
 	The whole clock	Seluruh waktu
 	Themes	Tema
@@ -526,7 +520,7 @@
 	This many may wait for each server working now (not failed, not taken out, on shift), so the waiting room follows them. When it shrinks, those already waiting stay.	Sebanyak ini boleh menunggu untuk setiap server yang sedang bekerja (tidak rusak, tidak dikeluarkan, dalam sif), sehingga ruang tunggu mengikuti server. Saat ruang tunggu menyusut, yang sudah menunggu tetap tinggal.
 	This many may wait outside the calendars, and each calendar's number while it is active. When the number drops, those already waiting stay.	Sebanyak ini boleh menunggu di luar kalender, dan jumlah tiap kalender selama kalender itu aktif. Saat jumlahnya turun, yang sudah menunggu tetap tinggal.
 	This many may wait, besides a place for each server; a failed server keeps its place.	Sebanyak ini boleh menunggu, selain satu tempat untuk setiap server; server yang rusak tetap memegang tempatnya.
-	This run	Jalannya ini
+	This run	Eksekusi ini
 	Three-point estimate	Perkiraan tiga titik
 	Thu	Kam
 	Time available	Waktu tersedia
@@ -583,9 +577,9 @@
 	Warm-up	Pemanasan
 	Warm-up {warmup} {unit}, then {duration} {unit} measured	Pemanasan {warmup} {unit}, lalu pengukuran {duration} {unit}
 	Warning	Peringatan
-	Watch a Run	Amati Jalannya Model
-	Watch a run	Amati jalannya model
-	Watching run 1	Mengamati replikasi 1
+	Watch a Run	Amati Eksekusi
+	Watch a run	Amati eksekusi
+	Watching run 1	Mengamati eksekusi 1
 	Weak text	Teks redup
 	Weak text on header	Teks redup di bilah atas
 	Wed	Rab
@@ -612,7 +606,7 @@
 	decision: one way	keputusan: satu jalur
 	departures	keberangkatan
 	egui and eframe (Craft suite fork)	egui dan eframe (cabang dari rangkaian Craft)
-	for the whole run	untuk seluruh jalannya
+	for the whole run	untuk seluruh eksekusi
 	from its value	berdasarkan nilainya
 	have left	telah keluar
 	hours	jam
@@ -621,7 +615,7 @@
 	maximum {value}	maksimum {value}
 	milliseconds	milidetik
 	minutes	menit
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k dari N: hanya k dari N replikasi yang memiliki nilai untuk hasil itu, dan rata-rata serta intervalnya dihitung atas k tersebut.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k dari N: hanya k dari N eksekusi yang memiliki nilai untuk hasil itu, dan rata-rata serta intervalnya dihitung atas k tersebut.
 	n = {k} of {n}	n = {k} dari {n}
 	nothing yet	belum ada
 	per day	per hari
@@ -656,7 +650,7 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} dan {second} berbeda {de} bagi pemirsa dengan buta warna merah-hijau, perlu 8: bedakan keduanya hanya dengan label.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} dan {second} berbeda kecerahan {step}, perlu 0.06.
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} dari {of} replikasi memenuhi target: {p} (interval 95% dari {lo} sampai {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} dari {of} eksekusi memenuhi target: {p} (interval 95% dari {lo} sampai {hi})
 	{name} — edited	{name} — diedit
 	{n} created	{n} dibuat
 	{n} done	{n} selesai
@@ -665,12 +659,12 @@
 	{n} {unit} per second	{n} {unit} per detik
 	{property} (set to, mean)	{property} (nilai ditetapkan, rata-rata)
 	{reason}. {field} is still {value}.	{reason}. {field} tetap {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replikasi terbagi menjadi dua hasil yang berbeda; lihat tabel di bawah.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): eksekusi terbagi menjadi dua hasil yang berbeda; lihat tabel di bawah.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} di atas {background}: {ratio}:1, perlu {min}:1
 	{title}: now {now}, at most {most}	{title}: sekarang {now}, paling banyak {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± IK 95%
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± adalah setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh replikasi.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± adalah setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh eksekusi.
 	· no results yet	· belum ada hasil
 unit	d	hr
 unit	h	jam
@@ -678,20 +672,27 @@ unit	min	mnt
 unit	ms	ms
 unit	s	dtk
 unit	yr	thn
+	How long one unit takes to serve one entity, drawn anew for each entity.	Berapa lama satu unit melayani satu entitas; diambil ulang untuk setiap entitas.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Berapa entitas boleh menunggu unit yang kosong di sini, selain yang sedang dilayani; tanpa centang, berapa pun.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Berapa unit yang melayani di sini sekaligus, seperti mesin atau staf, masing-masing satu entitas sekali waktu.
+	More settings	Pengaturan lainnya
+	Must be from {min} to {max}	Harus antara {min} dan {max}
+	Must be more than {min}	Harus lebih dari {min}
+	Must be {min} or more	Harus {min} atau lebih
 @plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
 @plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
-@plural	Finished {n} run|Finished {n} runs	Selesai {n} replikasi
+@plural	Finished {n} run|Finished {n} runs	Selesai {n} eksekusi
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} dibuka ({n} peringatan)
 @plural	Removed {n} block|Removed {n} blocks	{n} blok dihapus
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Menjalankan {n} replikasi model yang independen dari benih {seed}. Hasil setiap elemen mencakup setengah lebar interval kepercayaan 95%.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Kondisi berhenti tercapai pada {met} dari {n} replikasi, rata-rata setelah {time} {unit}.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} dari {n} replikasi selesai
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nInterval 95% dari {low} hingga {high}{unit}\ndari {n} replikasi
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Menjalankan {n} eksekusi model yang independen dari benih {seed}. Hasil setiap elemen mencakup setengah lebar interval kepercayaan 95%.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Kondisi berhenti tercapai pada {met} dari {n} eksekusi, rata-rata setelah {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} dari {n} eksekusi selesai
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nInterval 95% dari {low} hingga {high}{unit}\ndari {n} eksekusi
 @plural	{n} block selected|{n} blocks selected	{n} blok dipilih
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} replikasi per langkah · benih {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} replikasi · rata-rata {mean} · dari {min} sampai {max}
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasi · benih {seed} · pemanasan {warmup} {unit} · {duration} {unit} diukur
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikasi · benih {seed}
-@plural	{n} run|{n} runs	{n} replikasi
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} eksekusi per langkah · benih {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} eksekusi · rata-rata {mean} · dari {min} sampai {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} eksekusi · benih {seed} · pemanasan {warmup} {unit} · {duration} {unit} diukur
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} eksekusi · benih {seed}
+@plural	{n} run|{n} runs	{n} eksekusi
 @plural	Run ({n} problem)|Run ({n} problems)	Jalankan ({n} masalah)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} masalah: {blocks}

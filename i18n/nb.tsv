@@ -13,7 +13,7 @@
 
 @id	language.name	Norsk bokmål
 	% down and up	% ned og opp
-	% of runs	% av replikasjonene
+	% of runs	% av kjøringene
 	+ Add block	+ Legg til blokk
 	95% interval of the share meeting the target: {lo} to {hi}	95 %-intervall for andelen som når målet: {lo} til {hi}
 	95th percentile	95. persentil
@@ -34,7 +34,7 @@
 	Add Pool	Legg til pulje
 	Add a flow from…	Legg til flyt fra…
 	Add a flow to…	Legg til flyt til…
-	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Legg til en enhet ved den travleste oppgaven eller poolen til nok replikasjoner når et mål. Svaret med hver tid på sitt gjennomsnitt vises også; det er som regel for lite.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Legg til en enhet ved den travleste oppgaven eller poolen til nok kjøringer når et mål. Svaret med hver tid på sitt gjennomsnitt vises også; det er som regel for lite.
 	Add alternative	Legg til alternativ
 	Add calendar	Legg til kalender
 	Add calendar entry	Legg til kalenderoppføring
@@ -53,6 +53,7 @@
 	All text meets the contrast minimums.	All tekst oppfyller minstekravene til kontrast.
 	Also: {rule}	I tillegg: {rule}
 	Alternative {n}	Alternativ {n}
+	An entity takes the first flow whose condition holds; with no conditions, a flow drawn by the probabilities (blank ones share what the others leave).	En enhet tar den første flyten der betingelsen er oppfylt; uten betingelser trekkes en flyt etter sannsynlighetene (tomme deler det som er igjen etter de andre).
 	Analysis	Analyse
 	Appearance	Utseende
 	Arrival limit	Grense for ankomster
@@ -169,12 +170,12 @@
 	Ends early	Slutter tidlig
 	Energy	Energi
 	Energy per part	Energi per del
-	Enough: {units}, meeting the target in {p} of runs	Nok: {units}, når målet i {p} av replikasjonene
+	Enough: {units}, meeting the target in {p} of runs	Nok: {units}, når målet i {p} av kjøringene
 	Enter a number	Skriv inn et tall
 	Entered	Innkommet
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Enheter som finner venterommet fullt, tar straks denne flyten (for å prøve igjen senere, for eksempel) i stedet for å gå tapt eller vente før oppgaven; de telles her som tapt.
 	Entities give up waiting	Enheter gir opp å vente
-	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Enheter som fortsatt er inne ved slutten av en replikasjon, er utelatt fra gjennomsnittlig ventetid og gjennomsnittlig tid i systemet.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Enheter som fortsatt er inne ved slutten av en kjøring, er utelatt fra gjennomsnittlig ventetid og gjennomsnittlig tid i systemet.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Enheter som gir opp å vente, tar denne flyten (for å prøve igjen senere, for eksempel); de andre tar oppgavens andre vei ut.
 	Erlang	Erlang
 	Error	Feil
@@ -223,11 +224,8 @@
 	Hide Others	Skjul andre
 	Hide {app}	Skjul {app}
 	High contrast	Høy kontrast
-	How long one unit takes to serve one entity, drawn anew for each entity.	Hvor lang tid én ressursenhet bruker på å betjene én enhet; trekkes på nytt for hver enhet.
 	How many	Hvor mange
-	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hvor mange enheter som kan vente her på en ledig ressursenhet, i tillegg til dem som betjenes; uten hake et hvilket som helst antall.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	Hvor mange deler kundene vil ha fra disse avgangene; resultatene viser da takten (tilgjengelig tid delt på behovet) og hver oppgaves syklustid.
-	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Hvor mange ressursenheter som betjener her samtidig, for eksempel maskiner eller ansatte, hver én enhet om gangen.
 	In use	I bruk
 	Inside over time	Inne over tid
 	Job under way on a server going off shift:	Jobb under arbeid på en server som går av skift:
@@ -255,7 +253,7 @@
 	Maximum	Maksimum
 	Mean	Gjennomsnitt
 	Mean number inside	Gjennomsnittlig antall inne
-	One run of {n}: the results of the others differ.	Én replikasjon av {n}: de andre har andre resultater.
+	One run of {n}: the results of the others differ.	Én kjøring av {n}: de andre har andre resultater.
 	Save as a new BPMN file?	Lagre som ny BPMN-fil?
 	Still inside at the end	Fortsatt inne ved slutten
 	Mean work in progress	Gjennomsnittlig varer i arbeid
@@ -274,13 +272,9 @@
 	Model	Modell
 	Model time 0 is	Modelltid 0 er
 	Mon	man
-	More settings	Flere innstillinger
 	Most likely	Mest sannsynlig
 	Move	Flytt
 	Move each parameter down and up in turn, and rank them by how much the result moves.	Flytt hver parameter ned og opp etter tur, og ranger dem etter hvor mye resultatet flytter seg.
-	Must be from {min} to {max}	Må være fra {min} til {max}
-	Must be more than {min}	Må være mer enn {min}
-	Must be {min} or more	Må være {min} eller mer
 	Name	Navn
 	Needs	Behov
 	Never: it runs for its duration	Aldri: kjører hele varigheten
@@ -291,7 +285,7 @@
 	No arrivals outside calendars	Ingen ankomster utenfor kalendere
 	No blocks yet. Open a model, or add blocks to build one.	Ingen blokker ennå. Åpne en modell, eller legg til blokker for å lage en.
 	No connections yet: join blocks below.	Ingen forbindelser ennå: koble sammen blokkene nedenfor.
-	No run met the stop condition: each ran to its time limit.	Ingen replikasjon nådde stoppbetingelsen: hver kjørte til sin tidsgrense.
+	No run met the stop condition: each ran to its time limit.	Ingen kjøring nådde stoppbetingelsen: hver kjørte til sin tidsgrense.
 	No results yet	Ingen resultater ennå
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Ingen vrak eller omarbeid er merket i denne modellen, så OEE regner kvaliteten som 100 %.
 	No target	Intet mål
@@ -393,11 +387,11 @@
 	Repair time	Reparasjonstid
 	Repeats	Gjentas
 	Replace Model	Erstatt modell
-	Run 1 · {time} of {end} {unit}	Replikasjon 1 · {time} av {end} {unit}
-	Run 1 · {time} of {end} {unit} · warm-up	Replikasjon 1 · {time} av {end} {unit} · oppvarming
-	Runs	Replikasjoner
-	Runs meeting the target	Replikasjoner som når målet
-	Runs that never met the stop condition count as later than their time limit.	Replikasjoner som aldri nådde stoppbetingelsen, teller som senere enn tidsgrensen sin.
+	Run 1 · {time} of {end} {unit}	Kjøring 1 · {time} av {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Kjøring 1 · {time} av {end} {unit} · oppvarming
+	Runs	Kjøringer
+	Runs meeting the target	Kjøringer som når målet
+	Runs that never met the stop condition count as later than their time limit.	Kjøringer som aldri nådde stoppbetingelsen, teller som senere enn tidsgrensen sin.
 	Resource pool	Ressurspulje
 	Resource pools	Ressurspuljer
 	Restore	Gjenopprett vindu
@@ -418,7 +412,7 @@
 	Run	Kjør
 	Run cancelled	Kjøring avbrutt
 	Run experiment	Kjør eksperiment
-	Play run 1 step by step and see each block's queue on the diagram	Kjør replikasjon 1 trinn for trinn og se køen til hver blokk i diagrammet
+	Play run 1 step by step and see each block's queue on the diagram	Spill av kjøring 1 trinn for trinn og se køen til hver blokk i diagrammet
 	Run the experiment ({shortcut})	Kjør eksperimentet ({shortcut})
 	Run the experiment again to see this result's spread.	Kjør eksperimentet igjen for å se spredningen i dette resultatet.
 	Run the experiment at each value of one parameter, and compare a result.	Kjør eksperimentet ved hver verdi av én parameter, og sammenlign et resultat.
@@ -426,7 +420,7 @@
 	Run the sweep	Kjør gjennomløpet
 	Running	Kjører
 	Running…	Kjører…
-	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Replikasjonene deler seg: {low_n} av {n} nær {low}, {high_n} nær {high}. Gjennomsnittet ({mean}) blander to utfall; se på hver gruppe.
+	Runs split: {low_n} of {n} near {low}, {high_n} near {high}. The mean ({mean}) mixes two outcomes; look at each group.	Kjøringene deler seg: {low_n} av {n} nær {low}, {high_n} nær {high}. Gjennomsnittet ({mean}) blander to utfall; se på hver gruppe.
 	Sat	lør
 	Save	Lagre
 	Save As…	Lagre som…
@@ -474,7 +468,7 @@
 	Split batches	Del opp partier
 	Split or join	Del eller slå sammen
 	Split or join (all ways)	Del eller slå sammen (alle veier)
-	Spread across runs	Spredning på tvers av replikasjoner
+	Spread across runs	Spredning på tvers av kjøringer
 	Spread out	Fordel
 	Stages (k)	Trinn (k)
 	Standard deviation	Standardavvik
@@ -505,19 +499,19 @@
 	Text on header	Tekst på toppfelt
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Forbindelsen brytes og klienten prøver igjen: enheten går straks tilbake først i køen, og arbeidet som er gjort på den, er bortkastet.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Enheten venter ved serveren sin, og jobben fortsetter med det som var igjen når serveren er tilbake.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhet at andelen nås; flere replikasjoner ville gjort det smalere.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhet at andelen nås; flere kjøringer ville gjort det smalere.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Jobben stopper straks: enheten går tilbake først i køen for en hvilken som helst server på skift, og arbeidet som er gjort på den, er bortkastet.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Jobben stopper straks; enheten venter ved serveren sin, og jobben fortsetter med det som var igjen når den serveren er på skift igjen.
 	The last task with a resource it finished at	Den siste oppgaven med ressurs delen gikk gjennom
-	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Gjennomsnittlig tid til stoppbetingelsen er bare over replikasjonene som nådde den; de øvrige kjørte til sin tidsgrense.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Gjennomsnittlig tid til stoppbetingelsen er bare over kjøringene som nådde den; de øvrige kjørte til sin tidsgrense.
 	The model changed, so watching stopped	Modellen ble endret, så følgingen stoppet
 	The model has no calendars yet.	Modellen har ingen kalendere ennå.
 	The model now has the units sizing found	Modellen har nå enhetene dimensjoneringen fant
 	The model: its experiment, connections and problems	Modellen: eksperiment, forbindelser og problemer
 	The name is empty or already used.	Navnet er tomt eller allerede i bruk.
-	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikasjonene deler seg i to utfall: {a} av {n} i det ene, {b} i det andre. {count} resultater deler seg på samme måte, blant dem {result} ({element}); se tabellen nedenfor.
+	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Kjøringene deler seg i to utfall: {a} av {n} i det ene, {b} i det andre. {count} resultater deler seg på samme måte, blant dem {result} ({element}); se tabellen nedenfor.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Serveren gjør ferdig jobben den har, og går så av skift; fram til da teller den som på skift.
-	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen replikasjoner ved eller under hver verdi. Båndet inneholder den sanne fordelingen med {confidence} konfidens.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen kjøringer ved eller under hver verdi. Båndet inneholder den sanne fordelingen med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Verdiene er tall skilt med semikolon eller mellomrom
 	The whole clock	Hele tiden
 	Themes	Temaer
@@ -585,7 +579,7 @@
 	Warning	Advarsel
 	Watch a Run	Følg en kjøring
 	Watch a run	Følg en kjøring
-	Watching run 1	Følger replikasjon 1
+	Watching run 1	Følger kjøring 1
 	Weak text	Svak tekst
 	Weak text on header	Svak tekst på toppfelt
 	Wed	ons
@@ -621,7 +615,7 @@
 	maximum {value}	maksimum {value}
 	milliseconds	millisekunder
 	minutes	minutter
-	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k av N: bare k av de N replikasjonene hadde en verdi for dette resultatet, og gjennomsnittet og intervallet er over disse k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k av N: bare k av de N kjøringene hadde en verdi for dette resultatet, og gjennomsnittet og intervallet er over disse k.
 	n = {k} of {n}	n = {k} av {n}
 	nothing yet	ingenting ennå
 	per day	per dag
@@ -656,7 +650,7 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} og {second} skiller seg med {de} for seere med rød-grønn fargeblindhet, krever 8: skill dem bare ved hjelp av etiketter.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} og {second} skiller seg i lyshet med {step}, krever 0.06.
 	{kind} {name}	{kind} {name}
-	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} av {of} replikasjoner nådde målet: {p} (95 %-intervall {lo} til {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} av {of} kjøringer nådde målet: {p} (95 %-intervall {lo} til {hi})
 	{name} — edited	{name} — redigert
 	{n} created	{n} opprettet
 	{n} done	{n} ferdige
@@ -665,12 +659,12 @@
 	{n} {unit} per second	{n} {unit} per sekund
 	{property} (set to, mean)	{property} (angitt verdi, gjennomsnitt)
 	{reason}. {field} is still {value}.	{reason}. {field} er fortsatt {value}.
-	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): replikasjonene deler seg i to utfall; se tabellen nedenfor.
+	{result} ({element}) split into two outcomes: see the table below.	{result} ({element}): kjøringene deler seg i to utfall; se tabellen nedenfor.
 	{text} on {background}: {ratio}:1, needs {min}:1	{text} på {background}: {ratio}:1, krever {min}:1
 	{title}: now {now}, at most {most}	{title}: nå {now}, høyst {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% KI
-	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± er halve bredden av et 95% Student-t-konfidensintervall for gjennomsnittet på tvers av gjentakelser.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± er halve bredden av et 95% Student-t-konfidensintervall for gjennomsnittet på tvers av kjøringer.
 	· no results yet	· ingen resultater ennå
 unit	d	d
 unit	h	h
@@ -678,20 +672,27 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	år
+	How long one unit takes to serve one entity, drawn anew for each entity.	Hvor lang tid én ressursenhet bruker på å betjene én enhet; trekkes på nytt for hver enhet.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hvor mange enheter som kan vente her på en ledig ressursenhet, i tillegg til dem som betjenes; uten hake et hvilket som helst antall.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Hvor mange ressursenheter som betjener her samtidig, for eksempel maskiner eller ansatte, hver én enhet om gangen.
+	More settings	Flere innstillinger
+	Must be from {min} to {max}	Må være fra {min} til {max}
+	Must be more than {min}	Må være mer enn {min}
+	Must be {min} or more	Må være {min} eller mer
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
-@plural	Finished {n} run|Finished {n} runs	{n} replikasjon fullført|{n} replikasjoner fullført
+@plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Åpnet {file} ({n} advarsel)|Åpnet {file} ({n} advarsler)
 @plural	Removed {n} block|Removed {n} blocks	Fjernet {n} blokk|Fjernet {n} blokker
-@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kjører {n} uavhengig replikasjon av modellen fra tilfeldig frø {seed}. Resultatene for hvert element inneholder halvbredden til et 95% konfidensintervall.|Kjører {n} uavhengige replikasjoner av modellen fra tilfeldig frø {seed}. Resultatene for hvert element inneholder halvbredden til et 95% konfidensintervall.
-@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Stoppbetingelsen ble nådd i {met} av {n} replikasjon, etter i snitt {time} {unit}.|Stoppbetingelsen ble nådd i {met} av {n} replikasjoner, etter i snitt {time} {unit}.
-@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} av {n} replikasjon fullført|{done} av {n} replikasjoner fullført
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% intervall fra {low} til {high}{unit}\nover {n} replikasjon|{name}: {mean}{unit}\n95% intervall fra {low} til {high}{unit}\nover {n} replikasjoner
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Utfører {n} uavhengig kjøring av modellen fra tilfeldig frø {seed}. Resultatene for hvert element inneholder halvbredden til et 95% konfidensintervall.|Utfører {n} uavhengige kjøringer av modellen fra tilfeldig frø {seed}. Resultatene for hvert element inneholder halvbredden til et 95% konfidensintervall.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Stoppbetingelsen ble nådd i {met} av {n} kjøring, etter i snitt {time} {unit}.|Stoppbetingelsen ble nådd i {met} av {n} kjøringer, etter i snitt {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} av {n} kjøring fullført|{done} av {n} kjøringer fullført
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% intervall fra {low} til {high}{unit}\nover {n} kjøring|{name}: {mean}{unit}\n95% intervall fra {low} til {high}{unit}\nover {n} kjøringer
 @plural	{n} block selected|{n} blocks selected	{n} blokk valgt|{n} blokker valgt
-@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} replikasjon per trinn · tilfeldighetsfrø {seed}|{n} replikasjoner per trinn · tilfeldighetsfrø {seed}
-@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} replikasjon · gjennomsnitt {mean} · fra {min} til {max}|{n} replikasjoner · gjennomsnitt {mean} · fra {min} til {max}
-@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasjon · frø {seed} · oppvarming {warmup} {unit} · {duration} {unit} målt|{n} replikasjoner · frø {seed} · oppvarming {warmup} {unit} · {duration} {unit} målt
-@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikasjon · frø {seed}|{n} replikasjoner · frø {seed}
-@plural	{n} run|{n} runs	{n} replikasjon|{n} replikasjoner
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} kjøring per trinn · tilfeldighetsfrø {seed}|{n} kjøringer per trinn · tilfeldighetsfrø {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} kjøring · gjennomsnitt {mean} · fra {min} til {max}|{n} kjøringer · gjennomsnitt {mean} · fra {min} til {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} kjøring · frø {seed} · oppvarming {warmup} {unit} · {duration} {unit} målt|{n} kjøringer · frø {seed} · oppvarming {warmup} {unit} · {duration} {unit} målt
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} kjøring · frø {seed}|{n} kjøringer · frø {seed}
+@plural	{n} run|{n} runs	{n} kjøring|{n} kjøringer
 @plural	Run ({n} problem)|Run ({n} problems)	Kjør ({n} problem)|Kjør ({n} problemer)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemer: {blocks}
