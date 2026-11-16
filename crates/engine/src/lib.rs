@@ -42,6 +42,7 @@
 mod commands;
 mod compare;
 mod decide;
+mod design;
 mod distribution;
 mod edit;
 mod run;
@@ -218,7 +219,8 @@ pub struct Engine {
     last_results: Option<Value>,
     /// The results of the run that finished before it, for `results.compare`.
     previous_results: Option<Value>,
-    /// The sweeps and sensitivity analyses done on the model, carried in the run record
+    /// The sweeps, sensitivity analyses and designed experiments done on the model, carried in
+    /// the run record
     /// (NASA-STD-7009B [M&S 30]).
     sensitivity: Vec<Value>,
 }

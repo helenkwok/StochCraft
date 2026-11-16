@@ -78,6 +78,39 @@ enum Command {
         #[arg(long, short)]
         out: Option<PathBuf>,
     },
+    /// Run a designed experiment with several factors at once (the engine's
+    /// `experiment.design`): every combination of the factors' levels, or a Latin hypercube of
+    /// their ranges, each point with the same seed. Prints each result at each point and the
+    /// factors' effects.
+    Design {
+        file: PathBuf,
+        /// A factor and its levels, `id.field=1,2,3`, or its range, `id.field=0.5..1.5`. The
+        /// field is `capacity`, `quantity`, `queue_capacity` or `mean`. Repeat for each factor.
+        #[arg(long, required = true)]
+        factor: Vec<String>,
+        /// A result to report, `element.metric` (such as `desk.mean_wait`). Repeat for more.
+        #[arg(long, required = true)]
+        result: Vec<String>,
+        #[arg(long, value_enum, default_value_t = DesignKind::FullFactorial)]
+        design: DesignKind,
+        /// A Latin hypercube's number of points.
+        #[arg(long)]
+        points: Option<u32>,
+        /// The BPSim scenario to run (default: the first).
+        #[arg(long)]
+        scenario: Option<String>,
+        /// Replications at each point (default: the scenario's).
+        #[arg(long, short)]
+        reps: Option<u32>,
+        /// Random seed (default: the scenario's).
+        #[arg(long, short)]
+        seed: Option<u64>,
+        #[arg(long, value_enum, default_value_t = Format::Table)]
+        format: Format,
+        /// Write the output to this file instead of the terminal.
+        #[arg(long, short)]
+        out: Option<PathBuf>,
+    },
     /// Replay engine commands from a JSON script: an array of {"command", "params"}, as an
     /// engine journal is written. Prints each step's result as a line of JSON.
     Exec {
@@ -117,6 +150,14 @@ enum Format {
     Table,
     Json,
     Csv,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum DesignKind {
+    /// Every combination of the levels.
+    FullFactorial,
+    /// `--points` points, each factor's range cut into that many strata, each used once.
+    LatinHypercube,
 }
 
 /// A failure to report: the message, and the exit code.
@@ -278,6 +319,85 @@ fn run(
     Ok(0)
 }
 
+/// `id.field=1,2,3` or `id.field=min..max` as a factor of `experiment.design`.
+fn factor(text: &str) -> Result<Value, Failure> {
+    let bad = || {
+        Failure(format!(
+            "`{text}`: give a factor as `id.field=1,2,3` (its levels) or `id.field=min..max` \
+             (its range)"
+        ))
+    };
+    let (name, values) = text.split_once('=').ok_or_else(bad)?;
+    // Ids may contain dots; the field is after the last.
+    let (id, field) = name.rsplit_once('.').ok_or_else(bad)?;
+    let num = |v: &str| v.trim().parse::<f64>().map_err(|_| bad());
+    let mut f = json!({ "id": id, "field": field });
+    if let Some((lo, hi)) = values.split_once("..") {
+        f["min"] = json!(num(lo)?);
+        f["max"] = json!(num(hi)?);
+    } else {
+        let levels = values.split(',').map(num).collect::<Result<Vec<_>, _>>()?;
+        f["levels"] = json!(levels);
+    }
+    Ok(f)
+}
+
+/// `element.metric` as a result of `experiment.design`.
+fn result(text: &str) -> Result<Value, Failure> {
+    let (element, metric) = text.rsplit_once('.').ok_or_else(|| {
+        Failure(format!(
+            "`{text}`: give a result as `element.metric`, such as `desk.mean_wait`"
+        ))
+    })?;
+    Ok(json!({ "element": element, "metric": metric }))
+}
+
+struct DesignArgs<'a> {
+    file: &'a Path,
+    factors: &'a [String],
+    results: &'a [String],
+    design: DesignKind,
+    points: Option<u32>,
+    scenario: Option<&'a str>,
+    reps: Option<u32>,
+    seed: Option<u64>,
+    format: Format,
+    out: Option<&'a Path>,
+}
+
+fn design(a: &DesignArgs) -> Result<u8, Failure> {
+    let mut engine = Engine::new();
+    open(&mut engine, a.file, a.scenario)?;
+    let mut params = json!({
+        "factors": a.factors.iter().map(|f| factor(f)).collect::<Result<Vec<_>, _>>()?,
+        "results": a.results.iter().map(|r| result(r)).collect::<Result<Vec<_>, _>>()?,
+        "design": match a.design {
+            DesignKind::FullFactorial => "full_factorial",
+            DesignKind::LatinHypercube => "latin_hypercube",
+        },
+    });
+    if let Some(n) = a.points {
+        params["points"] = json!(n);
+    }
+    if let Some(r) = a.reps {
+        params["replications"] = json!(r);
+    }
+    if let Some(s) = a.seed {
+        params["seed"] = json!(s);
+    }
+    let answer = engine.execute("experiment.design", params)?;
+    let text = match a.format {
+        Format::Json => format!(
+            "{}\n",
+            serde_json::to_string_pretty(&answer).unwrap_or_default()
+        ),
+        Format::Csv => output::design_csv(&answer),
+        Format::Table => output::design_table(&engine.model().name, &answer),
+    };
+    emit(&text, a.out)?;
+    Ok(0)
+}
+
 fn exec(script: &Path, open_file: Option<&Path>) -> Result<u8, Failure> {
     let text = std::fs::read_to_string(script)
         .map_err(|e| Failure(format!("cannot read {}: {e}", script.display())))?;
@@ -382,6 +502,29 @@ fn main() -> ExitCode {
             format,
             out.as_deref(),
         ),
+        Command::Design {
+            file,
+            factor,
+            result,
+            design: kind,
+            points,
+            scenario,
+            reps,
+            seed,
+            format,
+            out,
+        } => design(&DesignArgs {
+            file: &file,
+            factors: &factor,
+            results: &result,
+            design: kind,
+            points,
+            scenario: scenario.as_deref(),
+            reps,
+            seed,
+            format,
+            out: out.as_deref(),
+        }),
         Command::Exec { script, open } => exec(&script, open.as_deref()),
         Command::Schema { command } => schema(command.as_deref()),
         Command::Mcp {
