@@ -2411,6 +2411,307 @@ fn a_sweep_of_a_parameter_that_changes_nothing_finds_no_difference() {
     assert_eq!(r["tests"], 1);
 }
 
+/// Field `k` (`mean`, `half_width`) of the first result at point `i` of a design answer.
+fn at_point(r: &Value, i: usize, k: &str) -> f64 {
+    r["points"][i]["results"][0][k].as_f64().unwrap_or(f64::NAN)
+}
+
+/// The main effect of factor `id` on the design's first result.
+fn main_effect<'a>(r: &'a Value, id: &str) -> &'a Value {
+    r["main_effects"]
+        .as_array()
+        .and_then(|m| m.iter().find(|x| x["id"] == id))
+        .unwrap_or(&Value::Null)
+}
+
+#[test]
+fn a_two_by_two_design_matches_mm1_theory() {
+    // The help desk at four corners: time between arrivals a in {2, 3}, mean service s in
+    // {0.8, 1.2}. M/M/1 waits in queue Wq = s² / (a − s): 0.5333, 1.8, 0.2909, 0.8.
+    let mut e = long_help_desk();
+    let r = ok(
+        &mut e,
+        "experiment.design",
+        json!({
+            "factors": [
+                { "id": "arrivals", "field": "mean", "levels": [2.0, 3.0] },
+                { "id": "desk", "field": "mean", "levels": [0.8, 1.2] }
+            ],
+            "results": [{ "element": "desk", "metric": "mean_wait" }]
+        }),
+    );
+    assert_eq!(r["design"], "full_factorial");
+    assert_eq!(r["runs"], 40);
+    let wq = |a: f64, s: f64| s * s / (a - s);
+    let corners = [(2.0, 0.8), (2.0, 1.2), (3.0, 0.8), (3.0, 1.2)];
+    for (i, (a, s)) in corners.into_iter().enumerate() {
+        // The last factor changes fastest, as in itertools.product.
+        assert_eq!(r["points"][i]["values"], json!([a, s]), "{r}");
+        let (m, hw) = (at_point(&r, i, "mean"), at_point(&r, i, "half_width"));
+        assert!(
+            (m - wq(a, s)).abs() <= 2.0 * hw,
+            "a = {a}, s = {s}: {m} ± {hw} vs {}",
+            wq(a, s)
+        );
+        assert_eq!(r["points"][i]["results"][0]["n"], 10);
+    }
+    // Main effects: the mean over the high level minus the mean over the low, which is the
+    // difference of the points' own means, with the sign theory gives (−0.621 and +0.888).
+    let theory = |hi: [usize; 2], lo: [usize; 2]| {
+        let w = |i: usize| wq(corners[i].0, corners[i].1);
+        (w(hi[0]) + w(hi[1]) - w(lo[0]) - w(lo[1])) / 2.0
+    };
+    for (id, hi, lo, sign) in [
+        ("arrivals", [2, 3], [0, 1], -1.0),
+        ("desk", [1, 3], [0, 2], 1.0),
+    ] {
+        let m = main_effect(&r, id);
+        let effect = m["effect"].as_f64().unwrap_or(0.0);
+        let hw = m["half_width"].as_f64().unwrap_or(f64::INFINITY);
+        let marginal = (at_point(&r, hi[0], "mean") + at_point(&r, hi[1], "mean")
+            - at_point(&r, lo[0], "mean")
+            - at_point(&r, lo[1], "mean"))
+            / 2.0;
+        assert!((effect - marginal).abs() < 1e-9, "{m} vs {marginal}");
+        assert!(effect * sign > 0.0, "{m}");
+        assert!((effect - theory(hi, lo)).abs() <= 2.0 * hw, "{m}");
+        assert_eq!(m["significant"], true, "{m}");
+        assert_eq!(m["n"], 10, "{m}");
+    }
+    // The interaction, (Wq(2, 0.8) + Wq(3, 1.2) − Wq(2, 1.2) − Wq(3, 0.8)) / 2 = −0.379: a
+    // longer service hurts more when arrivals come faster.
+    let i = &r["interactions"][0];
+    assert_eq!(i["factors"][0]["id"], "arrivals");
+    assert_eq!(i["factors"][1]["id"], "desk");
+    let effect = i["effect"].as_f64().unwrap_or(0.0);
+    let hw = i["half_width"].as_f64().unwrap_or(f64::INFINITY);
+    assert!(
+        (effect - (wq(2.0, 0.8) + wq(3.0, 1.2) - wq(2.0, 1.2) - wq(3.0, 0.8)) / 2.0).abs()
+            <= 2.0 * hw,
+        "{i}"
+    );
+    assert_eq!(i["significant"], true, "{i}");
+    assert_eq!(r["tests"], 3);
+    assert!(r["method"].as_str().is_some_and(|m| m.contains("2^k")));
+    // The model is unchanged, and the design is in the next run's record.
+    assert_eq!(e.model(), long_help_desk().model());
+    let run = ok(&mut e, "run", json!({ "replications": 2 }));
+    assert_eq!(run["record"]["sensitivity"][0]["kind"], "design");
+}
+
+#[test]
+fn a_factor_that_cannot_affect_a_result_has_no_significant_effect() {
+    // As in the sweep: a second server after the first cannot change the first one's waits.
+    let mut e = short_mm1();
+    ok(
+        &mut e,
+        "disconnect",
+        json!({ "from": "server", "to": "exit" }),
+    );
+    ok(
+        &mut e,
+        "block.add",
+        json!({ "kind": "server", "id": "pack", "capacity": 1,
+                "service": { "type": "exponential", "mean": 0.5 } }),
+    );
+    ok(&mut e, "connect", json!({ "from": "server", "to": "pack" }));
+    ok(&mut e, "connect", json!({ "from": "pack", "to": "exit" }));
+    let r = ok(
+        &mut e,
+        "experiment.design",
+        json!({
+            "factors": [
+                { "id": "server", "field": "mean", "min": 1.0, "max": 1.04 },
+                { "id": "pack", "field": "mean", "levels": [0.5, 0.6] }
+            ],
+            "results": [{ "element": "server", "metric": "mean_wait" }]
+        }),
+    );
+    // A range in a full factorial is its two ends.
+    assert_eq!(r["factors"][0]["levels"], json!([1.0, 1.04]));
+    let pack = main_effect(&r, "pack");
+    assert_eq!(pack["effect"].as_f64(), Some(0.0), "{pack}");
+    assert_eq!(pack["significant"], false, "{pack}");
+    let interaction = &r["interactions"][0];
+    assert_eq!(interaction["effect"].as_f64(), Some(0.0), "{interaction}");
+    assert_eq!(interaction["significant"], false, "{interaction}");
+    // The server's own service time does, as in the sweep of issue #66 (+0.634).
+    let server = main_effect(&r, "server");
+    assert!(
+        (server["effect"].as_f64().unwrap_or(0.0) - 0.634).abs() < 0.001,
+        "{server}"
+    );
+    assert_eq!(server["significant"], true, "{server}");
+}
+
+#[test]
+fn common_random_numbers_narrow_a_designs_intervals() {
+    // Issue #66 for a design: small changes to both times of the M/M/1. Paired over the
+    // replications, the main effects' intervals are far narrower than those of independent runs
+    // at each point would be: for a contrast (y3 + y4 − y1 − y2) / 2 of independent means, the
+    // half-width is the root of the sum of (hw_i / 2)².
+    let mut e = short_mm1();
+    let r = ok(
+        &mut e,
+        "experiment.design",
+        json!({
+            "factors": [
+                { "id": "arrivals", "field": "mean", "levels": [1.3333, 1.38] },
+                { "id": "server", "field": "mean", "levels": [1.0, 1.04] }
+            ],
+            "results": [{ "element": "server", "metric": "mean_wait" }]
+        }),
+    );
+    let unpaired = (0..4)
+        .map(|i| {
+            let h = at_point(&r, i, "half_width") / 2.0;
+            h * h
+        })
+        .sum::<f64>()
+        .sqrt();
+    for id in ["arrivals", "server"] {
+        let m = main_effect(&r, id);
+        let hw = m["half_width"].as_f64().unwrap_or(f64::INFINITY);
+        assert!(hw < unpaired / 2.0, "{id}: {hw} against {unpaired}: {m}");
+        assert_eq!(m["significant"], true, "{m}");
+    }
+}
+
+/// Factor `k`'s values across a design's points.
+fn column(r: &Value, k: usize) -> Vec<f64> {
+    r["points"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .map(|p| p["values"][k].as_f64().unwrap_or(f64::NAN))
+        .collect()
+}
+
+#[test]
+fn a_latin_hypercube_takes_each_stratum_once_and_follows_the_seed() {
+    let mut e = short_mm1();
+    let design = |e: &mut Engine, seed: u64, with_units: bool, points: u32| {
+        let mut factors = vec![
+            json!({ "id": "arrivals", "field": "mean", "min": 1.5, "max": 3.0 }),
+            json!({ "id": "server", "field": "mean", "min": 0.5, "max": 1.0 }),
+        ];
+        if with_units {
+            factors.push(json!({ "id": "server", "field": "capacity", "min": 1, "max": 4 }));
+        }
+        ok(
+            e,
+            "experiment.design",
+            json!({
+                "design": "latin_hypercube",
+                "points": points,
+                "factors": factors,
+                "results": [{ "element": "server", "metric": "mean_wait" }],
+                "replications": 2,
+                "seed": seed
+            }),
+        )
+    };
+    let r = design(&mut e, 5, true, 8);
+    assert_eq!(r["design"], "latin_hypercube");
+    assert_eq!(r["runs"], 16);
+    // One point in each eighth of each range.
+    for (k, (lo, hi)) in [(1.5, 3.0), (0.5, 1.0)].into_iter().enumerate() {
+        let mut strata: Vec<usize> = column(&r, k)
+            .iter()
+            .map(|x| ((x - lo) / (hi - lo) * 8.0) as usize)
+            .collect();
+        strata.sort_unstable();
+        assert_eq!(strata, (0..8).collect::<Vec<_>>(), "{}", r["points"]);
+    }
+    // A count's range is its whole numbers, each taken by two of the eight points.
+    let mut units = column(&r, 2);
+    units.sort_by(f64::total_cmp);
+    assert_eq!(units, [1.0, 1.0, 2.0, 2.0, 3.0, 3.0, 4.0, 4.0]);
+    // The same seed gives the same design and results; another seed another design; a factor
+    // added leaves the others' values as they were.
+    assert_eq!(design(&mut e, 5, true, 8)["points"], r["points"]);
+    assert_ne!(column(&design(&mut e, 6, true, 8), 0), column(&r, 0));
+    let fewer = design(&mut e, 5, false, 8);
+    assert_eq!(column(&fewer, 0), column(&r, 0));
+    assert_eq!(column(&fewer, 1), column(&r, 1));
+    // More units wait less (−0.98), and without them a slower server waits longer (+0.79).
+    let rho = |r: &Value, field: &str, id: &str| {
+        let c = r["correlations"]
+            .as_array()
+            .and_then(|c| c.iter().find(|c| c["id"] == id && c["field"] == field))
+            .cloned()
+            .unwrap_or_default();
+        assert_eq!(c["n"], r["points"].as_array().map_or(0, Vec::len), "{c}");
+        c["spearman"].as_f64().unwrap_or(0.0)
+    };
+    assert!(rho(&r, "capacity", "server") < -0.5);
+    assert!(rho(&fewer, "mean", "server") > 0.5);
+    // With 8 points the time between arrivals shows none (0.0): the columns, matched at
+    // random, hide its effect behind the server's. With 64 both show, with their signs
+    // (−0.56 and +0.83).
+    assert!(rho(&fewer, "mean", "arrivals").abs() < 0.1);
+    let more = design(&mut e, 5, false, 64);
+    assert!(rho(&more, "mean", "arrivals") < -0.4);
+    assert!(rho(&more, "mean", "server") > 0.6);
+    let run = ok(&mut e, "run", json!({ "replications": 2 }));
+    let record = &run["record"]["sensitivity"][0];
+    assert_eq!(record["kind"], "design", "{record}");
+    assert_eq!(record["points"], 8, "{record}");
+    assert_eq!(record["seed"], 5, "{record}");
+    assert!(record.get("main_effects").is_none(), "{record}");
+    assert!(r.get("main_effects").is_none());
+}
+
+#[test]
+fn a_design_too_large_or_malformed_is_refused() {
+    let mut e = short_mm1();
+    let levels: Vec<f64> = (0..101).map(|i| 1.0 + f64::from(i) * 0.01).collect();
+    let r = e.execute(
+        "experiment.design",
+        json!({
+            "factors": [{ "id": "server", "field": "mean", "levels": levels }],
+            "results": [{ "element": "server", "metric": "mean_wait" }],
+            "replications": 100
+        }),
+    );
+    let message = r.err().map(|e| e.message).unwrap_or_default();
+    assert!(
+        message.contains("10100 runs") && message.contains("10000"),
+        "{message}"
+    );
+    let factor = json!({ "id": "server", "field": "mean", "levels": [1.0, 1.1] });
+    let result = json!([{ "element": "server", "metric": "mean_wait" }]);
+    for bad in [
+        // A factor twice.
+        json!({ "factors": [factor, factor], "results": result }),
+        // `points` without a Latin hypercube, and a Latin hypercube without them.
+        json!({ "factors": [factor], "results": result, "points": 4 }),
+        json!({ "factors": [factor], "results": result, "design": "latin_hypercube" }),
+        // A level given twice, and levels with a range.
+        json!({ "factors": [{ "id": "server", "field": "mean", "levels": [1.0, 1.0] }], "results": result }),
+        json!({ "factors": [{ "id": "server", "field": "mean", "levels": [1.0], "min": 1.0, "max": 2.0 }], "results": result }),
+        // A count that is not whole, and an unknown metric.
+        json!({ "factors": [{ "id": "server", "field": "capacity", "levels": [1, 1.5] }], "results": result }),
+        json!({ "factors": [factor], "results": [{ "element": "server", "metric": "speed" }] }),
+        // A Latin hypercube too large.
+        json!({ "factors": [factor], "results": result, "design": "latin_hypercube", "points": 5001, "replications": 2 }),
+    ] {
+        assert_eq!(
+            err(&mut e, "experiment.design", bad.clone()),
+            ErrorCode::InvalidParams,
+            "{bad}"
+        );
+    }
+    assert_eq!(
+        err(
+            &mut e,
+            "experiment.design",
+            json!({ "factors": [{ "id": "nowhere", "field": "mean", "levels": [1.0] }], "results": result })
+        ),
+        ErrorCode::InvalidParams
+    );
+}
+
 /// The comparison of `element`'s `metric` in a `results.compare` answer.
 fn comparison<'a>(r: &'a Value, element: &str, metric: &str) -> &'a Value {
     r["comparisons"]

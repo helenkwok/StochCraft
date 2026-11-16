@@ -224,8 +224,11 @@
 	Hide Others	மற்றவற்றை மறை
 	Hide {app}	{app} ஐ மறை
 	High contrast	உயர் மாறுபாடு
+	How long one unit takes to serve one entity, drawn anew for each entity.	ஓர் அலகு ஓர் உருப்படிக்குச் சேவை செய்ய எடுக்கும் நேரம்; ஒவ்வோர் உருப்படிக்கும் புதிதாக எடுக்கப்படுகிறது.
 	How many	எத்தனை
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	சேவை பெறுபவை தவிர, இலவச அலகுக்காக இங்கே எத்தனை உருப்படிகள் காத்திருக்கலாம்; குறியிடாவிட்டால் எத்தனையும்.
 	How many parts customers want from these departures; the results then show takt (the time available over the demand) and each task's cycle time.	இந்த வெளியேற்றங்களிலிருந்து வாடிக்கையாளர்கள் எத்தனை பாகங்களை விரும்புகிறார்கள்; அப்போது முடிவுகள் டாக்ட் (கிடைக்கும் நேரத்தைத் தேவையால் வகுத்தது) மற்றும் ஒவ்வொரு பணியின் சுழற்சி நேரத்தையும் காட்டும்.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	இங்கே ஒரே நேரத்தில் எத்தனை அலகுகள் சேவை செய்கின்றன, இயந்திரங்கள் அல்லது பணியாளர்கள் போல, ஒவ்வொன்றும் ஒரு நேரத்தில் ஓர் உருப்படிக்கு.
 	In use	பயன்பாட்டில்
 	Inside over time	நேரப்படி உள்ளே
 	Job under way on a server going off shift:	பணிமுறை முடியும் வழங்கியில் நடந்துகொண்டிருக்கும் வேலை:
@@ -272,9 +275,13 @@
 	Model	மாதிரி
 	Model time 0 is	மாதிரி நேரம் 0 என்பது
 	Mon	திங்
+	More settings	மேலும் அமைப்புகள்
 	Most likely	அதிக வாய்ப்புள்ள மதிப்பு
 	Move	நகர்த்தல்
 	Move each parameter down and up in turn, and rank them by how much the result moves.	ஒவ்வொரு அளவுருவையும் வரிசையாகக் கீழும் மேலும் நகர்த்தி, முடிவு எவ்வளவு நகர்கிறது என்பதன்படி தரவரிசைப்படுத்தவும்.
+	Must be from {min} to {max}	{min} முதல் {max} வரை இருக்க வேண்டும்
+	Must be more than {min}	{min}-ஐ விட அதிகமாக இருக்க வேண்டும்
+	Must be {min} or more	{min} அல்லது அதற்கு மேல் இருக்க வேண்டும்
 	Name	பெயர்
 	Needs	தேவைகள்
 	Never: it runs for its duration	ஒருபோதும் இல்லை: முழுக் கால அளவும் இயங்கும்
@@ -649,7 +656,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first}, {second} – சிவப்பு-பச்சை நிறக்குருடு உள்ளவர்களுக்கு வேறுபாடு {de}, தேவை 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first}, {second} – சிவப்பு-பச்சை நிறக்குருடு உள்ளவர்களுக்கு வேறுபாடு {de}, தேவை 8: இவற்றைச் சிட்டைகளால் மட்டுமே பிரித்தறியவும்.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}, {second} – வெளிர்மை வேறுபாடு {step}, தேவை 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: நிகழ்தகவு 0 முதல் 1 வரையிலான எண்ணாக இருக்க வேண்டும்
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} மீள் இயக்கங்களில் {met} இலக்கை அடைந்தன: {p} (95% இடைவெளி {lo} முதல் {hi})
 	{name} — edited	{name} — திருத்தப்பட்டது
@@ -698,3 +704,5 @@ unit	yr	ஆண்டு
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} மீள் இயக்கம் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது|{n} மீள் இயக்கங்கள் · விதை {seed} · தொடக்கச் சீராக்கம் {warmup} {unit} · {duration} {unit} அளவிடப்பட்டது
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} மீள் இயக்கம் · விதை {seed}|{n} மீள் இயக்கங்கள் · விதை {seed}
 @plural	{n} run|{n} runs	{n} மீள் இயக்கம்|{n} மீள் இயக்கங்கள்
+@plural	Run ({n} problem)|Run ({n} problems)	இயக்கு ({n} சிக்கல்)|இயக்கு ({n} சிக்கல்கள்)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} சிக்கல்: {blocks}|{n} சிக்கல்கள்: {blocks}

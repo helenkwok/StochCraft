@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} i {second} – różnica przy ślepocie czerwono-zielonej {de}, wymagane 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} i {second} – różnica przy ślepocie czerwono-zielonej {de}, wymagane 8: rozróżniaj je tylko po etykietach.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} i {second} – różnica jasności {step}, wymagane 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: prawdopodobieństwo musi być liczbą od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} z {of} uruchomień osiągnęło cel: {p} (przedział 95% od {lo} do {hi})
 	{name} — edited	{name} — edytowano
@@ -673,6 +672,13 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	r.
+	How long one unit takes to serve one entity, drawn anew for each entity.	Ile czasu zajmuje jednemu zasobowi obsłużenie jednej jednostki; losowane od nowa dla każdej jednostki.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Ile jednostek może tu czekać na wolny zasób, oprócz obsługiwanych; bez zaznaczenia dowolnie wiele.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Ile zasobów obsługuje tu jednocześnie, np. maszyny lub personel, każdy po jednej jednostce naraz.
+	More settings	Więcej ustawień
+	Must be from {min} to {max}	Musi wynosić od {min} do {max}
+	Must be more than {min}	Musi być większe niż {min}
+	Must be {min} or more	Musi wynosić co najmniej {min}
 	1/(n + 1)	1/(n + 1)
 	Balked	Nie dołączyły
 	Balked on {id}	Nie dołączyły na {id}
@@ -698,3 +704,5 @@ unit	yr	r.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} uruchomienie · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} uruchomienia · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}|{n} uruchomień · ziarno {seed} · rozgrzewka {warmup} {unit} · pomiar {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} uruchomienie · ziarno {seed}|{n} uruchomienia · ziarno {seed}|{n} uruchomień · ziarno {seed}
 @plural	{n} run|{n} runs	{n} uruchomienie|{n} uruchomienia|{n} uruchomień
+@plural	Run ({n} problem)|Run ({n} problems)	Uruchom ({n} problem)|Uruchom ({n} problemy)|Uruchom ({n} problemów)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemy: {blocks}|{n} problemów: {blocks}

@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	對紅綠色盲的觀看者，{first}與{second}相差 {de}，需要 8。
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	對紅綠色盲的觀看者，{first}與{second}相差 {de}，需要 8：只能靠標籤區分。
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}與{second}的明度相差 {step}，需要 0.06。
-	{id}: a probability is a number from 0 to 1	{id}：機率必須是 0 到 1 之間的數值
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} 次執行中有 {met} 次達到目標：{p}（95% 區間 {lo} 至 {hi}）
 	{name} — edited	{name} — 已編輯
@@ -673,6 +672,13 @@ unit	min	分鐘
 unit	ms	毫秒
 unit	s	秒
 unit	yr	年
+	How long one unit takes to serve one entity, drawn anew for each entity.	一個資源單元服務一個實體所需的時間，每個實體重新抽取。
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	除正在服務的實體外，可在此等待空閒資源單元的實體數量；不勾選則不限數量。
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	此處同時服務的資源單元數量，如機器或人員，每個單元一次服務一個實體。
+	More settings	更多設定
+	Must be from {min} to {max}	必須介於 {min} 到 {max} 之間
+	Must be more than {min}	必須大於 {min}
+	Must be {min} or more	必須不小於 {min}
 	1/(n + 1)	1/(n + 1)
 	Balked	止步
 	Balked on {id}	{id} 上的止步
@@ -698,3 +704,5 @@ unit	yr	年
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} 次執行 · 隨機種子 {seed} · 暖機 {warmup} {unit} · 測量 {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} 次執行 · 隨機種子 {seed}
 @plural	{n} run|{n} runs	{n} 次執行
+@plural	Run ({n} problem)|Run ({n} problems)	執行（{n} 個問題）
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} 個問題：{blocks}

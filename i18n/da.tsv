@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} og {second} adskiller sig med {de} for seere med rød-grøn farveblindhed, kræver 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} og {second} adskiller sig med {de} for seere med rød-grøn farveblindhed, kræver 8: skeln kun mellem dem med etiketter.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} og {second} adskiller sig i lyshed med {step}, kræver 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: en sandsynlighed er et tal mellem 0 og 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} af {of} kørsler nåede målet: {p} (95 %-interval {lo} til {hi})
 	{name} — edited	{name} — redigeret
@@ -673,6 +672,13 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	år
+	How long one unit takes to serve one entity, drawn anew for each entity.	Hvor lang tid én ressourceenhed er om at betjene én enhed; trækkes på ny for hver enhed.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Hvor mange enheder der må vente her på en ledig ressourceenhed, ud over dem der betjenes; uden flueben et vilkårligt antal.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Hvor mange ressourceenheder der betjener her samtidig, f.eks. maskiner eller personale, hver én enhed ad gangen.
+	More settings	Flere indstillinger
+	Must be from {min} to {max}	Skal være fra {min} til {max}
+	Must be more than {min}	Skal være mere end {min}
+	Must be {min} or more	Skal være {min} eller mere
 	1/(n + 1)	1/(n + 1)
 	Balked	Fravalgte køen
 	Balked on {id}	Fravalgte køen på {id}
@@ -698,3 +704,5 @@ unit	yr	år
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} kørsel · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt|{n} kørsler · frø {seed} · opvarmning {warmup} {unit} · {duration} {unit} målt
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} kørsel · frø {seed}|{n} kørsler · frø {seed}
 @plural	{n} run|{n} runs	{n} kørsel|{n} kørsler
+@plural	Run ({n} problem)|Run ({n} problems)	Kør ({n} problem)|Kør ({n} problemer)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemer: {blocks}

@@ -18,7 +18,7 @@ use stochcraft_stats::{Proportion, difference};
 
 use crate::{CommandError, ErrorCode, wire};
 
-fn invalid(message: impl Into<String>) -> CommandError {
+pub(crate) fn invalid(message: impl Into<String>) -> CommandError {
     CommandError::new(ErrorCode::InvalidParams, message)
 }
 
@@ -43,11 +43,11 @@ pub enum Field {
 }
 
 impl Field {
-    fn integral(self) -> bool {
+    pub(crate) fn integral(self) -> bool {
         !matches!(self, Field::Mean)
     }
 
-    fn name(self) -> &'static str {
+    pub(crate) fn name(self) -> &'static str {
         match self {
             Field::Capacity => "capacity",
             Field::Quantity => "quantity",
@@ -238,7 +238,7 @@ pub fn run(model: &Model, replications: u64, seed: u64) -> Result<ExperimentSumm
     Ok(summarise(&reports))
 }
 
-fn metric(name: &str) -> Result<Metric, CommandError> {
+pub(crate) fn metric(name: &str) -> Result<Metric, CommandError> {
     Metric::from_name(name).ok_or_else(|| {
         let names: Vec<&str> = Metric::ALL.iter().map(|m| m.name()).collect();
         invalid(format!(
@@ -256,7 +256,10 @@ fn value(s: &ExperimentSummary, o: &Output) -> Result<Option<(f64, f64)>, Comman
 
 /// `o`'s value in each replication of `s`, in replication order (empty if the element did not
 /// report it).
-fn samples<'a>(s: &'a ExperimentSummary, o: &Output) -> Result<&'a [Option<f64>], CommandError> {
+pub(crate) fn samples<'a>(
+    s: &'a ExperimentSummary,
+    o: &Output,
+) -> Result<&'a [Option<f64>], CommandError> {
     let m = metric(&o.metric)?;
     Ok(s.elements
         .iter()
@@ -343,7 +346,7 @@ pub struct SensitivityParams {
     pub seed: Option<u64>,
 }
 
-fn reps_seed(model: &Model, replications: Option<u32>, seed: Option<u64>) -> (u64, u64) {
+pub(crate) fn reps_seed(model: &Model, replications: Option<u32>, seed: Option<u64>) -> (u64, u64) {
     let x = &model.experiment;
     (
         u64::from(replications.unwrap_or(x.replications).max(1)),

@@ -50,7 +50,8 @@ draw only with fonts the visitor's own system has.
   statistics.
 - `stochcraft-io` reads and writes models as BPSim on BPMN or XPDL.
 - `stochcraft-engine` makes every change and run a command with a JSON schema, undo and redo,
-  and a replayable journal, and adds sweeps, sensitivity analysis and capacity sizing.
+  and a replayable journal, and adds sweeps, sensitivity analysis, designed experiments and
+  capacity sizing.
 - `stochcraft-cli` runs models from the command line; the app (`apps/stochcraft`,
   `apps/stochcraft-web`, UI in `crates/ui-egui`) runs them in a window.
 
@@ -82,6 +83,20 @@ run record (version, model digest, scenario, seed, replications, warm-up and dur
 enough to reproduce the numbers. `--format json` or `--format csv` gives machine-readable
 results, `--out` writes them to a file, and `--seed`, `--warmup` and `--duration` override the
 model's scenario for that run. Any BPMN or XPDL file with BPSim data can be run the same way.
+
+To vary several parameters at once, `design` runs every combination of their levels (a full
+factorial) on the same seed, and gives each result at each point, each factor's main effect and,
+for factors with two levels, their two-way interactions, each with a paired 95% interval:
+
+```bash
+stochcraft-cli design queue.bpmn --factor arrivals.mean=1.33,2 --factor server.mean=0.8,1 \
+  --result server.mean_wait --reps 20
+```
+
+A factor is `id.field=levels` or `id.field=min..max`, the field one of `capacity`, `quantity`,
+`queue_capacity` and `mean`. `--design latin-hypercube --points 20` samples the ranges instead
+and gives each factor's rank correlation with each result. A design may take at most 10,000 runs
+(points × replications).
 
 Changes can be scripted as engine commands (`stochcraft-cli schema` lists them with their
 parameters) and replayed:

@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first}, {second} – ఎరుపు-ఆకుపచ్చ రంగు అంధత్వం ఉన్నవారికి తేడా {de}, అవసరం 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first}, {second} – ఎరుపు-ఆకుపచ్చ రంగు అంధత్వం ఉన్నవారికి తేడా {de}, అవసరం 8: వీటిని లేబుళ్లతో మాత్రమే వేరుగా గుర్తించండి.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first}, {second} – లేతదనంలో తేడా {step}, అవసరం 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: సంభావ్యత 0 నుంచి 1 మధ్య సంఖ్య కావాలి
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} అమలులలో {met} లక్ష్యాన్ని చేరాయి: {p} (95% అంతరం {lo} నుండి {hi})
 	{name} — edited	{name} — సవరించబడింది
@@ -673,6 +672,13 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	సం.
+	How long one unit takes to serve one entity, drawn anew for each entity.	ఒక యూనిట్ ఒక ఎంటిటీకి సేవ చేయడానికి పట్టే సమయం; ప్రతి ఎంటిటీకి కొత్తగా తీసుకోబడుతుంది.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	సేవ పొందుతున్నవి కాకుండా, ఖాళీ యూనిట్ కోసం ఇక్కడ ఎన్ని ఎంటిటీలు వేచి ఉండవచ్చు; టిక్ లేకపోతే ఎన్నైనా.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	ఇక్కడ ఒకేసారి ఎన్ని యూనిట్‌లు సేవ చేస్తాయి, ఉదా. యంత్రాలు లేదా సిబ్బంది, ఒక్కొక్కటి ఒకసారి ఒక ఎంటిటీకి.
+	More settings	మరిన్ని సెట్టింగ్‌లు
+	Must be from {min} to {max}	{min} నుండి {max} మధ్య ఉండాలి
+	Must be more than {min}	{min} కంటే ఎక్కువ ఉండాలి
+	Must be {min} or more	{min} లేదా అంతకంటే ఎక్కువ ఉండాలి
 	1/(n + 1)	1/(n + 1)
 	Balked	క్యూలో చేరనివి
 	Balked on {id}	{id} వద్ద క్యూలో చేరనివి
@@ -698,3 +704,5 @@ unit	yr	సం.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} అమలు · బీజం {seed} · ప్రారంభ సర్దుబాటు {warmup} {unit} · కొలత {duration} {unit}|{n} అమలులు · బీజం {seed} · ప్రారంభ సర్దుబాటు {warmup} {unit} · కొలత {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} అమలు · బీజం {seed}|{n} అమలులు · బీజం {seed}
 @plural	{n} run|{n} runs	{n} అమలు|{n} అమలులు
+@plural	Run ({n} problem)|Run ({n} problems)	అమలు చేయి ({n} సమస్య)|అమలు చేయి ({n} సమస్యలు)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} సమస్య: {blocks}|{n} సమస్యలు: {blocks}

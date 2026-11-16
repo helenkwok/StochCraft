@@ -35,7 +35,8 @@ each command's parameters and an example); `check_model`; `run` for the results,
 replications with its 95% confidence interval; to compare, change a parameter, `run` again and \
 `execute` results.compare (the last run against the one before: each difference with its 95% \
 interval, paired when both runs keep the seed and replications, so keep them; experiment.sweep and \
-experiment.sensitivity do this over many values); `save`. \
+experiment.sensitivity do this over many values, and experiment.design over several factors at once, \
+a full factorial or a Latin hypercube); `save`. \
 Every failure leaves the model unchanged and says why; `undo` takes back an edit.";
 
 pub struct Server {

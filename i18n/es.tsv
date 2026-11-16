@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} y {second} difieren en {de} para personas con daltonismo rojo-verde, necesita 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} y {second} difieren en {de} para personas con daltonismo rojo-verde, necesita 8: distíngalos solo con etiquetas.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} y {second} difieren en luminosidad en {step}, necesita 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: una probabilidad es un número entre 0 y 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} de {of} ejecuciones cumplieron el objetivo: {p} (intervalo del 95 % de {lo} a {hi})
 	{name} — edited	{name} — editado
@@ -673,6 +672,13 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	a
+	How long one unit takes to serve one entity, drawn anew for each entity.	Cuánto tarda una unidad en atender a una entidad; se extrae de nuevo para cada entidad.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Cuántas entidades pueden esperar aquí a una unidad libre, además de las que se atienden; sin marcar, cualquier número.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Cuántas unidades atienden aquí a la vez, como máquinas o personal, cada una a una entidad cada vez.
+	More settings	Más ajustes
+	Must be from {min} to {max}	Debe estar entre {min} y {max}
+	Must be more than {min}	Debe ser mayor que {min}
+	Must be {min} or more	Debe ser {min} o más
 	1/(n + 1)	1/(n + 1)
 	Balked	No se unieron
 	Balked on {id}	No se unieron en {id}
@@ -698,3 +704,5 @@ unit	yr	a
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ejecución · semilla {seed} · calentamiento {warmup} {unit} · {duration} {unit} medidos|{n} ejecuciones · semilla {seed} · calentamiento {warmup} {unit} · {duration} {unit} medidos
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} ejecución · semilla {seed}|{n} ejecuciones · semilla {seed}
 @plural	{n} run|{n} runs	{n} ejecución|{n} ejecuciones
+@plural	Run ({n} problem)|Run ({n} problems)	Ejecutar ({n} problema)|Ejecutar ({n} problemas)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemas: {blocks}

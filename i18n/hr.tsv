@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} i {second} razlikuju se za {de} kod crveno-zelenog daltonizma, potrebno 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} i {second} razlikuju se za {de} kod crveno-zelenog daltonizma, potrebno 8: razlikujte ih samo po oznakama.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} i {second} razlikuju se po svjetlini za {step}, potrebno 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: vjerojatnost je broj od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} od {of} pokretanja postiglo je cilj: {p} (interval od 95 % od {lo} do {hi})
 	{name} — edited	{name} — uređeno
@@ -673,6 +672,13 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	god.
+	How long one unit takes to serve one entity, drawn anew for each entity.	Koliko jednoj jedinici treba da posluži jedan entitet; izvlači se iznova za svaki entitet.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Koliko entiteta smije ovdje čekati slobodnu jedinicu, uz one koji se poslužuju; bez kvačice, bilo koliko.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Koliko jedinica ovdje poslužuje istodobno, npr. strojevi ili osoblje, svaka po jedan entitet.
+	More settings	Više postavki
+	Must be from {min} to {max}	Mora biti od {min} do {max}
+	Must be more than {min}	Mora biti više od {min}
+	Must be {min} or more	Mora biti {min} ili više
 	1/(n + 1)	1/(n + 1)
 	Balked	Nisu ušli u red
 	Balked on {id}	Nisu ušli u red na {id}
@@ -698,3 +704,5 @@ unit	yr	god.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} pokretanje · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}|{n} pokretanja · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}|{n} pokretanja · sjeme {seed} · zagrijavanje {warmup} {unit} · mjereno {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} pokretanje · sjeme {seed}|{n} pokretanja · sjeme {seed}|{n} pokretanja · sjeme {seed}
 @plural	{n} run|{n} runs	{n} pokretanje|{n} pokretanja|{n} pokretanja
+@plural	Run ({n} problem)|Run ({n} problems)	Pokreni ({n} problem)|Pokreni ({n} problema)|Pokreni ({n} problema)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problema: {blocks}|{n} problema: {blocks}

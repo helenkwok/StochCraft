@@ -759,6 +759,9 @@ pub fn write_new(model: &Model) -> Vec<u8> {
         // `xs:long` is signed; the seed's 64 bits are kept and read back unchanged.
         .with_attr("seed", &(x.seed as i64).to_string())
         .with_attr("baseTimeUnit", x.time_unit.bpsim_name());
+    if let Some(f) = x.result_frequency {
+        sp = sp.with_attr("baseResultFrequency", &crate::duration::format_seconds(f));
+    }
     if let Some(t) = x.start {
         sp.push(start_param(t));
     }

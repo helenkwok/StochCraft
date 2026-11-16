@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} a {second} – rozdiel pri červeno-zelenej farbosleposti {de}, treba 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} a {second} – rozdiel pri červeno-zelenej farbosleposti {de}, treba 8: rozlišujte ich len podľa popisov.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} a {second} – rozdiel svetlosti {step}, treba 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: pravdepodobnosť je číslo od 0 do 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} z {of} behov splnilo cieľ: {p} (95 % interval {lo} až {hi})
 	{name} — edited	{name} — upravené
@@ -673,6 +672,13 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	r.
+	How long one unit takes to serve one entity, drawn anew for each entity.	Ako dlho trvá jednej jednotke obslúžiť jednu entitu; losuje sa znova pre každú entitu.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Koľko entít tu smie čakať na voľnú jednotku, okrem obsluhovaných; bez začiarknutia ľubovoľný počet.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Koľko jednotiek tu obsluhuje súčasne, napr. stroje alebo pracovníci, každá jednu entitu naraz.
+	More settings	Ďalšie nastavenia
+	Must be from {min} to {max}	Musí byť od {min} do {max}
+	Must be more than {min}	Musí byť viac ako {min}
+	Must be {min} or more	Musí byť {min} alebo viac
 	1/(n + 1)	1/(n + 1)
 	Balked	Nezaradené
 	Balked on {id}	Nezaradené na {id}
@@ -698,3 +704,5 @@ unit	yr	r.
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} beh · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} behy · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}|{n} behov · počiatočná hodnota {seed} · zahrievanie {warmup} {unit} · meraných {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} beh · počiatočná hodnota {seed}|{n} behy · počiatočná hodnota {seed}|{n} behov · počiatočná hodnota {seed}
 @plural	{n} run|{n} runs	{n} beh|{n} behy|{n} behov
+@plural	Run ({n} problem)|Run ({n} problems)	Spustiť ({n} problém)|Spustiť ({n} problémy)|Spustiť ({n} problémov)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problém: {blocks}|{n} problémy: {blocks}|{n} problémov: {blocks}

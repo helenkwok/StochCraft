@@ -631,6 +631,11 @@ pub struct Run {
     /// Worker threads; by default all available. Results do not depend on it.
     #[serde(default)]
     pub threads: Option<u32>,
+    /// Record results over time (`series`) and suggest a warm-up from them
+    /// (`warmup_suggestion`, and the `no_warmup` warning); default true. Recording changes no
+    /// result; it costs a few per cent of run time on larger models, and the results grow.
+    #[serde(default)]
+    pub series: Option<bool>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -646,6 +651,11 @@ pub struct RunStart {
     /// to the caller's own workers (see `Engine::worker_task`).
     #[serde(default)]
     pub mode: Option<RunMode>,
+    /// Record results over time (`series`) and suggest a warm-up from them
+    /// (`warmup_suggestion`, and the `no_warmup` warning); default true. Recording changes no
+    /// result; it costs a few per cent of run time on larger models, and the results grow.
+    #[serde(default)]
+    pub series: Option<bool>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -1070,6 +1080,34 @@ fn experiment_sensitivity(e: &mut Engine, p: Value) -> Result<Value, CommandErro
         "change": v["change"],
         "effects": v["effects"],
     }));
+    Ok(v)
+}
+
+fn experiment_design(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    let p: crate::design::DesignParams = parse(p)?;
+    let v = crate::design::design(e.model(), &p)?;
+    let mut record = json!({
+        "kind": "design",
+        "model_digest": crate::model_digest(e.model()),
+    });
+    // What reproduces the design, and its findings: only the keys this kind of design has.
+    for key in [
+        "design",
+        "factors",
+        "replications",
+        "seed",
+        "main_effects",
+        "interactions",
+        "correlations",
+    ] {
+        if let Some(x) = v.get(key) {
+            record[key] = x.clone();
+        }
+    }
+    if v["design"] == "latin_hypercube" {
+        record["points"] = json!(v["points"].as_array().map_or(0, Vec::len));
+    }
+    e.sensitivity.push(record);
     Ok(v)
 }
 
@@ -1815,12 +1853,13 @@ fn history(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Run = parse(p)?;
-    e.plan(p.replications, p.seed, p.threads)?.run_now()
+    e.plan(p.replications, p.seed, p.threads, p.series.unwrap_or(true))?
+        .run_now()
 }
 
 fn run_start(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: RunStart = parse(p)?;
-    let plan = e.plan(p.replications, p.seed, p.threads)?;
+    let plan = e.plan(p.replications, p.seed, p.threads, p.series.unwrap_or(true))?;
     e.start_run(plan, p.mode.unwrap_or_else(RunMode::default_for_target))
 }
 
@@ -2142,6 +2181,14 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<crate::decide::SensitivityParams>,
         example: || json!({ "parameters": [{ "id": "desk", "field": "mean" }, { "id": "arrivals", "field": "mean" }], "results": [{ "element": "exit", "metric": "mean_time_in_system" }], "replications": 4 }),
         run: experiment_sensitivity,
+    },
+    Command {
+        name: "experiment.design",
+        summary: "Run a designed experiment with several factors at once: every combination of their levels (`full_factorial`, the default) or a Latin hypercube of their ranges, each point with the same seed; reports each result at each point, the factors' main effects and two-way interactions with paired intervals (or rank correlations for a Latin hypercube). At most 10,000 runs (points × replications).",
+        kind: CommandKind::Action,
+        schema: schema::<crate::design::DesignParams>,
+        example: || json!({ "factors": [{ "id": "arrivals", "field": "mean", "levels": [2.0, 3.0] }, { "id": "desk", "field": "mean", "levels": [0.8, 1.2] }], "results": [{ "element": "desk", "metric": "mean_wait" }], "replications": 4 }),
+        run: experiment_design,
     },
     Command {
         name: "experiment.size",

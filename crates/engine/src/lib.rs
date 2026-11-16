@@ -42,6 +42,7 @@
 mod commands;
 mod compare;
 mod decide;
+mod design;
 mod distribution;
 mod edit;
 mod run;
@@ -218,7 +219,8 @@ pub struct Engine {
     last_results: Option<Value>,
     /// The results of the run that finished before it, for `results.compare`.
     previous_results: Option<Value>,
-    /// The sweeps and sensitivity analyses done on the model, carried in the run record
+    /// The sweeps, sensitivity analyses and designed experiments done on the model, carried in
+    /// the run record
     /// (NASA-STD-7009B [M&S 30]).
     sensitivity: Vec<Value>,
 }
@@ -469,6 +471,7 @@ impl Engine {
         replications: Option<u32>,
         seed: Option<u64>,
         threads: Option<u32>,
+        series: bool,
     ) -> Result<Plan, CommandError> {
         let compiled = compile(&self.model).map_err(|ds| CommandError {
             code: ErrorCode::InvalidModel,
@@ -476,6 +479,12 @@ impl Engine {
             details: Some(wire::diagnostics(&ds)),
         })?;
         let x = &self.model.experiment;
+        // Results over time, for the warm-up suggestion and charts over the run.
+        let compiled = compiled.record_every(
+            series
+                .then(|| stochcraft_blocks::record_interval(x))
+                .flatten(),
+        );
         let mut experiment = Experiment::new(
             u64::from(replications.unwrap_or(x.replications)),
             seed.unwrap_or(x.seed),

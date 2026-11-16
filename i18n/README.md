@@ -545,6 +545,18 @@ engine's messages (validation, file notes) are English too.
   Отминали, ka, kk, lo, th, ta, te, bn, sq, et and lt as before, sl "Niso se pridružile" as a
   results label, da "Fravalgte køen", el "Μη είσοδος" as a count, and the endings of the
   Slavic, Baltic and Finnish hover texts.
+- The rows for issue #146 (problems where they are: the three reasons a number field refuses a
+  value, "Run ({n} problem)" and the problems chip as plurals, "More settings" and the "?"
+  explanations of Capacity, Service time and Waiting room) were machine-drafted from the plain
+  meaning of the English and each catalog's existing terms: the verb of its Run button, the noun
+  of its Problems heading (in the singular and plural forms its other `@plural` rows use), its
+  Settings word, and its words for a unit and an entity from "A caller on hold: once a unit takes
+  it, the entity stays." (so da and nb ressource-/ressursenhed for a unit and enhed for an
+  entity, pl zasób and jednostka, hi, ka, ko and zh 资源单元/資源單元 with their resource-unit
+  words). The reasons end without a full stop, as the line under the field adds one. Not checked
+  against any other source, and not reviewed by native speakers. The least certain are lo, th, ta,
+  te, ka, kk, bn and sq as before, and the word for "drawn anew" (a random draw) in each
+  explanation of the service time.
 - A run (issue #145): the window now calls one pass of the model with its own random numbers a
   run, not a replication. So the rows that count, name or average over replications (the Runs
   field, "{n} runs", "Watching run 1", "% of runs", the split-outcome notes…) use each language's

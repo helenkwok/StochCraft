@@ -85,7 +85,7 @@ asks, so an agent driving it is not confined.
 | `check_model` | — | `model.validate`: every problem, errors first, with the element, a stable code and a message. |
 | `open` | `path`, `scenario?` | `file.open`: a `.bpmn` or `.xpdl` file with BPSim data. |
 | `save` | `path?`, `as_new?` | `file.save`: into the model's own file (keeping what StochCraft does not understand), or to `path`. |
-| `run` | `replications?`, `seed?` | `run`: each element's metrics as means with 95% confidence intervals, and the run record. |
+| `run` | `replications?`, `seed?` | `run`: each element's metrics as means with 95% confidence intervals, the warm-up MSER-5 suggests (`warmup_suggestion`), the warnings about the results, and the run record. The values over the run (`series`) are left out, since they multiply the reply's size; `execute` with `run` gives them. |
 | `undo`, `redo` | — | `undo`, `redo`. |
 
 Resources: `stochcraft://model` (`model.get`) and `stochcraft://commands` (the command catalogue).
@@ -161,6 +161,16 @@ the warm-up). `experiment.size` takes `target_share`, the share of replications 
 the target; `confidence`, its name before #69, is still accepted, and the answer carries both.
 The share is not a statistical confidence: the answer's `stochastic.interval` is its Wilson 95%
 interval, and when its lower end is below `target_share` the share is not shown to be met.
+
+`experiment.design` varies several parameters at once. Each factor is a parameter as a sweep
+takes it (`{id, field}`) with its `levels`, or its range as `min` and `max`. The default design,
+`full_factorial`, runs every combination of the levels (the last factor changing fastest);
+`latin_hypercube` with `points` samples each range in that many strata, the same design for the
+same seed. Every point runs the same replications on the same seed, so a full factorial's
+`main_effects` and two-way `interactions` (between factors with two levels) come with paired 95%
+intervals, and a Latin hypercube's `correlations` give each factor's rank (Spearman) correlation
+with each result. A design of more than 10,000 runs (points × replications) is refused with the
+number it would take, so an agent can drop levels, points or replications and try again.
 
 `crates/mcp/tests/session.rs` covers four areas:
 - a session like this one, checked only through MCP;

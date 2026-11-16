@@ -212,6 +212,7 @@ pub fn showcase() -> Model {
         seed: u64::MAX - 3,
         stop: None,
         start: Some(at(4, 6)),
+        result_frequency: Some(1_800.0),
     });
     model.name = "Showcase & <friends>".into();
     model

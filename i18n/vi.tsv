@@ -649,7 +649,6 @@
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8.	{first} và {second} khác nhau {de} với người xem bị mù màu đỏ-lục, cần 8.
 	{first} and {second} differ by {de} to viewers with red-green colour blindness, needs 8: tell them apart only with labels.	{first} và {second} khác nhau {de} với người xem bị mù màu đỏ-lục, cần 8: chỉ phân biệt chúng bằng nhãn.
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} và {second} khác nhau về độ sáng {step}, cần 0.06.
-	{id}: a probability is a number from 0 to 1	{id}: xác suất là số từ 0 đến 1
 	{kind} {name}	{kind} {name}
 	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} trên {of} lần chạy đạt mục tiêu: {p} (khoảng 95% từ {lo} đến {hi})
 	{name} — edited	{name} — đã chỉnh sửa
@@ -673,6 +672,13 @@ unit	min	phút
 unit	ms	ms
 unit	s	s
 unit	yr	năm
+	How long one unit takes to serve one entity, drawn anew for each entity.	Thời gian một đơn vị phục vụ một thực thể, được rút lại cho mỗi thực thể.
+	How many entities may wait here for a free unit, besides those being served; unticked, any number may.	Số thực thể được chờ ở đây để có đơn vị rảnh, ngoài những thực thể đang được phục vụ; không đánh dấu thì không giới hạn.
+	How many units serve here at the same time, such as machines or staff, each one entity at a time.	Số đơn vị phục vụ cùng lúc ở đây, như máy móc hay nhân viên, mỗi đơn vị một thực thể mỗi lần.
+	More settings	Cài đặt khác
+	Must be from {min} to {max}	Phải từ {min} đến {max}
+	Must be more than {min}	Phải lớn hơn {min}
+	Must be {min} or more	Phải từ {min} trở lên
 	1/(n + 1)	1/(n + 1)
 	Balked	Không vào hàng
 	Balked on {id}	Không vào hàng tại {id}
@@ -698,3 +704,5 @@ unit	yr	năm
 @plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} lần chạy · hạt giống {seed} · khởi động {warmup} {unit} · đo {duration} {unit}
 @plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} lần chạy · hạt giống {seed}
 @plural	{n} run|{n} runs	{n} lần chạy
+@plural	Run ({n} problem)|Run ({n} problems)	Chạy ({n} vấn đề)
+@plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} vấn đề: {blocks}
