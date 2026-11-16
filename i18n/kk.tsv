@@ -700,6 +700,22 @@ unit	yr	ж.
 	Set a {value} warm-up	{value} қыздыру кезеңін орнату
 	The run is too short to suggest a warm-up: make it longer, then set one.	Іске қосу қыздыру кезеңін ұсыну үшін тым қысқа: оны ұзартып, содан кейін орнатыңыз.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} негізгі көрсеткіштің {k} тұрақты: әрқайсысы ± 5% (үлес үшін ± 1 пайыздық тармақ) немесе одан жақсы дәлдікпен белгілі.
+	What the run found	Іске қосу не көрсетті
+	See the numbers	Сандарды көру
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ағынды шектейді: уақыттың {busy} бөлігінде бос емес, алдында орта есеппен {queue} күтеді.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ең жүктелген блок: уақыттың {busy} бөлігінде бос емес, алдында орта есеппен {queue} күтеді.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Нысан жүйеде {total} өткізеді, оның {wait} уақыты {block} алдында күтумен өтеді.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	Жүйеден {unit} сайын {out} шығады, {unit} сайын {in} келеді.
+	Where an entity's {total} in the system goes	Нысанның жүйедегі {total} уақыты неге жұмсалады
+	Worked on	Өңделуде
+	Waiting	Күтуде
+	{block}: worked on {work}, waiting {wait}	{block}: өңдеу {work}, күту {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Бөліктердің қосындысы {sum}; {total} уақыттың қалғаны бұғатталған немесе блоктар арасындағы уақыт.
+	Waiting before {block} over the run	Іске қосу бойы {block} алдындағы күту
+	Mean number waiting, with its 95% band	Күтетіндердің орташа саны, 95% жолағымен
+	At {time}: {value} waiting	{time} кезінде: {value} күтуде
+	Still settling at the end of the run: run it longer to see where it levels off.	Іске қосудың соңында әлі тұрақталып жатыр: қай жерде теңесетінін көру үшін ұзартыңыз.
+	More charts	Тағы диаграммалар
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды

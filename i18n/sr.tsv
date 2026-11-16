@@ -700,6 +700,22 @@ unit	yr	год.
 	Set a {value} warm-up	Постави загревање од {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Покретање је прекратко да би се предложило загревање: продужите га, а затим поставите загревање.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} од {m} кључних метрика је устаљено: свака је позната до ± 5% (± 1 процентни поен за удео) или боље.
+	What the run found	Шта је покретање показало
+	See the numbers	Погледајте бројеве
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ограничава ток: заузет {busy} времена, а испред њега у просеку чека {queue}.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} је најзаузетији блок: заузет {busy} времена, а испред њега у просеку чека {queue}.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Ентитет проведе {total} у систему, од чега {wait} чекајући код блока {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} по {unit} напушта систем, од {in} по {unit} који стижу.
+	Where an entity's {total} in the system goes	Где одлази {total} ентитета у систему
+	Worked on	Обрада
+	Waiting	Чекање
+	{block}: worked on {work}, waiting {wait}	{block}: обрада {work}, чекање {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Делови укупно износе {sum}; остатак од {total} је време блокирања или између блокова.
+	Waiting before {block} over the run	Чекање испред блока {block} током покретања
+	Mean number waiting, with its 95% band	Просечан број на чекању, са 95% појасом
+	At {time}: {value} waiting	У {time}: чека {value}
+	Still settling at the end of the run: run it longer to see where it levels off.	Још се устаљује на крају покретања: продужите га да видите где се изравнава.
+	More charts	Више графикона
 @plural	Added {n} block|Added {n} blocks	Додат је {n} блок|Додата су {n} блока|Додато је {n} блокова
 @plural	Copied {n} block|Copied {n} blocks	Копиран је {n} блок|Копирана су {n} блока|Копирано је {n} блокова
 @plural	Finished {n} run|Finished {n} runs	Завршено је {n} покретање|Завршена су {n} покретања|Завршено је {n} покретања

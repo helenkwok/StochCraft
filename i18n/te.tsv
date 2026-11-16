@@ -700,6 +700,22 @@ unit	yr	సం.
 	Set a {value} warm-up	{value} ప్రారంభ సర్దుబాటు సమయాన్ని సెట్ చేయి
 	The run is too short to suggest a warm-up: make it longer, then set one.	ప్రారంభ సర్దుబాటు సమయాన్ని సూచించడానికి అమలు చాలా చిన్నది: దాన్ని పొడిగించి, ఆపై ప్రారంభ సర్దుబాటు సమయాన్ని సెట్ చేయండి.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} ముఖ్య కొలమానాల్లో {k} స్థిరపడ్డాయి: ప్రతి ఒక్కటి ± 5% (నిష్పత్తికి ± 1 శాతం పాయింట్) లేదా అంతకంటే మెరుగ్గా తెలుసు.
+	What the run found	అమలులో తేలినది
+	See the numbers	సంఖ్యలను చూడండి
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ప్రవాహాన్ని పరిమితం చేస్తుంది: {busy} సమయం పనిలో ఉంటుంది, దాని ముందు సగటున {queue} వేచి ఉంటాయి.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} అత్యంత బిజీ బ్లాక్: {busy} సమయం పనిలో ఉంటుంది, దాని ముందు సగటున {queue} వేచి ఉంటాయి.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	ఒక అంశం వ్యవస్థలో {total} గడుపుతుంది, అందులో {wait} {block} వద్ద వేచి ఉంటుంది.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	ప్రతి {unit}కి {in} వస్తాయి; వాటిలో ప్రతి {unit}కి {out} వ్యవస్థను వదిలివెళ్తాయి.
+	Where an entity's {total} in the system goes	ఒక అంశం వ్యవస్థలో గడిపే {total} ఎక్కడికి వెళ్తుంది
+	Worked on	పనిలో
+	Waiting	వేచి ఉంది
+	{block}: worked on {work}, waiting {wait}	{block}: పని {work}, వేచి ఉండటం {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	భాగాల మొత్తం {sum}; {total}లో మిగిలినది అడ్డుకోబడిన లేదా బ్లాక్‌ల మధ్య సమయం.
+	Waiting before {block} over the run	అమలు పొడవునా {block} ముందు వేచి ఉండటం
+	Mean number waiting, with its 95% band	వేచి ఉన్న సగటు సంఖ్య, 95% పట్టీతో
+	At {time}: {value} waiting	{time} వద్ద: {value} వేచి ఉన్నాయి
+	Still settling at the end of the run: run it longer to see where it levels off.	అమలు చివరలోనూ ఇంకా స్థిరపడుతోంది: ఎక్కడ సమమవుతుందో చూడటానికి దాన్ని పొడిగించండి.
+	More charts	మరిన్ని చార్ట్‌లు
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి

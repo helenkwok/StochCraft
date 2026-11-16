@@ -700,6 +700,22 @@ unit	yr	thn
 	Set a {value} warm-up	Tetapkan pemanasan {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Eksekusi terlalu singkat untuk menyarankan pemanasan: perpanjang, lalu tetapkan pemanasan.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} dari {m} metrik utama sudah stabil: masing-masing diketahui hingga ± 5% (± 1 poin persentase untuk proporsi) atau lebih baik.
+	What the run found	Apa yang ditemukan eksekusi
+	See the numbers	Lihat angkanya
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} membatasi aliran: sibuk {busy} dari waktu, dengan rata-rata {queue} menunggu di depannya.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} adalah blok tersibuk: sibuk {busy} dari waktu, dengan rata-rata {queue} menunggu di depannya.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Satu entitas menghabiskan {total} dalam sistem, {wait} di antaranya menunggu di {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} per {unit} keluar dari sistem, dari {in} per {unit} yang datang.
+	Where an entity's {total} in the system goes	Ke mana {total} sebuah entitas dalam sistem
+	Worked on	Sedang dikerjakan
+	Waiting	Menunggu
+	{block}: worked on {work}, waiting {wait}	{block}: dikerjakan {work}, menunggu {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Bagian-bagiannya berjumlah {sum}; sisa dari {total} adalah waktu terblokir atau di antara blok.
+	Waiting before {block} over the run	Antrean di depan {block} sepanjang eksekusi
+	Mean number waiting, with its 95% band	Rata-rata jumlah yang menunggu, dengan pita 95%
+	At {time}: {value} waiting	Pada {time}: {value} menunggu
+	Still settling at the end of the run: run it longer to see where it levels off.	Masih menstabil di akhir eksekusi: perpanjang untuk melihat di mana ia mendatar.
+	More charts	Bagan lainnya
 @plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
 @plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
 @plural	Finished {n} run|Finished {n} runs	Selesai {n} eksekusi

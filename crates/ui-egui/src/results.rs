@@ -730,6 +730,12 @@ fn key_measures(
                         let id = e["id"].as_str().unwrap_or("");
                         let name = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
                         let kind = e["kind"].as_str().unwrap_or("");
+                        // Brought into view when a finding's "See the numbers" names this block.
+                        let wanted = ui.ctx().data(|d| d.get_temp::<String>(scroll_target()));
+                        if wanted.as_deref() == Some(id) {
+                            ui.scroll_to_cursor(Some(egui::Align::TOP));
+                            ui.ctx().data_mut(|d| d.remove::<String>(scroll_target()));
+                        }
                         ui.horizontal(|ui| {
                             ui.label(theme::strong(name));
                             ui.label(theme::weak(ui, kind_label(kind)));
@@ -845,6 +851,15 @@ fn pow10(e: i32) -> f64 {
     if e < 0 { 1.0 / f } else { f }
 }
 
+/// `v` to `figures` significant figures (60.0014 → 60.0 to three), for a number with no interval
+/// to round it by.
+pub(crate) fn round_sig(v: f64, figures: i32) -> f64 {
+    if !v.is_finite() || v == 0.0 {
+        return v;
+    }
+    round_to(v, figures - 1 - magnitude(v))
+}
+
 /// `v` rounded to `places` decimal places (to tens, hundreds… where `places` is negative).
 fn round_to(v: f64, places: i32) -> f64 {
     let f = pow10(places);
@@ -955,11 +970,214 @@ fn split_strip(ui: &mut egui::Ui, p: &theme::Palette, values: &Value, cut: f64, 
     );
 }
 
+/// Where a finding's "See the numbers" asks the results to scroll: the id of a block whose key
+/// measures [`key_measures`] brings into view on its next frame.
+fn scroll_target() -> egui::Id {
+    egui::Id::unique("results-scroll-to-block")
+}
+
+/// A block's name, or its id where it has none.
+fn block_name(e: &Value) -> &str {
+    let id = e["id"].as_str().unwrap_or("");
+    e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id)
+}
+
+/// A result's mean as a finding writes it: rounded to what its interval supports, with its unit
+/// (`time` for times). `None` without a mean.
+fn said(m: &Value, kind: &Unit, time: &str) -> Option<String> {
+    let (scale, unit) = scale_and_unit(kind, time);
+    let mean = m["mean"].as_f64()?;
+    let text = match m["half_width"].as_f64() {
+        Some(hw) => rounded(mean * scale, hw * scale).0,
+        None => grouped(round_sig(mean * scale, 3)),
+    };
+    Some(match unit {
+        "" => text,
+        "%" => format!("{text}%"),
+        u => format!("{text} {u}"),
+    })
+}
+
+/// The busiest task: the server or task with shared resources with the highest mean utilisation.
+pub(crate) fn busiest(results: &Value) -> Option<&Value> {
+    results["elements"]
+        .as_array()?
+        .iter()
+        .filter(|e| matches!(e["kind"].as_str(), Some("server" | "shared_task")))
+        .filter(|e| e["metrics"]["utilisation"]["mean"].as_f64().is_some())
+        .max_by(|a, b| {
+            let u = |e: &Value| e["metrics"]["utilisation"]["mean"].as_f64().unwrap_or(0.0);
+            u(a).total_cmp(&u(b))
+        })
+}
+
+/// A block is said to limit the flow when it is busy at least this share of the time…
+const LIMITS_BUSY: f64 = 0.85;
+/// …and blocked by what comes after it less than this share (a block that is often blocked is
+/// held back by a later one, so it is only the busiest).
+const LIMITS_BLOCKED: f64 = 0.05;
+
+/// The answers at the top of the results, before the trust line and the tables: what limits the
+/// flow (or the busiest block, where the evidence for a limit is not clear), where an entity's
+/// time goes, and what leaves against what arrives. Each comes with the block whose key measures
+/// hold its numbers.
+fn answers(results: &Value) -> Vec<(String, String)> {
+    let time = unit_label(results["record"]["time_unit"].as_str().unwrap_or(""));
+    let elements = results["elements"]
+        .as_array()
+        .map(Vec::as_slice)
+        .unwrap_or(&[]);
+    let mut out = Vec::new();
+    // A mean the runs split on describes none of them: a sentence built on one is left out, and
+    // the split's own finding says what happened instead.
+    let split = |m: &Value| m["split"].is_object();
+
+    // What limits the flow.
+    if let Some(e) = busiest(results).filter(|e| {
+        !split(&e["metrics"]["utilisation"]) && !split(&e["metrics"]["mean_queue_length"])
+    }) {
+        let m = &e["metrics"];
+        let busy = m["utilisation"]["mean"].as_f64().unwrap_or(0.0);
+        let blocked = m["time_blocked"]["mean"].as_f64().unwrap_or(0.0);
+        let queue = said(&m["mean_queue_length"], &Unit::Items, time).unwrap_or_else(|| "0".into());
+        let args = [
+            ("block", block_name(e)),
+            (
+                "busy",
+                &said(&m["utilisation"], &Unit::Share, time).unwrap_or_default(),
+            ),
+            ("queue", &queue),
+        ];
+        let text = if busy >= LIMITS_BUSY && blocked < LIMITS_BLOCKED {
+            tf(
+                "{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.",
+                &args,
+            )
+        } else {
+            tf(
+                "{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.",
+                &args,
+            )
+        };
+        out.push((text, e["id"].as_str().unwrap_or("").to_owned()));
+    }
+
+    // Where the time goes: the time in the system, and the longest wait in it. Only with one
+    // departures block, so that every wait is part of the time in the system it reports (with
+    // two, the longest wait may be on the other one's route).
+    let sinks: Vec<&Value> = elements.iter().filter(|e| e["kind"] == "sink").collect();
+    let sink = match sinks.as_slice() {
+        [s] if s["metrics"]["mean_time_in_system"]["mean"]
+            .as_f64()
+            .is_some()
+            && !split(&s["metrics"]["mean_time_in_system"]) =>
+        {
+            Some(*s)
+        }
+        _ => None,
+    };
+    let longest = elements
+        .iter()
+        .filter(|e| {
+            e["metrics"]["mean_wait"]["mean"]
+                .as_f64()
+                .is_some_and(|w| w > 0.0)
+        })
+        .max_by(|a, b| {
+            let w = |e: &Value| e["metrics"]["mean_wait"]["mean"].as_f64().unwrap_or(0.0);
+            w(a).total_cmp(&w(b))
+        });
+    if let (Some(s), Some(w)) = (sink, longest.filter(|w| !split(&w["metrics"]["mean_wait"]))) {
+        let text = tf(
+            "An entity spends {total} in the system, {wait} of it waiting at {block}.",
+            &[
+                (
+                    "total",
+                    &said(&s["metrics"]["mean_time_in_system"], &Unit::Time, time)
+                        .unwrap_or_default(),
+                ),
+                (
+                    "wait",
+                    &said(&w["metrics"]["mean_wait"], &Unit::Time, time).unwrap_or_default(),
+                ),
+                ("block", block_name(w)),
+            ],
+        );
+        out.push((text, w["id"].as_str().unwrap_or("").to_owned()));
+    }
+
+    // What leaves against what arrives, as rates over the time measured.
+    let measured = match &results["measured"] {
+        m if m.is_object() => m["mean_duration"].as_f64(),
+        _ => results["record"]["duration"].as_f64(),
+    }
+    .filter(|d| *d > 0.0);
+    let total = |kind: &str, key: &str| -> Option<(f64, f64)> {
+        let ms: Vec<&Value> = elements
+            .iter()
+            .filter(|e| e["kind"] == kind)
+            .map(|e| &e["metrics"][key])
+            .filter(|m| m["mean"].as_f64().is_some())
+            .collect();
+        (!ms.is_empty() && !ms.iter().any(|m| split(m))).then(|| {
+            ms.iter().fold((0.0, 0.0), |(mean, hw), m| {
+                (
+                    mean + m["mean"].as_f64().unwrap_or(0.0),
+                    hw + m["half_width"].as_f64().unwrap_or(0.0),
+                )
+            })
+        })
+    };
+    if let (Some(d), Some(out_n), Some(in_n), Some(s)) = (
+        measured,
+        total("sink", "entered"),
+        total("source", "entered").or_else(|| total("source", "left")),
+        elements.iter().find(|e| e["kind"] == "sink"),
+    ) {
+        // Per hour where the model's unit is shorter, so a rate reads "8.9 per h", not "0.0025 per s".
+        let unit = results["record"]["time_unit"].as_str().unwrap_or("");
+        let (per, label) = match unit {
+            "ms" => (3_600_000.0, unit_label("hour")),
+            "s" => (3_600.0, unit_label("hour")),
+            "min" => (60.0, unit_label("hour")),
+            _ => (1.0, time),
+        };
+        let rate = |(mean, hw): (f64, f64)| {
+            let mean = mean / d * per;
+            if hw > 0.0 {
+                rounded(mean, hw / d * per).0
+            } else {
+                grouped(round_sig(mean, 3))
+            }
+        };
+        let text = tf(
+            "{out} per {unit} leave the system, from {in} per {unit} arriving.",
+            &[("out", &rate(out_n)), ("in", &rate(in_n)), ("unit", label)],
+        );
+        out.push((text, s["id"].as_str().unwrap_or("").to_owned()));
+    }
+    out
+}
+
 /// The findings at the top of the results, so the answer comes before the tables: one per group
 /// of results whose replications split into two outcomes the same way (the engine's `splits`),
 /// so one collapse seen in many results reads as one finding. Draws nothing when there are none.
 pub fn findings(ui: &mut egui::Ui, results: &Value) {
     let p = theme::palette(ui.ctx());
+    let answers = answers(results);
+    if !answers.is_empty() {
+        ui.label(theme::strong(t("What the run found")));
+        ui.add_space(2.0);
+    }
+    for (text, block) in answers {
+        ui.horizontal_wrapped(|ui| {
+            ui.label(text);
+            if ui.link(t("See the numbers")).clicked() {
+                ui.ctx()
+                    .data_mut(|d| d.insert_temp(scroll_target(), block.clone()));
+            }
+        });
+    }
     for group in results["splits"].as_array().into_iter().flatten() {
         if let Some(text) = finding(results, group) {
             ui.horizontal_wrapped(|ui| {
@@ -1317,6 +1535,82 @@ mod tests {
         // A time is judged against its mean, and a time of zero not at all.
         assert!(score(&m(38.0, 12.16), &Unit::Time).is_some_and(|s| (s - 6.4).abs() < 1e-9));
         assert!(score(&m(0.0, 0.0), &Unit::Time).is_none());
+    }
+
+    /// A line of two tasks over 1,000 min: Paint busy 92% and rarely blocked.
+    fn line(blocked: f64) -> serde_json::Value {
+        let m = |mean: f64, hw: f64| serde_json::json!({ "mean": mean, "half_width": hw, "n": 10 });
+        serde_json::json!({
+            "replications": 10,
+            "record": { "replications": 10, "time_unit": "min", "duration": 1000.0 },
+            "measured": { "mean_duration": 1000.0 },
+            "elements": [
+                { "id": "in", "name": "Parts arrive", "kind": "source",
+                  "metrics": { "entered": m(150.0, 4.0), "left": m(150.0, 4.0) } },
+                { "id": "weld", "name": "Weld", "kind": "server",
+                  "metrics": { "utilisation": m(0.68, 0.02), "mean_wait": m(2.0, 0.6),
+                               "mean_queue_length": m(0.3, 0.08), "time_blocked": m(0.0, 0.0) } },
+                { "id": "paint", "name": "Paint", "kind": "server",
+                  "metrics": { "utilisation": m(0.92, 0.02), "mean_wait": m(38.4, 12.3),
+                               "mean_queue_length": m(6.04, 2.1), "time_blocked": m(blocked, 0.01) } },
+                { "id": "out", "name": "Shipped", "kind": "sink",
+                  "metrics": { "entered": m(142.0, 4.0), "mean_time_in_system": m(54.0, 13.0) } },
+            ],
+        })
+    }
+
+    #[test]
+    fn the_findings_name_what_limits_the_flow_where_the_time_goes_and_the_rates() {
+        let said: Vec<String> = super::answers(&line(0.01))
+            .into_iter()
+            .map(|(t, _)| t)
+            .collect();
+        assert_eq!(
+            said,
+            [
+                "Paint limits the flow: busy 92% of the time, with 6 waiting in front of it on average.",
+                "An entity spends 54 min in the system, 38 min of it waiting at Paint.",
+                // 142 and 150 in 1,000 min, per hour.
+                "8.5 per h leave the system, from 9.0 per h arriving.",
+            ]
+        );
+        // Often blocked by what comes after it: only the busiest, not the limit.
+        let blocked = super::answers(&line(0.2));
+        assert!(
+            blocked[0]
+                .0
+                .starts_with("Paint is the busiest block: busy 92%")
+        );
+        // Each finding names the block whose numbers back it.
+        let blocks: Vec<String> = super::answers(&line(0.01))
+            .into_iter()
+            .map(|(_, b)| b)
+            .collect();
+        assert_eq!(blocks, ["paint", "paint", "out"]);
+    }
+
+    #[test]
+    fn a_finding_leaves_out_a_mean_the_runs_split_on_and_a_second_route() {
+        // Paint's utilisation split: no sentence on it (the split's own finding says so).
+        let mut split = line(0.01);
+        split["elements"][2]["metrics"]["utilisation"]["split"] = serde_json::json!({ "cut": 0.5 });
+        let said: Vec<String> = super::answers(&split).into_iter().map(|(t, _)| t).collect();
+        assert!(said.iter().all(|t| !t.contains("busy")), "{said:?}");
+        assert_eq!(said.len(), 2);
+        // Two departures blocks: the longest wait may be on the other route, so no time sentence.
+        let mut two = line(0.01);
+        if let Some(es) = two["elements"].as_array_mut() {
+            es.push(
+                serde_json::json!({ "id": "scrap", "name": "Scrapped", "kind": "sink",
+                "metrics": { "entered": { "mean": 8.0, "half_width": 1.0 },
+                             "mean_time_in_system": { "mean": 2.0, "half_width": 0.5 } } }),
+            );
+        }
+        let said: Vec<String> = super::answers(&two).into_iter().map(|(t, _)| t).collect();
+        assert!(
+            said.iter().all(|t| !t.contains("in the system,")),
+            "{said:?}"
+        );
     }
 
     /// Results of 10 replications in which only 4 had a mean wait, and work was left inside.

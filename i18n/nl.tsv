@@ -700,6 +700,22 @@ unit	yr	j
 	Set a {value} warm-up	Opwarmperiode van {value} instellen
 	The run is too short to suggest a warm-up: make it longer, then set one.	De uitvoering is te kort om een opwarmperiode voor te stellen: maak haar langer en stel er dan een in.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} van {m} belangrijke metrieken zijn stabiel: elk is bekend tot op ± 5% (± 1 procentpunt voor een aandeel) of beter.
+	What the run found	Wat de uitvoering vond
+	See the numbers	Bekijk de getallen
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} beperkt de stroom: {busy} van de tijd bezet, met gemiddeld {queue} wachtend ervoor.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} is het drukste blok: {busy} van de tijd bezet, met gemiddeld {queue} wachtend ervoor.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Een entiteit is {total} in het systeem, waarvan {wait} wachtend bij {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} per {unit} verlaten het systeem, van {in} per {unit} die aankomen.
+	Where an entity's {total} in the system goes	Waar de {total} van een entiteit in het systeem heen gaat
+	Worked on	In bewerking
+	Waiting	Wachtend
+	{block}: worked on {work}, waiting {wait}	{block}: bewerking {work}, wachten {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	De delen tellen op tot {sum}; de rest van de {total} is tijd geblokkeerd of tussen blokken.
+	Waiting before {block} over the run	Wachten voor {block} tijdens de uitvoering
+	Mean number waiting, with its 95% band	Gemiddeld aantal wachtenden, met 95%-band
+	At {time}: {value} waiting	Op {time}: {value} wachtend
+	Still settling at the end of the run: run it longer to see where it levels off.	Aan het eind van de uitvoering nog aan het stabiliseren: maak haar langer om te zien waar het afvlakt.
+	More charts	Meer grafieken
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid

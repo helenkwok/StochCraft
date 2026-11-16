@@ -700,6 +700,22 @@ unit	yr	yıl
 	Set a {value} warm-up	{value} ısınma ayarla
 	The run is too short to suggest a warm-up: make it longer, then set one.	Çalıştırma bir ısınma önermek için çok kısa: uzatın, ardından bir ısınma ayarlayın.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} temel ölçütten {k} tanesi oturdu: her biri ± 5% (oranlarda ± 1 yüzde puan) veya daha iyi kesinlikle biliniyor.
+	What the run found	Çalıştırmanın bulduğu
+	See the numbers	Sayılara bak
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} akışı sınırlıyor: zamanın {busy} kadarında meşgul, önünde ortalama {queue} bekliyor.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} en yoğun blok: zamanın {busy} kadarında meşgul, önünde ortalama {queue} bekliyor.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Bir varlık sistemde {total} geçiriyor, bunun {wait} kadarı {block} önünde beklemekle geçiyor.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{unit} başına {in} geliyor, {unit} başına {out} sistemden çıkıyor.
+	Where an entity's {total} in the system goes	Bir varlığın sistemdeki {total} süresi nereye gidiyor
+	Worked on	İşlemde
+	Waiting	Bekliyor
+	{block}: worked on {work}, waiting {wait}	{block}: işlem {work}, bekleme {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Parçaların toplamı {sum}; {total} süresinin geri kalanı engellenmiş ya da bloklar arasında geçen süre.
+	Waiting before {block} over the run	Çalıştırma boyunca {block} önünde bekleme
+	Mean number waiting, with its 95% band	Ortalama bekleyen sayısı, %95 bandıyla
+	At {time}: {value} waiting	{time} anında: {value} bekliyor
+	Still settling at the end of the run: run it longer to see where it levels off.	Çalıştırmanın sonunda hâlâ oturuyor: nerede dengelendiğini görmek için uzatın.
+	More charts	Daha fazla grafik
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı

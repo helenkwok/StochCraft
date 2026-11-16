@@ -331,6 +331,9 @@ pub struct App {
     screenshot: std::sync::Arc<std::sync::Mutex<Option<std::sync::Arc<egui::ColorImage>>>>,
     /// The charts' area and scale when the screenshot was asked for.
     pending_png: Option<(egui::Rect, f32)>,
+    /// Frames left to bring the charts into view before exporting them: the screenshot holds
+    /// only what is on screen, and the charts sit below the key measures.
+    png_scroll: u8,
     /// Commands and their shortcuts (craft-keymap), and the frame's key dispatch.
     keymap: craft_keymap::Keymap,
     dispatcher: craft_keymap::egui::Dispatcher,
@@ -410,6 +413,7 @@ impl App {
             charts_rect: None,
             screenshot: std::sync::Arc::default(),
             pending_png: None,
+            png_scroll: 0,
             keymap: commands::keymap(craft_keymap::Platform::current()),
             dispatcher: craft_keymap::egui::Dispatcher::new(),
             recent: Vec::new(),
@@ -1446,6 +1450,65 @@ impl App {
             .map_or_else(|| id.to_owned(), |e| e.name.clone())
     }
 
+    /// The tasks of a model that is one straight line, in flow order: one arrivals block, one
+    /// departures block, and between them tasks each with one way in and one way out, no
+    /// decisions, splits or batches. `None` for any other model, where the time an entity spends
+    /// is not the sum of each task's.
+    fn straight_line(&self) -> Option<Vec<String>> {
+        let model = self.engine.model();
+        let kind = |id: &str| {
+            model
+                .elements
+                .iter()
+                .find(|e| e.id.as_str() == id)
+                .map(|e| e.kind.name())
+        };
+        let sources: Vec<_> = model
+            .elements
+            .iter()
+            .filter(|e| e.kind.name() == "source")
+            .collect();
+        let sinks = model
+            .elements
+            .iter()
+            .filter(|e| e.kind.name() == "sink")
+            .count();
+        if sources.len() != 1 || sinks != 1 {
+            return None;
+        }
+        let mut line = Vec::new();
+        let mut at = sources[0].id.as_str().to_owned();
+        for _ in 0..=model.elements.len() {
+            let out: Vec<_> = model
+                .connections
+                .iter()
+                .filter(|c| c.from.as_str() == at)
+                .collect();
+            let [next] = out.as_slice() else {
+                return None;
+            };
+            let to = next.to.as_str();
+            if model
+                .connections
+                .iter()
+                .filter(|c| c.to.as_str() == to)
+                .count()
+                != 1
+            {
+                return None;
+            }
+            match kind(to)? {
+                "sink" => return Some(line),
+                "server" | "shared_task" | "delay" => {
+                    line.push(to.to_owned());
+                    at = to.to_owned();
+                }
+                _ => return None,
+            }
+        }
+        None
+    }
+
     /// The results: export buttons, the charts, then the table.
     fn results_view(&mut self, ui: &mut egui::Ui) {
         let Some(results) = self.results.clone() else {
@@ -1465,7 +1528,9 @@ impl App {
                         } else {
                             (t("Download charts (PNG)"), t("Download table (CSV)"))
                         };
-                        png = ui.add(theme::secondary(ui, charts)).clicked();
+                        if ui.add(theme::secondary(ui, charts)).clicked() {
+                            self.png_scroll = 4;
+                        }
                         csv = ui.add(theme::secondary(ui, table)).clicked();
                     });
                 });
@@ -1478,7 +1543,25 @@ impl App {
                 ui.add_space(10.0);
                 results::key(ui, &results);
                 ui.add_space(6.0);
-                self.charts_rect = charts::show(ui, &results);
+                let line = self.straight_line();
+                self.charts_rect = charts::show(ui, &results, line.as_deref());
+                // An export asked for: scroll the charts into view, and capture them once they
+                // are all on screen (or after a few frames, if the window is too short for them).
+                if self.png_scroll > 0 {
+                    if let Some(area) = self.charts_rect {
+                        if ui.clip_rect().contains_rect(area) || self.png_scroll == 1 {
+                            self.png_scroll = 0;
+                            png = true;
+                        } else {
+                            ui.scroll_to_rect(area, Some(egui::Align::TOP));
+                            self.png_scroll -= 1;
+                            ui.ctx().request_repaint();
+                        }
+                    } else {
+                        self.png_scroll = 0;
+                        png = true;
+                    }
+                }
                 ui.add_space(6.0);
                 results::show(ui, &results);
                 self.distribution_section(ui, &results);

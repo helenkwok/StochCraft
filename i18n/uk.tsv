@@ -700,6 +700,22 @@ unit	yr	р.
 	Set a {value} warm-up	Задати розігрів {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Запуск надто короткий, щоб запропонувати розігрів: подовжте його, потім задайте розігрів.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} з {m} основних показників усталилися: кожен відомий з точністю ± 5% (± 1 відсотковий пункт для частки) або краще.
+	What the run found	Що показав запуск
+	See the numbers	Переглянути числа
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} обмежує потік: зайнятий {busy} часу, перед ним у середньому чекають {queue}.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} — найзавантаженіший блок: зайнятий {busy} часу, перед ним у середньому чекають {queue}.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Об'єкт проводить у системі {total}, з них {wait} в очікуванні біля блока {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	Систему залишають {out} за {unit} з {in} за {unit}, що прибувають.
+	Where an entity's {total} in the system goes	На що йдуть {total} об'єкта в системі
+	Worked on	В обробці
+	Waiting	Очікування
+	{block}: worked on {work}, waiting {wait}	{block}: обробка {work}, очікування {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Частини разом дають {sum}; решта з {total} — час блокування або між блоками.
+	Waiting before {block} over the run	Очікування перед {block} упродовж запуску
+	Mean number waiting, with its 95% band	Середня кількість тих, що чекають, зі смугою 95%
+	At {time}: {value} waiting	У {time}: чекають {value}
+	Still settling at the end of the run: run it longer to see where it levels off.	Наприкінці запуску ще встановлюється: подовжте його, щоб побачити, де воно вирівнюється.
+	More charts	Більше діаграм
 @plural	Added {n} block|Added {n} blocks	Додано {n} блок|Додано {n} блоки|Додано {n} блоків
 @plural	Copied {n} block|Copied {n} blocks	Скопійовано {n} блок|Скопійовано {n} блоки|Скопійовано {n} блоків
 @plural	Finished {n} run|Finished {n} runs	Завершено {n} запуск|Завершено {n} запуски|Завершено {n} запусків

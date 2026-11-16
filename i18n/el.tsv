@@ -700,6 +700,22 @@ unit	yr	έτ
 	Set a {value} warm-up	Ορισμός προθέρμανσης {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Η εκτέλεση είναι πολύ σύντομη για να προταθεί προθέρμανση: επιμηκύνετέ την και μετά ορίστε μία.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} από {m} κύριες μετρικές έχουν σταθεροποιηθεί: η καθεμία είναι γνωστή με ± 5% (± 1 ποσοστιαία μονάδα για ποσοστό) ή καλύτερα.
+	What the run found	Τι βρήκε η εκτέλεση
+	See the numbers	Δείτε τους αριθμούς
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	Το {block} περιορίζει τη ροή: απασχολημένο {busy} του χρόνου, με {queue} κατά μέσο όρο σε αναμονή μπροστά του.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	Το {block} είναι το πιο απασχολημένο μπλοκ: απασχολημένο {busy} του χρόνου, με {queue} κατά μέσο όρο σε αναμονή μπροστά του.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Μια οντότητα περνά {total} στο σύστημα, από τα οποία {wait} σε αναμονή στο {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} ανά {unit} φεύγουν από το σύστημα, από {in} ανά {unit} που φτάνουν.
+	Where an entity's {total} in the system goes	Πού πηγαίνει ο χρόνος {total} μιας οντότητας στο σύστημα
+	Worked on	Σε επεξεργασία
+	Waiting	Σε αναμονή
+	{block}: worked on {work}, waiting {wait}	{block}: επεξεργασία {work}, αναμονή {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Τα μέρη αθροίζουν {sum}· το υπόλοιπο των {total} είναι χρόνος μπλοκαρίσματος ή μεταξύ μπλοκ.
+	Waiting before {block} over the run	Αναμονή πριν από το {block} κατά την εκτέλεση
+	Mean number waiting, with its 95% band	Μέσος αριθμός σε αναμονή, με τη ζώνη 95%
+	At {time}: {value} waiting	Στο {time}: {value} σε αναμονή
+	Still settling at the end of the run: run it longer to see where it levels off.	Ακόμη σταθεροποιείται στο τέλος της εκτέλεσης: επιμηκύνετέ την για να δείτε πού ισορροπεί.
+	More charts	Περισσότερα διαγράμματα
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις

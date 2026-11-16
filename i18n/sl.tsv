@@ -700,6 +700,22 @@ unit	yr	l.
 	Set a {value} warm-up	Nastavi ogrevanje {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Zagon je prekratek, da bi predlagali ogrevanje: podaljšajte ga in nato nastavite ogrevanje.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} od {m} ključnih kazalnikov je ustaljenih: vsak je znan na ± 5% (± 1 odstotna točka za delež) ali bolje.
+	What the run found	Kaj je pokazal zagon
+	See the numbers	Poglej številke
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} omejuje tok: zaseden {busy} časa, pred njim pa v povprečju čaka {queue}.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} je najbolj zaseden blok: zaseden {busy} časa, pred njim pa v povprečju čaka {queue}.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Entiteta preživi v sistemu {total}, od tega {wait} v čakanju pri bloku {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	Sistem zapusti {out} na {unit} od {in} na {unit} prispelih.
+	Where an entity's {total} in the system goes	Kam gre {total} entitete v sistemu
+	Worked on	V obdelavi
+	Waiting	Čaka
+	{block}: worked on {work}, waiting {wait}	{block}: obdelava {work}, čakanje {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Deli skupaj dajo {sum}; ostanek od {total} je čas blokiranja ali med bloki.
+	Waiting before {block} over the run	Čakanje pred blokom {block} med zagonom
+	Mean number waiting, with its 95% band	Povprečno število čakajočih s 95-odstotnim pasom
+	At {time}: {value} waiting	Ob {time}: čaka {value}
+	Still settling at the end of the run: run it longer to see where it levels off.	Ob koncu zagona se še ustaljuje: podaljšajte ga, da vidite, kje se izravna.
+	More charts	Več grafikonov
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov

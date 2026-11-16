@@ -700,6 +700,22 @@ unit	yr	J.
 	Set a {value} warm-up	Einschwingphase von {value} festlegen
 	The run is too short to suggest a warm-up: make it longer, then set one.	Der Lauf ist zu kurz, um eine Einschwingphase vorzuschlagen: Verlängern Sie ihn und legen Sie dann eine fest.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} von {m} wichtigsten Kennzahlen sind stabil: Jede ist auf ± 5% (± 1 Prozentpunkt bei Anteilen) oder besser bekannt.
+	What the run found	Was der Lauf ergeben hat
+	See the numbers	Zu den Zahlen
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} begrenzt den Fluss: {busy} der Zeit belegt, davor warten im Mittel {queue}.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ist der am stärksten belegte Block: {busy} der Zeit belegt, davor warten im Mittel {queue}.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Eine Einheit verbringt {total} im System, davon {wait} wartend an {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} je {unit} verlassen das System, bei {in} je {unit} ankommenden.
+	Where an entity's {total} in the system goes	Wofür eine Einheit ihre {total} im System braucht
+	Worked on	In Bearbeitung
+	Waiting	Wartend
+	{block}: worked on {work}, waiting {wait}	{block}: Bearbeitung {work}, Warten {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Die Teile ergeben zusammen {sum}; der Rest der {total} ist Blockierzeit oder Zeit zwischen Blöcken.
+	Waiting before {block} over the run	Warten vor {block} im Verlauf des Laufs
+	Mean number waiting, with its 95% band	Mittlere Anzahl Wartender mit 95-%-Band
+	At {time}: {value} waiting	Bei {time}: {value} wartend
+	Still settling at the end of the run: run it longer to see where it levels off.	Am Ende des Laufs noch nicht eingeschwungen: verlängern Sie ihn, um zu sehen, wo es sich einpendelt.
+	More charts	Weitere Diagramme
 @plural	Added {n} block|Added {n} blocks	{n} Block hinzugefügt|{n} Blöcke hinzugefügt
 @plural	Copied {n} block|Copied {n} blocks	{n} Block kopiert|{n} Blöcke kopiert
 @plural	Finished {n} run|Finished {n} runs	{n} Lauf abgeschlossen|{n} Läufe abgeschlossen

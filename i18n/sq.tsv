@@ -700,6 +700,22 @@ unit	yr	v
 	Set a {value} warm-up	Cakto një ngrohje prej {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	Ekzekutimi është shumë i shkurtër për të sugjeruar një ngrohje: zgjateni dhe pastaj caktoni një.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} nga {m} tregues kryesorë janë të qëndrueshëm: secili njihet me ± 5% (± 1 pikë përqindjeje për një pjesë) ose më mirë.
+	What the run found	Çfarë gjeti ekzekutimi
+	See the numbers	Shih numrat
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} kufizon rrjedhën: i zënë {busy} të kohës, me {queue} në pritje përpara tij mesatarisht.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} është blloku më i ngarkuar: i zënë {busy} të kohës, me {queue} në pritje përpara tij mesatarisht.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Një entitet kalon {total} në sistem, nga të cilat {wait} në pritje te {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} për {unit} largohen nga sistemi, nga {in} për {unit} që mbërrijnë.
+	Where an entity's {total} in the system goes	Ku shkojnë {total} e një entiteti në sistem
+	Worked on	Në përpunim
+	Waiting	Në pritje
+	{block}: worked on {work}, waiting {wait}	{block}: përpunim {work}, pritje {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Pjesët mblidhen në {sum}; pjesa tjetër e {total} është kohë e bllokuar ose mes blloqeve.
+	Waiting before {block} over the run	Pritja përpara {block} gjatë ekzekutimit
+	Mean number waiting, with its 95% band	Numri mesatar në pritje, me brezin e tij 95%
+	At {time}: {value} waiting	Në {time}: {value} në pritje
+	Still settling at the end of the run: run it longer to see where it levels off.	Ende po stabilizohet në fund të ekzekutimit: zgjateni për të parë ku niveluhet.
+	More charts	Më shumë grafikë
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime

@@ -225,23 +225,35 @@ cleared.
 
 ## Read the results
 
-![Results: charts with confidence whiskers, then a table per block](screenshots/results.png)
+![Results: what the run found, how sure the numbers are, key measures per block, and two charts](screenshots/results.png)
 
 The **Results** tab shows, from the top:
 
 1. **The run record:** runs, seed, warm-up and measured time, so you can reproduce the
    numbers.
-2. **Findings**, when there are any. For example, if the runs split into two different
-   outcomes (some lines collapse while others recover), StochCraft says so instead of reporting a
-   mean that fits neither.
-3. **Charts:** utilisation, mean wait, mean queue length, mean time in system, and the shares of
-   blocked units and lost arrivals, when the model has them. Each bar has a whisker for its 95%
-   confidence interval; hover over a bar for the numbers.
-4. **A table per block,** with each metric's **Mean**, its **± 95% CI** and its unit. Tasks with
-   a resource also report the time spent processing, starved, blocked, failed, off shift and
-   setting up, and OEE when a planned run time is set. Departures with a demand report takt time,
-   demand met and cycle time.
-5. **Spread across runs:** pick a result to see its percentiles and how often it met a
+2. **What the run found:** two to four sentences that answer first: which block limits the flow
+   (or is only the busiest, when what comes after it holds it back), how much of an entity's time
+   in the system is waiting and where, and what leaves against what arrives. **See the numbers**
+   scrolls to the block behind each one. If the runs split into two different outcomes (some
+   lines collapse while others recover), it says so instead of reporting a mean that fits
+   neither.
+3. **How sure are these numbers?** The key measure known least well, with a button to **Use N
+   runs** that brings it to about ± 5%, a button to **Set a warm-up** when the start from empty
+   pulls the means away, and how many key measures are already settled. A time or a count is
+   settled at ± 5% of its mean; a share, such as utilisation, at ± 1 percentage point.
+4. **Key measures:** up to four per block (for a task: utilisation, mean wait, mean queue length,
+   and time failed when it fails). Every mean is rounded to what its interval supports: "38 ± 12"
+   rather than "38.42 ± 12.31".
+5. **Two charts:** where an entity's time in the system goes (time worked on and waiting at each
+   task, for a model that is one straight line; the mean wait per block otherwise), and the
+   waiting before the busiest block over the run, with its 95% band and the warm-up shaded.
+   Hover for the numbers. The other charts (utilisation, queue length, time in system, blocked and
+   lost) are under **More charts**.
+6. **All measures:** every other result in a table per block, folded. Tasks with a resource also
+   report the time spent processing, starved, blocked, failed, off shift and setting up, and OEE
+   when a planned run time is set. Departures with a demand report takt time, demand met and
+   cycle time.
+7. **Spread across runs:** pick a result to see its percentiles and how often it met a
    target, for example "the wait is at most 5 minutes in 14 of 16 runs".
 
 **How sure is a number?** "2.99 ± 0.09" means the mean is most likely between 2.90 and 3.08. If

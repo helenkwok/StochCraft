@@ -700,6 +700,22 @@ unit	yr	वर्ष
 	Set a {value} warm-up	{value} का वार्म-अप सेट करें
 	The run is too short to suggest a warm-up: make it longer, then set one.	वार्म-अप सुझाने के लिए रन बहुत छोटा है: इसे लंबा करें, फिर एक वार्म-अप सेट करें।
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} में से {k} मुख्य मापदंड स्थिर हैं: हर एक ± 5% (अनुपात के लिए ± 1 प्रतिशत अंक) या बेहतर तक ज्ञात है।
+	What the run found	रन से क्या पता चला
+	See the numbers	संख्याएँ देखें
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} प्रवाह को सीमित करता है: {busy} समय व्यस्त, इसके आगे औसतन {queue} प्रतीक्षा में।
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} सबसे व्यस्त ब्लॉक है: {busy} समय व्यस्त, इसके आगे औसतन {queue} प्रतीक्षा में।
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	एक इकाई सिस्टम में {total} बिताती है, जिसमें से {wait} {block} पर प्रतीक्षा में।
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	प्रति {unit} {in} आते हैं, जिनमें से प्रति {unit} {out} सिस्टम छोड़ते हैं।
+	Where an entity's {total} in the system goes	एक इकाई का सिस्टम में {total} कहाँ जाता है
+	Worked on	काम पर
+	Waiting	प्रतीक्षा
+	{block}: worked on {work}, waiting {wait}	{block}: काम {work}, प्रतीक्षा {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	भागों का योग {sum} है; {total} का शेष अवरुद्ध रहने या ब्लॉकों के बीच का समय है।
+	Waiting before {block} over the run	रन के दौरान {block} के आगे प्रतीक्षा
+	Mean number waiting, with its 95% band	प्रतीक्षा में औसत संख्या, 95% बैंड के साथ
+	At {time}: {value} waiting	{time} पर: {value} प्रतीक्षा में
+	Still settling at the end of the run: run it longer to see where it levels off.	रन के अंत में भी स्थिर हो रहा है: यह कहाँ समतल होता है देखने के लिए इसे लंबा करें।
+	More charts	और चार्ट
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए

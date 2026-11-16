@@ -700,6 +700,22 @@ unit	yr	ປີ
 	Set a {value} warm-up	ກຳນົດໄລຍະອຸ່ນເຄື່ອງ {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	ການຈຳລອງສັ້ນເກີນໄປທີ່ຈະແນະນຳໄລຍະອຸ່ນເຄື່ອງ: ໃຫ້ຍືດມັນອອກ ແລ້ວກຳນົດໄລຍະອຸ່ນເຄື່ອງ.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	ຕົວຊີ້ວັດຫຼັກ {k} ຈາກ {m} ຄົງທີ່ແລ້ວ: ແຕ່ລະອັນຮູ້ໄດ້ພາຍໃນ ± 5% (± 1 ຈຸດສຳລັບສັດສ່ວນ) ຫຼື ດີກວ່າ.
+	What the run found	ສິ່ງທີ່ການຈຳລອງພົບ
+	See the numbers	ເບິ່ງຕົວເລກ
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ຈຳກັດການໄຫຼ: ຫວ່າງບໍ່ໄດ້ {busy} ຂອງເວລາ, ມີ {queue} ລໍຖ້າຢູ່ທາງໜ້າໂດຍສະເລ່ຍ.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} ເປັນບລັອກທີ່ຫຍຸ້ງທີ່ສຸດ: ຫວ່າງບໍ່ໄດ້ {busy} ຂອງເວລາ, ມີ {queue} ລໍຖ້າຢູ່ທາງໜ້າໂດຍສະເລ່ຍ.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	ສິ່ງໜຶ່ງໃຊ້ເວລາ {total} ໃນລະບົບ, ໃນນັ້ນ {wait} ລໍຖ້າຢູ່ທີ່ {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} ຕໍ່ {unit} ອອກຈາກລະບົບ, ຈາກ {in} ຕໍ່ {unit} ທີ່ເຂົ້າມາ.
+	Where an entity's {total} in the system goes	ເວລາ {total} ຂອງສິ່ງໜຶ່ງໃນລະບົບໄປໃສ
+	Worked on	ກຳລັງເຮັດວຽກ
+	Waiting	ລໍຖ້າ
+	{block}: worked on {work}, waiting {wait}	{block}: ເຮັດວຽກ {work}, ລໍຖ້າ {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	ສ່ວນຕ່າງໆລວມເປັນ {sum}; ສ່ວນທີ່ເຫຼືອຂອງ {total} ແມ່ນເວລາຖືກກີດຂວາງ ຫຼື ລະຫວ່າງບລັອກ.
+	Waiting before {block} over the run	ການລໍຖ້າກ່ອນ {block} ຕະຫຼອດການຈຳລອງ
+	Mean number waiting, with its 95% band	ຈຳນວນລໍຖ້າສະເລ່ຍ ພ້ອມແຖບ 95%
+	At {time}: {value} waiting	ທີ່ {time}: {value} ລໍຖ້າ
+	Still settling at the end of the run: run it longer to see where it levels off.	ຍັງບໍ່ຄົງທີ່ໃນຕອນທ້າຍການຈຳລອງ: ໃຫ້ຍືດອອກເພື່ອເບິ່ງວ່າມັນຄົງທີ່ຢູ່ໃສ.
+	More charts	ແຜນພູມເພີ່ມເຕີມ
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ

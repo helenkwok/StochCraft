@@ -700,6 +700,22 @@ unit	yr	a
 	Set a {value} warm-up	Defineix un escalfament de {value}
 	The run is too short to suggest a warm-up: make it longer, then set one.	L'execució és massa curta per suggerir un escalfament: allargueu-la i després definiu-ne un.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} de {m} mètriques clau són estables: cadascuna es coneix amb ± 5% (± 1 punt per a una proporció) o millor.
+	What the run found	Què ha trobat l'execució
+	See the numbers	Vegeu els números
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} limita el flux: ocupat {busy} del temps, amb {queue} esperant-hi al davant de mitjana.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block} és el bloc més ocupat: ocupat {busy} del temps, amb {queue} esperant-hi al davant de mitjana.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	Una entitat passa {total} al sistema, {wait} d'aquest temps esperant a {block}.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{out} per {unit} surten del sistema, de {in} per {unit} que arriben.
+	Where an entity's {total} in the system goes	On van els {total} d'una entitat al sistema
+	Worked on	Treballant-hi
+	Waiting	Esperant
+	{block}: worked on {work}, waiting {wait}	{block}: treball {work}, espera {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	Les parts sumen {sum}; la resta dels {total} és temps bloquejat o entre blocs.
+	Waiting before {block} over the run	Espera davant de {block} durant l'execució
+	Mean number waiting, with its 95% band	Nombre mitjà en espera, amb la seva banda del 95%
+	At {time}: {value} waiting	A {time}: {value} en espera
+	Still settling at the end of the run: run it longer to see where it levels off.	Encara s'està estabilitzant al final de l'execució: allargueu-la per veure on s'anivella.
+	More charts	Més gràfics
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions

@@ -700,6 +700,22 @@ unit	yr	년
 	Set a {value} warm-up	준비 기간 {value} 설정
 	The run is too short to suggest a warm-up: make it longer, then set one.	실행이 너무 짧아 준비 기간을 제안할 수 없습니다: 실행을 늘린 다음 설정하세요.
 	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	주요 지표 {m}개 중 {k}개가 안정적입니다: 각각 ± 5%(비율은 ± 1%p) 이내로 알려져 있습니다.
+	What the run found	실행 결과에서 찾은 것
+	See the numbers	숫자 보기
+	{block} limits the flow: busy {busy} of the time, with {queue} waiting in front of it on average.	{block}이(가) 흐름을 제한합니다: 시간의 {busy} 동안 가동 중이며, 그 앞에 평균 {queue}이(가) 대기합니다.
+	{block} is the busiest block: busy {busy} of the time, with {queue} waiting in front of it on average.	{block}이(가) 가장 바쁜 블록입니다: 시간의 {busy} 동안 가동 중이며, 그 앞에 평균 {queue}이(가) 대기합니다.
+	An entity spends {total} in the system, {wait} of it waiting at {block}.	개체는 시스템에서 {total}을(를) 보내며, 그중 {wait}은(는) {block}에서 대기합니다.
+	{out} per {unit} leave the system, from {in} per {unit} arriving.	{unit}당 {in}이(가) 도착하고 {unit}당 {out}이(가) 시스템을 떠납니다.
+	Where an entity's {total} in the system goes	개체의 시스템 내 {total}의 구성
+	Worked on	처리 중
+	Waiting	대기
+	{block}: worked on {work}, waiting {wait}	{block}: 처리 {work}, 대기 {wait}
+	The parts add up to {sum}; the rest of the {total} is time blocked or between blocks.	각 부분의 합은 {sum}입니다. {total}의 나머지는 막힌 시간이나 블록 사이의 시간입니다.
+	Waiting before {block} over the run	실행 동안 {block} 앞의 대기
+	Mean number waiting, with its 95% band	평균 대기 수와 95% 띠
+	At {time}: {value} waiting	{time}: {value} 대기
+	Still settling at the end of the run: run it longer to see where it levels off.	실행이 끝날 때도 아직 안정되는 중입니다: 어디서 평탄해지는지 보려면 실행을 늘리세요.
+	More charts	차트 더 보기
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료

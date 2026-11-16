@@ -637,6 +637,11 @@ engine's messages (validation, file notes) are English too.
   run (and its plural forms, from the catalog's "{n} runs" row), warm-up, metric and confidence
   interval. Percentage point is the usual term in each language as far as known; it is not checked
   against a source. Not reviewed by native speakers.
+- The findings and the two default charts (issue #147, sixteen strings: "What the run found",
+  the three finding sentences, "Where an entity's {total} in the system goes", "Waiting before
+  {block} over the run" and their labels) were drafted from the plain meaning of the English, with
+  each catalog's own words for entity, block, run, warm-up and confidence interval. Not checked
+  against a source, and not reviewed by native speakers.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.
