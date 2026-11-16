@@ -679,6 +679,16 @@ unit	yr	m.
 	Must be from {min} to {max}	Turi būti nuo {min} iki {max}
 	Must be more than {min}	Turi būti daugiau nei {min}
 	Must be {min} or more	Turi būti {min} arba daugiau
+	1/(n + 1)	1/(n + 1)
+	Balked	Nestojo į eilę
+	Balked on {id}	Nestojo į eilę sraute {id}
+	Balking	Nestojimas į eilę
+	Count those in service	Skaičiuoti ir aptarnaujamus
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Objektai, kurie nestoja į eilę, iškart eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą), užuot buvę prarasti; čia jie skaičiuojami kaip nestoję į eilę.
+	Joins with probability	Stoja į eilę su tikimybe
+	Number waiting	Laukiančiųjų skaičius
+	Share balked	Nestojusiųjų į eilę dalis
+	Table	Lentelė
 @plural	Added {n} block|Added {n} blocks	Pridėtas {n} blokas|Pridėti {n} blokai|Pridėta {n} blokų
 @plural	Copied {n} block|Copied {n} blocks	Nukopijuotas {n} blokas|Nukopijuoti {n} blokai|Nukopijuota {n} blokų
 @plural	Finished {n} run|Finished {n} runs	Baigtas {n} vykdymas|Baigti {n} vykdymai|Baigta {n} vykdymų

@@ -679,6 +679,16 @@ unit	yr	r.
 	Must be from {min} to {max}	Musi wynosić od {min} do {max}
 	Must be more than {min}	Musi być większe niż {min}
 	Must be {min} or more	Musi wynosić co najmniej {min}
+	1/(n + 1)	1/(n + 1)
+	Balked	Nie dołączyły
+	Balked on {id}	Nie dołączyły na {id}
+	Balking	Niedołączanie do kolejki
+	Count those in service	Licz też obsługiwane
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Jednostki, które nie dołączają do kolejki, od razu idą tym przepływem (na przykład, aby spróbować później ponownie), zamiast przepaść; tutaj liczą się jako niedołączone.
+	Joins with probability	Dołącza do kolejki z prawdopodobieństwem
+	Number waiting	Liczba oczekujących
+	Share balked	Odsetek niedołączeń
+	Table	Tabela
 @plural	Added {n} block|Added {n} blocks	Dodano {n} blok|Dodano {n} bloki|Dodano {n} bloków
 @plural	Copied {n} block|Copied {n} blocks	Skopiowano {n} blok|Skopiowano {n} bloki|Skopiowano {n} bloków
 @plural	Finished {n} run|Finished {n} runs	Zakończono {n} uruchomienie|Zakończono {n} uruchomienia|Zakończono {n} uruchomień

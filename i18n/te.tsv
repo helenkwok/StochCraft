@@ -679,6 +679,16 @@ unit	yr	సం.
 	Must be from {min} to {max}	{min} నుండి {max} మధ్య ఉండాలి
 	Must be more than {min}	{min} కంటే ఎక్కువ ఉండాలి
 	Must be {min} or more	{min} లేదా అంతకంటే ఎక్కువ ఉండాలి
+	1/(n + 1)	1/(n + 1)
+	Balked	క్యూలో చేరనివి
+	Balked on {id}	{id} వద్ద క్యూలో చేరనివి
+	Balking	క్యూలో చేరకపోవడం
+	Count those in service	సేవలో ఉన్నవాటినీ లెక్కించు
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	క్యూలో చేరని ఎంటిటీలు వెంటనే ఈ ప్రవాహంలో వెళ్తాయి (ఉదాహరణకు, తర్వాత మళ్ళీ ప్రయత్నించడానికి), కోల్పోవడం బదులు; ఇక్కడ అవి క్యూలో చేరనివిగా లెక్కించబడతాయి.
+	Joins with probability	క్యూలో చేరే సంభావ్యత
+	Number waiting	వేచి ఉన్నవాటి సంఖ్య
+	Share balked	క్యూలో చేరనివాటి వాటా
+	Table	పట్టిక
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి

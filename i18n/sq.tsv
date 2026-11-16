@@ -679,6 +679,16 @@ unit	yr	v
 	Must be from {min} to {max}	Duhet të jetë nga {min} deri në {max}
 	Must be more than {min}	Duhet të jetë më shumë se {min}
 	Must be {min} or more	Duhet të jetë {min} ose më shumë
+	1/(n + 1)	1/(n + 1)
+	Balked	Nuk hynë në radhë
+	Balked on {id}	Nuk hynë në radhë në {id}
+	Balking	Moshyrja në radhë
+	Count those in service	Numëro edhe ata në shërbim
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitetet që nuk hyjnë në radhë marrin menjëherë këtë rrjedhë (për të provuar sërish më vonë, të themi), në vend që të humbasin; këtu numërohen si moshyrje në radhë.
+	Joins with probability	Hyn në radhë me probabilitet
+	Number waiting	Numri në pritje
+	Share balked	Pjesa që nuk hyri në radhë
+	Table	Tabelë
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime

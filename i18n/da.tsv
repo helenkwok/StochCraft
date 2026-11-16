@@ -679,6 +679,16 @@ unit	yr	år
 	Must be from {min} to {max}	Skal være fra {min} til {max}
 	Must be more than {min}	Skal være mere end {min}
 	Must be {min} or more	Skal være {min} eller mere
+	1/(n + 1)	1/(n + 1)
+	Balked	Fravalgte køen
+	Balked on {id}	Fravalgte køen på {id}
+	Balking	Fravalg af kø
+	Count those in service	Medregn dem under betjening
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Enheder, der ikke stiller sig i køen, tager straks dette flow (for at prøve igen senere, f.eks.) i stedet for at gå tabt; de tælles her som at have fravalgt køen.
+	Joins with probability	Stiller sig i kø med sandsynlighed
+	Number waiting	Antal ventende
+	Share balked	Andel, der fravalgte køen
+	Table	Tabel
 @plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
 @plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført

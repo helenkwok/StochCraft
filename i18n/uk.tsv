@@ -679,6 +679,16 @@ unit	yr	р.
 	Must be from {min} to {max}	Має бути від {min} до {max}
 	Must be more than {min}	Має бути більше {min}
 	Must be {min} or more	Має бути не менше {min}
+	1/(n + 1)	1/(n + 1)
+	Balked	Відмовилися
+	Balked on {id}	Відмовилися на {id}
+	Balking	Відмова від черги
+	Count those in service	Враховувати й тих, що обслуговуються
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Сутності, які не стають у чергу, одразу йдуть цим потоком (наприклад, щоб спробувати пізніше), а не втрачаються; тут вони рахуються як відмови.
+	Joins with probability	Стає в чергу з імовірністю
+	Number waiting	Кількість в очікуванні
+	Share balked	Частка тих, хто відмовився
+	Table	Таблиця
 @plural	Added {n} block|Added {n} blocks	Додано {n} блок|Додано {n} блоки|Додано {n} блоків
 @plural	Copied {n} block|Copied {n} blocks	Скопійовано {n} блок|Скопійовано {n} блоки|Скопійовано {n} блоків
 @plural	Finished {n} run|Finished {n} runs	Завершено {n} запуск|Завершено {n} запуски|Завершено {n} запусків

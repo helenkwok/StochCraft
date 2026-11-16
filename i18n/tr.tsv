@@ -679,6 +679,16 @@ unit	yr	yıl
 	Must be from {min} to {max}	{min} ile {max} arasında olmalı
 	Must be more than {min}	{min} değerinden büyük olmalı
 	Must be {min} or more	{min} veya daha fazla olmalı
+	1/(n + 1)	1/(n + 1)
+	Balked	Kuyruğa katılmayanlar
+	Balked on {id}	{id} üzerinde kuyruğa katılmayanlar
+	Balking	Kuyruğa katılmama
+	Count those in service	Hizmet alanları da say
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Kuyruğa katılmayan varlıklar, kaybolmak yerine hemen bu akışı izler (örneğin daha sonra yeniden denemek için); burada kuyruğa katılmayan sayılırlar.
+	Joins with probability	Kuyruğa katılma olasılığı
+	Number waiting	Bekleyen sayısı
+	Share balked	Kuyruğa katılmayanların oranı
+	Table	Tablo
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı

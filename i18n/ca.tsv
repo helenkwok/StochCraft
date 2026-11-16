@@ -679,6 +679,16 @@ unit	yr	a
 	Must be from {min} to {max}	Ha de ser entre {min} i {max}
 	Must be more than {min}	Ha de ser més de {min}
 	Must be {min} or more	Ha de ser {min} o més
+	1/(n + 1)	1/(n + 1)
+	Balked	No s'hi han afegit
+	Balked on {id}	No s'hi han afegit a {id}
+	Balking	No afegir-se a la cua
+	Count those in service	Comptar també les que són en servei
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Les entitats que no s'afegeixen a la cua prenen aquest flux de seguida (per tornar-ho a provar més tard, per exemple), en lloc de perdre's; aquí compten com a no afegides a la cua.
+	Joins with probability	S'afegeix a la cua amb probabilitat
+	Number waiting	Nombre en espera
+	Share balked	Proporció que no s'hi ha afegit
+	Table	Taula
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions

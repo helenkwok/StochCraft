@@ -679,6 +679,16 @@ unit	yr	év
 	Must be from {min} to {max}	{min} és {max} között legyen
 	Must be more than {min}	Nagyobb legyen, mint {min}
 	Must be {min} or more	Legalább {min} legyen
+	1/(n + 1)	1/(n + 1)
+	Balked	Nem álltak sorba
+	Balked on {id}	Nem álltak sorba itt: {id}
+	Balking	Sorba be nem állás
+	Count those in service	A kiszolgálás alattiak is számítanak
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	A sorba be nem álló entitások azonnal ezt a folyamatot követik (például hogy később újra próbálkozzanak), ahelyett hogy elvesznének; itt sorba be nem állóként számítanak.
+	Joins with probability	Beállási valószínűség
+	Number waiting	Várakozók száma
+	Share balked	Sorba be nem állók aránya
+	Table	Táblázat
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve

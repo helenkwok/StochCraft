@@ -3,9 +3,9 @@
 use stochcraft_blocks::{BlockId, Builder, Event, Rule};
 use stochcraft_io::{Format, read, write_new};
 use stochcraft_model::{
-    DateTime, Dist, ElementKind, Experiment, HealthCheck, Model, Need, OnShiftEnd, OnTakeout,
-    Patience, PatienceUntil, PlaceWhileOut, Property, PropertyType, PropertyValue, QueueLimit,
-    Routing, TimeUnit,
+    BalkJoin, BalkRow, Balking, DateTime, Dist, ElementKind, Experiment, HealthCheck, Model, Need,
+    OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Property, PropertyType,
+    PropertyValue, QueueLimit, Routing, TimeUnit,
 };
 
 /// A model using every element kind and every distribution.
@@ -878,6 +878,165 @@ fn a_patience_and_an_abandoned_way_are_written_saved_and_removed() {
     assert!(!text.contains("stochcraft:patience"), "{text}");
     assert!(!text.contains("stochcraft:abandoned"), "{text}");
     assert_eq!(read(&removed).map(|l| l.model).ok(), Some(edited));
+}
+
+/// Balking and the way for entities that balk are StochCraft's vendor extensions: written, read
+/// back, changed and removed in place, removal giving back the original bytes.
+#[test]
+fn balking_and_a_balked_way_are_written_saved_and_removed() {
+    let mut m = Builder::new();
+    let src = m.source("calls", Dist::Exponential { mean: 5.0 }, None);
+    let desk = m.server("desk", 1, Dist::Exponential { mean: 4.0 });
+    let elsewhere = m.delay("elsewhere", Dist::Constant(30.0));
+    let out = m.sink("out");
+    m.connect(src, desk);
+    m.connect(desk, out);
+    m.connect(elsewhere, out);
+    let plain = m.build(Experiment::default());
+    let original = write_new(&plain);
+    let Ok(loaded) = read(&original) else {
+        unreachable!()
+    };
+
+    // A table, and a new connection to the delay marked balked.
+    let mut edited = loaded.model.clone();
+    if let ElementKind::Server { balking, .. } = &mut edited.elements[1].kind {
+        *balking = Some(Balking {
+            join: BalkJoin::Table(vec![
+                BalkRow {
+                    waiting: 0,
+                    probability: 1.0,
+                },
+                BalkRow {
+                    waiting: 3,
+                    probability: 0.25,
+                },
+            ]),
+            counts_in_service: false,
+        });
+    }
+    let mut way = edited.connections[0].clone();
+    way.id = stochcraft_model::ElementId::unchecked("balked-way");
+    way.from = edited.elements[1].id.clone();
+    way.to = edited.elements[2].id.clone();
+    way.balked = true;
+    edited.connections.push(way);
+    let saved = loaded.opened.save(&edited);
+    let Ok(saved) = saved else { unreachable!() };
+    let text = String::from_utf8_lossy(&saved);
+    assert!(text.contains("<stochcraft:balking>"), "{text}");
+    assert!(
+        text.contains(r#"<stochcraft:join waiting="3" probability="0.25"/>"#),
+        "{text}"
+    );
+    assert!(text.contains(r#"name="stochcraft:balked""#), "{text}");
+    let Ok(again) = read(&saved) else {
+        unreachable!()
+    };
+    assert_eq!(again.model, edited);
+
+    // Changed to 1/(n + 1) counting those in service: only its attributes change.
+    let mut reciprocal = edited.clone();
+    if let ElementKind::Server { balking, .. } = &mut reciprocal.elements[1].kind {
+        *balking = Some(Balking {
+            join: BalkJoin::Reciprocal,
+            counts_in_service: true,
+        });
+    }
+    let Ok(changed) = again.opened.save(&reciprocal) else {
+        unreachable!()
+    };
+    let text = String::from_utf8_lossy(&changed);
+    assert!(text.contains(r#"countsInService="true""#), "{text}");
+    assert!(text.contains(r#"rule="reciprocal""#), "{text}");
+    assert!(!text.contains("stochcraft:join"), "{text}");
+    let Ok(third) = read(&changed) else {
+        unreachable!()
+    };
+    assert_eq!(third.model, reciprocal);
+
+    // Removed again (balking, the mark and the new connection): the original bytes.
+    let Ok(removed) = third.opened.save(&loaded.model) else {
+        unreachable!()
+    };
+    assert_eq!(
+        String::from_utf8_lossy(&removed),
+        String::from_utf8_lossy(&original)
+    );
+}
+
+/// Balking with bad rows, an unknown rule, or on a task with no resource, is read with notes.
+#[test]
+fn bad_or_misplaced_balking_is_noted() {
+    let mut m = Builder::new();
+    let src = m.source("calls", Dist::Exponential { mean: 5.0 }, None);
+    let desk = m.server("desk", 1, Dist::Exponential { mean: 4.0 });
+    m.balking(
+        desk,
+        Balking {
+            join: BalkJoin::Table(vec![
+                BalkRow {
+                    waiting: 1,
+                    probability: 0.5,
+                },
+                BalkRow {
+                    waiting: 4,
+                    probability: 0.0,
+                },
+            ]),
+            counts_in_service: false,
+        },
+    );
+    let out = m.sink("out");
+    m.connect(src, desk);
+    m.connect(desk, out);
+    let text = String::from_utf8_lossy(&write_new(&m.build(Experiment::default())))
+        .replace(r#"waiting="4""#, r#"waiting="many""#);
+    let Ok(loaded) = read(text.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(
+        loaded.notes.iter().any(|n| n.message.contains("left out")),
+        "{:?}",
+        loaded.notes
+    );
+    assert!(matches!(
+        &loaded.model.elements[1].kind,
+        ElementKind::Server {
+            balking: Some(Balking {
+                join: BalkJoin::Table(rows),
+                ..
+            }),
+            ..
+        } if rows.len() == 1
+    ));
+    let text = text.replace(
+        "<stochcraft:balking>",
+        r#"<stochcraft:balking rule="sometimes">"#,
+    );
+    let Ok(loaded) = read(text.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(
+        loaded
+            .notes
+            .iter()
+            .any(|n| n.message.contains("table or reciprocal")),
+        "{:?}",
+        loaded.notes
+    );
+    // On the end event, which has no resource.
+    let moved = text.replace(r#"elementRef="desk""#, r#"elementRef="out""#);
+    let Ok(loaded) = read(moved.as_bytes()) else {
+        unreachable!()
+    };
+    assert!(
+        loaded.notes.iter().any(|n| n
+            .message
+            .contains("balking (stochcraft:balking) applies only")),
+        "{:?}",
+        loaded.notes
+    );
 }
 
 /// A patience with an unknown `until`, or on a task with no resource, is read with a note.
@@ -1765,6 +1924,7 @@ fn a_delay_made_a_server_per_working_server_replaces_the_extension_it_kept() {
         setup: None,
         planned_run_time: None,
         patience: None,
+        balking: None,
         health_check: None,
         shifts: Vec::new(),
         on_shift_end: OnShiftEnd::Finish,

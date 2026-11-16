@@ -679,6 +679,16 @@ unit	yr	r.
 	Must be from {min} to {max}	Musí byť od {min} do {max}
 	Must be more than {min}	Musí byť viac ako {min}
 	Must be {min} or more	Musí byť {min} alebo viac
+	1/(n + 1)	1/(n + 1)
+	Balked	Nezaradené
+	Balked on {id}	Nezaradené na {id}
+	Balking	Nezaradenie do radu
+	Count those in service	Započítať aj obsluhované
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entity, ktoré sa nezaradia do radu, idú hneď týmto tokom (napríklad aby to neskôr skúsili znova), namiesto toho, aby sa stratili; tu sa počítajú ako nezaradené.
+	Joins with probability	Zaradí sa do radu s pravdepodobnosťou
+	Number waiting	Počet čakajúcich
+	Share balked	Podiel nezaradených
+	Table	Tabuľka
 @plural	Added {n} block|Added {n} blocks	Pridaný {n} blok|Pridané {n} bloky|Pridaných {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Skopírovaný {n} blok|Skopírované {n} bloky|Skopírovaných {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Dokončený {n} beh|Dokončené {n} behy|Dokončených {n} behov

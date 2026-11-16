@@ -42,6 +42,7 @@ fn mmc_model(lambda: f64, mu: f64, c: u32) -> Model {
                     setup: None,
                     planned_run_time: None,
                     patience: None,
+                    balking: None,
                     health_check: None,
                     shifts: Vec::new(),
                     on_shift_end: OnShiftEnd::Finish,

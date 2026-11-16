@@ -679,6 +679,16 @@ unit	yr	년
 	Must be from {min} to {max}	{min}에서 {max} 사이여야 합니다
 	Must be more than {min}	{min}보다 커야 합니다
 	Must be {min} or more	{min} 이상이어야 합니다
+	1/(n + 1)	1/(n + 1)
+	Balked	진입 포기
+	Balked on {id}	{id} 진입 포기
+	Balking	진입 포기
+	Count those in service	서비스 중인 것도 셈
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	대기열에 합류하지 않는 엔터티는 곧바로 이 흐름을 따릅니다(예를 들어 나중에 다시 시도하기 위해). 손실되지 않으며, 여기서는 진입 포기로 셉니다.
+	Joins with probability	대기열 합류 확률
+	Number waiting	대기 수
+	Share balked	진입 포기 비율
+	Table	표
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료

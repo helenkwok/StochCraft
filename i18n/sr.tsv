@@ -679,6 +679,16 @@ unit	yr	год.
 	Must be from {min} to {max}	Мора бити од {min} до {max}
 	Must be more than {min}	Мора бити више од {min}
 	Must be {min} or more	Мора бити {min} или више
+	1/(n + 1)	1/(n + 1)
+	Balked	Нису ушли у ред
+	Balked on {id}	Нису ушли у ред на {id}
+	Balking	Неулазак у ред
+	Count those in service	Бројати и оне на услуживању
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Ентитети који не уђу у ред одмах иду овим током (да касније покушају поново, рецимо), уместо да буду изгубљени; овде се броје као они који нису ушли у ред.
+	Joins with probability	Улази у ред са вероватноћом
+	Number waiting	Број на чекању
+	Share balked	Удео оних који нису ушли у ред
+	Table	Таблица
 @plural	Added {n} block|Added {n} blocks	Додат је {n} блок|Додата су {n} блока|Додато је {n} блокова
 @plural	Copied {n} block|Copied {n} blocks	Копиран је {n} блок|Копирана су {n} блока|Копирано је {n} блокова
 @plural	Finished {n} run|Finished {n} runs	Завршено је {n} покретање|Завршена су {n} покретања|Завршено је {n} покретања

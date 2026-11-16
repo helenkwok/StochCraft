@@ -679,6 +679,16 @@ unit	yr	a
 	Must be from {min} to {max}	Trebuie să fie între {min} și {max}
 	Must be more than {min}	Trebuie să fie mai mare decât {min}
 	Must be {min} or more	Trebuie să fie {min} sau mai mult
+	1/(n + 1)	1/(n + 1)
+	Balked	Nu au intrat în coadă
+	Balked on {id}	Nu au intrat în coadă pe {id}
+	Balking	Neintrare în coadă
+	Count those in service	Numără și entitățile în servire
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitățile care nu intră în coadă iau imediat acest flux (pentru a încerca din nou mai târziu, de exemplu), în loc să fie pierdute; aici sunt numărate ca neintrate în coadă.
+	Joins with probability	Intră în coadă cu probabilitatea
+	Number waiting	Număr în așteptare
+	Share balked	Proporția celor care nu au intrat în coadă
+	Table	Tabel
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări

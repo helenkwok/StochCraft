@@ -574,6 +574,7 @@ fn edits() -> Vec<Edit> {
                         setup: None,
                         planned_run_time: None,
                         patience: None,
+                        balking: None,
                         health_check: None,
                         shifts: Vec::new(),
                         on_shift_end: OnShiftEnd::Finish,
@@ -1167,6 +1168,42 @@ fn everything_stochcraft_writes_is_schema_valid() {
         "waiting rooms",
         &xsd,
     );
+    // Balking by a table and by 1/(n + 1), and a way out for those that balk.
+    let mut k = Builder::new();
+    let src = k.source("calls", Dist::Exponential { mean: 1.0 }, None);
+    let first = k.server("first", 1, Dist::Exponential { mean: 1.5 });
+    let second = k.server("second", 2, Dist::Exponential { mean: 2.0 });
+    k.balking(
+        first,
+        stochcraft_blocks::Balking {
+            join: stochcraft_blocks::BalkJoin::Table(vec![
+                stochcraft_blocks::BalkRow {
+                    waiting: 2,
+                    probability: 0.5,
+                },
+                stochcraft_blocks::BalkRow {
+                    waiting: 5,
+                    probability: 0.0,
+                },
+            ]),
+            counts_in_service: false,
+        },
+    );
+    k.balking(
+        second,
+        stochcraft_blocks::Balking {
+            join: stochcraft_blocks::BalkJoin::Reciprocal,
+            counts_in_service: true,
+        },
+    );
+    let later = k.delay("later", Dist::Constant(30.0));
+    let out = k.sink("out");
+    k.connect(src, first);
+    k.connect(first, second);
+    k.connect(second, out);
+    k.balked(first, later);
+    k.connect(later, first);
+    validate(&write_new(&k.build(Experiment::default())), "balking", &xsd);
     // Each reference model, as StochCraft reads it, written again as a new BPMN file.
     let Some(paths) = models() else { return };
     for p in &paths {

@@ -679,6 +679,16 @@ unit	yr	г.
 	Must be from {min} to {max}	Трябва да е от {min} до {max}
 	Must be more than {min}	Трябва да е повече от {min}
 	Must be {min} or more	Трябва да е {min} или повече
+	1/(n + 1)	1/(n + 1)
+	Balked	Отминали
+	Balked on {id}	Отминали на {id}
+	Balking	Отминаване
+	Count those in service	Броене и на обслужваните
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Същностите, които не се нареждат на опашката, веднага минават по този поток (например за да опитат отново по-късно), вместо да бъдат загубени; тук те се броят като отминали.
+	Joins with probability	Нарежда се на опашката с вероятност
+	Number waiting	Брой чакащи
+	Share balked	Дял на отминалите
+	Table	Таблица
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения

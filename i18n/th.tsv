@@ -679,6 +679,16 @@ unit	yr	ปี
 	Must be from {min} to {max}	ต้องอยู่ระหว่าง {min} ถึง {max}
 	Must be more than {min}	ต้องมากกว่า {min}
 	Must be {min} or more	ต้องเป็น {min} ขึ้นไป
+	1/(n + 1)	1/(n + 1)
+	Balked	ไม่เข้าคิว
+	Balked on {id}	ไม่เข้าคิวที่ {id}
+	Balking	การไม่เข้าคิว
+	Count those in service	นับรวมที่กำลังรับบริการ
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	เอนทิตีที่ไม่เข้าคิวจะไปตามโฟลว์นี้ทันที (เช่น เพื่อลองใหม่ภายหลัง) แทนที่จะสูญเสีย ที่นี่นับเป็นการไม่เข้าคิว
+	Joins with probability	ความน่าจะเป็นที่เข้าคิว
+	Number waiting	จำนวนที่รอ
+	Share balked	สัดส่วนที่ไม่เข้าคิว
+	Table	ตาราง
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ

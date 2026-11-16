@@ -203,6 +203,9 @@ pub enum ElementKind {
         /// How long an entity waits before it gives up (reneging); `None`: entities wait for as
         /// long as it takes. See [`Patience`].
         patience: Option<Patience>,
+        /// Whether an arriving entity may not join the queue, with a chance that depends on its
+        /// length (balking); `None`: every entity joins. See [`Balking`].
+        balking: Option<Balking>,
         /// Each unit is checked now and then and taken out of service for a restart when too
         /// many entities wait (a StochCraft vendor extension, `stochcraft:healthCheck`); `None`:
         /// units are never taken out. See [`HealthCheck`].
@@ -469,6 +472,63 @@ impl PatienceUntil {
             "start" => Some(PatienceUntil::Start),
             "done" => Some(PatienceUntil::Done),
             _ => None,
+        }
+    }
+}
+
+/// Balking at a server: an entity arriving there looks at its queue and may not join it (a
+/// StochCraft vendor extension, `stochcraft:balking`, since BPSim has no parameter for it). It
+/// joins with a probability b(n) that depends on the number n it finds ([`Balking::join`]);
+/// otherwise it balks: it is counted as balked (it never enters) and takes the server's way out
+/// marked [`Connection::balked`] at once, or leaves the model if there is none.
+///
+/// The choice is made as the entity arrives, before it asks for room in a finite waiting room:
+/// one that joins and finds no room is then turned away (or waits for room) as before. A
+/// probability of 0 or 1 draws nothing; any other is drawn from the server's own stream.
+///
+/// Not joining at or above a length L is the same as a finite waiting room of L
+/// (`queue_capacity`) with a way out for those turned away (they count as lost there, not
+/// balked), and needs no balking. With `counts_in_service` and [`BalkJoin::Reciprocal`] it is
+/// Gross and Harris's M/M/1 with balking (b(n) = 1/(n + 1), n in the system; *Fundamentals of
+/// Queueing Theory*), whose number in the system is Poisson.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Balking {
+    pub join: BalkJoin,
+    /// What n counts: those waiting (in the queue, or in transfer here), as a waiting room
+    /// counts them, when false (the default); those in the system (also those in service, or
+    /// held blocked after it) when true.
+    pub counts_in_service: bool,
+}
+
+/// How the chance of joining depends on the number found, n.
+#[derive(Debug, Clone, PartialEq)]
+pub enum BalkJoin {
+    /// Rows in increasing order of `waiting`: from each row's number on (until the next row's),
+    /// the entity joins with the row's probability; below the first row it always joins.
+    Table(Vec<BalkRow>),
+    /// b(n) = 1/(n + 1): always when none are there, half the time when one is, and so on.
+    Reciprocal,
+}
+
+/// One row of a [`BalkJoin::Table`].
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct BalkRow {
+    /// The number found from which the row applies.
+    pub waiting: u32,
+    /// The chance of joining, from 0 to 1.
+    pub probability: f64,
+}
+
+impl Balking {
+    /// The chance that an entity finding `n` joins.
+    pub fn join_probability(&self, n: u64) -> f64 {
+        match &self.join {
+            BalkJoin::Table(rows) => rows
+                .iter()
+                .take_while(|r| u64::from(r.waiting) <= n)
+                .last()
+                .map_or(1.0, |r| r.probability),
+            BalkJoin::Reciprocal => 1.0 / (n as f64 + 1.0),
         }
     }
 }
@@ -1057,6 +1117,10 @@ pub struct Connection {
     /// any other element), apart from its ordinary way out. A StochCraft vendor extension
     /// (`stochcraft:turnedAway`).
     pub turned_away: bool,
+    /// The way out of a server with a [`Balking`] that entities not joining its queue take at
+    /// once, instead of leaving the model, apart from its ordinary way out. A StochCraft vendor
+    /// extension (`stochcraft:balked`).
+    pub balked: bool,
 }
 
 /// The customer demand a sink serves, for takt: `quantity` parts each `per` period. Takt is the
@@ -1132,6 +1196,7 @@ impl Connection {
             rework: false,
             abandoned: false,
             turned_away: false,
+            balked: false,
         }
     }
 }
@@ -1380,6 +1445,23 @@ pub enum Problem {
     TurnedAwayAndAbandoned {
         connection: ElementId,
     },
+    /// A balking table's chance of joining outside 0 to 1.
+    BalkingProbability,
+    /// A balking table whose rows are not in increasing order of the number found.
+    BalkingRowsOrder,
+    /// A connection marked for entities that balk leaves an element with no balking.
+    BalkedWithoutBalking {
+        connection: ElementId,
+    },
+    /// Several ways out of one server are marked for entities that balk.
+    SeveralBalkedWays {
+        count: usize,
+    },
+    /// A connection is marked both for entities that balk and for those that give up or are
+    /// turned away.
+    BalkedAndOtherWay {
+        connection: ElementId,
+    },
     /// A waiting room by timetable or per working server with no number of places: it is
     /// unlimited, and the setting is ignored.
     QueueLimitWithoutRoom,
@@ -1581,6 +1663,11 @@ impl Problem {
             Problem::TurnedAwayWithoutRoom { .. } => "turned_away_without_room",
             Problem::SeveralTurnedAwayWays { .. } => "several_turned_away_ways",
             Problem::TurnedAwayAndAbandoned { .. } => "turned_away_and_abandoned",
+            Problem::BalkingProbability => "balking_probability",
+            Problem::BalkingRowsOrder => "balking_rows_order",
+            Problem::BalkedWithoutBalking { .. } => "balked_without_balking",
+            Problem::SeveralBalkedWays { .. } => "several_balked_ways",
+            Problem::BalkedAndOtherWay { .. } => "balked_and_other_way",
             Problem::QueueLimitWithoutRoom => "queue_limit_without_room",
             Problem::QueueByShiftEmpty => "queue_by_shift_empty",
             Problem::HealthCheckLimitNotValid => "health_check_limit_not_valid",
@@ -1786,6 +1873,28 @@ impl std::fmt::Display for Diagnostic {
                 f,
                 "connection `{connection}` is marked both for entities that give up and for \
                  those turned away; it can be one of them"
+            ),
+            Problem::BalkingProbability => write!(
+                f,
+                "each chance of joining in its balking table must be from 0 to 1"
+            ),
+            Problem::BalkingRowsOrder => write!(
+                f,
+                "the rows of its balking table must be in increasing order of the number found"
+            ),
+            Problem::BalkedWithoutBalking { connection } => write!(
+                f,
+                "connection `{connection}` is the way for entities that balk, but they come only \
+                 from a task with a resource of its own and balking"
+            ),
+            Problem::SeveralBalkedWays { count } => write!(
+                f,
+                "{count} of its ways out are for entities that balk; at most one can be"
+            ),
+            Problem::BalkedAndOtherWay { connection } => write!(
+                f,
+                "connection `{connection}` is marked both for entities that balk and for those \
+                 that give up or are turned away; it can be one of them"
             ),
             Problem::QueueLimitWithoutRoom => write!(
                 f,
@@ -2073,6 +2182,18 @@ impl Model {
                 )
             })
         };
+        // A task with a resource of its own and balking, whose arrivals may not join.
+        let balky = |id: &ElementId| {
+            elements.get(id).is_some_and(|e| {
+                matches!(
+                    e.kind,
+                    ElementKind::Server {
+                        balking: Some(_),
+                        ..
+                    }
+                )
+            })
+        };
         for c in &self.connections {
             let mut ok = true;
             for end in [&c.from, &c.to] {
@@ -2141,9 +2262,27 @@ impl Model {
                     },
                 ));
             }
+            if c.balked && (c.abandoned || c.turned_away) {
+                out.push(Diagnostic::error(
+                    Some(&c.id),
+                    Problem::BalkedAndOtherWay {
+                        connection: c.id.clone(),
+                    },
+                ));
+            } else if c.balked && !balky(&c.from) {
+                out.push(Diagnostic::error(
+                    Some(&c.id),
+                    Problem::BalkedWithoutBalking {
+                        connection: c.id.clone(),
+                    },
+                ));
+            }
             if ok {
                 outgoing.entry(&c.from).or_default().push(&c.to);
-                if !((c.abandoned && patient(&c.from)) || (c.turned_away && roomy(&c.from))) {
+                if !((c.abandoned && patient(&c.from))
+                    || (c.turned_away && roomy(&c.from))
+                    || (c.balked && balky(&c.from)))
+                {
                     served.entry(&c.from).or_default().push(&c.to);
                 }
             }
@@ -2171,6 +2310,29 @@ impl Model {
                     Some(&e.id),
                     Problem::SeveralTurnedAwayWays { count: turned_away },
                 ));
+            }
+            let balked = self
+                .connections
+                .iter()
+                .filter(|c| c.balked && c.from == e.id)
+                .count();
+            if balked > 1 && balky(&e.id) {
+                out.push(Diagnostic::error(
+                    Some(&e.id),
+                    Problem::SeveralBalkedWays { count: balked },
+                ));
+            }
+            if let ElementKind::Server {
+                balking: Some(b), ..
+            } = &e.kind
+                && let BalkJoin::Table(rows) = &b.join
+            {
+                if rows.iter().any(|r| !(0.0..=1.0).contains(&r.probability)) {
+                    out.push(Diagnostic::error(Some(&e.id), Problem::BalkingProbability));
+                }
+                if rows.windows(2).any(|w| w[0].waiting >= w[1].waiting) {
+                    out.push(Diagnostic::error(Some(&e.id), Problem::BalkingRowsOrder));
+                }
             }
             if let ElementKind::Server {
                 queue_capacity: None,
@@ -3000,6 +3162,7 @@ impl Model {
                 service,
                 queue_capacity: None,
                 patience: None,
+                balking: None,
                 health_check: None,
                 ..
             } = &e.kind
@@ -3394,6 +3557,7 @@ mod tests {
             rework: false,
             abandoned: false,
             turned_away: false,
+            balked: false,
             id: id(i),
             from: id(from),
             to: id(to),
@@ -3574,6 +3738,7 @@ mod tests {
                         setup: None,
                         planned_run_time: None,
                         patience: None,
+                        balking: None,
                         health_check: None,
                         shifts: Vec::new(),
                         on_shift_end: OnShiftEnd::Finish,
@@ -3673,6 +3838,7 @@ mod tests {
             setup: None,
             planned_run_time: None,
             patience: None,
+            balking: None,
             health_check: None,
             shifts: Vec::new(),
             on_shift_end: OnShiftEnd::Finish,
@@ -3756,6 +3922,7 @@ mod tests {
                 setup: None,
                 planned_run_time: None,
                 patience: None,
+                balking: None,
                 health_check: None,
                 shifts: Vec::new(),
                 on_shift_end: OnShiftEnd::Finish,

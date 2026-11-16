@@ -679,6 +679,16 @@ unit	yr	j
 	Must be from {min} to {max}	Moet tussen {min} en {max} liggen
 	Must be more than {min}	Moet groter zijn dan {min}
 	Must be {min} or more	Moet {min} of meer zijn
+	1/(n + 1)	1/(n + 1)
+	Balked	Niet aangesloten
+	Balked on {id}	Niet aangesloten op {id}
+	Balking	Niet aansluiten
+	Count those in service	Ook die in bediening meetellen
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteiten die niet in de wachtrij aansluiten, nemen meteen deze stroom (om het later opnieuw te proberen, bijvoorbeeld), in plaats van verloren te gaan; ze tellen hier als niet aangesloten.
+	Joins with probability	Sluit aan met kans
+	Number waiting	Aantal wachtend
+	Share balked	Aandeel niet aangesloten
+	Table	Tabel
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid

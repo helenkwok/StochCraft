@@ -679,6 +679,16 @@ unit	yr	l.
 	Must be from {min} to {max}	Biti mora od {min} do {max}
 	Must be more than {min}	Biti mora več kot {min}
 	Must be {min} or more	Biti mora {min} ali več
+	1/(n + 1)	1/(n + 1)
+	Balked	Niso se pridružile
+	Balked on {id}	Niso se pridružile na {id}
+	Balking	Nepridružitev vrsti
+	Count those in service	Štej tudi tiste v strežbi
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitete, ki se ne pridružijo vrsti, gredo takoj po tem toku (da bi denimo kasneje poskusile znova), namesto da bi se izgubile; tukaj štejejo kot nepridružene.
+	Joins with probability	Pridruži se vrsti z verjetnostjo
+	Number waiting	Število čakajočih
+	Share balked	Delež nepridruženih
+	Table	Tabela
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov

@@ -679,6 +679,16 @@ unit	yr	v
 	Must be from {min} to {max}	Oltava välillä {min}–{max}
 	Must be more than {min}	Oltava suurempi kuin {min}
 	Must be {min} or more	Oltava vähintään {min}
+	1/(n + 1)	1/(n + 1)
+	Balked	Eivät liittyneet jonoon
+	Balked on {id}	Eivät liittyneet jonoon virrassa {id}
+	Balking	Jonoon liittymättä jättäminen
+	Count those in service	Laske mukaan myös palveltavat
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteetit, jotka eivät liity jonoon, kulkevat heti tätä virtaa (vaikkapa yrittääkseen myöhemmin uudelleen) sen sijaan, että ne menetettäisiin; ne lasketaan täällä jonoon liittymättömiksi.
+	Joins with probability	Liittyy jonoon todennäköisyydellä
+	Number waiting	Odottavien määrä
+	Share balked	Jonoon liittymättömien osuus
+	Table	Taulukko
 @plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
 @plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
 @plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui

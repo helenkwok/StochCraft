@@ -840,6 +840,19 @@ impl App {
                 form::focus_waits(&format!("{id}/patience")),
                 |ui| self.patience_section(ui, model, el, &id),
             );
+            // Balking, from block.set's schema: a table or 1/(n + 1), next to the flows those
+            // that balk take; closed on a server without it.
+            ui.add_space(6.0);
+            let summary = self.summary(el, &["balking"]);
+            fold(
+                ui,
+                &format!("{id}/balking"),
+                t("Balking"),
+                &summary,
+                el["balking"].is_object(),
+                form::focus_waits(&format!("{id}/balking")),
+                |ui| self.block_fields(ui, model, el, &id, &["balking"]),
+            );
             ui.add_space(6.0);
             let summary = self.summary(el, &["health_check"]);
             fold(
@@ -946,6 +959,12 @@ impl App {
                                     || c["turned_away"].as_bool() == Some(true)
                                 {
                                     self.turned_away_field(ui, cid, &c);
+                                }
+                                // Only one with balking has entities not joining.
+                                if (kind == "server" && el["balking"].is_object())
+                                    || c["balked"].as_bool() == Some(true)
+                                {
+                                    self.balked_field(ui, cid, &c);
                                 }
                             });
                         }
@@ -1385,6 +1404,20 @@ impl App {
         r.widget_info(|| egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, &name));
         if r.changed() {
             self.execute("flow.set", json!({ "id": cid, "turned_away": turned }));
+        }
+    }
+
+    /// Whether this way out is the one entities not joining the task's queue take, besides the
+    /// task's ordinary way out.
+    fn balked_field(&mut self, ui: &mut egui::Ui, cid: &str, c: &Value) {
+        let mut balked = c["balked"].as_bool().unwrap_or(false);
+        let r = ui.checkbox(&mut balked, t("Balked")).on_hover_text(t(
+            "Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.",
+        ));
+        let (ticked, name) = (balked, tf("Balked on {id}", &[("id", cid)]));
+        r.widget_info(|| egui::WidgetInfo::selected(egui::Role::CheckBox, true, ticked, &name));
+        if r.changed() {
+            self.execute("flow.set", json!({ "id": cid, "balked": balked }));
         }
     }
 

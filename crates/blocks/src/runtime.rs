@@ -12,9 +12,9 @@ use stochcraft_des::{
 };
 use stochcraft_model::calendar::{self, Calendar, DateTime};
 use stochcraft_model::{
-    Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, HealthCheck, Model, Need,
-    OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, QueueLimit, ResourcePool, Routing,
-    Setup, Timed,
+    Balking, Breakdown, Demand, DemandPer, Element, ElementId, ElementKind, HealthCheck, Model,
+    Need, OnShiftEnd, OnTakeout, PatienceUntil, PlaceWhileOut, Power, QueueLimit, ResourcePool,
+    Routing, Setup, Timed,
 };
 use stochcraft_random::{Dist, Rng};
 use stochcraft_stats::{Tally, TimeWeighted};
@@ -249,7 +249,7 @@ impl Compiled {
                 .get(i)
                 .into_iter()
                 .flatten()
-                .filter(|r| !r.abandoned && !r.turned_away)
+                .filter(|r| !r.abandoned && !r.turned_away && !r.balked)
                 .flat_map(|r| {
                     if routes_itself(r.to) {
                         self.routes
@@ -354,6 +354,26 @@ impl Compiled {
                 _ => None,
             })
             .collect();
+        // A stream for each server's balking (drawn only for a chance strictly between 0 and
+        // 1), so models without balking draw exactly as before. The servers' processes do not
+        // hold these: the ports into each server hold them weakly, and the run keeps them.
+        let balks: Vec<Option<Rc<Balk>>> = elements
+            .iter()
+            .enumerate()
+            .map(|(i, e)| match &e.kind {
+                ElementKind::Server {
+                    balking: Some(b), ..
+                } => Some(Rc::new(Balk {
+                    index: i,
+                    balking: b.clone(),
+                    rng: RefCell::new(stream("balking", i)),
+                    ctx: ctx.clone(),
+                    stats: Rc::clone(&stats),
+                    way: RefCell::new(None),
+                })),
+                _ => None,
+            })
+            .collect();
         let assigner = Rc::new(Assigner {
             slots: self.slots.clone(),
             elements: self
@@ -403,6 +423,11 @@ impl Compiled {
                     .cloned()
                     .flatten()
                     .map(|p| Rc::downgrade(&p)),
+                balk: balks
+                    .get(r.to)
+                    .cloned()
+                    .flatten()
+                    .map(|b| Rc::downgrade(&b)),
             })
         };
         let routers: Vec<Option<Rc<Router>>> = (0..elements.len())
@@ -431,7 +456,7 @@ impl Compiled {
             let routes = self.routes.get(i).into_iter().flatten();
             let outs: Vec<Out> = routes
                 .clone()
-                .filter(|r| !r.abandoned && !r.turned_away)
+                .filter(|r| !r.abandoned && !r.turned_away && !r.balked)
                 .filter_map(|r| {
                     Some(Out {
                         port: routed(r)?,
@@ -456,6 +481,9 @@ impl Compiled {
                 });
                 *p.away.borrow_mut() = Rc::downgrade(&away);
                 aways.push(away);
+            }
+            if let Some(b) = balks.get(i).and_then(Option::as_ref) {
+                *b.way.borrow_mut() = routes.clone().filter(|r| r.balked).find_map(routed);
             }
             let Some(ins) = inputs.get(i).cloned() else {
                 continue;
@@ -607,6 +635,7 @@ impl Compiled {
             stats,
             pools,
             _aways: aways,
+            _balks: balks.into_iter().flatten().collect(),
             feeds_buffer,
             feeds_transfer,
             warmup,
@@ -664,6 +693,8 @@ pub struct Live<'a> {
     pools: Rc<Pools>,
     /// The ways out for entities turned away, which the finite waiting rooms hold weakly.
     _aways: Vec<Rc<Away>>,
+    /// Each server's balking, which the ports into it hold weakly.
+    _balks: Vec<Rc<Balk>>,
     feeds_buffer: Vec<bool>,
     feeds_transfer: Vec<bool>,
     warmup: f64,
@@ -1158,6 +1189,8 @@ pub(crate) struct BlockStats {
     transferring: TimeWeighted,
     /// A server's units in each state, each unit in exactly one ([`UnitBook`]).
     states: UnitStates,
+    /// Servers with balking: arrivals that did not join the queue (they never entered).
+    balked: u64,
     /// Servers with a patience: entities that gave up, and how long each had been here.
     abandoned: u64,
     abandoned_wait: Tally,
@@ -1395,6 +1428,7 @@ impl BlockStats {
             transit: TimeWeighted::new(t, 0.0),
             transferring: TimeWeighted::new(t, 0.0),
             states: UnitStates::new(t),
+            balked: 0,
             abandoned: 0,
             abandoned_wait: Tally::new(),
             wasted: 0.0,
@@ -1426,6 +1460,7 @@ impl BlockStats {
         self.transit.reset(t);
         self.transferring.reset(t);
         self.states.reset(t);
+        self.balked = 0;
         self.abandoned = 0;
         self.abandoned_wait = Tally::new();
         self.wasted = 0.0;
@@ -1558,6 +1593,13 @@ impl BlockStats {
             ElementKind::Server { .. } | ElementKind::SharedTask { .. } | ElementKind::Delay { .. }
         );
         let offered = self.lost + self.entered;
+        let balky = matches!(
+            kind,
+            ElementKind::Server {
+                balking: Some(_),
+                ..
+            }
+        );
         // ISO 22400-2's OEE elements. Off shift is planned downtime, so the time planned to be
         // busy is the units' time less it.
         let oee_availability = match kind {
@@ -1781,6 +1823,11 @@ impl BlockStats {
                 (ended > 0).then(|| self.abandoned as f64 / ended as f64)
             }),
             abandoned_wait: patient.and_then(|_| self.abandoned_wait.mean()),
+            balked: balky.then_some(self.balked),
+            balked_share: balky.then_some(()).and_then(|()| {
+                let arrived = self.balked + self.lost + self.entered;
+                (arrived > 0).then(|| self.balked as f64 / arrived as f64)
+            }),
             wasted: wastes.then_some(self.wasted),
             wasted_share: wastes
                 .then(|| self.states.processing.integral(end) + self.states.setup.integral(end))
@@ -1828,6 +1875,74 @@ struct Port {
     /// The next element's patience, when it is a server with one. Weak, since a patience holds
     /// its way out, which may lead to another patient server and back.
     patient: Option<Weak<Patient>>,
+    /// The next element's balking, when it is a server with balking. Weak, for the same reason.
+    balk: Option<Weak<Balk>>,
+}
+
+/// Why an entity did not get into the next element.
+#[derive(Clone, Copy)]
+enum Refused {
+    /// It found no room in a finite waiting room that turns away those finding none.
+    TurnedAway,
+    /// It chose not to join the queue ([`Balking`]).
+    Balked,
+}
+
+/// A server's balking while the model runs ([`Balking`]): whether each arriving entity joins,
+/// and the way out for those that do not.
+struct Balk {
+    /// The server.
+    index: usize,
+    balking: Balking,
+    rng: RefCell<Rng>,
+    ctx: Ctx,
+    stats: Rc<Vec<RefCell<BlockStats>>>,
+    /// The way out marked for those that balk; `None`: they leave the model.
+    way: RefCell<Option<Port>>,
+}
+
+impl Balk {
+    /// Whether an entity arriving now balks: it joins with the chance the number it finds gives
+    /// ([`Balking::join_probability`]), drawn from the server's own stream only when that chance
+    /// is strictly between 0 and 1.
+    fn balks(&self) -> bool {
+        let n = self.stats.get(self.index).map_or(0, |s| {
+            let s = s.borrow();
+            if self.balking.counts_in_service {
+                s.inside()
+            } else {
+                // Sums of whole counts; `as` saturates (and a negative value cannot occur).
+                (s.waiting.value() + s.transit.value()).round().max(0.0) as u64
+            }
+        });
+        let b = self.balking.join_probability(n);
+        if b >= 1.0 {
+            false
+        } else if b > 0.0 {
+            self.rng.borrow_mut().uniform() >= b
+        } else {
+            true
+        }
+    }
+
+    /// `e` balks: it is counted, and takes the way out for those that balk at once, on its own,
+    /// as a process (as for those turned away, [`Away::take`]), or leaves the model.
+    fn take(&self, e: Entity) {
+        if let Some(s) = self.stats.get(self.index) {
+            s.borrow_mut().balked += 1;
+        }
+        let Some(way) = self.way.borrow().clone() else {
+            return;
+        };
+        let c = self.ctx.clone();
+        self.ctx.spawn_tagged(tag(self.index), async move {
+            if way.needs_room() {
+                way.deliver(&c, e).await;
+            } else {
+                way.dispatch(&c, e);
+            }
+        });
+    }
 }
 
 /// A finite buffer's places (see [`Compiled::run_for`]), with the one each entity there holds;
@@ -2387,13 +2502,23 @@ impl Port {
 
     /// Whether sending here must first find room ([`Port::deliver`]): a finite buffer, whether
     /// it holds the sender up or turns away those finding none, or a shortest-queue gateway
-    /// with one. Only where this is false may an entity be sent straight on
-    /// ([`Port::dispatch`]).
+    /// with one; or must first see whether the entity joins (a server with balking). Only where
+    /// this is false may an entity be sent straight on ([`Port::dispatch`]).
     fn needs_room(&self) -> bool {
         match &self.router {
             Some(r) => r.may_block(),
-            None => self.places.is_some(),
+            None => self.places.is_some() || self.balk.is_some(),
         }
+    }
+
+    /// The next element's balking, if it has one.
+    fn balk(&self) -> Option<Rc<Balk>> {
+        self.balk.as_ref().and_then(Weak::upgrade)
+    }
+
+    /// Whether `e`, arriving at the next element now, balks there.
+    fn balks(&self) -> bool {
+        self.balk().is_some_and(|b| b.balks())
     }
 
     /// Whether a sending server's unit stays with the part through the transfer here.
@@ -2434,33 +2559,50 @@ impl Port {
 
     /// Waits for a place in the next element's finite buffer, if it has one, and takes it for
     /// `e`; returns where `e` goes: here, or, through a shortest-queue gateway, the way chosen.
-    /// `None` if the buffer turns away those finding no room and has none now: then `e` goes
-    /// to [`Port::turn_away`] instead.
-    async fn make_room(&self, e: &mut Entity) -> Option<Port> {
+    /// An error if `e` balks there (decided first, as it arrives, before it asks for room), or
+    /// the buffer turns away those finding no room and has none now: then `e` goes to
+    /// [`Port::refuse`] instead.
+    async fn make_room(&self, e: &mut Entity) -> Result<Port, Refused> {
         if let Some(r) = &self.router {
             self.enter_gateway(r, e);
             let way = r.route(e).await;
             self.leave_gateway(r, false);
-            return Some(way);
+            return Ok(way);
+        }
+        if self.balks() {
+            return Err(Refused::Balked);
         }
         if let Some(p) = &self.places {
             if p.turns_away() {
                 if !p.try_room(e.id).await {
-                    return None;
+                    return Err(Refused::TurnedAway);
                 }
             } else {
                 p.wait_room(e.id).await;
             }
         }
-        Some(self.clone())
+        Ok(self.clone())
     }
 
-    /// Sends `e`, first waiting for room in a finite buffer (or, finding none in one that turns
-    /// away, down its way for those); any transfer goes on by itself.
+    /// Sends `e`, first seeing whether it joins (balking) and waiting for room in a finite
+    /// buffer (or, finding none in one that turns away, down its way for those); any transfer
+    /// goes on by itself.
     async fn deliver(&self, ctx: &Ctx, mut e: Entity) {
         match self.make_room(&mut e).await {
-            Some(to) => to.dispatch(ctx, e),
-            None => self.turn_away(e),
+            Ok(to) => to.dispatch(ctx, e),
+            Err(why) => self.refuse(e, why),
+        }
+    }
+
+    /// `e` did not get into the next element, for the reason given.
+    fn refuse(&self, e: Entity, why: Refused) {
+        match why {
+            Refused::TurnedAway => self.turn_away(e),
+            Refused::Balked => {
+                if let Some(b) = self.balk() {
+                    b.take(e);
+                }
+            }
         }
     }
 
@@ -2557,7 +2699,7 @@ impl Port {
 
     /// Sends a new arrival if there is room (a place freed at this instant counts) and returns
     /// `true`; otherwise the arrival is lost, counted as lost by the next element, and this
-    /// returns `false`. Through a shortest-queue gateway, the arrival is lost (counted by the
+    /// returns `false`. An arrival balking there returns `true` (it left the source). Through a shortest-queue gateway, the arrival is lost (counted by the
     /// gateway) if no way has room now.
     async fn offer(&self, ctx: &Ctx, mut e: Entity) -> bool {
         if let Some(r) = &self.router {
@@ -2571,6 +2713,13 @@ impl Port {
                 }
                 None => false,
             };
+        }
+        // An arrival that balks has left its source all the same; the server counts it.
+        if let Some(b) = self.balk()
+            && b.balks()
+        {
+            b.take(e);
+            return true;
         }
         if let Some(p) = &self.places
             && !p.try_room(e.id).await
@@ -3730,7 +3879,7 @@ async fn move_on(
         }
     }
     let out = env.borrow().out.clone();
-    // The next element, if it turns the entity away (finding no room there).
+    // The next element, if the entity does not get in there (it balks, or finds no room).
     let mut turned = None;
     // Where the entity goes: the next element, or the way a shortest-queue gateway there gives.
     let out = match out {
@@ -3746,24 +3895,27 @@ async fn move_on(
             // It gave up while held: the place it got next goes back unused. (Through a
             // shortest-queue gateway, the gateway has counted it passing.)
             if let Some(work) = gave_up(entity.id) {
-                if let Some(p) = to.as_ref().and_then(|to| to.places.as_ref()) {
+                if let Some(p) = to.as_ref().ok().and_then(|to| to.places.as_ref()) {
                     p.leave(entity.id);
                 }
                 return discard(env, entity.id, work, keep);
             }
             env.borrow().with_stats(|s| s.blocked_time.add(now - start));
-            if to.is_none() {
-                turned = Some(out);
+            match to {
+                Ok(to) => Some(to),
+                Err(why) => {
+                    turned = Some((out, why));
+                    None
+                }
             }
-            to
         }
-        Some(out) => {
-            let to = out.make_room(&mut entity).await;
-            if to.is_none() {
-                turned = Some(out);
+        Some(out) => match out.make_room(&mut entity).await {
+            Ok(to) => Some(to),
+            Err(why) => {
+                turned = Some((out, why));
+                None
             }
-            to
-        }
+        },
         None => None,
     };
     if let Some(p) = &patient {
@@ -3798,9 +3950,9 @@ async fn move_on(
             };
             if let Some(out) = out {
                 out.travel(ctx, entity, transfer);
-            } else if let Some(t) = turned {
-                // Turned away there, it has left here all the same.
-                t.turn_away(entity);
+            } else if let Some((t, why)) = turned {
+                // Turned away or balking there, it has left here all the same.
+                t.refuse(entity, why);
             }
             kept
         }
@@ -4156,6 +4308,8 @@ impl Pools {
                     abandoned: None,
                     abandoned_share: None,
                     abandoned_wait: None,
+                    balked: None,
+                    balked_share: None,
                     wasted: None,
                     wasted_share: None,
                     taken_out: None,

@@ -679,6 +679,16 @@ unit	min	ນາທີ
 unit	ms	ມິລລິວິນາທີ
 unit	s	ວິນາທີ
 unit	yr	ປີ
+	1/(n + 1)	1/(n + 1)
+	Balked	ບໍ່ເຂົ້າແຖວ
+	Balked on {id}	ບໍ່ເຂົ້າແຖວທີ່ {id}
+	Balking	ການບໍ່ເຂົ້າແຖວ
+	Count those in service	ນັບລວມທີ່ກຳລັງຮັບບໍລິການ
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ເອນທິຕີທີ່ບໍ່ເຂົ້າແຖວຄອຍ ຈະໄປຕາມເສັ້ນທາງນີ້ທັນທີ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ) ແທນທີ່ຈະສູນເສຍ; ຢູ່ນີ້ພວກມັນຖືກນັບເປັນການບໍ່ເຂົ້າແຖວ.
+	Joins with probability	ຄວາມເປັນໄປໄດ້ທີ່ເຂົ້າແຖວ
+	Number waiting	ຈຳນວນທີ່ລໍຖ້າ
+	Share balked	ສັດສ່ວນທີ່ບໍ່ເຂົ້າແຖວ
+	Table	ຕາຕະລາງ
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ

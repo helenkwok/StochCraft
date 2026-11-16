@@ -679,6 +679,16 @@ unit	yr	वर्ष
 	Must be from {min} to {max}	{min} से {max} के बीच होना चाहिए
 	Must be more than {min}	{min} से अधिक होना चाहिए
 	Must be {min} or more	{min} या उससे अधिक होना चाहिए
+	1/(n + 1)	1/(n + 1)
+	Balked	कतार में नहीं लगीं
+	Balked on {id}	{id} पर कतार में नहीं लगीं
+	Balking	कतार में न लगना
+	Count those in service	सेवा में चल रही इकाइयाँ भी गिनें
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	जो इकाइयाँ कतार में नहीं लगतीं, वे तुरंत यह प्रवाह लेती हैं (उदाहरण के लिए, बाद में फिर कोशिश करने के लिए), खो जाने के बजाय; यहाँ उन्हें कतार में न लगने वालों में गिना जाता है।
+	Joins with probability	कतार में लगने की प्रायिकता
+	Number waiting	प्रतीक्षारत संख्या
+	Share balked	कतार में न लगने वालों का अनुपात
+	Table	तालिका
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए

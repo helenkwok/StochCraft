@@ -183,6 +183,12 @@ pub fn label(name: &str) -> String {
         "transfer_holds_sender" => "Sender waits during transfer",
         "planned_run_time" => "Planned run time per item",
         "patience" => "Time before giving up",
+        "balking" => "Balking",
+        "table" => "Table",
+        "reciprocal" => "1/(n + 1)",
+        "join" => "Joins with probability",
+        "waiting" => "Number waiting",
+        "counts_in_service" => "Count those in service",
         "check_interval" => "Check every",
         "check_limit" => "Fails above, waiting per working server",
         "restart" => "Out for (restart)",
@@ -900,6 +906,8 @@ fn default_variant(variant: &Value, tag: &str, current: &Value) -> Value {
                 ("max", _) => json!(old_mean * 1.5),
                 ("std_dev", _) => json!(old_mean * 0.25),
                 ("probability", _) => json!(0.5),
+                // A balking table's first row: half join once one waits.
+                ("join", _) => json!([{"waiting": 1, "probability": 0.5}]),
                 (_, Some("integer")) => json!(2),
                 (_, Some("boolean")) => json!(false),
                 (_, Some("array")) => json!([

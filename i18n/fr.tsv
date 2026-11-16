@@ -679,6 +679,16 @@ unit	yr	an
 	Must be from {min} to {max}	Doit être entre {min} et {max}
 	Must be more than {min}	Doit être supérieur à {min}
 	Must be {min} or more	Doit être au moins {min}
+	1/(n + 1)	1/(n + 1)
+	Balked	Dérobades
+	Balked on {id}	Dérobades sur {id}
+	Balking	Dérobade
+	Count those in service	Compter aussi celles en service
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Les entités qui ne rejoignent pas la file prennent aussitôt ce flux (pour réessayer plus tard, par exemple), au lieu d'être perdues ; elles comptent ici comme dérobades.
+	Joins with probability	Rejoint la file avec la probabilité
+	Number waiting	Nombre en attente
+	Share balked	Part des dérobades
+	Table	Tableau
 @plural	Added {n} block|Added {n} blocks	{n} bloc ajouté|{n} blocs ajoutés
 @plural	Copied {n} block|Copied {n} blocks	{n} bloc copié|{n} blocs copiés
 @plural	Finished {n} run|Finished {n} runs	{n} exécution terminée|{n} exécutions terminées

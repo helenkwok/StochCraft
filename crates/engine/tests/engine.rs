@@ -3394,3 +3394,84 @@ fn processing_times_by_property_are_set_run_and_removed() {
     let m = ok(&mut e, "model.get", json!({}));
     assert!(!m.to_string().contains("processing_by"), "{m}");
 }
+
+/// Balking and a way for those that balk are set by command, show in the model, give the server
+/// its balking rows, undo exactly, and are removed again; a bad table is reported.
+#[test]
+fn balking_and_a_balked_way_are_set_run_and_removed() {
+    let mut e = help_desk();
+    let metric = |r: &serde_json::Value, id: &str, name: &str| {
+        r["elements"]
+            .as_array()
+            .and_then(|es| es.iter().find(|x| x["id"] == id))
+            .and_then(|x| x["metrics"][name]["mean"].as_f64())
+    };
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert_eq!(metric(&r, "desk", "balked"), None, "{r}");
+    let before = ok(&mut e, "model.get", json!({})).to_string();
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "balking": {"type": "table", "join": [{"waiting": 1, "probability": 0.5}]}}),
+    );
+    ok(&mut e, "undo", json!({}));
+    assert_eq!(ok(&mut e, "model.get", json!({})).to_string(), before);
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "balking": {"type": "reciprocal", "counts_in_service": true}}),
+    );
+    ok(
+        &mut e,
+        "block.add",
+        json!({"kind": "sink", "id": "elsewhere"}),
+    );
+    let way = ok(
+        &mut e,
+        "connect",
+        json!({"from": "desk", "to": "elsewhere"}),
+    );
+    let way = way["id"].as_str().unwrap_or_default().to_owned();
+    ok(&mut e, "flow.set", json!({"id": way, "balked": true}));
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(m.contains("\"balked\":true"), "{m}");
+    assert!(m.contains("\"type\":\"reciprocal\""), "{m}");
+    let r = ok(&mut e, "run", json!({"replications": 2}));
+    assert!(metric(&r, "desk", "balked").is_some_and(|x| x > 0.0), "{r}");
+    assert!(
+        metric(&r, "desk", "balked_share").is_some_and(|x| x > 0.0 && x < 1.0),
+        "{r}"
+    );
+    assert!(
+        metric(&r, "elsewhere", "left").is_some_and(|x| x > 0.0),
+        "{r}"
+    );
+    // A table whose rows go backwards, or whose chance is above 1, is an error.
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "desk", "balking": {"type": "table", "join": [{"waiting": 3, "probability": 0.5}, {"waiting": 1, "probability": 1.5}]}}),
+    );
+    let v = ok(&mut e, "model.validate", json!({})).to_string();
+    assert!(
+        v.contains("balking_rows_order") && v.contains("balking_probability"),
+        "{v}"
+    );
+    ok(&mut e, "flow.set", json!({"id": way, "balked": false}));
+    ok(&mut e, "block.set", json!({"id": "desk", "balking": null}));
+    let m = ok(&mut e, "model.get", json!({})).to_string();
+    assert!(!m.contains("balk"), "{m}");
+    // A way for those that balk out of a server without balking is an error.
+    ok(&mut e, "flow.set", json!({"id": way, "balked": true}));
+    let v = ok(&mut e, "model.validate", json!({})).to_string();
+    assert!(v.contains("balked_without_balking"), "{v}");
+    // Balking is a server's only.
+    assert_eq!(
+        err(
+            &mut e,
+            "block.set",
+            json!({"id": "elsewhere", "balking": {"type": "reciprocal"}})
+        ),
+        ErrorCode::InvalidParams
+    );
+}

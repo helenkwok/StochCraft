@@ -13,10 +13,10 @@ use stochcraft_model::{
 use crate::edit::Op;
 use crate::run::RunMode;
 use crate::wire::{
-    self, AvailabilityDoc, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc, FamilySpec,
-    HealthCheckSpec, KindSpec, ModelDoc, NeedSpec, OnShiftEndSpec, PatienceSpec, PowerSpec,
-    ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc, RoutingSpec,
-    ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
+    self, AvailabilityDoc, BalkingSpec, BreakdownSpec, DemandSpec, DistSpec, EstimateDoc, EventDoc,
+    FamilySpec, HealthCheckSpec, KindSpec, ModelDoc, NeedSpec, OnShiftEndSpec, PatienceSpec,
+    PowerSpec, ProcessingBySpec, PropertyDoc, PropertyTypeSpec, PropertyValueSpec, QueueShiftDoc,
+    RoutingSpec, ScrapSpec, SetupSpec, ShiftDoc, Stamp, StopSpec, TimeUnitSpec, TimedDist,
 };
 use crate::{CommandError, Engine, ErrorCode, HistoryEntry};
 
@@ -117,6 +117,7 @@ fn check_keys(v: &Value, extra: &[&str]) -> Result<(), CommandError> {
             "setup",
             "planned_run_time",
             "patience",
+            "balking",
             "health_check",
             "shifts",
             "on_shift_end",
@@ -359,6 +360,13 @@ pub struct BlockSet {
     #[serde(default, deserialize_with = "some")]
     #[schemars(with = "Option<PatienceSpec>")]
     pub patience: Option<Option<PatienceSpec>>,
+    /// Servers: whether an arriving entity may not join the queue (balking): by a table of the
+    /// chance of joining from each number found (`type`: `table`, with `join` rows of
+    /// `waiting` and `probability`), or 1/(n + 1) (`reciprocal`); n counts those waiting, or
+    /// with `counts_in_service` also those in service; `null` removes it.
+    #[serde(default, deserialize_with = "some")]
+    #[schemars(with = "Option<BalkingSpec>")]
+    pub balking: Option<Option<BalkingSpec>>,
     /// Servers: each unit is checked every `interval` and taken out for `restart` when more
     /// entities wait than `limit` per working unit, keeping at least `keep` working; a job
     /// under way on a unit taken out is retried at once (`on_takeout`: `retry`, the default)
@@ -545,6 +553,10 @@ pub struct FlowSet {
     /// room take at once, besides its ordinary way out.
     #[serde(default)]
     pub turned_away: Option<bool>,
+    /// Out of a server with balking: whether this is the way entities not joining its queue
+    /// take at once, besides its ordinary way out.
+    #[serde(default)]
+    pub balked: Option<bool>,
 }
 
 /// The connection's id, or the elements it joins.
@@ -1176,6 +1188,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ("setup", p.setup.is_some()),
         ("planned_run_time", p.planned_run_time.is_some()),
         ("patience", p.patience.is_some()),
+        ("balking", p.balking.is_some()),
         ("health_check", p.health_check.is_some()),
         ("shifts", p.shifts.is_some()),
         ("on_shift_end", p.on_shift_end.is_some()),
@@ -1206,6 +1219,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             "setup",
             "planned_run_time",
             "patience",
+            "balking",
             "health_check",
             "shifts",
             "on_shift_end",
@@ -1267,6 +1281,7 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             setup,
             planned_run_time,
             patience,
+            balking,
             health_check,
             shifts,
             on_shift_end,
@@ -1280,6 +1295,9 @@ fn block_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
             }
             if let Some(x) = p.patience {
                 *patience = x.map(Into::into);
+            }
+            if let Some(x) = p.balking {
+                *balking = x.map(Into::into);
             }
             if let Some(x) = p.health_check {
                 *health_check = x.map(Into::into);
@@ -1687,6 +1705,7 @@ fn connect(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 rework: false,
                 abandoned: false,
                 turned_away: false,
+                balked: false,
             },
         ),
     )?;
@@ -1712,10 +1731,11 @@ fn flow_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         && p.rework.is_none()
         && p.abandoned.is_none()
         && p.turned_away.is_none()
+        && p.balked.is_none()
     {
         return Err(CommandError::new(
             ErrorCode::InvalidParams,
-            "nothing to set: give `probability`, `condition`, `quantity`, `rework`, `abandoned` or `turned_away`",
+            "nothing to set: give `probability`, `condition`, `quantity`, `rework`, `abandoned`, `turned_away` or `balked`",
         ));
     }
     let id = c.id.clone();
@@ -1735,7 +1755,10 @@ fn flow_set(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
         ops.push(Op::SetAbandoned(id.clone(), a));
     }
     if let Some(t) = p.turned_away {
-        ops.push(Op::SetTurnedAway(id, t));
+        ops.push(Op::SetTurnedAway(id.clone(), t));
+    }
+    if let Some(b) = p.balked {
+        ops.push(Op::SetBalked(id, b));
     }
     let op = if ops.len() == 1 {
         ops.remove(0)

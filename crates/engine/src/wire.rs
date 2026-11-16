@@ -8,11 +8,11 @@ use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric};
 use stochcraft_model::calendar::{Calendar, DateTime, Event, Rule};
 use stochcraft_model::{
-    Bounds, Breakdown, ByValue, Change, Connection, Demand, DemandPer, Diagnostic, Dist, Element,
-    ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck, Model, Need, OnShiftEnd,
-    OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power, ProcessingBy, Property, PropertyType,
-    PropertyValue, QueueLimit, ResourcePool, Routing, Scrap, Setup, Severity, Stop, ThreePoint,
-    TimeUnit, Timed, Transfer, Upper,
+    BalkJoin, BalkRow, Balking, Bounds, Breakdown, ByValue, Change, Connection, Demand, DemandPer,
+    Diagnostic, Dist, Element, ElementId, ElementKind, Estimate, Experiment, Family, HealthCheck,
+    Model, Need, OnShiftEnd, OnTakeout, Patience, PatienceUntil, PlaceWhileOut, Power,
+    ProcessingBy, Property, PropertyType, PropertyValue, QueueLimit, ResourcePool, Routing, Scrap,
+    Setup, Severity, Stop, ThreePoint, TimeUnit, Timed, Transfer, Upper,
 };
 use stochcraft_stats::split::{self, Split};
 
@@ -267,6 +267,11 @@ pub enum KindSpec {
         /// takes.
         #[serde(default, skip_serializing_if = "Option::is_none")]
         patience: Option<PatienceSpec>,
+        /// Whether an arriving entity may not join the queue (balking), with a chance that
+        /// depends on the number it finds; those that balk take the way out marked `balked`,
+        /// or leave the model. Left out when every entity joins.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        balking: Option<BalkingSpec>,
         /// Each unit is checked now and then and taken out for a restart when too many
         /// entities wait per working unit; left out when units are never taken out.
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -918,6 +923,7 @@ impl From<&ElementKind> for KindSpec {
                 setup,
                 planned_run_time,
                 patience,
+                balking,
                 health_check,
                 shifts,
                 on_shift_end,
@@ -946,6 +952,7 @@ impl From<&ElementKind> for KindSpec {
                 setup: setup.as_ref().map(Into::into),
                 planned_run_time: planned_run_time.as_ref().map(Into::into),
                 patience: patience.as_ref().map(Into::into),
+                balking: balking.as_ref().map(Into::into),
                 health_check: health_check.as_ref().map(Into::into),
                 shifts: timed(shifts, |t| ShiftDoc {
                     calendar: t.calendar.to_string(),
@@ -1018,6 +1025,7 @@ impl From<KindSpec> for ElementKind {
                 setup,
                 planned_run_time,
                 patience,
+                balking,
                 health_check,
                 shifts,
                 on_shift_end,
@@ -1043,6 +1051,7 @@ impl From<KindSpec> for ElementKind {
                 setup: setup.map(Into::into),
                 planned_run_time: planned_run_time.map(Into::into),
                 patience: patience.map(Into::into),
+                balking: balking.map(Into::into),
                 health_check: health_check.map(Into::into),
                 shifts: shifts.into_iter().map(Into::into).collect(),
                 on_shift_end: on_shift_end.into(),
@@ -1505,6 +1514,84 @@ pub struct ConnectionDoc {
     /// lost by the server. Left out when false.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub turned_away: bool,
+    /// Out of a server with balking: the way entities not joining its queue take at once,
+    /// besides its ordinary way out; counted as balked by the server. Left out when false.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub balked: bool,
+}
+
+/// Balking: an entity arriving at a server joins its queue with a chance that depends on the
+/// number n it finds there, else it balks. n counts those waiting (in the queue or in transfer
+/// here), or with `counts_in_service` also those in service. A chance of 0 or 1 draws nothing.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(tag = "type", rename_all = "snake_case", deny_unknown_fields)]
+pub enum BalkingSpec {
+    /// By a table: from each row's number on, the row's chance of joining; below the first
+    /// row, always.
+    Table {
+        join: Vec<BalkRowSpec>,
+        /// Whether n counts those in service as well as those waiting; left out when false.
+        #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+        counts_in_service: bool,
+    },
+    /// A chance of 1/(n + 1): always when none are there, half the time when one is, and so on.
+    Reciprocal {
+        /// Whether n counts those in service as well as those waiting; left out when false.
+        #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+        counts_in_service: bool,
+    },
+}
+
+/// One row of a balking table: from `waiting` found on, the chance of joining.
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct BalkRowSpec {
+    pub waiting: u32,
+    pub probability: f64,
+}
+
+impl From<&Balking> for BalkingSpec {
+    fn from(b: &Balking) -> Self {
+        let counts_in_service = b.counts_in_service;
+        match &b.join {
+            BalkJoin::Table(rows) => BalkingSpec::Table {
+                join: rows
+                    .iter()
+                    .map(|r| BalkRowSpec {
+                        waiting: r.waiting,
+                        probability: r.probability,
+                    })
+                    .collect(),
+                counts_in_service,
+            },
+            BalkJoin::Reciprocal => BalkingSpec::Reciprocal { counts_in_service },
+        }
+    }
+}
+
+impl From<BalkingSpec> for Balking {
+    fn from(b: BalkingSpec) -> Self {
+        match b {
+            BalkingSpec::Table {
+                join,
+                counts_in_service,
+            } => Balking {
+                join: BalkJoin::Table(
+                    join.into_iter()
+                        .map(|r| BalkRow {
+                            waiting: r.waiting,
+                            probability: r.probability,
+                        })
+                        .collect(),
+                ),
+                counts_in_service,
+            },
+            BalkingSpec::Reciprocal { counts_in_service } => Balking {
+                join: BalkJoin::Reciprocal,
+                counts_in_service,
+            },
+        }
+    }
 }
 
 /// How long an entity waits at a server before it gives up, drawn as it enters, and what must
@@ -1869,6 +1956,7 @@ impl From<&Model> for ModelDoc {
                     rework: c.rework,
                     abandoned: c.abandoned,
                     turned_away: c.turned_away,
+                    balked: c.balked,
                 })
                 .collect(),
             resources: m.resources.iter().map(Into::into).collect(),
@@ -1923,6 +2011,7 @@ impl From<ModelDoc> for Model {
                     rework: c.rework,
                     abandoned: c.abandoned,
                     turned_away: c.turned_away,
+                    balked: c.balked,
                 })
                 .collect(),
             resources: m.resources.into_iter().map(Into::into).collect(),
@@ -2403,6 +2492,7 @@ mod tests {
                 setup: None,
                 planned_run_time: None,
                 patience: None,
+                balking: None,
                 health_check: None,
                 shifts: Vec::new(),
                 on_shift_end: OnShiftEndSpec::Finish,

@@ -679,6 +679,16 @@ unit	yr	ж.
 	Must be from {min} to {max}	{min} мен {max} аралығында болуы керек
 	Must be more than {min}	{min} мәнінен көп болуы керек
 	Must be {min} or more	{min} немесе одан көп болуы керек
+	1/(n + 1)	1/(n + 1)
+	Balked	Кезекке тұрмағандар
+	Balked on {id}	{id} ағынында кезекке тұрмағандар
+	Balking	Кезекке тұрмау
+	Count those in service	Қызмет көрсетілетіндерді де санау
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Кезекке тұрмайтын нысандар бірден осы ағынмен жүреді (мысалы, кейінірек қайта көру үшін), жоғалудың орнына; мұнда олар кезекке тұрмаған деп саналады.
+	Joins with probability	Кезекке тұру ықтималдығы
+	Number waiting	Күтушілер саны
+	Share balked	Кезекке тұрмағандар үлесі
+	Table	Кесте
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды

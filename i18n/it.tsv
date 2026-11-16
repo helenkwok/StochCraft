@@ -679,6 +679,16 @@ unit	yr	a
 	Must be from {min} to {max}	Deve essere tra {min} e {max}
 	Must be more than {min}	Deve essere maggiore di {min}
 	Must be {min} or more	Deve essere {min} o più
+	1/(n + 1)	1/(n + 1)
+	Balked	Non entrate in coda
+	Balked on {id}	Non entrate in coda su {id}
+	Balking	Mancato ingresso in coda
+	Count those in service	Contare anche quelle in servizio
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Le entità che non entrano in coda prendono subito questo flusso (per riprovare più tardi, ad esempio), invece di andare perse; qui contano come non entrate in coda.
+	Joins with probability	Entra in coda con probabilità
+	Number waiting	Numero in attesa
+	Share balked	Quota non entrata in coda
+	Table	Tabella
 @plural	Added {n} block|Added {n} blocks	Aggiunto {n} blocco|Aggiunti {n} blocchi
 @plural	Copied {n} block|Copied {n} blocks	Copiato {n} blocco|Copiati {n} blocchi
 @plural	Finished {n} run|Finished {n} runs	Completata {n} esecuzione|Completate {n} esecuzioni

@@ -679,6 +679,16 @@ unit	yr	thn
 	Must be from {min} to {max}	Harus antara {min} dan {max}
 	Must be more than {min}	Harus lebih dari {min}
 	Must be {min} or more	Harus {min} atau lebih
+	1/(n + 1)	1/(n + 1)
+	Balked	Batal mengantre
+	Balked on {id}	Batal mengantre di {id}
+	Balking	Batal mengantre
+	Count those in service	Hitung juga yang sedang dilayani
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitas yang tidak masuk antrean langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang; di sini mereka dihitung sebagai batal mengantre.
+	Joins with probability	Masuk antrean dengan probabilitas
+	Number waiting	Jumlah menunggu
+	Share balked	Proporsi yang batal mengantre
+	Table	Tabel
 @plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
 @plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
 @plural	Finished {n} run|Finished {n} runs	Selesai {n} eksekusi

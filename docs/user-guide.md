@@ -128,6 +128,14 @@ More settings are folded under headings; open them when you need them:
 
 - **Breakdowns and availability:** time to failure, repair time, and availability by calendar.
 - **Patience:** entities give up waiting after a time.
+- **Balking:** arriving entities may not join the queue, more often the longer it is. Choose
+  **Table** (rows of **Number waiting** and the chance it **Joins with probability** from that
+  number on; below the first row everyone joins) or **1/(n + 1)** (everyone joins an empty queue,
+  half when one waits, a third when two do, and so on). Tick **Count those in service** to count
+  the entities being served as well as those waiting. Those that balk take the flow marked
+  **Balked**, or leave the model; results show **Balked** and **Share balked** for the task. To
+  turn away everyone once a queue reaches a length, a **Waiting room** of that size with a flow
+  marked **Turned away** does the same, and needs no balking.
 - **Health check:** take servers out of service when they are overloaded, and back after a
   restart.
 - **Properties:** values set on each entity as it enters, for example a product type that
@@ -138,7 +146,7 @@ More settings are folded under headings; open them when you need them:
 
 On a decision, each outgoing flow has a probability **p** or a condition **if**, and you can set
 a **Default flow**. A flow can be marked **Rework**, and on a task with a resource also
-**Abandoned** or **Turned away**.
+**Abandoned**, **Turned away** or **Balked**.
 
 ### Shared resources and shifts
 

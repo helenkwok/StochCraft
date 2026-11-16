@@ -679,6 +679,16 @@ unit	yr	god.
 	Must be from {min} to {max}	Mora biti od {min} do {max}
 	Must be more than {min}	Mora biti više od {min}
 	Must be {min} or more	Mora biti {min} ili više
+	1/(n + 1)	1/(n + 1)
+	Balked	Nisu ušli u red
+	Balked on {id}	Nisu ušli u red na {id}
+	Balking	Neulazak u red
+	Count those in service	Brojati i one na usluživanju
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteti koji ne uđu u red odmah idu ovim tokom (da kasnije pokušaju ponovo, recimo), umjesto da budu izgubljeni; ovdje se broje kao oni koji nisu ušli u red.
+	Joins with probability	Ulazi u red s vjerovatnoćom
+	Number waiting	Broj na čekanju
+	Share balked	Udio onih koji nisu ušli u red
+	Table	Tablica
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana su {n} bloka|Dodano je {n} blokova
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana su {n} bloka|Kopirano je {n} blokova
 @plural	Finished {n} run|Finished {n} runs	Završeno je {n} pokretanje|Završena su {n} pokretanja|Završeno je {n} pokretanja

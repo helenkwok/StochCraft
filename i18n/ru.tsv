@@ -679,6 +679,16 @@ unit	yr	г.
 	Must be from {min} to {max}	Должно быть от {min} до {max}
 	Must be more than {min}	Должно быть больше {min}
 	Must be {min} or more	Должно быть не меньше {min}
+	1/(n + 1)	1/(n + 1)
+	Balked	Отказавшиеся
+	Balked on {id}	Отказавшиеся на {id}
+	Balking	Отказ от очереди
+	Count those in service	Учитывать и обслуживаемых
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Сущности, которые не встают в очередь, сразу идут по этому потоку (например, чтобы попробовать позже), а не теряются; здесь они считаются отказавшимися.
+	Joins with probability	Встаёт в очередь с вероятностью
+	Number waiting	Число ожидающих
+	Share balked	Доля отказавшихся
+	Table	Таблица
 @plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
 @plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
 @plural	Finished {n} run|Finished {n} runs	Завершён {n} запуск|Завершены {n} запуска|Завершено {n} запусков

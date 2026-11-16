@@ -679,6 +679,16 @@ unit	yr	a
 	Must be from {min} to {max}	Deve estar entre {min} e {max}
 	Must be more than {min}	Deve ser maior que {min}
 	Must be {min} or more	Deve ser {min} ou mais
+	1/(n + 1)	1/(n + 1)
+	Balked	Não entraram
+	Balked on {id}	Não entraram em {id}
+	Balking	Não entrar na fila
+	Count those in service	Contar também as em atendimento
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	As entidades que não entram na fila seguem este fluxo na hora (para tentar de novo mais tarde, por exemplo), em vez de serem perdidas; aqui elas contam como não entradas na fila.
+	Joins with probability	Entra na fila com probabilidade
+	Number waiting	Número aguardando
+	Share balked	Proporção que não entrou
+	Table	Tabela
 @plural	Added {n} block|Added {n} blocks	{n} bloco adicionado|{n} blocos adicionados
 @plural	Copied {n} block|Copied {n} blocks	{n} bloco copiado|{n} blocos copiados
 @plural	Finished {n} run|Finished {n} runs	Concluída {n} execução|Concluídas {n} execuções

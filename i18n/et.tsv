@@ -679,6 +679,16 @@ unit	yr	a
 	Must be from {min} to {max}	Peab olema vahemikus {min} kuni {max}
 	Must be more than {min}	Peab olema suurem kui {min}
 	Must be {min} or more	Peab olema {min} või rohkem
+	1/(n + 1)	1/(n + 1)
+	Balked	Ei liitunud järjekorraga
+	Balked on {id}	Ei liitunud järjekorraga voos {id}
+	Balking	Järjekorraga mitteliitumine
+	Count those in service	Arvesta ka teenindatavaid
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Olemid, kes järjekorraga ei liitu, lähevad kohe seda voogu mööda (näiteks hiljem uuesti proovima), selle asemel et kaotsi minna; siin loetakse need järjekorraga mitteliitunuks.
+	Joins with probability	Liitub järjekorraga tõenäosusega
+	Number waiting	Ootel olevate arv
+	Share balked	Järjekorraga mitteliitunute osakaal
+	Table	Tabel
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud

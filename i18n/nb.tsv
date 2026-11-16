@@ -679,6 +679,16 @@ unit	yr	år
 	Must be from {min} to {max}	Må være fra {min} til {max}
 	Must be more than {min}	Må være mer enn {min}
 	Must be {min} or more	Må være {min} eller mer
+	1/(n + 1)	1/(n + 1)
+	Balked	Gikk ikke i kø
+	Balked on {id}	Gikk ikke i kø på {id}
+	Balking	Avstå fra kø
+	Count those in service	Tell med dem under betjening
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Enheter som ikke stiller seg i køen, tar straks denne flyten (for å prøve igjen senere, for eksempel) i stedet for å gå tapt; de telles her som at de ikke gikk i kø.
+	Joins with probability	Stiller seg i kø med sannsynlighet
+	Number waiting	Antall ventende
+	Share balked	Andel som ikke gikk i kø
+	Table	Tabell
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
 @plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført

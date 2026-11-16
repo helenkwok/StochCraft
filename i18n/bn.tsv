@@ -679,6 +679,16 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	বছর
+	1/(n + 1)	1/(n + 1)
+	Balked	সারিতে না দাঁড়ানো
+	Balked on {id}	{id}-এ সারিতে না দাঁড়ানো
+	Balking	সারিতে না দাঁড়ানো
+	Count those in service	পরিষেবাধীনদেরও গুনুন
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	যে সত্তারা সারিতে যোগ দেয় না তারা সঙ্গে সঙ্গে এই প্রবাহ ধরে যায় (যেমন পরে আবার চেষ্টা করতে), হারিয়ে যাওয়ার বদলে; এখানে তাদের সারিতে না দাঁড়ানো হিসেবে গোনা হয়।
+	Joins with probability	সারিতে যোগ দেওয়ার সম্ভাবনা
+	Number waiting	অপেক্ষমাণ সংখ্যা
+	Share balked	সারিতে না দাঁড়ানোদের অনুপাত
+	Table	সারণি
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে

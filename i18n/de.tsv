@@ -679,6 +679,16 @@ unit	yr	J.
 	Must be from {min} to {max}	Muss zwischen {min} und {max} liegen
 	Must be more than {min}	Muss größer als {min} sein
 	Must be {min} or more	Muss {min} oder mehr sein
+	1/(n + 1)	1/(n + 1)
+	Balked	Nicht eingereiht
+	Balked on {id}	Nicht eingereiht bei {id}
+	Balking	Nicht einreihen
+	Count those in service	In Bedienung befindliche mitzählen
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitäten, die sich nicht in die Warteschlange einreihen, nehmen sofort diese Verbindung (etwa um es später erneut zu versuchen), statt verloren zu gehen; sie zählen hier als nicht eingereiht.
+	Joins with probability	Reiht sich ein mit Wahrscheinlichkeit
+	Number waiting	Anzahl Wartender
+	Share balked	Anteil nicht eingereihter Ankünfte
+	Table	Tabelle
 @plural	Added {n} block|Added {n} blocks	{n} Block hinzugefügt|{n} Blöcke hinzugefügt
 @plural	Copied {n} block|Copied {n} blocks	{n} Block kopiert|{n} Blöcke kopiert
 @plural	Finished {n} run|Finished {n} runs	{n} Lauf abgeschlossen|{n} Läufe abgeschlossen

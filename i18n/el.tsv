@@ -679,6 +679,16 @@ unit	yr	έτ
 	Must be from {min} to {max}	Πρέπει να είναι από {min} έως {max}
 	Must be more than {min}	Πρέπει να είναι μεγαλύτερο από {min}
 	Must be {min} or more	Πρέπει να είναι {min} ή περισσότερο
+	1/(n + 1)	1/(n + 1)
+	Balked	Μη είσοδος
+	Balked on {id}	Μη είσοδος στο {id}
+	Balking	Μη είσοδος στην ουρά
+	Count those in service	Να μετρώνται και όσες εξυπηρετούνται
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Οι οντότητες που δεν μπαίνουν στην ουρά ακολουθούν αμέσως αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε), αντί να χαθούν· εδώ μετρώνται ως μη είσοδος.
+	Joins with probability	Μπαίνει στην ουρά με πιθανότητα
+	Number waiting	Πλήθος σε αναμονή
+	Share balked	Ποσοστό μη εισόδου
+	Table	Πίνακας
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις

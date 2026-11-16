@@ -679,6 +679,16 @@ unit	yr	năm
 	Must be from {min} to {max}	Phải từ {min} đến {max}
 	Must be more than {min}	Phải lớn hơn {min}
 	Must be {min} or more	Phải từ {min} trở lên
+	1/(n + 1)	1/(n + 1)
+	Balked	Không vào hàng
+	Balked on {id}	Không vào hàng tại {id}
+	Balking	Không vào hàng đợi
+	Count those in service	Tính cả thực thể đang được phục vụ
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Các thực thể không vào hàng đợi sẽ đi theo luồng này ngay (chẳng hạn để thử lại sau), thay vì bị mất; ở đây chúng được tính là không vào hàng.
+	Joins with probability	Vào hàng đợi với xác suất
+	Number waiting	Số đang chờ
+	Share balked	Tỷ lệ không vào hàng
+	Table	Bảng
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy

@@ -679,6 +679,16 @@ unit	yr	år
 	Must be from {min} to {max}	Måste vara från {min} till {max}
 	Must be more than {min}	Måste vara mer än {min}
 	Must be {min} or more	Måste vara {min} eller mer
+	1/(n + 1)	1/(n + 1)
+	Balked	Ställde sig inte i kö
+	Balked on {id}	Ställde sig inte i kö på {id}
+	Balking	Avstå från kö
+	Count those in service	Räkna med dem som betjänas
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entiteter som inte ställer sig i kön tar genast detta flöde (för att försöka igen senare, till exempel) i stället för att gå förlorade; de räknas här som att de inte ställde sig i kö.
+	Joins with probability	Ställer sig i kö med sannolikhet
+	Number waiting	Antal väntande
+	Share balked	Andel som inte ställde sig i kö
+	Table	Tabell
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara

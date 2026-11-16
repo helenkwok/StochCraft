@@ -679,6 +679,16 @@ unit	yr	年
 	Must be from {min} to {max}	必须在 {min} 到 {max} 之间
 	Must be more than {min}	必须大于 {min}
 	Must be {min} or more	必须不小于 {min}
+	1/(n + 1)	1/(n + 1)
+	Balked	止步
+	Balked on {id}	{id} 上的止步
+	Balking	止步
+	Count those in service	计入服务中的实体
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	不加入队列的实体立即走此顺序流（例如稍后重试），而不是流失；此处计为止步。
+	Joins with probability	加入队列的概率
+	Number waiting	等待数量
+	Share balked	止步比例
+	Table	表格
 @plural	Added {n} block|Added {n} blocks	已添加 {n} 个区块
 @plural	Copied {n} block|Copied {n} blocks	已复制 {n} 个区块
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次运行
