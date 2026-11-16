@@ -692,6 +692,14 @@ unit	yr	年
 	Key measures	关键指标
 	Up to 4 per block, rounded to what the interval supports	每个区块最多 4 项，按置信区间四舍五入
 	All measures ({n} more)	全部指标（另有 {n} 项）
+	How sure are these numbers?	这些数字有多可靠？
+	One run gives no interval, so these numbers cannot be told from chance.	只运行一次无法得到置信区间，因此无法将这些数字与偶然区分开。
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure}（{block}）在 {n} 次运行后仅精确到 {value}。
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	宽于 ± 10%（比例为 ± 2 个百分点）的其他关键指标：{k}。
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	模型从空状态开始且未设置预热期，因此开始阶段会使均值偏离长期值。
+	Set a {value} warm-up	设置 {value} 的预热期
+	The run is too short to suggest a warm-up: make it longer, then set one.	运行时间太短，无法建议预热期：请延长运行，然后设置预热期。
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} 个关键指标中有 {k} 个已稳定：每个都精确到 ± 5%（比例为 ± 1 个百分点）或更好。
 @plural	Added {n} block|Added {n} blocks	已添加 {n} 个区块
 @plural	Copied {n} block|Copied {n} blocks	已复制 {n} 个区块
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次运行
@@ -709,3 +717,5 @@ unit	yr	年
 @plural	{n} run|{n} runs	{n} 次运行
 @plural	Run ({n} problem)|Run ({n} problems)	运行（{n} 个问题）
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} 个问题：{blocks}
+@plural	Use {n} run|Use {n} runs	使用 {n} 次运行
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	使用 {n} 次运行（约 ± 5%）

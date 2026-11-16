@@ -692,6 +692,14 @@ unit	yr	年
 	Key measures	關鍵指標
 	Up to 4 per block, rounded to what the interval supports	每個區塊最多 4 項，依信賴區間四捨五入
 	All measures ({n} more)	全部指標（另有 {n} 項）
+	How sure are these numbers?	這些數字有多可靠？
+	One run gives no interval, so these numbers cannot be told from chance.	只執行一次無法得到信賴區間，因此無法將這些數字與偶然區分開來。
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure}（{block}）在 {n} 次執行後僅精確到 {value}。
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	寬於 ± 10%（比例為 ± 2 個百分點）的其他關鍵指標：{k}。
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	模型從空狀態開始且未設定暖機期，因此開始階段會使平均值偏離長期值。
+	Set a {value} warm-up	設定 {value} 的暖機期
+	The run is too short to suggest a warm-up: make it longer, then set one.	執行時間太短，無法建議暖機期：請延長執行，然後設定暖機期。
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} 個關鍵指標中有 {k} 個已穩定：每個都精確到 ± 5%（比例為 ± 1 個百分點）或更好。
 @plural	Added {n} block|Added {n} blocks	已新增 {n} 個區塊
 @plural	Copied {n} block|Copied {n} blocks	已複製 {n} 個區塊
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次執行
@@ -709,3 +717,5 @@ unit	yr	年
 @plural	{n} run|{n} runs	{n} 次執行
 @plural	Run ({n} problem)|Run ({n} problems)	執行（{n} 個問題）
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} 個問題：{blocks}
+@plural	Use {n} run|Use {n} runs	使用 {n} 次執行
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	使用 {n} 次執行（約 ± 5%）

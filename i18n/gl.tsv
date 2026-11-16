@@ -692,6 +692,14 @@ unit	yr	a
 	Key measures	Métricas clave
 	Up to 4 per block, rounded to what the interval supports	Ata 4 por bloque, redondeadas segundo o intervalo
 	All measures ({n} more)	Todas as métricas ({n} máis)
+	How sure are these numbers?	Que seguros son estes números?
+	One run gives no interval, so these numbers cannot be told from chance.	Unha soa execución non dá intervalo, así que estes números non se poden distinguir do azar.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) só se coñece con {value} tras {n} execucións.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Outras métricas clave con máis de ± 10% (± 2 puntos nunha proporción): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	O modelo comeza baleiro e non hai quecemento definido, así que o inicio afasta as medias do seu valor a longo prazo.
+	Set a {value} warm-up	Definir un quecemento de {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	A execución é curta de máis para suxerir un quecemento: alónguea e despois defina un.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} de {m} métricas clave son estables: cada unha coñécese con ± 5% (± 1 punto nunha proporción) ou mellor.
 @plural	Added {n} block|Added {n} blocks	Engadiuse {n} bloque|Engadíronse {n} bloques
 @plural	Copied {n} block|Copied {n} blocks	Copiouse {n} bloque|Copiáronse {n} bloques
 @plural	Finished {n} run|Finished {n} runs	Rematou {n} execución|Remataron {n} execucións
@@ -709,3 +717,5 @@ unit	yr	a
 @plural	{n} run|{n} runs	{n} execución|{n} execucións
 @plural	Run ({n} problem)|Run ({n} problems)	Executar ({n} problema)|Executar ({n} problemas)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemas: {blocks}
+@plural	Use {n} run|Use {n} runs	Usar {n} execución|Usar {n} execucións
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usar {n} execución (aprox. ± 5%)|Usar {n} execucións (aprox. ± 5%)

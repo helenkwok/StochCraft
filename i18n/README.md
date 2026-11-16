@@ -632,6 +632,11 @@ engine's messages (validation, file notes) are English too.
   ru округлять. Wiktionary lists no word for that sense in the other 32 catalogs, whose
   rounding word was drafted from the plain meaning of the English and is not yet checked against
   a source (least certain: lo ປັດເສດ, ta, te, bn). Not reviewed by native speakers.
+- "How sure are these numbers?" (issue #147, ten strings: the trust line, its fixes and what is
+  settled) was drafted from the plain meaning of the English, with each catalog's own words for
+  run (and its plural forms, from the catalog's "{n} runs" row), warm-up, metric and confidence
+  interval. Percentage point is the usual term in each language as far as known; it is not checked
+  against a source. Not reviewed by native speakers.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

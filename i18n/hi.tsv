@@ -692,6 +692,14 @@ unit	yr	वर्ष
 	Key measures	मुख्य मापदंड
 	Up to 4 per block, rounded to what the interval supports	प्रति ब्लॉक अधिकतम 4, विश्वास अंतराल के अनुसार पूर्णांकित
 	All measures ({n} more)	सभी मापदंड ({n} और)
+	How sure are these numbers?	ये संख्याएँ कितनी विश्वसनीय हैं?
+	One run gives no interval, so these numbers cannot be told from chance.	एक रन से कोई अंतराल नहीं मिलता, इसलिए इन संख्याओं को संयोग से अलग नहीं किया जा सकता।
+	{measure} ({block}) is known only to {value} after {n} runs.	{n} रन के बाद {measure} ({block}) केवल {value} तक ज्ञात है।
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	± 10% (अनुपात के लिए ± 2 प्रतिशत अंक) से अधिक चौड़े अन्य मुख्य मापदंड: {k}।
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	मॉडल खाली शुरू होता है और कोई वार्म-अप सेट नहीं है, इसलिए शुरुआत माध्यों को दीर्घकालिक मान से दूर कर देती है।
+	Set a {value} warm-up	{value} का वार्म-अप सेट करें
+	The run is too short to suggest a warm-up: make it longer, then set one.	वार्म-अप सुझाने के लिए रन बहुत छोटा है: इसे लंबा करें, फिर एक वार्म-अप सेट करें।
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} में से {k} मुख्य मापदंड स्थिर हैं: हर एक ± 5% (अनुपात के लिए ± 1 प्रतिशत अंक) या बेहतर तक ज्ञात है।
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए
@@ -709,3 +717,5 @@ unit	yr	वर्ष
 @plural	{n} run|{n} runs	{n} रन|{n} रन
 @plural	Run ({n} problem)|Run ({n} problems)	चलाएँ ({n} समस्या)|चलाएँ ({n} समस्याएँ)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} समस्या: {blocks}|{n} समस्याएँ: {blocks}
+@plural	Use {n} run|Use {n} runs	{n} रन उपयोग करें|{n} रन उपयोग करें
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} रन उपयोग करें (लगभग ± 5%)|{n} रन उपयोग करें (लगभग ± 5%)

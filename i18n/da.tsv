@@ -692,6 +692,14 @@ unit	yr	år
 	Key measures	Vigtigste målepunkter
 	Up to 4 per block, rounded to what the interval supports	Op til 4 pr. blok, afrundet efter intervallet
 	All measures ({n} more)	Alle målepunkter ({n} mere)
+	How sure are these numbers?	Hvor sikre er disse tal?
+	One run gives no interval, so these numbers cannot be told from chance.	Én kørsel giver intet interval, så disse tal kan ikke skelnes fra tilfældigheder.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) kendes kun med {value} efter {n} kørsler.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Andre vigtige målepunkter bredere end ± 10% (± 2 procentpoint for en andel): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Modellen starter tom, og der er ikke angivet nogen opvarmning, så starten trækker gennemsnittene væk fra det lange løb.
+	Set a {value} warm-up	Angiv en opvarmning på {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Kørslen er for kort til at foreslå en opvarmning: gør den længere, og angiv derefter en.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} af {m} vigtige målepunkter er stabile: hvert kendes med ± 5% (± 1 procentpoint for en andel) eller bedre.
 @plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
 @plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført
@@ -709,3 +717,5 @@ unit	yr	år
 @plural	{n} run|{n} runs	{n} kørsel|{n} kørsler
 @plural	Run ({n} problem)|Run ({n} problems)	Kør ({n} problem)|Kør ({n} problemer)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemer: {blocks}
+@plural	Use {n} run|Use {n} runs	Brug {n} kørsel|Brug {n} kørsler
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Brug {n} kørsel (ca. ± 5%)|Brug {n} kørsler (ca. ± 5%)

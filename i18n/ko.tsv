@@ -692,6 +692,14 @@ unit	yr	년
 	Key measures	주요 지표
 	Up to 4 per block, rounded to what the interval supports	블록당 최대 4개, 신뢰 구간에 맞춰 반올림
 	All measures ({n} more)	모든 지표({n}개 더)
+	How sure are these numbers?	이 숫자들은 얼마나 확실한가요?
+	One run gives no interval, so these numbers cannot be told from chance.	실행이 1회뿐이면 구간이 없으므로 이 숫자들을 우연과 구별할 수 없습니다.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure}({block})은(는) 실행 {n}회 후에도 {value}까지만 알 수 있습니다.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	± 10%(비율은 ± 2%p)보다 넓은 다른 주요 지표: {k}개.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	모델이 빈 상태에서 시작하고 준비 기간이 설정되지 않아, 시작 부분이 평균을 장기적인 값에서 멀어지게 합니다.
+	Set a {value} warm-up	준비 기간 {value} 설정
+	The run is too short to suggest a warm-up: make it longer, then set one.	실행이 너무 짧아 준비 기간을 제안할 수 없습니다: 실행을 늘린 다음 설정하세요.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	주요 지표 {m}개 중 {k}개가 안정적입니다: 각각 ± 5%(비율은 ± 1%p) 이내로 알려져 있습니다.
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료
@@ -709,3 +717,5 @@ unit	yr	년
 @plural	{n} run|{n} runs	실행 {n}회
 @plural	Run ({n} problem)|Run ({n} problems)	실행 (문제 {n}개)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	문제 {n}개: {blocks}
+@plural	Use {n} run|Use {n} runs	실행 {n}회 사용
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	실행 {n}회 사용(약 ± 5%)

@@ -692,6 +692,14 @@ unit	yr	v
 	Key measures	Treguesit kryesorë
 	Up to 4 per block, rounded to what the interval supports	Deri në 4 për bllok, të rrumbullakosur sipas intervalit
 	All measures ({n} more)	Të gjithë treguesit (edhe {n})
+	How sure are these numbers?	Sa të sigurta janë këto numra?
+	One run gives no interval, so these numbers cannot be told from chance.	Një ekzekutim i vetëm nuk jep interval, prandaj këto numra nuk mund të dallohen nga rastësia.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) njihet vetëm me {value} pas {n} ekzekutimeve.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Tregues të tjerë kryesorë më të gjerë se ± 10% (± 2 pikë përqindjeje për një pjesë): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Modeli nis bosh dhe nuk është caktuar ngrohje, prandaj fillimi i largon mesataret nga vlera afatgjatë.
+	Set a {value} warm-up	Cakto një ngrohje prej {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Ekzekutimi është shumë i shkurtër për të sugjeruar një ngrohje: zgjateni dhe pastaj caktoni një.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} nga {m} tregues kryesorë janë të qëndrueshëm: secili njihet me ± 5% (± 1 pikë përqindjeje për një pjesë) ose më mirë.
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime
@@ -709,3 +717,5 @@ unit	yr	v
 @plural	{n} run|{n} runs	{n} ekzekutim|{n} ekzekutime
 @plural	Run ({n} problem)|Run ({n} problems)	Ekzekuto ({n} problem)|Ekzekuto ({n} probleme)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} probleme: {blocks}
+@plural	Use {n} run|Use {n} runs	Përdor {n} ekzekutim|Përdor {n} ekzekutime
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Përdor {n} ekzekutim (rreth ± 5%)|Përdor {n} ekzekutime (rreth ± 5%)

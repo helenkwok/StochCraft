@@ -692,6 +692,14 @@ unit	yr	年
 	Key measures	主な指標
 	Up to 4 per block, rounded to what the interval supports	ブロックごとに最大 4 つ、信頼区間に合わせて四捨五入した値
 	All measures ({n} more)	すべての指標（ほか {n} 件）
+	How sure are these numbers?	これらの数値はどれくらい確かですか？
+	One run gives no interval, so these numbers cannot be told from chance.	実行が 1 回では区間が得られないため、これらの数値を偶然と区別できません。
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) は {n} 回の実行後も {value} までしかわかっていません。
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	± 10% (割合では ± 2 ポイント) より広いほかの指標: {k}。
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	モデルは空の状態から始まり、ウォームアップが設定されていないため、開始時の影響で平均が長期的な値からずれます。
+	Set a {value} warm-up	{value} のウォームアップを設定
+	The run is too short to suggest a warm-up: make it longer, then set one.	実行が短すぎてウォームアップを提案できません: 実行を長くしてから設定してください。
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	主な指標 {m} 個のうち {k} 個が安定しています: いずれも ± 5% (割合では ± 1 ポイント) 以内でわかっています。
 @plural	Added {n} block|Added {n} blocks	{n} 個のブロックを追加しました
 @plural	Copied {n} block|Copied {n} blocks	{n} 個のブロックをコピーしました
 @plural	Finished {n} run|Finished {n} runs	{n} 回の実行が完了しました
@@ -709,3 +717,5 @@ unit	yr	年
 @plural	{n} run|{n} runs	{n} 回の実行
 @plural	Run ({n} problem)|Run ({n} problems)	実行 (問題 {n} 件)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	問題 {n} 件: {blocks}
+@plural	Use {n} run|Use {n} runs	{n} 回実行する
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} 回実行する (約 ± 5%)

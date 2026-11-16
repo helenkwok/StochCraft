@@ -692,6 +692,14 @@ unit	yr	წელი
 	Key measures	ძირითადი მაჩვენებლები
 	Up to 4 per block, rounded to what the interval supports	ბლოკზე მაქსიმუმ 4, დამრგვალებული ნდობის ინტერვალის მიხედვით
 	All measures ({n} more)	ყველა მაჩვენებელი (კიდევ {n})
+	How sure are these numbers?	რამდენად სანდოა ეს რიცხვები?
+	One run gives no interval, so these numbers cannot be told from chance.	ერთი გაშვება ინტერვალს არ იძლევა, ამიტომ ამ რიცხვების შემთხვევითობისგან გარჩევა შეუძლებელია.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) {n} გაშვების შემდეგ ცნობილია მხოლოდ {value} სიზუსტით.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	სხვა ძირითადი მაჩვენებლები ± 10%-ზე (წილისთვის ± 2 პროცენტულ პუნქტზე) ფართო ინტერვალით: {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	მოდელი ცარიელი იწყება და გახურების პერიოდი არ არის დაყენებული, ამიტომ დასაწყისი საშუალოებს გრძელვადიანი მნიშვნელობისგან აშორებს.
+	Set a {value} warm-up	{value} გახურების პერიოდის დაყენება
+	The run is too short to suggest a warm-up: make it longer, then set one.	გაშვება ძალიან მოკლეა გახურების პერიოდის შესათავაზებლად: გაახანგრძლივეთ და შემდეგ დააყენეთ.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} ძირითადი მაჩვენებლიდან {k} სტაბილურია: თითოეული ცნობილია ± 5% (წილისთვის ± 1 პროცენტული პუნქტი) ან უკეთესი სიზუსტით.
 @plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
 @plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
 @plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გაშვება|დასრულდა {n} გაშვება
@@ -709,3 +717,5 @@ unit	yr	წელი
 @plural	{n} run|{n} runs	{n} გაშვება|{n} გაშვება
 @plural	Run ({n} problem)|Run ({n} problems)	გაშვება ({n} პრობლემა)|გაშვება ({n} პრობლემა)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} პრობლემა: {blocks}|{n} პრობლემა: {blocks}
+@plural	Use {n} run|Use {n} runs	{n} გაშვების გამოყენება|{n} გაშვების გამოყენება
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} გაშვების გამოყენება (დაახლ. ± 5%)|{n} გაშვების გამოყენება (დაახლ. ± 5%)

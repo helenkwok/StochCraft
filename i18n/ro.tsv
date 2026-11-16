@@ -692,6 +692,14 @@ unit	yr	a
 	Key measures	Indicatori principali
 	Up to 4 per block, rounded to what the interval supports	Până la 4 pe bloc, rotunjiți după interval
 	All measures ({n} more)	Toți indicatorii (încă {n})
+	How sure are these numbers?	Cât de sigure sunt aceste numere?
+	One run gives no interval, so these numbers cannot be told from chance.	O singură rulare nu dă niciun interval, deci aceste numere nu pot fi deosebite de întâmplare.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) este cunoscut doar cu {value} după {n} rulări.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Alți indicatori principali mai largi de ± 10% (± 2 puncte procentuale pentru o pondere): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Modelul pornește gol și nu este setată nicio perioadă de încălzire, deci începutul îndepărtează mediile de valoarea pe termen lung.
+	Set a {value} warm-up	Setează o perioadă de încălzire de {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Rularea este prea scurtă pentru a sugera o perioadă de încălzire: prelungiți-o, apoi setați una.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} din {m} indicatori principali sunt stabili: fiecare este cunoscut cu ± 5% (± 1 punct procentual pentru o pondere) sau mai bine.
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări
@@ -709,3 +717,5 @@ unit	yr	a
 @plural	{n} run|{n} runs	{n} rulare|{n} rulări|{n} de rulări
 @plural	Run ({n} problem)|Run ({n} problems)	Rulează ({n} problemă)|Rulează ({n} probleme)|Rulează ({n} de probleme)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problemă: {blocks}|{n} probleme: {blocks}|{n} de probleme: {blocks}
+@plural	Use {n} run|Use {n} runs	Folosește {n} rulare|Folosește {n} rulări|Folosește {n} de rulări
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Folosește {n} rulare (circa ± 5%)|Folosește {n} rulări (circa ± 5%)|Folosește {n} de rulări (circa ± 5%)

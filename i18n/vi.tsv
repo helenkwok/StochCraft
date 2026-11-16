@@ -692,6 +692,14 @@ unit	yr	năm
 	Key measures	Chỉ số chính
 	Up to 4 per block, rounded to what the interval supports	Tối đa 4 mỗi khối, làm tròn theo khoảng tin cậy
 	All measures ({n} more)	Tất cả chỉ số (thêm {n})
+	How sure are these numbers?	Các con số này chắc chắn đến mức nào?
+	One run gives no interval, so these numbers cannot be told from chance.	Một lần chạy không cho khoảng tin cậy, nên không thể phân biệt các con số này với sự ngẫu nhiên.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) chỉ được biết đến mức {value} sau {n} lần chạy.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Các chỉ số chính khác rộng hơn ± 10% (± 2 điểm phần trăm với tỷ lệ): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Mô hình bắt đầu trống và chưa đặt giai đoạn khởi động, nên phần đầu kéo các giá trị trung bình lệch khỏi giá trị dài hạn.
+	Set a {value} warm-up	Đặt giai đoạn khởi động {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Lần chạy quá ngắn để đề xuất giai đoạn khởi động: hãy kéo dài lần chạy rồi đặt giai đoạn khởi động.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k}/{m} chỉ số chính đã ổn định: mỗi chỉ số được biết đến mức ± 5% (± 1 điểm phần trăm với tỷ lệ) hoặc tốt hơn.
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy
@@ -709,3 +717,5 @@ unit	yr	năm
 @plural	{n} run|{n} runs	{n} lần chạy
 @plural	Run ({n} problem)|Run ({n} problems)	Chạy ({n} vấn đề)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} vấn đề: {blocks}
+@plural	Use {n} run|Use {n} runs	Dùng {n} lần chạy
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Dùng {n} lần chạy (khoảng ± 5%)

@@ -692,6 +692,14 @@ unit	yr	an
 	Key measures	Indicateurs clés
 	Up to 4 per block, rounded to what the interval supports	Jusqu'à 4 par bloc, arrondis selon l'intervalle
 	All measures ({n} more)	Tous les indicateurs ({n} de plus)
+	How sure are these numbers?	Quelle confiance accorder à ces chiffres ?
+	One run gives no interval, so these numbers cannot be told from chance.	Une seule exécution ne donne pas d'intervalle : ces chiffres ne peuvent pas être distingués du hasard.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) n'est connu qu'à {value} près après {n} exécutions.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Autres indicateurs clés au-delà de ± 10 % (± 2 points pour une part) : {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Le modèle démarre vide et aucun préchauffage n'est défini : le démarrage éloigne les moyennes de leur valeur à long terme.
+	Set a {value} warm-up	Définir un préchauffage de {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	L'exécution est trop courte pour suggérer un préchauffage : allongez-la, puis définissez-en un.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} indicateurs clés sur {m} sont stables : chacun est connu à ± 5 % (± 1 point pour une part) près ou mieux.
 @plural	Added {n} block|Added {n} blocks	{n} bloc ajouté|{n} blocs ajoutés
 @plural	Copied {n} block|Copied {n} blocks	{n} bloc copié|{n} blocs copiés
 @plural	Finished {n} run|Finished {n} runs	{n} exécution terminée|{n} exécutions terminées
@@ -709,3 +717,5 @@ unit	yr	an
 @plural	{n} run|{n} runs	{n} exécution|{n} exécutions
 @plural	Run ({n} problem)|Run ({n} problems)	Exécuter ({n} problème)|Exécuter ({n} problèmes)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problème : {blocks}|{n} problèmes : {blocks}
+@plural	Use {n} run|Use {n} runs	Utiliser {n} exécution|Utiliser {n} exécutions
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Utiliser {n} exécution (environ ± 5 %)|Utiliser {n} exécutions (environ ± 5 %)

@@ -692,6 +692,14 @@ unit	yr	r.
 	Key measures	Kľúčové metriky
 	Up to 4 per block, rounded to what the interval supports	Najviac 4 na blok, zaokrúhlené podľa intervalu
 	All measures ({n} more)	Všetky metriky (ďalšie {n})
+	How sure are these numbers?	Aké isté sú tieto čísla?
+	One run gives no interval, so these numbers cannot be told from chance.	Jeden beh nedáva žiadny interval, takže tieto čísla nemožno odlíšiť od náhody.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) je po {n} behoch známy len s presnosťou {value}.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Ďalšie kľúčové metriky širšie ako ± 10% (± 2 percentuálne body pri podiele): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model začína prázdny a zahrievanie nie je nastavené, takže začiatok posúva priemery od dlhodobých hodnôt.
+	Set a {value} warm-up	Nastaviť zahrievanie {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Beh je príliš krátky na návrh zahrievania: predĺžte ho a potom zahrievanie nastavte.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} z {m} kľúčových metrík je ustálených: každá je známa s presnosťou ± 5% (± 1 percentuálny bod pri podiele) alebo lepšou.
 @plural	Added {n} block|Added {n} blocks	Pridaný {n} blok|Pridané {n} bloky|Pridaných {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Skopírovaný {n} blok|Skopírované {n} bloky|Skopírovaných {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Dokončený {n} beh|Dokončené {n} behy|Dokončených {n} behov
@@ -709,3 +717,5 @@ unit	yr	r.
 @plural	{n} run|{n} runs	{n} beh|{n} behy|{n} behov
 @plural	Run ({n} problem)|Run ({n} problems)	Spustiť ({n} problém)|Spustiť ({n} problémy)|Spustiť ({n} problémov)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problém: {blocks}|{n} problémy: {blocks}|{n} problémov: {blocks}
+@plural	Use {n} run|Use {n} runs	Použiť {n} beh|Použiť {n} behy|Použiť {n} behov
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Použiť {n} beh (asi ± 5%)|Použiť {n} behy (asi ± 5%)|Použiť {n} behov (asi ± 5%)

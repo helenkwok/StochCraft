@@ -692,6 +692,14 @@ unit	yr	বছর
 	Key measures	প্রধান পরিমাপক
 	Up to 4 per block, rounded to what the interval supports	প্রতি ব্লকে সর্বোচ্চ 4টি, আস্থা ব্যবধান অনুযায়ী আসন্নীকৃত
 	All measures ({n} more)	সব পরিমাপক (আরও {n}টি)
+	How sure are these numbers?	এই সংখ্যাগুলি কতটা নিশ্চিত?
+	One run gives no interval, so these numbers cannot be told from chance.	একটি পুনরাবৃত্তি কোনো ব্যবধান দেয় না, তাই এই সংখ্যাগুলিকে দৈবতা থেকে আলাদা করা যায় না।
+	{measure} ({block}) is known only to {value} after {n} runs.	{n}টি পুনরাবৃত্তির পরে {measure} ({block}) কেবল {value} পর্যন্ত জানা।
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	± 10%-এর (অনুপাতের ক্ষেত্রে ± 2 শতাংশ বিন্দু) চেয়ে প্রশস্ত অন্যান্য প্রধান পরিমাপক: {k}।
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	মডেলটি খালি অবস্থায় শুরু হয় এবং কোনো প্রাথমিক প্রস্তুতিকাল নির্ধারিত নেই, তাই শুরুর অংশ গড়গুলিকে দীর্ঘমেয়াদি মান থেকে সরিয়ে দেয়।
+	Set a {value} warm-up	{value} প্রাথমিক প্রস্তুতিকাল নির্ধারণ করুন
+	The run is too short to suggest a warm-up: make it longer, then set one.	প্রাথমিক প্রস্তুতিকাল প্রস্তাব করার জন্য পুনরাবৃত্তিটি খুব ছোট: এটি দীর্ঘ করুন, তারপর একটি নির্ধারণ করুন।
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m}টির মধ্যে {k}টি প্রধান পরিমাপক স্থির: প্রতিটি ± 5% (অনুপাতের ক্ষেত্রে ± 1 শতাংশ বিন্দু) বা তার চেয়ে ভালো নির্ভুলতায় জানা।
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে
@@ -709,3 +717,5 @@ unit	yr	বছর
 @plural	{n} run|{n} runs	{n}টি পুনরাবৃত্তি|{n}টি পুনরাবৃত্তি
 @plural	Run ({n} problem)|Run ({n} problems)	চালান ({n}টি সমস্যা)|চালান ({n}টি সমস্যা)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n}টি সমস্যা: {blocks}|{n}টি সমস্যা: {blocks}
+@plural	Use {n} run|Use {n} runs	{n}টি পুনরাবৃত্তি ব্যবহার করুন|{n}টি পুনরাবৃত্তি ব্যবহার করুন
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n}টি পুনরাবৃত্তি ব্যবহার করুন (প্রায় ± 5%)|{n}টি পুনরাবৃত্তি ব্যবহার করুন (প্রায় ± 5%)

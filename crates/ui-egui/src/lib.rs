@@ -1453,6 +1453,7 @@ impl App {
         };
         let mut csv = false;
         let mut png = false;
+        let mut fix = None;
         egui::ScrollArea::vertical()
             .auto_shrink([false, false])
             .show(ui, |ui| {
@@ -1473,6 +1474,8 @@ impl App {
                 ui.add_space(6.0);
                 results::findings(ui, &results);
                 ui.add_space(6.0);
+                fix = results::trust(ui, &results);
+                ui.add_space(10.0);
                 results::key(ui, &results);
                 ui.add_space(6.0);
                 self.charts_rect = charts::show(ui, &results);
@@ -1480,6 +1483,17 @@ impl App {
                 results::show(ui, &results);
                 self.distribution_section(ui, &results);
             });
+        // A fix from "How sure are these numbers?": made in the model as one undoable step, then
+        // the experiment runs again.
+        if let Some(fix) = fix {
+            let params = match fix {
+                results::Fix::Runs(n) => json!({ "replications": n }),
+                results::Fix::Warmup(w) => json!({ "warmup": w }),
+            };
+            if self.execute("experiment.set", params).is_some() {
+                self.run();
+            }
+        }
         if csv {
             self.export_csv();
         }

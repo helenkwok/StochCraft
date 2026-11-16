@@ -692,6 +692,14 @@ unit	yr	év
 	Key measures	Fő mérőszámok
 	Up to 4 per block, rounded to what the interval supports	Blokkonként legfeljebb 4, a konfidenciaintervallumhoz kerekítve
 	All measures ({n} more)	Minden mérőszám (még {n})
+	How sure are these numbers?	Mennyire biztosak ezek a számok?
+	One run gives no interval, so these numbers cannot be told from chance.	Egy futás nem ad intervallumot, így ezek a számok nem különböztethetők meg a véletlentől.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) {n} futás után csak {value} pontossággal ismert.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	További fő mérőszámok ± 10%-nál (aránynál ± 2 százalékpontnál) szélesebb intervallummal: {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	A modell üresen indul, és nincs bemelegítés beállítva, így az indulás eltolja az átlagokat a hosszú távú értéktől.
+	Set a {value} warm-up	{value} bemelegítés beállítása
+	The run is too short to suggest a warm-up: make it longer, then set one.	A futás túl rövid ahhoz, hogy bemelegítést javasoljunk: hosszabbítsa meg, majd állítson be egyet.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} fő mérőszámból {k} stabil: mindegyik ± 5% (aránynál ± 1 százalékpont) vagy jobb pontossággal ismert.
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve
@@ -709,3 +717,5 @@ unit	yr	év
 @plural	{n} run|{n} runs	{n} futás|{n} futás
 @plural	Run ({n} problem)|Run ({n} problems)	Futtatás ({n} probléma)|Futtatás ({n} probléma)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probléma: {blocks}|{n} probléma: {blocks}
+@plural	Use {n} run|Use {n} runs	{n} futás használata|{n} futás használata
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} futás használata (kb. ± 5%)|{n} futás használata (kb. ± 5%)

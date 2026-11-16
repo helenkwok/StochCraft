@@ -827,6 +827,27 @@ pub fn paint_warning_mark(painter: &egui::Painter, centre: egui::Pos2, radius: f
     painter.circle_filled(centre + egui::vec2(0.0, r * 0.5), ink.width * 0.6, p.raised);
 }
 
+/// The settled mark: a tick in the accent colour, drawn rather than a font glyph, its shape
+/// telling it from [`paint_warning_mark`].
+pub fn paint_check_mark(painter: &egui::Painter, centre: egui::Pos2, radius: f32, p: &Palette) {
+    let ink = egui::Stroke::new((radius * 0.32).max(1.6), p.accent);
+    let r = radius;
+    painter.line_segment(
+        [
+            centre + egui::vec2(-r * 0.8, 0.0),
+            centre + egui::vec2(-r * 0.2, r * 0.6),
+        ],
+        ink,
+    );
+    painter.line_segment(
+        [
+            centre + egui::vec2(-r * 0.2, r * 0.6),
+            centre + egui::vec2(r * 0.9, -r * 0.7),
+        ],
+        ink,
+    );
+}
+
 /// An error message in words, with the error mark before it: text, so the error is not told by
 /// colour alone (WCAG 3.3.1, 1.4.1).
 pub fn error_message(ui: &mut egui::Ui, text: impl Into<String>) -> egui::Response {

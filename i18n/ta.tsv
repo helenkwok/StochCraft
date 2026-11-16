@@ -692,6 +692,14 @@ unit	yr	ஆண்டு
 	Key measures	முக்கிய அளவீடுகள்
 	Up to 4 per block, rounded to what the interval supports	ஒரு தொகுதிக்கு அதிகபட்சம் 4, இடைவெளிக்கு ஏற்ப முழுமையாக்கப்பட்டவை
 	All measures ({n} more)	அனைத்து அளவீடுகளும் (மேலும் {n})
+	How sure are these numbers?	இந்த எண்கள் எவ்வளவு உறுதியானவை?
+	One run gives no interval, so these numbers cannot be told from chance.	ஒரே ஒரு இயக்கம் இடைவெளியைத் தராது, எனவே இந்த எண்களைத் தற்செயலிலிருந்து வேறுபடுத்த முடியாது.
+	{measure} ({block}) is known only to {value} after {n} runs.	{n} மீள் இயக்கங்களுக்குப் பிறகும் {measure} ({block}) {value} வரை மட்டுமே தெரியும்.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	± 10% (விகிதத்திற்கு ± 2 சதவீதப் புள்ளிகள்) ஐ விட அகலமான பிற முக்கிய அளவீடுகள்: {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	மாதிரி காலியாகத் தொடங்குகிறது, தொடக்கச் சீராக்க நேரம் அமைக்கப்படவில்லை, எனவே தொடக்கம் சராசரிகளை நீண்டகால மதிப்பிலிருந்து விலக்குகிறது.
+	Set a {value} warm-up	{value} தொடக்கச் சீராக்க நேரத்தை அமை
+	The run is too short to suggest a warm-up: make it longer, then set one.	தொடக்கச் சீராக்க நேரத்தைப் பரிந்துரைக்க இயக்கம் மிகக் குறுகியது: அதை நீட்டி, பின்னர் தொடக்கச் சீராக்க நேரத்தை அமைக்கவும்.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} முக்கிய அளவீடுகளில் {k} நிலைபெற்றுள்ளன: ஒவ்வொன்றும் ± 5% (விகிதத்திற்கு ± 1 சதவீதப் புள்ளி) அல்லது அதைவிடச் சிறந்த துல்லியத்துடன் தெரியும்.
 @plural	Added {n} block|Added {n} blocks	{n} தொகுதி சேர்க்கப்பட்டது|{n} தொகுதிகள் சேர்க்கப்பட்டன
 @plural	Copied {n} block|Copied {n} blocks	{n} தொகுதி நகலெடுக்கப்பட்டது|{n} தொகுதிகள் நகலெடுக்கப்பட்டன
 @plural	Finished {n} run|Finished {n} runs	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன
@@ -709,3 +717,5 @@ unit	yr	ஆண்டு
 @plural	{n} run|{n} runs	{n} மீள் இயக்கம்|{n} மீள் இயக்கங்கள்
 @plural	Run ({n} problem)|Run ({n} problems)	இயக்கு ({n} சிக்கல்)|இயக்கு ({n} சிக்கல்கள்)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} சிக்கல்: {blocks}|{n} சிக்கல்கள்: {blocks}
+@plural	Use {n} run|Use {n} runs	{n} மீள் இயக்கத்தைப் பயன்படுத்து|{n} மீள் இயக்கங்களைப் பயன்படுத்து
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} மீள் இயக்கத்தைப் பயன்படுத்து (சுமார் ± 5%)|{n} மீள் இயக்கங்களைப் பயன்படுத்து (சுமார் ± 5%)

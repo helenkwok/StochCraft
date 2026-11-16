@@ -692,6 +692,14 @@ unit	yr	l.
 	Key measures	Ključni kazalniki
 	Up to 4 per block, rounded to what the interval supports	Do 4 na blok, zaokroženi glede na interval
 	All measures ({n} more)	Vsi kazalniki (še {n})
+	How sure are these numbers?	Kako zanesljive so te številke?
+	One run gives no interval, so these numbers cannot be told from chance.	En zagon ne da intervala, zato teh številk ni mogoče ločiti od naključja.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) je po {n} zagonih znan le na {value}.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Drugi ključni kazalniki, širši od ± 10% (± 2 odstotni točki za delež): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model se začne prazen in ogrevanje ni nastavljeno, zato začetek odmakne povprečja od dolgoročne vrednosti.
+	Set a {value} warm-up	Nastavi ogrevanje {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Zagon je prekratek, da bi predlagali ogrevanje: podaljšajte ga in nato nastavite ogrevanje.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} od {m} ključnih kazalnikov je ustaljenih: vsak je znan na ± 5% (± 1 odstotna točka za delež) ali bolje.
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov
@@ -709,3 +717,5 @@ unit	yr	l.
 @plural	{n} run|{n} runs	{n} zagon|{n} zagona|{n} zagoni|{n} zagonov
 @plural	Run ({n} problem)|Run ({n} problems)	Zaženi ({n} težava)|Zaženi ({n} težavi)|Zaženi ({n} težave)|Zaženi ({n} težav)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} težava: {blocks}|{n} težavi: {blocks}|{n} težave: {blocks}|{n} težav: {blocks}
+@plural	Use {n} run|Use {n} runs	Uporabi {n} zagon|Uporabi {n} zagona|Uporabi {n} zagone|Uporabi {n} zagonov
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Uporabi {n} zagon (približno ± 5%)|Uporabi {n} zagona (približno ± 5%)|Uporabi {n} zagone (približno ± 5%)|Uporabi {n} zagonov (približno ± 5%)

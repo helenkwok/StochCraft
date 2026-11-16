@@ -692,6 +692,14 @@ unit	yr	år
 	Key measures	Viktigaste mått
 	Up to 4 per block, rounded to what the interval supports	Upp till 4 per block, avrundade efter intervallet
 	All measures ({n} more)	Alla mått ({n} till)
+	How sure are these numbers?	Hur säkra är de här talen?
+	One run gives no interval, so these numbers cannot be told from chance.	En körning ger inget intervall, så de här talen går inte att skilja från slumpen.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) är bara känt med {value} efter {n} körningar.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Andra viktiga mått bredare än ± 10% (± 2 procentenheter för en andel): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Modellen startar tom och ingen uppvärmning är angiven, så starten drar bort medelvärdena från det långsiktiga värdet.
+	Set a {value} warm-up	Ange en uppvärmning på {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Körningen är för kort för att föreslå en uppvärmning: gör den längre och ange sedan en.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} av {m} viktiga mått är stabila: vart och ett är känt med ± 5% (± 1 procentenhet för en andel) eller bättre.
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara
@@ -709,3 +717,5 @@ unit	yr	år
 @plural	{n} run|{n} runs	{n} körning|{n} körningar
 @plural	Run ({n} problem)|Run ({n} problems)	Kör ({n} problem)|Kör ({n} problem)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problem: {blocks}
+@plural	Use {n} run|Use {n} runs	Använd {n} körning|Använd {n} körningar
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Använd {n} körning (ungefär ± 5%)|Använd {n} körningar (ungefär ± 5%)

@@ -692,6 +692,14 @@ unit	yr	సం.
 	Key measures	ముఖ్య కొలమానాలు
 	Up to 4 per block, rounded to what the interval supports	ఒక్కో బ్లాక్‌కు గరిష్ఠంగా 4, విశ్వాస అంతరానికి తగినట్లు సవరించినవి
 	All measures ({n} more)	అన్ని కొలమానాలు (మరో {n})
+	How sure are these numbers?	ఈ సంఖ్యలు ఎంత నమ్మదగినవి?
+	One run gives no interval, so these numbers cannot be told from chance.	ఒక్క అమలు అంతరాన్ని ఇవ్వదు, కాబట్టి ఈ సంఖ్యలను యాదృచ్ఛికత నుండి వేరు చేయలేము.
+	{measure} ({block}) is known only to {value} after {n} runs.	{n} అమలుల తర్వాత {measure} ({block}) {value} వరకు మాత్రమే తెలుసు.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	± 10% (నిష్పత్తికి ± 2 శాతం పాయింట్లు) కంటే విశాలమైన ఇతర ముఖ్య కొలమానాలు: {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	నమూనా ఖాళీగా ప్రారంభమవుతుంది, ప్రారంభ సర్దుబాటు సమయం సెట్ చేయలేదు, కాబట్టి ప్రారంభం సగటులను దీర్ఘకాలిక విలువ నుండి దూరం చేస్తుంది.
+	Set a {value} warm-up	{value} ప్రారంభ సర్దుబాటు సమయాన్ని సెట్ చేయి
+	The run is too short to suggest a warm-up: make it longer, then set one.	ప్రారంభ సర్దుబాటు సమయాన్ని సూచించడానికి అమలు చాలా చిన్నది: దాన్ని పొడిగించి, ఆపై ప్రారంభ సర్దుబాటు సమయాన్ని సెట్ చేయండి.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} ముఖ్య కొలమానాల్లో {k} స్థిరపడ్డాయి: ప్రతి ఒక్కటి ± 5% (నిష్పత్తికి ± 1 శాతం పాయింట్) లేదా అంతకంటే మెరుగ్గా తెలుసు.
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి
@@ -709,3 +717,5 @@ unit	yr	సం.
 @plural	{n} run|{n} runs	{n} అమలు|{n} అమలులు
 @plural	Run ({n} problem)|Run ({n} problems)	అమలు చేయి ({n} సమస్య)|అమలు చేయి ({n} సమస్యలు)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} సమస్య: {blocks}|{n} సమస్యలు: {blocks}
+@plural	Use {n} run|Use {n} runs	{n} అమలును ఉపయోగించు|{n} అమలులను ఉపయోగించు
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} అమలును ఉపయోగించు (సుమారు ± 5%)|{n} అమలులను ఉపయోగించు (సుమారు ± 5%)

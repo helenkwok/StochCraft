@@ -692,6 +692,14 @@ unit	yr	år
 	Key measures	Viktigste måltall
 	Up to 4 per block, rounded to what the interval supports	Opptil 4 per blokk, avrundet etter intervallet
 	All measures ({n} more)	Alle måltall ({n} til)
+	How sure are these numbers?	Hvor sikre er disse tallene?
+	One run gives no interval, so these numbers cannot be told from chance.	Én kjøring gir ikke noe intervall, så disse tallene kan ikke skilles fra tilfeldigheter.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) er bare kjent med {value} etter {n} kjøringer.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Andre viktige måltall bredere enn ± 10% (± 2 prosentpoeng for en andel): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Modellen starter tom og ingen oppvarming er angitt, så starten trekker gjennomsnittene bort fra langtidsverdien.
+	Set a {value} warm-up	Angi en oppvarming på {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Kjøringen er for kort til å foreslå en oppvarming: gjør den lengre, og angi deretter en.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} av {m} viktige måltall er stabile: hvert er kjent med ± 5% (± 1 prosentpoeng for en andel) eller bedre.
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
 @plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført
@@ -709,3 +717,5 @@ unit	yr	år
 @plural	{n} run|{n} runs	{n} kjøring|{n} kjøringer
 @plural	Run ({n} problem)|Run ({n} problems)	Kjør ({n} problem)|Kjør ({n} problemer)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemer: {blocks}
+@plural	Use {n} run|Use {n} runs	Bruk {n} kjøring|Bruk {n} kjøringer
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Bruk {n} kjøring (ca. ± 5%)|Bruk {n} kjøringer (ca. ± 5%)

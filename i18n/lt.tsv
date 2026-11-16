@@ -692,6 +692,14 @@ unit	yr	m.
 	Key measures	Pagrindiniai rodikliai
 	Up to 4 per block, rounded to what the interval supports	Iki 4 bloke, suapvalinti pagal pasikliautinąjį intervalą
 	All measures ({n} more)	Visi rodikliai (dar {n})
+	How sure are these numbers?	Kiek patikimi šie skaičiai?
+	One run gives no interval, so these numbers cannot be told from chance.	Vienas vykdymas nesuteikia intervalo, todėl šių skaičių negalima atskirti nuo atsitiktinumo.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) po {n} vykdymų žinomas tik {value} tikslumu.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Kiti pagrindiniai rodikliai, platesni nei ± 10% (daliai ± 2 procentiniai punktai): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Modelis pradeda tuščias ir įšilimo laikotarpis nenustatytas, todėl pradžia atitolina vidurkius nuo ilgalaikės vertės.
+	Set a {value} warm-up	Nustatyti {value} įšilimo laikotarpį
+	The run is too short to suggest a warm-up: make it longer, then set one.	Vykdymas per trumpas įšilimo laikotarpiui pasiūlyti: pailginkite jį, tada nustatykite įšilimo laikotarpį.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} iš {m} pagrindinių rodiklių nusistovėjo: kiekvienas žinomas ± 5% (daliai ± 1 procentinio punkto) ar geresniu tikslumu.
 @plural	Added {n} block|Added {n} blocks	Pridėtas {n} blokas|Pridėti {n} blokai|Pridėta {n} blokų
 @plural	Copied {n} block|Copied {n} blocks	Nukopijuotas {n} blokas|Nukopijuoti {n} blokai|Nukopijuota {n} blokų
 @plural	Finished {n} run|Finished {n} runs	Baigtas {n} vykdymas|Baigti {n} vykdymai|Baigta {n} vykdymų
@@ -709,3 +717,5 @@ unit	yr	m.
 @plural	{n} run|{n} runs	{n} vykdymas|{n} vykdymai|{n} vykdymų
 @plural	Run ({n} problem)|Run ({n} problems)	Vykdyti ({n} problema)|Vykdyti ({n} problemos)|Vykdyti ({n} problemų)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemos: {blocks}|{n} problemų: {blocks}
+@plural	Use {n} run|Use {n} runs	Naudoti {n} vykdymą|Naudoti {n} vykdymus|Naudoti {n} vykdymų
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Naudoti {n} vykdymą (apie ± 5%)|Naudoti {n} vykdymus (apie ± 5%)|Naudoti {n} vykdymų (apie ± 5%)

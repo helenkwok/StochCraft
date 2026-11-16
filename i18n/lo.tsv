@@ -692,6 +692,14 @@ unit	yr	ປີ
 	Key measures	ຕົວຊີ້ວັດຫຼັກ
 	Up to 4 per block, rounded to what the interval supports	ສູງສຸດ 4 ຕໍ່ບລັອກ, ປັດເສດຕາມຊ່ວງຄວາມເຊື່ອໝັ້ນ
 	All measures ({n} more)	ຕົວຊີ້ວັດທັງໝົດ (ອີກ {n})
+	How sure are these numbers?	ຕົວເລກເຫຼົ່ານີ້ແນ່ນອນສໍ່າໃດ?
+	One run gives no interval, so these numbers cannot be told from chance.	ການຈຳລອງຮອບດຽວບໍ່ໃຫ້ຊ່ວງຄວາມເຊື່ອໝັ້ນ, ສະນັ້ນຈຶ່ງບໍ່ສາມາດແຍກຕົວເລກເຫຼົ່ານີ້ອອກຈາກຄວາມບັງເອີນໄດ້.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) ຮູ້ໄດ້ພຽງ {value} ຫຼັງຈາກ {n} ຮອບ.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	ຕົວຊີ້ວັດຫຼັກອື່ນທີ່ກວ້າງກວ່າ ± 10% (± 2 ຈຸດສຳລັບສັດສ່ວນ): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	ແບບຈຳລອງເລີ່ມຈາກວ່າງເປົ່າ ແລະ ບໍ່ໄດ້ກຳນົດໄລຍະອຸ່ນເຄື່ອງ, ສະນັ້ນຊ່ວງເລີ່ມຕົ້ນດຶງຄ່າສະເລ່ຍອອກຈາກຄ່າໃນໄລຍະຍາວ.
+	Set a {value} warm-up	ກຳນົດໄລຍະອຸ່ນເຄື່ອງ {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	ການຈຳລອງສັ້ນເກີນໄປທີ່ຈະແນະນຳໄລຍະອຸ່ນເຄື່ອງ: ໃຫ້ຍືດມັນອອກ ແລ້ວກຳນົດໄລຍະອຸ່ນເຄື່ອງ.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	ຕົວຊີ້ວັດຫຼັກ {k} ຈາກ {m} ຄົງທີ່ແລ້ວ: ແຕ່ລະອັນຮູ້ໄດ້ພາຍໃນ ± 5% (± 1 ຈຸດສຳລັບສັດສ່ວນ) ຫຼື ດີກວ່າ.
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ
@@ -709,3 +717,5 @@ unit	yr	ປີ
 @plural	{n} run|{n} runs	ຈຳລອງຊ້ຳ {n} ຮອບ
 @plural	Run ({n} problem)|Run ({n} problems)	ປະມວນຜົນ ({n} ບັນຫາ)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} ບັນຫາ: {blocks}
+@plural	Use {n} run|Use {n} runs	ໃຊ້ການຈຳລອງຊ້ຳ {n} ຮອບ
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	ໃຊ້ການຈຳລອງຊ້ຳ {n} ຮອບ (ປະມານ ± 5%)
