@@ -294,5 +294,10 @@ fn a_stop_inside_the_warm_up_leaves_the_replication_out() {
     assert_eq!((r.measured_from, r.measured_to), (100.0, at));
     assert!(r.after_warmup);
     let s = summarise(&[r]);
-    assert!(run_warnings(c.model(), &s).is_empty());
+    // Only that one replication says little.
+    let problems: Vec<Problem> = run_warnings(c.model(), &s)
+        .into_iter()
+        .map(|d| d.problem)
+        .collect();
+    assert_eq!(problems, vec![Problem::OneReplication]);
 }

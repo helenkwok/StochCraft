@@ -192,6 +192,8 @@ pub struct ScenarioSettings {
     pub warmup: Option<f64>,
     /// The scenario's start (BPSim `Start`), as written: an XML Schema date-time.
     pub start: Option<String>,
+    /// `baseResultFrequency`, an `xs:duration`, in seconds.
+    pub result_frequency: Option<f64>,
 }
 
 /// A BPSim `Calendar` as the file has it: id, name and iCalendar text.
@@ -391,6 +393,15 @@ fn read_settings(p: &Element, s: &mut ScenarioSettings, notes: &mut Vec<Note>) {
             Err(_) => notes.push(Note::warning(
                 None,
                 format!("seed `{v}` is not a whole number"),
+            )),
+        }
+    }
+    if let Some(f) = p.attr("baseResultFrequency") {
+        match crate::duration::seconds(&f) {
+            Some(secs) if secs > 0.0 => s.result_frequency = Some(secs),
+            _ => notes.push(Note::warning(
+                None,
+                format!("baseResultFrequency `{f}` is not a positive duration and is ignored"),
             )),
         }
     }
@@ -727,7 +738,7 @@ mod tests {
 
     const TWO_SCENARIOS: &str = r#"<b:BPSimData xmlns:b="http://www.bpsim.org/schemas/2.0">
       <b:Scenario id="S1" name="base">
-        <b:ScenarioParameters replication="5" seed="-1" baseTimeUnit="hour">
+        <b:ScenarioParameters replication="5" seed="-1" baseTimeUnit="hour" baseResultFrequency="PT15M">
           <b:Warmup><b:DurationParameter value="PT30M"/></b:Warmup>
           <b:Duration><b:DurationParameter value="PT10H"/></b:Duration>
         </b:ScenarioParameters>
@@ -766,6 +777,8 @@ mod tests {
         assert_eq!(s1.settings.replication, Some(5));
         assert_eq!(s1.settings.seed, Some(u64::MAX));
         assert_eq!(s1.settings.base_time_unit, TimeUnit::Hours);
+        // An `xs:duration`, kept in seconds whatever the base unit.
+        assert_eq!(s1.settings.result_frequency, Some(900.0));
         assert_eq!(
             (s1.settings.warmup, s1.settings.duration),
             (Some(0.5), Some(10.0))
@@ -796,6 +809,7 @@ mod tests {
         let s2 = read_scenario(&d, Some("S2"), &mut notes).unwrap_or_default();
         assert_eq!(s2.settings.id, "S2");
         assert_eq!(s2.settings.replication, Some(5), "inherited");
+        assert_eq!(s2.settings.result_frequency, Some(900.0), "inherited");
         let pt = s2
             .param("task", "TimeParameters/ProcessingTime")
             .and_then(|p| value(p, TimeUnit::Hours, &mut notes, None));

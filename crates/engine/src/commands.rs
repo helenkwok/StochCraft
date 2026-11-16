@@ -619,6 +619,11 @@ pub struct Run {
     /// Worker threads; by default all available. Results do not depend on it.
     #[serde(default)]
     pub threads: Option<u32>,
+    /// Record results over time (`series`) and suggest a warm-up from them
+    /// (`warmup_suggestion`, and the `no_warmup` warning); default true. Recording changes no
+    /// result; it costs a few per cent of run time on larger models, and the results grow.
+    #[serde(default)]
+    pub series: Option<bool>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -634,6 +639,11 @@ pub struct RunStart {
     /// to the caller's own workers (see `Engine::worker_task`).
     #[serde(default)]
     pub mode: Option<RunMode>,
+    /// Record results over time (`series`) and suggest a warm-up from them
+    /// (`warmup_suggestion`, and the `no_warmup` warning); default true. Recording changes no
+    /// result; it costs a few per cent of run time on larger models, and the results grow.
+    #[serde(default)]
+    pub series: Option<bool>,
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -1792,12 +1802,13 @@ fn history(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
 
 fn run(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: Run = parse(p)?;
-    e.plan(p.replications, p.seed, p.threads)?.run_now()
+    e.plan(p.replications, p.seed, p.threads, p.series.unwrap_or(true))?
+        .run_now()
 }
 
 fn run_start(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: RunStart = parse(p)?;
-    let plan = e.plan(p.replications, p.seed, p.threads)?;
+    let plan = e.plan(p.replications, p.seed, p.threads, p.series.unwrap_or(true))?;
     e.start_run(plan, p.mode.unwrap_or_else(RunMode::default_for_target))
 }
 

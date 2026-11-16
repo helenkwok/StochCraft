@@ -6,8 +6,8 @@ desktop app (and the browser app built from it); **M4** Monte Carlo, system dyna
 hybrid models; **M5** transport and layout; **M6** Python and plugins. M1 and M3.1–M3.6 are done; M3.7, a redesign that
 makes results answer the question, comes next. M2.1–M2.8 are done, and so is M2.10 (abandonment)
 apart from the gaps listed in it. M2.11 (changeovers and lean measures) has its changeovers,
-product-type times, takt and cycle times, state times and most of OEE done; M2.9 (output analysis) has only the checks it already
-had. M4 and M5 are being planned. Each milestone is a series of pull requests small enough to
+product-type times, takt and cycle times, state times and most of OEE done; M2.9 (output analysis) has its
+recorder of results over time, MSER-5's warm-up suggestion, its warnings and streams by element id done. M4 and M5 are being planned. Each milestone is a series of pull requests small enough to
 review in one sitting; every one keeps `cargo xtask ci` green.
 
 Decisions still open are marked **Decision** with a recommendation; the rest follows the
@@ -454,8 +454,8 @@ schema are read with a warning.
 - **How:** all of an element's assignments are made together, from the values the entity
   arrived with.
 - **Random values:** drawn from streams of their own, so adding a property changes no other
-  result. (The elements' own streams are forked in model order, so adding, removing or
-  reordering an element does change the streams of the elements after it; see M2.9.)
+  result. (The elements' own streams are keyed by their ids since #152, so adding, removing or
+  reordering an element leaves the others' streams as they were; see M2.9.)
 
 Each element reports the mean value it assigned to each property. The engine has
 `property.set`, `property.remove` and `property.list`, and `model.get` and `run` include
@@ -1125,10 +1125,9 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
 - **Comparing two runs:** `results.compare` gives, per element and metric, both runs' means
   and the difference with its 95% interval: paired-t when the runs share their seed and
   replications, Welch's two-sample t otherwise (issue #66).
-- **Common random numbers and the model's shape:** each element's stream is forked in model
-  order (`blocks/src/runtime.rs`). A sweep changes no element, so its points share their
-  streams; but a variant that adds, removes or reorders an element changes the streams of every
-  element after it, and so loses common random numbers (#70, M2.9).
+- **Common random numbers and the model's shape:** each element's streams are keyed by its id
+  and their purpose (#152, M2.9), so a sweep's points share their streams, and so does a variant
+  that adds, removes or reorders an element, for every element it leaves in place (#70).
 - **Sensitivity:** `experiment.sensitivity` moves each parameter down and up by a fraction,
   one at a time, and ranks the results' elasticities. Every sweep and sensitivity analysis is
   recorded, with the model's digest, in the `sensitivity` list of later runs' records
@@ -1211,22 +1210,44 @@ treats these as standard practice (Robinson, ch. 2; Morecroft and Robinson, ch. 
 ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and already done:
 `overloaded` and `no_steady_state` (M2.8, #68, #75) and `ended_in_warmup` (#67).
 
-- **Choosing a warm-up.** The default warm-up is 0, and nothing helps choose one.
-  - Record key metrics at fixed times in every replication, and plot their mean across
-    replications over time (Welch's plot).
-  - Suggest a warm-up from that series with MSER-5.
-  - Warn when a run without a stop condition has a warm-up of 0.
-- **Choosing the number of replications.** The default is 10, and a single replication is
-  accepted without a word (its half-width shows as "–").
-  - Warn when a run has one replication.
-  - A sequential mode that adds replications until the 95% half-width is within a target share
+- **Choosing a warm-up.** The default warm-up is 0. Done in the engine and the CLI; the window's
+  Welch plot is not yet (M3.7 step 3 draws its charts over the run from the same series).
+  - **Done:** a recorder of values at fixed times in every replication (`blocks/src/series.rs`,
+    `Compiled::record_every`): each element's queue length, number inside, busy units, and
+    counts entered and left since time 0, and each pool's busy units, at time 0 and every
+    interval to the end, read between events so that no event, draw or result changes. The
+    interval is the scenario's `baseResultFrequency` (an `xs:duration`, now read, inherited and
+    written), taken in whole multiples beyond 1,000 points, or else a hundredth of the warm-up
+    plus the duration. `run` and `run.start` record unless given `"series": false` (it costs
+    about 4% of run time on case A, 0.1% on mm1.bpmn).
+  - **Done:** across replications, each quantity's mean, its 95% Student-t half-width and the
+    2.5th and 97.5th percentiles at each time, in the results as `series` (the data for Welch's
+    plot; the MCP `run` tool leaves it out for its size).
+  - **Done:** MSER-5 (White 1997; White, Cobb and Spratt 2000; `stats/src/warmup.rs`) on each
+    task's mean number inside suggests a warm-up, in the results as `warmup_suggestion` and in
+    the CLI's text; with a hundredth of the run between points, it places it to within 5%.
+  - **Done:** the `no_warmup` warning, for a run with no stop condition and no warm-up where
+    MSER-5 places a start-up and the run starts lower than its second half by more than chance
+    (a window fixed in advance, since MSER-5's own cut finds a difference in noise about a third
+    of the time). Measured on M/M/1 started empty: 3 to 9% false alarms at loads of 0.3 to 0.7;
+    at 0.9 over 2,000 time units it warns in 9, 50 and 94% of runs with 3, 10 and 30
+    replications. A start-up too small to tell from the noise of few replications is not warned
+    about; the suggestion is there whenever the series has at least 20 points (a 50-unit run
+    recorded every 5 units has 11, and gets none).
+  - Tests: `blocks/tests/series.rs` (a D/D/1 trace; the values a live run shows at each time;
+    no result changes, in slices too; M/M/1's mean queue ρ²/(1 − ρ) at late times; the
+    start-up at ρ = 0.9 and none at 0.3; the warnings), `engine/tests/series.rs` (the JSON, the
+    file's frequency, threads, slices and workers alike).
+- **Choosing the number of replications.** The default is 10.
+  - **Done:** the `one_replication` warning for a run with one replication.
+  - Not yet: a sequential mode that adds replications until the 95% half-width is within a target share
     of the mean, using the t-table already in `stats` (automated methods: Hoad, Robinson and
     Davies, 2011).
-- **Streams by element id.** Derive each element's stream from the seed, the replication and the
-  element's id, not its place in the model, so that a variant that adds, removes or reorders an
-  element keeps common random numbers for the others, and an unrelated edit no longer changes
-  results with the same seed. This changes the golden digests once (`STOCHCRAFT_BLESS=1`, with
-  the reason in the commit).
+- **Streams by element id:** done (#152). Each block's streams are keyed by its id and their
+  purpose, derived from the seed and the replication, not its place in the model, so that a
+  variant that adds, removes or reorders an element keeps common random numbers for the others,
+  and an unrelated edit no longer changes results with the same seed. The golden digests changed
+  once, with the reason in the commit.
 - **Validation against observed data.** Compare a run's results with held-out real data (black-box
   validation, ch. 6 §6.5.5 and ch. 10 §10.4.1).
 - **A capacity table.** Before a run, each station's offered load and utilisation worked out
@@ -1507,8 +1528,9 @@ A line that makes several products, and results in the terms lean practice uses.
 M4.
 
 **M2 size:** about nine PRs for M2.1–M2.8 and one or two each for M2.9, M2.10 and M2.11, each independently mergeable after M1. **M2.1–M2.8 are complete**, and so is M2.10 apart from the gaps listed in it.
-What each leaves for later is under its own "Not yet" or "Not here". M2.9 (output analysis) and
-the rest of M2.11 (a line cycle time, ISO's NEE index, per-product plans, current and future
+What each leaves for later is under its own "Not yet" or "Not here". The rest of M2.9 (output
+analysis: the window's Welch plot, sequential replications, validation against observed data,
+the capacity table) and the rest of M2.11 (a line cycle time, ISO's NEE index, per-product plans, current and future
 state) are next.
 
 ---
@@ -1823,7 +1845,8 @@ The steps, in the order of gaps.md, each a series of pull requests:
    rest under "All measures"; two default charts chosen for the question. Numbers are rounded by
    one rule: the half-width to one significant figure (two if it starts with 1), the mean to the
    same place. The chart of a measure over the run needs values recorded at fixed times, the
-   recorder that M2.9's warm-up plot and M4's results over time also need; it is built here, once.
+   recorder that M2.9's warm-up plot and M4's results over time also need: built with M2.9's
+   warm-up (`series` and `warmup_suggestion` in the results), so here only its charts remain.
 4. **Baseline and now** (gaps 4, screen 1b). Results stay visible and marked out of date after an
    edit; "Keep as baseline"; then baseline, now, the paired difference with its interval (the
    engine's `results.compare`, on the same seeds), and a verdict in words and an icon ("Real:
@@ -1957,7 +1980,8 @@ Chapter references are to Brailsford, Churilov and Dangerfield (eds.),
   behaviour over time, and the hybrid case studies report monthly measures.
   - Values recorded at a save interval (BPSim's `baseResultFrequency`), with percentile bands per
     time point from M2.8's band code.
-  - One recorder, shared with M2.9's Welch plot, which needs the same values at fixed times.
+  - One recorder, shared with M2.9's Welch plot, which needs the same values at fixed times:
+    built in M2.9 (`blocks/src/series.rs`); SD adds its stocks and flows to what it records.
   - Ch. 3 §3.2.1; ch. 14 §14.2 and §14.4.5.
 - **Units.** Both sides of every SD equation balance their units, and the SD time unit is
   reconciled with `baseTimeUnit` (the class of bug #40 fixed for time units; ch. 3 §3.3.4,

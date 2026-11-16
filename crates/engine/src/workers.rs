@@ -15,7 +15,7 @@
 //! Which worker runs which replication, and in what order they answer, does not matter.
 
 use serde::{Deserialize, Serialize};
-use stochcraft_blocks::{Compiled, ElementReport, Report, compile};
+use stochcraft_blocks::{Compiled, ElementReport, Recording, Report, compile};
 use stochcraft_experiment::Experiment;
 
 use crate::run::run_failed;
@@ -27,6 +27,9 @@ pub(crate) struct Task {
     pub model: wire::ModelDoc,
     pub seed: u64,
     pub replications: u64,
+    /// The interval to record results over time at, when the run records them.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub record: Option<f64>,
 }
 
 /// One worker's side of a run: the model compiled, ready to run any of its replications.
@@ -40,11 +43,13 @@ impl Worker {
     pub fn new(task: &str) -> Result<Self, CommandError> {
         let task: Task = serde_json::from_str(task)
             .map_err(|e| CommandError::new(ErrorCode::InvalidParams, format!("task: {e}")))?;
-        let compiled = compile(&task.model.into()).map_err(|ds| CommandError {
-            code: ErrorCode::InvalidModel,
-            message: "the model has errors and cannot run".into(),
-            details: Some(wire::diagnostics(&ds)),
-        })?;
+        let compiled = compile(&task.model.into())
+            .map_err(|ds| CommandError {
+                code: ErrorCode::InvalidModel,
+                message: "the model has errors and cannot run".into(),
+                details: Some(wire::diagnostics(&ds)),
+            })?
+            .record_every(task.record);
         Ok(Self {
             compiled,
             experiment: Experiment::new(task.replications, task.seed),
@@ -107,6 +112,17 @@ pub(crate) struct Encoded {
     measured_to: u64,
     after_warmup: bool,
     elements: Vec<EncodedElement>,
+    /// Results over time: the interval, the times, and each element's values in the order of
+    /// its quantities (which both sides know from the model), all as bits.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    recording: Option<EncodedRecording>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct EncodedRecording {
+    interval: u64,
+    times: Vec<u64>,
+    elements: Vec<Vec<Vec<u64>>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -145,6 +161,19 @@ impl Encoded {
             measured_from: r.measured_from.to_bits(),
             measured_to: r.measured_to.to_bits(),
             after_warmup: r.after_warmup,
+            recording: r.recording.as_ref().map(|rec| EncodedRecording {
+                interval: rec.interval.to_bits(),
+                times: rec.times.iter().map(|t| t.to_bits()).collect(),
+                elements: rec
+                    .elements
+                    .iter()
+                    .map(|qs| {
+                        qs.iter()
+                            .map(|(_, v)| v.iter().map(|x| x.to_bits()).collect())
+                            .collect()
+                    })
+                    .collect(),
+            }),
             elements: r
                 .elements
                 .iter()
@@ -299,6 +328,34 @@ impl Encoded {
                 })
             })
             .collect::<Option<Vec<_>>>()?;
+        // The quantities from the template's recording (one with no time run), the values from
+        // the answer; both or neither.
+        let recording = match (self.recording, &template.recording) {
+            (None, None) => None,
+            (Some(rec), Some(t)) if rec.elements.len() == t.elements.len() => {
+                let elements = rec
+                    .elements
+                    .into_iter()
+                    .zip(&t.elements)
+                    .map(|(values, qs)| {
+                        (values.len() == qs.len()).then(|| {
+                            qs.iter()
+                                .zip(values)
+                                .map(|((q, _), v)| {
+                                    (*q, v.into_iter().map(f64::from_bits).collect())
+                                })
+                                .collect()
+                        })
+                    })
+                    .collect::<Option<Vec<_>>>()?;
+                Some(Recording {
+                    interval: f64::from_bits(rec.interval),
+                    times: rec.times.into_iter().map(f64::from_bits).collect(),
+                    elements,
+                })
+            }
+            _ => return None,
+        };
         Some(Report {
             warmup: f64::from_bits(self.warmup),
             duration: f64::from_bits(self.duration),
@@ -307,6 +364,7 @@ impl Encoded {
             measured_to: f64::from_bits(self.measured_to),
             after_warmup: self.after_warmup,
             elements,
+            recording,
         })
     }
 }
@@ -317,6 +375,7 @@ pub(crate) fn task(compiled: &Compiled, experiment: &Experiment) -> String {
         model: compiled.model().into(),
         seed: experiment.seed,
         replications: experiment.replications,
+        record: compiled.recorded_every(),
     };
     serde_json::to_string(&task).unwrap_or_default()
 }

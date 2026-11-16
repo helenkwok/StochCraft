@@ -160,6 +160,7 @@ pub fn table(name: &str, results: &Value) -> String {
     }
     split_lines(results, &mut out);
     stop_lines(results, &mut out);
+    warmup_line(results, &mut out);
     let notes: Vec<&Value> = results["record"]["warnings"]
         .as_array()
         .into_iter()
@@ -257,6 +258,40 @@ fn stop_lines(results: &Value, out: &mut String) {
         if stop["met"].as_u64() < results["replications"].as_u64() {
             let _ = write!(out, " (over those that met it only)");
         }
+    }
+    out.push('\n');
+}
+
+/// The warm-up MSER-5 suggests from the number inside each task over the run, if the run
+/// recorded it (`warmup_suggestion`).
+fn warmup_line(results: &Value, out: &mut String) {
+    let w = &results["warmup_suggestion"];
+    if w.is_null() {
+        return;
+    }
+    let unit = s(&results["time_unit"]);
+    let _ = write!(out, "\nwarm-up suggested (MSER-5 on the number inside): ");
+    match w["warmup"].as_f64() {
+        Some(t) if t > 0.0 => {
+            let _ = write!(out, "{} {unit}, at {}", number(t), s(&w["at"]));
+            if results["warmup"].as_f64().is_some_and(|x| x >= t) {
+                let _ = write!(out, " (the run's warm-up covers it)");
+            }
+        }
+        Some(_) => {
+            let _ = write!(out, "none, no start-up shows");
+        }
+        None => {
+            let _ = write!(out, "cannot tell, still settling halfway through the run");
+        }
+    }
+    // MSER-5 cuts something from many runs with no start-up at all: say when the start of the
+    // run is no clearer than chance.
+    if w["matters"] == false && w["warmup"].as_f64() != Some(0.0) {
+        let _ = write!(out, " (no clearer than chance)");
+    }
+    if w["too_short"] == true && w["warmup"].is_number() {
+        let _ = write!(out, "; some task is still settling halfway through the run");
     }
     out.push('\n');
 }

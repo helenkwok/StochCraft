@@ -315,3 +315,42 @@ fn measure_events_per_millisecond() {
         );
     }
 }
+
+/// Not a check: measures what recording results over time (`Compiled::record_every`, which
+/// `run` turns on) costs, on each model's own experiment and on case A (a month of a factory
+/// line, 25 replications). Run it on a release build:
+/// `cargo test --release -p stochcraft-engine --test slices measure_recording -- --ignored --nocapture`.
+#[test]
+#[ignore = "a measurement, for release builds"]
+fn measure_recording_cost() {
+    let mut all = models();
+    all.push(("case-a.bpmn", opened("case-a.bpmn")));
+    for (name, e) in all {
+        let x = &e.model().experiment;
+        let plain = stochcraft_blocks::compile(e.model()).expect("compiles");
+        let recording = plain
+            .clone()
+            .record_every(stochcraft_blocks::record_interval(x));
+        let streams = stochcraft_experiment::Experiment::new(u64::from(x.replications), x.seed);
+        let time = |c: &stochcraft_blocks::Compiled| {
+            let start = std::time::Instant::now();
+            for i in 0..u64::from(x.replications) {
+                c.run(streams.stream(i)).expect("runs");
+            }
+            start.elapsed().as_secs_f64()
+        };
+        // The fastest of five of each, interleaved, against noise.
+        let (mut off, mut on) = (f64::INFINITY, f64::INFINITY);
+        for _ in 0..5 {
+            off = off.min(time(&plain));
+            on = on.min(time(&recording));
+        }
+        eprintln!(
+            "{name:>20}: {} replications, {:.1} ms without, {:.1} ms with ({:+.1}%)",
+            x.replications,
+            off * 1e3,
+            on * 1e3,
+            (on / off - 1.0) * 100.0
+        );
+    }
+}

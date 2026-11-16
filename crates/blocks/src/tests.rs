@@ -449,6 +449,7 @@ fn empty() -> Report {
         measured_from: 0.0,
         measured_to: 0.0,
         after_warmup: true,
+        recording: None,
     }
 }
 
