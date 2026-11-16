@@ -192,6 +192,220 @@ fn order(results: &Value) -> Vec<&str> {
         .unwrap_or_default()
 }
 
+/// A fix "How sure are these numbers?" offers, for the app to make in the model and run again.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum Fix {
+    /// Set the number of runs.
+    Runs(u64),
+    /// Set the warm-up, in the model's time unit.
+    Warmup(f64),
+}
+
+/// A key measure's 95% half-width as a share of its mean at which it is settled (a time, a
+/// count): its score is that share over this.
+const SETTLED: f64 = 0.05;
+/// A share's (utilisation, time failed, share lost) 95% half-width in percentage points at which
+/// it is settled: its score is the half-width in points over this. Against its own mean a small
+/// share always looks unsure (1.7% ± 0.6 points is ± 32% of itself), so shares are judged in
+/// points.
+const SETTLED_POINTS: f64 = 1.0;
+/// The score above which a key measure gets a warning: ± 10% of its mean, ± 2 points for a share.
+const WIDE: f64 = 2.0;
+
+/// How sure the runs are of result `m` (with `kind`, from [`metric`]): its half-width over what
+/// counts as settled ([`SETTLED`], [`SETTLED_POINTS`]), so 1 or less is settled and more than
+/// [`WIDE`] gets a warning. `None` without an interval, or for a mean of zero that is not a share.
+fn score(m: &Value, kind: &Unit) -> Option<f64> {
+    let (mean, hw) = (m["mean"].as_f64()?, m["half_width"].as_f64()?);
+    if !hw.is_finite() {
+        return None;
+    }
+    match kind {
+        Unit::Share => Some(hw * 100.0 / SETTLED_POINTS),
+        _ if mean == 0.0 => None,
+        _ => Some(hw / mean.abs() / SETTLED),
+    }
+}
+
+/// How well the runs pin down each block's key measures ([`key_of`]), by [`score`]. Returns the
+/// widest (its block, its result, its score), how many get a warning, how many are settled, and
+/// how many were judged.
+fn precision(results: &Value) -> (Option<(&Value, &'static str, f64)>, usize, usize, usize) {
+    let mut widest: Option<(&Value, &'static str, f64)> = None;
+    let (mut wide, mut settled, mut judged) = (0, 0, 0);
+    for e in results["elements"].as_array().into_iter().flatten() {
+        let kind = e["kind"].as_str().unwrap_or("");
+        for key in key_of(e) {
+            let Some(s) = score(&e["metrics"][key], &metric(key, kind).1) else {
+                continue;
+            };
+            judged += 1;
+            if s <= 1.0 {
+                settled += 1;
+            }
+            if s > WIDE {
+                wide += 1;
+            }
+            if widest.is_none_or(|(_, _, w)| s > w) {
+                widest = Some((e, key, s));
+            }
+        }
+    }
+    (widest, wide, settled, judged)
+}
+
+/// About how many runs bring a result whose [`score`] is `score` after `n` runs down to settled
+/// (a score of 1): the interval narrows with the square root of the runs. Rounded up to a
+/// multiple of ten, and always more than `n`.
+pub fn runs_needed(n: u64, score: f64) -> u64 {
+    let wanted = (n as f64 * score * score).ceil().min(1.0e6) as u64;
+    let wanted = wanted.div_ceil(10) * 10;
+    wanted.max(n + 1)
+}
+
+/// A warm-up as a person would set it: two significant figures (437.2 → 440, 0.0234 → 0.023).
+fn round_warmup(w: f64) -> f64 {
+    if !(w.is_finite() && w > 0.0) {
+        return w;
+    }
+    let places = 1 - magnitude(w);
+    round_to(w, places)
+}
+
+/// One row of "How sure are these numbers?": its mark, its words and, where there is one, the
+/// button for its fix. Returns whether the button was clicked.
+fn trust_row(
+    ui: &mut egui::Ui,
+    p: &theme::Palette,
+    ok: bool,
+    text: &str,
+    button: Option<&str>,
+) -> bool {
+    let mut clicked = false;
+    ui.horizontal(|ui| {
+        let (rect, _) = ui.allocate_exact_size(egui::vec2(16.0, 18.0), egui::Sense::hover());
+        if ok {
+            theme::paint_check_mark(ui.painter(), rect.center(), 6.5, p);
+        } else {
+            theme::paint_warning_mark(ui.painter(), rect.center(), 6.5, p);
+        }
+        let room = (ui.available_width() - if button.is_some() { 230.0 } else { 0.0 }).max(200.0);
+        ui.scope(|ui| {
+            ui.set_max_width(room);
+            ui.add(egui::Label::new(text).wrap());
+        });
+        if let Some(label) = button {
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                clicked = ui.add(theme::secondary(ui, label)).clicked();
+            });
+        }
+    });
+    clicked
+}
+
+/// "How sure are these numbers?": whether the runs pin the key measures down, each problem with a
+/// one-click fix (more runs, a warm-up), and how many key measures are already settled. Draws
+/// nothing for results without runs. Returns the fix clicked, if any.
+pub fn trust(ui: &mut egui::Ui, results: &Value) -> Option<Fix> {
+    let p = theme::palette(ui.ctx());
+    let r = &results["record"];
+    let n = r["replications"].as_u64()?;
+    let time = unit_label(r["time_unit"].as_str().unwrap_or(""));
+    let (widest, wide, settled, judged) = precision(results);
+    let no_warmup = results["warnings"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .chain(r["warnings"].as_array().into_iter().flatten())
+        .any(|w| w["code"] == "no_warmup");
+    let mut fix = None;
+    let frame = egui::Frame::new()
+        .stroke(egui::Stroke::new(1.0, p.border))
+        .corner_radius(6.0)
+        .inner_margin(egui::Margin::symmetric(14, 10));
+    frame.show(ui, |ui| {
+        ui.set_width(ui.available_width());
+        ui.label(theme::strong(t("How sure are these numbers?")));
+        ui.add_space(4.0);
+        if n < 2 {
+            let label = tnf(10, "Use {n} run", "Use {n} runs", &[]);
+            let text = t("One run gives no interval, so these numbers cannot be told from chance.");
+            if trust_row(ui, &p, false, text, Some(&label)) {
+                fix = Some(Fix::Runs(10));
+            }
+        } else if let Some((e, key, score)) = widest.filter(|(_, _, s)| *s > WIDE) {
+            let id = e["id"].as_str().unwrap_or("");
+            let block = e["name"].as_str().filter(|n| !n.is_empty()).unwrap_or(id);
+            let kind = e["kind"].as_str().unwrap_or("");
+            let (label, unit_kind) = metric(key, kind);
+            let (scale, unit) = scale_and_unit(&unit_kind, time);
+            let (mean, hw) = mean_and_half_width(&e["metrics"][key], scale);
+            // A share in points as the table shows it; anything else also as a share of its mean.
+            let relative = grouped((score * SETTLED * 100.0).round());
+            let value = match unit {
+                "%" => format!("{mean} ± {hw}%"),
+                "" => format!("{mean} ± {hw}, ± {relative}%"),
+                u => format!("{mean} ± {hw} {u}, ± {relative}%"),
+            };
+            let mut text = tf(
+                "{measure} ({block}) is known only to {value} after {n} runs.",
+                &[
+                    ("measure", label),
+                    ("block", block),
+                    ("value", &value),
+                    ("n", &n.to_string()),
+                ],
+            );
+            if wide > 1 {
+                text.push(' ');
+                text.push_str(&tf(
+                    "Other key measures wider than ± 10% (± 2 points for a share): {k}.",
+                    &[("k", &(wide - 1).to_string())],
+                ));
+            }
+            let needed = runs_needed(n, score);
+            let label = tnf(
+                needed,
+                "Use {n} run (about ± 5%)",
+                "Use {n} runs (about ± 5%)",
+                &[],
+            );
+            if trust_row(ui, &p, false, &text, Some(&label)) {
+                fix = Some(Fix::Runs(needed));
+            }
+        }
+        if no_warmup && r["warmup"].as_f64().is_none_or(|w| w == 0.0) {
+            let text = t("The model starts empty and no warm-up is set, so the start pulls the means away from the long run.");
+            match results["warmup_suggestion"]["warmup"].as_f64().map(round_warmup) {
+                Some(w) if w > 0.0 => {
+                    let label = tf(
+                        "Set a {value} warm-up",
+                        &[("value", &format!("{} {time}", grouped(w)))],
+                    );
+                    if trust_row(ui, &p, false, text, Some(&label)) {
+                        fix = Some(Fix::Warmup(w));
+                    }
+                }
+                _ => {
+                    let text = format!(
+                        "{text} {}",
+                        t("The run is too short to suggest a warm-up: make it longer, then set one.")
+                    );
+                    trust_row(ui, &p, false, &text, None);
+                }
+            }
+        }
+        if settled > 0 {
+            let text = tf(
+                "{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.",
+                &[("k", &settled.to_string()), ("m", &judged.to_string())],
+            );
+            trust_row(ui, &p, true, &text, None);
+        }
+    });
+    fix
+}
+
 /// The top of the results under the findings: the warnings, then each block's key measures
 /// ([`key_measures`]).
 pub fn key(ui: &mut egui::Ui, results: &Value) {
@@ -206,6 +420,8 @@ pub fn key(ui: &mut egui::Ui, results: &Value) {
         .chain(results["warnings"].as_array().into_iter().flatten())
         .chain(r["file_notes"].as_array().into_iter().flatten())
         .filter(|n| n["severity"] != "info")
+        // "How sure are these numbers?" says this one, with its fix ([`trust`]).
+        .filter(|n| n["code"] != "no_warmup")
         .filter_map(|n| n["message"].as_str())
         .collect();
     ui.vertical(|ui| {
@@ -963,6 +1179,144 @@ mod tests {
         h.get_by_label("All measures (2 more)");
         assert!(h.query_by_label("Time failed").is_none());
         assert!(h.query_by_label("OEE availability").is_none());
+    }
+
+    #[test]
+    fn more_runs_narrow_an_interval_with_their_square_root() {
+        use super::runs_needed;
+        // ± 32% after 10 runs (a score of 6.4): 6.4² × 10 = 409.6, so 410.
+        assert_eq!(runs_needed(10, 6.4), 410);
+        // ± 10%, or ± 2 points for a share, after 16: 64.
+        assert_eq!(runs_needed(16, 2.0), 70);
+        // Always more than now, even when nearly there.
+        assert_eq!(runs_needed(25, 1.002), 30);
+        assert_eq!(runs_needed(30, 1.002), 40);
+        assert_eq!(super::round_warmup(437.2), 440.0);
+        assert_eq!(super::round_warmup(0.0234), 0.023);
+    }
+
+    /// `trust` drawn for `results`, returning the fix clicked when `click` names a button.
+    fn trust_with(results: serde_json::Value, click: Option<&str>) -> Option<super::Fix> {
+        use egui_kittest::kittest::Queryable;
+        let fix = std::rc::Rc::new(std::cell::Cell::new(None));
+        let seen = std::rc::Rc::clone(&fix);
+        let mut fonts = false;
+        let mut h = egui_kittest::Harness::new_ui(move |ui| {
+            if !fonts {
+                crate::theme::install_fonts(ui.ctx(), "en");
+                crate::theme::install(ui.ctx(), &crate::theme::default_theme());
+                fonts = true;
+                ui.ctx().request_repaint();
+                return;
+            }
+            if let Some(f) = super::trust(ui, &results) {
+                seen.set(Some(f));
+            }
+        });
+        h.run();
+        h.get_by_label("How sure are these numbers?");
+        if let Some(label) = click {
+            h.get_by_label(label).click();
+            h.run();
+        }
+        fix.get()
+    }
+
+    /// A single-server queue run 10 times from empty: a wait known to ± 32%, busy to ± 2%.
+    fn unsure() -> serde_json::Value {
+        let m = |mean: f64, hw: f64| serde_json::json!({ "mean": mean, "half_width": hw, "std_dev": 1.0, "n": 10 });
+        serde_json::json!({
+            "replications": 10,
+            "record": { "replications": 10, "time_unit": "min", "warmup": 0.0 },
+            "metrics": ["left", "mean_queue_length", "mean_wait", "utilisation"],
+            "elements": [{
+                "id": "paint", "name": "Paint", "kind": "server",
+                "metrics": {
+                    "left": m(79.0, 3.0),
+                    "mean_queue_length": m(6.0, 1.5),
+                    "mean_wait": m(38.0, 12.16),
+                    // 92% ± 0.8 points: settled, judged in points.
+                    "utilisation": m(0.92, 0.008),
+                },
+            }],
+            "warnings": [{ "code": "no_warmup", "severity": "warning", "message": "the run has no warm-up" }],
+            "warmup_suggestion": { "warmup": 57.3 },
+        })
+    }
+
+    #[test]
+    fn the_trust_line_says_how_sure_and_offers_the_fixes() {
+        use super::Fix;
+        // The widest key measure, with more runs as its fix: 10 × (32 / 5)² = 409.6.
+        assert_eq!(
+            trust_with(unsure(), Some("Use 410 runs (about ± 5%)")),
+            Some(Fix::Runs(410))
+        );
+        // No warm-up: the suggestion, rounded to two figures, as the other fix.
+        assert_eq!(
+            trust_with(unsure(), Some("Set a 57 min warm-up")),
+            Some(Fix::Warmup(57.0))
+        );
+        // The rest is drawn without a click; the sentence names the measure and how sure it is.
+        assert_eq!(trust_with(unsure(), None), None);
+
+        // Narrow intervals and a warm-up set: nothing to fix, every key measure settled.
+        let mut sure = unsure();
+        for (k, hw) in [
+            ("left", 0.5),
+            ("mean_queue_length", 0.1),
+            ("mean_wait", 0.5),
+            ("utilisation", 0.01),
+        ] {
+            sure["elements"][0]["metrics"][k]["half_width"] = hw.into();
+        }
+        sure["warnings"] = serde_json::json!([]);
+        sure["record"]["warmup"] = 60.0.into();
+        assert_eq!(trust_with(sure, None), None);
+
+        // One run: no interval at all.
+        let mut one = unsure();
+        one["record"]["replications"] = 1.into();
+        assert_eq!(trust_with(one, Some("Use 10 runs")), Some(Fix::Runs(10)));
+    }
+
+    #[test]
+    fn the_trust_line_words_name_the_widest_measure() {
+        use egui_kittest::kittest::Queryable;
+        let results = unsure();
+        let mut fonts = false;
+        let mut h = egui_kittest::Harness::new_ui(move |ui| {
+            if !fonts {
+                crate::theme::install_fonts(ui.ctx(), "en");
+                crate::theme::install(ui.ctx(), &crate::theme::default_theme());
+                fonts = true;
+                ui.ctx().request_repaint();
+                return;
+            }
+            super::trust(ui, &results);
+        });
+        h.run();
+        h.get_by_label(
+            "Mean wait (Paint) is known only to 38 ± 12 min, ± 32% after 10 runs. \
+             Other key measures wider than ± 10% (± 2 points for a share): 1.",
+        );
+        h.get_by_label_contains("no warm-up is set");
+        h.get_by_label(
+            "2 of 4 key measures are settled: each is known to ± 5% (± 1 point for a share) or better.",
+        );
+    }
+
+    #[test]
+    fn a_share_is_judged_in_points() {
+        use super::{Unit, score};
+        let m = |mean: f64, hw: f64| serde_json::json!({ "mean": mean, "half_width": hw });
+        // 1.7% ± 0.6 points: ± 35% of itself, but settled in points.
+        assert!(score(&m(0.017, 0.006), &Unit::Share).is_some_and(|s| s <= 1.0));
+        // 92% ± 3 points: a warning.
+        assert!(score(&m(0.92, 0.03), &Unit::Share).is_some_and(|s| s > 2.0));
+        // A time is judged against its mean, and a time of zero not at all.
+        assert!(score(&m(38.0, 12.16), &Unit::Time).is_some_and(|s| (s - 6.4).abs() < 1e-9));
+        assert!(score(&m(0.0, 0.0), &Unit::Time).is_none());
     }
 
     /// Results of 10 replications in which only 4 had a mean wait, and work was left inside.

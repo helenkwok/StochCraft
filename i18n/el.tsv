@@ -692,6 +692,14 @@ unit	yr	έτ
 	Key measures	Κύριες μετρικές
 	Up to 4 per block, rounded to what the interval supports	Έως 4 ανά μπλοκ, στρογγυλεμένες σύμφωνα με το διάστημα
 	All measures ({n} more)	Όλες οι μετρικές ({n} ακόμη)
+	How sure are these numbers?	Πόσο σίγουροι είναι αυτοί οι αριθμοί;
+	One run gives no interval, so these numbers cannot be told from chance.	Μία εκτέλεση δεν δίνει διάστημα, οπότε αυτοί οι αριθμοί δεν διακρίνονται από την τύχη.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}): γνωστό μόνο με {value} μετά από {n} εκτελέσεις.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Άλλες κύριες μετρικές ευρύτερες από ± 10% (± 2 ποσοστιαίες μονάδες για ποσοστό): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Το μοντέλο ξεκινά άδειο και δεν έχει οριστεί προθέρμανση, οπότε η αρχή απομακρύνει τις μέσες τιμές από τις μακροπρόθεσμες.
+	Set a {value} warm-up	Ορισμός προθέρμανσης {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Η εκτέλεση είναι πολύ σύντομη για να προταθεί προθέρμανση: επιμηκύνετέ την και μετά ορίστε μία.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} από {m} κύριες μετρικές έχουν σταθεροποιηθεί: η καθεμία είναι γνωστή με ± 5% (± 1 ποσοστιαία μονάδα για ποσοστό) ή καλύτερα.
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις
@@ -709,3 +717,5 @@ unit	yr	έτ
 @plural	{n} run|{n} runs	{n} εκτέλεση|{n} εκτελέσεις
 @plural	Run ({n} problem)|Run ({n} problems)	Εκτέλεση ({n} πρόβλημα)|Εκτέλεση ({n} προβλήματα)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} πρόβλημα: {blocks}|{n} προβλήματα: {blocks}
+@plural	Use {n} run|Use {n} runs	Χρήση {n} εκτέλεσης|Χρήση {n} εκτελέσεων
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Χρήση {n} εκτέλεσης (περίπου ± 5%)|Χρήση {n} εκτελέσεων (περίπου ± 5%)

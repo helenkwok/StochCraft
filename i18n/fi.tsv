@@ -692,6 +692,14 @@ unit	yr	v
 	Key measures	Tärkeimmät mittarit
 	Up to 4 per block, rounded to what the interval supports	Enintään 4 lohkoa kohden, pyöristetty luottamusvälin mukaan
 	All measures ({n} more)	Kaikki mittarit ({n} lisää)
+	How sure are these numbers?	Kuinka varmoja nämä luvut ovat?
+	One run gives no interval, so these numbers cannot be told from chance.	Yksi ajo ei anna väliä, joten näitä lukuja ei voi erottaa sattumasta.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) tunnetaan {n} ajon jälkeen vain tarkkuudella {value}.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Muut tärkeimmät mittarit, joiden väli on yli ± 10% (osuuksilla ± 2 prosenttiyksikköä): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Malli alkaa tyhjästä eikä alkulämmittelyä ole asetettu, joten alku vetää keskiarvoja pois pitkän aikavälin arvosta.
+	Set a {value} warm-up	Aseta {value} alkulämmittely
+	The run is too short to suggest a warm-up: make it longer, then set one.	Ajo on liian lyhyt alkulämmittelyn ehdottamiseen: pidennä sitä ja aseta sitten alkulämmittely.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k}/{m} tärkeimmästä mittarista on vakiintunut: kukin tunnetaan ± 5% (osuuksilla ± 1 prosenttiyksikön) tarkkuudella tai paremmin.
 @plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
 @plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
 @plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui
@@ -709,3 +717,5 @@ unit	yr	v
 @plural	{n} run|{n} runs	{n} ajo|{n} ajoa
 @plural	Run ({n} problem)|Run ({n} problems)	Suorita ({n} ongelma)|Suorita ({n} ongelmaa)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} ongelma: {blocks}|{n} ongelmaa: {blocks}
+@plural	Use {n} run|Use {n} runs	Käytä {n} ajo|Käytä {n} ajoa
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Käytä {n} ajo (noin ± 5%)|Käytä {n} ajoa (noin ± 5%)

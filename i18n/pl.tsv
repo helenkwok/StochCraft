@@ -692,6 +692,14 @@ unit	yr	r.
 	Key measures	Najważniejsze miary
 	Up to 4 per block, rounded to what the interval supports	Do 4 na blok, zaokrąglone według przedziału ufności
 	All measures ({n} more)	Wszystkie miary (jeszcze {n})
+	How sure are these numbers?	Na ile pewne są te liczby?
+	One run gives no interval, so these numbers cannot be told from chance.	Jedno uruchomienie nie daje przedziału, więc tych liczb nie da się odróżnić od przypadku.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) jest znana tylko z dokładnością {value} po {n} uruchomieniach.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Inne najważniejsze miary szersze niż ± 10% (± 2 punkty procentowe dla udziału): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model startuje pusty i nie ustawiono rozgrzewki, więc początek odciąga średnie od wartości długoterminowej.
+	Set a {value} warm-up	Ustaw rozgrzewkę {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Uruchomienie jest za krótkie, by zaproponować rozgrzewkę: wydłuż je, a następnie ustaw rozgrzewkę.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} z {m} najważniejszych miar jest ustalonych: każda jest znana z dokładnością ± 5% (± 1 punkt procentowy dla udziału) lub lepszą.
 @plural	Added {n} block|Added {n} blocks	Dodano {n} blok|Dodano {n} bloki|Dodano {n} bloków
 @plural	Copied {n} block|Copied {n} blocks	Skopiowano {n} blok|Skopiowano {n} bloki|Skopiowano {n} bloków
 @plural	Finished {n} run|Finished {n} runs	Zakończono {n} uruchomienie|Zakończono {n} uruchomienia|Zakończono {n} uruchomień
@@ -709,3 +717,5 @@ unit	yr	r.
 @plural	{n} run|{n} runs	{n} uruchomienie|{n} uruchomienia|{n} uruchomień
 @plural	Run ({n} problem)|Run ({n} problems)	Uruchom ({n} problem)|Uruchom ({n} problemy)|Uruchom ({n} problemów)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemy: {blocks}|{n} problemów: {blocks}
+@plural	Use {n} run|Use {n} runs	Ustaw {n} uruchomienie|Ustaw {n} uruchomienia|Ustaw {n} uruchomień
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Ustaw {n} uruchomienie (ok. ± 5%)|Ustaw {n} uruchomienia (ok. ± 5%)|Ustaw {n} uruchomień (ok. ± 5%)

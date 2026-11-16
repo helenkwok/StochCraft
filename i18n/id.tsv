@@ -692,6 +692,14 @@ unit	yr	thn
 	Key measures	Metrik utama
 	Up to 4 per block, rounded to what the interval supports	Hingga 4 per blok, dibulatkan sesuai interval
 	All measures ({n} more)	Semua metrik ({n} lagi)
+	How sure are these numbers?	Seberapa pasti angka-angka ini?
+	One run gives no interval, so these numbers cannot be told from chance.	Satu eksekusi tidak memberi interval, jadi angka-angka ini tidak dapat dibedakan dari kebetulan.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) hanya diketahui hingga {value} setelah {n} eksekusi.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Metrik utama lain yang lebih lebar dari ± 10% (± 2 poin persentase untuk proporsi): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model dimulai kosong dan tidak ada pemanasan yang ditetapkan, jadi awal menarik rata-rata menjauh dari nilai jangka panjang.
+	Set a {value} warm-up	Tetapkan pemanasan {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Eksekusi terlalu singkat untuk menyarankan pemanasan: perpanjang, lalu tetapkan pemanasan.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} dari {m} metrik utama sudah stabil: masing-masing diketahui hingga ± 5% (± 1 poin persentase untuk proporsi) atau lebih baik.
 @plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
 @plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
 @plural	Finished {n} run|Finished {n} runs	Selesai {n} eksekusi
@@ -709,3 +717,5 @@ unit	yr	thn
 @plural	{n} run|{n} runs	{n} eksekusi
 @plural	Run ({n} problem)|Run ({n} problems)	Jalankan ({n} masalah)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} masalah: {blocks}
+@plural	Use {n} run|Use {n} runs	Gunakan {n} eksekusi
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Gunakan {n} eksekusi (sekitar ± 5%)

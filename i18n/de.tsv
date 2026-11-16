@@ -692,6 +692,14 @@ unit	yr	J.
 	Key measures	Wichtigste Kennzahlen
 	Up to 4 per block, rounded to what the interval supports	Bis zu 4 je Block, gerundet nach dem Intervall
 	All measures ({n} more)	Alle Kennzahlen ({n} weitere)
+	How sure are these numbers?	Wie sicher sind diese Zahlen?
+	One run gives no interval, so these numbers cannot be told from chance.	Ein Lauf liefert kein Intervall, daher lassen sich diese Zahlen nicht vom Zufall unterscheiden.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) ist nach {n} Läufen nur auf {value} genau bekannt.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Weitere Kennzahlen mit mehr als ± 10% (± 2 Prozentpunkte bei Anteilen): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Das Modell startet leer und es ist keine Einschwingphase festgelegt, daher zieht der Anfang die Mittelwerte vom langfristigen Wert weg.
+	Set a {value} warm-up	Einschwingphase von {value} festlegen
+	The run is too short to suggest a warm-up: make it longer, then set one.	Der Lauf ist zu kurz, um eine Einschwingphase vorzuschlagen: Verlängern Sie ihn und legen Sie dann eine fest.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} von {m} wichtigsten Kennzahlen sind stabil: Jede ist auf ± 5% (± 1 Prozentpunkt bei Anteilen) oder besser bekannt.
 @plural	Added {n} block|Added {n} blocks	{n} Block hinzugefügt|{n} Blöcke hinzugefügt
 @plural	Copied {n} block|Copied {n} blocks	{n} Block kopiert|{n} Blöcke kopiert
 @plural	Finished {n} run|Finished {n} runs	{n} Lauf abgeschlossen|{n} Läufe abgeschlossen
@@ -709,3 +717,5 @@ unit	yr	J.
 @plural	{n} run|{n} runs	{n} Lauf|{n} Läufe
 @plural	Run ({n} problem)|Run ({n} problems)	Ausführen ({n} Problem)|Ausführen ({n} Probleme)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} Problem: {blocks}|{n} Probleme: {blocks}
+@plural	Use {n} run|Use {n} runs	{n} Lauf verwenden|{n} Läufe verwenden
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} Lauf verwenden (etwa ± 5%)|{n} Läufe verwenden (etwa ± 5%)

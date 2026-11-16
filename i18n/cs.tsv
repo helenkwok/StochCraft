@@ -692,6 +692,14 @@ unit	yr	r.
 	Key measures	Klíčové metriky
 	Up to 4 per block, rounded to what the interval supports	Až 4 na blok, zaokrouhlené podle intervalu
 	All measures ({n} more)	Všechny metriky (další {n})
+	How sure are these numbers?	Jak jistá jsou tato čísla?
+	One run gives no interval, so these numbers cannot be told from chance.	Jeden běh nedává žádný interval, takže tato čísla nelze odlišit od náhody.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) je po {n} bězích znám jen s přesností {value}.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Další klíčové metriky širší než ± 10% (± 2 procentní body u podílu): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model začíná prázdný a zahřívání není nastaveno, takže začátek posouvá průměry od dlouhodobých hodnot.
+	Set a {value} warm-up	Nastavit zahřívání {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Běh je příliš krátký na návrh zahřívání: prodlužte ho a pak zahřívání nastavte.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} z {m} klíčových metrik je ustálených: každá je známa s přesností ± 5% (± 1 procentní bod u podílu) nebo lepší.
 @plural	Added {n} block|Added {n} blocks	Přidán {n} blok|Přidány {n} bloky|Přidáno {n} bloků
 @plural	Copied {n} block|Copied {n} blocks	Zkopírován {n} blok|Zkopírovány {n} bloky|Zkopírováno {n} bloků
 @plural	Finished {n} run|Finished {n} runs	Dokončen {n} běh|Dokončeny {n} běhy|Dokončeno {n} běhů
@@ -709,3 +717,5 @@ unit	yr	r.
 @plural	{n} run|{n} runs	{n} běh|{n} běhy|{n} běhů
 @plural	Run ({n} problem)|Run ({n} problems)	Spustit ({n} problém)|Spustit ({n} problémy)|Spustit ({n} problémů)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problém: {blocks}|{n} problémy: {blocks}|{n} problémů: {blocks}
+@plural	Use {n} run|Use {n} runs	Použít {n} běh|Použít {n} běhy|Použít {n} běhů
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Použít {n} běh (asi ± 5%)|Použít {n} běhy (asi ± 5%)|Použít {n} běhů (asi ± 5%)

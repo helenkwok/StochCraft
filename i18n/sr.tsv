@@ -692,6 +692,14 @@ unit	yr	год.
 	Key measures	Кључне метрике
 	Up to 4 per block, rounded to what the interval supports	До 4 по блоку, заокружене према интервалу
 	All measures ({n} more)	Све метрике (још {n})
+	How sure are these numbers?	Колико су ови бројеви поуздани?
+	One run gives no interval, so these numbers cannot be told from chance.	Једно покретање не даје интервал, па се ови бројеви не могу разликовати од случајности.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) познат је само до {value} после {n} покретања.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Остале кључне метрике шире од ± 10% (± 2 процентна поена за удео): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Модел почиње празан и загревање није постављено, па почетак удаљава средње вредности од дугорочних.
+	Set a {value} warm-up	Постави загревање од {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Покретање је прекратко да би се предложило загревање: продужите га, а затим поставите загревање.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} од {m} кључних метрика је устаљено: свака је позната до ± 5% (± 1 процентни поен за удео) или боље.
 @plural	Added {n} block|Added {n} blocks	Додат је {n} блок|Додата су {n} блока|Додато је {n} блокова
 @plural	Copied {n} block|Copied {n} blocks	Копиран је {n} блок|Копирана су {n} блока|Копирано је {n} блокова
 @plural	Finished {n} run|Finished {n} runs	Завршено је {n} покретање|Завршена су {n} покретања|Завршено је {n} покретања
@@ -709,3 +717,5 @@ unit	yr	год.
 @plural	{n} run|{n} runs	{n} покретање|{n} покретања|{n} покретања
 @plural	Run ({n} problem)|Run ({n} problems)	Покрени ({n} проблем)|Покрени ({n} проблема)|Покрени ({n} проблема)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} проблем: {blocks}|{n} проблема: {blocks}|{n} проблема: {blocks}
+@plural	Use {n} run|Use {n} runs	Користи {n} покретање|Користи {n} покретања|Користи {n} покретања
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Користи {n} покретање (око ± 5%)|Користи {n} покретања (око ± 5%)|Користи {n} покретања (око ± 5%)

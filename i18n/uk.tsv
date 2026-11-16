@@ -692,6 +692,14 @@ unit	yr	р.
 	Key measures	Основні показники
 	Up to 4 per block, rounded to what the interval supports	До 4 на блок, округлені за довірчим інтервалом
 	All measures ({n} more)	Усі показники (ще {n})
+	How sure are these numbers?	Наскільки надійні ці числа?
+	One run gives no interval, so these numbers cannot be told from chance.	Один запуск не дає інтервалу, тому ці числа не можна відрізнити від випадковості.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) після {n} запусків відомий лише з точністю {value}.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Інші основні показники ширші за ± 10% (± 2 відсоткові пункти для частки): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Модель починає роботу порожньою, і розігрів не задано, тому початок зміщує середні від довгострокового значення.
+	Set a {value} warm-up	Задати розігрів {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Запуск надто короткий, щоб запропонувати розігрів: подовжте його, потім задайте розігрів.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} з {m} основних показників усталилися: кожен відомий з точністю ± 5% (± 1 відсотковий пункт для частки) або краще.
 @plural	Added {n} block|Added {n} blocks	Додано {n} блок|Додано {n} блоки|Додано {n} блоків
 @plural	Copied {n} block|Copied {n} blocks	Скопійовано {n} блок|Скопійовано {n} блоки|Скопійовано {n} блоків
 @plural	Finished {n} run|Finished {n} runs	Завершено {n} запуск|Завершено {n} запуски|Завершено {n} запусків
@@ -709,3 +717,5 @@ unit	yr	р.
 @plural	{n} run|{n} runs	{n} запуск|{n} запуски|{n} запусків
 @plural	Run ({n} problem)|Run ({n} problems)	Запустити ({n} проблема)|Запустити ({n} проблеми)|Запустити ({n} проблем)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} проблема: {blocks}|{n} проблеми: {blocks}|{n} проблем: {blocks}
+@plural	Use {n} run|Use {n} runs	Використати {n} запуск|Використати {n} запуски|Використати {n} запусків
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Використати {n} запуск (близько ± 5%)|Використати {n} запуски (близько ± 5%)|Використати {n} запусків (близько ± 5%)

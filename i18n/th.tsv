@@ -692,6 +692,14 @@ unit	yr	ปี
 	Key measures	ตัวชี้วัดหลัก
 	Up to 4 per block, rounded to what the interval supports	สูงสุด 4 ตัวต่อบล็อก ปัดเศษตามช่วงความเชื่อมั่น
 	All measures ({n} more)	ตัวชี้วัดทั้งหมด (อีก {n})
+	How sure are these numbers?	ตัวเลขเหล่านี้แน่นอนเพียงใด
+	One run gives no interval, so these numbers cannot be told from chance.	การรันเพียงรอบเดียวไม่ให้ช่วงความเชื่อมั่น จึงแยกตัวเลขเหล่านี้ออกจากความบังเอิญไม่ได้
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) ทราบได้เพียง {value} หลังรัน {n} รอบ
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	ตัวชี้วัดหลักอื่นที่กว้างกว่า ± 10% (± 2 จุดร้อยละสำหรับสัดส่วน): {k}
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	แบบจำลองเริ่มจากว่างเปล่าและไม่ได้กำหนดระยะอุ่นเครื่อง ช่วงเริ่มต้นจึงดึงค่าเฉลี่ยออกจากค่าระยะยาว
+	Set a {value} warm-up	กำหนดระยะอุ่นเครื่อง {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	การรันสั้นเกินกว่าจะแนะนำระยะอุ่นเครื่องได้: ให้ยืดการรันออก แล้วจึงกำหนดระยะอุ่นเครื่อง
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	ตัวชี้วัดหลัก {k} จาก {m} คงที่แล้ว: แต่ละตัวทราบได้ภายใน ± 5% (± 1 จุดร้อยละสำหรับสัดส่วน) หรือดีกว่า
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ
@@ -709,3 +717,5 @@ unit	yr	ปี
 @plural	{n} run|{n} runs	การรัน {n} รอบ
 @plural	Run ({n} problem)|Run ({n} problems)	รัน (ปัญหา {n} รายการ)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	ปัญหา {n} รายการ: {blocks}
+@plural	Use {n} run|Use {n} runs	ใช้การรัน {n} รอบ
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	ใช้การรัน {n} รอบ (ประมาณ ± 5%)

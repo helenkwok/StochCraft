@@ -692,6 +692,14 @@ unit	yr	a
 	Key measures	Métricas clave
 	Up to 4 per block, rounded to what the interval supports	Hasta 4 por bloque, redondeadas según el intervalo
 	All measures ({n} more)	Todas las métricas ({n} más)
+	How sure are these numbers?	¿Qué tan seguros son estos números?
+	One run gives no interval, so these numbers cannot be told from chance.	Una sola ejecución no da intervalo, así que estos números no se pueden distinguir del azar.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) solo se conoce con {value} tras {n} ejecuciones.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Otras métricas clave con más de ± 10% (± 2 puntos en una proporción): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	El modelo empieza vacío y no hay calentamiento definido, así que el inicio aleja las medias de su valor a largo plazo.
+	Set a {value} warm-up	Definir un calentamiento de {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	La ejecución es demasiado corta para sugerir un calentamiento: alárguela y luego defina uno.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} de {m} métricas clave son estables: cada una se conoce con ± 5% (± 1 punto en una proporción) o mejor.
 @plural	Added {n} block|Added {n} blocks	Se añadió {n} bloque|Se añadieron {n} bloques
 @plural	Copied {n} block|Copied {n} blocks	Se copió {n} bloque|Se copiaron {n} bloques
 @plural	Finished {n} run|Finished {n} runs	Finalizada {n} ejecución|Finalizadas {n} ejecuciones
@@ -709,3 +717,5 @@ unit	yr	a
 @plural	{n} run|{n} runs	{n} ejecución|{n} ejecuciones
 @plural	Run ({n} problem)|Run ({n} problems)	Ejecutar ({n} problema)|Ejecutar ({n} problemas)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemas: {blocks}
+@plural	Use {n} run|Use {n} runs	Usar {n} ejecución|Usar {n} ejecuciones
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usar {n} ejecución (aprox. ± 5%)|Usar {n} ejecuciones (aprox. ± 5%)

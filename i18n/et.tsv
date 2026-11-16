@@ -692,6 +692,14 @@ unit	yr	a
 	Key measures	Peamised mõõdikud
 	Up to 4 per block, rounded to what the interval supports	Kuni 4 ploki kohta, ümardatud usaldusvahemiku järgi
 	All measures ({n} more)	Kõik mõõdikud (veel {n})
+	How sure are these numbers?	Kui kindlad need arvud on?
+	One run gives no interval, so these numbers cannot be told from chance.	Üks käivitamine ei anna vahemikku, seega ei saa neid arve juhusest eristada.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) on {n} käivitamise järel teada vaid täpsusega {value}.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Muud peamised mõõdikud laiemad kui ± 10% (osakaalu puhul ± 2 protsendipunkti): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Mudel alustab tühjana ja soojendust pole määratud, seega nihutab algus keskmisi pikaajalisest väärtusest eemale.
+	Set a {value} warm-up	Määra soojendus {value}
+	The run is too short to suggest a warm-up: make it longer, then set one.	Käivitamine on soojenduse soovitamiseks liiga lühike: pikenda seda ja määra siis soojendus.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} peamist mõõdikut {m}-st on stabiilsed: igaüks on teada ± 5% (osakaalu puhul ± 1 protsendipunkti) või parema täpsusega.
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud
@@ -709,3 +717,5 @@ unit	yr	a
 @plural	{n} run|{n} runs	{n} käivitamine|{n} käivitamist
 @plural	Run ({n} problem)|Run ({n} problems)	Käivita ({n} probleem)|Käivita ({n} probleemi)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probleem: {blocks}|{n} probleemi: {blocks}
+@plural	Use {n} run|Use {n} runs	Kasuta {n} käivitamine|Kasuta {n} käivitamist
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Kasuta {n} käivitamine (umbes ± 5%)|Kasuta {n} käivitamist (umbes ± 5%)

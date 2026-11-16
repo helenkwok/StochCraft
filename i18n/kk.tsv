@@ -692,6 +692,14 @@ unit	yr	ж.
 	Key measures	Негізгі көрсеткіштер
 	Up to 4 per block, rounded to what the interval supports	Әр блокқа 4-ке дейін, сенімділік аралығына қарай дөңгелектенген
 	All measures ({n} more)	Барлық көрсеткіштер (тағы {n})
+	How sure are these numbers?	Бұл сандар қаншалықты сенімді?
+	One run gives no interval, so these numbers cannot be told from chance.	Бір іске қосу аралық бермейді, сондықтан бұл сандарды кездейсоқтықтан ажырату мүмкін емес.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) {n} іске қосудан кейін тек {value} дәлдікпен белгілі.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	± 10%-дан (үлес үшін ± 2 пайыздық тармақтан) кең басқа негізгі көрсеткіштер: {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Модель бос күйден басталады және қыздыру кезеңі орнатылмаған, сондықтан бастапқы кезең орташа мәндерді ұзақ мерзімді мәннен ауытқытады.
+	Set a {value} warm-up	{value} қыздыру кезеңін орнату
+	The run is too short to suggest a warm-up: make it longer, then set one.	Іске қосу қыздыру кезеңін ұсыну үшін тым қысқа: оны ұзартып, содан кейін орнатыңыз.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} негізгі көрсеткіштің {k} тұрақты: әрқайсысы ± 5% (үлес үшін ± 1 пайыздық тармақ) немесе одан жақсы дәлдікпен белгілі.
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды
@@ -709,3 +717,5 @@ unit	yr	ж.
 @plural	{n} run|{n} runs	{n} іске қосу|{n} іске қосу
 @plural	Run ({n} problem)|Run ({n} problems)	Іске қосу ({n} мәселе)|Іске қосу ({n} мәселе)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} мәселе: {blocks}|{n} мәселе: {blocks}
+@plural	Use {n} run|Use {n} runs	{n} іске қосуды пайдалану|{n} іске қосуды пайдалану
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} іске қосуды пайдалану (шамамен ± 5%)|{n} іске қосуды пайдалану (шамамен ± 5%)

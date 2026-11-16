@@ -692,6 +692,14 @@ unit	yr	j
 	Key measures	Belangrijkste metrieken
 	Up to 4 per block, rounded to what the interval supports	Tot 4 per blok, afgerond naar het interval
 	All measures ({n} more)	Alle metrieken (nog {n})
+	How sure are these numbers?	Hoe zeker zijn deze getallen?
+	One run gives no interval, so these numbers cannot be told from chance.	Eén uitvoering geeft geen interval, dus deze getallen zijn niet van toeval te onderscheiden.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}) is na {n} uitvoeringen slechts tot op {value} bekend.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	Andere belangrijke metrieken breder dan ± 10% (± 2 procentpunten voor een aandeel): {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Het model start leeg en er is geen opwarmperiode ingesteld, dus de start trekt de gemiddelden weg van de waarde op lange termijn.
+	Set a {value} warm-up	Opwarmperiode van {value} instellen
+	The run is too short to suggest a warm-up: make it longer, then set one.	De uitvoering is te kort om een opwarmperiode voor te stellen: maak haar langer en stel er dan een in.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{k} van {m} belangrijke metrieken zijn stabiel: elk is bekend tot op ± 5% (± 1 procentpunt voor een aandeel) of beter.
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid
@@ -709,3 +717,5 @@ unit	yr	j
 @plural	{n} run|{n} runs	{n} uitvoering|{n} uitvoeringen
 @plural	Run ({n} problem)|Run ({n} problems)	Uitvoeren ({n} probleem)|Uitvoeren ({n} problemen)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probleem: {blocks}|{n} problemen: {blocks}
+@plural	Use {n} run|Use {n} runs	{n} uitvoering gebruiken|{n} uitvoeringen gebruiken
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} uitvoering gebruiken (ongeveer ± 5%)|{n} uitvoeringen gebruiken (ongeveer ± 5%)

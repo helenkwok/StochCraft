@@ -692,6 +692,14 @@ unit	yr	yıl
 	Key measures	Temel ölçütler
 	Up to 4 per block, rounded to what the interval supports	Blok başına en fazla 4, güven aralığına göre yuvarlanmış
 	All measures ({n} more)	Tüm ölçütler ({n} tane daha)
+	How sure are these numbers?	Bu sayılar ne kadar kesin?
+	One run gives no interval, so these numbers cannot be told from chance.	Tek bir çalıştırma aralık vermez, bu yüzden bu sayılar rastlantıdan ayırt edilemez.
+	{measure} ({block}) is known only to {value} after {n} runs.	{measure} ({block}), {n} çalıştırmadan sonra yalnızca {value} kesinlikle biliniyor.
+	Other key measures wider than ± 10% (± 2 points for a share): {k}.	± 10%'dan (oranlarda ± 2 yüzde puandan) geniş diğer temel ölçütler: {k}.
+	The model starts empty and no warm-up is set, so the start pulls the means away from the long run.	Model boş başlıyor ve ısınma ayarlanmamış, bu yüzden başlangıç ortalamaları uzun dönem değerinden uzaklaştırıyor.
+	Set a {value} warm-up	{value} ısınma ayarla
+	The run is too short to suggest a warm-up: make it longer, then set one.	Çalıştırma bir ısınma önermek için çok kısa: uzatın, ardından bir ısınma ayarlayın.
+	{k} of {m} key measures are settled: each is known to ± 5% (± 1 point for a share) or better.	{m} temel ölçütten {k} tanesi oturdu: her biri ± 5% (oranlarda ± 1 yüzde puan) veya daha iyi kesinlikle biliniyor.
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı
@@ -709,3 +717,5 @@ unit	yr	yıl
 @plural	{n} run|{n} runs	{n} çalıştırma|{n} çalıştırma
 @plural	Run ({n} problem)|Run ({n} problems)	Çalıştır ({n} sorun)|Çalıştır ({n} sorun)
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} sorun: {blocks}|{n} sorun: {blocks}
+@plural	Use {n} run|Use {n} runs	{n} çalıştırma kullan|{n} çalıştırma kullan
+@plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} çalıştırma kullan (yaklaşık ± 5%)|{n} çalıştırma kullan (yaklaşık ± 5%)
