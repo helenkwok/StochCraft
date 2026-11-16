@@ -667,9 +667,18 @@ impl Limits {
     }
 }
 
+/// The times the model needs above 0, not just 0 or more: a planned run time per item
+/// (`PlannedRunTimeNotPositive`) and a health check's interval (`HealthCheckIntervalNotPositive`).
+fn positive_time(key: &str) -> bool {
+    key.ends_with("planned_run_time") || key.ends_with("check_interval")
+}
+
 /// A distribution's field `f` with the limits the model checks it against
-/// (`Dist::check`), and with none below 0 when it is a time: no time is negative.
-fn with_limits(node: &Value, dist: &str, f: &str, time: bool) -> Value {
+/// (`Dist::check`), and with none below 0 when it is a time: no time is negative. A truncated
+/// normal's underlying mean may be negative (its draws stay within its own minimum and
+/// maximum). When the time must be above 0 (`positive`), a distribution whose one parameter is
+/// its mean refuses 0 too.
+fn with_limits(node: &Value, dist: &str, f: &str, time: bool, positive: bool) -> Value {
     let mut n = node.clone();
     if !n.is_object() {
         return n;
@@ -684,12 +693,21 @@ fn with_limits(node: &Value, dist: &str, f: &str, time: bool) -> Value {
         ("truncated_normal", "std_dev") | ("log_normal", "mean") | (_, "shape" | "scale") => {
             n["exclusiveMinimum"] = json!(0.0);
         }
+        ("truncated_normal", "mean") => {}
         (_, "k") => n["minimum"] = json!(1),
         (_, "std_dev") | ("exponential" | "erlang" | "poisson", "mean") => {
             n["minimum"] = json!(0.0);
         }
         _ if time => n["minimum"] = json!(0.0),
         _ => {}
+    }
+    if positive
+        && matches!(
+            (dist, f),
+            ("constant", "value") | ("exponential" | "erlang" | "poisson", "mean")
+        )
+    {
+        n["exclusiveMinimum"] = json!(0.0);
     }
     n
 }
@@ -827,7 +845,13 @@ fn tagged(
                 // The model's limits on the field, and none below 0 for a time (a property's
                 // random value, under `…/random`, is not a time).
                 let time = is_time(&now, f) && !key.ends_with("/random");
-                let fnode = with_limits(schema.resolve(&v["properties"][f]), &now, f, time);
+                let fnode = with_limits(
+                    schema.resolve(&v["properties"][f]),
+                    &now,
+                    f,
+                    time,
+                    positive_time(key),
+                );
                 let changed = edit(
                     ui,
                     cx,
@@ -1247,7 +1271,7 @@ fn array(
                     &format!("{} {}", label_for(f), i + 1),
                     &it[f],
                     item["properties"][f]["type"] == "integer",
-                    &with_limits(&item["properties"][f], "user", f, false),
+                    &with_limits(&item["properties"][f], "user", f, false, false),
                     unit.as_deref(),
                 ) {
                     let mut all = out.clone().unwrap_or_else(|| items.clone());
@@ -1421,4 +1445,43 @@ fn keyed(
         }
     }
     out
+}
+
+#[cfg(test)]
+mod limit_tests {
+    use super::*;
+
+    #[test]
+    fn a_truncated_normals_mean_may_be_negative() {
+        let n = with_limits(
+            &json!({"type": "number"}),
+            "truncated_normal",
+            "mean",
+            true,
+            false,
+        );
+        assert!(
+            n["minimum"].is_null() && n["exclusiveMinimum"].is_null(),
+            "{n}"
+        );
+        let m = with_limits(&json!({"type": "number"}), "normal", "mean", true, false);
+        assert_eq!(m["minimum"], json!(0.0));
+    }
+
+    #[test]
+    fn a_time_that_must_be_positive_refuses_a_mean_of_zero() {
+        assert!(positive_time("serve/planned_run_time"));
+        assert!(positive_time("serve/health_check/check_interval"));
+        assert!(!positive_time("serve/service"));
+        for (dist, f) in [
+            ("constant", "value"),
+            ("exponential", "mean"),
+            ("erlang", "mean"),
+        ] {
+            let n = with_limits(&json!({"type": "number"}), dist, f, true, true);
+            assert_eq!(n["exclusiveMinimum"], json!(0.0), "{dist}.{f}");
+            let o = with_limits(&json!({"type": "number"}), dist, f, true, false);
+            assert!(o["exclusiveMinimum"].is_null(), "{dist}.{f}");
+        }
+    }
 }
