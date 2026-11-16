@@ -716,6 +716,10 @@ unit	yr	ປີ
 	At {time}: {value} waiting	ທີ່ {time}: {value} ລໍຖ້າ
 	Still settling at the end of the run: run it longer to see where it levels off.	ຍັງບໍ່ຄົງທີ່ໃນຕອນທ້າຍການຈຳລອງ: ໃຫ້ຍືດອອກເພື່ອເບິ່ງວ່າມັນຄົງທີ່ຢູ່ໃສ.
 	More charts	ແຜນພູມເພີ່ມເຕີມ
+	Out of date:	ລ້າສະໄໝ:
+	the model has changed since this run.	ແບບຈຳລອງໄດ້ປ່ຽນແປງຫຼັງຈາກການປະມວນຜົນນີ້.
+	Run again	ປະມວນຜົນອີກຄັ້ງ
+	· out of date	· ລ້າສະໄໝ
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ

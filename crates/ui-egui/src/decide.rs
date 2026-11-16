@@ -825,7 +825,7 @@ impl App {
     pub(crate) fn analysis_view(&mut self, ui: &mut egui::Ui) {
         let model = stochcraft_engine::wire::model(self.engine.model());
         let digest = stochcraft_engine::model_digest(self.engine.model());
-        let results = self.results.clone();
+        let results = self.results().cloned();
         let outs = outputs(&model, results.as_ref());
         let params = parameters(&model);
         egui::ScrollArea::vertical()

@@ -140,8 +140,9 @@ fn undo_and_redo_name_the_change_and_results_go_stale() {
     settle(&mut h);
     assert!(
         h.state().results().is_none(),
-        "results of another model stay"
+        "results of another model are current"
     );
+    assert!(h.state().results_out_of_date());
     assert!(h.state().title().contains('•'), "{}", h.state().title());
 
     click(&mut h, "Edit");
@@ -156,6 +157,65 @@ fn undo_and_redo_name_the_change_and_results_go_stale() {
     );
     settle(&mut h);
     assert_eq!(h.state().engine().model().name, "Renamed");
+}
+
+#[test]
+fn results_stay_marked_out_of_date_after_an_edit() {
+    let tab = |h: &mut Harness<'static, App>, label: &str| {
+        h.get_by_role_and_label(egui::accesskit::Role::Tab, label)
+            .click();
+        settle(h);
+    };
+    let mut h = harness(Platform::DESKTOP);
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    assert!(h.state().results().is_some());
+
+    // Moving a block changes no result.
+    h.state_mut().execute(
+        "layout.set",
+        json!({ "shapes": [{ "id": "serve", "x": 400, "y": 300 }] }),
+    );
+    settle(&mut h);
+    assert!(h.state().results().is_some(), "moved, not changed");
+    assert!(h.query_by_label("Out of date:").is_none());
+
+    // Any other change leaves the results on show, marked, with Run again.
+    h.state_mut()
+        .execute("block.set", json!({ "id": "serve", "capacity": 2 }));
+    settle(&mut h);
+    assert!(h.state().results().is_none());
+    assert!(h.state().results_out_of_date());
+    tab(&mut h, "Results");
+    h.get_by_label("Out of date:");
+    h.get_by_label("· out of date");
+    h.get_by_role_and_label(egui::accesskit::Role::Button, "Run again");
+
+    // Undone, they are current again.
+    h.state_mut().undo();
+    settle(&mut h);
+    assert!(h.state().results().is_some());
+    assert!(h.query_by_label("Out of date:").is_none());
+
+    // Run again replaces them with results of the model as it is.
+    h.state_mut().redo();
+    settle(&mut h);
+    click(&mut h, "Run again");
+    finish_run(&mut h);
+    assert!(h.state().results().is_some());
+    assert!(h.query_by_label("Out of date:").is_none());
+
+    // Results of a block that is gone still draw, and so does the Analysis view.
+    h.state_mut()
+        .execute("block.remove", json!({ "id": "serve" }));
+    settle(&mut h);
+    assert!(h.state().results_out_of_date());
+    tab(&mut h, "Results");
+    h.get_by_label("Out of date:");
+    tab(&mut h, "Analysis");
+    tab(&mut h, "Results");
+    h.get_by_label("Out of date:");
 }
 
 #[test]

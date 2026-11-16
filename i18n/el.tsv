@@ -716,6 +716,10 @@ unit	yr	έτ
 	At {time}: {value} waiting	Στο {time}: {value} σε αναμονή
 	Still settling at the end of the run: run it longer to see where it levels off.	Ακόμη σταθεροποιείται στο τέλος της εκτέλεσης: επιμηκύνετέ την για να δείτε πού ισορροπεί.
 	More charts	Περισσότερα διαγράμματα
+	Out of date:	Παρωχημένα:
+	the model has changed since this run.	το μοντέλο άλλαξε μετά από αυτή την εκτέλεση.
+	Run again	Εκτέλεση ξανά
+	· out of date	· παρωχημένα
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις

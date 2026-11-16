@@ -716,6 +716,10 @@ unit	yr	yıl
 	At {time}: {value} waiting	{time} anında: {value} bekliyor
 	Still settling at the end of the run: run it longer to see where it levels off.	Çalıştırmanın sonunda hâlâ oturuyor: nerede dengelendiğini görmek için uzatın.
 	More charts	Daha fazla grafik
+	Out of date:	Güncel değil:
+	the model has changed since this run.	model bu çalıştırmadan sonra değişti.
+	Run again	Yeniden çalıştır
+	· out of date	· güncel değil
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı

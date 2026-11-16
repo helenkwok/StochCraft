@@ -71,7 +71,7 @@ impl App {
             .execute("model.set", json!({ "model": copy["model"] }))
             .is_some()
         {
-            self.results = None;
+            self.clear_results();
             self.selected = None;
             self.show_results = false;
             self.show_analysis = false;

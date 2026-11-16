@@ -716,6 +716,10 @@ unit	yr	năm
 	At {time}: {value} waiting	Tại {time}: {value} đang chờ
 	Still settling at the end of the run: run it longer to see where it levels off.	Vẫn đang ổn định ở cuối lần chạy: hãy kéo dài lần chạy để xem nó ổn định ở đâu.
 	More charts	Thêm biểu đồ
+	Out of date:	Đã cũ:
+	the model has changed since this run.	mô hình đã thay đổi sau lần chạy này.
+	Run again	Chạy lại
+	· out of date	· đã cũ
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy

@@ -716,6 +716,10 @@ unit	yr	l.
 	At {time}: {value} waiting	Ob {time}: čaka {value}
 	Still settling at the end of the run: run it longer to see where it levels off.	Ob koncu zagona se še ustaljuje: podaljšajte ga, da vidite, kje se izravna.
 	More charts	Več grafikonov
+	Out of date:	Zastarelo:
+	the model has changed since this run.	model se je od tega zagona spremenil.
+	Run again	Zaženi znova
+	· out of date	· zastarelo
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov

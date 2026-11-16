@@ -716,6 +716,10 @@ unit	yr	r.
 	At {time}: {value} waiting	W chwili {time}: czeka {value}
 	Still settling at the end of the run: run it longer to see where it levels off.	Na końcu uruchomienia wciąż się stabilizuje: wydłuż je, aby zobaczyć, gdzie się wyrównuje.
 	More charts	Więcej wykresów
+	Out of date:	Nieaktualne:
+	the model has changed since this run.	model zmienił się od tego uruchomienia.
+	Run again	Uruchom ponownie
+	· out of date	· nieaktualne
 @plural	Added {n} block|Added {n} blocks	Dodano {n} blok|Dodano {n} bloki|Dodano {n} bloków
 @plural	Copied {n} block|Copied {n} blocks	Skopiowano {n} blok|Skopiowano {n} bloki|Skopiowano {n} bloków
 @plural	Finished {n} run|Finished {n} runs	Zakończono {n} uruchomienie|Zakończono {n} uruchomienia|Zakończono {n} uruchomień

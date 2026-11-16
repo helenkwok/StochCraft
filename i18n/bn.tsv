@@ -716,6 +716,10 @@ unit	yr	বছর
 	At {time}: {value} waiting	{time}-এ: {value}টি অপেক্ষায়
 	Still settling at the end of the run: run it longer to see where it levels off.	পুনরাবৃত্তির শেষেও স্থির হচ্ছে: কোথায় সমান হয় দেখতে এটি দীর্ঘ করুন।
 	More charts	আরও চার্ট
+	Out of date:	পুরোনো:
+	the model has changed since this run.	এই রানের পরে মডেলটি বদলেছে।
+	Run again	আবার চালান
+	· out of date	· পুরোনো
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে

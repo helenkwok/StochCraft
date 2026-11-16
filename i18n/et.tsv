@@ -716,6 +716,10 @@ unit	yr	a
 	At {time}: {value} waiting	Ajal {time}: ootel {value}
 	Still settling at the end of the run: run it longer to see where it levels off.	Käivitamise lõpus alles stabiliseerub: pikenda seda, et näha, kus see ühtlustub.
 	More charts	Rohkem diagramme
+	Out of date:	Aegunud:
+	the model has changed since this run.	mudel on pärast seda käivitust muutunud.
+	Run again	Käivita uuesti
+	· out of date	· aegunud
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud

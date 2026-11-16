@@ -716,6 +716,10 @@ unit	yr	r.
 	At {time}: {value} waiting	V čase {time}: čaká {value}
 	Still settling at the end of the run: run it longer to see where it levels off.	Na konci behu sa stále ustaľuje: predĺžte ho, aby ste videli, kde sa vyrovná.
 	More charts	Ďalšie grafy
+	Out of date:	Zastarané:
+	the model has changed since this run.	model sa od tohto behu zmenil.
+	Run again	Spustiť znova
+	· out of date	· zastarané
 @plural	Added {n} block|Added {n} blocks	Pridaný {n} blok|Pridané {n} bloky|Pridaných {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Skopírovaný {n} blok|Skopírované {n} bloky|Skopírovaných {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Dokončený {n} beh|Dokončené {n} behy|Dokončených {n} behov

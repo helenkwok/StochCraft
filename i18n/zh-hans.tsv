@@ -716,6 +716,10 @@ unit	yr	年
 	At {time}: {value} waiting	在 {time}：{value} 在等待
 	Still settling at the end of the run: run it longer to see where it levels off.	运行结束时仍在趋于稳定：请延长运行以查看它在何处趋平。
 	More charts	更多图表
+	Out of date:	已过时：
+	the model has changed since this run.	此次运行后模型已更改。
+	Run again	再次运行
+	· out of date	· 已过时
 @plural	Added {n} block|Added {n} blocks	已添加 {n} 个区块
 @plural	Copied {n} block|Copied {n} blocks	已复制 {n} 个区块
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次运行

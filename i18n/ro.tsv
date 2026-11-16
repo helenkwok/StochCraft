@@ -716,6 +716,10 @@ unit	yr	a
 	At {time}: {value} waiting	La {time}: {value} în așteptare
 	Still settling at the end of the run: run it longer to see where it levels off.	Încă se stabilizează la finalul rulării: prelungiți-o pentru a vedea unde se nivelează.
 	More charts	Mai multe grafice
+	Out of date:	Depășite:
+	the model has changed since this run.	modelul s-a schimbat de la această rulare.
+	Run again	Rulează din nou
+	· out of date	· depășite
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări

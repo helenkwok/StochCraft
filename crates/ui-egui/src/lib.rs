@@ -263,10 +263,15 @@ pub trait Workers {
 pub struct App {
     engine: Engine,
     platform: Platform,
-    /// Results of the last finished run, until the model changes.
+    /// Results of the last finished run. They stay after the model changes, marked out of date
+    /// ([`App::results_out_of_date`]), until another run, file or model replaces them.
     results: Option<Value>,
-    /// The model digest the results belong to.
-    results_digest: Option<String>,
+    /// The model the results came from, as [`comparable`] writes it.
+    results_model: Option<Value>,
+    /// The model as the run in progress started with it, as [`comparable`] writes it.
+    run_model: Option<Value>,
+    /// The model has changed since the results' run (worked out once a frame).
+    results_stale: bool,
     running: Option<Running>,
     /// The shell's workers for runs, if it has any.
     workers: Option<Box<dyn Workers>>,
@@ -381,7 +386,9 @@ impl App {
             engine: Engine::new(),
             platform,
             results: None,
-            results_digest: None,
+            results_model: None,
+            run_model: None,
+            results_stale: false,
             running: None,
             workers: None,
             status: String::new(),
@@ -480,7 +487,30 @@ impl App {
 
     /// Results of the last finished run, if the model has not changed since.
     pub fn results(&self) -> Option<&Value> {
-        self.results.as_ref()
+        self.results
+            .as_ref()
+            .filter(|_| self.results_model.as_ref() == Some(&comparable(self.engine.model())))
+    }
+
+    /// The results on show are of a model that has changed since their run: the Results view
+    /// still shows them, marked out of date.
+    pub fn results_out_of_date(&self) -> bool {
+        self.results.is_some() && self.results().is_none()
+    }
+
+    /// Shows `results` of a run of `model` (as [`comparable`] writes it).
+    fn set_results(&mut self, results: Value, model: Value) {
+        self.results = Some(results);
+        self.results_model = Some(model);
+        self.results_stale = false;
+        self.show_results = true;
+    }
+
+    /// Forgets the results: another model or file replaces the one they came from.
+    fn clear_results(&mut self) {
+        self.results = None;
+        self.results_model = None;
+        self.results_stale = false;
     }
 
     /// The window title: the file's name, marked when there are unsaved changes.
@@ -744,7 +774,7 @@ impl App {
     /// What the window shows of a model that has been replaced: results, selection, the
     /// canvas's view, a watched run and half-typed fields.
     fn forget_view(&mut self) {
-        self.results = None;
+        self.clear_results();
         self.selected = None;
         self.canvas = canvas::Canvas::default();
         self.watching = None;
@@ -765,6 +795,7 @@ impl App {
                 format!("`{command}` is not available in the app: use `run`, which runs at once"),
             ));
         }
+        let before = (command == "run").then(|| comparable(self.engine.model()));
         let result = self.engine.execute(command, params)?;
         match command {
             "file.open" | "model.new" | "model.set" => {
@@ -774,9 +805,8 @@ impl App {
                 }
             }
             "run" => {
-                self.results_digest = result["record"]["model_digest"].as_str().map(str::to_owned);
-                self.results = Some(result.clone());
-                self.show_results = true;
+                let model = before.unwrap_or_else(|| comparable(self.engine.model()));
+                self.set_results(result.clone(), model);
                 let n = result["replications"].as_u64().unwrap_or(0);
                 self.info(tn(n, "Finished {n} run", "Finished {n} runs"));
             }
@@ -1004,13 +1034,7 @@ impl App {
         match action {
             Replace::New => {
                 if self.execute("model.new", json!({})).is_some() {
-                    self.results = None;
-                    self.selected = None;
-                    self.canvas = canvas::Canvas::default();
-                    self.watching = None;
-                    self.drafts.clear();
-                    self.show_results = false;
-                    self.show_analysis = false;
+                    self.forget_view();
                     self.info(t("New model"));
                 }
             }
@@ -1081,6 +1105,7 @@ impl App {
         };
         if let Some(status) = status {
             self.show_results = true;
+            self.run_model = Some(comparable(self.engine.model()));
             self.running = Some(Running {
                 done: 0,
                 partial: 0.0,
@@ -1162,11 +1187,12 @@ impl App {
             }
             Some("finished") => {
                 self.running = None;
-                self.results_digest = status["result"]["record"]["model_digest"]
-                    .as_str()
-                    .map(str::to_owned);
-                self.results = Some(status["result"].clone());
-                self.show_results = true;
+                // The model as the run started: it may have been edited while it ran.
+                let model = self
+                    .run_model
+                    .take()
+                    .unwrap_or_else(|| comparable(self.engine.model()));
+                self.set_results(status["result"].clone(), model);
                 let n = status["total"].as_u64().unwrap_or(0);
                 self.info(tn(n, "Finished {n} run", "Finished {n} runs"));
                 false
@@ -1192,18 +1218,10 @@ impl App {
         }
     }
 
-    /// Results go stale when the model changes; they are dropped then.
-    fn drop_stale_results(&mut self) {
-        if self.results.is_some() {
-            let digest = stochcraft_engine::model_digest(self.engine.model());
-            if self.results_digest.as_deref() != Some(digest.as_str()) {
-                self.results = None;
-                if self.running.is_none() {
-                    self.show_results = false;
-                    self.show_analysis = false;
-                }
-            }
-        }
+    /// Results go out of date when the model changes (moving a block does not count); they stay
+    /// on show, marked, and are fresh again if the change is undone.
+    fn mark_stale_results(&mut self) {
+        self.results_stale = self.results_out_of_date();
     }
 
     fn shortcuts(&mut self, ctx: &egui::Context) {
@@ -1279,7 +1297,7 @@ impl App {
         chart_palette::use_palette(&ctx, &self.active_chart_palette(), canvas);
         self.shortcuts(&ctx);
         self.tick_watching(&ctx);
-        self.drop_stale_results();
+        self.mark_stale_results();
         let p = theme::palette(&ctx);
 
         egui::Panel::top("header")
@@ -1320,7 +1338,8 @@ impl App {
                     self.tabs(ui, &p);
                     ui.add_space(14.0);
                 }
-                if self.show_results && self.results.is_some() {
+                // A run in progress shows its progress, not the results it will replace.
+                if self.show_results && self.results.is_some() && self.running.is_none() {
                     self.results_view(ui);
                 } else if self.show_analysis && has_model && !self.show_results {
                     self.analysis_view(ui);
@@ -1517,6 +1536,7 @@ impl App {
         let mut csv = false;
         let mut png = false;
         let mut fix = None;
+        let mut again = false;
         egui::ScrollArea::vertical()
             .auto_shrink([false, false])
             .show(ui, |ui| {
@@ -1537,13 +1557,18 @@ impl App {
                 results::record_line(ui, &results);
                 self.stop_line(ui, &results);
                 ui.add_space(6.0);
+                if self.results_stale {
+                    again = self.out_of_date_line(ui);
+                    ui.add_space(6.0);
+                }
                 results::findings(ui, &results);
                 ui.add_space(6.0);
                 fix = results::trust(ui, &results);
                 ui.add_space(10.0);
                 results::key(ui, &results);
                 ui.add_space(6.0);
-                let line = self.straight_line();
+                // The line's blocks as the model has them now: only while the results are of it.
+                let line = self.straight_line().filter(|_| !self.results_stale);
                 self.charts_rect = charts::show(ui, &results, line.as_deref());
                 // An export asked for: scroll the charts into view, and capture them once they
                 // are all on screen (or after a few frames, if the window is too short for them).
@@ -1577,6 +1602,9 @@ impl App {
                 self.run();
             }
         }
+        if again {
+            self.run();
+        }
         if csv {
             self.export_csv();
         }
@@ -1584,6 +1612,31 @@ impl App {
             let ctx = ui.ctx().clone();
             self.export_png(&ctx);
         }
+    }
+
+    /// The line over results whose model has changed since their run: they stay on show, marked,
+    /// with Run again. Returns whether Run again was clicked.
+    fn out_of_date_line(&self, ui: &mut egui::Ui) -> bool {
+        let p = theme::palette(ui.ctx());
+        let mut again = false;
+        egui::Frame::new()
+            .stroke(egui::Stroke::new(1.0, p.warning))
+            .corner_radius(6.0)
+            .inner_margin(egui::Margin::symmetric(14, 8))
+            .show(ui, |ui| {
+                ui.set_width(ui.available_width());
+                ui.horizontal(|ui| {
+                    let (rect, _) =
+                        ui.allocate_exact_size(egui::vec2(16.0, 18.0), egui::Sense::hover());
+                    theme::paint_warning_mark(ui.painter(), rect.center(), 6.5, &p);
+                    ui.label(theme::strong(t("Out of date:")));
+                    ui.label(t("the model has changed since this run."));
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        again = ui.add(theme::primary(ui, t("Run again"))).clicked();
+                    });
+                });
+            });
+        again
     }
 
     /// The work area's two views: the model (overview or inspector) and the results.
@@ -1641,6 +1694,8 @@ impl App {
             }
             if self.results.is_none() && self.running.is_none() {
                 ui.label(theme::weak(ui, t("· no results yet")));
+            } else if self.results_stale && self.running.is_none() {
+                ui.label(theme::weak(ui, t("· out of date")));
             }
         });
         let rect = ui.max_rect();
@@ -2432,6 +2487,18 @@ enum Choice {
 }
 
 /// How the Edit menu and the status bar name a change, from the command that made it.
+/// `model` as results are kept against it: its wire form without where blocks are drawn, so
+/// moving a block leaves the results current while any other change marks them out of date.
+fn comparable(model: &stochcraft_model::Model) -> Value {
+    let mut m = stochcraft_engine::wire::model(model);
+    for e in m["elements"].as_array_mut().into_iter().flatten() {
+        if let Some(e) = e.as_object_mut() {
+            e.remove("bounds");
+        }
+    }
+    m
+}
+
 fn change_label(command: &str) -> &str {
     match command {
         "model.set" => "Replace Model",

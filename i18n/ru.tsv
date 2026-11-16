@@ -716,6 +716,10 @@ unit	yr	г.
 	At {time}: {value} waiting	В {time}: ждут {value}
 	Still settling at the end of the run: run it longer to see where it levels off.	К концу запуска ещё устанавливается: удлините его, чтобы увидеть, где оно выравнивается.
 	More charts	Ещё диаграммы
+	Out of date:	Устарели:
+	the model has changed since this run.	модель изменилась после этого запуска.
+	Run again	Запустить снова
+	· out of date	· устарели
 @plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
 @plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
 @plural	Finished {n} run|Finished {n} runs	Завершён {n} запуск|Завершены {n} запуска|Завершено {n} запусков

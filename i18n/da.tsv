@@ -716,6 +716,10 @@ unit	yr	år
 	At {time}: {value} waiting	Ved {time}: {value} venter
 	Still settling at the end of the run: run it longer to see where it levels off.	Er stadig ved at falde til ro ved slutningen af kørslen: gør den længere for at se, hvor den flader ud.
 	More charts	Flere diagrammer
+	Out of date:	Forældet:
+	the model has changed since this run.	modellen er ændret siden denne kørsel.
+	Run again	Kør igen
+	· out of date	· forældet
 @plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
 @plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført
