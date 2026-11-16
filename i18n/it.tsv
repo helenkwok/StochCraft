@@ -716,6 +716,10 @@ unit	yr	a
 	At {time}: {value} waiting	A {time}: {value} in attesa
 	Still settling at the end of the run: run it longer to see where it levels off.	Ancora in assestamento alla fine dell'esecuzione: allungala per vedere dove si stabilizza.
 	More charts	Altri grafici
+	Out of date:	Non aggiornati:
+	the model has changed since this run.	il modello è cambiato dopo questa esecuzione.
+	Run again	Esegui di nuovo
+	· out of date	· non aggiornati
 @plural	Added {n} block|Added {n} blocks	Aggiunto {n} blocco|Aggiunti {n} blocchi
 @plural	Copied {n} block|Copied {n} blocks	Copiato {n} blocco|Copiati {n} blocchi
 @plural	Finished {n} run|Finished {n} runs	Completata {n} esecuzione|Completate {n} esecuzioni

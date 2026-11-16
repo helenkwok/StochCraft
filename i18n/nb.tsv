@@ -716,6 +716,10 @@ unit	yr	år
 	At {time}: {value} waiting	Ved {time}: {value} venter
 	Still settling at the end of the run: run it longer to see where it levels off.	Er fortsatt ikke stabil ved slutten av kjøringen: gjør den lengre for å se hvor den flater ut.
 	More charts	Flere diagrammer
+	Out of date:	Utdatert:
+	the model has changed since this run.	modellen er endret siden denne kjøringen.
+	Run again	Kjør på nytt
+	· out of date	· utdatert
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
 @plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført

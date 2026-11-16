@@ -716,6 +716,10 @@ unit	yr	v
 	At {time}: {value} waiting	Në {time}: {value} në pritje
 	Still settling at the end of the run: run it longer to see where it levels off.	Ende po stabilizohet në fund të ekzekutimit: zgjateni për të parë ku niveluhet.
 	More charts	Më shumë grafikë
+	Out of date:	Të vjetruara:
+	the model has changed since this run.	modeli ka ndryshuar pas këtij ekzekutimi.
+	Run again	Ekzekuto përsëri
+	· out of date	· të vjetruara
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime

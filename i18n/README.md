@@ -642,6 +642,10 @@ engine's messages (validation, file notes) are English too.
   {block} over the run" and their labels) were drafted from the plain meaning of the English, with
   each catalog's own words for entity, block, run, warm-up and confidence interval. Not checked
   against a source, and not reviewed by native speakers.
+- The rows for results kept after an edit (issue #148: "Out of date:", "the model has changed since
+  this run.", "Run again", "· out of date") were drafted from the plain meaning of the English, with
+  each catalog's own words for run, model and Run. Not checked against a source, and not reviewed
+  by native speakers.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

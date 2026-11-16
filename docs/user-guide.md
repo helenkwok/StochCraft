@@ -220,8 +220,10 @@ runs have finished; **Cancel run** (or Esc) stops it. The status bar then says
 
 In the browser, the runs go in parallel on every processor core but one, up to 16.
 
-Results belong to the model as it was run: when you change the model, the old results are
-cleared.
+Results belong to the model as it was run. When you change the model, they stay on the
+**Results** tab, marked **Out of date: the model has changed since this run**, with **Run again**
+(the tab says "· out of date"). Undoing the change makes them current again; moving a block does
+not count as a change.
 
 ## Read the results
 
@@ -347,7 +349,8 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 - **Run is greyed out:** the model has no blocks yet, or a dialog is open. While a run is going, the button reads **Cancel run** instead.
 - **Run says "Run (1 problem)" and does not run:** the model has an error. The click selected the
   block and field concerned; fix it, or click Run again for the next problem (see Fix problems).
-- **The results disappeared:** the model changed after the run. Run it again.
+- **The results say "Out of date":** the model changed after the run. Click **Run again**, or undo
+  the change.
 - **A number field has a red outline:** the text is not a valid value. The message under it says
   why; the model keeps the old value until you fix it.
 - **Japanese, Chinese, Thai or other text shows as boxes in the browser:** the font is fetched

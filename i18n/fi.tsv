@@ -716,6 +716,10 @@ unit	yr	v
 	At {time}: {value} waiting	Kohdassa {time}: {value} odottaa
 	Still settling at the end of the run: run it longer to see where it levels off.	Vakiintuu yhä ajon lopussa: pidennä sitä nähdäksesi, mihin se tasaantuu.
 	More charts	Lisää kaavioita
+	Out of date:	Vanhentunut:
+	the model has changed since this run.	malli on muuttunut tämän ajon jälkeen.
+	Run again	Suorita uudelleen
+	· out of date	· vanhentunut
 @plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
 @plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
 @plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui

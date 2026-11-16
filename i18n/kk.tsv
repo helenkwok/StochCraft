@@ -716,6 +716,10 @@ unit	yr	ж.
 	At {time}: {value} waiting	{time} кезінде: {value} күтуде
 	Still settling at the end of the run: run it longer to see where it levels off.	Іске қосудың соңында әлі тұрақталып жатыр: қай жерде теңесетінін көру үшін ұзартыңыз.
 	More charts	Тағы диаграммалар
+	Out of date:	Ескірген:
+	the model has changed since this run.	осы іске қосудан кейін модель өзгерді.
+	Run again	Қайта іске қосу
+	· out of date	· ескірген
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды

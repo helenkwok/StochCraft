@@ -716,6 +716,10 @@ unit	yr	J.
 	At {time}: {value} waiting	Bei {time}: {value} wartend
 	Still settling at the end of the run: run it longer to see where it levels off.	Am Ende des Laufs noch nicht eingeschwungen: verlängern Sie ihn, um zu sehen, wo es sich einpendelt.
 	More charts	Weitere Diagramme
+	Out of date:	Veraltet:
+	the model has changed since this run.	Das Modell wurde seit diesem Lauf geändert.
+	Run again	Erneut ausführen
+	· out of date	· veraltet
 @plural	Added {n} block|Added {n} blocks	{n} Block hinzugefügt|{n} Blöcke hinzugefügt
 @plural	Copied {n} block|Copied {n} blocks	{n} Block kopiert|{n} Blöcke kopiert
 @plural	Finished {n} run|Finished {n} runs	{n} Lauf abgeschlossen|{n} Läufe abgeschlossen

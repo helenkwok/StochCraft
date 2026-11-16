@@ -716,6 +716,10 @@ unit	yr	a
 	At {time}: {value} waiting	A {time}: {value} en espera
 	Still settling at the end of the run: run it longer to see where it levels off.	Encara s'està estabilitzant al final de l'execució: allargueu-la per veure on s'anivella.
 	More charts	Més gràfics
+	Out of date:	Desactualitzats:
+	the model has changed since this run.	el model ha canviat des d'aquesta execució.
+	Run again	Executa de nou
+	· out of date	· desactualitzats
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions

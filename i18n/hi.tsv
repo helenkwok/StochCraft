@@ -716,6 +716,10 @@ unit	yr	वर्ष
 	At {time}: {value} waiting	{time} पर: {value} प्रतीक्षा में
 	Still settling at the end of the run: run it longer to see where it levels off.	रन के अंत में भी स्थिर हो रहा है: यह कहाँ समतल होता है देखने के लिए इसे लंबा करें।
 	More charts	और चार्ट
+	Out of date:	पुराने:
+	the model has changed since this run.	इस रन के बाद मॉडल बदल गया है।
+	Run again	फिर से चलाएँ
+	· out of date	· पुराने
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए

@@ -716,6 +716,10 @@ unit	yr	ปี
 	At {time}: {value} waiting	ที่ {time}: รอ {value}
 	Still settling at the end of the run: run it longer to see where it levels off.	ยังไม่คงที่เมื่อสิ้นสุดการรัน: ให้ยืดการรันเพื่อดูว่าจะคงที่ที่ใด
 	More charts	แผนภูมิเพิ่มเติม
+	Out of date:	ล้าสมัย:
+	the model has changed since this run.	แบบจำลองเปลี่ยนไปหลังจากการรันครั้งนี้
+	Run again	รันอีกครั้ง
+	· out of date	· ล้าสมัย
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ

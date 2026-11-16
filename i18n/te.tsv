@@ -716,6 +716,10 @@ unit	yr	సం.
 	At {time}: {value} waiting	{time} వద్ద: {value} వేచి ఉన్నాయి
 	Still settling at the end of the run: run it longer to see where it levels off.	అమలు చివరలోనూ ఇంకా స్థిరపడుతోంది: ఎక్కడ సమమవుతుందో చూడటానికి దాన్ని పొడిగించండి.
 	More charts	మరిన్ని చార్ట్‌లు
+	Out of date:	పాతవి:
+	the model has changed since this run.	ఈ అమలు తర్వాత మోడల్ మారింది.
+	Run again	మళ్లీ అమలు చేయి
+	· out of date	· పాతవి
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి

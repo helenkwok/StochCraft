@@ -716,6 +716,10 @@ unit	yr	év
 	At {time}: {value} waiting	{time} időpontban: {value} várakozik
 	Still settling at the end of the run: run it longer to see where it levels off.	A futás végén még nem állt be: hosszabbítsa meg, hogy lássa, hol egyenlítődik ki.
 	More charts	További diagramok
+	Out of date:	Elavult:
+	the model has changed since this run.	a modell megváltozott ez a futtatás óta.
+	Run again	Futtatás újra
+	· out of date	· elavult
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve

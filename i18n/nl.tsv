@@ -716,6 +716,10 @@ unit	yr	j
 	At {time}: {value} waiting	Op {time}: {value} wachtend
 	Still settling at the end of the run: run it longer to see where it levels off.	Aan het eind van de uitvoering nog aan het stabiliseren: maak haar langer om te zien waar het afvlakt.
 	More charts	Meer grafieken
+	Out of date:	Verouderd:
+	the model has changed since this run.	het model is sinds deze uitvoering gewijzigd.
+	Run again	Opnieuw uitvoeren
+	· out of date	· verouderd
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid

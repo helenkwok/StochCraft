@@ -716,6 +716,10 @@ unit	yr	år
 	At {time}: {value} waiting	Vid {time}: {value} väntar
 	Still settling at the end of the run: run it longer to see where it levels off.	Stabiliseras fortfarande i slutet av körningen: gör den längre för att se var den planar ut.
 	More charts	Fler diagram
+	Out of date:	Inaktuellt:
+	the model has changed since this run.	modellen har ändrats sedan den här körningen.
+	Run again	Kör igen
+	· out of date	· inaktuellt
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara

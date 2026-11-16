@@ -716,6 +716,10 @@ unit	yr	god.
 	At {time}: {value} waiting	U {time}: čeka {value}
 	Still settling at the end of the run: run it longer to see where it levels off.	Još se ustaljuje na kraju pokretanja: produžite ga da vidite gde se izravnava.
 	More charts	Više grafikona
+	Out of date:	Zastarelo:
+	the model has changed since this run.	model je promenjen posle ovog pokretanja.
+	Run again	Pokreni ponovo
+	· out of date	· zastarelo
 @plural	Added {n} block|Added {n} blocks	Dodat je {n} blok|Dodata su {n} bloka|Dodato je {n} blokova
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana su {n} bloka|Kopirano je {n} blokova
 @plural	Finished {n} run|Finished {n} runs	Završeno je {n} pokretanje|Završena su {n} pokretanja|Završeno je {n} pokretanja

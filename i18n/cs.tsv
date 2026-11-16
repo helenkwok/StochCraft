@@ -716,6 +716,10 @@ unit	yr	r.
 	At {time}: {value} waiting	V čase {time}: čeká {value}
 	Still settling at the end of the run: run it longer to see where it levels off.	Na konci běhu se stále ustaluje: prodlužte ho, abyste viděli, kde se vyrovná.
 	More charts	Další grafy
+	Out of date:	Zastaralé:
+	the model has changed since this run.	model se od tohoto běhu změnil.
+	Run again	Spustit znovu
+	· out of date	· zastaralé
 @plural	Added {n} block|Added {n} blocks	Přidán {n} blok|Přidány {n} bloky|Přidáno {n} bloků
 @plural	Copied {n} block|Copied {n} blocks	Zkopírován {n} blok|Zkopírovány {n} bloky|Zkopírováno {n} bloků
 @plural	Finished {n} run|Finished {n} runs	Dokončen {n} běh|Dokončeny {n} běhy|Dokončeno {n} běhů

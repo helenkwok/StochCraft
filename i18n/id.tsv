@@ -716,6 +716,10 @@ unit	yr	thn
 	At {time}: {value} waiting	Pada {time}: {value} menunggu
 	Still settling at the end of the run: run it longer to see where it levels off.	Masih menstabil di akhir eksekusi: perpanjang untuk melihat di mana ia mendatar.
 	More charts	Bagan lainnya
+	Out of date:	Usang:
+	the model has changed since this run.	model telah berubah sejak run ini.
+	Run again	Jalankan lagi
+	· out of date	· usang
 @plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
 @plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
 @plural	Finished {n} run|Finished {n} runs	Selesai {n} eksekusi

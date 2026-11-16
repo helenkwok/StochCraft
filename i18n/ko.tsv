@@ -716,6 +716,10 @@ unit	yr	년
 	At {time}: {value} waiting	{time}: {value} 대기
 	Still settling at the end of the run: run it longer to see where it levels off.	실행이 끝날 때도 아직 안정되는 중입니다: 어디서 평탄해지는지 보려면 실행을 늘리세요.
 	More charts	차트 더 보기
+	Out of date:	오래된 결과:
+	the model has changed since this run.	이 실행 이후 모델이 변경되었습니다.
+	Run again	다시 실행
+	· out of date	· 오래된 결과
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료
