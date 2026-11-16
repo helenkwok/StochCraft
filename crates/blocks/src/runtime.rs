@@ -743,9 +743,11 @@ impl Live<'_> {
         self.warmup
     }
 
-    /// Whether it has reached its end.
+    /// Whether it has reached its end, with every value due to be recorded by then recorded
+    /// (a budget that runs out at the end leaves the end's record to the next call, and until
+    /// then the run is not done).
     pub fn is_done(&self) -> bool {
-        self.sim.now() >= self.end
+        self.sim.now() >= self.end && !self.next_record_time().is_some_and(|t| t <= self.sim.now())
     }
 
     /// Runs every event up to time `until` (at most the end).
@@ -753,7 +755,8 @@ impl Live<'_> {
         self.advance_watched(until, &|| false, u64::MAX).map(|_| ())
     }
 
-    /// Runs at most `events` events towards the end; returns whether it has reached the end.
+    /// Runs at most `events` events towards the end; returns whether it has reached the end
+    /// (and, when recording, recorded there), as [`Live::is_done`] then says.
     /// A replication run this way, slice after slice, runs exactly the events of
     /// [`Compiled::run`] in the same order, whatever the slice size, and its stuck-time limit
     /// counts across slices.
@@ -845,6 +848,10 @@ impl Live<'_> {
     /// The next time to record at, if the run has not ended before it.
     fn next_record_time(&self) -> Option<f64> {
         let r = self.recording.as_ref()?;
+        // Once the end is recorded, nothing more is: the rounding below makes only one record.
+        if r.times.last().is_some_and(|l| *l >= self.end) {
+            return None;
+        }
         let t = r.times.len() as f64 * r.interval;
         // The last interval can overshoot the end by a rounding error: it is the end.
         let t = if t > self.end && t - self.end <= 1e-9 * self.end.abs().max(1.0) {

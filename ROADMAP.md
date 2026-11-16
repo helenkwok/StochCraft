@@ -1232,7 +1232,8 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     of the time). Measured on M/M/1 started empty: 3 to 9% false alarms at loads of 0.3 to 0.7;
     at 0.9 over 2,000 time units it warns in 9, 50 and 94% of runs with 3, 10 and 30
     replications. A start-up too small to tell from the noise of few replications is not warned
-    about; the suggestion is always there.
+    about; the suggestion is there whenever the series has at least 20 points (a 50-unit run
+    recorded every 5 units has 11, and gets none).
   - Tests: `blocks/tests/series.rs` (a D/D/1 trace; the values a live run shows at each time;
     no result changes, in slices too; M/M/1's mean queue ρ²/(1 − ρ) at late times; the
     start-up at ρ = 0.9 and none at 0.3; the warnings), `engine/tests/series.rs` (the JSON, the
