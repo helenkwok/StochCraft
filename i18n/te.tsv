@@ -689,6 +689,9 @@ unit	yr	సం.
 	Number waiting	వేచి ఉన్నవాటి సంఖ్య
 	Share balked	క్యూలో చేరనివాటి వాటా
 	Table	పట్టిక
+	Key measures	ముఖ్య కొలమానాలు
+	Up to 4 per block, rounded to what the interval supports	ఒక్కో బ్లాక్‌కు గరిష్ఠంగా 4, విశ్వాస అంతరానికి తగినట్లు సవరించినవి
+	All measures ({n} more)	అన్ని కొలమానాలు (మరో {n})
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి

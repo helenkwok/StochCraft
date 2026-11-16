@@ -689,6 +689,9 @@ unit	yr	r.
 	Number waiting	Liczba oczekujących
 	Share balked	Odsetek niedołączeń
 	Table	Tabela
+	Key measures	Najważniejsze miary
+	Up to 4 per block, rounded to what the interval supports	Do 4 na blok, zaokrąglone według przedziału ufności
+	All measures ({n} more)	Wszystkie miary (jeszcze {n})
 @plural	Added {n} block|Added {n} blocks	Dodano {n} blok|Dodano {n} bloki|Dodano {n} bloków
 @plural	Copied {n} block|Copied {n} blocks	Skopiowano {n} blok|Skopiowano {n} bloki|Skopiowano {n} bloków
 @plural	Finished {n} run|Finished {n} runs	Zakończono {n} uruchomienie|Zakończono {n} uruchomienia|Zakończono {n} uruchomień

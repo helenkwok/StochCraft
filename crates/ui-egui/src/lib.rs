@@ -1473,6 +1473,8 @@ impl App {
                 ui.add_space(6.0);
                 results::findings(ui, &results);
                 ui.add_space(6.0);
+                results::key(ui, &results);
+                ui.add_space(6.0);
                 self.charts_rect = charts::show(ui, &results);
                 ui.add_space(6.0);
                 results::show(ui, &results);

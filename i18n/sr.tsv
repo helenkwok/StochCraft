@@ -689,6 +689,9 @@ unit	yr	год.
 	Number waiting	Број на чекању
 	Share balked	Удео оних који нису ушли у ред
 	Table	Таблица
+	Key measures	Кључне метрике
+	Up to 4 per block, rounded to what the interval supports	До 4 по блоку, заокружене према интервалу
+	All measures ({n} more)	Све метрике (још {n})
 @plural	Added {n} block|Added {n} blocks	Додат је {n} блок|Додата су {n} блока|Додато је {n} блокова
 @plural	Copied {n} block|Copied {n} blocks	Копиран је {n} блок|Копирана су {n} блока|Копирано је {n} блокова
 @plural	Finished {n} run|Finished {n} runs	Завршено је {n} покретање|Завршена су {n} покретања|Завршено је {n} покретања

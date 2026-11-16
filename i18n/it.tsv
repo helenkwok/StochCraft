@@ -689,6 +689,9 @@ unit	yr	a
 	Number waiting	Numero in attesa
 	Share balked	Quota non entrata in coda
 	Table	Tabella
+	Key measures	Metriche principali
+	Up to 4 per block, rounded to what the interval supports	Fino a 4 per blocco, arrotondate secondo l'intervallo
+	All measures ({n} more)	Tutte le metriche (altre {n})
 @plural	Added {n} block|Added {n} blocks	Aggiunto {n} blocco|Aggiunti {n} blocchi
 @plural	Copied {n} block|Copied {n} blocks	Copiato {n} blocco|Copiati {n} blocchi
 @plural	Finished {n} run|Finished {n} runs	Completata {n} esecuzione|Completate {n} esecuzioni

@@ -689,6 +689,9 @@ unit	yr	j
 	Number waiting	Aantal wachtend
 	Share balked	Aandeel niet aangesloten
 	Table	Tabel
+	Key measures	Belangrijkste metrieken
+	Up to 4 per block, rounded to what the interval supports	Tot 4 per blok, afgerond naar het interval
+	All measures ({n} more)	Alle metrieken (nog {n})
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid

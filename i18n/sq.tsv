@@ -689,6 +689,9 @@ unit	yr	v
 	Number waiting	Numri në pritje
 	Share balked	Pjesa që nuk hyri në radhë
 	Table	Tabelë
+	Key measures	Treguesit kryesorë
+	Up to 4 per block, rounded to what the interval supports	Deri në 4 për bllok, të rrumbullakosur sipas intervalit
+	All measures ({n} more)	Të gjithë treguesit (edhe {n})
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime

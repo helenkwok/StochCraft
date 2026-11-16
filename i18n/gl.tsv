@@ -689,6 +689,9 @@ unit	yr	a
 	Number waiting	Número en espera
 	Share balked	Proporción que non se uniu
 	Table	Táboa
+	Key measures	Métricas clave
+	Up to 4 per block, rounded to what the interval supports	Ata 4 por bloque, redondeadas segundo o intervalo
+	All measures ({n} more)	Todas as métricas ({n} máis)
 @plural	Added {n} block|Added {n} blocks	Engadiuse {n} bloque|Engadíronse {n} bloques
 @plural	Copied {n} block|Copied {n} blocks	Copiouse {n} bloque|Copiáronse {n} bloques
 @plural	Finished {n} run|Finished {n} runs	Rematou {n} execución|Remataron {n} execucións

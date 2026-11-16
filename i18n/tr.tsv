@@ -689,6 +689,9 @@ unit	yr	yıl
 	Number waiting	Bekleyen sayısı
 	Share balked	Kuyruğa katılmayanların oranı
 	Table	Tablo
+	Key measures	Temel ölçütler
+	Up to 4 per block, rounded to what the interval supports	Blok başına en fazla 4, güven aralığına göre yuvarlanmış
+	All measures ({n} more)	Tüm ölçütler ({n} tane daha)
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı

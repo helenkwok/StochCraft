@@ -689,6 +689,9 @@ unit	yr	r.
 	Number waiting	Počet čekajících
 	Share balked	Podíl nezařazených
 	Table	Tabulka
+	Key measures	Klíčové metriky
+	Up to 4 per block, rounded to what the interval supports	Až 4 na blok, zaokrouhlené podle intervalu
+	All measures ({n} more)	Všechny metriky (další {n})
 @plural	Added {n} block|Added {n} blocks	Přidán {n} blok|Přidány {n} bloky|Přidáno {n} bloků
 @plural	Copied {n} block|Copied {n} blocks	Zkopírován {n} blok|Zkopírovány {n} bloky|Zkopírováno {n} bloků
 @plural	Finished {n} run|Finished {n} runs	Dokončen {n} běh|Dokončeny {n} běhy|Dokončeno {n} běhů

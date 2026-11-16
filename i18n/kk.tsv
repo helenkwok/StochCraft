@@ -689,6 +689,9 @@ unit	yr	ж.
 	Number waiting	Күтушілер саны
 	Share balked	Кезекке тұрмағандар үлесі
 	Table	Кесте
+	Key measures	Негізгі көрсеткіштер
+	Up to 4 per block, rounded to what the interval supports	Әр блокқа 4-ке дейін, сенімділік аралығына қарай дөңгелектенген
+	All measures ({n} more)	Барлық көрсеткіштер (тағы {n})
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды

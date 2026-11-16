@@ -689,6 +689,9 @@ unit	yr	a
 	Number waiting	Ootel olevate arv
 	Share balked	Järjekorraga mitteliitunute osakaal
 	Table	Tabel
+	Key measures	Peamised mõõdikud
+	Up to 4 per block, rounded to what the interval supports	Kuni 4 ploki kohta, ümardatud usaldusvahemiku järgi
+	All measures ({n} more)	Kõik mõõdikud (veel {n})
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud

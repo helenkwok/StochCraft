@@ -689,6 +689,9 @@ unit	yr	ປີ
 	Number waiting	ຈຳນວນທີ່ລໍຖ້າ
 	Share balked	ສັດສ່ວນທີ່ບໍ່ເຂົ້າແຖວ
 	Table	ຕາຕະລາງ
+	Key measures	ຕົວຊີ້ວັດຫຼັກ
+	Up to 4 per block, rounded to what the interval supports	ສູງສຸດ 4 ຕໍ່ບລັອກ, ປັດເສດຕາມຊ່ວງຄວາມເຊື່ອໝັ້ນ
+	All measures ({n} more)	ຕົວຊີ້ວັດທັງໝົດ (ອີກ {n})
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ

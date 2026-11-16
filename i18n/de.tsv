@@ -689,6 +689,9 @@ unit	yr	J.
 	Number waiting	Anzahl Wartender
 	Share balked	Anteil nicht eingereihter Ankünfte
 	Table	Tabelle
+	Key measures	Wichtigste Kennzahlen
+	Up to 4 per block, rounded to what the interval supports	Bis zu 4 je Block, gerundet nach dem Intervall
+	All measures ({n} more)	Alle Kennzahlen ({n} weitere)
 @plural	Added {n} block|Added {n} blocks	{n} Block hinzugefügt|{n} Blöcke hinzugefügt
 @plural	Copied {n} block|Copied {n} blocks	{n} Block kopiert|{n} Blöcke kopiert
 @plural	Finished {n} run|Finished {n} runs	{n} Lauf abgeschlossen|{n} Läufe abgeschlossen

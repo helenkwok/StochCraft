@@ -689,6 +689,9 @@ unit	yr	ஆண்டு
 	Number waiting	காத்திருப்பவற்றின் எண்ணிக்கை
 	Share balked	வரிசையில் சேராதவற்றின் விகிதம்
 	Table	அட்டவணை
+	Key measures	முக்கிய அளவீடுகள்
+	Up to 4 per block, rounded to what the interval supports	ஒரு தொகுதிக்கு அதிகபட்சம் 4, இடைவெளிக்கு ஏற்ப முழுமையாக்கப்பட்டவை
+	All measures ({n} more)	அனைத்து அளவீடுகளும் (மேலும் {n})
 @plural	Added {n} block|Added {n} blocks	{n} தொகுதி சேர்க்கப்பட்டது|{n} தொகுதிகள் சேர்க்கப்பட்டன
 @plural	Copied {n} block|Copied {n} blocks	{n} தொகுதி நகலெடுக்கப்பட்டது|{n} தொகுதிகள் நகலெடுக்கப்பட்டன
 @plural	Finished {n} run|Finished {n} runs	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன

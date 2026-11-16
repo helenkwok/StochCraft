@@ -689,6 +689,9 @@ unit	yr	г.
 	Number waiting	Брой чакащи
 	Share balked	Дял на отминалите
 	Table	Таблица
+	Key measures	Основни показатели
+	Up to 4 per block, rounded to what the interval supports	До 4 на блок, закръглени според интервала
+	All measures ({n} more)	Всички показатели (още {n})
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения

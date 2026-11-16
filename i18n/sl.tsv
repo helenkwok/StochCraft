@@ -689,6 +689,9 @@ unit	yr	l.
 	Number waiting	Število čakajočih
 	Share balked	Delež nepridruženih
 	Table	Tabela
+	Key measures	Ključni kazalniki
+	Up to 4 per block, rounded to what the interval supports	Do 4 na blok, zaokroženi glede na interval
+	All measures ({n} more)	Vsi kazalniki (še {n})
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov

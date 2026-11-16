@@ -689,6 +689,9 @@ unit	yr	év
 	Number waiting	Várakozók száma
 	Share balked	Sorba be nem állók aránya
 	Table	Táblázat
+	Key measures	Fő mérőszámok
+	Up to 4 per block, rounded to what the interval supports	Blokkonként legfeljebb 4, a konfidenciaintervallumhoz kerekítve
+	All measures ({n} more)	Minden mérőszám (még {n})
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve

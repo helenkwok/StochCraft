@@ -689,6 +689,9 @@ unit	yr	a
 	Number waiting	Nombre en espera
 	Share balked	Proporció que no s'hi ha afegit
 	Table	Taula
+	Key measures	Mètriques clau
+	Up to 4 per block, rounded to what the interval supports	Fins a 4 per bloc, arrodonides segons l'interval
+	All measures ({n} more)	Totes les mètriques ({n} més)
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions

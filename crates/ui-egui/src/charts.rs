@@ -11,7 +11,7 @@ use egui::{Align2, FontId, Rect, Stroke, pos2, vec2};
 use serde_json::Value;
 
 use crate::i18n::{t, tnf};
-use crate::results::{grouped, unit_label};
+use crate::results::{grouped, rounded, unit_label};
 use crate::theme;
 
 /// What one chart shows.
@@ -271,7 +271,8 @@ fn chart(ui: &mut egui::Ui, m: &Measure, bars: &[Bar], unit: &str, width: f32) {
         painter.text(
             pos2(plot.right() + 8.0, cy),
             Align2::LEFT_CENTER,
-            grouped(b.mean),
+            // Rounded to what its interval supports, as in the tables.
+            rounded(b.mean, b.half_width).0,
             FontId::monospace(12.0),
             p.text,
         );
@@ -282,9 +283,9 @@ fn chart(ui: &mut egui::Ui, m: &Measure, bars: &[Bar], unit: &str, width: f32) {
                 "{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs",
                 &[
                     ("name", &b.name),
-                    ("mean", &grouped(b.mean)),
-                    ("low", &grouped(b.mean - b.half_width)),
-                    ("high", &grouped(b.mean + b.half_width)),
+                    ("mean", &rounded(b.mean, b.half_width).0),
+                    ("low", &rounded(b.mean - b.half_width, b.half_width).0),
+                    ("high", &rounded(b.mean + b.half_width, b.half_width).0),
                     ("unit", &suffix),
                 ],
             );

@@ -689,6 +689,9 @@ unit	yr	år
 	Number waiting	Antal ventende
 	Share balked	Andel, der fravalgte køen
 	Table	Tabel
+	Key measures	Vigtigste målepunkter
+	Up to 4 per block, rounded to what the interval supports	Op til 4 pr. blok, afrundet efter intervallet
+	All measures ({n} more)	Alle målepunkter ({n} mere)
 @plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
 @plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført

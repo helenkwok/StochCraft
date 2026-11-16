@@ -689,6 +689,9 @@ unit	yr	р.
 	Number waiting	Кількість в очікуванні
 	Share balked	Частка тих, хто відмовився
 	Table	Таблиця
+	Key measures	Основні показники
+	Up to 4 per block, rounded to what the interval supports	До 4 на блок, округлені за довірчим інтервалом
+	All measures ({n} more)	Усі показники (ще {n})
 @plural	Added {n} block|Added {n} blocks	Додано {n} блок|Додано {n} блоки|Додано {n} блоків
 @plural	Copied {n} block|Copied {n} blocks	Скопійовано {n} блок|Скопійовано {n} блоки|Скопійовано {n} блоків
 @plural	Finished {n} run|Finished {n} runs	Завершено {n} запуск|Завершено {n} запуски|Завершено {n} запусків
