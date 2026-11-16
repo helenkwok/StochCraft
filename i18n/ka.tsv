@@ -13,9 +13,8 @@
 
 @id	language.name	ქართული
 	% down and up	% ქვემოთ და ზემოთ
-	% of replications	% გამეორებებიდან
+	% of runs	% გამეორებებიდან
 	+ Add block	+ ბლოკის დამატება
-	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	მიზნის მიღწევის წილის 95%-იანი ინტერვალი: {lo}-დან {hi}-მდე
 	95th percentile	95-ე პროცენტილი
 	95th percentile {value}	95-ე პროცენტილი {value}
@@ -35,7 +34,7 @@
 	Add Pool	პულის დამატება
 	Add a flow from…	ნაკადის დამატება (წყარო)…
 	Add a flow to…	ნაკადის დამატება (სამიზნე)…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	ყველაზე დატვირთულ ამოცანას ან პულს ერთეულის დამატება, სანამ საკმარისი გამეორება მიზანს არ მიაღწევს. ნაჩვენებია პასუხიც, სადაც ყოველი დრო თავის საშუალოზეა; ის ჩვეულებრივ ძალიან მცირეა.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	ყველაზე დატვირთულ ამოცანას ან პულს ერთეულის დამატება, სანამ საკმარისი გამეორება მიზანს არ მიაღწევს. ნაჩვენებია პასუხიც, სადაც ყოველი დრო თავის საშუალოზეა; ის ჩვეულებრივ ძალიან მცირეა.
 	Add alternative	ალტერნატივის დამატება
 	Add calendar	კალენდრის დამატება
 	Add calendar entry	კალენდრის ჩანაწერის დამატება
@@ -69,9 +68,6 @@
 	Available outside calendars	ხელმისაწვდომია კალენდრების გარეთ
 	BPMN with BPSim	BPMN BPSim-ით
 	Back to the model (Esc)	მოდელზე დაბრუნება (Esc)
-	Balked	რიგში არ ჩადგნენ
-	Balked on {id}	რიგში არ ჩადგნენ ნაკადზე {id}
-	Balking	რიგში არჩადგომა
 	Batch	პარტია
 	Batch (collect, then send together)	პარტია (შეაგროვე, შემდეგ ერთად გაგზავნე)
 	Batch size	პარტიის ზომა
@@ -131,7 +127,6 @@
 	Constant	მუდმივი
 	Control outlines	მართვის ელემენტების კონტურები
 	Copy	კოპირება
-	Count those in service	მომსახურებაში მყოფებიც ჩაითვალოს
 	Counts against	ეკისრება
 	Customer demand	მომხმარებლის მოთხოვნა
 	Cut	ამოჭრა
@@ -174,13 +169,12 @@
 	Ends early	ადრე მთავრდება
 	Energy	ენერგია
 	Energy per part	ენერგია ერთ დეტალზე
-	Enough: {units}, meeting the target in {p} of replications	საკმარისია: {units}, მიზანი მიიღწევა გამეორებების {p}-ში
+	Enough: {units}, meeting the target in {p} of runs	საკმარისია: {units}, მიზანი მიიღწევა გამეორებების {p}-ში
 	Enter a number	შეიყვანეთ რიცხვი
 	Entered	შესულა
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	ერთეულები, რომლებიც მოსაცდელ სივრცეს სავსეს პოულობენ, მაშინვე ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად), ნაცვლად იმისა, რომ დაიკარგონ ან დავალების წინ დაელოდონ; აქ ისინი დაკარგულად ითვლება.
 	Entities give up waiting	ერთეულები უარს ამბობენ ლოდინზე
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ობიექტები, რომლებიც გამეორების ბოლოს ჯერ კიდევ შიგნით არიან, არ შედის ლოდინის საშუალო დროსა და სისტემაში გატარებულ საშუალო დროში.
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ერთეულები, რომლებიც რიგში არ დგებიან, მაშინვე ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად), ნაცვლად იმისა, რომ დაიკარგონ; აქ ისინი რიგში არჩამდგარად ითვლება.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	ობიექტები, რომლებიც გამეორების ბოლოს ჯერ კიდევ შიგნით არიან, არ შედის ლოდინის საშუალო დროსა და სისტემაში გატარებულ საშუალო დროში.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	ერთეულები, რომლებიც ლოდინზე უარს ამბობენ, ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად); დანარჩენები დავალების მეორე გასასვლელით მიდიან.
 	Erlang	ერლანგი
 	Error	შეცდომა
@@ -235,7 +229,6 @@
 	Inside over time	შიგნით დროის მიხედვით
 	Job under way on a server going off shift:	ცვლიდან გამავალ სერვერზე მიმდინარე სამუშაო:
 	Job under way on a server taken out:	მუშაობიდან გამოყვანილ სერვერზე მიმდინარე სამუშაო:
-	Joins with probability	რიგში ჩადგომის ალბათობა
 	Jump	გადასვლა
 	Jump to time	დროზე გადასვლა
 	Keep at least in service	მუშაობაში დატოვე სულ მცირე
@@ -259,10 +252,8 @@
 	Maximum	მაქსიმუმი
 	Mean	საშუალო
 	Mean number inside	საშუალო რაოდენობა შიგნით
-	Number waiting	მომლოდინეთა რაოდენობა
-	One replication of {n}: the results of the others differ.	ერთი გამეორება {n}-დან: დანარჩენების შედეგები განსხვავდება.
+	One run of {n}: the results of the others differ.	ერთი გამეორება {n}-დან: დანარჩენების შედეგები განსხვავდება.
 	Save as a new BPMN file?	შევინახოთ ახალ BPMN ფაილად?
-	Share balked	რიგში არჩამდგართა წილი
 	Still inside at the end	ბოლოს ჯერ კიდევ შიგნით
 	Mean work in progress	დაუმთავრებელი წარმოების საშუალო რაოდენობა
 	Mean queue length	რიგის საშუალო სიგრძე
@@ -293,7 +284,7 @@
 	No arrivals outside calendars	კალენდრების გარეთ შემოსვლები არ არის
 	No blocks yet. Open a model, or add blocks to build one.	ბლოკები ჯერ არ არის. გახსენით მოდელი ან დაამატეთ ბლოკები მის შესაქმნელად.
 	No connections yet: join blocks below.	კავშირები ჯერ არ არის: დააკავშირეთ ქვემოთ მოცემული ბლოკები.
-	No replication met the stop condition: each ran to its time limit.	არცერთმა გამეორებამ არ მიაღწია გაჩერების პირობას: თითოეული თავის დროის ლიმიტამდე გაგრძელდა.
+	No run met the stop condition: each ran to its time limit.	არცერთმა გამეორებამ არ მიაღწია გაჩერების პირობას: თითოეული თავის დროის ლიმიტამდე გაგრძელდა.
 	No results yet	შედეგები ჯერ არ არის
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	ამ მოდელში წუნი ან გადამუშავება მონიშნული არ არის, ამიტომ OEE ხარისხს 100%-ად თვლის.
 	No target	მიზნის გარეშე
@@ -395,11 +386,11 @@
 	Repair time	შეკეთების დრო
 	Repeats	გამეორება
 	Replace Model	მოდელის ჩანაცვლება
-	Replication 1 · {time} of {end} {unit}	გამეორება 1 · {time} / {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	გამეორება 1 · {time} / {end} {unit} · გახურების პერიოდი
-	Replications	გამეორებები
-	Replications meeting the target	მიზნის მიმღწევი გამეორებები
-	Replications that never met the stop condition count as later than their time limit.	გამეორებები, რომლებმაც გაჩერების პირობას ვერასოდეს მიაღწიეს, ითვლება დროის ლიმიტზე გვიანად.
+	Run 1 · {time} of {end} {unit}	გამეორება 1 · {time} / {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	გამეორება 1 · {time} / {end} {unit} · გახურების პერიოდი
+	Runs	გამეორებები
+	Runs meeting the target	მიზნის მიმღწევი გამეორებები
+	Runs that never met the stop condition count as later than their time limit.	გამეორებები, რომლებმაც გაჩერების პირობას ვერასოდეს მიაღწიეს, ითვლება დროის ლიმიტზე გვიანად.
 	Resource pool	რესურსების პული
 	Resource pools	რესურსების პულები
 	Restore	ფანჯრის აღდგენა
@@ -420,7 +411,7 @@
 	Run	გაშვება
 	Run cancelled	გაშვება გაუქმდა
 	Run experiment	ექსპერიმენტის გაშვება
-	Run replication 1 step by step and see each block's queue on the diagram	გამეორება 1-ის ნაბიჯ-ნაბიჯ გაშვება და თითოეული ბლოკის რიგის ნახვა დიაგრამაზე
+	Play run 1 step by step and see each block's queue on the diagram	გამეორება 1-ის ნაბიჯ-ნაბიჯ გაშვება და თითოეული ბლოკის რიგის ნახვა დიაგრამაზე
 	Run the experiment ({shortcut})	ექსპერიმენტის გაშვება ({shortcut})
 	Run the experiment again to see this result's spread.	ხელახლა გაუშვით ექსპერიმენტი ამ შედეგის გაბნევის სანახავად.
 	Run the experiment at each value of one parameter, and compare a result.	ექსპერიმენტის გაშვება ერთი პარამეტრის ყოველ მნიშვნელობაზე და შედეგის შედარება.
@@ -476,7 +467,7 @@
 	Split batches	პარტიების დაყოფა
 	Split or join	გაყოფა ან გაერთიანება
 	Split or join (all ways)	გაყოფა ან გაერთიანება (ყველა გზა)
-	Spread across replications	გაბნევა გამეორებებს შორის
+	Spread across runs	გაბნევა გამეორებებს შორის
 	Spread out	განაწილება
 	Stages (k)	ეტაპები (k)
 	Standard deviation	სტანდარტული გადახრა
@@ -491,7 +482,6 @@
 	Stopped watching	დაკვირვება შეწყდა
 	Sun	კვი
 	Sweep a parameter	პარამეტრის გადარბენა
-	Table	ცხრილი
 	Table stripes	ცხრილის ზოლები
 	Take servers out when overloaded	ზედმეტად დატვირთული სერვერების მუშაობიდან გამოყვანა
 	Takt	ტაქტი
@@ -508,11 +498,11 @@
 	Text on header	ტექსტი სათაურის ზოლზე
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	კავშირი წყდება და კლიენტი ხელახლა ცდილობს: ერთეული მაშინვე ბრუნდება რიგის თავში, ხოლო მასზე შესრულებული სამუშაო ფუჭდება.
 	The entity waits on its server and the job carries on with what was left once the server is back.	ერთეული ელოდება თავის სერვერთან და სამუშაო გრძელდება დარჩენილით, როგორც კი სერვერი დაბრუნდება.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ინტერვალი {share} სამიზნე წილზე დაბლა ჩადის, ამიტომ 95%-იანი სანდოობით არ არის ნაჩვენები, რომ წილი მიღწეულია; მეტი გამეორება მას შეავიწროებს.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	ინტერვალი {share} სამიზნე წილზე დაბლა ჩადის, ამიტომ 95%-იანი სანდოობით არ არის ნაჩვენები, რომ წილი მიღწეულია; მეტი გამეორება მას შეავიწროებს.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	სამუშაო მაშინვე ჩერდება: ერთეული ბრუნდება რიგის თავში ცვლაში მყოფი ნებისმიერი სერვერისთვის, ხოლო მასზე შესრულებული სამუშაო ფუჭდება.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	სამუშაო მაშინვე ჩერდება; ერთეული ელოდება თავის სერვერთან და სამუშაო გრძელდება დარჩენილით, როგორც კი ეს სერვერი ისევ ცვლაში იქნება.
 	The last task with a resource it finished at	ბოლო დავალება რესურსით, რომელიც დეტალმა გაიარა
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	გაჩერების პირობამდე საშუალო დრო მხოლოდ იმ გამეორებებზეა გამოთვლილი, რომლებმაც მას მიაღწიეს; დანარჩენები დროის ლიმიტამდე გაგრძელდა.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	გაჩერების პირობამდე საშუალო დრო მხოლოდ იმ გამეორებებზეა გამოთვლილი, რომლებმაც მას მიაღწიეს; დანარჩენები დროის ლიმიტამდე გაგრძელდა.
 	The model changed, so watching stopped	მოდელი შეიცვალა, ამიტომ დაკვირვება შეწყდა
 	The model has no calendars yet.	მოდელს ჯერ არ აქვს კალენდრები.
 	The model now has the units sizing found	მოდელს ახლა აქვს ზომის შერჩევით ნაპოვნი ერთეულები
@@ -520,7 +510,7 @@
 	The name is empty or already used.	სახელი ცარიელია ან უკვე გამოყენებულია.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	გამეორებები ორ განსხვავებულ შედეგად გაიყო: {n}-დან {a} – ერთში, {b} – მეორეში. ასევე გაიყო {count} შედეგი, მათ შორის {result} ({element}); იხილეთ ქვემოთ მოცემული ცხრილი.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	სერვერი ასრულებს მიმდინარე სამუშაოს და შემდეგ ტოვებს ცვლას; მანამდე ის ცვლაში მყოფად ითვლება.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	გამეორებების წილი, რომლებიც თითოეულ მნიშვნელობაზე ნაკლები ან ტოლია. ზოლი შეიცავს ნამდვილ განაწილებას {confidence} სანდოობით.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	გამეორებების წილი, რომლებიც თითოეულ მნიშვნელობაზე ნაკლები ან ტოლია. ზოლი შეიცავს ნამდვილ განაწილებას {confidence} სანდოობით.
 	The values are numbers, separated by semicolons or spaces	მნიშვნელობები რიცხვებია, გამოყოფილი წერტილმძიმით ან ჰარით
 	The whole clock	მთელი დრო
 	Themes	თემები
@@ -588,7 +578,7 @@
 	Warning	გაფრთხილება
 	Watch a Run	გაშვებაზე დაკვირვება
 	Watch a run	გაშვებაზე დაკვირვება
-	Watching replication 1	მიმდინარეობს დაკვირვება გამეორება 1-ზე
+	Watching run 1	მიმდინარეობს დაკვირვება გამეორება 1-ზე
 	Weak text	მკრთალი ტექსტი
 	Weak text on header	მკრთალი ტექსტი სათაურის ზოლზე
 	Wed	ოთხ
@@ -624,7 +614,7 @@
 	maximum {value}	მაქსიმუმი {value}
 	milliseconds	მილიწამი
 	minutes	წუთი
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k N-დან: N გამეორებიდან მხოლოდ k-ს ჰქონდა ამ შედეგის მნიშვნელობა, და მისი საშუალო და ინტერვალი ამ k-ზეა გამოთვლილი.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k N-დან: N გამეორებიდან მხოლოდ k-ს ჰქონდა ამ შედეგის მნიშვნელობა, და მისი საშუალო და ინტერვალი ამ k-ზეა გამოთვლილი.
 	n = {k} of {n}	n = {k} {n}-დან
 	nothing yet	ჯერ არაფერი
 	per day	დღეში
@@ -660,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} და {second} – სიღიის სხვაობა {step}, საჭიროა 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: ალბათობა არის რიცხვი 0-დან 1-მდე
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} გამეორებიდან {met}-მა მიაღწია მიზანს: {p} (95%-იანი ინტერვალი {lo}-დან {hi}-მდე)
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} გამეორებიდან {met}-მა მიაღწია მიზანს: {p} (95%-იანი ინტერვალი {lo}-დან {hi}-მდე)
 	{name} — edited	{name} — რედაქტირებულია
 	{n} created	შეიქმნა: {n}
 	{n} done	დასრულდა: {n}
@@ -674,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: ახლა {now}, მაქსიმუმ {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% ნდობის ინტერვალი
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± არის რეპლიკაციებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± არის რეპლიკაციებს შორის საშუალო მნიშვნელობის 95% Student-t ნდობის ინტერვალის ნახევარსიგანე.
 	· no results yet	· შედეგები ჯერ არ არის
 unit	d	დღე
 unit	h	სთ
@@ -682,18 +672,28 @@ unit	min	წთ
 unit	ms	მწმ
 unit	s	წმ
 unit	yr	წელი
+	1/(n + 1)	1/(n + 1)
+	Balked	რიგში არ ჩადგნენ
+	Balked on {id}	რიგში არ ჩადგნენ ნაკადზე {id}
+	Balking	რიგში არჩადგომა
+	Count those in service	მომსახურებაში მყოფებიც ჩაითვალოს
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ერთეულები, რომლებიც რიგში არ დგებიან, მაშინვე ამ ნაკადით მიდიან (მაგალითად, მოგვიანებით ხელახლა საცდელად), ნაცვლად იმისა, რომ დაიკარგონ; აქ ისინი რიგში არჩამდგარად ითვლება.
+	Joins with probability	რიგში ჩადგომის ალბათობა
+	Number waiting	მომლოდინეთა რაოდენობა
+	Share balked	რიგში არჩამდგართა წილი
+	Table	ცხრილი
 @plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
 @plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
-@plural	Finished {n} replication|Finished {n} replications	დასრულდა {n} გამეორება|დასრულდა {n} გამეორება
+@plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გამეორება|დასრულდა {n} გამეორება
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	გახსნილია {file} ({n} გაფრთხილება)|გახსნილია {file} ({n} გაფრთხილება)
 @plural	Removed {n} block|Removed {n} blocks	წაშლილია {n} ბლოკი|წაშლილია {n} ბლოკი
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.|მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	გაჩერების პირობა მიღწეულ იქნა {n} გამეორებიდან {met}-ში, საშუალოდ {time} {unit}-ის შემდეგ.|გაჩერების პირობა მიღწეულ იქნა {n} გამეორებიდან {met}-ში, საშუალოდ {time} {unit}-ის შემდეგ.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{n}-დან {done} გამეორება დასრულდა|{n}-დან {done} გამეორება დასრულდა
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით|{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.|მოდელის {n} დამოუკიდებელ გამეორებას ასრულებს საწყისი მნიშვნელობით {seed}. თითოეული ელემენტის შედეგები შეიცავს 95% ნდობის ინტერვალის ნახევარსიგანეს.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	გაჩერების პირობა მიღწეულ იქნა {n} გამეორებიდან {met}-ში, საშუალოდ {time} {unit}-ის შემდეგ.|გაჩერების პირობა მიღწეულ იქნა {n} გამეორებიდან {met}-ში, საშუალოდ {time} {unit}-ის შემდეგ.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{n}-დან {done} გამეორება დასრულდა|{n}-დან {done} გამეორება დასრულდა
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით|{name}: {mean}{unit}\n95% ინტერვალი {low}-დან {high}{unit}-მდე\n{n} გამეორების მიხედვით
 @plural	{n} block selected|{n} blocks selected	მონიშნულია {n} ბლოკი|მონიშნულია {n} ბლოკი
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} გამეორება თითო ნაბიჯზე · საწყისი მნიშვნელობა {seed}|{n} გამეორება თითო ნაბიჯზე · საწყისი მნიშვნელობა {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} გამეორება · საშუალო {mean} · {min}-დან {max}-მდე|{n} გამეორება · საშუალო {mean} · {min}-დან {max}-მდე
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}|{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} გამეორება · საწყისი მნიშვნელობა {seed}|{n} გამეორება · საწყისი მნიშვნელობა {seed}
-@plural	{n} replication|{n} replications	{n} გამეორება|{n} გამეორება
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} გამეორება თითო ნაბიჯზე · საწყისი მნიშვნელობა {seed}|{n} გამეორება თითო ნაბიჯზე · საწყისი მნიშვნელობა {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} გამეორება · საშუალო {mean} · {min}-დან {max}-მდე|{n} გამეორება · საშუალო {mean} · {min}-დან {max}-მდე
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}|{n} გამეორება · საწყისი მნიშვნელობა {seed} · გახურება {warmup} {unit} · გაზომვა {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} გამეორება · საწყისი მნიშვნელობა {seed}|{n} გამეორება · საწყისი მნიშვნელობა {seed}
+@plural	{n} run|{n} runs	{n} გამეორება|{n} გამეორება

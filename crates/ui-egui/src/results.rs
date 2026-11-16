@@ -157,8 +157,8 @@ pub fn record_line(ui: &mut egui::Ui, results: &Value) {
         ui,
         tnf(
             r["replications"].as_u64().unwrap_or(0),
-            "{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured",
-            "{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured",
+            "{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured",
+            "{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured",
             &[
                 ("seed", &r["seed"].to_string()),
                 ("warmup", &num(&r["warmup"])),
@@ -330,20 +330,20 @@ pub fn show(ui: &mut egui::Ui, results: &Value) {
         if partial {
             ui.label(theme::weak(
                 ui,
-                t("n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k."),
+                t("n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k."),
             ));
         }
         if left_inside {
             ui.label(theme::weak(
                 ui,
-                t("Entities still inside at the end of a replication are left out of the mean wait and the mean time in system."),
+                t("Entities still inside at the end of a run are left out of the mean wait and the mean time in system."),
             ));
         }
         ui.label(theme::weak(
             ui,
             t(
                 "± is the half-width of a 95% Student-t confidence interval of the mean across \
-               replications.",
+               runs.",
             ),
         ));
         ui.label(
@@ -743,8 +743,8 @@ mod tests {
         // Only the mean wait is from fewer than all: one "n = k of N", and the note explaining it.
         assert_eq!(h.query_all_by_label("n = 4 of 10").count(), 1);
         assert!(h.query_by_label("n = 10 of 10").is_none());
-        h.get_by_label_contains("n = k of N: only k of the N replications");
-        h.get_by_label_contains("Entities still inside at the end of a replication are left out");
+        h.get_by_label_contains("n = k of N: only k of the N runs");
+        h.get_by_label_contains("Entities still inside at the end of a run are left out");
 
         // Every replication had every value and nothing was left inside: no n and no notes.
         let mut all = partial();

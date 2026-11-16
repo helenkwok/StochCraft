@@ -13,9 +13,8 @@
 
 @id	language.name	ພາສາລາວ
 	% down and up	% ລົງ ແລະ ຂຶ້ນ
-	% of replications	% ຂອງຮອບຈຳລອງຊ້ຳ
+	% of runs	% ຂອງຮອບຈຳລອງຊ້ຳ
 	+ Add block	+ ເພີ່ມບລັອກ
-	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	ຊ່ວງ 95% ຂອງສັດສ່ວນທີ່ບັນລຸເປົ້າໝາຍ: ຈາກ {lo} ຫາ {hi}
 	95th percentile	ເປີເຊັນໄທລ໌ທີ 95
 	95th percentile {value}	ເປີເຊັນໄທລ໌ທີ 95 {value}
@@ -35,7 +34,7 @@
 	Add Pool	ເພີ່ມກຸ່ມຊັບພະຍາກອນ
 	Add a flow from…	ເພີ່ມເສັ້ນທາງຈາກ…
 	Add a flow to…	ເພີ່ມເສັ້ນທາງໄປຫາ…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	ເພີ່ມໜຶ່ງໜ່ວຍໃຫ້ວຽກ ຫຼື ກຸ່ມທີ່ຫຍຸ້ງທີ່ສຸດ ຈົນກວ່າຮອບຈຳລອງຊ້ຳຈະບັນລຸເປົ້າໝາຍພຽງພໍ. ສະແດງຄຳຕອບທີ່ທຸກເວລາເທົ່າກັບຄ່າສະເລ່ຍນຳ, ເຊິ່ງມັກນ້ອຍເກີນໄປ.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	ເພີ່ມໜຶ່ງໜ່ວຍໃຫ້ວຽກ ຫຼື ກຸ່ມທີ່ຫຍຸ້ງທີ່ສຸດ ຈົນກວ່າຮອບຈຳລອງຊ້ຳຈະບັນລຸເປົ້າໝາຍພຽງພໍ. ສະແດງຄຳຕອບທີ່ທຸກເວລາເທົ່າກັບຄ່າສະເລ່ຍນຳ, ເຊິ່ງມັກນ້ອຍເກີນໄປ.
 	Add alternative	ເພີ່ມທາງເລືອກ
 	Add calendar	ເພີ່ມປະຕິທິນ
 	Add calendar entry	ເພີ່ມລາຍການປະຕິທິນ
@@ -69,9 +68,6 @@
 	Available outside calendars	ພ້ອມໃຊ້ນອກປະຕິທິນ
 	BPMN with BPSim	BPMN ພ້ອມ BPSim
 	Back to the model (Esc)	ກັບໄປຫາແບບຈຳລອງ (Esc)
-	Balked	ບໍ່ເຂົ້າແຖວ
-	Balked on {id}	ບໍ່ເຂົ້າແຖວທີ່ {id}
-	Balking	ການບໍ່ເຂົ້າແຖວ
 	Batch	ຊຸດ
 	Batch (collect, then send together)	ຊຸດ (ເກັບລວມ, ແລ້ວສົ່ງໄປພ້ອມກັນ)
 	Batch size	ຂະໜາດຊຸດ
@@ -131,7 +127,6 @@
 	Constant	ຄ່າຄົງທີ່
 	Control outlines	ເສັ້ນຂອບຂອງຕົວຄວບຄຸມ
 	Copy	ສຳເນົາ
-	Count those in service	ນັບລວມທີ່ກຳລັງຮັບບໍລິການ
 	Counts against	ນັບໃສ່ໜ້າວຽກ
 	Customer demand	ຄວາມຕ້ອງການຂອງລູກຄ້າ
 	Cut	ຕັດ
@@ -174,13 +169,12 @@
 	Ends early	ຈົບກ່ອນກຳນົດ
 	Energy	ພະລັງງານ
 	Energy per part	ພະລັງງານຕໍ່ຊິ້ນ
-	Enough: {units}, meeting the target in {p} of replications	ພຽງພໍ: {units}, ບັນລຸເປົ້າໝາຍໃນ {p} ຂອງຮອບຈຳລອງຊ້ຳ
+	Enough: {units}, meeting the target in {p} of runs	ພຽງພໍ: {units}, ບັນລຸເປົ້າໝາຍໃນ {p} ຂອງຮອບຈຳລອງຊ້ຳ
 	Enter a number	ປ້ອນຕົວເລກ
 	Entered	ຈຳນວນທີ່ເຂົ້າ
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	ເອນທິຕີທີ່ພົບວ່າຫ້ອງລໍຖ້າເຕັມ ຈະໄປຕາມເສັ້ນທາງນີ້ທັນທີ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ) ແທນທີ່ຈະສູນເສຍ ຫຼື ລໍຖ້າກ່ອນໜ້າວຽກ; ຢູ່ນີ້ພວກມັນຖືກນັບເປັນການສູນເສຍ.
 	Entities give up waiting	ເອນທິຕີເຊົາລໍຖ້າ
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	ສິ່ງທີ່ຍັງຢູ່ພາຍໃນເມື່ອຮອບຈຳລອງຊ້ຳສິ້ນສຸດ ບໍ່ຖືກນັບໃນເວລາລໍຖ້າສະເລ່ຍ ແລະ ເວລາສະເລ່ຍໃນລະບົບ.
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ເອນທິຕີທີ່ບໍ່ເຂົ້າແຖວຄອຍ ຈະໄປຕາມເສັ້ນທາງນີ້ທັນທີ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ) ແທນທີ່ຈະສູນເສຍ; ຢູ່ນີ້ພວກມັນຖືກນັບເປັນການບໍ່ເຂົ້າແຖວ.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	ສິ່ງທີ່ຍັງຢູ່ພາຍໃນເມື່ອຮອບຈຳລອງຊ້ຳສິ້ນສຸດ ບໍ່ຖືກນັບໃນເວລາລໍຖ້າສະເລ່ຍ ແລະ ເວລາສະເລ່ຍໃນລະບົບ.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	ເອນທິຕີທີ່ເຊົາລໍຖ້າຈະໄປຕາມເສັ້ນທາງນີ້ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ); ສ່ວນທີ່ເຫຼືອໄປທາງອອກອື່ນຂອງໜ້າວຽກ.
 	Erlang	ເອີລັງ
 	Error	ຂໍ້ຜິດພາດ
@@ -235,7 +229,6 @@
 	Inside over time	ຈຳນວນພາຍໃນຕາມເວລາ
 	Job under way on a server going off shift:	ວຽກທີ່ກຳລັງເຮັດຢູ່ເທິງແມ່ຂ່າຍທີ່ກຳລັງໝົດກະ:
 	Job under way on a server taken out:	ວຽກທີ່ກຳລັງເຮັດຢູ່ເທິງແມ່ຂ່າຍທີ່ຖືກເອົາອອກ:
-	Joins with probability	ຄວາມເປັນໄປໄດ້ທີ່ເຂົ້າແຖວ
 	Jump	ຂ້າມ
 	Jump to time	ຂ້າມໄປຫາເວລາ
 	Keep at least in service	ຮັກສາໄວ້ໃນການໃຊ້ງານຢ່າງໜ້ອຍ
@@ -259,10 +252,8 @@
 	Maximum	ຄ່າສູງສຸດ
 	Mean	ຄ່າສະເລ່ຍ
 	Mean number inside	ຈຳນວນສະເລ່ຍພາຍໃນ
-	Number waiting	ຈຳນວນທີ່ລໍຖ້າ
-	One replication of {n}: the results of the others differ.	ໜຶ່ງຮອບຈຳລອງຊ້ຳຈາກ {n}: ຜົນຂອງຮອບອື່ນແຕກຕ່າງກັນ.
+	One run of {n}: the results of the others differ.	ໜຶ່ງຮອບຈຳລອງຊ້ຳຈາກ {n}: ຜົນຂອງຮອບອື່ນແຕກຕ່າງກັນ.
 	Save as a new BPMN file?	ບັນທຶກເປັນໄຟລ໌ BPMN ໃໝ່ບໍ?
-	Share balked	ສັດສ່ວນທີ່ບໍ່ເຂົ້າແຖວ
 	Still inside at the end	ຍັງຢູ່ພາຍໃນເມື່ອສິ້ນສຸດ
 	Mean work in progress	ສິນຄ້າລະຫວ່າງຜະລິດສະເລ່ຍ
 	Mean queue length	ຄວາມຍາວແຖວຄອຍສະເລ່ຍ
@@ -293,7 +284,7 @@
 	No arrivals outside calendars	ບໍ່ມີການມາຮອດນອກປະຕິທິນ
 	No blocks yet. Open a model, or add blocks to build one.	ຍັງບໍ່ມີບລັອກ. ເປີດແບບຈຳລອງ ຫຼື ເພີ່ມບລັອກເພື່ອສ້າງໃໝ່.
 	No connections yet: join blocks below.	ຍັງບໍ່ມີການເຊື່ອມຕໍ່: ເຊື່ອມບລັອກດ້ານລຸ່ມ.
-	No replication met the stop condition: each ran to its time limit.	ບໍ່ມີຮອບຈຳລອງຊ້ຳໃດຮອດເງື່ອນໄຂຢຸດ: ທຸກຮອບແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
+	No run met the stop condition: each ran to its time limit.	ບໍ່ມີຮອບຈຳລອງຊ້ຳໃດຮອດເງື່ອນໄຂຢຸດ: ທຸກຮອບແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
 	No results yet	ຍັງບໍ່ມີຜົນໄດ້ຮັບ
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	ໃນແບບຈຳລອງນີ້ບໍ່ມີການໝາຍຂອງເສຍ ຫຼື ການແກ້ໄຂງານ, ດັ່ງນັ້ນ OEE ນັບຄຸນນະພາບເປັນ 100%.
 	No target	ບໍ່ມີເປົ້າໝາຍ
@@ -395,11 +386,11 @@
 	Repair time	ເວລາສ້ອມແປງ
 	Repeats	ເຮັດຊ້ຳ
 	Replace Model	ແທນທີ່ແບບຈຳລອງ
-	Replication 1 · {time} of {end} {unit}	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit} · ໄລຍະອຸ່ນເຄື່ອງ
-	Replications	ຈຳນວນຮອບຈຳລອງຊ້ຳ
-	Replications meeting the target	ຮອບຈຳລອງຊ້ຳທີ່ບັນລຸເປົ້າໝາຍ
-	Replications that never met the stop condition count as later than their time limit.	ຮອບຈຳລອງຊ້ຳທີ່ບໍ່ເຄີຍຮອດເງື່ອນໄຂຢຸດ ນັບວ່າຊ້າກວ່າຂີດຈຳກັດເວລາຂອງມັນ.
+	Run 1 · {time} of {end} {unit}	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	ຮອບຈຳລອງທີ 1 · {time} ຈາກ {end} {unit} · ໄລຍະອຸ່ນເຄື່ອງ
+	Runs	ຈຳນວນຮອບຈຳລອງຊ້ຳ
+	Runs meeting the target	ຮອບຈຳລອງຊ້ຳທີ່ບັນລຸເປົ້າໝາຍ
+	Runs that never met the stop condition count as later than their time limit.	ຮອບຈຳລອງຊ້ຳທີ່ບໍ່ເຄີຍຮອດເງື່ອນໄຂຢຸດ ນັບວ່າຊ້າກວ່າຂີດຈຳກັດເວລາຂອງມັນ.
 	Resource pool	ກຸ່ມຊັບພະຍາກອນ
 	Resource pools	ກຸ່ມຊັບພະຍາກອນ
 	Restore	ຄືນຂະໜາດໜ້າຕ່າງ
@@ -420,7 +411,7 @@
 	Run	ປະມວນຜົນ
 	Run cancelled	ຍົກເລີກການປະມວນຜົນແລ້ວ
 	Run experiment	ປະມວນຜົນການທົດລອງ
-	Run replication 1 step by step and see each block's queue on the diagram	ປະມວນຜົນຮອບຈຳລອງທີ 1 ເທື່ອລະຂັ້ນ ແລະ ເບິ່ງຄິວຂອງແຕ່ລະບລັອກໃນແຜນວາດ
+	Play run 1 step by step and see each block's queue on the diagram	ປະມວນຜົນຮອບຈຳລອງທີ 1 ເທື່ອລະຂັ້ນ ແລະ ເບິ່ງຄິວຂອງແຕ່ລະບລັອກໃນແຜນວາດ
 	Run the experiment ({shortcut})	ປະມວນຜົນການທົດລອງ ({shortcut})
 	Run the experiment again to see this result's spread.	ແລ່ນການທົດລອງອີກຄັ້ງເພື່ອເບິ່ງການກະຈາຍຂອງຜົນໄດ້ຮັບນີ້.
 	Run the experiment at each value of one parameter, and compare a result.	ແລ່ນການທົດລອງທີ່ແຕ່ລະຄ່າຂອງພາຣາມິເຕີໜຶ່ງ ແລ້ວປຽບທຽບຜົນໄດ້ຮັບ.
@@ -476,7 +467,7 @@
 	Split batches	ແຍກຊຸດ
 	Split or join	ແຍກ ຫຼື ລວມ
 	Split or join (all ways)	ແຍກ ຫຼື ລວມ (ທຸກທາງ)
-	Spread across replications	ການກະຈາຍລະຫວ່າງຮອບຈຳລອງຊ້ຳ
+	Spread across runs	ການກະຈາຍລະຫວ່າງຮອບຈຳລອງຊ້ຳ
 	Spread out	ກະຈາຍ
 	Stages (k)	ຂັ້ນຕອນ (k)
 	Standard deviation	ຄ່າຜັນຜວນມາດຕະຖານ
@@ -491,7 +482,6 @@
 	Stopped watching	ຢຸດຕິດຕາມແລ້ວ
 	Sun	ອາທິດ
 	Sweep a parameter	ກວາດພາຣາມິເຕີ
-	Table	ຕາຕະລາງ
 	Table stripes	ແຖບລາຍຕາຕະລາງ
 	Take servers out when overloaded	ເອົາແມ່ຂ່າຍທີ່ໂຫຼດເກີນອອກຈາກການໃຊ້ງານ
 	Takt	ເວລາແທັກ
@@ -508,11 +498,11 @@
 	Text on header	ຂໍ້ຄວາມເທິງແຖບຫົວ
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	ການເຊື່ອມຕໍ່ຫຼຸດ ແລະ ລູກຂ່າຍລອງໃໝ່: ເອນທິຕີຈະກັບໄປຫົວແຖວຄອຍທັນທີ ແລະ ວຽກທີ່ເຮັດກັບມັນແລ້ວຈະເສຍເປົ່າ.
 	The entity waits on its server and the job carries on with what was left once the server is back.	ເອນທິຕີລໍຖ້າຢູ່ທີ່ແມ່ຂ່າຍຂອງມັນ ແລະ ວຽກຈະເຮັດຕໍ່ຈາກສ່ວນທີ່ເຫຼືອເມື່ອແມ່ຂ່າຍກັບມາ.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	ຊ່ວງນີ້ລົງຕ່ຳກວ່າສັດສ່ວນເປົ້າໝາຍ {share}, ຈຶ່ງບໍ່ໄດ້ສະແດງດ້ວຍຄວາມເຊື່ອໝັ້ນ 95% ວ່າບັນລຸສັດສ່ວນນັ້ນ; ຮອບຈຳລອງຊ້ຳຫຼາຍຂຶ້ນຈະເຮັດໃຫ້ຊ່ວງແຄບລົງ.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	ຊ່ວງນີ້ລົງຕ່ຳກວ່າສັດສ່ວນເປົ້າໝາຍ {share}, ຈຶ່ງບໍ່ໄດ້ສະແດງດ້ວຍຄວາມເຊື່ອໝັ້ນ 95% ວ່າບັນລຸສັດສ່ວນນັ້ນ; ຮອບຈຳລອງຊ້ຳຫຼາຍຂຶ້ນຈະເຮັດໃຫ້ຊ່ວງແຄບລົງ.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	ວຽກຢຸດທັນທີ: ເອນທິຕີຈະກັບໄປຫົວແຖວຄອຍສຳລັບແມ່ຂ່າຍໃດກໍໄດ້ທີ່ຢູ່ໃນກະ ແລະ ວຽກທີ່ເຮັດກັບມັນແລ້ວຈະເສຍເປົ່າ.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	ວຽກຢຸດທັນທີ; ເອນທິຕີລໍຖ້າຢູ່ທີ່ແມ່ຂ່າຍຂອງມັນ ແລະ ວຽກຈະເຮັດຕໍ່ຈາກສ່ວນທີ່ເຫຼືອເມື່ອແມ່ຂ່າຍນັ້ນກັບເຂົ້າກະອີກ.
 	The last task with a resource it finished at	ໜ້າວຽກສຸດທ້າຍທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນທີ່ຊິ້ນງານຜ່ານມາ
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	ເວລາສະເລ່ຍຈົນຮອດເງື່ອນໄຂຢຸດ ຄິດສະເພາະຮອບຈຳລອງຊ້ຳທີ່ຮອດເງື່ອນໄຂ; ຮອບອື່ນແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	ເວລາສະເລ່ຍຈົນຮອດເງື່ອນໄຂຢຸດ ຄິດສະເພາະຮອບຈຳລອງຊ້ຳທີ່ຮອດເງື່ອນໄຂ; ຮອບອື່ນແລ່ນຈົນຮອດຂີດຈຳກັດເວລາ.
 	The model changed, so watching stopped	ແບບຈຳລອງປ່ຽນໄປ ຈຶ່ງຢຸດຕິດຕາມ
 	The model has no calendars yet.	ແບບຈຳລອງຍັງບໍ່ມີປະຕິທິນ.
 	The model now has the units sizing found	ຕອນນີ້ແບບຈຳລອງມີຈຳນວນໜ່ວຍທີ່ການກຳນົດຂະໜາດພົບແລ້ວ
@@ -520,7 +510,7 @@
 	The name is empty or already used.	ຊື່ຫວ່າງເປົ່າ ຫຼື ຖືກໃຊ້ແລ້ວ.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	ຮອບຈຳລອງຊ້ຳແບ່ງເປັນສອງຜົນທີ່ຕ່າງກັນ: {a} ຈາກ {n} ຢູ່ໃນກຸ່ມໜຶ່ງ, {b} ຢູ່ໃນອີກກຸ່ມໜຶ່ງ. ມີ {count} ຜົນທີ່ແບ່ງແບບດຽວກັນ, ລວມທັງ {result} ({element}); ເບິ່ງຕາຕະລາງດ້ານລຸ່ມ.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	ແມ່ຂ່າຍເຮັດວຽກທີ່ມີຢູ່ໃຫ້ແລ້ວ ແລ້ວຈຶ່ງອອກກະ; ຈົນກວ່າຈະຮອດຕອນນັ້ນ ມັນຍັງຖືວ່າຢູ່ໃນກະ.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	ສັດສ່ວນຮອບຈຳລອງຊ້ຳທີ່ເທົ່າກັບ ຫຼື ຕ່ຳກວ່າແຕ່ລະຄ່າ. ແຖບຄອບຄຸມການແຈກຢາຍແທ້ດ້ວຍຄວາມເຊື່ອໝັ້ນ {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	ສັດສ່ວນຮອບຈຳລອງຊ້ຳທີ່ເທົ່າກັບ ຫຼື ຕ່ຳກວ່າແຕ່ລະຄ່າ. ແຖບຄອບຄຸມການແຈກຢາຍແທ້ດ້ວຍຄວາມເຊື່ອໝັ້ນ {confidence}.
 	The values are numbers, separated by semicolons or spaces	ຄ່າຕ້ອງເປັນຕົວເລກທີ່ຂັ້ນດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ຫຼື ຍະຫວ່າງ
 	The whole clock	ເວລາທັງໝົດ
 	Themes	ຊຸດສີ
@@ -588,7 +578,7 @@
 	Warning	ຄຳເຕືອນ
 	Watch a Run	ຕິດຕາມການປະມວນຜົນ
 	Watch a run	ຕິດຕາມການປະມວນຜົນ
-	Watching replication 1	ກຳລັງຕິດຕາມຮອບຈຳລອງທີ 1
+	Watching run 1	ກຳລັງຕິດຕາມຮອບຈຳລອງທີ 1
 	Weak text	ຂໍ້ຄວາມຈາງ
 	Weak text on header	ຂໍ້ຄວາມຈາງເທິງແຖບຫົວ
 	Wed	ພຸດ
@@ -624,7 +614,7 @@
 	maximum {value}	ຄ່າສູງສຸດ {value}
 	milliseconds	ມິລລິວິນາທີ
 	minutes	ນາທີ
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k ຈາກ N: ມີພຽງ k ຈາກ N ຮອບຈຳລອງຊ້ຳທີ່ມີຄ່າສຳລັບຜົນນັ້ນ, ແລະ ຄ່າສະເລ່ຍ ແລະ ຊ່ວງຂອງມັນຄິດຈາກ k ຮອບນັ້ນ.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k ຈາກ N: ມີພຽງ k ຈາກ N ຮອບຈຳລອງຊ້ຳທີ່ມີຄ່າສຳລັບຜົນນັ້ນ, ແລະ ຄ່າສະເລ່ຍ ແລະ ຊ່ວງຂອງມັນຄິດຈາກ k ຮອບນັ້ນ.
 	n = {k} of {n}	n = {k} ຈາກ {n}
 	nothing yet	ຍັງບໍ່ມີຫຍັງ
 	per day	ຕໍ່ມື້
@@ -660,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ແລະ {second} ຕ່າງກັນດ້ານຄວາມແຈ້ງ {step}, ຕ້ອງການ 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: ຄວາມເປັນໄປໄດ້ຕ້ອງເປັນຕົວເລກຈາກ 0 ຫາ 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} ຈາກ {of} ຮອບຈຳລອງຊ້ຳບັນລຸເປົ້າໝາຍ: {p} (ຊ່ວງ 95% ຈາກ {lo} ຫາ {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} ຈາກ {of} ຮອບຈຳລອງຊ້ຳບັນລຸເປົ້າໝາຍ: {p} (ຊ່ວງ 95% ຈາກ {lo} ຫາ {hi})
 	{name} — edited	{name} — ແກ້ໄຂແລ້ວ
 	{n} created	ສ້າງແລ້ວ {n}
 	{n} done	ແລ້ວ {n}
@@ -674,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: ຕອນນີ້ {now} ສູງສຸດ {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% CI
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± ແມ່ນເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຂອງຊ່ວງຄວາມເຊື່ອໝັ້ນ Student-t 95% ສຳລັບຄ່າສະເລ່ຍຈາກການເຮັດຊ້ຳ.
 	· no results yet	· ຍັງບໍ່ມີຜົນໄດ້ຮັບ
 unit	d	ວັນ
 unit	h	ຊົ່ວໂມງ
@@ -682,18 +672,28 @@ unit	min	ນາທີ
 unit	ms	ມິລລິວິນາທີ
 unit	s	ວິນາທີ
 unit	yr	ປີ
+	1/(n + 1)	1/(n + 1)
+	Balked	ບໍ່ເຂົ້າແຖວ
+	Balked on {id}	ບໍ່ເຂົ້າແຖວທີ່ {id}
+	Balking	ການບໍ່ເຂົ້າແຖວ
+	Count those in service	ນັບລວມທີ່ກຳລັງຮັບບໍລິການ
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	ເອນທິຕີທີ່ບໍ່ເຂົ້າແຖວຄອຍ ຈະໄປຕາມເສັ້ນທາງນີ້ທັນທີ (ເຊັ່ນ ເພື່ອລອງໃໝ່ພາຍຫຼັງ) ແທນທີ່ຈະສູນເສຍ; ຢູ່ນີ້ພວກມັນຖືກນັບເປັນການບໍ່ເຂົ້າແຖວ.
+	Joins with probability	ຄວາມເປັນໄປໄດ້ທີ່ເຂົ້າແຖວ
+	Number waiting	ຈຳນວນທີ່ລໍຖ້າ
+	Share balked	ສັດສ່ວນທີ່ບໍ່ເຂົ້າແຖວ
+	Table	ຕາຕະລາງ
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
-@plural	Finished {n} replication|Finished {n} replications	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ
+@plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	ເປີດ {file} ແລ້ວ (ຄຳເຕືອນ {n} ລາຍການ)
 @plural	Removed {n} block|Removed {n} blocks	ລຶບ {n} ບລັອກແລ້ວ
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	ປະມວນຜົນແບບຈຳລອງຢ່າງອິດສະຫຼະ {n} ຮອບ ໂດຍໃຊ້ເມັດສຸ່ມ {seed}. ຜົນຂອງແຕ່ລະອົງປະກອບມີເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກທຸກຮອບ.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	ຮອດເງື່ອນໄຂຢຸດໃນ {met} ຈາກ {n} ຮອບຈຳລອງຊ້ຳ ຫຼັງຈາກສະເລ່ຍ {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	ສຳເລັດແລ້ວ {done} ຈາກ {n} ຮອບຈຳລອງຊ້ຳ
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກ {low} ຫາ {high}{unit}\nຈາກການຈຳລອງຊ້ຳ {n} ຮອບ
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	ປະມວນຜົນແບບຈຳລອງຢ່າງອິດສະຫຼະ {n} ຮອບ ໂດຍໃຊ້ເມັດສຸ່ມ {seed}. ຜົນຂອງແຕ່ລະອົງປະກອບມີເຄິ່ງໜຶ່ງຂອງຄວາມກວ້າງຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກທຸກຮອບ.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	ຮອດເງື່ອນໄຂຢຸດໃນ {met} ຈາກ {n} ຮອບຈຳລອງຊ້ຳ ຫຼັງຈາກສະເລ່ຍ {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	ສຳເລັດແລ້ວ {done} ຈາກ {n} ຮອບຈຳລອງຊ້ຳ
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nຊ່ວງຄວາມເຊື່ອໝັ້ນ 95% ຈາກ {low} ຫາ {high}{unit}\nຈາກການຈຳລອງຊ້ຳ {n} ຮອບ
 @plural	{n} block selected|{n} blocks selected	ເລືອກ {n} ບລັອກແລ້ວ
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} ຮອບຈຳລອງຊ້ຳຕໍ່ຂັ້ນ · ເມັດສຸ່ມ {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} ຮອບຈຳລອງຊ້ຳ · ຄ່າສະເລ່ຍ {mean} · ຈາກ {min} ຫາ {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed} · ອຸ່ນເຄື່ອງ {warmup} {unit} · ວັດຜົນ {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed}
-@plural	{n} replication|{n} replications	ຈຳລອງຊ້ຳ {n} ຮອບ
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} ຮອບຈຳລອງຊ້ຳຕໍ່ຂັ້ນ · ເມັດສຸ່ມ {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} ຮອບຈຳລອງຊ້ຳ · ຄ່າສະເລ່ຍ {mean} · ຈາກ {min} ຫາ {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed} · ອຸ່ນເຄື່ອງ {warmup} {unit} · ວັດຜົນ {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	ຈຳລອງຊ້ຳ {n} ຮອບ · ເມັດສຸ່ມ {seed}
+@plural	{n} run|{n} runs	ຈຳລອງຊ້ຳ {n} ຮອບ

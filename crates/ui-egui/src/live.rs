@@ -144,7 +144,7 @@ impl App {
         match self.engine.live_run(0) {
             Ok(run) => {
                 self.watching = Some(Watching::new(run, self.engine.model().clone()));
-                self.info(t("Watching replication 1"));
+                self.info(t("Watching run 1"));
             }
             Err(e) => self.report_error(e.message),
         }
@@ -265,7 +265,7 @@ impl App {
                 if ui
                     .add_enabled(can_watch, theme::secondary(ui, t("Watch a run")))
                     .on_hover_text(t(
-                        "Run replication 1 step by step and see each block's queue on the diagram",
+                        "Play run 1 step by step and see each block's queue on the diagram",
                     ))
                     .clicked()
                 {
@@ -351,7 +351,7 @@ impl App {
         let warm = w.run.warmup();
         let clock = if now < warm {
             tf(
-                "Replication 1 · {time} of {end} {unit} · warm-up",
+                "Run 1 · {time} of {end} {unit} · warm-up",
                 &[
                     ("time", &grouped(now)),
                     ("end", &grouped(end)),
@@ -360,7 +360,7 @@ impl App {
             )
         } else {
             tf(
-                "Replication 1 · {time} of {end} {unit}",
+                "Run 1 · {time} of {end} {unit}",
                 &[
                     ("time", &grouped(now)),
                     ("end", &grouped(end)),
@@ -380,7 +380,7 @@ impl App {
             ui.label(theme::weak(
                 ui,
                 tf(
-                    "One replication of {n}: the results of the others differ.",
+                    "One run of {n}: the results of the others differ.",
                     &[("n", &replications.to_string())],
                 ),
             ));

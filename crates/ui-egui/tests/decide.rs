@@ -116,12 +116,12 @@ fn a_replication_ends_when_enough_have_left_and_the_results_say_when() {
 
     run(&mut h);
     assert!(
-        h.query_by_label_contains("The stop condition was met in 6 of 6 replications")
+        h.query_by_label_contains("The stop condition was met in 6 of 6 runs")
             .is_some()
     );
     // The time to the stop is one of the results whose spread can be read.
     choose(&mut h, "Result", "Time to the stop condition");
-    h.get_by_label_contains("6 replications · mean");
+    h.get_by_label_contains("6 runs · mean");
 
     click(&mut h, Role::Tab, "Model");
     choose(&mut h, "Ends early", "Never: it runs for its duration");
@@ -166,14 +166,14 @@ fn a_tasks_time_is_fitted_to_a_three_point_estimate() {
 fn a_results_spread_and_the_chance_of_meeting_a_target() {
     let mut h = mm1();
     run(&mut h);
-    h.get_by_label("Spread across replications");
+    h.get_by_label("Spread across runs");
     choose(&mut h, "Result", "Serve customer · Mean wait");
     h.get_by_label("Percentile");
     choose(&mut h, "Target", "At most");
     type_into(&mut h, "Target value", "1000");
-    h.get_by_label_contains("6 of 6 replications met the target: 100%");
+    h.get_by_label_contains("6 of 6 runs met the target: 100%");
     type_into(&mut h, "Target value", "0");
-    h.get_by_label_contains("0 of 6 replications met the target: 0%");
+    h.get_by_label_contains("0 of 6 runs met the target: 0%");
 }
 
 #[test]
@@ -194,7 +194,7 @@ fn the_analysis_view_sweeps_ranks_and_sizes() {
     choose(&mut h, "Result to compare", "Serve customer · Mean wait");
     click(&mut h, Role::Button, "Run the sweep");
     h.get_by_label_contains("Across the range it changed by");
-    h.get_by_label_contains("6 replications at each step · seed");
+    h.get_by_label_contains("6 runs at each step · seed");
 
     // Which parameters matter.
     choose(

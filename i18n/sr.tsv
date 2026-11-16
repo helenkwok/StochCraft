@@ -13,9 +13,8 @@
 
 @id	language.name	Српски
 	% down and up	% доле и горе
-	% of replications	% репликација
+	% of runs	% репликација
 	+ Add block	+ Додај блок
-	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Интервал од 95% удела који постиже циљ: од {lo} до {hi}
 	95th percentile	95. перцентил
 	95th percentile {value}	95. перцентил {value}
@@ -35,7 +34,7 @@
 	Add Pool	Додај фонд
 	Add a flow from…	Додај ток од…
 	Add a flow to…	Додај ток према…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Додај јединицу најоптерећенијем задатку или групи док довољно репликација не постигне циљ. Приказан је и одговор са сваким временом на средњој вредности; обично је премали.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Додај јединицу најоптерећенијем задатку или групи док довољно репликација не постигне циљ. Приказан је и одговор са сваким временом на средњој вредности; обично је премали.
 	Add alternative	Додај алтернативу
 	Add calendar	Додај календар
 	Add calendar entry	Додај ставку календара
@@ -69,9 +68,6 @@
 	Available outside calendars	Расположиво ван календара
 	BPMN with BPSim	BPMN с BPSim
 	Back to the model (Esc)	Повратак на модел (Esc)
-	Balked	Нису ушли у ред
-	Balked on {id}	Нису ушли у ред на {id}
-	Balking	Неулазак у ред
 	Batch	Серија
 	Batch (collect, then send together)	Серија (прикупи, па пошаљи заједно)
 	Batch size	Величина серије
@@ -131,7 +127,6 @@
 	Constant	Константна
 	Control outlines	Обриси контрола
 	Copy	Копирај
-	Count those in service	Бројати и оне на услуживању
 	Counts against	Приписује се
 	Customer demand	Потражња купаца
 	Cut	Исеци
@@ -174,13 +169,12 @@
 	Ends early	Завршава раније
 	Energy	Енергија
 	Energy per part	Енергија по дијелу
-	Enough: {units}, meeting the target in {p} of replications	Довољно: {units}, циљ постигнут у {p} репликација
+	Enough: {units}, meeting the target in {p} of runs	Довољно: {units}, циљ постигнут у {p} репликација
 	Enter a number	Унесите број
 	Entered	Ушло
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Ентитети који затекну пуну чекаоницу одмах иду овим током (да касније покушају поново, рецимо), уместо да буду изгубљени или да чекају пре задатка; овде се броје као изгубљени.
 	Entities give up waiting	Ентитети одустају од чекања
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Ентитети који су још унутра на крају репликације нису укључени у просјечно чекање и просјечно време у систему.
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Ентитети који не уђу у ред одмах иду овим током (да касније покушају поново, рецимо), уместо да буду изгубљени; овде се броје као они који нису ушли у ред.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Ентитети који су још унутра на крају репликације нису укључени у просјечно чекање и просјечно време у систему.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Ентитети који одустану од чекања иду овим током (да касније покушају поново, рецимо); остали иду другим излазом задатка.
 	Erlang	Ерланг
 	Error	Грешка
@@ -235,7 +229,6 @@
 	Inside over time	Унутра кроз време
 	Job under way on a server going off shift:	Посао у току на серверу којем завршава смена:
 	Job under way on a server taken out:	Посао у току на серверу избаченом из рада:
-	Joins with probability	Улази у ред са вероватноћом
 	Jump	Скочи
 	Jump to time	Скочи на време
 	Keep at least in service	Задржи у раду најмање
@@ -259,10 +252,8 @@
 	Maximum	Максимум
 	Mean	Средња вредност
 	Mean number inside	Просјечан број унутра
-	Number waiting	Број на чекању
-	One replication of {n}: the results of the others differ.	Једна репликација од {n}: резултати осталих се разликују.
+	One run of {n}: the results of the others differ.	Једна репликација од {n}: резултати осталих се разликују.
 	Save as a new BPMN file?	Сачувати као нови BPMN фајл?
-	Share balked	Удео оних који нису ушли у ред
 	Still inside at the end	Још унутра на крају
 	Mean work in progress	Просјечна недовршена производња
 	Mean queue length	Просјечна дуљина реда
@@ -293,7 +284,7 @@
 	No arrivals outside calendars	Нема долазака ван календара
 	No blocks yet. Open a model, or add blocks to build one.	Још нема блокова. Отворите модел или додајте блокове да бисте га направили.
 	No connections yet: join blocks below.	Још нема веза: повежите блокове испод.
-	No replication met the stop condition: each ran to its time limit.	Ниједна репликација није постигла услов заустављања: свака је трајала до свог временског ограничења.
+	No run met the stop condition: each ran to its time limit.	Ниједна репликација није постигла услов заустављања: свака је трајала до свог временског ограничења.
 	No results yet	Још нема резултата
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	У овом моделу није означен шкарт ни дорада, па OEE рачуна квалитет као 100%.
 	No target	Без циља
@@ -395,11 +386,11 @@
 	Repair time	Време поправке
 	Repeats	Понављање
 	Replace Model	Замени модел
-	Replication 1 · {time} of {end} {unit}	Репликација 1 · {time} од {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Репликација 1 · {time} од {end} {unit} · загревање
-	Replications	Репликације
-	Replications meeting the target	Репликације које постижу циљ
-	Replications that never met the stop condition count as later than their time limit.	Репликације које никад нису постигле услов заустављања рачунају се као касније од свог временског ограничења.
+	Run 1 · {time} of {end} {unit}	Репликација 1 · {time} од {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Репликација 1 · {time} од {end} {unit} · загревање
+	Runs	Репликације
+	Runs meeting the target	Репликације које постижу циљ
+	Runs that never met the stop condition count as later than their time limit.	Репликације које никад нису постигле услов заустављања рачунају се као касније од свог временског ограничења.
 	Resource pool	Фонд ресурса
 	Resource pools	Фондови ресурса
 	Restore	Врати
@@ -420,7 +411,7 @@
 	Run	Покрени
 	Run cancelled	Извршавање отказано
 	Run experiment	Покрени експеримент
-	Run replication 1 step by step and see each block's queue on the diagram	Покрени репликацију 1 корак по корак и прати ред сваког блока на дијаграму
+	Play run 1 step by step and see each block's queue on the diagram	Покрени репликацију 1 корак по корак и прати ред сваког блока на дијаграму
 	Run the experiment ({shortcut})	Покрени експеримент ({shortcut})
 	Run the experiment again to see this result's spread.	Поново покрените експеримент да бисте видели расипање овог резултата.
 	Run the experiment at each value of one parameter, and compare a result.	Покрени експеримент за сваку вредност једног параметра и упореди резултат.
@@ -476,7 +467,7 @@
 	Split batches	Раздвајање серија
 	Split or join	Раздвоји или споји
 	Split or join (all ways)	Раздвоји или споји (сви путови)
-	Spread across replications	Расипање међу репликацијама
+	Spread across runs	Расипање међу репликацијама
 	Spread out	Распореди
 	Stages (k)	Фазе (k)
 	Standard deviation	Стандардна девијација
@@ -491,7 +482,6 @@
 	Stopped watching	Праћење заустављено
 	Sun	нед
 	Sweep a parameter	Пролаз кроз параметар
-	Table	Таблица
 	Table stripes	Пруге табела
 	Take servers out when overloaded	Избацивање преоптерећених сервера из рада
 	Takt	Такт
@@ -508,11 +498,11 @@
 	Text on header	Текст у заглављу
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Веза пукне и клијент покуша поново: ентитет се одмах враћа на чело реда, а рад обављен на њему је узалудан.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Ентитет чека на свом серверу, а посао се наставља с преосталим делом када се сервер врати.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Интервал сеже испод циљног удела од {share}, па није показано с поузданошћу од 95% да је удео постигнут; више репликација би га сузило.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Интервал сеже испод циљног удела од {share}, па није показано с поузданошћу од 95% да је удео постигнут; више репликација би га сузило.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Посао се одмах прекида: ентитет се враћа на чело реда за било који сервер у смени, а рад обављен на њему је узалудан.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Посао се одмах прекида; ентитет чека на свом серверу, а посао се наставља с преосталим делом када тај сервер поново буде у смени.
 	The last task with a resource it finished at	Последњи задатак с ресурсом кроз који је део прошао
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Просјечно време до услова заустављања односи се само на репликације које су га постигле; остале су трајале до свог временског ограничења.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Просјечно време до услова заустављања односи се само на репликације које су га постигле; остале су трајале до свог временског ограничења.
 	The model changed, so watching stopped	Модел се променио, па је праћење заустављено
 	The model has no calendars yet.	Модел још нема календара.
 	The model now has the units sizing found	Модел сада има јединице које је пронашло димензионисање
@@ -520,7 +510,7 @@
 	The name is empty or already used.	Име је празно или се већ користи.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Репликације су подељене на два исхода: {a} од {n} у једном, {b} у другом. Резултати подељени на исти начин: {count}, међу њима {result} ({element}); погледајте таблицу испод.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Сервер доврши посао који има, па заврши смену; до тада се рачуна као да је у смени.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Удео репликација једнаких или мањих од сваке вредности. Појас садржи праву расподелу са поузданошћу од {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Удео репликација једнаких или мањих од сваке вредности. Појас садржи праву расподелу са поузданошћу од {confidence}.
 	The values are numbers, separated by semicolons or spaces	Вредности су бројеви одвојени тачком и зарезом или размацима
 	The whole clock	Све време
 	Themes	Теме
@@ -588,7 +578,7 @@
 	Warning	Упозорење
 	Watch a Run	Прати покретање
 	Watch a run	Прати покретање
-	Watching replication 1	Прати се репликација 1
+	Watching run 1	Прати се репликација 1
 	Weak text	Бледи текст
 	Weak text on header	Бледи текст у заглављу
 	Wed	сре
@@ -624,7 +614,7 @@
 	maximum {value}	максимум {value}
 	milliseconds	милисекунде
 	minutes	минуте
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k од N: само k од N репликација има вредност за тај резултат, а његов просек и интервал су преко тих k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k од N: само k од N репликација има вредност за тај резултат, а његов просек и интервал су преко тих k.
 	n = {k} of {n}	n = {k} од {n}
 	nothing yet	још ништа
 	per day	по дану
@@ -660,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} и {second} разликују се по светлини за {step}, потребно 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: вероватноћа је број од 0 до 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} од {of} репликација постигло је циљ: {p} (интервал од 95% од {lo} до {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} од {of} репликација постигло је циљ: {p} (интервал од 95% од {lo} до {hi})
 	{name} — edited	{name} — уређено
 	{n} created	Направљено: {n}
 	{n} done	Завршено: {n}
@@ -674,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: сада {now}, највише {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% ИП
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± је половина ширине 95% Student-t интервала поверења за средњу вредност кроз репликације.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± је половина ширине 95% Student-t интервала поверења за средњу вредност кроз репликације.
 	· no results yet	· још нема резултата
 unit	d	д
 unit	h	ч
@@ -682,18 +672,28 @@ unit	min	мин
 unit	ms	мс
 unit	s	с
 unit	yr	год.
+	1/(n + 1)	1/(n + 1)
+	Balked	Нису ушли у ред
+	Balked on {id}	Нису ушли у ред на {id}
+	Balking	Неулазак у ред
+	Count those in service	Бројати и оне на услуживању
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Ентитети који не уђу у ред одмах иду овим током (да касније покушају поново, рецимо), уместо да буду изгубљени; овде се броје као они који нису ушли у ред.
+	Joins with probability	Улази у ред са вероватноћом
+	Number waiting	Број на чекању
+	Share balked	Удео оних који нису ушли у ред
+	Table	Таблица
 @plural	Added {n} block|Added {n} blocks	Додат је {n} блок|Додата су {n} блока|Додато је {n} блокова
 @plural	Copied {n} block|Copied {n} blocks	Копиран је {n} блок|Копирана су {n} блока|Копирано је {n} блокова
-@plural	Finished {n} replication|Finished {n} replications	Завршена је {n} репликација|Завршене су {n} репликације|Завршено је {n} репликација
+@plural	Finished {n} run|Finished {n} runs	Завршена је {n} репликација|Завршене су {n} репликације|Завршено је {n} репликација
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Отворен фајл {file} ({n} упозорење)|Отворен фајл {file} ({n} упозорења)|Отворен фајл {file} ({n} упозорења)
 @plural	Removed {n} block|Removed {n} blocks	Уклоњен је {n} блок|Уклоњена су {n} блока|Уклоњено је {n} блокова
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Покреће {n} независну репликацију модела од семена {seed}. Резултати сваког елемента укључују полуширину 95% интервала поузданости.|Покреће {n} независне репликације модела од семена {seed}. Резултати сваког елемента укључују полуширину 95% интервала поузданости.|Покреће {n} независних репликација модела од семена {seed}. Резултати сваког елемента укључују полуширину 95% интервала поузданости.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Услов заустављања постигнут је у {met} од {n} репликације, у просеку после {time} {unit}.|Услов заустављања постигнут је у {met} од {n} репликације, у просеку после {time} {unit}.|Услов заустављања постигнут је у {met} од {n} репликација, у просеку после {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	Завршена је {done} од {n} репликације|Завршено је {done} од {n} репликација|Завршено је {done} од {n} репликација
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% интервал од {low} до {high}{unit}\nна основу {n} репликације|{name}: {mean}{unit}\n95% интервал од {low} до {high}{unit}\nна основу {n} репликације|{name}: {mean}{unit}\n95% интервал од {low} до {high}{unit}\nна основу {n} репликација
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Покреће {n} независну репликацију модела од семена {seed}. Резултати сваког елемента укључују полуширину 95% интервала поузданости.|Покреће {n} независне репликације модела од семена {seed}. Резултати сваког елемента укључују полуширину 95% интервала поузданости.|Покреће {n} независних репликација модела од семена {seed}. Резултати сваког елемента укључују полуширину 95% интервала поузданости.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Услов заустављања постигнут је у {met} од {n} репликације, у просеку после {time} {unit}.|Услов заустављања постигнут је у {met} од {n} репликације, у просеку после {time} {unit}.|Услов заустављања постигнут је у {met} од {n} репликација, у просеку после {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Завршена је {done} од {n} репликације|Завршено је {done} од {n} репликација|Завршено је {done} од {n} репликација
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% интервал од {low} до {high}{unit}\nна основу {n} репликације|{name}: {mean}{unit}\n95% интервал од {low} до {high}{unit}\nна основу {n} репликације|{name}: {mean}{unit}\n95% интервал од {low} до {high}{unit}\nна основу {n} репликација
 @plural	{n} block selected|{n} blocks selected	Изабран је {n} блок|Изабрана су {n} блока|Изабрано је {n} блокова
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} репликација по кораку · семе {seed}|{n} репликације по кораку · семе {seed}|{n} репликација по кораку · семе {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} репликација · средња вредност {mean} · од {min} до {max}|{n} репликације · средња вредност {mean} · од {min} до {max}|{n} репликација · средња вредност {mean} · од {min} до {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликација · семе {seed} · загревање {warmup} {unit} · мерено {duration} {unit}|{n} репликације · семе {seed} · загревање {warmup} {unit} · мерено {duration} {unit}|{n} репликација · семе {seed} · загревање {warmup} {unit} · мерено {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} репликација · семе {seed}|{n} репликације · семе {seed}|{n} репликација · семе {seed}
-@plural	{n} replication|{n} replications	{n} репликација|{n} репликације|{n} репликација
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} репликација по кораку · семе {seed}|{n} репликације по кораку · семе {seed}|{n} репликација по кораку · семе {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} репликација · средња вредност {mean} · од {min} до {max}|{n} репликације · средња вредност {mean} · од {min} до {max}|{n} репликација · средња вредност {mean} · од {min} до {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликација · семе {seed} · загревање {warmup} {unit} · мерено {duration} {unit}|{n} репликације · семе {seed} · загревање {warmup} {unit} · мерено {duration} {unit}|{n} репликација · семе {seed} · загревање {warmup} {unit} · мерено {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} репликација · семе {seed}|{n} репликације · семе {seed}|{n} репликација · семе {seed}
+@plural	{n} run|{n} runs	{n} репликација|{n} репликације|{n} репликација

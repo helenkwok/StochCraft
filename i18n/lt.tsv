@@ -13,9 +13,8 @@
 
 @id	language.name	Lietuvių
 	% down and up	% žemyn ir aukštyn
-	% of replications	% replikacijų
+	% of runs	% replikacijų
 	+ Add block	+ Pridėti bloką
-	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Tikslą pasiekiančios dalies 95 % intervalas: nuo {lo} iki {hi}
 	95th percentile	95-asis procentilis
 	95th percentile {value}	95-asis procentilis {value}
@@ -35,7 +34,7 @@
 	Add Pool	Pridėti grupę
 	Add a flow from…	Pridėti srautą iš…
 	Add a flow to…	Pridėti srautą į…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Pridėti vienetą prie labiausiai apkrautos užduoties ar telkinio, kol pakankamai replikacijų pasieks tikslą. Rodomas ir atsakymas, kai kiekvienas laikas lygus savo vidurkiui; jis paprastai per mažas.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Pridėti vienetą prie labiausiai apkrautos užduoties ar telkinio, kol pakankamai replikacijų pasieks tikslą. Rodomas ir atsakymas, kai kiekvienas laikas lygus savo vidurkiui; jis paprastai per mažas.
 	Add alternative	Pridėti alternatyvą
 	Add calendar	Pridėti kalendorių
 	Add calendar entry	Pridėti kalendoriaus įrašą
@@ -69,9 +68,6 @@
 	Available outside calendars	Prieinama už kalendorių ribų
 	BPMN with BPSim	BPMN su BPSim
 	Back to the model (Esc)	Grįžti į modelį (Esc)
-	Balked	Nestojo į eilę
-	Balked on {id}	Nestojo į eilę sraute {id}
-	Balking	Nestojimas į eilę
 	Batch	Partija
 	Batch (collect, then send together)	Partija (surinkti, tada siųsti kartu)
 	Batch size	Partijos dydis
@@ -131,7 +127,6 @@
 	Constant	Konstanta
 	Control outlines	Valdiklių kontūrai
 	Copy	Kopijuoti
-	Count those in service	Skaičiuoti ir aptarnaujamus
 	Counts against	Priskiriama
 	Customer demand	Klientų poreikis
 	Cut	Iškirpti
@@ -174,13 +169,12 @@
 	Ends early	Baigiasi anksčiau
 	Energy	Energija
 	Energy per part	Energija vienai detalei
-	Enough: {units}, meeting the target in {p} of replications	Pakanka: {units}, tikslas pasiekiamas {p} replikacijų
+	Enough: {units}, meeting the target in {p} of runs	Pakanka: {units}, tikslas pasiekiamas {p} replikacijų
 	Enter a number	Įveskite skaičių
 	Entered	Įėjo
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Objektai, radę laukiamąjį pilną, iškart eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą), užuot buvę prarasti ar laukę prieš užduotį; čia jie skaičiuojami kaip prarasti.
 	Entities give up waiting	Objektai nustoja laukti
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Objektai, kurie replikacijos pabaigoje dar viduje, neįskaičiuojami į vidutinį laukimo laiką ir vidutinį laiką sistemoje.
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Objektai, kurie nestoja į eilę, iškart eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą), užuot buvę prarasti; čia jie skaičiuojami kaip nestoję į eilę.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Objektai, kurie replikacijos pabaigoje dar viduje, neįskaičiuojami į vidutinį laukimo laiką ir vidutinį laiką sistemoje.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Laukti nustoję objektai eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą); kiti eina kitu užduoties išėjimu.
 	Erlang	Erlango
 	Error	Klaida
@@ -235,7 +229,6 @@
 	Inside over time	Viduje per laiką
 	Job under way on a server going off shift:	Vykdomas darbas serveryje, kurio pamaina baigiasi:
 	Job under way on a server taken out:	Vykdomas darbas iš naudojimo išimtame serveryje:
-	Joins with probability	Stoja į eilę su tikimybe
 	Jump	Pereiti
 	Jump to time	Pereiti į laiką
 	Keep at least in service	Palikti naudojamų ne mažiau
@@ -259,10 +252,8 @@
 	Maximum	Maksimumas
 	Mean	Vidurkis
 	Mean number inside	Vidutinis skaičius viduje
-	Number waiting	Laukiančiųjų skaičius
-	One replication of {n}: the results of the others differ.	Viena replikacija iš {n}: kitų rezultatai skiriasi.
+	One run of {n}: the results of the others differ.	Viena replikacija iš {n}: kitų rezultatai skiriasi.
 	Save as a new BPMN file?	Įrašyti kaip naują BPMN failą?
-	Share balked	Nestojusiųjų į eilę dalis
 	Still inside at the end	Pabaigoje dar viduje
 	Mean work in progress	Vidutinė nebaigta gamyba
 	Mean queue length	Vidutinis eilės ilgis
@@ -293,7 +284,7 @@
 	No arrivals outside calendars	Jokių atvykimų už kalendorių ribų
 	No blocks yet. Open a model, or add blocks to build one.	Blokų dar nėra. Atidarykite modelį arba pridėkite blokų ir jį sukurkite.
 	No connections yet: join blocks below.	Jungčių dar nėra: sujunkite žemiau esančius blokus.
-	No replication met the stop condition: each ran to its time limit.	Nė viena replikacija nepasiekė stabdymo sąlygos: kiekviena truko iki savo laiko ribos.
+	No run met the stop condition: each ran to its time limit.	Nė viena replikacija nepasiekė stabdymo sąlygos: kiekviena truko iki savo laiko ribos.
 	No results yet	Rezultatų dar nėra
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Šiame modelyje nepažymėtas joks brokas ar perdirbimas, todėl OEE kokybę laiko 100 %.
 	No target	Be tikslo
@@ -395,11 +386,11 @@
 	Repair time	Remonto laikas
 	Repeats	Kartojasi
 	Replace Model	Pakeisti modelį
-	Replication 1 · {time} of {end} {unit}	Replikacija 1 · {time} iš {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Replikacija 1 · {time} iš {end} {unit} · įšilimas
-	Replications	Replikacijos
-	Replications meeting the target	Replikacijos, pasiekiančios tikslą
-	Replications that never met the stop condition count as later than their time limit.	Replikacijos, niekada nepasiekusios stabdymo sąlygos, laikomos vėlesnėmis už savo laiko ribą.
+	Run 1 · {time} of {end} {unit}	Replikacija 1 · {time} iš {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Replikacija 1 · {time} iš {end} {unit} · įšilimas
+	Runs	Replikacijos
+	Runs meeting the target	Replikacijos, pasiekiančios tikslą
+	Runs that never met the stop condition count as later than their time limit.	Replikacijos, niekada nepasiekusios stabdymo sąlygos, laikomos vėlesnėmis už savo laiko ribą.
 	Resource pool	Išteklių grupė
 	Resource pools	Išteklių grupės
 	Restore	Atkurti langą
@@ -420,7 +411,7 @@
 	Run	Vykdyti
 	Run cancelled	Vykdymas atšauktas
 	Run experiment	Vykdyti eksperimentą
-	Run replication 1 step by step and see each block's queue on the diagram	Vykdyti 1 replikaciją žingsnis po žingsnio ir matyti kiekvieno bloko eilę diagramoje
+	Play run 1 step by step and see each block's queue on the diagram	Vykdyti 1 replikaciją žingsnis po žingsnio ir matyti kiekvieno bloko eilę diagramoje
 	Run the experiment ({shortcut})	Vykdyti eksperimentą ({shortcut})
 	Run the experiment again to see this result's spread.	Paleiskite eksperimentą dar kartą, kad pamatytumėte šio rezultato sklaidą.
 	Run the experiment at each value of one parameter, and compare a result.	Paleisti eksperimentą su kiekviena vieno parametro reikšme ir palyginti rezultatą.
@@ -476,7 +467,7 @@
 	Split batches	Partijų skaidymas
 	Split or join	Skaidyti arba jungti
 	Split or join (all ways)	Skaidyti arba jungti (visi keliai)
-	Spread across replications	Sklaida tarp replikacijų
+	Spread across runs	Sklaida tarp replikacijų
 	Spread out	Paskirstyti
 	Stages (k)	Etapai (k)
 	Standard deviation	Standartinis nuokrypis
@@ -491,7 +482,6 @@
 	Stopped watching	Stebėjimas baigtas
 	Sun	sk
 	Sweep a parameter	Parametro perėjimas
-	Table	Lentelė
 	Table stripes	Lentelių juostos
 	Take servers out when overloaded	Perkrautų serverių išėmimas iš naudojimo
 	Takt	Taktas
@@ -508,11 +498,11 @@
 	Text on header	Tekstas antraštės juostoje
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Ryšys nutrūksta ir klientas bando dar kartą: objektas iškart grįžta į eilės pradžią, o su juo atliktas darbas iššvaistomas.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Objektas laukia prie savo serverio, o darbas tęsiamas nuo to, kas liko, kai serveris grįžta.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervalas siekia žemiau tikslinės dalies {share}, todėl 95 % patikimumu neparodyta, kad dalis pasiekta; daugiau replikacijų jį susiaurintų.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervalas siekia žemiau tikslinės dalies {share}, todėl 95 % patikimumu neparodyta, kad dalis pasiekta; daugiau replikacijų jį susiaurintų.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Darbas iškart sustoja: objektas grįžta į eilės pradžią bet kuriam pamainoje esančiam serveriui, o su juo atliktas darbas iššvaistomas.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Darbas iškart sustoja; objektas laukia prie savo serverio, o darbas tęsiamas nuo to, kas liko, kai tas serveris vėl būna pamainoje.
 	The last task with a resource it finished at	Paskutinė užduotis su ištekliumi, kurią detalė praėjo
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Vidutinis laikas iki stabdymo sąlygos skaičiuojamas tik iš replikacijų, kurios ją pasiekė; kitos truko iki savo laiko ribos.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Vidutinis laikas iki stabdymo sąlygos skaičiuojamas tik iš replikacijų, kurios ją pasiekė; kitos truko iki savo laiko ribos.
 	The model changed, so watching stopped	Modelis pasikeitė, todėl stebėjimas baigtas
 	The model has no calendars yet.	Modelis dar neturi kalendorių.
 	The model now has the units sizing found	Modelyje dabar yra parinkimo rasti vienetai
@@ -520,7 +510,7 @@
 	The name is empty or already used.	Pavadinimas tuščias arba jau naudojamas.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikacijos išsiskyrė į dvi skirtingas baigtis: {a} iš {n} vienoje, {b} kitoje. Taip pat išsiskyrę rezultatai: {count}, tarp jų {result} ({element}); žr. lentelę žemiau.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Serveris baigia turimą darbą, tada išeina iš pamainos; iki tol jis laikomas esančiu pamainoje.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Replikacijų, ne didesnių už kiekvieną reikšmę, dalis. Juosta su {confidence} pasikliovimu apima tikrąjį skirstinį.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Replikacijų, ne didesnių už kiekvieną reikšmę, dalis. Juosta su {confidence} pasikliovimu apima tikrąjį skirstinį.
 	The values are numbers, separated by semicolons or spaces	Reikšmės yra skaičiai, atskirti kabliataškiais arba tarpais
 	The whole clock	Visas laikas
 	Themes	Temos
@@ -588,7 +578,7 @@
 	Warning	Įspėjimas
 	Watch a Run	Stebėti vykdymą
 	Watch a run	Stebėti vykdymą
-	Watching replication 1	Stebima 1 replikacija
+	Watching run 1	Stebima 1 replikacija
 	Weak text	Blankus tekstas
 	Weak text on header	Blankus tekstas antraštės juostoje
 	Wed	tr
@@ -624,7 +614,7 @@
 	maximum {value}	maksimumas {value}
 	milliseconds	milisekundės
 	minutes	minutės
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k iš N: tik k iš N replikacijų turėjo šio rezultato reikšmę, o jo vidurkis ir intervalas skaičiuojami iš tų k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k iš N: tik k iš N replikacijų turėjo šio rezultato reikšmę, o jo vidurkis ir intervalas skaičiuojami iš tų k.
 	n = {k} of {n}	n = {k} iš {n}
 	nothing yet	dar nieko
 	per day	per dieną
@@ -660,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} ir {second} – šviesumo skirtumas {step}, reikia 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: tikimybė yra skaičius nuo 0 iki 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	Tikslą pasiekė {met} iš {of} replikacijų: {p} (95 % intervalas nuo {lo} iki {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	Tikslą pasiekė {met} iš {of} replikacijų: {p} (95 % intervalas nuo {lo} iki {hi})
 	{name} — edited	{name} — redaguota
 	{n} created	Sukurta: {n}
 	{n} done	Baigta: {n}
@@ -674,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: dabar {now}, daugiausia {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% pasikliautinasis intervalas
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± yra 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp kartojimų, pusplotis.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± yra 95% Student-t pasikliautinojo intervalo, apskaičiuoto vidurkiui tarp kartojimų, pusplotis.
 	· no results yet	· rezultatų dar nėra
 unit	d	d.
 unit	h	h
@@ -682,18 +672,28 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	m.
+	1/(n + 1)	1/(n + 1)
+	Balked	Nestojo į eilę
+	Balked on {id}	Nestojo į eilę sraute {id}
+	Balking	Nestojimas į eilę
+	Count those in service	Skaičiuoti ir aptarnaujamus
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Objektai, kurie nestoja į eilę, iškart eina šiuo srautu (pavyzdžiui, kad vėliau bandytų dar kartą), užuot buvę prarasti; čia jie skaičiuojami kaip nestoję į eilę.
+	Joins with probability	Stoja į eilę su tikimybe
+	Number waiting	Laukiančiųjų skaičius
+	Share balked	Nestojusiųjų į eilę dalis
+	Table	Lentelė
 @plural	Added {n} block|Added {n} blocks	Pridėtas {n} blokas|Pridėti {n} blokai|Pridėta {n} blokų
 @plural	Copied {n} block|Copied {n} blocks	Nukopijuotas {n} blokas|Nukopijuoti {n} blokai|Nukopijuota {n} blokų
-@plural	Finished {n} replication|Finished {n} replications	Baigta {n} replikacija|Baigtos {n} replikacijos|Baigta {n} replikacijų
+@plural	Finished {n} run|Finished {n} runs	Baigta {n} replikacija|Baigtos {n} replikacijos|Baigta {n} replikacijų
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Atidaryta {file} ({n} įspėjimas)|Atidaryta {file} ({n} įspėjimai)|Atidaryta {file} ({n} įspėjimų)
 @plural	Removed {n} block|Removed {n} blocks	Pašalintas {n} blokas|Pašalinti {n} blokai|Pašalinta {n} blokų
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Vykdo {n} nepriklausomą modelio replikaciją su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomas modelio replikacijas su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomų modelio replikacijų su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Stabdymo sąlyga pasiekta {met} iš {n} replikacijos, vidutiniškai po {time} {unit}.|Stabdymo sąlyga pasiekta {met} iš {n} replikacijų, vidutiniškai po {time} {unit}.|Stabdymo sąlyga pasiekta {met} iš {n} replikacijų, vidutiniškai po {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	Baigta {done} iš {n} replikacijos|Baigta {done} iš {n} replikacijų|Baigta {done} iš {n} replikacijų
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikaciją|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijas|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijų
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Vykdo {n} nepriklausomą modelio replikaciją su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomas modelio replikacijas su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.|Vykdo {n} nepriklausomų modelio replikacijų su sėkla {seed}. Kiekvieno elemento rezultatuose pateikiamas 95% pasikliautinojo intervalo pusplotis.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Stabdymo sąlyga pasiekta {met} iš {n} replikacijos, vidutiniškai po {time} {unit}.|Stabdymo sąlyga pasiekta {met} iš {n} replikacijų, vidutiniškai po {time} {unit}.|Stabdymo sąlyga pasiekta {met} iš {n} replikacijų, vidutiniškai po {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Baigta {done} iš {n} replikacijos|Baigta {done} iš {n} replikacijų|Baigta {done} iš {n} replikacijų
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikaciją|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijas|{name}: {mean}{unit}\n95% intervalas nuo {low} iki {high}{unit}\nper {n} replikacijų
 @plural	{n} block selected|{n} blocks selected	Pažymėtas {n} blokas|Pažymėti {n} blokai|Pažymėta {n} blokų
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikacija kiekviename žingsnyje · sėkla {seed}|{n} replikacijos kiekviename žingsnyje · sėkla {seed}|{n} replikacijų kiekviename žingsnyje · sėkla {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikacija · vidurkis {mean} · nuo {min} iki {max}|{n} replikacijos · vidurkis {mean} · nuo {min} iki {max}|{n} replikacijų · vidurkis {mean} · nuo {min} iki {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacija · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijos · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijų · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikacija · sėkla {seed}|{n} replikacijos · sėkla {seed}|{n} replikacijų · sėkla {seed}
-@plural	{n} replication|{n} replications	{n} replikacija|{n} replikacijos|{n} replikacijų
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} replikacija kiekviename žingsnyje · sėkla {seed}|{n} replikacijos kiekviename žingsnyje · sėkla {seed}|{n} replikacijų kiekviename žingsnyje · sėkla {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} replikacija · vidurkis {mean} · nuo {min} iki {max}|{n} replikacijos · vidurkis {mean} · nuo {min} iki {max}|{n} replikacijų · vidurkis {mean} · nuo {min} iki {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikacija · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijos · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}|{n} replikacijų · sėkla {seed} · įšilimas {warmup} {unit} · matuota {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikacija · sėkla {seed}|{n} replikacijos · sėkla {seed}|{n} replikacijų · sėkla {seed}
+@plural	{n} run|{n} runs	{n} replikacija|{n} replikacijos|{n} replikacijų

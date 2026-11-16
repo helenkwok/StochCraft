@@ -13,9 +13,8 @@
 
 @id	language.name	Norsk bokmål
 	% down and up	% ned og opp
-	% of replications	% av replikasjonene
+	% of runs	% av replikasjonene
 	+ Add block	+ Legg til blokk
-	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	95 %-intervall for andelen som når målet: {lo} til {hi}
 	95th percentile	95. persentil
 	95th percentile {value}	95. persentil {value}
@@ -35,7 +34,7 @@
 	Add Pool	Legg til pulje
 	Add a flow from…	Legg til flyt fra…
 	Add a flow to…	Legg til flyt til…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Legg til en enhet ved den travleste oppgaven eller poolen til nok replikasjoner når et mål. Svaret med hver tid på sitt gjennomsnitt vises også; det er som regel for lite.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Legg til en enhet ved den travleste oppgaven eller poolen til nok replikasjoner når et mål. Svaret med hver tid på sitt gjennomsnitt vises også; det er som regel for lite.
 	Add alternative	Legg til alternativ
 	Add calendar	Legg til kalender
 	Add calendar entry	Legg til kalenderoppføring
@@ -69,9 +68,6 @@
 	Available outside calendars	Tilgjengelig utenfor kalendere
 	BPMN with BPSim	BPMN med BPSim
 	Back to the model (Esc)	Tilbake til modellen (Esc)
-	Balked	Gikk ikke i kø
-	Balked on {id}	Gikk ikke i kø på {id}
-	Balking	Avstå fra kø
 	Batch	Parti
 	Batch (collect, then send together)	Parti (samle, og send dem samlet)
 	Batch size	Partistørrelse
@@ -131,7 +127,6 @@
 	Constant	Konstant
 	Control outlines	Kantlinjer for kontroller
 	Copy	Kopier
-	Count those in service	Tell med dem under betjening
 	Counts against	Belastes
 	Customer demand	Kundebehov
 	Cut	Klipp ut
@@ -174,13 +169,12 @@
 	Ends early	Slutter tidlig
 	Energy	Energi
 	Energy per part	Energi per del
-	Enough: {units}, meeting the target in {p} of replications	Nok: {units}, når målet i {p} av replikasjonene
+	Enough: {units}, meeting the target in {p} of runs	Nok: {units}, når målet i {p} av replikasjonene
 	Enter a number	Skriv inn et tall
 	Entered	Innkommet
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Enheter som finner venterommet fullt, tar straks denne flyten (for å prøve igjen senere, for eksempel) i stedet for å gå tapt eller vente før oppgaven; de telles her som tapt.
 	Entities give up waiting	Enheter gir opp å vente
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Enheter som fortsatt er inne ved slutten av en replikasjon, er utelatt fra gjennomsnittlig ventetid og gjennomsnittlig tid i systemet.
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Enheter som ikke stiller seg i køen, tar straks denne flyten (for å prøve igjen senere, for eksempel) i stedet for å gå tapt; de telles her som at de ikke gikk i kø.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Enheter som fortsatt er inne ved slutten av en replikasjon, er utelatt fra gjennomsnittlig ventetid og gjennomsnittlig tid i systemet.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Enheter som gir opp å vente, tar denne flyten (for å prøve igjen senere, for eksempel); de andre tar oppgavens andre vei ut.
 	Erlang	Erlang
 	Error	Feil
@@ -235,7 +229,6 @@
 	Inside over time	Inne over tid
 	Job under way on a server going off shift:	Jobb under arbeid på en server som går av skift:
 	Job under way on a server taken out:	Jobb under arbeid på en server som tas ut av drift:
-	Joins with probability	Stiller seg i kø med sannsynlighet
 	Jump	Gå
 	Jump to time	Gå til tidspunkt
 	Keep at least in service	Hold minst i drift
@@ -259,10 +252,8 @@
 	Maximum	Maksimum
 	Mean	Gjennomsnitt
 	Mean number inside	Gjennomsnittlig antall inne
-	Number waiting	Antall ventende
-	One replication of {n}: the results of the others differ.	Én replikasjon av {n}: de andre har andre resultater.
+	One run of {n}: the results of the others differ.	Én replikasjon av {n}: de andre har andre resultater.
 	Save as a new BPMN file?	Lagre som ny BPMN-fil?
-	Share balked	Andel som ikke gikk i kø
 	Still inside at the end	Fortsatt inne ved slutten
 	Mean work in progress	Gjennomsnittlig varer i arbeid
 	Mean queue length	Gjennomsnittlig kølengde
@@ -293,7 +284,7 @@
 	No arrivals outside calendars	Ingen ankomster utenfor kalendere
 	No blocks yet. Open a model, or add blocks to build one.	Ingen blokker ennå. Åpne en modell, eller legg til blokker for å lage en.
 	No connections yet: join blocks below.	Ingen forbindelser ennå: koble sammen blokkene nedenfor.
-	No replication met the stop condition: each ran to its time limit.	Ingen replikasjon nådde stoppbetingelsen: hver kjørte til sin tidsgrense.
+	No run met the stop condition: each ran to its time limit.	Ingen replikasjon nådde stoppbetingelsen: hver kjørte til sin tidsgrense.
 	No results yet	Ingen resultater ennå
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Ingen vrak eller omarbeid er merket i denne modellen, så OEE regner kvaliteten som 100 %.
 	No target	Intet mål
@@ -395,11 +386,11 @@
 	Repair time	Reparasjonstid
 	Repeats	Gjentas
 	Replace Model	Erstatt modell
-	Replication 1 · {time} of {end} {unit}	Replikasjon 1 · {time} av {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Replikasjon 1 · {time} av {end} {unit} · oppvarming
-	Replications	Replikasjoner
-	Replications meeting the target	Replikasjoner som når målet
-	Replications that never met the stop condition count as later than their time limit.	Replikasjoner som aldri nådde stoppbetingelsen, teller som senere enn tidsgrensen sin.
+	Run 1 · {time} of {end} {unit}	Replikasjon 1 · {time} av {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Replikasjon 1 · {time} av {end} {unit} · oppvarming
+	Runs	Replikasjoner
+	Runs meeting the target	Replikasjoner som når målet
+	Runs that never met the stop condition count as later than their time limit.	Replikasjoner som aldri nådde stoppbetingelsen, teller som senere enn tidsgrensen sin.
 	Resource pool	Ressurspulje
 	Resource pools	Ressurspuljer
 	Restore	Gjenopprett vindu
@@ -420,7 +411,7 @@
 	Run	Kjør
 	Run cancelled	Kjøring avbrutt
 	Run experiment	Kjør eksperiment
-	Run replication 1 step by step and see each block's queue on the diagram	Kjør replikasjon 1 trinn for trinn og se køen til hver blokk i diagrammet
+	Play run 1 step by step and see each block's queue on the diagram	Kjør replikasjon 1 trinn for trinn og se køen til hver blokk i diagrammet
 	Run the experiment ({shortcut})	Kjør eksperimentet ({shortcut})
 	Run the experiment again to see this result's spread.	Kjør eksperimentet igjen for å se spredningen i dette resultatet.
 	Run the experiment at each value of one parameter, and compare a result.	Kjør eksperimentet ved hver verdi av én parameter, og sammenlign et resultat.
@@ -476,7 +467,7 @@
 	Split batches	Del opp partier
 	Split or join	Del eller slå sammen
 	Split or join (all ways)	Del eller slå sammen (alle veier)
-	Spread across replications	Spredning på tvers av replikasjoner
+	Spread across runs	Spredning på tvers av replikasjoner
 	Spread out	Fordel
 	Stages (k)	Trinn (k)
 	Standard deviation	Standardavvik
@@ -491,7 +482,6 @@
 	Stopped watching	Sluttet å følge
 	Sun	søn
 	Sweep a parameter	Gjennomløp en parameter
-	Table	Tabell
 	Table stripes	Tabellstriper
 	Take servers out when overloaded	Ta servere ut av drift ved overbelastning
 	Takt	Takt
@@ -508,11 +498,11 @@
 	Text on header	Tekst på toppfelt
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Forbindelsen brytes og klienten prøver igjen: enheten går straks tilbake først i køen, og arbeidet som er gjort på den, er bortkastet.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Enheten venter ved serveren sin, og jobben fortsetter med det som var igjen når serveren er tilbake.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhet at andelen nås; flere replikasjoner ville gjort det smalere.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Intervallet går under målandelen på {share}, så det er ikke vist med 95 % sikkerhet at andelen nås; flere replikasjoner ville gjort det smalere.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Jobben stopper straks: enheten går tilbake først i køen for en hvilken som helst server på skift, og arbeidet som er gjort på den, er bortkastet.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Jobben stopper straks; enheten venter ved serveren sin, og jobben fortsetter med det som var igjen når den serveren er på skift igjen.
 	The last task with a resource it finished at	Den siste oppgaven med ressurs delen gikk gjennom
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Gjennomsnittlig tid til stoppbetingelsen er bare over replikasjonene som nådde den; de øvrige kjørte til sin tidsgrense.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Gjennomsnittlig tid til stoppbetingelsen er bare over replikasjonene som nådde den; de øvrige kjørte til sin tidsgrense.
 	The model changed, so watching stopped	Modellen ble endret, så følgingen stoppet
 	The model has no calendars yet.	Modellen har ingen kalendere ennå.
 	The model now has the units sizing found	Modellen har nå enhetene dimensjoneringen fant
@@ -520,7 +510,7 @@
 	The name is empty or already used.	Navnet er tomt eller allerede i bruk.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikasjonene deler seg i to utfall: {a} av {n} i det ene, {b} i det andre. {count} resultater deler seg på samme måte, blant dem {result} ({element}); se tabellen nedenfor.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Serveren gjør ferdig jobben den har, og går så av skift; fram til da teller den som på skift.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen replikasjoner ved eller under hver verdi. Båndet inneholder den sanne fordelingen med {confidence} konfidens.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Andelen replikasjoner ved eller under hver verdi. Båndet inneholder den sanne fordelingen med {confidence} konfidens.
 	The values are numbers, separated by semicolons or spaces	Verdiene er tall skilt med semikolon eller mellomrom
 	The whole clock	Hele tiden
 	Themes	Temaer
@@ -588,7 +578,7 @@
 	Warning	Advarsel
 	Watch a Run	Følg en kjøring
 	Watch a run	Følg en kjøring
-	Watching replication 1	Følger replikasjon 1
+	Watching run 1	Følger replikasjon 1
 	Weak text	Svak tekst
 	Weak text on header	Svak tekst på toppfelt
 	Wed	ons
@@ -624,7 +614,7 @@
 	maximum {value}	maksimum {value}
 	milliseconds	millisekunder
 	minutes	minutter
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k av N: bare k av de N replikasjonene hadde en verdi for dette resultatet, og gjennomsnittet og intervallet er over disse k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k av N: bare k av de N replikasjonene hadde en verdi for dette resultatet, og gjennomsnittet og intervallet er over disse k.
 	n = {k} of {n}	n = {k} av {n}
 	nothing yet	ingenting ennå
 	per day	per dag
@@ -660,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} og {second} skiller seg i lyshet med {step}, krever 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: en sannsynlighet er et tall fra 0 til 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} av {of} replikasjoner nådde målet: {p} (95 %-intervall {lo} til {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} av {of} replikasjoner nådde målet: {p} (95 %-intervall {lo} til {hi})
 	{name} — edited	{name} — redigert
 	{n} created	{n} opprettet
 	{n} done	{n} ferdige
@@ -674,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: nå {now}, høyst {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% KI
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± er halve bredden av et 95% Student-t-konfidensintervall for gjennomsnittet på tvers av gjentakelser.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± er halve bredden av et 95% Student-t-konfidensintervall for gjennomsnittet på tvers av gjentakelser.
 	· no results yet	· ingen resultater ennå
 unit	d	d
 unit	h	h
@@ -682,18 +672,28 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	år
+	1/(n + 1)	1/(n + 1)
+	Balked	Gikk ikke i kø
+	Balked on {id}	Gikk ikke i kø på {id}
+	Balking	Avstå fra kø
+	Count those in service	Tell med dem under betjening
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Enheter som ikke stiller seg i køen, tar straks denne flyten (for å prøve igjen senere, for eksempel) i stedet for å gå tapt; de telles her som at de ikke gikk i kø.
+	Joins with probability	Stiller seg i kø med sannsynlighet
+	Number waiting	Antall ventende
+	Share balked	Andel som ikke gikk i kø
+	Table	Tabell
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
-@plural	Finished {n} replication|Finished {n} replications	{n} replikasjon fullført|{n} replikasjoner fullført
+@plural	Finished {n} run|Finished {n} runs	{n} replikasjon fullført|{n} replikasjoner fullført
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Åpnet {file} ({n} advarsel)|Åpnet {file} ({n} advarsler)
 @plural	Removed {n} block|Removed {n} blocks	Fjernet {n} blokk|Fjernet {n} blokker
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kjører {n} uavhengig replikasjon av modellen fra tilfeldig frø {seed}. Resultatene for hvert element inneholder halvbredden til et 95% konfidensintervall.|Kjører {n} uavhengige replikasjoner av modellen fra tilfeldig frø {seed}. Resultatene for hvert element inneholder halvbredden til et 95% konfidensintervall.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Stoppbetingelsen ble nådd i {met} av {n} replikasjon, etter i snitt {time} {unit}.|Stoppbetingelsen ble nådd i {met} av {n} replikasjoner, etter i snitt {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} av {n} replikasjon fullført|{done} av {n} replikasjoner fullført
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% intervall fra {low} til {high}{unit}\nover {n} replikasjon|{name}: {mean}{unit}\n95% intervall fra {low} til {high}{unit}\nover {n} replikasjoner
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Kjører {n} uavhengig replikasjon av modellen fra tilfeldig frø {seed}. Resultatene for hvert element inneholder halvbredden til et 95% konfidensintervall.|Kjører {n} uavhengige replikasjoner av modellen fra tilfeldig frø {seed}. Resultatene for hvert element inneholder halvbredden til et 95% konfidensintervall.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Stoppbetingelsen ble nådd i {met} av {n} replikasjon, etter i snitt {time} {unit}.|Stoppbetingelsen ble nådd i {met} av {n} replikasjoner, etter i snitt {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} av {n} replikasjon fullført|{done} av {n} replikasjoner fullført
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% intervall fra {low} til {high}{unit}\nover {n} replikasjon|{name}: {mean}{unit}\n95% intervall fra {low} til {high}{unit}\nover {n} replikasjoner
 @plural	{n} block selected|{n} blocks selected	{n} blokk valgt|{n} blokker valgt
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikasjon per trinn · tilfeldighetsfrø {seed}|{n} replikasjoner per trinn · tilfeldighetsfrø {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikasjon · gjennomsnitt {mean} · fra {min} til {max}|{n} replikasjoner · gjennomsnitt {mean} · fra {min} til {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasjon · frø {seed} · oppvarming {warmup} {unit} · {duration} {unit} målt|{n} replikasjoner · frø {seed} · oppvarming {warmup} {unit} · {duration} {unit} målt
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikasjon · frø {seed}|{n} replikasjoner · frø {seed}
-@plural	{n} replication|{n} replications	{n} replikasjon|{n} replikasjoner
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} replikasjon per trinn · tilfeldighetsfrø {seed}|{n} replikasjoner per trinn · tilfeldighetsfrø {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} replikasjon · gjennomsnitt {mean} · fra {min} til {max}|{n} replikasjoner · gjennomsnitt {mean} · fra {min} til {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasjon · frø {seed} · oppvarming {warmup} {unit} · {duration} {unit} målt|{n} replikasjoner · frø {seed} · oppvarming {warmup} {unit} · {duration} {unit} målt
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikasjon · frø {seed}|{n} replikasjoner · frø {seed}
+@plural	{n} run|{n} runs	{n} replikasjon|{n} replikasjoner

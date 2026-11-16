@@ -42,22 +42,22 @@ fn watching() -> Harness<'static, App> {
     settle(&mut h);
     h.get_by_role_and_label(Role::Button, "Watch a run").click();
     h.run_steps(3);
-    assert_eq!(h.state().status(), "Watching replication 1");
+    assert_eq!(h.state().status(), "Watching run 1");
     h
 }
 
-/// The clock's text: "Replication 1 · 12.3 of 540 min".
+/// The clock's text: "Run 1 · 12.3 of 540 min".
 fn clock(h: &Harness<'static, App>) -> String {
     h.query_all(By::new())
         .filter_map(|n| n.accesskit_node().value().or(n.accesskit_node().label()))
-        .find(|l| l.starts_with("Replication 1 · "))
+        .find(|l| l.starts_with("Run 1 · "))
         .unwrap_or_default()
 }
 
 /// The time on the clock.
 fn time(h: &Harness<'static, App>) -> f64 {
     let c = clock(h);
-    c.trim_start_matches("Replication 1 · ")
+    c.trim_start_matches("Run 1 · ")
         .split(' ')
         .next()
         .and_then(|t| t.replace(',', "").parse().ok())
@@ -71,7 +71,7 @@ fn a_run_plays_pauses_steps_and_jumps() {
     let reps = h.state().engine().model().experiment.replications;
     assert!(reps > 1, "{reps}");
     h.get_by_label(&format!(
-        "One replication of {reps}: the results of the others differ."
+        "One run of {reps}: the results of the others differ."
     ));
     // Playing: frames move simulated time on.
     let t0 = time(&h);
@@ -212,5 +212,5 @@ fn a_loop_at_one_time_never_freezes_a_frame() {
     frames(&mut h, 30);
     assert!(slowest.as_millis() < 500, "a frame took {slowest:?}");
     assert_eq!(time(&h), 1.0, "{}", clock(&h));
-    assert_eq!(h.state().status(), "Watching replication 1");
+    assert_eq!(h.state().status(), "Watching run 1");
 }

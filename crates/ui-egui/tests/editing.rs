@@ -284,7 +284,7 @@ fn the_keyboard_moves_through_blocks_and_deletes_one() {
 #[test]
 fn the_experiment_and_flows_are_edited_from_their_forms() {
     let mut h = mm1();
-    type_into(&mut h, "Replications", "32");
+    type_into(&mut h, "Runs", "32");
     assert_eq!(model(&h)["experiment"]["replications"], json!(32));
     click(&mut h, Role::ComboBox, "Time unit");
     click(&mut h, Role::Button, "hours");

@@ -13,9 +13,8 @@
 
 @id	language.name	Magyar
 	% down and up	% le és fel
-	% of replications	% az ismétlésekből
+	% of runs	% az ismétlésekből
 	+ Add block	+ Blokk hozzáadása
-	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	A célt elérő arány 95%-os intervalluma: {lo}–{hi}
 	95th percentile	95. percentilis
 	95th percentile {value}	95. percentilis {value}
@@ -35,7 +34,7 @@
 	Add Pool	Készlet hozzáadása
 	Add a flow from…	Folyamat hozzáadása innen: …
 	Add a flow to…	Folyamat hozzáadása ide: …
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Egy egység hozzáadása a legterheltebb feladathoz vagy készlethez, amíg elég ismétlés el nem éri a célt. Megjelenik az a válasz is, amelyben minden idő az átlagán van; ez rendszerint túl kicsi.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Egy egység hozzáadása a legterheltebb feladathoz vagy készlethez, amíg elég ismétlés el nem éri a célt. Megjelenik az a válasz is, amelyben minden idő az átlagán van; ez rendszerint túl kicsi.
 	Add alternative	Alternatíva hozzáadása
 	Add calendar	Naptár hozzáadása
 	Add calendar entry	Naptárbejegyzés hozzáadása
@@ -69,9 +68,6 @@
 	Available outside calendars	Elérhető a naptárakon kívül
 	BPMN with BPSim	BPMN BPSim-mel
 	Back to the model (Esc)	Vissza a modellhez (Esc)
-	Balked	Nem álltak sorba
-	Balked on {id}	Nem álltak sorba itt: {id}
-	Balking	Sorba be nem állás
 	Batch	Köteg
 	Batch (collect, then send together)	Köteg (gyűjtés, majd együttes továbbítás)
 	Batch size	Kötegméret
@@ -131,7 +127,6 @@
 	Constant	Állandó
 	Control outlines	Vezérlők körvonala
 	Copy	Másolás
-	Count those in service	A kiszolgálás alattiak is számítanak
 	Counts against	Terhelt feladat
 	Customer demand	Vevői igény
 	Cut	Kivágás
@@ -174,13 +169,12 @@
 	Ends early	Korábban ér véget
 	Energy	Energia
 	Energy per part	Energia darabonként
-	Enough: {units}, meeting the target in {p} of replications	Elég: {units}, a cél az ismétlések {p} részében teljesül
+	Enough: {units}, meeting the target in {p} of runs	Elég: {units}, a cél az ismétlések {p} részében teljesül
 	Enter a number	Adjon meg egy számot
 	Entered	Belépett
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	A várakozóhelyet telve találó entitások azonnal ezt a folyamatot követik (például hogy később újra próbálkozzanak), ahelyett hogy elvesznének vagy a feladat előtt várakoznának; itt elveszettként számítanak.
 	Entities give up waiting	Az entitások lemondanak a várakozásról
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Az ismétlés végén még bent lévő egyedek nem számítanak bele az átlagos várakozási időbe és az átlagos rendszerben töltött időbe.
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	A sorba be nem álló entitások azonnal ezt a folyamatot követik (például hogy később újra próbálkozzanak), ahelyett hogy elvesznének; itt sorba be nem állóként számítanak.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Az ismétlés végén még bent lévő egyedek nem számítanak bele az átlagos várakozási időbe és az átlagos rendszerben töltött időbe.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	A várakozásról lemondó entitások ezt a folyamatot követik (például hogy később újra próbálkozzanak); a többiek a feladat másik kiútját választják.
 	Erlang	Erlang
 	Error	Hiba
@@ -235,7 +229,6 @@
 	Inside over time	Bent lévők az idő függvényében
 	Job under way on a server going off shift:	Folyamatban lévő munka egy műszakot befejező szerveren:
 	Job under way on a server taken out:	Folyamatban lévő munka egy kivont szerveren:
-	Joins with probability	Beállási valószínűség
 	Jump	Ugrás
 	Jump to time	Ugrás időpontra
 	Keep at least in service	Legalább ennyi maradjon üzemben
@@ -259,10 +252,8 @@
 	Maximum	Maximum
 	Mean	Átlag
 	Mean number inside	Átlagos belső darabszám
-	Number waiting	Várakozók száma
-	One replication of {n}: the results of the others differ.	Egy ismétlés a(z) {n}-ból/-ből: a többi eredménye eltér.
+	One run of {n}: the results of the others differ.	Egy ismétlés a(z) {n}-ból/-ből: a többi eredménye eltér.
 	Save as a new BPMN file?	Mentés új BPMN-fájlként?
-	Share balked	Sorba be nem állók aránya
 	Still inside at the end	A végén még bent
 	Mean work in progress	Átlagos befejezetlen termelés
 	Mean queue length	Átlagos sorhossz
@@ -293,7 +284,7 @@
 	No arrivals outside calendars	Nincs érkezés a naptárakon kívül
 	No blocks yet. Open a model, or add blocks to build one.	Még nincsenek blokkok. Nyisson meg egy modellt, vagy adjon hozzá blokkokat.
 	No connections yet: join blocks below.	Még nincsenek kapcsolatok: kapcsolja össze az alábbi blokkokat.
-	No replication met the stop condition: each ran to its time limit.	Egy ismétlés sem érte el a leállási feltételt: mind az időkorlátjáig futott.
+	No run met the stop condition: each ran to its time limit.	Egy ismétlés sem érte el a leállási feltételt: mind az időkorlátjáig futott.
 	No results yet	Még nincsenek eredmények
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Ebben a modellben nincs selejt vagy újramunkálás megjelölve, ezért az OEE a minőséget 100%-nak veszi.
 	No target	Nincs cél
@@ -395,11 +386,11 @@
 	Repair time	Javítási idő
 	Repeats	Ismétlődés
 	Replace Model	Modell cseréje
-	Replication 1 · {time} of {end} {unit}	1. ismétlés · {time} / {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	1. ismétlés · {time} / {end} {unit} · bemelegítés
-	Replications	Ismétlések
-	Replications meeting the target	A célt elérő ismétlések
-	Replications that never met the stop condition count as later than their time limit.	A leállási feltételt soha el nem érő ismétlések az időkorlátjuknál későbbinek számítanak.
+	Run 1 · {time} of {end} {unit}	1. ismétlés · {time} / {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	1. ismétlés · {time} / {end} {unit} · bemelegítés
+	Runs	Ismétlések
+	Runs meeting the target	A célt elérő ismétlések
+	Runs that never met the stop condition count as later than their time limit.	A leállási feltételt soha el nem érő ismétlések az időkorlátjuknál későbbinek számítanak.
 	Resource pool	Erőforráskészlet
 	Resource pools	Erőforráskészletek
 	Restore	Visszaállítás
@@ -420,7 +411,7 @@
 	Run	Futtatás
 	Run cancelled	Futtatás megszakítva
 	Run experiment	Kísérlet futtatása
-	Run replication 1 step by step and see each block's queue on the diagram	Az 1. ismétlés futtatása lépésenként, minden blokk sorával a diagramon
+	Play run 1 step by step and see each block's queue on the diagram	Az 1. ismétlés futtatása lépésenként, minden blokk sorával a diagramon
 	Run the experiment ({shortcut})	A kísérlet futtatása ({shortcut})
 	Run the experiment again to see this result's spread.	Futtassa újra a kísérletet az eredmény szóródásának megtekintéséhez.
 	Run the experiment at each value of one parameter, and compare a result.	A kísérlet futtatása egy paraméter minden értékénél, és egy eredmény összehasonlítása.
@@ -476,7 +467,7 @@
 	Split batches	Kötegek szétbontása
 	Split or join	Szétválasztás vagy egyesítés
 	Split or join (all ways)	Szétválasztás vagy egyesítés (minden út)
-	Spread across replications	Szóródás az ismétlések között
+	Spread across runs	Szóródás az ismétlések között
 	Spread out	Elosztás
 	Stages (k)	Szakaszok (k)
 	Standard deviation	Szórás
@@ -491,7 +482,6 @@
 	Stopped watching	A követés leállt
 	Sun	V
 	Sweep a parameter	Paraméter végigfuttatása
-	Table	Táblázat
 	Table stripes	Táblázatcsíkok
 	Take servers out when overloaded	Túlterhelt szerverek kivonása az üzemből
 	Takt	Ütem
@@ -508,11 +498,11 @@
 	Text on header	Szöveg a fejlécen
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	A kapcsolat megszakad, és a kliens újrapróbálkozik: az entitás azonnal visszakerül a sor elejére, és a rajta végzett munka kárba vész (elvesztegetett munka).
 	The entity waits on its server and the job carries on with what was left once the server is back.	Az entitás a szerverénél vár, és a munka a hátralévő résszel folytatódik, amint a szerver visszatér.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Az intervallum a(z) {share} célarány alá nyúlik, így 95%-os megbízhatósággal nem igazolt, hogy az arány teljesül; több ismétlés szűkítené.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Az intervallum a(z) {share} célarány alá nyúlik, így 95%-os megbízhatósággal nem igazolt, hogy az arány teljesül; több ismétlés szűkítené.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	A munka azonnal leáll: az entitás visszakerül a sor elejére bármely műszakban lévő szerver számára, és a rajta végzett munka kárba vész.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	A munka azonnal leáll; az entitás a szerverénél vár, és a munka a hátralévő résszel folytatódik, amint az a szerver újra műszakban van.
 	The last task with a resource it finished at	Az utolsó erőforrást használó feladat, amelyen a darab áthaladt
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	A leállási feltételig eltelt átlagos idő csak azokra az ismétlésekre vonatkozik, amelyek elérték; a többi az időkorlátjáig futott.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	A leállási feltételig eltelt átlagos idő csak azokra az ismétlésekre vonatkozik, amelyek elérték; a többi az időkorlátjáig futott.
 	The model changed, so watching stopped	A modell megváltozott, ezért a követés leállt
 	The model has no calendars yet.	A modellnek még nincs naptára.
 	The model now has the units sizing found	A modellben most a méretezés által talált egységek vannak
@@ -520,7 +510,7 @@
 	The name is empty or already used.	A név üres vagy már foglalt.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Az ismétlések két kimenetelre válnak szét: {n} ismétlésből {a} az egyikre, {b} a másikra. {count} eredmény ugyanígy válik szét, köztük {result} ({element}); lásd az alábbi táblázatot.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	A szerver befejezi a nála lévő munkát, aztán befejezi a műszakot; addig műszakban lévőnek számít.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Az egyes értékeknél nem nagyobb ismétlések aránya. A sáv {confidence} megbízhatósággal tartalmazza a valódi eloszlást.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Az egyes értékeknél nem nagyobb ismétlések aránya. A sáv {confidence} megbízhatósággal tartalmazza a valódi eloszlást.
 	The values are numbers, separated by semicolons or spaces	Az értékek pontosvesszővel vagy szóközzel elválasztott számok
 	The whole clock	A teljes idő
 	Themes	Témák
@@ -588,7 +578,7 @@
 	Warning	Figyelmeztetés
 	Watch a Run	Futtatás követése
 	Watch a run	Futtatás követése
-	Watching replication 1	Az 1. ismétlés követése
+	Watching run 1	Az 1. ismétlés követése
 	Weak text	Halvány szöveg
 	Weak text on header	Halvány szöveg a fejlécen
 	Wed	Sze
@@ -624,7 +614,7 @@
 	maximum {value}	maximum {value}
 	milliseconds	ezredmásodperc
 	minutes	perc
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k / N: az N ismétlésből csak k-nak volt értéke erre az eredményre, és átlaga és intervalluma erre a k-ra vonatkozik.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k / N: az N ismétlésből csak k-nak volt értéke erre az eredményre, és átlaga és intervalluma erre a k-ra vonatkozik.
 	n = {k} of {n}	n = {k} / {n}
 	nothing yet	még semmi
 	per day	naponta
@@ -660,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} és {second} – világosságeltérés {step}, legalább 0.06 kell.
 	{id}: a probability is a number from 0 to 1	{id}: a valószínűség 0 és 1 közötti szám
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{of} ismétlésből {met} érte el a célt: {p} (95%-os intervallum {lo}–{hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{of} ismétlésből {met} érte el a célt: {p} (95%-os intervallum {lo}–{hi})
 	{name} — edited	{name} — szerkesztve
 	{n} created	{n} létrehozva
 	{n} done	{n} kész
@@ -674,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: most {now}, legfeljebb {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95%-os konfidenciaintervallum
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	A ± az ismétlések átlagára számított 95%-os Student-t-konfidenciaintervallum fél szélessége.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	A ± az ismétlések átlagára számított 95%-os Student-t-konfidenciaintervallum fél szélessége.
 	· no results yet	· még nincsenek eredmények
 unit	d	nap
 unit	h	h
@@ -682,18 +672,28 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	év
+	1/(n + 1)	1/(n + 1)
+	Balked	Nem álltak sorba
+	Balked on {id}	Nem álltak sorba itt: {id}
+	Balking	Sorba be nem állás
+	Count those in service	A kiszolgálás alattiak is számítanak
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	A sorba be nem álló entitások azonnal ezt a folyamatot követik (például hogy később újra próbálkozzanak), ahelyett hogy elvesznének; itt sorba be nem állóként számítanak.
+	Joins with probability	Beállási valószínűség
+	Number waiting	Várakozók száma
+	Share balked	Sorba be nem állók aránya
+	Table	Táblázat
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
-@plural	Finished {n} replication|Finished {n} replications	{n} ismétlés befejezve|{n} ismétlés befejezve
+@plural	Finished {n} run|Finished {n} runs	{n} ismétlés befejezve|{n} ismétlés befejezve
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} megnyitva ({n} figyelmeztetés)|{file} megnyitva ({n} figyelmeztetés)
 @plural	Removed {n} block|Removed {n} blocks	{n} blokk eltávolítva|{n} blokk eltávolítva
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.|A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	A leállási feltétel {n} ismétlésből {met} esetben teljesült, átlagosan {time} {unit} után.|A leállási feltétel {n} ismétlésből {met} esetben teljesült, átlagosan {time} {unit} után.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done}/{n} ismétlés befejezve|{done}/{n} ismétlés befejezve
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján|{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.|A modell {n} független ismétlését futtatja a(z) {seed} véletlenszám-maggal. Az elemek eredményei tartalmazzák a 95%-os konfidenciaintervallum fél szélességét.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	A leállási feltétel {n} ismétlésből {met} esetben teljesült, átlagosan {time} {unit} után.|A leállási feltétel {n} ismétlésből {met} esetben teljesült, átlagosan {time} {unit} után.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{done}/{n} ismétlés befejezve|{done}/{n} ismétlés befejezve
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján|{name}: {mean}{unit}\n95%-os intervallum {low} és {high}{unit} között\n{n} ismétlés alapján
 @plural	{n} block selected|{n} blocks selected	{n} blokk kijelölve|{n} blokk kijelölve
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} ismétlés lépésenként · mag {seed}|{n} ismétlés lépésenként · mag {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} ismétlés · átlag {mean} · {min} és {max} között|{n} ismétlés · átlag {mean} · {min} és {max} között
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}|{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} ismétlés · mag {seed}|{n} ismétlés · mag {seed}
-@plural	{n} replication|{n} replications	{n} ismétlés|{n} ismétlés
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} ismétlés lépésenként · mag {seed}|{n} ismétlés lépésenként · mag {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} ismétlés · átlag {mean} · {min} és {max} között|{n} ismétlés · átlag {mean} · {min} és {max} között
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}|{n} ismétlés · mag {seed} · bemelegítés {warmup} {unit} · mérés {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} ismétlés · mag {seed}|{n} ismétlés · mag {seed}
+@plural	{n} run|{n} runs	{n} ismétlés|{n} ismétlés

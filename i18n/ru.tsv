@@ -13,9 +13,8 @@
 
 @id	language.name	Русский
 	% down and up	% вниз и вверх
-	% of replications	% репликаций
+	% of runs	% репликаций
 	+ Add block	+ Добавить блок
-	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	95% интервал доли, достигшей цели: от {lo} до {hi}
 	95th percentile	95-й процентиль
 	95th percentile {value}	95-й процентиль {value}
@@ -35,7 +34,7 @@
 	Add Pool	Добавить пул
 	Add a flow from…	Добавить поток от…
 	Add a flow to…	Добавить поток к…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Добавлять единицу к самой загруженной задаче или пулу, пока достаточно репликаций не достигнут цели. Показан и ответ, где каждое время равно своему среднему; обычно он слишком мал.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Добавлять единицу к самой загруженной задаче или пулу, пока достаточно репликаций не достигнут цели. Показан и ответ, где каждое время равно своему среднему; обычно он слишком мал.
 	Add alternative	Добавить альтернативу
 	Add calendar	Добавить календарь
 	Add calendar entry	Добавить запись календаря
@@ -69,9 +68,6 @@
 	Available outside calendars	Доступно вне календарей
 	BPMN with BPSim	BPMN с BPSim
 	Back to the model (Esc)	Вернуться к модели (Esc)
-	Balked	Отказавшиеся
-	Balked on {id}	Отказавшиеся на {id}
-	Balking	Отказ от очереди
 	Batch	Партия
 	Batch (collect, then send together)	Партия (собрать и отправить вместе)
 	Batch size	Размер партии
@@ -131,7 +127,6 @@
 	Constant	Постоянное значение
 	Control outlines	Контуры элементов управления
 	Copy	Копировать
-	Count those in service	Учитывать и обслуживаемых
 	Counts against	Относится на
 	Customer demand	Спрос клиентов
 	Cut	Вырезать
@@ -174,13 +169,12 @@
 	Ends early	Завершается раньше
 	Energy	Энергия
 	Energy per part	Энергия на деталь
-	Enough: {units}, meeting the target in {p} of replications	Достаточно: {units}, цель достигнута в {p} репликаций
+	Enough: {units}, meeting the target in {p} of runs	Достаточно: {units}, цель достигнута в {p} репликаций
 	Enter a number	Введите число
 	Entered	Вошло
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Сущности, которые застают места ожидания занятыми, сразу идут по этому потоку (например, чтобы попробовать позже), а не теряются и не ждут перед задачей; здесь они считаются потерями.
 	Entities give up waiting	Сущности перестают ждать
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Объекты, оставшиеся внутри в конце репликации, не учитываются в среднем времени ожидания и среднем времени в системе.
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Сущности, которые не встают в очередь, сразу идут по этому потоку (например, чтобы попробовать позже), а не теряются; здесь они считаются отказавшимися.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Объекты, оставшиеся внутри в конце репликации, не учитываются в среднем времени ожидания и среднем времени в системе.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Сущности, которые перестают ждать, идут по этому потоку (например, чтобы попробовать позже); остальные идут по другому выходу задачи.
 	Erlang	Распределение Эрланга
 	Error	Ошибка
@@ -235,7 +229,6 @@
 	Inside over time	Внутри во времени
 	Job under way on a server going off shift:	Работа, идущая на сервере, у которого кончается смена:
 	Job under way on a server taken out:	Работа, идущая на выведенном сервере:
-	Joins with probability	Встаёт в очередь с вероятностью
 	Jump	Перейти
 	Jump to time	Перейти ко времени
 	Keep at least in service	Оставлять в работе не меньше
@@ -259,10 +252,8 @@
 	Maximum	Максимум
 	Mean	Среднее
 	Mean number inside	Среднее число внутри
-	Number waiting	Число ожидающих
-	One replication of {n}: the results of the others differ.	Одна репликация из {n}: результаты остальных отличаются.
+	One run of {n}: the results of the others differ.	Одна репликация из {n}: результаты остальных отличаются.
 	Save as a new BPMN file?	Сохранить как новый файл BPMN?
-	Share balked	Доля отказавшихся
 	Still inside at the end	Осталось внутри в конце
 	Mean work in progress	Средний объём незавершённого производства
 	Mean queue length	Средняя длина очереди
@@ -293,7 +284,7 @@
 	No arrivals outside calendars	Нет прибытий вне календарей
 	No blocks yet. Open a model, or add blocks to build one.	Блоков пока нет. Откройте модель или добавьте блоки для создания модели.
 	No connections yet: join blocks below.	Соединений пока нет: соедините блоки ниже.
-	No replication met the stop condition: each ran to its time limit.	Ни одна репликация не достигла условия остановки: каждая шла до своего предела времени.
+	No run met the stop condition: each ran to its time limit.	Ни одна репликация не достигла условия остановки: каждая шла до своего предела времени.
 	No results yet	Результатов пока нет
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	В этой модели не отмечены ни брак, ни доработка, поэтому OEE считает качество равным 100%.
 	No target	Без цели
@@ -395,11 +386,11 @@
 	Repair time	Время ремонта
 	Repeats	Повтор
 	Replace Model	Заменить модель
-	Replication 1 · {time} of {end} {unit}	Повторный запуск 1 · {time} из {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Повторный запуск 1 · {time} из {end} {unit} · разогрев
-	Replications	Число повторных запусков
-	Replications meeting the target	Репликации, достигшие цели
-	Replications that never met the stop condition count as later than their time limit.	Репликации, так и не достигшие условия остановки, считаются более поздними, чем их предел времени.
+	Run 1 · {time} of {end} {unit}	Повторный запуск 1 · {time} из {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Повторный запуск 1 · {time} из {end} {unit} · разогрев
+	Runs	Число повторных запусков
+	Runs meeting the target	Репликации, достигшие цели
+	Runs that never met the stop condition count as later than their time limit.	Репликации, так и не достигшие условия остановки, считаются более поздними, чем их предел времени.
 	Resource pool	Пул ресурсов
 	Resource pools	Пулы ресурсов
 	Restore	Восстановить размер
@@ -420,7 +411,7 @@
 	Run	Запустить
 	Run cancelled	Запуск отменён
 	Run experiment	Запустить эксперимент
-	Run replication 1 step by step and see each block's queue on the diagram	Выполнить повторный запуск 1 по шагам и видеть очередь каждого блока на диаграмме
+	Play run 1 step by step and see each block's queue on the diagram	Выполнить повторный запуск 1 по шагам и видеть очередь каждого блока на диаграмме
 	Run the experiment ({shortcut})	Запустить эксперимент ({shortcut})
 	Run the experiment again to see this result's spread.	Запустите эксперимент снова, чтобы увидеть разброс этого результата.
 	Run the experiment at each value of one parameter, and compare a result.	Запустить эксперимент при каждом значении одного параметра и сравнить результат.
@@ -476,7 +467,7 @@
 	Split batches	Разделение партий
 	Split or join	Разделить или объединить
 	Split or join (all ways)	Разделить или объединить (все пути)
-	Spread across replications	Разброс по репликациям
+	Spread across runs	Разброс по репликациям
 	Spread out	Распределение
 	Stages (k)	Стадии (k)
 	Standard deviation	Стандартное отклонение
@@ -491,7 +482,6 @@
 	Stopped watching	Наблюдение прекращено
 	Sun	вс
 	Sweep a parameter	Перебор параметра
-	Table	Таблица
 	Table stripes	Полосы таблиц
 	Take servers out when overloaded	Выводить перегруженные серверы из работы
 	Takt	Такт
@@ -508,11 +498,11 @@
 	Text on header	Текст на верхней панели
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Соединение обрывается, и клиент пробует снова: сущность сразу возвращается в начало очереди, а сделанная над ней работа идёт впустую.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Сущность ждёт на своём сервере, и работа продолжается с оставшегося, как только сервер вернётся.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Интервал опускается ниже целевой доли {share}, поэтому с доверием 95% не показано, что доля достигнута; больше репликаций сузили бы его.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Интервал опускается ниже целевой доли {share}, поэтому с доверием 95% не показано, что доля достигнута; больше репликаций сузили бы его.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Работа сразу останавливается: сущность возвращается в начало очереди к любому серверу на смене, а сделанная над ней работа идёт впустую.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Работа сразу останавливается; сущность ждёт на своём сервере, и работа продолжается с оставшегося, как только этот сервер снова на смене.
 	The last task with a resource it finished at	Последняя задача с ресурсом, которую прошла деталь
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Среднее время до условия остановки рассчитано только по репликациям, которые его достигли; остальные шли до своего предела времени.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Среднее время до условия остановки рассчитано только по репликациям, которые его достигли; остальные шли до своего предела времени.
 	The model changed, so watching stopped	Модель изменилась, поэтому наблюдение прекращено
 	The model has no calendars yet.	В модели пока нет календарей.
 	The model now has the units sizing found	В модели теперь единицы, найденные при подборе
@@ -520,7 +510,7 @@
 	The name is empty or already used.	Имя пустое или уже используется.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Репликации разделились на два исхода: {a} из {n} в одном, {b} в другом. Результаты, разделившиеся так же: {count}, среди них {result} ({element}); см. таблицу ниже.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Сервер доделывает имеющуюся работу, затем уходит со смены; до тех пор он считается на смене.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Доля репликаций, не превышающих каждое значение. Полоса содержит истинное распределение с доверием {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Доля репликаций, не превышающих каждое значение. Полоса содержит истинное распределение с доверием {confidence}.
 	The values are numbers, separated by semicolons or spaces	Значения — это числа, разделённые точкой с запятой или пробелами
 	The whole clock	Всё время
 	Themes	Темы
@@ -588,7 +578,7 @@
 	Warning	Предупреждение
 	Watch a Run	Наблюдать за запуском
 	Watch a run	Наблюдать за запуском
-	Watching replication 1	Наблюдение за повторным запуском 1
+	Watching run 1	Наблюдение за повторным запуском 1
 	Weak text	Блёклый текст
 	Weak text on header	Блёклый текст на верхней панели
 	Wed	ср
@@ -624,7 +614,7 @@
 	maximum {value}	максимум {value}
 	milliseconds	миллисекунды
 	minutes	минуты
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k из N: только k из N репликаций имели значение для этого результата, и его среднее и интервал рассчитаны по этим k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k из N: только k из N репликаций имели значение для этого результата, и его среднее и интервал рассчитаны по этим k.
 	n = {k} of {n}	n = {k} из {n}
 	nothing yet	пока ничего
 	per day	в день
@@ -660,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} и {second} — различие по светлоте {step}, нужно 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: вероятность должна быть числом от 0 до 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} из {of} репликаций достигли цели: {p} (95% интервал от {lo} до {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} из {of} репликаций достигли цели: {p} (95% интервал от {lo} до {hi})
 	{name} — edited	{name} — изменено
 	{n} created	Создано: {n}
 	{n} done	Завершено: {n}
@@ -674,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: сейчас {now}, не более {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% ДИ
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± — половина ширины 95% доверительного интервала Student-t для среднего значения по повторениям.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± — половина ширины 95% доверительного интервала Student-t для среднего значения по повторениям.
 	· no results yet	· результатов пока нет
 unit	d	сут
 unit	h	ч
@@ -682,18 +672,28 @@ unit	min	мин
 unit	ms	мс
 unit	s	с
 unit	yr	г.
+	1/(n + 1)	1/(n + 1)
+	Balked	Отказавшиеся
+	Balked on {id}	Отказавшиеся на {id}
+	Balking	Отказ от очереди
+	Count those in service	Учитывать и обслуживаемых
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Сущности, которые не встают в очередь, сразу идут по этому потоку (например, чтобы попробовать позже), а не теряются; здесь они считаются отказавшимися.
+	Joins with probability	Встаёт в очередь с вероятностью
+	Number waiting	Число ожидающих
+	Share balked	Доля отказавшихся
+	Table	Таблица
 @plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
 @plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
-@plural	Finished {n} replication|Finished {n} replications	Завершена {n} репликация|Завершены {n} репликации|Завершено {n} репликаций
+@plural	Finished {n} run|Finished {n} runs	Завершена {n} репликация|Завершены {n} репликации|Завершено {n} репликаций
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Открыт {file} ({n} предупреждение)|Открыт {file} ({n} предупреждения)|Открыт {file} ({n} предупреждений)
 @plural	Removed {n} block|Removed {n} blocks	Удалён {n} блок|Удалено {n} блока|Удалено {n} блоков
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Выполняет {n} независимую репликацию модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимые репликации модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимых репликаций модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Условие остановки достигнуто в {met} из {n} репликации, в среднем через {time} {unit}.|Условие остановки достигнуто в {met} из {n} репликаций, в среднем через {time} {unit}.|Условие остановки достигнуто в {met} из {n} репликаций, в среднем через {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	Завершена {done} из {n} репликации|Завершено {done} из {n} репликаций|Завершено {done} из {n} репликаций
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликации|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликациям|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликациям
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Выполняет {n} независимую репликацию модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимые репликации модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.|Выполняет {n} независимых репликаций модели с начальным значением {seed}. Результаты каждого элемента включают полуширину 95% доверительного интервала.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Условие остановки достигнуто в {met} из {n} репликации, в среднем через {time} {unit}.|Условие остановки достигнуто в {met} из {n} репликаций, в среднем через {time} {unit}.|Условие остановки достигнуто в {met} из {n} репликаций, в среднем через {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Завершена {done} из {n} репликации|Завершено {done} из {n} репликаций|Завершено {done} из {n} репликаций
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликации|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликациям|{name}: {mean}{unit}\n95% интервал от {low} до {high}{unit}\nпо {n} репликациям
 @plural	{n} block selected|{n} blocks selected	Выбран {n} блок|Выбрано {n} блока|Выбрано {n} блоков
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} репликация на шаг · начальное значение {seed}|{n} репликации на шаг · начальное значение {seed}|{n} репликаций на шаг · начальное значение {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} репликация · среднее {mean} · от {min} до {max}|{n} репликации · среднее {mean} · от {min} до {max}|{n} репликаций · среднее {mean} · от {min} до {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликация · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликации · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликаций · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} репликация · начальное значение {seed}|{n} репликации · начальное значение {seed}|{n} репликаций · начальное значение {seed}
-@plural	{n} replication|{n} replications	{n} репликация|{n} репликации|{n} репликаций
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} репликация на шаг · начальное значение {seed}|{n} репликации на шаг · начальное значение {seed}|{n} репликаций на шаг · начальное значение {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} репликация · среднее {mean} · от {min} до {max}|{n} репликации · среднее {mean} · от {min} до {max}|{n} репликаций · среднее {mean} · от {min} до {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} репликация · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликации · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}|{n} репликаций · начальное значение {seed} · разогрев {warmup} {unit} · измерено {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} репликация · начальное значение {seed}|{n} репликации · начальное значение {seed}|{n} репликаций · начальное значение {seed}
+@plural	{n} run|{n} runs	{n} репликация|{n} репликации|{n} репликаций

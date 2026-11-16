@@ -13,9 +13,8 @@
 
 @id	language.name	Ελληνικά
 	% down and up	% προς τα κάτω και πάνω
-	% of replications	% των επαναλήψεων
+	% of runs	% των επαναλήψεων
 	+ Add block	+ Προσθήκη μπλοκ
-	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Διάστημα 95% του ποσοστού που πετυχαίνει τον στόχο: από {lo} έως {hi}
 	95th percentile	95ο εκατοστημόριο
 	95th percentile {value}	95ο εκατοστημόριο {value}
@@ -35,7 +34,7 @@
 	Add Pool	Προσθήκη δεξαμενής
 	Add a flow from…	Προσθήκη ροής από…
 	Add a flow to…	Προσθήκη ροής προς…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Προσθήκη μιας μονάδας στην πιο φορτωμένη εργασία ή ομάδα έως ότου αρκετές επαναλήψεις πετύχουν έναν στόχο. Εμφανίζεται και η απάντηση με κάθε χρόνο στη μέση τιμή του· συνήθως είναι πολύ μικρή.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Προσθήκη μιας μονάδας στην πιο φορτωμένη εργασία ή ομάδα έως ότου αρκετές επαναλήψεις πετύχουν έναν στόχο. Εμφανίζεται και η απάντηση με κάθε χρόνο στη μέση τιμή του· συνήθως είναι πολύ μικρή.
 	Add alternative	Προσθήκη εναλλακτικής
 	Add calendar	Προσθήκη ημερολογίου
 	Add calendar entry	Προσθήκη καταχώρισης ημερολογίου
@@ -69,9 +68,6 @@
 	Available outside calendars	Διαθέσιμο εκτός ημερολογίων
 	BPMN with BPSim	BPMN με BPSim
 	Back to the model (Esc)	Πίσω στο μοντέλο (Esc)
-	Balked	Μη είσοδος
-	Balked on {id}	Μη είσοδος στο {id}
-	Balking	Μη είσοδος στην ουρά
 	Batch	Παρτίδα
 	Batch (collect, then send together)	Παρτίδα (συλλογή και αποστολή μαζί)
 	Batch size	Μέγεθος παρτίδας
@@ -131,7 +127,6 @@
 	Constant	Σταθερή
 	Control outlines	Περιγράμματα στοιχείων ελέγχου
 	Copy	Αντιγραφή
-	Count those in service	Να μετρώνται και όσες εξυπηρετούνται
 	Counts against	Χρεώνεται σε
 	Customer demand	Ζήτηση πελατών
 	Cut	Αποκοπή
@@ -174,13 +169,12 @@
 	Ends early	Τελειώνει νωρίτερα
 	Energy	Ενέργεια
 	Energy per part	Ενέργεια ανά τεμάχιο
-	Enough: {units}, meeting the target in {p} of replications	Αρκετό: {units}, ο στόχος επιτυγχάνεται στο {p} των επαναλήψεων
+	Enough: {units}, meeting the target in {p} of runs	Αρκετό: {units}, ο στόχος επιτυγχάνεται στο {p} των επαναλήψεων
 	Enter a number	Εισαγάγετε αριθμό
 	Entered	Είσοδοι
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Οι οντότητες που βρίσκουν τον χώρο αναμονής γεμάτο ακολουθούν αμέσως αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε), αντί να χαθούν ή να περιμένουν πριν από την εργασία· εδώ μετρώνται ως απώλειες.
 	Entities give up waiting	Οι οντότητες εγκαταλείπουν την αναμονή
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Οι οντότητες που είναι ακόμη εντός στο τέλος μιας επανάληψης δεν περιλαμβάνονται στη μέση αναμονή και στον μέσο χρόνο στο σύστημα.
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Οι οντότητες που δεν μπαίνουν στην ουρά ακολουθούν αμέσως αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε), αντί να χαθούν· εδώ μετρώνται ως μη είσοδος.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Οι οντότητες που είναι ακόμη εντός στο τέλος μιας επανάληψης δεν περιλαμβάνονται στη μέση αναμονή και στον μέσο χρόνο στο σύστημα.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Οι οντότητες που εγκαταλείπουν την αναμονή ακολουθούν αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε)· οι υπόλοιπες παίρνουν την άλλη έξοδο της εργασίας.
 	Erlang	Έρλανγκ
 	Error	Σφάλμα
@@ -235,7 +229,6 @@
 	Inside over time	Μέσα στη διάρκεια του χρόνου
 	Job under way on a server going off shift:	Δουλειά σε εξέλιξη σε εξυπηρετητή που βγαίνει από βάρδια:
 	Job under way on a server taken out:	Δουλειά σε εξέλιξη σε εξυπηρετητή που τίθεται εκτός λειτουργίας:
-	Joins with probability	Μπαίνει στην ουρά με πιθανότητα
 	Jump	Μετάβαση
 	Jump to time	Μετάβαση σε χρόνο
 	Keep at least in service	Τουλάχιστον σε λειτουργία
@@ -259,10 +252,8 @@
 	Maximum	Μέγιστο
 	Mean	Μέση τιμή
 	Mean number inside	Μέσο πλήθος εντός
-	Number waiting	Πλήθος σε αναμονή
-	One replication of {n}: the results of the others differ.	Μία επανάληψη από {n}: τα αποτελέσματα των άλλων διαφέρουν.
+	One run of {n}: the results of the others differ.	Μία επανάληψη από {n}: τα αποτελέσματα των άλλων διαφέρουν.
 	Save as a new BPMN file?	Αποθήκευση ως νέο αρχείο BPMN;
-	Share balked	Ποσοστό μη εισόδου
 	Still inside at the end	Ακόμη εντός στο τέλος
 	Mean work in progress	Μέση παραγωγή σε εξέλιξη
 	Mean queue length	Μέσο μήκος ουράς
@@ -293,7 +284,7 @@
 	No arrivals outside calendars	Χωρίς αφίξεις εκτός ημερολογίων
 	No blocks yet. Open a model, or add blocks to build one.	Δεν υπάρχουν ακόμη μπλοκ. Ανοίξτε ένα μοντέλο ή προσθέστε μπλοκ για να το δημιουργήσετε.
 	No connections yet: join blocks below.	Δεν υπάρχουν ακόμη συνδέσεις: συνδέστε τα παρακάτω μπλοκ.
-	No replication met the stop condition: each ran to its time limit.	Καμία επανάληψη δεν έφτασε τη συνθήκη διακοπής: κάθε μία διήρκεσε ως το χρονικό της όριο.
+	No run met the stop condition: each ran to its time limit.	Καμία επανάληψη δεν έφτασε τη συνθήκη διακοπής: κάθε μία διήρκεσε ως το χρονικό της όριο.
 	No results yet	Δεν υπάρχουν ακόμη αποτελέσματα
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Σε αυτό το μοντέλο δεν έχουν σημειωθεί σκάρτα ή επανεπεξεργασία, οπότε το OEE μετρά την ποιότητα ως 100%.
 	No target	Χωρίς στόχο
@@ -395,11 +386,11 @@
 	Repair time	Χρόνος επισκευής
 	Repeats	Επανάληψη
 	Replace Model	Αντικατάσταση μοντέλου
-	Replication 1 · {time} of {end} {unit}	Επανάληψη 1 · {time} από {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Επανάληψη 1 · {time} από {end} {unit} · προθέρμανση
-	Replications	Επαναλήψεις
-	Replications meeting the target	Επαναλήψεις που πετυχαίνουν τον στόχο
-	Replications that never met the stop condition count as later than their time limit.	Οι επαναλήψεις που δεν έφτασαν ποτέ τη συνθήκη διακοπής μετρούν ως μεταγενέστερες του χρονικού τους ορίου.
+	Run 1 · {time} of {end} {unit}	Επανάληψη 1 · {time} από {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Επανάληψη 1 · {time} από {end} {unit} · προθέρμανση
+	Runs	Επαναλήψεις
+	Runs meeting the target	Επαναλήψεις που πετυχαίνουν τον στόχο
+	Runs that never met the stop condition count as later than their time limit.	Οι επαναλήψεις που δεν έφτασαν ποτέ τη συνθήκη διακοπής μετρούν ως μεταγενέστερες του χρονικού τους ορίου.
 	Resource pool	Δεξαμενή πόρων
 	Resource pools	Δεξαμενές πόρων
 	Restore	Επαναφορά παραθύρου
@@ -420,7 +411,7 @@
 	Run	Εκτέλεση
 	Run cancelled	Η εκτέλεση ακυρώθηκε
 	Run experiment	Εκτέλεση πειράματος
-	Run replication 1 step by step and see each block's queue on the diagram	Εκτέλεση της επανάληψης 1 βήμα προς βήμα με την ουρά κάθε μπλοκ στο διάγραμμα
+	Play run 1 step by step and see each block's queue on the diagram	Εκτέλεση της επανάληψης 1 βήμα προς βήμα με την ουρά κάθε μπλοκ στο διάγραμμα
 	Run the experiment ({shortcut})	Εκτέλεση πειράματος ({shortcut})
 	Run the experiment again to see this result's spread.	Εκτελέστε ξανά το πείραμα για να δείτε τη διασπορά αυτού του αποτελέσματος.
 	Run the experiment at each value of one parameter, and compare a result.	Εκτέλεση του πειράματος σε κάθε τιμή μιας παραμέτρου και σύγκριση ενός αποτελέσματος.
@@ -476,7 +467,7 @@
 	Split batches	Διαχωρισμός παρτίδων
 	Split or join	Διαχωρισμός ή ένωση
 	Split or join (all ways)	Διαχωρισμός ή ένωση (όλες οι διαδρομές)
-	Spread across replications	Διασπορά μεταξύ επαναλήψεων
+	Spread across runs	Διασπορά μεταξύ επαναλήψεων
 	Spread out	Κατανομή
 	Stages (k)	Στάδια (k)
 	Standard deviation	Τυπική απόκλιση
@@ -491,7 +482,6 @@
 	Stopped watching	Η παρακολούθηση διακόπηκε
 	Sun	Κυρ
 	Sweep a parameter	Σάρωση παραμέτρου
-	Table	Πίνακας
 	Table stripes	Ρίγες πινάκων
 	Take servers out when overloaded	Θέση υπερφορτωμένων εξυπηρετητών εκτός λειτουργίας
 	Takt	Takt
@@ -508,11 +498,11 @@
 	Text on header	Κείμενο στην κεφαλίδα
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Η σύνδεση πέφτει και ο πελάτης προσπαθεί ξανά: η οντότητα επιστρέφει αμέσως στην κεφαλή της ουράς, και η δουλειά που έγινε σε αυτήν σπαταλιέται.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Η οντότητα περιμένει στον εξυπηρετητή της και η δουλειά συνεχίζεται με ό,τι απέμενε μόλις επιστρέψει ο εξυπηρετητής.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Το διάστημα φτάνει κάτω από το ποσοστό-στόχο {share}, άρα δεν φαίνεται με εμπιστοσύνη 95% ότι το ποσοστό επιτυγχάνεται· περισσότερες επαναλήψεις θα το στένευαν.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Το διάστημα φτάνει κάτω από το ποσοστό-στόχο {share}, άρα δεν φαίνεται με εμπιστοσύνη 95% ότι το ποσοστό επιτυγχάνεται· περισσότερες επαναλήψεις θα το στένευαν.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Η δουλειά σταματά αμέσως: η οντότητα επιστρέφει στην κεφαλή της ουράς για οποιονδήποτε εξυπηρετητή σε βάρδια, και η δουλειά που έγινε σε αυτήν σπαταλιέται.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Η δουλειά σταματά αμέσως· η οντότητα περιμένει στον εξυπηρετητή της και η δουλειά συνεχίζεται με ό,τι απέμενε μόλις ο εξυπηρετητής αυτός είναι ξανά σε βάρδια.
 	The last task with a resource it finished at	Η τελευταία εργασία με πόρο από την οποία πέρασε το τεμάχιο
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Ο μέσος χρόνος ως τη συνθήκη διακοπής αφορά μόνο τις επαναλήψεις που την έφτασαν· οι υπόλοιπες διήρκεσαν ως το χρονικό τους όριο.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Ο μέσος χρόνος ως τη συνθήκη διακοπής αφορά μόνο τις επαναλήψεις που την έφτασαν· οι υπόλοιπες διήρκεσαν ως το χρονικό τους όριο.
 	The model changed, so watching stopped	Το μοντέλο άλλαξε, οπότε η παρακολούθηση διακόπηκε
 	The model has no calendars yet.	Το μοντέλο δεν έχει ακόμη ημερολόγια.
 	The model now has the units sizing found	Το μοντέλο έχει πλέον τις μονάδες που βρήκε η διαστασιολόγηση
@@ -520,7 +510,7 @@
 	The name is empty or already used.	Το όνομα είναι κενό ή χρησιμοποιείται ήδη.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Οι επαναλήψεις χωρίζονται σε δύο εκβάσεις: {a} από {n} στη μία, {b} στην άλλη. {count} αποτελέσματα χωρίζονται με τον ίδιο τρόπο, ανάμεσά τους {result} ({element})· δείτε τον πίνακα παρακάτω.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Ο εξυπηρετητής ολοκληρώνει τη δουλειά που έχει και μετά βγαίνει από βάρδια· μέχρι τότε μετρά ως σε βάρδια.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Το ποσοστό των επαναλήψεων έως και κάθε τιμή. Η ζώνη περιέχει την πραγματική κατανομή με εμπιστοσύνη {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Το ποσοστό των επαναλήψεων έως και κάθε τιμή. Η ζώνη περιέχει την πραγματική κατανομή με εμπιστοσύνη {confidence}.
 	The values are numbers, separated by semicolons or spaces	Οι τιμές είναι αριθμοί που χωρίζονται με ερωτηματικά ή κενά
 	The whole clock	Όλος ο χρόνος
 	Themes	Θέματα
@@ -588,7 +578,7 @@
 	Warning	Προειδοποίηση
 	Watch a Run	Παρακολούθηση εκτέλεσης
 	Watch a run	Παρακολούθηση εκτέλεσης
-	Watching replication 1	Παρακολούθηση της επανάληψης 1
+	Watching run 1	Παρακολούθηση της επανάληψης 1
 	Weak text	Αχνό κείμενο
 	Weak text on header	Αχνό κείμενο στην κεφαλίδα
 	Wed	Τετ
@@ -624,7 +614,7 @@
 	maximum {value}	μέγιστο {value}
 	milliseconds	χιλιοστά του δευτερολέπτου
 	minutes	λεπτά
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k από N: μόνο k από τις N επαναλήψεις είχαν τιμή για αυτό το αποτέλεσμα, και ο μέσος όρος και το διάστημά του αφορούν αυτές τις k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k από N: μόνο k από τις N επαναλήψεις είχαν τιμή για αυτό το αποτέλεσμα, και ο μέσος όρος και το διάστημά του αφορούν αυτές τις k.
 	n = {k} of {n}	n = {k} από {n}
 	nothing yet	τίποτα ακόμη
 	per day	ανά ημέρα
@@ -660,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} και {second} διαφέρουν σε φωτεινότητα κατά {step}, απαιτείται 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: η πιθανότητα είναι αριθμός από 0 έως 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} από {of} επαναλήψεις πέτυχαν τον στόχο: {p} (διάστημα 95% από {lo} έως {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} από {of} επαναλήψεις πέτυχαν τον στόχο: {p} (διάστημα 95% από {lo} έως {hi})
 	{name} — edited	{name} — επεξεργασμένο
 	{n} created	{n} δημιουργήθηκαν
 	{n} done	{n} ολοκληρώθηκαν
@@ -674,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: τώρα {now}, το πολύ {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± 95% ΔΕ
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	Το ± είναι το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t 95% για τη μέση τιμή μεταξύ των επαναλήψεων.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	Το ± είναι το μισό πλάτος ενός διαστήματος εμπιστοσύνης Student-t 95% για τη μέση τιμή μεταξύ των επαναλήψεων.
 	· no results yet	· δεν υπάρχουν ακόμη αποτελέσματα
 unit	d	ημ
 unit	h	ώ
@@ -682,18 +672,28 @@ unit	min	λ
 unit	ms	ms
 unit	s	δ
 unit	yr	έτ
+	1/(n + 1)	1/(n + 1)
+	Balked	Μη είσοδος
+	Balked on {id}	Μη είσοδος στο {id}
+	Balking	Μη είσοδος στην ουρά
+	Count those in service	Να μετρώνται και όσες εξυπηρετούνται
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Οι οντότητες που δεν μπαίνουν στην ουρά ακολουθούν αμέσως αυτή τη ροή (για να ξαναδοκιμάσουν αργότερα, ας πούμε), αντί να χαθούν· εδώ μετρώνται ως μη είσοδος.
+	Joins with probability	Μπαίνει στην ουρά με πιθανότητα
+	Number waiting	Πλήθος σε αναμονή
+	Share balked	Ποσοστό μη εισόδου
+	Table	Πίνακας
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
-@plural	Finished {n} replication|Finished {n} replications	Ολοκληρώθηκε {n} επανάληψη|Ολοκληρώθηκαν {n} επαναλήψεις
+@plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} επανάληψη|Ολοκληρώθηκαν {n} επαναλήψεις
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	Άνοιξε το {file} ({n} προειδοποίηση)|Άνοιξε το {file} ({n} προειδοποιήσεις)
 @plural	Removed {n} block|Removed {n} blocks	Αφαιρέθηκε {n} μπλοκ|Αφαιρέθηκαν {n} μπλοκ
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Εκτελεί {n} ανεξάρτητη επανάληψη του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.|Εκτελεί {n} ανεξάρτητες επαναλήψεις του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Η συνθήκη διακοπής επιτεύχθηκε σε {met} από {n} επανάληψη, κατά μέσο όρο μετά από {time} {unit}.|Η συνθήκη διακοπής επιτεύχθηκε σε {met} από {n} επαναλήψεις, κατά μέσο όρο μετά από {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	Ολοκληρώθηκε {done} από {n} επανάληψη|Ολοκληρώθηκαν {done} από {n} επαναλήψεις
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επανάληψη|{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επαναλήψεις
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Εκτελεί {n} ανεξάρτητη επανάληψη του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.|Εκτελεί {n} ανεξάρτητες επαναλήψεις του μοντέλου με σπόρο {seed}. Τα αποτελέσματα κάθε στοιχείου περιλαμβάνουν το ημιπλάτος διαστήματος εμπιστοσύνης 95%.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Η συνθήκη διακοπής επιτεύχθηκε σε {met} από {n} επανάληψη, κατά μέσο όρο μετά από {time} {unit}.|Η συνθήκη διακοπής επιτεύχθηκε σε {met} από {n} επαναλήψεις, κατά μέσο όρο μετά από {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	Ολοκληρώθηκε {done} από {n} επανάληψη|Ολοκληρώθηκαν {done} από {n} επαναλήψεις
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επανάληψη|{name}: {mean}{unit}\nΔιάστημα 95% από {low} έως {high}{unit}\nσε {n} επαναλήψεις
 @plural	{n} block selected|{n} blocks selected	Επιλέχθηκε {n} μπλοκ|Επιλέχθηκαν {n} μπλοκ
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} επανάληψη ανά βήμα · σπόρος {seed}|{n} επαναλήψεις ανά βήμα · σπόρος {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} επανάληψη · μέση τιμή {mean} · από {min} έως {max}|{n} επαναλήψεις · μέση τιμή {mean} · από {min} έως {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} επανάληψη · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}|{n} επαναλήψεις · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} επανάληψη · σπόρος {seed}|{n} επαναλήψεις · σπόρος {seed}
-@plural	{n} replication|{n} replications	{n} επανάληψη|{n} επαναλήψεις
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} επανάληψη ανά βήμα · σπόρος {seed}|{n} επαναλήψεις ανά βήμα · σπόρος {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} επανάληψη · μέση τιμή {mean} · από {min} έως {max}|{n} επαναλήψεις · μέση τιμή {mean} · από {min} έως {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} επανάληψη · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}|{n} επαναλήψεις · σπόρος {seed} · προθέρμανση {warmup} {unit} · μέτρηση {duration} {unit}
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} επανάληψη · σπόρος {seed}|{n} επαναλήψεις · σπόρος {seed}
+@plural	{n} run|{n} runs	{n} επανάληψη|{n} επαναλήψεις

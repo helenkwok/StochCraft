@@ -13,9 +13,8 @@
 
 @id	language.name	Bahasa Indonesia
 	% down and up	% turun dan naik
-	% of replications	% replikasi
+	% of runs	% replikasi
 	+ Add block	+ Tambah blok
-	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Interval 95% dari bagian yang memenuhi target: {lo} sampai {hi}
 	95th percentile	Persentil ke-95
 	95th percentile {value}	persentil ke-95 {value}
@@ -35,7 +34,7 @@
 	Add Pool	Tambah Kumpulan
 	Add a flow from…	Tambahkan alur dari…
 	Add a flow to…	Tambahkan alur ke…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Tambahkan satu unit pada tugas atau kumpulan tersibuk sampai cukup banyak replikasi memenuhi target. Jawaban dengan setiap waktu pada rata-ratanya juga ditampilkan; biasanya terlalu kecil.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Tambahkan satu unit pada tugas atau kumpulan tersibuk sampai cukup banyak replikasi memenuhi target. Jawaban dengan setiap waktu pada rata-ratanya juga ditampilkan; biasanya terlalu kecil.
 	Add alternative	Tambah alternatif
 	Add calendar	Tambah kalender
 	Add calendar entry	Tambah entri kalender
@@ -69,9 +68,6 @@
 	Available outside calendars	Tersedia di luar kalender
 	BPMN with BPSim	BPMN dengan BPSim
 	Back to the model (Esc)	Kembali ke model (Esc)
-	Balked	Batal mengantre
-	Balked on {id}	Batal mengantre di {id}
-	Balking	Batal mengantre
 	Batch	Batch
 	Batch (collect, then send together)	Batch (kumpulkan, lalu kirim bersama)
 	Batch size	Ukuran batch
@@ -131,7 +127,6 @@
 	Constant	Konstan
 	Control outlines	Garis luar kontrol
 	Copy	Salin
-	Count those in service	Hitung juga yang sedang dilayani
 	Counts against	Dibebankan ke
 	Customer demand	Permintaan pelanggan
 	Cut	Potong
@@ -174,13 +169,12 @@
 	Ends early	Berakhir lebih awal
 	Energy	Energi
 	Energy per part	Energi per komponen
-	Enough: {units}, meeting the target in {p} of replications	Cukup: {units}, target terpenuhi pada {p} replikasi
+	Enough: {units}, meeting the target in {p} of runs	Cukup: {units}, target terpenuhi pada {p} replikasi
 	Enter a number	Masukkan angka
 	Entered	Masuk
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Entitas yang mendapati ruang tunggu penuh langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang atau menunggu sebelum tugas; di sini mereka dihitung sebagai hilang.
 	Entities give up waiting	Entitas berhenti menunggu
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Entitas yang masih di dalam pada akhir replikasi tidak dihitung dalam waktu tunggu rata-rata dan waktu rata-rata dalam sistem.
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitas yang tidak masuk antrean langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang; di sini mereka dihitung sebagai batal mengantre.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Entitas yang masih di dalam pada akhir replikasi tidak dihitung dalam waktu tunggu rata-rata dan waktu rata-rata dalam sistem.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Entitas yang berhenti menunggu mengambil alur ini (misalnya untuk mencoba lagi nanti); yang lain mengambil jalan keluar lain dari tugas.
 	Erlang	Erlang
 	Error	Galat
@@ -235,7 +229,6 @@
 	Inside over time	Di dalam dari waktu ke waktu
 	Job under way on a server going off shift:	Pekerjaan berjalan di server yang mengakhiri sif:
 	Job under way on a server taken out:	Pekerjaan berjalan di server yang dikeluarkan:
-	Joins with probability	Masuk antrean dengan probabilitas
 	Jump	Lompat
 	Jump to time	Lompat ke waktu
 	Keep at least in service	Pertahankan beroperasi setidaknya
@@ -259,10 +252,8 @@
 	Maximum	Maksimum
 	Mean	Rata-rata
 	Mean number inside	Jumlah rata-rata di dalam
-	Number waiting	Jumlah menunggu
-	One replication of {n}: the results of the others differ.	Satu replikasi dari {n}: hasil replikasi lain berbeda.
+	One run of {n}: the results of the others differ.	Satu replikasi dari {n}: hasil replikasi lain berbeda.
 	Save as a new BPMN file?	Simpan sebagai berkas BPMN baru?
-	Share balked	Proporsi yang batal mengantre
 	Still inside at the end	Masih di dalam pada akhir
 	Mean work in progress	Barang dalam proses rata-rata
 	Mean queue length	Panjang antrean rata-rata
@@ -293,7 +284,7 @@
 	No arrivals outside calendars	Tanpa kedatangan di luar kalender
 	No blocks yet. Open a model, or add blocks to build one.	Belum ada blok. Buka model atau tambahkan blok untuk membuatnya.
 	No connections yet: join blocks below.	Belum ada koneksi: hubungkan blok di bawah.
-	No replication met the stop condition: each ran to its time limit.	Tidak ada replikasi yang mencapai kondisi berhenti: masing-masing berjalan hingga batas waktunya.
+	No run met the stop condition: each ran to its time limit.	Tidak ada replikasi yang mencapai kondisi berhenti: masing-masing berjalan hingga batas waktunya.
 	No results yet	Belum ada hasil
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Tidak ada skrap atau pengerjaan ulang yang ditandai dalam model ini, jadi OEE menghitung kualitas sebagai 100%.
 	No target	Tanpa target
@@ -395,11 +386,11 @@
 	Repair time	Waktu perbaikan
 	Repeats	Berulang
 	Replace Model	Ganti Model
-	Replication 1 · {time} of {end} {unit}	Replikasi 1 · {time} dari {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Replikasi 1 · {time} dari {end} {unit} · pemanasan
-	Replications	Replikasi
-	Replications meeting the target	Replikasi yang memenuhi target
-	Replications that never met the stop condition count as later than their time limit.	Replikasi yang tidak pernah mencapai kondisi berhenti dihitung lebih lambat dari batas waktunya.
+	Run 1 · {time} of {end} {unit}	Replikasi 1 · {time} dari {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Replikasi 1 · {time} dari {end} {unit} · pemanasan
+	Runs	Replikasi
+	Runs meeting the target	Replikasi yang memenuhi target
+	Runs that never met the stop condition count as later than their time limit.	Replikasi yang tidak pernah mencapai kondisi berhenti dihitung lebih lambat dari batas waktunya.
 	Resource pool	Kumpulan sumber daya
 	Resource pools	Kumpulan sumber daya
 	Restore	Pulihkan jendela
@@ -420,7 +411,7 @@
 	Run	Jalankan
 	Run cancelled	Proses dibatalkan
 	Run experiment	Jalankan eksperimen
-	Run replication 1 step by step and see each block's queue on the diagram	Jalankan replikasi 1 langkah demi langkah dan lihat antrean tiap blok di diagram
+	Play run 1 step by step and see each block's queue on the diagram	Jalankan replikasi 1 langkah demi langkah dan lihat antrean tiap blok di diagram
 	Run the experiment ({shortcut})	Jalankan eksperimen ({shortcut})
 	Run the experiment again to see this result's spread.	Jalankan eksperimen lagi untuk melihat sebaran hasil ini.
 	Run the experiment at each value of one parameter, and compare a result.	Jalankan eksperimen pada setiap nilai satu parameter dan bandingkan suatu hasil.
@@ -476,7 +467,7 @@
 	Split batches	Pisahkan batch
 	Split or join	Pisahkan atau gabungkan
 	Split or join (all ways)	Pisahkan atau gabungkan (semua jalur)
-	Spread across replications	Sebaran antar-replikasi
+	Spread across runs	Sebaran antar-replikasi
 	Spread out	Sebarkan
 	Stages (k)	Tahapan (k)
 	Standard deviation	Simpangan baku
@@ -491,7 +482,6 @@
 	Stopped watching	Berhenti mengamati
 	Sun	Min
 	Sweep a parameter	Sapu satu parameter
-	Table	Tabel
 	Table stripes	Belang tabel
 	Take servers out when overloaded	Mengeluarkan server yang kelebihan beban
 	Takt	Takt
@@ -508,11 +498,11 @@
 	Text on header	Teks di bilah atas
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	Koneksi terputus dan klien mencoba lagi: entitas langsung kembali ke depan antrean, dan pekerjaan yang sudah dilakukan padanya sia-sia.
 	The entity waits on its server and the job carries on with what was left once the server is back.	Entitas menunggu di servernya dan pekerjaan berlanjut dengan sisanya begitu server kembali.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak replikasi akan mempersempitnya.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	Interval mencapai di bawah bagian target {share}, jadi bagian itu tidak terbukti terpenuhi dengan keyakinan 95%; lebih banyak replikasi akan mempersempitnya.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Pekerjaan langsung berhenti: entitas kembali ke depan antrean untuk server mana pun yang sedang dalam sif, dan pekerjaan yang sudah dilakukan padanya sia-sia.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Pekerjaan langsung berhenti; entitas menunggu di servernya dan pekerjaan berlanjut dengan sisanya begitu server itu kembali dalam sif.
 	The last task with a resource it finished at	Tugas terakhir dengan sumber daya yang dilalui komponen
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas replikasi yang mencapainya; sisanya berjalan hingga batas waktunya.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Waktu rata-rata hingga kondisi berhenti hanya atas replikasi yang mencapainya; sisanya berjalan hingga batas waktunya.
 	The model changed, so watching stopped	Model berubah, jadi pengamatan dihentikan
 	The model has no calendars yet.	Model belum memiliki kalender.
 	The model now has the units sizing found	Model kini memakai unit yang ditemukan penentuan ukuran
@@ -520,7 +510,7 @@
 	The name is empty or already used.	Nama kosong atau sudah dipakai.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Replikasi terbagi menjadi dua hasil yang berbeda: {a} dari {n} di satu, {b} di yang lain. {count} hasil terbagi dengan cara yang sama, di antaranya {result} ({element}); lihat tabel di bawah.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Server menyelesaikan pekerjaan yang sedang dikerjakannya, lalu mengakhiri sif; sampai saat itu server dihitung masih dalam sif.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian replikasi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	Bagian replikasi pada atau di bawah setiap nilai. Pita memuat distribusi sebenarnya dengan keyakinan {confidence}.
 	The values are numbers, separated by semicolons or spaces	Nilai berupa angka yang dipisahkan titik koma atau spasi
 	The whole clock	Seluruh waktu
 	Themes	Tema
@@ -588,7 +578,7 @@
 	Warning	Peringatan
 	Watch a Run	Amati Jalannya Model
 	Watch a run	Amati jalannya model
-	Watching replication 1	Mengamati replikasi 1
+	Watching run 1	Mengamati replikasi 1
 	Weak text	Teks redup
 	Weak text on header	Teks redup di bilah atas
 	Wed	Rab
@@ -624,7 +614,7 @@
 	maximum {value}	maksimum {value}
 	milliseconds	milidetik
 	minutes	menit
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k dari N: hanya k dari N replikasi yang memiliki nilai untuk hasil itu, dan rata-rata serta intervalnya dihitung atas k tersebut.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k dari N: hanya k dari N replikasi yang memiliki nilai untuk hasil itu, dan rata-rata serta intervalnya dihitung atas k tersebut.
 	n = {k} of {n}	n = {k} dari {n}
 	nothing yet	belum ada
 	per day	per hari
@@ -660,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} dan {second} berbeda kecerahan {step}, perlu 0.06.
 	{id}: a probability is a number from 0 to 1	{id}: probabilitas adalah angka dari 0 sampai 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} dari {of} replikasi memenuhi target: {p} (interval 95% dari {lo} sampai {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} dari {of} replikasi memenuhi target: {p} (interval 95% dari {lo} sampai {hi})
 	{name} — edited	{name} — diedit
 	{n} created	{n} dibuat
 	{n} done	{n} selesai
@@ -674,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title}: sekarang {now}, paling banyak {most}
 	{word}: {message}	{word}: {message}
 	± 95% CI	± IK 95%
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± adalah setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh replikasi.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± adalah setengah lebar interval kepercayaan Student-t 95% untuk rata-rata di seluruh replikasi.
 	· no results yet	· belum ada hasil
 unit	d	hr
 unit	h	jam
@@ -682,18 +672,28 @@ unit	min	mnt
 unit	ms	ms
 unit	s	dtk
 unit	yr	thn
+	1/(n + 1)	1/(n + 1)
+	Balked	Batal mengantre
+	Balked on {id}	Batal mengantre di {id}
+	Balking	Batal mengantre
+	Count those in service	Hitung juga yang sedang dilayani
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Entitas yang tidak masuk antrean langsung mengambil alur ini (misalnya untuk mencoba lagi nanti), alih-alih hilang; di sini mereka dihitung sebagai batal mengantre.
+	Joins with probability	Masuk antrean dengan probabilitas
+	Number waiting	Jumlah menunggu
+	Share balked	Proporsi yang batal mengantre
+	Table	Tabel
 @plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
 @plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
-@plural	Finished {n} replication|Finished {n} replications	Selesai {n} replikasi
+@plural	Finished {n} run|Finished {n} runs	Selesai {n} replikasi
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} dibuka ({n} peringatan)
 @plural	Removed {n} block|Removed {n} blocks	{n} blok dihapus
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Menjalankan {n} replikasi model yang independen dari benih {seed}. Hasil setiap elemen mencakup setengah lebar interval kepercayaan 95%.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	Kondisi berhenti tercapai pada {met} dari {n} replikasi, rata-rata setelah {time} {unit}.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} dari {n} replikasi selesai
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name}: {mean}{unit}\nInterval 95% dari {low} hingga {high}{unit}\ndari {n} replikasi
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Menjalankan {n} replikasi model yang independen dari benih {seed}. Hasil setiap elemen mencakup setengah lebar interval kepercayaan 95%.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	Kondisi berhenti tercapai pada {met} dari {n} replikasi, rata-rata setelah {time} {unit}.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} dari {n} replikasi selesai
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name}: {mean}{unit}\nInterval 95% dari {low} hingga {high}{unit}\ndari {n} replikasi
 @plural	{n} block selected|{n} blocks selected	{n} blok dipilih
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} replikasi per langkah · benih {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} replikasi · rata-rata {mean} · dari {min} sampai {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasi · benih {seed} · pemanasan {warmup} {unit} · {duration} {unit} diukur
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} replikasi · benih {seed}
-@plural	{n} replication|{n} replications	{n} replikasi
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} replikasi per langkah · benih {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} replikasi · rata-rata {mean} · dari {min} sampai {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} replikasi · benih {seed} · pemanasan {warmup} {unit} · {duration} {unit} diukur
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} replikasi · benih {seed}
+@plural	{n} run|{n} runs	{n} replikasi

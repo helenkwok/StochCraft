@@ -13,9 +13,8 @@
 
 @id	language.name	Français
 	% down and up	% vers le bas et vers le haut
-	% of replications	% des réplications
+	% of runs	% des réplications
 	+ Add block	+ Ajouter un bloc
-	1/(n + 1)	1/(n + 1)
 	95% interval of the share meeting the target: {lo} to {hi}	Intervalle à 95 % de la part atteignant l'objectif : de {lo} à {hi}
 	95th percentile	95e centile
 	95th percentile {value}	95e centile {value}
@@ -35,7 +34,7 @@
 	Add Pool	Ajouter un pool
 	Add a flow from…	Ajouter un flux depuis…
 	Add a flow to…	Ajouter un flux vers…
-	Add a unit at the busiest task or pool until enough replications meet a target. The answer with every time at its mean is shown too; it is usually too small.	Ajouter une unité à la tâche ou au pool le plus occupé jusqu'à ce qu'assez de réplications atteignent un objectif. La réponse avec chaque temps à sa moyenne est aussi indiquée ; elle est généralement trop petite.
+	Add a unit at the busiest task or pool until enough runs meet a target. The answer with every time at its mean is shown too; it is usually too small.	Ajouter une unité à la tâche ou au pool le plus occupé jusqu'à ce qu'assez de réplications atteignent un objectif. La réponse avec chaque temps à sa moyenne est aussi indiquée ; elle est généralement trop petite.
 	Add alternative	Ajouter une alternative
 	Add calendar	Ajouter un calendrier
 	Add calendar entry	Ajouter une entrée de calendrier
@@ -69,9 +68,6 @@
 	Available outside calendars	Disponible hors des calendriers
 	BPMN with BPSim	BPMN avec BPSim
 	Back to the model (Esc)	Retour au modèle (Esc)
-	Balked	Dérobades
-	Balked on {id}	Dérobades sur {id}
-	Balking	Dérobade
 	Batch	Lot
 	Batch (collect, then send together)	Lot (regrouper, puis envoyer ensemble)
 	Batch size	Taille du lot
@@ -131,7 +127,6 @@
 	Constant	Constante
 	Control outlines	Contours des commandes
 	Copy	Copier
-	Count those in service	Compter aussi celles en service
 	Counts against	Imputé à
 	Customer demand	Demande client
 	Cut	Couper
@@ -174,13 +169,12 @@
 	Ends early	S'arrête plus tôt
 	Energy	Énergie
 	Energy per part	Énergie par pièce
-	Enough: {units}, meeting the target in {p} of replications	Suffisant : {units}, l'objectif est atteint dans {p} des réplications
+	Enough: {units}, meeting the target in {p} of runs	Suffisant : {units}, l'objectif est atteint dans {p} des réplications
 	Enter a number	Saisissez un nombre
 	Entered	Entrées
 	Entities finding the waiting room full take this flow at once (to try again later, say), instead of being lost or waiting before the task; they count as lost here.	Les entités qui trouvent la salle d'attente pleine prennent aussitôt ce flux (pour réessayer plus tard, par exemple), au lieu d'être perdues ou d'attendre avant la tâche ; elles comptent ici comme perdues.
 	Entities give up waiting	Les entités abandonnent l'attente
-	Entities still inside at the end of a replication are left out of the mean wait and the mean time in system.	Les entités encore présentes à la fin d'une réplication sont exclues de l'attente moyenne et du temps moyen dans le système.
-	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Les entités qui ne rejoignent pas la file prennent aussitôt ce flux (pour réessayer plus tard, par exemple), au lieu d'être perdues ; elles comptent ici comme dérobades.
+	Entities still inside at the end of a run are left out of the mean wait and the mean time in system.	Les entités encore présentes à la fin d'une réplication sont exclues de l'attente moyenne et du temps moyen dans le système.
 	Entities that give up waiting take this flow (to try again later, say); the others take the task's other way out.	Les entités qui abandonnent l'attente prennent ce flux (pour réessayer plus tard, par exemple) ; les autres prennent l'autre sortie de la tâche.
 	Erlang	Erlang
 	Error	Erreur
@@ -235,7 +229,6 @@
 	Inside over time	Présents au fil du temps
 	Job under way on a server going off shift:	Travail en cours sur un serveur qui quitte son poste :
 	Job under way on a server taken out:	Travail en cours sur un serveur mis hors service :
-	Joins with probability	Rejoint la file avec la probabilité
 	Jump	Aller
 	Jump to time	Aller à l'instant
 	Keep at least in service	Garder au moins en service
@@ -259,10 +252,8 @@
 	Maximum	Maximum
 	Mean	Moyenne
 	Mean number inside	Nombre moyen présent
-	Number waiting	Nombre en attente
-	One replication of {n}: the results of the others differ.	Une réplication sur {n} : les résultats des autres diffèrent.
+	One run of {n}: the results of the others differ.	Une réplication sur {n} : les résultats des autres diffèrent.
 	Save as a new BPMN file?	Enregistrer comme nouveau fichier BPMN ?
-	Share balked	Part des dérobades
 	Still inside at the end	Encore présents à la fin
 	Mean work in progress	En-cours moyen
 	Mean queue length	Longueur moyenne de la file
@@ -293,7 +284,7 @@
 	No arrivals outside calendars	Aucune arrivée hors des calendriers
 	No blocks yet. Open a model, or add blocks to build one.	Aucun bloc pour le moment. Ouvrez un modèle ou ajoutez des blocs pour en créer un.
 	No connections yet: join blocks below.	Aucune connexion pour le moment : reliez les blocs ci-dessous.
-	No replication met the stop condition: each ran to its time limit.	Aucune réplication n'a atteint la condition d'arrêt : chacune a duré jusqu'à sa limite de temps.
+	No run met the stop condition: each ran to its time limit.	Aucune réplication n'a atteint la condition d'arrêt : chacune a duré jusqu'à sa limite de temps.
 	No results yet	Aucun résultat pour le moment
 	No scrap or rework is marked in this model, so OEE counts quality as 100%.	Aucun rebut ni aucune retouche n'est marqué dans ce modèle, donc l'OEE compte la qualité comme 100 %.
 	No target	Pas d'objectif
@@ -395,11 +386,11 @@
 	Repair time	Temps de réparation
 	Repeats	Répétition
 	Replace Model	Remplacer le modèle
-	Replication 1 · {time} of {end} {unit}	Réplication 1 · {time} sur {end} {unit}
-	Replication 1 · {time} of {end} {unit} · warm-up	Réplication 1 · {time} sur {end} {unit} · préchauffage
-	Replications	Réplications
-	Replications meeting the target	Réplications atteignant l'objectif
-	Replications that never met the stop condition count as later than their time limit.	Les réplications qui n'ont jamais atteint la condition d'arrêt comptent comme plus tardives que leur limite de temps.
+	Run 1 · {time} of {end} {unit}	Réplication 1 · {time} sur {end} {unit}
+	Run 1 · {time} of {end} {unit} · warm-up	Réplication 1 · {time} sur {end} {unit} · préchauffage
+	Runs	Réplications
+	Runs meeting the target	Réplications atteignant l'objectif
+	Runs that never met the stop condition count as later than their time limit.	Les réplications qui n'ont jamais atteint la condition d'arrêt comptent comme plus tardives que leur limite de temps.
 	Resource pool	Pool de ressources
 	Resource pools	Pools de ressources
 	Restore	Restaurer
@@ -420,7 +411,7 @@
 	Run	Exécuter
 	Run cancelled	Exécution annulée
 	Run experiment	Exécuter l'expérience
-	Run replication 1 step by step and see each block's queue on the diagram	Exécuter la réplication 1 pas à pas et voir la file de chaque bloc sur le diagramme
+	Play run 1 step by step and see each block's queue on the diagram	Exécuter la réplication 1 pas à pas et voir la file de chaque bloc sur le diagramme
 	Run the experiment ({shortcut})	Exécuter l'expérience ({shortcut})
 	Run the experiment again to see this result's spread.	Relancez l'expérience pour voir la dispersion de ce résultat.
 	Run the experiment at each value of one parameter, and compare a result.	Exécuter l'expérience pour chaque valeur d'un paramètre et comparer un résultat.
@@ -476,7 +467,7 @@
 	Split batches	Séparer les lots
 	Split or join	Diviser ou joindre
 	Split or join (all ways)	Diviser ou joindre (toutes les voies)
-	Spread across replications	Dispersion entre réplications
+	Spread across runs	Dispersion entre réplications
 	Spread out	Répartir
 	Stages (k)	Étapes (k)
 	Standard deviation	Écart type
@@ -491,7 +482,6 @@
 	Stopped watching	Observation arrêtée
 	Sun	dim
 	Sweep a parameter	Balayer un paramètre
-	Table	Tableau
 	Table stripes	Bandes de tableau
 	Take servers out when overloaded	Mettre hors service les serveurs surchargés
 	Takt	Takt
@@ -508,11 +498,11 @@
 	Text on header	Texte de l'en-tête
 	The connection drops and the client tries again: the entity goes back to the head of the queue at once, and the work done on it is wasted.	La connexion tombe et le client réessaie : l'entité revient aussitôt en tête de la file, et le travail déjà fait sur elle est perdu.
 	The entity waits on its server and the job carries on with what was left once the server is back.	L'entité attend sur son serveur et le travail reprend avec ce qui restait une fois le serveur revenu.
-	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more replications would narrow it.	L'intervalle descend sous la part cible de {share} : il n'est donc pas établi avec 95 % de confiance que la part est atteinte ; davantage de réplications le resserreraient.
+	The interval reaches below the target share of {share}, so the share is not shown to be met with 95% confidence; more runs would narrow it.	L'intervalle descend sous la part cible de {share} : il n'est donc pas établi avec 95 % de confiance que la part est atteinte ; davantage de réplications le resserreraient.
 	The job stops at once: the entity goes back to the head of the queue for any server on shift, and the work done on it is wasted.	Le travail s'arrête aussitôt : l'entité revient en tête de la file pour tout serveur en poste, et le travail déjà fait sur elle est perdu.
 	The job stops at once; the entity waits on its server and the job carries on with what was left once that server is on shift again.	Le travail s'arrête aussitôt ; l'entité attend sur son serveur et le travail reprend avec ce qui restait une fois ce serveur de nouveau en poste.
 	The last task with a resource it finished at	La dernière tâche avec ressource par laquelle la pièce est passée
-	The mean time to the stop condition is over the replications that met it only; the others ran to their time limit.	Le temps moyen jusqu'à la condition d'arrêt ne porte que sur les réplications qui l'ont atteinte ; les autres ont duré jusqu'à leur limite de temps.
+	The mean time to the stop condition is over the runs that met it only; the others ran to their time limit.	Le temps moyen jusqu'à la condition d'arrêt ne porte que sur les réplications qui l'ont atteinte ; les autres ont duré jusqu'à leur limite de temps.
 	The model changed, so watching stopped	Le modèle a changé, l'observation s'est donc arrêtée
 	The model has no calendars yet.	Le modèle n'a pas encore de calendrier.
 	The model now has the units sizing found	Le modèle a maintenant les unités trouvées par le dimensionnement
@@ -520,7 +510,7 @@
 	The name is empty or already used.	Le nom est vide ou déjà utilisé.
 	The runs split into two outcomes: {a} of {n} in one, {b} in the other. {count} results split the same way, among them {result} ({element}); see the table below.	Les réplications se partagent en deux issues : {a} sur {n} dans l'une, {b} dans l'autre. {count} résultats se partagent de la même façon, dont {result} ({element}) ; voir le tableau ci-dessous.
 	The server finishes the job it has, then goes off; until then it counts as on shift.	Le serveur termine le travail en cours, puis quitte son poste ; d'ici là, il compte comme en poste.
-	The share of replications at or below each value. The band holds the true distribution with {confidence} confidence.	La part des réplications inférieures ou égales à chaque valeur. La bande contient la vraie distribution avec une confiance de {confidence}.
+	The share of runs at or below each value. The band holds the true distribution with {confidence} confidence.	La part des réplications inférieures ou égales à chaque valeur. La bande contient la vraie distribution avec une confiance de {confidence}.
 	The values are numbers, separated by semicolons or spaces	Les valeurs sont des nombres séparés par des points-virgules ou des espaces
 	The whole clock	Tout le temps
 	Themes	Thèmes
@@ -588,7 +578,7 @@
 	Warning	Avertissement
 	Watch a Run	Observer une exécution
 	Watch a run	Observer une exécution
-	Watching replication 1	Observation de la réplication 1
+	Watching run 1	Observation de la réplication 1
 	Weak text	Texte atténué
 	Weak text on header	Texte atténué de l'en-tête
 	Wed	mer
@@ -624,7 +614,7 @@
 	maximum {value}	maximum {value}
 	milliseconds	millisecondes
 	minutes	minutes
-	n = k of N: only k of the N replications had a value for that result, and its mean and interval are over those k.	n = k sur N : seules k des N réplications avaient une valeur pour ce résultat, et sa moyenne et son intervalle portent sur ces k.
+	n = k of N: only k of the N runs had a value for that result, and its mean and interval are over those k.	n = k sur N : seules k des N réplications avaient une valeur pour ce résultat, et sa moyenne et son intervalle portent sur ces k.
 	n = {k} of {n}	n = {k} sur {n}
 	nothing yet	rien pour le moment
 	per day	par jour
@@ -660,7 +650,7 @@
 	{first} and {second} differ in lightness by {step}, needs 0.06.	{first} et {second} diffèrent en clarté de {step}, minimum 0.06.
 	{id}: a probability is a number from 0 to 1	{id} : une probabilité est un nombre compris entre 0 et 1
 	{kind} {name}	{kind} {name}
-	{met} of {of} replications met the target: {p} (95% interval {lo} to {hi})	{met} réplications sur {of} ont atteint l'objectif : {p} (intervalle à 95 % de {lo} à {hi})
+	{met} of {of} runs met the target: {p} (95% interval {lo} to {hi})	{met} réplications sur {of} ont atteint l'objectif : {p} (intervalle à 95 % de {lo} à {hi})
 	{name} — edited	{name} — modifié
 	{n} created	{n} créés
 	{n} done	{n} terminés
@@ -674,7 +664,7 @@
 	{title}: now {now}, at most {most}	{title} : maintenant {now}, au plus {most}
 	{word}: {message}	{word} : {message}
 	± 95% CI	± IC à 95 %
-	± is the half-width of a 95% Student-t confidence interval of the mean across replications.	± correspond à la demi-largeur d'un intervalle de confiance Student-t à 95 % de la moyenne sur les réplications.
+	± is the half-width of a 95% Student-t confidence interval of the mean across runs.	± correspond à la demi-largeur d'un intervalle de confiance Student-t à 95 % de la moyenne sur les réplications.
 	· no results yet	· aucun résultat pour le moment
 unit	d	j
 unit	h	h
@@ -682,18 +672,28 @@ unit	min	min
 unit	ms	ms
 unit	s	s
 unit	yr	an
+	1/(n + 1)	1/(n + 1)
+	Balked	Dérobades
+	Balked on {id}	Dérobades sur {id}
+	Balking	Dérobade
+	Count those in service	Compter aussi celles en service
+	Entities that do not join the queue take this flow at once (to try again later, say), instead of being lost; they count as balked here.	Les entités qui ne rejoignent pas la file prennent aussitôt ce flux (pour réessayer plus tard, par exemple), au lieu d'être perdues ; elles comptent ici comme dérobades.
+	Joins with probability	Rejoint la file avec la probabilité
+	Number waiting	Nombre en attente
+	Share balked	Part des dérobades
+	Table	Tableau
 @plural	Added {n} block|Added {n} blocks	{n} bloc ajouté|{n} blocs ajoutés
 @plural	Copied {n} block|Copied {n} blocks	{n} bloc copié|{n} blocs copiés
-@plural	Finished {n} replication|Finished {n} replications	{n} réplication terminée|{n} réplications terminées
+@plural	Finished {n} run|Finished {n} runs	{n} réplication terminée|{n} réplications terminées
 @plural	Opened {file} ({n} warning)|Opened {file} ({n} warnings)	{file} ouvert ({n} avertissement)|{file} ouvert ({n} avertissements)
 @plural	Removed {n} block|Removed {n} blocks	{n} bloc supprimé|{n} blocs supprimés
-@plural	Runs {n} independent replication of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Runs {n} independent replications of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Exécute {n} réplication indépendante du modèle à partir de la graine {seed}. Les résultats de chaque élément incluent la demi-largeur d'un intervalle de confiance à 95 %.|Exécute {n} réplications indépendantes du modèle à partir de la graine {seed}. Les résultats de chaque élément incluent la demi-largeur d'un intervalle de confiance à 95 %.
-@plural	The stop condition was met in {met} of {n} replication, after {time} {unit} on average.|The stop condition was met in {met} of {n} replications, after {time} {unit} on average.	La condition d'arrêt a été atteinte dans {met} réplication sur {n}, après {time} {unit} en moyenne.|La condition d'arrêt a été atteinte dans {met} réplications sur {n}, après {time} {unit} en moyenne.
-@plural	{done} of {n} replication finished|{done} of {n} replications finished	{done} réplication terminée sur {n}|{done} réplications terminées sur {n}
-@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replication|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} replications	{name} : {mean}{unit}\nIntervalle à 95 % de {low} à {high}{unit}\nsur {n} réplication|{name} : {mean}{unit}\nIntervalle à 95 % de {low} à {high}{unit}\nsur {n} réplications
+@plural	Makes {n} independent run of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval.|Makes {n} independent runs of the model from seed {seed}. Each element's results come with the half-width of a 95% confidence interval across them.	Exécute {n} réplication indépendante du modèle à partir de la graine {seed}. Les résultats de chaque élément incluent la demi-largeur d'un intervalle de confiance à 95 %.|Exécute {n} réplications indépendantes du modèle à partir de la graine {seed}. Les résultats de chaque élément incluent la demi-largeur d'un intervalle de confiance à 95 %.
+@plural	The stop condition was met in {met} of {n} run, after {time} {unit} on average.|The stop condition was met in {met} of {n} runs, after {time} {unit} on average.	La condition d'arrêt a été atteinte dans {met} réplication sur {n}, après {time} {unit} en moyenne.|La condition d'arrêt a été atteinte dans {met} réplications sur {n}, après {time} {unit} en moyenne.
+@plural	{done} of {n} run finished|{done} of {n} runs finished	{done} réplication terminée sur {n}|{done} réplications terminées sur {n}
+@plural	{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} run|{name}: {mean}{unit}\n95% interval {low} to {high}{unit}\nacross {n} runs	{name} : {mean}{unit}\nIntervalle à 95 % de {low} à {high}{unit}\nsur {n} réplication|{name} : {mean}{unit}\nIntervalle à 95 % de {low} à {high}{unit}\nsur {n} réplications
 @plural	{n} block selected|{n} blocks selected	{n} bloc sélectionné|{n} blocs sélectionnés
-@plural	{n} replication at each step · seed {seed}|{n} replications at each step · seed {seed}	{n} réplication par étape · graine {seed}|{n} réplications par étape · graine {seed}
-@plural	{n} replication · mean {mean} · from {min} to {max}|{n} replications · mean {mean} · from {min} to {max}	{n} réplication · moyenne {mean} · de {min} à {max}|{n} réplications · moyenne {mean} · de {min} à {max}
-@plural	{n} replication · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} replications · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} réplication · graine {seed} · préchauffage {warmup} {unit} · {duration} {unit} mesurés|{n} réplications · graine {seed} · préchauffage {warmup} {unit} · {duration} {unit} mesurés
-@plural	{n} replication · seed {seed}|{n} replications · seed {seed}	{n} réplication · graine {seed}|{n} réplications · graine {seed}
-@plural	{n} replication|{n} replications	{n} réplication|{n} réplications
+@plural	{n} run at each step · seed {seed}|{n} runs at each step · seed {seed}	{n} réplication par étape · graine {seed}|{n} réplications par étape · graine {seed}
+@plural	{n} run · mean {mean} · from {min} to {max}|{n} runs · mean {mean} · from {min} to {max}	{n} réplication · moyenne {mean} · de {min} à {max}|{n} réplications · moyenne {mean} · de {min} à {max}
+@plural	{n} run · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured|{n} runs · seed {seed} · warm-up {warmup} {unit} · {duration} {unit} measured	{n} réplication · graine {seed} · préchauffage {warmup} {unit} · {duration} {unit} mesurés|{n} réplications · graine {seed} · préchauffage {warmup} {unit} · {duration} {unit} mesurés
+@plural	{n} run · seed {seed}|{n} runs · seed {seed}	{n} réplication · graine {seed}|{n} réplications · graine {seed}
+@plural	{n} run|{n} runs	{n} réplication|{n} réplications
