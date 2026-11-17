@@ -267,6 +267,51 @@ fn binomial(rng: &mut Rng, p: f64, n: u64) -> u64 {
     }
 }
 
+/// A draw from a user distribution (0 for points [`Dist::check`] rejects). Discrete points, and
+/// continuous ones already in order of value, are read where they are, without the copy
+/// [`user_points`] makes; the draw is the same either way.
+fn sample_user(rng: &mut Rng, points: &[(f64, f64)], discrete: bool) -> f64 {
+    // What `check` accepts, with the total summed as it sums it.
+    let total: f64 = points.iter().map(|(p, _)| *p).sum();
+    let valid = points
+        .iter()
+        .all(|(p, v)| p.is_finite() && *p >= 0.0 && v.is_finite())
+        && total > 0.0
+        && total.is_finite();
+    if !valid {
+        return 0.0;
+    }
+    let in_order = discrete
+        || points
+            .windows(2)
+            .all(|w| w[0].1.total_cmp(&w[1].1) != std::cmp::Ordering::Greater);
+    let u = rng.uniform();
+    if in_order {
+        draw_user(u, points.iter().map(|(p, v)| (p / total, *v)), discrete)
+    } else {
+        let pts = user_points(points, discrete).unwrap_or_default();
+        draw_user(u, pts.into_iter(), discrete)
+    }
+}
+
+/// The value at `u` of the normalised points, in order of value for the continuous form.
+fn draw_user(u: f64, pts: impl Iterator<Item = (f64, f64)>, discrete: bool) -> f64 {
+    let mut cumulative = 0.0;
+    let mut previous: Option<(f64, f64)> = None;
+    for (p, v) in pts {
+        let below = cumulative;
+        cumulative += p;
+        if u < cumulative {
+            return match (discrete, previous) {
+                (false, Some((_, v0))) if p > 0.0 => v0 + (v - v0) * (u - below) / p,
+                _ => v,
+            };
+        }
+        previous = Some((p, v));
+    }
+    previous.map_or(0.0, |(_, v)| v)
+}
+
 /// The normalised points of a user distribution, sorted by value for the continuous form.
 fn user_points(points: &[(f64, f64)], discrete: bool) -> Option<Vec<(f64, f64)>> {
     let total: f64 = points.iter().map(|(p, _)| *p).sum();
@@ -447,6 +492,9 @@ impl Dist {
 
     /// Draws one value. Parameters [`Dist::check`] rejects give the lower bound or 0, never a panic.
     pub fn sample(&self, rng: &mut Rng) -> f64 {
+        if let Dist::User { points, discrete } = self {
+            return sample_user(rng, points, *discrete);
+        }
         if self.check().is_err() {
             return self.fallback();
         }
@@ -497,26 +545,7 @@ impl Dist {
                 probability,
                 trials,
             } => binomial(rng, *probability, *trials) as f64,
-            Dist::User { points, discrete } => {
-                let Some(pts) = user_points(points, *discrete) else {
-                    return 0.0;
-                };
-                let u = rng.uniform();
-                let mut cumulative = 0.0;
-                let mut previous: Option<(f64, f64)> = None;
-                for (p, v) in &pts {
-                    let below = cumulative;
-                    cumulative += p;
-                    if u < cumulative {
-                        return match (discrete, previous) {
-                            (false, Some((_, v0))) if *p > 0.0 => v0 + (v - v0) * (u - below) / p,
-                            _ => *v,
-                        };
-                    }
-                    previous = Some((*p, *v));
-                }
-                pts.last().map_or(0.0, |(_, v)| *v)
-            }
+            Dist::User { points, discrete } => sample_user(rng, points, *discrete),
         }
     }
 
@@ -892,6 +921,67 @@ mod tests {
                 dv.is_some_and(|x| (x - v).abs() <= 1e-6 * v.max(1e-12)),
                 "{d:?}: variance {dv:?}, not {v}"
             );
+        }
+    }
+
+    /// User distributions sampled as before they were sampled in place: the old sampler, copied
+    /// here, gives the same bits and leaves the generator in the same state.
+    #[test]
+    fn user_distributions_sample_as_they_did() {
+        fn old(rng: &mut Rng, points: &[(f64, f64)], discrete: bool) -> f64 {
+            let d = Dist::User {
+                points: points.to_vec(),
+                discrete,
+            };
+            if d.check().is_err() {
+                return 0.0;
+            }
+            let Some(pts) = user_points(points, discrete) else {
+                return 0.0;
+            };
+            let u = rng.uniform();
+            let mut cumulative = 0.0;
+            let mut previous: Option<(f64, f64)> = None;
+            for (p, v) in &pts {
+                let below = cumulative;
+                cumulative += p;
+                if u < cumulative {
+                    return match (discrete, previous) {
+                        (false, Some((_, v0))) if *p > 0.0 => v0 + (v - v0) * (u - below) / p,
+                        _ => *v,
+                    };
+                }
+                previous = Some((*p, *v));
+            }
+            pts.last().map_or(0.0, |(_, v)| *v)
+        }
+        let sets: Vec<Vec<(f64, f64)>> = vec![
+            vec![(0.0, 1.0), (0.5, 2.0), (0.5, 4.0)],
+            vec![(3.0, 1.0), (7.0, 2.5), (1.0, 9.0)],
+            vec![(1.0, 5.0), (2.0, 1.0), (3.0, 3.0)],
+            vec![(0.1, 2.0), (0.2, 2.0), (0.0, 1.0), (0.7, 3.0)],
+            vec![(0.3, 1.0), (0.0, 2.0), (0.0, 2.0), (0.7, 4.0)],
+            vec![(1.0, 7.0)],
+            vec![(0.1, 0.1), (0.2, 0.2), (0.3, 0.3), (0.4, 0.4), (1e-9, 0.5)],
+            vec![],
+            vec![(0.0, 1.0), (0.0, 2.0)],
+            vec![(-1.0, 1.0), (2.0, 2.0)],
+            vec![(1.0, f64::NAN), (1.0, 2.0)],
+            vec![(f64::MAX, 1.0), (f64::MAX, 2.0)],
+        ];
+        for points in &sets {
+            for discrete in [false, true] {
+                let d = Dist::User {
+                    points: points.clone(),
+                    discrete,
+                };
+                let (mut a, mut b) = (Rng::new(11), Rng::new(11));
+                for _ in 0..2_000 {
+                    let (x, y) = (d.sample(&mut a), old(&mut b, points, discrete));
+                    assert_eq!(x.to_bits(), y.to_bits(), "{d:?}: {x} vs {y}");
+                }
+                assert_eq!(a.next_u64(), b.next_u64(), "{d:?}");
+            }
         }
     }
 
