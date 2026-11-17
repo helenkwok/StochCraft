@@ -87,11 +87,14 @@ struct Slot(Arc<AtomicUsize>);
 
 impl Slot {
     fn take(open: &Arc<AtomicUsize>) -> Option<Self> {
-        open.fetch_update(Ordering::AcqRel, Ordering::Acquire, |n| {
-            (n < MAX_CLIENTS).then_some(n + 1)
-        })
-        .ok()
-        .map(|_| Slot(Arc::clone(open)))
+        // Counted first, then given back if that went over the limit (`fetch_update` is
+        // deprecated on newer toolchains, and its replacement is not on 1.95).
+        if open.fetch_add(1, Ordering::AcqRel) < MAX_CLIENTS {
+            Some(Slot(Arc::clone(open)))
+        } else {
+            open.fetch_sub(1, Ordering::AcqRel);
+            None
+        }
     }
 }
 
