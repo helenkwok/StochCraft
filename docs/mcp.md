@@ -126,6 +126,9 @@ The server treats its input as hostile:
   skipped, and the server keeps serving.
 - A JSON-RPC batch holds at most 100 messages, and a `batch` call at most 10 000 commands.
 - An engine failure leaves the model as it was.
+- The control channel takes at most 8 clients at once. One more gets a `conflict` error naming
+  the limit and is closed. Connections are not timed out: an agent keeps its connection, idle
+  between calls, for its whole session.
 
 ## A typical session
 

@@ -1189,7 +1189,7 @@ impl App {
     pub fn export_csv(&mut self) {
         if let Some(r) = &self.results {
             let name = format!("{}-results.csv", self.export_stem());
-            let bytes = charts::csv(r).into_bytes();
+            let bytes = stochcraft_engine::wire::results_csv(r).into_bytes();
             self.requests.push(Request::Export { name, bytes });
         }
     }

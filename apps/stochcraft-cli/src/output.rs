@@ -4,6 +4,8 @@ use std::fmt::Write as _;
 use std::path::Path;
 
 use serde_json::Value;
+use stochcraft_engine::wire::csv_field;
+pub use stochcraft_engine::wire::results_csv as csv;
 
 /// A number for a table: about five significant digits, without a run of trailing zeros.
 pub fn number(v: f64) -> String {
@@ -509,64 +511,6 @@ fn warmup_line(results: &Value, out: &mut String) {
     out.push('\n');
 }
 
-fn csv_field(v: &str) -> String {
-    if v.contains([',', '"', '\n']) {
-        format!("\"{}\"", v.replace('"', "\"\""))
-    } else {
-        v.to_owned()
-    }
-}
-
-/// Results as CSV, one row per element and metric. Where a result's replications split into two
-/// outcomes, the last six columns give the cut, each group's count and mean, and which group of
-/// results that split the same runs it is in (empty otherwise).
-pub fn csv(results: &Value) -> String {
-    let mut out = String::from(
-        "element,name,kind,metric,mean,half_width,std_dev,n,\
-         split_cut,split_low_n,split_low_mean,split_high_n,split_high_mean,split_group\n",
-    );
-    for e in results["elements"].as_array().into_iter().flatten() {
-        for metric in results["metrics"].as_array().into_iter().flatten() {
-            let m = &e["metrics"][s(metric)];
-            if m.is_null() {
-                continue;
-            }
-            let split = &m["split"];
-            let split: Vec<String> = [
-                &split["cut"],
-                &split["low"]["n"],
-                &split["low"]["mean"],
-                &split["high"]["n"],
-                &split["high"]["mean"],
-                &split["group"],
-            ]
-            .iter()
-            .map(|v| {
-                if v.is_null() {
-                    String::new()
-                } else {
-                    v.to_string()
-                }
-            })
-            .collect();
-            let _ = writeln!(
-                out,
-                "{},{},{},{},{},{},{},{},{}",
-                csv_field(s(&e["id"])),
-                csv_field(s(&e["name"])),
-                s(&e["kind"]),
-                s(metric),
-                m["mean"],
-                m["half_width"],
-                m["std_dev"],
-                m["n"],
-                split.join(",")
-            );
-        }
-    }
-    out
-}
-
 /// `validate` as text: the file's notes, the model's diagnostics and a summary.
 pub fn validation(file: &Path, opened: &Value, errors: usize) -> String {
     let mut out = String::new();
@@ -676,6 +620,31 @@ mod tests {
             lines[5],
             "desk,Desk,server,mean_in_service,3.8,0.6,3.4,128,5.8,99,1.7,29,9.9,1"
         );
+    }
+
+    #[test]
+    fn csv_has_the_rows_the_app_exports() {
+        let m = serde_json::json!({ "mean": 2.0, "half_width": 0.5, "std_dev": 1.0, "n": 4 });
+        let results = serde_json::json!({
+            "metrics": ["entered", "custom,metric"],
+            "elements": [{
+                "id": "desk", "name": "Desk", "kind": "server",
+                "metrics": { "entered": m, "custom,metric": m },
+                "properties": { "size": m },
+            }],
+        });
+        let text = csv(&results);
+        let lines: Vec<&str> = text.lines().collect();
+        assert_eq!(lines[1], "desk,Desk,server,entered,2.0,0.5,1.0,4,,,,,,");
+        assert_eq!(
+            lines[2],
+            "desk,Desk,server,\"custom,metric\",2.0,0.5,1.0,4,,,,,,"
+        );
+        assert_eq!(
+            lines[3],
+            "desk,Desk,server,property:size,2.0,0.5,1.0,4,,,,,,"
+        );
+        assert_eq!(text, stochcraft_engine::wire::results_csv(&results));
     }
 
     #[test]

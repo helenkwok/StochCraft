@@ -11,9 +11,11 @@
 //! can; nothing is reachable from other computers.
 
 use std::io::{BufReader, Write};
-use std::net::{Ipv4Addr, SocketAddr, TcpListener, TcpStream};
+use std::net::{Ipv4Addr, Shutdown, SocketAddr, TcpListener, TcpStream};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::mpsc::{Receiver, Sender, channel};
+use std::time::Duration;
 
 use serde_json::{Value, json};
 use stochcraft_engine::{CommandError, ErrorCode};
@@ -45,17 +47,84 @@ pub fn listen(
     let addr = listener.local_addr()?;
     let (calls, receiver) = channel();
     let wake: Arc<dyn Fn() + Send + Sync> = Arc::new(wake);
+    let (open, refusing) = (Arc::new(AtomicUsize::new(0)), Arc::new(AtomicUsize::new(0)));
     std::thread::Builder::new()
         .name("stochcraft-control".into())
         .spawn(move || {
             for stream in listener.incoming().flatten() {
+                let Some(slot) = Slot::take(&open) else {
+                    // Refusals are capped too, so clients that never finish a line can't pile up
+                    // threads; beyond that the connection is just closed.
+                    if let Some(slot) = Slot::take(&refusing) {
+                        let _ = std::thread::Builder::new()
+                            .name("stochcraft-control-refuse".into())
+                            .spawn(move || {
+                                let _slot = slot;
+                                refuse(stream);
+                            });
+                    }
+                    continue;
+                };
                 let (calls, wake) = (calls.clone(), Arc::clone(&wake));
                 let _ = std::thread::Builder::new()
                     .name("stochcraft-control-client".into())
-                    .spawn(move || serve(stream, &calls, wake.as_ref()));
+                    .spawn(move || {
+                        let _slot = slot;
+                        serve(stream, &calls, wake.as_ref());
+                    });
             }
         })?;
     Ok((addr, receiver))
+}
+
+/// The most clients connected at once. An agent keeps its connection for its whole session, idle
+/// between calls, so connections are not timed out; this cap is what stops them piling up.
+pub const MAX_CLIENTS: usize = 8;
+
+/// One of the [`MAX_CLIENTS`] places (for clients, or for refusals being answered), given back
+/// when its thread ends or never starts.
+struct Slot(Arc<AtomicUsize>);
+
+impl Slot {
+    fn take(open: &Arc<AtomicUsize>) -> Option<Self> {
+        // Counted first, then given back if that went over the limit (`fetch_update` is
+        // deprecated on newer toolchains, and its replacement is not on 1.95).
+        if open.fetch_add(1, Ordering::AcqRel) < MAX_CLIENTS {
+            Some(Slot(Arc::clone(open)))
+        } else {
+            open.fetch_sub(1, Ordering::AcqRel);
+            None
+        }
+    }
+}
+
+impl Drop for Slot {
+    fn drop(&mut self) {
+        self.0.fetch_sub(1, Ordering::AcqRel);
+    }
+}
+
+/// Answers a client over [`MAX_CLIENTS`]: its first request (waited for briefly) gets a
+/// `conflict` error naming the limit, and the connection is closed.
+fn refuse(stream: TcpStream) {
+    let Ok(mut writer) = stream.try_clone() else {
+        return;
+    };
+    let _ = stream.set_read_timeout(Some(Duration::from_secs(2)));
+    let mut reader = BufReader::new(stream);
+    let id = match read_line(&mut reader, MAX_LINE) {
+        Ok(Some(line)) => serde_json::from_slice::<Value>(&line)
+            .ok()
+            .and_then(|r| r.get("id").cloned())
+            .unwrap_or(Value::Null),
+        _ => Value::Null,
+    };
+    let message = format!(
+        "the app already has {MAX_CLIENTS} control connections, the most it takes; close one and \
+         connect again"
+    );
+    let _ = reply(&mut writer, id, Err(failure(ErrorCode::Conflict, message)));
+    let _ = writer.shutdown(Shutdown::Write);
 }
 
 fn failure(code: ErrorCode, message: impl Into<String>) -> Value {

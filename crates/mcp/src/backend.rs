@@ -2,7 +2,7 @@
 //! through its control channel ([`Remote`], docs/mcp.md), so a person can watch the agent work.
 
 use std::io::{BufRead, BufReader, Read, Write};
-use std::net::{TcpStream, ToSocketAddrs};
+use std::net::{SocketAddr, TcpStream, ToSocketAddrs};
 use std::path::Path;
 use std::time::Duration;
 
@@ -105,6 +105,21 @@ impl Backend for Headless {
 /// Longest reply line accepted from the app.
 const MAX_REPLY: u64 = 256 << 20;
 
+/// A connection to the first of `targets` that answers, else the last one's error.
+fn first_reachable(targets: impl IntoIterator<Item = SocketAddr>) -> std::io::Result<TcpStream> {
+    let mut last = std::io::Error::new(
+        std::io::ErrorKind::NotFound,
+        "the address resolves to nothing",
+    );
+    for target in targets {
+        match TcpStream::connect_timeout(&target, Duration::from_secs(3)) {
+            Ok(s) => return Ok(s),
+            Err(e) => last = e,
+        }
+    }
+    Err(last)
+}
+
 /// The running app's control channel (`stochcraft --control PORT`): one JSON request per line,
 /// `{"id", "method": "engine.execute", "params": {"command", "params"}}` or
 /// `{"id", "method": "engine.commands"}`, answered by one line, `{"id", "result"}` or
@@ -117,13 +132,11 @@ pub struct Remote {
 }
 
 impl Remote {
-    /// Connects to the app's control channel at `addr` (`127.0.0.1:7070`).
+    /// Connects to the app's control channel at `addr` (`127.0.0.1:7070`). Each address the name
+    /// resolves to is tried in turn: `localhost` may give `::1` first, while the app listens on
+    /// `127.0.0.1` only.
     pub fn connect(addr: &str) -> std::io::Result<Self> {
-        let target = addr
-            .to_socket_addrs()?
-            .next()
-            .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::NotFound, "no such address"))?;
-        let stream = TcpStream::connect_timeout(&target, Duration::from_secs(3))?;
+        let stream = first_reachable(addr.to_socket_addrs()?)?;
         stream.set_nodelay(true)?;
         Ok(Self {
             addr: addr.to_owned(),
@@ -150,7 +163,8 @@ impl Remote {
         }
         let reply: Value =
             serde_json::from_str(&line).map_err(|e| format!("the app's reply is not JSON: {e}"))?;
-        if reply["id"] != id {
+        // A request the app could not read, or a connection it refused, is answered with no id.
+        if reply["id"] != id && !(reply["id"].is_null() && reply.get("error").is_some()) {
             return Err("the app's reply is for another request".into());
         }
         if let Some(e) = reply.get("error") {
@@ -177,5 +191,26 @@ impl Backend for Remote {
             "the StochCraft app at {}: the person using it sees every change",
             self.addr
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #![allow(clippy::unwrap_used)]
+
+    use super::*;
+
+    #[test]
+    fn every_address_is_tried_in_turn() {
+        // As `localhost` may resolve: `::1` first, while the app listens on 127.0.0.1 only.
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let targets: Vec<SocketAddr> = vec![
+            format!("[::1]:{port}").parse().unwrap(),
+            format!("127.0.0.1:{port}").parse().unwrap(),
+        ];
+        let stream = first_reachable(targets).unwrap();
+        assert_eq!(stream.peer_addr().unwrap().port(), port);
+        assert!(first_reachable(Vec::new()).is_err());
     }
 }

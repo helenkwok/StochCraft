@@ -64,9 +64,14 @@ fn covers(m: &Value, theory: f64) -> bool {
 
 #[test]
 fn every_template_is_written_validated_and_run() {
+    // The names `new --list` gives, so a template added later is covered too.
     let list = ok(&["new", "--list"]);
-    for name in ["mm1", "mm2", "tandem", "case-a"] {
-        assert!(list.contains(name), "{list}");
+    let names: Vec<&str> = list
+        .lines()
+        .filter_map(|l| l.split_whitespace().next())
+        .collect();
+    assert!(names.len() >= 10, "{list}");
+    for name in names {
         let path = scratch(&format!("{name}.bpmn"));
         let p = path.to_string_lossy();
         ok(&["new", "--template", name, &p, "--force"]);
@@ -204,6 +209,11 @@ fn validate_exits_with_1_on_errors() {
     let j = cli(&["validate", &broken.to_string_lossy(), "--format", "json"]);
     assert_eq!(j.status.code(), Some(1));
     assert!(json(&stdout(&j))["errors"].as_u64().is_some_and(|n| n > 0));
+    // A check is a list of notes, not a table: there is no CSV of it.
+    let c = cli(&["validate", &broken.to_string_lossy(), "--format", "csv"]);
+    assert_eq!(c.status.code(), Some(2));
+    assert!(stdout(&c).is_empty(), "{}", stdout(&c));
+    assert!(stderr(&c).contains("table, json"), "{}", stderr(&c));
     // Running it says why it cannot run.
     let r = cli(&["run", &broken.to_string_lossy()]);
     assert_eq!(r.status.code(), Some(1));
