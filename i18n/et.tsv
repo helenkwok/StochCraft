@@ -638,6 +638,10 @@
 	within chance	juhuse piires
 	years	aastad
 	{block}: units	{block}: ühikud
+	{block}: mean service time	{block}: keskmine teenindusaeg
+	{block}: mean time between arrivals	{block}: keskmine saabumiste vaheline aeg
+	{block}: mean duration	{block}: keskmine kestus
+	{block}: waiting room	{block}: ooteruum
 	{busy} busy	{busy} hõivatud
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrast graafiku taustaga {ratio}:1, alla 3:1: märgista selle andmeseeria või näita arve tabelis.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – paistab hallina (kromaatilisus {chroma}, vaja 0.10).

@@ -645,6 +645,10 @@
 	within chance	ຢູ່ໃນຂອບເຂດຄວາມບັງເອີນ
 	years	ປີ
 	{block}: units	{block}: ຈຳນວນໜ່ວຍ
+	{block}: mean service time	{block}: ເວລາໃຫ້ບໍລິການສະເລ່ຍ
+	{block}: mean time between arrivals	{block}: ເວລາສະເລ່ຍລະຫວ່າງການມາຮອດ
+	{block}: mean duration	{block}: ໄລຍະເວລາສະເລ່ຍ
+	{block}: waiting room	{block}: ຫ້ອງລໍຖ້າ
 	{busy} busy	ບໍ່ຫວ່າງ {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} ມີຄວາມຄົມຊັດ {ratio}:1 ເທິງພື້ນຫຼັງແຜນພູມ, ຕ່ຳກວ່າ 3:1: ໃສ່ປ້າຍໃຫ້ຊຸດຂໍ້ມູນຂອງມັນ ຫຼື ສະແດງຕົວເລກໃນຕາຕະລາງ.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} ເບິ່ງຄືສີເທົາ (ຄວາມອີ່ມຕົວ {chroma}, ຕ້ອງການ 0.10).

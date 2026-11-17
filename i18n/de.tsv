@@ -638,6 +638,10 @@
 	within chance	im Rahmen des Zufalls
 	years	Jahre
 	{block}: units	{block}: Einheiten
+	{block}: mean service time	{block}: mittlere Bearbeitungszeit
+	{block}: mean time between arrivals	{block}: mittlere Zeit zwischen Ankünften
+	{block}: mean duration	{block}: mittlere Dauer
+	{block}: waiting room	{block}: Warteraum
 	{busy} busy	{busy} belegt
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} hat auf dem Diagrammhintergrund einen Kontrast von {ratio}:1, unter 3:1: ihre Datenreihe beschriften oder die Zahlen in einer Tabelle zeigen.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} wirkt grau (Buntheit {chroma}, nötig 0.10).

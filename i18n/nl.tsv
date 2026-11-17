@@ -638,6 +638,10 @@
 	within chance	binnen toeval
 	years	jaren
 	{block}: units	{block}: eenheden
+	{block}: mean service time	{block}: gemiddelde servicetijd
+	{block}: mean time between arrivals	{block}: gemiddelde tijd tussen aankomsten
+	{block}: mean duration	{block}: gemiddelde duur
+	{block}: waiting room	{block}: wachtruimte
 	{busy} busy	{busy} bezet
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} heeft contrast {ratio}:1 op de grafiekachtergrond, onder 3:1: geef de reeks labels of toon de getallen in een tabel.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} oogt grijs (kleurverzadiging {chroma}, nodig 0.10).

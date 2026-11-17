@@ -638,6 +638,10 @@
 	within chance	у межах випадковості
 	years	роки
 	{block}: units	{block}: одиниці
+	{block}: mean service time	{block}: середній час обслуговування
+	{block}: mean time between arrivals	{block}: середній час між прибуттями
+	{block}: mean duration	{block}: середня тривалість
+	{block}: waiting room	{block}: місця очікування
 	{busy} busy	Зайнято: {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} — контраст із тлом діаграми {ratio}:1, нижче 3:1: підпишіть його ряд або покажіть числа в таблиці.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} — виглядає сірим (насиченість {chroma}, потрібно 0.10).

@@ -638,6 +638,10 @@
 	within chance	sattuman rajoissa
 	years	vuotta
 	{block}: units	{block}: yksiköt
+	{block}: mean service time	{block}: keskimääräinen palveluaika
+	{block}: mean time between arrivals	{block}: keskimääräinen saapumisten välinen aika
+	{block}: mean duration	{block}: keskimääräinen kesto
+	{block}: waiting room	{block}: odotustila
 	{busy} busy	{busy} varattuna
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrasti kaavion taustaa vasten {ratio}:1, alle 3:1: merkitse sen sarja tunnisteilla tai näytä luvut taulukossa.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – näyttää harmaalta (värikkyys {chroma}, vaaditaan 0.10).

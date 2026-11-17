@@ -638,6 +638,10 @@
 	within chance	atsitiktinumo ribose
 	years	metai
 	{block}: units	{block}: vienetai
+	{block}: mean service time	{block}: vidutinis aptarnavimo laikas
+	{block}: mean time between arrivals	{block}: vidutinis laikas tarp atvykimų
+	{block}: mean duration	{block}: vidutinė trukmė
+	{block}: waiting room	{block}: laukiamasis
 	{busy} busy	Užimta: {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrastas su diagramos fonu {ratio}:1, mažiau nei 3:1: pažymėkite jos seriją etiketėmis arba rodykite skaičius lentelėje.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – atrodo pilka (sodrumas {chroma}, reikia 0.10).

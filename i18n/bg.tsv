@@ -638,6 +638,10 @@
 	within chance	в рамките на случайността
 	years	години
 	{block}: units	{block}: единици
+	{block}: mean service time	{block}: средно време за обслужване
+	{block}: mean time between arrivals	{block}: средно време между пристиганията
+	{block}: mean duration	{block}: средна продължителност
+	{block}: waiting room	{block}: чакалня
 	{busy} busy	Заети: {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – контраст {ratio}:1 спрямо фона на графиката, под 3:1: надпишете серията му или покажете числата в таблица.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} изглежда сив (наситеност {chroma}, нужно е 0.10).

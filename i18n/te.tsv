@@ -638,6 +638,10 @@
 	within chance	యాదృచ్ఛికత లోపే
 	years	సంవత్సరాలు
 	{block}: units	{block}: యూనిట్‌లు
+	{block}: mean service time	{block}: సగటు సేవా సమయం
+	{block}: mean time between arrivals	{block}: రాకల మధ్య సగటు సమయం
+	{block}: mean duration	{block}: సగటు వ్యవధి
+	{block}: waiting room	{block}: వేచి ఉండే గది
 	{busy} busy	{busy} పనిలో
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – చార్ట్ నేపథ్యంపై కాంట్రాస్ట్ {ratio}:1, 3:1 కంటే తక్కువ: దాని సిరీస్‌కు లేబుల్ ఇవ్వండి లేదా సంఖ్యలను పట్టికలో చూపండి.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – బూడిద రంగులా కనిపిస్తుంది (సంతృప్తత {chroma}, అవసరం 0.10).

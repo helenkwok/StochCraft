@@ -638,6 +638,10 @@
 	within chance	संयोग के भीतर
 	years	वर्ष
 	{block}: units	{block}: इकाइयाँ
+	{block}: mean service time	{block}: माध्य सेवा समय
+	{block}: mean time between arrivals	{block}: आगमन के बीच का माध्य समय
+	{block}: mean duration	{block}: माध्य अवधि
+	{block}: waiting room	{block}: प्रतीक्षा कक्ष
 	{busy} busy	{busy} व्यस्त
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – चार्ट की पृष्ठभूमि पर कंट्रास्ट {ratio}:1, 3:1 से कम: इसकी शृंखला पर लेबल लगाएँ या संख्याएँ तालिका में दिखाएँ।
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} धूसर दिखता है (क्रोमा {chroma}, आवश्यक 0.10)।

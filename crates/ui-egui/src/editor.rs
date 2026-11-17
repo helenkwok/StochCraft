@@ -213,13 +213,13 @@ impl App {
     /// The model's problems (validation is a query: nothing is journalled). Validated once per
     /// change of the model, however many views ask in a frame.
     pub(crate) fn problems(&mut self) -> Vec<Problem> {
-        if let Some((model, problems)) = &self.problems_of
-            && model == self.engine.model()
+        if let Some((revision, problems)) = &self.problems_of
+            && *revision == self.engine.revision()
         {
             return problems.clone();
         }
         let problems = self.validate();
-        self.problems_of = Some((self.engine.model().clone(), problems.clone()));
+        self.problems_of = Some((self.engine.revision(), problems.clone()));
         problems
     }
 
@@ -304,17 +304,16 @@ impl App {
     pub(crate) fn add_block(&mut self, kind: &str) {
         let mut params = new_block(kind);
         params["name"] = json!(default_block_name(self.engine.model(), &[], kind));
-        if kind == "shared_task" {
-            let Some(pool) = self.first_pool() else {
-                return;
-            };
-            params["needs"] = json!([{ "resource": pool, "quantity": 1 }]);
-        }
         let index = self.selected_index().map(|i| i + 1);
         if let Some(i) = index {
             params["index"] = json!(i);
         }
-        if let Some(r) = self.execute("block.add", params)
+        let added = if kind == "shared_task" {
+            self.add_shared_task(params)
+        } else {
+            self.execute("block.add", params)
+        };
+        if let Some(r) = added
             && let Some(id) = r["id"].as_str()
         {
             self.info(tf(
@@ -374,12 +373,38 @@ impl App {
     /// Model overview or block inspector, by the selection.
     pub(crate) fn editor(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         let problems = self.problems();
-        let model = stochcraft_engine::wire::model(self.engine.model());
-        // A refused number belongs to the block it was typed for: showing another drops it
-        // (Esc in the field drops it too, and also goes back to the model).
-        if self.drafts_of != self.selected {
-            self.drafts.clear();
-            self.drafts_of = self.selected.clone();
+        let model = self.wire_model();
+        let ctx = ui.ctx().clone();
+        // Text typed in a field and not yet entered belongs to the block it was typed for. When
+        // another is selected, that block's page is drawn once more with the focus gone from
+        // the field, so the field commits as Enter would; the new selection shows next frame.
+        // Esc drops what was typed instead, and so does a change to the model meanwhile (another
+        // file opened, Undo), after which the block may not be there or not be the same.
+        if self.drafts_of == self.selected {
+            self.drafts_held = false;
+        } else {
+            let typing = self.inspector_focus.take();
+            if let Some((field, revision)) = typing
+                && revision == self.engine.revision()
+                && !self.drafts_held
+                && !ctx.input(|i| i.key_pressed(egui::Key::Escape))
+            {
+                if ctx.memory(|m| m.focused()) == Some(field) {
+                    ctx.memory_mut(|m| m.surrender_focus(field));
+                }
+                self.drafts_held = true;
+                ctx.request_repaint();
+            } else {
+                // A refused number belongs to the block it was typed for: showing another drops
+                // it (Esc in the field drops it too, and also goes back to the model).
+                self.drafts.clear();
+                self.drafts_of = self.selected.clone();
+                self.drafts_held = false;
+            }
+        }
+        let selected = self.selected.clone();
+        if self.drafts_held {
+            self.selected = self.drafts_of.clone();
         }
         let shown = self.selected.clone();
         egui::ScrollArea::vertical()
@@ -403,10 +428,30 @@ impl App {
                             None => self.selected = None,
                         }
                     }
-                    None if self.canvas.multi.len() > 1 => self.multi_inspector(ui),
+                    None if self.canvas.multi.len() > 1 && !self.drafts_held => {
+                        self.multi_inspector(ui)
+                    }
                     None => self.overview(ui, p, &model, &problems),
                 }
             });
+        if self.drafts_held {
+            // The selection made meanwhile, unless drawing the held page changed it.
+            if self.selected == shown {
+                self.selected = selected;
+            }
+        } else {
+            // A field of this page that has the keyboard, so a new selection commits it first,
+            // with the model it was typed for.
+            let area = ui.max_rect();
+            let revision = self.engine.revision();
+            self.inspector_focus = ctx
+                .memory(|m| m.focused())
+                .filter(|id| {
+                    ctx.read_response(*id)
+                        .is_some_and(|r| area.intersects(r.rect))
+                })
+                .map(|id| (id, revision));
+        }
         // A field to focus on the page just drawn was taken, or is not there: forgotten. (One on
         // a page chosen meanwhile, by a Show link, waits for that page.)
         let page = match &shown {

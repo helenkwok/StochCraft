@@ -214,6 +214,42 @@ fn a_new_edit_clears_redo_and_history_reports_it() {
 }
 
 #[test]
+fn the_revision_changes_with_the_model_and_only_then() {
+    let mut e = help_desk();
+    let mut seen = vec![e.revision()];
+    let mut changed = |e: &Engine, what: &str| {
+        assert!(!seen.contains(&e.revision()), "{what}: {}", e.revision());
+        seen.push(e.revision());
+    };
+    ok(&mut e, "model.rename", json!({"name": "a"}));
+    changed(&e, "an edit");
+    ok(&mut e, "undo", json!({}));
+    changed(&e, "undo");
+    ok(&mut e, "redo", json!({}));
+    changed(&e, "redo");
+    // Undo then a new edit leaves as many steps as before, but another revision.
+    ok(&mut e, "undo", json!({}));
+    changed(&e, "undo");
+    ok(&mut e, "model.rename", json!({"name": "b"}));
+    changed(&e, "a new edit");
+    ok(&mut e, "model.new", json!({}));
+    changed(&e, "a new model");
+    let path = scratch("revision.bpmn");
+    ok(&mut e, "file.save", json!({"path": path.to_string_lossy()}));
+    let before = e.revision();
+    ok(&mut e, "file.open", json!({"path": path.to_string_lossy()}));
+    assert_ne!(e.revision(), before, "an opened model");
+
+    // Queries and refused commands leave it.
+    let before = e.revision();
+    ok(&mut e, "model.get", json!({}));
+    ok(&mut e, "model.validate", json!({}));
+    ok(&mut e, "history", json!({}));
+    err(&mut e, "block.remove", json!({"id": "nowhere"}));
+    assert_eq!(e.revision(), before);
+}
+
+#[test]
 fn the_journal_replays_to_the_same_model() {
     let mut e = help_desk();
     ok(&mut e, "block.add", json!({"kind": "delay", "id": "walk"}));

@@ -638,6 +638,10 @@
 	within chance	inden for tilfældighed
 	years	år
 	{block}: units	{block}: enheder
+	{block}: mean service time	{block}: gennemsnitlig servicetid
+	{block}: mean time between arrivals	{block}: gennemsnitlig tid mellem ankomster
+	{block}: mean duration	{block}: gennemsnitlig varighed
+	{block}: waiting room	{block}: venteværelse
 	{busy} busy	{busy} optaget
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} har kontrast {ratio}:1 på diagrammets baggrund, under 3:1: sæt etiketter på dens serie, eller vis tallene i en tabel.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} ser grå ud (farvemætning {chroma}, kræver 0.10).

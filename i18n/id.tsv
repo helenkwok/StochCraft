@@ -638,6 +638,10 @@
 	within chance	dalam batas kebetulan
 	years	tahun
 	{block}: units	{block}: unit
+	{block}: mean service time	{block}: rata-rata waktu layanan
+	{block}: mean time between arrivals	{block}: rata-rata waktu antar kedatangan
+	{block}: mean duration	{block}: rata-rata durasi
+	{block}: waiting room	{block}: ruang tunggu
 	{busy} busy	{busy} sibuk
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} memiliki kontras {ratio}:1 di atas latar grafik, di bawah 3:1: beri label pada serinya atau tampilkan angkanya dalam tabel.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} tampak abu-abu (kemarakan {chroma}, perlu 0.10).

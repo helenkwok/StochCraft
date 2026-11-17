@@ -638,6 +638,10 @@
 	within chance	w granicach przypadku
 	years	lata
 	{block}: units	{block}: jednostki
+	{block}: mean service time	{block}: średni czas obsługi
+	{block}: mean time between arrivals	{block}: średni czas między przybyciami
+	{block}: mean duration	{block}: średni czas trwania
+	{block}: waiting room	{block}: poczekalnia
 	{busy} busy	Zajęte: {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrast z tłem wykresu {ratio}:1, poniżej 3:1: opisz jego serię etykietami lub pokaż liczby w tabeli.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – wygląda na szary (nasycenie {chroma}, wymagane 0.10).

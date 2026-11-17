@@ -638,6 +638,10 @@
 	within chance	inom slumpen
 	years	år
 	{block}: units	{block}: enheter
+	{block}: mean service time	{block}: genomsnittlig servicetid
+	{block}: mean time between arrivals	{block}: genomsnittlig tid mellan ankomster
+	{block}: mean duration	{block}: genomsnittlig varaktighet
+	{block}: waiting room	{block}: väntrum
 	{busy} busy	{busy} upptagna
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} har kontrast {ratio}:1 mot diagrammets bakgrund, under 3:1: märk dess serie med etiketter eller visa talen i en tabell.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} ser grå ut (färgmättnad {chroma}, kräver 0.10).

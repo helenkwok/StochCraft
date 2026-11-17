@@ -638,6 +638,10 @@
 	within chance	dins de l'atzar
 	years	anys
 	{block}: units	{block}: unitats
+	{block}: mean service time	{block}: temps de servei mitjà
+	{block}: mean time between arrivals	{block}: temps mitjà entre arribades
+	{block}: mean duration	{block}: durada mitjana
+	{block}: waiting room	{block}: sala d'espera
 	{busy} busy	{busy} ocupats
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} té un contrast de {ratio}:1 sobre el fons del gràfic, per sota de 3:1: etiqueteu-ne la sèrie o mostreu els nombres en una taula.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} es veu gris (croma {chroma}, cal 0.10).

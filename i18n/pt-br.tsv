@@ -638,6 +638,10 @@
 	within chance	dentro do acaso
 	years	anos
 	{block}: units	{block}: unidades
+	{block}: mean service time	{block}: tempo médio de serviço
+	{block}: mean time between arrivals	{block}: tempo médio entre chegadas
+	{block}: mean duration	{block}: duração média
+	{block}: waiting room	{block}: sala de espera
 	{busy} busy	{busy} ocupados
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} tem contraste de {ratio}:1 sobre o fundo do gráfico, abaixo de 3:1: rotule a série dela ou mostre os números em uma tabela.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} parece cinza (croma {chroma}, precisa de 0.10).

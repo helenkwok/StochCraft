@@ -957,6 +957,7 @@ fn batch(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                 // Take back the steps already done, so the model is as it was.
                 while e.undo.len() > start {
                     if let Some(entry) = e.undo.pop() {
+                        e.revision += 1;
                         let _ = crate::edit::apply(&mut e.model, entry.op);
                     }
                 }

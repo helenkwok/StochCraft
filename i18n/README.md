@@ -694,6 +694,16 @@ engine's messages (validation, file notes) are English too.
   inspector. "Show me" and "Done" are new words in every catalog. Not checked against a source, and
   not reviewed by native speakers; the least certain are lo, ka, kk, hi, hu, ta, te, bn and sq
   (whose catalog mixes formal and informal address), and the word for the connect dot.
+- The rows for the Analysis view's parameter labels (issue #47, four strings: "{block}: mean
+  service time", "{block}: mean time between arrivals", "{block}: mean duration" and "{block}:
+  waiting room", which reached the interface through a table the catalog check could not see)
+  were drafted from the plain meaning of the English. Each is the
+  catalog's own "{block}: units" pattern (its colon and spacing, fr "{block} :", zh "{block}：")
+  with the catalog's rows for Service time, Time between arrivals, Duration and Waiting room,
+  lower-cased where the language does not capitalise nouns, and its word for the mean as an
+  adjective (de "mittlere", fr "moyen", ja "平均", hi "माध्य"). Not checked against any other
+  source, and not reviewed by native speakers. The least certain are lo, th, ta, te, bn, ka and
+  kk as before, and ko 평균 길이, which keeps the catalog's 길이 for Duration.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

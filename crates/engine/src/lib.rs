@@ -223,6 +223,9 @@ pub struct Engine {
     /// the run record
     /// (NASA-STD-7009B [M&S 30]).
     sensitivity: Vec<Value>,
+    /// Counts changes to the model (edits, undo, redo, a new or opened document, a save that
+    /// fixes its shapes), so a view can tell it changed without comparing it.
+    revision: u64,
 }
 
 impl Default for Engine {
@@ -251,11 +254,19 @@ impl Engine {
             last_results: None,
             previous_results: None,
             sensitivity: Vec::new(),
+            revision: 0,
         }
     }
 
     pub fn model(&self) -> &Model {
         &self.model
+    }
+
+    /// A number that changes whenever the model may have changed (an edit, undo, redo, a new or
+    /// opened model) and never otherwise, so a view can redo work only then. Not saved, and not
+    /// a count of edits: it only ever grows.
+    pub fn revision(&self) -> u64 {
+        self.revision
     }
 
     /// Runs `command` with JSON `params` (`null` counts as `{}`). Every command that is not a
@@ -312,6 +323,7 @@ impl Engine {
     }
 
     fn edit(&mut self, label: &'static str, op: Op) -> Result<(), CommandError> {
+        self.revision += 1;
         let inverse = edit::apply(&mut self.model, op)?;
         self.undo.push(HistoryEntry { label, op: inverse });
         self.redo.clear();
@@ -324,6 +336,7 @@ impl Engine {
             .pop()
             .ok_or_else(|| CommandError::new(ErrorCode::NothingToUndo, "nothing to undo"))?;
         let label = entry.label;
+        self.revision += 1;
         match edit::apply(&mut self.model, entry.op.clone()) {
             Ok(op) => {
                 self.redo.push(HistoryEntry { label, op });
@@ -342,6 +355,7 @@ impl Engine {
             .pop()
             .ok_or_else(|| CommandError::new(ErrorCode::NothingToRedo, "nothing to redo"))?;
         let label = entry.label;
+        self.revision += 1;
         match edit::apply(&mut self.model, entry.op.clone()) {
             Ok(op) => {
                 self.undo.push(HistoryEntry { label, op });
@@ -369,6 +383,7 @@ impl Engine {
     /// them with the new model's.
     fn new_document(&mut self, model: Model) {
         self.saved = model.clone();
+        self.revision += 1;
         self.model = model;
         self.undo.clear();
         self.redo.clear();
@@ -452,6 +467,7 @@ impl Engine {
         // Elements that had no shape were given one in the file; they keep it.
         let layout = loaded.model.layout;
         if layout.keys().all(|id| self.model.element(id).is_some()) {
+            self.revision += 1;
             self.model.layout = layout;
         }
         self.saved = self.model.clone();
