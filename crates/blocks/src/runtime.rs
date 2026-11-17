@@ -762,10 +762,11 @@ impl Live<'_> {
             return false;
         };
         let s = s.borrow();
-        let (entered, left) = (s.entered_before + s.entered, s.left_before + s.left);
+        let entered = s.entered_before + s.entered;
         match stop {
-            stochcraft_model::Stop::Count { count, .. } => left >= *count,
-            stochcraft_model::Stop::Empty { .. } => entered > 0 && left >= entered,
+            stochcraft_model::Stop::Count { count, .. } => s.left_before + s.left >= *count,
+            // Empty now (an entity that gave up is gone without counting in `left`).
+            stochcraft_model::Stop::Empty { .. } => entered > 0 && s.inside() == 0,
         }
     }
 
@@ -3820,7 +3821,8 @@ fn take_out(
 /// shift ([`OnShiftEnd::Retry`]): the `work` done on it is
 /// wasted, and the entity goes back to the head of the queue at once, for any unit to start
 /// afresh (with a fresh patience). One that had given up during the job already (patience
-/// until done) is discarded instead, neither left nor produced. The wait recorded as it started
+/// until done) is discarded instead, neither left nor produced, and its place here goes back.
+/// The wait recorded as it started
 /// (`started`, into the statistics as they were after `resets` resets) is taken back.
 fn retry(
     env: &Rc<RefCell<BlockEnv>>,
@@ -3844,6 +3846,9 @@ fn retry(
         d.setup = false;
     });
     if e.patient.as_ref().is_some_and(|p| !p.retry(entity.id)) {
+        if let Some(p) = &e.places {
+            p.leave(entity.id);
+        }
         return;
     }
     e.adjust(|s| &mut s.waiting, 1.0);
@@ -4467,14 +4472,30 @@ fn spawn_exclusive(sim: &mut Sim, mut env: BlockEnv, outs: Vec<Out>, router: Opt
             // the model here, and is counted as lost.
             // A full finite buffer holds the gateway, and everything behind it, up.
             match to.and_then(|i| outs.get(i)) {
-                Some(out) => {
-                    env.with_stats(|s| s.left += 1);
-                    out.port.deliver(&env.ctx, entity).await;
-                }
+                Some(out) => send_on(&env, &out.port, entity, 1.0).await,
                 None => env.with_stats(|s| s.lost += 1),
             }
         }
     });
+}
+
+/// Sends `e` on from a gateway, batch or unbatch, as [`Port::deliver`] does. While a full finite
+/// buffer holds it up, the `n` entities it stands for (a batch's members) still count here, as
+/// blocked, and it counts as having left only once it gets in, as from a server.
+async fn send_on(env: &BlockEnv, out: &Port, mut e: Entity, n: f64) {
+    let blocks = out.may_block();
+    if blocks {
+        env.adjust(|s| &mut s.blocked, n);
+    }
+    let to = out.make_room(&mut e).await;
+    if blocks {
+        env.adjust(|s| &mut s.blocked, -n);
+    }
+    env.with_stats(|s| s.left += 1);
+    match to {
+        Ok(to) => to.dispatch(&env.ctx, e),
+        Err(why) => out.refuse(e, why),
+    }
 }
 
 /// The entity a join sends on: the one from its first input, with any property it lacks taken
@@ -4545,8 +4566,7 @@ fn spawn_parallel(
                     e.id = *n;
                     *n += 1;
                 }
-                env.with_stats(|s| s.left += 1);
-                out.port.deliver(&env.ctx, e).await;
+                send_on(&env, &out.port, e, 1.0).await;
             }
         }
     });
@@ -4568,12 +4588,13 @@ fn spawn_batch(sim: &mut Sim, env: BlockEnv, size: u32) {
                 continue;
             }
             let mut members = std::mem::take(&mut held);
-            env.adjust(|s| &mut s.busy, -(members.len() as f64));
+            let n = members.len() as f64;
+            env.adjust(|s| &mut s.busy, -n);
             let mut batch = members.remove(0);
             batch.members.extend(members);
-            env.with_stats(|s| s.left += 1);
-            if let Some(out) = &env.out {
-                out.deliver(&env.ctx, batch).await;
+            match &env.out {
+                Some(out) => send_on(&env, out, batch, n).await,
+                None => env.with_stats(|s| s.left += 1),
             }
         }
     });
@@ -4588,9 +4609,9 @@ fn spawn_unbatch(sim: &mut Sim, env: BlockEnv) {
             env.adjust(|s| &mut s.waiting, -1.0);
             let members = std::mem::take(&mut entity.members);
             for e in std::iter::once(entity).chain(members) {
-                env.with_stats(|s| s.left += 1);
-                if let Some(out) = &env.out {
-                    out.deliver(&env.ctx, e).await;
+                match &env.out {
+                    Some(out) => send_on(&env, out, e, 1.0).await,
+                    None => env.with_stats(|s| s.left += 1),
                 }
             }
         }

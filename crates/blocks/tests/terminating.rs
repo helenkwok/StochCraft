@@ -4,7 +4,9 @@
 //! which the empirical distribution and its Dvoretzky–Kiefer–Wolfowitz band must contain.
 #![allow(clippy::panic)]
 
-use stochcraft_blocks::{Builder, Compiled, Report, compile, run_warnings, summarise};
+use stochcraft_blocks::{
+    Builder, Compiled, Patience, PatienceUntil, Report, compile, run_warnings, summarise,
+};
 use stochcraft_model::{Dist, ElementId, Experiment, Model, Problem, Stop};
 use stochcraft_random::Rng;
 use stochcraft_stats::Ecdf;
@@ -300,4 +302,34 @@ fn a_stop_inside_the_warm_up_leaves_the_replication_out() {
         .map(|d| d.problem)
         .collect();
     assert_eq!(problems, vec![Problem::OneReplication]);
+}
+
+#[test]
+fn a_task_emptying_stops_the_run_when_some_gave_up() {
+    // Arrivals at 1, 2 and 3; the first is served from 1 to 11, the others give up waiting at
+    // 4 and 5. The desk is empty at 11, though only one entity left it the usual way.
+    let mut b = Builder::new();
+    let src = b.source("orders", Dist::Constant(1.0), Some(3));
+    let desk = b.server("desk", 1, Dist::Constant(10.0));
+    let out = b.sink("out");
+    let gave_up = b.sink("gave_up");
+    b.connect(src, desk);
+    b.connect(desk, out);
+    b.abandoned(desk, gave_up);
+    b.patience(
+        desk,
+        Patience {
+            time: Dist::Constant(2.0),
+            until: PatienceUntil::Start,
+        },
+    );
+    let model = b.build(stopping(
+        Stop::Empty {
+            element: ElementId::unchecked("desk"),
+        },
+        1_000.0,
+    ));
+    let r = run(&compiled(&model), 3);
+    assert_eq!(r.stopped_at, Some(11.0));
+    assert_eq!(r.element("gave_up").map(|o| o.entered), Some(2));
 }
