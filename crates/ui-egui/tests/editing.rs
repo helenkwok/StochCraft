@@ -702,6 +702,38 @@ fn pools_are_added_and_a_shared_task_needs_them_by_pool_or_role() {
     );
 }
 
+/// Selects the field labelled `label` and types `text` into it, without pressing Enter.
+fn type_without_enter(h: &mut Harness<'static, App>, label: &str, text: &str) {
+    h.get_by_role_and_label(Role::TextInput, label).click();
+    settle(h);
+    h.key_press_modifiers(egui::Modifiers::COMMAND, egui::Key::A);
+    h.get_by_role_and_label(Role::TextInput, label)
+        .type_text(text);
+    settle(h);
+}
+
+#[test]
+fn text_typed_but_not_entered_is_committed_when_another_block_is_selected() {
+    let mut h = mm1();
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    type_without_enter(&mut h, "Name", "Front desk");
+    assert_eq!(element(&h, "serve")["name"], "Serve customer", "not yet");
+    // Another block, chosen in the process line: the name is committed as Enter would.
+    click(&mut h, Role::ListBoxOption, "Customer arrives");
+    assert_eq!(element(&h, "serve")["name"], "Front desk");
+    h.get_by_role_and_label(Role::ListBoxOption, "Front desk");
+    // One step, which Undo takes back.
+    h.state_mut().undo();
+    settle(&mut h);
+    assert_eq!(h.state().status(), "Undid Rename Block");
+
+    // A number too, and from the overview's fields when a block is then chosen.
+    click(&mut h, Role::ListBoxOption, "Serve customer");
+    type_without_enter(&mut h, "Mean", "1.5");
+    click(&mut h, Role::ListBoxOption, "Customer leaves");
+    assert_eq!(element(&h, "serve")["service"]["mean"], json!(1.5));
+}
+
 #[test]
 fn a_shared_task_added_with_no_pool_brings_one_and_both_undo_in_one_step() {
     let mut h = mm1();

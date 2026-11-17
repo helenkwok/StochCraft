@@ -556,6 +556,12 @@ pub struct App {
     drafts: std::collections::HashMap<String, String>,
     /// The block the inspector showed last (`None`: the overview), whose drafts these are.
     drafts_of: Option<String>,
+    /// The field of the inspector that had the keyboard when it was last drawn, and the engine
+    /// revision of the model then.
+    inspector_focus: Option<(egui::Id, u64)>,
+    /// The inspector shows `drafts_of` for one more frame, while its field commits, though
+    /// another block is selected.
+    drafts_held: bool,
     /// The connections table's choices, before Connect.
     connect_from: Option<String>,
     connect_to: Option<String>,
@@ -661,6 +667,8 @@ impl App {
             problems_of: None,
             drafts: std::collections::HashMap::new(),
             drafts_of: None,
+            inspector_focus: None,
+            drafts_held: false,
             connect_from: None,
             connect_to: None,
             show_results: false,

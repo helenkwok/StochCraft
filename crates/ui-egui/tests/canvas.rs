@@ -262,6 +262,54 @@ fn a_pasted_block_without_a_name_is_named_like_a_new_one() {
     assert!(names.iter().any(String::is_empty), "{names:?}");
 }
 
+/// Types `text` into the field labelled `label` without pressing Enter.
+fn type_without_enter(h: &mut Harness<'static, App>, label: &str, text: &str) {
+    h.get_by_role_and_label(Role::TextInput, label).click();
+    settle(h);
+    h.key_press_modifiers(Modifiers::COMMAND, egui::Key::A);
+    h.get_by_role_and_label(Role::TextInput, label)
+        .type_text(text);
+    settle(h);
+}
+
+fn mean(h: &Harness<'static, App>) -> serde_json::Value {
+    let model = stochcraft_engine::wire::model(h.state().engine().model());
+    model["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|e| e["id"] == "serve"))
+        .map(|e| e["service"]["mean"].clone())
+        .unwrap_or_default()
+}
+
+#[test]
+fn a_number_typed_but_not_entered_is_committed_when_another_shape_is_clicked() {
+    let mut h = mm1();
+    let at = shape(&h, "Serve customer").center();
+    click_at(&mut h, at, Modifiers::NONE);
+    type_without_enter(&mut h, "Mean", "2.5");
+    assert_eq!(mean(&h), json!(1.0), "not yet");
+    let at = shape(&h, "Customer arrives").center();
+    click_at(&mut h, at, Modifiers::NONE);
+    assert_eq!(mean(&h), json!(2.5));
+    assert!(
+        h.query_by_role_and_label(Role::TextInput, "Capacity")
+            .is_none(),
+        "the arrivals' page is shown"
+    );
+
+    // Text typed for a model that has since been replaced is dropped, not written into the
+    // new one (here the same example again, with the same ids).
+    let mut h = mm1();
+    let at = shape(&h, "Serve customer").center();
+    click_at(&mut h, at, Modifiers::NONE);
+    type_without_enter(&mut h, "Mean", "2.5");
+    let e = &EXAMPLES[0];
+    h.state_mut().open_file(e.file, e.bytes);
+    settle(&mut h);
+    assert_eq!(mean(&h), json!(1.0));
+    assert!(!h.state().has_unsaved_changes());
+}
+
 #[test]
 fn the_view_zooms_and_a_click_on_the_background_selects_nothing() {
     let mut h = mm1();
