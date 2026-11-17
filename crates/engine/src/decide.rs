@@ -606,9 +606,19 @@ pub fn deterministic(model: &Model) -> Model {
         if let Some(Some(by)) = e.kind.processing_by_mut() {
             by.by_value.iter_mut().for_each(|v| mean(&mut v.time));
         }
+        // A property can be below 0, which a constant is not: a normal with no spread keeps it.
         for p in &mut e.properties {
-            if let PropertyValue::Random(d) = &mut p.value {
-                mean(d);
+            if let PropertyValue::Random(d) = &mut p.value
+                && let Some(x) = d.mean()
+            {
+                *d = if x >= 0.0 {
+                    Dist::Constant(x)
+                } else {
+                    Dist::Normal {
+                        mean: x,
+                        std_dev: 0.0,
+                    }
+                };
             }
         }
     }
@@ -773,6 +783,11 @@ mod tests {
                 "property.set",
                 json!({ "element": "arrivals", "name": "size", "value": { "random": exp(2.0) } }),
             ),
+            (
+                "property.set",
+                json!({ "element": "arrivals", "name": "offset",
+                        "value": { "random": { "type": "normal", "mean": -3.0, "std_dev": 1.0 } } }),
+            ),
         ];
         for (command, params) in steps {
             let r = e.execute(command, params.clone());
@@ -808,9 +823,16 @@ mod tests {
         fixed(&check.interval, 1.0);
         fixed(&check.restart, 0.5);
         let arrivals = m.elements.iter().find(|e| e.id.as_str() == "arrivals");
-        assert_eq!(
-            arrivals.map(|e| e.properties[0].value.clone()),
-            Some(PropertyValue::Random(Dist::Constant(2.0)))
-        );
+        let drawn = |name: &str| {
+            let p = arrivals.and_then(|e| e.properties.iter().find(|p| p.name == name));
+            match p.map(|p| &p.value) {
+                Some(PropertyValue::Random(d)) => {
+                    Some(d.sample(&mut stochcraft_random::Rng::new(1)))
+                }
+                _ => None,
+            }
+        };
+        assert_eq!(drawn("size"), Some(2.0));
+        assert_eq!(drawn("offset"), Some(-3.0));
     }
 }
