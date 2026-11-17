@@ -347,13 +347,14 @@ fn the_paper_line_matches_its_markov_chain() {
         if i < 3 {
             covers(&s, m, Metric::BlockingProbability, e.blocked[i]);
         }
-        // No part is lost inside the line.
-        if i > 0 {
-            covers(&s, m, Metric::Lost, 0.0);
-        }
     }
-    // The first machine is never starved.
+    // The first machine is never starved, and no part is lost inside the line, in any
+    // replication.
     for r in &reps {
+        for m in ["m2", "m3", "m4"] {
+            let lost = r.element(m).and_then(|x| x.lost).unwrap_or(0);
+            assert_eq!(lost, 0, "{m} lost parts");
+        }
         let starved = r.element("m1").and_then(|m| m.time_starved);
         assert!(starved.is_some_and(|x| x < 1e-9), "m1 starved {starved:?}");
     }
