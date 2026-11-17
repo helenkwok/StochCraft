@@ -125,6 +125,7 @@ fn models() -> Vec<(&'static str, Engine)> {
         ("mm1.bpmn", opened("mm1.bpmn")),
         ("tandem.xpdl", opened("tandem.xpdl")),
         ("distributions.bpmn", opened("distributions.bpmn")),
+        ("repair-shop.bpmn", opened("repair-shop.bpmn")),
         ("plant.json", plant()),
         ("help desk", help_desk()),
         ("pooled", pooled()),

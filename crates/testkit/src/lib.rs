@@ -34,6 +34,12 @@ pub static GOLDEN: &[Golden] = &[
         name: "distributions.bpmn",
         bytes: include_bytes!("../../../tests/models/distributions.bpmn"),
     },
+    // Gateways with conditions, a parallel split and join, entity properties, a shared pool and
+    // a finite buffer.
+    Golden {
+        name: "repair-shop.bpmn",
+        bytes: include_bytes!("../../../tests/models/repair-shop.bpmn"),
+    },
 ];
 
 /// Replications per golden run: enough to exercise the experiment, few enough to be quick on a

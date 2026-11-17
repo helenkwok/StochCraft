@@ -19,10 +19,15 @@ fn ok(e: &mut Engine, command: &str, params: Value) -> Value {
 /// has downloaded them.
 fn models() -> Vec<PathBuf> {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let mut paths: Vec<PathBuf> = ["mm1.bpmn", "tandem.xpdl", "distributions.bpmn"]
-        .iter()
-        .map(|n| root.join("tests/models").join(n))
-        .collect();
+    let mut paths: Vec<PathBuf> = [
+        "mm1.bpmn",
+        "tandem.xpdl",
+        "distributions.bpmn",
+        "repair-shop.bpmn",
+    ]
+    .iter()
+    .map(|n| root.join("tests/models").join(n))
+    .collect();
     let mut dirs = vec![root.join("target/bpsim/guide")];
     while let Some(dir) = dirs.pop() {
         for entry in std::fs::read_dir(&dir).into_iter().flatten().flatten() {
