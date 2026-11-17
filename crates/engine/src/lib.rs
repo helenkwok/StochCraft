@@ -45,6 +45,7 @@ mod decide;
 mod design;
 mod distribution;
 mod edit;
+mod fit;
 mod run;
 pub mod wire;
 mod workers;

@@ -98,6 +98,19 @@ A factor is `id.field=levels` or `id.field=min..max`, the field one of `capacity
 and gives each factor's rank correlation with each result. A design may take at most 10,000 runs
 (points × replications).
 
+To choose a distribution for measured times, `fit` fits one column of a CSV file (or a plain list,
+one value per line; `-` reads standard input) to each family by maximum likelihood and ranks the
+fits by Anderson–Darling A², with the Kolmogorov–Smirnov distance beside it:
+
+```bash
+stochcraft-cli fit service-times.csv --column minutes
+```
+
+`--families gamma,log_normal,weibull` limits the families, and `--format json` gives the engine's
+`estimate.fit` answer. Fewer than 20 values get no fit (`--min-count` lowers that, to 5 at least),
+and families that need values above 0 are left out, with the reason, when a value is 0 or less.
+The best fit's distribution is printed as `block.set` takes it.
+
 Changes can be scripted as engine commands (`stochcraft-cli schema` lists them with their
 parameters) and replayed:
 

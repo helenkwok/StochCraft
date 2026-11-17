@@ -3475,3 +3475,91 @@ fn balking_and_a_balked_way_are_set_run_and_removed() {
         ErrorCode::InvalidParams
     );
 }
+
+#[test]
+fn measured_data_are_fitted_ranked_and_applied_with_block_set() {
+    let mut e = help_desk();
+    let before = e.model().clone();
+    // 400 service times from a log-normal (StochCraft's own sampler, fixed seed).
+    let truth = Dist::LogNormal {
+        mean: 1.5,
+        std_dev: 1.2,
+    };
+    let mut rng = Rng::new(31);
+    let data: Vec<f64> = (0..400).map(|_| truth.sample(&mut rng)).collect();
+    let r = ok(&mut e, "estimate.fit", json!({ "data": data }));
+    assert_eq!(r["count"], 400);
+    assert_eq!(r["ranked_by"], "anderson_darling");
+    let candidates = r["candidates"].as_array().cloned().unwrap_or_default();
+    assert_eq!(candidates.len(), 8, "{r}");
+    assert_eq!(candidates[0]["family"], "log_normal", "{r}");
+    assert_eq!(r["best"], candidates[0]["distribution"]);
+    assert_eq!(r["best"]["type"], "log_normal");
+    let a2: Vec<f64> = candidates
+        .iter()
+        .map(|c| c["anderson_darling"].as_f64().unwrap_or(f64::NAN))
+        .collect();
+    assert!(a2.windows(2).all(|w| w[0] <= w[1]), "{a2:?}");
+    for c in &candidates {
+        for k in ["mean", "std_dev", "log_likelihood", "kolmogorov_smirnov"] {
+            assert!(c[k].is_number(), "{k}: {c}");
+        }
+    }
+    // A query: nothing changed, nothing journalled.
+    assert_eq!(e.model(), &before);
+    assert!(e.journal().len() <= 1);
+
+    // The fit goes straight into block.set.
+    ok(
+        &mut e,
+        "block.set",
+        json!({ "id": "desk", "service": r["best"].clone() }),
+    );
+    let m = ok(&mut e, "model.get", json!({}));
+    let desk = m["elements"]
+        .as_array()
+        .and_then(|es| es.iter().find(|el| el["id"] == "desk"))
+        .cloned()
+        .unwrap_or_default();
+    assert_eq!(desk["service"], r["best"], "{desk}");
+
+    // Families asked for by name, and the ones needing positive values skipped for a zero.
+    let mut with_zero = data.clone();
+    with_zero[0] = 0.0;
+    let r = ok(
+        &mut e,
+        "estimate.fit",
+        json!({ "data": with_zero, "families": ["lognormal", "normal", "gamma"] }),
+    );
+    assert_eq!(r["candidates"].as_array().map(Vec::len), Some(1), "{r}");
+    assert_eq!(r["candidates"][0]["family"], "normal");
+    assert_eq!(
+        r["skipped"],
+        json!([
+            {"family": "log_normal", "reason": "needs every value above 0"},
+            {"family": "gamma", "reason": "needs every value above 0"}
+        ])
+    );
+
+    // Refusals: too few values, no usable family, an unknown family, no families.
+    for bad in [
+        json!({ "data": data[..19].to_vec() }),
+        json!({ "data": data[..4].to_vec(), "min_count": 2 }),
+        json!({ "data": with_zero, "families": ["weibull"] }),
+        json!({ "data": vec![2.0; 30] }),
+        json!({ "data": data, "families": ["beta"] }),
+        json!({ "data": data, "families": [] }),
+        json!({ "values": data }),
+    ] {
+        assert_eq!(err(&mut e, "estimate.fit", bad), ErrorCode::InvalidParams);
+    }
+    let few = e.execute("estimate.fit", json!({ "data": data[..19].to_vec() }));
+    let message = few.err().map(|e| e.message).unwrap_or_default();
+    assert!(message.contains("at least 20"), "{message}");
+    // A smaller minimum is honoured.
+    ok(
+        &mut e,
+        "estimate.fit",
+        json!({ "data": data[..10].to_vec(), "min_count": 10 }),
+    );
+}

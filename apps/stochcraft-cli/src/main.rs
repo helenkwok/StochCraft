@@ -3,6 +3,7 @@
 //! Everything goes through the engine's commands (`stochcraft-engine`), as the desktop app and
 //! agents do, so a command line session can be replayed as a script and vice versa.
 
+mod fit;
 mod output;
 mod templates;
 
@@ -110,6 +111,25 @@ enum Command {
         /// Write the output to this file instead of the terminal.
         #[arg(long, short)]
         out: Option<PathBuf>,
+    },
+    /// Fit measured values to distributions (the engine's `estimate.fit`): each family by
+    /// maximum likelihood, ranked by Anderson–Darling A², with the Kolmogorov–Smirnov distance.
+    /// Exits with 1 if no family can be fitted.
+    Fit {
+        /// A CSV file, or a plain list with one value per line; `-` reads standard input.
+        file: PathBuf,
+        /// The column: its header or its number from 1 (default: the only column).
+        #[arg(long, short)]
+        column: Option<String>,
+        /// The families to try, separated by commas (default: all): exponential, gamma,
+        /// erlang, log_normal, weibull, normal, uniform, triangular.
+        #[arg(long, value_delimiter = ',')]
+        families: Vec<String>,
+        /// The fewest values a fit is offered for (default 20; never fewer than 5).
+        #[arg(long)]
+        min_count: Option<u32>,
+        #[arg(long, value_enum, default_value_t = Format::Table)]
+        format: Format,
     },
     /// Replay engine commands from a JSON script: an array of {"command", "params"}, as an
     /// engine journal is written. Prints each step's result as a line of JSON.
@@ -524,6 +544,19 @@ fn main() -> ExitCode {
             seed,
             format,
             out: out.as_deref(),
+        }),
+        Command::Fit {
+            file,
+            column,
+            families,
+            min_count,
+            format,
+        } => fit::fit(&fit::FitArgs {
+            file: &file,
+            column: column.as_deref(),
+            families: &families,
+            min_count,
+            format,
         }),
         Command::Exec { script, open } => exec(&script, open.as_deref()),
         Command::Schema { command } => schema(command.as_deref()),
