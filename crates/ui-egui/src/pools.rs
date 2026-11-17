@@ -2,7 +2,10 @@
 //! units and roles, and a task with shared resources lists what it needs, one alternative per
 //! row, tried in order. Every change is one engine command, so each undoes in one step.
 
+use std::collections::BTreeSet;
+
 use serde_json::{Value, json};
+use stochcraft_engine::ErrorCode;
 
 use crate::editor::{params_schema, section};
 use crate::form::{self, Schema};
@@ -258,14 +261,46 @@ impl App {
         }
     }
 
-    /// A new task with shared resources needs a pool to draw on: the first, or a new one.
-    pub(crate) fn first_pool(&mut self) -> Option<String> {
-        let model = stochcraft_engine::wire::model(self.engine.model());
-        if let Some(id) = model["resources"][0]["id"].as_str() {
-            return Some(id.to_owned());
+    /// Adds a task with shared resources (`params` are `block.add`'s), needing one unit of the
+    /// first pool. With no pool yet, a new one is added with it, in one step that Undo takes
+    /// back whole. The `block.add` result, or None with the error shown.
+    pub(crate) fn add_shared_task(&mut self, mut params: Value) -> Option<Value> {
+        let model = self.engine.model();
+        if let Some(pool) = model.resources.first() {
+            params["needs"] = json!([{ "resource": pool.id.as_str(), "quantity": 1 }]);
+            return self.execute("block.add", params);
         }
-        let r = self.execute("resource.add", json!({}))?;
-        r["id"].as_str().map(str::to_owned)
+        // The task's need names the pool, so its id is chosen here, as the engine would choose
+        // it: `resource-N` with the first N free. An id the opened file keeps for something the
+        // model doesn't have is refused as a conflict, and the next is tried.
+        let taken: BTreeSet<String> = model
+            .elements
+            .iter()
+            .map(|e| e.id.as_str())
+            .chain(model.connections.iter().map(|c| c.id.as_str()))
+            .chain(model.resources.iter().map(|r| r.id.as_str()))
+            .chain(model.calendars.iter().map(|c| c.id.as_str()))
+            .map(str::to_owned)
+            .collect();
+        for pool in (1u64..)
+            .map(|n| format!("resource-{n}"))
+            .filter(|id| !taken.contains(id))
+        {
+            params["needs"] = json!([{ "resource": pool, "quantity": 1 }]);
+            let batch = json!({ "commands": [
+                { "command": "resource.add", "params": { "id": pool } },
+                { "command": "block.add", "params": params },
+            ] });
+            match self.engine.execute("batch", batch) {
+                Ok(r) => return Some(r["results"][1].clone()),
+                Err(e) if e.code == ErrorCode::Conflict => {}
+                Err(e) => {
+                    self.command_failed(e);
+                    return None;
+                }
+            }
+        }
+        None
     }
 }
 

@@ -304,17 +304,16 @@ impl App {
     pub(crate) fn add_block(&mut self, kind: &str) {
         let mut params = new_block(kind);
         params["name"] = json!(default_block_name(self.engine.model(), &[], kind));
-        if kind == "shared_task" {
-            let Some(pool) = self.first_pool() else {
-                return;
-            };
-            params["needs"] = json!([{ "resource": pool, "quantity": 1 }]);
-        }
         let index = self.selected_index().map(|i| i + 1);
         if let Some(i) = index {
             params["index"] = json!(i);
         }
-        if let Some(r) = self.execute("block.add", params)
+        let added = if kind == "shared_task" {
+            self.add_shared_task(params)
+        } else {
+            self.execute("block.add", params)
+        };
+        if let Some(r) = added
             && let Some(id) = r["id"].as_str()
         {
             self.info(tf(

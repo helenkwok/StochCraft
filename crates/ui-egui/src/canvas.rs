@@ -994,12 +994,6 @@ impl App {
             &[],
             kind
         ));
-        if kind == "shared_task" {
-            let Some(pool) = self.first_pool() else {
-                return;
-            };
-            params["needs"] = json!([{ "resource": pool, "quantity": 1 }]);
-        }
         let (w, h) = match kind {
             "source" | "sink" => (36.0, 36.0),
             "exclusive_gateway" | "parallel_gateway" => (50.0, 50.0),
@@ -1009,7 +1003,12 @@ impl App {
         self.place(&BTreeMap::new());
         params["x"] = json!(snap(at.0 - w / 2.0));
         params["y"] = json!(snap(at.1 - h / 2.0));
-        if let Some(r) = self.execute("block.add", params)
+        let added = if kind == "shared_task" {
+            self.add_shared_task(params)
+        } else {
+            self.execute("block.add", params)
+        };
+        if let Some(r) = added
             && let Some(id) = r["id"].as_str()
         {
             self.info(tf(

@@ -1086,11 +1086,16 @@ impl App {
         match self.engine.execute(command, params) {
             Ok(v) => Some(v),
             Err(e) => {
-                self.report_error(e.message);
-                self.status_at = e.details.as_ref().and_then(|d| self.error_block(d));
+                self.command_failed(e);
                 None
             }
         }
+    }
+
+    /// Shows a command's error in the status bar, which a click takes to the block it is on.
+    fn command_failed(&mut self, e: CommandError) {
+        self.report_error(e.message);
+        self.status_at = e.details.as_ref().and_then(|d| self.error_block(d));
     }
 
     /// Opens a model file from its bytes (`name` is its path, or its name where there are no

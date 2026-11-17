@@ -703,6 +703,44 @@ fn pools_are_added_and_a_shared_task_needs_them_by_pool_or_role() {
 }
 
 #[test]
+fn a_shared_task_added_with_no_pool_brings_one_and_both_undo_in_one_step() {
+    let mut h = mm1();
+    let pools = |h: &Harness<'static, App>| model(h)["resources"].as_array().map_or(0, Vec::len);
+    let has_task = |h: &Harness<'static, App>, id: &str| {
+        model(h)["elements"]
+            .as_array()
+            .is_some_and(|es| es.iter().any(|e| e["id"] == id))
+    };
+    assert_eq!(pools(&h), 0);
+    click(&mut h, Role::Button, "+ Add block");
+    click(&mut h, Role::Button, "Task with shared resources");
+    assert_eq!(model(&h)["resources"][0]["id"], "resource-1");
+    assert_eq!(
+        element(&h, "shared_task-1")["needs"],
+        json!([{"resource": "resource-1", "quantity": 1}])
+    );
+
+    // One Undo takes back the task and its pool together; Redo brings both back.
+    h.state_mut().undo();
+    settle(&mut h);
+    assert!(!has_task(&h, "shared_task-1"));
+    assert_eq!(pools(&h), 0, "{}", h.state().status());
+    h.state_mut().redo();
+    settle(&mut h);
+    assert!(has_task(&h, "shared_task-1"));
+    assert_eq!(pools(&h), 1);
+
+    // With a pool there already, the next task needs it and no pool is added.
+    click(&mut h, Role::Button, "+ Add block");
+    click(&mut h, Role::Button, "Task with shared resources");
+    assert_eq!(
+        element(&h, "shared_task-2")["needs"],
+        json!([{"resource": "resource-1", "quantity": 1}])
+    );
+    assert_eq!(pools(&h), 1);
+}
+
+#[test]
 fn a_servers_transfer_breakdowns_and_availability_are_edited_in_its_inspector() {
     let mut h = mm1();
     click(&mut h, Role::ListBoxOption, "Serve customer");
