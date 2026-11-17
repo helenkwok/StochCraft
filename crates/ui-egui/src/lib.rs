@@ -1603,6 +1603,15 @@ impl App {
         if self.running.is_some() && ctx.input(|i| i.key_pressed(Key::Escape)) {
             self.cancel_run();
         }
+        // Esc stops the guide first, before it would clear the selection the guide made (the
+        // block whose connect dot it points at), unless a field is being typed in or a run goes.
+        if self.guide.on
+            && !ctx.egui_wants_keyboard_input()
+            && self.running.is_none()
+            && ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::Escape))
+        {
+            self.guide.on = false;
+        }
         // The block list from the keyboard, when no field is being edited.
         let typing = ctx.memory(|m| m.focused().is_some());
         if !typing && !self.show_results {
@@ -1630,14 +1639,6 @@ impl App {
             {
                 self.select(std::collections::BTreeSet::new());
             }
-        }
-        // Esc stops the guide, once nothing is left selected and no run is going.
-        if self.guide.on
-            && !ctx.egui_wants_keyboard_input()
-            && self.running.is_none()
-            && ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::Escape))
-        {
-            self.guide.on = false;
         }
     }
 
@@ -1762,6 +1763,11 @@ impl App {
 
     /// Starts the guide at the first step not done.
     fn start_guide(&mut self) {
+        // From an empty window (Show me in Help over the start page), the canvas and its palette
+        // replace the start page, so the first step's chip is there to point at.
+        if self.engine.model().elements.is_empty() {
+            self.building = true;
+        }
         self.guide.on = true;
         self.guide.last = None;
     }

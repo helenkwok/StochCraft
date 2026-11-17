@@ -441,6 +441,13 @@ fn show_me_guides_a_first_model_on_the_canvas() {
         std::collections::BTreeSet::from([arrivals.clone()])
     );
     h.get_by_label(&format!("Connect from {arrivals}"));
+    // Esc stops the guide on the first press, though it selected Arrivals; Show me resumes it.
+    h.key_press(egui::Key::Escape);
+    settle(&mut h);
+    assert!(h.query_by_label("Step 2 of 5").is_none());
+    h.get_by_label("Show me").click_accesskit();
+    settle(&mut h);
+    h.get_by_label("Step 2 of 5");
     h.state_mut()
         .execute("connect", json!({ "from": arrivals, "to": task }));
     settle(&mut h);
@@ -476,6 +483,9 @@ fn show_me_guides_a_first_model_on_the_canvas() {
     h.get_by_label("Show me").click_accesskit();
     settle(&mut h);
     h.get_by_label("Step 1 of 5");
+    // Over the start page, Show me opens the canvas, so the chip it points at is there.
+    assert!(h.query_by_label("What do you want to find out?").is_none());
+    h.get_by_role_and_label(button, "arrivals");
     h.key_press(egui::Key::Escape);
     settle(&mut h);
     assert!(h.query_by_label("Step 1 of 5").is_none());
