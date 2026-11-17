@@ -439,3 +439,53 @@ fn the_same_tools_drive_an_app_through_its_control_channel() {
     .unwrap();
     assert!(note.is_some_and(|n| n.contains("running headless")));
 }
+
+#[test]
+fn the_control_channel_takes_a_limited_number_of_clients() {
+    use std::io::{BufRead, BufReader, Write};
+    let addr = app_with_control();
+    let ask = |stream: &std::net::TcpStream, id: u64| -> Option<Value> {
+        let mut w = stream.try_clone().unwrap();
+        writeln!(w, r#"{{"id":{id},"method":"engine.commands"}}"#).ok()?;
+        let mut reply = String::new();
+        BufReader::new(stream.try_clone().unwrap())
+            .read_line(&mut reply)
+            .ok()?;
+        serde_json::from_str(&reply).ok()
+    };
+    // Each answered, so the app has taken all of them.
+    let mut open: Vec<std::net::TcpStream> = (0..control::MAX_CLIENTS)
+        .map(|_| std::net::TcpStream::connect(addr).unwrap())
+        .collect();
+    for (i, s) in open.iter().enumerate() {
+        assert!(ask(s, i as u64).unwrap()["result"].is_array());
+    }
+    // One more is told why, under its own id, and closed.
+    let extra = std::net::TcpStream::connect(addr).unwrap();
+    let refused = ask(&extra, 99).unwrap();
+    assert_eq!(refused["id"], 99);
+    assert_eq!(refused["error"]["code"], "conflict");
+    assert!(
+        refused["error"]["message"]
+            .as_str()
+            .unwrap()
+            .contains(&control::MAX_CLIENTS.to_string())
+    );
+    let mut rest = String::new();
+    assert_eq!(
+        BufReader::new(extra).read_line(&mut rest).unwrap_or(0),
+        0,
+        "{rest}"
+    );
+    // Once one closes, a new client is taken (its place is given back as its thread ends).
+    drop(open.pop());
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(5);
+    loop {
+        let s = std::net::TcpStream::connect(addr).unwrap();
+        if ask(&s, 1).is_some_and(|r| r["result"].is_array()) {
+            break;
+        }
+        assert!(std::time::Instant::now() < deadline, "no place came free");
+        std::thread::sleep(std::time::Duration::from_millis(20));
+    }
+}
