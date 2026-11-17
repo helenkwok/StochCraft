@@ -432,6 +432,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
           PRERELEASE: ${{ needs.version.outputs.prerelease }}
+          # This job runs only for a pushed tag, so the macOS job signed when MACOS_SIGN is "true".
+          MACOS_SIGNED: ${{ vars.MACOS_SIGN == 'true' }}
         run: |
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             if [ "$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)" != "true" ]; then
@@ -445,8 +447,13 @@ jobs:
           else
             flags=""
             [ "$PRERELEASE" = true ] && flags="--prerelease"
+            if [ "$MACOS_SIGNED" = true ]; then
+              signing="The macOS builds are signed with a Developer ID and notarized by Apple; the Windows builds are not signed."
+            else
+              signing="The Windows and macOS builds are not signed."
+            fi
             gh release create "$TAG" release/* --repo "$GITHUB_REPOSITORY" \
               --draft --verify-tag $flags \
               --title "StochCraft $TAG" \
-              --notes "StochCraft $TAG. Check the files against SHA256SUMS.txt. The Windows and macOS builds are not signed."
+              --notes "StochCraft $TAG. Check the files against SHA256SUMS.txt. $signing"
           fi
