@@ -193,7 +193,7 @@ fn fresh_id(base: &str, taken: &BTreeSet<String>) -> String {
 
 impl App {
     /// The blocks selected now: several, one, or none.
-    pub(crate) fn selection(&self) -> BTreeSet<String> {
+    pub fn selection(&self) -> BTreeSet<String> {
         if self.canvas.multi.is_empty() {
             self.selected.iter().cloned().collect()
         } else {
@@ -270,30 +270,59 @@ impl App {
                 ui.horizontal(|ui| {
                     ui.label(theme::weak(ui, t("Drag to add:")));
                     for (kind, label) in KINDS {
-                        let id = egui::Id::unique(("palette", *kind));
-                        let chip = ui.dnd_drag_source(id, (*kind).to_owned(), |ui| {
-                            ui.add(
-                                egui::Button::new(
-                                    egui::RichText::new(crate::kind_text(kind)).size(12.0),
-                                )
-                                .sense(Sense::click_and_drag()),
-                            )
-                        });
-                        let (button, r) = (chip.inner, chip.response);
-                        // The strip scrolls, so a chip the keyboard reaches is scrolled into
-                        // view (WCAG 2.4.11). Both the button and egui's drag area around it
-                        // take focus; the drag area draws nothing of its own, so it gets a ring.
-                        if button.gained_focus() || r.gained_focus() {
-                            r.scroll_to_me(None);
+                        // The chip itself is the drag source, not a drag area over it as egui's
+                        // `dnd_drag_source` makes: a drag-only area on top takes the click, so a
+                        // click (or Enter) on the chip did nothing.
+                        let text = egui::RichText::new(crate::kind_text(kind)).size(12.0);
+                        let r = ui
+                            .add(egui::Button::new(text).sense(Sense::click_and_drag()))
+                            .on_hover_cursor(egui::CursorIcon::Grab);
+                        if r.dragged() {
+                            egui::DragAndDrop::set_payload(ui.ctx(), (*kind).to_owned());
+                            ui.ctx().set_cursor_icon(egui::CursorIcon::Grabbing);
+                            // The chip's name follows the pointer while it is dragged.
+                            if let Some(at) = ui.ctx().pointer_interact_pos() {
+                                let layer = egui::LayerId::new(
+                                    egui::Order::Tooltip,
+                                    egui::Id::unique(("palette-drag", *kind)),
+                                );
+                                let p = theme::palette(ui.ctx());
+                                let painter = ui.ctx().layer_painter(layer);
+                                let galley = painter.layout_no_wrap(
+                                    crate::kind_text(kind).to_owned(),
+                                    FontId::proportional(12.0),
+                                    p.text,
+                                );
+                                let ghost = Rect::from_center_size(
+                                    at,
+                                    galley.size() + Vec2::new(16.0, 8.0),
+                                );
+                                painter.rect(
+                                    ghost,
+                                    6.0,
+                                    p.raised,
+                                    Stroke::new(1.0, p.accent),
+                                    StrokeKind::Inside,
+                                );
+                                painter.galley(ghost.min + Vec2::new(8.0, 4.0), galley, p.text);
+                            }
                         }
-                        if r.has_focus() {
-                            let p = theme::palette(ui.ctx());
-                            ui.painter().rect_stroke(
-                                r.rect,
-                                6.0,
-                                Stroke::new(1.5, p.accent),
-                                StrokeKind::Outside,
-                            );
+                        // Where the guide can point at it; scrolled into view when it does.
+                        if self.guide.on {
+                            let shown = ui.clip_rect().intersect(r.rect);
+                            if shown.is_positive() {
+                                self.guide.targets.chips.push((*kind, shown));
+                            }
+                            if self.guide.fresh
+                                && self.guide.last == Some(crate::guide::Target::Chip(kind))
+                            {
+                                r.scroll_to_me(None);
+                            }
+                        }
+                        // The strip scrolls, so a chip the keyboard reaches is scrolled into
+                        // view (WCAG 2.4.11).
+                        if r.gained_focus() {
+                            r.scroll_to_me(None);
                         }
                         let r = r.on_hover_text(crate::i18n::td(label));
                         if r.clicked() {
@@ -706,6 +735,15 @@ impl App {
         // A run being watched: each block's state on its shape.
         self.live_badges(&painter, &shape_rects, p, view.zoom);
 
+        // Each block's shape, for the guide to point at when its dot isn't drawn.
+        if self.guide.on {
+            self.guide.targets.blocks = shape_rects
+                .iter()
+                .filter(|(_, r)| r.intersects(rect))
+                .cloned()
+                .collect();
+        }
+
         // The connect handle: on the right of the block under the pointer (or the selected one),
         // except where nothing can leave (departures).
         let near = pointer.and_then(|pt| {
@@ -734,6 +772,7 @@ impl App {
         {
             let at = hr.right_center() + Vec2::new(10.0, 0.0);
             let handle = Rect::from_center_size(at, Vec2::splat(14.0));
+            self.guide.targets.handle = Some((hid.clone(), handle));
             let hit = handle.intersect(rect);
             let hresp = ui.interact(
                 hit,

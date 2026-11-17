@@ -884,6 +884,19 @@ unit	yr	an
 	Callers who give up: the share lost and the wait of those who stay.	Les appelants qui abandonnent : la part perdue et l'attente de ceux qui restent.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blocage, petites salles d'attente et pannes : des pièces refusées au début de la ligne.
 	Health checks that take busy servers out send their requests back to the queue.	Les contrôles de santé qui mettent hors service les serveurs occupés renvoient leurs requêtes dans la file.
+	Show me	Montrez-moi
+	Point at where to do this step	Montrer où effectuer cette étape
+	Step {k} of {n}	Étape {k} sur {n}
+	Stop the guide (Esc)	Arrêter le guide (Esc)
+	Done	Terminé
+	Drag Arrivals onto the canvas, or click it.	Faites glisser Arrivées sur la surface principale, ou cliquez dessus.
+	Now add a task: drag “Task with a resource” onto the canvas.	Ajoutez maintenant une tâche : faites glisser « Tâche avec ressource » sur la surface principale.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Faites glisser depuis le point situé sur Arrivées jusqu'à la tâche pour les relier, ou choisissez la tâche sous « Ajouter un flux vers… » dans le panneau Propriétés.
+	Add Departures, where entities leave: drag it onto the canvas.	Ajoutez Départs, là où les entités repartent : faites-le glisser sur la surface principale.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Faites glisser depuis le point situé sur la tâche jusqu'à Départs, ou choisissez Départs sous « Ajouter un flux vers… » dans le panneau Propriétés.
+	Press Run to run the model.	Appuyez sur Exécuter pour exécuter le modèle.
+	Open Results to read what the run found.	Ouvrez Résultats pour lire ce que l'exécution a trouvé.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Voilà votre premier modèle. Les premières lignes de Résultats indiquent ce que l'exécution a trouvé ; Aide ▸ Signification des résultats explique chaque nombre.
 @plural	Added {n} block|Added {n} blocks	{n} bloc ajouté|{n} blocs ajoutés
 @plural	Copied {n} block|Copied {n} blocks	{n} bloc copié|{n} blocs copiés
 @plural	Finished {n} run|Finished {n} runs	{n} exécution terminée|{n} exécutions terminées

@@ -686,6 +686,14 @@ engine's messages (validation, file notes) are English too.
   typography in fr, tr and hu. Not checked against a source, and not reviewed by native speakers;
   the least certain are lo, ka, kk, ta, te, bn, hi, sq, et and lt, and the names of the triage
   classes and of call-centre agents.
+- The rows for the guided first model (issue #149, thirteen strings: "Show me", the callout's
+  title and close button, "Done", and the seven instructions it gives) were drafted from the plain
+  meaning of the English. Each instruction quotes the catalog's own labels for the controls it
+  names (Arrivals, Departures, Task with a resource, Add a flow to…, Results, Run, Help ▸ What the
+  Results Mean), and takes the catalog's word for Properties for the panel the English calls the
+  inspector. "Show me" and "Done" are new words in every catalog. Not checked against a source, and
+  not reviewed by native speakers; the least certain are lo, ka, kk, hi, hu, ta, te, bn and sq
+  (whose catalog mixes formal and informal address), and the word for the connect dot.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

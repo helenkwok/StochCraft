@@ -884,6 +884,19 @@ unit	yr	বছর
 	Callers who give up: the share lost and the wait of those who stay.	হাল ছেড়ে দেওয়া কলার: হারানো অনুপাত এবং যারা থাকে তাদের অপেক্ষা।
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	অবরোধ, ছোট অপেক্ষার ঘর ও বিকলতা: লাইনের শুরুতে ফিরিয়ে দেওয়া অংশ।
 	Health checks that take busy servers out send their requests back to the queue.	ব্যস্ত সার্ভার সরিয়ে নেওয়া অবস্থা পরীক্ষা তাদের অনুরোধ আবার সারিতে পাঠায়।
+	Show me	আমাকে দেখান
+	Point at where to do this step	এই ধাপটি কোথায় করতে হবে তা দেখিয়ে দিন
+	Step {k} of {n}	{n}-এর মধ্যে ধাপ {k}
+	Stop the guide (Esc)	নির্দেশিকা বন্ধ করুন (Esc)
+	Done	সম্পন্ন
+	Drag Arrivals onto the canvas, or click it.	আগমন মূল পৃষ্ঠে টেনে আনুন, অথবা তাতে ক্লিক করুন।
+	Now add a task: drag “Task with a resource” onto the canvas.	এবার একটি কাজ যোগ করুন: “সম্পদসহ কাজ” মূল পৃষ্ঠে টেনে আনুন।
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	আগমন-এর বিন্দু থেকে কাজটির দিকে টেনে এনে সেগুলো যুক্ত করুন, অথবা বৈশিষ্ট্য প্যানেলে “প্রবাহ যোগ করুন (গন্তব্য)…” এর অধীনে কাজটি বেছে নিন।
+	Add Departures, where entities leave: drag it onto the canvas.	প্রস্থান যোগ করুন, যেখানে সত্তারা চলে যায়: এটি মূল পৃষ্ঠে টেনে আনুন।
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	কাজটির বিন্দু থেকে প্রস্থান-এর দিকে টেনে আনুন, অথবা বৈশিষ্ট্য প্যানেলে “প্রবাহ যোগ করুন (গন্তব্য)…” এর অধীনে প্রস্থান বেছে নিন।
+	Press Run to run the model.	মডেলটি চালাতে চালান বোতাম চাপুন।
+	Open Results to read what the run found.	চালানোয় কী পাওয়া গেছে তা পড়তে ফলাফল খুলুন।
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	এটাই আপনার প্রথম মডেল। ফলাফলের প্রথম কয়েকটি লাইন বলে দেয় চালানোয় কী পাওয়া গেছে; সহায়তা ▸ ফলাফলের অর্থ প্রতিটি সংখ্যা ব্যাখ্যা করে।
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে

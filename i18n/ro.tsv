@@ -884,6 +884,19 @@ unit	yr	a
 	Callers who give up: the share lost and the wait of those who stay.	Apelanți care renunță: proporția pierdută și așteptarea celor care rămân.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blocare, săli de așteptare mici și avarii: piese refuzate la începutul liniei.
 	Health checks that take busy servers out send their requests back to the queue.	Verificările stării care scot din funcțiune serverele ocupate trimit cererile acestora înapoi în coadă.
+	Show me	Arătați-mi
+	Point at where to do this step	Indicați unde se face acest pas
+	Step {k} of {n}	Pasul {k} din {n}
+	Stop the guide (Esc)	Opriți ghidul (Esc)
+	Done	Gata
+	Drag Arrivals onto the canvas, or click it.	Trageți Sosiri pe suprafața principală sau faceți clic pe acestea.
+	Now add a task: drag “Task with a resource” onto the canvas.	Acum adăugați o sarcină: trageți „Sarcină cu resursă” pe suprafața principală.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Trageți de la punctul de pe Sosiri la sarcină pentru a le conecta sau alegeți sarcina sub „Adaugă un flux către…” în panoul de proprietăți.
+	Add Departures, where entities leave: drag it onto the canvas.	Adăugați Plecări, unde pleacă entitățile: trageți-le pe suprafața principală.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Trageți de la punctul de pe sarcină la Plecări sau alegeți Plecări sub „Adaugă un flux către…” în panoul de proprietăți.
+	Press Run to run the model.	Apăsați Rulează pentru a rula modelul.
+	Open Results to read what the run found.	Deschideți Rezultate pentru a citi ce a găsit rularea.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Acesta este primul dumneavoastră model. Primele rânduri din Rezultate spun ce a găsit rularea; Ajutor ▸ Ce înseamnă rezultatele explică fiecare număr.
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări

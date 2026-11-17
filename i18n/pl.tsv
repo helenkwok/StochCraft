@@ -884,6 +884,19 @@ unit	yr	r.
 	Callers who give up: the share lost and the wait of those who stay.	Dzwoniący, którzy rezygnują: utracony odsetek i czekanie tych, którzy zostają.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokowanie, małe poczekalnie i awarie: części odrzucane na początku linii.
 	Health checks that take busy servers out send their requests back to the queue.	Kontrole stanu, które wyłączają zajęte serwery, odsyłają ich żądania z powrotem do kolejki.
+	Show me	Pokaż mi
+	Point at where to do this step	Wskaż, gdzie wykonać ten krok
+	Step {k} of {n}	Krok {k} z {n}
+	Stop the guide (Esc)	Zatrzymaj przewodnik (Esc)
+	Done	Gotowe
+	Drag Arrivals onto the canvas, or click it.	Przeciągnij Przybycia na główną powierzchnię lub kliknij je.
+	Now add a task: drag “Task with a resource” onto the canvas.	Teraz dodaj zadanie: przeciągnij „Zadanie z zasobem” na główną powierzchnię.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Przeciągnij od kropki na Przybycia do zadania, aby je połączyć, albo wybierz zadanie w sekcji „Dodaj przepływ do…” w panelu właściwości.
+	Add Departures, where entities leave: drag it onto the canvas.	Dodaj Wyjścia, którędy jednostki wychodzą: przeciągnij je na główną powierzchnię.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Przeciągnij od kropki na zadaniu do Wyjścia albo wybierz Wyjścia w sekcji „Dodaj przepływ do…” w panelu właściwości.
+	Press Run to run the model.	Naciśnij Uruchom, aby uruchomić model.
+	Open Results to read what the run found.	Otwórz Wyniki, aby przeczytać, co wykazało uruchomienie.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To jest Twój pierwszy model. Pierwsze wiersze Wyniki mówią, co wykazało uruchomienie; Pomoc ▸ Co oznaczają wyniki wyjaśnia każdą liczbę.
 @plural	Added {n} block|Added {n} blocks	Dodano {n} blok|Dodano {n} bloki|Dodano {n} bloków
 @plural	Copied {n} block|Copied {n} blocks	Skopiowano {n} blok|Skopiowano {n} bloki|Skopiowano {n} bloków
 @plural	Finished {n} run|Finished {n} runs	Zakończono {n} uruchomienie|Zakończono {n} uruchomienia|Zakończono {n} uruchomień

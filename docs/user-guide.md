@@ -48,7 +48,7 @@ runs it and compares its results with the exact answer (`crates/engine/tests/exa
 Beside the examples:
 
 - **New to simulation?** **Build a first model** opens an empty canvas with Getting started in
-  Help beside it (see Get help in the window).
+  Help beside it, and the guide points at the first step (see Get help in the window).
 - **Coming from another simulation tool?** **Read the two-page guide** opens
   [Coming from another simulation tool](switching.md): the usual words mapped onto StochCraft's,
   how runs and results work here, and how to bring in a process diagram.
@@ -365,7 +365,10 @@ Press **F1**, or choose **Help ▸ Help**, to open Help beside the model. It doe
 canvas, so you can follow it while you work.
 
 - **Getting started:** five steps to a first model (add arrivals, a task, departures, run it, read
-  what it found), each ticked as the model gets there.
+  what it found), each ticked as the model gets there. **Show me**, beside the next step, rings
+  the control it uses (a block in the palette, the dot to drag a connection from, **Run**, the
+  **Results** tab) with a line saying what to do. You make each change; the guide moves on with
+  the model, and **Esc** or **×** stops it.
 - **Glossary:** the window's words and what they mean, from Block to Could be chance. Type in
   **Search help and terms** to narrow it.
 - **Keyboard shortcuts:** the main keys; **Change keys** opens the full list.

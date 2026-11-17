@@ -884,6 +884,19 @@ unit	yr	a
 	Callers who give up: the share lost and the wait of those who stay.	Chamantes que desisten: a proporción perdida e a espera dos que quedan.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Bloqueo, salas de espera pequenas e avarías: pezas rexeitadas ao comezo da liña.
 	Health checks that take busy servers out send their requests back to the queue.	As comprobacións de estado que retiran os servidores ocupados devolven as súas solicitudes á cola.
+	Show me	Móstreme
+	Point at where to do this step	Sinalar onde facer este paso
+	Step {k} of {n}	Paso {k} de {n}
+	Stop the guide (Esc)	Deter a guía (Esc)
+	Done	Feito
+	Drag Arrivals onto the canvas, or click it.	Arrastre Chegadas á superficie principal ou faga clic nelas.
+	Now add a task: drag “Task with a resource” onto the canvas.	Engada agora unha tarefa: arrastre «Tarefa con recurso» á superficie principal.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Arrastre desde o punto de Chegadas ata a tarefa para conectalas, ou escolla a tarefa en «Engadir fluxo cara a…» no panel Propiedades.
+	Add Departures, where entities leave: drag it onto the canvas.	Engada Saídas, onde as entidades saen: arrástreas á superficie principal.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Arrastre desde o punto da tarefa ata Saídas, ou escolla Saídas en «Engadir fluxo cara a…» no panel Propiedades.
+	Press Run to run the model.	Prema Executar para executar o modelo.
+	Open Results to read what the run found.	Abra Resultados para ler o que atopou a execución.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Ese é o seu primeiro modelo. As primeiras liñas de Resultados din o que atopou a execución; Axuda ▸ Que significan os resultados explica cada número.
 @plural	Added {n} block|Added {n} blocks	Engadiuse {n} bloque|Engadíronse {n} bloques
 @plural	Copied {n} block|Copied {n} blocks	Copiouse {n} bloque|Copiáronse {n} bloques
 @plural	Finished {n} run|Finished {n} runs	Rematou {n} execución|Remataron {n} execucións

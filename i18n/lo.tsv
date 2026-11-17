@@ -884,6 +884,19 @@ unit	yr	ປີ
 	Callers who give up: the share lost and the wait of those who stay.	ຜູ້ໂທທີ່ຍອມແພ້: ສັດສ່ວນທີ່ສູນເສຍ ແລະ ເວລາລໍຖ້າຂອງຜູ້ທີ່ຍັງຢູ່.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	ການຂັດຂວາງ, ຫ້ອງລໍຖ້າຂະໜາດນ້ອຍ ແລະ ການເສຍ: ຊິ້ນສ່ວນທີ່ຖືກປະຕິເສດຢູ່ຕົ້ນສາຍການຜະລິດ.
 	Health checks that take busy servers out send their requests back to the queue.	ການກວດສະຖານະທີ່ເອົາແມ່ຂ່າຍທີ່ຫຍຸ້ງອອກຈະສົ່ງຄຳຮ້ອງຂໍຂອງມັນກັບຄືນເຂົ້າແຖວຄອຍ.
+	Show me	ສະແດງໃຫ້ເບິ່ງ
+	Point at where to do this step	ຊີ້ໄປບ່ອນທີ່ຕ້ອງເຮັດຂັ້ນຕອນນີ້
+	Step {k} of {n}	ຂັ້ນຕອນ {k} ຈາກ {n}
+	Stop the guide (Esc)	ຢຸດຄຳແນະນຳ (Esc)
+	Done	ສຳເລັດແລ້ວ
+	Drag Arrivals onto the canvas, or click it.	ລາກ ການມາຮອດ ໄປໃສ່ພື້ນຜິວຫຼັກ ຫຼື ກົດໃສ່ມັນ.
+	Now add a task: drag “Task with a resource” onto the canvas.	ຕອນນີ້ເພີ່ມໜ້າວຽກ: ລາກ “ໜ້າວຽກທີ່ຕ້ອງໃຊ້ຊັບພະຍາກອນ” ໄປໃສ່ພື້ນຜິວຫຼັກ.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	ລາກຈາກຈຸດເທິງ ການມາຮອດ ໄປຫາໜ້າວຽກເພື່ອເຊື່ອມຕໍ່ ຫຼື ເລືອກໜ້າວຽກພາຍໃຕ້ “ເພີ່ມເສັ້ນທາງໄປຫາ…” ໃນແຜງຄຸນສົມບັດ.
+	Add Departures, where entities leave: drag it onto the canvas.	ເພີ່ມ ການອອກ ບ່ອນທີ່ເອນທິຕີອອກໄປ: ລາກມັນໄປໃສ່ພື້ນຜິວຫຼັກ.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	ລາກຈາກຈຸດເທິງໜ້າວຽກໄປຫາ ການອອກ ຫຼື ເລືອກ ການອອກ ພາຍໃຕ້ “ເພີ່ມເສັ້ນທາງໄປຫາ…” ໃນແຜງຄຸນສົມບັດ.
+	Press Run to run the model.	ກົດ ປະມວນຜົນ ເພື່ອແລ່ນແບບຈຳລອງ.
+	Open Results to read what the run found.	ເປີດ ຜົນໄດ້ຮັບ ເພື່ອອ່ານສິ່ງທີ່ການແລ່ນພົບ.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	ນີ້ຄືແບບຈຳລອງທຳອິດຂອງທ່ານ. ບັນທັດທຳອິດຂອງ ຜົນໄດ້ຮັບ ບອກສິ່ງທີ່ການແລ່ນພົບ; ຊ່ວຍເຫຼືອ ▸ ຄວາມໝາຍຂອງຜົນລັບ ອະທິບາຍແຕ່ລະຕົວເລກ.
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ

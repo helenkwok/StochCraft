@@ -884,6 +884,19 @@ unit	yr	r.
 	Callers who give up: the share lost and the wait of those who stay.	Volajúci, ktorí to vzdajú: stratený podiel a čakanie tých, ktorí zostanú.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokovanie, malé čakárne a poruchy: diely odmietnuté na začiatku linky.
 	Health checks that take busy servers out send their requests back to the queue.	Kontroly stavu, ktoré vyraďujú vyťažené servery, vracajú ich požiadavky späť do radu.
+	Show me	Ukážte mi
+	Point at where to do this step	Ukážte, kde urobiť tento krok
+	Step {k} of {n}	Krok {k} z {n}
+	Stop the guide (Esc)	Zastaviť sprievodcu (Esc)
+	Done	Hotovo
+	Drag Arrivals onto the canvas, or click it.	Presuňte Príchody na hlavnú plochu alebo na ne kliknite.
+	Now add a task: drag “Task with a resource” onto the canvas.	Teraz pridajte úlohu: presuňte „Úloha so zdrojom“ na hlavnú plochu.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Presuňte z bodky na bloku Príchody na úlohu, aby ste ich prepojili, alebo vyberte úlohu v časti „Pridať tok do…“ na paneli vlastností.
+	Add Departures, where entities leave: drag it onto the canvas.	Pridajte Odchody, kadiaľ entity odchádzajú: presuňte ich na hlavnú plochu.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Presuňte z bodky na úlohe na blok Odchody, alebo vyberte Odchody v časti „Pridať tok do…“ na paneli vlastností.
+	Press Run to run the model.	Stlačte Spustiť, aby ste spustili model.
+	Open Results to read what the run found.	Otvorte Výsledky, aby ste si prečítali, čo spustenie zistilo.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	To je váš prvý model. Prvé riadky v časti Výsledky hovoria, čo spustenie zistilo; Pomocník ▸ Čo znamenajú výsledky vysvetľuje každé číslo.
 @plural	Added {n} block|Added {n} blocks	Pridaný {n} blok|Pridané {n} bloky|Pridaných {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Skopírovaný {n} blok|Skopírované {n} bloky|Skopírovaných {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Dokončený {n} beh|Dokončené {n} behy|Dokončených {n} behov

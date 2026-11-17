@@ -884,6 +884,19 @@ unit	yr	m.
 	Callers who give up: the share lost and the wait of those who stay.	Pasitraukiantys skambinantieji: prarasta dalis ir likusiųjų laukimas.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokavimas, maži laukiamieji ir gedimai: linijos pradžioje atmestos detalės.
 	Health checks that take busy servers out send their requests back to the queue.	Būklės patikros, išimančios užimtus serverius iš naudojimo, grąžina jų užklausas į eilę.
+	Show me	Parodykite man
+	Point at where to do this step	Parodyti, kur atlikti šį žingsnį
+	Step {k} of {n}	{k} žingsnis iš {n}
+	Stop the guide (Esc)	Sustabdyti vadovą (Esc)
+	Done	Atlikta
+	Drag Arrivals onto the canvas, or click it.	Nutempkite Atvykimai ant pagrindinio paviršiaus arba spustelėkite.
+	Now add a task: drag “Task with a resource” onto the canvas.	Dabar pridėkite užduotį: nutempkite „Užduotis su ištekliumi“ ant pagrindinio paviršiaus.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Nutempkite nuo taško ties Atvykimai iki užduoties, kad jas sujungtumėte, arba pasirinkite užduotį skiltyje „Pridėti srautą į…“ savybių skydelyje.
+	Add Departures, where entities leave: drag it onto the canvas.	Pridėkite Išvykimai, kur objektai išvyksta: nutempkite ant pagrindinio paviršiaus.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Nutempkite nuo taško ties užduotimi iki Išvykimai arba pasirinkite Išvykimai skiltyje „Pridėti srautą į…“ savybių skydelyje.
+	Press Run to run the model.	Paspauskite Vykdyti, kad paleistumėte modelį.
+	Open Results to read what the run found.	Atidarykite Rezultatai, kad perskaitytumėte, ką rodo vykdymas.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Tai jūsų pirmasis modelis. Pirmosios Rezultatai eilutės nurodo, ką rodo vykdymas; Žinynas ▸ Ką reiškia rezultatai paaiškina kiekvieną skaičių.
 @plural	Added {n} block|Added {n} blocks	Pridėtas {n} blokas|Pridėti {n} blokai|Pridėta {n} blokų
 @plural	Copied {n} block|Copied {n} blocks	Nukopijuotas {n} blokas|Nukopijuoti {n} blokai|Nukopijuota {n} blokų
 @plural	Finished {n} run|Finished {n} runs	Baigtas {n} vykdymas|Baigti {n} vykdymai|Baigta {n} vykdymų

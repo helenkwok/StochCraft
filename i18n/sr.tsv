@@ -884,6 +884,19 @@ unit	yr	год.
 	Callers who give up: the share lost and the wait of those who stay.	Позиваоци који одустану: изгубљени удео и чекање оних који остану.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Блокирање, мале чекаонице и кварови: делови одбијени на почетку линије.
 	Health checks that take busy servers out send their requests back to the queue.	Провере стања које избацују заузете сервере из рада враћају њихове захтеве у ред.
+	Show me	Покажите ми
+	Point at where to do this step	Покажите где се ради овај корак
+	Step {k} of {n}	Корак {k} од {n}
+	Stop the guide (Esc)	Зауставите водич (Esc)
+	Done	Готово
+	Drag Arrivals onto the canvas, or click it.	Превуците „Доласци” на главну површину или кликните на њих.
+	Now add a task: drag “Task with a resource” onto the canvas.	Сада додајте задатак: превуците „Задатак с ресурсом” на главну површину.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Превуците од тачке на „Доласци” до задатка да бисте их повезали, или изаберите задатак под „Додај ток према…” у панелу са својствима.
+	Add Departures, where entities leave: drag it onto the canvas.	Додајте „Одласци”, где ентитети одлазе: превуците их на главну површину.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Превуците од тачке на задатку до „Одласци”, или изаберите „Одласци” под „Додај ток према…” у панелу са својствима.
+	Press Run to run the model.	Притисните „Покрени” да бисте покренули модел.
+	Open Results to read what the run found.	Отворите „Резултати” да бисте прочитали шта је покретање открило.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	То је ваш први модел. Прве линије у делу „Резултати” говоре шта је покретање открило; Помоћ ▸ Шта значе резултати објашњава сваки број.
 @plural	Added {n} block|Added {n} blocks	Додат је {n} блок|Додата су {n} блока|Додато је {n} блокова
 @plural	Copied {n} block|Copied {n} blocks	Копиран је {n} блок|Копирана су {n} блока|Копирано је {n} блокова
 @plural	Finished {n} run|Finished {n} runs	Завршено је {n} покретање|Завршена су {n} покретања|Завршено је {n} покретања

@@ -407,6 +407,91 @@ fn help_opens_beside_the_work_and_follows_the_model() {
 }
 
 #[test]
+fn show_me_guides_a_first_model_on_the_canvas() {
+    let button = egui::accesskit::Role::Button;
+    let id_of = |h: &Harness<'static, App>, kind: &str| {
+        h.state()
+            .engine()
+            .model()
+            .elements
+            .iter()
+            .find(|e| e.kind.name() == kind)
+            .map(|e| e.id.as_str().to_owned())
+            .unwrap_or_default()
+    };
+    // Build a first model starts the guide at its first step: Arrivals, from the palette.
+    let mut h = harness(Platform::DESKTOP);
+    h.get_by_role_and_label(button, "Build a first model")
+        .click_accesskit();
+    settle(&mut h);
+    h.get_by_label("Step 1 of 5");
+    h.get_by_label("Drag Arrivals onto the canvas, or click it.");
+    h.get_by_role_and_label(button, "arrivals").click();
+    settle(&mut h);
+    // Then a task with a resource; once added, Arrivals is selected so its connect dot shows.
+    h.get_by_label("Step 2 of 5");
+    h.get_by_label_contains("drag \u{201c}Task with a resource\u{201d}");
+    h.get_by_role_and_label(button, "task with a resource")
+        .click();
+    settle(&mut h);
+    h.get_by_label_contains("Drag from the dot on Arrivals to the task");
+    let (arrivals, task) = (id_of(&h, "source"), id_of(&h, "server"));
+    assert_eq!(
+        h.state().selection(),
+        std::collections::BTreeSet::from([arrivals.clone()])
+    );
+    h.get_by_label(&format!("Connect from {arrivals}"));
+    // Esc stops the guide on the first press, though it selected Arrivals; Show me resumes it.
+    h.key_press(egui::Key::Escape);
+    settle(&mut h);
+    assert!(h.query_by_label("Step 2 of 5").is_none());
+    h.get_by_label("Show me").click_accesskit();
+    settle(&mut h);
+    h.get_by_label("Step 2 of 5");
+    h.state_mut()
+        .execute("connect", json!({ "from": arrivals, "to": task }));
+    settle(&mut h);
+    // Departures, connected from the task.
+    h.get_by_label("Step 3 of 5");
+    h.get_by_label("Add Departures, where entities leave: drag it onto the canvas.");
+    h.get_by_role_and_label(button, "departures").click();
+    settle(&mut h);
+    h.get_by_label_contains("Drag from the dot on the task to Departures");
+    let departures = id_of(&h, "sink");
+    h.state_mut()
+        .execute("connect", json!({ "from": task, "to": departures }));
+    settle(&mut h);
+    // Run, then the last callout by the results, which the × closes.
+    h.get_by_label("Step 4 of 5");
+    h.get_by_label("Press Run to run the model.");
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    h.get_by_label("Done");
+    h.get_by_label_contains("That is your first model.");
+    h.get_by_label("5 of 5 done");
+    click(&mut h, "\u{00d7}");
+    assert!(
+        h.query_by_label_contains("That is your first model.")
+            .is_none()
+    );
+    assert!(h.state().help_open(), "the × closed the guide, not Help");
+
+    // Show me in Getting started starts it too, and Esc stops it.
+    let mut h = harness(Platform::DESKTOP);
+    h.key_press(egui::Key::F1);
+    settle(&mut h);
+    h.get_by_label("Show me").click_accesskit();
+    settle(&mut h);
+    h.get_by_label("Step 1 of 5");
+    // Over the start page, Show me opens the canvas, so the chip it points at is there.
+    assert!(h.query_by_label("What do you want to find out?").is_none());
+    h.get_by_role_and_label(button, "arrivals");
+    h.key_press(egui::Key::Escape);
+    settle(&mut h);
+    assert!(h.query_by_label("Step 1 of 5").is_none());
+}
+
+#[test]
 fn unsaved_changes_are_asked_about_before_they_are_lost() {
     let mut h = harness(Platform::DESKTOP);
     h.state_mut()
@@ -897,4 +982,46 @@ fn runs_go_to_the_shells_workers_with_the_same_results() {
     h.state_mut().cancel_run();
     assert_eq!(pool.borrow().stopped, 2);
     assert_eq!(h.state().status(), "Run cancelled");
+}
+
+#[test]
+fn a_palette_chip_adds_its_block_by_click_keyboard_or_drag() {
+    let button = egui::accesskit::Role::Button;
+    let count = |h: &Harness<'static, App>| h.state().engine().model().elements.len();
+    let mut h = harness(Platform::DESKTOP);
+    h.get_by_label("Start from a blank model").click_accesskit();
+    settle(&mut h);
+    // A click: the chip, not a drag area over it, takes it.
+    h.get_by_role_and_label(button, "arrivals").click();
+    settle(&mut h);
+    assert_eq!(count(&h), 1);
+    // From the keyboard.
+    h.get_by_role_and_label(button, "departures").focus();
+    settle(&mut h);
+    h.key_press(egui::Key::Enter);
+    settle(&mut h);
+    assert_eq!(count(&h), 2);
+    // Dragged onto the canvas: a press on the chip, a move well away, a release there.
+    let from = h.get_by_role_and_label(button, "task").rect().center();
+    // Halfway down to the zoom buttons in the canvas's corner: on the canvas.
+    let zoom = h.get_by_role_and_label(button, "+").rect().center();
+    let to = egui::pos2(from.x + 40.0, (from.y + zoom.y) / 2.0);
+    let press = |pos, pressed| egui::Event::PointerButton {
+        pos,
+        button: egui::PointerButton::Primary,
+        pressed,
+        modifiers: egui::Modifiers::NONE,
+    };
+    h.event(egui::Event::PointerMoved(from));
+    h.event(press(from, true));
+    h.step();
+    for i in 1..=10 {
+        h.event(egui::Event::PointerMoved(
+            from + (to - from) * (i as f32 / 10.0),
+        ));
+        h.step();
+    }
+    h.event(press(to, false));
+    settle(&mut h);
+    assert_eq!(count(&h), 3, "the drop adds a task where it lands");
 }

@@ -884,6 +884,19 @@ unit	yr	v
 	Callers who give up: the share lost and the wait of those who stay.	Telefonuesit që heqin dorë: pjesa e humbur dhe pritja e atyre që qëndrojnë.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Bllokimi, dhoma të vogla pritjeje dhe defekte: pjesë të refuzuara në fillim të linjës.
 	Health checks that take busy servers out send their requests back to the queue.	Kontrollet e gjendjes që nxjerrin nga puna serverët e zënë i kthejnë kërkesat e tyre në radhë.
+	Show me	Më trego
+	Point at where to do this step	Tregoni ku bëhet ky hap
+	Step {k} of {n}	Hapi {k} nga {n}
+	Stop the guide (Esc)	Ndaloni udhëzuesin (Esc)
+	Done	U krye
+	Drag Arrivals onto the canvas, or click it.	Tërhiqni Mbërritjet te sipërfaqja kryesore ose klikoni mbi to.
+	Now add a task: drag “Task with a resource” onto the canvas.	Tani shtoni një detyrë: tërhiqni «Detyrë me burim» te sipërfaqja kryesore.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Tërhiqni nga pika në bllokun Mbërritjet te detyra për t'i lidhur, ose zgjidhni detyrën nën «Shto rrjedhë te…» në panelin e vetive.
+	Add Departures, where entities leave: drag it onto the canvas.	Shtoni Largimet, ku largohen entitetet: tërhiqni ato te sipërfaqja kryesore.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Tërhiqni nga pika në detyrë te blloku Largimet, ose zgjidhni Largimet nën «Shto rrjedhë te…» në panelin e vetive.
+	Press Run to run the model.	Shtypni Ekzekuto për ta ekzekutuar modelin.
+	Open Results to read what the run found.	Hapni Rezultatet për të lexuar çfarë gjeti ekzekutimi.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Ky është modeli juaj i parë. Rreshtat e parë të Rezultatet tregojnë çfarë gjeti ekzekutimi; Ndihmë ▸ Çfarë do të thonë rezultatet shpjegon çdo numër.
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime

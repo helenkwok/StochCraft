@@ -884,6 +884,19 @@ unit	yr	år
 	Callers who give up: the share lost and the wait of those who stay.	Opkaldere, der giver op: den tabte andel og ventetiden for dem, der bliver.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokering, små venteværelser og nedbrud: emner, der afvises ved starten af linjen.
 	Health checks that take busy servers out send their requests back to the queue.	Sundhedstjek, der tager travle servere ud af drift, sender deres forespørgsler tilbage i køen.
+	Show me	Vis mig
+	Point at where to do this step	Vis, hvor du udfører dette trin
+	Step {k} of {n}	Trin {k} af {n}
+	Stop the guide (Esc)	Stop vejledningen (Esc)
+	Done	Færdig
+	Drag Arrivals onto the canvas, or click it.	Træk Ankomster ud på hovedfladen, eller klik på dem.
+	Now add a task: drag “Task with a resource” onto the canvas.	Tilføj nu en opgave: træk »Opgave med ressource« ud på hovedfladen.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Træk fra prikken på Ankomster til opgaven for at forbinde dem, eller vælg opgaven under »Tilføj flow til…« i panelet Egenskaber.
+	Add Departures, where entities leave: drag it onto the canvas.	Tilføj Afgange, hvor enheder forlader modellen: træk dem ud på hovedfladen.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Træk fra prikken på opgaven til Afgange, eller vælg Afgange under »Tilføj flow til…« i panelet Egenskaber.
+	Press Run to run the model.	Tryk på Kør for at køre modellen.
+	Open Results to read what the run found.	Åbn Resultater for at læse, hvad kørslen fandt.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Det er din første model. De første linjer i Resultater fortæller, hvad kørslen fandt; Hjælp ▸ Hvad resultaterne betyder forklarer hvert tal.
 @plural	Added {n} block|Added {n} blocks	Tilføjede {n} blok|Tilføjede {n} blokke
 @plural	Copied {n} block|Copied {n} blocks	Kopierede {n} blok|Kopierede {n} blokke
 @plural	Finished {n} run|Finished {n} runs	{n} kørsel fuldført|{n} kørsler fuldført

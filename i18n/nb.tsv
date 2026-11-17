@@ -884,6 +884,19 @@ unit	yr	år
 	Callers who give up: the share lost and the wait of those who stay.	Innringere som gir opp: andelen som går tapt og ventetiden for dem som blir.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokkering, små venterom og feil: deler som avvises i starten av linjen.
 	Health checks that take busy servers out send their requests back to the queue.	Helsesjekk som tar travle servere ut av drift, sender forespørslene deres tilbake i køen.
+	Show me	Vis meg
+	Point at where to do this step	Pek på hvor du gjør dette trinnet
+	Step {k} of {n}	Trinn {k} av {n}
+	Stop the guide (Esc)	Stopp veiledningen (Esc)
+	Done	Ferdig
+	Drag Arrivals onto the canvas, or click it.	Dra Ankomster ut på hovedflaten, eller klikk på det.
+	Now add a task: drag “Task with a resource” onto the canvas.	Legg nå til en oppgave: dra «Oppgave med ressurs» ut på hovedflaten.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Dra fra prikken på Ankomster til oppgaven for å koble dem sammen, eller velg oppgaven under «Legg til flyt til…» i egenskapspanelet.
+	Add Departures, where entities leave: drag it onto the canvas.	Legg til Avganger, der enheter forlater modellen: dra det ut på hovedflaten.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Dra fra prikken på oppgaven til Avganger, eller velg Avganger under «Legg til flyt til…» i egenskapspanelet.
+	Press Run to run the model.	Trykk på Kjør for å kjøre modellen.
+	Open Results to read what the run found.	Åpne Resultater for å lese hva kjøringen fant.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Det er din første modell. De første linjene i Resultater sier hva kjøringen fant; Hjelp ▸ Hva resultatene betyr forklarer hvert tall.
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
 @plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført

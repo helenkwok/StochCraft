@@ -884,6 +884,19 @@ unit	yr	a
 	Callers who give up: the share lost and the wait of those who stay.	Chiamanti che rinunciano: la quota persa e l'attesa di chi resta.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blocco, piccole sale d'attesa e guasti: pezzi respinti all'inizio della linea.
 	Health checks that take busy servers out send their requests back to the queue.	I controlli dello stato che mettono fuori servizio i server occupati rimandano le loro richieste in coda.
+	Show me	Mostrami
+	Point at where to do this step	Indica dove eseguire questo passo
+	Step {k} of {n}	Passo {k} di {n}
+	Stop the guide (Esc)	Interrompi la guida (Esc)
+	Done	Fatto
+	Drag Arrivals onto the canvas, or click it.	Trascina Arrivi sulla superficie principale, oppure fai clic su di essi.
+	Now add a task: drag “Task with a resource” onto the canvas.	Ora aggiungi un'attività: trascina «Attività con risorsa» sulla superficie principale.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Trascina dal punto su Arrivi all'attività per collegarli, oppure scegli l'attività sotto «Aggiungi un flusso verso…» nel pannello Proprietà.
+	Add Departures, where entities leave: drag it onto the canvas.	Aggiungi Partenze, dove le entità escono: trascinale sulla superficie principale.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Trascina dal punto sull'attività a Partenze, oppure scegli Partenze sotto «Aggiungi un flusso verso…» nel pannello Proprietà.
+	Press Run to run the model.	Premi Esegui per eseguire il modello.
+	Open Results to read what the run found.	Apri Risultati per leggere cosa ha trovato l'esecuzione.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Ecco il tuo primo modello. Le prime righe di Risultati dicono cosa ha trovato l'esecuzione; Aiuto ▸ Cosa significano i risultati spiega ogni numero.
 @plural	Added {n} block|Added {n} blocks	Aggiunto {n} blocco|Aggiunti {n} blocchi
 @plural	Copied {n} block|Copied {n} blocks	Copiato {n} blocco|Copiati {n} blocchi
 @plural	Finished {n} run|Finished {n} runs	Completata {n} esecuzione|Completate {n} esecuzioni

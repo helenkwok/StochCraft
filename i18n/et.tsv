@@ -884,6 +884,19 @@ unit	yr	a
 	Callers who give up: the share lost and the wait of those who stay.	Loobuvad helistajad: kaotatud osakaal ja jääjate ootamine.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokeerimine, väikesed ooteruumid ja rikked: liini alguses tagasi lükatud detailid.
 	Health checks that take busy servers out send their requests back to the queue.	Tervisekontrollid, mis hõivatud serverid kasutusest välja võtavad, saadavad nende päringud järjekorda tagasi.
+	Show me	Näita mulle
+	Point at where to do this step	Osuta, kus seda sammu teha
+	Step {k} of {n}	Samm {k} / {n}
+	Stop the guide (Esc)	Lõpeta juhend (Esc)
+	Done	Valmis
+	Drag Arrivals onto the canvas, or click it.	Lohistage Saabumised põhipinnale või klõpsake neil.
+	Now add a task: drag “Task with a resource” onto the canvas.	Nüüd lisage ülesanne: lohistage „Ressursiga ülesanne“ põhipinnale.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Lohistage Saabumiste täpist ülesandeni, et need ühendada, või valige paneelil Omadused ülesanne „Lisa voog kuni…“ alt.
+	Add Departures, where entities leave: drag it onto the canvas.	Lisage Lahkumised, kus olemid lahkuvad: lohistage need põhipinnale.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Lohistage ülesande täpist Lahkumisteni või valige paneelil Omadused „Lisa voog kuni…“ alt Lahkumised.
+	Press Run to run the model.	Vajutage Käivita, et mudel käivitada.
+	Open Results to read what the run found.	Avage Tulemused, et lugeda, mida käivitus leidis.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	See on teie esimene mudel. Tulemuste esimesed read ütlevad, mida käivitus leidis; Abi ▸ Mida tulemused tähendavad selgitab iga numbrit.
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud

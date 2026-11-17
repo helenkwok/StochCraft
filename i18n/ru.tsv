@@ -884,6 +884,19 @@ unit	yr	г.
 	Callers who give up: the share lost and the wait of those who stay.	Звонящие, которые сдаются: потерянная доля и ожидание тех, кто остаётся.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Блокировка, малые места ожидания и отказы: детали, которым отказано в начале линии.
 	Health checks that take busy servers out send their requests back to the queue.	Проверки работоспособности, выводящие занятые серверы из работы, возвращают их запросы в очередь.
+	Show me	Покажите мне
+	Point at where to do this step	Указать, где выполнить этот шаг
+	Step {k} of {n}	Шаг {k} из {n}
+	Stop the guide (Esc)	Остановить руководство (Esc)
+	Done	Готово
+	Drag Arrivals onto the canvas, or click it.	Перетащите Прибытия на основную поверхность или щёлкните по ним.
+	Now add a task: drag “Task with a resource” onto the canvas.	Теперь добавьте задачу: перетащите «Задача с ресурсом» на основную поверхность.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Перетащите от точки на блоке Прибытия к задаче, чтобы соединить их, или выберите задачу в разделе «Добавить поток к…» на панели свойств.
+	Add Departures, where entities leave: drag it onto the canvas.	Добавьте Выходы, где сущности уходят: перетащите их на основную поверхность.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Перетащите от точки на задаче к блоку Выходы или выберите Выходы в разделе «Добавить поток к…» на панели свойств.
+	Press Run to run the model.	Нажмите Запустить, чтобы запустить модель.
+	Open Results to read what the run found.	Откройте Результаты, чтобы прочитать, что обнаружил запуск.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Это ваша первая модель. Первые строки раздела Результаты говорят, что обнаружил запуск; Справка ▸ Что означают результаты объясняет каждое число.
 @plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
 @plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
 @plural	Finished {n} run|Finished {n} runs	Завершён {n} запуск|Завершены {n} запуска|Завершено {n} запусков

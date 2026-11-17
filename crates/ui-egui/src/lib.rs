@@ -24,6 +24,7 @@ mod decide;
 pub use autosave::Autosave;
 mod editor;
 pub mod form;
+mod guide;
 mod help;
 pub mod i18n;
 mod live;
@@ -549,6 +550,8 @@ pub struct App {
     decide: decide::Decide,
     /// The Help panel.
     help: help::Help,
+    /// The guided first model: "Show me" in Getting started.
+    guide: guide::Guide,
     /// The start page's filters.
     start: start::Start,
     /// An empty model is being built (from the start page), so the model view shows rather than
@@ -645,6 +648,7 @@ impl App {
             show_analysis: false,
             decide: decide::Decide::default(),
             help: help::Help::default(),
+            guide: guide::Guide::default(),
             start: start::Start::default(),
             building: false,
             charts_rect: None,
@@ -796,6 +800,7 @@ impl App {
             Some(help::Action::Close) => self.help.open = false,
             Some(help::Action::Open(url)) => self.open_url(url),
             Some(help::Action::ChangeKeys) => self.open_shortcuts(),
+            Some(help::Action::ShowMe) => self.start_guide(),
             None => {}
         }
     }
@@ -1127,6 +1132,7 @@ impl App {
     fn forget_view(&mut self) {
         self.clear_results();
         self.building = false;
+        self.guide.on = false;
         self.help.read_results = false;
         self.selected = None;
         self.canvas = canvas::Canvas::default();
@@ -1397,6 +1403,7 @@ impl App {
                     self.building = true;
                     if getting_started {
                         self.show_help_at(help::Section::GettingStarted);
+                        self.start_guide();
                     }
                 }
             }
@@ -1596,6 +1603,15 @@ impl App {
         if self.running.is_some() && ctx.input(|i| i.key_pressed(Key::Escape)) {
             self.cancel_run();
         }
+        // Esc stops the guide first, before it would clear the selection the guide made (the
+        // block whose connect dot it points at), unless a field is being typed in or a run goes.
+        if self.guide.on
+            && !ctx.egui_wants_keyboard_input()
+            && self.running.is_none()
+            && ctx.input_mut(|i| i.consume_key(Modifiers::NONE, Key::Escape))
+        {
+            self.guide.on = false;
+        }
         // The block list from the keyboard, when no field is being edited.
         let typing = ctx.memory(|m| m.focused().is_some());
         if !typing && !self.show_results {
@@ -1660,6 +1676,7 @@ impl App {
         self.shortcuts(&ctx);
         self.tick_watching(&ctx);
         self.mark_stale_results();
+        self.guide.targets = guide::Targets::default();
         let p = theme::palette(&ctx);
 
         egui::Panel::top("header")
@@ -1741,6 +1758,52 @@ impl App {
         self.themes_window(&ctx);
         self.chart_colours_window(&ctx);
         self.recovery_dialog(&ctx);
+        self.guide_overlay(&ctx);
+    }
+
+    /// Starts the guide at the first step not done.
+    fn start_guide(&mut self) {
+        // From an empty window (Show me in Help over the start page), the canvas and its palette
+        // replace the start page, so the first step's chip is there to point at.
+        if self.engine.model().elements.is_empty() {
+            self.building = true;
+        }
+        self.guide.on = true;
+        self.guide.last = None;
+    }
+
+    /// The guide's ring and callout, drawn over everything once the controls it points at are.
+    fn guide_overlay(&mut self, ctx: &egui::Context) {
+        if !self.guide.on {
+            return;
+        }
+        let model = stochcraft_engine::wire::model(self.engine.model());
+        let ran = self.results().is_some();
+        let hint = guide::hint(&model, ran, self.help.read_results);
+        let target = hint.as_ref().map(|h| h.target.clone());
+        let fresh = self.guide.last != target;
+        if fresh {
+            match &target {
+                // A dot shows on the selected block; a chip or a dot is on the model view.
+                Some(guide::Target::Handle(id)) => {
+                    self.select(std::collections::BTreeSet::from([id.clone()]));
+                    self.show_results = false;
+                    self.show_analysis = false;
+                }
+                Some(guide::Target::Chip(_)) => {
+                    self.show_results = false;
+                    self.show_analysis = false;
+                }
+                _ => {}
+            }
+            self.guide.last = target;
+            ctx.request_repaint();
+        }
+        self.guide.fresh = fresh;
+        let steps = help::steps(&model, ran, self.help.read_results).len();
+        if guide::show(ctx, &self.guide, hint.as_ref(), steps) == Some(guide::Action::Stop) {
+            self.guide.on = false;
+        }
     }
 
     /// The model: the flowchart, with the inspector beside it (below it, in a narrow window).
@@ -2100,6 +2163,9 @@ impl App {
                 }) + 24.0;
                 let (rect, _) =
                     ui.allocate_exact_size(egui::vec2(width, 30.0), egui::Sense::hover());
+                if view == 1 {
+                    self.guide.targets.results_tab = Some(rect);
+                }
                 let tab = craft_ui::tabs::Tab::new(egui::Id::unique(("view-tab", view)), label, on)
                     .focus_stroke(egui::Stroke::new(1.5, p.accent));
                 let r = tab.show_at(ui, rect, |ui, r| {
@@ -2174,6 +2240,7 @@ impl App {
         } else {
             t("Run").to_owned()
         };
+        let mut run_rect = None;
         let (_, clicked) = egui::Sides::new().shrink_left().show(
             ui,
             |ui| {
@@ -2208,16 +2275,19 @@ impl App {
                     ui.add(cancel).on_hover_text("Esc").clicked()
                 } else {
                     let shortcut = run_key.clone();
-                    ui.add_enabled(can_run, theme::primary(ui, &run_label))
+                    let r = ui
+                        .add_enabled(can_run, theme::primary(ui, &run_label))
                         .on_hover_text(tf(
                             "Run the experiment ({shortcut})",
                             &[("shortcut", &shortcut)],
                         ))
-                        .on_disabled_hover_text(t("Open a model first"))
-                        .clicked()
+                        .on_disabled_hover_text(t("Open a model first"));
+                    run_rect = Some(r.rect);
+                    r.clicked()
                 }
             },
         );
+        self.guide.targets.run = run_rect;
         // The keyboard's place in the header: a ring in the header's text colour around the
         // focused menu title or button (WCAG 2.4.7). The menu bar draws its titles without one.
         if let Some(focused) = ui.memory(|m| m.focused())

@@ -884,6 +884,19 @@ unit	yr	वर्ष
 	Callers who give up: the share lost and the wait of those who stay.	हार मानने वाले कॉलर: खोया हुआ अनुपात और रुकने वालों की प्रतीक्षा।
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	अवरोधन, छोटे प्रतीक्षा कक्ष और खराबियाँ: लाइन की शुरुआत में लौटाए गए पुर्जे।
 	Health checks that take busy servers out send their requests back to the queue.	व्यस्त सर्वरों को हटाने वाली स्थिति जाँचें उनके अनुरोध वापस कतार में भेज देती हैं।
+	Show me	मुझे दिखाएँ
+	Point at where to do this step	बताएँ कि यह चरण कहाँ करना है
+	Step {k} of {n}	{n} में से चरण {k}
+	Stop the guide (Esc)	गाइड रोकें (Esc)
+	Done	पूरा हुआ
+	Drag Arrivals onto the canvas, or click it.	आगमन को मुख्य सतह पर खींचें, या उस पर क्लिक करें।
+	Now add a task: drag “Task with a resource” onto the canvas.	अब एक कार्य जोड़ें: “संसाधन वाला कार्य” को मुख्य सतह पर खींचें।
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	आगमन के बिंदु से कार्य तक खींचकर उन्हें जोड़ें, या गुण पैनल में “प्रवाह जोड़ें (लक्ष्य)…” के अंतर्गत कार्य चुनें।
+	Add Departures, where entities leave: drag it onto the canvas.	प्रस्थान जोड़ें, जहाँ इकाइयाँ निकलती हैं: उसे मुख्य सतह पर खींचें।
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	कार्य के बिंदु से प्रस्थान तक खींचें, या गुण पैनल में “प्रवाह जोड़ें (लक्ष्य)…” के अंतर्गत प्रस्थान चुनें।
+	Press Run to run the model.	मॉडल चलाने के लिए चलाएँ दबाएँ।
+	Open Results to read what the run found.	चलाने पर क्या मिला, यह पढ़ने के लिए परिणाम खोलें।
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	यह आपका पहला मॉडल है। परिणाम की शुरुआती पंक्तियाँ बताती हैं कि चलाने पर क्या मिला; सहायता ▸ परिणामों का अर्थ हर संख्या को समझाता है।
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए

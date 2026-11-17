@@ -884,6 +884,19 @@ unit	yr	thn
 	Callers who give up: the share lost and the wait of those who stay.	Penelepon yang menyerah: proporsi yang hilang dan waktu tunggu mereka yang bertahan.
 	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Pemblokiran, ruang tunggu kecil, dan kerusakan: komponen yang ditolak di awal lini.
 	Health checks that take busy servers out send their requests back to the queue.	Pemeriksaan kondisi yang mengeluarkan server sibuk mengembalikan permintaannya ke antrean.
+	Show me	Tunjukkan
+	Point at where to do this step	Tunjukkan tempat melakukan langkah ini
+	Step {k} of {n}	Langkah {k} dari {n}
+	Stop the guide (Esc)	Hentikan panduan (Esc)
+	Done	Selesai
+	Drag Arrivals onto the canvas, or click it.	Seret Kedatangan ke permukaan utama, atau klik.
+	Now add a task: drag “Task with a resource” onto the canvas.	Sekarang tambahkan tugas: seret “Tugas dengan sumber daya” ke permukaan utama.
+	Drag from the dot on Arrivals to the task to connect them, or choose the task under “Add a flow to…” in the inspector.	Seret dari titik pada Kedatangan ke tugas untuk menghubungkannya, atau pilih tugas di bawah “Tambahkan alur ke…” di panel Properti.
+	Add Departures, where entities leave: drag it onto the canvas.	Tambahkan Keberangkatan, tempat entitas pergi: seret ke permukaan utama.
+	Drag from the dot on the task to Departures, or choose Departures under “Add a flow to…” in the inspector.	Seret dari titik pada tugas ke Keberangkatan, atau pilih Keberangkatan di bawah “Tambahkan alur ke…” di panel Properti.
+	Press Run to run the model.	Tekan Jalankan untuk menjalankan model.
+	Open Results to read what the run found.	Buka Hasil untuk membaca apa yang ditemukan oleh proses tersebut.
+	That is your first model. The first lines of Results say what the run found; Help ▸ What the Results Mean explains each number.	Itulah model pertama Anda. Baris pertama Hasil menjelaskan temuan proses tersebut; Bantuan ▸ Arti Hasil menjelaskan setiap angka.
 @plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
 @plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
 @plural	Finished {n} run|Finished {n} runs	Selesai {n} eksekusi
