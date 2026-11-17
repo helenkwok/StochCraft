@@ -864,6 +864,26 @@ unit	yr	J.
 	One task for each distribution, to compare their spread.	Eine Aufgabe je Verteilung, um ihre Streuung zu vergleichen.
 	Failures, small buffers, shifts and energy per machine state.	Ausfälle, kleine Warteräume, Schichten und Energie je Maschinenzustand.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Parallele Maschinen, beschickt über die kürzere Warteschlange, und an der Qualitätsprüfung ausgesonderte Teile.
+	Coffee counter	Kaffeetheke
+	Emergency triage	Triage in der Notaufnahme
+	Call centre	Callcenter
+	Weld and paint line	Schweiß- und Lackierlinie
+	Web service with health checks	Webdienst mit Healthchecks
+	One barista busy 80% of the time, and what a second would do.	Ein Barista, zu 80% ausgelastet, und was ein zweiter bewirken würde.
+	Three priority classes sharing five nurses.	Drei Prioritätsklassen, die sich fünf Pflegekräfte teilen.
+	Three agents and callers who hang up when they wait too long.	Drei Mitarbeiter und Anrufer, die auflegen, wenn sie zu lange warten.
+	Two stations with small buffers, paint breaking down now and then.	Zwei Stationen mit kleinen Warteräumen, die Lackiererei fällt ab und zu aus.
+	Three app servers, taken out for a restart when too many requests wait.	Drei App-Server, die für einen Neustart außer Betrieb genommen werden, wenn zu viele Anfragen warten.
+	One barista or two at the morning rush?	Ein Barista oder zwei im Morgenansturm?
+	Who waits how long when urgent patients go first?	Wer wartet wie lange, wenn dringende Patienten vorgehen?
+	How many callers hang up before an agent answers?	Wie viele Anrufer legen auf, bevor ein Mitarbeiter abnimmt?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Wo ist der Engpass, und was kosten Ausfälle in der Lackiererei?
+	Do health checks that restart busy servers make the queue worse?	Machen Healthchecks, die ausgelastete Server neu starten, die Warteschlange länger?
+	Why a barista busy 80% of the time already means a four-minute wait.	Warum ein Barista, der zu 80% ausgelastet ist, schon vier Minuten Wartezeit bedeutet.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Prioritäten in einem gemeinsamen Team: Die Dringenden warten am kürzesten, die Leichtfälle am längsten.
+	Callers who give up: the share lost and the wait of those who stay.	Anrufer, die aufgeben: der verlorene Anteil und die Wartezeit derer, die bleiben.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blockieren, kleine Warteräume und Ausfälle: Teile, die am Anfang der Linie abgewiesen werden.
+	Health checks that take busy servers out send their requests back to the queue.	Healthchecks, die ausgelastete Server außer Betrieb nehmen, schicken deren Anfragen zurück in die Warteschlange.
 @plural	Added {n} block|Added {n} blocks	{n} Block hinzugefügt|{n} Blöcke hinzugefügt
 @plural	Copied {n} block|Copied {n} blocks	{n} Block kopiert|{n} Blöcke kopiert
 @plural	Finished {n} run|Finished {n} runs	{n} Lauf abgeschlossen|{n} Läufe abgeschlossen

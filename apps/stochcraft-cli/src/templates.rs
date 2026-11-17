@@ -283,6 +283,168 @@ fn case_b() -> Vec<(&'static str, Value)> {
     steps
 }
 
+/// The start page's examples (#149), each with an exact answer that
+/// `crates/engine/tests/examples.rs` checks. Times in minutes unless the model says otherwise.
+fn coffee() -> Vec<(&'static str, Value)> {
+    vec![
+        ("model.rename", json!({"name": "Coffee counter"})),
+        (
+            "block.add",
+            json!({"kind": "source", "id": "customers", "name": "Customers arrive", "interarrival": exp(1.25)}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "server", "id": "barista", "name": "Barista", "capacity": 1, "service": exp(1.0)}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "sink", "id": "served", "name": "Customers leave"}),
+        ),
+        ("connect", json!({"from": "customers", "to": "barista"})),
+        ("connect", json!({"from": "barista", "to": "served"})),
+        (
+            "experiment.set",
+            json!({"warmup": 1000.0, "duration": 20000.0, "replications": 10, "seed": 1}),
+        ),
+    ]
+}
+
+fn triage() -> Vec<(&'static str, Value)> {
+    let shared = |id: &str, name: &str, priority: f64| {
+        json!({"kind": "shared_task", "id": id, "name": name, "service": exp(15.0),
+               "needs": [{"resource": "nurses"}], "priority": priority})
+    };
+    vec![
+        ("model.rename", json!({"name": "Emergency triage"})),
+        (
+            "resource.add",
+            json!({"id": "nurses", "name": "Nurses", "quantity": 5}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "source", "id": "patients", "name": "Patients arrive", "interarrival": exp(5.0)}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "exclusive_gateway", "id": "triage", "name": "Triage"}),
+        ),
+        ("block.add", shared("urgent", "Urgent", 3.0)),
+        ("block.add", shared("standard", "Standard", 2.0)),
+        ("block.add", shared("minor", "Minor", 1.0)),
+        (
+            "block.add",
+            json!({"kind": "sink", "id": "seen", "name": "Seen"}),
+        ),
+        ("connect", json!({"from": "patients", "to": "triage"})),
+        (
+            "connect",
+            json!({"from": "triage", "to": "urgent", "probability": 0.2}),
+        ),
+        (
+            "connect",
+            json!({"from": "triage", "to": "standard", "probability": 0.5}),
+        ),
+        (
+            "connect",
+            json!({"from": "triage", "to": "minor", "probability": 0.3}),
+        ),
+        ("connect", json!({"from": "urgent", "to": "seen"})),
+        ("connect", json!({"from": "standard", "to": "seen"})),
+        ("connect", json!({"from": "minor", "to": "seen"})),
+        (
+            "experiment.set",
+            json!({"warmup": 5000.0, "duration": 50000.0, "replications": 10, "seed": 1}),
+        ),
+    ]
+}
+
+fn call_centre() -> Vec<(&'static str, Value)> {
+    vec![
+        ("model.rename", json!({"name": "Call centre"})),
+        (
+            "block.add",
+            json!({"kind": "source", "id": "calls", "name": "Calls arrive", "interarrival": exp(1.0)}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "server", "id": "agents", "name": "Agents", "capacity": 3, "service": exp(2.5),
+                   "patience": {"time": exp(5.0)}}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "sink", "id": "answered", "name": "Calls answered"}),
+        ),
+        ("connect", json!({"from": "calls", "to": "agents"})),
+        ("connect", json!({"from": "agents", "to": "answered"})),
+        (
+            "experiment.set",
+            json!({"warmup": 1000.0, "duration": 20000.0, "replications": 10, "seed": 1}),
+        ),
+    ]
+}
+
+fn weld_paint() -> Vec<(&'static str, Value)> {
+    vec![
+        ("model.rename", json!({"name": "Weld and paint line"})),
+        (
+            "block.add",
+            json!({"kind": "source", "id": "parts", "name": "Parts arrive", "interarrival": exp(6.5)}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "server", "id": "weld", "name": "Weld", "capacity": 1, "service": exp(4.0),
+                   "queue_capacity": 3}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "server", "id": "paint", "name": "Paint", "capacity": 1, "service": exp(5.0),
+                   "queue_capacity": 2,
+                   "breakdown": {"time_to_failure": exp(120.0), "repair": exp(15.0), "interruptible": true}}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "sink", "id": "shipped", "name": "Shipped"}),
+        ),
+        ("connect", json!({"from": "parts", "to": "weld"})),
+        ("connect", json!({"from": "weld", "to": "paint"})),
+        ("connect", json!({"from": "paint", "to": "shipped"})),
+        (
+            "experiment.set",
+            json!({"warmup": 2000.0, "duration": 40000.0, "replications": 10, "seed": 1}),
+        ),
+    ]
+}
+
+fn it_service() -> Vec<(&'static str, Value)> {
+    vec![
+        (
+            "model.rename",
+            json!({"name": "Web service with health checks"}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "source", "id": "requests", "name": "Requests arrive",
+                   "interarrival": exp(1.0 / 1.5)}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "server", "id": "servers", "name": "App servers", "capacity": 3, "service": exp(1.0),
+                   "health_check": {"interval": exp(1.0), "limit": 0.5, "restart": exp(2.0),
+                                    "keep": 2, "on_takeout": "retry"}}),
+        ),
+        (
+            "block.add",
+            json!({"kind": "sink", "id": "answered", "name": "Requests answered"}),
+        ),
+        ("connect", json!({"from": "requests", "to": "servers"})),
+        ("connect", json!({"from": "servers", "to": "answered"})),
+        (
+            "experiment.set",
+            json!({"time_unit": "s", "warmup": 1000.0, "duration": 20000.0, "replications": 10, "seed": 1}),
+        ),
+    ]
+}
+
 pub static TEMPLATES: &[Template] = &[
     Template {
         name: "mm1",
@@ -308,5 +470,30 @@ pub static TEMPLATES: &[Template] = &[
         name: "case-b",
         summary: "Case B of Schmitt et al. (2026): seven machines, two presses in parallel fed by the shorter queue, 8.9% rejects, minimum times in the buffers, weekend breaks and energy, in seconds",
         steps: case_b,
+    },
+    Template {
+        name: "coffee",
+        summary: "Coffee counter: customers every 1.25 minutes, one barista with mean 1 minute (rho = 0.8)",
+        steps: coffee,
+    },
+    Template {
+        name: "triage",
+        summary: "Emergency triage: patients every 5 minutes in three priority classes, five nurses with mean 15 minutes",
+        steps: triage,
+    },
+    Template {
+        name: "call-centre",
+        summary: "Call centre: calls every minute, three agents with mean 2.5 minutes, callers hanging up after a mean 5 minutes",
+        steps: call_centre,
+    },
+    Template {
+        name: "weld-paint",
+        summary: "Weld and paint line: small buffers, paint breaking down every 2 hours on average for 15 minutes",
+        steps: weld_paint,
+    },
+    Template {
+        name: "it-service",
+        summary: "Web service: three app servers with health checks that restart a server when too many requests wait, in seconds",
+        steps: it_service,
     },
 ];

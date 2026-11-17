@@ -864,6 +864,26 @@ unit	yr	ж.
 	One task for each distribution, to compare their spread.	Таралуын салыстыру үшін әр үлестірімге бір тапсырма.
 	Failures, small buffers, shifts and energy per machine state.	Ақаулар, шағын күту орындары, ауысымдар және машина күйі бойынша энергия.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Қысқарақ кезектен берілетін параллель машиналар және сапа бақылауында жарамсыз деп табылған бөлшектер.
+	Coffee counter	Кофе сөресі
+	Emergency triage	Жедел жәрдем триажы
+	Call centre	Байланыс орталығы
+	Weld and paint line	Дәнекерлеу және бояу желісі
+	Web service with health checks	Күйді тексеруі бар веб-қызмет
+	One barista busy 80% of the time, and what a second would do.	Уақыттың 80% бос емес бір бариста және екіншісі не өзгертер еді.
+	Three priority classes sharing five nurses.	Бес мейірбикені ортақ пайдаланатын үш басымдық сыныбы.
+	Three agents and callers who hang up when they wait too long.	Үш оператор және тым ұзақ күткенде тұтқаны қоятын қоңырау шалушылар.
+	Two stations with small buffers, paint breaking down now and then.	Шағын күту орындары бар екі станция, бояу анда-санда бұзылады.
+	Three app servers, taken out for a restart when too many requests wait.	Тым көп сұрау күткенде қайта іске қосу үшін жұмыстан шығарылатын үш қолданба сервері.
+	One barista or two at the morning rush?	Таңғы қарбаласта бір бариста ма, әлде екеу ме?
+	Who waits how long when urgent patients go first?	Шұғыл науқастар бірінші өткенде кім қанша күтеді?
+	How many callers hang up before an agent answers?	Оператор жауап бергенге дейін неше қоңырау шалушы тұтқаны қояды?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Тар жер қайда және бояудағы ақаулар қаншаға түседі?
+	Do health checks that restart busy servers make the queue worse?	Бос емес серверлерді қайта іске қосатын күйді тексерулер кезекті нашарлата ма?
+	Why a barista busy 80% of the time already means a four-minute wait.	Уақыттың 80% бос емес бариста неге төрт минуттық күтуді білдіреді.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Ортақ топтағы басымдықтар: шұғылдар ең аз, жеңіл жағдайлар ең ұзақ күтеді.
+	Callers who give up: the share lost and the wait of those who stay.	Бас тартқан қоңырау шалушылар: жоғалған үлес және қалғандардың күтуі.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Бұғаттау, шағын күту орындары және ақаулар: желінің басында қабылданбаған бөлшектер.
+	Health checks that take busy servers out send their requests back to the queue.	Бос емес серверлерді жұмыстан шығаратын күйді тексерулер олардың сұрауларын кезекке қайтарады.
 @plural	Added {n} block|Added {n} blocks	{n} блок қосылды|{n} блок қосылды
 @plural	Copied {n} block|Copied {n} blocks	{n} блок көшірілді|{n} блок көшірілді
 @plural	Finished {n} run|Finished {n} runs	{n} іске қосу аяқталды|{n} іске қосу аяқталды

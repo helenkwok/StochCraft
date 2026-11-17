@@ -864,6 +864,26 @@ unit	yr	a
 	One task for each distribution, to compare their spread.	Una tasca per cada distribució, per comparar-ne la dispersió.
 	Failures, small buffers, shifts and energy per machine state.	Avaries, sales d'espera petites, torns i energia per estat de màquina.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Màquines en paral·lel alimentades per la cua més curta i peces rebutjades a qualitat.
+	Coffee counter	Barra de cafè
+	Emergency triage	Triatge d'urgències
+	Call centre	Centre de trucades
+	Weld and paint line	Línia de soldadura i pintura
+	Web service with health checks	Servei web amb comprovacions d'estat
+	One barista busy 80% of the time, and what a second would do.	Un barista ocupat el 80% del temps, i què faria un segon.
+	Three priority classes sharing five nurses.	Tres classes de prioritat que comparteixen cinc infermeres.
+	Three agents and callers who hang up when they wait too long.	Tres agents i persones que truquen i pengen quan esperen massa.
+	Two stations with small buffers, paint breaking down now and then.	Dues estacions amb sales d'espera petites i la pintura que s'avaria de tant en tant.
+	Three app servers, taken out for a restart when too many requests wait.	Tres servidors d'aplicacions, retirats per reiniciar-los quan esperen massa sol·licituds.
+	One barista or two at the morning rush?	Un barista o dos a l'hora punta del matí?
+	Who waits how long when urgent patients go first?	Qui espera quant quan els pacients urgents passen primer?
+	How many callers hang up before an agent answers?	Quantes persones pengen abans que respongui un agent?
+	Where is the bottleneck, and what do breakdowns at paint cost?	On és el coll d'ampolla, i quant costen les avaries a pintura?
+	Do health checks that restart busy servers make the queue worse?	Les comprovacions d'estat que reinicien els servidors ocupats empitjoren la cua?
+	Why a barista busy 80% of the time already means a four-minute wait.	Per què un barista ocupat el 80% del temps ja vol dir quatre minuts d'espera.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Prioritats en un equip compartit: els urgents esperen menys, els lleus més.
+	Callers who give up: the share lost and the wait of those who stay.	Persones que es rendeixen: la proporció perduda i l'espera de les que es queden.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Bloqueig, sales d'espera petites i avaries: peces rebutjades a l'inici de la línia.
+	Health checks that take busy servers out send their requests back to the queue.	Les comprovacions d'estat que retiren els servidors ocupats tornen les seves sol·licituds a la cua.
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions

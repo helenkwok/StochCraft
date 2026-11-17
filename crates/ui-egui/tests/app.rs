@@ -281,7 +281,11 @@ fn the_start_page_asks_what_to_find_out() {
     let case_a = "What do failures and weekend breaks do to a line's output and energy per part?";
     h.get_by_role_and_label(egui::accesskit::Role::Button, mm1);
     h.get_by_role_and_label(egui::accesskit::Role::Button, case_a);
-    h.get_by_label("Checked against queueing theory");
+    assert!(
+        h.query_all_by_label("Checked against queueing theory")
+            .count()
+            >= 2
+    );
     assert!(
         h.query_by_label("How do the time distributions differ?")
             .is_none(),
@@ -296,7 +300,7 @@ fn the_start_page_asks_what_to_find_out() {
     h.get_by_role_and_label(egui::accesskit::Role::Button, case_a);
     click(&mut h, "All");
     // See all (below the fold, so as from the keyboard) shows the reference models too.
-    h.get_by_label("See all 5 examples, including reference models")
+    h.get_by_label("See all 10 examples, including reference models")
         .click_accesskit();
     settle(&mut h);
     h.get_by_role_and_label(

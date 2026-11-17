@@ -864,6 +864,26 @@ unit	yr	년
 	One task for each distribution, to compare their spread.	분포마다 작업 하나를 배정하여 분산 정도를 비교합니다.
 	Failures, small buffers, shifts and energy per machine state.	고장, 작은 대기실, 교대 근무, 기계 상태별 에너지.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	더 짧은 대기열에서 공급받는 병렬 기계와 품질 검사에서 불합격된 부품.
+	Coffee counter	커피 카운터
+	Emergency triage	응급실 분류
+	Call centre	콜센터
+	Weld and paint line	용접·도장 라인
+	Web service with health checks	상태 검사가 있는 웹 서비스
+	One barista busy 80% of the time, and what a second would do.	시간의 80%가 바쁜 바리스타 한 명과, 한 명을 더 두면 달라지는 점.
+	Three priority classes sharing five nurses.	간호사 다섯 명을 함께 쓰는 세 우선순위 등급.
+	Three agents and callers who hang up when they wait too long.	상담원 세 명과, 너무 오래 기다리면 전화를 끊는 발신자.
+	Two stations with small buffers, paint breaking down now and then.	대기실이 작은 두 작업장, 도장 공정이 가끔 고장 남.
+	Three app servers, taken out for a restart when too many requests wait.	대기 중인 요청이 너무 많으면 재시작을 위해 제외되는 앱 서버 세 대.
+	One barista or two at the morning rush?	아침 혼잡 시간에 바리스타 한 명, 아니면 두 명?
+	Who waits how long when urgent patients go first?	긴급 환자가 먼저 가면 누가 얼마나 기다릴까?
+	How many callers hang up before an agent answers?	상담원이 받기 전에 전화를 끊는 발신자는 몇 명일까?
+	Where is the bottleneck, and what do breakdowns at paint cost?	병목은 어디이고, 도장 공정의 고장은 얼마나 손해일까?
+	Do health checks that restart busy servers make the queue worse?	바쁜 서버를 재시작하는 상태 검사가 대기열을 더 나쁘게 만들까?
+	Why a barista busy 80% of the time already means a four-minute wait.	시간의 80%가 바쁜 바리스타만으로도 이미 4분을 기다리는 이유.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	공유 팀의 우선순위: 긴급 환자는 가장 짧게, 경증 환자는 가장 길게 기다림.
+	Callers who give up: the share lost and the wait of those who stay.	포기하는 발신자: 잃는 비율과 남은 사람의 대기 시간.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	차단, 작은 대기실, 고장: 라인 입구에서 받아들여지지 않는 부품.
+	Health checks that take busy servers out send their requests back to the queue.	바쁜 서버를 제외하는 상태 검사는 그 요청을 대기열로 되돌려 보냄.
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료

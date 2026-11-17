@@ -864,6 +864,26 @@ unit	yr	సం.
 	One task for each distribution, to compare their spread.	వ్యాప్తిని పోల్చడానికి ప్రతి పంపిణీకి ఒక పని.
 	Failures, small buffers, shifts and energy per machine state.	లోపాలు, చిన్న వేచి ఉండే గదులు, షిఫ్ట్‌లు, యంత్రం స్థితి వారీగా శక్తి.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	చిన్న క్యూ నుంచి సరఫరా పొందే సమాంతర యంత్రాలు, నాణ్యత తనిఖీలో తిరస్కరించిన భాగాలు.
+	Coffee counter	కాఫీ కౌంటర్
+	Emergency triage	అత్యవసర ట్రయాజ్
+	Call centre	కాల్ సెంటర్
+	Weld and paint line	వెల్డింగ్, పెయింట్ లైన్
+	Web service with health checks	స్థితి తనిఖీలతో వెబ్ సేవ
+	One barista busy 80% of the time, and what a second would do.	80% సమయం బిజీగా ఉండే ఒక బరిస్టా, రెండో వ్యక్తి ఏమి మారుస్తారు.
+	Three priority classes sharing five nurses.	ఐదుగురు నర్సులను పంచుకునే మూడు ప్రాధాన్యత తరగతులు.
+	Three agents and callers who hang up when they wait too long.	ముగ్గురు ఏజెంట్‌లు, ఎక్కువసేపు వేచి ఉంటే ఫోన్ పెట్టేసే కాలర్‌లు.
+	Two stations with small buffers, paint breaking down now and then.	చిన్న వేచి ఉండే గదులతో రెండు స్టేషన్‌లు, పెయింట్ అప్పుడప్పుడు పాడవుతుంది.
+	Three app servers, taken out for a restart when too many requests wait.	చాలా అభ్యర్థనలు వేచి ఉన్నప్పుడు పునఃప్రారంభం కోసం తొలగించే మూడు యాప్ సర్వర్‌లు.
+	One barista or two at the morning rush?	ఉదయం రద్దీలో ఒక బరిస్టానా, ఇద్దరా?
+	Who waits how long when urgent patients go first?	అత్యవసర రోగులు ముందు వెళ్లినప్పుడు ఎవరు ఎంతసేపు వేచి ఉంటారు?
+	How many callers hang up before an agent answers?	ఏజెంట్ సమాధానం ఇచ్చే ముందు ఎంతమంది కాలర్‌లు ఫోన్ పెట్టేస్తారు?
+	Where is the bottleneck, and what do breakdowns at paint cost?	అవరోధ బిందువు ఎక్కడ ఉంది, పెయింట్ వద్ద లోపాల ఖర్చు ఎంత?
+	Do health checks that restart busy servers make the queue worse?	బిజీ సర్వర్‌లను పునఃప్రారంభించే స్థితి తనిఖీలు క్యూను మరింత దిగజారుస్తాయా?
+	Why a barista busy 80% of the time already means a four-minute wait.	80% సమయం బిజీగా ఉండే బరిస్టా అంటేనే ఇప్పటికే నాలుగు నిమిషాల నిరీక్షణ ఎందుకు.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	పంచుకునే బృందంలో ప్రాధాన్యతలు: అత్యవసరమైనవారు అతి తక్కువగా, స్వల్పమైనవారు అతి ఎక్కువగా వేచి ఉంటారు.
+	Callers who give up: the share lost and the wait of those who stay.	వదిలేసే కాలర్‌లు: కోల్పోయిన వాటా, ఉండిపోయినవారి నిరీక్షణ.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	నిరోధం, చిన్న వేచి ఉండే గదులు, లోపాలు: లైన్ ప్రారంభంలో తిరస్కరించిన భాగాలు.
+	Health checks that take busy servers out send their requests back to the queue.	బిజీ సర్వర్‌లను తొలగించే స్థితి తనిఖీలు వాటి అభ్యర్థనలను తిరిగి క్యూకు పంపుతాయి.
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి

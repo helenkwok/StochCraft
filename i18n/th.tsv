@@ -864,6 +864,26 @@ unit	yr	ปี
 	One task for each distribution, to compare their spread.	หนึ่งงานต่อการแจกแจงแต่ละแบบ เพื่อเปรียบเทียบการกระจายของค่า
 	Failures, small buffers, shifts and energy per machine state.	การขัดข้อง พื้นที่รอขนาดเล็ก กะ และพลังงานตามสถานะเครื่องจักร
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	เครื่องจักรแบบขนานที่ป้อนจากคิวที่สั้นกว่า และชิ้นงานที่ถูกคัดทิ้งที่จุดตรวจคุณภาพ
+	Coffee counter	เคาน์เตอร์กาแฟ
+	Emergency triage	การคัดแยกผู้ป่วยฉุกเฉิน
+	Call centre	คอลเซ็นเตอร์
+	Weld and paint line	สายการผลิตเชื่อมและพ่นสี
+	Web service with health checks	บริการเว็บที่มีการตรวจสถานะ
+	One barista busy 80% of the time, and what a second would do.	บาริสตาหนึ่งคนที่ไม่ว่าง 80% ของเวลา และคนที่สองจะช่วยได้แค่ไหน
+	Three priority classes sharing five nurses.	ผู้ป่วยสามระดับความสำคัญที่ใช้พยาบาลห้าคนร่วมกัน
+	Three agents and callers who hang up when they wait too long.	เจ้าหน้าที่สามคน และผู้โทรที่วางสายเมื่อรอนานเกินไป
+	Two stations with small buffers, paint breaking down now and then.	สองสถานีที่มีพื้นที่รอขนาดเล็ก โดยจุดพ่นสีขัดข้องเป็นครั้งคราว
+	Three app servers, taken out for a restart when too many requests wait.	เซิร์ฟเวอร์แอปสามเครื่อง ที่ถูกนำออกจากการใช้งานเพื่อรีสตาร์ตเมื่อมีคำขอรออยู่มากเกินไป
+	One barista or two at the morning rush?	บาริสตาหนึ่งหรือสองคนในช่วงเร่งด่วนตอนเช้า?
+	Who waits how long when urgent patients go first?	ใครรอนานเท่าไรเมื่อผู้ป่วยเร่งด่วนได้ก่อน?
+	How many callers hang up before an agent answers?	ผู้โทรกี่รายวางสายก่อนที่เจ้าหน้าที่จะรับสาย?
+	Where is the bottleneck, and what do breakdowns at paint cost?	คอขวดอยู่ที่ไหน และการขัดข้องที่จุดพ่นสีมีต้นทุนเท่าไร?
+	Do health checks that restart busy servers make the queue worse?	การตรวจสถานะที่รีสตาร์ตเซิร์ฟเวอร์ที่ไม่ว่างทำให้คิวแย่ลงหรือไม่?
+	Why a barista busy 80% of the time already means a four-minute wait.	ทำไมบาริสตาที่ไม่ว่าง 80% ของเวลาจึงหมายถึงการรอสี่นาทีแล้ว
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	ลำดับความสำคัญในทีมที่ใช้ร่วมกัน: ผู้ป่วยเร่งด่วนรอน้อยที่สุด ผู้ป่วยอาการเล็กน้อยรอนานที่สุด
+	Callers who give up: the share lost and the wait of those who stay.	ผู้โทรที่ล้มเลิก: สัดส่วนที่สูญเสียและเวลารอของผู้ที่ยังอยู่
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	การบล็อก พื้นที่รอขนาดเล็ก และการขัดข้อง: ชิ้นงานที่ถูกปฏิเสธที่ต้นสายการผลิต
+	Health checks that take busy servers out send their requests back to the queue.	การตรวจสถานะที่นำเซิร์ฟเวอร์ที่ไม่ว่างออกจากการใช้งานจะส่งคำขอของเซิร์ฟเวอร์นั้นกลับเข้าคิว
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ

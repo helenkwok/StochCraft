@@ -864,6 +864,26 @@ unit	yr	j
 	One task for each distribution, to compare their spread.	Eén taak per verdeling om de spreiding te vergelijken.
 	Failures, small buffers, shifts and energy per machine state.	Storingen, kleine wachtruimtes, werktijden en energie per machinetoestand.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Parallelle machines gevoed via de kortste wachtrij, en onderdelen die bij de kwaliteitscontrole worden afgekeurd.
+	Coffee counter	Koffiebar
+	Emergency triage	Triage op de spoedeisende hulp
+	Call centre	Callcenter
+	Weld and paint line	Las- en spuitlijn
+	Web service with health checks	Webdienst met statuscontroles
+	One barista busy 80% of the time, and what a second would do.	Eén barista die 80% van de tijd bezig is, en wat een tweede zou doen.
+	Three priority classes sharing five nurses.	Drie prioriteitsklassen die vijf verpleegkundigen delen.
+	Three agents and callers who hang up when they wait too long.	Drie medewerkers en bellers die ophangen als ze te lang wachten.
+	Two stations with small buffers, paint breaking down now and then.	Twee stations met kleine wachtruimtes, waarbij de spuiterij af en toe uitvalt.
+	Three app servers, taken out for a restart when too many requests wait.	Drie app-servers die uit dienst worden genomen voor een herstart als er te veel verzoeken wachten.
+	One barista or two at the morning rush?	Eén barista of twee in de ochtendspits?
+	Who waits how long when urgent patients go first?	Wie wacht hoe lang als urgente patiënten voorgaan?
+	How many callers hang up before an agent answers?	Hoeveel bellers hangen op voordat een medewerker opneemt?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Waar zit het knelpunt, en wat kosten storingen bij de spuiterij?
+	Do health checks that restart busy servers make the queue worse?	Maken statuscontroles die drukke servers herstarten de wachtrij langer?
+	Why a barista busy 80% of the time already means a four-minute wait.	Waarom een barista die 80% van de tijd bezig is al vier minuten wachten betekent.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Prioriteiten in een gedeeld team: de urgente gevallen wachten het kortst, de lichte het langst.
+	Callers who give up: the share lost and the wait of those who stay.	Bellers die afhaken: het verloren aandeel en de wachttijd van wie blijft.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokkeren, kleine wachtruimtes en storingen: onderdelen die aan het begin van de lijn worden geweigerd.
+	Health checks that take busy servers out send their requests back to the queue.	Statuscontroles die drukke servers uit dienst nemen, sturen hun verzoeken terug naar de wachtrij.
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid

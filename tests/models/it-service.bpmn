@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/2.0" id="definitions" name="Web service with health checks" targetNamespace="https://github.com/helenkwok/StochCraft/model" exporter="StochCraft" exporterVersion="0.1.0">
+  <bpmn:resource id="servers_resource" name="App servers"/>
+  <bpmn:process id="process" name="Web service with health checks" isExecutable="false">
+    <bpmn:startEvent id="requests" name="Requests arrive">
+      <bpmn:outgoing>flow-1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="servers" name="App servers">
+      <bpmn:incoming>flow-1</bpmn:incoming>
+      <bpmn:outgoing>flow-2</bpmn:outgoing>
+      <bpmn:performer>
+        <bpmn:resourceRef>servers_resource</bpmn:resourceRef>
+      </bpmn:performer>
+    </bpmn:task>
+    <bpmn:endEvent id="answered" name="Requests answered">
+      <bpmn:incoming>flow-2</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="flow-1" sourceRef="requests" targetRef="servers"/>
+    <bpmn:sequenceFlow id="flow-2" sourceRef="servers" targetRef="answered"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="process">
+      <bpmndi:BPMNShape id="requests_di" bpmnElement="requests">
+        <dc:Bounds x="82" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="servers_di" bpmnElement="servers">
+        <dc:Bounds x="230" y="60" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="answered_di" bpmnElement="answered">
+        <dc:Bounds x="442" y="82" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow-1_di" bpmnElement="flow-1">
+        <di:waypoint x="118" y="100"/>
+        <di:waypoint x="230" y="100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow-2_di" bpmnElement="flow-2">
+        <di:waypoint x="330" y="100"/>
+        <di:waypoint x="442" y="100"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn:relationship type="BPSimData">
+    <bpmn:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="scenario" name="Web service with health checks" vendor="StochCraft" version="0.1.0">
+          <bpsim:ScenarioParameters replication="10" seed="1" baseTimeUnit="s">
+            <bpsim:Duration>
+              <bpsim:FloatingParameter value="21000"/>
+            </bpsim:Duration>
+            <bpsim:Warmup>
+              <bpsim:FloatingParameter value="1000"/>
+            </bpsim:Warmup>
+          </bpsim:ScenarioParameters>
+          <bpsim:ElementParameters elementRef="requests">
+            <bpsim:ControlParameters>
+              <bpsim:InterTriggerTimer>
+                <bpsim:NegativeExponentialDistribution mean="0.6666666666666666"/>
+              </bpsim:InterTriggerTimer>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="servers">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NegativeExponentialDistribution mean="1"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Selection>
+                <bpsim:ExpressionParameter value="getResource('servers_resource', 1)"/>
+              </bpsim:Selection>
+            </bpsim:ResourceParameters>
+            <bpsim:VendorExtension name="stochcraft:healthCheck" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1">
+              <stochcraft:healthCheck limit="0.5" keep="2">
+                <stochcraft:interval>
+                  <bpsim:NegativeExponentialDistribution mean="1"/>
+                </stochcraft:interval>
+                <stochcraft:restart>
+                  <bpsim:NegativeExponentialDistribution mean="2"/>
+                </stochcraft:restart>
+              </stochcraft:healthCheck>
+            </bpsim:VendorExtension>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="servers_resource">
+            <bpsim:ResourceParameters>
+              <bpsim:Quantity>
+                <bpsim:NumericParameter value="3"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn:extensionElements>
+    <bpmn:source>definitions</bpmn:source>
+    <bpmn:target>definitions</bpmn:target>
+  </bpmn:relationship>
+</bpmn:definitions>

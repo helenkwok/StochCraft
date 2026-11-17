@@ -864,6 +864,26 @@ unit	yr	r.
 	One task for each distribution, to compare their spread.	Jedna úloha pro každé rozdělení pro porovnání jejich variability.
 	Failures, small buffers, shifts and energy per machine state.	Poruchy, malé čekárny, směny a energie podle stavu stroje.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Paralelní stroje zásobované z kratší fronty a díly vyřazené při kontrole kvality.
+	Coffee counter	Kávový pult
+	Emergency triage	Třídění na urgentním příjmu
+	Call centre	Call centrum
+	Weld and paint line	Linka svařování a lakování
+	Web service with health checks	Webová služba s kontrolami stavu
+	One barista busy 80% of the time, and what a second would do.	Jeden barista vytížený z 80% a co by změnil druhý.
+	Three priority classes sharing five nurses.	Tři třídy priority, které sdílejí pět zdravotních sester.
+	Three agents and callers who hang up when they wait too long.	Tři operátoři a volající, kteří zavěsí, když čekají příliš dlouho.
+	Two stations with small buffers, paint breaking down now and then.	Dvě stanice s malými čekárnami, lakovna se občas porouchá.
+	Three app servers, taken out for a restart when too many requests wait.	Tři aplikační servery vyřazované kvůli restartu, když čeká příliš mnoho požadavků.
+	One barista or two at the morning rush?	Jeden barista, nebo dva v ranní špičce?
+	Who waits how long when urgent patients go first?	Kdo čeká jak dlouho, když naléhaví pacienti jdou první?
+	How many callers hang up before an agent answers?	Kolik volajících zavěsí, než operátor odpoví?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Kde je úzké místo a kolik stojí poruchy v lakovně?
+	Do health checks that restart busy servers make the queue worse?	Zhoršují frontu kontroly stavu, které restartují vytížené servery?
+	Why a barista busy 80% of the time already means a four-minute wait.	Proč barista vytížený z 80% už znamená čtyři minuty čekání.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Priority ve sdíleném týmu: naléhaví čekají nejkratší dobu, lehké případy nejdéle.
+	Callers who give up: the share lost and the wait of those who stay.	Volající, kteří to vzdají: ztracený podíl a čekání těch, kteří zůstanou.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokování, malé čekárny a poruchy: díly odmítnuté na začátku linky.
+	Health checks that take busy servers out send their requests back to the queue.	Kontroly stavu, které vyřazují vytížené servery, vracejí jejich požadavky zpět do fronty.
 @plural	Added {n} block|Added {n} blocks	Přidán {n} blok|Přidány {n} bloky|Přidáno {n} bloků
 @plural	Copied {n} block|Copied {n} blocks	Zkopírován {n} blok|Zkopírovány {n} bloky|Zkopírováno {n} bloků
 @plural	Finished {n} run|Finished {n} runs	Dokončen {n} běh|Dokončeny {n} běhy|Dokončeno {n} běhů

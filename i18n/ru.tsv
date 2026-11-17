@@ -864,6 +864,26 @@ unit	yr	г.
 	One task for each distribution, to compare their spread.	По одной задаче на каждое распределение для сравнения разброса.
 	Failures, small buffers, shifts and energy per machine state.	Отказы, малые места ожидания, смены и энергия по состояниям станка.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Параллельные станки, загружаемые из более короткой очереди, и детали, отбракованные на контроле качества.
+	Coffee counter	Кофейная стойка
+	Emergency triage	Сортировка в приёмном отделении
+	Call centre	Колл-центр
+	Weld and paint line	Линия сварки и окраски
+	Web service with health checks	Веб-сервис с проверками работоспособности
+	One barista busy 80% of the time, and what a second would do.	Один бариста, занятый 80% времени, и что дал бы второй.
+	Three priority classes sharing five nurses.	Три класса приоритета на пять общих медсестёр.
+	Three agents and callers who hang up when they wait too long.	Три оператора и звонящие, которые кладут трубку, если ждут слишком долго.
+	Two stations with small buffers, paint breaking down now and then.	Два поста с малыми местами ожидания, окраска время от времени выходит из строя.
+	Three app servers, taken out for a restart when too many requests wait.	Три сервера приложений, выводимые из работы на перезапуск, когда ждёт слишком много запросов.
+	One barista or two at the morning rush?	Один бариста или два в утренний час пик?
+	Who waits how long when urgent patients go first?	Кто сколько ждёт, если срочные пациенты идут первыми?
+	How many callers hang up before an agent answers?	Сколько звонящих кладут трубку до ответа оператора?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Где узкое место и чего стоят отказы на окраске?
+	Do health checks that restart busy servers make the queue worse?	Ухудшают ли очередь проверки работоспособности, перезапускающие занятые серверы?
+	Why a barista busy 80% of the time already means a four-minute wait.	Почему бариста, занятый 80% времени, уже означает четыре минуты ожидания.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Приоритеты в общей бригаде: срочные ждут меньше всех, лёгкие случаи — дольше всех.
+	Callers who give up: the share lost and the wait of those who stay.	Звонящие, которые сдаются: потерянная доля и ожидание тех, кто остаётся.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Блокировка, малые места ожидания и отказы: детали, которым отказано в начале линии.
+	Health checks that take busy servers out send their requests back to the queue.	Проверки работоспособности, выводящие занятые серверы из работы, возвращают их запросы в очередь.
 @plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
 @plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
 @plural	Finished {n} run|Finished {n} runs	Завершён {n} запуск|Завершены {n} запуска|Завершено {n} запусков

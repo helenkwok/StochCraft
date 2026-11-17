@@ -864,6 +864,26 @@ unit	yr	a
 	One task for each distribution, to compare their spread.	Uma tarefa para cada distribuição, para comparar a dispersão.
 	Failures, small buffers, shifts and energy per machine state.	Falhas, salas de espera pequenas, turnos e energia por estado da máquina.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Máquinas em paralelo alimentadas pela fila mais curta e peças rejeitadas na qualidade.
+	Coffee counter	Balcão de café
+	Emergency triage	Triagem de emergência
+	Call centre	Central de atendimento
+	Weld and paint line	Linha de solda e pintura
+	Web service with health checks	Serviço web com verificações de estado
+	One barista busy 80% of the time, and what a second would do.	Um barista ocupado 80% do tempo, e o que um segundo faria.
+	Three priority classes sharing five nurses.	Três classes de prioridade dividindo cinco enfermeiros.
+	Three agents and callers who hang up when they wait too long.	Três atendentes e chamadores que desligam quando esperam demais.
+	Two stations with small buffers, paint breaking down now and then.	Duas estações com salas de espera pequenas, com a pintura falhando de vez em quando.
+	Three app servers, taken out for a restart when too many requests wait.	Três servidores de aplicação, retirados para reinício quando muitas requisições esperam.
+	One barista or two at the morning rush?	Um barista ou dois no pico da manhã?
+	Who waits how long when urgent patients go first?	Quem espera quanto tempo quando os pacientes urgentes vão primeiro?
+	How many callers hang up before an agent answers?	Quantos chamadores desligam antes que um atendente responda?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Onde está o gargalo, e quanto custam as falhas na pintura?
+	Do health checks that restart busy servers make the queue worse?	Verificações de estado que reiniciam servidores ocupados pioram a fila?
+	Why a barista busy 80% of the time already means a four-minute wait.	Por que um barista ocupado 80% do tempo já significa quatro minutos de espera.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Prioridades em uma equipe compartilhada: os urgentes esperam menos, os leves esperam mais.
+	Callers who give up: the share lost and the wait of those who stay.	Chamadores que desistem: a proporção perdida e a espera dos que ficam.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Bloqueio, salas de espera pequenas e falhas: peças recusadas no início da linha.
+	Health checks that take busy servers out send their requests back to the queue.	Verificações de estado que retiram servidores ocupados devolvem as requisições deles à fila.
 @plural	Added {n} block|Added {n} blocks	{n} bloco adicionado|{n} blocos adicionados
 @plural	Copied {n} block|Copied {n} blocks	{n} bloco copiado|{n} blocos copiados
 @plural	Finished {n} run|Finished {n} runs	Concluída {n} execução|Concluídas {n} execuções

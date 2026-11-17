@@ -864,6 +864,26 @@ unit	yr	r.
 	One task for each distribution, to compare their spread.	Jedna úloha pre každé rozdelenie na porovnanie ich variability.
 	Failures, small buffers, shifts and energy per machine state.	Poruchy, malé čakárne, zmeny a energia podľa stavu stroja.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Paralelné stroje zásobované z kratšieho radu a diely vyradené pri kontrole kvality.
+	Coffee counter	Kávový pult
+	Emergency triage	Triáž na urgentnom príjme
+	Call centre	Call centrum
+	Weld and paint line	Linka zvárania a lakovania
+	Web service with health checks	Webová služba s kontrolami stavu
+	One barista busy 80% of the time, and what a second would do.	Jeden barista vyťažený na 80% a čo by zmenil druhý.
+	Three priority classes sharing five nurses.	Tri triedy priority, ktoré zdieľajú päť zdravotných sestier.
+	Three agents and callers who hang up when they wait too long.	Traja operátori a volajúci, ktorí zložia, keď čakajú príliš dlho.
+	Two stations with small buffers, paint breaking down now and then.	Dve stanice s malými čakárňami, lakovňa sa občas pokazí.
+	Three app servers, taken out for a restart when too many requests wait.	Tri aplikačné servery vyraďované kvôli reštartu, keď čaká príliš veľa požiadaviek.
+	One barista or two at the morning rush?	Jeden barista, alebo dvaja v rannej špičke?
+	Who waits how long when urgent patients go first?	Kto čaká ako dlho, keď naliehaví pacienti idú prví?
+	How many callers hang up before an agent answers?	Koľko volajúcich zloží, kým operátor odpovie?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Kde je úzke miesto a koľko stoja poruchy v lakovni?
+	Do health checks that restart busy servers make the queue worse?	Zhoršujú rad kontroly stavu, ktoré reštartujú vyťažené servery?
+	Why a barista busy 80% of the time already means a four-minute wait.	Prečo barista vyťažený na 80% už znamená štyri minúty čakania.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Priority v zdieľanom tíme: naliehaví čakajú najkratšie, ľahké prípady najdlhšie.
+	Callers who give up: the share lost and the wait of those who stay.	Volajúci, ktorí to vzdajú: stratený podiel a čakanie tých, ktorí zostanú.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokovanie, malé čakárne a poruchy: diely odmietnuté na začiatku linky.
+	Health checks that take busy servers out send their requests back to the queue.	Kontroly stavu, ktoré vyraďujú vyťažené servery, vracajú ich požiadavky späť do radu.
 @plural	Added {n} block|Added {n} blocks	Pridaný {n} blok|Pridané {n} bloky|Pridaných {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Skopírovaný {n} blok|Skopírované {n} bloky|Skopírovaných {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Dokončený {n} beh|Dokončené {n} behy|Dokončených {n} behov

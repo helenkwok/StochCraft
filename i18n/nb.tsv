@@ -864,6 +864,26 @@ unit	yr	år
 	One task for each distribution, to compare their spread.	Én oppgave per fordeling for å sammenligne spredningen.
 	Failures, small buffers, shifts and energy per machine state.	Feil, små venterom, skift og energi per maskintilstand.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Parallelle maskiner forsynt via den korteste køen, og deler som vrakes ved kvalitetskontroll.
+	Coffee counter	Kaffebar
+	Emergency triage	Triage på akuttmottaket
+	Call centre	Callsenter
+	Weld and paint line	Sveise- og lakkeringslinje
+	Web service with health checks	Webtjeneste med helsesjekk
+	One barista busy 80% of the time, and what a second would do.	Én barista som er opptatt 80% av tiden, og hva en til ville gjøre.
+	Three priority classes sharing five nurses.	Tre prioritetsklasser som deler fem sykepleiere.
+	Three agents and callers who hang up when they wait too long.	Tre medarbeidere og innringere som legger på når de venter for lenge.
+	Two stations with small buffers, paint breaking down now and then.	To stasjoner med små venterom, der lakkeringen svikter nå og da.
+	Three app servers, taken out for a restart when too many requests wait.	Tre app-servere som tas ut av drift for omstart når for mange forespørsler venter.
+	One barista or two at the morning rush?	Én eller to baristaer i morgenrushet?
+	Who waits how long when urgent patients go first?	Hvem venter hvor lenge når hastepasienter går først?
+	How many callers hang up before an agent answers?	Hvor mange innringere legger på før en medarbeider svarer?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Hvor er flaskehalsen, og hva koster feil i lakkeringen?
+	Do health checks that restart busy servers make the queue worse?	Gjør helsesjekk som starter travle servere på nytt, køen verre?
+	Why a barista busy 80% of the time already means a four-minute wait.	Hvorfor en barista som er opptatt 80% av tiden, allerede betyr fire minutters venting.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Prioriteter i et felles team: de hastende venter kortest, de lette lengst.
+	Callers who give up: the share lost and the wait of those who stay.	Innringere som gir opp: andelen som går tapt og ventetiden for dem som blir.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokkering, små venterom og feil: deler som avvises i starten av linjen.
+	Health checks that take busy servers out send their requests back to the queue.	Helsesjekk som tar travle servere ut av drift, sender forespørslene deres tilbake i køen.
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
 @plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført

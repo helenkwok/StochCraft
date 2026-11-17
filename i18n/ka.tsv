@@ -864,6 +864,26 @@ unit	yr	წელი
 	One task for each distribution, to compare their spread.	თითო დავალება ყოველ განაწილებაზე, მათი გაფანტვის შესადარებლად.
 	Failures, small buffers, shifts and energy per machine state.	გაუმართაობები, პატარა მოსაცდელი სივრცეები, ცვლები და ენერგია მანქანის მდგომარეობის მიხედვით.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	პარალელური მანქანები, რომლებსაც უფრო მოკლე რიგი კვებავს, და ხარისხის კონტროლზე უარყოფილი დეტალები.
+	Coffee counter	ყავის დახლი
+	Emergency triage	გადაუდებელი დახმარების ტრიაჟი
+	Call centre	ქოლ-ცენტრი
+	Weld and paint line	შედუღებისა და შეღებვის ხაზი
+	Web service with health checks	ვებსერვისი მდგომარეობის შემოწმებებით
+	One barista busy 80% of the time, and what a second would do.	ერთი ბარისტა, დაკავებული დროის 80%-ში, და რას შეცვლიდა მეორე.
+	Three priority classes sharing five nurses.	სამი პრიორიტეტის კლასი, რომლებიც ხუთ ექთანს იზიარებენ.
+	Three agents and callers who hang up when they wait too long.	სამი ოპერატორი და ზარის განმხორციელებლები, რომლებიც ყურმილს კიდებენ, როცა ძალიან დიდხანს ელოდებიან.
+	Two stations with small buffers, paint breaking down now and then.	ორი სადგური პატარა მოსაცდელი სივრცეებით, შეღებვა დროდადრო ფუჭდება.
+	Three app servers, taken out for a restart when too many requests wait.	სამი აპლიკაციის სერვერი, რომლებიც გადატვირთვისთვის მუშაობიდან გამოჰყავთ, როცა ძალიან ბევრი მოთხოვნა ელოდება.
+	One barista or two at the morning rush?	ერთი ბარისტა თუ ორი დილის პიკში?
+	Who waits how long when urgent patients go first?	ვინ რამდენ ხანს ელოდება, როცა სასწრაფო პაციენტები პირველები მიდიან?
+	How many callers hang up before an agent answers?	რამდენი აბონენტი კიდებს ყურმილს, სანამ ოპერატორი უპასუხებს?
+	Where is the bottleneck, and what do breakdowns at paint cost?	სად არის ვიწრო ადგილი და რა ჯდება შეღებვის გაუმართაობები?
+	Do health checks that restart busy servers make the queue worse?	აუარესებს თუ არა რიგს მდგომარეობის შემოწმებები, რომლებიც დაკავებულ სერვერებს გადატვირთავენ?
+	Why a barista busy 80% of the time already means a four-minute wait.	რატომ ნიშნავს დროის 80%-ში დაკავებული ბარისტა უკვე ოთხწუთიან ლოდინს.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	პრიორიტეტები საერთო გუნდში: სასწრაფოები ყველაზე ნაკლებს ელოდებიან, მსუბუქი შემთხვევები ყველაზე დიდხანს.
+	Callers who give up: the share lost and the wait of those who stay.	აბონენტები, რომლებიც ნებდებიან: დაკარგული წილი და დარჩენილების ლოდინი.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	ბლოკირება, პატარა მოსაცდელი სივრცეები და გაუმართაობები: ხაზის დასაწყისში უარყოფილი დეტალები.
+	Health checks that take busy servers out send their requests back to the queue.	მდგომარეობის შემოწმებები, რომლებიც დაკავებულ სერვერებს მუშაობიდან გამოიყვანენ, მათ მოთხოვნებს რიგში აბრუნებენ.
 @plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
 @plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
 @plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გაშვება|დასრულდა {n} გაშვება

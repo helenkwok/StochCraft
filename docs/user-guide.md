@@ -41,7 +41,9 @@ card with its question, its field, about how long it takes, a strip of its block
 teaches, and, where its answer has been checked, a tag: **Checked against queueing theory** or
 **Matches a published study**. Click a card to open its example. The question buttons (**Where is
 the bottleneck?**, **How many people or machines?**, …) and the **Industry** list narrow the
-cards; **See all examples** adds the reference models.
+cards; **See all examples** adds the reference models. Every example with a tag has a test that
+runs it and compares its results with the exact answer (`crates/engine/tests/examples.rs` and
+`benchmarks.rs`).
 
 Beside the examples:
 
@@ -57,6 +59,11 @@ The examples are also under **File ▸ Open Example**:
 
 | Example | What it asks |
 | --- | --- |
+| **Coffee counter** | One barista or two at the morning rush? Checked against the M/M/1 and M/M/2 (Erlang C) formulas. |
+| **Emergency triage** | Who waits how long when urgent patients go first? Checked against Cobham's priority-queue waits. |
+| **Call centre** | How many callers hang up before an agent answers? Checked against the M/M/c+M (Erlang-A) chain. |
+| **Weld and paint line** | Where is the bottleneck, and what do breakdowns at paint cost? Checked against the line's exact Markov chain. |
+| **Web service with health checks** | Do health checks that restart busy servers make the queue worse? Checked against the service's exact Markov chain. |
 | **M/M/1 queue** | How long do customers wait at one busy clerk? Checked against queueing theory. |
 | **Four-machine line with weekend breaks** | What do failures and weekend breaks do to a line's output and energy per part? Schmitt et al. 2026, Case A: matches the published throughput. |
 | **Seven-machine line with two presses** | Which machine holds back a line with two presses in parallel? Schmitt et al. 2026, Case B. |

@@ -864,6 +864,26 @@ unit	yr	год.
 	One task for each distribution, to compare their spread.	По један задатак за сваку дистрибуцију ради поређења њихове распршености.
 	Failures, small buffers, shifts and energy per machine state.	Кварови, мале чекаонице, смене и енергија по стању машине.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Паралелне машине које се пуне из краћег реда и делови одбачени на контроли квалитета.
+	Coffee counter	Пулт за кафу
+	Emergency triage	Тријажа у хитној служби
+	Call centre	Позивни центар
+	Weld and paint line	Линија за заваривање и фарбање
+	Web service with health checks	Веб-услуга са проверама стања
+	One barista busy 80% of the time, and what a second would do.	Један бариста заузет 80% времена и шта би променио други.
+	Three priority classes sharing five nurses.	Три класе приоритета које деле пет медицинских сестара.
+	Three agents and callers who hang up when they wait too long.	Три оператера и позиваоци који прекину позив кад предуго чекају.
+	Two stations with small buffers, paint breaking down now and then.	Две станице са малим чекаоницама, фарбање се повремено поквари.
+	Three app servers, taken out for a restart when too many requests wait.	Три апликацијска сервера који се избацују из рада ради поновног покретања кад чека превише захтева.
+	One barista or two at the morning rush?	Један бариста или два у јутарњој гужви?
+	Who waits how long when urgent patients go first?	Ко чека колико дуго кад хитни пацијенти иду први?
+	How many callers hang up before an agent answers?	Колико позивалаца прекине позив пре него што се јави оператер?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Где је уско грло и колико коштају кварови на фарбању?
+	Do health checks that restart busy servers make the queue worse?	Да ли провере стања које поново покрећу заузете сервере погоршавају ред?
+	Why a barista busy 80% of the time already means a four-minute wait.	Зашто бариста заузет 80% времена већ значи четири минута чекања.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Приоритети у заједничком тиму: хитни чекају најкраће, лакши случајеви најдуже.
+	Callers who give up: the share lost and the wait of those who stay.	Позиваоци који одустану: изгубљени удео и чекање оних који остану.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Блокирање, мале чекаонице и кварови: делови одбијени на почетку линије.
+	Health checks that take busy servers out send their requests back to the queue.	Провере стања које избацују заузете сервере из рада враћају њихове захтеве у ред.
 @plural	Added {n} block|Added {n} blocks	Додат је {n} блок|Додата су {n} блока|Додато је {n} блокова
 @plural	Copied {n} block|Copied {n} blocks	Копиран је {n} блок|Копирана су {n} блока|Копирано је {n} блокова
 @plural	Finished {n} run|Finished {n} runs	Завршено је {n} покретање|Завршена су {n} покретања|Завршено је {n} покретања

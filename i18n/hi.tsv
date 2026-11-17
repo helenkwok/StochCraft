@@ -864,6 +864,26 @@ unit	yr	वर्ष
 	One task for each distribution, to compare their spread.	प्रसार की तुलना के लिए प्रत्येक वितरण पर एक कार्य।
 	Failures, small buffers, shifts and energy per machine state.	खराबियाँ, छोटे प्रतीक्षा कक्ष, पालियाँ और मशीन की हर अवस्था में ऊर्जा।
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	छोटी कतार से भरी जाने वाली समानांतर मशीनें, और गुणवत्ता जाँच पर अस्वीकृत पुर्जे।
+	Coffee counter	कॉफ़ी काउंटर
+	Emergency triage	आपातकालीन ट्रायेज
+	Call centre	कॉल सेंटर
+	Weld and paint line	वेल्ड और पेंट लाइन
+	Web service with health checks	स्थिति जाँच वाली वेब सेवा
+	One barista busy 80% of the time, and what a second would do.	80% समय व्यस्त एक बरिस्ता, और दूसरा क्या बदलेगा।
+	Three priority classes sharing five nurses.	पाँच नर्सों को साझा करने वाले तीन प्राथमिकता वर्ग।
+	Three agents and callers who hang up when they wait too long.	तीन एजेंट और ऐसे कॉलर जो बहुत देर प्रतीक्षा करने पर फ़ोन रख देते हैं।
+	Two stations with small buffers, paint breaking down now and then.	छोटे प्रतीक्षा कक्षों वाले दो स्टेशन, जिनमें पेंट कभी-कभी खराब हो जाता है।
+	Three app servers, taken out for a restart when too many requests wait.	तीन ऐप सर्वर, जिन्हें बहुत अधिक अनुरोध प्रतीक्षा में होने पर पुनः आरंभ के लिए हटा दिया जाता है।
+	One barista or two at the morning rush?	सुबह की भीड़ में एक बरिस्ता या दो?
+	Who waits how long when urgent patients go first?	जब तत्काल मरीज़ पहले जाते हैं, तो कौन कितनी देर प्रतीक्षा करता है?
+	How many callers hang up before an agent answers?	एजेंट के जवाब देने से पहले कितने कॉलर फ़ोन रख देते हैं?
+	Where is the bottleneck, and what do breakdowns at paint cost?	बॉटलनेक कहाँ है, और पेंट पर खराबियों की कीमत क्या है?
+	Do health checks that restart busy servers make the queue worse?	क्या व्यस्त सर्वरों को पुनः आरंभ करने वाली स्थिति जाँचें कतार को और बिगाड़ती हैं?
+	Why a barista busy 80% of the time already means a four-minute wait.	80% समय व्यस्त बरिस्ता का मतलब पहले से ही चार मिनट की प्रतीक्षा क्यों है।
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	साझा टीम में प्राथमिकताएँ: तत्काल वाले सबसे कम, मामूली वाले सबसे देर प्रतीक्षा करते हैं।
+	Callers who give up: the share lost and the wait of those who stay.	हार मानने वाले कॉलर: खोया हुआ अनुपात और रुकने वालों की प्रतीक्षा।
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	अवरोधन, छोटे प्रतीक्षा कक्ष और खराबियाँ: लाइन की शुरुआत में लौटाए गए पुर्जे।
+	Health checks that take busy servers out send their requests back to the queue.	व्यस्त सर्वरों को हटाने वाली स्थिति जाँचें उनके अनुरोध वापस कतार में भेज देती हैं।
 @plural	Added {n} block|Added {n} blocks	{n} ब्लॉक जोड़ा गया|{n} ब्लॉक जोड़े गए
 @plural	Copied {n} block|Copied {n} blocks	{n} ब्लॉक कॉपी किया गया|{n} ब्लॉक कॉपी किए गए
 @plural	Finished {n} run|Finished {n} runs	{n} रन पूरा हुआ|{n} रन पूरे हुए

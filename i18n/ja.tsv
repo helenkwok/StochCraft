@@ -864,6 +864,26 @@ unit	yr	年
 	One task for each distribution, to compare their spread.	分布ごとに 1 つのタスクを使い、ばらつきを比較します。
 	Failures, small buffers, shifts and energy per machine state.	故障、小さな待機場所、シフト、機械の状態ごとのエネルギー。
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	短いほうの待ち行列から供給される並列の機械と、品質検査で不合格になった部品。
+	Coffee counter	コーヒーカウンター
+	Emergency triage	救急トリアージ
+	Call centre	コールセンター
+	Weld and paint line	溶接・塗装ライン
+	Web service with health checks	ヘルスチェック付きの Web サービス
+	One barista busy 80% of the time, and what a second would do.	時間の 80% がふさがっているバリスタ 1 人と、2 人目がいたらどうなるか。
+	Three priority classes sharing five nurses.	5 人の看護師を共有する 3 つの優先度クラス。
+	Three agents and callers who hang up when they wait too long.	オペレーター 3 人と、待ちすぎると電話を切る発信者。
+	Two stations with small buffers, paint breaking down now and then.	小さな待機場所のある 2 つのステーション。塗装がときどき故障します。
+	Three app servers, taken out for a restart when too many requests wait.	待っているリクエストが多すぎると再起動のために切り離される 3 台のアプリサーバ。
+	One barista or two at the morning rush?	朝の混雑時、バリスタは 1 人か 2 人か？
+	Who waits how long when urgent patients go first?	緊急の患者を優先すると、誰がどれだけ待つか？
+	How many callers hang up before an agent answers?	オペレーターが出る前に、何人の発信者が電話を切るか？
+	Where is the bottleneck, and what do breakdowns at paint cost?	ボトルネックはどこか、塗装の故障でどれだけ損をするか？
+	Do health checks that restart busy servers make the queue worse?	混んでいるサーバを再起動するヘルスチェックは、待ち行列を悪化させるか？
+	Why a barista busy 80% of the time already means a four-minute wait.	バリスタが時間の 80% ふさがっているだけで、もう 4 分待ちになる理由。
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	共有チームでの優先度。緊急は最も短く、軽症は最も長く待つ。
+	Callers who give up: the share lost and the wait of those who stay.	待ちきれずにあきらめる発信者。失われる割合と、残った人の待ち時間。
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	ブロック状態、小さな待機場所、故障。ラインの入口で受け入れられない部品。
+	Health checks that take busy servers out send their requests back to the queue.	混んでいるサーバを切り離すヘルスチェックは、そのリクエストを待ち行列に戻す。
 @plural	Added {n} block|Added {n} blocks	{n} 個のブロックを追加しました
 @plural	Copied {n} block|Copied {n} blocks	{n} 個のブロックをコピーしました
 @plural	Finished {n} run|Finished {n} runs	{n} 回の実行が完了しました

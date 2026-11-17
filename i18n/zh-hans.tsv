@@ -864,6 +864,26 @@ unit	yr	年
 	One task for each distribution, to compare their spread.	每种分布各设一个任务，用于比较其离散程度。
 	Failures, small buffers, shifts and energy per machine state.	故障、小等待区、班次以及按机器状态计的能耗。
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	由较短队列供料的并联机器，以及在质检时被剔除的零件。
+	Coffee counter	咖啡柜台
+	Emergency triage	急诊分诊
+	Call centre	呼叫中心
+	Weld and paint line	焊接与喷漆线
+	Web service with health checks	带健康检查的 Web 服务
+	One barista busy 80% of the time, and what a second would do.	一名 80% 时间在忙的咖啡师，以及再加一名会怎样。
+	Three priority classes sharing five nurses.	三个优先级类别共用五名护士。
+	Three agents and callers who hang up when they wait too long.	三名坐席，以及等太久就挂断的来电者。
+	Two stations with small buffers, paint breaking down now and then.	两个工作站，等待区很小，喷漆工位时有故障。
+	Three app servers, taken out for a restart when too many requests wait.	三台应用服务器，等待的请求过多时会下线重启。
+	One barista or two at the morning rush?	早高峰用一名咖啡师还是两名？
+	Who waits how long when urgent patients go first?	急症患者优先时，谁要等多久？
+	How many callers hang up before an agent answers?	坐席接听前有多少来电者挂断？
+	Where is the bottleneck, and what do breakdowns at paint cost?	瓶颈在哪里，喷漆工位的故障代价多大？
+	Do health checks that restart busy servers make the queue worse?	重启繁忙服务器的健康检查会让队列更糟吗？
+	Why a barista busy 80% of the time already means a four-minute wait.	为什么一名 80% 时间在忙的咖啡师就已经意味着要等四分钟。
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	共用团队中的优先级：急症等得最短，轻症等得最长。
+	Callers who give up: the share lost and the wait of those who stay.	放弃等待的来电者：流失比例和留下者的等待时间。
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	阻塞、小等待区和故障：在产线入口被拒收的零件。
+	Health checks that take busy servers out send their requests back to the queue.	将繁忙服务器下线的健康检查会把它们的请求送回队列。
 @plural	Added {n} block|Added {n} blocks	已添加 {n} 个区块
 @plural	Copied {n} block|Copied {n} blocks	已复制 {n} 个区块
 @plural	Finished {n} run|Finished {n} runs	已完成 {n} 次运行
