@@ -37,7 +37,7 @@ jobs:
       heavy: ${{ steps.affected.outputs.heavy }}
       wasm: ${{ steps.affected.outputs.wasm }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -104,7 +104,7 @@ jobs:
       # The BPSim reference models and XML Schema are downloaded, never committed (they carry no
       # licence of their own). The cache key changes when the pinned checksums in
       # xtask/src/bpsim.rs do, so bpsim.org is contacted only when the cache is cold.
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: target/bpsim
           key: bpsim-${{ hashFiles('xtask/src/bpsim.rs') }}
@@ -128,7 +128,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
@@ -139,27 +139,34 @@ jobs:
           key: heavy
       - run: cargo test --workspace --release --locked -- --ignored
 
-  # The BPSim reference-model and schema tests on Windows, where file paths and temporary files
-  # differ from Linux. xmllint is MSYS2's native mingw64 build (MSYS2 is preinstalled on the
-  # runner); only its mingw64 folder goes on PATH, since MSYS2's usr/bin has a link.exe that
-  # would shadow MSVC's linker.
+  # The crates with Windows-only code, on Windows: the desktop app (the Windows subsystem, opening
+  # links with `start`, and the Craft window, menus and file dialogs it builds on) and the MCP
+  # server's roots (device names, `..` resolved in the path's text), linted and tested; then the BPSim reference-model and schema tests, where file paths and
+  # temporary files differ from Linux. xmllint is MSYS2's native mingw64 build (MSYS2 is
+  # preinstalled on the runner); only its mingw64 folder goes on PATH, since MSYS2's usr/bin has a
+  # link.exe that would shadow MSVC's linker, and only after the desktop build.
   windows:
-    name: Reference tests on Windows
+    name: Windows (desktop app, MCP roots, reference tests)
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       # The tests compare files byte for byte, so check out with the repository's LF endings.
       - run: git config --global core.autocrlf false
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
         with:
           toolchain: stable
+          components: clippy
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
           key: windows
-      - uses: actions/cache@v6
+      - name: cargo clippy (desktop app, MCP)
+        run: cargo clippy --locked --all-targets -p stochcraft -p stochcraft-mcp -- -D warnings
+      - name: cargo test (desktop app, MCP)
+        run: cargo test --locked -p stochcraft -p stochcraft-mcp
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: target/bpsim
           key: bpsim-${{ hashFiles('xtask/src/bpsim.rs') }}
@@ -187,12 +194,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       # The craft-fonts commit pages.yml builds with (CRAFT_FONTS_REV there), so the table of
       # served faces the web build compiles in is checked here too.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: storytold/craft-fonts
           ref: aced4137c022f1f587624d48e81ec77e1914a9cc
@@ -207,7 +214,7 @@ jobs:
           key: wasm
       # Node runs the wasm32-wasip1 test binary through its built-in WASI (xtask/wasi-run.mjs). This
       # job uses the latest LTS release of Node; wasi-run.mjs works around a Node 22 crash (#102).
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: lts/*
       - run: cargo xtask wasm
@@ -218,7 +225,7 @@ jobs:
       - run: cargo xtask golden
       # Again on Node 22, the oldest Node LTS CONTRIBUTING supports, so the wasi-run.mjs
       # workaround for its crash stays tested (#102). The test binary is already built.
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
       - run: node --version && cargo xtask golden
@@ -228,7 +235,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
@@ -249,9 +256,63 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
         with:
           command: check licenses sources bans
+
+  # RustSec advisories, apart from the licence check so a new advisory shows as its own failure.
+  # A new advisory can fail a pull request that changed nothing: fix it by updating the crate, or
+  # add it to deny.toml's ignore list with the reason it doesn't apply.
+  advisories:
+    name: cargo deny (advisories)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
+        with:
+          command: check advisories
+
+  # The workspace's declared rust-version (Cargo.toml), so a newer language or library feature
+  # can't creep in unnoticed while the other jobs build with the latest stable. Keep this in step
+  # with rust-version. A check, not clippy: clippy's lints change from release to release.
+  msrv:
+    name: cargo check on Rust 1.95 (rust-version)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: "1.95"
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: msrv
+      - run: cargo check --workspace --all-targets --locked
+
+  # The desktop app's macOS-only code (the native application menu, `open` for links) is
+  # compiled nowhere else before a release; this lints it. A check, not a build or tests: cheap,
+  # and the rest of the workspace has no macOS-specific code.
+  macos:
+    name: macOS (desktop app, clippy)
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+          components: clippy
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: macos
+      - run: cargo clippy --locked --all-targets -p stochcraft -- -D warnings

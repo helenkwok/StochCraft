@@ -97,6 +97,13 @@ pub const UI_CRATES: &[&str] = &[
     "bevy*",
     "craft-ui",
     "craft-window",
+    // The Craft suite's desktop pieces: the menu bar, shortcuts, file dialogs and quitting.
+    "craft-menu",
+    "craft-keymap",
+    "craft-dialogs",
+    "craft-quit",
+    // OpenGL, which eframe draws with.
+    "glow",
 ];
 
 /// First layer allowed to use UI crates.
@@ -421,7 +428,19 @@ mod tests {
     #[test]
     fn ui_crates_below_the_ui_layer_flagged() {
         for dep in [
-            "egui", "eframe", "winit", "wgpu", "rfd", "bevy_ecs", "ash", "craft-ui",
+            "egui",
+            "eframe",
+            "winit",
+            "wgpu",
+            "rfd",
+            "bevy_ecs",
+            "ash",
+            "craft-ui",
+            "craft-menu",
+            "craft-keymap",
+            "craft-dialogs",
+            "craft-quit",
+            "glow",
         ] {
             let v = check(&[c("stochcraft-experiment", &[(dep, Normal, false)])]);
             assert!(
