@@ -34,6 +34,9 @@ mod start;
 pub mod theme;
 mod theme_editor;
 
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use egui::{Key, Modifiers};
 use serde_json::{Value, json};
 use stochcraft_engine::{CommandError, Engine, ErrorCode};
@@ -335,6 +338,16 @@ enum Replace {
     Quit,
 }
 
+/// What the views read of the model, each with the engine's revision it was worked out at
+/// ([`App::wire_model`], [`App::model_digest`], [`App::results`]).
+#[derive(Default)]
+struct ModelCache {
+    wire: Option<(u64, Rc<Value>)>,
+    digest: Option<(u64, String)>,
+    /// Whether the results are of the model, by revision and results serial.
+    results_current: Option<((u64, u64), bool)>,
+}
+
 /// A save that needs a new BPMN file, written from the model alone, held while the user decides.
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct NewFile {
@@ -476,9 +489,13 @@ pub struct App {
     platform: Platform,
     /// Results of the last finished run. They stay after the model changes, marked out of date
     /// ([`App::results_out_of_date`]), until another run, file or model replaces them.
-    results: Option<Value>,
+    /// Shared, so a view can hold them while it changes the app.
+    results: Option<Rc<Value>>,
     /// The model the results came from, as [`comparable`] writes it.
     results_model: Option<Value>,
+    /// The model as the views read it, and whether the results are of it, worked out once per
+    /// change of the model (by the engine's revision) rather than every frame.
+    model_cache: RefCell<ModelCache>,
     /// The model as the run in progress started with it, as [`comparable`] writes it.
     run_model: Option<Value>,
     /// The model has changed since the results' run (worked out once a frame).
@@ -531,8 +548,9 @@ pub struct App {
     canvas: canvas::Canvas,
     /// A run being watched on the canvas (M3.5).
     watching: Option<live::Watching>,
-    /// The model last validated and its problems, so a frame validates at most once.
-    problems_of: Option<(stochcraft_model::Model, Vec<editor::Problem>)>,
+    /// The engine revision of the model last validated, and its problems, so a frame validates
+    /// at most once.
+    problems_of: Option<(u64, Vec<editor::Problem>)>,
     /// Text being typed into form fields, until it commits, and numbers a field refused, until
     /// they are fixed or another block is shown.
     drafts: std::collections::HashMap<String, String>,
@@ -614,6 +632,7 @@ impl App {
             platform,
             results: None,
             results_model: None,
+            model_cache: RefCell::default(),
             run_model: None,
             results_stale: false,
             results_serial: 0,
@@ -721,9 +740,48 @@ impl App {
 
     /// Results of the last finished run, if the model has not changed since.
     pub fn results(&self) -> Option<&Value> {
-        self.results
-            .as_ref()
-            .filter(|_| self.results_model.as_ref() == Some(&comparable(self.engine.model())))
+        let results = self.results.as_deref()?;
+        let revision = self.engine.revision();
+        let key = (revision, self.results_serial);
+        let mut cache = self.model_cache.borrow_mut();
+        let current = match cache.results_current {
+            Some((k, current)) if k == key => current,
+            _ => {
+                let current = self.results_model.as_ref() == Some(&comparable(self.engine.model()));
+                cache.results_current = Some((key, current));
+                current
+            }
+        };
+        current.then_some(results)
+    }
+
+    /// The model as the window reads it ([`stochcraft_engine::wire::model`]), written once per
+    /// change of the model however many views read it in a frame.
+    pub(crate) fn wire_model(&self) -> Rc<Value> {
+        let revision = self.engine.revision();
+        let mut cache = self.model_cache.borrow_mut();
+        match &cache.wire {
+            Some((r, m)) if *r == revision => m.clone(),
+            _ => {
+                let m = Rc::new(stochcraft_engine::wire::model(self.engine.model()));
+                cache.wire = Some((revision, m.clone()));
+                m
+            }
+        }
+    }
+
+    /// The model's digest ([`stochcraft_engine::model_digest`]), worked out once per change.
+    pub(crate) fn model_digest(&self) -> String {
+        let revision = self.engine.revision();
+        let mut cache = self.model_cache.borrow_mut();
+        match &cache.digest {
+            Some((r, d)) if *r == revision => d.clone(),
+            _ => {
+                let d = stochcraft_engine::model_digest(self.engine.model());
+                cache.digest = Some((revision, d.clone()));
+                d
+            }
+        }
     }
 
     /// The results on show are of a model that has changed since their run: the Results view
@@ -734,7 +792,7 @@ impl App {
 
     /// Shows `results` of a run of `model` (as [`comparable`] writes it).
     fn set_results(&mut self, results: Value, model: Value) {
-        self.results = Some(results);
+        self.results = Some(Rc::new(results));
         self.results_model = Some(model);
         self.results_stale = false;
         self.results_serial += 1;
@@ -768,7 +826,7 @@ impl App {
 
     /// The Help panel, at the right of the window.
     fn help_panel(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
-        let model = stochcraft_engine::wire::model(self.engine.model());
+        let model = self.wire_model();
         let steps = help::steps(&model, self.results().is_some(), self.help.read_results);
         let keymap_platform = craft_keymap::egui::platform(ui.ctx());
         let key = |id: &str| commands::shortcut_text(&self.keymap, id, keymap_platform);
@@ -812,7 +870,7 @@ impl App {
 
     /// "Keep as baseline": the results on show become the baseline.
     pub fn keep_baseline(&mut self) {
-        if let (Some(results), Some(model)) = (&self.results, &self.results_model) {
+        if let (Some(results), Some(model)) = (self.results.as_deref(), &self.results_model) {
             self.baseline = Some(baseline::Baseline {
                 results: results.clone(),
                 model: model.clone(),
@@ -833,7 +891,7 @@ impl App {
     /// for each pair of results.
     fn compared(&mut self) -> Option<(Value, Value, Value, Vec<String>)> {
         let b = self.baseline.as_ref()?;
-        let now = self.results.as_ref()?;
+        let now = self.results.as_deref()?;
         if b.serial == self.results_serial {
             return None;
         }
@@ -1782,7 +1840,7 @@ impl App {
         if !self.guide.on {
             return;
         }
-        let model = stochcraft_engine::wire::model(self.engine.model());
+        let model = self.wire_model();
         let ran = self.results().is_some();
         let hint = guide::hint(&model, ran, self.help.read_results);
         let target = hint.as_ref().map(|h| h.target.clone());
@@ -3054,5 +3112,30 @@ mod tests {
                 c.name
             );
         }
+    }
+
+    /// The views read one written model until the model changes, and then the new one.
+    #[test]
+    fn the_model_is_written_once_per_change() {
+        let mut app = App::new(Platform::DESKTOP);
+        let a = app.wire_model();
+        assert!(Rc::ptr_eq(&a, &app.wire_model()), "unchanged: the same");
+        assert!(
+            app.execute("model.rename", json!({ "name": "x" }))
+                .is_some()
+        );
+        let b = app.wire_model();
+        assert!(!Rc::ptr_eq(&a, &b));
+        assert_eq!(b["name"], "x");
+        assert_eq!(
+            app.model_digest(),
+            stochcraft_engine::model_digest(app.engine.model())
+        );
+        app.undo();
+        assert_eq!(*app.wire_model(), *a);
+        assert_eq!(
+            app.model_digest(),
+            stochcraft_engine::model_digest(app.engine.model())
+        );
     }
 }

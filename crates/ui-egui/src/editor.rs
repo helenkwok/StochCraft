@@ -213,13 +213,13 @@ impl App {
     /// The model's problems (validation is a query: nothing is journalled). Validated once per
     /// change of the model, however many views ask in a frame.
     pub(crate) fn problems(&mut self) -> Vec<Problem> {
-        if let Some((model, problems)) = &self.problems_of
-            && model == self.engine.model()
+        if let Some((revision, problems)) = &self.problems_of
+            && *revision == self.engine.revision()
         {
             return problems.clone();
         }
         let problems = self.validate();
-        self.problems_of = Some((self.engine.model().clone(), problems.clone()));
+        self.problems_of = Some((self.engine.revision(), problems.clone()));
         problems
     }
 
@@ -373,7 +373,7 @@ impl App {
     /// Model overview or block inspector, by the selection.
     pub(crate) fn editor(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
         let problems = self.problems();
-        let model = stochcraft_engine::wire::model(self.engine.model());
+        let model = self.wire_model();
         // A refused number belongs to the block it was typed for: showing another drops it
         // (Esc in the field drops it too, and also goes back to the model).
         if self.drafts_of != self.selected {

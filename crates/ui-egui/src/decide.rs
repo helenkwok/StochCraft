@@ -672,7 +672,7 @@ impl App {
 
     /// One result's distribution across the replications, with a target's probability.
     pub(crate) fn distribution_section(&mut self, ui: &mut egui::Ui, results: &Value) {
-        let model = stochcraft_engine::wire::model(self.engine.model());
+        let model = self.wire_model();
         let mut options = outputs(&model, Some(results));
         if results["stop"].is_object() {
             options.insert(
@@ -823,10 +823,9 @@ impl App {
 
     /// Sweeps, sensitivity and sizing, each with the last answer for this model.
     pub(crate) fn analysis_view(&mut self, ui: &mut egui::Ui) {
-        let model = stochcraft_engine::wire::model(self.engine.model());
-        let digest = stochcraft_engine::model_digest(self.engine.model());
-        let results = self.results().cloned();
-        let outs = outputs(&model, results.as_ref());
+        let model = self.wire_model();
+        let digest = self.model_digest();
+        let outs = outputs(&model, self.results());
         let params = parameters(&model);
         egui::ScrollArea::vertical()
             .auto_shrink([false, false])
