@@ -720,6 +720,35 @@ unit	yr	a
 	the model has changed since this run.	el modelo ha cambiado desde esta ejecución.
 	Run again	Ejecutar de nuevo
 	· out of date	· desactualizados
+	Real: lower	Real: menor
+	Real: higher	Real: mayor
+	Could be chance	Podría ser azar
+	No change	Sin cambio
+	Too few runs to tell	Muy pocas ejecuciones para saberlo
+	{value} points	{value} puntos
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	La referencia usó la semilla {seed_a} y {n_a} ejecuciones, y esta ejecución la semilla {seed_b} y {n_b} ejecuciones, así que se comparan como ejecuciones independientes y los intervalos son más anchos. La misma semilla y el mismo número de ejecuciones dan una comparación pareada.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	La referencia midió el tiempo en {a} y esta ejecución en {b}, así que los tiempos no se comparan.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) bajó de {before} a {after}, en {change}: más de lo que explicaría el azar.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) subió de {before} a {after}, en {change}: más de lo que explicaría el azar.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Ninguna de las métricas clave se movió más de lo que explicaría el azar: puede que el cambio haga poco, o que más ejecuciones lo muestren.
+	What the change did	Qué hizo el cambio
+	Baseline and now, key measures	Referencia y ahora, métricas clave
+	Difference (paired, 95%)	Diferencia (pareada, 95 %)
+	Difference (95%)	Diferencia (95 %)
+	Measure	Métrica
+	Baseline	Referencia
+	Now	Ahora
+	Change from baseline	Cambio respecto a la referencia
+	Verdict	Veredicto
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Un veredicto es real cuando el intervalo del 95 % de la diferencia excluye el cero. Cada fila se juzga por separado.
+	This run is the baseline.	Esta ejecución es la referencia.
+	Change the model and run it again to compare.	Cambia el modelo y vuelve a ejecutarlo para comparar.
+	Compared with the baseline:	Comparado con la referencia:
+	Keep this as the baseline	Conservar esta ejecución como referencia
+	Keep as baseline	Conservar como referencia
+	Keep these results, change the model, run it again, and see what the change did.	Conserva estos resultados, cambia el modelo, vuelve a ejecutarlo y mira qué hizo el cambio.
+	Clear baseline	Quitar la referencia
 @plural	Added {n} block|Added {n} blocks	Se añadió {n} bloque|Se añadieron {n} bloques
 @plural	Copied {n} block|Copied {n} blocks	Se copió {n} bloque|Se copiaron {n} bloques
 @plural	Finished {n} run|Finished {n} runs	Finalizada {n} ejecución|Finalizadas {n} ejecuciones
@@ -739,3 +768,5 @@ unit	yr	a
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemas: {blocks}
 @plural	Use {n} run|Use {n} runs	Usar {n} ejecución|Usar {n} ejecuciones
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usar {n} ejecución (aprox. ± 5%)|Usar {n} ejecuciones (aprox. ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambas usaron la semilla {seed} y la misma {n} ejecución, así que cada ejecución recibe los mismos números aleatorios que su pareja: las diferencias vienen del cambio, no de extracciones al azar.|Ambas usaron la semilla {seed} y las mismas {n} ejecuciones, así que cada ejecución recibe los mismos números aleatorios que su pareja: las diferencias vienen del cambio, no de extracciones al azar.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} otra métrica clave no se movió más de lo que podría el azar.|{n} otras métricas clave no se movieron más de lo que podría el azar.

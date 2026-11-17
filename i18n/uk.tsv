@@ -720,6 +720,35 @@ unit	yr	р.
 	the model has changed since this run.	модель змінилася після цього запуску.
 	Run again	Запустити знову
 	· out of date	· застаріли
+	Real: lower	Реально: нижче
+	Real: higher	Реально: вище
+	Could be chance	Може бути випадковістю
+	No change	Без змін
+	Too few runs to tell	Замало запусків для висновку
+	{value} points	{value} в. п.
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Базовий варіант використав початкове значення генератора {seed_a} і кількість запусків {n_a}, цей запуск — значення {seed_b} і кількість запусків {n_b}, тож їх порівнюють як незалежні запуски, а інтервали ширші. Однакові початкове значення й кількість запусків дають парне порівняння.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Базовий варіант вимірював час у {a}, а цей запуск — у {b}, тож час не порівнюється.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) знизився з {before} до {after}, на {change}: більше, ніж пояснила б випадковість.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) зріс з {before} до {after}, на {change}: більше, ніж пояснила б випадковість.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Жоден з основних показників не змінився більше, ніж пояснила б випадковість: зміна, можливо, мало що дає, або більше запусків це покажуть.
+	What the change did	Що дала зміна
+	Baseline and now, key measures	Базовий варіант і зараз, основні показники
+	Difference (paired, 95%)	Різниця (парна, 95%)
+	Difference (95%)	Різниця (95%)
+	Measure	Показник
+	Baseline	Базовий варіант
+	Now	Зараз
+	Change from baseline	Зміна від базового варіанта
+	Verdict	Висновок
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Висновок реальний, коли 95% інтервал різниці не містить нуля. Кожен рядок оцінюється окремо.
+	This run is the baseline.	Цей запуск — базовий варіант.
+	Change the model and run it again to compare.	Змініть модель і запустіть її знову, щоб порівняти.
+	Compared with the baseline:	Порівняно з базовим варіантом:
+	Keep this as the baseline	Зберегти цей запуск як базовий варіант
+	Keep as baseline	Зберегти як базовий варіант
+	Keep these results, change the model, run it again, and see what the change did.	Збережіть ці результати, змініть модель, запустіть її знову й подивіться, що дала зміна.
+	Clear baseline	Скинути базовий варіант
 @plural	Added {n} block|Added {n} blocks	Додано {n} блок|Додано {n} блоки|Додано {n} блоків
 @plural	Copied {n} block|Copied {n} blocks	Скопійовано {n} блок|Скопійовано {n} блоки|Скопійовано {n} блоків
 @plural	Finished {n} run|Finished {n} runs	Завершено {n} запуск|Завершено {n} запуски|Завершено {n} запусків
@@ -739,3 +768,5 @@ unit	yr	р.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} проблема: {blocks}|{n} проблеми: {blocks}|{n} проблем: {blocks}
 @plural	Use {n} run|Use {n} runs	Використати {n} запуск|Використати {n} запуски|Використати {n} запусків
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Використати {n} запуск (близько ± 5%)|Використати {n} запуски (близько ± 5%)|Використати {n} запусків (близько ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Обидва використали початкове значення генератора {seed} і той самий {n} запуск, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.|Обидва використали початкове значення генератора {seed} і ті самі {n} запуски, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.|Обидва використали початкове значення генератора {seed} і ті самі {n} запусків, тож кожен запуск отримує ті самі випадкові числа, що й його пара: відмінності спричинені зміною, а не випадковими вибірками.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Ще {n} основний показник змінився не більше, ніж могла б випадковість.|Ще {n} основні показники змінилися не більше, ніж могла б випадковість.|Ще {n} основних показників змінилися не більше, ніж могла б випадковість.

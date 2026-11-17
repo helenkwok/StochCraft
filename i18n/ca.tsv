@@ -720,6 +720,35 @@ unit	yr	a
 	the model has changed since this run.	el model ha canviat des d'aquesta execució.
 	Run again	Executa de nou
 	· out of date	· desactualitzats
+	Real: lower	Real: més baix
+	Real: higher	Real: més alt
+	Could be chance	Pot ser atzar
+	No change	Cap canvi
+	Too few runs to tell	Massa poques execucions per saber-ho
+	{value} points	{value} punts
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	La referència va usar la llavor {seed_a} i {n_a} execucions, i aquesta execució la llavor {seed_b} i {n_b} execucions, de manera que es comparen com a execucions independents i els intervals són més amplis. La mateixa llavor i el mateix nombre d'execucions donen una comparació aparellada.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	La referència va mesurar el temps en {a} i aquesta execució en {b}, de manera que els temps no es comparen.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) va baixar de {before} a {after}, en {change}: més del que explicaria l'atzar.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) va pujar de {before} a {after}, en {change}: més del que explicaria l'atzar.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Cap de les mètriques clau no s'ha mogut més del que explicaria l'atzar: potser el canvi fa poc, o més execucions ho podrien mostrar.
+	What the change did	Què ha fet el canvi
+	Baseline and now, key measures	Referència i ara, mètriques clau
+	Difference (paired, 95%)	Diferència (aparellada, 95%)
+	Difference (95%)	Diferència (95%)
+	Measure	Mètrica
+	Baseline	Referència
+	Now	Ara
+	Change from baseline	Canvi respecte a la referència
+	Verdict	Veredicte
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Un veredicte és real quan l'interval del 95% de la diferència exclou el zero. Cada fila es jutja per separat.
+	This run is the baseline.	Aquesta execució és la referència.
+	Change the model and run it again to compare.	Canvia el model i torna'l a executar per comparar.
+	Compared with the baseline:	Comparat amb la referència:
+	Keep this as the baseline	Conserva aquesta execució com a referència
+	Keep as baseline	Conserva com a referència
+	Keep these results, change the model, run it again, and see what the change did.	Conserva aquests resultats, canvia el model, torna'l a executar i mira què ha fet el canvi.
+	Clear baseline	Treu la referència
 @plural	Added {n} block|Added {n} blocks	S'ha afegit {n} bloc|S'han afegit {n} blocs
 @plural	Copied {n} block|Copied {n} blocks	S'ha copiat {n} bloc|S'han copiat {n} blocs
 @plural	Finished {n} run|Finished {n} runs	Acabada {n} execució|Acabades {n} execucions
@@ -739,3 +768,5 @@ unit	yr	a
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemes: {blocks}
 @plural	Use {n} run|Use {n} runs	Usa {n} execució|Usa {n} execucions
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usa {n} execució (aprox. ± 5%)|Usa {n} execucions (aprox. ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Totes dues van usar la llavor {seed} i la mateixa {n} execució, de manera que cada execució rep els mateixos nombres aleatoris que la seva parella: les diferències vénen del canvi, no de tirades a l'atzar.|Totes dues van usar la llavor {seed} i les mateixes {n} execucions, de manera que cada execució rep els mateixos nombres aleatoris que la seva parella: les diferències vénen del canvi, no de tirades a l'atzar.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} altra mètrica clau no s'ha mogut més del que podria l'atzar.|{n} altres mètriques clau no s'han mogut més del que podria l'atzar.

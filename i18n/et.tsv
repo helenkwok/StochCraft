@@ -720,6 +720,35 @@ unit	yr	a
 	the model has changed since this run.	mudel on pärast seda käivitust muutunud.
 	Run again	Käivita uuesti
 	· out of date	· aegunud
+	Real: lower	Tegelik: madalam
+	Real: higher	Tegelik: kõrgem
+	Could be chance	Võib olla juhus
+	No change	Muutust pole
+	Too few runs to tell	Liiga vähe käivitamisi, et otsustada
+	{value} points	{value} protsendipunkti
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Võrdlusalus kasutas juhuarvuseemet {seed_a} ja {n_a} käivitamist, see käivitamine juhuarvuseemet {seed_b} ja {n_b} käivitamist, seega võrreldakse neid sõltumatute käivitamistena ja vahemikud on laiemad. Sama juhuarvuseeme ja käivitamiste arv annavad paarisvõrdluse.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Võrdlusalus mõõtis aega ühikutes {a} ja see käivitamine ühikutes {b}, seega aegu ei võrrelda.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) langes väärtuselt {before} väärtusele {after}, {change} võrra: rohkem, kui juhus seletaks.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) tõusis väärtuselt {before} väärtusele {after}, {change} võrra: rohkem, kui juhus seletaks.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Ükski peamine mõõdik ei muutunud rohkem, kui juhus seletaks: muudatus ehk mõjutab vähe või näitavad seda rohkemad käivitamised.
+	What the change did	Mida muudatus tegi
+	Baseline and now, key measures	Võrdlusalus ja praegu, peamised mõõdikud
+	Difference (paired, 95%)	Erinevus (paaris, 95%)
+	Difference (95%)	Erinevus (95%)
+	Measure	Mõõdik
+	Baseline	Võrdlusalus
+	Now	Praegu
+	Change from baseline	Muutus võrdlusalusest
+	Verdict	Hinnang
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Hinnang on tegelik, kui erinevuse 95% vahemik ei hõlma nulli. Iga rida hinnatakse eraldi.
+	This run is the baseline.	See käivitamine on võrdlusalus.
+	Change the model and run it again to compare.	Muuda mudelit ja käivita see uuesti, et võrrelda.
+	Compared with the baseline:	Võrreldes võrdlusalusega:
+	Keep this as the baseline	Hoia see käivitamine võrdlusalusena
+	Keep as baseline	Hoia võrdlusalusena
+	Keep these results, change the model, run it again, and see what the change did.	Hoia need tulemused, muuda mudelit, käivita see uuesti ja vaata, mida muudatus tegi.
+	Clear baseline	Eemalda võrdlusalus
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud
@@ -739,3 +768,5 @@ unit	yr	a
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} probleem: {blocks}|{n} probleemi: {blocks}
 @plural	Use {n} run|Use {n} runs	Kasuta {n} käivitamine|Kasuta {n} käivitamist
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Kasuta {n} käivitamine (umbes ± 5%)|Kasuta {n} käivitamist (umbes ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Mõlemad kasutasid juhuarvuseemet {seed} ja sama {n} käivitamist, nii et iga käivitamine saab samad juhuslikud arvud kui tema paariline: erinevused tulevad muudatusest, mitte juhuslikest valikutest.|Mõlemad kasutasid juhuarvuseemet {seed} ja samu {n} käivitamist, nii et iga käivitamine saab samad juhuslikud arvud kui tema paariline: erinevused tulevad muudatusest, mitte juhuslikest valikutest.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Veel {n} peamine mõõdik ei muutunud rohkem, kui juhus võiks.|Veel {n} peamist mõõdikut ei muutunud rohkem, kui juhus võiks.

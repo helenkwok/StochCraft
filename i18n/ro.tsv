@@ -720,6 +720,35 @@ unit	yr	a
 	the model has changed since this run.	modelul s-a schimbat de la această rulare.
 	Run again	Rulează din nou
 	· out of date	· depășite
+	Real: lower	Real: mai mic
+	Real: higher	Real: mai mare
+	Could be chance	Poate fi întâmplare
+	No change	Nicio modificare
+	Too few runs to tell	Prea puține rulări pentru a spune
+	{value} points	{value} puncte procentuale
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referința a folosit sămânța {seed_a} și {n_a} rulări, iar această rulare sămânța {seed_b} și {n_b} rulări, deci sunt comparate ca rulări independente și intervalele sunt mai largi. Aceeași sămânță și același număr de rulări dau o comparație pe perechi.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referința a măsurat timpul în {a}, iar această rulare în {b}, deci timpii nu sunt comparați.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) a scăzut de la {before} la {after}, cu {change}: mai mult decât ar explica întâmplarea.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) a crescut de la {before} la {after}, cu {change}: mai mult decât ar explica întâmplarea.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Niciunul dintre indicatorii principali nu s-a mișcat mai mult decât ar explica întâmplarea: modificarea poate avea un efect mic sau mai multe rulări l-ar putea arăta.
+	What the change did	Ce a făcut modificarea
+	Baseline and now, key measures	Referință și acum, indicatori principali
+	Difference (paired, 95%)	Diferență (pe perechi, 95%)
+	Difference (95%)	Diferență (95%)
+	Measure	Indicator
+	Baseline	Referință
+	Now	Acum
+	Change from baseline	Modificare față de referință
+	Verdict	Verdict
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Un verdict este real când intervalul de 95% al diferenței exclude zero. Fiecare rând este judecat separat.
+	This run is the baseline.	Această rulare este referința.
+	Change the model and run it again to compare.	Modificați modelul și rulați-l din nou pentru a compara.
+	Compared with the baseline:	Comparat cu referința:
+	Keep this as the baseline	Păstrează această rulare ca referință
+	Keep as baseline	Păstrează ca referință
+	Keep these results, change the model, run it again, and see what the change did.	Păstrați aceste rezultate, modificați modelul, rulați-l din nou și vedeți ce a făcut modificarea.
+	Clear baseline	Șterge referința
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări
@@ -739,3 +768,5 @@ unit	yr	a
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problemă: {blocks}|{n} probleme: {blocks}|{n} de probleme: {blocks}
 @plural	Use {n} run|Use {n} runs	Folosește {n} rulare|Folosește {n} rulări|Folosește {n} de rulări
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Folosește {n} rulare (circa ± 5%)|Folosește {n} rulări (circa ± 5%)|Folosește {n} de rulări (circa ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambele au folosit sămânța {seed} și aceeași {n} rulare, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.|Ambele au folosit sămânța {seed} și aceleași {n} rulări, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.|Ambele au folosit sămânța {seed} și aceleași {n} de rulări, deci fiecare rulare primește aceleași numere aleatoare ca perechea sa: diferențele vin din modificare, nu din extrageri întâmplătoare.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Încă {n} indicator principal nu s-a mișcat mai mult decât ar putea întâmplarea.|Încă {n} indicatori principali nu s-au mișcat mai mult decât ar putea întâmplarea.|Încă {n} de indicatori principali nu s-au mișcat mai mult decât ar putea întâmplarea.

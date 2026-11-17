@@ -720,6 +720,35 @@ unit	yr	r.
 	the model has changed since this run.	model zmienił się od tego uruchomienia.
 	Run again	Uruchom ponownie
 	· out of date	· nieaktualne
+	Real: lower	Realnie: niżej
+	Real: higher	Realnie: wyżej
+	Could be chance	Może to przypadek
+	No change	Bez zmian
+	Too few runs to tell	Za mało uruchomień, by ocenić
+	{value} points	{value} pkt proc.
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Punkt odniesienia użył ziarna {seed_a} i liczby uruchomień {n_a}, to uruchomienie ziarna {seed_b} i liczby uruchomień {n_b}, więc są porównywane jako niezależne uruchomienia, a przedziały są szersze. To samo ziarno i ta sama liczba uruchomień dają porównanie parami.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Punkt odniesienia mierzył czas w {a}, a to uruchomienie w {b}, więc czasów się nie porównuje.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) spadła z {before} do {after}, o {change}: bardziej, niż wyjaśniałby przypadek.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) wzrosła z {before} do {after}, o {change}: bardziej, niż wyjaśniałby przypadek.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Żadna z najważniejszych miar nie zmieniła się bardziej, niż wyjaśniałby przypadek: zmiana może niewiele dawać albo więcej uruchomień to pokaże.
+	What the change did	Co dała zmiana
+	Baseline and now, key measures	Punkt odniesienia i teraz, najważniejsze miary
+	Difference (paired, 95%)	Różnica (parami, 95%)
+	Difference (95%)	Różnica (95%)
+	Measure	Miara
+	Baseline	Punkt odniesienia
+	Now	Teraz
+	Change from baseline	Zmiana względem punktu odniesienia
+	Verdict	Werdykt
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Werdykt jest rzeczywisty, gdy 95% przedział różnicy nie obejmuje zera. Każdy wiersz jest oceniany osobno.
+	This run is the baseline.	To uruchomienie jest punktem odniesienia.
+	Change the model and run it again to compare.	Zmień model i uruchom go ponownie, aby porównać.
+	Compared with the baseline:	W porównaniu z punktem odniesienia:
+	Keep this as the baseline	Zachowaj to uruchomienie jako punkt odniesienia
+	Keep as baseline	Zachowaj jako punkt odniesienia
+	Keep these results, change the model, run it again, and see what the change did.	Zachowaj te wyniki, zmień model, uruchom go ponownie i zobacz, co dała zmiana.
+	Clear baseline	Wyczyść punkt odniesienia
 @plural	Added {n} block|Added {n} blocks	Dodano {n} blok|Dodano {n} bloki|Dodano {n} bloków
 @plural	Copied {n} block|Copied {n} blocks	Skopiowano {n} blok|Skopiowano {n} bloki|Skopiowano {n} bloków
 @plural	Finished {n} run|Finished {n} runs	Zakończono {n} uruchomienie|Zakończono {n} uruchomienia|Zakończono {n} uruchomień
@@ -739,3 +768,5 @@ unit	yr	r.
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problemy: {blocks}|{n} problemów: {blocks}
 @plural	Use {n} run|Use {n} runs	Ustaw {n} uruchomienie|Ustaw {n} uruchomienia|Ustaw {n} uruchomień
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Ustaw {n} uruchomienie (ok. ± 5%)|Ustaw {n} uruchomienia (ok. ± 5%)|Ustaw {n} uruchomień (ok. ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Oba użyły ziarna {seed} i tego samego {n} uruchomienia, więc każde uruchomienie dostaje te same liczby losowe co jego para: różnice wynikają ze zmiany, a nie z przypadkowych losowań.|Oba użyły ziarna {seed} i tych samych {n} uruchomień, więc każde uruchomienie dostaje te same liczby losowe co jego para: różnice wynikają ze zmiany, a nie z przypadkowych losowań.|Oba użyły ziarna {seed} i tych samych {n} uruchomień, więc każde uruchomienie dostaje te same liczby losowe co jego para: różnice wynikają ze zmiany, a nie z przypadkowych losowań.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	Jeszcze {n} najważniejsza miara nie zmieniła się bardziej, niż mógłby przypadek.|Jeszcze {n} najważniejsze miary nie zmieniły się bardziej, niż mógłby przypadek.|Jeszcze {n} najważniejszych miar nie zmieniło się bardziej, niż mógłby przypadek.

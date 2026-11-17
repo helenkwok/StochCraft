@@ -720,6 +720,35 @@ unit	yr	a
 	the model has changed since this run.	o modelo mudou desde esta execução.
 	Run again	Executar novamente
 	· out of date	· desatualizados
+	Real: lower	Real: menor
+	Real: higher	Real: maior
+	Could be chance	Pode ser acaso
+	No change	Sem alteração
+	Too few runs to tell	Poucas execuções para saber
+	{value} points	{value} pontos percentuais
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	A referência usou a semente {seed_a} e {n_a} execuções, e esta execução a semente {seed_b} e {n_b} execuções, então elas são comparadas como execuções independentes e os intervalos são mais largos. A mesma semente e o mesmo número de execuções dão uma comparação pareada.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	A referência mediu o tempo em {a} e esta execução em {b}, então os tempos não são comparados.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) caiu de {before} para {after}, em {change}: mais do que o acaso explicaria.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) subiu de {before} para {after}, em {change}: mais do que o acaso explicaria.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Nenhuma das métricas principais mudou mais do que o acaso explicaria: a mudança pode fazer pouco, ou mais execuções podem mostrá-lo.
+	What the change did	O que a mudança fez
+	Baseline and now, key measures	Referência e agora, métricas principais
+	Difference (paired, 95%)	Diferença (pareada, 95%)
+	Difference (95%)	Diferença (95%)
+	Measure	Métrica
+	Baseline	Referência
+	Now	Agora
+	Change from baseline	Mudança em relação à referência
+	Verdict	Veredito
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	Um veredito é real quando o intervalo de 95% da diferença exclui o zero. Cada linha é julgada por si só.
+	This run is the baseline.	Esta execução é a referência.
+	Change the model and run it again to compare.	Altere o modelo e execute-o de novo para comparar.
+	Compared with the baseline:	Comparado com a referência:
+	Keep this as the baseline	Manter esta execução como referência
+	Keep as baseline	Manter como referência
+	Keep these results, change the model, run it again, and see what the change did.	Mantenha estes resultados, altere o modelo, execute-o de novo e veja o que a mudança fez.
+	Clear baseline	Limpar referência
 @plural	Added {n} block|Added {n} blocks	{n} bloco adicionado|{n} blocos adicionados
 @plural	Copied {n} block|Copied {n} blocks	{n} bloco copiado|{n} blocos copiados
 @plural	Finished {n} run|Finished {n} runs	Concluída {n} execução|Concluídas {n} execuções
@@ -739,3 +768,5 @@ unit	yr	a
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problema: {blocks}|{n} problemas: {blocks}
 @plural	Use {n} run|Use {n} runs	Usar {n} execução|Usar {n} execuções
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Usar {n} execução (cerca de ± 5%)|Usar {n} execuções (cerca de ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Ambas usaram a semente {seed} e a mesma {n} execução, então cada execução recebe os mesmos números aleatórios que seu par: as diferenças vêm da mudança, não de sorteios ao acaso.|Ambas usaram a semente {seed} e as mesmas {n} execuções, então cada execução recebe os mesmos números aleatórios que seu par: as diferenças vêm da mudança, não de sorteios ao acaso.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} outra métrica principal não mudou mais do que o acaso poderia.|{n} outras métricas principais não mudaram mais do que o acaso poderia.

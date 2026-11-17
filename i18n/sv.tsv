@@ -720,6 +720,35 @@ unit	yr	år
 	the model has changed since this run.	modellen har ändrats sedan den här körningen.
 	Run again	Kör igen
 	· out of date	· inaktuellt
+	Real: lower	Verklig: lägre
+	Real: higher	Verklig: högre
+	Could be chance	Kan vara slump
+	No change	Ingen ändring
+	Too few runs to tell	För få körningar för att avgöra
+	{value} points	{value} procentenheter
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	Referensen använde slumpfrö {seed_a} och {n_a} körningar, den här körningen slumpfrö {seed_b} och {n_b} körningar, så de jämförs som oberoende körningar och intervallen blir bredare. Samma slumpfrö och antal körningar ger en parvis jämförelse.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	Referensen mätte tid i {a} och den här körningen i {b}, så tider jämförs inte.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) sjönk från {before} till {after}, med {change}: mer än slumpen skulle förklara.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) steg från {before} till {after}, med {change}: mer än slumpen skulle förklara.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	Inget av de viktigaste måtten rörde sig mer än slumpen skulle förklara: ändringen gör kanske lite, eller så kan fler körningar visa det.
+	What the change did	Vad ändringen gjorde
+	Baseline and now, key measures	Referens och nu, viktigaste mått
+	Difference (paired, 95%)	Skillnad (parvis, 95 %)
+	Difference (95%)	Skillnad (95 %)
+	Measure	Mått
+	Baseline	Referens
+	Now	Nu
+	Change from baseline	Ändring från referens
+	Verdict	Bedömning
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	En bedömning är verklig när skillnadens 95 %-intervall utesluter noll. Varje rad bedöms för sig.
+	This run is the baseline.	Den här körningen är referensen.
+	Change the model and run it again to compare.	Ändra modellen och kör den igen för att jämföra.
+	Compared with the baseline:	Jämfört med referensen:
+	Keep this as the baseline	Behåll den här körningen som referens
+	Keep as baseline	Behåll som referens
+	Keep these results, change the model, run it again, and see what the change did.	Behåll de här resultaten, ändra modellen, kör den igen och se vad ändringen gjorde.
+	Clear baseline	Rensa referens
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara
@@ -739,3 +768,5 @@ unit	yr	år
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} problem: {blocks}|{n} problem: {blocks}
 @plural	Use {n} run|Use {n} runs	Använd {n} körning|Använd {n} körningar
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	Använd {n} körning (ungefär ± 5%)|Använd {n} körningar (ungefär ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	Båda använde slumpfrö {seed} och samma {n} körning, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.|Båda använde slumpfrö {seed} och samma {n} körningar, så varje körning får samma slumptal som sin partner: skillnaderna kommer från ändringen, inte från slumpmässiga dragningar.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	{n} annat viktigt mått rörde sig inte mer än slumpen kunde.|{n} andra viktiga mått rörde sig inte mer än slumpen kunde.

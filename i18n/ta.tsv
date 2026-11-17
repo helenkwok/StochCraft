@@ -720,6 +720,35 @@ unit	yr	ஆண்டு
 	the model has changed since this run.	இந்த இயக்கத்திற்குப் பிறகு மாதிரி மாறியுள்ளது.
 	Run again	மீண்டும் இயக்கு
 	· out of date	· காலாவதியானவை
+	Real: lower	உண்மை: குறைவு
+	Real: higher	உண்மை: அதிகம்
+	Could be chance	தற்செயலாக இருக்கலாம்
+	No change	மாற்றம் இல்லை
+	Too few runs to tell	முடிவு சொல்ல மீள் இயக்கங்கள் மிகக் குறைவு
+	{value} points	{value} சதவீதப் புள்ளிகள்
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	ஒப்பீட்டு அடிப்படை சீரற்ற விதை {seed_a} மற்றும் {n_a} மீள் இயக்கங்களைப் பயன்படுத்தியது, இந்த இயக்கம் சீரற்ற விதை {seed_b} மற்றும் {n_b} மீள் இயக்கங்களை, எனவே அவை சார்பற்ற மீள் இயக்கங்களாக ஒப்பிடப்படுகின்றன, இடைவெளிகள் அகலமாக உள்ளன. அதே சீரற்ற விதையும் அதே எண்ணிக்கையிலான மீள் இயக்கங்களும் இணை ஒப்பீட்டைத் தரும்.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	ஒப்பீட்டு அடிப்படை நேரத்தை {a} இல் அளந்தது, இந்த இயக்கம் {b} இல், எனவே நேரங்கள் ஒப்பிடப்படுவதில்லை.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} இலிருந்து {after} ஆகக் குறைந்தது, {change} அளவு: தற்செயல் விளக்குவதை விட அதிகம்.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) {before} இலிருந்து {after} ஆக அதிகரித்தது, {change} அளவு: தற்செயல் விளக்குவதை விட அதிகம்.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	எந்த முக்கிய அளவீடும் தற்செயல் விளக்குவதை விட அதிகமாக மாறவில்லை: மாற்றத்தின் விளைவு சிறியதாக இருக்கலாம், அல்லது அதிக மீள் இயக்கங்கள் அதைக் காட்டலாம்.
+	What the change did	மாற்றம் என்ன செய்தது
+	Baseline and now, key measures	ஒப்பீட்டு அடிப்படையும் இப்போதும், முக்கிய அளவீடுகள்
+	Difference (paired, 95%)	வேறுபாடு (இணை, 95%)
+	Difference (95%)	வேறுபாடு (95%)
+	Measure	அளவீடு
+	Baseline	ஒப்பீட்டு அடிப்படை
+	Now	இப்போது
+	Change from baseline	ஒப்பீட்டு அடிப்படையிலிருந்து மாற்றம்
+	Verdict	தீர்ப்பு
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	வேறுபாட்டின் 95% இடைவெளி பூஜ்ஜியத்தை விலக்கும்போது தீர்ப்பு உண்மையானது. ஒவ்வொரு வரிசையும் தனித்தனியாக மதிப்பிடப்படுகிறது.
+	This run is the baseline.	இந்த இயக்கமே ஒப்பீட்டு அடிப்படை.
+	Change the model and run it again to compare.	ஒப்பிட, மாதிரியை மாற்றி மீண்டும் இயக்கவும்.
+	Compared with the baseline:	ஒப்பீட்டு அடிப்படையுடன் ஒப்பிடும்போது:
+	Keep this as the baseline	இந்த இயக்கத்தை ஒப்பீட்டு அடிப்படையாக வைத்திரு
+	Keep as baseline	ஒப்பீட்டு அடிப்படையாக வைத்திரு
+	Keep these results, change the model, run it again, and see what the change did.	இந்த முடிவுகளை வைத்துக்கொண்டு, மாதிரியை மாற்றி, மீண்டும் இயக்கி, மாற்றம் என்ன செய்தது என்று பாருங்கள்.
+	Clear baseline	ஒப்பீட்டு அடிப்படையை அழி
 @plural	Added {n} block|Added {n} blocks	{n} தொகுதி சேர்க்கப்பட்டது|{n} தொகுதிகள் சேர்க்கப்பட்டன
 @plural	Copied {n} block|Copied {n} blocks	{n} தொகுதி நகலெடுக்கப்பட்டது|{n} தொகுதிகள் நகலெடுக்கப்பட்டன
 @plural	Finished {n} run|Finished {n} runs	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன
@@ -739,3 +768,5 @@ unit	yr	ஆண்டு
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} சிக்கல்: {blocks}|{n} சிக்கல்கள்: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} மீள் இயக்கத்தைப் பயன்படுத்து|{n} மீள் இயக்கங்களைப் பயன்படுத்து
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} மீள் இயக்கத்தைப் பயன்படுத்து (சுமார் ± 5%)|{n} மீள் இயக்கங்களைப் பயன்படுத்து (சுமார் ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	இரண்டும் சீரற்ற விதை {seed} மற்றும் அதே {n} மீள் இயக்கத்தைப் பயன்படுத்தின, எனவே ஒவ்வொரு மீள் இயக்கமும் அதன் இணையைப் போலவே அதே சீரற்ற எண்களைப் பெறுகிறது: வேறுபாடுகள் தற்செயலான எடுப்புகளால் அல்ல, மாற்றத்தால் வருகின்றன.|இரண்டும் சீரற்ற விதை {seed} மற்றும் அதே {n} மீள் இயக்கங்களைப் பயன்படுத்தின, எனவே ஒவ்வொரு மீள் இயக்கமும் அதன் இணையைப் போலவே அதே சீரற்ற எண்களைப் பெறுகிறது: வேறுபாடுகள் தற்செயலான எடுப்புகளால் அல்ல, மாற்றத்தால் வருகின்றன.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	மேலும் {n} முக்கிய அளவீடு தற்செயல் செய்யக்கூடியதை விட அதிகமாக மாறவில்லை.|மேலும் {n} முக்கிய அளவீடுகள் தற்செயல் செய்யக்கூடியதை விட அதிகமாக மாறவில்லை.

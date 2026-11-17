@@ -646,6 +646,15 @@ engine's messages (validation, file notes) are English too.
   this run.", "Run again", "· out of date") were drafted from the plain meaning of the English, with
   each catalog's own words for run, model and Run. Not checked against a source, and not reviewed
   by native speakers.
+- The rows for comparing with a baseline (issue #148, thirty-one strings: Keep as baseline, the
+  table of baseline and now, the verdicts and the sentences of "What the change did") were drafted
+  from the plain meaning of the English, reusing each catalog's words for run, seed, key measures,
+  95% interval, points for a share and "more than chance would explain". Baseline, paired,
+  verdict, on and off had no earlier row and are this draft's own choice (de "Referenz", fr
+  "référence", ja "ベースライン", zh-hans "基线", zh-hant "基準"). "{value} points" is abbreviated
+  in cs, sk, pl, sl, hr, bs, sr, sr-latn, ru and uk, so a number of any size takes it. Serbian
+  Cyrillic is transliterated from the Latin. Not checked against a source, and not reviewed by
+  native speakers; the least certain are ka, kk, ta, te, bn, lo and th.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

@@ -720,6 +720,35 @@ unit	yr	年
 	the model has changed since this run.	この実行の後にモデルが変更されました。
 	Run again	再実行
 	· out of date	· 古い結果
+	Real: lower	実際に低下
+	Real: higher	実際に上昇
+	Could be chance	偶然の可能性
+	No change	変化なし
+	Too few runs to tell	判断するには実行回数が不足
+	{value} points	{value} ポイント
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	ベースラインは乱数シード {seed_a} で {n_a} 回、この実行は乱数シード {seed_b} で {n_b} 回の実行だったため、独立した実行として比較され、区間は広くなります。乱数シードと実行回数を揃えると、対応のある比較になります。
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	ベースラインは時間を {a} で、この実行は {b} で測定したため、時間は比較しません。
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) は {before} から {after} へ {change} 低下しました。偶然では説明できない大きさです。
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) は {before} から {after} へ {change} 上昇しました。偶然では説明できない大きさです。
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	主な指標はどれも偶然を超えて動いていません。変更の効果が小さいか、実行回数を増やせば見えてくるかもしれません。
+	What the change did	変更の効果
+	Baseline and now, key measures	ベースラインと現在の主な指標
+	Difference (paired, 95%)	差 (対応あり、95%)
+	Difference (95%)	差 (95%)
+	Measure	指標
+	Baseline	ベースライン
+	Now	現在
+	Change from baseline	ベースラインからの変化
+	Verdict	判定
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	差の 95% 区間がゼロを含まないとき、判定は「実際」になります。各行は個別に判定されます。
+	This run is the baseline.	この実行がベースラインです。
+	Change the model and run it again to compare.	モデルを変更して再実行すると比較できます。
+	Compared with the baseline:	ベースラインとの比較:
+	Keep this as the baseline	この実行をベースラインとして保持
+	Keep as baseline	ベースラインとして保持
+	Keep these results, change the model, run it again, and see what the change did.	この結果を保持し、モデルを変更して再実行すると、変更の効果がわかります。
+	Clear baseline	ベースラインを解除
 @plural	Added {n} block|Added {n} blocks	{n} 個のブロックを追加しました
 @plural	Copied {n} block|Copied {n} blocks	{n} 個のブロックをコピーしました
 @plural	Finished {n} run|Finished {n} runs	{n} 回の実行が完了しました
@@ -739,3 +768,5 @@ unit	yr	年
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	問題 {n} 件: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} 回実行する
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} 回実行する (約 ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	どちらも乱数シード {seed} と同じ {n} 回の実行を使ったため、各実行は対になる実行と同じ乱数を受け取ります。差は偶然の抽出ではなく、変更から生じています。
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	ほかの主な指標 {n} 個は、偶然の範囲を超えて動いていません。

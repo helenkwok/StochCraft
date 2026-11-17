@@ -720,6 +720,35 @@ unit	yr	წელი
 	the model has changed since this run.	ამ გაშვების შემდეგ მოდელი შეიცვალა.
 	Run again	ხელახლა გაშვება
 	· out of date	· მოძველებული
+	Real: lower	რეალური: დაბალი
+	Real: higher	რეალური: მაღალი
+	Could be chance	შესაძლოა შემთხვევითობაა
+	No change	ცვლილება არ არის
+	Too few runs to tell	ძალიან ცოტა გაშვებაა დასკვნისთვის
+	{value} points	{value} პროცენტული პუნქტი
+	The baseline used seed {seed_a} and {n_a} runs, this run seed {seed_b} and {n_b} runs, so they are compared as independent runs and the intervals are wider. The same seed and number of runs gives a paired comparison.	საბაზისო ვარიანტმა გამოიყენა საწყისი მნიშვნელობა {seed_a} და {n_a} გაშვება, ამ გაშვებამ კი — საწყისი მნიშვნელობა {seed_b} და {n_b} გაშვება, ამიტომ ისინი დამოუკიდებელ გაშვებებად შედარდება და ინტერვალები უფრო ფართოა. ერთი და იგივე საწყისი მნიშვნელობა და გაშვებების რაოდენობა წყვილურ შედარებას იძლევა.
+	The baseline measured time in {a} and this run in {b}, so times are not compared.	საბაზისო ვარიანტმა დრო გაზომა {a}-ში, ამ გაშვებამ კი — {b}-ში, ამიტომ დროები არ შედარდება.
+	{measure} ({block}) fell from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) შემცირდა {before}-დან {after}-მდე, {change}-ით: იმაზე მეტად, ვიდრე შემთხვევითობა ახსნიდა.
+	{measure} ({block}) rose from {before} to {after}, by {change}: more than chance would explain.	{measure} ({block}) გაიზარდა {before}-დან {after}-მდე, {change}-ით: იმაზე მეტად, ვიდრე შემთხვევითობა ახსნიდა.
+	None of the key measures moved by more than chance: the change may do little, or more runs may show it.	არცერთი ძირითადი მაჩვენებელი არ შეცვლილა იმაზე მეტად, ვიდრე შემთხვევითობა ახსნიდა: ცვლილებამ შეიძლება ცოტა რამ მოახდინოს, ან მეტმა გაშვებამ აჩვენოს ეს.
+	What the change did	რა მოახდინა ცვლილებამ
+	Baseline and now, key measures	საბაზისო ვარიანტი და ახლა, ძირითადი მაჩვენებლები
+	Difference (paired, 95%)	სხვაობა (წყვილური, 95%)
+	Difference (95%)	სხვაობა (95%)
+	Measure	მაჩვენებელი
+	Baseline	საბაზისო ვარიანტი
+	Now	ახლა
+	Change from baseline	ცვლილება საბაზისო ვარიანტთან შედარებით
+	Verdict	დასკვნა
+	{block}: {measure}	{block}: {measure}
+	A verdict is real when the difference's 95% interval leaves out zero. Each row is judged on its own.	დასკვნა რეალურია, როცა სხვაობის 95%-იანი ინტერვალი ნულს არ მოიცავს. თითოეული სტრიქონი ცალკე ფასდება.
+	This run is the baseline.	ეს გაშვება საბაზისო ვარიანტია.
+	Change the model and run it again to compare.	შეცვალეთ მოდელი და ხელახლა გაუშვით შესადარებლად.
+	Compared with the baseline:	საბაზისო ვარიანტთან შედარებით:
+	Keep this as the baseline	ამ გაშვების შენარჩუნება საბაზისო ვარიანტად
+	Keep as baseline	შენარჩუნება საბაზისო ვარიანტად
+	Keep these results, change the model, run it again, and see what the change did.	შეინახეთ ეს შედეგები, შეცვალეთ მოდელი, ხელახლა გაუშვით და ნახეთ, რა მოახდინა ცვლილებამ.
+	Clear baseline	საბაზისო ვარიანტის გასუფთავება
 @plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
 @plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
 @plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გაშვება|დასრულდა {n} გაშვება
@@ -739,3 +768,5 @@ unit	yr	წელი
 @plural	{n} problem: {blocks}|{n} problems: {blocks}	{n} პრობლემა: {blocks}|{n} პრობლემა: {blocks}
 @plural	Use {n} run|Use {n} runs	{n} გაშვების გამოყენება|{n} გაშვების გამოყენება
 @plural	Use {n} run (about ± 5%)|Use {n} runs (about ± 5%)	{n} გაშვების გამოყენება (დაახლ. ± 5%)|{n} გაშვების გამოყენება (დაახლ. ± 5%)
+@plural	Both used seed {seed} and the same {n} run, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.|Both used seed {seed} and the same {n} runs, so each run meets the same random numbers as its pair: the differences come from the change, not from chance draws.	ორივემ გამოიყენა საწყისი მნიშვნელობა {seed} და იგივე {n} გაშვება, ამიტომ ყოველი გაშვება იღებს იმავე შემთხვევით რიცხვებს, რასაც მისი წყვილი: განსხვავებები ცვლილებიდან მოდის და არა შემთხვევითი ამორჩევიდან.|ორივემ გამოიყენა საწყისი მნიშვნელობა {seed} და იგივე {n} გაშვება, ამიტომ ყოველი გაშვება იღებს იმავე შემთხვევით რიცხვებს, რასაც მისი წყვილი: განსხვავებები ცვლილებიდან მოდის და არა შემთხვევითი ამორჩევიდან.
+@plural	{n} other key measure moved no more than chance could.|{n} other key measures moved no more than chance could.	კიდევ {n} ძირითადი მაჩვენებელი არ შეცვლილა იმაზე მეტად, ვიდრე შემთხვევითობას შეეძლო.|კიდევ {n} ძირითადი მაჩვენებელი არ შეცვლილა იმაზე მეტად, ვიდრე შემთხვევითობას შეეძლო.

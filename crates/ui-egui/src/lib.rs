@@ -12,6 +12,7 @@
 //! [`App::report_error`].
 
 mod autosave;
+mod baseline;
 mod calendars;
 mod canvas;
 mod chart_editor;
@@ -272,6 +273,12 @@ pub struct App {
     run_model: Option<Value>,
     /// The model has changed since the results' run (worked out once a frame).
     results_stale: bool,
+    /// Counts the results shown, so a baseline knows whether it is the results on show.
+    results_serial: u64,
+    /// Results kept to compare later runs with ("Keep as baseline").
+    baseline: Option<baseline::Baseline>,
+    /// The engine's comparison of the baseline with the results on show, by their serials.
+    comparison: Option<((u64, u64), Value)>,
     running: Option<Running>,
     /// The shell's workers for runs, if it has any.
     workers: Option<Box<dyn Workers>>,
@@ -389,6 +396,9 @@ impl App {
             results_model: None,
             run_model: None,
             results_stale: false,
+            results_serial: 0,
+            baseline: None,
+            comparison: None,
             running: None,
             workers: None,
             status: String::new(),
@@ -503,7 +513,58 @@ impl App {
         self.results = Some(results);
         self.results_model = Some(model);
         self.results_stale = false;
+        self.results_serial += 1;
         self.show_results = true;
+    }
+
+    /// The baseline later runs are compared with, if one is kept.
+    pub fn baseline(&self) -> Option<&Value> {
+        self.baseline.as_ref().map(|b| &b.results)
+    }
+
+    /// "Keep as baseline": the results on show become the baseline.
+    pub fn keep_baseline(&mut self) {
+        if let Some(results) = &self.results {
+            self.baseline = Some(baseline::Baseline {
+                results: results.clone(),
+                serial: self.results_serial,
+            });
+            self.comparison = None;
+        }
+    }
+
+    /// "Clear baseline".
+    pub fn clear_baseline(&mut self) {
+        self.baseline = None;
+        self.comparison = None;
+    }
+
+    /// The baseline, the results on show and their comparison, when there is a baseline and the
+    /// results are not it. The comparison is the engine's (`results.compare`), worked out once
+    /// for each pair of results.
+    fn compared(&mut self) -> Option<(Value, Value, Value)> {
+        let b = self.baseline.as_ref()?;
+        let now = self.results.as_ref()?;
+        if b.serial == self.results_serial {
+            return None;
+        }
+        let key = (b.serial, self.results_serial);
+        if self.comparison.as_ref().map(|c| c.0) != Some(key) {
+            let wanted = baseline::wanted(&b.results, now);
+            let params = if wanted.is_empty() {
+                json!({ "a": b.results, "b": now })
+            } else {
+                json!({ "a": b.results, "b": now, "results": wanted })
+            };
+            let answer = self
+                .engine
+                .execute("results.compare", params)
+                .unwrap_or(Value::Null);
+            self.comparison = Some((key, answer));
+        }
+        let c = &self.comparison.as_ref()?.1;
+        c.is_object()
+            .then(|| (b.results.clone(), now.clone(), c.clone()))
     }
 
     /// Forgets the results: another model or file replaces the one they came from.
@@ -511,6 +572,7 @@ impl App {
         self.results = None;
         self.results_model = None;
         self.results_stale = false;
+        self.clear_baseline();
     }
 
     /// The window title: the file's name, marked when there are unsaved changes.
@@ -1537,6 +1599,8 @@ impl App {
         let mut png = false;
         let mut fix = None;
         let mut again = false;
+        let mut baseline_action = None;
+        let compared = self.compared();
         egui::ScrollArea::vertical()
             .auto_shrink([false, false])
             .show(ui, |ui| {
@@ -1560,6 +1624,12 @@ impl App {
                 if self.results_stale {
                     again = self.out_of_date_line(ui);
                     ui.add_space(6.0);
+                }
+                baseline_action = self.baseline_line(ui);
+                ui.add_space(6.0);
+                if let Some((before, now, comparison)) = &compared {
+                    baseline::show(ui, before, now, comparison);
+                    ui.add_space(12.0);
                 }
                 results::findings(ui, &results);
                 ui.add_space(6.0);
@@ -1605,6 +1675,11 @@ impl App {
         if again {
             self.run();
         }
+        match baseline_action {
+            Some(true) => self.keep_baseline(),
+            Some(false) => self.clear_baseline(),
+            None => {}
+        }
         if csv {
             self.export_csv();
         }
@@ -1637,6 +1712,58 @@ impl App {
                 });
             });
         again
+    }
+
+    /// The baseline's line under the run record: Keep as baseline, or which run is the baseline,
+    /// with Clear baseline. Returns `Some(true)` to keep these results as the baseline,
+    /// `Some(false)` to clear it.
+    fn baseline_line(&self, ui: &mut egui::Ui) -> Option<bool> {
+        let mut action = None;
+        ui.horizontal_wrapped(|ui| {
+            match &self.baseline {
+                Some(b) if b.serial == self.results_serial => {
+                    ui.label(theme::strong(t("This run is the baseline.")));
+                    ui.label(theme::weak(
+                        ui,
+                        t("Change the model and run it again to compare."),
+                    ));
+                }
+                Some(b) => {
+                    let r = &b.results["record"];
+                    ui.label(theme::strong(t("Compared with the baseline:")));
+                    ui.label(theme::weak(
+                        ui,
+                        tnf(
+                            r["replications"].as_u64().unwrap_or(0),
+                            "{n} run · seed {seed}",
+                            "{n} runs · seed {seed}",
+                            &[("seed", &r["seed"].to_string())],
+                        ),
+                    ));
+                    if ui
+                        .add(theme::secondary(ui, t("Keep this as the baseline")))
+                        .clicked()
+                    {
+                        action = Some(true);
+                    }
+                }
+                None => {
+                    if ui
+                        .add(theme::secondary(ui, t("Keep as baseline")))
+                        .on_hover_text(t(
+                            "Keep these results, change the model, run it again, and see what the change did.",
+                        ))
+                        .clicked()
+                    {
+                        action = Some(true);
+                    }
+                }
+            }
+            if self.baseline.is_some() && ui.link(t("Clear baseline")).clicked() {
+                action = Some(false);
+            }
+        });
+        action
     }
 
     /// The work area's two views: the model (overview or inspector) and the results.
