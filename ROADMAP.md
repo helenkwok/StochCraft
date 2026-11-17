@@ -970,6 +970,15 @@ taken together, and a large need waiting without holding back a smaller one.
   The paper's own two tools differed by 0.8% in throughput on this line. A delay that holds the
   sending machine costs the presses 32 s of every 175 s job: 15% of throughput, far from the
   paper's figure, so the paper's delays are read as minimum times in the buffer.
+- Not yet: **a serial line with finite buffers, task T1.2 of Pernas-Álvarez and Crespo-Pereira
+  (arXiv 2611.10602, 2026).** Four machines in series with exponential processing (means 3.3,
+  4.3, 3.0 and 3.7 min), raw material always in front of the first, buffers of 3 between them,
+  blocking after service; throughput per hour and each machine's utilisation. The paper gives
+  no reference values, so the targets are exact: the line's continuous-time Markov chain
+  (machine states working, blocked or starved, and the three buffer levels) solved numerically
+  here from first principles, as for Case A, with each StochCraft result's 95% interval to
+  contain them. Also a template and a committed model, as Cases A and B. The paper's simulator
+  (SimuLean) is GPL-3.0: its paper is used, its code never opened.
 
 ### M2.7 Assembly and batching
 
@@ -1313,6 +1322,16 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
     CI. The checks are saved with the experiment (a `stochcraft:` vendor extension) and can
     write a short report (Markdown) of the checks, the settings and the results. Also offered
     by desflow (MIT, `desflow experiment`), seen 2026-11.
+  - Not yet: **behaviour checks after every run.** Checks that need no reference, run after
+    each replication and reported as warnings, in the window, the CLI and to agents: every
+    entity is accounted for (created = in sinks + still inside + lost), something reaches an
+    exit, Little's law holds per element (mean contents against throughput times mean time
+    inside, within the run's own interval, with end effects allowed for over short runs), no
+    unit counts as busy while it is down, off shift or on a break, and utilisation stays within
+    0–100%. Pernas-Álvarez and Crespo-Pereira (arXiv 2611.10602, 2026) found that agents'
+    wrong models were all "silent" (they built and ran, and answered wrongly); checks like
+    these caught about half, the most common being a break counted as busy time. The tests'
+    `balanced` check in `blocks/tests` is the first of these.
 - **A capacity table.** Before a run, each station's offered load and utilisation worked out
   from the model's own numbers (arrival rates, mean service times, units), shown beside the
   simulated values after the run. The gap between the two is what variability and blocking
@@ -2338,6 +2357,14 @@ are.
     2019, doi 10.1080/17477778.2018.1442155.
 - **Candidates from the common textbooks** (Banks et al., Law, Robinson) join only once their
   parameters are taken from the books themselves.
+- Not yet: **a speed benchmark** (`cargo xtask bench`, extending `bench/`): events per second
+  on M/M/1, tandem lines of 5 to 200 stations, and the DEVStone models LI, HI and HO at set
+  widths and depths (Wainer, Glinsky and Gutierrez-Alcaraz, Simulation 87(7), 2011; Cárdenas
+  et al., ACM TOMACS 2022), whose event counts are known in closed form and so also check the
+  run. Times aggregated as Herguedas-Pinedo et al. propose (ANNSIM'25): a geometric mean of
+  ln(1 + t) weighted by each model's order of complexity. Comparable with the 3.0–3.3 million
+  events per second reported for M/M/1 in arXiv 2611.10602, and with SimPy. DEVStone is
+  implemented from the papers; no DEVS engine's code is read.
 - **Cross-checks against open-source simulators:** SimPy (already compared on M/M/1 in `bench/`)
   and Salabim. Salabim
   is MIT, but its licence text is `salabim/LICENSE.txt`, not at the repository's root, and the
