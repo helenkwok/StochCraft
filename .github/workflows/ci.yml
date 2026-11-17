@@ -255,3 +255,18 @@ jobs:
       - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
         with:
           command: check licenses sources bans
+
+  # RustSec advisories, apart from the licence check so a new advisory shows as its own failure.
+  # A new advisory can fail a pull request that changed nothing: fix it by updating the crate, or
+  # add it to deny.toml's ignore list with the reason it doesn't apply.
+  advisories:
+    name: cargo deny (advisories)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
+        with:
+          command: check advisories
