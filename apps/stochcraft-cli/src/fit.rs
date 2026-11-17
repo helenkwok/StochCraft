@@ -77,7 +77,7 @@ pub fn read_column(text: &str, column: Option<&str>) -> Result<Column, Failure> 
                 head.join(", ")
             )));
         }
-        Some(name) => match head.iter().position(|h| h == name) {
+        Some(name) => match head.iter().position(|h| h == name && value(h).is_none()) {
             Some(i) => (i, format!("column {name}")),
             None => match name.parse::<usize>() {
                 Ok(n) if (1..=head.len()).contains(&n) => (n - 1, format!("column {n}")),
@@ -296,6 +296,9 @@ mod tests {
         assert_eq!(c.values, [0.0, 1.0, 2.0, 3.0]);
         assert!(read(text, None).is_err_and(|m| m.contains("--column")));
         assert!(read(text, Some("4")).is_err_and(|m| m.contains("no column")));
+        // Without a header, a number is the column's number, never a value matched as a name.
+        let c = read("5,1\n6,2\n", Some("1")).unwrap_or_else(|m| panic!("{m}"));
+        assert_eq!((c.values, c.label.as_str()), (vec![5.0, 6.0], "column 1"));
     }
 
     #[test]

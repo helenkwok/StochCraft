@@ -3540,6 +3540,15 @@ fn measured_data_are_fitted_ranked_and_applied_with_block_set() {
             {"family": "gamma", "reason": "needs every value above 0"}
         ])
     );
+    // With a zero the uniform and triangular bounds may go below 0; each fit still applies.
+    let r = ok(&mut e, "estimate.fit", json!({ "data": with_zero }));
+    for c in r["candidates"].as_array().cloned().unwrap_or_default() {
+        ok(
+            &mut e,
+            "block.set",
+            json!({ "id": "desk", "service": c["distribution"].clone() }),
+        );
+    }
 
     // Refusals: too few values, no usable family, an unknown family, no families.
     for bad in [

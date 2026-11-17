@@ -2,16 +2,17 @@
 //! family by maximum likelihood, and ranked by how well each fits.
 //!
 //! The estimators are the textbook ones (A. M. Law, *Simulation Modeling and Analysis*, 5th ed.,
-//! section 6.5 and table 6.3; N. L. Johnson, S. Kotz and N. Balakrishnan, *Continuous Univariate
-//! Distributions*, 2nd ed., 1994–1995):
+//! chapter 6; N. L. Johnson, S. Kotz and N. Balakrishnan, *Continuous Univariate Distributions*,
+//! 2nd ed., 1994–1995):
 //!
 //! - **Exponential:** the mean is the sample mean.
 //! - **Normal:** the sample mean, and the standard deviation with divisor n (the maximum-likelihood
 //!   one, not n − 1).
 //! - **Log-normal:** μ and σ² of the logarithms, σ² with divisor n; written as BPSim's log-normal,
 //!   whose parameters are the mean e^(μ + σ²/2) and standard deviation of the values.
-//! - **Gamma:** the shape k solves ln k − ψ(k) = ln x̄ − mean(ln x), by Newton's method from Thom's
-//!   (1958) approximation, kept inside a bracket where the left side changes sign; the scale is
+//! - **Gamma:** the shape k solves ln k − ψ(k) = ln x̄ − mean(ln x), by Newton's method, kept
+//!   inside a bracket where the left side changes sign, from the positive root of
+//!   (1/(2k))(1 + 1/(6k + 1)) = ln x̄ − mean(ln x), an approximation of ln k − ψ(k); the scale is
 //!   x̄ / k.
 //! - **Erlang:** the gamma with a whole-number shape: the whole numbers either side of the gamma's
 //!   shape, whichever is more likely, with the sample mean as the mean.
@@ -506,10 +507,9 @@ fn ln_density(dist: &Dist, x: f64) -> Option<f64> {
 }
 
 /// ln P(a, y) and ln Q(a, y), the regularised lower and upper incomplete gamma functions, for
-/// a, y > 0. P by its series (DLMF 8.11.4; Abramowitz and Stegun 6.5.29) when y < a + 1,
-/// otherwise Q by Legendre's continued fraction (DLMF 8.9.2, in the contracted form of
-/// Abramowitz and Stegun 6.5.31) evaluated by the modified Lentz method; the other as the
-/// complement.
+/// a, y > 0. P by its power series when y < a + 1, otherwise Q by Legendre's continued fraction
+/// in its even (contracted) form, evaluated by the modified Lentz method; the other as the
+/// complement (Abramowitz and Stegun, *Handbook of Mathematical Functions*, chapter 6).
 fn ln_incomplete_gamma(a: f64, y: f64) -> (f64, f64) {
     let ln_front = a * ln(y) - y - ln_gamma(a);
     if y < a + 1.0 {
@@ -556,7 +556,7 @@ fn ln_incomplete_gamma(a: f64, y: f64) -> (f64, f64) {
 }
 
 /// The digamma function ψ(x) for x > 0: the recurrence ψ(x) = ψ(x + 1) − 1/x up to x ≥ 10, then
-/// the asymptotic series (Abramowitz and Stegun 6.3.5 and 6.3.18).
+/// the asymptotic series (Abramowitz and Stegun, chapter 6).
 fn digamma(mut x: f64) -> f64 {
     let mut shift = 0.0;
     while x < 10.0 {
@@ -571,7 +571,7 @@ fn digamma(mut x: f64) -> f64 {
 }
 
 /// The trigamma function ψ′(x) for x > 0: ψ′(x) = ψ′(x + 1) + 1/x² up to x ≥ 10, then the
-/// asymptotic series (Abramowitz and Stegun 6.4.6 and 6.4.12).
+/// asymptotic series (Abramowitz and Stegun, chapter 6).
 fn trigamma(mut x: f64) -> f64 {
     let mut shift = 0.0;
     while x < 10.0 {
@@ -656,7 +656,7 @@ fn gamma_shape(x: &[f64], mean: f64) -> Option<f64> {
     if !(s.is_finite() && s > 0.0) {
         return None;
     }
-    // Thom (1958), as given by Law (section 6.5) and Johnson, Kotz and Balakrishnan (17.7).
+    // The positive root of 6s k² + (s − 3) k − 1 = 0, from ln k − ψ(k) ≈ (1/(2k))(1 + 1/(6k + 1)).
     let k0 = (3.0 - s + ((s - 3.0) * (s - 3.0) + 24.0 * s).sqrt()) / (12.0 * s);
     let g = |k: f64| ln(k) - digamma(k) - s;
     let (lo, hi) = bracket(g, k0, true)?;
@@ -724,7 +724,7 @@ fn weibull(x: &[f64]) -> Option<Dist> {
         let m1 = s1 / s0;
         (m1 - 1.0 / k - mean_ly, s2 / s0 - m1 * m1 + 1.0 / (k * k))
     };
-    // Menon (1963), as given by Law (section 6.5).
+    // Menon (1963): 1/k is about √6/π times the standard deviation of ln x.
     let k0 = std::f64::consts::PI / (6.0_f64.sqrt() * sd_ly);
     let (lo, hi) = bracket(|k| h(k).0, k0, false)?;
     let k = solve(h, lo, hi, false, k0)?;
@@ -903,8 +903,7 @@ mod tests {
 
     #[test]
     fn special_functions_match_known_values() {
-        // ψ(1) = −γ, ψ(1/2) = −γ − 2 ln 2, ψ′(1) = π²/6, ψ′(1/2) = π²/2 (A&S 6.3.2, 6.3.3,
-        // 6.4.2, 6.4.4).
+        // ψ(1) = −γ, ψ(1/2) = −γ − 2 ln 2, ψ′(1) = π²/6, ψ′(1/2) = π²/2.
         let euler = 0.577_215_664_901_532_9;
         let pi2 = std::f64::consts::PI * std::f64::consts::PI;
         within("ψ(1)", digamma(1.0), -euler, 1e-13);
@@ -967,8 +966,7 @@ mod tests {
     #[test]
     fn maximum_likelihood_recovers_the_parameters() {
         // 20,000 values from StochCraft's own sampler, fixed seeds. Each tolerance is four
-        // asymptotic standard errors of the estimator (Law, section 6.5; Johnson, Kotz and
-        // Balakrishnan), so a correct estimator fails it about once in 16,000 seeds.
+        // asymptotic standard errors of the estimator (the inverse Fisher information), so a correct estimator fails it about once in 16,000 seeds.
         let n = 20_000;
         let nf = n as f64;
         let se = |var: f64| 4.0 * (var / nf).sqrt();
