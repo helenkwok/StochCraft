@@ -509,8 +509,70 @@ fn ln_density(dist: &Dist, x: f64) -> Option<f64> {
 /// ln P(a, y) and ln Q(a, y), the regularised lower and upper incomplete gamma functions, for
 /// a, y > 0. P by its power series when y < a + 1, otherwise Q by Legendre's continued fraction
 /// in its even (contracted) form, evaluated by the modified Lentz method; the other as the
-/// complement (Abramowitz and Stegun, *Handbook of Mathematical Functions*, chapter 6).
+/// complement (Abramowitz and Stegun, *Handbook of Mathematical Functions*, chapter 6). From
+/// `LARGE_SHAPE` up, by Temme's uniform expansion instead.
 fn ln_incomplete_gamma(a: f64, y: f64) -> (f64, f64) {
+    if a >= LARGE_SHAPE {
+        ln_incomplete_gamma_large(a, y)
+    } else {
+        ln_incomplete_gamma_by_terms(a, y)
+    }
+}
+
+/// The shape from which the series and the continued fraction are not used: they need about
+/// √(80a) terms near y = a, and a ln y − y − ln Γ(a) loses digits as a grows.
+const LARGE_SHAPE: f64 = 1e5;
+
+/// ln P(a, y) and ln Q(a, y) for a large by Temme's uniform asymptotic expansion (DLMF 8.12.1
+/// to 8.12.9): with λ = y/a, μ = λ − 1 and η = sign(μ)·√(2(μ − ln λ)),
+/// Q = ½ erfc(η√(a/2)) + S and P = ½ erfc(−η√(a/2)) − S, where
+/// S ≈ e^(−aη²/2) / √(2πa) · (c₀(η) + c₁(η)/a), c₀ = 1/μ − 1/η and
+/// c₁ = 1/η³ − 1/μ³ − 1/μ² − 1/(12μ). Near η = 0, where those differences lose digits, c₀ and c₁
+/// by their Taylor series (DLMF 8.12.11 to 8.12.14, with g₁ = 1/12 from 5.11.3). The terms left
+/// out are of order c₂/a² of S, c₂(0) = 25/6048 (DLMF 8.12.17).
+fn ln_incomplete_gamma_large(a: f64, y: f64) -> (f64, f64) {
+    let mu = y / a - 1.0;
+    // μ − ln(1 + μ), by its series where the subtraction would lose digits.
+    let half_eta2 = if mu.abs() < 0.1 {
+        let (mut power, mut sum) = (mu * mu, 0.0);
+        for n in 2..60 {
+            let term = power / f64::from(n);
+            sum += term;
+            if term.abs() <= sum * 1e-17 {
+                break;
+            }
+            power *= -mu;
+        }
+        sum
+    } else {
+        mu - libm::log1p(mu)
+    };
+    let eta = (2.0 * half_eta2).sqrt().copysign(mu);
+    let (c0, c1) = if eta.abs() < 1e-2 {
+        (
+            -1.0 / 3.0
+                + eta * (1.0 / 12.0 + eta * (-2.0 / 135.0 + eta * (1.0 / 864.0 + eta / 2835.0))),
+            -1.0 / 540.0 + eta * (-1.0 / 288.0 + eta / 378.0),
+        )
+    } else {
+        (
+            1.0 / mu - 1.0 / eta,
+            1.0 / (eta * eta * eta) - 1.0 / (mu * mu * mu) - 1.0 / (mu * mu) - 1.0 / (12.0 * mu),
+        )
+    };
+    let s = exp(-a * half_eta2) / (2.0 * std::f64::consts::PI * a).sqrt() * (c0 + c1 / a);
+    let z = eta * (a / 2.0).sqrt();
+    let q = (0.5 * libm::erfc(z) + s).max(0.0);
+    let p = (0.5 * libm::erfc(-z) - s).max(0.0);
+    if q < 0.5 {
+        (libm::log1p(-q), ln(q))
+    } else {
+        (ln(p), libm::log1p(-p))
+    }
+}
+
+/// [`ln_incomplete_gamma`] by the series and the continued fraction, for a below `LARGE_SHAPE`.
+fn ln_incomplete_gamma_by_terms(a: f64, y: f64) -> (f64, f64) {
     let ln_front = a * ln(y) - y - ln_gamma(a);
     if y < a + 1.0 {
         let mut term = 1.0 / a;
@@ -904,7 +966,7 @@ mod tests {
     #[test]
     fn special_functions_match_known_values() {
         // ψ(1) = −γ, ψ(1/2) = −γ − 2 ln 2, ψ′(1) = π²/6, ψ′(1/2) = π²/2.
-        let euler = 0.577_215_664_901_532_9;
+        let euler = std::f64::consts::EULER_GAMMA;
         let pi2 = std::f64::consts::PI * std::f64::consts::PI;
         within("ψ(1)", digamma(1.0), -euler, 1e-13);
         within("ψ(1/2)", digamma(0.5), -euler - 2.0 * ln(2.0), 1e-13);
@@ -920,6 +982,68 @@ mod tests {
             within("Q(3, y)", exp(lq), q3, 1e-14);
             within("P(3, y)", exp(lp), 1.0 - q3, 1e-14);
         }
+    }
+
+    #[test]
+    fn a_large_shape_s_distribution_function_is_right() {
+        // Q(a, a) = ½ + (c₀(0) + c₁(0)/a)/√(2πa) + O(a^−5/2), c₀(0) = −1/3, c₁(0) = −1/540
+        // (DLMF 8.12.15, 8.12.17). The series alone stopped at its term cap here: 0.3413.
+        for a in [1e5, 1e10, 1e14] {
+            let want =
+                0.5 + (1.0 / 3.0 + 1.0 / (540.0 * a)) / (2.0 * std::f64::consts::PI * a).sqrt();
+            let got = cdf(
+                &Dist::Gamma {
+                    shape: a,
+                    scale: 1.0,
+                },
+                a,
+            );
+            within("P(a, a)", got.unwrap_or(f64::NAN), want, 1e-13);
+        }
+        // Either side of the switch, and across the body and tails, the two methods agree.
+        for a in [1e5_f64, 3e5] {
+            for k in [-8.0, -4.0, -1.5, -0.3, 0.0, 0.01, 0.5, 2.0, 5.0, 9.0] {
+                let y = a + k * a.sqrt();
+                let (lp, lq) = ln_incomplete_gamma_large(a, y);
+                let (bp, bq) = ln_incomplete_gamma_by_terms(a, y);
+                // The terms lose about 10⁻¹⁰ here, in a ln y − y − ln Γ(a) near 10⁶.
+                within("P", exp(lp), exp(bp), 1e-9);
+                within(
+                    "ln of the smaller tail",
+                    lp.min(lq),
+                    bp.min(bq),
+                    1e-6 * bp.min(bq).abs(),
+                );
+            }
+        }
+        // The Taylor and closed forms of c₀ and c₁ meet where one hands over to the other.
+        for eta in [-1e-2, 1e-2] {
+            let (lo, hi) = (
+                ln_incomplete_gamma_large(1e6, 1e6 * (1.0 + eta * 0.999_99)),
+                ln_incomplete_gamma_large(1e6, 1e6 * (1.0 + eta * 1.000_01)),
+            );
+            within("across η = ±0.01", exp(lo.0), exp(hi.0), 1e-6);
+        }
+    }
+
+    #[test]
+    fn tightly_clustered_data_fit_the_gamma_as_the_normal() {
+        // Twenty values 1 ± 10⁻⁵: the gamma's shape is near 10¹⁰, where it is all but normal, so
+        // its Anderson–Darling statistic is the normal's, not one from a broken distribution function.
+        let x: Vec<f64> = (0..20)
+            .map(|i| if i % 2 == 0 { 1.0 - 1e-5 } else { 1.0 + 1e-5 })
+            .collect();
+        let fits = fit(&x, &[Family::Normal, Family::Gamma, Family::Erlang], 20)
+            .unwrap_or_else(|e| panic!("{e:?}"));
+        let ad = |f: Family| {
+            fits.candidates.iter().find(|c| c.family == f).map_or_else(
+                || panic!("no {f:?}: {:?}", fits.skipped),
+                |c| c.anderson_darling,
+            )
+        };
+        let normal = ad(Family::Normal);
+        within("gamma A²", ad(Family::Gamma), normal, 1e-3 * normal);
+        within("Erlang A²", ad(Family::Erlang), normal, 1e-3 * normal);
     }
 
     #[test]

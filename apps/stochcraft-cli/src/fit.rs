@@ -19,7 +19,7 @@ pub struct Column {
     pub empty: usize,
 }
 
-/// One line of delimited text as cells: double quotes around a cell are removed, and `""`
+/// One record of delimited text as cells: double quotes around a cell are removed, and `""`
 /// inside them is a quote.
 fn cells(line: &str, delimiter: char) -> Vec<String> {
     let mut out = Vec::new();
@@ -45,18 +45,51 @@ fn value(cell: &str) -> Option<f64> {
     cell.parse::<f64>().ok().filter(|v| v.is_finite())
 }
 
+/// A cell that reads as a number, finite or not: `inf` and `NaN` are data to refuse, not a
+/// header.
+fn numeric(cell: &str) -> bool {
+    cell.parse::<f64>().is_ok()
+}
+
+/// The records of delimited text with the line each starts on, blank ones left out. A line
+/// break inside double quotes belongs to the cell, so a quoted cell may run over several lines.
+fn records(text: &str) -> Result<Vec<(usize, &str)>, Failure> {
+    let mut out = Vec::new();
+    let (mut start, mut line, mut first_line, mut quoted) = (0, 1, 1, false);
+    for (i, c) in text.char_indices() {
+        match c {
+            '"' => quoted = !quoted,
+            '\n' => {
+                if !quoted {
+                    out.push((first_line, &text[start..i]));
+                    start = i + 1;
+                    first_line = line + 1;
+                }
+                line += 1;
+            }
+            _ => {}
+        }
+    }
+    if quoted {
+        return Err(Failure(format!(
+            "line {first_line}: a double quote is not closed"
+        )));
+    }
+    out.push((first_line, &text[start..]));
+    Ok(out
+        .into_iter()
+        .map(|(l, r)| (l, r.trim_end_matches('\r')))
+        .filter(|(_, r)| !r.trim().is_empty())
+        .collect())
+}
+
 /// The column `column` (a header, or a number from 1) of `text`; with none given, the only
 /// column. The first row is a header when its cell in the column is not a number. The cells are
 /// separated by tabs if the first row has one, by semicolons if it has those and no commas, and
 /// otherwise by commas.
 pub fn read_column(text: &str, column: Option<&str>) -> Result<Column, Failure> {
     let text = text.strip_prefix('\u{feff}').unwrap_or(text);
-    let rows: Vec<(usize, &str)> = text
-        .lines()
-        .enumerate()
-        .map(|(i, l)| (i + 1, l.trim_end_matches('\r')))
-        .filter(|(_, l)| !l.trim().is_empty())
-        .collect();
+    let rows = records(text)?;
     let Some(&(_, first)) = rows.first() else {
         return Err(Failure("no values: the input is empty".into()));
     };
@@ -77,7 +110,7 @@ pub fn read_column(text: &str, column: Option<&str>) -> Result<Column, Failure> 
                 head.join(", ")
             )));
         }
-        Some(name) => match head.iter().position(|h| h == name && value(h).is_none()) {
+        Some(name) => match head.iter().position(|h| h == name && !numeric(h)) {
             Some(i) => (i, format!("column {name}")),
             None => match name.parse::<usize>() {
                 Ok(n) if (1..=head.len()).contains(&n) => (n - 1, format!("column {n}")),
@@ -91,7 +124,7 @@ pub fn read_column(text: &str, column: Option<&str>) -> Result<Column, Failure> 
             },
         },
     };
-    let has_header = head.get(index).is_some_and(|c| value(c).is_none());
+    let has_header = head.get(index).is_some_and(|c| !numeric(c));
     let label = match (has_header, label.is_empty()) {
         (true, true) => format!("column {}", head.get(index).map_or("", String::as_str)),
         _ => label,
@@ -315,5 +348,25 @@ mod tests {
         assert!(read("1\nx\n", None).is_err_and(|m| m.contains("line 2")));
         assert!(read("1\ninf\n", None).is_err_and(|m| m.contains("line 2")));
         assert!(read("\n\n", None).is_err());
+    }
+
+    #[test]
+    fn a_quoted_cell_may_run_over_lines() {
+        let text = "note,time\n\"two\nlines\",1\nplain,2\r\n\"say \"\"hi\"\"\",3\n";
+        let c = read(text, Some("time")).unwrap_or_else(|m| panic!("{m}"));
+        assert_eq!((c.values, c.empty), (vec![1.0, 2.0, 3.0], 0));
+        // A row's line is the one it starts on.
+        let c = read("note,time\n\"a\nb\",1\nx,y\n", Some("time"));
+        assert!(c.is_err_and(|m| m.contains("line 4")));
+        assert!(read("t\n\"1\n2\n", None).is_err_and(|m| m.contains("not closed")));
+    }
+
+    #[test]
+    fn a_number_that_is_not_finite_is_refused_not_taken_for_a_header() {
+        for first in ["inf", "-inf", "NaN"] {
+            let text = format!("{first}\n1\n2\n");
+            let c = read(&text, None);
+            assert!(c.is_err_and(|m| m.contains("line 1")), "{first}");
+        }
     }
 }
