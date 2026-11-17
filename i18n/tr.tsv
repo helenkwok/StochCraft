@@ -761,6 +761,63 @@ unit	yr	yıl
 	off	kapalı
 	Changed since the baseline:	Referanstan bu yana değişenler:
 	Nothing in the model has changed since the baseline.	Referanstan bu yana modelde hiçbir şey değişmedi.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Diyagramdaki sürecin bir adımı: varlıkların geldiği, beklediği, işlendiği, yönlendirildiği veya ayrıldığı yer.
+	Entity	Varlık
+	What flows through the blocks: a part, a patient, a call, an order.	Bloklardan geçen şey: bir parça, bir hasta, bir çağrı, bir sipariş.
+	The block where entities enter the model, with the time between one arrival and the next.	Varlıkların modele girdiği blok; bir geliş ile sonraki arasındaki süreyle birlikte.
+	A step that takes time, with no limit on how many entities it works on at once.	Zaman alan ve aynı anda kaç varlık üzerinde çalıştığına sınır olmayan bir adım.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Makineler veya memurlar gibi sınırlı sayıda birimin yaptığı bir adım. Varlıklar bir birim boşalana kadar onun bekleme alanında bekler.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Bir hemşire ekibi gibi, birkaç görevin paylaştığı bir havuzdan birim ödünç alan bir adım.
+	The block where entities leave the model; it counts them and their time in the system.	Varlıkların modelden çıktığı blok; onları ve sistemdeki sürelerini sayar.
+	Sends each entity down one of its ways out, by chance or by a condition.	Her varlığı şansa ya da bir koşula göre çıkış yollarından birine gönderir.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Kaynak kullanan bir görevin aynı anda kaç varlık üzerinde çalışabileceği: makineleri, memurları ya da yatakları.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Varlıkların boş bir birimi beklediği yer (bir kuyruk). Bir sınırı olabilir; onu dolu bulan varlık kaybolur ya da akışın gerisinde bekler.
+	How long a unit takes with one entity, drawn from a distribution each time.	Bir birimin bir varlıkla ne kadar uğraştığı; her seferinde bir dağılımdan çekilir.
+	Distribution	Dağılım
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Bir sürenin veya miktarın bir varlıktan diğerine nasıl değiştiği: biçimi ve ortalaması.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Modelin kendi rastgele sayılarıyla baştan sona bir kez geçişi. Ders kitapları buna replikasyon der.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Aynı ayarlarla tüm çalıştırmalar birlikte: kaç çalıştırma, rastgelelik tohumu, ısınma ve ölçülen süre.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Rastgele sayıların başlangıç noktası. Aynı model aynı rastgelelik tohumuyla her zaman aynı sonuçları verir.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Her çalıştırmanın başında benzetimi yapılan ama ölçülmeyen süre; böylece boş bir modelin dolması sonuçları saptırmaz.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Bir görevin birimlerinin meşgul olduğu sürenin payı; vardiyada oldukları süre üzerinden sayılır.
+	The average time an entity spends in a waiting room before a unit takes it.	Bir varlığın, bir birim onu alana kadar bekleme alanında geçirdiği ortalama süre.
+	The average number of entities in a waiting room, over the time measured.	Ölçülen süre boyunca bekleme alanındaki ortalama varlık sayısı.
+	Time in system	Sistemdeki süre
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Bir varlığın gelişinden çıkışına kadar, bekleyerek ve işlenerek geçirdiği süre.
+	Blocked	Engellenme
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Bir birim işini bitirdi ama varlığı aktaramıyor, çünkü sonraki bekleme alanı dolu.
+	Starved	İş bekleme
+	A unit is free but has no entity to work on.	Bir birim boş ama üzerinde çalışacağı bir varlık yok.
+	95% confidence interval	%95 güven aralığı
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Bir ortalamadan sonra ± ile yazılır: gerçek ortalamanın gösterilenden makul olarak ne kadar uzak olabileceği. Daha çok çalıştırma onu daraltır.
+	Settled	Oturmuş
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Ona göre karar verecek kadar iyi bilinen bir sonuç: ortalamasının ± 5%'i veya oranlarda ± 1 yüzde puan içinde.
+	Results kept to compare a later run with, to see what a change to the model did.	Modeldeki bir değişikliğin ne yaptığını görmek için sonraki bir çalıştırmayla karşılaştırmak üzere saklanan sonuçlar.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	%95 aralığı sıfırı içeren bir fark: çalıştırmalar onu rastgele değişkenlikten ayıramaz.
+	Add Arrivals	Gelişler ekleyin
+	Add a task and connect Arrivals to it	Bir görev ekleyin ve Gelişler'i ona bağlayın
+	Add Departures and connect the task to it	Çıkışlar ekleyin ve görevi ona bağlayın
+	Run the model: press F5	Modeli çalıştırın: F5'e basın
+	Read what the run found	Çalıştırmanın bulduklarını okuyun
+	Close Help (F1)	Yardımı kapat (F1)
+	Search help and terms	Yardımda ve terimlerde ara
+	Getting started	Başlarken
+	{k} of {n} done	{k}/{n} tamamlandı
+	Glossary	Sözlük
+	No term matches “{text}”.	“{text}” ile eşleşen terim yok.
+	Keyboard shortcuts	Klavye kısayolları
+	Change keys	Tuşları değiştir
+	More help	Daha fazla yardım
+	User guide	Kullanım kılavuzu
+	What the results mean	Sonuçlar ne anlama geliyor
+	Report a problem	Sorun bildir
+	These open in your web browser.	Bunlar web tarayıcınızda açılır.
+	Space	Boşluk
+	Play or pause a watched run	İzlenen bir çalıştırmayı oynat veya duraklat
+	Getting Started	Başlarken
+	What the Results Mean	Sonuçlar Ne Anlama Geliyor
+	User Guide	Kullanım Kılavuzu
+	Report a Problem	Sorun Bildir
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı

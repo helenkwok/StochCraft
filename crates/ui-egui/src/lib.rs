@@ -24,6 +24,7 @@ mod decide;
 pub use autosave::Autosave;
 mod editor;
 pub mod form;
+mod help;
 pub mod i18n;
 mod live;
 mod pools;
@@ -90,6 +91,8 @@ pub enum Request {
     Export { name: String, bytes: Vec<u8> },
     /// Close the window: the user confirmed, or there was nothing unsaved.
     Quit,
+    /// Open `url` in the web browser (Help's links).
+    OpenUrl { url: String },
 }
 
 /// What the platform offers the app.
@@ -339,6 +342,8 @@ pub struct App {
     show_analysis: bool,
     /// The M2.8 screens' choices and last answers.
     decide: decide::Decide,
+    /// The Help panel.
+    help: help::Help,
     /// Where the charts were drawn last frame, for exporting them.
     charts_rect: Option<egui::Rect>,
     /// A screenshot asked for to export the charts, filled in by the renderer.
@@ -429,6 +434,7 @@ impl App {
             show_results: false,
             show_analysis: false,
             decide: decide::Decide::default(),
+            help: help::Help::default(),
             charts_rect: None,
             screenshot: std::sync::Arc::default(),
             pending_png: None,
@@ -517,6 +523,69 @@ impl App {
         self.results_stale = false;
         self.results_serial += 1;
         self.show_results = true;
+    }
+
+    /// Opens or closes the Help panel.
+    pub fn show_help(&mut self, open: bool) {
+        self.help.open = open;
+    }
+
+    /// Whether the Help panel is open.
+    pub fn help_open(&self) -> bool {
+        self.help.open
+    }
+
+    /// Opens the Help panel at `section`.
+    fn show_help_at(&mut self, section: help::Section) {
+        self.help.open = true;
+        // A search would hide the section asked for.
+        self.help.search.clear();
+        self.help.scroll_to = Some(section);
+    }
+
+    /// Asks the shell to open `url` in the web browser.
+    fn open_url(&mut self, url: &str) {
+        self.requests.push(Request::OpenUrl {
+            url: url.to_owned(),
+        });
+    }
+
+    /// The Help panel, at the right of the window.
+    fn help_panel(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
+        let model = stochcraft_engine::wire::model(self.engine.model());
+        let steps = help::steps(&model, self.results().is_some(), self.help.read_results);
+        let keymap_platform = craft_keymap::egui::platform(ui.ctx());
+        let key = |id: &str| commands::shortcut_text(&self.keymap, id, keymap_platform);
+        let mut keys: Vec<(String, &'static str)> = [
+            (commands::RUN, "Run"),
+            (commands::UNDO, "Undo"),
+            (commands::REDO, "Redo"),
+            (commands::SAVE, "Save"),
+            (commands::OPEN, "Open…"),
+            (commands::HELP, "Help"),
+        ]
+        .into_iter()
+        .filter_map(|(id, what)| key(id).map(|k| (k, what)))
+        .collect();
+        keys.push((t("Space").to_owned(), "Play or pause a watched run"));
+        let action = egui::Panel::right("help")
+            .resizable(true)
+            .default_size(360.0)
+            .size_range(280.0..=520.0)
+            .frame(
+                egui::Frame::new()
+                    .fill(p.raised)
+                    .stroke(egui::Stroke::new(1.0, p.border))
+                    .inner_margin(egui::Margin::symmetric(18, 14)),
+            )
+            .show(ui, |ui| help::show(ui, &mut self.help, &steps, &keys))
+            .inner;
+        match action {
+            Some(help::Action::Close) => self.help.open = false,
+            Some(help::Action::Open(url)) => self.open_url(url),
+            Some(help::Action::ChangeKeys) => self.open_shortcuts(),
+            None => {}
+        }
     }
 
     /// The baseline later runs are compared with, if one is kept.
@@ -845,6 +914,7 @@ impl App {
     /// canvas's view, a watched run and half-typed fields.
     fn forget_view(&mut self) {
         self.clear_results();
+        self.help.read_results = false;
         self.selected = None;
         self.canvas = canvas::Canvas::default();
         self.watching = None;
@@ -1385,6 +1455,9 @@ impl App {
                     .inner_margin(egui::Margin::symmetric(12, 4)),
             )
             .show(ui, |ui| self.status_bar(ui, &p));
+        if self.help.open {
+            self.help_panel(ui, &p);
+        }
         egui::Panel::left("outline")
             .resizable(true)
             .default_size(280.0)
@@ -1446,7 +1519,9 @@ impl App {
 
     /// The model: the flowchart, with the inspector beside it (below it, in a narrow window).
     fn model_view(&mut self, ui: &mut egui::Ui, p: &theme::Palette) {
-        let wide = ui.available_width() >= 720.0;
+        // Side by side only where the canvas and its toolbar keep about 400 px beside the
+        // inspector (it is narrower with Help open); otherwise the inspector goes below.
+        let wide = ui.available_width() >= 760.0;
         let frame = egui::Frame::new().inner_margin(egui::Margin {
             left: if wide { 18 } else { 0 },
             top: if wide { 0 } else { 14 },
@@ -1609,6 +1684,9 @@ impl App {
         let mut again = false;
         let mut baseline_action = None;
         let compared = self.compared();
+        if !self.results_stale {
+            self.help.read_results = true;
+        }
         egui::ScrollArea::vertical()
             .auto_shrink([false, false])
             .show(ui, |ui| {

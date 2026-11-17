@@ -94,6 +94,9 @@ impl eframe::App for Web {
                     Ok(()) => self.app.exported(&name),
                     Err(e) => self.app.report_error(format!("{name}: {e:?}")),
                 },
+                Request::OpenUrl { url } => {
+                    ctx.open_url(egui::OpenUrl::new_tab(url));
+                }
                 // Not made in the browser (Platform::BROWSER has no paths and no Quit).
                 Request::PickSave { .. }
                 | Request::OpenPath { .. }

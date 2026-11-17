@@ -761,6 +761,63 @@ unit	yr	г.
 	off	выкл.
 	Changed since the baseline:	Изменено по сравнению с базовым вариантом:
 	Nothing in the model has changed since the baseline.	В модели ничего не изменилось по сравнению с базовым вариантом.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Один шаг процесса на диаграмме: здесь сущности прибывают, ждут, обрабатываются, направляются дальше или уходят.
+	Entity	Сущность
+	What flows through the blocks: a part, a patient, a call, an order.	То, что проходит через блоки: деталь, пациент, звонок, заказ.
+	The block where entities enter the model, with the time between one arrival and the next.	Блок, через который сущности входят в модель, со временем между одним прибытием и следующим.
+	A step that takes time, with no limit on how many entities it works on at once.	Шаг, который занимает время, без ограничения на число сущностей, обрабатываемых одновременно.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Шаг, который выполняет ограниченное число единиц, например станков или служащих. Сущности ждут в его местах ожидания, пока не освободится единица.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Шаг, который берёт единицы из пула, общего для нескольких задач, например бригады медсестёр.
+	The block where entities leave the model; it counts them and their time in the system.	Блок, через который сущности покидают модель; он считает их и их время в системе.
+	Sends each entity down one of its ways out, by chance or by a condition.	Направляет каждую сущность по одному из своих выходов — случайно или по условию.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Сколько сущностей задача с ресурсом может обрабатывать одновременно: её станки, служащие или койки.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Где сущности ждут свободную единицу (очередь). Число мест может быть ограничено; сущность, которая застаёт их занятыми, теряется или ждёт выше по потоку.
+	How long a unit takes with one entity, drawn from a distribution each time.	Сколько времени единица тратит на одну сущность; каждый раз разыгрывается из распределения.
+	Distribution	Распределение
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Как время или количество меняется от одной сущности к другой: его форма и среднее значение.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Один проход модели от начала до конца со своими случайными числами. В учебниках его называют повторением (репликацией).
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Все запуски вместе, с одинаковыми настройками: число запусков, начальное значение генератора, разогрев и измеряемое время.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Начальная точка случайных чисел. Одна и та же модель с одним и тем же начальным значением генератора всегда даёт одни и те же результаты.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Время в начале каждого запуска, которое моделируется, но не измеряется, чтобы заполнение пустой модели не смещало результаты.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Доля времени, когда единицы задачи заняты, считая по времени, когда они на смене.
+	The average time an entity spends in a waiting room before a unit takes it.	Среднее время, которое сущность проводит в местах ожидания, прежде чем её возьмёт единица.
+	The average number of entities in a waiting room, over the time measured.	Среднее число сущностей в местах ожидания за измеряемое время.
+	Time in system	Время в системе
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Сколько времени сущность проводит от прибытия до выхода, включая ожидание и обработку.
+	Blocked	Блокировка
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Единица закончила работу, но не может передать сущность дальше, потому что следующие места ожидания заняты.
+	Starved	Без работы
+	A unit is free but has no entity to work on.	Единица свободна, но у неё нет сущности для обработки.
+	95% confidence interval	95% доверительный интервал
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Пишется после среднего со знаком ±: насколько истинное среднее может правдоподобно отличаться от показанного. Больше запусков сужают его.
+	Settled	Установившийся
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Результат, известный достаточно точно, чтобы на него опираться: с точностью ± 5% от его среднего или ± 1 процентный пункт для доли.
+	Results kept to compare a later run with, to see what a change to the model did.	Результаты, сохранённые для сравнения с более поздним запуском, чтобы увидеть, что дало изменение модели.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Разница, 95% интервал которой включает ноль: по запускам её нельзя отличить от случайного разброса.
+	Add Arrivals	Добавьте «Прибытия»
+	Add a task and connect Arrivals to it	Добавьте задачу и соедините с ней «Прибытия»
+	Add Departures and connect the task to it	Добавьте «Выходы» и соедините с ними задачу
+	Run the model: press F5	Запустите модель: нажмите F5
+	Read what the run found	Посмотрите, что показал запуск
+	Close Help (F1)	Закрыть справку (F1)
+	Search help and terms	Поиск по справке и терминам
+	Getting started	Начало работы
+	{k} of {n} done	{k} из {n} выполнено
+	Glossary	Глоссарий
+	No term matches “{text}”.	Нет терминов, совпадающих с «{text}».
+	Keyboard shortcuts	Сочетания клавиш
+	Change keys	Изменить клавиши
+	More help	Дополнительная справка
+	User guide	Руководство пользователя
+	What the results mean	Что означают результаты
+	Report a problem	Сообщить о проблеме
+	These open in your web browser.	Они открываются в веб-браузере.
+	Space	Пробел
+	Play or pause a watched run	Воспроизвести или приостановить наблюдаемый запуск
+	Getting Started	Начало работы
+	What the Results Mean	Что означают результаты
+	User Guide	Руководство пользователя
+	Report a Problem	Сообщить о проблеме
 @plural	Added {n} block|Added {n} blocks	Добавлен {n} блок|Добавлено {n} блока|Добавлено {n} блоков
 @plural	Copied {n} block|Copied {n} blocks	Скопирован {n} блок|Скопировано {n} блока|Скопировано {n} блоков
 @plural	Finished {n} run|Finished {n} runs	Завершён {n} запуск|Завершены {n} запуска|Завершено {n} запусков

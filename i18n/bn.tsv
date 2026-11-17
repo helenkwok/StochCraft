@@ -761,6 +761,63 @@ unit	yr	বছর
 	off	বন্ধ
 	Changed since the baseline:	ভিত্তিরেখার পর থেকে পরিবর্তিত:
 	Nothing in the model has changed since the baseline.	ভিত্তিরেখার পর থেকে মডেলে কিছুই বদলায়নি।
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	ক্যানভাসে প্রক্রিয়ার একটি ধাপ: যেখানে সত্তারা আসে, অপেক্ষা করে, তাদের ওপর কাজ হয়, তাদের পথ ঠিক করা হয় বা তারা চলে যায়।
+	Entity	সত্তা
+	What flows through the blocks: a part, a patient, a call, an order.	যা ব্লকগুলোর মধ্য দিয়ে প্রবাহিত হয়: একটি যন্ত্রাংশ, একজন রোগী, একটি কল, একটি অর্ডার।
+	The block where entities enter the model, with the time between one arrival and the next.	যে ব্লকে সত্তারা মডেলে প্রবেশ করে, এক আগমন থেকে পরের আগমনের মধ্যবর্তী সময়সহ।
+	A step that takes time, with no limit on how many entities it works on at once.	সময় লাগে এমন একটি ধাপ, যা একসঙ্গে কতগুলো সত্তার ওপর কাজ করবে তার কোনো সীমা নেই।
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	সীমিত সংখ্যক একক, যেমন মেশিন বা কেরানি, দিয়ে করা একটি ধাপ। কোনো একক খালি না হওয়া পর্যন্ত সত্তারা এর অপেক্ষার ঘরে অপেক্ষা করে।
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	এমন একটি ধাপ যা একাধিক কাজের ভাগ করা একটি পুল থেকে একক ধার নেয়, যেমন নার্সদের একটি দল।
+	The block where entities leave the model; it counts them and their time in the system.	যে ব্লকে সত্তারা মডেল ছেড়ে যায়; এটি তাদের এবং সিস্টেমে তাদের সময় গোনে।
+	Sends each entity down one of its ways out, by chance or by a condition.	প্রতিটি সত্তাকে তার বেরোনোর পথগুলোর একটিতে পাঠায়, দৈবক্রমে বা কোনো শর্ত অনুযায়ী।
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	সম্পদসহ কাজ একই সময়ে কতগুলো সত্তার ওপর কাজ করতে পারে: এর মেশিন, কেরানি বা শয্যা।
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	যেখানে সত্তারা খালি এককের জন্য অপেক্ষা করে (একটি সারি)। এর সীমা থাকতে পারে; যে সত্তা এটি পূর্ণ পায় সেটি হারিয়ে যায় বা আগের ধাপে অপেক্ষা করে।
+	How long a unit takes with one entity, drawn from a distribution each time.	একটি একক একটি সত্তার জন্য কত সময় নেয়, প্রতিবার একটি বণ্টন থেকে নেওয়া।
+	Distribution	বণ্টন
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	একটি সময় বা পরিমাণ এক সত্তা থেকে পরের সত্তায় কীভাবে বদলায়: এর আকার এবং এর গড়।
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	নিজস্ব যদৃচ্ছ সংখ্যা নিয়ে শুরু থেকে শেষ পর্যন্ত মডেলের একবার চালনা। পাঠ্যবইয়ে একে রেপ্লিকেশন বলা হয়।
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	একই সেটিংসসহ সব পুনরাবৃত্তি একসঙ্গে: কতগুলো পুনরাবৃত্তি, যদৃচ্ছ বীজ, প্রাথমিক প্রস্তুতিকাল এবং পরিমাপের সময়।
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	যদৃচ্ছ সংখ্যার শুরুর বিন্দু। একই যদৃচ্ছ বীজসহ একই মডেল সবসময় একই ফলাফল দেয়।
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	প্রতিটি পুনরাবৃত্তির শুরুর যে সময় সিমুলেট করা হয় কিন্তু পরিমাপ করা হয় না, যাতে ভরে উঠতে থাকা খালি মডেল ফলাফলকে টেনে না নেয়।
+	The share of the time a task's units are busy, counted over the time they are on shift.	কোনো কাজের এককগুলো যে অনুপাত সময় ব্যস্ত থাকে, তাদের শিফটে থাকার সময়ের ওপর গোনা।
+	The average time an entity spends in a waiting room before a unit takes it.	একক একটি সত্তাকে নেওয়ার আগে সেটি অপেক্ষার ঘরে গড়ে যে সময় কাটায়।
+	The average number of entities in a waiting room, over the time measured.	পরিমাপের সময় জুড়ে অপেক্ষার ঘরে সত্তাদের গড় সংখ্যা।
+	Time in system	সিস্টেমে সময়
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	একটি সত্তা তার আগমন থেকে প্রস্থান পর্যন্ত কত সময় কাটায়, অপেক্ষায় এবং কাজ চলাকালীন।
+	Blocked	অবরুদ্ধ
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	একটি একক কাজ শেষ করেছে কিন্তু সত্তাটিকে আগে পাঠাতে পারছে না, কারণ পরের অপেক্ষার ঘর পূর্ণ।
+	Starved	কাজহীন
+	A unit is free but has no entity to work on.	একটি একক খালি কিন্তু কাজ করার মতো কোনো সত্তা নেই।
+	95% confidence interval	95% আস্থা ব্যবধান
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	গড়ের পরে ± হিসেবে লেখা হয়: প্রকৃত গড় দেখানো গড় থেকে যুক্তিসংগতভাবে কতটা দূরে হতে পারে। বেশি পুনরাবৃত্তি একে সরু করে।
+	Settled	স্থির
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	ব্যবস্থা নেওয়ার মতো যথেষ্ট ভালোভাবে জানা একটি ফলাফল: তার গড়ের ± 5% পর্যন্ত, বা অনুপাতের ক্ষেত্রে ± 1 শতাংশ বিন্দু পর্যন্ত।
+	Results kept to compare a later run with, to see what a change to the model did.	পরের কোনো পুনরাবৃত্তির সঙ্গে তুলনার জন্য রাখা ফলাফল, মডেলে কোনো পরিবর্তন কী করল তা দেখতে।
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	এমন একটি পার্থক্য যার 95% ব্যবধানে শূন্য পড়ে: পুনরাবৃত্তিগুলো একে যদৃচ্ছ তারতম্য থেকে আলাদা করতে পারে না।
+	Add Arrivals	আগমন যোগ করুন
+	Add a task and connect Arrivals to it	একটি কাজ যোগ করুন এবং আগমনকে তার সঙ্গে যুক্ত করুন
+	Add Departures and connect the task to it	প্রস্থান যোগ করুন এবং কাজটিকে তার সঙ্গে যুক্ত করুন
+	Run the model: press F5	মডেল চালান: F5 চাপুন
+	Read what the run found	পুনরাবৃত্তিতে কী পাওয়া গেল পড়ুন
+	Close Help (F1)	সহায়তা বন্ধ করুন (F1)
+	Search help and terms	সহায়তা ও শব্দ খুঁজুন
+	Getting started	শুরু করা
+	{k} of {n} done	{n}টির মধ্যে {k}টি সম্পন্ন
+	Glossary	শব্দকোষ
+	No term matches “{text}”.	“{text}”-এর সঙ্গে কোনো শব্দ মেলে না।
+	Keyboard shortcuts	কীবোর্ড শর্টকাট
+	Change keys	কী বদলান
+	More help	আরও সহায়তা
+	User guide	ব্যবহারকারী নির্দেশিকা
+	What the results mean	ফলাফলের অর্থ
+	Report a problem	সমস্যা জানান
+	These open in your web browser.	এগুলো আপনার ওয়েব ব্রাউজারে খোলে।
+	Space	স্পেস
+	Play or pause a watched run	যে পুনরাবৃত্তি দেখছেন তা চালান বা বিরতি দিন
+	Getting Started	শুরু করা
+	What the Results Mean	ফলাফলের অর্থ
+	User Guide	ব্যবহারকারী নির্দেশিকা
+	Report a Problem	সমস্যা জানান
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে

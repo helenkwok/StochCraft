@@ -761,6 +761,63 @@ unit	yr	సం.
 	off	ఆఫ్
 	Changed since the baseline:	ప్రాతిపదిక తర్వాత మారినవి:
 	Nothing in the model has changed since the baseline.	ప్రాతిపదిక తర్వాత మోడల్‌లో ఏదీ మారలేదు.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	కాన్వాస్‌పై ప్రక్రియలో ఒక దశ: ఇక్కడ ఎంటిటీలు వస్తాయి, వేచి ఉంటాయి, వాటిపై పని జరుగుతుంది, దారి మళ్లించబడతాయి లేదా వెళ్లిపోతాయి.
+	Entity	ఎంటిటీ
+	What flows through the blocks: a part, a patient, a call, an order.	బ్లాక్‌ల గుండా ప్రవహించేది: ఒక భాగం, ఒక రోగి, ఒక కాల్, ఒక ఆర్డర్.
+	The block where entities enter the model, with the time between one arrival and the next.	ఎంటిటీలు మోడల్‌లోకి ప్రవేశించే బ్లాక్, ఒక రాకకు మరియు తదుపరి రాకకు మధ్య సమయంతో.
+	A step that takes time, with no limit on how many entities it works on at once.	సమయం తీసుకునే దశ; ఒకేసారి ఎన్ని ఎంటిటీలపై పని చేయగలదో దానికి పరిమితి లేదు.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	యంత్రాలు లేదా గుమస్తాలు వంటి పరిమిత సంఖ్యలో యూనిట్‌లు చేసే దశ. ఒక యూనిట్ ఖాళీ అయ్యే వరకు ఎంటిటీలు దాని వేచి ఉండే గదిలో వేచి ఉంటాయి.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	అనేక పనులు పంచుకునే పూల్ నుండి యూనిట్‌లను అరువు తీసుకునే దశ, నర్సుల బృందం వంటిది.
+	The block where entities leave the model; it counts them and their time in the system.	ఎంటిటీలు మోడల్ నుండి వెళ్లిపోయే బ్లాక్; ఇది వాటిని మరియు వ్యవస్థలో అవి గడిపిన సమయాన్ని లెక్కిస్తుంది.
+	Sends each entity down one of its ways out, by chance or by a condition.	ప్రతి ఎంటిటీని దాని బయటికి దారుల్లో ఒకదానిలో పంపుతుంది, యాదృచ్ఛికంగా లేదా ఒక షరతు ప్రకారం.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	వనరు అవసరమైన పని ఒకేసారి ఎన్ని ఎంటిటీలపై పని చేయగలదు: దాని యంత్రాలు, గుమస్తాలు లేదా పడకలు.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	ఎంటిటీలు ఖాళీ యూనిట్ కోసం వేచి ఉండే చోటు (ఒక క్యూ). దీనికి పరిమితి ఉండవచ్చు; ఇది నిండి ఉండటం చూసిన ఎంటిటీ కోల్పోబడుతుంది లేదా ముందటి దశలో వేచి ఉంటుంది.
+	How long a unit takes with one entity, drawn from a distribution each time.	ఒక యూనిట్ ఒక ఎంటిటీకి తీసుకునే సమయం, ప్రతిసారీ ఒక పంపిణీ నుండి తీసుకోబడుతుంది.
+	Distribution	పంపిణీ
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	ఒక సమయం లేదా పరిమాణం ఒక ఎంటిటీ నుండి తదుపరి దానికి ఎలా మారుతుంది: దాని ఆకారం మరియు దాని సగటు.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	సొంత యాదృచ్ఛిక సంఖ్యలతో మోడల్‌ను మొదటి నుండి చివరి వరకు ఒకసారి నడపడం. పాఠ్యపుస్తకాలు దీనిని పునరావృతం అంటాయి.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	ఒకే సెట్టింగ్‌లతో అన్ని అమలులు కలిపి: ఎన్ని అమలులు, యాదృచ్ఛిక బీజం, ప్రారంభ సర్దుబాటు సమయం మరియు కొలిచే సమయం.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	యాదృచ్ఛిక సంఖ్యల ప్రారంభ బిందువు. అదే యాదృచ్ఛిక బీజంతో అదే మోడల్ ఎల్లప్పుడూ అవే ఫలితాలను ఇస్తుంది.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	ప్రతి అమలు ప్రారంభంలో అనుకరించబడే కానీ కొలవబడని సమయం, ఖాళీ మోడల్ నిండుతున్నప్పుడు ఫలితాలను లాగకుండా ఉండేందుకు.
+	The share of the time a task's units are busy, counted over the time they are on shift.	ఒక పని యొక్క యూనిట్‌లు పనిలో ఉండే సమయ వాటా, అవి షిఫ్ట్‌లో ఉన్న సమయంపై లెక్కించబడుతుంది.
+	The average time an entity spends in a waiting room before a unit takes it.	ఒక యూనిట్ తీసుకునే ముందు ఒక ఎంటిటీ వేచి ఉండే గదిలో గడిపే సగటు సమయం.
+	The average number of entities in a waiting room, over the time measured.	కొలిచే సమయంలో వేచి ఉండే గదిలో ఉన్న ఎంటిటీల సగటు సంఖ్య.
+	Time in system	వ్యవస్థలో గడిపిన సమయం
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	ఒక ఎంటిటీ తన రాక నుండి నిష్క్రమణ వరకు, వేచి ఉండటంలోనూ పని జరగడంలోనూ గడిపే సమయం.
+	Blocked	నిరోధితం
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	ఒక యూనిట్ పని పూర్తి చేసింది కానీ తదుపరి వేచి ఉండే గది నిండి ఉన్నందున ఎంటిటీని ముందుకు పంపలేదు.
+	Starved	పని లేదు
+	A unit is free but has no entity to work on.	ఒక యూనిట్ ఖాళీగా ఉంది కానీ పని చేయడానికి ఎంటిటీ లేదు.
+	95% confidence interval	95% విశ్వసనీయత అంతరం
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	సగటు తర్వాత ±గా రాయబడుతుంది: నిజమైన సగటు చూపిన దాని నుండి ఎంత దూరంలో ఉండే అవకాశం ఉంది. ఎక్కువ అమలులు దీనిని ఇరుకుగా చేస్తాయి.
+	Settled	స్థిరపడింది
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	చర్య తీసుకునేంత బాగా తెలిసిన ఫలితం: దాని సగటులో ± 5% వరకు, లేదా నిష్పత్తికి ± 1 శాతం పాయింట్ వరకు.
+	Results kept to compare a later run with, to see what a change to the model did.	తర్వాతి అమలుతో పోల్చడానికి ఉంచిన ఫలితాలు, మోడల్‌లో మార్పు ఏమి చేసిందో చూడటానికి.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	95% అంతరం సున్నాను కలిగి ఉండే తేడా: అమలులు దానిని యాదృచ్ఛిక వైవిధ్యం నుండి వేరు చేయలేవు.
+	Add Arrivals	రాకలను జోడించు
+	Add a task and connect Arrivals to it	ఒక పనిని జోడించి రాకలను దానికి కలుపు
+	Add Departures and connect the task to it	నిష్క్రమణలను జోడించి పనిని దానికి కలుపు
+	Run the model: press F5	మోడల్‌ను అమలు చేయి: F5 నొక్కు
+	Read what the run found	అమలులో ఏమి కనుగొనబడిందో చదువు
+	Close Help (F1)	సహాయం మూసివేయి (F1)
+	Search help and terms	సహాయం మరియు పదాలను వెతుకు
+	Getting started	ప్రారంభించడం
+	{k} of {n} done	{n}లో {k} పూర్తయ్యాయి
+	Glossary	పదకోశం
+	No term matches “{text}”.	“{text}”కు సరిపోలే పదం లేదు.
+	Keyboard shortcuts	కీబోర్డ్ షార్ట్‌కట్‌లు
+	Change keys	కీలను మార్చు
+	More help	మరింత సహాయం
+	User guide	వినియోగదారు గైడ్
+	What the results mean	ఫలితాల అర్థం
+	Report a problem	సమస్యను నివేదించు
+	These open in your web browser.	ఇవి మీ వెబ్ బ్రౌజర్‌లో తెరుచుకుంటాయి.
+	Space	స్పేస్
+	Play or pause a watched run	గమనిస్తున్న అమలును ప్లే చేయి లేదా విరామం ఇవ్వు
+	Getting Started	ప్రారంభించడం
+	What the Results Mean	ఫలితాల అర్థం
+	User Guide	వినియోగదారు గైడ్
+	Report a Problem	సమస్యను నివేదించు
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి

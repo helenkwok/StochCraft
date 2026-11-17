@@ -761,6 +761,63 @@ unit	yr	j
 	off	uit
 	Changed since the baseline:	Gewijzigd sinds de referentie:
 	Nothing in the model has changed since the baseline.	Er is niets in het model gewijzigd sinds de referentie.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Eén stap van het proces op het hoofdvlak: waar entiteiten aankomen, wachten, bewerkt worden, worden doorgestuurd of vertrekken.
+	Entity	Entiteit
+	What flows through the blocks: a part, a patient, a call, an order.	Wat door de blokken stroomt: een onderdeel, een patiënt, een oproep, een bestelling.
+	The block where entities enter the model, with the time between one arrival and the next.	Het blok waar entiteiten het model binnenkomen, met de tijd tussen de ene aankomst en de volgende.
+	A step that takes time, with no limit on how many entities it works on at once.	Een stap die tijd kost, zonder grens aan het aantal entiteiten dat tegelijk wordt bewerkt.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Een stap die wordt uitgevoerd door een beperkt aantal eenheden, zoals machines of baliemedewerkers. Entiteiten wachten in de wachtruimte tot er een eenheid vrij is.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Een stap die eenheden leent uit een pool die meerdere taken delen, zoals een team verpleegkundigen.
+	The block where entities leave the model; it counts them and their time in the system.	Het blok waar entiteiten het model verlaten; het telt ze en hun tijd in het systeem.
+	Sends each entity down one of its ways out, by chance or by a condition.	Stuurt elke entiteit naar een van de uitgangen, volgens de kansen of een voorwaarde.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Hoeveel entiteiten een taak met een hulpbron tegelijk kan bewerken: de machines, baliemedewerkers of bedden.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Waar entiteiten wachten op een vrije eenheid (een wachtrij). Er kan een grens zijn; een entiteit die de wachtruimte vol aantreft, gaat verloren of wacht stroomopwaarts.
+	How long a unit takes with one entity, drawn from a distribution each time.	Hoe lang een eenheid over één entiteit doet, telkens getrokken uit een verdeling.
+	Distribution	Verdeling
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Hoe een tijd of een hoeveelheid varieert van de ene entiteit tot de volgende: de vorm en het gemiddelde.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Eén doorloop van het model van begin tot eind met eigen toevalsgetallen. In handboeken heet dit een replicatie.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Alle uitvoeringen samen, met dezelfde instellingen: het aantal uitvoeringen, de startwaarde, de opwarmperiode en de gemeten tijd.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Het beginpunt van de toevalsgetallen. Hetzelfde model met dezelfde startwaarde geeft altijd dezelfde resultaten.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Tijd aan het begin van elke uitvoering die wel gesimuleerd maar niet gemeten wordt, zodat een leeg model dat zich vult de resultaten niet vertekent.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Het deel van de tijd dat de eenheden van een taak bezet zijn, gerekend over hun werktijd.
+	The average time an entity spends in a waiting room before a unit takes it.	De gemiddelde tijd die een entiteit in een wachtruimte doorbrengt voordat een eenheid haar oppakt.
+	The average number of entities in a waiting room, over the time measured.	Het gemiddelde aantal entiteiten in een wachtruimte, over de gemeten tijd.
+	Time in system	Tijd in het systeem
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Hoe lang een entiteit van aankomst tot vertrek in het systeem is, wachtend en in bewerking.
+	Blocked	Geblokkeerd
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Een eenheid is klaar maar kan de entiteit niet doorgeven, omdat de volgende wachtruimte vol is.
+	Starved	Zonder werk
+	A unit is free but has no entity to work on.	Een eenheid is vrij maar heeft geen entiteit om te bewerken.
+	95% confidence interval	95%-betrouwbaarheidsinterval
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Geschreven als ± na een gemiddelde: hoe ver het ware gemiddelde redelijkerwijs van het getoonde kan liggen. Meer uitvoeringen maken het smaller.
+	Settled	Stabiel
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Een resultaat dat goed genoeg bekend is om op te handelen: tot op ± 5% van het gemiddelde, of ± 1 procentpunt voor een aandeel.
+	Results kept to compare a later run with, to see what a change to the model did.	Resultaten die worden bewaard om een latere uitvoering mee te vergelijken, om te zien wat een wijziging in het model deed.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Een verschil waarvan het 95%-interval nul omvat: de uitvoeringen kunnen het niet onderscheiden van toevallige variatie.
+	Add Arrivals	Aankomsten toevoegen
+	Add a task and connect Arrivals to it	Een taak toevoegen en Aankomsten ermee verbinden
+	Add Departures and connect the task to it	Vertrekken toevoegen en de taak ermee verbinden
+	Run the model: press F5	Het model uitvoeren: druk op F5
+	Read what the run found	Lees wat de uitvoering heeft gevonden
+	Close Help (F1)	Help sluiten (F1)
+	Search help and terms	Zoeken in help en termen
+	Getting started	Aan de slag
+	{k} of {n} done	{k} van {n} klaar
+	Glossary	Woordenlijst
+	No term matches “{text}”.	Geen term komt overeen met ‘{text}’.
+	Keyboard shortcuts	Sneltoetsen
+	Change keys	Toetsen wijzigen
+	More help	Meer hulp
+	User guide	Gebruikershandleiding
+	What the results mean	Wat de resultaten betekenen
+	Report a problem	Een probleem melden
+	These open in your web browser.	Deze worden geopend in je webbrowser.
+	Space	Spatiebalk
+	Play or pause a watched run	Een gevolgde uitvoering afspelen of pauzeren
+	Getting Started	Aan de slag
+	What the Results Mean	Wat de resultaten betekenen
+	User Guide	Gebruikershandleiding
+	Report a Problem	Een probleem melden
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid

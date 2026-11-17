@@ -761,6 +761,63 @@ unit	yr	år
 	off	av
 	Changed since the baseline:	Endret siden referansen:
 	Nothing in the model has changed since the baseline.	Ingenting i modellen er endret siden referansen.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Ett trinn i prosessen på hovedflaten: der enheter ankommer, venter, blir bearbeidet, sendes videre eller forlater modellen.
+	Entity	Enhet
+	What flows through the blocks: a part, a patient, a call, an order.	Det som strømmer gjennom blokkene: en del, en pasient, en samtale, en ordre.
+	The block where entities enter the model, with the time between one arrival and the next.	Blokken der enheter kommer inn i modellen, med tiden fra én ankomst til den neste.
+	A step that takes time, with no limit on how many entities it works on at once.	Et trinn som tar tid, uten grense for hvor mange enheter det bearbeider samtidig.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Et trinn som utføres av et begrenset antall ressursenheter, for eksempel maskiner eller saksbehandlere. Enheter venter i venterommet til en ressursenhet er ledig.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Et trinn som låner ressursenheter fra en pulje som flere oppgaver deler, for eksempel et team av sykepleiere.
+	The block where entities leave the model; it counts them and their time in the system.	Blokken der enheter forlater modellen; den teller dem og tiden deres i systemet.
+	Sends each entity down one of its ways out, by chance or by a condition.	Sender hver enhet ut én av sine veier ut, tilfeldig eller etter en betingelse.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Hvor mange enheter en oppgave med ressurs kan bearbeide samtidig: maskinene, saksbehandlerne eller sengene.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Der enheter venter på en ledig ressursenhet (en kø). Det kan ha en grense; en enhet som finner det fullt, går tapt eller venter før oppgaven.
+	How long a unit takes with one entity, drawn from a distribution each time.	Hvor lang tid en ressursenhet bruker på én enhet, trukket fra en fordeling hver gang.
+	Distribution	Fordeling
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Hvordan en tid eller en mengde varierer fra én enhet til den neste: formen og gjennomsnittet.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Ett gjennomløp av modellen fra start til slutt med egne tilfeldige tall. Lærebøker kaller det en replikasjon.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Alle kjøringene samlet, med de samme innstillingene: antall kjøringer, tilfeldighetsfrøet, oppvarmingen og den målte tiden.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Utgangspunktet for de tilfeldige tallene. Samme modell med samme tilfeldighetsfrø gir alltid de samme resultatene.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Tid i starten av hver kjøring som simuleres, men ikke måles, slik at en tom modell som fylles opp, ikke trekker resultatene skjevt.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Andelen av tiden en oppgaves ressursenheter er opptatt, regnet over tiden de er på skift.
+	The average time an entity spends in a waiting room before a unit takes it.	Den gjennomsnittlige tiden en enhet tilbringer i et venterom før en ressursenhet tar den.
+	The average number of entities in a waiting room, over the time measured.	Det gjennomsnittlige antallet enheter i et venterom over den målte tiden.
+	Time in system	Tid i systemet
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Hvor lenge en enhet er i systemet fra ankomst til avgang, ventende og under bearbeiding.
+	Blocked	Blokkert
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	En ressursenhet er ferdig, men kan ikke sende enheten videre fordi neste venterom er fullt.
+	Starved	Uten arbeid
+	A unit is free but has no entity to work on.	En ressursenhet er ledig, men har ingen enhet å arbeide på.
+	95% confidence interval	95 %-konfidensintervall
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Skrives ± etter et gjennomsnitt: hvor langt det sanne gjennomsnittet rimelig kan ligge fra det viste. Flere kjøringer gjør det smalere.
+	Settled	Stabil
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Et resultat som er kjent godt nok til å handle på: med ± 5% av gjennomsnittet, eller ± 1 prosentpoeng for en andel.
+	Results kept to compare a later run with, to see what a change to the model did.	Resultater som lagres for å sammenligne en senere kjøring med, for å se hva en endring i modellen gjorde.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	En differanse der 95 %-intervallet omfatter null: kjøringene kan ikke skille den fra tilfeldig variasjon.
+	Add Arrivals	Legg til Ankomster
+	Add a task and connect Arrivals to it	Legg til en oppgave og koble Ankomster til den
+	Add Departures and connect the task to it	Legg til Avganger og koble oppgaven til den
+	Run the model: press F5	Kjør modellen: trykk F5
+	Read what the run found	Les hva kjøringen fant
+	Close Help (F1)	Lukk Hjelp (F1)
+	Search help and terms	Søk i hjelp og begreper
+	Getting started	Kom i gang
+	{k} of {n} done	{k} av {n} gjort
+	Glossary	Ordliste
+	No term matches “{text}”.	Ingen begreper samsvarer med «{text}».
+	Keyboard shortcuts	Hurtigtaster
+	Change keys	Endre taster
+	More help	Mer hjelp
+	User guide	Brukerveiledning
+	What the results mean	Hva resultatene betyr
+	Report a problem	Rapporter et problem
+	These open in your web browser.	Disse åpnes i nettleseren din.
+	Space	Mellomrom
+	Play or pause a watched run	Spill av eller sett en fulgt kjøring på pause
+	Getting Started	Kom i gang
+	What the Results Mean	Hva resultatene betyr
+	User Guide	Brukerveiledning
+	Report a Problem	Rapporter et problem
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
 @plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført

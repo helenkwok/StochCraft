@@ -761,6 +761,63 @@ unit	yr	m.
 	off	išjungta
 	Changed since the baseline:	Pakeista nuo atskaitos taško:
 	Nothing in the model has changed since the baseline.	Nuo atskaitos taško modelyje niekas nepasikeitė.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Vienas proceso žingsnis pagrindiniame paviršiuje: kur objektai atvyksta, laukia, yra apdorojami, nukreipiami arba išvyksta.
+	Entity	Objektas
+	What flows through the blocks: a part, a patient, a call, an order.	Tai, kas teka per blokus: detalė, pacientas, skambutis, užsakymas.
+	The block where entities enter the model, with the time between one arrival and the next.	Blokas, kuriame objektai patenka į modelį, su laiku tarp vieno atvykimo ir kito.
+	A step that takes time, with no limit on how many entities it works on at once.	Laiko užimantis žingsnis be apribojimo, kiek objektų jis apdoroja vienu metu.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Žingsnis, kurį atlieka ribotas vienetų skaičius, pvz., mašinos ar tarnautojai. Objektai laukia jo laukiamajame, kol atsilaisvina vienetas.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Žingsnis, kuris skolinasi vienetus iš grupės, kurią bendrai naudoja kelios užduotys, pvz., slaugytojų komandos.
+	The block where entities leave the model; it counts them and their time in the system.	Blokas, kuriame objektai palieka modelį; jis juos suskaičiuoja ir jų laiką sistemoje.
+	Sends each entity down one of its ways out, by chance or by a condition.	Nukreipia kiekvieną objektą vienu iš savo išėjimų – atsitiktinai arba pagal sąlygą.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Kiek objektų užduotis su ištekliumi gali apdoroti vienu metu: jos mašinos, tarnautojai ar lovos.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Vieta, kur objektai laukia laisvo vieneto (eilė). Ji gali turėti ribą; ją pilną radęs objektas prarandamas arba laukia prieš užduotį.
+	How long a unit takes with one entity, drawn from a distribution each time.	Kiek laiko vienetas užtrunka su vienu objektu; kaskart traukiama iš skirstinio.
+	Distribution	Skirstinys
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Kaip laikas ar kiekis kinta nuo vieno objekto iki kito: jo forma ir vidurkis.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Vienas modelio perėjimas nuo pradžios iki pabaigos su savais atsitiktiniais skaičiais. Vadovėliuose tai vadinama replikacija.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Visi vykdymai kartu su tais pačiais nustatymais: vykdymų skaičius, atsitiktinių skaičių sėkla, įšilimo laikotarpis ir matuojamas laikas.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Atsitiktinių skaičių pradžios taškas. Tas pats modelis su ta pačia sėkla visada duoda tuos pačius rezultatus.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Laikas kiekvieno vykdymo pradžioje, kuris modeliuojamas, bet nematuojamas, kad tuščias ir besipildantis modelis neiškreiptų rezultatų.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Laiko dalis, kai užduoties vienetai užimti, skaičiuojant laiką, kai jie yra pamainoje.
+	The average time an entity spends in a waiting room before a unit takes it.	Vidutinis laikas, kurį objektas praleidžia laukiamajame, kol jį paima vienetas.
+	The average number of entities in a waiting room, over the time measured.	Vidutinis objektų skaičius laukiamajame per matuojamą laiką.
+	Time in system	Laikas sistemoje
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Kiek laiko objektas praleidžia nuo atvykimo iki išvykimo, laukdamas ir apdorojamas.
+	Blocked	Blokuotas
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Vienetas baigė darbą, bet negali perduoti objekto toliau, nes kitas laukiamasis pilnas.
+	Starved	Be darbo
+	A unit is free but has no entity to work on.	Vienetas laisvas, bet neturi objekto, kurį galėtų apdoroti.
+	95% confidence interval	95% pasikliautinasis intervalas
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Rašomas ± po vidurkio: kiek tikrasis vidurkis tikėtinai gali skirtis nuo parodyto. Daugiau vykdymų jį susiaurina.
+	Settled	Nusistovėjęs
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Rezultatas, žinomas pakankamai gerai, kad pagal jį būtų galima veikti: ± 5% vidurkio tikslumu arba daliai ± 1 procentinio punkto tikslumu.
+	Results kept to compare a later run with, to see what a change to the model did.	Rezultatai, išsaugoti vėlesniam vykdymui palyginti, kad matytumėte, ką padarė modelio pakeitimas.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Skirtumas, kurio 95% intervalas apima nulį: vykdymai negali jo atskirti nuo atsitiktinės variacijos.
+	Add Arrivals	Pridėti Atvykimus
+	Add a task and connect Arrivals to it	Pridėti užduotį ir prijungti prie jos Atvykimus
+	Add Departures and connect the task to it	Pridėti Išvykimus ir prijungti prie jų užduotį
+	Run the model: press F5	Vykdyti modelį: paspauskite F5
+	Read what the run found	Perskaityti, ką rado vykdymas
+	Close Help (F1)	Užverti žinyną (F1)
+	Search help and terms	Ieškoti žinyne ir terminuose
+	Getting started	Pradžia
+	{k} of {n} done	Atlikta {k} iš {n}
+	Glossary	Terminų žodynas
+	No term matches “{text}”.	Joks terminas neatitinka „{text}“.
+	Keyboard shortcuts	Spartieji klavišai
+	Change keys	Keisti klavišus
+	More help	Daugiau pagalbos
+	User guide	Naudotojo vadovas
+	What the results mean	Ką reiškia rezultatai
+	Report a problem	Pranešti apie problemą
+	These open in your web browser.	Jie atsidaro jūsų žiniatinklio naršyklėje.
+	Space	Tarpo klavišas
+	Play or pause a watched run	Leisti arba pristabdyti stebimą vykdymą
+	Getting Started	Pradžia
+	What the Results Mean	Ką reiškia rezultatai
+	User Guide	Naudotojo vadovas
+	Report a Problem	Pranešti apie problemą
 @plural	Added {n} block|Added {n} blocks	Pridėtas {n} blokas|Pridėti {n} blokai|Pridėta {n} blokų
 @plural	Copied {n} block|Copied {n} blocks	Nukopijuotas {n} blokas|Nukopijuoti {n} blokai|Nukopijuota {n} blokų
 @plural	Finished {n} run|Finished {n} runs	Baigtas {n} vykdymas|Baigti {n} vykdymai|Baigta {n} vykdymų

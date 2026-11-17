@@ -761,6 +761,63 @@ unit	yr	ปี
 	off	ปิด
 	Changed since the baseline:	เปลี่ยนแปลงตั้งแต่เส้นฐาน:
 	Nothing in the model has changed since the baseline.	ไม่มีสิ่งใดในแบบจำลองเปลี่ยนแปลงตั้งแต่เส้นฐาน
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	ขั้นตอนหนึ่งของกระบวนการบนผืนผ้าใบ: ที่ที่เอนทิตีเข้ามา รอ ได้รับการทำงาน ถูกส่งต่อ หรือออกไป
+	Entity	เอนทิตี
+	What flows through the blocks: a part, a patient, a call, an order.	สิ่งที่ไหลผ่านบล็อก: ชิ้นงาน ผู้ป่วย สายโทร หรือคำสั่งซื้อ
+	The block where entities enter the model, with the time between one arrival and the next.	บล็อกที่เอนทิตีเข้าสู่แบบจำลอง พร้อมเวลาระหว่างการมาถึงครั้งหนึ่งกับครั้งถัดไป
+	A step that takes time, with no limit on how many entities it works on at once.	ขั้นตอนที่ใช้เวลา โดยไม่จำกัดจำนวนเอนทิตีที่ทำงานพร้อมกัน
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	ขั้นตอนที่ทำโดยหน่วยจำนวนจำกัด เช่น เครื่องจักรหรือเสมียน เอนทิตีจะรอในพื้นที่รอของขั้นตอนนี้จนกว่าจะมีหน่วยว่าง
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	ขั้นตอนที่ยืมหน่วยจากกลุ่มทรัพยากรที่หลายงานใช้ร่วมกัน เช่น ทีมพยาบาล
+	The block where entities leave the model; it counts them and their time in the system.	บล็อกที่เอนทิตีออกจากแบบจำลอง โดยนับจำนวนเอนทิตีและเวลาในระบบของเอนทิตี
+	Sends each entity down one of its ways out, by chance or by a condition.	ส่งแต่ละเอนทิตีไปทางออกทางใดทางหนึ่ง โดยสุ่มหรือตามเงื่อนไข
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	จำนวนเอนทิตีที่งานที่ใช้ทรัพยากรทำงานได้พร้อมกัน: เครื่องจักร เสมียน หรือเตียงของงานนั้น
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	ที่ที่เอนทิตีรอหน่วยว่าง (คิว) อาจมีขีดจำกัดได้ เอนทิตีที่พบว่าเต็มจะสูญเสียหรือรออยู่ที่ขั้นตอนก่อนหน้า
+	How long a unit takes with one entity, drawn from a distribution each time.	เวลาที่หน่วยหนึ่งใช้กับเอนทิตีหนึ่ง สุ่มจากการแจกแจงทุกครั้ง
+	Distribution	การแจกแจง
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	เวลาหรือปริมาณเปลี่ยนแปลงอย่างไรจากเอนทิตีหนึ่งไปยังเอนทิตีถัดไป: รูปร่างและค่าเฉลี่ยของมัน
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	การรันแบบจำลองหนึ่งรอบตั้งแต่ต้นจนจบด้วยเลขสุ่มของตัวเอง ตำราเรียกว่าการทำซ้ำ
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	การรันทั้งหมดรวมกันด้วยการตั้งค่าเดียวกัน: จำนวนการรัน เมล็ดสุ่ม ระยะอุ่นเครื่อง และเวลาที่วัด
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	จุดเริ่มต้นของเลขสุ่ม แบบจำลองเดียวกันกับเมล็ดสุ่มเดียวกันให้ผลเหมือนกันเสมอ
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	เวลาช่วงต้นของแต่ละการรันที่จำลองแต่ไม่วัดผล เพื่อไม่ให้แบบจำลองว่างที่กำลังเติมเต็มดึงผลลัพธ์
+	The share of the time a task's units are busy, counted over the time they are on shift.	สัดส่วนเวลาที่หน่วยของงานไม่ว่าง นับจากเวลาที่หน่วยอยู่ในกะ
+	The average time an entity spends in a waiting room before a unit takes it.	เวลาเฉลี่ยที่เอนทิตีใช้ในพื้นที่รอก่อนที่หน่วยจะรับไป
+	The average number of entities in a waiting room, over the time measured.	จำนวนเอนทิตีเฉลี่ยในพื้นที่รอ ตลอดเวลาที่วัด
+	Time in system	เวลาในระบบ
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	เวลาที่เอนทิตีใช้ตั้งแต่มาถึงจนออกไป ทั้งการรอและการได้รับการทำงาน
+	Blocked	ถูกบล็อก
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	หน่วยทำงานเสร็จแล้วแต่ส่งเอนทิตีต่อไม่ได้ เพราะพื้นที่รอถัดไปเต็ม
+	Starved	ไม่มีงาน
+	A unit is free but has no entity to work on.	หน่วยว่างแต่ไม่มีเอนทิตีให้ทำงาน
+	95% confidence interval	ช่วงความเชื่อมั่น 95%
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	เขียนเป็น ± หลังค่าเฉลี่ย: ค่าเฉลี่ยจริงอาจห่างจากค่าที่แสดงได้มากเพียงใด การรันมากขึ้นทำให้ช่วงแคบลง
+	Settled	คงที่
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	ผลที่รู้ได้ดีพอจะนำไปใช้ตัดสินใจ: ภายใน ± 5% ของค่าเฉลี่ย หรือ ± 1 จุดร้อยละสำหรับสัดส่วน
+	Results kept to compare a later run with, to see what a change to the model did.	ผลที่เก็บไว้เทียบกับการรันครั้งถัดไป เพื่อดูว่าการเปลี่ยนแปลงแบบจำลองให้ผลอย่างไร
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	ผลต่างที่ช่วง 95% ครอบคลุมศูนย์: การรันแยกผลต่างนี้ออกจากความแปรผันสุ่มไม่ได้
+	Add Arrivals	เพิ่มขาเข้า
+	Add a task and connect Arrivals to it	เพิ่มงานและเชื่อมขาเข้าไปยังงานนั้น
+	Add Departures and connect the task to it	เพิ่มขาออกและเชื่อมงานไปยังขาออกนั้น
+	Run the model: press F5	รันแบบจำลอง: กด F5
+	Read what the run found	อ่านสิ่งที่การรันพบ
+	Close Help (F1)	ปิดวิธีใช้ (F1)
+	Search help and terms	ค้นหาวิธีใช้และคำศัพท์
+	Getting started	เริ่มต้นใช้งาน
+	{k} of {n} done	เสร็จ {k} จาก {n}
+	Glossary	อภิธานศัพท์
+	No term matches “{text}”.	ไม่มีคำศัพท์ที่ตรงกับ “{text}”
+	Keyboard shortcuts	ปุ่มลัด
+	Change keys	เปลี่ยนปุ่ม
+	More help	วิธีใช้เพิ่มเติม
+	User guide	คู่มือผู้ใช้
+	What the results mean	ความหมายของผลลัพธ์
+	Report a problem	รายงานปัญหา
+	These open in your web browser.	ลิงก์เหล่านี้เปิดในเว็บเบราว์เซอร์ของคุณ
+	Space	สเปซบาร์
+	Play or pause a watched run	เล่นหรือหยุดชั่วคราวการรันที่เฝ้าดู
+	Getting Started	เริ่มต้นใช้งาน
+	What the Results Mean	ความหมายของผลลัพธ์
+	User Guide	คู่มือผู้ใช้
+	Report a Problem	รายงานปัญหา
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ

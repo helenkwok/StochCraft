@@ -660,6 +660,16 @@ engine's messages (validation, file notes) are English too.
   drafted the same way, with each catalog's words for block, pool and model; "Connected {from} to
   {to}" already had a row and was reused. Not checked against a source, and not reviewed by
   native speakers.
+- The rows for the Help panel (issue #149, fifty-seven strings: its glossary of twenty-six terms
+  with their definitions, the five Getting started steps, the panel's labels and the Help menu's
+  items) were drafted from the plain meaning of the English. Each glossary term takes the
+  catalog's own wording for the label it explains (Block, Units, Waiting room, Warm-up,
+  Utilisation…), and every definition uses the catalog's existing word for entity (de "Entität",
+  fr "entité", ja "エンティティ", zh-hans "实体"). Where that word also means a resource unit (da,
+  nb, pl, hi, ka) the definitions say "resource unit" for the unit. Blocked, Starved and Settled
+  are cut down from the catalog's "Time blocked", "Time starved" and "…are settled". Not checked
+  against a source, and not reviewed by native speakers; the least certain are lo and ka, then
+  th, ta, te, bn, kk, sq, sr and sr-latn.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

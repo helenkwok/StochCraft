@@ -272,6 +272,62 @@ fn a_baseline_is_compared_with_the_next_run() {
 }
 
 #[test]
+fn help_opens_beside_the_work_and_follows_the_model() {
+    let mut h = harness(Platform::DESKTOP);
+    // F1 opens it; nothing is done yet.
+    h.key_press(egui::Key::F1);
+    settle(&mut h);
+    assert!(h.state().help_open());
+    h.get_by_label("Getting started");
+    h.get_by_label("0 of 5 done");
+    h.get_by_label("Glossary");
+    h.get_by_label("Utilisation");
+
+    // An example with arrivals, a connected task and departures: three steps done; a run, four;
+    // its results read, five.
+    menu(&mut h, &["File", "Open Example", "M/M/1 queue"]);
+    h.get_by_label("3 of 5 done");
+    menu(&mut h, &["Model", "Run"]);
+    finish_run(&mut h);
+    h.get_by_label("5 of 5 done");
+
+    // Search narrows the glossary to the matching terms.
+    let search = h.get_by_role(egui::accesskit::Role::TextInput);
+    search.click();
+    settle(&mut h);
+    h.get_by_role(egui::accesskit::Role::TextInput)
+        .type_text("random");
+    settle(&mut h);
+    h.get_by_label_contains("The starting point of the random numbers");
+    assert!(
+        h.query_by_label_contains("a task's units are busy")
+            .is_none()
+    );
+    assert!(h.query_by_label("Getting started").is_none());
+    // A section chosen from the menu clears the search, so it shows.
+    menu(&mut h, &["Help", "Getting Started"]);
+    h.get_by_label("Getting started");
+
+    // The guide opens in the browser.
+    h.state_mut().take_requests();
+    menu(&mut h, &["Help", "User Guide"]);
+    let requests = h.state_mut().take_requests();
+    assert!(
+        matches!(requests.as_slice(), [Request::OpenUrl { url }] if url.ends_with("docs/user-guide.md")),
+        "{requests:?}"
+    );
+
+    // F1 again, or the close button, closes it.
+    h.key_press(egui::Key::F1);
+    settle(&mut h);
+    assert!(!h.state().help_open());
+    menu(&mut h, &["Help", "Glossary"]);
+    assert!(h.state().help_open());
+    click(&mut h, "\u{00d7}");
+    assert!(!h.state().help_open());
+}
+
+#[test]
 fn unsaved_changes_are_asked_about_before_they_are_lost() {
     let mut h = harness(Platform::DESKTOP);
     h.state_mut()

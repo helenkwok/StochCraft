@@ -43,6 +43,12 @@ pub const EDIT_THEMES: &str = "view.edit_themes";
 pub const EDIT_CHART_COLOURS: &str = "view.edit_chart_colours";
 pub const LANGUAGE: &str = "view.language";
 pub const ABOUT: &str = "help.about";
+pub const HELP: &str = "help.panel";
+pub const GETTING_STARTED: &str = "help.getting_started";
+pub const GLOSSARY: &str = "help.glossary";
+pub const RESULTS_HELP: &str = "help.results";
+pub const USER_GUIDE: &str = "help.user_guide";
+pub const REPORT: &str = "help.report";
 pub const SHORTCUTS: &str = "app.keyboard_shortcuts";
 
 /// The commands that can have shortcuts, with their defaults (`Cmd` is Ctrl outside macOS).
@@ -75,6 +81,7 @@ fn catalog() -> Vec<Bindable> {
         b(CANCEL_RUN, "Cancel Run", &["Model"], &[]),
         b(WATCH, "Watch a Run", &["Model"], &[]),
         b(STOP_WATCHING, "Stop Watching", &["Model"], &[]),
+        b(HELP, "Help", &["Help"], &["F1"]),
         b(ABOUT, "About StochCraft", &["Help"], &[]),
     ]
 }
@@ -259,9 +266,18 @@ impl App {
         );
         let help = Menu::new(
             t("Help"),
-            vec![Node::Item(
-                Item::new(ABOUT, t("About StochCraft")).role(ItemRole::About),
-            )],
+            vec![
+                item(HELP, "Help"),
+                item(GETTING_STARTED, "Getting Started"),
+                item(GLOSSARY, "Glossary"),
+                item(RESULTS_HELP, "What the Results Mean"),
+                item(SHORTCUTS, "Keyboard Shortcuts…"),
+                Node::Separator,
+                item(USER_GUIDE, "User Guide"),
+                item(REPORT, "Report a Problem"),
+                Node::Separator,
+                Node::Item(Item::new(ABOUT, t("About StochCraft")).role(ItemRole::About)),
+            ],
         )
         .role(MenuRole::Help);
 
@@ -377,6 +393,12 @@ impl App {
             }
             ABOUT => self.about = true,
             SHORTCUTS => self.open_shortcuts(),
+            HELP => self.help.open = !self.help.open,
+            GETTING_STARTED => self.show_help_at(crate::help::Section::GettingStarted),
+            GLOSSARY => self.show_help_at(crate::help::Section::Glossary),
+            RESULTS_HELP => self.open_url(crate::help::RESULTS_GUIDE),
+            USER_GUIDE => self.open_url(crate::help::USER_GUIDE),
+            REPORT => self.open_url(crate::help::REPORT),
             _ => {}
         }
     }

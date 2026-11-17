@@ -761,6 +761,63 @@ unit	yr	a
 	off	desactivado
 	Changed since the baseline:	Cambios desde a referencia:
 	Nothing in the model has changed since the baseline.	Nada cambiou no modelo desde a referencia.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Un paso do proceso no lenzo: onde as entidades chegan, agardan, se procesan, se encamiñan ou saen.
+	Entity	Entidade
+	What flows through the blocks: a part, a patient, a call, an order.	O que flúe polos bloques: unha peza, un paciente, unha chamada, un pedido.
+	The block where entities enter the model, with the time between one arrival and the next.	O bloque polo que as entidades entran no modelo, co tempo entre unha chegada e a seguinte.
+	A step that takes time, with no limit on how many entities it works on at once.	Un paso que leva tempo, sen límite de cantas entidades procesa á vez.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Un paso feito por un número limitado de unidades, como máquinas ou empregados. As entidades agardan na súa sala de espera ata que unha unidade queda libre.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Un paso que toma prestadas unidades dun grupo que comparten varias tarefas, como un equipo de enfermeiras.
+	The block where entities leave the model; it counts them and their time in the system.	O bloque polo que as entidades saen do modelo; cóntaas xunto co seu tempo no sistema.
+	Sends each entity down one of its ways out, by chance or by a condition.	Envía cada entidade por unha das súas saídas, ao chou ou segundo unha condición.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Cantas entidades pode procesar á vez unha tarefa con recurso: as súas máquinas, empregados ou camas.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Onde as entidades agardan por unha unidade libre (unha cola). Pode ter un límite; unha entidade que a atopa chea pérdese ou agarda antes.
+	How long a unit takes with one entity, drawn from a distribution each time.	Canto tarda unha unidade cunha entidade, tirado dunha distribución cada vez.
+	Distribution	Distribución
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Como varía un tempo ou unha cantidade dunha entidade á seguinte: a súa forma e a súa media.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Unha pasada do modelo de principio a fin cos seus propios números aleatorios. Os manuais chámanlle réplica.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Todas as execucións xuntas, coa mesma configuración: cantas execucións, a semente, o quecemento e o tempo medido.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	O punto de partida dos números aleatorios. O mesmo modelo coa mesma semente dá sempre os mesmos resultados.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Tempo ao comezo de cada execución que se simula pero non se mide, para que un modelo baleiro que se vai enchendo non arrastre os resultados.
+	The share of the time a task's units are busy, counted over the time they are on shift.	A proporción do tempo en que as unidades dunha tarefa están ocupadas, contada sobre o tempo en que están de quenda.
+	The average time an entity spends in a waiting room before a unit takes it.	O tempo medio que unha entidade pasa nunha sala de espera antes de que unha unidade a tome.
+	The average number of entities in a waiting room, over the time measured.	O número medio de entidades nunha sala de espera, durante o tempo medido.
+	Time in system	Tempo no sistema
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Canto tempo pasa unha entidade desde a súa chegada ata a súa saída, agardando e sendo procesada.
+	Blocked	Bloqueado
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Unha unidade rematou pero non pode pasar a entidade, porque a seguinte sala de espera está chea.
+	Starved	Sen traballo
+	A unit is free but has no entity to work on.	Unha unidade está libre pero non ten ningunha entidade que procesar.
+	95% confidence interval	Intervalo de confianza do 95 %
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Escríbese ± despois dunha media: canto podería afastarse razoablemente a media real da que se mostra. Máis execucións estréitano.
+	Settled	Estable
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Un resultado coñecido o bastante ben para actuar: con ± 5% da súa media, ou ± 1 punto nunha proporción.
+	Results kept to compare a later run with, to see what a change to the model did.	Resultados gardados para comparalos cunha execución posterior e ver que fixo un cambio no modelo.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Unha diferenza cuxo intervalo do 95 % inclúe o cero: as execucións non a poden distinguir da variación aleatoria.
+	Add Arrivals	Engadir Chegadas
+	Add a task and connect Arrivals to it	Engadir unha tarefa e conectarlle Chegadas
+	Add Departures and connect the task to it	Engadir Saídas e conectarlles a tarefa
+	Run the model: press F5	Executar o modelo: prema F5
+	Read what the run found	Ler o que atopou a execución
+	Close Help (F1)	Pechar a axuda (F1)
+	Search help and terms	Buscar na axuda e nos termos
+	Getting started	Primeiros pasos
+	{k} of {n} done	{k} de {n} feitos
+	Glossary	Glosario
+	No term matches “{text}”.	Ningún termo coincide con «{text}».
+	Keyboard shortcuts	Atallos de teclado
+	Change keys	Cambiar teclas
+	More help	Máis axuda
+	User guide	Guía do usuario
+	What the results mean	Que significan os resultados
+	Report a problem	Informar dun problema
+	These open in your web browser.	Ábrense no seu navegador web.
+	Space	Espazo
+	Play or pause a watched run	Reproducir ou pausar unha execución observada
+	Getting Started	Primeiros pasos
+	What the Results Mean	Que significan os resultados
+	User Guide	Guía do usuario
+	Report a Problem	Informar dun problema
 @plural	Added {n} block|Added {n} blocks	Engadiuse {n} bloque|Engadíronse {n} bloques
 @plural	Copied {n} block|Copied {n} blocks	Copiouse {n} bloque|Copiáronse {n} bloques
 @plural	Finished {n} run|Finished {n} runs	Rematou {n} execución|Remataron {n} execucións

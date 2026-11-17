@@ -761,6 +761,63 @@ unit	yr	v
 	off	pois
 	Changed since the baseline:	Muuttunut vertailukohdan jälkeen:
 	Nothing in the model has changed since the baseline.	Mallissa ei ole muuttunut mitään vertailukohdan jälkeen.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Prosessin yksi vaihe pääpinnalla: missä entiteetit saapuvat, odottavat, käsitellään, ohjataan eteenpäin tai poistuvat.
+	Entity	Entiteetti
+	What flows through the blocks: a part, a patient, a call, an order.	Se, mikä virtaa lohkojen läpi: osa, potilas, puhelu, tilaus.
+	The block where entities enter the model, with the time between one arrival and the next.	Lohko, jossa entiteetit tulevat malliin, ja aika yhdestä saapumisesta seuraavaan.
+	A step that takes time, with no limit on how many entities it works on at once.	Aikaa vievä vaihe, jossa ei ole rajaa sille, kuinka montaa entiteettiä se käsittelee kerralla.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Vaihe, jonka tekee rajallinen määrä yksiköitä, esimerkiksi koneita tai virkailijoita. Entiteetit odottavat sen odotustilassa, kunnes jokin yksikkö vapautuu.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Vaihe, joka lainaa yksiköitä poolista, jota useampi tehtävä käyttää yhteisesti, esimerkiksi sairaanhoitajien tiimistä.
+	The block where entities leave the model; it counts them and their time in the system.	Lohko, jossa entiteetit poistuvat mallista; se laskee ne ja niiden ajan järjestelmässä.
+	Sends each entity down one of its ways out, by chance or by a condition.	Lähettää kunkin entiteetin yhtä sen ulosmenoreiteistä, sattumanvaraisesti tai ehdon mukaan.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Kuinka montaa entiteettiä resurssia käyttävä tehtävä voi käsitellä samaan aikaan: sen koneet, virkailijat tai vuoteet.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Paikka, jossa entiteetit odottavat vapaata yksikköä (jono). Sillä voi olla raja; entiteetti, joka löytää sen täynnä, menetetään tai se odottaa ennen tehtävää.
+	How long a unit takes with one entity, drawn from a distribution each time.	Kuinka kauan yksiköltä kestää yksi entiteetti, arvottuna jakaumasta joka kerta.
+	Distribution	Jakauma
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Miten aika tai määrä vaihtelee entiteetistä toiseen: sen muoto ja keskiarvo.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Mallin yksi läpikäynti alusta loppuun omilla satunnaisluvuillaan. Oppikirjoissa sitä kutsutaan toistoksi.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Kaikki ajot yhdessä samoilla asetuksilla: ajojen määrä, satunnaislukusiemen, alkulämmittely ja mitattu aika.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Satunnaislukujen lähtökohta. Sama malli samalla satunnaislukusiemenellä antaa aina samat tulokset.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Jokaisen ajon alussa oleva aika, joka simuloidaan mutta jota ei mitata, jotta tyhjänä alkava ja täyttyvä malli ei vääristä tuloksia.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Osuus ajasta, jonka tehtävän yksiköt ovat varattuina, laskettuna siltä ajalta, kun ne ovat vuorossa.
+	The average time an entity spends in a waiting room before a unit takes it.	Keskimääräinen aika, jonka entiteetti viettää odotustilassa, ennen kuin yksikkö ottaa sen.
+	The average number of entities in a waiting room, over the time measured.	Odotustilassa olevien entiteettien keskimääräinen määrä mitatun ajan kuluessa.
+	Time in system	Aika järjestelmässä
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Kuinka kauan entiteetti on järjestelmässä saapumisesta poistumiseen, odottaen ja käsiteltävänä.
+	Blocked	Estetty
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Yksikkö on valmis, mutta ei voi luovuttaa entiteettiä eteenpäin, koska seuraava odotustila on täynnä.
+	Starved	Ilman työtä
+	A unit is free but has no entity to work on.	Yksikkö on vapaa, mutta sillä ei ole entiteettiä käsiteltävänä.
+	95% confidence interval	95 %:n luottamusväli
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Merkitään ± keskiarvon perään: kuinka kaukana todellinen keskiarvo voi uskottavasti olla näytetystä. Useammat ajot kaventavat sitä.
+	Settled	Vakiintunut
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Tulos, joka tunnetaan riittävän hyvin toimimiseen: ± 5% keskiarvostaan tai osuuksilla ± 1 prosenttiyksikön tarkkuudella.
+	Results kept to compare a later run with, to see what a change to the model did.	Tulokset, jotka säilytetään myöhemmän ajon vertailua varten, jotta nähdään, mitä mallin muutos teki.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Ero, jonka 95 %:n väli sisältää nollan: ajot eivät pysty erottamaan sitä satunnaisvaihtelusta.
+	Add Arrivals	Lisää Saapumiset
+	Add a task and connect Arrivals to it	Lisää tehtävä ja yhdistä Saapumiset siihen
+	Add Departures and connect the task to it	Lisää Poistumiset ja yhdistä tehtävä siihen
+	Run the model: press F5	Suorita malli: paina F5
+	Read what the run found	Lue, mitä ajo löysi
+	Close Help (F1)	Sulje ohje (F1)
+	Search help and terms	Hae ohjeesta ja termeistä
+	Getting started	Aloitus
+	{k} of {n} done	{k}/{n} tehty
+	Glossary	Sanasto
+	No term matches “{text}”.	Mikään termi ei vastaa hakua ”{text}”.
+	Keyboard shortcuts	Pikanäppäimet
+	Change keys	Muuta näppäimiä
+	More help	Lisää ohjeita
+	User guide	Käyttöopas
+	What the results mean	Mitä tulokset tarkoittavat
+	Report a problem	Ilmoita ongelmasta
+	These open in your web browser.	Nämä avautuvat verkkoselaimessasi.
+	Space	Välilyönti
+	Play or pause a watched run	Toista tai keskeytä seurattava ajo
+	Getting Started	Aloitus
+	What the Results Mean	Mitä tulokset tarkoittavat
+	User Guide	Käyttöopas
+	Report a Problem	Ilmoita ongelmasta
 @plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
 @plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
 @plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui

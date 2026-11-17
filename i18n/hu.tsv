@@ -761,6 +761,63 @@ unit	yr	év
 	off	ki
 	Changed since the baseline:	Változott a viszonyítási alap óta:
 	Nothing in the model has changed since the baseline.	A modellben semmi sem változott a viszonyítási alap óta.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	A folyamat egy lépése a fő felületen: ahol az entitások érkeznek, várakoznak, megmunkálják őket, továbbirányítják őket, vagy távoznak.
+	Entity	Entitás
+	What flows through the blocks: a part, a patient, a call, an order.	Ami a blokkokon átáramlik: egy alkatrész, egy beteg, egy hívás, egy rendelés.
+	The block where entities enter the model, with the time between one arrival and the next.	A blokk, ahol az entitások belépnek a modellbe, az egyik érkezés és a következő közötti idővel.
+	A step that takes time, with no limit on how many entities it works on at once.	Időt igénylő lépés, amely korlátlan számú entitással foglalkozhat egyszerre.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Korlátozott számú egység által végzett lépés, például gépek vagy ügyintézők. Az entitások a várakozóhelyén várnak, amíg egy egység fel nem szabadul.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Olyan lépés, amely egységeket kölcsönöz egy több feladat által megosztott készletből, például egy ápolócsapatból.
+	The block where entities leave the model; it counts them and their time in the system.	A blokk, ahol az entitások elhagyják a modellt; megszámolja őket és a rendszerben töltött idejüket.
+	Sends each entity down one of its ways out, by chance or by a condition.	Minden entitást a kimenetei egyikére küld, véletlenszerűen vagy egy feltétel alapján.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Hány entitással foglalkozhat egyszerre egy erőforrást használó feladat: gépei, ügyintézői vagy ágyai.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Ahol az entitások szabad egységre várnak (sor). Lehet korlátja; a telve találó entitás elvész, vagy a feladat előtt várakozik.
+	How long a unit takes with one entity, drawn from a distribution each time.	Mennyi ideig foglalkozik egy egység egy entitással, minden alkalommal egy eloszlásból sorsolva.
+	Distribution	Eloszlás
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Hogyan változik egy idő vagy mennyiség egyik entitástól a másikig: az alakja és az átlaga.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	A modell egy végigfutása az elejétől a végéig, saját véletlenszámokkal. A tankönyvek replikációnak nevezik.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Az összes futás együtt, azonos beállításokkal: a futások száma, a véletlenszám-mag, a bemelegítés és a mért idő.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	A véletlenszámok kiindulópontja. Ugyanaz a modell ugyanazzal a véletlenszám-maggal mindig ugyanazt az eredményt adja.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Minden futás elején lévő idő, amelyet szimulálunk, de nem mérünk, hogy a feltöltődő üres modell ne torzítsa az eredményeket.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Az idő azon hányada, amikor egy feladat egységei foglaltak, a műszakban töltött idejükre számítva.
+	The average time an entity spends in a waiting room before a unit takes it.	Az átlagos idő, amelyet egy entitás a várakozóhelyen tölt, mielőtt egy egység átveszi.
+	The average number of entities in a waiting room, over the time measured.	A várakozóhelyen lévő entitások átlagos száma a mért idő alatt.
+	Time in system	Rendszerben töltött idő
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Mennyi időt tölt egy entitás az érkezésétől a távozásáig, várakozással és megmunkálással együtt.
+	Blocked	Blokkolt
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Egy egység végzett, de nem tudja továbbadni az entitást, mert a következő várakozóhely megtelt.
+	Starved	Munka nélküli
+	A unit is free but has no entity to work on.	Egy egység szabad, de nincs entitás, amellyel foglalkozhatna.
+	95% confidence interval	95%-os konfidenciaintervallum
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Az átlag után ± jellel írva: mennyire lehet az igazi átlag észszerűen távol a megjelenítettől. Több futás szűkíti.
+	Settled	Stabil
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Elég jól ismert eredmény ahhoz, hogy cselekedni lehessen rá: az átlagának ± 5%-án belül, aránynál ± 1 százalékponton belül.
+	Results kept to compare a later run with, to see what a change to the model did.	Megőrzött eredmények, amelyekhez egy későbbi futást hasonlíthat, hogy lássa, mit tett a modell egy módosítása.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Olyan különbség, amelynek 95%-os intervalluma tartalmazza a nullát: a futások alapján nem különböztethető meg a véletlen ingadozástól.
+	Add Arrivals	Érkezések hozzáadása
+	Add a task and connect Arrivals to it	Feladat hozzáadása és az Érkezések összekötése vele
+	Add Departures and connect the task to it	Távozások hozzáadása és a feladat összekötése vele
+	Run the model: press F5	A modell futtatása: nyomja meg az F5 billentyűt
+	Read what the run found	Olvassa el, mit talált a futás
+	Close Help (F1)	Súgó bezárása (F1)
+	Search help and terms	Keresés a súgóban és a fogalmakban
+	Getting started	Első lépések
+	{k} of {n} done	{k}/{n} kész
+	Glossary	Szójegyzék
+	No term matches “{text}”.	Egyetlen fogalom sem egyezik ezzel: „{text}”.
+	Keyboard shortcuts	Billentyűparancsok
+	Change keys	Billentyűk módosítása
+	More help	További súgó
+	User guide	Felhasználói útmutató
+	What the results mean	Mit jelentenek az eredmények
+	Report a problem	Probléma bejelentése
+	These open in your web browser.	Ezek a webböngészőben nyílnak meg.
+	Space	Szóköz
+	Play or pause a watched run	Követett futás lejátszása vagy szüneteltetése
+	Getting Started	Első lépések
+	What the Results Mean	Mit jelentenek az eredmények
+	User Guide	Felhasználói útmutató
+	Report a Problem	Probléma bejelentése
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve

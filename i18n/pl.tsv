@@ -761,6 +761,63 @@ unit	yr	r.
 	off	wył.
 	Changed since the baseline:	Zmieniono od punktu odniesienia:
 	Nothing in the model has changed since the baseline.	Od punktu odniesienia nic się w modelu nie zmieniło.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Jeden krok procesu na diagramie: miejsce, w którym jednostki przybywają, czekają, są obsługiwane, kierowane dalej lub wychodzą.
+	Entity	Jednostka
+	What flows through the blocks: a part, a patient, a call, an order.	To, co przepływa przez bloki: część, pacjent, połączenie telefoniczne, zamówienie.
+	The block where entities enter the model, with the time between one arrival and the next.	Blok, w którym jednostki wchodzą do modelu, z czasem między jednym przybyciem a następnym.
+	A step that takes time, with no limit on how many entities it works on at once.	Krok, który zajmuje czas, bez limitu liczby jednostek obsługiwanych naraz.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Krok wykonywany przez ograniczoną liczbę zasobów, np. maszyn lub urzędników. Jednostki czekają w jego poczekalni, aż zasób będzie wolny.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Krok, który pożycza zasoby z puli współdzielonej przez kilka zadań, np. zespołu pielęgniarek.
+	The block where entities leave the model; it counts them and their time in the system.	Blok, w którym jednostki opuszczają model; liczy je i ich czas w systemie.
+	Sends each entity down one of its ways out, by chance or by a condition.	Kieruje każdą jednostkę jednym ze swoich wyjść, losowo lub według warunku.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Ile jednostek zadanie z zasobem może obsługiwać jednocześnie: jego maszyny, urzędnicy lub łóżka.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Miejsce, w którym jednostki czekają na wolny zasób (kolejka). Może mieć limit; jednostka, która zastanie ją pełną, przepada lub czeka na wcześniejszym etapie.
+	How long a unit takes with one entity, drawn from a distribution each time.	Ile czasu zasób poświęca jednej jednostce; losowane za każdym razem z rozkładu.
+	Distribution	Rozkład
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Jak czas lub ilość zmienia się od jednej jednostki do następnej: jego kształt i średnia.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Jedno przejście modelu od początku do końca z własnymi liczbami losowymi. W podręcznikach nazywa się to replikacją.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Wszystkie uruchomienia razem, z tymi samymi ustawieniami: liczba uruchomień, ziarno, rozgrzewka i mierzony czas.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Punkt startowy liczb losowych. Ten sam model z tym samym ziarnem zawsze daje te same wyniki.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Czas na początku każdego uruchomienia, który jest symulowany, ale nie mierzony, aby zapełnianie się pustego modelu nie zniekształcało wyników.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Część czasu, w której zasoby zadania są zajęte, liczona w czasie, gdy są na zmianie.
+	The average time an entity spends in a waiting room before a unit takes it.	Średni czas, jaki jednostka spędza w poczekalni, zanim przyjmie ją zasób.
+	The average number of entities in a waiting room, over the time measured.	Średnia liczba jednostek w poczekalni w mierzonym czasie.
+	Time in system	Czas w systemie
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Ile czasu jednostka spędza od przybycia do wyjścia, czekając i będąc obsługiwaną.
+	Blocked	Zablokowanie
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Zasób skończył pracę, ale nie może przekazać jednostki dalej, bo następna poczekalnia jest pełna.
+	Starved	Bez pracy
+	A unit is free but has no entity to work on.	Zasób jest wolny, ale nie ma jednostki do obsłużenia.
+	95% confidence interval	95% przedział ufności
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Zapisywany jako ± po średniej: jak daleko prawdziwa średnia może wiarygodnie odbiegać od pokazanej. Więcej uruchomień go zawęża.
+	Settled	Ustalona
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Wynik znany wystarczająco dobrze, by na nim działać: z dokładnością ± 5% średniej lub ± 1 punkt procentowy dla udziału.
+	Results kept to compare a later run with, to see what a change to the model did.	Wyniki zachowane do porównania z późniejszym uruchomieniem, aby zobaczyć, co dała zmiana w modelu.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Różnica, której 95% przedział obejmuje zero: uruchomienia nie odróżniają jej od zmienności losowej.
+	Add Arrivals	Dodaj blok Przybycia
+	Add a task and connect Arrivals to it	Dodaj zadanie i połącz z nim Przybycia
+	Add Departures and connect the task to it	Dodaj Wyjścia i połącz z nimi zadanie
+	Run the model: press F5	Uruchom model: naciśnij F5
+	Read what the run found	Przeczytaj, co wykazało uruchomienie
+	Close Help (F1)	Zamknij pomoc (F1)
+	Search help and terms	Szukaj w pomocy i terminach
+	Getting started	Pierwsze kroki
+	{k} of {n} done	Ukończono {k} z {n}
+	Glossary	Słowniczek
+	No term matches “{text}”.	Żaden termin nie pasuje do „{text}”.
+	Keyboard shortcuts	Skróty klawiaturowe
+	Change keys	Zmień klawisze
+	More help	Więcej pomocy
+	User guide	Podręcznik użytkownika
+	What the results mean	Co oznaczają wyniki
+	Report a problem	Zgłoś problem
+	These open in your web browser.	Otwierają się w przeglądarce internetowej.
+	Space	Spacja
+	Play or pause a watched run	Odtwórz lub wstrzymaj obserwowane uruchomienie
+	Getting Started	Pierwsze kroki
+	What the Results Mean	Co oznaczają wyniki
+	User Guide	Podręcznik użytkownika
+	Report a Problem	Zgłoś problem
 @plural	Added {n} block|Added {n} blocks	Dodano {n} blok|Dodano {n} bloki|Dodano {n} bloków
 @plural	Copied {n} block|Copied {n} blocks	Skopiowano {n} blok|Skopiowano {n} bloki|Skopiowano {n} bloków
 @plural	Finished {n} run|Finished {n} runs	Zakończono {n} uruchomienie|Zakończono {n} uruchomienia|Zakończono {n} uruchomień

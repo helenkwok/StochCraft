@@ -335,6 +335,21 @@ standards that process-modelling tools share.
   (in the browser: **Download**). The CSV has one row per block and metric, with the mean, the
   half-width of its confidence interval, the standard deviation and the number of runs.
 
+## Get help in the window
+
+Press **F1**, or choose **Help ▸ Help**, to open Help beside the model. It does not cover the
+canvas, so you can follow it while you work.
+
+- **Getting started:** five steps to a first model (add arrivals, a task, departures, run it, read
+  what it found), each ticked as the model gets there.
+- **Glossary:** the window's words and what they mean, from Block to Could be chance. Type in
+  **Search help and terms** to narrow it.
+- **Keyboard shortcuts:** the main keys; **Change keys** opens the full list.
+- **User guide**, **What the results mean** and **Report a problem** open in your web browser.
+
+The **Help** menu also leads straight to Getting Started, the Glossary, the results section of
+this guide, Keyboard Shortcuts and Report a Problem. F1 or the × closes the panel.
+
 ## Change how it looks and which keys do what
 
 - **View ▸ Appearance:** Light, Dark or the system setting, and a colour theme: StochCraft, High
@@ -352,6 +367,7 @@ Ctrl on Windows and Linux is ⌘ on a Mac.
 
 | Key | Does |
 | --- | --- |
+| F1 | Help: open or close it beside the model |
 | F5 | Run |
 | Esc | Cancel the run; clear the selection |
 | Space | Play or pause while watching a run |

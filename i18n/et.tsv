@@ -761,6 +761,63 @@ unit	yr	a
 	off	väljas
 	Changed since the baseline:	Muutunud pärast võrdlusalust:
 	Nothing in the model has changed since the baseline.	Mudelis pole pärast võrdlusalust midagi muutunud.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	Protsessi üks samm põhipinnal: kus olemid saabuvad, ootavad, neid töödeldakse, suunatakse edasi või nad lahkuvad.
+	Entity	Olem
+	What flows through the blocks: a part, a patient, a call, an order.	See, mis plokkidest läbi voolab: detail, patsient, kõne, tellimus.
+	The block where entities enter the model, with the time between one arrival and the next.	Plokk, kus olemid mudelisse sisenevad, koos ajaga ühest saabumisest järgmiseni.
+	A step that takes time, with no limit on how many entities it works on at once.	Aega võttev samm, millel pole piiri, mitut olemit see korraga töötleb.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	Samm, mida teeb piiratud arv ühikuid, näiteks masinad või ametnikud. Olemid ootavad selle ooteruumis, kuni mõni ühik vabaneb.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	Samm, mis laenab ühikuid kogumist, mida mitu ülesannet jagavad, näiteks õdede meeskonnast.
+	The block where entities leave the model; it counts them and their time in the system.	Plokk, kus olemid mudelist lahkuvad; see loendab neid ja nende aega süsteemis.
+	Sends each entity down one of its ways out, by chance or by a condition.	Saadab iga olemi ühte oma väljapääsudest, juhuslikult või tingimuse järgi.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	Mitut olemit saab ressursiga ülesanne korraga töödelda: selle masinad, ametnikud või voodid.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	Koht, kus olemid ootavad vaba ühikut (järjekord). Sellel võib olla piir; olem, kes leiab selle täis olevat, läheb kaotsi või ootab eespool.
+	How long a unit takes with one entity, drawn from a distribution each time.	Kui kaua kulub ühikul ühe olemi peale, loositakse iga kord jaotusest.
+	Distribution	Jaotus
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	Kuidas aeg või kogus ühelt olemilt teisele varieerub: selle kuju ja keskmine.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	Mudeli üks läbimine algusest lõpuni oma juhuslike arvudega. Õpikutes nimetatakse seda replikatsiooniks.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	Kõik käivitamised koos samade seadetega: käivitamiste arv, juhuarvuseeme, soojendus ja mõõdetud aeg.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	Juhuslike arvude lähtepunkt. Sama mudel sama juhuarvuseemnega annab alati samad tulemused.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	Aeg iga käivitamise alguses, mida simuleeritakse, kuid ei mõõdeta, et tühjana alustav ja täituv mudel tulemusi ei moonutaks.
+	The share of the time a task's units are busy, counted over the time they are on shift.	Osa ajast, mil ülesande ühikud on hõivatud, arvestatuna ajast, mil nad on vahetuses.
+	The average time an entity spends in a waiting room before a unit takes it.	Keskmine aeg, mille olem veedab ooteruumis, enne kui ühik selle võtab.
+	The average number of entities in a waiting room, over the time measured.	Ooteruumis olevate olemite keskmine arv mõõdetud aja jooksul.
+	Time in system	Aeg süsteemis
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	Kui kaua olem on süsteemis saabumisest lahkumiseni, oodates ja töötlemisel.
+	Blocked	Blokeeritud
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	Ühik on lõpetanud, kuid ei saa olemit edasi anda, sest järgmine ooteruum on täis.
+	Starved	Tööta
+	A unit is free but has no entity to work on.	Ühik on vaba, kuid tal pole olemit, mida töödelda.
+	95% confidence interval	95% usaldusvahemik
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	Kirjutatakse ± keskmise järele: kui kaugel võib tegelik keskmine põhjendatult näidatust olla. Rohkem käivitamisi teeb selle kitsamaks.
+	Settled	Stabiilne
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	Tulemus, mis on piisavalt hästi teada, et selle põhjal tegutseda: ± 5% täpsusega oma keskmisest või osakaalu puhul ± 1 protsendipunkti täpsusega.
+	Results kept to compare a later run with, to see what a change to the model did.	Tulemused, mis hoitakse alles hilisema käivitamise võrdlemiseks, et näha, mida mudeli muudatus tegi.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	Erinevus, mille 95% vahemik hõlmab nulli: käivitamised ei suuda seda juhuslikust kõikumisest eristada.
+	Add Arrivals	Lisa Saabumised
+	Add a task and connect Arrivals to it	Lisa ülesanne ja ühenda Saabumised sellega
+	Add Departures and connect the task to it	Lisa Lahkumised ja ühenda ülesanne nendega
+	Run the model: press F5	Käivita mudel: vajuta F5
+	Read what the run found	Loe, mida käivitamine leidis
+	Close Help (F1)	Sulge abi (F1)
+	Search help and terms	Otsi abist ja mõistetest
+	Getting started	Alustamine
+	{k} of {n} done	{k}/{n} tehtud
+	Glossary	Sõnastik
+	No term matches “{text}”.	Ükski mõiste ei vasta päringule „{text}“.
+	Keyboard shortcuts	Klaviatuuri otseteed
+	Change keys	Muuda klahve
+	More help	Rohkem abi
+	User guide	Kasutusjuhend
+	What the results mean	Mida tulemused tähendavad
+	Report a problem	Teata probleemist
+	These open in your web browser.	Need avanevad sinu veebibrauseris.
+	Space	Tühik
+	Play or pause a watched run	Esita või peata jälgitav käivitamine
+	Getting Started	Alustamine
+	What the Results Mean	Mida tulemused tähendavad
+	User Guide	Kasutusjuhend
+	Report a Problem	Teata probleemist
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud

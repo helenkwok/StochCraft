@@ -761,6 +761,63 @@ unit	yr	წელი
 	off	გამორთული
 	Changed since the baseline:	შეიცვალა საბაზისო ვარიანტის შემდეგ:
 	Nothing in the model has changed since the baseline.	საბაზისო ვარიანტის შემდეგ მოდელში არაფერი შეცვლილა.
+	One step of the process on the canvas: where entities arrive, wait, are worked on, are routed or leave.	პროცესის ერთი ნაბიჯი დიაგრამაზე: სადაც ერთეულები შემოდიან, ელოდებიან, მუშავდებიან, მიემართებიან ან გადიან.
+	Entity	ერთეული
+	What flows through the blocks: a part, a patient, a call, an order.	ის, რაც ბლოკებში გადის: დეტალი, პაციენტი, ზარი, შეკვეთა.
+	The block where entities enter the model, with the time between one arrival and the next.	ბლოკი, სადაც ერთეულები შედიან მოდელში, ერთ შემოსვლასა და მომდევნოს შორის დროით.
+	A step that takes time, with no limit on how many entities it works on at once.	ნაბიჯი, რომელსაც დრო სჭირდება, იმის შეზღუდვის გარეშე, რამდენ ერთეულს ამუშავებს ერთდროულად.
+	A step done by a limited number of units, such as machines or clerks. Entities wait in its waiting room until a unit is free.	ნაბიჯი, რომელსაც ასრულებს რესურსის ერთეულების შეზღუდული რაოდენობა, მაგ. მანქანები ან კლერკები. ერთეულები მის მოსაცდელ სივრცეში ელოდებიან, სანამ რესურსის ერთეული არ გათავისუფლდება.
+	A step that borrows units from a pool that several tasks share, such as a team of nurses.	ნაბიჯი, რომელიც რესურსის ერთეულებს იღებს პულიდან, რომელსაც რამდენიმე დავალება იზიარებს, მაგ. ექთნების გუნდი.
+	The block where entities leave the model; it counts them and their time in the system.	ბლოკი, სადაც ერთეულები ტოვებენ მოდელს; ის ითვლის მათ და მათ სისტემაში გატარებულ დროს.
+	Sends each entity down one of its ways out, by chance or by a condition.	თითოეულ ერთეულს აგზავნის თავისი ერთ-ერთი გასასვლელით, შემთხვევით ან პირობის მიხედვით.
+	How many entities a task with a resource can work on at the same time: its machines, clerks or beds.	რამდენ ერთეულს შეუძლია ერთდროულად დაამუშაოს დავალებამ რესურსით: მისი მანქანები, კლერკები ან საწოლები.
+	Where entities wait for a free unit (a queue). It can have a limit; an entity that finds it full is lost or waits upstream.	სადაც ერთეულები თავისუფალ რესურსის ერთეულს ელოდებიან (რიგი). მას შეიძლება ჰქონდეს ზღვარი; ერთეული, რომელიც მას სავსეს პოულობს, იკარგება ან ნაკადის წინა ნაწილში ელოდება.
+	How long a unit takes with one entity, drawn from a distribution each time.	რამდენ დროს ანდომებს რესურსის ერთეული ერთ ერთეულს; ყოველ ჯერზე განაწილებიდან ირჩევა.
+	Distribution	განაწილება
+	How a time or a quantity varies from one entity to the next: its shape and its mean.	როგორ იცვლება დრო ან რაოდენობა ერთი ერთეულიდან მეორემდე: მისი ფორმა და საშუალო.
+	One pass of the model from start to end with its own random numbers. Textbooks call it a replication.	მოდელის ერთი გავლა დასაწყისიდან ბოლომდე საკუთარი შემთხვევითი რიცხვებით. სახელმძღვანელოებში მას რეპლიკაციას უწოდებენ.
+	All the runs together, with the same settings: how many runs, the seed, the warm-up and the time measured.	ყველა გაშვება ერთად, ერთნაირი პარამეტრებით: რამდენი გაშვება, საწყისი მნიშვნელობა, გახურების პერიოდი და გაზომვის დრო.
+	The starting point of the random numbers. The same model with the same seed always gives the same results.	შემთხვევითი რიცხვების საწყისი წერტილი. ერთი და იგივე მოდელი ერთი და იმავე საწყისი მნიშვნელობით ყოველთვის ერთსა და იმავე შედეგს იძლევა.
+	Time at the start of each run that is simulated but not measured, so an empty model filling up does not pull the results.	დრო ყოველი გაშვების დასაწყისში, რომელიც მოდელირდება, მაგრამ არ იზომება, რათა ცარიელი მოდელის შევსებამ შედეგები არ გადახაროს.
+	The share of the time a task's units are busy, counted over the time they are on shift.	დროის წილი, როცა დავალების რესურსის ერთეულები დაკავებულია, დათვლილი იმ დროზე, როცა ისინი ცვლაში არიან.
+	The average time an entity spends in a waiting room before a unit takes it.	საშუალო დრო, რომელსაც ერთეული მოსაცდელ სივრცეში ატარებს, სანამ რესურსის ერთეული მას აიღებს.
+	The average number of entities in a waiting room, over the time measured.	ერთეულების საშუალო რაოდენობა მოსაცდელ სივრცეში, გაზომვის დროის განმავლობაში.
+	Time in system	სისტემაში გატარებული დრო
+	How long an entity spends from its arrival to its departure, waiting and being worked on.	რამდენ დროს ატარებს ერთეული შემოსვლიდან გასვლამდე, ლოდინსა და დამუშავებაში.
+	Blocked	დაბლოკილი
+	A unit has finished but cannot pass the entity on, because the next waiting room is full.	რესურსის ერთეულმა დაასრულა, მაგრამ ერთეულს ვერ გადასცემს, რადგან შემდეგი მოსაცდელი სივრცე სავსეა.
+	Starved	სამუშაოს გარეშე
+	A unit is free but has no entity to work on.	რესურსის ერთეული თავისუფალია, მაგრამ დასამუშავებელი ერთეული არ აქვს.
+	95% confidence interval	95% ნდობის ინტერვალი
+	Written ± after a mean: how far the true mean could plausibly be from the one shown. More runs narrow it.	იწერება ±-ით საშუალოს შემდეგ: რამდენად შეიძლება სავარაუდოდ განსხვავდებოდეს ნამდვილი საშუალო ნაჩვენებისგან. მეტი გაშვება მას ავიწროებს.
+	Settled	სტაბილური
+	A result known well enough to act on: to ± 5% of its mean, or ± 1 percentage point for a share.	შედეგი, რომელიც საკმარისად კარგად არის ცნობილი, რომ მასზე დაყრდნობით იმოქმედოთ: საშუალოს ± 5%-ის ან წილისთვის ± 1 პროცენტული პუნქტის სიზუსტით.
+	Results kept to compare a later run with, to see what a change to the model did.	შედეგები, რომლებიც შენახულია მოგვიანებით გაშვებასთან შესადარებლად, რათა ნახოთ, რა შეცვალა მოდელის ცვლილებამ.
+	A difference whose 95% interval takes in zero: the runs cannot tell it from random variation.	სხვაობა, რომლის 95%-იანი ინტერვალი ნულს მოიცავს: გაშვებები ვერ ასხვავებენ მას შემთხვევითი ცვალებადობისგან.
+	Add Arrivals	დაამატეთ „შემოსვლები“
+	Add a task and connect Arrivals to it	დაამატეთ დავალება და მიუერთეთ მას „შემოსვლები“
+	Add Departures and connect the task to it	დაამატეთ „გასვლები“ და მიუერთეთ მას დავალება
+	Run the model: press F5	გაუშვით მოდელი: დააჭირეთ F5-ს
+	Read what the run found	წაიკითხეთ, რა აჩვენა გაშვებამ
+	Close Help (F1)	დახმარების დახურვა (F1)
+	Search help and terms	დახმარებასა და ტერმინებში ძიება
+	Getting started	დაწყება
+	{k} of {n} done	{n}-დან {k} შესრულებულია
+	Glossary	ტერმინების ლექსიკონი
+	No term matches “{text}”.	„{text}“-ს არცერთი ტერმინი არ ემთხვევა.
+	Keyboard shortcuts	კლავიატურის მალსახმობები
+	Change keys	კლავიშების შეცვლა
+	More help	მეტი დახმარება
+	User guide	მომხმარებლის სახელმძღვანელო
+	What the results mean	რას ნიშნავს შედეგები
+	Report a problem	პრობლემის შეტყობინება
+	These open in your web browser.	ისინი იხსნება თქვენს ვებბრაუზერში.
+	Space	ჰარი
+	Play or pause a watched run	დაკვირვებადი გაშვების დაკვრა ან პაუზა
+	Getting Started	დაწყება
+	What the Results Mean	რას ნიშნავს შედეგები
+	User Guide	მომხმარებლის სახელმძღვანელო
+	Report a Problem	პრობლემის შეტყობინება
 @plural	Added {n} block|Added {n} blocks	დამატებულია {n} ბლოკი|დამატებულია {n} ბლოკი
 @plural	Copied {n} block|Copied {n} blocks	დაკოპირებულია {n} ბლოკი|დაკოპირებულია {n} ბლოკი
 @plural	Finished {n} run|Finished {n} runs	დასრულდა {n} გაშვება|დასრულდა {n} გაშვება
