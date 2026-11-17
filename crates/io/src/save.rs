@@ -16,7 +16,7 @@ use stochcraft_model::{
     PropertyValue, ResourcePool, Routing, Stop, TimeUnit,
 };
 
-use crate::bpsim::{NS2, NSS};
+use crate::bpsim::{NS2, NSS, STOCHCRAFT_NS};
 use crate::duration::trim_float;
 use crate::read::{self, BPMN, XPDL};
 use crate::write::{
@@ -139,6 +139,99 @@ fn near_dist(a: &Dist, b: &Dist) -> bool {
     ka == kb && oa == ob && ta.len() == tb.len() && ta.iter().zip(&tb).all(|(x, y)| near(*x, *y))
 }
 
+/// StochCraft's vendor extensions that hold time distributions.
+const VENDOR_TIMES: [&str; 7] = [
+    crate::bpsim::BREAKDOWN,
+    crate::bpsim::TRANSFER_TIME,
+    crate::bpsim::CHANGEOVER,
+    crate::bpsim::PROCESSING_TIME_BY,
+    crate::bpsim::PLANNED_RUN_TIME,
+    crate::bpsim::PATIENCE,
+    crate::bpsim::HEALTH_CHECK,
+];
+
+/// Calls `f` on each distribution vendor extension `name` holds for an element, in order.
+fn vendor_dists(kind: &mut ElementKind, name: &str, f: &mut dyn FnMut(&mut Dist)) {
+    use crate::bpsim::{
+        BREAKDOWN, CHANGEOVER, HEALTH_CHECK, PATIENCE, PLANNED_RUN_TIME, PROCESSING_TIME_BY,
+        TRANSFER_TIME,
+    };
+    if name == PROCESSING_TIME_BY {
+        if let Some(Some(by)) = kind.processing_by_mut() {
+            by.by_value.iter_mut().for_each(|v| f(&mut v.time));
+        }
+        return;
+    }
+    let ElementKind::Server {
+        breakdown,
+        transfer,
+        setup,
+        planned_run_time,
+        patience,
+        health_check,
+        ..
+    } = kind
+    else {
+        return;
+    };
+    match name {
+        BREAKDOWN => {
+            if let Some(b) = breakdown {
+                f(&mut b.time_to_failure);
+                f(&mut b.repair);
+            }
+        }
+        TRANSFER_TIME => {
+            if let Some(t) = transfer {
+                f(&mut t.time);
+            }
+        }
+        CHANGEOVER => {
+            if let Some(s) = setup {
+                f(&mut s.time);
+                s.by_change.iter_mut().for_each(|c| f(&mut c.time));
+            }
+        }
+        PLANNED_RUN_TIME => {
+            if let Some(p) = planned_run_time {
+                f(p);
+            }
+        }
+        PATIENCE => {
+            if let Some(p) = patience {
+                f(&mut p.time);
+            }
+        }
+        HEALTH_CHECK => {
+            if let Some(h) = health_check {
+                f(&mut h.interval);
+                f(&mut h.restart);
+            }
+        }
+        _ => {}
+    }
+}
+
+/// Takes the distributions of vendor extension `name` from `want` into `got` when they differ
+/// only by float noise ([`within_noise`]).
+fn near_vendor(got: &mut ElementKind, want: &ElementKind, name: &str) {
+    let dists = |k: &ElementKind| {
+        let mut k = k.clone();
+        let mut out = Vec::new();
+        vendor_dists(&mut k, name, &mut |d| out.push(d.clone()));
+        out
+    };
+    let (g, w) = (dists(got), dists(want));
+    if g.len() == w.len() && g.iter().zip(&w).all(|(a, b)| near_dist(a, b)) {
+        let mut wanted = w.into_iter();
+        vendor_dists(got, name, &mut |d| {
+            if let Some(x) = wanted.next() {
+                *d = x;
+            }
+        });
+    }
+}
+
 /// `got` with each value the save rescaled taken from `want` where the two differ only by float
 /// noise. `rescaled` holds element ids with parameter keys (`""` with `Duration` or `Warmup`
 /// for the scenario's own). Rescaling a number into a value's own unit cannot always give a
@@ -172,6 +265,11 @@ fn within_noise(got: &Model, want: &Model, rescaled: &BTreeSet<(String, String)>
                 ElementKind::SharedTask { service: b, .. },
             ) if has("TimeParameters/ProcessingTime") && near_dist(a, b) => *a = b.clone(),
             _ => {}
+        }
+        for name in VENDOR_TIMES {
+            if has(&format!("VendorExtension/{name}")) {
+                near_vendor(&mut ge.kind, &we.kind, name);
+            }
         }
         for p in &mut ge.properties {
             if !has(&format!("PropertyParameters/Property/{}", p.name)) {
@@ -2817,6 +2915,12 @@ impl Editor {
                 let Some(element) = r.element.as_deref().filter(|e| !e.is_empty()) else {
                     continue;
                 };
+                if r.group == "VendorExtension" {
+                    if !sets_vendor(c, element, &r.name) {
+                        set_vendor(c, element, &r.name, Some(r.original.clone()));
+                    }
+                    continue;
+                }
                 if sets_param(c, element, &r.group, &r.name) {
                     continue;
                 }
@@ -2996,6 +3100,19 @@ fn rescaled_params(original: &Element, new: &Element) -> Vec<Rescaled> {
                 continue;
             };
             for (go, gn) in o.elements().zip(n.elements()) {
+                // A vendor extension is kept whole, under its name.
+                if go.is_any(&NSS, "VendorExtension") {
+                    if let Some(name) = go.attr("name").filter(|_| go != gn) {
+                        out.push(Rescaled {
+                            element: Some(r.clone()),
+                            group: "VendorExtension".into(),
+                            key: format!("VendorExtension/{name}"),
+                            name,
+                            original: go.detached(),
+                        });
+                    }
+                    continue;
+                }
                 for (po, pn) in go.elements().zip(gn.elements()) {
                     if defaults(po) == defaults(pn) {
                         continue;
@@ -3120,6 +3237,11 @@ fn rescale_own_units(
     to: TimeUnit,
 ) {
     for v in e.elements_mut() {
+        // StochCraft's vendor extensions hold BPSim values (a breakdown's times, a transfer's).
+        if v.ns.as_deref() == Some(STOCHCRAFT_NS) {
+            rescale_own_units(v, outer, ctx, from, to);
+            continue;
+        }
         if !v.ns.as_deref().is_some_and(|n| NSS.contains(&n)) {
             continue;
         }

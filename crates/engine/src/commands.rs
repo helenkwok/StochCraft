@@ -1548,6 +1548,9 @@ fn calendar_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
                     || shifts.iter().any(|t| t.calendar.as_str() == p.id)
                     || queue_limit.calendars().any(|c| c.as_str() == p.id)
             }
+            ElementKind::Sink {
+                demand: Some(d), ..
+            } => d.calendar.as_ref().is_some_and(|c| c.as_str() == p.id),
             _ => false,
         })
         .map(|el| el.id.as_str())

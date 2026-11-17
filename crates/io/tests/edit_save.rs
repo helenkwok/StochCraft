@@ -1729,3 +1729,123 @@ fn a_delay_made_a_server_again_leaves_one_resource() {
         assert_eq!(t.matches(resource).count(), 1, "{name}:\n{t}");
     }
 }
+
+/// Distributions inside StochCraft's vendor extensions (a breakdown, a transfer time) that name
+/// their own unit are rescaled too when the time unit changes, so they still read as the model
+/// says, and the scenario that inherits them keeps their meaning.
+#[test]
+fn values_with_their_own_unit_in_vendor_extensions_are_rescaled() {
+    let original = text(&file("mm1.bpmn")).replace(
+        r#"              <bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>"#,
+        r#"              <bpsim:SetupTime><bpsim:FloatingParameter value="0"/></bpsim:SetupTime>
+            </bpsim:TimeParameters>
+            <bpsim:VendorExtension name="stochcraft:breakdown" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"><stochcraft:breakdown><stochcraft:timeToFailure><bpsim:NegativeExponentialDistribution mean="80" timeUnit="s"/></stochcraft:timeToFailure><stochcraft:repairTime><bpsim:TriangularDistribution min="1" mode="2" max="4"/></stochcraft:repairTime></stochcraft:breakdown></bpsim:VendorExtension>
+            <bpsim:VendorExtension name="stochcraft:transferTime" xmlns:stochcraft="https://helenkwok.github.io/StochCraft/bpsim/1"><stochcraft:transferTime><bpsim:UniformDistribution min="30" max="90" timeUnit="s"/></stochcraft:transferTime></bpsim:VendorExtension>"#,
+    );
+    assert!(original.contains("stochcraft:breakdown"));
+    let loaded = read_scenario(original.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let before =
+        read_scenario(original.as_bytes(), Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    match &loaded
+        .model
+        .elements
+        .iter()
+        .find(|e| e.id.as_str() == "serve")
+        .map(|e| &e.kind)
+    {
+        Some(ElementKind::Server {
+            breakdown: Some(b),
+            transfer: Some(t),
+            ..
+        }) => {
+            assert_eq!(b.time_to_failure.mean(), Some(80.0 / 60.0));
+            assert_eq!(t.time.mean(), Some(1.0));
+        }
+        other => panic!("{other:?}"),
+    }
+    let hours = relabel(original.as_bytes(), TimeUnit::Hours);
+    let t = text(&hours);
+    for want in [
+        // 80 s became 80 s × 60: 1.333… hours written in seconds.
+        r#"<bpsim:NegativeExponentialDistribution mean="4800" timeUnit="s"/>"#,
+        r#"<bpsim:UniformDistribution min="1800" max="5400" timeUnit="s"/>"#,
+        // In the base unit: relabelled as it is.
+        r#"<bpsim:TriangularDistribution min="1" mode="2" max="4"/>"#,
+    ] {
+        assert!(t.contains(want), "{want} missing:\n{t}");
+    }
+    let after = read_scenario(&hours, Some("two-clerks")).unwrap_or_else(|e| panic!("{e}"));
+    assert_eq!(after.model, before.model, "{t}");
+    // And back: the original numbers again.
+    let t = text(&relabel(&hours, TimeUnit::Minutes));
+    assert!(
+        t.contains(r#"<stochcraft:timeToFailure><bpsim:NegativeExponentialDistribution mean="80" timeUnit="s"/>"#),
+        "{t}"
+    );
+    // Unchanged, the file saves byte for byte.
+    assert_eq!(
+        loaded.opened.save(&loaded.model).ok().as_deref(),
+        Some(original.as_bytes())
+    );
+    // A value that cannot be rescaled exactly (2.7 days under minutes, relabelled to hours)
+    // still saves, within 1e-12 of itself.
+    let inexact = original.replace(
+        r#"<stochcraft:timeToFailure><bpsim:NegativeExponentialDistribution mean="80" timeUnit="s"/>"#,
+        r#"<stochcraft:timeToFailure><bpsim:NegativeExponentialDistribution mean="2.7" timeUnit="day"/>"#,
+    );
+    assert_ne!(inexact, original);
+    let failure = |m: &Model| match m
+        .elements
+        .iter()
+        .find(|e| e.id.as_str() == "serve")
+        .map(|e| &e.kind)
+    {
+        Some(ElementKind::Server {
+            breakdown: Some(b), ..
+        }) => b.time_to_failure.mean(),
+        _ => None,
+    };
+    let loaded = read_scenario(inexact.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.experiment.time_unit = TimeUnit::Hours;
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    let back = read_scenario(&saved, None).unwrap_or_else(|e| panic!("{e}"));
+    let (got, want) = (failure(&back.model), failure(&m));
+    assert_ne!(got, want, "this case was meant to be inexact");
+    assert!(
+        matches!((got, want), (Some(g), Some(w)) if (g - w).abs() <= 1e-12 * w),
+        "{got:?} {want:?}"
+    );
+}
+
+/// A file nested as deep as the reader allows opens and saves (its unknown content kept); one
+/// nested deeper is refused as not well-formed.
+#[test]
+fn deeply_nested_content_is_kept_up_to_the_limit() {
+    let original = text(&file("mm1.bpmn"));
+    let depth = |n: usize| {
+        original.replacen(
+            "<bpsim:BPSimData>",
+            &format!(
+                "{}{}<bpsim:BPSimData>",
+                "<x:deep xmlns:x=\"urn:x\">".repeat(n),
+                "</x:deep>".repeat(n)
+            ),
+            1,
+        )
+    };
+    // The deepest element is already a few levels down.
+    let ok = depth(stochcraft_io::xml::MAX_DEPTH - 10);
+    let loaded = read_scenario(ok.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.experiment.replications = 3;
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    assert!(text(&saved).contains(&"<x:deep xmlns:x=\"urn:x\">".repeat(50)));
+    let r = read_scenario(depth(stochcraft_io::xml::MAX_DEPTH).as_bytes(), None);
+    assert!(
+        r.as_ref().is_err_and(|e| e.to_string().contains("nested")),
+        "{:?}",
+        r.err()
+    );
+}

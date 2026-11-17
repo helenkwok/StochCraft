@@ -2192,6 +2192,28 @@ fn sizing_takes_a_target_share_and_still_reads_confidence() {
     );
 }
 
+/// A target not reached by the most units allowed: the answer is the last step's model and
+/// share.
+#[test]
+fn sizing_that_runs_out_of_units_answers_with_the_last_step() {
+    let mut e = help_desk();
+    let target = json!({ "element": "desk", "metric": "mean_wait", "at_most": 0.0 });
+    let r = ok(
+        &mut e,
+        "experiment.size",
+        json!({ "target": target, "target_share": 0.9, "replications": 4, "max_added": 2 }),
+    );
+    let sto = &r["stochastic"];
+    assert_eq!(sto["reached"], false, "{r}");
+    let steps = sto["steps"].as_array().cloned().unwrap_or_default();
+    assert_eq!(steps.len(), 3, "{r}");
+    let last = &steps[2];
+    assert_eq!(sto["units"], last["units"], "{r}");
+    assert_eq!(sto["units"]["desk"], json!(3.0), "{r}");
+    assert_eq!(sto["probability"], last["probability"], "{r}");
+    assert_eq!(sto["interval"], last["interval"], "{r}");
+}
+
 /// The help desk (M/M/1, λ = 0.5, mean service 1.5) run long enough to compare with theory.
 fn long_help_desk() -> Engine {
     let mut e = help_desk();
@@ -2260,6 +2282,34 @@ fn a_sweep_of_servers_follows_erlang_c() {
     );
     let run = ok(&mut e, "run", json!({ "replications": 2 }));
     assert_eq!(run["record"]["sensitivity"][0]["kind"], "sweep");
+}
+
+/// A new model starts with no sweeps in its record and no run in the background, but keeps the
+/// last results so they can still be compared with the new model's.
+#[test]
+fn a_new_model_forgets_the_old_ones_sweeps_and_background_run() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "experiment.sweep",
+        json!({
+            "parameter": { "id": "desk", "field": "capacity" },
+            "values": [1, 2],
+            "results": [{ "element": "desk", "metric": "mean_wait" }]
+        }),
+    );
+    ok(&mut e, "run", json!({ "replications": 2 }));
+    ok(
+        &mut e,
+        "run.start",
+        json!({"replications": 5, "mode": "slices"}),
+    );
+    ok(&mut e, "model.new", json!({ "name": "Fresh" }));
+    assert_eq!(ok(&mut e, "run.status", json!({}))["state"], "idle");
+    ok(&mut e, "model.set", COMMANDS[0].example());
+    let run = ok(&mut e, "run", json!({ "replications": 2 }));
+    assert_eq!(run["record"]["sensitivity"], json!([]));
+    ok(&mut e, "results.compare", json!({}));
 }
 
 #[test]
@@ -3331,6 +3381,28 @@ fn a_demand_gives_takt_and_is_removed() {
     let r = ok(&mut e, "run", json!({"replications": 2}));
     assert_eq!(metric(&r, "exit", "takt"), None, "{r}");
     assert_eq!(metric(&r, "desk", "cycle_time"), None, "{r}");
+}
+
+/// A calendar a demand counts its shifts by cannot be removed while the demand names it.
+#[test]
+fn a_calendar_a_demand_uses_is_not_removed() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "calendar.add",
+        json!({"id": "shifts", "events": [{"start": "2016-01-01T08:00:00", "end": "2016-01-01T16:00:00", "repeat": "FREQ=DAILY"}]}),
+    );
+    ok(
+        &mut e,
+        "block.set",
+        json!({"id": "exit", "demand": {"quantity": 30.0, "per": "shift", "calendar": "shifts"}}),
+    );
+    assert_eq!(
+        err(&mut e, "calendar.remove", json!({"id": "shifts"})),
+        ErrorCode::Conflict
+    );
+    ok(&mut e, "block.set", json!({"id": "exit", "demand": null}));
+    ok(&mut e, "calendar.remove", json!({"id": "shifts"}));
 }
 
 /// Processing times by property value: set on a server, read back, run, refused where they do

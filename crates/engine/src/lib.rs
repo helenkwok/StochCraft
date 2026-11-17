@@ -364,13 +364,19 @@ impl Engine {
         })
     }
 
-    /// Replaces the document: a new model with no history and no file.
+    /// Replaces the document: a new model with no history, no file, no background run and no
+    /// sweeps in its record. The last results are kept, so `results.compare` can still compare
+    /// them with the new model's.
     fn new_document(&mut self, model: Model) {
         self.saved = model.clone();
         self.model = model;
         self.undo.clear();
         self.redo.clear();
         self.file = None;
+        self.cancel_run();
+        self.job = None;
+        self.job_kept = false;
+        self.sensitivity.clear();
     }
 
     /// Opens a model file from its bytes (`name` is reported back and used by `file.save`),

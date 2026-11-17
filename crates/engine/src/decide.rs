@@ -547,7 +547,8 @@ fn candidates(model: &Model, only: Option<&[String]>) -> Result<Vec<Param>, Comm
 }
 
 /// The model with every time distribution replaced by its mean: what a spreadsheet of average
-/// times would size.
+/// times would size. What is drawn otherwise stays drawn: property values (a part type at its
+/// mean could match no route), routing probabilities, balking, scrap and mixes of text values.
 pub fn deterministic(model: &Model) -> Model {
     let mut m = model.clone();
     let mean = |d: &mut Dist| {
@@ -566,12 +567,36 @@ pub fn deterministic(model: &Model) -> Model {
                 timed.iter_mut().for_each(|t| mean(&mut t.value));
             }
             ElementKind::Server {
-                service, breakdown, ..
+                service,
+                breakdown,
+                transfer,
+                setup,
+                planned_run_time,
+                patience,
+                health_check,
+                ..
             } => {
                 mean(service);
                 if let Some(b) = breakdown {
                     mean(&mut b.time_to_failure);
                     mean(&mut b.repair);
+                }
+                if let Some(t) = transfer {
+                    mean(&mut t.time);
+                }
+                if let Some(s) = setup {
+                    mean(&mut s.time);
+                    s.by_change.iter_mut().for_each(|c| mean(&mut c.time));
+                }
+                if let Some(p) = planned_run_time {
+                    mean(p);
+                }
+                if let Some(p) = patience {
+                    mean(&mut p.time);
+                }
+                if let Some(h) = health_check {
+                    mean(&mut h.interval);
+                    mean(&mut h.restart);
                 }
             }
             ElementKind::SharedTask { service, .. } => mean(service),
@@ -603,7 +628,8 @@ fn grow(
     let mut m = model.clone();
     let mut steps = Vec::new();
     let limit = p.max_added.unwrap_or(50);
-    for added in 0..=limit {
+    let mut added = 0;
+    loop {
         let s = run(&m, reps, seed)?;
         let met = p.target.met(&s)?;
         let probability = met.estimate().unwrap_or(0.0);
@@ -640,19 +666,19 @@ fn grow(
         };
         step["bottleneck"] = json!({ "id": r.id, "utilisation": u });
         steps.push(step);
+        // The last model run is the answer: it need not run again.
         if added == limit {
-            break;
+            return Ok(Sized {
+                model: m,
+                met,
+                steps,
+                reached: false,
+            });
         }
         let now = r.get(&m)?;
         r.set(&mut m, now + 1.0)?;
+        added += 1;
     }
-    let s = run(&m, reps, seed)?;
-    Ok(Sized {
-        met: p.target.met(&s)?,
-        model: m,
-        steps,
-        reached: false,
-    })
 }
 
 /// Adds a unit at the bottleneck until the share of replications meeting the target reaches the
@@ -703,7 +729,96 @@ pub fn size(model: &Model, p: &SizeParams) -> Result<(Value, Model), CommandErro
             "reached": fixed.reached,
             "steps": fixed.steps,
         },
-        "method": "run, add a unit to the busiest resource that may grow (highest utilisation), run again, until the share of replications meeting the target reaches the target share (`confidence` in earlier answers: a share of the replications run, not a statistical confidence); deterministic: the same with every time distribution replaced by its mean and one replication; the interval is Wilson's at 95% for the share meeting the target, and when its lower end is below the target share, the share is not shown to be met with 95% confidence",
+        "method": "run, add a unit to the busiest resource that may grow (highest utilisation), run again, until the share of replications meeting the target reaches the target share (`confidence` in earlier answers: a share of the replications run, not a statistical confidence); deterministic: the same with every time distribution replaced by its mean and one replication, while property values, routing probabilities, balking, scrap and mixes of text values are still drawn; the interval is Wilson's at 95% for the share meeting the target, and when its lower end is below the target share, the share is not shown to be met with 95% confidence",
     });
     Ok((answer, stochastic.model))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::Engine;
+    use stochcraft_model::PropertyValue;
+
+    /// A server with every kind of time and a property drawn for each entity.
+    fn busy_model() -> Model {
+        let mut e = Engine::new();
+        let exp = |mean: f64| json!({ "type": "exponential", "mean": mean });
+        let steps = [
+            ("model.set", crate::COMMANDS[0].example()),
+            (
+                "block.set",
+                json!({
+                    "id": "desk",
+                    "transfer": exp(0.5),
+                    "setup": {
+                        "time": exp(0.25),
+                        "on_change_of": "tier",
+                        "by_change": [{ "from": "a", "to": "b", "time": exp(1.0) }],
+                    },
+                    "planned_run_time": exp(0.1),
+                    "patience": { "time": exp(3.0) },
+                    "health_check": {
+                        "interval": exp(1.0),
+                        "limit": 0.0,
+                        "restart": exp(0.5),
+                    },
+                }),
+            ),
+            (
+                "property.set",
+                json!({ "element": "arrivals", "name": "size", "value": { "random": exp(2.0) } }),
+            ),
+            (
+                "property.set",
+                json!({ "element": "arrivals", "name": "offset",
+                        "value": { "random": { "type": "normal", "mean": -3.0, "std_dev": 1.0 } } }),
+            ),
+        ];
+        for (command, params) in steps {
+            let r = e.execute(command, params.clone());
+            assert!(r.is_ok(), "{command} {params}: {r:?}");
+        }
+        e.model().clone()
+    }
+
+    #[test]
+    fn the_deterministic_model_has_every_time_at_its_mean() {
+        let m = deterministic(&busy_model());
+        let fixed = |d: &Dist, mean: f64| assert_eq!(*d, Dist::Constant(mean));
+        let desk = m.elements.iter().find(|e| e.id.as_str() == "desk");
+        let Some(ElementKind::Server {
+            service,
+            transfer: Some(transfer),
+            setup: Some(setup),
+            planned_run_time: Some(planned),
+            patience: Some(patience),
+            health_check: Some(check),
+            ..
+        }) = desk.map(|e| &e.kind)
+        else {
+            unreachable!("the desk is a server with every time: {desk:?}");
+        };
+        fixed(service, 1.5);
+        fixed(&transfer.time, 0.5);
+        fixed(&setup.time, 0.25);
+        assert_eq!(setup.by_change.len(), 1);
+        fixed(&setup.by_change[0].time, 1.0);
+        fixed(planned, 0.1);
+        fixed(&patience.time, 3.0);
+        fixed(&check.interval, 1.0);
+        fixed(&check.restart, 0.5);
+        // Properties are not times: they stay drawn (a part type of 1 or 2 at its mean, 1.5,
+        // would match no route).
+        let properties = |m: &Model| -> Vec<PropertyValue> {
+            m.elements
+                .iter()
+                .flat_map(|e| &e.properties)
+                .map(|p| p.value.clone())
+                .collect()
+        };
+        let before = properties(&busy_model());
+        assert!(before.iter().any(|v| matches!(v, PropertyValue::Random(_))));
+        assert_eq!(properties(&m), before);
+    }
 }

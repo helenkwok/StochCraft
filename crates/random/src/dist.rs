@@ -5,7 +5,7 @@
 //! open, the choice made here is stated on the variant.
 
 use crate::Rng;
-use crate::math::{cos, exp, ln, powf, sin};
+use crate::math::{cos, erf, erfc, exp, ln, powf, sin};
 
 /// A probability distribution, as a model describes a duration, a count or a property.
 #[derive(Debug, Clone, PartialEq)]
@@ -213,7 +213,7 @@ fn truncated_standard_normal(rng: &mut Rng, a: f64, b: f64) -> f64 {
     if a * w + 0.5 * w * w <= 1.5 {
         loop {
             let z = rng.uniform_range(a, b);
-            if rng.uniform() <= exp(0.5 * (a * a - z * z)) {
+            if rng.uniform() <= exp(0.5 * (a - z) * (a + z)) {
                 return z;
             }
         }
@@ -265,6 +265,51 @@ fn binomial(rng: &mut Rng, p: f64, n: u64) -> u64 {
         }
         successes += 1;
     }
+}
+
+/// A draw from a user distribution (0 for points [`Dist::check`] rejects). Discrete points, and
+/// continuous ones already in order of value, are read where they are, without the copy
+/// [`user_points`] makes; the draw is the same either way.
+fn sample_user(rng: &mut Rng, points: &[(f64, f64)], discrete: bool) -> f64 {
+    // What `check` accepts, with the total summed as it sums it.
+    let total: f64 = points.iter().map(|(p, _)| *p).sum();
+    let valid = points
+        .iter()
+        .all(|(p, v)| p.is_finite() && *p >= 0.0 && v.is_finite())
+        && total > 0.0
+        && total.is_finite();
+    if !valid {
+        return 0.0;
+    }
+    let in_order = discrete
+        || points
+            .windows(2)
+            .all(|w| w[0].1.total_cmp(&w[1].1) != std::cmp::Ordering::Greater);
+    let u = rng.uniform();
+    if in_order {
+        draw_user(u, points.iter().map(|(p, v)| (p / total, *v)), discrete)
+    } else {
+        let pts = user_points(points, discrete).unwrap_or_default();
+        draw_user(u, pts.into_iter(), discrete)
+    }
+}
+
+/// The value at `u` of the normalised points, in order of value for the continuous form.
+fn draw_user(u: f64, pts: impl Iterator<Item = (f64, f64)>, discrete: bool) -> f64 {
+    let mut cumulative = 0.0;
+    let mut previous: Option<(f64, f64)> = None;
+    for (p, v) in pts {
+        let below = cumulative;
+        cumulative += p;
+        if u < cumulative {
+            return match (discrete, previous) {
+                (false, Some((_, v0))) if p > 0.0 => v0 + (v - v0) * (u - below) / p,
+                _ => v,
+            };
+        }
+        previous = Some((p, v));
+    }
+    previous.map_or(0.0, |(_, v)| v)
 }
 
 /// The normalised points of a user distribution, sorted by value for the continuous form.
@@ -447,6 +492,9 @@ impl Dist {
 
     /// Draws one value. Parameters [`Dist::check`] rejects give the lower bound or 0, never a panic.
     pub fn sample(&self, rng: &mut Rng) -> f64 {
+        if let Dist::User { points, discrete } = self {
+            return sample_user(rng, points, *discrete);
+        }
         if self.check().is_err() {
             return self.fallback();
         }
@@ -497,26 +545,7 @@ impl Dist {
                 probability,
                 trials,
             } => binomial(rng, *probability, *trials) as f64,
-            Dist::User { points, discrete } => {
-                let Some(pts) = user_points(points, *discrete) else {
-                    return 0.0;
-                };
-                let u = rng.uniform();
-                let mut cumulative = 0.0;
-                let mut previous: Option<(f64, f64)> = None;
-                for (p, v) in &pts {
-                    let below = cumulative;
-                    cumulative += p;
-                    if u < cumulative {
-                        return match (discrete, previous) {
-                            (false, Some((_, v0))) if *p > 0.0 => v0 + (v - v0) * (u - below) / p,
-                            _ => *v,
-                        };
-                    }
-                    previous = Some((*p, *v));
-                }
-                pts.last().map_or(0.0, |(_, v)| *v)
-            }
+            Dist::User { points, discrete } => sample_user(rng, points, *discrete),
         }
     }
 
@@ -564,7 +593,7 @@ impl Dist {
     }
 
     /// The theoretical mean (`None` where it has no simple closed form or the parameters are
-    /// invalid). For the truncated normal it is computed by numerical integration.
+    /// invalid).
     pub fn mean(&self) -> Option<f64> {
         self.check().ok()?;
         Some(match self {
@@ -580,10 +609,7 @@ impl Dist {
                 std_dev,
                 min,
                 max,
-            } => {
-                let (m0, m1, _) = truncated_moments(*mean, *std_dev, *min, *max);
-                m1 / m0
-            }
+            } => truncated_moments(*mean, *std_dev, *min, *max).0,
             Dist::Gamma { shape, scale } => shape * scale,
             Dist::Beta { shape, scale } => shape / (shape + scale),
             Dist::Weibull { shape, scale } => scale * exp(ln_gamma(1.0 + 1.0 / shape)),
@@ -624,11 +650,7 @@ impl Dist {
                 std_dev,
                 min,
                 max,
-            } => {
-                let (m0, m1, m2) = truncated_moments(*mean, *std_dev, *min, *max);
-                let m = m1 / m0;
-                m2 / m0 - m * m
-            }
+            } => truncated_moments(*mean, *std_dev, *min, *max).1,
             Dist::Gamma { shape, scale } => shape * scale * scale,
             Dist::Beta { shape: a, scale: b } => a * b / ((a + b) * (a + b) * (a + b + 1.0)),
             Dist::Erlang { mean, k } => mean * mean / *k as f64,
@@ -647,27 +669,150 @@ impl Dist {
     }
 }
 
-/// ∫ x^i φ((x − μ)/σ) dx over [min, max] for i = 0, 1, 2 (Simpson's rule, 4,000 intervals).
-fn truncated_moments(mean: f64, std_dev: f64, min: f64, max: f64) -> (f64, f64, f64) {
-    const N: usize = 4_000;
-    let h = (max - min) / N as f64;
+/// 1/√(2π).
+const FRAC_1_SQRT_2PI: f64 = 0.398_942_280_401_432_7;
+
+/// The standard normal density; 0 at ±∞.
+fn normal_pdf(z: f64) -> f64 {
+    if z.is_finite() {
+        FRAC_1_SQRT_2PI * exp(-0.5 * z * z)
+    } else {
+        0.0
+    }
+}
+
+/// The mean and variance of the normal (`mean`, `std_dev`) truncated to [min, max], for valid
+/// parameters.
+///
+/// In closed form (Johnson, Kotz and Balakrishnan, *Continuous Univariate Distributions*, vol. 1,
+/// 2nd ed., 1994, chapter 13), worked so that it stays finite and accurate however far the
+/// bounds are from the mean and however narrow the normal is beside them. An interval on one side
+/// of the mean is the upper tail beyond its near bound less the tail beyond its far bound (by
+/// symmetry for the left side); one around the mean takes its probability from `erf`. Where the
+/// density is nearly flat over the interval, which the closed forms lose to cancellation,
+/// Simpson's rule gives the moments instead.
+fn truncated_moments(mean: f64, std_dev: f64, min: f64, max: f64) -> (f64, f64) {
+    let w = (max - min) / std_dev;
+    let (m, v) = if min >= mean {
+        let (u, v) = tail_moments((min - mean) / std_dev, w);
+        (min + std_dev * u, v)
+    } else if max <= mean {
+        let (u, v) = tail_moments((mean - max) / std_dev, w);
+        (max - std_dev * u, v)
+    } else {
+        let (a, b) = ((min - mean) / std_dev, (max - mean) / std_dev);
+        if 0.5 * (a * a).max(b * b) <= FLAT {
+            let (u, v) = flat_moments(a, w);
+            (min + std_dev * u, v)
+        } else {
+            let z = 0.5 * (erf(b / std::f64::consts::SQRT_2) + erf(-a / std::f64::consts::SQRT_2));
+            let z_pdf = |x: f64| {
+                if x.is_finite() {
+                    x * normal_pdf(x)
+                } else {
+                    0.0
+                }
+            };
+            let m = (normal_pdf(a) - normal_pdf(b)) / z;
+            (mean + std_dev * m, 1.0 + (z_pdf(a) - z_pdf(b)) / z - m * m)
+        }
+    };
+    let v = std_dev * std_dev * v;
+    (
+        m.clamp(min, max),
+        v.clamp(0.0, 0.25 * (max - min) * (max - min)),
+    )
+}
+
+/// The most the log of the standard normal density may fall across an interval for it to count
+/// as nearly flat there (a fall by a factor of e²).
+const FLAT: f64 = 2.0;
+
+/// The standard normal truncated to [a, a + w] with a ≥ 0: its mean less a, and its variance.
+fn tail_moments(a: f64, w: f64) -> (f64, f64) {
+    if !a.is_finite() {
+        // The bound overflowed: everything is at it.
+        return (0.0, 0.0);
+    }
+    // The log density falls by this much across the interval.
+    let fall = 0.5 * w * (2.0 * a + w);
+    if fall <= FLAT {
+        return flat_moments(a, w);
+    }
+    let (mills_a, excess_a, var_a) = upper_tail(a);
+    let (mills_b, excess_b, var_b) = upper_tail(a + w);
+    // The tail beyond a + w as a share of the tail beyond a: below e^-FLAT.
+    let p = if mills_a > 0.0 {
+        exp(-fall) * mills_b / mills_a
+    } else {
+        0.0
+    };
+    if p == 0.0 {
+        return (excess_a, var_a);
+    }
+    // Moments about a, of the tail beyond a less the tail beyond a + w.
+    let (b1, b2) = (excess_b + w, var_b + (excess_b + w) * (excess_b + w));
+    let m1 = (excess_a - p * b1) / (1.0 - p);
+    let m2 = (var_a + excess_a * excess_a - p * b2) / (1.0 - p);
+    (m1, m2 - m1 * m1)
+}
+
+/// The standard normal's upper tail beyond x ≥ 0: Mills' ratio Q(x)/φ(x), the tail's mean less
+/// x, and its variance. From `erfc` near the mean; further out, where that loses digits to
+/// cancellation (and underflows past x ≈ 38), from Laplace's continued fraction
+/// Q(x)/φ(x) = 1/(x + 1/(x + 2/(x + 3/(x + …)))), whose last terms give the excess and variance
+/// without cancellation (40 terms are exact to rounding from x = 4 on).
+fn upper_tail(x: f64) -> (f64, f64, f64) {
+    if !x.is_finite() {
+        return (0.0, 0.0, 0.0);
+    }
+    if x < 4.0 {
+        let mills = 0.5 * erfc(x / std::f64::consts::SQRT_2) / normal_pdf(x);
+        let mean = 1.0 / mills;
+        let excess = mean - x;
+        return (mills, excess, 1.0 - mean * excess);
+    }
+    // t_k = x + (k + 1)/t_(k+1), from t_40 ≈ x down to t_2; then 1/t_0 is the ratio, the excess
+    // is 1/t_1 and the variance 1 − t_0/t_1 = (2 t_1 − t_2)/(t_1² t_2).
+    let mut t2 = x;
+    for k in (3..=40).rev() {
+        t2 = x + f64::from(k) / t2;
+    }
+    let t1 = x + 2.0 / t2;
+    let t0 = x + 1.0 / t1;
+    (1.0 / t0, 1.0 / t1, (2.0 * t1 - t2) / (t1 * t1 * t2))
+}
+
+/// The standard normal truncated to [a, a + w] where its density is nearly flat: its mean less
+/// a, and its variance, by Simpson's rule (1,000 intervals) about the interval's middle.
+fn flat_moments(a: f64, w: f64) -> (f64, f64) {
+    const N: u32 = 1_000;
+    let h = w / f64::from(N);
     let (mut m0, mut m1, mut m2) = (0.0, 0.0, 0.0);
     for i in 0..=N {
-        let x = min + h * i as f64;
-        let w = if i == 0 || i == N {
+        let x = h * f64::from(i);
+        let y = x - 0.5 * w;
+        // Twice the fall in log density from the point nearest the mean (a, or the mean itself
+        // when the interval holds it), kept small so nothing underflows.
+        let fall = if a >= 0.0 {
+            x * (2.0 * a + x)
+        } else {
+            (a + x) * (a + x)
+        };
+        let weight = if i == 0 || i == N {
             1.0
         } else if i % 2 == 1 {
             4.0
         } else {
             2.0
         };
-        let z = (x - mean) / std_dev;
-        let f = w * exp(-0.5 * z * z);
+        let f = weight * exp(-0.5 * fall);
         m0 += f;
-        m1 += f * x;
-        m2 += f * x * x;
+        m1 += f * y;
+        m2 += f * y * y;
     }
-    (m0, m1, m2)
+    let shift = m1 / m0;
+    (0.5 * w + shift, m2 / m0 - shift * shift)
 }
 
 #[cfg(test)]
@@ -712,6 +857,133 @@ mod tests {
     }
 
     use super::*;
+
+    /// The truncated normal's mean and variance, against known values: half and symmetric
+    /// truncations, tails far from the mean, a narrow interval, and a narrow normal inside wide
+    /// bounds (where integrating over the bounds missed the peak).
+    #[test]
+    fn truncated_normal_moments_are_exact_in_the_tails() {
+        let cases = [
+            // (mean, std_dev, min, max), mean, variance
+            (
+                (0.0, 1.0, 0.0, 60.0),
+                0.797_884_560_802_865_4,
+                0.363_380_227_632_418_7,
+            ),
+            ((0.0, 1.0, -1.0, 1.0), 0.0, 0.291_125_094_772_793),
+            (
+                (0.0, 1.0, 1.0, 60.0),
+                1.525_135_276_160_98,
+                0.199_097_665_570_346,
+            ),
+            (
+                (2.0, 1.0, 1.0, 1000.0),
+                2.287_599_970_939_18,
+                0.629_686_285_776_529,
+            ),
+            (
+                (0.0, 1.0, 3.0, 3.4),
+                3.158_665_253_073_33,
+                0.012_252_218_751_405_3,
+            ),
+            ((30.0, 0.5, 0.0, 1e5), 30.0, 0.25),
+            ((5.1, 0.001, 0.0, 1000.0), 5.1, 1e-6),
+            (
+                (0.0, 1.0, 40.0, 50.0),
+                40.024_968_847_207_3,
+                6.226_683_785_913_73e-4,
+            ),
+            (
+                (0.0, 1.0, -50.0, -40.0),
+                -40.024_968_847_207_3,
+                6.226_683_785_913_73e-4,
+            ),
+            (
+                (0.0, 1.0, 1.0, 1.000_001),
+                1.000_000_499_999_92,
+                8.333_333_331_961_53e-14,
+            ),
+            ((1e3, 1.0, 1e9, 1e9 + 1.0), 1e9, 1.000_002_000_003e-18),
+        ];
+        for ((mean, std_dev, min, max), m, v) in cases {
+            let d = Dist::TruncatedNormal {
+                mean,
+                std_dev,
+                min,
+                max,
+            };
+            let (dm, dv) = (d.mean(), d.variance());
+            assert!(
+                dm.is_some_and(|x| (x - m).abs() <= 1e-9 * m.abs().max(1.0)),
+                "{d:?}: mean {dm:?}, not {m}"
+            );
+            assert!(
+                dv.is_some_and(|x| (x - v).abs() <= 1e-6 * v.max(1e-12)),
+                "{d:?}: variance {dv:?}, not {v}"
+            );
+        }
+    }
+
+    /// User distributions sampled as before they were sampled in place: the old sampler, copied
+    /// here, gives the same bits and leaves the generator in the same state.
+    #[test]
+    fn user_distributions_sample_as_they_did() {
+        fn old(rng: &mut Rng, points: &[(f64, f64)], discrete: bool) -> f64 {
+            let d = Dist::User {
+                points: points.to_vec(),
+                discrete,
+            };
+            if d.check().is_err() {
+                return 0.0;
+            }
+            let Some(pts) = user_points(points, discrete) else {
+                return 0.0;
+            };
+            let u = rng.uniform();
+            let mut cumulative = 0.0;
+            let mut previous: Option<(f64, f64)> = None;
+            for (p, v) in &pts {
+                let below = cumulative;
+                cumulative += p;
+                if u < cumulative {
+                    return match (discrete, previous) {
+                        (false, Some((_, v0))) if *p > 0.0 => v0 + (v - v0) * (u - below) / p,
+                        _ => *v,
+                    };
+                }
+                previous = Some((*p, *v));
+            }
+            pts.last().map_or(0.0, |(_, v)| *v)
+        }
+        let sets: Vec<Vec<(f64, f64)>> = vec![
+            vec![(0.0, 1.0), (0.5, 2.0), (0.5, 4.0)],
+            vec![(3.0, 1.0), (7.0, 2.5), (1.0, 9.0)],
+            vec![(1.0, 5.0), (2.0, 1.0), (3.0, 3.0)],
+            vec![(0.1, 2.0), (0.2, 2.0), (0.0, 1.0), (0.7, 3.0)],
+            vec![(0.3, 1.0), (0.0, 2.0), (0.0, 2.0), (0.7, 4.0)],
+            vec![(1.0, 7.0)],
+            vec![(0.1, 0.1), (0.2, 0.2), (0.3, 0.3), (0.4, 0.4), (1e-9, 0.5)],
+            vec![],
+            vec![(0.0, 1.0), (0.0, 2.0)],
+            vec![(-1.0, 1.0), (2.0, 2.0)],
+            vec![(1.0, f64::NAN), (1.0, 2.0)],
+            vec![(f64::MAX, 1.0), (f64::MAX, 2.0)],
+        ];
+        for points in &sets {
+            for discrete in [false, true] {
+                let d = Dist::User {
+                    points: points.clone(),
+                    discrete,
+                };
+                let (mut a, mut b) = (Rng::new(11), Rng::new(11));
+                for _ in 0..2_000 {
+                    let (x, y) = (d.sample(&mut a), old(&mut b, points, discrete));
+                    assert_eq!(x.to_bits(), y.to_bits(), "{d:?}: {x} vs {y}");
+                }
+                assert_eq!(a.next_u64(), b.next_u64(), "{d:?}");
+            }
+        }
+    }
 
     fn moments(d: &Dist, n: usize, seed: u64) -> (f64, f64) {
         let mut rng = Rng::new(seed);

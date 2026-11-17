@@ -1025,3 +1025,47 @@ fn a_palette_chip_adds_its_block_by_click_keyboard_or_drag() {
     settle(&mut h);
     assert_eq!(count(&h), 3, "the drop adds a task where it lands");
 }
+
+/// A run going when the model is replaced (a new model, a file opened, or an agent's model) is
+/// cancelled, so its results cannot turn up later over the new model.
+#[test]
+fn replacing_the_model_cancels_the_run_in_progress() {
+    let mut h = harness(Platform::BROWSER);
+    for replace in ["open", "control model.new", "control model.set"] {
+        h.state_mut()
+            .open_file("mm1.bpmn", stochcraft_ui_egui::EXAMPLES[0].bytes);
+        settle(&mut h);
+        h.state_mut().run();
+        assert!(h.state().is_running(), "{replace}");
+        match replace {
+            "open" => h
+                .state_mut()
+                .open_file("mm1.bpmn", stochcraft_ui_egui::EXAMPLES[0].bytes),
+            "control model.new" => {
+                h.state_mut()
+                    .control("model.new", json!({}))
+                    .expect("model.new");
+            }
+            _ => {
+                let model = stochcraft_engine::COMMANDS[0].example();
+                h.state_mut()
+                    .control("model.set", model)
+                    .expect("model.set");
+            }
+        }
+        assert!(!h.state().is_running(), "{replace}");
+        for _ in 0..20 {
+            h.step();
+        }
+        assert!(h.state().results().is_none(), "{replace}");
+        // A new run can start: nothing is left running in the engine.
+        if replace == "control model.new" {
+            h.state_mut()
+                .control("model.set", stochcraft_engine::COMMANDS[0].example())
+                .expect("model.set");
+        }
+        h.state_mut().run();
+        assert!(h.state().is_running(), "{replace}: {}", h.state().status());
+        h.state_mut().cancel_run();
+    }
+}
