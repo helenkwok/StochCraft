@@ -538,6 +538,8 @@ impl App {
     /// Opens the Help panel at `section`.
     fn show_help_at(&mut self, section: help::Section) {
         self.help.open = true;
+        // A search would hide the section asked for.
+        self.help.search.clear();
         self.help.scroll_to = Some(section);
     }
 

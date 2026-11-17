@@ -304,6 +304,9 @@ fn help_opens_beside_the_work_and_follows_the_model() {
             .is_none()
     );
     assert!(h.query_by_label("Getting started").is_none());
+    // A section chosen from the menu clears the search, so it shows.
+    menu(&mut h, &["Help", "Getting Started"]);
+    h.get_by_label("Getting started");
 
     // The guide opens in the browser.
     h.state_mut().take_requests();

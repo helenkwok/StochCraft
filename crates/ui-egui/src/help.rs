@@ -145,8 +145,8 @@ pub const GLOSSARY: &[(&str, &str)] = &[
 ];
 
 /// The steps of Getting started, and whether each is done for `model` (its wire form):
-/// arrivals, a task connected to something, departures that something connects to, a run, and
-/// reading what it found.
+/// arrivals, a task that entities from them reach, departures they reach through a task, a run,
+/// and reading what it found.
 pub fn steps(model: &Value, ran: bool, read: bool) -> [(&'static str, bool); 5] {
     let elements = model["elements"]
         .as_array()
@@ -156,15 +156,38 @@ pub fn steps(model: &Value, ran: bool, read: bool) -> [(&'static str, bool); 5] 
         .as_array()
         .map(Vec::as_slice)
         .unwrap_or(&[]);
-    let fed = |id: &Value| connections.iter().any(|c| &c["to"] == id);
-    let kind_is = |e: &Value, kinds: &[&str]| kinds.contains(&e["kind"].as_str().unwrap_or(""));
-    let arrivals = elements.iter().any(|e| kind_is(e, &["source"]));
-    let task = elements
+    let kind = |id: &str| {
+        elements
+            .iter()
+            .find(|e| e["id"] == id)
+            .and_then(|e| e["kind"].as_str())
+            .unwrap_or("")
+    };
+    let is_task = |id: &str| matches!(kind(id), "server" | "delay" | "shared_task");
+    // Walk the connections from every Arrivals block, noting whether a task has been passed.
+    let mut reached: Vec<(String, bool)> = elements
         .iter()
-        .any(|e| kind_is(e, &["server", "delay", "shared_task"]) && fed(&e["id"]));
-    let departures = elements
+        .filter(|e| e["kind"] == "source")
+        .filter_map(|e| Some((e["id"].as_str()?.to_owned(), false)))
+        .collect();
+    let arrivals = !reached.is_empty();
+    let mut i = 0;
+    while i < reached.len() {
+        let (at, via_task) = reached[i].clone();
+        let via_task = via_task || is_task(&at);
+        for c in connections.iter().filter(|c| c["from"] == at.as_str()) {
+            if let Some(to) = c["to"].as_str()
+                && !reached.iter().any(|(id, v)| id == to && *v == via_task)
+            {
+                reached.push((to.to_owned(), via_task));
+            }
+        }
+        i += 1;
+    }
+    let task = reached.iter().any(|(id, _)| is_task(id));
+    let departures = reached
         .iter()
-        .any(|e| kind_is(e, &["sink"]) && fed(&e["id"]));
+        .any(|(id, via_task)| kind(id) == "sink" && *via_task);
     [
         ("Add Arrivals", arrivals),
         ("Add a task and connect Arrivals to it", task),
@@ -369,6 +392,36 @@ mod tests {
         }
         let s = steps(&model, true, true);
         assert!(s.iter().all(|(_, d)| *d));
+
+        // Arrivals not connected: a chain of tasks into departures is not the first model yet.
+        let chain = json!({
+            "elements": [
+                { "id": "a", "kind": "source" },
+                { "id": "t1", "kind": "server" },
+                { "id": "t2", "kind": "delay" },
+                { "id": "d", "kind": "sink" }
+            ],
+            "connections": [
+                { "id": "c1", "from": "t1", "to": "t2" },
+                { "id": "c2", "from": "t2", "to": "d" }
+            ]
+        });
+        assert_eq!(
+            steps(&chain, false, false).map(|(_, d)| d),
+            [true, false, false, false, false]
+        );
+        // Departures straight after arrivals, with no task between: not the third step.
+        let skip = json!({
+            "elements": [
+                { "id": "a", "kind": "source" },
+                { "id": "d", "kind": "sink" }
+            ],
+            "connections": [{ "id": "c1", "from": "a", "to": "d" }]
+        });
+        assert_eq!(
+            steps(&skip, false, false).map(|(_, d)| d),
+            [true, false, false, false, false]
+        );
     }
 
     #[test]

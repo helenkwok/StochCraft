@@ -76,30 +76,26 @@ fn untranslated(h: &Harness<'static, App>) -> BTreeSet<String> {
     if let Some(n) = model["name"].as_str() {
         model_words.insert(n.to_owned());
     }
-    let texts: Vec<String> = h
-        .query_all(By::new())
+    fn text_of(n: &egui_kittest::Node<'_>) -> Option<String> {
+        let a = n.accesskit_node();
+        Some(a.label().or_else(|| a.value())?.trim().to_owned())
+    }
+    let is_marked = |text: &str| text.contains('⟦') || text.contains('⟧');
+    h.query_all(By::new())
         .filter_map(|n| {
-            let a = n.accesskit_node();
-            let text = a.label().or_else(|| a.value())?;
-            Some(text.trim().to_owned())
+            let text = text_of(&n)?;
+            // A label wrapped over three lines or more has lines in the middle with neither
+            // mark: a line of its own label, which is marked.
+            let in_marked_label = n
+                .parent()
+                .and_then(|p| text_of(&p))
+                .is_some_and(|parent| is_marked(&parent));
+            (!text.is_empty()
+                && !is_marked(&text)
+                && !in_marked_label
+                && !is_data(&text, &model_words))
+            .then_some(text)
         })
-        .collect();
-    // A label wrapped over three lines or more has lines in the middle with neither mark; they
-    // are part of a marked label's text.
-    let marked: Vec<&String> = texts
-        .iter()
-        .filter(|t| t.contains('⟦') || t.contains('⟧'))
-        .collect();
-    texts
-        .iter()
-        .filter(|text| {
-            let is_marked = text.contains('⟦') || text.contains('⟧');
-            let inside = marked
-                .iter()
-                .any(|m| m.len() > text.len() && m.contains(text.as_str()));
-            !text.is_empty() && !is_marked && !inside && !is_data(text, &model_words)
-        })
-        .cloned()
         .collect()
 }
 
