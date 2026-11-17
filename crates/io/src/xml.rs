@@ -413,8 +413,13 @@ fn attrs_of(e: &quick_xml::events::BytesStart<'_>) -> Result<Vec<(String, String
     Ok(out)
 }
 
+/// How deep elements may nest. Walking, writing and dropping a document recurse once per level,
+/// so a file nested deeper (no model file comes close) is refused rather than let it run out of
+/// stack.
+pub const MAX_DEPTH: usize = 512;
+
 /// Parses a document. The input must be UTF-8 (as BPMN and XPDL files are in practice); a byte
-/// order mark is remembered and skipped.
+/// order mark is remembered and skipped. Elements may nest at most [`MAX_DEPTH`] deep.
 pub fn parse(bytes: &[u8]) -> Result<Document, XmlError> {
     let text = std::str::from_utf8(bytes).map_err(|e| XmlError(format!("not UTF-8: {e}")))?;
     let bom = text.starts_with('\u{feff}');
@@ -439,6 +444,11 @@ pub fn parse(bytes: &[u8]) -> Result<Document, XmlError> {
                 let content = content.strip_prefix("xml").unwrap_or(content).trim();
                 decl = Some(content.to_owned());
                 continue;
+            }
+            Event::Start(_) | Event::Empty(_) if stack.len() >= MAX_DEPTH => {
+                return Err(XmlError(format!(
+                    "at byte {at}: elements nested more than {MAX_DEPTH} deep"
+                )));
             }
             Event::Start(e) => {
                 let attrs = attrs_of(&e)?;
@@ -728,6 +738,39 @@ fn write_node(n: &Node, out: &mut String, indent: Option<usize>) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// `depth` elements, each inside the one before.
+    fn nested(depth: usize) -> String {
+        format!("{}{}", "<a>".repeat(depth), "</a>".repeat(depth))
+    }
+
+    /// A file nested deeper than [`MAX_DEPTH`] is refused, so walking, writing and dropping a
+    /// parsed one (all recursive) cannot run out of stack; one nested exactly that deep is read,
+    /// written back as it was and dropped.
+    #[test]
+    fn nesting_is_limited() {
+        let deepest = nested(MAX_DEPTH);
+        let d = parse(deepest.as_bytes()).unwrap_or_else(|e| unreachable!("{e}"));
+        assert_eq!(d.root.descendants().len(), MAX_DEPTH - 1);
+        assert_eq!(write(&d), deepest);
+        drop(d);
+        for too_deep in [
+            nested(MAX_DEPTH + 1),
+            format!(
+                "{}<a/>{}",
+                "<a>".repeat(MAX_DEPTH),
+                "</a>".repeat(MAX_DEPTH)
+            ),
+            nested(1_000_000),
+        ] {
+            let r = parse(too_deep.as_bytes());
+            assert!(
+                matches!(&r, Err(XmlError(m)) if m.contains("nested")),
+                "{:?}",
+                r.err()
+            );
+        }
+    }
 
     const SAMPLE: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
 <!-- made by hand -->

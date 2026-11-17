@@ -1818,3 +1818,34 @@ fn values_with_their_own_unit_in_vendor_extensions_are_rescaled() {
         "{got:?} {want:?}"
     );
 }
+
+/// A file nested as deep as the reader allows opens and saves (its unknown content kept); one
+/// nested deeper is refused as not well-formed.
+#[test]
+fn deeply_nested_content_is_kept_up_to_the_limit() {
+    let original = text(&file("mm1.bpmn"));
+    let depth = |n: usize| {
+        original.replacen(
+            "<bpsim:BPSimData>",
+            &format!(
+                "{}{}<bpsim:BPSimData>",
+                "<x:deep xmlns:x=\"urn:x\">".repeat(n),
+                "</x:deep>".repeat(n)
+            ),
+            1,
+        )
+    };
+    // The deepest element is already a few levels down.
+    let ok = depth(stochcraft_io::xml::MAX_DEPTH - 10);
+    let loaded = read_scenario(ok.as_bytes(), None).unwrap_or_else(|e| panic!("{e}"));
+    let mut m = loaded.model.clone();
+    m.experiment.replications = 3;
+    let saved = loaded.opened.save(&m).unwrap_or_else(|e| panic!("{e}"));
+    assert!(text(&saved).contains(&"<x:deep xmlns:x=\"urn:x\">".repeat(50)));
+    let r = read_scenario(depth(stochcraft_io::xml::MAX_DEPTH).as_bytes(), None);
+    assert!(
+        r.as_ref().is_err_and(|e| e.to_string().contains("nested")),
+        "{:?}",
+        r.err()
+    );
+}
