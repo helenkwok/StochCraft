@@ -818,6 +818,52 @@ unit	yr	년
 	What the Results Mean	결과의 의미
 	User Guide	사용자 가이드
 	Report a Problem	문제 보고
+	Where is the bottleneck?	병목은 어디인가?
+	How many people or machines?	사람이나 기계가 몇이나 필요한가?
+	Will a change help?	변경이 도움이 될까?
+	Why did it break down?	왜 멈췄나?
+	Manufacturing	제조
+	Healthcare	의료
+	Contact centre	콜센터
+	IT operations	IT 운영
+	Reference	참조 모델
+	Checked against queueing theory	대기열 이론으로 검증됨
+	Matches a published study	발표된 연구와 일치
+	What do you want to find out?	무엇을 알아보고 싶으세요?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	프로세스를 시뮬레이션하고, 가정 시나리오를 비교하고, 어떤 차이가 실제인지 확인하세요. 각 예제는 질문 하나를 던지고 답을 어떻게 찾았는지 보여 줍니다.
+	Questions	질문
+	All	모두
+	Industry	산업
+	All industries	모든 산업
+	No example matches these choices yet.	아직 이 선택에 맞는 예제가 없습니다.
+	Show the featured examples only	추천 예제만 표시
+	Teaches:	배울 내용:
+	New to simulation?	시뮬레이션이 처음이신가요?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	실제 캔버스에서 짧은 5단계로 첫 모델을 만드세요. 도착, 작업, 이탈, 실행, 그리고 발견 사항 읽기. 진행하는 동안 “시작하기”가 각 단계를 체크합니다.
+	Build a first model	첫 모델 만들기
+	Coming from another simulation tool?	다른 시뮬레이션 도구에서 오셨나요?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	여기서 블록, 실행, 신뢰 구간이 어떻게 작동하는지, 어떤 키가 무엇을 하는지, 이미 가진 프로세스 다이어그램을 어떻게 가져오는지.
+	Read the two-page guide	2페이지 가이드 읽기
+	Open a file	파일 열기
+	Open a file…	파일 열기…
+	Recent	최근 항목
+	Start from a blank model	빈 모델로 시작
+	See all {n} examples, including reference models	참조 모델을 포함한 예제 {n}개 모두 보기
+	{n} min	{n}분
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	주말 휴지가 있는 기계 4대 라인 (Schmitt et al. 2026, 사례 A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	프레스 2대가 있는 기계 7대 라인 (Schmitt et al. 2026, 사례 B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	고장, 작은 대기실, 주말 휴지, 기계별 전력이 있는 직렬 기계 4대.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	더 짧은 대기열에서 공급받는 병렬 프레스 2대, 품질 검사 불합격, 주말 휴지.
+	How long do customers wait at one busy clerk?	바쁜 창구 하나에서 고객은 얼마나 기다릴까?
+	How do two stations in a row share the waiting?	연속된 두 작업장은 대기를 어떻게 나눠 가질까?
+	How do the time distributions differ?	시간 분포는 어떻게 다를까?
+	What do failures and weekend breaks do to a line's output and energy per part?	고장과 주말 휴지는 라인의 산출량과 부품당 에너지에 어떤 영향을 줄까?
+	Which machine holds back a line with two presses in parallel?	병렬 프레스 2대가 있는 라인에서 발목을 잡는 기계는 무엇일까?
+	Why a clerk busy three quarters of the time already means a queue.	시간의 4분의 3만 바쁜 창구도 이미 대기열을 뜻하는 이유.
+	Reading a process diagram from another file format.	다른 파일 형식에서 프로세스 다이어그램 읽기.
+	One task for each distribution, to compare their spread.	분포마다 작업 하나를 배정하여 분산 정도를 비교합니다.
+	Failures, small buffers, shifts and energy per machine state.	고장, 작은 대기실, 교대 근무, 기계 상태별 에너지.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	더 짧은 대기열에서 공급받는 병렬 기계와 품질 검사에서 불합격된 부품.
 @plural	Added {n} block|Added {n} blocks	블록 {n}개 추가됨
 @plural	Copied {n} block|Copied {n} blocks	블록 {n}개 복사됨
 @plural	Finished {n} run|Finished {n} runs	실행 {n}회 완료

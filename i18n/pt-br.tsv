@@ -818,6 +818,52 @@ unit	yr	a
 	What the Results Mean	O que os resultados significam
 	User Guide	Guia do usuário
 	Report a Problem	Relatar um problema
+	Where is the bottleneck?	Onde está o gargalo?
+	How many people or machines?	Quantas pessoas ou máquinas?
+	Will a change help?	Uma mudança vai ajudar?
+	Why did it break down?	Por que falhou?
+	Manufacturing	Manufatura
+	Healthcare	Saúde
+	Contact centre	Central de atendimento
+	IT operations	Operações de TI
+	Reference	Modelos de referência
+	Checked against queueing theory	Verificado pela teoria das filas
+	Matches a published study	Confere com um estudo publicado
+	What do you want to find out?	O que você quer descobrir?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simule um processo, compare hipóteses e veja quais diferenças são reais. Cada exemplo faz uma pergunta e mostra como a resposta foi encontrada.
+	Questions	Perguntas
+	All	Todas
+	Industry	Setor
+	All industries	Todos os setores
+	No example matches these choices yet.	Nenhum exemplo corresponde a essas escolhas ainda.
+	Show the featured examples only	Mostrar só os exemplos em destaque
+	Teaches:	Ensina:
+	New to simulation?	Novo em simulação?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Monte um primeiro modelo em cinco passos curtos na superfície principal de verdade: chegadas, uma tarefa, saídas, executar e ler a constatação. “Primeiros passos” marca cada passo conforme você avança.
+	Build a first model	Montar um primeiro modelo
+	Coming from another simulation tool?	Vem de outra ferramenta de simulação?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Como blocos, execuções e intervalos de confiança funcionam aqui, o que cada tecla faz e como importar um diagrama de processo que você já tem.
+	Read the two-page guide	Ler o guia de duas páginas
+	Open a file	Abrir um arquivo
+	Open a file…	Abrir um arquivo…
+	Recent	Recentes
+	Start from a blank model	Começar com um modelo vazio
+	See all {n} examples, including reference models	Ver todos os {n} exemplos, incluindo os modelos de referência
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Linha de quatro máquinas com paradas de fim de semana (Schmitt et al. 2026, caso A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Linha de sete máquinas com duas prensas (Schmitt et al. 2026, caso B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Quatro máquinas em série com falhas, salas de espera pequenas, paradas de fim de semana e potência por máquina.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Duas prensas em paralelo alimentadas pela fila mais curta, rejeitos na qualidade, paradas de fim de semana.
+	How long do customers wait at one busy clerk?	Quanto tempo os clientes esperam por um único atendente muito ocupado?
+	How do two stations in a row share the waiting?	Como duas estações em série dividem a espera?
+	How do the time distributions differ?	Em que as distribuições de tempo diferem?
+	What do failures and weekend breaks do to a line's output and energy per part?	O que falhas e paradas de fim de semana fazem com a produção de uma linha e a energia por peça?
+	Which machine holds back a line with two presses in parallel?	Qual máquina segura uma linha com duas prensas em paralelo?
+	Why a clerk busy three quarters of the time already means a queue.	Por que um atendente ocupado três quartos do tempo já significa uma fila.
+	Reading a process diagram from another file format.	Ler um diagrama de processo de outro formato de arquivo.
+	One task for each distribution, to compare their spread.	Uma tarefa para cada distribuição, para comparar a dispersão.
+	Failures, small buffers, shifts and energy per machine state.	Falhas, salas de espera pequenas, turnos e energia por estado da máquina.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Máquinas em paralelo alimentadas pela fila mais curta e peças rejeitadas na qualidade.
 @plural	Added {n} block|Added {n} blocks	{n} bloco adicionado|{n} blocos adicionados
 @plural	Copied {n} block|Copied {n} blocks	{n} bloco copiado|{n} blocos copiados
 @plural	Finished {n} run|Finished {n} runs	Concluída {n} execução|Concluídas {n} execuções

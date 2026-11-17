@@ -670,6 +670,15 @@ engine's messages (validation, file notes) are English too.
   are cut down from the catalog's "Time blocked", "Time starved" and "…are settled". Not checked
   against a source, and not reviewed by native speakers; the least certain are lo and ka, then
   th, ta, te, bn, kk, sq, sr and sr-latn.
+- The rows for the start page (issue #149, forty-six strings: "What do you want to find out?",
+  the question filters, industries, proof tags, the examples' questions and what each teaches, and
+  the three ways in) were drafted from the plain meaning of the English, reusing each catalog's
+  words for canvas, waiting room, breakdown, shift, energy per part, Getting started, Open and
+  Open Recent. "Schmitt et al. 2026" is kept as cited, with "Case" translated. "See all {n}
+  examples" reads "all examples ({n})" where a number would need a plural form (ru, uk, pl, cs,
+  sk, sl, hr, bs, sr, sr-latn, lt, ka, kk). Not checked against a source, and not reviewed by
+  native speakers; the least certain are lo, ka, kk, ta, te, bn, sq, et and lt, and the words for
+  bottleneck and press.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

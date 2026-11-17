@@ -818,6 +818,52 @@ unit	yr	år
 	What the Results Mean	Vad resultaten betyder
 	User Guide	Användarhandbok
 	Report a Problem	Rapportera ett problem
+	Where is the bottleneck?	Var är flaskhalsen?
+	How many people or machines?	Hur många personer eller maskiner?
+	Will a change help?	Hjälper en ändring?
+	Why did it break down?	Varför havererade det?
+	Manufacturing	Tillverkning
+	Healthcare	Vård
+	Contact centre	Callcenter
+	IT operations	IT-drift
+	Reference	Referensmodeller
+	Checked against queueing theory	Kontrollerad mot köteori
+	Matches a published study	Stämmer med en publicerad studie
+	What do you want to find out?	Vad vill du ta reda på?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simulera en process, jämför tänk-om-varianter och se vilka skillnader som är verkliga. Varje exempel ställer en fråga och visar hur svaret hittades.
+	Questions	Frågor
+	All	Alla
+	Industry	Bransch
+	All industries	Alla branscher
+	No example matches these choices yet.	Inget exempel passar de här valen än.
+	Show the featured examples only	Visa bara de utvalda exemplen
+	Teaches:	Lär ut:
+	New to simulation?	Ny inom simulering?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Bygg en första modell i fem korta steg på den riktiga huvudytan: ankomster, en uppgift, avgångar, kör och läs sedan iakttagelsen. ”Kom igång” bockar av varje steg allt eftersom.
+	Build a first model	Bygg en första modell
+	Coming from another simulation tool?	Kommer du från ett annat simuleringsverktyg?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Hur block, körningar och konfidensintervall fungerar här, vilka tangenter som gör vad och hur du tar in ett processdiagram som du redan har.
+	Read the two-page guide	Läs guiden på två sidor
+	Open a file	Öppna en fil
+	Open a file…	Öppna en fil…
+	Recent	Senaste
+	Start from a blank model	Börja med en tom modell
+	See all {n} examples, including reference models	Visa alla {n} exempel, även referensmodellerna
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Linje med fyra maskiner och helgstopp (Schmitt et al. 2026, fall A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Linje med sju maskiner och två pressar (Schmitt et al. 2026, fall B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Fyra maskiner i serie med haverier, små väntrum, helgstopp och effekt per maskin.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Två parallella pressar matade via den kortaste kön, kassation vid kvalitetskontrollen, helgstopp.
+	How long do customers wait at one busy clerk?	Hur länge väntar kunderna hos en enda upptagen handläggare?
+	How do two stations in a row share the waiting?	Hur delar två stationer i rad på väntan?
+	How do the time distributions differ?	Hur skiljer sig tidsfördelningarna åt?
+	What do failures and weekend breaks do to a line's output and energy per part?	Vad gör haverier och helgstopp med en linjes utflöde och energin per detalj?
+	Which machine holds back a line with two presses in parallel?	Vilken maskin håller tillbaka en linje med två parallella pressar?
+	Why a clerk busy three quarters of the time already means a queue.	Varför en handläggare som är upptagen tre fjärdedelar av tiden redan betyder en kö.
+	Reading a process diagram from another file format.	Läsa in ett processdiagram från ett annat filformat.
+	One task for each distribution, to compare their spread.	En uppgift per fördelning för att jämföra deras spridning.
+	Failures, small buffers, shifts and energy per machine state.	Haverier, små väntrum, skift och energi per maskintillstånd.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Parallella maskiner matade via den kortaste kön, och detaljer som kasseras vid kvalitetskontrollen.
 @plural	Added {n} block|Added {n} blocks	Lade till {n} block|Lade till {n} block
 @plural	Copied {n} block|Copied {n} blocks	Kopierade {n} block|Kopierade {n} block
 @plural	Finished {n} run|Finished {n} runs	{n} körning klar|{n} körningar klara

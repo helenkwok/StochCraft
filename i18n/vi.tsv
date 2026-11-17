@@ -818,6 +818,52 @@ unit	yr	năm
 	What the Results Mean	Ý nghĩa của kết quả
 	User Guide	Hướng dẫn sử dụng
 	Report a Problem	Báo cáo sự cố
+	Where is the bottleneck?	Điểm nghẽn ở đâu?
+	How many people or machines?	Cần bao nhiêu người hoặc máy?
+	Will a change help?	Một thay đổi có giúp ích không?
+	Why did it break down?	Vì sao bị hỏng?
+	Manufacturing	Sản xuất
+	Healthcare	Y tế
+	Contact centre	Tổng đài
+	IT operations	Vận hành CNTT
+	Reference	Mô hình tham chiếu
+	Checked against queueing theory	Đã kiểm tra bằng lý thuyết hàng đợi
+	Matches a published study	Khớp với một nghiên cứu đã công bố
+	What do you want to find out?	Bạn muốn tìm hiểu điều gì?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Mô phỏng một quy trình, so sánh các phương án giả định và xem khác biệt nào là thật. Mỗi ví dụ đặt một câu hỏi và cho thấy câu trả lời được tìm ra như thế nào.
+	Questions	Câu hỏi
+	All	Tất cả
+	Industry	Ngành
+	All industries	Mọi ngành
+	No example matches these choices yet.	Chưa có ví dụ nào khớp với các lựa chọn này.
+	Show the featured examples only	Chỉ hiện các ví dụ nổi bật
+	Teaches:	Dạy về:
+	New to simulation?	Mới làm quen với mô phỏng?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Dựng mô hình đầu tiên trong năm bước ngắn trên bề mặt chính thật: lượt đến, một tác vụ, lượt rời đi, chạy, rồi đọc phát hiện. “Bắt đầu” đánh dấu từng bước khi bạn làm xong.
+	Build a first model	Dựng mô hình đầu tiên
+	Coming from another simulation tool?	Bạn chuyển từ một công cụ mô phỏng khác?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Cách khối, lần chạy và khoảng tin cậy hoạt động ở đây, phím nào làm gì, và cách nhập một sơ đồ quy trình bạn đã có.
+	Read the two-page guide	Đọc hướng dẫn hai trang
+	Open a file	Mở tệp
+	Open a file…	Mở tệp…
+	Recent	Gần đây
+	Start from a blank model	Bắt đầu từ mô hình trống
+	See all {n} examples, including reference models	Xem tất cả {n} ví dụ, kể cả mô hình tham chiếu
+	{n} min	{n} phút
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Dây chuyền bốn máy có nghỉ cuối tuần (Schmitt et al. 2026, Trường hợp A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Dây chuyền bảy máy có hai máy ép (Schmitt et al. 2026, Trường hợp B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Bốn máy nối tiếp với hỏng hóc, khu vực chờ nhỏ, nghỉ cuối tuần và công suất từng máy.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Hai máy ép song song được cấp từ hàng đợi ngắn hơn, loại bỏ tại khâu kiểm tra chất lượng, nghỉ cuối tuần.
+	How long do customers wait at one busy clerk?	Khách hàng chờ bao lâu ở một nhân viên phục vụ duy nhất đang bận?
+	How do two stations in a row share the waiting?	Hai trạm nối tiếp chia sẻ thời gian chờ như thế nào?
+	How do the time distributions differ?	Các phân phối thời gian khác nhau ra sao?
+	What do failures and weekend breaks do to a line's output and energy per part?	Hỏng hóc và nghỉ cuối tuần ảnh hưởng thế nào đến sản lượng của dây chuyền và năng lượng trên mỗi chi tiết?
+	Which machine holds back a line with two presses in parallel?	Máy nào kìm hãm dây chuyền có hai máy ép song song?
+	Why a clerk busy three quarters of the time already means a queue.	Vì sao một nhân viên phục vụ bận ba phần tư thời gian đã có nghĩa là có hàng đợi.
+	Reading a process diagram from another file format.	Đọc sơ đồ quy trình từ một định dạng tệp khác.
+	One task for each distribution, to compare their spread.	Mỗi phân phối một tác vụ để so sánh độ phân tán.
+	Failures, small buffers, shifts and energy per machine state.	Hỏng hóc, khu vực chờ nhỏ, ca làm việc và năng lượng theo trạng thái máy.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Máy song song được cấp từ hàng đợi ngắn hơn, và chi tiết bị loại tại khâu kiểm tra chất lượng.
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy

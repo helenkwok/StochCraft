@@ -818,6 +818,52 @@ unit	yr	a
 	What the Results Mean	Mida tulemused tähendavad
 	User Guide	Kasutusjuhend
 	Report a Problem	Teata probleemist
+	Where is the bottleneck?	Kus on kitsaskoht?
+	How many people or machines?	Kui palju inimesi või masinaid?
+	Will a change help?	Kas muudatus aitab?
+	Why did it break down?	Miks see üles ütles?
+	Manufacturing	Tootmine
+	Healthcare	Tervishoid
+	Contact centre	Kõnekeskus
+	IT operations	IT-teenused
+	Reference	Võrdlusmudelid
+	Checked against queueing theory	Kontrollitud järjekorrateooriaga
+	Matches a published study	Vastab avaldatud uuringule
+	What do you want to find out?	Mida soovite teada saada?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simuleerige protsessi, võrrelge mis-kui-variante ja vaadake, millised erinevused on tegelikud. Iga näide esitab ühe küsimuse ja näitab, kuidas vastus leiti.
+	Questions	Küsimused
+	All	Kõik
+	Industry	Valdkond
+	All industries	Kõik valdkonnad
+	No example matches these choices yet.	Ükski näide ei vasta veel neile valikutele.
+	Show the featured examples only	Näita ainult esiletõstetud näiteid
+	Teaches:	Õpetab:
+	New to simulation?	Simulatsioonis uus?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Ehitage esimene mudel viie lühikese sammuga päris põhipinnal: saabumised, ülesanne, lahkumised, käivitamine ja siis tähelepaneku lugemine. „Alustamine“ märgib iga sammu tehtuks, kui edasi liigute.
+	Build a first model	Ehita esimene mudel
+	Coming from another simulation tool?	Tulete teisest simulatsioonitööriistast?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Kuidas plokid, käivitamised ja usaldusvahemikud siin toimivad, millised klahvid mida teevad ja kuidas tuua sisse juba olemasolev protsessiskeem.
+	Read the two-page guide	Loe kaheleheküljelist juhendit
+	Open a file	Ava fail
+	Open a file…	Ava fail…
+	Recent	Hiljutised
+	Start from a blank model	Alusta tühjast mudelist
+	See all {n} examples, including reference models	Vaata kõiki {n} näidet, sh võrdlusmudeleid
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Nelja masinaga liin ja nädalavahetuse seisakud (Schmitt et al. 2026, juhtum A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Seitsme masinaga liin ja kaks pressi (Schmitt et al. 2026, juhtum B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Neli järjestikust masinat rikete, väikeste ooteruumide, nädalavahetuse seisakute ja võimsusega masina kohta.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Kaks paralleelset pressi, mida toidetakse lühemast järjekorrast, praak kvaliteedikontrollis, nädalavahetuse seisakud.
+	How long do customers wait at one busy clerk?	Kui kaua ootavad kliendid ühe hõivatud teenindaja juures?
+	How do two stations in a row share the waiting?	Kuidas jagavad kaks järjestikust jaama ootamist?
+	How do the time distributions differ?	Kuidas ajajaotused erinevad?
+	What do failures and weekend breaks do to a line's output and energy per part?	Mida teevad rikked ja nädalavahetuse seisakud liini toodangu ja energiaga detaili kohta?
+	Which machine holds back a line with two presses in parallel?	Milline masin pidurdab liini, kus on kaks paralleelset pressi?
+	Why a clerk busy three quarters of the time already means a queue.	Miks kolmveerand ajast hõivatud teenindaja tähendab juba järjekorda.
+	Reading a process diagram from another file format.	Protsessiskeemi lugemine teisest failivormingust.
+	One task for each distribution, to compare their spread.	Üks ülesanne iga jaotuse kohta nende hajuvuse võrdlemiseks.
+	Failures, small buffers, shifts and energy per machine state.	Rikked, väikesed ooteruumid, vahetused ja energia masina oleku kohta.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Paralleelsed masinad, mida toidetakse lühemast järjekorrast, ja kvaliteedikontrollis praagitud detailid.
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud

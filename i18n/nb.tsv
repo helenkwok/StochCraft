@@ -818,6 +818,52 @@ unit	yr	år
 	What the Results Mean	Hva resultatene betyr
 	User Guide	Brukerveiledning
 	Report a Problem	Rapporter et problem
+	Where is the bottleneck?	Hvor er flaskehalsen?
+	How many people or machines?	Hvor mange personer eller maskiner?
+	Will a change help?	Hjelper en endring?
+	Why did it break down?	Hvorfor sviktet det?
+	Manufacturing	Produksjon
+	Healthcare	Helse
+	Contact centre	Callsenter
+	IT operations	IT-drift
+	Reference	Referansemodeller
+	Checked against queueing theory	Kontrollert mot køteori
+	Matches a published study	Stemmer med en publisert studie
+	What do you want to find out?	Hva vil du finne ut?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simuler en prosess, sammenlign hva-om-varianter og se hvilke forskjeller som er reelle. Hvert eksempel stiller ett spørsmål og viser hvordan svaret ble funnet.
+	Questions	Spørsmål
+	All	Alle
+	Industry	Bransje
+	All industries	Alle bransjer
+	No example matches these choices yet.	Ingen eksempler passer til disse valgene ennå.
+	Show the featured examples only	Vis bare de fremhevede eksemplene
+	Teaches:	Lærer bort:
+	New to simulation?	Ny i simulering?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Bygg en første modell i fem korte trinn på den ekte hovedflaten: ankomster, en oppgave, avganger, kjør og les så funnet. «Kom i gang» krysser av hvert trinn etter hvert som du gjør det.
+	Build a first model	Bygg en første modell
+	Coming from another simulation tool?	Kommer du fra et annet simuleringsverktøy?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Hvordan blokker, kjøringer og konfidensintervaller virker her, hvilke taster som gjør hva, og hvordan du henter inn et prosessdiagram du allerede har.
+	Read the two-page guide	Les veiledningen på to sider
+	Open a file	Åpne en fil
+	Open a file…	Åpne en fil…
+	Recent	Nylig brukt
+	Start from a blank model	Start med en tom modell
+	See all {n} examples, including reference models	Se alle {n} eksemplene, også referansemodellene
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Linje med fire maskiner og helgestopp (Schmitt et al. 2026, case A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Linje med sju maskiner og to presser (Schmitt et al. 2026, case B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Fire maskiner i serie med feil, små venterom, helgestopp og effekt per maskin.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	To parallelle presser forsynt via den korteste køen, vrak ved kvalitetskontroll, helgestopp.
+	How long do customers wait at one busy clerk?	Hvor lenge venter kundene hos én travel medarbeider?
+	How do two stations in a row share the waiting?	Hvordan deler to stasjoner etter hverandre ventingen?
+	How do the time distributions differ?	Hvordan skiller tidsfordelingene seg?
+	What do failures and weekend breaks do to a line's output and energy per part?	Hva gjør feil og helgestopp med en linjes produksjon og energien per del?
+	Which machine holds back a line with two presses in parallel?	Hvilken maskin holder igjen en linje med to parallelle presser?
+	Why a clerk busy three quarters of the time already means a queue.	Hvorfor en medarbeider som er opptatt tre firedeler av tiden, allerede betyr kø.
+	Reading a process diagram from another file format.	Lese et prosessdiagram fra et annet filformat.
+	One task for each distribution, to compare their spread.	Én oppgave per fordeling for å sammenligne spredningen.
+	Failures, small buffers, shifts and energy per machine state.	Feil, små venterom, skift og energi per maskintilstand.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Parallelle maskiner forsynt via den korteste køen, og deler som vrakes ved kvalitetskontroll.
 @plural	Added {n} block|Added {n} blocks	La til {n} blokk|La til {n} blokker
 @plural	Copied {n} block|Copied {n} blocks	Kopierte {n} blokk|Kopierte {n} blokker
 @plural	Finished {n} run|Finished {n} runs	{n} kjøring fullført|{n} kjøringer fullført

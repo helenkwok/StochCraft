@@ -818,6 +818,52 @@ unit	yr	a
 	What the Results Mean	Ce înseamnă rezultatele
 	User Guide	Ghidul utilizatorului
 	Report a Problem	Raportează o problemă
+	Where is the bottleneck?	Unde este gâtul de sticlă?
+	How many people or machines?	Câți oameni sau câte mașini?
+	Will a change help?	Va ajuta o schimbare?
+	Why did it break down?	De ce s-a defectat?
+	Manufacturing	Producție
+	Healthcare	Sănătate
+	Contact centre	Call center
+	IT operations	Operațiuni IT
+	Reference	Modele de referință
+	Checked against queueing theory	Verificat cu teoria cozilor
+	Matches a published study	Concordă cu un studiu publicat
+	What do you want to find out?	Ce doriți să aflați?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simulați un proces, comparați variante „ce-ar fi dacă” și vedeți care diferențe sunt reale. Fiecare exemplu pune o întrebare și arată cum a fost găsit răspunsul.
+	Questions	Întrebări
+	All	Toate
+	Industry	Domeniu
+	All industries	Toate domeniile
+	No example matches these choices yet.	Încă niciun exemplu nu corespunde acestor alegeri.
+	Show the featured examples only	Afișează doar exemplele recomandate
+	Teaches:	Învață:
+	New to simulation?	Nou în simulare?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Construiți un prim model în cinci pași scurți pe suprafața principală reală: sosiri, o sarcină, plecări, rulare, apoi citiți constatarea. „Primii pași” bifează fiecare pas pe măsură ce avansați.
+	Build a first model	Construiește un prim model
+	Coming from another simulation tool?	Veniți de la alt instrument de simulare?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Cum funcționează aici blocurile, rulările și intervalele de încredere, ce face fiecare tastă și cum să importați o diagramă de proces pe care o aveți deja.
+	Read the two-page guide	Citește ghidul de două pagini
+	Open a file	Deschide un fișier
+	Open a file…	Deschide un fișier…
+	Recent	Recente
+	Start from a blank model	Începe cu un model gol
+	See all {n} examples, including reference models	Vezi toate exemplele ({n}), inclusiv modelele de referință
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Linie cu patru mașini și opriri de weekend (Schmitt et al. 2026, cazul A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Linie cu șapte mașini și două prese (Schmitt et al. 2026, cazul B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Patru mașini în serie cu avarii, săli de așteptare mici, opriri de weekend și putere pe mașină.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Două prese în paralel alimentate din coada mai scurtă, rebuturi la controlul calității, opriri de weekend.
+	How long do customers wait at one busy clerk?	Cât așteaptă clienții la un singur operator foarte ocupat?
+	How do two stations in a row share the waiting?	Cum își împart așteptarea două stații una după alta?
+	How do the time distributions differ?	Prin ce diferă distribuțiile timpilor?
+	What do failures and weekend breaks do to a line's output and energy per part?	Ce fac avariile și opririle de weekend cu producția unei linii și cu energia pe piesă?
+	Which machine holds back a line with two presses in parallel?	Ce mașină frânează o linie cu două prese în paralel?
+	Why a clerk busy three quarters of the time already means a queue.	De ce un operator ocupat trei sferturi din timp înseamnă deja o coadă.
+	Reading a process diagram from another file format.	Citirea unei diagrame de proces dintr-un alt format de fișier.
+	One task for each distribution, to compare their spread.	Câte o sarcină pentru fiecare distribuție, pentru compararea dispersiei.
+	Failures, small buffers, shifts and energy per machine state.	Avarii, săli de așteptare mici, ture și energie pe starea mașinii.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Mașini în paralel alimentate din coada mai scurtă și piese respinse la controlul calității.
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări

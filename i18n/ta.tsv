@@ -818,6 +818,52 @@ unit	yr	ஆண்டு
 	What the Results Mean	முடிவுகளின் பொருள்
 	User Guide	பயனர் வழிகாட்டி
 	Report a Problem	சிக்கலைப் புகாரளி
+	Where is the bottleneck?	தடைப்புள்ளி எங்கே?
+	How many people or machines?	எத்தனை நபர்கள் அல்லது இயந்திரங்கள்?
+	Will a change help?	ஒரு மாற்றம் உதவுமா?
+	Why did it break down?	ஏன் பழுதானது?
+	Manufacturing	உற்பத்தி
+	Healthcare	சுகாதாரம்
+	Contact centre	அழைப்பு மையம்
+	IT operations	தகவல் தொழில்நுட்பச் செயல்பாடுகள்
+	Reference	குறிப்பு மாதிரிகள்
+	Checked against queueing theory	வரிசைக் கோட்பாட்டுடன் சரிபார்க்கப்பட்டது
+	Matches a published study	வெளியிடப்பட்ட ஆய்வுடன் பொருந்துகிறது
+	What do you want to find out?	நீங்கள் எதைக் கண்டறிய விரும்புகிறீர்கள்?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	ஒரு செயல்முறையை உருவகப்படுத்துங்கள், “இப்படி இருந்தால்” மாற்றுகளை ஒப்பிடுங்கள், எந்த வேறுபாடுகள் உண்மையானவை என்று பாருங்கள். ஒவ்வொரு எடுத்துக்காட்டும் ஒரு கேள்வி கேட்டு, விடை எப்படிக் கண்டறியப்பட்டது என்பதைக் காட்டுகிறது.
+	Questions	கேள்விகள்
+	All	அனைத்தும்
+	Industry	தொழில்துறை
+	All industries	அனைத்துத் தொழில்துறைகளும்
+	No example matches these choices yet.	இந்தத் தேர்வுகளுக்குப் பொருந்தும் எடுத்துக்காட்டு இன்னும் இல்லை.
+	Show the featured examples only	சிறப்பு எடுத்துக்காட்டுகளை மட்டும் காட்டு
+	Teaches:	கற்பிப்பது:
+	New to simulation?	உருவகப்படுத்தலுக்குப் புதியவரா?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	உண்மையான முதன்மைப் பரப்பில் ஐந்து சிறிய படிகளில் முதல் மாதிரியை உருவாக்குங்கள்: வருகைகள், ஒரு பணி, வெளியேற்றங்கள், இயக்கம், பின்னர் கண்டறிதலைப் படித்தல். நீங்கள் முன்னேறும்போது “தொடங்குதல்” ஒவ்வொரு படியையும் குறிக்கிறது.
+	Build a first model	முதல் மாதிரியை உருவாக்கு
+	Coming from another simulation tool?	வேறு உருவகப்படுத்தல் கருவியிலிருந்து வருகிறீர்களா?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	இங்கே தொகுதிகள், மீள் இயக்கங்கள், நம்பிக்கை இடைவெளிகள் எப்படிச் செயல்படுகின்றன, எந்த விசை என்ன செய்கிறது, ஏற்கெனவே உள்ள செயல்முறை வரைபடத்தை எப்படிக் கொண்டுவருவது.
+	Read the two-page guide	இரண்டு பக்க வழிகாட்டியைப் படி
+	Open a file	ஒரு கோப்பைத் திற
+	Open a file…	ஒரு கோப்பைத் திற…
+	Recent	சமீபத்தியவை
+	Start from a blank model	வெற்று மாதிரியிலிருந்து தொடங்கு
+	See all {n} examples, including reference models	குறிப்பு மாதிரிகள் உட்பட அனைத்து {n} எடுத்துக்காட்டுகளையும் காண்க
+	{n} min	{n} நிமி
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	வார இறுதி நிறுத்தங்களுடன் நான்கு இயந்திர வரிசை (Schmitt et al. 2026, நிகழ்வு A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	இரண்டு அழுத்த இயந்திரங்களுடன் ஏழு இயந்திர வரிசை (Schmitt et al. 2026, நிகழ்வு B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	பழுதுகள், சிறிய காத்திருப்பு அறைகள், வார இறுதி நிறுத்தங்கள், ஒவ்வொரு இயந்திரத்தின் திறன் ஆகியவற்றுடன் தொடராக நான்கு இயந்திரங்கள்.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	குறுகிய வரிசையிலிருந்து ஊட்டப்படும் இரண்டு இணை அழுத்த இயந்திரங்கள், தரச் சோதனையில் நிராகரிப்புகள், வார இறுதி நிறுத்தங்கள்.
+	How long do customers wait at one busy clerk?	ஒரே ஒரு பணிமிகு பணியாளரிடம் வாடிக்கையாளர்கள் எவ்வளவு நேரம் காத்திருக்கிறார்கள்?
+	How do two stations in a row share the waiting?	அடுத்தடுத்த இரண்டு நிலையங்கள் காத்திருப்பை எப்படிப் பகிர்ந்துகொள்கின்றன?
+	How do the time distributions differ?	நேரப் பரவல்கள் எப்படி வேறுபடுகின்றன?
+	What do failures and weekend breaks do to a line's output and energy per part?	பழுதுகளும் வார இறுதி நிறுத்தங்களும் ஒரு வரிசையின் உற்பத்தியையும் ஒரு பாகத்திற்கான ஆற்றலையும் எப்படிப் பாதிக்கின்றன?
+	Which machine holds back a line with two presses in parallel?	இரண்டு இணை அழுத்த இயந்திரங்கள் கொண்ட வரிசையை எந்த இயந்திரம் தடுத்து நிறுத்துகிறது?
+	Why a clerk busy three quarters of the time already means a queue.	முக்கால் பங்கு நேரம் வேலையாக இருக்கும் பணியாளர் ஏன் ஏற்கெனவே ஒரு வரிசையைக் குறிக்கிறார்.
+	Reading a process diagram from another file format.	வேறு கோப்பு வடிவத்திலிருந்து செயல்முறை வரைபடத்தைப் படித்தல்.
+	One task for each distribution, to compare their spread.	பரவல் வேறுபாட்டை ஒப்பிட ஒவ்வொரு பரவலுக்கும் ஒரு பணி.
+	Failures, small buffers, shifts and energy per machine state.	பழுதுகள், சிறிய காத்திருப்பு அறைகள், பணிமுறைகள், இயந்திர நிலை வாரியான ஆற்றல்.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	குறுகிய வரிசையிலிருந்து ஊட்டப்படும் இணை இயந்திரங்கள், தரச் சோதனையில் நிராகரிக்கப்பட்ட பாகங்கள்.
 @plural	Added {n} block|Added {n} blocks	{n} தொகுதி சேர்க்கப்பட்டது|{n} தொகுதிகள் சேர்க்கப்பட்டன
 @plural	Copied {n} block|Copied {n} blocks	{n} தொகுதி நகலெடுக்கப்பட்டது|{n} தொகுதிகள் நகலெடுக்கப்பட்டன
 @plural	Finished {n} run|Finished {n} runs	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன

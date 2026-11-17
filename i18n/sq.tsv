@@ -818,6 +818,52 @@ unit	yr	v
 	What the Results Mean	Çfarë do të thonë rezultatet
 	User Guide	Udhëzuesi i përdoruesit
 	Report a Problem	Raporto një problem
+	Where is the bottleneck?	Ku është pika e ngushtë?
+	How many people or machines?	Sa njerëz ose makina?
+	Will a change help?	A do të ndihmojë një ndryshim?
+	Why did it break down?	Pse u prish?
+	Manufacturing	Prodhimi
+	Healthcare	Shëndetësia
+	Contact centre	Qendër thirrjesh
+	IT operations	Operacionet e TI-së
+	Reference	Modele reference
+	Checked against queueing theory	E kontrolluar me teorinë e radhëve
+	Matches a published study	Përputhet me një studim të botuar
+	What do you want to find out?	Çfarë doni të zbuloni?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simuloni një proces, krahasoni variante «po sikur» dhe shihni cilat dallime janë të vërteta. Çdo shembull bën një pyetje dhe tregon si u gjet përgjigjja.
+	Questions	Pyetjet
+	All	Të gjitha
+	Industry	Sektori
+	All industries	Të gjithë sektorët
+	No example matches these choices yet.	Asnjë shembull nuk përputhet ende me këto zgjedhje.
+	Show the featured examples only	Shfaq vetëm shembujt e veçuar
+	Teaches:	Mëson:
+	New to simulation?	I ri në simulim?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Ndërtoni një model të parë në pesë hapa të shkurtër në sipërfaqen kryesore të vërtetë: mbërritjet, një detyrë, largimet, ekzekutimi, pastaj lexoni gjetjen. «Si të fillosh» shënon çdo hap ndërsa ecni përpara.
+	Build a first model	Ndërto një model të parë
+	Coming from another simulation tool?	Vini nga një mjet tjetër simulimi?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Si funksionojnë këtu blloqet, ekzekutimet dhe intervalet e besimit, çfarë bën secili tast dhe si të importoni një diagram procesi që e keni tashmë.
+	Read the two-page guide	Lexo udhëzuesin dyfaqësh
+	Open a file	Hap një skedar
+	Open a file…	Hap një skedar…
+	Recent	Të fundit
+	Start from a blank model	Fillo nga një model bosh
+	See all {n} examples, including reference models	Shiko të gjithë shembujt ({n}), përfshirë modelet e referencës
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Linjë me katër makina dhe ndalesa fundjave (Schmitt et al. 2026, rasti A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Linjë me shtatë makina dhe dy presa (Schmitt et al. 2026, rasti B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Katër makina në seri me defekte, dhoma të vogla pritjeje, ndalesa fundjave dhe fuqi për makinë.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Dy presa paralele që furnizohen nga radha më e shkurtër, skarto në kontrollin e cilësisë, ndalesa fundjave.
+	How long do customers wait at one busy clerk?	Sa kohë presin klientët te një punonjës i vetëm shumë i zënë?
+	How do two stations in a row share the waiting?	Si e ndajnë pritjen dy stacione njëri pas tjetrit?
+	How do the time distributions differ?	Si ndryshojnë shpërndarjet e kohës?
+	What do failures and weekend breaks do to a line's output and energy per part?	Çfarë u bëjnë defektet dhe ndalesat e fundjavës prodhimit të një linje dhe energjisë për pjesë?
+	Which machine holds back a line with two presses in parallel?	Cila makinë e frenon një linjë me dy presa paralele?
+	Why a clerk busy three quarters of the time already means a queue.	Pse një punonjës i zënë tre të katërtat e kohës do të thotë tashmë radhë.
+	Reading a process diagram from another file format.	Leximi i një diagrami procesi nga një format tjetër skedari.
+	One task for each distribution, to compare their spread.	Një detyrë për çdo shpërndarje, për të krahasuar shpërhapjen e tyre.
+	Failures, small buffers, shifts and energy per machine state.	Defekte, dhoma të vogla pritjeje, turne dhe energji sipas gjendjes së makinës.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Makina paralele që furnizohen nga radha më e shkurtër dhe pjesë të refuzuara në kontrollin e cilësisë.
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime

@@ -818,6 +818,52 @@ unit	yr	ปี
 	What the Results Mean	ความหมายของผลลัพธ์
 	User Guide	คู่มือผู้ใช้
 	Report a Problem	รายงานปัญหา
+	Where is the bottleneck?	คอขวดอยู่ที่ไหน?
+	How many people or machines?	ต้องใช้คนหรือเครื่องจักรกี่หน่วย?
+	Will a change help?	การเปลี่ยนแปลงจะช่วยไหม?
+	Why did it break down?	ทำไมจึงขัดข้อง?
+	Manufacturing	การผลิต
+	Healthcare	การดูแลสุขภาพ
+	Contact centre	คอลเซ็นเตอร์
+	IT operations	การปฏิบัติการไอที
+	Reference	แบบจำลองอ้างอิง
+	Checked against queueing theory	ตรวจสอบเทียบกับทฤษฎีแถวคอย
+	Matches a published study	ตรงกับงานวิจัยที่ตีพิมพ์
+	What do you want to find out?	คุณต้องการค้นหาคำตอบเรื่องอะไร?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	จำลองกระบวนการ เปรียบเทียบสถานการณ์สมมติ และดูว่าความแตกต่างใดเป็นของจริง แต่ละตัวอย่างตั้งคำถามหนึ่งข้อและแสดงว่าหาคำตอบได้อย่างไร
+	Questions	คำถาม
+	All	ทั้งหมด
+	Industry	อุตสาหกรรม
+	All industries	ทุกอุตสาหกรรม
+	No example matches these choices yet.	ยังไม่มีตัวอย่างที่ตรงกับตัวเลือกเหล่านี้
+	Show the featured examples only	แสดงเฉพาะตัวอย่างแนะนำ
+	Teaches:	สอนเรื่อง:
+	New to simulation?	เพิ่งเริ่มใช้การจำลอง?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	สร้างแบบจำลองแรกใน 5 ขั้นตอนสั้น ๆ บนพื้นผิวหลักจริง: ขาเข้า งาน ขาออก รัน แล้วอ่านข้อค้นพบ “เริ่มต้นใช้งาน” จะทำเครื่องหมายแต่ละขั้นตอนเมื่อคุณทำเสร็จ
+	Build a first model	สร้างแบบจำลองแรก
+	Coming from another simulation tool?	ย้ายมาจากเครื่องมือจำลองอื่นใช่ไหม?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	บล็อก การรัน และช่วงความเชื่อมั่นทำงานอย่างไรที่นี่ ปุ่มใดทำอะไร และจะนำแผนภาพกระบวนการที่คุณมีอยู่แล้วเข้ามาได้อย่างไร
+	Read the two-page guide	อ่านคู่มือสองหน้า
+	Open a file	เปิดไฟล์
+	Open a file…	เปิดไฟล์…
+	Recent	ล่าสุด
+	Start from a blank model	เริ่มจากแบบจำลองเปล่า
+	See all {n} examples, including reference models	ดูตัวอย่างทั้งหมด {n} รายการ รวมถึงแบบจำลองอ้างอิง
+	{n} min	{n} นาที
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	สายการผลิตสี่เครื่องจักรพร้อมการหยุดช่วงสุดสัปดาห์ (Schmitt et al. 2026, กรณี A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	สายการผลิตเจ็ดเครื่องจักรพร้อมเครื่องอัดสองเครื่อง (Schmitt et al. 2026, กรณี B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	เครื่องจักรสี่เครื่องต่ออนุกรม พร้อมการขัดข้อง พื้นที่รอขนาดเล็ก การหยุดช่วงสุดสัปดาห์ และกำลังไฟฟ้าต่อเครื่อง
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	เครื่องอัดสองเครื่องแบบขนานที่ป้อนจากคิวที่สั้นกว่า ของเสียที่จุดตรวจคุณภาพ และการหยุดช่วงสุดสัปดาห์
+	How long do customers wait at one busy clerk?	ลูกค้ารอนานเท่าไรที่พนักงานคนเดียวซึ่งงานยุ่ง?
+	How do two stations in a row share the waiting?	สองสถานีที่ต่อกันแบ่งการรอกันอย่างไร?
+	How do the time distributions differ?	การแจกแจงของเวลาแตกต่างกันอย่างไร?
+	What do failures and weekend breaks do to a line's output and energy per part?	การขัดข้องและการหยุดช่วงสุดสัปดาห์ส่งผลอย่างไรต่อผลผลิตของสายการผลิตและพลังงานต่อชิ้น?
+	Which machine holds back a line with two presses in parallel?	เครื่องจักรใดฉุดสายการผลิตที่มีเครื่องอัดสองเครื่องแบบขนาน?
+	Why a clerk busy three quarters of the time already means a queue.	ทำไมพนักงานที่ไม่ว่างสามในสี่ของเวลาจึงหมายถึงการมีคิวแล้ว
+	Reading a process diagram from another file format.	การอ่านแผนภาพกระบวนการจากรูปแบบไฟล์อื่น
+	One task for each distribution, to compare their spread.	หนึ่งงานต่อการแจกแจงแต่ละแบบ เพื่อเปรียบเทียบการกระจายของค่า
+	Failures, small buffers, shifts and energy per machine state.	การขัดข้อง พื้นที่รอขนาดเล็ก กะ และพลังงานตามสถานะเครื่องจักร
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	เครื่องจักรแบบขนานที่ป้อนจากคิวที่สั้นกว่า และชิ้นงานที่ถูกคัดทิ้งที่จุดตรวจคุณภาพ
 @plural	Added {n} block|Added {n} blocks	เพิ่ม {n} บล็อกแล้ว
 @plural	Copied {n} block|Copied {n} blocks	คัดลอก {n} บล็อกแล้ว
 @plural	Finished {n} run|Finished {n} runs	การรันเสร็จสิ้น {n} รอบ

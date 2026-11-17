@@ -818,6 +818,52 @@ unit	yr	р.
 	What the Results Mean	Що означають результати
 	User Guide	Посібник користувача
 	Report a Problem	Повідомити про проблему
+	Where is the bottleneck?	Де вузьке місце?
+	How many people or machines?	Скільки людей або верстатів?
+	Will a change help?	Чи допоможе зміна?
+	Why did it break down?	Чому сталася відмова?
+	Manufacturing	Виробництво
+	Healthcare	Охорона здоров'я
+	Contact centre	Кол-центр
+	IT operations	ІТ-експлуатація
+	Reference	Еталонні моделі
+	Checked against queueing theory	Перевірено за теорією масового обслуговування
+	Matches a published study	Збігається з опублікованим дослідженням
+	What do you want to find out?	Що ви хочете з'ясувати?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Змоделюйте процес, порівняйте варіанти «що як» і подивіться, які відмінності справжні. Кожен приклад ставить одне запитання й показує, як було знайдено відповідь.
+	Questions	Запитання
+	All	Усі
+	Industry	Галузь
+	All industries	Усі галузі
+	No example matches these choices yet.	Поки жоден приклад не відповідає цьому вибору.
+	Show the featured examples only	Показати лише вибрані приклади
+	Teaches:	Чого вчить:
+	New to simulation?	Уперше в моделюванні?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Побудуйте першу модель за п'ять коротких кроків на справжній основній поверхні: прибуття, завдання, вибуття, запуск, а потім прочитайте спостереження. «Початок роботи» позначає кожен крок, щойно ви його виконаєте.
+	Build a first model	Побудувати першу модель
+	Coming from another simulation tool?	Переходите з іншого інструмента моделювання?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Як тут працюють блоки, запуски й довірчі інтервали, які клавіші що роблять і як імпортувати діаграму процесу, яка у вас уже є.
+	Read the two-page guide	Прочитати посібник на дві сторінки
+	Open a file	Відкрити файл
+	Open a file…	Відкрити файл…
+	Recent	Нещодавні
+	Start from a blank model	Почати з порожньої моделі
+	See all {n} examples, including reference models	Показати всі приклади ({n}), включно з еталонними моделями
+	{n} min	{n} хв
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Лінія з чотирьох верстатів із зупинками на вихідні (Schmitt et al. 2026, випадок A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Лінія із семи верстатів із двома пресами (Schmitt et al. 2026, випадок B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Чотири послідовні верстати з відмовами, малими місцями очікування, зупинками на вихідні та потужністю кожного верстата.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Два паралельні преси, що завантажуються з коротшої черги, брак на контролі якості, зупинки на вихідні.
+	How long do customers wait at one busy clerk?	Скільки чекають клієнти в одного завантаженого оператора?
+	How do two stations in a row share the waiting?	Як дві послідовні станції ділять очікування?
+	How do the time distributions differ?	Чим відрізняються розподіли часу?
+	What do failures and weekend breaks do to a line's output and energy per part?	Як відмови та зупинки на вихідні впливають на випуск лінії та енергію на деталь?
+	Which machine holds back a line with two presses in parallel?	Який верстат стримує лінію з двома паралельними пресами?
+	Why a clerk busy three quarters of the time already means a queue.	Чому оператор, зайнятий три чверті часу, уже означає чергу.
+	Reading a process diagram from another file format.	Читання діаграми процесу з іншого формату файлу.
+	One task for each distribution, to compare their spread.	По одному завданню на кожний розподіл для порівняння розкиду.
+	Failures, small buffers, shifts and energy per machine state.	Відмови, малі місця очікування, зміни й енергія за станами верстата.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Паралельні верстати, що завантажуються з коротшої черги, і деталі, відбраковані на контролі якості.
 @plural	Added {n} block|Added {n} blocks	Додано {n} блок|Додано {n} блоки|Додано {n} блоків
 @plural	Copied {n} block|Copied {n} blocks	Скопійовано {n} блок|Скопійовано {n} блоки|Скопійовано {n} блоків
 @plural	Finished {n} run|Finished {n} runs	Завершено {n} запуск|Завершено {n} запуски|Завершено {n} запусків

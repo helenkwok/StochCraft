@@ -818,6 +818,52 @@ unit	yr	বছর
 	What the Results Mean	ফলাফলের অর্থ
 	User Guide	ব্যবহারকারী নির্দেশিকা
 	Report a Problem	সমস্যা জানান
+	Where is the bottleneck?	বটলনেক কোথায়?
+	How many people or machines?	কতজন মানুষ বা কয়টি মেশিন?
+	Will a change help?	কোনো পরিবর্তন কি সাহায্য করবে?
+	Why did it break down?	কেন বিকল হলো?
+	Manufacturing	উৎপাদন
+	Healthcare	স্বাস্থ্যসেবা
+	Contact centre	কল সেন্টার
+	IT operations	আইটি পরিচালনা
+	Reference	রেফারেন্স মডেল
+	Checked against queueing theory	সারি তত্ত্বের সঙ্গে যাচাই করা
+	Matches a published study	একটি প্রকাশিত গবেষণার সঙ্গে মেলে
+	What do you want to find out?	আপনি কী জানতে চান?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	একটি প্রক্রিয়া সিমুলেট করুন, “যদি এমন হয়” বিকল্পগুলো তুলনা করুন এবং দেখুন কোন পার্থক্যগুলো বাস্তব। প্রতিটি উদাহরণ একটি প্রশ্ন করে এবং উত্তর কীভাবে পাওয়া গেল তা দেখায়।
+	Questions	প্রশ্ন
+	All	সব
+	Industry	শিল্পখাত
+	All industries	সব শিল্পখাত
+	No example matches these choices yet.	এখনও কোনো উদাহরণ এই পছন্দগুলোর সঙ্গে মেলে না।
+	Show the featured examples only	শুধু বাছাই করা উদাহরণ দেখান
+	Teaches:	শেখায়:
+	New to simulation?	সিমুলেশনে নতুন?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	আসল মূল পৃষ্ঠে পাঁচটি ছোট ধাপে প্রথম মডেল তৈরি করুন: আগমন, একটি কাজ, প্রস্থান, চালানো, তারপর পর্যবেক্ষণ পড়া। আপনি এগোনোর সঙ্গে সঙ্গে “শুরু করা” প্রতিটি ধাপে টিক দেয়।
+	Build a first model	প্রথম মডেল তৈরি করুন
+	Coming from another simulation tool?	অন্য কোনো সিমুলেশন টুল থেকে আসছেন?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	এখানে ব্লক, পুনরাবৃত্তি ও আস্থা ব্যবধান কীভাবে কাজ করে, কোন কী কী করে, এবং আপনার কাছে আগে থেকে থাকা প্রক্রিয়া ডায়াগ্রাম কীভাবে আনবেন।
+	Read the two-page guide	দুই পৃষ্ঠার নির্দেশিকা পড়ুন
+	Open a file	একটি ফাইল খুলুন
+	Open a file…	একটি ফাইল খুলুন…
+	Recent	সাম্প্রতিক
+	Start from a blank model	ফাঁকা মডেল দিয়ে শুরু করুন
+	See all {n} examples, including reference models	রেফারেন্স মডেলসহ সব {n}টি উদাহরণ দেখুন
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	সপ্তাহান্তের বিরতিসহ চার মেশিনের লাইন (Schmitt et al. 2026, কেস A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	দুটি প্রেসসহ সাত মেশিনের লাইন (Schmitt et al. 2026, কেস B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	ধারাবাহিক চারটি মেশিন, বিকলতা, ছোট অপেক্ষার ঘর, সপ্তাহান্তের বিরতি ও প্রতি মেশিনের শক্তি-হারসহ।
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	ছোট সারি থেকে সরবরাহ পাওয়া দুটি সমান্তরাল প্রেস, মান পরীক্ষায় বাতিল, সপ্তাহান্তের বিরতি।
+	How long do customers wait at one busy clerk?	একজন ব্যস্ত কর্মীর কাছে গ্রাহকেরা কতক্ষণ অপেক্ষা করেন?
+	How do two stations in a row share the waiting?	পরপর দুটি স্টেশন অপেক্ষা কীভাবে ভাগ করে নেয়?
+	How do the time distributions differ?	সময়ের বণ্টনগুলো কীভাবে আলাদা?
+	What do failures and weekend breaks do to a line's output and energy per part?	বিকলতা ও সপ্তাহান্তের বিরতি একটি লাইনের উৎপাদন ও প্রতি অংশে শক্তির ওপর কী প্রভাব ফেলে?
+	Which machine holds back a line with two presses in parallel?	দুটি সমান্তরাল প্রেসসহ একটি লাইনকে কোন মেশিন আটকে রাখে?
+	Why a clerk busy three quarters of the time already means a queue.	তিন-চতুর্থাংশ সময় ব্যস্ত থাকা একজন কর্মী মানেই কেন ইতিমধ্যে একটি সারি।
+	Reading a process diagram from another file format.	অন্য ফাইল ফরম্যাট থেকে প্রক্রিয়া ডায়াগ্রাম পড়া।
+	One task for each distribution, to compare their spread.	বিস্তার তুলনা করতে প্রতিটি বণ্টনের জন্য একটি কাজ।
+	Failures, small buffers, shifts and energy per machine state.	বিকলতা, ছোট অপেক্ষার ঘর, শিফট ও মেশিনের অবস্থা অনুযায়ী শক্তি।
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	ছোট সারি থেকে সরবরাহ পাওয়া সমান্তরাল মেশিন, এবং মান পরীক্ষায় বাতিল অংশ।
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে

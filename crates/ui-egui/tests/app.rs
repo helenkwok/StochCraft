@@ -104,11 +104,12 @@ fn an_example_opens_runs_and_shows_results() {
 #[test]
 fn the_browser_runs_in_slices_and_downloads_instead_of_saving() {
     let mut h = harness(Platform::BROWSER);
-    // The welcome screen's first example.
-    h.get_all_by_label("Open")
-        .next()
-        .expect("an example's Open button")
-        .click();
+    // The start page's first example card.
+    h.get_by_role_and_label(
+        egui::accesskit::Role::Button,
+        "How long do customers wait at one busy clerk?",
+    )
+    .click();
     settle(&mut h);
     h.key_press(egui::Key::F5);
     finish_run(&mut h);
@@ -269,6 +270,80 @@ fn a_baseline_is_compared_with_the_next_run() {
         .control("model.new", json!({}))
         .expect("a new model");
     assert!(h.state().baseline().is_none());
+}
+
+#[test]
+fn the_start_page_asks_what_to_find_out() {
+    let mut h = harness(Platform::DESKTOP);
+    h.get_by_label("What do you want to find out?");
+    // The featured examples, each a card named by its question, with its proof.
+    let mm1 = "How long do customers wait at one busy clerk?";
+    let case_a = "What do failures and weekend breaks do to a line's output and energy per part?";
+    h.get_by_role_and_label(egui::accesskit::Role::Button, mm1);
+    h.get_by_role_and_label(egui::accesskit::Role::Button, case_a);
+    h.get_by_label("Checked against queueing theory");
+    assert!(
+        h.query_by_label("How do the time distributions differ?")
+            .is_none(),
+        "reference models wait behind See all"
+    );
+    // A question narrows the cards; All brings them back.
+    click(&mut h, "Why did it break down?");
+    assert!(
+        h.query_by_role_and_label(egui::accesskit::Role::Button, mm1)
+            .is_none()
+    );
+    h.get_by_role_and_label(egui::accesskit::Role::Button, case_a);
+    click(&mut h, "All");
+    // See all (below the fold, so as from the keyboard) shows the reference models too.
+    h.get_by_label("See all 5 examples, including reference models")
+        .click_accesskit();
+    settle(&mut h);
+    h.get_by_role_and_label(
+        egui::accesskit::Role::Button,
+        "How do the time distributions differ?",
+    );
+
+    // A click anywhere on a card opens its example.
+    h.get_by_role_and_label(egui::accesskit::Role::Button, mm1)
+        .click();
+    settle(&mut h);
+    assert_eq!(h.state().engine().model().elements.len(), 3);
+
+    // With every block removed, the start page is back; a blank model from it is a new document
+    // (after the unsaved-changes question), not the old one's file and history.
+    for id in ["arrive", "serve", "leave"] {
+        h.state_mut().execute("block.remove", json!({ "id": id }));
+    }
+    settle(&mut h);
+    h.get_by_label("What do you want to find out?");
+    h.get_by_label("Start from a blank model").click_accesskit();
+    settle(&mut h);
+    click(&mut h, "Don't Save");
+    assert_eq!(h.state().engine().path(), None);
+    assert!(!h.state().has_unsaved_changes());
+    assert!(h.query_by_label("What do you want to find out?").is_none());
+
+    // Build a first model (below the cards in this narrow window, so from the keyboard): an
+    // empty model on the canvas with Getting started beside it.
+    let mut h = harness(Platform::DESKTOP);
+    h.get_by_role_and_label(egui::accesskit::Role::Button, "Build a first model")
+        .click_accesskit();
+    settle(&mut h);
+    assert!(h.state().help_open());
+    h.get_by_label("0 of 5 done");
+    assert!(h.query_by_label("What do you want to find out?").is_none());
+
+    // The guide for people from other tools opens in the browser.
+    let mut h = harness(Platform::DESKTOP);
+    h.get_by_role_and_label(egui::accesskit::Role::Button, "Read the two-page guide")
+        .click_accesskit();
+    settle(&mut h);
+    let requests = h.state_mut().take_requests();
+    assert!(
+        matches!(requests.as_slice(), [Request::OpenUrl { url }] if url.ends_with("docs/switching.md")),
+        "{requests:?}"
+    );
 }
 
 #[test]

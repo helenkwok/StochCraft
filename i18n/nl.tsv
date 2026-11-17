@@ -818,6 +818,52 @@ unit	yr	j
 	What the Results Mean	Wat de resultaten betekenen
 	User Guide	Gebruikershandleiding
 	Report a Problem	Een probleem melden
+	Where is the bottleneck?	Waar zit het knelpunt?
+	How many people or machines?	Hoeveel mensen of machines?
+	Will a change help?	Helpt een wijziging?
+	Why did it break down?	Waarom liep het vast?
+	Manufacturing	Productie
+	Healthcare	Zorg
+	Contact centre	Callcenter
+	IT operations	IT-beheer
+	Reference	Referentiemodellen
+	Checked against queueing theory	Getoetst aan de wachtrijtheorie
+	Matches a published study	Komt overeen met een gepubliceerde studie
+	What do you want to find out?	Wat wilt u te weten komen?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simuleer een proces, vergelijk wat-als-varianten en zie welke verschillen echt zijn. Elk voorbeeld stelt één vraag en laat zien hoe het antwoord is gevonden.
+	Questions	Vragen
+	All	Alle
+	Industry	Sector
+	All industries	Alle sectoren
+	No example matches these choices yet.	Nog geen voorbeeld past bij deze keuzes.
+	Show the featured examples only	Alleen de uitgelichte voorbeelden tonen
+	Teaches:	Leert:
+	New to simulation?	Nieuw met simulatie?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Bouw een eerste model in vijf korte stappen op het echte hoofdvlak: aankomsten, een taak, vertrekken, uitvoeren en dan de bevinding lezen. ‘Aan de slag’ vinkt elke stap af terwijl u bezig bent.
+	Build a first model	Een eerste model bouwen
+	Coming from another simulation tool?	Komt u van een ander simulatieprogramma?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Hoe blokken, uitvoeringen en betrouwbaarheidsintervallen hier werken, welke toetsen wat doen en hoe u een procesdiagram importeert dat u al hebt.
+	Read the two-page guide	De handleiding van twee pagina's lezen
+	Open a file	Een bestand openen
+	Open a file…	Een bestand openen…
+	Recent	Recent geopend
+	Start from a blank model	Beginnen met een leeg model
+	See all {n} examples, including reference models	Alle {n} voorbeelden bekijken, ook de referentiemodellen
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Lijn met vier machines en weekendstops (Schmitt et al. 2026, casus A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Lijn met zeven machines en twee persen (Schmitt et al. 2026, casus B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Vier machines achter elkaar met storingen, kleine wachtruimtes, weekendstops en vermogen per machine.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Twee parallelle persen gevoed via de kortste wachtrij, afkeur bij de kwaliteitscontrole, weekendstops.
+	How long do customers wait at one busy clerk?	Hoe lang wachten klanten bij één drukbezette medewerker?
+	How do two stations in a row share the waiting?	Hoe verdelen twee stations achter elkaar het wachten?
+	How do the time distributions differ?	Hoe verschillen de tijdverdelingen?
+	What do failures and weekend breaks do to a line's output and energy per part?	Wat doen storingen en weekendstops met de output van een lijn en de energie per onderdeel?
+	Which machine holds back a line with two presses in parallel?	Welke machine houdt een lijn met twee parallelle persen op?
+	Why a clerk busy three quarters of the time already means a queue.	Waarom een medewerker die driekwart van de tijd bezig is al een wachtrij betekent.
+	Reading a process diagram from another file format.	Een procesdiagram uit een ander bestandsformaat lezen.
+	One task for each distribution, to compare their spread.	Eén taak per verdeling om de spreiding te vergelijken.
+	Failures, small buffers, shifts and energy per machine state.	Storingen, kleine wachtruimtes, werktijden en energie per machinetoestand.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Parallelle machines gevoed via de kortste wachtrij, en onderdelen die bij de kwaliteitscontrole worden afgekeurd.
 @plural	Added {n} block|Added {n} blocks	{n} blok toegevoegd|{n} blokken toegevoegd
 @plural	Copied {n} block|Copied {n} blocks	{n} blok gekopieerd|{n} blokken gekopieerd
 @plural	Finished {n} run|Finished {n} runs	{n} uitvoering voltooid|{n} uitvoeringen voltooid

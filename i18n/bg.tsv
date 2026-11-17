@@ -818,6 +818,52 @@ unit	yr	г.
 	What the Results Mean	Какво означават резултатите
 	User Guide	Ръководство за потребителя
 	Report a Problem	Докладване на проблем
+	Where is the bottleneck?	Къде е тясното място?
+	How many people or machines?	Колко души или машини?
+	Will a change help?	Ще помогне ли една промяна?
+	Why did it break down?	Защо се провали?
+	Manufacturing	Производство
+	Healthcare	Здравеопазване
+	Contact centre	Кол център
+	IT operations	ИТ операции
+	Reference	Еталонни модели
+	Checked against queueing theory	Проверено с теорията на опашките
+	Matches a published study	Съвпада с публикувано изследване
+	What do you want to find out?	Какво искате да разберете?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Симулирайте процес, сравнете варианти „какво ако“ и вижте кои разлики са реални. Всеки пример задава един въпрос и показва как е намерен отговорът.
+	Questions	Въпроси
+	All	Всички
+	Industry	Отрасъл
+	All industries	Всички отрасли
+	No example matches these choices yet.	Все още няма пример, който да отговаря на този избор.
+	Show the featured examples only	Показване само на препоръчаните примери
+	Teaches:	Учи на:
+	New to simulation?	Нови сте в симулацията?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Изградете първи модел в пет кратки стъпки върху истинската основна повърхност: пристигания, задача, напускания, стартиране и после прочетете констатацията. „Първи стъпки“ отмята всяка стъпка, докато напредвате.
+	Build a first model	Изграждане на първи модел
+	Coming from another simulation tool?	Идвате от друг инструмент за симулация?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Как работят тук блоковете, изпълненията и доверителните интервали, кои клавиши какво правят и как да внесете диаграма на процес, която вече имате.
+	Read the two-page guide	Прочетете ръководството от две страници
+	Open a file	Отваряне на файл
+	Open a file…	Отваряне на файл…
+	Recent	Последно отваряни
+	Start from a blank model	Започване с празен модел
+	See all {n} examples, including reference models	Вижте всички примери ({n}), включително еталонните модели
+	{n} min	{n} мин
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Линия с четири машини и почивки през уикенда (Schmitt et al. 2026, случай A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Линия със седем машини и две преси (Schmitt et al. 2026, случай B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Четири последователни машини с повреди, малки чакални, почивки през уикенда и мощност на всяка машина.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Две паралелни преси, захранвани от по-късата опашка, брак при контрола на качеството, почивки през уикенда.
+	How long do customers wait at one busy clerk?	Колко чакат клиентите при един натоварен служител?
+	How do two stations in a row share the waiting?	Как две последователни станции си поделят чакането?
+	How do the time distributions differ?	Как се различават разпределенията на времената?
+	What do failures and weekend breaks do to a line's output and energy per part?	Как повредите и почивките през уикенда влияят на продукцията на една линия и на енергията на част?
+	Which machine holds back a line with two presses in parallel?	Коя машина задържа линия с две паралелни преси?
+	Why a clerk busy three quarters of the time already means a queue.	Защо служител, зает три четвърти от времето, вече означава опашка.
+	Reading a process diagram from another file format.	Четене на диаграма на процес от друг файлов формат.
+	One task for each distribution, to compare their spread.	По една задача за всяко разпределение за сравнение на разсейването.
+	Failures, small buffers, shifts and energy per machine state.	Повреди, малки чакални, смени и енергия по състояние на машината.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Паралелни машини, захранвани от по-късата опашка, и части, отхвърлени при контрола на качеството.
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения

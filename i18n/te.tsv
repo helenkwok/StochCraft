@@ -818,6 +818,52 @@ unit	yr	సం.
 	What the Results Mean	ఫలితాల అర్థం
 	User Guide	వినియోగదారు గైడ్
 	Report a Problem	సమస్యను నివేదించు
+	Where is the bottleneck?	అవరోధ బిందువు ఎక్కడ ఉంది?
+	How many people or machines?	ఎంతమంది వ్యక్తులు లేదా ఎన్ని యంత్రాలు?
+	Will a change help?	ఒక మార్పు సహాయపడుతుందా?
+	Why did it break down?	ఎందుకు విఫలమైంది?
+	Manufacturing	తయారీ
+	Healthcare	ఆరోగ్య సంరక్షణ
+	Contact centre	కాల్ సెంటర్
+	IT operations	ఐటీ కార్యకలాపాలు
+	Reference	సూచన నమూనాలు
+	Checked against queueing theory	క్యూ సిద్ధాంతంతో ధృవీకరించబడింది
+	Matches a published study	ప్రచురించిన అధ్యయనంతో సరిపోలుతుంది
+	What do you want to find out?	మీరు ఏమి తెలుసుకోవాలనుకుంటున్నారు?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	ఒక ప్రక్రియను అనుకరించండి, “ఇలా అయితే” ప్రత్యామ్నాయాలను పోల్చండి, ఏ తేడాలు నిజమైనవో చూడండి. ప్రతి ఉదాహరణ ఒక ప్రశ్న అడిగి, జవాబు ఎలా కనుగొనబడిందో చూపిస్తుంది.
+	Questions	ప్రశ్నలు
+	All	అన్నీ
+	Industry	పరిశ్రమ
+	All industries	అన్ని పరిశ్రమలు
+	No example matches these choices yet.	ఈ ఎంపికలకు సరిపోయే ఉదాహరణ ఇంకా లేదు.
+	Show the featured examples only	ఎంపిక చేసిన ఉదాహరణలను మాత్రమే చూపించు
+	Teaches:	నేర్పేది:
+	New to simulation?	అనుకరణకు కొత్తవారా?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	నిజమైన ప్రధాన ఉపరితలంపై ఐదు చిన్న దశల్లో మొదటి మోడల్‌ను నిర్మించండి: రాకలు, ఒక పని, నిష్క్రమణలు, అమలు, తర్వాత పరిశీలనను చదవడం. మీరు ముందుకు సాగుతున్న కొద్దీ “ప్రారంభించడం” ప్రతి దశను టిక్ చేస్తుంది.
+	Build a first model	మొదటి మోడల్‌ను నిర్మించు
+	Coming from another simulation tool?	వేరే అనుకరణ సాధనం నుంచి వస్తున్నారా?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	ఇక్కడ బ్లాక్‌లు, అమలులు, విశ్వసనీయత అంతరాలు ఎలా పనిచేస్తాయి, ఏ కీ ఏమి చేస్తుంది, మీ దగ్గర ఇప్పటికే ఉన్న ప్రక్రియ రేఖాచిత్రాన్ని ఎలా తీసుకురావాలి.
+	Read the two-page guide	రెండు పేజీల గైడ్‌ను చదువు
+	Open a file	ఒక ఫైల్‌ను తెరువు
+	Open a file…	ఒక ఫైల్‌ను తెరువు…
+	Recent	ఇటీవలివి
+	Start from a blank model	ఖాళీ మోడల్‌తో ప్రారంభించు
+	See all {n} examples, including reference models	సూచన నమూనాలతో సహా మొత్తం {n} ఉదాహరణలను చూడండి
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	వారాంతపు విరామాలతో నాలుగు యంత్రాల లైన్ (Schmitt et al. 2026, కేస్ A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	రెండు ప్రెస్‌లతో ఏడు యంత్రాల లైన్ (Schmitt et al. 2026, కేస్ B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	లోపాలు, చిన్న వేచి ఉండే గదులు, వారాంతపు విరామాలు, ఒక్కో యంత్రం విద్యుత్ సామర్థ్యంతో వరుసలో నాలుగు యంత్రాలు.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	చిన్న క్యూ నుంచి సరఫరా పొందే రెండు సమాంతర ప్రెస్‌లు, నాణ్యత తనిఖీలో తిరస్కరణలు, వారాంతపు విరామాలు.
+	How long do customers wait at one busy clerk?	ఒకే ఒక్క బిజీ గుమాస్తా దగ్గర కస్టమర్లు ఎంతసేపు వేచి ఉంటారు?
+	How do two stations in a row share the waiting?	వరుసలోని రెండు స్టేషన్‌లు వేచి ఉండటాన్ని ఎలా పంచుకుంటాయి?
+	How do the time distributions differ?	సమయ పంపిణీలు ఎలా భిన్నంగా ఉంటాయి?
+	What do failures and weekend breaks do to a line's output and energy per part?	లోపాలు, వారాంతపు విరామాలు ఒక లైన్ ఉత్పత్తిపై, ఒక్కో భాగానికి శక్తిపై ఏమి ప్రభావం చూపుతాయి?
+	Which machine holds back a line with two presses in parallel?	రెండు సమాంతర ప్రెస్‌లు ఉన్న లైన్‌ను ఏ యంత్రం వెనక్కి లాగుతుంది?
+	Why a clerk busy three quarters of the time already means a queue.	మూడొంతుల సమయం బిజీగా ఉండే గుమాస్తా అంటేనే ఇప్పటికే క్యూ ఎందుకు ఏర్పడుతుంది.
+	Reading a process diagram from another file format.	వేరే ఫైల్ ఫార్మాట్ నుంచి ప్రక్రియ రేఖాచిత్రాన్ని చదవడం.
+	One task for each distribution, to compare their spread.	వ్యాప్తిని పోల్చడానికి ప్రతి పంపిణీకి ఒక పని.
+	Failures, small buffers, shifts and energy per machine state.	లోపాలు, చిన్న వేచి ఉండే గదులు, షిఫ్ట్‌లు, యంత్రం స్థితి వారీగా శక్తి.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	చిన్న క్యూ నుంచి సరఫరా పొందే సమాంతర యంత్రాలు, నాణ్యత తనిఖీలో తిరస్కరించిన భాగాలు.
 @plural	Added {n} block|Added {n} blocks	{n} బ్లాక్ జోడించబడింది|{n} బ్లాక్‌లు జోడించబడ్డాయి
 @plural	Copied {n} block|Copied {n} blocks	{n} బ్లాక్ కాపీ చేయబడింది|{n} బ్లాక్‌లు కాపీ చేయబడ్డాయి
 @plural	Finished {n} run|Finished {n} runs	{n} అమలు పూర్తయింది|{n} అమలులు పూర్తయ్యాయి

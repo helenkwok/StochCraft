@@ -669,5 +669,5 @@ fn the_built_in_languages_translate_the_window() {
         .with_size(egui::vec2(1200.0, 900.0))
         .build_ui_state(|ui, app: &mut App| app.ui(ui), app);
     settle(&mut h);
-    h.get_by_label("Öffnen Sie ein Modell, um es zu simulieren");
+    h.get_by_label("Was möchten Sie herausfinden?");
 }

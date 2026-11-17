@@ -818,6 +818,52 @@ unit	yr	thn
 	What the Results Mean	Arti Hasil
 	User Guide	Panduan Pengguna
 	Report a Problem	Laporkan Masalah
+	Where is the bottleneck?	Di mana leher botolnya?
+	How many people or machines?	Berapa orang atau mesin?
+	Will a change help?	Apakah perubahan akan membantu?
+	Why did it break down?	Mengapa terjadi kerusakan?
+	Manufacturing	Manufaktur
+	Healthcare	Layanan kesehatan
+	Contact centre	Pusat panggilan
+	IT operations	Operasi TI
+	Reference	Model referensi
+	Checked against queueing theory	Diperiksa terhadap teori antrean
+	Matches a published study	Sesuai dengan studi yang diterbitkan
+	What do you want to find out?	Apa yang ingin Anda ketahui?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simulasikan proses, bandingkan skenario bagaimana-jika, dan lihat perbedaan mana yang nyata. Setiap contoh mengajukan satu pertanyaan dan menunjukkan bagaimana jawabannya ditemukan.
+	Questions	Pertanyaan
+	All	Semua
+	Industry	Industri
+	All industries	Semua industri
+	No example matches these choices yet.	Belum ada contoh yang cocok dengan pilihan ini.
+	Show the featured examples only	Tampilkan hanya contoh unggulan
+	Teaches:	Mengajarkan:
+	New to simulation?	Baru mengenal simulasi?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Buat model pertama dalam lima langkah singkat di permukaan utama yang sebenarnya: kedatangan, sebuah tugas, keberangkatan, jalankan, lalu baca temuannya. “Memulai” mencentang setiap langkah seiring Anda maju.
+	Build a first model	Buat model pertama
+	Coming from another simulation tool?	Beralih dari alat simulasi lain?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Cara kerja blok, eksekusi, dan interval kepercayaan di sini, tombol mana melakukan apa, dan cara mengimpor diagram proses yang sudah Anda miliki.
+	Read the two-page guide	Baca panduan dua halaman
+	Open a file	Buka berkas
+	Open a file…	Buka berkas…
+	Recent	Terakhir Dibuka
+	Start from a blank model	Mulai dari model kosong
+	See all {n} examples, including reference models	Lihat semua {n} contoh, termasuk model referensi
+	{n} min	{n} mnt
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Lini empat mesin dengan jeda akhir pekan (Schmitt et al. 2026, Kasus A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Lini tujuh mesin dengan dua mesin press (Schmitt et al. 2026, Kasus B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Empat mesin berurutan dengan kerusakan, ruang tunggu kecil, jeda akhir pekan, dan daya per mesin.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Dua mesin press paralel yang diumpan dari antrean terpendek, penolakan di kontrol kualitas, jeda akhir pekan.
+	How long do customers wait at one busy clerk?	Berapa lama pelanggan menunggu di satu petugas yang sibuk?
+	How do two stations in a row share the waiting?	Bagaimana dua stasiun berurutan berbagi waktu tunggu?
+	How do the time distributions differ?	Apa beda distribusi waktu yang satu dengan yang lain?
+	What do failures and weekend breaks do to a line's output and energy per part?	Apa dampak kerusakan dan jeda akhir pekan terhadap keluaran lini dan energi per komponen?
+	Which machine holds back a line with two presses in parallel?	Mesin mana yang menahan lini dengan dua mesin press paralel?
+	Why a clerk busy three quarters of the time already means a queue.	Mengapa petugas yang sibuk tiga perempat waktu sudah berarti antrean.
+	Reading a process diagram from another file format.	Membaca diagram proses dari format berkas lain.
+	One task for each distribution, to compare their spread.	Satu tugas untuk setiap distribusi, untuk membandingkan penyebarannya.
+	Failures, small buffers, shifts and energy per machine state.	Kerusakan, ruang tunggu kecil, sif, dan energi per status mesin.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Mesin paralel yang diumpan dari antrean terpendek, dan komponen yang ditolak di kontrol kualitas.
 @plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
 @plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
 @plural	Finished {n} run|Finished {n} runs	Selesai {n} eksekusi

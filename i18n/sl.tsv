@@ -818,6 +818,52 @@ unit	yr	l.
 	What the Results Mean	Kaj pomenijo rezultati
 	User Guide	Uporabniški priročnik
 	Report a Problem	Prijavi težavo
+	Where is the bottleneck?	Kje je ozko grlo?
+	How many people or machines?	Koliko ljudi ali strojev?
+	Will a change help?	Ali bo sprememba pomagala?
+	Why did it break down?	Zakaj je odpovedalo?
+	Manufacturing	Proizvodnja
+	Healthcare	Zdravstvo
+	Contact centre	Klicni center
+	IT operations	Delovanje IT
+	Reference	Referenčni modeli
+	Checked against queueing theory	Preverjeno s teorijo čakalnih vrst
+	Matches a published study	Se ujema z objavljeno študijo
+	What do you want to find out?	Kaj želite ugotoviti?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Simulirajte proces, primerjajte različice »kaj če« in poglejte, katere razlike so resnične. Vsak primer postavi eno vprašanje in pokaže, kako je bil najden odgovor.
+	Questions	Vprašanja
+	All	Vse
+	Industry	Panoga
+	All industries	Vse panoge
+	No example matches these choices yet.	Tem izbiram še ne ustreza noben primer.
+	Show the featured examples only	Pokaži samo izpostavljene primere
+	Teaches:	Uči:
+	New to simulation?	Ste novi v simulaciji?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Zgradite prvi model v petih kratkih korakih na pravi glavni površini: prihodi, naloga, odhodi, zagon, nato preberite ugotovitev. »Prvi koraki« sproti odkljuka vsak korak.
+	Build a first model	Zgradi prvi model
+	Coming from another simulation tool?	Prihajate iz drugega simulacijskega orodja?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Kako tu delujejo bloki, zagoni in intervali zaupanja, katere tipke kaj naredijo in kako uvoziti diagram procesa, ki ga že imate.
+	Read the two-page guide	Preberi dvostranski vodnik
+	Open a file	Odpri datoteko
+	Open a file…	Odpri datoteko…
+	Recent	Nedavno
+	Start from a blank model	Začni s praznim modelom
+	See all {n} examples, including reference models	Prikaži vse primere ({n}), tudi referenčne modele
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Linija s štirimi stroji in vikend premori (Schmitt et al. 2026, primer A)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Linija s sedmimi stroji in dvema stiskalnicama (Schmitt et al. 2026, primer B)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Štirje stroji zaporedno z okvarami, majhnimi čakalnicami, vikend premori in močjo vsakega stroja.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Dve vzporedni stiskalnici, ki ju zalaga krajša vrsta, izmet pri kontroli kakovosti, vikend premori.
+	How long do customers wait at one busy clerk?	Kako dolgo čakajo stranke pri enem zasedenem uslužbencu?
+	How do two stations in a row share the waiting?	Kako si dve zaporedni postaji delita čakanje?
+	How do the time distributions differ?	V čem se porazdelitve časov razlikujejo?
+	What do failures and weekend breaks do to a line's output and energy per part?	Kaj okvare in vikend premori naredijo z izhodom linije in energijo na kos?
+	Which machine holds back a line with two presses in parallel?	Kateri stroj zavira linijo z dvema vzporednima stiskalnicama?
+	Why a clerk busy three quarters of the time already means a queue.	Zakaj uslužbenec, ki je zaseden tri četrtine časa, že pomeni čakalno vrsto.
+	Reading a process diagram from another file format.	Branje diagrama procesa iz drugega formata datoteke.
+	One task for each distribution, to compare their spread.	Ena naloga za vsako porazdelitev, da primerjate njihovo razpršenost.
+	Failures, small buffers, shifts and energy per machine state.	Okvare, majhne čakalnice, izmene in energija glede na stanje stroja.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Vzporedni stroji, ki jih zalaga krajša vrsta, in kosi, zavrnjeni pri kontroli kakovosti.
 @plural	Added {n} block|Added {n} blocks	Dodan je {n} blok|Dodana sta {n} bloka|Dodani so {n} bloki|Dodanih je {n} blokov
 @plural	Copied {n} block|Copied {n} blocks	Kopiran je {n} blok|Kopirana sta {n} bloka|Kopirani so {n} bloki|Kopiranih je {n} blokov
 @plural	Finished {n} run|Finished {n} runs	Končan je {n} zagon|Končana sta {n} zagona|Končani so {n} zagoni|Končanih je {n} zagonov

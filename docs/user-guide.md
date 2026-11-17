@@ -36,20 +36,37 @@ differ, it says so. To get the app, see the [installation guide](installation.md
 
 ## Start: open an example
 
-When StochCraft opens with no model, it shows **Open a model to simulate it**. Click
-**Open a model…** to open your own file, or pick one of the examples under
-**Or start from an example**. They are also under **File ▸ Open Example**:
+When StochCraft opens with no model, it asks **What do you want to find out?** Each example is a
+card with its question, its field, about how long it takes, a strip of its blocks, what it
+teaches, and, where its answer has been checked, a tag: **Checked against queueing theory** or
+**Matches a published study**. Click a card to open its example. The question buttons (**Where is
+the bottleneck?**, **How many people or machines?**, …) and the **Industry** list narrow the
+cards; **See all examples** adds the reference models.
 
-| Example | What it shows |
+Beside the examples:
+
+- **New to simulation?** **Build a first model** opens an empty canvas with Getting started in
+  Help beside it (see Get help in the window).
+- **Coming from another simulation tool?** **Read the two-page guide** opens
+  [Coming from another simulation tool](switching.md): the usual words mapped onto StochCraft's,
+  how runs and results work here, and how to bring in a process diagram.
+- **Open a file:** **Open a file…**, your recent files (on the desktop), and **Start from a blank
+  model**.
+
+The examples are also under **File ▸ Open Example**:
+
+| Example | What it asks |
 | --- | --- |
-| **M/M/1 queue** | One clerk, random arrivals: the textbook queue, checked against theory. |
-| **Tandem line** | Two stations in series, read from an XPDL file. |
-| **Every distribution** | One task per BPSim distribution, to compare their spread. |
+| **M/M/1 queue** | How long do customers wait at one busy clerk? Checked against queueing theory. |
+| **Four-machine line with weekend breaks** | What do failures and weekend breaks do to a line's output and energy per part? Schmitt et al. 2026, Case A: matches the published throughput. |
+| **Seven-machine line with two presses** | Which machine holds back a line with two presses in parallel? Schmitt et al. 2026, Case B. |
+| **Tandem line** | Two stations in series, read from an XPDL file (a reference model). |
+| **Every distribution** | One task per BPSim distribution, to compare their spread (a reference model). |
 
 To try the whole cycle, open **M/M/1 queue** and press **Run**. The results show a mean wait close
 to 3 minutes and about 75% utilisation, which is what queueing theory predicts for this model.
 
-![The start screen with the three examples](screenshots/start.png)
+![The start page: examples by question, each with what it teaches and how its answer was checked, beside ways in for newcomers, people from other tools and opening a file](screenshots/start.png)
 
 ## Build a model
 

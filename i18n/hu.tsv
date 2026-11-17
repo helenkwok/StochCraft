@@ -818,6 +818,52 @@ unit	yr	év
 	What the Results Mean	Mit jelentenek az eredmények
 	User Guide	Felhasználói útmutató
 	Report a Problem	Probléma bejelentése
+	Where is the bottleneck?	Hol van a szűk keresztmetszet?
+	How many people or machines?	Hány ember vagy gép?
+	Will a change help?	Segít egy változtatás?
+	Why did it break down?	Miért hibásodott meg?
+	Manufacturing	Gyártás
+	Healthcare	Egészségügy
+	Contact centre	Telefonos ügyfélszolgálat
+	IT operations	IT-üzemeltetés
+	Reference	Referenciamodellek
+	Checked against queueing theory	Sorbanállási elmélettel ellenőrizve
+	Matches a published study	Egyezik egy publikált tanulmánnyal
+	What do you want to find out?	Mit szeretne megtudni?
+	Simulate a process, compare what-ifs, and see which differences are real. Each example asks one question and shows how the answer was found.	Szimuláljon egy folyamatot, hasonlítson össze „mi lenne, ha” változatokat, és lássa, mely különbségek valódiak. Minden példa egy kérdést tesz fel, és megmutatja, hogyan született a válasz.
+	Questions	Kérdések
+	All	Összes
+	Industry	Ágazat
+	All industries	Minden ágazat
+	No example matches these choices yet.	Még egyetlen példa sem felel meg ezeknek a választásoknak.
+	Show the featured examples only	Csak a kiemelt példák megjelenítése
+	Teaches:	Ezt tanítja:
+	New to simulation?	Új a szimulációban?
+	Build a first model in five short steps on the real canvas: arrivals, a task, departures, run, then read the finding. Getting started ticks each step as you go.	Építsen egy első modellt öt rövid lépésben a valódi fő felületen: érkezések, egy feladat, távozások, futtatás, majd a megállapítás elolvasása. Az „Első lépések” menet közben kipipálja az egyes lépéseket.
+	Build a first model	Első modell építése
+	Coming from another simulation tool?	Másik szimulációs eszközről érkezik?
+	How blocks, runs and confidence intervals work here, which keys do what, and how to bring in a process diagram you already have.	Hogyan működnek itt a blokkok, a futások és a konfidenciaintervallumok, melyik billentyű mit csinál, és hogyan hozhat be egy meglévő folyamatábrát.
+	Read the two-page guide	A kétoldalas útmutató elolvasása
+	Open a file	Fájl megnyitása
+	Open a file…	Fájl megnyitása…
+	Recent	Legutóbbiak
+	Start from a blank model	Kezdés üres modellből
+	See all {n} examples, including reference models	Mind a(z) {n} példa megjelenítése, a referenciamodellekkel együtt
+	{n} min	{n} min
+	Four-machine line with weekend breaks (Schmitt et al. 2026, Case A)	Négygépes sor hétvégi leállásokkal (Schmitt et al. 2026, A eset)
+	Seven-machine line with two presses (Schmitt et al. 2026, Case B)	Hétgépes sor két présgéppel (Schmitt et al. 2026, B eset)
+	Four machines in series with failures, small buffers, weekend breaks and power per machine.	Négy sorba kapcsolt gép meghibásodásokkal, kis várakozóhelyekkel, hétvégi leállásokkal és gépenkénti teljesítménnyel.
+	Two presses in parallel fed by the shorter queue, rejects at quality, weekend breaks.	Két párhuzamos présgép a rövidebb sorból ellátva, selejt a minőségellenőrzésnél, hétvégi leállások.
+	How long do customers wait at one busy clerk?	Mennyit várnak az ügyfelek egyetlen leterhelt ügyintézőnél?
+	How do two stations in a row share the waiting?	Hogyan osztozik két egymást követő állomás a várakozáson?
+	How do the time distributions differ?	Miben különböznek az időeloszlások?
+	What do failures and weekend breaks do to a line's output and energy per part?	Mit tesznek a meghibásodások és a hétvégi leállások egy sor kibocsátásával és a darabonkénti energiával?
+	Which machine holds back a line with two presses in parallel?	Melyik gép fogja vissza a két párhuzamos présgépes sort?
+	Why a clerk busy three quarters of the time already means a queue.	Miért jelent már sort, ha egy ügyintéző az idő háromnegyedében foglalt.
+	Reading a process diagram from another file format.	Folyamatábra beolvasása más fájlformátumból.
+	One task for each distribution, to compare their spread.	Minden eloszláshoz egy feladat, a szóródás összehasonlítására.
+	Failures, small buffers, shifts and energy per machine state.	Meghibásodások, kis várakozóhelyek, műszakok és energia gépállapotonként.
+	Parallel machines fed by the shorter queue, and parts rejected at quality.	Párhuzamos gépek a rövidebb sorból ellátva, és a minőségellenőrzésnél kiselejtezett darabok.
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve
