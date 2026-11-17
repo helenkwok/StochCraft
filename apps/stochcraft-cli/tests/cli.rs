@@ -418,3 +418,110 @@ fn a_design_too_large_or_mistyped_is_refused() {
         Some(2)
     );
 }
+
+#[test]
+fn fit_ranks_families_for_a_column_of_measured_times() {
+    // 40 evenly spread values on [1, 4] in the second column, with a header and an empty cell.
+    let mut csv = String::from("order,\"service time\"\n");
+    for i in 0..40 {
+        csv.push_str(&format!(
+            "{i},{}\n",
+            1.0 + 3.0 * (f64::from(i) + 0.5) / 40.0
+        ));
+    }
+    csv.push_str("40,\n");
+    let path = scratch("times.csv");
+    let _ = std::fs::write(&path, &csv);
+    let p = path.to_string_lossy();
+
+    let table = ok(&["fit", &p, "--column", "service time"]);
+    assert!(
+        table.starts_with(&format!(
+            "40 values from {p}, column service time: mean 2.5"
+        )),
+        "{table}"
+    );
+    assert!(table.contains("1 empty cell left out"), "{table}");
+    assert!(table.contains("Anderson–Darling"), "{table}");
+    let first = table
+        .lines()
+        .find(|l| l.split_whitespace().next() == Some("1") && !l.contains("empty"))
+        .unwrap_or_default();
+    assert!(first.contains("uniform"), "{table}");
+    assert!(table.contains("\"type\":\"uniform\""), "{table}");
+
+    let r = json(&ok(&["fit", &p, "-c", "2", "--format", "json"]));
+    assert_eq!(r["count"], 40);
+    assert_eq!(r["candidates"][0]["family"], "uniform");
+    assert_eq!(r["best"]["type"], "uniform");
+
+    let r = json(&ok(&[
+        "fit",
+        &p,
+        "-c",
+        "2",
+        "--families",
+        "gamma,lognormal",
+        "--format",
+        "json",
+    ]));
+    let families: Vec<&str> = r["candidates"]
+        .as_array()
+        .map(|a| a.iter().filter_map(|c| c["family"].as_str()).collect())
+        .unwrap_or_default();
+    assert_eq!(families.len(), 2, "{r}");
+    assert!(families.contains(&"gamma") && families.contains(&"log_normal"));
+
+    let rows = ok(&["fit", &p, "-c", "2", "--format", "csv"]);
+    assert!(rows.starts_with("rank,family,anderson_darling"), "{rows}");
+    assert_eq!(rows.lines().count(), 9, "{rows}"); // A header and eight families.
+
+    // A plain list on standard input.
+    let mut child = Command::new(env!("CARGO_BIN_EXE_stochcraft-cli"))
+        .args(["fit", "-", "--format", "json"])
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+        .unwrap_or_else(|e| panic!("cannot run stochcraft-cli: {e}"));
+    if let Some(mut stdin) = child.stdin.take() {
+        use std::io::Write as _;
+        let list: String = (1..=25)
+            .map(|i| format!("{}\n", f64::from(i) / 10.0))
+            .collect();
+        let _ = stdin.write_all(list.as_bytes());
+    }
+    let out = child
+        .wait_with_output()
+        .unwrap_or_else(|e| panic!("stochcraft-cli: {e}"));
+    assert!(out.status.success(), "{}", stderr(&out));
+    assert_eq!(json(&stdout(&out))["count"], 25);
+}
+
+#[test]
+fn fit_refuses_too_few_values_and_data_no_family_fits() {
+    let path = scratch("few.csv");
+    let _ = std::fs::write(&path, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n");
+    let p = path.to_string_lossy();
+    let few = cli(&["fit", &p]);
+    assert_eq!(few.status.code(), Some(1));
+    assert!(stderr(&few).contains("at least 20"), "{}", stderr(&few));
+    // Ten are enough when asked for.
+    ok(&["fit", &p, "--min-count", "10"]);
+
+    let path = scratch("zeros.csv");
+    let list: String = (0..30).map(|i| format!("{i}\n")).collect();
+    let _ = std::fs::write(&path, list);
+    let p = path.to_string_lossy();
+    let none = cli(&["fit", &p, "--families", "weibull,gamma"]);
+    assert_eq!(none.status.code(), Some(1));
+    assert!(
+        stderr(&none).contains("needs every value above 0"),
+        "{}",
+        stderr(&none)
+    );
+    let path = scratch("two-columns.csv");
+    let _ = std::fs::write(&path, "a,b\n1,2\n");
+    let two = cli(&["fit", &path.to_string_lossy()]);
+    assert_eq!(two.status.code(), Some(1));
+    assert!(stderr(&two).contains("--column"), "{}", stderr(&two));
+}

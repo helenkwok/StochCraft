@@ -164,6 +164,9 @@ fn standard_normal(rng: &mut Rng) -> f64 {
     (-2.0 * ln(u1)).sqrt() * cos(2.0 * std::f64::consts::PI * u2)
 }
 
+/// The largest Erlang `k` drawn as a sum of exponentials; above it, by [`gamma_sample`].
+const ERLANG_BY_SUM: u64 = 64;
+
 fn gamma_sample(rng: &mut Rng, shape: f64, scale: f64) -> f64 {
     if shape < 1.0 {
         // Γ(k) = Γ(k + 1) · U^(1/k).
@@ -524,6 +527,12 @@ impl Dist {
                 let x = gamma_sample(rng, *shape, 1.0);
                 let y = gamma_sample(rng, *scale, 1.0);
                 if x + y > 0.0 { x / (x + y) } else { 0.0 }
+            }
+            // The sum of k exponentials costs k draws, so a large k (a fit to tightly clustered
+            // data can give millions) is drawn as the gamma it is. Small k keep the sum, so
+            // their fixed-seed draws stay as they were.
+            Dist::Erlang { mean, k } if *k > ERLANG_BY_SUM => {
+                gamma_sample(rng, *k as f64, mean / *k as f64)
             }
             Dist::Erlang { mean, k } => {
                 let each = mean / *k as f64;
@@ -991,6 +1000,26 @@ mod tests {
         let mean = xs.iter().sum::<f64>() / n as f64;
         let var = xs.iter().map(|x| (x - mean) * (x - mean)).sum::<f64>() / (n - 1) as f64;
         (mean, var)
+    }
+
+    #[test]
+    fn a_large_erlang_is_drawn_quickly_with_its_moments() {
+        // k = 10¹⁰ by a sum would take 10¹⁰ draws each; mean 1, variance 10⁻¹⁰.
+        let d = Dist::Erlang {
+            mean: 1.0,
+            k: 10_000_000_000,
+        };
+        let (m, v) = moments(&d, 20_000, 9);
+        assert!((m - 1.0).abs() < 4.0 * 1e-5 / 20_000f64.sqrt(), "{m}");
+        assert!((v / 1e-10 - 1.0).abs() < 0.05, "{v}");
+        // Just above the switch, the same mean and variance as the sum gives.
+        let d = Dist::Erlang { mean: 6.0, k: 65 };
+        let (m, v) = moments(&d, 40_000, 10);
+        assert!(
+            (m - 6.0).abs() < 4.0 * (36.0 / 65.0 / 40_000.0f64).sqrt(),
+            "{m}"
+        );
+        assert!((v / (36.0 / 65.0) - 1.0).abs() < 0.05, "{v}");
     }
 
     fn all() -> Vec<Dist> {

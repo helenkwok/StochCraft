@@ -1059,6 +1059,10 @@ fn estimate_remove(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     Ok(json!({}))
 }
 
+fn estimate_fit(_: &mut Engine, p: Value) -> Result<Value, CommandError> {
+    crate::fit::run(&parse(p)?)
+}
+
 fn experiment_sweep(e: &mut Engine, p: Value) -> Result<Value, CommandError> {
     let p: crate::decide::SweepParams = parse(p)?;
     let v = crate::decide::sweep(e.model(), &p)?;
@@ -1993,6 +1997,14 @@ pub static COMMANDS: &[Command] = &[
         schema: schema::<Id>,
         example: || json!({ "id": "desk" }),
         run: estimate_remove,
+    },
+    Command {
+        name: "estimate.fit",
+        summary: "Fit measured values (at least 20) to each distribution family by maximum likelihood, ranked by Anderson–Darling A² (smaller fits better) with the Kolmogorov–Smirnov distance beside it; families needing values above 0 are skipped with the reason. Changes nothing: apply a fit's `distribution` with block.set as the element's `interarrival`, `service` or `duration`.",
+        kind: CommandKind::Query,
+        schema: schema::<crate::fit::Params>,
+        example: || json!({ "data": [1.9, 0.6, 2.4, 1.1, 0.8, 3.7, 1.5, 0.4, 1.2, 2.9, 0.9, 1.7, 0.7, 2.2, 1.3, 5.1, 1.0, 0.5, 1.6, 2.6, 1.4, 0.3, 1.8, 1.1] }),
+        run: estimate_fit,
     },
     Command {
         name: "block.rename",
