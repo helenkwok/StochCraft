@@ -47,8 +47,8 @@ enum Command {
         /// The BPSim scenario to read (default: the first).
         #[arg(long)]
         scenario: Option<String>,
-        #[arg(long, value_enum, default_value_t = Format::Table)]
-        format: Format,
+        #[arg(long, value_enum, default_value_t = CheckFormat::Table)]
+        format: CheckFormat,
     },
     /// Run a model's experiment and print the results with their run record.
     Run {
@@ -152,6 +152,14 @@ enum Format {
     Csv,
 }
 
+/// `validate`'s output: its notes and diagnostics are a list, not a table of numbers, so there is
+/// no CSV.
+#[derive(Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum CheckFormat {
+    Table,
+    Json,
+}
+
 #[derive(Clone, Copy, PartialEq, Eq, ValueEnum)]
 enum DesignKind {
     /// Every combination of the levels.
@@ -241,7 +249,7 @@ fn new(template: &str, list: bool, file: Option<&Path>, force: bool) -> Result<u
     Ok(0)
 }
 
-fn validate(file: &Path, scenario: Option<&str>, format: Format) -> Result<u8, Failure> {
+fn validate(file: &Path, scenario: Option<&str>, format: CheckFormat) -> Result<u8, Failure> {
     let mut engine = Engine::new();
     let opened = open(&mut engine, file, scenario)?;
     let notes = opened["notes"].as_array().cloned().unwrap_or_default();
@@ -255,7 +263,7 @@ fn validate(file: &Path, scenario: Option<&str>, format: Format) -> Result<u8, F
         .filter(|n| n["severity"] == "error")
         .count();
     match format {
-        Format::Json => println!(
+        CheckFormat::Json => println!(
             "{}",
             serde_json::to_string_pretty(&json!({
                 "file": path_str(file),
@@ -267,7 +275,7 @@ fn validate(file: &Path, scenario: Option<&str>, format: Format) -> Result<u8, F
             }))
             .unwrap_or_default()
         ),
-        Format::Table | Format::Csv => print!("{}", output::validation(file, &opened, errors)),
+        CheckFormat::Table => print!("{}", output::validation(file, &opened, errors)),
     }
     Ok(u8::from(errors > 0))
 }
