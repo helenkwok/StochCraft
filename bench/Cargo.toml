@@ -5,7 +5,7 @@
 
 [package]
 name = "stochcraft-bench"
-description = "M/M/1 benchmarks: StochCraft against simu-des, with a SimPy twin."
+description = "Speed benchmarks: M/M/1 against simu-des with a SimPy twin, tandem lines, the hold model and DEVStone."
 version = "0.1.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
@@ -13,6 +13,8 @@ publish = false
 
 [dependencies]
 stochcraft-des = { path = "../crates/des" }
+stochcraft-blocks = { path = "../crates/blocks" }
+stochcraft-model = { path = "../crates/model" }
 stochcraft-random = { path = "../crates/random" }
 stochcraft-experiment = { path = "../crates/experiment" }
 # simu-des 0.1.0 (MIT OR Apache-2.0), a SimPy-style Rust engine.
