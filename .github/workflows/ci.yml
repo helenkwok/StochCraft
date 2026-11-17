@@ -243,6 +243,11 @@ jobs:
       - run: cargo fmt --manifest-path bench/Cargo.toml --check
       - run: cargo clippy --manifest-path bench/Cargo.toml --locked --release -- -D warnings
       - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- all 20000 4
+      # The model benchmarks fail when a check does (W against theory, event counts).
+      - run: cargo test --release --manifest-path bench/Cargo.toml --locked
+      - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- tandem 20000
+      - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- hold 200000
+      - run: cargo run --release --manifest-path bench/Cargo.toml --locked -- devstone 60 20
 
   licences:
     name: cargo deny (licences, sources, bans)

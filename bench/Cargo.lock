@@ -135,9 +135,21 @@ name = "stochcraft-bench"
 version = "0.1.0"
 dependencies = [
  "simu-des",
+ "stochcraft-blocks",
  "stochcraft-des",
  "stochcraft-experiment",
+ "stochcraft-model",
  "stochcraft-random",
+]
+
+[[package]]
+name = "stochcraft-blocks"
+version = "0.1.0"
+dependencies = [
+ "stochcraft-des",
+ "stochcraft-model",
+ "stochcraft-random",
+ "stochcraft-stats",
 ]
 
 [[package]]
@@ -150,6 +162,13 @@ version = "0.1.0"
 dependencies = [
  "stochcraft-random",
  "stochcraft-stats",
+]
+
+[[package]]
+name = "stochcraft-model"
+version = "0.1.0"
+dependencies = [
+ "stochcraft-random",
 ]
 
 [[package]]

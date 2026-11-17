@@ -1,6 +1,13 @@
-//! M/M/1 benchmarks.
+//! Speed benchmarks.
 //!
 //! `cargo run --release --manifest-path bench/Cargo.toml -- [store|resource|parallel|all] [N] [REPS]`
+//!
+//! Model benchmarks, each checked against a known answer (see their modules); the run fails if
+//! a check does:
+//! - `tandem [CUSTOMERS]`: M/M/1 lines of 5, 50 and 200 stations, on `des` and through `blocks`.
+//! - `hold [EVENTS]`: the hold model with 10, 1,000 and 100,000 processes.
+//! - `devstone [MAX] [STEP]`: DEVStone LI, HI and HO for every width and depth in `STEP..=MAX`.
+//! - `models`: all three with their defaults.
 //!
 //! Workloads (λ = 0.9, μ = 1, N customers, then the queue drains; theory W = 10):
 //! - `store`: an arrival process puts timestamps into an unbounded FIFO store and one server
@@ -13,7 +20,12 @@
 //! Every engine draws from the same generator (`stochcraft-random`'s xoshiro256**), so the
 //! comparison measures the engines, not their random number generators.
 
+mod devstone;
+mod hold;
+mod tandem;
+
 use std::cell::{Cell, RefCell};
+use std::process::ExitCode;
 use std::rc::Rc;
 use std::time::Instant;
 
@@ -156,9 +168,45 @@ fn parallel(n: u64, reps: u64) {
     }
 }
 
-fn main() {
+/// Defaults: customers per line in `tandem`, events per population in `hold`, and the largest
+/// width and depth and the step between them in `devstone`.
+const TANDEM_CUSTOMERS: u64 = 100_000;
+const HOLD_EVENTS: u64 = 2_000_000;
+const DEVSTONE_MAX: u64 = 200;
+const DEVSTONE_STEP: u64 = 50;
+
+/// Runs the model benchmarks; `models` runs all three with their defaults. Returns whether
+/// every check passed.
+fn models(which: &str, args: &[String]) -> bool {
+    let arg = |i: usize, default: u64| {
+        if which == "models" {
+            return default;
+        }
+        args.get(i).and_then(|a| a.parse().ok()).unwrap_or(default)
+    };
+    let mut ok = true;
+    if matches!(which, "tandem" | "models") {
+        ok &= tandem::run(arg(1, TANDEM_CUSTOMERS));
+    }
+    if matches!(which, "hold" | "models") {
+        ok &= hold::run(arg(1, HOLD_EVENTS));
+    }
+    if matches!(which, "devstone" | "models") {
+        ok &= devstone::run(arg(1, DEVSTONE_MAX), arg(2, DEVSTONE_STEP));
+    }
+    ok
+}
+
+fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let which = args.first().map_or("all", String::as_str);
+    if matches!(which, "tandem" | "hold" | "devstone" | "models") {
+        if models(which, &args) {
+            return ExitCode::SUCCESS;
+        }
+        eprintln!("a check failed");
+        return ExitCode::FAILURE;
+    }
     let n = args
         .get(1)
         .and_then(|a| a.parse().ok())
@@ -181,4 +229,5 @@ fn main() {
     if matches!(which, "parallel" | "all") {
         parallel(n, reps);
     }
+    ExitCode::SUCCESS
 }
