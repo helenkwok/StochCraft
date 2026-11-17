@@ -316,6 +316,56 @@ mod tests {
     }
 
     #[test]
+    fn t_table_agrees_with_quantiles_computed_independently() {
+        // Two-sided 95% critical values (the 0.975 quantile), computed outside StochCraft from
+        // the exact finite series for integer df (Abramowitz and Stegun, Handbook of
+        // Mathematical Functions, 26.7.3) solved for 0.95 by bisection, and cross-checked by the
+        // regularized incomplete beta function, P(|T| > t) = I_x(df/2, 1/2) with
+        // x = df/(df + t²), evaluated by its continued fraction and also solved by bisection.
+        // The two agreed to 4e-13 on every df from 31 to 39 and 121 to 999; a sample is kept
+        // here, to six decimals. Known values check the method: df 1, 30 and 120 give 12.706205,
+        // 2.042272 and 1.979930.
+        const REFERENCE: [(u64, f64); 26] = [
+            (31, 2.039513),
+            (32, 2.036933),
+            (33, 2.034515),
+            (34, 2.032245),
+            (35, 2.030108),
+            (36, 2.028094),
+            (37, 2.026192),
+            (38, 2.024394),
+            (39, 2.022691),
+            (121, 1.979764),
+            (122, 1.979600),
+            (125, 1.979124),
+            (130, 1.978380),
+            (140, 1.977054),
+            (150, 1.975905),
+            (175, 1.973612),
+            (200, 1.971896),
+            (250, 1.969498),
+            (300, 1.967903),
+            (400, 1.965912),
+            (500, 1.964720),
+            (600, 1.963926),
+            (700, 1.963359),
+            (800, 1.962934),
+            (900, 1.962603),
+            (999, 1.962341),
+        ];
+        // The table is to three decimals, so its values, and the values interpolated between
+        // them, are right to within half the last place. (Over every df in both ranges the
+        // largest error is 2.3e-4, at the low end of 31–39.)
+        for (df, want) in REFERENCE {
+            let got = t_critical_95(df);
+            assert!(
+                got.is_some_and(|t| (t - want).abs() < 5e-4),
+                "df {df}: {got:?} vs {want}"
+            );
+        }
+    }
+
+    #[test]
     fn summary_interval() {
         let s = Summary::of(&[4.0, 6.0]).unwrap_or(Summary {
             n: 0,
