@@ -47,15 +47,22 @@ pub fn listen(
     let addr = listener.local_addr()?;
     let (calls, receiver) = channel();
     let wake: Arc<dyn Fn() + Send + Sync> = Arc::new(wake);
-    let open = Arc::new(AtomicUsize::new(0));
+    let (open, refusing) = (Arc::new(AtomicUsize::new(0)), Arc::new(AtomicUsize::new(0)));
     std::thread::Builder::new()
         .name("stochcraft-control".into())
         .spawn(move || {
             for stream in listener.incoming().flatten() {
                 let Some(slot) = Slot::take(&open) else {
-                    let _ = std::thread::Builder::new()
-                        .name("stochcraft-control-refuse".into())
-                        .spawn(move || refuse(stream));
+                    // Refusals are capped too, so clients that never finish a line can't pile up
+                    // threads; beyond that the connection is just closed.
+                    if let Some(slot) = Slot::take(&refusing) {
+                        let _ = std::thread::Builder::new()
+                            .name("stochcraft-control-refuse".into())
+                            .spawn(move || {
+                                let _slot = slot;
+                                refuse(stream);
+                            });
+                    }
                     continue;
                 };
                 let (calls, wake) = (calls.clone(), Arc::clone(&wake));
@@ -74,7 +81,8 @@ pub fn listen(
 /// between calls, so connections are not timed out; this cap is what stops them piling up.
 pub const MAX_CLIENTS: usize = 8;
 
-/// One of the [`MAX_CLIENTS`] places, given back when the client's thread ends (or never starts).
+/// One of the [`MAX_CLIENTS`] places (for clients, or for refusals being answered), given back
+/// when its thread ends or never starts.
 struct Slot(Arc<AtomicUsize>);
 
 impl Slot {
