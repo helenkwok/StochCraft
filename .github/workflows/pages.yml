@@ -16,10 +16,20 @@ name: Pages
 # can't show the new face in its preview until it merges, since the preview asks the main site,
 # which doesn't have it yet; and a face main removes stops loading in older previews.
 
+#
+# main's site is built only from a commit whose CI passed: the workflow_run trigger starts this
+# after each CI run on main, and the build goes ahead only for a successful run of a push, from
+# that run's commit. A workflow_run trigger can't filter by path, so main's site is rebuilt after
+# every green push, documentation-only ones too. Pull requests' previews don't wait for CI: they
+# are for trying a change before it is ready, and a preview built in workflow_run's context would
+# run the pull request's code with main's caches and a token that can push. A manual run builds
+# the branch it is started on, with no CI gate.
+
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
-    paths-ignore: ["**.md", "docs/**", "bench/**", "xtask/src/bpsim.rs"]
   pull_request:
     types: [opened, synchronize, reopened]
     paths-ignore: ["**.md", "docs/**", "bench/**", "xtask/src/bpsim.rs"]
@@ -41,11 +51,19 @@ env:
 jobs:
   build:
     name: Build the web app
+    # After CI on main: only a green run of a push (not of a manual CI run).
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # The commit CI passed, not main's newest (workflow_run's own github.sha); empty, and so
+          # the default, for pull requests and manual runs.
+          ref: ${{ github.event.workflow_run.head_sha }}
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -136,7 +154,7 @@ jobs:
       - name: Push
         env:
           PR: ${{ github.event.pull_request.number }}
-          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
         run: |
           cd site
           git add -A
@@ -155,7 +173,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           PR: ${{ github.event.pull_request.number }}
-          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
         run: |
           owner="${GITHUB_REPOSITORY%%/*}"
           repo="${GITHUB_REPOSITORY#*/}"
