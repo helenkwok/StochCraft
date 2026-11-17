@@ -770,6 +770,13 @@ taken together, and a large need waiting without holding back a smaller one.
   none, with a `timeToFailure` and a `repairTime` distribution; BPSim's own `Interruptible`
   chooses whether a failure interrupts the job under way.
   - Each unit fails on its own, in elapsed time (busy or idle) since its last repair.
+  - Not yet: **failures counted in working time.** A choice of clock for the time to failure:
+    elapsed time (today's rule) or only the time the unit is busy, since the last repair. Machines
+    that wear with use fail by working hours, so a slower line fails less often per day; with
+    the elapsed-time clock it fails as often idle as busy. Saved as an attribute of
+    `stochcraft:breakdown` (default: elapsed, so files read as before), with a check against
+    the closed form for a single machine whose failures count in busy time (availability
+    against the share of time worked). Also offered by desflow (MIT), seen 2026-11.
   - Interruptible: the job stops and resumes on the same unit after the repair, with the
     service time it had left (preemptive resume). Otherwise the failure waits for the job to
     finish, and the unit takes no new job meanwhile.
@@ -963,6 +970,15 @@ taken together, and a large need waiting without holding back a smaller one.
   The paper's own two tools differed by 0.8% in throughput on this line. A delay that holds the
   sending machine costs the presses 32 s of every 175 s job: 15% of throughput, far from the
   paper's figure, so the paper's delays are read as minimum times in the buffer.
+- Not yet: **a serial line with finite buffers, task T1.2 of Pernas-Álvarez and Crespo-Pereira
+  (arXiv 2611.10602, 2026).** Four machines in series with exponential processing (means 3.3,
+  4.3, 3.0 and 3.7 min), raw material always in front of the first, buffers of 3 between them,
+  blocking after service; throughput per hour and each machine's utilisation. The paper gives
+  no reference values, so the targets are exact: the line's continuous-time Markov chain
+  (machine states working, blocked or starved, and the three buffer levels) solved numerically
+  here from first principles, as for Case A, with each StochCraft result's 95% interval to
+  contain them. Also a template and a committed model, as Cases A and B. The paper's simulator
+  (SimuLean) is GPL-3.0: its paper is used, its code never opened.
 
 ### M2.7 Assembly and batching
 
@@ -1028,6 +1044,15 @@ From DES practice at NASA, NNSA and the Aerospace Corporation (docs/research.md)
   percentile) as elicited from experts (triangular, PERT as a scaled beta, lognormal, Weibull),
   written as a standard BPSim distribution; the triad and its source are kept as the parameter's
   pedigree (a `stochcraft:` vendor extension).
+- Not yet: **fitting a distribution to measured data.** A column of measured times (CSV, or
+  pasted) fitted to each candidate family by maximum likelihood, ranked by a goodness-of-fit
+  measure (Anderson–Darling, with the Kolmogorov–Smirnov distance beside it), with bounds for
+  censored or clipped data and a minimum sample size below which no fit is offered. The best
+  fit is written as a standard BPSim distribution, with the data's file, count and fit kept
+  as the parameter's pedigree, as for three-point estimates. In the window: the histogram with
+  the fitted density over it, and the empirical distribution beside the fitted one; in the
+  CLI, a `fit` command; to agents, an engine command. Closes the fitting part of docs/gaps.md
+  row 11. Also offered by desflow (MIT, `desflow fit`), seen 2026-11.
 - **Sweeps and sensitivity:** a parameter varied over a range, results per point, and a record of
   which parameters drive which results (NASA-STD-7009B [M&S 30]).
 - **Capacity sizing:** add a unit at the bottleneck (the busiest resource) and run again, until
@@ -1288,6 +1313,25 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   once, with the reason in the commit.
 - **Validation against observed data.** Compare a run's results with held-out real data (black-box
   validation, ch. 6 §6.5.5 and ch. 10 §10.4.1).
+  - Not yet: **checks that pass or fail.** An experiment can carry checks on its results: a
+    bound ("mean wait under 2 min", "throughput at least 400 a day", with the 95% interval
+    deciding, not the mean alone), a comparison of two scenarios with common random numbers
+    ("the third packer cuts the wait"), or observed values with their spread. A run reports
+    each check as met, not met, or not decided (the interval straddles the bound), and
+    `stochcraft-cli check` exits non-zero when a check is not met, so a model can be tested in
+    CI. The checks are saved with the experiment (a `stochcraft:` vendor extension) and can
+    write a short report (Markdown) of the checks, the settings and the results. Also offered
+    by desflow (MIT, `desflow experiment`), seen 2026-11.
+  - Not yet: **behaviour checks after every run.** Checks that need no reference, run after
+    each replication and reported as warnings, in the window, the CLI and to agents: every
+    entity is accounted for (created = in sinks + still inside + lost), something reaches an
+    exit, Little's law holds per element (mean contents against throughput times mean time
+    inside, within the run's own interval, with end effects allowed for over short runs), no
+    unit counts as busy while it is down, off shift or on a break, and utilisation stays within
+    0–100%. Pernas-Álvarez and Crespo-Pereira (arXiv 2611.10602, 2026) found that agents'
+    wrong models were all "silent" (they built and ran, and answered wrongly); checks like
+    these caught about half, the most common being a break counted as busy time. The tests'
+    `balanced` check in `blocks/tests` is the first of these.
 - **A capacity table.** Before a run, each station's offered load and utilisation worked out
   from the model's own numbers (arrival rates, mean service times, units), shown beside the
   simulated values after the run. The gap between the two is what variability and blocking
@@ -1295,6 +1339,14 @@ ch. 10 §10.4, in Brailsford, Churilov and Dangerfield, eds., 2014). Related and
   part of the model's validation (`Model::check_load` in `model/src/lib.rs`) and covers only
   servers with an unlimited queue fed straight from sources with steady arrivals; the table
   needs the load passed on through routing, joins and shared pools too.
+  - For each station: arrival rate, service rate, units and utilisation, marked as fine,
+    congested (above a target, 85% by default) or unstable (at 100% or more), the bottleneck
+    named, and the units that would bring it under the target. Where a queueing formula holds
+    (M/M/c, M/G/1, Erlang A with patience), its mean wait too; where none does, why not.
+  - Available without running: in the window beside the model, as `stochcraft-cli explain`,
+    and as an engine command for agents. A verify option runs replications and says, for each
+    number, whether the formula falls inside the simulated 95% interval.
+  - Also offered by desflow (MIT, `desflow explain`), seen 2026-11.
 
 Starting a run with entities already inside, the other answer to a warm-up, stays with
 "starting a run from an observed state" under digital twins (After M3).
@@ -2305,6 +2357,14 @@ are.
     2019, doi 10.1080/17477778.2018.1442155.
 - **Candidates from the common textbooks** (Banks et al., Law, Robinson) join only once their
   parameters are taken from the books themselves.
+- Not yet: **a speed benchmark** (`cargo xtask bench`, extending `bench/`): events per second
+  on M/M/1, tandem lines of 5 to 200 stations, and the DEVStone models LI, HI and HO at set
+  widths and depths (Wainer, Glinsky and Gutierrez-Alcaraz, Simulation 87(7), 2011; Cárdenas
+  et al., ACM TOMACS 2022), whose event counts are known in closed form and so also check the
+  run. Times aggregated as Herguedas-Pinedo et al. propose (ANNSIM'25): a geometric mean of
+  ln(1 + t) weighted by each model's order of complexity. Comparable with the 3.0–3.3 million
+  events per second reported for M/M/1 in arXiv 2611.10602, and with SimPy. DEVStone is
+  implemented from the papers; no DEVS engine's code is read.
 - **Cross-checks against open-source simulators:** SimPy (already compared on M/M/1 in `bench/`)
   and Salabim. Salabim
   is MIT, but its licence text is `salabim/LICENSE.txt`, not at the repository's root, and the
