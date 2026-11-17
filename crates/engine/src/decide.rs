@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use stochcraft_blocks::{ExperimentSummary, Metric, compile, summarise};
 use stochcraft_experiment::Experiment;
-use stochcraft_model::{Dist, ElementId, ElementKind, Model, PropertyValue, ResourcePool};
+use stochcraft_model::{Dist, ElementId, ElementKind, Model, ResourcePool};
 use stochcraft_stats::{Proportion, difference};
 
 use crate::{CommandError, ErrorCode, wire};
@@ -546,9 +546,9 @@ fn candidates(model: &Model, only: Option<&[String]>) -> Result<Vec<Param>, Comm
         .collect()
 }
 
-/// The model with every time distribution, and every number drawn for a property, replaced by
-/// its mean: what a spreadsheet of average times would size. What is drawn otherwise stays
-/// drawn: routing probabilities, balking, scrap and mixes of text values.
+/// The model with every time distribution replaced by its mean: what a spreadsheet of average
+/// times would size. What is drawn otherwise stays drawn: property values (a part type at its
+/// mean could match no route), routing probabilities, balking, scrap and mixes of text values.
 pub fn deterministic(model: &Model) -> Model {
     let mut m = model.clone();
     let mean = |d: &mut Dist| {
@@ -605,21 +605,6 @@ pub fn deterministic(model: &Model) -> Model {
         }
         if let Some(Some(by)) = e.kind.processing_by_mut() {
             by.by_value.iter_mut().for_each(|v| mean(&mut v.time));
-        }
-        // A property can be below 0, which a constant is not: a normal with no spread keeps it.
-        for p in &mut e.properties {
-            if let PropertyValue::Random(d) = &mut p.value
-                && let Some(x) = d.mean()
-            {
-                *d = if x >= 0.0 {
-                    Dist::Constant(x)
-                } else {
-                    Dist::Normal {
-                        mean: x,
-                        std_dev: 0.0,
-                    }
-                };
-            }
         }
     }
     m
@@ -744,7 +729,7 @@ pub fn size(model: &Model, p: &SizeParams) -> Result<(Value, Model), CommandErro
             "reached": fixed.reached,
             "steps": fixed.steps,
         },
-        "method": "run, add a unit to the busiest resource that may grow (highest utilisation), run again, until the share of replications meeting the target reaches the target share (`confidence` in earlier answers: a share of the replications run, not a statistical confidence); deterministic: the same with every time distribution (and every number drawn for a property) replaced by its mean and one replication, while routing probabilities, balking, scrap and mixes of text values are still drawn; the interval is Wilson's at 95% for the share meeting the target, and when its lower end is below the target share, the share is not shown to be met with 95% confidence",
+        "method": "run, add a unit to the busiest resource that may grow (highest utilisation), run again, until the share of replications meeting the target reaches the target share (`confidence` in earlier answers: a share of the replications run, not a statistical confidence); deterministic: the same with every time distribution replaced by its mean and one replication, while property values, routing probabilities, balking, scrap and mixes of text values are still drawn; the interval is Wilson's at 95% for the share meeting the target, and when its lower end is below the target share, the share is not shown to be met with 95% confidence",
     });
     Ok((answer, stochastic.model))
 }
@@ -753,6 +738,7 @@ pub fn size(model: &Model, p: &SizeParams) -> Result<(Value, Model), CommandErro
 mod tests {
     use super::*;
     use crate::Engine;
+    use stochcraft_model::PropertyValue;
 
     /// A server with every kind of time and a property drawn for each entity.
     fn busy_model() -> Model {
@@ -822,17 +808,17 @@ mod tests {
         fixed(&patience.time, 3.0);
         fixed(&check.interval, 1.0);
         fixed(&check.restart, 0.5);
-        let arrivals = m.elements.iter().find(|e| e.id.as_str() == "arrivals");
-        let drawn = |name: &str| {
-            let p = arrivals.and_then(|e| e.properties.iter().find(|p| p.name == name));
-            match p.map(|p| &p.value) {
-                Some(PropertyValue::Random(d)) => {
-                    Some(d.sample(&mut stochcraft_random::Rng::new(1)))
-                }
-                _ => None,
-            }
+        // Properties are not times: they stay drawn (a part type of 1 or 2 at its mean, 1.5,
+        // would match no route).
+        let properties = |m: &Model| -> Vec<PropertyValue> {
+            m.elements
+                .iter()
+                .flat_map(|e| &e.properties)
+                .map(|p| p.value.clone())
+                .collect()
         };
-        assert_eq!(drawn("size"), Some(2.0));
-        assert_eq!(drawn("offset"), Some(-3.0));
+        let before = properties(&busy_model());
+        assert!(before.iter().any(|v| matches!(v, PropertyValue::Random(_))));
+        assert_eq!(properties(&m), before);
     }
 }
