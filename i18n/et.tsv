@@ -864,6 +864,26 @@ unit	yr	a
 	One task for each distribution, to compare their spread.	Üks ülesanne iga jaotuse kohta nende hajuvuse võrdlemiseks.
 	Failures, small buffers, shifts and energy per machine state.	Rikked, väikesed ooteruumid, vahetused ja energia masina oleku kohta.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Paralleelsed masinad, mida toidetakse lühemast järjekorrast, ja kvaliteedikontrollis praagitud detailid.
+	Coffee counter	Kohvilett
+	Emergency triage	Erakorralise meditsiini triaaž
+	Call centre	Kõnekeskus
+	Weld and paint line	Keevitus- ja värvimisliin
+	Web service with health checks	Veebiteenus tervisekontrollidega
+	One barista busy 80% of the time, and what a second would do.	Üks barista, kes on hõivatud 80% ajast, ja mida teine muudaks.
+	Three priority classes sharing five nurses.	Kolm prioriteediklassi, mis jagavad viit õde.
+	Three agents and callers who hang up when they wait too long.	Kolm teenindajat ja helistajad, kes panevad toru ära, kui ootavad liiga kaua.
+	Two stations with small buffers, paint breaking down now and then.	Kaks jaama väikeste ooteruumidega, värvimine läheb aeg-ajalt rikki.
+	Three app servers, taken out for a restart when too many requests wait.	Kolm rakendusserverit, mis võetakse taaskäivituseks kasutusest välja, kui liiga palju päringuid ootab.
+	One barista or two at the morning rush?	Üks barista või kaks hommikuse tipu ajal?
+	Who waits how long when urgent patients go first?	Kes ootab kui kaua, kui kiireloomulised patsiendid lähevad ette?
+	How many callers hang up before an agent answers?	Mitu helistajat paneb toru ära enne, kui teenindaja vastab?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Kus on kitsaskoht ja mida maksavad värvimise rikked?
+	Do health checks that restart busy servers make the queue worse?	Kas tervisekontrollid, mis hõivatud serverid taaskäivitavad, teevad järjekorra hullemaks?
+	Why a barista busy 80% of the time already means a four-minute wait.	Miks 80% ajast hõivatud barista tähendab juba nelja minuti ootamist.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Prioriteedid ühises meeskonnas: kiireloomulised ootavad kõige vähem, kerged kõige kauem.
+	Callers who give up: the share lost and the wait of those who stay.	Loobuvad helistajad: kaotatud osakaal ja jääjate ootamine.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokeerimine, väikesed ooteruumid ja rikked: liini alguses tagasi lükatud detailid.
+	Health checks that take busy servers out send their requests back to the queue.	Tervisekontrollid, mis hõivatud serverid kasutusest välja võtavad, saadavad nende päringud järjekorda tagasi.
 @plural	Added {n} block|Added {n} blocks	Lisati {n} plokk|Lisati {n} plokki
 @plural	Copied {n} block|Copied {n} blocks	Kopeeriti {n} plokk|Kopeeriti {n} plokki
 @plural	Finished {n} run|Finished {n} runs	{n} käivitamine lõpetatud|{n} käivitamist lõpetatud

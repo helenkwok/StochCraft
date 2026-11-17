@@ -679,6 +679,13 @@ engine's messages (validation, file notes) are English too.
   sk, sl, hr, bs, sr, sr-latn, lt, ka, kk). Not checked against a source, and not reviewed by
   native speakers; the least certain are lo, ka, kk, ta, te, bn, sq, et and lt, and the words for
   bottleneck and press.
+- The rows for five new examples (issue #149: coffee counter, emergency triage, call centre, weld
+  and paint line, web service with health checks; their titles, descriptions, questions and what
+  each teaches) were drafted the same way, reusing each catalog's words for health check, taken
+  out, server, waiting room, breakdown and nurses. "80%" is kept as written, against local
+  typography in fr, tr and hu. Not checked against a source, and not reviewed by native speakers;
+  the least certain are lo, ka, kk, ta, te, bn, hi, sq, et and lt, and the names of the triage
+  classes and of call-centre agents.
 
 **Adding or changing a string:** add the English in the code through `i18n::t` (or `tf`, `tn`),
 then add its row to each catalog here, or leave it out to show English until it is translated.

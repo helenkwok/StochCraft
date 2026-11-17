@@ -864,6 +864,26 @@ unit	yr	r.
 	One task for each distribution, to compare their spread.	Jedno zadanie dla każdego rozkładu, aby porównać ich rozrzut.
 	Failures, small buffers, shifts and energy per machine state.	Awarie, małe poczekalnie, zmiany i energia według stanu maszyny.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Maszyny równoległe zasilane z krótszej kolejki i części odrzucane na kontroli jakości.
+	Coffee counter	Bar kawowy
+	Emergency triage	Triaż na SOR
+	Call centre	Call center
+	Weld and paint line	Linia spawania i lakierowania
+	Web service with health checks	Usługa internetowa z kontrolami stanu
+	One barista busy 80% of the time, and what a second would do.	Jeden barista zajęty przez 80% czasu i co zmieniłby drugi.
+	Three priority classes sharing five nurses.	Trzy klasy priorytetu dzielące pięć pielęgniarek.
+	Three agents and callers who hang up when they wait too long.	Trzech konsultantów i dzwoniący, którzy się rozłączają, gdy czekają zbyt długo.
+	Two stations with small buffers, paint breaking down now and then.	Dwa stanowiska z małymi poczekalniami, lakiernia od czasu do czasu ulega awarii.
+	Three app servers, taken out for a restart when too many requests wait.	Trzy serwery aplikacji wyłączane do restartu, gdy czeka zbyt wiele żądań.
+	One barista or two at the morning rush?	Jeden barista czy dwóch w porannym szczycie?
+	Who waits how long when urgent patients go first?	Kto czeka jak długo, gdy pilni pacjenci idą pierwsi?
+	How many callers hang up before an agent answers?	Ilu dzwoniących się rozłącza, zanim odbierze konsultant?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Gdzie jest wąskie gardło i ile kosztują awarie w lakierni?
+	Do health checks that restart busy servers make the queue worse?	Czy kontrole stanu, które restartują zajęte serwery, pogarszają kolejkę?
+	Why a barista busy 80% of the time already means a four-minute wait.	Dlaczego barista zajęty przez 80% czasu oznacza już cztery minuty czekania.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Priorytety we wspólnym zespole: pilni czekają najkrócej, lżejsze przypadki najdłużej.
+	Callers who give up: the share lost and the wait of those who stay.	Dzwoniący, którzy rezygnują: utracony odsetek i czekanie tych, którzy zostają.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokowanie, małe poczekalnie i awarie: części odrzucane na początku linii.
+	Health checks that take busy servers out send their requests back to the queue.	Kontrole stanu, które wyłączają zajęte serwery, odsyłają ich żądania z powrotem do kolejki.
 @plural	Added {n} block|Added {n} blocks	Dodano {n} blok|Dodano {n} bloki|Dodano {n} bloków
 @plural	Copied {n} block|Copied {n} blocks	Skopiowano {n} blok|Skopiowano {n} bloki|Skopiowano {n} bloków
 @plural	Finished {n} run|Finished {n} runs	Zakończono {n} uruchomienie|Zakończono {n} uruchomienia|Zakończono {n} uruchomień

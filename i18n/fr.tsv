@@ -864,6 +864,26 @@ unit	yr	an
 	One task for each distribution, to compare their spread.	Une tâche par distribution, pour comparer leur dispersion.
 	Failures, small buffers, shifts and energy per machine state.	Pannes, petites salles d'attente, travail posté et énergie par état de machine.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Machines en parallèle alimentées par la file la plus courte, et pièces rejetées au contrôle qualité.
+	Coffee counter	Comptoir à café
+	Emergency triage	Triage aux urgences
+	Call centre	Centre d'appels
+	Weld and paint line	Ligne de soudage et de peinture
+	Web service with health checks	Service web avec contrôles de santé
+	One barista busy 80% of the time, and what a second would do.	Un barista occupé 80% du temps, et ce qu'un deuxième changerait.
+	Three priority classes sharing five nurses.	Trois classes de priorité qui se partagent cinq infirmiers.
+	Three agents and callers who hang up when they wait too long.	Trois agents et des appelants qui raccrochent quand ils attendent trop longtemps.
+	Two stations with small buffers, paint breaking down now and then.	Deux postes avec de petites salles d'attente, la peinture tombant en panne de temps en temps.
+	Three app servers, taken out for a restart when too many requests wait.	Trois serveurs d'application, mis hors service pour un redémarrage quand trop de requêtes attendent.
+	One barista or two at the morning rush?	Un barista ou deux au coup de feu du matin ?
+	Who waits how long when urgent patients go first?	Qui attend combien de temps quand les patients urgents passent en premier ?
+	How many callers hang up before an agent answers?	Combien d'appelants raccrochent avant qu'un agent réponde ?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Où est le goulot d'étranglement, et que coûtent les pannes à la peinture ?
+	Do health checks that restart busy servers make the queue worse?	Les contrôles de santé qui redémarrent les serveurs occupés allongent-ils la file ?
+	Why a barista busy 80% of the time already means a four-minute wait.	Pourquoi un barista occupé 80% du temps signifie déjà quatre minutes d'attente.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Priorités dans une équipe partagée : les urgents attendent le moins, les cas mineurs le plus.
+	Callers who give up: the share lost and the wait of those who stay.	Les appelants qui abandonnent : la part perdue et l'attente de ceux qui restent.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blocage, petites salles d'attente et pannes : des pièces refusées au début de la ligne.
+	Health checks that take busy servers out send their requests back to the queue.	Les contrôles de santé qui mettent hors service les serveurs occupés renvoient leurs requêtes dans la file.
 @plural	Added {n} block|Added {n} blocks	{n} bloc ajouté|{n} blocs ajoutés
 @plural	Copied {n} block|Copied {n} blocks	{n} bloc copié|{n} blocs copiés
 @plural	Finished {n} run|Finished {n} runs	{n} exécution terminée|{n} exécutions terminées

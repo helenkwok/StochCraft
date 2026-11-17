@@ -864,6 +864,26 @@ unit	yr	বছর
 	One task for each distribution, to compare their spread.	বিস্তার তুলনা করতে প্রতিটি বণ্টনের জন্য একটি কাজ।
 	Failures, small buffers, shifts and energy per machine state.	বিকলতা, ছোট অপেক্ষার ঘর, শিফট ও মেশিনের অবস্থা অনুযায়ী শক্তি।
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	ছোট সারি থেকে সরবরাহ পাওয়া সমান্তরাল মেশিন, এবং মান পরীক্ষায় বাতিল অংশ।
+	Coffee counter	কফি কাউন্টার
+	Emergency triage	জরুরি বিভাগের ট্রায়াজ
+	Call centre	কল সেন্টার
+	Weld and paint line	ওয়েল্ড ও পেইন্ট লাইন
+	Web service with health checks	অবস্থা পরীক্ষাসহ ওয়েব পরিষেবা
+	One barista busy 80% of the time, and what a second would do.	80% সময় ব্যস্ত একজন বারিস্তা, এবং দ্বিতীয়জন কী বদলাবে।
+	Three priority classes sharing five nurses.	পাঁচজন নার্স ভাগ করে নেওয়া তিনটি অগ্রাধিকার শ্রেণি।
+	Three agents and callers who hang up when they wait too long.	তিনজন এজেন্ট এবং এমন কলার যারা বেশিক্ষণ অপেক্ষা করলে ফোন রেখে দেন।
+	Two stations with small buffers, paint breaking down now and then.	ছোট অপেক্ষার ঘরসহ দুটি স্টেশন, যেখানে পেইন্ট মাঝে মাঝে বিকল হয়।
+	Three app servers, taken out for a restart when too many requests wait.	তিনটি অ্যাপ সার্ভার, যেগুলো খুব বেশি অনুরোধ অপেক্ষায় থাকলে পুনরায় চালুর জন্য সরিয়ে নেওয়া হয়।
+	One barista or two at the morning rush?	সকালের ভিড়ে একজন বারিস্তা না দুজন?
+	Who waits how long when urgent patients go first?	জরুরি রোগীরা আগে গেলে কে কতক্ষণ অপেক্ষা করে?
+	How many callers hang up before an agent answers?	এজেন্ট উত্তর দেওয়ার আগে কতজন কলার ফোন রেখে দেন?
+	Where is the bottleneck, and what do breakdowns at paint cost?	বটলনেক কোথায়, আর পেইন্টে বিকলতার খরচ কত?
+	Do health checks that restart busy servers make the queue worse?	ব্যস্ত সার্ভার পুনরায় চালু করা অবস্থা পরীক্ষা কি সারিকে আরও খারাপ করে?
+	Why a barista busy 80% of the time already means a four-minute wait.	80% সময় ব্যস্ত একজন বারিস্তা মানেই কেন ইতিমধ্যে চার মিনিটের অপেক্ষা।
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	ভাগ করা দলে অগ্রাধিকার: জরুরিরা সবচেয়ে কম, সামান্যরা সবচেয়ে বেশি অপেক্ষা করে।
+	Callers who give up: the share lost and the wait of those who stay.	হাল ছেড়ে দেওয়া কলার: হারানো অনুপাত এবং যারা থাকে তাদের অপেক্ষা।
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	অবরোধ, ছোট অপেক্ষার ঘর ও বিকলতা: লাইনের শুরুতে ফিরিয়ে দেওয়া অংশ।
+	Health checks that take busy servers out send their requests back to the queue.	ব্যস্ত সার্ভার সরিয়ে নেওয়া অবস্থা পরীক্ষা তাদের অনুরোধ আবার সারিতে পাঠায়।
 @plural	Added {n} block|Added {n} blocks	{n}টি ব্লক যোগ করা হয়েছে|{n}টি ব্লক যোগ করা হয়েছে
 @plural	Copied {n} block|Copied {n} blocks	{n}টি ব্লক কপি করা হয়েছে|{n}টি ব্লক কপি করা হয়েছে
 @plural	Finished {n} run|Finished {n} runs	{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে|{n}টি পুনরাবৃত্তি সম্পন্ন হয়েছে

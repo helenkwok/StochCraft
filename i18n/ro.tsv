@@ -864,6 +864,26 @@ unit	yr	a
 	One task for each distribution, to compare their spread.	Câte o sarcină pentru fiecare distribuție, pentru compararea dispersiei.
 	Failures, small buffers, shifts and energy per machine state.	Avarii, săli de așteptare mici, ture și energie pe starea mașinii.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Mașini în paralel alimentate din coada mai scurtă și piese respinse la controlul calității.
+	Coffee counter	Tejghea de cafea
+	Emergency triage	Triaj la urgențe
+	Call centre	Call center
+	Weld and paint line	Linie de sudură și vopsire
+	Web service with health checks	Serviciu web cu verificări ale stării
+	One barista busy 80% of the time, and what a second would do.	Un barista ocupat 80% din timp și ce ar face un al doilea.
+	Three priority classes sharing five nurses.	Trei clase de prioritate care împart cinci asistente.
+	Three agents and callers who hang up when they wait too long.	Trei operatori și apelanți care închid când așteaptă prea mult.
+	Two stations with small buffers, paint breaking down now and then.	Două stații cu săli de așteptare mici, vopsirea defectându-se din când în când.
+	Three app servers, taken out for a restart when too many requests wait.	Trei servere de aplicații, scoase din funcțiune pentru o repornire când așteaptă prea multe cereri.
+	One barista or two at the morning rush?	Un barista sau doi la aglomerația de dimineață?
+	Who waits how long when urgent patients go first?	Cine așteaptă cât timp când pacienții urgenți trec primii?
+	How many callers hang up before an agent answers?	Câți apelanți închid înainte să răspundă un operator?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Unde este gâtul de sticlă și cât costă avariile la vopsire?
+	Do health checks that restart busy servers make the queue worse?	Înrăutățesc coada verificările stării care repornesc serverele ocupate?
+	Why a barista busy 80% of the time already means a four-minute wait.	De ce un barista ocupat 80% din timp înseamnă deja patru minute de așteptare.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Priorități într-o echipă comună: urgenții așteaptă cel mai puțin, cazurile ușoare cel mai mult.
+	Callers who give up: the share lost and the wait of those who stay.	Apelanți care renunță: proporția pierdută și așteptarea celor care rămân.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blocare, săli de așteptare mici și avarii: piese refuzate la începutul liniei.
+	Health checks that take busy servers out send their requests back to the queue.	Verificările stării care scot din funcțiune serverele ocupate trimit cererile acestora înapoi în coadă.
 @plural	Added {n} block|Added {n} blocks	S-a adăugat {n} bloc|S-au adăugat {n} blocuri|S-au adăugat {n} de blocuri
 @plural	Copied {n} block|Copied {n} blocks	S-a copiat {n} bloc|S-au copiat {n} blocuri|S-au copiat {n} de blocuri
 @plural	Finished {n} run|Finished {n} runs	S-a încheiat {n} rulare|S-au încheiat {n} rulări|S-au încheiat {n} de rulări

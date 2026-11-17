@@ -864,6 +864,26 @@ unit	yr	yıl
 	One task for each distribution, to compare their spread.	Yayılımlarını karşılaştırmak için her dağılıma bir görev.
 	Failures, small buffers, shifts and energy per machine state.	Arızalar, küçük bekleme alanları, vardiyalar ve makine durumuna göre enerji.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Daha kısa kuyruktan beslenen paralel makineler ve kalite kontrolde reddedilen parçalar.
+	Coffee counter	Kahve tezgâhı
+	Emergency triage	Acil serviste triyaj
+	Call centre	Çağrı merkezi
+	Weld and paint line	Kaynak ve boya hattı
+	Web service with health checks	Durum denetimli web hizmeti
+	One barista busy 80% of the time, and what a second would do.	Zamanın 80%'inde meşgul bir barista ve ikincisinin ne değiştireceği.
+	Three priority classes sharing five nurses.	Beş hemşireyi paylaşan üç öncelik sınıfı.
+	Three agents and callers who hang up when they wait too long.	Üç temsilci ve çok uzun beklediklerinde telefonu kapatan arayanlar.
+	Two stations with small buffers, paint breaking down now and then.	Küçük bekleme alanlı iki istasyon, boyahane ara sıra arızalanıyor.
+	Three app servers, taken out for a restart when too many requests wait.	Çok fazla istek beklediğinde yeniden başlatma için hizmetten çıkarılan üç uygulama sunucusu.
+	One barista or two at the morning rush?	Sabah yoğunluğunda bir barista mı, iki mi?
+	Who waits how long when urgent patients go first?	Acil hastalar önce alındığında kim ne kadar bekler?
+	How many callers hang up before an agent answers?	Bir temsilci yanıt vermeden önce kaç arayan telefonu kapatır?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Darboğaz nerede ve boyahanedeki arızaların maliyeti ne?
+	Do health checks that restart busy servers make the queue worse?	Meşgul sunucuları yeniden başlatan durum denetimleri kuyruğu kötüleştirir mi?
+	Why a barista busy 80% of the time already means a four-minute wait.	Zamanın 80%'inde meşgul bir barista neden zaten dört dakikalık bekleme demektir.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Ortak bir ekipte öncelikler: aciller en az, hafif vakalar en uzun bekler.
+	Callers who give up: the share lost and the wait of those who stay.	Vazgeçen arayanlar: kaybedilen oran ve kalanların beklemesi.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Engellenme, küçük bekleme alanları ve arızalar: hattın başında geri çevrilen parçalar.
+	Health checks that take busy servers out send their requests back to the queue.	Meşgul sunucuları hizmetten çıkaran durum denetimleri, onların isteklerini kuyruğa geri gönderir.
 @plural	Added {n} block|Added {n} blocks	{n} blok eklendi|{n} blok eklendi
 @plural	Copied {n} block|Copied {n} blocks	{n} blok kopyalandı|{n} blok kopyalandı
 @plural	Finished {n} run|Finished {n} runs	{n} çalıştırma tamamlandı|{n} çalıştırma tamamlandı

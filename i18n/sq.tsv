@@ -864,6 +864,26 @@ unit	yr	v
 	One task for each distribution, to compare their spread.	Një detyrë për çdo shpërndarje, për të krahasuar shpërhapjen e tyre.
 	Failures, small buffers, shifts and energy per machine state.	Defekte, dhoma të vogla pritjeje, turne dhe energji sipas gjendjes së makinës.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Makina paralele që furnizohen nga radha më e shkurtër dhe pjesë të refuzuara në kontrollin e cilësisë.
+	Coffee counter	Banak kafeje
+	Emergency triage	Triazhi i urgjencës
+	Call centre	Qendër thirrjesh
+	Weld and paint line	Linjë saldimi dhe lyerjeje
+	Web service with health checks	Shërbim uebi me kontrolle të gjendjes
+	One barista busy 80% of the time, and what a second would do.	Një barist i zënë 80% të kohës dhe çfarë do të bënte një i dytë.
+	Three priority classes sharing five nurses.	Tri klasa përparësie që ndajnë pesë infermierë.
+	Three agents and callers who hang up when they wait too long.	Tre operatorë dhe telefonues që e mbyllin kur presin shumë gjatë.
+	Two stations with small buffers, paint breaking down now and then.	Dy stacione me dhoma të vogla pritjeje, lyerja prishet herë pas here.
+	Three app servers, taken out for a restart when too many requests wait.	Tre serverë aplikacioni, të nxjerrë nga puna për rinisje kur presin shumë kërkesa.
+	One barista or two at the morning rush?	Një barist apo dy në pikun e mëngjesit?
+	Who waits how long when urgent patients go first?	Kush pret sa gjatë kur pacientët urgjentë shkojnë të parët?
+	How many callers hang up before an agent answers?	Sa telefonues e mbyllin para se të përgjigjet një operator?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Ku është pika e ngushtë dhe sa kushtojnë defektet te lyerja?
+	Do health checks that restart busy servers make the queue worse?	A e përkeqësojnë radhën kontrollet e gjendjes që rinisin serverët e zënë?
+	Why a barista busy 80% of the time already means a four-minute wait.	Pse një barist i zënë 80% të kohës do të thotë tashmë katër minuta pritje.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Përparësitë në një ekip të përbashkët: urgjentët presin më pak, rastet e lehta më gjatë.
+	Callers who give up: the share lost and the wait of those who stay.	Telefonuesit që heqin dorë: pjesa e humbur dhe pritja e atyre që qëndrojnë.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Bllokimi, dhoma të vogla pritjeje dhe defekte: pjesë të refuzuara në fillim të linjës.
+	Health checks that take busy servers out send their requests back to the queue.	Kontrollet e gjendjes që nxjerrin nga puna serverët e zënë i kthejnë kërkesat e tyre në radhë.
 @plural	Added {n} block|Added {n} blocks	U shtua {n} bllok|U shtuan {n} blloqe
 @plural	Copied {n} block|Copied {n} blocks	U kopjua {n} bllok|U kopjuan {n} blloqe
 @plural	Finished {n} run|Finished {n} runs	Përfundoi {n} ekzekutim|Përfunduan {n} ekzekutime

@@ -864,6 +864,26 @@ unit	yr	năm
 	One task for each distribution, to compare their spread.	Mỗi phân phối một tác vụ để so sánh độ phân tán.
 	Failures, small buffers, shifts and energy per machine state.	Hỏng hóc, khu vực chờ nhỏ, ca làm việc và năng lượng theo trạng thái máy.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Máy song song được cấp từ hàng đợi ngắn hơn, và chi tiết bị loại tại khâu kiểm tra chất lượng.
+	Coffee counter	Quầy cà phê
+	Emergency triage	Phân loại cấp cứu
+	Call centre	Tổng đài
+	Weld and paint line	Dây chuyền hàn và sơn
+	Web service with health checks	Dịch vụ web có kiểm tra tình trạng
+	One barista busy 80% of the time, and what a second would do.	Một barista bận 80% thời gian, và thêm người thứ hai sẽ thế nào.
+	Three priority classes sharing five nurses.	Ba nhóm ưu tiên dùng chung năm y tá.
+	Three agents and callers who hang up when they wait too long.	Ba nhân viên tổng đài và người gọi cúp máy khi chờ quá lâu.
+	Two stations with small buffers, paint breaking down now and then.	Hai trạm có khu vực chờ nhỏ, khâu sơn thỉnh thoảng hỏng.
+	Three app servers, taken out for a restart when too many requests wait.	Ba máy chủ ứng dụng, được đưa ra khỏi hoạt động để khởi động lại khi có quá nhiều yêu cầu đang chờ.
+	One barista or two at the morning rush?	Một hay hai barista vào giờ cao điểm buổi sáng?
+	Who waits how long when urgent patients go first?	Ai chờ bao lâu khi bệnh nhân khẩn cấp được ưu tiên?
+	How many callers hang up before an agent answers?	Bao nhiêu người gọi cúp máy trước khi nhân viên trả lời?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Điểm nghẽn ở đâu, và hỏng hóc ở khâu sơn tốn bao nhiêu?
+	Do health checks that restart busy servers make the queue worse?	Kiểm tra tình trạng khởi động lại máy chủ đang bận có làm hàng đợi tệ hơn không?
+	Why a barista busy 80% of the time already means a four-minute wait.	Vì sao một barista bận 80% thời gian đã có nghĩa là phải chờ bốn phút.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Ưu tiên trong một đội dùng chung: ca khẩn cấp chờ ít nhất, ca nhẹ chờ lâu nhất.
+	Callers who give up: the share lost and the wait of those who stay.	Người gọi bỏ cuộc: tỷ lệ bị mất và thời gian chờ của những người ở lại.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Tắc nghẽn, khu vực chờ nhỏ và hỏng hóc: chi tiết bị từ chối ở đầu dây chuyền.
+	Health checks that take busy servers out send their requests back to the queue.	Kiểm tra tình trạng đưa máy chủ đang bận ra khỏi hoạt động sẽ trả yêu cầu của chúng về hàng đợi.
 @plural	Added {n} block|Added {n} blocks	Đã thêm {n} khối
 @plural	Copied {n} block|Copied {n} blocks	Đã sao chép {n} khối
 @plural	Finished {n} run|Finished {n} runs	Đã hoàn thành {n} lần chạy

@@ -864,6 +864,26 @@ unit	yr	г.
 	One task for each distribution, to compare their spread.	По една задача за всяко разпределение за сравнение на разсейването.
 	Failures, small buffers, shifts and energy per machine state.	Повреди, малки чакални, смени и енергия по състояние на машината.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Паралелни машини, захранвани от по-късата опашка, и части, отхвърлени при контрола на качеството.
+	Coffee counter	Кафе бар
+	Emergency triage	Триаж в спешното отделение
+	Call centre	Кол център
+	Weld and paint line	Линия за заваряване и боядисване
+	Web service with health checks	Уеб услуга с проверки на състоянието
+	One barista busy 80% of the time, and what a second would do.	Един бариста, зает 80% от времето, и какво би направил втори.
+	Three priority classes sharing five nurses.	Три класа приоритет, които си поделят пет медицински сестри.
+	Three agents and callers who hang up when they wait too long.	Трима оператори и обаждащи се, които затварят, когато чакат твърде дълго.
+	Two stations with small buffers, paint breaking down now and then.	Две станции с малки чакални, боядисването от време на време се поврежда.
+	Three app servers, taken out for a restart when too many requests wait.	Три сървъра за приложения, извеждани от работа за рестарт, когато чакат твърде много заявки.
+	One barista or two at the morning rush?	Един бариста или двама в сутрешния пик?
+	Who waits how long when urgent patients go first?	Кой колко чака, когато спешните пациенти минават първи?
+	How many callers hang up before an agent answers?	Колко обаждащи се затварят, преди да отговори оператор?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Къде е тясното място и колко струват повредите при боядисването?
+	Do health checks that restart busy servers make the queue worse?	Влошават ли опашката проверките на състоянието, които рестартират натоварени сървъри?
+	Why a barista busy 80% of the time already means a four-minute wait.	Защо бариста, зает 80% от времето, вече означава четири минути чакане.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Приоритети в общ екип: спешните чакат най-малко, леките случаи – най-дълго.
+	Callers who give up: the share lost and the wait of those who stay.	Обаждащи се, които се отказват: загубеният дял и чакането на останалите.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Блокиране, малки чакални и повреди: части, отхвърлени в началото на линията.
+	Health checks that take busy servers out send their requests back to the queue.	Проверките на състоянието, които извеждат натоварени сървъри от работа, връщат заявките им в опашката.
 @plural	Added {n} block|Added {n} blocks	Добавен е {n} блок|Добавени са {n} блока
 @plural	Copied {n} block|Copied {n} blocks	Копиран е {n} блок|Копирани са {n} блока
 @plural	Finished {n} run|Finished {n} runs	Завършено е {n} изпълнение|Завършени са {n} изпълнения

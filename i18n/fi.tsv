@@ -864,6 +864,26 @@ unit	yr	v
 	One task for each distribution, to compare their spread.	Yksi tehtävä kutakin jakaumaa kohti niiden hajonnan vertailuun.
 	Failures, small buffers, shifts and energy per machine state.	Vikaantumiset, pienet odotustilat, vuorot ja energia koneen tilan mukaan.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Rinnakkaiset koneet, joille syötetään lyhyemmästä jonosta, ja laaduntarkastuksessa hylätyt osat.
+	Coffee counter	Kahvitiski
+	Emergency triage	Päivystyksen triage
+	Call centre	Puhelinpalvelukeskus
+	Weld and paint line	Hitsaus- ja maalauslinja
+	Web service with health checks	Verkkopalvelu ja tilatarkistukset
+	One barista busy 80% of the time, and what a second would do.	Yksi barista, joka on varattu 80% ajasta, ja mitä toinen muuttaisi.
+	Three priority classes sharing five nurses.	Kolme prioriteettiluokkaa, jotka jakavat viisi sairaanhoitajaa.
+	Three agents and callers who hang up when they wait too long.	Kolme asiakaspalvelijaa ja soittajat, jotka sulkevat puhelun odotettuaan liian kauan.
+	Two stations with small buffers, paint breaking down now and then.	Kaksi asemaa ja pienet odotustilat, maalaamo vikaantuu silloin tällöin.
+	Three app servers, taken out for a restart when too many requests wait.	Kolme sovelluspalvelinta, jotka poistetaan käytöstä uudelleenkäynnistystä varten, kun liian moni pyyntö odottaa.
+	One barista or two at the morning rush?	Yksi barista vai kaksi aamuruuhkassa?
+	Who waits how long when urgent patients go first?	Kuka odottaa kuinka kauan, kun kiireelliset potilaat menevät ensin?
+	How many callers hang up before an agent answers?	Moniko soittaja sulkee puhelun ennen kuin asiakaspalvelija vastaa?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Missä on pullonkaula, ja mitä maalaamon vikaantumiset maksavat?
+	Do health checks that restart busy servers make the queue worse?	Pahentavatko kiireisiä palvelimia uudelleenkäynnistävät tilatarkistukset jonoa?
+	Why a barista busy 80% of the time already means a four-minute wait.	Miksi barista, joka on varattu 80% ajasta, tarkoittaa jo neljän minuutin odotusta.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Prioriteetit yhteisessä tiimissä: kiireelliset odottavat vähiten, lievät pisimpään.
+	Callers who give up: the share lost and the wait of those who stay.	Luovuttavat soittajat: menetetty osuus ja jäävien odotus.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Estyminen, pienet odotustilat ja vikaantumiset: linjan alussa torjutut osat.
+	Health checks that take busy servers out send their requests back to the queue.	Kiireisiä palvelimia käytöstä poistavat tilatarkistukset lähettävät niiden pyynnöt takaisin jonoon.
 @plural	Added {n} block|Added {n} blocks	Lisättiin {n} lohko|Lisättiin {n} lohkoa
 @plural	Copied {n} block|Copied {n} blocks	Kopioitiin {n} lohko|Kopioitiin {n} lohkoa
 @plural	Finished {n} run|Finished {n} runs	{n} ajo valmistui|{n} ajoa valmistui

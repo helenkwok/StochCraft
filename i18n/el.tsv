@@ -864,6 +864,26 @@ unit	yr	έτ
 	One task for each distribution, to compare their spread.	Μία εργασία ανά κατανομή για σύγκριση της διασποράς τους.
 	Failures, small buffers, shifts and energy per machine state.	Βλάβες, μικροί χώροι αναμονής, βάρδιες και ενέργεια ανά κατάσταση μηχανής.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Παράλληλες μηχανές που τροφοδοτούνται από τη συντομότερη ουρά και τεμάχια που απορρίπτονται στον ποιοτικό έλεγχο.
+	Coffee counter	Πάγκος καφέ
+	Emergency triage	Διαλογή στα επείγοντα
+	Call centre	Τηλεφωνικό κέντρο
+	Weld and paint line	Γραμμή συγκόλλησης και βαφής
+	Web service with health checks	Υπηρεσία ιστού με ελέγχους κατάστασης
+	One barista busy 80% of the time, and what a second would do.	Ένας μπαρίστα απασχολημένος το 80% του χρόνου και τι θα έκανε ένας δεύτερος.
+	Three priority classes sharing five nurses.	Τρεις κατηγορίες προτεραιότητας που μοιράζονται πέντε νοσηλευτές.
+	Three agents and callers who hang up when they wait too long.	Τρεις εκπρόσωποι και καλούντες που κλείνουν όταν περιμένουν πολύ.
+	Two stations with small buffers, paint breaking down now and then.	Δύο σταθμοί με μικρούς χώρους αναμονής, με τη βαφή να παθαίνει βλάβη πού και πού.
+	Three app servers, taken out for a restart when too many requests wait.	Τρεις εξυπηρετητές εφαρμογών που τίθενται εκτός λειτουργίας για επανεκκίνηση όταν περιμένουν πάρα πολλά αιτήματα.
+	One barista or two at the morning rush?	Ένας μπαρίστα ή δύο στην πρωινή αιχμή;
+	Who waits how long when urgent patients go first?	Ποιος περιμένει πόσο όταν οι επείγοντες ασθενείς προηγούνται;
+	How many callers hang up before an agent answers?	Πόσοι καλούντες κλείνουν πριν απαντήσει ένας εκπρόσωπος;
+	Where is the bottleneck, and what do breakdowns at paint cost?	Πού είναι η στενωπός και πόσο κοστίζουν οι βλάβες στη βαφή;
+	Do health checks that restart busy servers make the queue worse?	Χειροτερεύουν την ουρά οι έλεγχοι κατάστασης που επανεκκινούν απασχολημένους εξυπηρετητές;
+	Why a barista busy 80% of the time already means a four-minute wait.	Γιατί ένας μπαρίστα απασχολημένος το 80% του χρόνου σημαίνει ήδη τέσσερα λεπτά αναμονή.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Προτεραιότητες σε κοινή ομάδα: οι επείγοντες περιμένουν λιγότερο, τα ήπια περιστατικά περισσότερο.
+	Callers who give up: the share lost and the wait of those who stay.	Καλούντες που εγκαταλείπουν: το χαμένο ποσοστό και η αναμονή όσων μένουν.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Αποκλεισμός, μικροί χώροι αναμονής και βλάβες: τεμάχια που απορρίπτονται στην αρχή της γραμμής.
+	Health checks that take busy servers out send their requests back to the queue.	Οι έλεγχοι κατάστασης που θέτουν εκτός λειτουργίας απασχολημένους εξυπηρετητές στέλνουν τα αιτήματά τους πίσω στην ουρά.
 @plural	Added {n} block|Added {n} blocks	Προστέθηκε {n} μπλοκ|Προστέθηκαν {n} μπλοκ
 @plural	Copied {n} block|Copied {n} blocks	Αντιγράφηκε {n} μπλοκ|Αντιγράφηκαν {n} μπλοκ
 @plural	Finished {n} run|Finished {n} runs	Ολοκληρώθηκε {n} εκτέλεση|Ολοκληρώθηκαν {n} εκτελέσεις

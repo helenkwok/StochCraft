@@ -864,6 +864,26 @@ unit	yr	thn
 	One task for each distribution, to compare their spread.	Satu tugas untuk setiap distribusi, untuk membandingkan penyebarannya.
 	Failures, small buffers, shifts and energy per machine state.	Kerusakan, ruang tunggu kecil, sif, dan energi per status mesin.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Mesin paralel yang diumpan dari antrean terpendek, dan komponen yang ditolak di kontrol kualitas.
+	Coffee counter	Konter kopi
+	Emergency triage	Triase gawat darurat
+	Call centre	Pusat panggilan
+	Weld and paint line	Lini las dan cat
+	Web service with health checks	Layanan web dengan pemeriksaan kondisi
+	One barista busy 80% of the time, and what a second would do.	Satu barista yang sibuk 80% waktu, dan apa yang akan dilakukan barista kedua.
+	Three priority classes sharing five nurses.	Tiga kelas prioritas yang berbagi lima perawat.
+	Three agents and callers who hang up when they wait too long.	Tiga agen dan penelepon yang menutup telepon jika menunggu terlalu lama.
+	Two stations with small buffers, paint breaking down now and then.	Dua stasiun dengan ruang tunggu kecil, pengecatan sesekali rusak.
+	Three app servers, taken out for a restart when too many requests wait.	Tiga server aplikasi, dikeluarkan untuk dimulai ulang saat terlalu banyak permintaan menunggu.
+	One barista or two at the morning rush?	Satu barista atau dua saat ramai pagi?
+	Who waits how long when urgent patients go first?	Siapa menunggu berapa lama jika pasien gawat didahulukan?
+	How many callers hang up before an agent answers?	Berapa banyak penelepon menutup telepon sebelum agen menjawab?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Di mana leher botolnya, dan berapa biaya kerusakan di pengecatan?
+	Do health checks that restart busy servers make the queue worse?	Apakah pemeriksaan kondisi yang memulai ulang server sibuk memperburuk antrean?
+	Why a barista busy 80% of the time already means a four-minute wait.	Mengapa barista yang sibuk 80% waktu sudah berarti menunggu empat menit.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Prioritas di tim bersama: yang gawat menunggu paling singkat, yang ringan paling lama.
+	Callers who give up: the share lost and the wait of those who stay.	Penelepon yang menyerah: proporsi yang hilang dan waktu tunggu mereka yang bertahan.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Pemblokiran, ruang tunggu kecil, dan kerusakan: komponen yang ditolak di awal lini.
+	Health checks that take busy servers out send their requests back to the queue.	Pemeriksaan kondisi yang mengeluarkan server sibuk mengembalikan permintaannya ke antrean.
 @plural	Added {n} block|Added {n} blocks	{n} blok ditambahkan
 @plural	Copied {n} block|Copied {n} blocks	{n} blok disalin
 @plural	Finished {n} run|Finished {n} runs	Selesai {n} eksekusi

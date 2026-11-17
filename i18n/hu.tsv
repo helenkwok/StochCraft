@@ -864,6 +864,26 @@ unit	yr	év
 	One task for each distribution, to compare their spread.	Minden eloszláshoz egy feladat, a szóródás összehasonlítására.
 	Failures, small buffers, shifts and energy per machine state.	Meghibásodások, kis várakozóhelyek, műszakok és energia gépállapotonként.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	Párhuzamos gépek a rövidebb sorból ellátva, és a minőségellenőrzésnél kiselejtezett darabok.
+	Coffee counter	Kávépult
+	Emergency triage	Sürgősségi triázs
+	Call centre	Telefonos ügyfélszolgálat
+	Weld and paint line	Hegesztő- és festősor
+	Web service with health checks	Webszolgáltatás állapot-ellenőrzéssel
+	One barista busy 80% of the time, and what a second would do.	Egy barista, aki az idő 80%-ában foglalt, és mit tenne egy második.
+	Three priority classes sharing five nurses.	Három prioritási osztály, amelyek öt ápolón osztoznak.
+	Three agents and callers who hang up when they wait too long.	Három ügyintéző és hívók, akik leteszik, ha túl sokáig várnak.
+	Two stations with small buffers, paint breaking down now and then.	Két állomás kis várakozóhelyekkel, a festés időnként meghibásodik.
+	Three app servers, taken out for a restart when too many requests wait.	Három alkalmazásszerver, amelyeket újraindításra kivonnak az üzemből, ha túl sok kérés vár.
+	One barista or two at the morning rush?	Egy barista vagy kettő a reggeli csúcsban?
+	Who waits how long when urgent patients go first?	Ki mennyit vár, ha a sürgős betegek mennek előre?
+	How many callers hang up before an agent answers?	Hány hívó teszi le, mielőtt egy ügyintéző felveszi?
+	Where is the bottleneck, and what do breakdowns at paint cost?	Hol van a szűk keresztmetszet, és mennyibe kerülnek a festés meghibásodásai?
+	Do health checks that restart busy servers make the queue worse?	Rontják-e a sort a foglalt szervereket újraindító állapot-ellenőrzések?
+	Why a barista busy 80% of the time already means a four-minute wait.	Miért jelent már négyperces várakozást egy barista, aki az idő 80%-ában foglalt.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	Prioritások egy közös csapatban: a sürgősek várnak a legkevesebbet, az enyhe esetek a legtovább.
+	Callers who give up: the share lost and the wait of those who stay.	Feladó hívók: az elvesztett arány és a maradók várakozása.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	Blokkolás, kis várakozóhelyek és meghibásodások: a sor elején visszautasított darabok.
+	Health checks that take busy servers out send their requests back to the queue.	A foglalt szervereket kivonó állapot-ellenőrzések visszaküldik azok kéréseit a sorba.
 @plural	Added {n} block|Added {n} blocks	{n} blokk hozzáadva|{n} blokk hozzáadva
 @plural	Copied {n} block|Copied {n} blocks	{n} blokk másolva|{n} blokk másolva
 @plural	Finished {n} run|Finished {n} runs	{n} futás befejezve|{n} futás befejezve

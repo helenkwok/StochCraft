@@ -864,6 +864,26 @@ unit	yr	ປີ
 	One task for each distribution, to compare their spread.	ໜຶ່ງໜ້າວຽກຕໍ່ແຕ່ລະການແຈກຢາຍ ເພື່ອປຽບທຽບການກະຈາຍ.
 	Failures, small buffers, shifts and energy per machine state.	ການເສຍ, ຫ້ອງລໍຖ້າຂະໜາດນ້ອຍ, ກະ ແລະ ພະລັງງານຕາມສະຖານະເຄື່ອງຈັກ.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	ເຄື່ອງຈັກແບບຂະໜານທີ່ປ້ອນຈາກແຖວຄອຍທີ່ສັ້ນກວ່າ ແລະ ຊິ້ນສ່ວນທີ່ຖືກປະຕິເສດທີ່ຈຸດກວດຄຸນນະພາບ.
+	Coffee counter	ເຄົາເຕີກາເຟ
+	Emergency triage	ການຄັດແຍກຄົນເຈັບສຸກເສີນ
+	Call centre	ສູນບໍລິການໂທລະສັບ
+	Weld and paint line	ສາຍການຜະລິດເຊື່ອມ ແລະ ພົ່ນສີ
+	Web service with health checks	ບໍລິການເວັບທີ່ມີການກວດສະຖານະ
+	One barista busy 80% of the time, and what a second would do.	ບາລິສຕ້າໜຶ່ງຄົນທີ່ຫຍຸ້ງ 80% ຂອງເວລາ ແລະ ຄົນທີສອງຈະຊ່ວຍໄດ້ແນວໃດ.
+	Three priority classes sharing five nurses.	ສາມລະດັບຄວາມສຳຄັນທີ່ໃຊ້ພະຍາບານຫ້າຄົນຮ່ວມກັນ.
+	Three agents and callers who hang up when they wait too long.	ພະນັກງານສາມຄົນ ແລະ ຜູ້ໂທທີ່ວາງສາຍເມື່ອລໍຖ້າດົນເກີນໄປ.
+	Two stations with small buffers, paint breaking down now and then.	ສອງສະຖານີທີ່ມີຫ້ອງລໍຖ້າຂະໜາດນ້ອຍ, ຈຸດພົ່ນສີເສຍເປັນບາງຄັ້ງ.
+	Three app servers, taken out for a restart when too many requests wait.	ແມ່ຂ່າຍແອັບສາມເຄື່ອງ ທີ່ຖືກເອົາອອກຈາກການໃຊ້ງານເພື່ອເລີ່ມໃໝ່ເມື່ອມີຄຳຮ້ອງຂໍລໍຖ້າຫຼາຍເກີນໄປ.
+	One barista or two at the morning rush?	ບາລິສຕ້າໜຶ່ງ ຫຼື ສອງຄົນໃນຊ່ວງເຊົ້າທີ່ຄົນຫຼາຍ?
+	Who waits how long when urgent patients go first?	ໃຜລໍຖ້າດົນເທົ່າໃດເມື່ອຄົນເຈັບດ່ວນໄດ້ກ່ອນ?
+	How many callers hang up before an agent answers?	ຜູ້ໂທຈັກຄົນວາງສາຍກ່ອນພະນັກງານຈະຮັບສາຍ?
+	Where is the bottleneck, and what do breakdowns at paint cost?	ຈຸດຄໍຂວດຢູ່ໃສ ແລະ ການເສຍທີ່ຈຸດພົ່ນສີມີຕົ້ນທຶນເທົ່າໃດ?
+	Do health checks that restart busy servers make the queue worse?	ການກວດສະຖານະທີ່ເລີ່ມແມ່ຂ່າຍທີ່ຫຍຸ້ງໃໝ່ເຮັດໃຫ້ແຖວຄອຍຮ້າຍແຮງຂຶ້ນບໍ?
+	Why a barista busy 80% of the time already means a four-minute wait.	ເປັນຫຍັງບາລິສຕ້າທີ່ຫຍຸ້ງ 80% ຂອງເວລາຈຶ່ງໝາຍເຖິງການລໍຖ້າສີ່ນາທີແລ້ວ.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	ລຳດັບຄວາມສຳຄັນໃນທີມທີ່ໃຊ້ຮ່ວມກັນ: ກໍລະນີດ່ວນລໍຖ້າໜ້ອຍສຸດ, ກໍລະນີເບົາລໍຖ້າດົນສຸດ.
+	Callers who give up: the share lost and the wait of those who stay.	ຜູ້ໂທທີ່ຍອມແພ້: ສັດສ່ວນທີ່ສູນເສຍ ແລະ ເວລາລໍຖ້າຂອງຜູ້ທີ່ຍັງຢູ່.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	ການຂັດຂວາງ, ຫ້ອງລໍຖ້າຂະໜາດນ້ອຍ ແລະ ການເສຍ: ຊິ້ນສ່ວນທີ່ຖືກປະຕິເສດຢູ່ຕົ້ນສາຍການຜະລິດ.
+	Health checks that take busy servers out send their requests back to the queue.	ການກວດສະຖານະທີ່ເອົາແມ່ຂ່າຍທີ່ຫຍຸ້ງອອກຈະສົ່ງຄຳຮ້ອງຂໍຂອງມັນກັບຄືນເຂົ້າແຖວຄອຍ.
 @plural	Added {n} block|Added {n} blocks	ເພີ່ມ {n} ບລັອກແລ້ວ
 @plural	Copied {n} block|Copied {n} blocks	ສຳເນົາ {n} ບລັອກແລ້ວ
 @plural	Finished {n} run|Finished {n} runs	ຈຳລອງຊ້ຳສຳເລັດ {n} ຮອບ

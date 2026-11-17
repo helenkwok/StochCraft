@@ -864,6 +864,26 @@ unit	yr	ஆண்டு
 	One task for each distribution, to compare their spread.	பரவல் வேறுபாட்டை ஒப்பிட ஒவ்வொரு பரவலுக்கும் ஒரு பணி.
 	Failures, small buffers, shifts and energy per machine state.	பழுதுகள், சிறிய காத்திருப்பு அறைகள், பணிமுறைகள், இயந்திர நிலை வாரியான ஆற்றல்.
 	Parallel machines fed by the shorter queue, and parts rejected at quality.	குறுகிய வரிசையிலிருந்து ஊட்டப்படும் இணை இயந்திரங்கள், தரச் சோதனையில் நிராகரிக்கப்பட்ட பாகங்கள்.
+	Coffee counter	காபி கவுண்டர்
+	Emergency triage	அவசரச் சிகிச்சை வகைப்படுத்தல்
+	Call centre	அழைப்பு மையம்
+	Weld and paint line	பற்றவைப்பு மற்றும் வண்ணப்பூச்சு வரிசை
+	Web service with health checks	நிலைச் சோதனைகளுடன் கூடிய இணையச் சேவை
+	One barista busy 80% of the time, and what a second would do.	80% நேரம் வேலையாக இருக்கும் ஒரு பாரிஸ்டா, இரண்டாமவர் என்ன மாற்றுவார்.
+	Three priority classes sharing five nurses.	ஐந்து செவிலியர்களைப் பகிர்ந்துகொள்ளும் மூன்று முன்னுரிமை வகுப்புகள்.
+	Three agents and callers who hang up when they wait too long.	மூன்று முகவர்களும், நீண்ட நேரம் காத்திருந்தால் அழைப்பைத் துண்டிக்கும் அழைப்பாளர்களும்.
+	Two stations with small buffers, paint breaking down now and then.	சிறிய காத்திருப்பு அறைகளுடன் இரண்டு நிலையங்கள், வண்ணப்பூச்சு அவ்வப்போது பழுதாகிறது.
+	Three app servers, taken out for a restart when too many requests wait.	அதிகமான கோரிக்கைகள் காத்திருக்கும்போது மறுதொடக்கத்திற்காக நீக்கப்படும் மூன்று பயன்பாட்டு வழங்கிகள்.
+	One barista or two at the morning rush?	காலை நெரிசலில் ஒரு பாரிஸ்டாவா, இருவரா?
+	Who waits how long when urgent patients go first?	அவசர நோயாளிகள் முதலில் செல்லும்போது யார் எவ்வளவு நேரம் காத்திருக்கிறார்கள்?
+	How many callers hang up before an agent answers?	முகவர் பதிலளிக்கும் முன் எத்தனை அழைப்பாளர்கள் அழைப்பைத் துண்டிக்கிறார்கள்?
+	Where is the bottleneck, and what do breakdowns at paint cost?	தடைப்புள்ளி எங்கே, வண்ணப்பூச்சில் ஏற்படும் பழுதுகளின் விலை என்ன?
+	Do health checks that restart busy servers make the queue worse?	வேலையாக உள்ள வழங்கிகளை மறுதொடக்கம் செய்யும் நிலைச் சோதனைகள் வரிசையை மோசமாக்குகின்றனவா?
+	Why a barista busy 80% of the time already means a four-minute wait.	80% நேரம் வேலையாக இருக்கும் பாரிஸ்டா ஏன் ஏற்கெனவே நான்கு நிமிடக் காத்திருப்பைக் குறிக்கிறார்.
+	Priorities on a shared team: the urgent wait least, the minor wait longest.	பகிரப்பட்ட குழுவில் முன்னுரிமைகள்: அவசர நிலையினர் மிகக் குறைவாகவும், சிறு நிலையினர் மிக அதிகமாகவும் காத்திருக்கின்றனர்.
+	Callers who give up: the share lost and the wait of those who stay.	கைவிடும் அழைப்பாளர்கள்: இழந்த விகிதமும் தங்குபவர்களின் காத்திருப்பும்.
+	Blocking, small buffers and breakdowns: parts turned away at the start of the line.	தடுப்பு, சிறிய காத்திருப்பு அறைகள், பழுதுகள்: வரிசையின் தொடக்கத்தில் திருப்பி அனுப்பப்பட்ட பாகங்கள்.
+	Health checks that take busy servers out send their requests back to the queue.	வேலையாக உள்ள வழங்கிகளை நீக்கும் நிலைச் சோதனைகள் அவற்றின் கோரிக்கைகளை மீண்டும் வரிசைக்கு அனுப்புகின்றன.
 @plural	Added {n} block|Added {n} blocks	{n} தொகுதி சேர்க்கப்பட்டது|{n} தொகுதிகள் சேர்க்கப்பட்டன
 @plural	Copied {n} block|Copied {n} blocks	{n} தொகுதி நகலெடுக்கப்பட்டது|{n} தொகுதிகள் நகலெடுக்கப்பட்டன
 @plural	Finished {n} run|Finished {n} runs	{n} மீள் இயக்கம் முடிந்தது|{n} மீள் இயக்கங்கள் முடிந்தன
