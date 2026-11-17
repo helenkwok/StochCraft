@@ -549,26 +549,58 @@ fn ln_incomplete_gamma_large(a: f64, y: f64) -> (f64, f64) {
     };
     let eta = (2.0 * half_eta2).sqrt().copysign(mu);
     let (c0, c1) = if eta.abs() < 1e-2 {
-        (
-            -1.0 / 3.0
-                + eta * (1.0 / 12.0 + eta * (-2.0 / 135.0 + eta * (1.0 / 864.0 + eta / 2835.0))),
-            -1.0 / 540.0 + eta * (-1.0 / 288.0 + eta / 378.0),
-        )
+        temme_c_series(eta)
     } else {
-        (
-            1.0 / mu - 1.0 / eta,
-            1.0 / (eta * eta * eta) - 1.0 / (mu * mu * mu) - 1.0 / (mu * mu) - 1.0 / (12.0 * mu),
-        )
+        temme_c_closed(mu, eta)
     };
-    let s = exp(-a * half_eta2) / (2.0 * std::f64::consts::PI * a).sqrt() * (c0 + c1 / a);
-    let z = eta * (a / 2.0).sqrt();
-    let q = (0.5 * libm::erfc(z) + s).max(0.0);
-    let p = (0.5 * libm::erfc(-z) - s).max(0.0);
-    if q < 0.5 {
-        (libm::log1p(-q), ln(q))
+    // The smaller side, Q above the mean and P below it, is e^(−aη²/2) times a bracket, with
+    // ½ erfc(w) = e^(−w²) · ½ erfcx(w) and w² = aη²/2: its logarithm stays finite in a far tail,
+    // where erfc and S themselves underflow.
+    let w = eta.abs() * (a / 2.0).sqrt();
+    let correction = (c0 + c1 / a) / (2.0 * std::f64::consts::PI * a).sqrt();
+    let bracket = 0.5 * erfcx(w) + if eta >= 0.0 { correction } else { -correction };
+    let ln_small = ln(bracket.max(0.0)) - a * half_eta2;
+    let ln_large = libm::log1p(-exp(ln_small));
+    if eta >= 0.0 {
+        (ln_large, ln_small)
     } else {
-        (ln(p), libm::log1p(-p))
+        (ln_small, ln_large)
     }
+}
+
+/// Temme's c₀(η) and c₁(η) by their Taylor series about η = 0 (DLMF 8.12.11 to 8.12.14).
+fn temme_c_series(eta: f64) -> (f64, f64) {
+    (
+        -1.0 / 3.0 + eta * (1.0 / 12.0 + eta * (-2.0 / 135.0 + eta * (1.0 / 864.0 + eta / 2835.0))),
+        -1.0 / 540.0 + eta * (-1.0 / 288.0 + eta / 378.0),
+    )
+}
+
+/// Temme's c₀(η) and c₁(η) in closed form (DLMF 8.12.9), μ = λ − 1.
+fn temme_c_closed(mu: f64, eta: f64) -> (f64, f64) {
+    (
+        1.0 / mu - 1.0 / eta,
+        1.0 / (eta * eta * eta) - 1.0 / (mu * mu * mu) - 1.0 / (mu * mu) - 1.0 / (12.0 * mu),
+    )
+}
+
+/// The scaled complementary error function e^(w²) erfc(w) for w ≥ 0: directly below 10, where
+/// erfc(w) is still far from underflow, and above it by the asymptotic series
+/// 1/(w√π) · Σ (−1)ⁿ (2n − 1)!! / (2w²)ⁿ (DLMF 7.12.1).
+fn erfcx(w: f64) -> f64 {
+    if w < 10.0 {
+        return libm::erfc(w) * exp(w * w);
+    }
+    let r = 1.0 / (2.0 * w * w);
+    let (mut term, mut sum) = (1.0, 1.0);
+    for n in 1..30 {
+        term *= -f64::from(2 * n - 1) * r;
+        sum += term;
+        if term.abs() < 1e-17 {
+            break;
+        }
+    }
+    sum / (w * std::f64::consts::PI.sqrt())
 }
 
 /// [`ln_incomplete_gamma`] by the series and the continued fraction, for a below `LARGE_SHAPE`.
@@ -1002,7 +1034,10 @@ mod tests {
         }
         // Either side of the switch, and across the body and tails, the two methods agree.
         for a in [1e5_f64, 3e5] {
-            for k in [-8.0, -4.0, -1.5, -0.3, 0.0, 0.01, 0.5, 2.0, 5.0, 9.0] {
+            for k in [
+                -60.0, -30.0, -8.0, -4.0, -1.5, -0.3, 0.0, 0.01, 0.5, 2.0, 5.0, 9.0, 15.0, 40.0,
+                100.0, 316.0,
+            ] {
                 let y = a + k * a.sqrt();
                 let (lp, lq) = ln_incomplete_gamma_large(a, y);
                 let (bp, bq) = ln_incomplete_gamma_by_terms(a, y);
@@ -1016,14 +1051,35 @@ mod tests {
                 );
             }
         }
-        // The Taylor and closed forms of c₀ and c₁ meet where one hands over to the other.
-        for eta in [-1e-2, 1e-2] {
-            let (lo, hi) = (
-                ln_incomplete_gamma_large(1e6, 1e6 * (1.0 + eta * 0.999_99)),
-                ln_incomplete_gamma_large(1e6, 1e6 * (1.0 + eta * 1.000_01)),
-            );
-            within("across η = ±0.01", exp(lo.0), exp(hi.0), 1e-6);
+        // The Taylor and closed forms of c₀ and c₁ agree where one hands over to the other, with
+        // μ from η by DLMF 8.12.13.
+        for eta in [-1e-2_f64, 1e-2] {
+            let alphas = [
+                1.0,
+                1.0 / 3.0,
+                1.0 / 36.0,
+                -1.0 / 270.0,
+                1.0 / 4320.0,
+                1.0 / 17010.0,
+                -139.0 / 5_443_200.0,
+            ];
+            let mu = eta * alphas.iter().rev().fold(0.0, |acc, &c| acc * eta + c);
+            let (s0, s1) = temme_c_series(eta);
+            let (f0, f1) = temme_c_closed(mu, eta);
+            within("c₀", s0, f0, 1e-11);
+            within("c₁", s1, f1, 1e-7);
         }
+        // Far beyond the old nine standard deviations the tail keeps its logarithm, so an
+        // outlier gets a finite A².
+        let d = Dist::Gamma {
+            shape: 1e5,
+            scale: 1.0,
+        };
+        let g = goodness_of_fit(&[99_999.0, 100_000.0, 100_001.0, 100_002.0, 200_000.0], &d);
+        assert!(g.is_some_and(|g| g.anderson_darling.is_finite()), "{g:?}");
+        // erfcx meets its asymptotic series at 10.
+        let below = libm::erfc(10.0) * exp(100.0);
+        within("erfcx(10)", erfcx(10.0), below, 1e-13 * below);
     }
 
     #[test]
