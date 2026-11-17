@@ -638,6 +638,10 @@
 	within chance	brenda rastësisë
 	years	vite
 	{block}: units	{block}: njësi
+	{block}: mean service time	{block}: koha mesatare e shërbimit
+	{block}: mean time between arrivals	{block}: koha mesatare ndërmjet mbërritjeve
+	{block}: mean duration	{block}: kohëzgjatja mesatare
+	{block}: waiting room	{block}: dhoma e pritjes
 	{busy} busy	{busy} të zëna
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrasti me sfondin e grafikut {ratio}:1, nën 3:1: etiketoni serinë e saj ose shfaqni numrat në një tabelë.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – duket gri (ngopja {chroma}, nevojitet 0.10).

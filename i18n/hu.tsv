@@ -638,6 +638,10 @@
 	within chance	a véletlen határán belül
 	years	év
 	{block}: units	{block}: egységek
+	{block}: mean service time	{block}: átlagos kiszolgálási idő
+	{block}: mean time between arrivals	{block}: érkezések közötti átlagos idő
+	{block}: mean duration	{block}: átlagos időtartam
+	{block}: waiting room	{block}: várakozóhely
 	{busy} busy	{busy} foglalt
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontraszt a diagram hátterén {ratio}:1, 3:1 alatt: lássa el címkékkel az adatsorát, vagy mutassa a számokat táblázatban.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – szürkének látszik (színtelítettség {chroma}, legalább 0.10 kell).

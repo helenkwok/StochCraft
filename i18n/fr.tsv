@@ -638,6 +638,10 @@
 	within chance	dans le hasard
 	years	années
 	{block}: units	{block} : unités
+	{block}: mean service time	{block} : temps de service moyen
+	{block}: mean time between arrivals	{block} : temps moyen entre arrivées
+	{block}: mean duration	{block} : durée moyenne
+	{block}: waiting room	{block} : salle d'attente
 	{busy} busy	{busy} occupés
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} a un contraste de {ratio}:1 sur le fond du graphique, sous 3:1 : étiqueter sa série ou afficher les nombres dans un tableau.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} paraît grise (chroma {chroma}, minimum 0.10).

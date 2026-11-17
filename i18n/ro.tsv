@@ -638,6 +638,10 @@
 	within chance	în limita întâmplării
 	years	ani
 	{block}: units	{block}: unități
+	{block}: mean service time	{block}: timp mediu de servire
+	{block}: mean time between arrivals	{block}: timp mediu între sosiri
+	{block}: mean duration	{block}: durată medie
+	{block}: waiting room	{block}: sală de așteptare
 	{busy} busy	Ocupate: {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} are contrast {ratio}:1 pe fundalul graficului, sub 3:1: etichetați-i seria sau arătați numerele într-un tabel.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} pare gri (cromă {chroma}, necesar 0.10).

@@ -638,6 +638,10 @@
 	within chance	innenfor tilfeldighetene
 	years	år
 	{block}: units	{block}: enheter
+	{block}: mean service time	{block}: gjennomsnittlig servicetid
+	{block}: mean time between arrivals	{block}: gjennomsnittlig tid mellom ankomster
+	{block}: mean duration	{block}: gjennomsnittlig varighet
+	{block}: waiting room	{block}: venterom
 	{busy} busy	{busy} opptatt
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} har kontrast {ratio}:1 mot diagrambakgrunnen, under 3:1: merk serien med etiketter, eller vis tallene i en tabell.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} ser grå ut (fargemetning {chroma}, krever 0.10).

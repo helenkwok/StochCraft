@@ -638,6 +638,10 @@
 	within chance	v mejah naključja
 	years	leta
 	{block}: units	{block}: enote
+	{block}: mean service time	{block}: povprečni čas strežbe
+	{block}: mean time between arrivals	{block}: povprečni čas med prihodi
+	{block}: mean duration	{block}: povprečno trajanje
+	{block}: waiting room	{block}: čakalnica
 	{busy} busy	Zasedeno: {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrast z ozadjem grafa {ratio}:1, pod 3:1: njeno serijo opremite z oznakami ali prikažite števila v tabeli.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – videti je siva (nasičenost {chroma}, potrebno 0.10).

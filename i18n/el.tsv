@@ -638,6 +638,10 @@
 	within chance	εντός της τύχης
 	years	έτη
 	{block}: units	{block}: μονάδες
+	{block}: mean service time	{block}: μέσος χρόνος εξυπηρέτησης
+	{block}: mean time between arrivals	{block}: μέσος χρόνος μεταξύ αφίξεων
+	{block}: mean duration	{block}: μέση διάρκεια
+	{block}: waiting room	{block}: χώρος αναμονής
 	{busy} busy	{busy} απασχολημένα
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – αντίθεση {ratio}:1 στο φόντο του γραφήματος, κάτω από 3:1: προσθέστε ετικέτες στη σειρά του ή δείξτε τους αριθμούς σε πίνακα.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – φαίνεται γκρι (χρωματική ένταση {chroma}, απαιτείται 0.10).

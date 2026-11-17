@@ -638,6 +638,10 @@
 	within chance	อยู่ในขอบเขตความบังเอิญ
 	years	ปี
 	{block}: units	{block}: จำนวนหน่วย
+	{block}: mean service time	{block}: เวลาให้บริการเฉลี่ย
+	{block}: mean time between arrivals	{block}: เวลาเฉลี่ยระหว่างการมาถึง
+	{block}: mean duration	{block}: ระยะเวลาเฉลี่ย
+	{block}: waiting room	{block}: พื้นที่รอ
 	{busy} busy	ไม่ว่าง {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} มีความเปรียบต่าง {ratio}:1 บนพื้นหลังแผนภูมิ ต่ำกว่า 3:1: ใส่ป้ายให้ชุดข้อมูลของสีนี้ หรือแสดงตัวเลขในตาราง
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} ดูเป็นสีเทา (ความอิ่มตัว {chroma} ต้องการ 0.10)

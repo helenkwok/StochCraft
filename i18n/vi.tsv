@@ -638,6 +638,10 @@
 	within chance	trong phạm vi ngẫu nhiên
 	years	năm
 	{block}: units	{block}: đơn vị
+	{block}: mean service time	{block}: thời gian phục vụ trung bình
+	{block}: mean time between arrivals	{block}: thời gian trung bình giữa các lượt đến
+	{block}: mean duration	{block}: thời lượng trung bình
+	{block}: waiting room	{block}: khu vực chờ
 	{busy} busy	{busy} đang bận
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} có độ tương phản {ratio}:1 trên nền biểu đồ, dưới 3:1: hãy gắn nhãn cho chuỗi dữ liệu của nó hoặc hiển thị các số trong một bảng.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} trông như màu xám (độ bão hòa {chroma}, cần 0.10).

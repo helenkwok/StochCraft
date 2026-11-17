@@ -638,6 +638,10 @@
 	within chance	在偶然範圍內
 	years	年
 	{block}: units	{block}：數量
+	{block}: mean service time	{block}：平均服務時間
+	{block}: mean time between arrivals	{block}：平均到達間隔時間
+	{block}: mean duration	{block}：平均持續時間
+	{block}: waiting room	{block}：等待區
 	{busy} busy	忙碌 {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour}在圖表背景上的對比度為 {ratio}:1，低於 3:1：請為其數列加上標籤，或以表格顯示數值。
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour}看起來是灰色（彩度 {chroma}，需要 0.10）。

@@ -638,6 +638,10 @@
 	within chance	偶然の範囲内
 	years	年
 	{block}: units	{block}: 数量
+	{block}: mean service time	{block}: 平均サービス時間
+	{block}: mean time between arrivals	{block}: 平均到着間隔
+	{block}: mean duration	{block}: 平均継続時間
+	{block}: waiting room	{block}: 待機場所
 	{busy} busy	使用中 {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} はグラフの背景に対してコントラスト {ratio}:1 で、3:1 未満です。系列にラベルを付けるか、数値を表で示してください。
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} は灰色に見えます (彩度 {chroma}、0.10 以上が必要)。

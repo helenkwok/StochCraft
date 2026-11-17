@@ -645,6 +645,10 @@
 	within chance	தற்செயலுக்குள்
 	years	ஆண்டுகள்
 	{block}: units	{block}: அலகுகள்
+	{block}: mean service time	{block}: சராசரி சேவை நேரம்
+	{block}: mean time between arrivals	{block}: வருகைகளுக்கு இடையிலான சராசரி நேரம்
+	{block}: mean duration	{block}: சராசரி கால அளவு
+	{block}: waiting room	{block}: காத்திருப்பு அறை
 	{busy} busy	{busy} பணியில்
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – வரைபடப் பின்னணியில் மாறுபாடு {ratio}:1, 3:1-க்குக் குறைவு: அதன் தொடருக்குச் சிட்டை இடவும் அல்லது எண்களை அட்டவணையில் காட்டவும்.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – சாம்பல் நிறமாகத் தெரிகிறது (நிறச்செறிவு {chroma}, தேவை 0.10).

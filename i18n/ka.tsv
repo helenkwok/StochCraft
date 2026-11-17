@@ -638,6 +638,10 @@
 	within chance	შემთხვევითობის ფარგლებში
 	years	წელი
 	{block}: units	{block}: ერთეულები
+	{block}: mean service time	{block}: მომსახურების საშუალო დრო
+	{block}: mean time between arrivals	{block}: შემოსვლებს შორის საშუალო დრო
+	{block}: mean duration	{block}: საშუალო ხანგრძლივობა
+	{block}: waiting room	{block}: მოსაცდელი სივრცე
 	{busy} busy	დაკავებული: {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – კონტრასტი დიაგრამის ფონზე {ratio}:1, 3:1-ზე ნაკლები: მიაწერეთ წარწერები მის სერიას ან აჩვენეთ რიცხვები ცხრილში.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – ნაცრისფრად ჩანს (გაჯერება {chroma}, საჭიროა 0.10).

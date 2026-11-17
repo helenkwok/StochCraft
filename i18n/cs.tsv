@@ -638,6 +638,10 @@
 	within chance	v mezích náhody
 	years	roky
 	{block}: units	{block}: jednotky
+	{block}: mean service time	{block}: průměrná doba obsluhy
+	{block}: mean time between arrivals	{block}: průměrná doba mezi příchody
+	{block}: mean duration	{block}: průměrná doba trvání
+	{block}: waiting room	{block}: čekárna
 	{busy} busy	Obsazeno: {busy}
 	{colour} has contrast {ratio}:1 on the chart background, below 3:1: label its series or show the numbers in a table.	{colour} – kontrast vůči pozadí grafu {ratio}:1, pod 3:1: popište její řadu nebo zobrazte čísla v tabulce.
 	{colour} reads as grey (chroma {chroma}, needs 0.10).	{colour} – působí šedě (sytost {chroma}, je třeba 0.10).

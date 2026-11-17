@@ -192,23 +192,26 @@ fn parameters(model: &Value) -> Vec<(String, String)> {
     for e in model["elements"].as_array().into_iter().flatten() {
         let id = e["id"].as_str().unwrap_or("");
         let block = name_of(model, id);
-        let what: &[(&str, &str)] = match e["kind"].as_str().unwrap_or("") {
-            "server" if e["queue_capacity"].is_number() => &[
-                ("capacity", "{block}: units"),
-                ("mean", "{block}: mean service time"),
-                ("queue_capacity", "{block}: waiting room"),
-            ],
-            "server" => &[
-                ("capacity", "{block}: units"),
-                ("mean", "{block}: mean service time"),
-            ],
-            "shared_task" => &[("mean", "{block}: mean service time")],
-            "source" => &[("mean", "{block}: mean time between arrivals")],
-            "delay" => &[("mean", "{block}: mean duration")],
-            _ => &[],
+        let b = [("block", block.as_str())];
+        // Each label a literal call, so the catalog check finds it.
+        let what: Vec<(&str, String)> = match e["kind"].as_str().unwrap_or("") {
+            "server" => {
+                let mut v = vec![
+                    ("capacity", tf("{block}: units", &b)),
+                    ("mean", tf("{block}: mean service time", &b)),
+                ];
+                if e["queue_capacity"].is_number() {
+                    v.push(("queue_capacity", tf("{block}: waiting room", &b)));
+                }
+                v
+            }
+            "shared_task" => vec![("mean", tf("{block}: mean service time", &b))],
+            "source" => vec![("mean", tf("{block}: mean time between arrivals", &b))],
+            "delay" => vec![("mean", tf("{block}: mean duration", &b))],
+            _ => Vec::new(),
         };
         for (field, label) in what {
-            out.push((format!("{id}/{field}"), tf(label, &[("block", &block)])));
+            out.push((format!("{id}/{field}"), label));
         }
     }
     for r in model["resources"].as_array().into_iter().flatten() {
