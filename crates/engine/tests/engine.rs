@@ -2192,6 +2192,28 @@ fn sizing_takes_a_target_share_and_still_reads_confidence() {
     );
 }
 
+/// A target not reached by the most units allowed: the answer is the last step's model and
+/// share.
+#[test]
+fn sizing_that_runs_out_of_units_answers_with_the_last_step() {
+    let mut e = help_desk();
+    let target = json!({ "element": "desk", "metric": "mean_wait", "at_most": 0.0 });
+    let r = ok(
+        &mut e,
+        "experiment.size",
+        json!({ "target": target, "target_share": 0.9, "replications": 4, "max_added": 2 }),
+    );
+    let sto = &r["stochastic"];
+    assert_eq!(sto["reached"], false, "{r}");
+    let steps = sto["steps"].as_array().cloned().unwrap_or_default();
+    assert_eq!(steps.len(), 3, "{r}");
+    let last = &steps[2];
+    assert_eq!(sto["units"], last["units"], "{r}");
+    assert_eq!(sto["units"]["desk"], json!(3.0), "{r}");
+    assert_eq!(sto["probability"], last["probability"], "{r}");
+    assert_eq!(sto["interval"], last["interval"], "{r}");
+}
+
 /// The help desk (M/M/1, λ = 0.5, mean service 1.5) run long enough to compare with theory.
 fn long_help_desk() -> Engine {
     let mut e = help_desk();
