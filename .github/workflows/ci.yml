@@ -139,14 +139,16 @@ jobs:
           key: heavy
       - run: cargo test --workspace --release --locked -- --ignored
 
-  # The BPSim reference-model and schema tests on Windows, where file paths and temporary files
-  # differ from Linux. xmllint is MSYS2's native mingw64 build (MSYS2 is preinstalled on the
-  # runner); only its mingw64 folder goes on PATH, since MSYS2's usr/bin has a link.exe that
-  # would shadow MSVC's linker.
+  # The crates with Windows-only code, on Windows: the desktop app (the Windows subsystem, opening
+  # links with `start`, and the Craft window, menus and file dialogs it builds on) and the MCP
+  # server's roots (device names, `..` resolved in the path's text), linted and tested; then the BPSim reference-model and schema tests, where file paths and
+  # temporary files differ from Linux. xmllint is MSYS2's native mingw64 build (MSYS2 is
+  # preinstalled on the runner); only its mingw64 folder goes on PATH, since MSYS2's usr/bin has a
+  # link.exe that would shadow MSVC's linker, and only after the desktop build.
   windows:
-    name: Reference tests on Windows
+    name: Windows (desktop app, MCP roots, reference tests)
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       # The tests compare files byte for byte, so check out with the repository's LF endings.
       - run: git config --global core.autocrlf false
@@ -156,9 +158,14 @@ jobs:
       - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
         with:
           toolchain: stable
+          components: clippy
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
           key: windows
+      - name: cargo clippy (desktop app, MCP)
+        run: cargo clippy --locked --all-targets -p stochcraft -p stochcraft-mcp -- -D warnings
+      - name: cargo test (desktop app, MCP)
+        run: cargo test --locked -p stochcraft -p stochcraft-mcp
       - uses: actions/cache@v6
         with:
           path: target/bpsim
@@ -289,3 +296,23 @@ jobs:
         with:
           key: msrv
       - run: cargo check --workspace --all-targets --locked
+
+  # The desktop app's macOS-only code (the native application menu, `open` for links) is
+  # compiled nowhere else before a release; this lints it. A check, not a build or tests: cheap,
+  # and the rest of the workspace has no macOS-specific code.
+  macos:
+    name: macOS (desktop app, clippy)
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+          components: clippy
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: macos
+      - run: cargo clippy --locked --all-targets -p stochcraft -- -D warnings
