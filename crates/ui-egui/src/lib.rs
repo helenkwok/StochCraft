@@ -1128,8 +1128,15 @@ impl App {
     }
 
     /// What the window shows of a model that has been replaced: results, selection, the
-    /// canvas's view, a watched run and half-typed fields.
+    /// canvas's view, a watched run and half-typed fields. A run in progress is cancelled, so
+    /// its results cannot turn up later over the new model.
     fn forget_view(&mut self) {
+        if self.running.is_some() {
+            self.stop_workers();
+            let _ = self.engine.execute("run.cancel", json!({}));
+            self.running = None;
+            self.run_model = None;
+        }
         self.clear_results();
         self.building = false;
         self.guide.on = false;

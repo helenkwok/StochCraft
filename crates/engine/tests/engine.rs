@@ -2262,6 +2262,34 @@ fn a_sweep_of_servers_follows_erlang_c() {
     assert_eq!(run["record"]["sensitivity"][0]["kind"], "sweep");
 }
 
+/// A new model starts with no sweeps in its record and no run in the background, but keeps the
+/// last results so they can still be compared with the new model's.
+#[test]
+fn a_new_model_forgets_the_old_ones_sweeps_and_background_run() {
+    let mut e = help_desk();
+    ok(
+        &mut e,
+        "experiment.sweep",
+        json!({
+            "parameter": { "id": "desk", "field": "capacity" },
+            "values": [1, 2],
+            "results": [{ "element": "desk", "metric": "mean_wait" }]
+        }),
+    );
+    ok(&mut e, "run", json!({ "replications": 2 }));
+    ok(
+        &mut e,
+        "run.start",
+        json!({"replications": 5, "mode": "slices"}),
+    );
+    ok(&mut e, "model.new", json!({ "name": "Fresh" }));
+    assert_eq!(ok(&mut e, "run.status", json!({}))["state"], "idle");
+    ok(&mut e, "model.set", COMMANDS[0].example());
+    let run = ok(&mut e, "run", json!({ "replications": 2 }));
+    assert_eq!(run["record"]["sensitivity"], json!([]));
+    ok(&mut e, "results.compare", json!({}));
+}
+
 #[test]
 fn sensitivity_ranks_what_drives_the_time_in_system() {
     let mut e = long_help_desk();
